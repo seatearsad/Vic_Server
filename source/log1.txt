@@ -1,0 +1,9 @@
+array (
+  'pay_weixin_open' => '1',
+  'pay_weixin_appid' => 'wx3ea1b9170693eb23',
+  'pay_weixin_mchid' => '1342217301',
+  'pay_weixin_key' => 'ziboyunkehulianwangxinxijishu198',
+  'pay_weixin_appsecret' => 'f5444075a8b1d1872be93e3f85c2894c',
+  'pay_weixin_client_cert' => '/upload/files/000/000/001/573d67a6b827d.pem',
+  'pay_weixin_client_key' => '/upload/files/000/000/001/573d67e772d37.pem',
+)

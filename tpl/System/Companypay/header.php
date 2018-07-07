@@ -1,0 +1,1 @@
+<div id="nav" class="mainnav_title">	<ul>		<a href="{pigcms{:U('Companypay/index')}">提款列表</a>|		<a href="{pigcms{:U('Config/index',array('galias'=>'companyPay','header'=>'Companypay/header'))}" class="on">企业付款配置</a>	</ul></div>

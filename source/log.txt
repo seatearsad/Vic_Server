@@ -1,0 +1,4 @@
+array (
+  'error' => 0,
+  'weixin_param' => '{"appId":"wx3ea1b9170693eb23","timeStamp":"1464163647","nonceStr":"f6gqd818ogx2iv41oorgnki9611ggowv","package":"prepay_id=wx20160525160727ea07d8b9a40905693325","signType":"MD5","paySign":"07D4401A3220B1F3086B3E20AAB10981"}',
+)
