@@ -2,30 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="553a9d70-a4e8-4aa9-a436-10bf7aa82eaf" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/static/js/lang/en-us.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/js/lang/zh-cn.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cms/Common/common.php" beforeDir="false" afterPath="$PROJECT_DIR$/cms/Common/common.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cms/Lib/Action/Shop/StoreAction.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/cms/Lib/Action/Shop/StoreAction.class.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cms/Lib/Action/Wap/GroupAction.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/cms/Lib/Action/Wap/GroupAction.class.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cms/Lib/Action/Wap/GroupserviceAction.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/cms/Lib/Action/Wap/GroupserviceAction.class.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cms/Lib/Action/Wap/HomeAction.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/cms/Lib/Action/Wap/HomeAction.class.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cms/Lib/Action/Wap/IndexAction.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/cms/Lib/Action/Wap/IndexAction.class.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cms/Lib/Action/Wap/ShopAction.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/cms/Lib/Action/Wap/ShopAction.class.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cms/Lib/Model/Merchant_storeModel.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/cms/Lib/Model/Merchant_storeModel.class.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cms/Lib/Model/Shop_categoryModel.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/cms/Lib/Model/Shop_categoryModel.class.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cms/Lib/ORG/TagLibPigcms.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/cms/Lib/ORG/TagLibPigcms.class.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tpl/Index/blue/Public/header_top.php" beforeDir="false" afterPath="$PROJECT_DIR$/tpl/Index/blue/Public/header_top.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tpl/Static/blue/css/header.css" beforeDir="false" afterPath="$PROJECT_DIR$/tpl/Static/blue/css/header.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tpl/Wap/pure/Group/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/tpl/Wap/pure/Group/index.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tpl/Wap/pure/Home/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/tpl/Wap/pure/Home/index.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tpl/Wap/pure/Public/footer.php" beforeDir="false" afterPath="$PROJECT_DIR$/tpl/Wap/pure/Public/footer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tpl/Wap/pure/Shop/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/tpl/Wap/pure/Shop/index.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tpl/Wap/pure/Shop/js_theme.php" beforeDir="false" afterPath="$PROJECT_DIR$/tpl/Wap/pure/Shop/js_theme.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tpl/Wap/pure/static/css/common.css" beforeDir="false" afterPath="$PROJECT_DIR$/tpl/Wap/pure/static/css/common.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tpl/Wap/pure/static/css/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/tpl/Wap/pure/static/css/index.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tpl/Wap/pure/static/js/common.js" beforeDir="false" afterPath="$PROJECT_DIR$/tpl/Wap/pure/static/js/common.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tpl/Wap/pure/static/js/grouplist.js" beforeDir="false" afterPath="$PROJECT_DIR$/tpl/Wap/pure/static/js/grouplist.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tpl/Wap/pure/static/shop/js/shopBase.js" beforeDir="false" afterPath="$PROJECT_DIR$/tpl/Wap/pure/static/shop/js/shopBase.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/._.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -92,9 +71,18 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ReplyAction.class.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="ReplyAction.class.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/cms/Lib/Action/Index/ReplyAction.class.php">
           <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="90">
+              <caret line="6" column="6" selection-start-line="6" selection-start-column="6" selection-end-line="6" selection-end-column="6" />
+            </state>
+          </provider>
         </entry>
       </file>
       <file leaf-file-name="en-us.js" pinned="false" current-in-tab="false">
@@ -170,11 +158,11 @@
       <find>月</find>
       <find>拨打电话</find>
       <find>店铺电话</find>
-      <find>website</find>
       <find>data-url</find>
       <find>ajax_goodS</find>
       <find>_NUM_DELI_</find>
       <find>元</find>
+      <find>website</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -229,6 +217,7 @@
         <option value="$PROJECT_DIR$/static/js/lang/zh-cn.js" />
         <option value="$PROJECT_DIR$/tpl/Wap/pure/static/shop/js/shopBase.js" />
         <option value="$PROJECT_DIR$/static/js/lang/en-us.js" />
+        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
@@ -263,20 +252,7 @@
             <path>
               <item name="Vic_Server" type="b2602c69:ProjectViewProjectNode" />
               <item name="Vic_Server" type="462c0819:PsiDirectoryNode" />
-              <item name="cms" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Vic_Server" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Vic_Server" type="462c0819:PsiDirectoryNode" />
-              <item name="cms" type="462c0819:PsiDirectoryNode" />
-              <item name="Lib" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Vic_Server" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Vic_Server" type="462c0819:PsiDirectoryNode" />
-              <item name="cms" type="462c0819:PsiDirectoryNode" />
-              <item name="Lib" type="462c0819:PsiDirectoryNode" />
-              <item name="Action" type="462c0819:PsiDirectoryNode" />
+              <item name="core" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -323,7 +299,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="75084000" />
+    <option name="totallyTimeSpent" value="75118000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -336,6 +312,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1280" height="717" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32998326" />
       <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" />
@@ -370,20 +347,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://$APPLICATION_HOME_DIR$/plugins/php/lib/php.jar!/stubs/standard/standard_8.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="173">
-          <caret line="754" column="9" selection-start-line="754" selection-start-column="9" selection-end-line="754" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$APPLICATION_HOME_DIR$/plugins/php/lib/php.jar!/stubs/standard/standard_9.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="226">
-          <caret line="85" column="9" selection-start-line="85" selection-start-column="9" selection-end-line="85" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/cms/Lib/Action/Shop/StoreAction.class.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="15">
@@ -746,8 +709,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/._.gitignore">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/cms/Lib/Action/Index/ReplyAction.class.php">
       <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" column="6" selection-start-line="6" selection-start-column="6" selection-end-line="6" selection-end-column="6" />
+        </state>
+      </provider>
     </entry>
   </component>
 </project>
