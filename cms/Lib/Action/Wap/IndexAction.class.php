@@ -142,7 +142,6 @@ class IndexAction extends BaseAction
 	public function index()
 	{
 		$where['token'] = $this->token;
-		
 		$allflash = M('Flash')->where($where)->order('id DESC')->select();
 		$allflash = $this->convertLinks($allflash);
 		if($allflash == NULL){

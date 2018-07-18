@@ -91,6 +91,42 @@
 	width: 110px;
 	height: 110px;
 }
+.lang_txt{
+	float: left; /*border-left:1px solid #7d7d7d*/
+	width: 70px;
+	position: relative;
+	z-index:91;
+	margin-left:20px;
+	color:#474747;
+	font-size: 12px;
+}
+.lang_div{
+	float: left; /*border-left:1px solid #7d7d7d*/
+	width: 90px;
+	position: relative;
+	z-index:91;
+	color:#474747;
+	font-size: 12px;
+}
+.lang_div .lang_curr{
+	float: left;
+	width: 90px;
+	height: 30px;
+	background: url(../images/o2o1_03.png) no-repeat 64px 8px;
+}
+.lang_div:hover .lang_curr{
+	float: left;
+	height: 30px;
+	position: relative;
+	z-index: 99;
+	background: url(../images/o2o554_03.png) no-repeat 64px 8px;
+}
+.lang_div .lang_select{
+	display: none;
+}
+.lang_select:hover{
+	color: #99585e;
+}
 .app {
     float: left; /*border-left:1px solid #7d7d7d*/
     width: 100px;

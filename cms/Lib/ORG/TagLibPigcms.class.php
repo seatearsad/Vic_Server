@@ -109,9 +109,9 @@ class TagLibPigcms extends TagLib {
 		$y = $_COOKIE['around_long'] ? $_COOKIE['around_long'] :0;
 		$adress = $_COOKIE['around_adress'];
 		if(empty($x) || empty($y) || empty($adress)){
-			$parseStr = '<?php $is_near_shop = false;$near_shop_list = D("Merchant_store")->get_hot_list("'.$limit.'");?>';
+			$parseStr = '<?php $is_near_shop = false;$near_shop_list = D("Merchant_store")->get_hot_list("'.$limit.'",0,0,1);?>';
 		}else{
-			$parseStr = '<?php $is_near_shop = true;$near_shop_list = D("Merchant_store")->get_hot_list("'.$limit.'","'.$x.'","'.$y.'");if(empty($near_shop_list)){$is_near_shop = false;$near_shop_list = D("Merchant_store")->get_hot_list("'.$limit.'");}?>';
+			$parseStr = '<?php $is_near_shop = true;$near_shop_list = D("Merchant_store")->get_hot_list("'.$limit.'","'.$x.'","'.$y.'",1);if(empty($near_shop_list)){$is_near_shop = false;$near_shop_list = D("Merchant_store")->get_hot_list("'.$limit.'");}?>';
 		}
         return $parseStr;
     }

@@ -69,13 +69,13 @@ class HomeAction extends BaseAction{
 		$tmp_wap_index_slider = D('Slider')->get_slider_by_key('wap_slider',0);
 
 		$wap_index_slider = array();
-		
+
 		if(count($tmp_wap_index_slider) >= 10 &&$this->config['wap_slider_number'] == 10){
 			$wap_slider_number = $this->config['wap_slider_number'];
 		}else{
 			$wap_slider_number = 8;
 		}
-		
+
 		foreach($tmp_wap_index_slider as $key=>$value){
 			$tmp_i = floor($key/$wap_slider_number);
 			$wap_index_slider[$tmp_i][] = $value;
@@ -115,7 +115,8 @@ class HomeAction extends BaseAction{
 				}
 				$Zcategorys = $newtmp;
 			}
-			$this->assign('classify_Zcategorys', $Zcategorys);
+			//modify garfunkel 分类信息展示 暂时无用注销
+			//$this->assign('classify_Zcategorys', $Zcategorys);
 			//dump($Zcategorys);exit;
 		}
 		/* 粉丝行为分析 */
@@ -184,7 +185,7 @@ class HomeAction extends BaseAction{
 				$condition_where .= " AND `have_group`='1'";
 				break;
 			default:
-				$this->error('非法访问！');
+				$this->error(L('_ILLEGAL_TXT_'));
 		}
 		$x = $_POST['lat'];
 		$y = $_POST['long'];
@@ -233,7 +234,7 @@ class HomeAction extends BaseAction{
 						$store['url'] = U('Group/shop',array('store_id'=>$store['store_id']));
 						break;
 					default:
-						$this->error('非法访问！');
+						$this->error(L('_ILLEGAL_TXT_'));
 				}
 			}
 			echo json_encode(array('error'=>0,'store_list'=>$store_list));

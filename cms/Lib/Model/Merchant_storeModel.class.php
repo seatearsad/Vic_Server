@@ -837,7 +837,8 @@ class Merchant_storeModel extends Model
 		return array('group_list' => $res, 'pagebar' => $p->show(), 'meal_count' => $count);
 	}
     //pc首页  推荐外卖   调的是这
-	public function get_hot_list($limit = 6, $lat = 0, $long = 0)
+    //modify garfunkel $is_lang 是否根据语言分割 0 否 1 是
+	public function get_hot_list($limit = 6, $lat = 0, $long = 0,$is_lang = 0)
 	{
 		$condition_where = "`me`.`city_id`='".C('config.now_city')."' AND s.have_shop=1 AND s.status=1 AND me.status=1";
 		if (C('config.store_shop_auth') == 1) {
@@ -880,6 +881,11 @@ class Merchant_storeModel extends Model
 
 			$v['state'] = 0;//根据营业时间判断
 			$v['work_time'] = '';
+
+			//modify garfunkel
+            if($is_lang){
+                $v['name'] = lang_substr($v['name'],C('DEFAULT_LANG'));
+            }
 			if ($v['office_time']) {
 				foreach (unserialize($v['office_time']) as $time) {
 					$v['work_time'] .= '<span>' . $time['open'] . '-' . $time['close'] . '</span>';

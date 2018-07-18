@@ -415,14 +415,16 @@ class StoreAction extends BaseAction
 				$temp['sort_discount'] = 0;
 			} else {
 				$temp['cat_id'] = $row['sort_id'];
-				$temp['cat_name'] = $row['sort_name'];
+				//modify garfunkel 语言判断
+				$temp['cat_name'] = lang_substr($row['sort_name'],C('DEFAULT_LANG'));
 				$temp['sort_discount'] = $row['sort_discount']/10;
 			}
 
 			foreach ($row['goods_list'] as $r) {
 				$glist = array();
 				$glist['product_id'] = $r['goods_id'];
-				$glist['product_name'] = $r['name'];
+                //modify garfunkel 语言判断
+				$glist['product_name'] = lang_substr($r['name'],C('DEFAULT_LANG'));
 				$glist['product_price'] = $r['price'];
 				$glist['is_seckill_price'] = $r['is_seckill_price'];
 				$glist['o_price'] = $r['o_price'];
@@ -671,8 +673,9 @@ class StoreAction extends BaseAction
         }
         //end  @wangchuanyuan
 		$delivers = array('平台配送', '商家配送', '客户自提', '平台配送或自提', '商家配送或自提', '快递配送');
+        //modify garfunkel 增加语言判断
+		$store['name'] = lang_substr($row['name'],C('DEFAULT_LANG'));
 
-		$store['name'] = $row['name'];
 		$store['store_notice'] = $row['store_notice'];
 		$store['txt_info'] = $row['txt_info'];
 		$store['image'] = isset($images[0]) ? $images[0] : '';
@@ -733,8 +736,9 @@ class StoreAction extends BaseAction
 		}
 
 
-
-		$store['delivery_money'] = floatval($store['delivery_money']);
+        //modify garfunkel
+        $store['delivery_money'] = C('config.delivery_distance_1');
+        //$store['delivery_money'] = floatval($store['delivery_money']);
 // 		$store['delivery_money'] = $row['deliver_type'] == 0 ? C('config.delivery_fee') : $row['delivery_fee'];//配送费
 // 		$store['delivery_money'] = floatval($store['delivery_money']);//配送费
 		$store['delivery_system'] = $row['deliver_type'] == 0 || $row['deliver_type'] == 3 ? true : false;//是否是平台配送

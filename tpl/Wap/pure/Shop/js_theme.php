@@ -74,23 +74,27 @@
 							}
 						}}
 					</span>
-                    &nbsp;<span style="color:#9f9f9f;">已售{{ d[i].month_sale_count }}单</span><br/>
-                    &nbsp;<span style="color:#9f9f9f;">月售{{ d[i].merchant_store_month_sale_count }}单</span>
+                    &nbsp;<span style="color:#9f9f9f;">
+                        {{ getLangStr('_SALE_NUM_ORDER_',d[i].month_sale_count) }}
+                    </span><br/>
+                    &nbsp;<span style="color:#9f9f9f;">
+                        {{getLangStr('_MONTH_SALE_NUM_',d[i].month_sale_count)}}
+                    </span>
 					{{# if(d[i].delivery){ }}
-						<em class="location-right">{{ d[i].delivery_time }}分钟</em>
+						<!--em class="location-right">{{ d[i].delivery_time }}分钟</em-->
 					{{# }else{ }}
-						<em class="location-right">门店自提</em>
+						<em class="location-right">{pigcms{:L('_SELF_DIST_')}</em>
 					{{# } }}
 				</div>
 				{{# if(d[i].delivery){ }}
 					<div class="price">
-						<span>起送价 ${{ d[i].delivery_price }}</span>
-                        <span class="delivery">配送费 ${{ d[i].delivery_money }}</span>
-                        <span class="delivery">{{ d[i].pack_alias }} ${{ d[i].pack_fee }}</span>
+						<span>{pigcms{:L('_MIN_DELI_PRICE_')} ${{ d[i].delivery_price }}</span>
+                        <span class="delivery">{pigcms{:L('_DELI_PRICE_')} ${{ d[i].delivery_money }}</span>
+                        <span class="delivery">{pigcms{:L('_PACK_PRICE_')} ${{ d[i].pack_fee }}</span>
 						{{# if(d[i].delivery_system){ }}
-							<em class="location-right">平台配送</em>
+							<em class="location-right">{pigcms{:L('_PLAT_DIST_')}</em>
 						{{# }else{ }}
-							<em class="location-right">商家配送</em>
+							<em class="location-right">{pigcms{:L('_SHOP_DIST_')}</em>
 						{{# } }}
 					</div>
 				{{# } }}
@@ -122,7 +126,7 @@
 							{{# } }}
 						</ul>
 						{{# if(d[i].coupon_count > 2){ }}
-							<div class="more">{{ d[i].coupon_count }}个活动</div>
+							<div class="more">{{ getLangStr('_EVENT_NUM_',d[i].coupon_count) }}</div>
 						{{# } }}
 					</div>
 				{{# } }}
@@ -151,19 +155,19 @@
 							</div>
 							<div class="product_text">
 								<div class="title">{{ d[i].product_list[j].product_name }}</div>
-								<div class="sale">月售{{ d[i].product_list[j].product_sale }}{{ d[i].product_list[j].unit }} 好评{{ d[i].product_list[j].product_reply }}</div>
+								<div class="sale">{{ getLangStr('_MONTH_SALE_NUM_',d[i].product_list[j].product_sale) }} {{ getLangStr('_PRAISE_TXT_') }}{{ d[i].product_list[j].product_reply }}</div>
 								{{# if(d[i].product_list[j].has_format){ }}
 									<div class="price">${{ d[i].product_list[j].product_price }} 起{{# if(d[i].product_list[j].extra_pay_price>0&&open_extra_price==1){ }}+{{ d[i].product_list[j].extra_pay_price }}{{ d[i].product_list[j].extra_pay_price_name }}{{# } }}</div>
 								{{# }else{ }}
 									<div class="price">${{ d[i].product_list[j].product_price }}{{# if(d[i].product_list[j].is_seckill_price){ }}<span>${{ d[i].product_list[j].o_price }}</span>{{# } }}{{# if(d[i].product_list[j].extra_pay_price>0&&open_extra_price==1){ }}+{{ d[i].product_list[j].extra_pay_price }}{{ d[i].product_list[j].extra_pay_price_name }}{{# } }}</div>
 								{{# } }}
 								{{# if(d[i].product_list[j].is_seckill_price){ }}
-									<div class="skill_discount" style="margin-top: 5px;">限时优惠</div>
+									<div class="skill_discount" style="margin-top: 5px;">{pigcms{:L('_LIMIT_TIME_DISCOUNT_')}</div>
 								{{# } }}
 							</div>
 							{{# if(d[i].product_list[j].has_format){ }}
 								<div class="product_btn" >
-									可选规格
+									{pigcms{:L('_OPTIONAL_SPEC_')}
 								</div>
 							{{# }else{ }}
 								<div class="product_btn plus"></div>
@@ -178,7 +182,7 @@
 	{{# } }}
 </script>
 <script id="shopProductTopBarTpl" type="text/html">
-		<li data-cat_id="0" class="active">全部分类</li>
+		<li data-cat_id="0" class="active">{pigcms{:L('_ALL_CLASSIF_')}</li>
 	{{# for(var i = 0, len = d.length; i < len; i++){ }}
 		<li data-cat_id="{{ d[i].cat_id }}" data-name="{{ d[i].cat_name }}" data-discount="{{ d[i].sort_discount }}">{{ d[i].cat_name }}{{# if(d[i].sort_discount){ }}<span>({{ d[i].sort_discount }}折优惠)</span>{{# } }}</li>
 	{{# } }}
@@ -198,9 +202,9 @@
 					<div class="product_text">
 						<div class="title">{{ d[i].product_list[j].product_name }}</div>
 						{{# if(d[i].product_list[j].is_seckill_price){ }}
-						<div class="skill_discount">限时优惠</div>
+						<div class="skill_discount">{pigcms{:L('_LIMIT_TIME_DISCOUNT_')}</div>
 						{{# } }}
-						<div class="sale">月售{{ d[i].product_list[j].product_sale }}{{ d[i].product_list[j].unit }} 好评{{ d[i].product_list[j].product_reply }}</div>
+                        <div class="sale">{{ getLangStr('_MONTH_SALE_NUM_',d[i].product_list[j].product_sale) }} {{ getLangStr('_PRAISE_TXT_') }}{{ d[i].product_list[j].product_reply }}</div>
 						{{# if(d[i].product_list[j].has_format){ }}
 							<div class="price">${{ d[i].product_list[j].product_price }} 起{{# if(d[i].product_list[j].extra_pay_price>0&&open_extra_price==1){ }}+{{ d[i].product_list[j].extra_pay_price }}{{ d[i].product_list[j].extra_pay_price_name }}{{# } }}</div>
 						{{# }else{ }}
@@ -209,7 +213,7 @@
 					</div>
 					{{# if(d[i].product_list[j].has_format){ }}
 						<div class="product_btn">
-							可选规格
+                            {pigcms{:L('_OPTIONAL_SPEC_')}
 						</div>
 					{{# }else{ }}
 						<div class="product_btn plus"></div>
@@ -227,7 +231,7 @@
 				<span class="quantity"><b></b></span>		
 				<div class="sub_cat hide">
 					<ul class="dropdown-list sub-list">
-						<li class="listCat-{{ d[i].cat_url }} isSon" data-cat_id="{{ d[i].cat_id }}" data-cat_url="{{ d[i].cat_url }}" onclick="list_location($(this));return false;"><div><span class="sub-name" data-name="{{ d[i].cat_name }}">全部</span></div></li>
+						<li class="listCat-{{ d[i].cat_url }} isSon" data-cat_id="{{ d[i].cat_id }}" data-cat_url="{{ d[i].cat_url }}" onclick="list_location($(this));return false;"><div><span class="sub-name" data-name="{{ d[i].cat_name }}">{pigcms{:L('_ALL_TXT_')}</span></div></li>
 						{{# for(var j = 0, jlen = d[i].son_list.length; j < jlen; j++){ }}
 							<li class="listCat-{{ d[i].son_list[j].cat_url }} isSon" data-cat_id="{{ d[i].son_list[j].cat_id }}" data-cat_url="{{ d[i].son_list[j].cat_url }}" onclick="list_location($(this));return false;"><div><span class="sub-name" data-name="{{ d[i].son_list[j].cat_name }}">{{ d[i].son_list[j].cat_name }}</span></div></li>
 						{{# } }}
@@ -292,7 +296,7 @@
 </script>
 <script id="productCartBoxTpl" type="text/html">
 	<dl>
-		<dt class="clearfix">购物车<div id="shopProductCartDel">清空</div></dt>
+		<dt class="clearfix">{pigcms{:L('_CART_TXT_')}<div id="shopProductCartDel">{pigcms{:L('_CLEAR_TXT_')}</div></dt>
 		{{#
 			var packCharge = 0;
 			for(var i in d){
@@ -357,7 +361,7 @@
 				{{# } }}
 				{{# if(d[i].merchant_reply_time != '0'){ }}
 					<div class="reply">
-						<div class="title">店铺回复:<div class="time">{{ d[i].merchant_reply_time_hi }}</div></div>
+						<div class="title">{pigcms{:L('_ALL_TXT_')}:<div class="time">{{ d[i].merchant_reply_time_hi }}</div></div>
 						<div class="reply_content">{{ d[i].merchant_reply_content }}</div>
 					</div>
 				{{# } }}

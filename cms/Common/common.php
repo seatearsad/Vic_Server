@@ -554,4 +554,30 @@ function getAttachmentUrl($fileUrl, $is_remote = true){
         return $url . $fileUrl;
     }
 }
+
+//Garfunkel Add
+//根据语言对显示字符进行分割
+//$str为需要被分割的字符，$lang为语言 zh-cn,en-us
+function lang_substr($str,$lang){
+    $arr = explode("|",$str);
+    if(count($arr) > 1){
+        if($lang == 'zh-cn'){//中文
+            $re_str = $arr[1];
+        }else{
+            $re_str = $arr[0];
+        }
+    }else{
+        $re_str = $arr[0];
+    }
+
+    return $re_str;
+}
+
+//Garfunkel Add
+//替换字符串中的%s字符
+function replace_lang_str($str,$replace){
+    $n_str = str_repeat('%s',$replace,$str);
+
+    return $n_str;
+}
 ?>

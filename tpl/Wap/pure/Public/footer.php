@@ -15,19 +15,19 @@
     <else />
         <ul>
 			<li>
-				<a <?php if(MODULE_NAME == 'Home'){ echo 'class="active"'; }?> href="{pigcms{:U('Home/index')}"><em class="home"></em><p>首页</p></a>
+				<a <?php if(MODULE_NAME == 'Home'){ echo 'class="active"'; }?> href="{pigcms{:U('Home/index')}"><em class="home"></em><p>{pigcms{:L('_HOME_TXT_')}</p></a>
 			</li>
 			<li>
-				<a <?php if(MODULE_NAME == 'Group'){ echo 'class="hover"'; }?> href="{pigcms{:U('Group/index')}"><em class="group"></em><p>{pigcms{$config.group_alias_name}</p></a>
+				<a <?php if(MODULE_NAME == 'Group'){ echo 'class="hover"'; }?> href="{pigcms{:U('Group/index')}"><em class="group"></em><p>{pigcms{:L('_LUNCH_TXT_')}</p></a>
 			</li>
 			<li class="voiceBox">
 				<a href="{pigcms{:U('Search/voice')}" class="voiceBtn" data-nobtn="true"></a>
 			</li>
 			<li>
-				<a <?php if(in_array(MODULE_NAME,array('Shop'))){ echo 'class="hover"';}?> href="{pigcms{:U('Shop/index')}"><em class="store"></em><p>{pigcms{$config.shop_alias_name}</p></a>
+				<a <?php if(in_array(MODULE_NAME,array('Shop'))){ echo 'class="hover"';}?> href="{pigcms{:U('Shop/index')}"><em class="store"></em><p>{pigcms{:L('_OUT_TXT_')}</p></a>
 			</li>
 			<li>
-				<a <?php if(in_array(MODULE_NAME,array('My','Login'))){ echo 'class="active"'; }?> href="{pigcms{:U('My/index')}"><em class="my"></em><p>我的</p></a>
+				<a <?php if(in_array(MODULE_NAME,array('My','Login'))){ echo 'class="active"'; }?> href="{pigcms{:U('My/index')}"><em class="my"></em><p>{pigcms{:L('_PROFILE_TXT_')}</p></a>
 			</li>
 		</ul>
     </if>
@@ -36,12 +36,12 @@
 	<div class="wx_aside more_active" id="quckArea">
 		<a id="quckIco2" class="btn_more"><img style="width:40px;height:40px;" src="tpl/Wap/pure/static/img/more.png" />更多</a>
 		<div class="wx_aside_item" id="quckMenu" style="display:none">
-			<div id="footer_home" class="item_gwq"><img src="tpl/Wap/pure/static/img/footer_home.png" /><a> 首页</a></div>
-			<div id="footer_group" class="item_gwq"><img src="tpl/Wap/pure/static/img/footer_group.png" /><a> {pigcms{$config.group_alias_name}</a></div>
-			<div id="footer_store" class="item_gwq"><img src="tpl/Wap/pure/static/img/footer_store.png" /><a> {pigcms{$config.meal_alias_name}</a></div>
-			<div id="footer_shop" class="item_gwq"><img src="tpl/Wap/pure/static/img/footer_shop.png" /><a> {pigcms{$config.merchant_alias_name}</a></div>
-			<div id="footer_my" class="item_gwq"><img src="tpl/Wap/pure/static/img/footer_my.png" /><a> 我的</a></div>
-			<div id="footer_refresh" class="item_gwq"><img src="tpl/Wap/pure/static/img/footer_refresh.png" /><a> 刷新</a></div>
+			<div id="footer_home" class="item_gwq"><img src="tpl/Wap/pure/static/img/footer_home.png" /><a> {pigcms{:L('_HOME_TXT_')}</a></div>
+			<div id="footer_group" class="item_gwq"><img src="tpl/Wap/pure/static/img/footer_group.png" /><a> {pigcms{:L('_LUNCH_TXT_')}</a></div>
+			<!--div id="footer_store" class="item_gwq"><img src="tpl/Wap/pure/static/img/footer_store.png" /><a> {pigcms{$config.meal_alias_name}</a></div-->
+			<div id="footer_shop" class="item_gwq"><img src="tpl/Wap/pure/static/img/footer_shop.png" /><a> {pigcms{:L('_OUT_TXT_')}</a></div>
+			<div id="footer_my" class="item_gwq"><img src="tpl/Wap/pure/static/img/footer_my.png" /><a> {pigcms{:L('_PROFILE_TXT_')}</a></div>
+			<!--div id="footer_refresh" class="item_gwq"><img src="tpl/Wap/pure/static/img/footer_refresh.png" /><a> 刷新</a></div-->
 		</div>
 	</div>
 	<script>
@@ -58,7 +58,7 @@
 			location.href = "{pigcms{:U('wap/Meal_list/index')}";
 		});
 		$("#footer_shop").on('click',function(){
-			location.href = "{pigcms{:U('wap/Merchant/store_list')}";
+			location.href = "{pigcms{:U('Shop/index')}";
 		});
 		$("#footer_my").on('click',function(){
 			location.href = "{pigcms{:U('wap/My/index')}";

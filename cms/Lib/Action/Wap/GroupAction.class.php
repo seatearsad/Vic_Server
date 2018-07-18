@@ -14,7 +14,7 @@ class GroupAction extends BaseAction{
 		if(!empty($area_url)){
 			$tmp_area = D('Area')->get_area_by_areaUrl($area_url);
 			if(empty($tmp_area)){
-				$this->error('当前区域不存在！');
+				$this->error(L('_AREA_NOT_EXIST_'));
 			}
 			$this->assign('now_area', $tmp_area);
 
@@ -25,7 +25,7 @@ class GroupAction extends BaseAction{
 				$this->assign('now_circle', $now_circle);
 				$now_area = D('Area')->get_area_by_areaId($tmp_area['area_pid'], true, $cat_url);
 				if (empty($tmp_area)) {
-					$this->error('当前区域不存在！');
+					$this->error(L('_AREA_NOT_EXIST_'));
 				}
 				$circle_url = $now_circle['area_url'];
 				$circle_id = $now_circle['area_id'];
@@ -44,21 +44,21 @@ class GroupAction extends BaseAction{
 		if(empty($long_lat)){
 			$sort_id = $sort_id == 'juli' ? 'defaults' : $sort_id;
 			$sort_array = array(
-				array('sort_id'=>'defaults','sort_value'=>'默认排序'),
-				array('sort_id'=>'rating','sort_value'=>'评价最高'),
-				array('sort_id'=>'start','sort_value'=>'最新发布'),
-				array('sort_id'=>'solds','sort_value'=>'人气最高'),
-				array('sort_id'=>'price','sort_value'=>'价格最低'),
-				array('sort_id'=>'priceDesc','sort_value'=>'价格最高'),
+                array('sort_id'=>'defaults','sort_value'=>L('_DEFAULT_SORT_')),
+                array('sort_id'=>'rating','sort_value'=>L('_BEST_EVAL_')),
+                array('sort_id'=>'start','sort_value'=>L('_NEW_RELEASE_')),
+                array('sort_id'=>'solds','sort_value'=>L('_BEST_POP_')),
+                array('sort_id'=>'price','sort_value'=>L('_LOWEST_PRICE_')),
+                array('sort_id'=>'priceDesc','sort_value'=>L('_HEIGHTEST_PRICE_')),
 			);
 		} else {
 			$sort_array = array(
-				array('sort_id'=>'juli','sort_value'=>'离我最近'),
-				array('sort_id'=>'rating','sort_value'=>'评价最高'),
-				array('sort_id'=>'start','sort_value'=>'最新发布'),
-				array('sort_id'=>'solds','sort_value'=>'人气最高'),
-				array('sort_id'=>'price','sort_value'=>'价格最低'),
-				array('sort_id'=>'priceDesc','sort_value'=>'价格最高'),
+                array('sort_id'=>'juli','sort_value'=>L('_CLOSEST_ME_')),
+                array('sort_id'=>'rating','sort_value'=>L('_BEST_EVAL_')),
+                array('sort_id'=>'start','sort_value'=>L('_NEW_RELEASE_')),
+                array('sort_id'=>'solds','sort_value'=>L('_BEST_POP_')),
+                array('sort_id'=>'price','sort_value'=>L('_LOWEST_PRICE_')),
+                array('sort_id'=>'priceDesc','sort_value'=>L('_HEIGHTEST_PRICE_')),
 			);
 			$this->assign('long_lat',$long_lat);
 		}
@@ -143,7 +143,7 @@ class GroupAction extends BaseAction{
 		if(!empty($area_url)){
 			$tmp_area = D('Area')->get_area_by_areaUrl($area_url);
 			if(empty($tmp_area)){
-				$this->error('当前区域不存在！');
+				$this->error(L('_AREA_NOT_EXIST_'));
 			}
 
 			if ($tmp_area['area_type'] == 3) {
@@ -152,7 +152,7 @@ class GroupAction extends BaseAction{
 				$now_circle = $tmp_area;
 				$now_area = D('Area')->get_area_by_areaId($tmp_area['area_pid'], true, $cat_url);
 				if (empty($tmp_area)) {
-					$this->error('当前区域不存在！');
+					$this->error(L('_AREA_NOT_EXIST_'));
 				}
 				$circle_url = $now_circle['area_url'];
 				$circle_id = $now_circle['area_id'];
@@ -170,22 +170,22 @@ class GroupAction extends BaseAction{
 		if(empty($long_lat)){
 			$sort_id = $sort_id == 'juli' ? 'defaults' : $sort_id;
 			$sort_array = array(
-					array('sort_id'=>'defaults','sort_value'=>'默认排序'),
-					array('sort_id'=>'rating','sort_value'=>'评价最高'),
-					array('sort_id'=>'start','sort_value'=>'最新发布'),
-					array('sort_id'=>'solds','sort_value'=>'人气最高'),
-					array('sort_id'=>'price','sort_value'=>'价格最低'),
-					array('sort_id'=>'priceDesc','sort_value'=>'价格最高'),
+					array('sort_id'=>'defaults','sort_value'=>L('_DEFAULT_SORT_')),
+					array('sort_id'=>'rating','sort_value'=>L('_BEST_EVAL_')),
+					array('sort_id'=>'start','sort_value'=>L('_NEW_RELEASE_')),
+					array('sort_id'=>'solds','sort_value'=>L('_BEST_POP_')),
+					array('sort_id'=>'price','sort_value'=>L('_LOWEST_PRICE_')),
+					array('sort_id'=>'priceDesc','sort_value'=>L('_HEIGHTEST_PRICE_')),
 
 			);
 		}else{
 			$sort_array = array(
-					array('sort_id'=>'juli','sort_value'=>'离我最近'),
-					array('sort_id'=>'rating','sort_value'=>'评价最高'),
-					array('sort_id'=>'start','sort_value'=>'最新发布'),
-					array('sort_id'=>'solds','sort_value'=>'人气最高'),
-					array('sort_id'=>'price','sort_value'=>'价格最低'),
-					array('sort_id'=>'priceDesc','sort_value'=>'价格最高'),
+			    array('sort_id'=>'juli','sort_value'=>L('_CLOSEST_ME_')),
+                array('sort_id'=>'rating','sort_value'=>L('_BEST_EVAL_')),
+                array('sort_id'=>'start','sort_value'=>L('_NEW_RELEASE_')),
+                array('sort_id'=>'solds','sort_value'=>L('_BEST_POP_')),
+                array('sort_id'=>'price','sort_value'=>L('_LOWEST_PRICE_')),
+                array('sort_id'=>'priceDesc','sort_value'=>L('_HEIGHTEST_PRICE_')),
 
 			);
 		}
@@ -196,7 +196,7 @@ class GroupAction extends BaseAction{
 		if(!empty($cat_url)){
 			$now_category = D('Group_category')->get_category_by_catUrl($cat_url);
 			if(empty($now_category)){
-				$this->error_tips('此分类不存在！');
+				$this->error_tips(L('_NOT_CLASSIF_'));
 			}
 
 			if(!empty($now_category['cat_fid'])){

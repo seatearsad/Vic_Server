@@ -48,21 +48,28 @@ class ShopAction extends BaseAction{
 		$return['slider_list'] = D('Slider')->get_slider_by_key('wap_shop_slider', 0);
 		$return['adver_list'] = D('Adver')->get_adver_by_key('wap_shop_index_cente', 3);
 		$return['category_list'] = D('Shop_category')->lists(true);
+		//add garfunkel 判断语言
+        foreach ($return['category_list'] as $k => $v){
+            $return['category_list'][$k]['cat_name'] = lang_substr($v['cat_name'],C('DEFAULT_LANG'));
+            foreach ($v['son_list'] as $kk => $vv) {
+                $return['category_list'][$k]['son_list'][$kk]['cat_name'] = lang_substr($vv['cat_name'],C('DEFAULT_LANG'));
+            }
+        }
 		$return['sort_list'] = array(
 				array(
-						'name' => '智能排序',
+						'name' => L('_INTELLIGENT_SORTING_'),
 						'sort_url' => 'juli'
 				),
 				array(
-						'name' => '销售数量最高',
+						'name' => L('_HIGHEST_SALES_'),
 						'sort_url'=>'sale_count'
 				),
 				array(
-						'name' => '配送时间最短',
+						'name' => L('_DELI_TIME_MIN_'),
 						'sort_url'=>'send_time'
 				),
 				array(
-						'name' => '起送价最低',
+						'name' => L('_DIST_PRICE_MIN_'),
 						'sort_url' => 'basic_price'
 				),
 // 				array(
@@ -70,25 +77,25 @@ class ShopAction extends BaseAction{
 // 						'sort_url' => 'delivery_fee'
 // 				),
 				array(
-						'name' => '评分最高',
+						'name' => L('_SCORE_HIGHEST_'),
 						'sort_url' => 'score_mean'
 				),
 				array(
-						'name' => '最新发布',
+						'name' => L('_NEW_RELEASE_'),
 						'sort_url' => 'create_time'
 				)
 		);
 		$return['type_list'] = array(
 			array(
-				'name' => '全部',
+				'name' => L('_ALL_TXT_'),
 				'type_url' => 'all'
 			),
 			array(
-				'name' => '配送',
+				'name' => L('_DELI_TXT_'),
 				'type_url' => 'delivery'
 			),
 			array(
-				'name' => '自提',
+				'name' => L('_SELF_LIFT_'),
 				'type_url' => 'pick'
 			)
 		);
@@ -98,48 +105,48 @@ class ShopAction extends BaseAction{
 		$return = array();
 		$return['category_list'] = D('Shop_category')->lists(true);
 		$return['sort_list'] = array(
-				array(
-						'name' => '智能排序',
-						'sort_url' => 'juli'
-				),
-				array(
-						'name' => '销售数量最高',
-						'sort_url'=>'sale_count'
-				),
-				array(
-						'name' => '配送时间最短',
-						'sort_url'=>'send_time'
-				),
-				array(
-						'name' => '起送价最低',
-						'sort_url' => 'basic_price'
-				),
+            array(
+                'name' => L('_INTELLIGENT_SORTING_'),
+                'sort_url' => 'juli'
+            ),
+            array(
+                'name' => L('_HIGHEST_SALES_'),
+                'sort_url'=>'sale_count'
+            ),
+            array(
+                'name' => L('_DELI_TIME_MIN_'),
+                'sort_url'=>'send_time'
+            ),
+            array(
+                'name' => L('_DIST_PRICE_MIN_'),
+                'sort_url' => 'basic_price'
+            ),
 // 				array(
 // 						'name' => '配送费最低',
 // 						'sort_url' => 'delivery_fee'
 // 				),
-				array(
-						'name' => '评分最高',
-						'sort_url' => 'score_mean'
-				),
-				array(
-						'name' => '最新发布',
-						'sort_url' => '	create_time'
-				)
+            array(
+                'name' => L('_SCORE_HIGHEST_'),
+                'sort_url' => 'score_mean'
+            ),
+            array(
+                'name' => L('_NEW_RELEASE_'),
+                'sort_url' => 'create_time'
+            )
 		);
 		$return['type_list'] = array(
-			array(
-				'name' => '全部',
-				'type_url' => 'all'
-			),
-			array(
-				'name' => '配送',
-				'type_url' => 'delivery'
-			),
-			array(
-				'name' => '自提',
-				'type_url' => 'pick'
-			)
+            array(
+                'name' => L('_ALL_TXT_'),
+                'type_url' => 'all'
+            ),
+            array(
+                'name' => L('_DELI_TXT_'),
+                'type_url' => 'delivery'
+            ),
+            array(
+                'name' => L('_SELF_LIFT_'),
+                'type_url' => 'pick'
+            )
 		);
 		echo json_encode($return);
 	}
@@ -183,7 +190,8 @@ class ShopAction extends BaseAction{
 		foreach ($lists['shop_list'] as $row) {
 			$temp = array();
 			$temp['id'] = $row['store_id'];
-			$temp['name'] = $row['name'];
+			//modify garfunkel 判断语言
+			$temp['name'] = lang_substr($row['name'],C('DEFAULT_LANG'));
 			$temp['range'] = $row['range'];
 			$temp['image'] = $row['image'];
 			$temp['star'] = $row['score_mean'];
@@ -647,8 +655,10 @@ class ShopAction extends BaseAction{
         }
         //end  @wangchuanyuan
 		$store['home_url'] = U('Index/index', array('token' => $row['mer_id']));
-		$store['name'] = $row['name'];
-		$store['store_notice'] = $row['store_notice'];
+        //modify garfunkel 判断语言
+		$store['name'] = lang_substr($row['name'],C('DEFAULT_LANG'));
+        //modify garfunkel 判断语言
+		$store['store_notice'] = lang_substr($row['store_notice'],C('DEFAULT_LANG'));
 		$store['txt_info'] = $row['txt_info'];
 		$store['image'] = isset($images[0]) ? $images[0] : '';
 		$store['auth_files_str'] = implode(',', $auth_files);
@@ -721,6 +731,8 @@ class ShopAction extends BaseAction{
 			$store['pick'] = 0;//是否支持自提
 		}
 		$store['pack_alias'] = $row['pack_alias'];//打包费别名
+        //modify garfunkel
+        $store['pack_fee'] = $row['pack_fee'];
 		$store['freight_alias'] = $row['freight_alias'];//运费别名
 		$store['coupon_list'] = array();
 		if ($row['is_invoice']) {
@@ -783,12 +795,14 @@ class ShopAction extends BaseAction{
 		foreach ($product_list as $row) {
 			$temp = array();
 			$temp['cat_id'] = $row['sort_id'];
-			$temp['cat_name'] = $row['sort_name'];
+			//modify garfunkel 判断语言
+			$temp['cat_name'] = lang_substr($row['sort_name'],C('DEFAULT_LANG'));
 			$temp['sort_discount'] = $row['sort_discount']/10;
 			foreach ($row['goods_list'] as $r) {
 				$glist = array();
 				$glist['product_id'] = $r['goods_id'];
-				$glist['product_name'] = $r['name'];
+                //modify garfunkel 判断语言
+				$glist['product_name'] = lang_substr($r['name'],C('DEFAULT_LANG'));
 				$glist['product_price'] = $r['price'];
 				$glist['is_seckill_price'] = $r['is_seckill_price'];
 				$glist['o_price'] = $r['o_price'];
@@ -1048,7 +1062,8 @@ class ShopAction extends BaseAction{
 
 
         $store['home_url'] = U('Index/index', array('token' => $row['mer_id']));
-        $store['name'] = $row['name'];
+        //modify garfunkel 判断语言
+        $store['name'] = lang_substr($row['name'],C('DEFAULT_LANG'));
         $store['store_notice'] = $row['store_notice'];
         $store['txt_info'] = $row['txt_info'];
         $store['image'] = isset($images[0]) ? $images[0] : '';
@@ -1186,12 +1201,14 @@ class ShopAction extends BaseAction{
             foreach ($product_list as $row) {
                 $temp = array();
                 $temp['cat_id'] = $row['sort_id'];
-                $temp['cat_name'] = $row['sort_name'];
+                //modify garfunkel 判断语言
+                $temp['cat_name'] = lang_substr($row['sort_name'],C('DEFAULT_LANG'));
                 $temp['sort_discount'] = $row['sort_discount']/10;
                 foreach ($row['goods_list'] as $r) {
                     $glist = array();
                     $glist['product_id'] = $r['goods_id'];
-                    $glist['product_name'] = $r['name'];
+                    //modify garfunkel 判断语言
+                    $glist['product_name'] = lang_substr($r['name'],C('DEFAULT_LANG'));
                     $glist['product_price'] = $r['price'];
                     $glist['is_seckill_price'] = $r['is_seckill_price'];
                     $glist['o_price'] = $r['o_price'];
@@ -1236,6 +1253,10 @@ class ShopAction extends BaseAction{
             echo json_encode(array('store' => $store, 'product_list' => $list));
         } else {
             $sortList = D('Shop_goods_sort')->lists($store_id, true);
+            //Add Garfunkel 判断语言
+            foreach ($sortList as $k => $sl){
+                $sortList[$k]['cat_name'] = lang_substr($sl['sort_name'],C('DEFAULT_LANG'));
+            }
             $firstSort = reset($sortList);
             $sortId = isset($firstSort['sort_id']) ? $firstSort['sort_id'] : 0;
             echo json_encode(array('store' => $store, 'product_list' => $this->getGoodsBySortId($sortId, $store_id), 'sort_list' => array_values($sortList)));
@@ -1250,12 +1271,14 @@ class ShopAction extends BaseAction{
         foreach ($product_list as $row) {
             $temp = array();
             $temp['cat_id'] = $row['sort_id'];
-            $temp['cat_name'] = $row['sort_name'];
+            //modify garfunkel 判断语言
+            $temp['cat_name'] = lang_substr($row['sort_name'],C('DEFAULT_LANG'));
             $temp['sort_discount'] = $row['sort_discount']/10;
             foreach ($row['goods_list'] as $r) {
                 $glist = array();
                 $glist['product_id'] = $r['goods_id'];
-                $glist['product_name'] = $r['name'];
+                //modify garfunkel 判断语言
+                $glist['product_name'] = lang_substr($r['name'],C('DEFAULT_LANG'));
                 $glist['product_price'] = $r['price'];
                 $glist['is_seckill_price'] = $r['is_seckill_price'];
                 $glist['o_price'] = $r['o_price'];
@@ -1316,6 +1339,8 @@ class ShopAction extends BaseAction{
 		$goods_id = isset($_GET['goods_id']) ? intval($_GET['goods_id']) : 1;
 		$database_shop_goods = D('Shop_goods');
 		$now_goods = $database_shop_goods->get_goods_by_id($goods_id);
+		$now_goods['name'] = lang_substr($now_goods['name'],C('DEFAULT_LANG'));
+		$now_goods['unit'] = lang_substr($now_goods['unit'],C('DEFAULT_LANG'));
 		if(empty($now_goods)){
 			$this->error_tips('商品不存在！');
 		}
@@ -1568,7 +1593,8 @@ class ShopAction extends BaseAction{
 				$store_discount_money += $this_goods_total_price;//折扣后的商品总价（店铺，分类，VIP折扣都计算在内）
 				
 				$goods[] = array(
-				    'name' => $row['name'],
+				    //modify garfunkel 判断语言
+				    'name' => lang_substr($row['name'],C('DEFAULT_LANG')),
 				    'is_seckill_price' => $t_return['is_seckill_price'],//是否是秒杀价(0:否，1：是)
 				    'discount_type' => $discount_type,//0:无折扣1：店铺折扣，2：分类折扣，3：VIP折扣，4:店铺+VIP折扣，5:分类+VIP折扣
 				    'discount_rate' => $discount_rate,//折扣率
@@ -1661,7 +1687,8 @@ class ShopAction extends BaseAction{
 				$str_s && $str = implode(',', $str_s);
 				$str_p && $str = $str ? $str . ';' . implode(',', $str_p) : implode(',', $str_p);
 				$goods[] = array(
-				    'name' => $row['productName'], 
+				    //modify garfunkel 判断语言
+				    'name' => lang_substr($row['productName'],C('DEFAULT_LANG')),
 				    'is_seckill_price' => $t_return['is_seckill_price'],//是否是秒杀价(0:否，1：是)
 				    'discount_type' => $discount_type,//0:无折扣1：店铺折扣，2：分类折扣，3：VIP折扣，4:店铺+VIP折扣，5:分类+VIP折扣
 				    'discount_rate' => $discount_rate,//折扣率

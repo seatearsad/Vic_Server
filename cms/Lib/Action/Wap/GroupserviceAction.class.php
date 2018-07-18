@@ -84,7 +84,8 @@ class GroupserviceAction extends BaseAction{
 				$n++;
 				$temp = array();
 				$temp['store_id'] = $row['store_id'];
-				$temp['name'] = $row['name'];
+				//modify garfunkel 判断语言
+				$temp['name'] = lang_substr($row['name'],C('DEFAULT_LANG'));
 				$temp['store_theme'] = $row['store_theme'];
 				$temp['isverify'] = $row['isverify'];
 				$temp['juli_wx'] = $row['juli'];

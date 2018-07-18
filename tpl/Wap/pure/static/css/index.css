@@ -63,8 +63,33 @@ header{
     background-size: 19px 20px;
     background-position: 16px 15px;
 }
+.lang_div_wap{
+	position: absolute;
+	width:90px;
+	height:300%;
+	text-align: center;
+	right: 50px;
+}
+.lang_div_wap:hover .lang_select{
+
+}
+.lang_div_wap div{
+	height:50px;
+	line-height:50px;
+	color: #ffffff;
+}
+.lang_curr_wap{
+
+}
+.lang_select{
+	display: none;
+	border-bottom: 1px dashed #ffffff ;
+	background: #06c1ae;
+}
 #searchBox{
-	margin:0 50px;
+	margin-left:50px;
+	margin-right:150px;
+	margin-bottom: 0px;
 	background: rgba(17,88,81,.11);
 	border-radius: 30px;
 	height:30px;

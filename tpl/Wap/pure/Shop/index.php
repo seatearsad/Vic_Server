@@ -23,7 +23,8 @@
 		<if condition="$user_long_lat">var last_user_long = "{pigcms{$user_long_lat.long}",last_user_lat = "{pigcms{$user_long_lat.lat}";<else/>var last_user_long = '0',last_user_lat  = '0';</if>
 		var open_extra_price =Number("{pigcms{$config.open_extra_price}");
 		var user_long = '0',user_lat  = '0';var user_address='';var ajax_url_root = "{pigcms{$config.site_url}/wap.php?c=Shop&a=";var check_cart_url = "{pigcms{$config.site_url}/wap.php?c=Shop&a=confirm_order";var ajax_map_url = "{pigcms{$config.site_url}/index.php?g=Index&c=Map&a=suggestion&city_id={pigcms{$config.now_city}";var get_route_url = "{pigcms{:U('Group/get_route')}";var baiduToGcj02Url = "{pigcms{:U('Userlonglat/baiduToGcj02')}";var city_id="{pigcms{$config.now_city}";var cat_url="",sort_url="",type_url="";var noAnimate= true;var userOpenid="{pigcms{$_SESSION.openid}";var shopShareUrl = "{pigcms{$config.site_url}{pigcms{:U('Shop/index',array('openid'=>$_SESSION['openid']))}&shop-id=",shopReplyUrl = "{pigcms{$config.site_url}/index.php??g=Index&c=Reply&a=ajax_get_list&order_type=3&parent_id=";</script>
-		<script type="text/javascript" src="{pigcms{$static_path}shop/js/shopBase.js?t={pigcms{$_SERVER.REQUEST_TIME}" charset="utf-8"></script>
+        <script type="text/javascript" src="{pigcms{$static_public}js/lang/{pigcms{:C('DEFAULT_LANG')}.js" charset="utf-8"></script>
+        <script type="text/javascript" src="{pigcms{$static_path}shop/js/shopBase.js?t={pigcms{$_SERVER.REQUEST_TIME}" charset="utf-8"></script>
 	</head>
 	<body>
 		<div id="pageList" class="pageDiv" <if condition="$config['shop_show_footer']">style="padding-bottom:56px;"</if>>
@@ -31,7 +32,7 @@
 				<div id="listBackBtn" class="listBackBtn hide"><div></div></div>
 				<div id="locationBtn" class="page-link" data-url="address" data-url-type="openRightFloatWindow">
 					<span class="location"></span>
-					<span id="locationText">正在定位</span>
+					<span id="locationText">{pigcms{:L('_BEING_POSITION_')}</span>
 					<span class="go"></span>
 				</div>
 				<div id="searchBtn" class="listSearchBtn page-link" data-url="shopSearch"><div></div></div>
@@ -52,13 +53,13 @@
 			<section id="listNavBox" class="navBox">
 				<ul>
 					<li class="dropdown-toggle caret category" data-nav="category">
-						<span class="nav-head-name">店铺分类</span>
+						<span class="nav-head-name">{pigcms{:L('_SHOP_CLASSIFICATION_')}</span>
 					</li>
 					<li class="dropdown-toggle caret sort" data-nav="sort">
-						<span class="nav-head-name">智能排序</span>
+						<span class="nav-head-name">{pigcms{:L('_INTELLIGENT_SORTING_')}</span>
 					</li>
 					<li class="dropdown-toggle caret type subway" data-nav="type">
-						<span class="nav-head-name">类型</span>
+						<span class="nav-head-name">{pigcms{:L('_TYPE_TXT_')}</span>
 					</li>
 				</ul>
 				<div class="dropdown-wrapper category">
@@ -88,7 +89,7 @@
 			</section>
 			<section id="storeList">
 				<dl class="dealcard"></dl>
-				<div id="storeListLoadTip">正在加载中...</div>
+				<div id="storeListLoadTip">{pigcms{:L('_LOADING_TXT_')}</div>
 			</section>
 			<section class="shade"></section>
 			<php>if(!$config['shop_show_footer']){$no_footer = true;$no_small_footer = true;}</php>
@@ -117,14 +118,14 @@
 			</section>
 			<section id="shopMenuBar">
 				<ul>
-					<li class="caret product active" data-nav="product">商品</li>
-					<li class="caret reply" data-nav="reply">评价</li>
-					<li class="caret merchant" data-nav="merchant">商家</li>
+					<li class="caret product active" data-nav="product">{pigcms{:L('_PRODUCT_TXT_')}</li>
+					<li class="caret reply" data-nav="reply">{pigcms{:L('_EVALUATE_TXT_')}</li>
+					<li class="caret merchant" data-nav="merchant">{pigcms{:L('_SHOP_TXT_')}</li>
 				</ul>
 			</section>
 			<section id="shopCatBar" style="display:none;">	
 				<div class="title">
-					全部分类
+					{pigcms{:L('_ALL_CLASSIF_')}
 				</div>
 				<div class="content">
 					<ul></ul>
@@ -142,54 +143,54 @@
 							<div class="cart">
 								<div id="cartNumber">0</div>
 							</div>
-							<div class="price">共$<span id="cartMoney">0</span></div>
+							<div class="price">{pigcms{:L('_TOTAL_TXT_')}$<span id="cartMoney">0</span></div>
 						</div>
 						<div id="emptyCart">
-							<div class="cart"></div>购物车是空的
+							<div class="cart"></div>{pigcms{:L('_CART_EMPTY_')}
 						</div>
-						<div id="checkCart" style="display:none;">选好了</div>
-						<div id="checkCartEmpty">起送价</div>
+						<div id="checkCart" style="display:none;">{pigcms{:L('_GOOD_CHOICE_')}</div>
+						<div id="checkCartEmpty">{pigcms{:L('_MIN_DELI_PRICE_')}</div>
 					</div>
 				</div>
 				<div id="shopReplyBox" style="display:none">
 					<div id="shopReplyDiv">
 						<ul class="clearfix">
-							<li class="active" data-tab="">全部(<em>0</em>)</li>
-							<li data-tab="good">满意(<em>0</em>)</li>
-							<li data-tab="wrong">不满意(<em>0</em>)</li>
+							<li class="active" data-tab="">{pigcms{:L('_ALL_TXT_')}(<em>0</em>)</li>
+							<li data-tab="good">{pigcms{:L('_SATISFIED_TXT_')}(<em>0</em>)</li>
+							<li data-tab="wrong">{pigcms{:L('_SATISFIED_NOT_')}(<em>0</em>)</li>
 						</ul>
 						<dl></dl>
-						<div id="noReply">暂无评价</div>
-						<div id="showMoreReply">加载更多</div>
+						<div id="noReply">{pigcms{:L('_NOT_EVALUATION_')}</div>
+						<div id="showMoreReply">{pigcms{:L('_LOAD_MORE_')}</div>
 					</div>
 				</div>
 				<div id="shopMerchantBox">
 					<dl id="shopMerchantDescBox">
-						<dd class="merchant more link-url">商家官网</dd>
-						<dd class="phone more">店铺电话</dd>
-						<dd class="address more page-link"><span></span>店铺地址</dd>
-						<dd class="openTime">营业时间</dd>
-						<dd class="deliveryType">配送服务</dd>
-						<dd class="merchantNotice">店铺公告</dd>
+						<!--dd class="merchant more link-url">{pigcms{:L('_SHOP_WEBSITE_')}</dd-->
+						<dd class="phone more">{pigcms{:L('_SHOP_PHONE_')}</dd>
+						<dd class="address more page-link"><span></span>{pigcms{:L('_SHOP_ADDRESS_')}</dd>
+						<dd class="openTime">{pigcms{:L('_BUSINESS_TIME_')}</dd>
+						<dd class="deliveryType">{pigcms{:L('_DIST_SERVICE_')}</dd>
+						<dd class="merchantNotice">{pigcms{:L('_SHOP_NOTICE_')}</dd>
 						
 					</dl>
 					<if condition="!$merchant_link_showOther">
 						<dl id="shopMerchantLinkBox">
-							<dd class="more link-url" data-url="{pigcms{:U('My/shop_order_list')}"><span></span>我的{pigcms{$config.shop_alias_name}订单</dd>
+							<dd class="more link-url" data-url="{pigcms{:U('My/shop_order_list')}"><span></span>{pigcms{:L('_MY_OUT_ORDER_')}</dd>
 						</dl>
 					</if>
 					<dl id="shopMerchantCouponBox">
-						<dd>配送服务</dd>
-						<dd>配送时间</dd>
+						<dd>{pigcms{:L('_DIST_SERVICE_')}</dd>
+						<dd>{pigcms{:L('_DIST_TIME_')}</dd>
 					</dl>
 					
 					<div class="photo_s">
 						<div class="photo">
-							<h2>商家照片</h2>
+							<h2>{pigcms{:L('_SHOP_PHOTO_')}</h2>
 							<ul class="clearfix store_image" data-pics=""></ul>
 						</div>
 						<div class="photo">
-							<h2>资质证照</h2>
+							<h2>{pigcms{:L('_CERTIFICATE_PHOTO_')}</h2>
 							<ul class="clearfix auth_file_image" data-pics=""></ul>
 						</div>
 					</div>
@@ -204,14 +205,14 @@
 							<div class="swiper-pagination swiper-pagination-productImg"></div>
 						</div>
 						<div id="shopDetailPageTitle">
-							<div class="title">商品名称</div>
-							<div class="desc">商品描述</div>
+							<div class="title">{pigcms{:L('_PRODUCT_NAME_')}</div>
+							<div class="desc">{pigcms{:L('_PRODUCT_DESC_')}</div>
 						</div>
-						<div id="shopDetailPageFormat">商品库存</div>
+						<div id="shopDetailPageFormat">{pigcms{:L('_PRODUCT_STOCK_')}</div>
 						<div id="shopDetailPageBar" class="clearfix">
-							<div class="fl" id="shopDetailPagePrice">价格</div>
+							<div class="fl" id="shopDetailPagePrice">{pigcms{:L('_PRICE_TXT_')}</div>
 							<div class="fr">
-								<div id="shopDetailPageBuy">加入购物车</div>
+								<div id="shopDetailPageBuy">{pigcms{:L('_ADD_TO_CART_')}</div>
 								<div id="shopDetailPageNumber" style="display:none;">
 									<div class="product_btn plus"></div>
 									<div class="product_btn number">0</div>
@@ -220,12 +221,12 @@
 							</div>
 						</div>
 						<div id="shopDetailPageLabel">
-							<div class="tip">我要备注<div class="question"></div></div>
+							<div class="tip">{pigcms{:L('_WANT_TO_NOT_')}<div class="question"></div></div>
 							<div id="shopDetailPageLabelBox"></div>
 						</div>
 						<div id="shopDetailPageContent">
-							<div class="title">商品描述</div>
-							<div class="content">商品描述内容</div>
+							<div class="title">{pigcms{:L('_PRODUCT_DESC_')}</div>
+							<div class="content">{pigcms{:L('_CONTENT_TXT_')}</div>
 						</div>
 					</div>
 				</div>
@@ -235,21 +236,21 @@
 			<div id="shopDetailMapClose" class="closeBtn"><div></div></div>
 			<div id="shopDetailMapBiz"></div>
 			<div id="shopDetailMapBar">
-				<span id="shopDetailMapAddress">地址</span>
-				<a class="btn right" id="shopDetailMapAddressGo">查看路线</a>
+				<span id="shopDetailMapAddress">{pigcms{:L('_ADDRESS_TXT_')}</span>
+				<a class="btn right" id="shopDetailMapAddressGo">{pigcms{:L('_LOOK_ROUTE_')}</a>
 			</div>
 		</div>
 		<div id="pageCat" class="pageDiv">
 			<section id="catHeader">
 				<div id="catBackBtn" class="backBtn"></div>
-				<span id="catTitle">分类</span>
+				<span id="catTitle">{pigcms{:L('_CLASSIFICATION_TXT_')}</span>
 				<div id="catSearchBtn" class="listSearchBtn page-link" data-url="shopSearch"><div></div></div>
 			</section>
 			<div id="pageCatNav"></div>
 			<section class="shade"></section>
 			<section id="storeList">
 				<dl class="dealcard"></dl>
-				<div id="storeListLoadTip">正在加载中...</div>
+				<div id="storeListLoadTip">{pigcms{:L('_LOADING_TXT_')}</div>
 			</section>
 		</div>
 		<div id="pageLoadTipShade" class="pageLoadTipBg">
@@ -264,14 +265,14 @@
 				<div id="pageAddressBackBtn" class="searhBackBtn"></div>
 				<div id="pageAddressSearch" class="searchBox">
 					<div class="searchIco"></div>
-					<input type="text" id="pageAddressSearchTxt" class="searchTxt" placeholder="请输入收货地址" autocomplete="off"/>
+					<input type="text" id="pageAddressSearchTxt" class="searchTxt" placeholder="{pigcms{:L('_PLEASE_INPUT_ADDRESS_')}" autocomplete="off"/>
 					<div class="delIco" id="pageAddressSearchDel"><div></div></div>
 				</div>
-				<div id="pageAddressSearchBtn" class="searchBtn">搜索</div>
+				<div id="pageAddressSearchBtn" class="searchBtn">{pigcms{:L('_SEARCH_TXT_')}</div>
 			</div>
 			<div id="pageAddressContent" class="searchAddressList">
 				<div id="pageAddressLocationList">
-					<div class="title">当前地址</div>
+					<div class="title">{pigcms{:L('_CURR_ADDRESS_')}</div>
 					<dl class="content">
 						<dd data-long="" data-lat="" data-name="">
 							<div class="name"></div>
@@ -279,7 +280,7 @@
 					</dl>
 				</div>
 				<div id="pageAddressUserList">
-					<div class="title">我的收货地址</div>
+					<div class="title">{pigcms{:L('_MY_ADDRESS_')}</div>
 					<dl class="content"></dl>
 				</div>
 			</div>
@@ -292,14 +293,14 @@
 				<div id="pageShopSearchBackBtn" class="searhBackBtn"></div>
 				<div id="pageShopSearchBox" class="searchBox">
 					<div class="searchIco"></div>
-					<input type="text" id="pageShopSearchTxt" class="searchTxt" placeholder="请输入店铺名称" autocomplete="off"/>
+					<input type="text" id="pageShopSearchTxt" class="searchTxt" placeholder="{pigcms{:L('_INPUT_SHOP_NAME_')}" autocomplete="off"/>
 					<div class="delIco" id="pageShopSearchDel"><div></div></div>
 				</div>
-				<div id="pageShopSearchBtn" class="searchBtn">搜索</div>
+				<div id="pageShopSearchBtn" class="searchBtn">{pigcms{:L('_SEARCH_TXT_')}</div>
 			</div>
 			<div id="storeList" style="display:none;">
 				<dl class="dealcard"></dl>
-				<div id="storeListLoadTip">正在加载中...</div>
+				<div id="storeListLoadTip">{pigcms{:L('_LOADING_TXT_')}</div>
 			</div>
 		</div>
 		<div class="cd-top">Top</div>

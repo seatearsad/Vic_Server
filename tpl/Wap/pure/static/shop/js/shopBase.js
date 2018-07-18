@@ -629,7 +629,8 @@ function showAddress(){
 		$('#pageAddressSearchTxt').width(window_width-124-32);
 	}
 	addressGeocoder = true;
-	$('#pageAddressLocationList dl').html('<div style="height:40px;line-height:40px;background:white;padding-left:12px;">正在定位</div>');
+
+	$('#pageAddressLocationList dl').html('<div style="height:40px;line-height:40px;background:white;padding-left:12px;">'+ getLangStr('_BEING_POSITION_') +'</div>');
 	getUserLocation({'useHistory':false,okFunction:'getListGeocoderbefore',okFunctionParam:[true],errorFunction:'getAddressGeocoderError',errorFunctionParam:[false]});
 	if(hasLoadAddress == false){
 		$('#pageAddressBackBtn').click(function(){
@@ -796,13 +797,13 @@ function showGood(shop_id,product_id){
 				}
 			});
 			$('#shopDetailPageTitle .title').html(result.name);
-			$('#shopDetailPageTitle .desc').html('月售'+result.sell_count+'份 好评'+result.reply_count+'');
+			$('#shopDetailPageTitle .desc').html(getLangStr('_MONTH_SALE_NUM_' , result.sell_count)+ ' ' +getLangStr('_PRAISE_TXT_')+result.reply_count);
 			$('#shopDetailPageFormat').empty();
 			if(result.des != ''){
 				$('#shopDetailPageContent .content').html(result.des).show();
 				$('#shopDetailPageContent').show();
 			}else if(nowShop.store.delivery){
-				$('#shopDetailPageContent .content').html('温馨提示：图片仅供参考，请以实物为准；高峰时段及恶劣天气，请提前下单。').show();
+				$('#shopDetailPageContent .content').html(getLangStr('_REMINDER_STRING_')).show();
 				$('#shopDetailPageContent').show();
 			}else{
 				$('#shopDetailPageContent').hide();
@@ -1118,14 +1119,14 @@ function showShop(shopId){
 		$(document).on('click','#shopProductRightBar .product_btn.plus,#shopProductBottomBar .product_btn.plus',function(event){
 			// alert(1111);
 			if(nowShop.store.is_close == 1){
-				motify.log('店铺休息中');
+				motify.log(getLangStr('_SHOP_AT_REST_'));
 				return false;
 			}
 			tmpDomObj = $(this);
 
 			var intStock = parseInt(tmpDomObj.closest('li').data('stock'));
 			if(intStock != -1 && (intStock == 0 || intStock - parseInt(tmpDomObj.siblings('.number').html()) <= 0)){
-				motify.log('没有库存了');
+				motify.log(getLangStr('_NO_STOCK_'));
 				return false;
 			}
 			if(!(motify.checkApp() && motify.checkAndroid())){
@@ -1235,7 +1236,7 @@ function showShop(shopId){
 		$('#shopProductBottomBar ul,#shopCatBar .content ul').empty();
 		$.getJSON(ajax_url_root+'ajax_shop',{store_id:shopId},function(result){
 			if(!result.store){
-				alert('店铺未完善信息，点击确定将返回到上一页！');
+				alert(getLangStr('_SHOP_ERROR_NOTICE_'));
 				window.history.go(-1);
 				return false;
 			}
@@ -1245,17 +1246,17 @@ function showShop(shopId){
 			$('#shopTitle').html(result.store.name);
 			$('#shopIcon').css('background-image','url('+result.store.image+')');
 			if(result.store.delivery){
-				$('#deliveryText').html('起送 $ '+result.store.delivery_price+' | 配送 $ '+result.store.delivery_money+' | 送达 '+result.store.delivery_time+'分钟');
+				$('#deliveryText').html(getLangStr('_MIN_DELI_PRICE_') + ' $ '+result.store.delivery_price+' | '+ getLangStr('_DELI_PRICE_') +' $ '+result.store.delivery_money+' | '+ getLangStr('_PACK_PRICE_') +' '+ result.store.pack_fee + ' | ' + getLangStr('_DEIL_NUM_MIN_',result.store.delivery_time));
 			}else{
-				$('#deliveryText').html('本店铺仅支持门店自提');
+				$('#deliveryText').html(getLangStr('_ONLY_SELF_'));
 			}
 			$('#shopNoticeText').html(result.store.store_notice);
 			// $('#shopCouponText').html(parseCoupon(result.store.coupon_list,'text')+';'+result.store.store_notice);
 			$('#shopCouponText').html(parseCoupon(result.store.coupon_list,'text'));
 			if(result.store.is_close == 1){
-				$('#checkCartEmpty').html('店铺休息中');
+				$('#checkCartEmpty').html(getLangStr('_SHOP_AT_REST_'));
 			}else if(result.store.delivery){
-				$('#checkCartEmpty').html(result.store.delivery_price.toFixed(2)+'元起送');
+				$('#checkCartEmpty').html(getLangStr('_NUM_DELI_PRICE_',result.store.delivery_price.toFixed(2)));
 			}
 			
 			nowShop = result;
@@ -1492,14 +1493,14 @@ function cartFunction(type,obj,dataObj){
 	
 	
 	if(productCartNumber == 0){
-		$('#checkCartEmpty').removeClass('noEmpty').show().html((nowShop.store.delivery_price).toFixed(2)+'元起送');
+		$('#checkCartEmpty').removeClass('noEmpty').show().html(getLangStr('_NUM_DELI_PRICE_',(nowShop.store.delivery_price).toFixed(2)));
 		$('#checkCart').removeClass('noEmpty').hide();	
 	}else if(nowShop.store.pick == true){
 		$('#checkCartEmpty').hide();
 		$('#checkCart').show();	
 	}else if(nowShop.store.delivery == true && parseFloat(productCartMoney.toFixed(2)) < nowShop.store.delivery_price){
 		$('#checkCart').hide();
-		$('#checkCartEmpty').addClass('noEmpty').show().html('还差$'+(nowShop.store.delivery_price - parseFloat(productCartMoney.toFixed(2))).toFixed(2)+'起送');
+		$('#checkCartEmpty').addClass('noEmpty').show().html(getLangStr('_POOR_DELI_') + getLangStr('_NUM_DELI_PRICE_',(nowShop.store.delivery_price - parseFloat(productCartMoney.toFixed(2))).toFixed(2)));
 	}else{
 		$('#checkCartEmpty').hide();
 		$('#checkCart').show();	
@@ -1717,20 +1718,27 @@ console.log(tmpShopCart);
 		$('#shopCatBar').hide();
 		$('#shopMenuBar').show();
 		if($('#shopMerchantBox').data('isShow') != '1'){
-			$('#shopMerchantDescBox .phone').attr('data-phone',nowShop.store.phone).html('店铺电话：'+nowShop.store.phone);
-			$('#shopMerchantDescBox .merchant').attr('data-url', nowShop.store.home_url);
-			$('#shopMerchantDescBox .address').attr('data-url','map-'+nowShop.store.id+'-'+nowShop.store.long+'-'+nowShop.store.lat+'-'+encodeURIComponent(nowShop.store.name)+'-'+encodeURIComponent(nowShop.store.adress)).html('<span></span>店铺地址：'+nowShop.store.adress);
-			$('#shopMerchantDescBox .openTime').html('营业时间：'+nowShop.store.time);
-			$('#shopMerchantDescBox .merchantNotice').html('店铺公告：'+nowShop.store.store_notice);
+			$('#shopMerchantDescBox .phone').attr('data-phone',nowShop.store.phone).html(getLangStr('_SHOP_PHONE_')+': '+nowShop.store.phone);
+			//$('#shopMerchantDescBox .merchant').attr('data-url', nowShop.store.home_url);
+			$('#shopMerchantDescBox .address').attr('data-url','map-'+nowShop.store.id+'-'+nowShop.store.long+'-'+nowShop.store.lat+'-'+encodeURIComponent(nowShop.store.name)+'-'+encodeURIComponent(nowShop.store.adress)).html('<span></span>'+ getLangStr('_SHOP_ADDRESS_') +'：'+nowShop.store.adress);
+			$('#shopMerchantDescBox .openTime').html(getLangStr('_BUSINESS_TIME_')+'：'+nowShop.store.time);
+			$('#shopMerchantDescBox .merchantNotice').html(getLangStr('_SHOP_NOTICE_') + '：'+nowShop.store.store_notice);
 			if(nowShop.store.isverify==1){
-				$('#shopMerchantDescBox').append('<dd class="merchantVerify">店铺认证：已认证</dd>');
+				$('#shopMerchantDescBox').append('<dd class="merchantVerify">'+ getLangStr('_SHOP_CERTIFICATION_') + getLangStr('_CERTIFIED_') +'</dd>');
 			}
+			var str = '';
 			if(nowShop.store.delivery){
-				$('#shopMerchantDescBox .deliveryType').html('配送服务：由 '+(nowShop.store.delivery_system ? '平台' : '店铺')+' 提供配送');
+				if(nowShop.store.delivery_system)
+					str = getLangStr('_PLAT_DIST_');
+				else
+                    str = getLangStr('_SHOP_DIST_');
+				//$('#shopMerchantDescBox .deliveryType').html('配送服务：由 '+(nowShop.store.delivery_system ? '平台' : '店铺')+' 提供配送');
 			}else{
-				$('#shopMerchantDescBox .deliveryType').html('配送服务：本店铺仅支持门店自提');
+				str = getLangStr('_SELF_DIST_');
+				//$('#shopMerchantDescBox .deliveryType').html(getLangStr('_DIST_SERVICE_') + ': ' + '本店铺仅支持门店自提');
 			}
-			var tmpCouponList = parseCoupon(nowShop.store.coupon_list,'array');
+            $('#shopMerchantDescBox .deliveryType').html(getLangStr('_DIST_SERVICE_') + ': ' + str);
+            var tmpCouponList = parseCoupon(nowShop.store.coupon_list,'array');
 			var tmpCouponHtml = '';
 			if(tmpCouponList['invoice']){
 				tmpCouponHtml+= '<dd><em class="merchant_invoice"></em>'+tmpCouponList['invoice']+'</dd>';

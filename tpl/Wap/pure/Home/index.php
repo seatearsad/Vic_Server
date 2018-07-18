@@ -3,7 +3,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="utf-8" />
-    <title>首页</title>
+    <title>{pigcms{:L('_VIC_NAME_')} - {pigcms{:L('_HOME_TXT_')}</title>
     <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width"/>
     <meta name="apple-mobile-web-app-capable" content="yes"/>
     <meta name='apple-touch-fullscreen' content='yes'/>
@@ -20,6 +20,7 @@
     <script type="text/javascript" src="{pigcms{$static_path}js/common.js?2112222" charset="utf-8"></script>
     <script type="text/javascript">var group_index_sort_url="{pigcms{:U('Home/group_index_sort')}";<if condition="$user_long_lat">var user_long = "{pigcms{$user_long_lat.long}",user_lat = "{pigcms{$user_long_lat.lat}";<else/>var user_long = '0',user_lat  = '0';</if>var app_version="{pigcms{$_REQUEST['app_version']}"</script>
     <script type="text/javascript" src="{pigcms{$static_path}js/index.js?210" charset="utf-8"></script>
+    <script type="text/javascript" src="{pigcms{$static_public}js/lang/{pigcms{:C('DEFAULT_LANG')}.js" charset="utf-8"></script>
     <if condition="$config.guess_content_type eq 'shop'">
         <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}shop/css/home_shop.css?216"/>
         <elseif condition="$config.guess_content_type eq 'meal'" />
@@ -68,15 +69,23 @@
 <div id="searchBox">
     <a href="{pigcms{:U('Search/index')}">
         <i class="icon-search"></i>
-        <span>请输入您想找的内容</span>
+        <span>{pigcms{:L('_INPUT_WANT_FIND_')}</span>
     </a>
 </div>
+<div class="lang_div_wap">
+    <div class="lang_curr_wap">
+        <php>if(C('DEFAULT_LANG') == 'zh-cn') echo L('_CHINESE_TXT_'); else echo L('_ENGLISH_TXT_');</php>
+    </div>
+    <div class="lang_select lang_cn">中文</div>
+    <div class="lang_select lang_en">English</div>
+</div>
+<script type="text/javascript" src="{pigcms{$static_public}js/lang.js" charset="utf-8"></script>
 <div id="qrcodeBtn"></div>
 </header>
 <div id="container" style="top:50px;-webkit-transform:translate3d(0,0,0)">
     <div id="scroller">
         <div id="pullDown">
-            <span class="pullDownIcon"></span><span class="pullDownLabel">下拉可以刷新</span>
+            <span class="pullDownIcon"></span><span class="pullDownLabel">{pigcms{:L('_DROP_REFRESH_')}</span>
         </div>
         <if condition="$wap_index_top_adver">
             <section id="banner_hei" class="banner">
@@ -254,22 +263,22 @@
                 <ul>
                     <li>
                         <div class="nearBoxDiv merchant link-url" data-url="{pigcms{:U('Merchant/around')}">
-                            <div class="title">附近商家</div>
-                            <div class="desc">快速找到商家</div>
+                            <div class="title">{pigcms{:L('_NEAR_SHOP_')}</div>
+                            <div class="desc">{pigcms{:L('_FIND_SHOP_')}</div>
                             <div class="icon"></div>
                         </div>
                     </li>
                     <li>
                         <div class="nearBoxDiv group link-url" data-url="{pigcms{:U('Group/index')}">
-                            <div class="title">附近{pigcms{$config.group_alias_name}</div>
-                            <div class="desc">看得到的便宜</div>
+                            <div class="title">{pigcms{:L('_NEAR_LUNCH_')}</div>
+                            <div class="desc">{pigcms{:L('_LOOK_CHEAPEST_')}</div>
                             <div class="icon"></div>
                         </div>
                     </li>
                     <li>
                         <div class="nearBoxDiv store link-url" data-url="{pigcms{:U('Shop/index')}">
-                            <div class="title">附近{pigcms{$config.shop_alias_name}</div>
-                            <div class="desc">购物无需等待</div>
+                            <div class="title">{pigcms{:L('_NEAR_OUT_')}</div>
+                            <div class="desc">{pigcms{:L('_SHOPPING_NOT_WAIT_')}</div>
                             <div class="icon"></div>
                         </div>
                     </li>
@@ -301,7 +310,7 @@
             </section>
         </if>
         <section class="youlike hide">
-            <div class="headBox">猜你喜欢</div>
+            <div class="headBox">{pigcms{:L('_GUESS_LIKE_')}</div>
             <dl class="likeBox dealcard"></dl>
         </section>
         <script id="indexRecommendBoxTpl" type="text/html">
@@ -331,7 +340,7 @@
                         <img src="./static/images/kd_rec.png" style="    width: 41px;height: 15px;position: absolute;z-index: 99;margin: 2px 0 0 0;">
                         {{# } }}
                         <img style="margin-left: 0px;position: absolute;"  src="{{ d[i].image }}" alt="{{ d[i].name }}">
-                        {{# if(d[i].is_close){ }}<div class="closeTip">休息中</div>{{# } }}
+                        {{# if(d[i].is_close){ }}<div class="closeTip">{pigcms{:L('_AT_REST_')}</div>{{# } }}
                     </div>
                     <div class="dealcard-block-right">
                         <div class="brand">{{ d[i].name }}<em class="location-right">{{# if(user_long != '0'){ }}{{ d[i].range }}{{# } }}</em></div>
@@ -348,12 +357,14 @@
 												}
 											}}
 										</span>
-                            <span style="color:#9f9f9f;">已售{{ d[i].month_sale_count }}单</span>
+                            <span style="color:#9f9f9f;">
+                                {{getLangStr('_SALE_NUM_ORDER_',d[i].month_sale_count)}}
+                            </span>
 
                             {{# if(d[i].delivery){ }}
-                            <em class="location-right">{{ d[i].delivery_time }}分钟</em>
+                            <!--em class="location-right">{{ d[i].delivery_time }}分钟</em-->
                             {{# }else{ }}
-                            <em class="location-right">门店自提</em>
+                            <em class="location-right">{pigcms{:L('_SELF_DIST_')}</em>
                             {{# } }}
                         </div>
 
@@ -362,7 +373,7 @@
 
 										</span>
 
-                            <span style="color:#9f9f9f;">月售{{ d[i].merchant_store_month_sale_count }}单</span>
+                            <span style="color:#9f9f9f;">{{ getLangStr('_MONTH_SALE_NUM_',d[i].merchant_store_month_sale_count) }}</span>
                             {{# if(d[i].delivery){ }}
                             <em class="location-right"> </em>
                             {{# }else{ }}
@@ -372,13 +383,13 @@
 
                         {{# if(d[i].delivery){ }}
                         <div class="price">
-                            <span>起送价 ${{ d[i].delivery_price }}</span>
-			    <span class="delivery">配送费 ${{ d[i].delivery_money }}</span>
-                            <span class="delivery">{{ d[i].pack_alias }} ${{ d[i].pack_fee }}</span>
+                            <span>{pigcms{:L('_MIN_DELI_PRICE_')} ${{ d[i].delivery_price }}</span>
+			    <span class="delivery">{pigcms{:L('_DELI_PRICE_')} ${{ d[i].delivery_money }}</span>
+                            <span class="delivery">{pigcms{:L('_PACK_PRICE_')} ${{ d[i].pack_fee }}</span>
 			    {{# if(d[i].delivery_system){ }}
-                            <em class="location-right">平台配送</em>
+                            <em class="location-right">{pigcms{:L('_PLAT_DIST_')}</em>
                             {{# }else{ }}
-                            <em class="location-right">商家配送</em>
+                            <em class="location-right">{pigcms{:L('_SHOP_DIST_')}</em>
                             {{# } }}
                         </div>
                         {{# } }}
@@ -411,7 +422,7 @@
                             {{# } }}
                         </ul>
                         {{# if(d[i].coupon_count > 2){ }}
-                        <div class="more">{{ d[i].coupon_count }}个活动</div>
+                        <div class="more">{{ getLangStr('_EVENT_NUM_',d[i].coupon_count) }}</div>
                         {{# } }}
                     </div>
                     {{# } }}
@@ -447,7 +458,7 @@
                                     </div>
                                 </li>
                             </ul>
-                            <div class="Notopen fl">未营业</div>
+                            <div class="Notopen fl">{pigcms{:L('_NO_BUSINESS_')}</div>
                             <div class="distance fr">{{ d.store_list[i].range }}</div>
                         </div>
                     </dt>
@@ -486,11 +497,14 @@
                     {{# if(d.store_list[i].pay_in_store == 1 && d.store_list[i].discount_txt != ''){ }}
                     <dd class="navlink clr">
                         <a href="{{ d.store_list[i].store_pay }}">
-                            <span class="link_Pay">到店付</span>
+                            <span class="link_Pay">{pigcms{:L('_TO_SHOP_PAY_')}</span>
                             {{# if(d.store_list[i].discount_txt.discount_type == 1){ }}
-                            <span>{{ d.store_list[i].discount_txt.discount_percent }}折</span>
+                            <span>{{ getLangStr('_DISCOUNT_NUM_',d.store_list[i].discount_txt.discount_percent) }}</span>
                             {{# } else { }}
-                            <span>每满{{ d.store_list[i].discount_txt.condition_price }}减{{ d.store_list[i].discount_txt.minus_price }}元</span>
+                            <span>
+                                {{ getLangStr('_EVERY_FULL_',d.store_list[i].discount_txt.condition_price) }}
+                                {{ getLangStr('_REDUCE_NUM_',d.store_list[i].discount_txt.minus_price) }}
+                            </span>
                             {{# } }}
                             <span class="link_jt fr"></span>
                         </a>
@@ -507,7 +521,7 @@
                                 <h2>{{ d.store_list[i].group_list[j].name }}</h2>
                                 <div class="MenuPrice">
                                     <span class="PriceF"><i>$</i><em>{{ d.store_list[i].group_list[j].price }}</em></span>
-                                    <span class="PriceT">门市价:${{ d.store_list[i].group_list[j].old_price }}</span>
+                                    <span class="PriceT">{pigcms{:L('_RACK_RATE_')}:${{ d.store_list[i].group_list[j].old_price }}</span>
                                     <span class="PriceS">{{ d.store_list[i].group_list[j].sale_txt }}</span>
                                 </div>
                             </div>
@@ -519,7 +533,7 @@
                 {{# } }}
             </if>
         </script>
-        <div id="moress" style="text-align:center;padding:10px;"">点击加载更多</div>
+        <div id="moress" style="text-align:center;padding:10px;"">{pigcms{:L('_CLICK_ADD_MORE_')}</div>
     <div id="pullUp" style="bottom:-60px;">
         <img src="{pigcms{$config.site_logo}" style="width:130px;height:40px;margin-top:10px"/>
     </div>

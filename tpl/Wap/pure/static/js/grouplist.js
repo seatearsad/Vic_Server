@@ -108,8 +108,8 @@ $(function(){
 function pageGetList(type){
 	if(type == true){
 		now_sort_id = 'juli';
-		$('.dropdown-toggle.sort span').html('离我最近');
-		$('.sort-wrapper>ul li:first').data('sort-id','juli').find('span').html('离我最近');
+		$('.dropdown-toggle.sort span').html(getLangStr('_CLOSEST_ME_'));
+		$('.sort-wrapper>ul li:first').data('sort-id','juli').find('span').html(getLangStr('_CLOSEST_ME_'));
 	}
 	getList(false);
 }

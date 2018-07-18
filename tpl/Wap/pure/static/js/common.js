@@ -218,11 +218,11 @@ $(function(){
 				var bg_height = $('body').height()>$(window).height() ? $('body').height() : $(window).height();
 				var msg_dom = '<div class="msg-bg" style="height:'+bg_height+'px;"></div>';
 				msg_dom+= '<div id="msg" class="msg-doc msg-option">';
-				msg_dom+= '<div class="msg-bd">'+($(this).data('phonetitle') ? $(this).data('phonetitle') : '拨打电话')+'</div>';
+				msg_dom+= '<div class="msg-bd">'+($(this).data('phonetitle') ? $(this).data('phonetitle') : getLangStr('_CALL_PHONE_'))+'</div>';
 				for(var i in tmpPhone){
 					msg_dom+= '		<div class="msg-option-btns"><a class="btn msg-btn" href="tel:'+tmpPhone[i]+'">'+(tmpPhone.length == 1 && $(this).data('phonetip') ? $(this).data('phonetip') : tmpPhone[i])+'</a></div>';
 				}
-				msg_dom+= '		<button class="btn msg-btn-cancel" type="button">取消</button>';
+				msg_dom+= '		<button class="btn msg-btn-cancel" type="button">' + getLangStr('_CANCEL_TXT_') +'</button>';
 				msg_dom+= '</div>';	
 				$('body').append(msg_dom);
 			}

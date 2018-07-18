@@ -22,6 +22,15 @@
 				<div class="weixin_txt"><a href="{pigcms{$config.config_site_url}/topic/weixin.html" target="_blank"> 微信版</a></div>
 				<div class="weixin_icon"><p><span>|</span><a href="{pigcms{$config.config_site_url}/topic/weixin.html" target="_blank">访问微信版</a></p><img src="{pigcms{$config.wechat_qrcode}"/></div>
 			</div>
+            <div class="span">|</div>
+            <div class="lang_txt">{pigcms{:L('_LANG_TXT_')} : </div>
+            <div class="lang_div">
+                <div class="lang_curr">
+                    <php>if(C('DEFAULT_LANG') == 'zh-cn') echo L('_CHINESE_TXT_'); else echo L('_ENGLISH_TXT_');</php>
+                </div>
+                <div class="lang_select lang_cn">中文</div>
+                <div class="lang_select lang_en">English</div>
+            </div>
         </div>
         <div class="list">
 
@@ -92,4 +101,5 @@
 		</div>
 		
     </div>
+    <script src="{pigcms{$static_public}js/lang.js"></script>
 </header>
