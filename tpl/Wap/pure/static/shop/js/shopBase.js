@@ -930,8 +930,8 @@ function showShop(shopId){
 		});
 		$(document).on('click','#shopProductCartDel',function(){
 			layer.open({
-				content: '您确定要清空购物车吗？',
-				btn: ['确认', '取消'],
+				content: getLangStr('_IS_CLEAR_CART_'),
+				btn: [getLangStr('_CONFIRM_TXT_'), getLangStr('_CANCEL_TXT_')],
 				shadeClose: false,
 				yes: function(){
 					$('#shopProductRightBar .product_btn.min,#shopProductRightBar .product_btn.number,#shopProductBottomBar .product_btn.min,#shopProductBottomBar .product_btn.number').remove();

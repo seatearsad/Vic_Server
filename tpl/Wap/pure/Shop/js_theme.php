@@ -206,7 +206,7 @@
 						{{# } }}
                         <div class="sale">{{ getLangStr('_MONTH_SALE_NUM_',d[i].product_list[j].product_sale) }} {{ getLangStr('_PRAISE_TXT_') }}{{ d[i].product_list[j].product_reply }}</div>
 						{{# if(d[i].product_list[j].has_format){ }}
-							<div class="price">${{ d[i].product_list[j].product_price }} 起{{# if(d[i].product_list[j].extra_pay_price>0&&open_extra_price==1){ }}+{{ d[i].product_list[j].extra_pay_price }}{{ d[i].product_list[j].extra_pay_price_name }}{{# } }}</div>
+							<div class="price">${{ d[i].product_list[j].product_price }} {{# if(d[i].product_list[j].extra_pay_price>0&&open_extra_price==1){ }}+{{ d[i].product_list[j].extra_pay_price }}{{ d[i].product_list[j].extra_pay_price_name }}{{# } }}</div>
 						{{# }else{ }}
 							<div class="price">${{ d[i].product_list[j].product_price }}{{# if(d[i].product_list[j].is_seckill_price){ }}<span>${{ d[i].product_list[j].o_price }}</span>{{# } }}{{# if(d[i].product_list[j].extra_pay_price>0&&open_extra_price==1){ }}+{{ d[i].product_list[j].extra_pay_price }}{{ d[i].product_list[j].extra_pay_price_name }}{{# } }}</div>
 						{{# } }}
@@ -361,7 +361,7 @@
 				{{# } }}
 				{{# if(d[i].merchant_reply_time != '0'){ }}
 					<div class="reply">
-						<div class="title">{pigcms{:L('_ALL_TXT_')}:<div class="time">{{ d[i].merchant_reply_time_hi }}</div></div>
+						<div class="title">{pigcms{:L('_SHOP_RETURN_')}:<div class="time">{{ d[i].merchant_reply_time_hi }}</div></div>
 						<div class="reply_content">{{ d[i].merchant_reply_content }}</div>
 					</div>
 				{{# } }}

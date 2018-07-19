@@ -31,6 +31,9 @@ lang['_SHOP_CERTIFICATION_'] = '店铺认证';
 lang['_CERTIFIED_'] = '已认证';
 lang['_CALL_PHONE_'] = '拨打电话';
 lang['_CANCEL_TXT_'] = '取消';
+//
+lang['_IS_CLEAR_CART_'] = '您确定要清空购物车吗？';
+lang['_CONFIRM_TXT_'] = '确定';
 
 function getLangStr(key,replace=''){
     var str = lang[key];

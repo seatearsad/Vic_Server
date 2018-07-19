@@ -1339,8 +1339,24 @@ class ShopAction extends BaseAction{
 		$goods_id = isset($_GET['goods_id']) ? intval($_GET['goods_id']) : 1;
 		$database_shop_goods = D('Shop_goods');
 		$now_goods = $database_shop_goods->get_goods_by_id($goods_id);
+		//modify garfunkel 判断语言
 		$now_goods['name'] = lang_substr($now_goods['name'],C('DEFAULT_LANG'));
 		$now_goods['unit'] = lang_substr($now_goods['unit'],C('DEFAULT_LANG'));
+		foreach ($now_goods['properties_list'] as $k => $v){
+            $now_goods['properties_list'][$k]['name'] = lang_substr($v['name'],C('DEFAULT_LANG'));
+            foreach ($v['val'] as $kk => $vv){
+                $now_goods['properties_list'][$k]['val'][$kk] = lang_substr($vv,C('DEFAULT_LANG'));
+            }
+        }
+
+        foreach($now_goods['spec_list'] as $k => $v){
+		    $now_goods['spec_list'][$k]['name'] = lang_substr($v['name'],C('DEFAULT_LANG'));
+		    foreach($v['list'] as $kk => $vv){
+		        $now_goods['spec_list'][$k]['list'][$kk]['name'] = lang_substr($vv['name'],C('DEFAULT_LANG'));
+            }
+        }
+
+        ///
 		if(empty($now_goods)){
 			$this->error_tips('商品不存在！');
 		}

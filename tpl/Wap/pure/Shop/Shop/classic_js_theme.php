@@ -263,7 +263,7 @@
 </script>
 <script id="productCartBoxTpl" type="text/html">
 	<dl>
-		<dt class="clearfix">购物车<div id="shopProductCartDel">清空</div></dt>
+		Z
 		{{# for(var i in d){ console.log(d[i])}}
 			<dd class="clearfix cartDD" data-product_id="{{ d[i].productId }}" data-product_price="{{ d[i].productPrice }}" data-product_name="{{ d[i].productName }}" data-stock="{{ d[i].productStock }}">
 				<div class="cartLeft {{# if(d[i].productParam.length > 0){ }}hasSpec{{# } }}">
