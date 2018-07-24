@@ -31,9 +31,24 @@ lang['_SHOP_CERTIFICATION_'] = '店铺认证';
 lang['_CERTIFIED_'] = '已认证';
 lang['_CALL_PHONE_'] = '拨打电话';
 lang['_CANCEL_TXT_'] = '取消';
+lang['_PRODUCT_DESC_'] = '商品描述';
+lang['_GOOD_CHOICE_'] =  '选好了';
 //
 lang['_IS_CLEAR_CART_'] = '您确定要清空购物车吗？';
 lang['_CONFIRM_TXT_'] = '确定';
+lang['_AT_ONCE_BUY_'] = '立即购买';
+lang['_CART_IS_EMPTY_'] = '您的购物车还是空！';
+lang['_B_LOGIN_ENTERPHONENO_'] =  '请输入手机号';
+lang['_B_LOGIN_ENTERKEY_'] =  '请输入密码';
+lang['_B_D_LOGIN_6KEYWORD_'] = '6位以上的密码';
+lang['_B_D_LOGIN_DISPLAY_'] =  '显示明文';
+lang['_B_LOGIN_PHONENOHAVE_']= '手机号已存在';
+//
+lang['_B_D_LOGIN_DISPLAY_PASS_'] = '显示密文';
+lang['_B_D_LANG_RE_NOREP_'] = '注册中，请不要重复提交';
+lang['_NO_BROWSE_RECORD_'] = '暂无浏览记录';
+lang['_PLEASE_INPUT_KET_'] = '请输入关键词';
+lang['_IS_CONFIRM_BIND_'] = '你确定要绑定已存在的账号吗？';
 
 function getLangStr(key,replace=''){
     var str = lang[key];

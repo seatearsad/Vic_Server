@@ -319,7 +319,7 @@ $(document).ready(function(){
 	
 	$(document).on('click', '.tencer', function(){
 		if (goodsNumber < 1) {
-			layer.msg('您的购物车还是空！');
+			layer.msg(getLangStr('_CART_IS_EMPTY_'));
 			return false;
 		} else {
 			$('#post_cart').submit();
@@ -507,7 +507,7 @@ function popup_html(data, has_format, goodsCartKey)
 
 		html += '<div class="fl Pricesl">$<i id="show_format_price">' + goodsCart[this_index].productPrice +tmp_extra_price+ '</i></div>';
 		html += '<div class="fl Pricesl" style="display: none;">$<i>18</i></div>';
-		html += '<div class="fr purchase" style="display:none" data-has_format="' + has_format + '" data-stock="' + data.stock_num + '" data-price="' + goodsCart[this_index].productPrice + '" data-packing_charge="' + data.packing_charge + '" data-goods_id="' + data.goods_id + '" data-index="' + goodsCartKey + '" data-name="' + data.name + '" data-extra_pay_price="' + data.extra_pay_price + '">立即购买</div>';
+		html += '<div class="fr purchase" style="display:none" data-has_format="' + has_format + '" data-stock="' + data.stock_num + '" data-price="' + goodsCart[this_index].productPrice + '" data-packing_charge="' + data.packing_charge + '" data-goods_id="' + data.goods_id + '" data-index="' + goodsCartKey + '" data-name="' + data.name + '" data-extra_pay_price="' + data.extra_pay_price + '">'+getLangStr('_AT_ONCE_BUY_')+'</div>';
 		html += '<div class="fr plus clr" style="display:block">';
 		html += '<a href="javascript:void(0)" class="jian" data-price="' + goodsCart[this_index].productPrice + '" data-stock="' + data.stock_num + '" data-packing_charge="' + data.packing_charge + '" data-goods_id="' + data.goods_id + '" data-index="' + goodsCartKey + '" data-name="' + data.name + '" data-extra_pay_price="' + data.extra_pay_price + '">-</a>';
 		html += '<input type="text" value="' + goodsCart[this_index].count + '"  readonly="readonly">';
@@ -518,7 +518,7 @@ function popup_html(data, has_format, goodsCartKey)
 		var tmp_extra_price = data.extra_pay_price >0&&open_extra_price==1&&data.spec_value==''?('+'+data.extra_pay_price+ExtraPirceName):'';
 		html += '<div class="fl Pricesl">$<i id="show_format_price">' + data.price +tmp_extra_price+ '</i></div>';
 		html += '<div class="fl Pricesl" style="display: none;">$<i>18</i></div>';
-		html += '<div class="fr purchase" data-price="' + data.price + '" data-stock="' + data.stock_num + '" data-packing_charge="' + data.packing_charge + '" data-has_format="' + has_format + '" data-goods_id="' + data.goods_id + '" data-index="' + data.goods_id + '" data-name="' + data.name + '" data-extra_pay_price="' + data.extra_pay_price + '">立即购买</div>';
+		html += '<div class="fr purchase" data-price="' + data.price + '" data-stock="' + data.stock_num + '" data-packing_charge="' + data.packing_charge + '" data-has_format="' + has_format + '" data-goods_id="' + data.goods_id + '" data-index="' + data.goods_id + '" data-name="' + data.name + '" data-extra_pay_price="' + data.extra_pay_price + '">'+getLangStr('_AT_ONCE_BUY_')+'</div>';
 		html += '<div class="fr plus clr">';
 		html += '<a href="javascript:void(0)" class="jian" data-price="' + data.price + '" data-stock="' + data.stock_num + '" data-packing_charge="' + data.packing_charge + '" data-goods_id="' + data.goods_id + '" data-index="' + data.goods_id + '" data-name="' + data.name + '" data-extra_pay_price="' + data.extra_pay_price + '">-</a>';
 		html += '<input type="text" value="1"  readonly="readonly">';
@@ -573,7 +573,7 @@ function popup_html(data, has_format, goodsCartKey)
 		html += '</div>';
 	}
 	html += '<div class="describe">';
-	html += '<h2>商品描述</h2>';
+	html += '<h2>'+getLangStr('_PRODUCT_DESC_')+'</h2>';
 	html += '<div class="describe_n">' + data.des + '</div>';
     html += '</div>';
     html += '</div>';
@@ -779,11 +779,11 @@ function cartFunction(name, price, goods_id, index, type, productParam, productP
 		
 		if (is_pick == 1 || delivery_price <= goodsCartMoney) {
 			$(".tencer").addClass("tenceron");
-			$(".tencer").text("选好了").css("cursor", "pointer");
+			$(".tencer").text(getLangStr('_GOOD_CHOICE_')).css("cursor", "pointer");
 		} else {
 			$(".tencer").removeClass("tenceron");
 			var diff_price = parseFloat(delivery_price) - parseFloat(goodsCartMoney);
-			$(".tencer").text('还差' + diff_price + '元起送').css("cursor", "default");
+			$(".tencer").text(getLangStr('_POOR_DELI_') + getLangStr('_NUM_DELI_PRICE_',diff_price)).css("cursor", "default");
 		}
 		
 		$(".car .cartop").show();
@@ -801,9 +801,9 @@ function cartFunction(name, price, goods_id, index, type, productParam, productP
 		$(".common, .cartop, .carmiddle, .amount").hide();
 		$(".tencer").removeClass("tenceron");
 		if (is_pick == 1) {
-			$(".tencer").text("购物车是空的").css("cursor", "default");
+			$(".tencer").text(getLangStr('_CART_IS_EMPTY_')).css("cursor", "default");
 		} else {
-			$(".tencer").text(delivery_price + '元起送').css("cursor", "default");
+			$(".tencer").text(getLangStr('_NUM_DELI_PRICE_',delivery_price)).css("cursor", "default");
 		}
 		
 	}
@@ -877,11 +877,11 @@ function init_goods_menu()
 		$(".common").show();
 		if (is_pick == 1 || delivery_price <= goodsCartMoney) {
 			$(".tencer").addClass("tenceron");
-			$(".tencer").text("选好了").css("cursor", "pointer");
+			$(".tencer").text(getLangStr('_GOOD_CHOICE_')).css("cursor", "pointer");
 		} else {
 			$(".tencer").removeClass("tenceron");
 			var diff_price = parseFloat(delivery_price) - parseFloat(goodsCartMoney);
-			$(".tencer").text('还差' + diff_price + '元起送').css("cursor", "default");
+			$(".tencer").text(getLangStr('_POOR_DELI_') + getLangStr('_NUM_DELI_PRICE_',diff_price)).css("cursor", "default");
 		}
 		
 //		$(".tencer").addClass("tenceron");

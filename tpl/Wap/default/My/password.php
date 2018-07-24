@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8"/>
-	<title>设置密码</title>
+	<title>{pigcms{:L('_B_PURE_MY_55_')}</title>
     <meta name="viewport" content="initial-scale=1, width=device-width, maximum-scale=1, user-scalable=no">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name='apple-touch-fullscreen' content='yes'>
@@ -22,15 +22,15 @@
 		    	<dd>
 		    		<dl>
 		    			<if condition="$now_user['pwd']">
-			            	<dd class="dd-padding"><input class="input-weak" placeholder="请输入当前密码" type="password" id="currentpassword" name="currentpassword" autocomplete="off"></dd>
+			            	<dd class="dd-padding"><input class="input-weak" placeholder="{pigcms{:L('_INPUT_CURR_PASS_')}" type="password" id="currentpassword" name="currentpassword" autocomplete="off"></dd>
 				        </if>
-				        <dd class="dd-padding"><input class="input-weak" placeholder="请输入新密码（密码长度在6-32个字符之间）" type="password" id="password" name="password" autocomplete="off"></dd>
-				        <dd class="dd-padding"><input class="input-weak" placeholder="请再输入一次新密码" type="password" id="password2" name="password2" autocomplete="off"></dd>
+				        <dd class="dd-padding"><input class="input-weak" placeholder="{pigcms{:L('_INPUT_NEW_PASS_')}" type="password" id="password" name="password" autocomplete="off"></dd>
+				        <dd class="dd-padding"><input class="input-weak" placeholder="{pigmcs{:L('_INPUT_AGAIN_NEW_PASS_')}" type="password" id="password2" name="password2" autocomplete="off"></dd>
 				    </dl>
 		    	</dd>
 		    </dl>
 		    <div class="btn-wrapper">
-				<button type="submit" class="btn btn-block btn-larger">确认提交</button>
+				<button type="submit" class="btn btn-block btn-larger">{pigcms{:L('_B_D_LOGIN_SUB_')}</button>
 		    </div>
 		</form>
     	<script src="{pigcms{:C('JQUERY_FILE')}"></script>
@@ -43,15 +43,15 @@
 			        var new_v = $("#password");
 			        var new_v2 = $("#password2");
 			        if(old_v.size() > 0 && old_v.val().length < 6){
-			        	$('#tips').html('请正确填写原始密码！').addClass('tips-err').show();
+			        	$('#tips').html("pigcms{:L('_B_MY_WRONGKEY_')").addClass('tips-err').show();
 			            return false;
 				    }
 			      	if(new_v.val().length < 6){
-			      		$('#tips').html('新密码长度不符合规范！').addClass('tips-err').show();
+			      		$('#tips').html("{pigcms{:L('_NEW_PASS_ERROR_')}").addClass('tips-err').show();
 			      		return false;
 				    }
 			      	if(new_v2.val() != new_v.val()){
-			      		$('#tips').html('两次新密码输入不一致！').addClass('tips-err').show();
+			      		$('#tips').html("{pigcms{:L('_B_LOGIN_DIFFERENTKEY_')}").addClass('tips-err').show();
 			      		return false;
 				    }
 			    });

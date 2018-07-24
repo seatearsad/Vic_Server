@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8"/>
-	<title>支付跳转</title>
+	<title>{pigcms{:L('_PAYMENT_JUMP_')}</title>
     <meta name="viewport" content="initial-scale=1, width=device-width, maximum-scale=1, user-scalable=no">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name='apple-touch-fullscreen' content='yes'>
@@ -16,7 +16,7 @@
         <h1 class="nav-header">支付跳转</h1>
     </header-->
 	<script src="{pigcms{$static_path}layer/layer.m.js"></script>
-	<script>layer.open({type:2,content:'支付跳转中,请稍等',shadeClose:false});</script>
+	<script>layer.open({type:2,content:'{pigcms{:L(\'_PAYMENT_JUMP_\')}',shadeClose:false});</script>
 	<if condition="$url">
 		<script>window.location.href = '{pigcms{$url}';</script>
 	<elseif condition="$form"/>

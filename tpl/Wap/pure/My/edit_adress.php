@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8"/>
-	<title>编辑收货地址</title>
+	<title>{pigcms{:L('_B_PURE_MY_05_')}</title>
     <meta name="viewport" content="initial-scale=1, width=device-width, maximum-scale=1, user-scalable=no">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name='apple-touch-fullscreen' content='yes'>
@@ -21,7 +21,8 @@
 	    }
 	
 	    .kv-line h6 {
-	        width: .8rem;
+	        width: 10em;
+            text-align: center;
 	    }
 		.btn {
 			background: #06c1bb;
@@ -39,15 +40,15 @@
 		    	<dd>
 		    		<dl>
 		        		<dd class="dd-padding kv-line">
-		        			<h6>姓名:</h6>
-		        			<input name="name" type="text" class="kv-v input-weak" placeholder="最少2个字" pattern=".{2,}" data-err="姓名必须大于2个字！" value="{pigcms{$now_adress.name}">
+		        			<h6>{pigcms{:L('_B_PURE_MY_06_')}:</h6>
+		        			<input name="name" type="text" class="kv-v input-weak" placeholder="{pigcms{:L('_B_PURE_MY_07_')}" pattern=".{2,}" data-err="{pigcms{:L('_B_PURE_MY_08_')}" value="{pigcms{$now_adress.name}">
 		        		</dd>
 		        		<dd class="dd-padding kv-line">
-		        			<h6>电话:</h6>
-		        			<input name="phone" type="tel" class="kv-v input-weak" placeholder="不少于7位" pattern="\d{3}[\d\*]{4,}" data-err="电话必须大于7位！" value="{pigcms{$now_adress.phone}">
+		        			<h6>{pigcms{:L('_B_PURE_MY_09_')}:</h6>
+		        			<input name="phone" type="tel" class="kv-v input-weak" placeholder="{pigcms{:L('_B_PURE_MY_10_')}" pattern="\d{3}[\d\*]{4,}" data-err="{pigcms{:L('_B_PURE_MY_11_')}" value="{pigcms{$now_adress.phone}">
 		        		</dd>
 		        		<dd class="dd-padding kv-line">
-				            <h6>省份:</h6>
+				            <h6>{pigcms{:L('_B_PURE_MY_12_')}:</h6>
 				            <label class="select kv-v">
 				                <select name="province">
 									<if condition="$now_adress">
@@ -63,7 +64,7 @@
 				            </label>
 				        </dd>
 				        <dd class="dd-padding kv-line">
-				            <h6>城市:</h6>
+				            <h6>{pigcms{:L('_B_PURE_MY_13_')}:</h6>
 				            <label class="select kv-v">
 				                <select name="city">
 									<if condition="$now_adress">
@@ -79,7 +80,7 @@
 				            </label>
 				        </dd>
 				        <dd class="dd-padding kv-line">
-				            <h6>区县:</h6>
+				            <h6>{pigcms{:L('_B_PURE_MY_14_')}:</h6>
 				            <label class="select kv-v">
 				                <select name="area">
 				                    <volist name="area_list" id="vo">
@@ -89,23 +90,23 @@
 				            </label>
 				        </dd>
 		        		<dd class="dd-padding kv-line" id="color-gray">
-		        			<h6>位置:</h6>
-	                        <i class="icon-location" data-node="icon"></i><span class="color-gray" data-node="addAddress"><?php if(!empty($now_adress['adress'])): ?><?php echo $now_adress['adress']; ?><?php else : ?><img src="{pigcms{$static_path}images/location.png" style=" width:25px; height:25px"/>点击选择位置<?php endif; ?></span> <i class="right_arrow"></i>
-	                        <!--div class="weaksuggestion"> 请点击这里，进行添加！<i class="toptriangle"></i> </div-->
-		        			<!--textarea name="adress" class="input-weak kv-v" placeholder="最少5个字,最多60个字,不能全部为数字" pattern="^.{5,60}$" data-err="请填写正确的地址信息！">{pigcms{$now_adress.adress}</textarea-->
+		        			<h6>{pigcms{:L('_B_PURE_MY_15_')}:</h6>
+	                        <i class="icon-location" data-node="icon"></i><span class="color-gray" data-node="addAddress"><?php if(!empty($now_adress['adress'])): ?><?php echo $now_adress['adress']; ?><?php else : ?><img src="{pigcms{$static_path}images/location.png" style=" width:25px; height:25px"/>{pigcms{:L('_CLICK_SELECT_W_')}<?php endif; ?></span> <i class="right_arrow"></i>
+	                        <!--div class="weaksuggestion"> {pigcms{:L('_B_PURE_MY_16_')}<i class="toptriangle"></i> </div-->
+		        			<!--textarea name="adress" class="input-weak kv-v" placeholder="{pigcms{:L('_B_PURE_MY_17_')}" pattern="^.{5,60}$" data-err="{pigcms{:L('_B_PURE_MY_18_')}">{pigcms{$now_adress.adress}</textarea-->
 		        		</dd>
 		        		<dd class="dd-padding kv-line">
-		        			<h6>地址:</h6>
-		        			<input name="detail" type="text" class="kv-v input-weak" placeholder="请填写详细的地址和门牌号" pattern=".{2,}" data-err="详址必须大于2个字！" value="{pigcms{$now_adress.detail}">
+		        			<h6>{pigcms{:L('_B_PURE_MY_19_')}:</h6>
+		        			<input name="detail" type="text" class="kv-v input-weak" placeholder="{pigcms{:L('_B_PURE_MY_20_')}" pattern=".{2,}" data-err="{pigcms{:L('_B_PURE_MY_21_')}" value="{pigcms{$now_adress.detail}">
 		        		</dd>
 		        		<dd class="dd-padding kv-line">
-		        			<h6>邮编:</h6>
-		        			<input type="tel" name="zipcode" class="input-weak kv-v" placeholder="6位邮政编码，可不填写"  maxlength="6" value="<if condition="$now_adress['zipcode']">{pigcms{$now_adress.zipcode}</if>"/>
+		        			<h6>{pigcms{:L('_B_PURE_MY_22_')}:</h6>
+		        			<input type="tel" name="zipcode" class="input-weak kv-v" placeholder="{pigcms{:L('_B_PURE_MY_23_')}"  maxlength="6" value="<if condition="$now_adress['zipcode']">{pigcms{$now_adress.zipcode}</if>"/>
 		        		</dd>
 		        		<dd>
 			            	<label class="react">
 			                	<input type="checkbox" name="default" value="1" class="mt"  <if condition="$now_adress['default']">checked="checked"</if>/>
-			              		  设为默认地址
+			              		  {pigcms{:L('_B_PURE_MY_24_')}
 			            	</label>
 			        	</dd>
 			    	</dl>
@@ -116,8 +117,8 @@
 				<input type="hidden" name="longitude" value="{pigcms{$now_adress.longitude}"/>
 				<input type="hidden" name="latitude" value="{pigcms{$now_adress.latitude}"/>
 				<input type="hidden" name="adress" value="{pigcms{$now_adress.adress}"/>
-				<button type="submit" class="btn btn-block btn-larger"><if condition="$now_adress">保存<else/>添加</if></button>
-				<if condition="$now_adress"><button type="button" class="btn btn-block btn-larger" style=" background:#fff; color:#000; margin-top:.1rem" id="address_del">删除</button></if>
+				<button type="submit" class="btn btn-block btn-larger"><if condition="$now_adress">{pigcms{:L('_B_PURE_MY_25_')}=><else/>{pigcms{:L('_B_PURE_MY_26_')}</if></button>
+				<if condition="$now_adress"><button type="button" class="btn btn-block btn-larger" style=" background:#fff; color:#000; margin-top:.1rem" id="address_del">{pigcms{:L('_B_PURE_MY_27_')}</button></if>
 		    </div>
 		</form>
     	<script src="{pigcms{:C('JQUERY_FILE')}"></script>
@@ -162,7 +163,7 @@
 						}
 
 						if(i+1 == form_input.size()){
-							layer.open({type:2,content:'提交中，请稍候'});
+							layer.open({type:2,content:"{pigcms{:L('_B_PURE_MY_28_')}"});
 							$.post($('#form').attr('action'),$('#form').serialize(),function(result){
 								layer.closeAll();
 								if(result.status == 1){
@@ -205,7 +206,7 @@
 						});
 						$("select[name='area']").html(area_dom);
 					}else{
-						$("select[name='area']").html('<option value="0">请手动填写区域</option>');
+						$("select[name='area']").html('<option value="0">{pigcms{:L('_B_PURE_MY_29_')}</option>');
 					}
 				});
 			}
@@ -213,8 +214,8 @@
 			
 			$('#address_del').click(function(){
 				layer.open({
-					content:'确认删除',
-					btn: ['确认','取消'],
+					content:"{pigcms{:L('_B_PURE_MY_30_')}",
+					btn: ["{pigcms{:L('_B_PURE_MY_31_')}","{pigcms{:L('_B_PURE_MY_32_')}"],
 					yes:function(){
 						var del_url = "{pigcms{:U('My/ajax_del_adress')}";
 						$.get(del_url,{'adress_id':"{pigcms{$now_adress['adress_id']}"},function(data){

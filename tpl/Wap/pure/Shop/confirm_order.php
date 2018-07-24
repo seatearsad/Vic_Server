@@ -212,25 +212,25 @@ a {
 	<section class="menu_wrap pay_wrap">
 		<ul class="box">
 			<li>
-				<a class="">配送方式：</a>&nbsp;&nbsp;
+				<a class="">{pigcms{:L('_DIST_MODE_')}：</a>&nbsp;&nbsp;
 				<if condition="in_array($delivery_type, array(0, 3))">
-				<a class="btn_express <if condition="$pick_addr_id">pick_in_store_click<else />pick_in_store</if>" id="post_package">平台配送</a>&nbsp;&nbsp;
+				<a class="btn_express <if condition="$pick_addr_id">pick_in_store_click<else />pick_in_store</if>" id="post_package">{pigcms{:L('_PLAT_DIST_')}</a>&nbsp;&nbsp;
 				</if>
 				<if condition="in_array($delivery_type, array(1, 4))">
-				<a class="btn_express <if condition="$pick_addr_id">pick_in_store_click<else />pick_in_store</if>" id="post_package">商家配送</a>&nbsp;&nbsp;
+				<a class="btn_express <if condition="$pick_addr_id">pick_in_store_click<else />pick_in_store</if>" id="post_package">{pigcms{:L('_SHOP_DIST_')}</a>&nbsp;&nbsp;
 				</if>
 				<if condition="$delivery_type eq 5">
-				<a class="btn_express <if condition="$pick_addr_id">pick_in_store_click<else />pick_in_store</if>" id="post_package_express">快递配送</a>&nbsp;&nbsp;
+				<a class="btn_express <if condition="$pick_addr_id">pick_in_store_click<else />pick_in_store</if>" id="post_package_express">{pigcms{:L('_EXPRESS_DELI_')}</a>&nbsp;&nbsp;
 				</if>
 				<if condition="in_array($delivery_type, array(2, 3, 4))">
-				<a class="btn_express <if condition="$pick_addr_id">pick_in_store<elseif condition="$delivery_type neq 2" />pick_in_store_click<else />pick_in_store</if>" id="pick_in_store">到店自提</a>
+				<a class="btn_express <if condition="$pick_addr_id">pick_in_store<elseif condition="$delivery_type neq 2" />pick_in_store_click<else />pick_in_store</if>" id="pick_in_store">{pigcms{:L('_SELF_DIST_')}</a>
 				</if>
 			</li>
 			<if condition="$delivery_type neq 2">
 			<li id="li_delivery" <if condition="$pick_addr_id">style="display:none"</if>>
 				<a href="{pigcms{:U('My/adress',array('buy_type' => 'shop', 'store_id'=>$store['store_id'], 'village_id'=>$village_id, 'mer_id' => $store['mer_id'], 'frm' => $_GET['frm'], 'current_id'=>$user_adress['adress_id'], 'order_id' => $order_id))}">
 					<strong>
-						<span id="showAddres"><if condition="$user_adress['adress_id']">{pigcms{$user_adress['province_txt']} {pigcms{$user_adress['city_txt']} {pigcms{$user_adress['area_txt']} {pigcms{$user_adress['adress']} {pigcms{$user_adress['detail']}<else/>请点击添加送货地址</if></span><br>
+						<span id="showAddres"><if condition="$user_adress['adress_id']">{pigcms{$user_adress['province_txt']} {pigcms{$user_adress['city_txt']} {pigcms{$user_adress['area_txt']} {pigcms{$user_adress['adress']} {pigcms{$user_adress['detail']}<else/>{pigcms{:L('_CLICK_ADD_NEW_A_')}</if></span><br>
 						<span id="showName">{pigcms{$user_adress['name']}</span>
 						<span id="showTel">{pigcms{$user_adress['phone']}</span>
 					</strong>
@@ -255,29 +255,29 @@ a {
 		<ul class="box pay_box">
 			<li id="show_arrive_date" <if condition="$delivery_type eq 2 OR $delivery_type eq 5 OR $pick_addr_id">style="display:none"</if>>
 				<a href="javascript:void(0);" id="dateBtn" class="date">
-					<strong>送达日期</strong>
+					<strong>{pigcms{:L('_DELI_DATE_')}</strong>
 					<span id="arriveDate">{pigcms{$arrive_date}</span>
 					<div><i class="ico_arrow"></i></div>
 				</a>
 			</li>
 			<if condition="$have_two_time">
             <li id="two_time_select" class="line name" <if condition="$delivery_type eq 2 OR $delivery_type eq 5 OR $pick_addr_id">style="display:none"</if>>
-				<strong>配送时间段</strong>						
+				<strong>{pigcms{:L('_DELI_TIME_SLOT_')}</strong>
 				<label><input type="radio" value="0" name="time_select" <if condition="$now_time_value eq 1">checked</if>>{pigcms{$time_select_1}</label>	
 				<label><input type="radio" value="1" name="time_select" <if condition="$now_time_value eq 2">checked</if>>{pigcms{$time_select_2}</label>
             </li>
             </if>
 			<li id="show_arrive_time" <if condition="$delivery_type eq 2 OR $delivery_type eq 5 OR $pick_addr_id">style="display:none"</if>>
 				<a href="javascript:void(0);" id="timeBtn" class="time">
-					<strong>送达时间</strong>
+					<strong>{pigcms{:L('_DELI_TIME_')}</strong>
 					<span id="arriveTime">{pigcms{$arrive_time}</span>
 					<div><i class="ico_arrow"></i></div>
 				</a>
 			</li>
 			<li>
 				<a href="javascript:void(0);" id="remarkBtn">
-					<strong>订单备注</strong>
-					<span id="remarkTxt">点击添加订单备注</span>
+					<strong>{pigcms{:L('_NOTE_INFO_')}</strong>
+					<span id="remarkTxt">{pigcms{:L('_CLICK_ADD_NOTE_INFO_')}</span>
 					<div><i class="ico_arrow"></i></div>
 				</a>
 			</li>
@@ -329,13 +329,13 @@ a {
 		<ul class="menu_list box" style="margin-bottom:20px;">
 			<li>
 				<div>
-					<h3>折扣后商品总价：<strong style="display: inline;font-size:14px;">${pigcms{$vip_discount_money|floatval}<if condition="$extra_price gt 0 AND $config.open_extra_price eq 1">+{pigcms{$extra_price|floatval}{pigcms{$config.extra_price_alias_name}</if></strong></h3>
+					<h3>{pigcms{:L('_TOTAL_PRICE_A_DIS_')}：<strong style="display: inline;font-size:14px;">${pigcms{$vip_discount_money|floatval}<if condition="$extra_price gt 0 AND $config.open_extra_price eq 1">+{pigcms{$extra_price|floatval}{pigcms{$config.extra_price_alias_name}</if></strong></h3>
 				</div>
 			</li>
 			<!--if condition="$packing_charge"-->
 			<li>
 				<div>
-					<h3>{pigcms{$store_shop['pack_alias']}：<strong style="display: inline;font-size:14px;">${pigcms{$store_shop['pack_fee']}</strong></h3>
+					<h3>{pigcms{:L('_PACK_PRICE_')}：<strong style="display: inline;font-size:14px;">${pigcms{$store_shop['pack_fee']}</strong></h3>
 				</div>
 			</li>
 			<!--/if-->
@@ -394,10 +394,10 @@ a {
 	</form>
 	<div class="addres_box" id="remarkBox">
 		<ul>
-			<li><textarea class="txt max" placeholder="请填写备注" id="userMark"></textarea></li>
+			<li><textarea class="txt max" placeholder="{pigcms{:L('_PLEASE_INPUT_NOTE_')}" id="userMark"></textarea></li>
 			<li class="btns_wrap">
-			<span><a href="javascript:void(0);" class="comm_btn higher disabled" id="cancleRemark">取消</a></span>
-			<span><a href="javascript:void(0);" class="comm_btn higher" id="saveRemark">确认</a></span>
+			<span><a href="javascript:void(0);" class="comm_btn higher disabled" id="cancleRemark">{pigcms{:L('_B_PURE_MY_86_')}</a></span>
+			<span><a href="javascript:void(0);" class="comm_btn higher" id="saveRemark">{pigcms{:L('_B_PURE_MY_85_')}</a></span>
 			</li>
 		</ul>
 	</div>
@@ -405,8 +405,8 @@ a {
 		<ul>
 			<li><textarea class="txt max" placeholder="请填发票抬头" id="invoice_head_txt"></textarea></li>
 			<li class="btns_wrap">
-			<span><a href="javascript:void(0);" class="comm_btn higher disabled" id="cancleInvoice">取消</a></span>
-			<span><a href="javascript:void(0);" class="comm_btn higher" id="saveInvoice">确认</a></span>
+			<span><a href="javascript:void(0);" class="comm_btn higher disabled" id="cancleInvoice">{pigcms{:L('_B_PURE_MY_86_')}</a></span>
+			<span><a href="javascript:void(0);" class="comm_btn higher" id="saveInvoice">{pigcms{:L('_B_PURE_MY_85_')}</a></span>
 			</li>
 		</ul>
 	</div>
@@ -416,8 +416,8 @@ a {
 				<ul>
 					<li><textarea class="txt max" placeholder="请填{pigcms{$vo.name}" id="cue_field_{pigcms{$key}_head_txt"></textarea></li>
 					<li class="btns_wrap">
-						<span><a href="javascript:void(0);" class="comm_btn higher disabled" id="cancle_cue_field_{pigcms{$key}">取消</a></span>
-						<span><a href="javascript:void(0);" class="comm_btn higher" id="save_cue_field_{pigcms{$key}">确认</a></span>
+						<span><a href="javascript:void(0);" class="comm_btn higher disabled" id="cancle_cue_field_{pigcms{$key}">{pigcms{:L('_B_PURE_MY_86_')}</a></span>
+						<span><a href="javascript:void(0);" class="comm_btn higher" id="save_cue_field_{pigcms{$key}">{pigcms{:L('_B_PURE_MY_85_')}</a></span>
 					</li>
 				</ul>
 			</div>
@@ -426,14 +426,14 @@ a {
 </div>
 <div class="fixed" style="min-height:90px;padding:14px;">
 	<p>
-		<span class="fr">商品总计：<strong>$<span id="totalPrice_">{pigcms{$price|floatval}<if condition="$extra_price gt 0 AND $config.open_extra_price eq 1">+{pigcms{$extra_price|floatval}{pigcms{$config.extra_price_alias_name}</if></span></strong> / <span id="cartNum_">{pigcms{$total}</span>份</span>
-		<p id="show_delivery_fee" <if condition="$delivery_type eq 2 OR $pick_addr_id OR $now_time_value eq 2">style="display:none"</if>>{pigcms{$store['freight_alias']|default='配送费'}：${pigcms{$delivery_fee}，税率5%</p>
+		<span class="fr">{pigcms{:L('_TOTAL_RECE_')}：<strong>$<span id="totalPrice_">{pigcms{$price|floatval}<if condition="$extra_price gt 0 AND $config.open_extra_price eq 1">+{pigcms{$extra_price|floatval}{pigcms{$config.extra_price_alias_name}</if></span></strong> / <span id="cartNum_">{pigcms{$total}</span></span>
+		<p id="show_delivery_fee" <if condition="$delivery_type eq 2 OR $pick_addr_id OR $now_time_value eq 2">style="display:none"</if>>{pigcms{:L('_DELI_PRICE_')}：${pigcms{$delivery_fee}，{pigcms{:L('_TAXATION_TXT_')}: 5%</p>
 		<if condition="$have_two_time">	
-		<p id="show_delivery_fee2" <if condition="$now_time_value eq 1">style="display:none"</if>>{pigcms{$store['freight_alias']|default='配送费'}：${pigcms{$delivery_fee2}</p>
+		<p id="show_delivery_fee2" <if condition="$now_time_value eq 1">style="display:none"</if>>{pigcms{:L('_DELI_PRICE_')}：${pigcms{$delivery_fee2}</p>
 		</if>	
 	</p>
 	<span class="fr" style="position: absolute; bottom: 8px; right: 20px;">
-	<a href="javascript:;" class="comm_btn" id="submit_order" >确认订单</a>
+	<a href="javascript:;" class="comm_btn" id="submit_order" >{pigcms{:L('_B_PURE_MY_85_')}</a>
 	</span>
 </div>
 <if condition="$cue_field">
@@ -546,8 +546,8 @@ $(document).ready(function () {
             mode: 'scroller', //日期选择模式
             lang:'zh',
             minWidth: 64,
-            setText: '确定', //确认按钮名称
-            cancelText: '取消',//取消按钮
+            setText: "{pigcms{:L('_B_PURE_MY_85_')}", //确认按钮名称
+            cancelText: "{pigcms{:L('_B_PURE_MY_86_')}",//取消按钮
             dateFormat: 'yy-mm-dd',
     		onSelect: function (valueText, inst) {
     			var time_select = $('input[name="time_select"]:checked').val();
@@ -583,8 +583,8 @@ $(document).ready(function () {
         mode: 'scroller', //日期选择模式
         lang:'zh',
         minWidth: 64,
-        setText: '确定', //确认按钮名称
-        cancelText: '取消',//取消按钮
+        setText: "{pigcms{:L('_B_PURE_MY_85_')}", //确认按钮名称
+        cancelText: "{pigcms{:L('_B_PURE_MY_86_')}",//取消按钮
         dateFormat: 'yy-mm-dd',
 		onSelect: function (valueText, inst) {
 			var time_select = $('input[name="time_select"]:checked').val();
@@ -706,9 +706,9 @@ $(document).ready(function () {
 	// 添加备注
 	$('#remarkBtn').bind('click', function(){
 		var remark = $('#remarkTxt').text();
-		if(remark == '点击添加订单备注') remark = '';
+		if(remark == "{pigcms{:L('_CLICK_ADD_NOTE_INFO_')}") remark = '';
 		$('#userMark').val(remark);
-		$('#remarkBox').dialog({title: '添加备注'});
+		$('#remarkBox').dialog({title: "{pigcms{:L('_ADD_NOTE_')}"});
 	});
 
 	$('#cancleRemark').bind('click', function(){

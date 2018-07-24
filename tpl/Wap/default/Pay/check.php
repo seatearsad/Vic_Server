@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8"/>
-    <title>确认订单</title>
+    <title>{pigcms{:L('_CONFIRM_ORDER_')}</title>
     <meta name="viewport" content="initial-scale=1, width=device-width, maximum-scale=1, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name='apple-touch-fullscreen' content='yes'>
@@ -96,21 +96,21 @@
 
                 if($(this).find('input').val()=='offline'){
                     //window.location.href=window.location.href+'&pay_type=offline';
-                    var mer_coupon_none = '<a class="react" ><div class="more more-weak"><h6>商家优惠券</h6><span class="more-after">无可用优惠券</span></div></a>';
-                    var system_coupon_none = '<a class="react" ><div class="more more-weak"><h6>平台优惠券</h6><span class="more-after">无可用优惠券</span></div></a>';
+                    var mer_coupon_none = '<a class="react" ><div class="more more-weak"><h6>{pigcms{:L("_SHOP_COUP_")}</h6><span class="more-after">{pigcms{:L("_UNAVAILABLE_COUP_")}</span></div></a>';
+                    var system_coupon_none = '<a class="react" ><div class="more more-weak"><h6>{pigcms{:L("_PLATFORM_COUP_")}</h6><span class="more-after">{pigcms{:L("_UNAVAILABLE_COUP_")}</span></div></a>';
                     $('#system_coupon').html(system_coupon_none);
                     $('#mer_coupon').html(mer_coupon_none);
 
                     check_money(total_money,0,0);
                     sysc_price = 0;
                     merc_price = 0;
-                    $('#pay_in_fact').html('实际支付：<b style="color:red">$'+(total_money+merc_price).toFixed(2)+'</b>');
+                    $('#pay_in_fact').html('{pigcms{:L("_ACTUAL_PAYMENT_")}：<b style="color:red">$'+(total_money+merc_price).toFixed(2)+'</b>');
                     $('input[name="card_id"]').attr('disabled','disabled');
                     $('input[name="coupon_id"]').attr('disabled','disabled');
                 }else{
                     $('#system_coupon').html(system_coupon_html);
                     $('#mer_coupon').html(mer_coupon_html);
-                    $('#pay_in_fact').html('实际支付：<b style="color:red">$'+(total_money-sysc_price).toFixed(2)+'</b>');
+                    $('#pay_in_fact').html('{pigcms{:L("_ACTUAL_PAYMENT_")}：<b style="color:red">$'+(total_money-sysc_price).toFixed(2)+'</b>');
                     $('input[name="card_id"]').removeAttr('disabled');
                     $('input[name="coupon_id"]').removeAttr('disabled');
                     sysc_price = sysc_price_tmp ;
@@ -121,21 +121,21 @@
             if($('#pay-methods-panel').find('.list .dd-padding input').val()=='offline'){
 
                 //window.location.href=window.location.href+'&pay_type=offline';
-                var mer_coupon_none = '<a class="react" ><div class="more more-weak"><h6>商家优惠券</h6><span class="more-after">无可用优惠券</span></div></a>';
-                var system_coupon_none = '<a class="react" ><div class="more more-weak"><h6>平台优惠券</h6><span class="more-after">无可用优惠券</span></div></a>';
+                var mer_coupon_none = '<a class="react" ><div class="more more-weak"><h6>{pigcms{:L("_SHOP_COUP_")}</h6><span class="more-after">{pigcms{:L("_UNAVAILABLE_COUP_")}</span></div></a>';
+                var system_coupon_none = '<a class="react" ><div class="more more-weak"><h6>{pigcms{:L("_PLATFORM_COUP_")}</h6><span class="more-after">{pigcms{:L("_UNAVAILABLE_COUP_")}</span></div></a>';
                 $('#system_coupon').html(system_coupon_none);
                 $('#mer_coupon').html(mer_coupon_none);
 
                 check_money(total_money,0,0);
                 sysc_price = 0;
                 merc_price = 0;
-                $('#pay_in_fact').html('实际支付：<b style="color:red">$'+(total_money+merc_price).toFixed(2)+'</b>');
+                $('#pay_in_fact').html('{pigcms{:L("_ACTUAL_PAYMENT_")}：<b style="color:red">$'+(total_money+merc_price).toFixed(2)+'</b>');
                 $('input[name="card_id"]').attr('disabled','disabled');
                 $('input[name="coupon_id"]').attr('disabled','disabled');
             }else{
                 $('#system_coupon').html(system_coupon_html);
                 $('#mer_coupon').html(mer_coupon_html);
-                $('#pay_in_fact').html('实际支付：<b style="color:red">$'+(total_money-sysc_price).toFixed(2)+'</b>');
+                $('#pay_in_fact').html('{pigcms{:L("_ACTUAL_PAYMENT_")}：<b style="color:red">$'+(total_money-sysc_price).toFixed(2)+'</b>');
                 $('input[name="card_id"]').removeAttr('disabled');
                 $('input[name="coupon_id"]').removeAttr('disabled');
                 sysc_price = sysc_price_tmp ;
@@ -300,9 +300,9 @@
             }else{
                 if(open_extra_price==1&&score_money>0){
                     extra_price_str = $('input[name="score_change"]').val()+'元宝';
-                    $('#pay_in_fact').html('实际支付：<b style="color:red">$'+(total_money-sysc_price-score_money).toFixed(2)+'+'+extra_price_str+'</b>');
+                    $('#pay_in_fact').html('{pigcms{:L("_ACTUAL_PAYMENT_")}：<b style="color:red">$'+(total_money-sysc_price-score_money).toFixed(2)+'+'+extra_price_str+'</b>');
                 }else{
-                    $('#pay_in_fact').html('实际支付：<b style="color:red">$'+(total_money-sysc_price).toFixed(2)+'</b>');
+                    $('#pay_in_fact').html('{pigcms{:L("_ACTUAL_PAYMENT_")}：<b style="color:red">$'+(total_money-sysc_price).toFixed(2)+'</b>');
                 }
 
             }
@@ -626,13 +626,17 @@
                     <if condition="$order_info.order_type neq 'weidian'AND  $order_info.order_type neq 'store' AND  $order_info.order_type neq 'wxapp' AND $order_info['order_type'] neq 'recharge' AND $order_info['img']"><img src="{pigcms{$order_info.img}" style="width:80px;height:80px;"></if>
                     <div>
                         <p style="margin-left: 20px;">{pigcms{$order_info.order_name}</p>
-                        <if condition="$order_info.order_price gt 0 && $order_info['order_num'] gt 0"><p style="margin-left: 20px;margin-top: 10px;">$ {pigcms{$order_info.order_price}<if condition="$order_info.is_head gt 0">(团长优惠)</if><if condition="$order_info.extra_price gt 0 AND $config.open_extra_price eq 1">+{pigcms{$order_info.extra_pay_price}{pigcms{$config.extra_price_alias_name}</if> X {pigcms{$order_info.order_num}</p></if>
+                        <if condition="$order_info.order_price gt 0 && $order_info['order_num'] gt 0">
+                            <p style="margin-left: 20px;margin-top: 10px;">$ {pigcms{$order_info.order_price}
+                                <if condition="$order_info.is_head gt 0">(团长优惠)</if>
+                                <if condition="$order_info.extra_price gt 0 AND $config.open_extra_price eq 1">+{pigcms{$order_info.extra_pay_price}{pigcms{$config.extra_price_alias_name}</if>
+                                X {pigcms{$order_info.order_num}</p></if>
                         <if condition="$order_info.order_txt_type"><p style="margin-left: 20px;margin-top: 5px;">{pigcms{$order_info.order_txt_type}</p></if>
 
                     </div>
                 </dd>
                 <dd class="kv-line-r dd-padding">
-                    <h6>订单总计</h6><p><b style="color:red">${pigcms{$order_info.order_total_money}<if condition="$order_info.extra_price gt 0 AND $config.open_extra_price eq 1 ">+{pigcms{$order_info.extra_price|floatval}{pigcms{$config.extra_price_alias_name}</if> </b></p>
+                    <h6>{pigcms{:L('_ORDER_TOTAL_')}</h6><p><b style="color:red">${pigcms{$order_info.order_total_money}<if condition="$order_info.extra_price gt 0 AND $config.open_extra_price eq 1 ">+{pigcms{$order_info.extra_price|floatval}{pigcms{$config.extra_price_alias_name}</if> </b></p>
                 </dd>
             </dl>
         </dd>
@@ -640,18 +644,18 @@
     <if condition="$order_info['order_type'] != 'recharge' OR $order_info['order_type'] != 'weidian' ">
         <php>if($order_info['order_type']!='recharge' ){</php>
         <div id="balanceBox">
-            <h4>结算信息</h4>
+            <h4>{pigcms{:L('_CLEARING_INFO_')}</h4>
             <dl class="list">
                 <dd>
                     <dl>
                         <if condition="$card_info AND $card_info.discount lt 10 AND $card_info.discount gt 0">
                             <dd class="kv-line-r dd-padding">
-                                <h6>会员卡折扣</h6><p  style="color:red;">{pigcms{$card_info.discount}折</p>
+                                <h6>{pigcms{:L('_MEMBERSHIP_CARD_DIS_')}</h6><p  style="color:red;">{pigcms{:replace_lang_str('_NUM_DISCOUNT_',$card_info['discount'])}</p>
                             </dd>
                         </if>
                         <if condition="$cheap_info['can_cheap']">
                             <dd class="kv-line-r dd-padding">
-                                <h6>微信优惠</h6><p  style="color:red;">${pigcms{$cheap_info.wx_cheap}</p>
+                                <h6>{pigcms{:L('_WECHAT_DIS_')}</h6><p  style="color:red;">${pigcms{$cheap_info.wx_cheap}</p>
                             </dd>
                         </if>
 
@@ -664,8 +668,8 @@
                                 <dd id="mer_coupon">
                                     <a class="react" href="{pigcms{:U('My/select_card',($coupon_url?$coupon_url :$_GET))}&coupon_type=mer" >
                                         <div class="more more-weak">
-                                            <h6>商家优惠券</h6>
-                                            <span class="more-after">不使用</span>
+                                            <h6>{pigcms{:L('_SHOP_COUP_')}</h6>
+                                            <span class="more-after">{pigcms{:L('_DONT_USE_')}</span>
                                         </div>
                                     </a>
                                 </dd>
@@ -673,8 +677,8 @@
                                 <dd id="mer_coupon">
                                     <a class="react" >
                                         <div class="more more-weak">
-                                            <h6>商家优惠券</h6>
-                                            <span class="more-after">无可用优惠券</span>
+                                            <h6>{pigcms{:L('_SHOP_COUP_')}</h6>
+                                            <span class="more-after">{pigcms{:L('_UNAVAILABLE_COUP_')}</span>
                                         </div>
                                     </a>
                                 </dd>
@@ -682,8 +686,8 @@
                                 <dd id="mer_coupon">
                                     <a class="react" href="{pigcms{:U('My/select_card',($coupon_url ? $coupon_url :$_GET))}&coupon_type=mer">
                                         <div class="more more-weak">
-                                            <h6>商家优惠券</h6>
-                                            <span class="more-after" style="color:red;"><?php if($card_coupon){ ?>满{pigcms{$card_coupon.order_money}减{pigcms{$card_coupon.discount}<?php }else{ ?>使用优惠券<?php } ?></span>
+                                            <h6>{pigcms{:L('_SHOP_COUP_')}</h6>
+                                            <span class="more-after" style="color:red;"><?php if($card_coupon){ ?>满{pigcms{$card_coupon.order_money}减{pigcms{$card_coupon.discount}<?php }else{ ?>{pigcms{:L('_USE_COUP_')}<?php } ?></span>
                                         </div>
                                     </a>
                                 </dd>
@@ -697,8 +701,8 @@
                                 <dd id="mer_coupon">
                                     <a class="react" href="{pigcms{:U('My/select_card',($coupon_url?$coupon_url :$_GET))}&coupon_type=system" >
                                         <div class="more more-weak">
-                                            <h6>平台优惠券</h6>
-                                            <span class="more-after">不使用</span>
+                                            <h6>{pigcms{:L('_PLATFORM_COUP_')}</h6>
+                                            <span class="more-after">{pigcms{:L('_DONT_USE_')}</span>
                                         </div>
                                     </a>
                                 </dd>
@@ -706,16 +710,16 @@
 
                                 <a class="react" >
                                     <div class="more more-weak">
-                                        <h6>平台优惠券</h6>
-                                        <span class="more-after">无可用优惠券</span>
+                                        <h6>{pigcms{:L('_PLATFORM_COUP_')}</h6>
+                                        <span class="more-after">{pigcms{:L('_UNAVAILABLE_COUP_')}</span>
                                     </div>
                                 </a>
                             <?php }else{ ?>
 
                                 <a class="react" href="{pigcms{:U('My/select_card',($coupon_url ? $coupon_url :$_GET))}&coupon_type=system">
                                     <div class="more more-weak">
-                                        <h6>平台优惠券</h6>
-                                        <span class="more-after"  style="color:red;"><?php if($system_coupon){ ?>满{pigcms{$system_coupon.order_money}减{pigcms{$system_coupon.discount}<?php }else{ ?>使用优惠券<?php } ?></span>
+                                        <h6>{pigcms{:L('_PLATFORM_COUP_')}</h6>
+                                        <span class="more-after"  style="color:red;"><?php if($system_coupon){ ?>满{pigcms{$system_coupon.order_money}减{pigcms{$system_coupon.discount}<?php }else{ ?>{pigcms{:L('_USE_COUP_')}<?php } ?></span>
                                     </div>
                                 </a>
                             <?php } ?>
@@ -735,12 +739,13 @@
                         <?php } ?>
                         <?php if($order_info['order_type'] != 'plat' || $order_info['pay_system_balance']){ ?>
                             <dd class="dd-padding" id="balance_money" <if condition="$now_user.now_money eq 0 OR $merchant_balance gt $order_info.order_total_money ">style="color: #C1B9B9;"</if>>
-                            <label class="mt"><span class="pay-wrapper">使用余额支付<br><font color="red">可用余额${pigcms{$now_user.now_money}</font><input type="checkbox" class="mt"  id="use_balance" name="use_balance"<if condition="$now_user['now_money'] eq 0 OR $merchant_balance gt $order_info['order_total_money'] ">disabled="disabled" value="1"<else /> value="0" checked="checked" </if>></span></label>
+                            <label class="mt"><span class="pay-wrapper">{pigcms{:L('_USE_BALANCE_PAY_')}<br><font color="red">{pigcms{:L('_AVAILABLE_BALANCE_')} ${pigcms{$now_user.now_money}</font>
+                                    <input type="checkbox" class="mt"  id="use_balance" name="use_balance"<if condition="$now_user['now_money'] eq 0 OR $merchant_balance gt $order_info['order_total_money'] ">disabled="disabled" value="1"<else /> value="0" checked="checked" </if>></span></label>
                             </dd>
                         <?php } ?>
                         <dd class="dd-padding">
                             <label class="mt">
-                                <span style="float: right;" class="pay-wrapper">税费：<b style="color:red">+5%</b></span>
+                                <span style="float: right;" class="pay-wrapper">{pigcms{:L('_TAXATION_TXT_')}：<b style="color:red">+5%</b></span>
                             </label>
                         </dd>
                         <dd class="dd-padding" id="balance_money" >
@@ -748,7 +753,7 @@
                             <label class="mt">
                                 <if condition="$config.open_extra_price eq 1"><span style="float: left;" class="pay-wrapper" id="give_score"></span></if>
                                 <span style="float: right;" class="pay-wrapper" id="pay_in_fact"></span>
-                                <if condition="$_GET['type'] eq 'shop'"><br><span  class="pay-wrapper" style="float: right;font-size:10px;color:#ccc9c9;margin-top:2px">(运费不参与打折)</span></if></label>
+                                <if condition="$_GET['type'] eq 'shop'"><br><span  class="pay-wrapper" style="float: right;font-size:10px;color:#ccc9c9;margin-top:2px">({pigcms{:L('_NOTE_NOT_TAKE_DIS_')})</span></if></label>
                         </dd>
                     </dl>
                 </dd>
@@ -774,7 +779,7 @@
 
         <div id="pay-methods-panel" class="pay-methods-panel">
             <div id="normal-fieldset" class="normal-fieldset" style="height: 100%;display:none;margin-bottom: 60px;" >
-                <h4 style="margin: .3rem .2rem .2rem;">选择支付方式</h4>
+                <h4 style="margin: .3rem .2rem .2rem;">{pigcms{:L('_SELECT_PAY_MODE_')}</h4>
                 <dl class="list">
                     <volist name="pay_method" id="vo">
 
@@ -790,11 +795,11 @@
 
             <div style="background-color: #FFFFFF; height: 53px;position: fixed;bottom: 0;left: 0;right: 0;z-index: 900;-webkit-tap-highlight-color: rgba(0, 0, 0, 0);height: 49px;width: 100%;">
                 <div id="need_pay_title" style="    position: absolute;margin-top: 18px;margin-left: 0.3rem;">
-                    还需在线支付 <div style="font-weight:bold;color:red;display: inline;">$<div class="need-pay" style="display:inline;">
+                    {pigcms{:L('_ALSO_NEED_PAY_')} <div style="font-weight:bold;color:red;display: inline;">$<div class="need-pay" style="display:inline;">
                         </div>
                     </div>
                 </div>
-                <button type="button" onclick="bio_verify()" style="float: right;height: 100%;width: 50%;background-color: #06c1ae;color: #fff;border: none;">确认支付</button>
+                <button type="button" onclick="bio_verify()" style="float: right;height: 100%;width: 50%;background-color: #06c1ae;color: #fff;border: none;">{pigcms{:L('_CONFIRM_PAY_')}</button>
             </div>
         </div>
     </form>

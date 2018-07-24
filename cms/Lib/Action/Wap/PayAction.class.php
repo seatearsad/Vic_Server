@@ -10,14 +10,14 @@ class PayAction extends BaseAction{
     }
     public function check(){
         if(empty($this->user_session)){
-            $this->error_tips('请先进行登录！',U('Login/index'));
+            $this->error_tips(L('_B_MY_LOGINFIRST_'),U('Login/index'));
         }
         if($this->config['open_extra_price']==0 && empty($this->user_session['phone'])){
-            $this->error_tips('尊敬的用户，为了提供更好的服务，请您在消费之前先绑定手机号码！',U('My/bind_user',array('referer'=>urlencode(U('Pay/check',$_GET)))));
+            $this->error_tips(L('_BIND_PHONE_BEFORECON_'),U('My/bind_user',array('referer'=>urlencode(U('Pay/check',$_GET)))));
         }
 
         if(!in_array($_GET['type'],array('group','meal','weidian','takeout', 'food', 'foodPad','recharge','appoint','wxapp', 'store', 'shop', 'mall', 'plat','balance-appoint'))){
-            $this->error_tips('订单来源无法识别，请重试。');
+            $this->error_tips(L('_ORDER_CANNT_IDEN_'));
         }
         $group_pay_offline = true;
         if($_GET['type'] == 'group'){
@@ -50,12 +50,12 @@ class PayAction extends BaseAction{
             $now_order = D('Plat_order')->get_pay_order($this->user_session['uid'], intval($_GET['order_id']));
             $now_order['order_info']['extra_price'] =  $now_order['order_info']['order_info']['extra_price'];
             if($now_order['order_info']['status']==1){
-                $this->error_tips('订单已支付');
+                $this->error_tips(L('_B_MY_PAIDTHISORDER_'));
             }
         }else if($_GET['type'] == 'balance-appoint'){
             $now_order = D('Appoint_order')->get_pay_balace_order($this->user_session['uid'],intval($_GET['order_id']));
         }else{
-            $this->error_tips('非法的订单');
+            $this->error_tips(L('_ILLEGAL_ORDER_'));
         }
         if($now_order['error'] == 1){
             if($now_order['url']){
@@ -65,6 +65,8 @@ class PayAction extends BaseAction{
             }
         }
         $order_info = $now_order['order_info'];
+        //ADD garfunkel
+        $order_info['order_name'] = lang_substr($order_info['order_name'],C('DEFAULT_LANG'));
         if($this->config['open_extra_price']==1&&($order_info['order_type']!='appoint'||$order_info['discount_status'])){
             $user_score_use_percent=(float)$this->config['user_score_use_percent'];
             $order_info['order_extra_price'] = bcdiv($order_info['extra_price'],$user_score_use_percent,2);
@@ -115,7 +117,7 @@ class PayAction extends BaseAction{
             }else if($return['result']){
                 redirect($return['result']);
             }else{
-                $this->error('调用支付时发生错误，请重试');
+                $this->error(L('_ERROR_PAYMENT_'));
             }
         }
 
@@ -147,7 +149,7 @@ class PayAction extends BaseAction{
         $now_user = D('User')->get_user($this->user_session['uid']);
 
         if(empty($now_user)){
-            $this->error_tips('未获取到您的帐号信息，请重试！');
+            $this->error_tips(L('_NO_GET_INFO_'));
         }
         $now_user['now_money'] = floatval($now_user['now_money']);
 
@@ -478,7 +480,7 @@ class PayAction extends BaseAction{
 		//dump($pay_method);die;
 
         if(empty($pay_method) && $this->is_app_browser==false){
-            $this->error_tips('系统管理员没开启任一一种支付方式！');
+            $this->error_tips(L('_SYSTEM_NOT_PAY_MODE_'));
         }
 
         if(empty($_SESSION['openid']) || $_GET['type'] == 'foodPad'){
@@ -500,7 +502,10 @@ class PayAction extends BaseAction{
                 }
             }
         }
-
+        //add garfunkel
+        foreach ($pay_method as $k=>$v){
+            $pay_method[$k]['name'] = lang_substr($v['name'],C('DEFAULT_LANG'));
+        }
         $this->assign('pay_method',$pay_method);
 
         if($_GET['type'] == 'group'){
@@ -533,10 +538,10 @@ class PayAction extends BaseAction{
             $_POST['use_balance'] = $_POST['use_balance_money'];
         }
         if(empty($this->user_session)){
-            $this->error_tips('请先进行登录！',U('Login/index'));
+            $this->error_tips(L('_B_MY_LOGINFIRST_'),U('Login/index'));
         }
         if(!in_array($_POST['order_type'],array('group','meal','weidian','takeout','food','foodPad','recharge','appoint','waimai','wxapp','store','shop','mall','plat','balance-appoint','plat'))){
-            $this->error_tips('订单来源无法识别，请重试。');
+            $this->error_tips(L('_ORDER_CANNT_IDEN_'));
         }
         if (strtolower($_POST['pay_type']) == 'alipay') {
             $url = U('Pay/alipay', $_POST);
@@ -587,7 +592,7 @@ class PayAction extends BaseAction{
                 $now_order = D('Appoint_order')->get_pay_balace_order($this->user_session['uid'],intval($_POST['order_id']));
                 break;
             default:
-                $this->error_tips('非法的订单!');
+                $this->error_tips(L('_ILLEGAL_ORDER_'));
         }
 
         if($now_order['error'] == 1){
@@ -646,7 +651,7 @@ class PayAction extends BaseAction{
 
 
         if(empty($now_user)){
-            $this->error_tips('未获取到您的帐号信息，请重试！');
+            $this->error_tips(L('_NO_GET_INFO_'));
         }
         //判断积分是否够用 防止支付同时积分被改动
 
@@ -797,7 +802,7 @@ class PayAction extends BaseAction{
         }
 
         if(empty($pay_method)){
-            $this->error_tips('系统管理员没开启任一一种支付方式！');
+            $this->error_tips(L('_SYSTEM_NOT_PAY_MODE_'));
         }
         if(empty($pay_method[$_POST['pay_type']])){
             $this->error_tips('您选择的支付方式不存在，请更新支付方式！');
@@ -834,11 +839,11 @@ class PayAction extends BaseAction{
         $data_tmp['orderid'] = $orderid;
         $data_tmp['addtime'] = $nowtime;
         if(!D('Tmp_orderid')->add($data_tmp)){
-            $this->error_tips('更新订单信息失败，请联系管理员');
+            $this->error_tips(L('_UPDATE_FAIL_ADMIN_'));
         }
         $save_pay_id = D($order_table)->where(array("order_id"=>$order_id))->setField('orderid',$orderid);
         if(!$save_pay_id){
-            $this->error_tips('更新订单信息失败，请联系管理员');
+            $this->error_tips(L('_UPDATE_FAIL_ADMIN_'));
         }else{
             $order_info['order_id']=$orderid;
         }
@@ -869,7 +874,7 @@ class PayAction extends BaseAction{
                 $arr['error'] = 0;
                 echo json_encode($arr);die;
             }else{
-                $this->error_tips('调用支付发生错误，请重试。');
+                $this->error_tips(L('_ERROR_PAYMENT_'));
             }
         }else{
             $this->error_tips($go_pay_param['msg']);
@@ -1224,12 +1229,12 @@ class PayAction extends BaseAction{
                 $now_order = $this->get_orderid('Appoint_order', $_GET['order_id']);
                 break;
             default:
-                $this->error_tips('非法的订单');
+                $this->error_tips(L('_ILLEGAL_ORDER_'));
         }
 
 
         if(empty($now_order)){
-            $this->error_tips('该订单不存在');
+            $this->error_tips(L('_B_MY_NOORDER_'));
         }
         $now_order['order_type'] = $_GET['order_type'];
         if($now_order['paid']==3&&$now_order['is_initiative']!=2){
@@ -1363,7 +1368,7 @@ class PayAction extends BaseAction{
         $now_order['order_id']  =   $now_order['orderid'];
         $import_result = import('@.ORG.pay.Weixin');
         if(empty($pay_method)){
-            $this->error_tips('系统管理员没开启任一一种支付方式！');
+            $this->error_tips(L('_SYSTEM_NOT_PAY_MODE_'));
         }
         $pay_class = new Weixin($now_order,0,'weixin',$pay_method['weixin']['config'],$this->user_session,1);
         $go_query_param = $pay_class->query_order();
@@ -1489,7 +1494,7 @@ class PayAction extends BaseAction{
     public function notify_url(){
         $pay_method = D('Config')->get_pay_method();
         if(empty($pay_method)){
-            $this->error_tips('系统管理员没开启任一一种支付方式！');
+            $this->error_tips(L('_SYSTEM_NOT_PAY_MODE_'));
         }
         if(empty($pay_method[$_GET['pay_type']])){
             $this->error_tips('您选择的支付方式不存在，请更新支付方式！');
@@ -1584,7 +1589,7 @@ class PayAction extends BaseAction{
             }
         }
         if(empty($pay_method)){
-            $this->error_tips('系统管理员没开启任一一种支付方式！');
+            $this->error_tips(L('_SYSTEM_NOT_PAY_MODE_'));
         }
         if(empty($pay_method[$pay_type])){
             $this->error_tips('您选择的支付方式不存在，请更新支付方式！');
@@ -1658,7 +1663,7 @@ class PayAction extends BaseAction{
                 $get_pay_param['order_param']['order_id']=$now_order['orderid'];
                 $pay_info = D('Appoint_order')->balance_after_pay($get_pay_param['order_param']);
             }else{
-                $this->error_tips('订单类型非法！请重新下单。');
+                $this->error_tips(L('_ILLEGAL_ORDER_'));
             }
 	
             $urltype = isset($_GET['urltype']) ? $_GET['urltype'] : '';
@@ -1672,7 +1677,7 @@ class PayAction extends BaseAction{
                 } elseif ('weifutong' == $get_pay_param['order_param']['pay_type'] && $urltype == 'back') {
                     exit("success");
                 }
-                $pay_info['msg'] = '订单付款成功！现在跳转.';
+                $pay_info['msg'] = L('_PAY_SUCCESS_JUMP_');
             }
             if(empty($pay_info['url'])){
                 $this->error_tips($pay_info['msg']);
@@ -1849,7 +1854,7 @@ class PayAction extends BaseAction{
                 break;
         }
         if(empty($pay_method)){
-            $this->error_tips('系统管理员没开启任一一种支付方式！');
+            $this->error_tips(L('_SYSTEM_NOT_PAY_MODE_'));
         }
         $import_result = import('@.ORG.pay.Alipay');
         $pay_class = new Alipay('','','alipay',$pay_method['alipay']['config'],$this->user_session,1);
@@ -1909,7 +1914,7 @@ class PayAction extends BaseAction{
                 $go_query_param['order_param']['order_id'] = $now_order['orderid'];
                 $pay_info = D('Plat_order')->after_pay($go_query_param['order_param']);
             }else{
-                $this->error_tips('订单类型非法！请重新下单。');
+                $this->error_tips(L('_ILLEGAL_ORDER_'));
             }
         }
         switch($order_type){
@@ -1963,7 +1968,7 @@ class PayAction extends BaseAction{
     {
         $pay_method = D('Config')->get_pay_method(0, 0, true);
         if(empty($pay_method)){
-            $this->error_tips('系统管理员没开启任一一种支付方式！');
+            $this->error_tips(L('_SYSTEM_NOT_PAY_MODE_'));
         }
         $import_result = import('@.ORG.pay.Alipay');
         $pay_class = new Alipay('','','alipay',$pay_method['alipay']['config'],$this->user_session,1);
@@ -2021,7 +2026,7 @@ class PayAction extends BaseAction{
                 $go_query_param['order_param']['order_id'] = $now_order['orderid'];
                 $pay_info = D('Plat_order')->after_pay($go_query_param['order_param']);
             }else{
-                $this->error_tips('订单类型非法！请重新下单。');
+                $this->error_tips(L('_ILLEGAL_ORDER_'));
             }
 
 
@@ -2336,10 +2341,10 @@ class PayAction extends BaseAction{
             }else if($get_pay_param['order_param']['order_type'] == 'plat'){
                 $pay_info = D('Plat_order')->after_pay($get_pay_param['order_param']);
             }else{
-                $this->error_tips('订单类型非法！请重新下单。');
+                $this->error_tips(L('_ILLEGAL_ORDER_'));
             }
             if(empty($pay_info['error'])){
-                $pay_info['msg'] = '订单付款成功！现在跳转.';
+                $pay_info['msg'] = L('_PAY_SUCCESS_JUMP_');
             }
             if(empty($pay_info['url'])){
                 $this->error_tips($pay_info['msg']);

@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8"/>
-	<title>{pigcms{$config.shop_alias_name}订单列表</title>
+	<title>{pigcms{:L('_OUT_TXT_')} {pigcms{:L('_B_PURE_MY_63_')}</title>
     <meta name="viewport" content="initial-scale=1, width=device-width, maximum-scale=1, user-scalable=no">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name='apple-touch-fullscreen' content='yes'>
@@ -203,16 +203,16 @@
 				<div class="border"></div>
 				<ul class="orderindex">
 					<li class="active"><a href="javascript:void(0)" tab-id="1" class="react">
-						<span>全部</span>
+						<span>{pigcms{:L('_B_PURE_MY_64_')}</span>
 					</a>
 					</li><li data-status='-1'><a href="javascript:void(0)" tab-id="2" class="react ">
-						<span>待付款</span>
+						<span>{pigcms{:L('_B_PURE_MY_65_')}</span>
 					</a>
 					</li><li data-status='1'><a href="javascript:void(0)" tab-id="3" class="react ">
-						<span>未消费</span>
+						<span>{pigcms{:L('_B_PURE_MY_66_')}</span>
 					</a>
 					</li><li data-status='2'><a href="javascript:void(0)" tab-id="4" class="react " >
-						<span>待评价</span>
+						<span>{pigcms{:L('_B_PURE_MY_67_')}</span>
 					</a>
 					</li>
 				</ul>
@@ -226,7 +226,7 @@
 				<volist name="order_list" id="order">
 					<dd>
 						<dl>
-							<dd class="order-num">订单编号：<span>{pigcms{$order.real_orderid}</span>
+							<dd class="order-num">{pigcms{:L('_B_PURE_MY_68_')}<span>{pigcms{$order.real_orderid}</span>
 							<if condition="$order['paid'] eq 0">
 							<a href="javascript::void(0)" onclick="del_order({pigcms{$order['order_id']})"><img src="{pigcms{$static_path}images/u282.png"></a>
 							</if>
@@ -240,38 +240,38 @@
 									</div>
 									<div class="dealcard-block-right">
 										<div class="dealcard-brand single-line">{pigcms{$order.name}</div>
-										<small>数量：{pigcms{$order.num}&nbsp;&nbsp;总价：{pigcms{$order['price']|floatval}  元</small>
+										<small>{pigcms{:L('_B_PURE_MY_69_')}{pigcms{$order.num}&nbsp;&nbsp;{pigcms{:L('_B_PURE_MY_70_')}{pigcms{$order['price']|floatval}  元</small>
 
 									</div>
 								</dd>
 							<dd class="order-num order-num-foot">
 								<if condition="$order['status'] eq 0">
-									<span>未确认</span>
+									<span>{pigcms{:L('_B_PURE_MY_71_')}</span>
 								<elseif condition="$order['status'] eq 1" />
-									<span>已确认</span>
+									<span>{pigcms{:L('_B_PURE_MY_72_')}</span>
 								<elseif condition="$order['status'] eq 2" />
-									<span  href="{pigcms{:U('My/shop_feedback',array('order_id'=>$order['order_id']))}">去评价</span>
+									<span  href="{pigcms{:U('My/shop_feedback',array('order_id'=>$order['order_id']))}">{pigcms{:L('_B_PURE_MY_73_')}</span>
 								<elseif condition="$order['status'] eq 3" />
-									<span>已评价</span>
+									<span>{pigcms{:L('_B_PURE_MY_74_')}</span>
 								<elseif condition="$order['status'] eq 4" />
-									<span>已退款</span>
+									<span>{pigcms{:L('_B_PURE_MY_75_')}</span>
 								<elseif condition="$order['status'] eq 5" />
-									<span>已取消</span>
+									<span>{pigcms{:L('_B_PURE_MY_76_')}</span>
 								<elseif condition="$order['status'] eq 6" />
 								<elseif condition="$order['status'] eq 7" />
-									<span>分配到自提点</span>
+									<span>{pigcms{:L('_B_PURE_MY_77_')}</span>
 								<elseif condition="$order['status'] eq 8" />
-									<span>发货到自提点</span>
+									<span>{pigcms{:L('_B_PURE_MY_78_')}</span>
 								<elseif condition="$order['status'] eq 9" />
-									<span>自提点接货</span>
+									<span>{pigcms{:L('_B_PURE_MY_79_')}</span>
 								<elseif condition="$order['status'] eq 10" />
-									<span>自提点发货</span>
+									<span>{pigcms{:L('_B_PURE_MY_80_')}</span>
 								</if>
 
 								<if condition="empty($order['paid']) AND ($order['status'] lt 2 OR $order['status'] eq 7)" >
-									<span onclick="location.href='{pigcms{:U('Pay/check',array('type'=>'shop','order_id'=>$order['order_id']))}'" class="order-pay">付款</span>
+									<span onclick="location.href='{pigcms{:U('Pay/check',array('type'=>'shop','order_id'=>$order['order_id']))}'" class="order-pay">{pigcms{:L('_B_PURE_MY_81_')}</span>
 								<elseif condition="$order['status'] == 2"/>
-									<span onclick="location.href='{pigcms{:U('My/shop_feedback',array('order_id'=>$order['order_id']))}'">评价</span>
+									<span onclick="location.href='{pigcms{:U('My/shop_feedback',array('order_id'=>$order['order_id']))}'">{pigcms{:L('_B_PURE_MY_82_')}</span>
 								</if>
 							</dd>
 						</dl>
@@ -324,7 +324,7 @@
 							var shtml = '<dd>';
 							var order_list = data['order_list'];
 							for(var i in order_list){
-								shtml += '<dl><dd class="order-num">订单编号：<span>'+order_list[i]["real_orderid"]+'</span>';
+								shtml += '<dl><dd class="order-num">{pigcms{:L('_B_PURE_MY_68_')}<span>'+order_list[i]["real_orderid"]+'</span>';
 								if((order_list[i]['paid'] == 0)){
 									shtml +='<a href="javascript:void(0)" onclick="del_order('+order_list[i]["order_id"]+')"><img src="{pigcms{$static_path}images/u282.png"></a>';
 								}
@@ -338,7 +338,7 @@
 								shtml += '</div>';
 								shtml += '<div class="dealcard-block-right">';
 								shtml += '<div class="dealcard-brand single-line">'+order_list[i]['name']+'</div>';
-								shtml += '<small>数量：'+order_list[i]['num']+'&nbsp;&nbsp;总价：'+order_list[i]['price']+' 元</small>';
+								shtml += '<small>{pigcms{:L('_B_PURE_MY_69_')}'+order_list[i]['num']+'&nbsp;&nbsp;{pigcms{:L('_B_PURE_MY_70_')}'+order_list[i]['price'];
 
 								shtml += '</div></dd><dd class="order-num order-num-foot">	';
 
@@ -347,46 +347,46 @@
 
 
 								if(order_list[i]['status']==0){
-									shtml += '<span>未确认</span>';
+									shtml += '<span>{pigcms{:L('_B_PURE_MY_71_')}</span>';
 								}else if(order_list[i]['status']==1){
-									shtml += '<span>已确认</span>';
+									shtml += '<span>{pigcms{:L('_B_PURE_MY_72_')}</span>';
 								}else if(order_list[i]['status']==2){
 									var url = "{pigcms{:U('My/shop_feedback')}";
 									url +='&order_id='+order_list[i]['order_id'];
-									shtml +='<span onclick="location.href=\''+url+'\'">去评价</span>';
+									shtml +='<span onclick="location.href=\''+url+'\'">{pigcms{:L('_B_PURE_MY_73_')}</span>';
 								}else if(order_list[i]['status']==3){
-									shtml += '<span>已评价</span>';
+									shtml += '<span>{pigcms{:L('_B_PURE_MY_74_')}</span>';
 								}else if(order_list[i]['status']==4){
-									shtml += '<span>已退款</span>';
+									shtml += '<span>{pigcms{:L('_B_PURE_MY_75_')}</span>';
 								}else if(order_list[i]['status']==5){
-									shtml += '<span>已取消</span>';
+									shtml += '<span>{pigcms{:L('_B_PURE_MY_76_')}</span>';
 								}else if(order_list[i]['status']==6){
 								}else if(order_list[i]['status']==7){
-									shtml += '<span>分配到自提点</span>';
+									shtml += '<span>{pigcms{:L('_B_PURE_MY_77_')}</span>';
 								}else if(order_list[i]['status']==8){
-									shtml += '<span>发货到自提点</span>';
+									shtml += '<span>{pigcms{:L('_B_PURE_MY_78_')}</span>';
 								}else if(order_list[i]['status']==9){
-									shtml += '<span>自提点接货</span>';
+									shtml += '<span>{pigcms{:L('_B_PURE_MY_79_')}</span>';
 								}else if(order_list[i]['status']==10){
-									shtml += '<span>自提点发货</span>';
+									shtml += '<span>{pigcms{:L('_B_PURE_MY_80_')}</span>';
 								}
 
 
 								 if(order_list[i]['paid'] == 0 && (order_list[i]['status'] < 2 || order_list[i]['status'] == 7)){
 									 var url = "{pigcms{:U('Pay/check')}";
 									 url += '&type=shop&order_id='+order_list[i]['order_id'];
-									 shtml +='<span onclick="location.href=\''+url+'\'" class="order-pay">付款</span>';
+									 shtml +='<span onclick="location.href=\''+url+'\'" class="order-pay">{pigcms{:L('_B_PURE_MY_81_')}</span>';
 								 }else if(order_list[i]['status'] == 2){
 									 var url = "{pigcms{:U('My/shop_feedback')}";
 									 url += '&order_id='+order_list[i]['order_id'];
-									 shtml +='<span onclick="location.href=\''+url+'\'">评价</span>';
+									 shtml +='<span onclick="location.href=\''+url+'\'">{pigcms{:L('_B_PURE_MY_82_')}</span>';
 								 }else{
 									 shtml+='<a></a>';
 								 }
 								shtml +='</dd></dl><div style=" height:10px; background:#f0efed"></div>';
 							}
 						}else{
-							var shtml ='<dd><dd class="dealcard dd-padding" style=" text-align:center; background:#fff; width:100%">暂无订单</dd></dd>';
+							var shtml ='<dd><dd class="dealcard dd-padding" style=" text-align:center; background:#fff; width:100%">{pigcms{:L('_B_PURE_MY_83_')}</dd></dd>';
 						}
 						$('.tab[tab-id="' + tabId + '"]').html(shtml);
 					},'json')
@@ -402,8 +402,8 @@
 
 
 				layer.open({
-				content:'确认删除？',
-				btn: ['确定','取消'],
+				content:"{pigcms{:L('_B_PURE_MY_84_')}",
+				btn: ["{pigcms{:L('_B_PURE_MY_85_')}","{pigcms{:L('_B_PURE_MY_86_')}"],
 				yes:function(){
                    var del_url = "{pigcms{:U('ajax_shop_order_del')}";
 					$.get(del_url,{'order_id':order_id},function(data){

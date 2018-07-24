@@ -401,8 +401,10 @@ class StoreAction extends BaseAction
 		$keyword = isset($_GET['keyword']) && $_GET['keyword'] ? trim(htmlspecialchars(($_GET['keyword']))) : '';
 		$store = $this->now_store($store_id);
 		if (empty($store)) {
-			$this->error('不存在的店铺信息');
-		}
+			$this->error(L('_NOT_SHOP_INFO_'));
+		}else{//add garfunkel
+		    $store['store_notice'] = lang_substr($store['store_notice'],C('DEFAULT_LANG'));
+        }
 		$today = date('Ymd');
 
 		$product_list = D('Shop_goods')->get_list_by_storeid($store_id, $sort, $keyword);
@@ -832,12 +834,16 @@ class StoreAction extends BaseAction
 		$database_shop_goods = D('Shop_goods');
 		$now_goods = $database_shop_goods->get_goods_by_id($goods_id);
 		if($now_goods['list']){
-			foreach($now_goods['list'] as &$value){
+			foreach($now_goods['list'] as $k => &$value){
 				if ($now_goods['is_seckill_price']) {
 					$value['price'] = $value['seckill_price'];
 				}
+                //$now_goods['list'][]
 			}
-		}
+		}else{
+		    $now_goods['name'] = lang_substr($now_goods['name'],C('DEFAULT_LANG'));
+            $now_goods['unit'] = lang_substr($now_goods['unit'],C('DEFAULT_LANG'));
+        }
 // 		echo '<pre/>';
 // 		print_r($now_goods);die;
 		if(empty($now_goods)){

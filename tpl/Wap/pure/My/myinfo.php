@@ -3,7 +3,7 @@
 <html lang="zh-CN">
 	<head>
 		<meta charset="utf-8" />
-		<title>账户管理</title>
+		<title>{pigcms{:L('_B_PURE_MY_53_')}</title>
 		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width"/>
 		<meta name="apple-mobile-web-app-capable" content="yes"/>
 		<meta name='apple-touch-fullscreen' content='yes'/>
@@ -41,24 +41,24 @@
 <body>
 	<dl style="padding:0 10px;background-color:#fff;margin-top:10px;margin-bottom:10px;">
 		<div id="nickname" class="titleBorder">
-			<div class="title">昵称<span style="float:right;">{pigcms{$now_user.nickname}</span></div>
+			<div class="title">{pigcms{:L('_B_PURE_MY_54_')}<span style="float:right;">{pigcms{$now_user.nickname}</span></div>
 			<img src="{pigcms{$static_path}images/new_my/tubiao2_11.png" class="imgRirht" />
 		</div>
 		<div id="psword" class="titleBorder">
-			<div class="title">修改密码</div>
+			<div class="title">{pigcms{:L('_B_PURE_MY_55_')}</div>
 			<img src="{pigcms{$static_path}images/new_my/tubiao2_11.png" class="imgRirht"></img>
 		</div>
 		<div id="bind_user" class="titleBorder">
-			<div class="title"><if condition="$now_user['phone']">修改手机号<else />绑定手机</if><span style="float:right;">{pigcms{$now_user.phone_s}</span></div>
+			<div class="title"><if condition="$now_user['phone']">{pigcms{:L('_B_PURE_MY_56_')}<else />{pigcms{:L('_B_PURE_MY_57_')}</if><span style="float:right;">{pigcms{$now_user.phone_s}</span></div>
 			<img src="{pigcms{$static_path}images/new_my/tubiao2_11.png" class="imgRirht"></img>
 		</div>
 		<if condition="!$_GET['type']">
 			<div id="adress" class="titleBorder">
-				<div class="title">收货地址</div>
+				<div class="title">{pigcms{:L('_B_PURE_MY_58_')}</div>
 				<img src="{pigcms{$static_path}images/new_my/tubiao2_11.png" class="imgRirht"></img>
 			</div>
 		</if>
-		<div id="authentication" class="titleBorder">
+		<!--div id="authentication" class="titleBorder">
 			<div class="title">实名认证</div>
 			<img src="{pigcms{$static_path}images/new_my/tubiao2_11.png" class="imgRirht"></img>
 		</div>
@@ -71,12 +71,12 @@
 				<div class="title">我的实体卡</div>
 				<img src="{pigcms{$static_path}images/new_my/tubiao2_11.png" class="imgRirht"></img>
 			</div>
-		</if>
+		</if-->
 	</dl>
 	<if condition="!$_GET['type']">
 		<dl style="padding:0 10px;background-color:#fff;margin-top:10px;margin-bottom:10px;">
 			<div id="about" style="padding-bottom:10px;">
-				<div class="title">关于我们</div>
+				<div class="title">{pigcms{:L('_B_PURE_MY_ABOUTUS_')}</div>
 				<img src="{pigcms{$static_path}images/new_my/tubiao2_11.png" class="imgRirht" />
 			</div>
 		</dl>
@@ -85,12 +85,12 @@
 	
 	<dl style="padding:0 10px;background-color:#fff;margin-top:10px;margin-bottom:10px;">
 		<div id="merchant" style="padding-bottom:10px;">
-			<div class="title">管理店铺</div>
+			<div class="title">{pigcms{:L('_B_PURE_MY_60_')}</div>
 			<img src="{pigcms{$static_path}images/new_my/tubiao2_11.png" class="imgRirht" />
 		</div>
 	</dl>
 		
-	<button id="logout" style="padding:15px;width:90%;margin:10px 5%;background-color:#00c4ac;color:#fff;border:0px;">退出登录</button>
+	<button id="logout" style="padding:15px;width:90%;margin:10px 5%;background-color:#00c4ac;color:#fff;border:0px;">{pigcms{:L('_B_PURE_MY_61_')}</button>
 		<script src="{pigcms{:C('JQUERY_FILE')}"></script>
 		<script src="{pigcms{$static_path}js/common_wap.js"></script>
 		<script>

@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8"/>
-	<title>绑定帐号</title>
+	<title>{pigcms{:L('_B_D_LOGIN_BINDING1_')}</title>
     <meta name="viewport" content="initial-scale=1, width=device-width, maximum-scale=1, user-scalable=no"/>
 	<meta name="apple-mobile-web-app-capable" content="yes"/>
 	<meta name='apple-touch-fullscreen' content='yes'/>
@@ -34,8 +34,8 @@
 			<dl class="list">
 				<dd class="nav">
 					<ul class="taba taban noslide" data-com="tab">
-						<li  class="active" tab-target="reg-form"><a class="react">注册新帐号</a></li>
-						<li  tab-target="login-form"><a class="react">绑定已有帐号</a></li>
+						<li  class="active" tab-target="reg-form"><a class="react">{pigcms{:L('_B_D_LOGIN_REG1_')}</a></li>
+						<li  tab-target="login-form"><a class="react">{pigcms{:L('_B_D_LOGIN_BINDING2_')}</a></li>
 						<div class="slide" style="left:0px;width:0px;"></div>
 					</ul>
 				</dd>
@@ -45,20 +45,20 @@
 					<dd>
 						<dl>
 							<dd class="dd-padding">
-								<input id="login_phone" class="input-weak" type="tel" placeholder="手机号" name="phone" value="" required=""/>
+								<input id="login_phone" class="input-weak" type="tel" placeholder="{pigcms{:L('_B_D_LOGIN_TEL_')}" name="phone" value="" required=""/>
 							</dd>
 							<dd class="dd-padding">
-								<input id="login_password" class="input-weak" type="password" placeholder="请输入您的密码" name="password" required=""/>
+								<input id="login_password" class="input-weak" type="password" placeholder="{pigcms{:L('_B_D_LOGIN_ENTERKEY1_')}" name="password" required=""/>
 							</dd>
 							
 						</dl>
 					</dd>
 				</dl>
 				<div class="btn-wrapper">
-					<button type="submit" class="btn btn-larger btn-block">绑定</button>
+					<button type="submit" class="btn btn-larger btn-block">{pigcms{:L('_B_D_LOGIN_BINDING3_')}</button>
 				</div>
 				<div class="btn-wrapper">
-					<a href="{pigcms{:U('Login/forgetpwd')}">找回密码</a>
+					<a href="{pigcms{:U('Login/forgetpwd')}">{pigcms{:L('_B_D_LOGIN_KEYBACK_')}</a>
 				</div>
 			</form>
 			<form id="reg-form" action="{pigcms{:U('Login/weixin_bind_reg')}" autocomplete="off" method="post" location_url="{pigcms{$referer}" >
@@ -66,32 +66,32 @@
 					<dd>
 						<dl>
 							<dd class="dd-padding">
-								<input id="reg_phone" class="input-weak" type="tel" placeholder="手机号" name="phone" value="" required=""/>
+								<input id="reg_phone" class="input-weak" type="tel" placeholder="{pigcms{:L('_B_D_LOGIN_TEL_')}" name="phone" value="" required=""/>
 							</dd>
 							<if condition="C('config.bind_phone_verify_sms') AND C('config.sms_key')">
 			            		<dd class="kv-line-r dd-padding">
-			            			<input id="sms_code" class="input-weak kv-k" name = "sms_code" type="text" placeholder="填写短信验证码" />
-			            			<button id="reg_send_sms" type="button" onclick="sendsms(this)" class="btn btn-weak kv-v">获取短信验证码</button>
+			            			<input id="sms_code" class="input-weak kv-k" name = "sms_code" type="text" placeholder="{pigcms{:L('_B_D_LOGIN_FILLMESSAGE_')}" />
+			            			<button id="reg_send_sms" type="button" onclick="sendsms(this)" class="btn btn-weak kv-v">{pigcms{:L('_B_D_LOGIN_RECEIVEMESSAGE_')}</button>
 			            		</dd>
 							</if>
 							<dd class="kv-line-r dd-padding">
-								<input id="reg_pwd_password" class="input-weak kv-k" type="password" placeholder="6位以上的密码"/>
-								<input id="reg_txt_password" class="input-weak kv-k" type="text" placeholder="6位以上的密码" style="display:none;"/>
+								<input id="reg_pwd_password" class="input-weak kv-k" type="password" placeholder="{pigcms{:L('_B_D_LOGIN_6KEYWORD_')}"/>
+								<input id="reg_txt_password" class="input-weak kv-k" type="text" placeholder="{pigcms{:L('_B_D_LOGIN_6KEYWORD_')}" style="display:none;"/>
 								<input type="hidden" id="reg_password_type" value="0"/>
 								<input type="hidden" id="openid" value="{pigcms{$_SESSION['openid']}"/>
-								<button id="reg_changeWord" type="button" class="btn btn-weak kv-v">显示明文</button>
+								<button id="reg_changeWord" type="button" class="btn btn-weak kv-v">{pigcms{:L('_B_D_LOGIN_DISPLAY_')}</button>
 							</dd>
 						</dl>
 					</dd>
 				</dl>
 				<div class="btn-wrapper">
-					<button type="submit" class="btn btn-larger btn-block">注册并绑定</button>
+					<button type="submit" class="btn btn-larger btn-block">{pigcms{:L('_B_D_LOGIN_REGANDBINDING_')}</button>
 				</div>
 			</form>
 		</div>
 		<if condition="!$config['weixin_login_bind']">
 			<ul class="subline">
-				<li><a href="{pigcms{:U('Login/weixin_nobind')}" id="weixin_nobind" style="height: 25px">不想绑定帐号，跳过 →</a></li>
+				<li><a href="{pigcms{:U('Login/weixin_nobind')}" id="weixin_nobind" style="height: 25px">{pigcms{:L('_B_D_LOGIN_NOBINDINGJUMP_')} →</a></li>
 			</ul>
 		</if>
 	</div>
@@ -104,7 +104,7 @@
 			var countdown = 60;
 			function sendsms(val){
 				if($("#reg_phone").val()==''){
-					alert('手机号码不能为空！');
+					alert("{pigcms{:L('_B_D_LOGIN_BLANKNUM_')}");
 				}else{
 					
 					if(countdown==60){
@@ -118,12 +118,12 @@
 					}
 					if (countdown == 0) {
 						val.removeAttribute("disabled");
-						val.innerText="获取短信验证码";
+						val.innerText="{pigcms{:L('_B_D_LOGIN_RECEIVEMESSAGE_')}";
 						countdown = 60;
 						//clearTimeout(t);
 					} else {
 						val.setAttribute("disabled", true);
-						val.innerText="重新发送(" + countdown + ")";
+						val.innerText="{pigcms{:L('_B_D_LOGIN_SENDAGAIN_')}(" + countdown + ")";
 						countdown--;
 						setTimeout(function() {
 							sendsms(val);
@@ -135,12 +135,12 @@
 	<script>
 		$('#weixin_nobind').click(function(){
 			layer.open({
-				title:['提醒：','background-color:#8DCE16;color:#fff;'],
-				content:'直接将微信号作为用户登录，以后将无法绑定已有帐号！请确认：',
-				btn: ['确认', '取消'],
+				title:["{pigcms{:L('_B_D_LOGIN_TIP1_')}","background-color:#8DCE16;color:#fff;"],
+				content:"{pigcms{:L('_B_D_LOGIN_WECHATLOGINNOBINDING_')}",
+				btn: ["{pigcms{:L('_B_D_LOGIN_CONIERM_')}", "{pigcms{:L('_B_D_LOGIN_CANCEL_')}"],
 				shadeClose: false,
 				yes: function(){
-					layer.open({content: '你点了确认，正在跳转！', time:3});
+					layer.open({content: "{pigcms{:L('_B_D_LOGIN_POINTCONFIRMJUMP_')}", time:3});
 					window.location.href = "{pigcms{:U('Login/weixin_nobind')}";
 				}
 			});

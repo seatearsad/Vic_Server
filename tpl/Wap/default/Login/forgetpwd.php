@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8"/>
-	<title>找回密码  - {pigcms{$config.site_name}</title>
+	<title>{pigcms{:L('_B_LOGIN_RECOMENDNEWGIFSCORE_')}  - {pigcms{$config.site_name}</title>
     <meta name="viewport" content="initial-scale=1, width=device-width, maximum-scale=1, user-scalable=no">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name='apple-touch-fullscreen' content='yes'>
@@ -35,7 +35,7 @@
             <h1 class="nav-header">{pigcms{$config.site_name}</h1>
             <div class="nav-wrap-right">
                 <a class="react" href="{pigcms{:U('Home/index')}">
-                    <span class="nav-btn"><i class="text-icon">⟰</i>首页</span>
+                    <span class="nav-btn"><i class="text-icon">⟰</i>{pigcms{:L('_B_D_LOGIN_HPME1_')}</span>
                 </a>
             </div>
         </header-->
@@ -47,12 +47,12 @@
 			        	<dd>
 			        		<dl>
 			            		<dd class="dd-padding">
-			            			<input id="phone" class="input-weak" type="tel" placeholder="手机号" name="phone" value="" required="">
+			            			<input id="phone" class="input-weak" type="tel" placeholder="{pigcms{:L('_B_D_LOGIN_TEL_')}" name="phone" value="" required="">
 			            		</dd>
 								<if condition=" C('config.sms_key')">
 			            		<dd class="kv-line-r dd-padding">
-			            			<input id="vfycode" class="input-weak kv-k" name = "vcode" type="text" placeholder="填写短信验证码" required/>
-			            			<button id="reg_send_sms" type="button" onclick="sendsms(this)" class="btn btn-weak kv-v">获取短信验证码</button>
+			            			<input id="vfycode" class="input-weak kv-k" name = "vcode" type="text" placeholder="{pigcms{:L('_B_D_LOGIN_FILLMESSAGE_')}" required/>
+			            			<button id="reg_send_sms" type="button" onclick="sendsms(this)" class="btn btn-weak kv-v">{pigcms{:L('_B_D_LOGIN_RECEIVEMESSAGE_')}</button>
 			            		</dd>
 								</if>
 			            		
@@ -60,12 +60,12 @@
 			        	</dd>
 			        </dl>
 			        <div class="btn-wrapper">
-						<button type="submit" onclick="forgetpwd(this);" class="btn btn-larger btn-block">提交</button>
+						<button type="submit" onclick="forgetpwd(this);" class="btn btn-larger btn-block">{pigcms{:L('_B_D_LOGIN_SUB_')}</button>
 			        </div>
 			   
 			</div>
 			<ul class="subline">
-			    <li><a href="{pigcms{:U('Login/index')}">立即登录</a></li>
+			    <li><a href="{pigcms{:U('Login/index')}">{pigcms{:L('_B_D_LOGIN_LOGINNOW_')}</a></li>
 			</ul>
 		</div>
 		<script type="text/javascript">
@@ -92,7 +92,7 @@
 			var countdown = 60;
 			function sendsms(val){
 				if($("input[name='phone']").val()==''){
-					alert('手机号码不能为空！');
+					alert("{pigcms{:L('_B_D_LOGIN_BLANKNUM_')}");
 				}else{
 					
 					if(countdown==60){
@@ -112,12 +112,12 @@
 					}
 					if (countdown == 0) {
 						val.removeAttribute("disabled");
-						val.innerText="获取短信验证码";
+						val.innerText="{pigcms{:L('_B_D_LOGIN_RECEIVEMESSAGE_')}";
 						countdown = 60;
 						//clearTimeout(t);
 					} else {
 						val.setAttribute("disabled", true);
-						val.innerText="重新发送(" + countdown + ")";
+						val.innerText="{pigcms{:L('_B_D_LOGIN_SENDAGAIN_')}(" + countdown + ")";
 						countdown--;
 						setTimeout(function() {
 							sendsms(val);

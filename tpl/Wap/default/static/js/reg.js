@@ -4,7 +4,7 @@ $(function(){
 		var phone = $.trim($('#phone').val());
 		$('#phone').val(phone);
 		if(phone.length == 0){
-			$('#tips').html('请输入手机号码。').show();
+			$('#tips').html(getLangStr('_B_LOGIN_ENTERPHONENO_')).show();
 			return false;
 		}
 		//if(!/^[0-9]{10}$/.test(phone)){
@@ -24,7 +24,7 @@ $(function(){
 			var password = $('#txt_password').val();
 		}
 		if(password.length < 6){
-			$('#tips').html('请输入6位以上的密码。').show();
+			$('#tips').html(getLangStr('_B_LOGIN_ENTERKEY_') +' '+ getLangStr('_B_D_LOGIN_6KEYWORD_')).show();
 			return false;
 		}
 		if(typeof(sms_code)!='undefined'){
@@ -36,7 +36,7 @@ $(function(){
 		if(reg_flag){
 			reg_flag = false;
 		}else{
-			$('#tips').html('注册中，请不要重复提交').show();
+			$('#tips').html(getLangStr('_B_D_LANG_RE_NOREP_')).show();
 			return false;
 		}
 		$.post($('#reg-form').attr('action'),{phone:phone,password:password,sms_code:sms_code},function(result){
@@ -53,15 +53,15 @@ $(function(){
 	
 	
 	$('#changeWord').click(function(){
-		if($(this).html() == '显示明文'){
+		if($(this).html() == getLangStr('_B_D_LOGIN_DISPLAY_')){
 			$('#txt_password').val($('#pwd_password').val()).show();
 			$('#pwd_password').hide();
-			$(this).html('显示密文');
+			$(this).html(getLangStr('_B_D_LOGIN_DISPLAY_PASS_'));
 			$('#password_type').val(1);
 		}else{
 			$('#pwd_password').val($('#txt_password').val()).show();
 			$('#txt_password').hide();
-			$(this).html('显示明文');
+			$(this).html(getLangStr('_B_D_LOGIN_DISPLAY_'));
 			$('#password_type').val(0);
 		}
 	});

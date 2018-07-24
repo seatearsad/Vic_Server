@@ -3,7 +3,7 @@
 <html lang="zh-CN">
 	<head>
 		<meta charset="utf-8" />
-		<title>个人中心</title>
+		<title>{pigcms{:L('_B_PURE_MY_33_')}</title>
 		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width"/>
 		<meta name="apple-mobile-web-app-capable" content="yes"/>
 		<meta name='apple-touch-fullscreen' content='yes'/>
@@ -145,19 +145,19 @@
 			<p class="uname <if condition="$now_user.phone">set_up</if>">{pigcms{$now_user.nickname}</p>
 			<if condition="$now_user.phone lt 1">
 				<a href="{pigcms{:U('bind_user')}">
-					<p class="umoney phone" style="color:#f9005e;">未绑定手机号</p>
+					<p class="umoney phone" style="color:#f9005e;">{pigcms{:L('_B_PURE_MY_34_')}</p>
 				</a>
 			<else/>
 				<p class="umoney phone <if condition="$now_user.phone">set_up</if>">{pigcms{$now_user.phone}</p>
 			</if>
 			<if condition="isset($config['specificfield'])">
 				<a href="{pigcms{:U('inputinfo')}">
-					<p class="data <if condition="$now_user.phone">set_up</if>">完善资料 ></p>
+					<p class="data <if condition="$now_user.phone">set_up</if>">{pigcms{:L('_B_PURE_MY_35_')} ></p>
 				</a>
 			</if>
 			<if condition="$config['sign_get_score'] gt 0">
 				<a href="<if condition="$config.wap_sign_url neq ''">javascript:check_http('{pigcms{$config.wap_sign_url}')<else />{pigcms{:U('sign')}</if>">
-					<p class="data" style="border:none;background-color:#ffea37;width:50px;color:#9f0000">签到</p>
+					<p class="data" style="border:none;background-color:#ffea37;width:50px;color:#9f0000">{pigcms{:L('_B_PURE_MY_36_')}</p>
 				</a>
 			</if>
 		</div>
@@ -167,12 +167,12 @@
 	<div id="money" style="padding:0 10px 10px;background-color:#fff;">
 		<div id ="my_wallet" style="border-bottom:1px solid #e5e5e5;padding-bottom:10px;">
 			<img class="titleImg" style="margin-top:10px;float:left;" src="{pigcms{$static_path}images/new_my/money.png" />
-			<div  style="padding-top:13px;width:60%;">我的钱包</div>
+			<div  style="padding-top:13px;width:60%;">{pigcms{:L('_B_PURE_MY_37_')}</div>
 			<if condition="$config.open_score_fenrun eq 0"><img src="{pigcms{$static_path}images/new_my/tubiao2_11.png" style="float:right;margin-top:-19px;width:10px;" /></if>
 		</div>
 		<div style="padding:5px 0px;color:#00c4ac;text-align:center;font-size:20px;display: flex;">
 			<if condition="$config.open_score_fenrun eq 1">
-				<div id="my_fenrun_wallet" style="width:33%;flex: 1;">{pigcms{$now_user.fenrun_money|floatval}<p class="words">分润钱包</p></div>
+				<div id="my_fenrun_wallet" style="width:33%;flex: 1;">{pigcms{$now_user.fenrun_money|floatval}<p class="words">{pigcms{:L('_B_PURE_MY_38_')}</p></div>
 			</if>
 			<div style="width:33%;flex: 1;">
 				<div id="close_eye" <if condition="($config['twice_verify'] eq 0) OR $_COOKIE['my_wallet_time'] OR $config['twice_verify_wallet'] eq 0">style="display:none;"</if>>
@@ -180,16 +180,16 @@
 				</div>
 				<div id="wallet_money" <if condition="$config['twice_verify'] AND empty($_COOKIE['my_wallet_time'])  AND $config['twice_verify_wallet']">style="display:none;"</if>>{pigcms{$now_user.now_money|floatval}</div>
 				<if condition="$now_user.frozen_money gt 0 AND $config.open_frozen_money eq 1 AND $now_user.free_time gt $_SERVER['REQUEST_TIME']">
-				<p class="words" id="balance_frozen_money"  style="color:red">(冻结：{pigcms{$now_user.frozen_money|floatval})</p></if>
+				<p class="words" id="balance_frozen_money"  style="color:red">({pigcms{:L('_B_PURE_MY_39_')}{pigcms{$now_user.frozen_money|floatval})</p></if>
 				
-				<p class="words" id="balance_money">余额</p>
+				<p class="words" id="balance_money">{pigcms{:L('_B_PURE_MY_40_')}</p>
 				
 			</div>
-			<div id="my_score" style="width:33%;flex: 1;">{pigcms{$now_user.score_count|floatval}<p class="words" id="score">{pigcms{$config.score_name}</p></div>
+			<div id="my_score" style="width:33%;flex: 1;">{pigcms{$now_user.score_count|floatval}<p class="words" id="score">{pigcms{:L('_TICKET_TXT_')}</p></div>
 			<if condition="$now_user.level eq 0">
-				<div id="my_level" style="width:33%;flex: 1;color:#e5e5e5;">VIP{pigcms{$now_user.level}<p class="words">等级</p></div>
+				<div id="my_level" style="width:33%;flex: 1;color:#e5e5e5;">VIP{pigcms{$now_user.level}<p class="words">{pigcms{:L('_B_PURE_MY_41_')}</p></div>
 			<else/>
-				<div id="my_level" style="width:33%;flex: 1;">VIP{pigcms{$now_user.level}<p class="words">等级</p></div>
+				<div id="my_level" style="width:33%;flex: 1;">VIP{pigcms{$now_user.level}<p class="words">{pigcms{:L('_B_PURE_MY_41_')}</p></div>
 			</if>
 			<div style="clear:both;"></div>
 		</div>
@@ -221,19 +221,19 @@
 	<dl style="padding:0 10px 10px;background-color:#fff;margin-top:10px;">
 		<div style="border-bottom:1px solid #e5e5e5;padding-bottom:10px;">
 			<img class="titleImg" style="margin-top:10px;float:left;" src="http://www.group.com/tpl/Wap/pure/static/images/yjt.png">
-			<div style="padding-top:13px;width:60%;">我的佣金</div>
+			<div style="padding-top:13px;width:60%;">{pigcms{:L('_B_PURE_MY_42_')}</div>
 		</div>
 		<dd style="padding:15px 0px 10px 0;text-align:center;display: flex;">
 			<a href="{pigcms{:U('Fenrun/user_free_award_list')}" style="text-align: center; color: #5f5f5f; flex: 1; border-right: #f1f1f1 1px solid;">
 				<div style="display: inline-block; background: url({pigcms{$static_path}images/grzx_03.png) left center no-repeat; padding-left: 33px; background-size: 22px 24px;">
 					<p style="font-size: 20px; color: #ffa400;">{pigcms{$now_user.free_award_money|floatval}</p>
-					<p style="font-size: 12px; color: #5f5f5f;">可用佣金</p>
+					<p style="font-size: 12px; color: #5f5f5f;">{pigcms{:L('_B_PURE_MY_43_')}</p>
 				</div>
 			</a>
 			<a href="{pigcms{:U('Fenrun/frozen_award_index')}" style="text-align: center; color: #5f5f5f; flex: 1">
 				<div style="display: inline-block; background: url({pigcms{$static_path}images/grzx_05.png) left center no-repeat; padding-left: 33px; background-size: 22px 24px;">
 					<p style="font-size: 20px; color: #419aff;">{pigcms{$now_user.frozen_award_money|floatval}</p>
-					<p style="font-size: 12px; color: #5f5f5f;">冻结佣金</p>
+					<p style="font-size: 12px; color: #5f5f5f;">{pigcms{:L('_B_PURE_MY_44_')}</p>
 				</div>
 			</a>
 		</dd>
@@ -242,28 +242,49 @@
 	<dl style="padding:0 0px 10px;background-color:#fff;margin-top:10px;">
 		<div style="border-bottom:1px solid #e5e5e5;padding:0 10px 10px;">
 			<img class="titleImg" style="margin-top:10px;float:left;" src="{pigcms{$static_path}images/new_my/order.png" />
-			<div style="padding-top:13px;width:60%;">我的订单</div>
+			<div style="padding-top:13px;width:60%;">{pigcms{:L('_B_PURE_MY_45_')}</div>
 		</div>
 		<dd style="padding-bottom:15px;color:#00c4ac;text-align:center;font-size:20px;">
-			<div style="float:left;width:25%;padding-top:15px;" onclick="location.href='{pigcms{:U('My/group_order_list')}'"><img class="wh25" src="{pigcms{$static_path}images/new_my/group.png" /><p style="text-align:center;color:#5f5f5f;font-size:12px;">{pigcms{$config.group_alias_name}订单</p></div>
-			<if condition="isset($config['store_open_shop'])"><div style="float:left;width:25%;padding-top:15px;" onclick="location.href='{pigcms{:U('My/shop_order_list')}'"><img class="wh25" src="{pigcms{$static_path}images/new_my/meal.png" /><p style="text-align:center;color:#5f5f5f;font-size:12px;">{pigcms{$config.shop_alias_name}订单</p></div></if>
-			<div style="float:left;width:25%;padding-top:15px;" onclick="location.href='{pigcms{:U('My/foodshop_order_list')}'"><img class="wh25" src="{pigcms{$static_path}images/new_my/shop.png" /><p style="text-align:center;color:#5f5f5f;font-size:12px;">{pigcms{$config.meal_alias_name}订单</p></div>
-			<if condition="isset($config['appoint_alias_name'])"><div style="float:left;width:25%;padding-top:15px;" onclick="location.href='{pigcms{:U('My/appoint_order_list')}'"><img class="wh25" src="{pigcms{$static_path}images/new_my/appoint.png" /><p style="text-align:center;color:#5f5f5f;font-size:12px;">{pigcms{$config.appoint_alias_name}订单</p></div></if>
-			<if condition="isset($config['wap_home_show_classify'])"><div style="float:left;width:25%;padding-top:15px;" onclick="location.href='{pigcms{:U('My/classify_order_list')}'"><img class="wh25" src="{pigcms{$static_path}images/new_my/pay.png" /><p style="text-align:center;color:#5f5f5f;font-size:12px;">{pigcms{$config.classify_name}订单</p></div></if>
-			<if condition="$config['pay_in_store']">
+			<!--div style="float:left;width:25%;padding-top:15px;" onclick="location.href='{pigcms{:U('My/group_order_list')}'">
+                <img class="wh25" src="{pigcms{$static_path}images/new_my/group.png" />
+                <p style="text-align:center;color:#5f5f5f;font-size:12px;">{pigcms{$config.group_alias_name}订单</p>
+            </div-->
+			<if condition="isset($config['store_open_shop'])">
+                <div style="float:left;width:25%;padding-top:15px;" onclick="location.href='{pigcms{:U('My/shop_order_list')}'">
+                    <img class="wh25" src="{pigcms{$static_path}images/new_my/meal.png" />
+                    <p style="text-align:center;color:#5f5f5f;font-size:12px;">{pigcms{:L('_MY_OUT_ORDER_')}</p>
+                </div>
+            </if>
+			<!--div style="float:left;width:25%;padding-top:15px;" onclick="location.href='{pigcms{:U('My/foodshop_order_list')}'">
+                <img class="wh25" src="{pigcms{$static_path}images/new_my/shop.png" />
+                <p style="text-align:center;color:#5f5f5f;font-size:12px;">{pigcms{$config.meal_alias_name}订单</p>
+            </div-->
+			<!--if condition="isset($config['appoint_alias_name'])">
+                <div style="float:left;width:25%;padding-top:15px;" onclick="location.href='{pigcms{:U('My/appoint_order_list')}'">
+                    <img class="wh25" src="{pigcms{$static_path}images/new_my/appoint.png" />
+                    <p style="text-align:center;color:#5f5f5f;font-size:12px;">{pigcms{$config.appoint_alias_name}订单</p>
+                </div>
+            </if-->
+			<!--if condition="isset($config['wap_home_show_classify'])">
+                <div style="float:left;width:25%;padding-top:15px;" onclick="location.href='{pigcms{:U('My/classify_order_list')}'">
+                    <img class="wh25" src="{pigcms{$static_path}images/new_my/pay.png" />
+                    <p style="text-align:center;color:#5f5f5f;font-size:12px;">{pigcms{$config.classify_name}订单</p>
+                </div>
+            </if-->
+			<!--if condition="$config['pay_in_store']">
 				<div style="float:left;width:25%;padding-top:15px;" onclick="location.href='{pigcms{:U('My/store_order_list')}'"><img class="wh25" src="{pigcms{$static_path}images/new_my/store.png" /><p style="text-align:center;color:#5f5f5f;font-size:12px;">到店付订单</p></div>
 			</if>
 			<if condition="isset($config['gift_alias_name'])">
 			<div style="float:left;width:25%;padding-top:15px;" onclick="location.href='{pigcms{:U('My/gift_order_list')}'"><img class="wh25" src="{pigcms{$static_path}images/new_my/gift.png" /><p style="text-align:center;color:#5f5f5f;font-size:12px;">{pigcms{$config['gift_alias_name']}订单</p></div>
-			</if>
+			</if-->
 		</dd>
 		<div style="clear:both;"></div>
 	</dl>
 	
-	<dl style="padding:0 10px 10px;background-color:#fff;margin-top:10px;">
+	<!--dl style="padding:0 10px 10px;background-color:#fff;margin-top:10px;">
 		<div style="border-bottom:1px solid #e5e5e5;padding-bottom:10px;">
 			<img class="titleImg" style="margin-top:10px;float:left;" src="{pigcms{$static_path}images/new_my/action.png" />
-			<div style="padding-top:13px;width:60%;">我的卡券</div>
+			<div style="padding-top:13px;width:60%;">{pigcms{:L('_B_PURE_MY_46_')}</div>
 		</div>
 		<dd style="padding:15px 0px 10px 0;text-align:center;font-size:20px;">
 				<a href="{pigcms{:U('My/card_list',array('coupon_type'=>'system'))}" style="text-align: center; width: 25%; display: inline-block; float: left;">
@@ -289,8 +310,8 @@
 
 			    <div style="clear:both;"></div>
 		</dd>
-	</dl>
-	<dl style="padding:0 10px 10px;background-color:#fff;margin-top:10px;">
+	</dl-->
+	<!--dl style="padding:0 10px 10px;background-color:#fff;margin-top:10px;">
 		<div style="border-bottom:1px solid #e5e5e5;padding-bottom:10px;">
 			<img class="titleImg" style="margin-top:10px;float:left;" src="{pigcms{$static_path}images/new_my/follow.png" />
 			<div style="padding-top:13px;width:60%;">收藏关注</div>
@@ -304,9 +325,9 @@
 			</if>
 		</dd>
 		<div style="clear:both;"></div>
-	</dl>
+	</dl-->
 
-	<dl style="padding:0 10px;background-color:#fff;margin-top:10px;margin-bottom:10px;">
+	<!--dl style="padding:0 10px;background-color:#fff;margin-top:10px;margin-bottom:10px;">
 		<a href="{pigcms{:U('My/my_spread')}" <if condition="$config.open_user_spread eq 0">style="display:none"</if>>
 			<div style="padding-bottom:10px;border-bottom:1px solid #e5e5e5;">
 				<img class="titleImg" style="margin-top:10px;float:left;" src="{pigcms{$static_path}images/new_my/extension.png" />
@@ -349,7 +370,7 @@
 
 
 		<div style="clear:both;"></div>
-	</dl>
+	</dl-->
 		<include file="Public:footer"/>
 
 		<script src="{pigcms{$static_path}js/common_wap.js"></script>

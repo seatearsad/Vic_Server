@@ -6,7 +6,7 @@ class MyAction extends BaseAction{
 		if(empty($this->user_session)){
 			if($this->is_app_browser){
 				$location_param['referer'] = urlencode($_SERVER['REQUEST_URI']);
-				$this->error_tips('请先进行登录！',U('Login/index',$location_param));
+				$this->error_tips(L('_HFDASJ_'),U('Login/index',$location_param));
 			}else{
 				$location_param['referer'] = urlencode($_SERVER['REQUEST_URI']);
 				redirect(U('Login/index',$location_param));
@@ -15,7 +15,7 @@ class MyAction extends BaseAction{
 		$now_user = D('User')->get_user($this->user_session['uid']);
 		if(empty($now_user)){
 			session('user',null);
-			$this->error_tips('未获取到您的帐号信息，请重新登录！',U('Login/index'));
+			$this->error_tips(L('_B_MY_NOACCOUNT_'),U('Login/index'));
 		}
 		$now_user['now_money'] = floatval($now_user['now_money']);
 		$now_user['now_money_two'] = number_format(floatval($now_user['now_money']),2);
@@ -87,7 +87,7 @@ class MyAction extends BaseAction{
 	//	老的个人中心页面
 	public function index__old(){
 		if($this->config['im_appid'] && $_SESSION['openid'] && $this->config['user_center_redirect_friend']){
-			redirect(U('Api/go_im',array('hash'=>'myList','title'=>urlencode('会员中心'))));exit;
+			redirect(U('Api/go_im',array('hash'=>'myList','title'=>urlencode(L('_B_MY_MEMBERCENTER_')))));exit;
 		}
 		$this->display();
 	}
@@ -181,27 +181,27 @@ class MyAction extends BaseAction{
 	}
 	public function savemyinfo(){
 		$_POST['truename']=trim($_POST['truename']);
-		if(empty($_POST['truename'])) $this->dexit(array('error'=>1,'msg'=>'您的姓名必须要填写！'));
-		if(empty($_POST['youaddress'])) $this->dexit(array('error'=>1,'msg'=>'地址必须要填写！'));
+		if(empty($_POST['truename'])) $this->dexit(array('error'=>1,'msg'=>L('_B_MY_MUSTNAME_')));
+		if(empty($_POST['youaddress'])) $this->dexit(array('error'=>1,'msg'=>L('_B_MY_MUSTADDRESS_')));
 		if(M('User')->where(array('uid'=>$this->now_user['uid']))->data($_POST)->save()){
-			$this->dexit(array('error'=>0,'msg'=>'保存成功！'));
+			$this->dexit(array('error'=>0,'msg'=>L('_B_MY_SAVEACCESS_')));
 		}
-		$this->dexit(array('error'=>1,'msg'=>'保存失败！'));
+		$this->dexit(array('error'=>1,'msg'=>L('_B_MY_SAVELOSE_')));
 	}
 	public function username(){
 		if($_POST['nickname']){
 			if(empty($_POST['nickname'])){
-				$this->assign('error','请输入新用户名！');
+				$this->assign('error',L('_B_MY_ENTERNEWNAME_'));
 			}else if($_POST['nickname'] == $this->now_user['nickname']){
-				$this->assign('error','您还没有修改用户名！');
+				$this->assign('error',L('_B_MY_NOCHANGENAME_'));
 			}else if($_POST['nickname'] == $this->config['site_name']){
-				$this->assign('error','用户名不能和平台名称一样！');
+				$this->assign('error',L('_B_MY_NAMESAMEASUS_'));
 			}else{
 				$result = D('User')->save_user($this->now_user['uid'],'nickname',$_POST['nickname']);
 				if($result['error']){
 					$this->assign('error',$result['msg']);
 				}else{
-					redirect(U('My/myinfo',array('OkMsg'=>urlencode('昵称修改成功'))));
+					redirect(U('My/myinfo',array('OkMsg'=>urlencode(L('_B_MY_NICKNAMECHANGE_')))));
 				}
 			}
 		}
@@ -210,18 +210,18 @@ class MyAction extends BaseAction{
 	public function password(){
 		if(IS_POST){
 			if(!empty($this->now_user['pwd']) && md5($_POST['currentpassword']) != $this->now_user['pwd']){
-				$this->assign('error','当前密码输入错误！');
+				$this->assign('error',L('_B_MY_WRONGKEY_'));
 			}else if($_POST['currentpassword'] == $_POST['password']){
-				$this->assign('error','新密码不能和当前密码相同！');
+				$this->assign('error',L('_B_MY_NEWSAMENOW_'));
 			}else if($_POST['password2'] != $_POST['password']){
-				$this->assign('error','两次新密码输入不一致！');
+				$this->assign('error',L('_B_LOGIN_DIFFERENTKEY_'));
 			}else{
 				$result = D('User')->save_user($this->now_user['uid'],'pwd',md5($_POST['password']));
 				if($result['error']){
 					$this->assign('error',$result['msg']);
 				}else{
 					unset($_SESSION['veriry_token']);
-					redirect(U('My/myinfo',array('OkMsg'=>urlencode('密码修改成功'))));
+					redirect(U('My/myinfo',array('OkMsg'=>urlencode(L('_B_LOGIN_CHANGEKEYSUCESS_')))));
 				}
 			}
 		}
@@ -237,7 +237,7 @@ class MyAction extends BaseAction{
 
 			while (strlen($vcode) < 6)
 				$vcode .= substr($chars, (mt_rand() % strlen($chars)), 1);
-			$content = '您的验证码是：'. $vcode . '。此验证码20分钟内有效，请不要把验证码泄露给其他人。如非本人操作，可不用理会！';
+			$content = L('_B_LOGIN_YOURCODE_'). $vcode . L('_B_LOGIN_CODEPOINT_');
 			Sms::sendSms(array('mer_id' => 0, 'store_id' => 0, 'content' => $content, 'mobile' => $_POST['phone'], 'uid' => $this->now_user['uid'], 'type' => 'bindphone'));
 			$addtime = time();
 			$expiry = $addtime + 20 * 60; /*             * **二十分钟有效期*** */
@@ -251,18 +251,18 @@ class MyAction extends BaseAction{
 
 	public function bind_user(){
 		if(empty($this->user_session)){
-			$this->error_tips('请先进行登录！');
+			$this->error_tips(L('_B_MY_LOGINFIRST_'));
 		}
 		if(IS_POST){
 			$database_user = D('User');
 			if(empty($_POST['phone'])){
-				$this->error('请输入手机号码！');
+				$this->error(L('_B_LOGIN_ENTERPHONENO_'));
 			}
 
 			if(!empty($this->user_session['phone'])){
 				$condition_user['phone'] = $_POST['phone'];
 				if($database_user->field(true)->where($condition_user)->find()){
-					$this->error('该手机号已注册！');
+					$this->error(L('_B_MY_HAVETELNUM_'));
 				}
 			}
 
@@ -287,7 +287,7 @@ class MyAction extends BaseAction{
 				if($_POST['bind_exist']){
 					$openid = $database_user->field('`openid`')->where(array('uid'=>$res['uid']))->find();
 					if(!empty($openid['openid'])){
-						$this->error("该手机已绑定微信，不能再绑定，有问题请联系系统管理员！");
+						$this->error("_B_MY_HAVEBANDINGWECHAT_");
 					}
 					$login_result = D('User')->checkin($_POST['phone'],$_POST['password']);
 					if($login_result['error_code']){
@@ -299,9 +299,9 @@ class MyAction extends BaseAction{
 							$database_user->where(array('uid'=>$this->now_user['uid']))->save($data_use);
 							session_destroy();
 							unset($_SESSION);
-							$this->success("绑定成功，请重新登录");
+							$this->success(L('_B_MY_BANDINGACCESS1_'));
 						}else {
-							$this->error('绑定失败!');
+							$this->error(L('_B_LOGIN_BINDINGLOSERETRY_'));
 						}
 					}
 				}else {
@@ -331,9 +331,9 @@ class MyAction extends BaseAction{
 				$database_house_village_user_bind->where($bind_where)->data(array('phone'=>$_POST['phone']))->save();
 
 
-				$this->success('手机号码绑定成功！');
+				$this->success(L('_B_MY_BANDINGACCESS2_'));
 			}else{
-				$this->error('手机号码绑定失败！请重试。');
+				$this->error(L('_B_LOGIN_BINDINGLOSERETRY_'));
 			}
 			exit();
 			//}
@@ -350,16 +350,16 @@ class MyAction extends BaseAction{
 	//验证原手机
 	public function verify_original_phone(){
 		if(empty($this->user_session)){
-			$this->error_tips('请先进行登录！');
+			$this->error_tips(L('_B_MY_LOGINFIRST_'));
 		}
 		if(IS_POST) {
 			$database_user = D('User');
 			if (empty($_POST['phone'])) {
-				$this->error('请输入手机号码！');
+				$this->error(L('_B_LOGIN_ENTERPHONENO_'));
 			}
 
 			if (empty($_POST['sms_code'])) {
-				$this->error('请输入验证码！');
+				$this->error(L('_B_MY_ENTERCODE_'));
 			}
 			//print_r($_POST);
 			//验证短信验证码
@@ -372,7 +372,7 @@ class MyAction extends BaseAction{
 				}
 			}
 			$_SESSION['veriry_token'] =1 ;
-			$this->success('手机号码绑定成功！',U('My/bind_user',array('bind'=>1)));
+			$this->success(L('_B_MY_BANDINGACCESS2_'),U('My/bind_user',array('bind'=>1)));
 
 		}else{
 			$referer = !empty($_GET['referer']) ? $_GET['referer'] : $_SERVER['HTTP_REFERER'];
@@ -383,7 +383,7 @@ class MyAction extends BaseAction{
 	/*优惠券操作*/
 	public function card(){
 		if(empty($this->user_session)){
-			$this->error_tips('请先进行登录！');
+			$this->error_tips(L('_B_MY_LOGINFIRST_'));
 		}
 
 		$coupon_list = D('Member_card_coupon')->get_all_coupon($this->user_session['uid']);
@@ -395,7 +395,7 @@ class MyAction extends BaseAction{
 	/*选择优惠券*/
 	public function select_card(){
 		if(empty($this->user_session)){
-			$this->error_tips('请先进行登录！');
+			$this->error_tips(L('_B_MY_LOGINFIRST_'));
 		}
 		//以下代码是为了得到商户的mer_id ，并且判断此订单是否存在！
 		if($_GET['type'] == 'group'){
@@ -434,7 +434,7 @@ class MyAction extends BaseAction{
 		$now_order['total_money'] = $now_order['order_total_money'];
 
 		if(empty($now_order)){
-			$this->error_tips('当前订单不存在！');
+			$this->error_tips(L('_B_MY_NOORDER_！'));
 		}
 
 		if($_SESSION['discount']>0){
@@ -507,7 +507,7 @@ class MyAction extends BaseAction{
 	/*地址操作*/
 	public function adress(){
 		if(empty($this->user_session)){
-			$this->error_tips('请先进行登录！');
+			$this->error_tips(L('_B_MY_LOGINFIRST_'));
 		}
 		$adress_list = D('User_adress')->get_adress_list($this->user_session['uid']);
 
@@ -617,12 +617,12 @@ class MyAction extends BaseAction{
 
 	public function pick_address(){
 		if(empty($this->user_session)){
-			$this->error_tips('请先进行登录！');
+			$this->error_tips(L('_B_MY_LOGINFIRST_'));
 		}
 		$flag = $_GET['buy_type'] == 'shop' || $_GET['buy_type'] == 'mall' ? true : false;
 		$adress_list = D('Pick_address')->get_pick_addr_by_merid($_GET['mer_id'], $flag);
 		if(empty($adress_list)){
-			$this->error_tips('地址信息错误请联系管理员！');
+			$this->error_tips(L('_B_MY_WRONGADDRESS_'));
 		}else{
 			if($_GET['group_id']){
 				$select_url = 'Group/buy';
@@ -662,13 +662,13 @@ class MyAction extends BaseAction{
 	public function edit_adress(){
 		if(IS_POST){
 			if(empty($_POST['adress'])){
-				$this->error('您的位置没有选择！请点击选择位置进行完善！');
+				$this->error(L('_B_MY_NOPOSITION_'));
 			}
 			if(D('User_adress')->post_form_save($this->user_session['uid']) !== false){
 				cookie('user_address', 0);
-				$this->success('保存成功！');
+				$this->success(L('_B_MY_SAVEACCESS_'));
 			}else{
-				$this->error('地址保存失败！请重试');
+				$this->error(L('_B_MY_SAVEPOSITIONLOSE_'));
 			}
 		}else{
 			$database_area = D('Area');
@@ -721,7 +721,7 @@ class MyAction extends BaseAction{
 // 			if($_GET['adress_id']){
 // 				$now_adress = D('User_adress')->get_adress($this->user_session['uid'],$_GET['adress_id']);
 // 				if(empty($now_adress)){
-// 					$this->error_tips('该地址不存在');
+// 					$this->error_tips(L('_B_MY_NOTAADDRESS_'));
 // 				}
 // 				$this->assign('now_adress',$now_adress);
 
@@ -760,7 +760,7 @@ class MyAction extends BaseAction{
 	{
 		$cookie = json_decode($_COOKIE['user_address'], true);
 		if (empty($cookie['province']) || empty($cookie['city'])) {
-			$this->error('请选择城市');
+			$this->error(L('_B_MY_CHOOSECITY_'));
 		}
 		$list = D('Area')->field(true)->where("area_id IN ({$cookie['province']}, {$cookie['city']}, {$cookie['area']})")->order('area_type ASC')->select();
 		$address = '';
@@ -776,13 +776,13 @@ class MyAction extends BaseAction{
 	/*删除地址*/
 	public function del_adress(){
 		if(empty($this->user_session)){
-			$this->error_tips('请先进行登录！');
+			$this->error_tips(L('_B_MY_LOGINFIRST_'));
 		}
 		$result = D('User_adress')->delete_adress($this->user_session['uid'],$_GET['adress_id']);
 		if($result){
-			$this->success('删除成功！');
+			$this->success(L('_B_MY_DELACCESS_'));
 		}else{
-			$this->error('删除失败！');
+			$this->error(L('_B_MY_DELLOSE_'));
 		}
 	}
 
@@ -790,13 +790,13 @@ class MyAction extends BaseAction{
 	/*删除地址*/
 	public function ajax_del_adress(){
 		if(empty($this->user_session)){
-			$this->error_tips('请先进行登录！');
+			$this->error_tips(L('_B_MY_LOGINFIRST_'));
 		}
 		$result = D('User_adress')->delete_adress($this->user_session['uid'],$_GET['adress_id']);
 		if($result){
-			exit(json_encode(array('status'=>1,'msg'=>'删除成功！')));
+			exit(json_encode(array('status'=>1,'msg'=>L('_B_MY_DELACCESS_'))));
 		}else{
-			exit(json_encode(array('status'=>1,'msg'=>'删除失败！')));
+			exit(json_encode(array('status'=>1,'msg'=>L('_B_MY_DELLOSE_'))));
 		}
 	}
 
@@ -813,7 +813,7 @@ class MyAction extends BaseAction{
 	/*全部团购*/
 	public function group_order_list(){
 		if(empty($this->user_session)){
-			$this->error_tips('请先进行登录！');
+			$this->error_tips(L('_B_MY_LOGINFIRST_'));
 		}
 
 		$order_list = D('Group')->wap_get_order_list($this->user_session['uid'],intval($_GET['status']));
@@ -824,7 +824,7 @@ class MyAction extends BaseAction{
 
 	public function classify_order_list(){
 		if(empty($this->user_session)){
-			$this->error_tips('请先进行登录！');
+			$this->error_tips(L('_B_MY_LOGINFIRST_'));
 		}
 
 		$database_classify_userinput = D('Classify_userinput');
@@ -866,7 +866,7 @@ class MyAction extends BaseAction{
 	/*全部预约*/
 	public function appoint_order_list(){
 		if(empty($this->user_session)){
-			$this->error_tips('请先进行登录！');
+			$this->error_tips(L('_B_MY_LOGINFIRST_'));
 		}
 
 		$mer_id = $_GET['mer_id'] + 0;
@@ -896,16 +896,16 @@ class MyAction extends BaseAction{
 		$database_appoint_order = D('Appoint_order');
 		$now_order = $database_appoint_order->get_order_detail_by_id($this->user_session['uid'],intval($_GET['order_id']));
 		if(empty($now_order)){
-			$this->error_tips('当前订单不存在！');
+			$this->error_tips(L('_B_MY_NOORDER_！'));
 		}else if($now_order['paid']){
 			$this->error_tips('当前订单已付款，不能删除。');
 		}
 		$condition_group_order['order_id'] = $now_order['order_id'];
 		$data_group_order['is_del'] = 5;
 		if($database_appoint_order->where($condition_group_order)->data($data_group_order)->save()){
-			exit(json_encode(array('status'=>1,'msg'=>'删除成功！')));
+			exit(json_encode(array('status'=>1,'msg'=>L('_B_MY_DELACCESS_'))));
 		}else{
-			exit(json_encode(array('status'=>0,'msg'=>'删除失败！')));
+			exit(json_encode(array('status'=>0,'msg'=>L('_B_MY_DELLOSE_'))));
 		}
 	}
 
@@ -924,7 +924,7 @@ class MyAction extends BaseAction{
 
 	public function gift_order_list(){
 		if(empty($this->user_session)){
-			$this->error_tips('请先进行登录！');
+			$this->error_tips(L('_B_MY_LOGINFIRST_'));
 		}
 
 		$database_gift_order = D('Gift_order');
@@ -939,7 +939,7 @@ class MyAction extends BaseAction{
 	public function ajax_gift_order_list(){
 		if(IS_AJAX){
 			if(empty($this->user_session)){
-				$this->error_tips('请先进行登录！');
+				$this->error_tips(L('_B_MY_LOGINFIRST_'));
 			}
 
 			$database_gift_order = D('Gift_order');
@@ -955,18 +955,18 @@ class MyAction extends BaseAction{
 				exit(json_encode(array('status'=>0,'order_list'=>$order_list['order_list'])));
 			}
 		}else{
-			$this->error_tips('访问页面有误！');
+			$this->error_tips(L('_B_MY_PAGEWRONG_'));
 		}
 	}
 
 	public function gift_order(){
 		if(empty($this->user_session)){
-			$this->error_tips('请先进行登录！');
+			$this->error_tips(L('_B_MY_LOGINFIRST_'));
 		}
 
 		$order_id = $_GET['order_id'] + 0;
 		if(!$order_id){
-			$this->error_tips('传递参数有误！');
+			$this->error_tips(L('_B_MY_PASSWRONG_'));
 		}
 
 		$database_gift_order = D('Gift_order');
@@ -979,7 +979,7 @@ class MyAction extends BaseAction{
 	/*团购收藏*/
 	public function group_collect(){
 		if(empty($this->user_session)){
-			$this->error_tips('请先进行登录！');
+			$this->error_tips(L('_B_MY_LOGINFIRST_'));
 		}
 
 		$this->assign(D('Group')->wap_get_group_collect_list($this->user_session['uid']));
@@ -990,7 +990,7 @@ class MyAction extends BaseAction{
 	//预约收藏
 	public function appoint_collect(){
 		if(empty($this->user_session)){
-			$this->error_tips('请先进行登录！');
+			$this->error_tips(L('_B_MY_LOGINFIRST_'));
 		}
 		$this->assign(D('Appoint')->wap_get_appoint_collect_list($this->user_session['uid']));
 		$this->display();
@@ -999,7 +999,7 @@ class MyAction extends BaseAction{
 	/*预约详情*/
 	public function appoint_order(){
 		if(empty($this->user_session)){
-			$this->error_tips('请先进行登录！');
+			$this->error_tips(L('_B_MY_LOGINFIRST_'));
 		}
 		$now_order = D('Appoint_order')->get_order_detail_by_id($this->user_session['uid'],intval($_GET['order_id']),true);
 		$now_order['order_type'] = 'appoint';
@@ -1012,7 +1012,7 @@ class MyAction extends BaseAction{
 			}
 		}
 		if(empty($now_order)){
-			$this->error_tips('当前订单不存在');
+			$this->error_tips(L('_B_MY_NOORDER_'));
 		}
 
 		$now_supply = D('Appoint_supply')->where(array('order_id'=>intval($_GET['order_id']),'status'=>3))->find();
@@ -1023,7 +1023,7 @@ class MyAction extends BaseAction{
 	/*团购详情*/
 	public function group_order(){
 		if(empty($this->user_session)){
-			$this->error_tips('请先进行登录！');
+			$this->error_tips(L('_B_MY_LOGINFIRST_'));
 		}
 		$otherrm = isset($_GET['otherrm']) ? intval($_GET['otherrm']) : 0;
 		$otherrm && $_SESSION['otherwc'] = null;
@@ -1045,7 +1045,7 @@ class MyAction extends BaseAction{
 		$now_group['merchant_name'] = $now_merchant['name'];
 
 		if(empty($now_order)){
-			$this->error_tips('当前订单不存在');
+			$this->error_tips(L('_B_MY_NOORDER_'));
 		}
 		if(empty($now_order['paid'])){
 			$now_order['status_txt'] = '未付款';
@@ -1185,30 +1185,30 @@ class MyAction extends BaseAction{
 	/*团购详情*/
 	public function meal_order_refund(){
 		if(empty($this->user_session)){
-			$this->error_tips('请先进行登录！');
+			$this->error_tips(L('_B_MY_LOGINFIRST_'));
 		}
 
 		$orderid = intval($_GET['order_id']);
 		$store_id = intval($_GET['store_id']);
 		$now_order = M("Meal_order")->where(array('order_id' => $orderid, 'mer_id' => $this->mer_id, 'store_id' => $store_id))->find();
 		if (empty($now_order)) {
-			$this->error_tips('当前订单不存在');
+			$this->error_tips(L('_B_MY_NOORDER_'));
 		}
 		if ($now_order['is_confirm']) {
-			$this->error_tips('当前订单店员正在处理中，不能退款或取消');
+			$this->error_tips(L('_B_MY_ORDERDEALING_'));
 		}
 		if(empty($now_order['paid'])){
-			$this->error_tips('当前订单还未付款！');
+			$this->error_tips(L('_B_MY_ORDERNOPAY_'));
 		}
 		if ($now_order['meal_type']) {
 			if ($now_order['status'] > 0 && $now_order['status'] < 3) {
-				$this->error_tips('订单必须是未消费状态才能取消！', U('Takeout/order_detail',array('order_id'=>$now_order['order_id'], 'store_id' => $store_id, 'mer_id' => $this->mer_id)));
+				$this->error_tips(L('_B_MY_ORDERMUSTNOPAID_'), U('Takeout/order_detail',array('order_id'=>$now_order['order_id'], 'store_id' => $store_id, 'mer_id' => $this->mer_id)));
 			} elseif ($now_order['status'] > 2) {
 				$this->redirect(U('Takeout/order_detail',array('order_id'=>$now_order['order_id'], 'store_id' => $store_id, 'mer_id' => $this->mer_id)));
 			}
 		} else {
 			if ($now_order['status'] > 0 && $now_order['status'] < 3) {
-				$this->error_tips('订单必须是未消费状态才能取消！', U('Food/order_detail',array('order_id'=>$now_order['order_id'], 'store_id' => $store_id, 'mer_id' => $this->mer_id)));
+				$this->error_tips(L('_B_MY_ORDERMUSTNOPAID_'), U('Food/order_detail',array('order_id'=>$now_order['order_id'], 'store_id' => $store_id, 'mer_id' => $this->mer_id)));
 			} elseif ($now_order['status'] > 2) {
 				$this->redirect(U('Food/order_detail',array('order_id'=>$now_order['order_id'], 'store_id' => $store_id, 'mer_id' => $this->mer_id)));
 			}
@@ -1222,30 +1222,30 @@ class MyAction extends BaseAction{
 	//取消订单
 	public function meal_order_check_refund(){
 		if(empty($this->user_session)){
-			$this->error_tips('请先进行登录！');
+			$this->error_tips(L('_B_MY_LOGINFIRST_'));
 		}
 		$orderid = intval($_GET['orderid']);
 		$store_id = intval($_GET['store_id']);
 		$now_order = M("Meal_order")->where(array('order_id' => $orderid, 'mer_id' => $this->mer_id, 'store_id' => $store_id))->find();
 		//dump($now_order);
 		if(empty($now_order)){
-			$this->error_tips('当前订单不存在');
+			$this->error_tips(L('_B_MY_NOORDER_'));
 		}
 		if ($now_order['is_confirm']) {
-			$this->error_tips('当前订单店员正在处理中，不能退款或取消');
+			$this->error_tips(L('_B_MY_ORDERDEALING_'));
 		}
 		if(empty($now_order['paid'])){
-			$this->error_tips('当前订单还未付款！');
+			$this->error_tips(L('_B_MY_ORDERNOPAY_'));
 		}
 		if ($now_order['meal_type']) {
 			if ($now_order['status'] > 0 && $now_order['status'] < 3) {
-				$this->error_tips('订单必须是未消费状态才能取消！', U('Takeout/order_detail',array('order_id'=>$now_order['order_id'], 'store_id' => $store_id, 'mer_id' => $this->mer_id)));
+				$this->error_tips(L('_B_MY_ORDERMUSTNOPAID_'), U('Takeout/order_detail',array('order_id'=>$now_order['order_id'], 'store_id' => $store_id, 'mer_id' => $this->mer_id)));
 			} elseif ($now_order['status'] > 2) {
 				$this->redirect(U('Takeout/order_detail',array('order_id'=>$now_order['order_id'], 'store_id' => $store_id, 'mer_id' => $this->mer_id)));
 			}
 		} else {
 			if ($now_order['status'] > 0 && $now_order['status'] < 3) {
-				$this->error_tips('订单必须是未消费状态才能取消！', U('Food/order_detail',array('order_id'=>$now_order['order_id'], 'store_id' => $store_id, 'mer_id' => $this->mer_id)));
+				$this->error_tips(L('_B_MY_ORDERMUSTNOPAID_'), U('Food/order_detail',array('order_id'=>$now_order['order_id'], 'store_id' => $store_id, 'mer_id' => $this->mer_id)));
 			} elseif ($now_order['status'] > 2) {
 				$this->redirect(U('Food/order_detail',array('order_id'=>$now_order['order_id'], 'store_id' => $store_id, 'mer_id' => $this->mer_id)));
 			}
@@ -1277,14 +1277,14 @@ class MyAction extends BaseAction{
 					$sms_data['uid'] = $now_order['uid'];
 					$sms_data['mobile'] = $now_order['phone'] ? $now_order['phone'] : $my_user['phone'];
 					$sms_data['sendto'] = 'user';
-					$sms_data['content'] = '您在 ' . $mer_store['name'] . '店中下的订单(订单号：' . $orderid . '),在' . date('Y-m-d H:i:s') . '时已被您取消并退款，欢迎再次光临！';
+					$sms_data['content'] = L('_B_MY_YOUAT_ ') . $mer_store['name'] . L('_B_MY_SHOPORDERNUM_') . $orderid . L('_B_MY_AT_') . date('Y-m-d H:i:s') . L('_B_MY_TIMECANCELLED_');
 					Sms::sendSms($sms_data);
 				}
 				if ($this->config['sms_cancel_order'] == 2 || $this->config['sms_cancel_order'] == 3) {
 					$sms_data['uid'] = 0;
 					$sms_data['mobile'] = $mer_store['phone'];
 					$sms_data['sendto'] = 'merchant';
-					$sms_data['content'] = '顾客' . $now_order['name'] . '的预定订单(订单号：' . $orderid . '),在' . date('Y-m-d H:i:s') . '时已被客户取消并退款！';
+					$sms_data['content'] = L('_B_MY_CUSTOMER_') . $now_order['name'] . L('_B_MY_BOOKINGNUM_') . $orderid . L('_B_MY_AT_') . date('Y-m-d H:i:s') . L('_B_MY_TIMECANCELLED2_');
 					Sms::sendSms($sms_data);
 				}
 				//如果使用了优惠券
@@ -1312,7 +1312,7 @@ class MyAction extends BaseAction{
 				if ($now_order['score_used_count']!=='0') {
 					$order_info=unserialize($now_order['info']);
 					$order_name=$order_info[0]['name']."*".$order_info[0]['num'];
-					$result = D('User')->add_score($now_order['uid'],$now_order['score_used_count'],'退款 '.$order_name.' '.$this->config['score_name'].'回滚');
+					$result = D('User')->add_score($now_order['uid'],$now_order['score_used_count'],L('_B_MY_REFUND_').$order_name.' '.$this->config['score_name'].L('_B_MY_ROLLBACK_'));
 					$param = array('refund_time' => time());
 					if($result['error_code']){
 						$param['err_msg'] = $result['msg'];
@@ -1331,7 +1331,7 @@ class MyAction extends BaseAction{
 
 				//平台余额退款
 				if($now_order['balance_pay'] != '0.00'){
-					$add_result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],'退款 '.$now_order['order_name'].' 增加余额');
+					$add_result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],L('_B_MY_REFUND_').$now_order['order_name'].' 增加余额');
 
 					$param = array('refund_time' => time());
 					if($result['error_code']){
@@ -1351,8 +1351,8 @@ class MyAction extends BaseAction{
 				}
 				//商家会员卡余额退款
 				if($now_order['merchant_balance'] != '0.00'){
-					//$result = D('Member_card')->add_card($now_order['uid'],$now_order['mer_id'],$now_order['merchant_balance'],'退款 '.$now_order['order_name'].' 增加余额');
-					$result = D('Card_new')->add_user_money($now_order['mer_id'],$now_order['uid'],$now_order['merchant_balance'],$now_order['card_give_money'],0,'退款 '.$now_order['order_name'].' 增加余额','退款 '.$now_order['order_name'].' 增加赠送余额');
+					//$result = D('Member_card')->add_card($now_order['uid'],$now_order['mer_id'],$now_order['merchant_balance'],L('_B_MY_REFUND_').$now_order['order_name'].' 增加余额');
+					$result = D('Card_new')->add_user_money($now_order['mer_id'],$now_order['uid'],$now_order['merchant_balance'],$now_order['card_give_money'],0,L('_B_MY_REFUND_').$now_order['order_name'].' 增加余额',L('_B_MY_REFUND_').$now_order['order_name'].' 增加赠送余额');
 
 					$param = array('refund_time' => time());
 					if($result['error_code']){
@@ -1371,13 +1371,13 @@ class MyAction extends BaseAction{
 					$go_refund_param['msg'] = $result['msg'];
 				}
 				if ($now_order['meal_type']) {
-					$this->success_tips('您使用的是线下支付！订单状态已修改为已退款。',U('Takeout/order_detail',array('order_id'=>$now_order['order_id'], 'store_id' => $store_id, 'mer_id' => $this->mer_id)));
+					$this->success_tips(L('_B_MY_USEOFFLINECHANGEREFUND_'),U('Takeout/order_detail',array('order_id'=>$now_order['order_id'], 'store_id' => $store_id, 'mer_id' => $this->mer_id)));
 				} else {
-					$this->success_tips('您使用的是线下支付！订单状态已修改为已退款。',U('Food/order_detail',array('order_id'=>$now_order['order_id'], 'store_id' => $store_id, 'mer_id' => $this->mer_id)));
+					$this->success_tips(L('_B_MY_USEOFFLINECHANGEREFUND_'),U('Food/order_detail',array('order_id'=>$now_order['order_id'], 'store_id' => $store_id, 'mer_id' => $this->mer_id)));
 				}
 				exit;
 			}else{
-				$this->error_tips('取消订单失败！请重试。');
+				$this->error_tips(L('_B_MY_CANCELLLOSE_'));
 			}
 		}
 		if($now_order['payment_money'] != '0.00'){
@@ -1407,16 +1407,16 @@ class MyAction extends BaseAction{
 			}
 
 			if(empty($pay_method)){
-				$this->error_tips('系统管理员没开启任一一种支付方式！');
+				$this->error_tips(L('_B_MY_NOPAIMENTMETHOD_'));
 			}
 			if(empty($pay_method[$now_order['pay_type']])){
-				$this->error_tips('您选择的支付方式不存在，请更新支付方式！');
+				$this->error_tips(L('_B_MY_CHANGEPAIMENT_'));
 			}
 
 			$pay_class_name = ucfirst($now_order['pay_type']);
 			$import_result = import('@.ORG.pay.'.$pay_class_name);
 			if(empty($import_result)){
-				$this->error_tips('系统管理员暂未开启该支付方式，请更换其他的支付方式');
+				$this->error_tips(L('_B_MY_THISPAIMENTNOTOPEN_'));
 			}
 
 			if ($now_order['meal_type'] == 1) {
@@ -1479,7 +1479,7 @@ class MyAction extends BaseAction{
 		if ($now_order['score_used_count']!=='0') {
 			$order_info=unserialize($now_order['info']);
 			$order_name=$order_info[0]['name']."*".$order_info[0]['num'];
-			$result = D('User')->add_score($now_order['uid'],$now_order['score_used_count'],'退款 '.$order_name.' '.$this->config['score_name'].'回滚');
+			$result = D('User')->add_score($now_order['uid'],$now_order['score_used_count'],L('_B_MY_REFUND_').$order_name.' '.$this->config['score_name'].L('_B_MY_ROLLBACK_'));
 			$param = array('refund_time' => time());
 			if($result['error_code']){
 				$param['err_msg'] = $result['msg'];
@@ -1498,7 +1498,7 @@ class MyAction extends BaseAction{
 
 		//平台余额退款
 		if($now_order['balance_pay'] != '0.00'){
-			$add_result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],'退款 '.$now_order['order_name'].' 增加余额');
+			$add_result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],L('_B_MY_REFUND_').$now_order['order_name'].' 增加余额');
 
 			$param = array('refund_time' => time());
 			if($result['error_code']){
@@ -1518,7 +1518,7 @@ class MyAction extends BaseAction{
 		}
 		//商家会员卡余额退款
 		if($now_order['merchant_balance'] != '0.00'){
-			$result = D('Card_new')->add_user_money($now_order['mer_id'],$now_order['uid'],$now_order['merchant_balance'],$now_order['card_give_money'],0,'退款 '.$now_order['order_name'].' 增加余额','退款 '.$now_order['order_name'].' 增加赠送余额');
+			$result = D('Card_new')->add_user_money($now_order['mer_id'],$now_order['uid'],$now_order['merchant_balance'],$now_order['card_give_money'],0,L('_B_MY_REFUND_').$now_order['order_name'].' 增加余额',L('_B_MY_REFUND_').$now_order['order_name'].' 增加赠送余额');
 			$param = array('refund_time' => time());
 			if($result['error_code']){
 				$param['err_msg'] = $result['msg'];
@@ -1539,7 +1539,7 @@ class MyAction extends BaseAction{
 			$data_meal_order['order_id'] = $now_order['order_id'];
 			$data_meal_order['status'] = 3;
 			D('Meal_order')->data($data_meal_order)->save();
-			$go_refund_param['msg'] = '取消订单成功';
+			$go_refund_param['msg'] = L('_B_MY_ORDERCANCELLEDACCESS_');
 		}
 
 		//退款时销量回滚
@@ -1567,14 +1567,14 @@ class MyAction extends BaseAction{
 			$sms_data['uid'] = $now_order['uid'];
 			$sms_data['mobile'] = $now_order['phone'] ? $now_order['phone'] : $my_user['phone'];
 			$sms_data['sendto'] = 'user';
-			$sms_data['content'] = '您在 ' . $mer_store['name'] . '店中下的订单(订单号：' . $orderid . '),在' . date('Y-m-d H:i:s') . '时已被您取消并退款，欢迎再次光临！';
+			$sms_data['content'] = L('_B_MY_YOUAT_') . $mer_store['name'] . L('_B_MY_SHOPORDERNUM_') . $orderid . L('_B_MY_AT_') . date('Y-m-d H:i:s') . L('_B_MY_TIMECANCELLED_');
 			Sms::sendSms($sms_data);
 		}
 		if ($this->config['sms_cancel_order'] == 2 || $this->config['sms_cancel_order'] == 3) {
 			$sms_data['uid'] = 0;
 			$sms_data['mobile'] = $mer_store['phone'];
 			$sms_data['sendto'] = 'merchant';
-			$sms_data['content'] = '顾客' . $now_order['name'] . '的预定订单(订单号：' . $orderid . '),在' . date('Y-m-d H:i:s') . '时已被客户取消并退款！';
+			$sms_data['content'] = L('_B_MY_CUSTOMER_') . $now_order['name'] . L('_B_MY_BOOKINGNUM_') . $orderid . L('_B_MY_AT_') . date('Y-m-d H:i:s') . L('_B_MY_TIMECANCELLED2_');
 			Sms::sendSms($sms_data);
 		}
 
@@ -1588,19 +1588,19 @@ class MyAction extends BaseAction{
 	/*团购详情*/
 	public function group_order_refund(){
 		if(empty($this->user_session)){
-			$this->error_tips('请先进行登录！');
+			$this->error_tips(L('_B_MY_LOGINFIRST_'));
 		}
 		$now_order = D('Group_order')->get_order_detail_by_id($this->user_session['uid'],intval($_GET['order_id']),true);
 		$now_group = D('Group')->where(array('group_id'=>$now_order['group_id']))->find();
 
 		if(empty($now_order)){
-			$this->error_tips('当前订单不存在');
+			$this->error_tips(L('_B_MY_NOORDER_'));
 		}
 		if(empty($now_order['paid'])){
-			$this->error_tips('当前订单还未付款！');
+			$this->error_tips(L('_B_MY_ORDERNOPAY_'));
 		}
 		if ($now_order['status'] > 0 && $now_order['status'] < 3) {
-			$this->error_tips('订单必须是未消费状态才能取消！',U('My/group_order',array('order_id'=>$now_order['order_id'])));
+			$this->error_tips(L('_B_MY_ORDERMUSTNOPAID_'),U('My/group_order',array('order_id'=>$now_order['order_id'])));
 		} elseif ($now_order['status'] > 2) {
 			$this->redirect(U('My/group_order',array('order_id'=>$now_order['order_id'])));
 		}
@@ -1657,19 +1657,19 @@ class MyAction extends BaseAction{
 	//取消订单
 	public function group_order_check_refund(){
 		if(empty($this->user_session)){
-			$this->error_tips('请先进行登录！');
+			$this->error_tips(L('_B_MY_LOGINFIRST_'));
 		}
 		$now_order = D('Group_order')->get_order_detail_by_id($this->user_session['uid'],intval($_GET['order_id']),true);
 
 		$now_group = M('Group')->where(array('group_id'=>$now_order['group_id']))->find();
 		if(empty($now_order)){
-			$this->error_tips('当前订单不存在');
+			$this->error_tips(L('_B_MY_NOORDER_'));
 		}
 		if(empty($now_order['paid'])){
-			$this->error_tips('当前订单还未付款！');
+			$this->error_tips(L('_B_MY_ORDERNOPAY_'));
 		}
 		if ($now_order['status'] > 0 && $now_order['status'] < 3) {
-			$this->error_tips('订单必须是未消费状态才能取消！',U('My/group_order',array('order_id'=>$now_order['order_id'])));
+			$this->error_tips(L('_B_MY_ORDERMUSTNOPAID_'),U('My/group_order',array('order_id'=>$now_order['order_id'])));
 		} elseif ($now_order['status'] > 2) {
 			$this->redirect(U('My/group_order',array('order_id'=>$now_order['order_id'])));
 		}
@@ -1712,7 +1712,7 @@ class MyAction extends BaseAction{
 				//用户积分退款是回滚
 				if ($now_order['score_used_count']!==0&&$unconsume_pass_num==$now_order['num']) {
 
-					$result = D('User')->add_score($now_order['uid'],$now_order['score_used_count'],'退款 '.$now_order['order_name'].C('config.score_name').'回滚');
+					$result = D('User')->add_score($now_order['uid'],$now_order['score_used_count'],L('_B_MY_REFUND_').$now_order['order_name'].C('config.score_name').L('_B_MY_ROLLBACK_'));
 					$param = array('refund_time' => time());
 					if($result['error_code']){
 						$param['err_msg'] = $result['msg'];
@@ -1731,7 +1731,7 @@ class MyAction extends BaseAction{
 
 				//平台余额退款
 				if($now_order['balance_pay'] != '0.00'){
-					$result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],'退款 '.$now_order['order_name'].' 增加余额');
+					$result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],L('_B_MY_REFUND_').$now_order['order_name'].' 增加余额');
 
 					$param = array('refund_time' => time());
 					if($result['error_code']){
@@ -1754,7 +1754,7 @@ class MyAction extends BaseAction{
 //					if($now_order['num']>$unconsume_pass_num){
 //						$now_order['merchant_balance'] =  ($has_pay-$now_order['balance_pay']-$consume_num*$now_order['price'])>0?($has_pay-$now_order['balance_pay']-$consume_num*$now_order['price']):0;
 //					}
-					$result = D('Card_new')->add_user_money($now_order['mer_id'],$now_order['uid'],$now_order['merchant_balance'],$now_order['card_give_money'],0,'退款 '.$now_order['order_name'].' 增加余额','退款 '.$now_order['order_name'].' 增加赠送余额');
+					$result = D('Card_new')->add_user_money($now_order['mer_id'],$now_order['uid'],$now_order['merchant_balance'],$now_order['card_give_money'],0,L('_B_MY_REFUND_').$now_order['order_name'].' 增加余额',L('_B_MY_REFUND_').$now_order['order_name'].' 增加赠送余额');
 
 					$param = array('refund_time' => time());
 					if($result['error_code']){
@@ -1771,10 +1771,10 @@ class MyAction extends BaseAction{
 					}
 					$go_refund_param['msg'] = $result['msg'];
 				}
-				$this->success_tips('您使用的是线下支付！订单状态已修改为已退款。',U('My/group_order',array('order_id'=>$now_order['order_id'])));
+				$this->success_tips(L('_B_MY_USEOFFLINECHANGEREFUND_'),U('My/group_order',array('order_id'=>$now_order['order_id'])));
 				exit;
 			}else{
-				$this->error_tips('取消订单失败！请重试。');
+				$this->error_tips(L('_B_MY_CANCELLLOSE_'));
 			}
 		}
 		$total_pay = $now_order['balance_pay']+$now_order['payment_money']+$now_order['merchant_balance']+$now_order['card_give_money'];
@@ -1799,7 +1799,7 @@ class MyAction extends BaseAction{
 					$now_order['merchant_balance'] = $now_order['merchant_balance']/$now_order['num'] * $unconsume_pass_num- round($now_order['total_money'] * $now_group['group_refund_fee'] / 100 * $merchant_percent, 2);
 					$now_order['merchant_balance'] = $now_order['merchant_balance']>0?$now_order['merchant_balance']:0;
 				}else{
-					$this->error_tips('您不能退款！');
+					$this->error_tips(L('_B_MY_YOUCANTREFUND_'));
 				}
 			}elseif($now_group['group_share_num']>0 ) {
 				if ($now_order['num'] > $unconsume_pass_num) {
@@ -1816,7 +1816,7 @@ class MyAction extends BaseAction{
 				$now_order['merchant_balance'] = $need_refund_tmp;
 			}
 
-			$result = D('Card_new')->add_user_money($now_order['mer_id'],$now_order['uid'],$now_order['merchant_balance'],0,0,'退款 '.$now_order['order_name'].' 增加余额','退款 '.$now_order['order_name'].' 增加赠送余额');
+			$result = D('Card_new')->add_user_money($now_order['mer_id'],$now_order['uid'],$now_order['merchant_balance'],0,0,L('_B_MY_REFUND_').$now_order['order_name'].' 增加余额',L('_B_MY_REFUND_').$now_order['order_name'].' 增加赠送余额');
 
 			$param = array('refund_time' => time());
 			if($result['error_code']){
@@ -1841,7 +1841,7 @@ class MyAction extends BaseAction{
 					$now_order['card_give_money']  = $now_order['card_give_money']/$now_order['num'] * $unconsume_pass_num - round($now_order['total_money'] * $now_group['group_refund_fee'] / 100 * $card_give_percent, 2);
 					$now_order['card_give_money'] = $now_order['card_give_money']>0?$now_order['card_give_money']:0;
 				}else{
-					$this->error_tips('您不能退款！');
+					$this->error_tips(L('_B_MY_YOUCANTREFUND_'));
 				}
 			}elseif($now_group['group_share_num']>0 ) {
 				if ($now_order['num'] > $unconsume_pass_num) {
@@ -1858,7 +1858,7 @@ class MyAction extends BaseAction{
 				$now_order['card_give_money'] = $need_refund_tmp;
 			}
 
-			$result = D('Card_new')->add_user_money($now_order['mer_id'],$now_order['uid'],0,$now_order['card_give_money'],0,'退款 '.$now_order['order_name'].' 增加余额','退款 '.$now_order['order_name'].' 增加赠送余额');
+			$result = D('Card_new')->add_user_money($now_order['mer_id'],$now_order['uid'],0,$now_order['card_give_money'],0,L('_B_MY_REFUND_').$now_order['order_name'].' 增加余额',L('_B_MY_REFUND_').$now_order['order_name'].' 增加赠送余额');
 			$param = array('refund_time' => time());
 			if($result['error_code']){
 				$param['err_msg'] = $result['msg'];
@@ -1883,7 +1883,7 @@ class MyAction extends BaseAction{
 					$now_order['balance_pay'] =$now_order['balance_pay']/$now_order['num'] * $unconsume_pass_num- round($now_order['total_money'] * $now_group['group_refund_fee'] / 100 * $balance_percent, 2);
 					$now_order['balance_pay'] = $now_order['balance_pay']>0?$now_order['balance_pay']:0;
 				}else{
-					$this->error_tips('您不能退款！');
+					$this->error_tips(L('_B_MY_YOUCANTREFUND_'));
 				}
 			}elseif($now_group['group_share_num']>0 ) {
 				if ($now_order['num'] > $unconsume_pass_num) {
@@ -1906,7 +1906,7 @@ class MyAction extends BaseAction{
 			}
 			if($now_order['balance_pay']>0){
 
-				$result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],'退款 '.$now_order['order_name'].' 增加余额');
+				$result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],L('_B_MY_REFUND_').$now_order['order_name'].' 增加余额');
 				$param = array('refund_time' => time());
 				if($result['error_code']){
 					$param['err_msg'] = $result['msg'];
@@ -1978,15 +1978,15 @@ class MyAction extends BaseAction{
 				$pay_method = D('Config')->get_pay_method(0,0,1);
 			}
 			if(empty($pay_method)){
-				$this->error_tips('系统管理员没开启任一一种支付方式！');
+				$this->error_tips(L('_B_MY_NOPAIMENTMETHOD_'));
 			}
 			if(empty($pay_method[$now_order['pay_type']])){
-				$this->error_tips('您选择的支付方式不存在，请更新支付方式！');
+				$this->error_tips(L('_B_MY_CHANGEPAIMENT_'));
 			}
 			$pay_class_name = ucfirst($now_order['pay_type']);
 			$import_result = import('@.ORG.pay.'.$pay_class_name);
 			if(empty($import_result)){
-				$this->error_tips('系统管理员暂未开启该支付方式，请更换其他的支付方式');
+				$this->error_tips(L('_B_MY_THISPAIMENTNOTOPEN_'));
 			}
 			$now_order['order_type'] = 'group';
 			if(!empty($now_order['orderid'])){
@@ -2017,7 +2017,7 @@ class MyAction extends BaseAction{
 
 		//用户积分退款是回滚
 		if ($now_order['score_used_count']>0&&$unconsume_pass_num==$now_order['num']) {
-			$result = D('User')->add_score($now_order['uid'],$now_order['score_used_count'],'退款 '.$now_order['order_name'].' '.$this->config['score_name'].'回滚');
+			$result = D('User')->add_score($now_order['uid'],$now_order['score_used_count'],L('_B_MY_REFUND_').$now_order['order_name'].' '.$this->config['score_name'].L('_B_MY_ROLLBACK_'));
 			$param = array('refund_time' => time());
 			if($result['error_code']){
 				$param['err_msg'] = $result['msg'];
@@ -2119,7 +2119,7 @@ class MyAction extends BaseAction{
 			$sms_data['uid'] = $now_order['uid'];
 			$sms_data['mobile'] = $now_order['phone'];
 			$sms_data['sendto'] = 'user';
-			$sms_data['content'] = '您购买 '.$now_order['order_name'].'的订单(订单号：' . $now_order['order_id'] . '),在' . date('Y-m-d H:i:s') . '时已被您取消并退款，欢迎再次光临！';
+			$sms_data['content'] = '您购买 '.$now_order['order_name'].'的订单(订单号：' . $now_order['order_id'] . L('_B_MY_AT_') . date('Y-m-d H:i:s') . L('_B_MY_TIMECANCELLED_');
 			Sms::sendSms($sms_data);
 		}
 		if ($this->config['sms_group_cancel_order'] == 2 || $this->config['sms_group_cancel_order'] == 3) {
@@ -2127,7 +2127,7 @@ class MyAction extends BaseAction{
 			$sms_data['uid'] = 0;
 			$sms_data['mobile'] = $merchant['phone'];
 			$sms_data['sendto'] = 'merchant';
-			$sms_data['content'] = '顾客购买的' . $now_order['order_name'] . '的订单(订单号：' . $now_order['order_id'] . '),在' . date('Y-m-d H:i:s') . '时已被客户取消并退款！';
+			$sms_data['content'] = L('_B_MY_CUSTOMER_').'购买的' . $now_order['order_name'] . '的订单(订单号：' . $now_order['order_id'] . L('_B_MY_AT_') . date('Y-m-d H:i:s') . L('_B_MY_TIMECANCELLED2_');
 			Sms::sendSms($sms_data);
 		}
 		D('Group_pass_relation')->change_refund_status($now_order['order_id']);
@@ -2138,7 +2138,7 @@ class MyAction extends BaseAction{
 	public function group_order_del(){
 		$now_order = D('Group_order')->get_order_detail_by_id($this->user_session['uid'],intval($_GET['order_id']));
 		if(empty($now_order)){
-			$this->error_tips('当前订单不存在！');
+			$this->error_tips(L('_B_MY_NOORDER_'));
 		}else if($now_order['paid']){
 			$this->error_tips('当前订单已付款，不能删除。');
 		}
@@ -2151,9 +2151,9 @@ class MyAction extends BaseAction{
 				D('Group')->where(array('group_id' => $now_order['group_id'], 'sale_count' => array('egt', $now_order['num'])))->setDec('sale_count', $now_order['num']);
 			}
 
-			$this->success_tips('删除成功！',U('My/group_order_list'));
+			$this->success_tips(L('_B_MY_DELACCESS_'),U('My/group_order_list'));
 		}else{
-			$this->error_tips('删除失败！请重试。');
+			$this->error_tips(L('_B_MY_DELLOSE_'));
 		}
 	}
 
@@ -2170,14 +2170,14 @@ class MyAction extends BaseAction{
 		$plat_order = D('Plat_order')->get_order_by_business_id($param);
 
 		if (empty($now_order)||empty($plat_order)) {
-			$this->error_tips('当前订单不存在');
+			$this->error_tips(L('_B_MY_NOORDER_'));
 		}
 		$can_refund = $model->can_refund_status($now_order);
 		if ($plat_order['paid'] != 1 || !$can_refund) {
-			$this->error_tips('当前订单店员正在处理中，不能退款或取消');
+			$this->error_tips(L('_B_MY_ORDERDEALING_'));
 		}
 		if (empty($plat_order['paid'])) {
-			$this->error_tips('当前订单还未付款！');
+			$this->error_tips(L('_B_MY_ORDERNOPAY_'));
 		}
 		$now_order['pay_order'] = $plat_order;
 
@@ -2188,7 +2188,7 @@ class MyAction extends BaseAction{
 	public function plat_order_check_refund(){
 
 		if(empty($this->user_session)){
-			$this->error_tips('请先进行登录！');
+			$this->error_tips(L('_B_MY_LOGINFIRST_'));
 		}
 		$orderid = intval($_GET['order_id']);
 
@@ -2199,15 +2199,15 @@ class MyAction extends BaseAction{
 		$business_order = $model->get_order_by_orderid($now_order['business_id']);
 
 		if(empty($now_order)){
-			$this->error_tips('当前订单不存在');
+			$this->error_tips(L('_B_MY_NOORDER_'));
 		}
 		$can_refund = $model->can_refund_status($business_order);
 		if ($now_order['paid'] != 1 || !$can_refund) {
-			$this->error_tips('当前订单店员正在处理中，不能退款或取消');
+			$this->error_tips(L('_B_MY_ORDERDEALING_'));
 		}
 
 		if(empty($now_order['paid'])){
-			$this->error_tips('当前订单还未付款！');
+			$this->error_tips(L('_B_MY_ORDERNOPAY_'));
 		}
 		//dump($now_order);die;
 		//$my_user = D('User')->field(true)->where(array('uid' => $now_order['uid']))->find();
@@ -2239,16 +2239,16 @@ class MyAction extends BaseAction{
 			}
 
 			if(empty($pay_method)){
-				$this->error_tips('系统管理员没开启任一一种支付方式！');
+				$this->error_tips(L('_B_MY_NOPAIMENTMETHOD_'));
 			}
 			if(empty($pay_method[$now_order['pay_type']])){
-				$this->error_tips('您选择的支付方式不存在，请更新支付方式！');
+				$this->error_tips(L('_B_MY_CHANGEPAIMENT_'));
 			}
 
 			$pay_class_name = ucfirst($now_order['pay_type']);
 			$import_result = import('@.ORG.pay.'.$pay_class_name);
 			if(empty($import_result)){
-				$this->error_tips('系统管理员暂未开启该支付方式，请更换其他的支付方式');
+				$this->error_tips(L('_B_MY_THISPAIMENTNOTOPEN_'));
 			}
 
 			$order_id = $now_order['order_id'];
@@ -2287,7 +2287,7 @@ class MyAction extends BaseAction{
 		if ($now_order['system_score']!=='0') {
 
 			$order_name=$now_order['order_name'];
-			$result = D('User')->add_score($now_order['uid'],$now_order['system_score'],'退款 '.$order_name.$this->config['score_name'].'回滚');
+			$result = D('User')->add_score($now_order['uid'],$now_order['system_score'],L('_B_MY_REFUND_').$order_name.$this->config['score_name'].L('_B_MY_ROLLBACK_'));
 			$param = array('refund_time' => time());
 			if($result['error_code']){
 				$param['err_msg'] = $result['msg'];
@@ -2307,7 +2307,7 @@ class MyAction extends BaseAction{
 
 		//平台余额退款
 		if($now_order['system_balance'] != '0.00'){
-			$result = D('User')->add_money($now_order['uid'],$now_order['system_balance'],'退款 '.$now_order['order_name'].' 增加余额');
+			$result = D('User')->add_money($now_order['uid'],$now_order['system_balance'],L('_B_MY_REFUND_').$now_order['order_name'].' 增加余额');
 			$param = array('refund_time' => time());
 			if($result['error_code']){
 				$param['err_msg'] = $result['msg'];
@@ -2327,7 +2327,7 @@ class MyAction extends BaseAction{
 
 		//商家会员卡余额退款
 		if($now_order['merchant_balance_pay'] != '0.00'||$now_order['merchant_balance_give']!='0.00'){
-			$result = D('Card_new')->add_user_money($now_order['mer_id'],$now_order['uid'],$now_order['merchant_balance_pay'],$now_order['merchant_balance_give'],0,'退款 '.$now_order['order_name'].' 增加余额','退款 '.$now_order['order_name'].' 增加赠送余额');
+			$result = D('Card_new')->add_user_money($now_order['mer_id'],$now_order['uid'],$now_order['merchant_balance_pay'],$now_order['merchant_balance_give'],0,L('_B_MY_REFUND_').$now_order['order_name'].' 增加余额',L('_B_MY_REFUND_').$now_order['order_name'].' 增加赠送余额');
 			$param = array('refund_time' => time());
 			if($result['error_code']){
 				$param['err_msg'] = $result['msg'];
@@ -2352,7 +2352,7 @@ class MyAction extends BaseAction{
 			$refund_result = $model->afert_refund($business_order);
 			if(!$refund_status['error_code']){
 				if($now_order['pay_type']=='offline'){
-					$this->success_tips('您使用的是线下支付！订单状态已修改为已退款。',$refund_result['url']);
+					$this->success_tips(L('_B_MY_USEOFFLINECHANGEREFUND_'),$refund_result['url']);
 				}else{
 					$this->success_tips($go_refund_param['msg'],$refund_result['url']);
 				}
@@ -2367,15 +2367,15 @@ class MyAction extends BaseAction{
 		$database_group_order = D('Group_order');
 		$now_order = $database_group_order->get_order_detail_by_id($this->user_session['uid'],intval($_GET['order_id']));
 		if(empty($now_order)){
-			exit(json_encode(array('status'=>0,'msg'=>'当前订单不存在！')));
+			exit(json_encode(array('status'=>0,'msg'=>L('_B_MY_NOORDER_'))));
 		}
 
 		$order_condition['order_id'] = $now_order['order_id'];
 		$data['is_del'] = 1;
 		if($database_group_order->where($order_condition)->data($data)->save()){
-			exit(json_encode(array('status'=>1,'msg'=>'删除成功！')));
+			exit(json_encode(array('status'=>1,'msg'=>L('_B_MY_DELACCESS_'))));
 		}else{
-			exit(json_encode(array('status'=>0,'msg'=>'删除失败！')));
+			exit(json_encode(array('status'=>0,'msg'=>L('_B_MY_DELLOSE_'))));
 		}
 	}
 
@@ -2386,19 +2386,19 @@ class MyAction extends BaseAction{
 			$now_order = $database_gift_order->get_order_detail_by_id($this->user_session['uid'],$order_id);
 
 			if(empty($now_order)){
-				exit(json_encode(array('status'=>0,'msg'=>'当前订单不存在！')));
+				exit(json_encode(array('status'=>0,'msg'=>L('_B_MY_NOORDER_！'))));
 			}
 
 			$order_condition['order_id'] = $now_order['order_id'];
 			$data['is_del'] = 1;
 			$data['del_time'] = time();
 			if($database_gift_order->where($order_condition)->data($data)->save()){
-				exit(json_encode(array('status'=>1,'msg'=>'删除成功！')));
+				exit(json_encode(array('status'=>1,'msg'=>L('_B_MY_DELACCESS_'))));
 			}else{
-				exit(json_encode(array('status'=>0,'msg'=>'删除失败！')));
+				exit(json_encode(array('status'=>0,'msg'=>L('_B_MY_DELLOSE_'))));
 			}
 		}else{
-			$this->error_tips('访问页面有误！');
+			$this->error_tips(L('_B_MY_PAGEWRONG_'));
 		}
 	}
 
@@ -2407,15 +2407,15 @@ class MyAction extends BaseAction{
 		$database_meal_order = D('Meal_order');
 		$now_order = $database_meal_order->get_order_by_id($this->user_session['uid'],intval($_GET['order_id']));
 		if(empty($now_order)){
-			exit(json_encode(array('status'=>0,'msg'=>'当前订单不存在！')));
+			exit(json_encode(array('status'=>0,'msg'=>L('_B_MY_NOORDER_！'))));
 		}
 
 		$order_condition['order_id'] = $now_order['order_id'];
 		$data['is_del'] = 1;
 		if($database_meal_order->where($order_condition)->data($data)->save()){
-			exit(json_encode(array('status'=>1,'msg'=>'删除成功！')));
+			exit(json_encode(array('status'=>1,'msg'=>L('_B_MY_DELACCESS_'))));
 		}else{
-			exit(json_encode(array('status'=>0,'msg'=>'删除失败！')));
+			exit(json_encode(array('status'=>0,'msg'=>L('_B_MY_DELLOSE_'))));
 		}
 	}
 
@@ -2425,15 +2425,15 @@ class MyAction extends BaseAction{
 		$now_order = $database_shop_order->get_order_by_id($this->user_session['uid'],intval($_GET['order_id']));
 
 		if(empty($now_order)){
-			exit(json_encode(array('status'=>0,'msg'=>'当前订单不存在！')));
+			exit(json_encode(array('status'=>0,'msg'=>L('_B_MY_NOORDER_！'))));
 		}
 
 		$order_condition['order_id'] = $now_order['order_id'];
 		$data['is_del'] = 1;
 		if($database_shop_order->where($order_condition)->data($data)->save()){
-			exit(json_encode(array('status'=>1,'msg'=>'删除成功！')));
+			exit(json_encode(array('status'=>1,'msg'=>L('_B_MY_DELACCESS_'))));
 		}else{
-			exit(json_encode(array('status'=>0,'msg'=>'删除失败！')));
+			exit(json_encode(array('status'=>0,'msg'=>L('_B_MY_DELLOSE_'))));
 		}
 	}
 
@@ -2443,16 +2443,16 @@ class MyAction extends BaseAction{
 		$database_appoint_order = D('Appoint_order');
 		$now_order = $database_appoint_order->get_order_detail_by_id($this->user_session['uid'],intval($_GET['order_id']));
 		if(empty($now_order)){
-			$this->error_tips('当前订单不存在！');
+			$this->error_tips(L('_B_MY_NOORDER_'));
 		}else if($now_order['paid']){
 			$this->error_tips('当前订单已付款，不能删除。');
 		}
 		$condition_group_order['order_id'] = $now_order['order_id'];
 		$data_group_order['paid'] = 3;
 		if($database_appoint_order->where($condition_group_order)->data($data_group_order)->save()){
-			$this->success_tips('删除成功！',U('My/appoint_order_list'));
+			$this->success_tips(L('_B_MY_DELACCESS_'),U('My/appoint_order_list'));
 		}else{
-			$this->error_tips('删除失败！请重试。');
+			$this->error_tips(L('_B_MY_DELLOSE_'));
 		}
 	}
 
@@ -2460,7 +2460,7 @@ class MyAction extends BaseAction{
 	/*店铺收藏*/
 	public function group_store_collect(){
 		if(empty($this->user_session)){
-			$this->error_tips('请先进行登录！');
+			$this->error_tips(L('_B_MY_LOGINFIRST_'));
 		}
 
 		$this->assign(D('Merchant_store')->wap_get_store_collect_list($this->user_session['uid']));
@@ -2470,7 +2470,7 @@ class MyAction extends BaseAction{
 	//手艺人收藏
 	public function worker_collect(){
 		if(empty($this->user_session)){
-			$this->error_tips('请先进行登录！');
+			$this->error_tips(L('_B_MY_LOGINFIRST_'));
 		}
 		$this->assign(D('Merchant_workers')->wap_get_worker_collect_list($this->user_session['uid']));
 		$this->display();
@@ -2479,7 +2479,7 @@ class MyAction extends BaseAction{
 	/*商家收藏***商家中心暂时没有手机版***/
 	public function merchant_collect(){
 		if(empty($this->user_session)){
-			$this->error_tips('请先进行登录！');
+			$this->error_tips(L('_B_MY_LOGINFIRST_'));
 		}
 
 		$this->assign(D('Merchant')->get_collect_list($this->user_session['uid']));
@@ -2503,39 +2503,39 @@ class MyAction extends BaseAction{
 		if (!is_dir($upload_dir)) {
 			mkdir($upload_dir, 0777, true);
 		}
-		$newfilename = $mulu.'_' . date('YmdHis') . '.jpg';
-		$save = file_put_contents($upload_dir . '/' . $newfilename, $imgdata);
-		$save = file_put_contents($upload_dir . '/m_' . $newfilename, $imgdata);
-		$save = file_put_contents($upload_dir . '/s_' . $newfilename, $imgdata);
+        $newfilename = $mulu.'_' . date('YmdHis') . '.jpg';
+        $save = file_put_contents($upload_dir . '/' . $newfilename, $imgdata);
+        $save = file_put_contents($upload_dir . '/m_' . $newfilename, $imgdata);
+        $save = file_put_contents($upload_dir . '/s_' . $newfilename, $imgdata);
 		if ($save) {
 			$this->dexit(array('error' => 0, 'data' => array('code' => 1, 'siteurl'=>$this->config['site_url'],'imgurl' =>$getupload_dir . '/' . $newfilename, 'msg' => '')));
 		} else {
-			$this->dexit(array('error' => 1, 'data' => array('code' => 0, 'url' => '', 'msg' => '保存失败！')));
+			$this->dexit(array('error' => 1, 'data' => array('code' => 0, 'url' => '', 'msg' => L('_B_MY_SAVELOSE_'))));
 		}
 	}
 	/*团购评价*/
 	public function group_feedback(){
 		if(empty($this->user_session)){
-			$this->error_tips('请先进行登录！');
+			$this->error_tips(L('_B_MY_LOGINFIRST_'));
 		}
 		$now_order = D('Group_order')->get_order_detail_by_id($this->user_session['uid'],intval($_GET['order_id']),true);
 		$this->assign('now_order',$now_order);
 		if(empty($now_order)){
-			$this->error_tips('当前订单不存在！');
+			$this->error_tips(L('_B_MY_NOORDER_'));
 		}
 		if(empty($now_order['paid'])){
-			$this->error_tips('当前订单未付款！无法评论');
+			$this->error_tips(L('_B_MY_NOTCONSUMENOCOMMENT_'));
 		}
 		if(empty($now_order['status'])){
 			$this->error_tips('当前订单未消费！无法评论');
 		}
 		if($now_order['status'] == 2){
-			$this->error_tips('当前订单已评论');
+			$this->error_tips(L('_B_MY_HAVECOMMENTD_'));
 		}
 		if(IS_POST){
 			$score = intval($_POST['score']);
 			if($score > 5 || $score < 1){
-				$this->error_tips('评分只能1到5分');
+				$this->error_tips(L('_B_MY_ONLY1-5_'));
 			}
 			$inputimg=isset($_POST['inputimg']) ? $_POST['inputimg'] :'';
 			$pic_ids=array();
@@ -2596,14 +2596,14 @@ class MyAction extends BaseAction{
 					$database_merchant_score->where(array('pigcms_id'=>$now_store_score['pigcms_id']))->data($data_store_score)->save();
 				}
 				if($this->config['feedback_score_add']>0){
-				  	D('User')->add_extra_score($this->user_session['uid'],$this->config['feedback_score_add'],$this->config['meal_alias_name'].'评论获得'.$this->config['feedback_score_add'].'个'.$this->config['score_name']);
+				  	D('User')->add_extra_score($this->user_session['uid'],$this->config['feedback_score_add'],$this->config['meal_alias_name'].L('_B_MY_COMMENTGET_').$this->config['feedback_score_add'].'个'.$this->config['score_name']);
 
-					D('Scroll_msg')->add_msg('feedback',$this->user_session['uid'],'用户'.$this->user_session['nickname'].'于'.date('Y-m-d H:i',$_SERVER['REQUEST_TIME']).'对'.$this->config['meal_alias_name'].'评论获得'.$this->config['feedback_score_add'].'个'.$this->config['score_name']);
+					D('Scroll_msg')->add_msg('feedback',$this->user_session['uid'],L('_B_MY_USER_').$this->user_session['nickname'].'于'.date('Y-m-d H:i',$_SERVER['REQUEST_TIME']).'对'.$this->config['meal_alias_name'].L('_B_MY_COMMENTGET_').$this->config['feedback_score_add'].'个'.$this->config['score_name']);
 				}
 
-				$this->success_tips('评论成功',U('My/group_order',array('order_id'=>$now_order['order_id'])));
+				$this->success_tips(L('_B_MY_COMMENTACCESS_'),U('My/group_order',array('order_id'=>$now_order['order_id'])));
 			}else{
-				$this->error_tips('评论失败');
+				$this->error_tips(L('_B_MY_COMMENTLOSE_'));
 			}
 		}
 		$this->display();
@@ -2611,26 +2611,26 @@ class MyAction extends BaseAction{
 	/*订餐OR外卖评价*/
 	public function meal_feedback(){
 		if(empty($this->user_session)){
-			$this->error_tips('请先进行登录！');
+			$this->error_tips(L('_B_MY_LOGINFIRST_'));
 		}
 		$now_order = D('Meal_order')->where(array('uid' => $this->user_session['uid'], 'order_id' => intval($_GET['order_id'])))->find();
 		$this->assign('now_order',$now_order);
 		if(empty($now_order)){
-			$this->error_tips('当前订单不存在！');
+			$this->error_tips(L('_B_MY_NOORDER_'));
 		}
 		if(empty($now_order['paid'])){
-			$this->error_tips('当前订单未付款！无法评论');
+			$this->error_tips(L('_B_MY_NOTCONSUMENOCOMMENT_'));
 		}
 		if(empty($now_order['status'])){
 			$this->error_tips('当前订单未消费！无法评论');
 		}
 		if($now_order['status'] == 2){
-			$this->error_tips('当前订单已评论');
+			$this->error_tips(L('_B_MY_HAVECOMMENTD_'));
 		}
 		if(IS_POST){
 			$score = intval($_POST['score']);
 			if($score > 5 || $score < 1){
-				$this->error_tips('评分只能1到5分');
+				$this->error_tips(L('_B_MY_ONLY1-5_'));
 			}
 			$inputimg=isset($_POST['inputimg']) ? $_POST['inputimg'] :'';
 			$pic_ids=array();
@@ -2694,20 +2694,20 @@ class MyAction extends BaseAction{
 
 				if ($now_order['meal_type'] == 1) {
 					if($this->config['feedback_score_add']>0){
-					  	D('User')->add_extra_score($this->user_session['uid'],$this->config['feedback_score_add'],$this->config['group_alias_name'].'评论获得'.$this->config['feedback_score_add'].'个'.$this->config['score_name']);
-					  	D('Scroll_msg')->add_msg('feedback',$this->user_session['uid'],'用户'.$this->user_session['nickname'].'于'.date('Y-m-d H:i',$_SERVER['REQUEST_TIME']).'对'.$this->config['group_alias_name'].'评论获得'.$this->config['feedback_score_add'].'个'.$this->config['score_name']);
+					  	D('User')->add_extra_score($this->user_session['uid'],$this->config['feedback_score_add'],$this->config['group_alias_name'].L('_B_MY_COMMENTGET_').$this->config['feedback_score_add'].$this->config['score_name']);
+					  	D('Scroll_msg')->add_msg('feedback',$this->user_session['uid'],L('_B_MY_USER_').$this->user_session['nickname'].date('Y-m-d H:i',$_SERVER['REQUEST_TIME']).L('_B_MY_COMMENT_').$this->config['group_alias_name'].L('_B_MY_GET_').$this->config['feedback_score_add'].$this->config['score_name']);
 					}
-					$this->success_tips('评论成功', U('Takeout/order_detail', array('order_id' => $now_order['order_id'], 'mer_id' => $now_order['mer_id'], 'store_id' => $now_order['store_id'])));
+					$this->success_tips(L('_B_MY_COMMENTACCESS_'), U('Takeout/order_detail', array('order_id' => $now_order['order_id'], 'mer_id' => $now_order['mer_id'], 'store_id' => $now_order['store_id'])));
 				} else {
 					if($this->config['feedback_score_add']>0){
-					  	D('User')->add_extra_score($this->user_session['uid'],$this->config['feedback_score_add'],$this->config['group_alias_name'].'评论获得'.$this->config['feedback_score_add'].'个'.$this->config['score_name']);
+					  	D('User')->add_extra_score($this->user_session['uid'],$this->config['feedback_score_add'],$this->config['group_alias_name'].L('_B_MY_COMMENTGET_').$this->config['feedback_score_add'].$this->config['score_name']);
 
-				  		D('Scroll_msg')->add_msg('feedback',$this->user_session['uid'],'用户'.$this->user_session['nickname'].'于'.date('Y-m-d H:i',$_SERVER['REQUEST_TIME']).'对'.$this->config['group_alias_name'].'评论获得'.$this->config['feedback_score_add'].'个'.$this->config['score_name']);
+				  		D('Scroll_msg')->add_msg('feedback',$this->user_session['uid'],L('_B_MY_USER_').$this->user_session['nickname'].date('Y-m-d H:i',$_SERVER['REQUEST_TIME']).L('_B_MY_COMMENT_').$this->config['group_alias_name'].L('_B_MY_GET_').$this->config['feedback_score_add'].$this->config['score_name']);
 					}
-					$this->success_tips('评论成功', U('Food/order_detail', array('order_id' => $now_order['order_id'], 'mer_id' => $now_order['mer_id'], 'store_id' => $now_order['store_id'])));
+					$this->success_tips(L('_B_MY_COMMENTACCESS_'), U('Food/order_detail', array('order_id' => $now_order['order_id'], 'mer_id' => $now_order['mer_id'], 'store_id' => $now_order['store_id'])));
 				}
 			} else{
-				$this->error_tips('评论失败');
+				$this->error_tips(L('_B_MY_COMMENTLOSE_'));
 			}
 		}
 		$this->display();
@@ -2717,18 +2717,18 @@ class MyAction extends BaseAction{
 	/*预约评论*/
 	public function appoint_feedback(){
 		if(empty($this->user_session)){
-			$this->error_tips('请先进行登录！');
+			$this->error_tips(L('_B_MY_LOGINFIRST_'));
 		}
 		$order_id = $_GET['order_id'] + 0;
 		$now_order = D('Appoint_order')->where(array('uid' => $this->user_session['uid'], 'order_id' => intval($_GET['order_id'])))->find();
 		$this->assign('now_order',$now_order);
 		if(empty($now_order)){
-			$this->error_tips('当前订单不存在！');
+			$this->error_tips(L('_B_MY_NOORDER_'));
 		}
 
 		if($now_order['type'] == 0){
 			if(empty($now_order['service_status'])){
-				$this->error_tips('当前订单未付款！无法评论');
+				$this->error_tips(L('_B_MY_NOTCONSUMENOCOMMENT_'));
 			}
 			if(empty($now_order['service_status'])){
 				$this->error_tips('当前订单未消费！无法评论');
@@ -2740,7 +2740,7 @@ class MyAction extends BaseAction{
 		$database_appoint_comment = D('Appoint_comment');
 		$appoint_order_num = $database_appoint_comment->where($where)->count();
 		if($appoint_order_num > 0){
-			$this->error_tips('当前订单已评论');
+			$this->error_tips(L('_B_MY_HAVECOMMENTD_'));
 		}
 
 		if(IS_POST){
@@ -2750,7 +2750,7 @@ class MyAction extends BaseAction{
 			$speed_total_score = $_POST['speed_score'] + 0;
 
 			if($score > 5 || $score < 1 || $profession_total_score > 5 || $profession_total_score < 1 || $communicate_total_score > 5 || $communicate_total_score < 1|| $speed_total_score > 5 || $speed_total_score < 1 ){
-				$this->error_tips('评分只能1到5分');
+				$this->error_tips(L('_B_MY_ONLY1-5_'));
 			}
 			$inputimg=isset($_POST['inputimg']) ? $_POST['inputimg'] :'';
 			$pic_ids=array();
@@ -2855,7 +2855,7 @@ class MyAction extends BaseAction{
 						$merchant_workers_data['mer_id'] =  $now_order['mer_id'];
 						$result = $database_merchant_workers->where($_Map)->data($merchant_workers_data)->save();
 						if(!$result){
-							$this->error_tips('工作人员评分失败！');
+							$this->error_tips(L('_B_MY_WORKCOMMENTLOSE_'));
 						}
 
 						$database_appoint_comment = D('Appoint_comment');
@@ -2884,12 +2884,12 @@ class MyAction extends BaseAction{
 				}
 				//工作人员评分end
 				if($this->config['feedback_score_add']>0){
-				  	D('User')->add_extra_score($this->user_session['uid'],$this->config['feedback_score_add'],$this->config['appoint_alias_name'].'评论获得'.$this->config['feedback_score_add'].'个'.$this->config['score_name']);
-			  		D('Scroll_msg')->add_msg('feedback',$this->user_session['uid'],'用户'.$this->user_session['nickname'].'于'.date('Y-m-d H:i',$_SERVER['REQUEST_TIME']).'对'.$this->config['appoint_alias_name'].'评论获得'.$this->config['feedback_score_add'].'个'.$this->config['score_name']);
+				  	D('User')->add_extra_score($this->user_session['uid'],$this->config['feedback_score_add'],$this->config['appoint_alias_name'].L('_B_MY_COMMENTGET_').$this->config['feedback_score_add'].$this->config['score_name']);
+			  		D('Scroll_msg')->add_msg('feedback',$this->user_session['uid'],L('_B_MY_USER_').$this->user_session['nickname'].date('Y-m-d H:i',$_SERVER['REQUEST_TIME']).L('_B_MY_COMMENT_').$this->config['appoint_alias_name'].L('_B_MY_GET_').$this->config['feedback_score_add'].$this->config['score_name']);
 				}
-				$this->success_tips('评论成功', U('My/appoint_order', array('order_id' => $now_order['order_id'])));
+				$this->success_tips(L('_B_MY_COMMENTACCESS_'), U('My/appoint_order', array('order_id' => $now_order['order_id'])));
 			} else{
-				$this->error_tips('评论失败');
+				$this->error_tips(L('_B_MY_COMMENTLOSE_'));
 			}
 		}
 		$this->display();
@@ -2899,7 +2899,7 @@ class MyAction extends BaseAction{
 	/*全部订餐订单列表*/
 	public function meal_order_list(){
 		if(empty($this->user_session)){
-			$this->error_tips('请先进行登录！');
+			$this->error_tips(L('_B_MY_LOGINFIRST_'));
 		}
 		$status = isset($_GET['status']) ? intval($_GET['status']) : 0;
 		$where = " uid={$this->user_session['uid']} AND status<=3";//array('uid' => $this->user_session['uid'], 'status' => array('lt', 3));
@@ -2952,7 +2952,7 @@ class MyAction extends BaseAction{
 
 	public function ajax_meal_order_list(){
 		if(empty($this->user_session)){
-			$this->error_tips('请先进行登录！');
+			$this->error_tips(L('_B_MY_LOGINFIRST_'));
 		}
 		$status = isset($_GET['status']) ? intval($_GET['status']) : 0;
 		$where = " uid={$this->user_session['uid']} AND status<=3";//array('uid' => $this->user_session['uid'], 'status' => array('lt', 3));
@@ -3008,7 +3008,7 @@ class MyAction extends BaseAction{
 	/*全部订餐订单列表*/
 	public function shop_order_list(){
 		if(empty($this->user_session)){
-			$this->error_tips('请先进行登录！');
+			$this->error_tips(L('_B_MY_LOGINFIRST_'));
 		}
 		$status = isset($_GET['status']) ? intval($_GET['status']) : 0;
 		$where = "is_del=0 AND uid={$this->user_session['uid']}";//array('uid' => $this->user_session['uid'], 'status' => array('lt', 3));
@@ -3060,8 +3060,9 @@ class MyAction extends BaseAction{
 
 		foreach($list as $key=>$val){
 			$list[$key]['order_url'] = U('Shop/status', array('order_id' => $val['order_id']));
+			//modify garfunkel
+            $list[$key]['name'] = lang_substr($val['name'],C('DEFAULT_LANG'));
 		}
-
 		$this->assign('order_list', $list);
 
 		$this->display();
@@ -3071,7 +3072,7 @@ class MyAction extends BaseAction{
 
 	public function ajax_shop_order_list(){
 		if(empty($this->user_session)){
-			$this->error_tips('请先进行登录！');
+			$this->error_tips(L('_B_MY_LOGINFIRST_'));
 		}
 		$status = isset($_GET['status']) ? intval($_GET['status']) : 0;
 		$where = "is_del=0 AND uid={$this->user_session['uid']}";//array('uid' => $this->user_session['uid'], 'status' => array('lt', 3));
@@ -3405,7 +3406,7 @@ class MyAction extends BaseAction{
 					$this->error_tips($use_result['msg']);
 				}else{
 					D('Companypay')->add($data_companypay);
-					D('Scroll_msg')->add_msg('user_withdraw',$user_info['uid'],'用户'.$user_info['nickname'].'于'.date('Y-m-d H:i',$_SERVER['REQUEST_TIME']). '提现成功！');
+					D('Scroll_msg')->add_msg('user_withdraw',$user_info['uid'],L('_B_MY_USER_').$user_info['nickname'].'于'.date('Y-m-d H:i',$_SERVER['REQUEST_TIME']). '提现成功！');
 					$this->success_tips("申请成功，请等待审核！");
 				}
 			}
@@ -3441,7 +3442,7 @@ class MyAction extends BaseAction{
 				if($res = D('User')->add_money($this->user_session['uid'],$score_deducte,$this->config['score_name'].'兑换 '.$score_deducte.' 元到账户余额')){
 					D('User')->user_score($this->user_session['uid'],$score_count,''.$this->config['score_name'].'兑换余额，减扣'.$this->config['score_name'].' '.$score_count.' 个');
 					D('User')->add_score_recharge_money($this->user_session['uid'],$score_deducte,'保存'.$this->config['score_name'].'兑换记录 '.$score_deducte.' 元');
-					D('Scroll_msg')->add_msg('score_recharge',$this->user_session['uid'],'用户'.$this->user_session['nickname'].'于'.date('Y-m-d H:i',$_SERVER['REQUEST_TIME']).'使用'.$this->config['score_name'].'兑换余额');
+					D('Scroll_msg')->add_msg('score_recharge',$this->user_session['uid'],L('_B_MY_USER_').$this->user_session['nickname'].'于'.date('Y-m-d H:i',$_SERVER['REQUEST_TIME']).'使用'.$this->config['score_name'].'兑换余额');
 
 					$this->success_tips($this->config['score_name']."兑换余额成功！");
 				}else{
@@ -3660,7 +3661,7 @@ class MyAction extends BaseAction{
 							}else{
 								D('User')->add_money($now_spread['uid'],$now_spread['money'],'推广用户购买'.$this->config['group_alias_name'].'商品获得'.$money_name);
 
-								D('Scroll_msg')->add_msg('spread',$now_spread['uid'],'用户'.$now_spread['nickname'].'于'.date('Y-m-d H:i',$_SERVER['REQUEST_TIME']).'获得推广用户的消费佣金');
+								D('Scroll_msg')->add_msg('spread',$now_spread['uid'],L('_B_MY_USER_').$now_spread['nickname'].'于'.date('Y-m-d H:i',$_SERVER['REQUEST_TIME']).'获得推广用户的消费佣金');
 							}
 						}
 						$this->success('结算完成');
@@ -3687,7 +3688,7 @@ class MyAction extends BaseAction{
 								D('User')->add_score($now_spread['uid'],$now_spread['money'],'推广用户购买'.$this->config['shop_alias_name'].'商品获得'.$money_name);
 							}else{
 								D('User')->add_money($now_spread['uid'],$now_spread['money'],'推广用户购买'.$this->config['shop_alias_name'].'商品获得'.$money_name);
-								D('Scroll_msg')->add_msg('spread',$now_spread['uid'],'用户'.$now_spread['nickname'].'于'.date('Y-m-d H:i',$_SERVER['REQUEST_TIME']).'获得推广用户的消费佣金');
+								D('Scroll_msg')->add_msg('spread',$now_spread['uid'],L('_B_MY_USER_').$now_spread['nickname'].'于'.date('Y-m-d H:i',$_SERVER['REQUEST_TIME']).'获得推广用户的消费佣金');
 							}
 						}
 						$this->success('结算完成');
@@ -3714,7 +3715,7 @@ class MyAction extends BaseAction{
 							}else{
 
 								D('User')->add_money($now_spread['uid'],$now_spread['money'],'推广用户购买'.$alia_name[$now_spread['order_type']].'商品获得'.$money_name);
-								D('Scroll_msg')->add_msg('spread',$now_spread['uid'],'用户'.$now_spread['nickname'].'于'.date('Y-m-d H:i',$_SERVER['REQUEST_TIME']).'获得推广用户的消费佣金');
+								D('Scroll_msg')->add_msg('spread',$now_spread['uid'],L('_B_MY_USER_').$now_spread['nickname'].'于'.date('Y-m-d H:i',$_SERVER['REQUEST_TIME']).'获得推广用户的消费佣金');
 							}
 						}
 						$this->success('结算完成');
@@ -3735,7 +3736,7 @@ class MyAction extends BaseAction{
 								D('User')->add_score($now_spread['uid'],$now_spread['money'],'推广用户购买'.$this->config['meal_alias_name'].'商品获得'.$money_name);
 							}else{
 								D('User')->add_money($now_spread['uid'],$now_spread['money'],'推广用户购买'.$this->config['meal_alias_name'].'商品获得'.$money_name);
-								D('Scroll_msg')->add_msg('spread',$now_spread['uid'],'用户'.$now_spread['nickname'].'于'.date('Y-m-d H:i',$_SERVER['REQUEST_TIME']).'获得推广用户的消费佣金');
+								D('Scroll_msg')->add_msg('spread',$now_spread['uid'],L('_B_MY_USER_').$now_spread['nickname'].'于'.date('Y-m-d H:i',$_SERVER['REQUEST_TIME']).'获得推广用户的消费佣金');
 							}
 						}
 						$this->success('结算完成');
@@ -3776,9 +3777,9 @@ class MyAction extends BaseAction{
 		$uid=$_POST['uid'];
 		if(M('User')->where(array('uid'=>$uid))->setField('spread_change_uid',0)){
 
-			$this->AjaxReturn(array('error_code'=>0,'msg'=>'解绑成功'));
+			$this->AjaxReturn(array('error_code'=>0,'msg'=>L('_B_MY_UNTIEDACCESS_')));
 		}else{
-			$this->AjaxReturn(array('error_code'=>1,'msg'=>'解绑失败'));
+			$this->AjaxReturn(array('error_code'=>1,'msg'=>L('_B_MY_UNTIEDLOSE_')));
 		}
 		exit;
 	}
@@ -3817,11 +3818,11 @@ class MyAction extends BaseAction{
 	}
 	protected function getPayName($label){
 		$payName = array(
-				'weixin' => '微信支付',
+				'weixin' => L('_B_MY_WECHATPAIMENT_'),
 				'tenpay' => '财付通支付',
-				'yeepay' => '银行卡支付(易宝支付)',
-				'allinpay' => '银行卡支付(通联支付)',
-				'chinabank' => '银行卡支付(网银在线)',
+				'yeepay' => L('_B_MY_CARDPAIMENT_'),
+				'allinpay' => L('_B_MY_CARDPAIMENT_'),
+				'chinabank' => L('_B_MY_CARDPAIMENT_'),
 		);
 		return $payName[$label];
 	}
@@ -3856,7 +3857,7 @@ class MyAction extends BaseAction{
 		$now_store = D('Merchant_store')->field(true)->where(array('store_id' => $store_id))->find();
 
 		if($now_store['status']!=1){
-			$this->error_tips('店铺已关闭',U('Wap/Home/index'));
+			$this->error_tips(L('_B_MY_SHOPHAVECLOSED_'),U('Wap/Home/index'));
 		}
 		$this->assign('now_store', $now_store);
 		$now_store['discount_txt'] = unserialize($now_store['discount_txt']);
@@ -3875,14 +3876,14 @@ class MyAction extends BaseAction{
 		$now_order = M("Store_order")->where(array('order_id'=>$order_id))->find();
 
 		if(empty($now_order)){
-			$this->error('当前订单不存在');
+			$this->error(L('_B_MY_NOORDER_'));
 		}else if($now_order['paid'] == '1'){
-			$this->error('该订单已经付款');
+			$this->error(L('_B_MY_PAIDTHISORDER_'));
 		}else if($now_order['uid'] != $this->user_session['uid']){
 			if(M("Store_order")->where(array('order_id'=>$order_id))->data(array('uid'=>$this->user_session['uid']))->save()){
 				redirect(U('Pay/check',array('type'=>'store','order_id'=>$order_id)));
 			}else{
-				$this->error('数据保存失败');
+				$this->error(L('_B_MY_DATASAVELOSE_'));
 			}
 		}else{
 			redirect(U('Pay/check',array('type'=>'store','order_id'=>$order_id)));
@@ -3893,14 +3894,14 @@ class MyAction extends BaseAction{
 		$now_order = M("Shop_order")->where(array('order_id'=>$order_id))->find();
 
 		if(empty($now_order)){
-			$this->error('当前订单不存在');
+			$this->error(L('_B_MY_NOORDER_'));
 		}else if($now_order['paid'] == '1'){
-			$this->error('该订单已经付款');
+			$this->error(L('_B_MY_PAIDTHISORDER_'));
 		}else if($now_order['uid'] != $this->user_session['uid']){
 			if(M("Shop_order")->where(array('order_id'=>$order_id))->data(array('uid'=>$this->user_session['uid'], 'username' => $this->user_session['nickname'], 'userphone' => $this->user_session['phone']))->save()){
 				redirect(U('Pay/check',array('type'=>'shop','order_id'=>$order_id)));
 			}else{
-				$this->error('数据保存失败');
+				$this->error(L('_B_MY_DATASAVELOSE_'));
 			}
 		}else{
 			redirect(U('Pay/check',array('type'=>'shop','order_id'=>$order_id)));
@@ -3910,18 +3911,18 @@ class MyAction extends BaseAction{
 	public function house_order_before(){
 		$order_id  = $_GET['order_id'] + 0;
 		if(!$order_id){
-			$this->error('传递参数有误！');
+			$this->error(L('_B_MY_PASSWRONG_'));
 		}
 
 		$now_order = M("House_village_pay_order")->where(array('order_id'=>$order_id))->find();
-		$recharge_where['label'] = 'wap_village_'.$order_id;
+        $recharge_where['label'] = 'wap_village_'.$order_id;
 		$recharge_order_info = M('User_recharge_order')->where($recharge_where)->find();
 		$recharge_order_id = $recharge_order_info['order_id'];
 
 		if(empty($now_order)){
-			$this->error('当前订单不存在');
+			$this->error(L('_B_MY_NOORDER_'));
 		}else if($now_order['paid'] == '1'){
-			$this->error('该订单已经付款');
+			$this->error(L('_B_MY_PAIDTHISORDER_'));
 		}else if($now_order['uid'] != $this->user_session['uid']){
 			if(M("House_village_pay_order")->where(array('order_id'=>$order_id))->data(array('uid'=>$this->user_session['uid']))->save()){
 				if(!$recharge_order_info){
@@ -3934,7 +3935,7 @@ class MyAction extends BaseAction{
 				}
 				redirect(U('Pay/check',array('type'=>'recharge','order_id'=>$recharge_order_id)));
 			}else{
-				$this->error('数据保存失败');
+				$this->error(L('_B_MY_DATASAVELOSE_'));
 			}
 		}else{
 			if(!$recharge_order_info){
@@ -3964,7 +3965,7 @@ class MyAction extends BaseAction{
 		if (empty($now_store)) {
 			$this->error('店铺不存在');
 		}
-		if ($total_money <= 0) $this->error('支付的金额不能小于0');
+		if ($total_money <= 0) $this->error(L('_B_MY_PAYMONEYLESS0_'));
 		$minus_price_true = $price_true = 0;
 		$now_store['discount_txt'] = unserialize($now_store['discount_txt']);
 		$count = D('Store_order')->get_storeorder_count_today($store_id);
@@ -3999,7 +4000,7 @@ class MyAction extends BaseAction{
 		$data['mer_id'] = $now_store['mer_id'];
 		$data['uid'] = $this->user_session['uid'];
 		$data['orderid'] = date("YmdHis") . mt_rand(10000000, 99999999);
-		$data['name'] = '顾客现场自助支付-' . $now_store['name'];
+		$data['name'] = L('_B_MY_CUSTOMERDIYPAY_') . $now_store['name'];
 		$data['total_price'] = $total_money;
 		$data['discount_price'] = $minus_price_true;
 		$data['price'] = $price_true;
@@ -4008,9 +4009,9 @@ class MyAction extends BaseAction{
 		$data['extra_price'] =$extra_price ;
 		$order_id = D("Store_order")->add($data);
 		if ($order_id) {
-			$this->success('订单保存成功，现在去支付', U('Pay/check',array('order_id' => $order_id, 'type'=>'store')));
+			$this->success(L('_B_MY_ORDERSAVEPAYNOW_'), U('Pay/check',array('order_id' => $order_id, 'type'=>'store')));
 		} else {
-			$this->error('订单创建失败，稍后重试！');
+			$this->error(L('_B_MY_ORDERLOSETRYLATER_'));
 		}
 	}
 
@@ -4056,7 +4057,7 @@ class MyAction extends BaseAction{
 			$this->assign('cardid',$this->now_user['cardid']);
 			$this->display();
 		}else{
-			$this->error_tips('您没有绑定实体卡！请联系商家！');
+			$this->error_tips(L('_B_MY_YOUHAVENOCARD_'));
 		}
 
 	}
@@ -4117,7 +4118,7 @@ class MyAction extends BaseAction{
 		if ($now_order['score_used_count']!=='0') {
 			$order_info=unserialize($now_order['info']);
 			$order_name=$order_info[0]['name']."*".$order_info[0]['num'];
-			$result = D('User')->add_score($now_order['uid'],$now_order['score_used_count'],'退款 '.$order_name.$this->config['score_name'].'回滚');
+			$result = D('User')->add_score($now_order['uid'],$now_order['score_used_count'],L('_B_MY_REFUND_').$order_name.$this->config['score_name'].L('_B_MY_ROLLBACK_'));
 			$param = array('refund_time' => time());
 			if($result['error_code']){
 				$param['err_msg'] = $result['msg'];
@@ -4137,7 +4138,7 @@ class MyAction extends BaseAction{
 
 		//平台余额退款
 		if($now_order['balance_pay'] != '0.00'){
-			$add_result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],'退款 '.$now_order['order_name'].' 增加余额');
+			$add_result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],L('_B_MY_REFUND_').$now_order['order_name'].' 增加余额');
 
 			$param = array('refund_time' => time());
 			if($result['error_code']){
@@ -4167,7 +4168,7 @@ class MyAction extends BaseAction{
 		}
 		//商家会员卡余额退款
 		if($now_order['merchant_balance'] != '0.00'){
-			$result = D('Member_card')->add_card($now_order['uid'],$now_order['mer_id'],$now_order['merchant_balance'],'退款 '.$now_order['order_name'].' 增加余额');
+			$result = D('Member_card')->add_card($now_order['uid'],$now_order['mer_id'],$now_order['merchant_balance'],L('_B_MY_REFUND_').$now_order['order_name'].' 增加余额');
 
 			$param = array('refund_time' => time());
 			if($result['error_code']){
@@ -4190,7 +4191,7 @@ class MyAction extends BaseAction{
 			$data_meal_order['order_id'] = $now_order['order_id'];
 			$data_meal_order['status'] = 3;
 			D('Meal_order')->data($data_meal_order)->save();
-			$msg .= '取消订单成功';
+			$msg .= L('_B_MY_ORDERCANCELLEDACCESS_');
 		}
 
 		//退款时销量回滚
@@ -4218,14 +4219,14 @@ class MyAction extends BaseAction{
 			$sms_data['uid'] = $now_order['uid'];
 			$sms_data['mobile'] = $now_order['phone'] ? $now_order['phone'] : $my_user['phone'];
 			$sms_data['sendto'] = 'user';
-			$sms_data['content'] = '您在 ' . $mer_store['name'] . '店中下的订单(订单号：' . $orderid . '),在' . date('Y-m-d H:i:s') . '时已被您取消并退款，欢迎再次光临！';
+			$sms_data['content'] = L('_B_MY_YOUAT_') . $mer_store['name'] . L('_B_MY_SHOPORDERNUM_') . $orderid . L('_B_MY_AT_') . date('Y-m-d H:i:s') . L('_B_MY_TIMECANCELLED_');
 			Sms::sendSms($sms_data);
 		}
 		if ($this->config['sms_cancel_order'] == 2 || $this->config['sms_cancel_order'] == 3) {
 			$sms_data['uid'] = 0;
 			$sms_data['mobile'] = $mer_store['phone'];
 			$sms_data['sendto'] = 'merchant';
-			$sms_data['content'] = '顾客' . $now_order['name'] . '的预定订单(订单号：' . $orderid . '),在' . date('Y-m-d H:i:s') . '时已被客户取消并退款！';
+			$sms_data['content'] = L('_B_MY_CUSTOMER_') . $now_order['name'] . L('_B_MY_BOOKINGNUM_') . $orderid . L('_B_MY_AT_') . date('Y-m-d H:i:s') . L('_B_MY_TIMECANCELLED2_');
 			Sms::sendSms($sms_data);
 		}
 		return array('error' => 0, 'msg' => $msg);
@@ -4238,7 +4239,7 @@ class MyAction extends BaseAction{
 		$pay_class_name = ucfirst($_GET['pay_type']);
 		$import_result = import('@.ORG.pay.'.$pay_class_name);
 		if(empty($import_result)){
-			$this->error_tips('系统管理员暂未开启该支付方式，请更换其他的支付方式');
+			$this->error_tips(L('_B_MY_THISPAIMENTNOTOPEN_'));
 		}
 		$pay_class = new $pay_class_name('', '', $_GET['pay_type'], $pay_method[$_GET['pay_type']]['config'], '', 1);
 		$go_refund_param = $pay_class->return_refund();
@@ -4289,7 +4290,7 @@ class MyAction extends BaseAction{
 	//推广二维码
 	public function my_spread_qrcode(){
 		if(empty($this->now_user['openid'])){
-			$this->error_tips("你没有绑定微信，无法生成推广二维码");
+			$this->error_tips("_B_MY_YOUHAVENATBANDINGWECHAT_");
 		}else{
 			$this->assign('uid',$this->now_user['uid']);
 			$spread = M('User_spread_qrcode');
@@ -4337,7 +4338,7 @@ class MyAction extends BaseAction{
 		$n = preg_match('/(.*\.)?(\w+\.\w+)$/',$url_info['host'], $matches);
 
 		if(!strpos($_POST['url'], $matches[2])&&empty($spread_url)){
-			echo json_encode(array('error_code'=>1,'msg'=>'您输入的域名有误！'));exit;
+			echo json_encode(array('error_code'=>1,'msg'=>L('_B_MY_WRONGDOMAINNAME_')));exit;
 		}
 		$spread = M('User_spread_qrcode');
 		$qrcode_id =900000000+$_POST['uid'];
@@ -4412,7 +4413,7 @@ class MyAction extends BaseAction{
 		$value = $_POST['value'];
 		$res = M('User')->field('nickname,phone')->where(array($key=>array('like','%'.$value.'%')))->select();
 		if(empty($res)){
-			$this->AjaxReturn(array('error_code'=>1,'msg'=>'没有相关用户'));
+			$this->AjaxReturn(array('error_code'=>1,'msg'=>L('_B_MY_NOTHAVEUSER_')));
 		}else{
 			$this->AjaxReturn(array('error_code'=>0,'msg'=>$res));
 		}
@@ -4502,12 +4503,12 @@ class MyAction extends BaseAction{
 		if (!is_dir($upload_dir)) {
 			mkdir($upload_dir, 0777, true);
 		}
-		$newfilename = $mulu.'_' . date('YmdHis') . '.jpg';
+        $newfilename = $mulu.'_' . date('YmdHis') . '.jpg';
 		$save = file_put_contents($upload_dir . '/' . $newfilename, $imgdata);
 		if ($save) {
 			$this->dexit(array('error' => 0, 'data' => array('code' => 1, 'siteurl'=>$this->config['site_url'],'imgurl' =>$getupload_dir . '/' . $newfilename, 'msg' => '')));
 		} else {
-			$this->dexit(array('error' => 1, 'data' => array('code' => 0, 'url' => '', 'msg' => '保存失败！')));
+			$this->dexit(array('error' => 1, 'data' => array('code' => 0, 'url' => '', 'msg' => L('_B_MY_SAVELOSE_'))));
 		}
 	}
 
@@ -4531,7 +4532,7 @@ class MyAction extends BaseAction{
 		$uid = $_POST['uid'];
 		$order_id = $_POST['order_id'];
 		if(!$order_id||!uid){
-			exit(json_encode(array('error_code'=>1,'msg'=>'传递参数有误！')));
+			exit(json_encode(array('error_code'=>1,'msg'=>L('_B_MY_PASSWRONG_'))));
 		}
 		$num = D('Group_share_relation')->get_share_num($uid,$order_id);
 
@@ -4543,7 +4544,7 @@ class MyAction extends BaseAction{
 		$uid = $_POST['uid'];
 		$order_id = $_POST['order_id'];
 		if(!$order_id||!uid){
-			exit(json_encode(array('error_code'=>1,'msg'=>'传递参数有误！')));
+			exit(json_encode(array('error_code'=>1,'msg'=>L('_B_MY_PASSWRONG_'))));
 		}
 		$num = D('Group_start')->get_group_start_by_order_id($order_id);
 
@@ -4558,7 +4559,7 @@ class MyAction extends BaseAction{
 		$uids = explode(',',substr($_POST['uids'],0,-1));
 
 		if(!$order_id||!uid){
-			exit(json_encode(array('error_code'=>1,'msg'=>'传递参数有误！')));
+			exit(json_encode(array('error_code'=>1,'msg'=>L('_B_MY_PASSWRONG_'))));
 		}
 		if(empty($_POST['type'])){
 
@@ -4581,14 +4582,14 @@ class MyAction extends BaseAction{
 
 	public function change_is_share(){
 		if(!M('Group_order')->where(array('order_id'=>$_POST['order_id']))->save(array('is_share_group'=>2))){
-			exit(json_encode(array('status'=>0,'msg'=>'取消失败！')));
+			exit(json_encode(array('status'=>0,'msg'=>L('_B_MY_CANCELLLOSE1_'))));
 		}
 	}
 	public function ajax_wap_user_del(){
 		if(IS_AJAX){
 			$order_id = $_POST['order_id'] + 0;
 			if(empty($order_id)){
-				exit(json_encode(array('msg' => '传递参数有误！','status' => 0)));
+				exit(json_encode(array('msg' => L('_B_MY_PASSWRONG_'),'status' => 0)));
 			}
 
 			$database_appoint_order = D('Appoint_order');
@@ -4597,12 +4598,12 @@ class MyAction extends BaseAction{
 			$data['del_time']= time();
 			$result = $database_appoint_order->where($where)->data($data)->save();
 			if(!empty($result)){
-				exit(json_encode(array('status'=>1,'msg'=>'取消成功！')));
+				exit(json_encode(array('status'=>1,'msg'=>L('_B_MY_CANCELLACCESS1_'))));
 			}else{
-				exit(json_encode(array('status'=>0,'msg'=>'取消失败！')));
+				exit(json_encode(array('status'=>0,'msg'=>L('_B_MY_CANCELLLOSE1_'))));
 			}
 		}else{
-			$this->error_tips('访问页面错误！~~~');
+			$this->error_tips(L('_B_MY_NOPAGE_'));
 		}
 	}
 
@@ -4612,7 +4613,7 @@ class MyAction extends BaseAction{
 		if(IS_AJAX){
 			$order_id = $_POST['order_id'] + 0;
 			if(empty($order_id)){
-				exit(json_encode(array('msg' => '传递参数有误！','status' => 0)));
+				exit(json_encode(array('msg' => L('_B_MY_PASSWRONG_'),'status' => 0)));
 			}
 
 			if($this->config['appoint_rule']){
@@ -4656,16 +4657,16 @@ class MyAction extends BaseAction{
 
 						$result = D('Merchant_money_list')->add_money($now_order['mer_id'] , '用户预约 '.$now_appoint['appoint_name'].'*1 取消预约，定金' . $order_info['money'] . '记入收入',$order_info);
 						if(!$result['error_code']){
-							exit(json_encode(array('status' => 1,'msg' => '取消成功！')));
+							exit(json_encode(array('status' => 1,'msg' => L('_B_MY_CANCELLACCESS1_'))));
 						}else{
-							exit(json_encode(array('status' => 0,'msg' => '取消失败！')));
+							exit(json_encode(array('status' => 0,'msg' => L('_B_MY_CANCELLLOSE1_'))));
 						}
 					}
 				}
 			}else{
 				$order_id = $_POST['order_id'] + 0;
 				if(empty($order_id)){
-					exit(json_encode(array('msg' => '传递参数有误！','status' => 0)));
+					exit(json_encode(array('msg' => L('_B_MY_PASSWRONG_'),'status' => 0)));
 				}
 
 				$database_appoint_order = D('Appoint_order');
@@ -4674,13 +4675,13 @@ class MyAction extends BaseAction{
 				$data['del_time']= time();
 				$result = $database_appoint_order->where($where)->data($data)->save();
 				if(!empty($result)){
-					exit(json_encode(array('status'=>1,'msg'=>'取消成功！')));
+					exit(json_encode(array('status'=>1,'msg'=>L('_B_MY_CANCELLACCESS1_'))));
 				}else{
-					exit(json_encode(array('status'=>0,'msg'=>'取消失败！')));
+					exit(json_encode(array('status'=>0,'msg'=>L('_B_MY_CANCELLLOSE1_'))));
 				}
 			}
 			}}else{
-			$this->error_tips('访问页面错误！~~~');
+			$this->error_tips(L('_B_MY_NOPAGE_'));
 		}
 	}
 
@@ -4689,7 +4690,7 @@ class MyAction extends BaseAction{
 		if(IS_POST){
 			$order_id = $_POST['order_id'] + 0;
 			if(empty($order_id)){
-				exit(json_encode(array('msg' => '传递参数有误！','status' => 0)));
+				exit(json_encode(array('msg' => L('_B_MY_PASSWRONG_'),'status' => 0)));
 			}
 
 			if($this->config['appoint_rule']){
@@ -4708,37 +4709,37 @@ class MyAction extends BaseAction{
 				}
 
 				if($now_pay_money <= 0){
-					exit(json_encode(array('status' => 0,'msg' => '数据处理有误！')));
+					exit(json_encode(array('status' => 0,'msg' => L('_B_MY_DATADEALWRONG_'))));
 				}
 
 				$href = U('Pay/check', array('order_id' => $order_id, 'type' => 'balance-appoint'));
-				exit(json_encode(array('url' => $href,'status' => 1,'msg'=>'余额不足')));
+				exit(json_encode(array('url' => $href,'status' => 1,'msg'=>L('_B_MY_NOMONEY_'))));
 			}
 		}else{
-			$this->error_tips('访问页面错误！~~~');
+			$this->error_tips(L('_B_MY_NOPAGE_'));
 		}
 	}
 
 	public function shop_order_refund()
 	{
 		if (empty($this->user_session)) {
-			$this->error_tips('请先进行登录！');
+			$this->error_tips(L('_B_MY_LOGINFIRST_'));
 		}
 
 		$order_id = intval($_GET['order_id']);
 		$now_order = D("Shop_order")->get_order_detail(array('order_id' => $order_id, 'uid' => $this->user_session['uid']));
 		if (empty($now_order)) {
-			$this->error_tips('当前订单不存在');
+			$this->error_tips(L('_B_MY_NOORDER_'));
 		}
 		if (!($now_order['paid'] == 1 && ($now_order['status'] == 0 || $now_order['status'] == 5))) {
-			$this->error_tips('当前订单店员正在处理中，不能退款或取消');
+			$this->error_tips(L('_B_MY_ORDERDEALING_'));
 		}
 		if (empty($now_order['paid'])) {
-			$this->error_tips('当前订单还未付款！');
+			$this->error_tips(L('_B_MY_ORDERNOPAY_'));
 		}
 
 		if (!($now_order['paid'] == 1 && ($now_order['status'] == 0 || $now_order['status'] == 5))) {
-			$this->error_tips('订单必须是未消费状态才能取消！', U('Shop/status',array('order_id' => $now_order['order_id'])));
+			$this->error_tips(L('_B_MY_ORDERMUSTNOPAID_'), U('Shop/status',array('order_id' => $now_order['order_id'])));
 		} elseif ($now_order['status'] > 3 && !($now_order['paid'] == 1 && $now_order['status'] == 5)) {
 			$this->redirect(U('Shop/status',array('order_id' => $now_order['order_id'])));
 		}
@@ -4751,23 +4752,23 @@ class MyAction extends BaseAction{
 	public function shop_order_check_refund()
 	{
 		if (empty($this->user_session)) {
-			$this->error_tips('请先进行登录！');
+			$this->error_tips(L('_B_MY_LOGINFIRST_'));
 		}
 		$order_id = intval($_GET['order_id']);
 		$now_order = D("Shop_order")->get_order_detail(array('order_id' => $order_id, 'uid' => $this->user_session['uid']));
 		if(empty($now_order)){
-			$this->error_tips('当前订单不存在');
+			$this->error_tips(L('_B_MY_NOORDER_'));
 		}
 		$store_id = $now_order['store_id'];
 		$this->mer_id = $now_order['mer_id'];
 		if (!($now_order['paid'] == 1 && ($now_order['status'] == 0 || $now_order['status'] == 5))) {
-			$this->error_tips('当前订单店员正在处理中，不能退款或取消');
+			$this->error_tips(L('_B_MY_ORDERDEALING_'));
 		}
 		if (empty($now_order['paid'])) {
-			$this->error_tips('当前订单还未付款！');
+			$this->error_tips(L('_B_MY_ORDERNOPAY_'));
 		}
 		if (!($now_order['paid'] == 1 && ($now_order['status'] == 0 || $now_order['status'] == 5))) {
-			$this->error_tips('订单必须是未消费状态才能取消！', U('Shop/status',array('order_id' => $now_order['order_id'])));
+			$this->error_tips(L('_B_MY_ORDERMUSTNOPAID_'), U('Shop/status',array('order_id' => $now_order['order_id'])));
 		} elseif ($now_order['status'] > 3 && !($now_order['paid'] == 1 && $now_order['status'] == 5)) {
 			$this->redirect(U('Shop/status',array('order_id' => $now_order['order_id'])));
 		}
@@ -4785,10 +4786,10 @@ class MyAction extends BaseAction{
 				if ($return['error_code']) {
 					$this->error_tips($result['msg']);
 				} else {
-					$this->success_tips('您使用的是线下支付！订单状态已修改为已退款。',U('Shop/status',array('order_id' => $now_order['order_id'], 'store_id' => $store_id, 'mer_id' => $this->mer_id)));
+					$this->success_tips(L('_B_MY_USEOFFLINECHANGEREFUND_'),U('Shop/status',array('order_id' => $now_order['order_id'], 'store_id' => $store_id, 'mer_id' => $this->mer_id)));
 				}
 			} else {
-				$this->error_tips('取消订单失败！请重试。');
+				$this->error_tips(L('_B_MY_CANCELLLOSE_'));
 			}
 		} else {
 			if ($now_order['payment_money'] != '0.00') {
@@ -4818,16 +4819,16 @@ class MyAction extends BaseAction{
 				}
 
 				if (empty($pay_method)) {
-					$this->error_tips('系统管理员没开启任一一种支付方式！');
+					$this->error_tips(L('_B_MY_NOPAIMENTMETHOD_'));
 				}
 				if (empty($pay_method[$now_order['pay_type']])) {
-					$this->error_tips('您选择的支付方式不存在，请更新支付方式！');
+					$this->error_tips(L('_B_MY_CHANGEPAIMENT_'));
 				}
 
 				$pay_class_name = ucfirst($now_order['pay_type']);
 				$import_result = import('@.ORG.pay.'.$pay_class_name);
 				if(empty($import_result)){
-					$this->error_tips('系统管理员暂未开启该支付方式，请更换其他的支付方式');
+					$this->error_tips(L('_B_MY_THISPAIMENTNOTOPEN_'));
 				}
 				D('Shop_order')->where(array('order_id' => $now_order['order_id']))->save(array('is_refund' => 1));
 				$now_order['order_type'] = 'shop';
@@ -4871,10 +4872,10 @@ class MyAction extends BaseAction{
 				$data_shop_order['status'] = 4;
 				$data_shop_order['last_time'] = time();
 				D('Shop_order')->data($data_shop_order)->save();
-				$go_refund_param['msg'] .= ' 取消订单成功';
+				$go_refund_param['msg'] .= L('_B_MY_ORDERCANCELLEDACCESS_');
 			}
 			if(empty($go_refund_param['msg'])){
-				$go_refund_param['msg'] .= ' 取消订单成功';
+				$go_refund_param['msg'] .= L('_B_MY_ORDERCANCELLEDACCESS_');
 			}
 			D('Shop_order_log')->add_log(array('order_id' => $order_id, 'status' => 9));
 			$this->success_tips($go_refund_param['msg'], U('Shop/status',array('order_id' => $order_id, 'store_id' => $store_id, 'mer_id' => $this->mer_id)));
@@ -4910,7 +4911,7 @@ class MyAction extends BaseAction{
 
 		//如果使用了积分 2016-1-15
 		if ($now_order['score_used_count'] != 0) {
-			$result = D('User')->add_score($now_order['uid'],$now_order['score_used_count'],'退款 ' . $mer_store['name'] . '(' . $order_id . ') '.$this->config['score_name'].'回滚');
+			$result = D('User')->add_score($now_order['uid'],$now_order['score_used_count'],L('_B_MY_REFUND_') . $mer_store['name'] . '(' . $order_id . ') '.$this->config['score_name'].L('_B_MY_ROLLBACK_'));
 			$param = array('refund_time' => time());
 			if ($result['error_code']) {
 				$param['err_msg'] = $result['msg'];
@@ -4930,7 +4931,7 @@ class MyAction extends BaseAction{
 
 		//平台余额退款
 		if ($now_order['balance_pay'] != '0.00') {
-			$add_result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],'退款 ' . $mer_store['name'] . '(' . $order_id . ') 增加余额');
+			$add_result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],L('_B_MY_REFUND_') . $mer_store['name'] . '(' . $order_id . ') 增加余额');
 
 			$param = array('refund_time' => time());
 			if($result['error_code']){
@@ -4951,8 +4952,8 @@ class MyAction extends BaseAction{
 		}
 		//商家会员卡余额退款
 		if ($now_order['merchant_balance'] != '0.00'||$now_order['card_give_money']!='0.00') {
-			//$result = D('Member_card')->add_card($now_order['uid'],$now_order['mer_id'],$now_order['merchant_balance'],'退款 ' . $mer_store['name'] . '(' . $order_id . ')  增加余额');
-			$result = D('Card_new')->add_user_money($now_order['mer_id'],$now_order['uid'],$now_order['merchant_balance'],$now_order['card_give_money'],0,'退款 '.$now_order['order_name'].' 增加余额','退款 '.$now_order['order_name'].' 增加赠送余额');
+			//$result = D('Member_card')->add_card($now_order['uid'],$now_order['mer_id'],$now_order['merchant_balance'],L('_B_MY_REFUND_') . $mer_store['name'] . '(' . $order_id . ')  增加余额');
+			$result = D('Card_new')->add_user_money($now_order['mer_id'],$now_order['uid'],$now_order['merchant_balance'],$now_order['card_give_money'],0,L('_B_MY_REFUND_').$now_order['order_name'].' 增加余额',L('_B_MY_REFUND_').$now_order['order_name'].' 增加赠送余额');
 
 			$param = array('refund_time' => time());
 			if ($result['error_code']) {
@@ -4987,14 +4988,14 @@ class MyAction extends BaseAction{
 			$sms_data['uid'] = $now_order['uid'];
 			$sms_data['mobile'] = $now_order['userphone'] ? $now_order['userphone'] : $my_user['phone'];
 			$sms_data['sendto'] = 'user';
-			$sms_data['content'] = '您在 ' . $mer_store['name'] . '店中下的订单(订单号：' . $order_id . '),在' . date('Y-m-d H:i:s') . '时已被您取消并退款，欢迎再次光临！';
+			$sms_data['content'] = L('_B_MY_YOUAT_') . $mer_store['name'] . L('_B_MY_SHOPORDERNUM_') . $order_id . L('_B_MY_AT_') . date('Y-m-d H:i:s') . L('_B_MY_TIMECANCELLED_');
 			Sms::sendSms($sms_data);
 		}
 		if ($this->config['sms_shop_cancel_order'] == 2 || $this->config['sms_shop_cancel_order'] == 3) {
 			$sms_data['uid'] = 0;
 			$sms_data['mobile'] = $mer_store['phone'];
 			$sms_data['sendto'] = 'merchant';
-			$sms_data['content'] = '顾客' . $now_order['username'] . '的预定订单(订单号：' . $order_id . '),在' . date('Y-m-d H:i:s') . '时已被客户取消并退款！';
+			$sms_data['content'] = L('_B_MY_CUSTOMER_') . $now_order['username'] . L('_B_MY_BOOKINGNUM_') . $order_id . L('_B_MY_AT_') . date('Y-m-d H:i:s') . L('_B_MY_TIMECANCELLED2_');
 			Sms::sendSms($sms_data);
 		}
 
@@ -5021,22 +5022,22 @@ class MyAction extends BaseAction{
 	public function shop_feedback()
 	{
 		if(empty($this->user_session)){
-			$this->error_tips('请先进行登录！');
+			$this->error_tips(L('_B_MY_LOGINFIRST_'));
 		}
 		$now_order = D('Shop_order')->get_order_detail(array('uid' => $this->user_session['uid'], 'order_id' => intval($_GET['order_id'])));
 
 
 		if (empty($now_order)) {
-			$this->error_tips('当前订单不存在！');
+			$this->error_tips(L('_B_MY_NOORDER_！'));
 		}
 		if (empty($now_order['paid'])) {
-			$this->error_tips('当前订单未付款！无法评论');
+			$this->error_tips(L('_B_MY_NOTCONSUMENOCOMMENT_'));
 		}
 		if ($now_order['status'] < 2) {
 			$this->error_tips('当前订单未消费！无法评论');
 		}
 		if ($now_order['status'] == 3) {
-			$this->error_tips('当前订单已评论');
+			$this->error_tips(L('_B_MY_HAVECOMMENTD_'));
 		}
 
 		if (isset($now_order['info'])) {
@@ -5060,8 +5061,8 @@ class MyAction extends BaseAction{
 	public function add_comment()
 	{
 		if(empty($this->user_session)){
-			exit(json_encode(array('status' => 0, 'msg' => '请先进行登录！')));
-			$this->error_tips('请先进行登录！');
+			exit(json_encode(array('status' => 0, 'msg' => L('_B_MY_LOGINFIRST_'))));
+			$this->error_tips(L('_B_MY_LOGINFIRST_'));
 		}
 		$order_id = isset($_POST['order_id']) ? intval($_POST['order_id']) : 0;
 		$goods_ids = isset($_POST['goods_ids']) ? $_POST['goods_ids'] : 0;
@@ -5071,16 +5072,16 @@ class MyAction extends BaseAction{
 		$now_order = D('Shop_order')->get_order_detail(array('uid' => $this->user_session['uid'], 'order_id' => $order_id));
 
 		if (empty($now_order)) {
-			exit(json_encode(array('status' => 0, 'msg' => '当前订单不存在！')));
+			exit(json_encode(array('status' => 0, 'msg' => L('_B_MY_NOORDER_'))));
 		}
 		if (empty($now_order['paid'])) {
-			exit(json_encode(array('status' => 0, 'msg' => '当前订单未付款！无法评论')));
+			exit(json_encode(array('status' => 0, 'msg' => L('_B_MY_NOTCONSUMENOCOMMENT_'))));
 		}
 		if ($now_order['status'] < 2) {
 			exit(json_encode(array('status' => 0, 'msg' => '当前订单未消费！无法评论')));
 		}
 		if ($now_order['status'] == 3) {
-			exit(json_encode(array('status' => 0, 'msg' => '当前订单已评论')));
+			exit(json_encode(array('status' => 0, 'msg' => L('_B_MY_HAVECOMMENTD_'))));
 		}
 
 
@@ -5152,11 +5153,11 @@ class MyAction extends BaseAction{
 // 				$database_merchant_score->where(array('pigcms_id'=>$now_store_score['pigcms_id']))->data($data_store_score)->save();
 // 			}
 			if($this->config['feedback_score_add']>0){
-			  	D('User')->add_extra_score($this->user_session['uid'],$this->config['feedback_score_add'],$this->config['shop_alias_name'].'评论获得'.$this->config['feedback_score_add'].'个'.$this->config['score_name']);
-			  	D('Scroll_msg')->add_msg('feedback',$this->user_session['uid'],'用户'.$this->user_session['nickname'].'于'.date('Y-m-d H:i',$_SERVER['REQUEST_TIME']).'对'.$this->config['shop_alias_name'].'评论获得'.$this->config['feedback_score_add'].'个'.$this->config['score_name']);
+			  	D('User')->add_extra_score($this->user_session['uid'],$this->config['feedback_score_add'],$this->config['shop_alias_name'].L('_B_MY_COMMENTGET_').$this->config['feedback_score_add'].$this->config['score_name']);
+			  	D('Scroll_msg')->add_msg('feedback',$this->user_session['uid'],L('_B_MY_USER_').$this->user_session['nickname'].date('Y-m-d H:i',$_SERVER['REQUEST_TIME']).L('_B_MY_COMMENT_').$this->config['shop_alias_name'].L('_B_MY_GET_').$this->config['feedback_score_add'].$this->config['score_name']);
 			}
-			exit(json_encode(array('status' => 1, 'msg' => '评论成功',  'url' => U('Shop/status', array('order_id' => $now_order['order_id'], 'mer_id' => $now_order['mer_id'], 'store_id' => $now_order['store_id'])))));
-			$this->success_tips('评论成功', U('Shop/status', array('order_id' => $now_order['order_id'], 'mer_id' => $now_order['mer_id'], 'store_id' => $now_order['store_id'])));
+			exit(json_encode(array('status' => 1, 'msg' => L('_B_MY_COMMENTACCESS_'),  'url' => U('Shop/status', array('order_id' => $now_order['order_id'], 'mer_id' => $now_order['mer_id'], 'store_id' => $now_order['store_id'])))));
+			$this->success_tips(L('_B_MY_COMMENTACCESS_'), U('Shop/status', array('order_id' => $now_order['order_id'], 'mer_id' => $now_order['mer_id'], 'store_id' => $now_order['store_id'])));
 		}
 	}
 
@@ -5174,7 +5175,7 @@ class MyAction extends BaseAction{
 	public function foodshop_order_list()
 	{
 		if(empty($this->user_session)){
-			$this->error_tips('请先进行登录！');
+			$this->error_tips(L('_B_MY_LOGINFIRST_'));
 		}
 		$status = isset($_GET['status']) ? intval($_GET['status']) : -1;
 
@@ -5226,21 +5227,21 @@ class MyAction extends BaseAction{
 		$now_order = $database_shop_order->get_order_by_id($this->user_session['uid'],intval($_GET['order_id']));
 
 		if(empty($now_order)){
-			exit(json_encode(array('status'=>0,'msg'=>'当前订单不存在！')));
+			exit(json_encode(array('status'=>0,'msg'=>L('_B_MY_NOORDER_'))));
 		}
 
 		$order_condition['order_id'] = $now_order['order_id'];
 		$data['is_del'] = 1;
 		if($database_shop_order->where($order_condition)->data($data)->save()){
-			exit(json_encode(array('status'=>1,'msg'=>'删除成功！')));
+			exit(json_encode(array('status'=>1,'msg'=>L('_B_MY_DELACCESS_'))));
 		}else{
-			exit(json_encode(array('status'=>0,'msg'=>'删除失败！')));
+			exit(json_encode(array('status'=>0,'msg'=>L('_B_MY_DELLOSE_'))));
 		}
 	}
 	public function ajax_foodshop_order_list()
 	{
 		if(empty($this->user_session)){
-			$this->error_tips('请先进行登录！');
+			$this->error_tips(L('_B_MY_LOGINFIRST_'));
 		}
 		$status = isset($_GET['status']) ? intval($_GET['status']) : -1;
 
@@ -5296,20 +5297,20 @@ class MyAction extends BaseAction{
 	public function foodshop_feedback()
 	{
 		if(empty($this->user_session)){
-			$this->error_tips('请先进行登录！');
+			$this->error_tips(L('_B_MY_LOGINFIRST_'));
 		}
 		$now_order = D('Foodshop_order')->get_order_detail(array('uid' => $this->user_session['uid'], 'order_id' => intval($_GET['order_id'])));
 
 
 		if (empty($now_order)) {
-			$this->error_tips('当前订单不存在！');
+			$this->error_tips(L('_B_MY_NOORDER_'));
 		}
 
 		if ($now_order['status'] < 3) {
 			$this->error_tips('当前订单未消费！无法评论');
 		}
 		if ($now_order['status'] == 4) {
-			$this->error_tips('当前订单已评论');
+			$this->error_tips(L('_B_MY_HAVECOMMENTD_'));
 		}
 
 		if (isset($now_order['info'])) {
@@ -5331,27 +5332,27 @@ class MyAction extends BaseAction{
 	public function foodshop_comment()
 	{
 		if(empty($this->user_session)){
-			exit(json_encode(array('status' => 0, 'msg' => '请先进行登录！')));
-			$this->error_tips('请先进行登录！');
+			exit(json_encode(array('status' => 0, 'msg' => L('_B_MY_LOGINFIRST_'))));
+			$this->error_tips(L('_B_MY_LOGINFIRST_'));
 		}
 		$order_id = isset($_POST['order_id']) ? intval($_POST['order_id']) : 0;
 		$goods_ids = isset($_POST['goods_ids']) ? $_POST['goods_ids'] : 0;
 		$score = isset($_POST['whole']) ? $_POST['whole'] : 5;
 		$comment = isset($_POST['textAre']) ? htmlspecialchars($_POST['textAre']) : 0;
 		if (empty($comment)) {
-			exit(json_encode(array('status' => 0, 'msg' => '评论内容不能为空！')));
+			exit(json_encode(array('status' => 0, 'msg' => L('_B_MY_COMMENTNOTHING_'))));
 		}
 		$now_order = D('Foodshop_order')->get_order_detail(array('uid' => $this->user_session['uid'], 'order_id' => $order_id));
 
 		if (empty($now_order)) {
-			exit(json_encode(array('status' => 0, 'msg' => '当前订单不存在！')));
+			exit(json_encode(array('status' => 0, 'msg' => L('_B_MY_NOORDER_'))));
 		}
 
 		if ($now_order['status'] < 3) {
 			exit(json_encode(array('status' => 0, 'msg' => '当前订单未消费！无法评论')));
 		}
 		if ($now_order['status'] == 4) {
-			exit(json_encode(array('status' => 0, 'msg' => '当前订单已评论')));
+			exit(json_encode(array('status' => 0, 'msg' => L('_B_MY_HAVECOMMENTD_'))));
 		}
 
 
@@ -5395,10 +5396,10 @@ class MyAction extends BaseAction{
 				}
 			}
 			if($this->config['feedback_score_add']>0){
-			  	D('User')->add_extra_score($this->user_session['uid'],$this->config['feedback_score_add'],$this->config['meal_alias_name'].'评论获得'.$this->config['feedback_score_add'].'个'.$this->config['score_name']);
-			  	D('Scroll_msg')->add_msg('feedback',$this->user_session['uid'],'用户'.$this->user_session['nickname'].'于'.date('Y-m-d H:i',$_SERVER['REQUEST_TIME']).'对'.$this->config['meal_alias_name'].'评论获得'.$this->config['feedback_score_add'].'个'.$this->config['score_name']);
+			  	D('User')->add_extra_score($this->user_session['uid'],$this->config['feedback_score_add'],$this->config['meal_alias_name'].L('_B_MY_COMMENTGET_').$this->config['feedback_score_add'].$this->config['score_name']);
+			  	D('Scroll_msg')->add_msg('feedback',$this->user_session['uid'],L('_B_MY_USER_').$this->user_session['nickname'].date('Y-m-d H:i',$_SERVER['REQUEST_TIME']).L('_B_MY_COMMENT_').$this->config['meal_alias_name'].L('_B_MY_GET_').$this->config['feedback_score_add'].$this->config['score_name']);
 			}
-			exit(json_encode(array('status' => 1, 'msg' => '评论成功',  'url' => U('Foodshop/order_detail', array('order_id' => $now_order['order_id'], 'mer_id' => $now_order['mer_id'], 'store_id' => $now_order['store_id'])))));
+			exit(json_encode(array('status' => 1, 'msg' => L('_B_MY_COMMENTACCESS_'),  'url' => U('Foodshop/order_detail', array('order_id' => $now_order['order_id'], 'mer_id' => $now_order['mer_id'], 'store_id' => $now_order['store_id'])))));
 		}
 	}
 	# 公共接口
@@ -5531,17 +5532,17 @@ class MyAction extends BaseAction{
 			$href = C('config.site_url').'/wap.php?c=My&a=group_order_list';
 			$model->sendTempMsg('TM00017', array('href' => $href,
 					'wecha_id' => $now_user['openid'],
-					'first' => $this->config['group_alias_name'].'快递发货通知',
+					'first' => $this->config['group_alias_name'].L('_B_MY_KUAIDISEND_'),
 					'OrderSn' => $now_order['real_orderid'],
-					'OrderStatus' =>$this->staff_session['name'].'已为您发货',
-					'remark' =>'快递号：'.$now_order['order_id'].'('.$express_nmae['name'].'),请尽快确认'));
+					'OrderStatus' =>$this->staff_session['name'].L('_B_MY_HAVESENDFORYOU_'),
+					'remark' =>'快递号：'.$now_order['order_id'].'('.$express_nmae['name'].L('_B_MY_CONFIRMSOON_')));
 
 			D('Group')->group_notice($now_order,1);
 
-			$this->success_tips('订单状态修改成功',U('My/group_order',array('order_id'=>$order_id)));
+			$this->success_tips(L('_B_MY_ORDERCHAGEACCESS1_'),U('My/group_order',array('order_id'=>$order_id)));
 		}else{
 
-			$this->error_tips('订单状态修改失败',U('My/group_order',array('order_id'=>$order_id)));
+			$this->error_tips(L('_B_MY_ORDERCHANGELOSE1_'),U('My/group_order',array('order_id'=>$order_id)));
 		}
 
 	}

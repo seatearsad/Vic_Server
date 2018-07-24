@@ -3,7 +3,7 @@ $(function(){
 		var phone = $.trim($('#reg_phone').val());
 		$('#reg_phone').val(phone);
 		if(phone.length == 0){
-			$('#tips').html('请输入手机号码。').show();
+			$('#tips').html(getLangStr('_B_LOGIN_ENTERPHONENO_')).show();
 			return false;
 		}
 		//if(!/^[0-9]{10}$/.test(phone)){
@@ -24,7 +24,7 @@ $(function(){
 		}
 
 		if(typeof(password)!='undefined'&&password.length < 6){
-			$('#tips').html('请输入6位以上的密码。').show();
+			$('#tips').html(getLangStr('_B_D_LOGIN_6KEYWORD_')).show();
 			return false;
 		}
 		
@@ -40,8 +40,8 @@ $(function(){
 				window.location.href = $('#reg-form').attr('location_url');
 			}else{
 				if(result.info=='phone_exist'){
-					$('#tips').html("手机已存在").show();
-					if(confirm("你确定要绑定已存在的账号吗？")){
+					$('#tips').html("pigcms{:L('_B_LOGIN_PHONENOHAVE_')").show();
+					if(confirm("{pigcms{:L('_IS_CONFIRM_BIND_')}")){
 						$.post($('#reg-form').attr('action'),{phone:phone,password:password,sms_code:sms_code,bind_exist:1},function(res){
 							$('#tips').html(res.info).show();
 							if(res.status=='1'){
@@ -58,15 +58,15 @@ $(function(){
 	});
 	
 	$('#reg_changeWord').click(function(){
-		if($(this).html() == '显示明文'){
+		if($(this).html() == getLangStr('_B_D_LOGIN_DISPLAY_')){
 			$('#reg_txt_password').val($('#reg_pwd_password').val()).show();
 			$('#reg_pwd_password').hide();
-			$(this).html('显示密文');
+			$(this).html(getLangStr('_B_D_LOGIN_DISPLAY_PASS_'));
 			$('#reg_password_type').val(1);
 		}else{
 			$('#reg_pwd_password').val($('#reg_txt_password').val()).show();
 			$('#reg_txt_password').hide();
-			$(this).html('显示明文');
+			$(this).html(getLangStr('_B_D_LOGIN_DISPLAY_'));
 			$('#reg_password_type').val(0);
 		}
 	});

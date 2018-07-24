@@ -27,14 +27,14 @@ class UserModel extends Model
 			if($type){
 				return array('error_code' => true, 'msg' => '20042001');
 			}else{
-				return array('error_code' => true, 'msg' => '手机号不能为空');
+				return array('error_code' => true, 'msg' => L('_B_LOGIN_ENTERPHONENO_'));
 			}
 		}
 		if (empty($pwd)){
 			if($type){
 				return array('error_code' => true, 'msg' => '20042002');
 			}else{
-				return array('error_code' => true, 'msg' => '密码不能为空');
+				return array('error_code' => true, 'msg' => L('_B_LOGIN_ENTERKEY_'));
 			}
 		}
 		$now_user = $this->field(true)->where(array('phone' => $phone))->find();
@@ -43,7 +43,7 @@ class UserModel extends Model
 				if($type){
 					return array('error_code' => true, 'msg' => '20120007');
 				}else{
-					return array('error_code' => true, 'msg' => '密码不正确!');
+					return array('error_code' => true, 'msg' => L('_PHONENUM_OR_PASSWORD_ERROR_'));
 				}
 			}
 			if(empty($now_user['status'])){
@@ -110,7 +110,7 @@ class UserModel extends Model
 			if($type){
 				return array('error_code' => true, 'msg' => '20120009');
 			}else{
-				return array('error_code' => true, 'msg' => '手机号不存在!');
+				return array('error_code' => true, 'msg' => L('_PHONENUM_OR_PASSWORD_ERROR_'));
 			}
 		}
 	}
@@ -192,7 +192,7 @@ class UserModel extends Model
 			}
 			return array('error_code' =>false,'msg' =>'OK','uid'=>$uid);
 		}else{
-			return array('error_code' => true, 'msg' => '注册失败！请重试。');
+			return array('error_code' => true, 'msg' => L('_B_LOGIN_REGISTLOSERE_'));
 		}
 	}
 
@@ -247,17 +247,17 @@ class UserModel extends Model
 			}
 			return array('error_code' =>false,'msg' =>array('uid'=>$uid));
 		}else{
-			return array('error_code' => true, 'msg' => '注册失败！请重试。');
+			return array('error_code' => true, 'msg' => L('_B_LOGIN_REGISTLOSERE_'));
 		}
 	}
 
 	/*帐号密码注册*/
 	public function checkreg($phone,$pwd){
 		if (empty($phone)) {
-			return array('error_code' => true, 'msg' => '手机号不能为空');
+			return array('error_code' => true, 'msg' => L('_B_LOGIN_ENTERPHONENO_'));
 		}
 		if (empty($pwd)) {
-			return array('error_code' => true, 'msg' => '密码不能为空');
+			return array('error_code' => true, 'msg' => L('_B_LOGIN_ENTERKEY_'));
 		}
 
 		if(is_numeric($phone) == false){
@@ -266,7 +266,7 @@ class UserModel extends Model
 
 		$condition_user['phone'] = $phone;
 		if($this->field('`uid`')->where($condition_user)->find()){
-			return array('error_code' => true, 'msg' => '手机号已存在');
+			return array('error_code' => true, 'msg' => L('_B_LOGIN_PHONENOHAVE_'));
 		}
 
 		$data_user['phone'] = $phone;
@@ -327,14 +327,14 @@ class UserModel extends Model
 				return array('error_code' =>false,'msg' =>'OK');
 			}
 		}else{
-			return array('error_code' => true, 'msg' => '注册失败！请重试。');
+			return array('error_code' => true, 'msg' => L('_B_LOGIN_REGISTLOSERE_'));
 		}
 	}
 
 	public function check_phone($phone){
 		$condition_user['phone'] = $phone;
 		if($this->field('`uid`')->where($condition_user)->find()){
-			return array('error_code' => true, 'msg' => '手机号已存在');
+			return array('error_code' => true, 'msg' => L('_B_LOGIN_PHONENOHAVE_'));
 		}
 	}
 	/*修改用户信息*/

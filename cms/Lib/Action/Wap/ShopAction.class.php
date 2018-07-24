@@ -2013,7 +2013,15 @@ class ShopAction extends BaseAction{
 		}
 
 		if ($return['error_code']) $this->error_tips($return['msg']);
-
+        //add garfunkel
+		if(isset($return['store']['name'])){
+		    $return['store']['name'] = lang_substr($return['store']['name'],C('DEFAULT_LANG'));
+        }
+        foreach ($return['goods'] as $k=>$v){
+		    $return['goods'][$k]['name'] = lang_substr($v['name'],C('DEFAULT_LANG'));
+		    $return['goods'][$k]['unit'] = lang_substr($v['unit'],C('DEFAULT_LANG'));
+        }
+        //
 		$village_id = isset($_GET['village_id']) ? intval($_GET['village_id']) : 0;
 		$this->assign('village_id', $village_id);
 		$is_own = 0;
@@ -2728,6 +2736,8 @@ class ShopAction extends BaseAction{
 		$order_id = isset($_GET['order_id']) ? intval($_GET['order_id']) : 0;
 		if ($order = D('Shop_order')->get_order_detail(array('order_id' => $order_id, 'uid' => $this->user_session['uid']))) {
 			$storeName = D("Merchant_store")->field('`name`, `phone`')->where(array('store_id' => $order['store_id']))->find();
+			//modify garfunkel
+            $storeName['name'] = lang_substr($storeName['name'],C('DEFAULT_LANG'));
 			$this->assign('storeName', $storeName);
 			cookie('shop_cart_' . $order['store_id'], null);
 			for($i=0;$i<20;$i++){
@@ -2923,6 +2933,8 @@ class ShopAction extends BaseAction{
         if ($order) {
             $store = D('Merchant_store')->field(true)->where(array('store_id' => $order['store_id']))->find();
             $store_image_class = new store_image();
+            //modify garfunkel
+            $store['name'] = lang_substr($store['name'],C('DEFAULT_LANG'));
             $images = $store_image_class->get_allImage_by_path($store['pic_info']);
             $store['image'] = isset($images[0]) ? $images[0] : '';
             cookie('shop_cart_' . $store['store_id'], null);
@@ -2996,7 +3008,8 @@ class ShopAction extends BaseAction{
             foreach($order['info'] as $v) {
                 $discount_price = floatval($v['discount_price']) > 0 ? floatval($v['discount_price']) : floatval($v['price']);
                 $arr['info'][] = array(
-                    'name' => $v['name'],
+                    //modify garfunkel
+                    'name' => lang_substr($v['name'],C('DEFAULT_LANG')),
                     'discount_type' => $v['discount_type'],
                     'price' => strval(floatval($v['price'])),
                     'discount_price' => strval($discount_price),

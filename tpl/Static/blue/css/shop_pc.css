@@ -272,7 +272,7 @@ body{ padding:0px; margin:0px auto; font-size:14px; background-color: #fff; }
 .details .parent .trans{ position: absolute; left: 103px; top: -19px; font-size: 12px;  padding-top: 141px; background: url(../images/tmtt_03.png); display: none; width: 90%; z-index: 999   }
 .details .parent .trans_n{ background: #fff; padding: 13px 12px;  line-height: 16px; box-shadow: 0px 2px 15px 2px #f2f3f5;}
 .details .parent .trans_n li{ padding: 7px 0; }
-.details .parent .trans span{ display: inline-block; width: 62px; color: #434343; }
+.details .parent .trans span{ display: inline-block; width: 140px; color: #434343; }
 .details .parent .trans .p62{ padding-left: 62px; color: #434343;  }
 .details .parent:hover .trans{ display: block; }
 
@@ -372,9 +372,9 @@ body{ padding:0px; margin:0px auto; font-size:14px; background-color: #fff; }
 /*购物车*/
 .car { position: fixed; bottom:0px; width: 322px; left: 50%; margin-left: 334px; box-shadow: 0px 0px 10px 5px #e6e6e6; z-index: 1; }
 .car .carend{ line-height: 45px; }
-.car .carleft{ width: 222px; background: #2c2c2c; height: 45px; position: relative; }
+.car .carleft{ width: 160px; background: #2c2c2c; height: 45px; position: relative; }
 .car .carleft span.mark{ width: 24px; height: 22px; display: block; background: url(../images/txo_11.png) center no-repeat;  position: absolute; top: 12px; left: 12px;}
-.car .tencer{ text-align: center; background: #e4e4e4; color: #333333; font-size: 14px; font-weight: bold; padding-left: 187px; }
+.car .tencer{ text-align: center; background: #e4e4e4; color: #333333; font-size: 14px; font-weight: bold; padding-left: 87px; }
 .car .carleft .common{ font-size: 16px; color: #fff; position: absolute; left: 70px; display: block; }
 .car .carleft .common .fl{ line-height: 43px; }
 .car .carleft .common .fr{ display: block;  font-size: 18px; }

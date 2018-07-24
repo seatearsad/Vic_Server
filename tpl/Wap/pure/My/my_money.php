@@ -3,7 +3,7 @@
 <html lang="zh-CN">
 	<head>
 		<meta charset="utf-8" />
-		<title>我的钱包</title>
+		<title>{pigcms{:L('_MY_WALLET_')}</title>
 		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width"/>
 		<meta name="apple-mobile-web-app-capable" content="yes"/>
 		<meta name='apple-touch-fullscreen' content='yes'/>
@@ -83,17 +83,17 @@
 		</div>
 		<div style="text-align:center;padding-top:40px;color:#fff;">
 			<div style="font-size:24px;"><span style="font-size:16px;"></span>{pigcms{$now_user.now_money_two}<if condition="$now_user.frozen_money gt 0 AND $config.open_frozen_money eq 1 AND $now_user.free_time gt $_SERVER['REQUEST_TIME']"><span class="frozen_money" style="font-size:12px;margin-left:5px;">(冻结{pigcms{$now_user.frozen_money|floatval}元)<i class="reason" style="margin-left:5px;"></i></span></if></div>
-			<div style="text-align:center;">我的余额</div>
+			<div style="text-align:center;">{pigcms{:L('_MY_BALANCE_')}</div>
 			
 		</div>
 		<div id="recharge" style="position:absolute;top:9.9em;left:4.5em;width:30%;height:35px;">
 			<img class="wh25" style="margin-right:10px;float:left;" src="{pigcms{$static_path}images/new_my/recharge.png" />
-			<div style="color:#fff;float:left;margin-top:3px;">充值</div>
+			<div style="color:#fff;float:left;margin-top:3px;">{pigcms{:L('_RECHARGE_TXT_')}</div>
 		</div>
 		<if condition="$config.company_pay_open eq 1">
 		<div id="withdraw" style="position:absolute;top:9.9em;right:1.5em;width:30%;height:35px;">
 			<img class="wh25" style="margin-right:10px;float:left;" src="{pigcms{$static_path}images/new_my/withdrawals.png" />
-			<div style="color:#fff;float:left;margin-top:3px;">提现</div>
+			<div style="color:#fff;float:left;margin-top:3px;">{pigcms{:L('_PUT_FORWARD_')}</div>
 		</div>
 		</if>
 		<!--<img style="position:absolute;top:9.8em;right:6.5em;width:25px;height:25px;margin-right:5px;" src="{pigcms{$static_path}images/new_my/withdrawals.png" />
@@ -102,7 +102,7 @@
 	<dl id="transaction" class="title">
 		<div class="pb10">
 			<img class="titleImg" src="{pigcms{$static_path}images/new_my/transaction.png" />
-			<div style="padding-top:12px;width:95%;">余额记录</div>
+			<div style="padding-top:12px;width:95%;">{pigcms{:L('_BALANCE_RECORD_')}</div>
 			<img class="title_img" src="{pigcms{$static_path}images/new_my/tubiao2_11.png"></img>
 		</div>
 		<div style="clear:both;"></div>
@@ -112,7 +112,7 @@
 		<div class="pb10">
 			<img class="titleImg" src="{pigcms{$static_path}images/new_my/integral.png" />
 			
-			<div style="padding-top:12px;width:95%;">{pigcms{$config.score_name}记录</div>
+			<div style="padding-top:12px;width:95%;">{pigcms{:L('_TICKET_RECORD_')}</div>
 			<img class="title_img" src="{pigcms{$static_path}images/new_my/tubiao2_11.png"></img>
 		</div>
 		<div style="clear:both;"></div>
@@ -120,7 +120,7 @@
 		<dl id="levelUpdate" class="title" <php>if($config['level_onoff']==0){ echo 'style="display:none"'; }</php>>
 			<div class="pb10">
 				<img class="titleImg" src="{pigcms{$static_path}images/new_my/grade.png" />
-				<div style="padding-top:12px;width:80%;">等级管理
+				<div style="padding-top:12px;width:80%;">{pigcms{:L('_LEVEL_MANAGE_')}
 					<if condition="$now_user.level eq 0">
 					<div style="position:absolute;color:#fff;background-color:#e5e5e5;padding:0px 8px;right:1.8em;top:301px;border-radius:10px;">VIP<span style="font-size:17px;">{pigcms{$now_user.level}</span></div>
 					<else/>

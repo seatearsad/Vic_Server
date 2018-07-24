@@ -576,7 +576,7 @@ function lang_substr($str,$lang){
 //Garfunkel Add
 //替换字符串中的%s字符
 function replace_lang_str($str,$replace){
-    $n_str = str_repeat('%s',$replace,$str);
+    $n_str = str_replace("%s",$replace,$str);
 
     return $n_str;
 }

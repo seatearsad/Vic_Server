@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8"/>
-	<title>收货地址管理</title>
+	<title>{pigcms{:L('_B_PURE_MY_58_')}</title>
     <meta name="viewport" content="initial-scale=1, width=device-width, maximum-scale=1, user-scalable=no">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name='apple-touch-fullscreen' content='yes'>
@@ -16,7 +16,7 @@
 	        -webkit-box-flex: 1;
 	    }
 	    .kv-line h6 {
-	        width: 4em;
+	        width: 10em;
 	    }
 	    .btn-wrapper {
 	        margin: .2rem .2rem;
@@ -74,7 +74,7 @@
 <body id="index">
         <div id="tips" class="tips"></div>
         <div class="wrapper btn-wrapper">
-		    <a class="address-add btn btn-larger btn-warning btn-block" href="{pigcms{:U('My/edit_adress',$_GET)}">添加新地址</a>
+		    <a class="address-add btn btn-larger btn-warning btn-block" href="{pigcms{:U('My/edit_adress',$_GET)}">{pigcms{:L('_ADD_NEW_ADDRESS_')}</a>
 		</div>
 		<volist name="adress_list" id="vo">
 			<dl class="list <if condition="$vo['default']">active</if>">
@@ -85,20 +85,20 @@
 			         </if>
 			            <div class="address-container">
 			                <div class="kv-line">
-			                    <h6>姓名：</h6><p>{pigcms{$vo.name}</p>
+			                    <h6>{pigcms{:L('_B_PURE_MY_06_')}：</h6><p>{pigcms{$vo.name}</p>
 			                </div>
 			                <div class="kv-line">
-			                    <h6>手机：</h6><p>{pigcms{$vo.phone}</p>
+			                    <h6>{pigcms{:L('_B_D_LOGIN_TEL_')}：</h6><p>{pigcms{$vo.phone}</p>
 			                </div>
 			                <div class="kv-line">
-			                    <h6>省市：</h6><p>{pigcms{$vo.province_txt} {pigcms{$vo.city_txt}</p>
+			                    <h6>{pigcms{:L('_B_PURE_MY_12_')} {pigcms{:L('_B_PURE_MY_13_')}：</h6><p>{pigcms{$vo.province_txt} {pigcms{$vo.city_txt}</p>
 			                </div>
 			                <div class="kv-line">
-			                    <h6>地址：</h6><p>{pigcms{$vo.area_txt} {pigcms{$vo.adress} {pigcms{$vo.detail}</p>
+			                    <h6>{pigcms{:L('_B_PURE_MY_19_')}：</h6><p>{pigcms{$vo.area_txt} {pigcms{$vo.adress} {pigcms{$vo.detail}</p>
 			                </div>
 							<if condition="$vo['zipcode']">
 								<div class="kv-line">
-									<h6>邮编：</h6><p>{pigcms{$vo.zipcode}</p>
+									<h6>{pigcms{:L('_B_PURE_MY_22_')}：</h6><p>{pigcms{$vo.zipcode}</p>
 								</div>
 							</if>
 			            </div>
@@ -108,7 +108,7 @@
 		        </dd>
 		        <dd>
 	                <ul class="confirmlist">
-	                    <li><a class="react" href="{pigcms{$vo.edit_url}">编辑</a></li><li><a class="react mj-del" href="{pigcms{$vo.del_url}">删除</a></li>
+	                    <li><a class="react" href="{pigcms{$vo.edit_url}">{pigcms{:L('_EDIT_TXT_')}</a></li><li><a class="react mj-del" href="{pigcms{$vo.del_url}">{pigcms{:L('_B_PURE_MY_27_')}</a></li>
 	                </ul>
 		        </dd>
 		    </dl>
@@ -120,7 +120,7 @@
 			$(function(){
 				$('.mj-del').click(function(){
 					var now_dom = $(this);
-					if(confirm('您确定要删除此地址吗？')){
+					if(confirm("{pigcms{:L('_B_PURE_MY_84_')}")){
 						$.post(now_dom.attr('href'),function(result){
 							if(result.status == '1'){
 								now_dom.closest('dl').remove();

@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8"/>
-	<title>找回密码  - {pigcms{$config.site_name}</title>
+	<title>{pigcms{:L('_B_D_LOGIN_KEYBACK_')}  - {pigcms{$config.site_name}</title>
     <meta name="viewport" content="initial-scale=1, width=device-width, maximum-scale=1, user-scalable=no">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name='apple-touch-fullscreen' content='yes'>
@@ -35,7 +35,7 @@
             <h1 class="nav-header">{pigcms{$config.site_name}</h1>
             <div class="nav-wrap-right">
                 <a class="react" href="{pigcms{:U('Home/index')}">
-                    <span class="nav-btn"><i class="text-icon">⟰</i>首页</span>
+                    <span class="nav-btn"><i class="text-icon">⟰</i>{pigcms{:L('_B_D_LOGIN_HPME1_')}</span>
                 </a>
             </div>
         </header-->
@@ -47,21 +47,21 @@
 			        		<dl>
 			        
 			            		<dd class="dd-padding">
-			            			<input id="phone" class="input-weak" type="password" placeholder="输入密码" name="newpwd" value="" required="">
+			            			<input id="phone" class="input-weak" type="password" placeholder="{pigcms{:L('_B_D_LOGIN_ENTERKEY2_')}" name="newpwd" value="" required="">
 			            		</dd>
 								<dd class="dd-padding">
-			            			<input id="phone" class="input-weak" type="password" placeholder="确认输入密码" name="new_pwd" value="" required="">
+			            			<input id="phone" class="input-weak" type="password" placeholder="{pigcms{:L('_B_D_LOGIN_CONFIRMKEY_')}" name="new_pwd" value="" required="">
 			            		</dd>
 								
 			        		</dl>
 			        	</dd>
 			        </dl>
 			        <div class="btn-wrapper">
-						<button type="submit" onclick="pwdmodify(this)"  class="btn btn-larger btn-block">确认</button>
+						<button type="submit" onclick="pwdmodify(this)"  class="btn btn-larger btn-block">{pigcms{:L('_B_D_LOGIN_CONIERM_')}</button>
 			        </div>
 			</div>
 			<ul class="subline">
-			    <li><a href="{pigcms{:U('Login/index')}">立即登录</a></li>
+			    <li><a href="{pigcms{:U('Login/index')}">{pigcms{:L('_B_D_LOGIN_LOGINNOW_')}</a></li>
 			</ul>
 		</div>
 		<script src="{pigcms{:C('JQUERY_FILE')}"></script>
@@ -71,18 +71,18 @@
 			function pwdmodify(val){
 				
 	
-				$('#commit').val('正在提交数据...').prop('disabled',true);
+				$('#commit').val("{pigcms{:L('_B_D_LOGIN_SENDING_')}").prop('disabled',true);
 				var newpwd = $('input[name="newpwd"]').val();
 				var new_pwd = $('input[name="new_pwd"]').val();
 				if (!newpwd) {
-					$('#tips').html('新密码不能为空').show();
+					$('#tips').html("{pigcms{:L('_B_D_LOGIN_BLANKNEWKEY_')}").show();
 
 				}
 				if (!new_pwd) {
-					$('#tips').html('确认新密码不能为空').show();
+					$('#tips').html("{pigcms{:L('_B_D_LOGIN_CONFIRMBLANKNEWKEY_')}").show();
 				}
 				if (newpwd!=new_pwd) {
-					$('#tips').html('俩次密码输入不一致').show();
+					$('#tips').html("{pigcms{:L('_B_D_LOGIN_DIFFERENTKEY2_')}").show();
 				}
 				
 				$.post("{pigcms{:U('Login/pwdModifying')}&pm={pigcms{$pm}", {newpwd:newpwd,new_pwd:new_pwd}, function(data){

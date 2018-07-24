@@ -3,7 +3,7 @@ $(function(){
 		var phone = $.trim($('#phone').val());
 		$('#phone').val(phone);
 		if(phone.length == 0){
-			$('#tips').html('请输入手机号码。').show();
+			$('#tips').html(getLangStr('_B_LOGIN_ENTERPHONENO_')).show();
 			return false;
 		}
 		//if(!/^[0-9]{10}$/.test(phone)){
@@ -13,7 +13,7 @@ $(function(){
 		
 		var password = $('#password').val();
 		if(password.length == 0){
-			$('#tips').html('请输入密码。').show();
+			$('#tips').html(getLangStr('_B_LOGIN_ENTERKEY_')).show();
 			return false;
 		}
 		

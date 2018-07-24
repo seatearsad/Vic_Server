@@ -6,7 +6,8 @@
 		<if condition="$config['site_favicon']">
 			<link rel="shortcut icon" href="{pigcms{$config.site_favicon}"/>
 		</if>
-		<title>{pigcms{$config.seo_title}</title>
+		<!--title>{pigcms{$config.seo_title}</title-->
+        <title>{pigcms{:L('_VIC_NAME_')}</title>
 		<meta name="keywords" content="{pigcms{$config.seo_keywords}" />
 		<meta name="description" content="{pigcms{$config.seo_description}" />
 		<link href="{pigcms{$static_path}css/css.css" type="text/css"  rel="stylesheet" />
@@ -17,6 +18,7 @@
 		<script src="{pigcms{$static_public}js/jquery.lazyload.js"></script>
 		<script src="{pigcms{$static_path}js/jquery.nav.js"></script>
 		<script src="{pigcms{$static_path}js/navfix.js"></script>
+        <script type="text/javascript" src="{pigcms{$static_public}js/lang/{pigcms{:C('DEFAULT_LANG')}.js" charset="utf-8"></script>
 		<script src="{pigcms{$static_path}js/common.js"></script>
 		<script src="{pigcms{$static_path}js/index.js"></script>
 		<script src="{pigcms{$static_path}js/index.activity.js"></script>
@@ -204,7 +206,7 @@
 										<div class="qrcodeDiv">
 											<img src="{pigcms{$config.wechat_qrcode}"/>
 										</div>
-										<div class="s_title">微信扫描二维码 关注我们</div>
+										<div class="s_title">{pigcms{:L('_SCAN_QR_CODE_')} {pigcms{:L('_FOLLOW_WE_')}</div>
 									</div>
 								</div>
 							</div>
@@ -274,7 +276,7 @@
 
                     <div class="nearby cf indexMeal">
 						<div class="indexMealTitle clearfix">
-							<h1><if condition="$is_near_shop">附近{pigcms{$config.shop_alias_name}<else/>推荐{pigcms{$config.shop_alias_name}</if></h1>
+							<h1><if condition="$is_near_shop">{pigcms{:L('_NEAR_OUT_')}<else/>{pigcms{:L('_RECOMMEND_OUT_')}</if></h1>
 						</div>
 						<div class="nearby_list clearfix">
 							<ul>
@@ -286,7 +288,7 @@
 
 													<img class="meal_img lazy_img" src="{pigcms{$static_public}images/blank.gif" data-original="{pigcms{$vo.image}" title="【{pigcms{$vo.area_name}】{pigcms{$vo.name}"/>
 													<div class="bmbox">
-														<div class="bmbox_title"> 微信扫码 手机查看</div>
+														<div class="bmbox_title">{pigcms{:L('_WECHAT_SCAN_TO_PHONE_')}</div>
 														<div class="bmbox_list">
 															<div class="bmbox_list_img"><img class="qrcode_img lazy_img" src="{pigcms{$static_public}images/blank.gif" data-original="{pigcms{:U('Index/Recognition/see_qrcode',array('type'=>'shop','id'=>$vo['store_id']))}" /></div>
 														</div>
@@ -296,11 +298,11 @@
 													<if condition="$vo['state']"><!--div class="name_info"><b>营业中</b></div--></if>
 													<div class="extro">
 														<div class="info">
-															<div class="join"><if condition="$vo['range']">距离您 <span>{pigcms{$vo.range} </span><else/>粉丝 <span>{pigcms{$vo.fans_count}</span></if></div>
+															<div class="join"><if condition="$vo['range']">距离您 <span>{pigcms{$vo.range} </span><else/>{pigcms{:L('_FANS_TXT_')} <span>{pigcms{$vo.fans_count}</span></if></div>
 														</div>
                                                         <div class="info mealSales">
-                                                            <div class="join"><span style="color:#9f9f9f;">已售{pigcms{$vo.sale_count}单</span></div>
-                                                            <div class="join"><span style="color:#9f9f9f;">月售{pigcms{$vo.merchant_store_month_sale_count}单</span></div>
+                                                            <div class="join"><span style="color:#9f9f9f;">{pigcms{:replace_lang_str(L('_SALE_NUM_ORDER_'),$vo[sale_count])}</span></div>
+                                                            <div class="join"><span style="color:#9f9f9f;">{pigcms{:replace_lang_str(L('_MONTH_SALE_NUM_'),$vo['merchant_store_month_sale_count'])}</span></div>
                                                         </div>
 													</div>
 												</a>

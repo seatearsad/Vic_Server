@@ -10,7 +10,7 @@ class LoginAction extends BaseAction{
 				session('user',$now_user);
                 session('openid', $now_user['openid']);
 				setcookie('login_name',$now_user['phone'],$_SERVER['REQUEST_TIME']+10000000,'/');
-				$this->success('登录成功！');
+				$this->success(L('_B_LOGIN_SUCESS_'));
 			}
 		}else{
 			if(!empty($this->user_session)){
@@ -40,17 +40,17 @@ class LoginAction extends BaseAction{
 
 			$database_user = D('User');
 			if($database_user->field('`uid`')->where($condition_user)->find()){
-				$this->error('手机号已存在');
+				$this->error(L('_B_LOGIN_PHONENOHAVE_'));
 			}
 
 			if(empty($data_user['phone'])){
-				$this->error('请输入手机号');
+				$this->error(L('_B_LOGIN_ENTERPHONENO_'));
 			}else if(empty($_POST['password'])){
-				$this->error('请输入密码');
+				$this->error(L('_B_LOGIN_ENTERKEY_'));
 			}
 
 			if(is_numeric($data_user['phone']) == false){
-				$this->error('请输入有效的手机号');
+				$this->error(L('_B_LOGIN_ENTERGOODNO_'));
 			}
 			if ($this->config['reg_verify_sms']&&$this->config['sms_key']&&substr($_POST['phone'],0,10)!='1321234567') {
 				$sms_verify_result = D('Smscodeverify')->verify($_POST['sms_code'], $_POST['phone']);
@@ -94,13 +94,13 @@ class LoginAction extends BaseAction{
 			if($uid = $database_user->data($data_user)->add()){
 				if ($this->config['register_give_money_condition'] == 2 || $this->config['register_give_money_condition'] == 3) {
 					if($this->config['register_give_money_type']==1 ||$this->config['register_give_money_type']==2 ){
-						D('User')->add_money($uid, $this->config['register_give_money'], '新用户注册平台赠送余额');
-						D('Scroll_msg')->add_msg('reg',$uid,'用户'.$data_user['nickname'].'于'.date('Y-m-d H:i',$_SERVER['REQUEST_TIME']).'注册成功获得赠送余额'.$this->config['register_give_money'].'元');
+						D('User')->add_money($uid, $this->config['register_give_money'], L('_B_LOGIN_NEWGIFTMONEY_'));
+						D('Scroll_msg')->add_msg('reg',$uid,L('_B_LOGIN_USER_').$data_user['nickname'].date('Y-m-d H:i',$_SERVER['REQUEST_TIME']).L('_B_LOGIN_NEWGIFTSUCESSMONEY_').$this->config['register_give_money']);
 
 					}
 					if($this->config['register_give_money_type']==0 ||$this->config['register_give_money_type']==2 ){
-						D('User')->add_score($uid,$this->config['register_give_score'], '新用户注册平台赠送'.$this->config['score_name']);
-						D('Scroll_msg')->add_msg('reg',$uid,'用户'.$data_user['nickname'].'于'.date('Y-m-d H:i',$_SERVER['REQUEST_TIME']).'注册成功获得赠送'.$this->config['score_name'].$this->config['register_give_score'].'个');
+						D('User')->add_score($uid,$this->config['register_give_score'], L('_B_LOGIN_NEWGIFTWORD_').$this->config['score_name']);
+						D('Scroll_msg')->add_msg('reg',$uid,L('_B_LOGIN_USER_').$data_user['nickname'].date('Y-m-d H:i',$_SERVER['REQUEST_TIME']).L('_B_LOGIN_NEWGIFTSUCESSSCORE_').$this->config['score_name'].$this->config['register_give_score']);
 					}
 					
 				}
@@ -112,9 +112,9 @@ class LoginAction extends BaseAction{
 				if(!empty($user_import)){
 				   $user_importDb->where(array('id'=>$user_import['id']))->save(array('isuse'=>2));
 				}
-				$this->success('注册成功');
+				$this->success(L('_B_LOGIN_REGISTSUCESS_'));
 			}else{
-				$this->error('注册失败！请重试。');
+				$this->error(L('_B_LOGIN_REGISTLOSERE_'));
 			}
 		}else{
 			if(!empty($this->user_session)){
@@ -132,7 +132,7 @@ class LoginAction extends BaseAction{
 		if($this->config['sms_key']){
 			$this->display();
 		}else{
-			$this->error_tips('平台未开启短信验证功能，请联系系统管理员！');
+			$this->error_tips(L('_B_LOGIN_NOMESSAGE_'));
 		}
 	}
 
@@ -149,7 +149,7 @@ class LoginAction extends BaseAction{
 					$modifypwd = M('User_modifypwd')->where(array('id' => $modfyinfo['vfycode_id'], 'telphone' => $phone))->find();
 					$nowtime = time();
 					if ($modifypwd['expiry'] < $nowtime) {
-						$this->error('链接时间已经过期失效了', U('Index/Login/index'));
+						$this->error(L('_B_LOGIN_LINKTIMEOUT_'), U('Index/Login/index'));
 						exit();
 					}
 					$this->assign('pm', $pm);
@@ -166,7 +166,7 @@ class LoginAction extends BaseAction{
 		$newpwd = trim($_POST['newpwd']);
 		$new_pwd = trim($_POST['new_pwd']);
 		if ($newpwd != $new_pwd) {
-			exit(json_encode(array('error_code' => 1, 'msg' => '两次密码输入不一样！')));
+			exit(json_encode(array('error_code' => 1, 'msg' => L('_B_LOGIN_DIFFERENTKEY_'))));
 		}
 		if (!empty($pm)) {
 			$pm = str_replace(' ', '+', $pm);
@@ -178,14 +178,14 @@ class LoginAction extends BaseAction{
 				if ($tmp) {
 					if (M('User')->where(array('uid' => $modfyinfo['uid'], 'phone' => $phone))->save(array('pwd' => md5($newpwd)))) {
 						session($phone . 'Generate_Pwd_Modify', null);
-						exit(json_encode(array('error_code' => 0, 'msg' => '密码修改成功！')));
+						exit(json_encode(array('error_code' => 0, 'msg' => L('_B_LOGIN_CHANGEKEYSUCESS_'))));
 					} else {
-						exit(json_encode(array('error_code' => 2, 'msg' => '密码修改失败！')));
+						exit(json_encode(array('error_code' => 2, 'msg' => L('_B_LOGIN_CHANGEKEYLOSE_'))));
 					}
 				}
 			}
 		}
-		//exit(json_encode(array('error_code' => 2, 'msg' => '参数出错！')));
+		//exit(json_encode(array('error_code' => 2, 'msg' => L('_B_LOGIN_WRONGPARE_'))));
 	}
 
     public function SmsCodeverify($tphone) {
@@ -199,11 +199,11 @@ class LoginAction extends BaseAction{
                     return true;
                 }
             }
-            $this->error('验证码失效了，务必在20分钟内完成验证');
+            $this->error(L('_B_LOGIN_CODEOVER20MIN_'));
             exit();
         } else {
             $vcode = createRandomStr(6, true, true);
-            $content = '您的验证码是：'. $vcode . '。此验证码20分钟内有效，请不要把验证码泄露给其他人。如非本人操作，可不用理会！';
+            $content = L('_B_LOGIN_YOURCODE_'). $vcode . L('_B_LOGIN_CODEPOINT_');
             Sms::sendSms(array('mer_id' => 0, 'store_id' => 0, 'content' => $content, 'mobile' => $tphone, 'uid' => 0, 'type' => 'regvfy'));
             $addtime = time();
             $expiry = $addtime + 20 * 60; /*             * **二十分钟有效期*** */
@@ -239,7 +239,7 @@ class LoginAction extends BaseAction{
 			$jsonrt = json_decode($return,true);
 			if($jsonrt['errcode']){
 				$error_msg_class = new GetErrorMsg();
-				$this->error_tips('授权发生错误：'.$error_msg_class->wx_error_msg($jsonrt['errcode']),U('Login/index'));
+				$this->error_tips(L('_B_LOGIN_WARRANTWRONG_').$error_msg_class->wx_error_msg($jsonrt['errcode']),U('Login/index'));
 			}
 
 			$return = $http->curlGet('https://api.weixin.qq.com/sns/userinfo?access_token='.$jsonrt['access_token'].'&openid='.$jsonrt['openid'].'&lang=zh_CN');
@@ -247,7 +247,7 @@ class LoginAction extends BaseAction{
 			$jsonrt = json_decode($return,true);
 			if ($jsonrt['errcode']) {
 				$error_msg_class = new GetErrorMsg();
-				$this->error_tips('授权发生错误：'.$error_msg_class->wx_error_msg($jsonrt['errcode']),U('Login/index'));
+				$this->error_tips(L('_B_LOGIN_WARRANTWRONG_').$error_msg_class->wx_error_msg($jsonrt['errcode']),U('Login/index'));
 			}
 			$is_follow = 0;
 			$access_token_array = D('Access_token_expires')->get_access_token();
@@ -299,12 +299,12 @@ class LoginAction extends BaseAction{
 				}
 			}
 		}else{
-			$this->error_tips('访问异常！请重新登录。',U('Login/index',array('referer'=>urlencode($referer))));
+			$this->error_tips(L('_B_LOGIN_WARNINGRETRY_'),U('Login/index',array('referer'=>urlencode($referer))));
 		}
 	}
 	public function weixin_bind(){
 		if(empty($_SESSION['weixin']['user'])){
-			$this->error('微信授权失效，请重新登录！');
+			$this->error(L('_B_LOGIN_WECHATLOSERETRY_'));
 		}
 		$login_result = D('User')->checkin($_POST['phone'],$_POST['password']);
 		if($login_result['error_code']){
@@ -368,31 +368,31 @@ class LoginAction extends BaseAction{
 				if(!empty($user_import)){
 				   $user_importDb->where(array('id'=>$user_import['id']))->save(array('isuse'=>1));
 				}
-				$this->success('登录成功！');
+				$this->success(L('_B_LOGIN_SUCESS_'));
 			}else{
-				$this->error('绑定失败！请重试。');
+				$this->error(L('_B_LOGIN_BINDINGLOSERETRY_'));
 			}
 		}
 	}
 	public function weixin_bind_reg(){
 		if(IS_POST){
 			if(empty($_SESSION['weixin']['user'])){
-				$this->error('微信授权失效，请重新登录！');
+				$this->error(L('_B_LOGIN_WECHATLOSERETRY_'));
 			}
 
 			$database_user = D('User');
 			$condition_user['phone'] = $data_user['phone'] = trim($_POST['phone']);
 
 			if(empty($data_user['phone'])){
-				$this->error('请输入手机号');
+				$this->error(L('_B_LOGIN_ENTERPHONENO_'));
 			}else if(!preg_match('/^[0-9]{11}$/',$data_user['phone'])){
-				$this->error('请输入有效的手机号');
+				$this->error(L('_B_LOGIN_ENTERGOODNO_'));
 			}else if(empty($_POST['password'])){
-				$this->error('请输入密码');
+				$this->error(L('_B_LOGIN_ENTERKEY_'));
 			}
 
 			if($database_user->field('`uid`')->where($condition_user)->find()){
-				$this->error('手机号已存在');
+				$this->error(L('_B_LOGIN_PHONENOHAVE_'));
 			}
 
 
@@ -417,7 +417,7 @@ class LoginAction extends BaseAction{
 			$data_user['add_ip'] = $data_user['last_ip'] = get_client_ip(1);
 
 //			if($nickname == $this->config['site_name']){
-//       			$data_user['nickname']  = '昵称';
+//       			$data_user['nickname']  = L('_B_LOGIN_NICKNAME_');
 //			}else{
 //        		$data_user['nickname'] = $_SESSION['weixin']['user']['nickname'];
 //			}
@@ -467,13 +467,13 @@ class LoginAction extends BaseAction{
 			if($uid = $database_user->data($data_user)->add()){
 				if ($this->config['register_give_money_condition'] == 2 || $this->config['register_give_money_condition'] == 3) {
 					if($this->config['register_give_money_type']==1 ||$this->config['register_give_money_type']==2 ){
-						D('User')->add_money($uid, $this->config['register_give_money'], '新用户注册平台赠送余额');
-						D('Scroll_msg')->add_msg('reg',$uid,'用户'.$data_user['nickname'].'于'.date('Y-m-d H:i',$_SERVER['REQUEST_TIME']).'注册成功获得赠送余额'.$this->config['register_give_money'].'元');
+						D('User')->add_money($uid, $this->config['register_give_money'], L('_B_LOGIN_NEWGIFTMONEY_'));
+						D('Scroll_msg')->add_msg('reg',$uid,L('_B_LOGIN_USER_').$data_user['nickname'].date('Y-m-d H:i',$_SERVER['REQUEST_TIME']).L('_B_LOGIN_NEWGIFTSUCESSMONEY_').$this->config['register_give_money']);
 
 					}
 					if($this->config['register_give_money_type']==0 ||$this->config['register_give_money_type']==2 ){
-						D('User')->add_score($uid,$this->config['register_give_score'], '新用户注册平台赠送'.$this->config['score_name']);
-						D('Scroll_msg')->add_msg('reg',$uid,'用户'.$data_user['nickname'].'于'.date('Y-m-d H:i',$_SERVER['REQUEST_TIME']).'注册成功获得赠送'.$this->config['score_name'].$this->config['register_give_score'].'个');
+						D('User')->add_score($uid,$this->config['register_give_score'], L('_B_LOGIN_NEWGIFTWORD_').$this->config['score_name']);
+						D('Scroll_msg')->add_msg('reg',$uid,L('_B_LOGIN_USER_').$data_user['nickname'].date('Y-m-d H:i',$_SERVER['REQUEST_TIME']).L('_B_LOGIN_NEWGIFTSUCESSSCORE_').$this->config['score_name'].$this->config['register_give_score']);
 
 					}
 				}
@@ -487,17 +487,17 @@ class LoginAction extends BaseAction{
 						if ($this->config['spread_user_give_type'] == 0 || $this->config['spread_user_give_type'] == 2) {
 							$spread_give_money = $now_level['spread_user_give_moeny']>0?$now_level:$this->config['spread_give_money'];
 							if($this->config['open_score_fenrun']){
-								D('User')->add_money($spread_user['uid'],  $spread_give_money, '推荐新用户注册平台赠送余额','','',$uid);
+								D('User')->add_money($spread_user['uid'],  $spread_give_money, L('_B_LOGIN_RECOMENDNEWGIFTMONEY_'),'','',$uid);
 							}else{
-								D('User')->add_money($spread_user['uid'],  $spread_give_money, '推荐新用户注册平台赠送余额');
+								D('User')->add_money($spread_user['uid'],  $spread_give_money, L('_B_LOGIN_RECOMENDNEWGIFTMONEY_'));
 							}
-							D('Scroll_msg')->add_msg('spread_reg',$this->now_user['uid'],'用户'.$spread_user['nickname'].'于'.date('Y-m-d H:i',$_SERVER['REQUEST_TIME']).'推荐新用户注册获赠平台余额'.$spread_give_money.'元');
+							D('Scroll_msg')->add_msg('spread_reg',$this->now_user['uid'],L('_B_LOGIN_USER_').$spread_user['nickname'].date('Y-m-d H:i',$_SERVER['REQUEST_TIME']).L('_B_LOGIN_RECOMENDNEWGIFTMONEYWORD_').$spread_give_money);
 						}
 
 						if ($this->config['spread_user_give_type'] == 1 || $this->config['spread_user_give_type'] == 2) {
 							$spread_give_score = $now_level['spread_user_give_score']>0?$now_level:$this->config['spread_give_score'];
-							D('User')->add_score($spread_user['uid'], $spread_give_score, '推荐新用户注册平台赠送' . $this->config['score_name']);
-							D('Scroll_msg')->add_msg('spread_reg',$this->now_user['uid'],'用户'.$spread_user['nickname'].'于'.date('Y-m-d H:i',$_SERVER['REQUEST_TIME']).'推荐新用户注册获赠'.$this->config['score_name'].$spread_give_score.'个');
+							D('User')->add_score($spread_user['uid'], $spread_give_score, L('_B_LOGIN_RECOMENDNEWGIFSCORE_') . $this->config['score_name']);
+							D('Scroll_msg')->add_msg('spread_reg',$this->now_user['uid'],L('_B_LOGIN_USER_').$spread_user['nickname'].date('Y-m-d H:i',$_SERVER['REQUEST_TIME']).L('_B_LOGIN_RECOMENDNEWGIFSCORE_').$this->config['score_name'].$spread_give_score);
 						}
 					}
 
@@ -510,15 +510,15 @@ class LoginAction extends BaseAction{
 				if(!empty($user_import)){
 				   $user_importDb->where(array('id'=>$user_import['id']))->save(array('isuse'=>1));
 				}
-				$this->success('注册成功');
+				$this->success(L('_B_LOGIN_REGISTSUCESS_'));
 			}else{
-				$this->error('注册失败！请重试。');
+				$this->error(L('_B_LOGIN_REGISTLOSERE_'));
 			}
 		}
 	}
 	public function weixin_nobind(){
 		if(empty($_SESSION['weixin']['user'])){
-			$this->error('微信授权失效，请重新登录！');
+			$this->error(L('_B_LOGIN_WECHATLOSERETRY_'));
 		}
 		$_SESSION['weixin']['user']['source'] = 'weixin_nobind_reg';
 		$reg_result = D('User')->autoreg($_SESSION['weixin']['user']);

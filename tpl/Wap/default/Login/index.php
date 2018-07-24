@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8"/>
-	<title>登录 - {pigcms{$config.site_name}</title>
+	<title>{pigcms{:L('_B_D_LOGIN_LOGIN1_')} - {pigcms{:L('_VIC_NAME_')}</title>
 	<meta name="description" content="{pigcms{$config.seo_description}"/>
     <meta name="viewport" content="initial-scale=1, width=device-width, maximum-scale=1, user-scalable=no"/>
 	<meta name="apple-mobile-web-app-capable" content="yes"/>
@@ -36,7 +36,7 @@
             <h1 class="nav-header">{pigcms{$config.site_name}</h1>
             <div class="nav-wrap-right">
                 <a class="react" href="{pigcms{:U('Home/index')}">
-                    <span class="nav-btn"><i class="text-icon">⟰</i>首页</span>
+                    <span class="nav-btn"><i class="text-icon">⟰</i>{pigcms{:L('_B_D_LOGIN_HPME1_')}</span>
                 </a>
             </div>
         </header-->
@@ -48,31 +48,32 @@
 			        	<dd>
 			        		<dl>
 			            		<dd class="dd-padding">
-			            			<input id="phone" class="input-weak" type="tel" placeholder="手机号" name="phone" value="{pigcms{$_COOKIE.login_name}" required=""/>
+			            			<input id="phone" class="input-weak" type="tel" placeholder="{pigcms{:L('_B_D_LOGIN_TEL_')}" name="phone" value="{pigcms{$_COOKIE.login_name}" />
 			            		</dd>
 			            		<dd class="dd-padding">
-			            			<input id="password" class="input-weak" type="password" placeholder="请输入您的密码" name="password" required=""/>
+			            			<input id="password" class="input-weak" type="password" placeholder="{pigcms{:L('_B_D_LOGIN_ENTERKEY1_')}" name="password" />
 			            		</dd>
 			        		</dl>
 			        	</dd>
 			        </dl>
 			        <div class="btn-wrapper">
-						<button type="submit" class="btn btn-larger btn-block">登录</button>
+						<button type="submit" class="btn btn-larger btn-block">{pigcms{:L('_B_D_LOGIN_LOGIN1_')}</button>
 			        </div>
 			    </form>
 			</div>
 			<ul class="subline">
-			    <li><a href="{pigcms{:U('Login/reg')}">立即注册</a></li>
-			    <if condition="C('config.sms_pwd')"><li id="forgetpwd" style="display:inline;float:right;display:none;"><a href="{pigcms{:U('Login/forgetpwd')}">找回密码</a></li></if>
+			    <li><a href="{pigcms{:U('Login/reg')}">{pigcms{:L('_B_D_LOGIN_REGNOW_')}</a></li>
+			    <if condition="C('config.sms_pwd')"><li id="forgetpwd" style="display:inline;float:right;display:none;"><a href="{pigcms{:U('Login/forgetpwd')}">{pigcms{:L('_B_D_LOGIN_KEYBACK_')}</a></li></if>
 			</ul>
 		</div>
 		<script src="{pigcms{:C('JQUERY_FILE')}"></script>
 		<script src="{pigcms{$static_path}js/common_wap.js"></script>
 		<!--script src="{pigcms{$static_path}layer/layer.m.js"></script>
 		<script>
-			if(is_weixin()){var location_url = "{pigcms{:U('Login/weixin')}";layer.open({title:'提示',content:'跳转到微信登录',end:function(){window.location.href=location_url;}});window.location.href = location_url}
+			if(is_weixin()){var location_url = "{pigcms{:U('Login/weixin')}";layer.open({title:"{pigcms{:L('_B_D_LOGIN_TIP2_')}",content:"{pigcms{:L('_B_D_LOGIN_JUMPWECHATLOG_')}",end:function(){window.location.href=location_url;}});window.location.href = location_url}
 		</script-->
-		<script src="{pigcms{$static_path}js/login.js"></script>
+        <script type="text/javascript" src="{pigcms{$static_public}js/lang/{pigcms{:C('DEFAULT_LANG')}.js" charset="utf-8"></script>
+        <script src="{pigcms{$static_path}js/login.js"></script>
 		<include file="Public:footer"/>
 
 {pigcms{$hideScript}

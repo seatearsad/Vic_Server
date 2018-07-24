@@ -3,7 +3,7 @@
 <html lang="zh-CN">
 	<head>
 		<meta charset="utf-8" />
-		<title>余额记录</title>
+		<title>{pigcms{:L('_BALANCE_RECORD_')}</title>
 		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width"/>
 		<meta name="apple-mobile-web-app-capable" content="yes"/>
 		<meta name='apple-touch-fullscreen' content='yes'/>
@@ -41,9 +41,9 @@
 <body>
 		<if condition="$_SESSION['source'] neq 1">
 	<div style="text-align:center;background-color:#fff;padding:10px 0;">
-		<button id="transaction" style="font-size:16px;width:45%;background-color:#00c4ac;border:1px solid #00c4ac;padding:8px;color:#fff;margin-right:-4px;z-index:100;-moz-border-radius:6px 0 0 6px;-webkit-border-radius:6px 0 0 6px;border-radius:6px 0 0 6px;">余额</button>
+		<button id="transaction" style="font-size:16px;width:45%;background-color:#00c4ac;border:1px solid #00c4ac;padding:8px;color:#fff;margin-right:-4px;z-index:100;-moz-border-radius:6px 0 0 6px;-webkit-border-radius:6px 0 0 6px;border-radius:6px 0 0 6px;">{pigcms{:L('_B_PURE_MY_40_')}</button>
 	
-		<button id="integral" style="font-size:16px;width:45%;background-color:#fff;border:1px solid #00c4ac;padding:8px;color:#00c4ac;margin-left:-4px;-moz-border-radius:0 6px 6px 0;-webkit-border-radius:0 6px 6px 0;border-radius:0 6px 6px 0;">{pigcms{$config.score_name}</button>
+		<button id="integral" style="font-size:16px;width:45%;background-color:#fff;border:1px solid #00c4ac;padding:8px;color:#00c4ac;margin-left:-4px;-moz-border-radius:0 6px 6px 0;-webkit-border-radius:0 6px 6px 0;border-radius:0 6px 6px 0;">{pigcms{:L('_TICKET_TXT_')}</button>
 	</div>
 		</if>
 	<dl id="newList" style="padding:0 10px;background-color:#fff;margin-top:10px;margin-bottom:10px;"></dl>
@@ -61,7 +61,7 @@
 				if($(window).scrollTop() == $(document).height() - $(window).height()){
 					$('#mais').remove();
 					var jia	=	'';
-    				jia	+=	'<div id="jia" class="text-center m-t m-b">正在加载</div>';
+    				jia	+=	'<div id="jia" class="text-center m-t m-b">{pigcms{:L("_LOADING_TXT_")}</div>';
     				$('#newList').append(jia);
 					if($('#is_null').length < 1){
 						destination	=	$('#destination').text();
@@ -102,21 +102,21 @@
 									rideList	+=	'</div>';
 								}
 								if(ride_list_length <= 9){
-									rideList	+=	'<div id="is_null" style="text-align:center;padding:10px 0;">没有记录了</div>';
+									rideList	+=	'<div id="is_null" style="text-align:center;padding:10px 0;">{pigcms{:L("_B_PURE_MY_49_")}</div>';
 								}else{
-									rideList	+=	'<div id="mais" style="text-align:center;padding:10px 0;">上拉会有更多记录哦</div>';
+									rideList	+=	'<div id="mais" style="text-align:center;padding:10px 0;">{pigcms{:L("_B_PURE_MY_50_")}</div>';
 								}
 							}else{
-								rideList	+=	'<div id="is_null" style="text-align:center;padding:10px 0;">没有记录了</div>';
+								rideList	+=	'<div id="is_null" style="text-align:center;padding:10px 0;">{pigcms{:L("_B_PURE_MY_49_")}</div>';
 							}
 						}else{
-							rideList	+=	'<div id="is_null" style="text-align:center;padding:10px 0;">没有记录了</div>';
+							rideList	+=	'<div id="is_null" style="text-align:center;padding:10px 0;">{pigcms{:L("_B_PURE_MY_49_")}</div>';
 						}
 						$('#jia').remove();
 						$('#newList').append(rideList);
 					},
 					error:function(){
-						alert('页面错误，请联系管理员');
+						alert("{pigcms{:L('_B_PURE_MY_WRONGPAGE_')}");
 					}
 				})
 			}

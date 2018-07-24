@@ -71,7 +71,7 @@ $(function(){
 	$('.search form').submit(function(){
 		$('.search .input').val($.trim($('.search .input').val()));
 		if($('.search .input').val().length < 1){
-			alert('请输入关键词');
+			alert(getLangStr('_PLEASE_INPUT_KET_'));
 			$('.search .input').focus();
 			return false;
 		}
@@ -140,16 +140,16 @@ $(function(){
 		$('.J-history-list').html(history_right);
 	}else{
 		$('.J-history-list').remove();
-		$('.side-extension--history').append('<div class="no-history">暂无浏览记录</div>');
-		$('#J-my-history-menu').html('<p class="dropdown-menu--empty">暂无浏览记录</p>');
+		$('.side-extension--history').append('<div class="no-history">'+getLangStr('_NO_BROWSE_RECORD_')+'</div>');
+		$('#J-my-history-menu').html('<p class="dropdown-menu--empty">'+getLangStr('_NO_BROWSE_RECORD_')+'</p>');
 	}
 	
 	$('.history .clear__btn,.J-clear').live('click',function(){
 		$.cookie('history', null,{expires:365,path:"/"});
-		$('#J-my-history-menu').html('<p class="dropdown-menu--empty">暂无浏览记录</p>');
+		$('#J-my-history-menu').html('<p class="dropdown-menu--empty">'+getLangStr('_NO_BROWSE_RECORD_')+'</p>');
 		if($('.side-extension--history .no-history').length <= 0){
 			$('.J-history-list').remove();
-			$('.side-extension--history').append('<div class="no-history">暂无浏览记录</div>');
+			$('.side-extension--history').append('<div class="no-history">'+getLangStr('_NO_BROWSE_RECORD_')+'</div>');
 		}
 	});
 	
