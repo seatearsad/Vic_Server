@@ -152,7 +152,7 @@
 							<ul>
 								<pigcms:slider cat_key="web_slider" limit="10" var_name="web_index_slider">
 									<li class="ctur">
-										<a href="{pigcms{$vo.url}" <if condition="$i eq 1">class="select"</if>>{pigcms{$vo.name}</a>
+										<a href="{pigcms{$vo.url}" <if condition="$i eq 1">class="select"</if>>{pigcms{:lang_substr($vo['name'],C('DEFAULT_LANG'))}</a>
 									</li>
 								</pigcms:slider>
 							</ul>
@@ -160,7 +160,7 @@
 					</div>
 				</div>
 				<div class="menu_main">
-				<div style=" position: relative;width: 1390px;padding-left:220px">
+				<div style=" position: relative;width: 1200px;">
 					<div class="menu cf" >
 						<div class="menu_right cf" style="margin-top:0px;width:1200px">
 							<div class="menu_right_bottom cf">
@@ -192,7 +192,7 @@
 								</div>
 								<div class="right cf" style="background-color:#fff;<if condition='$now_activity'>border-right:1px solid #dfdfdf;</if>">
 									<div class="systemNews">
-										<img src="{pigcms{$static_path}images/systemnews.png"><div class="title">平台快报<div class="more"><a href="{pigcms{$config.site_url}/news/" target="_blank">更多></a></div></div>
+										<img src="{pigcms{$static_path}images/systemnews.png"><div class="title">{pigcms{:L('_PLATFORM_NEWS_')}<div class="more"><a href="{pigcms{$config.site_url}/news/" target="_blank">{pigcms{:L('_MORE_TXT_')}></a></div></div>
 										<div class="newslist cf">
 											<ul>
 												<pigcms:system_news limit="8" var_name="system_newss">
@@ -288,7 +288,7 @@
 
 													<img class="meal_img lazy_img" src="{pigcms{$static_public}images/blank.gif" data-original="{pigcms{$vo.image}" title="【{pigcms{$vo.area_name}】{pigcms{$vo.name}"/>
 													<div class="bmbox">
-														<div class="bmbox_title">{pigcms{:L('_WECHAT_SCAN_TO_PHONE_')}</div>
+														<div class="bmbox_title" style="line-height: 20px;">{pigcms{:L('_WECHAT_SCAN_TO_PHONE_')}</div>
 														<div class="bmbox_list">
 															<div class="bmbox_list_img"><img class="qrcode_img lazy_img" src="{pigcms{$static_public}images/blank.gif" data-original="{pigcms{:U('Index/Recognition/see_qrcode',array('type'=>'shop','id'=>$vo['store_id']))}" /></div>
 														</div>

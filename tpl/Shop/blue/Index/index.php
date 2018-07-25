@@ -13,6 +13,7 @@
 	<meta charset="utf-8">
 	<link href="{pigcms{$static_path}css/shop_pc.css" rel="stylesheet"/>
     <script src="{pigcms{$static_path}js/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="{pigcms{$static_public}js/lang/{pigcms{:C('DEFAULT_LANG')}.js" charset="utf-8"></script>
     <script src="{pigcms{$static_path}js/common.js"></script>
 	<!--[if lte IE 9]>
 	<script src="{pigcms{$static_path}js/jquery-1.9.1.min.js"></script>
@@ -21,9 +22,9 @@
 </head>
 	<body>
 		<!-- 公用导航 -->
-		<div class="header_top">
+
 			<include file="Public:header_top"/>
-		</div>
+
 		<!-- 公用导航 -->
 		<section class="Fast" style="background: url({pigcms{$static_path}images/indexb_05.jpg) center no-repeat;">
 			<div class="logo">
@@ -70,7 +71,7 @@
 
 		<section class="Client">
 			<div class="Client_top">
-				<h2>让生活<i>更简单</i></h2>
+				<h2>让生活更简单</h2>
 				<p>微信扫描二维码关注或下载手机客户端，随时随地查看身边{pigcms{$config.shop_alias_name}</p>
 			</div>
 			<div class="Client_end">

@@ -34,7 +34,7 @@
         </div>
         <div class="list">
 
-			<ul class="cf">
+			<ul class="cf" style="float: right;">
 				<li>
 					<div class="li_txt"><a href="{pigcms{:UU('User/Index/index')}">{pigcms{:L('_MY_ORDER_')}</a></div>
 					<div class="span">|</div>

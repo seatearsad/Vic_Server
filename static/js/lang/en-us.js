@@ -44,11 +44,11 @@ lang['_B_D_LOGIN_6KEYWORD_'] = 'The password must be more than 6 digits';
 lang['_B_D_LOGIN_DISPLAY_'] =  'View more';
 lang['_B_LOGIN_PHONENOHAVE_']= 'This phone number already existed';
 //
-lang['_B_D_LOGIN_DISPLAY_PASS_'] = '显示密文';
-lang['_B_D_LANG_RE_NOREP_'] = '注册中，请不要重复提交';
-lang['_NO_BROWSE_RECORD_'] = '暂无浏览记录';
-lang['_PLEASE_INPUT_KET_'] = '请输入关键词';
-lang['_IS_CONFIRM_BIND_'] = '你确定要绑定已存在的账号吗？';
+lang['_B_D_LOGIN_DISPLAY_PASS_'] = 'Hide password';
+lang['_B_D_LANG_RE_NOREP_'] = 'Processing, please do not send twice';
+lang['_NO_BROWSE_RECORD_'] = 'No browsing history';
+lang['_PLEASE_INPUT_KET_'] = 'Please enter a key word';
+lang['_IS_CONFIRM_BIND_'] = 'Are you sure you want to bind exsited account?';
 
 function getLangStr(key,replace=''){
     var str = lang[key];
