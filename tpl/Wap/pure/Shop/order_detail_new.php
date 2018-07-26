@@ -261,7 +261,7 @@
         	         <li class="clr">
         	             <div class="fl">{pigcms{:L('_BUSINESS_CARD_DIS_')}</div>
         	             <div class="p90">
-                            <p class="e2c">-${pigcms{$order_details['minus_card_discount']}（{pigcms{:replace_lang_str('_NUM_DISCOUNT_',$order_details['card_discount'])}）</p>
+                            <p class="e2c">-${pigcms{$order_details['minus_card_discount']}（{pigcms{:replace_lang_str(L('_NUM_DISCOUNT_'),$order_details['card_discount'])}）</p>
                             <p class="kdsize">（{pigcms{:L('_NOTE_NOT_TAKE_DIS_')}）</p>
                          </div>
         	         </li>

@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-    <title>登录 | {pigcms{$config.site_name}</title>
+    <title>{pigcms{:L('_B_D_LOGIN_LOGIN1_')} | {pigcms{:L('_VIC_NAME_')}</title>
     <!--[if IE 6]>
 		<script src="{pigcms{$static_path}js/DD_belatedPNG_0.0.8a-min.v86c6ab94.js"></script>
     <![endif]-->
@@ -31,26 +31,26 @@
 	    <div class="component-login-section component-login-section--page mt-component--booted" >
 		    <div class="origin-part theme--www">
 			    <div class="validate-info" style="visibility:hidden"></div>
-		        <h2>账号登录</h2>
+		        <h2>{pigcms{:L('_B_D_LOGIN_LOGIN2_')}</h2>
 		        <form id="J-login-form" method="post" class="form form--stack J-wwwtracker-form">
 			        <div class="form-field form-field--icon">
 			            <i class="icon icon-user"></i>
-			            <input type="text" id="login-phone" class="f-text" name="phone" placeholder="手机号" value="{pigcms{$_COOKIE.login_name}"/>
+			            <input type="text" id="login-phone" class="f-text" name="phone" placeholder="{pigcms{:L('_B_D_LOGIN_TEL_')}" value="{pigcms{$_COOKIE.login_name}"/>
 			        </div>
 			        <div class="form-field form-field--icon" >
 			            <i class="icon icon-password"></i>
-			            <input type="password" id="login-password" class="f-text" name="pwd" placeholder="密码"/>
+			            <input type="password" id="login-password" class="f-text" name="pwd" placeholder="{pigcms{:L('_B_D_LOGIN_KEY1_')}"/>
 			        </div>
 			        <div class="form-field form-field--ops">
 			            <input type="hidden" name="fingerprint" class="J-fingerprint"/>
 			            <input type="hidden" name="origin" value="account-login"/>
-			            <input type="submit" class="btn" id="commit" value="登录"/>
+			            <input type="submit" class="btn" id="commit" value="{pigcms{:L('_B_D_LOGIN_LOGIN1_')}"/>
 			        </div>
 			    </form>
-			    <p class="signup-guide" style="float: left;display:inline">还没有账号？<a href="{pigcms{:U('Login/reg',array('referer'=>urlencode($referer)))}">免费注册</a></p>
-				<if condition=" C('config.sms_pwd')"><p style="float: right;display:inline;" id="forgetpwd">忘记密码？<a href="#" onclick="$(this).attr('href','{pigcms{:U('Login/forgetpwd')}&accphone='+$('#login-phone').val());">点这里</a></p> </if>
-			    <div class="oauth-wrapper">
-			        <h3 class="title-wrapper"><span class="title">用手机微信扫码登录</span></h3>
+			    <p class="signup-guide" style="float: left;display:inline">{pigcms{:L('_B_D_LOGIN_NOACCOUNT_')} <a href="{pigcms{:U('Login/reg',array('referer'=>urlencode($referer)))}">{pigcms{:L('_B_D_LOGIN_FREEREG_')}</a></p>
+				<if condition=" C('config.sms_pwd')"><p style="float: left;display:inline;" id="forgetpwd">{pigcms{:L('_FORGET_PASS_W_')} <a href="#" onclick="$(this).attr('href','{pigcms{:U('Login/forgetpwd')}&accphone='+$('#login-phone').val());">{pigcms{:L('_B_D_LOGIN_KEYBACK_')}</a></p> </if>
+			    <div class="oauth-wrapper" style="margin-top: 80px;">
+			        <h3 class="title-wrapper"><span class="title">{pigcms{:L('_B_D_LOGIN_TELWECHATLOGIN_')}</span></h3>
 			        <div class="oauth cf">
 			            <a class="oauth__link oauth__link--weixin" href="javascript:void(0);"></a>
 			        </div>   
@@ -67,30 +67,30 @@
 			}
 			$("#J-login-form").submit(function(){
 				$('.validate-info').css('visibility','hidden');
-				$('#commit').val('登录中...').prop('disabled',true);
+				$('#commit').val('{pigcms{:L("_B_D_LOGIN_LOGINING_")}').prop('disabled',true);
 				var phone = $("#login-phone").val();
 				var pwd = $("#login-password").val();
 				if (phone == '' || phone == null) {
-					$('.validate-info').html('<i class="tip-status tip-status--opinfo"></i>手机号不能为空').css('visibility','visible');
-					$("#commit").val('登录').prop('disabled',false);
+					$('.validate-info').html('<i class="tip-status tip-status--opinfo"></i>{pigcms{:L("_B_D_LOGIN_BLANKNUM_")}').css('visibility','visible');
+					$("#commit").val('{pigcms{:L("_B_D_LOGIN_LOGIN1_")}').prop('disabled',false);
 					return false;
 				}
 				if (pwd == '' || pwd == null) {
-					$('.validate-info').html('<i class="tip-status tip-status--opinfo"></i>密码不能为空').css('visibility','visible');
-					$("#commit").val('登录').prop('disabled',false);
+					$('.validate-info').html('<i class="tip-status tip-status--opinfo"></i>{pigcms{:L("_B_D_LOGIN_BLANKKEY_")}').css('visibility','visible');
+					$("#commit").val('{pigcms{:L("_B_D_LOGIN_LOGIN1_")}').prop('disabled',false);
 					return false;
 				}
 				
 				$.post("{pigcms{:U('Index/Login/index')}", {'phone':phone, 'pwd':pwd}, function(data){
 					if (data.error_code) {
-						$("#commit").val('登录').prop('disabled',false);
+						$("#commit").val('{pigcms{:L("_B_D_LOGIN_LOGIN1_")}').prop('disabled',false);
 						$('.validate-info').html('<i class="tip-status tip-status--opinfo"></i>'+data.msg).css('visibility','visible');
 						if(data.msg=='密码不正确!'){
 						  $('#forgetpwd').show();
 						}
 						return false;
 					} else {
-						$('.validate-info').html('<i class="tip-status tip-status--success"></i>登录成功！正在跳转.').css('visibility','visible');
+						$('.validate-info').html('<i class="tip-status tip-status--success"></i>{pigcms{:L("_B_D_LOGIN_LOGINACCESSJUMP_")}').css('visibility','visible');
 						setTimeout("location.href='{pigcms{$referer}'", 1000);
 					}
 				}, 'json');
@@ -104,7 +104,7 @@
 						window.top.art.dialog.data('login_iframe_handle',iframe);
 					},
 					id: 'login_handle',
-					title:'请使用微信扫描二维码登录',
+					title:'{pigcms{:L("_B_D_LOGIN_WECHATSCANLOGIN_")}',
 					padding: 0,
 					width: 430,
 					height: 433,

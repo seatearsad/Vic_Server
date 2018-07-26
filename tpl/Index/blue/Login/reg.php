@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-    <title>注册 | {pigcms{$config.site_name}</title>
+    <title>{pigcms{:L('_B_D_LOGIN_REG2_')} | {pigcms{:L('_VIC_NAME_')}</title>
     <!--[if IE 6]>
 		<script src="{pigcms{$static_path}js/DD_belatedPNG_0.0.8a-min.v86c6ab94.js"></script>
     <![endif]-->
@@ -31,11 +31,11 @@
 	    <div class="component-login-section component-login-section--page mt-component--booted" >
 		    <div class="origin-part theme--www">
 			    <div class="validate-info" style="visibility:hidden"></div>
-		        <h2>账号注册</h2>
+		        <h2>{pigcms{:L('_B_D_LOGIN_REG1_')}</h2>
 		        <form id="J-login-form" method="post" class="form form--stack J-wwwtracker-form">
 			        <div class="form-field form-field--icon">
 			            <i class="icon icon-user"></i>
-			            <input type="text" id="login-phone" class="f-text" name="phone" placeholder="手机号"/>
+			            <input type="text" id="login-phone" class="f-text" name="phone" placeholder="{pigcms{:L('_B_D_LOGIN_TEL_')}"/>
 			        </div>
 					<if condition="C('config.reg_verify_sms') AND C('config.sms_pwd')">
 					<div class="form-field form-field--icon">
@@ -46,11 +46,11 @@
 					</if>
 			        <div class="form-field form-field--icon" >
 			            <i class="icon icon-password"></i>
-			            <input type="password" id="login-password" class="f-text" name="pwd" placeholder="密码"/>
+			            <input type="password" id="login-password" class="f-text" name="pwd" placeholder="{pigcms{:L('_B_D_LOGIN_KEY1_')}"/>
 			        </div>
 					<div class="form-field form-field--icon" >
 			            <i class="icon icon-password"></i>
-			            <input type="password" id="login-repassword" class="f-text" name="repwd" placeholder="再输入一次密码"/>
+			            <input type="password" id="login-repassword" class="f-text" name="repwd" placeholder="{pigcms{:L('_AGAIN_INPUT_PASS_')}"/>
 			        </div>
 			        <if condition="$config['register_agreement'] neq ''">
 					<p class="signup-guide"><input type="checkbox" id="register_agreement" checked>同意《注册协议》<a href="javascript:;" id="read_register_agreement">查看协议</a></p>
@@ -58,10 +58,10 @@
 			        <div class="form-field form-field--ops">
 			            <input type="hidden" name="fingerprint" class="J-fingerprint"/>
 			            <input type="hidden" name="origin" value="account-login"/>
-			            <input type="submit" class="btn" id="commit" value="注册"/>
+			            <input type="submit" class="btn" id="commit" value="{pigcms{:L('_B_D_LOGIN_REG2_')}"/>
 			        </div>
 			    </form>
-				<p class="signup-guide">已有账号？<a href="{pigcms{:U('Login/index',array('referer'=>urlencode($referer)))}">立即登录</a></p>
+				<p class="signup-guide">{pigcms{:L('_ALREADY_ACC_')} <a href="{pigcms{:U('Login/index',array('referer'=>urlencode($referer)))}">{pigcms{:L('_B_D_LOGIN_LOGINNOW_')}</a></p>
 		    </div>
 		</div>
 	</div>
@@ -74,7 +74,7 @@
 			}
 			$("#J-login-form").submit(function(){
 				$('.validate-info').css('visibility','hidden');
-				$('#commit').val('注册中...').prop('disabled',true);
+				$('#commit').val('{pigcms{:L("_B_D_LOGIN_REG2_")}...').prop('disabled',true);
 				
 				$("#login-phone").val($.trim($("#login-phone").val()));
 				$("#login-password").val($.trim($("#login-password").val()));
@@ -91,7 +91,7 @@
 				</if>
 				var repwd = $("#login-repassword").val();
 				if(phone == '' || phone == null){
-					error_tips('手机号不能为空','login-phone');
+					error_tips('{pigcms{:L("_B_D_LOGIN_BLANKNUM_")}','login-phone');
 					return false;
 				}
 				//if(!/^[0-9]{10}$/.test(phone)){
@@ -99,23 +99,23 @@
 					//return false;
 				//}
 				if(pwd == '' || pwd == null){
-					error_tips('密码不能为空','login-password');
+					error_tips('{pigcms{:L("_B_D_LOGIN_BLANKKEY_")}','login-password');
 					return false;
 				}
 				if(pwd != repwd){
-					error_tips('两次密码输入不一致','login-repassword');
+					error_tips('{pigcms{:L("_B_LOGIN_DIFFERENTKEY_")}','login-repassword');
 					return false;
 				}
 				$.post("{pigcms{:U('Index/Login/reg')}", {'phone':phone,'pwd':pwd <if condition="C('config.reg_verify_sms') AND C('config.sms_key')">,sms_code:sms_code</if>}, function(data){
 					if(data.error_code){
-						$("#commit").val('注册').prop('disabled',false);
+						$("#commit").val('{pigcms{:L("_B_D_LOGIN_REG2_")}').prop('disabled',false);
 						$('.validate-info').html('<i class="tip-status tip-status--opinfo"></i>'+data.msg).css('visibility','visible');
 						return false;
 					}else if(data.user){
-						$('.validate-info').html('<i class="tip-status tip-status--success"></i>注册且登录成功！正在跳转.').css('visibility','visible');
+						$('.validate-info').html('<i class="tip-status tip-status--success"></i>{pigcms{:L("_B_LOGIN_REGISTSUCESS_")}').css('visibility','visible');
 						setTimeout("location.href='{pigcms{$referer}'", 1000);
 					}else{
-						$('.validate-info').html('<i class="tip-status tip-status--success"></i>注册成功！正在跳转登录页.').css('visibility','visible');
+						$('.validate-info').html('<i class="tip-status tip-status--success"></i>{pigcms{:L("_B_LOGIN_REGISTSUCESS_")}').css('visibility','visible');
 						setTimeout("location.href='{pigcms{:U('Login/index',array('referer'=>urlencode($referer)))}'", 1000);
 					}
 				}, 'json');
@@ -150,7 +150,7 @@
 					window.top.art.dialog.data('login_iframe_handle',iframe);
 				},
 				id: 'login_handle',
-				title:'微信扫码快速注册',
+				title:'{pigcms{:L("_FAST_REG_WECHAT_")}',
 				padding: 0,
 				width: 430,
 				height: 433,
@@ -167,13 +167,13 @@
 		});
 		function error_tips(msg,id){
 			$('.validate-info').html('<i class="tip-status tip-status--opinfo"></i>'+msg).css('visibility','visible');
-			$("#commit").val('注册').prop('disabled',false);
+			$("#commit").val('{pigcms{:L("_B_D_LOGIN_REG2_")}').prop('disabled',false);
 			$('#'+id).focus();
 		}
 		
 		var countdown = 60;function sendsms(val){
 		if($("input[name='phone']").val()==''){
-			alert('手机号码不能为空！');
+			alert('{pigcms{:L("_B_D_LOGIN_BLANKNUM_")}');
 		}else{
 			
 			if(countdown==60){

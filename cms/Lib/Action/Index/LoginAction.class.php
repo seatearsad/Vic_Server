@@ -61,7 +61,7 @@ class LoginAction extends BaseAction {
         if($this->config['sms_key']){
             $this->display();
         }else{
-            $this->error('平台未开启短信验证功能，请联系系统管理员！');
+            $this->error(L('_B_LOGIN_NOMESSAGE_'));
         }
     }
 
