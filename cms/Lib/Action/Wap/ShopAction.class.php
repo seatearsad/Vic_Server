@@ -1064,7 +1064,7 @@ class ShopAction extends BaseAction{
         $store['home_url'] = U('Index/index', array('token' => $row['mer_id']));
         //modify garfunkel 判断语言
         $store['name'] = lang_substr($row['name'],C('DEFAULT_LANG'));
-        $store['store_notice'] = $row['store_notice'];
+        $store['store_notice'] = lang_substr($row['store_notice'],C('DEFAULT_LANG'));
         $store['txt_info'] = $row['txt_info'];
         $store['image'] = isset($images[0]) ? $images[0] : '';
         $store['auth_files_str'] = implode(',', $auth_files);

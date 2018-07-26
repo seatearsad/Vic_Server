@@ -33,13 +33,13 @@
 				</div> 
 			</div>
 			<div class="search">
-				<h2>{pigcms{$config.shop_alias_name}，让生活更简单</h2>
+				<h2>{pigcms{:L('_OUT_TXT_')} {pigcms{:L('_MAKE_LIFE_EASIER_')}</h2>
 				<div class="clr">
 					<div class="text fl">
 						<input type="text" readonly="readonly" value="{pigcms{$now_city['area_name']}" class="elastic fl" id="city_name">
-						<input type="text" placeholder="请输入您的收货地址（写字楼，小区或者学校）" class="fr" id="search-con">
+						<input type="text" placeholder="{pigcms{:L('_ENTER_RECE_ADDRESS_')}" class="fr" id="search-con">
                     </div>
-					<div class="fr"><button class="search-btn">搜 索</button></div>
+					<div class="fr"><button class="search-btn">{pigcms{:L('_SEARCH_TXT_')}</button></div>
                     <div class="search-show s-item search-sug s-hide">
                         <ul class="search-sug">
 							<!--li data-name="金隅嘉华大厦" data-lat="40.042268" data-lng="116.314645" class="demo"><i></i>金隅嘉华大厦&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size:14px;color:red;">(此演示地点含店铺演示数据)</span></li-->
@@ -49,7 +49,7 @@
 				<!-- 地址 -->
 				<div class="place_list">
 					<ul class="place_top clr">
-						<li class="on"><span>猜你在</span><i>{pigcms{$now_city['area_name']}</i></li>
+						<li class="on"><span>{pigcms{:L('_GUESS_YOU_IN_')}</span><i>{pigcms{$now_city['area_name']}</i></li>
 						<volist name="all_city" id="first">
 						<li class="click" data-cat_id="{pigcms{$key}">{pigcms{$key}</li>
 						</volist>
@@ -71,8 +71,8 @@
 
 		<section class="Client">
 			<div class="Client_top">
-				<h2>让生活更简单</h2>
-				<p>微信扫描二维码关注或下载手机客户端，随时随地查看身边{pigcms{$config.shop_alias_name}</p>
+				<h2>{pigcms{:L('_MAKE_LIFE_EASIER_')}</h2>
+				<!--p>微信扫描二维码关注或下载手机客户端，随时随地查看身边{pigcms{$config.shop_alias_name}</p-->
 			</div>
 			<div class="Client_end">
 				<ul class="clr">
@@ -91,7 +91,7 @@
 					<li style="margin-right:0px;">
 						<a href="javascript:void(0)">
 							<img src="{pigcms{$config.wechat_qrcode}" class="img">
-							<p>微信扫描二维码</p>
+							<p>{pigcms{:L('_WECHAT_SCORE_CODE_')}</p>
 						</a>
 					</li>
 				</ul>
