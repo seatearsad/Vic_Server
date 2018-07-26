@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-<title>快店订单详情 | {pigcms{$config.site_name}</title>
+<title>{pigcms{:L('_ORDER_DETAIL_')} | {pigcms{:L('_VIC_NAME_')}</title>
 <meta name="keywords" content="{pigcms{$config.seo_keywords}" />
 <meta name="description" content="{pigcms{$config.seo_description}" />
 <link href="{pigcms{$static_path}css/css.css" type="text/css"  rel="stylesheet" />
@@ -13,6 +13,7 @@
 	<script type="text/javascript">
 	   var  shop_alias_name = "{pigcms{$config.shop_alias_name}";
 	</script>
+<script type="text/javascript" src="{pigcms{$static_public}js/lang/{pigcms{:C('DEFAULT_LANG')}.js" charset="utf-8"></script>
 <script src="{pigcms{$static_path}js/common.js"></script>
 <script src="{pigcms{$static_path}js/category.js"></script>
 <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/meal_order_detail.css" />
@@ -47,9 +48,9 @@ filter:alpha(opacity=50);
 		<article>
 			<div class="menu cf">
 				<div class="menu_left hide">
-					<div class="menu_left_top">全部分类</div>
+					<div class="menu_left_top">{pigcms{:L('_ALL_CLASSIF_')}</div>
 					<div class="list">
-						<ul>
+						<!--ul>
 							<volist name="all_category_list" id="vo" key="k">
 								<li>
 									<div class="li_top cf">
@@ -65,7 +66,7 @@ filter:alpha(opacity=50);
 									</if>
 								</li>
 							</volist>
-						</ul>
+						</ul-->
 					</div>
 				</div>
 				<div class="menu_right cf">
@@ -73,7 +74,7 @@ filter:alpha(opacity=50);
 						<ul>
 							<pigcms:slider cat_key="web_slider" limit="10" var_name="web_index_slider">
 								<li class="ctur">
-									<a href="{pigcms{$vo.url}">{pigcms{$vo.name}</a>
+									<a href="{pigcms{$vo.url}">{pigcms{:lang_substr($vo['name'],C('DEFAULT_LANG'))}</a>
 								</li>
 							</pigcms:slider>
 						</ul>
@@ -86,45 +87,45 @@ filter:alpha(opacity=50);
 			<div id="bd" class="cf">
 				<div id="content">
 					<div class="mainbox mine">
-						<h2>订单详情<span class="op-area"><a href="{pigcms{:U('Index/shop_list')}">返回订单列表</a></span></h2>
+						<h2>{pigcms{:L('_ORDER_DETAIL_')}<span class="op-area"><a href="{pigcms{:U('Index/shop_list')}">{pigcms{:L('_B_PURE_MY_63_')}</a></span></h2>
 						<dl class="info-section primary-info J-primary-info">
 							<dt>
-								<span class="info-section--title">当前订单状态：</span>
+								<span class="info-section--title">{pigcms{:L('_ORDER_STATUS_')}：</span>
 								<em class="info-section--text">
 								<if condition="$now_order['status'] eq 4">
-									已取消并退款
+									{pigcms{:L('_CANCEL_A_REFUND_')}
 								<elseif condition="$now_order['status'] eq 5" />
-									已取消
+                                    {pigcms{:L('_B_PURE_MY_76_')}
 								<elseif condition="empty($now_order['paid'])" />
-									未付款
+                                    {pigcms{:L('_NOT_PAY_')}
 								<elseif condition="$now_order['third_id'] eq '0' AND $now_order['pay_type'] eq 'offline'"/>
-									未消费 (<font color="red">线下未付款</font>)
+                                    {pigcms{:L('_NOT_SALE_PAY_')} (<font color="red">{pigcms{:L('_UNPAID_OFFLINE_')}</font>)
 								<elseif condition="$now_order['status'] lt 2"/>
-									未消费
+                                    {pigcms{:L('_NOT_SALE_PAY_')}
 								<elseif condition="$now_order['status'] == 2"/>
-									已使用
+                                    {pigcms{:L('_AL_USED_')}
 								<elseif condition="$now_order['status'] == 3"/>
-									已完成
+                                    {pigcms{:L('_B_PURE_MY_74_')}
 								</if></em>
-								<div style="float:right;"><a class="see_tmp_qrcode" href="{pigcms{:U('Index/Recognition/see_tmp_qrcode',array('qrcode_id'=>3500000000+$now_order['order_id']))}">查看微信二维码</a></div>
+								<div style="float:right;"><a class="see_tmp_qrcode" href="{pigcms{:U('Index/Recognition/see_tmp_qrcode',array('qrcode_id'=>3500000000+$now_order['order_id']))}">{pigcms{:L('_CHECK_WECHAT_CODE_')}</a></div>
 							</dt>
 							<dd class="last">
 							  <if condition="$now_order['status'] eq 4">
 									<div class="operation">
-									    <a class="btn btn-mini">已取消并退款</a>
+									    <a class="btn btn-mini">{pigcms{:L('_CANCEL_A_REFUND_')}</a>
 									</div>
 								<elseif condition="($now_order['status'] eq '0') AND ($now_order['paid'] eq '1')" />
 									<div class="operation">
-										<a class="btn btn-mini" href="javascript:void(0)" onclick="shop_order_cancel({pigcms{$now_order['order_id']})">取消订单</a>
+										<a class="btn btn-mini" href="javascript:void(0)" onclick="shop_order_cancel({pigcms{$now_order['order_id']})">{pigcms{:L('_CANCEL_ORDER_')}</a>
 									</div>
 								<elseif condition="empty($now_order['paid']) || $now_order['status'] eq 2" />
 									<div class="operation">
 										<if condition="empty($now_order['paid']) AND ($now_order['status'] eq 0)">
-											<a class="btn btn-mini" href="{pigcms{:U('Index/Pay/check',array('type'=>'shop','order_id'=>$now_order['order_id']))}">付款</a>
-											<a class="inline-link J-order-cancel" href="{pigcms{:U('Index/shop_order_del',array('order_id'=>$now_order['order_id']))}">删除</a>
+											<a class="btn btn-mini" href="{pigcms{:U('Index/Pay/check',array('type'=>'shop','order_id'=>$now_order['order_id']))}">{pigcms{:L('_B_PURE_MY_81_')}</a>
+											<a class="inline-link J-order-cancel" href="{pigcms{:U('Index/shop_order_del',array('order_id'=>$now_order['order_id']))}">{pigcms{:L('_B_PURE_MY_27_')}</a>
 										
 										<elseif condition="$now_order['status'] eq 2"/>
-											<a class="btn btn-mini" href="{pigcms{:U('Rates/shop')}">评价</a>
+											<a class="btn btn-mini" href="{pigcms{:U('Rates/shop')}">{pigcms{:L('_EVALUATE_TXT_')}</a>
 										</if>
 									</div>
 								</if>
@@ -143,42 +144,42 @@ filter:alpha(opacity=50);
 									</div>
 								</dd>
 							</if>
-							<dt class="bunch-section__label">订单信息</dt>
+							<dt class="bunch-section__label">{pigcms{:L('_ORDER_INFO_')}</dt>
 							<dd class="bunch-section__content">
 								<ul class="flow-list">
-									<li>订单编号：{pigcms{$now_order.real_orderid}</li>
-									<li>下单时间：{pigcms{$now_order.create_time|date='Y-m-d H:i:s',###}</li>
+									<li>{pigcms{:L('_B_PURE_MY_68_')}：{pigcms{$now_order.real_orderid}</li>
+									<li>{pigcms{:L('_ORDER_TIME_')}：{pigcms{$now_order.create_time|date='Y-m-d H:i:s',###}</li>
 									<if condition="$now_order['third_id'] eq '0' AND $now_order['pay_type'] eq 'offline'">
 										<li></li>
 										<li></li>
-										<li></li>
-										<li style="margin:30px 0;width:auto;"><b>线下需向商家付金额：</b>总金额 ${pigcms{$now_order['total_price']} - 商家会员卡余额支付 ${pigcms{:floatval($now_order['merchant_balance'])} - 平台余额支付 ${pigcms{:floatval($now_order['balance_pay'])} - 平台{pigcms{$config.score_name}支付 ${pigcms{:floatval($now_order['score_deducte'])}<if condition="$now_order['card_id']"> - 商家优惠券 ${pigcms{$now_order['coupon_price']}<elseif condition="$now_order['coupon_id']"> - 平台优惠券 ${pigcms{$now_order['coupon_price']}</if> = <font color="red">${pigcms{$now_order['total_price']-$now_order['merchant_balance']-$now_order['balance_pay']-$now_order['score_deducte']-$now_order['coupon_price']}元</font></li>
+										<li style="margin:30px 0;width:auto;"><b>{pigcms{:L('_PAY_TO_SHOP_OFFLINE_')}：</b>{pigcms{:L('_B_PURE_MY_70_')} ${pigcms{$now_order['total_price']} - {pigcms{:L('_SHOP_CARD_PAY_')} ${pigcms{:floatval($now_order['merchant_balance'])} - {pigcms{:L('_PLATFORM_BALANCE_PAY_')} ${pigcms{:floatval($now_order['balance_pay'])} - {pigcms{:L('_PLATFORM_TICKET_PATY_')} ${pigcms{:floatval($now_order['score_deducte'])}<if condition="$now_order['card_id']"> - {pigcms{:L('_SHOP_COUP_')} ${pigcms{$now_order['coupon_price']}<elseif condition="$now_order['coupon_id']"> - {pigcms{:L('_PLATFORM_COUP_')} ${pigcms{$now_order['coupon_price']}</if> = <font color="red">${pigcms{$now_order['total_price']-$now_order['merchant_balance']-$now_order['balance_pay']-$now_order['score_deducte']-$now_order['coupon_price']}</font></li>
+                                        <li></li>
 									<elseif condition="$now_order['paid']"/>
-										<li>付款方式：{pigcms{$now_order.pay_type_str}</li>
-										<li>付款时间：{pigcms{$now_order.pay_time|date='Y-m-d H:i:s',###}</li>
+										<li>{pigcms{:L('_PAYMENT_MODE_')}：{pigcms{$now_order.pay_type_str}</li>
+										<li>{pigcms{:L('_PAYMENT_TIME_')}：{pigcms{$now_order.pay_time|date='Y-m-d H:i:s',###}</li>
 									</if>
 									
 									<if condition="!empty($now_order['use_time'])">
-										<li>消费时间：{pigcms{$now_order.use_time|date='Y-m-d H:i',###}</li>
+										<li>{pigcms{:L('_SALE_TIME_')}：{pigcms{$now_order.use_time|date='Y-m-d H:i',###}</li>
 									</if>
 								</ul>
 								<ul class="flow-list">
-									<li>商品总价：${pigcms{$now_order.goods_price|floatval} 元</li>
+									<li>{pigcms{:L('_TOTAL_COMM_PRICE_')}：${pigcms{$now_order.goods_price|floatval} </li>
 								<if condition="$now_order['is_pick_in_store'] neq 2">
-									<li>配送费用：${pigcms{$now_order['freight_charge']|floatval} 元</li>
+									<li>{pigcms{:L('_DELI_PRICE_')}：${pigcms{$now_order['freight_charge']|floatval} </li>
 								</if>
-									<li>打包费：${pigcms{$now_order['packing_charge']|floatval} 元</li>
-									<li>订单总价：${pigcms{$now_order['total_price']|floatval} 元</li>
+									<li>{pigcms{:L('_PACK_PRICE_')}：${pigcms{$now_order['packing_charge']|floatval} </li>
+									<li>{pigcms{:L('_ORDER_TOTAL_')}：${pigcms{$now_order['total_price']|floatval} </li>
 								
 								<if condition="$now_order['merchant_reduce'] gt 0">
-									<li>店铺优惠：${pigcms{$now_order['merchant_reduce']|floatval} 元</li>
+									<li>{pigcms{:L('_STORE_DIS_')}：${pigcms{$now_order['merchant_reduce']|floatval} </li>
 								</if>
 								
 								
 								<if condition="$now_order['balance_reduce'] gt 0">
-									<li>平台优惠：${pigcms{$now_order['balance_reduce']|floatval} 元</li>
+									<li>{pigcms{:L('平台优惠')}：${pigcms{$now_order['balance_reduce']|floatval} </li>
 								</if>
-									<li>实付金额（+5%税费）：${pigcms{$now_order['price']|floatval} 元</li>
+									<li>{pigcms{:L('_ACTUAL_PAYMENT_')}（+5% {pigcms{:L('_TAXATION_TXT_')}）：${pigcms{$now_order['price']|floatval} </li>
 								</ul>
 								<ul class="flow-list">
 								<if condition="$now_order['score_used_count']">
@@ -187,51 +188,51 @@ filter:alpha(opacity=50);
 								</if>
 			
 								<if condition="$now_order['merchant_balance']">
-								<li>商家余额：${pigcms{$now_order['merchant_balance']|floatval} 元</li>
+								<li>{pigcms{:L('_SHOP_BALANCE_PAY_')}：${pigcms{$now_order['merchant_balance']|floatval} </li>
 								</if>
 								<if condition="$now_order['balance_pay']">
-								<li>平台余额：${pigcms{$now_order['balance_pay']|floatval} 元</li>
+								<li>{pigcms{:L('_PLATFORM_BALANCE_PAY_')}：${pigcms{$now_order['balance_pay']|floatval} </li>
 								</if>
 								<if condition="$now_order['card_give_money']">
-								<li>会员卡赠送余额：${pigcms{$now_order['card_give_money']|floatval} 元</li>
+								<li>{pigcms{:L('_PAYMENT_OF_BALANCE_')}：${pigcms{$now_order['card_give_money']|floatval} </li>
 								</if>
 								<if condition="$now_order['payment_money']">
-								<li>在线支付：${pigcms{$now_order['payment_money']|floatval} 元</li>
+								<li>{pigcms{:L('_ONLINE_PAY_')}：${pigcms{$now_order['payment_money']|floatval} </li>
 								</if>
 								
 								<if condition="$now_order['card_id']">
-								<li>店铺优惠券金额：${pigcms{$now_order['card_price']|floatval} 元</li>
+								<li>{pigcms{:L('_SHOP_COUP_')}：${pigcms{$now_order['card_price']|floatval} </li>
 								</if>
 								<if condition="$now_order['coupon_id']">
-								<li>平台优惠券金额：${pigcms{$now_order['coupon_price']|floatval} 元</li>
+								<li>{pigcms{:L('_PLATFORM_COUP_')}：${pigcms{$now_order['coupon_price']|floatval} </li>
 								</if>
 								<if condition="$now_order['pay_type'] eq 'offline' AND empty($now_order['third_id'])">
-								<li>线下需支付：${pigcms{$now_order['price']-$now_order['card_price']-$now_order['merchant_balance']-$now_order['balance_pay']-$now_order['payment_money']-$now_order['score_deducte']-$now_order['coupon_price']|floatval}元</li>
+								<li>{pigcms{:L('_PAY_TO_SHOP_OFFLINE_')}：${pigcms{$now_order['price']-$now_order['card_price']-$now_order['merchant_balance']-$now_order['balance_pay']-$now_order['payment_money']-$now_order['score_deducte']-$now_order['coupon_price']|floatval}元</li>
 								</if>
 			
 								</ul>
 								<if condition="$now_order['is_pick_in_store'] eq 2">
 									<ul>
-										<li class="invalid">提货信息：{pigcms{$now_order.address}</li>
+										<li class="invalid">{pigcms{:L('提货信息')}：{pigcms{$now_order.address}</li>
 									</ul>
 								<else />
 									<ul>
-										<li class="invalid">送货信息：{pigcms{$now_order.username}，{pigcms{$now_order.userphone}，{pigcms{$now_order.address}</li>
+										<li class="invalid">{pigcms{:L('_SHIPPING_INFO_')}：{pigcms{$now_order.username}，{pigcms{$now_order.userphone}，{pigcms{$now_order.address}</li>
 									</ul>
 								</if>
 							</dd>
 							
-							<dt class="bunch-section__label">{pigcms{$config.shop_alias_name}信息</dt>
+							<dt class="bunch-section__label">{pigcms{:L('_TAKEOUT_INFO_')}</dt>
 							<dd class="bunch-section__content">
 								<table cellspacing="0" cellpadding="0" border="0" class="info-table">
 									<tbody>
 										<tr>
-											<th class="left" width="100">商品名称</th>
-											<th width="50">单价</th>
+											<th class="left" width="100">{pigcms{:L('_PRODUCT_NAME_')}</th>
+											<th width="50">{pigcms{:L('_SINGLE_PRICE_')}</th>
 											<th width="10"></th>
-											<th width="30">数量</th>
+											<th width="30">{pigcms{:L('_B_PURE_MY_69_')}</th>
 											<th width="10"></th>
-											<th width="54">支付金额</th>
+											<th width="54">{pigcms{:L('_AMOUNT_PAYMENT_')}</th>
 										</tr>
 										<volist name="now_order['info']" id="v">
 										<tr>
@@ -285,7 +286,7 @@ filter:alpha(opacity=50);
 		});
 		
 		function shop_order_cancel(order_id){
-			if(confirm('确认取消该订单？')){
+			if(confirm("{pigcms{:L('_CONFIRM_CANCEL_ORDER_')}")){
 				var cancelUrl = "{pigcms{:U('shop_order_check_refund')}";
 				cancelUrl += "&order_id="+order_id;
 				location.href = cancelUrl;

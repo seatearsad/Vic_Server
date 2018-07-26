@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-<title>我的余额 | {pigcms{$config.site_name}</title>
+<title>{pigcms{:L('_MY_BALANCE_')} | {pigcms{:L('_VIC_NAME_')}</title>
 <meta name="keywords" content="{pigcms{$config.seo_keywords}" />
 <meta name="description" content="{pigcms{$config.seo_description}" />
 <link href="{pigcms{$static_path}css/css.css" type="text/css"  rel="stylesheet" />
@@ -73,6 +73,7 @@ a.btn {
 	<script type="text/javascript">
 	   var  meal_alias_name = "{pigcms{$config.meal_alias_name}";
 	</script>
+<script type="text/javascript" src="{pigcms{$static_public}js/lang/{pigcms{:C('DEFAULT_LANG')}.js" charset="utf-8"></script>
 <script src="{pigcms{$static_path}js/common.js"></script>
 <!--[if IE 6]>
 <script  src="{pigcms{$static_path}js/DD_belatedPNG_0.0.8a.js" mce_src="{pigcms{$static_path}js/DD_belatedPNG_0.0.8a.js"></script>
@@ -97,9 +98,9 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 			<div class="menu cf">
 		
 				<div class="menu_left hide">
-					<div class="menu_left_top">全部分类</div>
+					<div class="menu_left_top">{pigcms{:L('_ALL_CLASSIF_')}</div>
 					<div class="list">
-						<ul>
+						<!--ul>
 							<volist name="all_category_list" id="vo" key="k">
 								<li>
 									<div class="li_top cf">
@@ -115,7 +116,7 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 									</if>
 								</li>
 							</volist>
-						</ul>
+						</ul-->
 					</div>
 				</div>
 				<div class="menu_right cf">
@@ -123,7 +124,7 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 						<ul>
 							<pigcms:slider cat_key="web_slider" limit="10" var_name="web_index_slider">
 								<li class="ctur">
-									<a href="{pigcms{$vo.url}">{pigcms{$vo.name}</a>
+									<a href="{pigcms{$vo.url}">{pigcms{:lang_substr($vo['name'],C('DEFAULT_LANG'))}</a>
 								</li>
 							</pigcms:slider>
 						</ul>
@@ -140,16 +141,16 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 				<include file="Public:sidebar"/>
 				<div id="content" class="coupons-box">
 					<div class="mainbox mine">
-						<div class="balance">您当前的余额： <strong>${pigcms{$now_user.now_money}</strong><if condition="$now_user.frozen_money gt 0 AND $now_user.free_time gt $_SERVER['REQUEST_TIME'] AND $config.open_frozen_money eq 1"><span class="frozen_money" style="font-size:12px;">(冻结{pigcms{$now_user.frozen_money|floatval}元)<i class="reason"></i></span></if> <a class="btn" id="recharge_amount">充值</a><if condition="$config.company_pay_open eq 1"><a class="btn" id="withdraw">提现</a></if></div>
+						<div class="balance">{pigcms{:L('_ACCOUNT_BALANCE_')}： <strong>${pigcms{$now_user.now_money}</strong><if condition="$now_user.frozen_money gt 0 AND $now_user.free_time gt $_SERVER['REQUEST_TIME'] AND $config.open_frozen_money eq 1"><span class="frozen_money" style="font-size:12px;">(冻结{pigcms{$now_user.frozen_money|floatval}元)<i class="reason"></i></span></if> <a class="btn" id="recharge_amount">{pigcms{:L('_RECHARGE_TXT_')}</a><if condition="$config.company_pay_open eq 1"><a class="btn" id="withdraw">{pigcms{:L('_PUT_FORWARD_')}</a></if></div>
 						<ul class="filter cf">
-							<li class="current"><a href="{pigcms{:U('Credit/index')}">余额记录</a></li>
+							<li class="current"><a href="{pigcms{:U('Credit/index')}">{pigcms{:L('_BALANCE_RECORD_')}</a></li>
 						</ul>
 						<div class="table-section">
 							<table cellspacing="0" cellpadding="0" border="0">
 								<tr>
-									<th width="130">时间</th>
-									<th width="auto">详情</th>
-									<th width="110">金额（元）</th>
+									<th width="130">{pigcms{:L('_TIME_TXT_')}</th>
+									<th width="auto">{pigcms{:L('_DETAIL_TXT_')}</th>
+									<th width="110">{pigcms{:L('_AMOUNT_TXT_')}</th>
 								</tr>
 								<volist name="money_list" id="vo">
 									<tr>
@@ -229,15 +230,15 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 					ok:function(){
 						var money = parseFloat($('#recharge_money').val());
 						if(isNaN(money)){
-							$('#money_tips').html('请输入合法的金额！');
+							$('#money_tips').html("{pigcms{:L('_ENTER_LEGAL_AMOUNT_')}");
 							$('#recharge_money').focus();
 							return false;
 						}else if(money > 10000){
-							$('#money_tips').html('单次充值金额最高不能超过1万元');
+							$('#money_tips').html("{pigcms{:L('_RECHARGE_TEN_TH_')}");
 							$('#recharge_money').focus();
 							return false;
 						}else if(money < 0.1){
-							$('#money_tips').html('单次充值金额最低不能低于 0.1 元');
+							$('#money_tips').html("{pigcms{:L('_RECHARGE_POINTONE_')}");
 							$('#recharge_money').focus();
 							return false;
 						}else{

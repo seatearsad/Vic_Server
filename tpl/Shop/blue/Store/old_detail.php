@@ -51,7 +51,7 @@
 					<a href="/"><img src="{pigcms{$config.site_logo}" width=180 height=51></a>
 				</div>
 				<div class="link fl">
-					<a href="/shop.html" class="on">首页</a><span>|</span><a href="{pigcms{:UU('User/Index/index')}">我的订单</a>
+					<a href="/shop.html" class="on">首页</a><span>|</span><a href="{pigcms{:UU('User/Index/shop_list')}">我的订单</a>
 				</div>
 				<div class="fr">
 					<input type="text" placeholder="搜索美食" id="keyword" value="{pigcms{$keyword}">

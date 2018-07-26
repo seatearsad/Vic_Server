@@ -390,7 +390,7 @@
 								</li>
 								<li class="pingjia">共 <span>{pigcms{$now_group.reply_count}</span> 次评价</li>
 								<li class="pinglun">
-									<a class="fabiao" href="{pigcms{:U('User/Index/index')}" target="_blank">
+									<a class="fabiao" href="{pigcms{:U('User/Index/shop_list')}" target="_blank">
 										<img src="{pigcms{$static_path}images/xiangqing_54.png"/>
 										<p>发表评论</p>
 									</a>

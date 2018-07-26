@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-<title>付款确认 - {pigcms{$config.seo_title}</title>
+<title>{pigcms{:L('_PAYMENT_CONFIRM_')} - {pigcms{:L('_VIC_NAME_')}</title>
 <meta name="keywords" content="{pigcms{$config.seo_keywords}" />
 <meta name="description" content="{pigcms{$config.seo_description}" />
 <link href="{pigcms{$static_path}css/css.css" type="text/css"  rel="stylesheet" />
@@ -246,6 +246,7 @@
            
             
 </script>
+<script type="text/javascript" src="{pigcms{$static_public}js/lang/{pigcms{:C('DEFAULT_LANG')}.js" charset="utf-8"></script>
 <script src="{pigcms{$static_path}js/common.js"></script>
 <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/buy-process.css" />
 <!--[if IE 6]>
@@ -397,13 +398,13 @@ a.see_tmp_qrcode {
 			    		<div class="buy-process-bar-container">
 						    <ol class="buy-process-desc steps-desc">
 						        <li class="step step--current">
-						            1. 提交订单
+						            1. {pigcms{:L('_PLACE_ORDER_')}
 						        </li>
 						        <li class="step">
-						            2. 选择支付方式
+						            2. {pigcms{:L('_SELECT_PAY_MODE_')}
 						        </li>
 						        <li class="step">
-						            3. 购买成功
+						            3. {pigcms{:L('_SHOPPING_SUCCESS_')}
 						        </li>
 						    </ol>
 						    <div class="progress">
@@ -414,16 +415,16 @@ a.see_tmp_qrcode {
 					<if condition="$order_info['order_type'] != 'recharge'">
 						<div class="sysmsgw common-tip" style="margin-bottom:20px;" id="sysmsg-error">					
 							<div class="sysmsg">							
-								<span class="J-msg-content"><span class="J-tip-status tip-status"></span>在微信中付款才可以使用商家优惠券和商家会员卡。&nbsp;
+								<span class="J-msg-content"><span class="J-tip-status tip-status"></span>{pigcms{:L('_WECHAT_COUP_A_CARD_')}&nbsp;
 								<if condition="$order_info['order_type'] eq 'group'">
-								<a class="see_tmp_qrcode" href="{pigcms{:U('Index/Recognition/see_tmp_qrcode',array('qrcode_id'=>2000000000+$order_info['order_id']))}">查看订单微信二维码</a>
+								<a class="see_tmp_qrcode" href="{pigcms{:U('Index/Recognition/see_tmp_qrcode',array('qrcode_id'=>2000000000+$order_info['order_id']))}">{pigcms{:L('_CHECK_WECHAT_CODE_')}</a>
 								<elseif condition="$order_info['order_type'] eq 'shop'" />
-								<a class="see_tmp_qrcode" href="{pigcms{:U('Index/Recognition/see_tmp_qrcode',array('qrcode_id'=>3500000000+$order_info['order_id']))}" target="_blank">查看订单微信二维码</a>
+								<a class="see_tmp_qrcode" href="{pigcms{:U('Index/Recognition/see_tmp_qrcode',array('qrcode_id'=>3500000000+$order_info['order_id']))}" target="_blank">{pigcms{:L('_CHECK_WECHAT_CODE_')}</a>
 								<else/>
-								<a class="see_tmp_qrcode" href="{pigcms{:U('Index/Recognition/see_tmp_qrcode',array('qrcode_id'=>3000000000+$order_info['order_id']))}" target="_blank">查看订单微信二维码</a>
+								<a class="see_tmp_qrcode" href="{pigcms{:U('Index/Recognition/see_tmp_qrcode',array('qrcode_id'=>3000000000+$order_info['order_id']))}" target="_blank">{pigcms{:L('_CHECK_WECHAT_CODE_')}</a>
 								</if>
 								</span>
-								<span class="close common-close">关闭</span>
+								<span class="close common-close">{pigcms{:L('_CLOSE_TXT_')}</span>
 							</div>					
 						</div>
 					</if>
@@ -432,10 +433,10 @@ a.see_tmp_qrcode {
 			            	<div class="table-section summary-table">
 			                    <table cellspacing="0" class="buy-table">
 			                        <tr class="order-table-head-row">
-			                        	<th class="desc">项目</th>
-			                        	<th class="unit-price">单价</th>
-                                                        <th class="amount">数量</th>
-                                                        <th class="col-total">总价</th>
+			                        	<th class="desc">{pigcms{:L('_PRODUCT_NAME_')}</th>
+			                        	<th class="unit-price">{pigcms{:L('_SINGLE_PRICE_')}</th>
+                                                        <th class="amount">{pigcms{:L('_B_PURE_MY_69_')}</th>
+                                                        <th class="col-total">{pigcms{:L('_B_PURE_MY_70_')}</th>
 			                    	</tr>
 				                    <volist name="order_info['order_content']" id="vo">
 				                        <tr>
@@ -452,11 +453,11 @@ a.see_tmp_qrcode {
 			                        <tr>
 										<td>
 			                        	<if condition="!empty($leveloff) AND is_array($leveloff)">
-											<span style="float: right;">会员等级<strong style="color:#EA4F01;">{pigcms{$leveloff['lname']}</strong> &nbsp;{pigcms{$leveloff['offstr']}</span>   
+											<span style="float: right;">{pigcms{:L('_B_PURE_MY_41_')}<strong style="color:#EA4F01;">{pigcms{$leveloff['lname']}</strong> &nbsp;{pigcms{$leveloff['offstr']}</span>
 										</if>							
 										</td>
 				                        <td colspan="3" class="extra-fee total-fee rightpadding">
-											<strong><if condition="!empty($leveloff) AND is_array($leveloff)">优惠后</if>订单总额(+5%税费)</strong>：
+											<strong><if condition="!empty($leveloff) AND is_array($leveloff)">{pigcms{:L('_AFTER_DIS_')}</if>{pigcms{:L('_ORDER_TOTAL_')}(+5% {pigcms{:L('_TAXATION_TXT_')})</strong>：
 				                            <span class="inline-block money">
 				                                $<strong id="deal-buy-total-t">{pigcms{$order_info.order_total_money}<if condition="$config.open_extra_price eq 1 AND $order_info.extra_price gt 0">+{pigcms{$order_info.extra_price}{pigcms{$config.extra_price_alias_name}</if></strong>
 				                            </span>
@@ -465,16 +466,16 @@ a.see_tmp_qrcode {
 			                    	<if condition="$score_count gt 0">
 										<tr>
 											<td style="text-align:left;"  class="deal-component-quantity ">
-												<strong>帐户可用{pigcms{$config.score_name}</strong>：
+												<strong>{pigcms{:L('_ACC_WITH_TICKET_')}</strong>：
 												<span class="inline-block money" style="color:#EA4F01;">
 													<strong class="deal-buy-total-t">{pigcms{$now_user.score_count}</strong>
 													<input type="hidden" name="score_count" value="{pigcms{$now_user.score_count}">
 												</span>
 												&nbsp;&nbsp;&nbsp;&nbsp;
-												<strong>本单可用{pigcms{$config.score_name}</strong>：
-												<button for="J-cart-minus" class="minus" id="minus" data-action="-" type="button">-</button><input type="text"  name="score_used_count"  autocomplete="off" class="f-text J-quantity J-cart-quantity" maxlength="9" name="q" data-max="{pigcms{$score_can_use_count}" data-min="0"  id="score_change" value="{pigcms{$score_can_use_count}"/><button for="J-cart-add" class="item plus" data-action="+" type="button" id="plus">+</button>
+												<strong>{pigcms{:L('_TORDER_MEAL_TICKET_')}</strong>：
+												<button for="J-cart-minus" class="minus" id="minus" data-action="-" type="button">-</button><input type="text"  name="score_used_count"  autocomplete="off" class="f-text J-quantity J-cart-quantity" maxlength="9" name="q" data-max="{pigcms{$score_can_use_count}" data-min="0"  id="score_change" value="0"/><button for="J-cart-add" class="item plus" data-action="+" type="button" id="plus">+</button>
 												&nbsp;&nbsp;&nbsp;&nbsp;
-												<strong>{pigcms{$config.score_name}可抵扣现金</strong>：
+												<strong>{pigcms{:L('_MEAL_TICKET_DED_CASH_')}</strong>：
 												<span class="inline-block money" style="color:#EA4F01;">
 														<strong id="score_deducte_t">${pigcms{$score_deducte|floatval=###}</strong>
 														<input type="hidden" id="score_deducte" name="score_deducte" value="{pigcms{$score_deducte}">
@@ -485,21 +486,21 @@ a.see_tmp_qrcode {
 										
 										
 											<td colspan="3" class="extra-fee total-fee rightpadding">
-												使用{pigcms{$config.score_name}抵扣:<input type="checkbox" id ="use_score" name="use_score" value="1" <if condition="($score_checkbox eq 1) || (!empty($_GET['type']) && ($_GET['type'] == 'gift'))"> checked="checked" </if><if condition="($score_can_use_count eq 0) ||(($_GET['type'] == 'gift')) "> disabled="disabled" </if>>
+												{pigcms{:L('_USE_TICKET_DED_')}:<input type="checkbox" id ="use_score" name="use_score" value="1" <if condition="($score_checkbox eq 1) || (!empty($_GET['type']) && ($_GET['type'] == 'gift'))"> checked="checked" </if><if condition="($score_can_use_count eq 0) ||(($_GET['type'] == 'gift')) "> disabled="disabled" </if>>
 											</td>
 										</tr>
 									</if>
 								<if condition="$order_info['order_type'] != 'recharge'">
 									<tr>						
 										<td style="text-align:left;">
-												<strong>可用余额</strong>：
+												<strong>{pigcms{:L('_AVAILABLE_BALANCE_')}</strong>：
 												<span class="inline-block money" style="color:#EA4F01;">
 														$<strong id="deal-buy-total-t">{pigcms{$now_user.now_money}</strong>
 												</span>
 											
 										</td>
 										<td colspan="3" class="extra-fee total-fee rightpadding">
-												使用余额支付:<input type="checkbox" id ="use_balance" name="use_balance" value="1" <if condition="$now_user.now_money gt 0">checked="checked"<else />disabled="disabled"</if>>
+												{pigcms{:L('_USE_BALANCE_PAY_')}:<input type="checkbox" id ="use_balance" name="use_balance" value="1" <if condition="$now_user.now_money gt 0">checked="checked"<else />disabled="disabled"</if>>
 										</td>
 									</tr>
 								</if>
@@ -510,7 +511,7 @@ a.see_tmp_qrcode {
 					
 						<if condition="$order_info['order_type'] != 'recharge'">
 							<div id="need-pay" >
-								<strong>总金额</strong>：
+								<strong>{pigcms{:L('_B_PURE_MY_70_')}</strong>：
 								<span class="inline-block money" style="font-size:20px;color:#EA4F01;">
 									$<strong id="deal-buy-total-t" class="need_pay"><if condition="$pay_money lt 0">0.00<else />{pigcms{$pay_money}</if></strong>
 								</span>
@@ -520,7 +521,7 @@ a.see_tmp_qrcode {
 						<div id="pay_bank_list" style="display:none;">
 							<div class="payment-bank">
 								<div class="payment-banktit">
-									<b class="open">选择支付方式</b>
+									<b class="open">{pigcms{:L('_SELECT_PAY_MODE_')}</b>
 								</div>	
 								<div class="payment-bankcen">
 									<div class="bank morebank">
@@ -529,8 +530,8 @@ a.see_tmp_qrcode {
 												<php>if($pay_offline || $key != 'offline'){</php>
 												<li>
 													<label>
-														<input type="radio" name="pay_type" value="{pigcms{$key}" <if condition="$i eq 1">checked="checked"</if>>
-														<img src="{pigcms{$static_public}images/pay/{pigcms{$key}.gif" width="112" height="32" alt="{pigcms{$vo.name}" title="{pigcms{$vo.name}"/>
+														<input type="radio" name="pay_type" value="{pigcms{$key}" <if condition="$i eq 1">checked="checked"</if>>{pigcms{$vo.name}
+														<!--img src="{pigcms{$static_public}images/pay/{pigcms{$key}.gif" width="112" height="32" alt="{pigcms{$vo.name}" title="{pigcms{$vo.name}"/-->
 													</label>
 												</li>
 												<php>}</php>
@@ -546,7 +547,7 @@ a.see_tmp_qrcode {
 						<div class="form-submit">
 							<input type="hidden" name="order_id" value="{pigcms{$order_info.order_id}"/>
 				    		<input type="hidden" name="order_type" value="{pigcms{$order_info.order_type}"/>
-			                <input id="J-order-pay-button" type="submit" class="btn btn-large btn-pay" name="commit" value="去付款"/><br/>
+			                <input id="J-order-pay-button" type="submit" class="btn btn-large btn-pay" name="commit" value="{pigcms{:L('_B_PURE_MY_81_')}"/><br/>
 			            </div>
 			    	</form>
 				</div>
@@ -560,7 +561,7 @@ a.see_tmp_qrcode {
 		var orderid = 0;
 		$(function(){
 			$("form").submit(function() {
-			   $("#J-order-pay-button").val("正在处理...");
+			   $("#J-order-pay-button").val("{pigcms{:L('_DEALING_TXT_')}");
 			   $("#J-order-pay-button").attr("disabled", "disabled");
 			});
 			$('#sysmsg-error .close').click(function(){
@@ -615,12 +616,12 @@ a.see_tmp_qrcode {
 								resize: false,
 								content: '<p style="margin-top:20px;margin-bottom:20px;text-align:center;font-size:16px;color:black;">请使用微信扫描二维码进行支付</p><p style="text-align:center;"><img src="{pigcms{:U('Recognition/get_own_qrcode')}&qrCon='+result.info+'" style="width:240px;height:240px;"></p><p style="text-align:center;margin-top:20px;margin-bottom:20px;"><input id="J-order-weixin-button" type="button" class="btn btn-large btn-pay" value="已支付完成"/></p>',
 								cancel: function(){
-									$("#J-order-pay-button").val("去付款");
+									$("#J-order-pay-button").val("{pigcms{:L('_B_PURE_MY_81_')}");
 									$("#J-order-pay-button").removeAttr("disabled");
 								},
 							});
 						}else{
-							$("#J-order-pay-button").val("去付款");
+							$("#J-order-pay-button").val("{pigcms{:L('_B_PURE_MY_81_')}");
 							$("#J-order-pay-button").removeAttr("disabled");
 							art.dialog({
 								title: '错误提示：',

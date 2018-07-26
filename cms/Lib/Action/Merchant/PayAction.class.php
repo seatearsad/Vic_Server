@@ -226,7 +226,7 @@ class PayAction extends BaseAction{
                 }
                 if(!empty($pay_info['url'])){
                     $this->assign('jumpUrl',$pay_info['url']);
-                    $this->success('订单付款成功！现在跳转.');
+                    $this->success(L('_PAY_SUCCESS_JUMP_'));
                     exit();
                 }
             }

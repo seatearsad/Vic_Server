@@ -71,7 +71,7 @@ clear: both;
 							<else/>
 								<p class="user-info__name growth-info growth-info--nav">
 									<span>
-										<a rel="nofollow" href="{pigcms{:U('User/Index/index')}" class="username">{pigcms{$user_session.nickname}</a>
+										<a rel="nofollow" href="{pigcms{:U('User/Index/shop_list')}" class="username">{pigcms{$user_session.nickname}</a>
 									</span>
 									<a class="user-info__logout" href="{pigcms{:U('Index/Login/logout')}">退出</a>
 								</p>
@@ -89,16 +89,16 @@ clear: both;
 					</ul>
 					<ul class="site-mast__user-w">
 						<li class="user-orders">
-			                <a href="{pigcms{:U('User/Index/index')}" rel="nofollow">我的订单</a>
+			                <a href="{pigcms{:U('User/Index/shop_list')}" rel="nofollow">我的订单</a>
 			            </li>
 						<li class="dropdown dropdown--account">
-							<a id="J-my-account-toggle" rel="nofollow" class="dropdown__toggle" href="{pigcms{:U('User/Index/index')}">
+							<a id="J-my-account-toggle" rel="nofollow" class="dropdown__toggle" href="{pigcms{:U('User/Index/shop_list')}">
 								<span>我的信息</span>
 								<i class="tri tri--dropdown"></i>
 								<i class="vertical-bar"></i>
 							</a>
 							<ul id="J-my-account-menu" class="dropdown-menu dropdown-menu--text dropdown-menu--account account-menu">
-								<li><a class="dropdown-menu__item first" rel="nofollow" href="{pigcms{:U('User/Index/index')}">我的订单</a></li>
+								<li><a class="dropdown-menu__item first" rel="nofollow" href="{pigcms{:U('User/Index/shop_list')}">我的订单</a></li>
 								<li><a class="dropdown-menu__item" rel="nofollow" href="{pigcms{:U('User/Rates/index')}">我的评价</a></li>
 								<li><a class="dropdown-menu__item" rel="nofollow" href="{pigcms{:U('User/Collect/index')}">我的收藏</a></li>
 								<li><a class="dropdown-menu__item" rel="nofollow" href="{pigcms{:U('User/Point/index')}">我的{pigcms{$config['score_name']}</a></li>

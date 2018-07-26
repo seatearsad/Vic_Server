@@ -42,10 +42,10 @@ class Page{
 		$str.= '<div class="paginator-wrapper">';
 		$str.= '<ul class="paginator paginator--notri">';
 		if($now > 2){
-			$str .= '<li class="previous"><a href="'.$url.'1">首页</a></li>';
+			$str .= '<li class="previous"><a href="'.$url.'1">'.L('_FIRST_PAGE_').'</a></li>';
 		}
 		if($now > 1){
-			$str .= '<li class="previous"><a href="'.$url.($now-1).'"><i class="tri"></i>上一页</a></li>';
+			$str .= '<li class="previous"><a href="'.$url.($now-1).'"><i class="tri"></i>'.L('_PRE_PAGE_').'</a></li>';
 		}
 		for($i=1;$i<=5;$i++){
 			if($now <= 1){
@@ -66,8 +66,8 @@ class Page{
 			}
 		}
 		if ($now != $total){
-			$str .= '<li class="next"><a href="'.$url.($now+1).'"><i class="tri"></i>下一页</a></li>';
-			$str .= '<li class="next"><a href="'.$url.($total).'"><i class="tri"></i>尾页</a></li>';
+			$str .= '<li class="next"><a href="'.$url.($now+1).'"><i class="tri"></i>'.L('_NEXT_PAGE_').'</a></li>';
+			$str .= '<li class="next"><a href="'.$url.($total).'"><i class="tri"></i>'.L('_END_PAGE_').'</a></li>';
 		}
 		$str .= '</ul>';
 		$str .= '</div>';

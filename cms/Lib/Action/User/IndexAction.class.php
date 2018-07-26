@@ -12,6 +12,7 @@ class IndexAction extends BaseAction {
 		parent::_initialize();
     	//导航条
     	$web_index_slider = D('Slider')->get_slider_by_key('web_slider');
+
     	$this->assign('web_index_slider',$web_index_slider);
 
 		//热门搜索词
@@ -1125,6 +1126,8 @@ class IndexAction extends BaseAction {
 			$or['image'] = isset($list[$or['store_id']]['image']) ? $list[$or['store_id']]['image'] : '';
 			$or['s_name'] = isset($list[$or['store_id']]['name']) ? $list[$or['store_id']]['name'] : '';
 			$or['url'] = C('config.site_url').'/shop/'.$or['store_id'].'.html';
+			//modify garfunkel
+            $or['s_name'] = lang_substr($or['s_name'],C('DEFAULT_LANG'));
 		}
 		$this->assign('order_list', $orders);
 		$this->assign('status', $status);

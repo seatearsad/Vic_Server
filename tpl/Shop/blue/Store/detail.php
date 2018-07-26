@@ -53,7 +53,7 @@
 					<a href="/"><img src="{pigcms{$config.site_logo}" width=180 height=51></a>
 				</div>
 				<div class="link fl">
-					<a href="/shop.html" class="on">{pigcms{:L('_HOME_TXT_')}</a><span>|</span><a href="{pigcms{:UU('User/Index/index')}">{pigcms{:L('_MY_ORDER_')}</a>
+					<a href="/shop.html" class="on">{pigcms{:L('_HOME_TXT_')}</a><span>|</span><a href="{pigcms{:UU('User/Index/shop_list')}">{pigcms{:L('_MY_ORDER_')}</a>
 				</div>
 				<div class="fr">
 					<input type="text" placeholder="{pigcms{:L('_SEARCH_FOOD_')}" id="keyword" value="{pigcms{$keyword}">

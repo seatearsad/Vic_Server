@@ -7,7 +7,7 @@
 			<else/>
 				<p class="user-info__name growth-info growth-info--nav">
 					<span>
-						<a rel="nofollow" href="{pigcms{:U('User/Index/index')}" class="username">{pigcms{$user_session.nickname}</a>
+						<a rel="nofollow" href="{pigcms{:U('User/Index/shop_list')}" class="username">{pigcms{$user_session.nickname}</a>
 					</span>
 					<a class="user-info__logout" href="{pigcms{:U('Index/Login/logout')}">退出</a>
 				</p>
@@ -21,14 +21,14 @@
         <div class="list">
 			<ul class="cf">
 				<li>
-					<div class="li_txt"><a href="{pigcms{:U('User/Index/index')}">我的订单</a></div>
+					<div class="li_txt"><a href="{pigcms{:U('User/Index/shop_list')}">我的订单</a></div>
 					<div class="span">|</div>
 				</li>
 				<li class="li_txt_info cf">
-					<div class="li_txt_info_txt"><a href="{pigcms{:U('User/Index/index')}">我的信息</a></div>
+					<div class="li_txt_info_txt"><a href="{pigcms{:U('User/Index/shop_list')}">我的信息</a></div>
 					<div class="li_txt_info_ul">
 						<ul class="cf">
-							<li><a class="dropdown-menu__item" rel="nofollow" href="{pigcms{:U('User/Index/index')}">我的订单</a></li>
+							<li><a class="dropdown-menu__item" rel="nofollow" href="{pigcms{:U('User/Index/shop_list')}">我的订单</a></li>
 							<li><a class="dropdown-menu__item" rel="nofollow" href="{pigcms{:U('User/Rates/index')}">我的评价</a></li>
 							<li><a class="dropdown-menu__item" rel="nofollow" href="{pigcms{:U('User/Collect/index')}">我的收藏</a></li>
 							<li><a class="dropdown-menu__item" rel="nofollow" href="{pigcms{:U('User/Point/index')}">我的{pigcms{$config['score_name']}</a></li>

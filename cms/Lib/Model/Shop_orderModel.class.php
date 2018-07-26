@@ -71,9 +71,9 @@ class Shop_orderModel extends Model
 		foreach ($order_content as $val) {
 			if(count($order_content)>1) {
 				if($is_app){
-					$str = $val['name'] . ' $' . $val['price'] . ' *' . $val['num'] . ' 等';
+					$str = $val['name'] . ' $' . $val['price'] . ' *' . $val['num'] . ' ...';
 				}else{
-					$str = $val['name'] . ' $' . $val['price'] . ' *' . $val['num'] . '  <b style="color:#BEBFBF;">等</b>';
+					$str = $val['name'] . ' $' . $val['price'] . ' *' . $val['num'] . '  <b style="color:#BEBFBF;">...</b>';
 				}
 			}else{
 				$str = $val['name'] . ' $' . $val['price'] . ' *' . $val['num'] ;

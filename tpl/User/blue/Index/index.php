@@ -15,6 +15,7 @@
 	   var  meal_alias_name = "{pigcms{$config.meal_alias_name}";
 	   var  score_name = "{pigcms{$config.score_name}";
 	</script>
+<script type="text/javascript" src="{pigcms{$static_public}js/lang/{pigcms{:C('DEFAULT_LANG')}.js" charset="utf-8"></script>
 <script src="{pigcms{$static_path}js/common.js"></script>
 <!--[if IE 6]>
 <script  src="{pigcms{$static_path}js/DD_belatedPNG_0.0.8a.js" mce_src="{pigcms{$static_path}js/DD_belatedPNG_0.0.8a.js"></script>
@@ -39,9 +40,9 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 			<div class="menu cf">
 				
 				<div class="menu_left hide">
-					<div class="menu_left_top">全部分类</div>
+					<div class="menu_left_top">{pigcms{:('_ALL_CLASSIF_')}</div>
 					<div class="list">
-						<ul>
+						<!--ul>
 							<volist name="all_category_list" id="vo" key="k">
 								<li>
 									<div class="li_top cf">
@@ -57,7 +58,7 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 									</if>
 								</li>
 							</volist>
-						</ul>
+						</ul-->
 					</div>
 				</div>
 				<div class="menu_right cf">
@@ -65,7 +66,7 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 						<ul>
 							<pigcms:slider cat_key="web_slider" limit="10" var_name="web_index_slider">
 								<li class="ctur">
-									<a href="{pigcms{$vo.url}">{pigcms{$vo.name}</a>
+									<a href="{pigcms{$vo.url}">{pigcms{:lang_substr($vo['name'],C('DEFAULT_LANG'))}</a>
 								</li>
 							</pigcms:slider>
 						</ul>
@@ -81,11 +82,11 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 				<div id="content" class="coupons-box">
 					<div class="mainbox mine">
 						<select class="J-orders-filter orders-filter dropdown--small">
-							<option value="0" <if condition="$_GET['status'] eq 0">selected="selected"</if>>全部状态</option>
-							<option value="-1" <if condition="$_GET['status'] eq -1">selected="selected"</if>>未付款</option>
-							<option value="1" <if condition="$_GET['status'] eq 1">selected="selected"</if>>未消费</option>
-							<option value="2" <if condition="$_GET['status'] eq 2">selected="selected"</if>>未评论</option>
-							<option value="3" <if condition="$_GET['status'] eq 3">selected="selected"</if>>已完成</option>
+							<option value="0" <if condition="$_GET['status'] eq 0">selected="selected"</if>>{pigcms{:L('_ALL_STATUS_')}</option>
+							<option value="-1" <if condition="$_GET['status'] eq -1">selected="selected"</if>>{pigcms{:L('_NOT_PAY_')}</option>
+							<option value="1" <if condition="$_GET['status'] eq 1">selected="selected"</if>>{pigcms{:L('_NOT_SALE_PAY_')}</option>
+							<option value="2" <if condition="$_GET['status'] eq 2">selected="selected"</if>>{pigcms{:L('_NOT_COMMENT_')}</option>
+							<option value="3" <if condition="$_GET['status'] eq 3">selected="selected"</if>>{pigcms{:L('_IS_COMPLETE_')}</option>
 						</select>
 						<div class="orders-wrapper" id="order-list">
 							<div class="orders-head">

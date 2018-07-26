@@ -566,7 +566,7 @@ class UserModel extends Model
 		$recently_sign = M('User_sign')->where(array('uid'=>$uid))->order('id DESC')->find();
 		$now_user = $this->get_user($uid);
 		if($recently_sign && strtotime(date('Ymd',$_SERVER['REQUEST_TIME']))==strtotime(date('Ymd',$recently_sign['sign_time']))){
-			return array('error_code'=>1,'msg'=>'同一天只能签到一次，请明天再来！');
+			return array('error_code'=>1,'msg'=>L('_ONEDAY_SIGN_ONCE_'));
 		}
 
 		if($recently_sign && (strtotime(date('Ymd',$_SERVER['REQUEST_TIME']))-strtotime(date('Ymd',$recently_sign['sign_time'])))>86400){
@@ -582,12 +582,12 @@ class UserModel extends Model
 		$data['score_count'] = $score_get;
 		$data['sign_time'] = $_SERVER['REQUEST_TIME'];
 		M('User_sign')->add($data);
-		$this->add_extra_score($uid,$score_get,'第'.$sign_day.'天签到获得'.$score_get.'个'.C('config.score_name').'');
+		$this->add_extra_score($uid,$score_get,replace_lang_str(L('_SIGN_NUM_DAY_'),$sign_day).' '.replace_lang_str(L('_GET_NUM_TICKET_'),$score_get));
 
-		D('Scroll_msg')->add_msg('sign',$uid,'用户'.$now_user['nickname'].'于'.date('Y-m-d H:i',$_SERVER['REQUEST_TIME']).'签到获得'.$score_get.'个'.C('config.score_name'));
-		$return_msg = '签到成功!获得'.$score_get.'个'.C('config.score_name');
+		D('Scroll_msg')->add_msg('sign',$uid,$now_user['nickname'].'--'.date('Y-m-d H:i',$_SERVER['REQUEST_TIME']).replace_lang_str(L('_GET_NUM_TICKET_'),$score_get));
+		$return_msg = L('_SIGN_SUCCESS_').' '.replace_lang_str(L('_GET_NUM_TICKET_'),$score_get);
 		if($sign_day>1){
-			$return_msg = '连续'.$sign_day.'天签到!获得'.$score_get.'个'.C('config.score_name');
+			$return_msg = replace_lang_str(L('_CON_DAYS_SIGN_'),$sign_day).' '.replace_lang_str(L('_GET_NUM_TICKET_'),$score_get);
 		}
 		return array('error_code'=>0,'msg'=>$return_msg);
 	}

@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-<title>我的{pigcms{$config['score_name']} | {pigcms{$config.site_name}</title>
+<title>{pigcms{:L('_MY_TICKET_')} | {pigcms{:L('_VIC_NAME_')}</title>
 <meta name="keywords" content="{pigcms{$config.seo_keywords}" />
 <meta name="description" content="{pigcms{$config.seo_description}" />
 <link href="{pigcms{$static_path}css/css.css" type="text/css"  rel="stylesheet" />
@@ -14,6 +14,7 @@
 	<script type="text/javascript">
 	   var  meal_alias_name = "{pigcms{$config.meal_alias_name}";
 	</script>
+<script type="text/javascript" src="{pigcms{$static_public}js/lang/{pigcms{:C('DEFAULT_LANG')}.js" charset="utf-8"></script>
 <script src="{pigcms{$static_path}js/common.js"></script>
 <script src="{pigcms{$static_path}js/category.js"></script>
 <!--[if IE 6]>
@@ -38,9 +39,9 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 		<article>
 			<div class="menu cf">
 				<div class="menu_left hide">
-					<div class="menu_left_top">全部分类</div>
+					<div class="menu_left_top">{pigcms{:L('_ALL_CLASSIF_')}</div>
 					<div class="list">
-						<ul>
+						<!--ul>
 							<volist name="all_category_list" id="vo" key="k">
 								<li>
 									<div class="li_top cf">
@@ -56,7 +57,7 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 									</if>
 								</li>
 							</volist>
-						</ul>
+						</ul-->
 					</div>
 				</div>
 				<div class="menu_right cf">
@@ -64,7 +65,7 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 						<ul>
 							<pigcms:slider cat_key="web_slider" limit="10" var_name="web_index_slider">
 								<li class="ctur">
-									<a href="{pigcms{$vo.url}">{pigcms{$vo.name}</a>
+									<a href="{pigcms{$vo.url}">{pigcms{:lang_substr($vo['name'],C('DEFAULT_LANG'))}</a>
 								</li>
 							</pigcms:slider>
 						</ul>
@@ -81,16 +82,16 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 				<include file="Public:sidebar"/>
 				<div id="content" class="coupons-box">
 					<div class="mainbox mine">
-						<div class="balance">您当前的{pigcms{$config['score_name']}： <strong>{pigcms{$now_user.score_count}</strong></div>
+						<div class="balance">{pigcms{:L('_MY_TICKET_')}： <strong>{pigcms{$now_user.score_count}</strong></div>
 						<ul class="filter cf">
-							<li class="current"><a href="{pigcms{:U('Point/index')}">{pigcms{$config['score_name']}记录</a></li>
+							<li class="current"><a href="{pigcms{:U('Point/index')}">{pigcms{:L('_TICKET_RECORD_')}</a></li>
 						</ul>
 						<div class="table-section">
 							<table cellspacing="0" cellpadding="0" border="0">
 								<tr>
-									<th width="130">时间</th>
-									<th width="auto">详情</th>
-									<th width="110">{pigcms{$config['score_name']}</th>
+									<th width="130">{pigcms{:L('_TIME_TXT_')}</th>
+									<th width="auto">{pigcms{:L('_DETAIL_TXT_')}</th>
+									<th width="110">{pigcms{:L('_TICKET_TXT_')}</th>
 								</tr>
 								<volist name="score_list" id="vo">
 									<tr>

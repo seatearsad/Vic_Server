@@ -18,7 +18,7 @@ class LoginAction extends BaseAction {
             }
             exit(json_encode($result));
         } else {
-            $pigcms_assign['referer'] = !empty($_GET['referer']) ? strip_tags(htmlspecialchars_decode($_GET['referer'])) : (!empty($_SERVER['HTTP_REFERER']) ? strip_tags($_SERVER['HTTP_REFERER']) : U('Index/Index/index'));
+            $pigcms_assign['referer'] = !empty($_GET['referer']) ? strip_tags(htmlspecialchars_decode($_GET['referer'])) : (!empty($_SERVER['HTTP_REFERER']) ? strip_tags($_SERVER['HTTP_REFERER']) : U('Index/Index/shop_list'));
             $pigcms_assign['url_referer'] = urlencode($pigcms_assign['referer']);
             $this->assign($pigcms_assign);
 

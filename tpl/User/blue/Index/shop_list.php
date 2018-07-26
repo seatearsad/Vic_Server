@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-<title>快店订单| {pigcms{$config.site_name}</title>
+<title>{pigcms{:L('_MY_OUT_ORDER_')}  {pigcms{:L('_VIC_NAME_')}</title>
 <meta name="keywords" content="{pigcms{$config.seo_keywords}" />
 <meta name="description" content="{pigcms{$config.seo_description}" />
 <link href="{pigcms{$static_path}css/css.css" type="text/css"  rel="stylesheet" />
@@ -14,6 +14,7 @@
 	<script type="text/javascript">
 	   var  shop_alias_name = "{pigcms{$config.shop_alias_name}";
 	</script>
+<script type="text/javascript" src="{pigcms{$static_public}js/lang/{pigcms{:C('DEFAULT_LANG')}.js" charset="utf-8"></script>
 <script src="{pigcms{$static_path}js/common.js"></script>
 <script src="{pigcms{$static_path}js/category.js"></script>
 <!--[if IE 6]>
@@ -38,9 +39,9 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 		<article>
 			<div class="menu cf">
 				<div class="menu_left hide">
-					<div class="menu_left_top">全部分类</div>
+					<div class="menu_left_top">{pigcms{:('_ALL_CLASSIF_')}</div>
 					<div class="list">
-						<ul>
+						<!--ul>
 							<volist name="all_category_list" id="vo" key="k">
 								<li>
 									<div class="li_top cf">
@@ -56,7 +57,7 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 									</if>
 								</li>
 							</volist>
-						</ul>
+						</ul-->
 					</div>
 				</div>
 				<div class="menu_right cf">
@@ -64,7 +65,7 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 						<ul>
 							<pigcms:slider cat_key="web_slider" limit="10" var_name="web_index_slider">
 								<li class="ctur">
-									<a href="{pigcms{$vo.url}">{pigcms{$vo.name}</a>
+									<a href="{pigcms{$vo.url}">{pigcms{:lang_substr($vo['name'],C('DEFAULT_LANG'))}</a>
 								</li>
 							</pigcms:slider>
 						</ul>
@@ -79,31 +80,31 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 				<div id="content" class="coupons-box">
 					<div class="mainbox mine">
 						<select class="J-orders-filter orders-filter dropdown--small" id="select_status">
-							<option value="-1" <if condition="$status eq -1">selected="selected"</if>>全部状态</option>
-							<option value="1" <if condition="$status eq 1">selected="selected"</if>>未消费</option>
-							<option value="0" <if condition="$status eq 0">selected="selected"</if>>未付款</option>
-							<option value="2" <if condition="$status eq 2">selected="selected"</if>>已使用</option>
+							<option value="-1" <if condition="$status eq -1">selected="selected"</if>>{pigcms{:L('_ALL_STATUS_')}</option>
+							<option value="1" <if condition="$status eq 1">selected="selected"</if>>{pigcms{:L('_NOT_SALE_PAY_')}</option>
+							<option value="0" <if condition="$status eq 0">selected="selected"</if>>{pigcms{:L('_NOT_PAY_')}</option>
+							<option value="2" <if condition="$status eq 2">selected="selected"</if>>{pigcms{:L('_AL_USED_')}</option>
 						</select>
 						<div class="orders-wrapper" id="order-list">
 							<div class="orders-head">
-								<div class="order-cell order-info">餐厅信息</div>
-								<div class="order-cell order-quantity">数量</div>
-								<div class="order-cell order-money">总价</div>
-								<div class="order-cell order-status">订单状态</div>
-								<div class="order-cell order-op">操作</div>
+								<div class="order-cell order-info">{pigcms{:L('_SHOP_INFO_')}</div>
+								<div class="order-cell order-quantity">{pigcms{:L('_B_PURE_MY_69_')}</div>
+								<div class="order-cell order-money">{pigcms{:L('_B_PURE_MY_70_')}</div>
+								<div class="order-cell order-status">{pigcms{:L('_ORDER_STATUS_')}</div>
+								<div class="order-cell order-op">{pigcms{:L('_ACTION_')}</div>
 							</div>
 							<volist name="order_list" id="vo">
 								<div class="J-order-w">
-									<div class="order-title">订单编号：<a href="{pigcms{:U('Index/shop_order_view',array('order_id'=>$vo['order_id']))}" target="_blank">{pigcms{$vo.order_id}</a></div>
+									<div class="order-title">{pigcms{:L('_B_PURE_MY_68_')}：<a href="{pigcms{:U('Index/shop_order_view',array('order_id'=>$vo['order_id']))}" target="_blank">{pigcms{$vo.order_id}</a></div>
 									<div class="order-row">
 										<div class="order-cell order-op order-cell--right">
 											<if condition="$vo['status'] eq 3">	
 											<elseif condition="($vo['paid'] eq 0) AND ($vo['status'] eq 0)" />											
-												<a class="btn-hot btn-mini" href="{pigcms{:U('Index/Pay/check',array('type'=>'shop','order_id'=>$vo['order_id']))}">付款</a>
+												<a class="btn-hot btn-mini" href="{pigcms{:U('Index/Pay/check',array('type'=>'shop','order_id'=>$vo['order_id']))}">{pigcms{:L('_B_PURE_MY_81_')}</a>
 											<elseif condition="$vo['status'] eq 0" />											
-												<a class="btn-hot btn-mini" href="javascript:void(0)" onclick="shop_order_cancel({pigcms{$vo['order_id']})">取消</a>
+												<a class="btn-hot btn-mini" href="javascript:void(0)" onclick="shop_order_cancel({pigcms{$vo['order_id']})">{pigcms{:L('_B_D_LOGIN_CANCEL_')}</a>
 											<elseif condition="$vo['status'] == 2"/>
-												<a href="{pigcms{:U('Rates/shop')}">评价</a>									
+												<a href="{pigcms{:U('Rates/shop')}">{pigcms{:L('_EVALUATE_TXT_')}</a>
 											</if>
 										</div>
 										<div class="order-row--sub order-row--last">
@@ -114,8 +115,8 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 													</a>
 													<div class="info-detail">
 														<a class="deal-title" href="{pigcms{$vo.url}" title="{pigcms{$vo.s_name}" target="_blank">{pigcms{$vo.s_name}</a>
-														<p>下单时间：{pigcms{$vo.create_time|date='Y-m-d H:i:s',###}</p>
-														<a target="_blank" class="biz-info" href="{pigcms{$vo.url}">店铺信息</a>
+														<p>{pigcms{:L('_ORDER_TIME_')}：{pigcms{$vo.create_time|date='Y-m-d H:i:s',###}</p>
+														<a target="_blank" class="biz-info" href="{pigcms{$vo.url}">{pigcms{:L('_SHOP_INFO_')}</a>
 													</div>
 												</div>
 											</div>
@@ -123,21 +124,21 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 											<div class="order-cell order-money"><span class="money">$</span>{pigcms{$vo.price}</div>
 											<div class="order-cell order-status">
 											<if condition="$vo['status'] eq 4">
-												已取消并退款
+												{pigcms{:L('_CANCEL_A_REFUND_')}
 											<elseif condition="$vo['status'] eq 5" />
-												已取消
+												{pigcms{:L('_B_PURE_MY_76_')}
 											<elseif condition="empty($vo['paid'])"/>
-												未付款
+												{pigcms{:L('_NOT_PAY_')}
 											<elseif condition="$vo['third_id'] eq '0' AND $vo['pay_type'] eq 'offline'"/>
-												未消费 (<font color="red">线下未付款</font>)
+												{pigcms{:L('_NOT_SALE_PAY_')} (<font color="red">{pigcms{:L('_UNPAID_OFFLINE_')}</font>)
 											<elseif condition="$vo['status'] lt 2"/>
-												未消费
+												{pigcms{:L('_NOT_SALE_PAY_')}
 											<elseif condition="$vo['status'] eq 2"/>
-												已使用 
+												{pigcms{:L('_AL_USED_')}
 											<elseif condition="$vo['status'] eq 3"/>
-												已评价
+												{pigcms{:L('_B_PURE_MY_74_')}
 											</if>
-											<div><a target="_blank" href="{pigcms{:U('Index/shop_order_view',array('order_id'=>$vo['order_id']))}">订单详情</a></div></div>
+											<div><a target="_blank" href="{pigcms{:U('Index/shop_order_view',array('order_id'=>$vo['order_id']))}">{pigcms{:L('_ORDER_DETAIL_')}</a></div></div>
 										</div>
 									</div>
 								</div>
@@ -160,7 +161,7 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 	
 	
 	function shop_order_cancel(order_id){
-			if(confirm('确认取消该订单？')){
+			if(confirm("{pigcms{:L('_CONFIRM_CANCEL_ORDER_')}")){
 				var cancelUrl = "{pigcms{:U('shop_order_check_refund')}";
 				cancelUrl += "&order_id="+order_id;
 				location.href = cancelUrl;

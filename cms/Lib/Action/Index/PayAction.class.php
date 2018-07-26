@@ -146,6 +146,7 @@ class PayAction extends BaseAction{
 					if($ownValueArr['open']){
 						$ownValueArr['is_own'] = true;
 						$pay_method[$ownKey] = array('name'=>$this->getPayName($ownKey),'config'=>$ownValueArr);
+
 					}
 				}
 				unset($pay_method['weixin']);
@@ -154,6 +155,9 @@ class PayAction extends BaseAction{
 				}
 				break;			
 		}
+		foreach($pay_method as $k=>$v){
+		    $pay_method[$k]['name'] = lang_substr($v['name'],C('DEFAULT_LANG'));
+        }
 
 //		if ($_GET['type'] == 'takeout' || $_GET['type'] == 'food' || $_GET['type'] == 'foodPad') {
 //			$order_table = 'Meal_order';
@@ -545,7 +549,7 @@ class PayAction extends BaseAction{
                 }
 				if(!empty($pay_info['url'])){
 					$this->assign('jumpUrl',$pay_info['url']);
-					$this->success('订单付款成功！现在跳转.');
+					$this->success(L('_PAY_SUCCESS_JUMP_'));
 					exit();
 				}
 			}
@@ -967,7 +971,7 @@ class PayAction extends BaseAction{
 			if(empty($pay_info['error'])){
 				if(!empty($pay_info['url'])){
 					$this->assign('jumpUrl',$pay_info['url']);
-					$this->success('订单付款成功！现在跳转.');
+					$this->success(L('_PAY_SUCCESS_JUMP_'));
 					exit();
 				}
 			}

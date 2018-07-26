@@ -1214,7 +1214,7 @@ class PayAction extends BaseAction{
                 } elseif ($get_pay_param['order_param']['pay_type'] == 'baidu') {//百度的异步通知返回
                     exit("<html><head><meta name=\"VIP_BFB_PAYMENT\" content=\"BAIFUBAO\"></head><body><h1>这是一个return_url页面</h1></body></html>");
                 }
-                $pay_info['msg'] = '订单付款成功！现在跳转.';
+                $pay_info['msg'] = L('_PAY_SUCCESS_JUMP_');
             }
             if(empty($pay_info['url'])){
                 $this->error_tips($pay_info['msg']);
@@ -1757,7 +1757,7 @@ class PayAction extends BaseAction{
                 $this->error_tips('订单类型非法！请重新下单。');
             }
             if(empty($pay_info['error'])){
-                $pay_info['msg'] = '订单付款成功！现在跳转.';
+                $pay_info['msg'] = L('_PAY_SUCCESS_JUMP_');
             }
             if(empty($pay_info['url'])){
                 $this->error_tips($pay_info['msg']);

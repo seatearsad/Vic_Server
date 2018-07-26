@@ -12,7 +12,7 @@
 			<else/>
 				<p class="user-info__name growth-info growth-info--nav">
 					<span>
-						<a rel="nofollow" href="{pigcms{:UU('User/Index/index')}" class="username">{pigcms{$user_session.nickname}</a>
+						<a rel="nofollow" href="{pigcms{:UU('User/Index/shop_list')}" class="username">{pigcms{$user_session.nickname}</a>
 					</span>
 					<a class="user-info__logout" href="{pigcms{:UU('Index/Login/logout')}">{pigcms{:L('_LOGOUT_TXT_')}</a>
 				</p>
@@ -36,14 +36,14 @@
 
 			<ul class="cf" style="float: right;">
 				<li>
-					<div class="li_txt"><a href="{pigcms{:UU('User/Index/index')}">{pigcms{:L('_MY_ORDER_')}</a></div>
+					<div class="li_txt"><a href="{pigcms{:UU('User/Index/shop_list')}">{pigcms{:L('_MY_ORDER_')}</a></div>
 					<div class="span">|</div>
 				</li>
 				<li class="li_txt_info cf">
-					<div class="li_txt_info_txt"><a href="{pigcms{:UU('User/Index/index')}">{pigcms{:L('_MY_MESSAGE_')}</a></div>
+					<div class="li_txt_info_txt"><a href="{pigcms{:UU('User/Index/shop_list')}">{pigcms{:L('_MY_MESSAGE_')}</a></div>
 					<div class="li_txt_info_ul">
 						<ul class="cf">
-							<li><a class="dropdown-menu__item" rel="nofollow" href="{pigcms{:UU('User/Index/index')}">{pigcms{:L('_MY_ORDER_')}</a></li>
+							<li><a class="dropdown-menu__item" rel="nofollow" href="{pigcms{:UU('User/Index/shop_list')}">{pigcms{:L('_MY_ORDER_')}</a></li>
 							<li><a class="dropdown-menu__item" rel="nofollow" href="{pigcms{:UU('User/Rates/index')}">{pigcms{:L('_MY_EVAL_')}</a></li>
 							<li><a class="dropdown-menu__item" rel="nofollow" href="{pigcms{:UU('User/Collect/index')}">{pigcms{:L('_MY_COLLECTION_')}</a></li>
 							<li><a class="dropdown-menu__item" rel="nofollow" href="{pigcms{:UU('User/Point/index')}">{pigcms{:L('_MY_TICKET_')}</a></li>
