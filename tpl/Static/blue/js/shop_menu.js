@@ -259,7 +259,7 @@ $(document).ready(function(){
 	    $(".carleft").removeClass("carlefton");
 	    $(".common, .carmiddle, .amount").hide();
 	    $(".tencer").removeClass("tenceron");
-	    $(".tencer").text("购物车是空的").css("cursor", "default");
+	    $(".tencer").text(getLangStr('_CART_IS_EMPTY_')).css("cursor", "default");
 
 		goodsNumber = 0;
 		goodsCartMoney = 0;

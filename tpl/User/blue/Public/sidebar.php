@@ -46,20 +46,21 @@
 					<li <if condition="in_array(MODULE_NAME,array('Rates')) && in_array(ACTION_NAME,array('index','meal','shop'))">class="current"</if>><a href="{pigcms{:U('Rates/index')}">待评价</a></li>
 					<li <if condition="in_array(MODULE_NAME,array('Rates')) && in_array(ACTION_NAME,array('rated','meal_rated','shop_rated'))">class="current"</if>><a href="{pigcms{:U('Rates/rated')}">已评价</a></li>
 				</ul>
-			</dd>
-			<dt><strong>我的账户</strong></dt>
+			</dd-->
+			<dt><strong>{pigcms{:L('_MY_ADDRESS_')}</strong></dt>
 			<dd class="last">
 				<ul class="item-list">
-					<li <if condition="in_array(MODULE_NAME,array('Spread'))">class="current"</if>><a href="{pigcms{:U('Spread/index')}">我的推广</a></li>
+					<!--li <if condition="in_array(MODULE_NAME,array('Spread'))">class="current"</if>><a href="{pigcms{:U('Spread/index')}">我的推广</a></li>
 					<if condition="isset($config['specificfield'])">
 					<li <if condition="MODULE_NAME eq 'Index' AND ACTION_NAME eq 'myinfo'">class="current"</if>><a href="{pigcms{:U('Index/myinfo')}">完善信息</a></li>
 					</if>
 					<li <if condition="in_array(MODULE_NAME,array('Point'))">class="current"</if>><a href="{pigcms{:U('Point/index')}">我的{pigcms{$config['score_name']}</a></li>
 					<li <if condition="in_array(MODULE_NAME,array('Credit'))">class="current"</if>><a href="{pigcms{:U('Credit/index')}">我的余额</a></li>
-					<li <if condition="in_array(MODULE_NAME,array('Level'))">class="current"</if>><a href="{pigcms{:U('Level/index')}">我的等级</a></li>
-					<li <if condition="in_array(MODULE_NAME,array('Adress'))">class="current"</if>><a href="{pigcms{:U('Adress/index')}">收货地址</a></li>
+					<li <if condition="in_array(MODULE_NAME,array('Level'))">class="current"</if>><a href="{pigcms{:U('Level/index')}">我的等级</a></li-->
+					<li <if condition="in_array(MODULE_NAME,array('Adress'))">class="current"</if>><a href="{pigcms{:U('Adress/index')}">{pigcms{:L('_B_PURE_MY_58_')}</a></li>
 				</ul>
 			</dd>
+            <!--
 			<if condition="$config['portal_switch'] eq 1">
 				<dt><strong>我的门户</strong></dt>
 				<dd class="last">

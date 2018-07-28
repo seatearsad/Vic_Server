@@ -19,6 +19,7 @@
 <script type="text/javascript">
    var  shop_alias_name = "{pigcms{$config.shop_alias_name}";
 </script>
+<script type="text/javascript" src="{pigcms{$static_public}js/lang/{pigcms{:C('DEFAULT_LANG')}.js" charset="utf-8"></script>
 <script src="{pigcms{$static_path}js/common.js"></script>
 <script src="{pigcms{$static_public}js/artdialog/jquery.artDialog.js"></script>
 <script src="{pigcms{$static_public}js/artdialog/iframeTools.js"></script>
@@ -45,9 +46,9 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 	<article>
 		<div class="menu cf">
 			<div class="menu_left hide">
-				<div class="menu_left_top">全部分类</div>
+				<div class="menu_left_top">{pigcms{:L('_ALL_CLASSIF_')}</div>
 				<div class="list">
-					<ul>
+					<!--ul>
 						<volist name="all_category_list" id="vo" key="k">
 						<li>
 							<div class="li_top cf">
@@ -63,7 +64,7 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 							</if>
 						</li>
 						</volist>
-					</ul>
+					</ul-->
 				</div>
 			</div>
 			<div class="menu_right cf">
@@ -71,7 +72,7 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 					<ul>
 					<pigcms:slider cat_key="web_slider" limit="10" var_name="web_index_slider">
 					<li class="ctur">
-						<a href="{pigcms{$vo.url}">{pigcms{$vo.name}</a>
+						<a href="{pigcms{$vo.url}">{pigcms{:lang_substr($vo['name'],C('DEFAULT_LANG'))}</a>
 					</li>
 					</pigcms:slider>
 					</ul>
@@ -87,9 +88,9 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 					<div>
 						<div class="buy-process-bar-container">
 							<ol class="buy-process-desc steps-desc">
-								<li class="step step--current">1. 提交订单</li>
-								<li class="step">2. 选择支付方式</li>
-								<li class="step">3. 购买成功</li>
+								<li class="step step--current">1. {pigcms{:L('_PLACE_ORDER_')}</li>
+								<li class="step">2. {pigcms{:L('_SELECT_PAY_MODE_')}</li>
+								<li class="step">3. {pigcms{:L('_SHOPPING_SUCCESS_')}</li>
 							</ol>
 							<div class="progress">
 								<div class="progress-bar" style="width:33.33%"></div>
@@ -100,10 +101,10 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 						<div class="table-section summary-table">
 							<table cellspacing="0" class="buy-table" id="menu_list">
 								<tr class="order-table-head-row">
-									<th class="desc">名称</th>
-									<th class="unit-price">单价</th>
-									<th class="amount">数量</th>
-									<th class="col-total">总价</th>
+									<th class="desc">{pigcms{:L('_PRODUCT_NAME_')}</th>
+									<th class="unit-price">{pigcms{:L('_SINGLE_PRICE_')}</th>
+									<th class="amount">{pigcms{:L('_B_PURE_MY_69_')}</th>
+									<th class="col-total">{pigcms{:L('_B_PURE_MY_70_')}</th>
 								</tr>
 								<volist name="goods" id="food">
 								<tr>
@@ -117,26 +118,26 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 								<tr>
 									<td></td>
 									<td colspan="3" class="extra-fee total-fee rightpadding">
-										<div><strong>商品实际总价</strong>：<span class="inline-block money">$<strong id="basic_price">{pigcms{$basic_price|floatval}<if condition="$extra_price gt 0 AND $config.open_extra_price eq 1">+{pigcms{$extra_price}{pigcms{$config.extra_price_alias_name}</if></strong></span></div>
-										<div><strong>折扣后的商品总价</strong>：<span class="inline-block money">$<strong id="discount_price">{pigcms{$vip_discount_money|floatval}<if condition="$extra_price gt 0 AND $config.open_extra_price eq 1">+{pigcms{$extra_price}{pigcms{$config.extra_price_alias_name}</if></strong></span></div>
+										<div><strong>{pigcms{:L('_TOTAL_COMM_PRICE_')}</strong>：<span class="inline-block money">$<strong id="basic_price">{pigcms{$basic_price|floatval}<if condition="$extra_price gt 0 AND $config.open_extra_price eq 1">+{pigcms{$extra_price}{pigcms{$config.extra_price_alias_name}</if></strong></span></div>
+										<div><strong>{pigcms{:L('_TOTAL_PRICE_A_DIS_')}</strong>：<span class="inline-block money">$<strong id="discount_price">{pigcms{$vip_discount_money|floatval}<if condition="$extra_price gt 0 AND $config.open_extra_price eq 1">+{pigcms{$extra_price}{pigcms{$config.extra_price_alias_name}</if></strong></span></div>
 										<if condition="$sys_first_reduce gt 0 OR $sys_full_reduce gt 0">
-										<div><strong>平台满减优惠金额</strong>：<span class="inline-block money">$<strong id="sys_reduce_price">{pigcms{$sys_first_reduce + $sys_full_reduce|floatval}</strong></span></div>
+										<div><strong>{pigcms{:L('_PLATFORM_DIS_')}</strong>：<span class="inline-block money">$<strong id="sys_reduce_price">{pigcms{$sys_first_reduce + $sys_full_reduce|floatval}</strong></span></div>
 										</if>
 										<if condition="$sto_first_reduce gt 0 OR $sto_full_reduce gt 0">
-										<div><strong>店铺满减优惠金额</strong>：<span class="inline-block money">$<strong id="merchant_reduce_price">{pigcms{$sto_first_reduce + $sto_full_reduce|floatval}</strong></span></div>
+										<div><strong>{pigcms{:L('_STORE_DIS_')}</strong>：<span class="inline-block money">$<strong id="merchant_reduce_price">{pigcms{$sto_first_reduce + $sto_full_reduce|floatval}</strong></span></div>
 										</if>
-										<div><strong>优惠后商品总价</strong>：<span class="inline-block money">$<strong id="goods_price">{pigcms{$price|floatval}<if condition="$extra_price gt 0 AND $config.open_extra_price eq 1">+{pigcms{$extra_price}{pigcms{$config.extra_price_alias_name}</if></strong></span></div>
+										<div><strong>{pigcms{:L('_AFTER_DIS_')}</strong>：<span class="inline-block money">$<strong id="goods_price">{pigcms{$price|floatval}<if condition="$extra_price gt 0 AND $config.open_extra_price eq 1">+{pigcms{$extra_price}{pigcms{$config.extra_price_alias_name}</if></strong></span></div>
 
 										<!--if condition="$packing_charge"-->
-										<div><strong>{pigcms{$store['pack_alias']|default='打包费'}</strong>：<span class="inline-block money">$<strong id="packing_charge">{pigcms{$store['pack_fee']|floatval}</strong></span></div>
+										<div><strong>{pigcms{:L('_PACK_PRICE_')}</strong>：<span class="inline-block money">$<strong id="packing_charge">{pigcms{$store['pack_fee']|floatval}</strong></span></div>
 										<!--/if-->
 										
 										
-										<div id="show_delivery_fee" <if condition="!$delivery_fee">style="display:none"</if>><strong>{pigcms{$store['freight_alias']|default='配送费'}</strong>：<span class="inline-block money">$<strong id="delivery_fee">{pigcms{$delivery_fee|floatval}</strong></span></div>
+										<div id="show_delivery_fee" <if condition="!$delivery_fee">style="display:none"</if>><strong>{pigcms{:L('_DELI_PRICE_')}</strong>：<span class="inline-block money">$<strong id="delivery_fee">{pigcms{$delivery_fee|floatval}</strong></span></div>
 										
-										<div><strong>税费</strong>：<span class="inline-block money"><strong id="goods_price">5%</strong></span></div>
+										<div><strong>{pigcms{:L('_TAXATION_TXT_')}</strong>：<span class="inline-block money"><strong id="goods_price">5%</strong></span></div>
 										
-										<div><strong>合计总价</strong>：<span class="inline-block money">$<strong id="price">{pigcms{$totalPrice|floatval}<if condition="$extra_price gt 0 AND $config.open_extra_price eq 1">+{pigcms{$extra_price}{pigcms{$config.extra_price_alias_name}</if></strong></span></div>
+										<div><strong>{pigcms{:L('_TOTAL_RECE_')}</strong>：<span class="inline-block money">$<strong id="price">{pigcms{$totalPrice|floatval}<if condition="$extra_price gt 0 AND $config.open_extra_price eq 1">+{pigcms{$extra_price}{pigcms{$config.extra_price_alias_name}</if></strong></span></div>
 									</td>
 								</tr>
 							</table>
@@ -145,13 +146,13 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 						
 						<if condition="$user_session">
 							<if condition="$delivery_type eq 2">
-							<input type="checkbox" name="pick_in_store" id="pick_in_store" checked> <label for="pick_in_store">到店自提</label>
+							<input type="checkbox" name="pick_in_store" id="pick_in_store" checked> <label for="pick_in_store">{pigcms{:L('_SELF_DIST_')}</label>
 							<elseif condition="in_array($delivery_type, array(2, 3, 4))" />
-							<input type="checkbox" name="pick_in_store" id="pick_in_store"> <label for="pick_in_store">到店自提</label>
+							<input type="checkbox" name="pick_in_store" id="pick_in_store"> <label for="pick_in_store">{pigcms{:L('_SELF_DIST_')}</label>
 							</if>
 							<div id="deal-buy-delivery" class="blk-item delivery J-deal-buy-delivery">
-								<h3 id="package" <if condition="in_array($delivery_type, array(2, 5))">style="display:none"</if>>收货地址<span><a target="_blank" href="{pigcms{:U('User/Adress/index')}">管理</a></span></h3>
-								<h3 id="pick_addr" <if condition="$delivery_type neq 2">style="display:none"</if>>自提点地址</h3>
+								<h3 id="package" <if condition="in_array($delivery_type, array(2, 5))">style="display:none"</if>>{pigcms{:L('_B_PURE_MY_58_')}<span><a target="_blank" href="{pigcms{:U('User/Adress/index')}">{pigcms{:L('_EDIT_TXT_')}</a></span></h3>
+								<h3 id="pick_addr" <if condition="$delivery_type neq 2">style="display:none"</if>>{pigcms{:L('_SELF_LIFTING_')}</h3>
 								<div id="adress_frame_div">
 									
 								</div>
@@ -160,12 +161,12 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 								<input id="buy-pick-id" type="hidden" name="pick_id" value=""/>
 								<hr/>
 								
-								<h4 id="send_time_p" <if condition="$delivery_type neq 2">style="display:none"</if>>希望提货时间</h4>
-								<h4 id="send_time_d" <if condition="$delivery_type eq 2">style="display:none"</if>>希望货物送达的时间 <if condition="$have_two_time AND $delivery_type neq 2 AND $delivery_type neq 5 AND empty($pick_addr_id)">(配送时间一：{pigcms{$time_select_1}，{pigcms{$store['freight_alias']|default='配送费'}：$<b id="delivery_fee1">{pigcms{$delivery_fee}</b>；配送时间二：{pigcms{$time_select_2}，{pigcms{$store['freight_alias']|default='配送费'}：$<b id="delivery_fee2">{pigcms{$delivery_fee2}</b>)</if></h4>
+								<h4 id="send_time_p" <if condition="$delivery_type neq 2">style="display:none"</if>>{pigcms{:L('_HOPE_TIME_DELI_')}</h4>
+								<h4 id="send_time_d" <if condition="$delivery_type eq 2">style="display:none"</if>>{pigcms{:L('_TIME_TO_DELI_')} <if condition="$have_two_time AND $delivery_type neq 2 AND $delivery_type neq 5 AND empty($pick_addr_id)">({pigcms{:L('_DIST_TIME_')}：{pigcms{$time_select_1}，{pigcms{:L('_DELI_PRICE_')}：$<b id="delivery_fee1">{pigcms{$delivery_fee}</b>；{pigcms{:L('_DIST_TIME_')}：{pigcms{$time_select_2}，{pigcms{:L('_DELI_PRICE_')}：$<b id="delivery_fee2">{pigcms{$delivery_fee2}</b>)</if></h4>
 								<input type="text" class="f-text Wdate" id="oarrivalTime" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss', minDate: '{pigcms{$min_date}', maxDate: '{pigcms{$max_date}' })" value="{pigcms{$now_date}" readonly="readonly"/>
 								<hr/>
 								<input type="hidden" id="store_id" name="store_id" value="{pigcms{$store.store_id}">
-								<h4>给店铺留言<span>（给店家留意提醒）</span></h4>
+								<h4>{pigcms{:L('_MESSAGE_TO_SHOP_')}<span></span></h4>
 								<input class="f-text comment" type="text" id="desc" name="desc" />
 								
 								
@@ -177,10 +178,10 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 							</div>
 						</if>
 						<div class="blk-mobile" style="display: none">
-							<p>您绑定的手机号码：<span class="mobile" style="color:#EE3968;">{pigcms{$pigcms_phone}</span></p>
+							<p>{pigcms{:L('_B_PURE_MY_57_')}：<span class="mobile" style="color:#EE3968;">{pigcms{$pigcms_phone}</span></p>
 						</div> 
 						<div class="form-submit shopping-cart">
-							<input type="submit" class="clear-cart btn btn-large btn-buy" id="confirmOrder" value="提交订单" >
+							<input type="submit" class="clear-cart btn btn-large btn-buy" id="confirmOrder" value="{pigcms{:L('_PLACE_ORDER_')}" >
 						</div>
 					</div>
 				</div>
@@ -278,7 +279,7 @@ $(document).ready(function(){
 					window.top.art.dialog.data('iframe_handle',iframe);
 				},
 				id: 'handle',
-				title:'登录',
+				title:"{pigcms{:L('_B_D_LOGIN_LOGIN1_')}",
 				padding: '30px',
 				width: 438,
 				height: 500,
@@ -299,7 +300,7 @@ $(document).ready(function(){
 					window.top.art.dialog.data('iframe_handle',iframe);
 				},
 				id: 'handle',
-				title:'绑定手机号码',
+				title:"{pigcms{:L('_B_PURE_MY_34_')}",
 				padding: '30px',
 				width: 438,
 				height: 500,

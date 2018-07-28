@@ -186,7 +186,7 @@ body{ padding:0px; margin:0px auto; font-size:14px; background-color: #fff; }
 .shopto_end{ height: 90px; background: #fff; border-bottom: #ebebeb 1px solid; }
 .shopto_end .img{ padding-top: 18px;  width: 180px;  }
 .shopto_end .link{ font-size: 18px; color: #898989; line-height: 90px; padding-left: 60px; }
-.shopto_end .link a{ display: inline-block; width: 80px; color: #898989;  text-align: center; }
+.shopto_end .link a{ display: inline-block; width: 88px; color: #898989;  text-align: center; }
 .shopto_end .link a.on{ color: #06c1ae; }
 .shopto_end .link span{ padding: 0 20px; }
 .shopto_end .fr{ height: 34px;border: #06c1ae 2px solid; border-radius: 50px; width: 420px; background: url(../images/shous_03.png) 12px center no-repeat; position: relative; margin-top: 26px;}
@@ -281,7 +281,7 @@ body{ padding:0px; margin:0px auto; font-size:14px; background-color: #fff; }
 .Shoplist_end li a:hover .position{display: block;}*/
 
 .Load { line-height: 55px; font-size: 18px; color: #666666; display: block; text-align: center; background: #ebebeb; }
-.scan{ position: fixed; right: 0px; bottom: 205px; width: 80px; background: #fff; }
+.scan{ position: fixed; right: 0px; bottom: 215px; width: 80px; background: #fff; }
 .scan li{ height: 70px; width: 36px;  border-bottom: #edf1f2 1px solid; margin: 0 20px; cursor: pointer; }
 .scan li.code{ background: url(../images/dhtp_04.png) center no-repeat; }
 .scan li.code:hover{ background: url(../images/dhtp_03.png) center no-repeat; }
@@ -412,7 +412,7 @@ body{ padding:0px; margin:0px auto; font-size:14px; background-color: #fff; }
 
 
 /*购物车*/
-.car { position: fixed; bottom:0px; width: 322px; left: 50%; margin-left: 334px; box-shadow: 0px 0px 10px 5px #e6e6e6; z-index: 1; }
+.car { position: fixed; bottom:0px; width: 322px; left: 50%; margin-left: 322px; box-shadow: 0px 0px 10px 5px #e6e6e6; z-index: 1; }
 .car .carend{ line-height: 45px; }
 .car .carleft{ width: 160px; background: #2c2c2c; height: 45px; position: relative; }
 .car .carleft span.mark{ width: 24px; height: 22px; display: block; background: url(../images/txo_11.png) center no-repeat;  position: absolute; top: 12px; left: 12px;}
@@ -528,7 +528,7 @@ body{ padding:0px; margin:0px auto; font-size:14px; background-color: #fff; }
     padding-left: 20px;
     height: 30px;
     text-align: left;
-    background: url(../images/o2o1_03.png) no-repeat 64px 8px;
+    /*background: url(../images/o2o1_03.png) no-repeat 64px 8px;*/
 }
 .weixin:hover .weixin_txt {
     float: left;
@@ -540,7 +540,7 @@ body{ padding:0px; margin:0px auto; font-size:14px; background-color: #fff; }
     border-top: 0;
     width: 68px;
     z-index: 99;
-    background: #ffffff url(../images/o2o554_03.png) no-repeat 64px 8px;
+    background: #ffffff; /*url(../images/o2o554_03.png) no-repeat 64px 8px;*/
 }
 .weixin:hover .weixin_txt a {
     color: #fe5842;
@@ -608,6 +608,9 @@ body{ padding:0px; margin:0px auto; font-size:14px; background-color: #fff; }
     margin: 0 5px;
     float: right;
 }
+.header_top .list .li_liulan{
+    width:120px;
+}
 .li_txt_info_txt {
     float: left;
     height: 30px;
@@ -647,15 +650,16 @@ body{ padding:0px; margin:0px auto; font-size:14px; background-color: #fff; }
 .li_liulan_txt {
     float: left;
     height: 30px;
-    width: 76px;
-    padding-left: 10px;
+    width: 90px;
+    padding-left: 1px;
     /*background: url(../images/o2o1_03.png) no-repeat 65px 8px;*/
 }
 .li_liulan{ z-index:9}
 .li_liulan:hover .li_liulan_txt {
     position: absolute;
     height: 31px;
-    padding-left: 9px;
+    width:90px;
+    padding-left: 0px;
     z-index: 99;
     border: 1px solid #d9d9d9;
     border-bottom: 0;
@@ -672,7 +676,7 @@ body{ padding:0px; margin:0px auto; font-size:14px; background-color: #fff; }
     background: #fff;
     border: 1px solid #d9d9d9;
     box-shadow: 1px 1px 2px rgba(203,203,203,.5);
-    right: 12px;
+    right: 28px;
 
     z-index: 98;
     top: 30px;
@@ -685,7 +689,7 @@ body{ padding:0px; margin:0px auto; font-size:14px; background-color: #fff; }
     background: #fff;
     border: 1px solid #d9d9d9;
     box-shadow: 1px 1px 2px rgba(203,203,203,.5);
-    right: 12px;
+    right: 28px;
     position: absolute;
     z-index: 98;
     top: 30px;

@@ -84,7 +84,7 @@
 						</div>
 					</div>
 				</div>
-				<div style="height:30px">
+				<!--div style="height:30px">
 				<if condition="!empty($scroll_msg)">
 					<div style="background:#f2dede;margin-top:5px:display:none;width:1200px" class="scroll_msg">
 						<div style="background:#f2dede;">
@@ -109,7 +109,7 @@
 					</style>
 					<link rel="stylesheet" href="{pigcms{$static_public}font-awesome/css/font-awesome.min.css">
 					</if>
-				</div>
+				</div-->
 				
 				<div class="menu cf" style="position: relative;width: 1200px;">
 				

@@ -44,8 +44,8 @@
 					<div class="li_txt_info_ul">
 						<ul class="cf">
 							<li><a class="dropdown-menu__item" rel="nofollow" href="{pigcms{:UU('User/Index/index')}">{pigcms{:L('_MY_ORDER_')}</a></li>
-							<li><a class="dropdown-menu__item" rel="nofollow" href="{pigcms{:UU('User/Rates/index')}">{pigcms{:L('_MY_EVAL_')}</a></li>
-							<li><a class="dropdown-menu__item" rel="nofollow" href="{pigcms{:UU('User/Collect/index')}">{pigcms{:L('_MY_COLLECTION_')}</a></li>
+							<!--li><a class="dropdown-menu__item" rel="nofollow" href="{pigcms{:UU('User/Rates/index')}">{pigcms{:L('_MY_EVAL_')}</a></li>
+							<li><a class="dropdown-menu__item" rel="nofollow" href="{pigcms{:UU('User/Collect/index')}">{pigcms{:L('_MY_COLLECTION_')}</a></li-->
 							<li><a class="dropdown-menu__item" rel="nofollow" href="{pigcms{:UU('User/Point/index')}">{pigcms{:L('_MY_TICKET_')}</a></li>
 							<li><a class="dropdown-menu__item" rel="nofollow" href="{pigcms{:UU('User/Credit/index')}">{pigcms{:L('_ACCOUNT_BALANCE_')}</a></li>
 							<li><a class="dropdown-menu__item" rel="nofollow" href="{pigcms{:UU('User/Adress/index')}">{pigcms{:L('_MY_ADDRESS_')}</a></li>

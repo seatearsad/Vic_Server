@@ -581,7 +581,8 @@ caption, th {
   zoom: 1;
 }
 #content .address-field-list label {
-  width: 84px;
+  width: 100px;
+  text-align: left;
   font-size: 12px;
 }
 .form-field label {

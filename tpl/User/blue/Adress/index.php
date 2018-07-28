@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-<title>收货地址 | {pigcms{$config.site_name}</title>
+<title>{pigcms{:L('_B_PURE_MY_58_')} | {pigcms{:L('_VIC_NAME_')}</title>
 <meta name="keywords" content="{pigcms{$config.seo_keywords}" />
 <meta name="description" content="{pigcms{$config.seo_description}" />
 <link href="{pigcms{$static_path}css/css.css" type="text/css"  rel="stylesheet" />
@@ -14,6 +14,7 @@
 	<script type="text/javascript">
 	   var  meal_alias_name = "{pigcms{$config.meal_alias_name}";
 	</script>
+<script type="text/javascript" src="{pigcms{$static_public}js/lang/{pigcms{:C('DEFAULT_LANG')}.js" charset="utf-8"></script>
 <script src="{pigcms{$static_path}js/common.js"></script>
 <!--script src="{pigcms{$static_path}js/category.js"></script-->
 <!--[if IE 6]>
@@ -66,9 +67,9 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 		<article>
 			<div class="menu cf">
 				<div class="menu_left hide">
-					<div class="menu_left_top">全部分类</div>
+					<div class="menu_left_top">{pigcms{:L('_ALL_CLASSIF_')}</div>
 					<div class="list">
-						<ul>
+						<!--ul>
 							<volist name="all_category_list" id="vo" key="k">
 								<li>
 									<div class="li_top cf">
@@ -84,7 +85,7 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 									</if>
 								</li>
 							</volist>
-						</ul>
+						</ul-->
 					</div>
 				</div>
 				<div class="menu_right cf">
@@ -92,7 +93,7 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 						<ul>
 							<pigcms:slider cat_key="web_slider" limit="10" var_name="web_index_slider">
 								<li class="ctur">
-									<a href="{pigcms{$vo.url}">{pigcms{$vo.name}</a>
+									<a href="{pigcms{$vo.url}">{pigcms{:lang_substr($vo['name'],C('DEFAULT_LANG'))}</a>
 								</li>
 							</pigcms:slider>
 						</ul>
@@ -110,16 +111,16 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 				<div id="content" class="coupons-box">
 					<div class="mainbox mine">
 						<ul class="filter cf">
-							<li class="current"><a href="{pigcms{:U('Adress/index')}">收货地址</a></li>
+							<li class="current"><a href="{pigcms{:U('Adress/index')}">{pigcms{:L('_B_PURE_MY_58_')}</a></li>
 						</ul>
 						<div class="address-div">
 							<div class="table-section">
 								<table id="address-table" cellspacing="0" cellpadding="0">
 									<tr>
-										<th width="12%" class="left">收货人</th>
-										<th width="44%">地址/邮编</th>
-										<th width="19%">电话/手机</th>
-										<th width="25%" class="right">操作</th>
+										<th width="12%" class="left">{pigcms{:L('_CONSIGNEE_TXT_')}</th>
+										<th width="44%">{pigcms{:L('_ADDRESS_TXT_')}/{pigcms{:L('_B_PURE_MY_22_')}</th>
+										<th width="19%">{pigcms{:L('_B_PURE_MY_09_')}/{pigcms{:L('_B_D_LOGIN_TEL_')}</th>
+										<th width="25%" class="right">{pigcms{:L('_ACTION_')}</th>
 									</tr>
 									<volist name="user_adress_list" id="vo">
 										<tr class="<if condition='$i eq 1'>alt first-item</if> table-item">
@@ -128,14 +129,14 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 											<td class="consignee">{pigcms{$vo.phone}</td>
 											<td class="right">
 												<ul class="action hidden" adress_id="{pigcms{$vo.adress_id}">
-													<if condition="$vo['default']"><li id="address-default"><span>默认地址</span></li></if>
+													<if condition="$vo['default']"><li id="address-default"><span>{pigcms{:L('_DEFAULT_ADDRESS_')}</span></li></if>
 													<li>
-														<a href="javascript:void(0);" class="default">设为默认</a>
+														<a href="javascript:void(0);" class="default">{pigcms{:L('_B_PURE_MY_24_')}</a>
 													</li>
 													<li>
-														<a href="javascript:void(0);" class="delete">删除</a>&nbsp;<span class="separator">|</span>&nbsp;
+														<a href="javascript:void(0);" class="delete">{pigcms{:L('_B_PURE_MY_27_')}</a>&nbsp;<span class="separator">|</span>&nbsp;
 													</li>
-													<li><a href="javascript:void(0);" class="edit" data-params='{pigcms{:json_encode($vo)}'>修改</a>
+													<li><a href="javascript:void(0);" class="edit" data-params='{pigcms{:json_encode($vo)}'>{pigcms{:L('_MODIFY_TXT_')}</a>
 													</li>
 												</ul>
 											</td>
@@ -146,7 +147,7 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 							<div class="prompt table-section">
 								<table cellspacing="0" cellpadding="0" border="0">
 									<caption class="">
-										<a href="javascript:void(0);" class="add">添加新地址</a>
+										<a href="javascript:void(0);" class="add">{pigcms{:L('_ADD_NEW_ADDRESS_')}</a>
 									</caption>
 									<tbody>
 									</tbody>
@@ -164,7 +165,7 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 		<input type="hidden" name="adress_id" id="adress-id" value=""/>
 		<div class="address-field-list">
 			<div class="form-field">
-				<label for="address-province"><em>*</em> 所在地区：</label>
+				<label for="address-province"><em>*</em> {pigcms{:L('_B_PURE_MY_12_')} {pigcms{:L('_B_PURE_MY_13_')}：</label>
 				<span id="area-container">
 					<select id="address-province" class="address-province dropdown--small" name="province" autocomplete="off">
 						<volist name="province_list" id="vo">
@@ -184,31 +185,31 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 				</span>
 			</div>
 			<div class="form-field">
-				<label for="address-detail"><em>*</em> 位置：</label>
-				<input type="text" maxlength="60" size="60" name="adress" id="address-adress" onFocus="geolocate()"  class="f-text address-adress" style="width:350px" placeholder="请输入小区、大厦或学校"></input>
+				<label for="address-detail"><em>*</em> {pigcms{:L('_B_PURE_MY_15_')}：</label>
+				<input type="text" maxlength="60" size="60" name="adress" id="address-adress" onFocus="geolocate()"  class="f-text address-adress" style="width:350px" placeholder="{pigcms{:L('_B_PURE_MY_02_')}"></input>
 				</div>
 			</div>
 			<div class="form-field">
-				<label for="address-detail"><em>*</em> 详细地址：</label>
+				<label for="address-detail"><em>*</em> {pigcms{:L('_ADDRESS_TXT_')}：</label>
 				<input type="text" maxlength="60" size="60" name="detail" id="address-detail" class="f-text address-detail" value=""/>
 			</div>
 			<div class="form-field">
-				<label for="address-name"><em>*</em> 收货人姓名：</label>
+				<label for="address-name"><em>*</em> {pigcms{:L('_B_PURE_MY_06_')}：</label>
 				<input id="address-name" type="text" maxlength="15" size="15" name="name" class="f-text address-name" value=""/>
 			</div>
 			<div class="form-field">
-				<label for="address-phone"><em>*</em> 电话号码：</label>
+				<label for="address-phone"><em>*</em> {pigcms{:L('_B_D_LOGIN_TEL_')}：</label>
 				<input id="address-phone" class="f-text address-phone" type="text" maxlength="20" size="15" name="phone" value=""/>
 			</div>
 			<div class="form-field">
-				<label for="address-zipcode"><em></em> 邮政编码：</label>
+				<label for="address-zipcode"><em></em> {pigcms{:L('_B_PURE_MY_22_')}：</label>
 				<input id="address-zipcode" class="f-text address-zipcode" type="text" maxlength="20" size="10" name="zipcode" value=""/>
 			</div>
 			<div class="form-field comfirm">
 				<input type="hidden" name="longitude" value=''>
 				<input type="hidden" name="latitude" value=''>
-				<input type="submit" class="btn" name="commit" value="保存"/>
-				<a href="javascript:void(0)" class="address-cancel inline-link">取消</a>
+				<input type="submit" class="btn" name="commit" value="{pigcms{:L('_B_PURE_MY_25_')}"/>
+				<a href="javascript:void(0)" class="address-cancel inline-link">{pigcms{:L('_B_PURE_MY_32_')}</a>
 				<div id="map1"></div>
 			</div>
 		</div>
@@ -238,7 +239,7 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 						if(result.status == 1){
 							$('#address-default').remove();
 							now_ul.find('.default').hide();
-							now_ul.prepend('<li id="address-default"><span>默认地址</span></li>');
+							now_ul.prepend("<li id='address-default'><span>{pigcms{:L('_DEFAULT_ADDRESS_')}</span></li>");
 							
 						}else{
 							alert(result.info);
@@ -247,7 +248,7 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 				}else if($(this).hasClass('delete')){
 					var now_ul = $(this).closest('ul');
 					var now_tr = $(this).closest('.table-item');
-					if(confirm('您确定要删除这个地址吗？')){
+					if(confirm("{pigcms{:L('_B_PURE_MY_84_')}")){
 						$.post("{pigcms{:U('Adress/del_adress')}",{adress_id:now_ul.attr('adress_id')},function(result){
 							if(result.status == 1){
 								now_tr.remove();
@@ -351,7 +352,7 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 					$(this).val($.trim($(this).val()));
 					var adress = $(this).val();
 					if(adress.length < 3 || adress.length > 60){
-						$(this).after('<span class="inline-tip"><i class="tip-status tip-status--opinfo"></i>请填写街道地址，最少3个字，最多不能超过60个字</span>').closest('.form-field').addClass('form-field--error');
+						$(this).after("<span class='inline-tip'><i class='tip-status tip-status--opinfo'></i>{pigcms{:L('_B_PURE_MY_18_')} {pigcms{:L('_B_PURE_MY_17_')}</span>").closest('.form-field').addClass('form-field--error');
 					}
 				}
 			});
@@ -362,7 +363,7 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 					$(this).val($.trim($(this).val()));
 					var zipcode = $(this).val();
 					if(!/^\d{6}$/.test(zipcode)){
-						$(this).after('<span class="inline-tip"><i class="tip-status tip-status--opinfo"></i>邮政编码填写有误，请输入6位邮政编码</span>').closest('.form-field').addClass('form-field--error');
+						$(this).after("<span class='inline-tip'><i class='tip-status tip-status--opinfo'></i>{pigcms{:L('_MISTAKE_ZIPC_SIX_')}</span>").closest('.form-field').addClass('form-field--error');
 					}
 				}
 			});
@@ -373,7 +374,7 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 					$(this).val($.trim($(this).val()));
 					var name = $(this).val();
 					if(name.length < 2 || name.length > 15){
-						$(this).after('<span class="inline-tip"><i class="tip-status tip-status--opinfo"></i>请正确填写姓名，最少不能低于2个字，最多不能超过15个字</span>').closest('.form-field').addClass('form-field--error');
+						$(this).after("<span class='inline-tip'><i class='tip-status tip-status--opinfo'></i>{pigcms{:L('_B_PURE_MY_08_')}</span>").closest('.form-field').addClass('form-field--error');
 					}
 				}
 			});
@@ -384,7 +385,7 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 					$(this).val($.trim($(this).val()));
 					var phone = $(this).val();
 					if(!/^[+]{0,1}(\d){1,4}[ ]{0,1}([-]{0,1}((\d)|[ ]){1,12})+$/.test(phone)){
-						$(this).after('<span class="inline-tip"><i class="tip-status tip-status--opinfo"></i>请填写正确的电话号码或手机号</span>').closest('.form-field').addClass('form-field--error');
+						$(this).after("<span class='inline-tip'><i class='tip-status tip-status--opinfo'></i>{pigcms{:L('_B_LOGIN_ENTERGOODNO_')}</span>").closest('.form-field').addClass('form-field--error');
 					}
 				}
 			});
@@ -397,7 +398,7 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 			$('#address-form').live('submit',function(){
 				var longitude = $("input[name='longitude']").val();
 				if(longitude == '') {
-					alert('请选择一个有效的位置');return false;
+					alert("{pigcms{:L('_B_MY_NOPOSITION_')}");return false;
 				}
 				$.post("{pigcms{:U('Adress/amend_adress')}",$(this).serialize(),function(result){
 					alert(result.info);
@@ -431,7 +432,7 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 					});
 					$("select[name='area']").html(area_dom);
 				}else{
-					$("select[name='area']").html('<option value="0">请手动填写区域</option>');
+					$("select[name='area']").html("<option value='0'>{pigcms{:L('_B_PURE_MY_29_')}</option>");
 				}
 				
 				if(has_select){
