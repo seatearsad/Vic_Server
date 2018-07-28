@@ -84,7 +84,7 @@
 			</a>
 			<div></div>
 		</div>
-		<div class="search">
+		<!--div class="search">
 			<form action="{pigcms{:U('Group/Search/index')}" method="post" group_action="{pigcms{:U('Group/Search/index')}" meal_action="{pigcms{:U('Meal/Search/index')}">
 				<div class="form_sec">
 					<div class="form_sec_txt group">{pigcms{:L('_LUNCH_TXT_')}</div>
@@ -98,7 +98,7 @@
 					<a href="{pigcms{$vo.url}"><span>{pigcms{$vo.name}</span></a>
 				</volist>
 			</div>
-		</div>
+		</div-->
 		
     </div>
     <script src="{pigcms{$static_public}js/lang.js"></script>
