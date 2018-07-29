@@ -329,7 +329,7 @@ $(document).ready(function(){
 			$(".Return").fadeOut(500);
 		}
 		if(isLoadGetList == true && $('.Load').is(':visible') && $(document).scrollTop() >= ($(document).height() - $(window).height() - 220)){
-            getList($(this).data('page'), $('#keyword').val());
+            getList($('.Load').data('page'), $('#keyword').val());
 		}
 	});
 	$(".Return").click(function() {
