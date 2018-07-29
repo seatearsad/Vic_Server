@@ -3,7 +3,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=Edge">
-	<title>{pigcms{$config.shop_alias_name}_{pigcms{$now_city.area_name}_{pigcms{$config.seo_title}</title>
+	<title>{pigcms{:L('_OUT_TXT_')} {pigcms{:L('_VIC_NAME_')}</title>
 	<if condition="$now_area">
 		<meta name="keywords" content="{pigcms{$now_area.area_name},{pigcms{$now_circle.area_name},{pigcms{$config.seo_keywords}" />
 	<else />
@@ -13,6 +13,7 @@
 	<meta charset="utf-8">
 	<link href="{pigcms{$static_path}css/shop_pc.css" rel="stylesheet"/>
 	<script src="{pigcms{$static_path}js/jquery-1.7.2.js"></script>
+    <script type="text/javascript" src="{pigcms{$static_public}js/lang/{pigcms{:C('DEFAULT_LANG')}.js" charset="utf-8"></script>
 	<script src="{pigcms{$static_path}js/common.js"></script>
 	<script type="text/javascript">var  ajax_list = "{pigcms{:U('Store/ajax_list')}";</script>
 	<script src="{pigcms{$static_path}js/shop_store_list.js"></script>
@@ -29,15 +30,15 @@
 			<div class="w1200 clr">
 				<div class="fl clr">
 					<span class="fl">{pigcms{$shop_select_address}</span>
-					<a href="/shop/change.html" class="fl">[切换地址]</a> 
+					<a href="/shop/change.html" class="fl">[{pigcms{:L('_SWITCH_ADDRESS_')}]</a>
 				</div>
 				<if condition="empty($user_session)">
 					<div class="fr">
-						<span><a href="{pigcms{:UU('Index/Login/index')}">登录</a> | <a href="{pigcms{:UU('Index/Login/reg')}">注册</a></span>
+						<span><a href="{pigcms{:UU('Index/Login/index')}">{pigcms{:L('_B_D_LOGIN_LOGIN1_')}</a> | <a href="{pigcms{:UU('Index/Login/reg')}">{pigcms{:L('_B_D_LOGIN_REG2_')}</a></span>
 					</div>
 				<else />
 					<div class="fr">
-						<span><a href="{pigcms{:UU('User/Index/shop_list')}">{pigcms{$user_session.nickname}</a> | <a href="{pigcms{:UU('Index/Login/logout')}">退出</a></span>
+						<span><a href="{pigcms{:UU('User/Index/shop_list')}">{pigcms{$user_session.nickname}</a> | <a href="{pigcms{:UU('Index/Login/logout')}">{pigcms{:L('_LOGOUT_TXT_')}</a></span>
 					</div>
 				</if>
 			</div>
@@ -48,11 +49,11 @@
 					<a href="/"><img src="{pigcms{$config.site_logo}" width=180 height=51></a>
 				</div>
 				<div class="link fl">
-					<a href="/shop.html" class="on">首页</a><span>|</span><a href="{pigcms{:UU('User/Index/shop_list')}">我的订单</a>
+					<a href="/shop.html" class="on">{pigcms{:L('_HOME_TXT_')}</a><span>|</span><a href="{pigcms{:UU('User/Index/shop_list')}">{pigcms{:L('_MY_ORDER_')}</a>
 				</div>
 				<div class="fr">
-					<input type="text" placeholder="搜索店铺" id="keyword" value="">
-					<button id="search" style="cursor: pointer;">搜索</button>
+					<input type="text" placeholder="" id="keyword" value="">
+					<button id="search" style="cursor: pointer;">{pigcms{:L('_SEARCH_TXT_')}</button>
 				</div>
 			</div>
 		</div>
@@ -60,7 +61,7 @@
 	<section class="fication" <if condition="$keyword">style="display:none"</if>>
 		<div class="w1200 clr">
 			<div class="fication_n clr">
-				<div class="fication_top fl">店铺分类：</div>
+				<div class="fication_top fl">{pigcms{:L('_SHOP_CLASSIFICATION_')}：</div>
 				<div class="fication_end">
 					<ul class="clr">
 						<volist name="category_list" id="rowset">
@@ -92,22 +93,22 @@
 			</div>
 			<div class="Shoplist_top clr" <if condition="$keyword">style="display:none"</if>>
 				<div class="fl sort">
-					<a href="/shop/{pigcms{$cat_url}/juli/{pigcms{$type_url}" <if condition="$sort_url eq 'juli'">class="on"</if> data-sort_url="juli">默认排序</a>
-					<a href="/shop/{pigcms{$cat_url}/sale_count/{pigcms{$type_url}" <if condition="$sort_url eq 'sale_count'">class="on"</if> data-sort_url="sale_count">销量<i></i></a>
-					<a href="/shop/{pigcms{$cat_url}/send_time/{pigcms{$type_url}" <if condition="$sort_url eq 'send_time'">class="on"</if> data-sort_url="send_time">配送时间<i></i></a>
-					<a href="/shop/{pigcms{$cat_url}/basic_price/{pigcms{$type_url}" <if condition="$sort_url eq 'basic_price'">class="on"</if> data-sort_url="basic_price">起送价<i></i></a>
-					<a href="/shop/{pigcms{$cat_url}/score_mean/{pigcms{$type_url}" <if condition="$sort_url eq 'score_mean'">class="on"</if> data-sort_url="score_mean">评分<i></i></a>
-					<a href="/shop/{pigcms{$cat_url}/create_time/{pigcms{$type_url}" <if condition="$sort_url eq 'create_time'">class="on"</if> data-sort_url="create_time">最新发布<i></i></a>
+					<a href="/shop/{pigcms{$cat_url}/juli/{pigcms{$type_url}" <if condition="$sort_url eq 'juli'">class="on"</if> data-sort_url="juli">{pigcms{:L('_DEFAULT_SORT_')}</a>
+					<a href="/shop/{pigcms{$cat_url}/sale_count/{pigcms{$type_url}" <if condition="$sort_url eq 'sale_count'">class="on"</if> data-sort_url="sale_count">{pigcms{:L('_SALE_VOL_')}<i></i></a>
+					<a href="/shop/{pigcms{$cat_url}/send_time/{pigcms{$type_url}" <if condition="$sort_url eq 'send_time'">class="on"</if> data-sort_url="send_time">{pigcms{:L('_DIST_TIME_')}<i></i></a>
+					<a href="/shop/{pigcms{$cat_url}/basic_price/{pigcms{$type_url}" <if condition="$sort_url eq 'basic_price'">class="on"</if> data-sort_url="basic_price">{pigcms{:L('_MIN_DELI_PRICE_')}<i></i></a>
+					<a href="/shop/{pigcms{$cat_url}/score_mean/{pigcms{$type_url}" <if condition="$sort_url eq 'score_mean'">class="on"</if> data-sort_url="score_mean">{pigcms{:L('_SCORE_HIGHEST_')}<i></i></a>
+					<a href="/shop/{pigcms{$cat_url}/create_time/{pigcms{$type_url}" <if condition="$sort_url eq 'create_time'">class="on"</if> data-sort_url="create_time">{pigcms{:L('_NEW_RELEASE_')}<i></i></a>
 				</div>
-				<div class="fr deliver">
+				<!--div class="fr deliver">
 					<a href="/shop/{pigcms{$cat_url}/{pigcms{$sort_url}/-1" style="padding:0px;background:white;"><span <if condition="$type_url eq -1">class="on"</if> data-type="-1">全部</span></a>
 					<a href="/shop/{pigcms{$cat_url}/{pigcms{$sort_url}/0" style="padding:0px;background:white;"><span <if condition="$type_url eq 0">class="on"</if> data-type="0">配送</span></a>
 					<a href="/shop/{pigcms{$cat_url}/{pigcms{$sort_url}/2" style="padding:0px;background:white;"><span <if condition="$type_url eq 2">class="on"</if> data-type="2">自提</span></a>
-					<!-- span <if condition="$type_url eq 3">class="on"</if> data-type="3">平台配送/自提</span>
-					<span <if condition="$type_url eq 4">class="on"</if> data-type="4">商家配送/自提</span -->
+					<span <if condition="$type_url eq 3">class="on"</if> data-type="3">平台配送/自提</span>
+					<span <if condition="$type_url eq 4">class="on"</if> data-type="4">商家配送/自提</span>
 					<a href="/shop/{pigcms{$cat_url}/{pigcms{$sort_url}/5" style="padding:0px;background:white;"><span <if condition="$type_url eq 5">class="on"</if> data-type="5">快递配送</span></a>
 					<a href="/shop/{pigcms{$cat_url}/{pigcms{$sort_url}/1" style="padding:0px;background:white;"><span <if condition="$type_url eq 1">class="on"</if> data-type="1">平台配送</span></a>
-				</div>
+				</div-->
 			</div> 
 			<div class="Shoplist_end">
 				<ul class="clr navBox_list">
@@ -119,7 +120,7 @@
 								<img src="{pigcms{$vo['image']}" width=222 height=148>
 								<div class="imgewm">
 									<img class="lazy_img" src="{pigcms{$static_public}images/blank.gif" data-original="{pigcms{$vo['qrcode_url']}" width="78" height="78"/>
-									<p>微信扫码 手机查看</p>
+									<p>{pigcms{:L('_WECHAT_SCAN_TO_PHONE_')}</p>
 								</div>
 							</div>
 							<div class="text">
@@ -133,18 +134,19 @@
 											<div class="atar_Show">
 												<p></p>
 											</div>
-											<span class="Fraction"><i>{pigcms{$vo['star']}</i>分</span>
+											<span class="Fraction"><i>{pigcms{$vo['star']}</i></span>
 				  						</div>
-										<span class="fr">月售{pigcms{$vo['merchant_store_month_sale_count']}单</span>
+										<!--span class="fr">{pigcms{:replace_lang_str(L('_MONTH_SALE_NUM_'),$vo['merchant_store_month_sale_count'])}</span-->
 				 					</dd>
                                     <dd class="clr middle">
-                                        <span class="fr">总售{pigcms{$vo['month_sale_count']}单</span>
+                                        <span class="fr">{pigcms{:replace_lang_str(L('_MONTH_SALE_NUM_'),$vo['month_sale_count'])}</span>
                                     </dd>
 									<if condition="$vo['delivery']">
 									<dd class="clr end">
-										<span class="r5">起送:$<i>{pigcms{$vo['delivery_price']}</i></span>
-										<span class="r5">配送费:$<i>{pigcms{$vo['delivery_money']}</i></span>
-										<span class="fr">{pigcms{$vo['delivery_time']}分钟</span>
+										<span class="r5" style="width: 200px;float:left;">{pigcms{:L('_MIN_DELI_PRICE_')}:$<i>{pigcms{$vo['delivery_price']}</i></span>
+										<span class="r5" style="width: 200px;float:left;">{pigcms{:L('_DELI_PRICE_')}:$<i>{pigcms{$vo['delivery_money']}</i></span>
+                                        <span class="r5" style="width: 200px;float:left;">{pigcms{:L('_PACK_PRICE_')}:$<i>{pigcms{$vo['pack_fee']}</i></span>
+										<!--span class="fr">{pigcms{$vo['delivery_time']}分钟</span-->
 									</dd>
 									<else />
 									<dd class="clr end">
@@ -185,13 +187,13 @@
 									</if>
 				
 									<if condition="$vo['delivery'] eq 0">
-										<dd class="fr express">门店自提</dd>
+										<dd class="fr express">{pigcms{:L('_SELF_DIST_')}</dd>
 									<elseif condition="$vo['delivery_system']" />
-										<dd class="fr platform">平台配送</dd>
+										<dd class="fr platform">{pigcms{:L('_PLAT_DIST_')}</dd>
 									<elseif condition="$vo['deliver_type'] eq 5" />
-										<dd class="fr Since">快递配送</dd>
+										<dd class="fr Since">{pigcms{:L('_EXPRESS_DELI_')}</dd>
 									<else />
-										<dd class="fr business">商家配送</dd>
+										<dd class="fr business">{pigcms{:L('_SHOP_DIST_')}</dd>
 									</if>
 								</dl>
 							</div>
@@ -241,7 +243,7 @@
 									</dl>
 								</div>
 				 				<div class="notice">
-									<h2>商家公告</h2>{pigcms{$vo['store_notice']}
+									<h2>{pigcms{:L('_SHOP_NOTICE_')}</h2>{pigcms{$vo['store_notice']}
 								</div>
 							</div> 
 						</a>
@@ -250,7 +252,7 @@
 				</ul>
 			</div>
 			<if condition="$next_page">
-			<a href="javascript:void(0)" class="Load" data-page="2">点击加载更多商家...</a>
+			<a href="javascript:void(0)" class="Load" data-page="2">{pigcms{:L('_CLICK_ADD_MORE_')}</a>
 			</if>
 		</div>
 	</section>
@@ -260,8 +262,8 @@
 		<ul>
 			<li class="code">
 				<div class="display">
-					<h2>扫描二维码</h2>
-					<p>关注微信 下单优惠更多</p>
+					<h2>{pigcms{:L('_SCAN_QR_CODE_')}</h2>
+					<p>{pigcms{:L('_ATTENTION_TO_WECHAT_')}</p>
 					<img src="{pigcms{$config.wechat_qrcode}" width=122 height=122>
 				</div>
 			</li>
@@ -278,7 +280,7 @@
 				<div class="imgewm">
 					<img class="lazy_img" src="{pigcms{$static_public}images/blank.gif" data-original="{{ d.store_list[i].qrcode_url }}" width="78" height="78"/>
 					<!-- img class="lazy_img" src="{{ d.store_list[i].qrcode_url }}" data-original="{{ d.store_list[i].qrcode_url }}" width="78" height="78"/ -->
-					<p>微信扫码 手机查看</p>
+					<p>{pigcms{:L('_WECHAT_SCAN_TO_PHONE_')}</p>
 				</div>
 			</div>
 			<div class="text">
@@ -294,16 +296,17 @@
                             </div>
                             <span class="Fraction"><i>{{ d.store_list[i].star }}</i>分</span>
                         </div>
-                        <span class="fr">月售{{ d.store_list[i].merchant_store_month_sale_count }}单</span>
+                        <!--span class="fr">月售{{ d.store_list[i].merchant_store_month_sale_count }}单</span-->
                     </dd>
                     <dd class="clr middle">
-                        <span class="fr">总售{{ d.store_list[i].month_sale_count }}单</span>
+                        <span class="fr">{{getLangStr('_SALE_NUM_ORDER_',d.store_list[i].month_sale_count)}}</span>
                     </dd>
 					{{# if(d.store_list[i].delivery){ }}
 					<dd class="clr end">
-						<span class="r5">起送:$<i>{{ d.store_list[i].delivery_price }}</i></span>
-						<span class="r5">配送费:$<i>{{ d.store_list[i].delivery_money }}</i></span>
-						<span class="fr">{{ d.store_list[i].delivery_time }}分钟</span>
+						<span class="r5" style="width: 200px;float:left;">{pigcms{:L('_MIN_DELI_PRICE_')}:$<i>{{ d.store_list[i].delivery_price }}</i></span>
+						<span class="r5" style="width: 200px;float:left;">{pigcms{:L('_DELI_PRICE_')}:$<i>{{ d.store_list[i].delivery_money }}</i></span>
+                        <span class="r5" style="width: 200px;float:left;">{pigcms{:('_PACK_PRICE_')}:$<i>{{ d.store_list[i].pack_fee }}</i></span>
+						<!--span class="fr">{{ d.store_list[i].delivery_time }}分钟</span-->
 					</dd>
 					{{# }else{ }}
 					<dd class="clr end">
@@ -344,18 +347,18 @@
 					{{# } }}
 						
 					{{# if(!d.store_list[i].delivery){ }}
-					<dd class="fr express">门店自提</dd>
+					<dd class="fr express">{pigcms{:L('_SELF_DIST_')}</dd>
 					{{# } }}
 
 
 					{{# if(d.store_list[i].delivery){ }}
 						{{# if(d.store_list[i].delivery_system){ }}
-							<dd class="fr platform">平台配送</dd>
+							<dd class="fr platform">{pigcms{:L('_PLAT_DIST_')}</dd>
 						{{# }else{ }}
 							{{# if(d.store_list[i].deliver_type == 5){ }}
-								<dd class="fr Since">快递配送</dd>
+								<dd class="fr Since">{pigcms{：L('_EXPRESS_DELI_')}</dd>
 							{{# }else{ }}
-								<dd class="fr business">商家配送</dd>
+								<dd class="fr business">{pigcms{:L('_SHOP_DIST_')}</dd>
 							{{# } }}
 						{{# } }}
 					{{# } }}
@@ -407,7 +410,7 @@
 					</dl>
 				</div>
  				<div class="notice">
-					<h2>商家公告</h2>{{ d.store_list[i].store_notice }}
+					<h2>{pigcms{:L('_SHOP_NOTICE_')}</h2>{{ d.store_list[i].store_notice }}
 				</div>  
 			</div> 
 		</a>

@@ -53,8 +53,11 @@ function parseCoupon(obj,type){
 }
 
 var data = {};
+//add garfunkel
+var isLoadGetList = true;
 function getList(more, keyword)
 {
+	isLoadGetList = false;
 	if ($('.fication_list').find('a.on').data('cat_url')) {
 		var cat_url = $('.fication_list').find('a.on').data('cat_url');
 	} else if ($('.fication_end').find('li.on').data('cat_url')) {
@@ -129,6 +132,7 @@ function getList(more, keyword)
 	  		$('.Load').hide();
 	  	} else {
 	  		$('.Load').show().data('page', result.next_page);
+            isLoadGetList = true;
 	  	}
 	}, 'json');
 }
@@ -323,6 +327,9 @@ $(document).ready(function(){
 			$(".Return").fadeIn();
 		} else {
 			$(".Return").fadeOut(500);
+		}
+		if(isLoadGetList == true && $('.Load').is(':visible') && $(document).scrollTop() >= ($(document).height() - $(window).height() - 220)){
+            getList($(this).data('page'), $('#keyword').val());
 		}
 	});
 	$(".Return").click(function() {

@@ -42,7 +42,7 @@
 					</div>
 				<else />
 					<div class="fr">
-						<span><a href="{pigcms{:UU('Index/Login/index')}">{pigcms{$user_session.nickname}</a> | <a href="{pigcms{:UU('Index/Login/logout')}">{pigcms{:L(_LOGOUT_TXT_)}</a></span>
+						<span><a href="{pigcms{:UU('User/Index/shop_list')}">{pigcms{$user_session.nickname}</a> | <a href="{pigcms{:UU('Index/Login/logout')}">{pigcms{:L(_LOGOUT_TXT_)}</a></span>
 					</div>
 				</if>
 			</div>

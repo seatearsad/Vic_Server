@@ -5,6 +5,13 @@ class StoreAction extends BaseAction
 	{
 		$this->select_address();
 		$return['category_list'] = D('Shop_category')->lists(true);
+		//modify garfunkel
+        foreach ($return['category_list'] as $k => $v){
+            $return['category_list'][$k]['cat_name'] = lang_substr($v['cat_name'],C('DEFAULT_LANG'));
+            foreach ($v['son_list'] as $kk => $vv){
+                $return['category_list'][$k]['son_list'][$kk]['cat_name'] = lang_substr($vv['cat_name'],C('DEFAULT_LANG'));
+            }
+        }
 
 		$cat_url = isset($_GET['cat_url']) ? $_GET['cat_url'] : 'all';
 		$sort_url = isset($_GET['sort_url']) ? $_GET['sort_url'] : 'juli';
@@ -13,6 +20,7 @@ class StoreAction extends BaseAction
 		$cat_fid = $cat_id = 0;
 		if ($cat_url != 'all') {
 			$now_category = D('Shop_category')->get_category_by_catUrl($cat_url);
+
 			if ($now_category) {
 				if ($now_category['cat_fid']) {
 					$cat_id = $now_category['cat_id'];
@@ -57,7 +65,7 @@ class StoreAction extends BaseAction
 		foreach ($lists['shop_list'] as $row) {
 			$temp = array();
 			$temp['id'] = $row['store_id'];//店铺ID
-			$temp['name'] = $row['name'];//店铺名称
+			$temp['name'] = lang_substr($row['name'],C('DEFAULT_LANG'));//店铺名称
 			$temp['range'] = $row['range'];//距离
 			$temp['image'] = $row['image'];//图片
 			$temp['star'] = $row['score_mean'];//评分
@@ -69,11 +77,12 @@ class StoreAction extends BaseAction
 			$temp['delivery_system'] = $row['deliver_type'] == 0 || $row['deliver_type'] == 3 ? true : false;//是否是平台配送
 			$temp['deliver_type'] = $row['deliver_type'];//配送类型
 			$temp['is_close'] = 1;
-			$temp['store_notice'] = $row['store_notice'];
+			$temp['store_notice'] = lang_substr($row['store_notice'],C('DEFAULT_LANG'));
 			$temp['mean_money'] = $row['mean_money'];
 			$temp['qrcode_url'] = $this->config['site_url'] . '/index.php?g=Index&c=Recognition&a=see_qrcode&type=shop&id=' . $row['store_id'];//$row['store_notice'];
 			$temp['detail_url'] = $this->config['site_url'] . '/shop/' . $row['store_id'] . '.html';//$row['store_notice'];
 			$temp['isverify'] = $row['isverify'];
+			$temp['pack_fee'] = $row['pack_fee'];
 
 //			if ($row['open_1'] == '00:00:00' && $row['close_1'] == '00:00:00') {
 //				$temp['time'] = '24小时营业';
@@ -352,7 +361,17 @@ class StoreAction extends BaseAction
 		$lat = $_COOKIE['shop_select_lat'];
 		$lng = $_COOKIE['shop_select_lng'];
 		if (empty($lat) || empty($lng)) {
-			redirect('/shop/change.html?referer=' . urlencode($_SERVER['REDIRECT_URL']));
+		    //add garfunkel 如果用户已经登录，获取默认地址坐标
+		    if($_SESSION['user']){
+                $default_adr = D('User_adress')->get_one_adress($_SESSION['user']['uid']);
+                if($default_adr){
+                    $lat = $default_adr['latitude'];
+                    $lng = $default_adr['longitude'];
+                }
+            }
+            if (empty($lat) || empty($lng)) {
+                redirect('/shop/change.html?referer=' . urlencode($_SERVER['REDIRECT_URL']));
+            }
 		}
 		$this->assign('shop_select_address', $_COOKIE['shop_select_address']);
 	}

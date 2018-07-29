@@ -228,7 +228,7 @@
                 </div>
             </section>
         </if>
-        <section class="recommend" <if condition="!$wap_index_center_adver">style="height:85px;"</if>>
+        <!--section class="recommend" <if condition="!$wap_index_center_adver">style="height:85px;"</if>>
         <if condition="$wap_index_center_adver">
             <div class="recommendBox">
                 <div class="recommendLeft link-url" data-url="{pigcms{$wap_index_center_adver.2.url}">
@@ -285,7 +285,7 @@
                 </ul>
             </div>
         </if>
-        </section>
+        </section-->
         <if condition="$classify_Zcategorys">
             <section class="classify">
                 <div class="headBox">{pigcms{$config.classify_name}</div>
