@@ -7,7 +7,7 @@
 	<meta name="apple-mobile-web-app-status-bar-style" content="black">
 	<meta name="keywords" content="{pigcms{$config.seo_keywords}">
 	<meta name="description" content="{pigcms{$config.seo_description}">
-	<title>查看地址</title>
+	<title>{pigcms{:L('_B_PURE_MY_01_')}</title>
 </head>
 <body class=" hIphone" style="padding-bottom: initial;">
 <div id="fis_elm__0"></div>
@@ -25,14 +25,14 @@
                 <div class="left-slogan" style="margin-top: 12px"> <a class="left-arrow icon-arrow-left2" data-node="navBack" href="javascript:history.go(-1);"></a></div>
                 <div class="center-title" style="margin-top: 4px"> <i class="icon-location" data-node="icon"></i>
                     <div class="ui-suggestion-mask">
-                        <input type="text" placeholder="请输入小区、大厦或学校" id="se-input-wd" autocomplete="off">
+                        <input type="text" placeholder="{pigcms{:L('_B_PURE_MY_02_')}" id="se-input-wd" autocomplete="off">
                         <div class="ui-suggestion-quickdel"></div>
                     </div>
                 </div>
                 <div class="his-postion" data-node="historypos" style="">
                     <div class="ui-suggestion" id="ui-suggestion-0" style="top: 0px; left: 0px; position: relative;">
                         <div class="ui-suggestion-content" style="-webkit-tap-highlight-color: rgba(255, 255, 255, 0);"></div>
-                        <div class="ui-suggestion-button"><span class="ui-suggestion-clear" style="-webkit-tap-highlight-color: rgba(255, 255, 255, 0);">清除历史记录</span><span class="ui-suggestion-close" style="-webkit-tap-highlight-color: rgba(255, 255, 255, 0);"></span></div>
+                        <div class="ui-suggestion-button"><span class="ui-suggestion-clear" style="-webkit-tap-highlight-color: rgba(255, 255, 255, 0);">{pigcms{:L('_B_PURE_MY_03_')}</span><span class="ui-suggestion-close" style="-webkit-tap-highlight-color: rgba(255, 255, 255, 0);"></span></div>
                     </div>
                 </div>
             </div>
@@ -60,7 +60,7 @@ var timeout = 0;
 $(document).ready(function(){
 	$("#se-input-wd").bind('input', function(e){
 		var address = $.trim($('#se-input-wd').val());
-		if(address.length>0 && address !== '请输入小区、大厦或学校'){
+		if(address.length>0 && address !== "{pigcms{:L('_B_PURE_MY_02_')}"){
 			$('#addressShow').empty();
 			clearTimeout(timeout);
 			timeout = setTimeout("search('"+address+"')", 500);

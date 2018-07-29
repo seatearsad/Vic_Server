@@ -146,8 +146,9 @@
         if (query == "") {
             return false;
         }
+        
+        searchUrl += '&city_id=105';
         searchUrl += '&query=' + query;
-        searchUrl += '&region=' + $('#city_name').val();
         $.get(searchUrl, function(json) {
             if (json.error_code == 0) {
             	$(".search-sug").empty();

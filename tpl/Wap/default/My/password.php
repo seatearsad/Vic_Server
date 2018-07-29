@@ -25,7 +25,7 @@
 			            	<dd class="dd-padding"><input class="input-weak" placeholder="{pigcms{:L('_INPUT_CURR_PASS_')}" type="password" id="currentpassword" name="currentpassword" autocomplete="off"></dd>
 				        </if>
 				        <dd class="dd-padding"><input class="input-weak" placeholder="{pigcms{:L('_INPUT_NEW_PASS_')}" type="password" id="password" name="password" autocomplete="off"></dd>
-				        <dd class="dd-padding"><input class="input-weak" placeholder="{pigmcs{:L('_INPUT_AGAIN_NEW_PASS_')}" type="password" id="password2" name="password2" autocomplete="off"></dd>
+				        <dd class="dd-padding"><input class="input-weak" placeholder="{pigcms{:L('_INPUT_AGAIN_NEW_PASS_')}" type="password" id="password2" name="password2" autocomplete="off"></dd>
 				    </dl>
 		    	</dd>
 		    </dl>

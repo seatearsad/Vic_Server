@@ -1,15 +1,21 @@
 <footer>
 	<div class="footer1">
+        <div class="footer_list cf">
+            <ul class="cf">
+                <pigcms:footer_link var_name="footer_link_list">
+                    <li><a href="{pigcms{$vo.url}" target="_blank">{pigcms{$vo.name}</a><if condition="$i neq count($footer_link_list)"></if></li>
+                </pigcms:footer_link>
+            </ul>
+        </div>
 		<div class="footer_txt cf">
-			<div class="footer_list cf">
-				<ul class="cf">
-					<pigcms:footer_link var_name="footer_link_list">
-						<li><a href="{pigcms{$vo.url}" target="_blank">{pigcms{$vo.name}</a><if condition="$i neq count($footer_link_list)"><span>|</span></if></li>
-					</pigcms:footer_link>
-				</ul>
-			</div>
-			<div class="footer_txt">{pigcms{:nl2br($config['site_show_footer'],'<a>')}</div>
+			<div class="footer_txt" style="width: 100%;">{pigcms{:nl2br($config['site_show_footer'],'<a>')}</div>
 		</div>
+        <div class="footer_list cf">
+            <ul class="ul_left">
+                <li class="li_c">{pigcms{:L('_BUSINESS_TIME_')}</li>
+                <li class="li_c">11：00 am - 1：00 am</li>
+            </ul>
+        </div>
 	</div>
 </footer>
 <div style="display:none;">{pigcms{$config.site_footer}</div>

@@ -101,7 +101,7 @@
 		        		</dd>
 		        		<dd class="dd-padding kv-line">
 		        			<h6>{pigcms{:L('_B_PURE_MY_22_')}:</h6>
-		        			<input type="tel" name="zipcode" class="input-weak kv-v" placeholder="{pigcms{:L('_B_PURE_MY_23_')}"  maxlength="6" value="<if condition="$now_adress['zipcode']">{pigcms{$now_adress.zipcode}</if>"/>
+		        			<input type="text" name="zipcode" class="input-weak kv-v" placeholder="{pigcms{:L('_B_PURE_MY_23_')}"  maxlength="6" value="<if condition="$now_adress['zipcode']">{pigcms{$now_adress.zipcode}</if>"/>
 		        		</dd>
 		        		<dd>
 			            	<label class="react">
@@ -117,7 +117,7 @@
 				<input type="hidden" name="longitude" value="{pigcms{$now_adress.longitude}"/>
 				<input type="hidden" name="latitude" value="{pigcms{$now_adress.latitude}"/>
 				<input type="hidden" name="adress" value="{pigcms{$now_adress.adress}"/>
-				<button type="submit" class="btn btn-block btn-larger"><if condition="$now_adress">{pigcms{:L('_B_PURE_MY_25_')}=><else/>{pigcms{:L('_B_PURE_MY_26_')}</if></button>
+				<button type="submit" class="btn btn-block btn-larger"><if condition="$now_adress">{pigcms{:L('_B_PURE_MY_25_')}<else/>{pigcms{:L('_B_PURE_MY_26_')}</if></button>
 				<if condition="$now_adress"><button type="button" class="btn btn-block btn-larger" style=" background:#fff; color:#000; margin-top:.1rem" id="address_del">{pigcms{:L('_B_PURE_MY_27_')}</button></if>
 		    </div>
 		</form>

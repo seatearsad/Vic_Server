@@ -3,7 +3,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=Edge">
-		<title>{pigcms{$now_link.name} - {pigcms{$config.site_name}</title>
+		<title>{pigcms{$now_link.name} - {pigcms{:L('_VIC_NAME_')}</title>
 		<meta name="keywords" content="{pigcms{$config.seo_keywords}" />
 		<meta name="description" content="{pigcms{$config.seo_description}" />
 		<link href="{pigcms{$static_path}css/css.css" type="text/css"  rel="stylesheet" />
@@ -14,6 +14,7 @@
 		<script type="text/javascript">
 	      var  meal_alias_name = "{pigcms{$config.meal_alias_name}";
 	    </script>
+        <script type="text/javascript" src="{pigcms{$static_public}js/lang/{pigcms{:C('DEFAULT_LANG')}.js" charset="utf-8"></script>
 		<script src="{pigcms{$static_path}js/common.js"></script>
 		<!--[if IE 6]>
 		<script  src="{pigcms{$static_path}js/DD_belatedPNG_0.0.8a.js" mce_src="{pigcms{$static_path}js/DD_belatedPNG_0.0.8a.js"></script>
@@ -43,9 +44,9 @@
 			<article>
 				<div class="menu cf">
 					<div class="menu_left hide">
-						<div class="menu_left_top">全部分类</div>
+						<div class="menu_left_top">{pigcms{:L('_ALL_CLASSIF_')}</div>
 						<div class="list">
-							<ul>
+							<!--ul>
 								<volist name="all_category_list" id="vo" key="k">
 									<li>
 										<div class="li_top cf">
@@ -61,7 +62,7 @@
 										</if>
 									</li>
 								</volist>
-							</ul>
+							</ul-->
 						</div>
 					</div>
 					<div class="menu_right cf">
@@ -69,7 +70,7 @@
 							<ul>
 								<pigcms:slider cat_key="web_slider" limit="10" var_name="web_index_slider">
 									<li class="ctur">
-										<a href="{pigcms{$vo.url}">{pigcms{$vo.name}</a>
+										<a href="{pigcms{$vo.url}">{pigcms{:lang_substr($vo['name'],C('DEFAULT_LANG'))}</a>
 									</li>
 								</pigcms:slider>
 							</ul>
@@ -79,9 +80,9 @@
 			</article>
 			<div class="w main">
 				<div id="Position" class="margin_b6">
-					<a href="{pigcms{$config.site_url}">首页</a><span>&gt;</span>&nbsp;关于我们<span>&gt;</span>&nbsp;{pigcms{$now_link.name}</div>
+					<!--a href="{pigcms{$config.site_url}">首页</a><span>&gt;</span>&nbsp;关于我们<span>&gt;</span>&nbsp;{pigcms{$now_link.name}</div-->
 					<div class="left">
-						<h2>关于我们</h2>
+						<h2></h2>
 						<ul class="conact_side">
 							<pigcms:footer_link var_name="footer_link_list">
 								<li><a href="{pigcms{$vo.url}" <if condition="$vo['out_link']">target="_blank"</if>>{pigcms{$vo.name}</a></li>
