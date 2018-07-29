@@ -881,6 +881,7 @@ function init_goods_menu()
 		} else {
 			$(".tencer").removeClass("tenceron");
 			var diff_price = parseFloat((delivery_price - goodsCartMoney).toFixed(2));
+			console.log('price:' + diff_price);
 			$(".tencer").text(getLangStr('_POOR_DELI_') + getLangStr('_NUM_DELI_PRICE_',diff_price)).css("cursor", "default");
 		}
 
