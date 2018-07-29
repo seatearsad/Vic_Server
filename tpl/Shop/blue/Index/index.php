@@ -124,7 +124,7 @@
     var myCity = new BMap.LocalCity();
     myCity.get(locationCity);*/
 
-    var line_tpl = '<li data-name="{name}" data-lat="{lat}" data-lng="{long}"><i></i>{light-name}</li>';
+    var line_tpl = '<li data-name="{name}" data-lat="{lat}" data-lng="{long}"><i></i><div class="name">{name}</div><div class="desc">{address}</div></li>';
     var searchUrl = "{pigcms{:U('Index/Map/suggestion')}";
     $('#search-con').keyup(function(){
         search();
