@@ -778,6 +778,7 @@ body{ padding:0px; margin:0px auto; font-size:14px; background-color: #fff; }
     background: #fff;
 }*/
 .search-sug li i {
+    float: left;
     display: inline-block;
     width: 20px;
     height: 20px;
@@ -791,6 +792,7 @@ body{ padding:0px; margin:0px auto; font-size:14px; background-color: #fff; }
 }
 .search-sug li div{
     float:left;
+    width:90%;
 }
 .search-sug li .name{
     widht:90%;
