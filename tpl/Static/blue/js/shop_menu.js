@@ -782,7 +782,7 @@ function cartFunction(name, price, goods_id, index, type, productParam, productP
 			$(".tencer").text(getLangStr('_GOOD_CHOICE_')).css("cursor", "pointer");
 		} else {
 			$(".tencer").removeClass("tenceron");
-			var diff_price = parseFloat(delivery_price) - parseFloat(goodsCartMoney);
+			var diff_price = parseFloat((delivery_price - goodsCartMoney).toFixed(2));
 			$(".tencer").text(getLangStr('_POOR_DELI_') + getLangStr('_NUM_DELI_PRICE_',diff_price)).css("cursor", "default");
 		}
 		
@@ -881,7 +881,6 @@ function init_goods_menu()
 		} else {
 			$(".tencer").removeClass("tenceron");
 			var diff_price = parseFloat((delivery_price - goodsCartMoney).toFixed(2));
-			console.log('price:' + diff_price);
 			$(".tencer").text(getLangStr('_POOR_DELI_') + getLangStr('_NUM_DELI_PRICE_',diff_price)).css("cursor", "default");
 		}
 
