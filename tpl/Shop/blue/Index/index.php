@@ -125,7 +125,7 @@
     myCity.get(locationCity);*/
 
     var line_tpl = '<li data-name="{name}" data-lat="{lat}" data-lng="{long}"><i></i>{light-name}</li>';
-    var searchUrl = "{pigcms{:U('Shop/Index/suggestion')}";
+    var searchUrl = "{pigcms{:U('Index/Map/suggestion')}";
     $('#search-con').keyup(function(){
         search();
     });
@@ -146,7 +146,7 @@
         if (query == "") {
             return false;
         }
-        
+
         searchUrl += '&city_id=105';
         searchUrl += '&query=' + query;
         $.get(searchUrl, function(json) {
