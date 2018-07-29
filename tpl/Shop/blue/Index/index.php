@@ -150,10 +150,10 @@
         searchUrl += '&city_id=105';
         searchUrl += '&query=' + query;
         $.get(searchUrl, function(json) {
-            if (json.error_code == 0) {
+            if (json.status == 1) {
             	$(".search-sug").empty();
 				var subHtml = '';//'<li data-name="金隅嘉华大厦" data-lat="40.042268" data-lng="116.314645" class="demo"><i></i>金隅嘉华大厦&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size:14px;color:red;">(此演示地点含店铺演示数据)</span></li>';
-                for (var i= 0,item; item=json.data[i++];) {
+                for (var i= 0,item; item=json.result[i++];) {
                     var html = line_tpl;
                     for (var key in item) {
                         html = html.replace(new RegExp('{'+key+'}',"gm"), item[key]);
