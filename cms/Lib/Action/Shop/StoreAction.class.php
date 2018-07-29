@@ -66,7 +66,12 @@ class StoreAction extends BaseAction
 			$temp = array();
 			$temp['id'] = $row['store_id'];//店铺ID
 			$temp['name'] = lang_substr($row['name'],C('DEFAULT_LANG'));//店铺名称
-			$temp['range'] = $row['range'];//距离
+            //modify garfunkel 大于999取整
+            if($row['range'] > 999)
+                $temp['range'] = intval($row['range']).' km';
+            else
+			    $temp['range'] = $row['range'];
+            //距离
 			$temp['image'] = $row['image'];//图片
 			$temp['star'] = $row['score_mean'];//评分
 			$temp['month_sale_count'] = $row['sale_count'];//销量
