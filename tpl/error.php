@@ -14,7 +14,7 @@
 		a:active {COLOR: #1274ba; text-decoration:none;}
 		</style>
 		<div style="background:#fff;font-size:14px;width:600px; margin:60px auto; line-height:48px;min-height:48px;_height:48px;text-align:center;padding:60px 30px;border:5px solid #f3f3f3">
-			<present name="message"><img src="{pigcms{$config.site_url}/static/js/artdialog/skins/icons/face-smile.png" align="absmiddle" />&nbsp;&nbsp;<?php echo($message); ?><else/><img src="{pigcms{$config.site_url}/static/js/artdialog/skins/icons/face-sad.png" align="absmiddle" />&nbsp;&nbsp;<?php echo($error); ?></present><if condition="$jumpUrl neq '-1'"><br/><span style="font-size:12px;color:#999"><b id="wait"><?php echo($waitSecond); ?></b> {pigcms{:L('_AUTOJUMP_CANNT_')}</span> <a style="font-size:12px;" id="href" href="<?php echo($jumpUrl);?>">{pigcms{:L('_PLEASE_CLICK_')}</a></if>
+			<present name="message"><img src="{pigcms{$config.site_url}/static/js/artdialog/skins/icons/face-smile.png" align="absmiddle" />&nbsp;&nbsp;<?php echo($message); ?><else/><img src="{pigcms{$config.site_url}/static/js/artdialog/skins/icons/face-sad.png" align="absmiddle" />&nbsp;&nbsp;<?php echo($error); ?></present><if condition="$jumpUrl neq '-1'"><br/><span style="font-size:12px;color:#999"><?php echo(replace_lang_str(L('_AUTOJUMP_CANNT_'),'<b id="wait">'.$waitSecond.'</b>')); ?> </span> <a style="font-size:12px;" id="href" href="<?php echo($jumpUrl);?>">{pigcms{:L('_PLEASE_CLICK_')}</a></if>
 		</div>
 		<if condition="$jumpUrl neq '-1'">
 			<script type="text/javascript">
