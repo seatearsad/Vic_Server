@@ -74,7 +74,7 @@
 					<if condition="$rowset['son_list']">
 					<div class="fication_list fication_list_{pigcms{$rowset['cat_id']}" <if condition="$rowset['cat_id'] eq $cat_fid">style="display:block"</if>>
 						<dl class="clr">
-							<dd><a href="/shop/{pigcms{$rowset['cat_url']}/{pigcms{$sort_url}/{pigcms{$type_url}" <if condition="0 eq $cat_id AND $rowset['cat_id'] eq $cat_fid">class="on"</if> data-cat_url="{pigcms{$rowset['cat_url']}">全部</a></dd>
+							<dd><a href="/shop/{pigcms{$rowset['cat_url']}/{pigcms{$sort_url}/{pigcms{$type_url}" <if condition="0 eq $cat_id AND $rowset['cat_id'] eq $cat_fid">class="on"</if> data-cat_url="{pigcms{$rowset['cat_url']}">{pigcms{:L('_B_PURE_MY_64_')}</a></dd>
 							<volist name="rowset['son_list']" id="row">
 								<dd><a href="/shop/{pigcms{$row['cat_url']}/{pigcms{$sort_url}/{pigcms{$type_url}" <if condition="$row['cat_id'] eq $cat_id">class="on"</if> data-cat_url="{pigcms{$row['cat_url']}">{pigcms{$row['cat_name']}</a></dd>
 							</volist>
@@ -92,14 +92,14 @@
 				<p>找到<span class="keyword">“{pigcms{$keyword}”</span>相关{pigcms{$config.shop_alias_name}<span class="count"></span>个</p>
 			</div>
 			<div class="Shoplist_top clr" <if condition="$keyword">style="display:none"</if>>
-				<div class="fl sort">
+				<!--div class="fl sort">
 					<a href="/shop/{pigcms{$cat_url}/juli/{pigcms{$type_url}" <if condition="$sort_url eq 'juli'">class="on"</if> data-sort_url="juli">{pigcms{:L('_DEFAULT_SORT_')}</a>
 					<a href="/shop/{pigcms{$cat_url}/sale_count/{pigcms{$type_url}" <if condition="$sort_url eq 'sale_count'">class="on"</if> data-sort_url="sale_count">{pigcms{:L('_SALE_VOL_')}<i></i></a>
 					<a href="/shop/{pigcms{$cat_url}/send_time/{pigcms{$type_url}" <if condition="$sort_url eq 'send_time'">class="on"</if> data-sort_url="send_time">{pigcms{:L('_DIST_TIME_')}<i></i></a>
 					<a href="/shop/{pigcms{$cat_url}/basic_price/{pigcms{$type_url}" <if condition="$sort_url eq 'basic_price'">class="on"</if> data-sort_url="basic_price">{pigcms{:L('_MIN_DELI_PRICE_')}<i></i></a>
 					<a href="/shop/{pigcms{$cat_url}/score_mean/{pigcms{$type_url}" <if condition="$sort_url eq 'score_mean'">class="on"</if> data-sort_url="score_mean">{pigcms{:L('_SCORE_HIGHEST_')}<i></i></a>
 					<a href="/shop/{pigcms{$cat_url}/create_time/{pigcms{$type_url}" <if condition="$sort_url eq 'create_time'">class="on"</if> data-sort_url="create_time">{pigcms{:L('_NEW_RELEASE_')}<i></i></a>
-				</div>
+				</div-->
 				<!--div class="fr deliver">
 					<a href="/shop/{pigcms{$cat_url}/{pigcms{$sort_url}/-1" style="padding:0px;background:white;"><span <if condition="$type_url eq -1">class="on"</if> data-type="-1">全部</span></a>
 					<a href="/shop/{pigcms{$cat_url}/{pigcms{$sort_url}/0" style="padding:0px;background:white;"><span <if condition="$type_url eq 0">class="on"</if> data-type="0">配送</span></a>
