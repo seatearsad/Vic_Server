@@ -118,10 +118,10 @@
 							<div class="fix">
 							<div class="img">
 								<img src="{pigcms{$vo['image']}" width=222 height=148>
-								<div class="imgewm">
+								<!--div class="imgewm">
 									<img class="lazy_img" src="{pigcms{$static_public}images/blank.gif" data-original="{pigcms{$vo['qrcode_url']}" width="78" height="78"/>
 									<p>{pigcms{:L('_WECHAT_SCAN_TO_PHONE_')}</p>
-								</div>
+								</div-->
 							</div>
 							<div class="text">
 								<dl>
@@ -275,13 +275,13 @@
 	<li>
 		<a href="{{ d.store_list[i].detail_url }}">
 			<div class="fix">
-			<div class="img">
+			<div-- class="img">
 				<img src="{{ d.store_list[i].image }}" width=222 height=148>
-				<div class="imgewm">
+				<!--div class="imgewm">
 					<img class="lazy_img" src="{pigcms{$static_public}images/blank.gif" data-original="{{ d.store_list[i].qrcode_url }}" width="78" height="78"/>
-					<!-- img class="lazy_img" src="{{ d.store_list[i].qrcode_url }}" data-original="{{ d.store_list[i].qrcode_url }}" width="78" height="78"/ -->
+					<!-- img class="lazy_img" src="{{ d.store_list[i].qrcode_url }}" data-original="{{ d.store_list[i].qrcode_url }}" width="78" height="78"/ >
 					<p>{pigcms{:L('_WECHAT_SCAN_TO_PHONE_')}</p>
-				</div>
+				</div-->
 			</div>
 			<div class="text">
 				<dl>
@@ -299,13 +299,13 @@
                         <!--span class="fr">月售{{ d.store_list[i].merchant_store_month_sale_count }}单</span-->
                     </dd>
                     <dd class="clr middle">
-                        <span class="fr">{{getLangStr('_SALE_NUM_ORDER_',d.store_list[i].month_sale_count)}}</span>
+                        <span class="fr">{{getLangStr('_MONTH_SALE_NUM_',d.store_list[i].month_sale_count)}}</span>
                     </dd>
 					{{# if(d.store_list[i].delivery){ }}
 					<dd class="clr end">
 						<span class="r5" style="width: 200px;float:left;">{pigcms{:L('_MIN_DELI_PRICE_')}:$<i>{{ d.store_list[i].delivery_price }}</i></span>
 						<span class="r5" style="width: 200px;float:left;">{pigcms{:L('_DELI_PRICE_')}:$<i>{{ d.store_list[i].delivery_money }}</i></span>
-                        <span class="r5" style="width: 200px;float:left;">{pigcms{:('_PACK_PRICE_')}:$<i>{{ d.store_list[i].pack_fee }}</i></span>
+                        <span class="r5" style="width: 200px;float:left;">{pigcms{:L('_PACK_PRICE_')}:$<i>{{ d.store_list[i].pack_fee }}</i></span>
 						<!--span class="fr">{{ d.store_list[i].delivery_time }}分钟</span-->
 					</dd>
 					{{# }else{ }}
