@@ -287,13 +287,13 @@
 												<a href="{pigcms{$vo.url}" target="_blank">
 
 													<img class="meal_img lazy_img" src="{pigcms{$static_public}images/blank.gif" data-original="{pigcms{$vo.image}" title="【{pigcms{$vo.area_name}】{pigcms{$vo.name}"/>
-													<div class="bmbox">
+													<!--div class="bmbox">
 														<div class="bmbox_title" style="line-height: 20px;">{pigcms{:L('_WECHAT_SCAN_TO_PHONE_')}</div>
 														<div class="bmbox_list">
 															<div class="bmbox_list_img"><img class="qrcode_img lazy_img" src="{pigcms{$static_public}images/blank.gif" data-original="{pigcms{:U('Index/Recognition/see_qrcode',array('type'=>'shop','id'=>$vo['store_id']))}" /></div>
 														</div>
-														<!--div class="bmbox_tip">微信扫码 手机查看</div-->
-													</div>
+														<!--div class="bmbox_tip">微信扫码 手机查看</div>
+													</div-->
 													<div class="name" style="height:42px;"><if condition="$vo.isverify"><span class="zheng">证</span></if>【{pigcms{$vo.area_name}】{pigcms{$vo.name}</div>
 													<if condition="$vo['state']"><!--div class="name_info"><b>营业中</b></div--></if>
 													<div class="extro">
