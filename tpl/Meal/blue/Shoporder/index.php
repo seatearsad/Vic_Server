@@ -25,8 +25,13 @@
 <script src="{pigcms{$static_public}js/artdialog/iframeTools.js"></script>
 
 <script type="text/javascript" src="{pigcms{$static_public}js/date/WdatePicker.js"></script> 
-
-<script><if condition="$user_session">var is_login=true;<else/>var is_login=false;var login_url="{pigcms{:U('Index/Login/frame_login')}";</if><if condition="$user_session['phone']">var has_phone=true;<else/>var has_phone=false;var phone_url="{pigcms{:U('Index/Login/frame_phone')}";</if></script>
+<php>
+    $lang = 'cn';
+    if(C('DEFAULT_LANG') == 'en-us'){
+        $lang = 'en';
+    }
+</php>
+<script><if condition="$user_session">var is_login=true;<else/>var is_login=false;var login_url="{pigcms{:U('Index/Login/frame_login',array('lang' => $lang))}";</if><if condition="$user_session['phone']">var has_phone=true;<else/>var has_phone=false;var phone_url="{pigcms{:U('Index/Login/frame_phone')}";</if></script>
 <!--[if IE 6]>
 <script  src="{pigcms{$static_path}js/DD_belatedPNG_0.0.8a.js" mce_src="{pigcms{$static_path}js/DD_belatedPNG_0.0.8a.js"></script>
 <script type="text/javascript">

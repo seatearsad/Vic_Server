@@ -185,8 +185,8 @@ body{ padding:0px; margin:0px auto; font-size:14px; background-color: #fff; }
 .shopto_top .fr a{ color: #fff; }
 .shopto_end{ height: 90px; background: #fff; border-bottom: #ebebeb 1px solid; }
 .shopto_end .img{ padding-top: 18px;  width: 180px;  }
-.shopto_end .link{ font-size: 18px; color: #898989; line-height: 90px; padding-left: 60px; }
-.shopto_end .link a{ display: inline-block; width: 88px; color: #898989;  text-align: center; }
+.shopto_end .link{ font-size: 18px; color: #898989; line-height: 90px; padding-left: 10px; }
+.shopto_end .link a{ display: inline-block; width: 100px; color: #898989;  text-align: center; }
 .shopto_end .link a.on{ color: #06c1ae; }
 .shopto_end .link span{ padding: 0 20px; }
 .shopto_end .fr{ height: 34px;border: #06c1ae 2px solid; border-radius: 50px; width: 420px; background: url(../images/shous_03.png) 12px center no-repeat; position: relative; margin-top: 26px;}

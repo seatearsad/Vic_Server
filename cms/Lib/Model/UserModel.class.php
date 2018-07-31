@@ -585,7 +585,11 @@ class UserModel extends Model
 		$this->add_extra_score($uid,$score_get,replace_lang_str(L('_SIGN_NUM_DAY_'),$sign_day).' '.replace_lang_str(L('_GET_NUM_TICKET_'),$score_get));
 
 		D('Scroll_msg')->add_msg('sign',$uid,$now_user['nickname'].'--'.date('Y-m-d H:i',$_SERVER['REQUEST_TIME']).replace_lang_str(L('_GET_NUM_TICKET_'),$score_get));
-		$return_msg = L('_SIGN_SUCCESS_').' '.replace_lang_str(L('_GET_NUM_TICKET_'),$score_get);
+		if(C('DEFAULT_LANG') == 'zh-cn')
+		    $return_msg = L('_SIGN_SUCCESS_').' '.replace_lang_str(L('_GET_NUM_TICKET_'),$score_get);
+		else
+            $return_msg = replace_lang_str(L('_GET_NUM_TICKET_'),$score_get);
+
 		if($sign_day>1){
 			$return_msg = replace_lang_str(L('_CON_DAYS_SIGN_'),$sign_day).' '.replace_lang_str(L('_GET_NUM_TICKET_'),$score_get);
 		}
