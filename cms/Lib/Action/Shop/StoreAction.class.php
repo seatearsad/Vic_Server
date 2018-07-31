@@ -864,10 +864,27 @@ class StoreAction extends BaseAction
 				}
                 //$now_goods['list'][]
 			}
-		}else{
-		    $now_goods['name'] = lang_substr($now_goods['name'],C('DEFAULT_LANG'));
-            $now_goods['unit'] = lang_substr($now_goods['unit'],C('DEFAULT_LANG'));
+		}
+        //add garfunkel
+        if ($now_goods['properties_list']){
+		    foreach ($now_goods['properties_list'] as $k => $v){
+		        $now_goods['properties_list'][$k]['name'] = lang_substr($v['name'],C('DEFAULT_LANG'));
+		        foreach($v['val'] as $kk => $vv){
+                    $now_goods['properties_list'][$k]['val'][$kk] = lang_substr($vv,C('DEFAULT_LANG'));
+                }
+            }
         }
+        if($now_goods['spec_list']){
+		    foreach($now_goods['spec_list'] as $k => $v){
+                $now_goods['spec_list'][$k]['name'] = lang_substr($v['name'],C('DEFAULT_LANG'));
+                foreach($v['list'] as $kk => $vv){
+                    $now_goods['spec_list'][$k]['list'][$kk]['name'] = lang_substr($vv['name'],C('DEFAULT_LANG'));
+                }
+            }
+        }
+        $now_goods['name'] = lang_substr($now_goods['name'],C('DEFAULT_LANG'));
+        $now_goods['unit'] = lang_substr($now_goods['unit'],C('DEFAULT_LANG'));
+        //
 // 		echo '<pre/>';
 // 		print_r($now_goods);die;
 		if(empty($now_goods)){

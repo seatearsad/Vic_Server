@@ -461,14 +461,18 @@ function popup_html(data, has_format, goodsCartKey)
 {
 	var this_index = format_cart_data(goodsCartKey);
 	
-	console.log(data)
+	console.log(data.pic_arr)
 	var html = '', spec_ids = [], properties_ids = [];
 	html += '<div class="img fl">';
-	if (store_theme == 1) {
-		html += '<img src="' + data.pic_arr[0]['url'] + '" width="290" height="290">';
-	} else {
-		html += '<img src="' + data.pic_arr[0]['url'] + '" width="390" height="216">';
+
+	if(typeof(data.pic_arr) != 'undefined'){
+        if (store_theme == 1) {
+            html += '<img src="' + data.pic_arr[0]['url'] + '" width="290" height="290">';
+        } else {
+            html += '<img src="' + data.pic_arr[0]['url'] + '" width="390" height="216">';
+        }
 	}
+
 	html += '</div>';
 	html += '<div class="p415 text fr">';
 	html += '<h2>' + data.name + '</h2>';
