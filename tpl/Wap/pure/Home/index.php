@@ -337,7 +337,15 @@
 
                     <div class="dealcard-img imgbox">
                         {{# if(d[i].isverify == 1){ }}
-                        <img src="./static/images/kd_rec.png" style="    width: 41px;height: 15px;position: absolute;z-index: 99;margin: 2px 0 0 0;">
+                        <php>
+                            if(C('DEFAULT_LANG') == 'zh-cn')
+                                $img_name = '<img src="./static/images/kd_rec.png" style="width: 41px;height: 15px;position: absolute;z-index: 99;margin: 2px 0 0 0;">';
+                            else
+                                $img_name = '<img src="./static/images/en_rec.png" style="width: 15px;height: 14px;position: absolute;z-index: 99;margin: 2px 0 0 0;">';
+
+                            echo $img_name;
+                        </php>
+                        <!--img src="./static/images/kd_rec.png" style="    width: 41px;height: 15px;position: absolute;z-index: 99;margin: 2px 0 0 0;"-->
                         {{# } }}
                         <img style="margin-left: 0px;position: absolute;"  src="{{ d[i].image }}" alt="{{ d[i].name }}">
                         {{# if(d[i].is_close){ }}<div class="closeTip">{pigcms{:L('_AT_REST_')}</div>{{# } }}

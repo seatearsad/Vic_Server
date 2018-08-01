@@ -77,7 +77,13 @@
 							<span class="yes">{pigcms{:L('_AT_BUSINESS_')}</span>
 						</if>
 						<if condition="$store['isverify']">
-							<img src="../static/images/sjxq_rec.png" style="float: right;margin-left: 5px;" >
+                            <php>
+                                if(C('DEFAULT_LANG') == 'zh-cn')
+                                    $img_name = 'sjxp_rec.png';
+                                else
+                                    $img_name = 'en_rec.png';
+                            </php>
+							<img src="../static/images/{pigcms{$img_name}" style="float:left;margin-left:15px;" >
 						</if>
 					</div>
 					<div class="score clr">

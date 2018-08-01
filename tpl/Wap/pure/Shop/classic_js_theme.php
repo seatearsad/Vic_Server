@@ -54,7 +54,15 @@
 		<dd class="page-link" data-url="shop&shop_id={{ d[i].id }}" data-url-type="openRightFloatWindow" {{# if(d[i].is_close){ }}style="opacity:0.6;"{{# } }}>
 			<div class="dealcard-img imgbox">
 				{{# if(d[i].isverify == 1){ }}
-					<img src="./static/images/kd_rec.png" style="width: 41px;height: 15px;position: absolute;z-index: 15;margin: 2px 0 0 0;">
+                <php>
+                    if(C('DEFAULT_LANG') == 'zh-cn')
+                    $img_name = '<img src="./static/images/kd_rec.png" style="width: 41px;height: 15px;position: absolute;z-index: 99;margin: 2px 0 0 0;">';
+                    else
+                    $img_name = '<img src="./static/images/en_rec.png" style="width: 15px;height: 14px;position: absolute;z-index: 99;margin: 2px 0 0 0;">';
+
+                    echo $img_name;
+                </php>
+					<!--img src="./static/images/kd_rec.png" style="width: 41px;height: 15px;position: absolute;z-index: 15;margin: 2px 0 0 0;"-->
 				{{# } }}
 				<img src="{{ d[i].image }}" alt="{{ d[i].name }}">
 				{{# if(d[i].is_close){ }}<div class="closeTip">{pigcms{:L('_AT_REST_')}</div>{{# } }}

@@ -54,7 +54,15 @@
 		<dd class="page-link" data-url="shop-{{ d[i].id }}" data-url-type="openRightFloatWindow" {{# if(d[i].is_close){ }}style="opacity:0.6;"{{# } }}>
 			<div class="dealcard-img imgbox">
 				{{# if(d[i].isverify == 1){ }}
-					<img src="./static/images/kd_rec.png" style="    width: 41px;height: 15px;position: absolute;z-index: 15;margin: 2px 0 0 0;">
+                <php>
+                    if(C('DEFAULT_LANG') == 'zh-cn')
+                    $img_name = '<img src="./static/images/kd_rec.png" style="width: 41px;height: 15px;position: absolute;z-index: 99;margin: 2px 0 0 0;">';
+                    else
+                    $img_name = '<img src="./static/images/en_rec.png" style="width: 15px;height: 14px;position: absolute;z-index: 99;margin: 2px 0 0 0;">';
+
+                    echo $img_name;
+                </php>
+					<!--img src="./static/images/kd_rec.png" style="    width: 41px;height: 15px;position: absolute;z-index: 15;margin: 2px 0 0 0;"-->
 				{{# } }}
 				<img src="{{ d[i].image }}" alt="{{ d[i].name }}">
 				{{# if(d[i].is_close){ }}<div class="closeTip">休息中</div>{{# } }}
@@ -157,7 +165,7 @@
 								<div class="title">{{ d[i].product_list[j].product_name }}</div>
 								<div class="sale">{{ getLangStr('_MONTH_SALE_NUM_',d[i].product_list[j].product_sale) }} {{ getLangStr('_PRAISE_TXT_') }}{{ d[i].product_list[j].product_reply }}</div>
 								{{# if(d[i].product_list[j].has_format){ }}
-									<div class="price">${{ d[i].product_list[j].product_price }} 起{{# if(d[i].product_list[j].extra_pay_price>0&&open_extra_price==1){ }}+{{ d[i].product_list[j].extra_pay_price }}{{ d[i].product_list[j].extra_pay_price_name }}{{# } }}</div>
+									<div class="price">${{ d[i].product_list[j].product_price }} {{# if(d[i].product_list[j].extra_pay_price>0&&open_extra_price==1){ }}+{{ d[i].product_list[j].extra_pay_price }}{{ d[i].product_list[j].extra_pay_price_name }}{{# } }}</div>
 								{{# }else{ }}
 									<div class="price">${{ d[i].product_list[j].product_price }}{{# if(d[i].product_list[j].is_seckill_price){ }}<span>${{ d[i].product_list[j].o_price }}</span>{{# } }}{{# if(d[i].product_list[j].extra_pay_price>0&&open_extra_price==1){ }}+{{ d[i].product_list[j].extra_pay_price }}{{ d[i].product_list[j].extra_pay_price_name }}{{# } }}</div>
 								{{# } }}

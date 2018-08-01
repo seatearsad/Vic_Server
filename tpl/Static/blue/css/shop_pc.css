@@ -299,7 +299,7 @@ body{ padding:0px; margin:0px auto; font-size:14px; background-color: #fff; }
 .details .img img{ width: 88px; height: 88px;  border-radius: 100%; border: #b6b4a4 5px solid; }
 .details .pl15{ height: 74px; padding: 12px 0 12px 115px; }
 .details .pl15 .title{ height: 20px; line-height: 20px; }
-.details .pl15 .title span{ font-size: 14px;  line-height: 20px; padding: 0 10px; border-radius: 2px; margin-left: 10px; display: inline-block; }
+.details .pl15 .title span{float:left;font-size: 14px;  line-height: 20px; padding: 0 10px; border-radius: 2px; margin-left: 10px; display: inline-block; }
 .details .pl15 .title span.yes{ color: #fff; background: #06c1ae; }
 .details .pl15 .title span.no{ color: #999999; background: #eee; }
 .details .pl15 h2{ color: #fff; font-size: 20px;  float: left;}
