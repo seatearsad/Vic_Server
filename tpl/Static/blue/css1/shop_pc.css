@@ -638,7 +638,7 @@ body{ padding:0px; margin:0px auto; font-size:14px; background-color: #fff; }
 .li_shop_txt {
     float: left;
     height: 30px;
-    width: 76px;
+    width: 86px;
     padding-left: 10px;
     background: url(../images/o2o1_03.png) no-repeat 65px 8px;
 }
@@ -665,7 +665,7 @@ body{ padding:0px; margin:0px auto; font-size:14px; background-color: #fff; }
     background: #fff;
     border: 1px solid #d9d9d9;
     box-shadow: 1px 1px 2px rgba(203,203,203,.5);
-    right: 13px;
+    right: 3px;
     width: 86px;
     position: absolute;
     z-index: 98;

@@ -20,7 +20,7 @@
 </footer>
 <div style="display:none;">{pigcms{$config.site_footer}</div>
 <!--悬浮框-->
-<if condition="MODULE_NAME neq 'Login'">
+<!--if condition="MODULE_NAME neq 'Login'">
 	<div class="rightsead">
 		<ul>
 			<li>
@@ -62,5 +62,5 @@
 			</li>
 		</ul>
 	</div>
-</if>
+</if-->
 <!--leftsead end-->

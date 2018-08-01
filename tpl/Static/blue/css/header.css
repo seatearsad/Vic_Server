@@ -222,7 +222,7 @@
 	height: 30px;
 	width: 100px;
 	padding-left: 10px;
-	background: url(../images/o2o1_03.png) no-repeat 75px 8px;
+	background: url(../images/o2o1_03.png) no-repeat 85px 8px;
 }
 .li_txt_info{ z-index:90;}
 .li_txt_info:hover .li_txt_info_txt {
@@ -234,7 +234,7 @@
 
 	border-bottom: 0;
 	border-top: 0;
-	background: #fff url(../images/o2o554_03.png) no-repeat 75px 8px;
+	background: #fff url(../images/o2o554_03.png) no-repeat 85px 8px;
 }
 .li_txt_info:hover .li_txt_info_txt a {
 	color: #fe5842;
@@ -319,7 +319,7 @@
 .li_shop_txt {
 	float: left;
 	height: 30px;
-	width: 76px;
+	width: 86px;
 	padding-left: 10px;
 	/*background: url(../images/o2o1_03.png) no-repeat 65px 8px;*/
 }
@@ -349,7 +349,7 @@
 	background: #fff;
 	border: 1px solid #d9d9d9;
 	box-shadow: 1px 1px 2px rgba(203,203,203,.5);
-	right: 13px;
+	right: 3px;
 	width: 156px;
 	position: absolute;
 	z-index: 98;

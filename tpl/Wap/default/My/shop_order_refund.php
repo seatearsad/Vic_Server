@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8"/>
-	<title>取消订单</title>
+	<title>{pigcms{:L('_CANCEL_ORDER_')}</title>
     <meta name="viewport" content="initial-scale=1, width=device-width, maximum-scale=1, user-scalable=no">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name='apple-touch-fullscreen' content='yes'>
@@ -143,28 +143,28 @@
 			    <dd>
 			        <dl>
 			            <dd class="kv-line-r dd-padding">
-			                <h6>订单号：</h6><p><strong class="highlight-price">{pigcms{$now_order.order_id}</strong></p>
+			                <h6>{pigcms{:L('_B_PURE_MY_68_')}：</h6><p><strong class="highlight-price">{pigcms{$now_order.order_id}</strong></p>
 			            </dd>
 						<dd class="kv-line-r dd-padding">
-							<h6>购买数量：</h6><p>{pigcms{$now_order.num}</p>
+							<h6>{pigcms{:L('_B_PURE_MY_69_')}：</h6><p>{pigcms{$now_order.num}</p>
 						</dd>
 						<dd class="kv-line-r dd-padding">
-							<h6>商品总价：</h6><p>{pigcms{$now_order.goods_price|floatval}元</p>
+							<h6>{pigcms{:L('_TOTAL_COMM_PRICE_')}：</h6><p>${pigcms{$now_order.goods_price|floatval}</p>
 						</dd>
 						<dd class="kv-line-r dd-padding">
-							<h6>配送费：</h6><p>{pigcms{$now_order.freight_charge|floatval}元</p>
+							<h6>{pigcms{:L('_DELI_PRICE_')}：</h6><p>${pigcms{$now_order.freight_charge|floatval}</p>
 						</dd>
 						<dd class="kv-line-r dd-padding">
-							<h6>订单总价：</h6><p>{pigcms{$now_order.total_price|floatval}元</p>
+							<h6>{pigcms{:L('_B_PURE_MY_70_')}：</h6><p>${pigcms{$now_order.total_price|floatval}</p>
 						</dd>
 						<dd class="kv-line-r dd-padding">
-							<h6>平台优惠：</h6><p>{pigcms{$now_order.balance_reduce|floatval}元</p>
+							<h6>{pigcms{:L('_PLATFORM_DIS_')}：</h6><p>${pigcms{$now_order.balance_reduce|floatval}</p>
 						</dd>
 						<dd class="kv-line-r dd-padding">
-							<h6>商家优惠：</h6><p>{pigcms{$now_order.merchant_reduce|floatval}元</p>
+							<h6>{pigcms{:L('_STORE_DIS_')}：</h6><p>${pigcms{$now_order.merchant_reduce|floatval}</p>
 						</dd>
 						<dd class="kv-line-r dd-padding">
-							<h6>实收总额：</h6><p>{pigcms{$now_order.price|floatval}元</p>
+							<h6>{pigcms{:L('_TOTAL_RECE_')}：</h6><p>${pigcms{$now_order.price|floatval}</p>
 						</dd>
 						
 			        </dl>
@@ -177,7 +177,7 @@
 							<dd>
 								<a class="react" href="javascript:;">
 									<div class="more more-weak">
-										<h6>使用平台优惠券：</h6>
+										<h6>{pigcms{:L('_PLATFORM_COUP_')}：</h6>
 										<span class="more-after">${pigcms{$now_order.coupon_price|floatval}</span>
 									</div>
 								</a>
@@ -187,7 +187,7 @@
 							<dd>
 								<a class="react" href="javascript:;">
 									<div class="more more-weak">
-										<h6>使用商家优惠券：</h6>
+										<h6>{pigcms{:L('_SHOP_COUP_')}：</h6>
 										<span class="more-after">${pigcms{$now_order.card_price|floatval}</span>
 									</div>
 								</a>
@@ -195,44 +195,44 @@
 						</if>
 						<if condition="$now_order['balance_pay'] neq '0.00'">
 							<dd class="kv-line-r dd-padding">
-								<h6>使用平台余额：</h6><p>{pigcms{$now_order.balance_pay|floatval}元</p>
+								<h6>{pigcms{:L('_PLATFORM_BALANCE_PAY_')}：</h6><p>${pigcms{$now_order.balance_pay|floatval}</p>
 							</dd>
 						</if>
 						<if condition="$now_order['merchant_balance'] neq '0.00' OR $now_order.card_give_money neq '0.00'">
 							<dd class="kv-line-r dd-padding">
-								<h6>使用商家会员卡余额：</h6><p>{pigcms{$now_order['merchant_balance']+$now_order['card_give_money']|floatval}元</p>
+								<h6>{pigcms{:L('_SHOP_BALANCE_PAY_')}：</h6><p>${pigcms{$now_order['merchant_balance']+$now_order['card_give_money']|floatval}</p>
 							</dd>
 						</if>
                         <if condition="$now_order['score_used_count'] neq '0'">
                             <dd class="kv-line-r dd-padding">
-                                <h6>使用{pigcms{$config.score_name}：</h6><p>{pigcms{$now_order.score_used_count}</p>
+                                <h6>{pigcms{:L('_USE_TICKET_DED_')}：</h6><p>{pigcms{$now_order.score_used_count}</p>
                             </dd>
                         </if>
                         <if condition="$now_order['score_deducte'] neq '0.00'">
                             <dd class="kv-line-r dd-padding">
-                                <h6>使用{pigcms{$config.score_name}抵扣余额：</h6><p>{pigcms{$now_order.score_deducte|floatval}元</p>
+                                <h6>{pigcms{:L('_MEAL_TICKET_DED_CASH_')}：</h6><p>${pigcms{$now_order.score_deducte|floatval}</p>
                             </dd>
                         </if>
 						<if condition="$now_order['payment_money'] neq '0.00'">
 							<dd class="kv-line-r dd-padding">
-								<h6>在线支付金额：</h6>
+								<h6>{pigcms{:L('_AMOUNT_PAYMENT_')}：</h6>
 								<p>
 									<strong class="highlight-price">
-										<span class="need-pay">{pigcms{$now_order.payment_money}</span>元
+										<span class="need-pay">${pigcms{$now_order.payment_money}</span>
 									</strong>
 								</p>
 							</dd>
 							<dd class="kv-line-r dd-padding">
-								<h6>在线支付方式：</h6>
+								<h6>{pigcms{:L('_ONLINE_PAY_')}：</h6>
 								<p>{pigcms{$now_order.pay_type_txt}</p>
 							</dd>
 						</if>
 			        </dl>
 			    </dd>
 			</dl>
-			<div class="btn-wrapper" style="line-height:1.5;color:#666;">在线支付金额将通过您使用的支付方式返回到您的银行卡上，其他将返回到您的帐户上！</div>
+			<!--div class="btn-wrapper" style="line-height:1.5;color:#666;">在线支付金额将通过您使用的支付方式返回到您的银行卡上，其他将返回到您的帐户上！</div-->
 			<div class="btn-wrapper">
-				<span id="cancel" class="btn btn-larger btn-block btn-strong" style="margin-bottom:15px;">确定取消</span>
+				<span id="cancel" class="btn btn-larger btn-block btn-strong" style="margin-bottom:15px;">{pigcms{:L('_B_D_LOGIN_CONIERM_')}</span>
 			</div>
 		</div>
     	<script src="{pigcms{:C('JQUERY_FILE')}"></script>
