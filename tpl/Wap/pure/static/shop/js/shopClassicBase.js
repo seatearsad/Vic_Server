@@ -1143,7 +1143,7 @@ function showShop(shopId){
 			$('#shopTitle').html(result.store.name);
 			$('#shopIcon').css('background-image','url('+result.store.image+')');
 			if(result.store.delivery){
-				$('#deliveryText').html(getLangStr('_MIN_DELI_PRICE_') + ' $ '+result.store.delivery_price+' | '+ getLangStr('_DELI_PRICE_') +' $ '+result.store.delivery_money+' | '+ getLangStr('_PACK_PRICE_') +' '+ result.store.pack_fee + ' | ' + getLangStr('_DEIL_NUM_MIN_',result.store.delivery_time));
+				$('#deliveryText').html(getLangStr('_DELI_PRICE_') +' $ '+result.store.delivery_money+' | '+ getLangStr('_PACK_PRICE_') +' '+ result.store.pack_fee + ' | ' + getLangStr('_DEIL_NUM_MIN_',result.store.delivery_time));
 			}else{
 				$('#deliveryText').html(getLangStr('_ONLY_SELF_'));
 			}
