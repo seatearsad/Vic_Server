@@ -118,10 +118,10 @@
 			</div>
 			<div class="fr give">
 				<ul class="clr">
-					<li>
+					<!--li>
 						<h2>${pigcms{$store['delivery_price']|floatval}</h2>
 						<p>{pigcms{:L('_MIN_DELI_PRICE_')}</p>
-					</li>
+					</li-->
 					<li>
 						<h2>${pigcms{$store['delivery_money']|floatval}</h2>
 						<p>{pigcms{:L('_DELI_PRICE_')}</p>

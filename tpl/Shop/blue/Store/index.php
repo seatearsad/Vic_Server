@@ -143,7 +143,7 @@
                                     </dd>
 									<if condition="$vo['delivery']">
 									<dd class="clr end">
-										<span class="r5" style="width: 200px;float:left;">{pigcms{:L('_MIN_DELI_PRICE_')}:$<i>{pigcms{$vo['delivery_price']}</i></span>
+										<!--span class="r5" style="width: 200px;float:left;">{pigcms{:L('_MIN_DELI_PRICE_')}:$<i>{pigcms{$vo['delivery_price']}</i></span-->
 										<span class="r5" style="width: 200px;float:left;">{pigcms{:L('_DELI_PRICE_')}:$<i>{pigcms{$vo['delivery_money']}</i></span>
                                         <span class="r5" style="width: 200px;float:left;">{pigcms{:L('_PACK_PRICE_')}:$<i>{pigcms{$vo['pack_fee']}</i></span>
 										<!--span class="fr">{pigcms{$vo['delivery_time']}分钟</span-->
@@ -303,7 +303,7 @@
                     </dd>
 					{{# if(d.store_list[i].delivery){ }}
 					<dd class="clr end">
-						<span class="r5" style="width: 200px;float:left;">{pigcms{:L('_MIN_DELI_PRICE_')}:$<i>{{ d.store_list[i].delivery_price }}</i></span>
+						<!--span class="r5" style="width: 200px;float:left;">{pigcms{:L('_MIN_DELI_PRICE_')}:$<i>{{ d.store_list[i].delivery_price }}</i></span-->
 						<span class="r5" style="width: 200px;float:left;">{pigcms{:L('_DELI_PRICE_')}:$<i>{{ d.store_list[i].delivery_money }}</i></span>
                         <span class="r5" style="width: 200px;float:left;">{pigcms{:L('_PACK_PRICE_')}:$<i>{{ d.store_list[i].pack_fee }}</i></span>
 						<!--span class="fr">{{ d.store_list[i].delivery_time }}分钟</span-->
