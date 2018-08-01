@@ -79,7 +79,7 @@
 						<if condition="$store['isverify']">
                             <php>
                                 if(C('DEFAULT_LANG') == 'zh-cn')
-                                    $img_name = 'sjxp_rec.png';
+                                    $img_name = 'sjxq_rec.png';
                                 else
                                     $img_name = 'en_rec.png';
                             </php>
