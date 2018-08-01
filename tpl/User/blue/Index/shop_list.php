@@ -39,7 +39,7 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 		<article>
 			<div class="menu cf">
 				<div class="menu_left hide">
-					<div class="menu_left_top">{pigcms{:('_ALL_CLASSIF_')}</div>
+					<div class="menu_left_top">{pigcms{:L('_ALL_CLASSIF_')}</div>
 					<div class="list">
 						<!--ul>
 							<volist name="all_category_list" id="vo" key="k">

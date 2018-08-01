@@ -18,7 +18,7 @@
 	</tr>
 	</if>
 	<tr>
-		<th width="180">商品名称</th>
+		<th width="320">商品名称</th>
 		<th>单价</th>
 		<th>数量</th>
 		<th>规格属性详情</th>

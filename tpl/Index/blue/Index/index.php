@@ -294,7 +294,7 @@
 														</div>
 														<!--div class="bmbox_tip">微信扫码 手机查看</div>
 													</div-->
-													<div class="name" style="height:42px;"><if condition="$vo.isverify"><span class="zheng">证</span></if>【{pigcms{$vo.area_name}】{pigcms{$vo.name}</div>
+													<div class="name" style="height:42px;"><if condition="$vo.isverify"><span class="zheng">{pigcms{:L('_ZHENG_TXT_')}</span></if>【{pigcms{$vo.area_name}】{pigcms{$vo.name}</div>
 													<if condition="$vo['state']"><!--div class="name_info"><b>营业中</b></div--></if>
 													<div class="extro">
 														<div class="info">

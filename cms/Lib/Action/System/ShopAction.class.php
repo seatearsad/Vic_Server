@@ -371,6 +371,12 @@ class ShopAction extends BaseAction
         $order = D('Shop_order')->get_order_detail(array('order_id' => intval($_GET['order_id'])));
         if (empty($order)) {
             $this->frame_error_tips('没有找到该订单的信息！');
+        }else{//garfunkel 重新获取商品名称
+            foreach ($order['info'] as $k => $v){
+                $g_id = $v['goods_id'];
+                $goods = D('Shop_goods')->get_goods_by_id($g_id);
+                $order['info'][$k]['name'] = $goods['name'];
+            }
         }
         $this->assign('store', D('Merchant_store_shop')->field(true)->where(array('store_id' => $order['store_id']))->find());
         $this->assign('order', $order);

@@ -159,7 +159,7 @@
 								<dl class="clr">
 									<php>$tmp_num=0;</php>
 									<if condition="$vo['isverify'] gt 0">
-										<dd class="fl zheng">证</dd>
+										<dd class="fl zheng">{pigcms{:L('_ZHENG_TXT_')}</dd>
 										<php>$tmp_num++;</php>
 									</if>
 									<if condition="isset($vo['coupon_list']['system_newuser'])">
@@ -294,7 +294,7 @@
                             <div class="atar_Show">
                                 <p></p>
                             </div>
-                            <span class="Fraction"><i>{{ d.store_list[i].star }}</i>分</span>
+                            <span class="Fraction"><i>{{ d.store_list[i].star }}</i></span>
                         </div>
                         <!--span class="fr">月售{{ d.store_list[i].merchant_store_month_sale_count }}单</span-->
                     </dd>
@@ -319,7 +319,7 @@
 				<dl class="clr">
 				{{# var tmp_num=0 }}
 					{{# if(d.store_list[i].isverify > 0){ }}
-						<dd class="fl zheng">证</dd>
+						<dd class="fl zheng">{pigcms{:L('_ZHENG_TXT_')}</dd>
 						{{# tmp_num++ }}
 					{{# } }}
 					{{# if(d.store_list[i].coupon_list.system_newuser != undefined){ }}

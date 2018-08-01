@@ -152,7 +152,7 @@ filter:alpha(opacity=50);
 									<if condition="$now_order['third_id'] eq '0' AND $now_order['pay_type'] eq 'offline'">
 										<li></li>
 										<li></li>
-										<li style="margin:30px 0;width:auto;"><b>{pigcms{:L('_PAY_TO_SHOP_OFFLINE_')}：</b>{pigcms{:L('_B_PURE_MY_70_')} ${pigcms{$now_order['total_price']} - {pigcms{:L('_SHOP_CARD_PAY_')} ${pigcms{:floatval($now_order['merchant_balance'])} - {pigcms{:L('_PLATFORM_BALANCE_PAY_')} ${pigcms{:floatval($now_order['balance_pay'])} - {pigcms{:L('_PLATFORM_TICKET_PATY_')} ${pigcms{:floatval($now_order['score_deducte'])}<if condition="$now_order['card_id']"> - {pigcms{:L('_SHOP_COUP_')} ${pigcms{$now_order['coupon_price']}<elseif condition="$now_order['coupon_id']"> - {pigcms{:L('_PLATFORM_COUP_')} ${pigcms{$now_order['coupon_price']}</if> = <font color="red">${pigcms{$now_order['total_price']-$now_order['merchant_balance']-$now_order['balance_pay']-$now_order['score_deducte']-$now_order['coupon_price']}</font></li>
+										<!--li style="margin:30px 0;width:auto;"><b>{pigcms{:L('_PAY_TO_SHOP_OFFLINE_')}：</b>{pigcms{:L('_B_PURE_MY_70_')} ${pigcms{$now_order['total_price']} - {pigcms{:L('_SHOP_CARD_PAY_')} ${pigcms{:floatval($now_order['merchant_balance'])} - {pigcms{:L('_PLATFORM_BALANCE_PAY_')} ${pigcms{:floatval($now_order['balance_pay'])} - {pigcms{:L('_PLATFORM_TICKET_PATY_')} ${pigcms{:floatval($now_order['score_deducte'])}<if condition="$now_order['card_id']"> - {pigcms{:L('_SHOP_COUP_')} ${pigcms{$now_order['coupon_price']}<elseif condition="$now_order['coupon_id']"> - {pigcms{:L('_PLATFORM_COUP_')} ${pigcms{$now_order['coupon_price']}</if> = <font color="red">${pigcms{$now_order['total_price']-$now_order['merchant_balance']-$now_order['balance_pay']-$now_order['score_deducte']-$now_order['coupon_price']}</font></li-->
                                         <li></li>
 									<elseif condition="$now_order['paid']"/>
 										<li>{pigcms{:L('_PAYMENT_MODE_')}：{pigcms{$now_order.pay_type_str}</li>
@@ -184,7 +184,7 @@ filter:alpha(opacity=50);
 								<ul class="flow-list">
 								<if condition="$now_order['score_used_count']">
 								<li>使用{pigcms{$config.score_name}：{pigcms{$now_order['score_used_count']|floatval} </li>
-								<li>{pigcms{$config.score_name}抵现：${pigcms{$now_order['score_deducte']|floatval} 元</li>
+								<li>{pigcms{$config.score_name}抵现：${pigcms{$now_order['score_deducte']|floatval} </li>
 								</if>
 			
 								<if condition="$now_order['merchant_balance']">
@@ -207,7 +207,7 @@ filter:alpha(opacity=50);
 								<li>{pigcms{:L('_PLATFORM_COUP_')}：${pigcms{$now_order['coupon_price']|floatval} </li>
 								</if>
 								<if condition="$now_order['pay_type'] eq 'offline' AND empty($now_order['third_id'])">
-								<li>{pigcms{:L('_PAY_TO_SHOP_OFFLINE_')}：${pigcms{$now_order['price']-$now_order['card_price']-$now_order['merchant_balance']-$now_order['balance_pay']-$now_order['payment_money']-$now_order['score_deducte']-$now_order['coupon_price']|floatval}元</li>
+								<li>{pigcms{:L('_PAY_TO_SHOP_OFFLINE_')}：${pigcms{$now_order['price']-$now_order['card_price']-$now_order['merchant_balance']-$now_order['balance_pay']-$now_order['payment_money']-$now_order['score_deducte']-$now_order['coupon_price']|floatval}</li>
 								</if>
 			
 								</ul>

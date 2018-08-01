@@ -1440,6 +1440,15 @@ class StorestaffAction extends BaseAction
                     $sure = false;
                 }
             }
+            //add garfunkel
+            $lang = $_COOKIE['language'] == 'cn' ? 'zh-cn' : 'en-us';
+            foreach ($order['info'] as $k => $v){
+                $g_id = $v['goods_id'];
+                $goods = D('Shop_goods')->get_goods_by_id($g_id);
+                $order['info'][$k]['unit'] = lang_substr($goods['unit'],$lang);
+                $order['info'][$k]['name'] = lang_substr($goods['name'],$lang);
+            }
+            //
             $this->assign('store', D('Merchant_store_shop')->field(true)->where(array('store_id' => $store_id))->find());
             $this->assign('sure', $sure);
             $this->assign('order', $order);
