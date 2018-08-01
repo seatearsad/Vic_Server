@@ -65,7 +65,7 @@
 					<!--img src="./static/images/kd_rec.png" style="    width: 41px;height: 15px;position: absolute;z-index: 15;margin: 2px 0 0 0;"-->
 				{{# } }}
 				<img src="{{ d[i].image }}" alt="{{ d[i].name }}">
-				{{# if(d[i].is_close){ }}<div class="closeTip">休息中</div>{{# } }}
+				{{# if(d[i].is_close){ }}<div class="closeTip">{pigcms{:L('_AT_REST_')}</div>{{# } }}
 			</div>
 			<div class="dealcard-block-right">
 				<div class="brand">{{ d[i].name }}<em class="location-right">{{# if(user_long != '0'){ }}{{ d[i].range }}{{# } }}</em></div>
