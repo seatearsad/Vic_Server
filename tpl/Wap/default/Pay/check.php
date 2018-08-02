@@ -785,7 +785,7 @@
 
                         <php>if($pay_offline || $key != 'offline'){</php>
                         <dd class="dd-padding">
-                            <label class="mt"><i class="bank-icon icon-{pigcms{$key}"></i><span class="pay-wrapper">{pigcms{$vo.name}<input type="radio" class="mt" value="{pigcms{$key}"  <if condition="$i eq 1">checked="checked"</if> name="pay_type"></span></label>
+                            <label class="mt"><!--i class="bank-icon icon-{pigcms{$key}"></i--><span class="pay-wrapper">{pigcms{$vo.name}<input type="radio" class="mt" value="{pigcms{$key}"  <if condition="$i eq 1">checked="checked"</if> name="pay_type"></span></label>
                         </dd>
                         <php>}</php>
 

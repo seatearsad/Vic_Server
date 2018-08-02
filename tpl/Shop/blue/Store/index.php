@@ -3,7 +3,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=Edge">
-	<title>{pigcms{:L('_OUT_TXT_')} {pigcms{:L('_VIC_NAME_')}</title>
+	<title>{pigcms{:L('_OUT_TXT_')} - {pigcms{:L('_VIC_NAME_')}</title>
 	<if condition="$now_area">
 		<meta name="keywords" content="{pigcms{$now_area.area_name},{pigcms{$now_circle.area_name},{pigcms{$config.seo_keywords}" />
 	<else />
@@ -115,7 +115,7 @@
 					<volist name="store_list" id="vo">
 					<li>
 						<a href="{pigcms{$vo['detail_url']}">
-							<div class="fix">
+                            <if condition="$vo['is_close']"><div class="fix" style="background: #cccccc;"><else/><div class="fix"></if>
 							<div class="img">
 								<img src="{pigcms{$vo['image']}" width=222 height=148>
 								<!--div class="imgewm">
@@ -139,7 +139,7 @@
 										<!--span class="fr">{pigcms{:replace_lang_str(L('_MONTH_SALE_NUM_'),$vo['merchant_store_month_sale_count'])}</span-->
 				 					</dd>
                                     <dd class="clr middle">
-                                        <span class="fr">{pigcms{:replace_lang_str(L('_MONTH_SALE_NUM_'),$vo['month_sale_count'])}</span>
+                                        <span class="fr">{pigcms{:replace_lang_str(L('_SALE_NUM_ORDER_'),$vo['month_sale_count'])}</span>
                                     </dd>
 									<if condition="$vo['delivery']">
 									<dd class="clr end">
@@ -195,6 +195,9 @@
 									<else />
 										<dd class="fr business">{pigcms{:L('_SHOP_DIST_')}</dd>
 									</if>
+                                    <if condition="$vo['is_close']">
+                                        <dd class="fr">{pigcms{:L('_AT_REST_')}</dd>
+                                    </if>
 								</dl>
 							</div>
 							</div>

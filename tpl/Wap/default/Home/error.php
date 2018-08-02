@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8"/>
-	<title><if condition="$title"><?php echo ($title);?><elseif condition="$is_app_browser && strpos($url,'c=Login&a=index')"/>跳转登录中<else/>错误提示</if></title>
+	<title><if condition="$title"><?php echo ($title);?><elseif condition="$is_app_browser && strpos($url,'c=Login&a=index')"/>{pigcms{:L('_B_LOGIN_SUCESS_')}<else/>{pigcms{:L('_B_D_LOGIN_TIP2_')}</if></title>
 	<meta name="description" content="{pigcms{$config.seo_description}">
     <meta name="viewport" content="initial-scale=1, width=device-width, maximum-scale=1, user-scalable=no">
 	<meta name="apple-mobile-web-app-capable" content="yes">
@@ -78,7 +78,7 @@
     <else/>
         <script type="text/javascript">
             var location_url = '{pigcms{$url}', wxscan='{pigcms{$_GET["wxscan"]}', is_wexin_browser = '{pigcms{$is_wexin_browser}';
-            layer.open({content:'{pigcms{$msg}',btn: ['确定'],end:function(){
+            layer.open({content:'{pigcms{$msg}',btn: ["{pigcms{:L('_B_D_LOGIN_CONIERM_')}"],end:function(){
                 if (wxscan == 1 && is_wexin_browser) {
                 	wx.closeWindow();
                 } else {

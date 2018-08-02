@@ -287,18 +287,21 @@
 												<a href="{pigcms{$vo.url}" target="_blank">
 
 													<img class="meal_img lazy_img" src="{pigcms{$static_public}images/blank.gif" data-original="{pigcms{$vo.image}" title="【{pigcms{$vo.area_name}】{pigcms{$vo.name}"/>
-													<!--div class="bmbox">
-														<div class="bmbox_title" style="line-height: 20px;">{pigcms{:L('_WECHAT_SCAN_TO_PHONE_')}</div>
+                                                    <if condition="!$vo['state']">
+                                                    <div class="bmbox" style="display: block">
+														<!--div class="bmbox_title" style="line-height: 20px;">{pigcms{:L('_WECHAT_SCAN_TO_PHONE_')}</div>
 														<div class="bmbox_list">
 															<div class="bmbox_list_img"><img class="qrcode_img lazy_img" src="{pigcms{$static_public}images/blank.gif" data-original="{pigcms{:U('Index/Recognition/see_qrcode',array('type'=>'shop','id'=>$vo['store_id']))}" /></div>
-														</div>
-														<!--div class="bmbox_tip">微信扫码 手机查看</div>
-													</div-->
+														</div-->
+														<!--div class="bmbox_tip">微信扫码 手机查看</div-->
+                                                        <div class="bmbox_tip" style="margin-top:230px; margin-left:5px; font-size: 16px;">{pigcms{:L('_AT_REST_')}</div>
+													</div>
+                                                    </if>
 													<div class="name" style="height:42px;"><if condition="$vo.isverify"><span class="zheng">{pigcms{:L('_ZHENG_TXT_')}</span></if>【{pigcms{$vo.area_name}】{pigcms{$vo.name}</div>
 													<if condition="$vo['state']"><!--div class="name_info"><b>营业中</b></div--></if>
 													<div class="extro">
 														<div class="info">
-															<div class="join"><if condition="$vo['range']">距离您 <span>{pigcms{$vo.range} </span><else/>{pigcms{:L('_FANS_TXT_')} <span>{pigcms{$vo.fans_count}</span></if></div>
+															<!--div class="join"><if condition="$vo['range']">距离您 <span>{pigcms{$vo.range} </span><else/>{pigcms{:L('_FANS_TXT_')} <span>{pigcms{$vo.fans_count}</span></if></div-->
 														</div>
                                                         <div class="info mealSales">
                                                             <div class="join"><span style="color:#9f9f9f;">{pigcms{:replace_lang_str(L('_SALE_NUM_ORDER_'),$vo[sale_count])}</span></div>

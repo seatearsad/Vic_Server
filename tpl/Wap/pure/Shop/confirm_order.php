@@ -212,10 +212,10 @@ a {
 	<section class="menu_wrap pay_wrap">
 		<ul class="box">
 			<li>
-				<a class="">{pigcms{:L('_DIST_MODE_')}：</a>&nbsp;&nbsp;
-				<if condition="in_array($delivery_type, array(0, 3))">
+				<!--a class="">{pigcms{:L('_DIST_MODE_')}：</a>&nbsp;&nbsp;-->
+				<!--if condition="in_array($delivery_type, array(0, 3))">
 				<a class="btn_express <if condition="$pick_addr_id">pick_in_store_click<else />pick_in_store</if>" id="post_package">{pigcms{:L('_PLAT_DIST_')}</a>&nbsp;&nbsp;
-				</if>
+				</if-->
 				<if condition="in_array($delivery_type, array(1, 4))">
 				<a class="btn_express <if condition="$pick_addr_id">pick_in_store_click<else />pick_in_store</if>" id="post_package">{pigcms{:L('_SHOP_DIST_')}</a>&nbsp;&nbsp;
 				</if>

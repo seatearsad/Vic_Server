@@ -12,11 +12,11 @@
 <script src="{pigcms{$static_path}js/index.js"></script>
 <script src="{pigcms{$static_path}js/shop_reply.js"></script>
 <script src="{pigcms{$static_path}layer/layer.m.js"></script>
-<title>评论订单</title>
+<title>{pigcms{:L('_B_MY_COMMENT_')}</title>
 </head>
 <body class=" hPC" style="padding-bottom: initial; background:#fff;">
 <div id="page-loader" style="width: 100%; height: 100%; position: fixed; top: 0px; left: 0px; z-index: 10000; text-align: center; display: none; background-color: rgba(200, 200, 200, 0.2);">
-    <div style="margin-top:200px;color: white;background-color: rgba(30,30,30,0.8);padding: 10px;width: 140px;margin-left: auto;margin-right: auto;border-radius: 5px;font-size: 14px;  font-family: &#39;Helvetica&#39;;-webkit-box-shadow: 1px 1px 2px rgba(0,0,0,.4);">正在加载中……</div>
+    <div style="margin-top:200px;color: white;background-color: rgba(30,30,30,0.8);padding: 10px;width: 140px;margin-left: auto;margin-right: auto;border-radius: 5px;font-size: 14px;  font-family: &#39;Helvetica&#39;;-webkit-box-shadow: 1px 1px 2px rgba(0,0,0,.4);">{pigcms{:L('_LOADING_TXT_')}</div>
 </div>
 <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/lib_5e96991.css">
 <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/style_dd39d16.css">
@@ -29,7 +29,7 @@
         <div id="fis_elm__2">
             <div id="common-widget-nav" class="common-widget-nav ">
                 <div class="left-slogan"> <a class="left-arrow icon-arrow-left2" data-node="navBack" id="goBackUrl" href="javascript:history.go(-1);"></a> </div>
-                <div class="center-title"> <a href="javascript:void(0)">添加评论</a> </div>
+                <div class="center-title"> <a href="javascript:void(0)">{pigcms{:L('_B_MY_COMMENT_')}</a> </div>
                 <div class="right-slogan "> </div>
             </div>
         </div>
@@ -38,7 +38,7 @@
                 <div id="widget-shopcomment-add">
                     <div class="gradecon" id="Addnewskill_119">
                         <ul class="rev_pro clearfix">
-                            <li class="clearfix"> <span class="revtit">整体评价</span>
+                            <li class="clearfix"> <span class="revtit">{pigcms{:L('_RATE_TXT_')}</span>
                                 <div class="revinp">
                                 	<span class="level whole">
                                 		<i class="level_solid" cjmark=""></i> 
@@ -47,7 +47,7 @@
                                 		<i class="level_solid" cjmark=""></i> 
                                 		<i class="level_solid" cjmark=""></i> 
                                 	</span> 
-                                	<span class="revgrade">优</span> 
+                                	<span class="revgrade"></span>
                                 </div>
                             </li>
                             <!--li class="clearfix"> <span class="revtit">高品质量</span>
@@ -77,10 +77,10 @@
                         </ul>
                     </div>
                     <div class="add-list">
-                        <textarea class="text-area comment-desc" placeholder="你的意见很重要，来点评一下吧！"></textarea>
+                        <textarea class="text-area comment-desc" placeholder="{pigcms{:L('_YOUR_ADVICE_FOR_US_')}"></textarea>
                     </div>
                     <div class="add-list">
-                        <div class="add-list-title">请选择您要点赞的商品</div>
+                        <div class="add-list-title">{pigcms{:L('_THOMB_YOUR_FAV_')}</div>
                         <div class="add-list-span recommend-list">
                         <volist name="now_order['info']" id="vo">
                         	<span data-goods-id="{pigcms{$vo.goods_id}">{pigcms{$vo.name}</span>
@@ -88,7 +88,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="comment-btn" shop_id="{pigcms{$now_order.store_id}" order_id="{pigcms{$now_order.order_id}" data-node="comment-btn">提交评价</div>
+                <div class="comment-btn" shop_id="{pigcms{$now_order.store_id}" order_id="{pigcms{$now_order.order_id}" data-node="comment-btn">{pigcms{:L('_B_D_LOGIN_SUB_')}</div>
             </div>
         </div>
     </div>
@@ -111,9 +111,9 @@ $(document).ready(function(){
 		var postData = {'whole':whole, 'textAre':textAre, 'order_id':oid, 'goods_ids':goods_ids};
 		$.post("{pigcms{:U('My/add_comment')}", postData, function(data){
 			if (data.status == 1) {
-                layer.open({title:['评论提示：','background-color:#FF658E;color:#fff;'],content:''+data.msg+'',btn: ['确定'],end:function(){window.location.href=data.url;}});
+                layer.open({title:["{pigcms{:L('_B_D_LOGIN_TIP2_')}",'background-color:#FF658E;color:#fff;'],content:''+data.msg+'',btn: ["{pigcms{:L('_B_D_LOGIN_CONIERM_')}"],end:function(){window.location.href=data.url;}});
             } else {
-            	layer.open({title:['评论提示：','background-color:#FF658E;color:#fff;'],content:''+data.msg+'',btn: ['确定']});
+            	layer.open({title:["{pigcms{:L('_B_D_LOGIN_TIP2_')}",'background-color:#FF658E;color:#fff;'],content:''+data.msg+'',btn: ["{pigcms{:L('_B_D_LOGIN_CONIERM_')}"]});
             }
 		}, 'json');
 	});

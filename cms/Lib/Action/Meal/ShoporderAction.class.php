@@ -1261,7 +1261,7 @@ class ShoporderAction extends BaseAction
         $price = round(($return['vip_discount_money'] + $return['store']['pack_fee'] + $delivery_fee), 2) - round(($return['sto_first_reduce'] + $return['sto_full_reduce'] + $return['sys_first_reduce'] + $return['sys_full_reduce']), 2);//实际要支付的价格
 		//$price = round(($return['vip_discount_money'] + $return['packing_charge'] + $delivery_fee), 2) - round(($return['sto_first_reduce'] + $return['sto_full_reduce'] + $return['sys_first_reduce'] + $return['sys_full_reduce']), 2);//实际要支付的价格
 		
-		$price = $price * 1.05;
+		$price = round($price * 1.05,2);
 
 		
 		if($this->config['open_extra_price']){

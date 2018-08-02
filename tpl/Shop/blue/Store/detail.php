@@ -4,7 +4,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=Edge">
 	<!--title>{pigcms{$config.shop_alias_name}_{pigcms{$now_city.area_name}_{pigcms{$config.seo_title}</title-->
-    <title>{pigcms{:L('_VIC_NAME_')} - {pigcms{:L('_OUT_TXT_')}</title>
+    <title>{pigcms{:L('_OUT_TXT_')} - {pigcms{:L('_VIC_NAME_')}</title>
 	<if condition="$now_area">
 		<meta name="keywords" content="{pigcms{$now_area.area_name},{pigcms{$now_circle.area_name},{pigcms{$config.seo_keywords}" />
 	<else />
@@ -209,9 +209,9 @@
 													<dd class="clr end">
 														<div class="fl" <if condition="$vo['is_seckill_price'] eq 1 ">style="line-height:18px"</if>>
 															<if condition="$vo['is_seckill_price'] eq 1">
-															<span><i class="imit_i">限时价:</i>${pigcms{$vo['product_price']|floatval}<if condition="$vo.extra_pay_price gt 0 AND $config.open_extra_price eq 1 AND $vo.has_format eq false">+{pigcms{$vo.extra_pay_price}{pigcms{$config.extra_price_alias_name}</if></span> 
+															<span><i class="imit_i">{pigcms{:L('_LIMIT_PRICE_')}:</i>${pigcms{$vo['product_price']|floatval}<if condition="$vo.extra_pay_price gt 0 AND $config.open_extra_price eq 1 AND $vo.has_format eq false">+{pigcms{$vo.extra_pay_price}{pigcms{$config.extra_price_alias_name}</if></span>
 															<br>
-															<del style="ne-height: 16px;float: left;margin-left: 0px;">原价${pigcms{$vo['o_price']|floatval}</del>
+															<del style="ne-height: 16px;float: left;margin-left: 0px;">{pigcms{:L('_ORIGIN_PRICE_')}:${pigcms{$vo['o_price']|floatval}</del>
 															<else />
 															<span>${pigcms{$vo['product_price']|floatval}<if condition="$vo.extra_pay_price gt 0 AND $config.open_extra_price eq 1 AND $vo.has_format eq false">+{pigcms{$vo.extra_pay_price}{pigcms{$config.extra_price_alias_name}</if>
 															</span>

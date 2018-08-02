@@ -73,22 +73,22 @@
 			</div>
 		</if-->
 	</dl>
-	<if condition="!$_GET['type']">
+	<!--if condition="!$_GET['type']">
 		<dl style="padding:0 10px;background-color:#fff;margin-top:10px;margin-bottom:10px;">
 			<div id="about" style="padding-bottom:10px;">
 				<div class="title">{pigcms{:L('_B_PURE_MY_ABOUTUS_')}</div>
 				<img src="{pigcms{$static_path}images/new_my/tubiao2_11.png" class="imgRirht" />
 			</div>
 		</dl>
-	</if>
+	</if-->
 	
 	
-	<dl style="padding:0 10px;background-color:#fff;margin-top:10px;margin-bottom:10px;">
+	<!--dl style="padding:0 10px;background-color:#fff;margin-top:10px;margin-bottom:10px;">
 		<div id="merchant" style="padding-bottom:10px;">
 			<div class="title">{pigcms{:L('_B_PURE_MY_60_')}</div>
 			<img src="{pigcms{$static_path}images/new_my/tubiao2_11.png" class="imgRirht" />
 		</div>
-	</dl>
+	</dl-->
 		
 	<button id="logout" style="padding:15px;width:90%;margin:10px 5%;background-color:#00c4ac;color:#fff;border:0px;">{pigcms{:L('_B_PURE_MY_61_')}</button>
 		<script src="{pigcms{:C('JQUERY_FILE')}"></script>

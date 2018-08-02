@@ -806,14 +806,14 @@ input {
 	display: none;
 	width: 237px;
 	float: left;
- 	filter:alpha(opacity=70);
-	height: 203px;
+ 	filter:alpha(opacity=30);
+	height: 503px;
 	overflow: hidden;
 	position: absolute;
 	top: 0;
 	left: 0;
 	filter: progid:DXImageTransform.Microsoft.gradient(startcolorstr=#B2000000, endcolorstr=#B2000000);
-	background: rgba(0,0,0,0.7);
+	background: rgba(0,0,0,0.4);
 	color: #fff;
 	text-align: center;
 	font-size: 16px;
@@ -1597,7 +1597,7 @@ height:120px;
 }
 .indexMeal  li .bmbox{
 	width:220px;
-	height: 178px;
+	height: 278px;
 	z-index:1000;
 }
 .indexMeal li .bmbox_title{

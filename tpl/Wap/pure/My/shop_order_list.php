@@ -240,7 +240,7 @@
 									</div>
 									<div class="dealcard-block-right">
 										<div class="dealcard-brand single-line">{pigcms{$order.name}</div>
-										<small>{pigcms{:L('_B_PURE_MY_69_')}{pigcms{$order.num}&nbsp;&nbsp;{pigcms{:L('_B_PURE_MY_70_')}{pigcms{$order['price']|floatval}  元</small>
+										<small>{pigcms{:L('_B_PURE_MY_69_')}{pigcms{$order.num}&nbsp;&nbsp;{pigcms{:L('_B_PURE_MY_70_')}{pigcms{$order['price']|floatval} </small>
 
 									</div>
 								</dd>

@@ -1044,6 +1044,9 @@ class DeliverAction extends BaseAction
 			$this->assign('order', $order);
 			$goods = D('Shop_order_detail')->field(true)->where(array('order_id' => $supply['order_id']))->select();
 			foreach ($goods as &$g) {
+                $g_id = $g['goods_id'];
+                $t_goods = D('Shop_goods')->get_goods_by_id($g_id);
+                $g['name'] = $t_goods['name'];
 				if ($g['spec']) {
 					$g['name'] = $g['name'] . '(' . $g['spec'] . ')';
 				}
