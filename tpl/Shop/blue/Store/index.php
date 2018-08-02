@@ -277,8 +277,12 @@
 {{# for(var i = 0, len = d.store_list.length; i < len; i++){ }}
 	<li>
 		<a href="{{ d.store_list[i].detail_url }}">
-			<div class="fix">
-			<div-- class="img">
+            {{# if(d.store_list[i].is_close){ }}
+                <div class="fix" style="background: #cccccc;">
+            {{# }else{ }}
+                    <div class="fix">
+            {{# } }}
+			<div class="img">
 				<img src="{{ d.store_list[i].image }}" width=222 height=148>
 				<!--div class="imgewm">
 					<img class="lazy_img" src="{pigcms{$static_public}images/blank.gif" data-original="{{ d.store_list[i].qrcode_url }}" width="78" height="78"/>
@@ -365,6 +369,9 @@
 							{{# } }}
 						{{# } }}
 					{{# } }}
+                    {{# if(d.store_list[i].is_close){ }}
+                        <dd class="fr">{pigcms{:L('_AT_REST_')}</dd>
+                    {{# } }}
 				</dl>
 			</div>
 			</div>
