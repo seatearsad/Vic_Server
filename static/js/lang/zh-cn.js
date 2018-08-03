@@ -49,6 +49,7 @@ lang['_B_D_LANG_RE_NOREP_'] = '注册中，请不要重复提交';
 lang['_NO_BROWSE_RECORD_'] = '暂无浏览记录';
 lang['_PLEASE_INPUT_KET_'] = '请输入关键词';
 lang['_IS_CONFIRM_BIND_'] = '你确定要绑定已存在的账号吗？';
+lang['_LOADING_TXT_'] = '正在加载中...';
 
 function getLangStr(key,replace=''){
     var str = lang[key];

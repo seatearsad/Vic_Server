@@ -49,6 +49,7 @@ lang['_B_D_LANG_RE_NOREP_'] = 'Processing, please do not send twice';
 lang['_NO_BROWSE_RECORD_'] = 'No browsing history';
 lang['_PLEASE_INPUT_KET_'] = 'Please enter a key word';
 lang['_IS_CONFIRM_BIND_'] = 'Are you sure you want to bind exsited account?';
+lang['_LOADING_TXT_'] = 'Loading...';
 
 function getLangStr(key,replace=''){
     var str = lang[key];

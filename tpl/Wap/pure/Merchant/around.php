@@ -14,6 +14,7 @@
 		<script type="text/javascript" src="{pigcms{:C('JQUERY_FILE_190')}"></script>
 		<script type="text/javascript" src="{pigcms{$static_path}js/iscroll.js?444"></script>
 		<script type="text/javascript" src="{pigcms{$static_path}js/fastclick.js" charset="utf-8"></script>
+        <script type="text/javascript" src="{pigcms{$static_public}js/lang/{pigcms{:C('DEFAULT_LANG')}.js" charset="utf-8"></script>
 		<script type="text/javascript" src="{pigcms{$static_path}js/common.js?321" charset="utf-8"></script>
 		<script type="text/javascript"><if condition="$long_lat">var user_long = "{pigcms{$long_lat.long}",user_lat = "{pigcms{$long_lat.lat}";<else/>var user_long = '0',user_lat  = '0';</if>var static_path = "{pigcms{$static_path}";</script>
 		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBt3Lu-FlQE5LgusybLzqGr8lIXmvTsLZU&libraries=places"></script>

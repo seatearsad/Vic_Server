@@ -5,7 +5,7 @@ $(function(){
 	// myScroll = new IScroll('#listList', { probeType: 1,disableMouse:true,disablePointer:true,mouseWheel: false,scrollX: false, scrollY:true,click:false,scrollbars:true,shrinkScrollbars: 'scale',resizeScrollbars:false,fadeScrollbars:true});
 	myScroll = new IScroll('#listList',{probeType:1,disableMouse:true,disablePointer:true,mouseWheel:false,scrollX:false,scrollY:true,click:iScrollClick()});
 	
-	motify.log('正在调用地图组件',0,{show:true});
+	motify.log(getLangStr('_LOADING_TXT_'),0,{show:true});
 	if(user_long == '0' || !user_long){
 		if(motify.checkLifeApp() && motify.getLifeAppVersion() >= 50 && (motify.checkIos() || motify.checkAndroid())){
 			if(motify.checkAndroid()){
@@ -85,7 +85,7 @@ function getMap(lng, lat) {
 
 //附近店铺列表
 function getStoreList(lng,lat){
-	motify.log('正在加载周边店铺',0,{show:true});
+	motify.log(getLangStr('_LOADING_TXT_'),0,{show:true});
 	$.each(storePoint,function(i,item){
 		//storePoint[i].closeInfoWindow();
 	});
@@ -98,7 +98,7 @@ function getStoreList(lng,lat){
 			var listHtml = '';
 			$.each(result,function(i,item){
 				var listUrl = window.location.pathname+'?c=Group&a=shop&store_id='+item.store_id;
-				listHtml+= '<dd class="link-url" data-url="'+listUrl+'"><div class="title">'+item.sname+'</div><div class="phone">电话：'+item.sphone+'</div><div class="desc">地址：'+item.adress+'</div></dd>';
+				listHtml+= '<dd class="link-url" data-url="'+listUrl+'"><div class="title">'+item.sname+'</div><div class="phone">Phone：'+item.sphone+'</div><div class="desc">Address：'+item.adress+'</div></dd>';
 				// if(i == 0){
 					// var marker = new BMap.Marker(new BMap.Point(item['long'],item['lat']),{icon:new BMap.Icon(static_path+"images/blue_marker.png", new BMap.Size(24,25))});
 				// }else{
@@ -112,7 +112,7 @@ function getStoreList(lng,lat){
 				//map.addOverlay(marker);
 				storePoint[i] = marker;
 				// console.log(item);
-				var message = '<div class="windowBox link-url" data-url="'+listUrl+'"><!--img id="imgDemo" src="'+item.img+'"/><br/--><a href="'+listUrl+'" style="color:white;">'+item.sname+'</a><br/>电话：<a href="tel:'+item.sphone+'" style="color:#06c1ae;">'+item.sphone+'</a><br/>地址：'+item.adress+'</div>';
+				var message = '<div class="windowBox link-url" data-url="'+listUrl+'"><!--img id="imgDemo" src="'+item.img+'"/><br/--><a href="'+listUrl+'" style="color:white;">'+item.sname+'</a><br/>Phone：<a href="tel:'+item.sphone+'" style="color:#06c1ae;">'+item.sphone+'</a><br/>Address：'+item.adress+'</div>';
 			
 				var infowindow = new google.maps.InfoWindow({
 						content: message,
