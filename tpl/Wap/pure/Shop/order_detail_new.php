@@ -286,7 +286,7 @@
         	         <if condition="$order_details['score_deducte'] gt 0">
                      <li class="clr">
                          <div class="fl">{pigcms{:L('_INTEGRAL_DED_')}</div>
-                         <div class="fr e2c">-${pigcms{$order_details['score_deducte']|floatval}（使用{pigcms{$order_details['score_used_count']|floatval}积分）</div>
+                         <div class="fr e2c">-${pigcms{$order_details['score_deducte']|floatval}（{pigcms{:replace_lang_str(L('_USED_POINTS_'),$order_details['score_used_count'])}）</div>
                      </li>
                      </if>
                      <if condition="$order_details['card_give_money'] gt 0">

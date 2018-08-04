@@ -728,7 +728,7 @@
                         </if>
                         <if condition="$score_deducte gt 0">
                             <dd class="dd-padding" id="score_money">
-                                <label class="mt" ><span id="score_label">本单可使用<php>if($config['open_extra_price']==1){</php>{pigcms{$config.extra_price_alias_name}<php>}else{</php>{pigcms{$config['score_name']}<php>}</php><font color="red">{pigcms{$score_can_use_count}个</font>,可抵扣金额<font color="red">${pigcms{$score_deducte|floatval=###}</font></span> <span class="pay-wrapper"><input type="checkbox" class="mt" value="1" id="use_score" name="use_score"  <php>if($score_can_use_count==0){</php> disabled="disabled" value="1"<php>}else{</php>  value="0" checked="checked" <php>}</php>><p style="display:block;float:right;"></p></span></label><php> if($config['open_extra_price']==1){</php><a id="alter_score">修改</a><php>}</php>
+                                <label class="mt" ><span id="score_label">{pigcms{:L('_TORDER_MEAL_TICKET_')} <php>if($config['open_extra_price']==1){</php>{pigcms{$config.extra_price_alias_name}<php>}else{</php> <php>}</php><font color="red">{pigcms{$score_can_use_count}</font>,{pigcms{:L('_MEAL_TICKET_DED_CASH_')} <font color="red">${pigcms{$score_deducte|floatval=###}</font></span> <span class="pay-wrapper"><input type="checkbox" class="mt" value="1" id="use_score" name="use_score"  <php>if($score_can_use_count==0){</php> disabled="disabled" value="1"<php>}else{</php>  value="0" checked="checked" <php>}</php>><p style="display:block;float:right;"></p></span></label><php> if($config['open_extra_price']==1){</php><a id="alter_score">修改</a><php>}</php>
                             </dd>
                         </if>
                         <?php if($merchant_balance){ ?>

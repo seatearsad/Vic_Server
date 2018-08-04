@@ -49,7 +49,8 @@
 			            		<dd class="dd-padding">
 			            			<input id="phone" class="input-weak" type="tel" placeholder="{pigcms{:L('_B_D_LOGIN_TEL_')}" name="phone" value="">
 			            		</dd>
-								<if condition="C('config.reg_verify_sms') AND C('config.sms_key')">
+                                <!--AND C('config.sms_key')" garfunkel modify-->
+								<if condition="C('config.reg_verify_sms')">
 			            		<dd class="kv-line-r dd-padding">
 			            			<input id="sms_code" class="input-weak kv-k" name = "vcode" type="text" placeholder="{pigcms{:L('_B_D_LOGIN_FILLMESSAGE_')}" />
 			            			<button id="reg_send_sms" type="button" onclick="sendsms(this)" class="btn btn-weak kv-v">{pigcms{:L('_B_D_LOGIN_RECEIVEMESSAGE_')}</button>
@@ -89,6 +90,7 @@
 							success:function(date){
 								if(date.error_code){
 									$('#tips').html(date.msg).show();
+									countdown = 0;
 								}
 							}
 

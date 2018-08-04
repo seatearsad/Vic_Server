@@ -769,7 +769,7 @@ $(document).ready(function () {
 // 			$('#oarrivalTime').val(wo_delivery_time);
 			
 			var wo_memo = $.trim($("#remarkTxt").html());
-			if(wo_memo == '点击添加订单备注') {
+			if(wo_memo == "{pigcms{:L('_CLICK_ADD_NOTE_INFO_')}") {
 				wo_memo = '';
 			}
 			$('#omark').val(wo_memo);
