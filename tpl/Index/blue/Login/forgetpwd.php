@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-    <title>忘记密码 | {pigcms{$config.site_name}</title>
+    <title>{pigcms{:L('_FORGET_PASS_W_')} | {pigcms{:L('_VIC_NAME_')}</title>
     <!--[if IE 6]>
 		<script src="{pigcms{$static_path}js/DD_belatedPNG_0.0.8a-min.v86c6ab94.js"></script>
     <![endif]-->
@@ -32,20 +32,20 @@
 	    <div class="component-login-section component-login-section--page mt-component--booted" >
 		    <div class="origin-part theme--www">
 			    <div class="validate-info" style="visibility:hidden"></div>
-		        <h2>您的手机账号</h2>
+		        <h2>{pigcms{:L('_B_D_LOGIN_TEL_')}</h2>
 		        <form id="J-login-form" method="post" class="form form--stack J-wwwtracker-form">
 			        <div class="form-field form-field--icon">
 			            <i class="icon icon-user"></i>
-			            <input type="text" id="login-phone" class="f-text" name="phone" placeholder="手机号" value="{pigcms{$accphone}"/>
+			            <input type="text" id="login-phone" class="f-text" name="phone" placeholder="{pigcms{:L('_B_D_LOGIN_TEL_')}" value="{pigcms{$accphone}"/>
 			        </div>
 			        <div class="form-field form-field--icon" style="visibility:hidden" id="vfycodediv">
 			            <i class="icon icon-password"></i>
-			            <input type="text" id="vfycode" class="f-text" name="vfycode" placeholder="输入短信验证码" value=""/>
+			            <input type="text" id="vfycode" class="f-text" name="vfycode" placeholder="{pigcms{:L('_B_D_LOGIN_FILLMESSAGE_')}" value=""/>
 			        </div>
 			        <div class="form-field form-field--ops">
-			            <input type="submit" class="btn" id="commit" value="发送短信验证" style="width:55%"/>
-						&nbsp;&nbsp;&nbsp;<span class="btn noact" style="width:15%;"><span id="reciprocal">60</span>秒</span>
-						<a class="btn" id="submitcommit" style="margin-top:15px;width:85%" href="javascript:;" />提 交</a>
+			            <input type="submit" class="btn" id="commit" value="{pigcms{:L('_B_D_LOGIN_RECEIVEMESSAGE_')}" style="width:55%"/>
+						&nbsp;&nbsp;&nbsp;<span class="btn noact" style="width:15%;"><span id="reciprocal">60</span>S</span>
+						<a class="btn" id="submitcommit" style="margin-top:15px;width:85%" href="javascript:;" />{pigcms{:L('_B_D_LOGIN_SUB_')}</a>
 			        </div>
 			    </form>
 		    </div>
@@ -61,36 +61,36 @@
 			}
 			$("#J-login-form").submit(function(){
 				$('.validate-info').css('visibility','hidden');
-				$('#commit').val('正在发短信...').prop('disabled',true);
+				$('#commit').val('...').prop('disabled',true);
 				var phone = $.trim($("#login-phone").val());
 				var vfycode = $.trim($("#vfycode").val());
 				if (phone == '' || phone == null) {
-					$('.validate-info').html('<i class="tip-status tip-status--opinfo"></i>手机号不能为空').css('visibility','visible');
-					$("#commit").val('发送短信验证').prop('disabled',false);
+					$('.validate-info').html("<i class='tip-status tip-status--opinfo'></i>{pigcms{:L('_B_D_LOGIN_BLANKNUM_')}").css('visibility','visible');
+					$("#commit").val("{pigcms{:L('_B_D_LOGIN_RECEIVEMESSAGE_')}").prop('disabled',false);
 					return false;
 				}
 				
 				$.post("{pigcms{:U('Index/Login/Generate')}", {'phone':phone,vfycode:'',tmpid:0}, function(data){
 					data.error_code=parseInt(data.error_code);
 					if (!data.error_code) {
-						$("#commit").val('重发送短信验证');
+						$("#commit").val("{pigcms{:L('_B_D_LOGIN_SENDAGAIN_')}");
 						$("#vfycodediv").css('visibility','visible');
-						$('.validate-info').html('<i class="tip-status tip-status--success"></i>请输入短信验证码').css('visibility','visible');
+						$('.validate-info').html("<i class='tip-status tip-status--success'></i>{pigcms{:L('_B_D_LOGIN_FILLMESSAGE_')}").css('visibility','visible');
 						flage=data.id;
 						Reciprocal();
 						return false;
 					} else {
 						if(data.error_code == 1){
 						  $('.validate-info').html('<i class="tip-status tip-status--opinfo"></i>'+data.msg).css('visibility','visible');
-							  $("#commit").val('重发送短信验证').prop('disabled',false);
+							  $("#commit").val("{pigcms{:L('_B_D_LOGIN_SENDAGAIN_')}").prop('disabled',false);
 						}else if(data.error_code == 2){
-						  $('.validate-info').html('<i class="tip-status tip-status--opinfo"></i>验证成功,跳转密码修改页面').css('visibility','visible');
+						  $('.validate-info').html('<i class="tip-status tip-status--opinfo"></i>').css('visibility','visible');
 						  setTimeout(function(){
 						    window.location.href="{pigcms{:U('Index/Login/pwdModify')}&pm="+data.urlpm;
 						  }, 800);
 						}else if(data.error_code == 3){
 						   $('.validate-info').html('<i class="tip-status tip-status--opinfo"></i>'+data.msg+'<a href="{pigcms{:U(\'Index/Login/reg\')}">去注册</a>').css('visibility','visible');
-							  $("#commit").val('重发送短信验证').prop('disabled',false);
+							  $("#commit").val("{pigcms{:L('_B_D_LOGIN_SENDAGAIN_')}").prop('disabled',false);
 						}
 						
 					}
@@ -102,18 +102,18 @@
 				if(islock || !flage) return false;
 				islock=true;
 			    $('.validate-info').css('visibility','hidden');
-				  $('#submitcommit').val('正在提交数据...').prop('disabled',true);
+				  $('#submitcommit').val('...').prop('disabled',true);
 				var phone = $.trim($("#login-phone").val());
 				var vfycode = $.trim($("#vfycode").val());
 				if (phone == '' || phone == null) {
-					$('.validate-info').html('<i class="tip-status tip-status--opinfo"></i>手机号不能为空').css('visibility','visible');
-					  $("#submitcommit").val('提 交');
+					$('.validate-info').html("<i class='tip-status tip-status--opinfo'></i>{pigcms{:L('_B_D_LOGIN_BLANKNUM_')}").css('visibility','visible');
+					  $("#submitcommit").val("{pigcms{:L('_B_D_LOGIN_SUB_')}");
 					  islock=false;
 					  return false;
 				}
 				if (vfycode == '' || vfycode == null) {
-					$('.validate-info').html('<i class="tip-status tip-status--opinfo"></i>验证码不能为空').css('visibility','visible');
-					 $("#submitcommit").val('提 交');
+					$('.validate-info').html("<i class='tip-status tip-status--opinfo'></i>{pigcms{:L('_B_D_LOGIN_FILLMESSAGE_')}").css('visibility','visible');
+					 $("#submitcommit").val("{pigcms{:L('_B_D_LOGIN_SUB_')}");
 					 islock=false;
 					 return false;
 				}
@@ -121,7 +121,7 @@
 				$.post("{pigcms{:U('Index/Login/Generate')}", {'phone':phone,vfycode:vfycode,tmpid:flage}, function(data){
 					data.error_code=parseInt(data.error_code);
 					if (data.error_code == 2) {
-						$('.validate-info').html('<i class="tip-status tip-status--opinfo"></i>验证成功,跳转密码修改页面').css('visibility','visible');
+						$('.validate-info').html('<i class="tip-status tip-status--opinfo"></i>').css('visibility','visible');
 						  setTimeout(function(){
 						    window.location.href="{pigcms{:U('Index/Login/pwdModify')}&pm="+data.urlpm;
 						 }, 800);
@@ -130,7 +130,7 @@
 					} else {
 						  $('.validate-info').html('<i class="tip-status tip-status--opinfo"></i>'+data.msg).css('visibility','visible');
 						  islock=false;
-						  $("#submitcommit").val('提 交');	
+						  $("#submitcommit").val("{pigcms{:L('_B_D_LOGIN_SUB_')}");
 					}
 				}, 'json');
 				return false;
@@ -146,7 +146,7 @@
 		 if(num==1){
 		    $("#reciprocal").parent('.btn').addClass('noact');
 			//flage=0;
-			$("#commit").val('重发送短信验证').prop('disabled',false);
+			$("#commit").val("{pigcms{:L('_B_D_LOGIN_SENDAGAIN_')}").prop('disabled',false);
 			window.clearInterval(inttmp);
 			setTimeout(function(){
 				$("#reciprocal").text(60);

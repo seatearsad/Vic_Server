@@ -31,7 +31,7 @@ class LoginAction extends BaseAction {
             $phone = isset($_POST['phone']) ? $_POST['phone'] : '';
             $pwd = isset($_POST['pwd']) ? $_POST['pwd'] : '';
             //技术测试号码
-            if ($this->config['reg_verify_sms']&&$this->config['sms_key']&&substr($_POST['phone'],0,10)!='1321234567') {
+            if ($this->config['reg_verify_sms']&&substr($_POST['phone'],0,10)!='1321234567') {
                 $sms_verify_result = D('Smscodeverify')->verify($_POST['sms_code'], $_POST['phone']);
 
                 if ($sms_verify_result['error_code']) {
@@ -58,7 +58,7 @@ class LoginAction extends BaseAction {
     public function forgetpwd() {
         $accphone = isset($_GET['accphone']) ? trim($_GET['accphone']) : '';
         $this->assign('accphone', $accphone);
-        if($this->config['sms_key']){
+        if($this->config['reg_verify_sms']){
             $this->display();
         }else{
             $this->error(L('_B_LOGIN_NOMESSAGE_'));
@@ -72,14 +72,14 @@ class LoginAction extends BaseAction {
         $tmpid = intval($_POST['tmpid']);
         $vfycode = trim($_POST['vfycode']);
         if (empty($phone))
-            exit(json_encode(array('error_code' => 1, 'msg' => '手机账号不能为空')));
-        if (!is_numeric($phone) || (strlen($phone) != 11))
-            exit(json_encode(array('error_code' => 1, 'msg' => '请输入正确手机账号')));
+            exit(json_encode(array('error_code' => 1, 'msg' => L('_B_D_LOGIN_BLANKNUM_'))));
+        if (!is_numeric($phone))
+            exit(json_encode(array('error_code' => 1, 'msg' => L('_B_LOGIN_ENTERGOODNO_'))));
 		if ($tmpid && empty($vfycode))
-            exit(json_encode(array('error_code' => 1, 'msg' => '请输入验证码')));
+            exit(json_encode(array('error_code' => 1, 'msg' => L('_B_MY_ENTERCODE_'))));
         $Userarr = M('User')->where(array('phone' => $phone))->find();
         if (empty($Userarr))
-            exit(json_encode(array('error_code' => 3, 'msg' => '手机账号不存在，请先去注册吧！')));
+            exit(json_encode(array('error_code' => 3, 'msg' => L('_B_LOGIN_ENTERGOODNO_'))));
         $user_modifypwdDb = M('User_modifypwd');
         if (($tmpid > 0) && !empty($vfycode)) {
             $modifypwd = $user_modifypwdDb->where(array('vfcode' => $vfycode, 'telphone' => $phone))->find();
@@ -92,14 +92,25 @@ class LoginAction extends BaseAction {
                     exit(json_encode(array('error_code' => 2, 'msg' => $insert_id, 'urlpm' => $encrystr)));
                 }
             }
-            exit(json_encode(array('error_code' => 1, 'msg' => '验证错误！')));
+            exit(json_encode(array('error_code' => 1, 'msg' => L('_SMS_CODE_ERROR_'))));
         } else {
             $vcode = createRandomStr(6,true,true);
             //$content=$this->config['site_name'].'您的验证码是：'.$vcode.' 此验证码20分钟内有效。';
-            $content = '您的验证码是：' . $vcode . '。此验证码20分钟内有效，请不要把验证码泄露给其他人。如非本人操作，可不用理会！';
-            Sms::sendSms(array('mer_id' => 0, 'store_id' => 0, 'content' => $content, 'mobile' => $phone, 'uid' => 0, 'type' => 'mfypwd'));
+            //$content = '您的验证码是：' . $vcode . '。此验证码20分钟内有效，请不要把验证码泄露给其他人。如非本人操作，可不用理会！';
+            //Sms::sendSms(array('mer_id' => 0, 'store_id' => 0, 'content' => $content, 'mobile' => $phone, 'uid' => 0, 'type' => 'mfypwd'));
+
+            //modify garfunkel
+            $sms_data['uid'] = 0;
+            $sms_data['mobile'] = $_POST['phone'];
+            $sms_data['sendto'] = 'user';
+            $sms_data['tplid'] = 169244;
+            $sms_data['params'] = [
+                $vcode
+            ];
+            Sms::sendSms2($sms_data);
+
             $addtime = time();
-            $expiry = $addtime + 20 * 60; /*             * **二十分钟有效期*** */
+            $expiry = $addtime + 5 * 60; /*             * **五分钟有效期*** */
             $data = array('telphone' => $phone, 'vfcode' => $vcode, 'expiry' => $expiry, 'addtime' => $addtime);
             $insert_id = $user_modifypwdDb->add($data);
             //$datastr=base64_encode(json_encode($data));
@@ -142,7 +153,7 @@ class LoginAction extends BaseAction {
         $newpwd = trim($_POST['newpwd']);
         $new_pwd = trim($_POST['new_pwd']);
         if ($newpwd != $new_pwd) {
-            exit(json_encode(array('error_code' => 1, 'msg' => '两次密码输入不一样！')));
+            exit(json_encode(array('error_code' => 1, 'msg' => L('_B_LOGIN_DIFFERENTKEY_'))));
         }
         if (!empty($pm)) {
             $pm = str_replace(' ', '+', $pm);
@@ -154,9 +165,9 @@ class LoginAction extends BaseAction {
                 if ($tmp) {
                     if (M('User')->where(array('uid' => $modfyinfo['uid'], 'phone' => $phone))->save(array('pwd' => md5($newpwd)))) {
                         session($phone . 'Generate_Pwd_Modify', null);
-                        exit(json_encode(array('error_code' => 0, 'msg' => '密码修改成功！')));
+                        exit(json_encode(array('error_code' => 0, 'msg' => L('_B_LOGIN_CHANGEKEYSUCESS_'))));
                     } else {
-                        exit(json_encode(array('error_code' => 2, 'msg' => '密码修改失败！')));
+                        exit(json_encode(array('error_code' => 2, 'msg' => L('_B_LOGIN_CHANGEKEYLOSE_'))));
                     }
                 }
             }

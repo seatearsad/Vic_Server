@@ -14,7 +14,7 @@ $(function(){
 		
 		var password_type = $('#password_type').val();
 		if($('#sms_code')&&$('#sms_code').val()==''){
-			$('#tips').html('输入的短信验证码有误。').show();
+			$('#tips').html(getLangStr('_SMS_CODE_ERROR_')).show();
 			return false;
 		}
 		var sms_code = $('#sms_code').val();
@@ -29,7 +29,7 @@ $(function(){
 		}
 		if(typeof(sms_code)!='undefined'){
 			if(sms_code.length > 6||isNaN(sms_code)){
-				$('#tips').html('输入的短信验证码有误。').show();
+				$('#tips').html(getLangStr('_SMS_CODE_ERROR_')).show();
 				return false;
 			}
 		}

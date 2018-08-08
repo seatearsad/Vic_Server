@@ -40,8 +40,8 @@
 					<if condition="C('config.reg_verify_sms') AND C('config.sms_pwd')">
 					<div class="form-field form-field--icon">
 			            <i class="icon icon-user"></i>
-			            <input type="text" id="sms_code" style ="width:98px;" class="f-text" name="sms_code" placeholder="短信验证码"/>
-						&nbsp;&nbsp;<button class="btn" style="    width: 120px;font-weight: normal;padding: 7px 10px 6px;" onclick="sendsms(this)" >验证短信</button>
+			            <input type="text" id="sms_code" style ="width:98px;" class="f-text" name="sms_code" placeholder="{pigcms{:L('_B_D_LOGIN_FILLMESSAGE_')}"/>
+						<button class="btn" style="width: 125px;font-weight: normal;padding: 7px 5px 6px;" onclick="sendsms(this)" >{pigcms{:L('_B_D_LOGIN_RECEIVEMESSAGE_')}</button>
 			        </div>
 					</if>
 			        <div class="form-field form-field--icon" >
@@ -86,7 +86,7 @@
 				}
 				var phone = $("#login-phone").val();
 				var pwd = $("#login-password").val();
-				<if condition="C('config.reg_verify_sms') AND C('config.sms_key')">
+				<if condition="C('config.reg_verify_sms')">
 					var sms_code = $("#sms_code").val();
 				</if>
 				var repwd = $("#login-repassword").val();
@@ -106,7 +106,7 @@
 					error_tips('{pigcms{:L("_B_LOGIN_DIFFERENTKEY_")}','login-repassword');
 					return false;
 				}
-				$.post("{pigcms{:U('Index/Login/reg')}", {'phone':phone,'pwd':pwd <if condition="C('config.reg_verify_sms') AND C('config.sms_key')">,sms_code:sms_code</if>}, function(data){
+				$.post("{pigcms{:U('Index/Login/reg')}", {'phone':phone,'pwd':pwd <if condition="C('config.reg_verify_sms')">,sms_code:sms_code</if>}, function(data){
 					if(data.error_code){
 						$("#commit").val('{pigcms{:L("_B_D_LOGIN_REG2_")}').prop('disabled',false);
 						$('.validate-info').html('<i class="tip-status tip-status--opinfo"></i>'+data.msg).css('visibility','visible');
@@ -192,12 +192,12 @@
 			}
 			if (countdown == 0) {
 				val.removeAttribute("disabled");
-				val.innerText="验证短信";
+				val.innerText="{pigcms{:L('_B_D_LOGIN_FILLMESSAGE_')}";
 				countdown = 60;
 				//clearTimeout(t);
 			} else {
 				val.setAttribute("disabled", true);
-				val.innerText="重新发送(" + countdown + ")";
+				val.innerText="{pigcms{:L('_B_D_LOGIN_SENDAGAIN_')}(" + countdown + ")";
 				countdown--;
 				setTimeout(function() {
 					sendsms(val);

@@ -49,7 +49,7 @@
 			            		<dd class="dd-padding">
 			            			<input id="phone" class="input-weak" type="tel" placeholder="{pigcms{:L('_B_D_LOGIN_TEL_')}" name="phone" value="" required="">
 			            		</dd>
-								<if condition=" C('config.sms_key')">
+								<if condition=" C('config.reg_verify_sms')">
 			            		<dd class="kv-line-r dd-padding">
 			            			<input id="vfycode" class="input-weak kv-k" name = "vcode" type="text" placeholder="{pigcms{:L('_B_D_LOGIN_FILLMESSAGE_')}" required/>
 			            			<button id="reg_send_sms" type="button" onclick="sendsms(this)" class="btn btn-weak kv-v">{pigcms{:L('_B_D_LOGIN_RECEIVEMESSAGE_')}</button>

@@ -21,7 +21,7 @@ class SmssendAction extends BaseAction{
              $sms_data['uid'] = 0;
              $sms_data['mobile'] = $_POST['phone'];
              $sms_data['sendto'] = 'user';
-             $sms_data['tplid'] = 86918;
+             $sms_data['tplid'] = 169243;
              $sms_data['params'] = [
                  $vcode
              ];

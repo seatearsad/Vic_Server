@@ -688,11 +688,11 @@ class Shop_orderModel extends Model
 					$sms_data['uid'] = $now_order['uid'];
 					$sms_data['mobile'] = $now_order['userphone'];
 					$sms_data['sendto'] = 'user';
-					$sms_data['tplid'] = 87499;
+					$sms_data['tplid'] = 169226;
 					$sms_data['params'] = [
-						$store['name'],
-						$now_order['real_orderid'],
-						$offline
+                        $now_order['real_orderid'],
+                        $offline,
+                        $store['name']
 					];
 					if ($data_shop_order['shop_pass']) {
 						$sms_data['content'] = '您在' . $store['name'] . '中的订单号：' . $now_order['real_orderid'] . ',已经完成了支付' . $offline . '！';
@@ -714,13 +714,15 @@ class Shop_orderModel extends Model
 					$sms_data['mobile'] = $store['phone'];
 					$sms_data['sendto'] = 'merchant';
 					$sms_data['content'] = '顾客' . $now_order['username'] . '在' . date("Y-m-d H:i:s") . '时，将订单号：' . $now_order['real_orderid'] . '支付成功' . $offline . '！';
-				 	$sms_data['tplid'] = 87500;
+				 	$sms_data['tplid'] = 169186;
 					$sms_data['params'] = [
 						$now_order['username'],
-						date("Y-m-d H:i:s"),
-						$now_order['real_orderid']
+                        $now_order['real_orderid'],
+                        date("Y-m-d H:i:s")
 					];	
-                                        Sms::sendSms2($sms_data);
+					Sms::sendSms2($sms_data);
+					//add garfunkel 添加语音
+					Sms::send_voice_message($sms_data['mobile']);
 				}
 
 				if ($now_order['order_from'] == 6 && $now_order['is_pick_in_store'] == 2 && $now_order['staff_id'] > 0) {
@@ -1279,10 +1281,10 @@ class Shop_orderModel extends Model
 			$sms_data['sendto'] = 'user';
 			$sms_data['content'] = '您在 ' . $store['name'] . '店中下的订单(订单号：' . $order['real_orderid'] . '),已经完成了消费，如有任何疑意，请您及时联系本店，欢迎再次光临！';
 			$sms_data['params'] = [
-				$store['name'],
-				$order['real_orderid']
+                $order['real_orderid'],
+                $store['name']
 			];
-			$sms_data['tplid'] = 87501;
+			$sms_data['tplid'] = 169224;
 			Sms::sendSms2($sms_data);
 		}
 		if (C('config.sms_shop_finish_order') == 2 || C('config.sms_shop_finish_order') == 3) {
@@ -1294,7 +1296,7 @@ class Shop_orderModel extends Model
 				$order['name'],
 				$order['real_orderid']
 			];
-			$sms_data['tplid'] = 87502;
+			$sms_data['tplid'] = 169159;
 			Sms::sendSms2($sms_data);
 		}
 
@@ -1552,11 +1554,11 @@ class Shop_orderModel extends Model
 			$sms_data['sendto'] = 'user';
 			$sms_data['content'] = '您在 ' . $mer_store['name'] . '店中下的订单(订单号：' . $order_id . '),在' . date('Y-m-d H:i:s') . '时已被您取消并退款，欢迎再次光临！';
 			$sms_data['params'] = [
-				$mer_store['name'],
-				$order_id,
-				date('Y-m-d H:i:s')
+                $order_id,
+                date('Y-m-d H:i:s'),
+                $mer_store['name']
 			];
-			$sms_data['tplid'] = 87504;
+			$sms_data['tplid'] = 169203;
 			Sms::sendSms2($sms_data);
 		}
 		if (C('config.sms_shop_cancel_order') == 2 || C('config.sms_shop_cancel_order') == 3) {
@@ -1569,7 +1571,7 @@ class Shop_orderModel extends Model
 				$order_id,
 				date('Y-m-d H:i:s')
 			];
-			$sms_data['tplid'] = 87505;
+			$sms_data['tplid'] = 169151;
 			Sms::sendSms2($sms_data);
 		}
 
@@ -1671,10 +1673,10 @@ class Shop_orderModel extends Model
 						'content' => '顾客 ' . $order_data['username'] . ' 在' . date("Y-m-d H:i:s") . '时下了一个订单，订单号：' . $order_data['real_orderid'] . '请您注意查看并处理!',
 						'params' => [
 							$order_data['username'],
-							date("Y-m-d H:i:s"),
-							$order_data['real_orderid']
+                            $order_data['real_orderid'],
+							date("Y-m-d H:i:s")
 						],
-						'tplid' => 87321
+						'tplid' => 169236
 					];
                                         
                                         //客户支付成功后，向店家发送消息，创建订单消息的延时处理任务，若三分钟后店家没有接单处理，再发消息 ydhl-llx@20171213

@@ -52,7 +52,7 @@ class LoginAction extends BaseAction{
 			if(is_numeric($data_user['phone']) == false){
 				$this->error(L('_B_LOGIN_ENTERGOODNO_'));
 			}
-			if ($this->config['reg_verify_sms']&&$this->config['sms_key']&&substr($_POST['phone'],0,10)!='1321234567') {
+			if ($this->config['reg_verify_sms']&&substr($_POST['phone'],0,10)!='1321234567') {
 				$sms_verify_result = D('Smscodeverify')->verify($_POST['sms_code'], $_POST['phone']);
 
 				if ($sms_verify_result['error_code']) {
@@ -112,6 +112,9 @@ class LoginAction extends BaseAction{
 				if(!empty($user_import)){
 				   $user_importDb->where(array('id'=>$user_import['id']))->save(array('isuse'=>2));
 				}
+				//add garfunkel
+                D('Smscodeverify')->del_verify($_POST['sms_code'], $_POST['phone']);
+				//
 				$this->success(L('_B_LOGIN_REGISTSUCESS_'));
 			}else{
 				$this->error(L('_B_LOGIN_REGISTLOSERE_'));
@@ -129,7 +132,8 @@ class LoginAction extends BaseAction{
 	public function forgetpwd() {
 		$accphone = isset($_GET['accphone']) ? trim($_GET['accphone']) : '';
 		$this->assign('accphone', $accphone);
-		if($this->config['sms_key']){
+		//modify garfunkel
+		if($this->config['reg_verify_sms']){
 			$this->display();
 		}else{
 			$this->error_tips(L('_B_LOGIN_NOMESSAGE_'));

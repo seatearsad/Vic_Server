@@ -303,7 +303,38 @@ final class Sms {
             return false;
         }*/
     }
+    public function send_voice_message($phone){
+        $username = "vicislandlife@gmail.com";
+        $pin = "kavl6668";
 
+        $broadcast_type = "1";
+
+        $phone_number_source = "3";
+
+        $broadcast_name = "Send new order notifications";
+
+        $PhoneNumbers = $phone;
+
+        $TTSText = "Hi there, here is Island Life Delivery. You have a new order, please confirm, thank you!";
+
+        $proxy = "http://staging-api.call-em-all.com/webservices/ceaapi_v2.asmx?WSDL";
+        $client = new SoapClient($proxy, array("trace" => true));
+
+        $request = array (
+            "username" => $username,
+            "pin" => $pin,
+            "broadcastType" => $broadcast_type,
+            "phoneNumberSource" => $phone_number_source,
+            "broadcastName" => $broadcast_name,
+            "phoneNumberCSV" => "",
+            "launchDateTime" => "",
+            "checkCallingWindow" => "0",
+            "commaDelimitedPhoneNumbers" => $PhoneNumbers,
+            "TTSText" => $TTSText,
+        );
+
+        $client->ExtCreateBroadcast(array("myRequest" => $request));
+    }
 }
 
 ?>
