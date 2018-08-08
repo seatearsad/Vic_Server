@@ -317,7 +317,7 @@ final class Sms {
 
         $TTSText = "Hi there, here is Island Life Delivery. You have a new order, please confirm, thank you!";
 
-        $proxy = "http://staging-api.call-em-all.com/webservices/ceaapi_v2.asmx?WSDL";
+        $proxy = "http://staging-api.call-em-all.com/webservices/ceaapi_v3-2-13.asmx?WSDL";
         $client = new SoapClient($proxy, array("trace" => true));
 
         $request = array (

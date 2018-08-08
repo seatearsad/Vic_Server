@@ -720,7 +720,7 @@ class Shop_orderModel extends Model
                         $now_order['real_orderid'],
                         date("Y-m-d H:i:s")
 					];	
-					Sms::sendSms2($sms_data);
+					//Sms::sendSms2($sms_data);
 					//add garfunkel 添加语音
 					Sms::send_voice_message($sms_data['mobile']);
 				}
@@ -1297,7 +1297,7 @@ class Shop_orderModel extends Model
 				$order['real_orderid']
 			];
 			$sms_data['tplid'] = 169159;
-			Sms::sendSms2($sms_data);
+			//Sms::sendSms2($sms_data);
 		}
 
 		//微信模板消息提醒
@@ -1682,7 +1682,7 @@ class Shop_orderModel extends Model
                                         //客户支付成功后，向店家发送消息，创建订单消息的延时处理任务，若三分钟后店家没有接单处理，再发消息 ydhl-llx@20171213
                                         //require_once APP_PATH . 'Lib/ORG/crontab/creat_file.php';
                                         //creat_check_file_when_online_order($order_id, $sms_data['mobile'], $sms_data['content'], "model");
-					Sms::sendSms2($sms_data);
+					//Sms::sendSms2($sms_data);
 				}
 			}
 		
