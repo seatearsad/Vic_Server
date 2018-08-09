@@ -4786,7 +4786,38 @@ class MyAction extends BaseAction{
 				if ($return['error_code']) {
 					$this->error_tips($result['msg']);
 				} else {
-					$this->success_tips(L('_B_MY_USEOFFLINECHANGEREFUND_'),U('Shop/status',array('order_id' => $now_order['order_id'], 'store_id' => $store_id, 'mer_id' => $this->mer_id)));
+                    //add garfunkel 取消订单成功 发送消息
+                    if (C('config.sms_shop_cancel_order') == 1 || C('config.sms_shop_cancel_order') == 3) {
+                        $sms_data['uid'] = $now_order['uid'];
+                        $sms_data['mobile'] = $now_order['userphone'] ? $now_order['userphone'] : $my_user['phone'];
+                        $sms_data['sendto'] = 'user';
+                        $sms_data['content'] = '您在 ' . $mer_store['name'] . '店中下的订单(订单号：' . $order_id . '),在' . date('Y-m-d H:i:s') . '时已被您取消并退款，欢迎再次光临！';
+                        $sms_data['params'] = [
+                            $order_id,
+                            date('Y-m-d H:i:s'),
+                            $mer_store['name']
+                        ];
+                        $sms_data['tplid'] = 169203;
+                        Sms::sendSms2($sms_data);
+                    }
+                    if (C('config.sms_shop_cancel_order') == 2 || C('config.sms_shop_cancel_order') == 3) {
+                        $sms_data['uid'] = 0;
+                        $sms_data['mobile'] = $mer_store['phone'];
+                        $sms_data['sendto'] = 'merchant';
+                        $sms_data['content'] = '顾客' . $now_order['username'] . '的预定订单(订单号：' . $order_id . '),在' . date('Y-m-d H:i:s') . '时已被客户取消并退款！';
+                        $sms_data['params'] = [
+                            $now_order['username'],
+                            $order_id,
+                            date('Y-m-d H:i:s')
+                        ];
+                        $sms_data['tplid'] = 169151;
+                        //Sms::sendSms2($sms_data);
+
+                        //add garfunkel 添加语音
+                        $txt = "This is a important message from island life , the customer has canceled the last order.";
+                        Sms::send_voice_message($sms_data['mobile'],$txt);
+                    }
+                    $this->success_tips(L('_B_MY_USEOFFLINECHANGEREFUND_'),U('Shop/status',array('order_id' => $now_order['order_id'], 'store_id' => $store_id, 'mer_id' => $this->mer_id)));
 				}
 			} else {
 				$this->error_tips(L('_B_MY_CANCELLLOSE_'));
