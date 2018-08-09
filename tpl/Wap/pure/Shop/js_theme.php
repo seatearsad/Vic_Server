@@ -86,7 +86,7 @@
                         {{ getLangStr('_SALE_NUM_ORDER_',d[i].month_sale_count) }}
                     </span><br/>
                     &nbsp;<span style="color:#9f9f9f;">
-                        {{getLangStr('_MONTH_SALE_NUM_',d[i].month_sale_count)}}
+                        {{getLangStr('_MONTH_SALE_NUM_',d[i].merchant_store_month_sale_count)}}
                     </span>
 					{{# if(d[i].delivery){ }}
 						<!--em class="location-right">{{ d[i].delivery_time }}分钟</em-->
