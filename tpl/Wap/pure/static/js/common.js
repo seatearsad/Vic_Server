@@ -180,8 +180,8 @@ $(function(){
 	});
 	$('.footerMenu li a').click(function(e){
 		if($(this).hasClass('active')){
-			return false;
 			e.stopPropagation();
+            return false;
 		}
 	});
 	/*语音事件 end*/
@@ -441,7 +441,7 @@ function getUserLocation(options){
 		});
 	}else*/
 	//if('https:' == document.location.protocol  && navigator.geolocation){ garfunkel modify https judge
-    if(navigator.geolocation){
+    if(navigator.geolocation){alert('fuck');
 		navigator.geolocation.getCurrentPosition(function(position){
 			var userLong = position.coords.longitude.toFixed(6);
 			var userLat  = position.coords.latitude.toFixed(6);

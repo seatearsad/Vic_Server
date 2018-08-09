@@ -69,6 +69,10 @@ class GroupserviceAction extends BaseAction{
 			$cat_id = 0;
 			$cat_fid = 0;
 
+			//if($lat == 0 && $long == 0){
+            $lat = $_GET['lat'];
+			$long = $_GET['long'];
+			//}
 
 			$where = array('deliver_type' => $deliver_type, 'order' => $order, 'lat' => $lat, 'long' => $long, 'cat_id' => $cat_id, 'cat_fid' => $cat_fid, 'page' => $page);
 			$key && $where['key'] = $key;

@@ -179,7 +179,7 @@ $(function(){
 var like_page	=	0;
 var page_count	=	10;
 function getRecommendList(){
-	$.post(window.location.pathname+'?c=Groupservice&a=indexRecommendList&page='+like_page,function(result){
+	$.post(window.location.pathname+'?c=Groupservice&a=indexRecommendList&page='+like_page+'&long='+$.cookie('userLocationLong')+'&lat='+$.cookie('userLocationLat'),function(result){
 		if(guess_content_type == 'group' || guess_content_type == 'shop'){
 			if(result.length < page_count){
 				$("#moress").remove();

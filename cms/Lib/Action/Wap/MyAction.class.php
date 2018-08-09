@@ -4795,9 +4795,9 @@ class MyAction extends BaseAction{
                         $sms_data['params'] = [
                             $order_id,
                             date('Y-m-d H:i:s'),
-                            $mer_store['name']
+                            lang_substr($mer_store['name'],'en-us')
                         ];
-                        $sms_data['tplid'] = 169203;
+                        $sms_data['tplid'] = 171187;
                         Sms::sendSms2($sms_data);
                     }
                     if (C('config.sms_shop_cancel_order') == 2 || C('config.sms_shop_cancel_order') == 3) {
