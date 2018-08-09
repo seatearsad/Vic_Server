@@ -2161,6 +2161,13 @@ class StoreAction extends BaseAction{
 			}
 			$phones = explode(' ', $this->store['phone']);
 			D('Shop_order_log')->add_log(array('order_id' => $order_id, 'status' => 2, 'name' => $this->staff_session['name'], 'phone' => $phones[0]));
+            //add garfunkel
+            $sms_data['uid'] = $order['uid'];
+            $sms_data['mobile'] = $order['userphone'];
+            $sms_data['sendto'] = 'user';
+            $sms_data['tplid'] = 171072;
+            $sms_data['params'] = [];
+            Sms::sendSms2($sms_data);
 
 			//发送信息
 			//获取所有的配送员
@@ -2174,7 +2181,7 @@ class StoreAction extends BaseAction{
 				];
 				Sms::sendSms2($sms_data);
 			}
-			
+
 			$this->success('已接单');
 		} else {
 			$this->error('接单失败');

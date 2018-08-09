@@ -722,7 +722,8 @@ class Shop_orderModel extends Model
 					];	
 					//Sms::sendSms2($sms_data);
 					//add garfunkel 添加语音
-					Sms::send_voice_message($sms_data['mobile']);
+                    $txt = "Hi there, here is Island Life Delivery. You have a new order, please confirm, thank you!";
+					Sms::send_voice_message($sms_data['mobile'],$txt);
 				}
 
 				if ($now_order['order_from'] == 6 && $now_order['is_pick_in_store'] == 2 && $now_order['staff_id'] > 0) {
@@ -1572,7 +1573,11 @@ class Shop_orderModel extends Model
 				date('Y-m-d H:i:s')
 			];
 			$sms_data['tplid'] = 169151;
-			Sms::sendSms2($sms_data);
+			//Sms::sendSms2($sms_data);
+
+            //add garfunkel 添加语音
+            $txt = "This is a important message from island life , the customer has canceled the last order. Please call us back at 2505906668 if you need further assistance.";
+            Sms::send_voice_message($sms_data['mobile'],$txt);
 		}
 
 		//退款时销量回滚

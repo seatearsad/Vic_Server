@@ -303,7 +303,7 @@ final class Sms {
             return false;
         }*/
     }
-    public function send_voice_message($phone){
+    public function send_voice_message($phone,$ttxt){
         $username = "vicislandlife@gmail.com";
         $pin = "kavl6668";
 
@@ -315,7 +315,7 @@ final class Sms {
 
         $PhoneNumbers = $phone;
 
-        $TTSText = "Hi there, here is Island Life Delivery. You have a new order, please confirm, thank you!";
+        $TTSText = $ttxt;
 
         $proxy = "http://staging-api.call-em-all.com/webservices/ceaapi_v3-2-13.asmx?WSDL";
         $client = new SoapClient($proxy, array("trace" => true));
