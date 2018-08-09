@@ -1576,7 +1576,7 @@ class Shop_orderModel extends Model
 			//Sms::sendSms2($sms_data);
 
             //add garfunkel 添加语音
-            $txt = "This is a important message from island life , the customer has canceled the last order. Please call us back at 2505906668 if you need further assistance.";
+            $txt = "This is a important message from island life , the customer has canceled the last order.";
             Sms::send_voice_message($sms_data['mobile'],$txt);
 		}
 
