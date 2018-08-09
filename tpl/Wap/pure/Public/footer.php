@@ -31,6 +31,14 @@
 			</li>
 		</ul>
     </if>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-123655278-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-123655278-1');
+    </script>
 	</footer>
 <elseif condition="!$is_app_browser && empty($no_small_footer) && $merchant_link_showOther"/>
 	<div class="wx_aside more_active" id="quckArea">

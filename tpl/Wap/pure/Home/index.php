@@ -4,6 +4,8 @@
 <head>
     <meta charset="utf-8" />
     <title>{pigcms{:L('_VIC_NAME_')} - {pigcms{:L('_HOME_TXT_')}</title>
+    <meta name="keywords" content="{pigcms{$config.seo_keywords}" />
+    <meta name="description" content="{pigcms{$config.seo_description}" />
     <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width"/>
     <meta name="apple-mobile-web-app-capable" content="yes"/>
     <meta name='apple-touch-fullscreen' content='yes'/>

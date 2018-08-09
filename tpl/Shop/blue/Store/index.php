@@ -3,11 +3,11 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=Edge">
-	<title>{pigcms{:L('_OUT_TXT_')} - {pigcms{:L('_VIC_NAME_')}</title>
+    <title>{pigcms{:L('_OUT_TXT_')} | {pigcms{:L('_VIC_NAME_')}</title>
 	<if condition="$now_area">
-		<meta name="keywords" content="{pigcms{$now_area.area_name},{pigcms{$now_circle.area_name},{pigcms{$config.seo_keywords}" />
+		<meta name="keywords" content="{pigcms{$cat_url} delivery near me,{pigcms{$now_area.area_name},{pigcms{$now_circle.area_name},{pigcms{$config.seo_keywords}" />
 	<else />
-		<meta name="keywords" content="{pigcms{$config.seo_keywords}" />
+		<meta name="keywords" content="{pigcms{$cat_url} delivery near me,{pigcms{$config.seo_keywords}" />
 	</if>
 	<meta name="description" content="{pigcms{$config.seo_description}" />
 	<meta charset="utf-8">

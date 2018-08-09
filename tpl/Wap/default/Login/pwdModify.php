@@ -3,6 +3,8 @@
 <head>
     <meta charset="utf-8"/>
 	<title>{pigcms{:L('_B_D_LOGIN_KEYBACK_')}  - {pigcms{$config.site_name}</title>
+    <meta name="keywords" content="{pigcms{$config.seo_keywords}" />
+    <meta name="description" content="{pigcms{$config.seo_description}" />
     <meta name="viewport" content="initial-scale=1, width=device-width, maximum-scale=1, user-scalable=no">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name='apple-touch-fullscreen' content='yes'>

@@ -41,21 +41,30 @@
 <body>
 	<dl style="padding:0 10px;background-color:#fff;margin-top:10px;margin-bottom:10px;">
 		<div id="nickname" class="titleBorder">
-			<div class="title">{pigcms{:L('_B_PURE_MY_54_')}<span style="float:right;">{pigcms{$now_user.nickname}</span></div>
+			<div class="title">{pigcms{:L('_B_PURE_MY_54_')}
+                <span style="float:right;">{pigcms{$now_user.nickname}</span>
+            </div>
 			<img src="{pigcms{$static_path}images/new_my/tubiao2_11.png" class="imgRirht" />
 		</div>
 		<div id="psword" class="titleBorder">
 			<div class="title">{pigcms{:L('_B_PURE_MY_55_')}</div>
-			<img src="{pigcms{$static_path}images/new_my/tubiao2_11.png" class="imgRirht"></img>
+			<img src="{pigcms{$static_path}images/new_my/tubiao2_11.png" class="imgRirht" />
 		</div>
 		<div id="bind_user" class="titleBorder">
-			<div class="title"><if condition="$now_user['phone']">{pigcms{:L('_B_PURE_MY_56_')}<else />{pigcms{:L('_B_PURE_MY_57_')}</if><span style="float:right;">{pigcms{$now_user.phone_s}</span></div>
-			<img src="{pigcms{$static_path}images/new_my/tubiao2_11.png" class="imgRirht"></img>
+			<div class="title">
+                <if condition="$now_user['phone']">
+                    {pigcms{:L('_B_PURE_MY_56_')}
+                <else/>
+                    {pigcms{:L('_B_PURE_MY_57_')}
+                </if>
+                <span style="float:right;">{pigcms{$now_user.phone_s}</span>
+            </div>
+			<img src="{pigcms{$static_path}images/new_my/tubiao2_11.png" class="imgRirht" />
 		</div>
 		<if condition="!$_GET['type']">
 			<div id="adress" class="titleBorder">
 				<div class="title">{pigcms{:L('_B_PURE_MY_58_')}</div>
-				<img src="{pigcms{$static_path}images/new_my/tubiao2_11.png" class="imgRirht"></img>
+				<img src="{pigcms{$static_path}images/new_my/tubiao2_11.png" class="imgRirht" />
 			</div>
 		</if>
 		<!--div id="authentication" class="titleBorder">
@@ -71,7 +80,7 @@
 				<div class="title">我的实体卡</div>
 				<img src="{pigcms{$static_path}images/new_my/tubiao2_11.png" class="imgRirht"></img>
 			</div>
-		</if-->
+		</if>-->
 	</dl>
 	<!--if condition="!$_GET['type']">
 		<dl style="padding:0 10px;background-color:#fff;margin-top:10px;margin-bottom:10px;">
@@ -96,8 +105,18 @@
 		<script>
 			var find_car = "{pigcms{$find_car}";
 			var find = "{pigcms{$find}";
-			<if condition="$now_user['phone']">var change_phone=true;<else />var change_phone=false;</if>
-			<if condition="C('config.bind_phone_verify_sms') AND C('config.sms_key')">var sms=true;<else />var sms=false;</if>
+
+			<if condition="$now_user['phone']">
+                var change_phone=true;
+            <else/>
+                var change_phone=false;
+            </if>
+
+			<if condition="C('config.bind_phone_verify_sms') AND C('config.sms_key')">
+                var sms=true;
+			<else/>
+                var sms=false;
+            </if>
 		</script>
 		<script>
 			$('#nickname').on('click',function(){

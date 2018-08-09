@@ -4,6 +4,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
     <title>{pigcms{:L('_B_D_LOGIN_REG2_')} | {pigcms{:L('_VIC_NAME_')}</title>
+    <meta name="keywords" content="{pigcms{$config.seo_keywords}" />
+    <meta name="description" content="{pigcms{$config.seo_description}" />
     <!--[if IE 6]>
 		<script src="{pigcms{$static_path}js/DD_belatedPNG_0.0.8a-min.v86c6ab94.js"></script>
     <![endif]-->

@@ -3,6 +3,8 @@
     <head>
         <meta charset="utf-8"/>
         <title>{pigcms{:L('_OUT_TXT_')} {pigcms{:L('_ORDER_DETAIL_')}</title>
+        <meta name="keywords" content="{pigcms{$config.seo_keywords}" />
+        <meta name="description" content="{pigcms{$config.seo_description}" />
         <meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no,width=device-width"/>
         <meta http-equiv="pragma" content="no-cache"/>
         <meta name="apple-mobile-web-app-capable" content="yes"/>

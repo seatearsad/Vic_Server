@@ -441,7 +441,7 @@ function getUserLocation(options){
 		});
 	}else*/
 	//if('https:' == document.location.protocol  && navigator.geolocation){ garfunkel modify https judge
-    if(navigator.geolocation){alert('fuck');
+    if(navigator.geolocation){
 		navigator.geolocation.getCurrentPosition(function(position){
 			var userLong = position.coords.longitude.toFixed(6);
 			var userLat  = position.coords.latitude.toFixed(6);

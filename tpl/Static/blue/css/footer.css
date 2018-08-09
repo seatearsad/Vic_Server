@@ -1,29 +1,50 @@
 @charset "utf-8";
-
+.footer1 a{
+	color: #151515;
+}
+.footer1 div{
+	float: left;
+}
 .footer1 {
+	float: left;
 	width: 100%;
 	min-width: 1210px;
+	bottom: 0px;
 	background: #f4f4f4;
 	color: #656565;
-	margin-top: 150px;
+	margin-top: 100px;
 	padding: 25px 0;
-	font-family:'微软雅黑';
 }
 .footer_list {
-	margin: 0 auto 10px;
-	width: 900px;
+	width:24%;
+	text-align: left;
+	margin-bottom: 10px;
 }
 .footer_list span {
 	padding: 0 10px
 }
+.footer_list ul{
+	float:left;
+	width:130px;
+	margin-left:150px;
+}
 .footer_list li {
-	  display: inline-block;
-	  float:none;
+	display: inline-block;
+	float:none;
+	color: #656565;
+	font-size: 12px;
+	line-height:20px;
+}
+.footer_list .ul_left{
+	margin-left: 0px;
+}
+.footer_list .li_c{
+	text-align: center;
+	width:100%;
 }
 .footer_txt {
-	  margin: 0 auto;
-	width: 1210px;
+	width:52%;
 	text-align: center;
 	font-size: 12px;
-	line-height: 24px;
+	line-height:12px;
 }
