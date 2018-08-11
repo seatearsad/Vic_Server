@@ -69,7 +69,7 @@ class GroupserviceAction extends BaseAction{
 			$cat_id = 0;
 			$cat_fid = 0;
 
-			if($_GET['lat'] != null && $_GET['long'] != null){
+			if($_GET['lat'] != 'null' && $_GET['long'] != 'null'){
 				$lat = $_GET['lat'];
 				$long = $_GET['long'];
 			}
