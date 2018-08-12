@@ -2165,7 +2165,7 @@ class StoreAction extends BaseAction{
             $sms_data['uid'] = $order['uid'];
             $sms_data['mobile'] = $order['userphone'];
             $sms_data['sendto'] = 'user';
-            $sms_data['tplid'] = 171072;
+            $sms_data['tplid'] = 172700;
             $sms_data['params'] = [];
             Sms::sendSms2($sms_data);
 
