@@ -805,5 +805,44 @@ class UserAction extends BaseAction {
         $this->assign('recharge_list',$recharge_list);
         $this->display();
     }
+    //garfunkel add
+    public function send_coupon(){
+        $uid = $_GET['uid'];
+        $coupon = D('System_coupon');
 
+        $where = array('status' => 1,'allow_new'=>0);
+
+        $list = $coupon->field(true)->where($where)->order('`last_time` DESC')->select();
+
+        foreach ($list as $k=>$v){
+            $l_id = D('System_coupon_hadpull')->field(true)->where(array('uid'=>$uid,'coupon_id'=>$v['coupon_id']))->find();
+            if(empty($l_id))
+                $list[$k]['is_l'] = 0;
+            else
+                $list[$k]['is_l'] = 1;
+        }
+
+        $this->assign('list',$list);
+        $this->assign('uid',$uid);
+
+        $this->display();
+    }
+
+    public function sendCouponToUser(){
+        $uid = $_POST['uid'];
+        $coupon_id = $_POST['cid'];
+
+        $uList = explode(',',$uid);
+
+        if (count($uList) == 1){
+            $result = D('System_coupon')->had_pull($coupon_id,$uid);
+            exit(json_encode($result));
+        }else{
+            foreach($uList as $v){
+                D('System_coupon')->had_pull($coupon_id,$v);
+            }
+
+            echo json_encode(array('error_code'=> 0,'msg'=>''));
+        }
+    }
 }

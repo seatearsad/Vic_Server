@@ -3141,6 +3141,8 @@ class MyAction extends BaseAction{
 		}
 		$tmp = array();
 		foreach ($coupon_list as $key => $v) {
+		    $v['name'] = lang_substr($v['name'],C('DEFAULT_LANG'));
+		    $v['des'] = lang_substr($v['des'],C('DEFAULT_LANG'));
 			if (!empty($tmp[$v['is_use']][$v['coupon_id']])) {
 				$tmp[$v['is_use']][$v['coupon_id']]['get_num']++;
 			} else {
@@ -5618,7 +5620,26 @@ class MyAction extends BaseAction{
 		$this->display();
 	}
 
+    public  function exchangeCode(){
+	    $code = $_POST['code'];
+	    $uid = $this->user_session['uid'];
 
+        $coupon = D('System_coupon')->field(true)->where(array('notice'=>$code))->find();
+        $cid = $coupon['coupon_id'];
+
+        if($cid){
+            $l_id = D('System_coupon_hadpull')->field(true)->where(array('uid'=>$uid,'coupon_id'=>$cid))->find();
+
+            if($l_id == null)
+                $result = D('System_coupon')->had_pull($cid,$uid);
+            else
+                exit(json_encode(array('error_code'=> 1,'msg'=>L('_AL_EXCHANGE_CODE_'))));
+        }else{
+            exit(json_encode(array('error_code'=> 1,'msg'=>L('_NOT_EXCHANGE_CODE_'))));
+        }
+
+        echo json_encode($result);
+    }
 
 
 }

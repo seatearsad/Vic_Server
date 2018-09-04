@@ -93,54 +93,54 @@
                 $("button.mj-submit").html("正在处理...");
             });
             $('#pay-methods-panel').find('.list .dd-padding').click(function(){
-
-                if($(this).find('input').val()=='offline'){
-                    //window.location.href=window.location.href+'&pay_type=offline';
-                    var mer_coupon_none = "<a class='react' ><div class='more more-weak'><h6>{pigcms{:L('_SHOP_COUP_')}</h6><span class='more-after'>{pigcms{:L('_UNAVAILABLE_COUP_')}</span></div></a>";
-                    var system_coupon_none = "<a class='react' ><div class='more more-weak'><h6>{pigcms{:L('_PLATFORM_COUP_')}</h6><span class='more-after'>{pigcms{:L('_UNAVAILABLE_COUP_')}</span></div></a>";
-                    $('#system_coupon').html(system_coupon_none);
-                    $('#mer_coupon').html(mer_coupon_none);
-
-                    check_money(total_money,0,0);
-                    sysc_price = 0;
-                    merc_price = 0;
-                    $('#pay_in_fact').html("{pigcms{:L('_ACTUAL_PAYMENT_')}：<b style='color:red'>$"+(total_money+merc_price).toFixed(2)+"</b>");
-                    $('input[name="card_id"]').attr('disabled','disabled');
-                    $('input[name="coupon_id"]').attr('disabled','disabled');
-                }else{
-                    $('#system_coupon').html(system_coupon_html);
-                    $('#mer_coupon').html(mer_coupon_html);
-                    $('#pay_in_fact').html("{pigcms{:L('_ACTUAL_PAYMENT_')}：<b style='color:red'>$"+(total_money-sysc_price).toFixed(2)+"</b>");
-                    $('input[name="card_id"]').removeAttr('disabled');
-                    $('input[name="coupon_id"]').removeAttr('disabled');
-                    sysc_price = sysc_price_tmp ;
-                    merc_price = merc_price_tmp;
-                }
+                //garfunkel 线下支付不能使用优惠券 暂时屏蔽掉
+                // if($(this).find('input').val()=='offline'){
+                //     //window.location.href=window.location.href+'&pay_type=offline';
+                //     var mer_coupon_none = "<a class='react' ><div class='more more-weak'><h6>{pigcms{:L('_SHOP_COUP_')}</h6><span class='more-after'>{pigcms{:L('_UNAVAILABLE_COUP_')}</span></div></a>";
+                //     var system_coupon_none = "<a class='react' ><div class='more more-weak'><h6>{pigcms{:L('_PLATFORM_COUP_')}</h6><span class='more-after'>{pigcms{:L('_UNAVAILABLE_COUP_')}</span></div></a>";
+                //     $('#system_coupon').html(system_coupon_none);
+                //     $('#mer_coupon').html(mer_coupon_none);
+                //
+                //     check_money(total_money,0,0);
+                //     sysc_price = 0;
+                //     merc_price = 0;
+                //     $('#pay_in_fact').html("{pigcms{:L('_ACTUAL_PAYMENT_')}：<b style='color:red'>$"+(total_money+merc_price).toFixed(2)+"</b>");
+                //     $('input[name="card_id"]').attr('disabled','disabled');
+                //     $('input[name="coupon_id"]').attr('disabled','disabled');
+                // }else{
+                //     $('#system_coupon').html(system_coupon_html);
+                //     $('#mer_coupon').html(mer_coupon_html);
+                //     $('#pay_in_fact').html("{pigcms{:L('_ACTUAL_PAYMENT_')}：<b style='color:red'>$"+(total_money-sysc_price).toFixed(2)+"</b>");
+                //     $('input[name="card_id"]').removeAttr('disabled');
+                //     $('input[name="coupon_id"]').removeAttr('disabled');
+                //     sysc_price = sysc_price_tmp ;
+                //     merc_price = merc_price_tmp;
+                // }
             })
 
-            if($('#pay-methods-panel').find('.list .dd-padding input').val()=='offline'){
-
-                //window.location.href=window.location.href+'&pay_type=offline';
-                var mer_coupon_none = "<a class='react' ><div class='more more-weak'><h6>{pigcms{:L('_SHOP_COUP_')}</h6><span class='more-after'>{pigcms{:L('_UNAVAILABLE_COUP_')}</span></div></a>";
-                var system_coupon_none = "<a class='react' ><div class='more more-weak'><h6>{pigcms{:L('_PLATFORM_COUP_')}</h6><span class='more-after'>{pigcms{:L('_UNAVAILABLE_COUP_')}</span></div></a>";
-                $('#system_coupon').html(system_coupon_none);
-                $('#mer_coupon').html(mer_coupon_none);
-
-                check_money(total_money,0,0);
-                sysc_price = 0;
-                merc_price = 0;
-                $('#pay_in_fact').html("{pigcms{:L('_ACTUAL_PAYMENT_')}：<b style='color:red'>$"+(total_money+merc_price).toFixed(2)+"</b>");
-                $('input[name="card_id"]').attr('disabled','disabled');
-                $('input[name="coupon_id"]').attr('disabled','disabled');
-            }else{
-                $('#system_coupon').html(system_coupon_html);
-                $('#mer_coupon').html(mer_coupon_html);
-                $('#pay_in_fact').html("{pigcms{:L('_ACTUAL_PAYMENT_')}：<b style='color:red'>$"+(total_money-sysc_price).toFixed(2)+"</b>");
-                $('input[name="card_id"]').removeAttr('disabled');
-                $('input[name="coupon_id"]').removeAttr('disabled');
-                sysc_price = sysc_price_tmp ;
-                merc_price = merc_price_tmp;
-            }
+            // if($('#pay-methods-panel').find('.list .dd-padding input').val()=='offline'){
+            //
+            //     //window.location.href=window.location.href+'&pay_type=offline';
+            //     var mer_coupon_none = "<a class='react' ><div class='more more-weak'><h6>{pigcms{:L('_SHOP_COUP_')}</h6><span class='more-after'>{pigcms{:L('_UNAVAILABLE_COUP_')}</span></div></a>";
+            //     var system_coupon_none = "<a class='react' ><div class='more more-weak'><h6>{pigcms{:L('_PLATFORM_COUP_')}</h6><span class='more-after'>{pigcms{:L('_UNAVAILABLE_COUP_')}</span></div></a>";
+            //     $('#system_coupon').html(system_coupon_none);
+            //     $('#mer_coupon').html(mer_coupon_none);
+            //
+            //     check_money(total_money,0,0);
+            //     sysc_price = 0;
+            //     merc_price = 0;
+            //     $('#pay_in_fact').html("{pigcms{:L('_ACTUAL_PAYMENT_')}：<b style='color:red'>$"+(total_money+merc_price).toFixed(2)+"</b>");
+            //     $('input[name="card_id"]').attr('disabled','disabled');
+            //     $('input[name="coupon_id"]').attr('disabled','disabled');
+            // }else{
+            //     $('#system_coupon').html(system_coupon_html);
+            //     $('#mer_coupon').html(mer_coupon_html);
+            //     $('#pay_in_fact').html("{pigcms{:L('_ACTUAL_PAYMENT_')}：<b style='color:red'>$"+(total_money-sysc_price).toFixed(2)+"</b>");
+            //     $('input[name="card_id"]').removeAttr('disabled');
+            //     $('input[name="coupon_id"]').removeAttr('disabled');
+            //     sysc_price = sysc_price_tmp ;
+            //     merc_price = merc_price_tmp;
+            // }
 
 
             $('#alter_score').click(function(){

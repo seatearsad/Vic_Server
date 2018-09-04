@@ -253,6 +253,12 @@
 				</td>
 			</tr>
 			</if>
+            <tr>
+                <td width="100">领取口令：</td>
+                <td>
+                    {pigcms{$coupon['notice']}
+                </td>
+            </tr>
 		</table>
 		<div class="btn hidden">
 			<input type="submit" name="dosubmit" id="dosubmit" value="提交" class="button" />

@@ -246,6 +246,10 @@
 					<span class="cb-disable"><label class="cb-disable "><span>禁用</span><input type="radio" name="status" value="0" /></label></span>
 				</td>
 			</tr>
+            <tr>
+                <td width="100">领取口令：</td>
+                <td><input type="text" class="input fl" style="margin-left:4px;" name="notice" value=""  autocomplete="off"></td>
+            </tr>
 		</table>
 		<div class="btn hidden">
 			<input type="submit" name="dosubmit" id="dosubmit" value="提交" class="button" />

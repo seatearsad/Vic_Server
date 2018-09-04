@@ -857,5 +857,271 @@ class Merchant_store_shopModel extends Model
         $return['total_page'] = ceil($total / $pagesize);
         return $return;
     }
+
+    /**
+     * Api 获取店铺信心整理
+     * garfunkel add
+     * @param array $where
+     * @param int $is_wap
+     * @param int $type 1 链接get_list_by_option
+     * @param $limit
+     * @param int $page
+     * @param int $page_count
+     * @return array
+     */
+    public function get_list_arrange($where = array(), $is_wap = 1,$type = 1,$limit,$page = 0,$page_count = 10)
+    {
+        switch ($type){
+            case 1:
+                $t_list = $this->get_list_by_option($where,$is_wap);
+                break;
+
+            default:
+                $t_list = array();
+                break;
+
+        }
+        $page_max = floor($limit/$page_count)+($limit%$page_count>0?1:0);
+
+        $n = 1;
+        $return = array();
+        foreach ($t_list['shop_list'] as $row) {
+            if($n>$page_count ||$page>$page_max || ($page == $page_max && $n>$limit%$page_count&&$limit%$page_count!=0) )
+                break;
+            $n++;
+            $temp = array();
+            $temp['site_id'] = $row['store_id'];
+            $temp['logo'] = $row['image'];
+            //modify garfunkel 判断语言
+            $temp['site_name'] = lang_substr($row['name'],C('DEFAULT_LANG'));
+            $temp['shop_sale'] = $row['sale_count'];
+            $temp['store_theme'] = $row['store_theme'];
+            $temp['isverify'] = $row['isverify'];
+            $temp['juli_wx'] = $row['juli'];
+            $temp['range'] = $row['range'];
+            $temp['score'] = $row['score_mean'];
+            $temp['merchant_store_month_sale_count'] = $row['merchant_store_month_sale_count'];//月售量
+            $temp['delivery'] = $row['deliver'];//是否支持配送
+            $temp['delivery'] = $temp['delivery'] ? true : false;
+            $temp['time'] = $row['send_time'];//配送时长
+            $temp['delivery_price'] = floatval($row['basic_price']);//起送价
+            $temp['delivery_money'] = floatval($row['delivery_fee']);//配送费
+            //modify garfunkel
+            $temp['pack_fee'] = $row['pack_fee'];
+            //
+            $temp['delivery_system'] = $row['deliver_type'] == 0 || $row['deliver_type'] == 3 ? true : false;//是否是平台配送
+            $temp['is_close'] = 1;
+
+            //@wangchuanyuan 周一到周天
+            $date = date("w");//今天是星期几 @ydhl-wangchuanyuan 20171106
+            $now_time = date('H:i:s');
+            switch ($date){
+                case 1 :
+                    if ($row['open_1'] != '00:00:00' || $row['close_1'] != '00:00:00'){
+                        if ($row['open_1'] < $now_time && $now_time < $row['close_1']) {
+                            $temp['is_close'] = 0;
+                        }
+                    }
+                    if($row['open_2'] != '00:00:00' || $row['close_2'] != '00:00:00'){
+                        if($row['open_2'] < $now_time && $now_time < $row['close_2']) {
+                            $temp['is_close'] = 0;
+                        }
+                    }
+                    if($row['open_3'] != '00:00:00' || $row['close_3'] != '00:00:00'){
+                        if ($row['open_3'] < $now_time && $now_time < $row['close_3']) {
+                            $temp['is_close'] = 0;
+                        }
+                    }
+                    $row['time'] = $row['open_1']. '~' . $row['close_1'];
+                    $row['time'] .= ';' . $row['open_2']. '~' . $row['close_2'];
+                    $row['time'] .= ';' . $row['open_3']. '~' . $row['close_3'];
+                    break;
+                case 2 ://周二
+                    if ($row['open_4'] != '00:00:00' || $row['close_4'] != '00:00:00') {
+                        if ($row['open_4'] < $now_time && $now_time < $row['close_4']){
+                            $temp['is_close'] = 0;
+                        }
+                    }
+                    if ($row['open_5'] != '00:00:00' || $row['close_5'] != '00:00:00') {
+                        if ($row['open_5'] < $now_time && $now_time < $row['close_5']){
+                            $temp['is_close'] = 0;
+                        }
+                    }
+                    if ($row['open_6'] != '00:00:00' || $row['close_6'] != '00:00:00') {
+                        if ($row['open_6'] < $now_time && $now_time < $row['close_6']){
+                            $temp['is_close'] = 0;
+                        }
+                    }
+                    $row['time'] = $row['open_4'] . '~' . $row['close_4'];
+                    $row['time'] .= ';' . $row['open_5'] . '~' . $row['close_5'];
+                    $row['time'] .= ';' . $row['open_6'] . '~' . $row['close_6'];
+                    break;
+                case 3 ://周三
+                    if ($row['open_7'] != '00:00:00' || $row['close_7'] != '00:00:00') {
+                        if ($row['open_7'] < $now_time && $now_time < $row['close_7']){
+                            $temp['is_close'] = 0;
+                        }
+                    }
+                    if ($row['open_8'] != '00:00:00' || $row['close_8'] != '00:00:00') {
+                        if ($row['open_8'] < $now_time && $now_time < $row['close_8']){
+                            $temp['is_close'] = 0;
+                        }
+                    }
+                    if ($row['open_9'] != '00:00:00' || $row['close_9'] != '00:00:00') {
+                        if ($row['open_9'] < $now_time && $now_time < $row['close_9']){
+                            $temp['is_close'] = 0;
+                        }
+                    }
+                    $row['time'] = $row['open_7'] . '~' . $row['close_7'];
+                    $row['time'] .= ';' . $row['open_8'] . '~' . $row['close_8'];
+                    $row['time'] .= ';' . $row['open_9'] . '~' . $row['close_9'];
+
+                    break;
+                case 4 :
+                    if ($row['open_10'] != '00:00:00' || $row['close_10'] != '00:00:00') {
+                        if ($row['open_10'] < $now_time && $now_time < $row['close_10']){
+                            $temp['is_close'] = 0;
+                        }
+                    }
+                    if ($row['open_11'] != '00:00:00' || $row['close_11'] != '00:00:00') {
+                        if ($row['open_11'] < $now_time && $now_time < $row['close_11']){
+                            $temp['is_close'] = 0;
+                        }
+                    }
+                    if ($row['open_12'] != '00:00:00' || $row['close_12'] != '00:00:00') {
+                        if ($row['open_12'] < $now_time && $now_time < $row['close_12']){
+                            $temp['is_close'] = 0;
+                        }
+                    }
+                    $row['time'] = $row['open_10'] . '~' . $row['close_10'];
+                    $row['time'] .= ';' . $row['open_11'] . '~' . $row['close_11'];
+                    $row['time'] .= ';' . $row['open_12'] . '~' . $row['close_12'];
+                    break;
+                case 5 :
+                    if ($row['open_13'] != '00:00:00' || $row['close_13'] != '00:00:00') {
+                        if ($row['open_13'] < $now_time && $now_time < $row['close_13']){
+                            $temp['is_close'] = 0;
+                        }
+                    }
+                    if ($row['open_14'] != '00:00:00' || $row['close_14'] != '00:00:00') {
+                        if ($row['open_14'] < $now_time && $now_time < $row['close_14']){
+                            $temp['is_close'] = 0;
+                        }
+                    }
+                    if ($row['open_15'] != '00:00:00' || $row['close_15'] != '00:00:00') {
+                        if ($row['open_15'] < $now_time && $now_time < $row['close_15']){
+                            $temp['is_close'] = 0;
+                        }
+                    }
+                    $row['time'] = $row['open_13'] . '~' . $row['close_13'];
+                    $row['time'] .= ';' . $row['open_14'] . '~' . $row['close_14'];
+                    $row['time'] .= ';' . $row['open_15'] . '~' . $row['close_15'];
+                    break;
+                case 6 :
+                    if ($row['open_16'] != '00:00:00' || $row['close_16'] != '00:00:00') {
+                        if ($row['open_16'] < $now_time && $now_time < $row['close_16']){
+                            $temp['is_close'] = 0;
+                        }
+                    }
+                    if ($row['open_17'] != '00:00:00' || $row['close_17'] != '00:00:00') {
+                        if ($row['open_17'] < $now_time && $now_time < $row['close_17']){
+                            $temp['is_close'] = 0;
+                        }
+                    }
+                    if ($row['open_18'] != '00:00:00' || $row['close_18'] != '00:00:00') {
+                        if ($row['open_18'] < $now_time && $now_time < $row['close_18']){
+                            $temp['is_close'] = 0;
+                        }
+                    }
+                    $row['time'] = $row['open_16'] . '~' . $row['close_16'];
+                    $row['time'] .= ';' . $row['open_17'] . '~' . $row['close_17'];
+                    $row['time'] .= ';' . $row['open_18'] . '~' . $row['close_18'];
+                    break;
+                case 0 :
+                    if ($row['open_19'] != '00:00:00' || $row['close_19'] != '00:00:00') {
+                        if ($row['open_19'] < $now_time && $now_time < $row['close_19']){
+                            $temp['is_close'] = 0;
+                        }
+                    }
+                    if ($row['open_20'] != '00:00:00' || $row['close_20'] != '00:00:00') {
+                        if ($row['open_20'] < $now_time && $now_time < $row['close_20']){
+                            $temp['is_close'] = 0;
+                        }
+                    }
+                    if ($row['open_21'] != '00:00:00' || $row['close_21'] != '00:00:00') {
+                        if ($row['open_21'] < $now_time && $now_time < $row['close_21']){
+                            $temp['is_close'] = 0;
+                        }
+                    }
+                    $row['time'] .= $row['open_19'] . '~' . $row['close_19'];
+                    $row['time'] .= ';' . $row['open_20'] . '~' . $row['close_20'];
+                    $row['time'] .= ';' . $row['open_21'] . '~' . $row['close_21'];
+                    break;
+                default :
+                    $temp['is_close'] = 1;
+                    $row['time']= '营业时间未知';
+            }
+            //end  @wangchuanyuan
+
+            $temp['coupon_list'] = array();
+            if ($row['is_invoice']) {
+                $temp['coupon_list']['invoice'] = floatval($row['invoice_price']);
+            }
+            if ($row['store_discount'] != 0 && $row['store_discount'] != 100) {
+                $temp['coupon_list']['discount'] = $row['store_discount']/10;
+            }
+            $system_delivery = array();
+            foreach ($row['system_discount'] as $row_d) {
+                if ($row_d['type'] == 0) {//新单
+                    $temp['coupon_list']['system_newuser'][] = array('money' => floatval($row_d['full_money']), 'minus' => floatval($row_d['reduce_money']));
+                } elseif ($row_d['type'] == 1) {//满减
+                    $temp['coupon_list']['system_minus'][] = array('money' => floatval($row_d['full_money']), 'minus' => floatval($row_d['reduce_money']));
+                } elseif ($row_d['type'] == 2) {//配送
+                    if ($row_d['full_money'] > 0 && $row_d['reduce_money'] > 0) {
+                        $system_delivery[] = array('money' => floatval($row_d['full_money']), 'minus' => floatval($row_d['reduce_money']));
+                    }
+                }
+            }
+            foreach ($row['merchant_discount'] as $row_m) {
+                if ($row_m['type'] == 0) {
+                    $temp['coupon_list']['newuser'][] = array('money' => floatval($row_m['full_money']), 'minus' => floatval($row_m['reduce_money']));
+                } elseif ($row_m['type'] == 1) {
+                    $temp['coupon_list']['minus'][] = array('money' => floatval($row_m['full_money']), 'minus' => floatval($row_m['reduce_money']));
+                }
+            }
+            if ($row['deliver']) {
+                if ($temp['delivery_system']) {
+                    $system_delivery && $temp['coupon_list']['delivery'] = $system_delivery;
+                } else {
+                    if ($row['is_have_two_time']) {
+                        if ($row['reach_delivery_fee_type2'] == 0) {
+                            if ($row['basic_price'] > 0 && $row['delivery_fee2'] > 0) {
+                                $temp['coupon_list']['delivery'][] = array('money' => floatval($row['basic_price']), 'minus' => floatval($row['delivery_fee2']));
+                            }
+                        } elseif ($row['reach_delivery_fee_type2'] == 1) {
+                            //$temp['coupon_list']['delivery'] = array('money' => false, 'minus' => $row['delivery_fee']);
+                        } elseif ($row['reach_delivery_fee_type2'] == 2) {
+                            $row['delivery_fee2'] && $temp['coupon_list']['delivery'][] = array('money' => floatval($row['no_delivery_fee_value2']), 'minus' => floatval($row['delivery_fee2']));
+                        }
+                    } else {
+                        if ($row['reach_delivery_fee_type'] == 0) {
+                            if ($row['basic_price'] > 0 && $row['delivery_fee'] > 0) {
+                                $temp['coupon_list']['delivery'][] = array('money' => floatval($row['basic_price']), 'minus' => floatval($row['delivery_fee']));
+                            }
+                        } elseif ($row['reach_delivery_fee_type'] == 1) {
+                            //$temp['coupon_list']['delivery'] = array('money' => false, 'minus' => $row['delivery_fee']);
+                        } elseif ($row['reach_delivery_fee_type'] == 2) {
+                            $row['delivery_fee'] && $temp['coupon_list']['delivery'][] = array('money' => floatval($row['no_delivery_fee_value']), 'minus' => floatval($row['delivery_fee']));
+                        }
+                    }
+                }
+            }
+            $temp['coupon_count'] = count($temp['coupon_list']);
+            //$temp['coupon_list'] = $this->parseCoupon($temp['coupon_list'],'array');
+            $return[] = $temp;
+        }
+
+        return $return;
+    }
 }
 ?>

@@ -281,7 +281,7 @@
 		<div style="clear:both;"></div>
 	</dl>
 	
-	<!--dl style="padding:0 10px 10px;background-color:#fff;margin-top:10px;">
+	<dl style="padding:0 10px 10px;background-color:#fff;margin-top:10px;">
 		<div style="border-bottom:1px solid #e5e5e5;padding-bottom:10px;">
 			<img class="titleImg" style="margin-top:10px;float:left;" src="{pigcms{$static_path}images/new_my/action.png" />
 			<div style="padding-top:13px;width:60%;">{pigcms{:L('_B_PURE_MY_46_')}</div>
@@ -289,10 +289,18 @@
 		<dd style="padding:15px 0px 10px 0;text-align:center;font-size:20px;">
 				<a href="{pigcms{:U('My/card_list',array('coupon_type'=>'system'))}" style="text-align: center; width: 25%; display: inline-block; float: left;">
 					<img src="{pigcms{$static_path}images/new_my/gezxtp_09.png" width=29 height=20>
-					<p style="font-size: 14px; color: #5f5f5f;">平台优惠券</p>
-					<p style="font-size: 12px; color:#a0a0a0;">共<span style="color: #e94848;">{pigcms{$coupon_number}</span>张</p>
+					<p style="font-size: 14px; color: #5f5f5f;">{pigcms{:L('_PLATFORM_COUP_')}</p>
+					<p style="font-size: 12px; color:#a0a0a0;">
+                        {pigcms{:replace_lang_str(L('_TOTAL_NUM_PIECE_'),'<span style="color: #e94848;">'.$coupon_number.'</span>')}
+
+                    </p>
 				</a>
-				<a href="{pigcms{:U('My/card_list',array('coupon_type'=>'mer'))}" style="text-align: center; width: 25%; display: inline-block; float: left;">
+                <a href="{pigcms{:U('My/card_list',array('coupon_type'=>'system','slide'=>4))}" style="text-align: center; width: 25%; display: inline-block; float: left;">
+                    <img src="{pigcms{$static_path}images/new_my/gezxtp_14.png" width=29 height=20>
+                    <p style="font-size: 14px; color: #5f5f5f;">{pigcms{:L('_EXCHANGE_COUPON_')}</p>
+                    <p style="font-size: 12px; color:#a0a0a0;"></p>
+                </a>
+				<!--a href="{pigcms{:U('My/card_list',array('coupon_type'=>'mer'))}" style="text-align: center; width: 25%; display: inline-block; float: left;">
 					<img src="{pigcms{$static_path}images/new_my/gezxtp_14.png" width=25 height=20>
 					<p style="font-size: 14px; color: #5f5f5f;">商家优惠券</p>
 					<p style="font-size: 12px; color:#a0a0a0;">共<span style="color: #e94848;">{pigcms{$mer_number}</span>张</p>
@@ -306,11 +314,11 @@
 					<img src="{pigcms{$static_path}images/new_my/gezxtp_03.png" width=20 height=20>
 					<p style="font-size: 14px; color: #5f5f5f;">参与活动</p>
 					<p style="font-size: 12px; color:#a0a0a0;">共<span style="color: #e94848;">{pigcms{$activity_number}</span>张</p>
-				</a>
+				</a-->
 
 			    <div style="clear:both;"></div>
 		</dd>
-	</dl-->
+	</dl>
 	<!--dl style="padding:0 10px 10px;background-color:#fff;margin-top:10px;">
 		<div style="border-bottom:1px solid #e5e5e5;padding-bottom:10px;">
 			<img class="titleImg" style="margin-top:10px;float:left;" src="{pigcms{$static_path}images/new_my/follow.png" />

@@ -1,4 +1,4 @@
-$
+<include file="Public:header"/>
 		<div class="mainbox">
 			<div id="nav" class="mainnav_title">
 				<ul>
@@ -52,6 +52,7 @@ $
 						</colgroup>
 						<thead>
 							<tr>
+                                <th> </th>
 								<th><a href="{pigcms{:U('User/index',array('sort'=>'uid'))}" style="color:blue;">ID</a></th>
 								<th>昵称</th>
 								<th>手机号</th>
@@ -68,6 +69,9 @@ $
 							<if condition="is_array($user_list)">
 								<volist name="user_list" id="vo">
 									<tr>
+                                        <td>
+                                            <input type="checkbox" name="check" value="{pigcms{$vo.uid}" />
+                                        </td>
 										<td>{pigcms{$vo.uid}</td>
 										<td>{pigcms{$vo.nickname}</td>
 										<td>{pigcms{$vo.phone}</td>
@@ -83,16 +87,59 @@ $
 										{pigcms{$client[$vo['client']]}
 										<php>}</php></td>
 										<td class="textcenter"><if condition="$vo['status'] eq 1"><font color="green">正常</font><elseif condition="$vo['status'] eq 2" /><font color="red">未审核</font><else /><font color="red">禁用</font></if></td>
-										<td class="textcenter"><a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('User/edit',array('uid'=>$vo['uid']))}','编辑用户信息',680,560,true,false,false,editbtn,'edit',true);"><if condition="$vo['status'] eq 2">审核<else />编辑</if></a></td>
+										<td class="textcenter">
+                                            <a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('User/edit',array('uid'=>$vo['uid']))}','编辑用户信息',680,560,true,false,false,editbtn,'edit',true);"><if condition="$vo['status'] eq 2">审核<else />编辑</if></a>
+                                            <a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('User/send_coupon',array('uid'=>$vo['uid']))}','发优惠券',700,400,true,false,false,'','edit',true)">发优惠劵</a>
+                                        </td>
 									</tr>
 								</volist>
-								<tr><td class="textcenter pagebar" colspan="10">{pigcms{$pagebar}</td></tr>
+								<tr>
+                                    <td class="textcenter pagebar">
+                                        <span style="cursor: pointer" id="select_all">全选</span>
+                                    </td>
+                                    <td class="textcenter pagebar">
+                                        <span style="cursor: pointer" id="send_all">群发优惠劵</span>
+                                    </td>
+                                    <td class="textcenter pagebar" colspan="9">{pigcms{$pagebar}</td>
+                                </tr>
 							<else/>
-								<tr><td class="textcenter red" colspan="10">列表为空！</td></tr>
+								<tr><td class="textcenter red" colspan="11">列表为空！</td></tr>
 							</if>
 						</tbody>
 					</table>
 				</div>
 			</form>
 		</div>
+<script type="text/javascript">
+    $("#select_all").click(function(){
+        var is_all = true;
+        var groupCheckbox=$("input[name='check']");
+        for(i=0;i<groupCheckbox.length;i++){
+            if(groupCheckbox[i].checked){
+
+            }else{
+                is_all = false;
+            }
+        }
+        $("input[name='check']").prop("checked",!is_all);
+    });
+    $("#send_all").click(function () {
+        var ua = "";
+        var groupCheckbox=$("input[name='check']");
+        for(i=0;i<groupCheckbox.length;i++){
+            if(groupCheckbox[i].checked){
+                var val =groupCheckbox[i].value;
+                if(ua == "")
+                    ua = val;
+                else
+                    ua = ua + "," + val;
+            }
+        }
+
+        if(ua == "")
+            alert("请选择用户");
+        else
+            window.top.artiframe("{pigcms{:U('User/send_coupon',array('uid'=>'"+ua+"'))}",'发优惠券',700,400,true,false,false,'','edit',true)
+    })
+</script>
 <include file="Public:footer"/>

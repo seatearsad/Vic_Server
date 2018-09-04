@@ -60,6 +60,17 @@
 					<li <if condition="in_array(MODULE_NAME,array('Adress'))">class="current"</if>><a href="{pigcms{:U('Adress/index')}">{pigcms{:L('_B_PURE_MY_58_')}</a></li>
 				</ul>
 			</dd>
+            <dt><strong>{pigcms{:L('_B_PURE_MY_46_')}</strong></dt>
+            <dd>
+                <ul class="item-list">
+                    <li <if condition="MODULE_NAME eq 'Coupon' AND ACTION_NAME eq 'index'">class="current"</if>>
+                        <a href="{pigcms{:U('Coupon/index')}">{pigcms{:L('_PLATFORM_COUP_')}</a>
+                    </li>
+                    <li <if condition="MODULE_NAME eq 'Coupon' AND ACTION_NAME eq 'exchange'">class="current"</if>>
+                        <a href="{pigcms{:U('Coupon/exchange')}">{pigcms{:L('_EXCHANGE_COUPON_')}</a>
+                    </li>
+                </ul>
+            </dd>
             <!--
 			<if condition="$config['portal_switch'] eq 1">
 				<dt><strong>我的门户</strong></dt>
