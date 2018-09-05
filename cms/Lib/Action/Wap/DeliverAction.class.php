@@ -1033,7 +1033,7 @@ class DeliverAction extends BaseAction
 			$where = array();
 			$where['order_id'] = $supply['order_id'];
 			$order = D("Shop_order")->where($where)->find();
-			
+
 			if (empty($order)) {
 				$this->error_tips("订单信息有误");
 				exit;
@@ -1042,6 +1042,7 @@ class DeliverAction extends BaseAction
 			$order['discount_price'] = $order['price'];
 			$order['cue_field'] = $order['cue_field'] ? unserialize($order['cue_field']) : '';
 			$this->assign('order', $order);
+
 			$goods = D('Shop_order_detail')->field(true)->where(array('order_id' => $supply['order_id']))->select();
 			foreach ($goods as &$g) {
                 $g_id = $g['goods_id'];

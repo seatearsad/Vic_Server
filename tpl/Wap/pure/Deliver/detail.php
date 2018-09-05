@@ -47,7 +47,8 @@
 
         <div class="details_list">
             <p class="c9 f14">数量：{pigcms{$order['num']}</p>
-            <p class="f16 red">实际支付：${pigcms{$order['price']|floatval}</p>
+            <p class="c9 f14">总金额：{pigcms{$order['price']|floatval}</p>
+            <p class="f16 red">实际需支付：${pigcms{$supply['deliver_cash']|floatval}</p>
             <p class="f14 bur">支付方式： {pigcms{$order['pay_type']}</p>
             <p class="f12 red">配送距离{pigcms{$supply['distance']}公里，配送费{pigcms{$supply['freight_charge']}元</p>
         </div>

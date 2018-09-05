@@ -117,8 +117,8 @@
 									<td>{pigcms{$vo.store_phone}</td>
 									<td>{pigcms{$vo.username}</td>
 									<td>{pigcms{$vo.userphone}</td>
-									<td>${pigcms{$vo['total_price']|floatval}</td>
-									<td>${pigcms{$vo.balance_reduce|floatval}</td>
+									<td>${pigcms{$vo['offline_price']|floatval}</td>
+									<td>${pigcms{$vo.coupon_price|floatval}</td>
 									<td>${pigcms{$vo.merchant_reduce|floatval}</td>
 									<td>${pigcms{$vo.price|floatval}</td>
 									<td>${pigcms{$vo['duty_price']|floatval}</td>

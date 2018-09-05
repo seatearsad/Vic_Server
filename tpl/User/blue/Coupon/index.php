@@ -97,8 +97,8 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
                                                                     <div class="fltop">
                                                                         <i>$</i><em>{pigcms{$vo.discount}</em>
                                                                     </div>
-                                                                    <div class="flend">
-                                                                        满{pigcms{:floatval($vo['order_money'])}减{pigcms{$vo.discount}
+                                                                    <div class="flend" style="line-height: 14px;">
+                                                                        {pigcms{:replace_lang_str(L('_MAN_NUM_REDUCE_'),$vo['order_money'])}{pigcms{:replace_lang_str(L('_MAN_REDUCE_NUM_'),$vo['discount'])}
                                                                     </div>
                                                                 </div>
                                                                 <div class="fr">
