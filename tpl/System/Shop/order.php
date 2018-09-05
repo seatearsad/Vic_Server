@@ -117,10 +117,10 @@
 									<td>{pigcms{$vo.store_phone}</td>
 									<td>{pigcms{$vo.username}</td>
 									<td>{pigcms{$vo.userphone}</td>
-									<td>${pigcms{$vo['offline_price']|floatval}</td>
+									<td>${pigcms{$vo['price']|floatval}</td>
 									<td>${pigcms{$vo.coupon_price|floatval}</td>
 									<td>${pigcms{$vo.merchant_reduce|floatval}</td>
-									<td>${pigcms{$vo.price|floatval}</td>
+									<td>${pigcms{$vo.offline_price|floatval}</td>
 									<td>${pigcms{$vo['duty_price']|floatval}</td>
 									<td><if condition="$vo['pay_time']"> {pigcms{$vo['pay_time']|date="Y-m-d H:i:s",###}</if></td>
 									<td><if condition="$vo['use_time']">{pigcms{$vo['use_time']|date="Y-m-d H:i:s",###}</if></td>

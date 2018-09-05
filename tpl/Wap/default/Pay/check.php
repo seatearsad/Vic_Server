@@ -719,7 +719,16 @@
                                 <a class="react" href="{pigcms{:U('My/select_card',($coupon_url ? $coupon_url :$_GET))}&coupon_type=system">
                                     <div class="more more-weak">
                                         <h6>{pigcms{:L('_PLATFORM_COUP_')}</h6>
-                                        <span class="more-after"  style="color:red;"><?php if($system_coupon){ ?>满{pigcms{$system_coupon.order_money}减{pigcms{$system_coupon.discount}<?php }else{ ?>{pigcms{:L('_USE_COUP_')}<?php } ?></span>
+                                        <span class="more-after"  style="color:red;">
+                                            <?php if($system_coupon){ ?>
+                                                <php>if(C('DEFAULT_LANG') == 'zh-cn'){</php>
+                                                {pigcms{:replace_lang_str(L('_MAN_NUM_REDUCE_'),$system_coupon['order_money'])}{pigcms{:replace_lang_str(L('_MAN_REDUCE_NUM_'),$system_coupon['discount'])}
+                                                <php>}else{</php>
+                                                {pigcms{:replace_lang_str(L('_MAN_NUM_REDUCE_'),$system_coupon['discount'])}{pigcms{:replace_lang_str(L('_MAN_REDUCE_NUM_'),$system_coupon['order_money'])}
+                                                <php>}</php>
+                                            <?php }else{ ?>
+                                                {pigcms{:L('_USE_COUP_')}
+                                            <?php } ?></span>
                                     </div>
                                 </a>
                             <?php } ?>

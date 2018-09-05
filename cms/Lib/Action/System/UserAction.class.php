@@ -836,10 +836,28 @@ class UserAction extends BaseAction {
 
         if (count($uList) == 1){
             $result = D('System_coupon')->had_pull($coupon_id,$uid);
+            if($result['error_code'] == 0){
+                $sms_data['uid'] = $uid;
+                $userInfo = D('User')->get_user($uid);
+                $sms_data['mobile'] = $userInfo['phone'];
+                $sms_data['sendto'] = 'user';
+                $sms_data['tplid'] = 188130;
+                $sms_data['params'] = [];
+                Sms::sendSms2($sms_data);
+            }
             exit(json_encode($result));
         }else{
             foreach($uList as $v){
-                D('System_coupon')->had_pull($coupon_id,$v);
+                $result = D('System_coupon')->had_pull($coupon_id,$v);
+                if($result['error_code'] == 0){
+                    $sms_data['uid'] = $v;
+                    $userInfo = D('User')->get_user($v);
+                    $sms_data['mobile'] = $userInfo['phone'];
+                    $sms_data['sendto'] = 'user';
+                    $sms_data['tplid'] = 188130;
+                    $sms_data['params'] = [];
+                    Sms::sendSms2($sms_data);
+                }
             }
 
             echo json_encode(array('error_code'=> 0,'msg'=>''));

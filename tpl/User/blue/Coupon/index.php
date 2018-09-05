@@ -98,7 +98,11 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
                                                                         <i>$</i><em>{pigcms{$vo.discount}</em>
                                                                     </div>
                                                                     <div class="flend" style="line-height: 14px;">
+                                                                        <php>if(C('DEFAULT_LANG') == 'zh-cn'){</php>
                                                                         {pigcms{:replace_lang_str(L('_MAN_NUM_REDUCE_'),$vo['order_money'])}{pigcms{:replace_lang_str(L('_MAN_REDUCE_NUM_'),$vo['discount'])}
+                                                                        <php>}else{</php>
+                                                                        {pigcms{:replace_lang_str(L('_MAN_NUM_REDUCE_'),$vo['discount'])}{pigcms{:replace_lang_str(L('_MAN_REDUCE_NUM_'),$vo['order_money'])}
+                                                                        <php>}</php>
                                                                     </div>
                                                                 </div>
                                                                 <div class="fr">

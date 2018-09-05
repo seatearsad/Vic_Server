@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="utf-8"/>
-		<title>选择优惠券</title>
+		<title>{pigcms{:L('_SELECT_COUPON_')}</title>
 		<meta name="viewport" content="initial-scale=1, width=device-width, maximum-scale=1, user-scalable=no">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name='apple-touch-fullscreen' content='yes'>
@@ -216,11 +216,11 @@
 				<ul class="orderindex">
 					<li><a href="{pigcms{:U('My/select_card',array('coupon_type'=>'system','order_id'=>$_GET['order_id'],'type'=>$_GET['type']))}" class="react <if condition="(empty($_GET['coupon_type'])) OR ($_GET['coupon_type'] eq 'system')">hover</if>">
 						<i class="text-icon">⌺</i>
-						<span>平台优惠券</span>
+						<span>{pigcms{:L('_PLATFORM_COUP_')}</span>
 					</a>
 					</li><li><a href="{pigcms{:U('My/select_card',array('coupon_type'=>'mer','order_id'=>$_GET['order_id'],'type'=>$_GET['type']))}" class="react <if condition="$_GET['coupon_type'] == 'mer'">hover</if>">
 						<i class="text-icon">⌸</i>
-						<span>商家优惠券</span>
+						<span>{pigcms{:L('_SHOP_COUP_')}</span>
 					</a>
 					</li>
 				</ul>
@@ -234,7 +234,7 @@
 							<div class="address-select"><input class="mt" type="radio" name="addr" ></div>
 							<div class="address-container">
 								<div class="kv-line">
-									<h6>不使用优惠券</h6>
+									<h6>{pigcms{:L('_NOT_USE_COUPONE_')}</h6>
 								</div>
 							
 							</div>
@@ -248,13 +248,16 @@
 							<div class="address-select"><input class="mt" type="radio" name="addr" <if condition="$vo['id'] eq $_GET['merc_id']">checked="checked"</if>/></div>
 							<div class="address-container">
 								<div class="kv-line">
-									<h6>条件：</h6><p>满{pigcms{$vo.order_money}元可用</p>
+									<h6>{pigcms{:L('_PURCHASE_TXT_')}：</h6>
+                                    <p>
+                                        {pigcms{:replace_lang_str(L('_MAN_CAN_USE_'),$vo['order_money'])}
+                                    </p>
 								</div>
 								<div class="kv-line">
-									<h6>金额：</h6><p>${pigcms{$vo.discount}</p>
+									<h6>{pigcms{:L('_MONEY_NUM_')}：</h6><p>${pigcms{$vo.discount}</p>
 								</div>
 								<div class="kv-line">
-									<h6>有效期：</h6><p>{pigcms{$vo.end_time|date='Y年m月d日',###}</p>
+									<h6>{pigcms{:L('_EXPIRE_DATE_')}：</h6><p>{pigcms{$vo.end_time|date='Y/m/d',###}</p>
 								</div>
 							</div>
 						</a>
@@ -270,7 +273,7 @@
 							<div class="address-select"><input class="mt" type="radio" name="addr"></div>
 							<div class="address-container">
 								<div class="kv-line">
-									<h6>不使用优惠券</h6>
+									<h6>{pigcms{:L('_NOT_USE_COUPONE_')}</h6>
 								</div>
 							
 							</div>
@@ -284,13 +287,16 @@
 							<div class="address-select"><input class="mt" type="radio" name="addr" <if condition="$vo['id'] eq $_GET['sysc_id']">checked="checked"</if>/></div>
 							<div class="address-container">
 								<div class="kv-line">
-									<h6>条件：</h6><p>满{pigcms{$vo.order_money}元可用</p>
+									<h6>{pigcms{:L('_PURCHASE_TXT_')}：</h6>
+                                    <p>
+                                        {pigcms{:replace_lang_str(L('_MAN_CAN_USE_'),$vo['order_money'])}
+                                    </p>
 								</div>
 								<div class="kv-line">
-									<h6>金额：</h6><p>${pigcms{$vo.discount}</p>
+									<h6>{pigcms{:L('_MONEY_NUM_')}：</h6><p>${pigcms{$vo.discount}</p>
 								</div>
 								<div class="kv-line">
-									<h6>有效期：</h6><p>{pigcms{$vo.end_time|date='Y年m月d日',###}</p>
+									<h6>{pigcms{:L('_EXPIRE_DATE_')}：</h6><p>{pigcms{$vo.end_time|date='Y/m/d',###}</p>
 								</div>
 							</div>
 						</a>
@@ -298,7 +304,7 @@
 				</dl>
 			</volist>
 		<else/>
-			<div id="tips" class="tips" style="display:block;">您没有可用的优惠券</div>
+			<div id="tips" class="tips" style="display:block;">{pigcms{:L('_UNAVAILABLE_COUP_')}</div>
 		</if>
     	<script src="{pigcms{:C('JQUERY_FILE')}"></script>
 		<script src="{pigcms{$static_path}js/common_wap.js"></script>
