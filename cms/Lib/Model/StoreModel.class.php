@@ -510,4 +510,35 @@ class StoreModel extends Model
 
         return $result;
     }
+
+    public function getDefaultAdr($uid){
+        $addressModle = D('User_adress');
+
+        $address = $addressModle->field(true)->where(array('uid'=>$uid,'default'=>1))->find();
+        if ($address == null)
+            $address = $addressModle->field(true)->where(array('uid'=>$uid))->find();
+
+        if($address != null)
+            $result = arrange_address($address);
+
+        return $result;
+    }
+
+    public function arrange_address($address){
+        $data['rowID'] = $address['adress_id'];
+        $data['zoneID'] = $address['city'];
+        $data['zoneName'] = '';
+        $data['areaName'] = $address['areaName'];
+        $data['userName'] = $address['name'];
+        $data['phoneNum'] = $address['phone'];
+        $data['address'] = $address['adress'];
+        $data['isDefault'] = $address['default'];
+        $data['mapAddress'] = $address['adress'];
+        $data['mapNumber'] = $address['zipcode'];
+        $data['mapLat'] = $address['latitude'];
+        $data['mapLng'] = $address['longitude'];
+        $data['mapLocation'] = $address['detail'];
+
+        return $data;
+    }
 }

@@ -291,7 +291,7 @@ cursor: pointer;
 				</tr>
 				<if condition="$order['freight_charge'] gt 0">
 				<tr>
-					<td>{pigcms{$store['freight_alias']|default='Delivery Charge'}</td>
+					<td>Delivery Charge</td>
 					<td class="cc"></td>
 					<td class="cc"></td>
 					<td class="rr">${pigcms{$order['freight_charge']|floatval}</td>
@@ -299,7 +299,7 @@ cursor: pointer;
 				</if>
 				<if condition="$order['packing_charge'] gt 0">
 				<tr>
-					<td>{pigcms{$store['pack_alias']|default='Packageing Fee'}</td>
+					<td>Packageing Fee</td>
 					<td class="cc"></td>
 					<td class="cc"></td>
 					<td class="rr">${pigcms{$order['packing_charge']|floatval}</td>

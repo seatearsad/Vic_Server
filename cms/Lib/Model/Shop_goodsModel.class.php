@@ -1630,10 +1630,14 @@ class Shop_goodsModel extends Model
                     } else {
                         foreach ($r['data'] as $d) {
                             $str_p[] = $d['name'];
+                            $pro_ids[] = $d['list_id'].','.$d['id'];
                         }
                     }
                 }
                 $spec_str = $spec_ids ? implode('_', $spec_ids) : '';
+
+                $pro_str = $pro_ids ? implode('|',$pro_ids) : '';
+
                 $t_return = $this->check_stock($goods_id, $num, $spec_str, $store_shop['stock_type'], $store_id);
                 if ($t_return['status'] == 0) {
                     return array('error_code' => true, 'msg' => $t_return['msg']);
@@ -1741,6 +1745,7 @@ class Shop_goodsModel extends Model
                     'unit' => $t_return['unit'],
                     'str' => $str,
                     'spec_id' => $spec_str,
+                    'pro_id' => $pro_str,
                     'extra_price' => $row['productExtraPrice']
                 );
             }

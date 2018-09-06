@@ -1441,12 +1441,38 @@ class StorestaffAction extends BaseAction
                 }
             }
             //add garfunkel
-            $lang = $_COOKIE['language'] == 'cn' ? 'zh-cn' : 'en-us';
+            $lang = $this->language == 'cn' ? 'zh-cn' : 'en-us';
             foreach ($order['info'] as $k => $v){
                 $g_id = $v['goods_id'];
                 $goods = D('Shop_goods')->get_goods_by_id($g_id);
                 $order['info'][$k]['unit'] = lang_substr($goods['unit'],$lang);
                 $order['info'][$k]['name'] = lang_substr($goods['name'],$lang);
+                //garfunkel 显示规格和分类
+                $spec_desc = '';
+                $spec_ids = explode('_',$v['spec_id']);
+                foreach ($spec_ids as $vv){
+                    $spec = D('Shop_goods_spec_value')->field(true)->where(array('id'=>$vv))->find();
+                    $spec_desc = $spec_desc == '' ? lang_substr($spec['name'],$lang) : $spec_desc.','.lang_substr($spec['name'],$lang);
+                }
+
+                if($v['pro_id'] != '')
+                    $pro_ids = explode('|',$v['pro_id']);
+                else
+                    $pro_ids = array();
+                
+                foreach ($pro_ids as $vv){
+                    $ids = explode(',',$vv);
+                    $proId = $ids[0];
+                    $sId = $ids[1];
+
+                    $pro = D('Shop_goods_properties')->field(true)->where(array('id'=>$proId))->find();
+                    $nameList = explode(',',$pro['val']);
+                    $name = lang_substr($nameList[$sId],$lang);
+
+                    $spec_desc = $spec_desc == '' ? $name : $spec_desc.','.$name;
+                }
+                if ($spec_desc != '')
+                    $order['info'][$k]['spec'] = $spec_desc;
             }
             //
             $this->assign('store', D('Merchant_store_shop')->field(true)->where(array('store_id' => $store_id))->find());

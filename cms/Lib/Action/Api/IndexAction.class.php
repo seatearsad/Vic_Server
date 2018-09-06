@@ -171,4 +171,12 @@ class IndexAction extends BaseAction
 
         $this->returnCode(0,'',$result,'success');
     }
+
+    public function getUserDefaultAddress(){
+        $uid = $_POST['uid'];
+
+        $result = $this->loadModel()->getDefaultAdr($uid);
+
+        var_dump($result);
+    }
 }
