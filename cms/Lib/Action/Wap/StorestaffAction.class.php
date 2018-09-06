@@ -1459,7 +1459,7 @@ class StorestaffAction extends BaseAction
                     $pro_ids = explode('|',$v['pro_id']);
                 else
                     $pro_ids = array();
-                
+
                 foreach ($pro_ids as $vv){
                     $ids = explode(',',$vv);
                     $proId = $ids[0];

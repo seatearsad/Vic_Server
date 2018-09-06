@@ -1067,7 +1067,7 @@ class ShoporderAction extends BaseAction
     			$detail_obj = D('Shop_order_detail');
 				$goods_obj = D("Shop_goods");
 				foreach ($return['goods'] as $grow) {
-					$detail_data = array('store_id' => $return['store_id'], 'order_id' => $order_id, 'number' => isset($grow['number']) && $grow['number'] ? $grow['number'] : '', 'cost_price' => $grow['cost_price'], 'unit' => $grow['unit'], 'goods_id' => $grow['goods_id'], 'name' => $grow['name'], 'price' => $grow['price'], 'num' => $grow['num'], 'spec' => $grow['str'], 'spec_id' => $grow['spec_id'], 'create_time' => time(),'extra_price'=>$grow['extra_price']);
+					$detail_data = array('store_id' => $return['store_id'], 'order_id' => $order_id, 'number' => isset($grow['number']) && $grow['number'] ? $grow['number'] : '', 'cost_price' => $grow['cost_price'], 'unit' => $grow['unit'], 'goods_id' => $grow['goods_id'], 'name' => $grow['name'], 'price' => $grow['price'], 'num' => $grow['num'], 'spec' => $grow['str'], 'spec_id' => $grow['spec_id'], 'pro_id' => $grow['pro_id'],'create_time' => time(),'extra_price'=>$grow['extra_price']);
 					$detail_data['is_seckill'] = intval($grow['is_seckill_price']);
 					$detail_data['discount_type'] = intval($grow['discount_type']);
 					$detail_data['discount_rate'] = $grow['discount_rate'];
