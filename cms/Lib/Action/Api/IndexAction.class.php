@@ -175,8 +175,66 @@ class IndexAction extends BaseAction
     public function getUserDefaultAddress(){
         $uid = $_POST['uid'];
 
-        $result = $this->loadModel()->getDefaultAdr($uid);
+        $adr = $this->loadModel()->getDefaultAdr($uid);
 
-        var_dump($result);
+        if ($adr == null)
+            $this->returnCode(1,'info',array(),'success');
+        else{
+            $result[] = $adr;
+            $this->returnCode(0,'info',$result,'success');
+        }
+    }
+
+    public function getUserAddress(){
+        $uid = $_POST['uid'];
+
+        $result = $this->loadModel()->getUserAdr($uid);
+
+        $this->returnCode(0,'info',$result,'success');
+    }
+
+    public function addUserAddress(){
+        $data['uid'] = $_POST['uid'];
+        $data['adress_id'] = $_POST['itemid'];
+        $data['name'] = $_POST['uname'];
+        $data['phone'] = $_POST['phone'];
+        $data['adress'] = $_POST['map_addr'];
+        $data['zipcode'] = $_POST['map_number'];
+        $data['longitude'] = $_POST['lng'];
+        $data['latitude'] = $_POST['lat'];
+        $data['detail'] = $_POST['map_location'];
+
+        $result = $this->loadModel()->addUserAddress($data);
+
+        $this->returnCode(0,'info',$result,'success');
+    }
+
+    public function delUserAddress(){
+        $uid = $_POST['uid'];
+        $aid = $_POST['itemid'];
+
+        $this->loadModel()->delUserAddress($uid,$aid);
+
+        $this->returnCode(0,'info',array(),'success');
+    }
+
+    public function setDefaultAdr(){
+        $uid = $_POST['uid'];
+        $aid = $_POST['itemid'];
+
+        $this->loadModel()->setDefaultAdr($uid,$aid);
+
+        $this->returnCode(0,'info',array(),'success');
+    }
+
+    public function confirmCart(){
+        $uid = $_POST['uid'];
+        $cartList = $_POST['cart_list'];
+
+        $cart_array = json_decode(html_entity_decode($cartList),true);
+
+        $result = D('Cart')->getCartList($uid,$cart_array);
+
+        $this->returnCode(0,'',$result,'success');
     }
 }

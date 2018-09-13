@@ -1041,6 +1041,9 @@ class DeliverAction extends BaseAction
 			$order['pay_type'] = D('Pay')->get_pay_name($order['pay_type'], $order['is_mobile_pay'], $order['paid']);
 			$order['discount_price'] = $order['price'];
 			$order['cue_field'] = $order['cue_field'] ? unserialize($order['cue_field']) : '';
+
+			//garfunkel add
+            $order['deliver_cash'] = $order['price'] - $order['coupon_price'] - $order['score_deducte'];
 			$this->assign('order', $order);
 
 			$goods = D('Shop_order_detail')->field(true)->where(array('order_id' => $supply['order_id']))->select();

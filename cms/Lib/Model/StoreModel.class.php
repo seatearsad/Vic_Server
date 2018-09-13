@@ -519,16 +519,64 @@ class StoreModel extends Model
             $address = $addressModle->field(true)->where(array('uid'=>$uid))->find();
 
         if($address != null)
-            $result = arrange_address($address);
+            $result = $this->arrange_address($address);
 
         return $result;
+    }
+
+    public function getUserAdr($uid){
+        $addressModle = D('User_adress');
+
+        $adr = $addressModle->field(true)->where(array('uid'=>$uid))->order('`default` DESC')->select();
+
+        foreach ($adr as $v){
+            $result[] = $this->arrange_address($v);
+        }
+
+        return $result;
+    }
+
+    public function setDefaultAdr($uid,$aid){
+        $addressModle = D('User_adress');
+
+        return $addressModle->set_default($uid,$aid);
+    }
+
+    public function addUserAddress($data){
+        $addressModle = D('User_adress');
+        if($data['adress_id'] != 0){
+            $condition_user_adress['adress_id'] = $data['adress_id'];
+            $condition_user_adress['uid'] = $data['uid'];
+            if(!empty($data['default'])){
+                $condition_default_user_adress['uid'] = $data['uid'];
+                $addressModle->where($condition_default_user_adress)->setField('default','0');
+            }else{
+                $data['default'] = 0;
+            }
+
+            return $addressModle->where($condition_user_adress)->data($data)->save();
+        }else{
+            if(!empty($_POST['default'])){
+                $condition_default_user_adress['uid'] = $data['uid'];
+                $addressModle->where($condition_default_user_adress)->setField('default','0');
+            }else{
+                $data['default'] = 0;
+            }
+            return $addressModle->data($data)->add();
+        }
+    }
+
+    public function delUserAddress($uid,$aid){
+        $addressModle = D('User_adress');
+
+        return $addressModle->delete_adress($uid,$aid);
     }
 
     public function arrange_address($address){
         $data['rowID'] = $address['adress_id'];
         $data['zoneID'] = $address['city'];
         $data['zoneName'] = '';
-        $data['areaName'] = $address['areaName'];
+        $data['areaName'] = $address['area'];
         $data['userName'] = $address['name'];
         $data['phoneNum'] = $address['phone'];
         $data['address'] = $address['adress'];
@@ -540,5 +588,43 @@ class StoreModel extends Model
         $data['mapLocation'] = $address['detail'];
 
         return $data;
+    }
+
+    public function CalculationDeliveryFee($uid,$sid){
+        $address = $this->getDefaultAdr($uid);
+        $store = $this->get_store_by_id($sid);
+
+        $distance = getDistance($address['mapLat'], $address['mapLng'], $store['lat'], $store['long']);
+        $distance = $distance / 1000;
+
+        $deliveryCfg = [];
+        $deliverys = D("Config")->get_gid_config(20);
+        foreach($deliverys as $r){
+            $deliveryCfg[$r['name']] = $r['value'];
+        }
+
+        if($distance < 5) {
+            $delivery_fee = round($deliveryCfg['delivery_distance_1'], 2);
+        }elseif($distance > 5 && $distance <= 8) {
+            $delivery_fee = round($deliveryCfg['delivery_distance_2'], 2);
+        }elseif($distance > 8 && $distance <= 10) {
+            $delivery_fee = round($deliveryCfg['delivery_distance_3'], 2);
+        }elseif($distance > 10 && $distance <= 15) {
+            $delivery_fee = round($deliveryCfg['delivery_distance_4'], 2);
+        }elseif($distance > 15 && $distance <= 20) {
+            $delivery_fee = round($deliveryCfg['delivery_distance_5'], 2);
+        }else{
+            $delivery_fee = round($deliveryCfg['delivery_distance_more'], 2);
+        }
+
+        return $delivery_fee;
+    }
+
+    public function get_store_delivery_time($sid){
+        $shop_store = D("Merchant_store_shop")->field(true)->where(array('store_id' => $sid))->find();
+
+        $delivery_time = time() + $shop_store['send_time']*60;
+        
+        return $delivery_time;
     }
 }

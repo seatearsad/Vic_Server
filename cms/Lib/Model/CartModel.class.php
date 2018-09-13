@@ -76,4 +76,48 @@ class CartModel extends Model
 
         return $result;
     }
+
+    public function getCartList($uid,$cartList){
+        $list = array();
+        $total_price = 0;
+        $total_market_price = 0;
+        $total_pay_price = 0;
+
+        foreach ($cartList as $v){
+            $good = D('Shop_goods')->field(true)->where(array('goods_id' => $v['fid']))->find();
+            $t_good['fname'] = $good['name'];
+            $t_good['stock'] = $v['stock'];
+            $t_good['attr'] = $good['unit'];
+            $t_good['price'] = $good['price'];
+
+            $total_price += $good['price'];
+            $total_pay_price += $good['price'];
+            $total_market_price += $good['old_price'];
+
+            $list[] = $t_good;
+        }
+
+        $result['info'] = $list;
+
+        $sid = $this->field(true)->where(array('uid'=>$uid,'fid'=>$cartList[0]['fid']))->find()['sid'];
+        $store = D('Store')->get_store_by_id($sid);
+        $result['packing_fee'] = $store['pack_fee'];
+        $total_pay_price += $store['pack_fee'];
+        //获取配送费
+        $delivey_fee = D('Store')->CalculationDeliveryFee($uid,$sid);
+        $result['ship_fee'] = $delivey_fee;
+        $total_pay_price += $delivey_fee;
+        //获取预计到达时间
+        $delivery_time = D('Store')->get_store_delivery_time($sid);
+
+        $result['expect_time'] = date('Y-m-d H:i',$delivery_time);
+        $result['hongbao'] = array();
+        $result['total_market_price'] = $total_market_price;
+        $result['food_total_price'] = $total_price;
+        $result['total_pay_price'] = $total_pay_price * 1.05;
+
+        $result['full_discount'] = '0';
+
+        return $result;
+    }
 }
