@@ -373,7 +373,7 @@ class StoreModel extends Model
             $returnList[$k]['fid'] = $v['goods_id'];
             $returnList[$k]['group_id'] = $v['sort_id'];
             $returnList[$k]['sid'] = $v['store_id'];
-            $returnList[$k]['name'] = $v['name'];
+            $returnList[$k]['name'] = lang_substr($v['name'],C('DEFAULT_LANG'));
             $returnList[$k]['price'] = $v['price'];
             $returnList[$k]['market_price'] = $v['old_price'];
             $returnList[$k]['stock'] = 10000;//库存
@@ -386,6 +386,40 @@ class StoreModel extends Model
             $returnList[$k]['sales'] = $v['sell_mouth'];
             //购物车使用
             $returnList[$k]['quantity'] = empty($v['quantity'])? "0" : $v['quantity'];
+            $returnList[$k]['spec'] = empty($v['spec']) ? "" : $v['spec'];
+            $returnList[$k]['proper'] = empty($v['proper']) ? "" : $v['proper'];
+            //是否有规格及属性选择
+            if($v['spec_value'] || $v['is_properties'])
+                $returnList[$k]['has_format'] = true;
+            else
+                $returnList[$k]['has_format'] = false;
+
+            $spec_desc = "";
+            if($returnList[$k]['spec'] != ""){
+                $spec_list = explode("_",$returnList[$k]['spec']);
+                foreach($spec_list as $vv){
+                    $spec = D('Shop_goods_spec_value')->field(true)->where(array('id'=>$vv))->find();
+                    $spec_desc = $spec_desc == '' ? lang_substr($spec['name'],C('DEFAULT_LANG')) : $spec_desc.','.lang_substr($spec['name'],C('DEFAULT_LANG'));
+                }
+            }
+            $returnList[$k]['spec_desc'] = $spec_desc;
+
+            $proper_desc = "";
+            if($returnList[$k]['proper'] != ""){
+                $pro_list = explode("_",$returnList[$k]['proper']);
+                foreach ($pro_list as $vv){
+                    $ids = explode(',',$vv);
+                    $proId = $ids[0];
+                    $sId = $ids[1];
+
+                    $pro = D('Shop_goods_properties')->field(true)->where(array('id'=>$proId))->find();
+                    $nameList = explode(',',$pro['val']);
+                    $name = lang_substr($nameList[$sId],C('DEFAULT_LANG'));
+
+                    $proper_desc = $proper_desc == '' ? $name : $proper_desc.','.$name;
+                }
+            }
+            $returnList[$k]['proper_desc'] = $proper_desc;
         }
 
         return $returnList;
@@ -626,5 +660,31 @@ class StoreModel extends Model
         $delivery_time = time() + $shop_store['send_time']*60;
         
         return $delivery_time;
+    }
+
+    public function getPayTypeName($type){
+        $r_name = "";
+        if($type == 1 || $type == '1'){
+            $r_name = L('_ALIPAY_TXT_');
+        }elseif($type == 2 || $type == '2'){
+            $r_name = L('_WEICHAT_PAY_');
+        }else{
+            $r_name = L('_OFFLINE_PAY_');
+        }
+
+        return $r_name;
+    }
+
+    public function getOrderStatusStr($status){
+        $status_list = array('下单成功', '支付成功', '店员已接单', '配送员已接单', '配送员已取货' , '配送员配送中', '配送结束', '店员验证消费', '完成评论', '已完成退款', '已取消订单', '商家分配自提点', '商家发货到自提点', '自提点已接货', '自提点已发货', '您在自提完成取货', 30 => '店员修改价格');
+
+        return $status_list[$status];
+    }
+
+    public function getOrderStatusName($status){
+        $name_list = array(L('_B_PURE_MY_71_'),L('_B_PURE_MY_72_'),L('_B_PURE_MY_73_'),L('_B_PURE_MY_74_'),L('_B_PURE_MY_75_')
+        ,L('_B_PURE_MY_76_'),L('_B_PURE_MY_77_'),L('_B_PURE_MY_78_'),L('_B_PURE_MY_79_'),L('_B_PURE_MY_80_'));
+
+        return $name_list[$status];
     }
 }

@@ -158,8 +158,22 @@ class IndexAction extends BaseAction
         $uid = $_POST['uid'];
         $fid = $_POST['fid'];
         $num = !empty($_POST['num']) ? $_POST['num']:1;
+        $spec = empty($_POST['spec']) ? "" : $_POST['spec'];
+        $proper = empty($_POST['proper']) ? "" : $_POST['proper'];
 
-        D('Cart')->add_cart($uid,$fid,$num);
+        D('Cart')->add_cart($uid,$fid,$num,$spec,$proper);
+
+        $this->returnCode(0,'info',array(),'success');
+    }
+
+    public function addCartAndSpec(){
+        $uid = $_POST['uid'];
+        $fid = $_POST['fid'];
+        $num = !empty($_POST['num']) ? $_POST['num']:1;
+        $spec = $_POST['spec'];
+        $proper = $_POST['proper'];
+
+        D('Cart')->add_cart($uid,$fid,$num,$spec,$proper);
 
         $this->returnCode(0,'info',array(),'success');
     }
@@ -234,6 +248,323 @@ class IndexAction extends BaseAction
         $cart_array = json_decode(html_entity_decode($cartList),true);
 
         $result = D('Cart')->getCartList($uid,$cart_array);
+
+        $this->returnCode(0,'',$result,'success');
+    }
+
+    public function saveOrder(){
+        $uid = $_POST['uid'];
+        $cartList = $_POST['cart_list'];
+        $note = $_POST['order_mark'];
+
+        $adr_id = $_POST['addr_item_id'];
+
+        $cart_array = json_decode(html_entity_decode($cartList),true);
+
+        $orderData = array();
+        foreach ($cart_array as $v){
+            $good = D('Shop_goods')->field(true)->where(array('goods_id' => $v['fid']))->find();
+            $t_good['productId'] = $v['fid'];
+            $t_good['productName'] = lang_substr($good['name'],C('DEFAULT_LANG'));
+            $specData = D('Shop_goods')->format_spec_value($good['spec_value'], $good['goods_id'], $good['is_properties']);
+            if($specData['list'] != "" && $v['spec'] != ""){
+                foreach ($specData['list'] as $kk=>$vv){
+                    if($v['spec'] == $kk){
+                        $good['price'] = $vv['price'];
+                    }
+                }
+            }
+            $t_good['productPrice'] = $good['price'];
+            $t_good['productStock'] = $good['stock_num'];
+            $t_good['productParam'] = array();
+            if($v['spec'] != ''){
+                $spec_list = explode('_',$v['spec']);
+                foreach ($spec_list as $vv){
+                    $t_spec['id'] = $vv;
+                    $t_spec['type'] = 'spec';
+                    $spec = D('Shop_goods_spec_value')->field(true)->where(array('id'=>$vv))->find();
+                    $t_spec['name'] = lang_substr($spec['name'],C('DEFAULT_LANG'));
+
+                    $t_good['productParam'][] = $t_spec;
+                }
+            }
+            if($v['proper'] != ''){
+                $pro_list = explode('_',$v['proper']);
+                foreach ($pro_list as $vv){
+                    $t_pro['type'] = 'pro';
+
+                    $ids = explode(',',$vv);
+                    $proId = $ids[0];
+                    $sId = $ids[1];
+
+                    $pro = D('Shop_goods_properties')->field(true)->where(array('id'=>$proId))->find();
+                    $nameList = explode(',',$pro['val']);
+                    $name = lang_substr($nameList[$sId],C('DEFAULT_LANG'));
+
+                    $t_pro['data'][] = array('list_id' => $proId,'id' => $sId,'name'=>$name);
+
+                    $t_good['productParam'][] = $t_pro;
+                }
+            }
+
+            $t_good['count'] = $v['stock'];
+
+            $orderData[] = $t_good;
+        }
+
+        $sid = D('Cart')->field(true)->where(array('uid'=>$uid,'fid'=>$cart_array[0]['fid']))->find()['sid'];
+
+        $return = D('Shop_goods')->checkCart($sid, $uid, $orderData);
+
+        $now_time = time();
+        $order_data = array();
+        $order_data['mer_id'] = $return['mer_id'];
+        $order_data['store_id'] = $return['store_id'];
+        $order_data['uid'] = $uid;
+
+        $order_data['desc'] = $note;
+        $order_data['create_time'] = $now_time;
+        $order_data['last_time'] = $now_time;
+        $order_data['invoice_head'] = "";
+        $order_data['village_id'] = 0;
+
+        $order_data['num'] = $return['total'];
+        $order_data['packing_charge'] = $return['store']['pack_fee'];//打包费
+
+        $order_data['merchant_reduce'] = $return['sto_first_reduce'] + $return['sto_full_redu[ce'];//店铺优惠
+        $order_data['balance_reduce'] = $return['sys_first_reduce'] + $return['sys_full_reduce'];//平台优惠
+        $orderid  = date('ymdhis').substr(microtime(),2,8-strlen($uid)).$uid;
+        $order_data['real_orderid'] = $orderid;
+        $order_data['no_bill_money'] = 0;//无需跟平台对账的金额
+
+        $address = D('User_adress')->field(true)->where(array('adress_id' => $adr_id, 'uid' => $uid))->find();
+
+        $order_data['username'] = $address['name'];
+        $order_data['userphone'] = $address['phone'];
+        $order_data['address'] = $address['adress'].' '.$address['detail'].' '.$address['zipcode'];
+        $order_data['address_id'] = $adr_id;
+        $order_data['lat'] = $address['latitude'];
+        $order_data['lng'] = $address['longitude'];
+
+        $order_data['expect_use_time'] = D('Store')->get_store_delivery_time($sid);
+        $order_data['freight_charge'] = $delivery_fee = D('Store')->CalculationDeliveryFee($uid,$sid);
+
+        $order_data['is_pick_in_store'] = 0;
+
+        $order_data['goods_price'] = $return['price'];//商品的价格
+        $order_data['extra_price'] = $return['extra_price'];//另外要支付的金额
+        $order_data['discount_price'] = $return['vip_discount_money'];//商品折扣后的总价
+        //modify garfunkel
+        $order_data['total_price'] = ($return['price'] * 1.05) + $delivery_fee + $return['store']['pack_fee'];//订单总价  商品价格+打包费+配送费
+        //$order_data['total_price'] = ($return['price'] * 1.05) + $delivery_fee + $return['packing_charge'];//订单总价  商品价格+打包费+配送费
+        $order_data['price'] = $order_data['discount_price'] - $order_data['merchant_reduce'] - $order_data['balance_reduce'] + $delivery_fee + $return['store']['pack_fee'];//实际要支付的价格
+        //$order_data['price'] = $order_data['discount_price'] - $order_data['merchant_reduce'] - $order_data['balance_reduce'] + $delivery_fee + $return['packing_charge'];//实际要支付的价格
+        $order_data['price'] = $order_data['price'] * 1.05; //税费
+
+        $order_data['discount_detail'] = $return['discount_list'] ? serialize($return['discount_list']) : '';//优惠详情
+
+        $order_data['reduce_stock_type'] = $return['store']['reduce_stock_type'];//'减库存类型（0：支付后，1：下单后）'
+
+        //订单来源
+        $order_data['order_from'] = $_POST['cer_type'];
+        //支付方式
+        $order_data['pay_type'] = $_POST['pay_type'];
+
+        $order_id = D('Shop_order')->saveOrder($order_data, $return);
+        //清除购物车中的内容
+        D('Cart')->delCart($uid,$cart_array);
+
+        if($order_id != 0)
+            $this->returnCode(0,'info',array(),'success');
+        else
+            $this->returnCode(1,'info',$order_id,'success');
+    }
+
+    public function getOrderList(){
+        $uid = $_POST['uid'];
+        $status = $_POST['status'];
+        $_GET['page'] = $_POST['page'];
+
+        $where = "is_del=0 AND uid={$uid}";
+        if ($status == 0) {
+            $where .= " AND paid=0";
+        } elseif ($status == 1) {
+            $where .= " AND paid=1 AND status<2";
+        } elseif ($status == 2) {
+            $where .= " AND paid=1 AND status=2";
+        }
+
+        $where .= " AND is_del = 0";
+
+        $count = D("Shop_order")->where($where)->count();
+
+        $order_list = D("Shop_order")->get_order_list($where, 'order_id DESC', false);//field(true)->where($where)->order('order_id DESC')->select();
+        $order_list = $order_list['order_list'];
+
+        foreach ($order_list as $st) {
+            $store_ids[] = $st['store_id'];
+        }
+        $m = array();
+        if ($store_ids) {
+            $store_image_class = new store_image();
+            $merchant_list = D("Merchant_store")->where(array('store_id' => array('in', $store_ids)))->select();
+            foreach ($merchant_list as $li) {
+                $images = $store_image_class->get_allImage_by_path($li['pic_info']);
+                $li['image'] = $images ? array_shift($images) : array();
+                unset($li['status']);
+                $m[$li['store_id']] = $li;
+            }
+        }
+        $list = array();
+        foreach ($order_list as $ol) {
+            if (isset($m[$ol['store_id']]) && $m[$ol['store_id']]) {
+                $list[] = array_merge($ol, $m[$ol['store_id']]);
+            } else {
+                $list[] = $ol;
+            }
+        }
+
+        foreach($list as $key=>$val){
+            //modify garfunkel
+            $t['rowID'] = $val['real_orderid'];
+            $t['userID'] = $val['uid'];
+            $t['payType'] = $val['pay_type'];
+            $t['payTypeName'] = D('Store')->getPayTypeName($val['pay_type']);
+            $t['storeID'] = $val['store_id'];
+            $t['storeName'] = lang_substr($val['name'],C('DEFAULT_LANG'));
+            $t['createDate'] = date('Y-m-d',$val['create_time']);
+            $t['goodsCount'] = $val['num'];
+            $t['goodsPrice'] = $val['goods_price'];
+            $t['status'] = $val['status'];
+            $t['isComment'] = "1";
+            $t['statusName'] = D('Store')->getOrderStatusName($val['status']);
+            $t['goodsImage'] = $val['image'];
+            $t['orderType'] = "0";
+
+            $result['info'][] = $t;
+        }
+
+        $result['count'] = 10;
+        $result['number'] = count($result['info']);
+        $result['total_page'] = ceil($count / 10);
+
+
+        $this->returnCode(0,'',$result,'success');
+    }
+
+    public function getOrderStatus(){
+        $order_id = $_POST['order_id'];
+
+        $order = D('Shop_order')->field(true)->where(array('real_orderid'=>$order_id))->find();
+        $status = D('Shop_order_log')->field(true)->where(array('order_id' => $order['order_id']))->order('id DESC')->select();
+        foreach ($status as $v){
+            $data['status'] = $v['status'];
+            $data['mark'] = D('Store')->getOrderStatusStr($v['status']);
+            $data['name'] = $data['mark'];
+            $data['createDate'] = date('Y-m-d',$v['dateline']);
+
+            $result[] = $data;
+        }
+
+        $this->returnCode(0,'info',$result,'success');
+    }
+
+    public function getOrderDetail(){
+        $order_id = $_POST['order_id'];
+        $order = D('Shop_order')->field(true)->where(array('real_orderid'=>$order_id))->find();
+
+        $order_detail['statusname'] = D('Store')->getOrderStatusName($order['status']);
+        $order_detail['add_time'] = date('Y-m-d H:i:s',$order['create_time']);
+        $order_detail['payname'] = $order_detail['paymodel'] = D('Store')->getPayTypeName($order['pay_type']);
+        $order_detail['packing_fee'] = $order['packing_charge'];
+        $order_detail['ship_fee'] = $order['freight_charge'];
+        $order_detail['food_amount'] = $order['goods_price'];
+        $order_detail['order_id'] = $order_id;
+        $order_detail['expect_time'] = date('Y-m-d H:i:s',$order['expect_use_time']);
+        $order_detail['site_id'] = $order['store_id'];
+        $order_detail['uname'] = $order['username'];
+        $order_detail['phone'] = $order['userphone'];
+        $order_detail['address2'] = $order['address'];
+        $order_detail['address1'] = "";
+
+
+        $order_detail['promotion_discount'] = "0";
+        $order_detail['discount'] = "0";
+
+        $store = D('Store')->get_store_by_id($order['store_id']);
+        $order_detail['site_name'] = $store['site_name'];
+        $order_detail['tel'] = $store['phone'];
+
+        $result['order'] = $order_detail;
+
+        $order_good = D('Shop_order_detail')->field(true)->where(array('order_id' => $order['order_id']))->select();
+        foreach($order_good as $v){
+            $goods['fname'] = $v['name'];
+            $goods['quantity'] = $v['num'];
+            $goods['price'] = $v['price'];
+
+            $spec_desc = '';
+            $spec_ids = explode('_',$v['spec_id']);
+            foreach ($spec_ids as $vv){
+                $spec = D('Shop_goods_spec_value')->field(true)->where(array('id'=>$vv))->find();
+                $spec_desc = $spec_desc == '' ? lang_substr($spec['name'],$lang) : $spec_desc.','.lang_substr($spec['name'],$lang);
+            }
+
+            if($v['pro_id'] != '')
+                $pro_ids = explode('|',$v['pro_id']);
+            else
+                $pro_ids = array();
+
+            foreach ($pro_ids as $vv){
+                $ids = explode(',',$vv);
+                $proId = $ids[0];
+                $sId = $ids[1];
+
+                $pro = D('Shop_goods_properties')->field(true)->where(array('id'=>$proId))->find();
+                $nameList = explode(',',$pro['val']);
+                $name = lang_substr($nameList[$sId],$lang);
+
+                $spec_desc = $spec_desc == '' ? $name : $spec_desc.','.$name;
+            }
+            $goods['spec_desc'] = $spec_desc;
+
+            $food[] = $goods;
+        }
+
+        $result['food'] = $food;
+
+        $this->returnCode(0,'',$result,'success');
+    }
+
+    public function getGoodsSpec(){
+        $uid = $_POST['uid'];
+        $fid = $_POST['fid'];
+
+        $database_shop_goods = D('Shop_goods');
+        $now_goods = $database_shop_goods->get_goods_by_id($fid);
+        //modify garfunkel 判断语言
+        $now_goods['name'] = lang_substr($now_goods['name'],C('DEFAULT_LANG'));
+        $now_goods['unit'] = lang_substr($now_goods['unit'],C('DEFAULT_LANG'));
+        foreach ($now_goods['properties_list'] as $k => $v){
+            $now_goods['properties_list'][$k]['name'] = lang_substr($v['name'],C('DEFAULT_LANG'));
+            foreach ($v['val'] as $kk => $vv){
+                $now_goods['properties_list'][$k]['val'][$kk] = lang_substr($vv,C('DEFAULT_LANG'));
+            }
+            $result['properties_list'][] = $now_goods['properties_list'][$k];
+        }
+
+        foreach($now_goods['spec_list'] as $k => $v){
+            $now_goods['spec_list'][$k]['name'] = lang_substr($v['name'],C('DEFAULT_LANG'));
+            foreach($v['list'] as $kk => $vv){
+                $now_goods['spec_list'][$k]['list'][$kk]['name'] = lang_substr($vv['name'],C('DEFAULT_LANG'));
+            }
+        }
+
+        $result['spec_list'] = $now_goods['spec_list'];
+
+        $result['list'] = $now_goods['list'];
+
+        $result['cart'] = D('Cart')->field(true)->where(array("uid"=>$uid,"fid"=>$fid))->order('time desc')->select();
 
         $this->returnCode(0,'',$result,'success');
     }

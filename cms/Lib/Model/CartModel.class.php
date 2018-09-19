@@ -8,7 +8,7 @@
 
 class CartModel extends Model
 {
-    public function add_cart($uid,$fid,$num=1){
+    public function add_cart($uid,$fid,$num=1,$spec = "",$proper = ""){
         $data['uid'] = $uid;
         $data['fid'] = $fid;
 
@@ -16,14 +16,17 @@ class CartModel extends Model
         $data['sid'] = $good['store_id'];
 
         $data['num'] = $num;
+        $data['spec'] = $spec;
+        $data['proper'] = $proper;
         $data['time'] = date("Y-m-d H:i:s");
 
-        $item = $this->field(true)->where(array('uid'=>$uid,'fid'=>$fid))->find();
+        $item = $this->field(true)->where(array('uid'=>$uid,'fid'=>$fid,'spec'=>$spec,'proper'=>$proper))->find();
 
         if(empty($item)){
             $id = $this->data($data)->add();
         }else{
             $item['num'] += $num;
+            $item['time'] = $data['time'];
             if ($item['num']<=0)
                 $this->field(true)->where(array('itemId'=>$item['itemId']))->delete();
             else
@@ -36,7 +39,7 @@ class CartModel extends Model
     public function get_cart($uid){
         $where['uid'] = $uid;
 
-        $cartList = $this->field(true)->where($where)->order('sid ASC')->select();
+        $cartList = $this->field(true)->where($where)->order('itemId asc')->select();
         $result = array();
 
         $allnum = 0;
@@ -48,6 +51,15 @@ class CartModel extends Model
         foreach($cartList as $v){
             $allnum += $v['num'];
             $good = D('Shop_goods')->field(true)->where(array('goods_id' => $v['fid']))->find();
+            //获取规格价格
+            $specData = D('Shop_goods')->format_spec_value($good['spec_value'], $good['goods_id'], $good['is_properties']);
+            if($specData['list'] != "" && $v['spec'] != ""){
+                foreach ($specData['list'] as $kk=>$vv){
+                    if($v['spec'] == $kk){
+                        $good['price'] = $vv['price'];
+                    }
+                }
+            }
 
             $allmoney += $good['price']*$v['num'];
             if ($resid != $good['store_id']){
@@ -55,9 +67,12 @@ class CartModel extends Model
 
                 $resid = $good['store_id'];
 
-                $result['info'][] = $store;
+                if(!in_array($store,$result['info']))
+                    $result['info'][] = $store;
             }
             $good['quantity'] = $v['num'];
+            $good['spec'] = $v['spec'];
+            $good['proper'] = $v['proper'];
             $goodList[] = $good;
         }
         $goodList = D('Store')->arrange_goods_for_goods($goodList);
@@ -85,9 +100,49 @@ class CartModel extends Model
 
         foreach ($cartList as $v){
             $good = D('Shop_goods')->field(true)->where(array('goods_id' => $v['fid']))->find();
-            $t_good['fname'] = $good['name'];
+            $t_good['fname'] = lang_substr($good['name'],C('DEFAULT_LANG'));
             $t_good['stock'] = $v['stock'];
-            $t_good['attr'] = $good['unit'];
+
+            //处理商品规格
+            $t_good['spec'] = $v['spec'];
+            $t_good['proper'] = $v['proper'];
+            $specData = D('Shop_goods')->format_spec_value($good['spec_value'], $good['goods_id'], $good['is_properties']);
+            if($specData['list'] != "" && $v['spec'] != ""){
+                foreach ($specData['list'] as $kk=>$vv){
+                    if($v['spec'] == $kk){
+                        $good['price'] = $vv['price'];
+                    }
+                }
+            }
+
+            $spec_desc = "";
+            if($t_good['spec'] != ""){
+                $spec_list = explode("_",$t_good['spec']);
+                foreach($spec_list as $vv){
+                    $spec = D('Shop_goods_spec_value')->field(true)->where(array('id'=>$vv))->find();
+                    $spec_desc = $spec_desc == '' ? lang_substr($spec['name'],C('DEFAULT_LANG')) : $spec_desc.','.lang_substr($spec['name'],C('DEFAULT_LANG'));
+                }
+            }
+            $t_good['spec_desc'] = $spec_desc;
+
+            $proper_desc = "";
+            if($t_good['proper'] != ""){
+                $pro_list = explode("_",$t_good['proper']);
+                foreach ($pro_list as $vv){
+                    $ids = explode(',',$vv);
+                    $proId = $ids[0];
+                    $sId = $ids[1];
+
+                    $pro = D('Shop_goods_properties')->field(true)->where(array('id'=>$proId))->find();
+                    $nameList = explode(',',$pro['val']);
+                    $name = lang_substr($nameList[$sId],C('DEFAULT_LANG'));
+
+                    $proper_desc = $proper_desc == '' ? $name : $proper_desc.','.$name;
+                }
+            }
+            $t_good['proper_desc'] = $proper_desc;
+
+            $t_good['attr'] = $spec_desc . " " .$proper_desc;
             $t_good['price'] = $good['price'];
 
             $total_price += $good['price'];
@@ -119,5 +174,11 @@ class CartModel extends Model
         $result['full_discount'] = '0';
 
         return $result;
+    }
+
+    public function delCart($uid,$cartList){
+        foreach($cartList as $v){
+            $this->field(true)->where(array('uid'=>$uid,'fid'=>$v['fid']))->delete();
+        }
     }
 }
