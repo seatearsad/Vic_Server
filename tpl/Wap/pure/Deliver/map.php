@@ -32,7 +32,7 @@
     </div>
 </div>
 <div class="global-mask layout"></div>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBt3Lu-FlQE5LgusybLzqGr8lIXmvTsLZU&libraries=places&language=zh-CN"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&libraries=places&language=zh-CN"></script>
 <script>
 var wHeight = $(window).height();
 $("#map").css('height', wHeight);
