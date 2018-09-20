@@ -149,7 +149,7 @@ background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#33bbee), to(#2288cc))
 var static_public="{pigcms{$static_public}",static_path="{pigcms{$static_path}",merchant_index="{pigcms{:U('Index/index')}",choose_province="{pigcms{:U('Area/ajax_province')}",choose_city="{pigcms{:U('Area/ajax_city')}",choose_area="{pigcms{:U('Area/ajax_area')}",choose_circle="";
 </script>
 <script type="text/javascript" src="{pigcms{$static_path}js/area.js"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBt3Lu-FlQE5LgusybLzqGr8lIXmvTsLZU&libraries=places&language=zh-CN"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&libraries=places&language=zh-CN"></script>
 <script type="text/javascript" src="{pigcms{$static_path}js/map.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){

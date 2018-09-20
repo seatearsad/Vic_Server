@@ -14,7 +14,7 @@
 	<meta charset="utf-8">
 	<link href="{pigcms{$static_path}css/shop_pc.css" rel="stylesheet"/>
 	<!--<script src="https://api.map.baidu.com/api?v=2.0&ak=4c1bb2055e24296bbaef36574877b4e2&s=1"></script>-->
-	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBt3Lu-FlQE5LgusybLzqGr8lIXmvTsLZU&libraries=places&language={pigcms{:C('DEFAULT_LANG')}"></script>
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&libraries=places&language={pigcms{:C('DEFAULT_LANG')}"></script>
 	<script src="{pigcms{$static_path}js/jquery-1.7.2.js"></script>
 	<script src="{pigcms{$static_path}js/common.js"></script>
 	<script src="{pigcms{$static_public}js/layer/layer.js"></script>

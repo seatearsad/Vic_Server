@@ -123,6 +123,6 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
      </script>
 	<include file="Public:footer"/>
 
-	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBt3Lu-FlQE5LgusybLzqGr8lIXmvTsLZU&libraries=places" async defer></script>
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&libraries=places" async defer></script>
 </body>
 </html>

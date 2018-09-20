@@ -100,7 +100,7 @@
 		<include file="Public:footer"/>
 	</body>
 <!--<script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=4c1bb2055e24296bbaef36574877b4e2&s=1"></script>-->
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBt3Lu-FlQE5LgusybLzqGr8lIXmvTsLZU&libraries=places&language=zh-CN"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&libraries=places&language=zh-CN"></script>
 <script>
     var currentCity = '{pigcms{$now_city.area_name}';
     var currentCityId = '{pigcms{$now_city.area_id}';

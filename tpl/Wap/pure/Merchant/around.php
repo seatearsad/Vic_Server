@@ -17,7 +17,7 @@
         <script type="text/javascript" src="{pigcms{$static_public}js/lang/{pigcms{:C('DEFAULT_LANG')}.js" charset="utf-8"></script>
 		<script type="text/javascript" src="{pigcms{$static_path}js/common.js?321" charset="utf-8"></script>
 		<script type="text/javascript"><if condition="$long_lat">var user_long = "{pigcms{$long_lat.long}",user_lat = "{pigcms{$long_lat.lat}";<else/>var user_long = '0',user_lat  = '0';</if>var static_path = "{pigcms{$static_path}";</script>
-		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBt3Lu-FlQE5LgusybLzqGr8lIXmvTsLZU&libraries=places"></script>
+		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&libraries=places"></script>
 		<script type="text/javascript" src="{pigcms{$static_path}js/merchant_around.js?2222" charset="utf-8"></script>
 		<style>
 			#listBtn{background:url({pigcms{$static_path}img/listBtn.png) no-repeat;background-size:100%;width:35px;height:35px;right:8px;bottom:15px;position:absolute;z-index:10;}

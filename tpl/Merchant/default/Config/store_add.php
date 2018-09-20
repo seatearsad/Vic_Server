@@ -496,7 +496,7 @@ var static_public="{pigcms{$static_public}",static_path="{pigcms{$static_path}",
 <script type="text/javascript" src="{pigcms{$static_path}js/area.js"></script>
 <script type="text/javascript" src="{pigcms{$static_path}js/merchant_category.js"></script>
 <script type="text/javascript" src="https://api.map.baidu.com/api?ak=4c1bb2055e24296bbaef36574877b4e2&v=2.0&s=1" charset="utf-8"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBt3Lu-FlQE5LgusybLzqGr8lIXmvTsLZU&libraries=places&language=zh-CN"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&libraries=places&language=zh-CN"></script>
 <script type="text/javascript" src="{pigcms{$static_path}js/map.js"></script>
 <script type="text/javascript">
 $(function($){

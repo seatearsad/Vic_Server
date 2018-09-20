@@ -19,7 +19,7 @@
 	<script type="text/javascript">
 		var location_url = "{pigcms{:U('Deliver/grab')}", detail_url = "{pigcms{:U('Deliver/detail')}", lat = "{pigcms{$deliver_session['lat']}", lng = "{pigcms{$deliver_session['lng']}", static_path = "{pigcms{$static_path}";
 	</script>
-	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBt3Lu-FlQE5LgusybLzqGr8lIXmvTsLZU&libraries=places&language=zh-CN"></script>
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&libraries=places&language=zh-CN"></script>
 	<script type="text/javascript" src="{pigcms{$static_path}js/grab.js?211" charset="utf-8"></script>
 </head>
 <body>
