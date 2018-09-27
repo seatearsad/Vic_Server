@@ -983,6 +983,11 @@ class PayAction extends BaseAction{
 		}else{
 			$this->error_tips($get_pay_param['msg']);
 		}
+
 	}
+
+    public function moneris(){
+	    var_dump($_POST);die('henhao');
+    }
 }
 ?>
