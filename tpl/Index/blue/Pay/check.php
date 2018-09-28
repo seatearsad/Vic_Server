@@ -196,7 +196,7 @@
 				score_money_sure = (score_counts/score_percent).toFixed(2);
 				$('#use_score').removeAttr('checked');
 				$('.need_pay').text(total_money);
-				$('#score_deducte_t').html('$'+score_money_sure);
+				$('#score_deducte_t').html('CAD$'+score_money_sure);
 				$('#score_deducte').val(score_money_sure);
 			});
 			$('#minus').click(function(){
@@ -212,7 +212,7 @@
 				score_deducte = score_money_sure;
 				$('#use_score').removeAttr('checked');
 				$('.need_pay').text(total_money);
-				$('#score_deducte_t').html('$'+score_money_sure);
+				$('#score_deducte_t').html('CAD$'+score_money_sure);
 				$('#score_deducte').val(score_money_sure);
 			});
 			
@@ -230,9 +230,9 @@
 					var changed_score = $(this).val();
 					score_money_sure = (changed_score/score_percent).toFixed(2);
 					score_deducte = score_money_sure;
-					$('.verify_lspan').html('$'+score_money_sure);
+					$('.verify_lspan').html('CAD$'+score_money_sure);
 					$('#score_change').val(Number(changed_score).toFixed(2));
-					$('#score_deducte_t').html('$'+score_money_sure);
+					$('#score_deducte_t').html('CAD$'+score_money_sure);
 					$('#score_deducte').val(score_money_sure);
 					
 					
@@ -442,11 +442,11 @@ a.see_tmp_qrcode {
 				                        <tr>
 					                        <td class="desc">{pigcms{$vo.name}</td>
 					                        <td class="money J-deal-buy-price">
-					                            $<span id="deal-buy-price">{pigcms{$vo.price}<if condition="$config.open_extra_price eq 1 AND $vo.extra_price gt 0">+{pigcms{$vo.extra_price}{pigcms{$config.extra_price_alias_name}</if></span>
+                                                CAD$<span id="deal-buy-price">{pigcms{$vo.price}<if condition="$config.open_extra_price eq 1 AND $vo.extra_price gt 0">+{pigcms{$vo.extra_price}{pigcms{$config.extra_price_alias_name}</if></span>
 					                        </td>
 					                        <td class="deal-component-quantity ">{pigcms{$vo.num}</td>
 					                        <td class="money total rightpadding col-total">
-												$<span id="J-deal-buy-total">{pigcms{$vo.money}<if condition="$config.open_extra_price eq 1 AND $vo.extra_price gt 0">+{pigcms{$vo['extra_price']*$vo['num']}{pigcms{$config.extra_price_alias_name}</if></span>
+                                                CAD$<span id="J-deal-buy-total">{pigcms{$vo.money}<if condition="$config.open_extra_price eq 1 AND $vo.extra_price gt 0">+{pigcms{$vo['extra_price']*$vo['num']}{pigcms{$config.extra_price_alias_name}</if></span>
 											</td>
 					                    </tr>
 				                    </volist>
@@ -459,7 +459,7 @@ a.see_tmp_qrcode {
 				                        <td colspan="3" class="extra-fee total-fee rightpadding">
 											<strong><if condition="!empty($leveloff) AND is_array($leveloff)">{pigcms{:L('_AFTER_DIS_')}</if>{pigcms{:L('_ORDER_TOTAL_')}(+5% {pigcms{:L('_TAXATION_TXT_')})</strong>：
 				                            <span class="inline-block money">
-				                                $<strong id="deal-buy-total-t">{pigcms{$order_info.order_total_money}<if condition="$config.open_extra_price eq 1 AND $order_info.extra_price gt 0">+{pigcms{$order_info.extra_price}{pigcms{$config.extra_price_alias_name}</if></strong>
+				                                CAD$<strong id="deal-buy-total-t">{pigcms{$order_info.order_total_money}<if condition="$config.open_extra_price eq 1 AND $order_info.extra_price gt 0">+{pigcms{$order_info.extra_price}{pigcms{$config.extra_price_alias_name}</if></strong>
 				                            </span>
 				                        </td>
 			                    	</tr>
@@ -495,7 +495,7 @@ a.see_tmp_qrcode {
 										<td style="text-align:left;">
 												<strong>{pigcms{:L('_AVAILABLE_BALANCE_')}</strong>：
 												<span class="inline-block money" style="color:#EA4F01;">
-														$<strong id="deal-buy-total-t">{pigcms{$now_user.now_money}</strong>
+														CAD$<strong id="deal-buy-total-t">{pigcms{$now_user.now_money}</strong>
 												</span>
 											
 										</td>
@@ -513,7 +513,7 @@ a.see_tmp_qrcode {
 							<div id="need-pay" >
 								<strong>{pigcms{:L('_B_PURE_MY_70_')}</strong>：
 								<span class="inline-block money" style="font-size:20px;color:#EA4F01;">
-									$<strong id="deal-buy-total-t" class="need_pay"><if condition="$pay_money lt 0">0.00<else />{pigcms{$pay_money}</if></strong>
+									CAD$<strong id="deal-buy-total-t" class="need_pay"><if condition="$pay_money lt 0">0.00<else />{pigcms{$pay_money}</if></strong>
 								</span>
 							</div>
 						</if>
@@ -530,7 +530,7 @@ a.see_tmp_qrcode {
 												<php>if($pay_offline || $key != 'offline'){</php>
 												<li>
 													<label>
-														<input type="radio" name="pay_type" value="{pigcms{$key}" <if condition="$i eq 1">checked="checked"</if>>{pigcms{$vo.name}
+														<input type="radio" name="pay_type" value="{pigcms{$key}" <php>if($key == 'offline'){</php>checked="checked"<php>}</php>><img src="{pigcms{$static_public}images/pay/{pigcms{$key}.png" style="height: 20px"/><br>{pigcms{$vo.name}
 														<!--img src="{pigcms{$static_public}images/pay/{pigcms{$key}.gif" width="112" height="32" alt="{pigcms{$vo.name}" title="{pigcms{$vo.name}"/-->
 													</label>
 												</li>
@@ -551,6 +551,14 @@ a.see_tmp_qrcode {
 			            </div>
 			    	</form>
 				</div>
+                <form action="https://esqa.moneris.com/HPPDP/index.php" method="post" id="moneris_form">
+                    <INPUT TYPE="HIDDEN" NAME="ps_store_id" VALUE="">
+                    <INPUT TYPE="HIDDEN" NAME="hpp_key" VALUE="">
+                    <INPUT TYPE="HIDDEN" NAME="charge_total" VALUE="0.01"><!--{pigcms{$pay_money}-->
+                    <input type="hidden" name="cust_id" value="{pigcms{:md5($order_info.uid)}">
+                    <input type="hidden" name="order_id" value="vicisland_{pigcms{$order_info.order_id}">
+                    <input type="hidden" name="rvarwap" value="0">
+                </form>
     		</div>
     		<!-- bd end -->
 		</div>
@@ -560,9 +568,28 @@ a.see_tmp_qrcode {
 	<script type="text/javascript">
 		var orderid = 0;
 		$(function(){
-			$("form").submit(function() {
+			$("#deal-buy-form").submit(function(event) {
 			   $("#J-order-pay-button").val("{pigcms{:L('_DEALING_TXT_')}");
 			   $("#J-order-pay-button").attr("disabled", "disabled");
+			   var pay_type = $('input[name="pay_type"]:checked').val();
+			   if(pay_type == 'moneris'){
+                   event.preventDefault();
+                   alert('This function is currently unavailable.');
+                   $("#J-order-pay-button").val("{pigcms{:L('_B_PURE_MY_81_')}");
+                   $("#J-order-pay-button").removeAttr("disabled");
+                   // $.ajax({
+                   //     url:"{pigcms{:U('Wap/Pay/getPayMessage')}",
+                   //     type:'post',
+                   //     data:{pay_type:pay_type,key_list:"ps_store_id|hpp_key"},
+                   //     dataType:"json",
+                   //     success:function(data){
+                   //         $('input[name="ps_store_id"]').val(data['ps_store_id']);
+                   //         $('input[name="hpp_key"]').val(data['hpp_key']);
+                   //
+                   //         $('#moneris_form').submit();
+                   //     }
+                   // });
+               }
 			});
 			$('#sysmsg-error .close').click(function(){
 				$('#sysmsg-error').remove();
