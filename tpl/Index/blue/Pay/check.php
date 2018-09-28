@@ -530,7 +530,7 @@ a.see_tmp_qrcode {
 												<php>if($pay_offline || $key != 'offline'){</php>
 												<li>
 													<label>
-														<input type="radio" name="pay_type" value="{pigcms{$key}" <php>if($key == 'offline'){</php>checked="checked"<php>}</php>><img src="{pigcms{$static_public}images/pay/{pigcms{$key}.png" style="height: 20px"/><br>{pigcms{$vo.name}
+														<input type="radio" name="pay_type" value="{pigcms{$key}" <php>if($key == 'offline'){</php>checked="checked"<php>}</php>><img src="{pigcms{$static_public}images/pay/{pigcms{$key}.png" style="height: 30px"/><!--br>{pigcms{$vo.name}-->
 														<!--img src="{pigcms{$static_public}images/pay/{pigcms{$key}.gif" width="112" height="32" alt="{pigcms{$vo.name}" title="{pigcms{$vo.name}"/-->
 													</label>
 												</li>
