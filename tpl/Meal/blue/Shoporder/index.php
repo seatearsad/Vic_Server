@@ -126,12 +126,12 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 										<div><strong>{pigcms{:L('_TOTAL_COMM_PRICE_')}</strong>：<span class="inline-block money">$<strong id="basic_price">{pigcms{$basic_price|floatval}<if condition="$extra_price gt 0 AND $config.open_extra_price eq 1">+{pigcms{$extra_price}{pigcms{$config.extra_price_alias_name}</if></strong></span></div>
 										<!--div><strong>{pigcms{:L('_TOTAL_PRICE_A_DIS_')}</strong>：<span class="inline-block money">$<strong id="discount_price">{pigcms{$vip_discount_money|floatval}<if condition="$extra_price gt 0 AND $config.open_extra_price eq 1">+{pigcms{$extra_price}{pigcms{$config.extra_price_alias_name}</if></strong></span></div-->
 										<if condition="$sys_first_reduce gt 0 OR $sys_full_reduce gt 0">
-										<!--div><strong>{pigcms{:L('_PLATFORM_DIS_')}</strong>：<span class="inline-block money">$<strong id="sys_reduce_price">{pigcms{$sys_first_reduce + $sys_full_reduce|floatval}</strong></span></div-->
+										<div><strong>{pigcms{:L('_PLATFORM_DIS_')}</strong>：<span class="inline-block money">$<strong id="sys_reduce_price">{pigcms{$sys_first_reduce + $sys_full_reduce|floatval}</strong></span></div>
 										</if>
 										<if condition="$sto_first_reduce gt 0 OR $sto_full_reduce gt 0">
 										<div><strong>{pigcms{:L('_STORE_DIS_')}</strong>：<span class="inline-block money">$<strong id="merchant_reduce_price">{pigcms{$sto_first_reduce + $sto_full_reduce|floatval}</strong></span></div>
 										</if>
-										<div><strong>{pigcms{:L('_AFTER_DIS_')}</strong>：<span class="inline-block money">$<strong id="goods_price">{pigcms{$price|floatval}<if condition="$extra_price gt 0 AND $config.open_extra_price eq 1">+{pigcms{$extra_price}{pigcms{$config.extra_price_alias_name}</if></strong></span></div>
+										<!--div><strong>{pigcms{:L('_AFTER_DIS_')}</strong>：<span class="inline-block money">$<strong id="goods_price">{pigcms{$price|floatval}<if condition="$extra_price gt 0 AND $config.open_extra_price eq 1">+{pigcms{$extra_price}{pigcms{$config.extra_price_alias_name}</if></strong></span></div-->
 
 										<!--if condition="$packing_charge"-->
 										<div><strong>{pigcms{:L('_PACK_PRICE_')}</strong>：<span class="inline-block money">$<strong id="packing_charge">{pigcms{$store['pack_fee']|floatval}</strong></span></div>
