@@ -477,7 +477,7 @@ a.see_tmp_qrcode {
 												&nbsp;&nbsp;&nbsp;&nbsp;
 												<strong>{pigcms{:L('_MEAL_TICKET_DED_CASH_')}</strong>：
 												<span class="inline-block money" style="color:#EA4F01;">
-														<strong id="score_deducte_t">${pigcms{$score_deducte|floatval=###}</strong>
+														<strong id="score_deducte_t">CAD${pigcms{$score_deducte|floatval=###}</strong>
 														<input type="hidden" id="score_deducte" name="score_deducte" value="{pigcms{$score_deducte}">
 												</span>
 												
