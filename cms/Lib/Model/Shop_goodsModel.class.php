@@ -1622,6 +1622,7 @@ class Shop_goodsModel extends Model
                 $goods_id = $row['productId'];
                 $num = $row['count'];
                 $spec_ids = array();
+                $pro_ids = array();
                 $str_s = array(); $str_p = array();
                 foreach ($row['productParam'] as $r) {
                     if ($r['type'] == 'spec') {
@@ -1634,9 +1635,9 @@ class Shop_goodsModel extends Model
                         }
                     }
                 }
-                $spec_str = $spec_ids ? implode('_', $spec_ids) : '';
+                $spec_str = count($spec_ids)>0 ? implode('_', $spec_ids) : '';
 
-                $pro_str = $pro_ids ? implode('|',$pro_ids) : '';
+                $pro_str = count($pro_ids)>0 ? implode('|',$pro_ids) : '';
 
                 $t_return = $this->check_stock($goods_id, $num, $spec_str, $store_shop['stock_type'], $store_id);
                 if ($t_return['status'] == 0) {
