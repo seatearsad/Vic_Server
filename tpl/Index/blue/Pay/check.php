@@ -414,7 +414,7 @@ a.see_tmp_qrcode {
 			    	</div>
 					<if condition="$order_info['order_type'] != 'recharge'">
 						<div class="sysmsgw common-tip" style="margin-bottom:20px;" id="sysmsg-error">					
-							<div class="sysmsg">							
+							<!--div class="sysmsg">
 								<span class="J-msg-content"><span class="J-tip-status tip-status"></span>{pigcms{:L('_WECHAT_COUP_A_CARD_')}&nbsp;
 								<if condition="$order_info['order_type'] eq 'group'">
 								<a class="see_tmp_qrcode" href="{pigcms{:U('Index/Recognition/see_tmp_qrcode',array('qrcode_id'=>2000000000+$order_info['order_id']))}">{pigcms{:L('_CHECK_WECHAT_CODE_')}</a>
@@ -425,7 +425,7 @@ a.see_tmp_qrcode {
 								</if>
 								</span>
 								<span class="close common-close">{pigcms{:L('_CLOSE_TXT_')}</span>
-							</div>					
+							</div-->
 						</div>
 					</if>
 			        <form action="{pigcms{:U('Pay/go_pay')}" method="post" id="deal-buy-form" class="common-form J-wwwtracker-form">

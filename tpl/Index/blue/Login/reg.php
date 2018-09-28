@@ -146,26 +146,26 @@
 				});
 			});
 			
-			art.dialog.open("{pigcms{:U('Index/Recognition/see_login_qrcode',array('referer'=>urlencode($referer)))}&"+Math.random(),{
-				init: function(){
-					var iframe = this.iframe.contentWindow;
-					window.top.art.dialog.data('login_iframe_handle',iframe);
-				},
-				id: 'login_handle',
-				title:'{pigcms{:L("_FAST_REG_WECHAT_")}',
-				padding: 0,
-				width: 430,
-				height: 433,
-				lock: true,
-				resize: false,
-				background:'black',
-				button: null,
-				fixed: false,
-				close: null,
-				left: '50%',
-				top: '38.2%',
-				opacity:'0.4'
-			});
+			// art.dialog.open("{pigcms{:U('Index/Recognition/see_login_qrcode',array('referer'=>urlencode($referer)))}&"+Math.random(),{
+			// 	init: function(){
+			// 		var iframe = this.iframe.contentWindow;
+			// 		window.top.art.dialog.data('login_iframe_handle',iframe);
+			// 	},
+			// 	id: 'login_handle',
+			// 	title:'{pigcms{:L("_FAST_REG_WECHAT_")}',
+			// 	padding: 0,
+			// 	width: 430,
+			// 	height: 433,
+			// 	lock: true,
+			// 	resize: false,
+			// 	background:'black',
+			// 	button: null,
+			// 	fixed: false,
+			// 	close: null,
+			// 	left: '50%',
+			// 	top: '38.2%',
+			// 	opacity:'0.4'
+			// });
 		});
 		function error_tips(msg,id){
 			$('.validate-info').html('<i class="tip-status tip-status--opinfo"></i>'+msg).css('visibility','visible');
