@@ -76,6 +76,16 @@ class PayAction extends BaseAction{
         }
         $this->assign('order_info',$order_info);
 
+        //garfunkel 如果修改信用卡的选择
+        if($_GET['card_id']){
+            D('User_card')->clearIsDefaultByUid($this->user_session['uid']);
+            D('User_card')->field(true)->where(array('id'=>$_GET['card_id']))->save(array('is_default'=>1));
+        }
+
+        $card_list = D('User_card')->getCardListByUid($this->user_session['uid']);
+        if(count($card_list) > 0)
+            $this->assign('card',$card_list[0]);
+
         if($this->is_app_browser){
             $this->display();die;
         }
@@ -2359,6 +2369,40 @@ class PayAction extends BaseAction{
             }
         }else{
             $this->error_tips($get_pay_param['msg']);
+        }
+    }
+
+    public function getPayMessage(){
+        $key = $_POST['pay_type'];
+        $key_list = $_POST['key_list'];
+        $where = array('tab_id'=>$key,'gid'=>7);
+        $list = explode("|",$key_list);
+
+        $data = array();
+        $result = D('Config')->field(true)->where($where)->select();
+
+        foreach($result as $v){
+            if(in_array($v['info'],$list)){
+                $data[$v['info']] = $v['value'];
+            }
+        }
+
+        echo json_encode($data);
+    }
+
+    public function MonerisPay(){
+        import('@.ORG.pay.MonerisPay');
+        $moneris_pay = new MonerisPay();
+        $resp = $moneris_pay->payment($_POST);
+        //var_dump($resp);
+        if($resp['complete'] == 'true'){
+            $order = explode("_",$_POST['order_id']);
+            $order_id = $order[1];
+            $url =U("Wap/Shop/status",array('order_id'=>$order_id));
+
+            $this->success(L('_PAYMENT_SUCCESS_'),$url,true);
+        }else{
+            $this->error($resp['message'],'',true);
         }
     }
 }

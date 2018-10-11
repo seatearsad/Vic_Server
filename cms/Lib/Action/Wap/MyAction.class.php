@@ -615,6 +615,64 @@ class MyAction extends BaseAction{
 		}
 	}
 
+	public function credit(){
+        if(empty($this->user_session)){
+            $this->error_tips(L('_B_MY_LOGINFIRST_'));
+        }
+
+        if($_GET['order_id']){
+            $this->assign('order_id',$_GET['order_id']);
+        }
+
+        $card_list = D('User_card')->getCardListByUid($this->user_session['uid']);
+        $this->assign('card_list',$card_list);
+        $this->display();
+    }
+
+    public function del_card(){
+	    if($_GET['id']){
+            D('User_card')->field(true)->where(array('id'=>$_GET['id']))->delete();
+            $this->success(L('_OPERATION_SUCCESS_'));
+        }
+        $this->error(L('_OPERATION_FAIL_'));
+    }
+
+    public function edit_card(){
+	    if($_POST){
+	        $data['name'] = $_POST['name'];
+	        $data['card_num'] = $_POST['card_num'];
+	        $data['expiry'] = $_POST['expiry'];
+
+	        //如果 is_default 存在，清空之前的default
+	        if($_POST['is_default']){
+                D('User_card')->clearIsDefaultByUid($this->user_session['uid']);
+            }
+	        $data['is_default'] = $_POST['is_default'] ? $_POST['is_default'] : 0;
+
+	        $data['uid'] = $this->user_session['uid'];
+
+	        if($_POST['id'] && $_POST['id'] != ''){
+                $data['id'] = $_POST['id'];
+                D('User_card')->field(true)->where(array('id'=>$data['id']))->save($data);
+                $this->success(L('_OPERATION_SUCCESS_'));
+            }else{
+                $isC = D('User_card')->getCardByUserAndNum($data['uid'],$data['card_num']);
+                if($isC){
+                    $this->error(L('_CARD_EXIST_'));
+                }else{
+                    $data['create_time'] = date("Y-m-d H:i:s");
+                    D('User_card')->field(true)->add($data);
+                    $this->success(L('_OPERATION_SUCCESS_'));
+                }
+            }
+        }else if($_GET['id']){
+	        $card = D('User_card')->field(true)->where(array('id'=>$_GET['id']))->find();
+            $this->assign('card',$card);
+        }
+
+	    $this->display();
+    }
+
 	public function pick_address(){
 		if(empty($this->user_session)){
 			$this->error_tips(L('_B_MY_LOGINFIRST_'));

@@ -67,6 +67,10 @@
 				<img src="{pigcms{$static_path}images/new_my/tubiao2_11.png" class="imgRirht" />
 			</div>
 		</if>
+        <div id="card" class="titleBorder">
+            <div class="title">{pigcms{:L('_CREDIT_CARD_')}</div>
+            <img src="{pigcms{$static_path}images/new_my/tubiao2_11.png" class="imgRirht" />
+        </div>
 		<!--div id="authentication" class="titleBorder">
 			<div class="title">实名认证</div>
 			<img src="{pigcms{$static_path}images/new_my/tubiao2_11.png" class="imgRirht"></img>
@@ -139,6 +143,9 @@
 			$('#adress').on('click',function(){
 				location.href =	"{pigcms{:U('adress')}";
 			});
+			$('#card').on('click',function(){
+                location.href = "{pigcms{:U('credit')}";
+            })
 			$('#authentication').on('click',function(){
 				if(find){
 					location.href =	"{pigcms{:U('authentication_index')}";

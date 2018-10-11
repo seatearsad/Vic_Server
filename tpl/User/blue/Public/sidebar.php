@@ -60,6 +60,12 @@
 					<li <if condition="in_array(MODULE_NAME,array('Adress'))">class="current"</if>><a href="{pigcms{:U('Adress/index')}">{pigcms{:L('_B_PURE_MY_58_')}</a></li>
 				</ul>
 			</dd>
+            <dt><strong>{pigcms{:L('_MY_CREDIT_CARD_')}</strong></dt>
+            <dd class="last">
+                <ul class="item-list">
+                    <li <if condition="in_array(MODULE_NAME,array('Card'))">class="current"</if>><a href="{pigcms{:U('Card/index')}">{pigcms{:L('_CREDIT_CARD_')}</a></li>
+                </ul>
+            </dd>
             <dt><strong>{pigcms{:L('_B_PURE_MY_46_')}</strong></dt>
             <dd>
                 <ul class="item-list">

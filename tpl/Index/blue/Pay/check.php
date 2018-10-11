@@ -540,7 +540,35 @@ a.see_tmp_qrcode {
 										<div class="clr"></div>
 									</div>
 								</div>
-								<div class="clr"></div>
+								<div class="clr" style="border-bottom: 1px #cccccc solid"></div>
+                                <div id="card">
+                                    <div class="payment-banktit">
+                                        <b class="open">
+                                            {pigcms{:L('_CREDIT_CARD_')} --
+                                            <a href="{pigcms{:U('User/Card/index')}" target="_blank">{pigcms{:L('_EDIT_TXT_')}</a>
+                                        </b>
+                                    </div>
+                                    <div class="payment-bankcen">
+                                        <div class="bank morebank">
+                                            <ul class="imgradio">
+                                                <if condition="count($card_list) eq 0">
+                                                    <a href="{pigcms{:U('User/Card/index')}" target="_blank">
+                                                        {pigcms{:L('_ADD_CREDIT_CARD_')}
+                                                    </a>
+                                                    <span id="refresh_card" style="font-size: 11px;color: #0c68cf;cursor:pointer"> -- {pigcms{:L('_REFRESH_TXT_')} </span>
+                                                <else />
+                                                    <volist name="card_list" id="vo">
+                                                        <div style="font-size: 12px;">
+                                                            <input type="radio" name="card_id" value="{pigcms{$vo.id}">
+                                                            {pigcms{$vo.name} -- {pigcms{$vo.card_num}
+                                                        </div>
+                                                    </volist>
+                                                </if>
+                                            </ul>
+                                            <div class="clr"></div>
+                                        </div>
+                                    </div>
+                                </div>
 							</div>
 						</div>
 						
@@ -551,13 +579,15 @@ a.see_tmp_qrcode {
 			            </div>
 			    	</form>
 				</div>
-                <form action="https://esqa.moneris.com/HPPDP/index.php" method="post" id="moneris_form">
+                <!--form action="https://esqa.moneris.com/HPPDP/index.php" method="post" id="moneris_form"-->
+                <form action="{pigcms{:U('Index/Pay/MonerisPay')}" method="post" id="moneris_form">
                     <INPUT TYPE="HIDDEN" NAME="ps_store_id" VALUE="">
                     <INPUT TYPE="HIDDEN" NAME="hpp_key" VALUE="">
-                    <INPUT TYPE="HIDDEN" NAME="charge_total" VALUE="0.01"><!--{pigcms{$pay_money}-->
+                    <INPUT TYPE="HIDDEN" NAME="charge_total" VALUE="{pigcms{$pay_money}"><!--{pigcms{$pay_money}-->
                     <input type="hidden" name="cust_id" value="{pigcms{:md5($order_info.uid)}">
                     <input type="hidden" name="order_id" value="vicisland_{pigcms{$order_info.order_id}">
                     <input type="hidden" name="rvarwap" value="0">
+                    <input type="hidden" name="credit_id" value="0">
                 </form>
     		</div>
     		<!-- bd end -->
@@ -574,9 +604,27 @@ a.see_tmp_qrcode {
 			   var pay_type = $('input[name="pay_type"]:checked').val();
 			   if(pay_type == 'moneris'){
                    event.preventDefault();
-                   alert('This function is currently unavailable.');
-                   $("#J-order-pay-button").val("{pigcms{:L('_B_PURE_MY_81_')}");
-                   $("#J-order-pay-button").removeAttr("disabled");
+                   // alert('This function is currently unavailable.');
+                   // $("#J-order-pay-button").val("{pigcms{:L('_B_PURE_MY_81_')}");
+                   // $("#J-order-pay-button").removeAttr("disabled");
+
+                   if($('input[name="credit_id"]').val()){
+                       $.post($('#moneris_form').attr('action'),$('#moneris_form').serialize(),function(data){
+                           if(data.status == 1){
+                               setTimeout("window.location.href = '"+data.url+"'",200);
+                           }else{
+                               alert(data.info);
+                               $("#J-order-pay-button").val("{pigcms{:L('_B_PURE_MY_81_')}");
+                               $("#J-order-pay-button").removeAttr("disabled");
+                           }
+                       });
+                   }else{
+                       alert("{pigcms{:L('_PLEASE_ADD_CARD_')}");
+                       $("#J-order-pay-button").val("{pigcms{:L('_B_PURE_MY_81_')}");
+                       $("#J-order-pay-button").removeAttr("disabled");
+                       $("html,body").animate({"scrollTop":$('#card').offset().top},900);
+                   }
+
                    // $.ajax({
                    //     url:"{pigcms{:U('Wap/Pay/getPayMessage')}",
                    //     type:'post',
@@ -669,6 +717,32 @@ a.see_tmp_qrcode {
 				window.location.href="{pigcms{:U('Pay/weixin_back',array('order_type'=>$order_info['order_type']))}&order_id="+orderid+'&pay_type='+$('input[name="pay_type"]:checked').val();
 			});
 		});
+
+        //garfunkel add
+        $("input[name='pay_type']").click(isShowCredit);
+
+        $(function(){
+            isShowCredit();
+            //默认第一个选中
+            $('input[name="card_id"]:first').attr('checked','checked');
+            $('input[name="credit_id"]').val($('input[name="card_id"]').val());
+        });
+
+        $('input[name="card_id"]').click(function(){
+            $('input[name="credit_id"]').val(this.val());
+        });
+        function isShowCredit(){
+            var pay_type = $('input[name="pay_type"]:checked').val();
+            if(pay_type == 'moneris'){
+                $('#card').show();
+            }else{
+                $('#card').hide();
+            }
+        }
+
+        $('#refresh_card').click(function(){
+            window.location.reload();
+        });
 	</script>
 	<include file="Public:footer"/>
 </body>

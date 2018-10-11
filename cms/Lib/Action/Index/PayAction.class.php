@@ -180,7 +180,10 @@ class PayAction extends BaseAction{
 			$this->error_tips('系统管理员没开启任一一种支付方式！');
 		}
 		$this->assign('pay_method',$pay_method);
-		
+		//garfunkel add 获取信用卡
+        $card_list = D('User_card')->getCardListByUid($this->user_session['uid']);
+        $this->assign('card_list',$card_list);
+
 		$this->display();
 	}
 	protected function getPayName($label){
@@ -987,7 +990,72 @@ class PayAction extends BaseAction{
 	}
 
     public function moneris(){
-	    var_dump($_POST);die('henhao');
+	    //var_dump($_POST);die('henhao');
+	    $order_id = $_POST['response_order_id'];
+	    $response_code = $_POST['response_code'];
+	    $date_stamp = $_POST['date_stamp'];
+	    $time_stamp = $_POST['time_stamp'];
+	    $bank_approval_code = $_POST['bank_approval_code'];
+        $result = $_POST['result'];//1 = approved ,  0 = declined, incomplete
+        $trans_name = $_POST['trans_name'];
+        $cardholder = $_POST['cardholder'];
+        $charge_total = $_POST['charge_total'];//支付金额
+        $card = $_POST['card'];
+        $f4l4 = $_POST['f4l4'];
+        $message = $_POST['message'];
+        $iso_code = $_POST['iso_code'];
+        $bank_transaction_id = $_POST['bank_transaction_id'];
+        $transactionKey = $_POST['transactionKey'];
+        $Ticket = $_POST['Ticket'];
+        $txn_num = $_POST['txn_num'];//交易号，退款时使用
+        $avs_response_code = $_POST['avs_response_code'];
+        $cvd_response_code = $_POST['cvd_response_code'];
+        $cavv_result_code = $_POST['cavv_result_code'];
+        $is_visa_debit = $_POST['is_visa_debit'];
+        $is_wap = $_POST['rvarwap'];//自定义 是否来自wap 1是 0否 web
+
+        $order = explode("_",$order_id);
+        $order_id = $order[1];
+
+        if($result == 1){//支付成功
+            $order_param['order_id'] = $order_id;
+            $order_param['order_from'] = 0;
+            $order_param['order_type'] = 'shop';
+            $order_param['pay_time'] = $date_stamp.' '.$time_stamp;
+            $order_param['pay_money'] = $charge_total;
+            $order_param['pay_type'] = 'moneris';
+            $order_param['is_mobile'] = $is_wap;
+            $order_param['is_own'] = 0;
+            $order_param['third_id'] = 0;
+            $order_param['invoice_head'] = $txn_num;//借用发票头这个字段存储交易号
+
+            $pay_info = D('Shop_order')->after_pay($order_param);
+
+        }else{
+
+        }
+
+        if($is_wap == 1){
+            header("location:".U("Wap/Shop/status",array('order_id'=>$order_id)));
+        }else{
+            header("location:".U("User/Index/shop_order_view",array('order_id'=>$order_id)));
+        }
+    }
+
+    public function MonerisPay(){
+        import('@.ORG.pay.MonerisPay');
+        $moneris_pay = new MonerisPay();
+        $resp = $moneris_pay->payment($_POST);
+        //var_dump($resp);
+        if($resp['complete'] == 'true'){
+            $order = explode("_",$_POST['order_id']);
+            $order_id = $order[1];
+            $url =U("User/Index/shop_order_view",array('order_id'=>$order_id));
+
+            $this->success(L('_PAYMENT_SUCCESS_'),$url,true);
+        }else{
+            $this->error($resp['message'],'',true);
+        }
     }
 }
 ?>

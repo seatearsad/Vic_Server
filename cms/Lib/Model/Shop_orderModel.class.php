@@ -100,6 +100,7 @@ class Shop_orderModel extends Model
 					'order_total_money'	=>	$now_order['price'],//当前需要支付的金额
 					'order_type'		=>	'shop',
 					'extra_price'	=>	$now_order['extra_price'],
+					'real_orderid' 		=> $now_order['real_orderid'],
 			);
 		} else {
 			$order_info = array(
@@ -123,6 +124,7 @@ class Shop_orderModel extends Model
 				'img'				=> C('config.site_url').'/upload/store/'.$imgs[0],
 				'order_txt_type'	=>	$str,
 				'extra_price'	=>	$now_order['extra_price'],
+                'real_orderid' 		=> $now_order['real_orderid'],
 			);
 		}
 		return array('error' => 0, 'order_info' => $order_info);
@@ -369,10 +371,15 @@ class Shop_orderModel extends Model
 
 	public function after_pay($order_param)
 	{
-		if ($order_param['pay_type'] != '') {
-			$where['orderid'] = $order_param['order_id'];
-		} else {
-			$where['order_id'] = $order_param['order_id'];
+		//garfunkel modify
+		if($order_param['pay_type'] == 'moneris'){//
+            $where['order_id'] = $order_param['order_id'];
+		}else{
+            if ($order_param['pay_type'] != '') {
+                $where['orderid'] = $order_param['order_id'];
+            } else {
+                $where['order_id'] = $order_param['order_id'];
+            }
 		}
 
 		$now_order = $this->field(true)->where($where)->find();
@@ -522,6 +529,8 @@ class Shop_orderModel extends Model
 			$data_shop_order['is_mobile_pay'] = $order_param['is_mobile'];
 			$data_shop_order['is_own'] = isset($order_param['sub_mch_id'])?2:$order_param['is_own'];
 			$data_shop_order['paid'] = 1;
+			//garfunkel add moneris
+			$data_shop_order['invoice_head'] = $order_param['invoice_head'];
 			if ($now_order['card_discount']) {
 				$data_shop_order['price'] = sprintf("%.2f", ($now_order['price']-$now_order['freight_charge']) * $now_order['card_discount']/10)+$now_order['freight_charge'];//floor($now_order['price'] * $now_order['card_discount'] * 10) / 100;
 			}

@@ -247,7 +247,7 @@
             }else{
                 $('#balanceBox').css('margin-bottom','0px');
                 if($('#normal-fieldset').css('display')=='none'){
-                    $('#normal-fieldset input[type="radio"]:first').attr('checked','checked');
+                    //$('#normal-fieldset input[type="radio"]:first').attr('checked','checked');
                 }
                 $('#normal-fieldset').css('display','block');
             }
@@ -301,10 +301,11 @@
                 if(open_extra_price==1&&score_money>0){
                     extra_price_str = $('input[name="score_change"]').val()+'元宝';
                     $('#pay_in_fact').html('{pigcms{:L("_ACTUAL_PAYMENT_")}：<b style="color:red">$'+(total_money-sysc_price-score_money).toFixed(2)+'+'+extra_price_str+'</b>');
+                    $('input[name="charge_total"]').val((total_money-sysc_price-score_money).toFixed(2));
                 }else{
                     $('#pay_in_fact').html('{pigcms{:L("_ACTUAL_PAYMENT_")}：<b style="color:red">$'+(total_money-sysc_price).toFixed(2)+'</b>');
+                    $('input[name="charge_total"]').val((total_money-sysc_price).toFixed(2));
                 }
-
             }
             var pay_score = 0
             if($("#use_score").is(':checked')==true){
@@ -509,7 +510,7 @@
     </script>
     <script language="javascript">
         function bio_verify(){
-            layer.open({type:2,content:'页面加载中',shadeClose:false});
+            layer.open({type:2,content:"{pigcms{:L('_LOADING_TXT_')}",shadeClose:false});
             var pay_type = $('input:radio:checked').val();
             $("button.mj-submit").attr("disabled", "disabled");
             $("button.mj-submit").html("正在处理...");
@@ -553,11 +554,44 @@
                     $('#pwd_verify').css('display','block');
                 }
 
-            }else{
-                layer.closeAll();
-                var res = callpay();
-                if(res){
-                    $('#pay-form').submit();
+            }else{//garfunkel add
+                if(pay_type == 'moneris'){
+                    if($('input[name="credit_id"]').val()){
+                        $.post($('#moneris_form').attr('action'),$('#moneris_form').serialize(),function(data){
+                            layer.closeAll();
+                            layer.open({title:['Message'],content:data.info});
+                            if(data.status == 1){
+                                setTimeout("window.location.href = '"+data.url+"'",200);
+                            }else{
+
+                            }
+                        });
+                    }else{
+                        alert("{pigcms{:L('_PLEASE_ADD_CARD_')}");
+                        layer.closeAll();
+                        $("html,body").animate({"scrollTop":$('#credit').offset().top},900);
+                    }
+
+
+
+                    // $.ajax({
+                    //     url:"{pigcms{:U('Pay/getPayMessage')}",
+                    //     type:'post',
+                    //     data:{pay_type:pay_type,key_list:"ps_store_id|hpp_key"},
+                    //     dataType:"json",
+                    //     success:function(data){
+                    //         $('input[name="ps_store_id"]').val(data['ps_store_id']);
+                    //         $('input[name="hpp_key"]').val(data['hpp_key']);
+                    //
+                    //         $('#moneris_form').submit();
+                    //     }
+                    // });
+                }else{
+                    layer.closeAll();
+                    var res = callpay();
+                    if(res){
+                        $('#pay-form').submit();
+                    }
                 }
             }
         }
@@ -611,7 +645,6 @@
                         return true;
                     }
                 }
-
 
 
 
@@ -771,6 +804,17 @@
         <php>}</php>
     </if>
 
+    <!-- garfunkel add moneris >
+    <form action="https://www3.moneris.com/HPPDP/index.php" method="post" id="moneris_form" -->
+    <form action="{pigcms{:U('Index/Pay/MonerisPay')}" method="post" id="moneris_form">
+        <INPUT TYPE="HIDDEN" NAME="ps_store_id" VALUE="">
+        <INPUT TYPE="HIDDEN" NAME="hpp_key" VALUE="">
+        <INPUT TYPE="HIDDEN" NAME="charge_total" VALUE="">
+        <input type="hidden" name="cust_id" value="{pigcms{:md5($order_info.uid)}">
+        <input type="hidden" name="order_id" value="vicisland_{pigcms{$order_info.order_id}_7">
+        <input type="hidden" name="rvarwap" value="1">
+        <input type="hidden" name="credit_id" value="{pigcms{$card['id']}">
+    </form>
     <form action="/source{pigcms{:U('Pay/go_pay',array('showwxpaytitle1'=>1))}" method="POST" id="pay-form" class="pay-form" >
         <input type="hidden" name="order_id" value="{pigcms{$order_info.order_id}"/>
         <input type="hidden" name="order_type" value="{pigcms{$order_info.order_type}"/>
@@ -791,17 +835,38 @@
                 <h4 style="margin: .3rem .2rem .2rem;">{pigcms{:L('_SELECT_PAY_MODE_')}</h4>
                 <dl class="list">
                     <volist name="pay_method" id="vo">
-
                         <php>if($pay_offline || $key != 'offline'){</php>
                         <dd class="dd-padding">
-                            <label class="mt"><!--i class="bank-icon icon-{pigcms{$key}"></i--><span class="pay-wrapper">{pigcms{$vo.name}<input type="radio" class="mt" value="{pigcms{$key}"  <if condition="$i eq 1">checked="checked"</if> name="pay_type"></span></label>
+                            <label class="mt">
+                                <!--i class="bank-icon icon-{pigcms{$key}"></i-->
+                                <span class="pay-wrapper">
+                                    <img src="{pigcms{$static_public}images/pay/{pigcms{$key}.png" style="height: 20px"/> {pigcms{$vo.name}
+                                    <input type="radio" class="mt" value="{pigcms{$key}"  <php>if($key == 'moneris'){</php>checked="checked"<php>}</php> name="pay_type">
+                                </span>
+                            </label>
                         </dd>
                         <php>}</php>
-
                     </volist>
                 </dl>
             </div>
-
+            <div id="credit" class="normal-fieldset" style="height: 100%;display:none;margin-top: -50px; margin-bottom:60px;" >
+                <h4 style="margin: .3rem .2rem .2rem;">{pigcms{:L('_CREDIT_CARD_')}</h4>
+                <dl class="list">
+                    <a href="{pigcms{:U('My/credit',array('order_id'=>$order_info['order_id']))}">
+                        <dd class="more dd-padding" style="padding-right: .3rem;">
+                            <label class="mt">
+                                <span class="pay-wrapper">
+                                    <if condition="$card">
+                                        {pigcms{$card['name']} -- {pigcms{$card['card_num']}
+                                    <else />
+                                        {pigcms{:L('_ADD_CREDIT_CARD_')}
+                                    </if>
+                                </span>
+                            </label>
+                        </dd>
+                    </a>
+                </dl>
+            </div>
             <div style="background-color: #FFFFFF; height: 53px;position: fixed;bottom: 0;left: 0;right: 0;z-index: 900;-webkit-tap-highlight-color: rgba(0, 0, 0, 0);height: 49px;width: 100%;">
                 <div id="need_pay_title" style="    position: absolute;margin-top: 18px;margin-left: 0.3rem;">
                     {pigcms{:L('_ALSO_NEED_PAY_')} <div style="font-weight:bold;color:red;display: inline;">$<div class="need-pay" style="display:inline;">
@@ -881,6 +946,23 @@
     }
     layer.closeAll();
     var showBuyBtn = true;
+
+    //garfunkel add
+    $(":radio").click(isShowCredit);
+
+    $(function(){
+        isShowCredit();
+    });
+
+    function isShowCredit(){
+        var pay_type = $('input:radio:checked').val();
+        if(pay_type == 'moneris'){
+            $('#credit').show();
+        }else{
+            $('#credit').hide();
+        }
+    }
+
 </script>
 <if condition="$cheap_info['can_buy'] heq false">
     <script>layer.open({title:['提示：','background-color:#FF658E;color:#fff;'],content:'您必须关注公众号后才能购买本单！<br/>长按图片识别二维码关注：<br/><img src="{pigcms{$config.site_url}/index.php?c=Recognition&a=get_tmp_qrcode&qrcode_id={pigcms{$order_info['order_id']+2000000000}" style="width:230px;height:230px;"/>',shadeClose:false});$('button.mj-submit').remove();var showBuyBtn = false;</script>
