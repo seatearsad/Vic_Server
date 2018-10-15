@@ -2393,8 +2393,8 @@ class PayAction extends BaseAction{
     public function MonerisPay(){
         import('@.ORG.pay.MonerisPay');
         $moneris_pay = new MonerisPay();
-        $resp = $moneris_pay->payment($_POST);
-        //var_dump($resp);
+        $resp = $moneris_pay->payment($_POST,$this->user_session['uid']);
+//        var_dump($resp);die();
         if($resp['complete'] == 'true'){
             $order = explode("_",$_POST['order_id']);
             $order_id = $order[1];
@@ -2404,6 +2404,50 @@ class PayAction extends BaseAction{
         }else{
             $this->error($resp['message'],'',true);
         }
+    }
+
+    public function receipt(){
+        $now_order = D('Shop_order')->get_order_detail(array('uid' => $this->user_session['uid'], 'order_id' => $_GET['order_id']));
+        $pay_record = D('Pay_moneris_record')->field(true)->where(array('order_id'=>$_GET['order_id']))->find();
+        if($pay_record)
+            $now_order = array_merge($now_order,$pay_record);
+//        var_dump($now_order);
+        foreach($now_order['info'] as $k=>$v){
+            $goods = D('Shop_goods')->field(true)->where(array('goods_id'=>$v['goods_id']))->find();
+            $now_order['info'][$k]['name'] = lang_substr($goods['name'],C('DEFAULT_LANG'));
+
+            //garfunkel 显示规格和分类
+            $spec_desc = '';
+            $spec_ids = explode('_',$v['spec_id']);
+            foreach ($spec_ids as $vv){
+                $spec = D('Shop_goods_spec_value')->field(true)->where(array('id'=>$vv))->find();
+                $spec_desc = $spec_desc == '' ? lang_substr($spec['name'],C('DEFAULT_LANG')) : $spec_desc.','.lang_substr($spec['name'],C('DEFAULT_LANG'));
+            }
+
+            if($v['pro_id'] != '')
+                $pro_ids = explode('|',$v['pro_id']);
+            else
+                $pro_ids = array();
+
+            foreach ($pro_ids as $vv){
+                $ids = explode(',',$vv);
+                $proId = $ids[0];
+                $sId = $ids[1];
+
+                $pro = D('Shop_goods_properties')->field(true)->where(array('id'=>$proId))->find();
+                $nameList = explode(',',$pro['val']);
+                $name = lang_substr($nameList[$sId],C('DEFAULT_LANG'));
+
+                $spec_desc = $spec_desc == '' ? $name : $spec_desc.','.$name;
+            }
+
+            if ($spec_desc != '')
+                $now_order['info'][$k]['spec'] = $spec_desc;
+        }
+
+
+        $this->assign('order',$now_order);
+        $this->display();
     }
 }
 ?>

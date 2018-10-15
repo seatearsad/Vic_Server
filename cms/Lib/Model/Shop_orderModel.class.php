@@ -531,8 +531,12 @@ class Shop_orderModel extends Model
 			$data_shop_order['paid'] = 1;
 			//garfunkel add moneris
 			$data_shop_order['invoice_head'] = $order_param['invoice_head'];
+
 			if ($now_order['card_discount']) {
 				$data_shop_order['price'] = sprintf("%.2f", ($now_order['price']-$now_order['freight_charge']) * $now_order['card_discount']/10)+$now_order['freight_charge'];//floor($now_order['price'] * $now_order['card_discount'] * 10) / 100;
+			}
+            if($order_param['tip_charge']){
+                $data_shop_order['tip_charge'] = $order_param['tip_charge'];
 			}
 			$shop_pass_array = array(
 					date('y',$_SERVER['REQUEST_TIME']),

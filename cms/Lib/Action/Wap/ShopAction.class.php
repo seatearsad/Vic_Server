@@ -3004,6 +3004,8 @@ class ShopAction extends BaseAction{
                 'order_from_txt' => $this->order_froms[$order['order_from']],
                 'deliver_log_list' => D('Shop_order_log')->where(array('order_id' => $order['order_id']))->order('id DESC')->find(),
                 'deliver_info' => unserialize($order['deliver_info']),
+                'pay_type' => $order['pay_type'],
+                'tip_charge' => $order['tip_charge']
             );
             foreach($order['info'] as $v) {
                 $discount_price = floatval($v['discount_price']) > 0 ? floatval($v['discount_price']) : floatval($v['price']);

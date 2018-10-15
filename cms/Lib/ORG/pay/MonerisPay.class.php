@@ -8,7 +8,7 @@
 
 class MonerisPay
 {
-    public function payment($data){
+    public function payment($data,$uid){
         import('@.ORG.pay.MonerisPay.mpgClasses');
 
         $where = array('tab_id'=>'moneris','gid'=>7);
@@ -20,14 +20,31 @@ class MonerisPay
                 $api_token = $v['value'];
         }
 
-        $card_id = $data['credit_id'];
-
-        $card = D('User_card')->field(true)->where(array('id'=>$card_id))->find();
-
         $txnArray['type'] = 'purchase';
         $txnArray['crypt_type'] = '7';
-        $txnArray['pan'] = $card['card_num'];
-        $txnArray['expdate'] = $card['expiry'];
+
+        if($data['credit_id']){//存储卡的
+            $card_id = $data['credit_id'];
+            $card = D('User_card')->field(true)->where(array('id'=>$card_id))->find();
+            $txnArray['pan'] = $card['card_num'];
+            $txnArray['expdate'] = $card['expiry'];
+        }else{//直接输入卡号的
+            $txnArray['pan'] = $data['card_num'];
+            $txnArray['expdate'] = $data['expiry'];
+
+            if($data['save'] == 1){//如果需要存储
+                $isC = D('User_card')->getCardByUserAndNum($uid,$data['card_num']);
+                if(!$isC) {
+                    D('User_card')->clearIsDefaultByUid($uid);
+                    $data['is_default'] = 1;
+                    $data['uid'] = $uid;
+                    $data['create_time'] = date("Y-m-d H:i:s");
+                    D('User_card')->field(true)->add($data);
+                }
+            }
+        }
+
+
         $txnArray['order_id'] = $data['order_id'];
         $txnArray['cust_id'] = $data['cust_id'];
         $txnArray['amount'] = $data['charge_total'];
@@ -47,16 +64,15 @@ class MonerisPay
         $mpgHttpPost  =new mpgHttpsPost($store_id,$api_token,$mpgRequest);
 
         $mpgResponse=$mpgHttpPost->getMpgResponse();
+        $resp = $this->arrageResp($mpgResponse,$txnArray['pan'],$txnArray['expdate']);
 
-        $resp = $this->arrageResp($mpgResponse);
-
-        $this->savePayData($resp,$data['rvarwap']);
+        $this->savePayData($resp,$data['rvarwap'],$data['tip']);
 
         return $resp;
     }
 
     //处理返回数据
-    public function arrageResp($mpgResponse){
+    public function arrageResp($mpgResponse,$pan,$expiry){
         /*卡类型 M = MasterCard V = Visa AX = American Express  NO = Discover（仅限加拿大）
         C1 = JCB（仅限加拿大）SE =Sears（仅限加拿大）D =借方（仅限加拿大）*/
         $resp['card_type'] = $mpgResponse->getCardType();
@@ -87,12 +103,19 @@ class MonerisPay
         //是否超时
         $resp['timeOut'] = $mpgResponse->getTimedOut();
 
+        $order = explode("_",$resp['receiptId']);
+        $resp['order_id'] = $order[1];
+
+        $resp['pan'] = $pan;
+        $resp['expiry'] = $expiry;
+        //存储支付记录
+        D('Pay_moneris_record')->field(true)->add($resp);
 
         return $resp;
     }
 
     //存储支付数据
-    public function savePayData($resp,$is_wap){
+    public function savePayData($resp,$is_wap,$tip){
         if($resp['complete'] == 'true'){//支付成功
             $order = explode("_",$resp['receiptId']);
             $order_id = $order[1];
@@ -107,6 +130,7 @@ class MonerisPay
             $order_param['is_own'] = 0;
             $order_param['third_id'] = 0;
             $order_param['invoice_head'] = $resp['txnNumber'];//借用发票头这个字段存储交易号
+            $order_param['tip_charge'] = $tip;
 
             $result = D('Shop_order')->after_pay($order_param);
 

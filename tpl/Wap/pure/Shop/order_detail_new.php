@@ -20,6 +20,13 @@
             <a class="return link-url" href="javascript:window.history.go(-1);"></a>
             <div class="content">{pigcms{:L('_ORDER_DETAIL_')}</div>
             <div class="ipho phone" data-phone="{pigcms{$store['phone']}"></div>
+            <if condition="$order_details['pay_type'] eq moneris">
+                <div style="position:absolute;right: 50px;top: 2px; font-size: 14px;color: #FF0000;cursor: pointer">
+                    <span onclick="javascript:window.location.href = '{pigcms{:U(\'Pay/receipt\',array(\'order_id\'=>$order_details[\'order_id\']))}'">
+                    {pigcms{:L('_RECEIPT_TXT_')}
+                    </span>
+                </div>
+            </if>
         </section>
         <if condition="$order_details['deliver_log_list']">
         <section class="defrayal">
@@ -108,6 +115,12 @@
                             <div class="fl">{pigcms{:L('_TAXATION_TXT_')}</div>
                             <div class="fr">5%</div>
                         </dd>
+                        <if condition="$order_details['tip_charge'] neq 0">
+                            <dd class="clr">
+                                <div class="fl">{pigcms{:L('_TIP_TXT_')}</div>
+                                <div class="fr">${pigcms{$order_details['tip_charge']}</div>
+                            </dd>
+                        </if>
                     </dl>
                 </div>
                 
@@ -161,7 +174,7 @@
                 <div class="answer clr">
               
                     <div class="fl">{pigcms{:L('_ORDER_TXT_')} ${pigcms{$order_details['discount_price']|floatval} {pigcms{:L('_DISCOUNT_TXT_')}-${pigcms{$order_details['minus_price']|floatval}</div>
-                    <div class="fr">{pigcms{:L('_TOTAL_RECE_')}: ${pigcms{$order_details['price']|floatval}</div>
+                    <div class="fr">{pigcms{:L('_TOTAL_RECE_')}: ${pigcms{$order_details['price'] + $order_details['tip_charge']|floatval}</div>
                 </div>
                 
             </div>

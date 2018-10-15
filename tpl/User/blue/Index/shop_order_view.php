@@ -87,7 +87,15 @@ filter:alpha(opacity=50);
 			<div id="bd" class="cf">
 				<div id="content">
 					<div class="mainbox mine">
-						<h2>{pigcms{:L('_ORDER_DETAIL_')}<span class="op-area"><a href="{pigcms{:U('Index/shop_list')}">{pigcms{:L('_B_PURE_MY_63_')}</a></span></h2>
+						<h2>{pigcms{:L('_ORDER_DETAIL_')}
+                            <span class="op-area">
+                                <if condition="$now_order['pay_type'] eq moneris">
+                                    <a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U(\'Index/Pay/receipt\',array(\'order_id\'=>$now_order[\'order_id\']))}','{pigcms{:L(\'_RECEIPT_TXT_\')}',420,540,false,false,false,null,null,true);">{pigcms{:L('_RECEIPT_TXT_')}</a>
+                                 |
+                                </if>
+                                <a href="{pigcms{:U('Index/shop_list')}">{pigcms{:L('_B_PURE_MY_63_')}</a>
+                            </span>
+                        </h2>
 						<dl class="info-section primary-info J-primary-info">
 							<dt>
 								<span class="info-section--title">{pigcms{:L('_ORDER_STATUS_')}：</span>
@@ -175,11 +183,13 @@ filter:alpha(opacity=50);
 									<li>{pigcms{:L('_STORE_DIS_')}：${pigcms{$now_order['merchant_reduce']|floatval} </li>
 								</if>
 								
-								
+								<if condition="$now_order['tip_charge'] neq 0">
+                                    <li>{pigcms{:L('_TIP_TXT_')}:${pigcms{$now_order['tip_charge']}</li>
+                                </if>
 								<if condition="$now_order['balance_reduce'] gt 0">
-									<li>{pigcms{:L('平台优惠')}：${pigcms{$now_order['balance_reduce']|floatval} </li>
+									<li>{pigcms{:L('_PLATFORM_DIS_')}：${pigcms{$now_order['balance_reduce']|floatval} </li>
 								</if>
-									<li>{pigcms{:L('_ACTUAL_PAYMENT_')}（+5% {pigcms{:L('_TAXATION_TXT_')}）：${pigcms{$now_order['price']|floatval} </li>
+									<li>{pigcms{:L('_ACTUAL_PAYMENT_')}（+5% {pigcms{:L('_TAXATION_TXT_')}）：${pigcms{$now_order['price']+$now_order['tip_charge']|floatval} </li>
 								</ul>
 								<ul class="flow-list">
 								<if condition="$now_order['score_used_count']">
@@ -293,6 +303,47 @@ filter:alpha(opacity=50);
 			}
 			
 		}
+
+        //art弹框组件
+        function artiframe(url, title, width, height, lock, resize, background, button, id, fixeds, closefun, left, top, padding){
+            if(url.indexOf("?") != -1){
+                url = url+'&frame=1';
+            }else{
+                url = url+'?frame=1';
+            }
+            if (!width) width = 'auto';
+            if (!height) height = 'auto';
+            if (!lock) lock = false;
+            if (!resize) resize = false;
+            if (!background) background = 'black';
+            if (!closefun) closefun = null;
+            if (!button) button = null;
+            if (!left) left = '50%';
+            if (!top) top = '38.2%';
+            if (!id) id = null;
+            if (!fixeds) fixeds = false;
+            if (!padding) padding = 0;
+            art.dialog.open(url, {
+                init: function(){
+                    var iframe = this.iframe.contentWindow;
+                    window.top.art.dialog.data('iframe' + id, iframe);
+                },
+                id: id,
+                title: title,
+                padding: padding,
+                width: width,
+                height: height,
+                lock: lock,
+                resize: resize,
+                background: background,
+                button: button,
+                fixed: fixeds,
+                close: closefun,
+                left: left,
+                top: top,
+                opacity:'0.4'
+            });
+        }
 	</script>
 </body>
 </html>

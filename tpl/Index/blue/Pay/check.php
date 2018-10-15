@@ -382,8 +382,13 @@ a.see_tmp_qrcode {
   border: none;
   padding: 0;
   padding-bottom: 60px;
-}	
-		
+}
+.form-field--error{
+    border:1px #FF0000 solid;
+}
+
+.tip_s{width: 32%; height: 40px; border: 1px #999999 solid;line-height: 40px;text-align: center;font-size: 16px;display:-moz-inline-box;display:inline-block;cursor: pointer}
+.tip_on{background-color: #06c1ae;color: #ffffff;border-color:#06c1ae }
 		
 	</style>
 </head>
@@ -540,6 +545,40 @@ a.see_tmp_qrcode {
 										<div class="clr"></div>
 									</div>
 								</div>
+                                <div class="clr" style="border-bottom: 1px #cccccc solid"></div>
+                                <div id="tip_label">
+                                    <div class="payment-banktit">
+                                        <b class="open">
+                                            {pigcms{:L('_TIP_TXT_')}
+                                        </b>
+                                    </div>
+                                    <div class="payment-bankcen">
+                                        <div class="bank morebank">
+                                            <dl class="list">
+                                                <dd class="dd-padding">
+                                                    <div id="tip_list" style="margin: auto;width: 98%">
+                                                        <span class="tip_s">
+                                                            10%
+                                                        </span>
+                                                        <span class="tip_s tip_on">
+                                                            15%
+                                                        </span>
+                                                        <span class="tip_s">
+                                                            20%
+                                                        </span>
+                                                    </div>
+                                                    <div style="margin: 20px auto 5px;width: 98%">
+                                                        {pigcms{:L('_SELF_ENTER_TIP_')}: $ <input type="text" id="tip_fee" name="tip_fee" size="20" style="height: 25px;">
+                                                    </div>
+                                                    <div style="margin: 20px auto 5px;width: 98%;font-size: 16px;">
+                                                        <span>{pigcms{:L('_TIP_TXT_')}:</span><span id="tip_num">$0</span>
+                                                        <span style="color: #ff0000;">{pigcms{:L('_B_PURE_MY_70_')}:</span><span id="add_tip">$0</span>
+                                                    </div>
+                                                </dd>
+                                            </dl>
+                                        </div>
+                                    </div>
+                                </div>
 								<div class="clr" style="border-bottom: 1px #cccccc solid"></div>
                                 <div id="card">
                                     <div class="payment-banktit">
@@ -552,10 +591,10 @@ a.see_tmp_qrcode {
                                         <div class="bank morebank">
                                             <ul class="imgradio">
                                                 <if condition="count($card_list) eq 0">
-                                                    <a href="{pigcms{:U('User/Card/index')}" target="_blank">
+                                                    <!--a href="{pigcms{:U('User/Card/index')}" target="_blank">
                                                         {pigcms{:L('_ADD_CREDIT_CARD_')}
                                                     </a>
-                                                    <span id="refresh_card" style="font-size: 11px;color: #0c68cf;cursor:pointer"> -- {pigcms{:L('_REFRESH_TXT_')} </span>
+                                                    <span id="refresh_card" style="font-size: 11px;color: #0c68cf;cursor:pointer"> -- {pigcms{:L('_REFRESH_TXT_')} </span-->
                                                 <else />
                                                     <volist name="card_list" id="vo">
                                                         <div style="font-size: 12px;">
@@ -566,6 +605,33 @@ a.see_tmp_qrcode {
                                                 </if>
                                             </ul>
                                             <div class="clr"></div>
+                                        </div>
+                                        <div class="payment-bankcen" style="border-top: 1px #cccccc solid;">
+                                            <div class="bank morebank">
+                                                <input type="radio" name="card_id" value="0">
+                                                {pigcms{:L('_USE_NEW_CARD_')}
+
+                                                <ul class="imgradio">
+                                                    <div>
+                                                        <span style="width:150px;display:-moz-inline-box;display:inline-block;">{pigcms{:L('_CREDITHOLDER_NAME_')}：</span>
+                                                        <input type="text" maxlength="20" size="20" name="name" id="card_name" value=""/>
+
+                                                    </div>
+                                                    <div>
+                                                        <span style="width:150px;display:-moz-inline-box;display:inline-block;">{pigcms{:L('_CREDIT_CARD_NUM_')}：</span>
+                                                        <input type="text" maxlength="20" size="20" name="card_num" id="card_num" value=""/>
+                                                    </div>
+                                                    <div>
+                                                        <span style="width:150px;display:-moz-inline-box;display:inline-block;">{pigcms{:L('_EXPRIRY_DATE_')}：</span>
+                                                        <input type="text" maxlength="4" size="20" name="expiry" id="expiry" value=""/>
+                                                    </div>
+                                                    <div>
+                                                        <span style="width:150px;display:-moz-inline-box;display:inline-block;">{pigcms{:L('_IS_SAVE_')}：</span>
+                                                        <input type="checkbox" name="save" id="save" value="1"/>
+                                                    </div>
+                                                </ul>
+                                            </div>
+
                                         </div>
                                     </div>
                                 </div>
@@ -607,9 +673,51 @@ a.see_tmp_qrcode {
                    // alert('This function is currently unavailable.');
                    // $("#J-order-pay-button").val("{pigcms{:L('_B_PURE_MY_81_')}");
                    // $("#J-order-pay-button").removeAttr("disabled");
-
-                   if($('input[name="credit_id"]').val()){
-                       $.post($('#moneris_form').attr('action'),$('#moneris_form').serialize(),function(data){
+                   if($('input[name="credit_id"]').val() == 0){//使用新的信用卡
+                        if(check_card()){
+                            var re_data = {
+                                'name':$('#card_name').val(),
+                                'card_num':$('#card_num').val(),
+                                'expiry':$('#expiry').val(),
+                                'save':$('input[name="save"]:checked').val(),
+                                // 'charge_total':$('input[name="charge_total"]').val(),
+                                'charge_total':$('#add_tip').text().replace('$', ""),
+                                'order_id':"vicisland_{pigcms{$order_info.order_id}",
+                                'cust_id':'{pigcms{:md5($order_info.uid)}',
+                                'rvarwap':$('input[name="rvarwap"]').val(),
+                                'tip':$('#tip_num').text().replace('$', "")
+                            };
+                            $.post($('#moneris_form').attr('action'),re_data,function(data){
+                                if(data.status == 1){
+                                    art.dialog({
+                                        title: 'Message',
+                                        id: 'moneris_pay',
+                                        opacity:'0.4',
+                                        lock:true,
+                                        fixed: true,
+                                        resize: false,
+                                        content: "{pigcms{:L('_PAYMENT_SUCCESS_')}"
+                                    });
+                                    setTimeout("window.location.href = '"+data.url+"'",200);
+                                }
+                            });
+                        }else{
+                            alert("{pigcms{:L('_PLEASE_RIGHT_CARD_')}");
+                            $("#J-order-pay-button").val("{pigcms{:L('_B_PURE_MY_81_')}");
+                            $("#J-order-pay-button").removeAttr("disabled");
+                            $("html,body").animate({"scrollTop":$('#card').offset().top},900);
+                        }
+                   }else{
+                       var re_data = {
+                           'credit_id':$('input[name="credit_id"]').val(),
+                           // 'charge_total':$('input[name="charge_total"]').val(),
+                           'charge_total':$('#add_tip').text().replace('$', ""),
+                           'order_id':"vicisland_{pigcms{$order_info.order_id}",
+                           'cust_id':'{pigcms{:md5($order_info.uid)}',
+                           'rvarwap':$('input[name="rvarwap"]').val(),
+                           'tip':$('#tip_num').text().replace('$', "")
+                       };
+                       $.post($('#moneris_form').attr('action'),re_data,function(data){
                            if(data.status == 1){
                                setTimeout("window.location.href = '"+data.url+"'",200);
                            }else{
@@ -618,12 +726,16 @@ a.see_tmp_qrcode {
                                $("#J-order-pay-button").removeAttr("disabled");
                            }
                        });
-                   }else{
-                       alert("{pigcms{:L('_PLEASE_ADD_CARD_')}");
-                       $("#J-order-pay-button").val("{pigcms{:L('_B_PURE_MY_81_')}");
-                       $("#J-order-pay-button").removeAttr("disabled");
-                       $("html,body").animate({"scrollTop":$('#card').offset().top},900);
                    }
+
+                   // if($('input[name="credit_id"]').val()){
+                   //
+                   // }else{
+                   //     alert("{pigcms{:L('_PLEASE_ADD_CARD_')}");
+                   //     $("#J-order-pay-button").val("{pigcms{:L('_B_PURE_MY_81_')}");
+                   //     $("#J-order-pay-button").removeAttr("disabled");
+                   //     $("html,body").animate({"scrollTop":$('#card').offset().top},900);
+                   // }
 
                    // $.ajax({
                    //     url:"{pigcms{:U('Wap/Pay/getPayMessage')}",
@@ -723,9 +835,81 @@ a.see_tmp_qrcode {
 
         $(function(){
             isShowCredit();
+            $('#tip_list').children('span').each(function(){
+                $(this).click(tip_select);
+            });
             //默认第一个选中
             $('input[name="card_id"]:first').attr('checked','checked');
             $('input[name="credit_id"]').val($('input[name="card_id"]').val());
+
+            CalTip();
+        });
+
+        //计算小费
+        function CalTip(){
+            var tipNum = 0;
+
+            var num = $('#tip_fee').val();
+            if(/^\d+(\.\d{1,2})?$/.test(num) && num != ""){
+                tipNum = parseFloat(num);
+            }else{
+                $('#tip_list').children('span').each(function(){
+                    if($(this).hasClass('tip_on')){
+                        tipNum = $('input[name="charge_total"]').val() *  ($(this).text().replace(/%/, "")/100);
+                    }
+                });
+            }
+            var totalNum = parseFloat($('input[name="charge_total"]').val()) + parseFloat(tipNum);
+
+            $('#tip_num').text('$' + tipNum.toFixed(2));
+            $('#add_tip').text('$' + totalNum.toFixed(2));
+            // alert($('#add_tip').text().replace('$', ""));
+        }
+
+        function tip_select(){
+            $('#tip_list').children('span').each(function(){
+                $(this).removeClass('tip_on');
+            });
+            $(this).addClass('tip_on');
+            $('#tip_fee').val("");
+            CalTip();
+        }
+
+        $('#tip_fee').live('focusin focusout',function(event){
+            if(event.type == 'focusin'){
+                $(this).siblings('.inline-tip').remove();$(this).removeClass('form-field--error');
+            }else{
+                $(this).val($.trim($(this).val()));
+                var num = $(this).val();
+                if(num != ''){
+                    if(!/^\d+(\.\d{1,2})?$/.test(num)){
+                        alert("{pigcms{:L('_PLEASE_RIGHT_PRICE_')}");
+                        $(this).focus();
+                        $(this).after("<span class='inline-tip'><i class='tip-status tip-status--opinfo'></i></span>").addClass('form-field--error');
+                    }else{
+                        $('#tip_list').children('span').each(function(){
+                            $(this).removeClass('tip_on');
+                        });
+                    }
+                }else{
+                    var isC = false;
+                    $('#tip_list').children('span').each(function(){
+                        if($(this).hasClass('tip_on')){
+                            isC = true;
+                        }
+                    });
+                    if(!isC){
+                        var i=0;
+                        $('#tip_list').children('span').each(function(){
+                            if(i == 1){
+                                $(this).addClass('tip_on');
+                            }
+                            i++;
+                        });
+                    }
+                }
+                CalTip();
+            }
         });
 
         $('input[name="card_id"]').click(function(){
@@ -735,14 +919,57 @@ a.see_tmp_qrcode {
             var pay_type = $('input[name="pay_type"]:checked').val();
             if(pay_type == 'moneris'){
                 $('#card').show();
+                $('#tip_label').show();
             }else{
                 $('#card').hide();
+                $('#tip_label').hide();
             }
         }
 
         $('#refresh_card').click(function(){
             window.location.reload();
         });
+
+        $('#card_name').live('focusin focusout',function(event){
+            if(event.type == 'focusin'){
+                $(this).siblings('.inline-tip').remove();$(this).removeClass('form-field--error');
+            }else{
+                $(this).val($.trim($(this).val()));
+                var name = $(this).val();
+                if(name.length < 2){
+                    $(this).after("<span class='inline-tip'><i class='tip-status tip-status--opinfo'></i></span>").addClass('form-field--error');
+                }
+            }
+        });
+        $('#card_num').live('focusin focusout',function(event){
+            if(event.type == 'focusin'){
+                $(this).siblings('.inline-tip').remove();$(this).removeClass('form-field--error');
+            }else{
+                $(this).val($.trim($(this).val()));
+                var num = $(this).val();
+                if(!/^\d{13,}$/.test(num)){
+                    $(this).after("<span class='inline-tip'><i class='tip-status tip-status--opinfo'></i></span>").addClass('form-field--error');
+                }
+            }
+        });
+        $('#expiry').live('focusin focusout',function(event){
+            if(event.type == 'focusin'){
+                $(this).siblings('.inline-tip').remove();$(this).removeClass('form-field--error');
+            }else{
+                $(this).val($.trim($(this).val()));
+                var expiry = $(this).val();
+                if(expiry.length < 4 || expiry.length > 4){
+                    $(this).after("<span class='inline-tip'><i class='tip-status tip-status--opinfo'></i></span>").addClass('form-field--error');
+                }
+            }
+        });
+        function check_card(){
+            var isT = true;
+            if($('#card_name').val().length < 2 || !/^\d{13,}$/.test($('#card_num').val()) || $('#expiry').val().length != 4 ){
+                isT = false;
+            }
+            return isT;
+        }
 	</script>
 	<include file="Public:footer"/>
 </body>

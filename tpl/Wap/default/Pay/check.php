@@ -243,11 +243,11 @@
                 $('#mer_coupon').html(mer_coupon_html);
                 $('#balanceBox').css('margin-bottom','+60px');
                 $('#normal-fieldset').css('display','none');
-                $('#normal-fieldset input[type="radio"]').removeAttr('checked');
+                $('#normal-fieldset input[name="pay_type"]').removeAttr('checked');
             }else{
                 $('#balanceBox').css('margin-bottom','0px');
                 if($('#normal-fieldset').css('display')=='none'){
-                    //$('#normal-fieldset input[type="radio"]:first').attr('checked','checked');
+                    //$('#normal-fieldset input[name="pay_type"]:first').attr('checked','checked');
                 }
                 $('#normal-fieldset').css('display','block');
             }
@@ -511,7 +511,7 @@
     <script language="javascript">
         function bio_verify(){
             layer.open({type:2,content:"{pigcms{:L('_LOADING_TXT_')}",shadeClose:false});
-            var pay_type = $('input:radio:checked').val();
+            var pay_type = $('input[name="pay_type"]:checked').val();
             $("button.mj-submit").attr("disabled", "disabled");
             $("button.mj-submit").html("正在处理...");
             var use_score= $("input[name='use_score']").val();
@@ -556,23 +556,60 @@
 
             }else{//garfunkel add
                 if(pay_type == 'moneris'){
-                    if($('input[name="credit_id"]').val()){
-                        $.post($('#moneris_form').attr('action'),$('#moneris_form').serialize(),function(data){
+                    var card_type = $('input[name="pay_card_type"]:checked').val();
+                    if(card_type == 1){
+                        if(check_card()){
+                            // alert($('input[name="save"]:checked').val());
+                            var re_data = {
+                                'name':$('#card_name').val(),
+                                'card_num':$('#card_num').val(),
+                                'expiry':$('#expiry').val(),
+                                'save':$('input[name="save"]:checked').val(),
+                                // 'charge_total':$('input[name="charge_total"]').val(),
+                                'charge_total':$('#add_tip').text().replace('$', ""),
+                                'order_id':"vicisland_{pigcms{$order_info.order_id}",
+                                'cust_id':'{pigcms{:md5($order_info.uid)}',
+                                'rvarwap':$('input[name="rvarwap"]').val(),
+                                'tip':$('#tip_num').text().replace('$', "")
+                            };
+                            $.post($('#moneris_form').attr('action'),re_data,function(data){
+                                layer.closeAll();
+                                layer.open({title:['Message'],content:data.info});
+                                if(data.status == 1){
+                                    setTimeout("window.location.href = '"+data.url+"'",200);
+                                }
+                            });
+                        }else{
+                            alert("{pigcms{:L('_PLEASE_RIGHT_CARD_')}");
                             layer.closeAll();
-                            layer.open({title:['Message'],content:data.info});
-                            if(data.status == 1){
-                                setTimeout("window.location.href = '"+data.url+"'",200);
-                            }else{
-
-                            }
-                        });
+                            $("html,body").animate({"scrollTop":$('#credit').offset().top},900);
+                        }
                     }else{
-                        alert("{pigcms{:L('_PLEASE_ADD_CARD_')}");
-                        layer.closeAll();
-                        $("html,body").animate({"scrollTop":$('#credit').offset().top},900);
+                        if($('input[name="credit_id"]').val()){
+                            var re_data = {
+                                'credit_id':$('input[name="credit_id"]').val(),
+                                // 'charge_total':$('input[name="charge_total"]').val(),
+                                'charge_total':$('#add_tip').text().replace('$', ""),
+                                'order_id':"vicisland_{pigcms{$order_info.order_id}",
+                                'cust_id':'{pigcms{:md5($order_info.uid)}',
+                                'rvarwap':$('input[name="rvarwap"]').val(),
+                                'tip':$('#tip_num').text().replace('$', "")
+                            };
+                            $.post($('#moneris_form').attr('action'),re_data,function(data){
+                                layer.closeAll();
+                                layer.open({title:['Message'],content:data.info});
+                                if(data.status == 1){
+                                    setTimeout("window.location.href = '"+data.url+"'",200);
+                                }else{
+
+                                }
+                            });
+                        }else{
+                            alert("{pigcms{:L('_PLEASE_ADD_CARD_')}");
+                            layer.closeAll();
+                            $("html,body").animate({"scrollTop":$('#credit').offset().top},900);
+                        }
                     }
-
-
 
                     // $.ajax({
                     //     url:"{pigcms{:U('Pay/getPayMessage')}",
@@ -598,7 +635,7 @@
 
         //微信弹程支付
         function callpay(){
-            var pay_type = $('input:radio:checked').val();
+            var pay_type = $('input[name="pay_type"]:checked').val();
             if(typeof(pay_type)!='undefined'){
                 if(pay_type!='weixin'){
                     return true;
@@ -811,7 +848,7 @@
         <INPUT TYPE="HIDDEN" NAME="hpp_key" VALUE="">
         <INPUT TYPE="HIDDEN" NAME="charge_total" VALUE="">
         <input type="hidden" name="cust_id" value="{pigcms{:md5($order_info.uid)}">
-        <input type="hidden" name="order_id" value="vicisland_{pigcms{$order_info.order_id}_7">
+        <input type="hidden" name="order_id" value="vicisland_{pigcms{$order_info.order_id}">
         <input type="hidden" name="rvarwap" value="1">
         <input type="hidden" name="credit_id" value="{pigcms{$card['id']}">
     </form>
@@ -849,22 +886,69 @@
                     </volist>
                 </dl>
             </div>
+            <div id="tip_label" class="normal-fieldset" style="height: 100%;margin-top: -50px;margin-bottom: 60px;">
+                <h4 style="margin: .3rem .2rem .2rem;">{pigcms{:L('_TIP_TXT_')}</h4>
+                <dl class="list">
+                    <dd class="dd-padding">
+                        <div id="tip_list" style="margin: auto;width: 98%">
+                            <span class="tip_s">
+                                10%
+                            </span>
+                            <span class="tip_s tip_on">
+                                15%
+                            </span>
+                                <span class="tip_s">
+                                20%
+                            </span>
+                        </div>
+                        <div style="margin: 20px auto 5px;width: 98%">
+                            {pigcms{:L('_SELF_ENTER_TIP_')}: $ <input type="text" id="tip_fee" name="tip_fee" size="20" style="height: 25px;">
+                        </div>
+                        <div style="margin: 20px auto 5px;width: 98%;font-size: 16px;">
+                            <span>{pigcms{:L('_TIP_TXT_')}:</span><span id="tip_num">$0</span>
+                            <span style="color: #ff0000;">{pigcms{:L('_B_PURE_MY_70_')}:</span><span id="add_tip">$0</span>
+                        </div>
+                    </dd>
+                </dl>
+            </div>
             <div id="credit" class="normal-fieldset" style="height: 100%;display:none;margin-top: -50px; margin-bottom:60px;" >
                 <h4 style="margin: .3rem .2rem .2rem;">{pigcms{:L('_CREDIT_CARD_')}</h4>
                 <dl class="list">
+                    <if condition="$card">
+                    <div style="line-height: 20px;float:left;width: 100%;margin-bottom: 15px;margin-left: .2rem">
+                        <input type="radio" name="pay_card_type" value="0" class="mt" checked=checked> {pigcms{:L('_USE_NEW_CARD_')}
+                    </div>
                     <a href="{pigcms{:U('My/credit',array('order_id'=>$order_info['order_id']))}">
-                        <dd class="more dd-padding" style="padding-right: .3rem;">
-                            <label class="mt">
-                                <span class="pay-wrapper">
-                                    <if condition="$card">
-                                        {pigcms{$card['name']} -- {pigcms{$card['card_num']}
-                                    <else />
-                                        {pigcms{:L('_ADD_CREDIT_CARD_')}
-                                    </if>
-                                </span>
-                            </label>
-                        </dd>
+                    <dd class="more dd-padding" style="border-bottom: 1px #cccccc solid;">
+                        <label class="mt">
+                            <span class="pay-wrapper">
+                                   {pigcms{$card['name']} -- {pigcms{$card['card_num']}
+                            </span>
+                        </label>
+                    </dd>
                     </a>
+                    </if>
+                    <dd class="dd-padding">
+                        <div style="line-height: 20px;float:left;width: 100%;margin-bottom: 15px;">
+                            <input type="radio" name="pay_card_type" value="1" class="mt" <if condition="!$card">checked=checked</if>> {pigcms{:L('_USE_NEW_CARD_')}
+                        </div>
+                        <div style="line-height: 20px;float:left;width: 100%;margin-bottom: 5px;">
+                            <span style="float: left;width:150px;">{pigcms{:L('_CREDITHOLDER_NAME_')}：</span>
+                            <input type="text" maxlength="20" size="20" name="name" class="form-field" id="card_name" value="" style="float: left"/>
+                        </div>
+                        <div style="line-height: 20px;float:left;width: 100%;margin-bottom: 5px;">
+                            <span style="float: left;width:150px;">{pigcms{:L('_CREDIT_CARD_NUM_')}：</span>
+                            <input type="text" maxlength="20" size="20" name="card_num" class="form-field" id="card_num" value="" style="float: left"/>
+                        </div>
+                        <div style="line-height: 20px;float:left;width: 100%;margin-bottom: 5px;">
+                            <span style="float: left;width:150px;">{pigcms{:L('_EXPRIRY_DATE_')}：</span>
+                            <input type="text" maxlength="4" size="20" name="expiry" class="form-field" id="expiry" value="" style="float: left"/>
+                        </div>
+                        <div style="line-height: 20px;float:left;width: 100%;margin-bottom: 5px;">
+                            <span style="float: left;width:150px;">{pigcms{:L('_IS_SAVE_')}：</span>
+                            <input type="checkbox" name="save" class="form-field" id="save" value="1" style="float: left;width:20px;height: 20px;"/>
+                        </div>
+                    </dd>
                 </dl>
             </div>
             <div style="background-color: #FFFFFF; height: 53px;position: fixed;bottom: 0;left: 0;right: 0;z-index: 900;-webkit-tap-highlight-color: rgba(0, 0, 0, 0);height: 49px;width: 100%;">
@@ -912,6 +996,8 @@
     .plus{ float: left; }
     .plus a{width: 30px;float: left;height: 25px;border: #e5e5e5 1px solid;text-align: center;color: #232326;font-size: 20px;line-height: 25px;font-family: "Arial";}
     .plus input{width: 80px;text-align: center;float: left;border: #e5e5e5 1px solid;border-left: none;border-right: none;height: 25px;font-size: 14px;border-radius: 0px;font-size: 16px;color: red;}
+    .tip_s{width: 32%; height: 40px; border: 1px #999999 solid;line-height: 40px;text-align: center;font-size: 16px;display:-moz-inline-box;display:inline-block;cursor: pointer}
+    .tip_on{background-color: #06c1ae;color: #ffffff;border-color:#06c1ae }
 </style>
 
 <div class="pwd_verify" style="display: none;" id="change_score">
@@ -948,22 +1034,142 @@
     var showBuyBtn = true;
 
     //garfunkel add
-    $(":radio").click(isShowCredit);
+    $('input[name="pay_type"]').click(isShowCredit);
 
     $(function(){
         isShowCredit();
+        $('#tip_list').children('span').each(function(){
+            $(this).click(tip_select);
+        });
+        CalTip();
     });
+    //计算小费
+    function CalTip(){
+        var tipNum = 0;
+
+        var num = $('#tip_fee').val();
+        if(/^\d+(\.\d{1,2})?$/.test(num) && num != ""){
+            tipNum = parseFloat(num);
+        }else{
+            $('#tip_list').children('span').each(function(){
+                if($(this).hasClass('tip_on')){
+                    tipNum = $('input[name="charge_total"]').val() *  ($(this).text().replace(/%/, "")/100);
+                }
+            });
+        }
+        var totalNum = parseFloat($('input[name="charge_total"]').val()) + parseFloat(tipNum);
+
+        $('#tip_num').text('$' + tipNum.toFixed(2));
+        $('#add_tip').text('$' + totalNum.toFixed(2));
+        // alert($('#add_tip').text().replace('$', ""));
+    }
+
+    function tip_select(){
+        $('#tip_list').children('span').each(function(){
+            $(this).removeClass('tip_on');
+        });
+        $(this).addClass('tip_on');
+        $('#tip_fee').val("");
+        $('#tip_fee').after("<span class='inline-tip'><i class='tip-status tip-status--opinfo'></i></span>").removeClass('form-field--error');
+        CalTip();
+    }
 
     function isShowCredit(){
-        var pay_type = $('input:radio:checked').val();
+        var pay_type = $('input[name="pay_type"]:checked').val();
         if(pay_type == 'moneris'){
             $('#credit').show();
+            $('#tip_label').show();
         }else{
             $('#credit').hide();
+            $('#tip_label').hide();
         }
     }
 
+    $('#tip_fee').live('focusin focusout',function(event){
+        if(event.type == 'focusin'){
+            $(this).siblings('.inline-tip').remove();$(this).removeClass('form-field--error');
+        }else{
+            $(this).val($.trim($(this).val()));
+            var num = $(this).val();
+            if(num != ''){
+                if(!/^\d+(\.\d{1,2})?$/.test(num)){
+                    alert("{pigcms{:L('_PLEASE_RIGHT_PRICE_')}");
+                    $(this).focus();
+                    $(this).after("<span class='inline-tip'><i class='tip-status tip-status--opinfo'></i></span>").addClass('form-field--error');
+                }else{
+                    $('#tip_list').children('span').each(function(){
+                        $(this).removeClass('tip_on');
+                    });
+                }
+            }else{
+                var isC = false;
+                $('#tip_list').children('span').each(function(){
+                    if($(this).hasClass('tip_on')){
+                        isC = true;
+                    }
+                });
+                if(!isC){
+                    var i=0;
+                    $('#tip_list').children('span').each(function(){
+                        if(i == 1){
+                            $(this).addClass('tip_on');
+                        }
+                        i++;
+                    });
+                }
+            }
+            CalTip();
+        }
+    });
+
+    $('#card_name').live('focusin focusout',function(event){
+        if(event.type == 'focusin'){
+            $(this).siblings('.inline-tip').remove();$(this).closest('.form-field').removeClass('form-field--error');
+        }else{
+            $(this).val($.trim($(this).val()));
+            var name = $(this).val();
+            if(name.length < 2){
+                $(this).after("<span class='inline-tip'><i class='tip-status tip-status--opinfo'></i></span>").closest('.form-field').addClass('form-field--error');
+            }
+        }
+    });
+    $('#card_num').live('focusin focusout',function(event){
+        if(event.type == 'focusin'){
+            $(this).siblings('.inline-tip').remove();$(this).closest('.form-field').removeClass('form-field--error');
+        }else{
+            $(this).val($.trim($(this).val()));
+            var num = $(this).val();
+            if(!/^\d{13,}$/.test(num)){
+                $(this).after("<span class='inline-tip'><i class='tip-status tip-status--opinfo'></i></span>").closest('.form-field').addClass('form-field--error');
+            }
+        }
+    });
+
+    $('#expiry').live('focusin focusout',function(event){
+        if(event.type == 'focusin'){
+            $(this).siblings('.inline-tip').remove();$(this).closest('.form-field').removeClass('form-field--error');
+        }else{
+            $(this).val($.trim($(this).val()));
+            var expiry = $(this).val();
+            if(expiry.length < 4 || expiry.length > 4){
+                $(this).after("<span class='inline-tip'><i class='tip-status tip-status--opinfo'></i></span>").closest('.form-field').addClass('form-field--error');
+            }
+        }
+    });
+    function check_card(){
+        var isT = true;
+        if($('#card_name').val().length < 2 || !/^\d{13,}$/.test($('#card_num').val()) || $('#expiry').val().length != 4 ){
+            isT = false;
+        }
+        return isT;
+    }
+
 </script>
+<style>
+    .form-field--error{
+        border:1px #FF0000 solid;
+    }
+</style>
 <if condition="$cheap_info['can_buy'] heq false">
     <script>layer.open({title:['提示：','background-color:#FF658E;color:#fff;'],content:'您必须关注公众号后才能购买本单！<br/>长按图片识别二维码关注：<br/><img src="{pigcms{$config.site_url}/index.php?c=Recognition&a=get_tmp_qrcode&qrcode_id={pigcms{$order_info['order_id']+2000000000}" style="width:230px;height:230px;"/>',shadeClose:false});$('button.mj-submit').remove();var showBuyBtn = false;</script>
 </if>
