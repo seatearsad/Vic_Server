@@ -832,11 +832,20 @@ a.see_tmp_qrcode {
 
         //garfunkel add
         $("input[name='pay_type']").click(isShowCredit);
-
+        var isb = false;
         $(function(){
             isShowCredit();
+            if(parseFloat($('input[name="charge_total"]').val()) <= 20){
+                isb = true;
+            }
+            var tipxn = new Array(2,3,4);
+            var i = 0;
             $('#tip_list').children('span').each(function(){
                 $(this).click(tip_select);
+                if(isb){
+                    $(this).text('$' + tipxn[i]);
+                }
+                i++;
             });
             //默认第一个选中
             $('input[name="card_id"]:first').attr('checked','checked');
@@ -855,7 +864,10 @@ a.see_tmp_qrcode {
             }else{
                 $('#tip_list').children('span').each(function(){
                     if($(this).hasClass('tip_on')){
-                        tipNum = $('input[name="charge_total"]').val() *  ($(this).text().replace(/%/, "")/100);
+                        if(isb)
+                            tipNum = parseFloat($(this).text().replace('$', ""));
+                        else
+                            tipNum = $('input[name="charge_total"]').val() *  ($(this).text().replace(/%/, "")/100);
                     }
                 });
             }
