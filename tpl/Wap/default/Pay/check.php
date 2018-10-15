@@ -916,7 +916,7 @@
                 <dl class="list">
                     <if condition="$card">
                     <div style="line-height: 20px;float:left;width: 100%;margin-bottom: 15px;margin-left: .2rem">
-                        <input type="radio" name="pay_card_type" value="0" class="mt" checked=checked> {pigcms{:L('_USE_NEW_CARD_')}
+                        <input type="radio" name="pay_card_type" value="0" class="mt" checked=checked> {pigcms{:L('_USE_OLD_CARD_')}
                     </div>
                     <a href="{pigcms{:U('My/credit',array('order_id'=>$order_info['order_id']))}">
                     <dd class="more dd-padding" style="border-bottom: 1px #cccccc solid;">
