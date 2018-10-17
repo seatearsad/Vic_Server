@@ -31,17 +31,6 @@ class MonerisPay
         }else{//直接输入卡号的
             $txnArray['pan'] = $data['card_num'];
             $txnArray['expdate'] = $data['expiry'];
-
-            if($data['save'] == 1){//如果需要存储
-                $isC = D('User_card')->getCardByUserAndNum($uid,$data['card_num']);
-                if(!$isC) {
-                    D('User_card')->clearIsDefaultByUid($uid);
-                    $data['is_default'] = 1;
-                    $data['uid'] = $uid;
-                    $data['create_time'] = date("Y-m-d H:i:s");
-                    D('User_card')->field(true)->add($data);
-                }
-            }
         }
 
 
@@ -65,6 +54,17 @@ class MonerisPay
 
         $mpgResponse=$mpgHttpPost->getMpgResponse();
         $resp = $this->arrageResp($mpgResponse,$txnArray['pan'],$txnArray['expdate']);
+
+        if($resp['complete'] == 'true' && $data['save'] == 1){//如果需要存储
+            $isC = D('User_card')->getCardByUserAndNum($uid,$data['card_num']);
+            if(!$isC) {
+                D('User_card')->clearIsDefaultByUid($uid);
+                $data['is_default'] = 1;
+                $data['uid'] = $uid;
+                $data['create_time'] = date("Y-m-d H:i:s");
+                D('User_card')->field(true)->add($data);
+            }
+        }
 
         $this->savePayData($resp,$data['rvarwap'],$data['tip']);
 

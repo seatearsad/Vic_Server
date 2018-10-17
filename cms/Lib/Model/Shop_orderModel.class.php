@@ -372,7 +372,7 @@ class Shop_orderModel extends Model
 	public function after_pay($order_param)
 	{
 		//garfunkel modify
-		if($order_param['pay_type'] == 'moneris'){//
+		if($order_param['pay_type'] == 'moneris' || $order_param['pay_type'] == 'Cash'){//
             $where['order_id'] = $order_param['order_id'];
 		}else{
             if ($order_param['pay_type'] != '') {

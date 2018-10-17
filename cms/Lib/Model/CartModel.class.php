@@ -156,7 +156,7 @@ class CartModel extends Model
 
         $sid = $this->field(true)->where(array('uid'=>$uid,'fid'=>$cartList[0]['fid']))->find()['sid'];
         $store = D('Store')->get_store_by_id($sid);
-        $result['packing_fee'] = $store['pack_fee'];
+        $result['packing_fee'] = $store['pack_fee'] ? $store['pack_fee'] :0;
         $total_pay_price += $store['pack_fee'];
         //获取配送费
         $delivey_fee = D('Store')->CalculationDeliveryFee($uid,$sid);

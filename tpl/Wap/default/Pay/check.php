@@ -891,14 +891,14 @@
                 <dl class="list">
                     <dd class="dd-padding">
                         <div id="tip_list" style="margin: auto;width: 98%">
-                            <span class="tip_s">
-                                10%
-                            </span>
                             <span class="tip_s tip_on">
                                 15%
                             </span>
-                                <span class="tip_s">
+                            <span class="tip_s">
                                 20%
+                            </span>
+                                <span class="tip_s">
+                                25%
                             </span>
                         </div>
                         <div style="margin: 20px auto 5px;width: 98%">
@@ -1043,7 +1043,7 @@
         if(parseFloat($('input[name="charge_total"]').val()) <= 20){
             isb = true;
         }
-        var tipxn = new Array(2,3,4);
+        var tipxn = new Array(3,4,5);
         var i = 0;
         $('#tip_list').children('span').each(function(){
             $(this).click(tip_select);

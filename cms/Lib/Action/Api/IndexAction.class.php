@@ -367,17 +367,30 @@ class IndexAction extends BaseAction
 
         //订单来源
         $order_data['order_from'] = $_POST['cer_type'];
-        //支付方式
-        $order_data['pay_type'] = $_POST['pay_type'];
 
         $order_id = D('Shop_order')->saveOrder($order_data, $return);
         //清除购物车中的内容
         D('Cart')->delCart($uid,$cart_array);
+        //die($order_id);
+        if($_POST['pay_type'] == 0){//线下支付 直接进入支付流程
+            $order_param['order_id'] = $order_id;
+            $order_param['order_from'] = 0;
+            $order_param['order_type'] = 'shop';
+            $order_param['pay_time'] = date();
+            $order_param['pay_type'] = 'Cash';
+            $order_param['is_mobile'] = 1;
+            $order_param['is_own'] = 0;
+            $order_param['third_id'] = 0;
+
+            D('Shop_order')->after_pay($order_param);
+        }else if($_POST['pay_type'] == 3){//信用卡支付
+
+        }
 
         if($order_id != 0)
-            $this->returnCode(0,'info',array(),'success');
+            $this->returnCode(0,'main_id',$order_id,'success');
         else
-            $this->returnCode(1,'info',$order_id,'success');
+            $this->returnCode(1,'info',array(),'success');
     }
 
     public function getOrderList(){
@@ -567,5 +580,30 @@ class IndexAction extends BaseAction
         $result['cart'] = D('Cart')->field(true)->where(array("uid"=>$uid,"fid"=>$fid))->order('time desc')->select();
 
         $this->returnCode(0,'',$result,'success');
+    }
+
+    public function credit_pay(){
+        import('@.ORG.pay.MonerisPay');
+        $moneris_pay = new MonerisPay();
+        $resp = $moneris_pay->payment($_POST,$_POST['uid']);
+//        var_dump($resp);die();
+        if($resp['complete'] == 'true'){
+            $order = explode("_",$_POST['order_id']);
+            $order_id = $order[1];
+            $url =U("Wap/Shop/status",array('order_id'=>$order_id));
+
+            $this->returnCode(0,'info',array(),'success');
+            //$this->success(L('_PAYMENT_SUCCESS_'),$url,true);
+        }else{
+            $this->returnCode(1,'info',array(),'fail');
+//            $this->error($resp['message'],'',true);
+        }
+    }
+
+    public function user_card_default(){
+        $uid = $_POST['uid'];
+        $card = D('User_card')->getCardListByUid($uid);
+
+        $this->returnCode(0,'info',$card[0],'success');
     }
 }
