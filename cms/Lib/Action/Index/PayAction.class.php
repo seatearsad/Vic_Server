@@ -1060,7 +1060,7 @@ class PayAction extends BaseAction{
 
     public function receipt(){
         $now_order = D('Shop_order')->get_order_detail(array('uid' => $this->user_session['uid'], 'order_id' => $_GET['order_id']));
-        $pay_record = D('Pay_moneris_record')->field(true)->where(array('order_id'=>$_GET['order_id']))->find();
+        $pay_record = D('Pay_moneris_record')->field(true)->where(array('order_id'=>$_GET['order_id'],'complete'=>'true'))->find();
         if($pay_record)
             $now_order = array_merge($now_order,$pay_record);
 //        var_dump($now_order);

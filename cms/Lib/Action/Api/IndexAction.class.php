@@ -34,8 +34,8 @@ class IndexAction extends BaseAction
         }
 
         //获取店铺列表
-        $page	=	$_GET['page']?$_GET['page']:0;
-        $limit = $this->config['guess_num'];
+        $page	=	$_POST['page']?$_POST['page']:0;
+        $limit = 5;
 
         $order = 'juli';
         $deliver_type =  'all';
@@ -59,7 +59,8 @@ class IndexAction extends BaseAction
 //            $shop_list[$k]['goods'] = $product_list;
 //        }
         $arr['best']['status'] = 1;
-        $arr['best']['info'] = $shop_list;
+        $arr['best']['info'] = $shop_list['list'];
+        $arr['best']['count'] = $shop_list['count'];
 
         $this->returnCode(0,'data',$arr);
     }
@@ -367,6 +368,11 @@ class IndexAction extends BaseAction
 
         //订单来源
         $order_data['order_from'] = $_POST['cer_type'];
+        //记录支付类型
+        if($_POST['pay_type'] == 3){
+            $order_data['pay_type'] = "moneris";
+        }
+        $order_data['tip_charge'] = $_POST['tip'] ? $_POST['tip'] : 0;
 
         $order_id = D('Shop_order')->saveOrder($order_data, $return);
         //清除购物车中的内容
@@ -453,6 +459,10 @@ class IndexAction extends BaseAction
             $t['statusName'] = D('Store')->getOrderStatusName($val['status']);
             $t['goodsImage'] = $val['image'];
             $t['orderType'] = "0";
+            $t['tip_fee'] = $val['tip_charge'];
+            $t['total_price'] = $val['price'];
+            $t['paid'] = $val['paid'];
+            $t['order_id'] = $val['order_id'];
 
             $result['info'][] = $t;
         }
@@ -491,6 +501,7 @@ class IndexAction extends BaseAction
         $order_detail['payname'] = $order_detail['paymodel'] = D('Store')->getPayTypeName($order['pay_type']);
         $order_detail['packing_fee'] = $order['packing_charge'];
         $order_detail['ship_fee'] = $order['freight_charge'];
+        $order_detail['tip_fee'] = $order['tip_charge'];
         $order_detail['food_amount'] = $order['goods_price'];
         $order_detail['order_id'] = $order_id;
         $order_detail['expect_time'] = date('Y-m-d H:i:s',$order['expect_use_time']);
@@ -499,6 +510,7 @@ class IndexAction extends BaseAction
         $order_detail['phone'] = $order['userphone'];
         $order_detail['address2'] = $order['address'];
         $order_detail['address1'] = "";
+        $order_detail['pay_type'] = $order['pay_type'];
 
 
         $order_detail['promotion_discount'] = "0";
@@ -605,5 +617,69 @@ class IndexAction extends BaseAction
         $card = D('User_card')->getCardListByUid($uid);
 
         $this->returnCode(0,'info',$card[0],'success');
+    }
+
+    public function getUserCard(){
+        $uid = $_POST['uid'];
+        $card_list = D('User_card')->getCardListByUid($uid);
+
+        $this->returnCode(0,'info',$card_list,'success');
+    }
+
+    public function setDefaultCard(){
+        $uid = $_POST['uid'];
+        $card_id = $_POST['card_id'];
+
+        D('User_card')->clearIsDefaultByUid($uid);
+
+        D('User_card')->field(true)->where(array('id'=>$card_id))->save(array('is_default'=>1));
+
+        $card_list = D('User_card')->getCardListByUid($uid);
+
+        $this->returnCode(0,'info',$card_list,'success');
+    }
+
+    public function edit_card(){
+        $uid = $_POST['uid'];
+        $data['name'] = $_POST['name'];
+        $data['card_num'] = $_POST['card_num'];
+        $data['expiry'] = $_POST['expiry'];
+
+        //如果 is_default 存在，清空之前的default
+        if($_POST['is_default']){
+            D('User_card')->clearIsDefaultByUid($uid);
+        }
+        $data['is_default'] = $_POST['is_default'] ? $_POST['is_default'] : 0;
+
+        $data['uid'] = $uid;
+
+        if($_POST['card_id'] && $_POST['card_id'] != ''){
+            $data['id'] = $_POST['card_id'];
+            D('User_card')->field(true)->where(array('id'=>$data['id']))->save($data);
+            $this->returnCode(0,'info',array(),'success');
+        }else {
+            $isC = D('User_card')->getCardByUserAndNum($data['uid'], $data['card_num']);
+            if ($isC) {
+//                $this->error(L('_CARD_EXIST_'));
+                $this->returnCode(1,'info',array(),'fail');
+            } else {
+                $data['create_time'] = date("Y-m-d H:i:s");
+                D('User_card')->field(true)->add($data);
+                $this->returnCode(0,'info',array(),'success');
+            }
+        }
+    }
+
+    public function delCard(){
+        $uid = $_POST['uid'];
+
+        if($_POST['card_id']){
+            D('User_card')->field(true)->where(array('id'=>$_POST['card_id']))->delete();
+            //$this->success(L('_OPERATION_SUCCESS_'));
+        }
+
+        $card_list = D('User_card')->getCardListByUid($uid);
+
+        $this->returnCode(0,'info',$card_list,'success');
     }
 }

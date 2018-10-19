@@ -252,8 +252,12 @@ class Merchant_store_shopModel extends Model
 			$star = $pagesize * ($page - 1);
 			$return['next_page'] = $totalPage > $page ? intval($page + 1) : 0;
 		} elseif ($is_wap == 3) {
-			$star	=	isset($where['page']) ? intval($where['page']) : 0;
-			$pagesize	=	5;
+//			$star	=	isset($where['page']) ? intval($where['page']) : 0;
+//			$pagesize	=	5;
+            $page = isset($where['page']) ? intval($where['page']) : 1;
+            $pagesize = 5;
+//            $totalPage = ceil($total / $pagesize);
+            $star = $pagesize * ($page - 1);
 		} else {
 			import('@.ORG.group_page');
 			$p = new Page($total, C('config.meal_page_row'), C('config.meal_page_val'));
@@ -869,7 +873,7 @@ class Merchant_store_shopModel extends Model
      * @param int $page_count
      * @return array
      */
-    public function get_list_arrange($where = array(), $is_wap = 1,$type = 1,$limit,$page = 0,$page_count = 10)
+    public function get_list_arrange($where = array(), $is_wap = 1,$type = 1,$limit,$page = 1)
     {
         switch ($type){
             case 1:
@@ -881,13 +885,26 @@ class Merchant_store_shopModel extends Model
                 break;
 
         }
-        $page_max = floor($limit/$page_count)+($limit%$page_count>0?1:0);
 
+//        $total = $t_list['total'];
+//        $total_page = ceil($total / $limit);
+//        $page_begin = ($page - 1)*$limit;
+//        $page_end = $page_begin + $limit;
+//        die($total.'-'.$limit.'---'.$total_page.'-'.$page_begin.'-'.$page_end.'--'.count($t_list['shop_list']));
+//        //$page_max = floor($limit/$page_count)+($limit%$page_count>0?1:0);
+//
         $n = 1;
-        $return = array();
+//        $return = array();
+//        if($page > $total_page || $page < 0){
+//            return $return;
+//        }
         foreach ($t_list['shop_list'] as $row) {
-            if($n>$page_count ||$page>$page_max || ($page == $page_max && $n>$limit%$page_count&&$limit%$page_count!=0) )
-                break;
+
+//            if(!($n > $page_begin && $n <= $page_end)){
+//                $n++;
+//                continue;
+//            }
+
             $n++;
             $temp = array();
             $temp['site_id'] = $row['store_id'];
@@ -1118,8 +1135,9 @@ class Merchant_store_shopModel extends Model
             }
             $temp['coupon_count'] = count($temp['coupon_list']);
             //$temp['coupon_list'] = $this->parseCoupon($temp['coupon_list'],'array');
-            $return[] = $temp;
+            $return['list'][] = $temp;
         }
+        $return['count'] = $t_list['total'];
 
         return $return;
     }
