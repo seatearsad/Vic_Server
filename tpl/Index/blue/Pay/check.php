@@ -568,7 +568,7 @@ a.see_tmp_qrcode {
                                                         </span>
                                                     </div>
                                                     <div style="margin: 20px auto 5px;width: 98%">
-                                                        {pigcms{:L('_SELF_ENTER_TIP_')}: $ <input type="text" id="tip_fee" name="tip_fee" size="20" style="height: 25px;">
+                                                        {pigcms{:L('_SELF_ENTER_TIP_')}: $ <input type="text" id="tip_fee" name="tip_fee" size="20" style="height: 25px;border: 1px #333333 solid;">
                                                     </div>
                                                     <div style="margin: 20px auto 5px;width: 98%;font-size: 16px;">
                                                         <span>{pigcms{:L('_TIP_TXT_')}:</span><span id="tip_num">$0</span>
@@ -614,16 +614,16 @@ a.see_tmp_qrcode {
                                                 <ul class="imgradio">
                                                     <div>
                                                         <span style="width:150px;display:-moz-inline-box;display:inline-block;">{pigcms{:L('_CREDITHOLDER_NAME_')}：</span>
-                                                        <input type="text" maxlength="20" size="20" name="name" id="card_name" value=""/>
+                                                        <input type="text" maxlength="20" size="20" name="name" id="card_name" value="" style="border: 1px #333333 solid;" />
 
                                                     </div>
                                                     <div>
                                                         <span style="width:150px;display:-moz-inline-box;display:inline-block;">{pigcms{:L('_CREDIT_CARD_NUM_')}：</span>
-                                                        <input type="text" maxlength="20" size="20" name="card_num" id="card_num" value=""/>
+                                                        <input type="text" maxlength="20" size="20" name="card_num" id="card_num" value="" style="border: 1px #333333 solid;"/>
                                                     </div>
                                                     <div>
                                                         <span style="width:150px;display:-moz-inline-box;display:inline-block;">{pigcms{:L('_EXPRIRY_DATE_')}：</span>
-                                                        <input type="text" maxlength="4" size="20" name="expiry" id="expiry" value=""/>
+                                                        <input type="text" maxlength="4" size="20" name="expiry" id="expiry" value="" style="border: 1px #333333 solid;"/>
                                                     </div>
                                                     <div>
                                                         <span style="width:150px;display:-moz-inline-box;display:inline-block;">{pigcms{:L('_IS_SAVE_')}：</span>
