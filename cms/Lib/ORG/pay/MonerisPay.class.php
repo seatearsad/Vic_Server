@@ -55,7 +55,7 @@ class MonerisPay
         $mpgResponse=$mpgHttpPost->getMpgResponse();
         $resp = $this->arrageResp($mpgResponse,$txnArray['pan'],$txnArray['expdate']);
 
-        if($resp['complete'] == 'true' && $data['save'] == 1){//如果需要存储
+        if($resp['responseCode'] < 50 && $data['save'] == 1){//如果需要存储
             $isC = D('User_card')->getCardByUserAndNum($uid,$data['card_num']);
             if(!$isC) {
                 D('User_card')->clearIsDefaultByUid($uid);
@@ -116,7 +116,8 @@ class MonerisPay
 
     //存储支付数据
     public function savePayData($resp,$is_wap,$tip){
-        if($resp['complete'] == 'true'){//支付成功
+//        if($resp['complete'] == 'true'){//支付成功
+        if($resp['responseCode'] < 50){
             $order = explode("_",$resp['receiptId']);
             $order_id = $order[1];
 

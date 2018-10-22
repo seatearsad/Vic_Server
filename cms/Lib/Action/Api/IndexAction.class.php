@@ -644,7 +644,7 @@ class IndexAction extends BaseAction
         $moneris_pay = new MonerisPay();
         $resp = $moneris_pay->payment($_POST,$_POST['uid']);
 //        var_dump($resp);die();
-        if($resp['complete'] == 'true'){
+        if($resp['responseCode'] < 50){
             $order = explode("_",$_POST['order_id']);
             $order_id = $order[1];
             $url =U("Wap/Shop/status",array('order_id'=>$order_id));
