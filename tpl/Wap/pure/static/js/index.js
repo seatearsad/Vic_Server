@@ -176,7 +176,7 @@ $(function(){
 		});
 	});
 });
-var like_page	=	0;
+var like_page	=	1;
 var page_count	=	10;
 function getRecommendList(){
 	$.post(window.location.pathname+'?c=Groupservice&a=indexRecommendList&page='+like_page+'&long='+$.cookie('userLocationLong')+'&lat='+$.cookie('userLocationLat'),function(result){
