@@ -48,7 +48,7 @@ class MonerisPay
 
         $mpgRequest = new mpgRequest($mpgTxn);
         $mpgRequest->setProcCountryCode("CA"); //"US" for sending transaction to US environment
-        $mpgRequest->setTestMode(true);
+        $mpgRequest->setTestMode(false);
 
         $mpgHttpPost  =new mpgHttpsPost($store_id,$api_token,$mpgRequest);
 
