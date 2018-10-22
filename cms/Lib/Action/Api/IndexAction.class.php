@@ -97,10 +97,49 @@ class IndexAction extends BaseAction
     }
 
     public function user_third_Login(){
-        $userInfo = array("uid"=>"1","uname"=>"garfunkel","password"=>"123456","login_type"=>"1",
-            "outsrc"=>"http://thirdqq.qlogo.cn/qqapp/1106028245/ED09815DE876D237105B7BF6F40DEFCA/100",
-            "openid"=>"ED09815DE876D237105B7BF6F40DEFCA"
-        );
+//        $userInfo = array("uid"=>"1","uname"=>"garfunkel","password"=>"123456","login_type"=>"1",
+//            "outsrc"=>"http://thirdqq.qlogo.cn/qqapp/1106028245/ED09815DE876D237105B7BF6F40DEFCA/100",
+//            "openid"=>"ED09815DE876D237105B7BF6F40DEFCA"
+//        );
+        $nickname = $_POST['nickname'];
+        $openid = $_POST['openid'];
+        $face_pic = $_POST['face_pic'];
+        $sex = $_POST['sex'];
+        $province = $_POST['province'];
+        $city = $_POST['city'];
+        $type = $_POST['type'];
+        if($type == 2){//微信登录
+            $result = D('User')->autologin('openid', $openid);
+
+            if(!$result['user']){
+                $data_user = array(
+                    'openid' 	=> $openid,
+                    'union_id' 	=> '',
+                    'nickname' 	=> $nickname,
+                    'sex' 		=> $sex,
+                    'province' 	=> $province,
+                    'city' 		=> $city,
+                    'avatar' 	=> $face_pic,
+                    'is_follow' => 1,
+                );
+                $reg_result = D('User')->autoreg($data_user);
+                if($reg_result['error_code']){
+                    $user['uid'] = '0';
+                }else{
+                    $user = D('User')->get_user($openid,'openid');
+                }
+            }else{
+                $user = $result['user'];
+            }
+
+
+            $userInfo['uid'] = $user['uid'];
+            $userInfo['uname'] = $user['nickname'];
+            $userInfo['password'] = $user['pwd'];
+            $userInfo['outsrc'] = $user['avatar'];
+            $userInfo['openid'] = $user['openid'];
+            $userInfo['login_type'] = $type;
+        }
 
         $this->returnCode(0,'info',$userInfo);
     }
@@ -557,6 +596,11 @@ class IndexAction extends BaseAction
         }
 
         $result['food'] = $food;
+
+        $delivery = D('Deliver_supply')->field(true)->where(array('order_id'=>$order_id))->find();
+        if($delivery) {
+            $result['order']['empname'] = $delivery['name'].'('.$delivery['phone'].')';
+        }
 
         $this->returnCode(0,'',$result,'success');
     }
