@@ -597,7 +597,7 @@ class IndexAction extends BaseAction
 
         $result['food'] = $food;
 
-        $delivery = D('Deliver_supply')->field(true)->where(array('order_id'=>$order_id))->find();
+        $delivery = D('Deliver_supply')->field(true)->where(array('order_id'=>$order['order_id']))->find();
         if($delivery) {
             $result['order']['empname'] = $delivery['name'].'('.$delivery['phone'].')';
         }
