@@ -659,10 +659,8 @@ class IndexAction extends BaseAction
     public function user_card_default(){
         $uid = $_POST['uid'];
         $card = D('User_card')->getCardListByUid($uid);
-        if(!$card)
-            $this->returnCode(0,'info','','success');
-        else
-            $this->returnCode(0,'info',$card[0],'success');
+        
+        $this->returnCode(0,'info',$card[0],'success');
     }
 
     public function getUserCard(){
