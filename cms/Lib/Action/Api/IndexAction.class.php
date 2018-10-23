@@ -410,8 +410,11 @@ class IndexAction extends BaseAction
         //记录支付类型
         if($_POST['pay_type'] == 3){
             $order_data['pay_type'] = "moneris";
+            $order_data['tip_charge'] = $_POST['tip'] ? $_POST['tip'] : 0;
+        }else{
+            $order_data['tip_charge'] = 0;
         }
-        $order_data['tip_charge'] = $_POST['tip'] ? $_POST['tip'] : 0;
+
 
         $order_id = D('Shop_order')->saveOrder($order_data, $return);
         //清除购物车中的内容

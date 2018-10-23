@@ -325,6 +325,7 @@ class DeliverAction extends BaseAction
 			foreach ($list as &$val) {
 				switch ($val['pay_type']) {
 					case 'offline':
+                    case 'Cash':
 						$val['pay_method'] = 0;
 						break;
 					default:
@@ -344,6 +345,9 @@ class DeliverAction extends BaseAction
 				$val['real_orderid'] = $val['real_orderid'] ? $val['real_orderid'] : $val['order_id'];
 				$val['store_distance'] = getRange(getDistance($val['from_lat'], $val['from_lnt'], $lat, $lng));
 				$val['map_url'] = U('Deliver/map', array('supply_id' => $val['supply_id']));
+
+				$order = D('Shop_order')->get_order_by_orderid($val['order_id']);
+				$val['tip_charge'] = $order['tip_charge'];
 			}
 			exit(json_encode(array('err_code' => false, 'list' => $list)));
 		}
@@ -1038,12 +1042,13 @@ class DeliverAction extends BaseAction
 				$this->error_tips("订单信息有误");
 				exit;
 			}
-			$order['pay_type'] = D('Pay')->get_pay_name($order['pay_type'], $order['is_mobile_pay'], $order['paid']);
+			$order['pay_type_name'] = D('Pay')->get_pay_name($order['pay_type'], $order['is_mobile_pay'], $order['paid']);
 			$order['discount_price'] = $order['price'];
 			$order['cue_field'] = $order['cue_field'] ? unserialize($order['cue_field']) : '';
 
 			//garfunkel add
-            $order['deliver_cash'] = $order['price'] - $order['coupon_price'] - $order['score_deducte'];
+            $order['subtotal_price'] = $order['price'] + $order['tip_charge'];
+            $order['deliver_cash'] = round($order['price'] +$order['extra_price'] + $order['tip_charge'] - round($order['card_price'] + $order['merchant_balance'] + $order['card_give_money'] +$order['balance_pay'] + $order['payment_money'] + $order['score_deducte'] + $order['coupon_price'], 2), 2);
 			$this->assign('order', $order);
 
 			$goods = D('Shop_order_detail')->field(true)->where(array('order_id' => $supply['order_id']))->select();

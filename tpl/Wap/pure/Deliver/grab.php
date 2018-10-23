@@ -68,7 +68,7 @@
 		<h2 class="f15 c3">{{ d.list[i].name }} <span class="c6"><a href="tel:{{ d.list[i].phone }}">{{ d.list[i].phone }}</a></span></h2>
 		<p class="c9">期望送达：{{ d.list[i].appoint_time }}</p>
 		<p class="red">应收现金：<i>{{ d.list[i].deliver_cash }}</i>元</p>
-		<p class="red">配送距离{{ d.list[i].distance }}公里，配送费{{ d.list[i].freight_charge }}元</p>
+		<p class="red">配送距离{{ d.list[i].distance }}公里，配送费:${{ d.list[i].freight_charge }},小费:${{d.list[i].tip_charge}}</p>
 	</div>
 	<div class="sign_bottom">
 		<a href="javascript:void(0);" class="rob" data-spid="{{ d.list[i].supply_id }}">抢单</a>

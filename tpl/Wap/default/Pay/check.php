@@ -877,7 +877,7 @@
                             <label class="mt">
                                 <!--i class="bank-icon icon-{pigcms{$key}"></i-->
                                 <span class="pay-wrapper">
-                                    <img src="{pigcms{$static_public}images/pay/{pigcms{$key}.png" style="height: 20px"/> {pigcms{$vo.name}
+                                    <img src="{pigcms{$static_public}images/pay/{pigcms{$key}.png" style="height: 20px"/>
                                     <input type="radio" class="mt" value="{pigcms{$key}"  <php>if($key == 'moneris'){</php>checked="checked"<php>}</php> name="pay_type">
                                 </span>
                             </label>

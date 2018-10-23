@@ -72,6 +72,7 @@
 							<th>下单人</th>
 							<th>电话</th>
 							<th>总价<i class="menu-icon fa fa-sort"></i></th>
+                            <th>小费</th>
 							<th>平台优惠</th>
 							<th>商家优惠</th>
 							<th>
@@ -117,7 +118,8 @@
 									<td>{pigcms{$vo.store_phone}</td>
 									<td>{pigcms{$vo.username}</td>
 									<td>{pigcms{$vo.userphone}</td>
-									<td>${pigcms{$vo['price']|floatval}</td>
+									<td>${pigcms{$vo['price'] + $vo['tip_charge']|floatval}</td>
+                                    <td>${pigcms{$vo['tip_charge']|floatval}</td>
 									<td>${pigcms{$vo.coupon_price|floatval}</td>
 									<td>${pigcms{$vo.merchant_reduce|floatval}</td>
 									<td>${pigcms{$vo.offline_price|floatval}</td>
@@ -125,7 +127,7 @@
 									<td><if condition="$vo['pay_time']"> {pigcms{$vo['pay_time']|date="Y-m-d H:i:s",###}</if></td>
 									<td><if condition="$vo['use_time']">{pigcms{$vo['use_time']|date="Y-m-d H:i:s",###}</if></td>
 									<td class="status">{pigcms{$vo.status_str}</td>
-									<td><!-- {pigcms{$vo.pay_status} --><span style="color: green">{pigcms{$vo.pay_type_str}</span></td>
+									<td><!-- {pigcms{$vo.pay_status} --><span style="color: green">{pigcms{$vo.pay_type_str}<br>({pigcms{$vo.pay_type})</span></td>
 									<td class="textcenter">
 										<if condition="$vo.status eq 0 AND $vo.paid eq 1">
                                             <a data-href="{pigcms{:U('Shop/refund_update',array('order_id'=>$vo['order_id']))}" class="refund">手动退款</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</if>

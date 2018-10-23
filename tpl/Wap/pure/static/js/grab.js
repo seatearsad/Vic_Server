@@ -53,7 +53,7 @@ function getList() {
 //			alert('failed'+this.getStatus());
 		}        
 	},{enableHighAccuracy: true})*/
-	return false;
+	// return false;
 	console.log(lat + '--------->lng:' + lng);
 	$.get(location_url, {'lat':lat, 'lng':lng}, function(result){
 		if (result.err_code) {
