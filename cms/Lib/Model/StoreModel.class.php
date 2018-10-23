@@ -345,6 +345,7 @@ class StoreModel extends Model
         $database_goods_sort = D('Shop_goods_sort');
         $condition_goods_sort['store_id'] = $storeId;
         $sort_list = $database_goods_sort->field(true)->where($condition_goods_sort)->order('`sort_id` ASC')->select();
+
         return $sort_list;
     }
 
@@ -360,7 +361,7 @@ class StoreModel extends Model
         foreach($groupList as $k=>$v){
             $returnList[$k]['id'] = $v['sort_id'];
             $returnList[$k]['sid'] = $v['store_id'];
-            $returnList[$k]['title'] = $v['sort_name'];
+            $returnList[$k]['title'] = lang_substr($v['sort_name'],C('DEFAULT_LANG'));
         }
 
         return $returnList;
@@ -676,7 +677,24 @@ class StoreModel extends Model
     }
 
     public function getOrderStatusStr($status){
-        $status_list = array('下单成功', '支付成功', '店员已接单', '配送员已接单', '配送员已取货' , '配送员配送中', '配送结束', '店员验证消费', '完成评论', '已完成退款', '已取消订单', '商家分配自提点', '商家发货到自提点', '自提点已接货', '自提点已发货', '您在自提完成取货', 30 => '店员修改价格');
+        $status_list = array(
+            L('_ORDER_STATUS_0_'),
+            L('_ORDER_STATUS_1_'),
+            L('_ORDER_STATUS_2_'),
+            L('_ORDER_STATUS_3_'),
+            L('_ORDER_STATUS_4_') ,
+            L('_ORDER_STATUS_5_'),
+            L('_ORDER_STATUS_6_'),
+            L('_ORDER_STATUS_7_'),
+            L('_ORDER_STATUS_8_'),
+            L('_ORDER_STATUS_9_'),
+            L('_ORDER_STATUS_10_'),
+            L('_ORDER_STATUS_11_'),
+            L('_ORDER_STATUS_12_'),
+            L('_ORDER_STATUS_13_'),
+            L('_ORDER_STATUS_14_'),
+            L('_ORDER_STATUS_15_'),
+            30 => L('_ORDER_STATUS_30_'));
 
         return $status_list[$status];
     }

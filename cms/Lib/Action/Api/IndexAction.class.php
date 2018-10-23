@@ -540,7 +540,7 @@ class IndexAction extends BaseAction
 
         $order_detail['statusname'] = D('Store')->getOrderStatusName($order['status']);
         $order_detail['add_time'] = date('Y-m-d H:i:s',$order['create_time']);
-        $order_detail['payname'] = $order_detail['paymodel'] = D('Store')->getPayTypeName($order['pay_type']);
+        //$order_detail['payname'] = $order_detail['paymodel'] = D('Store')->getPayTypeName($order['pay_type']);
         $order_detail['packing_fee'] = $order['packing_charge'];
         $order_detail['ship_fee'] = $order['freight_charge'];
         $order_detail['tip_fee'] = $order['tip_charge'];
@@ -553,6 +553,7 @@ class IndexAction extends BaseAction
         $order_detail['address2'] = $order['address'];
         $order_detail['address1'] = "";
         $order_detail['pay_type'] = $order['pay_type'];
+        $order_detail['payname'] = $order['pay_type'] == 'moneris' ? 'Paid Online' : 'Cash';
 
 
         $order_detail['promotion_discount'] = "0";
