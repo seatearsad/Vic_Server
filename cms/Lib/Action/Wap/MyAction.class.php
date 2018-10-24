@@ -4837,7 +4837,7 @@ class MyAction extends BaseAction{
 
 		//线下支付退款
 		$data_shop_order['cancel_type'] = 5;//取消类型（0:pc店员，1:wap店员，2:andriod店员,3:ios店员，4：打包app店员，5：用户，6：配送员, 7:超时取消）
-		if ($now_order['pay_type'] == 'offline') {
+		if ($now_order['pay_type'] == 'offline' || $now_order['pay_type'] == 'Cash') {
 			$data_shop_order['order_id'] = $now_order['order_id'];
 			$data_shop_order['refund_detail'] = serialize(array('refund_time' => time()));
 			$data_shop_order['status'] = 4;
@@ -4882,8 +4882,22 @@ class MyAction extends BaseAction{
 			} else {
 				$this->error_tips(L('_B_MY_CANCELLLOSE_'));
 			}
-		} else {
-			if ($now_order['payment_money'] != '0.00') {
+		}else{
+            if($now_order['pay_type'] == 'moneris'){
+                import('@.ORG.pay.MonerisPay');
+                $moneris_pay = new MonerisPay();
+                $resp = $moneris_pay->refund($this->user_session['uid'],$now_order['order_id']);
+//                var_dump($now_order['order_id']);die();
+                if($resp['responseCode'] != 'null' && $resp['responseCode'] < 50){
+                    $data_shop_order['order_id'] = $now_order['order_id'];
+                    $data_shop_order['status'] = 4;
+                    $data_shop_order['last_time'] = time();
+                    D('Shop_order')->data($data_shop_order)->save();
+                }else{
+                    $this->error_tips($resp['message']);
+                }
+            }
+			else if ($now_order['payment_money'] != '0.00') {
 				if ($now_order['is_own']) {
 					$pay_method = array();
 					$merchant_ownpay = D('Merchant_ownpay')->field('mer_id', true)->where(array('mer_id' => $now_order['mer_id']))->find();

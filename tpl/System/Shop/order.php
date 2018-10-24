@@ -61,7 +61,7 @@
 						<col/>
 						<col/>
 						<col/>
-						<col width="180" align="center"/>
+						<col/>
 					</colgroup>
 					<thead>
 						<tr>
@@ -71,6 +71,7 @@
 							<th>店铺电话</th>
 							<th>下单人</th>
 							<th>电话</th>
+                            <th>原始总价</th>
 							<th>总价<i class="menu-icon fa fa-sort"></i></th>
                             <th>小费</th>
 							<th>平台优惠</th>
@@ -118,6 +119,11 @@
 									<td>{pigcms{$vo.store_phone}</td>
 									<td>{pigcms{$vo.username}</td>
 									<td>{pigcms{$vo.userphone}</td>
+                                    <td style="color: red">
+                                        <php>if($vo['is_refund'] == 1){</php>
+                                        ${pigcms{$vo['change_price'] + $vo['tip_charge']|floatval}
+                                        <php>}</php>
+                                    </td>
 									<td>${pigcms{$vo['price'] + $vo['tip_charge']|floatval}</td>
                                     <td>${pigcms{$vo['tip_charge']|floatval}</td>
 									<td>${pigcms{$vo.coupon_price|floatval}</td>
@@ -132,7 +138,9 @@
 										<if condition="$vo.status eq 0 AND $vo.paid eq 1">
                                             <a data-href="{pigcms{:U('Shop/refund_update',array('order_id'=>$vo['order_id']))}" class="refund">手动退款</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</if>
                                         <a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Shop/order_detail',array('order_id'=>$vo['order_id'],'frame_show'=>true))}','查看{pigcms{$config.shop_alias_name}订单详情',920,520,true,false,false,false,'detail',true);">查看</a>
+                                        <php>if($vo['is_refund'] == 0){</php>
                                         <a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Shop/edit_order',array('order_id'=>$vo['order_id']))}','编辑订单',600,260,true,false,false,editbtn,'edit',true);">编辑</a>
+                                        <php>}</php>
                                         <a href="{pigcms{:U('Shop/del',array('id'=>$vo['order_id']))}" onclick="return confirm('确定要删除吗？')" style="color: red">删除</a>
 									</td>
 								</tr>

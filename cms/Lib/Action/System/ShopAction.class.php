@@ -404,6 +404,9 @@ class ShopAction extends BaseAction
             if (!$shop_order_data){
                 $this->error('订单不存在或已经删除，请刷新后重试');
             }
+            //garfunkel add 记录原始价格
+            $data['change_price'] = $shop_order_data['price'];
+
             $price=floatval(sprintf("%.2f", $_POST['price']));//实际要支付的金额
             $goods_price=floatval(sprintf("%.2f", $_POST['goods_price']));//商品总价
             $goods_price_taxation=floatval(sprintf("%.2f", $_POST['goods_price'] * 0.05));//商品税费
@@ -430,6 +433,36 @@ class ShopAction extends BaseAction
             $data['goods_price'] = $goods_price;
             $data['freight_charge'] =$freight_charge;
 
+            //garfunkel add 记录原始价格
+            $data['change_price'] = $shop_order_data['price'];
+            //记录此订单被后台修改过
+            $data['is_refund'] = 1;
+            //计算修改后的价格差 原始价格 - 修改价格
+            $cha = $shop_order_data['price'] - $data['price'];
+            //是否使用线上付款
+            if($shop_order_data['pay_type'] == 'moneris' && $shop_order_data['paid'] == 1){
+                import('@.ORG.pay.MonerisPay');
+                $moneris_pay = new MonerisPay();
+                if($cha > 0){//需要退款
+                    $cha = sprintf("%.2f", $cha);
+                    $resp = $moneris_pay->refund($shop_order_data['uid'],$order_id,$cha);
+                    if(!($resp['responseCode'] != 'null' && $resp['responseCode'] < 50)){
+                        $this->error($resp['message']);
+                    }else{//更新线上支付金额
+                        $data['payment_money'] = $shop_order_data['payment_money'] - $cha;
+                    }
+                }elseif($cha < 0){//需要追加付款
+                    $cha = sprintf("%.2f", $cha*-1);
+                    $resp = $moneris_pay->addPay($shop_order_data['uid'],$order_id,$cha);
+                    if(!($resp['responseCode'] != 'null' && $resp['responseCode'] < 50)){
+                        $this->error($resp['message']);
+                    }else{//更新线上支付金额
+                        $data['payment_money'] = $shop_order_data['payment_money'] + $cha;
+                    }
+                }
+            }
+
+            ////////
             if ($shop_order->where("order_id=$order_id")->data($data)->save()){
                 $this->success('修改成功！');
             }else{
@@ -447,6 +480,23 @@ class ShopAction extends BaseAction
             $shop_order = M('Shop_order');
             $order_id= intval($_GET['id']);//订单id
             $data['is_del']=1;
+            //garfunkel add
+            $now_order = $shop_order -> where("order_id=$order_id")->find();
+            if($now_order['pay_type'] == 'moneris' && $now_order['paid'] == 1){
+                import('@.ORG.pay.MonerisPay');
+                $moneris_pay = new MonerisPay();
+                $resp = $moneris_pay->refund($now_order['uid'],$now_order['order_id']);
+//                var_dump($now_order['order_id']);die();
+                if($resp['responseCode'] != 'null' && $resp['responseCode'] < 50){
+//                    $data_shop_order['order_id'] = $now_order['order_id'];
+//                    $data_shop_order['status'] = 4;
+//                    $data_shop_order['last_time'] = time();
+//                    D('Shop_order')->data($data_shop_order)->save();
+                }else{
+                    $this->error('删除失败！请重试~');
+                }
+            }
+            ///////
             if ($shop_order->where("order_id=$order_id")->data($data)->save()){
                 $this->success('删除成功！');
             }else{
