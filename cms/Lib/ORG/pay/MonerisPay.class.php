@@ -66,6 +66,24 @@ class MonerisPay
             }
         }
 
+        if($resp['responseCode'] < 50){
+            //处理优惠券
+            if($data['coupon_id']){
+                $now_coupon = D('System_coupon')->get_coupon_by_id($data['coupon_id']);
+                if(!empty($now_coupon)){
+                    $order = explode("_",$data['order_id']);
+                    $order_id = $order[1];
+                    $coupon_data = D('System_coupon_hadpull')->field(true)->where(array('id'=>$data['coupon_id']))->find();
+                    $coupon_real_id = $coupon_data['coupon_id'];
+                    $coupon = D('System_coupon')->get_coupon($coupon_real_id);
+
+                    $in_coupon = array('coupon_id'=>$data['coupon_id'],'coupon_price'=>$coupon['discount']);
+
+                    D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->save($in_coupon);
+                }
+            }
+        }
+
         $this->savePayData($resp,$data['rvarwap'],$data['tip']);
 
         return $resp;

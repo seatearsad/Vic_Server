@@ -570,6 +570,7 @@
                                 'order_id':"vicisland_{pigcms{$order_info.order_id}",
                                 'cust_id':'{pigcms{:md5($order_info.uid)}',
                                 'rvarwap':$('input[name="rvarwap"]').val(),
+                                'coupon_id':$('input[name="coupon_id"]').val(),
                                 'tip':$('#tip_num').text().replace('$', "")
                             };
                             $.post($('#moneris_form').attr('action'),re_data,function(data){
@@ -593,6 +594,7 @@
                                 'order_id':"vicisland_{pigcms{$order_info.order_id}",
                                 'cust_id':'{pigcms{:md5($order_info.uid)}',
                                 'rvarwap':$('input[name="rvarwap"]').val(),
+                                'coupon_id':$('input[name="coupon_id"]').val(),
                                 'tip':$('#tip_num').text().replace('$', "")
                             };
                             $.post($('#moneris_form').attr('action'),re_data,function(data){
@@ -877,7 +879,7 @@
                             <label class="mt">
                                 <!--i class="bank-icon icon-{pigcms{$key}"></i-->
                                 <span class="pay-wrapper">
-                                    <img src="{pigcms{$static_public}images/pay/{pigcms{$key}.png" style="height: 20px"/>
+                                    <img src="{pigcms{$static_public}images/pay/{pigcms{$key}.png" style="height: 20px"/> {pigcms{:L($key)}
                                     <input type="radio" class="mt" value="{pigcms{$key}"  <php>if($key == 'moneris'){</php>checked="checked"<php>}</php> name="pay_type">
                                 </span>
                             </label>
