@@ -189,8 +189,8 @@ class MonerisPay
             }
 
 
-//            if($record){
-            if($record && $record['responseCode'] < 50 && !$del_record){//正式的使用此判断
+            if($record){
+//            if($record && $record['responseCode'] < 50 && !$del_record){//正式的使用此判断
                 //初始化退款差额
                 $cha = 0;
                 $txnArray['order_id'] = $record['receiptId'];
@@ -211,9 +211,9 @@ class MonerisPay
 
 //                $txnArray['amount'] = $change_amount == -1 ? $record['transAmount'] : $change_amount;
 
-                $txnArray['amount'] = $record['transAmount'];
-                $txnArray['cust_id'] = $uid;
-
+                //$txnArray['amount'] = $record['transAmount'];
+                //$txnArray['cust_id'] = $uid;
+                var_dump($txnArray);
                 import('@.ORG.pay.MonerisPay.mpgClasses');
                 $mpgTxn = new mpgTransaction($txnArray);
 
@@ -238,9 +238,10 @@ class MonerisPay
 //                    $record_type = 1;
 
                 $resp = $this->arrageResp($mpgResponse,'','',$record_type);
-
+                var_dump($resp);
                 if(!($resp['responseCode'] != "null" && $resp['responseCode'] < 50)){//如果购买更正不成功，尝试退款
                     $txnArray['type'] = 'refund';
+                    $txnArray['amount'] = $record['transAmount'];
                     $mpgTxn = new mpgTransaction($txnArray);
 
                     $mpgRequest = new mpgRequest($mpgTxn);
