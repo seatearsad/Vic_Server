@@ -138,10 +138,10 @@ class MonerisPay
         elseif($record_type == 3)
             $save_table = D('Pay_moneris_record_refund');
 
-        if($resp['responseCode'] < 50)//只记录正确的
+        if($resp['responseCode'] != "null" && $resp['responseCode'] < 50)//只记录正确的
             $save_table->field(true)->add($resp);
         else//记录所有错误
-            D('Pay_moneris_record_refund_error')->add($resp);
+            D('Pay_moneris_record_error')->add($resp);
 
         return $resp;
     }
@@ -149,7 +149,7 @@ class MonerisPay
     //存储支付数据
     public function savePayData($resp,$is_wap,$tip){
 //        if($resp['complete'] == 'true'){//支付成功
-        if($resp['responseCode'] < 50){
+        if($resp['responseCode'] != "null" && $resp['responseCode'] < 50){
             $order = explode("_",$resp['receiptId']);
             $order_id = $order[1];
 
@@ -175,33 +175,43 @@ class MonerisPay
      * $order_id 为系统原始订单ID
      * $change_amount 为要退还的金额 当不输入是为-1，即订单金额全部退回
     */
-    public function refund($uid,$order_id,$change_amount = -1){
+    public function refund($uid,$order_id,$change_amount = -1,$record_type = 1){
         $order = D('Shop_order')->field(true)->where(array('order_id'=>$order_id,'paid'=>1,'pay_type'=>'moneris'))->find();
         if($order){
-            $record = D('Pay_moneris_record')->field(true)->where(array('order_id'=>$order_id,'txnNumber'=>$order['invoice_head']))->find();
-            //是否有过全额退款记录
-            $del_record = D('Pay_moneris_record_del')->field(true)->where(array('order_id'=>$order_id))->find();
-//            if($record && $record['responseCode'] < 50){//正式的使用此判断
-            if($record && $record['responseCode'] < 50 && !$del_record){
+            if ($record_type == 1){
+                $record = D('Pay_moneris_record')->field(true)->where(array('order_id'=>$order_id))->find();
+                //是否有过全额退款记录
+                $del_record = D('Pay_moneris_record_del')->field(true)->where(array('order_id'=>$order_id))->find();
+            }else{
+                $record = D('Pay_moneris_record_add')->field(true)->where(array('order_id'=>$order_id))->find();
+                //是否有过全额退款记录
+                $del_record = D('Pay_moneris_record_refund')->field(true)->where(array('order_id'=>$order_id))->find();
+            }
+
+
+//            if($record){
+            if($record && $record['responseCode'] < 50 && !$del_record){//正式的使用此判断
                 //初始化退款差额
                 $cha = 0;
                 $txnArray['order_id'] = $record['receiptId'];
-                $txnArray['type'] = 'refund';
+                $txnArray['type'] = 'purchasecorrection';
                 $txnArray['crypt_type'] = '7';
                 $txnArray['txn_number'] = $record['txnNumber'];
                 //之前是否有退款
-                $refund_record = D('Pay_moneris_record_refund')->field(true)->where(array('order_id'=>$order_id))->find();
-                if($refund_record){//如果之前有退款 减去退款金额
-                    $record['transAmount'] = $record['transAmount'] - $refund_record['transAmount'];
-                }
-                //金额是否超出
-                if($change_amount > $record['transAmount']){
-                    //如果有超出记录金额 之后再追加付款中退还
-                    $cha = $change_amount - $record['transAmount'];
-                    $change_amount = $record['transAmount'];
-                }
+//                $refund_record = D('Pay_moneris_record_refund')->field(true)->where(array('order_id'=>$order_id))->find();
+//                if($refund_record){//如果之前有退款 减去退款金额
+//                    $record['transAmount'] = $record['transAmount'] - $refund_record['transAmount'];
+//                }
+//                //金额是否超出
+//                if($change_amount > $record['transAmount']){
+//                    //如果有超出记录金额 之后再追加付款中退还
+//                    $cha = $change_amount - $record['transAmount'];
+//                    $change_amount = $record['transAmount'];
+//                }
 
-                $txnArray['amount'] = $change_amount == -1 ? $record['transAmount'] : $change_amount;
+//                $txnArray['amount'] = $change_amount == -1 ? $record['transAmount'] : $change_amount;
+
+                $txnArray['amount'] = $record['transAmount'];
                 $txnArray['cust_id'] = $uid;
 
                 import('@.ORG.pay.MonerisPay.mpgClasses');
@@ -223,15 +233,29 @@ class MonerisPay
                 $mpgHttpPost  =new mpgHttpsPost($store_id,$api_token,$mpgRequest);
                 $mpgResponse=$mpgHttpPost->getMpgResponse();
 
-                $record_type = 3;//退还部分款项
-                if($change_amount == -1)//全额退款即删单
-                    $record_type = 1;
+//                $record_type = 3;//退还部分款项
+//                if($change_amount == -1)//全额退款即删单
+//                    $record_type = 1;
 
                 $resp = $this->arrageResp($mpgResponse,'','',$record_type);
 
-                if ($cha > 0 || $change_amount == -1){//如果有多出的金额或者删除订单 再后添加付款处退还
-                    $this->refund_addPay($uid,$order_id,$cha);
+                if(!($resp['responseCode'] != "null" && $resp['responseCode'] < 50)){//如果购买更正不成功，尝试退款
+                    $txnArray['type'] = 'refund';
+                    $mpgTxn = new mpgTransaction($txnArray);
+
+                    $mpgRequest = new mpgRequest($mpgTxn);
+                    $mpgRequest->setProcCountryCode("CA"); //"US" for sending transaction to US environment
+                    $mpgRequest->setTestMode(false);
+                    $mpgHttpPost  =new mpgHttpsPost($store_id,$api_token,$mpgRequest);
+                    $mpgResponse=$mpgHttpPost->getMpgResponse();
+
+                    $resp = $this->arrageResp($mpgResponse,'','',$record_type);
                 }
+
+
+//                if ($cha > 0 || $change_amount == -1){//如果有多出的金额或者删除订单 再后添加付款处退还
+//                    $this->refund_addPay($uid,$order_id,$cha);
+//                }
 
                 return $resp;
             }

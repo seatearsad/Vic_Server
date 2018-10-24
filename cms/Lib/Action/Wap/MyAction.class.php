@@ -4887,7 +4887,7 @@ class MyAction extends BaseAction{
                 import('@.ORG.pay.MonerisPay');
                 $moneris_pay = new MonerisPay();
                 $resp = $moneris_pay->refund($this->user_session['uid'],$now_order['order_id']);
-//                var_dump($now_order['order_id']);die();
+//                var_dump($resp);die();
                 if($resp['responseCode'] != 'null' && $resp['responseCode'] < 50){
                     $data_shop_order['order_id'] = $now_order['order_id'];
                     $data_shop_order['status'] = 4;

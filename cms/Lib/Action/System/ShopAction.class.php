@@ -443,21 +443,38 @@ class ShopAction extends BaseAction
             if($shop_order_data['pay_type'] == 'moneris' && $shop_order_data['paid'] == 1){
                 import('@.ORG.pay.MonerisPay');
                 $moneris_pay = new MonerisPay();
-                if($cha > 0){//需要退款
-                    $cha = sprintf("%.2f", $cha);
-                    $resp = $moneris_pay->refund($shop_order_data['uid'],$order_id,$cha);
-                    if(!($resp['responseCode'] != 'null' && $resp['responseCode'] < 50)){
+//                if($cha > 0){//需要退款
+//                    $cha = sprintf("%.2f", $cha);
+//                    $resp = $moneris_pay->refund($shop_order_data['uid'],$order_id,$cha);
+//                    if(!($resp['responseCode'] != 'null' && $resp['responseCode'] < 50)){
+//                        $this->error($resp['message']);
+//                    }else{//更新线上支付金额
+//                        $data['payment_money'] = $shop_order_data['payment_money'] - $cha;
+//                    }
+//                }elseif($cha < 0){//需要追加付款
+//                    $cha = sprintf("%.2f", $cha*-1);
+//                    $resp = $moneris_pay->addPay($shop_order_data['uid'],$order_id,$cha);
+//                    if(!($resp['responseCode'] != 'null' && $resp['responseCode'] < 50)){
+//                        $this->error($resp['message']);
+//                    }else{//更新线上支付金额
+//                        $data['payment_money'] = $shop_order_data['payment_money'] + $cha;
+//                    }
+//                }
+                //如果有差价首先删除之前的支付 然后添加一个新的支付
+                if($cha != 0){
+                    $resp = $moneris_pay->refund($shop_order_data['uid'],$order_id);
+                    if($resp['responseCode'] != 'null' && $resp['responseCode'] < 50){
+                        $cha = $shop_order_data['payment_money'] - $cha;
+                        $cha = $cha < 0 ? 0 : $cha;
+                        $cha = sprintf("%.2f", $cha);
+                        $resp = $moneris_pay->addPay($shop_order_data['uid'],$order_id,$cha);
+                        if(!($resp['responseCode'] != 'null' && $resp['responseCode'] < 50)){
+                            $this->error($resp['message']);
+                        }else{//更新线上支付金额
+                            $data['payment_money'] = $cha;
+                        }
+                    }else{
                         $this->error($resp['message']);
-                    }else{//更新线上支付金额
-                        $data['payment_money'] = $shop_order_data['payment_money'] - $cha;
-                    }
-                }elseif($cha < 0){//需要追加付款
-                    $cha = sprintf("%.2f", $cha*-1);
-                    $resp = $moneris_pay->addPay($shop_order_data['uid'],$order_id,$cha);
-                    if(!($resp['responseCode'] != 'null' && $resp['responseCode'] < 50)){
-                        $this->error($resp['message']);
-                    }else{//更新线上支付金额
-                        $data['payment_money'] = $shop_order_data['payment_money'] + $cha;
                     }
                 }
             }
@@ -485,7 +502,7 @@ class ShopAction extends BaseAction
             if($now_order['pay_type'] == 'moneris' && $now_order['paid'] == 1){
                 import('@.ORG.pay.MonerisPay');
                 $moneris_pay = new MonerisPay();
-                $resp = $moneris_pay->refund($now_order['uid'],$now_order['order_id']);
+                $resp = $moneris_pay->refund($now_order['uid'],$now_order['order_id'],-1,3);
 //                var_dump($now_order['order_id']);die();
                 if($resp['responseCode'] != 'null' && $resp['responseCode'] < 50){
 //                    $data_shop_order['order_id'] = $now_order['order_id'];
