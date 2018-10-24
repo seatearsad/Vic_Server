@@ -189,14 +189,15 @@ class MonerisPay
             }
 
 
-            if($record){
-//            if($record && $record['responseCode'] < 50 && !$del_record){//正式的使用此判断
+//            if($record){
+            if($record && !$del_record){//正式的使用此判断
                 //初始化退款差额
                 $cha = 0;
-                $txnArray['order_id'] = $record['receiptId'];
                 $txnArray['type'] = 'purchasecorrection';
-                $txnArray['crypt_type'] = '7';
                 $txnArray['txn_number'] = $record['txnNumber'];
+                $txnArray['order_id'] = $record['receiptId'];
+                $txnArray['crypt_type'] = '7';
+
                 //之前是否有退款
 //                $refund_record = D('Pay_moneris_record_refund')->field(true)->where(array('order_id'=>$order_id))->find();
 //                if($refund_record){//如果之前有退款 减去退款金额
@@ -213,14 +214,6 @@ class MonerisPay
 
                 //$txnArray['amount'] = $record['transAmount'];
                 //$txnArray['cust_id'] = $uid;
-                var_dump($txnArray);
-                import('@.ORG.pay.MonerisPay.mpgClasses');
-                $mpgTxn = new mpgTransaction($txnArray);
-
-                $mpgRequest = new mpgRequest($mpgTxn);
-                $mpgRequest->setProcCountryCode("CA"); //"US" for sending transaction to US environment
-                $mpgRequest->setTestMode(false);
-
                 $where = array('tab_id'=>'moneris','gid'=>7);
                 $result = D('Config')->field(true)->where($where)->select();
                 foreach($result as $v){
@@ -229,6 +222,13 @@ class MonerisPay
                     elseif ($v['info'] == 'token')
                         $api_token = $v['value'];
                 }
+//                var_dump($txnArray);
+                import('@.ORG.pay.MonerisPay.mpgClasses');
+                $mpgTxn = new mpgTransaction($txnArray);
+
+                $mpgRequest = new mpgRequest($mpgTxn);
+                $mpgRequest->setProcCountryCode("CA"); //"US" for sending transaction to US environment
+                $mpgRequest->setTestMode(false);
 
                 $mpgHttpPost  =new mpgHttpsPost($store_id,$api_token,$mpgRequest);
                 $mpgResponse=$mpgHttpPost->getMpgResponse();
@@ -238,10 +238,14 @@ class MonerisPay
 //                    $record_type = 1;
 
                 $resp = $this->arrageResp($mpgResponse,'','',$record_type);
-                var_dump($resp);
+//                var_dump($resp);
                 if(!($resp['responseCode'] != "null" && $resp['responseCode'] < 50)){//如果购买更正不成功，尝试退款
                     $txnArray['type'] = 'refund';
+                    $txnArray['txn_number'] = $record['txnNumber'];
+                    $txnArray['order_id'] = $record['receiptId'];
                     $txnArray['amount'] = $record['transAmount'];
+                    $txnArray['crypt_type'] = '7';
+
                     $mpgTxn = new mpgTransaction($txnArray);
 
                     $mpgRequest = new mpgRequest($mpgTxn);
