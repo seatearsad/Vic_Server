@@ -580,4 +580,14 @@ function replace_lang_str($str,$replace){
 
     return $n_str;
 }
+
+//换位信用卡年月
+function transYM($str){
+    $m = substr($str,0,2);
+    $y = substr($str,2,2);
+
+    $new_str = $y.$m;
+
+    return $new_str;
+}
 ?>

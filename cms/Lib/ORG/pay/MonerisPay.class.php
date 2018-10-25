@@ -30,9 +30,16 @@ class MonerisPay
             $txnArray['expdate'] = $card['expiry'];
         }else{//直接输入卡号的
             $txnArray['pan'] = $data['card_num'];
-            $txnArray['expdate'] = $data['expiry'];
+            $txnArray['expdate'] = transYM($data['expiry']);
         }
 
+        //或者这张订单之前的错误回复
+        $order = explode("_",$data['order_id']);
+        $order_id = $order[1];
+        $error_list = D('Pay_moneris_record_error')->field(true)->where(array('order_id'=>$order_id))->select();
+        $count = count($error_list);
+        if($count > 0)
+            $data['order_id'] = $data['order_id'].'_'.$count;
 
         $txnArray['order_id'] = $data['order_id'];
         $txnArray['cust_id'] = $data['cust_id'];
@@ -62,6 +69,8 @@ class MonerisPay
                 $data['is_default'] = 1;
                 $data['uid'] = $uid;
                 $data['create_time'] = date("Y-m-d H:i:s");
+                //存储的时候为YYMM
+                $data['expiry'] = transYM($data['expiry']);
                 D('User_card')->field(true)->add($data);
             }
         }
@@ -71,8 +80,6 @@ class MonerisPay
             if($data['coupon_id']){
                 $now_coupon = D('System_coupon')->get_coupon_by_id($data['coupon_id']);
                 if(!empty($now_coupon)){
-                    $order = explode("_",$data['order_id']);
-                    $order_id = $order[1];
                     $coupon_data = D('System_coupon_hadpull')->field(true)->where(array('id'=>$data['coupon_id']))->find();
                     $coupon_real_id = $coupon_data['coupon_id'];
                     $coupon = D('System_coupon')->get_coupon($coupon_real_id);

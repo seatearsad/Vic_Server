@@ -145,9 +145,9 @@
 									</td>
 								</tr>
 							</volist>
-							<tr><td class="textcenter pagebar" colspan="15">{pigcms{$pagebar}</td></tr>
+							<tr><td class="textcenter pagebar" colspan="18">{pigcms{$pagebar}</td></tr>
 						<else/>
-							<tr><td class="textcenter red" colspan="15">列表为空！</td></tr>
+							<tr><td class="textcenter red" colspan="18">列表为空！</td></tr>
 						</if>
 					</tbody>
 				</table>

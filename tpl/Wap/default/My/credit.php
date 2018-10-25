@@ -95,7 +95,7 @@
 			                    <h6>{pigcms{:L('_CREDIT_CARD_NUM_')}：</h6><p>{pigcms{$vo.card_num}</p>
 			                </div>
 			                <div class="kv-line">
-			                    <h6>{pigcms{:L('_EXPRIRY_DATE_')}：</h6><p>{pigcms{$vo.expiry}</p>
+			                    <h6>{pigcms{:L('_EXPRIRY_DATE_')}：</h6><p>{pigcms{:transYM($vo['expiry'])}</p>
 			                </div>
 			            </div>
 			        <if condition="$order_id">

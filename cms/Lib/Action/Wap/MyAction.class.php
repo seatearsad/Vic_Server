@@ -641,7 +641,7 @@ class MyAction extends BaseAction{
 	    if($_POST){
 	        $data['name'] = $_POST['name'];
 	        $data['card_num'] = $_POST['card_num'];
-	        $data['expiry'] = $_POST['expiry'];
+	        $data['expiry'] = transYM($_POST['expiry']);
 
 	        //如果 is_default 存在，清空之前的default
 	        if($_POST['is_default']){

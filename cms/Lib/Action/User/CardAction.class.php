@@ -18,6 +18,9 @@ class CardAction extends  BaseAction{
         }
 
         $card_list = D('User_card')->getCardListByUid($this->user_session['uid']);
+        foreach ($card_list as $k=>$item) {
+            $card_list[$k]['expiry'] = transYM($item['expiry']);
+        }
         $this->assign('card_list',$card_list);
         $this->display();
     }
@@ -26,7 +29,7 @@ class CardAction extends  BaseAction{
         if($_POST){
             $data['name'] = $_POST['name'];
             $data['card_num'] = $_POST['card_num'];
-            $data['expiry'] = $_POST['expiry'];
+            $data['expiry'] = transYM($_POST['expiry']);
 
             //如果 is_default 存在，清空之前的default
             if($_POST['is_default']){

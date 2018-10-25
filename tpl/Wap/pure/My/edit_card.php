@@ -49,7 +49,7 @@
 		        		</dd>
 		        		<dd class="dd-padding kv-line">
 		        			<h6>{pigcms{:L('_EXPRIRY_DATE_')}:</h6>
-		        			<input name="expiry" type="text" class="kv-v input-weak" pattern=".{4,}" data-err="{pigcms{:L('_EXPRIRY_DATE_')}" value="{pigcms{$card.expiry}">
+		        			<input name="expiry" type="text" class="kv-v input-weak" pattern=".{4,}" data-err="{pigcms{:L('_EXPRIRY_DATE_')}" value="{pigcms{:transYM($card['expiry'])}">
 		        		</dd>
 		        		<dd>
 			            	<label class="react">
