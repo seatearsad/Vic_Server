@@ -502,7 +502,9 @@ class ShopAction extends BaseAction
             if($now_order['pay_type'] == 'moneris' && $now_order['paid'] == 1){
                 import('@.ORG.pay.MonerisPay');
                 $moneris_pay = new MonerisPay();
-                $resp = $moneris_pay->refund($now_order['uid'],$now_order['order_id'],-1,3);
+                //判读此订单是否修改过价格
+                $record_type = $now_order['is_refund'] == 1 ? 3 : 1;
+                $resp = $moneris_pay->refund($now_order['uid'],$now_order['order_id'],-1,$record_type);
 //                var_dump($now_order['order_id']);die();
                 if($resp['responseCode'] != 'null' && $resp['responseCode'] < 50){
 //                    $data_shop_order['order_id'] = $now_order['order_id'];
