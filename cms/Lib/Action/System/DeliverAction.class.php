@@ -708,9 +708,94 @@ class DeliverAction extends BaseAction {
 // 			}
 		}
 	}
-    
+
+	public function new_export(){
+        $b_date = $_GET['begin'].' 00:00:00';
+        $e_date = $_GET['end'].' 24:00:00';
+
+        $b_time = strtotime($b_date);
+        $e_time = strtotime($e_date);
+
+        $sql = "SELECT s.order_id, s.create_time,s.uid,s.freight_charge, u.name, u.phone,o.tip_charge,o.price,o.pay_type FROM " . C('DB_PREFIX') . "merchant_store AS m INNER JOIN " . C('DB_PREFIX') . "deliver_supply AS s ON m.store_id=s.store_id LEFT JOIN " . C('DB_PREFIX') . "deliver_user AS u ON s.uid=u.uid LEFT JOIN " . C('DB_PREFIX') . "shop_order AS o ON s.order_id=o.order_id";
+
+        $sql .= ' where s.status = 5 and s.create_time >='.$b_time.' and s.create_time <='.$e_time;
+        $sql .= ' order by s.uid';
+
+        $list = D()->query($sql);
+
+        $show_list = array();
+
+        foreach ($list as $k=>$v){
+            //$show_list[$v['uid']] = array();
+            $show_list[$v['uid']]['name'] = $v['name'];
+            $show_list[$v['uid']]['phone'] = $v['phone'];
+            $show_list[$v['uid']]['order_num'] = $show_list[$v['uid']]['order_num'] ? $show_list[$v['uid']]['order_num']+ 1 : 1;
+            $show_list[$v['uid']]['tip'] = $show_list[$v['uid']]['tip'] ? $show_list[$v['uid']]['tip'] + $v['tip_charge'] : $v['tip_charge'];
+            $show_list[$v['uid']]['freight'] = $show_list[$v['uid']]['freight'] ? $show_list[$v['uid']]['freight'] + $v['freight_charge'] : $v['freight_charge'];
+            if($v['pay_type'] != 'moneris'){//统计现金
+                $show_list[$v['uid']]['cash'] = $show_list[$v['uid']]['cash'] ? $show_list[$v['uid']]['cash'] + $v['price'] : $v['price'];
+            }
+        }
+
+        require_once APP_PATH . 'Lib/ORG/phpexcel/PHPExcel.php';
+        $title = '配送统计';
+        $objExcel = new PHPExcel();
+        $objProps = $objExcel->getProperties();
+        // 设置文档基本属性
+        $objProps->setCreator($title);
+        $objProps->setTitle($title);
+        $objProps->setSubject($title);
+        $objProps->setDescription($title);
+
+        $objExcel->createSheet();
+        $objExcel->setActiveSheetIndex(0);
+
+        $objExcel->getActiveSheet()->setTitle($title);
+        $objActSheet = $objExcel->getActiveSheet();
+
+        $objActSheet->setCellValue('A1', '配送员姓名');
+        $objActSheet->setCellValue('B1', '配送员电话');
+        $objActSheet->setCellValue('C1', '送单数量');
+        $objActSheet->setCellValue('D1', '小费总计');
+        $objActSheet->setCellValue('E1', '送餐费总计');
+        $objActSheet->setCellValue('F1', '收入现金');
+        $objActSheet->setCellValue('G1', '总计');
+
+        $index = 2;
+        foreach ($show_list as $k=>$v){
+//            $show_list[$k]['total'] = $v['tip'] + $v['freight'] - $v['cash'];
+            $objActSheet->setCellValueExplicit('A'.$index,$v['name']);
+            $objActSheet->setCellValueExplicit('B'.$index,$v['phone']);
+            $objActSheet->setCellValueExplicit('C'.$index,$v['order_num']);
+            $objActSheet->setCellValueExplicit('D'.$index,sprintf("%.2f", $v['tip']));
+            $objActSheet->setCellValueExplicit('E'.$index,sprintf("%.2f", $v['freight']));
+            $objActSheet->setCellValueExplicit('F'.$index,sprintf("%.2f", $v['cash']));
+            $objActSheet->setCellValueExplicit('G'.$index,sprintf("%.2f",$v['tip'] + $v['freight'] - $v['cash']));
+            $index++;
+        }
+
+
+        $objWriter = new PHPExcel_Writer_Excel5($objExcel);
+        ob_end_clean();
+        header("Pragma: public");
+        header("Expires: 0");
+        header("Cache-Control:must-revalidate, post-check=0, pre-check=0");
+        header("Content-Type:application/force-download");
+        header("Content-Type:application/vnd.ms-execl");
+        header("Content-Type:application/octet-stream");
+        header("Content-Type:application/download");
+        header('Content-Disposition:attachment;filename="'.$title.'_' . date("Y-m-d h:i:s", time()) . '.xls"');
+        header("Content-Transfer-Encoding:binary");
+        $objWriter->save('php://output');
+        exit();
+    }
+
 	public function export() 
 	{
+	    //if(!$_POST && !$_GET){
+	        $this->display();
+	        die();
+        //}
 		set_time_limit(0);	
 		require_once APP_PATH . 'Lib/ORG/phpexcel/PHPExcel.php';
 		$title = '配送列表';
