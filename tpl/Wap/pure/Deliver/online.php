@@ -151,10 +151,10 @@ $(function(){
         };
         $.post("{pigcms{:U('Deliver/online')}",re_data,function(data){
             layer.closeAll();
-            // layer.open({title:['Message'],content:data.info});
-            // if(data.status == 1){
-            //     setTimeout("window.location.href = '"+data.url+"'",200);
-            // }
+            layer.open({title:['Message'],content:data.info});
+            if(data.status == 1){
+                setTimeout("window.location.href = '"+data.url+"'",200);
+            }
         });
     }
 

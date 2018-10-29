@@ -72,7 +72,9 @@
                     应收现金：<i>{pigcms{$row['deliver_cash']}</i>元
                     <!--if condition="$row['deliver_cash'] neq 0"-->
                     <if condition="$row['uid'] eq 0">
-                    <input type="button" value="线上支付" style="width: 120px;height: 30px; background-color: #04B7A5;color: #ffffff;" class="t_online" data-id="{pigcms{$row['supply_id']}">
+                        <if condition="$row['deliver_cash'] neq 0">
+                            <input type="button" value="线上支付" style="width: 120px;height: 30px; background-color: #04B7A5;color: #ffffff;" class="t_online" data-id="{pigcms{$row['supply_id']}">
+                        </if>
                     </if>
                 </p>
 				<p class="red">配送距离{pigcms{$row['distance']}公里，配送费:${pigcms{$row['freight_charge']},小费:${pigcms{$row['tip_charge']}</p>
