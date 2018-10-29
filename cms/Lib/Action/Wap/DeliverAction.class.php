@@ -1408,7 +1408,7 @@ class DeliverAction extends BaseAction
             $moneris_pay = new MonerisPay();
             $resp = $moneris_pay->payment($post_data,0);
             if($resp['responseCode'] != 'null' && $resp['responseCode'] < 50){
-                $order = explode("_",$_POST['order_id']);
+                $order = explode("_",$post_data['order_id']);
                 $order_id = $order[1];
                 $url =U("Wap/Deliver/my");
 
@@ -1432,11 +1432,13 @@ class DeliverAction extends BaseAction
                 $this->error($resp['message'],'',true);
             }
         }else{
+            $supply_id = intval(I("supply_id"));
             $where = array();
             $where['status'] = 4;
             // $where['item'] = 1;
             $where['uid'] = $uid;
             $where['is_hide'] = 0;
+            $where['supply_id'] = $supply_id;
             if ($this->deliver_session['group'] == 2 && $this->deliver_session['store_id']) {
                 $where['store_id'] = $this->deliver_session['store_id'];
             }
