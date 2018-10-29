@@ -1405,7 +1405,7 @@ class DeliverAction extends BaseAction
             $post_data['tip'] = $_POST["tip"];
             $post_data['rvarwap'] = $_POST["rvarwap"];
 
-            var_dump($post_data);die();
+//            var_dump($post_data);die();
             import('@.ORG.pay.MonerisPay');
             $moneris_pay = new MonerisPay();
             $resp = $moneris_pay->payment($post_data,0);
