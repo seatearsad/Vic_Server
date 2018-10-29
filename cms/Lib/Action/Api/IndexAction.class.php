@@ -59,9 +59,9 @@ class IndexAction extends BaseAction
 //            $shop_list[$k]['goods'] = $product_list;
 //        }
 
-        if(!$shop_list){
+        if(!$shop_list['list']){
             $shop_list['list'] = array();
-            $shop_list['count'] = '1';
+            $shop_list['count'] = '0';
         }
 
         $arr['best']['status'] = 1;
