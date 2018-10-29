@@ -145,7 +145,7 @@ $(function(){
         e.stopPropagation();
 
         var supply_id = $(this).attr("data-id");
-        var DetailUrl = "{pigcms{:U('Wap/Deliver/online', array('supply_id'=>'d%'))}";
+        var DetailUrl = "{pigcms{:U('Wap/Deliver/online', array('supply_id'=>'d%','lang'=>'en'))}";
         location.href = DetailUrl.replace(/d%/, supply_id);
     }
 

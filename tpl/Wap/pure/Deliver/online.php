@@ -27,28 +27,28 @@
 		<section class="robbed supply_{pigcms{$row['supply_id']}" data-id="{pigcms{$row.supply_id}">
 			<div class="Online c9 p10 f14" data-id="{pigcms{$row.supply_id}">
 				<span>
-                    订单编号: {pigcms{$row['real_orderid']}
+                    {pigcms{:L('_B_PURE_MY_68_')}: {pigcms{$row['real_orderid']}
                     <if condition="$row['uid'] eq 0">
-                        (代客下单)
+                        ({pigcms{:L('_PAY_FROM_MER_')})
                     </if>
                 </span>
 				<if condition="$row['pay_method'] eq 1">
-				<a href="javascript:;" class="fr cd p10">在线支付</a>
+				<a href="javascript:;" class="fr cd p10">{pigcms{:L('moneris')}</a>
 				<else />
-				<a href="javascript:;" class="fr cd p10 on">货到付款</a>
+				<a href="javascript:;" class="fr cd p10 on">{pigcms{:L('offline')}</a>
 				</if>
 				
 			</div>
 			<div class="Title m10" data-id="{pigcms{$row.supply_id}">
 				<h2 class="f16 c3">{pigcms{$row['store_name']}</h2>
-				<p class="f14 c9">下单时间：{pigcms{$row['order_time']}</p>
+				<p class="f14 c9">{pigcms{:L('_ORDER_TIME_')}：{pigcms{$row['order_time']}</p>
 				<if condition="$row['get_type'] eq 1">
 				<div class="leaflets">系统派单</div>
 				</if>
 			</div>
 			<div class="Namelist p10 f14">
 				<p class="red" style="height: 30px;">
-                    应收现金：<i>${pigcms{$row['deliver_cash']}</i>
+                    {pigcms{:L('_TOTAL_RECE_')}：<i>${pigcms{$row['deliver_cash']}</i>
                     <INPUT TYPE="HIDDEN" NAME="charge_total" VALUE="{pigcms{$row['deliver_cash']}">
                 </p>
 			</div>
@@ -97,7 +97,7 @@
                 </dl>
             </div>
 			<div class="sign_bottom">
-				<a href="javascript:;" class="service" data-id="{pigcms{$row['supply_id']}">支付</a>
+				<a href="javascript:;" class="service" data-id="{pigcms{$row['supply_id']}">{pigcms{:L('_PAYMENT_ORDER_')}</a>
 			</div>
 		</section>
 		</volist>
