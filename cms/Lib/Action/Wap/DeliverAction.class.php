@@ -1401,6 +1401,7 @@ class DeliverAction extends BaseAction
             $post_data['card_num'] = intval(I("card_num"));
             $post_data['expiry'] = intval(I("expiry"));
             $post_data['charge_total'] = intval(I("charge_total"));
+            $post_data['charge_total'] = sprintf("%.2f", $post_data['charge_total']);
             $post_data['tip'] = intval(I("tip"));
             $post_data['rvarwap'] = intval(I("rvarwap"));
 
