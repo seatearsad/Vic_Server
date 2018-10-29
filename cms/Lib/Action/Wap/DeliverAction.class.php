@@ -1397,13 +1397,13 @@ class DeliverAction extends BaseAction
             $order_id = $supply['order_id'];
             $post_data['order_id'] = 'vicisland_'.$order_id;
             $post_data['cust_id'] = 'Deliver'.$uid;
-            $post_data['name'] = intval(I("name"));
-            $post_data['card_num'] = intval(I("card_num"));
-            $post_data['expiry'] = intval(I("expiry"));
-            $post_data['charge_total'] = intval(I("charge_total"));
-            $post_data['charge_total'] = sprintf("%.2f", $post_data['charge_total']);
-            $post_data['tip'] = intval(I("tip"));
-            $post_data['rvarwap'] = intval(I("rvarwap"));
+            $post_data['name'] = $_POST["name"];
+            $post_data['card_num'] = $_POST["card_num"];
+            $post_data['expiry'] = $_POST["expiry"];
+            $post_data['charge_total'] = $_POST["charge_total"];
+//            $post_data['charge_total'] = sprintf("%.2f", $post_data['charge_total']);
+            $post_data['tip'] = $_POST["tip"];
+            $post_data['rvarwap'] = $_POST["rvarwap"];
 
             var_dump($post_data);die();
             import('@.ORG.pay.MonerisPay');
