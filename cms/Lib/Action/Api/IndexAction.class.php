@@ -58,6 +58,12 @@ class IndexAction extends BaseAction
 //            $product_list = D('Shop_goods')->get_list_by_storeid($v['site_id']);
 //            $shop_list[$k]['goods'] = $product_list;
 //        }
+
+        if(!$shop_list){
+            $shop_list['list'] = array();
+            $shop_list['count'] = '1';
+        }
+
         $arr['best']['status'] = 1;
         $arr['best']['info'] = $shop_list['list'];
         $arr['best']['count'] = $shop_list['count'];
