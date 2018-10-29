@@ -141,5 +141,15 @@
         }
         $('#addressShow').append(addressHtml);
     }
+    //测试使用
+    // $(function () {
+    //     info = JSON.parse($.cookie('staff_address'));
+    //     info.adress = "123";
+    //     info.longitude = "-123.343033";
+    //     info.latitude = "48.430168";
+    //     $.cookie('staff_address', JSON.stringify(info));
+    //     info.id = '1';
+    //     location.href = "{pigcms{:U('Storestaff/add_shop_order')}&adress_id="+info.id;
+    // })
 </script>
 </html>

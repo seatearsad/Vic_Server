@@ -27,7 +27,12 @@
 		<volist name="list" id="row">
 		<section class="robbed supply_{pigcms{$row['supply_id']}" data-id="{pigcms{$row.supply_id}">
 			<div class="Online c9 p10 f14 go_detail" data-id="{pigcms{$row.supply_id}">
-				<span>订单编号: {pigcms{$row['real_orderid']}</span>
+				<span>
+                    订单编号: {pigcms{$row['real_orderid']}
+                    <if condition="$row['uid'] eq 0">
+                        (代客下单)
+                    </if>
+                </span>
 				<if condition="$row['pay_method'] eq 1">
 				<a href="javascript:;" class="fr cd p10">在线支付</a>
 				<else />
@@ -64,7 +69,7 @@
 				<p class="c9">客户备注：{pigcms{$row['note']}</p>
 				</if>
 				<p class="red">应收现金：<i>{pigcms{$row['deliver_cash']}</i>元</p>
-				<p class="red">配送距离{pigcms{$row['distance']}公里，配送费{pigcms{$row['freight_charge']}元</p>
+				<p class="red">配送距离{pigcms{$row['distance']}公里，配送费:${pigcms{$row['freight_charge']},小费:${pigcms{$row['tip_charge']}</p>
 				<if condition="$row['get_type'] eq 2">
 				<div class="Order">订单来源于{pigcms{$row['change_name']}配送员</div>
 				</if>

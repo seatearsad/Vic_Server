@@ -736,4 +736,103 @@ class IndexAction extends BaseAction
 
         $this->returnCode(0,'info',$card_list,'success');
     }
+
+    public function getCouponByUser(){
+        $uid = $_POST['uid'];
+        $coupon_list = D('System_coupon')->get_user_coupon_list($uid);
+
+        $tmp = array();
+        foreach ($coupon_list as $key => $v) {
+            $v['name'] = lang_substr($v['name'],C('DEFAULT_LANG'));
+            $v['des'] = lang_substr($v['des'],C('DEFAULT_LANG'));
+            if (!empty($tmp[$v['is_use']][$v['coupon_id']])) {
+                $tmp[$v['is_use']][$v['coupon_id']]['get_num']++;
+            } else {
+                $tmp[$v['is_use']][$v['coupon_id']] = $v;
+                $mer = M('Merchant')->where(array('mer_id'=>$v['mer_id']))->find();
+                $tmp[$v['is_use']][$v['coupon_id']]['merchant']=$mer['name'];
+                $tmp[$v['is_use']][$v['coupon_id']]['get_num'] = 1;
+            }
+
+        }
+        $this->returnCode(0,'info',$tmp,'success');
+    }
+    //获取订单可使用的优惠券
+    public function getCanCoupon(){
+        $uid = $_POST['uid'];
+        //订单金额
+        $amount = $_POST['amount'];
+        $today = time();
+
+        $sql = 'select c.coupon_id,h.id,c.discount,c.order_money from '.C('DB_PREFIX').'system_coupon_hadpull as h left join '.C('DB_PREFIX').'system_coupon as c on h.coupon_id = c.coupon_id';
+        $sql .= ' where h.uid = '.$uid.' and h.is_use = 0 and c.start_time <='.$today.' and c.end_time >='.$today.' and c.order_money <='.$amount;
+        $sql .= ' order by c.discount desc,c.end_time asc';
+
+        $model = new Model();
+        $coupon_list = $model->query($sql);
+
+        $this->returnCode(0,'info',$coupon_list,'success');
+    }
+
+    public function orderRefund(){
+        $uid = $_POST['uid'];
+        $order_id = $_POST['order_id'];
+
+        $now_order = D("Shop_order")->get_order_detail(array('order_id' => $order_id, 'uid' => $uid));
+        if(empty($now_order)){
+            $this->returnCode(1,'info',array(),L('_B_MY_NOORDER_'));
+        }
+        $store_id = $now_order['store_id'];
+        //$mer_id = $now_order['mer_id'];
+        if (!($now_order['paid'] == 1 && ($now_order['status'] == 0 || $now_order['status'] == 5))) {
+            $this->returnCode(1,'info',array(),L('_B_MY_ORDERDEALING_'));
+        }
+
+        $data_shop_order['cancel_type'] = 5;//取消类型（0:pc店员，1:wap店员，2:andriod店员,3:ios店员，4：打包app店员，5：用户，6：配送员, 7:超时取消）
+        if ($now_order['pay_type'] == 'offline' || $now_order['pay_type'] == 'Cash') {
+            $data_shop_order['order_id'] = $now_order['order_id'];
+            $data_shop_order['refund_detail'] = serialize(array('refund_time' => time()));
+            $data_shop_order['status'] = 4;
+            if (D('Shop_order')->data($data_shop_order)->save()) {
+                $return = $this->shop_refund_detail($now_order, $store_id);
+                if ($return['error_code']) {
+                    $this->returnCode(1,'info',array(),$result['msg']);
+                }
+            } else {
+                $this->returnCode(1,'info',array(),L('_B_MY_CANCELLLOSE_'));
+            }
+        }else{
+            if($now_order['pay_type'] == 'moneris'){
+                import('@.ORG.pay.MonerisPay');
+                $moneris_pay = new MonerisPay();
+                $resp = $moneris_pay->refund($uid,$now_order['order_id']);
+//                var_dump($resp);die();
+                if($resp['responseCode'] != 'null' && $resp['responseCode'] < 50){
+                    $data_shop_order['order_id'] = $now_order['order_id'];
+                    $data_shop_order['status'] = 4;
+                    $data_shop_order['last_time'] = time();
+                    D('Shop_order')->data($data_shop_order)->save();
+                }else{
+                    $this->returnCode(1,'info',array(),$resp['message']);
+                }
+            }
+
+            $return = $this->shop_refund_detail($now_order, $store_id);
+            if ($return['error_code']) {
+                $this->returnCode(1,'info',array(),$return['msg']);
+            }
+
+//            if (empty($now_order['pay_type'])) {
+//                $data_shop_order['order_id'] = $now_order['order_id'];
+//                $data_shop_order['status'] = 4;
+//                $data_shop_order['last_time'] = time();
+//                D('Shop_order')->data($data_shop_order)->save();
+//            }
+//            if(empty($go_refund_param['msg'])){
+//                $go_refund_param['msg'] .= L('_B_MY_ORDERCANCELLEDACCESS_');
+//            }
+            D('Shop_order_log')->add_log(array('order_id' => $order_id, 'status' => 9));
+        }
+        $this->returnCode(0,'info',array(),'success');
+    }
 }

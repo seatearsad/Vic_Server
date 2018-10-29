@@ -37,7 +37,12 @@
 {{# for(var i = 0, len = d.list.length; i < len; i++){ }}
 <section class="robbed supply_{{ d.list[i].supply_id }}" data-id="{{ d.list[i].supply_id }}">
 	<div class="Online c9 p10 f14 go_detail" data-id="{{ d.list[i].supply_id }}" style="cursor: pointer;">
-		<span>订单编号: {{ d.list[i].real_orderid }}</span>
+		<span>
+            订单编号: {{ d.list[i].real_orderid }}
+            {{# if(d.list[i].uid == 0){ }}
+                (代客下单)
+            {{# } }}
+        </span>
 		{{# if(d.list[i].pay_method == 1){ }}
 		<a href="javascript:;" class="fr cd p10">在线支付</a>
 		{{# } else { }}

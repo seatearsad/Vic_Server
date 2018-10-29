@@ -27,7 +27,12 @@
 		<volist name="list" id="row">
 		<section class="robbed supply_{pigcms{$row['supply_id']} go_detail" data-id="{pigcms{$row.supply_id}">
 			<div class="Online c9 p10 f14" data-id="{pigcms{$row.supply_id}">
-				<span>订单编号: {pigcms{$row['real_orderid']}</span>
+				<span>
+                    订单编号: {pigcms{$row['real_orderid']}
+                    <if condition="$row['uid'] eq 0">
+                        (代客下单)
+                    </if>
+                </span>
 				<if condition="$row['pay_method'] eq 1">
 				<a href="javascript:;" class="fr cd p10">在线支付</a>
 				<else />
@@ -63,8 +68,13 @@
 				<if condition="$row['note']">
 				<p class="c9">客户备注：{pigcms{$row['note']}</p>
 				</if>
-				<p class="red">应收现金：<i>{pigcms{$row['deliver_cash']}</i>元</p>
-				<p class="red">配送距离{pigcms{$row['distance']}公里，配送费{pigcms{$row['freight_charge']}元</p>
+				<p class="red" style="height: 30px;">
+                    应收现金：<i>{pigcms{$row['deliver_cash']}</i>元
+                    <if condition="$row['deliver_cash'] neq 0">
+                    <input type="button" value="线上支付" style="width: 80px;height: 30px;" id="online" data-id="{pigcms{$row['supply_id']}">
+                    </if>
+                </p>
+				<p class="red">配送距离{pigcms{$row['distance']}公里，配送费:${pigcms{$row['freight_charge']},小费:${pigcms{$row['tip_charge']}</p>
 				<if condition="$row['get_type'] eq 2">
 				<div class="Order">订单来源于{pigcms{$row['change_name']}配送员</div>
 				</if>
@@ -123,9 +133,25 @@ $(function(){
 		location.href = DetailUrl.replace(/d%/, supply_id);
 	}
 
+    //garfunkel add
+    function onlinePay(e){
+        if (mark) {
+            return false;
+        }
+        mark = 1;
+        e.stopPropagation();
+
+        var supply_id = $(this).attr("data-id");
+        var DetailUrl = "{pigcms{:U('Wap/Deliver/online', array('supply_id'=>'d%'))}";
+        location.href = DetailUrl.replace(/d%/, supply_id);
+    }
+
+    $("#online").bind("click",onlinePay);
 	$(".service").bind("click", grab);
 	$(".go_detail").bind("click", detail);
 });
+
+
 </script>
 <include file="menu"/>
 </body>

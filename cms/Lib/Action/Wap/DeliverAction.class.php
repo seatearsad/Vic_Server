@@ -348,6 +348,7 @@ class DeliverAction extends BaseAction
 
 				$order = D('Shop_order')->get_order_by_orderid($val['order_id']);
 				$val['tip_charge'] = $order['tip_charge'];
+				$val['uid'] = $order['uid'];
 			}
 			exit(json_encode(array('err_code' => false, 'list' => $list)));
 		}
@@ -452,6 +453,7 @@ class DeliverAction extends BaseAction
 		foreach ($list as &$val) {
 			switch ($val['pay_type']) {
 				case 'offline':
+                case 'Cash':
 					$val['pay_method'] = 0;
 					break;
 				default:
@@ -476,6 +478,9 @@ class DeliverAction extends BaseAction
 				$uid = array_pop($changes);
 				$val['change_name'] = $this->getDeliverUser($uid);
 			}
+            $order = D('Shop_order')->get_order_by_orderid($val['order_id']);
+            $val['tip_charge'] = $order['tip_charge'];
+            $val['uid'] = $order['uid'];
 		}
 		$this->assign('list', $list);
 		$this->display();
@@ -806,6 +811,9 @@ class DeliverAction extends BaseAction
 				$uid = array_pop($changes);
 				$val['change_name'] = $this->getDeliverUser($uid);
 			}
+            $order = D('Shop_order')->get_order_by_orderid($val['order_id']);
+            $val['tip_charge'] = $order['tip_charge'];
+            $val['uid'] = $order['uid'];
 		}
 		$this->assign('list', $list);
 		$this->display();
@@ -1367,4 +1375,109 @@ class DeliverAction extends BaseAction
 		}
 		exit(json_encode(array('total' => ceil($count/$page_size), 'list' => $list, 'count' => $count, 'err_code' => false)));
 	}
+
+	public function online(){
+        $uid = $this->deliver_session['uid'];
+	    if($_POST){
+            $supply_id = intval(I("supply_id"));
+            if (! $supply_id) {
+                $this->error("参数错误");exit;
+            }
+
+            $supply = $this->deliver_supply->field(true)->where(array('supply_id' => $supply_id, 'uid' => $this->deliver_session['uid']))->find();
+            if (empty($supply)) {
+                $this->error("配送信息错误");
+                exit;
+            }
+            if ($supply['status'] != 4) {
+                $this->error("此单暂时不能进行配送完成操作");
+                exit;
+            }
+
+            $order_id = $supply['order_id'];
+            $post_data['order_id'] = 'vicisland_'.$order_id;
+            $post_data['cust_id'] = 'Deliver'.$uid;
+            $post_data['name'] = intval(I("name"));
+            $post_data['card_num'] = intval(I("card_num"));
+            $post_data['expiry'] = intval(I("expiry"));
+            $post_data['charge_total'] = intval(I("charge_total"));
+            $post_data['tip'] = intval(I("tip"));
+            $post_data['rvarwap'] = intval(I("rvarwap"));
+
+            import('@.ORG.pay.MonerisPay');
+            $moneris_pay = new MonerisPay();
+            $resp = $moneris_pay->payment($post_data,0);
+            if($resp['responseCode'] != 'null' && $resp['responseCode'] < 50){
+                $order = explode("_",$_POST['order_id']);
+                $order_id = $order[1];
+                $url =U("Wap/Deliver/my");
+
+                //修改supply 和 order的支付相关数据
+                $data['pay_type'] = 'moneris';
+                $data['money'] = 0.00;
+                $data['paid'] = 1;
+                $data['deliver_cash'] = 0;
+                $this->deliver_supply->field(true)->where(array('supply_id' => $supply_id, 'uid' => $this->deliver_session['uid']))->save($data);
+
+                $order_data['tip_charge'] = $post_data['tip'];
+                $order_data['paid'] = 1;
+                $order_data['pay_type'] = 'moneris';
+                $order_data['pay_time'] = time();
+                $order_data['payment_money'] = $resp['transAmount'];
+
+                D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->save($order_data);
+
+                $this->success(L('_PAYMENT_SUCCESS_'),$url,true);
+            }else{
+                $this->error($resp['message'],'',true);
+            }
+        }else{
+            $where = array();
+            $where['status'] = 4;
+            // $where['item'] = 1;
+            $where['uid'] = $uid;
+            $where['is_hide'] = 0;
+            if ($this->deliver_session['group'] == 2 && $this->deliver_session['store_id']) {
+                $where['store_id'] = $this->deliver_session['store_id'];
+            }
+            $list = $this->deliver_supply->field(true)->where($where)->order("`create_time` DESC")->select();
+            if (false === $list) {
+                $this->error("系统错误");exit;
+            }
+
+            foreach ($list as &$val) {
+                switch ($val['pay_type']) {
+                    case 'offline':
+                        $val['pay_method'] = 0;
+                        break;
+                    default:
+                        if ($val['paid']) {
+                            $val['pay_method'] = 1;
+                        } else {
+                            $val['pay_method'] = 0;
+                        }
+                        break;
+                }
+                $val['deliver_cash'] = floatval($val['deliver_cash']);
+                $val['distance'] = floatval($val['distance']);
+                $val['freight_charge'] = floatval($val['freight_charge']);
+                $val['create_time'] = date('Y-m-d H:i', $val['create_time']);
+                $val['appoint_time'] = date('Y-m-d H:i', $val['appoint_time']);
+                $val['order_time'] = $val['order_time'] ? date('Y-m-d H:i', $val['order_time']) : '--';
+                $val['real_orderid'] = $val['real_orderid'] ? $val['real_orderid'] : $val['order_id'];
+                $val['map_url'] = U('Deliver/map', array('supply_id' => $val['supply_id']));
+                if ($val['change_log']) {
+                    $changes = explode(',', $val['change_log']);
+                    $uid = array_pop($changes);
+                    $val['change_name'] = $this->getDeliverUser($uid);
+                }
+                $order = D('Shop_order')->get_order_by_orderid($val['order_id']);
+                $val['tip_charge'] = $order['tip_charge'];
+                $val['uid'] = $order['uid'];
+            }
+            $this->assign('list', $list);
+            $this->display();
+        }
+
+    }
 }

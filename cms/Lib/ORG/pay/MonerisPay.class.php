@@ -90,8 +90,8 @@ class MonerisPay
                 }
             }
         }
-
-        $this->savePayData($resp,$data['rvarwap'],$data['tip']);
+        if($uid != 0)
+            $this->savePayData($resp,$data['rvarwap'],$data['tip']);
 
         return $resp;
     }
