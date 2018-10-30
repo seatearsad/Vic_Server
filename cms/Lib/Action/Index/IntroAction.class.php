@@ -10,7 +10,7 @@ class IntroAction extends BaseAction{
 			redirect($this->config['site_url']);
 		}
 		$this->assign('now_link',$now_link);
-		
+
 		//热门搜索词
     	$search_hot_list = D('Search_hot')->get_list(12);
     	$this->assign('search_hot_list',$search_hot_list);
@@ -19,6 +19,9 @@ class IntroAction extends BaseAction{
 		$all_category_list = D('Group_category')->get_category();
 		$this->assign('all_category_list',$all_category_list);
 
-		$this->display();
+        if($_GET['app'])
+            $this->display('app');
+        else
+		    $this->display();
     }
 }
