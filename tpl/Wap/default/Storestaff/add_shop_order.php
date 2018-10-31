@@ -59,13 +59,13 @@
                         <td>添加订单</td>
                     </tr>
                     <tr>
-                        <td>姓名：<input type="text" name="name" value="{pigcms{$now_adress.name}" placeholder="请输入客户姓名"></td>
+                        <td>Name：<input type="text" name="name" value="{pigcms{$now_adress.name}" placeholder="请输入客户姓名"></td>
                     </tr>
                     <tr>
-                        <td>电话：<input type="text" name="phone" value="{pigcms{$now_adress.phone}" placeholder="请输入客户电话"></td>
+                        <td>Mobile：<input type="text" name="phone" value="{pigcms{$now_adress.phone}" placeholder="请输入客户电话"></td>
                     </tr>
                     <tr>
-                        <td>省份：
+                        <td>Province：
                             <select name="province">
                                 <if condition="$now_adress">
                                     <volist name="province_list" id="vo">
@@ -80,7 +80,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>城市：<select name="city">
+                        <td>City：<select name="city">
                                 <if condition="$now_adress">
                                     <volist name="city_list" id="vo">
                                         <option value="{pigcms{$vo.area_id}" <if condition="$vo['area_id'] eq $now_adress['city']">selected="selected"</if>>{pigcms{$vo.area_name}</option>
@@ -93,7 +93,7 @@
                             </select></td>
                     </tr>
                     <tr>
-                        <td>区县：<select name="area">
+                        <td>Area：<select name="area">
                                 <volist name="area_list" id="vo">
                                     <option value="{pigcms{$vo.area_id}"  <if condition="$vo['area_id'] eq $now_adress['area']">selected="selected"</if>>{pigcms{$vo.area_name}</option>
                                 </volist>
@@ -101,29 +101,29 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>位置：
+                        <td>Position：
                             <?php if(!empty($now_adress['adress'])){echo $now_adress['adress'];} ?>
                             <button type="button" id="color-gray" class="btn" style="background-color: #06c1bb;"> <?php if(!empty($now_adress['adress'])){echo '重新选择';}else{ echo '选择位置';} ?></button>
                         </td>
                     </tr>
                     <tr>
-                        <td>地址：<input name="detail" value="{pigcms{$now_adress.detail}" type="text" placeholder="请填写详细的地址和门牌号"></td>
+                        <td>Address：<input name="detail" value="{pigcms{$now_adress.detail}" type="text" placeholder="请填写详细的地址和门牌号"></td>
                     </tr>
                     <tr>
-                        <td>总价：<input type="text" value="{pigcms{$now_adress.goods_price}" name="goods_price" placeholder="请输入商品总价">
+                        <td>Price：<input type="text" value="{pigcms{$now_adress.goods_price}" name="goods_price" placeholder="请输入商品总价">
                             <input type="hidden" name="adress" value="{pigcms{$now_adress.adress}" style="width: 50%">
                             <input type="hidden" name="longitude" value="{pigcms{$now_adress.longitude}" >
                             <input type="hidden" name="latitude" value="{pigcms{$now_adress.latitude}" >
                         </td>
                     </tr>
                     <tr>
-                        <td><button type="button" id="confirm_order" class="btn" style="text-align: center;width: 100%;margin-top: 20px;font-size: 14px;">确认订单</button></td>
+                        <td><button type="button" id="confirm_order" class="btn" style="text-align: center;width: 100%;margin-top: 20px;font-size: 14px;">Confirm</button></td>
                     </tr>
                 </tbody>
             </form>
         </table>
     </ul>
-    <a href="{pigcms{:U('Storestaff/shop_list')}" class="btn" style="float:right;right:1rem;top:0.2rem;position:absolute;width:5rem;font-size:1rem;">返 回</a>
+    <a href="{pigcms{:U('Storestaff/shop_list')}" class="btn" style="float:right;right:1rem;top:0.2rem;position:absolute;width:5rem;font-size:1rem;">Back</a>
 </div>
 <script src="{pigcms{:C('JQUERY_FILE')}"></script>
 <script src="{pigcms{$static_path}js/jquery.cookie.js"></script>

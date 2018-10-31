@@ -11,7 +11,7 @@ class MapAction extends BaseAction{
 		$this->assign('city_name',$now_city['area_name']);
 		//$url = 'http://api.map.baidu.com/place/v2/suggestion?query='.urlencode($_GET['query']).'&region='.urlencode($now_city['area_name']).'&ak=4c1bb2055e24296bbaef36574877b4e2&output=json';
 //		$url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=48.43016873926502,-123.34303379055086&rankby=distance&keyword='.urlencode($_GET['query']).'&key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&language=zh-CN';
-        $url = 'https://maps.googleapis.com/maps/api/place/autocomplete/json?input='.urlencode($_GET['query']).'&types=address&key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&location=48.43016873926502,-123.34303379055086&radius=50000&language=en';
+        $url = 'https://maps.googleapis.com/maps/api/place/autocomplete/json?input='.urlencode($_GET['query']).'&types=address&key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&location=48.43016873926502,-123.34303379055086&radius=50000&components=country:ca&language=en';
 		import('ORG.Net.Http');
 		$http = new Http();
 		$result = $http->curlGet($url);
