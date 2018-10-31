@@ -22,6 +22,7 @@ class MapAction extends BaseAction{
 				foreach($result['predictions'] as $v) {
 				    $place_url = 'https://maps.googleapis.com/maps/api/place/details/json?placeid='.$v['place_id'].'&key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&fields=geometry&language=en';
                     $place = $http->curlGet($place_url);
+                    $place = json_decode($place,true);
 				    $return[] = [
 						'name' => $v['description'],
 						'lat' => $place['result']['geometry']['location']['lat'],
