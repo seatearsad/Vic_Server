@@ -10,20 +10,23 @@ class MapAction extends BaseAction{
 		$now_city = D('Area')->field(true)->where(array('area_id' => $city_id))->find();
 		$this->assign('city_name',$now_city['area_name']);
 		//$url = 'http://api.map.baidu.com/place/v2/suggestion?query='.urlencode($_GET['query']).'&region='.urlencode($now_city['area_name']).'&ak=4c1bb2055e24296bbaef36574877b4e2&output=json';
-		$url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=48.43016873926502,-123.34303379055086&rankby=distance&keyword='.urlencode($_GET['query']).'&key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&language=zh-CN';
+//		$url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=48.43016873926502,-123.34303379055086&rankby=distance&keyword='.urlencode($_GET['query']).'&key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&language=zh-CN';
+        $url = 'https://maps.googleapis.com/maps/api/place/autocomplete/json?input='.urlencode($_GET['query']).'&types=address&key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&location=48.43016873926502,-123.34303379055086&radius=50000&language=en';
 		import('ORG.Net.Http');
 		$http = new Http();
 		$result = $http->curlGet($url);
 		if($result){
 			$result = json_decode($result,true);
-			if($result['status'] == 'OK' && count($result['results']) > 0){
+			if($result['status'] == 'OK' && count($result['predictions']) > 0){
 				$return = [];
-				foreach($result['results'] as $v) {
-					$return[] = [
-						'name' => $v['name'],
-						'lat' => $v['geometry']['location']['lat'],
-						'long' => $v['geometry']['location']['lng'],
-						'address' => $v['vicinity']
+				foreach($result['predictions'] as $v) {
+				    $place_url = 'https://maps.googleapis.com/maps/api/place/details/json?placeid='.$v['place_id'].'&key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&fields=geometry&language=en';
+                    $place = $http->curlGet($place_url);
+				    $return[] = [
+						'name' => $v['description'],
+						'lat' => $place['result']['geometry']['location']['lat'],
+						'long' => $place['result']['geometry']['location']['lng'],
+						'address' => $v['description']
 					];
 				}
 				exit(json_encode(array('status'=>1,'result'=>$return)));	

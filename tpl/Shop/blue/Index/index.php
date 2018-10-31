@@ -142,6 +142,8 @@
         $(".search-sug").removeClass('s-hide');
     });
     function search() {
+        searchUrl = "{pigcms{:U('Index/Map/suggestion')}";
+
         var query = $('#search-con').val();
         if (query == "") {
             return false;
