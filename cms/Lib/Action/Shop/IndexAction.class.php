@@ -92,7 +92,7 @@ class IndexAction extends BaseAction
 	{
 		$query = I('query', false);
 		$region = I('region', false);
-		$url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=48.43016873926502,-123.34303379055086&radius=50000&type=restaurant&keyword='.urlencode($query).'&key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&language=zh-CN';
+		$url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=48.43016873926502,-123.34303379055086&radius=50000&type=street_address&keyword='.urlencode($query).'&key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&language=zh-CN';
 		import('ORG.Net.Http');
 		$http = new Http();
 		$result = $http->curlGet($url);
