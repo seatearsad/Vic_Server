@@ -56,13 +56,13 @@
             <form id="add-shop-order" enctype="multipart/form-data" method="post" action="{pigcms{:U('Storestaff/confirm_order')}">
                 <tbody>
                     <tr>
-                        <td>添加订单</td>
+                        <td>Add Order</td>
                     </tr>
                     <tr>
-                        <td>Name：<input type="text" name="name" value="{pigcms{$now_adress.name}" placeholder="请输入客户姓名"></td>
+                        <td>Name：<input type="text" name="name" value="{pigcms{$now_adress.name}" placeholder="User Name"></td>
                     </tr>
                     <tr>
-                        <td>Mobile：<input type="text" name="phone" value="{pigcms{$now_adress.phone}" placeholder="请输入客户电话"></td>
+                        <td>Mobile：<input type="text" name="phone" value="{pigcms{$now_adress.phone}" placeholder="Mobile Number"></td>
                     </tr>
                     <tr>
                         <td>Province：
@@ -107,10 +107,10 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>Address：<input name="detail" value="{pigcms{$now_adress.detail}" type="text" placeholder="请填写详细的地址和门牌号"></td>
+                        <td>Address：<input name="detail" value="{pigcms{$now_adress.detail}" type="text" placeholder="Address"></td>
                     </tr>
                     <tr>
-                        <td>Price：<input type="text" value="{pigcms{$now_adress.goods_price}" name="goods_price" placeholder="请输入商品总价">
+                        <td>Price：<input type="text" value="{pigcms{$now_adress.goods_price}" name="goods_price" placeholder="Total Price">
                             <input type="hidden" name="adress" value="{pigcms{$now_adress.adress}" style="width: 50%">
                             <input type="hidden" name="longitude" value="{pigcms{$now_adress.longitude}" >
                             <input type="hidden" name="latitude" value="{pigcms{$now_adress.latitude}" >

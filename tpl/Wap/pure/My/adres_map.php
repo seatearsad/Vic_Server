@@ -101,13 +101,13 @@ $(document).ready(function(){
 		location.href = "{pigcms{:U('My/edit_adress', $params)}&adress_id="+info.id;
 	});
 
-	if (navigator.geolocation){
-    	navigator.geolocation.getCurrentPosition(function(position){
-			initGoogleMap(position.coords.latitude, position.coords.longitude);
-		});
-    }else{
-  		alert("Geolocation is not supported by this browser.");
-  	}
+    // if (navigator.geolocation){
+    // 	navigator.geolocation.getCurrentPosition(function(position){
+		// 	initGoogleMap(position.coords.latitude, position.coords.longitude);
+		// });
+    // }else{
+  	// 	alert("Geolocation is not supported by this browser.");
+  	// }
 });
 
 function search(address)
