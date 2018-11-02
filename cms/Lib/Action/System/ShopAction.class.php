@@ -439,6 +439,13 @@ class ShopAction extends BaseAction
             $data['is_refund'] = 1;
             //计算修改后的价格差 原始价格 - 修改价格
             $cha = $shop_order_data['price'] - $data['price'];
+
+            //同时修改配送员端的价格
+            $deliver_data['money'] = $data['price'];
+            if($shop_order_data['pay_type'] != 'moneris')
+                $deliver_data['deliver_cash'] = $data['price'];
+            D('Deliver_supply')->field(true)->where(array('order_id'=>$order_id))->save($deliver_data);
+
             //是否使用线上付款
             if($shop_order_data['pay_type'] == 'moneris' && $shop_order_data['paid'] == 1){
                 import('@.ORG.pay.MonerisPay');

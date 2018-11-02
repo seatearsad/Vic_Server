@@ -107,10 +107,10 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>Address：<input name="detail" value="{pigcms{$now_adress.detail}" type="text" placeholder="Address"></td>
+                        <td>Note for driver：<input name="detail" value="{pigcms{$now_adress.detail}" type="text" placeholder="Note for driver"></td>
                     </tr>
                     <tr>
-                        <td>Price：<input type="text" value="{pigcms{$now_adress.goods_price}" name="goods_price" placeholder="Total Price">
+                        <td>Price：<input type="text" value="{pigcms{$now_adress.goods_price}" name="goods_price" placeholder="Total Price befroe tax">
                             <input type="hidden" name="adress" value="{pigcms{$now_adress.adress}" style="width: 50%">
                             <input type="hidden" name="longitude" value="{pigcms{$now_adress.longitude}" >
                             <input type="hidden" name="latitude" value="{pigcms{$now_adress.latitude}" >

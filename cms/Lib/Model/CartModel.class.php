@@ -22,7 +22,7 @@ class CartModel extends Model
 
         $item = $this->field(true)->where(array('uid'=>$uid,'fid'=>$fid,'spec'=>$spec,'proper'=>$proper))->find();
 
-        if(empty($item)){
+        if(empty($item) && $data['num'] > 0){
             $id = $this->data($data)->add();
         }else{
             $item['num'] += $num;

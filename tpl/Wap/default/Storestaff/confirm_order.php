@@ -44,42 +44,42 @@
             <form enctype="multipart/form-data" method="post" action="{pigcms{:U('Storestaff/save_shop_oder')}">
                 <tbody>
                 <tr>
-                    <td>订单确认</td>
+                    <td>Confirm Ordre</td>
                 </tr>
                 <tr>
-                    <td>客户姓名：<?php echo $post_data['name'] ?></td>
+                    <td>Name：<?php echo $post_data['name'] ?></td>
                 </tr>
                 <tr>
-                    <td>联系电话：<?php echo $post_data['phone'] ?></td>
+                    <td>Mobile：<?php echo $post_data['phone'] ?></td>
                 </tr>
                 <tr>
-                    <td>客户地址：<?php echo $post_data['adress'] ?></td>
+                    <td>Address：<?php echo $post_data['adress'] ?></td>
                 </tr>
                 <tr>
-                    <td>地址详细：<?php echo $post_data['detail'] ?></td>
+                    <td>Note for driver：<?php echo $post_data['detail'] ?></td>
                 </tr>
 
                 <tr>
-                    <td>商品总价：$<?php echo $return_data['goods_price'] ?></td>
+                    <td>Merchant total：$<?php echo $return_data['goods_price'] ?></td>
                 </tr>
                 <tr>
-                    <td>商品税费：$<?php echo $return_data['goods_price_tax'] ?></td>
+                    <td>Tax：$<?php echo $return_data['goods_price_tax'] ?></td>
                 </tr>
                 <tr>
-                    <td>配送费用：$<?php echo $return_data['freight_charge'] ?></td>
+                    <td>Delivery fee：$<?php echo $return_data['freight_charge'] ?></td>
                 </tr>
                 <tr>
-                    <td>配送费税：$<?php echo $return_data['freight_charge_tax'] ?></td>
+                    <td>Tax：$<?php echo $return_data['freight_charge_tax'] ?></td>
                 </tr>
                 <tr>
-                    <td>实际支付：$<?php echo $return_data['price'] ?></td>
+                    <td>Total price：$<?php echo $return_data['price'] ?></td>
 
                 </tr>
                 <tr>
-                    <td>支付税率：0.5%</td>
+                    <td>Tax：0.5%</td>
                 </tr>
                 <tr>
-                    <td><span style="color: red">确认下单后不可以在修改订单信息，请认真核对</span></td>
+                    <td><span style="color: red"></span></td>
                 </tr>
                 <input type="hidden" name="staff_id" value="<?php echo $return_data['staff_id'] ?>">
                 <input type="hidden" name="store_id" value="<?php echo  $return_data['store_id'] ?>">
@@ -95,14 +95,14 @@
                 <input type="hidden" name="address" value="<?php echo $post_data['adress'] ?>">
                 <input type="hidden" name="real_orderid" value="<?php echo $return_data['real_orderid']?>">
                 <tr>
-                    <td><button type="submit" class="btn" style="text-align: center;width: 100%;margin-top: 20px;font-size: 14px;background-color: #06c1ae;">确认下单</button></td>
+                    <td><button type="submit" class="btn" style="text-align: center;width: 100%;margin-top: 20px;font-size: 14px;background-color: #06c1ae;">Confirm</button></td>
                 </tr>
                 </tbody>
             </form>
         </table>
 
     </ul>
-    <a href="{pigcms{:U('Storestaff/add_shop_order')}" class="btn" style="float:right;right:1rem;top:0.2rem;position:absolute;width:5rem;font-size:1rem;background-color: #06c1ae;">返 回</a>
+    <a href="{pigcms{:U('Storestaff/add_shop_order')}" class="btn" style="float:right;right:1rem;top:0.2rem;position:absolute;width:5rem;font-size:1rem;background-color: #06c1ae;">Back</a>
 </div>
 
 
