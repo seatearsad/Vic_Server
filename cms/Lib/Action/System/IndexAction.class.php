@@ -44,7 +44,7 @@ class IndexAction extends BaseAction {
 		$param['u']=$hosturl;
 		$param['a']='check';
 		$param['v']=$ver;
-		$lastver = $this->http($updatehost,$param,'GET', array("Content-type: text/html; charset=utf-8"));
+//		$lastver = $this->http($updatehost,$param,'GET', array("Content-type: text/html; charset=utf-8"));
 
 		$this->assign('updateinfo',$updateinfo);
         $this -> assign('ver', $ver);
