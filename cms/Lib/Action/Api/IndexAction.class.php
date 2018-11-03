@@ -444,7 +444,7 @@ class IndexAction extends BaseAction
         if($order_id != 0)
             $this->returnCode(0,'main_id',$order_id,'success');
         else
-            $this->returnCode(1,'info',array(),'success');
+            $this->returnCode(1,'info',array(),'fail');
     }
 
     public function getOrderList(){
