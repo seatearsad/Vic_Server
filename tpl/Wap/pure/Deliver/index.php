@@ -6,7 +6,7 @@
 <meta http-equiv="Cache-Control" content="no-cache">
 <meta http-equiv="Pragma" content="no-cache">
 <meta charset="utf-8">
-<title>配送首页</title>
+<title>{pigcms{:L('_COURIER_TXT_')}</title>
 <meta name="description" content="{pigcms{$config.seo_description}"/>
 <link href="{pigcms{$static_path}css/deliver.css" rel="stylesheet"/>
 <script src="{pigcms{:C('JQUERY_FILE')}"></script>
@@ -35,13 +35,13 @@
                 </if>
 			</div>
 			<div class="clerk_r">
-				<h2>{pigcms{$deliver_session['name']}<i> , 您好</i></h2>
+				<h2>{pigcms{$deliver_session['name']}<i> , {pigcms{:L('_HELLO_TXT_')}</i></h2>
 				<p>
-					<if condition="$deliver_session['store_id']">商家配送员  {pigcms{$store['name']}店铺<else />系统配送员</if>
+					<if condition="$deliver_session['store_id']">{pigcms{:L('_COURIER_TXT_')}-{pigcms{$store['name']}<else />{pigcms{:L('_COURIER_TXT_')}</if>
 					<if condition="$deliver_session['work_status'] eq '1'">
-					<a href="javascript:void(0)" class="startOrder" ref="0">上班</a>
+					<a href="javascript:void(0)" class="startOrder" ref="0">{pigcms{:L('_CLOCK_IN_')}</a>
 					<else />
-					<a href="javascript:void(0)" class="stopOrder" ref="1">下班</a>
+					<a href="javascript:void(0)" class="stopOrder" ref="1">{pigcms{:L('_CLOCK_OUT_')}</a>
 					</if>
 				</p>
 			</div>
@@ -52,21 +52,21 @@
 					<a href="{pigcms{:U('Deliver/grab')}">
 						<i></i>
 						<h2 id="gray_count">{pigcms{$gray_count}</h2>
-						<p>待抢单</p> 
+						<p>{pigcms{:L('_C_ORDER_PENDING_')}</p>
 					</a>
 				</li>
 				<li class="Handle fl">
 					<a href="{pigcms{:U('Deliver/pick')}">
 						<i></i>
 						<h2 id="deliver_count">{pigcms{$deliver_count}</h2>
-						<p>处理中</p> 
+						<p>{pigcms{:L('_C_PROCESSING_')}</p>
 					</a>
 				</li>
 				<li class="complete fl">
 					<a href="{pigcms{:U('Deliver/finish')}">
 						<i></i>
 						<h2 id="finish_count">{pigcms{$finish_count}</h2>
-						<p>已完成</p> 
+						<p>{pigcms{:L('_C_COMPLETED')}</p>
 					</a>
 				</li>
 			</ul>
@@ -78,20 +78,20 @@
 		<div class="bottom_n">
 			<ul>
 				<li class="Statistics fl">
-                    <a href="{pigcms{:U('Deliver/tongji')}">统计</a>
+                    <a href="{pigcms{:U('Deliver/tongji')}">{pigcms{:L('_STATISTICS_TXT_')}</a>
 				</li>
 				<li class="home homeon fl">
-					<a href="javascript:void(0);"><i></i>首页</a>
+					<a href="javascript:void(0);"><i></i>{pigcms{:L('_HOME_TXT_')}</a>
 				</li>
 				<li class="My fl">
-					<a href="{pigcms{:U('Deliver/info')}">我的</a>
+					<a href="{pigcms{:U('Deliver/info')}">{pigcms{:L('_PROFILE_TXT_')}</a>
 				</li>
 			</ul>
 		</div>
 	</section>
 	<script type="text/javascript">$('#biz-map').height($(window).height()-267);</script>
 <!-- 	<script src="http://api.map.baidu.com/api?type=quick&ak=4c1bb2055e24296bbaef36574877b4e2&v=1.0"></script> -->
-	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&libraries=places&language=zh-CN"></script>
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&libraries=places&language={pigcms{:C('DEFAULT_LANG')}"></script>
 	<script type="text/javascript">
 	$(function(){
 		map = new google.maps.Map(document.getElementById('biz-map'), {

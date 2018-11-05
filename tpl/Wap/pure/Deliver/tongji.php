@@ -6,7 +6,7 @@
 <meta http-equiv="Cache-Control" content="no-cache">
 <meta http-equiv="Pragma" content="no-cache">
 <meta charset="utf-8">
-<title>{pigcms{$deliver_session['name']}-个人统计</title>
+<title>{pigcms{$deliver_session['name']}-{pigcms{:L('_STATISTICS_TXT_')}</title>
 <meta name="description" content="{pigcms{$config.seo_description}"/>
 <link href="{pigcms{$static_path}css/deliver.css" rel="stylesheet"/>
 <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/mobiscroll.2.13.2.css"/>
@@ -19,12 +19,12 @@
     <section class="Statistics">
         <div class="Statistics_top clr">
             <a href="javascript:void(0);" id="begin">
-                <h2><i>开始时间</i></h2>
-                <input type="text" readonly="readonly" placeholder="选择时间"  name="appDate" id="appDate" value="{pigcms{$begin_time}">
+                <h2><i>{pigcms{:L('_START_TIME_')}</i></h2>
+                <input type="text" readonly="readonly" placeholder="{pigcms{:L('_SELECT_TIME_')}"  name="appDate" id="appDate" value="{pigcms{$begin_time}">
             </a>
             <a href="javascript:void(0)" id="end">
-                <h2><i>结束时间</i></h2>
-                <input type="text" readonly="readonly" placeholder="选择时间"  name="appDate1" id="appDate1" value="{pigcms{$end_time}">
+                <h2><i>{pigcms{:L('_END_TIME_')}</i></h2>
+                <input type="text" readonly="readonly" placeholder="{pigcms{:L('_SELECT_TIME_')}"  name="appDate1" id="appDate1" value="{pigcms{$end_time}">
             </a>
         </div>
 
@@ -36,7 +36,7 @@
                             <img src="{pigcms{$static_path}images/tjt_10.png" width=23 height=20>
                             <p><i>$</i>{pigcms{$online_money|floatval}</p>
                         </div>
-                        <h2>在线支付</h2>
+                        <h2>{pigcms{:L('_ONLINE_PAY_')}</h2>
                     </a>
                 </li>
                 <li>
@@ -45,7 +45,7 @@
                             <img src="{pigcms{$static_path}images/tjt_07.png" width=22 height=20>
                             <p><i>$</i>{pigcms{$freight_charge|floatval}</p>
                         </div>
-                        <h2>配送费</h2>
+                        <h2>{pigcms{:L('_DELI_PRICE_')}</h2>
                     </a>
                 </li>
                 <if condition="empty($deliver_session['store_id'])">
@@ -55,7 +55,7 @@
                             <img src="{pigcms{$static_path}images/tjt_17.png" width=20 height=20>
                             <p><i></i>{pigcms{$change_count|default=0}</p>
                         </div>
-                        <h2>系统更换订单数量</h2>
+                        <h2>{pigcms{:L('_SYS_TRAN_ORDER_')}</h2>
                     </a>
                 </li>
                 </if>
@@ -65,7 +65,7 @@
                             <img src="{pigcms{$static_path}images/tjt_14.png" width=20 height=20>
                             <p><i>$</i>{pigcms{$offline_money|floatval}</p>
                         </div>
-                        <h2>货到付款</h2>
+                        <h2>{pigcms{:L('_CASH_ON_DELI_')}</h2>
                     </a>
                 </li>
                 <if condition="empty($deliver_session['store_id'])">
@@ -75,7 +75,7 @@
                             <img src="{pigcms{$static_path}images/tjt_25.png" width=19 height=20>
                             <p><i></i>{pigcms{$system_count|default=0}</p>
                         </div>
-                        <h2>系统分配数量</h2>
+                        <h2>{pigcms{:L('_SYS_ASS_ORDER_')}</h2>
                     </a>
                 </li>
                 </if>
@@ -85,7 +85,7 @@
                             <img src="{pigcms{$static_path}images/tjt_22.png" width=15 height=20>
                             <p><i></i>{pigcms{$self_count|default=0}</p>
                         </div>
-                        <h2>抢单数量</h2>
+                        <h2>{pigcms{:L('_INIT_GRAB_ORDER_')}</h2>
                     </a>
                 </li>
             </ul>
@@ -95,15 +95,15 @@
         <div class="bottom_n">
             <ul>
                 <li class="Statistics Statisticson fl">
-                    <a href="javascript:void(0);">统计</a>
+                    <a href="javascript:void(0);">{pigcms{:L('_STATISTICS_TXT_')}</a>
                 </li>
                 <li class="home fl">
                       <a href="{pigcms{:U('Deliver/index')}">
-                        <i></i>首页
+                        <i></i>{pigcms{:L('_HOME_TXT_')}
                       </a>
                 </li>
                  <li class="My fl">
-                    <a href="{pigcms{:U('Deliver/info')}">我的</a>
+                    <a href="{pigcms{:U('Deliver/info')}">{pigcms{:L('_PROFILE_TXT_')}</a>
                 </li>
             </ul>
         </div>

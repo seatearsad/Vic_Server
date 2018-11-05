@@ -6,7 +6,7 @@
 <meta http-equiv="Cache-Control" content="no-cache">
 <meta http-equiv="Pragma" content="no-cache">
 <meta charset="utf-8">
-<title>已完成的订单</title>
+<title>{pigcms{:L('_C_COMPLETED')}</title>
 <meta name="description" content="{pigcms{$config.seo_description}"/>
 <link href="{pigcms{$static_path}css/deliver.css" rel="stylesheet"/>
 <script src="{pigcms{:C('JQUERY_FILE')}"></script>
@@ -21,7 +21,7 @@
                 <span class="bjt" style="background: url(<if condition="$config['wechat_share_img']">{pigcms{$config.wechat_share_img}<else/>{pigcms{$config.site_logo}</if>) center no-repeat; background-size: contain;"></span>  
                 </if>
             <h2>{pigcms{$deliver_session['name']}</h2>
-            <span class="sj"><if condition="$deliver_session['store_id']">商家配送员<else />系统配送员</if></span>
+            <span class="sj"><if condition="$deliver_session['store_id']">{pigcms{:L('_COURIER_TXT_')}<else />{pigcms{:L('_COURIER_TXT_')}</if></span>
             <if condition="$deliver_session['store_id']">
             <span class="mc"> {pigcms{$store['name']}</span>
             </if>
@@ -30,15 +30,15 @@
             <ul>
                 <li class="cfe">
                     <h2>{pigcms{$finish_total}</h2>
-                    <p>累计完成数量</p>
+                    <p>{pigcms{:L('_C_TOTAL_ORDER_')}</p>
                 </li>
                 <li class="c65">
                     <h2>{pigcms{$total}</h2>
-                    <p>累计抢单数量</p>
+                    <p>{pigcms{:L('_C_TOTAL_INIT_')}</p>
                 </li>
                 <li class="c66">
                     <h2>{pigcms{$distance}</h2>
-                    <p>累计公里数</p>
+                    <p>{pigcms{:L('_C_TOTAL_DIST_')}</p>
                 </li>
             </ul> 
            
@@ -49,15 +49,15 @@
         <div class="bottom_n">
             <ul>
                 <li class="Statistics fl">
-                    <a href="{pigcms{:U('Deliver/tongji')}">统计</a>
+                    <a href="{pigcms{:U('Deliver/tongji')}">{pigcms{:L('_STATISTICS_TXT_')}</a>
                 </li>
                 <li class="home fl">
                       <a href="{pigcms{:U('Deliver/index')}">
-                        <i></i>首页
+                        <i></i>{pigcms{:L('_HOME_TXT_')}
                       </a>
                 </li>
                  <li class="My Myon fl">
-                    <a href="{pigcms{:U('Deliver/info')}">我的</a>
+                    <a href="{pigcms{:U('Deliver/info')}">{pigcms{:L('_PROFILE_TXT_')}</a>
                 </li>
             </ul>
         </div>
@@ -66,9 +66,9 @@
 $(document).ready(function(){
 	$('.Setup').click(function(){
 		layer.open({
-			title:['提示：','background-color:#FF658E;color:#fff;'],
-			content:'确定退出吗？',
-			btn: ['是', '否'],
+			title:['{pigcms{:L("_B_D_LOGIN_TIP2_")}：','background-color:#FF658E;color:#fff;'],
+			content:'{pigcms{:L("_LOGOUT_TXT_")}？',
+			btn: ['Yes', 'No'],
 			shadeClose: false,
 			yes: function(){
 				window.parent.location = "{pigcms{:U('Deliver/logout')}";

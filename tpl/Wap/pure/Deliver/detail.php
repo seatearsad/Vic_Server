@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8"/>
-	<title>配送员系统</title>
+	<title>{pigcms{:L('_COURIER_CENTER_')}</title>
     <meta name="viewport" content="initial-scale=1, width=device-width, maximum-scale=1, user-scalable=no">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name='apple-touch-fullscreen' content='yes'>
@@ -19,7 +19,7 @@
         <div class="details_top">
             <h2 class="f16 c3"><i>{pigcms{$supply['name']}</i><span class="f14 c6"><a href="tel:{pigcms{$supply['phone']}">{pigcms{$supply['phone']}</a></span></h2>
             <a href="{pigcms{:U('Deliver/map', array('supply_id' => $supply['supply_id']))}">
-            <p class="c6 f14"><i>配送地址：</i><span>{pigcms{$supply['aim_site']}</span></p>
+            <p class="c6 f14"><i>{pigcms{:L('_C_DELIVERY_ADDRESS_')}：</i><span>{pigcms{$supply['aim_site']}</span></p>
             <em><img src="{pigcms{$static_path}images/dindxqt_11.png" width=23 height=27></em>
             </a>
         </div>
@@ -28,7 +28,7 @@
     <section class="PsorderX">
         <div class="Psorder">
             <div class="Psorder_top p10">
-                <h2 class="f16 c3">订单详情</h2>
+                <h2 class="f16 c3">{pigcms{:L('_ORDER_DETAIL_')}</h2>
             </div>
             <div class="Psorder_end p10">
                 <ul>
@@ -46,15 +46,15 @@
         </div>
 
         <div class="details_list">
-            <p class="c9 f14">数量：{pigcms{$order['num']}</p>
-            <p class="c9 f14">总金额：{pigcms{$order['subtotal_price']|floatval}</p>
-            <p class="f16 red">实际需支付：${pigcms{$order['deliver_cash']|floatval}</p>
-            <p class="f14 bur">支付方式： {pigcms{$order['pay_type_name']} ({pigcms{$order['pay_type']})</p>
-            <p class="f12 red">配送距离{pigcms{$supply['distance']}公里，配送费:${pigcms{$supply['freight_charge']},小费:${pigcms{$order['tip_charge']}</p>
+            <p class="c9 f14">{pigcms{:L('_B_PURE_MY_69_')}：{pigcms{$order['num']}</p>
+            <p class="c9 f14">{pigcms{:L('_B_PURE_MY_70_')}：{pigcms{$order['subtotal_price']|floatval}</p>
+            <p class="f16 red">{pigcms{:L('_ACTUAL_PAYMENT_')}：${pigcms{$order['deliver_cash']|floatval}</p>
+            <p class="f14 bur">{pigcms{:L('_PAYMENT_MODE_')}： {pigcms{$order['pay_type_name']} ({pigcms{$order['pay_type']})</p>
+            <p class="f12 red">{pigcms{:L('_C_DISTANCE_')}{pigcms{$row['distance']}(KM)，{pigcms{:L('_DELI_PRICE_')}:${pigcms{$row['freight_charge']},{pigcms{:L('_TIP_TXT_')}:${pigcms{$row['tip_charge']}</p>
         </div>
 
         <div class="Remarks clr p10">
-            <span class="fl c3 f16">备注</span>
+            <span class="fl c3 f16">{pigcms{:L('_NOTE_INFO_')}</span>
             <div class="Remarks_rig">{pigcms{$supply['note']}</div>
         </div>
     </section>
@@ -62,36 +62,36 @@
 
     <section class="Psorder information">
         <div class="Psorder_top p10">
-            <h2 class="f16 c3">订单信息</h2>
+            <h2 class="f16 c3">{pigcms{:L('_ORDER_INFO_')}</h2>
         </div>
         <div class="information_end">
             <ul>
                 <li class="clr p10">
-                    <div class="fl f16 c80">订单编号</div>
+                    <div class="fl f16 c80">{pigcms{:L('_B_PURE_MY_68_')}</div>
                     <div class="fr f14 c80">{pigcms{$order['real_orderid']}</div>
                 </li>
                 <li class="clr p10">
-                    <div class="fl f16 c80">下单时间</div>
+                    <div class="fl f16 c80">{pigcms{:L('_ORDER_TIME_')}</div>
                     <div class="fr f14 c25">{pigcms{$order['create_time']|date="Y-m-d H:i",###}</div>
                 </li>
                 <li class="clr p10">
-                    <div class="fl f16 c80">期望送达</div>
+                    <div class="fl f16 c80">{pigcms{:L('_EXPECTED_TIME_')}</div>
                     <div class="fr f14 c25">{pigcms{$supply['appoint_time']}</div>
                 </li>
                 <li class="clr p10">
-                    <div class="fl f16 c80">送达时间</div>
+                    <div class="fl f16 c80">{pigcms{:L('_DELI_TIME_')}</div>
                     <div class="fr f14 c25">{pigcms{$supply['end_time']}</div>
                 </li>
                 
                 <if condition="$supply['get_type'] neq 2">
 	                <li class="clr p10">
-	                    <div class="fl f16 c80">订单类型</div>
-	                    <div class="fr f14 c80">系统派单</div>
+	                    <div class="fl f16 c80">{pigcms{:L('_C_ORDER_TYPE_')}</div>
+	                    <div class="fr f14 c80">{pigcms{:L('_C_SYS_ASS_ORDER_')}</div>
 	                </li>
 	            <else />
 	                <li class="clr p10">
-	                    <div class="fl f16 c80">订单来源</div>
-	                    <div class="fr f14 c80">{pigcms{$supply['change_name']}配送员</div>
+	                    <div class="fl f16 c80">{pigcms{:L('_C_ORDER_SOURCE_')}</div>
+	                    <div class="fr f14 c80">{pigcms{:L('_COURIER_TXT_')}:{pigcms{$supply['change_name']}</div>
 	                </li>
 				</if>
             </ul>
@@ -101,7 +101,7 @@
 	<if condition="$order['cue_field']">
     <section class="Psorder information">
         <div class="Psorder_top p10">
-            <h2 class="f16 c3">分类填写字段</h2>
+            <h2 class="f16 c3"></h2>
         </div>
         <div class="information_end">
             <ul>
@@ -118,20 +118,20 @@
            
     <section class="Psorder information Merchant">
         <div class="Psorder_top p10">
-            <h2 class="f16 c3">商家信息</h2>
+            <h2 class="f16 c3">{pigcms{:L('_SHOP_INFO_')}</h2>
         </div>
         <div class="information_end">
             <ul>
                 <li class="clr p10">
-                    <div class="fl f16 c80">店铺名称</div>
+                    <div class="fl f16 c80">{pigcms{:L('_C_MERCHANT_NAME_')}</div>
                     <div class="fr f14 c80">{pigcms{$store['name']}</div>
                 </li>
                 <li class="clr p10">
-                    <div class="fl f16 c80">店铺电话</div>
+                    <div class="fl f16 c80">{pigcms{:L('_C_MERCHANT_PHONE_')}</div>
                     <div class="fr f14 c80"><php>$phoneArr = explode(' ',$store['phone']);</php><volist name="phoneArr" id="vo"><div><a href="tel:{pigcms{$vo}" style="color:blue;">{pigcms{$vo}</a></div></volist></div>
                 </li>
                 <li class="clr p10">
-                    <div class="fl f16 c80">店铺地址</div>
+                    <div class="fl f16 c80">{pigcms{:L('_C_MERCHANT_ADDR_')}</div>
                     <div class="fr f14 c80">{pigcms{$store['adress']}</div>
                 </li>
             </ul>

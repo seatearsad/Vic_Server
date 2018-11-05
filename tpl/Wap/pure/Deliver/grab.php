@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8"/>
-	<title>等待抢单列表</title>
+	<title>{pigcms{:L('_C_PENDING_LIST_')}</title>
     <meta name="viewport" content="initial-scale=1, width=device-width, maximum-scale=1, user-scalable=no">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name='apple-touch-fullscreen' content='yes'>
@@ -28,7 +28,7 @@
 			<div id="grab_list"></div>
 		</div>
 		<!-- 空白图 -->
-		<div class="psnone" ><img src="{pigcms{$static_path}images/qdz_02.jpg"></div>
+		<div class="psnone" ><img src="{pigcms{$static_path}images/qdz_02.png"></div>
 		<!-- 空白图 -->
 	</div>
 	<include file="menu"/>
@@ -38,45 +38,45 @@
 <section class="robbed supply_{{ d.list[i].supply_id }}" data-id="{{ d.list[i].supply_id }}">
 	<div class="Online c9 p10 f14 go_detail" data-id="{{ d.list[i].supply_id }}" style="cursor: pointer;">
 		<span>
-            订单编号: {{ d.list[i].real_orderid }}
+            {pigcms{:L('_B_PURE_MY_68_')}: {{ d.list[i].real_orderid }}
             {{# if(d.list[i].uid == 0){ }}
-                (代客下单)
+                ({pigcms{:L('_PAY_FROM_MER_')})
             {{# } }}
         </span>
 		{{# if(d.list[i].pay_method == 1){ }}
-		<a href="javascript:;" class="fr cd p10">在线支付</a>
+		<a href="javascript:;" class="fr cd p10">{pigcms{:L('_ONLINE_PAY_')}</a>
 		{{# } else { }}
-		<a href="javascript:;" class="fr cd p10 on">货到付款</a>
+		<a href="javascript:;" class="fr cd p10 on">{pigcms{:L('_CASH_ON_DELI_')}</a>
 		{{# } }}
 	</div>
 	<div class="Title m10 go_detail" data-id="{{ d.list[i].supply_id }}">
 		<h2 class="f16 c3">{{ d.list[i].store_name }}</h2>
-		<p class="f14 c9">下单时间：{{ d.list[i].order_time }}</p>
+		<p class="f14 c9">{pigcms{:L('_ORDER_TIME_')}：{{ d.list[i].order_time }}</p>
 	</div>
 	<div class="delivery m10">
 		<p class="f14 c6 on">
 			<a href="javascript:;" class="clr">
-				<span class="fl">取</span>
+				<span class="fl">{pigcms{:L('_C_PICK_UP_')}</span>
 				<em class="fl">{{ d.list[i].from_site }}</em>
-				<i class="cd f12 fl">距离我{{ d.list[i].store_distance }}</i>
+				<i class="cd f12 fl">{pigcms{:L('_C_DISTANCE_')}:{{ d.list[i].store_distance }}</i>
 			</a>
 		</p>
 		<p class="f14 c6 on1">
 			<a href="{{ d.list[i].map_url }}" class="clr">
-				<span class="fl">送</span>
+				<span class="fl">{pigcms{:L('_C_DELIVER_')}</span>
 				<em class="fl">{{ d.list[i].aim_site }}</em>
-				<i class="cd f14 fl">查看路线</i>
+				<i class="cd f14 fl">{pigcms{:L('_LOOK_ROUTE_')}</i>
 			</a>
 		</p>
 	</div>
 	<div class="Namelist p10 f14">
 		<h2 class="f15 c3">{{ d.list[i].name }} <span class="c6"><a href="tel:{{ d.list[i].phone }}">{{ d.list[i].phone }}</a></span></h2>
-		<p class="c9">期望送达：{{ d.list[i].appoint_time }}</p>
-		<p class="red">应收现金：<i>{{ d.list[i].deliver_cash }}</i>元</p>
-		<p class="red">配送距离{{ d.list[i].distance }}公里，配送费:${{ d.list[i].freight_charge }},小费:${{d.list[i].tip_charge}}</p>
+		<p class="c9">{pigcms{:L('_EXPECTED_TIME_')}：{{ d.list[i].appoint_time }}</p>
+		<p class="red">{pigcms{:L('_TOTAL_RECE_')}：<i>${{ d.list[i].deliver_cash }}</i></p>
+		<p class="red">{pigcms{:L('_C_DISTANCE_')}:{{ d.list[i].distance }}(KM)，{pigcms{:L('_DELI_PRICE_')}:${{ d.list[i].freight_charge }},{pigcms{:L('_TIP_TXT_')}:${{d.list[i].tip_charge}}</p>
 	</div>
 	<div class="sign_bottom">
-		<a href="javascript:void(0);" class="rob" data-spid="{{ d.list[i].supply_id }}">抢单</a>
+		<a href="javascript:void(0);" class="rob" data-spid="{{ d.list[i].supply_id }}">{pigcms{:L('_TICK_ORDER_')}</a>
 	</div>
 </section>
 {{# } }}

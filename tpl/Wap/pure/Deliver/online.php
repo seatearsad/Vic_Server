@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8"/>
-	<title>配送列表</title>
+	<title>{pigcms{:L('_COURIER_CENTER_')}</title>
     <meta name="viewport" content="initial-scale=1, width=device-width, maximum-scale=1, user-scalable=no">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name='apple-touch-fullscreen' content='yes'>
@@ -43,7 +43,7 @@
 				<h2 class="f16 c3">{pigcms{$row['store_name']}</h2>
 				<p class="f14 c9">{pigcms{:L('_ORDER_TIME_')}：{pigcms{$row['order_time']}</p>
 				<if condition="$row['get_type'] eq 1">
-				<div class="leaflets">系统派单</div>
+				<div class="leaflets">{pigcms{:L('_C_SYS_ASS_ORDER_')}</div>
 				</if>
 			</div>
 			<div class="Namelist p10 f14">

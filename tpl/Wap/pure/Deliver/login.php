@@ -6,7 +6,7 @@
 <meta http-equiv="Cache-Control" content="no-cache">
 <meta http-equiv="Pragma" content="no-cache">
 <meta charset="utf-8">
-<title>配送员登录</title>
+<title>{pigcms{:L('_COURIER_LOGIN_')}</title>
 <meta name="description" content="{pigcms{$config.seo_description}"/>
 <link href="{pigcms{$static_path}css/deliver.css" rel="stylesheet"/>
 <script src="{pigcms{:C('JQUERY_FILE')}"></script>
@@ -17,25 +17,33 @@
 	<section class="Land">
 	<div class="Land_top">
 		<span class="fillet" style="background: url(<if condition="$config['wechat_share_img']">{pigcms{$config.wechat_share_img}<else/>{pigcms{$config.site_logo}</if>) center no-repeat; background-size: contain;"></span>
-		<h2>配送员中心</h2>
+		<h2>{pigcms{:L('_COURIER_CENTER_')}</h2>
 	</div>
 	<div class="Land_end">
 		<ul>
 			<li class="number">
-			  	<input type="text" placeholder="请输入账号" id="login_phone">
+			  	<input type="text" placeholder="{pigcms{:L('_B_D_LOGIN_ACCOUNT1_')}" id="login_phone">
 				<a href="javascript:void(0)"></a>
 			</li>
 			<li class="Password">
-				<input type="password" placeholder="请输入密码" id="login_pwd">
+				<input type="password" placeholder="{pigcms{:L('_B_D_LOGIN_KEY1_')}" id="login_pwd">
 				<a href="javascript:void(0)"></a>
 			</li>
 			<li class="Landd">
-				<input type="button" value="登录" id="login_form">
+				<input type="button" value="{pigcms{:L('_B_D_LOGIN_LOGIN1_')}" id="login_form">
 			</li>
+            <li class="Landd">
+                <php>if(C('DEFAULT_LANG') == 'zh-cn'){</php>
+                <input type="button" value="English" class="lang_en" id="lang">
+                <php>}else{</php>
+                <input type="button" value="中文" class="lang_cn" id="lang">
+                <php>}</php>
+            </li>
 		</ul>
 	</div>     
 	</section>
 </body>
+<script src="{pigcms{$static_public}js/lang.js"></script>
 <script type="text/javascript">
 var store_index = "{pigcms{:U('Deliver/index')}";
 <if condition="!empty($refererUrl)">
@@ -51,11 +59,11 @@ $(function(){
 		if (is_click_login) return false;
 		is_click_login = true;
 		if ($('#login_phone').val()=='') {
-			layer.open({title:['登录提示：','background-color:#FF658E;color:#fff;'],content:'请输入帐号~',btn: ['确定'],end:function(){}});
+			layer.open({title:["{pigcms{:L('_B_D_LOGIN_TIP2_')}：",'background-color:#FF658E;color:#fff;'],content:"{pigcms{:L('_B_LOGIN_ENTERPHONENO_')}",btn: ["{pigcms{:L('_B_D_LOGIN_CONIERM_')}"],end:function(){}});
 			is_click_login = false;
 			return false;
 		} else if ($('#login_pwd').val()=='') {
-			layer.open({title:['登录提示：','background-color:#FF658E;color:#fff;'],content:'请输入密码~',btn: ['确定'],end:function(){}});
+			layer.open({title:["{pigcms{:L('_B_D_LOGIN_TIP2_')}：",'background-color:#FF658E;color:#fff;'],content:"{pigcms{:L('_B_LOGIN_ENTERKEY_')}",btn: ["{pigcms{:L('_B_D_LOGIN_CONIERM_')}"],end:function(){}});
 			is_click_login = false;
 			return false;
 		} else {

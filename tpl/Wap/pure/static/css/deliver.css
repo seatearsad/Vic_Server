@@ -278,6 +278,7 @@ body{ padding:0px; margin:0px auto; font-size:14px; min-width:320px; max-width:6
 .Land_end li input::-webkit-input-placeholder{ color: #1b9dff;}
 .Land_end li a{ display: block; width: 15px; height: 42px; background: url(../images/dlymt_06.png) center no-repeat; background-size: 15px; position: absolute; top: 0px; right: 55px;  display: none; }
 .Land_end li.Landd input{ background: #1b9dff; color: #fff; text-indent: 0px; font-size: 16px; margin-top: 10px; padding: 0px; height: 40px;}
+.Land_end li.Landd #lang{ background: #f0a30a; color: #fff; text-indent: 0px; font-size: 16px; margin-top: 10px; padding: 0px; height: 40px;}
 span.fillet{ display: inline-block; width: 70px; height: 70px; border-radius: 100%; border: #fff 2px solid;  }
 
 /*悬浮*/
