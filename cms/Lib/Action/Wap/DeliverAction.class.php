@@ -481,6 +481,8 @@ class DeliverAction extends BaseAction
             $order = D('Shop_order')->get_order_by_orderid($val['order_id']);
             $val['tip_charge'] = $order['tip_charge'];
             $val['uid'] = $order['uid'];
+            $store = D('Merchant_store')->field(true)->where(array('store_id'=>$val['store_id']))->find();
+            $val['store_name'] = lang_substr($store['name'],C('DEFAULT_LANG'));
 		}
 		$this->assign('list', $list);
 		$this->display();
@@ -614,6 +616,9 @@ class DeliverAction extends BaseAction
 				$uid = array_pop($changes);
 				$val['change_name'] = $this->getDeliverUser($uid);
 			}
+
+            $store = D('Merchant_store')->field(true)->where(array('store_id'=>$val['store_id']))->find();
+            $val['store_name'] = lang_substr($store['name'],C('DEFAULT_LANG'));
 		}
 		$this->assign('list', $list);
 		$this->display();
@@ -814,6 +819,8 @@ class DeliverAction extends BaseAction
             $order = D('Shop_order')->get_order_by_orderid($val['order_id']);
             $val['tip_charge'] = $order['tip_charge'];
             $val['uid'] = $order['uid'];
+            $store = D('Merchant_store')->field(true)->where(array('store_id'=>$val['store_id']))->find();
+            $val['store_name'] = lang_substr($store['name'],C('DEFAULT_LANG'));
 		}
 		$this->assign('list', $list);
 		$this->display();

@@ -124,7 +124,7 @@
             <ul>
                 <li class="clr p10">
                     <div class="fl f16 c80">{pigcms{:L('_C_MERCHANT_NAME_')}</div>
-                    <div class="fr f14 c80">{pigcms{$store['name']}</div>
+                    <div class="fr f14 c80">{pigcms{:lang_substr($store['name'],C('DEFAULT_LANG'))}</div>
                 </li>
                 <li class="clr p10">
                     <div class="fl f16 c80">{pigcms{:L('_C_MERCHANT_PHONE_')}</div>
@@ -140,15 +140,15 @@
 
     <div class="sign_bottom Ps_bottom">
     	<if condition="$supply['status'] eq 1">
-    	<a href="javascript:void(0);" data-id="{pigcms{$supply['supply_id']}" data-status="{pigcms{$supply['status']}" data-url="{pigcms{:U('Deliver/grab')}">抢单</a>
+    	<a href="javascript:void(0);" data-id="{pigcms{$supply['supply_id']}" data-status="{pigcms{$supply['status']}" data-url="{pigcms{:U('Deliver/grab')}">{pigcms{:L('_TICK_ORDER_')}</a>
     	<elseif condition="$supply['status'] eq 2" />
-    	<a href="javascript:void(0);" data-id="{pigcms{$supply['supply_id']}" data-status="{pigcms{$supply['status']}" data-url="{pigcms{:U('Deliver/pick')}">取货</a>
+    	<a href="javascript:void(0);" data-id="{pigcms{$supply['supply_id']}" data-status="{pigcms{$supply['status']}" data-url="{pigcms{:U('Deliver/pick')}">{pigcms{:L('_C_PICK_UP_')}</a>
     	<elseif condition="$supply['status'] eq 3" />
-    	<a href="javascript:void(0);" data-id="{pigcms{$supply['supply_id']}" data-status="{pigcms{$supply['status']}" data-url="{pigcms{:U('Deliver/send')}">配送</a>
+    	<a href="javascript:void(0);" data-id="{pigcms{$supply['supply_id']}" data-status="{pigcms{$supply['status']}" data-url="{pigcms{:U('Deliver/send')}">{pigcms{:L('_DELI_TXT_')}</a>
     	<elseif condition="$supply['status'] eq 4" />
-    	<a href="javascript:void(0);" data-id="{pigcms{$supply['supply_id']}" data-status="{pigcms{$supply['status']}" data-url="{pigcms{:U('Deliver/my')}">送达</a>
+    	<a href="javascript:void(0);" data-id="{pigcms{$supply['supply_id']}" data-status="{pigcms{$supply['status']}" data-url="{pigcms{:U('Deliver/my')}">{pigcms{:L('_ARRIVAL_TXT_')}</a>
     	<elseif condition="$supply['status'] eq 5" />
-    	<a href="javascript:void(0);" data-id="{pigcms{$supply['supply_id']}" data-status="{pigcms{$supply['status']}" data-url="{pigcms{:U('Deliver/del')}">删除</a>
+    	<a href="javascript:void(0);" data-id="{pigcms{$supply['supply_id']}" data-status="{pigcms{$supply['status']}" data-url="{pigcms{:U('Deliver/del')}">{pigcms{:L('_B_PURE_MY_27_')}</a>
     	</if>
     </div>     
 </body>
