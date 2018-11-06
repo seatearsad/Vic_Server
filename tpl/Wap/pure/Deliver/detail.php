@@ -50,7 +50,7 @@
             <p class="c9 f14">{pigcms{:L('_B_PURE_MY_70_')}：{pigcms{$order['subtotal_price']|floatval}</p>
             <p class="f16 red">{pigcms{:L('_ACTUAL_PAYMENT_')}：${pigcms{$order['deliver_cash']|floatval}</p>
             <p class="f14 bur">{pigcms{:L('_PAYMENT_MODE_')}： {pigcms{$order['pay_type_name']} ({pigcms{$order['pay_type']})</p>
-            <p class="f12 red">{pigcms{:L('_C_DISTANCE_')}{pigcms{$row['distance']}(KM)，{pigcms{:L('_DELI_PRICE_')}:${pigcms{$row['freight_charge']},{pigcms{:L('_TIP_TXT_')}:${pigcms{$row['tip_charge']}</p>
+            <p class="f12 red">{pigcms{:L('_C_DISTANCE_')}{pigcms{$supply['distance']}(KM)，{pigcms{:L('_DELI_PRICE_')}:${pigcms{$supply['freight_charge']},{pigcms{:L('_TIP_TXT_')}:${pigcms{$order['tip_charge']}</p>
         </div>
 
         <div class="Remarks clr p10">
