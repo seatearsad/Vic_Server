@@ -27,7 +27,14 @@ class BaseAction extends Action
 				$_SERVER['REQUEST_SCHEME'] = 'http';
 			}
 		}
-		
+
+
+
+        $this->config = D('Config')->get_config();
+
+        if($_POST['scenic_now_city']){
+			$this->config['scenic_now_city']	=	$_POST['scenic_now_city'];
+        }
         $this->config['site_url'] = $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'];
         C('config',$this->config);
     }
