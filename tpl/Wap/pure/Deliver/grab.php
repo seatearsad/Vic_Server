@@ -18,6 +18,20 @@
 <!-- 	<script type="text/javascript" src="{pigcms{$static_path}js/common.js?210" charset="utf-8"></script> -->
 	<script type="text/javascript">
 		var location_url = "{pigcms{:U('Deliver/grab')}", detail_url = "{pigcms{:U('Deliver/detail')}", lat = "{pigcms{$deliver_session['lat']}", lng = "{pigcms{$deliver_session['lng']}", static_path = "{pigcms{$static_path}";
+
+        //ios app 更新位置
+        function updatePosition(lat,lng){
+            var message = '';
+            $.post("{pigcms{:U('Deliver/App_update')}", {'lat':lat, 'lng':lng}, function(result) {
+                if(result){
+                    message = result.message;
+                }else {
+                    message = 'Error';
+                }
+            });
+
+            return message;
+        }
 	</script>
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&libraries=places&language=zh-CN"></script>
 	<script type="text/javascript" src="{pigcms{$static_path}js/grab.js?211" charset="utf-8"></script>
@@ -34,6 +48,7 @@
 	<include file="menu"/>
 </body>
 <script id="replyListBoxTpl" type="text/html">
+
 {{# for(var i = 0, len = d.list.length; i < len; i++){ }}
 <section class="robbed supply_{{ d.list[i].supply_id }}" data-id="{{ d.list[i].supply_id }}">
 	<div class="Online c9 p10 f14 go_detail" data-id="{{ d.list[i].supply_id }}" style="cursor: pointer;">

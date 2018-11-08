@@ -18,6 +18,19 @@
 			});
 		});
 	})
+    //ios app 更新位置
+    function updatePosition(lat,lng){
+        var message = '';
+	    $.post("{pigcms{:U('Deliver/App_update')}", {'lat':lat, 'lng':lng}, function(result) {
+            if(result){
+                message = result.message;
+            }else {
+                message = 'Error';
+            }
+        });
+
+	    return message;
+    }
 </script>
 <style>
 	.startOrder{color: #fff;float: right;background: green;border: 1px solid #ccc;padding: 5px 10px 5px 10px;}
@@ -111,7 +124,7 @@
 				icon:"{pigcms{$static_path}images/map/my_pos.png"
 			});
 	
-		});  
+		});
 /*
 			var geolocation = new BMap.Geolocation();
 			geolocation.getCurrentPosition(function(r){
@@ -176,6 +189,19 @@
 // 				},{enableHighAccuracy: true})
 // 			});
 // 		});
+        function appToPosition(lat,long){
+
+            alert("From App");
+            map.setCenter({lat:lat, lng:long});
+            //我的图标
+            var marker = new google.maps.Marker({
+                position: {lng: long, lat: lat},
+                map: map,
+                icon:"{pigcms{$static_path}images/map/my_pos.png"
+            });
+
+            return "{pigcms{$deliver_session['uid']}";
+        }
 	</script>
 </body>
 </html>

@@ -54,6 +54,8 @@ var openid = false;
 	openid = "{pigcms{$openid}";
 </if>
 $(function(){
+    var ua = navigator.userAgent.toLowerCase();
+    // alert(ua);
 	var is_click_login = false;
 	$('#login_form').click(function(){
 		if (is_click_login) return false;
@@ -70,6 +72,10 @@ $(function(){
 			$.post("{pigcms{:U('Deliver/login')}", {'phone':$('#login_phone').val(), 'pwd':$('#login_pwd').val()}, function(result) {
 				is_click_login = false;
 				if (result) {
+                    //webView调用
+                    if(ua.match(/iPhone/i))
+                        window.webkit.messageHandlers.getUserMessage.postMessage([$('#login_phone').val(),$('#login_pwd').val()]);
+
 					if (result.error == 0 && result.is_bind == 0 && openid) {
 						  layer.open({
 							title:['提示：','background-color:#FF658E;color:#fff;'],
@@ -120,6 +126,11 @@ $(".Land_end input").focus(function(){
 $(".Land_end a").click(function(){
 	$(this).hide();
 	$(this).siblings("input").val("");
-});     
+});
+
+function putUserNP(name,password) {
+    $('#login_phone').val(name);
+    $('#login_pwd').val(password);
+}
 </script>   
 </html>

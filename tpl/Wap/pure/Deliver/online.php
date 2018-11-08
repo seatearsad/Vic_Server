@@ -266,6 +266,20 @@ $('#expiry').live('focusin focusout',function(event){
     }
 });
 
+
+//ios app 更新位置
+function updatePosition(lat,lng){
+    var message = '';
+    $.post("{pigcms{:U('Deliver/App_update')}", {'lat':lat, 'lng':lng}, function(result) {
+        if(result){
+            message = result.message;
+        }else {
+            message = 'Error';
+        }
+    });
+
+    return message;
+}
 </script>
 <include file="menu"/>
 </body>

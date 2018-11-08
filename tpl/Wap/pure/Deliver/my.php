@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8"/>
-	<title>配送列表</title>
+	<title>Deliver List</title>
     <meta name="viewport" content="initial-scale=1, width=device-width, maximum-scale=1, user-scalable=no">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name='apple-touch-fullscreen' content='yes'>
@@ -154,7 +154,19 @@ $(function(){
 	$(".go_detail").bind("click", detail);
 });
 
+//ios app 更新位置
+function updatePosition(lat,lng){
+    var message = '';
+    $.post("{pigcms{:U('Deliver/App_update')}", {'lat':lat, 'lng':lng}, function(result) {
+        if(result){
+            message = result.message;
+        }else {
+            message = 'Error';
+        }
+    });
 
+    return message;
+}
 </script>
 <include file="menu"/>
 </body>

@@ -1489,6 +1489,21 @@ class DeliverAction extends BaseAction
             $this->assign('list', $list);
             $this->display();
         }
+    }
+
+    public function App_update(){
+        $lat = $_POST['lat'] ? $_POST['lat'] : '';
+        $lng = $_POST['lng'] ? $_POST['lng'] : '';
+        $deliver_id = $this->deliver_session['uid'];
+
+        if($lat != '' && $lng != ''){
+            $data['lng'] = $lng;
+            $data['lat'] = $lat;
+            D('Deliver_user')->field(true)->where(array('uid'=>$deliver_id))->save($data);
+            exit(json_encode(array('error' => 0, 'msg' => 'Success！', 'dom_id' => 'account')));
+        }else{
+            exit(json_encode(array('error' => 1, 'msg' => 'Fail！', 'dom_id' => 'account')));
+        }
 
     }
 }
