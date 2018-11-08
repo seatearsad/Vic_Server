@@ -38,7 +38,7 @@ class IndexAction extends BaseAction {
         $hosturl = urlencode('http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF']);
         $updatehost = 'http://www.mx800.com/o2o/update.php';
         $updatehosturl = $updatehost . '?a=client_check_time&v=' . $ver . '&u=' . $hosturl;
-		$info = json_decode(file_get_contents($updatehosturl),true);
+		//$info = json_decode(file_get_contents($updatehosturl),true);
   
 		$hosturl = urlencode('http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF']);	
 		$param['u']=$hosturl;
