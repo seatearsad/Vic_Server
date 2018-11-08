@@ -111,20 +111,22 @@
 			center: {lat:{pigcms{$deliver_session['lat']}, lng:{pigcms{$deliver_session['lng']}},
 			zoom: 16
 		});
+        var ua = navigator.userAgent.toLowerCase();
+        if(!ua.match(/iPhone/i)) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                console.log(position);
+                //list_detail(position.coords.latitude, position.coords.longitude);
+                map.setCenter({lat: position.coords.latitude, lng: position.coords.longitude});
 
-		navigator.geolocation.getCurrentPosition(function (position) {  
-			console.log(position);
-			//list_detail(position.coords.latitude, position.coords.longitude);
-			map.setCenter({lat:position.coords.latitude, lng:position.coords.longitude});
+                //我的图标
+                var marker = new google.maps.Marker({
+                    position: {lng: position.coords.longitude, lat: position.coords.latitude},
+                    map: map,
+                    icon: "{pigcms{$static_path}images/map/my_pos.png"
+                });
 
-			//我的图标
-			var marker = new google.maps.Marker({
-				position: {lng: position.coords.longitude, lat: position.coords.latitude},
-				map: map,
-				icon:"{pigcms{$static_path}images/map/my_pos.png"
-			});
-	
-		});
+            });
+        }
 /*
 			var geolocation = new BMap.Geolocation();
 			geolocation.getCurrentPosition(function(r){
