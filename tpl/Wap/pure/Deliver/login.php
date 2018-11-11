@@ -54,7 +54,7 @@ var openid = false;
 	openid = "{pigcms{$openid}";
 </if>
 $(function(){
-    var ua = navigator.userAgent.toLowerCase();
+    var ua = navigator.userAgent;
     // alert(ua);
 	var is_click_login = false;
 	$('#login_form').click(function(){
@@ -73,8 +73,8 @@ $(function(){
 				is_click_login = false;
 				if (result) {
                     //webView调用
-                    // if(ua.match(/iPhone/i))
-                    //     window.webkit.messageHandlers.getUserMessage.postMessage([$('#login_phone').val(),$('#login_pwd').val()]);
+                    if(ua.match(/TuttiDeliver/i))
+                        window.webkit.messageHandlers.getUserMessage.postMessage([$('#login_phone').val(),$('#login_pwd').val()]);
 
 					if (result.error == 0 && result.is_bind == 0 && openid) {
 						  layer.open({

@@ -145,9 +145,9 @@ class CartModel extends Model
             $t_good['attr'] = $spec_desc . " " .$proper_desc;
             $t_good['price'] = $good['price'];
 
-            $total_price += $good['price'];
-            $total_pay_price += $good['price'];
-            $total_market_price += $good['old_price'];
+            $total_price += $good['price']*$v['stock'];
+            $total_pay_price += $good['price']*$v['stock'];
+            $total_market_price += $good['old_price']*$v['stock'];
 
             $list[] = $t_good;
         }

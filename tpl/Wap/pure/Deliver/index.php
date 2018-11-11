@@ -111,8 +111,8 @@
 			center: {lat:{pigcms{$deliver_session['lat']}, lng:{pigcms{$deliver_session['lng']}},
 			zoom: 16
 		});
-        var ua = navigator.userAgent.toLowerCase();
-        if(!ua.match(/iPhone/i)) {
+        var ua = navigator.userAgent;
+        if(!ua.match(/TuttiDeliver/i)) {
             navigator.geolocation.getCurrentPosition(function (position) {
                 console.log(position);
                 //list_detail(position.coords.latitude, position.coords.longitude);

@@ -841,4 +841,14 @@ class IndexAction extends BaseAction
         }
         $this->returnCode(0,'info',array(),'success');
     }
+
+//    public function testDistance(){
+//        die('henhao');
+//        $url = 'https://maps.googleapis.com/maps/api/directions/json?origin=48.424210,-123.363388&destination=48.428761,-123.368652&key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&language=en';
+//        import('ORG.Net.Http');
+//        $http = new Http();
+//        $result = $http->curlGet($url);
+//
+//        $this->returnCode(0,'info',$result,'success');
+//    }
 }
