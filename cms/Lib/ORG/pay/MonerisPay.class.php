@@ -60,7 +60,7 @@ class MonerisPay
         $mpgHttpPost  =new mpgHttpsPost($store_id,$api_token,$mpgRequest);
 
         $mpgResponse=$mpgHttpPost->getMpgResponse();
-        $resp = $this->arrageResp($mpgResponse,$txnArray['pan'],$txnArray['expdate']);
+        $resp = $this->arrageResp($mpgResponse,$txnArray['pan'],$txnArray['expdate'],0,$order_id);
 
         if($resp['responseCode'] < 50 && $data['save'] == 1){//如果需要存储
             $isC = D('User_card')->getCardByUserAndNum($uid,$data['card_num']);
@@ -97,7 +97,7 @@ class MonerisPay
     }
 
     //处理返回数据 $record_type 存储记录的类型 0初次支付记录 1删单退款记录（用户删单、系统删单）2 二次付款记录 3退还部分款项记录
-    public function arrageResp($mpgResponse,$pan,$expiry,$record_type = 0){
+    public function arrageResp($mpgResponse,$pan,$expiry,$record_type = 0,$order_id){
         /*卡类型 M = MasterCard V = Visa AX = American Express  NO = Discover（仅限加拿大）
         C1 = JCB（仅限加拿大）SE =Sears（仅限加拿大）D =借方（仅限加拿大）*/
         $resp['card_type'] = $mpgResponse->getCardType();
@@ -149,7 +149,7 @@ class MonerisPay
             $save_table->field(true)->add($resp);
         else{//记录所有错误
             //有可能错误返回值里面没有正确的订单号
-            //$resp['order_id'] = $order_id;
+            $resp['order_id'] = $order_id;
             D('Pay_moneris_record_error')->add($resp);
         }
 
@@ -247,7 +247,7 @@ class MonerisPay
 //                if($change_amount == -1)//全额退款即删单
 //                    $record_type = 1;
 
-                $resp = $this->arrageResp($mpgResponse,'','',$record_type);
+                $resp = $this->arrageResp($mpgResponse,'','',$record_type,$order_id);
 //                var_dump($resp);
                 if(!($resp['responseCode'] != "null" && $resp['responseCode'] < 50)){//如果购买更正不成功，尝试退款
                     $txnArray['type'] = 'refund';
@@ -264,7 +264,7 @@ class MonerisPay
                     $mpgHttpPost  =new mpgHttpsPost($store_id,$api_token,$mpgRequest);
                     $mpgResponse=$mpgHttpPost->getMpgResponse();
 
-                    $resp = $this->arrageResp($mpgResponse,'','',$record_type);
+                    $resp = $this->arrageResp($mpgResponse,'','',$record_type,$order_id);
                 }
 
 
@@ -308,7 +308,7 @@ class MonerisPay
 
             $mpgHttpPost  =new mpgHttpsPost($store_id,$api_token,$mpgRequest);
             $mpgResponse=$mpgHttpPost->getMpgResponse();
-            $resp = $this->arrageResp($mpgResponse,'','',3);
+            $resp = $this->arrageResp($mpgResponse,'','',3,$order_id);
 
             return $resp;
         }
@@ -354,7 +354,7 @@ class MonerisPay
         $mpgHttpPost  =new mpgHttpsPost($store_id,$api_token,$mpgRequest);
 
         $mpgResponse=$mpgHttpPost->getMpgResponse();
-        $resp = $this->arrageResp($mpgResponse,$txnArray['pan'],$txnArray['expdate'],2);
+        $resp = $this->arrageResp($mpgResponse,$txnArray['pan'],$txnArray['expdate'],2,$order_id);
 
         return $resp;
     }
