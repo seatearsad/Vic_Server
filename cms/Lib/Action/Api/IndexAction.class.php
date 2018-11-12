@@ -653,16 +653,15 @@ class IndexAction extends BaseAction
         import('@.ORG.pay.MonerisPay');
         $moneris_pay = new MonerisPay();
         $resp = $moneris_pay->payment($_POST,$_POST['uid']);
-//        var_dump($resp);die();
-        if($resp['responseCode'] < 50){
-            $order = explode("_",$_POST['order_id']);
-            $order_id = $order[1];
-            $url =U("Wap/Shop/status",array('order_id'=>$order_id));
+        if($resp['responseCode'] != 'null' && $resp['responseCode'] < 50){
+            //$order = explode("_",$_POST['order_id']);
+            //$order_id = $order[1];
+            //$url =U("Wap/Shop/status",array('order_id'=>$order_id));
 
             $this->returnCode(0,'info',array(),'success');
             //$this->success(L('_PAYMENT_SUCCESS_'),$url,true);
         }else{
-            $this->returnCode(1,'info',array(),'fail');
+            $this->returnCode(1,'info',array(),$resp['message']);
 //            $this->error($resp['message'],'',true);
         }
     }
