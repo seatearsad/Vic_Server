@@ -130,6 +130,8 @@ class Deliver_supplyModel extends Model
                     if ($addResult = $this->add($supply)) {
                         //推送消息提示
 //                         $this->sendMsg($supply);
+                        //garfunkel 添加派单逻辑
+                        //D('Deliver_assign')->createAssign($supply);
                         return array('error_code' => 0, 'msg' => '接单成功！');
                     } else {
                         return array('error_code' => 1, 'msg' => '保存订单失败');
