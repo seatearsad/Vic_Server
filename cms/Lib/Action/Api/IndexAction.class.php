@@ -850,4 +850,8 @@ class IndexAction extends BaseAction
 //
 //        $this->returnCode(0,'info',$result,'success');
 //    }
+
+    public function updateAssign(){
+        D('Deliver_assign')->check_assign();
+    }
 }
