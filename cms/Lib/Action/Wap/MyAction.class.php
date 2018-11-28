@@ -3420,6 +3420,16 @@ class MyAction extends BaseAction{
 				}
 			}
 		}else{
+		    $config = D('Config')->get_config();
+		    $recharge_txt = $config['recharge_discount'];
+		    $recharge = explode(",",$recharge_txt);
+		    $recharge_list = array();
+		    foreach ($recharge as $v){
+		        $v_a = explode("|",$v);
+		        $recharge_list[$v_a[0]] = $v_a[1];
+            }
+            //krsort($recharge_list);
+            $this->assign('recharge_list',$recharge_list);
 			$this->display();
 		}
 	}

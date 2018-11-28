@@ -91,7 +91,7 @@ class MonerisPay
             }
         }
         if($uid != 0)
-            $this->savePayData($resp,$data['rvarwap'],$data['tip']);
+            $this->savePayData($resp,$data['rvarwap'],$data['tip'],$data['order_type']);
 
         return $resp;
     }
@@ -157,25 +157,38 @@ class MonerisPay
     }
 
     //存储支付数据
-    public function savePayData($resp,$is_wap,$tip){
+    public function savePayData($resp,$is_wap,$tip,$order_type){
 //        if($resp['complete'] == 'true'){//支付成功
+        if(!$order_type) $order_type = "shop";
         if($resp['responseCode'] != "null" && $resp['responseCode'] < 50){
+
             $order = explode("_",$resp['receiptId']);
             $order_id = $order[1];
+            if($order_type == "recharge"){
+                $order_param['order_id'] = $order_id;
+                $order_param['pay_type'] = 'moneris';
+                $order_param['pay_time'] = $resp['transDate'] . ' ' . $resp['transTime'];
+                $order_param['pay_money'] = $resp['transAmount'];
+                $order_param['order_type'] = $order_type;
+                $order_param['is_mobile_pay'] = 1;
+                $order_param['third_id'] = 0;
 
-            $order_param['order_id'] = $order_id;
-            $order_param['order_from'] = 0;
-            $order_param['order_type'] = 'shop';
-            $order_param['pay_time'] = $resp['transDate'].' '.$resp['transTime'];
-            $order_param['pay_money'] = $resp['transAmount'];
-            $order_param['pay_type'] = 'moneris';
-            $order_param['is_mobile'] = $is_wap;
-            $order_param['is_own'] = 0;
-            $order_param['third_id'] = 0;
-            $order_param['invoice_head'] = $resp['txnNumber'];//借用发票头这个字段存储交易号
-            $order_param['tip_charge'] = $tip;
+                $result = D('User_recharge_order')->after_pay($order_param);
+            }else {
+                $order_param['order_id'] = $order_id;
+                $order_param['order_from'] = 0;
+                $order_param['order_type'] = 'shop';
+                $order_param['pay_time'] = $resp['transDate'] . ' ' . $resp['transTime'];
+                $order_param['pay_money'] = $resp['transAmount'];
+                $order_param['pay_type'] = 'moneris';
+                $order_param['is_mobile'] = $is_wap;
+                $order_param['is_own'] = 0;
+                $order_param['third_id'] = 0;
+                $order_param['invoice_head'] = $resp['txnNumber'];//借用发票头这个字段存储交易号
+                $order_param['tip_charge'] = $tip;
 
-            $result = D('Shop_order')->after_pay($order_param);
+                $result = D('Shop_order')->after_pay($order_param);
+            }
 
 //            var_dump($result);die($order_id);
         }

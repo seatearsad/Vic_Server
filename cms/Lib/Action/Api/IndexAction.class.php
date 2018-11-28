@@ -294,6 +294,14 @@ class IndexAction extends BaseAction
         $cart_array = json_decode(html_entity_decode($cartList),true);
 
         $result = D('Cart')->getCartList($uid,$cart_array);
+        //平台优惠劵
+        $_POST['amount'] = $result['total_pay_price'];
+        $coupon = $this->getCanCoupon();
+
+        $result['coupon'] = $coupon;
+        //账户余额
+        $userInfo = D('User')->get_user($uid);
+        $result['now_money'] = round($userInfo['now_money'],2);
 
         $this->returnCode(0,'',$result,'success');
     }
@@ -417,8 +425,23 @@ class IndexAction extends BaseAction
         if($_POST['pay_type'] == 3){
             $order_data['pay_type'] = "moneris";
             $order_data['tip_charge'] = $_POST['tip'] ? $_POST['tip'] : 0;
+        }elseif ($_POST['pay_type'] == 4){//余额支付
+            $order_data['pay_type'] = "";
+            $order_data['tip_charge'] = $_POST['tip'] ? $_POST['tip'] : 0;
         }else{
             $order_data['tip_charge'] = 0;
+        }
+
+        //处理优惠券
+        if($_POST['coupon_id'] && $_POST['coupon_id'] != -1){
+            $now_coupon = D('System_coupon')->get_coupon_by_id($_POST['coupon_id']);
+            if(!empty($now_coupon)){
+                $coupon_data = D('System_coupon_hadpull')->field(true)->where(array('id'=>$_POST['coupon_id']))->find();
+                $coupon_real_id = $coupon_data['coupon_id'];
+                $coupon = D('System_coupon')->get_coupon($coupon_real_id);
+                $order_data['coupon_id'] = $_POST['coupon_id'];
+                $order_data['coupon_price'] = $coupon['discount'];
+            }
         }
 
 
@@ -432,11 +455,37 @@ class IndexAction extends BaseAction
             $order_param['order_type'] = 'shop';
             $order_param['pay_time'] = date();
             $order_param['pay_type'] = 'Cash';
-            $order_param['is_mobile'] = 1;
+            $order_param['is_mobile'] = 2;
             $order_param['is_own'] = 0;
             $order_param['third_id'] = 0;
 
             D('Shop_order')->after_pay($order_param);
+        }elseif($_POST['pay_type'] == 4){//余额支付
+            //账户余额
+            $userInfo = D('User')->get_user($uid);
+            $now_money = round($userInfo['now_money'],2);
+
+            $data['balance_pay'] = $order_data['price'] + $order_data['tip_charge'];
+            if($now_money >= $data['balance_pay']){
+                D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->save($data);
+
+                $order_param = array(
+                    'order_id' => $order_id,
+                    'pay_type' => '',
+                    'order_type'=> 'shop',
+                    'third_id' => '',
+                    'is_mobile' => 2,
+                    'pay_money' => 0,
+                    'order_total_money' => $order_data['price'] + $order_data['tip_charge'],
+                    'balance_pay' => $order_data['price'] + $order_data['tip_charge'],
+                    'merchant_balance' => 0,
+                    'is_own'	=> 0
+                );
+
+                D('Shop_order')->after_pay($order_param);
+            }else {
+                $this->returnCode(1, 'info', array(), L('_B_MY_NOMONEY_'));
+            }
         }else if($_POST['pay_type'] == 3){//信用卡支付
 
         }
@@ -511,6 +560,7 @@ class IndexAction extends BaseAction
             $t['total_price'] = $val['price'];
             $t['paid'] = $val['paid'];
             $t['order_id'] = $val['order_id'];
+            $t['discount'] = $val['coupon_price'];
 
             $result['info'][] = $t;
         }
@@ -544,7 +594,22 @@ class IndexAction extends BaseAction
         $order_id = $_POST['order_id'];
         $order = D('Shop_order')->field(true)->where(array('real_orderid'=>$order_id))->find();
 
-        $order_detail['statusname'] = D('Store')->getOrderStatusName($order['status']);
+        if($order['paid'] == 0){
+            $order_detail['statusname'] = L('_UNPAID_TXT_');
+            $order_detail['payname'] = L('_UNPAID_TXT_');
+        }else{
+            $order_detail['statusname'] = D('Store')->getOrderStatusName($order['status']);
+            $order_detail['pay_type'] = $order['pay_type'];
+            //$order_detail['payname'] = $order['pay_type'] == 'moneris' ? 'Paid Online' : 'Cash';
+            if($order['pay_type'] == 'moneris'){
+                $order_detail['payname'] = 'Paid Online';
+            }elseif ($order['pay_type'] == ''){
+                $order_detail['payname'] = 'Pay by balance';
+            }else{
+                $order_detail['payname'] = 'Cash';
+            }
+        }
+
         $order_detail['add_time'] = date('Y-m-d H:i:s',$order['create_time']);
         //$order_detail['payname'] = $order_detail['paymodel'] = D('Store')->getPayTypeName($order['pay_type']);
         $order_detail['packing_fee'] = $order['packing_charge'];
@@ -558,12 +623,9 @@ class IndexAction extends BaseAction
         $order_detail['phone'] = $order['userphone'];
         $order_detail['address2'] = $order['address'];
         $order_detail['address1'] = "";
-        $order_detail['pay_type'] = $order['pay_type'];
-        $order_detail['payname'] = $order['pay_type'] == 'moneris' ? 'Paid Online' : 'Cash';
-
 
         $order_detail['promotion_discount'] = "0";
-        $order_detail['discount'] = "0";
+        $order_detail['discount'] = $order['coupon_price'];
 
         $store = D('Store')->get_store_by_id($order['store_id']);
         $order_detail['site_name'] = $store['site_name'];
@@ -666,6 +728,55 @@ class IndexAction extends BaseAction
         }
     }
 
+    public function ToPay(){
+        $uid = $_POST['uid'];
+        $order_id = $_POST['order_id'];
+        $price = $_POST['price'];
+        $tip = $_POST['tip'];
+
+        if($_POST['pay_type'] == 0){//线下支付 直接进入支付流程
+            D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->save(array('tip_charge'=>$tip));
+            $order_param['order_id'] = $order_id;
+            $order_param['order_from'] = 0;
+            $order_param['order_type'] = 'shop';
+            $order_param['pay_time'] = date();
+            $order_param['pay_type'] = 'Cash';
+            $order_param['is_mobile'] = 2;
+            $order_param['is_own'] = 0;
+            $order_param['third_id'] = 0;
+
+            D('Shop_order')->after_pay($order_param);
+        }elseif($_POST['pay_type'] == 4){//余额支付
+            //账户余额
+            $userInfo = D('User')->get_user($uid);
+            $now_money = round($userInfo['now_money'],2);
+
+            $data['balance_pay'] = $price + $tip;
+            if($now_money >= $data['balance_pay']){
+                D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->save($data);
+
+                $order_param = array(
+                    'order_id' => $order_id,
+                    'pay_type' => '',
+                    'order_type'=> 'shop',
+                    'third_id' => '',
+                    'is_mobile' => 2,
+                    'pay_money' => 0,
+                    'order_total_money' => $price + $tip,
+                    'balance_pay' => $price + $tip,
+                    'merchant_balance' => 0,
+                    'is_own'	=> 0
+                );
+
+                D('Shop_order')->after_pay($order_param);
+            }else {
+                $this->returnCode(1, 'info', array(), L('_B_MY_NOMONEY_'));
+            }
+        }
+
+        $this->returnCode(0,'info',array(),'success');
+    }
+
     public function user_card_default(){
         $uid = $_POST['uid'];
         $card = D('User_card')->getCardListByUid($uid);
@@ -681,6 +792,11 @@ class IndexAction extends BaseAction
         $card_list = D('User_card')->getCardListByUid($uid);
         if(!$card_list)
             $card_list = array();
+        else{
+            foreach ($card_list as $k=>$v){
+                $card_list[$k]['expiry'] = transYM($v['expiry']);
+            }
+        }
 
         $this->returnCode(0,'info',$card_list,'success');
     }
@@ -702,7 +818,7 @@ class IndexAction extends BaseAction
         $uid = $_POST['uid'];
         $data['name'] = $_POST['name'];
         $data['card_num'] = $_POST['card_num'];
-        $data['expiry'] = $_POST['expiry'];
+        $data['expiry'] = transYM($_POST['expiry']);
 
         //如果 is_default 存在，清空之前的default
         if($_POST['is_default']){
@@ -748,35 +864,70 @@ class IndexAction extends BaseAction
 
         $tmp = array();
         foreach ($coupon_list as $key => $v) {
-            $v['name'] = lang_substr($v['name'],C('DEFAULT_LANG'));
-            $v['des'] = lang_substr($v['des'],C('DEFAULT_LANG'));
-            if (!empty($tmp[$v['is_use']][$v['coupon_id']])) {
-                $tmp[$v['is_use']][$v['coupon_id']]['get_num']++;
-            } else {
-                $tmp[$v['is_use']][$v['coupon_id']] = $v;
-                $mer = M('Merchant')->where(array('mer_id'=>$v['mer_id']))->find();
-                $tmp[$v['is_use']][$v['coupon_id']]['merchant']=$mer['name'];
-                $tmp[$v['is_use']][$v['coupon_id']]['get_num'] = 1;
+            if(!$v['is_use']){
+                $coupon = $this->arrange_coupon($v);
+                $tmp[] = $coupon;
             }
+//            if (!empty($tmp[$v['is_use']][$v['coupon_id']])) {
+//                $tmp[$v['is_use']][$v['coupon_id']]['get_num']++;
+//            } else {
+//                $tmp[$v['is_use']][$v['coupon_id']] = $v;
+//                $mer = M('Merchant')->where(array('mer_id'=>$v['mer_id']))->find();
+//                $tmp[$v['is_use']][$v['coupon_id']]['merchant']=$mer['name'];
+//                $tmp[$v['is_use']][$v['coupon_id']]['get_num'] = 1;
+//            }
 
         }
         $this->returnCode(0,'info',$tmp,'success');
+    }
+
+    public function arrange_coupon($coupon){
+        $coupon['name'] = lang_substr($coupon['name'],C('DEFAULT_LANG'));
+        $coupon['des'] = lang_substr($coupon['des'],C('DEFAULT_LANG'));
+
+        $data['name'] = $coupon['name'];
+        $data['desc'] = $coupon['des'];
+        $data['rowiID'] = $coupon['id'];
+        $data['limitMoney'] = $coupon['order_money'];
+        $data['money'] = $coupon['discount'];
+        $data['beginDate'] = date('Y.m.d',$coupon['start_time']);
+        $data['endDate'] = date('Y.m.d',$coupon['end_time']);
+        $data['type'] = "2";
+
+        if($coupon['is_use'] == 0)
+            $data['status'] = $coupon['is_use'];
+        elseif ($coupon['is_use'] == 1)
+            $data['status'] = "2";
+        else
+            $data['status'] = "3";
+
+
+        return $data;
     }
     //获取订单可使用的优惠券
     public function getCanCoupon(){
         $uid = $_POST['uid'];
         //订单金额
         $amount = $_POST['amount'];
-        $today = time();
+//        $today = time();
 
-        $sql = 'select c.coupon_id,h.id,c.discount,c.order_money from '.C('DB_PREFIX').'system_coupon_hadpull as h left join '.C('DB_PREFIX').'system_coupon as c on h.coupon_id = c.coupon_id';
-        $sql .= ' where h.uid = '.$uid.' and h.is_use = 0 and c.start_time <='.$today.' and c.end_time >='.$today.' and c.order_money <='.$amount;
-        $sql .= ' order by c.discount desc,c.end_time asc';
+//        $sql = 'select c.coupon_id,h.id,c.discount,c.order_money from '.C('DB_PREFIX').'system_coupon_hadpull as h left join '.C('DB_PREFIX').'system_coupon as c on h.coupon_id = c.coupon_id';
+//        $sql .= ' where h.uid = '.$uid.' and h.is_use = 0 and c.start_time <='.$today.' and c.end_time >='.$today.' and c.order_money <='.$amount;
+//        $sql .= ' order by c.discount desc,c.end_time asc';
+//
+//        $model = new Model();
+//        $coupon_list = $model->query($sql);
+        $coupon_list = D('System_coupon')->get_user_coupon_list($uid);
 
-        $model = new Model();
-        $coupon_list = $model->query($sql);
-
-        $this->returnCode(0,'info',$coupon_list,'success');
+        $tmp = array();
+        foreach ($coupon_list as $key => $v) {
+            if (!$v['is_use'] && $v['order_money']<=$amount) {
+                $coupon = $this->arrange_coupon($v);
+                $tmp[] = $coupon;
+            }
+        }
+        return $tmp;
+//        $this->returnCode(0,'info',$tmp,'success');
     }
 
     public function orderRefund(){
@@ -841,6 +992,454 @@ class IndexAction extends BaseAction
         $this->returnCode(0,'info',array(),'success');
     }
 
+    private function shop_refund_detail($now_order, $store_id)
+    {
+        $order_id  = $now_order['order_id'];
+
+        $mer_store = D('Merchant_store')->where(array('mer_id' => $this->mer_id, 'store_id' => $store_id))->find();
+
+        //如果使用了积分 2016-1-15
+        if ($now_order['score_used_count'] != 0) {
+            $result = D('User')->add_score($now_order['uid'],$now_order['score_used_count'],L('_B_MY_REFUND_') . $mer_store['name'] . '(' . $order_id . ') '.$this->config['score_name'].L('_B_MY_ROLLBACK_'));
+            $param = array('refund_time' => time());
+            if ($result['error_code']) {
+                $param['err_msg'] = $result['msg'];
+            } else {
+                $param['refund_id'] = $now_order['order_id'];
+            }
+            $data_shop_order['order_id'] = $now_order['order_id'];
+            $data_shop_order['refund_detail'] = serialize($param);
+            $result['error_code'] || $data_shop_order['status'] = 4;
+            D('Shop_order')->data($data_shop_order)->save();
+            if ($result['error_code']) {
+                return $result;
+            }
+            $go_refund_param['msg'] .= ' '.$result['msg'];
+        }
+
+        //平台余额退款
+        if ($now_order['balance_pay'] != '0.00') {
+            $add_result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],L('_B_MY_REFUND_') . $mer_store['name'] . '(' . $order_id . ') 增加余额');
+
+            $param = array('refund_time' => time());
+            if($result['error_code']){
+                $param['err_msg'] = $result['msg'];
+            } else {
+                $param['refund_id'] = $now_order['order_id'];
+            }
+
+            $data_shop_order['order_id'] = $now_order['order_id'];
+            $data_shop_order['refund_detail'] = serialize($param);
+            $result['error_code'] || $data_shop_order['status'] = 4;
+            D('Shop_order')->data($data_shop_order)->save();
+            if ($result['error_code']) {
+                return $result;
+            }
+            $go_refund_param['msg'] .= ' 平台余额退款成功';
+        }
+        //商家会员卡余额退款
+        if ($now_order['merchant_balance'] != '0.00'||$now_order['card_give_money']!='0.00') {
+            //$result = D('Member_card')->add_card($now_order['uid'],$now_order['mer_id'],$now_order['merchant_balance'],L('_B_MY_REFUND_') . $mer_store['name'] . '(' . $order_id . ')  增加余额');
+            $result = D('Card_new')->add_user_money($now_order['mer_id'],$now_order['uid'],$now_order['merchant_balance'],$now_order['card_give_money'],0,L('_B_MY_REFUND_').$now_order['order_name'].' 增加余额',L('_B_MY_REFUND_').$now_order['order_name'].' 增加赠送余额');
+
+            $param = array('refund_time' => time());
+            if ($result['error_code']) {
+                $param['err_msg'] = $result['msg'];
+            } else {
+                $param['refund_id'] = $now_order['order_id'];
+            }
+
+            $data_shop_order['order_id'] = $now_order['order_id'];
+            $data_shop_order['refund_detail'] = serialize($param);
+            $result['error_code'] || $data_shop_order['status'] = 4;
+            D('Shop_order')->data($data_shop_order)->save();
+            if ($result['error_code']) {
+                return $result;
+            }
+            $go_refund_param['msg'] .= $result['msg'];
+        }
+
+        //退款打印
+        $msg = ArrayToStr::array_to_str($now_order['order_id'], 'shop_order');
+        $op = new orderPrint($this->config['print_server_key'], $this->config['print_server_topdomain']);
+        $op->printit($this->mer_id, $store_id, $msg, 3);
+
+        $str_format = ArrayToStr::print_format($now_order['order_id'], 'shop_order');
+        foreach ($str_format as $print_id => $print_msg) {
+            $print_id && $op->printit($this->mer_id, $store_id, $print_msg, 3, $print_id);
+        }
+
+        //退款时销量回滚
+        if (($now_order['paid'] == 1 || $now_order['reduce_stock_type'] == 1) && $now_order['is_rollback'] == 0) {
+            $goods_obj = D("Shop_goods");
+            foreach ($now_order['info'] as $menu) {
+                $goods_obj->update_stock($menu, 1);//修改库存
+            }
+            D('Shop_order')->where(array('order_id' => $now_order['order_id']))->save(array('is_rollback' => 1));
+        }
+        D("Merchant_store_shop")->where(array('store_id' => $now_order['store_id'], 'sale_count' => array('gt', 0)))->setDec('sale_count', 1);
+        //退款时销量回滚
+
+        $go_refund_param['error_code'] = false;
+        return $go_refund_param;
+    }
+
+    public  function coupon_code(){
+        $code = $_POST['code'];
+        $uid = $_POST['uid'];
+
+        $coupon = D('System_coupon')->field(true)->where(array('notice'=>$code))->find();
+        $cid = $coupon['coupon_id'];
+
+        if($cid){
+            $l_id = D('System_coupon_hadpull')->field(true)->where(array('uid'=>$uid,'coupon_id'=>$cid))->find();
+
+            if($l_id == null)
+                $result = D('System_coupon')->had_pull($cid,$uid);
+            else
+                $this->returnCode(1,'info',array(),L('_AL_EXCHANGE_CODE_'));
+        }else{
+            $this->returnCode(1,'info',array(),L('_NOT_EXCHANGE_CODE_'));
+        }
+
+        $this->returnCode(0,'info',$result,'success');
+    }
+    //未支付 取消订单
+    public function cancelOrder(){
+        $uid = $_POST['uid'];
+        $id = $_POST['order_id'];
+
+        if ($order = M('Shop_order')->where(array('order_id' => $id, 'uid' => $uid))->find()) {
+// 			if ($order['status'] != 0 ) $this->error_tips('商家已经处理了此订单，现在不能取消了！');
+            if ($order['paid'] == 1 )
+                $this->returnCode(1,'info',array(),L('_B_MY_CANCELLLOSE1_'));
+
+// 			D("Merchant_store_meal")->where(array('store_id' => $order['store_id']))->setDec('sale_count', 1);
+            /* 粉丝行为分析 */
+//            $this->behavior(array('mer_id' => $order['mer_id'], 'biz_id' => $order['store_id']));
+
+            M('Shop_order')->where(array('order_id' => $id, 'uid' => $uid))->save(array('status' => 5, 'is_rollback' => 1));//取消未支付的订单
+            D('Shop_order_log')->add_log(array('order_id' => $id, 'status' => 10));
+
+            if (($order['paid'] == 1 || $order['reduce_stock_type'] == 1) && $order['is_rollback'] == 0) {
+                $details = D('Shop_order_detail')->field(true)->where(array('order_id' => $order['order_id']))->select();
+                $goods_db = D("Shop_goods");
+                foreach ($details as $menu) {
+                    $goods_db->update_stock($menu, 1);//修改库存
+                }
+            }
+
+            $this->returnCode(0,'info',array(),L('_B_MY_CANCELLACCESS1_'));
+        } else {
+            $this->returnCode(1,'info',array(),L('_B_MY_CANCELLLOSE1_'));
+        }
+    }
+
+    //已支付 取消订单
+    public function delOrder()
+    {
+        $uid = $_POST['uid'];
+        $order_id = $_POST['order_id'];
+
+        $now_order = D("Shop_order")->get_order_detail(array('order_id' => $order_id, 'uid' => $uid));
+        if(empty($now_order)){
+            $this->returnCode(1,'info',array(),L('_B_MY_NOORDER_'));
+        }
+        $store_id = $now_order['store_id'];
+        $this->mer_id = $now_order['mer_id'];
+        if (!($now_order['paid'] == 1 && ($now_order['status'] == 0 || $now_order['status'] == 5))) {
+            $this->returnCode(1,'info',array(),L('_B_MY_ORDERDEALING_'));
+        }
+        if (empty($now_order['paid'])) {
+            $this->returnCode(1,'info',array(),L('_B_MY_ORDERNOPAY_'));
+        }
+        if (!($now_order['paid'] == 1 && ($now_order['status'] == 0 || $now_order['status'] == 5))) {
+            $this->returnCode(1,'info',array(),L('_B_MY_ORDERMUSTNOPAID_'));
+        } elseif ($now_order['status'] > 3 && !($now_order['paid'] == 1 && $now_order['status'] == 5)) {
+            $this->returnCode(1,'info',array(),L('_B_MY_ORDERMUSTNOPAID_'));
+        }
+        $mer_store = D('Merchant_store')->where(array('mer_id' => $now_order['mer_id'], 'store_id' => $now_order['store_id']))->find();
+        $my_user = D('User')->field(true)->where(array('uid' => $now_order['uid']))->find();
+
+        //线下支付退款
+        $data_shop_order['cancel_type'] = 5;//取消类型（0:pc店员，1:wap店员，2:andriod店员,3:ios店员，4：打包app店员，5：用户，6：配送员, 7:超时取消）
+        if ($now_order['pay_type'] == 'offline' || $now_order['pay_type'] == 'Cash') {
+            $data_shop_order['order_id'] = $now_order['order_id'];
+            $data_shop_order['refund_detail'] = serialize(array('refund_time' => time()));
+            $data_shop_order['status'] = 4;
+            if (D('Shop_order')->data($data_shop_order)->save()) {
+                $return = $this->shop_refund_detail($now_order, $store_id);
+                if ($return['error_code']) {
+                    $this->returnCode(1,'info',array(),$result['msg']);
+                } else {
+                    //add garfunkel 取消订单成功 发送消息
+                    if (C('config.sms_shop_cancel_order') == 1 || C('config.sms_shop_cancel_order') == 3) {
+                        $sms_data['uid'] = $now_order['uid'];
+                        $sms_data['mobile'] = $now_order['userphone'] ? $now_order['userphone'] : $my_user['phone'];
+                        $sms_data['sendto'] = 'user';
+                        $sms_data['content'] = '您在 ' . $mer_store['name'] . '店中下的订单(订单号：' . $order_id . '),在' . date('Y-m-d H:i:s') . '时已被您取消并退款，欢迎再次光临！';
+                        $sms_data['params'] = [
+                            $order_id,
+                            date('Y-m-d H:i:s'),
+                            lang_substr($mer_store['name'],'en-us')
+                        ];
+                        $sms_data['tplid'] = 171187;
+                        Sms::sendSms2($sms_data);
+                    }
+                    if (C('config.sms_shop_cancel_order') == 2 || C('config.sms_shop_cancel_order') == 3) {
+                        $sms_data['uid'] = 0;
+                        $sms_data['mobile'] = $mer_store['phone'];
+                        $sms_data['sendto'] = 'merchant';
+                        $sms_data['content'] = '顾客' . $now_order['username'] . '的预定订单(订单号：' . $order_id . '),在' . date('Y-m-d H:i:s') . '时已被客户取消并退款！';
+                        $sms_data['params'] = [
+                            $now_order['username'],
+                            $order_id,
+                            date('Y-m-d H:i:s')
+                        ];
+                        $sms_data['tplid'] = 169151;
+                        //Sms::sendSms2($sms_data);
+
+                        //add garfunkel 添加语音
+                        $txt = "This is a important message from island life , the customer has canceled the last order.";
+                        Sms::send_voice_message($sms_data['mobile'],$txt);
+                    }
+                    $this->returnCode(0,'info',array(),L('_B_MY_USEOFFLINECHANGEREFUND_'));
+                }
+            } else {
+                $this->returnCode(1,'info',array(),L('_B_MY_CANCELLLOSE_'));
+            }
+        }else{
+            if($now_order['pay_type'] == 'moneris'){
+                import('@.ORG.pay.MonerisPay');
+                $moneris_pay = new MonerisPay();
+                $resp = $moneris_pay->refund($uid,$now_order['order_id']);
+//                var_dump($resp);die();
+                if($resp['responseCode'] != 'null' && $resp['responseCode'] < 50){
+                    $data_shop_order['order_id'] = $now_order['order_id'];
+                    $data_shop_order['status'] = 4;
+                    $data_shop_order['last_time'] = time();
+                    D('Shop_order')->data($data_shop_order)->save();
+                }else{
+                    $this->returnCode(1,'info',array(),$resp['message']);
+                }
+            }else if ($now_order['payment_money'] != '0.00') {
+                if ($now_order['is_own']) {
+                    $pay_method = array();
+                    $merchant_ownpay = D('Merchant_ownpay')->field('mer_id', true)->where(array('mer_id' => $now_order['mer_id']))->find();
+                    foreach($merchant_ownpay as $ownKey=>$ownValue){
+                        $ownValueArr = unserialize($ownValue);
+                        if($ownValueArr['open']){
+                            $ownValueArr['is_own'] = true;
+                            $pay_method[$ownKey] = array('name'=>$this->getPayName($ownKey),'config'=>$ownValueArr);
+                        }
+                    }
+                    $now_merchant = D('Merchant')->get_info($now_order['mer_id']);
+                    if ($now_merchant['sub_mch_refund'] && $this->config['open_sub_mchid'] && $now_merchant['open_sub_mchid'] && $now_merchant['sub_mch_id'] > 0) {
+                        $pay_method['weixin']['config']['pay_weixin_appid'] = $this->config['pay_weixin_appid'];
+                        $pay_method['weixin']['config']['pay_weixin_appsecret'] = $this->config['pay_weixin_appsecret'];
+                        $pay_method['weixin']['config']['pay_weixin_mchid'] = $this->config['pay_weixin_sp_mchid'];
+                        $pay_method['weixin']['config']['pay_weixin_key'] = $this->config['pay_weixin_sp_key'];
+                        $pay_method['weixin']['config']['sub_mch_id'] = $now_merchant['sub_mch_id'];
+                        $pay_method['weixin']['config']['pay_weixin_client_cert'] = $this->config['pay_weixin_sp_client_cert'];
+                        $pay_method['weixin']['config']['pay_weixin_client_key'] = $this->config['pay_weixin_sp_client_key'];
+                        $pay_method['weixin']['config']['is_own'] = 1 ;
+                    }
+                } else {
+                    $pay_method = D('Config')->get_pay_method(0,0,1);
+                }
+
+                if (empty($pay_method)) {
+                    $this->returnCode(1,'info',array(),L('_B_MY_NOPAIMENTMETHOD_'));
+                }
+                if (empty($pay_method[$now_order['pay_type']])) {
+                    $this->returnCode(1,'info',array(),L('_B_MY_CHANGEPAIMENT_'));
+                }
+
+                $pay_class_name = ucfirst($now_order['pay_type']);
+                $import_result = import('@.ORG.pay.'.$pay_class_name);
+                if(empty($import_result)){
+                    $this->returnCode(1,'info',array(),L('_B_MY_THISPAIMENTNOTOPEN_'));
+                }
+                D('Shop_order')->where(array('order_id' => $now_order['order_id']))->save(array('is_refund' => 1));
+                $now_order['order_type'] = 'shop';
+                $now_order['order_id'] = $now_order['orderid'];
+                if($now_order['is_mobile_pay']==3){
+                    $pay_method[$now_order['pay_type']]['config'] =array(
+                        'pay_weixin_appid'=>$this->config['pay_wxapp_appid'],
+                        'pay_weixin_key'=>$this->config['pay_wxapp_key'],
+                        'pay_weixin_mchid'=>$this->config['pay_wxapp_mchid'],
+                        'pay_weixin_appsecret'=>$this->config['pay_wxapp_appsecret'],
+                    );
+                }
+                $pay_class = new $pay_class_name($now_order, $now_order['payment_money'], $now_order['pay_type'], $pay_method[$now_order['pay_type']]['config'], $this->user_session, 1);
+                $go_refund_param = $pay_class->refund();
+
+                $now_order['order_id'] = $order_id;
+                $data_shop_order['order_id'] = $order_id;
+                $data_shop_order['refund_detail'] = serialize($go_refund_param['refund_param']);
+                if (empty($go_refund_param['error']) && $go_refund_param['type'] == 'ok') {
+                    $data_shop_order['status'] = 4;
+                }
+                $data_shop_order['last_time'] = time();
+                D('Shop_order')->data($data_shop_order)->save();
+                if($data_shop_order['status'] != 4){
+                    $this->returnCode(1,'info',array(),$go_refund_param['msg']);
+                }else{
+                    $go_refund_param['msg'] ="在线支付退款成功 ";
+                }
+            }
+
+
+            $return = $this->shop_refund_detail($now_order, $store_id);
+            if ($return['error_code']) {
+                $this->returnCode(1,'info',array(),$return['msg']);
+            } else {
+                $go_refund_param['msg'] .= $return['msg'];
+            }
+
+            if (empty($now_order['pay_type'])) {
+                $data_shop_order['order_id'] = $now_order['order_id'];
+                $data_shop_order['status'] = 4;
+                $data_shop_order['last_time'] = time();
+                D('Shop_order')->data($data_shop_order)->save();
+                $go_refund_param['msg'] .= L('_B_MY_ORDERCANCELLEDACCESS_');
+            }
+            if(empty($go_refund_param['msg'])){
+                $go_refund_param['msg'] .= L('_B_MY_ORDERCANCELLEDACCESS_');
+            }
+            D('Shop_order_log')->add_log(array('order_id' => $order_id, 'status' => 9));
+            $this->returnCode(0,'info',array(),$go_refund_param['msg']);
+        }
+    }
+
+    public function add_comment(){
+        $uid = $_POST['uid'];
+        $order_id = $_POST['order_id'];
+        $comment = $_POST['comment'];
+        $score = $_POST['score'];
+        $score_store = $_POST['score1'];
+        $score_deliver = $_POST['score2'];
+        $is_late = $_POST['righttime'] == 1 ? 0 : 1;
+
+        $now_order = D('Shop_order')->get_order_detail(array('uid' => $uid, 'order_id' => $order_id));
+
+        if (empty($now_order)) {
+            $this->returnCode(1,'info',array(),L('_B_MY_NOORDER_'));
+        }
+        if (empty($now_order['paid'])) {
+            $this->returnCode(1,'info',array(),L('_B_MY_NOTCONSUMENOCOMMENT_'));
+        }
+        if ($now_order['status'] == 3) {
+            $this->returnCode(1,'info',array(),L('_B_MY_HAVECOMMENTD_'));
+        }
+
+        $goodsids = array();
+        $goods_ids = array();
+        $goods = '';
+        $pre = '';
+        if (isset($now_order['info'])) {
+            foreach ($now_order['info'] as $row) {
+                if (!in_array($row['goods_id'], $goodsids)) {
+                    $goodsids[] = $row['goods_id'];
+                    if (in_array($row['goods_id'], $goods_ids)) {
+                        $goods .= $pre . $row['name'];
+                        $pre = '#@#';
+                    }
+                }
+            }
+        }
+        $database_reply = D('Reply');
+
+        $data_reply['parent_id'] = $now_order['store_id'];
+        $data_reply['store_id'] = $now_order['store_id'];
+        $data_reply['mer_id'] = $now_order['mer_id'];
+        $data_reply['score'] = $score;
+        $data_reply['order_type'] = 3;
+        $data_reply['order_id'] = intval($now_order['order_id']);
+        $data_reply['anonymous'] = 1;
+        $data_reply['comment'] = $comment;
+        $data_reply['uid'] = $uid;
+        $data_reply['pic'] = '';
+        $data_reply['add_time'] = $_SERVER['REQUEST_TIME'];
+        $data_reply['add_ip'] = get_client_ip(1);
+        $data_reply['goods'] = $goods ? $goods : "";
+        $data_reply['score_store'] = $score_store;
+        $data_reply['score_deliver'] = $score_deliver;
+        $data_reply['is_late'] = $is_late;
+
+        $data_reply['merchant_reply_content'] = "";
+        $data_reply['merchant_reply_time'] = 0;
+
+// 		echo "<pre/>";
+// 		print_r($data_reply);die;
+        if ($database_reply->data($data_reply)->add()) {
+            D('Merchant_store')->setInc_shop_reply($now_order['store_id'], $score);
+            D('Shop_order')->change_status($now_order['order_id'], 3);
+            D('Shop_order_log')->add_log(array('order_id' => $now_order['order_id'], 'status' => 8));
+            foreach ($goods_ids as $goods_id) {
+                if (in_array($goods_id, $goodsids)) {
+                    D('Shop_goods')->where(array('goods_id' => $goods_id))->setInc('reply_count', 1);
+                    D('Shop_order_detail')->where(array('goods_id' => $goods_id, 'order_id' => $order_id))->save(array('is_goods' => 1));
+                }
+            }
+
+            if($this->config['feedback_score_add']>0){
+                $user = D('User')->field(true)->where(array('uid'=>$uid))->find();
+
+                D('User')->add_extra_score($this->$uid,$this->config['feedback_score_add'],$this->config['shop_alias_name'].L('_B_MY_COMMENTGET_').$this->config['feedback_score_add'].$this->config['score_name']);
+                D('Scroll_msg')->add_msg('feedback',$uid,L('_B_MY_USER_').$user['nickname'].date('Y-m-d H:i',$_SERVER['REQUEST_TIME']).L('_B_MY_COMMENT_').$this->config['shop_alias_name'].L('_B_MY_GET_').$this->config['feedback_score_add'].$this->config['score_name']);
+            }
+
+            $this->returnCode(0,'info',array(),L('_B_MY_COMMENTACCESS_'));
+//            exit(json_encode(array('status' => 1, 'msg' => L('_B_MY_COMMENTACCESS_'),  'url' => U('Shop/status', array('order_id' => $now_order['order_id'], 'mer_id' => $now_order['mer_id'], 'store_id' => $now_order['store_id'])))));
+//            $this->success_tips(L('_B_MY_COMMENTACCESS_'), U('Shop/status', array('order_id' => $now_order['order_id'], 'mer_id' => $now_order['mer_id'], 'store_id' => $now_order['store_id'])));
+        }
+        $this->returnCode(1,'info',array(),L('_B_MY_COMMENTLOSE_'));
+    }
+
+    public function get_user_info(){
+        $uid = $_POST['uid'];
+
+        $userInfo = D('User')->get_user($uid);
+        $info['now_money'] = round($userInfo['now_money'],2);
+
+        $this->returnCode(0,'info',$info,'success');
+    }
+
+    public function getRechargeDis(){
+        $config = D('Config')->get_config();
+        $recharge_txt = $config['recharge_discount'];
+        $recharge = explode(",",$recharge_txt);
+        $recharge_list = array();
+        foreach ($recharge as $v){
+            $v_a = explode("|",$v);
+            $recharge_list[$v_a[0]] = $v_a[1];
+        }
+
+        $this->returnCode(0,'info',$recharge_list,'success');
+    }
+
+    public function createRechargeOrder(){
+        $uid = $_POST['uid'];
+        $data_user_recharge_order['uid'] = $uid;
+        $money = floatval($_POST['money']);
+        if(empty($money) || $money > 10000){
+            //$this->error('请输入有效的金额！最高不能超过1万元。');
+            $this->returnCode(1,'info',array(),'请输入有效的金额！最高不能超过1万元。');
+        }
+        if($_POST['label']){
+            $data_user_recharge_order['label'] = $_POST['label'];
+        }
+        $data_user_recharge_order['money'] = $money;
+        // $data_user_recharge_order['order_name'] = '帐户余额在线充值';
+        $data_user_recharge_order['add_time'] = $_SERVER['REQUEST_TIME'];
+        $data_user_recharge_order['is_mobile_pay'] = 2;
+
+        if($order_id = D('User_recharge_order')->data($data_user_recharge_order)->add()){
+            $this->returnCode(0,'info',$order_id,'success');
+        }
+    }
+
 //    public function testDistance(){
 //        die('henhao');
 //        $url = 'https://maps.googleapis.com/maps/api/directions/json?origin=48.424210,-123.363388&destination=48.428761,-123.368652&key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&language=en';
@@ -852,6 +1451,7 @@ class IndexAction extends BaseAction
 //    }
 
     public function updateAssign(){
-        D('Deliver_assign')->check_assign();
+        $id = D('Deliver_assign')->assignLogic(9349);
+        //var_dump($id);
     }
 }

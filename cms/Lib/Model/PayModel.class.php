@@ -31,9 +31,13 @@ class PayModel extends Model{
 			case 'weifutong':
 				$pay_type_txt = C('config.pay_weifutong_alias_name');
 				break;
+            case 'Cash':
 			case 'offline':
 				$pay_type_txt = L('_CASH_ON_DELI_');
 				break;
+            case 'moneris':
+                $pay_type_txt = "Moneris";
+                break;
 			default:
 				if ($paid) {
 					$pay_type_txt = L('_BALANCE_PAYMENT_');

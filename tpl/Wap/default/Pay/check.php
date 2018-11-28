@@ -86,6 +86,7 @@
                 }else{
                     $('#score_money_title').css('display','none');
                 }
+                isShowCredit();
             });
 
             $("form").submit(function() {
@@ -243,7 +244,7 @@
                 $('#mer_coupon').html(mer_coupon_html);
                 $('#balanceBox').css('margin-bottom','+60px');
                 $('#normal-fieldset').css('display','none');
-                $('#normal-fieldset input[name="pay_type"]').removeAttr('checked');
+                // $('#normal-fieldset input[name="pay_type"]').removeAttr('checked');
             }else{
                 $('#balanceBox').css('margin-bottom','0px');
                 if($('#normal-fieldset').css('display')=='none'){
@@ -567,12 +568,15 @@
                                 'save':$('input[name="save"]:checked').val(),
                                 // 'charge_total':$('input[name="charge_total"]').val(),
                                 'charge_total':$('#add_tip').text().replace('$', ""),
-                                'order_id':"vicisland_{pigcms{$order_info.order_id}",
+                                'order_id':"vicisland{pigcms{$order_info.order_type}_{pigcms{$order_info.order_id}",
                                 'cust_id':'{pigcms{:md5($order_info.uid)}',
                                 'rvarwap':$('input[name="rvarwap"]').val(),
                                 'coupon_id':$('input[name="coupon_id"]').val(),
-                                'tip':$('#tip_num').text().replace('$', "")
+                                'tip':$('#tip_num').text().replace('$', ""),
+                                'order_type':"{pigcms{$order_info.order_type}"
                             };
+
+                            //alert(re_data['order_type']);
                             $.post($('#moneris_form').attr('action'),re_data,function(data){
                                 layer.closeAll();
                                 layer.open({title:['Message'],content:data.info});
@@ -591,12 +595,14 @@
                                 'credit_id':$('input[name="credit_id"]').val(),
                                 // 'charge_total':$('input[name="charge_total"]').val(),
                                 'charge_total':$('#add_tip').text().replace('$', ""),
-                                'order_id':"vicisland_{pigcms{$order_info.order_id}",
+                                'order_id':"vicisland{pigcms{$order_info.order_type}_{pigcms{$order_info.order_id}",
                                 'cust_id':'{pigcms{:md5($order_info.uid)}',
                                 'rvarwap':$('input[name="rvarwap"]').val(),
                                 'coupon_id':$('input[name="coupon_id"]').val(),
-                                'tip':$('#tip_num').text().replace('$', "")
+                                'tip':$('#tip_num').text().replace('$', ""),
+                                'order_type':"{pigcms{$order_info.order_type}"
                             };
+                            //alert(re_data['order_type']);
                             $.post($('#moneris_form').attr('action'),re_data,function(data){
                                 layer.closeAll();
                                 layer.open({title:['Message'],content:data.info});
@@ -867,6 +873,7 @@
         <input type="hidden" name="use_merchant_balance" <if condition="$order_info['order_type'] eq 'recharge' OR $merchant_blance eq 0 OR ($order_info['order_type'] eq 'plat' && !$order_info['pay_merchant_balance'])">value="1"<else /> value="0" </if>>
         <input type="hidden" name="merchant_balance" value="{pigcms{$merchant_balance}">
         <input type="hidden" name="balance_money" value="{pigcms{$now_user.now_money}">
+        <input type="hidden" name="tip" value="">
 
 
         <div id="pay-methods-panel" class="pay-methods-panel">
@@ -888,6 +895,7 @@
                     </volist>
                 </dl>
             </div>
+            <if condition="$order_info['order_type'] != 'recharge'">
             <div id="tip_label" class="normal-fieldset" style="height: 100%;margin-top: -50px;margin-bottom: 60px;">
                 <h4 style="margin: .3rem .2rem .2rem;">{pigcms{:L('_TIP_TXT_')}</h4>
                 <dl class="list">
@@ -913,6 +921,10 @@
                     </dd>
                 </dl>
             </div>
+            <else />
+                <span id="tip_num" style="display: none;">$0</span>
+                <span id="add_tip" style="display: none;">$0</span>
+            </if>
             <div id="credit" class="normal-fieldset" style="height: 100%;display:none;margin-top: -50px; margin-bottom:60px;" >
                 <h4 style="margin: .3rem .2rem .2rem;">{pigcms{:L('_CREDIT_CARD_')}</h4>
                 <dl class="list">
@@ -1036,12 +1048,11 @@
     var showBuyBtn = true;
 
     //garfunkel add
-    $('input[name="pay_type"]').click(isShowCredit);
+    $('input[name="pay_type"]').click(changePay);
 
     var isb = false;
 
     $(function(){
-        isShowCredit();
         if(parseFloat($('input[name="charge_total"]').val()) <= 20){
             isb = true;
         }
@@ -1055,6 +1066,7 @@
             i++;
         });
         CalTip();
+        isShowCredit();
     });
     //计算小费
     function CalTip(){
@@ -1075,8 +1087,22 @@
         }
         var totalNum = parseFloat($('input[name="charge_total"]').val()) + parseFloat(tipNum);
 
+        $('input[name="tip"]').val(tipNum.toFixed(2));
+
         $('#tip_num').text('$' + tipNum.toFixed(2));
         $('#add_tip').text('$' + totalNum.toFixed(2));
+
+        var user_money = {pigcms{$now_user.now_money};
+        if(totalNum > user_money){
+            $('#balance_money').css('color','#C1B9B9');
+            $('#use_balance').removeAttr('checked');
+            $('#use_balance').attr('disabled','disabled');
+
+            $('#normal-fieldset').css('display','block');
+        }else{
+            $('#balance_money').css('color','#666666');
+            $('#use_balance').removeAttr('disabled');
+        }
         // alert($('#add_tip').text().replace('$', ""));
     }
 
@@ -1090,14 +1116,29 @@
         CalTip();
     }
 
+    function changePay() {
+        $("input[name='use_balance']").attr('value',0);
+        $("#use_balance").removeAttr('checked');
+
+        isShowCredit();
+    }
+
     function isShowCredit(){
-        var pay_type = $('input[name="pay_type"]:checked').val();
-        if(pay_type == 'moneris'){
-            $('#credit').show();
+        if($("#use_balance").is(':checked')==true){
+            $('input[name="pay_type"]').removeAttr('checked');
             $('#tip_label').show();
-        }else{
             $('#credit').hide();
-            $('#tip_label').hide();
+        }else{
+            var pay_type = $('input[name="pay_type"]:checked').val();
+            if(pay_type == 'moneris'){
+                $('#credit').show();
+                $('#tip_label').show();
+            }else{
+                $('#credit').hide();
+                $('#tip_label').hide();
+            }
+            check_money(total_money,sysc_price,merchant_money);
+            CalTip();
         }
     }
 

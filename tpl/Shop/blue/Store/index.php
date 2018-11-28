@@ -11,6 +11,8 @@
 	</if>
 	<meta name="description" content="{pigcms{$config.seo_description}" />
 	<meta charset="utf-8">
+    <link href="{pigcms{$static_path}css/css.css" type="text/css"  rel="stylesheet" />
+    <link href="{pigcms{$static_path}css/new.css" type="text/css"  rel="stylesheet" />
 	<link href="{pigcms{$static_path}css/shop_pc.css" rel="stylesheet"/>
 	<script src="{pigcms{$static_path}js/jquery-1.7.2.js"></script>
     <script type="text/javascript" src="{pigcms{$static_public}js/lang/{pigcms{:C('DEFAULT_LANG')}.js" charset="utf-8"></script>
@@ -19,6 +21,10 @@
 	<script src="{pigcms{$static_path}js/shop_store_list.js"></script>
 	<script src="{pigcms{$static_public}js/laytpl.js"></script>
 	<script src="{pigcms{$static_public}js/jquery.lazyload.js"></script>
+    <script src="{pigcms{$static_path}js/jquery.nav.js"></script>
+    <script src="{pigcms{$static_path}js/navfix.js"></script>
+
+    <script src="{pigcms{$static_path}js/index.activity.js"></script>
 	<!--[if lte IE 9]>
 	<script src="{pigcms{$static_path}js/jquery-1.9.1.min.js"></script>
 	<script src="{pigcms{$static_path}js/html5shiv.min.js"></script>
@@ -58,6 +64,35 @@
 			</div>
 		</div>
 	</section>
+    <div class="menu_right cf" style="margin-top:0px;width:1200px;margin:auto;clear:both;float: none;">
+        <div class="menu_right_bottom cf">
+            <div class="left cf"  style="width:1200px">
+                <div class="activityDiv">
+                    <ul>
+                        <pigcms:adver cat_key="index_today_fav" limit="6" var_name="index_today_fav">
+                            <li <if condition="$i eq 1">class="mt-slider-current-trigger"</if> data-color="{pigcms{$vo.bg_color}" data-name="{pigcms{$vo.name}" data-subname="{pigcms{$vo.sub_name}">
+                            <a href="{pigcms{$vo.url}" target="_blank">
+                                <img src="{pigcms{$vo.pic}" alt="{pigcms{$vo.name}"/>
+                            </a>
+                            </li>
+                        </pigcms:adver>
+                    </ul>
+                    <div class="activityDesc">
+                        <h1></h1>
+                        <div class="activityInfo"></div>
+                        <pigcms:adver cat_key="index_today_fav" limit="6" var_name="index_today_fav">
+                            <a id="point{pigcms{$i}" href="javascript:void(0);" <if condition="$i neq 1">class="un_select"</if> ></a>
+                        </pigcms:adver>
+                    </div>
+
+                    <div class="pre-next">
+                        <a href="javascript:;" hidefocus="true" class="mt-slider-previous "></a>
+                        <a href="javascript:;" hidefocus="true" class="mt-slider-next "></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 	<section class="fication" <if condition="$keyword">style="display:none"</if>>
 		<div class="w1200 clr">
 			<div class="fication_n clr">

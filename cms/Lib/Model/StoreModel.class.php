@@ -39,7 +39,7 @@ class StoreModel extends Model
 
         $store['phone'] = $row['phone'];
         $store['isverify'] = $merchant['isverify'];
-        $store['long'] = $row['long'];
+        $store['lng'] = $row['long'];
         $store['lat'] = $row['lat'];
         $store['store_theme'] = $row['store_theme'];
         $store['address'] = $row['adress'];

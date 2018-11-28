@@ -714,6 +714,17 @@ class PayAction extends BaseAction{
 
         //如果用户存在余额或使用了优惠券，则保存至订单信息。如果金额满足订单总价，则实时扣除并返回支付成功！若不够则不实时扣除，防止用户在付款过程中取消支付
         $wx_cheap = 0;
+
+        //garfunkel add 添加小费记录
+        $order_info['tip'] = $_POST['tip'];
+        if($order_info['tip'] > 0){
+            $order_info['order_total_money'] = $order_info['order_total_money'] + $order_info['tip'];
+            $data['tip_charge'] = $order_info['tip'];
+            if($order_info['order_type'] == 'shop' || $order_info['order_type'] == 'mall'){
+                D('Shop_order')->field(true)->where(array('order_id'=>$order_info['order_id']))->save($data);
+            }
+        }
+        //
         if($order_info['order_type'] == 'group'){
             //判断有没有使用微信，如果是微信，则检测此团购有没有微信优惠！
             if($this->is_app_browser){
@@ -761,7 +772,6 @@ class PayAction extends BaseAction{
 
         //需要支付的钱
         $pay_money = round($save_result['pay_money']*100)/100;
-
         if(in_array($order_info['order_type'],array('group','meal','weidian','takeout','food','foodPad','recharge','appoint','waimai','wxapp','store','shop','plat','balance-appoint')) && $order_info['mer_id']){
             $mer_id = $order_info['mer_id'];
         }else{
@@ -2396,9 +2406,14 @@ class PayAction extends BaseAction{
         $resp = $moneris_pay->payment($_POST,$this->user_session['uid']);
 //        var_dump($resp);die();
         if($resp['responseCode'] != 'null' && $resp['responseCode'] < 50){
-            $order = explode("_",$_POST['order_id']);
-            $order_id = $order[1];
-            $url =U("Wap/Shop/status",array('order_id'=>$order_id));
+            if(!$_POST['order_type']) $_POST['order_type'] = "shop";
+            if($_POST['order_type'] == "recharge"){
+                $url = U("Wap/My/my_money");
+            }else{
+                $order = explode("_",$_POST['order_id']);
+                $order_id = $order[1];
+                $url =U("Wap/Shop/status",array('order_id'=>$order_id));
+            }
 
             $this->success(L('_PAYMENT_SUCCESS_'),$url,true);
         }else{

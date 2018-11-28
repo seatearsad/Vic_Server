@@ -356,6 +356,7 @@ class Shop_orderModel extends Model
 				'order_total_money' => $order_info['order_total_money'],
 				'balance_pay' => $order_info['balance_pay'],
 				'merchant_balance' => $order_info['merchant_balance'],
+				'is_own'	=> $order_info['is_own']
 			);
 			$result_after_pay = $this->after_pay($order_param);
 			if($result_after_pay['error']){
@@ -473,6 +474,15 @@ class Shop_orderModel extends Model
 				$use_result = D('System_coupon')->user_coupon($now_order['coupon_id'],$now_order['order_id'],$order_param['order_type'],$now_order['mer_id'],$now_order['uid']);
 				if($use_result['error_code']){
 					return array('error'=>1,'msg'=>$use_result['msg']);
+				}else{//garfunkel add
+					//如果使用成功的话，未支付成功的，且绑定了同一个优惠劵的订单，取消此优惠券
+					$data['coupon_id'] = 0;
+					$data['coupon_price'] = 0;
+					$where['coupon_id'] = $now_order['coupon_id'];
+					$where['paid'] = 0;
+					$where['order_id'] = array(array('gt', $now_order['order_id']), array('lt', $now_order['order_id']));
+
+					$this->field(true)->where($where)->save($data);
 				}
 			}
 
@@ -530,7 +540,7 @@ class Shop_orderModel extends Model
 			$data_shop_order['is_own'] = isset($order_param['sub_mch_id'])?2:$order_param['is_own'];
 			$data_shop_order['paid'] = 1;
 			//garfunkel add moneris
-			$data_shop_order['invoice_head'] = $order_param['invoice_head'];
+			$data_shop_order['invoice_head'] = $order_param['invoice_head']?$order_param['invoice_head']:'';
 
 			if ($now_order['card_discount']) {
 				$data_shop_order['price'] = sprintf("%.2f", ($now_order['price']-$now_order['freight_charge']) * $now_order['card_discount']/10)+$now_order['freight_charge'];//floor($now_order['price'] * $now_order['card_discount'] * 10) / 100;
@@ -551,7 +561,6 @@ class Shop_orderModel extends Model
 			$data_shop_order['shop_pass'] = implode('', $shop_pass_array);
 
 			D('Action_relation')->add_user_action($now_order['order_id'], 'shop');
-
 
 			if($this->where($where)->save($data_shop_order)){
 				D('Scroll_msg')->add_msg('shop',$now_user['uid'],'用户'.$now_user['nickname'].'于'.date('Y-m-d H:i',$_SERVER['REQUEST_TIME']).'购买'.C('config.shop_alias_name').'成功');

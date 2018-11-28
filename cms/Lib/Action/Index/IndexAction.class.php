@@ -5,6 +5,7 @@
  */
 class IndexAction extends BaseAction {
     public function index(){
+        header("location:".U('Shop/Index/index'));
 		//顶部广告
 		$index_top_adver = D('Adver')->get_adver_by_key('index_top');
 		$this->assign('index_top_adver',$index_top_adver);

@@ -167,8 +167,31 @@ class User_recharge_orderModel extends Model{
 			$data_user_recharge_order['pay_type'] = $order_param['pay_type'];
 			$data_user_recharge_order['third_id'] = $order_param['third_id'];
 			$data_user_recharge_order['paid'] = 1;
+
+            //garfunkel add 添加充值赠送
+            $config = D('Config')->get_config();
+            $recharge_txt = $config['recharge_discount'];
+            $recharge = explode(",",$recharge_txt);
+            $recharge_list = array();
+            foreach ($recharge as $v){
+                $v_a = explode("|",$v);
+                $recharge_list[$v_a[0]] = $v_a[1];
+            }
+            //逆序
+            krsort($recharge_list);
+
+            $money_plus = 0;
+            foreach ($recharge_list as $k=>$v){
+                if($data_user_recharge_order['payment_money'] >= $k){
+                    $money_plus = $v;
+                    break;
+                }
+            }
+            $data_user_recharge_order['label'] = $money_plus;
+
 			if($this->where($where)->save($data_user_recharge_order)){
-				D('User')->add_money($now_order['uid'],$order_param['pay_money'],'在线充值');
+                $add_money = $data_user_recharge_order['payment_money'] + $money_plus;
+				D('User')->add_money($now_order['uid'],$add_money,'在线充值+'.$money_plus);
 				D('Scroll_msg')->add_msg('user_recharge',$now_user['uid'],'用户'.$now_user['nickname'].'于'.date('Y-m-d H:i',$_SERVER['REQUEST_TIME']).'充值成功！');
 				if($order_param['order_type'] == 'waimai-recharge'){
 					return array('error'=>0,'msg'=>'充值成功！','url'=>U('Waimai/User/index'));

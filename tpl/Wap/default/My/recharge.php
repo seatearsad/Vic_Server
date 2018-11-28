@@ -25,6 +25,20 @@
 		        </dd>
 		    </dl>
 		    <p class="btn-wrapper">{pigcms{:L('_AMOUNT_TWO_DEC_')}</p>
+            <div class="btn-wrapper">
+                <div>充值活动：</div>
+                <php>
+                    foreach($recharge_list as $k=>$v){
+                </php>
+                <div>
+                    <php>
+                        echo "充 $".$k."返 $".$v;
+                    </php>
+                </div>
+                <php>
+                    }
+                </php>
+            </div>
 		    <div class="btn-wrapper"><button type="submit" class="btn btn-block btn-larger">{pigcms{:L('_RECHARGE_TXT_')}</button></div>
 		</form>
     	<script src="{pigcms{:C('JQUERY_FILE')}"></script>

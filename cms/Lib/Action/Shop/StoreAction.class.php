@@ -52,6 +52,9 @@ class StoreAction extends BaseAction
 		$return['total'] = $lists['total'];
 		$return['store_count'] = count($result);
 		$return['next_page'] = $lists['next_page'];
+
+        $index_top_adver = D('Adver')->get_adver_by_key('index_top');
+        $this->assign('index_top_adver',$index_top_adver);
 		
 		$this->assign($return);
 		$this->display();

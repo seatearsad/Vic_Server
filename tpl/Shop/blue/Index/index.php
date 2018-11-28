@@ -26,10 +26,10 @@
 			<include file="Public:header_top"/>
 
 		<!-- 公用导航 -->
-		<section class="Fast" style="background: url({pigcms{$static_path}images/indexb_05.jpg) center no-repeat;">
+		<section class="Fast" style="background: url({pigcms{$static_path}images/new_back.jpg) center no-repeat;">
 			<div class="logo">
 				<div class="w1200">
-					<a href="/"><img src="{pigcms{$config.site_logo}"></a>
+					<!--a href="/"><img src="{pigcms{$config.site_logo}"></a-->
 				</div> 
 			</div>
 			<div class="search">
