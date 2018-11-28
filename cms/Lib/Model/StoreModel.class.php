@@ -628,8 +628,8 @@ class StoreModel extends Model
     public function CalculationDeliveryFee($uid,$sid){
         $address = $this->getDefaultAdr($uid);
         $store = $this->get_store_by_id($sid);
-
-        $distance = getDistance($address['mapLat'], $address['mapLng'], $store['lat'], $store['long']);
+        
+        $distance = getDistance($address['mapLat'], $address['mapLng'], $store['lat'], $store['lng']);
         $distance = $distance / 1000;
 
         $deliveryCfg = [];
