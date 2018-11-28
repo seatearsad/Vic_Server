@@ -854,6 +854,7 @@ class IndexAction extends BaseAction
         }
 
         $card_list = D('User_card')->getCardListByUid($uid);
+        if(!$card_list) $card_list = array();
 
         $this->returnCode(0,'info',$card_list,'success');
     }
