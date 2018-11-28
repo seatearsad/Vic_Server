@@ -465,7 +465,7 @@ class IndexAction extends BaseAction
             $userInfo = D('User')->get_user($uid);
             $now_money = round($userInfo['now_money'],2);
 
-            $data['balance_pay'] = $order_data['price'] + $order_data['tip_charge'];
+            $data['balance_pay'] = $order_data['price'] + $order_data['tip_charge'] - $order_data['coupon_price'];
             if($now_money >= $data['balance_pay']){
                 D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->save($data);
 
@@ -476,8 +476,8 @@ class IndexAction extends BaseAction
                     'third_id' => '',
                     'is_mobile' => 2,
                     'pay_money' => 0,
-                    'order_total_money' => $order_data['price'] + $order_data['tip_charge'],
-                    'balance_pay' => $order_data['price'] + $order_data['tip_charge'],
+                    'order_total_money' => $order_data['price'] + $order_data['tip_charge'] - $order_data['coupon_price'],
+                    'balance_pay' => $order_data['price'] + $order_data['tip_charge'] - $order_data['coupon_price'],
                     'merchant_balance' => 0,
                     'is_own'	=> 0
                 );
