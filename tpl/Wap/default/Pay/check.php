@@ -242,8 +242,8 @@
             if(!pay_title){ //弹出来的支付方式
                 $('#system_coupon').html(system_coupon_html);
                 $('#mer_coupon').html(mer_coupon_html);
-                $('#balanceBox').css('margin-bottom','+60px');
-                $('#normal-fieldset').css('display','none');
+                //$('#balanceBox').css('margin-bottom','+60px');
+                // $('#normal-fieldset').css('display','none');
                 // $('#normal-fieldset input[name="pay_type"]').removeAttr('checked');
             }else{
                 $('#balanceBox').css('margin-bottom','0px');
@@ -877,7 +877,7 @@
 
 
         <div id="pay-methods-panel" class="pay-methods-panel">
-            <div id="normal-fieldset" class="normal-fieldset" style="height: 100%;display:none;margin-bottom: 60px;" >
+            <div id="normal-fieldset" class="normal-fieldset" style="height: 100%;margin-bottom: 60px;" >
                 <h4 style="margin: .3rem .2rem .2rem;">{pigcms{:L('_SELECT_PAY_MODE_')}</h4>
                 <dl class="list">
                     <volist name="pay_method" id="vo">
