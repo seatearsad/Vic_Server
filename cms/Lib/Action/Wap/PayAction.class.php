@@ -717,6 +717,8 @@ class PayAction extends BaseAction{
 
         //garfunkel add 添加小费记录
         $order_info['tip'] = $_POST['tip'];
+        if($_POST['pay_type'] == 'Cash' || $_POST['pay_type'] == 'offline')
+            $order_info['tip'] = 0;
         if($order_info['tip'] > 0){
             $order_info['order_total_money'] = $order_info['order_total_money'] + $order_info['tip'];
             $data['tip_charge'] = $order_info['tip'];
