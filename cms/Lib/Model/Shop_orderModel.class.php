@@ -356,7 +356,7 @@ class Shop_orderModel extends Model
 				'order_total_money' => $order_info['order_total_money'],
 				'balance_pay' => $order_info['balance_pay'],
 				'merchant_balance' => $order_info['merchant_balance'],
-				'is_own'	=> $order_info['is_own']
+				'is_own'	=> $order_info['is_own'] ? $order_info['is_own'] : 0
 			);
 			$result_after_pay = $this->after_pay($order_param);
 			if($result_after_pay['error']){
