@@ -135,11 +135,13 @@ class User_recharge_orderModel extends Model{
 		}
 	}
 	public function after_pay($order_param){
-		if($order_param['pay_type']!=''){
-			$where['orderid'] = $order_param['order_id'];
-		}else{
-			$where['order_id'] = $order_param['order_id'];
-		}
+//		if($order_param['pay_type']!=''){
+//			$where['orderid'] = $order_param['order_id'];
+//		}else{
+//			$where['order_id'] = $order_param['order_id'];
+//		}
+
+        $where['order_id'] = $order_param['order_id'];
 
 		$now_order = $this->field(true)->where($where)->find();
 		if(empty($now_order)){

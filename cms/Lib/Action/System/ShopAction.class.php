@@ -484,6 +484,24 @@ class ShopAction extends BaseAction
                         $this->error($resp['message']);
                     }
                 }
+            }else if($shop_order_data['pay_type'] == '' && $shop_order_data['paid'] == 1 && $shop_order_data['balance_pay'] > 0){
+                $new_price = $shop_order_data['balance_pay'] - $cha;
+                if($cha > 0){//需要退款
+                    $cha = sprintf("%.2f", $cha);
+                    $add_result = D('User')->add_money($shop_order_data['uid'],$cha,L('_B_MY_REFUND_')  . '(' . $order_id . ') 修改价格 退还金额');
+                }elseif($cha < 0){//需要追加付款
+                    $user = D('User')->field(true)->where(array('uid'=>$shop_order_data['uid']))->find();
+                    $cha = sprintf("%.2f", $cha*-1);
+                    if($user['now_money'] >= $cha){
+                        $use_result = D('User')->user_money($shop_order_data['uid'], $cha, '购买 ' . $shop_order_data['order_id'] . ' 修改价格 追加付款');
+                        if ($use_result['error_code']) {
+                            $this->error( $use_result['msg']);
+                        }
+                    }
+                }
+
+                $new_price = $new_price < 0 ? 0 : $new_price;
+                $data['balance_pay'] = $new_price;
             }
 
             ////////
@@ -521,6 +539,8 @@ class ShopAction extends BaseAction
                 }else{
                     $this->error('删除失败！请重试~');
                 }
+            }elseif($now_order['pay_type'] == '' && $now_order['paid'] == 1 && $now_order['balance_pay'] > 0){
+                $add_result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],L('_B_MY_REFUND_')  . '(' . $order_id . ') 增加余额');
             }
             ///////
             if ($shop_order->where("order_id=$order_id")->data($data)->save()){
@@ -635,12 +655,30 @@ class ShopAction extends BaseAction
     public function refund_update(){
         $database_shop_order = D('Shop_order');
         $condition_shop_order['order_id'] = $_GET['order_id'];
-        $order = $database_shop_order->field('`order_id`,`mer_id`')->where($condition_shop_order)->find();
-        if(empty($order)){
+        $now_order = $database_shop_order->field(true)->where($condition_shop_order)->find();
+        if(empty($now_order)){
             $this->error('此订单不存在！');
         }
         $data['status'] = 4;
         $data['last_time'] = time();
+        if($now_order['pay_type'] == 'moneris' && $now_order['paid'] == 1){
+            import('@.ORG.pay.MonerisPay');
+            $moneris_pay = new MonerisPay();
+            //判读此订单是否修改过价格
+            $record_type = $now_order['is_refund'] == 1 ? 3 : 1;
+            $resp = $moneris_pay->refund($now_order['uid'],$now_order['order_id'],-1,$record_type);
+//                var_dump($now_order['order_id']);die();
+            if($resp['responseCode'] != 'null' && $resp['responseCode'] < 50){
+//                    $data_shop_order['order_id'] = $now_order['order_id'];
+//                    $data_shop_order['status'] = 4;
+//                    $data_shop_order['last_time'] = time();
+//                    D('Shop_order')->data($data_shop_order)->save();
+            }else{
+                $this->error('删除失败！请重试~');
+            }
+        }elseif($now_order['pay_type'] == '' && $now_order['paid'] == 1 && $now_order['balance_pay'] > 0){
+            $add_result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],L('_B_MY_REFUND_')  . '(' . $_GET['order_id'] . ') 增加余额');
+        }
         if($database_shop_order->where($condition_shop_order)->setField('status',4)){
             $this->success('订单状态已改为已退款！');
         }else{
