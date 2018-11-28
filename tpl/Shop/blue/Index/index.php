@@ -19,6 +19,20 @@
 	<script src="{pigcms{$static_path}js/jquery-1.9.1.min.js"></script>
 	<script src="{pigcms{$static_path}js/html5shiv.min.js"></script>
 	<![endif]-->
+    <if condition="$config['wap_redirect']">
+        <script>
+            if(/(iphone|ipod|android|windows phone)/.test(navigator.userAgent.toLowerCase())){
+            <if condition="$config['wap_redirect'] eq 1">
+                window.location.href = './wap.php';
+            <else/>
+                if(confirm('系统检测到您可能正在使用手机访问，是否要跳转到手机版网站？')){
+                    window.location.href = './wap.php';
+                }
+            </if>
+            }
+
+        </script>
+    </if>
 </head>
 	<body>
 		<!-- 公用导航 -->
