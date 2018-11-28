@@ -346,6 +346,8 @@ class Shop_orderModel extends Model
 	//如果无需调用在线支付，使用此方法即可。
 	public function wap_after_pay_before($order_info)
 	{
+		if(!$order_info['is_own'] || $order_info['is_own'] == 'NULL')
+			$order_info['is_own'] = 0;
 		$order_param = array(
 				'order_id' => $order_info['order_id'],
 				'orderid' => $order_info['orderid'],
@@ -478,11 +480,11 @@ class Shop_orderModel extends Model
 					//如果使用成功的话，未支付成功的，且绑定了同一个优惠劵的订单，取消此优惠券
 					$data['coupon_id'] = 0;
 					$data['coupon_price'] = 0;
-					$where['coupon_id'] = $now_order['coupon_id'];
-					$where['paid'] = 0;
-					$where['order_id'] = array(array('gt', $now_order['order_id']), array('lt', $now_order['order_id']));
+					$coupon_where['coupon_id'] = $now_order['coupon_id'];
+                    $coupon_where['paid'] = 0;
+                    $coupon_where['order_id'] = array(array('gt', $now_order['order_id']), array('lt', $now_order['order_id']));
 
-					$this->field(true)->where($where)->save($data);
+					$this->field(true)->where($coupon_where)->save($data);
 				}
 			}
 
@@ -538,6 +540,7 @@ class Shop_orderModel extends Model
 			$data_shop_order['third_id'] = $order_param['third_id'];
 			$data_shop_order['is_mobile_pay'] = $order_param['is_mobile'];
 			$data_shop_order['is_own'] = isset($order_param['sub_mch_id'])?2:$order_param['is_own'];
+			if(!$data_shop_order['is_own']) $data_shop_order['is_own'] = 0;
 			$data_shop_order['paid'] = 1;
 			//garfunkel add moneris
 			$data_shop_order['invoice_head'] = $order_param['invoice_head']?$order_param['invoice_head']:'';
