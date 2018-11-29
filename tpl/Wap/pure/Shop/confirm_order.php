@@ -742,7 +742,7 @@ $(document).ready(function () {
 	$("#submit_order").click(function(){
 		
 		if($('#deliver_type').val() == 0 && $('#address_id').val() == ''){
-			motify.log('请您先添加配送地址');
+			motify.log('Please Enter Address');
 			return false;
 		}
 		if(!$(this).hasClass('disabled')){

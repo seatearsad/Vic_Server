@@ -11,7 +11,7 @@ class Shop_categoryModel extends Model
 		}
 		$list = array();
 		if ($is_add_all) {
-			$list[] = array('cat_id' => '0', 'cat_name' => L('_ALL_CLASSIF_'), 'cat_url' => 'all');
+			$list[] = array('cat_id' => '0', 'cat_name' => L('_ALL_TXT_'), 'cat_url' => 'all');
 		}
 		
 		$tlist = array();

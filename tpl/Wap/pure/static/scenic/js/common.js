@@ -94,7 +94,7 @@ function getUserLocation(options){
 				},
 				cancel: function(res){
 					if(res.errMsg == 'getLocation:cancel'){
-						options['errorMsg'] = '获取位置信息失败,用户拒绝请求地理定位';
+						options['errorMsg'] = 'Please enable location access while using';
 					}
 					locationErorrTip(options);
 				}
@@ -131,7 +131,7 @@ function getUserLocation(options){
 		},function(error){
 			switch (error.code){
 				case error.PERMISSION_DENIED:
-					options['errorMsg'] = '获取位置信息失败,用户拒绝请求地理定位';
+					options['errorMsg'] = 'Please enable location access while using';
 					break;
 				case error.POSITION_UNAVAILABLE:
 					options['errorMsg'] = '获取位置信息失败,位置信息不可用';

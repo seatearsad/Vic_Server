@@ -404,7 +404,7 @@ function callbackLocation(locations){
 function getListGeocoderError(){
 	pageLoadHides();
 	var addressTipLayer = layer.open({
-		content: '未获取到您的位置，请先确认收货地址！',
+		content: 'Locating failed, please enter your address to start.',
 		btn: ['OK'],
 		end: function(){
 			$('#pageAddressHeader').addClass('mustHideBack');

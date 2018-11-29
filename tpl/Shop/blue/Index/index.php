@@ -47,7 +47,7 @@
 				</div> 
 			</div>
 			<div class="search">
-				<h2>{pigcms{:L('_OUT_TXT_')} {pigcms{:L('_MAKE_LIFE_EASIER_')}</h2>
+				<h2 style="font-weight: bold;">Tutti Delivers Everything</h2>
 				<div class="clr">
 					<div class="text fl">
 						<input type="text" readonly="readonly" value="{pigcms{$now_city['area_name']}" class="elastic fl" id="city_name">
@@ -177,7 +177,7 @@
 					subHtml += html; 
                 }
             } else {
-            	var subHtml = '<li data-name="" data-lat="0" data-lng="0" class="demo">很抱歉，未找到相关地址：<br/><span style="font-size:14px;color:gray;">请检查地址是否正确或尝试只输入写字楼、小区或学校试试</span></li>';
+            	var subHtml = '<li data-name="" data-lat="0" data-lng="0" class="demo">Sorry,address could not be found for this area.<br/><span style="font-size:14px;color:gray;"></span></li>';
             }
             $(".search-sug").html(subHtml).removeClass("s-hide");
         }, 'json');

@@ -1172,7 +1172,7 @@ class ShoporderAction extends BaseAction
 		}
 		
 		$user_adress = D('User_adress')->get_one_adress($this->user_session['uid'], intval($address_id));
-		if (empty($user_adress)) exit(json_encode(array('error_code' => true, 'msg' => '地址不存在')));
+		if (empty($user_adress)) exit(json_encode(array('error_code' => true, 'msg' => 'Please Enter Address')));
 		
 		if ($return['delivery_type'] == 0 || $return['delivery_type'] == 3) {
 			$delivery_times = explode('-', $this->config['delivery_time']);

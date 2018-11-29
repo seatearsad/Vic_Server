@@ -714,6 +714,8 @@ class IndexAction extends BaseAction
     public function credit_pay(){
         import('@.ORG.pay.MonerisPay');
         $moneris_pay = new MonerisPay();
+        //app 支付标识
+        $_POST['rvarwap'] = 2;
         $resp = $moneris_pay->payment($_POST,$_POST['uid']);
         if($resp['responseCode'] != 'null' && $resp['responseCode'] < 50){
             //$order = explode("_",$_POST['order_id']);

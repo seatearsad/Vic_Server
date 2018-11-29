@@ -747,7 +747,7 @@ class Shop_orderModel extends Model
 					];	
 					//Sms::sendSms2($sms_data);
 					//add garfunkel 添加语音
-                    $txt = "Hi there, here is Island Life Delivery. You have a new order, please confirm, thank you!";
+                    $txt = "Hi there, Tutti got a new order for you, can you please confirm online now!";
 					Sms::send_voice_message($sms_data['mobile'],$txt);
 				}
 

@@ -190,7 +190,7 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 				</div>
 			</div>
 			<div class="form-field">
-				<label for="address-detail"><em>*</em> {pigcms{:L('_ADDRESS_TXT_')}：</label>
+				<label for="address-detail"><em>*</em> {pigcms{:L('_NOTE_TXT_')}：</label>
 				<input type="text" maxlength="60" size="60" name="detail" id="address-detail" class="f-text address-detail" value=""/>
 			</div>
 			<div class="form-field">
