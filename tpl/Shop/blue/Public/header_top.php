@@ -7,8 +7,8 @@
 				<div class="span" style="padding-right:10px;">|</div>
 			</if>
 			<if condition="empty($user_session)">
-				<div class="login"><a href="{pigcms{:UU('Index/Login/index')}" style="color:red;"> {pigcms{:L('_B_D_LOGIN_LOGIN1_')} </a></div>
-				<div class="regist"><a href="{pigcms{:UU('Index/Login/reg')}"> {pigcms{:L('_B_D_LOGIN_REG2_')} </a></div>
+				<!--div class="login"><a href="{pigcms{:UU('Index/Login/index')}" style="color:red;"> {pigcms{:L('_B_D_LOGIN_LOGIN1_')} </a></div>
+				<div class="regist"><a href="{pigcms{:UU('Index/Login/reg')}"> {pigcms{:L('_B_D_LOGIN_REG2_')} </a></div-->
 			<else/>
 				<p class="user-info__name growth-info growth-info--nav">
 					<span>
@@ -16,8 +16,9 @@
 					</span>
 					<a class="user-info__logout" href="{pigcms{:UU('Index/Login/logout')}">{pigcms{:L('_LOGOUT_TXT_')}</a>
 				</p>
+                <div class="span">|</div>
 			</if>
-			<div class="span">|</div>
+
 			<div class="weixin cf">
 				<div class="weixin_txt"><a href="{pigcms{$config.config_site_url}/topic/weixin.html" target="_blank"> {pigcms{:L('_WECHAT_EDITION_')} </a></div>
 				<div class="weixin_icon"><p><span>|</span><a href="{pigcms{$config.config_site_url}/topic/weixin.html" target="_blank">{pigcms{:L('_GO_TO_WECHAT_')}</a></p><img src="{pigcms{$config.wechat_qrcode}"/></div>

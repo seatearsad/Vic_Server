@@ -295,7 +295,7 @@ body{ padding:0px; margin:0px auto; font-size:14px; background-color: #fff; }
 /*商家详情*/
 .shopto_end2{ position: absolute; top: 50px; left: 0px; width: 100%; background: url(../images/xtm_06.png); }
 .details{ background: url(../images/bjt_02.jpg) center no-repeat; height: 122px; padding-top: 110px; color: #fff; }
-.details .img{ width: 98px; } 
+.details .img{ width: 98px; }
 .details .img img{ width: 88px; height: 88px;  border-radius: 100%; border: #b6b4a4 5px solid; }
 .details .pl15{ height: 74px; padding: 12px 0 12px 115px; }
 .details .pl15 .title{ height: 20px; line-height: 20px; }
@@ -342,7 +342,7 @@ body{ padding:0px; margin:0px auto; font-size:14px; background-color: #fff; }
 .variety .vleft .Sell_list .text .middle .fr{  color: #fe5842; background: url(../images/sxt_07.png) left center no-repeat; padding-left: 18px; }
 .variety .vleft .Sell_list .text .end{ line-height: 27px; position: relative; height: 27px; }
 .variety .vleft .Sell_list .text .end .fl span{ font-size: 16px; color: #fe5842; font-weight: bold;}
-.variety .vleft .Sell_list .text .end .fl del{ font-size: 14px; color: #666666; margin-left: 10px; } 
+.variety .vleft .Sell_list .text .end .fl del{ font-size: 14px; color: #666666; margin-left: 10px; }
 .variety .vleft .Sell_list .text .end .click{ background: url(../images/sxt_11.png) center no-repeat; width: 27px; height: 27px;  position: absolute; right: 0px; top: 0px; }
 .variety .vleft .Sell_list .imit{ line-height: 26px; background: #fe5842; color: #ffffff; font-size: 14px; padding: 0 10px; position: absolute; left: 7px; top: 16px; border-radius: 0 0 10px 10px; }
 .variety .vleft .Sell_list .imit_i{ font-size: 14px; }

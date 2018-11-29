@@ -44,6 +44,14 @@
 			<div class="logo">
 				<div class="w1200">
 					<!--a href="/"><img src="{pigcms{$config.site_logo}"></a-->
+                    <if condition="empty($user_session)">
+                    <a href="{pigcms{:U('Index/Login/index')}" style="margin-left: 980px;">
+                        <img src="{pigcms{$static_path}images/login.png" style="width: 100px;height: 33px">
+                    </a>
+                    <a href="{pigcms{:U('Index/Login/reg')}" >
+                        <img src="{pigcms{$static_path}images/sign.png" style="width: 100px;height: 33px;">
+                    </a>
+                    </if>
 				</div> 
 			</div>
 			<div class="search">
@@ -91,7 +99,7 @@
 			<div class="Client_end">
 				<ul class="clr">
 					<li>
-						<a href="#">
+						<a href="https://itunes.apple.com/us/app/tutti/id1439900347" target="_blank">
 							<img src="{pigcms{$static_path}images/pho_15.png">
 							<p>iPhone</p>
 						</a>
@@ -99,7 +107,7 @@
 					<li>
 						<a href="#">
 							<img src="{pigcms{$static_path}images/pho_17.png">
-							<p>Android</p>
+							<p>Android<br>(COMING SOON)</p>
 						</a>
 					</li>
 					<li style="margin-right:0px;">
