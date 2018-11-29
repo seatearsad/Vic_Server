@@ -145,9 +145,9 @@
 			</div>
 			<div style="clear:both;"></div>
 		</div>
-		<if condition="$system_session['level'] eq 2">
+		<!--if condition="$system_session['level'] eq 2">
 			<div id="footer" class="footer" >Powered by <a href="http://www.pigcms.com" target="_blank">Pigcms</a> Copyright 2017 © 合肥彼岸互联信息技术有限公司 版权所有<span id="run"></span></div>
-		</if>
+		</if-->
 		<script type="text/javascript" src="{pigcms{$static_path}js/index.js"></script>
 
 		<script type="text/javascript">
