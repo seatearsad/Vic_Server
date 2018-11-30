@@ -93,8 +93,8 @@
 
 		<section class="Client">
 			<div class="Client_top">
-				<h2>{pigcms{:L('_MAKE_LIFE_EASIER_')}</h2>
-				<!--p>微信扫描二维码关注或下载手机客户端，随时随地查看身边{pigcms{$config.shop_alias_name}</p-->
+				<h2>Effortless App</h2>
+				<p>For better use experience,please download Tutti App</p>
 			</div>
 			<div class="Client_end">
 				<ul class="clr">
@@ -107,15 +107,15 @@
 					<li>
 						<a href="#">
 							<img src="{pigcms{$static_path}images/pho_17.png">
-							<p>Android<br>(COMING SOON)</p>
+							<p>Android<br>(Coming soon)</p>
 						</a>
 					</li>
-					<li style="margin-right:0px;">
+					<!--li style="margin-right:0px;">
 						<a href="javascript:void(0)">
 							<img src="{pigcms{$config.wechat_qrcode}" class="img">
 							<p>{pigcms{:L('_WECHAT_SCORE_CODE_')}</p>
 						</a>
-					</li>
+					</li-->
 				</ul>
 			</div>  
 		</section>

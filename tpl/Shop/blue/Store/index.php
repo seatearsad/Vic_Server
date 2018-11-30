@@ -36,7 +36,7 @@
 			<div class="w1200 clr">
 				<div class="fl clr">
 					<span class="fl">{pigcms{$shop_select_address}</span>
-					<a href="/shop/change.html" class="fl">[{pigcms{:L('_SWITCH_ADDRESS_')}]</a>
+					<a href="/shop/change.html" class="fl" style="color: #ffffff;">[{pigcms{:L('_SWITCH_ADDRESS_')}]</a>
 				</div>
 				<if condition="empty($user_session)">
 					<div class="fr">

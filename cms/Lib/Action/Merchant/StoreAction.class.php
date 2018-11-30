@@ -5328,7 +5328,7 @@ class StoreAction extends BaseAction{
 
 
 		if ($is_open == 0) {
-			return array('error_code' => true, 'msg' => '店铺休息中');
+			return array('error_code' => true, 'msg' => 'Store closed');
 		}
 	
 		$store_shop = D("Merchant_store_shop")->field(true)->where(array('store_id' => $store_id))->find();

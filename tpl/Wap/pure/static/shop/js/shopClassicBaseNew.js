@@ -595,7 +595,7 @@ function showAddress(){
 }
 
 function getAddressGeocoderError(){
-	$('#pageAddressLocationList dl').html('<div style="height:40px;line-height:40px;background:white;padding-left:12px;">未获取到定位</div>');
+	$('#pageAddressLocationList dl').html('<div style="height:40px;line-height:40px;background:white;padding-left:12px;">Address not found</div>');
 }
 
 function searchAddress(address){

@@ -704,7 +704,7 @@ function showAddress(){
 }
 
 function getAddressGeocoderError(){
-	$('#pageAddressLocationList dl').html('<div style="height:40px;line-height:40px;background:white;padding-left:12px;">未获取到定位</div>');
+	$('#pageAddressLocationList dl').html('<div style="height:40px;line-height:40px;background:white;padding-left:12px;">Address not found</div>');
 }
 
 function searchAddress(address){
@@ -1027,7 +1027,7 @@ function showShop(shopId){
 		
 		$(document).on('click','#shopDetailPageNumber .product_btn.plus,#shopDetailPageBuy',function(event){
 			if(nowShop.store.is_close == 1){
-				motify.log('店铺休息中');
+				motify.log('Store closed');
 				return false;
 			}
 			var intStock = parseInt($('#shopDetailPagePrice span').data('stock'));
@@ -1073,7 +1073,7 @@ function showShop(shopId){
 		
 		$(document).on('click','#shopProductCartBox .product_btn.plus',function(event){
 			if(nowShop.store.is_close == 1){
-				motify.log('店铺休息中');
+				motify.log('Store closed');
 				return false;
 			}
 			tmpDomObj = $(this);
@@ -1082,7 +1082,7 @@ function showShop(shopId){
 		
 		$(document).on('click','#shopProductRightBar .bgPlusBack',function(event){
 			if(nowShop.store.is_close == 1){
-				motify.log('店铺休息中');
+				motify.log('Store closed');
 				return false;
 			}
 			tmpDomObj = $(this);

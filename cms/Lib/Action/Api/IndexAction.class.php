@@ -343,6 +343,7 @@ class IndexAction extends BaseAction
                 }
             }
             if($v['proper'] != ''){
+                $t_pro['data'] = array();
                 $pro_list = explode('_',$v['proper']);
                 foreach ($pro_list as $vv){
                     $t_pro['type'] = 'pro';
@@ -505,9 +506,9 @@ class IndexAction extends BaseAction
         if ($status == 0) {
             $where .= " AND paid=0";
         } elseif ($status == 1) {
-            $where .= " AND paid=1 AND status<2";
-        } elseif ($status == 2) {
             $where .= " AND paid=1 AND status=2";
+        } elseif ($status == 2) {
+            $where .= " AND paid=1 AND status=4";
         }
 
         $where .= " AND is_del = 0";

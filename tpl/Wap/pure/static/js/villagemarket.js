@@ -84,7 +84,7 @@ $(function(){
 	});
 	$(document).on('click','#shopProductBottomBar .product_btn.plus',function(event){
 		if(nowShop.store.is_close == 1){
-			motify.log('店铺休息中');
+			motify.log('Store closed');
 			return false;
 		}
 		tmpDomObj = $(this);
@@ -119,7 +119,7 @@ $(function(){
 	});
 	$(document).on('click','#shopProductCartBox .product_btn.plus',function(event){
 		if(nowShop.store.is_close == 1){
-			motify.log('店铺休息中');
+			motify.log('Store closed');
 			return false;
 		}
 		tmpDomObj = $(this);
@@ -239,7 +239,7 @@ $(function(){
 	});
 	$(document).on('click','#shopDetailPageNumber .product_btn.plus,#shopDetailPageBuy',function(event){
 		if(nowShop.store.is_close == 1){
-			motify.log('店铺休息中');
+			motify.log('Store closed');
 			return false;
 		}
 		var intStock = parseInt($('#shopDetailPagePrice span').data('stock'));
