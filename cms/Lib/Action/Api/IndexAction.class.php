@@ -1450,6 +1450,7 @@ class IndexAction extends BaseAction
         import('ORG.Net.Http');
         $http = new Http();
         $result = $http->curlGet($url);
+        $result = json_decode($result);
 
         $this->returnCode(0,'info',$result,'success');
     }
