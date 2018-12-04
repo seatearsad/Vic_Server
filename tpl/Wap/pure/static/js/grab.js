@@ -29,11 +29,14 @@ $(function(){
 	});
 });
 function getList() {
-	
-	// navigator.geolocation.getCurrentPosition(function (position) {
-	// 	console.log(position);
-	// 	list_detail(position.coords.latitude, position.coords.longitude);
-	// });
+    var ua = navigator.userAgent;
+    if(!ua.match(/TuttiDeliver/i)) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+            console.log(position);
+            list_detail(position.coords.latitude, position.coords.longitude);
+        });
+        return false;
+    }
 
 	
 	/*var geolocation = new BMap.Geolocation();

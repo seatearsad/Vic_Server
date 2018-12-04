@@ -441,7 +441,7 @@ class Deliver_assignModel extends Model
         }
 
         if(count($comparison) > 0){
-            var_dump($comparison);
+            //var_dump($comparison);
             asort($comparison);
             //key 数组
             $u_list = array_keys($comparison);
