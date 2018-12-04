@@ -151,7 +151,18 @@ class DeliverAction extends BaseAction
 		} else {
 			$where = "`type`= 0 AND " . $where;
 		}
-		$gray_count = D("Deliver_supply")->where($where)->count();
+		//$gray_count = D("Deliver_supply")->where($where)->count();
+		//garfunkel 添加派单逻辑
+        $gray_list = D("Deliver_supply")->where($where)->select();
+        $gray_count = 0;
+        foreach ($gray_list as $k=>$v){
+            $supply_id = $v['supply_id'];
+            $deliver_assign = D('Deliver_assign')->field(true)->where(array('supply_id'=>$supply_id))->find();
+            //派单列表中不存在 || 派单列表中开放 || 指定派单 && 不在转接等候期
+            if(!$deliver_assign || $deliver_assign['deliver_id'] == 0 || $deliver_assign['deliver_id'] == $this->deliver_session['uid']){
+                $gray_count += 1;
+            }
+        }
 		
 		$deliver_count = D('Deliver_supply')->where(array('uid' => $this->deliver_session['uid'], 'status' => array(array('gt', 1), array('lt', 5))))->count();
 		$finish_count = D('Deliver_supply')->where(array('uid' => $this->deliver_session['uid'], 'status' => 5))->count();
@@ -170,7 +181,18 @@ class DeliverAction extends BaseAction
 		} else {
 			$where = "`type`= 0 AND " . $where;
 		}
-		$gray_count = D("Deliver_supply")->where($where)->count();
+		//$gray_count = D("Deliver_supply")->where($where)->count();
+        //garfunkel 添加派单逻辑
+        $gray_list = D("Deliver_supply")->where($where)->select();
+        $gray_count = 0;
+        foreach ($gray_list as $k=>$v){
+            $supply_id = $v['supply_id'];
+            $deliver_assign = D('Deliver_assign')->field(true)->where(array('supply_id'=>$supply_id))->find();
+            //派单列表中不存在 || 派单列表中开放 || 指定派单 && 不在转接等候期
+            if(!$deliver_assign || $deliver_assign['deliver_id'] == 0 || $deliver_assign['deliver_id'] == $this->deliver_session['uid']){
+                $gray_count += 1;
+            }
+        }
 		
 		$deliver_count = D('Deliver_supply')->where(array('uid' => $this->deliver_session['uid'], 'status' => array(array('gt', 0), array('lt', 5))))->count();
 		$finish_count = D('Deliver_supply')->where(array('uid' => $this->deliver_session['uid'], 'status' => 5))->count();
@@ -231,8 +253,12 @@ class DeliverAction extends BaseAction
 				$this->error("抢单失败");
 				exit;
 			}
+            //garfunkel 更新派单状态
+            $assign_data['status'] = 1;
+			$assign_data['grab_deliver_id'] = $this->deliver_session['uid'];
+			D('Deliver_assign')->field(true)->where(array('supply_id'=>$supply_id))->save($assign_data);
 
-			$order_id = $supply['order_id'];
+            $order_id = $supply['order_id'];
 			
 			if ($supply['item'] == 1) {
 				$order = D("Waimai_order")->find($order_id);
@@ -316,8 +342,17 @@ class DeliverAction extends BaseAction
 				$where = "`type`= 0 AND " . $where;
 			}
 			
-			$list = D('Deliver_supply')->field(true)->where($where)->order("`create_time` DESC")->select();
-			
+			//$list = D('Deliver_supply')->field(true)->where($where)->order("`create_time` DESC")->select();
+            //garfunkel 添加派单逻辑
+            $grab_list = D('Deliver_supply')->field(true)->where($where)->order("`create_time` DESC")->select();
+            foreach ($grab_list as $k=>$v){
+                $supply_id = $v['supply_id'];
+                $deliver_assign = D('Deliver_assign')->field(true)->where(array('supply_id'=>$supply_id))->find();
+                //派单列表中不存在 || 派单列表中开放 || 指定派单 && 不在转接等候期
+                if(!$deliver_assign || $deliver_assign['deliver_id'] == 0 || $deliver_assign['deliver_id'] == $this->deliver_session['uid']){
+                    $list[] = $v;
+                }
+            }
 			if (empty($list)) {
 				exit(json_encode(array('err_code' => true)));
 			}
@@ -1500,6 +1535,8 @@ class DeliverAction extends BaseAction
             $data['lng'] = $lng;
             $data['lat'] = $lat;
             D('Deliver_user')->field(true)->where(array('uid'=>$deliver_id))->save($data);
+            $this->deliver_session['lat'] = $lat;
+            $this->deliver_session['lng'] = $lng;
             exit(json_encode(array('error' => 0, 'msg' => 'Success！', 'dom_id' => 'account')));
         }else{
             exit(json_encode(array('error' => 1, 'msg' => 'Fail！', 'dom_id' => 'account')));

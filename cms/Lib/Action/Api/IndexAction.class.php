@@ -1458,7 +1458,7 @@ class IndexAction extends BaseAction
     }
 
     public function updateAssign(){
-        $id = D('Deliver_assign')->assignLogic(9349);
+        $id = D('Deliver_assign')->check_assign();
         //var_dump($id);
     }
 }

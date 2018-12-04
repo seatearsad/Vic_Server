@@ -4,6 +4,7 @@
 <title>Clerk center</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <link href="{pigcms{$static_path}css/diancai.css" rel="stylesheet" type="text/css" />
+<script src="{pigcms{:C('JQUERY_FILE')}"></script>
 <style>
 .green{color:green;}
 .btn{
@@ -51,6 +52,16 @@ cursor: pointer;
     font-family: Arial, Helvetica, sans-serif;
     border: 0;
     -webkit-appearance: none;
+}
+.submit_btn{
+    color: #fff;
+    background-color: #FF658E;
+    top: .15rem;
+    width: 100%;
+    height: 3rem;
+    text-align: center;
+    line-height: 3rem;
+    cursor: pointer;
 }
 </style>
 </head>
@@ -329,10 +340,49 @@ cursor: pointer;
 					<td class="cc"></td>
 					<td class="rr"><span class="price">${pigcms{$order['price']|floatval}</span></td>
 				</tr>
+                <if condition="$order['paid'] eq 1 and $order['status'] eq 0">
+                    <tr>
+                        <td>Meal Time</td>
+                        <td class="cc">
+                            <input type="text" name="dining_time" pattern="^[0-9]*$" data-err="Error" style="height: 2rem">
+                        </td>
+                        <td class="cc" style="text-align: left;">Minutes</td>
+                        <td class="rr"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" style="text-align: center">
+                            <div class="submit_btn" id="submit_div">
+                                Confirm
+                            </div>
+                        </td>
+                    </tr>
+                </if>
 			</tbody>
 		</table>
 	</ul>
 </div>
+<script>
+    var is_send = false;
+    $('#submit_div').click(function () {
+        if(is_send) return false;
+        var time_val = $.trim($('input[name="dining_time"]').val());
+        if(time_val == '' || !/^[0-9]*$/.test(time_val)){
+            alert('Please enter Meal Time！');
+            return false;
+        }
+        is_send = true;
+        $(this).html('Pending……');
+        $.post("{pigcms{:U('Storestaff/shop_order_confirm')}",{order_id:"{pigcms{$order['order_id']}",status:1,dining_time:time_val},function(result){
+            is_send = false;
+            if(result.status == 1){
+                window.location.href = "{pigcms{:U('Storestaff/shop_list')}";
+            }else{
+                window.location.reload();
+            }
+        });
+        return false;
+    });
+</script>
 <div class="footReturn">
 	<div class="clr"></div>
 	<div class="window" id="windowcenter">

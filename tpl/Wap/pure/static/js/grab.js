@@ -21,7 +21,7 @@ $(function(){
 		});
     });
 	getList();
-	var timer = setInterval(getList, 10000);
+	var timer = setInterval(getList, 2000);
 	
 	$(document).on("click", '.go_detail', function(e){
 		e.stopPropagation();
@@ -30,10 +30,10 @@ $(function(){
 });
 function getList() {
 	
-	navigator.geolocation.getCurrentPosition(function (position) {  
-		console.log(position);
-		list_detail(position.coords.latitude, position.coords.longitude);
-	});  
+	// navigator.geolocation.getCurrentPosition(function (position) {
+	// 	console.log(position);
+	// 	list_detail(position.coords.latitude, position.coords.longitude);
+	// });
 
 	
 	/*var geolocation = new BMap.Geolocation();
@@ -53,7 +53,7 @@ function getList() {
 //			alert('failed'+this.getStatus());
 		}        
 	},{enableHighAccuracy: true})*/
-	return false;
+	//return false;
 	console.log(lat + '--------->lng:' + lng);
 	$.get(location_url, {'lat':lat, 'lng':lng}, function(result){
 		if (result.err_code) {

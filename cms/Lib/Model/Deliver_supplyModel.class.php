@@ -126,12 +126,15 @@ class Deliver_supplyModel extends Model
                 $supply['distance'] = round(getDistance($order['lat'], $order['lng'], $store['lat'], $store['long'])/1000, 2);//配送距离
                 $supply['is_hide'] = '0';//是否隐藏 默认为0
 
+                //garfunkel add
+                $supply['dining_time'] = $_POST['dining_time'] ? $_POST['dining_time'] : 20;
+
                 if ($this->create($supply) != false) {
                     if ($addResult = $this->add($supply)) {
                         //推送消息提示
 //                         $this->sendMsg($supply);
                         //garfunkel 添加派单逻辑
-                        //D('Deliver_assign')->createAssign($supply);
+                        D('Deliver_assign')->createAssign($supply,$addResult);
                         return array('error_code' => 0, 'msg' => '接单成功！');
                     } else {
                         return array('error_code' => 1, 'msg' => '保存订单失败');

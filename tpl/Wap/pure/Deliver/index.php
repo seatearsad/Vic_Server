@@ -172,7 +172,7 @@
 							$('#finish_count').html(response.finish_count);
 						}
 					}, 'json');
-				}, 10000);
+				}, 2000);
 	});			
 // 		$(function(){
 // 			var map = new BMap.Map("biz-map");

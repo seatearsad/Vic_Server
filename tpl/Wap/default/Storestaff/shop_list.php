@@ -260,8 +260,9 @@ line-height: .7rem;
 								<elseif condition="$vo['is_pick_in_store'] eq 3 AND $now_store['deliver_type'] neq 5" />
 								<a data-title="接单" class="green edit_btn " style="color: green; float:right" href="{pigcms{:U('Storestaff/mall_order_detail',array('order_id'=>$vo['order_id']))}" js-order="{pigcms{$vo.order_id}">更换配送</a>
 								<else />
-<!--								<a title="操作订单" class="green edit_btn js-add-order js-add-order-{pigcms{$vo.order_id}" style="color: green; float:right" href="javascript:;" js-order="{pigcms{$vo.order_id}">接单</a-->
-								<a title="操作订单" class="green edit_btn js-add-order js-add-order-{pigcms{$vo.order_id}" style="color: #fff;background-color: #FF658E;position: absolute;right: 0rem; top: .15rem;width: 1.2rem;height: .7rem;text-align: center;line-height: .7rem;float:right" href="javascript:;" js-order="{pigcms{$vo.order_id}">接单</a>
+<!--								<a title="操作订单" class="green edit_btn js-add-order js-add-order-{pigcms{$vo.order_id}" style="color: green; float:right" href="javascript:;" js-order="{pigcms{$vo.order_id}">接单</a>
+								<a title="操作订单" class="green edit_btn js-add-order js-add-order-{pigcms{$vo.order_id}" style="color: #fff;background-color: #FF658E;position: absolute;right: 0rem; top: .15rem;width: 1.2rem;height: .7rem;text-align: center;line-height: .7rem;float:right" href="javascript:;" js-order="{pigcms{$vo.order_id}">接单</a-->
+                                    <a title="操作订单" class="green edit_btn" style="color: #fff;background-color: #FF658E;position: absolute;right: 0rem; top: .15rem;width: 1.2rem;height: .7rem;text-align: center;line-height: .7rem;float:right" href="{pigcms{:U('Storestaff/shop_edit',array('order_id'=>$vo['order_id']))}">接单</a>
 								</if>
 							<elseif condition="$vo['status'] eq 1" />
 							<a title="已接单" class="green edit_btn" style="color: green; float:right" href="javascript:;" >已接单</a>

@@ -262,8 +262,9 @@ line-height: .7rem;
 								<elseif condition="$vo['is_pick_in_store'] eq 3 AND $now_store['deliver_type'] neq 5" />
 								<a data-title="Confirm" class="green edit_btn " style="color: green; float:right" href="{pigcms{:U('Storestaff/mall_order_detail',array('order_id'=>$vo['order_id']))}" js-order="{pigcms{$vo.order_id}">Change Delivery</a>
 								<else />
-								<!--a title="Operate order" class="green edit_btn js-add-order js-add-order-{pigcms{$vo.order_id}" style="color: green; float:right" href="javascript:;" js-order="{pigcms{$vo.order_id}">Confirm</a-->
-								<a title="Operate order" class="green edit_btn js-add-order js-add-order-{pigcms{$vo.order_id}" style="color: #fff;background-color: #FF658E;position: absolute;right: 0rem; top: .15rem;width: 1.2rem;height: .7rem;text-align: center;line-height: .7rem;float:right" href="javascript:;" js-order="{pigcms{$vo.order_id}">Confirm</a>
+								<!--a title="Operate order" class="green edit_btn js-add-order js-add-order-{pigcms{$vo.order_id}" style="color: green; float:right" href="javascript:;" js-order="{pigcms{$vo.order_id}">Confirm</a>
+								<a title="Operate order" class="green edit_btn js-add-order js-add-order-{pigcms{$vo.order_id}" style="color: #fff;background-color: #FF658E;position: absolute;right: 0rem; top: .15rem;width: 1.2rem;height: .7rem;text-align: center;line-height: .7rem;float:right" href="javascript:;" js-order="{pigcms{$vo.order_id}">Confirm</a-->
+                                    <a title="操作订单" class="green edit_btn" style="color: #fff;background-color: #FF658E;position: absolute;right: 0rem; top: .15rem;width: 1.2rem;height: .7rem;text-align: center;line-height: .7rem;float:right" href="{pigcms{:U('Storestaff/shop_edit',array('order_id'=>$vo['order_id']))}">Confirm</a>
 								</if>
 							<elseif condition="$vo['status'] eq 1" />
 							<a title="Confirmed" class="green edit_btn" style="color: green; float:right" href="javascript:;" >Confirmed</a>

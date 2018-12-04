@@ -442,7 +442,7 @@ class ShoporderAction extends BaseAction
 
 
 		if ($is_open == 0) {
-			return array('error_code' => true, 'msg' => '店铺休息中');
+			return array('error_code' => true, 'msg' => 'Store closed');
 		}
 		//资质认证
 		if ($this->config['store_shop_auth'] == 1 && $now_store['auth'] < 3) {
