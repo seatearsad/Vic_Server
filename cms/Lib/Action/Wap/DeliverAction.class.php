@@ -133,7 +133,6 @@ class DeliverAction extends BaseAction
 			session('deliver_session', serialize($this->deliver_session));
 			exit;
 		}
-
 		if ($this->deliver_session['store_id']) {
 			$store = D('Merchant_store')->field(true)->where(array('store_id' => $this->deliver_session['store_id']))->find();
 			$store_image_class = new store_image();
@@ -166,8 +165,13 @@ class DeliverAction extends BaseAction
 		
 		$deliver_count = D('Deliver_supply')->where(array('uid' => $this->deliver_session['uid'], 'status' => array(array('gt', 1), array('lt', 5))))->count();
 		$finish_count = D('Deliver_supply')->where(array('uid' => $this->deliver_session['uid'], 'status' => 5))->count();
+
+		//获取送餐员的当前路线
+        $is_route = 0;
+        $route = D('Deliver_route')->where(array('deliver_id'=>$this->deliver_session['uid']))->find();
+        if($route) $is_route = 1;
 		
-		$this->assign(array('gray_count' => $gray_count, 'deliver_count' => $deliver_count, 'finish_count' => $finish_count));
+		$this->assign(array('gray_count' => $gray_count, 'deliver_count' => $deliver_count, 'finish_count' => $finish_count,'is_route'=>$is_route,'route'=>$route));
 		$this->display();
 	}
 	
@@ -324,6 +328,18 @@ class DeliverAction extends BaseAction
 				}
 				D('Shop_order_log')->add_log(array('order_id' => $order_id, 'status' => 3, 'name' => $this->deliver_session['name'], 'phone' => $this->deliver_session['phone']));
 			}
+			//添加送餐员路线记录
+            $route = D('Deliver_route')->where(array('deliver_id'=>$this->deliver_session['uid']))->find();
+			//如果不存在路线记录 去当前订单店铺为第一路线 存在的话不做更改
+			if(!$route){
+                $data['deliver_id'] = $this->deliver_session['uid'];
+                $data['order_id'] = $order_id;
+                $data['destination_lat'] = $supply['from_lat'];
+                $data['destination_lng'] = $supply['from_lnt'];
+                $data['type'] = 0;
+
+                D('Deliver_route')->add($data);
+            }
 			$this->success("抢单成功");exit;
 		}
 		
@@ -609,6 +625,27 @@ class DeliverAction extends BaseAction
 				}
 				D('Shop_order_log')->add_log(array('order_id' => $order_id, 'status' => 5, 'name' => $this->deliver_session['name'], 'phone' => $this->deliver_session['phone']));
 			}
+			//添加送餐员路线记录
+            $where = array('uid'=>$uid,'status' => array(array('gt', 1), array('lt', 5)));
+			//获取该送餐员所有未完成订单
+            $user_order = D('Deliver_supply')->field(true)->where($where)->select();
+            if(count($user_order) == 1){//如果只有一张订单 即当前订单
+                $data['deliver_id'] = $uid;
+                $data['order_id'] = $order_id;
+                $data['destination_lat'] = $supply['aim_lat'];
+                $data['destination_lng'] = $supply['aim_lnt'];
+                $data['type'] = 1;
+            }else{//如果有多张订单 需要进行逻辑判断
+                $data = $this->routeAssign($uid);
+            }
+            //记录去往下一个节点的信息
+            $route = D('Deliver_route')->where(array('deliver_id'=>$uid))->find();
+            if($route){
+                D('Deliver_route')->where(array('deliver_id'=>$uid))->save($data);
+            }else{
+                D('Deliver_route')->add($data);
+            }
+
 			$this->success("更新状态成功");
 			exit;
 		}
@@ -808,6 +845,45 @@ class DeliverAction extends BaseAction
 			} else {
 				D('Deliver_count')->add(array('uid' => $this->deliver_session['uid'], 'today' => $date, 'num' => 1));
 			}
+			//添加送餐员路线记录
+            $where = array('uid'=>$uid,'status' => array(array('gt', 1), array('lt', 5)));
+            //获取该送餐员所有未完成订单
+            $user_order = D('Deliver_supply')->field(true)->where($where)->select();
+            if(count($user_order) == 0){//如果该送餐员已经没有问完成订单 删除他的路线记录
+                D('Deliver_route')->where(array('deliver_id'=>$uid))->delete();
+            }else if(count($user_order) == 1){//如果只有一张未完成订单
+                $curr_supply = $user_order[0];
+                if($curr_supply['status'] == 4){//只差未送到客户手中
+                    $data['deliver_id'] = $uid;
+                    $data['order_id'] = $curr_supply['order_id'];
+                    $data['destination_lat'] = $curr_supply['aim_lat'];
+                    $data['destination_lng'] = $curr_supply['aim_lnt'];
+                    $data['type'] = 1;
+                }else{//尚未取餐
+                    $data['deliver_id'] = $uid;
+                    $data['order_id'] = $curr_supply['order_id'];
+                    $data['destination_lat'] = $curr_supply['from_lat'];
+                    $data['destination_lng'] = $curr_supply['from_lnt'];
+                    $data['type'] = 0;
+                }
+                //记录去往下一个节点的信息
+                $route = D('Deliver_route')->where(array('deliver_id'=>$uid))->find();
+                if($route){
+                    D('Deliver_route')->where(array('deliver_id'=>$uid))->save($data);
+                }else{
+                    D('Deliver_route')->add($data);
+                }
+            }else{//如果有多张订单 需要进行逻辑判断
+                $data = $this->routeAssign($uid);
+                //记录去往下一个节点的信息
+                $route = D('Deliver_route')->where(array('deliver_id'=>$uid))->find();
+                if($route){
+                    D('Deliver_route')->where(array('deliver_id'=>$uid))->save($data);
+                }else{
+                    D('Deliver_route')->add($data);
+                }
+            }
+
 			$this->success("更新状态成功");
 			exit;
 		}
@@ -1542,5 +1618,137 @@ class DeliverAction extends BaseAction
             exit(json_encode(array('error' => 1, 'msg' => 'Fail！', 'dom_id' => 'account')));
         }
 
+    }
+    //送餐员路线逻辑运算 多张订单时
+    public function routeAssign($deliver_id){
+        $where = array('uid'=>$deliver_id,'status' => array(array('gt', 1), array('lt', 5)));
+        //获取该送餐员所有未完成订单
+        $user_order = D('Deliver_supply')->field(true)->where($where)->select();
+        //送餐员的当前位置
+        $deliver_lat = $this->deliver_session['lat'];
+        $delvier_lng = $this->deliver_session['lng'];
+
+        //$distance = getDistance($from_lat,$from_lng,$aim_lat,$aim_lng);
+        /*
+         * 遍历所有节点的距离 选择最短的 记录下第一个节点 添加到送餐员路线记录表中
+         * 如果订单尚未取单 必须先到达餐厅 后才可到客户
+         * 在考虑距离的基础上 如果要去餐厅取餐 添加出餐时间的判断
+         */
+        //先取出所有节点
+        //$c_point['type'] 0 店铺 1客户
+        $points = array();
+        foreach ($user_order as $order){
+            $c_point['order'] = $order;
+            $c_point['status'] = $order['status'];
+            if($order['status'] != 4){//取店铺节点
+                $c_point['lat'] = $order['from_lat'];
+                $c_point['lng'] = $order['from_lnt'];
+                $c_point['type'] = 0;
+                $points[] = $c_point;
+            }
+            //取用户节点
+            $c_point['lat'] = $order['aim_lat'];
+            $c_point['lng'] = $order['aim_lnt'];
+            $c_point['type'] = 1;
+            $points[] = $c_point;
+        }
+
+//        $routes = $this->getRouteList(count($points),count($points),array());
+//        var_dump($routes);
+
+        $min_dis = null;
+        $i = 0;
+        foreach ($points as $point){
+            if($point['status'] != 4 && $point['type'] != 0){
+                continue;
+            }else{
+                $distance = getDistance($deliver_lat,$delvier_lng,$point['lat'],$point['lng']);
+                $data_p['distance'] = $distance;
+                $data_p['point'] = $point;
+
+                $routes[$i] = $data_p;
+                $sort_a[$distance] = $i;
+                $i++;
+            }
+        }
+        //排序
+        sort($sort_a);
+        $record_point = $routes[$sort_a[0]];
+        if($record_point['type'] == 1){//此为一个用户节点 直接记录
+
+        }else{//如果是个餐厅 比较一下到达时间 与出餐时间
+            $chu_time = $record_point['order']['create_time'] + $record_point['order']['dining_time'] * 60;
+            $c_time = $this->getDistanceTime($deliver_lat,$delvier_lng,$record_point['lat'],$record_point['lng']);
+            $dao_time = time() + $c_time*60;
+            //如果到达时间与出餐时间差 的绝对值 小于5分钟 直接记录 并且有下一个节点的话
+            if(abs($chu_time - $dao_time)/60 > 5 && $sort_a[1]){
+                //先记录之前的差值
+                $r_cha = abs($chu_time - $dao_time);
+                //先计算到达下一个节点的时间
+                $test_points = $routes[$sort_a[1]];
+                $time_1 = $this->getDistanceTime($deliver_lat,$delvier_lng,$test_points['lat'],$test_points['lng']);
+                //再计算 此节点到预计节点的时间
+                $time_2 = $this->getDistanceTime($test_points['lat'],$test_points['lng'],$record_point['lat'],$record_point['lng']);
+
+                $all_time = $time_1 + $time_2;
+
+                $new_time = time() + $all_time*60;
+                //计算新的时间差值
+                $n_cha = abs($chu_time - $new_time);
+                if ($n_cha < $r_cha){
+                    $record_point = $routes[$sort_a[1]];
+                }
+            }
+        }
+        $data['deliver_id'] = $deliver_id;
+        $data['order_id'] = $record_point['order']['order_id'];
+        $data['destination_lat'] = $record_point['lat'];
+        $data['destination_lng'] = $record_point['lng'];
+        $data['type'] = $record_point['type'];
+
+        return $data;
+    }
+
+    public function getDistanceTime($from_lat,$from_lng,$aim_lat,$aim_lng){
+        //获取两点之间的距离
+        $distance = getDistance($from_lat,$from_lng,$aim_lat,$aim_lng);
+        //获取预计到达时间
+        $use_time = $distance / 100;
+        //返回值为分钟
+        return $use_time;
+    }
+
+    public function getRouteList($num,$curr,$array){
+	    $all_array = array();
+        for ($i = 1;$i <= $num;$i++){
+            if($num == $curr){
+                if(!in_array($i,$all_array)) {
+                    $all_array[] = $i;
+                    $array[] = $i;
+                    $next_num = $curr - 1;
+                    if($next_num > 0){
+                        $array = $this->getRouteList($num,$next_num,$array);
+                        $all_list[] = implode(',',$array);
+                        $array = array();
+                    }
+                }
+            }else{
+                if(in_array($i,$array)){
+                    continue;
+                }else{
+                    $array[] = $i;
+                    $next_num = $curr - 1;
+                    if($next_num > 0){
+                        $array = $this->getRouteList($num,$next_num,$array);
+                        return $array;
+                    }else{
+                        echo "henhao<br>";
+                        $all_list[] = implode(',',$array);
+                    }
+                }
+            }
+        }
+        return $all_list;
+//        $this->getRouteList($num,$num,array());
     }
 }

@@ -106,93 +106,100 @@
 <!-- 	<script src="http://api.map.baidu.com/api?type=quick&ak=4c1bb2055e24296bbaef36574877b4e2&v=1.0"></script> -->
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&libraries=places&language={pigcms{:C('DEFAULT_LANG')}"></script>
 	<script type="text/javascript">
-	$(function(){
-		map = new google.maps.Map(document.getElementById('biz-map'), {
-			center: {lat:{pigcms{$deliver_session['lat']}, lng:{pigcms{$deliver_session['lng']}},
-			zoom: 16
-		});
-        var ua = navigator.userAgent;
-        if(!ua.match(/TuttiDeliver/i)) {
-            navigator.geolocation.getCurrentPosition(function (position) {
-                console.log(position);
-                //list_detail(position.coords.latitude, position.coords.longitude);
-                map.setCenter({lat: position.coords.latitude, lng: position.coords.longitude});
-
-                //我的图标
-                var marker = new google.maps.Marker({
-                    position: {lng: position.coords.longitude, lat: position.coords.latitude},
-                    map: map,
-                    icon: "{pigcms{$static_path}images/map/my_pos.png"
-                });
-
-            });
-        }
-/*
-			var geolocation = new BMap.Geolocation();
-			geolocation.getCurrentPosition(function(r){
-				if(this.getStatus() == BMAP_STATUS_SUCCESS){
-					console.log(r);
-					map.setCenter({lat: r.point.lat, lng:r.point.lng});
-					var marker = new google.maps.Marker({
-						position: map.getCenter(),
-						map: map
-					});
-				}
-				else {
-					alert('failed'+this.getStatus());
-				}        
-			},{enableHighAccuracy: true})*/
-
-
-	
-
-// 				var map = new BMap.Map("biz-map");
-// 				var point = new BMap.Point({pigcms{$deliver_session['lng']}, {pigcms{$deliver_session['lat']});
-// 				map.centerAndZoom(point, 16);
-
-// 				var geolocation = new BMap.Geolocation();
-// 				geolocation.getCurrentPosition(function(r){
-// 					if(this.getStatus() == BMAP_STATUS_SUCCESS){
-// 						map.panTo(r.point);
-// 						var mk = new BMap.Marker(r.point);
-// 						map.addOverlay(mk);
-// // 						mk.setAnimation(BMAP_ANIMATION_BOUNCE); 
-// // 						alert('您的位置：'+r.point.lng+','+r.point.lat);
-// 					}
-// 					else {
-// 						alert('failed'+this.getStatus());
-// 					}        
-// 				},{enableHighAccuracy: true})
-
-				setInterval(function(){
-					$.get("{pigcms{:U('Deliver/index_count')}", function(response){
-						if (response.err_code == false) {
-							$('#gray_count').html(response.gray_count);
-							$('#deliver_count').html(response.deliver_count);
-							$('#finish_count').html(response.finish_count);
-						}
-					}, 'json');
-				}, 2000);
-	});			
-// 		$(function(){
-// 			var map = new BMap.Map("biz-map");
-// 			map.centerAndZoom(new BMap.Point({pigcms{$deliver_session['lng']}, {pigcms{$deliver_session['lat']}), 16);
-			
-// 			$.getScript("http://api.map.baidu.com/getscript?v=2.0&ak=4c1bb2055e24296bbaef36574877b4e2",function(){
-// 				var geolocation = new BMap.Geolocation();
-// 				geolocation.getCurrentPosition(function(r){
-// 					if(this.getStatus() == BMAP_STATUS_SUCCESS){
-// 						var mk = new BMap.Marker(r.point);
-// 						map.addOverlay(mk);
-// 						map.panTo(r.point);
-// 					} else {
-// 						alert('failed'+this.getStatus());
-// 					}        
-// 				},{enableHighAccuracy: true})
-// 			});
+// 	$(function(){
+// 		map = new google.maps.Map(document.getElementById('biz-map'), {
+// 			center: {lat:{pigcms{$deliver_session['lat']}, lng:{pigcms{$deliver_session['lng']}},
+// 			zoom: 16
 // 		});
-        function appToPosition(lat,long){
+//         var ua = navigator.userAgent;
+//         if(!ua.match(/TuttiDeliver/i)) {
+//             navigator.geolocation.getCurrentPosition(function (position) {
+//                 console.log(position);
+//                 //list_detail(position.coords.latitude, position.coords.longitude);
+//                 map.setCenter({lat: position.coords.latitude, lng: position.coords.longitude});
+//
+//                 //我的图标
+//                 var marker = new google.maps.Marker({
+//                     position: {lng: position.coords.longitude, lat: position.coords.latitude},
+//                     map: map,
+//                     icon: "{pigcms{$static_path}images/map/my_pos.png"
+//                 });
+//
+//             });
+//         }
+// /*
+// 			var geolocation = new BMap.Geolocation();
+// 			geolocation.getCurrentPosition(function(r){
+// 				if(this.getStatus() == BMAP_STATUS_SUCCESS){
+// 					console.log(r);
+// 					map.setCenter({lat: r.point.lat, lng:r.point.lng});
+// 					var marker = new google.maps.Marker({
+// 						position: map.getCenter(),
+// 						map: map
+// 					});
+// 				}
+// 				else {
+// 					alert('failed'+this.getStatus());
+// 				}        
+// 			},{enableHighAccuracy: true})*/
+//
+//
+//	
+//
+// // 				var map = new BMap.Map("biz-map");
+// // 				var point = new BMap.Point({pigcms{$deliver_session['lng']}, {pigcms{$deliver_session['lat']});
+// // 				map.centerAndZoom(point, 16);
+//
+// // 				var geolocation = new BMap.Geolocation();
+// // 				geolocation.getCurrentPosition(function(r){
+// // 					if(this.getStatus() == BMAP_STATUS_SUCCESS){
+// // 						map.panTo(r.point);
+// // 						var mk = new BMap.Marker(r.point);
+// // 						map.addOverlay(mk);
+// // // 						mk.setAnimation(BMAP_ANIMATION_BOUNCE); 
+// // // 						alert('您的位置：'+r.point.lng+','+r.point.lat);
+// // 					}
+// // 					else {
+// // 						alert('failed'+this.getStatus());
+// // 					}        
+// // 				},{enableHighAccuracy: true})
+//
+// 				setInterval(function(){
+// 					$.get("{pigcms{:U('Deliver/index_count')}", function(response){
+// 						if (response.err_code == false) {
+// 							$('#gray_count').html(response.gray_count);
+// 							$('#deliver_count').html(response.deliver_count);
+// 							$('#finish_count').html(response.finish_count);
+// 						}
+// 					}, 'json');
+// 				}, 2000);
+// 	});			
+// // 		$(function(){
+// // 			var map = new BMap.Map("biz-map");
+// // 			map.centerAndZoom(new BMap.Point({pigcms{$deliver_session['lng']}, {pigcms{$deliver_session['lat']}), 16);
+//			
+// // 			$.getScript("http://api.map.baidu.com/getscript?v=2.0&ak=4c1bb2055e24296bbaef36574877b4e2",function(){
+// // 				var geolocation = new BMap.Geolocation();
+// // 				geolocation.getCurrentPosition(function(r){
+// // 					if(this.getStatus() == BMAP_STATUS_SUCCESS){
+// // 						var mk = new BMap.Marker(r.point);
+// // 						map.addOverlay(mk);
+// // 						map.panTo(r.point);
+// // 					} else {
+// // 						alert('failed'+this.getStatus());
+// // 					}        
+// // 				},{enableHighAccuracy: true})
+// // 			});
+// // 		});
+        var is_route = {pigcms{$is_route};
+        var self_position = new google.maps.LatLng({pigcms{$deliver_session['lat']}, {pigcms{$deliver_session['lng']});
+        var mapOptions = {
+            zoom: 16,
+            center: self_position
+        }
 
+        var map = new google.maps.Map(document.getElementById('biz-map'), mapOptions);
+        function appToPosition(lat,long){
             alert("From App");
             map.setCenter({lat:lat, lng:long});
             //我的图标
@@ -204,6 +211,55 @@
 
             return "{pigcms{$deliver_session['uid']}";
         }
-	</script>
+
+        function loadPosition(){
+            var marker = new google.maps.Marker({
+                position: self_position,
+                map: map,
+                icon:"{pigcms{$static_path}images/map/my_pos.png"
+            });
+        }
+
+
+        $(function () {
+            if(is_route == 1){//如果已有路线规划 显示路线图
+                loadRoute();
+            }else{
+                loadPosition();
+            }
+
+            setInterval(function(){
+                $.get("{pigcms{:U('Deliver/index_count')}", function(response){
+                    if (response.err_code == false) {
+                        $('#gray_count').html(response.gray_count);
+                        $('#deliver_count').html(response.deliver_count);
+                        $('#finish_count').html(response.finish_count);
+                    }
+                }, 'json');
+            }, 2000);
+        })
+
+        function loadRoute() {
+            var directionsService = new google.maps.DirectionsService();
+            var directionsDisplay = new google.maps.DirectionsRenderer();
+            var haight = self_position;
+            var oceanBeach = new google.maps.LatLng({pigcms{$route['destination_lat']}, {pigcms{$route['destination_lng']});
+
+            directionsDisplay.setMap(map);
+
+
+            //var selectedMode = document.getElementById('biz-map').value;
+            var request = {
+                origin: haight,
+                destination: oceanBeach,
+                travelMode: 'DRIVING'
+            };
+            directionsService.route(request, function (response, status) {
+                if (status == 'OK') {
+                    directionsDisplay.setDirections(response);
+                }
+            });
+        }
+    </script>
 </body>
 </html>
