@@ -133,6 +133,8 @@ class DeliverAction extends BaseAction
 			session('deliver_session', serialize($this->deliver_session));
 			exit;
 		}
+//		$data = $this->routeAssign($this->deliver_session['uid']);
+//		var_dump($data);die();
 		if ($this->deliver_session['store_id']) {
 			$store = D('Merchant_store')->field(true)->where(array('store_id' => $this->deliver_session['store_id']))->find();
 			$store_image_class = new store_image();
@@ -637,6 +639,7 @@ class DeliverAction extends BaseAction
                 $data['type'] = 1;
             }else{//如果有多张订单 需要进行逻辑判断
                 $data = $this->routeAssign($uid);
+                var_dump($data);die();
             }
             //记录去往下一个节点的信息
             $route = D('Deliver_route')->where(array('deliver_id'=>$uid))->find();
@@ -1700,11 +1703,12 @@ class DeliverAction extends BaseAction
                 }
             }
         }
+
         $data['deliver_id'] = $deliver_id;
-        $data['order_id'] = $record_point['order']['order_id'];
-        $data['destination_lat'] = $record_point['lat'];
-        $data['destination_lng'] = $record_point['lng'];
-        $data['type'] = $record_point['type'];
+        $data['order_id'] = $record_point['point']['order']['order_id'];
+        $data['destination_lat'] = $record_point['point']['lat'];
+        $data['destination_lng'] = $record_point['point']['lng'];
+        $data['type'] = $record_point['point']['type'];
 
         return $data;
     }
