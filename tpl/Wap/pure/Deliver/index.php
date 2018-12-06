@@ -243,8 +243,7 @@
             var directionsService = new google.maps.DirectionsService();
             var directionsDisplay = new google.maps.DirectionsRenderer();
             var haight = self_position;
-            if(is_route == 1)
-                var oceanBeach = new google.maps.LatLng({pigcms{$route['destination_lat']}, {pigcms{$route['destination_lng']});
+            var oceanBeach = new google.maps.LatLng({pigcms{$route['destination_lat']?$route['destination_lat']:0}, {pigcms{$route['destination_lng']?$route['destination_lng']:0});
 
             directionsDisplay.setMap(map);
 
