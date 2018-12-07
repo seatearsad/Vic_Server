@@ -1420,6 +1420,7 @@ class IndexAction extends BaseAction
             $recharge_list[$v_a[0]] = $v_a[1];
         }
 
+        krsort($recharge_list);
         $this->returnCode(0,'info',$recharge_list,'success');
     }
 

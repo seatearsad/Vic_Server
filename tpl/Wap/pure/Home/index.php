@@ -67,13 +67,13 @@
 <if condition="$config['many_city']">
     <div id="cityBtn" class="link-url" data-url="{pigcms{:U('Changecity/index')}">{pigcms{$config.now_select_city.area_name}</div>
 </if>
-<div id="locaitonBtn" class="link-url" data-url="{pigcms{:U('Merchant/around')}"></div>
-<div id="searchBox">
+<div id="locaitonBtn" class="link-url" data-url="{pigcms{:U('Home/address')}"></div>
+<!--div id="searchBox">
     <a href="{pigcms{:U('Search/index')}">
         <i class="icon-search"></i>
         <span>{pigcms{:L('_INPUT_WANT_FIND_')}</span>
     </a>
-</div>
+</div-->
 <div class="lang_div_wap">
     <div class="lang_curr_wap">
         <php>if(C('DEFAULT_LANG') == 'zh-cn') echo L('_CHINESE_TXT_'); else echo L('_ENGLISH_TXT_');</php>

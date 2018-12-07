@@ -291,6 +291,10 @@ class HomeAction extends BaseAction{
 
 		}
 	}
+
+	public function address(){
+	    $this->display();
+    }
 }
 
 ?>
