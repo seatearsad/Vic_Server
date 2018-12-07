@@ -729,7 +729,7 @@ class DeliverAction extends BaseAction
 			$columns['end_time'] = time();
 
 			if ($supply['type'] == 0 && $supply['pay_type'] == 'offline') {
-				$columns['pay_type'] = '';
+				$columns['pay_type'] = 'Cash';
 			}
 				
 			$result = $this->deliver_supply->where(array("supply_id"=>$supply_id, 'status'=>4))->data($columns)->save();
@@ -803,7 +803,7 @@ class DeliverAction extends BaseAction
 					if ($order['is_pick_in_store'] == 0) {//平台配送
 						if ($order['paid'] == 0 || ($order['pay_type'] == 'offline' && empty($order['third_id']))) {
 							$data['paid'] = $order['paid'] == 0 ? 1 : $order['paid'];
-							$data['pay_type'] = '';
+							$data['pay_type'] = 'Cash';
 							$data['balance_pay'] = $supply['deliver_cash'];
 							$order['balance_pay'] = $supply['deliver_cash'];
 						}
