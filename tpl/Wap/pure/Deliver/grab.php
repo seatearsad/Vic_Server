@@ -18,7 +18,7 @@
 <!-- 	<script type="text/javascript" src="{pigcms{$static_path}js/common.js?210" charset="utf-8"></script> -->
 	<script type="text/javascript">
 		var location_url = "{pigcms{:U('Deliver/grab')}", detail_url = "{pigcms{:U('Deliver/detail')}", lat = "{pigcms{$deliver_session['lat']}", lng = "{pigcms{$deliver_session['lng']}", static_path = "{pigcms{$static_path}";
-
+        var reject_url = "{pigcms{:U('Deliver/reject')}";
         //ios app 更新位置
         function updatePosition(lat,lng){
             var message = '';
@@ -86,12 +86,15 @@
 	</div>
 	<div class="Namelist p10 f14">
 		<h2 class="f15 c3">{{ d.list[i].name }} <span class="c6"><a href="tel:{{ d.list[i].phone }}">{{ d.list[i].phone }}</a></span></h2>
-		<p class="c9">{pigcms{:L('_EXPECTED_TIME_')}：{{ d.list[i].appoint_time }}</p>
-		<p class="red">{pigcms{:L('_TOTAL_RECE_')}：<i>${{ d.list[i].deliver_cash }}</i></p>
-		<p class="red">{pigcms{:L('_C_DISTANCE_')}:{{ d.list[i].distance }}(KM)，{pigcms{:L('_DELI_PRICE_')}:${{ d.list[i].freight_charge }},{pigcms{:L('_TIP_TXT_')}:${{d.list[i].tip_charge}}</p>
+        <p class="c9">{pigcms{:L('_MEAL_TIME_')}：{{ d.list[i].meal_time }}</p>
+        <p class="c9">{pigcms{:L('_EXPECTED_TIME_')}：{{ d.list[i].appoint_time }}</p>
+		<!--p class="red">{pigcms{:L('_TOTAL_RECE_')}：<i>${{ d.list[i].deliver_cash }}</i></p-->
+		<p class="red">{pigcms{:L('_C_DISTANCE_')}:{{ d.list[i].distance }}(KM)
+            <!--，{pigcms{:L('_DELI_PRICE_')}:${{ d.list[i].freight_charge }},{pigcms{:L('_TIP_TXT_')}:${{d.list[i].tip_charge}} --></p>
 	</div>
 	<div class="sign_bottom">
-		<a href="javascript:void(0);" class="rob" data-spid="{{ d.list[i].supply_id }}">{pigcms{:L('_TICK_ORDER_')}</a>
+		<a href="javascript:void(0);" class="rob" data-spid="{{ d.list[i].supply_id }}">{pigcms{:L('_D_ACCEPT_ORDER_')}</a>
+        <a href="javascript:void(0);" class="rej" data-spid="{{ d.list[i].supply_id }}">{pigcms{:L('_D_REJECT_ORDER_')}</a>
 	</div>
 </section>
 {{# } }}

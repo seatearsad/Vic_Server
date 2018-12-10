@@ -48,17 +48,16 @@
                         <h2>{pigcms{:L('_DELI_PRICE_')}</h2>
                     </a>
                 </li>
-                <if condition="empty($deliver_session['store_id'])">
                 <li>
                     <a href="javascript:void(0);">
-                        <div class="c80">
-                            <img src="{pigcms{$static_path}images/tjt_17.png" width=20 height=20>
-                            <p><i></i>{pigcms{$change_count|default=0}</p>
+                        <div class="c07">
+                            <img src="{pigcms{$static_path}images/tjt_22.png" width=15 height=20>
+                            <p><i>$</i>{pigcms{$tip|default=0}</p>
                         </div>
-                        <h2>{pigcms{:L('_SYS_TRAN_ORDER_')}</h2>
+                        <h2>{pigcms{:L('_TIP_TXT_')}</h2>
                     </a>
                 </li>
-                </if>
+
                 <li>
                     <a href="javascript:void(0);">
                         <div class="cff">
@@ -78,6 +77,17 @@
                         <h2>{pigcms{:L('_SYS_ASS_ORDER_')}</h2>
                     </a>
                 </li>
+                </if>
+                <if condition="empty($deliver_session['store_id'])">
+                    <li>
+                        <a href="javascript:void(0);">
+                            <div class="c80">
+                                <img src="{pigcms{$static_path}images/tjt_17.png" width=20 height=20>
+                                <p><i></i>{pigcms{$change_count|default=0}</p>
+                            </div>
+                            <h2>{pigcms{:L('_SYS_TRAN_ORDER_')}</h2>
+                        </a>
+                    </li>
                 </if>
                 <li>
                     <a href="javascript:void(0);">

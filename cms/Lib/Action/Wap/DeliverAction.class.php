@@ -159,8 +159,9 @@ class DeliverAction extends BaseAction
         foreach ($gray_list as $k=>$v){
             $supply_id = $v['supply_id'];
             $deliver_assign = D('Deliver_assign')->field(true)->where(array('supply_id'=>$supply_id))->find();
+            $record_array = explode(',',$deliver_assign['record']);
             //派单列表中不存在 || 派单列表中开放 || 指定派单 && 不在转接等候期
-            if(!$deliver_assign || $deliver_assign['deliver_id'] == 0 || $deliver_assign['deliver_id'] == $this->deliver_session['uid']){
+            if(!$deliver_assign || ($deliver_assign['deliver_id'] == 0 && !in_array($this->deliver_session['uid'],$record_array)) || $deliver_assign['deliver_id'] == $this->deliver_session['uid']){
                 $gray_count += 1;
             }
         }
@@ -194,8 +195,9 @@ class DeliverAction extends BaseAction
         foreach ($gray_list as $k=>$v){
             $supply_id = $v['supply_id'];
             $deliver_assign = D('Deliver_assign')->field(true)->where(array('supply_id'=>$supply_id))->find();
+            $record_array = explode(',',$deliver_assign['record']);
             //派单列表中不存在 || 派单列表中开放 || 指定派单 && 不在转接等候期
-            if(!$deliver_assign || $deliver_assign['deliver_id'] == 0 || $deliver_assign['deliver_id'] == $this->deliver_session['uid']){
+            if(!$deliver_assign || ($deliver_assign['deliver_id'] == 0 && !in_array($this->deliver_session['uid'],$record_array)) || $deliver_assign['deliver_id'] == $this->deliver_session['uid']){
                 $gray_count += 1;
             }
         }
@@ -224,6 +226,45 @@ class DeliverAction extends BaseAction
 		}
 		$this->deliver_supply->where(array("supply_id" => $supply_id))->save($data);
 	}
+
+	//拒单
+	public function reject(){
+	    if(IS_POST && $_POST['supply_id']){
+            $supply_id = $_POST['supply_id'];
+            $supply = $this->deliver_supply->field(true)->where(array('supply_id' => $supply_id))->find();
+            if (empty($supply)) {
+                $this->error("配送信息错误");
+                exit;
+            }
+
+            $assign = D('Deliver_assign')->field(true)->where(array('supply_id'=>$supply_id))->find();
+            if (empty($assign)) {//如果派单记录不存在 添加一个
+                $data['order_id'] = $supply['order_id'];
+                $data['supply_id'] = $supply_id;
+                $data['deliver_id'] = 0;
+                $data['assign_time'] = time();
+                $data['assign_num'] = 0;
+                $data['record'] = $this->deliver_session['uid'];
+
+                D('Deliver_assign')->field(true)->add($data);
+            }else{//如果派单记录存在
+                if($assign['deliver_id'] == $this->deliver_session['uid']){
+                    $data['deliver_id'] = -1;
+                    $data['status'] = 99;
+                }
+
+                $data['assign_time'] = time();
+                //如果该送餐员没在记录列表中 添加记录该送餐员
+                $record_array = explode(',',$assign);
+                if(!in_array($this->deliver_session['uid'],$record_array)){
+                    $data['record'] = $assign['record'].','.$this->deliver_session['uid'];
+                }
+                D('Deliver_assign')->field(true)->where(array('supply_id'=>$supply_id))->save($data);
+            }
+
+            $this->success("拒单成功");exit;
+        }
+    }
 	//抢
 	public function grab()
 	{
@@ -366,8 +407,9 @@ class DeliverAction extends BaseAction
             foreach ($grab_list as $k=>$v){
                 $supply_id = $v['supply_id'];
                 $deliver_assign = D('Deliver_assign')->field(true)->where(array('supply_id'=>$supply_id))->find();
-                //派单列表中不存在 || 派单列表中开放 || 指定派单 && 不在转接等候期
-                if(!$deliver_assign || $deliver_assign['deliver_id'] == 0 || $deliver_assign['deliver_id'] == $this->deliver_session['uid']){
+                $record_array = explode(',',$deliver_assign['record']);
+                //派单列表中不存在 || 派单列表中开放 && 未拒单 || 指定派单 && 不在转接等候期
+                if(!$deliver_assign || ($deliver_assign['deliver_id'] == 0 && !in_array($this->deliver_session['uid'],$record_array)) || $deliver_assign['deliver_id'] == $this->deliver_session['uid']){
                     $list[] = $v;
                 }
             }
@@ -392,12 +434,15 @@ class DeliverAction extends BaseAction
 				$val['deliver_cash'] = floatval($val['deliver_cash']);
 				$val['distance'] = floatval($val['distance']);
 				$val['freight_charge'] = floatval($val['freight_charge']);
+                $val['meal_time'] = date('Y-m-d H:i',($val['create_time'] + $val['dining_time']*60));
 				$val['create_time'] = date('Y-m-d H:i', $val['create_time']);
 				$val['appoint_time'] = date('Y-m-d H:i', $val['appoint_time']);
 				$val['order_time'] = $val['order_time'] ? date('Y-m-d H:i', $val['order_time']) : '--';
 				$val['real_orderid'] = $val['real_orderid'] ? $val['real_orderid'] : $val['order_id'];
 				$val['store_distance'] = getRange(getDistance($val['from_lat'], $val['from_lnt'], $lat, $lng));
 				$val['map_url'] = U('Deliver/map', array('supply_id' => $val['supply_id']));
+
+
 
 				$order = D('Shop_order')->get_order_by_orderid($val['order_id']);
 				$val['tip_charge'] = $order['tip_charge'];
@@ -1423,7 +1468,7 @@ class DeliverAction extends BaseAction
 		if ($begin_time && $end_time) {
 			$where['end_time'] = array(array('gt', strtotime($begin_time)), array('lt', strtotime($end_time . '23:59:59')));
 		}
-		
+
 		$result = D('Deliver_supply')->field('sum(deliver_cash) as offline_money, sum(money-deliver_cash) as online_money, sum(freight_charge) as freight_charge')->where($where)->find();
 		
 		$count_list = D('Deliver_supply')->field('count(1) as cnt, get_type')->where($where)->group('get_type')->select();
@@ -1439,6 +1484,30 @@ class DeliverAction extends BaseAction
 		}
 		$result['begin_time'] = $begin_time;
 		$result['end_time'] = $end_time;
+
+        $b_date = $_GET['begin_time'].' 00:00:00';
+        $e_date = $_GET['end_time'].' 24:00:00';
+
+        $b_time = strtotime($b_date);
+        $e_time = strtotime($e_date);
+
+        $sql = "SELECT s.order_id, s.create_time,s.uid,s.freight_charge, u.name, u.phone,o.tip_charge,o.price,o.pay_type,o.coupon_price FROM " . C('DB_PREFIX') . "deliver_supply AS s INNER JOIN " . C('DB_PREFIX') . "deliver_user AS u ON s.uid=u.uid LEFT JOIN " . C('DB_PREFIX') . "shop_order AS o ON s.order_id=o.order_id";
+
+        $sql .= ' where s.uid = '.$this->deliver_session['uid'].' and s.status = 5 and o.is_del = 0';
+        if ($begin_time && $end_time)
+            $sql .= ' and s.create_time >='.$b_time.' and s.create_time <='.$e_time;
+        $list = D()->query($sql);
+        foreach ($list as $k=>$v){
+            $result['tip'] = $result['tip'] ? $result['tip'] + $v['tip_charge'] : $v['tip_charge'];
+            if($v['coupon_price'] > 0) $v['price'] = $v['price'] - $v['coupon_price'];
+
+            if($v['pay_type'] != 'moneris' && $v['pay_type'] != ''){//统计现金
+                $result['offline_money'] = $result['offline_money'] ? $result['offline_money'] + $v['price'] : $v['price'];
+            }else{
+                $result['online_money'] = $result['online_money'] ? $result['online_money'] + $v['price'] : $v['price'];
+            }
+        }
+
 		$this->assign($result);
 		$this->display();
 	}

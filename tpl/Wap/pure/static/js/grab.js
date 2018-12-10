@@ -13,19 +13,40 @@ $(function(){
 		$.post(location_url, "supply_id="+supply_id, function(json){
 			mark = 0;
 			if (json.status) {
-				layer.open({title:['抢单提示：','background-color:#FF658E;color:#fff;'],content:json.info,btn: ['确定'],end:function(){}});
+				layer.open({title:['抢单提示：','background-color:#FF658E;color:#fff;'],content:json.info,btn: ['Confirm'],end:function(){}});
 			} else {
-				layer.open({title:['抢单提示：','background-color:#FF658E;color:#fff;'],content:json.info,btn: ['确定'],end:function(){}});
+				layer.open({title:['抢单提示：','background-color:#FF658E;color:#fff;'],content:json.info,btn: ['Confirm'],end:function(){}});
 			}
 			$(".supply_"+supply_id).remove();
 		});
     });
+
+    $(document).on('click', '.rej', function(e){
+        if (mark) {
+            return false;
+        }
+        mark = 1;
+
+        e.stopPropagation();
+        var supply_id = $(this).attr("data-spid");
+        //alert(supply_id);
+        $.post(reject_url, "supply_id="+supply_id, function(json){
+            mark = 0;
+            if (json.status) {
+                layer.open({title:['提示：','background-color:#FF658E;color:#fff;'],content:json.info,btn: ['Confirm'],end:function(){}});
+            } else {
+                layer.open({title:['提示：','background-color:#FF658E;color:#fff;'],content:json.info,btn: ['Confirm'],end:function(){}});
+            }
+            $(".supply_"+supply_id).remove();
+        });
+    });
 	getList();
-	var timer = setInterval(getList, 2000);
+	//var timer = setInterval(getList, 2000);
 	
 	$(document).on("click", '.go_detail', function(e){
-		e.stopPropagation();
-		location.href = detail_url + '&supply_id=' + $(this).attr("data-id");
+		//e.stopPropagation();
+		//先关闭查看订单详情
+		//location.href = detail_url + '&supply_id=' + $(this).attr("data-id");
 	});
 });
 function getList() {
