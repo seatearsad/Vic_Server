@@ -2174,7 +2174,8 @@ class StoreAction extends BaseAction{
 			$rs = D('Deliver_user')->field(true)->where(array('status' => 1, 'work_status' => 0))->select();
 			foreach($rs as $r){
 				$sms_data = [
-					'tplid' => 86914,
+//					'tplid' => 86914,
+                    'tplid' => 247173,
 					'mobile' => $r['phone'],
 					'params' => [],
 					'content' => '有一个新的订单可以配送，请前往个人中心抢单。'

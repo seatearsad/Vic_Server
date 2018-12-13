@@ -5,6 +5,7 @@
 					<a href="{pigcms{:U('Deliver/user')}" class="on">配送员管理</a>|
 					<a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Deliver/user_add')}','添加配送员',680,560,true,false,false,editbtn,'edit',true);">添加配送员</a>
 					<a href="{pigcms{:U('Config/index',array('galias'=>'deliver','header'=>'Deliver/header'))}">配送配置</a>
+                    <a href="{pigcms{:U('Deliver/map')}">配送员监控</a>
 				</ul>
 			</div>
 			<table class="search_table" width="100%">

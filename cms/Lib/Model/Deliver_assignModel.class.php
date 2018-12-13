@@ -30,6 +30,8 @@ class Deliver_assignModel extends Model
         $data['record'] = $data['deliver_id'];
 
         $this->field(true)->add($data);
+
+        $this->sendMsg($data['deliver_id']);
     }
     //最简单的逻辑
     public function easyLogic($supply_id)
@@ -78,9 +80,16 @@ class Deliver_assignModel extends Model
             //上一个指派超时未抢
             if($v['status'] == 0 && $list[$k]['cha'] > self::CHANGE_TIME){
                 //总派单次数已到
-
                 if((int)$v['assign_num'] >= self::CHANGE_TOTAL_TIMES){
                     $data['deliver_id'] = 0;
+                    //群发短信
+                    $user_list = D('Deliver_user')->field(true)->where(array('status'=>1,'work_status'=>0))->order('uid asc')->select();
+                    $record = explode(',',$v['record']);
+                    foreach ($user_list as $deliver){
+                        if(!in_array($deliver['uid'],$record)){
+                            $this->sendMsg($deliver['uid']);
+                        }
+                    }
                 }else{//准备变换派单人选
                     $data['deliver_id'] = -1;
                     $data['status'] = 99;
@@ -95,6 +104,8 @@ class Deliver_assignModel extends Model
                 $data['assign_num'] = $v['assign_num'] + 1;
                 $data['record'] = $v['record'].','.$data['deliver_id'];
                 $this->field(true)->where($where)->save($data);
+
+                $this->sendMsg($data['deliver_id']);
             }
         }
         var_dump($list);
@@ -482,6 +493,18 @@ class Deliver_assignModel extends Model
         $use_time = $distance / 100;
         //返回值为分钟
         return $use_time;
+    }
+
+    private function sendMsg($uid){
+        $deliver = D('Deliver_user')->field(true)->where(array('uid'=>$uid))->find();
+        $sms_data = [
+            'mobile' => $deliver['phone'],
+//            'tplid' => 86914,
+            'tplid'=>247173,
+            'params' => [],
+            'content' => '有一个新的订单可以配送，请前往个人中心抢单。'
+        ];
+        Sms::sendSms2($sms_data);
     }
 
 //    public function getDistance($from,$aim){

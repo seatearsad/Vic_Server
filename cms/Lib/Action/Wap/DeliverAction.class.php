@@ -446,7 +446,9 @@ class DeliverAction extends BaseAction
 
 				$order = D('Shop_order')->get_order_by_orderid($val['order_id']);
 				$val['tip_charge'] = $order['tip_charge'];
-				$val['uid'] = $order['uid'];
+                $val['uid'] = $order['uid'];
+                $store = D('Merchant_store')->field(true)->where(array('store_id'=>$val['store_id']))->find();
+                $val['store_name'] = lang_substr($store['name'],C('DEFAULT_LANG'));
 			}
 			exit(json_encode(array('err_code' => false, 'list' => $list)));
 		}
@@ -712,6 +714,7 @@ class DeliverAction extends BaseAction
 		foreach ($list as &$val) {
 			switch ($val['pay_type']) {
 				case 'offline':
+                case 'Cash':
 					$val['pay_method'] = 0;
 					break;
 				default:
@@ -737,6 +740,9 @@ class DeliverAction extends BaseAction
 				$val['change_name'] = $this->getDeliverUser($uid);
 			}
 
+            $order = D('Shop_order')->get_order_by_orderid($val['order_id']);
+            $val['tip_charge'] = $order['tip_charge'];
+            $val['uid'] = $order['uid'];
             $store = D('Merchant_store')->field(true)->where(array('store_id'=>$val['store_id']))->find();
             $val['store_name'] = lang_substr($store['name'],C('DEFAULT_LANG'));
 		}
@@ -951,6 +957,7 @@ class DeliverAction extends BaseAction
 		foreach ($list as &$val) {
 			switch ($val['pay_type']) {
 				case 'offline':
+                case 'Cash':
 					$val['pay_method'] = 0;
 					break;
 				default:
@@ -1491,24 +1498,62 @@ class DeliverAction extends BaseAction
         $b_time = strtotime($b_date);
         $e_time = strtotime($e_date);
 
-        $sql = "SELECT s.order_id, s.create_time,s.uid,s.freight_charge, u.name, u.phone,o.tip_charge,o.price,o.pay_type,o.coupon_price FROM " . C('DB_PREFIX') . "deliver_supply AS s INNER JOIN " . C('DB_PREFIX') . "deliver_user AS u ON s.uid=u.uid LEFT JOIN " . C('DB_PREFIX') . "shop_order AS o ON s.order_id=o.order_id";
+        $sql = "SELECT s.*, u.name, u.phone,o.tip_charge,o.price,o.pay_type,o.coupon_price FROM " . C('DB_PREFIX') . "deliver_supply AS s INNER JOIN " . C('DB_PREFIX') . "deliver_user AS u ON s.uid=u.uid LEFT JOIN " . C('DB_PREFIX') . "shop_order AS o ON s.order_id=o.order_id";
 
         $sql .= ' where s.uid = '.$this->deliver_session['uid'].' and s.status = 5 and o.is_del = 0';
         if ($begin_time && $end_time)
             $sql .= ' and s.create_time >='.$b_time.' and s.create_time <='.$e_time;
+        $sql .= " order by s.create_time DESC";
         $list = D()->query($sql);
-        foreach ($list as $k=>$v){
-            $result['tip'] = $result['tip'] ? $result['tip'] + $v['tip_charge'] : $v['tip_charge'];
-            if($v['coupon_price'] > 0) $v['price'] = $v['price'] - $v['coupon_price'];
+        foreach ($list as $k=>&$val){
+            $result['tip'] = $result['tip'] ? $result['tip'] + $val['tip_charge'] : $val['tip_charge'];
+            if($val['coupon_price'] > 0) $val['price'] = $val['price'] - $val['coupon_price'];
 
-            if($v['pay_type'] != 'moneris' && $v['pay_type'] != ''){//统计现金
-                $result['offline_money'] = $result['offline_money'] ? $result['offline_money'] + $v['price'] : $v['price'];
+            if($val['pay_type'] != 'moneris' && $val['pay_type'] != ''){//统计现金
+                $result['offline_money'] = $result['offline_money'] ? $result['offline_money'] + $val['price'] : $val['price'];
             }else{
-                $result['online_money'] = $result['online_money'] ? $result['online_money'] + $v['price'] : $v['price'];
+                $result['online_money'] = $result['online_money'] ? $result['online_money'] + $val['price'] : $val['price'];
             }
+
+            switch ($val['pay_type']) {
+                case 'offline':
+                case 'Cash':
+                    $val['pay_method'] = 0;
+                    break;
+                default:
+                    if ($val['paid']) {
+                        $val['pay_method'] = 1;
+                    } else {
+                        $val['pay_method'] = 0;
+                    }
+                    break;
+            }
+            $val['deliver_cash'] = floatval($val['deliver_cash']);
+            $val['distance'] = floatval($val['distance']);
+            $val['freight_charge'] = floatval($val['freight_charge']);
+            $val['create_time'] = date('Y-m-d H:i', $val['create_time']);
+            $val['appoint_time'] = date('Y-m-d H:i', $val['appoint_time']);
+            $val['order_time'] = $val['order_time'] ? date('Y-m-d H:i', $val['order_time']) : '--';
+            $val['end_time'] = $val['end_time'] ? date('Y-m-d H:i', $val['end_time']) : '未送达';
+            $val['real_orderid'] = $val['real_orderid'] ? $val['real_orderid'] : $val['order_id'];
+// 			$val['store_distance'] = getRange(getDistance($val['from_lat'], $val['from_lnt'], $lat, $lng));
+            $val['map_url'] = U('Deliver/map', array('supply_id' => $val['supply_id']));
+            if ($val['change_log']) {
+                $changes = explode(',', $val['change_log']);
+                $uid = array_pop($changes);
+                $val['change_name'] = $this->getDeliverUser($uid);
+            }
+            $order = D('Shop_order')->get_order_by_orderid($val['order_id']);
+            $val['tip_charge'] = $order['tip_charge'];
+            $val['uid'] = $order['uid'];
+            $store = D('Merchant_store')->field(true)->where(array('store_id'=>$val['store_id']))->find();
+            $val['store_name'] = lang_substr($store['name'],C('DEFAULT_LANG'));
         }
 
+        $result['order_count'] = count($list);
+
 		$this->assign($result);
+		$this->assign('list',$list);
 		$this->display();
 	}
 	
@@ -1537,6 +1582,7 @@ class DeliverAction extends BaseAction
 		foreach ($list as &$val) {
 			switch ($val['pay_type']) {
 				case 'offline':
+                case 'Cash':
 					$val['pay_method'] = 0;
 					break;
 				default:
@@ -1562,6 +1608,11 @@ class DeliverAction extends BaseAction
 				$uid = array_pop($changes);
 				$val['change_name'] = $this->getDeliverUser($uid);
 			}
+            $order = D('Shop_order')->get_order_by_orderid($val['order_id']);
+            $val['tip_charge'] = $order['tip_charge'];
+            $val['uid'] = $order['uid'];
+            $store = D('Merchant_store')->field(true)->where(array('store_id'=>$val['store_id']))->find();
+            $val['store_name'] = lang_substr($store['name'],C('DEFAULT_LANG'));
 		}
 		exit(json_encode(array('total' => ceil($count/$page_size), 'list' => $list, 'count' => $count, 'err_code' => false)));
 	}
@@ -1642,6 +1693,7 @@ class DeliverAction extends BaseAction
             foreach ($list as &$val) {
                 switch ($val['pay_type']) {
                     case 'offline':
+                    case 'Cash':
                         $val['pay_method'] = 0;
                         break;
                     default:

@@ -1645,7 +1645,8 @@ class StorestaffAction extends BaseAction
             foreach($rs as $r){
                 $sms_data = [
                     'mobile' => $r['phone'],
-		            'tplid' => 86914,
+//		            'tplid' => 86914,
+                    'tplid' =>247173,
                     'params' => [],
                     'content' => '有一个新的订单可以配送，请前往个人中心抢单。'
                 ];

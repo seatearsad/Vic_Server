@@ -27,48 +27,79 @@
                 <input type="text" readonly="readonly" placeholder="{pigcms{:L('_SELECT_TIME_')}"  name="appDate1" id="appDate1" value="{pigcms{$end_time}">
             </a>
         </div>
-        <section class="robbed">
-            <div class="Online c9 p10 f14">
-                <span>{pigcms{:L('_SUMMARY_TXT_')} </span>
-            </div>
-            <div class="Title m10">
-                <p class="f14 c9">{pigcms{:L('_ONLINE_PAY_')}：<i>$</i>{pigcms{$online_money|floatval}</p>
-                <p class="f14 c9">{pigcms{:L('_CASH_ON_DELI_')}：<i>$</i>{pigcms{$offline_money|floatval}</p>
-                <p class="f14 c9">{pigcms{:L('_DELI_PRICE_')}：<i>$</i>{pigcms{$freight_charge|floatval}</p>
-                <p class="f14 c9">{pigcms{:L('_TIP_TXT_')}：<i>$</i>{pigcms{$tip|default=0}</p>
-            </div>
-            <div class="Namelist p10 f14">
-                <p class="red">{pigcms{:L('_ORDER_TOTAL_')}：{pigcms{$order_count|default=0}<i></i></p>
-            </div>
-        </section>
-        <volist name="list" id="order">
-        <section class="robbed supply_{pigcms{$order.supply_id}" data-id="{pigcms{$order.supply_id}">
-            <div class="Online c9 p10 f14 go_detail" data-id="{pigcms{$order.supply_id}">
-                <span>{pigcms{:L('_B_PURE_MY_68_')}: {pigcms{$order.real_orderid}</span>
-                <if condition="$order['pay_method'] eq 1">
-                <a href="javascript:;" class="fr cd p10">{pigcms{:L('_ONLINE_PAY_')}</a>
-                <else />
-                <a href="javascript:;" class="fr cd p10 on">{pigcms{:L('_CASH_ON_DELI_')}</a>
-                </if>
-            </div>
-            <div class="Title m10 go_detail" data-id="{pigcms{$order.supply_id}">
-                <h2 class="f16 c3">{pigcms{$order.store_name}</h2>
-                <p class="f14 c9">{pigcms{:L('_ORDER_TIME_')}：{pigcms{$order.order_time}</p>
-                <p class="f14 c9">{pigcms{:L('_DELI_TIME_')}：{pigcms{$order.end_time}</p>
-                <if condition="$order['get_type'] eq 1">
-                <div class="leaflets">{pigcms{:L('_C_SYS_ASS_ORDER_')}</div>
-                </if>
-            </div>
 
-            <div class="Namelist p10 f14">
-                <p class="red">{pigcms{:L('_TOTAL_RECE_')}：<i>${pigcms{$order.deliver_cash}</i></p>
-                <p class="red">{pigcms{:L('_C_DISTANCE_')}:{pigcms{$order.distance}(KM)，{pigcms{:L('_DELI_PRICE_')}:${pigcms{$order.freight_charge},{pigcms{:L('_TIP_TXT_')}:${pigcms{$order.tip_charge}</p>
-                <if condition="$order['get_type'] eq 2">
-                <div class="Order">From Courier - {pigcms{$order['change_name']}</div>
+        <div class="Statistics_end clr">
+            <ul>
+                <li>
+                    <a href="javascript:void(0);">
+                        <div class="cfd">
+                            <img src="{pigcms{$static_path}images/tjt_10.png" width=23 height=20>
+                            <p><i>$</i>{pigcms{$online_money|floatval}</p>
+                        </div>
+                        <h2>{pigcms{:L('_ONLINE_PAY_')}</h2>
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:void(0);">
+                        <div class="c3a">
+                            <img src="{pigcms{$static_path}images/tjt_07.png" width=22 height=20>
+                            <p><i>$</i>{pigcms{$freight_charge|floatval}</p>
+                        </div>
+                        <h2>{pigcms{:L('_DELI_PRICE_')}</h2>
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:void(0);">
+                        <div class="c07">
+                            <img src="{pigcms{$static_path}images/tjt_22.png" width=15 height=20>
+                            <p><i>$</i>{pigcms{$tip|default=0}</p>
+                        </div>
+                        <h2>{pigcms{:L('_TIP_TXT_')}</h2>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="javascript:void(0);">
+                        <div class="cff">
+                            <img src="{pigcms{$static_path}images/tjt_14.png" width=20 height=20>
+                            <p><i>$</i>{pigcms{$offline_money|floatval}</p>
+                        </div>
+                        <h2>{pigcms{:L('_CASH_ON_DELI_')}</h2>
+                    </a>
+                </li>
+                <if condition="empty($deliver_session['store_id'])">
+                <li>
+                    <a href="javascript:void(0);">
+                        <div class="c0a">
+                            <img src="{pigcms{$static_path}images/tjt_25.png" width=19 height=20>
+                            <p><i></i>{pigcms{$system_count|default=0}</p>
+                        </div>
+                        <h2>{pigcms{:L('_SYS_ASS_ORDER_')}</h2>
+                    </a>
+                </li>
                 </if>
-            </div>
-        </section>
-        </volist>
+                <if condition="empty($deliver_session['store_id'])">
+                    <li>
+                        <a href="javascript:void(0);">
+                            <div class="c80">
+                                <img src="{pigcms{$static_path}images/tjt_17.png" width=20 height=20>
+                                <p><i></i>{pigcms{$change_count|default=0}</p>
+                            </div>
+                            <h2>{pigcms{:L('_SYS_TRAN_ORDER_')}</h2>
+                        </a>
+                    </li>
+                </if>
+                <li>
+                    <a href="javascript:void(0);">
+                        <div class="c07">
+                            <img src="{pigcms{$static_path}images/tjt_22.png" width=15 height=20>
+                            <p><i></i>{pigcms{$self_count|default=0}</p>
+                        </div>
+                        <h2>{pigcms{:L('_INIT_GRAB_ORDER_')}</h2>
+                    </a>
+                </li>
+            </ul>
+        </div>
     </section>
     <section class="bottom">
         <div class="bottom_n">
@@ -88,7 +119,6 @@
         </div>
     </section>
 <script type="text/javascript">
-var DetailUrl = "{pigcms{:U('Wap/Deliver/detail', array('supply_id'=>'d%'))}";
 $(function () {
 	var begin = {};
 	begin.date = {preset : 'date'};
@@ -124,16 +154,6 @@ $(function () {
 	$("#end").mobiscroll($.extend(enddate['date'], enddate['default']));
 });
 
-var is_flag = false;
-$(document).on('click', '.go_detail', function(e){
-    e.stopPropagation();
-    if (is_flag) {
-        return false;
-    }
-    is_flag = true;
-    var supply_id = $(this).attr("data-id");
-    location.href = DetailUrl.replace(/d%/, supply_id);
-});
 
 //ios app 更新位置
 function updatePosition(lat,lng){

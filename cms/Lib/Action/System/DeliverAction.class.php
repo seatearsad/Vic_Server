@@ -66,6 +66,16 @@ class DeliverAction extends BaseAction {
     		$column['last_time'] = $_SERVER['REQUEST_TIME'];
     		$column['group'] = 1;
     		$column['range'] = intval($_POST['range']);
+
+            $column['family_name'] = isset($_POST['family_name']) ? htmlspecialchars($_POST['family_name']) : '';
+            $column['email'] = $_POST['email'];
+            $column['language'] = intval($_POST['language']);
+
+            $card['ahname'] = $_POST['ahname'];
+            $card['transit'] = $_POST['transit'];
+            $card['institution'] = $_POST['institution'];
+            $card['account'] = $_POST['account'];
+
     		if (empty($column['name'])) {
     			$this->error('姓名不能为空');
     		}
@@ -84,6 +94,9 @@ class DeliverAction extends BaseAction {
     		if(!$id){
     			$this->error('保存失败，请重试');
     		}
+    		//
+    		$card['deliver_id'] = $id;
+            D('Deliver_card')->data($card)->add();
     		$this->success('保存成功');
     	}
     	
@@ -115,6 +128,16 @@ class DeliverAction extends BaseAction {
     		$column['status'] = intval($_POST['status']);
     		$column['last_time'] = $_SERVER['REQUEST_TIME'];
     		$column['range'] = intval($_POST['range']);
+
+            $column['family_name'] = isset($_POST['family_name']) ? htmlspecialchars($_POST['family_name']) : '';
+            $column['email'] = $_POST['email'];
+            $column['language'] = intval($_POST['language']);
+
+            $card['ahname'] = $_POST['ahname'];
+            $card['transit'] = $_POST['transit'];
+            $card['institution'] = $_POST['institution'];
+            $card['account'] = $_POST['account'];
+
     		if (empty($column['name'])) {
     			$this->error('姓名不能为空');
     		}
@@ -127,6 +150,13 @@ class DeliverAction extends BaseAction {
     		}
     		
     		if(D('deliver_user')->where(array('uid'=>$uid))->data($column)->save()){
+    		    $card_id = D('Deliver_card')->field('id')->where(array('deliver_id'=>$uid))->find();
+    		    if($card_id){
+                    D('Deliver_card')->field(true)->where(array('deliver_id'=>$uid))->data($card)->save();
+                }else{
+    		        $card['deliver_id'] = $uid;
+                    D('Deliver_card')->data($card)->add();
+                }
     			$this->success('修改成功！');
     		}else{
     			$this->error('修改失败！请检查内容是否有过修改（必须修改）后重试~');
@@ -141,6 +171,9 @@ class DeliverAction extends BaseAction {
     			$this->error('非法操作');
     		}
     		$this->assign('now_user',$deliver);
+
+    		$card = D('Deliver_card')->field(true)->where(array('deliver_id'=>$uid))->find();
+    		$this->assign('card',$card);
     	}
     	$this->display();
     }
@@ -1081,4 +1114,28 @@ class DeliverAction extends BaseAction {
 		$objWriter->save('php://output');
 		exit();
 	}
+
+	public function map(){
+        //获取当前所有上班状态的配送员 包含现在手中订单数量及状态
+        $user_list = D('Deliver_user')->field(true)->where(array('status'=>1,'work_status'=>0))->order('uid asc')->select();
+        foreach ($user_list as &$deliver){
+            $orders = D('Deliver_supply')->field(true)->where(array('uid'=>$deliver['uid'],'status' => array(array('gt', 1), array('lt', 5))))->order('supply_id asc')->select();
+            $deliver['order_count'] = count($orders);
+        }
+
+        $this->assign('list',$user_list);
+        $this->display();
+    }
+
+    public function e_call(){
+        $user_list = D('Deliver_user')->field(true)->where(array('status'=>0,'work_status'=>0))->order('uid asc')->select();
+        foreach ($user_list as $deliver){
+            $sms_data['uid'] = 0;
+            $sms_data['mobile'] = $deliver['phone'];
+            $sms_data['sendto'] = 'deliver';
+            $sms_data['tplid'] = 247163;
+            $sms_data['params'] = [];
+            Sms::sendSms2($sms_data);
+        }
+    }
 }

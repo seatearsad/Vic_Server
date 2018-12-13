@@ -6,11 +6,20 @@
 		<input type="hidden" name="uid" value="{pigcms{$now_user.uid}"/>
 		<table cellpadding="0" cellspacing="0" class="frame_form" width="100%">
 			<tr>
-				<th width="15%">姓名</th>
-				<td width="35%"><input type="text" class="input fl" name="name" size="20" validate="maxlength:50,required:true" value="{pigcms{$now_user.nickname}"/></td>
-				<th width="15%">手机号</th>
-				<td width="35%"><input type="text" class="input fl" name="phone" size="20" validate="number:true,required:true" value="{pigcms{$now_user.phone}"/></td>
+				<th width="15%">姓</th>
+				<td width="35%"><input type="text" class="input fl" name="family_name" size="20" validate="maxlength:50,required:true"/></td>
+				<th width="15%">名</th>
+				<td width="35%"><input type="text" class="input fl" name="name" size="20" validate="maxlength:50,required:true"/></td>
 			</tr>
+            <tr>
+                <th width="15%">邮箱</th>
+                <td width="35%"><input type="text" class="input fl" name="email" size="20" validate="maxlength:50,required:true" /></td>
+                <th width="15%">语言</th>
+                <td width="35%">
+                    <span class="cb-enable"><label class="cb-enable"><span>English</span><input type="radio" name="language" value="1"  /></label></span>
+                    <span class="cb-disable"><label class="cb-disable selected"><span>中文</span><input type="radio" name="language" value="0"  /></label></span>
+                </td>
+            </tr>
 			<tr>
 				<th width="15%">密码</th>
 				<td width="35%"><input type="text" class="input fl" name="pwd" size="20" value="123456" tips="不修改则不填写" validate="required:true"/></td>
@@ -26,15 +35,41 @@
 			<tr>
 			<tr>
 				<th width="15%">配送范围</th>
-				<td colspan=3><input type="text" class="input fl" name="range" size="20" validate="required:true" value="5"/>公里</td>
+				<td width="35%"><input type="text" class="input fl" name="range" size="20" validate="required:true" value="5"/>公里</td>
+                <th width="15%">手机号</th>
+                <td width="35%"><input type="text" class="input fl" name="phone" size="20" validate="number:true,required:true" value="{pigcms{$now_user.phone}"/></td>
 			<tr>
 			</tr>
 			<tr>
-				<th width="15%">配送员常驻地区</th>
+				<th width="15%">常驻地区</th>
 				<td width="35%"><input type="text" class="input fl" readonly="readonly" name="adress" id="adress" validate="required:true"/></td>
 				<th width="15%">配送员经纬度</th>
 				<td width="35%" class="radio_box"><input class="input fl" size="20" name="long_lat" id="long_lat" type="text" readonly="readonly" validate="required:true"/></td>
 			</tr>
+            <tr>
+                <th width="15%">银行卡</th>
+                <td colspan=3>
+                        <input type="text" placeholder="Account Holder Name" class="input fl" name="ahname" size="30" validate="maxlength:50,required:true" />
+                </td>
+            <tr>
+            <tr>
+                <th width="15%"></th>
+                <td colspan=3>
+                    <input type="text" placeholder="Transit(Branch)" class="input fl" name="transit" size="30" validate="maxlength:50,required:true" />
+                </td>
+            <tr>
+            <tr>
+                <th width="15%"></th>
+                <td colspan=3>
+                    <input type="text" placeholder="Institution" class="input fl" name="institution" size="30" validate="maxlength:50,required:true" />
+                </td>
+            <tr>
+            <tr>
+                <th width="15%"></th>
+                <td colspan=3>
+                    <input type="text" placeholder="Account" class="input fl" name="account" size="30" validate="maxlength:50,required:true" />
+                </td>
+            <tr>
 		</table>
 		<div class="btn hidden">
 			<input type="submit" name="dosubmit" id="dosubmit" value="提交" class="button" />
@@ -63,6 +98,6 @@
 	var static_public="{pigcms{$static_public}",static_path="{pigcms{$static_path}",merchant_index="{pigcms{:U('Index/index')}",choose_province="{pigcms{:U('Area/ajax_province')}",choose_city="{pigcms{:U('Area/ajax_city')}",choose_area="{pigcms{:U('Area/ajax_area')}",choose_circle="{pigcms{:U('Area/ajax_circle')}";
 	</script>
 	<!--<script type="text/javascript" src="{pigcms{$static_path}js/area.js"></script>-->
-	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&libraries=places&language=zh-CN"></script>
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&libraries=places&language=en"></script>
 	<script type="text/javascript" src="{pigcms{$static_path}js/map.js"></script>
 <include file="Public:footer"/>

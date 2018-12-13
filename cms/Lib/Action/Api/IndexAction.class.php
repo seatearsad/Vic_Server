@@ -1462,4 +1462,82 @@ class IndexAction extends BaseAction
         $id = D('Deliver_assign')->check_assign();
         //var_dump($id);
     }
+    //监控配送员 是否发送 紧急召唤 所有送餐员的预计路程时间超过60分钟
+    public function deliver_e_call(){
+        //是否发送
+        $is_send = false;
+        $user_list = D('Deliver_user')->field(true)->where(array('status'=>1,'work_status'=>0))->order('uid asc')->select();
+
+        //记录超出时间的配送员id
+        $record_list = array();
+        foreach ($user_list as $deliver){
+            //获取所有配送员手中的订单
+            $where = array('uid'=>$deliver['uid'],'status' => array(array('gt', 1), array('lt', 5)));
+            $user_order = D('Deliver_supply')->field(true)->where($where)->select();
+            //如果有配送员手中无订单则跳出
+            if(count($user_order) == 0) break;
+            //总时间
+            $all_time = 0;
+            foreach ($user_order as $order){
+                if($order['status'] == 2 || $order['status'] == 3){
+                    //出餐剩余时间
+                    $chu_s = ($order['create_time'] + $order['dining_time']*60) - time();
+                    $chu_s = $chu_s > 0 ? $chu_s : 0;
+                    //计算到达店铺的时间
+                    $to_shop = $this->getDistanceTime($deliver['lat'],$deliver['lng'],$order['from_lat'],$order['from_lnt']);
+
+                    if($to_shop > $chu_s) $all_time += $to_shop;
+                    else $all_time += $chu_s;
+                }
+
+                if($order['status'] == 4){
+                    $to_user = $this->getDistanceTime($deliver['lat'],$deliver['lng'],$order['aim_lat'],$order['aim_lnt']);
+                }else{
+                    $to_user = $this->getDistanceTime($order['from_lat'],$order['from_lnt'],$order['aim_lat'],$order['aim_lnt']);
+                }
+
+                $all_time += $to_user;
+                if($all_time/60 > 60){
+                    $record_list[] = $deliver['uid'];
+                }
+            }
+        }
+        //全部配送人员都超过规定时间 发送紧急信息
+        if(count($user_list) == count($record_list)){
+            $is_send = true;
+        }
+
+        //发送紧急召唤
+        if($is_send){
+            //三个小时内不重复发送
+            $record_time = D('System_record')->field(true)->where(array('id'=>1))->find();
+            if(time() > $record_time['record']){
+                //获取发送记录
+                $this->e_call();
+                //存储发送紧急召唤的记录
+                $data_time['record'] = time() + 3*60*60;
+                D('System_record')->field(true)->where(array('id'=>1))->save($data_time);
+            }
+        }
+    }
+    public function getDistanceTime($from_lat,$from_lng,$aim_lat,$aim_lng){
+        //获取两点之间的距离
+        $distance = getDistance($from_lat,$from_lng,$aim_lat,$aim_lng);
+        //获取预计到达时间
+        $use_time = $distance / 100;
+        //返回值为分钟
+        return $use_time;
+    }
+
+    public function e_call(){
+        $user_list = D('Deliver_user')->field(true)->where(array('status'=>0,'work_status'=>0))->order('uid asc')->select();
+        foreach ($user_list as $deliver){
+            $sms_data['uid'] = 0;
+            $sms_data['mobile'] = $deliver['phone'];
+            $sms_data['sendto'] = 'deliver';
+            $sms_data['tplid'] = 247163;
+            $sms_data['params'] = [];
+            Sms::sendSms2($sms_data);
+        }
+    }
 }

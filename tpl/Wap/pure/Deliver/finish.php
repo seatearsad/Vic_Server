@@ -90,7 +90,7 @@
             <h2 class="f15 c3">{{ d.list[i].name }} <span class="c6"><a href="tel:{{ d.list[i].phone }}">{{ d.list[i].phone }}</a></span></h2>
             <p class="c9">{pigcms{:L('_EXPECTED_TIME_')}：{{ d.list[i].appoint_time }}</p>
             <p class="red">{pigcms{:L('_TOTAL_RECE_')}：<i>${{ d.list[i].deliver_cash }}</i></p>
-            <p class="red">{pigcms{:L('_C_DISTANCE_')}{pigcms{$row['distance']}(KM)，{pigcms{:L('_DELI_PRICE_')}:${pigcms{$row['freight_charge']},{pigcms{:L('_TIP_TXT_')}:${pigcms{$row['tip_charge']}</p>
+            <p class="red">{pigcms{:L('_C_DISTANCE_')}{{ d.list[i].distance }}(KM)，{pigcms{:L('_DELI_PRICE_')}:${{ d.list[i].freight_charge }},{pigcms{:L('_TIP_TXT_')}:${{ d.list[i].tip_charge }}</p>
 			{{# if(d.list[i].get_type == 2){ }}
 			<div class="Order">From Courier - {pigcms{$row['change_name']}</div>
 			{{# } }}
