@@ -1137,5 +1137,7 @@ class DeliverAction extends BaseAction {
             $sms_data['params'] = [];
             Sms::sendSms2($sms_data);
         }
+
+        exit(json_encode(array('error' => 0, 'msg' => 'Success！', 'dom_id' => 'account')));
     }
 }

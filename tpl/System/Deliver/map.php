@@ -177,7 +177,13 @@
 
     $('#e_call').click(function () {
         $.post("{pigcms{:U('Deliver/e_call')}", {}, function(result) {
-            alert(result);
+            if(result){
+                message = result.message;
+            }else {
+                message = 'Error';
+            }
+
+            alert(message);
         });
     });
 </script>
