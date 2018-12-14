@@ -18,6 +18,12 @@
 	<script type="text/javascript">
 		var location_url = "{pigcms{:U('Deliver/ajaxFinish')}", del_url = "{pigcms{:U('Deliver/del')}", DetailUrl = "{pigcms{:U('Wap/Deliver/detail', array('supply_id'=>'d%'))}";
 
+        var ua = navigator.userAgent;
+        if(!ua.match(/TuttiDeliver/i)) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                updatePosition(position.coords.latitude,position.coords.longitude);
+            });
+        }
         //ios app 更新位置
         function updatePosition(lat,lng){
             var message = '';

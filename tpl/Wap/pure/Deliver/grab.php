@@ -32,6 +32,12 @@
 
             return message;
         }
+        var ua = navigator.userAgent;
+        if(!ua.match(/TuttiDeliver/i)) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                updatePosition(position.coords.latitude,position.coords.longitude);
+            });
+        }
 	</script>
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&libraries=places&language=zh-CN"></script>
 	<script type="text/javascript" src="{pigcms{$static_path}js/grab.js?211" charset="utf-8"></script>

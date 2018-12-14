@@ -191,6 +191,22 @@
 // // 				},{enableHighAccuracy: true})
 // // 			});
 // // 		});
+
+        var ua = navigator.userAgent;
+        if(!ua.match(/TuttiDeliver/i)) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                map.setCenter({lat: position.coords.latitude, lng: position.coords.longitude});
+
+                //我的图标
+                var marker = new google.maps.Marker({
+                    position: {lng: position.coords.longitude, lat: position.coords.latitude},
+                    map: map,
+                    icon: "{pigcms{$static_path}images/map/my_pos.png"
+                });
+                updatePosition(position.coords.latitude,position.coords.longitude);
+            });
+        }
+
         var is_route = {pigcms{$is_route};
         var self_position = new google.maps.LatLng({pigcms{$deliver_session['lat']}, {pigcms{$deliver_session['lng']});
         var mapOptions = {

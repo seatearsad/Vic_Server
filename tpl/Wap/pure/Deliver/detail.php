@@ -195,6 +195,14 @@ $(document).ready(function(){
 		}
 	});
 });
+
+var ua = navigator.userAgent;
+if(!ua.match(/TuttiDeliver/i)) {
+    navigator.geolocation.getCurrentPosition(function (position) {
+        updatePosition(position.coords.latitude,position.coords.longitude);
+    });
+}
+
 //ios app 更新位置
 function updatePosition(lat,lng){
     var message = '';
