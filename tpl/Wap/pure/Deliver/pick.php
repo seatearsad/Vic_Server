@@ -111,9 +111,9 @@ $(function(){
 		$.post(DeliverListUrl, "supply_id="+supply_id, function(json){
 			mark = 0;
 			if (json.status) {
-				layer.open({title:['抢单提示：','background-color:#FF658E;color:#fff;'],content:'取货成功，快去配送吧！',btn: ['确定'],end:function(){}});
+				layer.open({title:['Tips：','background-color:#FF658E;color:#fff;'],content:'Please start deliver',btn: ['Confirm'],end:function(){}});
 			} else {
-				layer.open({title:['抢单提示：','background-color:#FF658E;color:#fff;'],content:json.info,btn: ['确定'],end:function(){}});
+				layer.open({title:['Tips：','background-color:#FF658E;color:#fff;'],content:json.info,btn: ['Confirm'],end:function(){}});
 			}
 			$(".supply_"+supply_id).remove();
 		});

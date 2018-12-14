@@ -2312,7 +2312,7 @@ class StorestaffAction extends BaseAction
             $return_data['freight_charge_tax']=$freight_charge_tax;//配送费税
             $return_data['address_id']=$user_add;//客户地址id
             $return_data['real_orderid']=$real_orderid;//订单编号
-            $return_data['desc']="店员--{$staff['name']}--代客户下单";//备注
+            $return_data['desc']="restaurant--{$staff['name']}--order from restaurants";//备注
             $this->assign('post_data',$_POST);
             $this->assign('return_data',$return_data);
         }

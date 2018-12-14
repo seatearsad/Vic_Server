@@ -382,7 +382,7 @@ class DeliverAction extends BaseAction
 
                 D('Deliver_route')->add($data);
             }
-			$this->success("抢单成功");exit;
+			$this->success("Order Accepted");exit;
 		}
 		
 		if (IS_AJAX) {
