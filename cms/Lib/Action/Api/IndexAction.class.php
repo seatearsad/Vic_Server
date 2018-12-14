@@ -1504,7 +1504,7 @@ class IndexAction extends BaseAction
             }
         }
         //全部配送人员都超过规定时间 发送紧急信息
-        if(count($user_list) == count($record_list)){
+        if(count($user_list) != 0 && count($user_list) == count($record_list)){
             $is_send = true;
         }
 

@@ -178,12 +178,12 @@
     $('#e_call').click(function () {
         $.post("{pigcms{:U('Deliver/e_call')}", {}, function(result) {
             if(result){
-                message = result.message;
+                message = result.msg;
             }else {
                 message = 'Error';
             }
 
             alert(message);
-        });
+        },'json');
     });
 </script>
