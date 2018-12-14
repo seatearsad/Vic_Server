@@ -102,7 +102,7 @@
 			{{# } }}
         </div>
         <div class="sign_bottom">
-            <a href="javascript:;" class="del" data-id="{{ d.list[i].supply_id }}">{pigcms{:L('_B_PURE_MY_27_')}</a>
+            <!--a href="javascript:;" class="del" data-id="{{ d.list[i].supply_id }}">{pigcms{:L('_B_PURE_MY_27_')}</a-->
         </div>
 </section>
 {{# } }}
