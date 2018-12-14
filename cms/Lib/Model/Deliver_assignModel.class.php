@@ -177,6 +177,8 @@ class Deliver_assignModel extends Model
                     continue;
                 else
                     $deliver = $v;
+            }else{
+                $deliver = $v;
             }
             $where = array('uid'=>$v['uid'],'status' => array(array('gt', 1), array('lt', 5)));
             $user_order = D('Deliver_supply')->field(true)->where($where)->select();
