@@ -389,7 +389,7 @@ cursor: pointer;
 				</tr>
                 <if condition="$order['paid'] eq 1 and $order['status'] eq 0">
                     <tr>
-                        <td>Meal Time</td>
+                        <td>Order preparing time</td>
                         <td class="cc">
                             <input type="text" name="dining_time" pattern="^[0-9]*$" data-err="Error" style="height: 2rem">
                         </td>
