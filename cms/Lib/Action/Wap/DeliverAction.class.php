@@ -685,7 +685,6 @@ class DeliverAction extends BaseAction
                 $data['type'] = 1;
             }else{//如果有多张订单 需要进行逻辑判断
                 $data = $this->routeAssign($uid);
-                var_dump($data);die();
             }
             //记录去往下一个节点的信息
             $route = D('Deliver_route')->where(array('deliver_id'=>$uid))->find();
