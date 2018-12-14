@@ -56,7 +56,7 @@ function getList() {
             console.log(position);
             list_detail(position.coords.latitude, position.coords.longitude);
         });
-        return false;
+        //return false;
     }
 
 	

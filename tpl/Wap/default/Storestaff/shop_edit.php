@@ -277,6 +277,49 @@ cursor: pointer;
 		</if>
 	</ul>
 	<a href="{pigcms{:U('Storestaff/shop_list')}" class="btn" style="float:right;right:1rem;top:0.2rem;position:absolute;width:5rem;font-size:1rem;">返 回</a>
+    <if condition="$deliver">
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&libraries=places&language=en"></script>
+        <div id="deliver_map" style="width: 98%;height: 300px;margin-left: 10px;border: 1px #f0efed solid"></div>
+
+        <span class="d_id">{pigcms{$deliver.uid}</span>
+        <span class="d_name">{pigcms{$deliver.name}</span>
+        <span class="d_lat">{pigcms{$deliver.lat}</span>
+        <span class="d_lng">{pigcms{$deliver.lng}</span>
+        <span class="d_phone">{pigcms{$deliver.phone}</span>
+
+        <style>
+            .d_id,.d_name,.d_lat,.d_lng,.d_phone{
+                display: none;
+            }
+        </style>
+        <script type="text/javascript">
+            var mapOptions = {
+                zoom: 18,
+                center: {lat:48.4245911, lng:-123.3667908}
+            }
+
+            var map = new google.maps.Map(document.getElementById('deliver_map'), mapOptions);
+
+            var lat = $('.d_lat').text();
+            var lng = $('.d_lng').text();
+
+            var marker = new google.maps.Marker({
+                position: new google.maps.LatLng(lat,lng),
+                map: map,
+                label:$('.d_id').text(),
+                title: $('.d_name').text() + '('+ $('.d_phone').text()+ ')',
+                tag:$('.d_id').text()
+            });
+            map.setCenter(marker.getPosition());
+
+            var self_position = new google.maps.LatLng('{pigcms{$shop.lat}','{pigcms{$shop.long}');
+            var shop_mark = new google.maps.Marker({
+                position: self_position,
+                map: map,
+                icon:"{pigcms{$static_path}images/map/my_pos.png"
+            });
+        </script>
+    </if>
 	<ul class="round">
 		<table width="100%" border="0" cellpadding="0" cellspacing="0" class="cpbiaoge">
 			<tbody>

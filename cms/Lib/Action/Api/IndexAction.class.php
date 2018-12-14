@@ -1460,6 +1460,7 @@ class IndexAction extends BaseAction
 
     public function updateAssign(){
         $id = D('Deliver_assign')->check_assign();
+        $this->deliver_e_call();
         //var_dump($id);
     }
     //监控配送员 是否发送 紧急召唤 所有送餐员的预计路程时间超过60分钟

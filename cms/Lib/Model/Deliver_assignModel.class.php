@@ -166,6 +166,7 @@ class Deliver_assignModel extends Model
 
         //获取当前所有上班状态的配送员 包含现在手中订单数量及状态
         $user_list = D('Deliver_user')->field(true)->where(array('status'=>1,'work_status'=>0))->order('uid asc')->select();
+        $deliver_list = array();
         foreach ($user_list as $k => $v){
             //获取之前的派单记录
             $record = D('Deliver_assign')->field(true)->where(array('supply_id'=>$supply_id))->find();
@@ -174,48 +175,51 @@ class Deliver_assignModel extends Model
                 //如果之前的记录中存在此用户 跳过
                 if(in_array($v['uid'],$record_list))
                     continue;
+                else
+                    $deliver = $v;
             }
             $where = array('uid'=>$v['uid'],'status' => array(array('gt', 1), array('lt', 5)));
             $user_order = D('Deliver_supply')->field(true)->where($where)->select();
             //送餐员当前手中订单数量
-            $user_list[$k]['count'] = count($user_order);
+            $deliver['count'] = count($user_order);
             foreach ($user_order as $o){
                 //状态
-                $user_list[$k]['order'][$o['supply_id']]['status'] = $o['status'];
+                $deliver['order'][$o['supply_id']]['status'] = $o['status'];
                 //出餐时间
-                $user_list[$k]['order'][$o['supply_id']]['dining_time'] = $o['dining_time'];
+                $deliver['order'][$o['supply_id']]['dining_time'] = $o['dining_time'];
                 //店铺坐标
-                $user_list[$k]['order'][$o['supply_id']]['store_lat'] = $o['from_lat'];
-                $user_list[$k]['order'][$o['supply_id']]['store_lng'] = $o['from_lnt'];
+                $deliver['order'][$o['supply_id']]['store_lat'] = $o['from_lat'];
+                $deliver['order'][$o['supply_id']]['store_lng'] = $o['from_lnt'];
                 //客户坐标
-                $user_list[$k]['order'][$o['supply_id']]['user_lat'] = $o['aim_lat'];
-                $user_list[$k]['order'][$o['supply_id']]['user_lng'] = $o['aim_lnt'];
+                $deliver['order'][$o['supply_id']]['user_lat'] = $o['aim_lat'];
+                $deliver['order'][$o['supply_id']]['user_lng'] = $o['aim_lnt'];
                 //接单时间戳
-                $user_list[$k]['order'][$o['supply_id']]['create_time'] = $o['create_time'];
+                $deliver['order'][$o['supply_id']]['create_time'] = $o['create_time'];
             }
+            $deliver_list[] = $deliver;
         }
 
-        $user_id = $this->step_first($user_list,$supply);
+        $user_id = $this->step_first($deliver_list,$supply);
         //如果第一步成功 便返回 否则进入第二部
         if($user_id){
             return $user_id;
         }else{//2
-            $user_id = $this->step_second($user_list,$supply);
+            $user_id = $this->step_second($deliver_list,$supply);
             if($user_id){
                 return $user_id;
             }else{//3
                 //第三步//////////////////////////////////////////
                 //在都大于出餐时间的情况下 有没有小于10分钟的
-                $user_id = $this->step_first($user_list,$supply,1);
+                $user_id = $this->step_first($deliver_list,$supply,1);
                 if($user_id){
                     return $user_id;
                 }else{
-                    $user_id = $this->step_second($user_list,$supply,1);
+                    $user_id = $this->step_second($deliver_list,$supply,1);
                     if($user_id){
                         return $user_id;
                 /////////////////////////////////////////////////
                     }else{//4
-                        $user_id = $this->step_fourth($user_list,$supply);
+                        $user_id = $this->step_fourth($deliver_list,$supply);
                         return $user_id;
                     }
                 }
