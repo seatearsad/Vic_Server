@@ -154,7 +154,7 @@
     	<elseif condition="$supply['status'] eq 4" />
     	<a href="javascript:void(0);" data-id="{pigcms{$supply['supply_id']}" data-status="{pigcms{$supply['status']}" data-url="{pigcms{:U('Deliver/my')}">{pigcms{:L('_ARRIVAL_TXT_')}</a>
     	<elseif condition="$supply['status'] eq 5" />
-    	<a href="javascript:void(0);" data-id="{pigcms{$supply['supply_id']}" data-status="{pigcms{$supply['status']}" data-url="{pigcms{:U('Deliver/del')}">{pigcms{:L('_B_PURE_MY_27_')}</a>
+    	<!--a href="javascript:void(0);" data-id="{pigcms{$supply['supply_id']}" data-status="{pigcms{$supply['status']}" data-url="{pigcms{:U('Deliver/del')}">{pigcms{:L('_B_PURE_MY_27_')}</a-->
     	</if>
     </div>     
 </body>
