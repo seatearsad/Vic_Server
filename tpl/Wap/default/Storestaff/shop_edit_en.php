@@ -80,10 +80,10 @@ cursor: pointer;
 				</tr>
 				</if>
 				<tr>
-					<td>Custmer Name：{pigcms{$order.username}</td>
+					<td>Customer Name：{pigcms{$order.username}</td>
 				</tr>
 				<tr>
-					<td>Custmer Phone Number：<a href="tel:{pigcms{$order.userphone}" class="totel">{pigcms{$order.userphone}</a></td>
+					<td>Customer Phone Number：<a href="tel:{pigcms{$order.userphone}" class="totel">{pigcms{$order.userphone}</a></td>
 				</tr>
 				<tr>
 					<td>Time of order： {pigcms{$order.create_time|date="Y-m-d H:i:s",###}</td>
@@ -105,7 +105,7 @@ cursor: pointer;
 				</tr>
 				<else />
 				<tr>
-					<td>Custmer Address：{pigcms{$order['address']}</td>
+					<td>Customer Address：{pigcms{$order['address']}</td>
 				</tr>
 				</if>
 				<tr>
@@ -115,7 +115,7 @@ cursor: pointer;
 					<td>Delivery Method：{pigcms{$order['deliver_status_str']}</td>
 				</tr>
 				<tr>
-					<td>Custmer Commant： <b style="color:red">{pigcms{$order.desc|default='No'}</b</td>
+					<td>Customer Commant： <b style="color:red">{pigcms{$order.desc|default='No'}</b</td>
 				</tr>
 				
 				<if condition="$order['invoice_head']">
@@ -177,7 +177,7 @@ cursor: pointer;
 				</tr>
 				</if>
 				<tr>
-					<td>Amount receivable：${pigcms{$order['offline_price']|floatval}Dollars</td>
+					<td>Sub total：${pigcms{$order['offline_price']|floatval}Dollars</td>
 				</tr>
 				<if condition="!empty($order['use_time'])">		
 					<tr>
