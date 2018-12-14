@@ -1443,6 +1443,7 @@ class StorestaffAction extends BaseAction
                         $this->assign('deliver',$t_deliver);
                     }
                 }
+                $this->assign('supply',$supply);
             }
             //add garfunkel
             $lang = $this->language == 'cn' ? 'zh-cn' : 'en-us';

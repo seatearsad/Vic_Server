@@ -91,7 +91,10 @@ cursor: pointer;
 				<tr>
 					<td>Time of Payment：{pigcms{$order['pay_time']|date="Y-m-d H:i:s",###} </td>
 				</tr>
-				<if condition="$order['expect_use_time']">
+                <tr>
+                    <td>Order prepared by：{pigcms{$supply['dining_time']} mins </td>
+                </tr>
+                <if condition="$order['expect_use_time']">
 				<tr>
 					<td>Time of arrival：{pigcms{$order['expect_use_time']|date="Y-m-d H:i:s",###}</td>
 				</tr>
@@ -279,6 +282,7 @@ cursor: pointer;
 	<a href="{pigcms{:U('Storestaff/shop_list')}" class="btn" style="float:right;right:1rem;top:0.2rem;position:absolute;width:5rem;font-size:1rem;">back</a>
     <if condition="$deliver">
         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&libraries=places&language=en"></script>
+        <div style="margin-left: 10px">{pigcms{$deliver.name}({pigcms{$deliver.phone})</div>
         <div id="deliver_map" style="width: 98%;height: 300px;margin-left: 10px;border: 1px #f0efed solid"></div>
 
         <span class="d_id">{pigcms{$deliver.uid}</span>
