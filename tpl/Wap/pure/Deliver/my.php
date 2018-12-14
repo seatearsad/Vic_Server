@@ -77,7 +77,8 @@
                         </if>
                     </if>
                 </p>
-				<p class="red">{pigcms{:L('_C_DISTANCE_')}{pigcms{$row['distance']}(KM)，{pigcms{:L('_DELI_PRICE_')}:${pigcms{$row['freight_charge']},{pigcms{:L('_TIP_TXT_')}:${pigcms{$row['tip_charge']}</p>
+                <p class="red">{pigcms{:L('_C_DISTANCE_')}{pigcms{$row['distance']}(KM)</p>
+                    <!--，{pigcms{:L('_DELI_PRICE_')}:${pigcms{$row['freight_charge']},{pigcms{:L('_TIP_TXT_')}:${pigcms{$row['tip_charge']}</p-->
 				<if condition="$row['get_type'] eq 2">
 				<div class="Order">From Courier - {pigcms{$row['change_name']}</div>
 				</if>
