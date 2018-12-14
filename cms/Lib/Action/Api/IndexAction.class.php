@@ -1529,7 +1529,6 @@ class IndexAction extends BaseAction
         //返回值为分钟
         return $use_time;
     }
-
     public function e_call(){
         $user_list = D('Deliver_user')->field(true)->where(array('status'=>0,'work_status'=>0))->order('uid asc')->select();
         foreach ($user_list as $deliver){

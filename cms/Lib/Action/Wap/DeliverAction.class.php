@@ -177,7 +177,6 @@ class DeliverAction extends BaseAction
 		$this->assign(array('gray_count' => $gray_count, 'deliver_count' => $deliver_count, 'finish_count' => $finish_count,'is_route'=>$is_route,'route'=>$route));
 		$this->display();
 	}
-	
 	public function index_count()
 	{
 		$my_distance = $this->deliver_session['range'] * 1000;
