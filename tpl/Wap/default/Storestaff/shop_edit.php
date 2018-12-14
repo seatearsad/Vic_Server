@@ -387,7 +387,7 @@ cursor: pointer;
                 <tr>
                     <td>出餐时间</td>
                     <td class="cc">
-                        <input type="text" name="dining_time" pattern="^[0-9]*$" data-err="Error" style="height: 2rem">
+                        <input type="text" name="dining_time" pattern="^[0-9]*$" data-err="Error" style="height: 2rem" value="20">
                     </td>
                     <td class="cc" style="text-align: left;">分钟</td>
                     <td class="rr"></td>
