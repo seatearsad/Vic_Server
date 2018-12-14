@@ -1025,35 +1025,35 @@ class Shop_orderModel extends Model
 		switch ($order['status']) {
 			case 0:
 				$order['css'] = 'inhand';
-				$order['show_status'] = '处理中';
-				$order['status_str'] = '未确认';
+				$order['show_status'] = 'Pending';
+				$order['status_str'] = 'Unconfirmed';
 				break;
 			case 1:
 				$order['css'] = 'confirm';
-				$order['show_status'] = '已确认';
-				$order['status_str'] = '已确认';
+				$order['show_status'] = 'Confirmed';
+				$order['status_str'] = 'Confirmed';
 				break;
 			case 2:
 				$order['css'] = 'confirm';
-				$order['show_status'] = '已消费';
-				$order['status_str'] = '已消费';
+				$order['show_status'] = 'Completed';
+				$order['status_str'] = 'Completed';
 				break;
 			case 3:
 				$order['css'] = 'complete';
-				$order['show_status'] = '已评价';
-				$order['status_str'] = '已评价';
+				$order['show_status'] = 'Customer Reviewe';
+				$order['status_str'] = 'Customer Reviewe';
 				break;
 			case 4:
 				$order['css'] = 'cancle';
-				$order['show_status'] = '已退款';
-				$order['status_str'] = '已退款';
+				$order['show_status'] = 'Refunded';
+				$order['status_str'] = 'Refunded';
 				$order['refund_detail'] = unserialize($order['refund_detail']);
 				$order['last_time'] = isset($order['refund_detail']['refund_time']) ? $order['refund_detail']['refund_time'] : $order['last_time'];
 				break;
 			case 5:
 				$order['css'] = 'cancle';
-				$order['show_status'] = '已取消';
-				$order['status_str'] = '已取消';
+				$order['show_status'] = 'Canceled';
+				$order['status_str'] = 'Canceled';
 				break;
 			case 7:
 				$order['css'] = 'confirm';
@@ -1078,28 +1078,28 @@ class Shop_orderModel extends Model
 		}
 
 		if ($order['paid'] == 0) {
-			$order['pay_status'] = '<b style="color:red">未支付</b>';
-			$order['pay_status_print'] = '未支付';
+			$order['pay_status'] = '<b style="color:red">Unpaid</b>';
+			$order['pay_status_print'] = 'Unpaid';
 		} elseif ($order['paid'] == 1) {
 			if ($order['pay_type'] == 'offline') {
 				if ($order['third_id']) {
-					$order['pay_status'] = '<b style="color:green">已支付</b>';
-					$order['pay_status_print'] = '已支付';
+					$order['pay_status'] = '<b style="color:green">Paid</b>';
+					$order['pay_status_print'] = 'Paid';
 				} else {
-					$order['pay_status'] = '<b style="color:red">未支付</b>';
-					$order['pay_status_print'] = '未支付';
+					$order['pay_status'] = '<b style="color:red">Unpaid</b>';
+					$order['pay_status_print'] = 'Unpaid';
 				}
 			} else {
-				$order['pay_status'] = '<b style="color:green">已支付</b>';
-				$order['pay_status_print'] = '已支付';
+				$order['pay_status'] = '<b style="color:green">Paid</b>';
+				$order['pay_status_print'] = 'Paid';
 			}
 		}
 		if ($order['is_pick_in_store'] == 0) {
-			$order['deliver_str'] = '平台配送';
+			$order['deliver_str'] = 'Delivered By Tutti';
 		} elseif ($order['is_pick_in_store'] == 1) {
-			$order['deliver_str'] = '商家配送';
+			$order['deliver_str'] = 'Delivered By Merchant';
 		} elseif ($order['is_pick_in_store'] == 2) {
-			$order['deliver_str'] = '自提';
+			$order['deliver_str'] = 'Delivered By Merchant';
 		} elseif ($order['is_pick_in_store'] == 3) {
 			$order['deliver_str'] = '快递配送';
 		}
@@ -1116,31 +1116,31 @@ class Shop_orderModel extends Model
 		switch ($order['order_status']) {
 			case 0:
 				if ($order['is_pick_in_store'] == 2) {
-					$order['deliver_status_str'] = '待提货';
+					$order['deliver_status_str'] = 'Waiting for pick up';
 				} else {
-					$order['deliver_status_str'] = '待发货';
+					$order['deliver_status_str'] = 'Waiting for order';
 				}
 				break;
 			case 1:
-				$order['deliver_status_str'] = '店铺已接单';
+				$order['deliver_status_str'] = 'Merchant Confirmed';
 				break;
 			case 2:
-				$order['deliver_status_str'] = '配送员接单';
+				$order['deliver_status_str'] = 'Courier Confirmed';
 				break;
 			case 3:
-				$order['deliver_status_str'] = '配送员取货';
+				$order['deliver_status_str'] = 'Order has picked up';
 				break;
 			case 4:
-				$order['deliver_status_str'] = '配送中';
+				$order['deliver_status_str'] = 'In transit';
 				break;
 			case 5:
-				$order['deliver_status_str'] = '确认收货';
+				$order['deliver_status_str'] = 'Delivered';
 				break;
 			case 6:
 				if ($order['is_pick_in_store'] == 2) {
-					$order['deliver_status_str'] = '已提货';
+					$order['deliver_status_str'] = 'Picked up';
 				} else {
-					$order['deliver_status_str'] = '配送完成';
+					$order['deliver_status_str'] = 'Order Completed';
 				}
 				break;
 
