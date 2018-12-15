@@ -192,13 +192,14 @@
 // // 			});
 // // 		});
 
+        var marker;
         var ua = navigator.userAgent;
         if(!ua.match(/TuttiDeliver/i)) {
             navigator.geolocation.getCurrentPosition(function (position) {
                 map.setCenter({lat: position.coords.latitude, lng: position.coords.longitude});
 
                 //我的图标
-                var marker = new google.maps.Marker({
+                marker = new google.maps.Marker({
                     position: {lng: position.coords.longitude, lat: position.coords.latitude},
                     map: map,
                     icon: "{pigcms{$static_path}images/map/my_pos.png"
@@ -219,7 +220,7 @@
             alert("From App");
             map.setCenter({lat:lat, lng:long});
             //我的图标
-            var marker = new google.maps.Marker({
+            marker = new google.maps.Marker({
                 position: {lng: long, lat: lat},
                 map: map,
                 icon:"{pigcms{$static_path}images/map/my_pos.png"
@@ -229,7 +230,7 @@
         }
 
         function loadPosition(){
-            var marker = new google.maps.Marker({
+            marker = new google.maps.Marker({
                 position: self_position,
                 map: map,
                 icon:"{pigcms{$static_path}images/map/my_pos.png"
