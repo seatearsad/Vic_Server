@@ -1128,7 +1128,7 @@ class DeliverAction extends BaseAction {
     }
 
     public function e_call(){
-        $user_list = D('Deliver_user')->field(true)->where(array('status'=>0,'work_status'=>0))->order('uid asc')->select();
+        $user_list = D('Deliver_user')->field(true)->where(array('status'=>1,'work_status'=>1))->order('uid asc')->select();
         foreach ($user_list as $deliver){
             $sms_data['uid'] = 0;
             $sms_data['mobile'] = $deliver['phone'];
