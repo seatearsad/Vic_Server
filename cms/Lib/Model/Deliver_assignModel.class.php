@@ -90,6 +90,8 @@ class Deliver_assignModel extends Model
                             $this->sendMsg($deliver['uid']);
                         }
                     }
+                    //清除之前的记录 让所有都能抢
+                    $data['record'] = '';
                 }else{//准备变换派单人选
                     $data['deliver_id'] = -1;
                     $data['status'] = 99;
