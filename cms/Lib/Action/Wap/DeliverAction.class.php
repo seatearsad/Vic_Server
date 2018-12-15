@@ -1474,8 +1474,8 @@ class DeliverAction extends BaseAction
 			$where['end_time'] = array(array('gt', strtotime($begin_time)), array('lt', strtotime($end_time . '23:59:59')));
 		}
 
-		$result = D('Deliver_supply')->field('sum(deliver_cash) as offline_money, sum(money-deliver_cash) as online_money, sum(freight_charge) as freight_charge')->where($where)->find();
-		
+//		$result = D('Deliver_supply')->field('sum(deliver_cash) as offline_money, sum(money-deliver_cash) as online_money, sum(freight_charge) as freight_charge')->where($where)->find();
+        $result = D('Deliver_supply')->field('sum(freight_charge) as freight_charge')->where($where)->find();
 		$count_list = D('Deliver_supply')->field('count(1) as cnt, get_type')->where($where)->group('get_type')->select();
 		
 		foreach ($count_list as $row) {
@@ -1496,7 +1496,7 @@ class DeliverAction extends BaseAction
         $b_time = strtotime($b_date);
         $e_time = strtotime($e_date);
 
-        $sql = "SELECT s.*, u.name, u.phone,o.tip_charge,o.price,o.pay_type,o.coupon_price FROM " . C('DB_PREFIX') . "deliver_supply AS s INNER JOIN " . C('DB_PREFIX') . "deliver_user AS u ON s.uid=u.uid LEFT JOIN " . C('DB_PREFIX') . "shop_order AS o ON s.order_id=o.order_id";
+        $sql = "SELECT s.*, u.name, u.phone,o.tip_charge,o.price,o.pay_type as payType,o.coupon_price FROM " . C('DB_PREFIX') . "deliver_supply AS s INNER JOIN " . C('DB_PREFIX') . "deliver_user AS u ON s.uid=u.uid LEFT JOIN " . C('DB_PREFIX') . "shop_order AS o ON s.order_id=o.order_id";
 
         $sql .= ' where s.uid = '.$this->deliver_session['uid'].' and s.status = 5 and o.is_del = 0';
         if ($begin_time && $end_time)
@@ -1506,7 +1506,7 @@ class DeliverAction extends BaseAction
         foreach ($list as $k=>&$val){
             $result['tip'] = $result['tip'] ? $result['tip'] + $val['tip_charge'] : $val['tip_charge'];
             if($val['coupon_price'] > 0) $val['price'] = $val['price'] - $val['coupon_price'];
-
+            $val['pay_type'] = $val['payType'];
             if($val['pay_type'] != 'moneris' && $val['pay_type'] != ''){//统计现金
                 $result['offline_money'] = $result['offline_money'] ? $result['offline_money'] + $val['price'] : $val['price'];
             }else{
