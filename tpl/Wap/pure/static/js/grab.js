@@ -41,7 +41,7 @@ $(function(){
         });
     });
 	getList();
-	//var timer = setInterval(getList, 2000);
+	var timer = setInterval(getList, 2000);
 	
 	$(document).on("click", '.go_detail', function(e){
 		//e.stopPropagation();

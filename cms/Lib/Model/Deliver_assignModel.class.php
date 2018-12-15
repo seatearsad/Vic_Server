@@ -104,7 +104,12 @@ class Deliver_assignModel extends Model
                 $data['deliver_id'] = $this->assignLogic($v['supply_id']);
                 $data['assign_time'] = $curr_time;
                 $data['assign_num'] = $v['assign_num'] + 1;
-                $data['record'] = $v['record'].','.$data['deliver_id'];
+
+                if($data['deliver_id'] == 0)
+                    $data['record'] = '';
+                else
+                    $data['record'] = $v['record'].','.$data['deliver_id'];
+
                 $this->field(true)->where($where)->save($data);
 
                 $this->sendMsg($data['deliver_id']);
