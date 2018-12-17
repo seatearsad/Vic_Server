@@ -42,6 +42,17 @@
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&libraries=places&language=zh-CN"></script>
 	<script type="text/javascript" src="{pigcms{$static_path}js/grab.js?211" charset="utf-8"></script>
 </head>
+<style>
+    .delivery p em {
+        overflow: hidden;
+        white-space: normal;
+        text-overflow: ellipsis;
+        display: inline-block;
+        font-size: 14px;
+        height: auto;
+        word-break: normal | break-word;
+    }
+</style>
 <body>
 	<div class="Dgrab" id="container">
 		<div class="scroller" id="scroller">
