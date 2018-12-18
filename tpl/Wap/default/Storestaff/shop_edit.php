@@ -137,38 +137,38 @@ cursor: pointer;
 					<td>使用{pigcms{$config.score_name}：{pigcms{$order['score_used_count']} </td>
 				</tr>
 				<tr>
-					<td>{pigcms{$config.score_name}抵现：${pigcms{$order['score_deducte']|floatval} 元</td>
+					<td>{pigcms{$config.score_name}抵现：${pigcms{$order['score_deducte']|floatval}</td>
 				</tr>
 				</if>
 				
 				<if condition="$order['merchant_balance'] gt 0">
 				<tr>
-					<td>商家余额：${pigcms{$order['merchant_balance']|floatval} 元</td>
+					<td>商家余额：${pigcms{$order['merchant_balance']|floatval} </td>
 				</tr>
 				</if>
 				<if condition="$order['balance_pay'] gt 0">
 				<tr>
-					<td>平台余额：${pigcms{$order['balance_pay']|floatval} 元</td>
+					<td>平台余额：${pigcms{$order['balance_pay']|floatval} </td>
 				</tr>
 				</if>
 				<if condition="$order['payment_money'] gt 0">
 				<tr>
-					<td>在线支付：${pigcms{$order['payment_money']|floatval} 元</td>
+					<td>在线支付：${pigcms{$order['payment_money']|floatval} </td>
 				</tr>
 				</if>
 				<if condition="$order['card_id']">
 				<tr>
-					<td>店铺优惠券金额：${pigcms{$order['card_price']} 元</td>
+					<td>店铺优惠券金额：${pigcms{$order['card_price']} </td>
 				</tr>
 				</if>
 				<if condition="$order['coupon_id']">
 				<tr>
-					<td>平台优惠券金额：${pigcms{$order['coupon_price']} 元</td>
+					<td>平台优惠券金额：${pigcms{$order['coupon_price']} </td>
 				</tr>
 				</if>
 				<if condition="$order['card_give_money'] gt 0">
 				<tr>
-					<td>会员卡余额：${pigcms{$order['card_give_money']|floatval} 元</td>
+					<td>会员卡余额：${pigcms{$order['card_give_money']|floatval} </td>
 				</tr>
 				</if>
 				<if condition="$order['card_discount'] neq 0 AND $order['card_discount'] neq 10">
@@ -177,7 +177,7 @@ cursor: pointer;
 				</tr>
 				</if>
 				<tr>
-					<td>应收现金：${pigcms{$order['offline_price']|floatval}元</td>
+					<td>应收现金：${pigcms{$order['offline_price']|floatval}</td>
 				</tr>
 				<if condition="!empty($order['use_time'])">		
 					<tr>
@@ -327,6 +327,7 @@ cursor: pointer;
 	<ul class="round">
 		<table width="100%" border="0" cellpadding="0" cellspacing="0" class="cpbiaoge">
 			<tbody>
+            <if condition="$order['info']">
 				<tr>
 					<th>商品名称</th>
 					<th class="cc">单价</th>
@@ -341,6 +342,13 @@ cursor: pointer;
 					<td class="rr">{pigcms{$info['spec']}</td>
 				</tr>
 				</volist>
+            </if>
+                <tr>
+                    <th></th>
+                    <th class="cc"></th>
+                    <th class="cc"></th>
+                    <th class="rr">价格</th>
+                </tr>
 				<tr>
 					<td>商品总价</td>
 					<td class="cc"></td>
