@@ -1209,7 +1209,7 @@ class PayAction extends BaseAction{
 	    echo 'notify_wa_return';
 	    $p = json_encode($_POST);
 	    var_dump($_POST);
-        file_put_contents("../test_log.txt",date("Y/m/d")."   ".date("h:i:sa")."   "."Notify" ."   ". $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'--'.$p."\r\n",FILE_APPEND);
+        file_put_contents("./test_log.txt",date("Y/m/d")."   ".date("h:i:sa")."   "."Notify" ."   ". $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'--'.$p."\r\n",FILE_APPEND);
     }
 }
 ?>
