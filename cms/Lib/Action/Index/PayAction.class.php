@@ -55,7 +55,7 @@ class PayAction extends BaseAction{
 		}
 		$now_user['now_money'] = floatval($now_user['now_money']);
 		$this->assign('now_user',$now_user);
-		
+
 		if($_GET['type'] != 'recharge'){
 			$pay_money = $order_info['order_total_money'] - $now_user['now_money'];
 		}else{
@@ -1058,6 +1058,92 @@ class PayAction extends BaseAction{
         }
     }
 
+    public function WeixinAndAli(){
+        //获取支付的相关配置数据
+        $where = array('tab_id'=>'alipay','gid'=>7);
+        $result = D('Config')->field(true)->where($where)->select();
+        foreach ($result as $payData){
+            if($payData['name'] == 'pay_alipay_name')
+                $pay_id = $payData['value'];
+            if($payData['name'] == 'pay_alipay_key')
+                $pay_key = $payData['value'];
+            if($payData['name'] == 'pay_alipay_pid')
+                $pay_url = $payData['value'];
+        }
+        //var_dump($_POST);
+        //var_dump($this->user_session);
+        //支付类型 weixin alipay
+        $channelId = '';
+        $pay_type = $_POST['pay_type'];
+        //微信支付
+        if($pay_type == 'weixin')
+            $channelId = 'WX_NATIVE';
+
+        //支付宝支付
+        if($pay_type == 'alipay')
+            $channelId = 'ALIPAY_PC';
+
+        $order_id = explode('_',$_POST['order_id'])[1];
+        $data['mchId'] = $pay_id;
+        $data['mchOrderNo'] = $_POST['order_id'].'_'.time();
+        $data['channelId'] = $channelId;
+        $data['currency'] = 'CAD';
+        //单位分
+        $data['amount'] = 1;//$_POST['charge_total'] * 100;
+        $data['clientIp'] = ip();
+        $data['device'] = 'WEB';
+        //支付结果回调URL
+        $data['notifyUrl'] = 'http://54.190.29.18/index.php?g=Index&c=Pay&a=notify_wa_return';
+        $data['subject'] = $order_id;
+        $data['body'] = $_POST['order_id'];
+        if($pay_type == 'weixin') {
+            $data['extra'] = json_encode(array('productId' => $_POST['order_id']));
+        }
+        $data['sign'] = $this->getSign($data,$pay_key);
+        //echo $pay_url;
+        //ksort($data);
+        //var_dump($data);
+        //var_dump(json_encode($data));
+        import('ORG.Net.Http');
+        $http = new Http();
+        $result = $http->curlPost($pay_url,'params='.json_encode($data));
+        //var_dump($result);
+        //通信标识 及 创建支付订单是否成功
+        if ($result['retCode'] == 'SUCCESS') {
+            //交易结果
+            if ($result['resCode'] == 'SUCCESS') {
+                if($pay_type == 'weixin')
+                    $this->success('', $result['codeUrl']);
+                if($pay_type == 'alipay')
+                    $this->success('', $result['payUrl']);
+            } else {
+                $this->error($result['errCodeDes'].' - errCode:'.$result['errcode']);
+            }
+        } else {
+            $this->error($result['retMsg'].' - errCode:'.$result['errcode']);
+        }
+//        if($pay_type == 'weixin'){
+//            if($result['success'])
+//                $this->success('', $result['url']);
+//            else
+//                $this->error('Fail'.' - errCode:'.$result['errcode']);
+//        }else {
+//            //通信标识 及 创建支付订单是否成功
+//            if ($result['retCode'] == 'SUCCESS') {
+//                //交易结果
+//                if ($result['resCode'] == 'SUCCESS') {
+//                    $this->success('', $result['payUrl']);
+//                } else {
+//                    $this->error($result['errCodeDes'].' - errCode:'.$result['errcode']);
+//                }
+//            } else {
+//                $this->error($result['retMsg'].' - errCode:'.$result['errcode']);
+//            }
+//        }
+
+//        echo json_encode($result);
+    }
+
     public function receipt(){
         $now_order = D('Shop_order')->get_order_detail(array('uid' => $this->user_session['uid'], 'order_id' => $_GET['order_id']));
         $pay_record = D('Pay_moneris_record')->field(true)->where(array('order_id'=>$_GET['order_id'],'complete'=>'true'))->find();
@@ -1100,6 +1186,30 @@ class PayAction extends BaseAction{
 
         $this->assign('order',$now_order);
         $this->display();
+    }
+
+    private function getSign($params,$key){
+        if(!empty($params)){
+            $p =  ksort($params);
+            if($p){
+                $str = '';
+                foreach ($params as $k=>$val){
+                    if ($val != '')
+                        $str .= $k .'=' . $val . '&';
+                }
+                $strs = rtrim($str, '&');
+                //var_dump($strs);
+                $sign = md5($strs.'&key='.$key);
+                return strtoupper($sign);
+            }
+        }
+    }
+
+    public function notify_wa_return(){
+	    echo 'notify_wa_return';
+	    $p = json_encode($_POST);
+	    var_dump($_POST);
+        file_put_contents("../test_log.txt",date("Y/m/d")."   ".date("h:i:sa")."   "."Notify" ."   ". $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'--'.$p."\r\n",FILE_APPEND);
     }
 }
 ?>

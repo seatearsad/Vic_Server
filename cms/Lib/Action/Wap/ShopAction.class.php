@@ -2254,8 +2254,10 @@ class ShopAction extends BaseAction{
 		} else {
 			$pick_address = $pick_list[0];
 		}
-
-		$return['price'] = ($return['price'] + $return['delivery_fee'] + $store_shop['pack_fee'])  * 1.05;//税费
+        //garfunkel add
+        $tax = $return['store']['tax_num'] / 100 + 1;
+		//$return['price'] = ($return['price'] + $return['delivery_fee'] + $store_shop['pack_fee'])  * 1.05;//税费
+        $return['price'] = ($return['price'] + $return['delivery_fee'] + $store_shop['pack_fee'])  * $tax;
 
 		$pick_address['distance'] = $this->wapFriendRange($pick_address['distance']);
 		$this->assign($return);
@@ -2556,7 +2558,9 @@ class ShopAction extends BaseAction{
 			//$order_data['total_price'] = ($return['price'] * 1.05) + $delivery_fee + $return['packing_charge'];//订单总价  商品价格+打包费+配送费
             $order_data['price'] = $order_data['discount_price'] - $order_data['merchant_reduce'] - $order_data['balance_reduce'] + $delivery_fee + $return['store']['pack_fee'];//实际要支付的价格
 			//$order_data['price'] = $order_data['discount_price'] - $order_data['merchant_reduce'] - $order_data['balance_reduce'] + $delivery_fee + $return['packing_charge'];//实际要支付的价格
-			$order_data['price'] = $order_data['price'] * 1.05; //税费
+			$tax = $return['store']['tax_num']/100 + 1;
+            $order_data['price'] = $order_data['price'] * $tax;
+            //$order_data['price'] = $order_data['price'] * 1.05; //税费
 
 			$order_data['discount_detail'] = $return['discount_list'] ? serialize($return['discount_list']) : '';//优惠详情
             //var_dump($order_data);die();

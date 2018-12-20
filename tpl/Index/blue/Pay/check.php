@@ -179,6 +179,7 @@
 						$('.need_pay').html('0.00');
 					}
 					$("input[name='use_balance']").attr('value',0);
+					isShowCredit();
 				}
 			});
 			
@@ -649,7 +650,7 @@ a.see_tmp_qrcode {
                 <form action="{pigcms{:U('Index/Pay/MonerisPay')}" method="post" id="moneris_form">
                     <INPUT TYPE="HIDDEN" NAME="ps_store_id" VALUE="">
                     <INPUT TYPE="HIDDEN" NAME="hpp_key" VALUE="">
-                    <INPUT TYPE="HIDDEN" NAME="charge_total" VALUE="{pigcms{$pay_money}"><!--{pigcms{$pay_money}-->
+                    <INPUT TYPE="HIDDEN" NAME="charge_total" VALUE="{pigcms{$order_info.order_total_money}"><!--{pigcms{$pay_money}-->
                     <input type="hidden" name="cust_id" value="{pigcms{:md5($order_info.uid)}">
                     <input type="hidden" name="order_id" value="vicisland_{pigcms{$order_info.order_id}">
                     <input type="hidden" name="rvarwap" value="0">
@@ -749,6 +750,57 @@ a.see_tmp_qrcode {
                    //         $('#moneris_form').submit();
                    //     }
                    // });
+               }else if(pay_type == 'weixin' || pay_type == 'alipay'){
+                   event.preventDefault();
+                   var re_data = {
+                       'charge_total':$('#add_tip').text().replace('$', ""),
+                       'order_id':"vicisland{pigcms{$order_info.order_type}_{pigcms{$order_info.order_id}",
+                       'cust_id':'{pigcms{:md5($order_info.uid)}',
+                       'rvarwap':$('input[name="rvarwap"]').val(),
+                       'coupon_id':$('input[name="coupon_id"]').val(),
+                       'tip':$('#tip_num').text().replace('$', ""),
+                       'order_type':"{pigcms{$order_info.order_type}",
+                       'pay_type':pay_type
+                   };
+                   $.post('{pigcms{:U("Pay/WeixinAndAli")}',re_data,function(data){
+                       //success
+                       if(data.status == 1){
+                           if(pay_type == 'alipay'){
+                               art.dialog({
+                                   title: 'AliPay',
+                                   id: 'ali_pay_pc',
+                                   width:'350px',
+                                   opacity:'0.4',
+                                   lock:true,
+                                   fixed: true,
+                                   resize: false,
+                                   content: '<p style="margin-top:20px;margin-bottom:20px;text-align:center;font-size:16px;color:black;">{pigcms{:L("_PAYMENT_JUMP_")}</p><p style="text-align:center;">'+data.url+'</p><p style="text-align:center;margin-top:20px;margin-bottom:20px;"></p>',
+                                   cancel: function(){
+                                   $("#J-order-pay-button").val("{pigcms{:L('_B_PURE_MY_81_')}");
+                                   $("#J-order-pay-button").removeAttr("disabled");
+                               },
+                           });
+                           }else{
+                               art.dialog({
+                                    title: 'QRCode',
+                                    id: 'weixin_pay_qrcode',
+                                    width:'350px',
+                                    opacity:'0.4',
+                                    lock:true,
+                                    fixed: true,
+                                    resize: false,
+                                    content: '<p style="margin-top:20px;margin-bottom:20px;text-align:center;font-size:16px;color:black;">QRCode</p><p style="text-align:center;"><img src="{pigcms{:U('Recognition/get_own_qrcode')}&qrCon='+data.url+'" style="width:240px;height:240px;"></p><p style="text-align:center;margin-top:20px;margin-bottom:20px;"><input id="J-order-weixin-button" type="button" class="btn btn-large btn-pay" value=\'{pigcms{:L("_IS_COMPLETE_")}\'/></p>',
+                                    cancel: function(){
+                                        $("#J-order-pay-button").val("{pigcms{:L('_B_PURE_MY_81_')}");
+                                        $("#J-order-pay-button").removeAttr("disabled");
+                                    },
+                                });
+                           }
+                       }else{
+                           layer.open({title:['Message'],content:data.info});
+                       }
+
+                   },'json');
                }
 			});
 			$('#sysmsg-error .close').click(function(){
@@ -778,53 +830,53 @@ a.see_tmp_qrcode {
 				});
 				return false;
 			});
-			$('#deal-buy-form').submit(function(){			
-				if($('input[name="pay_type"]:checked').val() == 'weixin' || $('input[name="pay_type"]:checked').val() == 'weifutong'){
-					art.dialog({
-						title: '提示信息',
-						id: 'weixin_pay_tip',
-						opacity:'0.4',
-						lock:true,
-						fixed: true,
-						resize: false,
-						content: '正在获取微信支付相关信息，请稍等...'
-					});
-					$.post($('#deal-buy-form').attr('action'),$('#deal-buy-form').serialize(),function(result){
-						art.dialog.list['weixin_pay_tip'].close();			
-						if(result.status == 1){
-							orderid = result.orderid;
-							art.dialog({
-								title: '请使用微信扫码支付',
-								id: 'weixin_pay_qrcode',
-								width:'350px',
-								opacity:'0.4',
-								lock:true,
-								fixed: true,
-								resize: false,
-								content: '<p style="margin-top:20px;margin-bottom:20px;text-align:center;font-size:16px;color:black;">请使用微信扫描二维码进行支付</p><p style="text-align:center;"><img src="{pigcms{:U('Recognition/get_own_qrcode')}&qrCon='+result.info+'" style="width:240px;height:240px;"></p><p style="text-align:center;margin-top:20px;margin-bottom:20px;"><input id="J-order-weixin-button" type="button" class="btn btn-large btn-pay" value="已支付完成"/></p>',
-								cancel: function(){
-									$("#J-order-pay-button").val("{pigcms{:L('_B_PURE_MY_81_')}");
-									$("#J-order-pay-button").removeAttr("disabled");
-								},
-							});
-						}else{
-							$("#J-order-pay-button").val("{pigcms{:L('_B_PURE_MY_81_')}");
-							$("#J-order-pay-button").removeAttr("disabled");
-							art.dialog({
-								title: '错误提示：',
-								id: 'weixin_pay_error',
-								opacity:'0.4',
-								lock:true,
-								fixed: true,
-								resize: false,
-								content: result.info
-							});
-							
-						}
-					});
-					return false;
-				}
-			});
+			// $('#deal-buy-form').submit(function(){
+			// 	if($('input[name="pay_type"]:checked').val() == 'weixin' || $('input[name="pay_type"]:checked').val() == 'weifutong'){
+			// 		art.dialog({
+			// 			title: '提示信息',
+			// 			id: 'weixin_pay_tip',
+			// 			opacity:'0.4',
+			// 			lock:true,
+			// 			fixed: true,
+			// 			resize: false,
+			// 			content: '正在获取微信支付相关信息，请稍等...'
+			// 		});
+			// 		$.post($('#deal-buy-form').attr('action'),$('#deal-buy-form').serialize(),function(result){
+			// 			art.dialog.list['weixin_pay_tip'].close();
+			// 			if(result.status == 1){
+			// 				orderid = result.orderid;
+			// 				art.dialog({
+			// 					title: '请使用微信扫码支付',
+			// 					id: 'weixin_pay_qrcode',
+			// 					width:'350px',
+			// 					opacity:'0.4',
+			// 					lock:true,
+			// 					fixed: true,
+			// 					resize: false,
+			// 					content: '<p style="margin-top:20px;margin-bottom:20px;text-align:center;font-size:16px;color:black;">请使用微信扫描二维码进行支付</p><p style="text-align:center;"><img src="{pigcms{:U('Recognition/get_own_qrcode')}&qrCon='+result.info+'" style="width:240px;height:240px;"></p><p style="text-align:center;margin-top:20px;margin-bottom:20px;"><input id="J-order-weixin-button" type="button" class="btn btn-large btn-pay" value="已支付完成"/></p>',
+			// 					cancel: function(){
+			// 						$("#J-order-pay-button").val("{pigcms{:L('_B_PURE_MY_81_')}");
+			// 						$("#J-order-pay-button").removeAttr("disabled");
+			// 					},
+			// 				});
+			// 			}else{
+			// 				$("#J-order-pay-button").val("{pigcms{:L('_B_PURE_MY_81_')}");
+			// 				$("#J-order-pay-button").removeAttr("disabled");
+			// 				art.dialog({
+			// 					title: '错误提示：',
+			// 					id: 'weixin_pay_error',
+			// 					opacity:'0.4',
+			// 					lock:true,
+			// 					fixed: true,
+			// 					resize: false,
+			// 					content: result.info
+			// 				});
+			//
+			// 			}
+			// 		});
+			// 		return false;
+			// 	}
+			// });
 			$('#J-order-weixin-button').live('click',function(){
 				window.location.href="{pigcms{:U('Pay/weixin_back',array('order_type'=>$order_info['order_type']))}&order_id="+orderid+'&pay_type='+$('input[name="pay_type"]:checked').val();
 			});
@@ -932,7 +984,10 @@ a.see_tmp_qrcode {
             if(pay_type == 'moneris'){
                 $('#card').show();
                 $('#tip_label').show();
-            }else{
+            }else if(pay_type == 'weixin' || pay_type == 'alipay') {
+                $('#card').hide();
+                $('#tip_label').show();
+            }else {
                 $('#card').hide();
                 $('#tip_label').hide();
             }

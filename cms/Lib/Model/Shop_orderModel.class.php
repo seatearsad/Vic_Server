@@ -101,6 +101,7 @@ class Shop_orderModel extends Model
 					'order_type'		=>	'shop',
 					'extra_price'	=>	$now_order['extra_price'],
 					'real_orderid' 		=> $now_order['real_orderid'],
+					'tax_num'			=>	$merchant_store['tax_num']
 			);
 		} else {
 			$order_info = array(
@@ -125,6 +126,7 @@ class Shop_orderModel extends Model
 				'order_txt_type'	=>	$str,
 				'extra_price'	=>	$now_order['extra_price'],
                 'real_orderid' 		=> $now_order['real_orderid'],
+                'tax_num'			=>	$merchant_store['tax_num']
 			);
 		}
 		return array('error' => 0, 'order_info' => $order_info);

@@ -2423,6 +2423,92 @@ class PayAction extends BaseAction{
         }
     }
 
+    public function WeixinAndAli(){
+        //获取支付的相关配置数据
+        $where = array('tab_id'=>'alipay','gid'=>7);
+        $result = D('Config')->field(true)->where($where)->select();
+        foreach ($result as $payData){
+            if($payData['name'] == 'pay_alipay_name')
+                $pay_id = $payData['value'];
+            if($payData['name'] == 'pay_alipay_key')
+                $pay_key = $payData['value'];
+            if($payData['name'] == 'pay_alipay_pid')
+                $pay_url = $payData['value'];
+        }
+        //var_dump($_POST);
+        //var_dump($this->user_session);
+        //支付类型 weixin alipay
+        $channelId = '';
+        $pay_type = $_POST['pay_type'];
+        //微信公众号 选择微信支付
+        if(!$this->is_wexin_browser && $pay_type == 'weixin') {
+            $channelId = 'WX_JSAPI';
+            $pay_url = 'http://open.4jicao.com/goods/payForSubmit';
+        }
+        //H5 选择微信支付
+//        if(!$this->is_wexin_browser && $pay_type == 'weixin')
+//            $channelId = 'WX_MWEB';
+        //H5 支付宝支付
+        if($pay_type == 'alipay')
+            $channelId = 'ALIPAY_WAP';
+
+        $order_id = explode('_',$_POST['order_id'])[1];
+        $data['mchId'] = $pay_id;
+        $data['mchOrderNo'] = $_POST['order_id'].'_'.time();
+        $data['channelId'] = $channelId;
+        $data['currency'] = 'CAD';
+        //单位分
+        $data['amount'] = $_POST['charge_total'] * 100;
+        $data['clientIp'] = ip();
+        $data['device'] = 'WEB';
+        //支付结果回调URL
+        $data['notifyUrl'] = 'https://tutti.app';
+        $data['subject'] = $order_id;
+        $data['body'] = $_POST['order_id'];
+//        $data['param1'] = '';
+//        $data['param2'] = '';
+        if(!$this->is_wexin_browser && $pay_type == 'weixin') {
+            $data['returnUrl'] = 'https://tutti.app';
+            $data['extra'] = json_encode(array('openId' => $this->user_session['openid']));
+        }
+//        if(!$this->is_wexin_browser && $pay_type == 'weixin') {
+//            $h5_info['type'] = "WAP";
+//            $h5_info['wap_url'] = 'https://tutti.app/wap.php';
+//            $h5_info['wap_name'] = 'Tutti';
+//            $sceneInfo['h5_info'] = $h5_info;
+//            $data['extra'] = json_encode(array('sceneInfo' => $sceneInfo));
+//        }
+        $data['sign'] = $this->getSign($data,$pay_key);
+        //echo $pay_url;
+        //ksort($data);
+        //var_dump($data);
+        //var_dump(json_encode($data));
+        import('ORG.Net.Http');
+        $http = new Http();
+        $result = $http->curlPost($pay_url,'params='.json_encode($data));
+        //var_dump($result);
+        if($channelId == 'WX_JSAPI'){
+            if($result['success'])
+                $this->success('', $result['url']);
+            else
+                $this->error('Fail'.' - errCode:'.$result['errcode']);
+        }else {
+            //通信标识 及 创建支付订单是否成功
+            if ($result['retCode'] == 'SUCCESS') {
+                //交易结果
+                if ($result['resCode'] == 'SUCCESS') {
+                    $this->success('', $result['payUrl']);
+                } else {
+                    $this->error($result['errCodeDes'].' - errCode:'.$result['errcode']);
+                }
+            } else {
+                $this->error($result['retMsg'].' - errCode:'.$result['errcode']);
+            }
+        }
+
+//        echo json_encode($result);
+    }
+
     public function receipt(){
         $now_order = D('Shop_order')->get_order_detail(array('uid' => $this->user_session['uid'], 'order_id' => $_GET['order_id']));
         $pay_record = D('Pay_moneris_record')->field(true)->where(array('order_id'=>$_GET['order_id']))->find();
@@ -2465,6 +2551,23 @@ class PayAction extends BaseAction{
 
         $this->assign('order',$now_order);
         $this->display();
+    }
+
+    private function getSign($params,$key){
+        if(!empty($params)){
+            $p =  ksort($params);
+            if($p){
+                $str = '';
+                foreach ($params as $k=>$val){
+                    if ($val != '')
+                        $str .= $k .'=' . $val . '&';
+                }
+                $strs = rtrim($str, '&');
+                //var_dump($strs);
+                $sign = md5($strs.'&key='.$key);
+                return strtoupper($sign);
+            }
+        }
     }
 }
 ?>

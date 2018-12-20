@@ -631,6 +631,30 @@
                     //         $('#moneris_form').submit();
                     //     }
                     // });
+                }else if(pay_type == 'weixin' || pay_type == 'alipay'){
+                    var re_data = {
+                        'charge_total':$('#add_tip').text().replace('$', ""),
+                        'order_id':"vicisland{pigcms{$order_info.order_type}_{pigcms{$order_info.order_id}",
+                        'cust_id':'{pigcms{:md5($order_info.uid)}',
+                        'rvarwap':$('input[name="rvarwap"]').val(),
+                        'coupon_id':$('input[name="coupon_id"]').val(),
+                        'tip':$('#tip_num').text().replace('$', ""),
+                        'order_type':"{pigcms{$order_info.order_type}",
+                        'pay_type':pay_type
+                    };
+                    $.post('{pigcms{:U("Pay/WeixinAndAli")}',re_data,function(data){
+                        layer.closeAll();
+                        //success
+                        if(data.status == 1){
+                            if(pay_type == 'alipay')
+                                $('body').html(data.url);
+                            else
+                                window.location.href = data.url;
+                        }else{
+                            layer.open({title:['Message'],content:data.info});
+                        }
+
+                    },'json');
                 }else{
                     layer.closeAll();
                     var res = callpay();
@@ -832,7 +856,7 @@
                         <?php } ?>
                         <dd class="dd-padding">
                             <label class="mt">
-                                <span style="float: right;" class="pay-wrapper">{pigcms{:L('_TAXATION_TXT_')}：<b style="color:red">+5%</b></span>
+                                <span style="float: right;" class="pay-wrapper">{pigcms{:L('_TAXATION_TXT_')}：<b style="color:red">{pigcms{$order_info['tax_num']}%</b></span>
                             </label>
                         </dd>
                         <dd class="dd-padding" id="balance_money" >
@@ -1133,6 +1157,9 @@
             if(pay_type == 'moneris'){
                 $('#credit').show();
                 $('#tip_label').show();
+            }else if(pay_type == 'weixin' || pay_type == 'alipay'){
+                $('#tip_label').show();
+                $('#credit').hide();
             }else{
                 $('#credit').hide();
                 $('#tip_label').hide();

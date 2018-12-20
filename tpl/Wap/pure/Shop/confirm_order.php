@@ -427,7 +427,7 @@ a {
 <div class="fixed" style="min-height:90px;padding:14px;">
 	<p>
 		<span class="fr">{pigcms{:L('_TOTAL_RECE_')}：<strong>$<span id="totalPrice_">{pigcms{$price|floatval}<if condition="$extra_price gt 0 AND $config.open_extra_price eq 1">+{pigcms{$extra_price|floatval}{pigcms{$config.extra_price_alias_name}</if></span></strong> / <span id="cartNum_">{pigcms{$total}</span></span>
-		<p id="show_delivery_fee" <if condition="$delivery_type eq 2 OR $pick_addr_id OR $now_time_value eq 2">style="display:none"</if>>{pigcms{:L('_DELI_PRICE_')}：${pigcms{$delivery_fee}，{pigcms{:L('_TAXATION_TXT_')}: 5%</p>
+		<p id="show_delivery_fee" <if condition="$delivery_type eq 2 OR $pick_addr_id OR $now_time_value eq 2">style="display:none"</if>>{pigcms{:L('_DELI_PRICE_')}：${pigcms{$delivery_fee}，{pigcms{:L('_TAXATION_TXT_')}: {pigcms{$store['tax_num']}%</p>
 		<if condition="$have_two_time">	
 		<p id="show_delivery_fee2" <if condition="$now_time_value eq 1">style="display:none"</if>>{pigcms{:L('_DELI_PRICE_')}：${pigcms{$delivery_fee2}</p>
 		</if>	

@@ -63,6 +63,10 @@
 					<span class="cb-disable"><label class="cb-disable"><span>关闭</span><input type="radio" name="status" value="0" /></label></span>
 				</td>
 			</tr>
+            <tr>
+                <th width="80">税费</th>
+                <td><input type="text" class="input fl" name="tax_num" size="5" value="5" validate="required:true,number:true,maxlength:6" />%</td>
+            </tr>
 		</table>
 		<div class="btn hidden">
 			<input type="submit" name="dosubmit" id="dosubmit" value="提交" class="button" />
