@@ -197,7 +197,6 @@ class PayAction extends BaseAction{
 		return $payName[$label];
 	}
 	public function go_pay(){
-
 		if(empty($this->user_session)){
 			$this->error_tips('请先进行登录！',U('Login/index'));
 		}
@@ -221,6 +220,9 @@ class PayAction extends BaseAction{
 			$now_order = D('User_recharge_order')->get_pay_order($this->user_session['uid'],intval($_POST['order_id']),true);
 		} elseif ($_POST['order_type'] == 'shop') {
 			$now_order = D('Shop_order')->get_pay_order($this->user_session['uid'],intval($_POST['order_id']),true);
+
+			if($_POST['pay_type'] == 'offline' && $now_order['order_info']['tip_charge'] != 0)
+			    D('Shop_order')->where(array('order_id'=>intval($_POST['order_id'])))->save(array('tip_charge'=>0));
 		} elseif ($_POST['order_type'] == 'gift') {
 			$now_order = D('Gift_order')->get_pay_order($this->user_session['uid'],intval($_POST['order_id']),true);
 		}else{
@@ -1093,9 +1095,9 @@ class PayAction extends BaseAction{
         $data['clientIp'] = ip();
         $data['device'] = 'WEB';
         //支付结果回调URL
-        $data['notifyUrl'] = 'http://54.190.29.18/index.php?g=Index&c=Pay&a=notify_wa_return';
-        $data['subject'] = $order_id;
-        $data['body'] = $_POST['order_id'];
+        $data['notifyUrl'] = 'http://54.190.29.18/notify';
+        $data['subject'] = 'Tutti Order '.$order_id;
+        $data['body'] = 'Tutti Order';
         if($pay_type == 'weixin') {
             $data['extra'] = json_encode(array('productId' => $_POST['order_id']));
         }
@@ -1112,6 +1114,23 @@ class PayAction extends BaseAction{
         if ($result['retCode'] == 'SUCCESS') {
             //交易结果
             if ($result['resCode'] == 'SUCCESS') {
+                //先处理一下订单信息
+                //处理小费
+                $order_data = array('tip_charge'=>$_POST['tip']);
+                //处理优惠券
+                if($_POST['coupon_id']){
+                    $now_coupon = D('System_coupon')->get_coupon_by_id($_POST['coupon_id']);
+                    if(!empty($now_coupon)){
+                        $coupon_data = D('System_coupon_hadpull')->field(true)->where(array('id'=>$_POST['coupon_id']))->find();
+                        $coupon_real_id = $coupon_data['coupon_id'];
+                        $coupon = D('System_coupon')->get_coupon($coupon_real_id);
+
+                        $in_coupon = array('coupon_id'=>$data['coupon_id'],'coupon_price'=>$coupon['discount']);
+                        $order_data = array_merge($order_data,$in_coupon);
+                    }
+                }
+                D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->save($order_data);
+
                 if($pay_type == 'weixin')
                     $this->success('', $result['codeUrl']);
                 if($pay_type == 'alipay')
@@ -1122,26 +1141,6 @@ class PayAction extends BaseAction{
         } else {
             $this->error($result['retMsg'].' - errCode:'.$result['errcode']);
         }
-//        if($pay_type == 'weixin'){
-//            if($result['success'])
-//                $this->success('', $result['url']);
-//            else
-//                $this->error('Fail'.' - errCode:'.$result['errcode']);
-//        }else {
-//            //通信标识 及 创建支付订单是否成功
-//            if ($result['retCode'] == 'SUCCESS') {
-//                //交易结果
-//                if ($result['resCode'] == 'SUCCESS') {
-//                    $this->success('', $result['payUrl']);
-//                } else {
-//                    $this->error($result['errCodeDes'].' - errCode:'.$result['errcode']);
-//                }
-//            } else {
-//                $this->error($result['retMsg'].' - errCode:'.$result['errcode']);
-//            }
-//        }
-
-//        echo json_encode($result);
     }
 
     public function receipt(){
@@ -1206,10 +1205,82 @@ class PayAction extends BaseAction{
     }
 
     public function notify_wa_return(){
-	    echo 'notify_wa_return';
+	    //是否跳转
+	    $is_jump = false;
+	    if($_GET){
+            $_POST = $_GET;
+            $is_jump = true;
+        }
+
 	    $p = json_encode($_POST);
-	    var_dump($_POST);
-        file_put_contents("./test_log.txt",date("Y/m/d")."   ".date("h:i:sa")."   "."Notify" ."   ". $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'--'.$p."\r\n",FILE_APPEND);
+        //存储返回记录 暂时使用 正式上线注释掉
+        //file_put_contents("./test_log.txt",date("Y/m/d")."   ".date("h:i:sa")."   "."Notify" ."   ". $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'--'.$p."\r\n",FILE_APPEND);
+
+        $where = array('tab_id'=>'alipay','gid'=>7);
+        $result = D('Config')->field(true)->where($where)->select();
+        foreach ($result as $payData){
+            if($payData['name'] == 'pay_alipay_key')
+                $key = $payData['value'];
+        }
+        //$json_data = '{"payOrderId":"P00181221140838553334009319","amount":"1","mchId":"10000029","mchOrderNo":"Tuttishop_11377_1545372518","subject":"Tutti+Order+11377","paySuccTime":"1545372518567","sign":"66D651F73E42758E2015B5C2D1BCF526","channelOrderNo":"2018122122001343950505016972","backType":"1","param1":"","param2":"","clientIp":"127.0.0.1","currency":"CAD","device":"WEB","channelId":"ALIPAY_PC","status":"2"}';
+        //$_POST = json_decode($json_data,true);
+        if($_POST){
+            $rData['payOrderId'] = $_POST['payOrderId'];
+            $rData['amount'] = $_POST['amount'];
+            $rData['mchId'] = $_POST['mchId'];
+            $rData['mchOrderNo'] = $_POST['mchOrderNo'];
+            $rData['subject'] = $_POST['subject'];
+            $rData['paySuccTime'] = $_POST['paySuccTime'];
+            $rData['channelOrderNo'] = $_POST['channelOrderNo'];
+            $rData['backType'] = $_POST['backType'];
+            $rData['param1'] = $_POST['param1'];
+            $rData['param2'] = $_POST['param2'];
+            $rData['clientIp'] = $_POST['clientIp'];
+            $rData['currency'] = $_POST['currency'];
+            $rData['device'] = $_POST['device'];
+            $rData['channelId'] = $_POST['channelId'];
+            $rData['status'] = $_POST['status'];
+
+            //获取订单id
+            $order = explode("_",$rData['mchOrderNo']);
+            $order_id = $order[1];
+
+            if($rData['status'] == 2){
+                $sign = $this->getSign($rData,$key);
+                //var_dump($sign.'=='. $_POST['sign']);
+                //验证签名
+                if($sign == $_POST['sign']){
+                    $now_order = D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->find();
+                    if($now_order['pain'] == 0){
+                        //获取支付方式
+                        $channel = explode("_",$rData['channelId']);
+                        $payment = $channel[0] == 'WX' ? 'weixin' : 'alipay';
+                        //换算支付金额
+                        $amount = $rData['amount'] / 100;
+
+                        $order_param['order_id'] = $order_id;
+                        $order_param['order_from'] = 0;
+                        $order_param['order_type'] = 'shop';
+                        $order_param['pay_time'] = date('Y-m-d H:i:s',substr($rData['paySuccTime'],0,10));
+                        $order_param['pay_money'] = $amount;
+                        $order_param['pay_type'] = $payment;
+                        $order_param['is_own'] = 0;
+                        $order_param['third_id'] = 0;
+                        $order_param['invoice_head'] = $rData['payOrderId'];//借用发票头这个字段存储交易号
+                        $result = D('Shop_order')->after_pay($order_param);
+                    }
+                    echo 'success';
+                }
+            }
+
+        }else{
+            echo 'Error';
+        }
+        if($is_jump){
+            sleep(1);
+            $url =U("User/Index/shop_order_view",array('order_id'=>$order_id));
+            header('Location:'.$url);
+        }
     }
 }
 ?>

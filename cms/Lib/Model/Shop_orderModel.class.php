@@ -62,10 +62,18 @@ class Shop_orderModel extends Model
 		}
 
 		$order_content = D('Shop_order_detail')->field(true)->where(array('order_id' => $order_id))->select();
+		$tax_price = 0;
+		$deposit_price = 0;
 		foreach ($order_content as &$trow) {
 			$trow['name'] = $trow['spec'] ? $trow['name'] . ' (' . $trow['spec'] . ')' : $trow['name'];
 			$trow['money'] = floatval($trow['price'] * $trow['num']);
+			$goods = D('Shop_goods')->field(true)->where(array('goods_id'=>$trow['goods_id']))->find();
+			$trow['tax_num'] = $goods['tax_num'];
+			$trow['deposit_price'] = $goods['deposit_price'];
+            $tax_price += $trow['price'] * $goods['tax_num']/100 * $trow['num'];
+            $deposit_price += $goods['deposit_price'];
 		}
+        $tax_price = $tax_price + ($now_order['freight_charge'] + $now_order['packing_charge']) * $merchant_store['tax_num']/100;
 
 		//$str='';
 		foreach ($order_content as $val) {
@@ -96,12 +104,16 @@ class Shop_orderModel extends Model
 					'order_num'			=>	$now_order['num'],
 					'order_from'		=>	$now_order['order_from'],
 					'freight_charge'	=>	$now_order['freight_charge'],
+					'packing_charge'	=>	$now_order['packing_charge'],
 					'order_content'		=>  $order_content,
 					'order_total_money'	=>	$now_order['price'],//当前需要支付的金额
 					'order_type'		=>	'shop',
 					'extra_price'	=>	$now_order['extra_price'],
 					'real_orderid' 		=> $now_order['real_orderid'],
-					'tax_num'			=>	$merchant_store['tax_num']
+					'tax_num'			=>	$merchant_store['tax_num'],
+					'tip_charge'		=>	$now_order['tip_charge'],
+					'tax_price'			=>	$tax_price,
+					'deposit_price'		=>	$deposit_price
 			);
 		} else {
 			$order_info = array(
@@ -121,12 +133,16 @@ class Shop_orderModel extends Model
 				'order_content'		=>  $order_content,
 				'order_total_money'	=>	$now_order['price'],
 				'freight_charge'	=>	$now_order['freight_charge'],
+                'packing_charge'	=>	$now_order['packing_charge'],
 				'order_type'		=>	'shop',
 				'img'				=> C('config.site_url').'/upload/store/'.$imgs[0],
 				'order_txt_type'	=>	$str,
 				'extra_price'	=>	$now_order['extra_price'],
                 'real_orderid' 		=> $now_order['real_orderid'],
-                'tax_num'			=>	$merchant_store['tax_num']
+                'tax_num'			=>	$merchant_store['tax_num'],
+                'tip_charge'		=>	$now_order['tip_charge'],
+                'tax_price'			=>	$tax_price,
+                'deposit_price'		=>	$deposit_price
 			);
 		}
 		return array('error' => 0, 'order_info' => $order_info);
@@ -377,7 +393,7 @@ class Shop_orderModel extends Model
 	public function after_pay($order_param)
 	{
 		//garfunkel modify
-		if($order_param['pay_type'] == 'moneris' || $order_param['pay_type'] == 'Cash'){//
+		if($order_param['pay_type'] == 'moneris' || $order_param['pay_type'] == 'Cash' || $order_param['pay_type'] == 'weixin' || $order_param['pay_type'] == 'alipay'){//
             $where['order_id'] = $order_param['order_id'];
 		}else{
             if ($order_param['pay_type'] != '') {
@@ -540,7 +556,8 @@ class Shop_orderModel extends Model
 			$data_shop_order['payment_money'] = floatval($order_param['pay_money']);//在线支付的钱
 			$data_shop_order['pay_type'] = $order_param['pay_type'];
 			$data_shop_order['third_id'] = $order_param['third_id'];
-			$data_shop_order['is_mobile_pay'] = $order_param['is_mobile'];
+            if ($order_param['is_mobile'])
+                $data_shop_order['is_mobile_pay'] = $order_param['is_mobile'];
 			$data_shop_order['is_own'] = isset($order_param['sub_mch_id'])?2:$order_param['is_own'];
 			if(!$data_shop_order['is_own']) $data_shop_order['is_own'] = 0;
 			$data_shop_order['paid'] = 1;

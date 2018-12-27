@@ -1969,4 +1969,13 @@ class ShopAction extends BaseAction
         }
     }
 
+    public function goods_tax(){
+        $tax_num = $_POST['tax_num'];
+        $data['tax_num'] = $tax_num;
+        $where['store_id'] = $_POST['store_id'];
+        if($_POST['sort_id'] != 0) $where['sort_id'] = $_POST['sort_id'];
+        D('Shop_goods')->where($where)->save($data);
+        $this->success('Success');
+    }
+
 }

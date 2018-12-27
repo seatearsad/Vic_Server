@@ -25,6 +25,8 @@
 			<div class="row">
 				<div class="col-xs-12">
 				    <a class="btn btn-success" href="{pigcms{:U('Shop/sort_add',array('store_id' => $now_store['store_id'], 'fid' => $fid))}">新建分类</a>
+                    | <input type="text" id="tax_num" name="tax_num" value="">%
+                    <button class="btn btn-success" onclick="Modify_tax({pigcms{$now_store['store_id']},0)">修改全部税率</button>
 					<div id="shopList" class="grid-view">
 						<table class="table table-striped table-bordered table-hover">
 							<thead>
@@ -95,6 +97,22 @@ $(function(){
 		if(!confirm('确定要删除这条数据吗?不可恢复。')) return false;
 	});
 });
+function Modify_tax(store_id,sort_id) {
+    if($('#tax_num').val()){
+        $.ajax({
+            url:"{pigcms{:U('Shop/goods_tax')}",
+            type:"post",
+            data:{"store_id":store_id,"sort_id":sort_id,"tax_num":$('#tax_num').val()},
+            dataType:"json",
+            success:function(d){
+                alert(d.info);
+                window.location.reload();
+            }
+        });
+    }else {
+        alert('请输入税率!');
+    }
+}
 function updateStatus(dom1, dom2, status1, status2, attribute){
 	$(dom1).each(function(){
 		if($(this).attr("data-status")==status1){

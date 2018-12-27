@@ -568,7 +568,7 @@
                                 'save':$('input[name="save"]:checked').val(),
                                 // 'charge_total':$('input[name="charge_total"]').val(),
                                 'charge_total':$('#add_tip').text().replace('$', ""),
-                                'order_id':"vicisland{pigcms{$order_info.order_type}_{pigcms{$order_info.order_id}",
+                                'order_id':"Tutti{pigcms{$order_info.order_type}_{pigcms{$order_info.order_id}",
                                 'cust_id':'{pigcms{:md5($order_info.uid)}',
                                 'rvarwap':$('input[name="rvarwap"]').val(),
                                 'coupon_id':$('input[name="coupon_id"]').val(),
@@ -856,7 +856,7 @@
                         <?php } ?>
                         <dd class="dd-padding">
                             <label class="mt">
-                                <span style="float: right;" class="pay-wrapper">{pigcms{:L('_TAXATION_TXT_')}：<b style="color:red">{pigcms{$order_info['tax_num']}%</b></span>
+                                <span style="float: right;" class="pay-wrapper">{pigcms{:L('_TAXATION_TXT_')}：<b style="color:red">${pigcms{$order_info['tax_price']}</b></span>
                             </label>
                         </dd>
                         <dd class="dd-padding" id="balance_money" >

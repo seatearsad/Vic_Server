@@ -108,6 +108,8 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 								<tr class="order-table-head-row">
 									<th class="desc">{pigcms{:L('_PRODUCT_NAME_')}</th>
 									<th class="unit-price">{pigcms{:L('_SINGLE_PRICE_')}</th>
+                                    <th class="unit-price">{pigcms{:L('_TAXATION_TXT_')}</th>
+                                    <th class="unit-price">{pigcms{:L('_DEPOSIT_TXT_')}</th>
 									<th class="amount">{pigcms{:L('_B_PURE_MY_69_')}</th>
 									<th class="col-total">{pigcms{:L('_B_PURE_MY_70_')}</th>
 								</tr>
@@ -115,14 +117,16 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 								<tr>
 									<td class="desc">{pigcms{$food['name']}<if condition="$food['str']">　<span style="color: gray;fond-size:10px">({pigcms{$food['str']})</span></if></td>
 									<td class="money J-deal-buy-price">$<span id="deal-buy-price">{pigcms{:floatval($food['price'])}<if condition="$food.extra_price gt 0 AND $config.open_extra_price eq 1">+{pigcms{$food.extra_price}{pigcms{$config.extra_price_alias_name}</if></span></td>
-									<td class="deal-component-quantity ">{pigcms{$food['num']}</td>
+                                    <td class="money J-deal-buy-price"><span id="deal-buy-price">{pigcms{:floatval($food['tax_num'])}</span>%</td>
+                                    <td class="money J-deal-buy-price">$<span id="deal-buy-price">{pigcms{:floatval($food['deposit_price'])}</span></td>
+                                    <td class="deal-component-quantity ">{pigcms{$food['num']}</td>
 									<td class="money total rightpadding col-total">$<span id="J-deal-buy-total">{pigcms{$food['price'] * $food['num']|floatval}<if condition="$food.extra_price gt 0 AND $config.open_extra_price eq 1">+{pigcms{$food['extra_price']*$food['num']|floatval}{pigcms{$config.extra_price_alias_name}</if></span></td>
 								</tr>
 								</volist>
 								
 								<tr>
 									<td></td>
-									<td colspan="3" class="extra-fee total-fee rightpadding">
+									<td colspan="5" class="extra-fee total-fee rightpadding">
 										<div><strong>{pigcms{:L('_TOTAL_COMM_PRICE_')}</strong>：<span class="inline-block money">$<strong id="basic_price">{pigcms{$basic_price|floatval}<if condition="$extra_price gt 0 AND $config.open_extra_price eq 1">+{pigcms{$extra_price}{pigcms{$config.extra_price_alias_name}</if></strong></span></div>
 										<!--div><strong>{pigcms{:L('_TOTAL_PRICE_A_DIS_')}</strong>：<span class="inline-block money">$<strong id="discount_price">{pigcms{$vip_discount_money|floatval}<if condition="$extra_price gt 0 AND $config.open_extra_price eq 1">+{pigcms{$extra_price}{pigcms{$config.extra_price_alias_name}</if></strong></span></div-->
 										<if condition="$sys_first_reduce gt 0 OR $sys_full_reduce gt 0">
@@ -136,11 +140,11 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 										<!--if condition="$packing_charge"-->
 										<div><strong>{pigcms{:L('_PACK_PRICE_')}</strong>：<span class="inline-block money">$<strong id="packing_charge">{pigcms{$store['pack_fee']|floatval}</strong></span></div>
 										<!--/if-->
-										
+                                        <div><strong>{pigcms{:L('_DEPOSIT_TXT_')}</strong>：<span class="inline-block money">$<strong id="packing_charge">{pigcms{$deposit_price|floatval}</strong></span></div>
 										
 										<div id="show_delivery_fee" <if condition="!$delivery_fee">style="display:none"</if>><strong>{pigcms{:L('_DELI_PRICE_')}</strong>：<span class="inline-block money">$<strong id="delivery_fee">{pigcms{$delivery_fee|floatval}</strong></span></div>
 										
-										<div><strong>{pigcms{:L('_TAXATION_TXT_')}</strong>：<span class="inline-block money"><strong id="goods_price">5%</strong></span></div>
+										<div><strong>{pigcms{:L('_TAXATION_TXT_')}</strong>：<span class="inline-block money">$<strong id="goods_price">{pigcms{$tax_price}</strong></span></div>
 										
 										<div><strong>{pigcms{:L('_TOTAL_RECE_')}</strong>：<span class="inline-block money">$<strong id="price">{pigcms{$totalPrice|floatval}<if condition="$extra_price gt 0 AND $config.open_extra_price eq 1">+{pigcms{$extra_price}{pigcms{$config.extra_price_alias_name}</if></strong></span></div>
 									</td>

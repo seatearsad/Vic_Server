@@ -214,6 +214,9 @@ class StoreModel extends Model
         $store['send'] = $row['deliver_type'] == 2 ? false : true;//是否支持配送
         $store['delivery_time'] = $row['send_time'];//配送时长
         $store['delivery_price'] = floatval($row['basic_price']);//起送价
+        $store['tax_num'] = $row['tax_num'];
+        $store['deposit_price'] = floatval($row['deposit_price']);
+
         //$store['deliver_name'] = $delivers[$row['deliver_type']];
         $is_have_two_time = 0;//是否是第二时段的配送显示
 
@@ -421,6 +424,9 @@ class StoreModel extends Model
                 }
             }
             $returnList[$k]['proper_desc'] = $proper_desc;
+
+            $returnList[$k]['deposit'] = $v['deposit_price'];
+            $returnList[$k]['tax_num'] = $v['tax_num'];
         }
 
         return $returnList;
@@ -704,5 +710,65 @@ class StoreModel extends Model
         ,L('_B_PURE_MY_76_'),L('_B_PURE_MY_77_'),L('_B_PURE_MY_78_'),L('_B_PURE_MY_79_'),L('_B_PURE_MY_80_'));
 
         return $name_list[$status];
+    }
+
+    public function WeixinAndAli($pay_type,$order_id,$price){
+        //获取支付的相关配置数据
+        $where = array('tab_id'=>'alipay','gid'=>7);
+        $result = D('Config')->field(true)->where($where)->select();
+        foreach ($result as $payData){
+            if($payData['name'] == 'pay_alipay_name')
+                $pay_id = $payData['value'];
+            if($payData['name'] == 'pay_alipay_key')
+                $pay_key = $payData['value'];
+            if($payData['name'] == 'pay_alipay_pid')
+                $pay_url = $payData['value'];
+        }
+
+        $channelId = '';
+        //微信支付
+        if($pay_type == 2) {
+            $channelId = 'WX_APP';
+        }
+        //支付宝支付
+        if($pay_type == 1)
+            $channelId = 'ALIPAY_MOBILE';
+
+        $data['mchId'] = $pay_id;
+        $data['mchOrderNo'] = 'Tuttishop_'.$order_id.'_'.time();
+        $data['channelId'] = $channelId;
+        $data['currency'] = 'CAD';
+        //单位分
+        $data['amount'] = 1;//$price * 100;
+        $data['clientIp'] = ip();
+        $data['device'] = 'APP';
+        //支付结果回调URL
+        $data['notifyUrl'] = 'http://54.190.29.18/notify';
+        $data['subject'] = 'Tutti Order '.$order_id;
+        $data['body'] = 'Tutti Order';
+        $data['sign'] = $this->getSign($data,$pay_key);
+
+        import('ORG.Net.Http');
+        $http = new Http();
+        $result = $http->curlPost($pay_url,'params='.json_encode($data));
+
+        return $result;
+    }
+
+    private function getSign($params,$key){
+        if(!empty($params)){
+            $p =  ksort($params);
+            if($p){
+                $str = '';
+                foreach ($params as $k=>$val){
+                    if ($val != '')
+                        $str .= $k .'=' . $val . '&';
+                }
+                $strs = rtrim($str, '&');
+                //var_dump($strs);
+                $sign = md5($strs.'&key='.$key);
+                return strtoupper($sign);
+            }
+        }
     }
 }

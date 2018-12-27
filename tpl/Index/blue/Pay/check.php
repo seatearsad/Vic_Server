@@ -463,7 +463,7 @@ a.see_tmp_qrcode {
 										</if>							
 										</td>
 				                        <td colspan="3" class="extra-fee total-fee rightpadding">
-											<strong><if condition="!empty($leveloff) AND is_array($leveloff)">{pigcms{:L('_AFTER_DIS_')}</if>{pigcms{:L('_ORDER_TOTAL_')}(+5% {pigcms{:L('_TAXATION_TXT_')})</strong>：
+											<strong><if condition="!empty($leveloff) AND is_array($leveloff)">{pigcms{:L('_AFTER_DIS_')}</if>{pigcms{:L('_ORDER_TOTAL_')}(+ {pigcms{:L('_TAXATION_TXT_')})</strong>：
 				                            <span class="inline-block money">
 				                                CAD$<strong id="deal-buy-total-t">{pigcms{$order_info.order_total_money}<if condition="$config.open_extra_price eq 1 AND $order_info.extra_price gt 0">+{pigcms{$order_info.extra_price}{pigcms{$config.extra_price_alias_name}</if></strong>
 				                            </span>
@@ -683,7 +683,7 @@ a.see_tmp_qrcode {
                                 'save':$('input[name="save"]:checked').val(),
                                 // 'charge_total':$('input[name="charge_total"]').val(),
                                 'charge_total':$('#add_tip').text().replace('$', ""),
-                                'order_id':"vicisland_{pigcms{$order_info.order_id}",
+                                'order_id':"Tutti{pigcms{$order_info.order_type}_{pigcms{$order_info.order_id}",
                                 'cust_id':'{pigcms{:md5($order_info.uid)}',
                                 'rvarwap':$('input[name="rvarwap"]').val(),
                                 'tip':$('#tip_num').text().replace('$', "")
@@ -713,7 +713,7 @@ a.see_tmp_qrcode {
                            'credit_id':$('input[name="credit_id"]').val(),
                            // 'charge_total':$('input[name="charge_total"]').val(),
                            'charge_total':$('#add_tip').text().replace('$', ""),
-                           'order_id':"vicisland_{pigcms{$order_info.order_id}",
+                           'order_id':"Tutti{pigcms{$order_info.order_type}_{pigcms{$order_info.order_id}",
                            'cust_id':'{pigcms{:md5($order_info.uid)}',
                            'rvarwap':$('input[name="rvarwap"]').val(),
                            'tip':$('#tip_num').text().replace('$', "")
@@ -754,7 +754,7 @@ a.see_tmp_qrcode {
                    event.preventDefault();
                    var re_data = {
                        'charge_total':$('#add_tip').text().replace('$', ""),
-                       'order_id':"vicisland{pigcms{$order_info.order_type}_{pigcms{$order_info.order_id}",
+                       'order_id':"Tutti{pigcms{$order_info.order_type}_{pigcms{$order_info.order_id}",
                        'cust_id':'{pigcms{:md5($order_info.uid)}',
                        'rvarwap':$('input[name="rvarwap"]').val(),
                        'coupon_id':$('input[name="coupon_id"]').val(),
@@ -797,7 +797,9 @@ a.see_tmp_qrcode {
                                 });
                            }
                        }else{
-                           layer.open({title:['Message'],content:data.info});
+                           alert(data.info);
+                           $("#J-order-pay-button").val("{pigcms{:L('_B_PURE_MY_81_')}");
+                           $("#J-order-pay-button").removeAttr("disabled");
                        }
 
                    },'json');

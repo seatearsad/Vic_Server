@@ -21,6 +21,8 @@
 			<div class="row">
 				<div class="col-xs-12">
 					<button class="btn btn-success" onclick="CreateShop()">添加商品</button>
+                    | <input type="text" id="tax_num" name="tax_num" value="">%
+                    <button class="btn btn-success" onclick="Modify_tax({pigcms{$now_sort.store_id},{pigcms{$now_sort.sort_id})">修改全部税率</button>
 					<div id="shopList" class="grid-view">
 						<table class="table table-striped table-bordered table-hover">
 							<thead>
@@ -28,10 +30,12 @@
 									<th width="50">编号</th>
 									<th width="50">排序</th>
 									<th class="button-column">商品名称</th>
-									<th width="100">价格</th>
-									<th class="button-column" style="width:100px;">单位</th>
+									<th width="80">价格</th>
+									<th class="button-column" style="width:60px;">单位</th>
 									<th width="80">原始库存</th>
 									<th width="80">实际库存</th>
+                                    <th width="50">税率</th>
+                                    <th width="50">押金</th>
 									<th width="80">今日销量</th>
 									<th width="80">总销量</th>
 									<th class="button-column" style="width:180px;">最后操作时间</th>
@@ -55,6 +59,8 @@
 											<td>{pigcms{$vo.stock_num}</td>
 											</if>
 											<td>{pigcms{$vo.stock_num_t}</td>
+                                            <td>{pigcms{$vo.tax_num}%</td>
+                                            <td>{pigcms{$vo.deposit_price}</td>
 											<td>{pigcms{$vo.today_sell_count}</td>
 											<td>{pigcms{$vo.sell_count}</td>
 											<td class="button-column">{pigcms{$vo.last_time|date='Y-m-d H:i:s',###}</td>
@@ -98,6 +104,22 @@ $(function(){
 });
 function CreateShop(){
 	window.location.href = "{pigcms{:U('Shop/goods_add',array('sort_id' => $now_sort['sort_id']))}";
+}
+function Modify_tax(store_id,sort_id) {
+    if($('#tax_num').val()){
+        $.ajax({
+            url:"{pigcms{:U('Shop/goods_tax')}",
+            type:"post",
+            data:{"store_id":store_id,"sort_id":sort_id,"tax_num":$('#tax_num').val()},
+            dataType:"json",
+            success:function(d){
+                    alert(d.info);
+                    window.location.reload();
+            }
+        });
+    }else {
+        alert('请输入税率!');
+    }
 }
 function updateStatus(dom1, dom2, status1, status2, attribute){
 	$(dom1).each(function(){

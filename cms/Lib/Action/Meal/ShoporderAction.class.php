@@ -267,7 +267,8 @@ class ShoporderAction extends BaseAction
         //modify garfunkel
         $sum = $return['delivery_fee'] + $return['price'] + $return['store']['pack_fee'];
 		//$sum = $return['delivery_fee'] + $return['price'] + $return['packing_charge'];
-		$return['totalPrice'] = $sum * 1.05;
+        $return['tax_price'] = $return['tax_price'] + ($return['delivery_fee'] + $return['store']['pack_fee'])*$return['store']['tax_num']/100;
+		$return['totalPrice'] = $sum + $return['tax_price'] + $return['deposit_price'];
  		//print_r($return);die;
 		$this->assign($return);
 		$this->assign('pick_addr_id', $pick_addr_id);
@@ -1031,9 +1032,14 @@ class ShoporderAction extends BaseAction
     		$order_data['extra_price'] = $return['extra_price'];//另外要支付的金额
     		$order_data['discount_price'] = $return['vip_discount_money'];//商品折扣后的总价
             //modify garfunkel
-            $order_data['total_price'] = $return['price'] + $delivery_fee + $return['store']['pack_fee'];//订单总价  商品价格+打包费+配送费
+            $sum = $delivery_fee + $return['price'] + $return['store']['pack_fee'];
+            //$sum = $return['delivery_fee'] + $return['price'] + $return['packing_charge'];
+            $return['tax_price'] = $return['tax_price'] + ($delivery_fee + $return['store']['pack_fee'])*$return['store']['tax_num']/100;
+            $price = round($sum + $return['tax_price'] + $return['deposit_price'],2);
+
+            $order_data['total_price'] = $price;//订单总价  商品价格+打包费+配送费
 			//$order_data['total_price'] = $return['price'] + $delivery_fee + $return['packing_charge'];//订单总价  商品价格+打包费+配送费
-            $order_data['price'] = ($order_data['discount_price'] + $delivery_fee + $return['store']['pack_fee'] - $order_data['merchant_reduce'] - $order_data['balance_reduce']) * 1.05;//实际要支付的价格
+            $order_data['price'] = $price;//实际要支付的价格
 			//$order_data['price'] = ($order_data['discount_price'] + $delivery_fee + $return['packing_charge'] - $order_data['merchant_reduce'] - $order_data['balance_reduce']) * 1.05;//实际要支付的价格
     		$order_data['discount_detail'] = $return['discount_list'] ? serialize($return['discount_list']) : '';//优惠详情
 //     		if ($return['price'] - $return['store_discount_money'] > 0) {
@@ -1258,10 +1264,14 @@ class ShoporderAction extends BaseAction
 		}*/
 
 		//modify garfunkel
-        $price = round(($return['vip_discount_money'] + $return['store']['pack_fee'] + $delivery_fee), 2) - round(($return['sto_first_reduce'] + $return['sto_full_reduce'] + $return['sys_first_reduce'] + $return['sys_full_reduce']), 2);//实际要支付的价格
+        //$price = round(($return['vip_discount_money'] + $return['store']['pack_fee'] + $delivery_fee), 2) - round(($return['sto_first_reduce'] + $return['sto_full_reduce'] + $return['sys_first_reduce'] + $return['sys_full_reduce']), 2);//实际要支付的价格
 		//$price = round(($return['vip_discount_money'] + $return['packing_charge'] + $delivery_fee), 2) - round(($return['sto_first_reduce'] + $return['sto_full_reduce'] + $return['sys_first_reduce'] + $return['sys_full_reduce']), 2);//实际要支付的价格
 		
-		$price = round($price * 1.05,2);
+		//$price = round($price * 1.05,2);
+        $sum = $delivery_fee + $return['price'] + $return['store']['pack_fee'];
+        //$sum = $return['delivery_fee'] + $return['price'] + $return['packing_charge'];
+        $return['tax_price'] = $return['tax_price'] + ($delivery_fee + $return['store']['pack_fee'])*$return['store']['tax_num']/100;
+        $price = round($sum + $return['tax_price'] + $return['deposit_price'],2);
 
 		
 		if($this->config['open_extra_price']){

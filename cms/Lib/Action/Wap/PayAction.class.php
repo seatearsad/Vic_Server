@@ -594,6 +594,8 @@ class PayAction extends BaseAction{
             case 'shop':
             case 'mall':
                 $now_order = D('Shop_order')->get_pay_order($this->user_session['uid'], intval($_POST['order_id']));
+                if($_POST['pay_type'] == 'offline' && $now_order['order_info']['tip_charge'] != 0)
+                    D('Shop_order')->where(array('order_id'=>intval($_POST['order_id'])))->save(array('tip_charge'=>0));
                 break;
             case 'plat':
                 $now_order = D('Plat_order')->get_pay_order($this->user_session['uid'], intval($_POST['order_id']));
@@ -2497,7 +2499,27 @@ class PayAction extends BaseAction{
             if ($result['retCode'] == 'SUCCESS') {
                 //交易结果
                 if ($result['resCode'] == 'SUCCESS') {
-                    $this->success('', $result['payUrl']);
+                    //先处理一下订单信息
+                    //处理小费
+                    $order_data = array('tip_charge'=>$_POST['tip']);
+                    //处理优惠券
+                    if($_POST['coupon_id']){
+                        $now_coupon = D('System_coupon')->get_coupon_by_id($_POST['coupon_id']);
+                        if(!empty($now_coupon)){
+                            $coupon_data = D('System_coupon_hadpull')->field(true)->where(array('id'=>$_POST['coupon_id']))->find();
+                            $coupon_real_id = $coupon_data['coupon_id'];
+                            $coupon = D('System_coupon')->get_coupon($coupon_real_id);
+
+                            $in_coupon = array('coupon_id'=>$data['coupon_id'],'coupon_price'=>$coupon['discount']);
+                            $order_data = array_merge($order_data,$in_coupon);
+                        }
+                    }
+                    D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->save($order_data);
+                    //=========
+                    if($pay_type == 'weixin')
+                        $this->success('', $result['codeUrl']);
+                    if($pay_type == 'alipay')
+                        $this->success('', $result['payUrl']);
                 } else {
                     $this->error($result['errCodeDes'].' - errCode:'.$result['errcode']);
                 }

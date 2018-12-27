@@ -476,6 +476,9 @@ function popup_html(data, has_format, goodsCartKey)
 	html += '</div>';
 	html += '<div class="p415 text fr">';
 	html += '<h2>' + data.name + '</h2>';
+	if(data.deposit_price > 0) {
+        html += '<span style="color: #999999;font-size: 12px;">Deposit:$' + data.deposit_price + '</span>';
+    }
 	html += '<div class="Price clr">';
 
 	if (this_index != null) {

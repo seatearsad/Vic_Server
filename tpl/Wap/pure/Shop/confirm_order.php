@@ -320,7 +320,16 @@ a {
 						<span style="color:#999">{pigcms{$ditem['str']}</span>
 					</div>
 					<span class="count">{pigcms{$ditem['num']}</span>
-					<strong>$<span class="unit_price">{pigcms{$ditem['price']}<if condition="$ditem.extra_price gt 0 AND $config.open_extra_price eq 1">+{pigcms{$ditem['extra_price']|floatval}{pigcms{$config.extra_price_alias_name}</if></span> <span style="color: gray; font-size:10px">({pigcms{$ditem['num']}{pigcms{$ditem['unit']})</span></strong>
+					<strong>$<span class="unit_price">{pigcms{$ditem['price']}
+                            <if condition="$ditem.extra_price gt 0 AND $config.open_extra_price eq 1">
+                                +{pigcms{$ditem['extra_price']|floatval}{pigcms{$config.extra_price_alias_name}
+                            </if>
+                        </span>
+                        <span style="color: gray; font-size:10px">({pigcms{$ditem['num']}{pigcms{$ditem['unit']})</span>
+                        <if condition="$ditem.deposit_price gt 0">
+                            <span style="color: gray; font-size:10px">({pigcms{:L('_DEPOSIT_TXT_')}:${pigcms{$ditem['deposit_price']})</span>
+                        </if>
+                    </strong>
 				</div>
 			</div>
 		</li>
@@ -339,6 +348,11 @@ a {
 				</div>
 			</li>
 			<!--/if-->
+            <li>
+                <div>
+                    <h3>{pigcms{:L('_DEPOSIT_TXT_')}：<strong style="display: inline;font-size:14px;">${pigcms{$deposit_price}</strong></h3>
+                </div>
+            </li>
 			<if condition="$discount_list">
 			<volist name="discount_list" id="row">
 			<li>
@@ -427,7 +441,7 @@ a {
 <div class="fixed" style="min-height:90px;padding:14px;">
 	<p>
 		<span class="fr">{pigcms{:L('_TOTAL_RECE_')}：<strong>$<span id="totalPrice_">{pigcms{$price|floatval}<if condition="$extra_price gt 0 AND $config.open_extra_price eq 1">+{pigcms{$extra_price|floatval}{pigcms{$config.extra_price_alias_name}</if></span></strong> / <span id="cartNum_">{pigcms{$total}</span></span>
-		<p id="show_delivery_fee" <if condition="$delivery_type eq 2 OR $pick_addr_id OR $now_time_value eq 2">style="display:none"</if>>{pigcms{:L('_DELI_PRICE_')}：${pigcms{$delivery_fee}，{pigcms{:L('_TAXATION_TXT_')}: {pigcms{$store['tax_num']}%</p>
+		<p id="show_delivery_fee" <if condition="$delivery_type eq 2 OR $pick_addr_id OR $now_time_value eq 2">style="display:none"</if>>{pigcms{:L('_DELI_PRICE_')}：${pigcms{$delivery_fee}，{pigcms{:L('_TAXATION_TXT_')}: ${pigcms{$tax_price}</p>
 		<if condition="$have_two_time">	
 		<p id="show_delivery_fee2" <if condition="$now_time_value eq 1">style="display:none"</if>>{pigcms{:L('_DELI_PRICE_')}：${pigcms{$delivery_fee2}</p>
 		</if>	

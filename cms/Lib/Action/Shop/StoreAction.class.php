@@ -460,6 +460,10 @@ class StoreAction extends BaseAction
 				$glist['number'] = $r['number'];
 				$glist['packing_charge'] = floatval($r['packing_charge']);
 				$glist['unit'] = $r['unit'];
+				//garfunkel add
+                $glist['tax_num'] = $r['tax_num'];
+                $glist['deposit_price'] = $r['deposit_price'];
+                //
 				$glist['extra_pay_price'] = $r['extra_pay_price'];
 				if (isset($r['pic_arr'][0])) {
 					$glist['product_image'] = $r['pic_arr'][0]['url']['s_image'];

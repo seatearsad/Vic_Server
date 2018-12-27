@@ -207,6 +207,8 @@ class ShopAction extends BaseAction{
 			//add garfunkel
             $temp['pack_alias'] = $row['pack_alias'];
             $temp['pack_fee'] = $row['pack_fee'];
+            $temp['tax_num'] = $row['tax_num'];
+            $temp['deposit_price'] = $row['deposit_price'];
 
 //			if ($row['open_1'] == '00:00:00' && $row['close_1'] == '00:00:00') {
 //				$temp['time'] = '24小时营业';
@@ -809,6 +811,8 @@ class ShopAction extends BaseAction{
 				$glist['number'] = $r['number'];
 				$glist['packing_charge'] = floatval($r['packing_charge']);
 				$glist['unit'] = $r['unit'];
+				$glist['tax_num'] = $r['tax_num'];
+				$glist['deposit_price'] = $r['deposit_price'];
 				if (isset($r['pic_arr'][0])) {
 					$glist['product_image'] = $r['pic_arr'][0]['url']['s_image'];
 				}
@@ -1285,6 +1289,8 @@ class ShopAction extends BaseAction{
                 $glist['number'] = $r['number'];
                 $glist['packing_charge'] = floatval($r['packing_charge']);
                 $glist['unit'] = $r['unit'];
+                $glist['tax_num'] = $r['tax_num'];
+                $glist['deposit_price'] = $r['deposit_price'];
                 if (isset($r['pic_arr'][0])) {
                     $glist['product_image'] = $r['pic_arr'][0]['url']['s_image'];
                 }else{exit;
@@ -2255,9 +2261,10 @@ class ShopAction extends BaseAction{
 			$pick_address = $pick_list[0];
 		}
         //garfunkel add
-        $tax = $return['store']['tax_num'] / 100 + 1;
+        //$tax = $return['store']['tax_num'] / 100 + 1;
+		$return['tax_price'] = $return['tax_price'] + ($return['delivery_fee'] + $store_shop['pack_fee'])*$return['store']['tax_num'] / 100;
 		//$return['price'] = ($return['price'] + $return['delivery_fee'] + $store_shop['pack_fee'])  * 1.05;//税费
-        $return['price'] = ($return['price'] + $return['delivery_fee'] + $store_shop['pack_fee'])  * $tax;
+        $return['price'] = $return['price'] + $return['delivery_fee'] + $store_shop['pack_fee'] + $return['tax_price'] + $return['deposit_price'];
 
 		$pick_address['distance'] = $this->wapFriendRange($pick_address['distance']);
 		$this->assign($return);
@@ -2554,15 +2561,19 @@ class ShopAction extends BaseAction{
 			$order_data['extra_price'] = $return['extra_price'];//另外要支付的金额
 			$order_data['discount_price'] = $return['vip_discount_money'];//商品折扣后的总价
             //modify garfunkel
-            $order_data['total_price'] = ($return['price'] * 1.05) + $delivery_fee + $return['store']['pack_fee'];//订单总价  商品价格+打包费+配送费
+            //$order_data['total_price'] = ($return['price'] * 1.05) + $delivery_fee + $return['store']['pack_fee'];//订单总价  商品价格+打包费+配送费
 			//$order_data['total_price'] = ($return['price'] * 1.05) + $delivery_fee + $return['packing_charge'];//订单总价  商品价格+打包费+配送费
-            $order_data['price'] = $order_data['discount_price'] - $order_data['merchant_reduce'] - $order_data['balance_reduce'] + $delivery_fee + $return['store']['pack_fee'];//实际要支付的价格
+            //$order_data['price'] = $order_data['discount_price'] - $order_data['merchant_reduce'] - $order_data['balance_reduce'] + $delivery_fee + $return['store']['pack_fee'];//实际要支付的价格
 			//$order_data['price'] = $order_data['discount_price'] - $order_data['merchant_reduce'] - $order_data['balance_reduce'] + $delivery_fee + $return['packing_charge'];//实际要支付的价格
-			$tax = $return['store']['tax_num']/100 + 1;
-            $order_data['price'] = $order_data['price'] * $tax;
+			//$tax = $return['store']['tax_num']/100 + 1;
+            //$order_data['price'] = $order_data['price'] * $tax;
             //$order_data['price'] = $order_data['price'] * 1.05; //税费
 
-			$order_data['discount_detail'] = $return['discount_list'] ? serialize($return['discount_list']) : '';//优惠详情
+            $return['tax_price'] = $return['tax_price'] + ($delivery_fee + $return['store']['pack_fee'])*$return['store']['tax_num'] / 100;
+            $order_data['price'] = $return['price'] + $return['delivery_fee'] + $return['store']['pack_fee'] + $return['tax_price'] + $return['deposit_price'];
+            $order_data['total_price'] = $order_data['price'];
+
+            $order_data['discount_detail'] = $return['discount_list'] ? serialize($return['discount_list']) : '';//优惠详情
             //var_dump($order_data);die();
 // 			if ($return['price'] - $return['store_discount_money'] > 0) {
 // 				$order_data['discount_detail'] = '店铺折扣优惠：' . floatval($return['price'] - $return['store_discount_money']);
@@ -3011,6 +3022,8 @@ class ShopAction extends BaseAction{
                 'pay_type' => $order['pay_type'],
                 'tip_charge' => $order['tip_charge']
             );
+            $tax_price = 0;
+            $deposit_price = 0;
             foreach($order['info'] as $v) {
                 $discount_price = floatval($v['discount_price']) > 0 ? floatval($v['discount_price']) : floatval($v['price']);
                 $arr['info'][] = array(
@@ -3024,7 +3037,13 @@ class ShopAction extends BaseAction{
                     'total' => strval(floatval($v['price'] * $v['num'])),
                     'discount_total' => strval(floatval($discount_price * $v['num'])),
                 );
+                $goods = D('Shop_goods')->field(true)->where(array('goods_id'=>$v['goods_id']))->find();
+                $tax_price += $v['price'] * $goods['tax_num']/100 * $v['num'];
+                $deposit_price += $goods['deposit_price'] * $v['num'];
             }
+            $tax_price = $tax_price + ($order['freight_charge'] + $order['packing_charge'])*$store['tax_num']/100;
+            $arr['order_details']['tax_price'] = $tax_price;
+            $arr['order_details']['deposit_price'] = $deposit_price;
             $arr['discount_detail'] = $order['discount_detail'] ?: '';
 //             echo '<pre/>';
 //             print_r($arr);die;

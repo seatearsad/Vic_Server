@@ -113,8 +113,14 @@
                         </dd>
                         <dd class="clr">
                             <div class="fl">{pigcms{:L('_TAXATION_TXT_')}</div>
-                            <div class="fr">5%</div>
+                            <div class="fr">${pigcms{$order_details['tax_price']}</div>
                         </dd>
+                        <if condition="$order_details['deposit_price'] neq 0">
+                        <dd class="clr">
+                            <div class="fl">{pigcms{:L('_DEPOSIT_TXT_')}</div>
+                            <div class="fr">${pigcms{$order_details['deposit_price']}</div>
+                        </dd>
+                        </if>
                         <if condition="$order_details['tip_charge'] neq 0">
                             <dd class="clr">
                                 <div class="fl">{pigcms{:L('_TIP_TXT_')}</div>

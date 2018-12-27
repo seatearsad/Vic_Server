@@ -314,7 +314,8 @@ class IndexAction extends BaseAction
         $adr_id = $_POST['addr_item_id'];
 
         $cart_array = json_decode(html_entity_decode($cartList),true);
-
+        $tax_price = 0;
+        $deposit_price = 0;
         $orderData = array();
         foreach ($cart_array as $v){
             $good = D('Shop_goods')->field(true)->where(array('goods_id' => $v['fid']))->find();
@@ -363,6 +364,11 @@ class IndexAction extends BaseAction
             }
 
             $t_good['count'] = $v['stock'];
+            $t_good['tax_num'] = $good['tax_num'];
+            $t_good['deposit_price'] = $good['deposit_price'];
+
+            $tax_price += $good['price'] * $good['tax_num']/100 * $v['stock'];
+            $deposit_price += $good['deposit_price']*$v['stock'];
 
             $orderData[] = $t_good;
         }
@@ -410,11 +416,15 @@ class IndexAction extends BaseAction
         $order_data['extra_price'] = $return['extra_price'];//另外要支付的金额
         $order_data['discount_price'] = $return['vip_discount_money'];//商品折扣后的总价
         //modify garfunkel
-        $order_data['total_price'] = ($return['price'] * 1.05) + $delivery_fee + $return['store']['pack_fee'];//订单总价  商品价格+打包费+配送费
+        //$order_data['total_price'] = ($return['price'] * 1.05) + $delivery_fee + $return['store']['pack_fee'];//订单总价  商品价格+打包费+配送费
         //$order_data['total_price'] = ($return['price'] * 1.05) + $delivery_fee + $return['packing_charge'];//订单总价  商品价格+打包费+配送费
-        $order_data['price'] = $order_data['discount_price'] - $order_data['merchant_reduce'] - $order_data['balance_reduce'] + $delivery_fee + $return['store']['pack_fee'];//实际要支付的价格
+        //$order_data['price'] = $order_data['discount_price'] - $order_data['merchant_reduce'] - $order_data['balance_reduce'] + $delivery_fee + $return['store']['pack_fee'];//实际要支付的价格
         //$order_data['price'] = $order_data['discount_price'] - $order_data['merchant_reduce'] - $order_data['balance_reduce'] + $delivery_fee + $return['packing_charge'];//实际要支付的价格
-        $order_data['price'] = $order_data['price'] * 1.05; //税费
+        //$order_data['price'] = $order_data['price'] * 1.05; //税费
+
+        $tax_price = $tax_price + ($delivery_fee + $return['store']['pack_fee'])*$return['store']['tax_num']/100;
+        $order_data['total_price'] = $return['price'] + $tax_price + $deposit_price + $delivery_fee + $return['store']['pack_fee'];
+        $order_data['price'] = $order_data['total_price'];
 
         $order_data['discount_detail'] = $return['discount_list'] ? serialize($return['discount_list']) : '';//优惠详情
 
@@ -489,6 +499,14 @@ class IndexAction extends BaseAction
             }
         }else if($_POST['pay_type'] == 3){//信用卡支付
 
+        }else if($_POST['pay_type'] == 1){//支付宝
+            $price = $order_data['price'] + $order_data['tip_charge'] - $order_data['coupon_price'];
+            $result = $this->loadModel()->WeixinAndAli($_POST['pay_type'],$order_id,$price);
+            if($result['resCode'] == 'SUCCESS'){
+                $this->returnCode(0,'result',$result,'success');
+            }else{
+                $this->returnCode(1,'info',array(),'fail');
+            }
         }
 
         if($order_id != 0)
@@ -634,6 +652,9 @@ class IndexAction extends BaseAction
 
         $result['order'] = $order_detail;
 
+        $tax_price = 0;
+        $deposit_price = 0;
+
         $order_good = D('Shop_order_detail')->field(true)->where(array('order_id' => $order['order_id']))->select();
         foreach($order_good as $v){
             $goods['fname'] = $v['name'];
@@ -665,10 +686,18 @@ class IndexAction extends BaseAction
             }
             $goods['spec_desc'] = $spec_desc;
 
+            $good = D('Shop_goods')->field(true)->where(array('goods_id' => $v['goods_id']))->find();
+            $tax_price += $v['price'] * $good['tax_num']/100 * $v['num'];
+            $deposit_price += $good['deposit_price']*$v['num'];
+
             $food[] = $goods;
         }
 
         $result['food'] = $food;
+        $tax_price = $tax_price + ($order['packing_charge'] + $order['freight_charge'])*$store['tax_num']/100;
+        $result['order']['tax_price'] = $tax_price;
+        $result['order']['deposit_price'] = $deposit_price;
+        $result['order']['subtotal'] = $order['price'];
 
         $delivery = D('Deliver_supply')->field(true)->where(array('order_id'=>$order['order_id']))->find();
         if($delivery) {
@@ -1539,5 +1568,10 @@ class IndexAction extends BaseAction
             $sms_data['params'] = [];
             Sms::sendSms2($sms_data);
         }
+    }
+
+    public function AlipayTest(){
+        $result = $this->loadModel()->WeixinAndAli(2,111,1);
+        var_dump($result);
     }
 }

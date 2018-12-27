@@ -27,6 +27,9 @@ class Shop_goodsModel extends Model
 		$data['image'] = empty($goods['pic']) ? '' : $goods['pic'];
 		$data['number'] = $goods['number'];
 		$data['store_id'] = $store_id;
+		//garfunkel add
+		$data['tax_num'] = $goods['tax_num'];
+		$data['deposit_price'] = $goods['deposit_price'];
 
 		$data['freight_template'] = intval($goods['freight_template']);
 		$data['freight_type'] = intval($goods['freight_type']);
@@ -794,13 +797,13 @@ class Shop_goodsModel extends Model
 		}
 		
 		if ($stock_num == -1) {
-			return array('status' => 1, 'num' => $num, 'is_seckill_price' => $is_seckill_price, 'old_price' => $old_price, 'cost_price' => $cost_price, 'price' => $price, 'image' => $image, 'packing_charge' => $now_goods['packing_charge'], 'freight_type' => $now_goods['freight_type'], 'freight_value' => $now_goods['freight_value'], 'freight_template' => $now_goods['freight_template'], 'unit' => $now_goods['unit'], 'number' => $number, 'sort_id' => $now_goods['sort_id'], 'name' => $now_goods['name']);
+			return array('status' => 1, 'num' => $num, 'is_seckill_price' => $is_seckill_price, 'old_price' => $old_price, 'cost_price' => $cost_price, 'price' => $price, 'image' => $image, 'packing_charge' => $now_goods['packing_charge'], 'freight_type' => $now_goods['freight_type'], 'freight_value' => $now_goods['freight_value'], 'freight_template' => $now_goods['freight_template'], 'unit' => $now_goods['unit'], 'number' => $number, 'sort_id' => $now_goods['sort_id'], 'name' => $now_goods['name'],'tax_num'=>$now_goods['tax_num'],'deposit_price'=>$now_goods['deposit_price']);
 		} elseif ($stock_num == 0) {
 			return array('status' => 0, 'msg' => '商品库存不足');
 		} elseif ($stock_num - $num >= 0) {
-			return array('status' => 1, 'num' => $num, 'is_seckill_price' => $is_seckill_price, 'old_price' => $old_price, 'cost_price' => $cost_price, 'price' => $price, 'image' => $image, 'packing_charge' => $now_goods['packing_charge'], 'freight_type' => $now_goods['freight_type'], 'freight_value' => $now_goods['freight_value'], 'freight_template' => $now_goods['freight_template'], 'unit' => $now_goods['unit'], 'number' => $number, 'sort_id' => $now_goods['sort_id'], 'name' => $now_goods['name']);
+			return array('status' => 1, 'num' => $num, 'is_seckill_price' => $is_seckill_price, 'old_price' => $old_price, 'cost_price' => $cost_price, 'price' => $price, 'image' => $image, 'packing_charge' => $now_goods['packing_charge'], 'freight_type' => $now_goods['freight_type'], 'freight_value' => $now_goods['freight_value'], 'freight_template' => $now_goods['freight_template'], 'unit' => $now_goods['unit'], 'number' => $number, 'sort_id' => $now_goods['sort_id'], 'name' => $now_goods['name'],'tax_num'=>$now_goods['tax_num'],'deposit_price'=>$now_goods['deposit_price']);
 		} else {
-			return array('status' => 2, 'num' => $stock_num, 'is_seckill_price' => $is_seckill_price, 'old_price' => $old_price, 'cost_price' => $cost_price, 'msg' => '最多能购买' . $stock_num . $now_goods['unit'], 'number' => $number, 'price' => $price, 'image' => $image, 'packing_charge' => $now_goods['packing_charge'], 'freight_type' => $now_goods['freight_type'], 'freight_value' => $now_goods['freight_value'], 'freight_template' => $now_goods['freight_template'], 'unit' => $now_goods['unit'], 'sort_id' => $now_goods['sort_id'], 'name' => $now_goods['name']);
+			return array('status' => 2, 'num' => $stock_num, 'is_seckill_price' => $is_seckill_price, 'old_price' => $old_price, 'cost_price' => $cost_price, 'msg' => '最多能购买' . $stock_num . $now_goods['unit'], 'number' => $number, 'price' => $price, 'image' => $image, 'packing_charge' => $now_goods['packing_charge'], 'freight_type' => $now_goods['freight_type'], 'freight_value' => $now_goods['freight_value'], 'freight_template' => $now_goods['freight_template'], 'unit' => $now_goods['unit'], 'sort_id' => $now_goods['sort_id'], 'name' => $now_goods['name'],'tax_num'=>$now_goods['tax_num'],'deposit_price'=>$now_goods['deposit_price']);
 		}
 	}
 	
@@ -1526,6 +1529,8 @@ class Shop_goodsModel extends Model
         $total = 0;//商品总数
         $extra_price = 0;//额外价格的总价
         $packing_charge = 0;//打包费
+        $deposit_price = 0;//押金
+        $tax_price = 0;//税费
         //店铺优惠条件
         $sorts_discout = D('Shop_goods_sort')->get_sorts_discount($store_id);
         $store_discount_money = 0;//店铺折扣后的总价
@@ -1649,6 +1654,8 @@ class Shop_goodsModel extends Model
                 $price += $t_return['price'] * $num;
                 $extra_price += $row['productExtraPrice'] * $num;
                 $packing_charge += $t_return['packing_charge'] * $num;
+                $deposit_price += $t_return['deposit_price'] * $num;
+                $tax_price += ($t_return['price'] * $t_return['tax_num']/100)*$num;
         
                 if ($address_id) {
                     //-----计算运费--------  freight_type ==> 0:最大，1：单独
@@ -1747,7 +1754,9 @@ class Shop_goodsModel extends Model
                     'str' => $str,
                     'spec_id' => $spec_str,
                     'pro_id' => $pro_str,
-                    'extra_price' => $row['productExtraPrice']
+                    'extra_price' => $row['productExtraPrice'],
+                    'tax_num'   => $t_return['tax_num'],
+                    'deposit_price' =>  $t_return['deposit_price']
                 );
             }
         } elseif ($isCookie == 2) {
@@ -1821,7 +1830,9 @@ class Shop_goodsModel extends Model
                     'unit' => $t_return['unit'],
                     'str' => $str,
                     'spec_id' => $spec_str,
-                    'extra_price'=> 0
+                    'extra_price'=> 0,
+                    'tax_num'   => $t_return['tax_num'],
+                    'deposit_price' =>  $t_return['deposit_price']
                 );
             }
         }
@@ -1979,7 +1990,7 @@ class Shop_goodsModel extends Model
                 }
             }
         }
-        
+
         if (empty($goods)) {
             return array('error_code' => true, 'msg' => '购物车是空的');
         } else {
@@ -1988,6 +1999,8 @@ class Shop_goodsModel extends Model
             $data['price'] = $price;//商品实际总价
             $data['extra_price'] = $extra_price;//商品实际总价
             $data['discount_price'] = $vip_discount_money;//折扣后的总价
+            $data['deposit_price'] = $deposit_price;
+            $data['tax_price'] = $tax_price;
             $data['goods'] = $goods;
             $data['store_id'] = $store_id;
             $data['mer_id'] = $mer_id;
@@ -2004,7 +2017,7 @@ class Shop_goodsModel extends Model
             $data['store_discount_money'] = $store_discount_money;//店铺折扣后的总价
             $data['vip_discount_money'] = $vip_discount_money;//VIP折扣后的总价
             $data['packing_charge'] = $packing_charge;//总的打包费
-    
+
             $data['delivery_fee'] = $delivery_fee;//起步配送费
             if ($address_id) {
                 $full_money = floatval($express_freight['full_money']);

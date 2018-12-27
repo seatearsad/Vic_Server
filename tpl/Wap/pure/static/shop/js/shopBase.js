@@ -808,7 +808,7 @@ function showGood(shop_id,product_id){
 			}else{
 				$('#shopDetailPageContent').hide();
 			}
-			$('#shopDetailPagePrice').html('$'+result.price+(result.extra_pay_price>0?'+'+result.extra_pay_price+result.extra_pay_price_name:'')+'<span class="unit"><em>/ </em>'+result.unit+'</span>'+(result.stock_num != -1 ? '<span data-stock="'+result.stock_num+'">还剩'+result.stock_num+result.unit+'</span>' : '<span data-stock="-1"></span'));
+			$('#shopDetailPagePrice').html('$'+result.price+(result.extra_pay_price>0?'+'+result.extra_pay_price+result.extra_pay_price_name:'')+'<span class="unit"><em>/ </em>'+result.unit+'</span>'+(result.stock_num != -1 ? '<span data-stock="'+result.stock_num+'">还剩'+result.stock_num+result.unit+'</span>' : '<span data-stock="-1"></span>') + (result.deposit_price > 0 ? '<span>(Deposit:$'+ result.deposit_price +')</span>' : ''));
 			if(result.properties_list){
 				laytpl($('#productPropertiesTpl').html()).render(result.properties_list, function(html){
 					$('#shopDetailPageLabelBox').html(html);
@@ -1286,7 +1286,7 @@ function changeProductSpec(){
 		});
 		var productSpecStr = productSpecId.join('_');
 		var nowProductSpect = nowProduct.list[productSpecStr];
-		$('#shopDetailPagePrice').html('$'+((nowProduct.is_seckill_price && nowProductSpect.seckill_price) ? nowProductSpect.seckill_price : nowProductSpect.price)+(nowProduct.extra_pay_price>0?'+'+nowProduct.extra_pay_price+nowProduct.extra_pay_price_name:'')+'<span class="unit"><em>/ </em>'+nowProduct.unit+'</span>'+(nowProductSpect.stock_num != -1 ? '<span data-stock="'+nowProductSpect.stock_num+'">剩下'+nowProductSpect.stock_num+nowProduct.unit+'</span>' : '<span data-stock="-1"></span>'));
+		$('#shopDetailPagePrice').html('$'+((nowProduct.is_seckill_price && nowProductSpect.seckill_price) ? nowProductSpect.seckill_price : nowProductSpect.price)+(nowProduct.extra_pay_price>0?'+'+nowProduct.extra_pay_price+nowProduct.extra_pay_price_name:'')+'<span class="unit"><em>/ </em>'+nowProduct.unit+'</span>'+(nowProductSpect.stock_num != -1 ? '<span data-stock="'+nowProductSpect.stock_num+'">剩下'+nowProductSpect.stock_num+nowProduct.unit+'</span>' : '<span data-stock="-1"></span>') + (nowProduct.deposit_price > 0 ? '<span>(Deposit:$'+ nowProduct.deposit_price +')</span>' : ''));
 		
 		if(nowProduct.properties_list){
 			for(var i in nowProductSpect.properties){

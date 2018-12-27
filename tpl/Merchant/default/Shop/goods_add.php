@@ -119,7 +119,14 @@
 										<option value="0" >停售</option>
 									</select>
 								</div>
-
+                                <div class="form-group">
+                                    <label class="col-sm-1"><label for="sort">商品税率</label></label>
+                                    <input class="col-sm-1" size="10" name="tax_num" id="tax_num" type="text" value="{pigcms{$now_goods.tax_num|default='5'}"/> %
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-1"><label for="sort">商品押金</label></label>
+                                    <input class="col-sm-1" size="10" name="deposit_price" id="deposit_price" type="text" value="{pigcms{$now_goods.deposit_price|default='0.00'}"/>
+                                </div>
 								<if condition="$print_list">
 								<div class="form-group">
 									<label class="col-sm-1" for="Food_status">归属打印机</label>

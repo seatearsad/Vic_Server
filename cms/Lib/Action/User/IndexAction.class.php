@@ -1153,6 +1153,18 @@ class IndexAction extends BaseAction {
 		$now_order['order_type'] = 'shop';
 		$laste_order_info = D('Tmp_orderid')->get_laste_order_info($now_order['order_type'],$now_order['order_id']);
 
+        $store = D('Merchant_store')->field(true)->where(array('store_id' => $now_order['store_id']))->find();
+        $tax_price = 0;
+        $deposit_price = 0;
+        foreach($now_order['info'] as $v) {
+            $goods = D('Shop_goods')->field(true)->where(array('goods_id'=>$v['goods_id']))->find();
+            $tax_price += $v['price'] * $goods['tax_num']/100 * $v['num'];
+            $deposit_price += $goods['deposit_price'] * $v['num'];
+        }
+        $tax_price = $tax_price + ($now_order['freight_charge'] + $now_order['packing_charge'])*$store['tax_num']/100;
+        $now_order['tax_price'] = $tax_price;
+        $now_order['deposit_price'] = $deposit_price;
+
 		if (empty($now_order)) {
 			$this->error('当前订单不存在！');
 		} else {

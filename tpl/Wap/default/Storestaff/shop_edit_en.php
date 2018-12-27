@@ -347,6 +347,20 @@ cursor: pointer;
 					<td class="cc"></td>
 					<td class="rr">${pigcms{$order['goods_price']|floatval}</td>
 				</tr>
+                <tr>
+                    <td>Tax</td>
+                    <td class="cc"></td>
+                    <td class="cc"></td>
+                    <td class="rr">${pigcms{$order['tax_price']|floatval}</td>
+                </tr>
+                <if condition="$order['deposit_price'] gt 0">
+                    <tr>
+                        <td>Deposit</td>
+                        <td class="cc"></td>
+                        <td class="cc"></td>
+                        <td class="rr">${pigcms{$order['deposit_price']|floatval}</td>
+                    </tr>
+                </if>
 				<if condition="$order['freight_charge'] gt 0">
 				<tr>
 					<td>Delivery Charge</td>

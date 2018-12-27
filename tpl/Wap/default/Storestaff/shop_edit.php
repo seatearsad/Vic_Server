@@ -347,6 +347,20 @@ cursor: pointer;
 					<td class="cc"></td>
 					<td class="rr">${pigcms{$order['goods_price']|floatval}</td>
 				</tr>
+                <tr>
+                    <td>税费</td>
+                    <td class="cc"></td>
+                    <td class="cc"></td>
+                    <td class="rr">${pigcms{$order['tax_price']|floatval}</td>
+                </tr>
+                <if condition="$order['deposit_price'] gt 0">
+                    <tr>
+                        <td>押金</td>
+                        <td class="cc"></td>
+                        <td class="cc"></td>
+                        <td class="rr">${pigcms{$order['deposit_price']|floatval}</td>
+                    </tr>
+                </if>
 				<if condition="$order['freight_charge'] gt 0">
 				<tr>
 					<td>{pigcms{$store['freight_alias']|default='配送费'}</td>

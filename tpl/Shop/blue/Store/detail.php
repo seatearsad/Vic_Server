@@ -215,6 +215,7 @@
 															<else />
 															<span>${pigcms{$vo['product_price']|floatval}<if condition="$vo.extra_pay_price gt 0 AND $config.open_extra_price eq 1 AND $vo.has_format eq false">+{pigcms{$vo.extra_pay_price}{pigcms{$config.extra_price_alias_name}</if>
 															</span>
+                                                            <if condition="$vo.deposit_price gt 0"><span style="font-size: 10px; color: #999999">{pigcms{:L('_DEPOSIT_TXT_')}:${pigcms{$vo['deposit_price']}</span></if>
 															</if>
 														</div>
 														<div style="cursor: pointer;" class="fr click" data-has_format="{pigcms{$vo['has_format']}" data-index="{pigcms{$vo['product_id']}" data-goods_id="{pigcms{$vo['product_id']}" data-price="{pigcms{$vo['product_price']|floatval}" data-packing_charge="{pigcms{$vo['packing_charge']|floatval}" data-stock="{pigcms{$vo['stock']}" data-name="{pigcms{$vo['product_name']}" data-extra_pay_price="{pigcms{$vo.extra_pay_price}" ></div>

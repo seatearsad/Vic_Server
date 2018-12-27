@@ -1446,12 +1446,17 @@ class StorestaffAction extends BaseAction
                 $this->assign('supply',$supply);
             }
             //add garfunkel
+            $tax_price = 0;
+            $deposit_price = 0;
             $lang = $this->language == 'cn' ? 'zh-cn' : 'en-us';
             foreach ($order['info'] as $k => $v){
                 $g_id = $v['goods_id'];
                 $goods = D('Shop_goods')->get_goods_by_id($g_id);
                 $order['info'][$k]['unit'] = lang_substr($goods['unit'],$lang);
                 $order['info'][$k]['name'] = lang_substr($goods['name'],$lang);
+
+                $tax_price += $v['price'] * $goods['tax_num']/100 * $v['num'];
+                $deposit_price += $goods['deposit_price'] * $v['num'];
                 //garfunkel 显示规格和分类
                 $spec_desc = '';
                 $spec_ids = explode('_',$v['spec_id']);
@@ -1479,9 +1484,13 @@ class StorestaffAction extends BaseAction
                 if ($spec_desc != '')
                     $order['info'][$k]['spec'] = $spec_desc;
             }
+            $store = D('Merchant_store')->field(true)->where(array('store_id' => $order['store_id']))->find();
+            $tax_price = $tax_price + ($order['freight_charge'] + $order['packing_charge'])*$store['tax_num']/100;
+            $order['tax_price'] = $tax_price;
+            $order['deposit_price'] = $deposit_price;
             //
             $this->assign('store', D('Merchant_store_shop')->field(true)->where(array('store_id' => $store_id))->find());
-            $this->assign('shop',D('Merchant_store')->field(true)->where(array('store_id' => $store_id))->find());
+            $this->assign('shop',$store);
             $this->assign('sure', $sure);
             $this->assign('order', $order);
             $this->assign('staff',$this->staff_session);

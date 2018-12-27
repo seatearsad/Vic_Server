@@ -177,8 +177,11 @@ filter:alpha(opacity=50);
 									<li>{pigcms{:L('_DELI_PRICE_')}：${pigcms{$now_order['freight_charge']|floatval} </li>
 								</if>
 									<li>{pigcms{:L('_PACK_PRICE_')}：${pigcms{$now_order['packing_charge']|floatval} </li>
-									<li>{pigcms{:L('_ORDER_TOTAL_')}：${pigcms{$now_order['total_price']|floatval} </li>
-								
+                                    <li>{pigcms{:L('_TAXATION_TXT_')}：${pigcms{$now_order['tax_price']|floatval} </li>
+                                    <if condition="$now_order['deposit_price'] neq 0">
+                                        <li>{pigcms{:L('_DEPOSIT_TXT_')}：${pigcms{$now_order['deposit_price']|floatval} </li>
+                                    </if>
+                                    <li>{pigcms{:L('_ORDER_TOTAL_')}：${pigcms{$now_order['total_price']|floatval} </li>
 								<if condition="$now_order['merchant_reduce'] gt 0">
 									<li>{pigcms{:L('_STORE_DIS_')}：${pigcms{$now_order['merchant_reduce']|floatval} </li>
 								</if>
@@ -189,7 +192,7 @@ filter:alpha(opacity=50);
 								<if condition="$now_order['balance_reduce'] gt 0">
 									<li>{pigcms{:L('_PLATFORM_DIS_')}：${pigcms{$now_order['balance_reduce']|floatval} </li>
 								</if>
-									<li>{pigcms{:L('_ACTUAL_PAYMENT_')}（+5% {pigcms{:L('_TAXATION_TXT_')}）：${pigcms{$now_order['price']+$now_order['tip_charge']|floatval} </li>
+									<!--li>{pigcms{:L('_ACTUAL_PAYMENT_')}（+5% {pigcms{:L('_TAXATION_TXT_')}）：${pigcms{$now_order['price']+$now_order['tip_charge']|floatval} </li-->
 								</ul>
 								<ul class="flow-list">
 								<if condition="$now_order['score_used_count']">

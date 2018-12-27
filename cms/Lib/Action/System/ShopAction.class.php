@@ -333,7 +333,7 @@ class ShopAction extends BaseAction
         $temp = array();
         if ($store_ids) {
             $store_ids = implode(',', $store_ids);
-            $sql = "SELECT `m`.`name` AS merchant_name, `s`.`name` AS store_name, `s`.`phone` AS store_phone, `s`.`store_id` FROM " . C('DB_PREFIX') . "merchant AS m INNER JOIN " . C('DB_PREFIX') . "merchant_store AS s ON `s`.`mer_id`=`m`.`mer_id` WHERE `s`.`store_id` IN ($store_ids)";
+            $sql = "SELECT `m`.`name` AS merchant_name, `s`.`name` AS store_name, `s`.`phone` AS store_phone, `s`.`store_id`,`s`.`tax_num` FROM " . C('DB_PREFIX') . "merchant AS m INNER JOIN " . C('DB_PREFIX') . "merchant_store AS s ON `s`.`mer_id`=`m`.`mer_id` WHERE `s`.`store_id` IN ($store_ids)";
             $mod = new Model();
             $res = $mod->query($sql);
             foreach ($res as $r) {
@@ -345,6 +345,14 @@ class ShopAction extends BaseAction
             $li['store_name'] = isset($temp[$li['store_id']]['store_name']) ? $temp[$li['store_id']]['store_name'] : '';
             $li['store_phone'] = isset($temp[$li['store_id']]['store_phone']) ? $temp[$li['store_id']]['store_phone'] : '';
             $li['duty_price'] = sprintf("%.2f", $li['total_price'] * 0.05);
+            $tax_price = 0;
+            $order = D('Shop_order')->get_order_detail(array('order_id' => $li['order_id']));
+            foreach ($order['info'] as $k => $v){
+                $g_id = $v['goods_id'];
+                $goods = D('Shop_goods')->get_goods_by_id($g_id);
+                $tax_price += $v['price'] * $goods['tax_num']/100 *$v['num'];
+            }
+            $li['duty_price'] = $tax_price + ($li['packing_charge'] + $li['freight_charge'])*$temp[$li['store_id']]['tax_num']/100;
         }
         $this->assign(array('type' => $type, 'sort' => $sort, 'status' => $status,'pay_type'=>$pay_type));
         $this->assign('status_list', D('Shop_order')->status_list_admin);
@@ -369,15 +377,25 @@ class ShopAction extends BaseAction
         }
 
         $order = D('Shop_order')->get_order_detail(array('order_id' => intval($_GET['order_id'])));
+        $store = D('Merchant_store')->field(true)->where(array('store_id' => $order['store_id']))->find();
         if (empty($order)) {
             $this->frame_error_tips('没有找到该订单的信息！');
         }else{//garfunkel 重新获取商品名称
+            $tax_price = 0;
+            $deposit_price = 0;
             foreach ($order['info'] as $k => $v){
                 $g_id = $v['goods_id'];
                 $goods = D('Shop_goods')->get_goods_by_id($g_id);
                 $order['info'][$k]['name'] = $goods['name'];
+                $order['info'][$k]['tax_num'] = $goods['tax_num'];
+                $order['info'][$k]['deposit_price'] = $goods['deposit_price'];
+                $deposit_price += $goods['deposit_price']*$v['num'];
+                $tax_price += $v['price'] * $goods['tax_num']/100 * $v['num'];
             }
+            $order['deposit_price'] = $deposit_price;
+            $order['tax_price'] = $tax_price + ($order['freight_charge'] + $order['packing_charge']) * $store['tax_num']/100;
         }
+
         $this->assign('store', D('Merchant_store_shop')->field(true)->where(array('store_id' => $order['store_id']))->find());
         $this->assign('order', $order);
         $this->display();

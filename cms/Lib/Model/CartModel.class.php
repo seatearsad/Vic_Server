@@ -97,6 +97,8 @@ class CartModel extends Model
         $total_price = 0;
         $total_market_price = 0;
         $total_pay_price = 0;
+        $tax_price = 0;
+        $deposit_price = 0;
 
         foreach ($cartList as $v){
             $good = D('Shop_goods')->field(true)->where(array('goods_id' => $v['fid']))->find();
@@ -144,10 +146,15 @@ class CartModel extends Model
 
             $t_good['attr'] = $spec_desc . " " .$proper_desc;
             $t_good['price'] = $good['price'];
+            $t_good['tax_num'] = $good['tax_num'];
+            $t_good['deposit_price'] = $good['deposit_price'];
 
             $total_price += $good['price']*$v['stock'];
             $total_pay_price += $good['price']*$v['stock'];
             $total_market_price += $good['old_price']*$v['stock'];
+
+            $tax_price += $good['price']*$good['tax_num']/100*$v['stock'];
+            $deposit_price += $good['deposit_price'] * $v['stock'];
 
             $list[] = $t_good;
         }
@@ -164,12 +171,17 @@ class CartModel extends Model
         $total_pay_price += $delivey_fee;
         //获取预计到达时间
         $delivery_time = D('Store')->get_store_delivery_time($sid);
+        //计算税费
+        $tax_price = $tax_price + ($store['pack_fee'] + $delivey_fee)*$store['tax_num']/100;
+        $total_pay_price = $total_pay_price + $tax_price + $deposit_price;
 
         $result['expect_time'] = date('Y-m-d H:i',$delivery_time);
         $result['hongbao'] = array();
         $result['total_market_price'] = $total_market_price;
         $result['food_total_price'] = $total_price;
-        $result['total_pay_price'] = $total_pay_price * 1.05;
+        $result['total_pay_price'] = round($total_pay_price,2);
+        $result['tax_price'] = round($tax_price,2);
+        $result['deposit_price'] = round($deposit_price,2);
 
         $result['full_discount'] = '0';
 
