@@ -1214,7 +1214,7 @@ class PayAction extends BaseAction{
 
 	    $p = json_encode($_POST);
         //存储返回记录 暂时使用 正式上线注释掉
-        //file_put_contents("./test_log.txt",date("Y/m/d")."   ".date("h:i:sa")."   "."Notify" ."   ". $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'--'.$p."\r\n",FILE_APPEND);
+        file_put_contents("./test_log.txt",date("Y/m/d")."   ".date("h:i:sa")."   "."Notify" ."   ". $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'--'.$p."\r\n",FILE_APPEND);
 
         $where = array('tab_id'=>'alipay','gid'=>7);
         $result = D('Config')->field(true)->where($where)->select();
