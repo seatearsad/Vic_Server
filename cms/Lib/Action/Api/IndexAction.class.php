@@ -607,7 +607,7 @@ class IndexAction extends BaseAction
             $data['status'] = $v['status'];
             $data['mark'] = D('Store')->getOrderStatusStr($v['status']);
             $data['name'] = $data['mark'];
-            $data['createDate'] = date('Y-m-d',$v['dateline']);
+            $data['createDate'] = date('Y-m-d H:i:s',$v['dateline']);
 
             $result[] = $data;
         }
