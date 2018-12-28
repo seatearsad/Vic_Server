@@ -439,6 +439,12 @@ class IndexAction extends BaseAction
         }elseif ($_POST['pay_type'] == 4){//余额支付
             $order_data['pay_type'] = "";
             $order_data['tip_charge'] = $_POST['tip'] ? $_POST['tip'] : 0;
+        }elseif ($_POST['pay_type'] == 2){//微信支付
+            $order_data['pay_type'] = "weixin";
+            $order_data['tip_charge'] = $_POST['tip'] ? $_POST['tip'] : 0;
+        }elseif ($_POST['pay_type'] == 1){//支付宝
+            $order_data['pay_type'] = "alipay";
+            $order_data['tip_charge'] = $_POST['tip'] ? $_POST['tip'] : 0;
         }else{
             $order_data['tip_charge'] = 0;
         }
