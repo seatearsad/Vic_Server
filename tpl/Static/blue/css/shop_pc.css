@@ -336,7 +336,7 @@ body{ padding:0px; margin:0px auto; font-size:14px; background-color: #fff; }
 .variety .vleft .Sell_list li{ float: left; position: relative; }
 .variety .vleft .Sell_list a{  display: block; width: 190px; padding:14px; border: #e6e6e6 1px solid; margin: 15px 18px 0px 0px; background: #fff;  }
 .variety .vleft .Sell_list .text{ padding-top: 14px; }
-.variety .vleft .Sell_list .text h2{ font-size: 16px; color: #333333; line-height: 1; overflow: hidden; white-space: nowrap;text-overflow: ellipsis; }
+.variety .vleft .Sell_list .text h2{ font-size: 16px; color: #333333; line-height: 1; overflow: hidden; white-space: normal;text-overflow: ellipsis;height: 40px;word-break: break-word; }
 .variety .vleft .Sell_list .text .middle { font-size: 14px; line-height: 16px; padding: 14px 0 15px 0; }
 .variety .vleft .Sell_list .text .middle .fl{  color: #707070; }
 .variety .vleft .Sell_list .text .middle .fr{  color: #fe5842; background: url(../images/sxt_07.png) left center no-repeat; padding-left: 18px; }

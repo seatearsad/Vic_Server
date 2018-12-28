@@ -133,6 +133,17 @@ $(document).ready(function(){
 		}
 		popup($(this).data('goods_id'), $(this).data('has_format'), tt_index);
 	});
+    //点击名字查看商品详情
+    $(".Sell_list h2").click(function(){
+        var tt_index = $(this).data('index');
+        if ($(this).data('has_format')) {
+            tt_index = '';
+            if (goods_index_list[$(this).data('goods_id')] != undefined) {
+                tt_index = goods_index_list[$(this).data('goods_id')];
+            }
+        }
+        popup($(this).data('goods_id'), $(this).data('has_format'), tt_index);
+    });
 	//关闭商品详情
 	$(".gb").click(function(){
 		$(this).parents(".Popup").hide();
