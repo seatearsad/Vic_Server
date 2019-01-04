@@ -336,6 +336,45 @@ final class Sms {
 
         $client->ExtCreateBroadcast(array("myRequest" => $request));
     }
+
+    public function sendMessageToGoogle(){
+        $url = 'https://fcm.googleapis.com/fcm/send';
+        $data['to'] = 'cCISyREI92I:APA91bFJC2LpWL7R3v6esaZqQsK9B1NDegebVbMdYYwcunp7_Fr4QTvVk_qEjKANkRgYfYizHIWs8XHv4TCc5tIFR66QDOVeT9vB8uxjBIY1fWoy34chTfJ1L7uKgdkte3aP8Uavc4tf';
+        $data['data'] = array('message'=>'Message From Tutti');
+        $data['notification'] = array('title'=>'Tutti','body'=>'Message Test From Tutti Server');
+
+
+        $ch = curl_init();
+        $headers[] = "Content-Type:application/json";//"Content-Type: multipart/form-data; boundary=" .  uniqid('------------------');
+        $headers[] = "Authorization:key=AIzaSyAxHAPoWlRu2Mz8APLwM8Ae6B3x1MJUlvU";
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+        curl_setopt($ch, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (compatible; MSIE 5.01; Windows NT 5.0)');
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+        curl_setopt($ch, CURLOPT_AUTOREFERER, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch ,CURLOPT_TIMEOUT ,15);
+        $result = curl_exec($ch);
+
+        //关闭curl
+        curl_close($ch);
+        // echo $result;exit;
+        $result = json_decode($result, true);
+
+        if (isset($result['errcode'])) {
+            import('ORG.Net.GetErrorMsg');
+            $errmsg = GetErrorMsg::wx_error_msg($result['errcode']);
+            return array('errcode' => $result['errcode'], 'errmsg' => $errmsg);
+        } else {
+            $result['errcode'] = 0;
+            return $result;
+        }
+    }
 }
 
 ?>

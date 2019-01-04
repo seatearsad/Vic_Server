@@ -1576,21 +1576,27 @@ class IndexAction extends BaseAction
         }
     }
 
+    public function userToken(){
+        $uid = $_POST['uid'];
+        $token = $_POST['token'];
+
+        $user = D('User')->field(true)->where(array('uid'=> $uid))->find();
+
+        if($user['device_id'] != $token){
+            $data['device_id'] = $token;
+            D('User')->field(true)->where(array('uid'=> $uid))->save($data);
+        }
+        $this->returnCode(0,'info',array(),'success');
+
+    }
+
     public function AlipayTest(){
         $result = $this->loadModel()->WeixinAndAli(2,111,1);
         var_dump($result);
     }
 
     public function TestGoogle(){
-        import('ORG.Net.Http');
-        $http = new Http();
-
-        $url = 'https://fcm.googleapis.com/fcm/send';
-        $data['to'] = 'cCISyREI92I:APA91bFJC2LpWL7R3v6esaZqQsK9B1NDegebVbMdYYwcunp7_Fr4QTvVk_qEjKANkRgYfYizHIWs8XHv4TCc5tIFR66QDOVeT9vB8uxjBIY1fWoy34chTfJ1L7uKgdkte3aP8Uavc4tf';
-        $data['data'] = array('message'=>'Test From Server');
-        $data['notification'] = array('title'=>'Tutti','body'=>'Message Test From Tutti Server');
-
-        $result = $http->curlGooglePost($url,json_encode($data));
+        $result = Sms::sendMessageToGoogle();
         var_dump($result);
     }
 }
