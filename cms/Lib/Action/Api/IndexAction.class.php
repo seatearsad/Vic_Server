@@ -1588,6 +1588,7 @@ class IndexAction extends BaseAction
         $url = 'https://fcm.googleapis.com/fcm/send';
         $data['to'] = 'cCISyREI92I:APA91bFJC2LpWL7R3v6esaZqQsK9B1NDegebVbMdYYwcunp7_Fr4QTvVk_qEjKANkRgYfYizHIWs8XHv4TCc5tIFR66QDOVeT9vB8uxjBIY1fWoy34chTfJ1L7uKgdkte3aP8Uavc4tf';
         $data['data'] = array('message'=>'Test From Server');
+        $data['notification'] = array('title'=>'Tutti','body'=>'Message Test From Tutti Server');
 
         $result = $http->curlGooglePost($url,json_encode($data));
         var_dump($result);
