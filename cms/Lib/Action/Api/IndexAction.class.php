@@ -1607,7 +1607,7 @@ class IndexAction extends BaseAction
 
     public function TestGoogle(){
         $device_id = 'cx-enHUoavg:APA91bFZbnqoVg4wtewEDjPQ6cAgZyZctCAK4-wlOEfpbC91xRouYjtJZon5GlbAUE6cMw4p4ft63mkanr6RgLJ0HHnO51gyw3y2Z6Be9plqKCTy2yI3hiaPtxl9vHwSUtxp7hmy1Kx3';
-        $message = 'Message Test From Tutti Server';
+        $message = 'Your order (1133999) has been successfully canceled at 2019-01-07 07:10:01 at vicisland store, we are looking forward to seeing you again.';
         $result = Sms::sendMessageToGoogle($device_id,$message);
         var_dump($result);
     }
