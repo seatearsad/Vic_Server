@@ -4858,17 +4858,23 @@ class MyAction extends BaseAction{
 				} else {
                     //add garfunkel 取消订单成功 发送消息
                     if (C('config.sms_shop_cancel_order') == 1 || C('config.sms_shop_cancel_order') == 3) {
-                        $sms_data['uid'] = $now_order['uid'];
-                        $sms_data['mobile'] = $now_order['userphone'] ? $now_order['userphone'] : $my_user['phone'];
-                        $sms_data['sendto'] = 'user';
-                        $sms_data['content'] = '您在 ' . $mer_store['name'] . '店中下的订单(订单号：' . $order_id . '),在' . date('Y-m-d H:i:s') . '时已被您取消并退款，欢迎再次光临！';
-                        $sms_data['params'] = [
-                            $order_id,
-                            date('Y-m-d H:i:s'),
-                            lang_substr($mer_store['name'],'en-us')
-                        ];
-                        $sms_data['tplid'] = 171187;
-                        Sms::sendSms2($sms_data);
+                        $userInfo = D('User')->field(true)->where(array('uid'=>$now_order['uid']))->find();
+                        if($userInfo['device_id'] != ""){
+                            $message = 'Your order ('.$order_id.') has been successfully canceled at '.date('Y-m-d H:i:s').' at '.lang_substr($mer_store['name'], 'en-us').' store, we are looking forward to seeing you again.';
+                            Sms::sendMessageToGoogle($userInfo['device_id'],$message);
+                        }else {
+                            $sms_data['uid'] = $now_order['uid'];
+                            $sms_data['mobile'] = $now_order['userphone'] ? $now_order['userphone'] : $my_user['phone'];
+                            $sms_data['sendto'] = 'user';
+                            $sms_data['content'] = '您在 ' . $mer_store['name'] . '店中下的订单(订单号：' . $order_id . '),在' . date('Y-m-d H:i:s') . '时已被您取消并退款，欢迎再次光临！';
+                            $sms_data['params'] = [
+                                $order_id,
+                                date('Y-m-d H:i:s'),
+                                lang_substr($mer_store['name'], 'en-us')
+                            ];
+                            $sms_data['tplid'] = 171187;
+                            Sms::sendSms2($sms_data);
+                        }
                     }
                     if (C('config.sms_shop_cancel_order') == 2 || C('config.sms_shop_cancel_order') == 3) {
                         $sms_data['uid'] = 0;
