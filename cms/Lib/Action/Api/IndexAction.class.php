@@ -114,6 +114,8 @@ class IndexAction extends BaseAction
         $province = $_POST['province'];
         $city = $_POST['city'];
         $type = $_POST['type'];
+
+        $token = $_POST['token'];
         if($type == 2){//微信登录
             $result = D('User')->autologin('openid', $openid);
 
@@ -145,6 +147,8 @@ class IndexAction extends BaseAction
             $userInfo['outsrc'] = $user['avatar'];
             $userInfo['openid'] = $user['openid'];
             $userInfo['login_type'] = $type;
+            //记录设备号
+            D('User')->where(array('uid'=>$userInfo['uid']))->save(array('device_id'=>$token));
         }
 
         $this->returnCode(0,'info',$userInfo);
@@ -153,13 +157,16 @@ class IndexAction extends BaseAction
     public function userLogin(){
         $userName = $_POST['userName'];
         $password = $_POST['password'];
+        $token = $_POST['token'];
 
         $userInfo = $this->loadModel()->getUserInfo($userName,$password);
 
         if($userInfo['msg'] != "")
             $code = 1;
-        else
+        else{
             $code = 0;
+            D('User')->where(array('uid'=>$userInfo['uid']))->save(array('device_id'=>$token));
+        }
 
         $this->returnCode($code,'info',$userInfo,$userInfo['msg']);
     }
@@ -180,13 +187,16 @@ class IndexAction extends BaseAction
         $phone = $_POST['phone'];
         $vcode = $_POST['vcode'];
         $pwd = $_POST['password'];
+        $token = $_POST['token'];
 
         $result = $this->loadModel()->reg_phone_pwd_vcode($phone,$vcode,$pwd);
 
         if ($result['error_code'])
             $code = 1;
-        else
+        else{
             $code = 0;
+            D('User')->where(array('uid'=>$result['uid']))->save(array('device_id'=>$token));
+        }
 
         $this->returnCode($code,'info',$result,$result['msg']);
     }
@@ -1596,7 +1606,9 @@ class IndexAction extends BaseAction
     }
 
     public function TestGoogle(){
-        $result = Sms::sendMessageToGoogle();
+        $device_id = 'cx-enHUoavg:APA91bFZbnqoVg4wtewEDjPQ6cAgZyZctCAK4-wlOEfpbC91xRouYjtJZon5GlbAUE6cMw4p4ft63mkanr6RgLJ0HHnO51gyw3y2Z6Be9plqKCTy2yI3hiaPtxl9vHwSUtxp7hmy1Kx3';
+        $message = 'Message Test From Tutti Server';
+        $result = Sms::sendMessageToGoogle($device_id,$message);
         var_dump($result);
     }
 }

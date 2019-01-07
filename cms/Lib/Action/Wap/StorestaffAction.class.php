@@ -1647,26 +1647,32 @@ class StorestaffAction extends BaseAction
             D('Shop_order_log')->add_log(array('order_id' => $order_id, 'status' => 2, 'name' => $this->staff_session['name'], 'phone' => $phones[0]));
 
             //add garfunkel
-            $sms_data['uid'] = $order['uid'];
-            $sms_data['mobile'] = $order['userphone'];
-            $sms_data['sendto'] = 'user';
-            $sms_data['tplid'] = 172700;
-            $sms_data['params'] = [];
-            Sms::sendSms2($sms_data);
+            $userInfo = D('User')->field(true)->where(array('uid'=>$order['uid']))->find();
+            if($userInfo['device_id'] != ""){
+                $message = 'Your order has been accepted by the store, they are preparing your order now. Our Courier is on the way, thank you for your patient.';
+                Sms::sendMessageToGoogle($userInfo['device_id'],$message);
+            }else{
+                $sms_data['uid'] = $order['uid'];
+                $sms_data['mobile'] = $order['userphone'];
+                $sms_data['sendto'] = 'user';
+                $sms_data['tplid'] = 172700;
+                $sms_data['params'] = [];
+                Sms::sendSms2($sms_data);
+            }
 
             //发送信息
             //获取所有的配送员
-            $rs = D('Deliver_user')->field(true)->where(array('status' => 1, 'work_status' => 0))->select();
-            foreach($rs as $r){
-                $sms_data = [
-                    'mobile' => $r['phone'],
-//		            'tplid' => 86914,
-                    'tplid' =>247173,
-                    'params' => [],
-                    'content' => '有一个新的订单可以配送，请前往个人中心抢单。'
-                ];
-                Sms::sendSms2($sms_data);
-            }
+//            $rs = D('Deliver_user')->field(true)->where(array('status' => 1, 'work_status' => 0))->select();
+//            foreach($rs as $r){
+//                $sms_data = [
+//                    'mobile' => $r['phone'],
+////		            'tplid' => 86914,
+//                    'tplid' =>247173,
+//                    'params' => [],
+//                    'content' => '有一个新的订单可以配送，请前往个人中心抢单。'
+//                ];
+//                Sms::sendSms2($sms_data);
+//            }
 
             $this->success('已接单');
         } else {
