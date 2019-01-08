@@ -1,7 +1,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>店员中心</title>
+    <title>Merchant Center</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link href="{pigcms{$static_path}css/diancai.css" rel="stylesheet" type="text/css" />
     <style>
@@ -69,7 +69,10 @@
                     <td>Delivery fee：$<?php echo $return_data['freight_charge'] ?></td>
                 </tr>
                 <tr>
-                    <td>Tax：$<?php echo $return_data['freight_charge_tax'] ?>(0.5%)</td>
+                    <td>Tax：$<?php echo $return_data['freight_charge_tax'] ?></td>
+                </tr>
+                <tr>
+                    <td>Deposit：$<?php echo $return_data['deposit'] ?></td>
                 </tr>
                 <tr>
                     <td>Total price：$<?php echo $return_data['price'] ?></td>
@@ -91,6 +94,8 @@
                 <input type="hidden" name="userphone" value="<?php echo $post_data['phone'] ?>">
                 <input type="hidden" name="address" value="<?php echo $post_data['adress'] ?>">
                 <input type="hidden" name="real_orderid" value="<?php echo $return_data['real_orderid']?>">
+                <input type="hidden" name="discount_price" value="<?php echo $return_data['all_tax'] ?>">
+                <input type="hidden" name="packing_charge" value="<?php echo $return_data['deposit'] ?>">
                 <tr>
                     <td><button type="submit" class="btn" style="text-align: center;width: 100%;margin-top: 20px;font-size: 14px;background-color: #06c1ae;">Confirm</button></td>
                 </tr>

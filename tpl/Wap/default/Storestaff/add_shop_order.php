@@ -117,6 +117,16 @@
                         </td>
                     </tr>
                     <tr>
+                        <td>
+                            Tax：<input type="text" value="" name="goods_tax" placeholder="Tax">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Deposit：<input type="text" value="" name="goods_deposit" placeholder="Deposit">
+                        </td>
+                    </tr>
+                    <tr>
                         <td><button type="button" id="confirm_order" class="btn" style="text-align: center;width: 100%;margin-top: 20px;font-size: 14px;">Confirm</button></td>
                     </tr>
                 </tbody>

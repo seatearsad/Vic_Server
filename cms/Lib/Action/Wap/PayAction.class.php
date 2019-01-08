@@ -487,8 +487,6 @@ class PayAction extends BaseAction{
 			//$pay_method['weixin']['config']['is_own'] = 1 ;
         }
 
-		//dump($pay_method);die;
-
         if(empty($pay_method) && $this->is_app_browser==false){
             $this->error_tips(L('_SYSTEM_NOT_PAY_MODE_'));
         }
@@ -496,7 +494,7 @@ class PayAction extends BaseAction{
         if(empty($_SESSION['openid']) || $_GET['type'] == 'foodPad'){
             unset($pay_method['weixin'],$pay_method['weifutong']);
         }
-
+        //dump($_SESSION);die;
         if($pay_method['weixin']['config']['is_own']){
             $merchant_bind = D('Weixin_bind')->field('authorizer_appid')->where(array('mer_id' => $now_merchant['mer_id']))->find();
             if(empty($merchant_bind)){
@@ -2443,13 +2441,13 @@ class PayAction extends BaseAction{
         $channelId = '';
         $pay_type = $_POST['pay_type'];
         //微信公众号 选择微信支付
-        if(!$this->is_wexin_browser && $pay_type == 'weixin') {
+        if($this->is_wexin_browser && $pay_type == 'weixin') {
             $channelId = 'WX_JSAPI';
             $pay_url = 'http://open.4jicao.com/goods/payForSubmit';
         }
         //H5 选择微信支付
-//        if(!$this->is_wexin_browser && $pay_type == 'weixin')
-//            $channelId = 'WX_MWEB';
+        if(!$this->is_wexin_browser && $pay_type == 'weixin')
+            $channelId = 'WX_MWEB';
         //H5 支付宝支付
         if($pay_type == 'alipay')
             $channelId = 'ALIPAY_WAP';
@@ -2469,17 +2467,17 @@ class PayAction extends BaseAction{
         $data['body'] = $_POST['order_id'];
 //        $data['param1'] = '';
 //        $data['param2'] = '';
-        if(!$this->is_wexin_browser && $pay_type == 'weixin') {
+        if($this->is_wexin_browser && $pay_type == 'weixin') {
             $data['returnUrl'] = 'https://tutti.app';
             $data['extra'] = json_encode(array('openId' => $this->user_session['openid']));
         }
-//        if(!$this->is_wexin_browser && $pay_type == 'weixin') {
-//            $h5_info['type'] = "WAP";
-//            $h5_info['wap_url'] = 'https://tutti.app/wap.php';
-//            $h5_info['wap_name'] = 'Tutti';
-//            $sceneInfo['h5_info'] = $h5_info;
-//            $data['extra'] = json_encode(array('sceneInfo' => $sceneInfo));
-//        }
+        if(!$this->is_wexin_browser && $pay_type == 'weixin') {
+            $h5_info['type'] = "WAP";
+            $h5_info['wap_url'] = 'https://tutti.app/wap.php';
+            $h5_info['wap_name'] = 'Tutti';
+            $sceneInfo['h5_info'] = $h5_info;
+            $data['extra'] = json_encode(array('sceneInfo' => $sceneInfo));
+        }
         $data['sign'] = $this->getSign($data,$pay_key);
         //echo $pay_url;
         //ksort($data);
@@ -2489,7 +2487,7 @@ class PayAction extends BaseAction{
         $http = new Http();
         $result = $http->curlPost($pay_url,'params='.json_encode($data));
         //var_dump($result);
-        if($channelId == 'WX_JSAPI'){
+        if($channelId == 'WX_JSAPI' || $channelId == 'WX_MWEB'){
             if($result['success'])
                 $this->success('', $result['url']);
             else
