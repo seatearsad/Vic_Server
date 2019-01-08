@@ -51,6 +51,8 @@ class StorestaffAction extends BaseAction
         //设置cookie
         if(isset($_GET['lang'])) {
             setcookie('language', $_GET['lang']);
+            $lang = $_GET['lang'] == 'cn' ? 'zh-cn' : 'en-us';
+            setcookie('lang', $lang, $_SERVER['REQUEST_TIME'] + 72000000);
             Header("Location:/wap.php?g=Wap&c=Storestaff&a=login");
         }
 
@@ -111,12 +113,12 @@ class StorestaffAction extends BaseAction
 
     public function index()
     {
-        if ($this->store['have_group']) {
-            redirect(U('Storestaff/group_list'));
+        if ($this->store['have_shop']) {
+            redirect(U('Storestaff/shop_list'));
         } elseif ($this->store['have_meal']) {
             redirect(U('Storestaff/meal_list'));
-        } elseif ($this->store['have_shop']) {
-            redirect(U('Storestaff/shop_list'));
+        } elseif ($this->store['have_group']) {
+            redirect(U('Storestaff/group_list'));
         } else {
             echo "该店铺没有开启{$this->config['group_alias_name']}，{$this->config['meal_alias_name']}，{$this->config['shop_alias_name']}中的任何一个";
             exit();
@@ -2328,7 +2330,7 @@ class StorestaffAction extends BaseAction
             $return_data['freight_charge_tax']=$freight_charge_tax;//配送费税
             $return_data['address_id']=$user_add;//客户地址id
             $return_data['real_orderid']=$real_orderid;//订单编号
-            $return_data['desc']="restaurant--{$staff['name']}--order from restaurants";//备注
+            $return_data['desc']="Merchant--{$staff['name']}--order from restaurants";//备注
             $this->assign('post_data',$_POST);
             $this->assign('return_data',$return_data);
         }
@@ -2345,10 +2347,10 @@ class StorestaffAction extends BaseAction
             if ($order){
                 //清除cookie
                 cookie('staff_address',null,'');
-                $this->success_tips('下单成功',U('Storestaff/shop_list'));
+                $this->success_tips('Success',U('Storestaff/shop_list'));
 
             }else{
-                $this->error_tips('下单失败');
+                $this->error_tips('Fail');
             }
         }
     }

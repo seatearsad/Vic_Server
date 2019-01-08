@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8"/>
-	<title>Clerk center</title>
+	<title>Merchant Center</title>
     <meta name="viewport" content="initial-scale=1, width=device-width, maximum-scale=1, user-scalable=no">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name='apple-touch-fullscreen' content='yes'>
@@ -210,7 +210,7 @@ line-height: .7rem;
 					<input type="hidden" name="a" value="shop_list"/>
 					<div class="find_type_div">
 						<select name="ft" id="find_type" onchange="toJmupURl(this.value);">							
-							<option value="">Please select the type</option>
+							<option value="">Select</option>
 							<option value="st" <php>if($ftype=='st') echo "selected='selected'";</php>>Pending order</option>
 							<option value="oid" <php>if($ftype=='oid') echo "selected='selected'";</php>>order Number</option>
 							<option value="xm" <php>if($ftype=='xm') echo "selected='selected'";</php>>Custmer Name</option>
@@ -219,7 +219,7 @@ line-height: .7rem;
 						</select>
 					</div>
 					<div class="find_txt_div"><input name="fv" id="find_value" type="text" value="{pigcms{$fvalue}"/></div>
-					<button class="btn btn-success" type="submit" id="find_submit">search</button>
+					<button class="btn btn-success" type="submit" id="find_submit">Search</button>
 				</form>
 			</div>
 		</dd>
@@ -231,7 +231,7 @@ line-height: .7rem;
 		<else />
 			<a href="javascript:void(0)" class="stopOrder" ref="1">Off shift</a>
 		</if>
-        <a href="{pigcms{:U('Storestaff/add_shop_order')}" class="addorder">add order</a>
+        <a href="{pigcms{:U('Storestaff/add_shop_order')}" class="addorder">Add Order</a>
 	</dd>
 </dl>
 	    <div style="margin-top:.2rem;">
@@ -269,7 +269,7 @@ line-height: .7rem;
 							<elseif condition="$vo['status'] eq 1" />
 							<a title="Confirmed" class="green edit_btn" style="color: green; float:right" href="javascript:;" >Confirmed</a>
 							<elseif condition="$vo['status'] eq 2" />
-							<a title="Consumed" class="green edit_btn" style="color: blue; float:right" href="javascript:;" >Consumed</a>
+							<a title="Consumed" class="green edit_btn" style="color: blue; float:right" href="javascript:;" >Completed</a>
 							<elseif condition="$vo['status'] eq 3" />
 							<a title="Evaluated" class="green edit_btn" style="color: gray; float:right" href="javascript:;" >Evaluated</a>
 							<elseif condition="$vo['status'] eq 4" />

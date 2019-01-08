@@ -1475,7 +1475,7 @@ class DeliverAction extends BaseAction
 		}
 
 //		$result = D('Deliver_supply')->field('sum(deliver_cash) as offline_money, sum(money-deliver_cash) as online_money, sum(freight_charge) as freight_charge')->where($where)->find();
-        $result = D('Deliver_supply')->field('sum(freight_charge) as freight_charge')->where($where)->find();
+//      $result = D('Deliver_supply')->field('sum(freight_charge) as freight_charge')->where($where)->find();
 		$count_list = D('Deliver_supply')->field('count(1) as cnt, get_type')->where($where)->group('get_type')->select();
 		
 		foreach ($count_list as $row) {
@@ -1512,6 +1512,8 @@ class DeliverAction extends BaseAction
             }else{
                 $result['online_money'] = $result['online_money'] ? $result['online_money'] + $val['price'] : $val['price'];
             }
+
+            $result['freight_charge'] = $result['freight_charge'] ? $result['freight_charge'] + $val['freight_charge'] : $val['freight_charge'];
 
             switch ($val['pay_type']) {
                 case 'offline':

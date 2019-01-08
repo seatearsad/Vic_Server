@@ -44,7 +44,7 @@
             <form enctype="multipart/form-data" method="post" action="{pigcms{:U('Storestaff/save_shop_oder')}">
                 <tbody>
                 <tr>
-                    <td>Confirm Ordre</td>
+                    <td>Confirm Order</td>
                 </tr>
                 <tr>
                     <td>Name：<?php echo $post_data['name'] ?></td>
@@ -69,14 +69,11 @@
                     <td>Delivery fee：$<?php echo $return_data['freight_charge'] ?></td>
                 </tr>
                 <tr>
-                    <td>Tax：$<?php echo $return_data['freight_charge_tax'] ?></td>
+                    <td>Tax：$<?php echo $return_data['freight_charge_tax'] ?>(0.5%)</td>
                 </tr>
                 <tr>
                     <td>Total price：$<?php echo $return_data['price'] ?></td>
 
-                </tr>
-                <tr>
-                    <td>Tax：0.5%</td>
                 </tr>
                 <tr>
                     <td><span style="color: red"></span></td>

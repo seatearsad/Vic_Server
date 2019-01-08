@@ -1,7 +1,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Clerk center</title>
+<title>Merchant Center</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <link href="{pigcms{$static_path}css/diancai.css" rel="stylesheet" type="text/css" />
 <script src="{pigcms{:C('JQUERY_FILE')}"></script>
@@ -86,10 +86,10 @@ cursor: pointer;
 					<td>Customer Phone Number：<a href="tel:{pigcms{$order.userphone}" class="totel">{pigcms{$order.userphone}</a></td>
 				</tr>
 				<tr>
-					<td>Time of order： {pigcms{$order.create_time|date="Y-m-d H:i:s",###}</td>
+					<td>Order Time： {pigcms{$order.create_time|date="Y-m-d H:i:s",###}</td>
 				</tr>
 				<tr>
-					<td>Time of Payment：{pigcms{$order['pay_time']|date="Y-m-d H:i:s",###} </td>
+					<td>Payment Time：{pigcms{$order['pay_time']|date="Y-m-d H:i:s",###} </td>
 				</tr>
                 <tr>
                     <td>Order prepared by：{pigcms{$supply['dining_time']} mins </td>
@@ -108,9 +108,9 @@ cursor: pointer;
 					<td>Customer Address：{pigcms{$order['address']}</td>
 				</tr>
 				</if>
-				<tr>
+				<!--tr>
 					<td>Delivery Method：{pigcms{$order['deliver_str']}</td>
-				</tr>
+				</tr-->
 				<tr>
 					<td>Delivery Method：{pigcms{$order['deliver_status_str']}</td>
 				</tr>
@@ -137,38 +137,38 @@ cursor: pointer;
 					<td>Use{pigcms{$config.score_name}：{pigcms{$order['score_used_count']} </td>
 				</tr>
 				<tr>
-					<td>{pigcms{$config.score_name}Cash Out：${pigcms{$order['score_deducte']|floatval} Dollars</td>
+					<td>{pigcms{$config.score_name}Cash Out：${pigcms{$order['score_deducte']|floatval} </td>
 				</tr>
 				</if>
 				
 				<if condition="$order['merchant_balance'] gt 0">
 				<tr>
-					<td>Merchant Balance：${pigcms{$order['merchant_balance']|floatval} Dollars</td>
+					<td>Merchant Balance：${pigcms{$order['merchant_balance']|floatval} </td>
 				</tr>
 				</if>
 				<if condition="$order['balance_pay'] gt 0">
 				<tr>
-					<td>Contracter Balance：${pigcms{$order['balance_pay']|floatval} Dollars</td>
+					<td>Contracter Balance：${pigcms{$order['balance_pay']|floatval} </td>
 				</tr>
 				</if>
 				<if condition="$order['payment_money'] gt 0">
 				<tr>
-					<td>Online Payment：${pigcms{$order['payment_money']|floatval} Dollars</td>
+					<td>Online Payment：${pigcms{$order['payment_money']|floatval} </td>
 				</tr>
 				</if>
 				<if condition="$order['card_id']">
 				<tr>
-					<td>Store coupon amount：${pigcms{$order['card_price']} Dollars</td>
+					<td>Store coupon amount：${pigcms{$order['card_price']} </td>
 				</tr>
 				</if>
 				<if condition="$order['coupon_id']">
 				<tr>
-					<td>Contracter coupon amount：${pigcms{$order['coupon_price']} Dollars</td>
+					<td>Contracter coupon amount：${pigcms{$order['coupon_price']} </td>
 				</tr>
 				</if>
 				<if condition="$order['card_give_money'] gt 0">
 				<tr>
-					<td>Membership card balance：${pigcms{$order['card_give_money']|floatval} Dollars</td>
+					<td>Membership card balance：${pigcms{$order['card_give_money']|floatval} </td>
 				</tr>
 				</if>
 				<if condition="$order['card_discount'] neq 0 AND $order['card_discount'] neq 10">
@@ -177,7 +177,7 @@ cursor: pointer;
 				</tr>
 				</if>
 				<tr>
-					<td>Sub total：${pigcms{$order['offline_price']|floatval}Dollars</td>
+					<td>Sub total：${pigcms{$order['offline_price']|floatval}</td>
 				</tr>
 				<if condition="!empty($order['use_time'])">		
 					<tr>
@@ -240,7 +240,7 @@ cursor: pointer;
 				<elseif condition="!in_array($order['status'], array(2,3,4,5)) AND $sure"/>
 					<tr id="xfstatus">
 						<form enctype="multipart/form-data" method="post" action="">
-							<td>Order Status：<span class="red">Not Consumed</span>	
+							<td>Order Status：<span class="red">Incomplete</span>
 <!--								<div>-->
 <!--									<input name="status" value="2" type="hidden">-->
 <!--									<input name="order_id" value="{pigcms{$order['order_id']}" type="hidden">-->
@@ -327,6 +327,7 @@ cursor: pointer;
 	<ul class="round">
 		<table width="100%" border="0" cellpadding="0" cellspacing="0" class="cpbiaoge">
 			<tbody>
+            <if condition="$order['info']">
 				<tr>
 					<th>Name of the product</th>
 					<th class="cc">unit price</th>
@@ -341,8 +342,15 @@ cursor: pointer;
 					<td class="rr">{pigcms{$info['spec']}</td>
 				</tr>
 				</volist>
+            </if>
+                <tr>
+                    <th></th>
+                    <th class="cc"></th>
+                    <th class="cc"></th>
+                    <th class="rr">Pricing</th>
+                </tr>
 				<tr>
-					<td>Product Total</td>
+					<td>Merchant Total</td>
 					<td class="cc"></td>
 					<td class="cc"></td>
 					<td class="rr">${pigcms{$order['goods_price']|floatval}</td>
@@ -363,7 +371,7 @@ cursor: pointer;
                 </if>
 				<if condition="$order['freight_charge'] gt 0">
 				<tr>
-					<td>Delivery Charge</td>
+					<td>Delivery Fee</td>
 					<td class="cc"></td>
 					<td class="cc"></td>
 					<td class="rr">${pigcms{$order['freight_charge']|floatval}</td>
@@ -378,7 +386,7 @@ cursor: pointer;
 				</tr>
 				</if>
 				<tr>
-					<td>Total</td>
+					<td>Subtotal</td>
 					<td class="cc"></td>
 					<td class="cc"></td>
 					<td class="rr"><span class="price">${pigcms{$order['total_price']|floatval}</span></td>
@@ -390,24 +398,24 @@ cursor: pointer;
 					<td class="rr"><span class="price">${pigcms{$order['merchant_reduce']|floatval}</span></td>
 				</tr>
 				<tr>
-					<td>Contracter Discount</td>
+					<td>Tutti Coupon</td>
 					<td class="cc"></td>
 					<td class="cc"></td>
 					<td class="rr"><span class="price">${pigcms{$order['balance_reduce']|floatval}</span></td>
 				</tr>
 				<tr>
-					<td>Total after discount</td>
+					<td>Total</td>
 					<td class="cc"></td>
 					<td class="cc"></td>
 					<td class="rr"><span class="price">${pigcms{$order['price']|floatval}</span></td>
 				</tr>
                 <if condition="$order['paid'] eq 1 and $order['status'] eq 0">
                     <tr>
-                        <td>Order preparing time</td>
+                        <td>Estimated Time</td>
                         <td class="cc">
                             <input type="text" name="dining_time" pattern="^[0-9]*$" data-err="Error" style="height: 2rem">
                         </td>
-                        <td class="cc" style="text-align: left;">Minutes</td>
+                        <td class="cc" style="text-align: left;">Minute</td>
                         <td class="rr"></td>
                     </tr>
                     <tr>

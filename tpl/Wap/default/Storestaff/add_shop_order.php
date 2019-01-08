@@ -1,7 +1,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>店员中心--下单</title>
+    <title>Merchant Center -- Add Order</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link href="{pigcms{$static_path}css/eve.7c92a906.css" rel="stylesheet"/>
     <link href="{pigcms{$static_path}css/diancai.css" rel="stylesheet" type="text/css" />
@@ -59,7 +59,7 @@
                         <td>Add Order</td>
                     </tr>
                     <tr>
-                        <td>Name：<input type="text" name="name" value="{pigcms{$now_adress.name}" placeholder="User Name"></td>
+                        <td>Name：<input type="text" name="name" value="{pigcms{$now_adress.name}" placeholder="Username"></td>
                     </tr>
                     <tr>
                         <td>Mobile：<input type="text" name="phone" value="{pigcms{$now_adress.phone}" placeholder="Mobile Number"></td>
@@ -103,7 +103,7 @@
                     <tr>
                         <td>Position：
                             <?php if(!empty($now_adress['adress'])){echo $now_adress['adress'];} ?>
-                            <button type="button" id="color-gray" class="btn" style="background-color: #06c1bb;"> <?php if(!empty($now_adress['adress'])){echo '重新选择';}else{ echo '选择位置';} ?></button>
+                            <button type="button" id="color-gray" class="btn" style="background-color: #06c1bb;"> <?php if(!empty($now_adress['adress'])){echo 'Select Location';}else{ echo 'Select Location';} ?></button>
                         </td>
                     </tr>
                     <tr>

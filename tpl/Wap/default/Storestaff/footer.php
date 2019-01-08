@@ -7,22 +7,11 @@
 	<footer class="footermenu">
 		<ul>
 			<li>
-				<a <if condition="ACTION_NAME eq 'group_list' OR ACTION_NAME eq 'group_edit'">class="active"</if> href="{pigcms{:U('Storestaff/group_list')}">
-				<img src="{pigcms{$static_path}images/Lngjm86JQq.png"/>
-				<p>
-				<if condition="$language eq 'en'">
-					<if condition="$config.group_alias_name eq '午餐'">lunch</if>
-				</if>
-				<if condition="$language eq 'cn'">{pigcms{$config.group_alias_name}</if>
-				</p>
-				</a>
-			</li>
-			<li>
 				<a <if condition="ACTION_NAME eq 'meal_list' OR ACTION_NAME eq 'meal_edit'">class="active"</if> href="{pigcms{:U('Storestaff/meal_list')}">
 				<img src="{pigcms{$static_path}images/s22KaR0Wtc.png"/>
 				<p>
 				<if condition="$language eq 'en'">
-					<if condition="$config.meal_alias_name eq '到店'">dine</if>
+					<if condition="$config.meal_alias_name eq '到店'">Dine</if>
 				</if>
 				<if condition="$language eq 'cn'">{pigcms{$config.meal_alias_name}</if>
 				</p>
@@ -33,7 +22,7 @@
 				<img src="{pigcms{$static_path}images/s22KaR0Wtc.png"/>
 				<p>
 				<if condition="$language eq 'en'">
-					<if condition="$config.shop_alias_name eq '外卖'">delivery</if>
+					<if condition="$config.shop_alias_name eq '外卖'">Delivery</if>
 				</if>
 				<if condition="$language eq 'cn'">{pigcms{$config.shop_alias_name}</if>
 				</p>
@@ -45,7 +34,7 @@
 					<img src="{pigcms{$static_path}images/3YQLfzfuGx.png"/>
 					<p>
 					<if condition="$language eq 'cn'">预约</if>
-					<if condition="$language eq 'en'">reservation</if>
+					<if condition="$language eq 'en'">Reservation</if>
 					</p>
 					</a>
 				</li>
@@ -55,7 +44,7 @@
 					<img src="{pigcms{$static_path}images/qrcode.png"/>
 					<p>
 					<if condition="$language eq 'cn'">扫一扫</if>
-					<if condition="$language eq 'en'">scan</if>
+					<if condition="$language eq 'en'">Scan</if>
 					</p>
 				</a>
 			</li>

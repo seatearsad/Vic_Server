@@ -200,7 +200,7 @@
                                                             }
 
                                                         </php>
-                                                        <h2 {pigcms{$font_s}>{pigcms{$vo['product_name']}</h2>
+                                                        <h2 {pigcms{$font_s} style="cursor: pointer" data-goods_id="{pigcms{$vo['product_id']}" data-index="{pigcms{$vo['product_id']}" data-has_format="{pigcms{$vo['has_format']}">{pigcms{$vo['product_name']}</h2>
 													</dd>
 													<dd class="clr middle">
 														<div class="fl">{pigcms{:replace_lang_str(L('_MONTH_SALE_NUM_'),$vo['product_sale'])}  <if condition="$vo['stock'] neq -1 AND $vo['stock'] lt 10">{pigcms{:L('_STOCK_TXT_')}{pigcms{$vo['stock']}{pigcms{$vo['unit']}</if></div>

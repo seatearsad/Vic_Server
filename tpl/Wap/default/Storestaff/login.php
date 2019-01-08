@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8"/>
-	<title>店员登录</title>
+	<title>{pigcms{:L('_STAFF_LOGIN_')}</title>
 	<meta name="description" content="{pigcms{$config.seo_description}"/>
     <meta name="viewport" content="initial-scale=1, width=device-width, maximum-scale=1, user-scalable=no"/>
 	<meta name="apple-mobile-web-app-capable" content="yes"/>

@@ -74,6 +74,8 @@ class Deliver_assignModel extends Model
         $curr_time = time();
         $where = 'deliver_id <> 0 and (status = 0 or status = 99)';
         $list = $this->field(true)->where($where)->select();
+        //记录一下 已经发送过短信的用户
+        $send_list = array();
         foreach ($list as $k=>$v){
             $list[$k]['cha'] = $curr_time - $v['assign_time'];
             $where = array('supply_id'=>$v['supply_id']);
@@ -86,8 +88,9 @@ class Deliver_assignModel extends Model
                     $user_list = D('Deliver_user')->field(true)->where(array('status'=>1,'work_status'=>0))->order('uid asc')->select();
                     $record = explode(',',$v['record']);
                     foreach ($user_list as $deliver){
-                        if(!in_array($deliver['uid'],$record)){
+                        if(!in_array($deliver['uid'],$record) && !in_array($deliver['uid'],$send_list)){
                             $this->sendMsg($deliver['uid']);
+                            $send_list[] = $deliver['uid'];
                         }
                     }
                     //清除之前的记录 让所有都能抢
