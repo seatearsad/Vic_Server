@@ -72,7 +72,7 @@
                     <td>Tax：$<?php echo $return_data['freight_charge_tax'] ?></td>
                 </tr>
                 <tr>
-                    <td>Deposit：$<?php echo $return_data['deposit'] ?></td>
+                    <td>Bottle Deposit：$<?php echo $return_data['deposit'] ?></td>
                 </tr>
                 <tr>
                     <td>Total price：$<?php echo $return_data['price'] ?></td>

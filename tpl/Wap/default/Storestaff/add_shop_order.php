@@ -123,7 +123,7 @@
                     </tr>
                     <tr>
                         <td>
-                            Deposit：<input type="text" value="" name="goods_deposit" placeholder="Deposit">
+                            Bottle Deposit：<input type="text" value="" name="goods_deposit" placeholder="Deposit">
                         </td>
                     </tr>
                     <tr>

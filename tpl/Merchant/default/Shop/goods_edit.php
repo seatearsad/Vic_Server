@@ -125,7 +125,7 @@
                                     <input class="col-sm-1" size="10" name="tax_num" id="tax_num" type="text" value="{pigcms{$now_goods.tax_num|default='0'}"/> %
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-1"><label for="sort">商品押金</label></label>
+                                    <label class="col-sm-1"><label for="sort">Bottle Deposit</label></label>
                                     <input class="col-sm-1" size="10" name="deposit_price" id="deposit_price" type="text" value="{pigcms{$now_goods.deposit_price|default='0.00'}"/>
                                 </div>
 								<if condition="$print_list">

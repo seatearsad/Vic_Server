@@ -727,7 +727,7 @@ class IndexAction extends BaseAction
         if($delivery) {
             $deliver = D('Deliver_user')->field(true)->where(array('uid'=>$delivery['uid']))->find();
             $result['order']['empname'] = $deliver['name'].'('.$deliver['phone'].')';
-            if($deliver['status'] > 1 && $deliver['status'] < 5){
+            if($delivery['status'] > 1 && $delivery['status'] < 5){
                 $result['order']['deliver_lng'] = $deliver['lng'];
                 $result['order']['deliver_lat'] = $deliver['lat'];
             }

@@ -363,7 +363,7 @@ cursor: pointer;
                 </tr>
                 <if condition="$order['deposit_price'] gt 0">
                     <tr>
-                        <td>押金</td>
+                        <td>Bottle Deposit</td>
                         <td class="cc"></td>
                         <td class="cc"></td>
                         <td class="rr">${pigcms{$order['deposit_price']|floatval}</td>
