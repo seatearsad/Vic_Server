@@ -380,6 +380,7 @@ class StoreModel extends Model
             $returnList[$k]['name'] = lang_substr($v['name'],C('DEFAULT_LANG'));
             $returnList[$k]['price'] = $v['price'];
             $returnList[$k]['market_price'] = $v['old_price'];
+            $returnList[$k]['desc'] = $v['des'];
             $returnList[$k]['stock'] = 10000;//库存
             $tmp_pic_arr = explode(';', $v['image']);
             if ($tmp_pic_arr[0] != '')

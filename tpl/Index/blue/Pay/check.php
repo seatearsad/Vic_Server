@@ -880,7 +880,7 @@ a.see_tmp_qrcode {
 			// 	}
 			// });
 			$('#J-order-weixin-button').live('click',function(){
-				window.location.href="{pigcms{:U('Pay/weixin_back',array('order_type'=>$order_info['order_type']))}&order_id="+orderid+'&pay_type='+$('input[name="pay_type"]:checked').val();
+				window.location.href="{pigcms{:U('User/Index/shop_order_view',array('order_id'=>$order_info['order_id']))}";
 			});
 		});
 

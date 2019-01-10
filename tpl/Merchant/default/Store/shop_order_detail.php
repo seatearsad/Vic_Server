@@ -159,16 +159,16 @@
 				<th colspan="2"><strong>费用信息</strong></th>
 			</tr>
 			<tr>
-				<th colspan="4">商品总价：${pigcms{$order['goods_price']|floatval} 元<if condition="$config.open_extra_price eq 1 AND $order.extra_price gt 0">+{pigcms{$order.extra_price|floatval}{pigcms{$config.extra_price_alias_name}</if></th>
+				<th colspan="4">商品总价：${pigcms{$order['goods_price']|floatval} <if condition="$config.open_extra_price eq 1 AND $order.extra_price gt 0">+{pigcms{$order.extra_price|floatval}{pigcms{$config.extra_price_alias_name}</if></th>
 			</tr>
 			<if condition="$order['packing_charge'] gt 0">
 			<tr>
-				<th colspan="4">{pigcms{$store['pack_alias']|default='打包费'}：${pigcms{$order['packing_charge']|floatval} 元</th>
+				<th colspan="4">{pigcms{$store['pack_alias']|default='打包费'}：${pigcms{$order['packing_charge']|floatval} </th>
 			</tr>
 			</if>
 			<if condition="$order['freight_charge'] gt 0">
 			<tr>
-				<th colspan="4">配送费用：${pigcms{$order['freight_charge']|floatval} 元</th>
+				<th colspan="4">配送费用：${pigcms{$order['freight_charge']|floatval} </th>
 			</tr>
 			</if>
 			<if condition="$order['is_pick_in_store'] eq 0">
@@ -176,17 +176,23 @@
 				<th colspan="4">支付平台配送费：{pigcms{$order['no_bill_money']|floatval}</th>
 			</tr>
 			</if>
+            <tr>
+                <th colspan="4">税费：${pigcms{$order['tax_price']|floatval} </th>
+            </tr>
+            <tr>
+                <th colspan="4">Bottle Deposit：${pigcms{$order['deposit']|floatval} </th>
+            </tr>
 			<tr>
-				<th colspan="4">订单总价：${pigcms{$order['total_price']|floatval} 元<if condition="$config.open_extra_price eq 1 AND $order.extra_price gt 0">+{pigcms{$order.extra_price|floatval}{pigcms{$config.extra_price_alias_name}</if></th>
+				<th colspan="4">订单总价：${pigcms{$order['total_price']|floatval} <if condition="$config.open_extra_price eq 1 AND $order.extra_price gt 0">+{pigcms{$order.extra_price|floatval}{pigcms{$config.extra_price_alias_name}</if></th>
 			</tr>
 			<if condition="$order['merchant_reduce'] gt 0">
 			<tr>
-				<th colspan="4">店铺优惠：${pigcms{$order['merchant_reduce']|floatval} 元</th>
+				<th colspan="4">店铺优惠：${pigcms{$order['merchant_reduce']|floatval} </th>
 			</tr>
 			</if>
 			<if condition="$order['balance_reduce'] gt 0">
 			<tr>
-				<th colspan="4">平台优惠：${pigcms{$order['balance_reduce']|floatval} 元</th>
+				<th colspan="4">平台优惠：${pigcms{$order['balance_reduce']|floatval} </th>
 			</tr>
 			</if>
 			<if condition="$order['card_discount'] neq 0 AND $order['card_discount'] neq 10">

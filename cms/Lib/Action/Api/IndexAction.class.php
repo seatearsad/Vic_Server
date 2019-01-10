@@ -470,7 +470,7 @@ class IndexAction extends BaseAction
                 $order_data['coupon_price'] = $coupon['discount'];
             }
         }
-
+        $order_data['is_mobile_pay'] = 2;
 
         $order_id = D('Shop_order')->saveOrder($order_data, $return);
         //清除购物车中的内容
@@ -604,6 +604,16 @@ class IndexAction extends BaseAction
             $t['paid'] = $val['paid'];
             $t['order_id'] = $val['order_id'];
             $t['discount'] = $val['coupon_price'];
+
+            $delivery = D('Deliver_supply')->field(true)->where(array('order_id'=>$val['order_id']))->find();
+            if($delivery) {
+                if($delivery['status'] > 1 && $delivery['status'] < 5){
+                    $deliver = D('Deliver_user')->field(true)->where(array('uid'=>$delivery['uid']))->find();
+                    $t['deliver_name'] = $deliver['name'].'('.$deliver['phone'].')';
+                    $t['deliver_lng'] = $deliver['lng'];
+                    $t['deliver_lat'] = $deliver['lat'];
+                }
+            }
 
             $result['info'][] = $t;
         }

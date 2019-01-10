@@ -2601,6 +2601,7 @@ class ShopAction extends BaseAction{
 			if($_POST['cue_field']){
 				$order_data['cue_field'] = serialize($_POST['cue_field']);
 			}
+			$order_data['is_mobile_pay'] = 1;
 
 			if ($order_id = D('Shop_order')->saveOrder($order_data, $return, $this->user_session)) {
                 /* 粉丝行为分析 */

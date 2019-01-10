@@ -2201,7 +2201,19 @@ class StoreAction extends BaseAction{
 	{
 		$order_id = isset($_GET['order_id']) ? intval($_GET['order_id']) : 0;
 		$order = D('Shop_order')->get_order_detail(array('order_id' => $order_id, 'store_id' => $this->store['store_id']));
+		$tax_price = 0;
+		$deposit = 0;
+		foreach ($order['info'] as $v){
+            $good = D('Shop_goods')->field(true)->where(array('goods_id'=>$v['goods_id']))->find();
+            $deposit += $good['deposit_price']*$v['num'];
+            $tax_price += $good['price'] * $good['tax_num']/100 * $v['num'];
+        }
 		$store = D('Merchant_store_shop')->field(true)->where(array('store_id' => $order['store_id']))->find();
+
+		$shop = D('Merchant_store')->field(true)->where(array('store_id' => $order['store_id']))->find();
+		$tax_price = $tax_price + ($order['freight_charge'] + $order['packing_charge'])*$shop['tax_num']/100;
+		$order['tax_price'] = $tax_price;
+		$order['deposit'] = $deposit;
 		$sure = false;
 		if($order['is_pick_in_store'] == 3){
 			$express_list = D('Express')->get_express_list();
