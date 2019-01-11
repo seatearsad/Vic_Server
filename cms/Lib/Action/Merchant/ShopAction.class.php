@@ -1737,14 +1737,14 @@ class ShopAction extends BaseAction
             //			$objActSheet->setCellValue('S1', '订单状态');
             //			$objActSheet->setCellValue('T1', '支付情况');
             //$objActSheet->setCellValue('R1', '支付情况');
-            $objActSheet->setCellValue('A1', '订单编号');
-            $objActSheet->setCellValue('B1', '商品名称');
-            $objActSheet->setCellValue('C1', '数量');
-            $objActSheet->setCellValue('D1', '单价');
-            $objActSheet->setCellValue('E1', '店铺名称');
-            $objActSheet->setCellValue('F1', '客户姓名');
-            $objActSheet->setCellValue('G1', '商品总价（税前）');//无
-            $objActSheet->setCellValue('H1', '商品税费');
+            $objActSheet->setCellValue('A1', 'Order Number|订单编号');
+            $objActSheet->setCellValue('B1', 'Item|商品名称');
+            $objActSheet->setCellValue('C1', 'Quantity|数量');
+            $objActSheet->setCellValue('D1', 'Price|单价');
+            $objActSheet->setCellValue('E1', 'Restaurant Name|店铺名称');
+            $objActSheet->setCellValue('F1', 'Customer Name|客户姓名');
+            $objActSheet->setCellValue('G1', 'Total Price Before Tax|商品总价（税前）');//无
+            $objActSheet->setCellValue('H1', 'Total Tax|商品税费');
             $objActSheet->setCellValue('I1', '配送费');
             $objActSheet->setCellValue('J1', '配送费税');
             $objActSheet->setCellValue('K1', '实付总价');
@@ -1763,7 +1763,7 @@ class ShopAction extends BaseAction
             $objActSheet->setCellValue('X1', '送达时间');
 
             //$sql = "SELECT  o.*, m.name AS merchant_name,d.name as good_name,d.price as good_price ,d.unit,d.cost_price, d.num as good_num, s.name AS store_name FROM " . C('DB_PREFIX') . "shop_order AS o INNER JOIN " . C('DB_PREFIX') . "merchant_store AS s ON s.store_id=o.store_id INNER JOIN " . C('DB_PREFIX') . "merchant AS m ON `s`.`mer_id`=`m`.`mer_id` INNER JOIN " . C('DB_PREFIX') . "shop_order_detail AS d ON `d`.`order_id`=`o`.`order_id` ".$condition_where." ORDER BY o.order_id DESC LIMIT " . $i * 1000 . ",1000";
-            $sql = "SELECT  o.*, m.name AS merchant_name,d.name as good_name,d.price as good_price ,d.unit,d.cost_price, d.num as good_num, s.name AS store_name FROM " . C('DB_PREFIX') . "shop_order AS o LEFT JOIN " . C('DB_PREFIX') . "merchant_store AS s ON s.store_id=o.store_id LEFT JOIN " . C('DB_PREFIX') . "merchant AS m ON `s`.`mer_id`=`m`.`mer_id` LEFT JOIN " . C('DB_PREFIX') . "shop_order_detail AS d ON `d`.`order_id`=`o`.`order_id` ".$condition_where." ORDER BY o.order_id DESC LIMIT " . $i * 1000 . ",1000";
+            $sql = "SELECT  o.*, m.name AS merchant_name,g.name as good_name,d.price as good_price ,d.unit,d.cost_price, d.num as good_num, s.name AS store_name FROM " . C('DB_PREFIX') . "shop_order AS o LEFT JOIN " . C('DB_PREFIX') . "merchant_store AS s ON s.store_id=o.store_id LEFT JOIN " . C('DB_PREFIX') . "merchant AS m ON `s`.`mer_id`=`m`.`mer_id` LEFT JOIN " . C('DB_PREFIX') . "shop_order_detail AS d ON `d`.`order_id`=`o`.`order_id`  LEFT JOIN " . C('DB_PREFIX') . "shop_goods AS g ON `g`.`goods_id`=`d`.`goods_id` ".$condition_where." ORDER BY o.order_id DESC LIMIT " . $i * 1000 . ",1000";
 
             $result_list = D()->query($sql);
 

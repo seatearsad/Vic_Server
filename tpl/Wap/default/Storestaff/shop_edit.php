@@ -385,12 +385,14 @@ cursor: pointer;
 					<td class="rr">${pigcms{$order['packing_charge']|floatval}</td>
 				</tr>
 				</if>
-				<tr>
-					<td>总计</td>
-					<td class="cc"></td>
-					<td class="cc"></td>
-					<td class="rr"><span class="price">${pigcms{$order['total_price']|floatval}</span></td>
-				</tr>
+                <if condition="$order['tip_charge'] gt 0">
+                    <tr>
+                        <td>小费</td>
+                        <td class="cc"></td>
+                        <td class="cc"></td>
+                        <td class="rr">${pigcms{$order['tip_charge']|floatval}</td>
+                    </tr>
+                </if>
 				<tr>
 					<td>商家优惠</td>
 					<td class="cc"></td>
@@ -401,13 +403,13 @@ cursor: pointer;
 					<td>平台优惠</td>
 					<td class="cc"></td>
 					<td class="cc"></td>
-					<td class="rr"><span class="price">${pigcms{$order['balance_reduce']|floatval}</span></td>
+					<td class="rr"><span class="price">-${pigcms{$order['coupon_price']|floatval}</span></td>
 				</tr>
 				<tr>
-					<td>优惠后总额</td>
+					<td>总额</td>
 					<td class="cc"></td>
 					<td class="cc"></td>
-					<td class="rr"><span class="price">${pigcms{$order['price']|floatval}</span></td>
+					<td class="rr"><span class="price">${pigcms{$order['price']+$order['tip_charge']|floatval}</span></td>
 				</tr>
                 <if condition="$order['paid'] eq 1 and $order['status'] eq 0">
                 <tr>

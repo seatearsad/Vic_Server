@@ -1128,6 +1128,10 @@ class IndexAction extends BaseAction {
 			$or['url'] = C('config.site_url').'/shop/'.$or['store_id'].'.html';
 			//modify garfunkel
             $or['s_name'] = lang_substr($or['s_name'],C('DEFAULT_LANG'));
+            $status_log = D('Shop_order_log')->where(array('order_id' => $or['order_id']))->order('id DESC')->find();
+
+            $or['now_status'] = $status_log['status'];
+
 		}
 		$this->assign('order_list', $orders);
 		$this->assign('status', $status);
@@ -1164,7 +1168,8 @@ class IndexAction extends BaseAction {
         $tax_price = $tax_price + ($now_order['freight_charge'] + $now_order['packing_charge'])*$store['tax_num']/100;
         $now_order['tax_price'] = $tax_price;
         $now_order['deposit_price'] = $deposit_price;
-
+        $status_log = D('Shop_order_log')->where(array('order_id' => $now_order['order_id']))->order('id DESC')->find();
+        $now_order['now_status'] = $status_log['status'];
 		if (empty($now_order)) {
 			$this->error('当前订单不存在！');
 		} else {

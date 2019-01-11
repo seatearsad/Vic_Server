@@ -658,6 +658,10 @@ class IndexAction extends BaseAction
                 $order_detail['payname'] = 'Paid Online';
             }elseif ($order['pay_type'] == ''){
                 $order_detail['payname'] = 'Pay by balance';
+            }elseif ($order['pay_type'] == 'weixin'){
+                $order_detail['payname'] = 'WeiXin';
+            }elseif ($order['pay_type'] == 'alipay'){
+                $order_detail['payname'] = 'AliPay';
             }else{
                 $order_detail['payname'] = 'Cash';
             }
@@ -736,7 +740,11 @@ class IndexAction extends BaseAction
         $delivery = D('Deliver_supply')->field(true)->where(array('order_id'=>$order['order_id']))->find();
         if($delivery) {
             $deliver = D('Deliver_user')->field(true)->where(array('uid'=>$delivery['uid']))->find();
-            $result['order']['empname'] = $deliver['name'].'('.$deliver['phone'].')';
+            if($deliver['name'])
+                $result['order']['empname'] = $deliver['name'].'('.$deliver['phone'].')';
+            else
+                $result['order']['empname'] = '';
+
             if($delivery['status'] > 1 && $delivery['status'] < 5){
                 $result['order']['deliver_lng'] = $deliver['lng'];
                 $result['order']['deliver_lat'] = $deliver['lat'];

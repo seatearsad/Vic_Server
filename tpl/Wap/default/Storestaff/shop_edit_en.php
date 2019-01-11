@@ -385,12 +385,14 @@ cursor: pointer;
 					<td class="rr">${pigcms{$order['packing_charge']|floatval}</td>
 				</tr>
 				</if>
-				<tr>
-					<td>Subtotal</td>
-					<td class="cc"></td>
-					<td class="cc"></td>
-					<td class="rr"><span class="price">${pigcms{$order['total_price']|floatval}</span></td>
-				</tr>
+                <if condition="$order['tip_charge'] gt 0">
+                    <tr>
+                        <td>Tip</td>
+                        <td class="cc"></td>
+                        <td class="cc"></td>
+                        <td class="rr">${pigcms{$order['tip_charge']|floatval}</td>
+                    </tr>
+                </if>
 				<tr>
 					<td>Merchant Discount</td>
 					<td class="cc"></td>
@@ -407,13 +409,13 @@ cursor: pointer;
 					<td>Total</td>
 					<td class="cc"></td>
 					<td class="cc"></td>
-					<td class="rr"><span class="price">${pigcms{$order['price']|floatval}</span></td>
+					<td class="rr"><span class="price">${pigcms{$order['price']+$order['tip_charge']|floatval}</span></td>
 				</tr>
                 <if condition="$order['paid'] eq 1 and $order['status'] eq 0">
                     <tr>
                         <td>Estimated Time</td>
                         <td class="cc">
-                            <input type="text" name="dining_time" pattern="^[0-9]*$" data-err="Error" style="height: 2rem">
+                            <input type="text" name="dining_time" pattern="^[0-9]*$" data-err="Error" style="height: 2rem" value="20">
                         </td>
                         <td class="cc" style="text-align: left;">Minute</td>
                         <td class="rr"></td>

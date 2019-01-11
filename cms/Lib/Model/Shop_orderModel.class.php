@@ -1040,7 +1040,7 @@ class Shop_orderModel extends Model
 		    $order['discount_detail'] = '';
 		}
 		$order['date'] = date('Y-m-d H:i:s', $order['create_time']);
-		$order['offline_price'] = round($order['price'] +$order['extra_price'] - round($order['card_price'] + $order['card_give_money'] +$order['merchant_balance'] + $order['balance_pay'] + $order['payment_money'] + $order['score_deducte'] + $order['coupon_price'], 2), 2);
+		$order['offline_price'] = round($order['price'] +$order['extra_price'] + $order['tip_charge'] - round($order['card_price'] + $order['card_give_money'] +$order['merchant_balance'] + $order['balance_pay'] + $order['payment_money'] + $order['score_deducte'] + $order['coupon_price'], 2), 2);
 		switch ($order['status']) {
 			case 0:
 				$order['css'] = 'inhand';

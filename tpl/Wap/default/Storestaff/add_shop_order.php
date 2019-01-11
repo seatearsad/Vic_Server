@@ -156,19 +156,19 @@
         });
         $("#confirm_order").click(function() {
             if (!$('input[name="name"]').val()){
-                alert('请输入客户姓名');return;
+                alert("Customer's name is empty");return;
             }
             if (!$('input[name="phone"]').val()){
-                alert('请输入客户电话');return;
+                alert('Mobile number is empty');return;
             }
             if (!$('input[name="adress"]').val()||!$('input[name="longitude"]').val()||!$('input[name="latitude"]').val()){
-                alert('请选择客户位置');return;
+                alert("Customer's location is empty");return;
             }
             if (!$('input[name="detail"]').val()){
-                alert('请输入客户详细地址');return;
+                alert("Note for deliver is empty,ex.unit number or front door...");return;
             }
             if (!$('input[name="goods_price"]').val()){
-                alert('请输入商品总价');return;
+                alert('Total price is empty');return;
             }
             $("#add-shop-order").submit();
         });

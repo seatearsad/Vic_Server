@@ -4912,73 +4912,77 @@ class MyAction extends BaseAction{
                 }else{
                     $this->error_tips($resp['message']);
                 }
+            }else if($now_order['pay_type'] == 'weixin' || $now_order['pay_type'] == 'alipay'){
+                import('@.ORG.pay.IotPay');
+                $IotPay = new IotPay();
+                $IotPay->refund($this->user_session['uid'],$now_order['order_id'],'WEB');
             }
-			else if ($now_order['payment_money'] != '0.00') {
-				if ($now_order['is_own']) {
-					$pay_method = array();
-					$merchant_ownpay = D('Merchant_ownpay')->field('mer_id', true)->where(array('mer_id' => $now_order['mer_id']))->find();
-					foreach($merchant_ownpay as $ownKey=>$ownValue){
-						$ownValueArr = unserialize($ownValue);
-						if($ownValueArr['open']){
-							$ownValueArr['is_own'] = true;
-							$pay_method[$ownKey] = array('name'=>$this->getPayName($ownKey),'config'=>$ownValueArr);
-						}
-					}
-					$now_merchant = D('Merchant')->get_info($now_order['mer_id']);
-					if ($now_merchant['sub_mch_refund'] && $this->config['open_sub_mchid'] && $now_merchant['open_sub_mchid'] && $now_merchant['sub_mch_id'] > 0) {
-						$pay_method['weixin']['config']['pay_weixin_appid'] = $this->config['pay_weixin_appid'];
-						$pay_method['weixin']['config']['pay_weixin_appsecret'] = $this->config['pay_weixin_appsecret'];
-						$pay_method['weixin']['config']['pay_weixin_mchid'] = $this->config['pay_weixin_sp_mchid'];
-						$pay_method['weixin']['config']['pay_weixin_key'] = $this->config['pay_weixin_sp_key'];
-						$pay_method['weixin']['config']['sub_mch_id'] = $now_merchant['sub_mch_id'];
-						$pay_method['weixin']['config']['pay_weixin_client_cert'] = $this->config['pay_weixin_sp_client_cert'];
-						$pay_method['weixin']['config']['pay_weixin_client_key'] = $this->config['pay_weixin_sp_client_key'];
-						$pay_method['weixin']['config']['is_own'] = 1 ;
-					}
-				} else {
-					$pay_method = D('Config')->get_pay_method(0,0,1);
-				}
-
-				if (empty($pay_method)) {
-					$this->error_tips(L('_B_MY_NOPAIMENTMETHOD_'));
-				}
-				if (empty($pay_method[$now_order['pay_type']])) {
-					$this->error_tips(L('_B_MY_CHANGEPAIMENT_'));
-				}
-
-				$pay_class_name = ucfirst($now_order['pay_type']);
-				$import_result = import('@.ORG.pay.'.$pay_class_name);
-				if(empty($import_result)){
-					$this->error_tips(L('_B_MY_THISPAIMENTNOTOPEN_'));
-				}
-				D('Shop_order')->where(array('order_id' => $now_order['order_id']))->save(array('is_refund' => 1));
-				$now_order['order_type'] = 'shop';
-				$now_order['order_id'] = $now_order['orderid'];
-				if($now_order['is_mobile_pay']==3){
-					$pay_method[$now_order['pay_type']]['config'] =array(
-							'pay_weixin_appid'=>$this->config['pay_wxapp_appid'],
-							'pay_weixin_key'=>$this->config['pay_wxapp_key'],
-							'pay_weixin_mchid'=>$this->config['pay_wxapp_mchid'],
-							'pay_weixin_appsecret'=>$this->config['pay_wxapp_appsecret'],
-					);
-				}
-				$pay_class = new $pay_class_name($now_order, $now_order['payment_money'], $now_order['pay_type'], $pay_method[$now_order['pay_type']]['config'], $this->user_session, 1);
-				$go_refund_param = $pay_class->refund();
-
-				$now_order['order_id'] = $order_id;
-				$data_shop_order['order_id'] = $order_id;
-				$data_shop_order['refund_detail'] = serialize($go_refund_param['refund_param']);
-				if (empty($go_refund_param['error']) && $go_refund_param['type'] == 'ok') {
-					$data_shop_order['status'] = 4;
-				}
-				$data_shop_order['last_time'] = time();
-				D('Shop_order')->data($data_shop_order)->save();
-				if($data_shop_order['status'] != 4){
-					$this->error_tips($go_refund_param['msg']);
-				}else{
-					$go_refund_param['msg'] ="在线支付退款成功 ";
-				}
-			}
+//			else if ($now_order['payment_money'] != '0.00') {
+//				if ($now_order['is_own']) {
+//					$pay_method = array();
+//					$merchant_ownpay = D('Merchant_ownpay')->field('mer_id', true)->where(array('mer_id' => $now_order['mer_id']))->find();
+//					foreach($merchant_ownpay as $ownKey=>$ownValue){
+//						$ownValueArr = unserialize($ownValue);
+//						if($ownValueArr['open']){
+//							$ownValueArr['is_own'] = true;
+//							$pay_method[$ownKey] = array('name'=>$this->getPayName($ownKey),'config'=>$ownValueArr);
+//						}
+//					}
+//					$now_merchant = D('Merchant')->get_info($now_order['mer_id']);
+//					if ($now_merchant['sub_mch_refund'] && $this->config['open_sub_mchid'] && $now_merchant['open_sub_mchid'] && $now_merchant['sub_mch_id'] > 0) {
+//						$pay_method['weixin']['config']['pay_weixin_appid'] = $this->config['pay_weixin_appid'];
+//						$pay_method['weixin']['config']['pay_weixin_appsecret'] = $this->config['pay_weixin_appsecret'];
+//						$pay_method['weixin']['config']['pay_weixin_mchid'] = $this->config['pay_weixin_sp_mchid'];
+//						$pay_method['weixin']['config']['pay_weixin_key'] = $this->config['pay_weixin_sp_key'];
+//						$pay_method['weixin']['config']['sub_mch_id'] = $now_merchant['sub_mch_id'];
+//						$pay_method['weixin']['config']['pay_weixin_client_cert'] = $this->config['pay_weixin_sp_client_cert'];
+//						$pay_method['weixin']['config']['pay_weixin_client_key'] = $this->config['pay_weixin_sp_client_key'];
+//						$pay_method['weixin']['config']['is_own'] = 1 ;
+//					}
+//				} else {
+//					$pay_method = D('Config')->get_pay_method(0,0,1);
+//				}
+//
+//				if (empty($pay_method)) {
+//					$this->error_tips(L('_B_MY_NOPAIMENTMETHOD_'));
+//				}
+//				if (empty($pay_method[$now_order['pay_type']])) {
+//					$this->error_tips(L('_B_MY_CHANGEPAIMENT_'));
+//				}
+//
+//				$pay_class_name = ucfirst($now_order['pay_type']);
+//				$import_result = import('@.ORG.pay.'.$pay_class_name);
+//				if(empty($import_result)){
+//					$this->error_tips(L('_B_MY_THISPAIMENTNOTOPEN_'));
+//				}
+//				D('Shop_order')->where(array('order_id' => $now_order['order_id']))->save(array('is_refund' => 1));
+//				$now_order['order_type'] = 'shop';
+//				$now_order['order_id'] = $now_order['orderid'];
+//				if($now_order['is_mobile_pay']==3){
+//					$pay_method[$now_order['pay_type']]['config'] =array(
+//							'pay_weixin_appid'=>$this->config['pay_wxapp_appid'],
+//							'pay_weixin_key'=>$this->config['pay_wxapp_key'],
+//							'pay_weixin_mchid'=>$this->config['pay_wxapp_mchid'],
+//							'pay_weixin_appsecret'=>$this->config['pay_wxapp_appsecret'],
+//					);
+//				}
+//				$pay_class = new $pay_class_name($now_order, $now_order['payment_money'], $now_order['pay_type'], $pay_method[$now_order['pay_type']]['config'], $this->user_session, 1);
+//				$go_refund_param = $pay_class->refund();
+//
+//				$now_order['order_id'] = $order_id;
+//				$data_shop_order['order_id'] = $order_id;
+//				$data_shop_order['refund_detail'] = serialize($go_refund_param['refund_param']);
+//				if (empty($go_refund_param['error']) && $go_refund_param['type'] == 'ok') {
+//					$data_shop_order['status'] = 4;
+//				}
+//				$data_shop_order['last_time'] = time();
+//				D('Shop_order')->data($data_shop_order)->save();
+//				if($data_shop_order['status'] != 4){
+//					$this->error_tips($go_refund_param['msg']);
+//				}else{
+//					$go_refund_param['msg'] ="在线支付退款成功 ";
+//				}
+//			}
 
 
 			$return = $this->shop_refund_detail($now_order, $store_id);

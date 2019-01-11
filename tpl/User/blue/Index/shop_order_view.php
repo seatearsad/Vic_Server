@@ -109,7 +109,39 @@ filter:alpha(opacity=50);
 								<elseif condition="$now_order['third_id'] eq '0' AND $now_order['pay_type'] eq 'offline'"/>
                                     {pigcms{:L('_NOT_SALE_PAY_')} (<font color="red">{pigcms{:L('_UNPAID_OFFLINE_')}</font>)
 								<elseif condition="$now_order['status'] lt 2"/>
-                                    {pigcms{:L('_NOT_SALE_PAY_')}
+                                    <if condition="$now_order['now_status'] lt 2">
+                                        {pigcms{:L('_ORDER_STATUS_1_')}
+                                        <elseif condition="$now_order['now_status'] eq 2"/>
+                                        {pigcms{:L('_CLERK_ORDER_')}
+                                        <elseif condition="$now_order['now_status'] eq 3"/>
+                                        {pigcms{:L('_DISTER_ORDER_')}
+                                        <elseif condition="$now_order['now_status'] eq 4"/>
+                                        {pigcms{:L('_DISTER_GET_FOOD_')}
+                                        <elseif condition="$now_order['now_status'] eq 5"/>
+                                        {pigcms{:L('_DISTER_DISTING_')}
+                                        <elseif condition="$now_order['now_status'] eq 6"/>
+                                        {pigcms{:L('_DIST_END_')}
+                                        <elseif condition="$now_order['now_status'] eq 7"/>
+                                            {pigcms{:L('_VERIFYING_CONS_')}
+                                        <elseif condition="$now_order['now_status'] eq 8"/>
+                                        {pigcms{:L('_COMPLETE_REVIEW_')}
+                                        <elseif condition="$now_order['now_status'] eq 9"/>
+                                        {pigcms{:L('_REFUNDS_COMPLETE_')}
+                                        <elseif condition="$now_order['now_status'] eq 10"/>
+                                        {pigcms{:L('_CANCELLATION_ORDER_')}
+                                        <elseif condition="$now_order['now_status'] eq 11"/>
+                                        {pigcms{:L('_BUSINESS_ALLOCATION_')}
+                                        <elseif condition="$now_order['now_status'] eq 12"/>
+                                        {pigcms{:L('_SHIP_TO_PRO_')}
+                                        <elseif condition="$now_order['now_status'] eq 13"/>
+                                        {pigcms{:L('_PICKUP_GOODS_')}
+                                        <elseif condition="$now_order['now_status'] eq 14"/>
+                                        {pigcms{:L('_SELF_BEEN_DELI_')}
+                                        <elseif condition="$now_order['now_status'] eq 15"/>
+                                        {pigcms{:L('_YOU_PICKUP_GOODS_')}
+                                        <elseif condition="$now_order['now_status'] eq 30"/>
+                                        {pigcms{:L('_CHANGE_PRICE_FOR_Y_')}
+                                    </if>
 								<elseif condition="$now_order['status'] == 2"/>
                                     {pigcms{:L('_AL_USED_')}
 								<elseif condition="$now_order['status'] == 3"/>
@@ -181,7 +213,7 @@ filter:alpha(opacity=50);
                                     <if condition="$now_order['deposit_price'] neq 0">
                                         <li>{pigcms{:L('_DEPOSIT_TXT_')}：${pigcms{$now_order['deposit_price']|floatval} </li>
                                     </if>
-                                    <li>{pigcms{:L('_ORDER_TOTAL_')}：${pigcms{$now_order['total_price']|floatval} </li>
+                                    <li>{pigcms{:L('_TOTAL_TXT_')}：${pigcms{$now_order['price']|floatval} </li>
 								<if condition="$now_order['merchant_reduce'] gt 0">
 									<li>{pigcms{:L('_STORE_DIS_')}：${pigcms{$now_order['merchant_reduce']|floatval} </li>
 								</if>
@@ -189,6 +221,7 @@ filter:alpha(opacity=50);
 								<if condition="$now_order['tip_charge'] neq 0">
                                     <li>{pigcms{:L('_TIP_TXT_')}:${pigcms{$now_order['tip_charge']}</li>
                                 </if>
+                                    <li>{pigcms{:L('_ORDER_TOTAL_')}:${pigcms{$now_order['price'] + $now_order['tip_charge']}</li>
 								<if condition="$now_order['balance_reduce'] gt 0">
 									<li>{pigcms{:L('_PLATFORM_DIS_')}：${pigcms{$now_order['balance_reduce']|floatval} </li>
 								</if>

@@ -121,7 +121,7 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 												</div>
 											</div>
 											<div class="order-cell order-quantity">{pigcms{$vo.num}</div>
-											<div class="order-cell order-money"><span class="money">$</span>{pigcms{$vo.price}</div>
+											<div class="order-cell order-money"><span class="money">$</span>{pigcms{$vo['price']+$vo['tip_charge']-$vo['coupon_price']}</div>
 											<div class="order-cell order-status">
 											<if condition="$vo['status'] eq 4">
 												{pigcms{:L('_CANCEL_A_REFUND_')}
@@ -132,7 +132,43 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 											<elseif condition="$vo['third_id'] eq '0' AND $vo['pay_type'] eq 'offline'"/>
 												{pigcms{:L('_NOT_SALE_PAY_')} (<font color="red">{pigcms{:L('_UNPAID_OFFLINE_')}</font>)
 											<elseif condition="$vo['status'] lt 2"/>
-												{pigcms{:L('_NOT_SALE_PAY_')}
+                                                    <if condition="$vo['now_status'] lt 2">
+												    {pigcms{:L('_ORDER_STATUS_1_')}
+                                                    <elseif condition="$vo['now_status'] eq 2"/>
+                                                    {pigcms{:L('_CLERK_ORDER_')}
+                                                    <elseif condition="$vo['now_status'] eq 3"/>
+                                                    {pigcms{:L('_DISTER_ORDER_')}
+                                                    <elseif condition="$vo['now_status'] eq 4"/>
+                                                    {pigcms{:L('_DISTER_GET_FOOD_')}
+                                                    <elseif condition="$vo['now_status'] eq 5"/>
+                                                    {pigcms{:L('_DISTER_DISTING_')}
+                                                    <elseif condition="$vo['now_status'] eq 6"/>
+                                                    {pigcms{:L('_DIST_END_')}
+                                                    <elseif condition="$vo['now_status'] eq 7"/>
+                                                    <if condition="$vo['is_pick_in_store'] eq 3">
+                                                        {pigcms{:L('_CLERK_SHIP_GOODS_')}
+                                                        <else />
+                                                        {pigcms{:L('_VERIFYING_CONS_')}
+                                                    </if>
+                                                    <elseif condition="$vo['now_status'] eq 8"/>
+                                                    {pigcms{:L('_COMPLETE_REVIEW_')}
+                                                    <elseif condition="$vo['now_status'] eq 9"/>
+                                                    {pigcms{:L('_REFUNDS_COMPLETE_')}
+                                                    <elseif condition="$vo['now_status'] eq 10"/>
+                                                    {pigcms{:L('_CANCELLATION_ORDER_')}
+                                                    <elseif condition="$vo['now_status'] eq 11"/>
+                                                    {pigcms{:L('_BUSINESS_ALLOCATION_')}
+                                                    <elseif condition="$vo['now_status'] eq 12"/>
+                                                    {pigcms{:L('_SHIP_TO_PRO_')}
+                                                    <elseif condition="$vo['now_status'] eq 13"/>
+                                                    {pigcms{:L('_PICKUP_GOODS_')}
+                                                    <elseif condition="$vo['now_status'] eq 14"/>
+                                                    {pigcms{:L('_SELF_BEEN_DELI_')}
+                                                    <elseif condition="$vo['now_status'] eq 15"/>
+                                                    {pigcms{:L('_YOU_PICKUP_GOODS_')}
+                                                    <elseif condition="$vo['now_status'] eq 30"/>
+                                                    {pigcms{:L('_CHANGE_PRICE_FOR_Y_')}
+                                                    </if>
 											<elseif condition="$vo['status'] eq 2"/>
 												{pigcms{:L('_AL_USED_')}
 											<elseif condition="$vo['status'] eq 3"/>

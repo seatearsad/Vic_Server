@@ -135,7 +135,7 @@
         for(var i=0;i<re.length;i++){
             if (re[i]['long'] == null || re[i]['lat'] == null) continue;
             addressHtml += '<li lng="'+re[i]['long']+'" lat="'+re[i]['lat']+'" sug_address="'+re[i]['name']+'" address="'+re[i]['address']+'" sname="'+re[i]['name']+'" class="addresslist">';
-            addressHtml += '<div class="mapaddress-title"> <span class="icon-location" data-node="icon"></span> <span class="recommend"> '+(i == 0 ? '[推荐位置]' : '')+'   '+re[i]['name']+' </span> </div>';
+            addressHtml += '<div class="mapaddress-title"> <span class="icon-location" data-node="icon"></span> <span class="recommend"> '+(i == 0 ? '[Recommend]' : '')+'   '+re[i]['name']+' </span> </div>';
             addressHtml += '<div class="mapaddress-body"> '+re[i]['address']+' </div>';
             addressHtml += '</li>';
         }
