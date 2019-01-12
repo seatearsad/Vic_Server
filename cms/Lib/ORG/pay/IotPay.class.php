@@ -31,24 +31,25 @@ class IotPay
 
             $data['mchId'] = $pay_id;
             $data['mchRefundNo'] = 'TuttiRefund_'.$order_id.'_'.time();
-            $data['channelId'] = $channelId;
+            //$data['channelId'] = $channelId;
             $data['currency'] = 'CAD';
             $data['refundAmount'] = $order['payment_money']*100;
             $data['clientIp'] = ip();
-            $data['device'] =$device;
-            $data['notifyUrl'] = 'http://54.190.29.18/notify_refund';
+            //$data['device'] =$device;
+            $data['notifyUrl'] = 'http://54.190.29.18/notify';
             $data['loginName'] = 'jwsj218';
             //import('ORG.Crypt.Des');
             //$data['password'] = bin2hex(Des::encrypt('il1234','IotPay66'));
             $data['password'] = $this->encrypt('il1234','IotPay66','98765432');
             $data['payOrderId'] = $order['invoice_head'];
-
             $data['sign'] = $this->getSign($data);
             //var_dump($data);die();
             import('ORG.Net.Http');
             $http = new Http();
+            $pay_url = 'http://pay.4jicao.com/api/refund/create_order';
             $result = $http->curlPost($pay_url,'params='.json_encode($data));
-            var_dump($result);die();
+            //var_dump($result);die();
+            return $result;
         }
     }
 

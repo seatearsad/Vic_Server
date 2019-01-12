@@ -1066,6 +1066,18 @@ class IndexAction extends BaseAction
                 }else{
                     $this->returnCode(1,'info',array(),$resp['message']);
                 }
+            }else if($now_order['pay_type'] == 'weixin' || $now_order['pay_type'] == 'alipay'){
+                import('@.ORG.pay.IotPay');
+                $IotPay = new IotPay();
+                $result = $IotPay->refund($uid,$now_order['order_id'],'WEB');
+                if ($result['retCode'] == 'SUCCESS' && $result['resCode'] == 'SUCCESS'){
+                    $data_shop_order['order_id'] = $now_order['order_id'];
+                    $data_shop_order['status'] = 4;
+                    $data_shop_order['last_time'] = time();
+                    D('Shop_order')->data($data_shop_order)->save();
+                }else{
+                    $this->returnCode(1,'info',array(),$result['retMsg']);
+                }
             }
 
             $return = $this->shop_refund_detail($now_order, $store_id);

@@ -1215,7 +1215,7 @@ class IndexAction extends BaseAction {
 
 
 		//线下支付退款
-		if ($now_order['pay_type'] == 'offline') {
+		if ($now_order['pay_type'] == 'offline' || $now_order['pay_type'] == 'Cash') {
 			$data_shop_order['order_id'] = $now_order['order_id'];
 			$data_shop_order['refund_detail'] = serialize(array('refund_time' => time()));
 			$data_shop_order['status'] = 4;
@@ -1230,51 +1230,78 @@ class IndexAction extends BaseAction {
 				$this->error('取消订单失败！请重试。');
 			}
 		} else {
-			if ($now_order['payment_money'] != '0.00') {
-				if ($now_order['is_own']) {
-					$pay_method = array();
-					$merchant_ownpay = D('Merchant_ownpay')->field('mer_id', true)->where(array('mer_id' => $now_order['mer_id']))->find();
-					foreach($merchant_ownpay as $ownKey=>$ownValue){
-						$ownValueArr = unserialize($ownValue);
-						if($ownValueArr['open']){
-							$ownValueArr['is_own'] = true;
-							$pay_method[$ownKey] = array('name'=>$this->getPayName($ownKey),'config'=>$ownValueArr);
-						}
-					}
-				} else {
-					$pay_method = D('Config')->get_pay_method();
-				}
+            if($now_order['pay_type'] == 'moneris'){
+                import('@.ORG.pay.MonerisPay');
+                $moneris_pay = new MonerisPay();
+                $resp = $moneris_pay->refund($this->user_session['uid'],$now_order['order_id']);
+//                var_dump($resp);die();
+                if($resp['responseCode'] != 'null' && $resp['responseCode'] < 50){
+                    $data_shop_order['order_id'] = $now_order['order_id'];
+                    $data_shop_order['status'] = 4;
+                    $data_shop_order['last_time'] = time();
+                    D('Shop_order')->data($data_shop_order)->save();
+                }else{
+                    $this->error($resp['message']);
+                }
+            }else if($now_order['pay_type'] == 'weixin' || $now_order['pay_type'] == 'alipay'){
+                import('@.ORG.pay.IotPay');
+                $IotPay = new IotPay();
+                $result = $IotPay->refund($this->user_session['uid'],$now_order['order_id'],'WEB');
+                if ($result['retCode'] == 'SUCCESS' && $result['resCode'] == 'SUCCESS'){
+                    $data_shop_order['order_id'] = $now_order['order_id'];
+                    $data_shop_order['status'] = 4;
+                    $data_shop_order['last_time'] = time();
+                    D('Shop_order')->data($data_shop_order)->save();
+                }else{
+                    $this->error($result['retMsg']);
+                }
+            }
 
-				if (empty($pay_method)) {
-					$this->error('系统管理员没开启任一一种支付方式！');
-				}
-				if (empty($pay_method[$now_order['pay_type']])) {
-					$this->error('您选择的支付方式不存在，请更新支付方式！');
-				}
-
-				$pay_class_name = ucfirst($now_order['pay_type']);
-				$import_result = import('@.ORG.pay.'.$pay_class_name);
-				if(empty($import_result)){
-					$this->error('系统管理员暂未开启该支付方式，请更换其他的支付方式');
-				}
-
-				$now_order['order_type'] = 'shop';
-				$now_order['order_id'] = $now_order['orderid'];
-
-				$pay_class = new $pay_class_name($now_order, $now_order['payment_money'], $now_order['pay_type'], $pay_method[$now_order['pay_type']]['config'], $this->user_session, 1);
-				$go_refund_param = $pay_class->refund();
-
-				$now_order['order_id'] = $order_id;
-				$data_shop_order['order_id'] = $order_id;
-				$data_shop_order['refund_detail'] = serialize($go_refund_param['refund_param']);
-				if (empty($go_refund_param['error']) && $go_refund_param['type'] == 'ok') {
-					$data_shop_order['status'] = 4;
-				}
-				D('Shop_order')->data($data_shop_order)->save();
-				if($data_shop_order['status'] != 4){
-					$this->error($go_refund_param['msg']);
-				}
-			}
+//			if ($now_order['payment_money'] != '0.00') {
+//				if ($now_order['is_own']) {
+//					$pay_method = array();
+//					$merchant_ownpay = D('Merchant_ownpay')->field('mer_id', true)->where(array('mer_id' => $now_order['mer_id']))->find();
+//					foreach($merchant_ownpay as $ownKey=>$ownValue){
+//						$ownValueArr = unserialize($ownValue);
+//						if($ownValueArr['open']){
+//							$ownValueArr['is_own'] = true;
+//							$pay_method[$ownKey] = array('name'=>$this->getPayName($ownKey),'config'=>$ownValueArr);
+//						}
+//					}
+//				} else {
+//					$pay_method = D('Config')->get_pay_method();
+//				}
+//
+//				if (empty($pay_method)) {
+//					$this->error('系统管理员没开启任一一种支付方式！');
+//				}
+//				if (empty($pay_method[$now_order['pay_type']])) {
+//					$this->error('您选择的支付方式不存在，请更新支付方式！');
+//				}
+//
+//				$pay_class_name = ucfirst($now_order['pay_type']);
+//				$import_result = import('@.ORG.pay.'.$pay_class_name);
+//				if(empty($import_result)){
+//					$this->error('系统管理员暂未开启该支付方式，请更换其他的支付方式');
+//				}
+//
+//				$now_order['order_type'] = 'shop';
+//				$now_order['order_id'] = $now_order['orderid'];
+//
+//				$pay_class = new $pay_class_name($now_order, $now_order['payment_money'], $now_order['pay_type'], $pay_method[$now_order['pay_type']]['config'], $this->user_session, 1);
+//				$go_refund_param = $pay_class->refund();
+//
+//				$now_order['order_id'] = $order_id;
+//				$data_shop_order['order_id'] = $order_id;
+//				$data_shop_order['refund_detail'] = serialize($go_refund_param['refund_param']);
+//				if (empty($go_refund_param['error']) && $go_refund_param['type'] == 'ok') {
+//					$data_shop_order['status'] = 4;
+//				}
+//				D('Shop_order')->data($data_shop_order)->save();
+//				if($data_shop_order['status'] != 4){
+//					$this->error($go_refund_param['msg']);
+//				}
+//			}
 
 
 			$return = $this->shop_refund_detail($now_order, $now_order['store_id']);

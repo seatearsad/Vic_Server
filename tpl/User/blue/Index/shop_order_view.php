@@ -221,7 +221,7 @@ filter:alpha(opacity=50);
 								<if condition="$now_order['tip_charge'] neq 0">
                                     <li>{pigcms{:L('_TIP_TXT_')}:${pigcms{$now_order['tip_charge']}</li>
                                 </if>
-                                    <li>{pigcms{:L('_ORDER_TOTAL_')}:${pigcms{$now_order['price'] + $now_order['tip_charge']}</li>
+                                    <li>{pigcms{:L('_B_PURE_MY_70_')}:${pigcms{$now_order['price'] + $now_order['tip_charge']}</li>
 								<if condition="$now_order['balance_reduce'] gt 0">
 									<li>{pigcms{:L('_PLATFORM_DIS_')}：${pigcms{$now_order['balance_reduce']|floatval} </li>
 								</if>

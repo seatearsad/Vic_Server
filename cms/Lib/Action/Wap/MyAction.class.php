@@ -4915,7 +4915,15 @@ class MyAction extends BaseAction{
             }else if($now_order['pay_type'] == 'weixin' || $now_order['pay_type'] == 'alipay'){
                 import('@.ORG.pay.IotPay');
                 $IotPay = new IotPay();
-                $IotPay->refund($this->user_session['uid'],$now_order['order_id'],'WEB');
+                $result = $IotPay->refund($this->user_session['uid'],$now_order['order_id'],'WEB');
+                if ($result['retCode'] == 'SUCCESS' && $result['resCode'] == 'SUCCESS'){
+                    $data_shop_order['order_id'] = $now_order['order_id'];
+                    $data_shop_order['status'] = 4;
+                    $data_shop_order['last_time'] = time();
+                    D('Shop_order')->data($data_shop_order)->save();
+                }else{
+                    $this->error_tips($result['retMsg']);
+                }
             }
 //			else if ($now_order['payment_money'] != '0.00') {
 //				if ($now_order['is_own']) {

@@ -557,6 +557,18 @@ class ShopAction extends BaseAction
                 }else{
                     $this->error('删除失败！请重试~');
                 }
+            }else if($now_order['pay_type'] == 'weixin' || $now_order['pay_type'] == 'alipay'){
+                import('@.ORG.pay.IotPay');
+                $IotPay = new IotPay();
+                $result = $IotPay->refund($now_order['uid'],$now_order['order_id'],'WEB');
+                if ($result['retCode'] == 'SUCCESS' && $result['resCode'] == 'SUCCESS'){
+//                    $data_shop_order['order_id'] = $now_order['order_id'];
+//                    $data_shop_order['status'] = 4;
+//                    $data_shop_order['last_time'] = time();
+//                    D('Shop_order')->data($data_shop_order)->save();
+                }else{
+                    $this->error('删除失败！--'.$result['retMsg']);
+                }
             }elseif($now_order['pay_type'] == '' && $now_order['paid'] == 1 && $now_order['balance_pay'] > 0){
                 $add_result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],L('_B_MY_REFUND_')  . '(' . $order_id . ') 增加余额');
             }

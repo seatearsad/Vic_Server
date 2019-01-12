@@ -2219,9 +2219,13 @@ class StoreAction extends BaseAction{
 			$express_list = D('Express')->get_express_list();
 			$this->assign('express_list',$express_list);
 		} elseif ($order['is_pick_in_store'] == 0) {
-			$supply = D('Deliver_supply')->field('uid')->where(array('order_id' => $order['order_id'], 'item' => 2))->find();
+			$supply = D('Deliver_supply')->field('uid,status')->where(array('order_id' => $order['order_id'], 'item' => 2))->find();
 			if (isset($supply['uid']) && $supply['uid']) {
 				$sure = true;
+                if($supply['status'] == 2 || $supply['status'] == 3){
+                    $t_deliver = D('Deliver_user')->field(true)->where(array('uid'=>$supply['uid']))->find();
+                    $this->assign('deliver',$t_deliver);
+                }
 			}
 		}
 

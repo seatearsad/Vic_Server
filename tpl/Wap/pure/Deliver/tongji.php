@@ -38,7 +38,7 @@
                 <p class="f14 c9">{pigcms{:L('_TIP_TXT_')}：<i>$</i>{pigcms{$tip|default=0}</p>
             </div>
             <div class="Namelist p10 f14">
-                <p class="red">{pigcms{:L('_ORDER_TOTAL_')}：{pigcms{$order_count|default=0}<i></i></p>
+                <p class="red">{pigcms{:L('_ORDER_NUM_TOTAL_')}：{pigcms{$order_count|default=0}<i></i></p>
             </div>
         </section>
         <volist name="list" id="order">

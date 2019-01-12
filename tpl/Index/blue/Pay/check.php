@@ -164,6 +164,7 @@
 					}else{
 						var need_pay_tmp = need_pay_tmp-now_money;
 						$('#pay_bank_list').css('display', 'block');
+                        $('#payment_select').show();
 						$('.need_pay').html(need_pay_tmp.toFixed(2));
 					}
 					$("input[name='use_balance']").attr('value',1);
@@ -172,6 +173,7 @@
 					if(need_pay_tmp>0){
 						$('.imgradio').find('input:first').attr('checked','checked');
 						$('#pay_bank_list').css('display', 'block');
+                        $('#payment_select').show();
 						$('#need-pay').css('display', 'block');
 						$('.need_pay').html(need_pay_tmp.toFixed(2));
 					}else{
@@ -179,8 +181,8 @@
 						$('.need_pay').html('0.00');
 					}
 					$("input[name='use_balance']").attr('value',0);
-					isShowCredit();
 				}
+                isShowCredit();
 			});
 			
 			
@@ -526,26 +528,28 @@ a.see_tmp_qrcode {
 						
 						<div id="pay_bank_list" style="display:none;">
 							<div class="payment-bank">
-								<div class="payment-banktit">
-									<b class="open">{pigcms{:L('_SELECT_PAY_MODE_')}</b>
-								</div>	
-								<div class="payment-bankcen">
-									<div class="bank morebank">
-										<ul class="imgradio">
-											<volist name="pay_method" id="vo">
-												<php>if($pay_offline || $key != 'offline'){</php>
-												<li>
-													<label>
-														<input type="radio" name="pay_type" value="{pigcms{$key}" <php>if($key == 'offline'){</php>checked="checked"<php>}</php>><img src="{pigcms{$static_public}images/pay/{pigcms{$key}.png" style="height: 30px"/><!--br>{pigcms{$vo.name}-->
-														<!--img src="{pigcms{$static_public}images/pay/{pigcms{$key}.gif" width="112" height="32" alt="{pigcms{$vo.name}" title="{pigcms{$vo.name}"/-->
-													</label>
-												</li>
-												<php>}</php>
-											</volist>
-										</ul>
-										<div class="clr"></div>
-									</div>
-								</div>
+                                <div id="payment_select">
+                                    <div class="payment-banktit">
+                                        <b class="open">{pigcms{:L('_SELECT_PAY_MODE_')}</b>
+                                    </div>
+                                    <div class="payment-bankcen">
+                                        <div class="bank morebank">
+                                            <ul class="imgradio">
+                                                <volist name="pay_method" id="vo">
+                                                    <php>if($pay_offline || $key != 'offline'){</php>
+                                                    <li>
+                                                        <label>
+                                                            <input type="radio" name="pay_type" value="{pigcms{$key}" <php>if($key == 'offline'){</php>checked="checked"<php>}</php>><img src="{pigcms{$static_public}images/pay/{pigcms{$key}.png" style="height: 30px"/><!--br>{pigcms{$vo.name}-->
+                                                            <!--img src="{pigcms{$static_public}images/pay/{pigcms{$key}.gif" width="112" height="32" alt="{pigcms{$vo.name}" title="{pigcms{$vo.name}"/-->
+                                                        </label>
+                                                    </li>
+                                                    <php>}</php>
+                                                </volist>
+                                            </ul>
+                                            <div class="clr"></div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="clr" style="border-bottom: 1px #cccccc solid"></div>
                                 <div id="tip_label">
                                     <div class="payment-banktit">
@@ -642,6 +646,7 @@ a.see_tmp_qrcode {
 						<div class="form-submit">
 							<input type="hidden" name="order_id" value="{pigcms{$order_info.order_id}"/>
 				    		<input type="hidden" name="order_type" value="{pigcms{$order_info.order_type}"/>
+                            <input type="hidden" name="tip" value="">
 			                <input id="J-order-pay-button" type="submit" class="btn btn-large btn-pay" name="commit" value="{pigcms{:L('_B_PURE_MY_81_')}"/><br/>
 			            </div>
 			    	</form>
@@ -888,7 +893,6 @@ a.see_tmp_qrcode {
         $("input[name='pay_type']").click(isShowCredit);
         var isb = false;
         $(function(){
-            isShowCredit();
             if(parseFloat($('input[name="charge_total"]').val()) <= 20){
                 isb = true;
             }
@@ -906,6 +910,7 @@ a.see_tmp_qrcode {
             $('input[name="credit_id"]').val($('input[name="card_id"]').val());
 
             CalTip();
+            isShowCredit();
         });
 
         //计算小费
@@ -927,9 +932,27 @@ a.see_tmp_qrcode {
             }
             var totalNum = parseFloat($('input[name="charge_total"]').val()) + parseFloat(tipNum);
 
+            $('input[name="tip"]').val(tipNum.toFixed(2));
+
             $('#tip_num').text('$' + tipNum.toFixed(2));
             $('#add_tip').text('$' + totalNum.toFixed(2));
-            // alert($('#add_tip').text().replace('$', ""));
+
+            var user_money = {pigcms{$now_user.now_money};
+            if(totalNum > user_money){
+                $('#balance_money').css('color','#C1B9B9');
+                $('#use_balance').removeAttr('checked');
+                $('#use_balance').attr('disabled','disabled');
+
+                $('#normal-fieldset').css('display','block');
+                $('#payment_select').show();
+                $('.imgradio').find('input:last').attr('checked','checked');
+                $('#pay_bank_list').css('display', 'block');
+                $('#need-pay').css('display', 'block');
+            }else{
+                $('#balance_money').css('color','#666666');
+                $('#use_balance').removeAttr('disabled');
+            }
+            $('.need_pay').html(totalNum.toFixed(2));
         }
 
         function tip_select(){
@@ -975,23 +998,40 @@ a.see_tmp_qrcode {
                     }
                 }
                 CalTip();
+                isShowCredit();
             }
         });
 
         $('input[name="card_id"]').click(function(){
             $('input[name="credit_id"]').val(this.val());
         });
+
         function isShowCredit(){
-            var pay_type = $('input[name="pay_type"]:checked').val();
-            if(pay_type == 'moneris'){
-                $('#card').show();
+            var tip = parseFloat($('#tip_num').text().replace('$', "")).toFixed(2);
+            var totalNum = parseFloat($('input[name="charge_total"]').val()).toFixed(2);
+            var show_money = (parseFloat(totalNum) + parseFloat(tip)).toFixed(2);
+            if($("#use_balance").is(':checked')==true){
+                $('input[name="pay_type"]').removeAttr('checked');
+                $('#pay_bank_list').css('display', 'block');
+                $('#payment_select').hide();
                 $('#tip_label').show();
-            }else if(pay_type == 'weixin' || pay_type == 'alipay') {
                 $('#card').hide();
-                $('#tip_label').show();
-            }else {
-                $('#card').hide();
-                $('#tip_label').hide();
+                $('.need_pay').html(show_money);
+            }else{
+                var pay_type = $('input[name="pay_type"]:checked').val();
+                if(pay_type == 'moneris'){
+                    $('#card').show();
+                    $('#tip_label').show();
+                    $('.need_pay').html(show_money);
+                }else if(pay_type == 'weixin' || pay_type == 'alipay'){
+                    $('#tip_label').show();
+                    $('#card').hide();
+                    $('.need_pay').html(show_money);
+                }else{
+                    $('#card').hide();
+                    $('#tip_label').hide();
+                    $('.need_pay').html(totalNum);
+                }
             }
         }
 

@@ -274,7 +274,17 @@ class PayAction extends BaseAction{
 			$order_info['use_balance'] = 1;
 		}
 		//dump($order_info);die;
-		
+        //garfunkel add 添加小费记录
+        $order_info['tip'] = $_POST['tip'];
+        if($_POST['pay_type'] == 'Cash' || $_POST['pay_type'] == 'offline')
+            $order_info['tip'] = 0;
+        if($order_info['tip'] > 0){
+            $order_info['order_total_money'] = $order_info['order_total_money'] + $order_info['tip'];
+            $data['tip_charge'] = $order_info['tip'];
+            if($order_info['order_type'] == 'shop' || $order_info['order_type'] == 'mall'){
+                D('Shop_order')->field(true)->where(array('order_id'=>$order_info['order_id']))->save($data);
+            }
+        }
 		//如果用户存在余额或使用了优惠券，则保存至订单信息。如果金额满足订单总价，则实时扣除并返回支付成功！若不够则不实时扣除，防止用户在付款过程中取消支付
 		if($order_info['order_type'] == 'group'){
 			$save_result = D('Group_order')->web_befor_pay($order_info,$now_user);
