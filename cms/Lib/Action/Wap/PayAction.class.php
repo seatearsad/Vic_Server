@@ -2483,6 +2483,7 @@ class PayAction extends BaseAction{
         //ksort($data);
         //var_dump($data);
         //var_dump(json_encode($data));
+        file_put_contents("./test_log.txt",date("Y/m/d")."   ".date("h:i:sa")."   "."Request" ."   ". $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'--'.json_encode($data)."\r\n",FILE_APPEND);
         import('ORG.Net.Http');
         $http = new Http();
         $result = $http->curlPost($pay_url,'params='.json_encode($data));
