@@ -1508,7 +1508,7 @@ class DeliverAction extends BaseAction
             $result['tip'] = $result['tip'] ? $result['tip'] + $val['tip_charge'] : $val['tip_charge'];
             if($val['coupon_price'] > 0) $val['price'] = $val['price'] - $val['coupon_price'];
             $val['pay_type'] = $val['payType'];
-            if($val['pay_type'] != 'moneris' && $val['pay_type'] != ''){//统计现金
+            if($val['pay_type'] == 'offline' || $val['pay_type'] == 'Cash'){//统计现金
                 $result['offline_money'] = $result['offline_money'] ? $result['offline_money'] + $val['price'] : $val['price'];
             }else{
                 $result['online_money'] = $result['online_money'] ? $result['online_money'] + $val['price'] : $val['price'];

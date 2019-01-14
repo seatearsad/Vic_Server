@@ -25,7 +25,7 @@
                 <div class="left-slogan" style="margin-top: 12px"> <a class="left-arrow icon-arrow-left2" data-node="navBack" href="javascript:history.go(-1);"></a></div>
                 <div class="center-title" style="margin-top: 4px"> <i class="icon-location" data-node="icon"></i>
                     <div class="ui-suggestion-mask">
-                        <input type="text" placeholder="{pigcms{:L('_STAFF_SEARCH_WORD_')}" id="se-input-wd" autocomplete="off">
+                        <input type="text" placeholder="Please enter your detail address" id="se-input-wd" autocomplete="off">
                         <div class="ui-suggestion-quickdel"></div>
                     </div>
                 </div>

@@ -784,7 +784,7 @@ class DeliverAction extends BaseAction {
             $show_list[$v['uid']]['order_num'] = $show_list[$v['uid']]['order_num'] ? $show_list[$v['uid']]['order_num']+ 1 : 1;
             $show_list[$v['uid']]['tip'] = $show_list[$v['uid']]['tip'] ? $show_list[$v['uid']]['tip'] + $v['tip_charge'] : $v['tip_charge'];
             $show_list[$v['uid']]['freight'] = $show_list[$v['uid']]['freight'] ? $show_list[$v['uid']]['freight'] + $v['freight_charge'] : $v['freight_charge'];
-            if($v['pay_type'] != 'moneris' && $v['pay_type'] != ''){//统计现金
+            if($v['pay_type'] == 'offline' || $v['pay_type'] == 'Cash'){//统计现金
                 if($v['coupon_price'] > 0) $v['price'] = $v['price'] - $v['coupon_price'];
                 $show_list[$v['uid']]['cash'] = $show_list[$v['uid']]['cash'] ? $show_list[$v['uid']]['cash'] + $v['price'] : $v['price'];
             }
