@@ -1101,11 +1101,11 @@ class PayAction extends BaseAction{
         $data['channelId'] = $channelId;
         $data['currency'] = 'CAD';
         //单位分
-        $data['amount'] = 1;//$_POST['charge_total'] * 100;
+        $data['amount'] = $_POST['charge_total'] * 100;
         $data['clientIp'] = ip();
         $data['device'] = 'WEB';
         //支付结果回调URL
-        $data['notifyUrl'] = 'http://54.190.29.18/notify';
+        $data['notifyUrl'] = 'https://www.tutti.app/notify';
         $data['subject'] = 'Tutti Order '.$order_id;
         $data['body'] = 'Tutti Order';
         if($pay_type == 'weixin') {

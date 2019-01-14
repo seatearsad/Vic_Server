@@ -2462,7 +2462,7 @@ class PayAction extends BaseAction{
         $data['clientIp'] = ip();
         $data['device'] = 'WEB';
         //支付结果回调URL
-        $data['notifyUrl'] = 'https://tutti.app';
+        $data['notifyUrl'] = 'https://www.tutti.app/notify';
         $data['subject'] = $order_id;
         $data['body'] = $_POST['order_id'];
 //        $data['param1'] = '';

@@ -36,7 +36,7 @@ class IotPay
             $data['refundAmount'] = $order['payment_money']*100;
             $data['clientIp'] = ip();
             //$data['device'] =$device;
-            $data['notifyUrl'] = 'http://54.190.29.18/notify';
+            $data['notifyUrl'] = 'https://www.tutti.app/notify';
             $data['loginName'] = 'jwsj218';
             //import('ORG.Crypt.Des');
             //$data['password'] = bin2hex(Des::encrypt('il1234','IotPay66'));
