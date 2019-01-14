@@ -515,6 +515,7 @@ class PayAction extends BaseAction{
             $pay_method[$k]['name'] = lang_substr($v['name'],C('DEFAULT_LANG'));
         }
         $this->assign('pay_method',$pay_method);
+        $this->assign('is_wexin_browser',$this->is_wexin_browser);
 
         if($_GET['type'] == 'group'){
             $this->behavior(array('model'=>'Pay_group','mer_id'=>$order_info['mer_id'],'biz_id'=>$order_info['order_id']),true);
