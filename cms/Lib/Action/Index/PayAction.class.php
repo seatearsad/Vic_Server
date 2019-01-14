@@ -1245,7 +1245,7 @@ class PayAction extends BaseAction{
             $rData['backType'] = $_POST['backType'];
             $rData['param1'] = $_POST['param1'];
             $rData['param2'] = $_POST['param2'];
-            $rData['clientIp'] = $_POST['clientIp'];
+            $rData['clientIp'] = $_POST['clientIp'] ? $_POST['clientIp'] : '';
             $rData['currency'] = $_POST['currency'];
             $rData['device'] = $_POST['device'];
             $rData['channelId'] = $_POST['channelId'];
@@ -1280,17 +1280,23 @@ class PayAction extends BaseAction{
                         $result = D('Shop_order')->after_pay($order_param);
                     }
                     echo 'success';
+                    if($is_jump){
+                        if($rData['channelId'] == 'WX_JSAPI' || $rData['channelId'] == 'ALIPAY_WAP' || $rData['channelId'] == 'WX_MWEB'){
+                            $url = '/wap.php?g=Wap&c=Shop&a=status&order_id='.$order_id;
+                        }else{
+                            $url =U("User/Index/shop_order_view",array('order_id'=>$order_id));
+                        }
+                        sleep(1);
+
+                        header('Location:'.$url);
+                    }
                 }
             }
 
         }else{
             echo 'Error';
         }
-        if($is_jump){
-            sleep(1);
-            $url =U("User/Index/shop_order_view",array('order_id'=>$order_id));
-            header('Location:'.$url);
-        }
+
     }
 }
 ?>
