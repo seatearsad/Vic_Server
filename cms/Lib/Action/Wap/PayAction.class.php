@@ -2488,8 +2488,24 @@ class PayAction extends BaseAction{
         $result = $http->curlPost($pay_url,'params='.json_encode($data));
         //var_dump($result);
         if($channelId == 'WX_JSAPI' || $channelId == 'WX_MWEB'){
-            if($result['success'])
+            if($result['success']){
+                //处理小费
+                $order_data = array('tip_charge'=>$_POST['tip']);
+                //处理优惠券
+                if($_POST['coupon_id']){
+                    $now_coupon = D('System_coupon')->get_coupon_by_id($_POST['coupon_id']);
+                    if(!empty($now_coupon)){
+                        $coupon_data = D('System_coupon_hadpull')->field(true)->where(array('id'=>$_POST['coupon_id']))->find();
+                        $coupon_real_id = $coupon_data['coupon_id'];
+                        $coupon = D('System_coupon')->get_coupon($coupon_real_id);
+
+                        $in_coupon = array('coupon_id'=>$data['coupon_id'],'coupon_price'=>$coupon['discount']);
+                        $order_data = array_merge($order_data,$in_coupon);
+                    }
+                }
+                D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->save($order_data);
                 $this->success('', $result['url']);
+            }
             else
                 $this->error('Fail'.' - errCode:'.$result['errcode']);
         }else {
