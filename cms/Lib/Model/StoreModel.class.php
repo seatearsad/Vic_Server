@@ -713,7 +713,7 @@ class StoreModel extends Model
         return $name_list[$status];
     }
 
-    public function WeixinAndAli($pay_type,$order_id,$price){
+    public function WeixinAndAli($pay_type,$order_id,$price,$ip){
         //获取支付的相关配置数据
         $where = array('tab_id'=>'alipay','gid'=>7);
         $result = D('Config')->field(true)->where($where)->select();
@@ -741,7 +741,7 @@ class StoreModel extends Model
         $data['currency'] = 'CAD';
         //单位分
         $data['amount'] = $price * 100;
-        $data['clientIp'] = real_ip();
+        $data['clientIp'] = $ip;//real_ip();
         $data['device'] = 'APP';
         //支付结果回调URL
         $data['notifyUrl'] = 'https://www.tutti.app/notify';
@@ -752,7 +752,7 @@ class StoreModel extends Model
         import('ORG.Net.Http');
         $http = new Http();
         $result = $http->curlPost($pay_url,'params='.json_encode($data));
-
+        file_put_contents("./test_log.txt",date("Y/m/d")."   ".date("h:i:sa")."   "."Request" ."   ". $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'--'.json_encode($data)."\r\n",FILE_APPEND);
         return $result;
     }
 
