@@ -1238,7 +1238,7 @@ class PayAction extends BaseAction{
             $rData['payOrderId'] = $_POST['payOrderId'];
             $rData['amount'] = $_POST['amount'];
             $rData['mchId'] = $_POST['mchId'];
-            $rData['mchOrderNo'] = $_POST['mchOrderNo'];
+            $rData['mchOrderNo'] = $_POST['mchOrderNo'] ? $_POST['mchOrderNo'] : '';
             $rData['subject'] = $_POST['subject'];
             $rData['paySuccTime'] = $_POST['paySuccTime'];
             $rData['channelOrderNo'] = $_POST['channelOrderNo'];
@@ -1252,9 +1252,6 @@ class PayAction extends BaseAction{
             $rData['status'] = $_POST['status'];
 
             //获取订单id
-            if($rData['channelId'] == 'WX_JSAPI')//如果是公众号支付
-                $rData['mchOrderNo'] = $rData['param1'];
-
             $order = explode("_",$rData['mchOrderNo']);
             $order_id = $order[1];
 
@@ -1285,6 +1282,10 @@ class PayAction extends BaseAction{
                     echo 'success';
                     if($is_jump){
                         if($rData['channelId'] == 'WX_JSAPI' || $rData['channelId'] == 'ALIPAY_WAP' || $rData['channelId'] == 'WX_MWEB'){
+                            if($rData['channelId'] == 'WX_JSAPI') {//如果是公众号支付
+                                $order = explode("_", $rData['param1']);
+                                $order_id = $order[1];
+                            }
                             $url = '/wap.php?g=Wap&c=Shop&a=status&order_id='.$order_id;
                         }else{
                             $url =U("User/Index/shop_order_view",array('order_id'=>$order_id));
