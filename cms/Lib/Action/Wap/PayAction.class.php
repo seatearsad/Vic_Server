@@ -2459,7 +2459,7 @@ class PayAction extends BaseAction{
         $data['currency'] = 'CAD';
         //单位分
         $data['amount'] = $_POST['charge_total'] * 100;
-        $data['clientIp'] = ip();
+        $data['clientIp'] = real_ip();
         $data['device'] = 'WEB';
         //支付结果回调URL
         $data['notifyUrl'] = 'https://www.tutti.app/notify';
