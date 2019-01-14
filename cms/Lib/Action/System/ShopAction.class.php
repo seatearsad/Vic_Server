@@ -353,6 +353,7 @@ class ShopAction extends BaseAction
                 $tax_price += $v['price'] * $goods['tax_num']/100 *$v['num'];
             }
             $li['duty_price'] = $tax_price + ($li['packing_charge'] + $li['freight_charge'])*$temp[$li['store_id']]['tax_num']/100;
+            $li['duty_price'] = round($li['duty_price'],2);
         }
         $this->assign(array('type' => $type, 'sort' => $sort, 'status' => $status,'pay_type'=>$pay_type));
         $this->assign('status_list', D('Shop_order')->status_list_admin);
