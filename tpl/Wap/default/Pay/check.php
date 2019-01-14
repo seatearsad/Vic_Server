@@ -906,7 +906,7 @@
                 <dl class="list">
                     <volist name="pay_method" id="vo">
                         <php>if($pay_offline || $key != 'offline'){</php>
-                        <php>if(!$this->is_wexin_browser && $key != 'weixin'){</php>
+                        <php>if(($key == 'weixin' && $this->is_wexin_browser) || ($key == 'alipay' && !$this->is_wexin_browser) || ($key != 'weixin' && $key!= 'alipay')){</php>
                         <dd class="dd-padding">
                             <label class="mt">
                                 <!--i class="bank-icon icon-{pigcms{$key}"></i-->
