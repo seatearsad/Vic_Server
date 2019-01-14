@@ -1262,6 +1262,10 @@ class PayAction extends BaseAction{
                 if($sign == $_POST['sign']){
                     $now_order = D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->find();
                     if($now_order['pain'] == 0){
+                        if($rData['channelId'] == 'WX_JSAPI') {//如果是公众号支付
+                            $order = explode("_", $rData['param1']);
+                            $order_id = $order[1];
+                        }
                         //获取支付方式
                         $channel = explode("_",$rData['channelId']);
                         $payment = $channel[0] == 'WX' ? 'weixin' : 'alipay';
@@ -1282,10 +1286,7 @@ class PayAction extends BaseAction{
                     echo 'success';
                     if($is_jump){
                         if($rData['channelId'] == 'WX_JSAPI' || $rData['channelId'] == 'ALIPAY_WAP' || $rData['channelId'] == 'WX_MWEB'){
-                            if($rData['channelId'] == 'WX_JSAPI') {//如果是公众号支付
-                                $order = explode("_", $rData['param1']);
-                                $order_id = $order[1];
-                            }
+
                             $url = '/wap.php?g=Wap&c=Shop&a=status&order_id='.$order_id;
                         }else{
                             $url =U("User/Index/shop_order_view",array('order_id'=>$order_id));
