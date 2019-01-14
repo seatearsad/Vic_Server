@@ -1252,6 +1252,9 @@ class PayAction extends BaseAction{
             $rData['status'] = $_POST['status'];
 
             //获取订单id
+            if($rData['channelId'] == 'WX_JSAPI')//如果是公众号支付
+                $rData['mchOrderNo'] = $rData['param1'];
+
             $order = explode("_",$rData['mchOrderNo']);
             $order_id = $order[1];
 
