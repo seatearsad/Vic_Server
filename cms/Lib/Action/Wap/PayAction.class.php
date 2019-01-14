@@ -2468,7 +2468,7 @@ class PayAction extends BaseAction{
 //        $data['param1'] = '';
 //        $data['param2'] = '';
         if($this->is_wexin_browser && $pay_type == 'weixin') {
-            $data['returnUrl'] = 'https://tutti.app';
+            $data['returnUrl'] = 'https://www.tutti.app/notify';
             $data['extra'] = json_encode(array('openId' => $this->user_session['openid']));
         }
         if(!$this->is_wexin_browser && $pay_type == 'weixin') {
