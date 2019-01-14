@@ -34,7 +34,7 @@ class IotPay
             //$data['channelId'] = $channelId;
             $data['currency'] = 'CAD';
             $data['refundAmount'] = $order['payment_money']*100;
-            $data['clientIp'] = ip();
+            $data['clientIp'] = real_ip();
             //$data['device'] =$device;
             $data['notifyUrl'] = 'https://www.tutti.app/notify';
             $data['loginName'] = 'jwsj218';

@@ -741,7 +741,7 @@ class StoreModel extends Model
         $data['currency'] = 'CAD';
         //单位分
         $data['amount'] = $price * 100;
-        $data['clientIp'] = ip();
+        $data['clientIp'] = real_ip();
         $data['device'] = 'APP';
         //支付结果回调URL
         $data['notifyUrl'] = 'https://www.tutti.app/notify';
