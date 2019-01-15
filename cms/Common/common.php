@@ -607,7 +607,7 @@ function ip() {
 function real_ip()
 {
     static $realip = NULL;
-
+    $num = rand(1,100);
     if ($realip !== NULL)
     {
         return $realip;
@@ -644,7 +644,7 @@ function real_ip()
             }
             else
             {
-                $realip = '0.0.0.0';
+                $realip = '192.168.88.'.$num;
             }
         }
     }
@@ -665,7 +665,7 @@ function real_ip()
     }
 
     preg_match("/[\d\.]{7,15}/", $realip, $onlineip);
-    $realip = !empty($onlineip[0]) ? $onlineip[0] : '0.0.0.0';
+    $realip = !empty($onlineip[0]) ? $onlineip[0] : '192.168.88.'.$num;
 
     return $realip;
 }
