@@ -2324,7 +2324,6 @@ class StorestaffAction extends BaseAction
             $return_data['mer_id']=$merchant_store['mer_id'];//商家id
             $return_data['goods_price']=floatval(sprintf("%.2f", $goods_price));//商品总价
             //$return_data['goods_price_tax']=$goods_price_tax;//商品税
-            $return_data['total_price']=$price;//总价=实际支付
             $return_data['freight_charge']=floatval(sprintf("%.2f", $return['delivery_fee']));//配送费
             $return_data['freight_charge_tax']=$freight_charge_tax;//配送费税
             $return_data['address_id']=$user_add;//客户地址id
@@ -2334,6 +2333,7 @@ class StorestaffAction extends BaseAction
             $return_data['deposit'] = $_POST['goods_deposit'] ? $_POST['goods_deposit'] : 0;
             $return_data['all_tax'] = floatval(sprintf("%.2f", $return_data['goods_price_tax'])) + floatval(sprintf("%.2f", $freight_charge_tax));
             $price = floatval(sprintf("%.2f", $goods_price))+floatval(sprintf("%.2f", $return_data['goods_price_tax']))+floatval(sprintf("%.2f", $return['delivery_fee']))+floatval(sprintf("%.2f", $freight_charge_tax))+floatval(sprintf("%.2f", $return_data['deposit']));
+            $return_data['total_price']=$price;//总价=实际支付
             $return_data['price']=$price;//实际需要支付的金额，商品*配送
             $this->assign('post_data',$_POST);
             $this->assign('return_data',$return_data);

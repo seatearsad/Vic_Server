@@ -352,6 +352,10 @@ class ShopAction extends BaseAction
                 $goods = D('Shop_goods')->get_goods_by_id($g_id);
                 $tax_price += $v['price'] * $goods['tax_num']/100 *$v['num'];
             }
+            if($order['num'] == 0){
+                $tax_price = $order['packing_charge'];
+                $li['packing_charge'] = 0;
+            }
             $li['duty_price'] = $tax_price + ($li['packing_charge'] + $li['freight_charge'])*$temp[$li['store_id']]['tax_num']/100;
             $li['duty_price'] = round($li['duty_price'],2);
         }
@@ -384,17 +388,24 @@ class ShopAction extends BaseAction
         }else{//garfunkel 重新获取商品名称
             $tax_price = 0;
             $deposit_price = 0;
-            foreach ($order['info'] as $k => $v){
-                $g_id = $v['goods_id'];
-                $goods = D('Shop_goods')->get_goods_by_id($g_id);
-                $order['info'][$k]['name'] = $goods['name'];
-                $order['info'][$k]['tax_num'] = $goods['tax_num'];
-                $order['info'][$k]['deposit_price'] = $goods['deposit_price'];
-                $deposit_price += $goods['deposit_price']*$v['num'];
-                $tax_price += $v['price'] * $goods['tax_num']/100 * $v['num'];
+            if($order['num'] == 0){
+                $order['deposit_price'] = $order['discount_price'];
+                $order['good_tax_price'] = $order['packing_charge'];
+                $order['packing_charge'] = 0;
+                $order['tax_price'] = $order['good_tax_price'] + ($order['freight_charge'] + $order['packing_charge']) * $store['tax_num']/100;
+            }else {
+                foreach ($order['info'] as $k => $v) {
+                    $g_id = $v['goods_id'];
+                    $goods = D('Shop_goods')->get_goods_by_id($g_id);
+                    $order['info'][$k]['name'] = $goods['name'];
+                    $order['info'][$k]['tax_num'] = $goods['tax_num'];
+                    $order['info'][$k]['deposit_price'] = $goods['deposit_price'];
+                    $deposit_price += $goods['deposit_price'] * $v['num'];
+                    $tax_price += $v['price'] * $goods['tax_num'] / 100 * $v['num'];
+                }
+                $order['deposit_price'] = $deposit_price;
+                $order['tax_price'] = $tax_price + ($order['freight_charge'] + $order['packing_charge']) * $store['tax_num'] / 100;
             }
-            $order['deposit_price'] = $deposit_price;
-            $order['tax_price'] = $tax_price + ($order['freight_charge'] + $order['packing_charge']) * $store['tax_num']/100;
         }
 
         $this->assign('store', D('Merchant_store_shop')->field(true)->where(array('store_id' => $order['store_id']))->find());
@@ -404,11 +415,35 @@ class ShopAction extends BaseAction
 
     //admin 修改订单
     public function edit_order(){
-        $order_id['order_id']= intval($_GET['order_id']);//订单id
-        $shop_order = M('Shop_order');
-        $shop_order_data = $shop_order->field(true)->where($order_id)->find();
-        if ($shop_order_data){
-            $this->assign('order',$shop_order_data);
+        $order = D('Shop_order')->get_order_detail(array('order_id' => intval($_GET['order_id'])));
+        $store = D('Merchant_store')->field(true)->where(array('store_id' => $order['store_id']))->find();
+        if (empty($order)) {
+            $this->frame_error_tips('没有找到该订单的信息！');
+        }else{//garfunkel 重新获取商品名称
+            $tax_price = 0;
+            $deposit_price = 0;
+            if($order['num'] == 0){
+                $order['deposit_price'] = $order['discount_price'];
+                $order['good_tax_price'] = $order['packing_charge'];
+                $order['packing_charge'] = 0;
+                $order['tax_price'] = $order['good_tax_price'] + ($order['freight_charge'] + $order['packing_charge']) * $store['tax_num']/100;
+            }else{
+                foreach ($order['info'] as $k => $v){
+                    $g_id = $v['goods_id'];
+                    $goods = D('Shop_goods')->get_goods_by_id($g_id);
+                    $order['info'][$k]['name'] = $goods['name'];
+                    $order['info'][$k]['tax_num'] = $goods['tax_num'];
+                    $order['info'][$k]['deposit_price'] = $goods['deposit_price'];
+                    $deposit_price += $goods['deposit_price']*$v['num'];
+                    $tax_price += $v['price'] * $goods['tax_num']/100 * $v['num'];
+                }
+                $order['deposit_price'] = $deposit_price;
+                $order['tax_price'] = $tax_price + ($order['freight_charge'] + $order['packing_charge']) * $store['tax_num']/100;
+            }
+        }
+        if ($order){
+            $this->assign('order',$order);
+            $this->assign('store',$store);
         }else{
             $this->frame_error_tips('订单不存在');
         }
@@ -416,12 +451,22 @@ class ShopAction extends BaseAction
     }
     public function save_edit_order(){
         if (IS_POST){
-
             $order_id= intval($_POST['order_id']);//订单id
             $shop_order = M('Shop_order');
             $shop_order_data = $shop_order->field(true)->find($order_id);
             if (!$shop_order_data){
                 $this->error('订单不存在或已经删除，请刷新后重试');
+            }
+
+            //更新订单商品
+            $good_list = D('Shop_order_detail')->field(true)->where(array('order_id'=>$order_id))->select();
+            foreach ($good_list as $good){
+                $good_id = 'good_'.$good['goods_id'];
+                //如果商品数量更新
+                if($_POST[$good_id] != $good['num']){
+                    $good['num'] = $_POST[$good_id];
+                    D('Shop_order_detail')->where(array('order_id'=>$order_id))->save($good);
+                }
             }
             //garfunkel add 记录原始价格
             $data['change_price'] = $shop_order_data['price'];
