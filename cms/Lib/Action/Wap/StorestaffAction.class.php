@@ -1451,6 +1451,7 @@ class StorestaffAction extends BaseAction
             $tax_price = 0;
             $deposit_price = 0;
             $lang = $this->language == 'cn' ? 'zh-cn' : 'en-us';
+
             foreach ($order['info'] as $k => $v){
                 $g_id = $v['goods_id'];
                 $goods = D('Shop_goods')->get_goods_by_id($g_id);
@@ -1490,6 +1491,13 @@ class StorestaffAction extends BaseAction
             $tax_price = $tax_price + ($order['freight_charge'] + $order['packing_charge'])*$store['tax_num']/100;
             $order['tax_price'] = $tax_price;
             $order['deposit_price'] = $deposit_price;
+            
+            if($order['num'] == 0){
+                $order['deposit_price'] = $order['packing_charge'];
+                $order['good_tax_price'] = $order['discount_price'];
+                $order['packing_charge'] = 0;
+                $order['tax_price'] = $order['good_tax_price'] + ($order['freight_charge'] + $order['packing_charge']) * $store['tax_num']/100;
+            }
             //
             $this->assign('store', D('Merchant_store_shop')->field(true)->where(array('store_id' => $store_id))->find());
             $this->assign('shop',$store);
