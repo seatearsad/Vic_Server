@@ -94,7 +94,7 @@
                 <input type="hidden" name="userphone" value="<?php echo $post_data['phone'] ?>">
                 <input type="hidden" name="address" value="<?php echo $post_data['adress'] ?>">
                 <input type="hidden" name="real_orderid" value="<?php echo $return_data['real_orderid']?>">
-                <input type="hidden" name="discount_price" value="<?php echo $return_data['all_tax'] ?>">
+                <input type="hidden" name="discount_price" value="<?php echo $return_data['goods_price_tax'] ?>">
                 <input type="hidden" name="packing_charge" value="<?php echo $return_data['deposit'] ?>">
                 <tr>
                     <td><button type="submit" class="btn" style="text-align: center;width: 100%;margin-top: 20px;font-size: 14px;background-color: #06c1ae;">Confirm</button></td>
