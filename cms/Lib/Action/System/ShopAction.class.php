@@ -389,8 +389,8 @@ class ShopAction extends BaseAction
             $tax_price = 0;
             $deposit_price = 0;
             if($order['num'] == 0){
-                $order['deposit_price'] = $order['discount_price'];
-                $order['good_tax_price'] = $order['packing_charge'];
+                $order['deposit_price'] = $order['packing_charge'];
+                $order['good_tax_price'] = $order['discount_price'];
                 $order['packing_charge'] = 0;
                 $order['tax_price'] = $order['good_tax_price'] + ($order['freight_charge'] + $order['packing_charge']) * $store['tax_num']/100;
             }else {
@@ -423,8 +423,8 @@ class ShopAction extends BaseAction
             $tax_price = 0;
             $deposit_price = 0;
             if($order['num'] == 0){
-                $order['deposit_price'] = $order['discount_price'];
-                $order['good_tax_price'] = $order['packing_charge'];
+                $order['deposit_price'] = $order['packing_charge'];
+                $order['good_tax_price'] = $order['discount_price'];
                 $order['packing_charge'] = 0;
                 $order['tax_price'] = $order['good_tax_price'] + ($order['freight_charge'] + $order['packing_charge']) * $store['tax_num']/100;
             }else{
