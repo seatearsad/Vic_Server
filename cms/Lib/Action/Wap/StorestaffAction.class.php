@@ -1491,7 +1491,7 @@ class StorestaffAction extends BaseAction
             $tax_price = $tax_price + ($order['freight_charge'] + $order['packing_charge'])*$store['tax_num']/100;
             $order['tax_price'] = $tax_price;
             $order['deposit_price'] = $deposit_price;
-            
+            //代客下单
             if($order['num'] == 0){
                 $order['deposit_price'] = $order['packing_charge'];
                 $order['good_tax_price'] = $order['discount_price'];
