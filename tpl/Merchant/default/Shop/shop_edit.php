@@ -29,11 +29,11 @@
 							</li>
 							<!--li>
 								<a data-toggle="tab" href="#label">选择标签</a>
-							</li>
+							</li-->
 							<li>
 								<a data-toggle="tab" href="#pay">支付方式</a>
 							</li>
-							<li>
+							<!--li>
 								<a data-toggle="tab" href="#delivertime">配送时间</a>
 							</li-->
 							<li>
@@ -174,6 +174,10 @@
 									<input class="col-sm-1" size="10" maxlength="10" name="basic_price" id="Config_basicprice" type="text" value="{pigcms{$store_shop.basic_price|floatval}" />
 									<span class="form_tips">元</span>
 								</div>
+                                <div class="form-group">
+                                    <label class="col-sm-1"><label for="Config_notice">店铺提示</label></label>
+                                    <textarea class="col-sm-3" rows="4" name="shop_remind" id="Config_notice">{pigcms{$store_shop.shop_remind}</textarea>
+                                </div>
 								<div class="form-group deliver" <if condition="in_array($store_shop['deliver_type'], array(0,2,3,5))">style="display:none"</if>>
 									<label class="col-sm-1" for="Config_delivery_radius">服务距离</label>
 									<div class="col-sm-10">
@@ -262,6 +266,7 @@
 												<label><input name="reach_delivery_fee_type2" <if condition="$store_shop['reach_delivery_fee_type2'] eq 2 ">checked="checked"</if> value="2" type="radio" >达到</label>
 												<input size="10" maxlength="10" name="no_delivery_fee_value2" id="Config_no_delivery_fee_value" type="text" value="{pigcms{$store_shop.no_delivery_fee_value2|floatval}"/>元免外送费
 											</div>
+
 										</div>
 									</div>
 								</div>
@@ -299,7 +304,7 @@
 									</div>
 								</volist>
 							</div>
-							<div id="pay" class="tab-pane">
+							<!--div id="pay" class="tab-pane">
 								<if condition="$config['store_open_payone']">
 									<div class="form-group">
 										<div class="radio">
@@ -328,7 +333,22 @@
 										</div>
 									</div>
 								</if>
-							</div>
+							</div-->
+                            <div id="pay" class="tab-pane">
+                                <php>
+                                    $pay_list = explode('|',$now_store['pay_method']);
+                                    foreach($pay_method as $k=>$v){
+                                </php>
+                                    <div class="form-group">
+                                        <div class="radio">
+                                            <label>
+                                                <input class="paycheck " type="checkbox" name="paymethod_{pigcms{$k}" value="1" id="Config_openpaythree" onclick="check(this);" <php>if(in_array($k,$pay_list)){</php>checked="checked"<php>}</php>/>
+                                                <span class="lbl"><label for="Config_openpaythree">{pigcms{$v.name}</label></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                <php>}</php>
+                            </div>
 							<div id="delivertime" class="tab-pane">
 								<div class="alert alert-block alert-success">
 									<button type="button" class="close" data-dismiss="alert">

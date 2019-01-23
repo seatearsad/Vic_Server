@@ -112,7 +112,6 @@ class ShopAction extends BaseAction
             $sysnc = isset($_POST['sysnc']) ? intval($_POST['sysnc']) : 0;
             unset($_POST['sysnc']);
             $store_shop = $database_merchant_store_shop->field(true)->where(array('store_id' => $store_id))->find();
-
             /*****************************数据同步导入****************************************/
             if ($store_shop) {
 
@@ -204,6 +203,21 @@ class ShopAction extends BaseAction
             }
             $database_shop_category_relation->addAll($data_shop_category_relation);
 
+            //支付方式选择
+            //$pay_method = D('Config')->get_pay_method();
+            $pay_method = '';
+            foreach ($_POST as $k=>$v){
+                if(strpos($k,'paymethod') !== false){
+                    $pay = explode('_',$k);
+                    if($pay_method == '')
+                        $pay_method = $pay[1];
+                    else
+                        $pay_method = $pay_method.'|'.$pay[1];
+                }
+            }
+            $store_data['pay_method'] = $pay_method;
+            D('Merchant_store')->where(array('store_id'=>$store_id))->save($store_data);
+
             $this->success('编辑成功！');
             // 			}else{
             // 				$this->error('编辑失败！请重试。');
@@ -267,6 +281,10 @@ class ShopAction extends BaseAction
             }
             unset($tmparr);
             $this->assign('levelarr', $levelarr);
+
+            $pay_method = D('Config')->get_pay_method();
+            //var_dump($pay_method);die();
+            $this->assign('pay_method',$pay_method);
 
             $this->display();
         }

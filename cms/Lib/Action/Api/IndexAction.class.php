@@ -49,7 +49,7 @@ class IndexAction extends BaseAction
         $cat_fid = 0;
 
         $key = '';
-        $where = array('deliver_type' => $deliver_type, 'order' => $order, 'lat' => $lat, 'long' => $long, 'cat_id' => $cat_id, 'cat_fid' => $cat_fid, 'page' => $page);
+        $where = array('deliver_type' => $deliver_type, 'order' => $order, 'lat' => $lat, 'long' => $long, 'cat_id' => $cat_id, 'cat_fid' => $cat_fid, 'page' => $page,'limit'=>$limit);
         $key && $where['key'] = $key;
 
         $shop_list = D('Merchant_store_shop')->get_list_arrange($where,3,1,$limit,$page);
@@ -67,8 +67,67 @@ class IndexAction extends BaseAction
         $arr['best']['status'] = 1;
         $arr['best']['info'] = $shop_list['list'];
         $arr['best']['count'] = $shop_list['count'];
+        //获取顶级分类
+        $category = D('Shop_category')->field(true)->where(array('cat_fid'=>0))->select();
+        $nav_list = array();
+        foreach ($category as $v){
+            $nav['title'] = lang_substr($v['cat_name'],C('DEFAULT_LANG'));
+            $nav['image'] = 'https://www.tutti.app/static/images/category/'.$v['cat_url'].'.png';
+            $nav['id'] = $v['cat_id'];
+
+            $nav_list[] = $nav;
+        }
+        $arr['nav'] = $nav_list;
 
         $this->returnCode(0,'data',$arr);
+    }
+
+    public function getShopByCategory(){
+        //获取店铺列表
+        $page	=	$_POST['page']?$_POST['page']:0;
+        $limit = 10;
+
+        $order = 'juli';
+        $deliver_type =  'all';
+
+        $lat = $_POST['lat'];
+        $long = $_POST['lng'];
+
+        $cat_id = intval($_POST['cate_id']);
+        $cat_fid = intval($_POST['category']);
+
+        $key = '';
+        $where = array('deliver_type' => $deliver_type, 'order' => $order, 'lat' => $lat, 'long' => $long, 'cat_id' => $cat_id, 'cat_fid' => $cat_fid, 'page' => $page,'limit'=>$limit);
+        $key && $where['key'] = $key;
+
+        $shop_list = D('Merchant_store_shop')->get_list_arrange($where,3,1,$limit,$page);
+
+        if(!$shop_list['list']){
+            $shop_list['list'] = array();
+            $shop_list['count'] = '0';
+        }
+
+        $result['info'] = $shop_list['list'];
+        $result['count'] = $shop_list['count'];
+
+        $this->returnCode(0,'',$result,'success');
+    }
+
+    public function getCategorySubList(){
+        $cate_fid = $_POST['category'];
+        $category = D('Shop_category')->field(true)->where(array('cat_fid'=>$cate_fid))->select();
+        foreach ($category as &$v) {
+            $v['cat_name'] = lang_substr($v['cat_name'], C('DEFAULT_LANG'));
+            $v['cat_id'] = $v['cat_id'];
+        }
+        $all['cat_name'] = 'All';
+        $all['cat_id'] = 0;
+        if($category)
+            array_unshift($category,$all);
+        else
+            $category[] = $all;
+
+        $this->returnCode(0,'info',$category);
     }
 
     public function getStore(){
@@ -624,6 +683,21 @@ class IndexAction extends BaseAction
 
 
         $this->returnCode(0,'',$result,'success');
+    }
+
+    public function getDeliverPosition(){
+        $order_id = $_POST['order_id'];
+        $delivery = D('Deliver_supply')->field(true)->where(array('order_id'=>$order_id))->find();
+        if($delivery) {
+            if($delivery['status'] > 1 && $delivery['status'] < 5){
+                $deliver = D('Deliver_user')->field(true)->where(array('uid'=>$delivery['uid']))->find();
+                $t['deliver_name'] = $deliver['name'].'('.$deliver['phone'].')';
+                $t['deliver_lng'] = $deliver['lng'];
+                $t['deliver_lat'] = $deliver['lat'];
+
+                $this->returnCode(0,'info',$t,'success');
+            }
+        }
     }
 
     public function getOrderStatus(){

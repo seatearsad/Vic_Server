@@ -255,7 +255,7 @@ class Merchant_store_shopModel extends Model
 //			$star	=	isset($where['page']) ? intval($where['page']) : 0;
 //			$pagesize	=	5;
             $page = isset($where['page']) ? intval($where['page']) : 1;
-            $pagesize = 5;
+            $pagesize = $where['limit'] ? $where['limit'] : 5;
 //            $totalPage = ceil($total / $pagesize);
             $star = $pagesize * ($page - 1);
 		} else {

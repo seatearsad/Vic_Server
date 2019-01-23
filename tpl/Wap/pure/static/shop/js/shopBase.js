@@ -1224,6 +1224,16 @@ function showShop(shopId){
 		// showShopContent('product');
 		pageLoadHides();
 		changeWechatShare('shop',{title:nowShop.store.name,desc:nowShop.store.txt_info,imgUrl:nowShop.store.image,link:shopShareUrl+nowShop.store.id});
+        if(nowShop.store.shop_remind != '' && nowShop.store.is_mult_class != 1){
+            pageLoadHides();
+            var remindTipLayer = layer.open({
+                content: nowShop.store.shop_remind,
+                btn: ['Confirm'],
+                end: function(){
+                    layer.close(remindTipLayer);
+                }
+            });
+        }
 	}else{
 		productCart=[];
 		productCartNumber = 0;
@@ -1266,12 +1276,23 @@ function showShop(shopId){
 			// showShopContent('product');
 			firstMenuClick = true;
 			$('#shopMenuBar .product').trigger('click');
-			
+
 			changeWechatShare('shop',{title:nowShop.store.name,desc:nowShop.store.txt_info,imgUrl:nowShop.store.image,link:shopShareUrl+nowShop.store.id});
+
+            if(nowShop.store.shop_remind != '' && nowShop.store.is_mult_class != 1){
+                pageLoadHides();
+                var remindTipLayer = layer.open({
+                    content: nowShop.store.shop_remind,
+                    btn: ['Confirm'],
+                    end: function(){
+                        layer.close(remindTipLayer);
+                    }
+                });
+            }
 		});
 	}
 	$('#shopContentBar,#shopBanner').show();
-	
+
 	// setTimeout(function(){
 		// pageLoadHides();
 	// },1500);

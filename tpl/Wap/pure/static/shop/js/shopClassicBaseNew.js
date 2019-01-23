@@ -628,7 +628,6 @@ function showGood(shop_id,product_id){
 	$('#shopHeader,#shopBanner,#shopMenuBar,#shopMerchantBox').hide();
 		
 	cartEventReg();
-	
 	$.getJSON(ajax_url_root+'ajaxShop',{store_id:shopId},function(result){
 		nowShop = result;
 		if(nowShop.store.tmpl == '0'){
@@ -816,6 +815,16 @@ function showGood(shop_id,product_id){
 			$('#shopDetailPage').show();
 			pageLoadHides();
 		});
+        if(nowShop.shop_remind != ''){
+            pageLoadHides();
+            var remindTipLayer = layer.open({
+                content: nowShop.shop_remind,
+                btn: ['Confirm'],
+                end: function(){
+                    layer.close(remindTipLayer);
+                }
+            });
+        }
 	});
 }
 
@@ -1159,6 +1168,16 @@ function showShop(shopId){
 			$('#shopMenuBar .product').trigger('click');
 			
 			changeWechatShare('shop',{title:nowShop.store.name,desc:nowShop.store.txt_info,imgUrl:nowShop.store.image,link:shopShareUrl+nowShop.store.id});
+            if(nowShop.store.shop_remind != ''){
+                pageLoadHides();
+                var remindTipLayer = layer.open({
+                    content: nowShop.store.shop_remind,
+                    btn: ['Confirm'],
+                    end: function(){
+                        layer.close(remindTipLayer);
+                    }
+                });
+            }
 		});
 	}
 	$('#shopContentBar,#shopBanner').show();

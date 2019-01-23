@@ -182,6 +182,7 @@ class CartModel extends Model
         $result['total_pay_price'] = round($total_pay_price,2);
         $result['tax_price'] = round($tax_price,2);
         $result['deposit_price'] = round($deposit_price,2);
+        $result['pay_method'] = explode('|',$store['pay_method']);
 
         $result['full_discount'] = '0';
 

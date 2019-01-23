@@ -511,10 +511,16 @@ class PayAction extends BaseAction{
             }
         }
         //add garfunkel
+        $store = D('Merchant_store')->field(true)->where(array('store_id'=>$now_order['order_info']['store_id']))->find();
+        $store_pay = explode('|',$store['pay_method']);
+        $pay_list = array();
         foreach ($pay_method as $k=>$v){
-            $pay_method[$k]['name'] = lang_substr($v['name'],C('DEFAULT_LANG'));
+            if(in_array($k,$store_pay)){
+                $pay_method[$k]['name'] = lang_substr($v['name'],C('DEFAULT_LANG'));
+                $pay_list[$k] = $pay_method[$k];
+            }
         }
-        $this->assign('pay_method',$pay_method);
+        $this->assign('pay_method',$pay_list);
 
         if($_GET['type'] == 'group'){
             $this->behavior(array('model'=>'Pay_group','mer_id'=>$order_info['mer_id'],'biz_id'=>$order_info['order_id']),true);
