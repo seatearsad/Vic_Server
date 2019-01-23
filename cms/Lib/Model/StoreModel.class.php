@@ -357,7 +357,9 @@ class StoreModel extends Model
     public function get_goods_by_storeId($storeId){
         $data_goods = D('Shop_goods');
         $good_list = $data_goods ->field(true)->where(array('store_id' => $storeId, 'status' => 1))->order('goods_id ASC')->select();
-
+        foreach ($good_list as &$v){
+            $v['des'] = preg_replace("/<([^>]*)>/","",$v['des']);
+        }
         return $good_list;
     }
 
