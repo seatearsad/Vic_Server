@@ -155,8 +155,15 @@ class PayAction extends BaseAction{
 				}
 				break;			
 		}
-		foreach($pay_method as $k=>$v){
-		    $pay_method[$k]['name'] = lang_substr($v['name'],C('DEFAULT_LANG'));
+
+        $store = D('Merchant_store')->field(true)->where(array('store_id'=>$order_info['store_id']))->find();
+        $store_pay = explode('|',$store['pay_method']);
+        $pay_list = array();
+        foreach ($pay_method as $k=>$v){
+            if(in_array($k,$store_pay)){
+                $pay_method[$k]['name'] = lang_substr($v['name'],C('DEFAULT_LANG'));
+                $pay_list[$k] = $pay_method[$k];
+            }
         }
 
 //		if ($_GET['type'] == 'takeout' || $_GET['type'] == 'food' || $_GET['type'] == 'foodPad') {
@@ -176,10 +183,10 @@ class PayAction extends BaseAction{
 //			$order_info['order_id']=$orderid;
 //		}
 
-		if(empty($pay_method)){
+		if(empty($pay_list)){
 			$this->error_tips('系统管理员没开启任一一种支付方式！');
 		}
-		$this->assign('pay_method',$pay_method);
+		$this->assign('pay_method',$pay_list);
 		//garfunkel add 获取信用卡
         $card_list = D('User_card')->getCardListByUid($this->user_session['uid']);
         $this->assign('card_list',$card_list);

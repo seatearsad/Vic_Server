@@ -43,6 +43,8 @@ class StoreModel extends Model
         $store['lat'] = $row['lat'];
         $store['store_theme'] = $row['store_theme'];
         $store['address'] = $row['adress'];
+        $store['shop_remind'] = $row['shop_remind'];
+        $store['pay_method'] = $row['pay_method'];
 
         $store['is_close'] = 1;
         $now_time = date('H:i:s');

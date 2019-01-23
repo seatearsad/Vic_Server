@@ -20,7 +20,6 @@ class StoreAction extends BaseAction
 		$cat_fid = $cat_id = 0;
 		if ($cat_url != 'all') {
 			$now_category = D('Shop_category')->get_category_by_catUrl($cat_url);
-
 			if ($now_category) {
 				if ($now_category['cat_fid']) {
 					$cat_id = $now_category['cat_id'];
@@ -42,7 +41,6 @@ class StoreAction extends BaseAction
 		$long = $_COOKIE['shop_select_lng'];
 		$where = array('deliver_type_pc' => $type_url, 'order' => $sort_url, 'lat' => $lat, 'long' => $long, 'cat_id' => $cat_id, 'cat_fid' => $cat_fid, 'page' => 1);
 // 		$key && $where['key'] = $key;
-		
 		$lists = D('Merchant_store_shop')->get_list_by_option($where, 2);
 		
 		$result = $this->format_store_data($lists);
@@ -500,6 +498,8 @@ class StoreAction extends BaseAction
 	{
 		$where = array('store_id' => $store_id);
 		$now_store = D('Merchant_store')->field(true)->where($where)->find();
+		$store_shop = D('Merchant_store_shop')->field('shop_remind')->where($where)->find();
+
 		if ($now_store['status'] != 1) {
 			return null;
 		}
@@ -839,6 +839,7 @@ class StoreAction extends BaseAction
 				}
 			}
 		}
+		$store['shop_remind'] = $store_shop['shop_remind'];
 		return $store;
 	}
 	public function comment()

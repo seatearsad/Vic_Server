@@ -359,5 +359,35 @@
 		</div>
 	</div>
 	<!-- 购物车 -->
+    <script>
+        var remind = '{pigcms{$store.shop_remind}';
+        if(remind != ''){
+            $(".Popup").show();
+            $(".mask").show();
+            $(".Popup .title").hide();
+            $('.Popup_n').html(remind);
+            $(".Popup .gb").hide();
+            $(".Popup").css({'width':'500px','margin-left':'-250px','height':'300px','margin-top':'-150px'});
+
+            $(".Popup").append("<input type='button' id='remind_confirm' value='Confirm' style='width: 80px;height:30px;color: #ffffff;margin-left:-40px;background-color: #ef973e; position: absolute;left: 50%;bottom: 20px;'>");
+            
+            $('#remind_confirm').click(function () {
+                $(this).remove();
+                $('.Popup, .mask').hide();
+                $(".Popup").css({'width':'900px','margin-left':'-450px','height':'460px','margin-top':'-230px'});
+                $(".Popup .title").show();
+                $(".Popup .gb").show();
+                $('.Popup_n').html('');
+
+                $('.mask').click( function(e) {
+                    $('.Popup, .mask').hide();
+                });
+            });
+        }else{
+            $('.mask').click( function(e) {
+                $('.Popup, .mask').hide();
+            });
+        }
+    </script>
 </body>
 </html>

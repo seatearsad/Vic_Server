@@ -482,6 +482,7 @@ class ShopAction extends BaseAction{
 		$store['adress'] = $row['adress'];
 		$store['is_close'] = 1;
 		$store['isverify'] = $now_mer['isverify'];
+		$store['shop_remind'] = $row['shop_remind'];
 		$now_time = date('H:i:s');
 
 
@@ -884,6 +885,7 @@ class ShopAction extends BaseAction{
         $store['adress'] = $row['adress'];
         $store['is_close'] = 1;
         $store['isverify'] = $now_mer['isverify'];
+        $store['shop_remind'] = $row['shop_remind'];
         $now_time = date('H:i:s');
 
 

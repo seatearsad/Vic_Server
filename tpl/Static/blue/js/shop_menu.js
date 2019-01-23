@@ -149,9 +149,9 @@ $(document).ready(function(){
 		$(this).parents(".Popup").hide();
 		$(".mask").hide();
 	});
-	$('.mask').click( function(e) {
-		$('.Popup, .mask').hide();
-	});
+	// $('.mask').click( function(e) {
+	// 	$('.Popup, .mask').hide();
+	// });
 
 	//购物车的加减
 	$(document).on('click', '.carmiddle ul a', function(){
