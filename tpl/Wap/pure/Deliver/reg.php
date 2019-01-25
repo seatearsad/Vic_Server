@@ -177,11 +177,11 @@ function check_form() {
             return false;
         }
     });
-    if($('#pwd').val() != $('#c_pwd').val()){
+    if(is_check && $('#pwd').val() != $('#c_pwd').val()){
         is_check = false;
         show_tip("{pigcms{:L('_B_LOGIN_DIFFERENTKEY_')}",$('#pwd'));
     }
-    if($('#pwd').val().length < 6){
+    if(is_check && $('#pwd').val().length < 6){
         is_check = false;
         show_tip("{pigcms{:L('_B_D_LOGIN_6KEYWORD_')}",$('#pwd'));
     }
