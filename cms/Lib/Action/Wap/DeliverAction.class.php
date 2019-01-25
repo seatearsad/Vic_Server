@@ -23,13 +23,14 @@ class DeliverAction extends BaseAction
 			}
 			
 			if (empty($this->deliver_session)) {
-				if (ACTION_NAME != 'login') {
+				if (ACTION_NAME != 'login' && ACTION_NAME != 'reg') {
 					redirect(U('Deliver/login', array('referer' => urlencode('http://' . $_SERVER['HTTP_HOST'] . (!empty($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'])))));
 					exit();
 				}
 			} else {
 				if ($user = D('Deliver_user')->field(true)->where(array('uid' => $this->deliver_session['uid']))->find()) {
-					if (empty($user['status'])) {
+                    //garfunkel add && $now_user['reg_status'] == 0 判断是否完成注册步骤
+				    if (empty($user['status']) && $user['reg_status'] == 0) {
 						session('deliver_session', null);
 						$this->error_tips("您的账号已禁止");
 						exit;
@@ -72,7 +73,8 @@ class DeliverAction extends BaseAction
 			if (empty($now_user)) {
 				exit(json_encode(array('error' => 2, 'msg' => '帐号不存在！', 'dom_id' => 'account')));
 			}
-			if (empty($now_user['status'])) {
+			//garfunkel add && $now_user['reg_status'] == 0 判断是否完成注册步骤
+			if (empty($now_user['status']) && $now_user['reg_status'] == 0) {
 				exit(json_encode(array('error' => 2, 'msg' => '此账号已冻结！', 'dom_id' => 'account')));
 			}
 			$pwd = md5(trim($_POST['pwd']));
@@ -126,6 +128,10 @@ class DeliverAction extends BaseAction
 	
 	public function index() 
 	{
+
+	    $deliver = D('Deliver_user')->field('reg_status')->where(['uid' => $this->deliver_session['uid']])->find();
+	    if($deliver['reg_status'] != 0)
+            header('Location:'.U('Deliver/step_1'));
 		//修改上下班状态
 		if($_GET['action'] == 'changeWorkstatus') {
 			D('Deliver_user')->where(['uid' => $this->deliver_session['uid']])->save(['work_status' => $_GET['type']]);
@@ -1876,5 +1882,59 @@ class DeliverAction extends BaseAction
         }
         return $all_list;
 //        $this->getRouteList($num,$num,array());
+    }
+
+    public function reg(){
+	    if($_POST){
+	        $data['phone'] = $_POST['phone'];
+	        $data['vfcode'] = $_POST['sms_code'];
+	        if(!D('User_modifypwd')->field('id')->where($data)->find()){
+                $result = array('error_code' => true, 'msg' => L('_SMS_CODE_ERROR_'));
+	            $this->ajaxReturn($result);
+            }
+
+            $deliver = D('Deliver_user')->field(true)->where(array('phone'=>$data['phone']))->find();
+	        if($deliver){
+                $result = array('error_code' => true, 'msg' => L('_B_LOGIN_PHONENOHAVE_'));
+                $this->ajaxReturn($result);
+            }
+
+            $deliver_data['phone'] = $_POST['phone'];
+	        $deliver_data['email'] = $_POST['email'];
+	        $deliver_data['name'] = $_POST['first_name'];
+	        $deliver_data['family_name'] = $_POST['last_name'];
+	        $deliver_data['pwd'] = md5($_POST['password']);
+
+	        if(C('DEFAULT_LANG') == 'zh-cn')
+	            $deliver_data['language'] = 0;
+	        else
+	            $deliver_data['language'] = 1;
+
+	        $deliver_data['create_time'] = time();
+	        //暂时写死 之后选择城市
+	        $deliver_data['city_id'] = 105;
+	        $deliver_data['province_id'] = 104;
+	        $deliver_data['circle_id'] = 3446;
+	        $deliver_data['area_id'] = 108;
+
+	        //注册状态
+            $deliver_data['reg_status'] = 1;
+
+	        $deliver_id = D('Deliver_user')->add($deliver_data);
+
+            $database_deliver_user = D('Deliver_user');
+            $now_user = $database_deliver_user->field(true)->where(array('uid'=>$deliver_id))->find();
+            session('deliver_session', serialize($now_user));
+
+            $result = array('error_code'=>false,'msg'=>L('_B_LOGIN_REGISTSUCESS_'));
+            $this->ajaxReturn($result);
+        }else
+	        $this->display();
+    }
+
+    public function step_1(){
+        $database_deliver_user = D('Deliver_user');
+        $now_user = $database_deliver_user->field(true)->where(array('uid'=>$this->deliver_session['uid']))->find();
+	    var_dump($now_user);die();
     }
 }
