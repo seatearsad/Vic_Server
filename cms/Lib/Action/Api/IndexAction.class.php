@@ -115,7 +115,7 @@ class IndexAction extends BaseAction
 
     public function getCategorySubList(){
         $cate_fid = $_POST['category'];
-        $category = D('Shop_category')->field(true)->where(array('cat_fid'=>$cate_fid))->select();
+        $category = D('Shop_category')->field(true)->where(array('cat_fid'=>$cate_fid))->order('cat_sort desc')->select();
         foreach ($category as &$v) {
             $v['cat_name'] = lang_substr($v['cat_name'], C('DEFAULT_LANG'));
             $v['cat_id'] = $v['cat_id'];
