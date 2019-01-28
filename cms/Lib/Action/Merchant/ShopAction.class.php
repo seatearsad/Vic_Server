@@ -1661,6 +1661,9 @@ class ShopAction extends BaseAction
         }else if ($status != -1) {
             $where['status'] = $status;
             $condition_where .= ' AND o.status='.$status;
+        }else if($status == -1){
+            $where['status'] = array(array('gt', 1), array('lt', 4));
+            $condition_where .= ' AND (o.status=2 or o.status=3)';
         }
 
         if($pay_type&&$pay_type!='balance'){
@@ -1729,8 +1732,9 @@ class ShopAction extends BaseAction
             $objActSheet->setCellValue('M1', 'Total Tax|总税费');
             $objActSheet->setCellValue('N1', 'Bottle Deposit');
             $objActSheet->setCellValue('O1', 'Total Price|总价');
-            $objActSheet->setCellValue('P1', 'Status|订单状态');
-            $objActSheet->setCellValue('Q1', 'Time|时间');
+            $objActSheet->setCellValue('P1', 'Cash|现金');
+            $objActSheet->setCellValue('Q1', 'Status|订单状态');
+            $objActSheet->setCellValue('R1', 'Time|时间');
 
             //$sql = "SELECT  o.*, m.name AS merchant_name,d.name as good_name,d.price as good_price ,d.unit,d.cost_price, d.num as good_num, s.name AS store_name FROM " . C('DB_PREFIX') . "shop_order AS o INNER JOIN " . C('DB_PREFIX') . "merchant_store AS s ON s.store_id=o.store_id INNER JOIN " . C('DB_PREFIX') . "merchant AS m ON `s`.`mer_id`=`m`.`mer_id` INNER JOIN " . C('DB_PREFIX') . "shop_order_detail AS d ON `d`.`order_id`=`o`.`order_id` ".$condition_where." ORDER BY o.order_id DESC LIMIT " . $i * 1000 . ",1000";
             $sql = "SELECT  o.*, m.name AS merchant_name,g.name as good_name,g.tax_num as good_tax,g.deposit_price,s.tax_num as store_tax,d.price as good_price ,d.unit,d.cost_price, d.num as good_num, s.name AS store_name FROM " . C('DB_PREFIX') . "shop_order AS o LEFT JOIN " . C('DB_PREFIX') . "merchant_store AS s ON s.store_id=o.store_id LEFT JOIN " . C('DB_PREFIX') . "merchant AS m ON `s`.`mer_id`=`m`.`mer_id` LEFT JOIN " . C('DB_PREFIX') . "shop_order_detail AS d ON `d`.`order_id`=`o`.`order_id`  LEFT JOIN " . C('DB_PREFIX') . "shop_goods AS g ON `g`.`goods_id`=`d`.`goods_id` ".$condition_where." ORDER BY o.order_id DESC LIMIT " . $i * 1000 . ",1000";
@@ -1741,6 +1745,25 @@ class ShopAction extends BaseAction
             $all_deposit = 0;
             $all_record = array();
             $record_id = '';
+            $freight_tax = 0;
+            $packing_tax = 0;
+            $total_tax = 0;
+            $curr_cash = 0;
+            //subtotal
+            $total_goods_price = 0;
+            $total_goods_tax = 0;
+            $total_freight_price = 0;
+            $total_freight_tax = 0;
+            $total_packing_price = 0;
+            $total_packing_tax = 0;
+            $total_all_tax = 0;
+            $total_deposit = 0;
+            $total_all_price = 0;
+            $total_cash = 0;
+
+
+            //结束循环后是否存储最后一张订单，如果最后一张是代客下单为 false;
+            $is_last = true;
             foreach ($result_list as &$val){
                 $curr_order = $val['real_orderid'];
                 if($val['good_num'] == 0){//代客下单
@@ -1748,26 +1771,75 @@ class ShopAction extends BaseAction
                     $all_record[$curr_order]['all_tax'] = $val['discount_price'];
                     $all_record[$curr_order]['all_deposit'] = $val['packing_charge'];
                     $val['packing_charge'] = 0;
+                    $all_record[$curr_order]['freight_tax'] = $val['freight_charge']*$val['store_tax']/100;
+                    $all_record[$curr_order]['packing_tax'] = $val['packing_charge']*$val['store_tax']/100;
+                    $all_record[$curr_order]['total_tax'] = $val['discount_price'] + ($val['freight_charge']+$val['packing_charge'])*$val['store_tax']/100;
+
+                    $all_record[$curr_order]['cash'] = $val['price'];
+                    $is_last = false;
+
+                    $total_goods_price += $val['goods_price'];
+                    $total_goods_tax += $val['discount_price'];
+                    $total_freight_price += $val['freight_charge'];
+                    $total_freight_tax += $val['freight_charge']*$val['store_tax']/100;
+                    $total_packing_price += $val['packing_charge'];
+                    $total_packing_tax += $val['packing_charge']*$val['store_tax']/100;
+                    $total_all_tax += $all_record[$curr_order]['total_tax'];
+                    $total_deposit += $all_record[$curr_order]['all_deposit'];
+                    $total_all_price += $val['price'];
+                    $total_cash += $val['price'];
                 }else{
-                    if($curr_order != $record_id && $record_id != ''){
+                    if($curr_order != $record_id){
                         //记录上一张订单的税费和押金
-                        $all_record[$record_id]['all_tax'] = $all_tax;
-                        $all_record[$record_id]['all_deposit'] = $all_deposit;
-                        $all_record[$record_id]['freight_tax'] = $val['freight_charge']*$val['store_tax']/100;
-                        $all_record[$record_id]['packing_tax'] = $val['packing_charge']*$val['store_tax']/100;
-                        $all_record[$record_id]['total_tax'] = $all_tax + ($val['freight_charge']+$val['packing_charge'])*$val['store_tax']/100;
+                        if($record_id != '') {
+                            $all_record[$record_id]['all_tax'] = $all_tax;
+                            $all_record[$record_id]['all_deposit'] = $all_deposit;
+                            $all_record[$record_id]['total_tax'] = $all_tax + $all_record[$record_id]['freight_tax'] + $all_record[$record_id]['packing_tax'];
+
+                            $total_goods_tax += $all_tax;
+                            $total_deposit += $all_deposit;
+                            $total_all_tax += $all_record[$record_id]['total_tax'];
+                        }
+                        //记录最新订单的基本数值
+                        $total_goods_price += $val['goods_price'];
+                        $total_freight_price += $val['freight_charge'];
+                        $total_freight_tax += $val['freight_charge']*$val['store_tax']/100;
+                        $total_packing_price += $val['packing_charge'];
+                        $total_packing_tax += $val['packing_charge']*$val['store_tax']/100;
+                        $total_all_price += $val['price'];
+
+                        $all_record[$curr_order]['freight_tax'] = $val['freight_charge']*$val['store_tax']/100;
+                        $all_record[$curr_order]['packing_tax'] = $val['packing_charge']*$val['store_tax']/100;
+                        if($val['pay_type'] == 'offline' || $val['pay_type'] == 'cash') {
+                            $all_record[$curr_order]['cash'] = $val['price'];
+                            $total_cash += $val['price'];
+                        }
 
                         //清空商品税费
                         $all_tax = 0;//($val['freight_charge'] + $val['packing_charge'])*$val['store_tax']/100;
                         //清空押金
                         $all_deposit = 0;
                     }
+
                     $all_tax += $val['good_price'] * $val['good_tax']/100*$val['good_num'];
                     $all_deposit += $val['deposit_price']*$val['good_num'];
+                    $total_tax = $all_tax + ($val['freight_charge']+$val['packing_charge'])*$val['store_tax']/100;
 
                     $record_id = $curr_order;
+                    $is_last = true;
                 }
             }
+            //记录最后一张订单
+            if ($is_last){
+                $all_record[$record_id]['all_tax'] = $all_tax;
+                $all_record[$record_id]['all_deposit'] = $all_deposit;
+                $all_record[$record_id]['total_tax'] = $total_tax;
+
+                $total_goods_tax += $all_tax;
+                $total_deposit += $all_deposit;
+                $total_all_tax += $total_tax;
+            }
+
             ////
             $tmp_id = 0;
             if (!empty($result_list)) {
@@ -1789,8 +1861,9 @@ class ShopAction extends BaseAction
                         $objActSheet->setCellValueExplicit('M' . $index, '',PHPExcel_Cell_DataType::TYPE_NUMERIC);//Total Tax|总税费
                         $objActSheet->setCellValueExplicit('N' . $index, '',PHPExcel_Cell_DataType::TYPE_NUMERIC);//Bottle Deposit
                         $objActSheet->setCellValueExplicit('O' . $index, '',PHPExcel_Cell_DataType::TYPE_NUMERIC);//Total Price|总价
-                        $objActSheet->setCellValueExplicit('P' . $index, '');//订单状态
-                        $objActSheet->setCellValueExplicit('Q' . $index, '');//时间
+                        $objActSheet->setCellValueExplicit('P' . $index, '',PHPExcel_Cell_DataType::TYPE_NUMERIC);//Cash|现金
+                        $objActSheet->setCellValueExplicit('Q' . $index, '');//订单状态
+                        $objActSheet->setCellValueExplicit('R' . $index, '');//时间
 //                        $objActSheet->setCellValueExplicit('R' . $index, $value['unit']);//单位
 //                        $objActSheet->setCellValueExplicit('S' . $index, '',PHPExcel_Cell_DataType::TYPE_NUMERIC);//平台优惠
 //                        $objActSheet->setCellValueExplicit('T' . $index, '',PHPExcel_Cell_DataType::TYPE_NUMERIC);//商家优惠
@@ -1816,8 +1889,9 @@ class ShopAction extends BaseAction
                         $objActSheet->setCellValueExplicit('M' . $index, floatval(sprintf("%.2f", $all_record[$value['real_orderid']]['total_tax'])),PHPExcel_Cell_DataType::TYPE_NUMERIC);//Total Tax|总税费
                         $objActSheet->setCellValueExplicit('N' . $index, floatval(sprintf("%.2f", $all_record[$value['real_orderid']]['all_deposit'])),PHPExcel_Cell_DataType::TYPE_NUMERIC);//Bottle Deposit
                         $objActSheet->setCellValueExplicit('O' . $index, floatval($value['price']),PHPExcel_Cell_DataType::TYPE_NUMERIC);//订单总价
-                        $objActSheet->setCellValueExplicit('P' . $index, D('Shop_order')->status_list[$value['status']]);//订单状态
-                        $objActSheet->setCellValueExplicit('Q' . $index, $value['use_time'] ? date('Y-m-d H:i:s', $value['use_time']) : '');//送达时间
+                        $objActSheet->setCellValueExplicit('P' . $index, floatval(sprintf("%.2f", $all_record[$value['real_orderid']]['cash'])),PHPExcel_Cell_DataType::TYPE_NUMERIC);//Cash|现金
+                        $objActSheet->setCellValueExplicit('Q' . $index, D('Shop_order')->status_list[$value['status']]);//订单状态
+                        $objActSheet->setCellValueExplicit('R' . $index, $value['use_time'] ? date('Y-m-d H:i:s', $value['use_time']) : '');//送达时间
 //                        $objActSheet->setCellValueExplicit('P' . $index, $value['merchant_name']);//商家名称
 //                        $objActSheet->setCellValueExplicit('Q' . $index, $value['cost_price'],PHPExcel_Cell_DataType::TYPE_NUMERIC);//商品进价
 //                        $objActSheet->setCellValueExplicit('R' . $index, $value['unit']);//单位
@@ -1832,6 +1906,25 @@ class ShopAction extends BaseAction
                     $tmp_id = $value['real_orderid'];
 
                 }
+                //添加最后一行 subtotal
+                $objActSheet->setCellValueExplicit('A' . $index, 'Subtotal');//订单编号
+                $objActSheet->setCellValueExplicit('B' . $index, '');//商品名称
+                $objActSheet->setCellValueExplicit('C' . $index, '');//数量
+                $objActSheet->setCellValueExplicit('D' . $index, '');//单价
+                $objActSheet->setCellValueExplicit('E' . $index, '');//店铺名称
+                $objActSheet->setCellValueExplicit('F' . $index, '');//客户姓名
+                $objActSheet->setCellValueExplicit('G' . $index, floatval(sprintf("%.2f", $total_goods_price)),PHPExcel_Cell_DataType::TYPE_NUMERIC);//商品总价（税前）////无
+                $objActSheet->setCellValueExplicit('H' . $index, floatval(sprintf("%.2f", $total_goods_tax)),PHPExcel_Cell_DataType::TYPE_NUMERIC);//税费
+                $objActSheet->setCellValueExplicit('I' . $index, floatval(sprintf("%.2f", $total_freight_price)),PHPExcel_Cell_DataType::TYPE_NUMERIC);//配送费
+                $objActSheet->setCellValueExplicit('J' . $index, floatval(sprintf("%.2f", $total_freight_tax)),PHPExcel_Cell_DataType::TYPE_NUMERIC);//配送费
+                $objActSheet->setCellValueExplicit('K' . $index, floatval(sprintf("%.2f", $total_packing_price)),PHPExcel_Cell_DataType::TYPE_NUMERIC);//Packing Fee|包装费
+                $objActSheet->setCellValueExplicit('L' . $index, floatval(sprintf("%.2f", $total_packing_tax)),PHPExcel_Cell_DataType::TYPE_NUMERIC);//Packing Tax|包装税费
+                $objActSheet->setCellValueExplicit('M' . $index, floatval(sprintf("%.2f", $total_all_tax)),PHPExcel_Cell_DataType::TYPE_NUMERIC);//Total Tax|总税费
+                $objActSheet->setCellValueExplicit('N' . $index, floatval(sprintf("%.2f", $total_deposit)),PHPExcel_Cell_DataType::TYPE_NUMERIC);//Bottle Deposit
+                $objActSheet->setCellValueExplicit('O' . $index, floatval(sprintf("%.2f", $total_all_price)),PHPExcel_Cell_DataType::TYPE_NUMERIC);//订单总价
+                $objActSheet->setCellValueExplicit('P' . $index, floatval(sprintf("%.2f", $total_cash)),PHPExcel_Cell_DataType::TYPE_NUMERIC);//Cash|现金
+                $objActSheet->setCellValueExplicit('Q' . $index, '');//订单状态
+                $objActSheet->setCellValueExplicit('R' . $index, '');//送达时间
             }
             sleep(2);
         }
