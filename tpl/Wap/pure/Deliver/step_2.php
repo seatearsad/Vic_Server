@@ -87,7 +87,6 @@
         line-height: 50px;
         position: absolute;
         margin-top: 10px;
-        margin-left: -30px;
         font-weight: bold;
     }
     #reg_form {
@@ -104,7 +103,7 @@
 </style>
 <body style="background:#ebf3f8; background-size: 100% 137px;max-width: 100%">
     <div class="top_back">
-        <img src="{pigcms{$config.site_logo}" width=180 height=51 style="margin-top: 10px">
+        <img src="{pigcms{$config.site_logo}" width=80 height=80>
         <span class="tt_title">{pigcms{:L('_COURIER_CENTER_')}</span>
     </div>
     <div class="top_two_back"></div>

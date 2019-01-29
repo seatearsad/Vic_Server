@@ -40,7 +40,7 @@
                 <td width="35%"><input type="text" class="input fl" name="phone" size="20" validate="number:true,required:true" value="{pigcms{$now_user.phone}"/></td>
 			<tr>
 			</tr>
-			<tr>
+			<!--tr>
 				<th width="15%">常驻地区</th>
 				<td width="35%"><input type="text" class="input fl" readonly="readonly" name="adress" id="adress" validate="required:true" value="{pigcms{$now_user.site}"/></td>
 				<th width="15%">配送员经纬度</th>
@@ -69,7 +69,7 @@
                 <td colspan=3>
                     <input type="text" placeholder="Account" class="input fl" name="account" size="30" validate="maxlength:50,required:true" value="{pigcms{$card.account}" />
                 </td>
-            <tr>
+            <tr-->
             <tr>
                 <th width="15%">驾照</th>
                 <td colspan=3>
