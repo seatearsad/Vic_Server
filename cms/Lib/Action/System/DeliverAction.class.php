@@ -1174,7 +1174,9 @@ class DeliverAction extends BaseAction {
         if(!$deliver){
             $this->error('非法操作');
         }
+        $deliver_img = D('Deliver_img')->field(true)->where(array('uid'=>$uid))->find();
         $this->assign('now_user',$deliver);
+        $this->assign('img',$deliver_img);
 
         $this->display();
     }

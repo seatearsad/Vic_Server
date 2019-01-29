@@ -131,7 +131,7 @@ class DeliverAction extends BaseAction
 
 	    $deliver = D('Deliver_user')->field('reg_status')->where(['uid' => $this->deliver_session['uid']])->find();
 	    if($deliver['reg_status'] != 0)
-            header('Location:'.U('Deliver/step_1'));
+            header('Location:'.U('Deliver/step_'.$deliver['reg_status']));
 		//修改上下班状态
 		if($_GET['action'] == 'changeWorkstatus') {
 			D('Deliver_user')->where(['uid' => $this->deliver_session['uid']])->save(['work_status' => $_GET['type']]);
@@ -1934,7 +1934,67 @@ class DeliverAction extends BaseAction
 
     public function step_1(){
         $database_deliver_user = D('Deliver_user');
-        $now_user = $database_deliver_user->field(true)->where(array('uid'=>$this->deliver_session['uid']))->find();
-	    var_dump($now_user);die();
+        if($_POST){
+            $data['uid'] = $this->deliver_session['uid'];
+            $data['driver_license'] = $_POST['img_0'];
+            $data['insurance'] = $_POST['img_1'];
+            $data['certificate'] = $_POST['img_2'];
+
+            D('Deliver_img')->add($data);
+
+            $database_deliver_user->where(array('uid' => $this->deliver_session['uid']))->save(array('reg_status'=>2));
+
+            $result = array('error_code'=>false,'msg'=>L('_B_LOGIN_REGISTSUCESS_'));
+            $this->ajaxReturn($result);
+        }else {
+            $now_user = $database_deliver_user->field(true)->where(array('uid' => $this->deliver_session['uid']))->find();
+            if($now_user['reg_status'] != 1)
+                header('Location:'.U('Deliver/step_'.$now_user['reg_status']));
+
+            $this->display();
+        }
+    }
+
+    public function step_2(){
+        $database_deliver_user = D('Deliver_user');
+        $now_user = $database_deliver_user->field(true)->where(array('uid' => $this->deliver_session['uid']))->find();
+        if($now_user['reg_status'] != 2)
+            header('Location:'.U('Deliver/step_'.$now_user['reg_status']));
+        $this->display();
+    }
+
+    public function ajax_upload()
+    {
+        if ($_FILES['file']['error'] != 4) {
+            //$store_id = isset($_GET['store_id']) ? intval($_GET['store_id']) : 0;
+            //$shop = D('Merchant_store_shop')->field('store_theme')->where(array('store_id' => $store_id))->find();
+            //$store_theme = isset($shop['store_theme']) ? intval($shop['store_theme']) : 0;
+            //if ($store_theme) {
+                //$width = '900,450';
+                //$height = '900,450';
+            //} else {
+                $width = '900,450';
+                $height = '500,250';
+            //}
+            $param = array('size' => $this->config['group_pic_size']);
+            $param['thumb'] = true;
+            $param['imageClassPath'] = 'ORG.Util.Image';
+            $param['thumbPrefix'] = 'm_,s_';
+            $param['thumbMaxWidth'] = $width;
+            $param['thumbMaxHeight'] = $height;
+            $param['thumbRemoveOrigin'] = false;
+            $image = D('Image')->handle($this->deliver_session['uid'], 'deliver', 1, $param);
+            if ($image['error']) {
+                exit(json_encode(array('error' => 1,'message' =>$image['msg'])));
+            } else {
+                $title = $image['title']['file'];
+                $goods_image_class = new goods_image();
+                $url = $goods_image_class->get_delver_image_by_path($title, 's');
+                $file = $image['url']['file'];
+                exit(json_encode(array('error' => 0, 'url' => $url, 'title' => $title,'file'=>$file)));
+            }
+        } else {
+            exit(json_encode(array('error' => 1,'message' =>'没有选择图片')));
+        }
     }
 }

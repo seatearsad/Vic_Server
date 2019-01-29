@@ -70,6 +70,24 @@
                     <input type="text" placeholder="Account" class="input fl" name="account" size="30" validate="maxlength:50,required:true" value="{pigcms{$card.account}" />
                 </td>
             <tr>
+            <tr>
+                <th width="15%">驾照</th>
+                <td colspan=3>
+                    <img src="{pigcms{:C('config.site_url')}{pigcms{$img['driver_license']}" height="100"/>
+                </td>
+            <tr>
+            <tr>
+                <th width="15%">车辆保险</th>
+                <td colspan=3>
+                    <img src="{pigcms{:C('config.site_url')}{pigcms{$img['insurance']}" height="100"/>
+                </td>
+            <tr>
+            <tr>
+                <th width="15%">车辆登记证</th>
+                <td colspan=3>
+                    <img src="{pigcms{:C('config.site_url')}{pigcms{$img['certificate']}" height="100"/>
+                </td>
+            <tr>
 		</table>
 		<div class="btn hidden">
 			<input type="submit" name="dosubmit" id="dosubmit" value="提交" class="button" />
@@ -100,4 +118,10 @@
 
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&libraries=places&language=en"></script>
 	<script type="text/javascript" src="{pigcms{$static_path}js/map.js"></script-->
+<script>
+    $('img').click(function () {
+        //alert($(this).attr('src'));
+        window.top.artiframe($(this).attr('src'),'查看',600,500,true,false,false);
+    });
+</script>
 <include file="Public:footer"/>

@@ -52,10 +52,10 @@
                                                 <font color="red">完成注册</font>
                                             </if>
                                             <if condition="$vo['reg_status'] eq 2">
-                                                <font color="red">完成第一步</font>
+                                                <font color="green">完成第一步</font>
                                             </if>
                                             <if condition="$vo['reg_status'] eq 3">
-                                                <font color="green">禁止</font>
+                                                <font color="green">通过审核</font>
                                             </if>
                                         </td>
 										<td class="textcenter">　
