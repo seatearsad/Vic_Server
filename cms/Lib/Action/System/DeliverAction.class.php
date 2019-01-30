@@ -1166,18 +1166,49 @@ class DeliverAction extends BaseAction {
     }
 
     public function user_view(){
-        $uid = $_GET['uid'];
-        if(!$uid){
-            $this->error('非法操作');
-        }
-        $deliver = D('deliver_user')->where(array('uid'=>$uid))->find();
-        if(!$deliver){
-            $this->error('非法操作');
-        }
-        $deliver_img = D('Deliver_img')->field(true)->where(array('uid'=>$uid))->find();
-        $this->assign('now_user',$deliver);
-        $this->assign('img',$deliver_img);
+        if($_POST) {
+            $uid = $_POST['uid'];
+            $deliver = D('deliver_user')->where(array('uid' => $uid))->find();
+            if ($deliver['reg_status'] == 2) {
+                $review_status = $_POST['review'];
+                if ($review_status == 1) {//通过
+                    $data['reg_status'] = 3;
+                } else {//未通过
+                    $data['reg_status'] = 1;
+                    $data_img['review_desc'] = $_POST['review_desc'];
+                    D('Deliver_img')->where(array('uid' => $uid))->save($data_img);
+                }
+                D('deliver_user')->where(array('uid' => $uid))->save($data);
 
-        $this->display();
+                $this->success('修改成功！');
+            }elseif ($deliver['reg_status'] == 4){
+                if($_POST['receive'] == 1){
+                    $data['reg_status'] = 0;
+                    $data['group'] = 1;
+                    $data['status'] = 1;
+                    D('deliver_user')->where(array('uid' => $uid))->save($data);
+                }
+                $this->user_edit();
+            }else{
+                $this->user_edit();
+            }
+        }else {
+            $uid = $_GET['uid'];
+            if (!$uid) {
+                $this->error('非法操作');
+            }
+            $deliver = D('deliver_user')->where(array('uid' => $uid))->find();
+            if (!$deliver) {
+                $this->error('非法操作');
+            }
+            $deliver_img = D('Deliver_img')->field(true)->where(array('uid' => $uid))->find();
+            $this->assign('now_user', $deliver);
+            $this->assign('img', $deliver_img);
+
+            $card = D('Deliver_card')->field(true)->where(array('deliver_id'=>$uid))->find();
+            $this->assign('card',$card);
+
+            $this->display();
+        }
     }
 }

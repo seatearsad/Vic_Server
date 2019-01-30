@@ -40,7 +40,7 @@
                 <td width="35%"><input type="text" class="input fl" name="phone" size="20" validate="number:true,required:true" value="{pigcms{$now_user.phone}"/></td>
 			<tr>
 			</tr>
-			<!--tr>
+			<tr>
 				<th width="15%">常驻地区</th>
 				<td width="35%"><input type="text" class="input fl" readonly="readonly" name="adress" id="adress" validate="required:true" value="{pigcms{$now_user.site}"/></td>
 				<th width="15%">配送员经纬度</th>
@@ -51,43 +51,69 @@
                 <td colspan=3>
                     <input type="text" placeholder="Account Holder Name" class="input fl" name="ahname" size="30" validate="maxlength:50,required:true" value="{pigcms{$card.ahname}" />
                 </td>
-            <tr>
+            </tr>
             <tr>
                 <th width="15%"></th>
                 <td colspan=3>
                     <input type="text" placeholder="Transit(Branch)" class="input fl" name="transit" size="30" validate="maxlength:50,required:true" value="{pigcms{$card.transit}" />
                 </td>
-            <tr>
+            </tr>
             <tr>
                 <th width="15%"></th>
                 <td colspan=3>
                     <input type="text" placeholder="Institution" class="input fl" name="institution" size="30" validate="maxlength:50,required:true" value="{pigcms{$card.institution}" />
                 </td>
-            <tr>
+            </tr>
             <tr>
                 <th width="15%"></th>
                 <td colspan=3>
                     <input type="text" placeholder="Account" class="input fl" name="account" size="30" validate="maxlength:50,required:true" value="{pigcms{$card.account}" />
                 </td>
-            <tr-->
+            </tr>
+            <if condition="$now_user['reg_status'] gt 2">
             <tr>
                 <th width="15%">驾照</th>
                 <td colspan=3>
                     <img src="{pigcms{:C('config.site_url')}{pigcms{$img['driver_license']}" height="100"/>
                 </td>
-            <tr>
+            </tr>
             <tr>
                 <th width="15%">车辆保险</th>
                 <td colspan=3>
                     <img src="{pigcms{:C('config.site_url')}{pigcms{$img['insurance']}" height="100"/>
                 </td>
+            </tr>
             <tr>
-            <tr>
-                <th width="15%">车辆登记证</th>
+                <th width="15%">社保号</th>
                 <td colspan=3>
                     <img src="{pigcms{:C('config.site_url')}{pigcms{$img['certificate']}" height="100"/>
                 </td>
+            </tr>
+            </if>
+            <if condition="$now_user['reg_status'] eq 2">
             <tr>
+                <th width="15%">是否通过审核</th>
+                <td colspan=3>
+                    <span class="cb-enable"><label class="cb-enable selected"><span>通过</span><input type="radio" name="review" value="1" checked="checked" /></label></span>
+                    <span class="cb-disable"><label class="cb-disable"><span>未通过</span><input type="radio" name="review" value="0" /></label></span>
+                </td>
+            </tr>
+            <tr id="review_desc" style="display: none">
+                <th width="15%">审核说明</th>
+                <td colspan=3>
+                    <input type="text" class="input fl" name="review_desc">
+                </td>
+            </tr>
+            </if>
+            <if condition="$now_user['reg_status'] eq 4">
+                <tr>
+                    <th width="15%">是否领取</th>
+                    <td colspan=3>
+                        <span class="cb-enable"><label class="cb-enable"><span>已领</span><input type="radio" name="receive" value="1"  /></label></span>
+                        <span class="cb-disable"><label class="cb-disable selected"><span>未领</span><input type="radio" name="receive" value="0" checked="checked" /></label></span>
+                    </td>
+                </tr>
+            </if>
 		</table>
 		<div class="btn hidden">
 			<input type="submit" name="dosubmit" id="dosubmit" value="提交" class="button" />
@@ -122,6 +148,14 @@
     $('img').click(function () {
         //alert($(this).attr('src'));
         window.top.artiframe($(this).attr('src'),'查看',600,500,true,false,false);
+    });
+
+    $('input:radio[name=review]').click(function () {
+        if($(this).val() == 0){//未通过
+            $('#review_desc').show();
+        }else{
+            $('#review_desc').hide();
+        }
     });
 </script>
 <include file="Public:footer"/>

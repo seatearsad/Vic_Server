@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-<meta http-equiv="Expires" content="-1">
-<meta http-equiv="Cache-Control" content="no-cache">
-<meta http-equiv="Pragma" content="no-cache">
-<meta charset="utf-8">
-<title>{pigcms{:L('_COURIER_CENTER_')}</title>
-<meta name="description" content="{pigcms{$config.seo_description}"/>
-<script src="{pigcms{:C('JQUERY_FILE')}"></script>
-<script src="{pigcms{$static_public}js/laytpl.js"></script>
-<script src="{pigcms{$static_path}layer/layer.m.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta http-equiv="Expires" content="-1">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta charset="utf-8">
+    <title>{pigcms{:L('_COURIER_CENTER_')}</title>
+    <meta name="description" content="{pigcms{$config.seo_description}"/>
+    <script src="{pigcms{:C('JQUERY_FILE')}"></script>
+    <script src="{pigcms{$static_public}js/laytpl.js"></script>
+    <script src="{pigcms{$static_path}layer/layer.m.js"></script>
 </head>
 <style>
     body {
@@ -87,34 +87,41 @@
     }
 </style>
 <body style="background:#ebf3f8; background-size: 100% 137px;max-width: 100%">
-    <div class="top_back">
-        <img src="{pigcms{$config.site_logo}" width=80 height=80>
-        <span class="tt_title">{pigcms{:L('_COURIER_CENTER_')}</span>
-    </div>
-    <div class="top_two_back"></div>
-    <form enctype="multipart/form-data" class="form-horizontal" method="post">
-	<section>
-	<div class="Land_top">
-		<h2>{pigcms{:L('_COURIER_CENTER_')}</h2>
-        <h2>{pigcms{:L('_B_D_LOGIN_REG2_')}</h2>
-	</div>
-	<div id="reg_list">
-        <ul>
-            <li>
-                {pigcms{:L('_WAIT_REVIEW_')}
-            </li>
-            <li>
-                {pigcms{:L('_WAIT_REVIEW_DESC_')}
-            </li>
-        </ul>
-	</div>
+<div class="top_back">
+    <img src="{pigcms{$config.site_logo}" width=80 height=80>
+    <span class="tt_title">{pigcms{:L('_COURIER_CENTER_')}</span>
+</div>
+<div class="top_two_back"></div>
+<form enctype="multipart/form-data" class="form-horizontal" method="post">
+    <section>
+        <div class="Land_top">
+            <h2>{pigcms{:L('_COURIER_CENTER_')}</h2>
+            <h2>{pigcms{:L('_B_D_LOGIN_REG2_')}</h2>
+        </div>
+        <div id="reg_list">
+            <ul>
+                <li>
+                    {pigcms{:L('_DELIVER_REG_COM_')}
+                </li>
+                <li>
+                    {pigcms{:L('_DELIVER_REG_COM_DESC_')}
+                </li>
 
-	</section>
-    </form>
+                <li>
+                    801-747 Fort Street， Victoria BC
+                </li>
+                <li>
+                    Monday -Friday 10:00 am - 7:00 pm
+                </li>
+            </ul>
+        </div>
+
+    </section>
+</form>
 </body>
 <script src="{pigcms{$static_public}js/lang.js"></script>
 <script type="text/javascript">
-$("body").css({"height":$(window).height()});
+    $("body").css({"height":$(window).height()});
 
 </script>
 </html>

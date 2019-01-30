@@ -1904,6 +1904,10 @@ class DeliverAction extends BaseAction
 	        $deliver_data['name'] = $_POST['first_name'];
 	        $deliver_data['family_name'] = $_POST['last_name'];
 	        $deliver_data['pwd'] = md5($_POST['password']);
+	        $deliver_data['site'] = $_POST['address'];
+	        $deliver_data['lng'] = sprintf('%.7f',$_POST['lng']);
+	        $deliver_data['lat'] = sprintf('%.7f',$_POST['lat']);
+	        $deliver_data['range'] = 50;
 
 	        if(C('DEFAULT_LANG') == 'zh-cn')
 	            $deliver_data['language'] = 0;
@@ -1940,7 +1944,23 @@ class DeliverAction extends BaseAction
             $data['insurance'] = $_POST['img_1'];
             $data['certificate'] = $_POST['img_2'];
 
-            D('Deliver_img')->add($data);
+            $deliver_img = D('Deliver_img')->where(array('uid'=>$this->deliver_session['uid']))->find();
+            if($deliver_img)
+                D('Deliver_img')->save($data);
+            else
+                D('Deliver_img')->add($data);
+
+            $card_data['ahname'] = $_POST['ahname'];
+            $card_data['transit'] = $_POST['transit'];
+            $card_data['institution'] = $_POST['institution'];
+            $card_data['account'] = $_POST['account'];
+            $card_data['deliver_id'] = $this->deliver_session['uid'];
+
+            $deliver_card = D('Deliver_card')->field(true)->where(array('deliver_id'=>$this->deliver_session['uid']))->find();
+            if($deliver_card)
+                D('Deliver_card')->save($card_data);
+            else
+                D('Deliver_card')->add($card_data);
 
             $database_deliver_user->where(array('uid' => $this->deliver_session['uid']))->save(array('reg_status'=>2));
 
@@ -1951,6 +1971,10 @@ class DeliverAction extends BaseAction
             if($now_user['reg_status'] != 1)
                 header('Location:'.U('Deliver/step_'.$now_user['reg_status']));
 
+            $deliver_img = D('Deliver_img')->field(true)->where(array('uid'=>$this->deliver_session['uid']))->find();
+            if ($deliver_img)
+                $this->assign('deliver_img',$deliver_img);
+
             $this->display();
         }
     }
@@ -1959,6 +1983,71 @@ class DeliverAction extends BaseAction
         $database_deliver_user = D('Deliver_user');
         $now_user = $database_deliver_user->field(true)->where(array('uid' => $this->deliver_session['uid']))->find();
         if($now_user['reg_status'] != 2)
+            header('Location:'.U('Deliver/step_'.$now_user['reg_status']));
+        $this->display();
+    }
+
+    public function step_3(){
+        if($_POST){
+            import('@.ORG.pay.MonerisPay.mpgClasses');
+            $where = array('tab_id'=>'moneris','gid'=>7);
+            $result = D('Config')->field(true)->where($where)->select();
+            foreach($result as $v){
+                if($v['info'] == 'store_id')
+                    $store_id = $v['value'];
+                elseif ($v['info'] == 'token')
+                    $api_token = $v['value'];
+            }
+
+            $txnArray['type'] = 'purchase';
+            $txnArray['crypt_type'] = '7';
+            $txnArray['pan'] = $_POST['c_number'];
+            $txnArray['expdate'] = transYM($_POST['e_date']);
+            $txnArray['order_id'] = 'TuttiDeliver_'.$this->deliver_session['uid'].'_'.time();
+            $txnArray['cust_id'] = $this->deliver_session['uid'];
+            $txnArray['amount'] = 0.01;//50;
+
+            /**************************** Transaction Object *****************************/
+
+            $mpgTxn = new mpgTransaction($txnArray);
+
+            /****************************** Request Object *******************************/
+
+            $mpgRequest = new mpgRequest($mpgTxn);
+            $mpgRequest->setProcCountryCode("CA"); //"US" for sending transaction to US environment
+            $mpgRequest->setTestMode(false);
+
+            $mpgHttpPost  =new mpgHttpsPost($store_id,$api_token,$mpgRequest);
+
+            $mpgResponse=$mpgHttpPost->getMpgResponse();
+
+            if($mpgResponse->getResponseCode() != "null" && $mpgResponse->getResponseCode() < 50){//支付成功
+                $data['card_name'] = $_POST['c_name'];
+                $data['card_num'] = $_POST['c_number'];
+                $data['expdate'] = $txnArray['expdate'];
+                $data['order_id'] = $txnArray['order_id'];
+                $data['txnNumber'] = $mpgResponse->getTxnNumber();
+
+                D('Deliver_img')->where(array('uid'=>$this->deliver_session['uid']))->save($data);
+
+                $result = array('error_code' => false, 'msg' => L('_PAYMENT_SUCCESS_'));
+            }else{
+                $result = array('error_code' => true, 'msg' => $mpgResponse->getMessage());
+            }
+            $this->ajaxReturn($result);
+        }else {
+            $database_deliver_user = D('Deliver_user');
+            $now_user = $database_deliver_user->field(true)->where(array('uid' => $this->deliver_session['uid']))->find();
+            if ($now_user['reg_status'] != 3)
+                header('Location:' . U('Deliver/step_' . $now_user['reg_status']));
+            $this->display();
+        }
+    }
+
+    public function step_4(){
+        $database_deliver_user = D('Deliver_user');
+        $now_user = $database_deliver_user->field(true)->where(array('uid' => $this->deliver_session['uid']))->find();
+        if($now_user['reg_status'] != 4)
             header('Location:'.U('Deliver/step_'.$now_user['reg_status']));
         $this->display();
     }

@@ -55,7 +55,10 @@
                                                 <font color="green">完成第一步</font>
                                             </if>
                                             <if condition="$vo['reg_status'] eq 3">
-                                                <font color="green">通过审核</font>
+                                                <font color="green">通过初步审核</font>
+                                            </if>
+                                            <if condition="$vo['reg_status'] eq 4">
+                                                <font color="green">领取配送箱</font>
                                             </if>
                                         </td>
 										<td class="textcenter">　

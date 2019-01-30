@@ -14,6 +14,17 @@
 <script src="{pigcms{$static_path}layer/layer.m.js"></script>
 </head>
 <style>
+    body {
+        padding: 0px;
+        margin: 0px auto;
+        font-size: 14px;
+        min-width: 320px;
+        max-width: 100%;
+        background-color: #f4f4f4;
+        color: #333333;
+        position: relative;
+        -webkit-tap-highlight-color: rgba(0,0,0,0);
+    }
     section{
         position: absolute;
         top: 5%;
@@ -72,6 +83,9 @@
             <li>
                 <input type="text" placeholder="{pigcms{:L('_EMAIL_TXT_')}*" id="email">
             </li>
+            <li>
+                <input type="text" placeholder="{pigcms{:L('_ADDRESS_TXT_')}*" id="address">
+            </li>
 			<li>
 			  	<input type="text" placeholder="{pigcms{:L('_B_D_LOGIN_TEL_')}*" id="mobile">
 			</li>
@@ -89,10 +103,13 @@
                 <input type="button" value="{pigcms{:L('_B_D_LOGIN_REG2_')}" id="reg_form" style="background-color: #FF0000;width: 50%;margin-left: 25%;">
             </li>
 		</ul>
-	</div>     
+	</div>
+        <input type="text" name="lng" id="lng" style="display:none">
+        <input type="text" name="lat" id="lat" style="display:none">
 	</section>
 </body>
 <script src="{pigcms{$static_public}js/lang.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&libraries=places&language=en" async defer></script>
 <script type="text/javascript">
 $("body").css({"height":$(window).height()});
 
@@ -102,10 +119,13 @@ $("#reg_form").click(function () {
         var form_data = {
             'first_name':$('#f_name').val(),
             'last_name':$('#l_name').val(),
+            'address':$('#address').val(),
             'email':$('#email').val(),
             'phone':$('#mobile').val(),
             'sms_code':$('#sms_code').val(),
-            'password':$('#pwd').val()
+            'password':$('#pwd').val(),
+            'lng':$('#lng').val(),
+            'lat':$('#lat').val()
         };
         $.ajax({
             url: "{pigcms{:U('Deliver/reg')}",
@@ -192,6 +212,36 @@ function show_tip(msg,input) {
     layer.open({title:"{pigcms{:L('_B_D_LOGIN_TIP2_')}",content: msg, btn:["{pigcms{:L('_B_D_LOGIN_CONIERM_')}"],end:function () {
          input.focus();
     }});
+}
+
+$('#address').focus(function () {
+    initAutocomplete();
+});
+
+var autocomplete;
+function initAutocomplete() {
+    autocomplete = new google.maps.places.Autocomplete(document.getElementById('address'), {types: ['geocode']});
+    autocomplete.addListener('place_changed', fillInAddress);
+}
+function fillInAddress() {
+    var place = autocomplete.getPlace();
+    $("input[name='lng']").val(place.geometry.location.lng());
+    $("input[name='lat']").val(place.geometry.location.lat());
+}
+function geolocate() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            var geolocation = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude
+            };
+            var circle = new google.maps.Circle({
+                center: geolocation,
+                radius: position.coords.accuracy
+            });
+            autocomplete.setBounds(circle.getBounds());
+        });
+    }
 }
 </script>
 </html>

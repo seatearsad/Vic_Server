@@ -32,6 +32,27 @@
         margin-top: -40px;
         box-shadow: 0 1px 4px 0 rgba(0,0,0,0.37)
     }
+    ul{
+        padding-left: 0px;
+    }
+    li {
+        list-style-type: none;
+    }
+    li input {
+        width: 100%;
+        height: 15px;
+        padding: 10px 0;
+        text-indent: 10px;
+        color: #1b9dff;
+        font-size: 14px;
+        background-color: transparent;
+        margin-top: 10px;
+        border: none;
+        border-bottom: 1px solid;
+    }
+    li input:focus{
+        border-bottom: 1px solid #FF0000;
+    }
     input[type="file"] {
         display: block;
         position: absolute;
@@ -76,6 +97,7 @@
         width: 100%;
         height: 100px;
         text-align: center;
+        line-height: 20px;
     }
     .img_0 img,.img_1 img,.img_2 img{
         height: 100px;
@@ -99,6 +121,7 @@
         border: 0px;
         margin-bottom: 20px;
         cursor: pointer;
+        margin-top: 20px;
     }
 </style>
 <body style="background:#ebf3f8; background-size: 100% 137px;max-width: 100%">
@@ -112,47 +135,71 @@
 	<div class="Land_top">
 		<h2>{pigcms{:L('_COURIER_CENTER_')}</h2>
         <h2>{pigcms{:L('_B_D_LOGIN_REG2_')}</h2>
+        <if condition="deliver_img">
+            <div>{pigcms{$deliver_img.review_desc}</div>
+        </if>
 	</div>
 	<div id="reg_list">
         <div style="margin: 10px auto;width: 60%;">
             <div style="display:inline-block;" id="J_selectImage_0">
                 <div class="btn btn-sm btn-success" style="position:relative;width:height:40px;line-height: 40px;text-align: center;">
-                    上传驾照
+                    {pigcms{:L('_DRIVER_LICENSE_')}
                 </div>
             </div>
             <div class="img_0">
-
+                {pigcms{:L('_IMAGE_REMARK_')}
             </div>
         </div>
 
         <div style="margin: 10px auto;width: 60%;">
             <div style="display:inline-block;" id="J_selectImage_1">
                 <div class="btn btn-sm btn-success" style="position:relative;width:height:40px;line-height: 40px;text-align: center;">
-                    车辆保险
+                    {pigcms{:L('_VEHICLE_INSURANCE_')}
                 </div>
             </div>
             <div class="img_1">
-
+                {pigcms{:L('_IMAGE_REMARK_')}
             </div>
         </div>
 
         <div style="margin: 10px auto;width: 60%;">
             <div style="display:inline-block;" id="J_selectImage_2">
                 <div class="btn btn-sm btn-success" style="position:relative;width:height:40px;line-height: 40px;text-align: center;">
-                    车辆登记证
+                    {pigcms{:L('_SIN_NUMBER_')}
                 </div>
             </div>
             <div class="img_2">
-
+                {pigcms{:L('_IMAGE_REMARK_')}
             </div>
+
+            <ul>
+                <li>
+                    {pigcms{:L('_BANKING_INFO_')}:
+                </li>
+                <li>
+                    {pigcms{:L('_BANK_REMARK_')}
+                </li>
+                <li>
+                    <input type="text" placeholder="Account Holder Name*" id="ahname">
+                </li>
+                <li>
+                    <input type="text" placeholder="Transit(Branch)*" id="transit">
+                </li>
+                <li>
+                    <input type="text" placeholder="Institution*" id="institution">
+                </li>
+                <li>
+                    <input type="text" placeholder="Account*" id="account">
+                </li>
+            </ul>
         </div>
 	</div>
-        <div>
-            <span id="filename_0" style="display: none;"></span>
-            <span id="filename_1" style="display: none;"></span>
-            <span id="filename_2" style="display: none;"></span>
-            <input type="button" value="{pigcms{:L('_NEXT_TXT_')}" id="reg_form" style="background-color: #FF0000;width: 50%;margin-left: 25%;">
-        </div>
+    <div>
+        <span id="filename_0" style="display: none;"></span>
+        <span id="filename_1" style="display: none;"></span>
+        <span id="filename_2" style="display: none;"></span>
+        <input type="button" value="{pigcms{:L('_NEXT_TXT_')}" id="reg_form" style="background-color: #FF0000;width: 50%;margin-left: 25%;">
+    </div>
 	</section>
     </form>
 </body>
@@ -240,13 +287,21 @@ $('#reg_form').click(function () {
         }
     });
 
+    if($('#ahname').val() == '' || $('#transit').val() == '' || $('#institution').val() == '' || $('#account').val() == ''){
+        is_next = false;
+    }
+
     if(!is_next)
-        alert('请上传所有文件');
+        alert("{pigcms{:L('_PLEASE_INPUT_ALL_')}");
     else{
         var post_data = {
             img_0:$('#filename_0').html(),
             img_1:$('#filename_1').html(),
-            img_2:$('#filename_2').html()
+            img_2:$('#filename_2').html(),
+            ahname:$('#ahname').val(),
+            transit:$('#transit').val(),
+            institution:$('#institution').val(),
+            account:$('#account').val()
         };
         $.ajax({
             url: "{pigcms{:U('Deliver/step_1')}",
