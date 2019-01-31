@@ -19,9 +19,10 @@
             min-width: 320px;
             max-width: 640px;
             background-color: #dcdcdc;
-            color: #333333;
+            color: #626160;
             position: relative;
             -webkit-tap-highlight-color: rgba(0,0,0,0);
+            font-family: Helvetica;
         }
         section{
             position: absolute;
@@ -102,12 +103,53 @@
             border: 0px;
             margin-bottom: 20px;
             cursor: pointer;
-            background-color: #FF0000;
+            background-color: #407ec7;
             width: 50%;
             margin-left: 25%;
         }
         #reg_form:disabled{
             background-color: #999999;
+        }
+        .Land_top {
+            text-align: center;
+            color: #626160;
+            width: 100%;
+            float: left;
+            margin-top: 10px;
+        }
+        .Land_top h2{
+            color: #1b9dff;
+            width: 100%;
+        }
+        .step{
+            width: 25%;
+            height: 40px;
+            float: left;
+            text-align: left;
+            font-size: 12px;
+            min-width: 140px;
+        }
+        .step .back{
+            width: 20px;
+            height: 20px;
+            background-color:#a0a0a0;
+            border-radius: 50%;
+            -moz-border-radius: 50%;
+            -webkit-border-radius: 50%;
+            text-align: center;
+            margin-left: 20px;
+            color: #ffffff;
+        }
+        .step span{
+            position: absolute;
+            line-height: 20px;
+        }
+        .step_title{
+            margin-left: 42px;
+            word-wrap: break-word;
+        }
+        .step .curr{
+            background-color:#f39824;
         }
     </style>
 </head>
@@ -118,11 +160,31 @@
     </div>
     <div class="top_two_back"></div>
 	<section>
-	<div class="Land_top">
-		<h2>{pigcms{:L('_COURIER_CENTER_')}</h2>
-        <h2>{pigcms{:L('_B_D_LOGIN_REG2_')}</h2>
-	</div>
+        <div class="Land_top">
+            <span class="step">
+                <span class="back">1</span>
+                <span class="step_title">{pigcms{:L('_DELIVER_STEP_1_')}</span>
+            </span>
+            <span class="step">
+                <span class="back">2</span>
+                <span class="step_title">{pigcms{:L('_DELIVER_STEP_2_')}</span>
+            </span>
+            <span class="step">
+                <span class="back curr">3</span>
+                <span class="step_title" style="color:#f39824">{pigcms{:L('_DELIVER_STEP_3_')}</span>
+            </span>
+            <span class="step">
+                <span class="back">4</span>
+                <span class="step_title">{pigcms{:L('_DELIVER_STEP_4_')}</span>
+            </span>
+        </div>
+        <div class="Land_top">
+            <h2>{pigcms{:L('_DELIVER_STEP_3_')}</h2>
+        </div>
 	<div id="reg_list">
+        <div style="margin: 10px auto;width: 80%;text-align: center">
+            {pigcms{:L('_COURIER_BAG_DESC_')}
+        </div>
         <ul>
             <li style="text-align: center">
                 <img src="{pigcms{$static_public}images/deliver_box.png" width="200px">

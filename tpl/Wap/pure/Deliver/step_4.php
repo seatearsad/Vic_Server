@@ -20,9 +20,10 @@
         min-width: 320px;
         max-width: 640px;
         background-color: #dcdcdc;
-        color: #333333;
+        color: #626160;
         position: relative;
         -webkit-tap-highlight-color: rgba(0,0,0,0);
+        font-family: Helvetica;
     }
     section{
         position: absolute;
@@ -46,7 +47,14 @@
     }
     .Land_top {
         text-align: center;
+        color: #626160;
+        width: 100%;
+        float: left;
+        margin-top: 10px;
+    }
+    .Land_top h2{
         color: #1b9dff;
+        width: 100%;
     }
     .top_back{
         position: relative;
@@ -85,6 +93,42 @@
         margin-bottom: 20px;
         cursor: pointer;
     }
+
+    .step{
+        width: 25%;
+        height: 40px;
+        float: left;
+        text-align: left;
+        font-size: 12px;
+        min-width: 140px;
+    }
+    .step .back{
+        width: 20px;
+        height: 20px;
+        background-color:#a0a0a0;
+        border-radius: 50%;
+        -moz-border-radius: 50%;
+        -webkit-border-radius: 50%;
+        text-align: center;
+        margin-left: 20px;
+        color: #ffffff;
+    }
+    .step span{
+        position: absolute;
+        line-height: 20px;
+    }
+    .step_title{
+        margin-left: 42px;
+        word-wrap: break-word;
+    }
+    .step .curr{
+        background-color:#f39824;
+    }
+    #reg_list{
+        float: left;
+        width: 80%;
+        margin-left: 10%;
+    }
 </style>
 <body style="background:#ebf3f8; background-size: 100% 137px;max-width: 100%">
 <div class="top_back">
@@ -95,16 +139,50 @@
 <form enctype="multipart/form-data" class="form-horizontal" method="post">
     <section>
         <div class="Land_top">
-            <h2>{pigcms{:L('_COURIER_CENTER_')}</h2>
-            <h2>{pigcms{:L('_B_D_LOGIN_REG2_')}</h2>
+            <span class="step">
+                <span class="back">1</span>
+                <span class="step_title">{pigcms{:L('_DELIVER_STEP_1_')}</span>
+            </span>
+            <span class="step">
+                <span class="back">2</span>
+                <span class="step_title">{pigcms{:L('_DELIVER_STEP_2_')}</span>
+            </span>
+            <span class="step">
+                <span class="back">3</span>
+                <span class="step_title">{pigcms{:L('_DELIVER_STEP_3_')}</span>
+            </span>
+            <span class="step">
+                <span class="back curr">4</span>
+                <span class="step_title" style="color:#f39824">{pigcms{:L('_DELIVER_STEP_4_')}</span>
+            </span>
+        </div>
+        <div class="Land_top">
+            <h2>{pigcms{:L('_DELIVER_STEP_4_')}</h2>
         </div>
         <div id="reg_list">
-            <ul>
+            <div style="float: left;width: 100%;text-align: center;margin-top: 20px;">
+                <img src="{pigcms{$static_public}images/deliver/step4.png" width="100">
+            </div>
+            <div style="float: left;width:100%;text-align:center;margin-top:10px;font-size:16px;line-height:20px;">
+                {pigcms{:L('_DELIVER_REG_COM_DESC_')}
+            </div>
+        </div>
+        <div id="reg_list" style="margin-top: 50px; margin-bottom: 20px">
+            <div style="float: left;width: 100%;text-align:center;font-size:14px;line-height:20px;margin-top: 20px">
+                801-747 Fort Street， Victoria BC<br>
+                Monday - Friday 10:00 am - 7:00 pm
+            </div>
+            <div style="float: left;width:100%;text-align:center;">
+                <img src="{pigcms{$static_public}images/deliver/step4_address.png" width="100">
+            </div>
+        </div>
+
+        <!--ul>
                 <li>
-                    {pigcms{:L('_DELIVER_REG_COM_')}
+
                 </li>
                 <li>
-                    {pigcms{:L('_DELIVER_REG_COM_DESC_')}
+
                 </li>
 
                 <li>
@@ -113,9 +191,7 @@
                 <li>
                     Monday -Friday 10:00 am - 7:00 pm
                 </li>
-            </ul>
-        </div>
-
+            </ul-->
     </section>
 </form>
 </body>

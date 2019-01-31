@@ -20,9 +20,10 @@
         min-width: 320px;
         max-width: 640px;
         background-color: #dcdcdc;
-        color: #333333;
+        color: #626160;
         position: relative;
         -webkit-tap-highlight-color: rgba(0,0,0,0);
+        font-family: Helvetica;
     }
     section{
         position: absolute;
@@ -59,18 +60,18 @@
         opacity: 0;
         -ms-filter: 'alpha(opacity=0)';
     }
-    .Land_top {
-        text-align: center;
-        color: #1b9dff;
-    }
     #J_selectImage_0,#J_selectImage_1,#J_selectImage_2{
         background: #1b9dff;
         background-color: rgb(27, 157, 255);
+        background-image: url("{pigcms{$static_public}images/deliver/step1_upload.png");
+        background-size: 40px 40px;
+        background-repeat: no-repeat;
+        background-position:center bottom;
         color: #fff;
         text-indent: 0px;
         font-size: 14px;
         padding: 0px;
-        height: 40px;
+        height: 60px;
         display: inline-block;
         width: 100%;
     }
@@ -111,6 +112,47 @@
         margin-top: 10px;
         font-weight: bold;
     }
+    .Land_top {
+        text-align: center;
+        color: #626160;
+        width: 100%;
+        float: left;
+        margin-top: 10px;
+    }
+    .Land_top h2{
+        color: #1b9dff;
+        width: 100%;
+    }
+    .step{
+        width: 25%;
+        height: 40px;
+        float: left;
+        text-align: left;
+        font-size: 12px;
+        min-width: 140px;
+    }
+    .step .back{
+        width: 20px;
+        height: 20px;
+        background-color:#a0a0a0;
+        border-radius: 50%;
+        -moz-border-radius: 50%;
+        -webkit-border-radius: 50%;
+        text-align: center;
+        margin-left: 20px;
+        color: #ffffff;
+    }
+    .step span{
+        position: absolute;
+        line-height: 20px;
+    }
+    .step_title{
+        margin-left: 42px;
+        word-wrap: break-word;
+    }
+    .step .curr{
+        background-color:#f39824;
+    }
     #reg_form {
         color: #fff;
         text-indent: 0px;
@@ -132,44 +174,63 @@
     <div class="top_two_back"></div>
     <form enctype="multipart/form-data" class="form-horizontal" method="post">
 	<section>
-	<div class="Land_top">
-		<h2>{pigcms{:L('_COURIER_CENTER_')}</h2>
-        <h2>{pigcms{:L('_B_D_LOGIN_REG2_')}</h2>
-        <if condition="deliver_img">
-            <div>{pigcms{$deliver_img.review_desc}</div>
-        </if>
-	</div>
+        <div class="Land_top">
+            <span class="step">
+                <span class="back curr">1</span>
+                <span class="step_title" style="color:#f39824">{pigcms{:L('_DELIVER_STEP_1_')}</span>
+            </span>
+            <span class="step">
+                <span class="back">2</span>
+                <span class="step_title">{pigcms{:L('_DELIVER_STEP_2_')}</span>
+            </span>
+            <span class="step">
+                <span class="back">3</span>
+                <span class="step_title">{pigcms{:L('_DELIVER_STEP_3_')}</span>
+            </span>
+            <span class="step">
+                <span class="back">4</span>
+                <span class="step_title">{pigcms{:L('_DELIVER_STEP_4_')}</span>
+            </span>
+        </div>
+        <div class="Land_top">
+            <h2>{pigcms{:L('_DELIVER_STEP_1_')}</h2>
+        </div>
+
 	<div id="reg_list">
-        <div style="margin: 10px auto;width: 60%;">
+        <div style="margin: 10px auto;width: 80%;">
+            {pigcms{:L('_IMAGE_REMARK_')}
+        </div>
+
+        <div style="margin: 10px auto;width: 80%;">
             <div style="display:inline-block;" id="J_selectImage_0">
-                <div class="btn btn-sm btn-success" style="position:relative;width:height:40px;line-height: 40px;text-align: center;">
+                <div class="btn btn-sm btn-success" style="position:relative;height:60px;line-height: 30px;text-align: center;">
                     {pigcms{:L('_DRIVER_LICENSE_')}
                 </div>
             </div>
             <div class="img_0">
-                {pigcms{:L('_IMAGE_REMARK_')}
+
             </div>
         </div>
 
-        <div style="margin: 10px auto;width: 60%;">
+        <div style="margin: 10px auto;width: 80%;">
             <div style="display:inline-block;" id="J_selectImage_1">
-                <div class="btn btn-sm btn-success" style="position:relative;width:height:40px;line-height: 40px;text-align: center;">
+                <div class="btn btn-sm btn-success" style="position:relative;height:60px;line-height: 30px;text-align: center;">
                     {pigcms{:L('_VEHICLE_INSURANCE_')}
                 </div>
             </div>
             <div class="img_1">
-                {pigcms{:L('_IMAGE_REMARK_')}
+
             </div>
         </div>
 
-        <div style="margin: 10px auto;width: 60%;">
+        <div style="margin: 10px auto;width: 80%;">
             <div style="display:inline-block;" id="J_selectImage_2">
-                <div class="btn btn-sm btn-success" style="position:relative;width:height:40px;line-height: 40px;text-align: center;">
+                <div class="btn btn-sm btn-success" style="position:relative;height:60px;line-height: 30px;text-align: center;">
                     {pigcms{:L('_SIN_NUMBER_')}
                 </div>
             </div>
             <div class="img_2">
-                {pigcms{:L('_IMAGE_REMARK_')}
+
             </div>
 
             <ul>
@@ -198,7 +259,7 @@
         <span id="filename_0" style="display: none;"></span>
         <span id="filename_1" style="display: none;"></span>
         <span id="filename_2" style="display: none;"></span>
-        <input type="button" value="{pigcms{:L('_NEXT_TXT_')}" id="reg_form" style="background-color: #FF0000;width: 50%;margin-left: 25%;">
+        <input type="button" value="{pigcms{:L('_NEXT_TXT_')}" id="reg_form" style="background-color:#407ec7;width: 50%;margin-left: 25%;">
     </div>
 	</section>
     </form>
