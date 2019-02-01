@@ -23,13 +23,14 @@ class DeliverAction extends BaseAction
 			}
 			
 			if (empty($this->deliver_session)) {
-				if (ACTION_NAME != 'login') {
+				if (ACTION_NAME != 'login' && ACTION_NAME != 'reg') {
 					redirect(U('Deliver/login', array('referer' => urlencode('http://' . $_SERVER['HTTP_HOST'] . (!empty($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'])))));
 					exit();
 				}
 			} else {
 				if ($user = D('Deliver_user')->field(true)->where(array('uid' => $this->deliver_session['uid']))->find()) {
-					if (empty($user['status'])) {
+                    //garfunkel add && $now_user['reg_status'] == 0 判断是否完成注册步骤
+				    if (empty($user['status']) && $user['reg_status'] == 0) {
 						session('deliver_session', null);
 						$this->error_tips("您的账号已禁止");
 						exit;
@@ -72,7 +73,8 @@ class DeliverAction extends BaseAction
 			if (empty($now_user)) {
 				exit(json_encode(array('error' => 2, 'msg' => '帐号不存在！', 'dom_id' => 'account')));
 			}
-			if (empty($now_user['status'])) {
+			//garfunkel add && $now_user['reg_status'] == 0 判断是否完成注册步骤
+			if (empty($now_user['status']) && $now_user['reg_status'] == 0) {
 				exit(json_encode(array('error' => 2, 'msg' => '此账号已冻结！', 'dom_id' => 'account')));
 			}
 			$pwd = md5(trim($_POST['pwd']));
@@ -126,6 +128,10 @@ class DeliverAction extends BaseAction
 	
 	public function index() 
 	{
+
+	    $deliver = D('Deliver_user')->field('reg_status')->where(['uid' => $this->deliver_session['uid']])->find();
+	    if($deliver['reg_status'] != 0)
+            header('Location:'.U('Deliver/step_'.$deliver['reg_status']));
 		//修改上下班状态
 		if($_GET['action'] == 'changeWorkstatus') {
 			D('Deliver_user')->where(['uid' => $this->deliver_session['uid']])->save(['work_status' => $_GET['type']]);
@@ -1876,5 +1882,209 @@ class DeliverAction extends BaseAction
         }
         return $all_list;
 //        $this->getRouteList($num,$num,array());
+    }
+
+    public function reg(){
+	    if($_POST){
+	        $data['phone'] = $_POST['phone'];
+	        $data['vfcode'] = $_POST['sms_code'];
+	        if(!D('User_modifypwd')->field('id')->where($data)->find()){
+                $result = array('error_code' => true, 'msg' => L('_SMS_CODE_ERROR_'));
+	            $this->ajaxReturn($result);
+            }
+
+            $deliver = D('Deliver_user')->field(true)->where(array('phone'=>$data['phone']))->find();
+	        if($deliver){
+                $result = array('error_code' => true, 'msg' => L('_B_LOGIN_PHONENOHAVE_'));
+                $this->ajaxReturn($result);
+            }
+
+            $deliver_data['phone'] = $_POST['phone'];
+	        $deliver_data['email'] = $_POST['email'];
+	        $deliver_data['name'] = $_POST['first_name'];
+	        $deliver_data['family_name'] = $_POST['last_name'];
+	        $deliver_data['pwd'] = md5($_POST['password']);
+	        $deliver_data['site'] = $_POST['address'];
+	        $deliver_data['lng'] = sprintf('%.7f',$_POST['lng']);
+	        $deliver_data['lat'] = sprintf('%.7f',$_POST['lat']);
+	        $deliver_data['range'] = 50;
+
+	        if(C('DEFAULT_LANG') == 'zh-cn')
+	            $deliver_data['language'] = 0;
+	        else
+	            $deliver_data['language'] = 1;
+
+	        $deliver_data['create_time'] = time();
+	        //暂时写死 之后选择城市
+	        $deliver_data['city_id'] = 105;
+	        $deliver_data['province_id'] = 104;
+	        $deliver_data['circle_id'] = 3446;
+	        $deliver_data['area_id'] = 108;
+
+	        //注册状态
+            $deliver_data['reg_status'] = 1;
+
+	        $deliver_id = D('Deliver_user')->add($deliver_data);
+
+            $database_deliver_user = D('Deliver_user');
+            $now_user = $database_deliver_user->field(true)->where(array('uid'=>$deliver_id))->find();
+            session('deliver_session', serialize($now_user));
+
+            $result = array('error_code'=>false,'msg'=>L('_B_LOGIN_REGISTSUCESS_'));
+            $this->ajaxReturn($result);
+        }else
+	        $this->display();
+    }
+
+    public function step_1(){
+        $database_deliver_user = D('Deliver_user');
+        if($_POST){
+            $data['uid'] = $this->deliver_session['uid'];
+            $data['driver_license'] = $_POST['img_0'];
+            $data['insurance'] = $_POST['img_1'];
+            $data['certificate'] = $_POST['img_2'];
+
+            $deliver_img = D('Deliver_img')->where(array('uid'=>$this->deliver_session['uid']))->find();
+            if($deliver_img)
+                D('Deliver_img')->save($data);
+            else
+                D('Deliver_img')->add($data);
+
+            $card_data['ahname'] = $_POST['ahname'];
+            $card_data['transit'] = $_POST['transit'];
+            $card_data['institution'] = $_POST['institution'];
+            $card_data['account'] = $_POST['account'];
+
+            $deliver_card = D('Deliver_card')->field(true)->where(array('deliver_id'=>$this->deliver_session['uid']))->find();
+            if($deliver_card)
+                D('Deliver_card')->where(array('deliver_id'=>$this->deliver_session['uid']))->save($card_data);
+            else{
+                $card_data['deliver_id'] = $this->deliver_session['uid'];
+                D('Deliver_card')->add($card_data);
+            }
+
+            $database_deliver_user->where(array('uid' => $this->deliver_session['uid']))->save(array('reg_status'=>2));
+
+            $result = array('error_code'=>false,'msg'=>L('_B_LOGIN_REGISTSUCESS_'));
+            $this->ajaxReturn($result);
+        }else {
+            $now_user = $database_deliver_user->field(true)->where(array('uid' => $this->deliver_session['uid']))->find();
+            if($now_user['reg_status'] != 1)
+                header('Location:'.U('Deliver/step_'.$now_user['reg_status']));
+
+            $deliver_img = D('Deliver_img')->field(true)->where(array('uid'=>$this->deliver_session['uid']))->find();
+            if ($deliver_img)
+                $this->assign('deliver_img',$deliver_img);
+
+            $this->display();
+        }
+    }
+
+    public function step_2(){
+        $database_deliver_user = D('Deliver_user');
+        $now_user = $database_deliver_user->field(true)->where(array('uid' => $this->deliver_session['uid']))->find();
+        if($now_user['reg_status'] != 2)
+            header('Location:'.U('Deliver/step_'.$now_user['reg_status']));
+        $this->display();
+    }
+
+    public function step_3(){
+        if($_POST){
+            import('@.ORG.pay.MonerisPay.mpgClasses');
+            $where = array('tab_id'=>'moneris','gid'=>7);
+            $result = D('Config')->field(true)->where($where)->select();
+            foreach($result as $v){
+                if($v['info'] == 'store_id')
+                    $store_id = $v['value'];
+                elseif ($v['info'] == 'token')
+                    $api_token = $v['value'];
+            }
+
+            $txnArray['type'] = 'purchase';
+            $txnArray['crypt_type'] = '7';
+            $txnArray['pan'] = $_POST['c_number'];
+            $txnArray['expdate'] = transYM($_POST['e_date']);
+            $txnArray['order_id'] = 'TuttiDeliver_'.$this->deliver_session['uid'].'_'.time();
+            $txnArray['cust_id'] = $this->deliver_session['uid'];
+            $txnArray['amount'] = 0.01;//50;
+
+            /**************************** Transaction Object *****************************/
+
+            $mpgTxn = new mpgTransaction($txnArray);
+
+            /****************************** Request Object *******************************/
+
+            $mpgRequest = new mpgRequest($mpgTxn);
+            $mpgRequest->setProcCountryCode("CA"); //"US" for sending transaction to US environment
+            $mpgRequest->setTestMode(false);
+
+            $mpgHttpPost  =new mpgHttpsPost($store_id,$api_token,$mpgRequest);
+
+            $mpgResponse=$mpgHttpPost->getMpgResponse();
+
+            if($mpgResponse->getResponseCode() != "null" && $mpgResponse->getResponseCode() < 50){//支付成功
+                $data['card_name'] = $_POST['c_name'];
+                $data['card_num'] = $_POST['c_number'];
+                $data['expdate'] = $txnArray['expdate'];
+                $data['order_id'] = $txnArray['order_id'];
+                $data['txnNumber'] = $mpgResponse->getTxnNumber();
+
+                D('Deliver_img')->where(array('uid'=>$this->deliver_session['uid']))->save($data);
+
+                $result = array('error_code' => false, 'msg' => L('_PAYMENT_SUCCESS_'));
+            }else{
+                $result = array('error_code' => true, 'msg' => $mpgResponse->getMessage());
+            }
+            $this->ajaxReturn($result);
+        }else {
+            $database_deliver_user = D('Deliver_user');
+            $now_user = $database_deliver_user->field(true)->where(array('uid' => $this->deliver_session['uid']))->find();
+            if ($now_user['reg_status'] != 3)
+                header('Location:' . U('Deliver/step_' . $now_user['reg_status']));
+            $this->display();
+        }
+    }
+
+    public function step_4(){
+        $database_deliver_user = D('Deliver_user');
+        $now_user = $database_deliver_user->field(true)->where(array('uid' => $this->deliver_session['uid']))->find();
+        if($now_user['reg_status'] != 4)
+            header('Location:'.U('Deliver/step_'.$now_user['reg_status']));
+        $this->display();
+    }
+
+    public function ajax_upload()
+    {
+        if ($_FILES['file']['error'] != 4) {
+            //$store_id = isset($_GET['store_id']) ? intval($_GET['store_id']) : 0;
+            //$shop = D('Merchant_store_shop')->field('store_theme')->where(array('store_id' => $store_id))->find();
+            //$store_theme = isset($shop['store_theme']) ? intval($shop['store_theme']) : 0;
+            //if ($store_theme) {
+                //$width = '900,450';
+                //$height = '900,450';
+            //} else {
+                $width = '900,450';
+                $height = '500,250';
+            //}
+            $param = array('size' => $this->config['group_pic_size']);
+            $param['thumb'] = true;
+            $param['imageClassPath'] = 'ORG.Util.Image';
+            $param['thumbPrefix'] = 'm_,s_';
+            $param['thumbMaxWidth'] = $width;
+            $param['thumbMaxHeight'] = $height;
+            $param['thumbRemoveOrigin'] = false;
+            $image = D('Image')->handle($this->deliver_session['uid'], 'deliver', 1, $param);
+            if ($image['error']) {
+                exit(json_encode(array('error' => 1,'message' =>$image['msg'])));
+            } else {
+                $title = $image['title']['file'];
+                $goods_image_class = new goods_image();
+                $url = $goods_image_class->get_delver_image_by_path($title, 's');
+                $file = $image['url']['file'];
+                exit(json_encode(array('error' => 0, 'url' => $url, 'title' => $title,'file'=>$file)));
+            }
+        } else {
+            exit(json_encode(array('error' => 1,'message' =>'没有选择图片')));
+        }
     }
 }

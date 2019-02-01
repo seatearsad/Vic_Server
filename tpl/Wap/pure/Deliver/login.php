@@ -22,7 +22,7 @@
 	<div class="Land_end">
 		<ul>
 			<li class="number">
-			  	<input type="text" placeholder="{pigcms{:L('_B_D_LOGIN_ACCOUNT1_')}" id="login_phone">
+			  	<input type="text" placeholder="{pigcms{:L('_B_D_LOGIN_TEL_')}" id="login_phone">
 				<a href="javascript:void(0)"></a>
 			</li>
 			<li class="Password">
@@ -32,12 +32,15 @@
 			<li class="Landd">
 				<input type="button" value="{pigcms{:L('_B_D_LOGIN_LOGIN1_')}" id="login_form">
 			</li>
-            <li class="Landd">
+            <li class="Landd" style="margin-bottom: 30px;">
                 <php>if(C('DEFAULT_LANG') == 'zh-cn'){</php>
                 <input type="button" value="English" class="lang_en" id="lang">
                 <php>}else{</php>
                 <input type="button" value="中文" class="lang_cn" id="lang">
                 <php>}</php>
+            </li>
+            <li class="Landd">
+                <input type="button" value="{pigcms{:L('_B_D_LOGIN_REG2_')}" id="reg_form" style="background-color: #FF0000;width: 50%;margin-left: 25%;">
             </li>
 		</ul>
 	</div>     
@@ -132,5 +135,9 @@ function putUserNP(name,password) {
     $('#login_phone').val(name);
     $('#login_pwd').val(password);
 }
+
+$("#reg_form").click(function () {
+    window.location.href = "{pigcms{:U('Deliver/reg')}";
+});
 </script>   
 </html>

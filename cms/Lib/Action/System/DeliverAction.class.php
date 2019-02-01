@@ -1140,4 +1140,82 @@ class DeliverAction extends BaseAction {
 
         exit(json_encode(array('error' => 0, 'msg' => 'Success！', 'dom_id' => 'account')));
     }
+
+    public function review(){
+        //搜索
+        if (!empty($_GET['keyword'])) {
+            if ($_GET['searchtype'] == 'uid') {
+                $condition_user['uid'] = $_GET['keyword'];
+            } else if ($_GET['searchtype'] == 'nickname') {
+                $condition_user['name'] = array('like', '%' . $_GET['keyword'] . '%');
+            } else if ($_GET['searchtype'] == 'phone') {
+                $condition_user['phone'] = array('like', '%' . $_GET['keyword'] . '%');
+            }
+        }
+        //未审核的
+        $condition_user['group'] = 0;
+        $condition_user['reg_status'] = array('neq',0);
+        $count_user = $this->deliver_user->where($condition_user)->count();
+        import('@.ORG.system_page');
+        $p = new Page($count_user, 15);
+        $user_list = $this->deliver_user->field(true)->where($condition_user)->order('`uid` DESC')->limit($p->firstRow . ',' . $p->listRows)->select();
+        $this->assign('user_list', $user_list);
+        $pagebar = $p->show();
+        $this->assign('pagebar', $pagebar);
+        $this->display();
+    }
+
+    public function user_view(){
+        if($_POST) {
+            $uid = $_POST['uid'];
+            $deliver = D('deliver_user')->where(array('uid' => $uid))->find();
+            if ($deliver['reg_status'] == 2) {
+                $review_status = $_POST['review'];
+                if ($review_status == 1) {//通过
+                    $data['reg_status'] = 3;
+
+                    $sms_data['uid'] = $uid;
+                    $sms_data['mobile'] = $deliver['phone'];
+                    $sms_data['sendto'] = 'deliver';
+                    $sms_data['tplid'] = 275882;
+                    $sms_data['params'] = [];
+                    Sms::sendSms2($sms_data);
+                } else {//未通过
+                    $data['reg_status'] = 1;
+                    $data_img['review_desc'] = $_POST['review_desc'];
+                    D('Deliver_img')->where(array('uid' => $uid))->save($data_img);
+                }
+                D('deliver_user')->where(array('uid' => $uid))->save($data);
+
+                $this->success('修改成功！');
+            }elseif ($deliver['reg_status'] == 4){
+                if($_POST['receive'] == 1){
+                    $data['reg_status'] = 0;
+                    $data['group'] = 1;
+                    $data['status'] = 1;
+                    D('deliver_user')->where(array('uid' => $uid))->save($data);
+                }
+                $this->user_edit();
+            }else{
+                $this->user_edit();
+            }
+        }else {
+            $uid = $_GET['uid'];
+            if (!$uid) {
+                $this->error('非法操作');
+            }
+            $deliver = D('deliver_user')->where(array('uid' => $uid))->find();
+            if (!$deliver) {
+                $this->error('非法操作');
+            }
+            $deliver_img = D('Deliver_img')->field(true)->where(array('uid' => $uid))->find();
+            $this->assign('now_user', $deliver);
+            $this->assign('img', $deliver_img);
+
+            $card = D('Deliver_card')->field(true)->where(array('deliver_id'=>$uid))->find();
+            $this->assign('card',$card);
+
+            $this->display();
+        }
+    }
 }
