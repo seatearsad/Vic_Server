@@ -170,7 +170,7 @@
         <div id="reg_list" style="margin-top: 50px; margin-bottom: 20px">
             <div style="float: left;width: 100%;text-align:center;font-size:14px;line-height:20px;margin-top: 20px">
                 801-747 Fort Street， Victoria BC<br>
-                Monday - Friday 10:00 am - 7:00 pm
+                Monday - Friday 10:00 am - 4:30 pm
             </div>
             <div style="float: left;width:100%;text-align:center;">
                 <img src="{pigcms{$static_public}images/deliver/step4_address.png" width="100">

@@ -1942,7 +1942,7 @@ class DeliverAction extends BaseAction
             $data['uid'] = $this->deliver_session['uid'];
             $data['driver_license'] = $_POST['img_0'];
             $data['insurance'] = $_POST['img_1'];
-            $data['certificate'] = $_POST['sin_num'];
+            $data['certificate'] = $_POST['img_2'];
 
             $deliver_img = D('Deliver_img')->where(array('uid'=>$this->deliver_session['uid']))->find();
             if($deliver_img)
@@ -1954,13 +1954,14 @@ class DeliverAction extends BaseAction
             $card_data['transit'] = $_POST['transit'];
             $card_data['institution'] = $_POST['institution'];
             $card_data['account'] = $_POST['account'];
-            $card_data['deliver_id'] = $this->deliver_session['uid'];
 
             $deliver_card = D('Deliver_card')->field(true)->where(array('deliver_id'=>$this->deliver_session['uid']))->find();
             if($deliver_card)
-                D('Deliver_card')->save($card_data);
-            else
+                D('Deliver_card')->where(array('deliver_id'=>$this->deliver_session['uid']))->save($card_data);
+            else{
+                $card_data['deliver_id'] = $this->deliver_session['uid'];
                 D('Deliver_card')->add($card_data);
+            }
 
             $database_deliver_user->where(array('uid' => $this->deliver_session['uid']))->save(array('reg_status'=>2));
 
