@@ -2006,7 +2006,7 @@ class DeliverAction extends BaseAction
             $txnArray['expdate'] = transYM($_POST['e_date']);
             $txnArray['order_id'] = 'TuttiDeliver_'.$this->deliver_session['uid'].'_'.time();
             $txnArray['cust_id'] = $this->deliver_session['uid'];
-            $txnArray['amount'] = 0.01;//50;
+            $txnArray['amount'] = 50.00;
 
             /**************************** Transaction Object *****************************/
 
