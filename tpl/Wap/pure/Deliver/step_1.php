@@ -75,6 +75,19 @@
         display: inline-block;
         width: 100%;
     }
+    .bank_title{
+        background: #1b9dff;
+        background-color: rgb(27, 157, 255);
+        color: #fff;
+        text-indent: 0px;
+        font-size: 14px;
+        padding: 0px;
+        height: 40px;
+        display: inline-block;
+        width: 100%;
+        line-height: 40px;
+        text-align: center;
+    }
     .top_back{
         position: relative;
         width: 100%;
@@ -224,19 +237,27 @@
         </div>
 
         <div style="margin: 10px auto;width: 80%;">
-            <div style="display:inline-block;" id="J_selectImage_2">
+            <!--div style="display:inline-block;" id="J_selectImage_2">
                 <div class="btn btn-sm btn-success" style="position:relative;height:60px;line-height: 30px;text-align: center;">
                     {pigcms{:L('_SIN_NUMBER_')}
                 </div>
             </div>
             <div class="img_2">
 
+            </div-->
+            <div class="bank_title">
+                {pigcms{:L('_SIN_NUMBER_')}
             </div>
-
             <ul>
                 <li>
-                    {pigcms{:L('_BANKING_INFO_')}:
+                    <input type="text" placeholder="{pigcms{:L('_SIN_NUMBER_')}*" id="sin_num">
                 </li>
+            </ul>
+
+            <div class="bank_title">
+                {pigcms{:L('_BANKING_INFO_')}
+            </div>
+            <ul>
                 <li>
                     {pigcms{:L('_BANK_REMARK_')}
                 </li>
@@ -258,7 +279,7 @@
     <div>
         <span id="filename_0" style="display: none;"></span>
         <span id="filename_1" style="display: none;"></span>
-        <span id="filename_2" style="display: none;"></span>
+        <!--span id="filename_2" style="display: none;"></span-->
         <input type="button" value="{pigcms{:L('_NEXT_TXT_')}" id="reg_form" style="background-color:#407ec7;width: 50%;margin-left: 25%;">
     </div>
 	</section>
@@ -289,11 +310,11 @@ uploader.addButton({
     name:'image_1',
     multiple:false
 });
-uploader.addButton({
-    id:'#J_selectImage_2',
-    name:'image_2',
-    multiple:false
-});
+// uploader.addButton({
+//     id:'#J_selectImage_2',
+//     name:'image_2',
+//     multiple:false
+// });
 uploader.on('fileQueued',function(file){
     if($('.upload_pic_li').size() >= 5){
         uploader.cancelFile(file);
@@ -319,7 +340,7 @@ uploader.on('uploadError', function(file,reason){
 
 function findImg(fid,file) {
     var img = '';
-    var all = 3;
+    var all = 2;
     for(var i=0;i<all;i++) {
         $('#J_selectImage_' + i).children('div').each(function () {
             if (typeof($(this).attr('id')) != 'undefined') {
@@ -348,7 +369,7 @@ $('#reg_form').click(function () {
         }
     });
 
-    if($('#ahname').val() == '' || $('#transit').val() == '' || $('#institution').val() == '' || $('#account').val() == ''){
+    if($('#account').val() == '' || $('#ahname').val() == '' || $('#transit').val() == '' || $('#institution').val() == '' || $('#account').val() == ''){
         is_next = false;
     }
 
@@ -358,11 +379,12 @@ $('#reg_form').click(function () {
         var post_data = {
             img_0:$('#filename_0').html(),
             img_1:$('#filename_1').html(),
-            img_2:$('#filename_2').html(),
+            //img_2:$('#filename_2').html(),
             ahname:$('#ahname').val(),
             transit:$('#transit').val(),
             institution:$('#institution').val(),
-            account:$('#account').val()
+            account:$('#account').val(),
+            sin_num:$('#sin_num').val()
         };
         $.ajax({
             url: "{pigcms{:U('Deliver/step_1')}",

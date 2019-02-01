@@ -70,7 +70,14 @@
                     <input type="text" placeholder="Account" class="input fl" name="account" size="30" validate="maxlength:50,required:true" value="{pigcms{$card.account}" />
                 </td>
             </tr>
-            <if condition="$now_user['reg_status'] gt 2">
+            <if condition="$now_user['reg_status'] gt 1">
+            <tr>
+                <th width="15%">社保号</th>
+                <td colspan=3>
+                    <!--img src="{pigcms{:C('config.site_url')}{pigcms{$img['certificate']}" height="100"/-->
+                    <input type="text" placeholder="SIN_Number" class="input fl" name="certificate" size="30" validate="maxlength:50,required:true" value="{pigcms{$img.certificate}" />
+                </td>
+            </tr>
             <tr>
                 <th width="15%">驾照</th>
                 <td colspan=3>
@@ -81,12 +88,6 @@
                 <th width="15%">车辆保险</th>
                 <td colspan=3>
                     <img src="{pigcms{:C('config.site_url')}{pigcms{$img['insurance']}" height="100"/>
-                </td>
-            </tr>
-            <tr>
-                <th width="15%">社保号</th>
-                <td colspan=3>
-                    <img src="{pigcms{:C('config.site_url')}{pigcms{$img['certificate']}" height="100"/>
                 </td>
             </tr>
             </if>

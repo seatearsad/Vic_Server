@@ -1173,6 +1173,13 @@ class DeliverAction extends BaseAction {
                 $review_status = $_POST['review'];
                 if ($review_status == 1) {//通过
                     $data['reg_status'] = 3;
+
+                    $sms_data['uid'] = $uid;
+                    $sms_data['mobile'] = $deliver['phone'];
+                    $sms_data['sendto'] = 'deliver';
+                    $sms_data['tplid'] = 275882;
+                    $sms_data['params'] = [];
+                    Sms::sendSms2($sms_data);
                 } else {//未通过
                     $data['reg_status'] = 1;
                     $data_img['review_desc'] = $_POST['review_desc'];

@@ -1942,7 +1942,7 @@ class DeliverAction extends BaseAction
             $data['uid'] = $this->deliver_session['uid'];
             $data['driver_license'] = $_POST['img_0'];
             $data['insurance'] = $_POST['img_1'];
-            $data['certificate'] = $_POST['img_2'];
+            $data['certificate'] = $_POST['sin_num'];
 
             $deliver_img = D('Deliver_img')->where(array('uid'=>$this->deliver_session['uid']))->find();
             if($deliver_img)

@@ -179,7 +179,7 @@
             </span>
         </div>
         <div class="Land_top">
-            <h2>{pigcms{:L('_DELIVER_STEP_3_')}</h2>
+            <h2>{pigcms{:L('_REVIEW_APPROVED_')}</h2>
         </div>
 	<div id="reg_list">
         <div style="margin: 10px auto;width: 80%;text-align: center">
