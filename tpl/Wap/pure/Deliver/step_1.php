@@ -266,13 +266,13 @@
                     <input type="text" placeholder="Account Holder Name*" id="ahname">
                 </li>
                 <li>
+                    <input type="text" placeholder="Account*(7-12 digit)" id="account">
+                </li>
+                <li>
                     <input type="text" placeholder="Transit(Branch)*(5-digit)" id="transit">
                 </li>
                 <li>
                     <input type="text" placeholder="Institution*(3-digit)" id="institution">
-                </li>
-                <li>
-                    <input type="text" placeholder="Account*(7-12 digit)" id="account">
                 </li>
             </ul>
         </div>
