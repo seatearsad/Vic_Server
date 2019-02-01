@@ -190,7 +190,7 @@
                 <img src="{pigcms{$static_public}images/deliver_box.png" width="200px">
             </li>
             <li style="text-align: center">
-                $50.00
+                $50.00 + GST
             </li>
             <li>
                 <input type="text" placeholder="{pigcms{:L('_CREDITHOLDER_NAME_')}*" id="c_name">
