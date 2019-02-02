@@ -907,6 +907,7 @@
                     <volist name="pay_method" id="vo">
                         <php>if($pay_offline || $key != 'offline'){</php>
                         <php>if(($key == 'weixin' && $is_wexin_browser) || ($key == 'alipay' && !$is_wexin_browser) || ($key != 'weixin' && $key!= 'alipay')){</php>
+                        <php>if(($order_info['order_type'] == recharge && $key != 'weixin' && $key!= 'alipay') || $order_info['order_type'] != recharge){</php>
                         <dd class="dd-padding">
                             <label class="mt">
                                 <!--i class="bank-icon icon-{pigcms{$key}"></i-->
@@ -916,6 +917,7 @@
                                 </span>
                             </label>
                         </dd>
+                        <php>}</php>
                         <php>}</php>
                         <php>}</php>
                     </volist>
