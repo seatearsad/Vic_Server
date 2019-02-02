@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="cn"><head>
+<html><head>
 <if condition="$zd['status'] eq 1">
             {pigcms{$zd['code']}
         </if>

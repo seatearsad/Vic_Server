@@ -9,7 +9,7 @@
 	</php>	
 </if>
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html>
 <head>
 <title>在线支付</title>
 <meta charset="utf-8">

@@ -1,6 +1,6 @@
 <?php if(!defined('PigCms_VERSION')){ exit('deny access!');} ?>
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html>
     <head>
         <meta charset="utf-8"/>
         <title>{pigcms{$find_info.floor_layer}{pigcms{$find_info.floor_name}-{pigcms{$find_info.village_name}</title>

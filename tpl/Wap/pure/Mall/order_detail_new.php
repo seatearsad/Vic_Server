@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html>
     <head>
         <meta charset="utf-8"/>
         <title>{pigcms{$config.shop_alias_name}订单详情</title>

@@ -1,6 +1,6 @@
 <?php if(!defined('PigCms_VERSION')){ exit('deny access!');} ?>
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html>
 	<head>
 		<meta charset="utf-8" />
 		<title>{pigcms{:L('_B_PURE_MY_53_')}</title>

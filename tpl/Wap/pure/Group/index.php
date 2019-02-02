@@ -1,6 +1,6 @@
 <?php if(!defined('PigCms_VERSION')){ exit('deny access!');} ?>
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html>
 <head>
     <meta charset="utf-8" />
     <title>{pigcms{:L('_VIC_NAME_')} - {pigcms{:L('_LUNCH_TXT_')}</title>

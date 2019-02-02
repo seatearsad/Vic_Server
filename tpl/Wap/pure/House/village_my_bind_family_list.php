@@ -1,6 +1,6 @@
 <?php if(!defined('PigCms_VERSION')){ exit('deny access!');} ?>
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html>
 	<head>
 		<meta charset="utf-8" />
         <title>绑定家属列表</title>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html>
     <head>
         <meta charset="utf-8"/>
         <title>我的帖子</title>

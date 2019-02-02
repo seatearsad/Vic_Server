@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN" class="index_page">
+<html class="index_page">
  <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> 
   <meta name="location" content="" /> 
