@@ -2031,6 +2031,8 @@ class DeliverAction extends BaseAction
 
                 D('Deliver_img')->where(array('uid'=>$this->deliver_session['uid']))->save($data);
 
+                D('Deliver_user')->where(array('uid'=>$this->deliver_session['uid']))->save(array('reg_status'=>4));
+
                 $result = array('error_code' => false, 'msg' => L('_PAYMENT_SUCCESS_'));
             }else{
                 $result = array('error_code' => true, 'msg' => $mpgResponse->getMessage());
