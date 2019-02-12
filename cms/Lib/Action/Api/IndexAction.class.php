@@ -52,7 +52,7 @@ class IndexAction extends BaseAction
         $where = array('deliver_type' => $deliver_type, 'order' => $order, 'lat' => $lat, 'long' => $long, 'cat_id' => $cat_id, 'cat_fid' => $cat_fid, 'page' => $page,'limit'=>$limit);
         $key && $where['key'] = $key;
 
-        $shop_list = D('Merchant_store_shop')->get_list_arrange($where,3,1,$limit,$page);
+        $shop_list = D('Merchant_store_shop')->get_list_arrange($where,3,1,$limit,$page,$lat,$long);
 //
 //        foreach ($shop_list as $k => $v) {
 //            $product_list = D('Shop_goods')->get_list_by_storeid($v['site_id']);
@@ -100,7 +100,7 @@ class IndexAction extends BaseAction
         $where = array('deliver_type' => $deliver_type, 'order' => $order, 'lat' => $lat, 'long' => $long, 'cat_id' => $cat_id, 'cat_fid' => $cat_fid, 'page' => $page,'limit'=>$limit);
         $key && $where['key'] = $key;
 
-        $shop_list = D('Merchant_store_shop')->get_list_arrange($where,3,1,$limit,$page);
+        $shop_list = D('Merchant_store_shop')->get_list_arrange($where,3,1,$limit,$page,$lat,$long);
 
         if(!$shop_list['list']){
             $shop_list['list'] = array();

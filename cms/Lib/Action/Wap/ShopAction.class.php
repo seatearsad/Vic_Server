@@ -200,7 +200,11 @@ class ShopAction extends BaseAction{
 			$temp['delivery'] = $deliver_type == 'pick' ? 0 : $row['deliver'];//是否支持配送
 			$temp['delivery_time'] = $row['send_time'];//配送时长
 			$temp['delivery_price'] = floatval($row['basic_price']);//起送价
-			$temp['delivery_money'] = floatval($row['delivery_fee']);//配送费
+            if($lat != 0 && $long != 0){
+                $temp['delivery_money'] = getDeliveryFee($row['lat'],$row['long'],$lat,$long);
+            }else{
+                $temp['delivery_money'] = floatval($row['delivery_fee']);//配送费
+            }
 			$temp['delivery_system'] = $row['deliver_type'] == 0 || $row['deliver_type'] == 3 ? true : false;//是否是平台配送
 			$temp['is_close'] = 1;
 			$temp['isverify'] = $row['isverify'];

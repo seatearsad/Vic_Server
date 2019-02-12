@@ -81,7 +81,6 @@ class GroupserviceAction extends BaseAction{
 			$return = array();
 			$now_time = date('H:i:s');
 			$n= 1;
-
 			foreach ($lists['shop_list'] as $row) {
 				if($n>$page_count ||$page>$page_max || ($page == $page_max && $n>$limit%$page_count&&$limit%$page_count!=0) )
 					break;
@@ -102,7 +101,11 @@ class GroupserviceAction extends BaseAction{
 				$temp['delivery'] = $temp['delivery'] ? true : false;
 				$temp['delivery_time'] = $row['send_time'];//配送时长
 				$temp['delivery_price'] = floatval($row['basic_price']);//起送价
-				$temp['delivery_money'] = floatval($row['delivery_fee']);//配送费
+				if($lat != 0 && $long != 0){
+                    $temp['delivery_money'] = getDeliveryFee($row['lat'],$row['long'],$lat,$long);
+				}else{
+                    $temp['delivery_money'] = floatval($row['delivery_fee']);//配送费
+                }
 				//modify garfunkel
                 		$temp['pack_alias'] = $row['pack_alias'];
                 		$temp['pack_fee'] = $row['pack_fee'];
