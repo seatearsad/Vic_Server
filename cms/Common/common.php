@@ -302,7 +302,7 @@ function getDistanceByGoogle($from,$aim){
     $result = $http->curlGet($url);
     $result = json_decode($result,true);
     //$result = $result['info'];
-    var_dump($result);die();
+    //var_dump($result);die();
     $distance = 0;
     //是否重新计算
     $is_c = false;
