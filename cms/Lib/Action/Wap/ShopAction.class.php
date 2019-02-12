@@ -2211,9 +2211,13 @@ class ShopAction extends BaseAction{
 
 		//计算配送费
 		if ($user_adress) {
-			$distance = getDistance($user_adress['latitude'], $user_adress['longitude'], $return['store']['lat'], $return['store']['long']);
-			$distance = $distance / 1000;
-			
+			//$distance = getDistance($user_adress['latitude'], $user_adress['longitude'], $return['store']['lat'], $return['store']['long']);
+            $from = $return['store']['lat'].','.$return['store']['long'];
+            $aim = $user_adress['latitude'].','.$user_adress['longitude'];
+            $distance = getDistanceByGoogle($from,$aim);
+			//$distance = $distance / 1000;
+			//var_dump($distance);die();
+
 			//获取配送费用
 			$deliveryCfg = [];
 			$deliverys = D("Config")->get_gid_config(20);
