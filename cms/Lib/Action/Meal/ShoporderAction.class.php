@@ -213,8 +213,11 @@ class ShoporderAction extends BaseAction
 	
 		//计算配送费
 		if ($user_adress) {
-			$distance = getDistance($user_adress['latitude'], $user_adress['longitude'], $return['store']['lat'], $return['store']['long']);
-			$distance = $distance / 1000;
+			//$distance = getDistance($user_adress['latitude'], $user_adress['longitude'], $return['store']['lat'], $return['store']['long']);
+			//$distance = $distance / 1000;
+            $from = $return['store']['lat'].','.$return['store']['long'];
+            $aim = $user_adress['latitude'].','.$user_adress['longitude'];
+            $distance = getDistanceByGoogle($from,$aim);
 			
 			//获取配送费用
 			$deliveryCfg = [];
@@ -815,7 +818,10 @@ class ShoporderAction extends BaseAction
     			if ($user_address = D('User_adress')->field(true)->where(array('adress_id' => $address_id, 'uid' => $this->user_session['uid']))->find()) {
     				if ($user_address['longitude'] != 0 && $user_address['latitude'] != 0) {
 					    if ($return['store']['delivery_range_type'] == 0) {
-							$distance = getDistance($user_address['latitude'], $user_address['longitude'], $return['store']['lat'], $return['store']['long']);
+							//$distance = getDistance($user_address['latitude'], $user_address['longitude'], $return['store']['lat'], $return['store']['long']);
+                            $from = $return['store']['lat'].','.$return['store']['long'];
+                            $aim = $user_address['latitude'].','.$user_address['longitude'];
+                            $distance = getDistanceByGoogle($from,$aim);
 							$delivery_radius = $return['store']['delivery_radius'] * 1000;
 							if ($distance > $delivery_radius && $return['delivery_type'] != 5) {
 								//$this->error_tips('您到本店的距离是' . $distance . '米,超过了' . $delivery_radius . '米的配送范围');
@@ -969,7 +975,7 @@ class ShoporderAction extends BaseAction
 				
 				
 				//计算配送费
-				$distance = $distance / 1000;
+				//$distance = $distance / 1000;
 				/*
 				if ($return['delivery_type'] == 5) {//快递配送
 					$pass_distance = $distance > $return['basic_distance'] ? floatval($distance - $return['basic_distance']) : 0;
@@ -1224,8 +1230,11 @@ class ShoporderAction extends BaseAction
 		}
 
 		//计算配送费
-		$distance = getDistance($user_adress['latitude'], $user_adress['longitude'], $return['store']['lat'], $return['store']['long']);
-		$distance = $distance / 1000;
+		//$distance = getDistance($user_adress['latitude'], $user_adress['longitude'], $return['store']['lat'], $return['store']['long']);
+		//$distance = $distance / 1000;
+        $from = $return['store']['lat'].','.$return['store']['long'];
+        $aim = $user_adress['latitude'].','.$user_adress['longitude'];
+        $distance = getDistanceByGoogle($from,$aim);
 		
 		if($distance < 5) {
 			$delivery_fee = floatval($deliveryCfg['delivery_distance_1']);
