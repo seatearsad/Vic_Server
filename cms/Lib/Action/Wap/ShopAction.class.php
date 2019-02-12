@@ -2340,7 +2340,10 @@ class ShopAction extends BaseAction{
 					if ($user_address = D('User_adress')->field(true)->where(array('adress_id' => $address_id, 'uid' => $this->user_session['uid']))->find()) {
 						if ($user_address['longitude'] != 0 && $user_address['latitude'] != 0) {
 						    if ($return['store']['delivery_range_type'] == 0) {
-    							$distance = getDistance($user_address['latitude'], $user_address['longitude'], $return['store']['lat'], $return['store']['long']);
+    							//$distance = getDistance($user_address['latitude'], $user_address['longitude'], $return['store']['lat'], $return['store']['long']);
+                                $from = $return['store']['lat'].','.$return['store']['long'];
+                                $aim = $user_address['latitude'].','.$user_address['longitude'];
+                                $distance = getDistanceByGoogle($from,$aim);
     							$delivery_radius = $return['store']['delivery_radius'] * 1000;
     							if ($distance > $delivery_radius && $return['delivery_type'] != 5) {
     								//$this->error_tips('您到本店的距离是' . $distance . '米,超过了' . $delivery_radius . '米的配送范围');
@@ -2479,7 +2482,7 @@ class ShopAction extends BaseAction{
 				$order_data['expect_use_time'] = $arrive_time ? $arrive_time : time() + $return['store']['send_time'] * 60;//客户期望使用时间
 
 				//计算配送费
-				$distance = $distance / 1000;
+				//$distance = $distance / 1000;
 				//获取配送费用
 				$deliveryCfg = [];
 				$deliverys = D("Config")->get_gid_config(20);
