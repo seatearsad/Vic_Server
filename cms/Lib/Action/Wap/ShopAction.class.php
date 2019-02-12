@@ -449,6 +449,11 @@ class ShopAction extends BaseAction{
 		$where = array('store_id' => $store_id);
 		$now_store = D('Merchant_store')->field(true)->where($where)->find();
 
+		$user_long_lat = D('User_long_lat')->getLocation($_SESSION['openid'],0);
+		if($_COOKIE['userLocationLat']){
+            $user_long_lat['lat'] = $_COOKIE['userLocationLat'];
+            $user_long_lat['long'] = $_COOKIE['userLocationLong'];
+        }
 		//资质认证
 		if ($this->config['store_shop_auth'] == 1 && $now_store['auth'] < 3) {
 			echo json_encode(array());
@@ -727,7 +732,11 @@ class ShopAction extends BaseAction{
 		}
 
         //modify garfunkel
-        $store['delivery_money'] = C('config.delivery_distance_1');
+        if($user_long_lat && $user_long_lat['lat'] != 0){
+            $store['delivery_money'] = getDeliveryFee($store['lat'],$store['long'],$user_long_lat['lat'],$user_long_lat['long']);
+        }else{
+            $store['delivery_money'] = C('config.delivery_distance_1');
+        }
         //$store['delivery_money'] = floatval($store['delivery_money']);
 // 		$store['delivery_money'] = $row['deliver_type'] == 0 ? C('config.delivery_fee') : $row['delivery_fee'];//配送费
 // 		$store['delivery_money'] = floatval($store['delivery_money']);//配送费
@@ -851,7 +860,12 @@ class ShopAction extends BaseAction{
         $store_id = isset($_GET['store_id']) ? intval($_GET['store_id']) : 2;
         $where = array('store_id' => $store_id);
         $now_store = D('Merchant_store')->field(true)->where($where)->find();
-        
+
+        $user_long_lat = D('User_long_lat')->getLocation($_SESSION['openid'],0);
+        if($_COOKIE['userLocationLat']){
+            $user_long_lat['lat'] = $_COOKIE['userLocationLat'];
+            $user_long_lat['long'] = $_COOKIE['userLocationLong'];
+        }
         //资质认证
         if ($this->config['store_shop_auth'] == 1 && $now_store['auth'] < 3) {
             echo json_encode(array());
@@ -1136,7 +1150,11 @@ class ShopAction extends BaseAction{
         }
 
         //modify garfunkel
-        $store['delivery_money'] = C('config.delivery_distance_1');
+        if($user_long_lat && $user_long_lat['lat'] != 0){
+            $store['delivery_money'] = getDeliveryFee($store['lat'],$store['long'],$user_long_lat['lat'],$user_long_lat['long']);
+        }else{
+            $store['delivery_money'] = C('config.delivery_distance_1');
+        }
         //$store['delivery_money'] = floatval($store['delivery_money']);
         // 		$store['delivery_money'] = $row['deliver_type'] == 0 ? C('config.delivery_fee') : $row['delivery_fee'];//配送费
         // 		$store['delivery_money'] = floatval($store['delivery_money']);//配送费
