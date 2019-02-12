@@ -200,7 +200,11 @@ class ShopAction extends BaseAction{
 			$temp['delivery'] = $deliver_type == 'pick' ? 0 : $row['deliver'];//是否支持配送
 			$temp['delivery_time'] = $row['send_time'];//配送时长
 			$temp['delivery_price'] = floatval($row['basic_price']);//起送价
-			$temp['delivery_money'] = floatval($row['delivery_fee']);//配送费
+            if($lat != 0 && $long != 0){
+                $temp['delivery_money'] = getDeliveryFee($row['lat'],$row['long'],$lat,$long);
+            }else{
+                $temp['delivery_money'] = floatval($row['delivery_fee']);//配送费
+            }
 			$temp['delivery_system'] = $row['deliver_type'] == 0 || $row['deliver_type'] == 3 ? true : false;//是否是平台配送
 			$temp['is_close'] = 1;
 			$temp['isverify'] = $row['isverify'];
@@ -445,6 +449,11 @@ class ShopAction extends BaseAction{
 		$where = array('store_id' => $store_id);
 		$now_store = D('Merchant_store')->field(true)->where($where)->find();
 
+		$user_long_lat = D('User_long_lat')->getLocation($_SESSION['openid'],0);
+		if($_COOKIE['userLocationLat']){
+            $user_long_lat['lat'] = $_COOKIE['userLocationLat'];
+            $user_long_lat['long'] = $_COOKIE['userLocationLong'];
+        }
 		//资质认证
 		if ($this->config['store_shop_auth'] == 1 && $now_store['auth'] < 3) {
 			echo json_encode(array());
@@ -723,7 +732,11 @@ class ShopAction extends BaseAction{
 		}
 
         //modify garfunkel
-        $store['delivery_money'] = C('config.delivery_distance_1');
+        if($user_long_lat && $user_long_lat['lat'] != 0){
+            $store['delivery_money'] = getDeliveryFee($store['lat'],$store['long'],$user_long_lat['lat'],$user_long_lat['long']);
+        }else{
+            $store['delivery_money'] = C('config.delivery_distance_1');
+        }
         //$store['delivery_money'] = floatval($store['delivery_money']);
 // 		$store['delivery_money'] = $row['deliver_type'] == 0 ? C('config.delivery_fee') : $row['delivery_fee'];//配送费
 // 		$store['delivery_money'] = floatval($store['delivery_money']);//配送费
@@ -847,7 +860,12 @@ class ShopAction extends BaseAction{
         $store_id = isset($_GET['store_id']) ? intval($_GET['store_id']) : 2;
         $where = array('store_id' => $store_id);
         $now_store = D('Merchant_store')->field(true)->where($where)->find();
-        
+
+        $user_long_lat = D('User_long_lat')->getLocation($_SESSION['openid'],0);
+        if($_COOKIE['userLocationLat']){
+            $user_long_lat['lat'] = $_COOKIE['userLocationLat'];
+            $user_long_lat['long'] = $_COOKIE['userLocationLong'];
+        }
         //资质认证
         if ($this->config['store_shop_auth'] == 1 && $now_store['auth'] < 3) {
             echo json_encode(array());
@@ -1132,7 +1150,11 @@ class ShopAction extends BaseAction{
         }
 
         //modify garfunkel
-        $store['delivery_money'] = C('config.delivery_distance_1');
+        if($user_long_lat && $user_long_lat['lat'] != 0){
+            $store['delivery_money'] = getDeliveryFee($store['lat'],$store['long'],$user_long_lat['lat'],$user_long_lat['long']);
+        }else{
+            $store['delivery_money'] = C('config.delivery_distance_1');
+        }
         //$store['delivery_money'] = floatval($store['delivery_money']);
         // 		$store['delivery_money'] = $row['deliver_type'] == 0 ? C('config.delivery_fee') : $row['delivery_fee'];//配送费
         // 		$store['delivery_money'] = floatval($store['delivery_money']);//配送费
@@ -2211,9 +2233,13 @@ class ShopAction extends BaseAction{
 
 		//计算配送费
 		if ($user_adress) {
-			$distance = getDistance($user_adress['latitude'], $user_adress['longitude'], $return['store']['lat'], $return['store']['long']);
-			$distance = $distance / 1000;
-			
+			//$distance = getDistance($user_adress['latitude'], $user_adress['longitude'], $return['store']['lat'], $return['store']['long']);
+            $from = $return['store']['lat'].','.$return['store']['long'];
+            $aim = $user_adress['latitude'].','.$user_adress['longitude'];
+            $distance = getDistanceByGoogle($from,$aim);
+			//$distance = $distance / 1000;
+			//var_dump($distance);die();
+
 			//获取配送费用
 			$deliveryCfg = [];
 			$deliverys = D("Config")->get_gid_config(20);
@@ -2336,7 +2362,10 @@ class ShopAction extends BaseAction{
 					if ($user_address = D('User_adress')->field(true)->where(array('adress_id' => $address_id, 'uid' => $this->user_session['uid']))->find()) {
 						if ($user_address['longitude'] != 0 && $user_address['latitude'] != 0) {
 						    if ($return['store']['delivery_range_type'] == 0) {
-    							$distance = getDistance($user_address['latitude'], $user_address['longitude'], $return['store']['lat'], $return['store']['long']);
+    							//$distance = getDistance($user_address['latitude'], $user_address['longitude'], $return['store']['lat'], $return['store']['long']);
+                                $from = $return['store']['lat'].','.$return['store']['long'];
+                                $aim = $user_address['latitude'].','.$user_address['longitude'];
+                                $distance = getDistanceByGoogle($from,$aim);
     							$delivery_radius = $return['store']['delivery_radius'] * 1000;
     							if ($distance > $delivery_radius && $return['delivery_type'] != 5) {
     								//$this->error_tips('您到本店的距离是' . $distance . '米,超过了' . $delivery_radius . '米的配送范围');
@@ -2475,7 +2504,7 @@ class ShopAction extends BaseAction{
 				$order_data['expect_use_time'] = $arrive_time ? $arrive_time : time() + $return['store']['send_time'] * 60;//客户期望使用时间
 
 				//计算配送费
-				$distance = $distance / 1000;
+				//$distance = $distance / 1000;
 				//获取配送费用
 				$deliveryCfg = [];
 				$deliverys = D("Config")->get_gid_config(20);

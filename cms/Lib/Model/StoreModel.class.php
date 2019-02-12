@@ -640,8 +640,11 @@ class StoreModel extends Model
         $address = $this->getDefaultAdr($uid);
         $store = $this->get_store_by_id($sid);
         
-        $distance = getDistance($address['mapLat'], $address['mapLng'], $store['lat'], $store['lng']);
-        $distance = $distance / 1000;
+        //$distance = getDistance($address['mapLat'], $address['mapLng'], $store['lat'], $store['lng']);
+        //$distance = $distance / 1000;
+        $from = $store['lat'].','.$store['lng'];
+        $aim = $address['mapLat'].','.$address['mapLng'];
+        $distance = getDistanceByGoogle($from,$aim);
 
         $deliveryCfg = [];
         $deliverys = D("Config")->get_gid_config(20);

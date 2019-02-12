@@ -873,7 +873,7 @@ class Merchant_store_shopModel extends Model
      * @param int $page_count
      * @return array
      */
-    public function get_list_arrange($where = array(), $is_wap = 1,$type = 1,$limit,$page = 1)
+    public function get_list_arrange($where = array(), $is_wap = 1,$type = 1,$limit,$page = 1,$lat=0,$long=0)
     {
         switch ($type){
             case 1:
@@ -922,7 +922,11 @@ class Merchant_store_shopModel extends Model
             $temp['delivery'] = $temp['delivery'] ? true : false;
             $temp['time'] = $row['send_time'];//配送时长
             $temp['delivery_price'] = floatval($row['basic_price']);//起送价
-            $temp['delivery_money'] = floatval($row['delivery_fee']);//配送费
+            if($lat != 0 && $long != 0){
+                $temp['delivery_money'] = getDeliveryFee($row['lat'],$row['long'],$lat,$long);
+            }else{
+                $temp['delivery_money'] = floatval($row['delivery_fee']);//配送费
+            }
             //modify garfunkel
             $temp['pack_fee'] = $row['pack_fee'];
             //

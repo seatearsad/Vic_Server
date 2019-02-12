@@ -292,7 +292,73 @@ function getDistance($lat1, $lng1, $lat2, $lng2){
 	$stepTwo = 2 * asin(min(1, sqrt($stepOne)));
 	$calculatedDistance = $earthRadius * $stepTwo;
 	return round($calculatedDistance);
-} 
+}
+
+function getDistanceByGoogle($from,$aim){
+    //$url = 'http://54.190.29.18/index.php?g=Api&c=Index&a=testDistance&from='.$from.'&aim='.$aim;
+    $url = 'https://maps.googleapis.com/maps/api/directions/json?origin='.$from.'&destination='.$aim.'&key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&language=en';
+    import('ORG.Net.Http');
+    $http = new Http();
+    $result = $http->curlGet($url);
+    $result = json_decode($result,true);
+    //$result = $result['info'];
+    //var_dump($result);die();
+    $distance = 0;
+    //是否重新计算
+    $is_c = false;
+    if($result['status'] == 'OK'){
+        $routes = $result['routes'][0]['legs'];
+        $distance = $routes[0]['distance']['value'];
+
+        $distance = $distance / 1000;
+        if(!$distance){
+            $is_c = true;
+        }
+    }else{//google 没有结果
+        $is_c = true;
+    }
+
+    if($is_c){
+        $from_data = explode(',',$from);
+        $aim_data = explode(',',$aim);
+        $distance = getDistance($from_data[0],$from_data[1],$aim_data[0],$aim_data[1]);
+        $distance = $distance/1000;
+    }
+    //return json_decode($result,true);
+    return $distance;
+//    $result = json_decode($result);
+//    $this->returnCode(0,'info',$result,'success');
+}
+
+function getDeliveryFee($store_lat,$store_lng,$map_lat,$map_lng){
+    //$from = $store_lat.','.$store_lng;
+    //$aim = $map_lat.','.$map_lng;
+    //$distance = getDistanceByGoogle($from,$aim);
+    $distance = getDistance($store_lat,$store_lng,$map_lat,$map_lng);
+    $distance = $distance / 1000;
+
+    $deliveryCfg = [];
+    $deliverys = D("Config")->get_gid_config(20);
+    foreach($deliverys as $r){
+        $deliveryCfg[$r['name']] = $r['value'];
+    }
+
+    if($distance < 5) {
+        $delivery_fee = round($deliveryCfg['delivery_distance_1'], 2);
+    }elseif($distance > 5 && $distance <= 8) {
+        $delivery_fee = round($deliveryCfg['delivery_distance_2'], 2);
+    }elseif($distance > 8 && $distance <= 10) {
+        $delivery_fee = round($deliveryCfg['delivery_distance_3'], 2);
+    }elseif($distance > 10 && $distance <= 15) {
+        $delivery_fee = round($deliveryCfg['delivery_distance_4'], 2);
+    }elseif($distance > 15 && $distance <= 20) {
+        $delivery_fee = round($deliveryCfg['delivery_distance_5'], 2);
+    }else{
+        $delivery_fee = round($deliveryCfg['delivery_distance_more'], 2);
+    }
+
+    return $delivery_fee;
+}
 
 function getRange($range,$space = true){
 	if($range < 1000){
