@@ -66,7 +66,7 @@
 					<thead>
 						<tr>
 							<th>订单编号</th>
-							<th>商家名称</th>
+							<!--th>商家名称</th-->
 							<th>店铺名称</th>
 							<th>店铺电话</th>
 							<th>下单人</th>
@@ -103,6 +103,7 @@
 								<a href="{pigcms{:U('Shop/order', array('type' => 'pay_time', 'sort' => 'DESC', 'status' => $status))}" style="color:blue;">支付时间</a>
 							</if>
 							</th>
+                            <th>出餐时间</th>
 							<th>送达时间</th>
 							<th>订单状态</th>
 							<th>支付情况</th>
@@ -114,7 +115,7 @@
 							<volist name="order_list" id="vo">
 								<tr>
 									<td>{pigcms{$vo.real_orderid}</td>
-									<td>{pigcms{$vo.merchant_name}</td>
+									<!--td>{pigcms{$vo.merchant_name}</td-->
 									<td>{pigcms{$vo.store_name}</td>
 									<td>{pigcms{$vo.store_phone}</td>
 									<td>{pigcms{$vo.username}</td>
@@ -131,8 +132,9 @@
 									<td>${pigcms{$vo.offline_price|floatval}</td>
 									<td>${pigcms{$vo['duty_price']|floatval}</td>
 									<td><if condition="$vo['pay_time']"> {pigcms{$vo['pay_time']|date="Y-m-d H:i:s",###}</if></td>
-									<td><if condition="$vo['use_time']">{pigcms{$vo['use_time']|date="Y-m-d H:i:s",###}</if></td>
-									<td class="status">{pigcms{$vo.status_str}</td>
+									<td>{pigcms{$vo.dining_time}</td>
+                                    <td><if condition="$vo['use_time']">{pigcms{$vo['use_time']|date="Y-m-d H:i:s",###}</if></td>
+                                    <td class="status">{pigcms{$vo.status_str}</td>
 									<td><!-- {pigcms{$vo.pay_status} --><span style="color: green">{pigcms{$vo.pay_type_str}<br>({pigcms{$vo.pay_type})</span></td>
 									<td class="textcenter">
 										<if condition="$vo.status eq 0 AND $vo.paid eq 1">

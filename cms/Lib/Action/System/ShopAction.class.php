@@ -358,6 +358,12 @@ class ShopAction extends BaseAction
             }
             $li['duty_price'] = $tax_price + ($li['packing_charge'] + $li['freight_charge'])*$temp[$li['store_id']]['tax_num']/100;
             $li['duty_price'] = round($li['duty_price'],2);
+            if($li['status'] > 0){
+                $deliver = D('Deliver_supply')->field(true)->where(array('order_id'=>$li['order_id']))->find();
+                if($deliver){
+                    $li['dining_time'] = $deliver['dining_time'];
+                }
+            }
         }
         $this->assign(array('type' => $type, 'sort' => $sort, 'status' => $status,'pay_type'=>$pay_type));
         $this->assign('status_list', D('Shop_order')->status_list_admin);
@@ -506,6 +512,7 @@ class ShopAction extends BaseAction
 
             //同时修改配送员端的价格
             $deliver_data['money'] = $data['price'];
+            $deliver_data['freight_charge'] = $freight_charge;
             if($shop_order_data['pay_type'] != 'moneris')
                 $deliver_data['deliver_cash'] = $data['price'];
             D('Deliver_supply')->field(true)->where(array('order_id'=>$order_id))->save($deliver_data);
