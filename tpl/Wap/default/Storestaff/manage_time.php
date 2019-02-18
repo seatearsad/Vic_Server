@@ -433,6 +433,14 @@ line-height: .7rem;
                 }
             }
             if(is_tip){
+                var w_n = parseInt(i/3);
+                var o_n = num%3;
+                week_num = w_n + 1;
+                if(week_num == 7) week_num = 0;
+                changeWeek();
+                if (o_n == 0) o_n = 3;
+                $('#open_time_' + o_n).focus();
+
                 alert("{pigcms{:L('_STORE_START_END_TIP_')}");
                 break;
             }
