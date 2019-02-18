@@ -114,7 +114,8 @@ class StorestaffAction extends BaseAction
     public function index()
     {
         if ($this->store['have_shop']) {
-            redirect(U('Storestaff/shop_list'));
+            //redirect(U('Storestaff/shop_list'));
+            redirect(U('Storestaff/manage'));
         } elseif ($this->store['have_meal']) {
             redirect(U('Storestaff/meal_list'));
         } elseif ($this->store['have_group']) {
@@ -2369,8 +2370,74 @@ class StorestaffAction extends BaseAction
         $this->display();
     }
 
+    public function manage(){
+        $shop = D('Merchant_store')->field(true)->where(array('store_id' => $this->store['store_id']))->find();
+        $shop['name'] = lang_substr($shop['name'],C('DEFAULT_LANG'));
+        $store_image_class = new store_image();
+        $images = $store_image_class->get_allImage_by_path($shop['pic_info']);
+        $shop['image'] = $images ? array_shift($images) : '';
 
+        if($shop['store_is_close'] != 0){
+            $shop = checkAutoOpen($shop);
+        }
 
+        $shop_status = getClose($shop);
+        $shop['is_close'] = $shop_status['is_close'] ? 1 : 0;
 
+        $this->assign('store',$shop);
+        $this->display();
+    }
 
+    public function manage_open_close(){
+        $open_close = $_POST['open_close'];
+        $shop = D('Merchant_store')->field(true)->where(array('store_id' => $this->store['store_id']))->find();
+        $shop_status = getClose($shop);
+        //0 关闭店铺 1打开店铺
+        if($open_close == 0){
+            if(!$shop_status['is_close']){
+                $data['store_is_close'] = $shop_status['open_num'];
+                D('Merchant_store')->where(array('store_id' => $this->store['store_id']))->save($data);
+            }
+            $this->success('Success');
+        }else{//1打开店铺
+            if($shop_status['is_close']){
+                if($shop_status['open_num'] == 0){
+                    $this->error(L('_STORE_NOT_OPEN_TIP_'));
+                }else{
+                    $data['store_is_close'] = 0;
+                    D('Merchant_store')->where(array('store_id' => $this->store['store_id']))->save($data);
+                }
+            }
+            $this->success('Success');
+        }
+    }
+
+    public function manage_holiday(){
+        $store = D('Merchant_store')->field(true)->where(array('store_id' => $this->store['store_id']))->find();
+        $data['status'] = $store['status'] == 1 ? 0 : 1;
+        D('Merchant_store')->where(array('store_id' => $this->store['store_id']))->save($data);
+
+        $this->success('Success');
+    }
+
+    public function manage_time(){
+        $shop = D('Merchant_store')->field(true)->where(array('store_id' => $this->store['store_id']))->find();
+        $shop['name'] = lang_substr($shop['name'],C('DEFAULT_LANG'));
+        $store_image_class = new store_image();
+        $images = $store_image_class->get_allImage_by_path($shop['pic_info']);
+        $shop['image'] = $images ? array_shift($images) : '';
+
+        $week_num = date("w");
+
+        $this->assign('store',$shop);
+        $this->assign('week_num',$week_num);
+        $this->display();
+    }
+
+    public function edit_time(){
+        if ($_POST){
+            D('Merchant_store')->where(array('store_id' => $this->store['store_id']))->save($_POST);
+            $this->success('Success');
+        }
+    }
 }

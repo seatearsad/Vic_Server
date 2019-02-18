@@ -6,6 +6,12 @@
 	</style>
 	<footer class="footermenu">
 		<ul>
+            <li>
+                <a <if condition="ACTION_NAME eq 'manage' OR ACTION_NAME eq 'manage_time'">class="active"</if> href="{pigcms{:U('Storestaff/manage')}">
+                <img src="{pigcms{$static_path}images/Lngjm86JQq.png" />
+                <p>{pigcms{:L('_STORE_MANAGE_')}</p>
+                </a>
+            </li>
 			<li>
 				<a <if condition="ACTION_NAME eq 'meal_list' OR ACTION_NAME eq 'meal_edit'">class="active"</if> href="{pigcms{:U('Storestaff/meal_list')}">
 				<img src="{pigcms{$static_path}images/s22KaR0Wtc.png"/>
@@ -39,7 +45,7 @@
 					</a>
 				</li>
 			</if>
-			<li>
+			<!--li>
 				<a id="qrcode_btn">
 					<img src="{pigcms{$static_path}images/qrcode.png"/>
 					<p>
@@ -47,7 +53,7 @@
 					<if condition="$language eq 'en'">Scan</if>
 					</p>
 				</a>
-			</li>
+			</li-->
 			<li>
 				<a href="javascript:;" onclick="LogOutSys()" <if condition="ACTION_NAME eq 'logout'">class="active"</if> >
 				<img src="{pigcms{$static_path}images/J0uZbXQWvJ.png"/>

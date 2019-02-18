@@ -49,6 +49,9 @@ class StoreModel extends Model
         $store['is_close'] = 1;
         $now_time = date('H:i:s');
 
+        if($row['store_is_close'] != 0){
+            $row = checkAutoOpen($row);
+        }
         //@wangchuanyuan 周一到周天
         $date = date("w");//今天是星期几 @ydhl-wangchuanyuan 20171106
         switch ($date){
@@ -193,6 +196,10 @@ class StoreModel extends Model
             default :
                 $store['is_close'] = 1;
                 $store['time']= '营业时间未知';
+        }
+        //garfunkel add
+        if($row['store_is_close'] != 0){
+            $store['is_close'] = 1;
         }
         //garfunkel add
         $date = $date == 0 ? 7 : $date;

@@ -134,6 +134,10 @@ class GroupserviceAction extends BaseAction{
 //						}
 //					}
 //				}
+
+                if($row['store_is_close'] != 0){
+                    $row = checkAutoOpen($row);
+                }
                 //@wangchuanyuan 周一到周天
                 $date = date("w");//今天是星期几 @ydhl-wangchuanyuan 20171106
                 $now_time = date('H:i:s');
@@ -282,6 +286,10 @@ class GroupserviceAction extends BaseAction{
                     default :
                         $temp['is_close'] = 1;
                         $row['time']= '营业时间未知';
+                }
+                //garfunkel add
+                if($row['store_is_close'] != 0){
+                    $temp['is_close'] = 1;
                 }
                 //end  @wangchuanyuan
 

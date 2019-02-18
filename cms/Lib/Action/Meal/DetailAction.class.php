@@ -81,6 +81,10 @@ class DetailAction extends BaseAction
 //				}
 //			}
 
+            if($store['store_is_close'] != 0){
+                $store = checkAutoOpen($store);
+            }
+
             //@wangchuanyuan 周一到周天
             $date = date("w");//今天是星期几 @ydhl-wangchuanyuan 20171106
             $now_time = date('H:i:s');
@@ -229,6 +233,10 @@ class DetailAction extends BaseAction
                 default :
                     $store['state'] = 0;
                     $str= '营业时间未知';
+            }
+            //garfunkel add
+            if($store['store_is_close'] != 0){
+                $store['state'] = 0;
             }
             //end  @wangchuanyuan
 		}

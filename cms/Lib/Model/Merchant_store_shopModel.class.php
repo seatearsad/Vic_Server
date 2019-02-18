@@ -933,6 +933,9 @@ class Merchant_store_shopModel extends Model
             $temp['delivery_system'] = $row['deliver_type'] == 0 || $row['deliver_type'] == 3 ? true : false;//是否是平台配送
             $temp['is_close'] = 1;
 
+            if($row['store_is_close'] != 0){
+                $row = checkAutoOpen($row);
+            }
             //@wangchuanyuan 周一到周天
             $date = date("w");//今天是星期几 @ydhl-wangchuanyuan 20171106
             $now_time = date('H:i:s');
@@ -1081,6 +1084,10 @@ class Merchant_store_shopModel extends Model
                 default :
                     $temp['is_close'] = 1;
                     $row['time']= '营业时间未知';
+            }
+            //garfunkel add
+            if($row['store_is_close'] != 0){
+                $temp['is_close'] = 1;
             }
             //end  @wangchuanyuan
 

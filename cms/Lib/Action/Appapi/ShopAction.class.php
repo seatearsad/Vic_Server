@@ -186,7 +186,9 @@ class ShopAction extends BaseAction{
 //				}
 //			}
 
-
+            if($row['store_is_close'] != 0){
+                $row = checkAutoOpen($row);
+            }
             //@wangchuanyuan 周一到周天
             $date = date("w");//今天是星期几 @ydhl-wangchuanyuan 20171106
             $now_time = date('H:i:s');
@@ -338,7 +340,10 @@ class ShopAction extends BaseAction{
             }
             //end  @wangchuanyuan
 
-
+            //garfunkel add
+            if($row['store_is_close'] != 0){
+                $temp['is_close'] = 1;
+            }
 
 
 
@@ -541,7 +546,9 @@ class ShopAction extends BaseAction{
 //				}
 //			}
 //		}
-
+        if($row['store_is_close'] != 0){
+            $row = checkAutoOpen($row);
+        }
         //@wangchuanyuan 周一到周天
         $date = date("w");//今天是星期几 @ydhl-wangchuanyuan 20171103
         switch ($date){
@@ -688,6 +695,10 @@ class ShopAction extends BaseAction{
             default :
                 $store['is_close'] = 1;
                 $store['time']= '营业时间未知';
+        }
+        //garfunkel add
+        if($row['store_is_close'] != 0){
+            $store['is_close'] = 1;
         }
         //end  @wangchuanyuan
 
@@ -1317,6 +1328,9 @@ class ShopAction extends BaseAction{
 //				}
 //			}
 //		}
+        if($store['store_is_close'] != 0){
+            $store = checkAutoOpen($store);
+        }
         //@wangchuanyuan 周一到周天
         $date = date("w");//今天是星期几 @ydhl-wangchuanyuan 20171103
         switch ($date){
@@ -1443,6 +1457,10 @@ class ShopAction extends BaseAction{
                 break;
             default :
                 $is_open = 1;
+        }
+        //garfunkel add
+        if($store['store_is_close'] != 0){
+            $is_open = 0;
         }
         //end  @wangchuanyuan
 
