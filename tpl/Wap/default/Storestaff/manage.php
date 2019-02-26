@@ -287,7 +287,7 @@ line-height: .7rem;
 	<dl class="list"></dl>
     <div style="margin-top:.2rem;">
         <ul id="features">
-            <li>
+            <li id="manage_product">
                 <div>{pigcms{:L('_STORE_PRODUCT_MANAGE_')}</div>
             </li>
             <li id="manage_time">
@@ -585,6 +585,9 @@ $('#holiday').click(function () {
 });
 $('#manage_time').click(function () {
     window.location.href = '{pigcms{:U("Storestaff/manage_time")}';
+});
+$('#manage_product').click(function () {
+    window.location.href = '{pigcms{:U("Storestaff/manage_product")}';
 });
 </script>
 </html>

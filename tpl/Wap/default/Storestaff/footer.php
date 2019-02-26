@@ -7,7 +7,7 @@
 	<footer class="footermenu">
 		<ul>
             <li>
-                <a <if condition="ACTION_NAME eq 'manage' OR ACTION_NAME eq 'manage_time'">class="active"</if> href="{pigcms{:U('Storestaff/manage')}">
+                <a <if condition="ACTION_NAME eq 'manage' OR ACTION_NAME eq 'manage_time' OR ACTION_NAME eq 'manage_product' OR ACTION_NAME eq 'goods_list' OR ACTION_NAME eq 'goods_add_edit'">class="active"</if> href="{pigcms{:U('Storestaff/manage')}">
                 <img src="{pigcms{$static_path}images/Lngjm86JQq.png" />
                 <p>{pigcms{:L('_STORE_MANAGE_')}</p>
                 </a>
