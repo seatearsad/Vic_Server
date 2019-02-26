@@ -321,10 +321,10 @@ input[type="file"] {
     margin-left: 0px;
     line-height: 30px;
 }
-.edit_pro,.edit_pro_new{
+.edit_pro,.edit_pro_new,.del_pro,.del_pro_new{
     cursor: pointer;
 }
-.edit_pro:hover,.edit_pro_new:hover{
+.edit_pro:hover,.edit_pro_new:hover,.del_pro:hover,.del_pro_new:hover{
     color: #0e62cd;
 }
 
@@ -342,11 +342,8 @@ input[type="file"] {
     line-height: 20px;
     border: 1px solid;
     cursor: pointer;
-    margin: 20px auto 0px;
-    /**
     float: left;
     margin: 20px auto 0px 10px;
-    */
 }
 .spec_del_btn{
     width: 50px;
@@ -485,7 +482,7 @@ input[type="file"] {
                             <th>
                                 <div class="spec_titel_name" data-id="{pigcms{$vo['id']}">{pigcms{$vo['name']}</div>
                                 <div class="spec_edit_btn" data-id="{pigcms{$vo['id']}">Edit</div>
-                                <!--div class="spec_del_btn" data-id="{pigcms{$vo['id']}">Del</div-->
+                                <div class="spec_del_btn" data-type="{pigcms{$i-1}" data-id="{pigcms{$vo['id']}">Del</div>
                             </th>
                             </volist>
                             <th id="price_title">{pigcms{:L('_PRICE_TXT_')}</th>
@@ -565,6 +562,8 @@ input[type="file"] {
                                 </td>
                                 <td width="10%">
                                     <div class="edit_pro" data-id="{pigcms{$v['id']}">Edit</div>
+                                    　　
+                                    <div class="del_pro" data-id="{pigcms{$v['id']}">Del</div>
                                 </td>
                             </tr>
                             <php>}</php>
@@ -656,6 +655,31 @@ input[type="file"] {
         art.dialog.open("?g=Wap&c=Storestaff&a=goods_properties&goods_id={pigcms{$goods_id}&pro_id="+pro_id,{lock:true,title:"{pigcms{:L('_STORE_EDIT_PROPERTIES_')}",background: '#000',opacity: 0.45});
     });
 
+    $('.del_pro').click(function () {
+        var pro_id = $(this).attr('data-id');
+        layer.open({
+            title:"{pigcms{:L('_B_D_LOGIN_TIP2_')}",
+            content:"{pigcms{:L('_B_PURE_MY_84_')}",
+            btn: ["{pigcms{:L('_B_D_LOGIN_CONIERM_')}","{pigcms{:L('_B_D_LOGIN_CANCEL_')}"],
+            yes: function(index){
+                layer.close(index);
+                $.post("{pigcms{:U('Storestaff/goods_pro_del')}", {'id':pro_id,'goods_id':$('input[name=goods_id]').val()}, function (result) {
+                    if(result.status){
+                        layer.open({
+                            title: "{pigcms{:L('_B_D_LOGIN_TIP2_')}",
+                            content: result.info,
+                            time: 1,
+                            end: function () {
+                                $('#pro_'+pro_id).remove();
+                                art.dialog.close();
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    });
+
     function updatePro(pro) {
         var pro_tr = $('#pro_'+pro['id']);
         pro_tr.find('#pro_name').html(pro['name']);
@@ -706,7 +730,8 @@ input[type="file"] {
         val_html += '</td>';
         val_html += '<td width="10%" id="pro_num">' + pro['num'] + '</td>';
 
-        val_html += '<td width="10%"><div class="edit_pro_new" data-id="'+pro_new_num+'">Edit</div></td>';
+        val_html += '<td width="10%"><div class="edit_pro_new" data-id="'+pro_new_num+'">Edit</div>';
+        val_html += '　　<div class="del_pro_new" data-id="'+pro_new_num+'">Del</div></td>';
 
         val_html += '</tr>';
 
@@ -715,9 +740,34 @@ input[type="file"] {
         addNewEditClick();
     }
     function addNewEditClick() {
+        $('.edit_pro_new').unbind("click");
         $('.edit_pro_new').click(function () {
             var new_id = $(this).attr('data-id');
             art.dialog.open("?g=Wap&c=Storestaff&a=goods_properties&new_id="+new_id,{lock:true,title:"{pigcms{:L('_STORE_EDIT_PROPERTIES_')}",background: '#000',opacity: 0.45});
+        });
+
+        $('.del_pro_new').unbind("click");
+        $('.del_pro_new').click(function () {
+            var new_id = parseInt($(this).attr('data-id'));
+            layer.open({
+                title:"{pigcms{:L('_B_D_LOGIN_TIP2_')}",
+                content:"{pigcms{:L('_B_PURE_MY_84_')}",
+                btn: ["{pigcms{:L('_B_D_LOGIN_CONIERM_')}","{pigcms{:L('_B_D_LOGIN_CANCEL_')}"],
+                yes: function(index){
+                    layer.close(index);
+                    pro_new_list.splice(new_id-1,1);
+                    $('#good_pro').find('table').find('#pro_new_'+new_id).remove();
+                    if(pro_new_num > new_id){
+                        for(var i=new_id+1;i<=pro_new_num;i++){
+                            $('#pro_new_'+i).find('.edit_pro_new').attr('data-id',i-1);
+                            $('#pro_new_'+i).find('.del_pro_new').attr('data-id',i-1);
+                            $('#good_pro').find('table').find('#pro_new_'+i).attr('id','pro_new_'+(i-1));
+                        }
+                        pro_new_num = pro_new_num - 1;
+                    }
+                }
+            });
+
         });
     }
 
@@ -736,6 +786,12 @@ input[type="file"] {
         art.dialog.open("?g=Wap&c=Storestaff&a=goods_spec&goods_id={pigcms{$goods_id}&spec_id="+spec_id,{lock:true,title:"{pigcms{:L('_STORE_EDIT_PROPERTIES_')}",background: '#000',opacity: 0.45});
     });
 
+    $('.spec_del_btn').click(function () {
+        var spec_id = $(this).attr('data-id');
+        var spec_type = $(this).attr('data-type');
+        spec_del_val(spec_id,spec_type);
+    });
+
     var spec_num = "{pigcms{$goods['spec_num']}";
     if(spec_num == '')
         spec_num = 0;
@@ -744,6 +800,8 @@ input[type="file"] {
 
     var new_spec_num = 0;
     var new_spec_list = [];
+
+    var del_spec_list = [];
 
     var spec_val_key = [];
 
@@ -756,6 +814,7 @@ input[type="file"] {
             var c_num = $(this).attr('data-type')
             if(c_num == spec_num-1){
                 $(this).find('tr').each(function () {
+                    $(this).removeClass();
                     if(link_spec_str == ''){
                         var push_str = $(this).attr('data-id');
                     }else{
@@ -858,7 +917,7 @@ input[type="file"] {
     function addNewSpec(data) {
         new_spec_list.push(data);
 
-        if(spec_num == 0){
+        if(spec_num == 0 && $('#good_spec').find('table').length == 0){
             var html = '<table class="table table-striped table-bordered table-hover"><thead><tr id="spec_name_list"><th id="price_title">{pigcms{:L(\'_PRICE_TXT_\')}</th></tr></thead>';
             html += '<tr id="spec_val"><td id="price_input_list" valign="top" style="padding: 0px">';
             html += '<table class="table table-striped table-bordered table-hover" id="spec_price_table" style="margin-bottom: 0px;"></table></td></tr></table>';
@@ -870,13 +929,19 @@ input[type="file"] {
 
         var spec_title = '<th><div class="spec_titel_name" data-id="new-'+new_spec_num+'">'+data['name']+'</div>';
         spec_title += '<div class="spec_edit_btn" data-id="new-'+new_spec_num+'">Edit</div>';
-        //spec_title += '<div class="spec_del_btn" data-id="new-'+new_spec_num+'">Del</div></th>';
-        spec_title += '</th>';
-        $('#price_title').before(spec_title);
+        spec_title += '<div class="spec_del_btn" data-type="'+(spec_num-1)+'" data-id="new-'+new_spec_num+'">Del</div></th>';
 
+        $('#price_title').before(spec_title);
+        $('.spec_edit_btn').unbind('click');
         $('.spec_edit_btn').click(function () {
             var spec_id = $(this).attr('data-id');
             art.dialog.open("?g=Wap&c=Storestaff&a=goods_spec&goods_id={pigcms{$goods_id}&spec_id="+spec_id,{lock:true,title:"{pigcms{:L('_STORE_EDIT_PROPERTIES_')}",background: '#000',opacity: 0.45});
+        });
+        $('.spec_del_btn').unbind('click');
+        $('.spec_del_btn').click(function () {
+            var spec_id = $(this).attr('data-id');
+            var spec_type = $(this).attr('data-type');
+            spec_del_val(spec_id,spec_type);
         });
 
         var spec_val_html = '<td valign="top" style="padding: 0px">';
@@ -892,6 +957,43 @@ input[type="file"] {
 
         init_spec(-1,0);
         insert_spec_price();
+    }
+
+    function spec_del_val(id,type) {
+        layer.open({
+            title:"{pigcms{:L('_B_D_LOGIN_TIP2_')}",
+            content:"{pigcms{:L('_B_PURE_MY_84_')}",
+            btn: ["{pigcms{:L('_B_D_LOGIN_CONIERM_')}","{pigcms{:L('_B_D_LOGIN_CANCEL_')}"],
+            yes: function(index){
+                layer.close(index);
+                del_spec_list.push(id);
+                $('#good_spec').find('table').find('th').each(function () {
+                    if($(this).find('.spec_titel_name').attr('data-id') == id){
+                        $(this).remove();
+                    }
+                });
+                $('#spec_val').find('td').each(function () {
+                    if($(this).find('table').attr('data-id') == id){
+                        $(this).remove();
+                    }
+
+                    if($(this).find('table').attr('data-type') > type){
+                        var new_type = parseInt($(this).find('table').attr('data-type')) - 1;
+                        $(this).find('table').attr('data-type',new_type);
+                    }
+                });
+
+                spec_num = spec_num - 1;
+                if(spec_num > 0){
+                    init_spec(-1,0);
+                    insert_spec_price();
+                }else {
+                    $('#good_spec').find('table').remove();
+                    $('#spec_val_price_list').remove();
+                }
+
+            }
+        });
     }
     ///submit
     var spec_val = [];
@@ -1009,7 +1111,8 @@ input[type="file"] {
                 'product_image': $('input[name=product_pic]').val(),
                 'spec_all_list': spec_data,
                 'spec_all_price': spec_price_data,
-                'pro_new_list': pro_new_list
+                'pro_new_list': pro_new_list,
+                'spec_del_list':del_spec_list
             }
 
             $.post("{pigcms{:U('Storestaff/goods_add_edit')}", product_data, function (result) {

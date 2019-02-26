@@ -2591,6 +2591,7 @@ class StorestaffAction extends BaseAction
 
             $goods_data['tax_num'] = $_POST['tax'];
             $goods_data['deposit_price'] = $_POST['deposit'];
+            $goods_data['spec_value'] = '';
 
             if($goods_id == 0){//新添
                 $goods_data['old_price'] = 0;
@@ -2619,8 +2620,6 @@ class StorestaffAction extends BaseAction
                 $goods_data['freight_template'] = 0;
                 $goods_data['extra_pay_price'] = 0;
                 $goods_data['cost_price'] = 0;
-
-                $goods_data['spec_value'] = '';
                 $goods_id = D('Shop_goods')->add($goods_data);
             }else{
                 D('Shop_goods')->where(array('goods_id'=>$goods_id))->save($goods_data);
@@ -2680,6 +2679,18 @@ class StorestaffAction extends BaseAction
 
                     $spec_value_str = implode('#', $price_str);
                     D('Shop_goods')->where(array('goods_id' => $goods_id))->save(array('spec_value' => $spec_value_str));
+                }
+                //删除规格
+                if($_POST['spec_del_list']){
+                    foreach ($_POST['spec_del_list'] as $vo){
+                        if (strpos($vo, 'new') !== false) {
+
+                        }else{
+                            $spec_id = $vo;
+                            D('Shop_goods_spec')->where(array('id'=>$spec_id))->delete();
+                            D('Shop_goods_spec_value')->where(array('sid'=>$spec_id))->delete();
+                        }
+                    }
                 }
                 $this->success('Success');
             }else{
@@ -2788,6 +2799,19 @@ class StorestaffAction extends BaseAction
     public function goods_pro_edit(){
         $pro_id = $_POST['id'];
         D('Shop_goods_properties')->where(array('id'=>$pro_id))->save($_POST);
+
+        $this->success('Success');
+    }
+
+    public function goods_pro_del(){
+        $pro_id = $_POST['id'];
+        $goods_id = $_POST['goods_id'];
+        D('Shop_goods_properties')->where(array('id'=>$pro_id))->delete();
+
+        $list = D('Shop_goods_properties')->where(array('goods_id'=>$goods_id))->select();
+        if(!$list || count($list) == 0){
+            D('Shop_goods')->where(array('goods_id'=>$goods_id))->save(array('is_properties'=>0));
+        }
 
         $this->success('Success');
     }
