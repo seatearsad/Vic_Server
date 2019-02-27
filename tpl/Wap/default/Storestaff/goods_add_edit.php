@@ -425,13 +425,21 @@ input[type="file"] {
             <tr>
                 <td width="30%" style="text-align: right">{pigcms{:L('_STORE_PRODUCT_TAX_')}</td>
                 <td width="70%" style="text-align: left">
-                    <input type="text" name="product_tax" placeholder="{pigcms{:L('_STORE_REQUIRED_')}" value="{pigcms{$goods['tax_num']}">
+                    <if condition="$goods['tax_num']">
+                        <input type="text" name="product_tax" placeholder="{pigcms{:L('_STORE_REQUIRED_')}" value="{pigcms{$goods['tax_num']}">%
+                    <else />
+                        <input type="text" name="product_tax" placeholder="{pigcms{:L('_STORE_REQUIRED_')}" value="5">%
+                    </if>
                 </td>
             </tr>
             <tr>
                 <td width="30%" style="text-align: right">{pigcms{:L('_STORE_PRODUCT_DEPOSIT_')}</td>
                 <td width="70%" style="text-align: left">
-                    <input type="text" name="deposit_price" placeholder="{pigcms{:L('_STORE_REQUIRED_')}" value="{pigcms{$goods['deposit_price']}">
+                    <if condition="$goods['tax_num']">
+                        <input type="text" name="deposit_price" placeholder="{pigcms{:L('_STORE_REQUIRED_')}" value="{pigcms{$goods['deposit_price']}">
+                    <else />
+                        <input type="text" name="deposit_price" placeholder="{pigcms{:L('_STORE_REQUIRED_')}" value="0.00">
+                    </if>
                 </td>
             </tr>
             <tr>
@@ -1067,7 +1075,7 @@ input[type="file"] {
 
     function checkSubmit(spec_price_data){
         var is_tip = false;
-        if($('input[name=product_name_en]').val() == '' || $('input[name=product_unit]').val() == '' || $('input[name=product_price]').val() == '' || $('input[name=product_tax]').val() == '' || $('input[name=deposit_price]').val() == ''){
+        if($('input[name=product_name_en]').val() == '' || $('input[name=product_unit]').val() == '' || $('input[name=product_price]').val() == '' || $('input[name=product_tax]').val() == ''){
             is_tip = true;
             changeNav('good_info');
         }
@@ -1090,7 +1098,29 @@ input[type="file"] {
         var spec_price_data = getSpecPrice(spec_data,0,[]);
 
         var is_tip = checkSubmit(spec_price_data);
-        if(is_tip){
+        if(!/^\d+(\.\d{1,2})?$/.test($('input[name=product_price]').val())) {
+            $('input[name=product_price]').focus();
+            layer.open({
+                title: "{pigcms{:L('_B_D_LOGIN_TIP2_')}",
+                time: 1,
+                content: "{pigcms{:L('_PLEASE_RIGHT_PRICE_')}"
+            });
+        }else if(!/^\d+(\.\d{1,2})?$/.test($('input[name=deposit_price]').val())){
+            $('input[name=deposit_price]').focus();
+            layer.open({
+                title: "{pigcms{:L('_B_D_LOGIN_TIP2_')}",
+                time: 1,
+                content: "{pigcms{:L('_PLEASE_RIGHT_PRICE_')}"
+            });
+        }else if(!/^\d{1,2}$/.test($('input[name=product_tax]').val())){
+            $('input[name=product_tax]').focus();
+            layer.open({
+                title: "{pigcms{:L('_B_D_LOGIN_TIP2_')}",
+                time: 1,
+                content: "{pigcms{:L('_STORE_TAX_TIP_')}"
+            });
+        }
+        else if(is_tip){
             layer.open({
                 title: "{pigcms{:L('_B_D_LOGIN_TIP2_')}",
                 time: 1,

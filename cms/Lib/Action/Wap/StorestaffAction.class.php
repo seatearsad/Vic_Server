@@ -2426,6 +2426,8 @@ class StorestaffAction extends BaseAction
         $store_image_class = new store_image();
         $images = $store_image_class->get_allImage_by_path($shop['pic_info']);
         $shop['image'] = $images ? array_shift($images) : '';
+        $shop_status = getClose($shop);
+        $shop['is_close'] = $shop_status['is_close'] ? 1 : 0;
 
         $week_num = date("w");
 
@@ -2447,6 +2449,8 @@ class StorestaffAction extends BaseAction
         $store_image_class = new store_image();
         $images = $store_image_class->get_allImage_by_path($shop['pic_info']);
         $shop['image'] = $images ? array_shift($images) : '';
+        $shop_status = getClose($shop);
+        $shop['is_close'] = $shop_status['is_close'] ? 1 : 0;
 
         $fid = 0;
         $where = array('store_id' => $this->store['store_id']);
@@ -2540,6 +2544,8 @@ class StorestaffAction extends BaseAction
         $store_image_class = new store_image();
         $images = $store_image_class->get_allImage_by_path($shop['pic_info']);
         $shop['image'] = $images ? array_shift($images) : '';
+        $shop_status = getClose($shop);
+        $shop['is_close'] = $shop_status['is_close'] ? 1 : 0;
 
         $this->assign('store',$shop);
 
@@ -2590,7 +2596,7 @@ class StorestaffAction extends BaseAction
                 $goods_data['is_properties'] = 1;
 
             $goods_data['tax_num'] = $_POST['tax'];
-            $goods_data['deposit_price'] = $_POST['deposit'];
+            $goods_data['deposit_price'] = $_POST['deposit'] ? $_POST['deposit'] : 0;
             $goods_data['spec_value'] = '';
 
             if($goods_id == 0){//新添
@@ -2702,6 +2708,8 @@ class StorestaffAction extends BaseAction
             $store_image_class = new store_image();
             $images = $store_image_class->get_allImage_by_path($shop['pic_info']);
             $shop['image'] = $images ? array_shift($images) : '';
+            $shop_status = getClose($shop);
+            $shop['is_close'] = $shop_status['is_close'] ? 1 : 0;
 
             $this->assign('store', $shop);
 
