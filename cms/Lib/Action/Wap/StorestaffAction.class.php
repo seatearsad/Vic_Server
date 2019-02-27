@@ -2582,7 +2582,7 @@ class StorestaffAction extends BaseAction
             $goods_data['unit'] = $_POST['unit'];
             $goods_data['price'] = $_POST['price'];
             $goods_data['image'] = $_POST['product_image'] ? $_POST['product_image'] : '';
-            $goods_data['des'] = $_POST['desc'];
+            $goods_data['des'] = $_POST['desc'] ? $_POST['desc'] : '';
             $goods_data['last_time'] = time();
             $goods_data['status'] = $_POST['status'];
 

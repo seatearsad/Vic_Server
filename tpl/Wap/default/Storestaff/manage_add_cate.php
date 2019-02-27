@@ -267,7 +267,7 @@ line-height: .7rem;
                 'cate_name_en': $('input[name=cate_name_en]').val(),
                 'cate_name_cn': $('input[name=cate_name_cn]').val()
             };
-            $.post("{pigcms{:U('Storestaff/manage_edit_cate')}", data, function (result) {
+            $.post("{pigcms{:U('Storestaff/manage_add_cate')}", data, function (result) {
                 layer.open({
                     title: "{pigcms{:L('_B_D_LOGIN_TIP2_')}",
                     content: result.info,
