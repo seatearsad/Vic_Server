@@ -330,8 +330,8 @@ line-height: .7rem;
                 <dd id="time_dd">
                     <input type="text" name="close_time_3" id="close_time_3">
                 </dd>
-                <dd class="time_desc">* {pigcms{:L('_STORE_TIME_TIP_1_')}</dd>
-                <dd class="time_desc">* {pigcms{:L('_STORE_START_END_TIP_')}</dd>
+                <dd class="time_desc">* {pigcms{:L('_STORE_TIME_TIP_1_')}.</dd>
+                <dd class="time_desc">* {pigcms{:L('_STORE_START_END_TIP_')}.</dd>
             </dl>
         </div>
     </div>
@@ -476,6 +476,17 @@ line-height: .7rem;
             //alert($('#'+input_name[0]+'_'+input_num).val());
         });
     });
+    // $(window).resize(function () {
+    //     if($(window).height() > $(window).width()){
+    //         $('.submit').css('margin-top','50px');
+    //         $('.week_time').css('height','317px');
+    //     }
+    // });
+    if($(window).height() > $(window).width()){
+        $('.submit').css('margin-top','50px');
+        $('.week_time').css('height','317px');
+    }
+
 
 </script>
 </html>

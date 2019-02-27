@@ -327,9 +327,9 @@ line-height: .7rem;
             <tr>
                 <th width="20%">{pigcms{:L('_STORE_PRODUCT_NAME_')}</th>
                 <th width="20%">{pigcms{:L('_STORE_PRODUCT_PRICE_')}</th>
-                <th width="10%">{pigcms{:L('_STORE_PRODUCT_UNIT_')}</th>
+                <th width="10%" class="product_unit">{pigcms{:L('_STORE_PRODUCT_UNIT_')}</th>
                 <th width="10%">{pigcms{:L('_STORE_PRODUCT_TAX_')}</th>
-                <th width="10%">{pigcms{:L('_STORE_PRODUCT_DEPOSIT_')}</th>
+                <th width="10%" class="product_deposit">{pigcms{:L('_STORE_PRODUCT_DEPOSIT_')}</th>
                 <th width="10%">{pigcms{:L('_STORE_PRODUCT_STATUS_')}</th>
                 <th width="20%">{pigcms{:L('_ACTION_')}</th>
             </tr>
@@ -340,9 +340,9 @@ line-height: .7rem;
                     <tr class="<if condition="$i%2 eq 0">odd<else/>even</if>">
             <td>{pigcms{$vo.name}</td>
             <td>${pigcms{$vo.price}</td>
-            <td>{pigcms{$vo.unit}</td>
+            <td class="product_unit">{pigcms{$vo.unit}</td>
             <td>{pigcms{$vo.tax_num}</td>
-            <td>{pigcms{$vo.deposit_price}</td>
+            <td class="product_deposit">{pigcms{$vo.deposit_price}</td>
             <td>
                 <if condition="$vo['status'] eq 0">
                     {pigcms{:L('_STORE_GOOD_DIS_')}
@@ -381,5 +381,10 @@ line-height: .7rem;
     $('.add_c').click(function () {
         window.location.href =  "{pigcms{:U('Storestaff/goods_add_edit',array('sort_id'=>$sort['sort_id']))}";
     });
+
+    if($(window).height() > $(window).width()){
+        $('.product_unit').hide();
+        $('.product_deposit').hide();
+    }
 </script>
 </html>
