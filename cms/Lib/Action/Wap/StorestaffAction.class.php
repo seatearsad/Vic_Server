@@ -2904,4 +2904,17 @@ class StorestaffAction extends BaseAction
             exit(json_encode(array('error' => 1,'message' =>'没有选择图片')));
         }
     }
+
+    public function update_device(){
+        $device_id = $_POST['token'] ? $_POST['token'] : '';
+
+        if($device_id != '' ){
+            $data['device_id'] = $device_id;
+            D('Merchant_store_staff')->field(true)->where(array('id'=>$this->staff_session['id']))->save($data);
+            exit(json_encode(array('error' => 0, 'msg' => 'Success！', 'dom_id' => 'account')));
+        }else{
+            exit(json_encode(array('error' => 1, 'msg' => 'Fail！', 'dom_id' => 'account')));
+        }
+
+    }
 }

@@ -309,6 +309,18 @@ line-height: .7rem;
 </body>
 <script type="text/javascript" src="{pigcms{$static_public}js/artdialog/jquery.artDialog.js"></script>
 <script type="text/javascript">
+//更新app 设备token
+function pushDeviceToken(token) {
+    var message = '';
+    $.post("{pigcms{:U('Storestaff/update_device')}", {'token':token}, function(result) {
+        if(result){
+            message = result.message;
+        }else {
+            message = 'Error';
+        }
+    });
+    return message;
+}
 $(document).ready(function(){
 	var is_click = false;
 	$('.js-add-order').click(function(){
