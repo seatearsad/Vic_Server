@@ -2891,13 +2891,30 @@ class StorestaffAction extends BaseAction
             $param['thumbMaxWidth'] = $width;
             $param['thumbMaxHeight'] = $height;
             $param['thumbRemoveOrigin'] = false;
-            $image = D('Image')->handle($this->merchant_session['mer_id'], 'goods', 1, $param);
+            $image = D('Image')->handle($this->store['store_id'], 'goods', 1, $param);
             if ($image['error']) {
                 exit(json_encode(array('error' => 1,'message' =>$image['msg'])));
             } else {
                 $title = $image['title']['file'];
                 $goods_image_class = new goods_image();
                 $url = $goods_image_class->get_image_by_path($title, 's');
+                exit(json_encode(array('error' => 0, 'url' => $url, 'title' => $title)));
+            }
+        } else {
+            exit(json_encode(array('error' => 1,'message' =>'没有选择图片')));
+        }
+    }
+
+    public function ajax_store_upload() {
+        if ($_FILES['imgFile']['error'] != 4) {
+            $shop = D('Merchant_store')->field(true)->where(array('store_id' => $this->store['store_id']))->find();
+            $image = D('Image')->handle($shop['mer_id'], 'store', 1);
+            if ($image['error']) {
+                exit(json_encode($image));
+            } else {
+                $title = $image['title']['file'];
+                $store_image_class = new store_image();
+                $url = $store_image_class->get_image_by_path($title);
                 exit(json_encode(array('error' => 0, 'url' => $url, 'title' => $title)));
             }
         } else {
@@ -2916,5 +2933,37 @@ class StorestaffAction extends BaseAction
             exit(json_encode(array('error' => 1, 'msg' => 'Fail！', 'dom_id' => 'account')));
         }
 
+    }
+
+    public function manage_info(){
+        if($_POST){
+            $data['name'] = $_POST['en_name'];
+            if($_POST['cn_name'] && $_POST['cn_name'] != ''){
+                $data['name'] = $data['name'].'|'.$_POST['cn_name'];
+            }
+            $data['phone'] = $_POST['phone'];
+            $data['pic_info'] = $_POST['pic_info'];
+            $data['txt_info'] = $_POST['txt_info'];
+
+            D('Merchant_store')->where(array('store_id' => $this->store['store_id']))->save($data);
+
+            $this->success('Success');
+        }else{
+            $shop = D('Merchant_store')->field(true)->where(array('store_id' => $this->store['store_id']))->find();
+            $name = explode('|',$shop['name']);
+            $shop['en_name'] = $name[0];
+            $shop['cn_name'] = $name[1] ? $name[1] : '';
+
+            $shop['name'] = lang_substr($shop['name'],C('DEFAULT_LANG'));
+            $store_image_class = new store_image();
+            $images = $store_image_class->get_allImage_by_path($shop['pic_info']);
+            $shop['image'] = $images ? array_shift($images) : '';
+            $shop_status = getClose($shop);
+            $shop['is_close'] = $shop_status['is_close'] ? 1 : 0;
+
+            $this->assign('store',$shop);
+
+            $this->display();
+        }
     }
 }

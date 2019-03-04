@@ -260,14 +260,7 @@ line-height: .7rem;
                     <img src="{pigcms{$store.image}" width="100" height="100">
                     <div class="store_name">
                         <div>{pigcms{$store.name}</div>
-                        <div style="margin-top: 10px;">
-                            {pigcms{:L('_STORE_STATUS_')}:
-                            <if condition="$store['status']">
-                                {pigcms{:L('_STORE_NORMAL_OPEN_')}
-                            <else/>
-                                {pigcms{:L('_STORE_ON_HOLIDAY_')}
-                            </if>
-                        </div>
+
                         <div style="margin-top: 10px;">
                             {pigcms{:L('_STORE_OPEN_CLOSE_')}:
                             <if condition="$store['is_close']">{pigcms{:L('_AT_REST_')}<else />{pigcms{:L('_AT_BUSINESS_')}</if>
@@ -287,21 +280,14 @@ line-height: .7rem;
 	<dl class="list"></dl>
     <div style="margin-top:.2rem;">
         <ul id="features">
+            <li id="info">
+                <div>{pigcms{:L('_STORE_INFO_')}</div>
+            </li>
             <li id="manage_product">
                 <div>{pigcms{:L('_STORE_PRODUCT_MANAGE_')}</div>
             </li>
             <li id="manage_time">
                 <div>{pigcms{:L('_STORE_TIME_MANAGE_')}</div>
-            </li>
-            <li id="holiday">
-                <div>
-                    {pigcms{:L('_STORE_HOLIDAY_MANAGE_')}:
-                    <if condition="$store['status']">
-                        {pigcms{:L('_STORE_TO_HOLIDAY_')}
-                        <else/>
-                        {pigcms{:L('_STORE_TO_NOT_HOLIDAY_')}
-                    </if>
-                </div>
             </li>
         </ul>
     </div>
@@ -520,14 +506,14 @@ var is_close = '{pigcms{$store.is_close}';
 $('#store_open').click(function () {
     if(is_close == 0){//操作 关闭店铺
         layer.open({
-            title:"{pigcms{:L('_B_D_LOGIN_TIP2_')}",
+            title:"{pigcms{:L('_STORE_REMIND_')}",
             content:"{pigcms{:L('_STORE_CLOSE_TIP_')}",
             btn: ["{pigcms{:L('_B_D_LOGIN_CONIERM_')}","{pigcms{:L('_B_D_LOGIN_CANCEL_')}"],
             yes: function(index){
                 layer.close(index);
                 $.post("{pigcms{:U('Storestaff/manage_open_close')}",{open_close:0},function(result){
                     layer.open({
-                        title:"{pigcms{:L('_B_D_LOGIN_TIP2_')}",
+                        title:"{pigcms{:L('_STORE_REMIND_')}",
                         content:result.info,
                         time: 1,
                         end:function () {
@@ -542,7 +528,7 @@ $('#store_open').click(function () {
         $.post("{pigcms{:U('Storestaff/manage_open_close')}",{open_close:1},function(result){
             if(result.status == 1) {
                 layer.open({
-                    title: "{pigcms{:L('_B_D_LOGIN_TIP2_')}",
+                    title: "{pigcms{:L('_STORE_REMIND_')}",
                     content: result.info,
                     time: 1,
                     end: function () {
@@ -551,7 +537,7 @@ $('#store_open').click(function () {
                 });
             }else{
                 layer.open({
-                    title: "{pigcms{:L('_B_D_LOGIN_TIP2_')}",
+                    title: "{pigcms{:L('_STORE_REMIND_')}",
                     content: result.info,
                 });
             }
@@ -559,47 +545,15 @@ $('#store_open').click(function () {
         });
     }
 });
-var store_status = '{pigcms{$store.status}';
-$('#holiday').click(function () {
-    if(store_status == 1){//操作 店铺休假
-        layer.open({
-            title:"{pigcms{:L('_B_D_LOGIN_TIP2_')}",
-            content:"{pigcms{:L('_STORE_HOLIDAY_TIP_')}",
-            btn: ["{pigcms{:L('_B_D_LOGIN_CONIERM_')}","{pigcms{:L('_B_D_LOGIN_CANCEL_')}"],
-            yes: function(index){
-                layer.close(index);
-                $.post("{pigcms{:U('Storestaff/manage_holiday')}",function(result){
-                    layer.open({
-                        title:"{pigcms{:L('_B_D_LOGIN_TIP2_')}",
-                        content:result.info,
-                        time: 1,
-                        end:function () {
-                            window.location.reload();
-                        }
-                    });
 
-                });
-            }
-        });
-    }else{//操作 打开店铺
-        $.post("{pigcms{:U('Storestaff/manage_holiday')}",function(result){
-            layer.open({
-                title:"{pigcms{:L('_B_D_LOGIN_TIP2_')}",
-                content:result.info,
-                time: 1,
-                end:function () {
-                    window.location.reload();
-                }
-            });
-
-        });
-    }
-});
 $('#manage_time').click(function () {
     window.location.href = '{pigcms{:U("Storestaff/manage_time")}';
 });
 $('#manage_product').click(function () {
     window.location.href = '{pigcms{:U("Storestaff/manage_product")}';
+});
+$('#info').click(function () {
+    window.location.href = '{pigcms{:U("Storestaff/manage_info")}';
 });
 </script>
 </html>

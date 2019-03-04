@@ -219,7 +219,7 @@ line-height: .7rem;
 .add_c{
     width: 100px;
     height: 30px;
-    background-color: #0A8DE4;
+    background-color: #ffa64d;
     text-align: center;
     line-height: 30px;
     margin: 20px auto;
@@ -229,7 +229,7 @@ line-height: .7rem;
 .add_val{
     width: 120px;
     height: 20px;
-    background-color: #0A8DE4;
+    background-color: #ffa64d;
     text-align: center;
     line-height: 20px;
     margin: 0px auto;

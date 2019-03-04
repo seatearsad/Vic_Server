@@ -217,21 +217,21 @@ line-height: .7rem;
     cursor: pointer;
 }
 .time_list ul li:hover{
-    background-color: #0A8DE4;
+    background-color: #ffa64d;
 }
 .h_week{
-    background-color: #0A8DE4;
+    background-color: #ffa64d;
 }
 .week_time{
     margin-left: 30%;
     margin-top: -217px;
     width: 70%;
-    height: 217px;
+    height: 267px;
 }
 .submit{
     width: 100px;
     height: 30px;
-    background-color: #0A8DE4;
+    background-color: #ffa64d;
     text-align: center;
     line-height: 30px;
     margin: 20px auto;
@@ -280,14 +280,7 @@ line-height: .7rem;
                     <img src="{pigcms{$store.image}" width="100" height="100">
                     <div class="store_name">
                         <div>{pigcms{$store.name}</div>
-                        <div style="margin-top: 10px;">
-                            {pigcms{:L('_STORE_STATUS_')}:
-                            <if condition="$store['status']">
-                                {pigcms{:L('_STORE_NORMAL_OPEN_')}
-                            <else/>
-                                {pigcms{:L('_STORE_ON_HOLIDAY_')}
-                            </if>
-                        </div>
+
                         <div style="margin-top: 10px;">
                             {pigcms{:L('_STORE_OPEN_CLOSE_')}:
                             <if condition="$store['is_close']">{pigcms{:L('_AT_REST_')}<else />{pigcms{:L('_AT_BUSINESS_')}</if>
@@ -483,8 +476,8 @@ line-height: .7rem;
     //     }
     // });
     if($(window).height() > $(window).width()){
-        $('.submit').css('margin-top','50px');
-        $('.week_time').css('height','317px');
+        //$('.submit').css('margin-top','50px');
+        $('.week_time').css('height','367px');
     }
 
 

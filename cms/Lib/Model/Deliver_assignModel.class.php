@@ -513,14 +513,19 @@ class Deliver_assignModel extends Model
 
     private function sendMsg($uid){
         $deliver = D('Deliver_user')->field(true)->where(array('uid'=>$uid))->find();
-        $sms_data = [
-            'mobile' => $deliver['phone'],
+        if($deliver['device_id'] && $deliver['device_id'] != ''){
+            $message = 'There is a new order for you to pick up, please go to "Pending List" take the order.';
+            Sms::sendMessageToGoogle($deliver['device_id'],$message);
+        }else{
+            $sms_data = [
+                'mobile' => $deliver['phone'],
 //            'tplid' => 86914,
-            'tplid'=>247173,
-            'params' => [],
-            'content' => '有一个新的订单可以配送，请前往个人中心抢单。'
-        ];
-        Sms::sendSms2($sms_data);
+                'tplid'=>247173,
+                'params' => [],
+                'content' => '有一个新的订单可以配送，请前往个人中心抢单。'
+            ];
+            Sms::sendSms2($sms_data);
+        }
     }
 
 //    public function getDistance($from,$aim){

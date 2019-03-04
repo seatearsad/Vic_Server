@@ -215,7 +215,7 @@ line-height: .7rem;
     display: inline-block;
 }
 .time_list ul li:hover{
-    background-color: #0A8DE4;
+    background-color: #ffa64d;
 }
 .table {
     width: 100%;
@@ -256,7 +256,7 @@ line-height: .7rem;
 .submit{
     width: 100px;
     height: 30px;
-    background-color: #0A8DE4;
+    background-color: #ffa64d;
     text-align: center;
     line-height: 30px;
     margin: 20px auto;
@@ -267,7 +267,7 @@ line-height: .7rem;
     margin: 0px;
 }
 .nav_list dd{
-    width: 90px;
+    width: 80px;
     height: 30px;
     float: left;
     text-align: center;
@@ -279,6 +279,7 @@ line-height: .7rem;
     border-right: 1px solid #0A8DE4;
     border-top: 1px solid #0A8DE4;
     border-left: 1px solid #0A8DE4;
+    font-size: 12px;
 }
 .nav_list .nav_act{
     border-top: 3px solid #0A8DE4;
@@ -290,7 +291,7 @@ line-height: .7rem;
     width: 80%;
     height: 30px;
     line-height: 30px;
-    background-color: #0A8DE4;
+    background-color: #ffa64d;
     color: white;
     cursor: pointer;
     text-align: center;
@@ -305,13 +306,16 @@ input[type="file"] {
 .add_c{
     width: 100px;
     height: 30px;
-    background-color: #0A8DE4;
+    background-color: #ffa64d;
     text-align: center;
     line-height: 30px;
     margin-bottom: 10px;
     margin-top: 5px;
     color: #ffffff;
     cursor: pointer;
+}
+a{
+    color: #ffa64d;
 }
 .pro_name_list{
     margin: 0px;
@@ -329,7 +333,7 @@ input[type="file"] {
 }
 
 .spec_act{
-    background-color: #0A8DE4;
+    background-color: #ffa64d;
     color: white;
 }
 .spec_main tr td{
@@ -364,14 +368,7 @@ input[type="file"] {
                     <img src="{pigcms{$store.image}" width="100" height="100">
                     <div class="store_name">
                         <div>{pigcms{$store.name}</div>
-                        <div style="margin-top: 10px;">
-                            {pigcms{:L('_STORE_STATUS_')}:
-                            <if condition="$store['status']">
-                                {pigcms{:L('_STORE_NORMAL_OPEN_')}
-                            <else/>
-                                {pigcms{:L('_STORE_ON_HOLIDAY_')}
-                            </if>
-                        </div>
+
                         <div style="margin-top: 10px;">
                             {pigcms{:L('_STORE_OPEN_CLOSE_')}:
                             <if condition="$store['is_close']">{pigcms{:L('_AT_REST_')}<else />{pigcms{:L('_AT_BUSINESS_')}</if>

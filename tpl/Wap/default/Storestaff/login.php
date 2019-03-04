@@ -55,7 +55,7 @@
 						<button type="button" class="btn btn-larger btn-block" style="margin-top:10px;background-color:green" onclick="window.location.href='/wap.php?g=Wap&c=Storestaff&a=login&lang=en'">English</button>
 						</if>
 						<if condition="$language eq 'en'">
-						<button type="button" class="btn btn-larger btn-block" style="margin-top:10px;background-color:green"onclick="window.location.href='/wap.php?g=Wap&c=Storestaff&a=login&lang=cn'">中文</button>
+						<button type="button" class="btn btn-larger btn-block" style="margin-top:10px;background-color:green"onclick="window.location.href='/wap.php?g=Wap&c=Storestaff&a=login&lang=cn'">Chinese</button>
 						</if>
 			        </div>
 			    </form>

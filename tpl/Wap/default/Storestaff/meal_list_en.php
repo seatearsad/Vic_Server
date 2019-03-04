@@ -143,6 +143,8 @@ margin: .15rem 0;
 			width: 1.2rem;
 			height: .7rem;;
 			-webkit-box-sizing: border-box;
+            padding: 0px;
+            background-color: #ffa64d;
 		}
  .dealcard-block-right li{
     font-size: .266rem;

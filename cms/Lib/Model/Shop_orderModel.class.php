@@ -766,6 +766,13 @@ class Shop_orderModel extends Model
 					];	
 					//Sms::sendSms2($sms_data);
 					//add garfunkel 添加语音
+					$store_staff = D('Merchant_store_staff')->where(array('store_id'=>$store['store_id']))->select();
+					foreach ($store_staff as $staff){
+						if($staff['device_id'] && $staff['device_id'] != ''){
+                            $staff_message = "Tutti got a new order for you, can you please confirm online now!";
+                            Sms::sendMessageToGoogle($staff['device_id'],$staff_message);
+						}
+					}
                     $txt = "Hi there, Tutti got a new order for you, can you please confirm online now!";
 					Sms::send_voice_message($sms_data['mobile'],$txt);
 				}

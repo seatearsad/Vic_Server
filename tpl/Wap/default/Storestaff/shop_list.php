@@ -25,7 +25,7 @@
 <style>
 	.startOrder{color: #fff;float: right;background: green;padding: 10px 0px 10px 0px;width:50%;text-align:center;float: left}
 	.stopOrder{color: #000;float: right;background: #ccc;padding: 10px 0px 10px 0px;width:50%;text-align:center;float: left}
-	.addorder{color: #000;float: right;color: #fff;background-color: #06c1ae;;padding: 10px 0px 10px 0px;width:50%;text-align:center;float: right}
+	.addorder{color: #000;float: right;color: #fff;background-color: #06c1ae;;padding: 10px 0px 10px 0px;width:100%;text-align:center;float: right}
 </style>
     <style>
 	    dl.list dd.dealcard {
@@ -157,6 +157,8 @@ margin: .15rem 0;
 			width: 1.2rem;
 			height: .7rem;;
 			-webkit-box-sizing: border-box;
+            padding: 0px;
+            background-color: #ffa64d;
 		}
  .dealcard-block-right li{
     font-size: .266rem;
@@ -226,11 +228,6 @@ line-height: .7rem;
 	</dl>
 	<dl class="list">
 	<dd>
-	<if condition="$staff_session['work_status'] eq '1'">
-			<a href="javascript:void(0)" class="startOrder" ref="0">上班</a>
-		<else />
-			<a href="javascript:void(0)" class="stopOrder" ref="1">下班</a>
-		</if>
         <a href="{pigcms{:U('Storestaff/add_shop_order')}" class="addorder">添加订单</a>
 	</dd>
 </dl>
@@ -262,7 +259,7 @@ line-height: .7rem;
 								<else />
 <!--								<a title="操作订单" class="green edit_btn js-add-order js-add-order-{pigcms{$vo.order_id}" style="color: green; float:right" href="javascript:;" js-order="{pigcms{$vo.order_id}">接单</a>
 								<a title="操作订单" class="green edit_btn js-add-order js-add-order-{pigcms{$vo.order_id}" style="color: #fff;background-color: #FF658E;position: absolute;right: 0rem; top: .15rem;width: 1.2rem;height: .7rem;text-align: center;line-height: .7rem;float:right" href="javascript:;" js-order="{pigcms{$vo.order_id}">接单</a-->
-                                    <a title="操作订单" class="green edit_btn" style="color: #fff;background-color: #FF658E;position: absolute;right: 0rem; top: .15rem;width: 1.2rem;height: .7rem;text-align: center;line-height: .7rem;float:right" href="{pigcms{:U('Storestaff/shop_edit',array('order_id'=>$vo['order_id']))}">接单</a>
+                                    <a title="操作订单" class="green edit_btn" style="color: #fff;background-color: #ffa64d;position: absolute;right: 0rem; top: .15rem;width: 1.2rem;height: .7rem;text-align: center;line-height: .7rem;float:right" href="{pigcms{:U('Storestaff/shop_edit',array('order_id'=>$vo['order_id']))}">接单</a>
 								</if>
 							<elseif condition="$vo['status'] eq 1" />
 							<a title="已接单" class="green edit_btn" style="color: green; float:right" href="javascript:;" >已接单</a>

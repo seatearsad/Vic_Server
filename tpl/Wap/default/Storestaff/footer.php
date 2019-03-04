@@ -7,7 +7,7 @@
 	<footer class="footermenu">
 		<ul>
             <li>
-                <a <if condition="ACTION_NAME eq 'manage' OR ACTION_NAME eq 'manage_time' OR ACTION_NAME eq 'manage_product' OR ACTION_NAME eq 'goods_list' OR ACTION_NAME eq 'goods_add_edit'">class="active"</if> href="{pigcms{:U('Storestaff/manage')}">
+                <a <if condition="ACTION_NAME eq 'manage' OR ACTION_NAME eq 'manage_time' OR ACTION_NAME eq 'manage_product' OR ACTION_NAME eq 'goods_list' OR ACTION_NAME eq 'goods_add_edit' OR ACTION_NAME eq 'manage_info'">class="active"</if> href="{pigcms{:U('Storestaff/manage')}">
                 <img src="{pigcms{$static_path}images/Lngjm86JQq.png" />
                 <p>{pigcms{:L('_STORE_MANAGE_')}</p>
                 </a>
@@ -67,9 +67,18 @@
 	<script type="text/javascript">
 	var logoutURl="{pigcms{:U('Storestaff/logout')}"
 	function LogOutSys(){
-		if(confirm('您确认要退出系统吗？')){
-			window.location.href=logoutURl;
-		}
+		// if(confirm('您确认要退出系统吗？')){
+		// 	window.location.href=logoutURl;
+		// }
+        layer.open({
+            title:"{pigcms{:L('_STORE_REMIND_')}",
+            content:"{pigcms{:L('_STORE_LOGOUT_TIP_')}",
+            btn: ["{pigcms{:L('_B_D_LOGIN_CONIERM_')}","{pigcms{:L('_B_D_LOGIN_CANCEL_')}"],
+            yes: function(index){
+                layer.close(index);
+                window.location.href=logoutURl;
+            }
+        });
 	}
 	</script>
 	</footer>

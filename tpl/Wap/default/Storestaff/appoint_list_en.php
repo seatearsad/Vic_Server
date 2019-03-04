@@ -125,6 +125,8 @@
 			width: 1.2rem;
 			height: .7rem;;
 			-webkit-box-sizing: border-box;
+            padding: 0px;
+            background-color: #ffa64d;
 		}
 		#filtercon{margin: 0 .15rem;}
 .find_txt_div{

@@ -215,7 +215,7 @@ line-height: .7rem;
     display: inline-block;
 }
 .time_list ul li:hover{
-    background-color: #0A8DE4;
+    background-color: #ffa64d;
 }
 .table {
     width: 100%;
@@ -246,13 +246,16 @@ line-height: .7rem;
 .add_c{
     width: 100px;
     height: 30px;
-    background-color: #0A8DE4;
+    background-color: #ffa64d;
     text-align: center;
     line-height: 30px;
     margin-bottom: 10px;
     margin-top: 10px;
     color: #ffffff;
     cursor: pointer;
+}
+a {
+    color: #ffa64d;
 }
 </style>
 </head>
@@ -264,14 +267,7 @@ line-height: .7rem;
                     <img src="{pigcms{$store.image}" width="100" height="100">
                     <div class="store_name">
                         <div>{pigcms{$store.name}</div>
-                        <div style="margin-top: 10px;">
-                            {pigcms{:L('_STORE_STATUS_')}:
-                            <if condition="$store['status']">
-                                {pigcms{:L('_STORE_NORMAL_OPEN_')}
-                            <else/>
-                                {pigcms{:L('_STORE_ON_HOLIDAY_')}
-                            </if>
-                        </div>
+
                         <div style="margin-top: 10px;">
                             {pigcms{:L('_STORE_OPEN_CLOSE_')}:
                             <if condition="$store['is_close']">{pigcms{:L('_AT_REST_')}<else />{pigcms{:L('_AT_BUSINESS_')}</if>
@@ -294,8 +290,8 @@ line-height: .7rem;
             <thead>
             <tr>
                 <th width="60%">{pigcms{:L('_STORE_PRODUCT_CATE_')}</th>
-                <th width="20%">{pigcms{:L('_STORE_PRODUCT_MANAGE_')}</th>
-                <th width="20%">{pigcms{:L('_ACTION_')}</th>
+                <th width="20%">{pigcms{:L('_B_PURE_MY_26_')}</th>
+                <th width="20%">{pigcms{:L('_EDIT_TXT_')}</th>
             </tr>
             </thead>
             <tbody>
@@ -306,16 +302,16 @@ line-height: .7rem;
             <td>
                 <if condition="$vo['operation_type'] eq 2">
                     <a style="width: 60px;" class="label label-sm label-purple" href="{pigcms{:U('Shop/goods_sort',array('fid' => $vo['sort_id'], 'store_id' => $vo['store_id']))}">子分类</a>
-                    <a style="width: 60px;" class="label label-sm label-info handle_btn" href="{pigcms{:U('Storestaff/goods_list',array('sort_id'=>$vo['sort_id']))}">{pigcms{:L('_STORE_PRODUCT_MANAGE_')}</a>
+                    <a style="width: 60px;" class="label label-sm label-info handle_btn" href="{pigcms{:U('Storestaff/goods_list',array('sort_id'=>$vo['sort_id']))}">{pigcms{:L('_STORE_SUB_PRODUCT_')}</a>
                     <elseif condition="$vo['operation_type'] eq 1" />
                     <a style="width: 60px;" class="label label-sm label-purple" href="{pigcms{:U('Shop/goods_sort',array('fid' => $vo['sort_id'], 'store_id' => $vo['store_id']))}">子分类</a>
                     <else />
-                    <a style="width: 60px;" class="label label-sm label-info handle_btn" href="{pigcms{:U('Storestaff/goods_list',array('sort_id'=>$vo['sort_id']))}">{pigcms{:L('_STORE_PRODUCT_MANAGE_')}</a>
+                    <a style="width: 60px;" class="label label-sm label-info handle_btn" href="{pigcms{:U('Storestaff/goods_list',array('sort_id'=>$vo['sort_id']))}">{pigcms{:L('_STORE_SUB_PRODUCT_')}</a>
                 </if>
             </td>
             <td>
                 <a title="{pigcms{:L('_EDIT_TXT_')}" class="green" href="javascript:edit_cate('{pigcms{$vo.sort_id}','{pigcms{$vo.fid}');">
-                    {pigcms{:L('_EDIT_TXT_')}
+                    {pigcms{:L('_STORE_EDIT_CATE_NAME_')}
                 </a>
                 <!--　　a title="删除" class="red" href="{pigcms{:U('Shop/sort_del',array('sort_id'=>$vo['sort_id']))}">
                     {pigcms{:L('_B_PURE_MY_27_')}
@@ -324,7 +320,7 @@ line-height: .7rem;
             </tr>
             </volist>
             <else/>
-            <tr class="odd"><td class="button-column" colspan="3" >无内容</td></tr>
+            <tr class="odd"><td class="button-column" colspan="3" ></td></tr>
             </if>
             </tbody>
         </table>
