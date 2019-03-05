@@ -490,7 +490,6 @@
         if($('input[name=name_en]').val() == '' || $('input[name=phone]').val() == '' || $('input[name=store_pic]').val() == ''){
             is_tip = true;
         }
-        alert();
 
         return is_tip;
     }
