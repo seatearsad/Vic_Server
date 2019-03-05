@@ -337,7 +337,11 @@
 
                     <div style="margin-top: 10px;">
                         {pigcms{:L('_STORE_OPEN_CLOSE_')}:
-                        <if condition="$store['is_close']">{pigcms{:L('_AT_REST_')}<else />{pigcms{:L('_AT_BUSINESS_')}</if>
+                        <if condition="$store['status']">
+                            <if condition="$store['is_close']">{pigcms{:L('_AT_REST_')}<else />{pigcms{:L('_AT_BUSINESS_')}</if>
+                            <else />
+                            {pigcms{:L('_AT_REST_')}
+                        </if>
                     </div>
                 </div>
             </div>
