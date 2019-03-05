@@ -113,17 +113,18 @@ class StorestaffAction extends BaseAction
 
     public function index()
     {
-        if ($this->store['have_shop']) {
-            //redirect(U('Storestaff/shop_list'));
-            redirect(U('Storestaff/manage'));
-        } elseif ($this->store['have_meal']) {
-            redirect(U('Storestaff/meal_list'));
-        } elseif ($this->store['have_group']) {
-            redirect(U('Storestaff/group_list'));
-        } else {
-            echo "该店铺没有开启{$this->config['group_alias_name']}，{$this->config['meal_alias_name']}，{$this->config['shop_alias_name']}中的任何一个";
-            exit();
-        }
+        redirect(U('Storestaff/manage'));
+//        if ($this->store['have_shop']) {
+//            //redirect(U('Storestaff/shop_list'));
+//            redirect(U('Storestaff/manage'));
+//        } elseif ($this->store['have_meal']) {
+//            redirect(U('Storestaff/meal_list'));
+//        } elseif ($this->store['have_group']) {
+//            redirect(U('Storestaff/group_list'));
+//        } else {
+//            echo "该店铺没有开启{$this->config['group_alias_name']}，{$this->config['meal_alias_name']}，{$this->config['shop_alias_name']}中的任何一个";
+//            exit();
+//        }
         exit();
     }
 
