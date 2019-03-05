@@ -460,7 +460,7 @@
                 'cn_name':$('input[name=name_cn]').val(),
                 'phone':$('input[name=phone]').val(),
                 'pic_info':$('input[name=store_pic]').val(),
-                'txt_info':$('textarea[name=txt_info').val()
+                'txt_info':$('textarea[name=txt_info]').val()
             };
 
             $.post($('#time_form').attr('action'),re_data,function(data){
@@ -490,6 +490,7 @@
         if($('input[name=name_en]').val() == '' || $('input[name=phone]').val() == '' || $('input[name=store_pic]').val() == ''){
             is_tip = true;
         }
+        alert();
 
         return is_tip;
     }

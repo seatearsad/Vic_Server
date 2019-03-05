@@ -2943,7 +2943,7 @@ class StorestaffAction extends BaseAction
             }
             $data['phone'] = $_POST['phone'];
             $data['pic_info'] = $_POST['pic_info'];
-            $data['txt_info'] = $_POST['txt_info'];
+            $data['txt_info'] = $_POST['txt_info'] ? $_POST['txt_info'] : '';
 
             D('Merchant_store')->where(array('store_id' => $this->store['store_id']))->save($data);
 
