@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8"/>
-	<title>Clerk center</title>
+	<title>Merchant center</title>
     <meta name="viewport" content="initial-scale=1, width=device-width, maximum-scale=1, user-scalable=no">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name='apple-touch-fullscreen' content='yes'>

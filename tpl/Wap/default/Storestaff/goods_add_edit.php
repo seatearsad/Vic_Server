@@ -267,7 +267,7 @@ line-height: .7rem;
     margin: 0px;
 }
 .nav_list dd{
-    width: 80px;
+    width: 85px;
     height: 30px;
     float: left;
     text-align: center;

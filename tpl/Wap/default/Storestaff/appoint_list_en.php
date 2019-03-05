@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8"/>
-	<title>Clerk center</title>
+	<title>Merchant center</title>
     <meta name="viewport" content="initial-scale=1, width=device-width, maximum-scale=1, user-scalable=no">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name='apple-touch-fullscreen' content='yes'>
@@ -186,9 +186,9 @@ background: white;
 				<div class="find_type_div">
 					<select name="find_type" id="find_type" class="col-sm-1">
 						<optgroup label="Appointment">
-							<option value="1">消费密码</option>
+							<option value="1">Customer Pin</option>
 						</optgroup>
-						<optgroup label="通用">
+						<optgroup label="Option">
 							<option value="2">Order ID</option>
 							<option value="3">Appointment ID</option>
 							<option value="4">User ID</option>

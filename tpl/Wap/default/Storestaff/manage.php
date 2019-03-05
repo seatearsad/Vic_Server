@@ -254,7 +254,6 @@ line-height: .7rem;
 </head>
 <body>
 	<dl class="list"  style="border-top:none;margin-top:0rem;">
-		<dd id="filtercon">
 			<div class="find_div">
                 <div style="height: 110px;">
                     <img src="{pigcms{$store.image}" width="100" height="100">
@@ -263,10 +262,15 @@ line-height: .7rem;
 
                         <div style="margin-top: 10px;">
                             {pigcms{:L('_STORE_OPEN_CLOSE_')}:
-                            <if condition="$store['is_close']">{pigcms{:L('_AT_REST_')}<else />{pigcms{:L('_AT_BUSINESS_')}</if>
+                            <if condition="$store['status']">
+                                <if condition="$store['is_close']">{pigcms{:L('_AT_REST_')}<else />{pigcms{:L('_AT_BUSINESS_')}</if>
+                            <else />
+                                {pigcms{:L('_AT_REST_')}
+                            </if>
                         </div>
                     </div>
                 </div>
+                <if condition="$store['status']">
                 <div id="store_open" <if condition="$store['is_close']">class="store_open"<else />class="store_close"</if>>
                     <if condition="$store['is_close']">
                         {pigcms{:L('_STORE_OPEN_')}
@@ -274,6 +278,7 @@ line-height: .7rem;
                         {pigcms{:L('_STORE_CLOSE_')}
                     </if>
                 </div>
+                </if>
 			</div>
 		</dd>
 	</dl>
