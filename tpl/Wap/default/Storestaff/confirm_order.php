@@ -97,14 +97,14 @@
                 <input type="hidden" name="discount_price" value="<?php echo $return_data['all_tax'] ?>">
                 <input type="hidden" name="packing_charge" value="<?php echo $return_data['deposit'] ?>">
                 <tr>
-                    <td><button type="submit" class="btn" style="text-align: center;width: 100%;margin-top: 20px;font-size: 14px;background-color: #06c1ae;">Confirm</button></td>
+                    <td><button type="submit" class="btn" style="text-align: center;width: 100%;margin-top: 20px;font-size: 14px;background-color: #ffa64d;">Confirm</button></td>
                 </tr>
                 </tbody>
             </form>
         </table>
 
     </ul>
-    <a href="{pigcms{:U('Storestaff/add_shop_order')}" class="btn" style="float:right;right:1rem;top:0.2rem;position:absolute;width:5rem;font-size:1rem;background-color: #06c1ae;">Back</a>
+    <a href="{pigcms{:U('Storestaff/add_shop_order')}" class="btn" style="float:right;right:1rem;top:0.2rem;position:absolute;width:5rem;font-size:1rem;background-color: #ffa64d;">Back</a>
 </div>
 
 

@@ -14,6 +14,6 @@
 	</head>
 	<body>
         <script src="{pigcms{$static_path}layer/layer.m.js"></script>
-		<script>var location_url = '{pigcms{$url}';layer.open({title:["",'background-color:#8DCE16;color:#fff;'],content:'{pigcms{$msg}',btn: ["{pigcms{:L('_B_D_LOGIN_CONIERM_')}"],end:function(){location.href=location_url;}});</script>
+		<script>var location_url = '{pigcms{$url}';layer.open({title:["",'background-color:#ffa64d;color:#fff;'],content:'{pigcms{$msg}',btn: ["{pigcms{:L('_B_D_LOGIN_CONIERM_')}"],end:function(){location.href=location_url;}});</script>
 	</body>
 </html>
