@@ -466,7 +466,7 @@
             $.post($('#time_form').attr('action'),re_data,function(data){
                 if(data.status == 1){
                     layer.open({
-                        title: "{pigcms{:L('_B_D_LOGIN_TIP2_')}",
+                        title: "{pigcms{:L('_STORE_REMIND_')}",
                         time: 1,
                         content: data.info,
                         end:function () {
@@ -479,7 +479,7 @@
             });
         }else{
             layer.open({
-                title: "{pigcms{:L('_B_D_LOGIN_TIP2_')}",
+                title: "{pigcms{:L('_STORE_REMIND_')}",
                 time: 1,
                 content: "{pigcms{:L('_PLEASE_INPUT_ALL_')}"
             });

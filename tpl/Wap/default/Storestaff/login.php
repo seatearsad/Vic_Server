@@ -47,7 +47,7 @@
 			        	</dd>
 			        </dl>
 			        <div class="btn-wrapper">
-						<button type="submit" class="btn btn-larger btn-block">
+						<button type="submit" class="btn btn-larger btn-block" style="background-color: #ffa64d">
 						<if condition="$language eq 'en'">Login</if>
 						<if condition="$language eq 'cn'">登录</if>
 						</button>

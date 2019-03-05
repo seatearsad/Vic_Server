@@ -374,7 +374,7 @@ line-height: .7rem;
         var is_tip = checkTable();
         if(is_tip){
             layer.open({
-                title: "{pigcms{:L('_B_D_LOGIN_TIP2_')}",
+                title: "{pigcms{:L('_STORE_REMIND_')}",
                 time: 1,
                 content: "{pigcms{:L('_PLEASE_INPUT_ALL_')}"
             });
@@ -389,7 +389,7 @@ line-height: .7rem;
                 };
                 $.post("{pigcms{:U('Storestaff/goods_spec_edit')}", post_data, function (result) {
                     layer.open({
-                        title: "{pigcms{:L('_B_D_LOGIN_TIP2_')}",
+                        title: "{pigcms{:L('_STORE_REMIND_')}",
                         content: result.info,
                         time: 1,
                         end: function () {

@@ -396,7 +396,7 @@ line-height: .7rem;
             $.post($('#time_form').attr('action'),re_data,function(data){
                 if(data.status == 1){
                     layer.open({
-                        title: "{pigcms{:L('_B_D_LOGIN_TIP2_')}",
+                        title: "{pigcms{:L('_STORE_REMIND_')}",
                         time: 1,
                         content: data.info,
                     });

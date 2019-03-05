@@ -338,6 +338,7 @@ a{
 }
 .spec_main tr td{
     cursor: pointer;
+    height: 20px;
 }
 .spec_edit_btn{
     width: 50px;
@@ -354,6 +355,10 @@ a{
     line-height: 20px;
     border: 1px solid;
     cursor: pointer;
+}
+#spec_price_table tr{
+    height:20px;
+    line-height: 20px;
 }
 </style>
 </head>
@@ -664,7 +669,7 @@ a{
     $('.del_pro').click(function () {
         var pro_id = $(this).attr('data-id');
         layer.open({
-            title:"{pigcms{:L('_B_D_LOGIN_TIP2_')}",
+            title:"{pigcms{:L('_STORE_REMIND_')}",
             content:"{pigcms{:L('_B_PURE_MY_84_')}",
             btn: ["{pigcms{:L('_B_D_LOGIN_CONIERM_')}","{pigcms{:L('_B_D_LOGIN_CANCEL_')}"],
             yes: function(index){
@@ -672,7 +677,7 @@ a{
                 $.post("{pigcms{:U('Storestaff/goods_pro_del')}", {'id':pro_id,'goods_id':$('input[name=goods_id]').val()}, function (result) {
                     if(result.status){
                         layer.open({
-                            title: "{pigcms{:L('_B_D_LOGIN_TIP2_')}",
+                            title: "{pigcms{:L('_STORE_REMIND_')}",
                             content: result.info,
                             time: 1,
                             end: function () {
@@ -756,7 +761,7 @@ a{
         $('.del_pro_new').click(function () {
             var new_id = parseInt($(this).attr('data-id'));
             layer.open({
-                title:"{pigcms{:L('_B_D_LOGIN_TIP2_')}",
+                title:"{pigcms{:L('_STORE_REMIND_')}",
                 content:"{pigcms{:L('_B_PURE_MY_84_')}",
                 btn: ["{pigcms{:L('_B_D_LOGIN_CONIERM_')}","{pigcms{:L('_B_D_LOGIN_CANCEL_')}"],
                 yes: function(index){
@@ -967,7 +972,7 @@ a{
 
     function spec_del_val(id,type) {
         layer.open({
-            title:"{pigcms{:L('_B_D_LOGIN_TIP2_')}",
+            title:"{pigcms{:L('_STORE_REMIND_')}",
             content:"{pigcms{:L('_B_PURE_MY_84_')}",
             btn: ["{pigcms{:L('_B_D_LOGIN_CONIERM_')}","{pigcms{:L('_B_D_LOGIN_CANCEL_')}"],
             yes: function(index){
@@ -1099,28 +1104,28 @@ a{
         if(!/^\d+(\.\d{1,2})?$/.test($('input[name=product_price]').val())) {
             $('input[name=product_price]').focus();
             layer.open({
-                title: "{pigcms{:L('_B_D_LOGIN_TIP2_')}",
+                title: "{pigcms{:L('_STORE_REMIND_')}",
                 time: 1,
                 content: "{pigcms{:L('_PLEASE_RIGHT_PRICE_')}"
             });
         }else if(!/^\d+(\.\d{1,2})?$/.test($('input[name=deposit_price]').val())){
             $('input[name=deposit_price]').focus();
             layer.open({
-                title: "{pigcms{:L('_B_D_LOGIN_TIP2_')}",
+                title: "{pigcms{:L('_STORE_REMIND_')}",
                 time: 1,
                 content: "{pigcms{:L('_PLEASE_RIGHT_PRICE_')}"
             });
         }else if(!/^\d{1,2}$/.test($('input[name=product_tax]').val())){
             $('input[name=product_tax]').focus();
             layer.open({
-                title: "{pigcms{:L('_B_D_LOGIN_TIP2_')}",
+                title: "{pigcms{:L('_STORE_REMIND_')}",
                 time: 1,
                 content: "{pigcms{:L('_STORE_TAX_TIP_')}"
             });
         }
         else if(is_tip){
             layer.open({
-                title: "{pigcms{:L('_B_D_LOGIN_TIP2_')}",
+                title: "{pigcms{:L('_STORE_REMIND_')}",
                 time: 1,
                 content: "{pigcms{:L('_PLEASE_INPUT_ALL_')}"
             });
@@ -1146,7 +1151,7 @@ a{
             $.post("{pigcms{:U('Storestaff/goods_add_edit')}", product_data, function (result) {
                 if(result.status) {
                     layer.open({
-                        title: "{pigcms{:L('_B_D_LOGIN_TIP2_')}",
+                        title: "{pigcms{:L('_STORE_REMIND_')}",
                         content: result.info,
                         time: 1,
                         end: function () {
@@ -1155,7 +1160,7 @@ a{
                     });
                 }else{
                     layer.open({
-                        title: "{pigcms{:L('_B_D_LOGIN_TIP2_')}",
+                        title: "{pigcms{:L('_STORE_REMIND_')}",
                         content: result.info,
                     });
                 }

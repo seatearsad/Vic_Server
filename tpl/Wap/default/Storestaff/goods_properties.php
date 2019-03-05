@@ -359,7 +359,7 @@ line-height: .7rem;
         var is_tip = checkTable();
         if(is_tip){
             layer.open({
-                title: "{pigcms{:L('_B_D_LOGIN_TIP2_')}",
+                title: "{pigcms{:L('_STORE_REMIND_')}",
                 time: 1,
                 content: "{pigcms{:L('_PLEASE_INPUT_ALL_')}"
             });
@@ -375,7 +375,7 @@ line-height: .7rem;
                 };
                 $.post("{pigcms{:U('Storestaff/goods_pro_edit')}", post_data, function (result) {
                     layer.open({
-                        title: "{pigcms{:L('_B_D_LOGIN_TIP2_')}",
+                        title: "{pigcms{:L('_STORE_REMIND_')}",
                         content: result.info,
                         time: 1,
                         end: function () {
@@ -403,7 +403,7 @@ line-height: .7rem;
         // if($('input[name=cate_name_en]').val() == ''){
         //     $('input[name=cate_name_en]').focus();
         //     layer.open({
-        //         title: "{pigcms{:L('_B_D_LOGIN_TIP2_')}",
+        //         title: "{pigcms{:L('_STORE_REMIND_')}",
         //         time: 1,
         //         content: "{pigcms{:L('_STORE_PLEASE_CATENAME_')}"
         //     });
@@ -414,7 +414,7 @@ line-height: .7rem;
         //     };
         //     $.post("{pigcms{:U('Storestaff/manage_edit_cate')}", data, function (result) {
         //         layer.open({
-        //             title: "{pigcms{:L('_B_D_LOGIN_TIP2_')}",
+        //             title: "{pigcms{:L('_STORE_REMIND_')}",
         //             content: result.info,
         //             time: 1,
         //             end: function () {

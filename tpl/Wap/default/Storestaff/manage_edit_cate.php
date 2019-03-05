@@ -220,7 +220,7 @@ line-height: .7rem;
 .add_c{
     width: 100px;
     height: 30px;
-    background-color: #0A8DE4;
+    background-color: #ffa64d;
     text-align: center;
     line-height: 30px;
     margin: 10px auto;
@@ -245,7 +245,7 @@ line-height: .7rem;
             <li></li>
             <li>
                 <div class="add_c">
-                    {pigcms{:L('_EDIT_TXT_')}
+                    {pigcms{:L('_STORE_SAVE_')}
                 </div>
             </li>
         </ul>
@@ -258,7 +258,7 @@ line-height: .7rem;
         if($('input[name=cate_name_en]').val() == ''){
             $('input[name=cate_name_en]').focus();
             layer.open({
-                title: "{pigcms{:L('_B_D_LOGIN_TIP2_')}",
+                title: "{pigcms{:L('_STORE_REMIND_')}",
                 time: 1,
                 content: "{pigcms{:L('_STORE_PLEASE_CATENAME_')}"
             });
@@ -270,7 +270,7 @@ line-height: .7rem;
             };
             $.post("{pigcms{:U('Storestaff/manage_edit_cate')}", data, function (result) {
                 layer.open({
-                    title: "{pigcms{:L('_B_D_LOGIN_TIP2_')}",
+                    title: "{pigcms{:L('_STORE_REMIND_')}",
                     content: result.info,
                     time: 1,
                     end: function () {
