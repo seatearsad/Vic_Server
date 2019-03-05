@@ -25,7 +25,7 @@
 <style>
 	.startOrder{color: #fff;float: right;background: green;padding: 10px 0px 10px 0px;width:50%;text-align:center;float: left}
 	.stopOrder{color: #000;float: right;background: #ccc;padding: 10px 0px 10px 0px;width:50%;text-align:center;float: left}
-	.addorder{color: #000;float: right;color: #fff;background-color: #06c1ae;;padding: 10px 0px 10px 0px;width:100%;text-align:center;float: right}
+	.addorder{color: #000;float: right;color: #fff;background-color: #ffa64d;padding: 10px 0px 10px 0px;width:100%;text-align:center;float: right}
 </style>
     <style>
 	    dl.list dd.dealcard {
