@@ -248,7 +248,7 @@ line-height: .7rem;
     width: 49%;
     text-align: center;
     height: 30px;
-    line-height: 30px;
+    line-height: 20px;
     display: inline-block;
     background-color: #ffffff;
     color: #333;
@@ -324,7 +324,7 @@ line-height: .7rem;
                     <input type="text" name="close_time_3" id="close_time_3">
                 </dd>
                 <dd class="time_desc">* {pigcms{:L('_STORE_TIME_TIP_1_')}.</dd>
-                <dd class="time_desc">* {pigcms{:L('_STORE_START_END_TIP_')}.</dd>
+                <dd class="time_desc" style="margin-top: 10px;">* {pigcms{:L('_STORE_START_END_TIP_')}.</dd>
             </dl>
         </div>
     </div>
