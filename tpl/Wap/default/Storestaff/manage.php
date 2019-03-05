@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8"/>
-	<title>店员中心</title>
+	<title>{pigcms{:L('_STORE_CENTER_')}</title>
     <meta name="viewport" content="initial-scale=1, width=device-width, maximum-scale=1, user-scalable=no">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name='apple-touch-fullscreen' content='yes'>
@@ -25,7 +25,7 @@
 <style>
 	.startOrder{color: #fff;float: right;background: green;padding: 10px 0px 10px 0px;width:50%;text-align:center;float: left}
 	.stopOrder{color: #000;float: right;background: #ccc;padding: 10px 0px 10px 0px;width:50%;text-align:center;float: left}
-	.addorder{color: #000;float: right;color: #fff;background-color: #ffa64d;padding: 10px 0px 10px 0px;width:100%;text-align:center;float: right}
+	.addorder{color: #000;float: right;color: #fff;background-color: #06c1ae;;padding: 10px 0px 10px 0px;width:50%;text-align:center;float: right}
 </style>
     <style>
 	    dl.list dd.dealcard {
@@ -157,8 +157,6 @@ margin: .15rem 0;
 			width: 1.2rem;
 			height: .7rem;;
 			-webkit-box-sizing: border-box;
-            padding: 0px;
-            background-color: #ffa64d;
 		}
  .dealcard-block-right li{
     font-size: .266rem;
@@ -200,100 +198,121 @@ line-height: .7rem;
   .dealcard-block-right li.btm_li{
      margin-bottom: .18rem;
  }
+
+ .store_name{
+     height: 20px;
+     margin-left: 105px;
+     margin-top: -90px;
+ }
+ .store_name div{
+
+ }
+ .store_open{
+     float: right;
+     margin-top: -30px;
+     margin-right: 10px;
+     width: 60px;
+     height: 25px;
+     text-align: center;
+     line-height: 25px;
+     border: 1px solid #e6e6e6;
+     background-color: #0CCC6C;
+     color: #ffffff;
+     cursor: pointer;
+ }
+.store_close{
+    float: right;
+    margin-top: -30px;
+    margin-right: 10px;
+    width: 60px;
+    height: 25px;
+    text-align: center;
+    line-height: 25px;
+    border: 1px solid #e6e6e6;
+    background-color: #ff2c4c;
+    color: #ffffff;
+    cursor: pointer;
+}
+#features{
+    list-style: none;
+}
+#features li{
+    width: 30%;
+    height: 100px;
+    display: inline-block;
+    border: 1px solid #ccc;
+    text-align: center;
+    margin-left: 1.5%;
+    margin-top: 10px;
+    cursor: pointer;
+}
+#features li div{
+    margin-top:40px;
+    word-wrap:break-word;
+}
 </style>
 </head>
 <body>
 	<dl class="list"  style="border-top:none;margin-top:0rem;">
-		<dd id="filtercon">
+        <dd id="filtercon">
 			<div class="find_div">
-				<form name="find_form" method="get" action="{pigcms{:U('Storestaff/shop_list')}">
-					<input type="hidden" name="g" value="Wap"/>
-					<input type="hidden" name="c" value="Storestaff"/>
-					<input type="hidden" name="a" value="shop_list"/>
-					<div class="find_type_div">
-						<select name="ft" id="find_type" onchange="toJmupURl(this.value);">							
-							<option value="">请选择类型</option>
-							<option value="st" <php>if($ftype=='st') echo "selected='selected'";</php>>待验证订单</option>
-							<option value="oid" <php>if($ftype=='oid') echo "selected='selected'";</php>>订单编号</option>
-							<option value="xm" <php>if($ftype=='xm') echo "selected='selected'";</php>>客户姓名</option>
-							<option value="dh" <php>if($ftype=='dh') echo "selected='selected'";</php>>客户电话</option>
-							<option value="mps" <php>if($ftype=='mps') echo "selected='selected'";</php>>订单流水号</option>									
-						</select>
-					</div>
-					<div class="find_txt_div"><input name="fv" id="find_value" type="text" value="{pigcms{$fvalue}"/></div>
-					<button class="btn btn-success" type="submit" id="find_submit">搜索</button>
-				</form>
+                <div style="height: 110px;">
+                    <img src="{pigcms{$store.image}" width="100" height="100">
+                    <div class="store_name">
+                        <div style="font-size: 20px">{pigcms{$store.name}</div>
+
+                        <div style="margin-top: 10px;">
+                            {pigcms{:L('_STORE_OPEN_CLOSE_')}:
+                            <if condition="$store['status']">
+                                <if condition="$store['is_close']">{pigcms{:L('_AT_REST_')}<else />{pigcms{:L('_AT_BUSINESS_')}</if>
+                            <else />
+                                {pigcms{:L('_AT_REST_')}
+                            </if>
+                        </div>
+                    </div>
+                </div>
+                <if condition="$store['status']">
+                <div id="store_open" <if condition="$store['is_close']">class="store_open"<else />class="store_close"</if>>
+                    <if condition="$store['is_close']">
+                        {pigcms{:L('_STORE_OPEN_')}
+                    <else />
+                        {pigcms{:L('_STORE_CLOSE_')}
+                    </if>
+                </div>
+                </if>
 			</div>
 		</dd>
 	</dl>
-	<dl class="list">
-	<dd>
-        <a href="{pigcms{:U('Storestaff/add_shop_order')}" class="addorder">添加订单</a>
-	</dd>
-</dl>
-	    <div style="margin-top:.2rem;">
-		    <dl class="list" id="orders">
-				<volist name="order_list" id="vo">
-					<dd class="dealcard dd-padding" onclick="Jumpto({pigcms{$vo['order_id']})">
-						<ul class="dealcard-block-right">
-							<li class="btm_li"><span class="dth">客户姓名：</span>
-							<span class="ttd">{pigcms{$vo.username}</span></li>
-							<li class="btm_li"><span class="dth">客户电话：</span><span class="td"><a  href="tel:{pigcms{$vo.userphone}" onclick="stopPropagation()">{pigcms{$vo.userphone}</a></span></li>
-							<li class="btm_li"><span class="dth">订单总价：</span><span class="td red">${pigcms{$vo.price|floatval}<if condition="$config.open_extra_price eq 1 AND $vo.extra_price gt 0">+{pigcms{$vo.extra_price}{pigcms{$config.extra_price_alias_name}</if></span></li>
-							<li>
-							<span class="dth">支付状态：</span>
-							<if condition="empty($vo['third_id']) AND ($vo['pay_type'] eq 'offline')" >
-								<span style="color: red">线下未支付</span>
-							<elseif condition="$vo['paid'] eq 0" />
-								<span style="color: red">未支付</span>
-							<else />
-								<span style="color: green">已支付</span> / <span style="color: #aaa">{pigcms{$vo['pay_type_str']}</span>
-							</if>
-                                <if condition="$vo['paid'] eq 0">
-								<a class="red edit_btn" style="color: red; float:right" href="javascript:;" >未支付</a>
-							<elseif condition="$vo['status'] eq 0 AND $vo['paid'] eq 1" />
-								<if condition="($vo['is_pick_in_store'] eq 2 OR $vo['is_pick_in_store'] eq 1) AND $now_store['is_open_pick'] eq 1">
-								<a title="操作订单" class="green handle_btn" style="color: green; float:right" href="{pigcms{:U('Storestaff/pick',array('order_id'=>$vo['order_id']))}">分配自提点</a>
-								<elseif condition="$vo['is_pick_in_store'] eq 3 AND $now_store['deliver_type'] neq 5" />
-								<a data-title="接单" class="green edit_btn " style="color: green; float:right" href="{pigcms{:U('Storestaff/mall_order_detail',array('order_id'=>$vo['order_id']))}" js-order="{pigcms{$vo.order_id}">更换配送</a>
-								<else />
-<!--								<a title="操作订单" class="green edit_btn js-add-order js-add-order-{pigcms{$vo.order_id}" style="color: green; float:right" href="javascript:;" js-order="{pigcms{$vo.order_id}">接单</a>
-								<a title="操作订单" class="green edit_btn js-add-order js-add-order-{pigcms{$vo.order_id}" style="color: #fff;background-color: #FF658E;position: absolute;right: 0rem; top: .15rem;width: 1.2rem;height: .7rem;text-align: center;line-height: .7rem;float:right" href="javascript:;" js-order="{pigcms{$vo.order_id}">接单</a-->
-                                    <a title="操作订单" class="green edit_btn" style="color: #fff;background-color: #ffa64d;position: absolute;right: 0rem; top: .15rem;width: 1.2rem;height: .7rem;text-align: center;line-height: .7rem;float:right" href="{pigcms{:U('Storestaff/shop_edit',array('order_id'=>$vo['order_id']))}">接单</a>
-								</if>
-							<elseif condition="$vo['status'] eq 1" />
-							<a title="已接单" class="green edit_btn" style="color: green; float:right" href="javascript:;" >已接单</a>
-							<elseif condition="$vo['status'] eq 2" />
-							<a title="已消费" class="green edit_btn" style="color: blue; float:right" href="javascript:;" >已消费</a>
-							<elseif condition="$vo['status'] eq 3" />
-							<a title="已评价" class="green edit_btn" style="color: gray; float:right" href="javascript:;" >已评价</a>
-							<elseif condition="$vo['status'] eq 4" />
-							<a title="已退款" class="red edit_btn" style="color: red; float:right" href="javascript:;" >已退款</a>
-							<elseif condition="$vo['status'] eq 5" />
-							<a title="已取消" class="red edit_btn" style="color: red; float:right" href="javascript:;" >已取消</a>
-							<elseif condition="$vo['status'] eq 7" />
-							<a title="操作订单" class="green edit_btn js-send-order js-add-order-{pigcms{$vo.order_id}" style="color: green; float:right" href="javascript:;" js-order="{pigcms{$vo.order_id}">发货</a>
-							<elseif condition="$vo['status'] eq 8" />
-							<a title="已发货" class="red edit_btn" style="color: green; float:right" href="javascript:;" >已发货</a>
-							<elseif condition="$vo['status'] eq 9" />
-							<a title="自提点接货" class="red edit_btn" style="color: green; float:right" href="javascript:;" >自提点接货</a>
-							<elseif condition="$vo['status'] eq 10" />
-							<a title="自提点发货" class="red edit_btn" style="color: green; float:right" href="javascript:;" >自提点发货</a>
-							<else />
-							<a title="未支付" class="red edit_btn" style="color: red; float:right" href="javascript:;" >未支付，不接单</a>
-							</if>
-							
-							</li>
-						</ul>
-					</dd>
-				</volist>
-			</dl>
-			<div style="margin-top:.2rem;margin-bottom:.2rem;margin-left:1.5rem;">{pigcms{$pagebar}</div>
-		</div>
-		<include file="Storestaff:footer"/>
+	<dl class="list"></dl>
+    <div style="margin-top:.2rem;">
+        <ul id="features">
+            <li id="info">
+                <div>{pigcms{:L('_STORE_INFO_')}</div>
+            </li>
+            <li id="manage_product">
+                <div>{pigcms{:L('_STORE_PRODUCT_MANAGE_')}</div>
+            </li>
+            <li id="manage_time">
+                <div>{pigcms{:L('_STORE_TIME_MANAGE_')}</div>
+            </li>
+        </ul>
+    </div>
+    <include file="Storestaff:footer"/>
 </body>
 <script type="text/javascript" src="{pigcms{$static_public}js/artdialog/jquery.artDialog.js"></script>
 <script type="text/javascript">
+//更新app 设备token
+function pushDeviceToken(token) {
+    var message = '';
+    $.post("{pigcms{:U('Storestaff/update_device')}", {'token':token}, function(result) {
+        if(result){
+            message = result.message;
+        }else {
+            message = 'Error';
+        }
+    });
+    return message;
+}
 $(document).ready(function(){
 	var is_click = false;
 	$('.js-add-order').click(function(){
@@ -488,6 +507,59 @@ $('#qrcode_btn').click(function(){
 		layer.open({title:['错误提示：','background-color:#FF658E;color:#fff;'],content:'您使用的不是微信浏览器，此功能无法使用！您可以使用浏览器自带的或其他扫描二维码工具进行扫描',btn: ['确定'],end:function(){}});
 	}
 	return false;
+});
+var is_close = '{pigcms{$store.is_close}';
+$('#store_open').click(function () {
+    if(is_close == 0){//操作 关闭店铺
+        layer.open({
+            title:"{pigcms{:L('_STORE_REMIND_')}",
+            content:"{pigcms{:L('_STORE_CLOSE_TIP_')}",
+            btn: ["{pigcms{:L('_B_D_LOGIN_CONIERM_')}","{pigcms{:L('_B_D_LOGIN_CANCEL_')}"],
+            yes: function(index){
+                layer.close(index);
+                $.post("{pigcms{:U('Storestaff/manage_open_close')}",{open_close:0},function(result){
+                    layer.open({
+                        title:"{pigcms{:L('_STORE_REMIND_')}",
+                        content:result.info,
+                        time: 1,
+                        end:function () {
+                            window.location.reload();
+                        }
+                    });
+
+                });
+            }
+        });
+    }else{//操作 打开店铺
+        $.post("{pigcms{:U('Storestaff/manage_open_close')}",{open_close:1},function(result){
+            if(result.status == 1) {
+                layer.open({
+                    title: "{pigcms{:L('_STORE_REMIND_')}",
+                    content: result.info,
+                    time: 1,
+                    end: function () {
+                        window.location.reload();
+                    }
+                });
+            }else{
+                layer.open({
+                    title: "{pigcms{:L('_STORE_REMIND_')}",
+                    content: result.info,
+                });
+            }
+
+        });
+    }
+});
+
+$('#manage_time').click(function () {
+    window.location.href = '{pigcms{:U("Storestaff/manage_time")}';
+});
+$('#manage_product').click(function () {
+    window.location.href = '{pigcms{:U("Storestaff/manage_product")}';
+});
+$('#info').click(function () {
+    window.location.href = '{pigcms{:U("Storestaff/manage_info")}';
 });
 </script>
 </html>

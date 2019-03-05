@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8"/>
-	<title>Clerk center</title>
+	<title>Merchant Center</title>
     <meta name="viewport" content="initial-scale=1, width=device-width, maximum-scale=1, user-scalable=no">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name='apple-touch-fullscreen' content='yes'>
@@ -143,6 +143,8 @@ margin: .15rem 0;
 			width: 1.2rem;
 			height: .7rem;;
 			-webkit-box-sizing: border-box;
+            padding: 0px;
+            background-color: #ffa64d;
 		}
  .dealcard-block-right li{
     font-size: .266rem;

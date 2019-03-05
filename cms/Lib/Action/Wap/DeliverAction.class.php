@@ -1750,6 +1750,21 @@ class DeliverAction extends BaseAction
         }
 
     }
+
+    public function update_device(){
+        $device_id = $_POST['token'] ? $_POST['token'] : '';
+
+        $deliver_id = $this->deliver_session['uid'];
+
+        if($device_id != '' ){
+            $data['device_id'] = $device_id;
+            D('Deliver_user')->field(true)->where(array('uid'=>$deliver_id))->save($data);
+            exit(json_encode(array('error' => 0, 'msg' => 'Success！', 'dom_id' => 'account')));
+        }else{
+            exit(json_encode(array('error' => 1, 'msg' => 'Fail！', 'dom_id' => 'account')));
+        }
+
+    }
     //送餐员路线逻辑运算 多张订单时
     public function routeAssign($deliver_id){
         $where = array('uid'=>$deliver_id,'status' => array(array('gt', 1), array('lt', 5)));

@@ -103,7 +103,7 @@
                     <tr>
                         <td>Position：
                             <?php if(!empty($now_adress['adress'])){echo $now_adress['adress'];} ?>
-                            <button type="button" id="color-gray" class="btn" style="background-color: #06c1bb;"> <?php if(!empty($now_adress['adress'])){echo 'Select Location';}else{ echo 'Select Location';} ?></button>
+                            <button type="button" id="color-gray" class="btn" style="background-color: #ffa64d;"> <?php if(!empty($now_adress['adress'])){echo 'Select Location';}else{ echo 'Select Location';} ?></button>
                         </td>
                     </tr>
                     <tr>
@@ -127,13 +127,13 @@
                         </td>
                     </tr>
                     <tr>
-                        <td><button type="button" id="confirm_order" class="btn" style="text-align: center;width: 100%;margin-top: 20px;font-size: 14px;">Confirm</button></td>
+                        <td><button type="button" id="confirm_order" class="btn" style="text-align: center;width: 100%;margin-top: 20px;font-size: 14px;background-color: #ffa64d">Confirm</button></td>
                     </tr>
                 </tbody>
             </form>
         </table>
     </ul>
-    <a href="{pigcms{:U('Storestaff/shop_list')}" class="btn" style="float:right;right:1rem;top:0.2rem;position:absolute;width:5rem;font-size:1rem;">Back</a>
+    <a href="{pigcms{:U('Storestaff/shop_list')}" class="btn" style="float:right;right:1rem;top:0.2rem;position:absolute;width:5rem;font-size:1rem;background-color: #ffa64d">Back</a>
 </div>
 <script src="{pigcms{:C('JQUERY_FILE')}"></script>
 <script src="{pigcms{$static_path}js/jquery.cookie.js"></script>

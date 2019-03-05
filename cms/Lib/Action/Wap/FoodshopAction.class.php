@@ -219,6 +219,9 @@ class FoodshopAction extends BaseAction
 //				}
 //			}
 
+            if($store['store_is_close'] != 0){
+                $store = checkAutoOpen($store);
+            }
             //@wangchuanyuan 周一到周天
             $date = date("w");//今天是星期几 @ydhl-wangchuanyuan 20171106
             $now_time = date('H:i:s');
@@ -369,7 +372,12 @@ class FoodshopAction extends BaseAction
                     $store['business_time']= '营业时间未知';
             }
             //end  @wangchuanyuan
+            //garfunkel add
+            if($store['store_is_close'] != 0){
+                $store['is_close'] = 1;
+            }
 		}
+
 		$store_image_class = new store_image();
 		$images = $store_image_class->get_allImage_by_path($store['pic_info']);
 		$store['image_list'] = $images;
@@ -587,6 +595,11 @@ class FoodshopAction extends BaseAction
 //					}
 //				}
 //			}
+
+            if($store['store_is_close'] != 0){
+                $store = checkAutoOpen($store);
+            }
+
             $store['business_time'] = '';
             $is_close = 1;
             //@wangchuanyuan 周一到周天
@@ -737,6 +750,10 @@ class FoodshopAction extends BaseAction
                 default :
                     $is_close = 1;
                     $store['business_time']= '营业时间未知';
+            }
+            //garfunkel add
+            if($store['store_is_close'] != 0){
+                $is_close = 1;
             }
             //end  @wangchuanyuan
 			if ($is_close && $is_return) {

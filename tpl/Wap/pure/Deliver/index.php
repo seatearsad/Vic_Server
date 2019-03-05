@@ -31,6 +31,20 @@
 
 	    return message;
     }
+    //更新app 设备token
+    var device_token = '';
+    function pushDeviceToken(token) {
+        device_token = token;
+        var message = '';
+        $.post("{pigcms{:U('Deliver/update_device')}", {'token':token}, function(result) {
+            if(result){
+                message = result.message;
+            }else {
+                message = 'Error';
+            }
+        });
+        return message;
+    }
 </script>
 <style>
 	.startOrder{color: #fff;float: right;background: green;border: 1px solid #ccc;padding: 5px 10px 5px 10px;}

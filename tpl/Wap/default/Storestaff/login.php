@@ -1,15 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8"/>
 	<title>{pigcms{:L('_STAFF_LOGIN_')}</title>
-	<meta name="description" content="{pigcms{$config.seo_description}"/>
+    <meta http-equiv="Expires" content="-1">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta charset="utf-8">
+    <meta name="description" content="{pigcms{$config.seo_description}"/>
     <meta name="viewport" content="initial-scale=1, width=device-width, maximum-scale=1, user-scalable=no"/>
-	<meta name="apple-mobile-web-app-capable" content="yes"/>
-	<meta name='apple-touch-fullscreen' content='yes'/>
-	<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
-	<meta name="format-detection" content="telephone=no"/>
-	<meta name="format-detection" content="address=no"/>
 
     <link href="{pigcms{$static_path}css/eve.7c92a906.css" rel="stylesheet"/>
 	<link href="{pigcms{$static_path}css/index_wap.css" rel="stylesheet"/>
@@ -49,7 +47,7 @@
 			        	</dd>
 			        </dl>
 			        <div class="btn-wrapper">
-						<button type="submit" class="btn btn-larger btn-block">
+						<button type="submit" class="btn btn-larger btn-block" style="background-color: #ffa64d">
 						<if condition="$language eq 'en'">Login</if>
 						<if condition="$language eq 'cn'">登录</if>
 						</button>
@@ -57,7 +55,7 @@
 						<button type="button" class="btn btn-larger btn-block" style="margin-top:10px;background-color:green" onclick="window.location.href='/wap.php?g=Wap&c=Storestaff&a=login&lang=en'">English</button>
 						</if>
 						<if condition="$language eq 'en'">
-						<button type="button" class="btn btn-larger btn-block" style="margin-top:10px;background-color:green"onclick="window.location.href='/wap.php?g=Wap&c=Storestaff&a=login&lang=cn'">中文</button>
+						<button type="button" class="btn btn-larger btn-block" style="margin-top:10px;background-color:green"onclick="window.location.href='/wap.php?g=Wap&c=Storestaff&a=login&lang=cn'">Chinese</button>
 						</if>
 			        </div>
 			    </form>
@@ -67,6 +65,17 @@
 		<script src="{pigcms{$static_public}js/laytpl.js"></script>
 	    <script src="{pigcms{$static_path}layer/layer.m.js"></script>
 		<script type="text/javascript">
+            var ua = navigator.userAgent;
+            var device_token = '';
+            function pushDeviceToken(token) {
+                device_token = token;
+                alert(device_token);
+            }
+
+            function putUserNP(name,password) {
+                $('#login_account').val(name);
+                $('#login_pwd').val(password);
+            }
 			var static_public="{pigcms{$static_public}",static_path="{pigcms{$merchantstatic_path}",login_check="{pigcms{:U('Storestaff/login')}",store_index="{pigcms{:U('Storestaff/index')}";
 
 			<if condition="!empty($refererUrl)">
@@ -92,6 +101,10 @@
 			$.post(login_check,$("#login_form").serialize(),function(result){
 				//result = $.parseJSON(result);
 				if(result){
+                    if(result.error == 0){
+                        if(ua.match(/TuttiPartner/i))
+                            window.webkit.messageHandlers.getUserMessage.postMessage([$('#login_account').val(),$('#login_pwd').val()]);
+                    }
 					if(result.error == 0 && openid){
 					  layer.open({
 						title:['提示：','background-color:#FF658E;color:#fff;'],
@@ -150,7 +163,6 @@
 		return false;
 	});
 });
-
 	</script>
 	</body>
 </html>

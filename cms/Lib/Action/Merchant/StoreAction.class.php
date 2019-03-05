@@ -5219,6 +5219,10 @@ class StoreAction extends BaseAction{
 //				}
 //			}
 //		}
+
+        if($store['store_is_close'] != 0){
+            $store = checkAutoOpen($store);
+        }
         //@wangchuanyuan 周一到周天
         $date = date("w");//今天是星期几 @ydhl-wangchuanyuan 20171103
         switch ($date){
@@ -5346,7 +5350,12 @@ class StoreAction extends BaseAction{
             default :
                 $is_open = 1;
         }
+        //garfunkel add
+        if($store['store_is_close'] != 0){
+            $is_open = 0;
+        }
         //end  @wangchuanyuan
+
 
 
 

@@ -111,7 +111,9 @@ class StoreAction extends BaseAction
 //					}
 //				}
 //			}
-
+            if($row['store_is_close'] != 0){
+                $row = checkAutoOpen($row);
+            }
             //@wangchuanyuan 周一到周天
             $date = date("w");//今天是星期几 @ydhl-wangchuanyuan 20171106
             $now_time = date('H:i:s');
@@ -260,6 +262,10 @@ class StoreAction extends BaseAction
                 default :
                     $temp['is_close'] = 1;
                     $row['time']= '营业时间未知';
+            }
+            //garfunkel add
+            if($row['store_is_close'] != 0){
+                $temp['is_close'] = 1;
             }
             //end  @wangchuanyuan
 			$temp['coupon_list'] = array();
@@ -556,6 +562,9 @@ class StoreAction extends BaseAction
 //				}
 //			}
 //		}
+        if($row['store_is_close'] != 0){
+            $row = checkAutoOpen($row);
+        }
         //@wangchuanyuan 周一到周天
         $date = date("w");//今天是星期几 @ydhl-wangchuanyuan 20171106
         switch ($date){
@@ -703,6 +712,10 @@ class StoreAction extends BaseAction
             default :
                 $store['is_close'] = 1;
                 $store['time']= '营业时间未知';
+        }
+        //garfunkel add
+        if($row['store_is_close'] != 0){
+            $store['is_close'] = 1;
         }
         //end  @wangchuanyuan
 		$delivers = array('平台配送', '商家配送', '客户自提', '平台配送或自提', '商家配送或自提', '快递配送');

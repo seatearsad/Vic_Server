@@ -114,7 +114,8 @@ class StorestaffAction extends BaseAction
     public function index()
     {
         if ($this->store['have_shop']) {
-            redirect(U('Storestaff/shop_list'));
+            //redirect(U('Storestaff/shop_list'));
+            redirect(U('Storestaff/manage'));
         } elseif ($this->store['have_meal']) {
             redirect(U('Storestaff/meal_list'));
         } elseif ($this->store['have_group']) {
@@ -2377,8 +2378,600 @@ class StorestaffAction extends BaseAction
         $this->display();
     }
 
+    public function manage(){
+        $shop = D('Merchant_store')->field(true)->where(array('store_id' => $this->store['store_id']))->find();
+        $shop['name'] = lang_substr($shop['name'],C('DEFAULT_LANG'));
+        $store_image_class = new store_image();
+        $images = $store_image_class->get_allImage_by_path($shop['pic_info']);
+        $shop['image'] = $images ? array_shift($images) : '';
+
+        if($shop['store_is_close'] != 0){
+            $shop = checkAutoOpen($shop);
+        }
+
+        $shop_status = getClose($shop);
+        $shop['is_close'] = $shop_status['is_close'] ? 1 : 0;
+
+        $this->assign('store',$shop);
+        $this->display();
+    }
+
+    public function manage_open_close(){
+        $open_close = $_POST['open_close'];
+        $shop = D('Merchant_store')->field(true)->where(array('store_id' => $this->store['store_id']))->find();
+        $shop_status = getClose($shop);
+        //0 关闭店铺 1打开店铺
+        if($open_close == 0){
+            if(!$shop_status['is_close']){
+                $data['store_is_close'] = $shop_status['open_num'];
+                D('Merchant_store')->where(array('store_id' => $this->store['store_id']))->save($data);
+            }
+            $this->success('Success');
+        }else{//1打开店铺
+            if($shop_status['is_close']){
+                if($shop_status['open_num'] == 0){
+                    $this->error(L('_STORE_NOT_OPEN_TIP_'));
+                }else{
+                    $data['store_is_close'] = 0;
+                    D('Merchant_store')->where(array('store_id' => $this->store['store_id']))->save($data);
+                }
+            }
+            $this->success('Success');
+        }
+    }
+
+    public function manage_holiday(){
+        $store = D('Merchant_store')->field(true)->where(array('store_id' => $this->store['store_id']))->find();
+        $data['status'] = $store['status'] == 1 ? 0 : 1;
+        D('Merchant_store')->where(array('store_id' => $this->store['store_id']))->save($data);
+
+        $this->success('Success');
+    }
+
+    public function manage_time(){
+        $shop = D('Merchant_store')->field(true)->where(array('store_id' => $this->store['store_id']))->find();
+        $shop['name'] = lang_substr($shop['name'],C('DEFAULT_LANG'));
+        $store_image_class = new store_image();
+        $images = $store_image_class->get_allImage_by_path($shop['pic_info']);
+        $shop['image'] = $images ? array_shift($images) : '';
+        $shop_status = getClose($shop);
+        $shop['is_close'] = $shop_status['is_close'] ? 1 : 0;
+
+        $week_num = date("w");
+
+        $this->assign('store',$shop);
+        $this->assign('week_num',$week_num);
+        $this->display();
+    }
+
+    public function edit_time(){
+        if ($_POST){
+            D('Merchant_store')->where(array('store_id' => $this->store['store_id']))->save($_POST);
+            $this->success('Success');
+        }
+    }
+
+    public function manage_product(){
+        $shop = D('Merchant_store')->field(true)->where(array('store_id' => $this->store['store_id']))->find();
+        $shop['name'] = lang_substr($shop['name'],C('DEFAULT_LANG'));
+        $store_image_class = new store_image();
+        $images = $store_image_class->get_allImage_by_path($shop['pic_info']);
+        $shop['image'] = $images ? array_shift($images) : '';
+        $shop_status = getClose($shop);
+        $shop['is_close'] = $shop_status['is_close'] ? 1 : 0;
+
+        $fid = 0;
+        $where = array('store_id' => $this->store['store_id']);
+        $where['fid'] = $fid;
+
+        $shopGoodsSortDB = D('Shop_goods_sort');
+        $sort_list = $shopGoodsSortDB->field(true)->where($where)->order('`sort` DESC,`sort_id` ASC')->select();
+        foreach ($sort_list as &$value) {
+            if ($shop['is_mult_class'] == 0 && $value['operation_type'] == 2) {
+                $value['operation_type'] = 0;
+            }
+            if ($value['week'] != null) {
+                $week_arr = explode(',', $value['week']);
+                $week_str = '';
+                foreach ($week_arr as $k => $v) {
+                    $week_str .= $this->get_week($v) . ' ';
+                }
+                $value['week_str'] = $week_str;
+            }
+            $value['sort_name'] = lang_substr($value['sort_name'],C('DEFAULT_LANG'));
+        }
+        $this->assign('sort_list', $sort_list);
+        $this->assign('store',$shop);
+        $this->display();
+    }
+
+    public function manage_add_cate(){
+        if($_POST){
+            $en_name = $_POST['cate_name_en'];
+            $cn_name = $_POST['cate_name_cn'];
+            if($cn_name != ''){
+                $sort_name = $en_name.'|'.$cn_name;
+            }else{
+                $sort_name = $en_name;
+            }
+
+            $database_goods_sort = D('Shop_goods_sort');
+            $data_goods_sort['store_id'] = $this->store['store_id'];
+            $data_goods_sort['sort_name'] = $sort_name;
+            $data_goods_sort['sort'] = 0;
+            $data_goods_sort['sort_discount'] = 0;
+            $data_goods_sort['is_weekshow'] = 0;
+            $data_goods_sort['week'] = '';
+            $data_goods_sort['print_id'] = 0;
+            $data_goods_sort['fid'] = 0;
+            $data_goods_sort['level'] = 1;
+            $data_goods_sort['image'] = '';
+
+            $database_goods_sort->data($data_goods_sort)->add();
+
+            $this->success('Success');
+        }else {
+            $this->display();
+        }
+    }
+
+    public function manage_edit_cate(){
+        if($_POST){
+            $en_name = $_POST['cate_name_en'];
+            $cn_name = $_POST['cate_name_cn'];
+            if($cn_name != ''){
+                $sort_name = $en_name.'|'.$cn_name;
+            }else{
+                $sort_name = $en_name;
+            }
+
+            $database_goods_sort = D('Shop_goods_sort');
+            $data_goods_sort['sort_id'] = $_POST['sort_id'];
+            $data_goods_sort['sort_name'] = $sort_name;
 
 
+            $database_goods_sort->where(array('sort_id'=>$_POST['sort_id']))->save($data_goods_sort);
+
+            $this->success('Success');
+        }else {
+            $database_goods_sort = D('Shop_goods_sort');
+            $condition_goods_sort['sort_id'] = intval($_GET['sort_id']);
+            $now_sort = $database_goods_sort->field(true)->where($condition_goods_sort)->find();
+            $sort_name = explode('|', $now_sort['sort_name']);
+            $now_sort['en_name'] = $sort_name[0];
+            $now_sort['cn_name'] = $sort_name[1];
+
+            $this->assign('sort', $now_sort);
+
+            $this->display();
+        }
+    }
+    public function goods_list(){
+        $shop = D('Merchant_store')->field(true)->where(array('store_id' => $this->store['store_id']))->find();
+        $shop['name'] = lang_substr($shop['name'],C('DEFAULT_LANG'));
+        $store_image_class = new store_image();
+        $images = $store_image_class->get_allImage_by_path($shop['pic_info']);
+        $shop['image'] = $images ? array_shift($images) : '';
+        $shop_status = getClose($shop);
+        $shop['is_close'] = $shop_status['is_close'] ? 1 : 0;
+
+        $this->assign('store',$shop);
+
+        $sort_id = $_GET['sort_id'];
+        $sort = D('Shop_goods_sort')->where(array('sort_id'=>$sort_id))->find();
+        $sort['sort_name'] = lang_substr($sort['sort_name'],C('DEFAULT_LANG'));
+        $this->assign('sort',$sort);
+
+        $database_goods = D('Shop_goods');
+        $condition_goods['sort_id'] = $sort_id;
+        $count_goods = $database_goods->where($condition_goods)->count();
+        import('@.ORG.merchant_goods');
+        $p = new Page($count_goods, 10);
+        $goods_list = $database_goods->field(true)->where($condition_goods)->order('`sort` DESC, `goods_id` ASC')->limit($p->firstRow . ',' . $p->listRows)->select();
+        foreach($goods_list as &$val){
+            $val['name'] = lang_substr($val['name'],C('DEFAULT_LANG'));
+            $val['unit'] = lang_substr($val['unit'],C('DEFAULT_LANG'));
+        }
+
+        $this->assign('pagebar', $p->show());
+        //var_dump($goods_list);die();
+        $this->assign('goods_list',$goods_list);
+
+        $this->display();
+    }
+
+    public function goods_add_edit(){
+        if($_POST){
+            $sort_id = $_POST['sort_id'];
+            $goods_id = $_POST['goods_id'];
+
+            $goods_data['sort_id'] = $sort_id;
+            $goods_data['store_id'] = $this->store['store_id'];
+            if($_POST['cn_name'] && $_POST['cn_name'] != '')
+                $name = $_POST['en_name'].'|'.$_POST['cn_name'];
+            else
+                $name = $_POST['en_name'];
+
+            $goods_data['name'] = $name;
+            $goods_data['unit'] = $_POST['unit'];
+            $goods_data['price'] = $_POST['price'];
+            $goods_data['image'] = $_POST['product_image'] ? $_POST['product_image'] : '';
+            $goods_data['des'] = $_POST['desc'] ? $_POST['desc'] : '';
+            $goods_data['last_time'] = time();
+            $goods_data['status'] = $_POST['status'];
+
+            if($_POST['pro_new_list'])
+                $goods_data['is_properties'] = 1;
+
+            $goods_data['tax_num'] = $_POST['tax'];
+            $goods_data['deposit_price'] = $_POST['deposit'] ? $_POST['deposit'] : 0;
+            $goods_data['spec_value'] = '';
+
+            if($goods_id == 0){//新添
+                $goods_data['old_price'] = 0;
+                $goods_data['seckill_price'] = 0;
+                $goods_data['seckill_open_time'] = time();
+                $goods_data['seckill_close_time'] = time();
+                $goods_data['seckill_type'] = 0;
+                $goods_data['seckill_stock'] = -1;
+                $goods_data['sell_count'] = 0;
+                $goods_data['sell_mouth'] = 0;
+                $goods_data['print_id'] = 0;
+                $goods_data['sort'] = 0;
+                $goods_data['stock_num'] = -1;
+                $goods_data['today_sell_count'] = 0;
+                $goods_data['sell_day'] = 0;
+
+                $goods_data['reply_count'] = 0;
+                $goods_data['today_sell_spec'] = '';
+                $goods_data['number'] = '';
+                $goods_data['packing_charge'] = 0;
+                $goods_data['today_seckill_count'] = 0;
+                $goods_data['cat_fid'] = 0;
+                $goods_data['cat_id'] = 0;
+                $goods_data['freight_type'] = 0;
+                $goods_data['freight_value'] = 0;
+                $goods_data['freight_template'] = 0;
+                $goods_data['extra_pay_price'] = 0;
+                $goods_data['cost_price'] = 0;
+                $goods_id = D('Shop_goods')->add($goods_data);
+            }else{
+                D('Shop_goods')->where(array('goods_id'=>$goods_id))->save($goods_data);
+            }
+            if($goods_id != 0) {
+                //处理新属性
+                if ($_POST['pro_new_list']) {
+                    foreach ($_POST['pro_new_list'] as $v) {
+                        $pro_data = array();
+                        $pro_data = $v;
+                        $pro_data['goods_id'] = $goods_id;
+                        D('Shop_goods_properties')->add($pro_data);
+                    }
+                }
+                //处理规格
+                if ($_POST['spec_all_list']) {
+                    $spec_id_record = array();
+                    foreach ($_POST['spec_all_list'] as $vo) {
+                        $spec_data = array();
+                        $spec_data['store_id'] = $this->store['store_id'];
+                        $spec_data['goods_id'] = $goods_id;
+                        $spec_data['name'] = $vo['name'];
+                        if (strpos($vo['id'], 'new') !== false) {//新规格
+                            $spec_data['id'] = D('Shop_goods_spec')->add($spec_data);
+                            $spec_id_record[$vo['id']] = $spec_data['id'];
+                        } else {
+                            $spec_data['id'] = $vo['id'];
+                            //D('Shop_goods_spec')->where(array('id'=>$spec_data['id']))->save($spec_data);
+                        }
+                        foreach ($vo['val'] as $v_val) {
+                            $spec_val_data = array();
+                            if (strpos($v_val['id'], 'new') !== false) {
+                                $spec_val_data['sid'] = $spec_data['id'];
+                                $spec_val_data['name'] = $v_val['name'];
+                                $spec_val_data['id'] = D('Shop_goods_spec_value')->add($spec_val_data);
+                                $spec_id_record[$v_val['id']] = $spec_val_data['id'];
+                            } else {
+                                $spec_val_data['id'] = $v_val['id'];
+                            }
+                        }
+                    }
+
+                    //处理规格价格
+                    $price_str = array();
+                    foreach ($_POST['spec_all_price'] as $vo) {
+                        $str = '';
+                        $ids = explode('_', $vo['ids']);
+                        foreach ($ids as &$id) {
+                            if (strpos($id, 'new') !== false) {
+                                $id = $spec_id_record[$id];
+                            }
+                        }
+                        $tids = implode(':', $ids);
+                        $str = $tids . '|' . '0' . ':' . $vo['price'] . ':' . '0:-1:0';
+                        $price_str[] = $str;
+                    }
+
+                    $spec_value_str = implode('#', $price_str);
+                    D('Shop_goods')->where(array('goods_id' => $goods_id))->save(array('spec_value' => $spec_value_str));
+                }
+                //删除规格
+                if($_POST['spec_del_list']){
+                    foreach ($_POST['spec_del_list'] as $vo){
+                        if (strpos($vo, 'new') !== false) {
+
+                        }else{
+                            $spec_id = $vo;
+                            D('Shop_goods_spec')->where(array('id'=>$spec_id))->delete();
+                            D('Shop_goods_spec_value')->where(array('sid'=>$spec_id))->delete();
+                        }
+                    }
+                }
+                $this->success('Success');
+            }else{
+                $this->error('Fail');
+            }
+        }else {
+            $shop = D('Merchant_store')->field(true)->where(array('store_id' => $this->store['store_id']))->find();
+            $shop['name'] = lang_substr($shop['name'], C('DEFAULT_LANG'));
+            $store_image_class = new store_image();
+            $images = $store_image_class->get_allImage_by_path($shop['pic_info']);
+            $shop['image'] = $images ? array_shift($images) : '';
+            $shop_status = getClose($shop);
+            $shop['is_close'] = $shop_status['is_close'] ? 1 : 0;
+
+            $this->assign('store', $shop);
+
+            $sort_id = $_GET['sort_id'];
+            $sort = D('Shop_goods_sort')->where(array('sort_id' => $sort_id))->find();
+            $sort['sort_name'] = lang_substr($sort['sort_name'], C('DEFAULT_LANG'));
+            $this->assign('sort', $sort);
+
+            if ($_GET['goods_id']) {
+                $goods_id = $_GET['goods_id'];
+                $database_shop_goods = D('Shop_goods');
+                $condition_goods['goods_id'] = $goods_id;
+                $now_goods = $database_shop_goods->field(true)->where($condition_goods)->find();
+                if (empty($now_goods)) {
+                    $this->error('商品不存在！');
+                }
+                if (!empty($now_goods['image'])) {
+                    $goods_image_class = new goods_image();
+                    $tmp_pic_arr = explode(';', $now_goods['image']);
+                    foreach ($tmp_pic_arr as $key => $value) {
+                        $now_goods['pic_arr'][$key]['title'] = $value;
+                        $now_goods['pic_arr'][$key]['url'] = $goods_image_class->get_image_by_path($value, 's');
+                    }
+                }
+
+                $return = $database_shop_goods->format_spec_value($now_goods['spec_value'], $now_goods['goods_id']);
+                $now_goods['json'] = isset($return['json']) ? json_encode($return['json']) : '';
+                $now_goods['properties_list'] = isset($return['properties_list']) ? $return['properties_list'] : '';
+                $now_goods['spec_list'] = isset($return['spec_list']) ? $return['spec_list'] : '';
+                $now_goods['list'] = isset($return['list']) ? $return['list'] : '';
+
+                $good_name = explode('|', $now_goods['name']);
+                $now_goods['en_name'] = $good_name[0];
+                $now_goods['cn_name'] = $good_name[1];
+
+                $now_goods['spec_num'] = is_array($now_goods['spec_list']) ? count($now_goods['spec_list']) : 0;
+                //var_dump($now_goods);die();
+                $this->assign('goods', $now_goods);
+            }
+            $goods_id = $_GET['goods_id'] ? $_GET['goods_id'] : 0;
+            $this->assign('sort_id', $sort_id);
+            $this->assign('goods_id', $goods_id);
+
+            $this->display();
+        }
+    }
+
+    public function goods_properties(){
+        if($_GET['new_id']){
+            $this->assign($_GET);
+            $this->assign('val_num', 0);
+        }else {
+            $this->assign($_GET);
+            if ($_GET['pro_id']) {
+                $pro_id = $_GET['pro_id'];
+                $properties = D('Shop_goods_properties')->field(true)->where(array('id' => $pro_id))->find();
+                $properties['value'] = explode(',', $properties['val']);
+                $properties['val_num'] = count($properties['value']);
+
+                $this->assign('val_num', $properties['val_num']);
+                $this->assign('pro', $properties);
+            } else {
+                $this->assign('val_num', 1);
+            }
+        }
+
+        $this->display();
+    }
+
+    public function goods_spec(){
+        $spec_class = explode('-',$_GET['spec_id']);
+        if($spec_class[0] == 'new'){
+            $_GET['spec_id'] = "";
+            $this->assign($_GET);
+            $this->assign('new_id',$spec_class[1]);
+            $this->assign('val_num', 0);
+        }else{
+            if ($_GET['spec_id']) {
+                $this->assign($_GET);
+                $spec_id = $_GET['spec_id'];
+                $spec = D('Shop_goods_spec')->where(array('id'=>$spec_id))->find();
+
+                $spec['val'] = D('Shop_goods_spec_value')->where(array('sid'=>$spec_id))->select();
+
+                $this->assign('val_num', count($spec['val']));
+                $this->assign('spec',$spec);
+            }else{
+                $this->assign('val_num', 1);
+            }
+        }
+
+        $this->display();
+    }
+
+    public function goods_pro_edit(){
+        $pro_id = $_POST['id'];
+        D('Shop_goods_properties')->where(array('id'=>$pro_id))->save($_POST);
+
+        $this->success('Success');
+    }
+
+    public function goods_pro_del(){
+        $pro_id = $_POST['id'];
+        $goods_id = $_POST['goods_id'];
+        D('Shop_goods_properties')->where(array('id'=>$pro_id))->delete();
+
+        $list = D('Shop_goods_properties')->where(array('goods_id'=>$goods_id))->select();
+        if(!$list || count($list) == 0){
+            D('Shop_goods')->where(array('goods_id'=>$goods_id))->save(array('is_properties'=>0));
+        }
+
+        $this->success('Success');
+    }
+
+    public function goods_spec_edit(){
+        $spec_id = $_POST['id'];
+        $val_list = $_POST['val'];
+
+        //$store_id = $this->store['store_id'];
+
+        $spec_data['name'] = $_POST['name'];
+        D('Shop_goods_spec')->where(array('id'=>$spec_id))->save($spec_data);
+
+        //获取之前的所有属性id
+        $old_val_list = D('Shop_goods_spec_value')->field('id')->where(array('sid'=>$spec_id))->select();
+        $old_list = array();
+        foreach ($old_val_list as $v){
+            $old_list[] = $v['id'];
+        }
+
+        $spec_val = explode(',',$val_list);
+        foreach ($spec_val as $val){
+            $spec_val_arr = explode(':',$val);
+            $spec_val_id = $spec_val_arr[0];
+            $spec_val_name = $spec_val_arr[1];
+
+            if($spec_val_id != 0){
+                D('Shop_goods_spec_value')->where(array('id'=>$spec_val_id))->save(array('name'=>$spec_val_name));
+
+                $old_list = array_diff($old_list,[$spec_val_id]);
+            }else{//新属性
+                $add_data['sid'] = $spec_id;
+                $add_data['name'] = $spec_val_name;
+                D('Shop_goods_spec_value')->add($add_data);
+            }
+        }
+        //删除未在提交表单中的
+        foreach ($old_list as $v){
+            D('Shop_goods_spec_value')->where(array('id'=>$v))->delete();
+        }
 
 
+        $spec = D('Shop_goods_spec')->where(array('id'=>$spec_id))->find();
+        $spec['val'] = D('Shop_goods_spec_value')->where(array('sid'=>$spec_id))->select();
+
+        $result['data'] = $spec;
+        $result['info'] = 'Success';
+
+        $this->ajaxReturn($result);
+    }
+
+    public function ajax_upload()
+    {
+        if ($_FILES['file']['error'] != 4) {
+            $store_id = isset($_GET['store_id']) ? intval($_GET['store_id']) : 0;
+            $shop = D('Merchant_store_shop')->field('store_theme')->where(array('store_id' => $store_id))->find();
+            $store_theme = isset($shop['store_theme']) ? intval($shop['store_theme']) : 0;
+            if ($store_theme) {
+                $width = '900,450';
+                $height = '900,450';
+            } else {
+                $width = '900,450';
+                $height = '500,250';
+            }
+            $param = array('size' => $this->config['group_pic_size']);
+            $param['thumb'] = true;
+            $param['imageClassPath'] = 'ORG.Util.Image';
+            $param['thumbPrefix'] = 'm_,s_';
+            $param['thumbMaxWidth'] = $width;
+            $param['thumbMaxHeight'] = $height;
+            $param['thumbRemoveOrigin'] = false;
+            $image = D('Image')->handle($this->store['store_id'], 'goods', 1, $param);
+            if ($image['error']) {
+                exit(json_encode(array('error' => 1,'message' =>$image['msg'])));
+            } else {
+                $title = $image['title']['file'];
+                $goods_image_class = new goods_image();
+                $url = $goods_image_class->get_image_by_path($title, 's');
+                exit(json_encode(array('error' => 0, 'url' => $url, 'title' => $title)));
+            }
+        } else {
+            exit(json_encode(array('error' => 1,'message' =>'没有选择图片')));
+        }
+    }
+
+    public function ajax_store_upload() {
+        if ($_FILES['imgFile']['error'] != 4) {
+            $shop = D('Merchant_store')->field(true)->where(array('store_id' => $this->store['store_id']))->find();
+            $image = D('Image')->handle($shop['mer_id'], 'store', 1);
+            if ($image['error']) {
+                exit(json_encode($image));
+            } else {
+                $title = $image['title']['file'];
+                $store_image_class = new store_image();
+                $url = $store_image_class->get_image_by_path($title);
+                exit(json_encode(array('error' => 0, 'url' => $url, 'title' => $title)));
+            }
+        } else {
+            exit(json_encode(array('error' => 1,'message' =>'没有选择图片')));
+        }
+    }
+
+    public function update_device(){
+        $device_id = $_POST['token'] ? $_POST['token'] : '';
+
+        if($device_id != '' ){
+            $data['device_id'] = $device_id;
+            D('Merchant_store_staff')->field(true)->where(array('id'=>$this->staff_session['id']))->save($data);
+            exit(json_encode(array('error' => 0, 'msg' => 'Success！', 'dom_id' => 'account')));
+        }else{
+            exit(json_encode(array('error' => 1, 'msg' => 'Fail！', 'dom_id' => 'account')));
+        }
+
+    }
+
+    public function manage_info(){
+        if($_POST){
+            $data['name'] = $_POST['en_name'];
+            if($_POST['cn_name'] && $_POST['cn_name'] != ''){
+                $data['name'] = $data['name'].'|'.$_POST['cn_name'];
+            }
+            $data['phone'] = $_POST['phone'];
+            $data['pic_info'] = $_POST['pic_info'];
+            $data['txt_info'] = $_POST['txt_info'] ? $_POST['txt_info'] : '';
+
+            D('Merchant_store')->where(array('store_id' => $this->store['store_id']))->save($data);
+
+            $this->success('Success');
+        }else{
+            $shop = D('Merchant_store')->field(true)->where(array('store_id' => $this->store['store_id']))->find();
+            $name = explode('|',$shop['name']);
+            $shop['en_name'] = $name[0];
+            $shop['cn_name'] = $name[1] ? $name[1] : '';
+
+            $shop['name'] = lang_substr($shop['name'],C('DEFAULT_LANG'));
+            $store_image_class = new store_image();
+            $images = $store_image_class->get_allImage_by_path($shop['pic_info']);
+            $shop['image'] = $images ? array_shift($images) : '';
+            $shop_status = getClose($shop);
+            $shop['is_close'] = $shop_status['is_close'] ? 1 : 0;
+
+            $this->assign('store',$shop);
+
+            $this->display();
+        }
+    }
 }

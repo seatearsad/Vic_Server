@@ -115,7 +115,7 @@ cursor: pointer;
 					<td>Delivery Method：{pigcms{$order['deliver_status_str']}</td>
 				</tr>
 				<tr>
-					<td>Customer Commant： <b style="color:red">{pigcms{$order.desc|default='No'}</b</td>
+					<td>Customer Comment： <b style="color:red">{pigcms{$order.desc|default='No'}</b</td>
 				</tr>
 				
 				<if condition="$order['invoice_head']">
@@ -279,7 +279,7 @@ cursor: pointer;
 		</table>
 		</if>
 	</ul>
-	<a href="{pigcms{:U('Storestaff/shop_list')}" class="btn" style="float:right;right:1rem;top:0.2rem;position:absolute;width:5rem;font-size:1rem;">back</a>
+	<a href="{pigcms{:U('Storestaff/shop_list')}" class="btn" style="background-color:#ffa64d;float:right;right:1rem;top:0.2rem;position:absolute;width:5rem;font-size:1rem;">back</a>
     <if condition="$deliver">
         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&libraries=places&language=en"></script>
         <div style="margin-left: 10px">{pigcms{$deliver.name}({pigcms{$deliver.phone})</div>
@@ -329,10 +329,10 @@ cursor: pointer;
 			<tbody>
             <if condition="$order['info']">
 				<tr>
-					<th>Name of the product</th>
-					<th class="cc">unit price</th>
-					<th class="cc">Quantity</th>
-					<th class="rr">Specification attribute</th>
+					<th>Name</th>
+					<th class="cc">Rate</th>
+					<th class="cc">Qty</th>
+					<th class="rr">Options</th>
 				</tr>
 				<volist name="order['info']" id="info">
 				<tr>
@@ -422,7 +422,7 @@ cursor: pointer;
                     </tr>
                     <tr>
                         <td colspan="4" style="text-align: center">
-                            <div class="submit_btn" id="submit_div">
+                            <div class="submit_btn" style="background-color: #ffa64d" id="submit_div">
                                 Confirm
                             </div>
                         </td>
@@ -466,4 +466,4 @@ cursor: pointer;
 
 </script>
 
-<!---<include file="Storestaff:footer"/>--->
+<!--include file="Storestaff:footer" -->

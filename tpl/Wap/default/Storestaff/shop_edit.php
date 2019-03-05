@@ -279,7 +279,7 @@ cursor: pointer;
 		</table>
 		</if>
 	</ul>
-	<a href="{pigcms{:U('Storestaff/shop_list')}" class="btn" style="float:right;right:1rem;top:0.2rem;position:absolute;width:5rem;font-size:1rem;">返 回</a>
+	<a href="{pigcms{:U('Storestaff/shop_list')}" class="btn" style="float:right;right:1rem;top:0.2rem;position:absolute;width:5rem;font-size:1rem;background-color: #ffa64d">返 回</a>
     <if condition="$deliver">
         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&libraries=places&language=en"></script>
         <div style="margin-left: 10px">{pigcms{$deliver.name}({pigcms{$deliver.phone})</div>
@@ -422,7 +422,7 @@ cursor: pointer;
                 </tr>
                 <tr>
                     <td colspan="4" style="text-align: center">
-                        <div class="submit_btn" id="submit_div">
+                        <div class="submit_btn" style="background-color: #ffa64d" id="submit_div">
                             接单
                         </div>
                     </td>
@@ -466,4 +466,4 @@ cursor: pointer;
 
 
 
-<!---<include file="Storestaff:footer"/>--->
+<!--include file="Storestaff:footer"/ -->

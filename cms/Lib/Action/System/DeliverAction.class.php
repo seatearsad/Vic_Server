@@ -1130,12 +1130,17 @@ class DeliverAction extends BaseAction {
     public function e_call(){
         $user_list = D('Deliver_user')->field(true)->where(array('status'=>1,'work_status'=>1))->order('uid asc')->select();
         foreach ($user_list as $deliver){
-            $sms_data['uid'] = 0;
-            $sms_data['mobile'] = $deliver['phone'];
-            $sms_data['sendto'] = 'deliver';
-            $sms_data['tplid'] = 247163;
-            $sms_data['params'] = [];
-            Sms::sendSms2($sms_data);
+            if($deliver['device_id'] && $deliver['device_id'] != ''){
+                $message = 'Tutti are short on hands now! Please log in to your account and start to Accept Order! Tutti thanks your help!';
+                Sms::sendMessageToGoogle($deliver['device_id'],$message);
+            }else {
+                $sms_data['uid'] = 0;
+                $sms_data['mobile'] = $deliver['phone'];
+                $sms_data['sendto'] = 'deliver';
+                $sms_data['tplid'] = 247163;
+                $sms_data['params'] = [];
+                Sms::sendSms2($sms_data);
+            }
         }
 
         exit(json_encode(array('error' => 0, 'msg' => 'Success！', 'dom_id' => 'account')));
