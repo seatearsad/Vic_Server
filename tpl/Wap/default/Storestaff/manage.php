@@ -202,7 +202,7 @@ line-height: .7rem;
  .store_name{
      height: 20px;
      margin-left: 105px;
-     margin-top: -100px;
+     margin-top: -90px;
  }
  .store_name div{
 
@@ -254,11 +254,12 @@ line-height: .7rem;
 </head>
 <body>
 	<dl class="list"  style="border-top:none;margin-top:0rem;">
+        <dd id="filtercon">
 			<div class="find_div">
                 <div style="height: 110px;">
                     <img src="{pigcms{$store.image}" width="100" height="100">
                     <div class="store_name">
-                        <div>{pigcms{$store.name}</div>
+                        <div style="font-size: 20px">{pigcms{$store.name}</div>
 
                         <div style="margin-top: 10px;">
                             {pigcms{:L('_STORE_OPEN_CLOSE_')}:
