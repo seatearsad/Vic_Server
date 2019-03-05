@@ -670,72 +670,52 @@ function ip() {
     return preg_match ( '/[\d\.]{7,15}/', $ip, $matches ) ? $matches [0] : '';
 }
 
-<<<<<<< HEAD
 function real_ip()
 {
     static $realip = NULL;
-    $num = rand(1,100);
-    if ($realip !== NULL)
-    {
+    $num = rand(1, 100);
+    if ($realip !== NULL) {
         return $realip;
     }
 
-    if (isset($_SERVER))
-    {
-        if (isset($_SERVER['HTTP_X_FORWARDED_FOR']))
-        {
+    if (isset($_SERVER)) {
+        if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
             $arr = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
 
             /* 取X-Forwarded-For中第一个非unknown的有效IP字符串 */
-            foreach ($arr AS $ip)
-            {
+            foreach ($arr AS $ip) {
                 $ip = trim($ip);
 
-                if ($ip != 'unknown')
-                {
+                if ($ip != 'unknown') {
                     $realip = $ip;
 
                     break;
                 }
             }
-        }
-        elseif (isset($_SERVER['HTTP_CLIENT_IP']))
-        {
+        } elseif (isset($_SERVER['HTTP_CLIENT_IP'])) {
             $realip = $_SERVER['HTTP_CLIENT_IP'];
-        }
-        else
-        {
-            if (isset($_SERVER['REMOTE_ADDR']))
-            {
+        } else {
+            if (isset($_SERVER['REMOTE_ADDR'])) {
                 $realip = $_SERVER['REMOTE_ADDR'];
-            }
-            else
-            {
-                $realip = '192.168.88.'.$num;
+            } else {
+                $realip = '192.168.88.' . $num;
             }
         }
-    }
-    else
-    {
-        if (getenv('HTTP_X_FORWARDED_FOR'))
-        {
+    } else {
+        if (getenv('HTTP_X_FORWARDED_FOR')) {
             $realip = getenv('HTTP_X_FORWARDED_FOR');
-        }
-        elseif (getenv('HTTP_CLIENT_IP'))
-        {
+        } elseif (getenv('HTTP_CLIENT_IP')) {
             $realip = getenv('HTTP_CLIENT_IP');
-        }
-        else
-        {
+        } else {
             $realip = getenv('REMOTE_ADDR');
         }
     }
 
     preg_match("/[\d\.]{7,15}/", $realip, $onlineip);
-    $realip = !empty($onlineip[0]) ? $onlineip[0] : '192.168.88.'.$num;
+    $realip = !empty($onlineip[0]) ? $onlineip[0] : '192.168.88.' . $num;
 
     return $realip;
-=======
+}
 function checkAutoOpen($store){
     $shop_status = getClose($store);
     //如果当前时段是手动关闭的便不自动开启 否则自动开启
@@ -914,6 +894,5 @@ function getClose($store){
     $data['open_num'] = $open_num;
 
     return $data;
->>>>>>> dev_pay
 }
 ?>
