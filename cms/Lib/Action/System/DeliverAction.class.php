@@ -1132,7 +1132,7 @@ class DeliverAction extends BaseAction {
         foreach ($user_list as $deliver){
             if($deliver['device_id'] && $deliver['device_id'] != ''){
                 $message = 'Tutti are short on hands now! Please log in to your account and start to Accept Order! Tutti thanks your help!';
-                Sms::sendMessageToGoogle($deliver['device_id'],$message);
+                Sms::sendMessageToGoogle($deliver['device_id'],$message,3);
             }else {
                 $sms_data['uid'] = 0;
                 $sms_data['mobile'] = $deliver['phone'];

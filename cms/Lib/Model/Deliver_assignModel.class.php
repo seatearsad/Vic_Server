@@ -515,7 +515,7 @@ class Deliver_assignModel extends Model
         $deliver = D('Deliver_user')->field(true)->where(array('uid'=>$uid))->find();
         if($deliver['device_id'] && $deliver['device_id'] != ''){
             $message = 'There is a new order for you to pick up, please go to "Pending List" take the order.';
-            Sms::sendMessageToGoogle($deliver['device_id'],$message);
+            Sms::sendMessageToGoogle($deliver['device_id'],$message,3);
         }else{
             $sms_data = [
                 'mobile' => $deliver['phone'],

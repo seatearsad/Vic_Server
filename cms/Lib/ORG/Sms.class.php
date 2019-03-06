@@ -337,7 +337,23 @@ final class Sms {
         $client->ExtCreateBroadcast(array("myRequest" => $request));
     }
 
-    public function sendMessageToGoogle($device_id,$message){
+    //type 向那个客户端发送消息 1用户端 2店员端 3配送员端
+    public function sendMessageToGoogle($device_id,$message,$type=1){
+        $server_key = '';
+        switch ($type){
+            case 1:
+                $server_key = 'AIzaSyAxHAPoWlRu2Mz8APLwM8Ae6B3x1MJUlvU';
+                break;
+            case 2:
+                $server_key = 'AIzaSyAIIwFEIadyWzc9T3M37hUb4ujbH0i5BAk';
+                break;
+            case 3:
+                $server_key = 'AIzaSyA3DNstqG2aHPyjeyOpsuiWfoC5-qF9l_Q';
+                break;
+            default:
+                break;
+        }
+
         $url = 'https://fcm.googleapis.com/fcm/send';
         $data['to'] = $device_id;
         $data['data'] = array('message'=>'Message From Tutti');
@@ -346,7 +362,7 @@ final class Sms {
 
         $ch = curl_init();
         $headers[] = "Content-Type:application/json";//"Content-Type: multipart/form-data; boundary=" .  uniqid('------------------');
-        $headers[] = "Authorization:key=AIzaSyAxHAPoWlRu2Mz8APLwM8Ae6B3x1MJUlvU";
+        $headers[] = "Authorization:key=".$server_key;
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);

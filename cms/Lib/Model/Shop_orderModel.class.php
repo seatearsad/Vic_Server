@@ -770,7 +770,7 @@ class Shop_orderModel extends Model
 					foreach ($store_staff as $staff){
 						if($staff['device_id'] && $staff['device_id'] != ''){
                             $staff_message = "Tutti got a new order for you, can you please confirm online now!";
-                            Sms::sendMessageToGoogle($staff['device_id'],$staff_message);
+                            Sms::sendMessageToGoogle($staff['device_id'],$staff_message,2);
 						}
 					}
                     $txt = "Hi there, Tutti got a new order for you, can you please confirm online now!";
