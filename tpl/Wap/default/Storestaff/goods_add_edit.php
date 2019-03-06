@@ -496,7 +496,7 @@ a{
                                 <div class="spec_del_btn" data-type="{pigcms{$i-1}" data-id="{pigcms{$vo['id']}">Del</div>
                             </th>
                             </volist>
-                            <th id="price_title">{pigcms{:L('_PRICE_TXT_')}</th>
+                            <th id="price_title">{pigcms{:L('_PRICE_TXT_')} ($)</th>
                         </tr>
                         </thead>
                         <tr id="spec_val">
@@ -871,7 +871,7 @@ a{
                 var new_price = '<span id="'+spec_val_key[i]+'">0</span>';
                 $('#spec_val_price_list').append(new_price);
             }
-            insert_html += '<tr><td style="padding: 4px">$<input type="text" name="price" data-id="'+spec_val_key[i]+'" value="'+price+'"></td></tr>';
+            insert_html += '<tr><td style="padding: 4px"><input type="text" name="price" data-id="'+spec_val_key[i]+'" value="'+price+'"></td></tr>';
         }
         $('#spec_price_table').html(insert_html);
 

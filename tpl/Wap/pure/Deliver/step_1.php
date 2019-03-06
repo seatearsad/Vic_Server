@@ -244,7 +244,7 @@
                 </div>
             </div>
             <div class="img_2">
-                Please submit your proof of work eligibility(passport,birth certificate,permanent residency card,work permit,study permit with valid permeation to work off campus)
+                <div style="text-align: left;margin-top:5px">Please submit your proof of work eligibility(passport,birth certificate,permanent residency card,work permit,study permit with valid permission to work off campus)</div>
             </div>
             <!--div class="bank_title">
                 {pigcms{:L('_SIN_NUMBER_')}

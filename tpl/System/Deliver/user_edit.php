@@ -70,6 +70,27 @@
                     <input type="text" placeholder="Account" class="input fl" name="account" size="30" validate="maxlength:50,required:true" value="{pigcms{$card.account}" />
                 </td>
             <tr>
+            <if condition="$img">
+            <tr>
+                <th width="15%">驾照</th>
+                <td colspan=3>
+                    <img src="{pigcms{:C('config.site_url')}{pigcms{$img['driver_license']}" height="100"/>
+                </td>
+            </tr>
+            <tr>
+                <th width="15%">车辆保险</th>
+                <td colspan=3>
+                    <img src="{pigcms{:C('config.site_url')}{pigcms{$img['insurance']}" height="100"/>
+                </td>
+            </tr>
+            <tr>
+                <th width="15%">工作证明</th>
+                <td colspan=3>
+                    <img src="{pigcms{:C('config.site_url')}{pigcms{$img['certificate']}" height="100"/>
+                    <!--input type="text" placeholder="SIN_Number" class="input fl" name="certificate" size="30" validate="maxlength:50,required:true" value="{pigcms{$img.certificate}" /-->
+                </td>
+            </tr>
+            </if>
 		</table>
 		<div class="btn hidden">
 			<input type="submit" name="dosubmit" id="dosubmit" value="提交" class="button" />

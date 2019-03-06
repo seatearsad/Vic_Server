@@ -663,7 +663,8 @@ function showGood(shop_id,product_id){
 				}
 			});
 			$('#shopDetailPageTitle .title').html(result.name);
-            $('#shopDetailPageTitle .desc').html(getLangStr('_MONTH_SALE_NUM_' , result.sell_count)+ ' ' +getLangStr('_PRAISE_TXT_')+result.reply_count);
+            //$('#shopDetailPageTitle .desc').html(getLangStr('_MONTH_SALE_NUM_' , result.sell_count)+ ' ' +getLangStr('_PRAISE_TXT_')+result.reply_count);
+            $('#shopDetailPageTitle .desc').html(getLangStr('_PRAISE_TXT_')+result.reply_count);
 			$('#shopDetailPageFormat').empty();
 			if(result.des != ''){
 				$('#shopDetailPageContent .content').html(result.des).show();

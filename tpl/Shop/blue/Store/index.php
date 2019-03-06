@@ -173,9 +173,9 @@
 				  						</div>
 										<!--span class="fr">{pigcms{:replace_lang_str(L('_MONTH_SALE_NUM_'),$vo['merchant_store_month_sale_count'])}</span-->
 				 					</dd>
-                                    <dd class="clr middle">
+                                    <!--dd class="clr middle">
                                         <span class="fr">{pigcms{:replace_lang_str(L('_SALE_NUM_ORDER_'),$vo['month_sale_count'])}</span>
-                                    </dd>
+                                    </dd-->
 									<if condition="$vo['delivery']">
 									<dd class="clr end">
 										<!--span class="r5" style="width: 200px;float:left;">{pigcms{:L('_MIN_DELI_PRICE_')}:$<i>{pigcms{$vo['delivery_price']}</i></span-->
@@ -340,9 +340,9 @@
                         </div>
                         <!--span class="fr">月售{{ d.store_list[i].merchant_store_month_sale_count }}单</span-->
                     </dd>
-                    <dd class="clr middle">
+                    <!--dd class="clr middle">
                         <span class="fr">{{getLangStr('_MONTH_SALE_NUM_',d.store_list[i].month_sale_count)}}</span>
-                    </dd>
+                    </dd-->
 					{{# if(d.store_list[i].delivery){ }}
 					<dd class="clr end">
 						<!--span class="r5" style="width: 200px;float:left;">{pigcms{:L('_MIN_DELI_PRICE_')}:$<i>{{ d.store_list[i].delivery_price }}</i></span-->

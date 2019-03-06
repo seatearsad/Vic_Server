@@ -1127,7 +1127,7 @@ class DeliverAction extends BaseAction
 		$supply['create_time'] = date('Y-m-d H:i', $supply['create_time']);
 		$supply['appoint_time'] = date('Y-m-d H:i', $supply['appoint_time']);
 		$supply['order_time'] = $supply['order_time'] ? date('Y-m-d H:i', $supply['order_time']) : '--';
-		$supply['end_time'] = $supply['end_time'] ? date('Y-m-d H:i', $supply['end_time']) : '未送达';
+		$supply['end_time'] = $supply['end_time'] ? date('Y-m-d H:i', $supply['end_time']) : 'N/A';
 		$supply['real_orderid'] = $supply['real_orderid'] ? $supply['real_orderid'] : $supply['order_id'];
 // 		$supply['store_distance'] = getRange(getDistance($supply['from_lat'], $supply['from_lnt'], $lat, $lng));
 		$supply['map_url'] = U('Deliver/map', array('supply_id' => $supply['supply_id']));

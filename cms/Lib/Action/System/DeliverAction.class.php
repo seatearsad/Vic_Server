@@ -174,6 +174,9 @@ class DeliverAction extends BaseAction {
 
     		$card = D('Deliver_card')->field(true)->where(array('deliver_id'=>$uid))->find();
     		$this->assign('card',$card);
+
+            $deliver_img = D('Deliver_img')->field(true)->where(array('uid' => $uid))->find();
+            $this->assign('img', $deliver_img);
     	}
     	$this->display();
     }

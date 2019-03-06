@@ -70,7 +70,8 @@
 			<div class="dealcard-block-right">
 				<div class="brand">{{ d[i].name }}<em class="location-right">{{# if(user_long != '0'){ }}{{ d[i].range }}{{# } }}</em></div>
 				<div class="title {{# if(!d[i].delivery){ }}pick{{# } }}">
-					<span class="star"><i class="full"></i><i class="full"></i><i class="full"></i><i class="half"></i><i></i></span><span>{{getLangStr('_MONTH_SALE_NUM_',d[i].month_sale_count)}}</span>
+					<span class="star"><i class="full"></i><i class="full"></i><i class="full"></i><i class="half"></i><i></i></span>
+                    <!--span>{{getLangStr('_MONTH_SALE_NUM_',d[i].month_sale_count)}}</span-->
                     {{# if(d[i].delivery){ }}
                     <!--em class="location-right">{{ d[i].delivery_time }}分钟</em-->
                     {{# }else{ }}
@@ -211,7 +212,8 @@
 							{{# }}}
 							<div class="product_text" {{# if(d[i].product_list[j].product_image == null ){ }} style="margin-left:0px" {{# } }}>
 								<div class="title">{{ d[i].product_list[j].product_name }}</div>
-                                <div class="sale">{{ getLangStr('_MONTH_SALE_NUM_',d[i].product_list[j].product_sale) }} {{ getLangStr('_PRAISE_TXT_') }} {{ d[i].product_list[j].product_reply }}</div>
+                                <!--div class="sale">{{ getLangStr('_MONTH_SALE_NUM_',d[i].product_list[j].product_sale) }} {{ getLangStr('_PRAISE_TXT_') }} {{ d[i].product_list[j].product_reply }}</div-->
+                                <div class="sale">{{ getLangStr('_PRAISE_TXT_') }} {{ d[i].product_list[j].product_reply }}</div>
 								{{# if(d[i].product_list[j].has_format){ }}
 									<div class="price">${{ d[i].product_list[j].product_price }}
                                         {{# if(d[i].product_list[j].deposit_price > 0){ }}
@@ -270,7 +272,8 @@
 						{{# if(d[i].product_list[j].is_seckill_price){ }}
                         <div class="skill_discount">{pigcms{:L('_LIMIT_TIME_DISCOUNT_')}</div>
                         {{# } }}
-                        <div class="sale">{{ getLangStr('_MONTH_SALE_NUM_',d[i].product_list[j].product_sale) }} {{ getLangStr('_PRAISE_TXT_') }}{{ d[i].product_list[j].product_reply }}</div>
+                        <!--div class="sale">{{ getLangStr('_MONTH_SALE_NUM_',d[i].product_list[j].product_sale) }} {{ getLangStr('_PRAISE_TXT_') }}{{ d[i].product_list[j].product_reply }}</div-->
+                        <div class="sale">{{ getLangStr('_PRAISE_TXT_') }}{{ d[i].product_list[j].product_reply }}</div>
                         {{# if(d[i].product_list[j].has_format){ }}
                         <div class="price">${{ d[i].product_list[j].product_price }} {{# if(d[i].product_list[j].extra_pay_price>0&&open_extra_price==1){ }}+{{ d[i].product_list[j].extra_pay_price }}{{ d[i].product_list[j].extra_pay_price_name }}{{# } }}</div>
                         {{# }else{ }}

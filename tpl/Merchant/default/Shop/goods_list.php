@@ -72,7 +72,7 @@
 												</label>
 											</td>
 											<td class="button-column">
-												<a title="修改" class="green" style="padding-right:8px;" href="{pigcms{:U('Shop/goods_edit',array('goods_id'=>$vo['goods_id']))}">
+												<a title="修改" class="green" style="padding-right:8px;" href="{pigcms{:U('Shop/goods_edit',array('goods_id'=>$vo['goods_id'],'page'=>$_GET['page']))}">
 													<i class="ace-icon fa fa-pencil bigger-130"></i>
 												</a>
 												<a title="删除" class="red" style="padding-right:8px;" href="{pigcms{:U('Shop/goods_del',array('goods_id'=>$vo['goods_id']))}">

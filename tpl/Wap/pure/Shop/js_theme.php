@@ -82,12 +82,12 @@
 							}
 						}}
 					</span>
-                    &nbsp;<span style="color:#9f9f9f;">
+                    &nbsp;<!--span style="color:#9f9f9f;">
                         {{ getLangStr('_SALE_NUM_ORDER_',d[i].month_sale_count) }}
                     </span><br/>
                     &nbsp;<span style="color:#9f9f9f;">
                         {{getLangStr('_MONTH_SALE_NUM_',d[i].merchant_store_month_sale_count)}}
-                    </span>
+                    </span-->
 					{{# if(d[i].delivery){ }}
 						<!--em class="location-right">{{ d[i].delivery_time }}分钟</em-->
 					{{# }else{ }}
@@ -163,7 +163,8 @@
 							</div>
 							<div class="product_text">
 								<div class="title">{{ d[i].product_list[j].product_name }}</div>
-								<div class="sale">{{ getLangStr('_MONTH_SALE_NUM_',d[i].product_list[j].product_sale) }} {{ getLangStr('_PRAISE_TXT_') }}{{ d[i].product_list[j].product_reply }}</div>
+								<!--div class="sale">{{ getLangStr('_MONTH_SALE_NUM_',d[i].product_list[j].product_sale) }} {{ getLangStr('_PRAISE_TXT_') }}{{ d[i].product_list[j].product_reply }}</div-->
+                                <div class="sale">{{ getLangStr('_PRAISE_TXT_') }}{{ d[i].product_list[j].product_reply }}</div>
 								{{# if(d[i].product_list[j].has_format){ }}
 									<div class="price">
                                         ${{ d[i].product_list[j].product_price }} {{# if(d[i].product_list[j].extra_pay_price>0&&open_extra_price==1){ }}+{{ d[i].product_list[j].extra_pay_price }}{{ d[i].product_list[j].extra_pay_price_name }}{{# } }}
@@ -222,7 +223,8 @@
 						{{# if(d[i].product_list[j].is_seckill_price){ }}
 						<div class="skill_discount">{pigcms{:L('_LIMIT_TIME_DISCOUNT_')}</div>
 						{{# } }}
-                        <div class="sale">{{ getLangStr('_MONTH_SALE_NUM_',d[i].product_list[j].product_sale) }} {{ getLangStr('_PRAISE_TXT_') }}{{ d[i].product_list[j].product_reply }}</div>
+                        <!--div class="sale">{{ getLangStr('_MONTH_SALE_NUM_',d[i].product_list[j].product_sale) }} {{ getLangStr('_PRAISE_TXT_') }}{{ d[i].product_list[j].product_reply }}</div-->
+                        <div class="sale">{{ getLangStr('_PRAISE_TXT_') }}{{ d[i].product_list[j].product_reply }}</div>
 						{{# if(d[i].product_list[j].has_format){ }}
 							<div class="price">${{ d[i].product_list[j].product_price }} {{# if(d[i].product_list[j].extra_pay_price>0&&open_extra_price==1){ }}+{{ d[i].product_list[j].extra_pay_price }}{{ d[i].product_list[j].extra_pay_price_name }}{{# } }}</div>
 						{{# }else{ }}

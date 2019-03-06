@@ -36,7 +36,7 @@
                 <php>if(C('DEFAULT_LANG') == 'zh-cn'){</php>
                 <input type="button" value="English" class="lang_en" id="lang">
                 <php>}else{</php>
-                <input type="button" value="中文" class="lang_cn" id="lang">
+                <input type="button" value="Chinese" class="lang_cn" id="lang">
                 <php>}</php>
             </li>
             <li class="Landd">

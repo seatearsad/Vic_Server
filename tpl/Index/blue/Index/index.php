@@ -304,8 +304,8 @@
 															<!--div class="join"><if condition="$vo['range']">距离您 <span>{pigcms{$vo.range} </span><else/>{pigcms{:L('_FANS_TXT_')} <span>{pigcms{$vo.fans_count}</span></if></div-->
 														</div>
                                                         <div class="info mealSales">
-                                                            <div class="join"><span style="color:#9f9f9f;">{pigcms{:replace_lang_str(L('_SALE_NUM_ORDER_'),$vo[sale_count])}</span></div>
-                                                            <div class="join"><span style="color:#9f9f9f;">{pigcms{:replace_lang_str(L('_MONTH_SALE_NUM_'),$vo['merchant_store_month_sale_count'])}</span></div>
+                                                            <!--div class="join"><span style="color:#9f9f9f;">{pigcms{:replace_lang_str(L('_SALE_NUM_ORDER_'),$vo[sale_count])}</span></div>
+                                                            <div class="join"><span style="color:#9f9f9f;">{pigcms{:replace_lang_str(L('_MONTH_SALE_NUM_'),$vo['merchant_store_month_sale_count'])}</span></div-->
                                                         </div>
 													</div>
 												</a>

@@ -980,7 +980,7 @@ class ShopAction extends BaseAction
 
                 if ($goods_id = D('Shop_goods')->save_post_form($_POST, $now_store['store_id'])) {
                     D('Image')->update_table_id($_POST['image'], $goods_id, 'goods');
-                    $this->success('保存成功！', U('Shop/goods_list', array('sort_id' => $now_sort['sort_id'])));
+                    $this->success('保存成功！', U('Shop/goods_list', array('sort_id' => $now_sort['sort_id'],'page'=>$_GET['page'])));
                     die;
                     $ok_tips = '保存成功！';
                 } else {
