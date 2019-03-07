@@ -226,7 +226,7 @@ line-height: .7rem;
     margin-left: 30%;
     margin-top: -217px;
     width: 70%;
-    height: 267px;
+    height: 337px;
 }
 .submit{
     width: 100px;
@@ -247,8 +247,7 @@ line-height: .7rem;
 .week_time dl dd{
     width: 49%;
     text-align: center;
-    height: 30px;
-    line-height: 20px;
+    line-height: 30px;
     display: inline-block;
     background-color: #ffffff;
     color: #333;
@@ -330,7 +329,9 @@ line-height: .7rem;
                     <input type="text" name="close_time_3" id="close_time_3">
                 </dd>
                 <dd class="time_desc">* {pigcms{:L('_STORE_TIME_TIP_1_')}.</dd>
-                <dd class="time_desc" style="margin-top: 10px;">* {pigcms{:L('_STORE_START_END_TIP_')}.</dd>
+                <dd class="time_desc">* {pigcms{:L('_STORE_TIME_TIP_2_')}.</dd>
+                <dd class="time_desc">* {pigcms{:L('_STORE_TIME_TIP_3_')}.</dd>
+                <dd class="time_desc">* {pigcms{:L('_STORE_TIME_TIP_4_')}.</dd>
             </dl>
         </div>
     </div>
@@ -483,7 +484,7 @@ line-height: .7rem;
     // });
     if($(window).height() > $(window).width()){
         //$('.submit').css('margin-top','50px');
-        $('.week_time').css('height','367px');
+        $('.week_time').css('height','547px');
     }
 
 
