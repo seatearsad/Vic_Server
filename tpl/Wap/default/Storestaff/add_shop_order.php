@@ -101,9 +101,9 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>Position：
+                        <td>Address：
                             <?php if(!empty($now_adress['adress'])){echo $now_adress['adress'];} ?>
-                            <button type="button" id="color-gray" class="btn" style="background-color: #ffa64d;"> <?php if(!empty($now_adress['adress'])){echo 'Select Location';}else{ echo 'Select Location';} ?></button>
+                            <button type="button" id="color-gray" class="btn" style="background-color: #ffa64d;width: 100px;font-size: 12px"> <?php if(!empty($now_adress['adress'])){echo 'Select';}else{ echo 'Select';} ?></button>
                         </td>
                     </tr>
                     <tr>
