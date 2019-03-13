@@ -247,7 +247,7 @@ line-height: .7rem;
 .week_time dl dd{
     width: 49%;
     text-align: center;
-    line-height: 30px;
+    line-height: 25px;
     display: inline-block;
     background-color: #ffffff;
     color: #333;
