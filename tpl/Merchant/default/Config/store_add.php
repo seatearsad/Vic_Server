@@ -84,7 +84,11 @@
 								</div>
 								<div class="form-group">
 									<label class="col-sm-1"><label>店铺所在地</label></label>
-									<fieldset id="choose_cityarea"></fieldset>
+									<!--fieldset id="choose_cityarea"></fieldset-->
+                                    <fieldse id="city_area" style="padding-top: 6px;float: left"></fieldse>
+                                    <input type="hidden" name="area_id" id="area_id">
+                                    <input type="hidden" name="city_id" id="city_id">
+                                    <input type="hidden" name="province_id" id="province_id">
 								</div>
 								<div class="form-group">
 									<label class="col-sm-1"><label for="adress">店铺地址</label></label>
@@ -491,12 +495,12 @@
 </div>
 
 <script type="text/javascript">
-var static_public="{pigcms{$static_public}",static_path="{pigcms{$static_path}",merchant_index="{pigcms{:U('Index/index')}",choose_province="{pigcms{:U('Area/ajax_province')}",choose_city="{pigcms{:U('Area/ajax_city')}",choose_area="{pigcms{:U('Area/ajax_area')}",choose_circle="{pigcms{:U('Area/ajax_circle')}",choose_market="{pigcms{:U('Area/ajax_market')}",choose_cat_fid="{pigcms{:U('Merchant_category/ajax_cat_fid')}",choose_cat_id="{pigcms{:U('Merchant_category/ajax_cat_id')}";
+var static_public="{pigcms{$static_public}",static_path="{pigcms{$static_path}",merchant_index="{pigcms{:U('Index/index')}",choose_province="{pigcms{:U('Area/ajax_province')}",choose_city="{pigcms{:U('Area/ajax_city')}",choose_area="{pigcms{:U('Area/ajax_area')}",choose_circle="{pigcms{:U('Area/ajax_circle')}",choose_market="{pigcms{:U('Area/ajax_market')}",choose_cat_fid="{pigcms{:U('Merchant_category/ajax_cat_fid')}",choose_cat_id="{pigcms{:U('Merchant_category/ajax_cat_id')}",choose_place_id="{pigcms{:U('Area/ajax_place_id')}",choose_city_name="{pigcms{:U('Area/ajax_city_name')}";
 </script>
 <script type="text/javascript" src="{pigcms{$static_path}js/area.js"></script>
 <script type="text/javascript" src="{pigcms{$static_path}js/merchant_category.js"></script>
 <script type="text/javascript" src="https://api.map.baidu.com/api?ak=4c1bb2055e24296bbaef36574877b4e2&v=2.0&s=1" charset="utf-8"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&libraries=places&language=zh-CN"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&libraries=places&language=en"></script>
 <script type="text/javascript" src="{pigcms{$static_path}js/map.js"></script>
 <script type="text/javascript">
 $(function($){

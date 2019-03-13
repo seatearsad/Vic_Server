@@ -736,7 +736,9 @@ class MyAction extends BaseAction{
 // 				$where['uid'] = $this->_uid;
 				$now_adress = D('User_adress')->get_adress($this->user_session['uid'], $id);
 				if ($now_adress) {
-					$this->assign('now_adress', $now_adress);
+                    $city = $database_area->where(array('area_id'=>$now_adress['city']))->find();
+                    $now_adress['city_name'] = $city['area_name'];
+                    $this->assign('now_adress', $now_adress);
 
 					$province_list = $database_area->get_arealist_by_areaPid(0);
 					$this->assign('province_list',$province_list);
@@ -762,6 +764,7 @@ class MyAction extends BaseAction{
 			} else {
 				$cookie = json_decode($_COOKIE['user_address'], true);
 				$now_adress = $cookie;
+
 				$now_adress['default'] = $now_adress['defaul'];
 				$now_adress['adress_id'] = $now_adress['id'];
 				$this->assign('now_adress', $now_adress);
@@ -817,15 +820,15 @@ class MyAction extends BaseAction{
 	public function adres_map()
 	{
 		$cookie = json_decode($_COOKIE['user_address'], true);
-		if (empty($cookie['province']) || empty($cookie['city'])) {
-			$this->error(L('_B_MY_CHOOSECITY_'));
-		}
-		$list = D('Area')->field(true)->where("area_id IN ({$cookie['province']}, {$cookie['city']}, {$cookie['area']})")->order('area_type ASC')->select();
+//		if (empty($cookie['province']) || empty($cookie['city'])) {
+//			$this->error(L('_B_MY_CHOOSECITY_'));
+//		}
+		//$list = D('Area')->field(true)->where("area_id IN ({$cookie['province']}, {$cookie['city']}, {$cookie['area']})")->order('area_type ASC')->select();
 		$address = '';
-		foreach ($list as $row) {
-			$address .= $row['area_name'];
-		}
-		$this->assign('address', $address);
+//		foreach ($list as $row) {
+//			$address .= $row['area_name'];
+//		}
+		//$this->assign('address', $address);
 		$params = $_GET;
 		unset($params['adress_id']);
 		$this->assign('params',$params);
@@ -5741,6 +5744,22 @@ class MyAction extends BaseAction{
         echo json_encode($result);
     }
 
+    public function ajax_city_name(){
+        $city_name = $_POST['city_name'];
+        $where = array('area_name'=>$city_name,'area_type'=>2);
+        $area = D('Area')->where($where)->find();
+        $data = array();
+        if($area){
+            $data['area_id'] = 0;
+            $data['city_id'] = $area['area_id'];
+            $data['province_id'] = $area['area_pid'];
 
+            $return['error'] = 0;
+        }else{
+            $return['error'] = 1;
+        }
+        $return['info'] = $data;
+        exit(json_encode($return));
+    }
 }
 ?>

@@ -54,9 +54,11 @@ class DeliverAction extends BaseAction {
     		$column['pwd'] = isset($_POST['pwd']) ? htmlspecialchars($_POST['pwd']) : '';
     		$column['store_id'] = 0;
     		$column['city_id'] = $_POST['city_id'];
-    		$column['province_id'] = $_POST['province_id'];
+            $area = D('Area')->where(array('area_id'=>$_POST['city_id']))->find();
+            $column['province_id'] = $area ? $area['area_pid'] : 0;
+    		//$column['province_id'] = $_POST['province_id'];
     		$column['circle_id'] = $_POST['circle_id'];
-    		$column['area_id'] = $_POST['area_id'];
+    		$column['area_id'] = 0;
     		$column['site'] = $_POST['adress'];
     		$long_lat = explode(',',$_POST['long_lat']);
     		$column['lng'] = $long_lat[0];
@@ -118,9 +120,11 @@ class DeliverAction extends BaseAction {
     			unset($column['pwd']);
     		}
     		$column['city_id'] = $_POST['city_id'];
-    		$column['province_id'] = $_POST['province_id'];
+            $area = D('Area')->where(array('area_id'=>$_POST['city_id']))->find();
+            $column['province_id'] = $area ? $area['area_pid'] : 0;
+    		//$column['province_id'] = $_POST['province_id'];
     		$column['circle_id'] = $_POST['circle_id'];
-    		$column['area_id'] = $_POST['area_id'];
+    		$column['area_id'] = 0;
     		$column['site'] = $_POST['adress'];
     		$long_lat = explode(',',$_POST['long_lat']);
     		$column['lng'] = $long_lat[0];
@@ -170,6 +174,8 @@ class DeliverAction extends BaseAction {
     		if(!$deliver){
     			$this->error('非法操作');
     		}
+            $city = D('Area')->where(array('area_id'=>$deliver['city_id']))->find();
+            $deliver['city_name'] = $city['area_name'];
     		$this->assign('now_user',$deliver);
 
     		$card = D('Deliver_card')->field(true)->where(array('deliver_id'=>$uid))->find();
@@ -1216,6 +1222,9 @@ class DeliverAction extends BaseAction {
             if (!$deliver) {
                 $this->error('非法操作');
             }
+            $city = D('Area')->where(array('area_id'=>$deliver['city_id']))->find();
+            $deliver['city_name'] = $city['area_name'];
+
             $deliver_img = D('Deliver_img')->field(true)->where(array('uid' => $uid))->find();
             $this->assign('now_user', $deliver);
             $this->assign('img', $deliver_img);

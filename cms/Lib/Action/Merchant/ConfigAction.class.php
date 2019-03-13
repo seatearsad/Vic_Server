@@ -171,10 +171,13 @@ class ConfigAction extends BaseAction{
 		$database_merchant_store = D('Merchant_store');
 		$condition_merchant_store['mer_id'] = $mer_id;
 		$count_store = $database_merchant_store->where("mer_id='{$mer_id}' AND status<>4")->count();
-		$db_arr = array(C('DB_PREFIX').'area'=>'a',C('DB_PREFIX').'merchant_store'=>'s');
+		//$db_arr = array(C('DB_PREFIX').'area'=>'a',C('DB_PREFIX').'merchant_store'=>'s');
+        $db_arr = array(C('DB_PREFIX').'merchant_store'=>'s');
 		import('@.ORG.merchant_page');
 		$p = new Page($count_store,15);
-		$store_list = D()->table($db_arr)->field(true)->where("`s`.`mer_id`='$mer_id' AND `s`.`area_id`=`a`.`area_id` AND s.status!=4")->order('`sort` DESC,`store_id` ASC')->limit($p->firstRow.','.$p->listRows)->select();
+//		$store_list = D()->table($db_arr)->field(true)->where("`s`.`mer_id`='$mer_id' AND `s`.`area_id`=`a`.`area_id` AND s.status!=4")->order('`sort` DESC,`store_id` ASC')->limit($p->firstRow.','.$p->listRows)->select();
+        //garfunkel modify
+        $store_list = D()->table($db_arr)->field(true)->where("`s`.`mer_id`='$mer_id' AND s.status!=4")->order('`sort` DESC,`store_id` ASC')->limit($p->firstRow.','.$p->listRows)->select();
 		$this->assign('store_list',$store_list);
 		$pagebar = $p->show();
 		$this->assign('pagebar',$pagebar);
@@ -669,6 +672,9 @@ class ConfigAction extends BaseAction{
 			if(empty($now_store)){
 				$this->error('店铺不存在！');
 			}
+
+			$area = D('Area')->where(array('area_id'=>$now_store['city_id']))->find();
+			$now_store['city_name'] = $area['area_name'];
 
 			if(!empty($now_store['pic_info'])){
 				$store_image_class = new store_image();

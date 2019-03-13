@@ -38,6 +38,28 @@ $(function(){
 		geocoder.geocode(request, function(results, status){
 			if(status == 'OK') {
 				$("#adress").val(results[0].formatted_address);
+                var add_com = results[0].address_components;
+                var is_get_city = false;
+                for(var i=0;i<add_com.length;i++){
+                    if(add_com[i]['types'][0] == 'locality'){
+                        is_get_city = true;
+                        var city_name = add_com[i]['long_name'];
+                        $('#city_area').html(city_name);
+                        $.post(choose_city_name,{city_name:city_name},function(result){
+                            if (result.error == 1){
+                                alert("该城市还未开放！");
+                                $('#city_id').val(0);
+                            }else{
+                                $('#city_id').val(result['info']['city_id']);
+                            }
+                        },'JSON');
+                    }
+                }
+                if(!is_get_city) {
+                    alert('未获取到城市信息');
+                    $('#city_area').html('');
+                    $('#city_id').val(0);
+                }
 			}
 			console.log(results);
 			console.log(status);

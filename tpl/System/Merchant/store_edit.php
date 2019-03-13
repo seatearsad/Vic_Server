@@ -4,7 +4,7 @@
 		<table cellpadding="0" cellspacing="0" class="frame_form" width="100%">
 			<tr>
 				<th width="80">店铺名称</th>
-				<td><input type="text" class="input fl" name="name" value="{pigcms{$store.name}" size="25" placeholder="店铺名称" validate="maxlength:20,required:true"/></td>
+				<td><input type="text" class="input fl" name="name" value="{pigcms{$store.name}" size="25" placeholder="店铺名称" validate="required:true"/></td>
 			</tr>
 			<tr>
 				<th width="80">联系电话</th>
@@ -16,7 +16,11 @@
 			</tr>
 			<tr>
 				<th width="80">店铺所在地</th>
-				<td id="choose_cityarea" province_id="{pigcms{$store.province_id}" city_id="{pigcms{$store.city_id}" area_id="{pigcms{$store.area_id}" circle_id="{pigcms{$store.circle_id}" market_id="{pigcms{$store.market_id}"></td>
+				<!--td id="choose_cityarea" province_id="{pigcms{$store.province_id}" city_id="{pigcms{$store.city_id}" area_id="{pigcms{$store.area_id}" circle_id="{pigcms{$store.circle_id}" market_id="{pigcms{$store.market_id}"></td-->
+                <td id="city_area">
+                    {pigcms{$store.city_name}
+                </td>
+                <input type="hidden" id="city_id" name="city_id" value="{pigcms{$store.city_id}">
 			</tr>
 			<tr>
 				<th width="80">店铺地址</th>

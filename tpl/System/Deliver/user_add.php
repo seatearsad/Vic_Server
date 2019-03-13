@@ -31,7 +31,11 @@
 			</tr>
 			<tr>
 			 	<th width="15%">所在地</th>
-				<td id="choose_cityarea" colspan=3></td>
+				<!--td id="choose_cityarea" colspan=3></td-->
+                <td id="city_area">
+
+                </td>
+                <input type="hidden" id="city_id" name="city_id">
 			<tr>
 			<tr>
 				<th width="15%">配送范围</th>
@@ -95,7 +99,7 @@
 		</div>
 	</div>
 	<script type="text/javascript">
-	var static_public="{pigcms{$static_public}",static_path="{pigcms{$static_path}",merchant_index="{pigcms{:U('Index/index')}",choose_province="{pigcms{:U('Area/ajax_province')}",choose_city="{pigcms{:U('Area/ajax_city')}",choose_area="{pigcms{:U('Area/ajax_area')}",choose_circle="{pigcms{:U('Area/ajax_circle')}";
+	var static_public="{pigcms{$static_public}",static_path="{pigcms{$static_path}",merchant_index="{pigcms{:U('Index/index')}",choose_province="{pigcms{:U('Area/ajax_province')}",choose_city="{pigcms{:U('Area/ajax_city')}",choose_area="{pigcms{:U('Area/ajax_area')}",choose_circle="{pigcms{:U('Area/ajax_circle')}",choose_city_name="{pigcms{:U('Area/ajax_city_name')}";
 	</script>
 	<!--<script type="text/javascript" src="{pigcms{$static_path}js/area.js"></script>-->
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&libraries=places&language=en"></script>

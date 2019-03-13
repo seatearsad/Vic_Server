@@ -100,7 +100,14 @@
 			
 			<tr>
 				<th width="160">所在区域</th>
-				<td id="choose_cityarea"></td>
+				<!--td id="choose_cityarea"></td-->
+                <td>
+                    <select name="city_id">
+                        <volist name="city" id="vo">
+                            <option value="{pigcms{$vo.area_id}">{pigcms{$vo.area_name}</option>
+                        </volist>
+                    </select>
+                </td>
 			</tr>
 			<tr>
 				<th width="160">到期时间</th>

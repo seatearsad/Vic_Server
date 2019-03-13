@@ -84,7 +84,11 @@
 								</div>
 								<div class="form-group">
 									<label class="col-sm-1"><label>店铺所在地</label></label>
-									<fieldset id="choose_cityarea" province_id="{pigcms{$now_store.province_id}" city_id="{pigcms{$now_store.city_id}" area_id="{pigcms{$now_store.area_id}" circle_id="{pigcms{$now_store.circle_id}" market_id="{pigcms{$now_store.market_id}"></fieldset>
+									<!--fieldset id="choose_cityarea" province_id="{pigcms{$now_store.province_id}" city_id="{pigcms{$now_store.city_id}" area_id="{pigcms{$now_store.area_id}" circle_id="{pigcms{$now_store.circle_id}" market_id="{pigcms{$now_store.market_id}"></fieldset-->
+                                    <fieldse id="city_area" style="padding-top: 6px;float: left">{pigcms{$now_store.city_name}</fieldse>
+                                    <input type="hidden" name="area_id" id="area_id" value="{pigcms{$now_store.area_id}">
+                                    <input type="hidden" name="city_id" id="city_id" value="{pigcms{$now_store.city_id}">
+                                    <input type="hidden" name="province_id" id="province_id" value="{pigcms{$now_store.province_id}">
 								</div>
 								<div class="form-group">
 									<label class="col-sm-1"><label for="adress">店铺地址</label></label>
@@ -494,10 +498,10 @@
 </div><!-- PAGE CONTENT ENDS -->
 
 <script type="text/javascript">
-var static_public="{pigcms{$static_public}",static_path="{pigcms{$static_path}",merchant_index="{pigcms{:U('Index/index')}",choose_province="{pigcms{:U('Area/ajax_province')}",choose_city="{pigcms{:U('Area/ajax_city')}",choose_area="{pigcms{:U('Area/ajax_area')}",choose_circle="{pigcms{:U('Area/ajax_circle')}",choose_market="{pigcms{:U('Area/ajax_market')}",choose_cat_fid="{pigcms{:U('Merchant_category/ajax_cat_fid')}",choose_cat_id="{pigcms{:U('Merchant_category/ajax_cat_id')}";
+var static_public="{pigcms{$static_public}",static_path="{pigcms{$static_path}",merchant_index="{pigcms{:U('Index/index')}",choose_province="{pigcms{:U('Area/ajax_province')}",choose_city="{pigcms{:U('Area/ajax_city')}",choose_area="{pigcms{:U('Area/ajax_area')}",choose_circle="{pigcms{:U('Area/ajax_circle')}",choose_market="{pigcms{:U('Area/ajax_market')}",choose_cat_fid="{pigcms{:U('Merchant_category/ajax_cat_fid')}",choose_cat_id="{pigcms{:U('Merchant_category/ajax_cat_id')}",choose_place_id="{pigcms{:U('Merchant_category/ajax_place_id')}",choose_city_name="{pigcms{:U('Area/ajax_city_name')}";
 </script>
 <script type="text/javascript" src="{pigcms{$static_path}js/area.js"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&libraries=places&language=zh-CN"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&libraries=places&language=en"></script>
 <script type="text/javascript" src="{pigcms{$static_path}js/map.js"></script>
 <script type="text/javascript" src="{pigcms{$static_path}js/merchant_category.js"></script>
 <script type="text/javascript">
@@ -513,6 +517,11 @@ $(function($){
 			$('#condition').show();
 		}
 	});
+
+    // var geocoder = new google.maps.Geocoder();
+    // geocoder.geocode({'placeId':"{pigcms{$now_store['place_id']}"},function (results, status) {
+    //     $('#city_area').html(results[0].formatted_address);
+    // });
 });
 </script>
 

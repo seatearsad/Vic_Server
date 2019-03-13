@@ -332,6 +332,17 @@ class IndexAction extends BaseAction
         $data['longitude'] = $_POST['lng'];
         $data['latitude'] = $_POST['lat'];
         $data['detail'] = $_POST['map_location'];
+        $data['default'] = $_POST['default'];
+        if($_POST['city_name']){
+            $city_name = $_POST['city_name'];
+            $where = array('area_name'=>$city_name,'area_type'=>2);
+            $area = D('Area')->where($where)->find();
+            if($area) {
+                $data['area'] = 0;
+                $data['city'] = $area['area_id'];
+                $data['province'] = $area['area_pid'];
+            }
+        }
 
         $result = $this->loadModel()->addUserAddress($data);
 

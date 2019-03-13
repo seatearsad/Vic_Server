@@ -125,7 +125,7 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 									<volist name="user_adress_list" id="vo">
 										<tr class="<if condition='$i eq 1'>alt first-item</if> table-item">
 											<td>{pigcms{$vo.name}</td>
-											<td class="info1">{pigcms{$vo.province_txt} {pigcms{$vo.city_txt} {pigcms{$vo.area_txt} {pigcms{$vo.adress} {pigcms{$vo.detail}，{pigcms{$vo.zipcode}</td>
+											<td class="info1">{pigcms{$vo.adress} {pigcms{$vo.detail}，{pigcms{$vo.zipcode}</td>
 											<td class="consignee">{pigcms{$vo.phone}</td>
 											<td class="right">
 												<ul class="action hidden" adress_id="{pigcms{$vo.adress_id}">
@@ -167,7 +167,7 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 			<div class="form-field">
 				<label for="address-province"><em>*</em> {pigcms{:L('_B_PURE_MY_12_')} {pigcms{:L('_B_PURE_MY_13_')}：</label>
 				<span id="area-container">
-					<select id="address-province" class="address-province dropdown--small" name="province" autocomplete="off">
+					<!--select id="address-province" class="address-province dropdown--small" name="province" autocomplete="off">
 						<volist name="province_list" id="vo">
 							<option value="{pigcms{$vo.area_id}">{pigcms{$vo.area_name}</option>
 						</volist>
@@ -181,7 +181,7 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 						<volist name="area_list" id="vo">
 							<option value="{pigcms{$vo.area_id}">{pigcms{$vo.area_name}</option>
 						</volist>
-					</select>
+					</select-->
 				</span>
 			</div>
 			<div class="form-field">
@@ -208,6 +208,8 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 			<div class="form-field comfirm">
 				<input type="hidden" name="longitude" value=''>
 				<input type="hidden" name="latitude" value=''>
+                <input type="hidden" name="city" id="city_id">
+                <input type="hidden" name="province" id="province_id">
 				<input type="submit" class="btn" name="commit" value="{pigcms{:L('_B_PURE_MY_25_')}"/>
 				<a href="javascript:void(0)" class="address-cancel inline-link">{pigcms{:L('_B_PURE_MY_32_')}</a>
 				<div id="map1"></div>
@@ -262,6 +264,7 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 					var now_table = $(this).closest('table');
 					now_table.find('tbody').html('<tr class="edit-form"><td>'+address_form+'</td></tr>');
 					now_table.find('caption').addClass('add-address').find('a').addClass('text');
+                    $('#area-container').html('N/A');
 					initAutocomplete();
 				}else if($(this).hasClass('edit')){
 					$('#address-form').closest('.edit-form').remove();
@@ -271,13 +274,17 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 					
 					var form_param = $.parseJSON($(this).attr('data-params'));
 					$('#address-adress').val(form_param.adress);
-					//$("input[name='longitude']").val(form_param.longitude);
-					//$("input[name='latitude']").val(form_param.latitude);
+					$("input[name='longitude']").val(form_param.longitude);
+					$("input[name='latitude']").val(form_param.latitude);
 					$('#address-detail').val(form_param.detail);
 					$('#address-zipcode').val(form_param.zipcode);
 					$('#address-name').val(form_param.name);
 					$('#address-phone').val(form_param.phone);
 					$('#adress-id').val(form_param.adress_id);
+					$('#city_id').val(form_param.city);
+					$('#province_id').val(form_param.province);
+					if(form_param.city_txt == null) form_param.city_txt = 'N/A';
+					$('#area-container').html(form_param.city_txt);
 					
 					initAutocomplete();
 					if(form_param.province != $('#address-province option:first').attr('value')){
@@ -516,6 +523,38 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 			var place = autocomplete.getPlace();
 			$("input[name='longitude']").val(place.geometry.location.lng());
 			$("input[name='latitude']").val(place.geometry.location.lat());
+            var geocoder = new google.maps.Geocoder();
+            var request = {
+                location:{lat:place.geometry.location.lat(), lng:place.geometry.location.lng()}
+            }
+            geocoder.geocode(request, function(results, status) {
+                if (status == 'OK') {
+                    var add_com = results[0].address_components;
+                    var is_get_city = false;
+                    for (var i = 0; i < add_com.length; i++) {
+                        if (add_com[i]['types'][0] == 'locality') {
+                            is_get_city = true;
+                            var city_name = add_com[i]['long_name'];
+                            $('#area-container').html(city_name);
+                            $.post("{pigcms{:U('Index/ajax_city_name')}", {city_name: city_name}, function (result) {
+                                if (result.error == 1) {
+                                    $('#area-container').html('N/A');
+                                    $('#city_id').val(0);
+                                    $('#province_id').val(0);
+                                } else {
+                                    $('#city_id').val(result['info']['city_id']);
+                                    $('#province_id').val(result['info']['province_id']);
+                                }
+                            }, 'JSON');
+                        }
+                    }
+                    if (!is_get_city) {
+                        $('#area-container').html('N/A');
+                        $('#city_id').val(0);
+                        $('#province_id').val(0);
+                    }
+                }
+            });
 		}
 		function geolocate() {
 			if (navigator.geolocation) {
@@ -533,6 +572,6 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 			}
 		}
 	</script>
-	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&libraries=places" async defer></script>
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&libraries=places&language=en" async defer></script>
 </body>
 </html>

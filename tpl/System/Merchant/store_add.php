@@ -16,7 +16,11 @@
 			</tr>
 			<tr>
 				<th width="80">店铺所在地</th>
-				<td id="choose_cityarea"></td>
+				<!--td id="choose_cityarea"></td-->
+                <td id="city_area">
+
+                </td>
+                <input type="hidden" id="city_id" name="city_id">
 			</tr>
 			<tr>
 				<th width="80">店铺地址</th>

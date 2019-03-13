@@ -628,7 +628,12 @@ class StoreModel extends Model
     public function arrange_address($address){
         $data['rowID'] = $address['adress_id'];
         $data['zoneID'] = $address['city'];
-        $data['zoneName'] = '';
+        if($address['city'] != 0){
+            $city = D('Area')->where(array('area_id'=>$address['city']))->find();
+            $data['zoneName'] = $city['area_name'];
+        }else {
+            $data['zoneName'] = '';
+        }
         $data['areaName'] = $address['area'];
         $data['userName'] = $address['name'];
         $data['phoneNum'] = $address['phone'];

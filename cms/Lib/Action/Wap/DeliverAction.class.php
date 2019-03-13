@@ -1931,10 +1931,10 @@ class DeliverAction extends BaseAction
 
 	        $deliver_data['create_time'] = time();
 	        //暂时写死 之后选择城市
-	        $deliver_data['city_id'] = 105;
-	        $deliver_data['province_id'] = 104;
+	        $deliver_data['city_id'] = $_POST['city_id'];
+	        $deliver_data['province_id'] = $_POST['province_id'];
 	        $deliver_data['circle_id'] = 3446;
-	        $deliver_data['area_id'] = 108;
+	        $deliver_data['area_id'] = 0;
 
 	        //注册状态
             $deliver_data['reg_status'] = 1;
@@ -2103,5 +2103,23 @@ class DeliverAction extends BaseAction
         } else {
             exit(json_encode(array('error' => 1,'message' =>'没有选择图片')));
         }
+    }
+
+    public function ajax_city_name(){
+        $city_name = $_POST['city_name'];
+        $where = array('area_name'=>$city_name,'area_type'=>2);
+        $area = D('Area')->where($where)->find();
+        $data = array();
+        if($area){
+            $data['area_id'] = 0;
+            $data['city_id'] = $area['area_id'];
+            $data['province_id'] = $area['area_pid'];
+
+            $return['error'] = 0;
+        }else{
+            $return['error'] = 1;
+        }
+        $return['info'] = $data;
+        exit(json_encode($return));
     }
 }

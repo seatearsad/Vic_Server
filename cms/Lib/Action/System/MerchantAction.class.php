@@ -97,6 +97,8 @@ class MerchantAction extends BaseAction{
     }
 	public function add(){
 		$this->assign('bg_color','#F3F3F3');
+		$city_list = D('Area')->where(array('area_type'=>2))->order('`area_sort` asc')->select();
+		$this->assign('city',$city_list);
 		$this->display();
 	}
 	public function modify(){
@@ -106,7 +108,11 @@ class MerchantAction extends BaseAction{
 			$_POST['reg_time'] = $_SERVER['REQUEST_TIME'];
 			$_POST['reg_ip'] = get_client_ip(1);
 			$_POST['from'] = '1';
-			$_POST['area_id'] = $this->system_session['area_id'];
+			//$_POST['area_id'] = $this->system_session['area_id'];
+            //garfunkel add
+            $area = D('Area')->where(array('area_id'=>$_POST['city_id']))->find();
+            $_POST['province_id'] = $area['area_pid'];
+            $_POST['area_id'] = 0;
 			if($_POST['merchant_end_time']){
 				$_POST['merchant_end_time'] = strtotime($_POST['merchant_end_time']);
 			}else{
@@ -157,6 +163,9 @@ class MerchantAction extends BaseAction{
 		$home_share = D('Home_share')->where(array('mer_id' => $condition_merchant['mer_id']))->find();
 		$this->assign('home_share', $home_share);
 
+        $city_list = D('Area')->where(array('area_type'=>2))->order('`area_sort` asc')->select();
+        $this->assign('city',$city_list);
+
 		$this->display();
 	}
 
@@ -176,6 +185,11 @@ class MerchantAction extends BaseAction{
     		$data['a_name'] = isset($_POST['a_name']) && $_POST['a_name'] ? htmlspecialchars($_POST['a_name']) : '进入';
     		$data['title'] = isset($_POST['a_title']) && $_POST['a_title'] ? htmlspecialchars($_POST['a_title']) : '您是' . $_POST['name'] . '的粉丝';
     		unset($_POST['a_name'], $_POST['a_title'], $_POST['a_href']);
+
+            //garfunkel add
+            $area = D('Area')->where(array('area_id'=>$_POST['city_id']))->find();
+            $_POST['province_id'] = $area['area_pid'];
+            $_POST['area_id'] = 0;
 
 			$database_merchant = D('Merchant');
 			$database_merchant->data($_POST)->save();
@@ -315,6 +329,9 @@ class MerchantAction extends BaseAction{
 
 		$this->assign('bg_color','#F3F3F3');
 
+        $city_list = D('Area')->where(array('area_type'=>2))->order('`area_sort` asc')->select();
+        $this->assign('city',$city_list);
+
 		$this->display();
 	}
 	public function store_modify(){
@@ -324,6 +341,10 @@ class MerchantAction extends BaseAction{
 			$_POST['lat'] = $long_lat[1];
 			$_POST['last_time'] = $_SERVER['REQUEST_TIME'];
 			$_POST['add_from'] = '1';
+			//garfunkel add
+            $area = D('Area')->where(array('area_id'=>$_POST['city_id']))->find();
+            $_POST['province_id'] = $area ? $area['area_pid'] : 0;
+            $_POST['area_id'] = 0;
 			$database_merchant_store = D('Merchant_store');
 			if($insert_id=$database_merchant_store->data($_POST)->add()){
 				M('Merchant_score')->add(array('parent_id'=>$insert_id,'type'=>2));
@@ -343,7 +364,11 @@ class MerchantAction extends BaseAction{
 		if(empty($store)){
 			$this->frame_error_tips('数据库中没有查询到该店铺的信息！',5);
 		}
-		$this->assign('store',$store);
+
+        $city = D('Area')->where(array('area_id'=>$store['city_id']))->find();
+		$store['city_name'] = $city['area_name'];
+
+        $this->assign('store',$store);
 
 		$this->assign('bg_color','#F3F3F3');
 
@@ -356,6 +381,10 @@ class MerchantAction extends BaseAction{
 			$_POST['long'] = $long_lat[0];
 			$_POST['lat'] = $long_lat[1];
 			$_POST['last_time'] = $_SERVER['REQUEST_TIME'];
+            //garfunkel add
+            $area = D('Area')->where(array('area_id'=>$_POST['city_id']))->find();
+            $_POST['province_id'] = $area ? $area['area_pid'] : 0;
+            $_POST['area_id'] = 0;
 			$database_merchant_store = D('Merchant_store');
 			if($database_merchant_store->data($_POST)->save()){
 				$this->success('修改成功！');

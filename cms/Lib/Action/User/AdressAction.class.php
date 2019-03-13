@@ -52,6 +52,7 @@ class AdressAction extends BaseAction{
 	}
 	public function amend_adress(){
 		if(IS_POST){
+		    $_POST['area'] = 0;
 			if(D('User_adress')->post_form_save($this->user_session['uid'])){
 				$this->success('保存成功！');
 			}else{

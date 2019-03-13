@@ -29,6 +29,10 @@
 				<th width="80">排序</th>
 				<td><input type="text" class="input fl" name="area_sort" size="10" value="0" validate="required:true,number:true,maxlength:6" tips="数值越大，排序越前"/></td>
 			</tr>
+            <!--tr>
+                <th width="80">Place ID</th>
+                <td><input type="text" class="input fl" name="place_id" size="35" validate="required:false" /></td>
+            </tr-->
 			<if condition="$_GET['type'] gt 1">
 				<tr>
 					<th width="80">热门</th>

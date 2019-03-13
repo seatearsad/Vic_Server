@@ -418,9 +418,19 @@
 
 <include file="Storestaff:footer"/>
 </body>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&language=en"></script>
 <script type="text/javascript" src="{pigcms{$static_public}js/artdialog/jquery.artDialog.js"></script>
 <script type="text/javascript" src="{pigcms{$static_public}js/webuploader.min.js"></script>
 <script>
+    //var geocoder = new google.maps.Geocoder;
+    //var latlng = {lat: parseFloat("48.4245834"), lng: parseFloat("-123.3666992")};
+    // geocoder.geocode({'location': latlng}, function(results, status) {
+    //     alert(results);
+    // });
+    // geocoder.geocode({'placeId':'ChIJcWGw3Ytzj1QR7Ui7HnTz6Dg'},function (results, status) {
+    //    alert(result);
+    // });
+
     var uploader = WebUploader.create({
         auto: true,
         swf: '{pigcms{$static_public}js/Uploader.swf',
@@ -529,5 +539,7 @@
             });
         }
     });
+
+
 </script>
 </html>

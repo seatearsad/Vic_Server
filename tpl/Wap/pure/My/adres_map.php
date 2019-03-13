@@ -23,9 +23,9 @@
         <div id="address-widget-map" class="address-widget-map">
             <div class="address-map-nav">
                 <div class="left-slogan" style="margin-top: 12px"> <a class="left-arrow icon-arrow-left2" data-node="navBack" href="javascript:history.go(-1);"></a></div>
-                <div class="center-title" style="margin-top: 4px"> <i class="icon-location" data-node="icon"></i>
+                <div class="center-title" style="margin-top: 4px"> <i class="icon-location" data-node="icon" style="margin-top: 8px"></i>
                     <div class="ui-suggestion-mask">
-                        <input type="text" placeholder="{pigcms{:L('_B_PURE_MY_02_')}" id="se-input-wd" autocomplete="off">
+                        <input type="text" placeholder="{pigcms{:L('_B_PURE_MY_02_')}" id="se-input-wd" autocomplete="off" style="height: 46px">
                         <div class="ui-suggestion-quickdel"></div>
                     </div>
                 </div>
@@ -54,43 +54,65 @@
 <div id="fis_elm__7"></div>
 
 </body>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&libraries=places&language=zh-CN"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&libraries=places&language=en" async defer></script>
 <script type="text/javascript">
-var address = '{pigcms{$address}';
-var timeout = 0;
-var map = null;
-var pyrmont = {lat: 48.430168, lng: -123.343033};
-function initGoogleMap(lat, lng) {
-	map = new google.maps.Map("", {
-		center: {lat: lat, lng: lng},
-		zoom: 15
-	});
-	var request = {
-		location: {lat: lat, lng: lng},
-		name:'*',
-		rankBy: google.maps.places.RankBy.DISTANCE,
-	  };
-	service = new google.maps.places.PlacesService(map);
-	service.nearbySearch(request, function(results, status){
-		if (status == google.maps.places.PlacesServiceStatus.OK) {
-			//console.log(results);
-			getPositionAdress(results);
-			for (var i = 0; i < results.length; i++) {
-			
-			}
-		}
-	});
-}
+    $('#se-input-wd').focus(function () {
+        initAutocomplete();
+    });
+
+    var autocomplete;
+    function initAutocomplete() {
+        autocomplete = new google.maps.places.Autocomplete(document.getElementById('se-input-wd'), {types: ['geocode']});
+        autocomplete.addListener('place_changed', fillInAddress);
+    }
+    function fillInAddress() {
+        var place = autocomplete.getPlace();
+
+        info = JSON.parse($.cookie('user_address'));
+        info.adress = place.formatted_address;
+        info.longitude = place.geometry.location.lng();
+        info.latitude = place.geometry.location.lat();
+
+        var add_com = place.address_components;
+        var is_get_city = false;
+        for(var i=0;i<add_com.length;i++){
+            if(add_com[i]['types'][0] == 'locality'){
+                is_get_city = true;
+                var city_name = add_com[i]['long_name'];
+                $.post("{pigcms{:U('My/ajax_city_name')}",{city_name:city_name},function(result){
+                    if (result.error == 1){
+                        info.city = 0;
+                        info.province = 0;
+                        info.city_name = 'N/A';
+                    }else{
+                        info.city = result['info']['city_id']
+                        info.province = result['info']['province_id'];
+                        info.city_name = city_name;
+                    }
+                    $.cookie('user_address', JSON.stringify(info));
+                    location.href = "{pigcms{:U('My/edit_adress', $params)}&adress_id="+info.id;
+                },'JSON');
+            }
+        }
+        if(!is_get_city) {
+            info.city = 0;
+            info.province = 0;
+            info.city_name = 'N/A';
+            $.cookie('user_address', JSON.stringify(info));
+            location.href = "{pigcms{:U('My/edit_adress', $params)}&adress_id="+info.id;
+        }
+
+    }
 
 $(document).ready(function(){
-	$("#se-input-wd").bind('input', function(e){
-		var address = $.trim($('#se-input-wd').val());
-		if(address.length>0 && address !== "{pigcms{:L('_B_PURE_MY_02_')}"){
-			$('#addressShow').empty();
-			clearTimeout(timeout);
-			timeout = setTimeout("search('"+address+"')", 500);
-		}
-	});
+	// $("#se-input-wd").bind('input', function(e){
+	// 	var address = $.trim($('#se-input-wd').val());
+	// 	if(address.length>0 && address !== "{pigcms{:L('_B_PURE_MY_02_')}"){
+	// 		$('#addressShow').empty();
+	// 		clearTimeout(timeout);
+	// 		timeout = setTimeout("search('"+address+"')", 500);
+	// 	}
+	// });
 
 	$('#addressShow').delegate("li","click",function(){ 
 		info = JSON.parse($.cookie('user_address'));

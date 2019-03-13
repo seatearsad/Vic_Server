@@ -31,7 +31,10 @@
 			</tr>
 			<tr>
 			 	<th width="15%">所在地</th>
-				<td id="choose_cityarea" colspan=3  province_id="{pigcms{$now_user.province_id}" city_id="{pigcms{$now_user.city_id}" area_id="{pigcms{$now_user.area_id}" circle_id="{pigcms{$now_user.circle_id}"></td>
+				<!--td id="choose_cityarea" colspan=3  province_id="{pigcms{$now_user.province_id}" city_id="{pigcms{$now_user.city_id}" area_id="{pigcms{$now_user.area_id}" circle_id="{pigcms{$now_user.circle_id}"></td-->
+                <td>
+                    {pigcms{$now_user['city_name']}
+                </td>
 			<tr>
 			<tr>
 				<th width="15%">配送范围</th>
@@ -116,6 +119,8 @@
                 </tr>
             </if>
 		</table>
+        <input type="hidden" name="city_id" id="city_id" value="{pigcms{$now_user['city_id']}">
+        <input type="hidden" name="province_id" id="province_id" value="{pigcms{$now_user['province_id']}">
 		<div class="btn hidden">
 			<input type="submit" name="dosubmit" id="dosubmit" value="提交" class="button" />
 			<input type="reset" value="取消" class="button" />

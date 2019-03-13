@@ -9,8 +9,10 @@ class AreaAction extends BaseAction{
 		$database_area = D('Area');
 		if(!isset($_GET['type'])){
 			if(!$this->config['many_city']){
-				if($_GET['type'] != 4) $_GET['type'] = 3;
-				$_GET['pid'] = !empty($_GET['pid']) ? $_GET['pid'] : $this->config['now_city'];
+				//if($_GET['type'] != 4) $_GET['type'] = 3; garfunkel modify
+                if($_GET['type'] != 4) $_GET['type'] = 1;
+				//$_GET['pid'] = !empty($_GET['pid']) ? $_GET['pid'] : $this->config['now_city'];
+                $_GET['pid'] = !empty($_GET['pid']) ? $_GET['pid'] : 0;
 			}else{
 				if($this->config['now_province']){
 					if(empty($_GET['type'])) $_GET['type'] = 2;
@@ -414,4 +416,22 @@ class AreaAction extends BaseAction{
 		}
 
 	}
+
+    public function ajax_city_name(){
+        $city_name = $_POST['city_name'];
+        $where = array('area_name'=>$city_name,'area_type'=>2);
+        $area = D('Area')->where($where)->find();
+        $data = array();
+        if($area){
+            $data['area_id'] = 0;
+            $data['city_id'] = $area['area_id'];
+            $data['province_id'] = $area['area_pid'];
+
+            $return['error'] = 0;
+        }else{
+            $return['error'] = 1;
+        }
+        $return['info'] = $data;
+        exit(json_encode($return));
+    }
 }

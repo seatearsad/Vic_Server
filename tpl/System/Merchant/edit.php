@@ -103,7 +103,14 @@
 			</tr>
 			<tr>
 				<th width="160">所在区域</th>
-				<td id="choose_cityarea" province_id="{pigcms{$merchant.province_id}" city_id="{pigcms{$merchant.city_id}" area_id="{pigcms{$merchant.area_id}" circle_id="-1"></td>
+				<!--td id="choose_cityarea" province_id="{pigcms{$merchant.province_id}" city_id="{pigcms{$merchant.city_id}" area_id="{pigcms{$merchant.area_id}" circle_id="-1"></td-->
+                <td>
+                    <select name="city_id">
+                        <volist name="city" id="vo">
+                            <option value="{pigcms{$vo.area_id}" <if condition="$merchant['city_id'] eq $vo['area_id']">selected="selected"</if>>{pigcms{$vo.area_name}</option>
+                        </volist>
+                    </select>
+                </td>
 			</tr>
 			<tr>
 				<th width="160">到期时间</th>

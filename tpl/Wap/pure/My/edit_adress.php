@@ -47,7 +47,7 @@
 		        			<h6>{pigcms{:L('_B_PURE_MY_09_')}:</h6>
 		        			<input name="phone" type="tel" class="kv-v input-weak" placeholder="{pigcms{:L('_B_PURE_MY_10_')}" pattern="\d{3}[\d\*]{4,}" data-err="{pigcms{:L('_B_PURE_MY_11_')}" value="{pigcms{$now_adress.phone}">
 		        		</dd>
-		        		<dd class="dd-padding kv-line">
+		        		<!--dd class="dd-padding kv-line">
 				            <h6>{pigcms{:L('_B_PURE_MY_12_')}:</h6>
 				            <label class="select kv-v">
 				                <select name="province">
@@ -62,24 +62,16 @@
 									</if>
 				                </select>
 				            </label>
-				        </dd>
+				        </dd-->
 				        <dd class="dd-padding kv-line">
 				            <h6>{pigcms{:L('_B_PURE_MY_13_')}:</h6>
-				            <label class="select kv-v">
-				                <select name="city">
-									<if condition="$now_adress">
-										<volist name="city_list" id="vo">
-											<option value="{pigcms{$vo.area_id}" <if condition="$vo['area_id'] eq $now_adress['city']">selected="selected"</if>>{pigcms{$vo.area_name}</option>
-										</volist>
-									<else/>
-										<volist name="city_list" id="vo">
-											<option value="{pigcms{$vo.area_id}" <if condition="$vo['area_id'] eq $now_city_area['area_id']">selected="selected"</if>>{pigcms{$vo.area_name}</option>
-										</volist>
-									</if>
-				                </select>
+				            <label class="select kv-v" style="line-height: 30px" id="city_name">
+				                {pigcms{$now_adress['city_name']}
 				            </label>
+                            <input type="hidden" name="city" id="city_id" value="{pigcms{$now_adress['city']}">
+                            <input type="hidden" name="province" id="province_id" value="{pigcms{$now_adress['province']}">
 				        </dd>
-				        <dd class="dd-padding kv-line">
+				        <!--dd class="dd-padding kv-line">
 				            <h6>{pigcms{:L('_B_PURE_MY_14_')}:</h6>
 				            <label class="select kv-v">
 				                <select name="area">
@@ -88,7 +80,7 @@
 				                    </volist>
 				                </select>
 				            </label>
-				        </dd>
+				        </dd-->
 		        		<dd class="dd-padding kv-line" id="color-gray">
 		        			<h6>{pigcms{:L('_B_PURE_MY_15_')}:</h6>
 	                        <i class="icon-location" data-node="icon"></i><span class="color-gray" data-node="addAddress"><?php if(!empty($now_adress['adress'])): ?><?php echo $now_adress['adress']; ?><?php else : ?><img src="{pigcms{$static_path}images/location.png" style=" width:25px; height:25px"/>{pigcms{:L('_CLICK_SELECT_W_')}<?php endif; ?></span> <i class="right_arrow"></i>
@@ -136,14 +128,16 @@
 				$("#color-gray").click(function(){
 					var detail = new Object();
 					detail.name = $('input[name="name"]').val();
-					detail.province = $('select[name="province"]').val();
-					detail.area = $('select[name="area"]').val();
-					detail.city = $('select[name="city"]').val();
+					detail.province = $('input[name="province"]').val();
+					//detail.area = $('input[name="area"]').val();
+                    detail.area = 0;
+					detail.city = $('input[name="city"]').val();
 					detail.defaul = $('input[name="default"]').val();
 					detail.detail = $('input[name="detail"]').val();
 					detail.zipcode = $('input[name="zipcode"]').val();
 					detail.phone = $('input[name="phone"]').val();
 					detail.id = $('input[name="adress_id"]').val();
+					detail.city_name = $('#city_name').html();
 					
 					$.cookie("user_address", JSON.stringify(detail));
 					location.href = "{pigcms{:U('My/adres_map', $params)}";

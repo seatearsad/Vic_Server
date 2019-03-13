@@ -35,10 +35,54 @@ $(function(){
 		var geocoder = new google.maps.Geocoder();
 		var request = {
 			location:{lat:event.latLng.lat(), lng:event.latLng.lng()}
-		}
+		};
 		geocoder.geocode(request, function(results, status){
 			if(status == 'OK') {
 				$("#adress").val(results[0].formatted_address);
+				var add_com = results[0].address_components;
+				// for(var i=0;i<results.length;i++){
+				// 	if(results[i]['types'][0] == 'locality'){
+				// 		var place_id = results[i]['place_id'];
+				// 		var city_name = results[i]['formatted_address'];
+				// 		$('#city_area').html(city_name);
+                 //        $.post(choose_place_id,{place_id:place_id},function(result){
+				// 			if (result.error == 1){
+				// 				alert("该城市还未开放！");
+				// 			}else{
+				// 				$('#area_id').val(result['info']['area_id']);
+                 //                $('#city_id').val(result['info']['city_id']);
+                 //                $('#province_id').val(result['info']['province_id']);
+				// 			}
+                 //        },'JSON');
+				// 	}
+				// }
+				var is_get_city = false;
+                for(var i=0;i<add_com.length;i++){
+					if(add_com[i]['types'][0] == 'locality'){
+						is_get_city = true;
+						var city_name = add_com[i]['long_name'];
+                        $('#city_area').html(city_name);
+                        $.post(choose_city_name,{city_name:city_name},function(result){
+                            if (result.error == 1){
+								alert("该城市还未开放！");
+                                $('#area_id').val(0);
+                                $('#city_id').val(0);
+                                $('#province_id').val(0);
+							}else{
+								$('#area_id').val(result['info']['area_id']);
+							   	$('#city_id').val(result['info']['city_id']);
+							   	$('#province_id').val(result['info']['province_id']);
+							}
+                        },'JSON');
+					}
+                }
+                if(!is_get_city) {
+                    alert('未获取到城市信息');
+                    $('#city_area').html('');
+                    $('#area_id').val(0);
+                    $('#city_id').val(0);
+                    $('#province_id').val(0);
+                }
 			}
 			console.log(results);
 			console.log(status);
