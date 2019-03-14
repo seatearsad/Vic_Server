@@ -22,16 +22,47 @@
 				<th width="80">EMAIL</th>
 				<td><input type="text" class="input fl" name="email" size="20" value="{pigcms{$admin['email']}"/></td>
 			</tr>
-			<tr>
+			<!--tr>
 				<th width="80">QQ</th>
 				<td><input type="text" class="input fl" name="qq" size="20" value="{pigcms{$admin['qq']}"/></td>
-			</tr>
+			</tr-->
 			<if condition="$config.open_extra_price  eq 1">
 			<tr>
 				<th width="80">区域管理员{pigcms{$config.score_name}结算比例</th>
 				<td><input type="text" class="input fl" name="score_percent" size="20"  validate="required:true,min:0,max:100" value="{pigcms{$admin['score_percent']|floatval}"/></td>
 			</tr>
 			</if>
+            <if condition="$admin['level'] eq 3">
+            <tr>
+                <th width="80">城市</th>
+                <td>
+                    <select name="area_id">
+                        <option value="0" <if condition="$admin['area_id'] eq 0">selected="selected"</if>>None</option>
+                    <volist name="city" id="vo">
+                        <option value="{pigcms{$vo.area_id}" <if condition="$admin['area_id'] eq $vo['area_id']">selected="selected"</if>>{pigcms{$vo.area_name}</option>
+                    </volist>
+                    </select>
+                    <select name="level">
+                        <option value="0">普通管理员</option>
+                        <option value="3" selected="selected">城市管理员</option>
+                    </select>
+                </td>
+            </tr>
+                <else />
+                <tr>
+                    <th width="80">类型</th>
+                    <td>
+                        <if condition="$admin['level'] eq 2">
+                            超级管理员
+                            <else />
+                            <select name="level">
+                                <option value="0" selected="selected">普通管理员</option>
+                                <option value="3">城市管理员</option>
+                            </select>
+                        </if>
+                    </td>
+                </tr>
+            </if>
 			<tr>
 				<th width="80">状态</th>
 				<td>

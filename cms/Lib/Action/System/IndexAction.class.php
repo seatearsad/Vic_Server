@@ -78,7 +78,14 @@ class IndexAction extends BaseAction {
         }else{
             $pigcms_assign['website_collect_count'] = floatval(M('Merchant_money_list')->sum('total_money'));
         }
-        $pigcms_assign['website_user_count'] = M('User')->count();
+        if($area_id){
+            $sql_count = "SELECT count(*) FROM ". C('DB_PREFIX') . "user as u LEFT JOIN ". C('DB_PREFIX') . "user_adress as a on a.uid = u.uid ";
+            $sql_count .= "WHERE a.default=1 and a.city=".$area_id;
+            $count = D()->query($sql_count);
+            $pigcms_assign['website_user_count'] = $count[0]['count(*)'];
+        }else {
+            $pigcms_assign['website_user_count'] = M('User')->count();
+        }
         $where['status'] = 1;
         if($area_id){
             $where['_string'] = 'city_id = '.$area_id.' OR area_id = '.$area_id;
@@ -260,6 +267,10 @@ class IndexAction extends BaseAction {
         $tmp_array=array();
         $condition_merchant_request['paid'] = 1;
         $condition_merchant_request['o.status']=array('lt',3);
+        //garfunkel 判断城市管理员
+        if($this->system_session['area_id'] != 0){
+            $condition_merchant_request['m.city_id']=$this->system_session['area_id'];
+        }
         $res_group   = M('Group_order')->field('total_money as money,payment_money,pay_type ,pay_time')->join(' as o left join '.C('DB_PREFIX').'merchant m ON m.mer_id = o.mer_id')->where($condition_merchant_request)->select();
 
         $res_meal    = M('Meal_order')->field('total_price as money,payment_money,pay_type ,pay_time')->join(' as o left join '.C('DB_PREFIX').'merchant m ON m.mer_id = o.mer_id')->where($condition_merchant_request)->select();
@@ -284,6 +295,10 @@ class IndexAction extends BaseAction {
         $count['all'] = $count['group']+$count['meal']+$count['shop']+$count['appoint']+$count['wxapp']+$count['weidian']+$count['store'];
 
         $condition_mer_request['type']=array('neq','withdraw');
+        //garfunkel 判断城市管理员
+        if($this->system_session['area_id'] != 0){
+            $condition_mer_request['m.city_id']=$this->system_session['area_id'];
+        }
         $mer_money = M('Merchant_money_list')->field('`o`.*')->join(' as o left join '.C('DB_PREFIX').'merchant m ON m.mer_id = o.mer_id')->where($condition_mer_request)->select();
         $mer_count= M('Merchant_money_list')->join(' as o left join '.C('DB_PREFIX').'merchant m ON m.mer_id = o.mer_id')->where($condition_mer_request)->group('o.type')->getField('type,count(o.id) as count');
 
@@ -596,11 +611,20 @@ class IndexAction extends BaseAction {
     }
 
     public function ajax_merchant_money(){
-        $all_money = M('')->query('SELECT SUM(power(-1,1+income)*money) AS all_money FROM '.C('DB_PREFIX').'merchant_money_list ');
-        $all_money = floatval($all_money[0]['all_money']);
-        $all_count= M('Merchant_money_list')->where(array('type'=>array('neq','withdraw')))->count();
-        $all_mer_money =M('Merchant')->sum('money');
-        $all_need_pay = M('Merchant_withdraw')->where(array('status'=>0))->sum('money');
+        if($this->system_session['area_id'] != 0){
+            $area_id = $this->system_session['area_id'];
+            $all_money = M('')->query('SELECT SUM(power(-1,1+mm.income)*mm.money) AS all_money FROM '.C('DB_PREFIX').'merchant_money_list as mm left join '.C('DB_PREFIX').'merchant as m on mm.mer_id=m.mer_id where m.city_id='.$area_id);
+            $all_money = floatval($all_money[0]['all_money']);
+            $all_count= M('Merchant_money_list')->where(array('type'=>array('neq','withdraw')))->count();
+            $all_mer_money =M('Merchant')->where(array('city_id'=>$area_id))->sum('money');
+            $all_need_pay = M('Merchant_withdraw')->where(array('status'=>0,'city_id'=>$area_id))->sum('money');
+        }else {
+            $all_money = M('')->query('SELECT SUM(power(-1,1+income)*money) AS all_money FROM ' . C('DB_PREFIX') . 'merchant_money_list ');
+            $all_money = floatval($all_money[0]['all_money']);
+            $all_count = M('Merchant_money_list')->where(array('type' => array('neq', 'withdraw')))->count();
+            $all_mer_money = M('Merchant')->sum('money');
+            $all_need_pay = M('Merchant_withdraw')->where(array('status' => 0))->sum('money');
+        }
         $all_mer_money = $all_mer_money+$all_need_pay;
         return array(
             'all_money'=>$all_money>0?$all_money:0,
@@ -739,6 +763,12 @@ class IndexAction extends BaseAction {
 // 		import('ORG.Net.IpLocation');
 // 		$IpLocation = new IpLocation();
         $admins = D('Admin')->field(true)->select();
+        foreach ($admins as &$vo){
+            if($vo['area_id'] != 0){
+                $city = D('Area')->where(array('area_id'=>$vo['area_id']))->find();
+                $vo['city_name'] = $city['area_name'];
+            }
+        }
 // 		foreach($admins as &$value){
 // 			$last_location = $IpLocation->getlocation(long2ip($value['last_ip']));
 // 			$value['last_ip_txt'] = iconv('GBK','UTF-8',$last_location['country']);
@@ -758,6 +788,10 @@ class IndexAction extends BaseAction {
     public function admin() {
         $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
         $admin = D('Admin')->field(true)->where(array('id' => $id))->find();
+        //garfunkel 获取城市
+        $city = D('Area')->where(array('area_type'=>2))->order('area_name asc')->select();
+        $this->assign('city',$city);
+
         $this->assign('admin', $admin);
         $this->assign('bg_color', '#F3F3F3');
         $this->display();
@@ -771,6 +805,7 @@ class IndexAction extends BaseAction {
             if ($database_area->where("`id`<>'{$id}' AND `account`='{$account}'")->find()) {
                 $this->error('数据库中已存在相同的账号，请更换。');
             }
+            if($_POST['level'] != 3)$_POST['area_id'] = 0;
             unset($_POST['id']);
             if ($id) {
                 if ($_POST['pwd']) {
@@ -781,7 +816,7 @@ class IndexAction extends BaseAction {
                 $database_area->where(array('id' => $id))->data($_POST)->save();
                 $this->success('修改成功！');
             } else {
-            	$_POST['level'] = 0;
+            	//$_POST['level'] = 0;
                 if (empty($_POST['pwd'])) {
                     $this->error('密码不能为空~');
                 }

@@ -7,73 +7,115 @@
 
 class UserAction extends BaseAction {
     public function index() {
-        //搜索
-        if (!empty($_GET['keyword'])) {
-            if ($_GET['searchtype'] == 'uid') {
-                $condition_user['uid'] = $_GET['keyword'];
-            } else if ($_GET['searchtype'] == 'nickname') {
-                $condition_user['nickname'] = array('like', '%' . $_GET['keyword'] . '%');
-            } else if ($_GET['searchtype'] == 'phone') {
-                $condition_user['phone'] = array('like', '%' . $_GET['keyword'] . '%');
+        if($this->system_session['level'] == 3){
+            if($this->system_session['area_id'] != 0){
+                $sql_count = "SELECT count(*) FROM ". C('DB_PREFIX') . "user as u LEFT JOIN ". C('DB_PREFIX') . "user_adress as a on a.uid = u.uid ";
+                $sql = "SELECT u.* , a.city as city_id FROM ". C('DB_PREFIX') . "user as u LEFT JOIN ". C('DB_PREFIX') . "user_adress as a on a.uid = u.uid ";
+                $where = "WHERE a.default=1 and a.city=".$this->system_session['area_id'];
+
+                if (!empty($_GET['keyword'])) {
+                    if ($_GET['searchtype'] == 'uid') {
+                        $where .= " and u.uid=".$_GET['keyword'];
+                    } else if ($_GET['searchtype'] == 'nickname') {
+                        $where .= " and u.nickname like '%".$_GET['keyword']. "%'";
+                    } else if ($_GET['searchtype'] == 'phone') {
+                        $where .= " and u.phone like '%".$_GET['keyword']. "%'";
+                    }
+                }
+                if ($_GET['status'] != '') {
+                    $where .= " and u.status=".$_GET['status'];
+                }
+                if (!empty($_GET['begin_time']) && !empty($_GET['end_time'])) {
+                    if ($_GET['begin_time'] > $_GET['end_time']) {
+                        $this->error_tips("结束时间应大于开始时间");
+                    }
+                    $period = array(strtotime($_GET['begin_time'] . " 00:00:00"), strtotime($_GET['end_time'] . " 23:59:59"));
+                    $where .= " and u.add_time>".$period[0]." and u.add_time<".$period[1];
+                }
+                //var_dump($sql_count.$where);die();
+                $count = D()->query($sql_count.$where);
+                $count_user = $count[0]['count(*)'];
+                if($count_user > 0){
+                    import('@.ORG.system_page');
+                    $p = new Page($count_user, 15);
+                    $limit = " LIMIT {$p->firstRow}, {$p->listRows}";
+                    $user_list = D()->query($sql.$where.$limit);
+
+                    $pagebar = $p->show();
+                    $this->assign('pagebar', $pagebar);
+                }
+
             }
-        }
-
-
-        $condition_user['openid'] = array('notlike','%no_use');
-		//排序
-		$order_string = '`uid` DESC';
-		if($_GET['sort']){
-			switch($_GET['sort']){
-				case 'uid':
-					$order_string = '`uid` DESC';
-					break;
-				case 'lastTime':
-					$order_string = '`last_time` DESC';
-					break;
-				case 'money':
-					$order_string = '`now_money` DESC';
-					break;
-				case 'score':
-					$order_string = '`score_count` DESC';
-					break;
-			}
-		}
-		//状态
-        if ($_GET['status'] != '') {
-        	$condition_user['status']	=	$_GET['status'];
-        }
-        if(!empty($_GET['begin_time'])&&!empty($_GET['end_time'])){
-            if ($_GET['begin_time']>$_GET['end_time']) {
-                $this->error_tips("结束时间应大于开始时间");
+        }else {
+            //搜索
+            if (!empty($_GET['keyword'])) {
+                if ($_GET['searchtype'] == 'uid') {
+                    $condition_user['uid'] = $_GET['keyword'];
+                } else if ($_GET['searchtype'] == 'nickname') {
+                    $condition_user['nickname'] = array('like', '%' . $_GET['keyword'] . '%');
+                } else if ($_GET['searchtype'] == 'phone') {
+                    $condition_user['phone'] = array('like', '%' . $_GET['keyword'] . '%');
+                }
             }
-            $period = array(strtotime($_GET['begin_time']." 00:00:00"),strtotime($_GET['end_time']." 23:59:59"));
-            $condition_user['_string'] =" (add_time BETWEEN ".$period[0].' AND '.$period[1].")";
-        }
-        $database_user = D('User');
 
-        $count_user = $database_user->where($condition_user)->count();
-        import('@.ORG.system_page');
-        $p = new Page($count_user, 15);
-        $user_list = $database_user->field(true)->where($condition_user)->order($order_string)->limit($p->firstRow . ',' . $p->listRows)->select();
 
-        if (!empty($user_list)) {
-            import('ORG.Net.IpLocation');
-            $IpLocation = new IpLocation();
-            foreach ($user_list as &$value) {
-                $last_location = $IpLocation->getlocation(long2ip($value['last_ip']));
-                $value['last_ip_txt'] = iconv('GBK', 'UTF-8', $last_location['country']);
+            $condition_user['openid'] = array('notlike', '%no_use');
+            //排序
+            $order_string = '`uid` DESC';
+            if ($_GET['sort']) {
+                switch ($_GET['sort']) {
+                    case 'uid':
+                        $order_string = '`uid` DESC';
+                        break;
+                    case 'lastTime':
+                        $order_string = '`last_time` DESC';
+                        break;
+                    case 'money':
+                        $order_string = '`now_money` DESC';
+                        break;
+                    case 'score':
+                        $order_string = '`score_count` DESC';
+                        break;
+                }
             }
+            //状态
+            if ($_GET['status'] != '') {
+                $condition_user['status'] = $_GET['status'];
+            }
+            if (!empty($_GET['begin_time']) && !empty($_GET['end_time'])) {
+                if ($_GET['begin_time'] > $_GET['end_time']) {
+                    $this->error_tips("结束时间应大于开始时间");
+                }
+                $period = array(strtotime($_GET['begin_time'] . " 00:00:00"), strtotime($_GET['end_time'] . " 23:59:59"));
+                $condition_user['_string'] = " (add_time BETWEEN " . $period[0] . ' AND ' . $period[1] . ")";
+            }
+            $database_user = D('User');
+
+            $count_user = $database_user->where($condition_user)->count();
+            import('@.ORG.system_page');
+            $p = new Page($count_user, 15);
+            $user_list = $database_user->field(true)->where($condition_user)->order($order_string)->limit($p->firstRow . ',' . $p->listRows)->select();
+
+            if (!empty($user_list)) {
+                import('ORG.Net.IpLocation');
+                $IpLocation = new IpLocation();
+                foreach ($user_list as &$value) {
+                    $last_location = $IpLocation->getlocation(long2ip($value['last_ip']));
+                    $value['last_ip_txt'] = iconv('GBK', 'UTF-8', $last_location['country']);
+                }
+            }
+            $user_balance	=	array(
+                'count'	=>	$database_user->sum('now_money'),
+                'open'	=>	$database_user->where(array('status'=>1))->sum('now_money'),
+                'close'	=>	$database_user->where(array('status'=>2))->sum('now_money'),
+            );
+
+            $this->assign('user_balance', $user_balance);
+            $pagebar = $p->show();
+            $this->assign('pagebar', $pagebar);
         }
+
         $this->assign('user_list', $user_list);
-        $user_balance	=	array(
-			'count'	=>	$database_user->sum('now_money'),
-			'open'	=>	$database_user->where(array('status'=>1))->sum('now_money'),
-			'close'	=>	$database_user->where(array('status'=>2))->sum('now_money'),
-        );
-
-        $this->assign('user_balance', $user_balance);
-        $pagebar = $p->show();
-        $this->assign('pagebar', $pagebar);
         $this->assign('client', array(0=>'WAP端',1=>'苹果',2=>'安卓',3=>'电脑',4=>'小程序',5=>'微信'));
         $this->display();
     }

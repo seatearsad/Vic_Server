@@ -32,6 +32,10 @@ class DeliverAction extends BaseAction {
                 $condition_user['phone'] = array('like', '%' . $_GET['keyword'] . '%');
             }
         }
+        //garfunkel 判断城市管理员
+        if($this->system_session['level'] == 3){
+            $condition_user['city_id'] = $this->system_session['area_id'];
+        }
         $condition_user['group'] = 1;
         $count_user = $this->deliver_user->where($condition_user)->count();
         import('@.ORG.system_page');
@@ -101,7 +105,10 @@ class DeliverAction extends BaseAction {
             D('Deliver_card')->data($card)->add();
     		$this->success('保存成功');
     	}
-    	
+    	//garfunkel 判断城市管理员
+        if($this->system_session['level'] == 3){
+            $this->error('当前管理员没有此权限');
+        }
     	$this->display();
     }
     
@@ -318,6 +325,13 @@ class DeliverAction extends BaseAction {
 
 		$sql .= ' WHERE s.type=0';
 		$sql_count .= ' WHERE s.type=0';
+
+        //garfunkel 判断城市管理员
+        if($this->system_session['level'] == 3){
+            $sql .= " AND m.city_id=".$this->system_session['area_id'];
+            $sql_count .= " AND m.city_id=".$this->system_session['area_id'];
+        }
+
 		if ($phone) {
 			$sql .= " AND s.phone=".$phone;
 			$sql_count .= " AND s.phone=".$phone;
@@ -331,7 +345,6 @@ class DeliverAction extends BaseAction {
 			$sql .= " AND s.status=".$status;
 			$sql_count .= " AND s.status=".$status;
 		}
-
 
 		if ($selectStoreId) {
 			$sql .= " AND s.store_id=".$selectStoreId;
@@ -1126,7 +1139,13 @@ class DeliverAction extends BaseAction {
 
 	public function map(){
         //获取当前所有上班状态的配送员 包含现在手中订单数量及状态
-        $user_list = D('Deliver_user')->field(true)->where(array('status'=>1,'work_status'=>0))->order('uid asc')->select();
+        $where['status'] = 1;
+        $where['work_status'] = 0;
+        //garfunkel 判断城市管理员
+        if($this->system_session['level'] == 3){
+            $where['city_id'] = $this->system_session['area_id'];
+        }
+        $user_list = D('Deliver_user')->field(true)->where($where)->order('uid asc')->select();
         foreach ($user_list as &$deliver){
             $orders = D('Deliver_supply')->field(true)->where(array('uid'=>$deliver['uid'],'status' => array(array('gt', 1), array('lt', 5))))->order('supply_id asc')->select();
             $deliver['order_count'] = count($orders);
@@ -1169,6 +1188,10 @@ class DeliverAction extends BaseAction {
         //未审核的
         $condition_user['group'] = 0;
         $condition_user['reg_status'] = array('neq',0);
+        //garfunkel 判断城市管理员
+        if($this->system_session['level'] == 3){
+            $condition_user['city_id'] = $this->system_session['area_id'];
+        }
         $count_user = $this->deliver_user->where($condition_user)->count();
         import('@.ORG.system_page');
         $p = new Page($count_user, 15);
