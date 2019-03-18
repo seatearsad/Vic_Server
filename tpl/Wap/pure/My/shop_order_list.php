@@ -249,8 +249,11 @@
 									<span>{pigcms{:L('_B_PURE_MY_71_')}</span>
 								<elseif condition="$order['status'] eq 1" />
 									<span>{pigcms{:L('_B_PURE_MY_72_')}</span>
+                                    <if condition="$deliver">
+                                        <span onclick='location.href="{pigcms{:U('My/order_track',array('order_id'=>$order['order_id']))}"'>Track</span>
+                                    </if>
 								<elseif condition="$order['status'] eq 2" />
-									<span  href="{pigcms{:U('My/shop_feedback',array('order_id'=>$order['order_id']))}">{pigcms{:L('_B_PURE_MY_73_')}</span>
+									<span href="{pigcms{:U('My/shop_feedback',array('order_id'=>$order['order_id']))}">{pigcms{:L('_B_PURE_MY_73_')}</span>
 								<elseif condition="$order['status'] eq 3" />
 									<span>{pigcms{:L('_B_PURE_MY_74_')}</span>
 								<elseif condition="$order['status'] eq 4" />

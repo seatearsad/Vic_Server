@@ -10,10 +10,6 @@
         <title>{pigcms{:L('_VIC_NAME_')}</title>
 		<meta name="keywords" content="{pigcms{$config.seo_keywords}" />
 		<meta name="description" content="{pigcms{$config.seo_description}" />
-		<link href="{pigcms{$static_path}css/css.css" type="text/css"  rel="stylesheet" />
-		<link href="{pigcms{$static_path}css/new.css" type="text/css"  rel="stylesheet" />
-		<link href="{pigcms{$static_path}css/header.css"  rel="stylesheet"  type="text/css" />
-		<link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/ydyfx.css"/>
 		<script src="{pigcms{$static_path}js/jquery-1.7.2.js"></script>
 		<script src="{pigcms{$static_public}js/jquery.lazyload.js"></script>
 		<script src="{pigcms{$static_path}js/jquery.nav.js"></script>
@@ -36,414 +32,616 @@
 
 			</script>
 		</if>
-		<!--[if IE 6]>
-		<script  src="{pigcms{$static_path}js/DD_belatedPNG_0.0.8a.js" mce_src="{pigcms{$static_path}js/DD_belatedPNG_0.0.8a.js"></script>
-		<script type="text/javascript">
-		   /* EXAMPLE */
-		   DD_belatedPNG.fix('.enter,.enter a,.enter a:hover');
-
-		   /* string argument can be any CSS selector */
-		   /* .png_bg example is unnecessary */
-		   /* change it to what suits you! */
-		</script>
-		<script type="text/javascript">DD_belatedPNG.fix('*');</script>
-		<style type="text/css">
-			body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
-			.category_list li:hover .bmbox {filter:alpha(opacity=50);}
-			.gd_box{display:none;}
-		</style>
-		<![endif]-->
 	</head>
+    <style>
+        *{
+            margin: 0px;
+            box-sizing: border-box;
+            font-family: Helvetica;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        body{
+            min-width: 1024px;
+            background-color: #F5F5F5;
+            color: #3f3f3f;
+        }
+        #tutti_header{
+            height: 100px;
+            display: flex;
+            background-color: #ffffff;
+        }
+        #header_menu{
+            display: flex;
+            flex: 1 1 100%;
+        }
+        #header_sign{
+            flex: 1 1 100%;
+        }
+        #header_logo{
+            margin: 5px auto;
+            width: 90px;
+            height: 90px;
+            -moz-border-radius: 45px;
+            -webkit-border-radius: 45px;
+            border-radius: 45px;
+            background-color: #ffa52d;
+            background-image: url("./tpl/Static/blue/images/new/icon.png");
+            background-size: 100% 100%;
+            flex: 0 0 auto;
+        }
+        .hamburger{
+            height: 50px;
+            width: 50px;
+            cursor: pointer;
+            margin-left: 30px;
+            margin-top: 40px;
+        }
+        .hamburger .line {
+            width: 30px;
+            height: 3px;
+            background-color: #3f3f3f;
+            display: block;
+            margin: 6px auto;
+            -moz-border-radius: 3px;
+            -webkit-border-radius: 3px;
+            border-radius: 3px;
+            -webkit-transition: all 0.3s ease-in-out;
+            -o-transition: all 0.3s ease-in-out;
+            transition: all 0.3s ease-in-out;
+        }
+        .hamburger:hover .line{
+            background-color: #ffa64d;
+        }
+        .menu_font{
+            margin-top: 48px;
+            font-size: 22px;
+            -webkit-transition: all 0.3s ease-in-out;
+            -o-transition: all 0.3s ease-in-out;
+            transition: all 0.3s ease-in-out;
+        }
+        .main{
+            width: 100%;
+            height: 500px;
+            background-image: url("./tpl/Static/blue/images/new/main.jpg");
+            background-size: cover;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+        }
+        #hamburger-1.is-active .line:nth-child(1) {
+            -webkit-transform: translateY(9px) rotate(45deg);
+            -ms-transform: translateY(9px) rotate(45deg);
+            -o-transform: translateY(9px) rotate(45deg);
+            transform: translateY(9px) rotate(45deg);
+        }
+        #hamburger-1.is-active .line:nth-child(3) {
+            -webkit-transform: translateY(-9px) rotate(-45deg);
+            -ms-transform: translateY(-9px) rotate(-45deg);
+            -o-transform: translateY(-9px) rotate(-45deg);
+            transform: translateY(-9px) rotate(-45deg);
+        }
+        #hamburger-1.is-active .line:nth-child(2) {
+            opacity: 0;
+        }
+        #menu_memo{
+            max-width: 100%;
+            width: 380px;
+            position: absolute;
+            background-color: #f5f5f5;
+            transition: transform .4s ease;
+            transform: translate3d(-100%, 0, 0);
+            display: flex;
+            z-index: 999999;
+        }
+        #menu_memo.is_open{
+            transform: translate3d(0, 0, 0);
+        }
+        #menu_memo ul{
+            width: 92%;
+            margin-left: 5%;
+            margin-top: 20px;
+            padding: 0;
+        }
+        #menu_memo ul li{
+            list-style-type: none;
+            height: 30px;
+            line-height: 30px;
+            cursor: pointer;
+            background-image: url("./tpl/Static/blue/images/new/black_arrow.png");
+            background-size: auto 16px;
+            background-repeat: no-repeat;
+            background-position: right;
+            display: flex;
+            margin-top: 5px;
+            color: #3f3f3f;
+        }
+        #menu_memo ul li:hover{
+            color: #ffa52d;
+            background-image: url("./tpl/Static/blue/images/new/or_arrow.png");
+        }
+
+        #menu_memo li:nth-child(1) .m_img{
+            background-image: url("./tpl/Static/blue/images/new/home.png");
+        }
+        #menu_memo li:nth-child(2) .m_img{
+            background-image: url("./tpl/Static/blue/images/new/food.png");
+        }
+        #menu_memo li:nth-child(3) .m_img{
+            background-image: url("./tpl/Static/blue/images/new/car.png");
+        }
+        #menu_memo li:nth-child(4) .m_img{
+            background-image: url("./tpl/Static/blue/images/new/store.png");
+        }
+        #menu_memo li:hover:nth-child(1) .m_img{
+            background-image: url("./tpl/Static/blue/images/new/h_home.png");
+        }
+        #menu_memo li:hover:nth-child(2) .m_img{
+            background-image: url("./tpl/Static/blue/images/new/h_food.png");
+        }
+        #menu_memo li:hover:nth-child(3) .m_img{
+            background-image: url("./tpl/Static/blue/images/new/h_car.png");
+        }
+        #menu_memo li:hover:nth-child(4) .m_img{
+            background-image: url("./tpl/Static/blue/images/new/h_store.png");
+        }
+        #menu_memo li .m_img{
+            background-size: 22px 22px;
+            background-repeat: no-repeat;
+            background-position:left 2px;
+            height: 30px;
+            width: 30px;
+        }
+        .w_line{
+            background-color: #ffffff;
+            width: 100%;
+            height: 5px;
+            margin-top: 30px;
+            margin-bottom: 30px;
+            -moz-border-radius: 3px;
+            -webkit-border-radius: 3px;
+            border-radius: 3px;
+        }
+        .sign_btn{
+            width: 100px;
+            height: 35px;
+            border: 3px solid #F5F5F5;
+            -moz-border-radius: 5px;
+            -webkit-border-radius: 5px;
+            border-radius: 5px;
+            line-height: 35px;
+            text-align: center;
+            box-sizing: content-box;
+            float: right;
+            margin-right: 30px;
+            margin-top: 40px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        .slogan{
+            color: #ffa52d;
+            font-size: 48px;
+            font-weight: bold;
+            text-align: center;
+            position: absolute;
+            width: 100%;
+            min-width: 1024px;
+            margin-top: 200px;
+        }
+        .search_box{
+            width: 100%;
+            min-width: 1024px;
+            position: absolute;
+            margin-top: 300px;
+            text-align: center;
+        }
+        .search_back{
+            background-color: #ffffff;
+            height: 60px;
+            width: 45%;
+            margin: 0px auto;
+            -moz-border-radius: 5px;
+            -webkit-border-radius: 5px;
+            border-radius: 5px;
+            display: flex;
+        }
+        .search_input{
+            border: 0px;
+            padding-left: 80px;
+            margin-left: 5px;
+            width: 85%;
+            font-size: 24px;
+            background-image: url("./tpl/Static/blue/images/new/locating.png");
+            background-repeat: no-repeat;
+            background-size: auto 45px;
+            background-position:5px center;
+        }
+        .link_btn{
+            width: 15%;
+            background-image: url("./tpl/Static/blue/images/new/or_arrow.png");
+            background-repeat: no-repeat;
+            background-size: auto 45px;
+            background-position:center;
+            cursor: pointer;
+        }
+        .down_div{
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 50px;
+        }
+        .down_app{
+            text-align: center;
+            margin-top: 20px;
+            height: 70px;
+        }
+        .down_app span{
+            position: absolute;
+            width: 205px;
+            height: 70px;
+            cursor: pointer;
+        }
+        .down_app .app_icon{
+            margin-left: -240px;
+            background-image: url("./tpl/Static/blue/images/new/Apple_app_store_icon.png");
+            background-size: auto 70px;
+            background-repeat: no-repeat;
+        }
+        .down_app .apk_icon{
+            margin-left: 35px;
+            background-image: url("./tpl/Static/blue/images/new/AndroidButton.png");
+            background-size: auto 70px;
+            background-repeat: no-repeat;
+        }
+        .app_desc{
+            margin-top: 50px;
+            margin-left: 20px;
+            margin-right: 20px;
+            height: 440px;
+            display: flex;
+        }
+        .desc_left{
+            -moz-transform:scaleX(-1);
+            -webkit-transform:scaleX(-1);
+            -o-transform:scaleX(-1);
+            transform:scaleX(-1);
+        }
+        .desc_left,.desc_right{
+            height: 440px;
+            width: 100px;
+            background-image: url("./tpl/Static/blue/images/new/black_arrow.png");
+            background-size: auto 70px;
+            background-repeat: no-repeat;
+            background-position: center right;
+            cursor: pointer;
+            z-index: 99;
+        }
+        .desc_left:hover,.desc_right:hover{
+            background-image: url("./tpl/Static/blue/images/new/or_arrow.png");
+        }
+        .desc_center{
+            flex: 1 1 100%;
+            position: relative;
+            overflow: hidden;
+        }
+        .desc_all{
+            width: 100%;
+            position: absolute;
+            transform: translate3d(120%, 0, 0);
+            transition: transform .5s ease;
+        }
+        .desc_pro{
+            transform: translate3d(-120%, 0, 0);
+        }
+        .desc_next{
+            transform: translate3d(120%, 0, 0);
+        }
+        .desc_curr{
+            transform: translate3d(0%, 0, 0);
+        }
+        .desc_txt{
+            width: 100%;
+            height: 350px;
+            margin-top: 55px;
+            background-color: #ffffff;
+            padding-left: 300px;
+            padding-top: 100px;
+            padding-right: 20px;
+        }
+        .desc_img{
+            width: 220px;
+            height: 440px;
+            background-image: url("./tpl/Static/blue/images/new/iphone.png");
+            background-size:auto 440px ;
+            background-repeat: no-repeat;
+            position: absolute;
+            margin-left: 30px;
+        }
+        .desc_title{
+            font-size: 32px;
+            font-weight: bold;
+            line-height: 40px;
+        }
+        .desc_memo{
+            font-size: 22px;
+            margin-top: 10px;
+            line-height: 28px;
+        }
+        .white_line{
+            width: 90%;
+            height: 3px;
+            margin:50px auto;
+            -moz-border-radius: 3px;
+            -webkit-border-radius: 3px;
+            border-radius: 3px;
+            background-color: #ffffff;
+        }
+        .all_info{
+            width: 90%;
+            margin: 0px auto;
+            height: 440px;
+            display: flex;
+        }
+        .all_info .info_list{
+            width: 30%;
+            margin: 20px 0px 20px 30px;
+            flex: 1 1 100%;
+            background-color: #ffffff;
+            position: relative;
+        }
+        .info_txt{
+            width: 100%;
+            position: absolute;
+            bottom: 70px;
+            padding: 10px 10px;
+            text-align: center;
+        }
+        .info_btn{
+            position: absolute;
+            left: 30px;
+            right: 30px;
+            bottom: 20px;
+            height:40px;
+            text-align: center;
+            background-color: #ffa52d;
+            line-height: 40px;
+            -moz-border-radius: 5px;
+            -webkit-border-radius: 5px;
+            border-radius: 5px;
+            color: #ffffff;
+            font-weight: bold;
+            font-size: 22px;
+            cursor: pointer;
+        }
+        .food_comm{
+            background-image: url("./tpl/Static/blue/images/new/food_community.jpg");
+            background-size: 100% auto;
+            background-repeat: no-repeat;
+        }
+        .info_courier{
+            background-image: url("./tpl/Static/blue/images/new/courier.jpg");
+            background-size: 100% auto;
+            background-repeat: no-repeat;
+        }
+        .info_partner{
+            background-image: url("./tpl/Static/blue/images/new/partner.jpg");
+            background-size: 100% auto;
+            background-repeat: no-repeat;
+        }
+        .ready_order{
+            text-align: center;
+            font-size: 48px;
+            font-weight: bold;
+        }
+        .footer{
+            width: 100%;
+            margin-top: 100px;
+            background-color: #232323;
+            height: 500px;
+        }
+    </style>
 	<body>
-		<pigcms:adver cat_key="index_top_fold" limit="1" var_name="index_top_fold">
-			<div class="index_top_fold_box" style="background:url({pigcms{$vo.pic}) no-repeat center top {pigcms{$vo.bg_color};">
-				<a href="{pigcms{$vo.url}" target="_blank" class="link"></a>
-			</div>
-		</pigcms:adver>
-		<include file="Public:header_top"/>
-		<div class="containr">
-			<div class="body" style="width:100%;">
-				<div class="gd_box" style="top:1540px;">
-					<div id="gd_box">
-						<div id="gd_box1">
-							<div id="nav">
-								<ul>
-									<php>$autoI = 0;</php>
-									<volist name="index_group_list" id="vo">
-										<if condition="!empty($vo['group_list']) && count($vo['group_list']) egt 4">
-											<li <if condition="$i eq 1">class="current"</if>>
-												<a class="f{pigcms{$i}" onClick="scrollToId('#f{pigcms{$i}');"><img src="{pigcms{$vo.cat_pic}" />
-													<div class="scroll_{pigcms{$autoI%7+1}">{pigcms{$vo.cat_name}</div>
-												</a>
-											</li>
-											<php>$autoI++;</php>
-										</if>
-									</volist>
-								</ul>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!--div style="height:30px">
-				<if condition="!empty($scroll_msg)">
-					<div style="background:#f2dede;margin-top:5px:display:none;width:1200px" class="scroll_msg">
-						<div style="background:#f2dede;">
-							<div class="" style="font-size:14px;" id="scrollText">
-								<marquee  scrollamount="5" onmouseover = this.stop()  onmouseout=this.start() >
-								<volist name="scroll_msg" id="vo">
-									<div style="display:inline-block">
-										<span style="padding-right:30px;color:#a94442;">
-											<i class="ice-icon fa fa-volume-up bigger-130"></i>
-											<a href="#">{pigcms{$vo.content}</a>
-										</span>
-									</div>
-								</volist>
-								</marquee>
-							</div>
-						</div>
-					</div>
+		<div id="tutti_header">
+            <div id="header_menu">
+                <div id="hamburger-1" class="hamburger">
+                    <span class="line"></span>
+                    <span class="line"></span>
+                    <span class="line"></span>
+                </div>
+                <div class="menu_font">MENU</div>
+            </div>
+            <div id="header_logo"></div>
+            <div id="header_sign">
+                <div class="sign_btn">Sign in</div>
+            </div>
+        </div>
+        <div id="menu_memo">
+            <ul>
+                <li>
+                    <span class="m_img"> </span>
+                    <span>Home</span>
+                </li>
+                <li>
+                    <span class="m_img"> </span>
+                    <span>Food Community</span>
+                </li>
+                <li>
+                    <span class="m_img"> </span>
+                    <span>Become a Courier</span>
+                </li>
+                <li>
+                    <span class="m_img"> </span>
+                    <span>Become a Partner</span>
+                </li>
+                <li style="background-image: none;height: 65px">
+                    <span class="w_line"></span>
+                </li>
+                <li style="background-image: none">
+                    <span>About Us</span>
+                </li>
+                <li style="background-image: none">
+                    <span>Blogs</span>
+                </li>
+                <li style="background-image: none">
+                    <span>Help</span>
+                </li>
+            </ul>
+        </div>
+        <div class="main">
+            <div class="slogan">Your Online Food Community</div>
+            <div class="search_box">
+                <div class="search_back">
+                    <input type="text" placeholder="Enter your address" class="search_input" name="search_word">
+                    <div class="link_btn"></div>
+                </div>
+            </div>
+        </div>
+        <div class="down_div">
+            DOWNLOAD THE TUTTI APP
+        </div>
+        <div class="down_app">
+            <span class="app_icon">
+            </span>
+            <span class="apk_icon">
+            </span>
+        </div>
+        <div class="app_desc">
+            <div class="desc_left"></div>
+            <div class="desc_center">
+                <div class="desc_all">
+                    <div class="desc_img"></div>
+                    <div class="desc_txt">
+                        <div class="desc_title">
+                            1 Various categories to choose from and get you always connected
+                        </div>
+                        <div class="desc_memo">
+                            food delivery, local services and activities make your life so fun and exciting, best user experience.
+                        </div>
+                    </div>
+                </div>
+                <div class="desc_all">
+                    <div class="desc_img"></div>
+                    <div class="desc_txt">
+                        <div class="desc_title">
+                            2 Various categories to choose from and get you always connected
+                        </div>
+                        <div class="desc_memo">
+                            food delivery, local services and activities make your life so fun and exciting, best user experience.
+                        </div>
+                    </div>
+                </div>
+                <div class="desc_all">
+                    <div class="desc_img"></div>
+                    <div class="desc_txt">
+                        <div class="desc_title">
+                            3 Various categories to choose from and get you always connected
+                        </div>
+                        <div class="desc_memo">
+                            food delivery, local services and activities make your life so fun and exciting, best user experience.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="desc_right"></div>
+        </div>
+        <div class="white_line"></div>
+        <div class="all_info">
+            <div class="info_list food_comm" style="margin-left: 0px">
+                <div class="info_txt">
+                    Your favorite food and drinks are just a click away, we deliver right to your door !
+                </div>
+                <div class="info_btn">
+                    Food Community
+                </div>
+            </div>
+            <div class="info_list info_courier">
+                <div class="info_txt">
+                    Your favorite food and drinks are just a click away, we deliver right to your door !
+                </div>
+                <div class="info_btn">
+                    Become a Courier
+                </div>
+            </div>
+            <div class="info_list info_partner">
+                <div class="info_txt">
+                    Your favorite food and drinks are just a click away, we deliver right to your door !
+                </div>
+                <div class="info_btn">
+                    Become a Partner
+                </div>
+            </div>
+        </div>
+        <div class="white_line"></div>
+        <div>
+            <div class="ready_order">
+                Ready To Order?
+            </div>
+            <div class="search_box" style="margin-top: 30px;margin-bottom: 30px;position: relative">
+                <div class="search_back" style="width: 60%">
+                    <input type="text" placeholder="Enter your address" class="search_input" name="search_word">
+                    <div class="link_btn"></div>
+                </div>
+            </div>
+        </div>
+        <div class="footer">
 
-
-					<style>
-					#scrollText div a{ color: #a94442;}
-					</style>
-					<link rel="stylesheet" href="{pigcms{$static_public}font-awesome/css/font-awesome.min.css">
-					</if>
-				</div-->
-				
-				<div class="menu cf" style="position: relative;width: 1200px;">
-				
-				<if condition="false">
-					<div class="menu_left" style="margin-top:0px">
-					
-						<img class="category" src="{pigcms{$static_path}images/category.png" /><div class="menu_left_top">全部分类</div>
-						<div class="list">
-							<ul>
-								<volist name="all_category_list" id="vo" key="k">
-									<li>
-										<div class="li_top cf">
-											<if condition="$vo['cat_pic']"><div class="icon"><img src="{pigcms{$vo.cat_pic}" /></div></if>
-											<div class="li_txt"><a href="{pigcms{$vo.url}" target="_blank">{pigcms{$vo.cat_name}</a></div>
-										</div>
-										<if condition="$vo['cat_count'] gt 1">
-											<div class="rightIco"></div>
-											<div class="li_bottom">
-												<volist name="vo['category_list']" id="voo" offset="0" length="2" key="j">
-													<span><a href="{pigcms{$voo.url}" target="_blank">{pigcms{$voo.cat_name}</a></span>
-												</volist>
-											</div>
-											<div class="list_txt">
-												<p><a href="{pigcms{$vo.url}">{pigcms{$vo.cat_name}</a></p>
-												<volist name="vo['category_list']" id="voo" key="j">
-													<a class="<if condition="$voo['is_hot']">bribe</if>" href="{pigcms{$voo.url}" target="_blank">{pigcms{$voo.cat_name}</a>
-												</volist>
-											</div>
-										</if>
-									</li>
-								</volist>
-							</ul>
-						</div>
-							
-					</div>
-					</if>
-					
-					<div class="menu_right cf" style="margin-top:0px">
-						<div class="menu_right_top">
-							<ul>
-								<pigcms:slider cat_key="web_slider" limit="10" var_name="web_index_slider">
-									<li class="ctur">
-										<a href="{pigcms{$vo.url}" <if condition="$i eq 1">class="select"</if>>{pigcms{:lang_substr($vo['name'],C('DEFAULT_LANG'))}</a>
-									</li>
-								</pigcms:slider>
-							</ul>
-						</div>
-					</div>
-				</div>
-				<div class="menu_main">
-				<div style=" position: relative;width: 1200px;">
-					<div class="menu cf" >
-						<div class="menu_right cf" style="margin-top:0px;width:1200px">
-							<div class="menu_right_bottom cf">
-								<div class="left cf"  style="width:965px">
-									<div class="activityDiv">
-											<ul>
-												<pigcms:adver cat_key="index_today_fav" limit="6" var_name="index_today_fav">
-													<li <if condition="$i eq 1">class="mt-slider-current-trigger"</if> data-color="{pigcms{$vo.bg_color}" data-name="{pigcms{$vo.name}" data-subname="{pigcms{$vo.sub_name}">
-														<a href="{pigcms{$vo.url}" target="_blank">
-															<img src="{pigcms{$vo.pic}" alt="{pigcms{$vo.name}"/>
-														</a>
-													</li>
-												</pigcms:adver>
-											</ul>
-											<div class="activityDesc">
-												<h1></h1>
-												<div class="activityInfo"></div>
-												<pigcms:adver cat_key="index_today_fav" limit="6" var_name="index_today_fav">
-												<a id="point{pigcms{$i}" href="javascript:void(0);" <if condition="$i neq 1">class="un_select"</if> ></a>
-												</pigcms:adver>
-											</div>
-
-										<div class="pre-next">
-											<a href="javascript:;" hidefocus="true" class="mt-slider-previous "></a>
-											<a href="javascript:;" hidefocus="true" class="mt-slider-next "></a>
-										</div>
-									</div>
-
-								</div>
-								<div class="right cf" style="background-color:#fff;<if condition='$now_activity'>border-right:1px solid #dfdfdf;</if>">
-									<div class="systemNews">
-										<img src="{pigcms{$static_path}images/systemnews.png"><div class="title">{pigcms{:L('_PLATFORM_NEWS_')}<div class="more"><a href="{pigcms{$config.site_url}/news/" target="_blank">{pigcms{:L('_MORE_TXT_')}></a></div></div>
-										<div class="newslist cf">
-											<ul>
-												<pigcms:system_news limit="8" var_name="system_newss">
-													<li><a href="{pigcms{$config.site_url}/news/{pigcms{$vo.id}.html" target="_blank"><span>[{pigcms{$vo.name}]</span>{pigcms{$vo.title}</a></li>
-												</pigcms:system_news>
-											</ul>
-										</div>
-									</div>
-									<div class="systemQrocde">
-										<!--<div class="title">微信专享价 省更多</div>-->
-										<div class="qrcodeDiv">
-											<img src="{pigcms{$config.wechat_qrcode}"/>
-										</div>
-										<div class="s_title">{pigcms{:L('_SCAN_QR_CODE_')} {pigcms{:L('_FOLLOW_WE_')}</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				</div>
-				<div style=" position: relative;width: 1200px;">
-				<!--
-					<div class="menu cf" >
-						<div class="menu_right cf" style="margin-top:0px;width:100%">
-
-							<div class="menu_right_bottom cf" style="width:100%">
-								<div class="left cf" style="width: 100%;height: 194px;">
-									<div class="mainbav clearfix">
-										<div class="main_list cf hot" >
-											<div class="mainbav_left clearfix">
-												<div class="mainbav_txt group">热门{pigcms{$config.group_alias_name}</div>
-											</div>
-											<div class="mainbav_list">
-												<volist name="hot_group_category" id="vo">
-													<span><a href="{pigcms{$vo.url}" target="_blank">{pigcms{$vo.cat_name}</a></span>
-												</volist>
-											
-											</div>
-										</div>
-										<div class="main_list cf allarea" >
-											<div class="mainbav_left clearfix">
-												<div class="mainbav_txt area">全部区域</div>
-											</div>
-											<div class="mainbav_list">
-												<volist name="all_area_list" id="vo">
-													<span><a href="{pigcms{$vo.url}" target="_blank">{pigcms{$vo.area_name}</a></span>
-												</volist>
-												
-											</div>
-										</div>
-										<div class="main_list cf circle hotcircle" >
-											<div class="mainbav_left clearfix">
-												<div class="mainbav_txt circle">热门商圈</div>
-											</div>
-											<div class="mainbav_list">
-												<volist name="hot_circle_list" id="vo">
-													<span><a href="{pigcms{$vo.url}" target="_blank">{pigcms{$vo.area_name}</a></span>
-												</volist>
-												
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div> --> 
-				</div>
-
-				<pigcms:near_shop limit="10"/>
-        <if condition="$near_shop_list">
-					<pigcms:adver cat_key="index_meal_top" limit="4" var_name="index_meal_top">
-						<if condition="$i eq 1"><ul class="index_adver_ul clearfix"></if>
-							<li <if condition="$i eq 4">class="li_4"</if>>
-								<a href="{pigcms{$vo.url}" target="_blank" class="link" title="{pigcms{$vo.name}">
-									<img src="{pigcms{$vo.pic}"/>
-								</a>
-							</li>
-						<if condition="$i eq 4 || $i eq count($index_meal_top)"></ul></if>
-					</pigcms:adver>
-
-                    <div class="nearby cf indexMeal">
-						<div class="indexMealTitle clearfix">
-							<h1><if condition="$is_near_shop">{pigcms{:L('_NEAR_OUT_')}<else/>{pigcms{:L('_RECOMMEND_OUT_')}</if></h1>
-						</div>
-						<div class="nearby_list clearfix">
-							<ul>
-								<volist name="near_shop_list" id="vo">
-									<li <if condition="$i gt 5">style="border-top:0px;"</if>>
-										<div class="box">
-											<div class="nearby_list_img">
-												<a href="{pigcms{$vo.url}" target="_blank">
-
-													<img class="meal_img lazy_img" src="{pigcms{$static_public}images/blank.gif" data-original="{pigcms{$vo.image}" title="【{pigcms{$vo.area_name}】{pigcms{$vo.name}"/>
-                                                    <if condition="!$vo['state']">
-                                                    <div class="bmbox" style="display: block">
-														<!--div class="bmbox_title" style="line-height: 20px;">{pigcms{:L('_WECHAT_SCAN_TO_PHONE_')}</div>
-														<div class="bmbox_list">
-															<div class="bmbox_list_img"><img class="qrcode_img lazy_img" src="{pigcms{$static_public}images/blank.gif" data-original="{pigcms{:U('Index/Recognition/see_qrcode',array('type'=>'shop','id'=>$vo['store_id']))}" /></div>
-														</div-->
-														<!--div class="bmbox_tip">微信扫码 手机查看</div-->
-                                                        <div class="bmbox_tip" style="margin-top:230px; margin-left:5px; font-size: 16px;">{pigcms{:L('_AT_REST_')}</div>
-													</div>
-                                                    </if>
-													<div class="name" style="height:42px;"><if condition="$vo.isverify"><span class="zheng">{pigcms{:L('_ZHENG_TXT_')}</span></if>【{pigcms{$vo.area_name}】{pigcms{$vo.name}</div>
-													<if condition="$vo['state']"><!--div class="name_info"><b>营业中</b></div--></if>
-													<div class="extro">
-														<div class="info">
-															<!--div class="join"><if condition="$vo['range']">距离您 <span>{pigcms{$vo.range} </span><else/>{pigcms{:L('_FANS_TXT_')} <span>{pigcms{$vo.fans_count}</span></if></div-->
-														</div>
-                                                        <div class="info mealSales">
-                                                            <!--div class="join"><span style="color:#9f9f9f;">{pigcms{:replace_lang_str(L('_SALE_NUM_ORDER_'),$vo[sale_count])}</span></div>
-                                                            <div class="join"><span style="color:#9f9f9f;">{pigcms{:replace_lang_str(L('_MONTH_SALE_NUM_'),$vo['merchant_store_month_sale_count'])}</span></div-->
-                                                        </div>
-													</div>
-												</a>
-											</div>
-										</div>
-									</li>
-								</volist>
-							</ul>
-						</div>
-						<!--if condition="empty($is_near_shop)">
-							<section class="nearby_box">
-								<div class="nearby_box_txt"><img src="{pigcms{$static_path}images/tankuang_10.png"/></div>
-								<button class="nearby_box_but"><span>选取</span></button>
-								<div class="nearby_box_close"></div>
-							</section>
-						</if-->
-					</div>
-				</if>
-				<div class="socll" style="width:100%;z-index:99">
-					<php>$autoI=0;</php>
-					<volist name="index_group_list" id="cat_vo">
-						<if condition="!empty($cat_vo['group_list']) && count($cat_vo['group_list']) egt 4">
-							<pigcms:adver cat_key="cat_{$cat_vo['cat_id']}_top" limit="4" var_name="cat_top" key="m">
-								<if condition="$m eq 1"><ul class="index_adver_ul clearfix"></if>
-									<li <if condition="$m eq 4">class="li_4"</if>>
-										<a href="{pigcms{$vo.url}" target="_blank" class="link" title="{pigcms{$vo.name}">
-											<img src="{pigcms{$vo.pic}"/>
-										</a>
-									</li>
-								<if condition="$m eq 4 || $m eq count($cat_top)"></ul></if>
-							</pigcms:adver>
-							<div class="category cf sa" id="f{pigcms{$i}">
-								<div class="category_top cf">
-									<div class="category_top_left">
-										<ul>
-											<li id="category_main_{pigcms{$autoI%7+1}">
-												<div class="category_main_icon"><if condition="$cat_vo['cat_pic']"><img src="{pigcms{$cat_vo.cat_pic}" style="width:22px;"/></if></div>
-												<div class="category_main_txt">{pigcms{$cat_vo.cat_name}</div>
-											</li>
-										</ul>
-									</div>
-									<div class="category_top_right">
-										<ul>
-											<if condition="count($cat_vo['category_list']) gt 1">
-												<volist name="cat_vo['category_list']" id="voo" offset="0" length="6" key="j">
-													<li><a target="_blank" href="{pigcms{$voo.url}" class="link">{pigcms{$voo.cat_name}</a></li>
-												</volist>
-											</if>
-											<li><a target="_blank" href="{pigcms{$cat_vo.url}" class="link all">全部></a></li>
-										</ul>
-									</div>
-								</div>
-								<div class="category_list cf">
-									<ul class="cf">
-										<volist name="cat_vo['group_list']" id="voo" offset="0" length="8" key="k">
-											<li class="<if condition='$k gt 4'>btp0</if> li <if condition="$k%4 eq 0 || $k eq count($cat_vo['group_list'])">last--even</if>">
-												<div class="category_list_img">
-													<a href="{pigcms{$voo.url}" target="_blank" class="imgBox">
-														<img alt="{pigcms{$voo.s_name}" class="deal_img lazy_img" src="{pigcms{$static_public}images/blank.gif" data-original="{pigcms{$voo.list_pic}"/>
-														<div class="bmbox">
-															<div class="bmbox_title"> 该商家有<span> {pigcms{$voo.fans_count} </span>个粉丝</div>
-															<div class="bmbox_list">
-																<div class="bmbox_list_img"><img class="lazy_img" src="{pigcms{$static_public}images/blank.gif" data-original="{pigcms{:U('Index/Recognition/see_qrcode',array('type'=>'group','id'=>$voo['group_id']))}" /></div>
-																<div class="bmbox_list_li">
-																	<ul class="cf">
-																		<li class="open_windows" data-url="{pigcms{$config.site_url}/merindex/{pigcms{$voo.mer_id}.html">商家</li>
-																		<li class="open_windows" data-url="{pigcms{$config.site_url}/meractivity/{pigcms{$voo.mer_id}.html">{pigcms{$config.group_alias_name}</li>
-																		<li class="open_windows" data-url="{pigcms{$config.site_url}/mergoods/{pigcms{$voo.mer_id}.html">{pigcms{$config.meal_alias_name}</li>
-																		<li class="open_windows" data-url="{pigcms{$config.site_url}/mermap/{pigcms{$voo.mer_id}.html">地图</li>
-																	</ul>
-																</div>
-															</div>
-															<div class="bmbox_tip">微信扫码 更多优惠</div>
-														</div>
-													</a>
-													<div class="datal">
-														<a href="{pigcms{$voo.url}" target="_blank">
-															<div class="category_list_title">【{pigcms{$voo.prefix_title}】{pigcms{$voo.merchant_name}</div>
-															<div class="category_list_description">{pigcms{$voo.group_name}</div>
-														</a>
-														<div class="deal-tile__detail cf">
-															<span class="price">$<strong>{pigcms{$voo.price}<if condition="$voo.extra_pay_price  neq ''">{pigcms{$voo.extra_pay_price}</if></strong> </span>
-															<span>门店价 ${pigcms{$voo.old_price}<if condition="$voo.extra_pay_price  neq ''">{pigcms{$voo.extra_pay_price}</if></span>
-															<if condition="$voo['wx_cheap']">
-																<div class="cheap">微信购买立减${pigcms{$voo.wx_cheap}</div>
-															</if>
-														</div>
-													</div>
-													<div class="extra-inner cf">
-														<div class="sales">{pigcms{$voo['sale_txt']}</div>
-														<div class="noreviews">
-															<if condition="$voo['reply_count']">
-																<a href="{pigcms{$voo.url}#anchor-reviews" target="_blank">
-																	<div class="icon"><span style="width:{pigcms{$voo['score_mean']/5*100}%;" class="rate-stars"></span></div>
-																	<span>{pigcms{$voo.reply_count}次评价</span>
-																</a>
-															<else/>
-																<span>暂无评价</span>
-															</if>
-														</div >
-													</div>
-												</div>
-											</li>
-										</volist>
-									</ul>
-								</div>
-								<div class="category_more cf">
-									<a href="{pigcms{$cat_vo.url}" target="_blank">
-									查看全部 <span>{pigcms{$cat_vo.cat_name}</span> {pigcms{$config.group_alias_name} >
-									</a>
-								</div>
-							</div>
-							<php>$autoI++;</php>
-						</if>
-					</volist>
-				</div>
-			</div>
-		</div>
-		<!--友情链接-->
-		<if condition="!empty($flink_list)">
-			<style type="text/css">.component-holy-reco {clear: both; margin: 0 auto;width: 1210px; position: relative;bottom: -98px;}.holy-reco{width:100%;margin:0 auto;padding-bottom:20px;_display:none}.holy-reco .tab-item {
-			color: #666;}.holy-reco__content{border:1px solid #E8E8E8;padding:10px;background:#FFF}.holy-reco__content a{display:inline-block;color:#666;font-size:12px;padding:0 5px;line-height:16px;white-space:nowrap;width:85px;overflow:hidden;text-overflow:ellipsis}.nav-tabs--small .current {background: #ededed none repeat scroll 0 0;width:80px;text-align:center;padding:0 6px;float:left;cursor:pointer;}</style>
-			<div class="component-holy-reco">
-				<div class="J-holy-reco holy-reco">
-					<div>
-						<ul class="ccf cf nav-tabs--small">
-							<li class="J-holy-reco__label current"><a href="javascript:void(0)" class="tab-item">友情链接</a></li>
-						</ul>
-					</div>
-					<div class="J-holy-reco__content holy-reco__content">
-						<volist name="flink_list" id="vo">
-							<a href="{pigcms{$vo.url}" title="{pigcms{$vo.info}" target="_blank">{pigcms{$vo.name}</a>
-						</volist>
-					</div>
-				</div>
-			</div>
-		</if>
-		<!--友情链接--end-->
-		<include file="Public:footer"/>
+        </div>
 	</body>
+<script>
+    var is_open_menu = false;
+    $('.hamburger').click(function () {
+        if(is_open_menu) {
+            $(this).removeClass('is-active');
+            $('#menu_memo').removeClass('is_open');
+        }else {
+            $(this).addClass('is-active');
+            $('#menu_memo').addClass('is_open');
+            $('#menu_memo').height($(window).height() - 100);
+        }
+
+        is_open_menu = !is_open_menu;
+    });
+
+    var desc_num = 3;
+    var curr_num = 1;
+
+    changeDesc();
+
+    function changeDesc() {
+        var i = 1;
+        curr_num = curr_num == 0 ? desc_num : curr_num;
+        curr_num = curr_num > desc_num ? curr_num - desc_num : curr_num;
+
+        var next_num = curr_num + 1;
+        next_num = next_num > desc_num ? 0 : next_num;
+
+        var pro_num = curr_num - 1;
+        pro_num = pro_num == 0 ? 0 : pro_num;
+        $('.desc_center').find('.desc_all').each(function () {
+            if(i == curr_num){
+                $(this).attr('class','desc_all desc_curr');
+            }
+            else if(i == next_num){
+                $(this).attr('class','desc_all desc_next');
+            }
+            else if(i == pro_num){
+                $(this).attr('class','desc_all desc_pro');
+            }
+
+            i++;
+        });
+    }
+
+    $('.desc_right').click(function () {
+        if(desc_num > curr_num){
+            curr_num += 1;
+            changeDesc();
+        }
+    });
+    $('.desc_left').click(function () {
+        if(curr_num > 1){
+            curr_num -= 1;
+            changeDesc();
+        }
+    });
+</script>
 </html>

@@ -3123,6 +3123,11 @@ class MyAction extends BaseAction{
 			$list[$key]['order_url'] = U('Shop/status', array('order_id' => $val['order_id']));
 			//modify garfunkel
             $list[$key]['name'] = lang_substr($val['name'],C('DEFAULT_LANG'));
+            $supply = D('Deliver_supply')->where(array('order_id'=>$val['order_id']))->find();
+            if($supply['status'] > 1 && $supply['status'] < 5){
+                $t_deliver = D('Deliver_user')->field(true)->where(array('uid'=>$supply['uid']))->find();
+                $this->assign('deliver',$t_deliver);
+            }
 		}
 		$this->assign('order_list', $list);
 
@@ -5761,5 +5766,26 @@ class MyAction extends BaseAction{
         $return['info'] = $data;
         exit(json_encode($return));
     }
+
+    public function order_track(){
+	    $order_id = $_GET['order_id'];
+	    $supply = D('Deliver_supply')->where(array('order_id'=>$order_id))->find();
+	    if($supply['uid']){
+	        $deliver = D('Deliver_user')->where(array('uid'=>$supply['uid']))->find();
+	        $this->assign('deliver',$deliver);
+	        $this->display();
+        }
+    }
+
+    public function getDeliver(){
+	    if($_POST['deliver_id']){
+	        $uid = $_POST['deliver_id'];
+	        $deliver = D('Deliver_user')->where(array('uid'=>$uid))->find();
+	        $data['lat'] = $deliver['lat'];
+	        $data['lng'] = $deliver['lng'];
+            $this->success('Success',$data);
+        }
+    }
+
 }
 ?>
