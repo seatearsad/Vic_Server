@@ -110,4 +110,8 @@ class IndexAction extends BaseAction {
 			}
 		}
 	}
+
+	public function courier(){
+        $this->display();
+    }
 }
