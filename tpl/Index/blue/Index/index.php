@@ -283,7 +283,7 @@
             <div class="slogan">Your Online Food Community</div>
             <div class="search_box">
                 <div class="search_back">
-                    <input type="text" placeholder="Enter your address" class="search_input" name="search_word">
+                    <input type="text" placeholder="Enter your address" id="address" class="search_input" name="search_word">
                     <div class="link_btn"></div>
                 </div>
             </div>
@@ -341,28 +341,28 @@
             <div class="info_list" style="margin-left: 0px">
                 <div class="food_comm"></div>
                 <div class="info_txt">
-                    Your favorite food and drinks are just a click away, we deliver right to your door !
+                    {pigcms{:L('_NEW_INDEX_FOOD_')}
                 </div>
                 <div class="info_btn">
-                    Food Community
+                    {pigcms{:L('_NEW_FOOD_COMM_')}
                 </div>
             </div>
             <div class="info_list">
                 <div class="info_courier"></div>
                 <div class="info_txt">
-                    Your favorite food and drinks are just a click away, we deliver right to your door !
+                    {pigcms{:L('_NEW_INDEX_COURIER_')}
                 </div>
                 <div class="info_btn">
-                    Become a Courier
+                    {pigcms{:L('_NEW_BECOME_COURIER_')}
                 </div>
             </div>
             <div class="info_list">
                 <div class="info_partner"></div>
                 <div class="info_txt">
-                    Your favorite food and drinks are just a click away, we deliver right to your door !
+                    {pigcms{:L('_NEW_INDEX_PARTNER_')}
                 </div>
                 <div class="info_btn">
-                    Become a Partner
+                    {pigcms{:L('_NEW_BECOME_PARTNER_')}
                 </div>
             </div>
         </div>
@@ -373,13 +373,16 @@
             </div>
             <div class="search_box" style="margin-top: 30px;margin-bottom: 30px;position: relative">
                 <div class="search_back" style="width: 60%">
-                    <input type="text" placeholder="Enter your address" class="search_input" name="search_word">
+                    <input type="text" placeholder="Enter your address" id="address_bottom" class="search_input" name="search_word">
                     <div class="link_btn"></div>
                 </div>
             </div>
         </div>
         <include file="Public:footer"/>
 	</body>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&libraries=places&language=en" async defer></script>
+    <script src="{pigcms{$static_public}js/laytpl.js"></script>
+    <script src="{pigcms{$static_public}layer/layer.m.js"></script>
 <script>
     var desc_num = 3;
     var curr_num = 1;
@@ -429,5 +432,54 @@
             changeDesc();
         //}
     });
+    var i = 1;
+    $('.all_info').find('.info_btn').each(function () {
+        var link = '';
+        switch (i){
+            case 1:
+                link = './shop';
+                break;
+            case 2:
+                link = './courier';
+                break;
+            case 3:
+                link = './partner';
+                break;
+            default:
+                break;
+        }
+        $(this).click(function () {
+            window.location.href = link;
+        });
+        i++;
+    });
+    
+    $('.link_btn').click(function () {
+        window.location.href = './shop';
+    });
+
+    $('#address').focus(function () {
+        initAutocomplete();
+    });
+
+    $('#address_bottom').focus(function () {
+        initAutocompleteBottom();
+    });
+
+    var autocomplete;
+    function initAutocomplete() {
+        autocomplete = new google.maps.places.Autocomplete(document.getElementById('address'), {types: ['geocode']});
+        autocomplete.addListener('place_changed', fillInAddress);
+    }
+    function initAutocompleteBottom() {
+        autocomplete = new google.maps.places.Autocomplete(document.getElementById('address_bottom'), {types: ['geocode']});
+        autocomplete.addListener('place_changed', fillInAddress);
+    }
+    function fillInAddress() {
+        var place = autocomplete.getPlace();
+        $.cookie('shop_select_address', place.formatted_address,{expires:700,path:"/"});
+        $.cookie('shop_select_lng', place.geometry.location.lng(),{expires:700,path:"/"});
+        $.cookie('shop_select_lat', place.geometry.location.lat(),{expires:700,path:"/"});
+    }
 </script>
 </html>

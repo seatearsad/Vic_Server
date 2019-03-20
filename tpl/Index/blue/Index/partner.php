@@ -7,7 +7,7 @@
 			<link rel="shortcut icon" href="{pigcms{$config.site_favicon}"/>
 		</if>
 		<!--title>{pigcms{$config.seo_title}</title-->
-        <title>{pigcms{:L('_VIC_NAME_')} - {pigcms{:L('_NEW_BECOME_COURIER_')}</title>
+        <title>{pigcms{:L('_VIC_NAME_')} - {pigcms{:L('_NEW_BECOME_PARTNER_')}</title>
 		<meta name="keywords" content="{pigcms{$config.seo_keywords}" />
 		<meta name="description" content="{pigcms{$config.seo_description}" />
 		<script src="{pigcms{$static_path}js/jquery-1.7.2.js"></script>
@@ -56,16 +56,16 @@
         .main{
             width: 100%;
             height: 520px;
-            background-image: url("./tpl/Static/blue/images/new/courier/courier.jpg");
+            background-image: url("./tpl/Static/blue/images/new/partner/partner.jpg");
             background-size: 100% auto;
             background-position: bottom;
 
         }
         .become_div{
             width: 320px;
-            height: 180px;
+            height: 430px;
             background-color: #ffffff;
-            margin-top: -70px;
+            margin-top: -340px;
             margin-left: 70px;
             -moz-border-radius: 3px;
             -webkit-border-radius: 3px;
@@ -80,6 +80,7 @@
             font-weight: bold;
             padding-top: 20px;
             color: #ffa52d;
+            box-sizing: content-box;
         }
         .become_btn{
             width: 70%;
@@ -88,7 +89,7 @@
             margin-top: 50px;
             line-height: 40px;
             background-color: #ffa52d;
-            font-size: 30px;
+            font-size: 28px;
             font-weight: bold;
             -moz-border-radius: 3px;
             -webkit-border-radius: 3px;
@@ -119,7 +120,7 @@
         .middle_img{
             width: 100%;
             height: 520px;
-            background-image: url("./tpl/Static/blue/images/new/courier/middle.jpg");
+            background-image: url("./tpl/Static/blue/images/new/partner/middle.jpg");
             background-size: 100% auto;
             background-position: center;
         }
@@ -153,19 +154,20 @@
             background-position: center;
         }
         .how_memo .how_box:nth-child(1) .how_img{
-            background-image: url("./tpl/Static/blue/images/new/courier/mobile_app.png");
+            background-image: url("./tpl/Static/blue/images/new/partner/order.png");
         }
         .how_memo .how_box:nth-child(2) .how_img{
-            background-image: url("./tpl/Static/blue/images/new/courier/to_store.png");
+            background-image: url("./tpl/Static/blue/images/new/partner/cook.png");
         }
         .how_memo .how_box:nth-child(3) .how_img{
-            background-image: url("./tpl/Static/blue/images/new/courier/car.png");
+            background-image: url("./tpl/Static/blue/images/new/partner/hand_over.png");
         }
         .how_memo .how_box:nth-child(4) .how_img{
-            background-image: url("./tpl/Static/blue/images/new/courier/hand_over.png");
+            background-image: url("./tpl/Static/blue/images/new/partner/drive.png");
         }
         .reg_desc{
-            height: 330px;
+            margin-top: 80px;
+            height: 50px;
         }
         .app_now{
             width: 300px;
@@ -182,130 +184,72 @@
             text-align: center;
             cursor: pointer;
         }
-        .reg_show{
-            width: 600px;
-            height: 200px;
-            margin: 80px auto 50px auto;
-            display: flex;
-        }
-        .desc_left{
-            -moz-transform:scaleX(-1);
-            -webkit-transform:scaleX(-1);
-            -o-transform:scaleX(-1);
-            transform:scaleX(-1);
-        }
-        .desc_left,.desc_right{
-            height: 200px;
-            width: 40px;
-            background-image: url("./tpl/Static/blue/images/new/black_arrow.png");
-            background-size: auto 30px;
-            background-repeat: no-repeat;
-            background-position: center right;
-            cursor: pointer;
-            z-index: 99;
-        }
-        .desc_left:hover,.desc_right:hover{
-            background-image: url("./tpl/Static/blue/images/new/or_arrow.png");
-        }
-        .desc_center{
-            flex: 1 1 100%;
-            position: relative;
-            overflow: hidden;
-        }
-        .desc_all{
-            width: 100%;
-            height: 180px;
-            position: absolute;
-            transform: translate3d(120%, 0, 0);
-            -webkit-transition: all 0.5s ease-in-out;
-            -o-transition: all 0.5s ease-in-out;
-            transition: all 0.5s ease-in-out;
-            text-align: center;
-        }
-        .desc_pro{
-            transform: translate3d(-100%, 0, 0);
-        }
-        .desc_next{
-            transform: translate3d(100%, 0, 0);
-        }
-        .desc_curr{
-            transform: translate3d(0%, 0, 0);
-        }
-        .reg_title{
-            font-size: 28px;
-            font-weight: bold;
-            height: 40px;
-            margin: 60px 0 10px 0;
-        }
-        .reg_txt{
-            font-size: 14px;
-        }
-        .desc_point{
-            position: absolute;
-            bottom: 20px;
-            width: 100%;
-        }
-        .desc_point ul{
-            width: 42px;
+        .become_form{
+            width: 70%;
             margin: 0 auto;
-            padding: 0;
-            position: relative;
+            margin-top: 10px;
         }
-        .desc_point ul li{
-            width: 8px;
-            height: 8px;
-            -moz-border-radius: 4px;
-            -webkit-border-radius: 4px;
-            border-radius: 4px;
-            background-color: #ffa52d;
-            float: left;
-            margin-left: 5px;
-            list-style: none;
+        .become_form input{
+            width: 100%;
+            height: 30px;
+            border-left: 0;
+            border-right: 0;
+            border-top: 0;
+            border-bottom: 2px solid #666666;
+            font-size: 14px;
+            padding-left: 5px;
+            margin-top: 10px;
         }
-        .desc_point ul li.curr_li{
-            width: 10px;
-            height: 10px;
-            -moz-border-radius: 5px;
-            -webkit-border-radius: 5px;
-            border-radius: 5px;
-            margin-top: -1px;
+        .become_form input:focus{
+            border-bottom: 2px solid #ffa52d;
         }
     </style>
 	<body>
         <include file="Public:header"/>
         <div class="main"></div>
-        <div class="become_div">
+        <div class="become_div" id="become_div">
             <div class="become_txt">
-                {pigcms{:L('_NEW_BECOME_COURIER_')}
+                {pigcms{:L('_NEW_BECOME_PARTNER_')}
+            </div>
+            <div class="become_form">
+                <input type="text" name="store_name" placeholder="{pigcms{:L('_NEW_RESTAURANT_NAME_')}">
+                <input type="text" name="store_address" id="address" placeholder="{pigcms{:L('_RESTAURANT_ADDRESS_')}">
+                <input type="text" name="first_name" placeholder="{pigcms{:L('_NEW_FIRST_NAME_')}">
+                <input type="text" name="last_name" placeholder="{pigcms{:L('_NEW_LAST_NAME_')}">
+                <input type="text" name="phone" placeholder="{pigcms{:L('_NEW_PHONE_NUMBER_')}">
+                <input type="text" name="email" placeholder="{pigcms{:L('_NEW_EMAIL_ADDRESS_')}">
+
+                <input type="hidden" name="lng" value="0" />
+                <input type="hidden" name="lat" value="0" />
+                <input type="hidden" name="city_id" value="0" />
             </div>
             <div class="become_btn">
-                {pigcms{:L('_NEW_GET_STARTED_')}
+                {pigcms{:L('_NEW_SEND_REQUEST_')}
             </div>
         </div>
         <div class="courier_desc">
             <div class="desc_box">
                 <div class="desc_title">
-                    {pigcms{:L('_NEW_WORK_WANT_')}
+                    {pigcms{:L('_EXPAND_AUDIENCE_')}
                 </div>
                 <div class="desc_txt">
-                    {pigcms{:L('_NEW_PICK_HOURS_')}
+                    {pigcms{:L('_EXPAND_CONTENT_')}
                 </div>
             </div>
             <div class="desc_box">
                 <div class="desc_title">
-                    {pigcms{:L('_NEW_KEEP_EARNING_')}
+                    {pigcms{:L('_GROW_REVENUE_')}
                 </div>
                 <div class="desc_txt">
-                    {pigcms{:L('_NEW_EARNING_TIPS_')}
+                    {pigcms{:L('_GROW_CONTENT_')}
                 </div>
             </div>
             <div class="desc_box">
                 <div class="desc_title">
-                    {pigcms{:L('_NEW_PAID_WEEKLY_')}
+                    {pigcms{:L('_ONLINE_STORE_')}
                 </div>
                 <div class="desc_txt">
-                    {pigcms{:L('_NEW_WEEKLY_CONTENT_')}
-                    features.
+                    {pigcms{:L('_ONLINE_CONTENT_')}
                 </div></div>
         </div>
         <div class="white_line"></div>
@@ -318,131 +262,106 @@
                 <div class="how_box">
                     <div class="how_img"></div>
                     <div>
-                        {pigcms{:L('_NEW_ORDER_APPEARS_')}
+                        {pigcms{:L('_CUSTOMER_PLACE_')}
                     </div>
                 </div>
                 <div class="how_box">
                     <div class="how_img"></div>
                     <div>
-                        {pigcms{:L('_NEW_ACCEPT_ORDER_')}
+                        {pigcms{:L('_ONCE_CONFIRM_')}
                     </div>
                 </div>
                 <div class="how_box">
                     <div class="how_img"></div>
                     <div>
-                        {pigcms{:L('_NEW_PICK_DELIVERY_')}
+                        {pigcms{:L('_ONE_OF_')}
                     </div>
                 </div>
                 <div class="how_box">
                     <div class="how_img"></div>
                     <div>
-                        {pigcms{:L('_NEW_DELIVERY_CUSTOMER_')}
+                        {pigcms{:L('_OUR_COURIER_')}
                     </div>
                 </div>
             </div>
         </div>
         <div class="white_line"></div>
         <div class="reg_desc">
-            <div class="reg_show">
-                <div class="desc_left"></div>
-                <div class="desc_center">
-                    <div class="desc_all">
-                        <div class="reg_title">{pigcms{:L('_NEW_STEPS_SIGNUP_')}</div>
-                        <div class="reg_txt">
-                            {pigcms{:L('_NEW_STEPS_ONE_')}
-                        </div>
-                    </div>
-                    <div class="desc_all">
-                        <div class="reg_title">{pigcms{:L('_NEW_STEPS_BAG_')}</div>
-                        <div class="reg_txt">
-                            {pigcms{:L('_NEW_STEPS_TWO_')}
-                        </div>
-                    </div>
-                    <div class="desc_all">
-                        <div class="reg_title">{pigcms{:L('_NEW_STEPS_APP_')}</div>
-                        <div class="reg_txt">
-                            {pigcms{:L('_NEW_STEPS_THREE_')}
-                        </div>
-                    </div>
-                    <div class="desc_point">
-                        <ul>
-                            <li></li>
-                            <li></li>
-                            <li></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="desc_right"></div>
-            </div>
-            <div class="app_now">{pigcms{:L('_NEW_APPLY_NOW_')}</div>
+            <div class="app_now">Sign Me Up</div>
         </div>
         <include file="Public:footer"/>
 	</body>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&libraries=places&language=en" async defer></script>
+    <script src="{pigcms{$static_public}js/laytpl.js"></script>
+    <script src="{pigcms{$static_public}layer/layer.m.js"></script>
 <script>
-    var desc_num = 3;
-    var curr_num = 1;
+    $('#address').focus(function () {
+        initAutocomplete();
+    });
 
-    changeDesc();
+    var autocomplete;
+    function initAutocomplete() {
+        autocomplete = new google.maps.places.Autocomplete(document.getElementById('address'), {types: ['geocode']});
+        autocomplete.addListener('place_changed', fillInAddress);
+    }
+    function fillInAddress() {
+        var place = autocomplete.getPlace();
+        $("input[name='lng']").val(place.geometry.location.lng());
+        $("input[name='lat']").val(place.geometry.location.lat());
 
-    function changeDesc() {
-        var i = 1;
-        curr_num = curr_num == 0 ? desc_num : curr_num;
-        curr_num = curr_num > desc_num ? curr_num - desc_num : curr_num;
-
-        var next_num = curr_num + 1;
-        next_num = next_num > desc_num ? 1 : next_num;
-
-        var pro_num = curr_num - 1;
-        pro_num = pro_num == 0 ? desc_num : pro_num;
-        $('.desc_center').find('.desc_all').each(function () {
-            if(i == curr_num){
-                $(this).css('opacity',1);
-                $(this).attr('class','desc_all desc_curr');
-                var j = 1;
-                $('.desc_point').find('li').each(function () {
-                    if(j == i){
-                        $(this).addClass('curr_li');
+        var add_com = place.address_components;
+        var is_get_city = false;
+        for(var i=0;i<add_com.length;i++){
+            if(add_com[i]['types'][0] == 'locality'){
+                is_get_city = true;
+                var city_name = add_com[i]['long_name'];
+                $.post("{pigcms{:U('Index/ajax_city_name')}",{city_name:city_name},function(result){
+                    if (result.error == 1){
+                        $("input[name='city_id']").val(0);
                     }else{
-                        $(this).removeClass('curr_li');
+                        $("input[name='city_id']").val(result['info']['city_id']);
                     }
-                    j++;
-                });
+                },'JSON');
             }
-            else if(i == next_num){
-                $(this).css('opacity',0);
-                $(this).attr('class','desc_all desc_next');
+        }
+    }
+    $('.become_btn').click(function () {
+        var is_tip = checkForm();
+        if(is_tip){
+            layer.open({
+                title: "{pigcms{:L('_STORE_REMIND_')}",
+                time: 1,
+                content: "{pigcms{:L('_PLEASE_INPUT_ALL_')}"
+            });
+        }else{
+            var re_data = {};
+            $('.become_form').find('input').each(function () {
+                re_data[$(this).attr('name')] = $(this).val();
+            });
+            $.post("{pigcms{:U('Index/partner')}",re_data,function(result){
+                if (result.error == 0){
+                    layer.open({
+                        title: "{pigcms{:L('_STORE_REMIND_')}",
+                        time: 1,
+                        content: "提交成功，我们会尽快与您联系"
+                    });
+                }
+            },'JSON');
+        }
+    });
+    function checkForm() {
+        var is_tip = false;
+        $('.become_form').find('input').each(function () {
+            if($(this).val() == ''){
+                is_tip = true;
             }
-            else if(i == pro_num){
-                $(this).css('opacity',0);
-                $(this).attr('class','desc_all desc_pro');
-            }else{
-                $(this).css('opacity',0);
-                $(this).attr('class','desc_all');
-            }
-
-            i++;
         });
+
+        return is_tip;
     }
 
-    $('.desc_right').click(function () {
-        //if(desc_num > curr_num){
-            curr_num += 1;
-            changeDesc();
-        //}
-    });
-    $('.desc_left').click(function () {
-        //if(curr_num > 1){
-            curr_num -= 1;
-            changeDesc();
-        //}
-    });
-    var courier_link = '{pigcms{$config.site_url}/wap.php?g=Wap&c=Deliver&a=login';
     $('.app_now').click(function () {
-        window.location.href = courier_link;
+        location.hash = "#become_div";
     });
-    $('.become_btn').click(function () {
-        window.location.href = courier_link;
-    });
-
 </script>
 </html>
