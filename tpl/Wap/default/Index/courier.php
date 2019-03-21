@@ -51,7 +51,6 @@
         background-color: #ffffff;
     }
     .main{
-        margin-top: 10px;
         width: 100%;
         height: 600px;
         background-image: url("./tpl/Static/blue/images/wap/courier.jpg");
@@ -270,12 +269,17 @@
         background-size: 100% 100%;
         flex: 0 0 auto;
     }
+    .ten{
+        width: 100%;
+        height: 30px;
+    }
 </style>
 <body>
 <script>
     var app_name = 'TUTTI Courier';
 </script>
 <include file="Public:header"/>
+<div class="ten"></div>
 <div class="main"></div>
 <div class="become_div">
     <div class="become_txt">

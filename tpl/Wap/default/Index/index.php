@@ -43,7 +43,6 @@
         color: #3f3f3f;
     }
     .main{
-        margin-top: 10px;
         width: 100%;
         height: 600px;
         background-image: url("./tpl/Static/blue/images/wap/main.jpg");
@@ -241,12 +240,17 @@
         background-size: 100% 100%;
         flex: 0 0 auto;
     }
+    .ten{
+        width: 100%;
+        height: 30px;
+    }
 </style>
 <body>
 <script>
     var app_name = 'TUTTI - Online Food Community';
 </script>
 <include file="Public:header"/>
+<div class="ten"></div>
 <div class="main">
     <div class="slogan">Your Online Food Community</div>
     <div class="search_box">
