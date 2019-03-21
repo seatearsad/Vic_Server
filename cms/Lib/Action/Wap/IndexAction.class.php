@@ -138,6 +138,10 @@ class IndexAction extends BaseAction
 		$this->assign('info', $this->info);
 		$this->display($this->tpl['tpltypename']);
 	}
+
+	public function new_index(){
+	    $this->display('index');
+    }
 	
 	public function index()
 	{
@@ -747,5 +751,37 @@ class IndexAction extends BaseAction
 		}
 		return $plugmenus;
 	}
+
+	public function courier(){
+	    $this->display();
+    }
+
+    public function partner(){
+        if($_POST){
+            $_POST['create_time'] = date('Y-m-d H:i:s');
+            D('Merchant_apply')->add($_POST);
+            exit(json_encode(array('error'=>0)));
+        } else {
+            $this->display();
+        }
+    }
+
+    public function ajax_city_name(){
+        $city_name = $_POST['city_name'];
+        $where = array('area_name'=>$city_name,'area_type'=>2);
+        $area = D('Area')->where($where)->find();
+        $data = array();
+        if($area){
+            $data['area_id'] = 0;
+            $data['city_id'] = $area['area_id'];
+            $data['province_id'] = $area['area_pid'];
+
+            $return['error'] = 0;
+        }else{
+            $return['error'] = 1;
+        }
+        $return['info'] = $data;
+        exit(json_encode($return));
+    }
 }
 
