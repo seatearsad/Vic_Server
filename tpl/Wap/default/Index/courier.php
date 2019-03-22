@@ -100,7 +100,7 @@
     }
     .desc_title{
         width: 100%;
-        font-size: 1.7em;
+        font-size: 1.5em;
         font-weight: bold;
         margin-bottom: 30px;
         height: 20px;
@@ -121,7 +121,7 @@
         text-align: center;
     }
     .how_title{
-        font-size: 36px;
+        font-size: 2.25em;
         font-weight: bold;
         height: 50px;
     }
@@ -220,7 +220,7 @@
         transform: translate3d(0%, 0, 0);
     }
     .reg_title{
-        font-size: 28px;
+        font-size: 1.55em;
         font-weight: bold;
         height: 40px;
         margin: 60px 0 10px 0;

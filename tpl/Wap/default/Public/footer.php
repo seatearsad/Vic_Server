@@ -1,3 +1,4 @@
+<script type="text/javascript" src="{pigcms{$static_public}js/lang.js" charset="utf-8"></script>
 <div class="footer">
     <div class="about_div">
         <p style="font-size: 20px;">TUTTI</p>
@@ -189,16 +190,19 @@
         float: left;
     }
     .link_icon ul li{
-        width: 25px;
-        height: 25px;
-        margin-left: 5px;
+        width: 24px;
+        height: 24px;
+        margin-left: 4px;
         list-style: none;
         float: left;
         background-size: 100% 100%;
     }
+    .link_icon ul li:nth-child(1){
+        margin-left: 0px;
+    }
     .link_icon a{
-        width: 25px;
-        height: 25px;
+        width: 24px;
+        height: 24px;
         display: block;
     }
     .link_icon li:nth-child(1){

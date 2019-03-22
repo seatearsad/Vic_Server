@@ -101,7 +101,7 @@
     }
     .desc_title{
         width: 100%;
-        font-size: 1.7em;
+        font-size: 1.5em;
         font-weight: bold;
         margin-bottom: 30px;
         height: 20px;

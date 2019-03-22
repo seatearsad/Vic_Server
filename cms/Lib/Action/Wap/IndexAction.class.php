@@ -140,7 +140,13 @@ class IndexAction extends BaseAction
 	}
 
 	public function new_index(){
-	    $this->display('index');
+	    $is_first = $_COOKIE['first_wap'];
+	    if($is_first && $is_first == 1)
+	        $temp_name = 'index';
+	    else
+	        $temp_name = 'down_index';
+
+	    $this->display($temp_name);
     }
 	
 	public function index()

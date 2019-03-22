@@ -1,3 +1,5 @@
+<script type="text/javascript" src="{pigcms{$static_public}js/artdialog/jquery.artDialog.js"></script>
+<script type="text/javascript" src="{pigcms{$static_public}js/artdialog/iframeTools.js"></script>
 <style>
     #tutti_header{
         width: 100%;
@@ -304,5 +306,12 @@
             $('#menu_memo').css('margin-top',init_margin);
 
         }
+    });
+    $('.sign_btn').click(function () {
+        // var width = $(window).width();
+        // var height = $(window).height();
+        // art.dialog.open("{pigcms{:U('Login/index')}",
+        //     {title: '', width: width, height: height,flexed:false,close:null,background:'black',opacity:'0.4'});
+        window.location.href = "{pigcms{:U('Login/index')}";
     });
 </script>

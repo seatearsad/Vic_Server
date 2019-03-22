@@ -13,12 +13,7 @@
     <meta name="keywords" content="{pigcms{$config.seo_keywords}" />
     <meta name="description" content="{pigcms{$config.seo_description}" />
     <script src="{pigcms{$static_path}js/jquery-1.7.2.js"></script>
-    <script src="{pigcms{$static_public}js/jquery.lazyload.js"></script>
-    <script src="{pigcms{$static_path}js/jquery.nav.js"></script>
-    <script src="{pigcms{$static_path}js/navfix.js"></script>
     <script type="text/javascript" src="{pigcms{$static_public}js/lang/{pigcms{:C('DEFAULT_LANG')}.js" charset="utf-8"></script>
-    <script src="{pigcms{$static_path}js/common.js"></script>
-    <script src="{pigcms{$static_path}js/index.activity.js"></script>
     <if condition="$config['wap_redirect']">
         <script>
             if(/(iphone|ipod|android|windows phone)/.test(navigator.userAgent.toLowerCase())){
@@ -53,7 +48,7 @@
     }
     .slogan{
         color: #ffa52d;
-        font-size: 2.6em;
+        font-size: 2.4em;
         font-weight: bold;
         text-align: center;
         position: absolute;
