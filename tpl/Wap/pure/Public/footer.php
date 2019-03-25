@@ -15,19 +15,19 @@
     <else />
         <ul>
 			<li>
-				<a <?php if(MODULE_NAME == 'Home'){ echo 'class="active"'; }?> href="{pigcms{:U('Home/index')}"><em class="home"></em><p>{pigcms{:L('_HOME_TXT_')}</p></a>
+				<a <?php if(MODULE_NAME == 'Home'){ echo 'class="active"'; }?> href="{pigcms{:U('Home/index')}"><em class="home"></em></a>
 			</li>
-			<li>
-                <a <?php if(ACTION_NAME == 'shop_order_list'){ echo 'class="hover"'; }?> href="{pigcms{:U('My/shop_order_list')}"><em class="group"></em><p>{pigcms{:L('_ORDER_TXT_')}</p></a>
-			</li>
+            <li>
+                <a <?php if(in_array(MODULE_NAME,array('Shop'))){ echo 'class="hover"';}?> href="{pigcms{:U('Shop/index')}"><em class="group"></em></a>
+            </li>
 			<li class="voiceBox">
 				<a href="{pigcms{:U('Search/voice')}" class="voiceBtn" data-nobtn="true"></a>
 			</li>
+            <li>
+                <a <?php if(ACTION_NAME == 'shop_order_list'){ echo 'class="hover"'; }?> href="{pigcms{:U('My/shop_order_list')}"><em class="store"></em></a>
+            </li>
 			<li>
-                <a <?php if(in_array(MODULE_NAME,array('Shop'))){ echo 'class="hover"';}?> href="{pigcms{:U('Shop/index')}"><em class="store"></em><p>{pigcms{:L('_OUT_TXT_')}</p></a>
-			</li>
-			<li>
-				<a <?php if(in_array(MODULE_NAME,array('My','Login'))){ echo 'class="active"'; }?> href="{pigcms{:U('My/index')}"><em class="my"></em><p>{pigcms{:L('_PROFILE_TXT_')}</p></a>
+				<a <?php if(in_array(MODULE_NAME,array('My','Login'))){ echo 'class="active"'; }?> href="{pigcms{:U('My/index')}"><em class="my"></em></a>
 			</li>
 		</ul>
     </if>

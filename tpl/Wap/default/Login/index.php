@@ -11,6 +11,7 @@
 	<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
 	<meta name="format-detection" content="telephone=no"/>
 	<meta name="format-detection" content="address=no"/>
+    <script src="{pigcms{$static_path}js/jquery-1.7.2.js"></script>
 </head>
 <style>
     *{
@@ -102,9 +103,35 @@
         Sign in
     </div>
     <div class="forget_div">
-        New to TUTTI? <a href="{pigcms:U('Login/reg')}">Sign up</a>
+        New to TUTTI? <a href="{pigcms{:U('Login/reg')}">Sign up</a>
     </div>
     <div class="black_line"></div>
     <div class="or_div">or</div>
+    <script src="{pigcms{$static_public}layer/layer.m.js"></script>
+    <script>
+        $('.sign_btn').click(function () {
+            var phone = $('input[name=phone]').val();
+            var password = $('input[name=password]').val();
+            if(phone == '' || password == ''){
+                layer.open({
+                    title: "{pigcms{:L('_STORE_REMIND_')}",
+                    time: 1,
+                    content: "{pigcms{:L('_PLEASE_INPUT_ALL_')}"
+                });
+            }else{
+                $.post("{pigcms{:U('Login/index')}",{phone:phone,password:password},function(result){
+                    if(result.status == '1'){
+                        window.location.href = "{pigcms{$referer}";
+                    }else{
+                        layer.open({
+                            title: "{pigcms{:L('_STORE_REMIND_')}",
+                            time: 1,
+                            content: result.info
+                        });
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 </html>

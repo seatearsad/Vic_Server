@@ -63,7 +63,7 @@ class LoginAction extends BaseAction{
 			}
 			$data_user['pwd'] = md5($_POST['password']);
 
-			$data_user['nickname'] = substr($data_user['phone'],0,3).'****'.substr($data_user['phone'],7);
+			$data_user['nickname'] = $_POST['nickname'] ? $_POST['nickname'] : substr($data_user['phone'],0,3).'****'.substr($data_user['phone'],7);
 
 			$data_user['add_time'] = $data_user['last_time'] = $_SERVER['REQUEST_TIME'];
 			$data_user['add_ip'] = $data_user['last_ip'] = get_client_ip(1);

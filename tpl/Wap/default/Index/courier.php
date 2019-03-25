@@ -54,8 +54,10 @@
         width: 100%;
         height: 600px;
         background-image: url("./tpl/Static/blue/images/wap/courier.jpg");
-        background-size: 100% auto;
-        background-position: bottom;
+        background-size: cover;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
     }
     .become_div{
         width: 80%;

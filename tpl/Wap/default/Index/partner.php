@@ -54,8 +54,10 @@
         width: 100%;
         height: 600px;
         background-image: url("./tpl/Static/blue/images/wap/partner.jpg");
-        background-size: 100% auto;
-        background-position: center;
+        background-size: cover;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
     }
     .become_div{
         width: 80%;
