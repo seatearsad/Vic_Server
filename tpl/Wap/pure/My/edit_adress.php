@@ -10,6 +10,7 @@
 	<meta name="format-detection" content="telephone=no">
 	<meta name="format-detection" content="address=no">
     <link href="{pigcms{$static_path}css/eve.7c92a906.css" rel="stylesheet"/>
+    <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/common.css?215"/>
     <style>
 	    .btn-wrapper {
 	        margin: .2rem .2rem;
@@ -22,17 +23,65 @@
 	
 	    .kv-line h6 {
 	        width: 10em;
-            text-align: center;
+            text-align: left;
+            padding-left: 30px;
 	    }
 		.btn {
-			background: #06c1bb;
+			background: #ffa52d;
 		}
 		dl.list-in dd {
 			border-bottom: 1px dashed #e5e5e5;
 		}
+        .main{
+            width: 100%;
+            padding-top: 60px;
+        }
+        .gray_line{
+            width: 100%;
+            height: 2px;
+            margin-top: 15px;
+            margin-bottom: 15px;
+            background-color: #cccccc;
+        }
+        .this_nav{
+            width: 100%;
+            text-align: center;
+            font-size: 1.8em;
+            height: 30px;
+            line-height: 30px;
+            margin-top: 15px;
+        }
+        .this_nav span{
+            width: 50px;
+            height: 30px;
+            display:-moz-inline-box;
+            display:inline-block;
+            -moz-transform:scaleX(-1);
+            -webkit-transform:scaleX(-1);
+            -o-transform:scaleX(-1);
+            transform:scaleX(-1);
+            background-image: url("./tpl/Static/blue/images/new/black_arrow.png");
+            background-size: auto 20px;
+            background-repeat: no-repeat;
+            background-position: right center;
+            position: absolute;
+            left: 8%;
+            cursor: pointer;
+        }
 	</style>  
 </head>
 <body id="index" data-com="pagecommon">
+<include file="Public:header"/>
+<div class="main">
+    <div class="this_nav">
+        <span id="back_span"></span>
+        <if condition="$now_adress">
+            {pigcms{:L('_B_PURE_MY_05_')}
+            <else />
+            {pigcms{:L('_ADD_NEW_ADDRESS_')}
+        </if>
+    </div>
+    <div class="gray_line"></div>
         <div id="tips" class="tips"></div>
         <form id="form" method="post" action="{pigcms{:U('My/edit_adress')}">
         
@@ -62,7 +111,7 @@
 									</if>
 				                </select>
 				            </label>
-				        </dd-->
+				        </dd>
 				        <dd class="dd-padding kv-line">
 				            <h6>{pigcms{:L('_B_PURE_MY_13_')}:</h6>
 				            <label class="select kv-v" style="line-height: 30px" id="city_name">
@@ -70,7 +119,7 @@
 				            </label>
                             <input type="hidden" name="city" id="city_id" value="{pigcms{$now_adress['city']}">
                             <input type="hidden" name="province" id="province_id" value="{pigcms{$now_adress['province']}">
-				        </dd>
+				        </dd-->
 				        <!--dd class="dd-padding kv-line">
 				            <h6>{pigcms{:L('_B_PURE_MY_14_')}:</h6>
 				            <label class="select kv-v">
@@ -81,15 +130,15 @@
 				                </select>
 				            </label>
 				        </dd-->
+                        <dd class="dd-padding kv-line">
+                            <h6>Unit:</h6>
+                            <input name="detail" type="text" class="kv-v input-weak" placeholder="{pigcms{:L('_B_PURE_MY_20_')}" pattern=".{2,}" data-err="{pigcms{:L('_B_PURE_MY_21_')}" value="{pigcms{$now_adress.detail}">
+                        </dd>
 		        		<dd class="dd-padding kv-line" id="color-gray">
 		        			<h6>{pigcms{:L('_B_PURE_MY_15_')}:</h6>
-	                        <i class="icon-location" data-node="icon"></i><span class="color-gray" data-node="addAddress"><?php if(!empty($now_adress['adress'])): ?><?php echo $now_adress['adress']; ?><?php else : ?><img src="{pigcms{$static_path}images/location.png" style=" width:25px; height:25px"/>{pigcms{:L('_CLICK_SELECT_W_')}<?php endif; ?></span> <i class="right_arrow"></i>
+	                        <i class="icon-location" data-node="icon"></i><span class="color-gray" data-node="addAddress"><?php if(!empty($now_adress['adress'])): ?><?php echo $now_adress['adress']; ?><?php else : ?><img src="{pigcms{$static_path}images/location.png" style=" width:25px; height:25px"/><?php endif; ?></span> <i class="right_arrow"></i>
 	                        <!--div class="weaksuggestion"> {pigcms{:L('_B_PURE_MY_16_')}<i class="toptriangle"></i> </div-->
 		        			<!--textarea name="adress" class="input-weak kv-v" placeholder="{pigcms{:L('_B_PURE_MY_17_')}" pattern="^.{5,60}$" data-err="{pigcms{:L('_B_PURE_MY_18_')}">{pigcms{$now_adress.adress}</textarea-->
-		        		</dd>
-		        		<dd class="dd-padding kv-line">
-		        			<h6>{pigcms{:L('_B_PURE_MY_19_')}:</h6>
-		        			<input name="detail" type="text" class="kv-v input-weak" placeholder="{pigcms{:L('_B_PURE_MY_20_')}" pattern=".{2,}" data-err="{pigcms{:L('_B_PURE_MY_21_')}" value="{pigcms{$now_adress.detail}">
 		        		</dd>
 		        		<dd class="dd-padding kv-line">
 		        			<h6>{pigcms{:L('_B_PURE_MY_22_')}:</h6>
@@ -221,7 +270,12 @@
 					}
 				});
 			});
+
+            $('#back_span').click(function () {
+                window.history.go(-1);
+            });
 		</script>
-{pigcms{$hideScript}
+</div>
+<include file="Public:footer"/>
 </body>
 </html>

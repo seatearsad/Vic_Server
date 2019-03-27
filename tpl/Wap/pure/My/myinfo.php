@@ -16,176 +16,117 @@
 		<script type="text/javascript" src="{pigcms{$static_path}js/idangerous.swiper.min.js" charset="utf-8"></script>
 		<script type="text/javascript" src="{pigcms{$static_path}js/fastclick.js" charset="utf-8"></script>
 		<script type="text/javascript" src="{pigcms{$static_path}layer/layer.m.js" charset="utf-8"></script>
-		<script type="text/javascript" src="{pigcms{$static_path}js/common.js?211" charset="utf-8"></script>
     <style>
-	    .titleImg{
-			width:25px;
-			height:25px;
-			margin-right:10px;
-	    }
-	    .titleBorder{
-			padding-bottom:10px;
-			border-bottom:1px solid #e5e5e5;
-	    }
-	    .title{
-			padding-top:12px;
-			width:95%;
-	    }
-	    .imgRirht{
-			float:right;
-			margin-top:-19px;
-			width:10px;
-	    }
+        .main{
+            width: 100%;
+            padding-top: 60px;
+        }
+
+        .gray_line{
+            width: 100%;
+            height: 2px;
+            margin-top: 15px;
+            background-color: #cccccc;
+        }
+        .gray_k{
+            width: 10%;
+            height: 2px;
+            background-color: #f4f4f4;
+            margin: -2px auto 0 auto;
+        }
+        .main ul{
+            margin: 20px 0 0;
+            width: 100%;
+        }
+        .main ul li{
+            width: 90%;
+            height: 50px;
+            margin-left: 5%;
+            background-color: white;
+            list-style: none;
+            margin-bottom: 10px;
+            background-image: url("./tpl/Static/blue/images/new/black_arrow.png");
+            background-size: auto 16px;
+            background-repeat: no-repeat;
+            background-position:right 10px center;
+        }
+        .main ul li div{
+            line-height: 50px;
+            font-size: 1.4em;
+            padding-left: 20px;
+            background-size: auto 70%;
+            background-repeat: no-repeat;
+            background-position: 10px center;
+        }
+        .this_nav{
+            width: 100%;
+            text-align: center;
+            font-size: 1.8em;
+            height: 30px;
+            line-height: 30px;
+            margin-top: 15px;
+        }
+        .this_nav span{
+            width: 50px;
+            height: 30px;
+            display:-moz-inline-box;
+            display:inline-block;
+            -moz-transform:scaleX(-1);
+            -webkit-transform:scaleX(-1);
+            -o-transform:scaleX(-1);
+            transform:scaleX(-1);
+            background-image: url("./tpl/Static/blue/images/new/black_arrow.png");
+            background-size: auto 20px;
+            background-repeat: no-repeat;
+            background-position: right center;
+            position: absolute;
+            left: 8%;
+            cursor: pointer;
+        }
 	</style>
 </head>
 <body>
-	<dl style="padding:0 10px;background-color:#fff;margin-top:10px;margin-bottom:10px;">
-		<div id="nickname" class="titleBorder">
-			<div class="title">{pigcms{:L('_B_PURE_MY_54_')}
-                <span style="float:right;">{pigcms{$now_user.nickname}</span>
-            </div>
-			<img src="{pigcms{$static_path}images/new_my/tubiao2_11.png" class="imgRirht" />
-		</div>
-		<div id="psword" class="titleBorder">
-			<div class="title">{pigcms{:L('_B_PURE_MY_55_')}</div>
-			<img src="{pigcms{$static_path}images/new_my/tubiao2_11.png" class="imgRirht" />
-		</div>
-		<div id="bind_user" class="titleBorder">
-			<div class="title">
-                <if condition="$now_user['phone']">
-                    {pigcms{:L('_B_PURE_MY_56_')}
-                <else/>
-                    {pigcms{:L('_B_PURE_MY_57_')}
-                </if>
-                <span style="float:right;">{pigcms{$now_user.phone_s}</span>
-            </div>
-			<img src="{pigcms{$static_path}images/new_my/tubiao2_11.png" class="imgRirht" />
-		</div>
-		<if condition="!$_GET['type']">
-			<div id="adress" class="titleBorder">
-				<div class="title">{pigcms{:L('_B_PURE_MY_58_')}</div>
-				<img src="{pigcms{$static_path}images/new_my/tubiao2_11.png" class="imgRirht" />
-			</div>
-		</if>
-        <div id="card" class="titleBorder">
-            <div class="title">{pigcms{:L('_CREDIT_CARD_')}</div>
-            <img src="{pigcms{$static_path}images/new_my/tubiao2_11.png" class="imgRirht" />
+    <include file="Public:header"/>
+    <div class="main">
+        <div class="this_nav">
+            <span id="back_span"></span>
+            Profile
         </div>
-		<!--div id="authentication" class="titleBorder">
-			<div class="title">实名认证</div>
-			<img src="{pigcms{$static_path}images/new_my/tubiao2_11.png" class="imgRirht"></img>
-		</div>
-		<div id="car_owner" class="titleBorder">
-			<div class="title">车主认证</div>
-			<img src="{pigcms{$static_path}images/new_my/tubiao2_11.png" class="imgRirht"></img>
-		</div>
-		<if condition="!$_GET['type']">
-			<div id="cardcode" style="padding-bottom:10px;">
-				<div class="title">我的实体卡</div>
-				<img src="{pigcms{$static_path}images/new_my/tubiao2_11.png" class="imgRirht"></img>
-			</div>
-		</if>-->
-	</dl>
-	<!--if condition="!$_GET['type']">
-		<dl style="padding:0 10px;background-color:#fff;margin-top:10px;margin-bottom:10px;">
-			<div id="about" style="padding-bottom:10px;">
-				<div class="title">{pigcms{:L('_B_PURE_MY_ABOUTUS_')}</div>
-				<img src="{pigcms{$static_path}images/new_my/tubiao2_11.png" class="imgRirht" />
-			</div>
-		</dl>
-	</if-->
-	
-	
-	<!--dl style="padding:0 10px;background-color:#fff;margin-top:10px;margin-bottom:10px;">
-		<div id="merchant" style="padding-bottom:10px;">
-			<div class="title">{pigcms{:L('_B_PURE_MY_60_')}</div>
-			<img src="{pigcms{$static_path}images/new_my/tubiao2_11.png" class="imgRirht" />
-		</div>
-	</dl-->
-		
-	<button id="logout" style="padding:15px;width:90%;margin:10px 5%;background-color:#00c4ac;color:#fff;border:0px;">{pigcms{:L('_B_PURE_MY_61_')}</button>
-		<script src="{pigcms{:C('JQUERY_FILE')}"></script>
-		<script src="{pigcms{$static_path}js/common_wap.js"></script>
-		<script>
-			var find_car = "{pigcms{$find_car}";
-			var find = "{pigcms{$find}";
-
-			<if condition="$now_user['phone']">
-                var change_phone=true;
-            <else/>
-                var change_phone=false;
-            </if>
-
-			<if condition="C('config.bind_phone_verify_sms') AND C('config.sms_key')">
-                var sms=true;
-			<else/>
-                var sms=false;
-            </if>
-		</script>
-		<script>
-			$('#nickname').on('click',function(){
-				location.href =	"{pigcms{:U('username')}";
-			});
-			$('#psword').on('click',function(){
-				if(change_phone&&sms){
-					location.href =	"{pigcms{:U('My/verify_original_phone')}&go=password";
-				}else{
-					location.href =	"{pigcms{:U('password')}";
-				}
-			});
-			$('#bind_user').on('click',function(){
-				if(change_phone&&sms){
-					location.href =	"{pigcms{:U('My/verify_original_phone')}&go=bind_user";
-				}else{
-					location.href =	"{pigcms{:U('bind_user')}";
-				}
-			});
-			$('#adress').on('click',function(){
-				location.href =	"{pigcms{:U('adress')}";
-			});
-			$('#card').on('click',function(){
-                location.href = "{pigcms{:U('credit')}";
-            })
-			$('#authentication').on('click',function(){
-				if(find){
-					location.href =	"{pigcms{:U('authentication_index')}";
-				}else{
-					location.href =	"{pigcms{:U('authentication')}";
-				}
-			});
-			$('#car_owner').on('click',function(){
-				if(find_car){
-					location.href =	"{pigcms{:U('car_owner')}";
-				}else{
-					location.href =	"{pigcms{:U('car_apply')}";
-				}
-			});
-			$('#cardcode').on('click',function(){
-				location.href =	"{pigcms{:U('cardcode')}";
-			});
-			$('#phone').on('click',function(){
-				location.href =	"{pigcms{:U('my_money')}";
-			});
-			$('#logout').on('click',function(){
-				location.href =	"{pigcms{:U('Login/logout')}";
-			});
-			$('#about').on('click',function(){
-				location.href =	"{pigcms{:U('My/about')}";
-			});
-			$('#merchant').on('click',function(){
-				location.href =	"{pigcms{$merchant_url}";
-			});
-		</script>
-		<script type="text/javascript">
-			window.shareData = {
-				"moduleName":"Home",
-				"moduleID":"0",
-				"imgUrl": "<if condition="$config['wechat_share_img']">{pigcms{$config.wechat_share_img}<else/>{pigcms{$config.site_logo}</if>",
-				"sendFriendLink": "{pigcms{$config.site_url}{pigcms{:U('Home/index')}",
-				"tTitle": "{pigcms{$config.site_name}",
-				"tContent": "{pigcms{$config.seo_description}"
-			};
-		</script>
-		{pigcms{$shareScript}
-	</body>
+        <div class="gray_line"></div>
+        <ul>
+            <a href="{pigcms{:U('username')}">
+                <li>
+                    <div>{pigcms{:L('_B_PURE_MY_54_')}</div>
+                </li>
+            </a>
+            <a href="{pigcms{:U('password')}">
+            <li>
+                <div>Password</div>
+            </li>
+            </a>
+            <a href="{pigcms{:U('My/verify_original_phone')}&go=bind_user">
+            <li>
+                <div>Phone Number</div>
+            </li>
+            </a>
+            <li>
+                <div>Email</div>
+            </li>
+            <a href="{pigcms{:U('adress')}">
+            <li>
+                <div>Address</div>
+            </li>
+            </a>
+            <li>
+                <div>Wallet</div>
+            </li>
+        </ul>
+    </div>
+    <include file="Public:footer"/>
+<script>
+    $('#back_span').click(function () {
+        window.history.go(-1);
+    });
+</script>
+</body>
 </html>
