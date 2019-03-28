@@ -207,6 +207,21 @@ class MyAction extends BaseAction{
 		}
 		$this->display();
 	}
+	public function email(){
+        if($_POST['email']){
+            $result = D('User')->save_user($this->now_user['uid'],'email',$_POST['email']);
+            if($result['error']){
+                $this->assign('error',$result['msg']);
+            }else{
+                redirect(U('My/myinfo',array('OkMsg'=>urlencode(L('_B_MY_SAVEACCESS_')))));
+            }
+        }
+	    $this->display();
+    }
+    public function language(){
+	    $this->assign('curr_lang',C('DEFAULT_LANG'));
+	    $this->display();
+    }
 	public function password(){
 		if(IS_POST){
 			if(!empty($this->now_user['pwd']) && md5($_POST['currentpassword']) != $this->now_user['pwd']){
@@ -3188,13 +3203,67 @@ class MyAction extends BaseAction{
 		}
 	}
 
+    public function coupon(){
+        $coupon_list = D('System_coupon')->get_user_coupon_list($this->user_session['uid'], $this->user_session['phone']);
+        $this->assign('cate_platform', D('System_coupon')->cate_platform());
 
-	/*优惠券列表*/
+        $tmp = array();
+        foreach ($coupon_list as $key => $v) {
+            $v['name'] = lang_substr($v['name'],C('DEFAULT_LANG'));
+            $v['des'] = lang_substr($v['des'],C('DEFAULT_LANG'));
+            if (!empty($tmp[$v['is_use']][$v['coupon_id']])) {
+                $tmp[$v['is_use']][$v['coupon_id']]['get_num']++;
+            } else {
+                $tmp[$v['is_use']][$v['coupon_id']] = $v;
+                $mer = M('Merchant')->where(array('mer_id'=>$v['mer_id']))->find();
+                $tmp[$v['is_use']][$v['coupon_id']]['merchant']=$mer['name'];
+                $tmp[$v['is_use']][$v['coupon_id']]['get_num'] = 1;
+                switch($v['type']){
+                    case 'all':
+                        $url = $this->config['site_url'].'/wap.php';
+                        break;
+                    case 'group':
+                        $url = $this->config['site_url'].'/wap.php?g=Wap&c=Group&a=index';
+                        break;
+                    case 'meal':
+                        $url = $this->config['site_url'].'/wap.php?g=Wap&c=Meal_list&a=index';
+                        break;
+                    case 'appoint':
+                        $url = $this->config['site_url'].'/wap.php?g=Wap&c=Appoint&a=index';
+                        break;
+                    case 'shop':
+                        $url = $this->config['site_url'].'/wap.php?g=Wap&c=Shop&a=index';
+                        break;
+                }
+                $tmp[$v['is_use']][$v['coupon_id']]['url'] = $url;
+            }
+
+        }
+
+        if($tmp[0]){
+            $this->assign('coupon', array_shift($tmp[0]));
+        }
+
+        $this->display();
+    }
+
+    /*优惠券列表*/
 	public function card_list(){
 		// if(!$this->is_wexin_browser){
 		// $this->error_tips('请使用微信浏览优惠券！');
 		// }
-		$use = empty($_GET['use']) ? '0' : '1';
+		$use = empty($_GET['use']) ? '0' : $_GET['use'];
+		if($use == 0){
+		    $title = 'Available';
+		    $class_name = 'Muse';
+        }else{
+		    $title = 'History';
+            $class_name = 'Expired';
+        }
+
+        $this->assign('title',$title);
+		$this->assign('className',$class_name);
+
 		if($_GET['coupon_type']=='mer') {
 			$coupon_list = D('Card_new_coupon')->get_user_all_coupon_list($this->user_session['uid']);
 			$this->assign('cate_platform', D('Card_new_coupon')->cate_platform());
@@ -3237,7 +3306,10 @@ class MyAction extends BaseAction{
 			}
 
 		}
-		$this->assign('coupon_list', $tmp);
+		if($use == 0)
+		    $this->assign('coupon_list', $tmp[0]);
+		else
+            $this->assign('coupon_list', array_merge($tmp[1],$tmp[2]));
 		$this->display();
 	}
 
@@ -5728,25 +5800,29 @@ class MyAction extends BaseAction{
 		$this->display();
 	}
 
-    public  function exchangeCode(){
-	    $code = $_POST['code'];
-	    $uid = $this->user_session['uid'];
+    public function exchangeCode(){
+	    if($_POST) {
+            $code = $_POST['code'];
+            $uid = $this->user_session['uid'];
 
-        $coupon = D('System_coupon')->field(true)->where(array('notice'=>$code))->find();
-        $cid = $coupon['coupon_id'];
+            $coupon = D('System_coupon')->field(true)->where(array('notice' => $code))->find();
+            $cid = $coupon['coupon_id'];
 
-        if($cid){
-            $l_id = D('System_coupon_hadpull')->field(true)->where(array('uid'=>$uid,'coupon_id'=>$cid))->find();
+            if ($cid) {
+                $l_id = D('System_coupon_hadpull')->field(true)->where(array('uid' => $uid, 'coupon_id' => $cid))->find();
 
-            if($l_id == null)
-                $result = D('System_coupon')->had_pull($cid,$uid);
-            else
-                exit(json_encode(array('error_code'=> 1,'msg'=>L('_AL_EXCHANGE_CODE_'))));
+                if ($l_id == null)
+                    $result = D('System_coupon')->had_pull($cid, $uid);
+                else
+                    exit(json_encode(array('error_code' => 1, 'msg' => L('_AL_EXCHANGE_CODE_'))));
+            } else {
+                exit(json_encode(array('error_code' => 1, 'msg' => L('_NOT_EXCHANGE_CODE_'))));
+            }
+
+            echo json_encode($result);
         }else{
-            exit(json_encode(array('error_code'=> 1,'msg'=>L('_NOT_EXCHANGE_CODE_'))));
+	        $this->display();
         }
-
-        echo json_encode($result);
     }
 
     public function ajax_city_name(){

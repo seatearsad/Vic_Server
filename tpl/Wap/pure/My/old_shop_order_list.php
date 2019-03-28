@@ -10,9 +10,8 @@
 	<meta name="format-detection" content="telephone=no">
 	<meta name="format-detection" content="address=no">
     <link href="{pigcms{$static_path}css/eve.7c92a906.css" rel="stylesheet"/>
-    <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/common.css?215"/>
     <style>
-		dl.list dd dl{ padding-left:0;background-color: white;width: 98%;margin: 0px auto;}
+		dl.list dd dl{ padding-left:0;}
 		.dealcard-img{ margin-left:.2rem}
 		dl.list dd{ border:none;}
 	    dl.list dd.dealcard {
@@ -89,12 +88,10 @@
 	        width: 25%;
 	        text-align:center;
 	        position: relative;
-            color: #999999;
-            font-size: 1.2em;
 	    }
 
 		.orderindex li.active {
-            font-weight: bold;
+	        color:#06c1bb
 	    }
 
 	    .orderindex li .react {
@@ -161,6 +158,7 @@
 		.tabs {
 		  z-index: 15px;
 		  position: relative;
+		  background: #FFFFFF;
 		  box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
 		  box-sizing: border-box;
 		  overflow: hidden;
@@ -193,35 +191,16 @@
 		.order-num-foot span:first-child{display:block; float:left; color:#06c1bb; line-height:1rem}
 		.order-num-foot span:last-child,.order-pay,.order-cancel{border:1px solid #e5e5e5;color:#666; padding:.2rem; border-radius:4px; display:block; float:right;line-height:.3rem; margin:.1rem .1rem 0 0; }
 		.order-num-foot span.order-pay{ color:#06c1bb;padding:.2rem .5rem}
-        .main{
-            width: 100%;
-            padding-top: 60px;
-        }
-        dl.list{
-            background-color: transparent;
-            border: 0px;
-        }
-        .gray_line{
-            width: 100%;
-            height: 2px;
-            background-color: #cccccc;
-        }
-        .gray_k{
-            width: 10%;
-            height: 2px;
-            background-color: #f4f4f4;
-            margin: -2px auto 0 auto;
-        }
+
 	</style>
 </head>
 <body id="index">
-<include file="Public:header"/>
-<div class="main">
         <div id="tips" class="tips"></div>
 		<dl class="list" style="margin-top:0px;">
 		    <dd>
 			<div class="tabs">
 			<div class="tabs-header">
+				<div class="border"></div>
 				<ul class="orderindex">
 					<li class="active"><a href="javascript:void(0)" tab-id="1" class="react">
 						<span>{pigcms{:L('_B_PURE_MY_64_')}</span>
@@ -240,8 +219,6 @@
 				</div></div>
 			</dd>
 		</dl>
-        <div class="gray_line"></div>
-        <div class="gray_k"></div>
 		<div style="margin-top:.2rem;">
 		    <dl class="list tabs-content" id="orders">
 				<div tab-id="1" class="tab active">
@@ -442,7 +419,7 @@
 
 			}
 		</script>
-</div>
-<include file="Public:footer"/>
+<!--include file="Public:footer"/-->
+{pigcms{$hideScript}
 </body>
 </html>

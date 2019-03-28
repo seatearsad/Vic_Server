@@ -3,7 +3,7 @@
 <html>
 	<head>
 		<meta charset="utf-8" />
-		<title>{pigcms{:L('_B_PURE_MY_53_')}</title>
+		<title>{pigcms{:L('_LANG_TXT_')}</title>
 		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width"/>
 		<meta name="apple-mobile-web-app-capable" content="yes"/>
 		<meta name='apple-touch-fullscreen' content='yes'/>
@@ -45,10 +45,7 @@
             background-color: white;
             list-style: none;
             margin-bottom: 10px;
-            background-image: url("./tpl/Static/blue/images/new/black_arrow.png");
-            background-size: auto 16px;
-            background-repeat: no-repeat;
-            background-position:right 10px center;
+            cursor: pointer;
         }
         .main ul li div{
             line-height: 50px;
@@ -83,24 +80,8 @@
             left: 8%;
             cursor: pointer;
         }
-        #logout{
-            width: 50%;
-            height: 40px;
-            background-color: #ffa52d;
-            -moz-border-radius: 5px;
-            -webkit-border-radius: 5px;
-            border-radius: 5px;
-            margin: 20px auto 0 auto;
-            background-image: url("./tpl/Static/blue/images/wap/logout.png");
-            background-size: auto 30px;
-            background-repeat: no-repeat;
-            background-position: 10px center;
-            text-align: center;
-            color: white;
-            font-size: 1.4em;
-            font-weight: bold;
-            line-height: 40px;
-            cursor: pointer;
+        .lang_c{
+            color: #ffa52d;
         }
 	</style>
 </head>
@@ -109,45 +90,22 @@
     <div class="main">
         <div class="this_nav">
             <span id="back_span"></span>
-            Profile
+            {pigcms{:L('_LANG_TXT_')}
         </div>
         <div class="gray_line"></div>
         <ul>
-            <a href="{pigcms{:U('username')}">
-                <li>
-                    <div>{pigcms{:L('_B_PURE_MY_54_')}</div>
-                </li>
-            </a>
-            <a href="{pigcms{:U('password')}">
-            <li>
-                <div>Password</div>
+            <li class="lang_en">
+                <div <if condition="$curr_lang eq 'en-us'">class="lang_c"</if>>
+                    English
+                </div>
             </li>
-            </a>
-            <a href="{pigcms{:U('bind_user')}">
-            <li>
-                <div>Phone Number</div>
+            <li class="lang_cn">
+                <div <if condition="$curr_lang eq 'zh-cn'">class="lang_c"</if>>中文</div>
             </li>
-            </a>
-            <a href="{pigcms{:U('email')}">
-            <li>
-                <div>Email</div>
-            </li>
-            </a>
-            <a href="{pigcms{:U('adress')}">
-            <li>
-                <div>Address</div>
-            </li>
-            </a>
-            <a href="{pigcms{:U('credit')}">
-            <li>
-                <div>Wallet</div>
-            </li>
-            </a>
         </ul>
-
-        <div id="logout">Log out</div>
     </div>
     <include file="Public:footer"/>
+    <script src="{pigcms{$static_public}js/lang.js"></script>
 <script>
     $('#back_span').click(function () {
         window.history.go(-1);

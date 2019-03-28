@@ -68,6 +68,9 @@
             left: 8%;
             cursor: pointer;
         }
+        input.mt[type="checkbox"]:checked{
+            background-color: #ffa52d;
+        }
 	</style>  
 </head>
 <body id="index" data-com="pagecommon">

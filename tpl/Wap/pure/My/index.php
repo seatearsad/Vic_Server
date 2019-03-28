@@ -81,19 +81,19 @@
             background-repeat: no-repeat;
             background-position: 10px center;
         }
-        .main ul li:nth-child(1) div{
+        .main ul a:nth-child(1) li div{
             background-image: url("./tpl/Static/blue/images/wap/profile.png");
         }
-        .main ul li:nth-child(2) div{
+        .main ul a:nth-child(2) li div{
             background-image: url("./tpl/Static/blue/images/wap/balance.png");
         }
-        .main ul li:nth-child(3) div{
+        .main ul a:nth-child(3) li div{
             background-image: url("./tpl/Static/blue/images/wap/coupon.png");
         }
-        .main ul li:nth-child(4) div{
+        .main ul a:nth-child(4) li div{
             background-image: url("./tpl/Static/blue/images/wap/orders.png");
         }
-        .main ul li:nth-child(5) div{
+        .main ul a:nth-child(5) li div{
             background-image: url("./tpl/Static/blue/images/wap/language.png");
         }
 	</style>
@@ -116,18 +116,26 @@
                 <div>Profile</div>
             </li>
             </a>
+            <a href="{pigcms{:U('My/my_money')}">
             <li>
                 <div>Balance</div>
             </li>
+            </a>
+            <a href="{pigcms{:U('My/coupon')}">
             <li>
                 <div>Coupon</div>
             </li>
+            </a>
+            <a href="{pigcms{:U('My/shop_order_list')}">
             <li>
                 <div>Orders</div>
             </li>
+            </a>
+            <a href="{pigcms{:U('My/language')}">
             <li>
                 <div>Language</div>
             </li>
+            </a>
         </ul>
     </div>
 	<include file="Public:footer"/>

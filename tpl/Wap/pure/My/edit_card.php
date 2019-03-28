@@ -10,6 +10,7 @@
 	<meta name="format-detection" content="telephone=no">
 	<meta name="format-detection" content="address=no">
     <link href="{pigcms{$static_path}css/eve.7c92a906.css" rel="stylesheet"/>
+    <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/common.css?215"/>
     <style>
 	    .btn-wrapper {
 	        margin: .2rem .2rem;
@@ -25,14 +26,60 @@
             text-align: center;
 	    }
 		.btn {
-			background: #06c1bb;
+			background: #ffa52d;
 		}
 		dl.list-in dd {
 			border-bottom: 1px dashed #e5e5e5;
 		}
+        input.mt[type="checkbox"]:checked{
+            background-color: #ffa52d;
+        }
+        .main{
+            width: 100%;
+            padding-top: 60px;
+        }
+        .gray_line{
+            width: 100%;
+            height: 2px;
+            margin-top: 15px;
+            margin-bottom: 15px;
+            background-color: #cccccc;
+        }
+        .this_nav{
+            width: 100%;
+            text-align: center;
+            font-size: 1.8em;
+            height: 30px;
+            line-height: 30px;
+            margin-top: 15px;
+        }
+        .this_nav span{
+            width: 50px;
+            height: 30px;
+            display:-moz-inline-box;
+            display:inline-block;
+            -moz-transform:scaleX(-1);
+            -webkit-transform:scaleX(-1);
+            -o-transform:scaleX(-1);
+            transform:scaleX(-1);
+            background-image: url("./tpl/Static/blue/images/new/black_arrow.png");
+            background-size: auto 20px;
+            background-repeat: no-repeat;
+            background-position: right center;
+            position: absolute;
+            left: 8%;
+            cursor: pointer;
+        }
 	</style>  
 </head>
 <body id="index" data-com="pagecommon">
+<include file="Public:header"/>
+<div class="main">
+    <div class="this_nav">
+        <span id="back_span"></span>
+        Wallet
+    </div>
+    <div class="gray_line"></div>
         <div id="tips" class="tips"></div>
         <form id="form" method="post" action="{pigcms{:U('My/edit_card')}">
         
@@ -128,7 +175,11 @@
 					return false;
 				});
 			});
+            $('#back_span').click(function () {
+                window.history.go(-1);
+            });
 		</script>
-{pigcms{$hideScript}
+</div>
+<include file="Public:footer"/>
 </body>
 </html>

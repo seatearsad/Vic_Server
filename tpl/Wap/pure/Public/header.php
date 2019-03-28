@@ -6,7 +6,6 @@
         font-family: Helvetica;
         -moz-osx-font-smoothing: grayscale;
         font-size: 100%;
-        color: #3f3f3f;
     }
     #tutti_header{
         width: 100%;

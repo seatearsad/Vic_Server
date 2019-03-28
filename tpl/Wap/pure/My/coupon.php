@@ -3,7 +3,7 @@
 <html>
 	<head>
 		<meta charset="utf-8" />
-		<title>{pigcms{:L('_B_PURE_MY_53_')}</title>
+		<title>Coupon</title>
 		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width"/>
 		<meta name="apple-mobile-web-app-capable" content="yes"/>
 		<meta name='apple-touch-fullscreen' content='yes'/>
@@ -16,6 +16,7 @@
 		<script type="text/javascript" src="{pigcms{$static_path}js/idangerous.swiper.min.js" charset="utf-8"></script>
 		<script type="text/javascript" src="{pigcms{$static_path}js/fastclick.js" charset="utf-8"></script>
 		<script type="text/javascript" src="{pigcms{$static_path}layer/layer.m.js" charset="utf-8"></script>
+        <link type="text/css" rel="stylesheet" href="{pigcms{$static_path}my_card/css/card_new.css"/>
     <style>
         .main{
             width: 100%;
@@ -83,69 +84,88 @@
             left: 8%;
             cursor: pointer;
         }
-        #logout{
-            width: 50%;
-            height: 40px;
-            background-color: #ffa52d;
-            -moz-border-radius: 5px;
-            -webkit-border-radius: 5px;
-            border-radius: 5px;
-            margin: 20px auto 0 auto;
-            background-image: url("./tpl/Static/blue/images/wap/logout.png");
-            background-size: auto 30px;
-            background-repeat: no-repeat;
-            background-position: 10px center;
+        .my_money{
+            width: 100%;
             text-align: center;
-            color: white;
-            font-size: 1.4em;
-            font-weight: bold;
+            margin: 40px auto;
+            font-size: 4em;
             line-height: 40px;
-            cursor: pointer;
+        }
+        .Coupon .Coupon_top{
+            background-color: #ffa52d;
+        }
+        .Coupon .Coupon_end em{
+            border: 1px solid #ffa52d;
+            color: #ffa52d;
+        }
+        .Muse{
+            width: 89%;
+            margin: 10px auto;
         }
 	</style>
 </head>
 <body>
     <include file="Public:header"/>
-    <div class="main">
+    <div class="main Coupon">
         <div class="this_nav">
             <span id="back_span"></span>
-            Profile
+            Coupon
         </div>
         <div class="gray_line"></div>
-        <ul>
-            <a href="{pigcms{:U('username')}">
+        <ul class="end_ul">
+            <a href="{pigcms{:U('card_list')}&coupon_type=system&use=0">
                 <li>
-                    <div>{pigcms{:L('_B_PURE_MY_54_')}</div>
+                    <div>Available</div>
                 </li>
             </a>
-            <a href="{pigcms{:U('password')}">
-            <li>
-                <div>Password</div>
-            </li>
+            <if condition="$coupon">
+                <dl class="Muse">
+                    <dd>
+                        <div class="Coupon_top clr">
+                            <div class="fl">
+                                <div class="fltop">
+                                    <i>$</i><em>{pigcms{$coupon.discount}</em>
+                                </div>
+                                <div class="flend">
+
+                                </div>
+                            </div>
+                            <div class="fr">
+                                <h2>{pigcms{$coupon.name} <php>if($_GET['coupon_type']=='mer'){</php>({pigcms{$coupon.merchant})<php>}</php></h2>
+                                <php>if(C('DEFAULT_LANG') == 'zh-cn'){</php>
+                                {pigcms{:replace_lang_str(L('_MAN_NUM_REDUCE_'),$coupon['order_money'])}{pigcms{:replace_lang_str(L('_MAN_REDUCE_NUM_'),$coupon['discount'])}
+                                <php>}else{</php>
+                                {pigcms{:replace_lang_str(L('_MAN_NUM_REDUCE_'),$coupon['discount'])}{pigcms{:replace_lang_str(L('_MAN_REDUCE_NUM_'),$coupon['order_money'])}
+                                <php>}</php>
+                            </div>
+                        </div>
+
+                        <div class="Coupon_end">
+                            <div class="Coupon_x">
+                                <i>{pigcms{$coupon.start_time|date='Y.m.d',###}--{pigcms{$coupon.end_time|date='Y.m.d',###}</i>
+                                <a href="{pigcms{$coupon.url}"><em>{pigcms{:L('_IMMEDIATE_USE_')}</em></a>
+                            </div>
+                            <div class="Coupon_sm">
+                                <span class="on">{pigcms{:L('_INSTRUCTIONS_TXT_')}</span>
+                                <div class="Coupon_text overflow">{pigcms{$coupon.des}</div>
+                            </div>
+                        </div>
+                        <span class="several">{pigcms{$coupon.get_num}</span>
+                        <i class="bj"></i>
+                    </dd>
+                </dl>
+            </if>
+            <a href="{pigcms{:U('exchangeCode')}">
+                <li>
+                    <div>{pigcms{:L('_EXCHANGE_COUPON_')}</div>
+                </li>
             </a>
-            <a href="{pigcms{:U('bind_user')}">
+            <a href="{pigcms{:U('card_list')}&coupon_type=system&use=1">
             <li>
-                <div>Phone Number</div>
-            </li>
-            </a>
-            <a href="{pigcms{:U('email')}">
-            <li>
-                <div>Email</div>
-            </li>
-            </a>
-            <a href="{pigcms{:U('adress')}">
-            <li>
-                <div>Address</div>
-            </li>
-            </a>
-            <a href="{pigcms{:U('credit')}">
-            <li>
-                <div>Wallet</div>
+                <div>History</div>
             </li>
             </a>
         </ul>
-
-        <div id="logout">Log out</div>
     </div>
     <include file="Public:footer"/>
 <script>
@@ -154,6 +174,20 @@
     });
     $('#logout').on('click',function(){
         location.href =	"{pigcms{:U('Login/logout')}";
+    });
+    $(".Coupon_sm").each(function(){
+        $(this).find("span").click(function(){
+            if($(this).hasClass("on")){
+                $(this).removeClass("on")
+                $(this).siblings(".Coupon_text").removeClass("overflow");
+                $(this).parents("dd").siblings().find(".Coupon_sm span").addClass("on");
+                $(this).parents("dd").siblings().find(".Coupon_sm .Coupon_text").addClass("overflow");
+            }else{
+                $(this).addClass("on")
+                $(this).siblings(".Coupon_text").addClass("overflow");
+            }
+
+        })
     });
 </script>
 </body>
