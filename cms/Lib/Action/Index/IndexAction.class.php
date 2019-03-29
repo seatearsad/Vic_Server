@@ -126,22 +126,22 @@ class IndexAction extends BaseAction {
             $body .= '<p>CURRENT OCCUPATION: '.$_POST['occ'].'</p>';
             $body .= '<p>NUMBER OF YEARS: '.$_POST['noy'].'</p>';
             $body .= '<br>';
-            $str = $_POST['dyoab'] == 1 ? 'Yes' : 'No';
+            $str = $_POST['dyoab'] == '1' ? 'Yes' : 'No';
             $body .= '<p>DO YOU OWN A BUSINESS?: '.$str.'</p>';
             $body .= '<p>IF YES,explain:'.$_POST['dyoab_ex'].'</p>';
             $income = array('Up to $50K','Over $50K to $75K','Over $75K to $120K','Over $120K');
-            $body .= '<p>'.$income[$_POST[cai]-1].'</p>';
+            $body .= '<p>'.$income[(int)$_POST['cai']-1].'</p>';
             $body .= '<br>';
             $body .= '<p>NET WORTH: '.$_POST['net_worth'].'</p>';
             $body .= '<p>If you go into business, what amount do you plan to invest?: '.$_POST['invest'].'</p>';
             $body .= '<p>Your own capital: '.$_POST['capital'].'</p>';
             $body .= '<p>Borrowed: '.$_POST['borrowed'].'</p>';
             $body .= '<br>';
-            $str = $_POST['dyoyh'] == 1 ? 'Yes' : 'No';
+            $str = $_POST['dyoyh'] == '1' ? 'Yes' : 'No';
             $body .= '<p>Do you own your home?: '.$str.'</p>';
-            $str = $_POST['mortgage'] == 1 ? 'Yes' : 'No';
+            $str = $_POST['mortgage'] == '1' ? 'Yes' : 'No';
             $body .= '<p>Mortgage?: '.$str.'</p>';
-            $str = $_POST['hyegb'] == 1 ? 'Yes' : 'No';
+            $str = $_POST['hyegb'] == '1' ? 'Yes' : 'No';
             $body .= '<p>Have you ever gone bankrupt?: '.$str.'</p>';
             $body .= '<p>If you decide to move forward when can you start?: '.$_POST['when_start'].'</p>';
             $body .= '<br>';
@@ -182,8 +182,8 @@ class IndexAction extends BaseAction {
             $mail->AltBody = '';
 
             if(!$mail->send()) {
-                echo 'Message could not be sent.';
-                echo 'Mailer Error: ' . $mail->ErrorInfo;
+                //echo 'Message could not be sent.';
+                //echo 'Mailer Error: ' . $mail->ErrorInfo;
                 exit(json_encode(array('status'=>0)));
             } else {
                 //echo 'Message has been sent';

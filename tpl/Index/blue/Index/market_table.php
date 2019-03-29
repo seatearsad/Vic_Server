@@ -323,8 +323,16 @@
         var is_tip = false;
         var check_list = ['name','address','city','postal_code','email','phone'];
         $('.table').find('input').each(function () {
-            send_data[$(this).attr('name')] = $(this).val();
-            if ($.inArray($(this).attr('name'), check_list) >= 0 && $(this).val() == '') {
+            var val = '';
+            if($(this).attr('type') == 'radio'){
+                var t_n = $(this).attr('name');
+                val = $('input:radio[name='+t_n+']:checked').val();
+            }else{
+                val = $(this).val();
+            }
+
+            send_data[$(this).attr('name')] = val;
+            if ($.inArray($(this).attr('name'), check_list) >= 0 && val == '') {
                 is_tip = true;
                 $(this).focus();
             }
