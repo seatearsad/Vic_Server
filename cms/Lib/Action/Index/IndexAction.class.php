@@ -128,7 +128,7 @@ class IndexAction extends BaseAction {
             $body += '<br>';
             $str = $_POST['dyoab'] == 1 ? 'Yes' : 'No';
             $body += '<p>DO YOU OWN A BUSINESS?: '.$str.'</p>';
-            $body += '<p>IF YES,explain:'.$_POST['dyoab_ex'].'</p>'
+            $body += '<p>IF YES,explain:'.$_POST['dyoab_ex'].'</p>';
             $income = array('Up to $50K','Over $50K to $75K','Over $75K to $120K','Over $120K');
             $body += '<p>'.$income[$_POST[cai]-1].'</p>';
             $body += '<br>';
