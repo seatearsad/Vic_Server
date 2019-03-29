@@ -114,6 +114,8 @@ class IndexAction extends BaseAction {
 	public function market_doc(){
         require './mailer/PHPMailer.php';
         require './mailer/SMTP.php';
+        require './mailer/Exception.php';
+        
         $mail = new PHPMailer\PHPMailer\PHPMailer();
 
         $mail->isSMTP();                                      // Set mailer to use SMTP
