@@ -112,46 +112,83 @@ class IndexAction extends BaseAction {
 	}
 
 	public function market_doc(){
-        require './mailer/PHPMailer.php';
-        require './mailer/SMTP.php';
-        require './mailer/Exception.php';
-
-        $mail = new PHPMailer\PHPMailer\PHPMailer();
-
-        $mail->isSMTP();                                      // Set mailer to use SMTP
-        $mail->Host = 'smtp.gmail.com';  // Specify main and backup SMTP servers. 这里改成smtp.gmail.com
-        $mail->SMTPAuth = true;                               // Enable SMTP authentication
-        $mail->Username = 'caesark882@gmail.com';                 // SMTP username 这里改成自己的gmail邮箱，最好新注册一个，因为后期设置会导致安全性降低
-        $mail->Password = 'kkrzakbtivctdtdm';                           // SMTP password 这里改成对应邮箱密码
-        $mail->SMTPSecure = 'ssl';                            // Enable TLS encryption, `ssl` also accepted
-        $mail->Port = 465;
-
-        $mail->setFrom('caesark882@gmail.com', 'Caesark');
-        $mail->addAddress('garfunkel@126.com', 'Garfunkel');     // Add a recipient 这里改成用于接收邮件的测试邮箱
-        //$mail->addAddress('ellen@example.com');               // Name is optional
-//        $mail->addReplyTo('info@example.com', 'Information');
-//        $mail->addCC('cc@example.com');
-//        $mail->addBCC('bcc@example.com');
-
-        //$mail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
-        //$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
-        $mail->isHTML(true);
-        $mail->Subject = 'Here is the subject';
-        $mail->Body    = 'This is the HTML message body <b>in bold!</b>';
-        $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
-
-        if(!$mail->send()) {
-            echo 'Message could not be sent.';
-            echo 'Mailer Error: ' . $mail->ErrorInfo;
-        } else {
-            echo 'Message has been sent';
-        }
-
-        //$this->display();
+        $this->display();
     }
 
     public function market_table(){
         if($_POST){
+            $body = '<p>NAME: '.$_POST['name'].'</p>';
+            $body += '<p>ADDRESS: '.$_POST['address'].'</p>';
+            $body += '<p>CITY: '.$_POST['city'].'</p>';
+            $body += '<p>POSTAL CODE: '.$_POST['postal_code'].'</p>';
+            $body += '<p>EMAIL: '.$_POST['email'].'</p>';
+            $body += '<p>PHONE: '.$_POST['phone'].'</p>';
+            $body += '<p>CURRENT OCCUPATION: '.$_POST['occ'].'</p>';
+            $body += '<p>NUMBER OF YEARS: '.$_POST['noy'].'</p>';
+            $body += '<br>';
+            $str = $_POST['dyoab'] == 1 ? 'Yes' : 'No';
+            $body += '<p>DO YOU OWN A BUSINESS?: '.$str.'</p>';
+            $body += '<p>IF YES,explain:'.$_POST['dyoab_ex'].'</p>'
+            $income = array('Up to $50K','Over $50K to $75K','Over $75K to $120K','Over $120K');
+            $body += '<p>'.$income[$_POST[cai]-1].'</p>';
+            $body += '<br>';
+            $body += '<p>NET WORTH: '.$_POST['net_worth'].'</p>';
+            $body += '<p>If you go into business, what amount do you plan to invest?: '.$_POST['invest'].'</p>';
+            $body += '<p>Your own capital: '.$_POST['capital'].'</p>';
+            $body += '<p>Borrowed: '.$_POST['borrowed'].'</p>';
+            $body += '<br>';
+            $str = $_POST['dyoyh'] == 1 ? 'Yes' : 'No';
+            $body += '<p>Do you own your home?: '.$str.'</p>';
+            $str = $_POST['mortgage'] == 1 ? 'Yes' : 'No';
+            $body += '<p>Mortgage?: '.$str.'</p>';
+            $str = $_POST['hyegb'] == 1 ? 'Yes' : 'No';
+            $body += '<p>Have you ever gone bankrupt?: '.$str.'</p>';
+            $body += '<p>If you decide to move forward when can you start?: '.$_POST['when_start'].'</p>';
+            $body += '<br>';
+            $body += '<p>REFERENCES & CONTACT INFO</p>';
+            $body += '<p>1. '.$_POST['raci_1'].'</p>';
+            $body += '<p>2. '.$_POST['raci_2'].'</p>';
+            $body += '<p>3. '.$_POST['raci_3'].'</p>';
+            $body += '<br>';
+            $body += '<p>COMMENTS: '.$_POST['comments'].'</p>';
+
+
+            require './mailer/PHPMailer.php';
+            require './mailer/SMTP.php';
+            require './mailer/Exception.php';
+
+            $mail = new PHPMailer\PHPMailer\PHPMailer();
+
+            $mail->isSMTP();                                      // Set mailer to use SMTP
+            $mail->Host = 'smtp.gmail.com';  // Specify main and backup SMTP servers. 这里改成smtp.gmail.com
+            $mail->SMTPAuth = true;                               // Enable SMTP authentication
+            $mail->Username = 'caesark882@gmail.com';                 // SMTP username 这里改成自己的gmail邮箱，最好新注册一个，因为后期设置会导致安全性降低
+            $mail->Password = 'kkrzakbtivctdtdm';                           // SMTP password 这里改成对应邮箱密码
+            $mail->SMTPSecure = 'ssl';                            // Enable TLS encryption, `ssl` also accepted
+            $mail->Port = 465;
+
+            $mail->setFrom('caesark882@gmail.com', 'Caesark');
+            $mail->addAddress('garfunkel@126.com', 'Garfunkel');
+            $mail->addAddress('jheary@tutti.app', 'Heary');
+            //$mail->addAddress('ellen@example.com');               // Name is optional
+            //$mail->addReplyTo('info@example.com', 'Information');
+            //$mail->addCC('cc@example.com');
+            //$mail->addBCC('bcc@example.com');
+
+            //$mail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
+            //$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
+            $mail->isHTML(true);
+            $mail->Subject = 'Application Form';
+            $mail->Body    = $body;
+            $mail->AltBody = '';
+
+            if(!$mail->send()) {
+                echo 'Message could not be sent.';
+                echo 'Mailer Error: ' . $mail->ErrorInfo;
+            } else {
+                echo 'Message has been sent';
+            }
+
             exit(json_encode(array('status'=>1)));
         }else {
             $this->display();
