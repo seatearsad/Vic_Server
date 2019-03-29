@@ -183,8 +183,8 @@ class IndexAction extends BaseAction {
             $mail->AltBody = '';
 
             if(!$mail->send()) {
-                //echo 'Message could not be sent.';
-                //echo 'Mailer Error: ' . $mail->ErrorInfo;
+                echo 'Message could not be sent.';
+                echo 'Mailer Error: ' . $mail->ErrorInfo;
                 exit(json_encode(array('status'=>0)));
             } else {
                 //echo 'Message has been sent';
