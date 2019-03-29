@@ -110,4 +110,49 @@ class IndexAction extends BaseAction {
 			}
 		}
 	}
+
+	public function market_doc(){
+        require './mailer/PHPMailer.php';
+        require './mailer/SMTP.php';
+        $mail = new PHPMailer\PHPMailer\PHPMailer();
+
+        $mail->isSMTP();                                      // Set mailer to use SMTP
+        $mail->Host = 'smtp.gmail.com';  // Specify main and backup SMTP servers. 这里改成smtp.gmail.com
+        $mail->SMTPAuth = true;                               // Enable SMTP authentication
+        $mail->Username = 'caesark882@gmail.com';                 // SMTP username 这里改成自己的gmail邮箱，最好新注册一个，因为后期设置会导致安全性降低
+        $mail->Password = 'wojiaowo123KAISA';                           // SMTP password 这里改成对应邮箱密码
+        $mail->SMTPSecure = 'ssl';                            // Enable TLS encryption, `ssl` also accepted
+        $mail->Port = 465;
+
+        $mail->setFrom('caesark882@gmail.com', 'Caesark');
+        $mail->addAddress('garfunkel@126.com', 'Garfunkel');     // Add a recipient 这里改成用于接收邮件的测试邮箱
+        //$mail->addAddress('ellen@example.com');               // Name is optional
+//        $mail->addReplyTo('info@example.com', 'Information');
+//        $mail->addCC('cc@example.com');
+//        $mail->addBCC('bcc@example.com');
+
+        //$mail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
+        //$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
+        $mail->isHTML(true);
+        $mail->Subject = 'Here is the subject';
+        $mail->Body    = 'This is the HTML message body <b>in bold!</b>';
+        $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+
+        if(!$mail->send()) {
+            echo 'Message could not be sent.';
+            echo 'Mailer Error: ' . $mail->ErrorInfo;
+        } else {
+            echo 'Message has been sent';
+        }
+
+        //$this->display();
+    }
+
+    public function market_table(){
+        if($_POST){
+            exit(json_encode(array('status'=>1)));
+        }else {
+            $this->display();
+        }
+    }
 }
