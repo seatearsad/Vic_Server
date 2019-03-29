@@ -22,7 +22,7 @@
         background-image: url("{pigcms{$config.site_favicon}");
         background-repeat: no-repeat;
         background-position: center;
-        background-size: auto 50px;
+        background-size: auto 60px;
         background-color: white;
     }
     .memo{
