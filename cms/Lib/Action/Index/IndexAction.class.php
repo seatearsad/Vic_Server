@@ -115,6 +115,28 @@ class IndexAction extends BaseAction {
         $this->display();
     }
 
+    public function market_table_first(){
+        if($_POST){
+            $body = '<p>NAME: '.$_POST['name'].'</p>';
+            $body .= '<p>CITY: '.$_POST['city'].'</p>';
+            $body .= '<p>PHONE: '.$_POST['phone'].'</p>';
+            $body .= '<p>EMAIL: '.$_POST['email'].'</p>';
+            $body .= '<p>ADDRESS: '.$_POST['address'].'</p>';
+
+            $mail = $this->getMail('Interested in Participating with TUTTI',$body);
+            if(!$mail->send()) {
+                //echo 'Message could not be sent.';
+                //echo 'Mailer Error: ' . $mail->ErrorInfo;
+                exit(json_encode(array('status'=>0)));
+            } else {
+                //echo 'Message has been sent';
+                exit(json_encode(array('status'=>1)));
+            }
+        }else {
+            $this->display();
+        }
+    }
+
     public function market_table(){
         if($_POST){
             $body = '<p>NAME: '.$_POST['name'].'</p>';
@@ -152,35 +174,7 @@ class IndexAction extends BaseAction {
             $body .= '<br>';
             $body .= '<p>COMMENTS: '.$_POST['comments'].'</p>';
 
-            require './mailer/PHPMailer.php';
-            require './mailer/SMTP.php';
-            require './mailer/Exception.php';
-
-            $mail = new PHPMailer\PHPMailer\PHPMailer();
-
-            $mail->isSMTP();                                      // Set mailer to use SMTP
-            $mail->Host = 'smtp.gmail.com';  // Specify main and backup SMTP servers. 这里改成smtp.gmail.com
-            $mail->SMTPAuth = true;                               // Enable SMTP authentication
-            $mail->Username = 'caesark882@gmail.com';                 // SMTP username 这里改成自己的gmail邮箱，最好新注册一个，因为后期设置会导致安全性降低
-            $mail->Password = 'kkrzakbtivctdtdm';                           // SMTP password 这里改成对应邮箱密码
-            $mail->SMTPSecure = 'ssl';                            // Enable TLS encryption, `ssl` also accepted
-            $mail->Port = 465;
-
-            $mail->setFrom('caesark882@gmail.com', 'Caesark');
-            $mail->addAddress('garfunkel@126.com', 'Garfunkel');
-            $mail->addAddress('jheary@tutti.app', 'Heary');
-            //$mail->addAddress('ellen@example.com');               // Name is optional
-            //$mail->addReplyTo('info@example.com', 'Information');
-            //$mail->addCC('cc@example.com');
-            //$mail->addBCC('bcc@example.com');
-
-            //$mail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
-            //$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
-            $mail->isHTML(true);
-            $mail->Subject = 'Application Form';
-            $mail->Body    = $body;
-            $mail->AltBody = '';
-
+            $mail = $this->getMail('Application Form',$body);
             if(!$mail->send()) {
                 //echo 'Message could not be sent.';
                 //echo 'Mailer Error: ' . $mail->ErrorInfo;
@@ -194,5 +188,38 @@ class IndexAction extends BaseAction {
         }else {
             $this->display();
         }
+    }
+
+    function getMail($title,$body){
+        require './mailer/PHPMailer.php';
+        require './mailer/SMTP.php';
+        require './mailer/Exception.php';
+
+        $mail = new PHPMailer\PHPMailer\PHPMailer();
+
+        $mail->isSMTP();                                      // Set mailer to use SMTP
+        $mail->Host = 'smtp.gmail.com';  // Specify main and backup SMTP servers. 这里改成smtp.gmail.com
+        $mail->SMTPAuth = true;                               // Enable SMTP authentication
+        $mail->Username = 'caesark882@gmail.com';                 // SMTP username 这里改成自己的gmail邮箱，最好新注册一个，因为后期设置会导致安全性降低
+        $mail->Password = 'kkrzakbtivctdtdm';                           // SMTP password 这里改成对应邮箱密码
+        $mail->SMTPSecure = 'ssl';                            // Enable TLS encryption, `ssl` also accepted
+        $mail->Port = 465;
+
+        $mail->setFrom('caesark882@gmail.com', 'Caesark');
+        $mail->addAddress('garfunkel@126.com', 'Garfunkel');
+        $mail->addAddress('jheary@tutti.app', 'Heary');
+        //$mail->addAddress('ellen@example.com');               // Name is optional
+        //$mail->addReplyTo('info@example.com', 'Information');
+        //$mail->addCC('cc@example.com');
+        //$mail->addBCC('bcc@example.com');
+
+        //$mail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
+        //$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
+        $mail->isHTML(true);
+        $mail->Subject = $title;
+        $mail->Body    = $body;
+        $mail->AltBody = '';
+
+        return $mail;
     }
 }

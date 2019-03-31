@@ -69,7 +69,7 @@
         <img src="./static/market/0008.jpg">
     </div>
     <div class="memo">
-        <img src="./static/market/0010.jpg">
+        <img src="./static/market/0009.jpg">
     </div>
     <div class="footer">
         &copy;2019 Kavl Technology Ltd.All rights reserved

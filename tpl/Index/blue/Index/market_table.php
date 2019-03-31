@@ -61,9 +61,6 @@
         -webkit-border-radius: 5px;
         border-radius: 5px;
     }
-    .table{
-        display: none;
-    }
     .table p{
         line-height: 30px;
     }
@@ -130,34 +127,6 @@
 </style>
 <body>
     <div class="header"></div>
-    <div class="memo">
-        <h2>Congratulations on taking the first step to financial independence.</h2>
-        <br />
-        <p>If you’re looking at buying into a business you owe it to yourself and your family, to ask these 9 questions before you do.</p>
-        <br />
-        <p>1.) does the business offer a 100% ROI year one, as well as a living wage?</p>
-        <br />
-        <p>2.) does the business allow you to work hard for the first 3 months, then part-time there after?</p>
-        <br />
-        <p>3.) does the parent company of the business you’re looking to buy do all the customer service, website maintenance and technical support issues?</p>
-        <br />
-        <p>4.) is the businesses core value about giving back to the community you live and work in?</p>
-        <br />
-        <p>5.) does the business offer lucrative employee wages, enriching the lives of more than the just owner and the parent company?</p>
-        <br />
-        <p>6.) does the business offer pricing up to 20% cheaper then the competition?</p>
-        <br />
-        <p>7.) does the business offer multiple revenue streams, ensuring increased uncapped revenues year after year?</p>
-        <br />
-        <p>8.) does the business save your customers time?</p>
-        <br />
-        <p>9.) can you operate the business out of your home office?</p>
-        <br />
-        <p>If you answered “no” to more than 5 of these questions, we need to talk! Because what I’m offering is a “yes” to all 9 of those questions.
-        For more information on this incredible but limited opportunity please fill out the form on the next page.</p>
-
-        <div class="btn">Next</div>
-    </div>
     <div class="table">
         <h2>Application Form – Complete and get started</h2>
         <br/>
@@ -313,11 +282,6 @@
     <script src="{pigcms{$static_public}js/laytpl.js"></script>
     <script src="{pigcms{$static_public}js/layer/layer.js"></script>
 <script>
-    $('.btn').click(function () {
-        $('.memo').hide();
-        $('.table').show();
-        window.scrollTo(0,0);
-    });
     $('.submit').click(function () {
         var send_data = {};
         var is_tip = false;
@@ -345,7 +309,7 @@
             $.post("{pigcms{:U('market_table')}", send_data, function (data) {
                 layer.closeAll();
                 if (data.status == 1) {
-                    layer.msg('Success');
+                    layer.msg('We are processing your application now,will get back to you soon.Stay turned!');
                 } else {
 
                 }
