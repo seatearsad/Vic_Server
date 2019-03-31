@@ -193,7 +193,7 @@
             layer.msg('Please fill in the necessary information');
         }else {
             layer.load(2);
-            $.post("{pigcms{:U('market_table')}", send_data, function (data) {
+            $.post("{pigcms{:U('market_table_first')}", send_data, function (data) {
                 layer.closeAll();
                 if (data.status == 1) {
                     layer.msg('Thank you for your interested,we will contact you soon!');
