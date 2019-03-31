@@ -197,6 +197,8 @@
                 layer.closeAll();
                 if (data.status == 1) {
                     layer.msg('Thank you for your interested,we will contact you soon!');
+                    $('.submit').css('background-color','#666666');
+                    $('.submit').unbind();
                 } else {
 
                 }

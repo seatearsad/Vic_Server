@@ -310,6 +310,8 @@
                 layer.closeAll();
                 if (data.status == 1) {
                     layer.msg('We are processing your application now,will get back to you soon.Stay turned!');
+                    $('.submit').css('background-color','#666666');
+                    $('.submit').unbind();
                 } else {
 
                 }
