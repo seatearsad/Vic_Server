@@ -135,7 +135,7 @@ class IndexAction extends BaseAction {
             $body .= '<p>CITY: '.$_POST['city'].'</p>';
             $body .= '<p>PHONE: '.$_POST['phone'].'</p>';
             $body .= '<p>EMAIL: '.$_POST['email'].'</p>';
-            $body .= '<p>ADDRESS: '.$_POST['address'].'</p>';
+            //$body .= '<p>ADDRESS: '.$_POST['address'].'</p>';
 
             $mail = $this->getMail('Interested in Participating with TUTTI',$body);
             if(!$mail->send()) {
