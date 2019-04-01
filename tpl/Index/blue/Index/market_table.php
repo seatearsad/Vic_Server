@@ -308,7 +308,7 @@
         </p>
         <div class="policy">
             <input type="checkbox" name="default" value="1" class="mt" checked="checked">
-            By clicking the box you are agree to out "<span id="checkPolicy">Privacy Policy</span>"
+            By clicking the box you are agree to our "<span id="checkPolicy">Privacy Policy</span>"
         </div>
         <div class="submit">Submit</div>
     </div>
