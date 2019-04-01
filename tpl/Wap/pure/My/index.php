@@ -16,7 +16,7 @@
 		<script type="text/javascript" src="{pigcms{$static_path}js/idangerous.swiper.min.js" charset="utf-8"></script>
 		<script type="text/javascript" src="{pigcms{$static_path}js/fastclick.js" charset="utf-8"></script>
 		<script type="text/javascript" src="{pigcms{$static_path}layer/layer.m.js" charset="utf-8"></script>
-		<script type="text/javascript" src="{pigcms{$static_path}js/common.js?211" charset="utf-8"></script>
+		<!--script type="text/javascript" src="{pigcms{$static_path}js/common.js?211" charset="utf-8"></script-->
 
 		<link href="{pigcms{$static_path}css/check.css" rel="stylesheet"/>
     <style>

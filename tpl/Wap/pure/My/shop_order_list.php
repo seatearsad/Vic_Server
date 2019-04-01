@@ -19,7 +19,6 @@
 	        overflow: visible;
 	        -webkit-transition: -webkit-transform .2s;
 	        position: relative;
-			background:rgba(242, 242, 242, 0.86);
 	    }
 	    .dealcard.orders-del {
 	        -webkit-transform: translateX(1.05rem);
@@ -28,9 +27,8 @@
 	        height: 1.5rem;
 	    }
 	    .dealcard .dealcard-brand {
-			margin-top:.18rem;
-	        margin-bottom: .18rem;
-			heigth:.5rem
+			heigth:.5rem;
+            font-size:1.3em;
 	    }
 	    .dealcard small {
 	        font-size: .24rem;
@@ -188,7 +186,7 @@
 		  display: block;
 		}
 
-		.order-num{ height:1rem; line-height:1rem; color:#9E9E9E; padding-left:.2rem}
+		.order-num{ height:.6rem; line-height:.6rem; color:#9E9E9E; padding-left:.2rem}
 		.order-num a{ display:block; float:right; margin-right:.1rem}
 		.order-num-foot span:first-child{display:block; float:left; color:#06c1bb; line-height:1rem}
 		.order-num-foot span:last-child,.order-pay,.order-cancel{border:1px solid #e5e5e5;color:#666; padding:.2rem; border-radius:4px; display:block; float:right;line-height:.3rem; margin:.1rem .1rem 0 0; }
@@ -211,6 +209,41 @@
             height: 2px;
             background-color: #f4f4f4;
             margin: -2px auto 0 auto;
+        }
+        #ord_num{
+            padding-left: 20px;
+            background-image: url("./tpl/Static/blue/images/wap/order_num.png");
+            background-repeat: no-repeat;
+            background-size: auto 100%;
+        }
+        .dealcard .dealcard-img{
+            width: 2.4rem;
+            height: 1.5rem;
+        }
+        .dealcard .dealcard-img img{
+            margin-left: 0px;
+        }
+        .dealcard .dealcard-block-right {
+            margin-left: 2.8rem;
+            margin-right: 1.2rem;
+        }
+        .total_price{
+            color: #ffa52d;
+        }
+        .order_btn{
+            position: absolute;
+            right: .2rem;
+            top: .3rem;
+            width: 1.3rem;
+            height: .5rem;
+            line-height: .5rem;
+            text-align: center;
+            border-radius: .05rem;
+            color: white;
+            background-color: #ffa52d;
+        }
+        .order_btn span{
+            display: block;
         }
 	</style>
 </head>
@@ -249,7 +282,7 @@
 				<volist name="order_list" id="order">
 					<dd>
 						<dl>
-							<dd class="order-num">{pigcms{:L('_B_PURE_MY_68_')}<span>{pigcms{$order.real_orderid}</span>
+							<dd class="order-num"><span id="ord_num">{pigcms{$order.real_orderid}</span>
 							<if condition="$order['paid'] eq 0">
 							<a href="javascript::void(0)" onclick="del_order({pigcms{$order['order_id']})"><img src="{pigcms{$static_path}images/u282.png"></a>
 							</if>
@@ -257,17 +290,51 @@
 							<a href="javascript::void(0)" onclick="del_order({pigcms{$order['order_id']})"><img src="{pigcms{$static_path}images/u282.png"></a>
 							</if>
 							</dd>
-							<dd class="dealcard dd-padding" onclick="window.location.href = '{pigcms{$order.order_url}';">
-									<div class="dealcard-img imgbox">
+							<dd class="dealcard dd-padding">
+									<div class="dealcard-img imgbox" onclick="window.location.href = '{pigcms{$order.order_url}';">
 										<img src="{pigcms{$order.image}" style="width:100%;height:100%;"/>
 									</div>
-									<div class="dealcard-block-right">
+									<div class="dealcard-block-right" onclick="window.location.href = '{pigcms{$order.order_url}';">
 										<div class="dealcard-brand single-line">{pigcms{$order.name}</div>
-										<small>{pigcms{:L('_B_PURE_MY_69_')}{pigcms{$order.num}&nbsp;&nbsp;{pigcms{:L('_B_PURE_MY_70_')}{pigcms{$order['price']|floatval} </small>
-
+                                        <div class="total_price">Total:${pigcms{$order['price']|floatval}</div>
+										<small>Total item:{pigcms{$order.num}&nbsp;&nbsp;{pigcms{:date('Y-m-d',$order['create_time'])} </small>
 									</div>
+                                    <div class="order_btn">
+                                        <if condition="empty($order['paid']) AND ($order['status'] lt 2 OR $order['status'] eq 7)" >
+                                            <span onclick="location.href='{pigcms{:U('Pay/check',array('type'=>'shop','order_id'=>$order['order_id']))}'">{pigcms{:L('_B_PURE_MY_81_')}</span>
+                                            <elseif condition="$order['status'] == 2"/>
+                                            <span onclick="location.href='{pigcms{:U('My/shop_feedback',array('order_id'=>$order['order_id']))}'">{pigcms{:L('_B_PURE_MY_82_')}</span>
+                                            <else />
+                                            <if condition="$order['status'] eq 0">
+                                                <span>{pigcms{:L('_B_PURE_MY_71_')}</span>
+                                                <elseif condition="$order['status'] eq 1" />
+                                                <if condition="$deliver">
+                                                    <span onclick='location.href="{pigcms{:U('My/order_track',array('order_id'=>$order['order_id']))}"'>Track</span>
+                                                    <else />
+                                                    <span>{pigcms{:L('_B_PURE_MY_72_')}</span>
+                                                </if>
+                                                <elseif condition="$order['status'] eq 2" />
+                                                <span href="{pigcms{:U('My/shop_feedback',array('order_id'=>$order['order_id']))}">{pigcms{:L('_B_PURE_MY_73_')}</span>
+                                                <elseif condition="$order['status'] eq 3" />
+                                                <span>{pigcms{:L('_B_PURE_MY_74_')}</span>
+                                                <elseif condition="$order['status'] eq 4" />
+                                                <span>{pigcms{:L('_B_PURE_MY_75_')}</span>
+                                                <elseif condition="$order['status'] eq 5" />
+                                                <span>{pigcms{:L('_B_PURE_MY_76_')}</span>
+                                                <elseif condition="$order['status'] eq 6" />
+                                                <elseif condition="$order['status'] eq 7" />
+                                                <span>{pigcms{:L('_B_PURE_MY_77_')}</span>
+                                                <elseif condition="$order['status'] eq 8" />
+                                                <span>{pigcms{:L('_B_PURE_MY_78_')}</span>
+                                                <elseif condition="$order['status'] eq 9" />
+                                                <span>{pigcms{:L('_B_PURE_MY_79_')}</span>
+                                                <elseif condition="$order['status'] eq 10" />
+                                                <span>{pigcms{:L('_B_PURE_MY_80_')}</span>
+                                            </if>
+                                        </if>
+                                    </div>
 								</dd>
-							<dd class="order-num order-num-foot">
+							<!--dd class="order-num order-num-foot">
 								<if condition="$order['status'] eq 0">
 									<span>{pigcms{:L('_B_PURE_MY_71_')}</span>
 								<elseif condition="$order['status'] eq 1" />
@@ -299,7 +366,7 @@
 								<elseif condition="$order['status'] == 2"/>
 									<span onclick="location.href='{pigcms{:U('My/shop_feedback',array('order_id'=>$order['order_id']))}'">{pigcms{:L('_B_PURE_MY_82_')}</span>
 								</if>
-							</dd>
+							</dd-->
 						</dl>
 					</dd>
 					<div style=" height:10px; background:#f0efed"></div>
@@ -350,7 +417,7 @@
 							var shtml = '<dd>';
 							var order_list = data['order_list'];
 							for(var i in order_list){
-								shtml += '<dl><dd class="order-num">{pigcms{:L('_B_PURE_MY_68_')}<span>'+order_list[i]["real_orderid"]+'</span>';
+								shtml += '<dl><dd class="order-num"><span id="ord_num">'+order_list[i]["real_orderid"]+'</span>';
 								if((order_list[i]['paid'] == 0)){
 									shtml +='<a href="javascript:void(0)" onclick="del_order('+order_list[i]["order_id"]+')"><img src="{pigcms{$static_path}images/u282.png"></a>';
 								}
@@ -358,58 +425,103 @@
 									shtml +='<a href="javascript:void(0)" onclick="del_order('+order_list[i]["order_id"]+')"><img src="{pigcms{$static_path}images/u282.png"></a>';
 								}
 								shtml += '</dd>';
-								shtml += '<dd class="dealcard dd-padding" onclick="window.location.href = \''+order_list[i]['order_url']+'\';">';
-								shtml += '<div class="dealcard-img imgbox">';
+								shtml += '<dd class="dealcard dd-padding">';
+								shtml += '<div class="dealcard-img imgbox" onclick="window.location.href = \''+order_list[i]['order_url']+'\';">';
 								shtml += '<img src="'+order_list[i]['image']+'" style="width:100%;height:100%;"/>';
 								shtml += '</div>';
-								shtml += '<div class="dealcard-block-right">';
+								shtml += '<div class="dealcard-block-right"  onclick="window.location.href = \''+order_list[i]['order_url']+'\';">';
 								shtml += '<div class="dealcard-brand single-line">'+order_list[i]['name']+'</div>';
-								shtml += '<small>{pigcms{:L('_B_PURE_MY_69_')}'+order_list[i]['num']+'&nbsp;&nbsp;{pigcms{:L('_B_PURE_MY_70_')}'+order_list[i]['price'];
+								shtml += '<div class="total_price">Total:'+order_list[i]['price']+'</div>'
+								shtml += '<small>Total item:'+order_list[i]['num']+'&nbsp;&nbsp;'+order_list[i]['create_time']+'</small>';
+                                shtml += '</div>';
 
-								shtml += '</div></dd><dd class="order-num order-num-foot">	';
+                                shtml += '<div class="order_btn">';
+                                if(order_list[i]['paid'] == 0 && (order_list[i]['status'] < 2 || order_list[i]['status'] == 7)){
+                                     var url = "{pigcms{:U('Pay/check')}";
+                                     url += '&type=shop&order_id='+order_list[i]['order_id'];
+                                     shtml +='<span onclick="location.href=\''+url+'\'">{pigcms{:L('_B_PURE_MY_81_')}</span>';
+                                 }else if(order_list[i]['status'] == 2){
+                                     var url = "{pigcms{:U('My/shop_feedback')}";
+                                     url += '&order_id='+order_list[i]['order_id'];
+                                     shtml +='<span onclick="location.href=\''+url+'\'">{pigcms{:L('_B_PURE_MY_82_')}</span>';
+                                 }else{
+                                    if(order_list[i]['status']==0){
+                                        shtml += '<span>{pigcms{:L('_B_PURE_MY_71_')}</span>';
+                                    }else if(order_list[i]['status']==1){
+                                        if(order_list[i]['deliver']){
+                                            var url = "{pigcms{:U('My/order_track')}";
+                                            url += '&order_id='+order_list[i]['order_id'];
+                                            shtml +='<span onclick="location.href=\''+url+'\'">Track</span>';
+                                        }else{
+                                            shtml += '<span>{pigcms{:L('_B_PURE_MY_72_')}</span>';
+                                        }
+                                    }else if(order_list[i]['status']==2){
+                                        var url = "{pigcms{:U('My/shop_feedback')}";
+                                        url +='&order_id='+order_list[i]['order_id'];
+                                        shtml +='<span onclick="location.href=\''+url+'\'">{pigcms{:L('_B_PURE_MY_73_')}</span>';
+                                    }else if(order_list[i]['status']==3){
+                                        shtml += '<span>{pigcms{:L('_B_PURE_MY_74_')}</span>';
+                                    }else if(order_list[i]['status']==4){
+                                        shtml += '<span>{pigcms{:L('_B_PURE_MY_75_')}</span>';
+                                    }else if(order_list[i]['status']==5){
+                                        shtml += '<span>{pigcms{:L('_B_PURE_MY_76_')}</span>';
+                                    }else if(order_list[i]['status']==6){
+                                    }else if(order_list[i]['status']==7){
+                                        shtml += '<span>{pigcms{:L('_B_PURE_MY_77_')}</span>';
+                                    }else if(order_list[i]['status']==8){
+                                        shtml += '<span>{pigcms{:L('_B_PURE_MY_78_')}</span>';
+                                    }else if(order_list[i]['status']==9){
+                                        shtml += '<span>{pigcms{:L('_B_PURE_MY_79_')}</span>';
+                                    }else if(order_list[i]['status']==10){
+                                        shtml += '<span>{pigcms{:L('_B_PURE_MY_80_')}</span>';
+                                    }
+                                 }
+
+								shtml += '</div></dd>';
 
 // 								var url = "{pigcms{:U('My/shop_order_refund')}";
 // 								url +='&order_id='+order_list[i]['order_id']+'&mer_id='+order_list[i]['mer_id']+'&store_id='+order_list[i]['store_id'];
 
-
-								if(order_list[i]['status']==0){
-									shtml += '<span>{pigcms{:L('_B_PURE_MY_71_')}</span>';
-								}else if(order_list[i]['status']==1){
-									shtml += '<span>{pigcms{:L('_B_PURE_MY_72_')}</span>';
-								}else if(order_list[i]['status']==2){
-									var url = "{pigcms{:U('My/shop_feedback')}";
-									url +='&order_id='+order_list[i]['order_id'];
-									shtml +='<span onclick="location.href=\''+url+'\'">{pigcms{:L('_B_PURE_MY_73_')}</span>';
-								}else if(order_list[i]['status']==3){
-									shtml += '<span>{pigcms{:L('_B_PURE_MY_74_')}</span>';
-								}else if(order_list[i]['status']==4){
-									shtml += '<span>{pigcms{:L('_B_PURE_MY_75_')}</span>';
-								}else if(order_list[i]['status']==5){
-									shtml += '<span>{pigcms{:L('_B_PURE_MY_76_')}</span>';
-								}else if(order_list[i]['status']==6){
-								}else if(order_list[i]['status']==7){
-									shtml += '<span>{pigcms{:L('_B_PURE_MY_77_')}</span>';
-								}else if(order_list[i]['status']==8){
-									shtml += '<span>{pigcms{:L('_B_PURE_MY_78_')}</span>';
-								}else if(order_list[i]['status']==9){
-									shtml += '<span>{pigcms{:L('_B_PURE_MY_79_')}</span>';
-								}else if(order_list[i]['status']==10){
-									shtml += '<span>{pigcms{:L('_B_PURE_MY_80_')}</span>';
-								}
-
-
-								 if(order_list[i]['paid'] == 0 && (order_list[i]['status'] < 2 || order_list[i]['status'] == 7)){
-									 var url = "{pigcms{:U('Pay/check')}";
-									 url += '&type=shop&order_id='+order_list[i]['order_id'];
-									 shtml +='<span onclick="location.href=\''+url+'\'" class="order-pay">{pigcms{:L('_B_PURE_MY_81_')}</span>';
-								 }else if(order_list[i]['status'] == 2){
-									 var url = "{pigcms{:U('My/shop_feedback')}";
-									 url += '&order_id='+order_list[i]['order_id'];
-									 shtml +='<span onclick="location.href=\''+url+'\'">{pigcms{:L('_B_PURE_MY_82_')}</span>';
-								 }else{
-									 shtml+='<a></a>';
-								 }
-								shtml +='</dd></dl><div style=" height:10px; background:#f0efed"></div>';
+                                // shtml += '<dd class="order-num order-num-foot">	';
+								// if(order_list[i]['status']==0){
+								// 	shtml += '<span>{pigcms{:L('_B_PURE_MY_71_')}</span>';
+								// }else if(order_list[i]['status']==1){
+								// 	shtml += '<span>{pigcms{:L('_B_PURE_MY_72_')}</span>';
+								// }else if(order_list[i]['status']==2){
+								// 	var url = "{pigcms{:U('My/shop_feedback')}";
+								// 	url +='&order_id='+order_list[i]['order_id'];
+								// 	shtml +='<span onclick="location.href=\''+url+'\'">{pigcms{:L('_B_PURE_MY_73_')}</span>';
+								// }else if(order_list[i]['status']==3){
+								// 	shtml += '<span>{pigcms{:L('_B_PURE_MY_74_')}</span>';
+								// }else if(order_list[i]['status']==4){
+								// 	shtml += '<span>{pigcms{:L('_B_PURE_MY_75_')}</span>';
+								// }else if(order_list[i]['status']==5){
+								// 	shtml += '<span>{pigcms{:L('_B_PURE_MY_76_')}</span>';
+								// }else if(order_list[i]['status']==6){
+								// }else if(order_list[i]['status']==7){
+								// 	shtml += '<span>{pigcms{:L('_B_PURE_MY_77_')}</span>';
+								// }else if(order_list[i]['status']==8){
+								// 	shtml += '<span>{pigcms{:L('_B_PURE_MY_78_')}</span>';
+								// }else if(order_list[i]['status']==9){
+								// 	shtml += '<span>{pigcms{:L('_B_PURE_MY_79_')}</span>';
+								// }else if(order_list[i]['status']==10){
+								// 	shtml += '<span>{pigcms{:L('_B_PURE_MY_80_')}</span>';
+								// }
+                                //
+                                //
+								//  if(order_list[i]['paid'] == 0 && (order_list[i]['status'] < 2 || order_list[i]['status'] == 7)){
+								// 	 var url = "{pigcms{:U('Pay/check')}";
+								// 	 url += '&type=shop&order_id='+order_list[i]['order_id'];
+								// 	 shtml +='<span onclick="location.href=\''+url+'\'" class="order-pay">{pigcms{:L('_B_PURE_MY_81_')}</span>';
+								//  }else if(order_list[i]['status'] == 2){
+								// 	 var url = "{pigcms{:U('My/shop_feedback')}";
+								// 	 url += '&order_id='+order_list[i]['order_id'];
+								// 	 shtml +='<span onclick="location.href=\''+url+'\'">{pigcms{:L('_B_PURE_MY_82_')}</span>';
+								//  }else{
+								// 	 shtml+='<a></a>';
+								//  }
+								// shtml +='</dd>';
+                                shtml +='</dl><div style=" height:10px; background:#f0efed"></div>';
 							}
 						}else{
 							var shtml ='<dd><dd class="dealcard dd-padding" style=" text-align:center; background:#fff; width:100%">{pigcms{:L('_B_PURE_MY_83_')}</dd></dd>';

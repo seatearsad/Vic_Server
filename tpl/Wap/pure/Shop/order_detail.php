@@ -1,424 +1,416 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta charset="utf-8">
-
-<script type="text/javascript" src="{pigcms{$static_path}shop/js/jquery1.8.3.js"></script>
-<script type="text/javascript" src="{pigcms{$static_path}shop/js/dialog.js"></script>
-
-<title>{pigcms{$config.shop_alias_name}订单详情</title>
-<meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
-<meta name="Keywords" content="">
-<meta name="Description" content="">
-<meta content="telephone=no, address=no" name="format-detection">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<link rel="stylesheet" type="text/css" href="{pigcms{$static_path}shop/css/main.css" media="all">
-<link rel="stylesheet" type="text/css" href="{pigcms{$static_path}shop/css/lib_3a812b5.css">
-<link rel="stylesheet" type="text/css" href="{pigcms{$static_path}shop/css/style_dd39d16.css">
-<!-- <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/orderhistory_c6670c7.css"> -->
-<link rel="stylesheet" type="text/css" href="{pigcms{$static_path}shop/css/order_4bc7e9e.css">
-<style>
-#dingcai_adress_info{
-border-top: 1px solid #ddd8ce;
-border-bottom: 1px solid #ddd8ce;
-position: relative;
-}
-#dingcai_adress_info:after{
-position: absolute;
-right: 8px;
-top: 50%;
-display: block;
-content: '';
-width: 13px;
-height: 13px;
-border-left: 3px solid #999;
-border-bottom: 3px solid #999;
--webkit-transform: translateY(-50%) scaleY(0.7) rotateZ(-135deg);
--moz-transform: translateY(-50%) scaleY(0.7) rotateZ(-135deg);
--ms-transform: translateY(-50%) scaleY(0.7) rotateZ(-135deg);
-}
-
-
-#enter_im_div {
-  bottom: 121px;
-  z-index: 11;
-  display: none;
-  position: fixed;
-  width: 100%;
-  max-width: 640px;
-  height: 1px;
-}
-#enter_im {
-  width: 94px;
-  margin-left: 110px;
-  position: relative;
-  left: -100px;
-  display: block;
-}
-a {
-  color: #323232;
-  outline-style: none;
-  text-decoration: none;
-}
-#to_user_list {
-  height: 30px;
-  padding: 7px 6px 8px 8px;
-  background-color: #00bc06;
-  border-radius: 25px;
-  /* box-shadow: 0 0 2px 0 rgba(0,0,0,.4); */
-}
-#to_user_list_icon_div {
-  width: 20px;
-  height: 16px;
-  background-color: #fff;
-  border-radius: 10px;
-}
-
-.rel {
-  position: relative;
-}
-.left {
-  float: left;
-}
-.to_user_list_icon_em_a {
-  left: 4px;
-}
-#to_user_list_icon_em_num {
-  background-color: #f00;
-}
-#to_user_list_icon_em_num {
-  width: 14px;
-  height: 14px;
-  border-radius: 7px;
-  text-align: center;
-  font-size: 12px;
-  line-height: 14px;
-  color: #fff;
-  top: -14px;
-  left: 68px;
-}
-.hide {
-  display: none;
-}
-.abs {
-  position: absolute;
-}
-.to_user_list_icon_em_a, .to_user_list_icon_em_b, .to_user_list_icon_em_c {
-  width: 2px;
-  height: 2px;
-  border-radius: 1px;
-  top: 7px;
-  background-color: #00ba0a;
-}
-.to_user_list_icon_em_a {
-  left: 4px;
-}
-.to_user_list_icon_em_b {
-  left: 9px;
-}
-.to_user_list_icon_em_c {
-  right: 4px;
-}
-.to_user_list_icon_em_d {
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-width: 4px;
-  top: 14px;
-  left: 6px;
-  border-color: #fff transparent transparent transparent;
-}
-#to_user_list_txt {
-  color: #fff;
-  font-size: 13px;
-  line-height: 16px;
-  padding: 1px 3px 0 5px;
-}
-</style>
+    <meta charset="utf-8"/>
+    <title>{pigcms{:L('_OUT_TXT_')} {pigcms{:L('_ORDER_DETAIL_')}</title>
+    <meta name="keywords" content="{pigcms{$config.seo_keywords}" />
+    <meta name="description" content="{pigcms{$config.seo_description}" />
+    <meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no,width=device-width"/>
+    <meta http-equiv="pragma" content="no-cache"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name='apple-touch-fullscreen' content='yes'/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="format-detection" content="address=no"/>
+    <link href="{pigcms{$static_path}shop/css/order_detail.css" rel="stylesheet"/>
+    <script type="text/javascript" src="{pigcms{:C('JQUERY_FILE_190')}" charset="utf-8"></script>
 </head>
-<body onselectstart="return true;" ondragstart="return false;">
-<div class="container">
-    <div id="fis_elm__2">
-        <div id="common-widget-nav" class="common-widget-nav ">
-            <div class="left-slogan"> <a class="left-arrow icon-arrow-left2" id="goBackUrl" href="javascript:history.go(-1);"></a> </div>
-            <div class="center-title"> <a href="javascript:void(0)">{pigcms{$store['name']}</a> </div>
-            <div class="right-slogan "> <a class="tel-btn" href="tel:{pigcms{$store['phone']}"><i class="icon-phone"></i></a> </div>
-        </div>
+<style>
+    .main{
+        width: 100%;
+        padding-top: 60px;
+    }
+    .gray_line{
+        width: 100%;
+        height: 2px;
+        margin-top: 15px;
+        background-color: #cccccc;
+    }
+    .this_nav{
+        width: 100%;
+        text-align: center;
+        font-size: 1.8em;
+        height: 30px;
+        line-height: 30px;
+        margin-top: 15px;
+    }
+    .this_nav span{
+        width: 50px;
+        height: 30px;
+        display:-moz-inline-box;
+        display:inline-block;
+        -moz-transform:scaleX(-1);
+        -webkit-transform:scaleX(-1);
+        -o-transform:scaleX(-1);
+        transform:scaleX(-1);
+        background-image: url("./tpl/Static/blue/images/new/black_arrow.png");
+        background-size: auto 20px;
+        background-repeat: no-repeat;
+        background-position: right center;
+        position: absolute;
+        left: 8%;
+        cursor: pointer;
+    }
+    .detail_header{
+        display: flex;
+        background-color: white;
+        height: 40px;
+        line-height: 40px;
+        font-size: 1.2em;
+    }
+    .detail_header div{
+        box-sizing: border-box;
+        flex: 1 1 100%;
+        text-align: center;
+        color: #ffa52d;
+    }
+    .header_active{
+        border-bottom: 1px solid #ffa52d;
+    }
+    .g_details{
+        margin-top: 10px;
+    }
+</style>
+<body>
+<include file="Public:header"/>
+<div class="main">
+    <div class="this_nav">
+        <span id="back_span"></span>
+        {pigcms{:L('_ORDER_DETAIL_')}
     </div>
-    <div id="fis_elm__3">
-        <div id="common-widget-tab" class="common-widget-tab">
-            <ul class="order-tab">
-                <li><a href="{pigcms{:U('Shop/status', array('order_id' => $order['order_id']))}">订单状态</a></li>
-                <li class="active"><a href="javaScript:void(0);">订单详情</a></li>
+    <div class="gray_line"></div>
+    <div class="detail_header">
+        <div><a href="{pigcms{:U('status',array('order_id'=>$order_details['order_id']))}">{pigcms{:L('_ORDER_STATUS_')}</a></div>
+        <div class="header_active">{pigcms{:L('_ORDER_INFO_TXT_')}</div>
+    </div>
+<section class="g_details">
+    <div class="infor">
+        <ul>
+            <li class="first storext">
+                <a href="{pigcms{:U('Shop/index')}#shop-{pigcms{$store['store_id']}">
+                    <div class="img">
+                        <img src="{pigcms{$store['image']}">
+                    </div>
+                    <div class="tit">{pigcms{$store['name']}</div>
+                </a>
+            </li>
+        </ul>
+        <dl class="kd_dd">
+            <volist name="info" id="goods">
+                <dd class="clr">
+                    <div class="fl left">
+                        <h2>
+                            <if condition="in_array($goods['discount_type'], array(1, 3, 4))">
+                                <em class="dd1">折</em>
+                                <elseif condition="in_array($goods['discount_type'], array(2, 5))" />
+                                <em class="d40">折</em>
+                            </if>
+                            {pigcms{$goods['name']}</h2>
+                        <if condition="!empty($goods['spec'])">
+                            <p>{pigcms{$goods['spec']}</p>
+                        </if>
+                    </div>
+                    <div class="clr fr right">
+                        <div class="fl ride">x{pigcms{$goods['num']}</div>
+                        <div class="fl del">${pigcms{$goods['total']}</div>
+                        <div class="fl price">${pigcms{$goods['discount_total']}</div>
+                    </div>
+                </dd>
+            </volist>
+        </dl>
+        <div class="mealfee">
+            <dl>
+                <dd class="clr">
+                    <div class="fl">{pigcms{:L('_PACK_PRICE_')}</div>
+                    <div class="fr">${pigcms{$order_details['packing_charge']}</div>
+                </dd>
+                <dd class="clr">
+                    <div class="fl">{pigcms{:L('_DELI_PRICE_')}</div>
+                    <div class="fr">${pigcms{$order_details['freight_charge']}</div>
+                </dd>
+                <dd class="clr">
+                    <div class="fl">{pigcms{:L('_TAXATION_TXT_')}</div>
+                    <div class="fr">${pigcms{$order_details['tax_price']}</div>
+                </dd>
+                <if condition="$order_details['deposit_price'] neq 0">
+                    <dd class="clr">
+                        <div class="fl">{pigcms{:L('_DEPOSIT_TXT_')}</div>
+                        <div class="fr">${pigcms{$order_details['deposit_price']}</div>
+                    </dd>
+                </if>
+                <if condition="$order_details['tip_charge'] neq 0">
+                    <dd class="clr">
+                        <div class="fl">{pigcms{:L('_TIP_TXT_')}</div>
+                        <div class="fr">${pigcms{$order_details['tip_charge']}</div>
+                    </dd>
+                </if>
+            </dl>
+        </div>
+
+        <div class="reduce">
+            <dl>
+                <volist name="discount_detail" id="discount">
+                    <if condition="$discount['discount_type'] eq 1">
+                        <dd class="clr">
+                            <div  class="fl clr">
+                                <em class="fl e0c">首</em>
+                                <div class="p20">平台首单满{pigcms{$discount['money']|floatval}元减{pigcms{$discount['minus']|floatval}元</div>
+                            </div>
+                            <div class="fr ff3">-${pigcms{$discount['minus']|floatval}</div>
+                        </dd>
+                        <elseif condition="$discount['discount_type'] eq 2" />
+                        <dd class="clr">
+                            <div class="fl clr">
+                                <em class="fl d52">减</em>
+                                <div class="p20">平台优惠满{pigcms{$discount['money']|floatval}元减{pigcms{$discount['minus']|floatval}元</div>
+                            </div>
+                            <div class="fr ff3">-${pigcms{$discount['minus']|floatval}</div>
+                        </dd>
+                        <elseif condition="$discount['discount_type'] eq 3" />
+                        <dd class="clr">
+                            <div class="fl clr">
+                                <em class="fl ffa">首</em>
+                                <div class="p20">店铺首单满{pigcms{$discount['money']|floatval}元减{pigcms{$discount['minus']|floatval}元</div>
+                            </div>
+                            <div class="fr ff3">-${pigcms{$discount['minus']|floatval}</div>
+                        </dd>
+                        <elseif condition="$discount['discount_type'] eq 4" />
+                        <dd class="clr">
+                            <div class="fl clr">
+                                <em class="fl ff6">减</em>
+                                <div class="p20">店铺优惠满{pigcms{$discount['money']|floatval}元减{pigcms{$discount['minus']|floatval}元</div>
+                            </div>
+                            <div class="fr ff3">-${pigcms{$discount['minus']|floatval}</div>
+                        </dd>
+                        <elseif condition="$discount['discount_type'] eq 5" />
+                        <dd class="clr">
+                            <div class="fl clr">
+                                <em class="fl ff0">惠</em>
+                                <div class="p20">商品满{pigcms{$discount['money']|floatval}元配送费减{pigcms{$discount['minus']|floatval}元</div>
+                            </div>
+                            <div class="fr ff3">-${pigcms{$discount['minus']|floatval}</div>
+                        </dd>
+                    </if>
+                </volist>
+            </dl>
+        </div>
+        <div class="answer clr">
+
+            <div class="fl">{pigcms{:L('_ORDER_TXT_')} ${pigcms{$order_details['discount_price']|floatval} {pigcms{:L('_DISCOUNT_TXT_')}-${pigcms{$order_details['minus_price']|floatval}</div>
+            <div class="fr">{pigcms{:L('_TOTAL_RECE_')}: ${pigcms{$order_details['price'] + $order_details['tip_charge']|floatval}</div>
+        </div>
+
+    </div>
+
+    <div class="infor">
+        <ul>
+            <if condition="$order_details['is_pick_in_store'] eq 2">
+                <li class="clr first">
+                    <div class="fl match">{pigcms{:L('_SELF_LIFT_')}</div>
+                </li>
+                <li class="clr">
+                    <div class="fl">{pigcms{:L('_DIST_MODE_')}</div>
+                    <div class="fr">{pigcms{:L('_SELF_DIST_')}</div>
+                </li>
+                <li class="clr">
+                    <div class="fl">{pigcms{:L('_SELF_LIFT_ADDRESS_')}</div>
+                    <div class="p90">
+                        <p>{pigcms{$order_details['address']}</p>
+                    </div>
+                </li>
+                <else />
+                <li class="clr first">
+                    <div class="fl match">{pigcms{:L('_DIST_INFO_')}</div>
+                </li>
+                <li class="clr">
+                    <div class="fl">{pigcms{:L('_DIST_MODE_')}</div>
+                    <div class="fr">{pigcms{:L('_PLAT_DIST_')}</div>
+                </li>
+                <li class="clr">
+                    <div class="fl">{pigcms{:L('_EXPECTED_TIME_')}</div>
+                    <div class="fr">{pigcms{$order_details['expect_use_time']}</div>
+                </li>
+                <li class="clr">
+                    <div class="fl">{pigcms{:L('_RECE_INFO_')}</div>
+                    <div class="p90">
+                        <p>{pigcms{$order_details['address']}</p>
+                        <p>{pigcms{$order_details['username']} {pigcms{$order_details['userphone']}</p>
+                    </div>
+                </li>
+                <if condition="$order_details['deliver_info']">
+                    <li class="clr">
+                        <div class="fl">{pigcms{:L('_DIST_DETAIL_')}</div>
+                        <dl class="kd_dl kd_dls">
+                            <dd>
+                                <h2 class="endt">{pigcms{:L('_DISTOR_TXT_')} ：{pigcms{$order_details['deliver_info']['name']} <a href="tel:{pigcms{$order_details['deliver_info']['phone']}">{pigcms{$order_details['deliver_info']['phone']}</a></h2>
+                            </dd>
+                        </dl>
+                    </li>
+                </if>
+            </if>
+        </ul>
+    </div>
+
+    <div class="infor">
+        <ul>
+            <li class="clr first">
+                <div class="fl book">{pigcms{:L('_ORDER_INFO_')}</div>
+            </li>
+            <li class="clr">
+                <div class="fl">{pigcms{:L('_B_PURE_MY_68_')}</div>
+                <div class="fr">{pigcms{$order_details['real_orderid']}</div>
+            </li>
+            <li class="clr">
+                <div class="fl">{pigcms{:L('_ORDER_TIME_')}</div>
+                <div class="fr">{pigcms{$order_details['create_time']}</div>
+            </li>
+            <li class="clr">
+                <div class="fl">{pigcms{:L('_NOTE_INFO_')}</div>
+                <div class="fr">{pigcms{$order_details['note']}</div>
+            </li>
+        </ul>
+    </div>
+    <if condition="$order_details['paid'] eq 1">
+        <div class="infor">
+            <ul>
+                <li class="clr first">
+                    <div class="fl branch">{pigcms{:L('_PAYMENT_INFO_')}</div>
+                </li>
+                <li class="clr">
+                    <div class="fl">{pigcms{:L('_PAYMENT_TIME_')}</div>
+                    <div class="fr">{pigcms{$order_details['pay_time']}</div>
+                </li>
+                <li class="clr">
+                    <div class="fl">{pigcms{:L('_PAYMENT_MODE_')}</div>
+                    <div class="fr">{pigcms{$order_details['pay_type_str']}</div>
+                </li>
+                <li class="clr">
+                    <div class="fl">{pigcms{:L('_TOTAL_RECE_')}</div>
+                    <div class="p90">
+                        <if condition="$order_details['change_price'] gt 0">
+                            <p class="e2c">${pigcms{$order_details['price']}</p>
+                            <p class="kdsize">（{pigcms{:L('_BEFORE_MODIFY_')}：${pigcms{$order_details['change_price']|floatval}，{pigcms{:L('_NOTE_TXT_')}：{pigcms{$order_details['change_price_reason']}）</p>
+                            <else />
+                            <p class="e2c">${pigcms{$order_details['price']}</p>
+                        </if>
+                    </div>
+                </li>
+                <if condition="$order_details['card_discount'] eq 0 OR $order_details['card_discount'] eq 10">
+                    <li class="clr">
+                        <div class="fl">{pigcms{:L('_BUSINESS_CARD_DIS_')}</div>
+                        <div class="p90">
+                            <php>
+                                if(C('DEFAULT_LANG') == 'en-us'){
+                                $order_details['card_discount'] = 10*(10 - $order_details['card_discount']);
+                                }
+                            </php>
+                            <p class="e2c">-${pigcms{$order_details['minus_card_discount']}（{pigcms{:replace_lang_str(L('_NUM_DISCOUNT_'),$order_details['card_discount'])}）</p>
+                            <p class="kdsize">（{pigcms{:L('_NOTE_NOT_TAKE_DIS_')}）</p>
+                        </div>
+                    </li>
+                </if>
+                <if condition="$order_details['coupon_price'] gt 0">
+                    <li class="clr">
+                        <div class="fl">{pigcms{:L('_PLATFORM_COUP_')}</div>
+                        <div class="fr e2c">-${pigcms{$order_details['coupon_price']|floatval}</div>
+                    </li>
+                </if>
+                <if condition="$order_details['card_price'] gt 0">
+                    <li class="clr">
+                        <div class="fl">{pigcms{:L('_SHOP_COUP_')}</div>
+                        <div class="fr e2c">-${pigcms{$order_details['card_price']|floatval}</div>
+                    </li>
+                </if>
+                <if condition="$order_details['score_deducte'] gt 0">
+                    <li class="clr">
+                        <div class="fl">{pigcms{:L('_INTEGRAL_DED_')}</div>
+                        <div class="fr e2c">-${pigcms{$order_details['score_deducte']|floatval}（{pigcms{:replace_lang_str(L('_USED_POINTS_'),$order_details['score_used_count'])}）</div>
+                    </li>
+                </if>
+                <if condition="$order_details['card_give_money'] gt 0">
+                    <li class="clr">
+                        <div class="fl">{pigcms{:L('_PAYMENT_OF_BALANCE_')}</div>
+                        <div class="fr e2c">-${pigcms{$order_details['card_give_money']|floatval}</div>
+                    </li>
+                </if>
+                <if condition="$order_details['merchant_balance'] gt 0">
+                    <li class="clr">
+                        <div class="fl">{pigcms{:L('_SHOP_BALANCE_PAY_')}</div>
+                        <div class="fr e2c">-${pigcms{$order_details['merchant_balance']|floatval}</div>
+                    </li>
+                </if>
+                <if condition="$order_details['balance_pay'] gt 0">
+                    <li class="clr">
+                        <div class="fl">{pigcms{:L('_PLATFORM_BALANCE_PAY_')}</div>
+                        <div class="fr e2c">-${pigcms{$order_details['balance_pay']|floatval}</div>
+                    </li>
+                </if>
+                <if condition="$order_details['payment_money'] gt 0">
+                    <li class="clr">
+                        <div class="fl">{pigcms{$order_details['pay_type_str']}</div>
+                        <div class="fr e2c">-${pigcms{$order_details['payment_money']|floatval}</div>
+                    </li>
+                </if>
             </ul>
         </div>
+    </if>
+    <div class="consume consumes">
+        <ul class="clr">
+            <if condition="$order_details['status'] lt 3 OR ($order_details['paid'] eq 1 AND $order_details['status'] eq 5) OR ($order_details['paid'] eq 0 AND $order_details['status'] eq 7)">
+                <if condition="$order_details['paid'] eq 0">
+                    <li class="fl firmly" data-url="{pigcms{:U('Pay/check',array('order_id' => $order_details['order_id'], 'type'=>'shop'))}">{pigcms{:L('_PAYMENT_ORDER_')}</li>
+                </if>
+                <php> if($config['open_sub_mchid'] && $now_merchant['open_sub_mchid'] && $now_merchant['sub_mch_id'] > 0 && $now_merchant['sub_mch_refund'] == 0 && $order['is_own'] == 2 && $order['pay_type'] == 'weixin'){</php>
+                <li class="fr zlyd">{pigcms{:L('_CANNT_REFUND_C_S_')} 【{pigcms{$now_merchant.name}】</li>
+                <php>}else{</php>
+
+                <if condition="$order_details['paid'] eq 0">
+                    <li class="fr replace" data-url="{pigcms{:U('Shop/orderdel', array('order_id' => $order_details['order_id']))}">{pigcms{:L('_CANCEL_ORDER_')}</li>
+                    <elseif condition="$order_details['paid'] eq 1 AND $order_details['status'] lt 2" />
+                    <li class="fr replace" data-url="{pigcms{:U('My/shop_order_refund', array('order_id' => $order_details['order_id']))}">{pigcms{:L('_CANCEL_ORDER_')}</li>
+                    <elseif condition="$order_details['paid'] eq 1 AND $order_details['status'] eq 5" />
+                    <li class="fr replace" data-url="{pigcms{:U('My/shop_order_refund', array('order_id' => $order_details['order_id']))}">{pigcms{:L('_REFUND_TXT_')}</li>
+                </if>
+                <php>}</php>
+                <if condition="$order_details['status'] eq 2">
+                    <li class="fl replace" data-url="{pigcms{:U('My/shop_feedback',array('order_id' => $order_details['order_id']))}">{pigcms{:L('_B_PURE_MY_73_')}</li>
+                    <li class="fr zlyd" data-url="{pigcms{:U('Shop/confirm_order', array('order_id' => $order_details['order_id'], 'store_id' => $store['store_id']))}">{pigcms{:L('_ONE_MORE_LIST_')}</li>
+                </if>
+                <else/>
+                <li class="fr zlyd" data-url="{pigcms{:U('Shop/confirm_order', array('order_id' => $order_details['order_id'], 'store_id' => $store['store_id']))}">{pigcms{:L('_ONE_MORE_LIST_')}</li>
+            </if>
+        </ul>
     </div>
-	<section>
-		<!--ul class="my_order">
-			<li>
-				<a href="?c=Shop#shop-{pigcms{$store['store_id']}">
-					<div>
-						<div class="ico_status {pigcms{$order['css']}"><i></i>{pigcms{$order['show_status']}</div>
-					</div>
-					<div>
-						<h3 class="highlight">{pigcms{$store['name']}</h3>
-						<p>{pigcms{$order['num']}份/${pigcms{$order['price']|floatval}</p>
-						<div>{pigcms{$order['date']}</div>
-					</div>
-					<div class="w14"><i class="ico_arrow"></i></div>
-				</a>
-			</li>
-		</ul-->
-		<table class="my_menu_list">
-			<thead>
-				<tr>
-					<th>商品列表</th>
-					<th>{pigcms{$order['num']}份</th>
-					<th><strong class="highlight">${pigcms{$order['goods_price']|floatval}</strong></th>
-				</tr>
-			</thead>
-			<tbody>
-				<volist name="order['info']" id="info">
-				<tr>
-					<td>{pigcms{$info['name']}<if condition="$info['spec']">({pigcms{$info['spec']})</if></td>
-					<td>X{pigcms{$info['num']}</td>
-					<td>${pigcms{$info['price']|floatval}</td>
-				</tr>
-				</volist>
-			</tbody>
-		</table>
-
-		<ul class="box">
-			<li>客户姓名：{pigcms{$order['username']}</li>
-			<li>客户手机：{pigcms{$order['userphone']}</li>
-			<if condition="$order['is_pick_in_store'] eq 2">
-			<li>自提地址：{pigcms{$order['address']} <a style="color:blue" href="{pigcms{:U('My/map')}&origin_lat={pigcms{$lat}&origin_long={pigcms{$lng}&end_lat={pigcms{$order.pick_lat}&end_long={pigcms{$order.pick_lng}&drive=1">自提导航>></a></li>
-			<else />
-			<li>客户地址：{pigcms{$order['address']}</li>
-			</if>
-			<li>配送方式：{pigcms{$order['deliver_str']}</li>
-			<if condition="$order['is_pick_in_store'] eq 3 AND $order['express_id']">
-			<li>快递公司：{pigcms{$order['express_name']}</li>
-			<li>快递单号：{pigcms{$order['express_number']} &nbsp;<a href="http://m.kuaidi100.com/index_all.html?type={pigcms{$order.express_code}&postid={pigcms{$order.express_number}&callbackurl=<?php echo 'http://'.urlencode($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);?>" target="_blank" style="color:#1B9C46;">查看物流信息</a></li>
-			</if>
-			<!--li>配送状态：{pigcms{$order['deliver_status_str']}</li-->
-		</ul>
-		<ul class="box">
-			<li>订单编号：{pigcms{$order['real_orderid']} </li>
-			<li>下单时间：{pigcms{$order['create_time']|date="Y-m-d H:i:s",###} </li>
-			<if condition="$order['pay_time']">
-			<li>支付时间：{pigcms{$order['pay_time']|date="Y-m-d H:i:s",###} </li>
-			</if>
-			<if condition="$order['expect_use_time']">
-			<li>到货时间：{pigcms{$order['expect_use_time']|date="Y-m-d H:i:s",###}</li>
-			</if>
-			<li>商品总价：${pigcms{$order['goods_price']|floatval} 元</li>
-			<li>配送费用：${pigcms{$order['freight_charge']|floatval} 元</li>
-			<if condition="$order['packing_charge'] gt 0">
-			<li>{pigcms{$store['pack_alias']|default='打包费'}：${pigcms{$order['packing_charge']|floatval} 元</li>
-			</if>
-			<li>订单总价：${pigcms{$order['total_price']|floatval} 元<if condition="$config.open_extra_price eq 1 AND $order.extra_price gt 0">+{pigcms{$order.extra_price|floatval}{pigcms{$config.extra_price_alias_name}</if></li>
-			<if condition="$order['merchant_reduce'] gt 0">
-			<li>店铺优惠：${pigcms{$order['merchant_reduce']|floatval} 元</li>
-			</if>
-			<if condition="$order['balance_reduce'] gt 0">
-			<li>平台优惠：${pigcms{$order['balance_reduce']|floatval} 元</li>
-			</if>
-			<if condition="$order['card_discount'] neq 0 AND $order['card_discount'] neq 10">
-			<li>会员卡：{pigcms{$order['card_discount']|floatval} 折优惠</li>
-			</if>
-			<li>实付金额：${pigcms{$order['price']|floatval} 元<if condition="$config.open_extra_price eq 1">+{pigcms{$order.extra_price}{pigcms{$config.extra_price_alias_name}</if></li>
-		</ul>
-		<ul class="box">
-			<if condition="$order['score_used_count']">
-			<li>使用{pigcms{$config.score_name}：{pigcms{$order['score_used_count']} </li>
-			<li>{pigcms{$config.score_name}抵现：${pigcms{$order['score_deducte']|floatval} 元</li>
-			</if>
-			
-			<if condition="$order['card_give_money'] gt 0">
-			<li>会员卡余额：${pigcms{$order['card_give_money']|floatval} 元</li>
-			</if>
-			
-			<if condition="$order['merchant_balance'] gt 0">
-			<li>商家余额：${pigcms{$order['merchant_balance']|floatval} 元</li>
-			</if>
-			<if condition="$order['balance_pay'] gt 0">
-			<li>平台余额：${pigcms{$order['balance_pay']|floatval} 元</li>
-			</if>
-			<if condition="$order['payment_money'] gt 0">
-			<li>在线支付：${pigcms{$order['payment_money']|floatval} 元</li>
-			</if>
-			
-			<if condition="$order['card_id']">
-			<li>店铺优惠券金额：${pigcms{$order['card_price']} 元</li>
-			</if>
-			<if condition="$order['coupon_id']">
-			<li>平台优惠券金额：${pigcms{$order['coupon_price']} 元</li>
-			</if>
-			<if condition="$order['pay_type'] eq 'offline' AND empty($order['third_id'])">
-			<li>线下需支付：${pigcms{$order['offline_price']|floatval}元</li>
-			</if>
-		</ul>
-		<ul class="box">
-			<li>支付状态：{pigcms{$order['pay_status']}</li>
-			<li>支付方式：{pigcms{$order['pay_type_str']}</li>
-			<li>订单状态：{pigcms{$order['status_str']}</li>
-			<if condition="($order['paid'] && $order['status'] eq 0) OR ($order['is_pick_in_store'] eq 2 AND $order['paid'] AND !in_array($order['status'], array(2,3,4,5)))">
-			<li>消费二维码：<span id="see_storestaff_qrcode" style="color:#FF658E;">查看二维码</span></li>
-			</if>
-		</ul>
-		<ul class="box">
-			<if condition="$order['cue_field']">
-			<volist name="order['cue_field']" id="cue">
-			<li>{pigcms{$cue['title']}：{pigcms{$cue['txt']}</li>
-			</volist>
-			</if>
-			<if condition="$order['invoice_head']">
-			<li>发票信息：</li>
-			<li>{pigcms{$order['invoice_head']}</li>
-			</if>
-			<li>备注</li>
-			<li>{pigcms{$order['desc']|default="无"}</li>
-		</ul>
-	</section>
-	<if condition="$order['status'] lt 3 OR ($order['paid'] eq 1 AND $order['status'] eq 5) OR ($order['paid'] eq 0 AND $order['status'] eq 7)">
-	<footer class="order_fixed">
-		<div class="fixed">
-			<if condition="$order['paid'] eq 0">
-				<div style="float: left">
-					<a href="{pigcms{:U('Pay/check',array('order_id' => $order['order_id'], 'type'=>'shop'))}" class="comm_btn" style="background-color: #5fb038;">支付订单</a>
-				</div>
-			</if>
-			<div style="float: right">
-			<php> if($config['open_sub_mchid'] && $now_merchant['open_sub_mchid'] && $now_merchant['sub_mch_id'] > 0 && $now_merchant['sub_mch_refund'] == 0 && $order['is_own'] == 2 && $order['pay_type'] == 'weixin'){</php>
-					<a class="comm_btn" href="tel:{pigcms{$now_merchant.phone}">该订单不能退款，请联系商家 【{pigcms{$now_merchant.name}】</a>
-				<php>}else{</php>
-				
-				<if condition="$order['paid'] eq 0">
-				<a class="comm_btn" href="{pigcms{:U('Shop/orderdel', array('mer_id' => $order['mer_id'], 'store_id' => $order['store_id'], 'order_id' => $order['order_id']))}">取消订单</a> 
-				<elseif condition="$order['paid'] eq 1 AND $order['status'] lt 2" />
-				<a class="comm_btn" href="{pigcms{:U('My/shop_order_refund', array('mer_id' => $order['mer_id'], 'store_id' => $order['store_id'], 'order_id' => $order['order_id']))}">取消订单</a> 
-				<elseif condition="$order['paid'] eq 1 AND $order['status'] eq 5" />
-				<a class="comm_btn" href="{pigcms{:U('My/shop_order_refund', array('mer_id' => $order['mer_id'], 'store_id' => $order['store_id'], 'order_id' => $order['order_id']))}">退款</a> 
-				</if>
-				<php>}</php>
-			</div>
-			<if condition="$order['status'] eq 2">
-				<div style="float: right">
-					<a href="{pigcms{:U('My/shop_feedback',array('order_id' => $order['order_id']))}" class="comm_btn">去评价</a>
-				</div>	
-			</if>
-		</div>
-	</footer>
-	</if>
+</section>
 </div>
-<script type="text/javascript" src="{pigcms{:C('JQUERY_FILE_190')}" charset="utf-8"></script>
-<script type="text/javascript" src="{pigcms{$static_path}layer/layer.m.js" charset="utf-8"></script>
-<script type="text/javascript">
-var order_id = {pigcms{$order['order_id']};
-var status = {pigcms{$order['status']};
-var order_status = {pigcms{$order['order_status']};
-$(document).ready(function(){
-	setInterval("ostatus()", 5000);//1000为1秒钟
-});
-
-function ostatus(){
-	$.get('wap.php?c=Shop&a=orderstatus', {'order_id':order_id}, function(response){
-		if (response.error_code == false) {
-			var data = response.data;
-			if (status < data.status) {
-				if (data.status == 1) {
-					order_status = data.order_status;
-					status = data.status;
-					tips('店员已经接单了！');
-				}
-			} else if (order_status < data.order_status) {
-				if (data.order_status == 2) {
-					order_status = data.order_status;
-					status = data.status;
-					tips('配送员已接单！');
-				} else if (data.order_status == 3) {
-					order_status = data.order_status;
-					status = data.status;
-					tips('配送员已经取货！');
-				} else if (data.order_status == 4) {
-					order_status = data.order_status;
-					status = data.status;
-					tips('配送员已经将您的货物送达！');
-				} else if (data.order_status == 5) {
-					order_status = data.order_status;
-					status = data.status;
-					tips('您已经确认收货！');
-				}
-			}
-		}
-	}, 'json');
-}
-
-
-function tips(msg){
-	layer.open({
-		title: [
-		        '状态修改提示',
-		        'background-color:#8DCE16; color:#fff;'
-		    ],
-	    content: msg,
-	    btn: ['确认'],
-	    shadeClose: false,
-	    yes: function(){
-	        location.href='wap.php?c=Shop&a=status&order_id=' + order_id;
-	    }
-	});
-}
-
-if(/(pigcmso2oreallifeapp)/.test(navigator.userAgent.toLowerCase()) || (/(pigcmso2olifeapp)/.test(navigator.userAgent.toLowerCase()) && /(life_app)/.test(navigator.userAgent.toLowerCase()))){
-	var reg = /versioncode=(\d+),/;
-	var arr = reg.exec(navigator.userAgent.toLowerCase());
-	if(arr == null){
-		
-	}else{
-		var version = parseInt(arr[1]);
-		if(version >= 50){
-			if(/(iphone|ipad|ipod)/.test(navigator.userAgent.toLowerCase())){
-				if(version >= 100){
-					$('body').append('<iframe src="pigcmso2o://hideWebViewHeader/false" style="display:none;"></iframe>');
-				}
-				$('#goBackUrl').click(function(){
-					if(version >= 100){
-						$('body').append('<iframe src="pigcmso2o://closeWebView" style="display:none;"></iframe>');
-					}else{
-						$('body').append('<iframe src="pigcmso2o://webViewGoBack" style="display:none;"></iframe>');
-					}
-					return false;
-				});
-			}else{
-				if(version >= 100){
-					window.lifepasslogin.hideWebViewHeader(false);
-				}
-				$('#goBackUrl').click(function(){
-					if(version >= 100){
-						window.lifepasslogin.closeWebView();
-					}else{
-						window.lifepasslogin.webViewGoBack();
-					}
-					return false;
-				});
-			}
-		}
-	}
-}
-
-function appbackmonitor(){
-	if(/(iphone|ipad|ipod)/.test(navigator.userAgent.toLowerCase())){
-		$('body').append('<iframe src="pigcmso2o://closeWebView" style="display:none;"></iframe>');
-	}else{
-		window.lifepasslogin.closeWebView();
-	}
-}
-</script>
-<include file="kefu" />
-{pigcms{$hideScript}
 </body>
 </html>
+
+<script>
+    $(document).ready(function(){
+        $('.consumes ul li').click(function(){
+            location.href = $(this).data('url');
+        });
+        $(document).on('click','.phone',function(event){
+            if($(this).attr('data-phone')){
+                var tmpPhone = $(this).attr('data-phone').split(' ');
+                var msg_dom = '<div class="msg-bg"></div>';
+                msg_dom+= '<div id="msg" class="msg-doc msg-option">';
+                msg_dom+= '<div class="msg-bd">'+($(this).data('phonetitle') ? $(this).data('phonetitle') : "{pigcms{:L('_CALL_PHONE_')}")+'</div>';
+                for(var i in tmpPhone){
+                    msg_dom+= '<div class="msg-option-btns"><a class="btn msg-btn" href="tel:'+tmpPhone[i]+'">'+(tmpPhone.length == 1 && $(this).data('phonetip') ? $(this).data('phonetip') : tmpPhone[i])+'</a></div>';
+                }
+                msg_dom+= '     <button class="btn msg-btn-cancel" type="button">{pigcms{:L('_B_D_LOGIN_CANCEL_')}</button>';
+                msg_dom+= '</div>';
+                $('body').append(msg_dom);
+            }
+            event.stopPropagation();
+        });
+        $(document).on('click','.msg-btn-cancel,.msg-bg',function(){
+            $('.msg-doc,.msg-bg').remove();
+        });
+    });
+    $('#back_span').click(function () {
+        window.history.go(-1);
+    });
+</script>

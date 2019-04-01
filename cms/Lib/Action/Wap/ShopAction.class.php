@@ -2803,7 +2803,7 @@ class ShopAction extends BaseAction{
 	/**
 	 * 订单状态列表
 	 */
-	public function order_detail()
+	public function status()
 	{
 		$order_id = isset($_GET['order_id']) ? intval($_GET['order_id']) : 0;
 		if ($order = D('Shop_order')->get_order_detail(array('order_id' => $order_id, 'uid' => $this->user_session['uid']))) {
@@ -2846,7 +2846,7 @@ class ShopAction extends BaseAction{
 			$this->assign('status', $status);
 			$this->assign('order_id', $order_id);
 			$this->assign('order', $order);
-			$this->display('status_new');
+			$this->display();
 		} else {
 			$this->error_tips('错误的订单信息！');
 		}
@@ -2998,7 +2998,7 @@ class ShopAction extends BaseAction{
 	/**
 	 * 订单详情
 	 */
-    public function status()
+    public function order_detail()
     {
         $order_id = isset($_GET['order_id']) ? intval($_GET['order_id']) : 0;
         $order = D("Shop_order")->get_order_detail(array('order_id' => $order_id, 'uid' => $this->user_session['uid']));
@@ -3106,7 +3106,7 @@ class ShopAction extends BaseAction{
 //             print_r($arr);die;
             $this->assign($arr);
             $this->assign('store', $store);
-            $this->display('order_detail_new');
+            $this->display();
         } else {
             $this->error_tips('订单信息错误！');
         }

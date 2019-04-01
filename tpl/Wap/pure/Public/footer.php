@@ -27,7 +27,7 @@
                 <a <?php if(ACTION_NAME == 'shop_order_list'){ echo 'class="hover"'; }?> href="{pigcms{:U('My/shop_order_list')}"><em class="store"></em></a>
             </li>
 			<li>
-				<a <?php if(in_array(MODULE_NAME,array('My','Login'))){ echo 'class="active"'; }?> href="{pigcms{:U('My/index')}"><em class="my"></em></a>
+				<a <?php if(in_array(MODULE_NAME,array('My','Login')) && ACTION_NAME != 'shop_order_list'){ echo 'class="active"'; }?> href="{pigcms{:U('My/index')}"><em class="my"></em></a>
 			</li>
 		</ul>
     </if>
