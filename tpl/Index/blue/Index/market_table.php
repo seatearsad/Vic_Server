@@ -124,6 +124,40 @@
         height: 100px;
         background-color: #F5F5F5;
     }
+    .policy{
+        margin-top: 20px;
+        text-align: center;
+    }
+    .policy span{
+        color: #ffa52d;
+        cursor: pointer;
+    }
+    input.mt[type="radio"], input.mt[type="checkbox"] {
+        -webkit-appearance: none;
+        width: 1.1rem;
+        height: 1.1rem;
+        margin: -.07rem 0;
+        border-radius: 50%;
+        border: .02rem solid #ddd8ce;
+        text-align: center;
+        vertical-align: middle;
+        line-height: 1.1rem;
+        outline: 0;
+    }
+    input.mt[type="checkbox"]:checked {
+        background-color: #ffa52d;
+        border: 0;
+        color: #fff;
+    }
+    @font-face {
+        font-family:base_icon;
+        src:url("./tpl/Wap/default/static/css/fonts/base.woff") format("woff"),url("./tpl/Wap/default/static/css/fonts/base.otf")
+    }
+    input.mt[type="checkbox"]:checked::after {
+        content: "✓";
+        font-size: 1rem;
+        font-family: base_icon;
+    }
 </style>
 <body>
     <div class="header"></div>
@@ -272,7 +306,10 @@
         <p>
             <textarea name="comments"></textarea>
         </p>
-
+        <div class="policy">
+            <input type="checkbox" name="default" value="1" class="mt" checked="checked">
+            By clicking the box you are agree to out "<span id="checkPolicy">Privacy Policy</span>"
+        </div>
         <div class="submit">Submit</div>
     </div>
 
@@ -282,42 +319,69 @@
     <script src="{pigcms{$static_public}js/laytpl.js"></script>
     <script src="{pigcms{$static_public}js/layer/layer.js"></script>
 <script>
-    $('.submit').click(function () {
-        var send_data = {};
-        var is_tip = false;
-        var check_list = ['name','address','city','postal_code','email','phone'];
-        $('.table').find('input').each(function () {
-            var val = '';
-            if($(this).attr('type') == 'radio'){
-                var t_n = $(this).attr('name');
-                val = $('input:radio[name='+t_n+']:checked').val();
-            }else{
-                val = $(this).val();
-            }
-
-            send_data[$(this).attr('name')] = val;
-            if ($.inArray($(this).attr('name'), check_list) >= 0 && val == '') {
-                is_tip = true;
-                $(this).focus();
-            }
-        });
-        send_data['comments'] = $('textarea[name=comments]').val();
-        if(is_tip){
-            layer.msg('Please fill in the necessary information');
-        }else {
-            layer.load(2);
-            $.post("{pigcms{:U('market_table')}", send_data, function (data) {
-                layer.closeAll();
-                if (data.status == 1) {
-                    layer.msg('We are processing your application now,will get back to you soon.Stay turned!');
-                    $('.submit').css('background-color','#666666');
-                    $('.submit').unbind();
-                } else {
-
-                }
-            }, 'json');
+    $(function () {
+        if(!$('input[name="default"]').is(':checked')){
+            $('.submit').css('background-color', '#666666');
+            $('.submit').unbind();
         }
     });
+
+    $('#checkPolicy').click(function () {
+        window.open("./intro/2.html");
+    });
+
+    $('input[name="default"]').click(function () {
+        if($('input[name="default"]').is(':checked')){
+            $('.submit').css('background-color', '#ffa52d');
+            $('.submit').bind('click',submit_func);
+        }else{
+            $('.submit').css('background-color', '#666666');
+            $('.submit').unbind();
+        }
+    });
+
+    $('.submit').click(function () {
+        submit_func();
+    });
+
+    function submit_func() {
+        if($('input[name="default"]').is(':checked')) {
+            var send_data = {};
+            var is_tip = false;
+            var check_list = ['name', 'address', 'city', 'postal_code', 'email', 'phone'];
+            $('.table').find('input').each(function () {
+                var val = '';
+                if ($(this).attr('type') == 'radio') {
+                    var t_n = $(this).attr('name');
+                    val = $('input:radio[name=' + t_n + ']:checked').val();
+                } else {
+                    val = $(this).val();
+                }
+
+                send_data[$(this).attr('name')] = val;
+                if ($.inArray($(this).attr('name'), check_list) >= 0 && val == '') {
+                    is_tip = true;
+                    $(this).focus();
+                }
+            });
+            send_data['comments'] = $('textarea[name=comments]').val();
+            if (is_tip) {
+                layer.msg('Please fill in the necessary information');
+            } else {
+                layer.load(2);
+                $.post("{pigcms{:U('market_table')}", send_data, function (data) {
+                    layer.closeAll();
+                    if (data.status == 1) {
+                        layer.msg('We are processing your application now,will get back to you soon.Stay turned!');
+                        $('.submit').css('background-color', '#666666');
+                        $('.submit').unbind();
+                    } else {
+
+                    }
+                }, 'json');
+            }
+        }
+    }
 </script>
 </body>
 </html>
