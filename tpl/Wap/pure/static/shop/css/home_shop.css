@@ -5,15 +5,15 @@
     overflow: hidden;
     position: relative;
     border-bottom: 1px solid #f1f1f1;
-    padding: 8px 3px;
+    padding: 10px 10px;
 	margin-bottom:8px;
 }
 .dealcard dd:last-child{
 	margin-bottom:0px;
 }
 .dealcard .dealcard-img {
-	width: 90px;
-    height: 60px;
+	width: 120px;
+    height: 75px;
     border-radius: 2px;
     float: left;
     position: absolute;
@@ -33,11 +33,12 @@
     text-align: center;
 }
 .dealcard .dealcard-block-right {
-    margin-left: 100px;
+    margin-left: 130px;
+	height: 75px;
 }
 .dealcard .brand {
-    font-size: 16px;
-    line-height: 24px;
+    font-size: 1.2em;
+    line-height: 28px;
     color: #333;
 }
 .dealcard .location-right{

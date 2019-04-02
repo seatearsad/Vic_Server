@@ -37,48 +37,47 @@ $(function(){
 			}
 		},1000);
 	}
-	$('#container').css({top:'50px'});
 	var upIcon = $("#up-icon"),
 		downIcon = $("#pullDown");
 	// myScroll = new IScroll('#container', { probeType: 3,disableMouse:true,disablePointer:true,mouseWheel: false,scrollX: false, scrollY:true,click:false,scrollbars:true,shrinkScrollbars: 'scale',resizeScrollbars:false,fadeScrollbars:true});
 	// myScroll = new IScroll('#container', { probeType: 3,disableMouse:true,disablePointer:true,mouseWheel: false,scrollX: false, scrollY:true,click:false,scrollbars:false,useTransform:false,useTransition:false});
-	myScroll = new IScroll('#container', { probeType: 3,disableMouse:true,disablePointer:true,mouseWheel: false,scrollX: false, scrollY:true,click:iScrollClick(),scrollbars:false});
-	myScroll.on("scroll",function(){
-		if(this.y >= 50){
-			if(!downIcon.hasClass("reverse_icon")) downIcon.addClass("reverse_icon").find('.pullDownLabel').html('释放可以刷新');
-			return "";
-		}else if(this.y < 50 && this.y > 0){
-			if(downIcon.hasClass("reverse_icon")) downIcon.removeClass("reverse_icon").find('.pullDownLabel').html('下拉可以刷新');
-			return "";
-		}
-
-		/*if(maxY >= 50){
-			!upHasClass && upIcon.addClass("reverse_icon");
-			return "";
-		}else if(maxY < 50 && maxY >=0){
-			upHasClass && upIcon.removeClass("reverse_icon");
-			return "";
-		}*/
-	});
+	// myScroll = new IScroll('#container', { probeType: 3,disableMouse:true,disablePointer:true,mouseWheel: false,scrollX: false, scrollY:true,click:iScrollClick(),scrollbars:false});
+	// myScroll.on("scroll",function(){
+	// 	if(this.y >= 60){
+	// 		if(!downIcon.hasClass("reverse_icon")) downIcon.addClass("reverse_icon").find('.pullDownLabel').html('释放可以刷新');
+	// 		return "";
+	// 	}else if(this.y < 60 && this.y > 0){
+	// 		if(downIcon.hasClass("reverse_icon")) downIcon.removeClass("reverse_icon").find('.pullDownLabel').html('下拉可以刷新');
+	// 		return "";
+	// 	}
+    //
+	// 	/*if(maxY >= 50){
+	// 		!upHasClass && upIcon.addClass("reverse_icon");
+	// 		return "";
+	// 	}else if(maxY < 50 && maxY >=0){
+	// 		upHasClass && upIcon.removeClass("reverse_icon");
+	// 		return "";
+	// 	}*/
+	// });
 //http://www.zhangyunling.com/study/slideUpDownRefresh/version_1/iscroll-test.html
-	myScroll.on("slideDown",function(){
-		if(this.y > 50){
-			//alert("slideDown");
-			$('#container').css({'bottom':0});
-			$('.footerMenu,#pullDown').hide();
-			$('#scroller').animate({'top':$(window).height()+'px'},function(){
-				upIcon.removeClass("reverse_icon");
-				pageLoadTip();
-				window.addEventListener("pagehide", function(){
-					$('#container').css({'bottom':'49px'});
-					$('#scroller').css({'top':'0px'});
-					$('.footerMenu,#pullDown').show();
-					pageLoadTipHide();
-				},false);
-				window.location.href =window.location.href;
-			});
-		}
-	});
+// 	myScroll.on("slideDown",function(){
+// 		if(this.y > 60){
+// 			//alert("slideDown");
+// 			$('#container').css({'bottom':0});
+// 			$('.footerMenu,#pullDown').hide();
+// 			$('#scroller').animate({'top':$(window).height()+'px'},function(){
+// 				upIcon.removeClass("reverse_icon");
+// 				pageLoadTip();
+// 				window.addEventListener("pagehide", function(){
+// 					$('#container').css({'bottom':'49px'});
+// 					$('#scroller').css({'top':'0px'});
+// 					$('.footerMenu,#pullDown').show();
+// 					pageLoadTipHide();
+// 				},false);
+// 				window.location.href =window.location.href;
+// 			});
+// 		}
+// 	});
 
 	/*myScroll.on("slideUp",function(){
 		if(this.maxScrollY - this.y > 50){
@@ -198,7 +197,7 @@ function getRecommendList(){
 		if(like_page >= guess_num){
 			$("#moress").remove();
 		}
-		myScroll.refresh();
+		//myScroll.refresh();
 	});
 }
 function format_time(time){

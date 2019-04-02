@@ -197,18 +197,18 @@ $(function(){
 	});
 	
 	/*A标签*/
-	$(document).on('click','a',function(){
-		if($(this).data('nobtn')){
-			return false;
-		}
-		if(typeof(noAnimate) == "undefined"){
-			var href = $(this).attr('href');
-			if(href && href.substr(0,3) != 'tel' && href.substr(0,10) != 'javascript'){
-				redirect(href,$(this).data('url-type'));
-				return false;
-			}
-		}
-	});
+	// $(document).on('click','a',function(){
+	// 	if($(this).data('nobtn')){
+	// 		return false;
+	// 	}
+	// 	if(typeof(noAnimate) == "undefined"){
+	// 		var href = $(this).attr('href');
+	// 		if(href && href.substr(0,3) != 'tel' && href.substr(0,10) != 'javascript'){
+	// 			redirect(href,$(this).data('url-type'));
+	// 			return false;
+	// 		}
+	// 	}
+	// });
 	
 	/*电话按钮事件*/
 	// if($('.phone').size() > 0){

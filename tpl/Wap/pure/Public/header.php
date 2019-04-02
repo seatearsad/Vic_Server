@@ -1,4 +1,3 @@
-<script type="text/javascript" src="{pigcms{:C('JQUERY_FILE_190')}" charset="utf-8"></script>
 <style>
     *{
         margin: 0px;

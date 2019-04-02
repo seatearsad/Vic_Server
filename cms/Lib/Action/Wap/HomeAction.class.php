@@ -162,6 +162,20 @@ class HomeAction extends BaseAction{
 					break;
 			}
 		}
+		//garfunkel add
+        //获取顶级分类
+        $category = D('Shop_category')->field(true)->where(array('cat_fid'=>0))->select();
+        $nav_list = array();
+        foreach ($category as $v){
+            $nav['title'] = lang_substr($v['cat_name'],C('DEFAULT_LANG'));
+            $nav['image'] = $this->config['site_url'].'/static/images/category/web/'.$v['cat_url'].'.png';
+            $nav['id'] = $v['cat_id'];
+
+            $nav_list[] = $nav;
+        }
+        $arr['nav'] = $nav_list;
+        $this->assign('category',$nav_list);
+        //
 		if($this->config['show_scroll_msg']){
 			$scroll_msg = D('Scroll_msg')->get_msg();
 			$this->assign('scroll_msg',$scroll_msg);

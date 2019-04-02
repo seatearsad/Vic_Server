@@ -304,10 +304,10 @@
                     <div class="desc_img"></div>
                     <div class="desc_txt">
                         <div class="desc_title">
-                            1 Various categories to choose from and get you always connected
+                            {pigcms{:L('_NEW_INDEX_APP_T_1_')}
                         </div>
                         <div class="desc_memo">
-                            food delivery, local services and activities make your life so fun and exciting, best user experience.
+                            {pigcms{:L('_NEW_INDEX_APP_D_1_')}
                         </div>
                     </div>
                 </div>
@@ -315,10 +315,10 @@
                     <div class="desc_img"></div>
                     <div class="desc_txt">
                         <div class="desc_title">
-                            2 Various categories to choose from and get you always connected
+                            {pigcms{:L('_NEW_INDEX_APP_T_2_')}
                         </div>
                         <div class="desc_memo">
-                            food delivery, local services and activities make your life so fun and exciting, best user experience.
+                            {pigcms{:L('_NEW_INDEX_APP_D_2_')}
                         </div>
                     </div>
                 </div>
@@ -326,10 +326,10 @@
                     <div class="desc_img"></div>
                     <div class="desc_txt">
                         <div class="desc_title">
-                            3 Various categories to choose from and get you always connected
+                            {pigcms{:L('_NEW_INDEX_APP_T_3_')}
                         </div>
                         <div class="desc_memo">
-                            food delivery, local services and activities make your life so fun and exciting, best user experience.
+                            {pigcms{:L('_NEW_INDEX_APP_D_3_')}
                         </div>
                     </div>
                 </div>
@@ -480,6 +480,9 @@
         $.cookie('shop_select_address', place.formatted_address,{expires:700,path:"/"});
         $.cookie('shop_select_lng', place.geometry.location.lng(),{expires:700,path:"/"});
         $.cookie('shop_select_lat', place.geometry.location.lat(),{expires:700,path:"/"});
+        //wap
+        $.cookie('userLocationLong',place.geometry.location.lng(),{expires:700,path:'/'});
+        $.cookie('userLocationLat',place.geometry.location.lat(),{expires:700,path:'/'});
     }
 </script>
 </html>

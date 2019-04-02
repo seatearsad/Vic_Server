@@ -69,7 +69,7 @@ class GroupserviceAction extends BaseAction{
 			$cat_id = 0;
 			$cat_fid = 0;
 
-			if($_GET['lat'] != 'null' && $_GET['long'] != 'null'){
+			if($_GET['lat'] != 'null' && $_GET['lat'] != 'undefined' && $_GET['long'] != 'null' && $_GET['long'] != 'undefined'){
 				$lat = $_GET['lat'];
 				$long = $_GET['long'];
 			}
@@ -112,6 +112,13 @@ class GroupserviceAction extends BaseAction{
                 		//
 				$temp['delivery_system'] = $row['deliver_type'] == 0 || $row['deliver_type'] == 3 ? true : false;//是否是平台配送
                 $temp['is_close'] = 1;
+
+                $keywords = D('Keywords')->where(array('third_type' => 'Merchant_store', 'third_id' => $row['store_id']))->select();
+                $str = "";
+                foreach ($keywords as $key) {
+                    $str .= $key['keyword'] . " ";
+                }
+                $temp['keywords'] = $str;
 
 //				if ($row['open_1'] == '00:00:00' && $row['close_1'] == '00:00:00') {
 //					$temp['time'] = '24小时营业';

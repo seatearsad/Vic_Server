@@ -267,20 +267,20 @@
         <div class="desc_img"></div>
         <div class="desc_txt">
             <div class="desc_title">
-                Various categories to choose from and get you always connected
+                {pigcms{:L('_NEW_INDEX_APP_T_1_')}
             </div>
             <div class="desc_memo">
-                food delivery, local services and activities make your life so fun and exciting, best user experience.
+                {pigcms{:L('_NEW_INDEX_APP_D_1_')}
             </div>
         </div>
     </div>
     <div class="desc_all">
         <div class="desc_txt" style="width:70%;padding-left:3%;text-align: right">
             <div class="desc_title">
-                Various categories to choose from and get you always connected
+                {pigcms{:L('_NEW_INDEX_APP_T_2_')}
             </div>
             <div class="desc_memo">
-                food delivery, local services and activities make your life so fun and exciting, best user experience.
+                {pigcms{:L('_NEW_INDEX_APP_D_2_')}
             </div>
         </div>
         <div class="desc_img" style="margin-left:1%;right: 2%;margin-top: -220px"></div>
@@ -289,10 +289,10 @@
         <div class="desc_img"></div>
         <div class="desc_txt">
             <div class="desc_title">
-                Various categories to choose from and get you always connected
+                {pigcms{:L('_NEW_INDEX_APP_T_3_')}
             </div>
             <div class="desc_memo">
-                food delivery, local services and activities make your life so fun and exciting, best user experience.
+                {pigcms{:L('_NEW_INDEX_APP_D_3_')}
             </div>
         </div>
     </div>
@@ -344,6 +344,7 @@
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&libraries=places&language=en" async defer></script>
 <script src="{pigcms{$static_public}js/laytpl.js"></script>
 <script src="{pigcms{$static_public}layer/layer.m.js"></script>
+<script src="{pigcms{$static_path}js/jquery.cookie.js"></script>
 <script>
     var desc_num = 3;
     var curr_num = 1;
@@ -441,6 +442,9 @@
         $.cookie('shop_select_address', place.formatted_address,{expires:700,path:"/"});
         $.cookie('shop_select_lng', place.geometry.location.lng(),{expires:700,path:"/"});
         $.cookie('shop_select_lat', place.geometry.location.lat(),{expires:700,path:"/"});
+        //wap
+        $.cookie('userLocationLong',place.geometry.location.lng(),{expires:700,path:'/'});
+        $.cookie('userLocationLat',place.geometry.location.lat(),{expires:700,path:'/'});
     }
 </script>
 </html>
