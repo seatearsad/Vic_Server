@@ -10,6 +10,18 @@ class ShopAction extends BaseAction{
 		}
 		$user_long_lat = D('User_long_lat')->getLocation($_SESSION['openid'],0);
 		$this->assign('user_long_lat',$user_long_lat);
+
+        $category = D('Shop_category')->field(true)->where(array('cat_fid'=>0))->select();
+        $nav_list = array();
+        foreach ($category as $v){
+            $nav['title'] = lang_substr($v['cat_name'],C('DEFAULT_LANG'));
+            $nav['image'] = $this->config['site_url'].'/static/images/category/web/'.$v['cat_url'].'.png';
+            $nav['id'] = $v['cat_id'];
+
+            $nav_list[] = $nav;
+        }
+        $this->assign('category',$nav_list);
+
 		$this->getFooterMenu();
 		$this->display();
 	}
@@ -40,6 +52,7 @@ class ShopAction extends BaseAction{
 		$this->assign('home_menu_list',$home_menu_list);
 		return array();
 	}
+
 	public function ajax_index()
 	{
 		/*最多5个*/
@@ -101,6 +114,30 @@ class ShopAction extends BaseAction{
 		);
 		echo json_encode($return);
 	}
+
+	public function ajax_cat(){
+        $cat_id = $_POST['id'];
+        $list = D('Shop_category')->field(true)->where(array('cat_fid'=>$cat_id))->select();
+        $nav_list = array();
+        foreach ($list as $v){
+            $nav['title'] = lang_substr($v['cat_name'],C('DEFAULT_LANG'));
+            $nav['id'] = $v['cat_id'];
+            $nav['url'] = '#cat-'.$cat_id.'-'.$v['cat_id'];
+            $nav_list[] = $nav;
+        }
+
+        $all['title'] = 'All';
+        $all['id'] = 0;
+        $all['url'] = '#cat-'.$cat_id;
+        array_unshift($nav_list,$all);
+
+        $return['status'] = 1;
+        $return['list'] = $nav_list;
+
+        exit(json_encode($return));
+
+    }
+
 	public function ajax_category(){
 		$return = array();
 		$return['category_list'] = D('Shop_category')->lists(true);
@@ -164,6 +201,10 @@ class ShopAction extends BaseAction{
 		$page = max(1, $page);
 		$cat_id = 0;
 		$cat_fid = 0;
+		//garfunkel add
+        $cat_id = $_GET['cat_id'];
+        $cat_fid = $_GET['cat_fid'];
+        //
 		if ($cat_url != 'all') {
 			$now_category = D('Shop_category')->get_category_by_catUrl($cat_url);
 			if ($now_category) {
@@ -390,6 +431,13 @@ class ShopAction extends BaseAction{
             if($row['store_is_close'] != 0){
                 $temp['is_close'] = 1;
             }
+
+            $keywords = D('Keywords')->where(array('third_type' => 'Merchant_store', 'third_id' => $row['store_id']))->select();
+            $str = "";
+            foreach ($keywords as $key) {
+                $str .= $key['keyword'] . " ";
+            }
+            $temp['keywords'] = $str;
             //end  @wangchuanyuan
 			$temp['coupon_list'] = array();
 			if ($row['is_invoice']) {

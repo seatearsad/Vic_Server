@@ -12,301 +12,152 @@
 		<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
 		<meta name="format-detection" content="telephone=no"/>
 		<meta name="format-detection" content="address=no"/>
-		<link rel="stylesheet" type="text/css" href="{pigcms{$static_path}shop/css/shopBase.css?t={pigcms{$_SERVER.REQUEST_TIME}"/>
 		<script type="text/javascript" src="{pigcms{:C('JQUERY_FILE_190')}" charset="utf-8"></script>
-		<script type="text/javascript" src="{pigcms{$static_public}js/jquery.lazyload.js" charset="utf-8"></script>
-		<script type="text/javascript" src="{pigcms{$static_path}js/iscroll.js?220" charset="utf-8"></script>
-		<script type="text/javascript" src="{pigcms{$static_path}js/idangerous.swiper.min.js" charset="utf-8"></script>
-		<script type="text/javascript" src="{pigcms{$static_path}js/fastclick.js" charset="utf-8"></script>
 		<script type="text/javascript" src="{pigcms{$static_path}layer/layer.m.js" charset="utf-8"></script>
-		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&libraries=places&language=zh-CN"></script>
+        <script type="text/javascript" src="{pigcms{$static_path}js/fastclick.js" charset="utf-8"></script>
 		<script type="text/javascript" src="{pigcms{$static_path}js/common.js?t={pigcms{$_SERVER.REQUEST_TIME}" charset="utf-8"></script>
-		<script type="text/javascript">
-		<if condition="$user_long_lat">var last_user_long = "{pigcms{$user_long_lat.long}",last_user_lat = "{pigcms{$user_long_lat.lat}";<else/>var last_user_long = '0',last_user_lat  = '0';</if>
-		var open_extra_price =Number("{pigcms{$config.open_extra_price}");
-		var user_long = '0',user_lat  = '0';var user_address='';var ajax_url_root = "{pigcms{$config.site_url}/wap.php?c=Shop&a=";var check_cart_url = "{pigcms{$config.site_url}/wap.php?c=Shop&a=confirm_order";var ajax_map_url = "{pigcms{$config.site_url}/index.php?g=Index&c=Map&a=suggestion&city_id={pigcms{$config.now_city}";var get_route_url = "{pigcms{:U('Group/get_route')}";var baiduToGcj02Url = "{pigcms{:U('Userlonglat/baiduToGcj02')}";var city_id="{pigcms{$config.now_city}";var cat_url="",sort_url="",type_url="";var noAnimate= true;var userOpenid="{pigcms{$_SESSION.openid}";var shopShareUrl = "{pigcms{$config.site_url}{pigcms{:U('Shop/index',array('openid'=>$_SESSION['openid']))}&shop-id=",shopReplyUrl = "{pigcms{$config.site_url}/index.php??g=Index&c=Reply&a=ajax_get_list&order_type=3&parent_id=";</script>
         <script type="text/javascript" src="{pigcms{$static_public}js/lang/{pigcms{:C('DEFAULT_LANG')}.js" charset="utf-8"></script>
-        <script type="text/javascript" src="{pigcms{$static_path}shop/js/shopBase.js?t={pigcms{$_SERVER.REQUEST_TIME}" charset="utf-8"></script>
+        <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/common.css"/>
+        <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/index.css"/>
+        <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}shop/css/home_shop.css"/>
 	</head>
+    <style>
+        #container{
+            width: 100%;
+            padding-top: 60px;
+        }
+        .cate_left,.cate_right,.sub_left,.sub_right{
+            background-image: url("./tpl/Static/blue/images/new/black_arrow.png");
+            background-size: auto 16px;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+        #category{
+            margin-top: 2px;
+        }
+        .gray_line{
+            width: 100%;
+            height: 2px;
+            margin-top: 25px;
+            margin-bottom: 25px;
+            background-color: #cccccc;
+        }
+        .gray_k{
+            width: 10%;
+            height: 2px;
+            background-color: #f4f4f4;
+            margin: -27px auto 0 auto;
+        }
+        #sub_cate{
+            width: 100%;
+            height: 30px;
+        }
+        #storeList{
+            width: 96%;
+            margin: 15px auto;
+        }
+        #storeListLoadTip{
+            width: 100%;
+            text-align: center;
+            display: none;
+        }
+    </style>
 	<body>
-		<div id="pageList" class="pageDiv" <if condition="$config['shop_show_footer']">style="padding-bottom:56px;"</if>>
-			<section id="listHeader" class="roundBg">
-				<div id="listBackBtn" class="listBackBtn hide"><div></div></div>
-				<div id="locationBtn" class="page-link" data-url="address" data-url-type="openRightFloatWindow">
-					<span class="location"></span>
-					<span id="locationText">{pigcms{:L('_BEING_POSITION_')}</span>
-					<span class="go"></span>
-				</div>
-				<div id="searchBtn" class="listSearchBtn page-link" data-url="shopSearch"><div></div></div>
-			</section>
-			<section id="listBanner" class="banner">
-				<div class="swiper-container swiper-container1">
-					<div class="swiper-wrapper"></div>
-					<div class="swiper-pagination swiper-pagination1"></div>
-				</div>
-			</section>
-			<section id="listSlider" class="slider">
-				<div class="swiper-container swiper-container2" style="height:178px;">
-					<div class="swiper-wrapper"></div>
-					<div class="swiper-pagination swiper-pagination2"></div>
-				</div>
-			</section>
-			<section id="listRecommend" class="recommend"></section>
-			<section id="listNavBox" class="navBox">
-				<ul>
-					<li class="dropdown-toggle caret category" data-nav="category">
-						<span class="nav-head-name">{pigcms{:L('_SHOP_CLASSIFICATION_')}</span>
-					</li>
-					<li class="dropdown-toggle caret sort" data-nav="sort">
-						<span class="nav-head-name">{pigcms{:L('_INTELLIGENT_SORTING_')}</span>
-					</li>
-					<li class="dropdown-toggle caret type subway" data-nav="type">
-						<span class="nav-head-name">{pigcms{:L('_TYPE_TXT_')}</span>
-					</li>
-				</ul>
-				<div class="dropdown-wrapper category">
-					<div class="dropdown-module">
-						<div class="scroller-wrapper">
-							<div id="dropdown_scroller" class="dropdown-scroller">
-								<div>
-									<ul>
-										<li class="category-wrapper" style="min-height:200px;">
-											<ul class="dropdown-list"></ul>
-										</li>
-										<li class="sort-wrapper">
-											<ul class="dropdown-list"></ul>
-										</li>
-										<li class="type-wrapper">
-											<ul class="dropdown-list"></ul>
-										</li>
-									</ul>
-								</div>
-							</div>
-							<div id="dropdown_sub_scroller" class="dropdown-sub-scroller"><div></div></div>
-						</div>
-					</div>
-				</div>
-			</section>
-			<section id="listNavPlaceHolderBox">
-			</section>
-			<section id="storeList">
-				<dl class="dealcard"></dl>
-				<div id="storeListLoadTip">{pigcms{:L('_LOADING_TXT_')}</div>
-			</section>
-			<section class="shade"></section>
-			<php>if(!$config['shop_show_footer']){$no_footer = true;$no_small_footer = true;}</php>
-			<include file="Public:footer"/>
-		</div>
-		<div id="pageShop" class="pageDiv">
-			<section id="shopHeader">
-				<div id="backBtn" class="backBtn"></div>
-				<div id="shopTitle"></div>
-				<!--div id="searchBtn" class="searchBtn"><div></div></div-->
-			</section>
-			<section id="shopBanner">
-				<div class="leftIco">
-					<div id="shopIcon"></div>
-					
-					
-				</div>
-				<div class="text">
-					<div id="deliveryText"></div>
-					<div id="shopNoticeText"></div>
-				</div>
-				<div class="discount">
-					<div class="noticeBox"><div class="notice"><div></div></div></div>
-					<span id="shopCouponText"></span>
-				</div>
-			</section>
-			<section id="shopMenuBar">
-				<ul>
-					<li class="caret product active" data-nav="product">{pigcms{:L('_PRODUCT_TXT_')}</li>
-					<li class="caret reply" data-nav="reply">{pigcms{:L('_EVALUATE_TXT_')}</li>
-					<li class="caret merchant" data-nav="merchant">{pigcms{:L('_SHOP_TXT_')}</li>
-				</ul>
-			</section>
-			<section id="shopCatBar" style="display:none;">	
-				<div class="title">
-					{pigcms{:L('_ALL_CLASSIF_')}
-				</div>
-				<div class="content">
-					<ul></ul>
-				</div>
-			</section>
-			<section id="shopContentBar">
-				<div id="shopProductBox">
-					<div id="shopProductBottomBar"><ul class="clearfix"></ul><div id="shopProductBottomLine"></div></div>
-					<div id="shopProductLeftBar"><dl></dl></div>
-					<div id="shopProductRightBar"><dl></dl></div>
-					<div id="shopProductCartShade"></div>
-					<div id="shopProductCartBox"></div>
-					<div id="shopProductCart">
-						<div id="cartInfo" class="cartLeft" style="display:none;">
-							<div class="cart">
-								<div id="cartNumber">0</div>
-							</div>
-							<div class="price">{pigcms{:L('_TOTAL_TXT_')}$<span id="cartMoney">0</span></div>
-						</div>
-						<div id="emptyCart">
-							<div class="cart"></div>{pigcms{:L('_CART_EMPTY_')}
-						</div>
-						<div id="checkCart" style="display:none;">{pigcms{:L('_GOOD_CHOICE_')}</div>
-						<div id="checkCartEmpty">{pigcms{:L('_MIN_DELI_PRICE_')}</div>
-					</div>
-				</div>
-				<div id="shopReplyBox" style="display:none">
-					<div id="shopReplyDiv">
-						<ul class="clearfix">
-							<li class="active" data-tab="">{pigcms{:L('_ALL_TXT_')}(<em>0</em>)</li>
-							<li data-tab="good">{pigcms{:L('_SATISFIED_TXT_')}(<em>0</em>)</li>
-							<li data-tab="wrong">{pigcms{:L('_SATISFIED_NOT_')}(<em>0</em>)</li>
-						</ul>
-						<dl></dl>
-						<div id="noReply">{pigcms{:L('_NOT_EVALUATION_')}</div>
-						<div id="showMoreReply">{pigcms{:L('_LOAD_MORE_')}</div>
-					</div>
-				</div>
-				<div id="shopMerchantBox">
-					<dl id="shopMerchantDescBox">
-						<!--dd class="merchant more link-url">{pigcms{:L('_SHOP_WEBSITE_')}</dd-->
-						<dd class="phone more">{pigcms{:L('_SHOP_PHONE_')}</dd>
-						<dd class="address more page-link"><span></span>{pigcms{:L('_SHOP_ADDRESS_')}</dd>
-						<dd class="openTime">{pigcms{:L('_BUSINESS_TIME_')}</dd>
-						<dd class="deliveryType">{pigcms{:L('_DIST_SERVICE_')}</dd>
-						<dd class="merchantNotice">{pigcms{:L('_SHOP_NOTICE_')}</dd>
-						
-					</dl>
-					<if condition="!$merchant_link_showOther">
-						<dl id="shopMerchantLinkBox">
-							<dd class="more link-url" data-url="{pigcms{:U('My/shop_order_list')}"><span></span>{pigcms{:L('_MY_OUT_ORDER_')}</dd>
-						</dl>
-					</if>
-					<dl id="shopMerchantCouponBox">
-						<dd>{pigcms{:L('_DIST_SERVICE_')}</dd>
-						<dd>{pigcms{:L('_DIST_TIME_')}</dd>
-					</dl>
-					
-					<div class="photo_s">
-						<div class="photo">
-							<h2>{pigcms{:L('_SHOP_PHOTO_')}</h2>
-							<ul class="clearfix store_image" data-pics=""></ul>
-						</div>
-						<div class="photo">
-							<h2>{pigcms{:L('_CERTIFICATE_PHOTO_')}</h2>
-							<ul class="clearfix auth_file_image" data-pics=""></ul>
-						</div>
-					</div>
-				</div>
-				<div id="shopPageShade"></div>
-				<div id="shopPageCatShade"></div>
-				<div id="shopDetailPage" style="display:none;">
-					<div class-s="scrollerBox">
-						<div id="shopDetailpageClose" class="closeBtn"><div></div></div>
-						<div id="shopDetailPageImgbox" class="swiper-container swiper-container-productImg">
-							<div class="swiper-wrapper"></div>
-							<div class="swiper-pagination swiper-pagination-productImg"></div>
-						</div>
-						<div id="shopDetailPageTitle">
-							<div class="title">{pigcms{:L('_PRODUCT_NAME_')}</div>
-							<div class="desc">{pigcms{:L('_PRODUCT_DESC_')}</div>
-						</div>
-						<div id="shopDetailPageFormat">{pigcms{:L('_PRODUCT_STOCK_')}</div>
-						<div id="shopDetailPageBar" class="clearfix">
-							<div class="fl" id="shopDetailPagePrice">{pigcms{:L('_PRICE_TXT_')}</div>
-							<div class="fr">
-								<div id="shopDetailPageBuy">{pigcms{:L('_ADD_TO_CART_')}</div>
-								<div id="shopDetailPageNumber" style="display:none;">
-									<div class="product_btn plus"></div>
-									<div class="product_btn number">0</div>
-									<div class="product_btn min"></div>
-								</div>
-							</div>
-						</div>
-						<div id="shopDetailPageLabel">
-							<div class="tip">{pigcms{:L('_WANT_TO_NOT_')}<div class="question"></div></div>
-							<div id="shopDetailPageLabelBox"></div>
-						</div>
-						<div id="shopDetailPageContent">
-							<div class="title">{pigcms{:L('_PRODUCT_DESC_')}</div>
-							<div class="content">{pigcms{:L('_CONTENT_TXT_')}</div>
-						</div>
-					</div>
-				</div>
-			</section>
-		</div>
-		<div id="pageMap" class="pageDiv">
-			<div id="shopDetailMapClose" class="closeBtn"><div></div></div>
-			<div id="shopDetailMapBiz"></div>
-			<div id="shopDetailMapBar">
-				<span id="shopDetailMapAddress">{pigcms{:L('_ADDRESS_TXT_')}</span>
-				<a class="btn right" id="shopDetailMapAddressGo">{pigcms{:L('_LOOK_ROUTE_')}</a>
-			</div>
-		</div>
-		<div id="pageCat" class="pageDiv">
-			<section id="catHeader">
-				<div id="catBackBtn" class="backBtn"></div>
-				<span id="catTitle">{pigcms{:L('_CLASSIFICATION_TXT_')}</span>
-				<div id="catSearchBtn" class="listSearchBtn page-link" data-url="shopSearch"><div></div></div>
-			</section>
-			<div id="pageCatNav"></div>
-			<section class="shade"></section>
-			<section id="storeList">
-				<dl class="dealcard"></dl>
-				<div id="storeListLoadTip">{pigcms{:L('_LOADING_TXT_')}</div>
-			</section>
-		</div>
-		<div id="pageLoadTipShade" class="pageLoadTipBg">
-			<div id="pageLoadTipBox" class="pageLoadTipBox">
-				<div class="pageLoadTipLoader">
-					<div style="background-image:url({pigcms{$config.shop_load_bg});"><!--img src="{pigcms{$static_path}shop/images/pageTipImg.png"/--></div>
-				</div>
-			</div>
-		</div>
-		<div id="pageAddress" class="pageDiv">
-			<div id="pageAddressHeader" class="searchHeader">
-				<div id="pageAddressBackBtn" class="searhBackBtn"></div>
-				<div id="pageAddressSearch" class="searchBox">
-					<div class="searchIco"></div>
-					<input type="text" id="pageAddressSearchTxt" class="searchTxt" placeholder="{pigcms{:L('_PLEASE_INPUT_ADDRESS_')}" autocomplete="off"/>
-					<div class="delIco" id="pageAddressSearchDel"><div></div></div>
-				</div>
-				<div id="pageAddressSearchBtn" class="searchBtn">{pigcms{:L('_SEARCH_TXT_')}</div>
-			</div>
-			<div id="pageAddressContent" class="searchAddressList">
-				<div id="pageAddressLocationList">
-					<div class="title">{pigcms{:L('_CURR_ADDRESS_')}</div>
-					<dl class="content">
-						<dd data-long="" data-lat="" data-name="">
-							<div class="name"></div>
-						</dd>
-					</dl>
-				</div>
-				<div id="pageAddressUserList">
-					<div class="title">{pigcms{:L('_MY_ADDRESS_')}</div>
-					<dl class="content"></dl>
-				</div>
-			</div>
-			<div id="pageAddressSearchContent" class="searchAddressList" style="display:none;">
-				<dl class="content"></dl>
-			</div>
-		</div>
-		<div id="pageShopSearch" class="pageDiv">
-			<div id="pageShopSearchHeader" class="searchHeader">
-				<div id="pageShopSearchBackBtn" class="searhBackBtn"></div>
-				<div id="pageShopSearchBox" class="searchBox">
-					<div class="searchIco"></div>
-					<input type="text" id="pageShopSearchTxt" class="searchTxt" placeholder="{pigcms{:L('_INPUT_SHOP_NAME_')}" autocomplete="off"/>
-					<div class="delIco" id="pageShopSearchDel"><div></div></div>
-				</div>
-				<div id="pageShopSearchBtn" class="searchBtn">{pigcms{:L('_SEARCH_TXT_')}</div>
-			</div>
-			<div id="storeList" style="display:none;">
-				<dl class="dealcard"></dl>
-				<div id="storeListLoadTip">{pigcms{:L('_LOADING_TXT_')}</div>
-			</div>
-		</div>
-		<div class="cd-top">Top</div>
-		<include file="Shop:js_theme"/>
+    <include file="Public:header"/>
+    <div id="container">
+        <div id="category">
+            <div class="cate_left"></div>
+            <ul>
+                <volist name="category" id="vo">
+                    <a href="#cat-{pigcms{$vo['id']}">
+                        <li data-id="{pigcms{$vo['id']}">
+                            <div>
+                                <img src="{pigcms{$vo['image']}" />
+                            </div>
+                            <div>{pigcms{$vo['title']}</div>
+                        </li>
+                    </a>
+                </volist>
+            </ul>
+            <div class="cate_right"></div>
+        </div>
+        <div id="sub_cate">
+            <div class="sub_left"></div>
+            <ul>
+
+            </ul>
+            <div class="sub_right"></div>
+        </div>
+        <div class="gray_line"></div>
+        <div class="gray_k"></div>
+        <div id="storeList">
+            <dl class="dealcard"></dl>
+            <div id="storeListLoadTip">{pigcms{:L('_LOADING_TXT_')}</div>
+        </div>
+        <script id="listShopTpl" type="text/html">
+            {{# for(var i = 0, len = d.length; i < len; i++){ }}
+            <dd class="recommend-link-url" data-url="./wap.php?g=Wap&c=Shop&a=index#shop-{{ d[i].id }}" data-url-type="openRightFloatWindow">
+
+                <div class="dealcard-img imgbox">
+                    <img style="margin-left: 0px;position: absolute;"  src="{{ d[i].image }}" alt="{{ d[i].name }}">
+                </div>
+                <div class="dealcard-block-right">
+                    <div class="brand">{{ d[i].name }}</div>
+                    {{# if(d[i].delivery){ }}
+                    <div class="price">
+                        <!--span>{pigcms{:L('_MIN_DELI_PRICE_')} ${{ d[i].delivery_price }}</span-->
+                        <span class="delivery">{pigcms{:L('_DELI_PRICE_')} ${{ d[i].delivery_money }}</span>
+                        <span class="delivery">{pigcms{:L('_PACK_PRICE_')} ${{ d[i].pack_fee }}</span>
+                        {{# if(d[i].delivery_system){ }}
+                        <em class="location-right">{pigcms{:L('_PLAT_DIST_')}</em>
+                        {{# }else{ }}
+                        <em class="location-right">{pigcms{:L('_SHOP_DIST_')}</em>
+                        {{# } }}
+                    </div>
+                    {{# } }}
+                    <div class="price"><span>{{ d[i].keywords }}</span></div>
+                </div>
+                {{# if(d[i].is_close){ }}
+                <div class="is_close close_s">CLOSE</div>
+                {{# }else{ }}
+                <div class="is_close">OPEN</div>
+                {{# } }}
+                {{# if(d[i].coupon_count > 0){ }}
+                <div class="coupon {{# if(d[i].coupon_count > 2){ }}hasMore{{# } }}">
+                    <ul>
+                        {{# var tmpCouponList = parseCoupon(d[i].coupon_list,'array');  }}
+                        {{# if(tmpCouponList['invoice']){ }}
+                        <li><em class="merchant_invoice"></em>{{ tmpCouponList['invoice'] }}</li>
+                        {{# } }}
+                        {{# if(tmpCouponList['discount']){ }}
+                        <li><em class="merchant_discount"></em>{{ tmpCouponList['discount'] }}</li>
+                        {{# } }}
+                        {{# if(tmpCouponList['minus']){ }}
+                        <li><em class="merchant_minus"></em>{{ tmpCouponList['minus'] }}</li>
+                        {{# } }}
+                        {{# if(tmpCouponList['newuser']){ }}
+                        <li><em class="newuser"></em>{{ tmpCouponList['newuser'] }}</li>
+                        {{# } }}
+                        {{# if(tmpCouponList['delivery']){ }}
+                        <li><em class="delivery"></em>{{ tmpCouponList['delivery'] }}</li>
+                        {{# } }}
+                        {{# if(tmpCouponList['system_minus']){ }}
+                        <li><em class="system_minus"></em>{{ tmpCouponList['system_minus'] }}</li>
+                        {{# } }}
+                        {{# if(tmpCouponList['system_newuser']){ }}
+                        <li><em class="system_newuser"></em>{{ tmpCouponList['system_newuser'] }}</li>
+                        {{# } }}
+                    </ul>
+                    {{# if(d[i].coupon_count > 2){ }}
+                    <div class="more">{{ getLangStr('_EVENT_NUM_',d[i].coupon_count) }}</div>
+                    {{# } }}
+                </div>
+                {{# } }}
+            </dd>
+            {{# } }}
+        </script>
+    </div>
+    <include file="Public:footer"/>
 		<script type="text/javascript">
 			window.shareData = {
 				"moduleName":"Shop",
@@ -316,6 +167,246 @@
 				"tTitle": "{pigcms{$config.shop_alias_name|default="快店"} - {pigcms{$config.site_name}",
 				"tContent": "{pigcms{$config.seo_description}"
 			};
+
+			var page = 1;
+            var user_long = $.cookie('userLocationLong');
+            var user_lat = $.cookie('userLocationLat');
+
+            var is_more = false;
+
+            function showShopList(newPage) {
+                if(newPage){
+                    page = 1;
+                }
+                
+                var cat_id = 0;
+                var cat_fid = 0;
+                if(curr_sub_id != 0){
+                    cat_id = curr_sub_id;
+                    cat_fid = curr_cat_id;
+                }else{
+                    cat_id = 0;
+                    cat_fid = curr_cat_id;
+                }
+                $.getJSON("{pigcms{:U('ajax_list')}",{cat_id:cat_id,cat_fid:cat_fid,user_lat:user_lat,user_long:user_long,page:page,key:''},function(result){
+                    if(result.store_list && result.store_list.length > 0){
+                        laytpl($('#listShopTpl').html()).render(result.store_list, function(html){
+                            if(newPage){
+                                $('#storeList .dealcard').html(html);
+                                $('#storeList').show();
+                            }else{
+                                $('#storeList .dealcard').append(html);
+                            }
+                        });
+
+                        is_more = result.has_more;
+                        if(result.has_more == false){
+                            $('#storeListLoadTip').hide();
+                        }else{
+                            $('#storeListLoadTip').show();
+                        }
+                    }else{
+                        $('#storeList .dealcard').html('');
+                        is_more = false;
+                        $('#storeListLoadTip').hide();
+                    }
+                    //isSearchListShow = false;
+                    //pageLoadHides();
+                });
+            }
+
+            var base_num = 4;
+            var all_num = $('#category').find('li').length;
+            var curr_num = 4;
+            var width = $('#category').find('li').width();
+
+            if(all_num > base_num){
+                $('.cate_right').css('opacity',1);
+                $('.cate_right').bind('click',cate_right_click);
+            }
+
+            function cate_right_click() {
+                curr_num++;
+                scroll_cate();
+            }
+            function cate_left_click() {
+                curr_num--;
+                scroll_cate();
+            }
+            function scroll_cate() {
+                if(curr_num > all_num)
+                    curr_num = all_num;
+                if(curr_num < base_num)
+                    curr_num = base_num;
+
+                if(curr_num == all_num){
+                    $('.cate_right').css('opacity',0);
+                    $('.cate_right').unbind();
+                }else if(curr_num == base_num){
+                    $('.cate_left').css('opacity',0);
+                    $('.cate_left').unbind();
+                }else if(curr_num > base_num){
+                    if($('.cate_left').css('opacity') == 0){
+                        $('.cate_left').css('opacity',1);
+                        $('.cate_left').bind('click',cate_left_click);
+                    }
+                    if($('.cate_right').css('opacity') == 0){
+                        $('.cate_right').css('opacity',1);
+                        $('.cate_right').bind('click',cate_right_click);
+                    }
+                }
+                var cha_num = curr_num - base_num;
+                $('#category').find('ul').animate({scrollLeft:cha_num * width},500);
+            }
+
+            $(window).bind('hashchange', function() {
+                show_cate(window.location.hash);
+            });
+            //当前分类id
+            var curr_cat_id = 0;
+            var curr_sub_id = 0;
+            show_cate(window.location.hash);
+            function show_cate(hash) {
+                if(hash != ''){
+                    var cat_str = hash.split('#')[1].split('-');
+                    if(cat_str[0] == 'cat'){
+                        layer.open({
+                            type:2
+                        });
+                        $('#sub_cate').show();
+
+                        var cat_id = cat_str[1];
+                        if(cat_id != curr_cat_id){
+                            curr_cat_id = cat_id;
+                            $('#category').find('li').each(function () {
+                                if($(this).attr('data-id') == cat_id) {
+                                    $(this).css('background', '#f5f5f5f5');
+                                    getCateSubList(cat_id);
+                                }else{
+                                    $(this).css('background', 'none');
+                                }
+                            });
+                            if (cat_str[2]) {
+                                curr_sub_id = cat_str[2];
+                            } else {
+                                curr_sub_id = 0;
+                            }
+                        }else {
+                            layer.closeAll();
+                            //子集
+                            if (cat_str[2]) {
+                                curr_sub_id = cat_str[2];
+                            } else {
+                                curr_sub_id = 0;
+                            }
+                            $('#sub_cate').find('li').each(function () {
+                                if ($(this).attr('data-id') == curr_sub_id) {
+                                    $(this).attr('class', 'cur');
+                                } else {
+                                    $(this).removeClass();
+                                }
+                            });
+                            showShopList(true);
+                        }
+                    }else{
+                        $('#sub_cate').hide();
+                    }
+                }else{
+                    $('#sub_cate').hide();
+                }
+            }
+            
+            function getCateSubList(cat_id) {
+                $.post("{pigcms{:U('ajax_cat')}",{'id':cat_id},function(data){
+                    layer.closeAll();
+                    if(data.status == 1){
+                        addSubList(data.list);
+                        showShopList(true);
+                    }
+                },'json');
+            }
+
+            var base_width = $('#sub_cate').find('ul').width();
+            var act_width = 0;
+            var move_size = 0;
+            function addSubList(list) {
+                var html = '';
+                for(var i=0;i<list.length;i++){
+                    html += '<a href='+list[i]['url']+'>';
+                    html += '<li data-id='+list[i]['id']+'>'+list[i]['title']+'</li>';
+                    html += '</a>';
+                }
+                $('#sub_cate').find('ul').html(html);
+
+                base_width = $('#sub_cate').find('ul').width();
+                act_width = 0;
+                $('#sub_cate').find('li').each(function () {
+                    if($(this).attr('data-id') == curr_sub_id){
+                        $(this).attr('class','cur');
+                    }else{
+                        $(this).removeClass();
+                    }
+                    act_width += $(this).width()+parseInt($(this).css('padding-left'))*2;
+                });
+
+                setSubMove();
+            }
+            
+            function setSubMove() {
+                if(move_size > 0){
+                    if($('.sub_left').css('opacity') == 0){
+                        $('.sub_left').css('opacity',1);
+                        $('.sub_left').bind('click',subClickLeft);
+                    }
+                }else{
+                    $('.sub_left').css('opacity',0);
+                    $('.sub_left').unbind();
+                }
+
+                if(base_width < act_width-move_size){
+                    if($('.sub_right').css('opacity') == 0){
+                        $('.sub_right').css('opacity',1);
+                        $('.sub_right').bind('click',subClickRight);
+                    }
+                }else{
+                    $('.sub_right').css('opacity',0);
+                    $('.sub_right').unbind();
+                }
+
+                $('#sub_cate').find('ul').animate({scrollLeft:move_size},300);
+            }
+            
+            function subClickRight() {
+                move_size += base_width/5;
+                if(move_size > act_width-base_width){
+                    move_size = act_width-base_width;
+                }
+                setSubMove();
+            }
+            
+            function subClickLeft() {
+                move_size -= base_width/5;
+                if(move_size < 0){
+                    move_size = 0;
+                }
+                setSubMove();
+            }
+
+            showShopList(true);
+
+            $(window).scroll(function(){
+                var doc_height = $(document).height();
+                var scroll_top = $(document).scrollTop();
+                var window_height = $(window).height();
+
+                if(scroll_top + window_height >= doc_height){
+                    if(is_more){
+                        is_more = false;
+                        page++;
+                        showShopList(false);
+                    }
+                }
+            });
 		</script>
 		{pigcms{$shareScript}
 	</body>

@@ -188,11 +188,19 @@
         .desc_img{
             width: 220px;
             height: 440px;
-            background-image: url("./tpl/Static/blue/images/new/iphone.png");
             background-size:auto 440px ;
             background-repeat: no-repeat;
             position: absolute;
             margin-left: 30px;
+        }
+        .desc_center .desc_all:nth-child(1) .desc_img{
+            background-image: url("./tpl/Static/blue/images/new/app_1.png");
+        }
+        .desc_center .desc_all:nth-child(2) .desc_img{
+            background-image: url("./tpl/Static/blue/images/new/app_2.png");
+        }
+        .desc_center .desc_all:nth-child(3) .desc_img{
+            background-image: url("./tpl/Static/blue/images/new/app_3.png");
         }
         .desc_title{
             font-size: 32px;

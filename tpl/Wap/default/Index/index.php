@@ -140,11 +140,19 @@
         width: 27%;
         height: 215px;
         margin-top: 5px;
-        background-image: url("./tpl/Static/blue/images/new/iphone.png");
         background-size:100% auto ;
         background-repeat: no-repeat;
         position: absolute;
         margin-left: 2%;
+    }
+    .app_desc .desc_all:nth-child(1) .desc_img{
+        background-image: url("./tpl/Static/blue/images/new/app_1.png");
+    }
+    .app_desc .desc_all:nth-child(2) .desc_img{
+        background-image: url("./tpl/Static/blue/images/new/app_2.png");
+    }
+    .app_desc .desc_all:nth-child(3) .desc_img{
+        background-image: url("./tpl/Static/blue/images/new/app_3.png");
     }
     .desc_title{
         font-size: 1em;
@@ -443,6 +451,7 @@
         $.cookie('shop_select_lng', place.geometry.location.lng(),{expires:700,path:"/"});
         $.cookie('shop_select_lat', place.geometry.location.lat(),{expires:700,path:"/"});
         //wap
+        $.cookie('userLocationName', place.formatted_address,{expires:700,path:"/"});
         $.cookie('userLocationLong',place.geometry.location.lng(),{expires:700,path:'/'});
         $.cookie('userLocationLat',place.geometry.location.lat(),{expires:700,path:'/'});
     }

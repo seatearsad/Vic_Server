@@ -103,7 +103,7 @@
             <div class="cate_left"></div>
             <ul>
                 <volist name="category" id="vo">
-                    <a href="{pigcms{:U('Shop/index')}&cate_id={pigcms{$vo['id']}">
+                    <a href="{pigcms{:U('Shop/index')}&cat={pigcms{$vo['id']}">
                     <li>
                         <div>
                             <img src="{pigcms{$vo['image']}" />
@@ -113,7 +113,7 @@
                     </a>
                 </volist>
                 <volist name="category" id="vo">
-                    <a href="{pigcms{:U('Shop/index')}&cate_id={pigcms{$vo['id']}">
+                    <a href="{pigcms{:U('Shop/index')}&cat={pigcms{$vo['id']}">
                     <li>
                         <div>
                             <img src="{pigcms{$vo['image']}" />
