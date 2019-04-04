@@ -143,7 +143,7 @@
 </body>
 <script>
     $('#back_span').click(function () {
-        window.history.go(-1);
+        window.location.href = "{pigcms{:U('My/shop_order_list')}";
     });
 </script>
 </html>
