@@ -151,7 +151,7 @@
                 <elseif condition="$config.guess_content_type eq 'shop'"/>
 
                 {{# for(var i = 0, len = d.length; i < len; i++){ }}
-                <dd class="recommend-link-url" data-url="./wap.php?g=Wap&c=Shop&a=index#shop-{{ d[i].id }}" data-url-type="openRightFloatWindow">
+                <dd class="recommend-link-url" data-url="./wap.php?c=Shop&a=classic_shop&shop_id={{ d[i].id }}" data-url-type="openRightFloatWindow">
 
                     <div class="dealcard-img imgbox">
                         <img style="margin-left: 0px;position: absolute;"  src="{{ d[i].image }}" alt="{{ d[i].name }}">

@@ -704,7 +704,8 @@ header #backBtn:after {
 	height: 50px;
 	white-space: nowrap;
 	float:left;
-	overflow:hidden;
+	overflow-y:hidden;
+	overflow-x: visible;
 	display: inline;
 }
 #sub_cate ul li{

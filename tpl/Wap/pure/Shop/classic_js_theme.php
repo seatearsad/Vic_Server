@@ -213,7 +213,7 @@
 							<div class="product_text" {{# if(d[i].product_list[j].product_image == null ){ }} style="margin-left:0px" {{# } }}>
 								<div class="title">{{ d[i].product_list[j].product_name }}</div>
                                 <!--div class="sale">{{ getLangStr('_MONTH_SALE_NUM_',d[i].product_list[j].product_sale) }} {{ getLangStr('_PRAISE_TXT_') }} {{ d[i].product_list[j].product_reply }}</div-->
-                                <div class="sale">{{ getLangStr('_PRAISE_TXT_') }} {{ d[i].product_list[j].product_reply }}</div>
+                                <!--div class="sale">{{ getLangStr('_PRAISE_TXT_') }} {{ d[i].product_list[j].product_reply }}</div-->
 								{{# if(d[i].product_list[j].has_format){ }}
 									<div class="price">${{ d[i].product_list[j].product_price }}
                                         {{# if(d[i].product_list[j].deposit_price > 0){ }}
@@ -404,10 +404,12 @@
 				<img src="{{# if(d[i].avatar!= ''){}}{{ d[i].avatar }}{{# }else{ }}/static/images/portrait.jpg{{# } }}"/>
 			</div>
 			<div class="right">
-				<div class="nickname">{{ d[i].nickname }}<div class="time">{{ d[i].add_time_hi }}</div></div>
-				<div class="star">
-					{{# for(var j=1;j<=5;j++){ }}{{# if(d[i].score >= j){ }}<i class="full"></i>{{# }else{ }}<i></i>{{# } }}{{# } }}
-				</div>
+				<div class="nickname">{{ d[i].nickname }}
+                    <div class="star">
+                        {{# for(var j=1;j<=5;j++){ }}{{# if(d[i].score >= j){ }}<i class="full"></i>{{# }else{ }}<i></i>{{# } }}{{# } }}
+                    </div>
+                </div>
+                <div class="time">{{ d[i].add_time_hi }}</div>
 				<div class="content">{{ d[i].comment }}</div>
 				{{# if(d[i].goods){ }}
 					{{# var tmpGoods = d[i].goods; }}

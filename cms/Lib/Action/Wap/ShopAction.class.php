@@ -966,7 +966,12 @@ class ShopAction extends BaseAction{
         $store['isverify'] = $now_mer['isverify'];
         $store['shop_remind'] = $row['shop_remind'];
         $now_time = date('H:i:s');
-
+        $keywords = D('Keywords')->where(array('third_type' => 'Merchant_store', 'third_id' => $row['store_id']))->select();
+        $str = "";
+        foreach ($keywords as $key) {
+            $str .= $key['keyword'] . " ";
+        }
+        $store['keywords'] = $str;
 
 
 

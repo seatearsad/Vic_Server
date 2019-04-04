@@ -96,7 +96,7 @@
         </div>
         <script id="listShopTpl" type="text/html">
             {{# for(var i = 0, len = d.length; i < len; i++){ }}
-            <dd class="recommend-link-url" data-url="./wap.php?g=Wap&c=Shop&a=index#shop-{{ d[i].id }}" data-url-type="openRightFloatWindow">
+            <dd class="recommend-link-url" data-url="./wap.php?c=Shop&a=classic_shop&shop_id={{ d[i].id }}" data-url-type="openRightFloatWindow">
 
                 <div class="dealcard-img imgbox">
                     <img style="margin-left: 0px;position: absolute;"  src="{{ d[i].image }}" alt="{{ d[i].name }}">
@@ -351,29 +351,34 @@
 
                 setSubMove();
             }
+
+            $('#sub_cate').find('ul').scroll(function () {
+                move_size = $(this).scrollLeft();
+                setSubMove();
+            });
             
             function setSubMove() {
                 if(move_size > 0){
                     if($('.sub_left').css('opacity') == 0){
                         $('.sub_left').css('opacity',1);
-                        $('.sub_left').bind('click',subClickLeft);
+                        //$('.sub_left').bind('click',subClickLeft);
                     }
                 }else{
                     $('.sub_left').css('opacity',0);
-                    $('.sub_left').unbind();
+                    //$('.sub_left').unbind();
                 }
 
-                if(base_width < act_width-move_size){
+                if(base_width < act_width-move_size-10){
                     if($('.sub_right').css('opacity') == 0){
                         $('.sub_right').css('opacity',1);
-                        $('.sub_right').bind('click',subClickRight);
+                        //$('.sub_right').bind('click',subClickRight);
                     }
                 }else{
                     $('.sub_right').css('opacity',0);
-                    $('.sub_right').unbind();
+                    //$('.sub_right').unbind();
                 }
 
-                $('#sub_cate').find('ul').animate({scrollLeft:move_size},300);
+                //$('#sub_cate').find('ul').animate({scrollLeft:move_size},300);
             }
             
             function subClickRight() {
@@ -406,6 +411,11 @@
                         showShopList(false);
                     }
                 }
+            });
+
+            $(document).on('click','.recommend-link-url',function(){
+                var url = $(this).data('url');
+                window.location.href = url;
             });
 		</script>
 		{pigcms{$shareScript}

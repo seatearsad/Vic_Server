@@ -38,6 +38,190 @@
         <script type="text/javascript" src="{pigcms{$static_public}js/lang/{pigcms{:C('DEFAULT_LANG')}.js" charset="utf-8"></script>
 		<script type="text/javascript" src="{pigcms{$static_path}shop/js/shopClassicBase.js?t={pigcms{$_SERVER.REQUEST_TIME}" charset="utf-8"></script>
 	</head>
+    <style>
+        *{
+            font-family: Helvetica;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        #shopHeader{
+            position: relative;
+            background: none;
+        }
+        #shopBanner{
+            background: none;
+            margin-top: 0;
+        }
+        #shopTitle{
+            color: #333;
+        }
+        .backBtn::after{
+            border-top: 2px solid #999;
+            border-left: 2px solid #999;
+        }
+        #shopBanner .leftIco{
+            left:30px;
+        }
+        #shopBanner .leftIco div{
+            width: 60px;
+            height: 60px;
+        }
+        #shopBanner .text{
+            height: 70px;
+            padding-left: 110px;
+        }
+        #shopBanner .text div{
+            color:#999;
+            height: 20px;
+            line-height: 20px;
+        }
+        .is_close{
+            margin:10px 20px;
+            width: 50px;
+            height: 20px;
+            line-height: 20px;
+            background-color: #ffa52d;
+            text-align: center;
+            border-radius: 2px;
+            font-size: .8em;
+            color: white;
+        }
+        .close_s{
+            background-color: silver;
+        }
+        .shop_info{
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 30px;
+            height: 30px;
+            background-image: url("{pigcms{$static_path}shop/images/store_info.png");
+            background-size: 100%;
+            cursor: pointer;
+        }
+        #shopBanner::after{
+            content: none;
+        }
+        #shopProductLeftBar2{
+            width: 100%;
+            display: flex;
+            background: none;
+            border-top: 1px solid silver;
+            border-bottom: 1px solid silver;
+        }
+        .sub_left,.sub_right{
+            width: 6%;
+            height: 50px;
+            cursor: pointer;
+            opacity: 0;
+            background-image: url("./tpl/Static/blue/images/new/black_arrow.png");
+            background-size: auto 16px;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+        .sub_left{
+            -moz-transform: scaleX(-1);
+            -webkit-transform: scaleX(-1);
+            -o-transform: scaleX(-1);
+            transform: scaleX(-1);
+        }
+        #shopProductLeftBar2 dd span{
+            background: none;
+        }
+        #shopProductLeftBar2 dl{
+            margin: 0;
+            padding: 0;
+            width: 88%;
+            height: 50px;
+            white-space: nowrap;
+            float:left;
+            overflow-y:hidden;
+            overflow-x: visible;
+            display: inline;
+        }
+        #shopProductLeftBar2 dd{
+            text-align: center;
+            color: silver;
+            display: inline-block;
+            height: 100%;
+            line-height: 50px;
+            padding: 0 10px;
+            font-size: 1.2em;
+            box-sizing: initial;
+            background: none;
+        }
+        #shopProductLeftBar2 dd.active{
+            background: none;
+        }
+        #shopProductLeftBar2 dd.active span{
+            color: #ffa52d;
+        }
+        #shopProductRightBar2{
+            width: 96%;
+            float: none;
+            margin: 0 auto;
+            padding-top: 20px;
+        }
+        #shopMenuBar li.active{
+            color: #ffa52d;
+        }
+        #shopMenuBar li.active::after{
+            background-color: #ffa52d;
+        }
+        #shopProductRightBar2 .cat_name{
+            padding-left: 0;
+            text-align: center;
+            color: silver;
+            font-size: 1.2em;
+        }
+        #shopProductRightBar2 dl{
+            background: none;
+        }
+        #shopProductRightBar2 ul{
+            background-color: white;
+        }
+        #shopProductRightBar2 li .position_img{
+            width: 100px;
+        }
+        #shopProductRightBar2 li .product_text{
+            margin-left: 110px;
+            height: 60px;
+        }
+        #shopProductRightBar2 li .product_btn,#shopProductCartBox .product_btn.plus,#shopProductCartBox .product_btn.min,#shopDetailPageNumber .product_btn.plus,#shopDetailPageNumber .product_btn.min{
+            border: 1px solid #ffa52d;
+        }
+        #shopProductRightBar2 li .product_btn.plus::after,#shopProductCartBox .product_btn.plus::after,#shopDetailPageNumber .product_btn.plus::after{
+            left: 13px;
+            background-color: #ffa52d;
+        }
+        #shopProductRightBar2 li .product_btn.min::before,#shopProductRightBar2 li .product_btn.plus::before,#shopProductCartBox .product_btn.min::before,#shopProductCartBox .product_btn.plus::before,#shopDetailPageNumber .product_btn.min::before,#shopDetailPageNumber .product_btn.plus::before{
+            top: 12px;
+            left: 9px;
+            background-color: #ffa52d;
+        }
+        #shopProductCartBox dd .cartRight .price,#shopProductRightBar2 li .product_btn,#shopDetailPageBar .fl{
+            color: #ffa52d;
+        }
+        #shopProductCart #cartNumber,#shopProductCart #cartInfo .cart,#shopProductCart #checkCart,.shopCartFly,#shopDetailPageBar #shopDetailPageBuy{
+            background-color: #ffa52d;
+        }
+        #shopProductCart{
+            background-color: #949494;
+        }
+        #shopProductCartBox dt{
+            border-left: 0;
+            font-weight: bold;
+        }
+        #shopReplyBox ul li.active,#shopDetailPageFormat .row .right li.active{
+            border-color: #ffa52d;
+            color: #ffa52d;
+        }
+        #shopReplyBox .star{
+            float: right;
+        }
+        #shopReplyBox .right .time{
+            float: none;
+        }
+    </style>
 	<body>
 		<div id="pageList" class="pageDiv" <if condition="$config['shop_show_footer']">style="padding-bottom:56px;"</if>>
 			<section id="listHeader" class="roundBg">

@@ -12,7 +12,7 @@
 		<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
 		<meta name="format-detection" content="telephone=no"/>
 		<meta name="format-detection" content="address=no"/>
-		<link rel="stylesheet" type="text/css" href="{pigcms{$static_path}shop/css/shopBase.css?t={pigcms{$_SERVER.REQUEST_TIME}"/>
+		<link rel="stylesheet" type="text/css" href="{pigcms{$static_path}shop/css/shopBase.css"/>
 		<script type="text/javascript" src="{pigcms{:C('JQUERY_FILE_190')}" charset="utf-8"></script>
 		<script type="text/javascript" src="{pigcms{$static_path}js/iscroll.js?220" charset="utf-8"></script>
 		<script type="text/javascript" src="{pigcms{$static_path}js/idangerous.swiper.min.js" charset="utf-8"></script>
@@ -40,7 +40,192 @@
         <script type="text/javascript" src="{pigcms{$static_public}js/lang/{pigcms{:C('DEFAULT_LANG')}.js" charset="utf-8"></script>
 		<script type="text/javascript" src="{pigcms{$static_path}shop/js/shopClassicBaseNew.js?t={pigcms{$_SERVER.REQUEST_TIME}" charset="utf-8"></script>
 	</head>
+        <style>
+            #container{
+                width: 100%;
+                padding-top: 60px;
+            }
+            #shopHeader{
+                position: relative;
+                background: none;
+            }
+            #shopBanner{
+                background: none;
+                margin-top: 0;
+            }
+            #shopTitle{
+                color: #333;
+            }
+            .backBtn::after{
+                border-top: 2px solid #999;
+                border-left: 2px solid #999;
+            }
+            #shopBanner .leftIco{
+                left:30px;
+            }
+            #shopBanner .leftIco div{
+                width: 60px;
+                height: 60px;
+            }
+            #shopBanner .text{
+                height: 70px;
+                padding-left: 110px;
+            }
+            #shopBanner .text div{
+                color:#999;
+                height: 20px;
+                line-height: 20px;
+            }
+            .is_close{
+                margin:10px 20px;
+                width: 50px;
+                height: 20px;
+                line-height: 20px;
+                background-color: #ffa52d;
+                text-align: center;
+                border-radius: 2px;
+                font-size: .8em;
+                color: white;
+            }
+            .close_s{
+                background-color: silver;
+            }
+            .shop_info{
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                width: 30px;
+                height: 30px;
+                background-image: url("{pigcms{$static_path}shop/images/store_info.png");
+                background-size: 100%;
+                cursor: pointer;
+            }
+            #shopBanner::after{
+                content: none;
+            }
+            #shopProductLeftBar2{
+                width: 100%;
+                display: flex;
+                background: none;
+                border-top: 1px solid silver;
+                border-bottom: 1px solid silver;
+            }
+            .sub_left,.sub_right{
+                width: 6%;
+                height: 50px;
+                cursor: pointer;
+                opacity: 0;
+                background-image: url("./tpl/Static/blue/images/new/black_arrow.png");
+                background-size: auto 16px;
+                background-repeat: no-repeat;
+                background-position: center;
+            }
+            .sub_left{
+                -moz-transform: scaleX(-1);
+                -webkit-transform: scaleX(-1);
+                -o-transform: scaleX(-1);
+                transform: scaleX(-1);
+            }
+            #shopProductLeftBar2 dd span{
+                background: none;
+            }
+            #shopProductLeftBar2 dl{
+                margin: 0;
+                padding: 0;
+                width: 88%;
+                height: 50px;
+                white-space: nowrap;
+                float:left;
+                overflow-y:hidden;
+                overflow-x: visible;
+                display: inline;
+            }
+            #shopProductLeftBar2 dd{
+                text-align: center;
+                color: silver;
+                display: inline-block;
+                height: 100%;
+                line-height: 50px;
+                padding: 0 10px;
+                font-size: 1.2em;
+                box-sizing: initial;
+                background: none;
+            }
+            #shopProductLeftBar2 dd.active{
+                background: none;
+            }
+            #shopProductLeftBar2 dd.active span{
+                color: #ffa52d;
+            }
+            #shopProductRightBar2{
+                width: 96%;
+                float: none;
+                margin: 0 auto;
+                padding-top: 20px;
+            }
+            #shopMenuBar li.active{
+                color: #ffa52d;
+            }
+            #shopMenuBar li.active::after{
+                background-color: #ffa52d;
+            }
+            #shopProductRightBar2 .cat_name{
+                padding-left: 0;
+                text-align: center;
+                color: silver;
+                font-size: 1.2em;
+            }
+            #shopProductRightBar2 dl{
+                background: none;
+            }
+            #shopProductRightBar2 ul{
+                background-color: white;
+            }
+            #shopProductRightBar2 li .position_img{
+                width: 100px;
+            }
+            #shopProductRightBar2 li .product_text{
+                margin-left: 110px;
+                height: 60px;
+            }
+            #shopProductRightBar2 li .product_btn,#shopProductCartBox .product_btn.plus,#shopProductCartBox .product_btn.min{
+                border: 1px solid #ffa52d;
+            }
+            #shopProductRightBar2 li .product_btn.plus::after,#shopProductCartBox .product_btn.plus::after{
+                left: 12px;
+                background-color: #ffa52d;
+            }
+            #shopProductRightBar2 li .product_btn.min::before,#shopProductRightBar2 li .product_btn.plus::before,#shopProductCartBox .product_btn.min::before,#shopProductCartBox .product_btn.plus::before{
+                left: 8px;
+                background-color: #ffa52d;
+            }
+            #shopProductCartBox dd .cartRight .price,#shopProductRightBar2 li .product_btn{
+                color: #ffa52d;
+            }
+            #shopProductCart #cartNumber,#shopProductCart #cartInfo .cart,#shopProductCart #checkCart,.shopCartFly{
+                background-color: #ffa52d;
+            }
+            #shopProductCart{
+                background-color: #949494;
+            }
+            #shopProductCartBox dt{
+                border-left: 0;
+                font-weight: bold;
+            }
+            #shopReplyBox ul li.active{
+                border-color: #ffa52d;
+                color: #ffa52d;
+            }
+            #shopReplyBox .star{
+                float: right;
+            }
+            #shopReplyBox .right .time{
+                float: none;
+            }
+        </style>
 	<body>
+    <include file="Public:header"/>
+    <div id="container">
 		<div id="pageList" class="pageDiv" <if condition="$config['shop_show_footer']">style="padding-bottom:56px;"</if>>
 			<section id="listHeader" class="roundBg">
 				<div id="listBackBtn" class="listBackBtn hide"><div></div></div>
@@ -113,6 +298,8 @@
 			<section id="shopHeader">
 				<div id="backBtn" class="backBtn"></div>
 				<div id="shopTitle"></div>
+                <div class="is_close"></div>
+                <div class="shop_info" data-nav="merchant"></div>
 				<!--div id="searchBtn" class="searchBtn"><div></div></div-->
 			</section>
 			<section id="shopBanner">
@@ -120,13 +307,16 @@
 					<div id="shopIcon"></div>
 				</div>
 				<div class="text">
+                    <div class="star">
+                        <i class="full"></i><i></i>
+                    </div>
 					<div id="deliveryText"></div>
 					<div id="shopNoticeText"></div>
 				</div>
-				<div class="discount">
+				<!--div class="discount">
 					<div class="noticeBox"><div class="notice"><div></div></div></div>
 					<span id="shopCouponText"></span>
-				</div>
+				</div-->
 			</section>
 			<section id="shopMenuBar">
 				<ul>
@@ -146,7 +336,11 @@
 			<section id="shopContentBar">
 				<div id="shopProductBox">
 					<div id="shopProductBottomBar"><ul class="clearfix"></ul><div id="shopProductBottomLine"></div></div>
-					<div id="shopProductLeftBar2"><dl></dl></div>
+					<div id="shopProductLeftBar2">
+                        <div class="sub_left"></div>
+                        <dl></dl>
+                        <div class="sub_right"></div>
+                    </div>
 					<div id="shopProductRightBar2"><dl></dl></div>
 					<div id="shopProductCartShade"></div>
 					<div id="shopProductCartBox"></div>
@@ -303,6 +497,7 @@
 			</div>
 		</div>
 		<include file="Shop:classic_js_theme"/>
+    </div>
 		<script type="text/javascript">
 			window.shareData = {
 				"moduleName":"Shop",
@@ -312,6 +507,33 @@
 				"tTitle": "{pigcms{$config.shop_alias_name|default="快店"} - {pigcms{$config.site_name}",
 				"tContent": "{pigcms{$config.seo_description}"
 			};
+
+            var base_width = $('#shopProductLeftBar2').find('dl').width();
+            var act_width = 0;
+            var move_size = 0;
+            $('#shopProductLeftBar2').find('dl').scroll(function () {
+                move_size = $(this).scrollLeft();
+                setSubMove();
+            });
+
+            function setSubMove() {
+                if(move_size > 0){
+                    if($('.sub_left').css('opacity') == 0){
+                        $('.sub_left').css('opacity',1);
+                    }
+                }else{
+                    $('.sub_left').css('opacity',0);
+                }
+
+                if(base_width < act_width-move_size-10){
+                    if($('.sub_right').css('opacity') == 0){
+                        $('.sub_right').css('opacity',1);
+                    }
+                }else{
+                    $('.sub_right').css('opacity',0);
+                }
+                // console.log(act_width-move_size+'--'+base_width);
+            }
 		</script>
 		{pigcms{$shareScript}
 	</body>
