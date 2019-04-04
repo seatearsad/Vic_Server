@@ -199,7 +199,7 @@
                 left: 8px;
                 background-color: #ffa52d;
             }
-            #shopProductCartBox dd .cartRight .price,#shopProductRightBar2 li .product_btn{
+            #shopProductCartBox dd .cartRight .price,#shopProductRightBar2 li .product_btn,#shopProductRightBar2 li .product_text .price{
                 color: #ffa52d;
             }
             #shopProductCart #cartNumber,#shopProductCart #cartInfo .cart,#shopProductCart #checkCart,.shopCartFly{
