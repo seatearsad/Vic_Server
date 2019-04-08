@@ -65,7 +65,7 @@ class Shop_orderModel extends Model
 		$tax_price = 0;
 		$deposit_price = 0;
 		foreach ($order_content as &$trow) {
-			$trow['name'] = $trow['spec'] ? $trow['name'] . ' (' . $trow['spec'] . ')' : $trow['name'];
+			//$trow['name'] = $trow['spec'] ? $trow['name'] . ' (' . $trow['spec'] . ')' : $trow['name'];
 			$trow['money'] = floatval($trow['price'] * $trow['num']);
 			$goods = D('Shop_goods')->field(true)->where(array('goods_id'=>$trow['goods_id']))->find();
 			$trow['tax_num'] = $goods['tax_num'];
@@ -113,7 +113,10 @@ class Shop_orderModel extends Model
 					'tax_num'			=>	$merchant_store['tax_num'],
 					'tip_charge'		=>	$now_order['tip_charge'],
 					'tax_price'			=>	$tax_price,
-					'deposit_price'		=>	$deposit_price
+					'deposit_price'		=>	$deposit_price,
+					'username'          =>  $now_order['username'],
+					'phone'             =>  $now_order['userphone'],
+					'address'           =>  $now_order['address']
 			);
 		} else {
 			$order_info = array(
@@ -142,7 +145,10 @@ class Shop_orderModel extends Model
                 'tax_num'			=>	$merchant_store['tax_num'],
                 'tip_charge'		=>	$now_order['tip_charge'],
                 'tax_price'			=>	$tax_price,
-                'deposit_price'		=>	$deposit_price
+                'deposit_price'		=>	$deposit_price,
+                'username'          =>  $now_order['username'],
+                'phone'             =>  $now_order['userphone'],
+                'address'           =>  $now_order['address']
 			);
 		}
 		return array('error' => 0, 'order_info' => $order_info);

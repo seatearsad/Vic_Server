@@ -65,6 +65,7 @@ class PayAction extends BaseAction{
             }
         }
         $order_info = $now_order['order_info'];
+        //var_dump($order_info);die();
         //ADD garfunkel
         $order_info['order_name'] = lang_substr($order_info['order_name'],C('DEFAULT_LANG'));
         if($this->config['open_extra_price']==1&&($order_info['order_type']!='appoint'||$order_info['discount_status'])){

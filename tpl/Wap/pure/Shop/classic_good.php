@@ -211,7 +211,8 @@
             border-left: 0;
             font-weight: bold;
         }
-        #shopReplyBox ul li.active,#shopDetailPageFormat .row .right li.active{
+        #shopReplyBox ul li.active,#shopDetailPageFormat .row .right li.active,
+        #shopDetailPageLabel .row .right li.active{
             border-color: #ffa52d;
             color: #ffa52d;
         }
