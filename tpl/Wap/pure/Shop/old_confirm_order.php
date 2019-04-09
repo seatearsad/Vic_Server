@@ -203,43 +203,107 @@ a {
 	text-align: center;
 	word-wrap: break-word;
 }
-.container{
-    margin-top: 70px;
-}
-.user_address{
-    width: 100%;
-    background-color: white;
-    background-image: url("./tpl/Static/blue/images/wap/address.png");
-    background-repeat: no-repeat;
-    background-size: auto 40px;
-    background-position: 10px center;
-    padding: 10px 0;
-}
-.user_address div{
-    line-height: 25px;
-    margin-left: 70px;
-    font-size: 1.1em;
-}
-.menu_list li strong{
-    color: #ffa52d;
-}
-.comm_btn{
-    background-color: #ffa52d;
-}
 </style>
 </head>
 <script type="text/javascript" src="{pigcms{$static_path}shop/js/scroller.js"></script>
 <body onselectstart="return true;" ondragstart="return false;">
-<include file="Public:header"/>
 <div class="container">
 	<form name="cart_confirm_form" action="{pigcms{:U('Shop/save_order',array('store_id'=> $store['store_id'], 'mer_id' => $store['mer_id'], 'frm' => $_GET['frm'], 'village_id'=>$village_id))}" method="post">
-        <a href="{pigcms{:U('My/adress',array('buy_type' => 'shop', 'store_id'=>$store['store_id'], 'village_id'=>$village_id, 'mer_id' => $store['mer_id'], 'frm' => $_GET['frm'], 'current_id'=>$user_adress['adress_id'], 'order_id' => $order_id))}">
-        <div class="user_address">
-            <div>{pigcms{$user_adress['name']} {pigcms{$user_adress['phone']}</div>
-            <div><if condition="$user_adress['adress_id']">{pigcms{$user_adress['province_txt']} {pigcms{$user_adress['city_txt']} {pigcms{$user_adress['area_txt']} {pigcms{$user_adress['adress']} {pigcms{$user_adress['detail']}<else/>{pigcms{:L('_CLICK_ADD_NEW_A_')}</if></div>
-        </div>
-        </a>
-    <section class="menu_wrap pay_wrap">
+	<section class="menu_wrap pay_wrap">
+		<ul class="box">
+			<li>
+				<!--a class="">{pigcms{:L('_DIST_MODE_')}：</a>&nbsp;&nbsp;-->
+				<!--if condition="in_array($delivery_type, array(0, 3))">
+				<a class="btn_express <if condition="$pick_addr_id">pick_in_store_click<else />pick_in_store</if>" id="post_package">{pigcms{:L('_PLAT_DIST_')}</a>&nbsp;&nbsp;
+				</if-->
+				<if condition="in_array($delivery_type, array(1, 4))">
+				<a class="btn_express <if condition="$pick_addr_id">pick_in_store_click<else />pick_in_store</if>" id="post_package">{pigcms{:L('_SHOP_DIST_')}</a>&nbsp;&nbsp;
+				</if>
+				<if condition="$delivery_type eq 5">
+				<a class="btn_express <if condition="$pick_addr_id">pick_in_store_click<else />pick_in_store</if>" id="post_package_express">{pigcms{:L('_EXPRESS_DELI_')}</a>&nbsp;&nbsp;
+				</if>
+				<if condition="in_array($delivery_type, array(2, 3, 4))">
+				<a class="btn_express <if condition="$pick_addr_id">pick_in_store<elseif condition="$delivery_type neq 2" />pick_in_store_click<else />pick_in_store</if>" id="pick_in_store">{pigcms{:L('_SELF_DIST_')}</a>
+				</if>
+			</li>
+			<if condition="$delivery_type neq 2">
+			<li id="li_delivery" <if condition="$pick_addr_id">style="display:none"</if>>
+				<a href="{pigcms{:U('My/adress',array('buy_type' => 'shop', 'store_id'=>$store['store_id'], 'village_id'=>$village_id, 'mer_id' => $store['mer_id'], 'frm' => $_GET['frm'], 'current_id'=>$user_adress['adress_id'], 'order_id' => $order_id))}">
+					<strong>
+						<span id="showAddres"><if condition="$user_adress['adress_id']">{pigcms{$user_adress['province_txt']} {pigcms{$user_adress['city_txt']} {pigcms{$user_adress['area_txt']} {pigcms{$user_adress['adress']} {pigcms{$user_adress['detail']}<else/>{pigcms{:L('_CLICK_ADD_NEW_A_')}</if></span><br>
+						<span id="showName">{pigcms{$user_adress['name']}</span>
+						<span id="showTel">{pigcms{$user_adress['phone']}</span>
+					</strong>
+					<div><i class="ico_arrow"></i></div>
+				</a>
+			</li>
+			</if>
+			<if condition="in_array($delivery_type, array(2, 3, 4))">
+			<li id="li_pick" <if condition="$delivery_type neq 2 AND empty($pick_addr_id)">style="display:none"</if>>
+				<a href="{pigcms{:U('My/pick_address',array('buy_type' => 'shop', 'store_id'=>$store['store_id'], 'village_id'=>$village_id, 'frm' => $_GET['frm'], 'mer_id' => $store['mer_id'],'pick_addr_id' => $pick_address['pick_addr_id'], 'order_id' => $order_id))}">
+					<strong>
+						<span id="showTel">省市区：{pigcms{$pick_address['area_info']['province']} {pigcms{$pick_address['area_info']['city']} {pigcms{$pick_address['area_info']['area']}</span><br>
+						<span id="showName">电话：{pigcms{$pick_address['phone']}</span><br>
+						<span id="showAddres">地址：{pigcms{$pick_address['name']}</span>
+						<br><span id="showName" style="color:green">距离：{pigcms{$pick_address['distance']}</span>
+					</strong>
+					<div><i class="ico_arrow"></i></div>
+				</a>
+			</li>
+			</if>
+		</ul>
+		<ul class="box pay_box">
+			<li id="show_arrive_date" <if condition="$delivery_type eq 2 OR $delivery_type eq 5 OR $pick_addr_id">style="display:none"</if>>
+				<a href="javascript:void(0);" id="dateBtn" class="date">
+					<strong>{pigcms{:L('_DELI_DATE_')}</strong>
+					<span id="arriveDate">{pigcms{$arrive_date}</span>
+					<div><i class="ico_arrow"></i></div>
+				</a>
+			</li>
+			<if condition="$have_two_time">
+            <li id="two_time_select" class="line name" <if condition="$delivery_type eq 2 OR $delivery_type eq 5 OR $pick_addr_id">style="display:none"</if>>
+				<strong>{pigcms{:L('_DELI_TIME_SLOT_')}</strong>
+				<label><input type="radio" value="0" name="time_select" <if condition="$now_time_value eq 1">checked</if>>{pigcms{$time_select_1}</label>	
+				<label><input type="radio" value="1" name="time_select" <if condition="$now_time_value eq 2">checked</if>>{pigcms{$time_select_2}</label>
+            </li>
+            </if>
+			<li id="show_arrive_time" <if condition="$delivery_type eq 2 OR $delivery_type eq 5 OR $pick_addr_id">style="display:none"</if>>
+				<a href="javascript:void(0);" id="timeBtn" class="time">
+					<strong>{pigcms{:L('_DELI_TIME_')}</strong>
+					<span id="arriveTime">{pigcms{$arrive_time}</span>
+					<div><i class="ico_arrow"></i></div>
+				</a>
+			</li>
+			<li>
+				<a href="javascript:void(0);" id="remarkBtn">
+					<strong>{pigcms{:L('_NOTE_INFO_')}</strong>
+					<span id="remarkTxt">{pigcms{:L('_CLICK_ADD_NOTE_INFO_')}</span>
+					<div><i class="ico_arrow"></i></div>
+				</a>
+			</li>
+		</ul>
+		<ul class="box " <if condition="$store['is_invoice'] AND $store['invoice_price'] elt $price">style="display:block"<else/>style="display:none"</if>>
+			<li>
+				<a href="javascript:void(0);" id="invoiceBtn">
+					<strong id="invoiceTxt">点击添加发票抬头</strong>
+					<span ></span>
+					<div><i class="ico_arrow"></i></div>
+				</a>
+			</li>
+		</ul>
+		<if condition="$cue_field">
+			<ul class="box pay_box">
+				<volist name="cue_field" id="vo">
+					<li>
+						<a href="javascript:void(0);" id="cue_field_btn_{pigcms{$key}">
+							<strong>{pigcms{$vo.name}</strong>
+							<span id="cue_field_{pigcms{$key}_txt">点击填写{pigcms{$vo.name}</span>
+							<div><i class="ico_arrow"></i></div>
+						</a>
+					</li>
+				</volist>
+			</ul>
+		</if>
 		<if condition="!empty($goods)">
 		<ul class="menu_list order_list" id="orderList">
 		<volist name="goods" id="ditem">

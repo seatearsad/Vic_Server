@@ -186,6 +186,9 @@ class MonerisPay
                 $order_param['third_id'] = 0;
                 $order_param['invoice_head'] = $resp['txnNumber'];//借用发票头这个字段存储交易号
                 $order_param['tip_charge'] = $tip;
+                //garfunkel add 19.4.9
+                if($_POST['note'] && $_POST['note'] != '')
+                    $order_param['desc'] = $_POST['note'];
 
                 $result = D('Shop_order')->after_pay($order_param);
             }

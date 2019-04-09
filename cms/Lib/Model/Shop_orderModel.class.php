@@ -107,6 +107,7 @@ class Shop_orderModel extends Model
 					'packing_charge'	=>	$now_order['packing_charge'],
 					'order_content'		=>  $order_content,
 					'order_total_money'	=>	$now_order['price'],//当前需要支付的金额
+                	'goods_price'		=>	$now_order['goods_price'],
 					'order_type'		=>	'shop',
 					'extra_price'	=>	$now_order['extra_price'],
 					'real_orderid' 		=> $now_order['real_orderid'],
@@ -135,6 +136,7 @@ class Shop_orderModel extends Model
 				'order_from'		=>	$now_order['order_from'],
 				'order_content'		=>  $order_content,
 				'order_total_money'	=>	$now_order['price'],
+				'goods_price'		=>	$now_order['goods_price'],
 				'freight_charge'	=>	$now_order['freight_charge'],
                 'packing_charge'	=>	$now_order['packing_charge'],
 				'order_type'		=>	'shop',

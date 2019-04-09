@@ -573,7 +573,8 @@
                                 'rvarwap':$('input[name="rvarwap"]').val(),
                                 'coupon_id':$('input[name="coupon_id"]').val(),
                                 'tip':$('#tip_num').text().replace('$', ""),
-                                'order_type':"{pigcms{$order_info.order_type}"
+                                'order_type':"{pigcms{$order_info.order_type}",
+                                'note':$('input[name="note"]').val()
                             };
 
                             //alert(re_data['order_type']);
@@ -600,7 +601,8 @@
                                 'rvarwap':$('input[name="rvarwap"]').val(),
                                 'coupon_id':$('input[name="coupon_id"]').val(),
                                 'tip':$('#tip_num').text().replace('$', ""),
-                                'order_type':"{pigcms{$order_info.order_type}"
+                                'order_type':"{pigcms{$order_info.order_type}",
+                                'note':$('input[name="note"]').val()
                             };
                             //alert(re_data['order_type']);
                             $.post($('#moneris_form').attr('action'),re_data,function(data){
@@ -640,7 +642,8 @@
                         'coupon_id':$('input[name="coupon_id"]').val(),
                         'tip':$('#tip_num').text().replace('$', ""),
                         'order_type':"{pigcms{$order_info.order_type}",
-                        'pay_type':pay_type
+                        'pay_type':pay_type,
+                        'note':$('input[name="note"]').val()
                     };
                     $.post('{pigcms{:U("Pay/WeixinAndAli")}',re_data,function(data){
                         layer.closeAll();
@@ -738,6 +741,7 @@
     }
     .wrapper-list{
         margin-top: 70px;
+        margin-bottom: 70px;
     }
     .user_address{
         width: 100%;
@@ -811,9 +815,45 @@
         background-color: #eee;
         padding-left: 5px;
     }
+    input[type=text]{
+        border: 0;
+        background-color: #eee;
+    }
+    #tip_fee{
+        border: 0;
+        width: 90%;
+        line-height: 25px;
+        background-color: #eee;
+        padding-left: 5px;
+    }
     .note_div{
         height: 45px;
         padding-top: 7px;
+    }
+    .apply_div{
+        height: 45px;
+        padding-top: 7px;
+        display: flex;
+    }
+    .coupon_code{
+        border: 0;
+        width: 70%;
+        margin-left: 5%;
+        height:25px;
+        line-height: 25px;
+        background-color: #eee;
+        padding-left: 5px;
+    }
+    #ex_code{
+        width: 18%;
+        height: 25px;
+        line-height: 25px;
+        color: white;
+        background-color: #ffa52d;
+        text-align: center;
+        margin-left: 2%;
+        cursor: pointer;
+        border-radius: 2px;
     }
     .av_coupon{
         line-height: 30px;
@@ -870,6 +910,11 @@
         margin-left: 10px;
         margin-top: 2px;
     }
+    #tip_input{
+        width: 80%;
+        padding-left: 20px;
+        display: none;
+    }
     .tip_more{
         width:20px;
         height: 30px;
@@ -881,9 +926,58 @@
         right: 20px;
         cursor: pointer;
     }
+    #tip_label{
+        padding: 10px 0;
+    }
+    #credit{
+        margin-top: 10px;
+    }
+    a{
+        color: #333;
+    }
+    .more::after{
+        border-left: .04rem solid #999999;
+        border-bottom: .04rem solid #999999;
+    }
+    .price_list{
+        width: 90%;
+        margin: 0 auto;
+        padding: 20px 0;
+        line-height: 20px;
+    }
+    .price_list span{
+        float: right;
+    }
+    .price_total{
+        width: 100%;
+        line-height: 40px;
+        border-top: 1px solid #e5e5e5;
+        text-align: right;
+        padding-right: 5%;
+        color: #ffa52d;
+    }
+    #agree_div{
+        width: 90%;
+        margin: 0 auto;
+        padding: 20px 0;
+        line-height: 20px;
+        font-size: 1.1em;
+    }
+    #agree_div a{
+        text-decoration: underline;
+    }
+    .confirm_btn{
+        width: 50%;
+        background-color: #ffa52d;
+        color: #fff;
+        border: none;
+        margin: 20px 25%;
+        font-size: 1.2em;
+        line-height: 30px;
+        border-radius: 2px;
+    }
 </style>
 <include file="Public:header"/>
-    <div id="tips" class="tips"></div>
 <div class="wrapper-list">
     <div class="user_address">
         <div>{pigcms{$order_info['username']} {pigcms{$order_info['phone']}</div>
@@ -902,37 +996,7 @@
             </dd>
         </volist>
     </dl>
-    <div class="all_list">
-        <div class="order_note">
-            Estimated Time
-            <span class="est_time">{pigcms{:date('Y-m-d H:i:s')}</span>
-        </div>
-        <div class="note_div">
-            <input type="text" name="note" class="note_input" placeholder="Note">
-        </div>
-    </div>
-    <div class="all_list">
-        <a class="react" href="{pigcms{:U('My/select_card',($coupon_url?$coupon_url :$_GET))}&coupon_type=system" >
-        <div class="av_coupon">
-            Available Coupon
-            <span class="coupon_more"></span>
-        </div>
-        </a>
-        <?php if($system_coupon){ ?>
-            <div class="coupon_desc">
-                <php>if(C('DEFAULT_LANG') == 'zh-cn'){</php>
-                {pigcms{:replace_lang_str(L('_MAN_NUM_REDUCE_'),$system_coupon['order_money'])}{pigcms{:replace_lang_str(L('_MAN_REDUCE_NUM_'),$system_coupon['discount'])}
-                <php>}else{</php>
-                {pigcms{:replace_lang_str(L('_MAN_NUM_REDUCE_'),$system_coupon['discount'])}{pigcms{:replace_lang_str(L('_MAN_REDUCE_NUM_'),$system_coupon['order_money'])}
-                <php>}</php>
-                <span class="est_time">-${pigcms{$system_coupon['discount']}</span>
-            </div>
-        <?php }else{ ?>
-            <div class="note_div">
-                <input type="text" name="coupon_code" class="note_input" placeholder="Coupon Code">
-            </div>
-        <?php } ?>
-    </div>
+
     <form action="{pigcms{:U('Index/Pay/MonerisPay')}" method="post" id="moneris_form">
         <INPUT TYPE="HIDDEN" NAME="ps_store_id" VALUE="">
         <INPUT TYPE="HIDDEN" NAME="hpp_key" VALUE="">
@@ -957,13 +1021,44 @@
         <input type="hidden" name="balance_money" value="{pigcms{$now_user.now_money}">
         <input type="hidden" name="tip" value="">
 
-
+        <div class="all_list">
+            <div class="order_note">
+                Estimated Time
+                <span class="est_time">ASAP</span>
+            </div>
+            <div class="note_div">
+                <input type="text" name="note" class="note_input" placeholder="Note">
+            </div>
+        </div>
+        <div class="all_list">
+            <a class="react" href="{pigcms{:U('My/select_card',($coupon_url?$coupon_url :$_GET))}&coupon_type=system" >
+                <div class="av_coupon">
+                    Available Coupon
+                    <span class="coupon_more"></span>
+                </div>
+            </a>
+            <?php if($system_coupon){ ?>
+                <div class="coupon_desc">
+                    <php>if(C('DEFAULT_LANG') == 'zh-cn'){</php>
+                    {pigcms{:replace_lang_str(L('_MAN_NUM_REDUCE_'),$system_coupon['order_money'])}{pigcms{:replace_lang_str(L('_MAN_REDUCE_NUM_'),$system_coupon['discount'])}
+                    <php>}else{</php>
+                    {pigcms{:replace_lang_str(L('_MAN_NUM_REDUCE_'),$system_coupon['discount'])}{pigcms{:replace_lang_str(L('_MAN_REDUCE_NUM_'),$system_coupon['order_money'])}
+                    <php>}</php>
+                    <span class="est_time">-${pigcms{$system_coupon['discount']}</span>
+                </div>
+            <?php }else{ ?>
+                <div class="apply_div">
+                    <input type="text" name="coupon_code" class="coupon_code" placeholder="{pigcms{:L('_EXCHANGE_COUPON_')}">
+                    <div id="ex_code">{pigcms{:L('_EXCHANGE_TXT_')}</div>
+                </div>
+            <?php } ?>
+        </div>
         <div class="all_list">
         <div class="payment">
             Payment
         </div>
         <div class="pay-methods-panel">
-            <div id="normal-fieldset" class="normal-fieldset" style="height: 100%;margin-bottom: 60px;" >
+            <div class="normal-fieldset">
                 <dl class="list">
                     <volist name="pay_method" id="vo">
                         <php>if($pay_offline || $key != 'offline'){</php>
@@ -973,10 +1068,51 @@
                             <label class="mt">
                                 <!--i class="bank-icon icon-{pigcms{$key}"></i-->
                                 <span class="pay-wrapper">
-                                    <img src="{pigcms{$static_public}images/pay/{pigcms{$key}.png" style="height: 20px"/>
+                                    <img src="{pigcms{$static_public}images/pay/{pigcms{$key}.png" style="height: 25px"/>
                                     <input type="radio" class="mt" value="{pigcms{$key}"  <php>if($key == 'moneris'){</php>checked="checked"<php>}</php> name="pay_type">
                                 </span>
                             </label>
+                            <php>if($key == 'moneris'){</php>
+                            <div id="credit" class="normal-fieldset">
+                                <dl class="list">
+                                    <if condition="$card">
+                                        <div style="line-height: 20px;width: 100%;margin-bottom: 15px;">
+                                            <input type="radio" name="pay_card_type" value="0" class="mt" checked=checked> {pigcms{:L('_USE_OLD_CARD_')}
+                                        </div>
+                                        <a href="{pigcms{:U('My/credit',array('order_id'=>$order_info['order_id']))}">
+                                            <dd class="more dd-padding" style="border-bottom: 1px #cccccc solid;">
+                                                <label class="mt">
+                                                    <span class="pay-wrapper">
+                                                           {pigcms{$card['name']} -- {pigcms{$card['card_num']}
+                                                    </span>
+                                                </label>
+                                            </dd>
+                                        </a>
+                                    </if>
+                                    <dd class="dd-padding">
+                                        <div style="line-height: 20px;float:left;width: 100%;margin-bottom: 15px;">
+                                            <input type="radio" name="pay_card_type" value="1" class="mt" <if condition="!$card">checked=checked</if>> {pigcms{:L('_USE_NEW_CARD_')}
+                                        </div>
+                                        <div style="line-height: 20px;float:left;width: 100%;margin-bottom: 5px;">
+                                            <span style="float: left;width:150px;">{pigcms{:L('_CREDITHOLDER_NAME_')}：</span>
+                                            <input type="text" maxlength="20" size="20" name="name" class="form-field" id="card_name" value="" style="float: left"/>
+                                        </div>
+                                        <div style="line-height: 20px;float:left;width: 100%;margin-bottom: 5px;">
+                                            <span style="float: left;width:150px;">{pigcms{:L('_CREDIT_CARD_NUM_')}：</span>
+                                            <input type="text" maxlength="20" size="20" name="card_num" class="form-field" id="card_num" value="" style="float: left"/>
+                                        </div>
+                                        <div style="line-height: 20px;float:left;width: 100%;margin-bottom: 5px;">
+                                            <span style="float: left;width:150px;">{pigcms{:L('_EXPRIRY_DATE_')}：</span>
+                                            <input type="text" maxlength="4" size="20" name="expiry" class="form-field" id="expiry" value="" style="float: left"/>
+                                        </div>
+                                        <div style="line-height: 20px;float:left;width: 100%;margin-bottom: 5px;">
+                                            <span style="float: left;width:150px;">{pigcms{:L('_IS_SAVE_')}：</span>
+                                            <input type="checkbox" name="save" class="form-field" id="save" value="1" style="float: left;width:20px;height: 20px;"/>
+                                        </div>
+                                    </dd>
+                                </dl>
+                            </div>
+                            <php>}</php>
                         </dd>
                         <php>}</php>
                         <php>}</php>
@@ -986,8 +1122,8 @@
             </div>
         </div>
         <if condition="$order_info['order_type'] != 'recharge'">
-            <div id="tip_label" class="normal-fieldset" style="height: 100%;margin-top: -50px;margin-bottom: 60px;">
-                <dl class="list">
+            <div id="tip_label" class="normal-fieldset">
+                <dl class="list" style="border-bottom: 0;">
                     <div class="tip_title">
                         <div>{pigcms{:L('_TIP_TXT_')}</div>
                         <div id="tip_list">
@@ -1001,101 +1137,71 @@
                                 25%
                             </span>
                         </div>
+                        <div id="tip_input">
+                            $ <input type="text" id="tip_fee" name="tip_fee" size="20">
+                        </div>
                         <span class="tip_more"></span>
                     </div>
-                    <dd class="dd-padding">
-                        <div style="margin: 20px auto 5px;width: 98%">
-                            {pigcms{:L('_SELF_ENTER_TIP_')}: $ <input type="text" id="tip_fee" name="tip_fee" size="20" style="height: 25px;">
-                        </div>
-                        <div style="margin: 20px auto 5px;width: 98%;font-size: 16px;">
-                            <span>{pigcms{:L('_TIP_TXT_')}:</span><span id="tip_num">$0</span>
-                            <span style="color: #ff0000;">{pigcms{:L('_B_PURE_MY_70_')}:</span><span id="add_tip">$0</span>
-                        </div>
-                    </dd>
                 </dl>
             </div>
-            <else />
-            <span id="tip_num" style="display: none;">$0</span>
-            <span id="add_tip" style="display: none;">$0</span>
         </if>
-    </div>
-
-            <div id="credit" class="normal-fieldset" style="height: 100%;display:none;margin-top: -50px; margin-bottom:60px;" >
-                <h4 style="margin: .3rem .2rem .2rem;">{pigcms{:L('_CREDIT_CARD_')}</h4>
-                <dl class="list">
-                    <if condition="$card">
-                    <div style="line-height: 20px;float:left;width: 100%;margin-bottom: 15px;margin-left: .2rem">
-                        <input type="radio" name="pay_card_type" value="0" class="mt" checked=checked> {pigcms{:L('_USE_OLD_CARD_')}
-                    </div>
-                    <a href="{pigcms{:U('My/credit',array('order_id'=>$order_info['order_id']))}">
-                    <dd class="more dd-padding" style="border-bottom: 1px #cccccc solid;">
-                        <label class="mt">
-                            <span class="pay-wrapper">
-                                   {pigcms{$card['name']} -- {pigcms{$card['card_num']}
-                            </span>
-                        </label>
-                    </dd>
-                    </a>
-                    </if>
-                    <dd class="dd-padding">
-                        <div style="line-height: 20px;float:left;width: 100%;margin-bottom: 15px;">
-                            <input type="radio" name="pay_card_type" value="1" class="mt" <if condition="!$card">checked=checked</if>> {pigcms{:L('_USE_NEW_CARD_')}
-                        </div>
-                        <div style="line-height: 20px;float:left;width: 100%;margin-bottom: 5px;">
-                            <span style="float: left;width:150px;">{pigcms{:L('_CREDITHOLDER_NAME_')}：</span>
-                            <input type="text" maxlength="20" size="20" name="name" class="form-field" id="card_name" value="" style="float: left"/>
-                        </div>
-                        <div style="line-height: 20px;float:left;width: 100%;margin-bottom: 5px;">
-                            <span style="float: left;width:150px;">{pigcms{:L('_CREDIT_CARD_NUM_')}：</span>
-                            <input type="text" maxlength="20" size="20" name="card_num" class="form-field" id="card_num" value="" style="float: left"/>
-                        </div>
-                        <div style="line-height: 20px;float:left;width: 100%;margin-bottom: 5px;">
-                            <span style="float: left;width:150px;">{pigcms{:L('_EXPRIRY_DATE_')}：</span>
-                            <input type="text" maxlength="4" size="20" name="expiry" class="form-field" id="expiry" value="" style="float: left"/>
-                        </div>
-                        <div style="line-height: 20px;float:left;width: 100%;margin-bottom: 5px;">
-                            <span style="float: left;width:150px;">{pigcms{:L('_IS_SAVE_')}：</span>
-                            <input type="checkbox" name="save" class="form-field" id="save" value="1" style="float: left;width:20px;height: 20px;"/>
-                        </div>
-                    </dd>
-                </dl>
+        <span id="tip_num" style="display: none;">$0</span>
+        <span id="add_tip" style="display: none;">$0</span>
+        </div>
+        <div class="all_list">
+            <div class="price_list">
+                <div>
+                    Subtotal <span>${pigcms{$order_info['goods_price']}</span>
+                </div>
+                <div>
+                    {pigcms{:L('_DELI_PRICE_')} <span>${pigcms{$order_info['freight_charge']}</span>
+                </div>
+                <div>
+                    {pigcms{:L('_PACK_PRICE_')} <span>${pigcms{$order_info['packing_charge']}</span>
+                </div>
+                <div>
+                    {pigcms{:L('_DEPOSIT_TXT_')} <span>${pigcms{$order_info['deposit_price']}</span>
+                </div>
+                <div>
+                    {pigcms{:L('_TIP_TXT_')} <span class="tip_show"></span>
+                </div>
+                <div>
+                    {pigcms{:L('_TAXATION_TXT_')} <span>${pigcms{$order_info['tax_price']}</span>
+                </div>
+                <?php if($system_coupon){ ?>
+                <div>
+                    Coupon
+                    <span>
+                        -${pigcms{:sprintf("%.2f",$system_coupon['discount'])}
+                    </span>
+                </div>
+                <?php } ?>
             </div>
-            <div style="background-color: #FFFFFF; height: 53px;position: fixed;bottom: 0;left: 0;right: 0;z-index: 900;-webkit-tap-highlight-color: rgba(0, 0, 0, 0);height: 49px;width: 100%;">
+            <div class="price_total">
+                Total <span></span>
+            </div>
+        </div>
+        <div id="agree_div">
+            <input type="checkbox" name="is_agree" class="form-field" id="is_agree" value="1" checked="checked"/>
+            By clicking the box,you are agree with
+            <a href="./intro/5.html" target="_blank">Team of Use</a> and <a href="./intro/2.html" target="_blank">Privacy Policy</a>
+        </div>
+
+        <button type="button" class="confirm_btn">{pigcms{:L('_B_D_LOGIN_CONIERM_')}</button>
+            <!--div style="background-color: #FFFFFF; height: 53px;position: fixed;bottom: 0;left: 0;right: 0;z-index: 900;-webkit-tap-highlight-color: rgba(0, 0, 0, 0);height: 49px;width: 100%;">
                 <div id="need_pay_title" style="    position: absolute;margin-top: 18px;margin-left: 0.3rem;">
                     {pigcms{:L('_ALSO_NEED_PAY_')} <div style="font-weight:bold;color:red;display: inline;">$<div class="need-pay" style="display:inline;">
                         </div>
                     </div>
                 </div>
                 <button type="button" onclick="bio_verify()" style="float: right;height: 100%;width: 50%;background-color: #06c1ae;color: #fff;border: none;">{pigcms{:L('_CONFIRM_PAY_')}</button>
-            </div>
+            </div-->
         </div>
     </form>
 </div>
 
 <link href="{pigcms{$static_path}css/check.css" rel="stylesheet"/>
-<div id="pwd_bg" style="height: 921px;" style="display:block">
 
-</div>
-<div id="pwd_verify" class="pwd_verify" style="display:none" >
-    <div class="pwd_menu" >
-        <span class="cancle"><img src="{pigcms{$static_path}images/twice_cancel.png"></span><p>密码验证</p>
-    </div>
-    <input type="hidden" id="pwd_type" name="type" value="1">
-    <div class="verify_pwd">
-        <p class="tips"></p>
-        <input type="password"  autocomplete="off"  id="pwd" placeholder="输入登录密码" name="pwd" value="">
-        <a id="forget_pwd" href="{pigcms{:U('Login/forgetpwd')}"><p class="forget_pwd">忘记密码?</p></a>
-    </div>
-    <div class="verify_sms" style="display:none;">
-        <span style="color:#5E5E5E;font-size: 12px;">验证码将发送您手机：</span><span id="verify_phone" style="color:#006600;font-size: 12px;"></span>
-        <input type="text" name="sms_code" autocomplete="off"  placeholder="输入验证码" value="">
-        <button onclick="sendsms(this)">发送短信</button>
-        <p></p>
-    </div>
-    <div class="verify_button" id="verify">
-        <p>验证</p>
-    </div>
-</div>
 <!-- 加 -->
 <style type="text/css">
     .verify_jg{ display: inline-block; height: 27px; padding:50px 0; }
@@ -1108,34 +1214,74 @@
     .tip_s{width: 32%; height: 25px;color: #ffa52d; border: 1px #ffa52d solid;line-height: 25px;text-align: center;font-size: 16px;display:-moz-inline-box;display:block;cursor: pointer;float: left}
     .tip_on{background-color: #ffa52d;color: #ffffff;border-color:#ffa52d }
 </style>
-
-<div class="pwd_verify" style="display: none;" id="change_score">
-    <div class="pwd_menu" >
-        <span class="cancle"><img src="{pigcms{$static_path}images/twice_cancel.png"></span><p><php>if($config['open_extra_price']==1){</php>{pigcms{$config.extra_price_alias_name}<php>}else{</php>{pigcms{$config['score_name']}<php>}</php>修改</p>
-    </div>
-    <div class="verify_pwd">
-        <p class="tips"></p>
-        <div class="verify_jg">
-            <div class="verify_l">
-                <span class="verify_lspan">${pigcms{$score_deducte}</span>
-                <span class="verify_lspan1">+</span>
-            </div>
-            <div class="plus">
-                <a href="javascript:void(0)" class="jian">-</a>
-                <input type="text" id="score_value" name="score_change" value="{pigcms{$score_can_use_count}" >
-                <a href="javascript:void(0)" class="jia">+</a>
-            </div>
-        </div>
-    </div>
-    <div class="verify_button" id="score_sure" style="background-color: #06c1ae;color: #fff;">
-        <p style="color: #fff;">确定</p>
-    </div>
-</div>
 <!-- 加 -->
 <script src="{pigcms{$static_path}js/common_wap.js"></script>
 <script src="{pigcms{$static_path}js/bioauth_.js"></script>
 
 <script>
+    $('.tip_more').click(function () {
+        if($('#tip_list').is(':hidden')){
+            $('#tip_list').show();
+            $('#tip_input').hide();
+        }else{
+            $('#tip_list').hide();
+            $('#tip_input').show();
+        }
+    });
+
+    $(function () {
+        if(!$('input[name="is_agree"]').is(':checked')){
+            $('.confirm_btn').css('background-color', '#666666');
+            $('.confirm_btn').unbind();
+        }
+    });
+
+    $('input[name="is_agree"]').click(function () {
+        if($('input[name="is_agree"]').is(':checked')){
+            $('.confirm_btn').css('background-color', '#ffa52d');
+            $('.confirm_btn').bind('click',bio_verify);
+        }else{
+            $('.confirm_btn').css('background-color', '#666666');
+            $('.confirm_btn').unbind();
+        }
+    });
+
+    $('.confirm_btn').click(function () {
+        bio_verify();
+    });
+
+    $("#ex_code").click(function(){
+        var code = $("input[name='coupon_code']").val();
+        if(code == ""){
+            layer.open({
+                title:'Message',
+                content:"{pigcms{:L('_INPUT_EXCHANGE_CODE_')}"
+            });
+        } else{
+            exchange_code(code);
+        }
+    })
+
+    function exchange_code(code){
+        $.ajax({url:"{pigcms{:U('My/exchangeCode')}",type:"post",data:"code="+code,dataType:"json",success:function(data){
+                if(data.error_code == 0){
+                    layer.open({
+                        title:'Message',
+                        time:1,
+                        content:"Success"
+                    });
+                    window.location.reload();
+                }else{
+                    layer.open({
+                        title:'Message',
+                        time:1,
+                        content:data.msg
+                    });
+                }
+            }
+        });
+    }
+
     if($('#balanceBox dd dl dd').size() == 0){
         $('#balanceBox').hide();
     }
@@ -1187,6 +1333,14 @@
         $('#tip_num').text('$' + tipNum.toFixed(2));
         $('#add_tip').text('$' + totalNum.toFixed(2));
 
+        var pay_type = $('input[name="pay_type"]:checked').val();
+
+        if(pay_type != 'offline') {
+            $('.tip_show').text('$' + tipNum.toFixed(2));
+            $('.price_total').find('span').text('$' + totalNum.toFixed(2));
+        }
+
+
         var user_money = {pigcms{$now_user.now_money};
         if(totalNum > user_money){
             $('#balance_money').css('color','#C1B9B9');
@@ -1228,12 +1382,18 @@
             if(pay_type == 'moneris'){
                 $('#credit').show();
                 $('#tip_label').show();
+                $('.tip_show').text($('#tip_num').text());
+                $('.price_total').find('span').text($('#add_tip').text());
             }else if(pay_type == 'weixin' || pay_type == 'alipay'){
                 $('#tip_label').show();
                 $('#credit').hide();
+                $('.tip_show').text($('#tip_num').text());
+                $('.price_total').find('span').text($('#add_tip').text());
             }else{
                 $('#credit').hide();
                 $('#tip_label').hide();
+                $('.tip_show').text('$0.00');
+                $('.price_total').find('span').text('$' + $('input[name="charge_total"]').val());
             }
             check_money(total_money,sysc_price,merchant_money);
             CalTip();
