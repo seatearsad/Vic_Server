@@ -2414,7 +2414,7 @@ class ShopAction extends BaseAction{
 		$return['tax_price'] = $return['tax_price'] + ($return['delivery_fee'] + $store_shop['pack_fee'])*$return['store']['tax_num'] / 100;
 		//$return['price'] = ($return['price'] + $return['delivery_fee'] + $store_shop['pack_fee'])  * 1.05;//税费
         $return['price'] = $return['price'] + $return['delivery_fee'] + $store_shop['pack_fee'] + $return['tax_price'] + $return['deposit_price'];
-
+        $return['price'] = sprintf("%.2f",$return['price']);
 		$pick_address['distance'] = $this->wapFriendRange($pick_address['distance']);
 		$this->assign($return);
 		$this->assign('pick_addr_id', $pick_addr_id);

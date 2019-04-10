@@ -178,7 +178,7 @@
             -moz-border-radius: 5px;
             -webkit-border-radius: 5px;
             border-radius: 5px;
-            font-size: 36px;
+            font-size: 30px;
             font-weight: bold;
             color: #ffffff;
             text-align: center;
@@ -287,7 +287,8 @@
         </div>
         <div class="white_line"></div>
         <div class="reg_desc">
-            <div class="app_now">Sign Me Up</div>
+            <div class="app_now">Merchant Sign In</div>
+            <div style="text-align: center;margin-top: 10px;font-size: 12px">Existing TUTTI Partner?</div>
         </div>
         <include file="Public:footer"/>
 	</body>
@@ -360,7 +361,8 @@
     }
 
     $('.app_now').click(function () {
-        location.hash = "#become_div";
+        //location.hash = "#become_div";
+        window.location.href = "./wap.php?g=Wap&c=storestaff&a=login";
     });
 </script>
 </html>
