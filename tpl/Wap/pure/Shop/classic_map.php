@@ -37,6 +37,12 @@
 		</script>
 		<script type="text/javascript" src="{pigcms{$static_path}shop/js/shopClassicBase.js?t={pigcms{$_SERVER.REQUEST_TIME}" charset="utf-8"></script>
 	</head>
+    <style>
+        #shopDetailMapBar .btn{
+            background-color: #ffa52d;
+            border: 0;
+        }
+    </style>
 	<body>
 		<div id="pageList" class="pageDiv" <if condition="$config['shop_show_footer']">style="padding-bottom:56px;"</if>>
 			<section id="listHeader" class="roundBg">

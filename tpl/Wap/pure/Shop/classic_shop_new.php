@@ -43,7 +43,7 @@
         <style>
             #container{
                 width: 100%;
-                padding-top: 60px;
+                padding-top: 10px;
             }
             #shopHeader{
                 position: relative;
@@ -107,7 +107,6 @@
                 width: 100%;
                 display: flex;
                 background: none;
-                border-top: 1px solid silver;
                 border-bottom: 1px solid silver;
             }
             .sub_left,.sub_right{
@@ -161,7 +160,6 @@
                 width: 96%;
                 float: none;
                 margin: 0 auto;
-                padding-top: 20px;
             }
             #shopMenuBar li.active{
                 color: #ffa52d;
@@ -192,17 +190,22 @@
                 border: 1px solid #ffa52d;
             }
             #shopProductRightBar2 li .product_btn.plus::after,#shopProductCartBox .product_btn.plus::after{
-                left: 12px;
                 background-color: #ffa52d;
             }
             #shopProductRightBar2 li .product_btn.min::before,#shopProductRightBar2 li .product_btn.plus::before,#shopProductCartBox .product_btn.min::before,#shopProductCartBox .product_btn.plus::before{
-                left: 8px;
                 background-color: #ffa52d;
             }
-            #shopProductCartBox dd .cartRight .price,#shopProductRightBar2 li .product_btn,#shopProductRightBar2 li .product_text .price{
+            #shopProductCartBox dd .cartRight .price,
+            #shopProductRightBar2 li .product_btn,
+            #shopProductRightBar2 li .product_text .price,
+            .msg-option .btn{
                 color: #ffa52d;
             }
-            #shopProductCart #cartNumber,#shopProductCart #cartInfo .cart,#shopProductCart #checkCart,.shopCartFly{
+            #shopProductCart #cartNumber,
+            #shopProductCart #cartInfo .cart,
+            #shopProductCart #checkCart,
+            .shopCartFly,
+            #shopDetailMapBar .btn{
                 background-color: #ffa52d;
             }
             #shopProductCart{
@@ -222,9 +225,14 @@
             #shopReplyBox .right .time{
                 float: none;
             }
+            .pageLoadTipLoader::before{
+                border-bottom: #ffffff solid 5px;
+                border-top: rgba(255,255,255,0.35) solid 5px;
+                border-right: rgba(255,255,255,0.35) solid 5px;
+                border-left: rgba(255,255,255,0.35) solid 5px;
+            }
         </style>
 	<body>
-    <include file="Public:header"/>
     <div id="container">
 		<div id="pageList" class="pageDiv" <if condition="$config['shop_show_footer']">style="padding-bottom:56px;"</if>>
 			<section id="listHeader" class="roundBg">
@@ -299,7 +307,7 @@
 				<div id="backBtn" class="backBtn"></div>
 				<div id="shopTitle"></div>
                 <div class="is_close"></div>
-                <div class="shop_info" data-nav="merchant"></div>
+                <!--div class="shop_info" data-nav="merchant"></div-->
 				<!--div id="searchBtn" class="searchBtn"><div></div></div-->
 			</section>
 			<section id="shopBanner">
@@ -355,7 +363,7 @@
 							<div class="cart"></div>{pigcms{:L('_CART_EMPTY_')}
 						</div>
 						<div id="checkCart" style="display:none;">{pigcms{:L('_GOOD_CHOICE_')}</div>
-						<div id="checkCartEmpty">{pigcms{:L('_MIN_DELI_PRICE_')}</div>
+						<div id="checkCartEmpty"></div>
 					</div>
 				</div>
 				<div id="shopReplyBox" style="display:none">
@@ -375,7 +383,7 @@
 						<dd class="phone more">{pigcms{:L('_SHOP_PHONE_')}</dd>
 						<dd class="address more page-link"><span></span>{pigcms{:L('_SHOP_ADDRESS_')}</dd>
 						<dd class="openTime">{pigcms{:L('_BUSINESS_TIME_')}</dd>
-						<dd class="deliveryType">{pigcms{:L('_DIST_SERVICE_')}</dd>
+						<!--dd class="deliveryType">{pigcms{:L('_DIST_SERVICE_')}</dd-->
 						<dd class="merchantNotice">{pigcms{:L('_SHOP_NOTICE_')}</dd>
 					</dl>
 					<if condition="!$merchant_link_showOther">
@@ -534,6 +542,17 @@
                 }
                 // console.log(act_width-move_size+'--'+base_width);
             }
+
+            $('#shopProductRightBar2').scroll(function () {
+                var base_top = $(this).offset().top;
+                $(this).find('dd').each(function () {
+                    var curr_top = $(this).offset().top - base_top;
+                    if(curr_top > -10 && curr_top < 10){
+                        var this_id = $(this).data('cat_id');
+                        $('#shopProductLeftBar2-'+this_id).addClass("active").siblings("dd").removeClass("active");
+                    }
+                });
+            });
 		</script>
 		{pigcms{$shareScript}
 	</body>

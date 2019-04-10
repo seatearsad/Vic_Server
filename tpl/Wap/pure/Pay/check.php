@@ -15,6 +15,8 @@
     <script src="{pigcms{:C('JQUERY_FILE')}"></script>
     <script src="{pigcms{$static_path}layer/layer.m.js"></script>
     <link href="{pigcms{$static_path}css/check.css" rel="stylesheet"/>
+    <link rel="stylesheet" type="text/css" href="{pigcms{$static_public}js/mobiscroll/mobiscroll.custom.min.css" media="all">
+    <script type="text/javascript" src="{pigcms{$static_public}js/mobiscroll/mobiscroll.custom.min.js"></script>
 </head>
 <body>
 
@@ -145,10 +147,8 @@
 
 
             $('#alter_score').click(function(){
-
                 $('#change_score').show();
                 $('#pwd_bg').show();
-
             });
             $('.cancle').click(function(){
                 $('#pwd_bg').hide();
@@ -801,6 +801,7 @@
         background-size: auto 20px;
         background-position: 10px center;
         border-bottom: 1px solid #e5e5e5;
+        cursor: pointer;
     }
     .est_time{
         color: #ffa52d;
@@ -979,10 +980,12 @@
 </style>
 <include file="Public:header"/>
 <div class="wrapper-list">
+    <if condition="$order_info['order_type'] != 'recharge'">
     <div class="user_address">
         <div>{pigcms{$order_info['username']} {pigcms{$order_info['phone']}</div>
         <div>{pigcms{$order_info['address']}</div>
     </div>
+    </if>
     <dl class="all_list">
         <div class="order_store">{pigcms{$order_info['order_name']}</div>
         <volist name="order_info['order_content']" id="vo">
@@ -1020,11 +1023,13 @@
         <input type="hidden" name="merchant_balance" value="{pigcms{$merchant_balance}">
         <input type="hidden" name="balance_money" value="{pigcms{$now_user.now_money}">
         <input type="hidden" name="tip" value="">
-
+        <if condition="$order_info['order_type'] != 'recharge'">
         <div class="all_list">
             <div class="order_note">
                 Estimated Time
+                <span class="coupon_more"></span>
                 <span class="est_time">ASAP</span>
+                <input type="hidden" name="est_time" id="est_time_input">
             </div>
             <div class="note_div">
                 <input type="text" name="note" class="note_input" placeholder="Note">
@@ -1053,6 +1058,7 @@
                 </div>
             <?php } ?>
         </div>
+        </if>
         <div class="all_list">
         <div class="payment">
             Payment
@@ -1060,6 +1066,17 @@
         <div class="pay-methods-panel">
             <div class="normal-fieldset">
                 <dl class="list">
+                    <?php if(($order_info['order_type'] != 'plat' && $order_info['order_type'] != 'recharge') || $order_info['pay_system_balance']){ ?>
+                        <dd class="dd-padding" id="balance_money" <if condition="$now_user.now_money eq 0 OR $merchant_balance gt $order_info.order_total_money ">style="color: #C1B9B9;"</if>>
+                        <label class="mt">
+                            <span class="pay-wrapper">
+                                <img src="./tpl/Static/blue/images/wap/dollar.png" style="height: 25px"/>
+                                <font style="color: #ffa52d">${pigcms{$now_user.now_money}</font>
+                                <input type="checkbox" class="mt"  id="use_balance" name="use_balance"<if condition="$now_user['now_money'] eq 0 OR $merchant_balance gt $order_info['order_total_money'] ">disabled="disabled" value="1"<else /> value="0" checked="checked" </if>>
+                            </span>
+                        </label>
+                        </dd>
+                    <?php } ?>
                     <volist name="pay_method" id="vo">
                         <php>if($pay_offline || $key != 'offline'){</php>
                         <php>if(($key == 'weixin' && $is_wexin_browser) || ($key == 'alipay' && !$is_wexin_browser) || ($key != 'weixin' && $key!= 'alipay')){</php>
@@ -1079,7 +1096,7 @@
                                         <div style="line-height: 20px;width: 100%;margin-bottom: 15px;">
                                             <input type="radio" name="pay_card_type" value="0" class="mt" checked=checked> {pigcms{:L('_USE_OLD_CARD_')}
                                         </div>
-                                        <a href="{pigcms{:U('My/credit',array('order_id'=>$order_info['order_id']))}">
+                                        <a href="{pigcms{:U('My/credit',array('order_id'=>$order_info['order_id'],'type'=>$order_info['order_type']))}">
                                             <dd class="more dd-padding" style="border-bottom: 1px #cccccc solid;">
                                                 <label class="mt">
                                                     <span class="pay-wrapper">
@@ -1149,6 +1166,7 @@
         <span id="add_tip" style="display: none;">$0</span>
         </div>
         <div class="all_list">
+            <if condition="$order_info['order_type'] != 'recharge'">
             <div class="price_list">
                 <div>
                     Subtotal <span>${pigcms{$order_info['goods_price']}</span>
@@ -1177,6 +1195,7 @@
                 </div>
                 <?php } ?>
             </div>
+            </if>
             <div class="price_total">
                 Total <span></span>
             </div>
@@ -1281,6 +1300,45 @@
             }
         });
     }
+    
+    $('.order_note').click(function () {
+        $('#est_time_input').trigger('click');
+    });
+
+    var theme = "ios";
+    var mode = "scroller";
+    var display = "bottom";
+    var lang="en";
+
+    var myDate = new Date();
+    //获取当前年
+    var year=myDate.getFullYear();
+    //获取当前月
+    var month=myDate.getMonth()+1;
+    //获取当前日
+    var date=myDate.getDate()+1;
+    var h=myDate.getHours();       //获取当前小时数(0-23)
+    var m=myDate.getMinutes();
+
+    $('#est_time_input').mobiscroll().datetime({
+        theme: theme,
+        mode: mode,
+        display: display,
+        dateFormat: 'yyyy-mm-dd',
+        dateOrder:'yymmdd',
+        timeFormat: 'HH:ii',
+        timeWheels: 'HHii',
+        minDate: new Date(),
+        maxDate: new Date(year,month,date),
+        lang: lang,
+        stepMinute: 1
+    });
+    $('#est_time_input').change(function () {
+        if($(this).val() == '')
+            $('.est_time').html('ASAP');
+        else
+            $('.est_time').html($(this).val());
+    });
 
     if($('#balanceBox dd dl dd').size() == 0){
         $('#balanceBox').hide();

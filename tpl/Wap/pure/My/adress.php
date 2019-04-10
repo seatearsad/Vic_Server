@@ -113,6 +113,9 @@
         .btn-warning:visited{
             color: white;
         }
+        input.mt[type="radio"]:checked, input.mt[type="checkbox"]:checked{
+            background-color: #ffa52d;
+        }
 	</style>
 </head>
 <body id="index">

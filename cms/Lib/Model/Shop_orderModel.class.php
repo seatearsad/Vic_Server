@@ -578,6 +578,12 @@ class Shop_orderModel extends Model
             if($order_param['tip_charge']){
                 $data_shop_order['tip_charge'] = $order_param['tip_charge'];
 			}
+			if($order_param['desc']){
+				$data_shop_order['desc'] = $order_param['desc'];
+			}
+			if($order_param['expect_use_time']){
+				$data_shop_order['expect_use_time'] = $order_param['expect_use_time'];
+			}
 			$shop_pass_array = array(
 					date('y',$_SERVER['REQUEST_TIME']),
 					date('m',$_SERVER['REQUEST_TIME']),

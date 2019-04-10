@@ -1358,8 +1358,51 @@ class ShopAction extends BaseAction{
                 $sortList[$k]['cat_name'] = lang_substr($sl['sort_name'],C('DEFAULT_LANG'));
             }
             $firstSort = reset($sortList);
-            $sortId = isset($firstSort['sort_id']) ? $firstSort['sort_id'] : 0;
-            echo json_encode(array('store' => $store, 'product_list' => $this->getGoodsBySortId($sortId, $store_id), 'sort_list' => array_values($sortList)));
+            //$sortId = isset($firstSort['sort_id']) ? $firstSort['sort_id'] : 0;
+            $product_list = D('Shop_goods')->get_list_by_storeid($store_id);
+            foreach ($product_list as $row) {
+                $temp = array();
+                $temp['cat_id'] = $row['sort_id'];
+                //modify garfunkel 判断语言
+                $temp['cat_name'] = lang_substr($row['sort_name'],C('DEFAULT_LANG'));
+                $temp['sort_discount'] = $row['sort_discount']/10;
+                foreach ($row['goods_list'] as $r) {
+                    $glist = array();
+                    $glist['product_id'] = $r['goods_id'];
+                    //modify garfunkel 判断语言
+                    $glist['product_name'] = lang_substr($r['name'],C('DEFAULT_LANG'));
+                    $glist['product_price'] = $r['price'];
+                    $glist['is_seckill_price'] = $r['is_seckill_price'];
+                    $glist['o_price'] = $r['o_price'];
+                    $glist['number'] = $r['number'];
+                    $glist['packing_charge'] = floatval($r['packing_charge']);
+                    $glist['unit'] = $r['unit'];
+                    if (isset($r['pic_arr'][0])) {
+                        $glist['product_image'] = $r['pic_arr'][0]['url']['s_image'];
+                    }
+                    $glist['product_sale'] = $r['sell_count'];
+                    $glist['product_reply'] = $r['reply_count'];
+                    $glist['has_format'] = false;
+                    if ($r['spec_value'] || $r['is_properties']) {
+                        $glist['has_format'] = true;
+                    }
+                    if($r['extra_pay_price']>0){
+                        $glist['extra_pay_price']=$r['extra_pay_price'];
+                        $glist['extra_pay_price_name']=$this->config['extra_price_alias_name'];
+                    }
+
+                    $r['sell_day'] = $now_shop['stock_type'] ? $today : $r['sell_day'];
+                    if ($today == $r['sell_day']) {
+                        $glist['stock'] = $r['stock_num'] == -1 ? $r['stock_num'] : (intval($r['stock_num'] - $r['today_sell_count']) > 0 ? intval($r['stock_num'] - $r['today_sell_count']) : 0);
+                    } else {
+                        $glist['stock'] = $r['stock_num'];
+                    }
+                    $temp['product_list'][] = $glist;
+                }
+                $list[] = $temp;
+            }
+            //echo json_encode(array('store' => $store, 'product_list' => $this->getGoodsBySortId($sortId, $store_id), 'sort_list' => array_values($sortList)));
+            echo json_encode(array('store' => $store, 'product_list' => $list, 'sort_list' => array_values($sortList)));
         }
     }
 

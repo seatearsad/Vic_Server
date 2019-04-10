@@ -974,10 +974,10 @@ function showShop(shopId){
             $('#shopMenuBar li.merchant').trigger('click');
         });
 		
-//		$(document).on('click','#shopProductLeftBar2 dd',function(){
-//			$(this).addClass('active').siblings().removeClass('active');
-//			$('#shopProductRightBar2').scrollTop($('#shopProductRightBar2-'+$(this).data('cat_id')).offset().top-$('#shopProductRightBar2').offset().top+$('#shopProductRightBar2').scrollTop());
-//		});
+		$(document).on('click','#shopProductLeftBar2 dd',function(){
+			$(this).addClass('active').siblings().removeClass('active');
+			$('#shopProductRightBar2').scrollTop($('#shopProductRightBar2-'+$(this).data('cat_id')).offset().top-$('#shopProductRightBar2').offset().top+$('#shopProductRightBar2').scrollTop());
+		});
 		
 		$(document).on('click','#shopProductRightBar2 li,#shopProductBottomBar li',function(event){
 			redirectPage(ajax_url_root+'classic_good&shop_id='+shopId+'&good_id='+$(this).data('product_id'));
@@ -1153,7 +1153,7 @@ function showShop(shopId){
 			$('#shopTitle').html(result.store.name);
 			$('#shopIcon').css('background-image','url('+result.store.image+')');
 			if(result.store.delivery){
-                $('#deliveryText').html(getLangStr('_DELI_PRICE_') +' $ '+result.store.delivery_money+' | '+ getLangStr('_PACK_PRICE_') +' '+ result.store.pack_fee + ' | ' + getLangStr('_DEIL_NUM_MIN_',result.store.delivery_time));
+                $('#deliveryText').html(getLangStr('_DELI_PRICE_') +' $ '+result.store.delivery_money+' | '+ getLangStr('_PACK_PRICE_') +' '+ result.store.pack_fee);//+ ' | ' + getLangStr('_DEIL_NUM_MIN_',result.store.delivery_time)
 			}else{
                 $('#deliveryText').html(getLangStr('_ONLY_SELF_'));
 			}
@@ -1161,11 +1161,11 @@ function showShop(shopId){
 			// $('#shopCouponText').html(parseCoupon(result.store.coupon_list,'text')+';'+result.store.store_notice);
 			$('#shopCouponText').html(parseCoupon(result.store.coupon_list,'text'));
 			if(result.store.is_close == 1){
-                $('#checkCartEmpty').html(getLangStr('_SHOP_AT_REST_'));
+                //$('#checkCartEmpty').html(getLangStr('_SHOP_AT_REST_'));
                 $('.is_close').html('CLOSE');
                 $('.is_close').addClass('close_s');
 			}else if(result.store.delivery){
-                $('#checkCartEmpty').html(getLangStr('_NUM_DELI_PRICE_',result.store.delivery_price.toFixed(2)));
+                //$('#checkCartEmpty').html(getLangStr('_NUM_DELI_PRICE_',result.store.delivery_price.toFixed(2)));
                 $('.is_close').html('OPEN');
 			}
 			
@@ -1483,7 +1483,7 @@ function showShopContent(nav){
 						$("#shopProductLeftBar2 dd span").click(function(){
 							$(this).parents("dd").addClass("active").siblings("dd").removeClass("active");
 							$(this).siblings("ul").find("li").removeClass("active").find(".p").hide();
-							showGoodsBySortId($(this).data('sort_id'), nowShop.store.id);
+							//showGoodsBySortId($(this).data('sort_id'), nowShop.store.id);
 						});
 						$("#shopProductLeftBar2 dd li em").click(function(){
 							$(this).parents("li").siblings("li").removeClass("active").find(".p").hide();
@@ -1563,9 +1563,9 @@ function showShopContent(nav){
             $('#shopMerchantDescBox .address').attr('data-url','map&param='+nowShop.store.id+'-'+nowShop.store.long+'-'+nowShop.store.lat+'-'+encodeURIComponent(nowShop.store.name)+'-'+encodeURIComponent(nowShop.store.adress)).html('<span></span>'+ getLangStr('_SHOP_ADDRESS_') +'：'+nowShop.store.adress);
             $('#shopMerchantDescBox .openTime').html(getLangStr('_BUSINESS_TIME_')+'：'+nowShop.store.time);
             $('#shopMerchantDescBox .merchantNotice').html(getLangStr('_SHOP_NOTICE_') + '：'+nowShop.store.store_notice);
-            if(nowShop.store.isverify==1){
-                $('#shopMerchantDescBox').append('<dd class="merchantVerify">'+ getLangStr('_SHOP_CERTIFICATION_') + getLangStr('_CERTIFIED_') +'</dd>');
-            }
+            // if(nowShop.store.isverify==1){
+            //     $('#shopMerchantDescBox').append('<dd class="merchantVerify">'+ getLangStr('_SHOP_CERTIFICATION_') + getLangStr('_CERTIFIED_') +'</dd>');
+            // }
             var str = '';
             if(nowShop.store.delivery){
                 if(nowShop.store.delivery_system)

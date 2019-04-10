@@ -189,6 +189,9 @@ class MonerisPay
                 //garfunkel add 19.4.9
                 if($_POST['note'] && $_POST['note'] != '')
                     $order_param['desc'] = $_POST['note'];
+                if($_POST['est_time'] && $_POST['est_time'] != ''){
+                    $order_param['expect_use_time'] = strtotime($_POST['est_time']);
+                }
 
                 $result = D('Shop_order')->after_pay($order_param);
             }

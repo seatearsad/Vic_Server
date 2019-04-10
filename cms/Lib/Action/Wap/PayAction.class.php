@@ -31,7 +31,7 @@ class PayAction extends BaseAction{
             $now_order = D('Weidian_order')->get_pay_order($this->user_session['uid'],intval($_GET['order_id']));
             $this->assign('notCard',true);
         }else if($_GET['type'] == 'recharge'){
-            $now_order = D('User_recharge_order')->get_pay_order($this->user_session['uid'],intval($_GET['order_id']));
+            $now_order = D('User_recharge_order')->get_pay_order($this->user_session['uid'],intval($_GET['order_id']),true);
             $this->assign('notCard',true);
         }else if($_GET['type'] == 'appoint'){
             $now_order = D('Appoint_order')->get_pay_order($this->user_session['uid'],intval($_GET['order_id']));
@@ -745,6 +745,9 @@ class PayAction extends BaseAction{
         }
         if($_POST['note'] && $_POST['note'] != '')
             $order_info['desc'] = $_POST['note'];
+        if($_POST['est_time'] && $_POST['est_time'] != ''){
+            $order_info['expect_use_time'] = strtotime($_POST['est_time']);
+        }
         //
         if($order_info['order_type'] == 'group'){
             //判断有没有使用微信，如果是微信，则检测此团购有没有微信优惠！
@@ -2513,6 +2516,9 @@ class PayAction extends BaseAction{
                 $order_data = array('tip_charge'=>$_POST['tip']);
                 if($_POST['note'] && $_POST['note'] != '')
                     $order_data['desc'] = $_POST['note'];
+                if($_POST['est_time'] && $_POST['est_time'] != ''){
+                    $order_data['expect_use_time'] = strtotime($_POST['est_time']);
+                }
                 //处理优惠券
                 if($_POST['coupon_id']){
                     $now_coupon = D('System_coupon')->get_coupon_by_id($_POST['coupon_id']);

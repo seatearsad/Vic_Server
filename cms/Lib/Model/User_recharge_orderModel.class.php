@@ -12,11 +12,11 @@ class User_recharge_orderModel extends Model{
 					'order_id'			=>	$now_order['order_id'],
 					'order_type'		=>	($_GET['type'] == 'waimai-recharge' || $_POST['order_type'] == 'waimai-recharge') ? 'waimai-recharge' : 'recharge',
 					'order_total_money'	=>	floatval($now_order['money']),
-					'order_name'		=>	'在线充值',
+					'order_name'		=>	L('_RECHARGE_TXT_'),
 					'order_num'			=>	1,
 					'order_content'    =>  array(
 							0=>array(
-									'name'  		=> '在线充值',
+									'name'  		=> L('_RECHARGE_TXT_'),
 									'num'   		=> 1,
 									'price' 		=> floatval($now_order['money']),
 									'money' 	=> floatval($now_order['money']),

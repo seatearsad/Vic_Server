@@ -11,6 +11,7 @@
 	<meta name="format-detection" content="address=no">
     <link href="{pigcms{$static_path}css/eve.7c92a906.css" rel="stylesheet"/>
     <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/common.css?215"/>
+    <script type="text/javascript" src="{pigcms{:C('JQUERY_FILE_190')}" charset="utf-8"></script>
     <style>
 	    .btn-wrapper {
 	        margin: .2rem .2rem;
@@ -23,8 +24,8 @@
 	
 	    .kv-line h6 {
 	        width: 10em;
-            text-align: left;
-            padding-left: 30px;
+            text-align: right;
+            padding-left: 10px;
 	    }
 		.btn {
 			background: #ffa52d;
@@ -139,7 +140,7 @@
                         </dd>
 		        		<dd class="dd-padding kv-line" id="color-gray">
 		        			<h6>{pigcms{:L('_B_PURE_MY_15_')}:</h6>
-	                        <i class="icon-location" data-node="icon"></i><span class="color-gray" data-node="addAddress"><?php if(!empty($now_adress['adress'])): ?><?php echo $now_adress['adress']; ?><?php else : ?><img src="{pigcms{$static_path}images/location.png" style=" width:25px; height:25px"/><?php endif; ?></span> <i class="right_arrow"></i>
+	                        <i class="icon-location" data-node="icon"></i><span class="color-gray" data-node="addAddress" style="margin-left: .1rem;margin-top: -.2em;display: block;"><?php if(!empty($now_adress['adress'])): ?><?php echo $now_adress['adress']; ?><?php else : ?><img src="{pigcms{$static_path}images/location.png" style=" width:25px; height:25px"/><?php endif; ?></span> <i class="right_arrow"></i>
 	                        <!--div class="weaksuggestion"> {pigcms{:L('_B_PURE_MY_16_')}<i class="toptriangle"></i> </div-->
 		        			<!--textarea name="adress" class="input-weak kv-v" placeholder="{pigcms{:L('_B_PURE_MY_17_')}" pattern="^.{5,60}$" data-err="{pigcms{:L('_B_PURE_MY_18_')}">{pigcms{$now_adress.adress}</textarea-->
 		        		</dd>
