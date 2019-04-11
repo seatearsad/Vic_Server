@@ -386,11 +386,6 @@ function getUserLocation(options){
 		this.options[i] = options[i];
 	}
 	options = this.options;
-    layer.open({
-        type:0,
-        title:'test',
-        content:wxSdkLoad
-    });
     if(options.useHistory && $.cookie('userLocationLong') && $.cookie('userLocationLat')){
 		options['userLocation'] = $.cookie('userLocation');
 		options['userLocationLong'] = $.cookie('userLocationLong');
@@ -398,11 +393,21 @@ function getUserLocation(options){
 		locationOkFun(options);
 		return false;
 	}
+    layer.open({
+        type:0,
+        title:'test',
+        content:wxSdkLoad+'111'
+    });
 	if(typeof(wxSdkLoad) != "undefined"){
 		wx.ready(function () {
 			wx.getLocation({
 				type: 'wgs84',
 				success: function (res) {
+                    layer.open({
+                        type:0,
+                        title:'test',
+                        content:'wx.success'
+                    });
 					var userLat = res.latitude;
 					var userLong = res.longitude;
 					options['userLocation'] = userLong+','+userLat;
