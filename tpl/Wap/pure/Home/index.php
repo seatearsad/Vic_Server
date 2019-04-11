@@ -99,6 +99,11 @@
                 </div>
             </section>
         </if>
+        <if condition="$is_wexin_browser">1
+            <else />
+            0
+        </if>
+        |{pigcms{$_SESSION['openid']}
         <div id="category">
             <div class="cate_left"></div>
             <ul>

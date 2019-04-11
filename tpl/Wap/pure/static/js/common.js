@@ -393,7 +393,6 @@ function getUserLocation(options){
 		locationOkFun(options);
 		return false;
 	}
-	alert(wxSdkLoad);
 	if(typeof(wxSdkLoad) != "undefined"){
 		wx.ready(function () {
 			wx.getLocation({
