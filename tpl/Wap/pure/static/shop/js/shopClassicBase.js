@@ -815,7 +815,7 @@ function showGood(shop_id,product_id){
 			
 			$('#shopDetailpageClose').click(function(){
 				//goBackPage();
-                window.history.go(-1);
+                window.location.href = storeUrl;
 			});
 			
 			changeProductSpec();
