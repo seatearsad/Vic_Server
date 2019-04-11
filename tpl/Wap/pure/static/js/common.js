@@ -397,11 +397,6 @@ function getUserLocation(options){
     var wxSdkLoad = true;
 	if(typeof(wxSdkLoad) != "undefined"){
 		wx.ready(function () {
-            layer.open({
-                type:0,
-                title:'test',
-                content:'wx ready'
-            });
 			wx.getLocation({
 				type: 'wgs84',
 				success: function (res) {
