@@ -251,8 +251,11 @@
 </div>
 <div id="tutti_header">
     <div id="header_menu">
-        <if condition="MODULE_NAME == 'Home' or MODULE_NAME == 'Shop'">
-        <div class="local_div"></div>
+        <if condition="MODULE_NAME == 'Home'">
+        <div class="local_div" data-url="{pigcms{:U('Home/address')}"></div>
+        </if>
+        <if condition="MODULE_NAME == 'Shop'">
+            <div class="local_div" data-url="{pigcms{:U('Shop/classic_address')}"></div>
         </if>
     </div>
     <div id="header_logo"></div>
@@ -312,6 +315,6 @@
         window.open(app_url);
     });
     $('.local_div').click(function () {
-        window.location.href = "{pigcms{:U('Home/address')}";
+        window.location.href = $(this).data('url');
     });
 </script>

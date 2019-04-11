@@ -205,10 +205,11 @@ class ShopAction extends BaseAction{
         $cat_id = $_GET['cat_id'];
         $cat_fid = $_GET['cat_fid'];
         //
-
-        $user_long_lat = D('User_long_lat')->getLocation($_SESSION['openid']);
-        $lat = isset($user_long_lat['lat']) && $lat == 0 ? $user_long_lat['lat'] : 0;
-        $long = isset($user_long_lat['long']) && $long == 0 ? $user_long_lat['long'] : 0;
+        if($_SESSION['openid'] && $lat == 0 && $long == 0){
+            $user_long_lat = D('User_long_lat')->getLocation($_SESSION['openid']);
+            $lat = isset($user_long_lat['lat']) ? $user_long_lat['lat'] : 0;
+            $long = isset($user_long_lat['long']) ? $user_long_lat['long'] : 0;
+        }
 
 		if ($cat_url != 'all') {
 			$now_category = D('Shop_category')->get_category_by_catUrl($cat_url);
