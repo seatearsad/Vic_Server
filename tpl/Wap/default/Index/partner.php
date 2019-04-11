@@ -215,6 +215,7 @@
 <body>
 <script>
     var app_name = 'TUTTI Partner';
+    var app_url ='https://itunes.apple.com/us/app/tutti-partner/id1454731849?ls=1&mt=8';
 </script>
 <include file="Public:header"/>
 <div class="ten"></div>
@@ -299,7 +300,8 @@
 </div>
 <div class="white_line"></div>
 <div class="reg_desc">
-    <div class="app_now">Sign Me Up</div>
+    <div class="app_now">Merchant Sign In</div>
+    <div style="text-align: center;margin-top: 10px;font-size: 12px">Existing TUTTI Partner?</div>
 </div>
 <include file="Public:footer"/>
 </body>
@@ -373,7 +375,8 @@
     }
 
     $('.app_now').click(function () {
-        location.hash = "#become_div";
+        //location.hash = "#become_div";
+        window.location.href = "./wap.php?g=Wap&c=storestaff&a=login";
     });
 </script>
 </html>

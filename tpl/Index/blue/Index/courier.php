@@ -59,7 +59,6 @@
             background-image: url("./tpl/Static/blue/images/new/courier/courier.jpg");
             background-size: 100% auto;
             background-position: bottom;
-
         }
         .become_div{
             width: 320px;

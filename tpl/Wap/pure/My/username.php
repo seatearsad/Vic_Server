@@ -74,7 +74,7 @@
 		            <input id="username" placeholder="{pigcms{:L('_B_MY_ENTERNEWNAME_')}" class="input-weak" type="text" name="nickname" value="{pigcms{$now_user.nickname}">
 		        </dd>
 		    </dl>
-		    <p class="btn-wrapper">{pigcms{:L('_NICKNAME_GZ_1_')} , {pigcms{:L('_NICKNAME_GZ_2_')}</p>
+		    <!--p class="btn-wrapper">{pigcms{:L('_NICKNAME_GZ_1_')} , {pigcms{:L('_NICKNAME_GZ_2_')}</p-->
 		    <div class="btn-wrapper"><button type="submit" class="btn btn-block btn-larger">{pigcms{:L('_B_D_LOGIN_CONIERM_')}</button></div>
 		</form>
     	<script src="{pigcms{:C('JQUERY_FILE')}"></script>

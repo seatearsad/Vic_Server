@@ -22,8 +22,8 @@
                 <li class="list_head">INFORMATION</li>
                 <li><a href="#" target="_blank">About Us</a></li>
                 <li><a href="#" target="_blank">Blogs</a></li>
-                <li><a href="#" target="_blank">Become a Courier</a></li>
-                <li><a href="#" target="_blank">Become a Partner</a></li>
+                <li><a href="{pigcms{:U('Index/courier')}" target="_blank">Become a Courier</a></li>
+                <li><a href="{pigcms{:U('Index/partner')}" target="_blank">Become a Partner</a></li>
             </ul>
         </div>
         <div class="open_time">
@@ -46,11 +46,11 @@
         </div>
         <div class="link_icon">
             <ul>
-                <li><a href="#" target="_blank"></a></li>
-                <li><a href="#" target="_blank"></a></li>
-                <li><a href="#" target="_blank"></a></li>
-                <li><a href="#" target="_blank"></a></li>
-                <li><a href="#" target="_blank"></a></li>
+                <li><a href="https://www.facebook.com/tuttilifestyle/" target="_blank"></a></li>
+                <li><a href="https://www.instagram.com/tuttilifestyle/?hl=en" target="_blank"></a></li>
+                <li><a href="https://twitter.com/tuttilifestyle" target="_blank"></a></li>
+                <li><a href="https://www.youtube.com/channel/UCdXYWCKbNRPysK9dZ9rtC2A?view_as=public" target="_blank"></a></li>
+                <li><a href="https://www.linkedin.com/company/tuttilifestyle/about/" target="_blank"></a></li>
             </ul>
         </div>
     </div>

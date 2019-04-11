@@ -21,8 +21,8 @@
                 <li class="list_head">INFORMATION</li>
                 <li><a href="#" target="_blank">About Us</a></li>
                 <li><a href="#" target="_blank">Blogs</a></li>
-                <li><a href="#" target="_blank">Become a Courier</a></li>
-                <li><a href="#" target="_blank">Become a Partner</a></li>
+                <li><a href="{pigcms{$config.site_url}/courier" target="_blank">Become a Courier</a></li>
+                <li><a href="{pigcms{$config.site_url}/partner" target="_blank">Become a Partner</a></li>
             </ul>
         </div>
         <div class="open_time">
@@ -45,11 +45,11 @@
     </div>
     <div class="link_icon">
         <ul>
-            <li><a href="#" target="_blank"></a></li>
-            <li><a href="#" target="_blank"></a></li>
-            <li><a href="#" target="_blank"></a></li>
-            <li><a href="#" target="_blank"></a></li>
-            <li><a href="#" target="_blank"></a></li>
+            <li><a href="https://www.facebook.com/tuttilifestyle/" target="_blank"></a></li>
+            <li><a href="https://www.instagram.com/tuttilifestyle/?hl=en" target="_blank"></a></li>
+            <li><a href="https://twitter.com/tuttilifestyle" target="_blank"></a></li>
+            <li><a href="https://www.youtube.com/channel/UCdXYWCKbNRPysK9dZ9rtC2A?view_as=public" target="_blank"></a></li>
+            <li><a href="https://www.linkedin.com/company/tuttilifestyle/about/" target="_blank"></a></li>
         </ul>
     </div>
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-123655278-1"></script>
@@ -143,7 +143,7 @@
     }
     .open_time ul .open_img{
         height: 70px;
-        background-image: url("./tpl/Static/blue/images/new/open.png");
+        background-image: url("{pigcms{$config.site_url}/tpl/Static/blue/images/new/open.png");
         background-size: 70px auto;
         background-repeat: no-repeat;
         background-position: center;
@@ -157,7 +157,7 @@
     }
     .footer_app .app_icon{
         height: 70px;
-        background-image: url("./tpl/Static/blue/images/new/Apple_app_store_icon.png");
+        background-image: url("{pigcms{$config.site_url}/tpl/Static/blue/images/new/Apple_app_store_icon.png");
         background-size: auto 50px;
         background-repeat: no-repeat;
         background-position: right;
@@ -165,7 +165,7 @@
     }
     .footer_app .apk_icon{
         height: 70px;
-        background-image: url("./tpl/Static/blue/images/new/AndroidButton.png");
+        background-image: url("{pigcms{$config.site_url}/tpl/Static/blue/images/new/AndroidButton.png");
         background-size: auto 50px;
         background-repeat: no-repeat;
         background-position: right;
@@ -195,18 +195,18 @@
         display: block;
     }
     .link_icon li:nth-child(1){
-        background-image: url("./tpl/Static/blue/images/new/icons/facebook.png");
+        background-image: url("{pigcms{$config.site_url}/tpl/Static/blue/images/new/icons/facebook.png");
     }
     .link_icon li:nth-child(2){
-        background-image: url("./tpl/Static/blue/images/new/icons/instagram.png");
+        background-image: url("{pigcms{$config.site_url}/tpl/Static/blue/images/new/icons/instagram.png");
     }
     .link_icon li:nth-child(3){
-        background-image: url("./tpl/Static/blue/images/new/icons/twitter.png");
+        background-image: url("{pigcms{$config.site_url}/tpl/Static/blue/images/new/icons/twitter.png");
     }
     .link_icon li:nth-child(4){
-        background-image: url("./tpl/Static/blue/images/new/icons/youtube.png");
+        background-image: url("{pigcms{$config.site_url}/tpl/Static/blue/images/new/icons/youtube.png");
     }
     .link_icon li:nth-child(5){
-        background-image: url("./tpl/Static/blue/images/new/icons/linkedin.png");
+        background-image: url("{pigcms{$config.site_url}/tpl/Static/blue/images/new/icons/linkedin.png");
     }
 </style>

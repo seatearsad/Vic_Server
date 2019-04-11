@@ -16,37 +16,35 @@
 	    </script>
         <script type="text/javascript" src="{pigcms{$static_public}js/lang/{pigcms{:C('DEFAULT_LANG')}.js" charset="utf-8"></script>
 		<script src="{pigcms{$static_path}js/common.js"></script>
-		<!--[if IE 6]>
-		<script  src="{pigcms{$static_path}js/DD_belatedPNG_0.0.8a.js" mce_src="{pigcms{$static_path}js/DD_belatedPNG_0.0.8a.js"></script>
-		<script type="text/javascript">
-		   /* EXAMPLE */
-		   DD_belatedPNG.fix('.enter,.enter a,.enter a:hover');
-
-		   /* string argument can be any CSS selector */
-		   /* .png_bg example is unnecessary */
-		   /* change it to what suits you! */
-		</script>
-		<script type="text/javascript">DD_belatedPNG.fix('*');</script>
 		<style type="text/css">
-				body{behavior:url("{pigcms{$static_path}css/csshover.htc"); 
-				}
-				.category_list li:hover .bmbox {
-		filter:alpha(opacity=50);
-			 
-					}
-		  .gd_box{	display: none;}
+                *{
+                    margin: 0px;
+                    box-sizing: border-box;
+                    font-family: Helvetica;
+                    -moz-osx-font-smoothing: grayscale;
+                }
+                body{
+                    min-width: 1024px;
+                    background-color: #F5F5F5;
+                    color: #3f3f3f;
+                }
+                .main .content{
+                    width: 100%;
+                }
+                .main .content .tit{
+                    border: 0;
+                }
 		</style>
-		<![endif]-->
 	</head>
 	<body>
-		<include file="Public:header_top"/>
-		<div class="body"> 
-			<article>
+    <include file="Public:header"/>
+		<div>
+			<!--article>
 				<div class="menu cf">
 					<div class="menu_left hide">
 						<div class="menu_left_top">{pigcms{:L('_ALL_CLASSIF_')}</div>
 						<div class="list">
-							<!--ul>
+							<ul>
 								<volist name="all_category_list" id="vo" key="k">
 									<li>
 										<div class="li_top cf">
@@ -62,7 +60,7 @@
 										</if>
 									</li>
 								</volist>
-							</ul-->
+							</ul>
 						</div>
 					</div>
 					<div class="menu_right cf">
@@ -77,11 +75,11 @@
 						</div>
 					</div>
 				</div>
-			</article>
+			</article-->
 			<div class="w main">
-				<div id="Position" class="margin_b6">
+				<div class="margin_b6">
 					<!--a href="{pigcms{$config.site_url}">首页</a><span>&gt;</span>&nbsp;关于我们<span>&gt;</span>&nbsp;{pigcms{$now_link.name}</div-->
-					<div class="left">
+					<!--div class="left">
 						<h2></h2>
 						<ul class="conact_side">
 							<pigcms:footer_link var_name="footer_link_list">
@@ -93,7 +91,7 @@
 							<div class="corner_bl"></div>
 							<div class="corner_br"></div>
 						</div>
-					</div>
+					</div-->
 					<div class="right">
 						<div class="corner_t">
 							<div class="corner_tl"></div>

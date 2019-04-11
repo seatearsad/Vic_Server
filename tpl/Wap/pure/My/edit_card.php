@@ -23,7 +23,7 @@
 	
 	    .kv-line h6 {
 	        width: 10em;
-            text-align: center;
+            text-align: right;
 	    }
 		.btn {
 			background: #ffa52d;

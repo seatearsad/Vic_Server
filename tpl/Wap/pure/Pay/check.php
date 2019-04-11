@@ -740,7 +740,7 @@
         font-size: 1em;
     }
     .wrapper-list{
-        margin-top: 70px;
+        padding-top: 70px;
         margin-bottom: 70px;
     }
     .user_address{
@@ -1174,17 +1174,21 @@
                 <div>
                     {pigcms{:L('_DELI_PRICE_')} <span>${pigcms{$order_info['freight_charge']}</span>
                 </div>
+                <if condition="$order_info['packing_charge'] != 0">
                 <div>
                     {pigcms{:L('_PACK_PRICE_')} <span>${pigcms{$order_info['packing_charge']}</span>
                 </div>
+                </if>
+                <if condition="$order_info['deposit_price'] != 0">
                 <div>
                     {pigcms{:L('_DEPOSIT_TXT_')} <span>${pigcms{$order_info['deposit_price']}</span>
                 </div>
+                </if>
                 <div>
                     {pigcms{:L('_TIP_TXT_')} <span class="tip_show"></span>
                 </div>
                 <div>
-                    {pigcms{:L('_TAXATION_TXT_')} <span>${pigcms{$order_info['tax_price']}</span>
+                    {pigcms{:L('_TAXATION_TXT_')} <span>${pigcms{:sprintf("%.2f",$order_info['tax_price'])}</span>
                 </div>
                 <?php if($system_coupon){ ?>
                 <div>

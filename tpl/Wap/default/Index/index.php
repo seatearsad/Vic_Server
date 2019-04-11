@@ -251,6 +251,7 @@
 <body>
 <script>
     var app_name = 'TUTTI - Online Food Community';
+    var app_url = 'https://itunes.apple.com/us/app/tutti/id1439900347?ls=1&mt=8';
 </script>
 <include file="Public:header"/>
 <div class="ten"></div>

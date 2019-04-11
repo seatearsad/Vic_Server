@@ -279,6 +279,7 @@
 <body>
 <script>
     var app_name = 'TUTTI Courier';
+    var app_url = 'https://itunes.apple.com/us/app/tutti-courier/id1446852099?ls=1&mt=8';
 </script>
 <include file="Public:header"/>
 <div class="ten"></div>

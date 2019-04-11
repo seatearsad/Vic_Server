@@ -334,4 +334,7 @@
         //     {title: '', width: width, height: height,flexed:false,close:null,background:'black',opacity:'0.4'});
         window.location.href = "{pigcms{:U('Login/index')}&referer=" + encodeURIComponent(window.location.href);
     });
+    $('.down_view').click(function () {
+        window.open(app_url);
+    });
 </script>
