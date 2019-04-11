@@ -158,9 +158,9 @@
                             <span class="delivery">{pigcms{:L('_DELI_PRICE_')} ${{ d[i].delivery_money }}</span>
                             <span class="delivery">{pigcms{:L('_PACK_PRICE_')} ${{ d[i].pack_fee }}</span>
                             {{# if(d[i].delivery_system){ }}
-                            <em class="location-right">{pigcms{:L('_PLAT_DIST_')}</em>
+                            <!--em class="location-right">{pigcms{:L('_PLAT_DIST_')}</em-->
                             {{# }else{ }}
-                            <em class="location-right">{pigcms{:L('_SHOP_DIST_')}</em>
+                            <!--em class="location-right">{pigcms{:L('_SHOP_DIST_')}</em-->
                             {{# } }}
                         </div>
                         {{# } }}

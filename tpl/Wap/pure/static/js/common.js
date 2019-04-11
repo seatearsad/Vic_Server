@@ -546,28 +546,28 @@ function getUserLocation(options){
 			options.errorMsg = options.errorMsg + '<br/>' + options.errorContentSuffix;
 		}
 		if(options.errorFunction){
-            layer.open({
-                title:[options.errorTipTitle,'background-color:#FF658E;color:#fff;'],
-                content:options.errorMsg,
-                btn: ['确定'],
-                end:function(){
-                    if(options.errorUrl != ''){
-                        if(options.errorUrl == 'history'){
-                            window.history.go(-1);
-                        }else if(options.errorUrl == 'href'){
-                            window.location.reload();
-                        }else{
-                            window.location.href=options.errorUrl;
-                        }
-                    }
-                }
-            });
-			// if(options.errorFunction == 'refresh'){
-			// 	window.location.reload();
-			// }else{
-			// 	options.errorFunctionParam.push(options.errorMsg);
-			// 	call_user_func(options.errorFunction,options.errorFunctionParam);
-			// }
+            // layer.open({
+            //     title:[options.errorTipTitle,'background-color:#FF658E;color:#fff;'],
+            //     content:options.errorMsg,
+            //     btn: ['确定'],
+            //     end:function(){
+            //         if(options.errorUrl != ''){
+            //             if(options.errorUrl == 'history'){
+            //                 window.history.go(-1);
+            //             }else if(options.errorUrl == 'href'){
+            //                 window.location.reload();
+            //             }else{
+            //                 window.location.href=options.errorUrl;
+            //             }
+            //         }
+            //     }
+            // });
+			if(options.errorFunction == 'refresh'){
+				window.location.reload();
+			}else{
+				options.errorFunctionParam.push(options.errorMsg);
+				call_user_func(options.errorFunction,options.errorFunctionParam);
+			}
 		}else{
 			if(options.errorMsg){
 				switch(options.errorAction){

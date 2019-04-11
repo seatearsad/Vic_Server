@@ -15,6 +15,7 @@ class HomeAction extends BaseAction{
 	}
 
 	public function index(){
+	    var_dump($_COOKIE);
 		if(!$_GET['no_house'] && cookie('is_house')){
 			if(cookie('house_village_id')){
 				redirect(str_replace('wap.php','wap_house.php',U('House/village',array('village_id'=>  cookie('house_village_id')))));
