@@ -393,14 +393,15 @@ function getUserLocation(options){
 		locationOkFun(options);
 		return false;
 	}
-    layer.open({
-        type:0,
-        title:'test',
-        content:wx
-    });
+
     var wxSdkLoad = true;
 	if(typeof(wxSdkLoad) != "undefined"){
 		wx.ready(function () {
+            layer.open({
+                type:0,
+                title:'test',
+                content:'wx ready'
+            });
 			wx.getLocation({
 				type: 'wgs84',
 				success: function (res) {
@@ -451,6 +452,14 @@ function getUserLocation(options){
 				}
 			});
 		});
+
+        wx.error(function(res){
+            layer.open({
+                type:0,
+                title:'test',
+                content:res
+            });
+        });
         //if('https:' == document.location.protocol  && navigator.geolocation){ garfunkel modify https judge
     }else if(navigator.geolocation){
 		navigator.geolocation.getCurrentPosition(function(position){
