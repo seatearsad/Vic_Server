@@ -18,7 +18,11 @@
     <script type="text/javascript" src="{pigcms{$static_path}js/idangerous.swiper.min.js" charset="utf-8"></script>
     <script type="text/javascript" src="{pigcms{$static_path}js/fastclick.js" charset="utf-8"></script>
     <script type="text/javascript" src="{pigcms{$static_path}layer/layer.m.js" charset="utf-8"></script>
-    <script type="text/javascript">var group_index_sort_url="{pigcms{:U('Home/group_index_sort')}";<if condition="$user_long_lat">var user_long = "{pigcms{$user_long_lat.long}",user_lat = "{pigcms{$user_long_lat.lat}";<else/>var user_long = '0',user_lat  = '0';</if>var app_version="{pigcms{$_REQUEST['app_version']}"</script>
+    <script type="text/javascript">
+        var group_index_sort_url="{pigcms{:U('Home/group_index_sort')}";
+        <if condition="$user_long_lat">var user_long = "{pigcms{$user_long_lat.long}",user_lat = "{pigcms{$user_long_lat.lat}";<else/>var user_long = '0',user_lat  = '0';</if>var app_version="{pigcms{$_REQUEST['app_version']}"
+        var address_url = "{pigcms{:U('Home/address')}";
+    </script>
     <script type="text/javascript" src="{pigcms{$static_path}js/index.js" charset="utf-8"></script>
     <script type="text/javascript" src="{pigcms{$static_public}js/lang/{pigcms{:C('DEFAULT_LANG')}.js" charset="utf-8"></script>
     <script type="text/javascript" src="{pigcms{$static_path}js/common.js" charset="utf-8"></script>
@@ -99,11 +103,6 @@
                 </div>
             </section>
         </if>
-        <if condition="$is_wexin_browser">1
-            <else />
-            0
-        </if>
-        |{pigcms{$_SESSION['openid']}
         <div id="category">
             <div class="cate_left"></div>
             <ul>

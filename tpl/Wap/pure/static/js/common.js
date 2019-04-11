@@ -374,7 +374,7 @@ function getUserLocation(options){
 		'errorFunction':false,			//string 没得到位置调用的方法， refresh 代表刷新页面
 		'errorFunctionParam':[],		//array 调用方法的自定义参数，以数组形式传参！系统参数：
 		'errorAction':1,				//number 1代表给指定“errorTipTime”参数时间内的提示，2代表弹层给出确认按钮的提示后跳转“errorUrl”（需要自行加载layer.js支持），3代表直接跳转到URL，4代表不提示
-		'errorUrl':'',					//string errorAction 等于2或3时生效，值 history 代表上一页 值  href 代表刷新当前页面
+		'errorUrl':address_url,					//string errorAction 等于2或3时生效，值 history 代表上一页 值  href 代表刷新当前页面
 		'errorTipTime':3,				//number  给有效时间提示的时间 	0代表长时间存在
 		'errorTipTitle':'错误提示：',	//string errorAction 等于2生效
 		'errorContentSuffix':'',	//string errorAction 等于2生效
@@ -435,6 +435,7 @@ function getUserLocation(options){
 					if(res.errMsg == 'getLocation:cancel'){
 						options['errorMsg'] = '获取位置信息失败,用户拒绝请求地理定位';
 					}
+                    options['errorMsg'] = res.errMsg;
 					locationErorrTip(options);
 				}
 			});
@@ -484,7 +485,7 @@ function getUserLocation(options){
 					options['errorMsg'] = '获取位置信息失败,定位系统失效';
 					break;
 			}
-			alert(options['errorMsg']);
+			//alert(options['errorMsg']);
 			locationErorrTip(options);
 		},{enableHighAccuracy:true});
 	}else{
@@ -540,16 +541,33 @@ function getUserLocation(options){
 		}
 	}
 	function locationErorrTip(options){
+    	console.log(options);
 		if(options.errorMsg && options.errorContentSuffix){
 			options.errorMsg = options.errorMsg + '<br/>' + options.errorContentSuffix;
 		}
 		if(options.errorFunction){
-			if(options.errorFunction == 'refresh'){
-				window.location.reload();
-			}else{
-				options.errorFunctionParam.push(options.errorMsg);
-				call_user_func(options.errorFunction,options.errorFunctionParam);
-			}
+            layer.open({
+                title:[options.errorTipTitle,'background-color:#FF658E;color:#fff;'],
+                content:options.errorMsg,
+                btn: ['确定'],
+                end:function(){
+                    if(options.errorUrl != ''){
+                        if(options.errorUrl == 'history'){
+                            window.history.go(-1);
+                        }else if(options.errorUrl == 'href'){
+                            window.location.reload();
+                        }else{
+                            window.location.href=options.errorUrl;
+                        }
+                    }
+                }
+            });
+			// if(options.errorFunction == 'refresh'){
+			// 	window.location.reload();
+			// }else{
+			// 	options.errorFunctionParam.push(options.errorMsg);
+			// 	call_user_func(options.errorFunction,options.errorFunctionParam);
+			// }
 		}else{
 			if(options.errorMsg){
 				switch(options.errorAction){
