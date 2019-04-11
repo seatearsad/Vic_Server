@@ -112,16 +112,6 @@
                     </li>
                     </a>
                 </volist>
-                <volist name="category" id="vo">
-                    <a href="{pigcms{:U('Shop/index')}&cat={pigcms{$vo['id']}">
-                    <li>
-                        <div>
-                            <img src="{pigcms{$vo['image']}" />
-                        </div>
-                        <div>{pigcms{$vo['title']}</div>
-                    </li>
-                    </a>
-                </volist>
             </ul>
             <div class="cate_right"></div>
         </div>
