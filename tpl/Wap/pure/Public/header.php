@@ -229,6 +229,17 @@
         background-size: 100% 100%;
         flex: 0 0 auto;
     }
+    .local_div{
+        width: 50px;
+        height: 50px;
+        margin-top: 5px;
+        margin-left: 10px;
+        background-image: url("./tpl/Static/blue/images/wap/address.png");
+        background-size: 70% 70%;
+        background-repeat: no-repeat;
+        background-position: center;
+        cursor: pointer;
+    }
 </style>
 <div class="down_header">
     <div class="down_close">X</div>
@@ -239,7 +250,11 @@
     <div class="down_view">VIEW</div>
 </div>
 <div id="tutti_header">
-    <div id="header_menu"></div>
+    <div id="header_menu">
+        <if condition="MODULE_NAME == 'Home' or MODULE_NAME == 'Shop'">
+        <div class="local_div"></div>
+        </if>
+    </div>
     <div id="header_logo"></div>
     <div id="header_sign">
     </div>
@@ -295,5 +310,8 @@
     var app_url = 'https://itunes.apple.com/us/app/tutti/id1439900347?ls=1&mt=8';
     $('.down_view').click(function () {
         window.open(app_url);
+    });
+    $('.local_div').click(function () {
+        window.location.href = "{pigcms{:U('Home/address')}";
     });
 </script>

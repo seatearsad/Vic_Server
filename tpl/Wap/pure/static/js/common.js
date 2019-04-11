@@ -374,7 +374,7 @@ function getUserLocation(options){
 		'errorFunction':false,			//string 没得到位置调用的方法， refresh 代表刷新页面
 		'errorFunctionParam':[],		//array 调用方法的自定义参数，以数组形式传参！系统参数：
 		'errorAction':1,				//number 1代表给指定“errorTipTime”参数时间内的提示，2代表弹层给出确认按钮的提示后跳转“errorUrl”（需要自行加载layer.js支持），3代表直接跳转到URL，4代表不提示
-		'errorUrl':address_url,					//string errorAction 等于2或3时生效，值 history 代表上一页 值  href 代表刷新当前页面
+		'errorUrl':'',					//string errorAction 等于2或3时生效，值 history 代表上一页 值  href 代表刷新当前页面
 		'errorTipTime':3,				//number  给有效时间提示的时间 	0代表长时间存在
 		'errorTipTitle':'错误提示：',	//string errorAction 等于2生效
 		'errorContentSuffix':'',	//string errorAction 等于2生效
@@ -385,26 +385,20 @@ function getUserLocation(options){
 	for (var i in options){
 		this.options[i] = options[i];
 	}
+
 	options = this.options;
-    if(options.useHistory && $.cookie('userLocationLong') && $.cookie('userLocationLat')){
+	if(options.useHistory && $.cookie('userLocationLong') && $.cookie('userLocationLat')){
 		options['userLocation'] = $.cookie('userLocation');
 		options['userLocationLong'] = $.cookie('userLocationLong');
 		options['userLocationLat'] = $.cookie('userLocationLat');
 		locationOkFun(options);
 		return false;
 	}
-
-    var wxSdkLoad = true;
 	if(typeof(wxSdkLoad) != "undefined"){
 		wx.ready(function () {
 			wx.getLocation({
 				type: 'wgs84',
 				success: function (res) {
-                    layer.open({
-                        type:0,
-                        title:'test',
-                        content:'wx.success'
-                    });
 					var userLat = res.latitude;
 					var userLong = res.longitude;
 					options['userLocation'] = userLong+','+userLat;
@@ -436,35 +430,16 @@ function getUserLocation(options){
 					// alert(res.errMsg);
 					// alert(JSON.stringify(res));
 					options['errorMsg'] = res.errMsg;
-					layer.open({
-						type:0,
-						title:'test',
-						content:res.errMsg+'1'
-					});
 					locationErorrTip(options);
 				},
 				cancel: function(res){
-					layer.open({
-						type:0,
-						title:'test',
-						content:res.errMsg+'2'
-					});
-					// if(res.errMsg == 'getLocation:cancel'){
-					// 	options['errorMsg'] = '获取位置信息失败,用户拒绝请求地理定位';
-					// }
-                    // options['errorMsg'] = res.errMsg;
-					// locationErorrTip(options);
+					if(res.errMsg == 'getLocation:cancel'){
+						options['errorMsg'] = '获取位置信息失败,用户拒绝请求地理定位';
+					}
+					locationErorrTip(options);
 				}
 			});
 		});
-
-        wx.error(function(res){
-            layer.open({
-                type:0,
-                title:'test',
-                content:res.errMsg+3
-            });
-        });
         //if('https:' == document.location.protocol  && navigator.geolocation){ garfunkel modify https judge
     }else if(navigator.geolocation){
 		navigator.geolocation.getCurrentPosition(function(position){
@@ -510,7 +485,7 @@ function getUserLocation(options){
 					options['errorMsg'] = '获取位置信息失败,定位系统失效';
 					break;
 			}
-			//alert(options['errorMsg']);
+			alert(options['errorMsg']);
 			locationErorrTip(options);
 		},{enableHighAccuracy:true});
 	}else{
@@ -570,22 +545,6 @@ function getUserLocation(options){
 			options.errorMsg = options.errorMsg + '<br/>' + options.errorContentSuffix;
 		}
 		if(options.errorFunction){
-            // layer.open({
-            //     title:[options.errorTipTitle,'background-color:#FF658E;color:#fff;'],
-            //     content:options.errorMsg,
-            //     btn: ['确定'],
-            //     end:function(){
-            //         if(options.errorUrl != ''){
-            //             if(options.errorUrl == 'history'){
-            //                 window.history.go(-1);
-            //             }else if(options.errorUrl == 'href'){
-            //                 window.location.reload();
-            //             }else{
-            //                 window.location.href=options.errorUrl;
-            //             }
-            //         }
-            //     }
-            // });
 			if(options.errorFunction == 'refresh'){
 				window.location.reload();
 			}else{
