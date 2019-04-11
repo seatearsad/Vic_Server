@@ -462,7 +462,7 @@ function getUserLocation(options){
             layer.open({
                 type:0,
                 title:'test',
-                content:res
+                content:res.errMsg+3
             });
         });
         //if('https:' == document.location.protocol  && navigator.geolocation){ garfunkel modify https judge
