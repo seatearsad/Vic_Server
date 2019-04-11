@@ -393,7 +393,7 @@ function getUserLocation(options){
 		locationOkFun(options);
 		return false;
 	}
-	/*if(typeof(wxSdkLoad) != "undefined"){
+	if(typeof(wxSdkLoad) != "undefined"){
 		wx.ready(function () {
 			wx.getLocation({
 				type: 'wgs84',
@@ -439,9 +439,8 @@ function getUserLocation(options){
 				}
 			});
 		});
-	}else*/
-	//if('https:' == document.location.protocol  && navigator.geolocation){ garfunkel modify https judge
-    if(navigator.geolocation){
+        //if('https:' == document.location.protocol  && navigator.geolocation){ garfunkel modify https judge
+    }else if(navigator.geolocation){
 		navigator.geolocation.getCurrentPosition(function(position){
 			var userLong = position.coords.longitude.toFixed(6);
 			var userLat  = position.coords.latitude.toFixed(6);
