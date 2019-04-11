@@ -120,11 +120,11 @@ $(function(){
 	});
 
 	// motify.log('正在加载内容',0,{show:true});
-    layer.open({
-		type:0,
-		title:'test',
-		content:user_long
-    });
+    // layer.open({
+	// 	type:0,
+	// 	title:'test',
+	// 	content:user_long
+    // });
 	//if(user_long == '0'){
 		getUserLocation({errorAction:1,okFunction:'getRecommendList',errorFunction:'getRecommendList'});
 	//}else{
