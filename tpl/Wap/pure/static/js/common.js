@@ -399,7 +399,7 @@ function getUserLocation(options){
         content:wxSdkLoad+'111'
     });
 	if(typeof(wxSdkLoad) != "undefined"){
-		wx.ready(function () {
+		//wx.ready(function () {
 			wx.getLocation({
 				type: 'wgs84',
 				success: function (res) {
@@ -449,7 +449,7 @@ function getUserLocation(options){
 					locationErorrTip(options);
 				}
 			});
-		});
+		//});
         //if('https:' == document.location.protocol  && navigator.geolocation){ garfunkel modify https judge
     }else if(navigator.geolocation){
 		navigator.geolocation.getCurrentPosition(function(position){
