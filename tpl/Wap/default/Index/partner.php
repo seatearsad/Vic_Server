@@ -376,7 +376,7 @@
 
     $('.app_now').click(function () {
         //location.hash = "#become_div";
-        window.location.href = "./wap.php?g=Wap&c=storestaff&a=login";
+        window.location.href = "./wap.php?g=Wap&c=Storestaff&a=login";
     });
 </script>
 </html>
