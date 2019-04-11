@@ -112,7 +112,7 @@
                     </div>
                     <div class="clr fr right">
                         <div class="fl ride">x{pigcms{$goods['num']}</div>
-                        <div class="fl del">${pigcms{$goods['total']}</div>
+                        <div class="fl del"> &nbsp;</div>
                         <div class="fl price">${pigcms{$goods['discount_total']}</div>
                     </div>
                 </dd>
@@ -295,7 +295,7 @@
                         </if>
                     </div>
                 </li>
-                <if condition="$order_details['card_discount'] eq 0 OR $order_details['card_discount'] eq 10">
+                <!--if condition="$order_details['card_discount'] eq 0 OR $order_details['card_discount'] eq 10">
                     <li class="clr">
                         <div class="fl">{pigcms{:L('_BUSINESS_CARD_DIS_')}</div>
                         <div class="p90">
@@ -308,7 +308,7 @@
                             <p class="kdsize">（{pigcms{:L('_NOTE_NOT_TAKE_DIS_')}）</p>
                         </div>
                     </li>
-                </if>
+                </if-->
                 <if condition="$order_details['coupon_price'] gt 0">
                     <li class="clr">
                         <div class="fl">{pigcms{:L('_PLATFORM_COUP_')}</div>

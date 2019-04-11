@@ -231,6 +231,9 @@
                 border-right: rgba(255,255,255,0.35) solid 5px;
                 border-left: rgba(255,255,255,0.35) solid 5px;
             }
+            .msg-option{
+                bottom: 0;
+            }
         </style>
 	<body>
     <div id="container">
@@ -381,7 +384,7 @@
 				<div id="shopMerchantBox">
 					<dl id="shopMerchantDescBox">
 						<dd class="phone more">{pigcms{:L('_SHOP_PHONE_')}</dd>
-						<dd class="address more page-link"><span></span>{pigcms{:L('_SHOP_ADDRESS_')}</dd>
+						<dd class="address more"><span></span>{pigcms{:L('_SHOP_ADDRESS_')}</dd>
 						<dd class="openTime">{pigcms{:L('_BUSINESS_TIME_')}</dd>
 						<!--dd class="deliveryType">{pigcms{:L('_DIST_SERVICE_')}</dd-->
 						<dd class="merchantNotice">{pigcms{:L('_SHOP_NOTICE_')}</dd>

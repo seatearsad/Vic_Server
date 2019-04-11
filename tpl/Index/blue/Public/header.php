@@ -194,7 +194,7 @@
             <div class="sign_btn">{pigcms{:L('_NEW_SIGN_IN_')}</div>
             <else />
             <div class="user_div">
-                <a href="{pigcms{:U('User/index/shop_list')}">{pigcms{$user_session.nickname}</a>
+                <a href="{pigcms{:U('User/Index/shop_list')}">{pigcms{$user_session.nickname}</a>
             </div>
         </if>
     </div>

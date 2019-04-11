@@ -20,9 +20,9 @@
             <li>
                 <a <?php if(in_array(MODULE_NAME,array('Shop'))){ echo 'class="hover"';}?> href="{pigcms{:U('Shop/index')}"><em class="group"></em></a>
             </li>
-			<li class="voiceBox">
+			<!--li class="voiceBox">
 				<a href="{pigcms{:U('Search/voice')}" class="voiceBtn" data-nobtn="true"></a>
-			</li>
+			</li-->
             <li>
                 <a <?php if(ACTION_NAME == 'shop_order_list'){ echo 'class="hover"'; }?> href="{pigcms{:U('My/shop_order_list')}"><em class="store"></em></a>
             </li>

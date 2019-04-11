@@ -197,7 +197,7 @@ class Store_orderModel extends Model
 			if ($result_after_pay['error']) {
 				return array('error_code' => true,'msg'=>$result_after_pay['msg']);
 			}
-			return array('error_code'=>false,'msg'=>'支付成功！','url'=>str_replace('/source/','/',U('My/store_order_list')));
+			return array('error_code'=>false,'msg'=>L('_PAYMENT_SUCCESS_'),'url'=>str_replace('/source/','/',U('My/store_order_list')));
 	}
 	
 	//支付之后

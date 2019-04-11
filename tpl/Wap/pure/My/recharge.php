@@ -11,6 +11,7 @@
 	<meta name="format-detection" content="address=no">
     <link href="{pigcms{$static_path}css/eve.7c92a906.css" rel="stylesheet"/>
     <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/common.css?215"/>
+    <script type="text/javascript" src="{pigcms{:C('JQUERY_FILE_190')}" charset="utf-8"></script>
 </head>
 <style>
     .main{
@@ -114,7 +115,7 @@
                     }
                 </php>
             </div>
-		    <div class="btn-wrapper"><button type="submit" class="btn btn-block btn-larger">{pigcms{:L('_B_PURE_MY_26_')}</button></div>
+		    <div class="btn-wrapper"><button type="submit" class="btn btn-block btn-larger">{pigcms{:L('_RECHARGE_TXT_')}</button></div>
 		</form>
     	<script src="{pigcms{:C('JQUERY_FILE')}"></script>
 		<script src="{pigcms{$static_path}js/common_wap.js"></script>

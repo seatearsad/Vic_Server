@@ -2930,7 +2930,7 @@ class StoreAction extends BaseAction{
 					}
 				}
 
-				$this->success('支付成功！');
+				$this->success(L('_PAYMENT_SUCCESS_'));
 			}else{
 				$this->error('支付失败！请联系管理员处理。');
 			}
@@ -2959,7 +2959,7 @@ class StoreAction extends BaseAction{
 						}
 					}
 
-					$this->success('支付成功！');
+					$this->success(L('_PAYMENT_SUCCESS_'));
 				}else{
 					$this->error('支付失败！请联系管理员处理。');
 				}
@@ -3004,7 +3004,7 @@ class StoreAction extends BaseAction{
 				}
 
 			}
-			$this->success('支付成功！');
+			$this->success(L('_PAYMENT_SUCCESS_'));
 		}else{
 			$this->error('支付失败！请联系管理员处理。');
 		}
@@ -3163,7 +3163,7 @@ class StoreAction extends BaseAction{
 				}
 			}
 
-			$this->success('支付成功！');
+			$this->success(L('_PAYMENT_SUCCESS_'));
 		}else{
 			$this->error('支付失败！请联系管理员处理。');
 		}
@@ -3171,7 +3171,7 @@ class StoreAction extends BaseAction{
 	public function store_arrival_check(){
 		$now_order = M('Store_order')->where(array('order_id'=>$_POST['order_id']))->find();
 		if($now_order['paid']){
-			$this->success('支付成功！');
+			$this->success(L('_PAYMENT_SUCCESS_'));
 		}else{
 			$this->error('还未支付');
 		}
@@ -5641,7 +5641,7 @@ class StoreAction extends BaseAction{
 	{
 		$now_order = M('Shop_order')->where(array('order_id'=>$_POST['order_id']))->find();
 		if ($now_order['paid']) {
-			$this->success('支付成功！');
+			$this->success(L('_PAYMENT_SUCCESS_'));
 		} else {
 			$this->error('还未支付');
 		}
@@ -5831,7 +5831,7 @@ class StoreAction extends BaseAction{
 		if(M($table_name)->where(array('order_id' => $order_id))->data($data)->save()){
 			$now_order = M($table_name)->where(array('order_id'=>$order_id))->find();
 			$this->shop_notice($now_order, true);
-			$this->success('支付成功！');
+			$this->success(L('_PAYMENT_SUCCESS_'));
 		}else{
 			$this->error('支付失败！请联系管理员处理。');
 		}
@@ -5849,7 +5849,7 @@ class StoreAction extends BaseAction{
 		if(M($table_name)->where(array('order_id' => $order_id))->data($data)->save()){
 			$now_order = M($table_name)->where(array('order_id' => $order_id))->find();
 			$this->shop_notice($now_order, true);
-			$this->success('支付成功！');
+			$this->success(L('_PAYMENT_SUCCESS_'));
 		}else{
 			$this->error('支付失败！请联系管理员处理。');
 		}
@@ -5924,7 +5924,7 @@ class StoreAction extends BaseAction{
 			if (M($table_name)->where(array('order_id'=>$order_id))->data($data)->save()) {
 				$now_order = M($table_name)->where(array('order_id' => $order_id))->find();
 				$this->shop_notice($now_order, true);
-				$this->success('支付成功！');
+				$this->success(L('_PAYMENT_SUCCESS_'));
 			} else {
 				$this->error('支付失败！请联系管理员处理。');
 			}
@@ -5943,7 +5943,7 @@ class StoreAction extends BaseAction{
 				if (M($table_name)->where(array('order_id' => $order_id))->data($data)->save()) {
 					$now_order = M($table_name)->where(array('order_id' => $order_id))->find();
 					$this->shop_notice($now_order, true);
-					$this->success('支付成功！');
+					$this->success(L('_PAYMENT_SUCCESS_'));
 				} else {
 					$this->error('支付失败！请联系管理员处理。');
 				}

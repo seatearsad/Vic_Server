@@ -24,6 +24,18 @@
                 <li><a href="#" target="_blank">Blogs</a></li>
                 <li><a href="{pigcms{:U('Index/courier')}" target="_blank">Become a Courier</a></li>
                 <li><a href="{pigcms{:U('Index/partner')}" target="_blank">Become a Partner</a></li>
+                <li class="lang_curr_wap">
+                    <if condition="C('DEFAULT_LANG') == 'zh-cn'">
+                        Chinese
+                        <else />
+                        English
+                    </if>
+                    <span style="font-weight: bold"> &or;</span>
+                    <div class="lang_select">
+                        <div class="lang_en">English</div>
+                        <div class="lang_cn">Chinese</div>
+                    </div>
+                </li>
             </ul>
         </div>
         <div class="open_time">
@@ -83,6 +95,19 @@
 
         gtag('config', 'UA-123655278-1');
     </script>
+    <script src="{pigcms{$static_public}js/lang.js"></script>
+    <script>
+        $('.apk_icon').click(function () {
+            layer.open({
+                title:"{pigcms{:L('_STORE_REMIND_')}",
+                content:'Coming Soon'
+            });
+        });
+        var app_url = 'https://itunes.apple.com/us/app/tutti/id1439900347?ls=1&mt=8';
+        $('.app_icon').click(function () {
+            window.open(app_url);
+        });
+    </script>
 </div>
 <style>
     .footer{
@@ -126,7 +151,7 @@
         color: #ffa52d;
     }
     .footer_memo ul{
-        margin: 20px 0px 10px 30px;
+        margin: 20px 0px 30px 30px;
         padding: 10px 0px;
         width: 100%;
     }
@@ -219,5 +244,12 @@
     }
     .link_icon li:nth-child(5){
         background-image: url("./tpl/Static/blue/images/new/icons/linkedin.png");
+    }
+    .lang_curr_wap div{
+        float: none;
+    }
+    .lang_select{
+        display: none;
+        z-index: 99;
     }
 </style>

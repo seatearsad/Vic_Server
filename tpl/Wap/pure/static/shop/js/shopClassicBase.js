@@ -814,7 +814,8 @@ function showGood(shop_id,product_id){
 			});
 			
 			$('#shopDetailpageClose').click(function(){
-				goBackPage();
+				//goBackPage();
+                window.history.go(-1);
 			});
 			
 			changeProductSpec();

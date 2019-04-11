@@ -94,7 +94,7 @@
 			        var new_v = $("#password");
 			        var new_v2 = $("#password2");
 			        if(old_v.size() > 0 && old_v.val().length < 6){
-			        	$('#tips').html("pigcms{:L('_B_MY_WRONGKEY_')").addClass('tips-err').show();
+			        	$('#tips').html("{pigcms{:L('_B_MY_WRONGKEY_')}").addClass('tips-err').show();
 			            return false;
 				    }
 			      	if(new_v.val().length < 6){

@@ -213,7 +213,7 @@ class Shop_orderModel extends Model
 			if($result_after_pay['error']){
 				return array('error_code'=>true,'msg'=>$result_after_pay['msg']);
 			}
-			return array('error_code'=>false,'msg'=>'支付成功！','url'=>U('User/Index/shop_order_view',array('order_id'=>$order_info['order_id'])));
+			return array('error_code'=>false,'msg'=>L('_PAYMENT_SUCCESS_'),'url'=>U('User/Index/shop_order_view',array('order_id'=>$order_info['order_id'])));
 		}
 	}
 
@@ -391,9 +391,9 @@ class Shop_orderModel extends Model
 				return array('error_code' => true,'msg'=>$result_after_pay['msg']);
 			}
 			if ($order_info['order_from'] == 1) {
-				return array('error_code'=>false,'msg'=>'支付成功！','url' => C('config.site_url') . "/wap.php?g=Wap&c=Mall&a=status&order_id=" . $order_info['order_id'] . '&mer_id=' . $order_info['mer_id'] . '&store_id=' . $order_info['store_id']);
+				return array('error_code'=>false,'msg'=>L('_PAYMENT_SUCCESS_'),'url' => C('config.site_url') . "/wap.php?g=Wap&c=Mall&a=status&order_id=" . $order_info['order_id'] . '&mer_id=' . $order_info['mer_id'] . '&store_id=' . $order_info['store_id']);
 			} else {
-				return array('error_code'=>false,'msg'=>'支付成功！','url' => C('config.site_url') . "/wap.php?g=Wap&c=Shop&a=status&order_id=" . $order_info['order_id'] . '&mer_id=' . $order_info['mer_id'] . '&store_id=' . $order_info['store_id']);
+				return array('error_code'=>false,'msg'=>L('_PAYMENT_SUCCESS_'),'url' => C('config.site_url') . "/wap.php?g=Wap&c=Shop&a=status&order_id=" . $order_info['order_id'] . '&mer_id=' . $order_info['mer_id'] . '&store_id=' . $order_info['store_id']);
 			}
 	}
 

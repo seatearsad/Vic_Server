@@ -222,6 +222,12 @@
         #shopReplyBox .right .time{
             float: none;
         }
+        .pageLoadTipLoader::before{
+            border-bottom: #ffffff solid 5px;
+            border-top: rgba(255,255,255,0.35) solid 5px;
+            border-right: rgba(255,255,255,0.35) solid 5px;
+            border-left: rgba(255,255,255,0.35) solid 5px;
+        }
     </style>
 	<body>
 		<div id="pageList" class="pageDiv" <if condition="$config['shop_show_footer']">style="padding-bottom:56px;"</if>>

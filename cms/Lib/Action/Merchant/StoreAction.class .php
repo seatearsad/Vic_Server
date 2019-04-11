@@ -2429,7 +2429,7 @@ class StoreAction extends BaseAction{
 				//商家余额增加
 				D('Merchant_money_list')->add_money($now_order['mer_id'],'用户到店支付宝支付计入收入',$now_order);
 
-				$this->success('支付成功！');
+				$this->success(L('_PAYMENT_SUCCESS_'));
 			}else{
 				$this->error('支付失败！请联系管理员处理。');
 			}
@@ -2448,7 +2448,7 @@ class StoreAction extends BaseAction{
 					//商家余额增加
 					D('Merchant_money_list')->add_money($now_order['mer_id'],'用户到店支付宝支付计入收入',$now_order);
 
-					$this->success('支付成功！');
+					$this->success(L('_PAYMENT_SUCCESS_'));
 				}else{
 					$this->error('支付失败！请联系管理员处理。');
 				}
@@ -2558,7 +2558,7 @@ class StoreAction extends BaseAction{
 			D('Merchant_money_list')->add_money($now_order['mer_id'],'用户到店微信支付计入收入',$now_order);
 
 			D('Merchant_spread')->add_spread_list($now_order,$now_user,$now_order['order_type'],$now_user['nickname'].'用户到店支付获得佣金');
-			$this->success('支付成功！');
+			$this->success(L('_PAYMENT_SUCCESS_'));
 		}else{
 			$this->error('支付失败！请联系管理员处理。');
 		}
@@ -2566,7 +2566,7 @@ class StoreAction extends BaseAction{
 	public function store_arrival_check(){
 		$now_order = M('Store_order')->where(array('order_id'=>$_POST['order_id']))->find();
 		if($now_order['paid']){
-			$this->success('支付成功！');
+			$this->success(L('_PAYMENT_SUCCESS_'));
 		}else{
 			$this->error('还未支付');
 		}
