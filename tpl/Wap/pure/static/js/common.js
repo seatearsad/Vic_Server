@@ -436,28 +436,24 @@ function getUserLocation(options){
 					// alert(res.errMsg);
 					// alert(JSON.stringify(res));
 					options['errorMsg'] = res.errMsg;
-                    wx.error(function(res){
-                        layer.open({
-                            type:0,
-                            title:'test',
-                            content:res.errMsg+'1'
-                        });
-                    });
+					layer.open({
+						type:0,
+						title:'test',
+						content:res.errMsg+'1'
+					});
 					locationErorrTip(options);
 				},
 				cancel: function(res){
-                    wx.error(function(res){
-                        layer.open({
-                            type:0,
-                            title:'test',
-                            content:res.errMsg+'2'
-                        });
-                    });
-					if(res.errMsg == 'getLocation:cancel'){
-						options['errorMsg'] = '获取位置信息失败,用户拒绝请求地理定位';
-					}
-                    options['errorMsg'] = res.errMsg;
-					locationErorrTip(options);
+					layer.open({
+						type:0,
+						title:'test',
+						content:res.errMsg+'2'
+					});
+					// if(res.errMsg == 'getLocation:cancel'){
+					// 	options['errorMsg'] = '获取位置信息失败,用户拒绝请求地理定位';
+					// }
+                    // options['errorMsg'] = res.errMsg;
+					// locationErorrTip(options);
 				}
 			});
 		});
