@@ -386,11 +386,6 @@ function getUserLocation(options){
 		this.options[i] = options[i];
 	}
 	options = this.options;
-    layer.open({
-        type:0,
-        title:'test',
-        content:wxSdkLoad
-    });
     if(options.useHistory && $.cookie('userLocationLong') && $.cookie('userLocationLat')){
 		options['userLocation'] = $.cookie('userLocation');
 		options['userLocationLong'] = $.cookie('userLocationLong');

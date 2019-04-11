@@ -125,11 +125,11 @@ $(function(){
 		title:'test',
 		content:user_long
     });
-	if(user_long == '0'){
+	//if(user_long == '0'){
 		getUserLocation({errorAction:1,okFunction:'getRecommendList',errorFunction:'getRecommendList'});
-	}else{
-		getRecommendList();
-	}
+	//}else{
+		//getRecommendList();
+	//}
 	if($('.platformNews').size() > 0){
 		$('.platformNews .list').width($(window).width()-20-73);
 		var platformNewsIndex = 0;
