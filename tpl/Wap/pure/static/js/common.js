@@ -386,13 +386,14 @@ function getUserLocation(options){
 		this.options[i] = options[i];
 	}
 	options = this.options;
-	if(options.useHistory && $.cookie('userLocationLong') && $.cookie('userLocationLat')){
+    if(options.useHistory && $.cookie('userLocationLong') && $.cookie('userLocationLat')){
 		options['userLocation'] = $.cookie('userLocation');
 		options['userLocationLong'] = $.cookie('userLocationLong');
 		options['userLocationLat'] = $.cookie('userLocationLat');
 		locationOkFun(options);
 		return false;
 	}
+	alert(wxSdkLoad);
 	if(typeof(wxSdkLoad) != "undefined"){
 		wx.ready(function () {
 			wx.getLocation({

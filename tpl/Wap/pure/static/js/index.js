@@ -120,6 +120,7 @@ $(function(){
 	});
 
 	// motify.log('正在加载内容',0,{show:true});
+	alert(user_long);
 	if(user_long == '0'){
 		getUserLocation({errorAction:1,okFunction:'getRecommendList',errorFunction:'getRecommendList'});
 	}else{
