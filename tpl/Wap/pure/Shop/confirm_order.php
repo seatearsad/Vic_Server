@@ -226,6 +226,9 @@ a {
 .comm_btn{
     background-color: #ffa52d;
 }
+.menu_wrap{
+    margin-top: 90px;
+}
 </style>
 </head>
 <script type="text/javascript" src="{pigcms{$static_path}shop/js/scroller.js"></script>
