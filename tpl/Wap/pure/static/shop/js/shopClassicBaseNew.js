@@ -7,6 +7,10 @@ $(function(){
 	
 	$('body').width(window_width);
 	$('body,.pageDiv').css({width:window_width,'min-height':window_height});
+
+    $(window).bind('hashchange',function(){
+        hash_handle();
+    });
 	
 	$(document).on('click','.hasMore',function(){
 		$(this).toggleClass('showMore');
@@ -44,8 +48,15 @@ function resetBodyHeight(){
 }
 
 function hash_handle(){
-	var locationHashParam = locationClassicHash.split('-');
-	var locationHashItem = locationHashParam[0];
+    var locationHash = location.hash.replace("#","");
+    if(locationHash.split('-')[0] == "good") {
+        var locationHashParam = locationHash.split('-');
+        var locationHashItem = locationHashParam[0];
+    }else{
+        var locationHashParam = locationClassicHash.split('-');
+        var locationHashItem = locationHashParam[0];
+	}
+
 	if(locationHashItem != 'shop' && locationHashItem != 'good'){
 		changeWechatShare('plat');
 	}
@@ -618,215 +629,304 @@ function searchAddress(address){
 }
 
 var isShowGood = false;
+// function showGood(shop_id,product_id){
+// 	shopId = shop_id;
+// 	$('#pageShop').addClass('nowPage').show();
+// 	pageLoadTips();
+// 	$('body').css('overflow','hidden');
+// 	$('#shopDetailPage').height(window_height-50);
+//
+// 	$('#shopHeader,#shopBanner,#shopMenuBar,#shopMerchantBox').hide();
+//
+// 	cartEventReg();
+// 	$.getJSON(ajax_url_root+'ajaxShop',{store_id:shopId},function(result){
+// 		nowShop = result;
+// 		if(nowShop.store.tmpl == '0'){
+// 			$('#shopDetailPageImgbox').css({height:window_width*500/900,width:window_width});
+// 		}else if(nowShop.store.tmpl == '1'){
+// 			$('#shopDetailPageImgbox').css({height:window_width,width:window_width});
+// 		}
+// 		$.getJSON(ajax_url_root+'ajax_goods',{goods_id:product_id},function(result){
+// 			nowProduct = result;
+// 			productPicList = [];
+// 			for(var i in result.pic_arr){
+// 				productPicList.push(result.pic_arr[i].url);
+// 			}
+//
+// 			//changeWechatShare('good',{title:nowProduct.name,desc:nowProduct.des,imgUrl:productPicList[0],link:goodShareUrl});
+//
+// 			// console.log(productPicList);
+// 			laytpl($('#productSwiperTpl').html()).render(result.pic_arr, function(html){
+// 				$('#shopDetailPageImgbox .swiper-wrapper').removeAttr('style').html(html);
+// 				if(productSwiper != null){
+// 					productSwiper.reInit();
+// 				}
+// 				if(result.pic_arr.length > 1){
+// 					productSwiper = $('#shopDetailPageImgbox').swiper({
+// 						pagination:'#shopDetailPageImgbox .swiper-pagination-productImg',
+// 						loop:true,
+// 						grabCursor: true,
+// 						paginationClickable: true,
+// 						autoplay:3000,
+// 						autoplayDisableOnInteraction:false,
+// 						simulateTouch:false
+// 					});
+// 				}
+// 			});
+// 			$('#shopDetailPageTitle .title').html(result.name);
+//             //$('#shopDetailPageTitle .desc').html(getLangStr('_MONTH_SALE_NUM_' , result.sell_count)+ ' ' +getLangStr('_PRAISE_TXT_')+result.reply_count);
+//             $('#shopDetailPageTitle .desc').html(getLangStr('_PRAISE_TXT_')+result.reply_count);
+// 			$('#shopDetailPageFormat').empty();
+// 			if(result.des != ''){
+// 				$('#shopDetailPageContent .content').html(result.des).show();
+// 				$('#shopDetailPageContent').show();
+// 			}else if(nowShop.store.delivery){
+// 				$('#shopDetailPageContent .content').html(getLangStr('_REMINDER_STRING_')).show();
+// 				$('#shopDetailPageContent').show();
+// 			}else{
+// 				$('#shopDetailPageContent').hide();
+// 			}
+// 			$('#shopDetailPagePrice').html('$'+result.price+'<span class="unit"><em>/ </em>'+result.unit+'</span>'+(result.stock_num != -1 ? '<span data-stock="'+result.stock_num+'">还剩'+result.stock_num+result.unit+'</span>' : '<span data-stock="-1"></span>') + '<span>'+ result.deposit_price +'</span>');
+// 			if(result.properties_list){
+// 				laytpl($('#productPropertiesTpl').html()).render(result.properties_list, function(html){
+// 					$('#shopDetailPageLabelBox').html(html);
+// 				});
+// 				$('#shopDetailPageLabel').show();
+// 			}else{
+// 				$('#shopDetailPageLabel').hide();
+// 			}
+// 			if(result.spec_list){
+// 				laytpl($('#productFormatTpl').html()).render(result.spec_list, function(html){
+// 					$('#shopDetailPageFormat').html(html);
+// 				});
+// 			}
+// 			$('#shopDetailPageNumber .number').addClass('productNum-'+result.goods_id);
+//
+// 			var nowShopCart = $.cookie('shop_cart_'+nowShop.store.id);
+// 			if(nowShopCart){
+// 				nowShopCartArr = $.parseJSON(nowShopCart);
+// 				productCart=[];
+// 				if(nowShopCartArr.length > 0){
+// 					productCartNumber = productCartMoney = 0;
+// 					for(var i in nowShopCartArr){
+// 						var tmpSpec = [];
+// 						var tmpObj = nowShopCartArr[i].productParam;
+// 						if(tmpObj.length > 0){
+// 							for(var j in tmpObj){
+// 								if(tmpObj[j].type == 'spec'){
+// 									tmpSpec.push(tmpObj[j].id);
+// 								}else{
+// 									for(var k in tmpObj[j].data){
+// 										tmpSpec.push(tmpObj[j].data[k].list_id);
+// 										tmpSpec.push(tmpObj[j].data[k].id);
+// 									}
+// 								}
+// 							}
+// 							if(tmpSpec.length > 0){
+// 								var tmpSpecStr = nowShopCartArr[i].productId + '_' + tmpSpec.join('_');
+// 								productCart[tmpSpecStr] = nowShopCartArr[i];
+// 							}else{
+// 								productCart[nowShopCartArr[i].productId] = nowShopCartArr[i];
+// 							}
+// 						}else{
+// 							productCart[nowShopCartArr[i].productId] = nowShopCartArr[i];
+// 							$('.product_'+nowShopCartArr[i].productId+' .plus').after('<div class="product_btn number productNum-'+nowShopCartArr[i].productId+'">'+nowShopCartArr[i].count+'</div>').after('<div class="product_btn min"></div>');
+// 						}
+// 						productCartNumber += nowShopCartArr[i].count;
+// 						productCartMoney += nowShopCartArr[i].count * nowShopCartArr[i].productPrice;
+// 					}
+//
+// 					//统计购物车功能
+// 					cartFunction('count');
+// 				}
+// 				// console.log(productCart);
+// 			}else{
+// 				cartFunction('count');
+// 			}
+//
+// 			$('#shopDetailPageImgbox').click(function(){
+// 				if(motify.checkWeixin()){
+// 					wx.previewImage({
+// 						current:productPicList[0],
+// 						urls:productPicList
+// 					});
+// 				}
+// 			});
+// 			$(document).on('click','#shopDetailPageFormat li',function(event){
+// 				$(this).addClass('active').siblings('li').removeClass('active');
+// 				changeProductSpec();
+// 			});
+//
+// 			$(document).on('click','#shopDetailPageLabel li',function(event){
+// 				var maxSize = $(this).closest('.row').data('num');
+// 				if(maxSize == 1){
+// 					$(this).addClass('active').siblings('li').removeClass('active');
+// 				}else if(!$(this).hasClass('active')){
+// 					var tmpActiveSize = $(this).closest('ul').find('.active').size();
+// 					if(tmpActiveSize >= maxSize){
+// 						motify.log($(this).closest('.row').data('label_name')+' 您最多能选择 '+maxSize+' 个');
+// 					}else{
+// 						/* if(tmpActiveSize == maxSize-1){
+// 							motify.log('您最多能选择 '+maxSize+' 个，现在已经选择满了');
+// 						} */
+// 						$(this).addClass('active');
+// 					}
+// 				}else{
+// 					$(this).removeClass('active');
+// 				}
+// 				changeProductSpec();
+// 			});
+//
+// 			$(document).on('click','#shopDetailPageNumber .product_btn.plus,#shopDetailPageBuy',function(event){
+// 				if(nowShop.store.is_close == 1){
+// 					motify.log(getLangStr('_SHOP_AT_REST_'));
+// 					return false;
+// 				}
+// 				var intStock = parseInt($('#shopDetailPagePrice span').data('stock'));
+// 				if(intStock != -1 && (intStock == 0 || intStock - parseInt($('#shopDetailPageNumber .number').html()) <= 0)){
+// 					motify.log(getLangStr('_NO_STOCK_'));
+// 					return false;
+// 				}
+// 				tmpDomObj = $(this);
+// 				if(!(motify.checkApp() && motify.checkAndroid())){
+// 					flyer.fly({
+// 						start: {
+// 							left: event.pageX-10,
+// 							top: event.pageY-120
+// 						},
+// 						end: {
+// 							left: 20,
+// 							top: window_height-50,
+// 							width: 20,
+// 							height: 20
+// 						},
+// 						onEnd:function(){
+// 							cartFunction('plus',tmpDomObj,'productPage');
+// 							flyer.remove();
+// 						}
+// 					});
+// 				}else{
+// 					cartFunction('plus',tmpDomObj,'productPage');
+// 				}
+// 				return false;
+// 			});
+// 			$(document).on('click','#shopDetailPageNumber .product_btn.min',function(event){
+// 				tmpDomObj = $(this);
+// 				cartFunction('min',tmpDomObj,'productPage');
+// 				return false;
+// 			});
+//
+// 			$('#shopDetailpageClose').click(function(){
+// 				goBackPage();
+// 			});
+//
+// 			changeProductSpec();
+//
+// 			// shopDetailPageIscroll = new IScroll('#shopDetailPage', { probeType: 1,disableMouse:true,disablePointer:true,mouseWheel: false,scrollX: false, scrollY:true,click:false});
+// 			$('#shopContentBar').show();
+// 			$('#shopDetailPage').show();
+// 			pageLoadHides();
+// 		});
+//         // if(nowShop.shop_remind != ''){
+//         //     pageLoadHides();
+//         //     var remindTipLayer = layer.open({
+//         //         content: nowShop.shop_remind,
+//         //         btn: ['Confirm'],
+//         //         end: function(){
+//         //             layer.close(remindTipLayer);
+//         //         }
+//         //     });
+//         // }
+// 	});
+// }
+
 function showGood(shop_id,product_id){
-	shopId = shop_id;
-	$('#pageShop').addClass('nowPage').show();
-	pageLoadTips();
-	$('body').css('overflow','hidden');
-	$('#shopDetailPage').height(window_height-50);
-	
-	$('#shopHeader,#shopBanner,#shopMenuBar,#shopMerchantBox').hide();
-		
-	cartEventReg();
-	$.getJSON(ajax_url_root+'ajaxShop',{store_id:shopId},function(result){
-		nowShop = result;
-		if(nowShop.store.tmpl == '0'){
-			$('#shopDetailPageImgbox').css({height:window_width*500/900,width:window_width});
-		}else if(nowShop.store.tmpl == '1'){
-			$('#shopDetailPageImgbox').css({height:window_width,width:window_width});
-		}
-		$.getJSON(ajax_url_root+'ajax_goods',{goods_id:product_id},function(result){
-			nowProduct = result;
-			productPicList = [];
-			for(var i in result.pic_arr){
-				productPicList.push(result.pic_arr[i].url);
+    if(nowPage != 'shop'){
+        //location.hash = 'shop-'+shop_id;
+		window.history.go(-1);
+        return false;
+    }
+    pageLoadTips();
+    $('body').css('overflow','hidden');
+    $('#shopDetailPage').height(window_height-50);
+
+    if(nowShop.store.store_theme == '0'){
+        $('#shopDetailPageImgbox').css({height:window_width*500/900,width:window_width});
+    }else if(nowShop.store.store_theme == '1'){
+        $('#shopDetailPageImgbox').css({height:window_width,width:window_width});
+    }
+
+    if(product_id == nowProduct.goods_id){
+        $('#shopContentBar').show();
+        $('#shopDetailPage').show().scrollTop(0).addClass('sliderLeft');
+        pageLoadHides();
+    }else{
+        $.getJSON(ajax_url_root+'ajax_goods',{goods_id:product_id},function(result) {
+            nowProduct = result;
+            productPicList = [];
+            for (var i in result.pic_arr) {
+                productPicList.push(result.pic_arr[i].url);
+            }
+            if (typeof(result.pic_arr) != 'undefined') {
+				laytpl($('#productSwiperTpl').html()).render(result.pic_arr, function (html) {
+					$('#shopDetailPageImgbox .swiper-wrapper').removeAttr('style').html(html);
+					if (productSwiper != null) {
+						productSwiper.reInit();
+						productSwiper.swipeTo(0);
+					}
+					if (productSwiper == null && result.pic_arr.length > 1) {
+						productSwiper = $('#shopDetailPageImgbox').swiper({
+							pagination: '#shopDetailPageImgbox .swiper-pagination-productImg',
+							loop: true,
+							grabCursor: true,
+							paginationClickable: true,
+							autoplay: 3000,
+							autoplayDisableOnInteraction: false,
+							simulateTouch: false
+						});
+					}
+				});
+			}else{
+                $('#shopDetailPageImgbox .swiper-wrapper').removeAttr('style').html("");
 			}
-			
-			changeWechatShare('good',{title:nowProduct.name,desc:nowProduct.des,imgUrl:productPicList[0],link:goodShareUrl});
-			
-			// console.log(productPicList);
-			laytpl($('#productSwiperTpl').html()).render(result.pic_arr, function(html){
-				$('#shopDetailPageImgbox .swiper-wrapper').removeAttr('style').html(html);
-				if(productSwiper != null){
-					productSwiper.reInit();
-				}
-				if(result.pic_arr.length > 1){
-					productSwiper = $('#shopDetailPageImgbox').swiper({
-						pagination:'#shopDetailPageImgbox .swiper-pagination-productImg',
-						loop:true,
-						grabCursor: true,
-						paginationClickable: true,
-						autoplay:3000,
-						autoplayDisableOnInteraction:false,
-						simulateTouch:false
-					});
-				}
-			});
-			$('#shopDetailPageTitle .title').html(result.name);
+            $('#shopDetailPageTitle .title').html(result.name);
             //$('#shopDetailPageTitle .desc').html(getLangStr('_MONTH_SALE_NUM_' , result.sell_count)+ ' ' +getLangStr('_PRAISE_TXT_')+result.reply_count);
             $('#shopDetailPageTitle .desc').html(getLangStr('_PRAISE_TXT_')+result.reply_count);
-			$('#shopDetailPageFormat').empty();
-			if(result.des != ''){
-				$('#shopDetailPageContent .content').html(result.des).show();
-				$('#shopDetailPageContent').show();
-			}else if(nowShop.store.delivery){
-				$('#shopDetailPageContent .content').html(getLangStr('_REMINDER_STRING_')).show();
-				$('#shopDetailPageContent').show();
-			}else{
-				$('#shopDetailPageContent').hide();
-			}
-			$('#shopDetailPagePrice').html('$'+result.price+'<span class="unit"><em>/ </em>'+result.unit+'</span>'+(result.stock_num != -1 ? '<span data-stock="'+result.stock_num+'">还剩'+result.stock_num+result.unit+'</span>' : '<span data-stock="-1"></span>') + '<span>'+ result.deposit_price +'</span>');
-			if(result.properties_list){
-				laytpl($('#productPropertiesTpl').html()).render(result.properties_list, function(html){
-					$('#shopDetailPageLabelBox').html(html);
-				});
-				$('#shopDetailPageLabel').show();
-			}else{
-				$('#shopDetailPageLabel').hide();
-			}		
-			if(result.spec_list){
-				laytpl($('#productFormatTpl').html()).render(result.spec_list, function(html){
-					$('#shopDetailPageFormat').html(html);
-				});
-			}
-			$('#shopDetailPageNumber .number').addClass('productNum-'+result.goods_id);
-			
-			var nowShopCart = $.cookie('shop_cart_'+nowShop.store.id);
-			if(nowShopCart){
-				nowShopCartArr = $.parseJSON(nowShopCart);
-				productCart=[];
-				if(nowShopCartArr.length > 0){
-					productCartNumber = productCartMoney = 0;
-					for(var i in nowShopCartArr){
-						var tmpSpec = [];
-						var tmpObj = nowShopCartArr[i].productParam;
-						if(tmpObj.length > 0){
-							for(var j in tmpObj){
-								if(tmpObj[j].type == 'spec'){
-									tmpSpec.push(tmpObj[j].id);
-								}else{
-									for(var k in tmpObj[j].data){
-										tmpSpec.push(tmpObj[j].data[k].list_id);
-										tmpSpec.push(tmpObj[j].data[k].id);
-									}
-								}
-							}
-							if(tmpSpec.length > 0){
-								var tmpSpecStr = nowShopCartArr[i].productId + '_' + tmpSpec.join('_');
-								productCart[tmpSpecStr] = nowShopCartArr[i];
-							}else{
-								productCart[nowShopCartArr[i].productId] = nowShopCartArr[i];
-							}
-						}else{
-							productCart[nowShopCartArr[i].productId] = nowShopCartArr[i];
-							$('.product_'+nowShopCartArr[i].productId+' .plus').after('<div class="product_btn number productNum-'+nowShopCartArr[i].productId+'">'+nowShopCartArr[i].count+'</div>').after('<div class="product_btn min"></div>');
-						}
-						productCartNumber += nowShopCartArr[i].count;
-						productCartMoney += nowShopCartArr[i].count * nowShopCartArr[i].productPrice;
-					}
-					
-					//统计购物车功能
-					cartFunction('count');
-				}
-				// console.log(productCart);
-			}else{
-				cartFunction('count');
-			}
-			
-			$('#shopDetailPageImgbox').click(function(){
-				if(motify.checkWeixin()){
-					wx.previewImage({
-						current:productPicList[0],
-						urls:productPicList
-					});
-				}
-			});
-			$(document).on('click','#shopDetailPageFormat li',function(event){
-				$(this).addClass('active').siblings('li').removeClass('active');
-				changeProductSpec();
-			});
-			
-			$(document).on('click','#shopDetailPageLabel li',function(event){
-				var maxSize = $(this).closest('.row').data('num');
-				if(maxSize == 1){
-					$(this).addClass('active').siblings('li').removeClass('active');
-				}else if(!$(this).hasClass('active')){
-					var tmpActiveSize = $(this).closest('ul').find('.active').size();
-					if(tmpActiveSize >= maxSize){
-						motify.log($(this).closest('.row').data('label_name')+' 您最多能选择 '+maxSize+' 个');
-					}else{
-						/* if(tmpActiveSize == maxSize-1){
-							motify.log('您最多能选择 '+maxSize+' 个，现在已经选择满了');
-						} */
-						$(this).addClass('active');
-					}
-				}else{
-					$(this).removeClass('active');
-				}
-				changeProductSpec();
-			});
-			
-			$(document).on('click','#shopDetailPageNumber .product_btn.plus,#shopDetailPageBuy',function(event){
-				if(nowShop.store.is_close == 1){
-					motify.log(getLangStr('_SHOP_AT_REST_'));
-					return false;
-				}
-				var intStock = parseInt($('#shopDetailPagePrice span').data('stock'));
-				if(intStock != -1 && (intStock == 0 || intStock - parseInt($('#shopDetailPageNumber .number').html()) <= 0)){
-					motify.log(getLangStr('_NO_STOCK_'));
-					return false;
-				}
-				tmpDomObj = $(this);
-				if(!(motify.checkApp() && motify.checkAndroid())){
-					flyer.fly({
-						start: {
-							left: event.pageX-10,
-							top: event.pageY-120
-						},
-						end: {
-							left: 20,
-							top: window_height-50,
-							width: 20,
-							height: 20
-						},
-						onEnd:function(){
-							cartFunction('plus',tmpDomObj,'productPage');
-							flyer.remove();
-						}
-					});
-				}else{
-					cartFunction('plus',tmpDomObj,'productPage');
-				}
-				return false;
-			});
-			$(document).on('click','#shopDetailPageNumber .product_btn.min',function(event){
-				tmpDomObj = $(this);
-				cartFunction('min',tmpDomObj,'productPage');
-				return false;
-			});
-			
-			$('#shopDetailpageClose').click(function(){
-				goBackPage();
-			});
-			
-			changeProductSpec();
-			
-			// shopDetailPageIscroll = new IScroll('#shopDetailPage', { probeType: 1,disableMouse:true,disablePointer:true,mouseWheel: false,scrollX: false, scrollY:true,click:false});
-			$('#shopContentBar').show();
-			$('#shopDetailPage').show();
-			pageLoadHides();
-		});
-        if(nowShop.shop_remind != ''){
+            $('#shopDetailPageFormat').empty();
+            if(result.des != ''){
+                $('#shopDetailPageContent .content').html(result.des).show();
+                $('#shopDetailPageContent').show();
+            }else if(nowShop.store.delivery){
+                $('#shopDetailPageContent .content').html(getLangStr('_REMINDER_STRING_')).show();
+                $('#shopDetailPageContent').show();
+            }else{
+                $('#shopDetailPageContent').hide();
+            }
+            $('#shopDetailPagePrice').html('$'+result.price+(result.extra_pay_price>0?'+'+result.extra_pay_price+result.extra_pay_price_name:'')+'<span class="unit"><em>/ </em>'+result.unit+'</span>'+(result.stock_num != -1 ? '<span data-stock="'+result.stock_num+'">还剩'+result.stock_num+result.unit+'</span>' : '<span data-stock="-1"></span>') + (result.deposit_price > 0 ? '<span>(Deposit:$'+ result.deposit_price +')</span>' : ''));
+            if(result.properties_list){
+                laytpl($('#productPropertiesTpl').html()).render(result.properties_list, function(html){
+                    $('#shopDetailPageLabelBox').html(html);
+                });
+                $('#shopDetailPageLabel').show();
+            }else{
+                $('#shopDetailPageLabel').hide();
+            }
+            if(result.spec_list){
+                laytpl($('#productFormatTpl').html()).render(result.spec_list, function(html){
+                    $('#shopDetailPageFormat').html(html);
+                });
+            }
+            $('#shopDetailPageNumber .number').addClass('productNum-'+result.goods_id);
+
+            changeProductSpec();
+
+            // shopDetailPageIscroll = new IScroll('#shopDetailPage', { probeType: 1,disableMouse:true,disablePointer:true,mouseWheel: false,scrollX: false, scrollY:true,click:false});
+            $('#shopContentBar').show();
+            $('#shopDetailPage').show().scrollTop(0).addClass('sliderLeft');
+            $('.content_video').css({'width':$(window).width()-20,'height':($(window).width()-20)*9/16});
             pageLoadHides();
-            var remindTipLayer = layer.open({
-                content: nowShop.shop_remind,
-                btn: ['Confirm'],
-                end: function(){
-                    layer.close(remindTipLayer);
-                }
-            });
-        }
-	});
+        });
+    }
 }
 
 function cartEventReg(){
@@ -896,9 +996,16 @@ var nowShop = {},isShowShop = false,tmpDomObj={},flyer = $('<div class="shopCart
 function showShop(shopId){
 	pageLoadTips({showBg:false});
 
-	$('#pageShop').addClass('nowPage').show();
-	$('#pageShop').css('min-height','');
-	$('#pageShop').css('height',$(window).height());
+	// $('#pageShop').addClass('nowPage').show();
+	// $('#pageShop').css('min-height','');
+	// $('#pageShop').css('height',$(window).height());
+
+    $('#pageShop').addClass('nowPage').show().siblings('.pageDiv').removeClass('nowPage').hide();
+    $('#pageShop').css('min-height','');
+    $('#pageShop').css('height',$(window).height());
+    $('#shopPageShade').hide();
+
+    nowPage = 'shop';
 
 	if(isShowShop == false){
 		$('#shopContentBar').height(window_height-166);
@@ -980,8 +1087,81 @@ function showShop(shopId){
 		});
 		
 		$(document).on('click','#shopProductRightBar2 li,#shopProductBottomBar li',function(event){
-			redirectPage(ajax_url_root+'classic_good&shop_id='+shopId+'&good_id='+$(this).data('product_id'));
+			//redirectPage(ajax_url_root+'classic_good&shop_id='+shopId+'&good_id='+$(this).data('product_id'));
+            location.hash = 'good-'+shopId+'-'+$(this).data('product_id');
 		});
+
+        $('#shopDetailpageClose').click(function(){
+            $('#shopDetailPage,#shopContentBar,#shopBanner').hide();
+            $('#shopTitle').empty();
+            $('body').css('overflow-y','auto');
+            $('#shopDetailPage,#pageCat').removeClass('sliderLeft');
+            goBackPage();
+        });
+
+        $(document).on('click','#shopDetailPageFormat li',function(event){
+            $(this).addClass('active').siblings('li').removeClass('active');
+            changeProductSpec();
+        });
+
+        $(document).on('click','#shopDetailPageLabel li',function(event){
+            var maxSize = $(this).closest('.row').data('num');
+            if(maxSize == 1){
+                $(this).addClass('active').siblings('li').removeClass('active');
+            }else if(!$(this).hasClass('active')){
+                var tmpActiveSize = $(this).closest('ul').find('.active').size();
+                if(tmpActiveSize >= maxSize){
+                    motify.log($(this).closest('.row').data('label_name')+' 您最多能选择 '+maxSize+' 个');
+                }else{
+                    /* if(tmpActiveSize == maxSize-1){
+                        motify.log('您最多能选择 '+maxSize+' 个，现在已经选择满了');
+                    } */
+                    $(this).addClass('active');
+                }
+            }else{
+                $(this).removeClass('active');
+            }
+            changeProductSpec();
+        });
+
+        $(document).on('click','#shopDetailPageNumber .product_btn.plus,#shopDetailPageBuy',function(event){
+            if(nowShop.store.is_close == 1){
+                motify.log('Store closed');
+                return false;
+            }
+            var intStock = parseInt($('#shopDetailPagePrice span').data('stock'));
+            if(intStock != -1 && (intStock == 0 || intStock - parseInt($('#shopDetailPageNumber .number').html()) <= 0)){
+                motify.log('没有库存了');
+                return false;
+            }
+            tmpDomObj = $(this);
+            if(!(motify.checkApp() && motify.checkAndroid())){
+                flyer.fly({
+                    start: {
+                        left: event.pageX-10,
+                        top: event.pageY-120
+                    },
+                    end: {
+                        left: 20,
+                        top: window_height-50,
+                        width: 20,
+                        height: 20
+                    },
+                    onEnd:function(){
+                        cartFunction('plus',tmpDomObj,'productPage');
+                        flyer.remove();
+                    }
+                });
+            }else{
+                cartFunction('plus',tmpDomObj,'productPage');
+            }
+            return false;
+        });
+        $(document).on('click','#shopDetailPageNumber .product_btn.min',function(event){
+            tmpDomObj = $(this);
+            cartFunction('min',tmpDomObj,'productPage');
+            return false;
+        });
 
 		$(document).on('click','#shopProductRightBar2 .product_btn.plus,#shopProductBottomBar .product_btn.plus',function(event){
 			if(nowShop.store.is_close == 1){
@@ -1206,7 +1386,7 @@ function changeProductSpec(){
 		});
 		var productSpecStr = productSpecId.join('_');
 		var nowProductSpect = nowProduct.list[productSpecStr];
-		$('#shopDetailPagePrice').html('$'+nowProductSpect.price+'<span class="unit"><em>/ </em>'+nowProduct.unit+'</span>'+(nowProductSpect.stock_num != -1 ? '<span data-stock="'+nowProductSpect.stock_num+'">剩下'+nowProductSpect.stock_num+nowProduct.unit+'</span>' : '<span data-stock="-1"></span>') + '<span>'+ result.deposit_price +'</span>');
+		$('#shopDetailPagePrice').html('$'+nowProductSpect.price+'<span class="unit"><em>/ </em>'+nowProduct.unit+'</span>'+(nowProductSpect.stock_num != -1 ? '<span data-stock="'+nowProductSpect.stock_num+'">剩下'+nowProductSpect.stock_num+nowProduct.unit+'</span>' : '<span data-stock="-1"></span>') + (nowProduct.deposit_price > 0 ? '<span>(Deposit:$'+ nowProduct.deposit_price +')</span>' : ''));
 		
 		if(nowProduct.properties_list){
 			for(var i in nowProductSpect.properties){

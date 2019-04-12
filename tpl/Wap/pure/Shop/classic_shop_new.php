@@ -22,7 +22,7 @@
 		<script type="text/javascript" src="{pigcms{$static_path}js/common.js?220" charset="utf-8"></script>
 		<script type="text/javascript">
 			var locationClassicHash = 'shop-{pigcms{$_GET.shop_id}';
-			
+			var storeUrl = "{pigcms{:U('Shop/classic_shop')}&shop_id={pigcms{$_GET.shop_id}";
 			var user_long = '0',user_lat  = '0';
 			var user_address='';
 			var ajax_url_root = "{pigcms{$config.site_url}/wap.php?c=Shop&a=";
@@ -198,6 +198,7 @@
             #shopProductCartBox dd .cartRight .price,
             #shopProductRightBar2 li .product_btn,
             #shopProductRightBar2 li .product_text .price,
+            #shopDetailPageBar .fl,
             .msg-option .btn{
                 color: #ffa52d;
             }
@@ -205,6 +206,7 @@
             #shopProductCart #cartInfo .cart,
             #shopProductCart #checkCart,
             .shopCartFly,
+            #shopDetailPageBar #shopDetailPageBuy,
             #shopDetailMapBar .btn{
                 background-color: #ffa52d;
             }
@@ -215,7 +217,8 @@
                 border-left: 0;
                 font-weight: bold;
             }
-            #shopReplyBox ul li.active{
+            #shopReplyBox ul li.active,#shopDetailPageFormat .row .right li.active,
+            #shopDetailPageLabel .row .right li.active{
                 border-color: #ffa52d;
                 color: #ffa52d;
             }
