@@ -403,7 +403,7 @@
                 var scroll_top = $(document).scrollTop();
                 var window_height = $(window).height();
 
-                if(scroll_top + window_height >= doc_height){
+                if(scroll_top + window_height >= doc_height-60){
                     if(is_more){
                         is_more = false;
                         page++;

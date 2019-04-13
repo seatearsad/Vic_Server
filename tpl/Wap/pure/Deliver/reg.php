@@ -127,7 +127,9 @@ $("#reg_form").click(function () {
             'sms_code':$('#sms_code').val(),
             'password':$('#pwd').val(),
             'lng':$('#lng').val(),
-            'lat':$('#lat').val()
+            'lat':$('#lat').val(),
+            'city_id':$('#city_id').val(),
+            'province_id':$('#province_id').val()
         };
         $.ajax({
             url: "{pigcms{:U('Deliver/reg')}",
@@ -236,6 +238,7 @@ function fillInAddress() {
     }
     geocoder.geocode(request, function(results, status){
         if(status == 'OK') {
+            console.log(results[0].address_components);
             var add_com = results[0].address_components;
             var is_get_city = false;
             for(var i=0;i<add_com.length;i++){

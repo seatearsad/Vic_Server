@@ -61,7 +61,8 @@ class DeliverAction extends BaseAction {
             $area = D('Area')->where(array('area_id'=>$_POST['city_id']))->find();
             $column['province_id'] = $area ? $area['area_pid'] : 0;
     		//$column['province_id'] = $_POST['province_id'];
-    		$column['circle_id'] = $_POST['circle_id'];
+    		//$column['circle_id'] = $_POST['circle_id'];
+            $column['circle_id'] = 0;
     		$column['area_id'] = 0;
     		$column['site'] = $_POST['adress'];
     		$long_lat = explode(',',$_POST['long_lat']);
@@ -95,7 +96,6 @@ class DeliverAction extends BaseAction {
     		if (D('Deliver_user')->field(true)->where(array('phone' => $column['phone']))->find()) {
     			$this->error('该手机号已经是配送员账号了，不能重复申请');
     		}
-    		
     		$id = D('deliver_user')->data($column)->add();
     		if(!$id){
     			$this->error('保存失败，请重试');

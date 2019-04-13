@@ -23,7 +23,7 @@ class DeliverAction extends BaseAction
 			}
 			
 			if (empty($this->deliver_session)) {
-				if (ACTION_NAME != 'login' && ACTION_NAME != 'reg') {
+				if (ACTION_NAME != 'login' && ACTION_NAME != 'reg' &&  ACTION_NAME != 'ajax_city_name') {
 					redirect(U('Deliver/login', array('referer' => urlencode('http://' . $_SERVER['HTTP_HOST'] . (!empty($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'])))));
 					exit();
 				}
@@ -1938,7 +1938,6 @@ class DeliverAction extends BaseAction
 
 	        //注册状态
             $deliver_data['reg_status'] = 1;
-
 	        $deliver_id = D('Deliver_user')->add($deliver_data);
 
             $database_deliver_user = D('Deliver_user');
