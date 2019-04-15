@@ -144,10 +144,10 @@
             animation-fill-mode: forwards;
             z-index: 1;
 
-            -webkit-animation-duration: 0.5s;
-            -moz-animation-duration: 0.5s;
-            -o-animation-duration: 0.5s;
-            animation-duration: 0.5s;
+            -webkit-animation-duration: 1s;
+            -moz-animation-duration: 1s;
+            -o-animation-duration: 1s;
+            animation-duration: 1s;
         }
         .pageLoadTipLoader div {
             position: absolute;
@@ -175,11 +175,11 @@
         }
         @-webkit-keyframes pageLoader {
             from {
-                -webkit-transform: rotate(360deg);
+                -webkit-transform: rotate(0deg);
             }
 
             to {
-                -webkit-transform: rotate(00deg);
+                -webkit-transform: rotate(360deg);
             }
 
         }
