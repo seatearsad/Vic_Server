@@ -6,7 +6,7 @@
 		<title>{pigcms{:L('_VIC_NAME_')} - {pigcms{:L('_OUT_TXT_')}</title>
         <meta name="keywords" content="{pigcms{$config.seo_keywords}" />
         <meta name="description" content="{pigcms{$config.seo_description}" />
-		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width"/>
+		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width,viewport-fit=cover"/>
 		<meta name="apple-mobile-web-app-capable" content="yes"/>
 		<meta name='apple-touch-fullscreen' content='yes'/>
 		<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
@@ -212,6 +212,7 @@
             }
             #shopProductCart{
                 background-color: #949494;
+                padding-bottom: env(safe-area-inset-bottom);
             }
             #shopProductCartBox dt{
                 border-left: 0;

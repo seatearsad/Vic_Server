@@ -1,3 +1,5 @@
+var window_width = $(window).width();
+var window_height = $(window).height();
 /* jQuery cookie 操作*/
 jQuery.cookie = function (key, value, options) {
     if (arguments.length > 1 && (value === null || typeof value !== "object")){
@@ -182,6 +184,8 @@ $(function(){
 		if($(this).hasClass('active')){
 			e.stopPropagation();
             return false;
+		}else{
+			pageLoadTip();
 		}
 	});
 	/*语音事件 end*/
@@ -233,7 +237,7 @@ $(function(){
 		});
 	// }
 	
-	$('body').append('<div id="pageLoadTip" style="display:none;"><div></div></div>');
+	//$('body').append('<div id="pageLoadTip" style="display:none;"><div></div></div>');
 });
 
 /*
@@ -339,23 +343,54 @@ function redirect(url,type){
 	}
 }
 /*页面加载提示*/
-function pageLoadTip(msg){
-	var defaultMsg='',top=0;	//'加载中...'
-	//如果msg是数字，则是top的值！是字符串就是消息
-	if(typeof(msg) == 'number'){
-		top = msg;
-		msg = defaultMsg;
-	}else if(!msg){
-		top = 0;
-		msg = defaultMsg;
-	}
+// function pageLoadTip(msg){
+// 	var defaultMsg='',top=0;	//'加载中...'
+// 	//如果msg是数字，则是top的值！是字符串就是消息
+// 	if(typeof(msg) == 'number'){
+// 		top = msg;
+// 		msg = defaultMsg;
+// 	}else if(!msg){
+// 		top = 0;
+// 		msg = defaultMsg;
+// 	}
+//
+// 	$('#pageLoadTip').css({top:top+'px','display':'block'}).find('div').css({'margin-top':(($(window).height()-100-top)/2)+'px'}).html(msg);
+// 	// $('body').append('<div id="pageLoadTip" style="top:'+top+'px;"><div style="margin-top:'+(($(window).height()-100-top)/2)+'px;">'+msg+'</div></div>');
+// }
+// function pageLoadTipHide(){
+// 	// $('#pageLoadTip').remove();
+// 	$('#pageLoadTip').hide();
+// }
 
-	$('#pageLoadTip').css({top:top+'px','display':'block'}).find('div').css({'margin-top':(($(window).height()-100-top)/2)+'px'}).html(msg);
-	// $('body').append('<div id="pageLoadTip" style="top:'+top+'px;"><div style="margin-top:'+(($(window).height()-100-top)/2)+'px;">'+msg+'</div></div>');
+function pageLoadTip(options){
+    this.options = {
+        showBg:true,
+        top:'center',
+        left:'center'
+    }
+    for (var i in options){
+        this.options[i] = options[i];
+    }
+    options = this.options;
+    //显示背景
+    if(options.showBg){
+        $('#pageLoadTipShade').css('background','rgba(216,216,216,0.5)').removeClass('nobg');
+    }else{
+        $('#pageLoadTipShade').addClass('nobg');
+    }
+    //显示顶边
+    if(options.top == 'center'){
+        options.top = (window_height-120)/2;
+    }
+    //显示顶边
+    if(options.left == 'center'){
+        options.left = (window_width-120)/2;
+    }
+    $('#pageLoadTipBox').css({'top':options.top+'px','left':options.left+'px'});
+    $('#pageLoadTipShade').css({'height':$(window).height(),'width':$(window).width()}).show();
 }
 function pageLoadTipHide(){
-	// $('#pageLoadTip').remove();
-	$('#pageLoadTip').hide();
+    $('#pageLoadTipShade').hide();
 }
 
 /*

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8"/>
 	<title>{pigcms{:L('_MODIFY_NICK_NAME_')}</title>
-    <meta name="viewport" content="initial-scale=1, width=device-width, maximum-scale=1, user-scalable=no">
+    <meta name="viewport" content="initial-scale=1, width=device-width, maximum-scale=1, user-scalable=no,viewport-fit=cover">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name='apple-touch-fullscreen' content='yes'>
 	<meta name="apple-mobile-web-app-status-bar-style" content="black">

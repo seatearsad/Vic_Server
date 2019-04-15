@@ -41,7 +41,7 @@ $(function(){
 		downIcon = $("#pullDown");
 	// myScroll = new IScroll('#container', { probeType: 3,disableMouse:true,disablePointer:true,mouseWheel: false,scrollX: false, scrollY:true,click:false,scrollbars:true,shrinkScrollbars: 'scale',resizeScrollbars:false,fadeScrollbars:true});
 	// myScroll = new IScroll('#container', { probeType: 3,disableMouse:true,disablePointer:true,mouseWheel: false,scrollX: false, scrollY:true,click:false,scrollbars:false,useTransform:false,useTransition:false});
-	// myScroll = new IScroll('#container', { probeType: 3,disableMouse:true,disablePointer:true,mouseWheel: false,scrollX: false, scrollY:true,click:iScrollClick(),scrollbars:false});
+	myScroll = new IScroll('#container', { probeType: 3,disableMouse:true,disablePointer:true,mouseWheel: false,scrollX: false, scrollY:true,click:iScrollClick(),scrollbars:false});
 	// myScroll.on("scroll",function(){
 	// 	if(this.y >= 60){
 	// 		if(!downIcon.hasClass("reverse_icon")) downIcon.addClass("reverse_icon").find('.pullDownLabel').html('释放可以刷新');
@@ -169,10 +169,10 @@ $(function(){
 		pageLoadTip();
 		var tmpObj = $(this);
 		var id = tmpObj.data('group_id');
-		$.post(group_index_sort_url,{id:id},function(){
+		//$.post(group_index_sort_url,{id:id},function(){
 			redirect(tmpObj.data('url'),tmpObj.data('url-type'));
 			return false;
-		});
+		//});
 	});
 });
 var like_page	=	1;
