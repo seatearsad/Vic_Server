@@ -478,13 +478,13 @@
         </script>
     </div>
 </div>
-<div id="pageLoadTipShade" class="pageLoadTipBg">
+<!--div id="pageLoadTipShade" class="pageLoadTipBg">
     <div id="pageLoadTipBox" class="pageLoadTipBox">
         <div class="pageLoadTipLoader">
-            <div style="background-image:url({pigcms{$config.shop_load_bg});"><!--img src="{pigcms{$static_path}shop/images/pageTipImg.png"/--></div>
+            <div style="background-image:url({pigcms{$config.shop_load_bg});"></div>
         </div>
     </div>
-</div>
+</div-->
 <include file="Public:footer"/>
 <script type="text/javascript">
     window.shareData = {
