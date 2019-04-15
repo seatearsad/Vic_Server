@@ -144,10 +144,10 @@
             animation-fill-mode: forwards;
             z-index: 1;
 
-            -webkit-animation-duration: 1s;
-            -moz-animation-duration: 1s;
-            -o-animation-duration: 1s;
-            animation-duration: 1s;
+            -webkit-animation-duration: 0.5s;
+            -moz-animation-duration: 0.5s;
+            -o-animation-duration: 0.5s;
+            animation-duration: 0.5s;
         }
         .pageLoadTipLoader div {
             position: absolute;
@@ -175,19 +175,11 @@
         }
         @-webkit-keyframes pageLoader {
             from {
-                -webkit-transform: rotate(0deg);
-                -moz-transform: rotate(0deg);
-                -ms-transform: rotate(0deg);
-                -o-transform: rotate(0deg);
-                transform: rotate(0deg);
+                -webkit-transform: rotate(360deg);
             }
 
             to {
-                -webkit-transform: rotate(360deg);
-                -moz-transform: rotate(360deg);
-                -ms-transform: rotate(360deg);
-                -o-transform: rotate(360deg);
-                transform: rotate(360deg);
+                -webkit-transform: rotate(00deg);
             }
 
         }
@@ -478,13 +470,13 @@
         </script>
     </div>
 </div>
-<!--div id="pageLoadTipShade" class="pageLoadTipBg">
+<div id="pageLoadTipShade" class="pageLoadTipBg">
     <div id="pageLoadTipBox" class="pageLoadTipBox">
         <div class="pageLoadTipLoader">
-            <div style="background-image:url({pigcms{$config.shop_load_bg});"></div>
+            <div style="background-image:url({pigcms{$config.shop_load_bg});"><!--img src="{pigcms{$static_path}shop/images/pageTipImg.png"/--></div>
         </div>
     </div>
-</div-->
+</div>
 <include file="Public:footer"/>
 <script type="text/javascript">
     window.shareData = {

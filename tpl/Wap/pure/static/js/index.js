@@ -178,6 +178,7 @@ $(function(){
 var like_page	=	1;
 var page_count	=	10;
 function getRecommendList(){
+    pageLoadTip();
 	$.post(window.location.pathname+'?c=Groupservice&a=indexRecommendList&page='+like_page+'&long='+$.cookie('userLocationLong')+'&lat='+$.cookie('userLocationLat'),function(result){
 		if(guess_content_type == 'group' || guess_content_type == 'shop'){
 			if(result.length < page_count){
@@ -197,6 +198,7 @@ function getRecommendList(){
 		if(like_page >= guess_num){
 			$("#moress").remove();
 		}
+        pageLoadTipHide();
 		//myScroll.refresh();
 	});
 }
