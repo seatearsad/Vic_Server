@@ -185,7 +185,7 @@ $(function(){
 			e.stopPropagation();
             return false;
 		}else{
-			pageLoadTip();
+			pageLoadTip({showBg:false});
 		}
 	});
 	/*语音事件 end*/

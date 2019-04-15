@@ -166,7 +166,7 @@ $(function(){
 	})
 
 	$(document).on('click','.recommend-link-url',function(){
-		pageLoadTip();
+		pageLoadTip({showBg:false});
 		var tmpObj = $(this);
 		var id = tmpObj.data('group_id');
 		//$.post(group_index_sort_url,{id:id},function(){
@@ -178,7 +178,7 @@ $(function(){
 var like_page	=	1;
 var page_count	=	10;
 function getRecommendList(){
-    pageLoadTip();
+    pageLoadTip({showBg:false});
 	$.post(window.location.pathname+'?c=Groupservice&a=indexRecommendList&page='+like_page+'&long='+$.cookie('userLocationLong')+'&lat='+$.cookie('userLocationLat'),function(result){
 		if(guess_content_type == 'group' || guess_content_type == 'shop'){
 			if(result.length < page_count){
