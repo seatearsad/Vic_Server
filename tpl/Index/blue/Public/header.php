@@ -259,7 +259,7 @@
     });
     
     $('.sign_btn').click(function () {
-        var width = $(window).width()/2;
+        var width = $(window).width()/3;
         var height = $(window).height()*0.8;
         art.dialog.open("{pigcms{:U('Wap/Login/index')}",
            {title: '', width: width, height: height,close:null,background:'black',opacity:'0.4'});

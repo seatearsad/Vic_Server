@@ -240,6 +240,14 @@
             }
 
         }
+        .dealcard .brand{
+            width: 100%;
+            padding-right: 65px;
+            overflow:hidden;
+            white-space:nowrap;
+            text-overflow:ellipsis;
+            font-size: 1.05em;
+        }
     </style>
 </head>
 <body>
@@ -326,7 +334,7 @@
                         <div class="price"><span>{{ d[i].keywords }}</span></div>
                     </div>
                     {{# if(d[i].is_close){ }}
-                    <div class="is_close close_s">CLOSE</div>
+                    <div class="is_close close_s">CLOSED</div>
                     {{# }else{ }}
                     <div class="is_close">OPEN</div>
                     {{# } }}

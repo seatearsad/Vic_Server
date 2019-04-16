@@ -148,7 +148,7 @@
 			                    <h6>Unit：</h6><p>{pigcms{$vo.detail} {pigcms{$vo.city_txt}</p>
 			                </div>
 			                <div class="kv-line">
-			                    <h6>{pigcms{:L('_B_PURE_MY_19_')}：</h6><p>{pigcms{$vo.area_txt} {pigcms{$vo.adress}</p>
+			                    <h6>{pigcms{:L('_B_PURE_MY_19_')}：</h6><p>{pigcms{$vo.adress}</p>
 			                </div>
 							<if condition="$vo['zipcode']">
 								<div class="kv-line">

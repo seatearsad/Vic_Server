@@ -117,7 +117,7 @@ class ShopAction extends BaseAction{
 
 	public function ajax_cat(){
         $cat_id = $_POST['id'];
-        $list = D('Shop_category')->field(true)->where(array('cat_fid'=>$cat_id))->select();
+        $list = D('Shop_category')->field(true)->where(array('cat_fid'=>$cat_id))->order('cat_sort desc')->select();
         $nav_list = array();
         foreach ($list as $v){
             $nav['title'] = lang_substr($v['cat_name'],C('DEFAULT_LANG'));

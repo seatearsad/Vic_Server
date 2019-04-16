@@ -36,7 +36,7 @@ class PayModel extends Model{
 				$pay_type_txt = L('_CASH_ON_DELI_');
 				break;
             case 'moneris':
-                $pay_type_txt = "Moneris";
+                $pay_type_txt = "Online";
                 break;
 			default:
 				if ($paid) {

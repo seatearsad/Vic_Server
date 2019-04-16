@@ -753,4 +753,5 @@ header #backBtn:after {
 }
 .close_s{
 	background-color: silver;
+	font-size: .85em;
 }

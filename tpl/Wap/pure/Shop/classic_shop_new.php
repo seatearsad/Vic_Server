@@ -41,6 +41,13 @@
 		<script type="text/javascript" src="{pigcms{$static_path}shop/js/shopClassicBaseNew.js?t={pigcms{$_SERVER.REQUEST_TIME}" charset="utf-8"></script>
 	</head>
         <style>
+            *{
+                margin: 0px;
+                box-sizing: border-box;
+                font-family: Helvetica;
+                -moz-osx-font-smoothing: grayscale;
+                font-size: 100%;
+            }
             #container{
                 width: 100%;
                 padding-top: 10px;
@@ -48,6 +55,7 @@
             #shopHeader{
                 position: relative;
                 background: none;
+                display: flex;
             }
             #shopBanner{
                 background: none;
@@ -55,6 +63,10 @@
             }
             #shopTitle{
                 color: #333;
+                overflow:hidden;
+                text-overflow:ellipsis;
+                white-space:nowrap;
+                flex:1 1 100%
             }
             .backBtn::after{
                 border-top: 2px solid #999;
@@ -77,8 +89,8 @@
                 line-height: 20px;
             }
             .is_close{
-                margin:10px 20px;
-                width: 50px;
+                margin:10px 10px;
+                width: 5rem;
                 height: 20px;
                 line-height: 20px;
                 background-color: #ffa52d;
@@ -89,6 +101,7 @@
             }
             .close_s{
                 background-color: silver;
+                font-size: .8em;
             }
             .shop_info{
                 position: absolute;
@@ -237,6 +250,14 @@
             }
             .msg-option{
                 bottom: 0;
+            }
+            #shopDetailPageBar{
+                margin-bottom: 50px;
+                margin-top: 10px;
+            }
+            .closeBtn div:before,.closeBtn div:after{
+                top: 17px;
+                left: 6px;
             }
         </style>
 	<body>
@@ -414,28 +435,28 @@
 						</div>
 						<div id="shopDetailPageTitle">
 							<div class="title">{pigcms{:L('_PRODUCT_NAME_')}</div>
-							<div class="desc">{pigcms{:L('_PRODUCT_DESC_')}</div>
+							<div class="desc"></div>
 						</div>
+                        <div id="shopDetailPageContent">
+                            <!--div class="title">{pigcms{:L('_PRODUCT_DESC_')}</div-->
+                            <div class="content">{pigcms{:L('_CONTENT_TXT_')}</div>
+                        </div>
 						<div id="shopDetailPageFormat">{pigcms{:L('_PRODUCT_STOCK_')}</div>
-						<div id="shopDetailPageBar" class="clearfix">
-							<div class="fl" id="shopDetailPagePrice">{pigcms{:L('_PRICE_TXT_')}</div>
-							<div class="fr">
-								<div id="shopDetailPageBuy">{pigcms{:L('_ADD_TO_CART_')}</div>
-								<div id="shopDetailPageNumber" style="display:none;">
-									<div class="product_btn plus"></div>
-									<div class="product_btn number">0</div>
-									<div class="product_btn min"></div>
-								</div>
-							</div>
-						</div>
 						<div id="shopDetailPageLabel">
-							<div class="tip">{pigcms{:L('_WANT_TO_NOT_')}<div class="question"></div></div>
+							<!--div class="tip">{pigcms{:L('_WANT_TO_NOT_')}<div class="question"></div></div-->
 							<div id="shopDetailPageLabelBox"></div>
 						</div>
-						<div id="shopDetailPageContent">
-							<div class="title">{pigcms{:L('_PRODUCT_DESC_')}</div>
-							<div class="content">{pigcms{:L('_CONTENT_TXT_')}</div>
-						</div>
+                        <div id="shopDetailPageBar" class="clearfix">
+                            <div class="fl" id="shopDetailPagePrice">{pigcms{:L('_PRICE_TXT_')}</div>
+                            <div class="fr">
+                                <div id="shopDetailPageBuy">{pigcms{:L('_ADD_TO_CART_')}</div>
+                                <div id="shopDetailPageNumber" style="display:none;">
+                                    <div class="product_btn plus"></div>
+                                    <div class="product_btn number">0</div>
+                                    <div class="product_btn min"></div>
+                                </div>
+                            </div>
+                        </div>
 					</div>
 				</div>
 			</section>

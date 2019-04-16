@@ -1329,7 +1329,7 @@
         mode: mode,
         display: display,
         dateFormat: 'yyyy-mm-dd',
-        dateOrder:'yymmdd',
+        dateOrder:'yyMdd',
         timeFormat: 'HH:ii',
         timeWheels: 'HHii',
         minDate: new Date(),

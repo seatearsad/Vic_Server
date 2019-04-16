@@ -254,7 +254,7 @@
         <if condition="MODULE_NAME == 'Home'">
         <div class="local_div" data-url="{pigcms{:U('Home/address')}"></div>
         </if>
-        <if condition="MODULE_NAME == 'Shop'">
+        <if condition="MODULE_NAME == 'Shop' && ACTION_NAME == 'index'">
             <div class="local_div" data-url="{pigcms{:U('Shop/classic_address')}"></div>
         </if>
     </div>

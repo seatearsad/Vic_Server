@@ -239,7 +239,11 @@ a {
         <a href="{pigcms{:U('My/adress',array('buy_type' => 'shop', 'store_id'=>$store['store_id'], 'village_id'=>$village_id, 'mer_id' => $store['mer_id'], 'frm' => $_GET['frm'], 'current_id'=>$user_adress['adress_id'], 'order_id' => $order_id))}">
         <div class="user_address">
             <div>{pigcms{$user_adress['name']} {pigcms{$user_adress['phone']}</div>
-            <div><if condition="$user_adress['adress_id']">{pigcms{$user_adress['province_txt']} {pigcms{$user_adress['city_txt']} {pigcms{$user_adress['area_txt']} {pigcms{$user_adress['adress']} {pigcms{$user_adress['detail']}<else/>{pigcms{:L('_CLICK_ADD_NEW_A_')}</if></div>
+            <div><if condition="$user_adress['adress_id']">{pigcms{$user_adress['adress']} {pigcms{$user_adress['detail']}
+                    <else/>
+                    <span style="color: #ffa52d">{pigcms{:L('_CLICK_ADD_NEW_A_')}</span>
+                </if>
+            </div>
         </div>
         </a>
     <section class="menu_wrap pay_wrap">
@@ -380,7 +384,7 @@ a {
 </div>
 <div class="fixed" style="min-height:90px;padding:14px;">
 	<p>
-		<span class="fr">{pigcms{:L('_TOTAL_RECE_')}：<strong>$<span id="totalPrice_">{pigcms{:sprintf("%.2f",$vip_discount_money)}<if condition="$extra_price gt 0 AND $config.open_extra_price eq 1">+{pigcms{$extra_price|floatval}{pigcms{$config.extra_price_alias_name}</if></span></strong> / <span id="cartNum_">{pigcms{$total}</span></span>
+		<span class="fr">{pigcms{:L('_TOTAL_RECE_')}：<strong>$<span id="totalPrice_">{pigcms{:sprintf("%.2f",$vip_discount_money)}<if condition="$extra_price gt 0 AND $config.open_extra_price eq 1">+{pigcms{$extra_price|floatval}{pigcms{$config.extra_price_alias_name}</if></span></strong></span>
 		<!--p id="show_delivery_fee" <if condition="$delivery_type eq 2 OR $pick_addr_id OR $now_time_value eq 2">style="display:none"</if>>{pigcms{:L('_DELI_PRICE_')}：${pigcms{$delivery_fee}，{pigcms{:L('_TAXATION_TXT_')}: ${pigcms{$tax_price}</p-->
 		<if condition="$have_two_time">	
 		<p id="show_delivery_fee2" <if condition="$now_time_value eq 1">style="display:none"</if>>{pigcms{:L('_DELI_PRICE_')}：${pigcms{$delivery_fee2}</p>

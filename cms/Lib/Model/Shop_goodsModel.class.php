@@ -799,7 +799,7 @@ class Shop_goodsModel extends Model
 		if ($stock_num == -1) {
 			return array('status' => 1, 'num' => $num, 'is_seckill_price' => $is_seckill_price, 'old_price' => $old_price, 'cost_price' => $cost_price, 'price' => $price, 'image' => $image, 'packing_charge' => $now_goods['packing_charge'], 'freight_type' => $now_goods['freight_type'], 'freight_value' => $now_goods['freight_value'], 'freight_template' => $now_goods['freight_template'], 'unit' => $now_goods['unit'], 'number' => $number, 'sort_id' => $now_goods['sort_id'], 'name' => $now_goods['name'],'tax_num'=>$now_goods['tax_num'],'deposit_price'=>$now_goods['deposit_price']);
 		} elseif ($stock_num == 0) {
-			return array('status' => 0, 'msg' => '商品库存不足');
+			return array('status' => 0, 'msg' => 'Out of Stock!');
 		} elseif ($stock_num - $num >= 0) {
 			return array('status' => 1, 'num' => $num, 'is_seckill_price' => $is_seckill_price, 'old_price' => $old_price, 'cost_price' => $cost_price, 'price' => $price, 'image' => $image, 'packing_charge' => $now_goods['packing_charge'], 'freight_type' => $now_goods['freight_type'], 'freight_value' => $now_goods['freight_value'], 'freight_template' => $now_goods['freight_template'], 'unit' => $now_goods['unit'], 'number' => $number, 'sort_id' => $now_goods['sort_id'], 'name' => $now_goods['name'],'tax_num'=>$now_goods['tax_num'],'deposit_price'=>$now_goods['deposit_price']);
 		} else {

@@ -61,7 +61,7 @@
 								</div>
 								<div class="form-group">
 									<label class="col-sm-1">关键词：</label>
-									<input class="col-sm-3" maxlength="30" name="keywords" type="text" value="{pigcms{$now_store.keywords}" id="keywords"/><span class="form_tips">选填。<font color="red">（用空格分隔不同的关键词，最多5个）</font>，用户在微信将按此值搜索！</span> <a href="javascript:;" id="get_key_btn">按店铺名称获取</a>
+									<input class="col-sm-3" maxlength="100" name="keywords" type="text" value="{pigcms{$now_store.keywords}" id="keywords"/><span class="form_tips">选填。<font color="red">（用 | 分隔不同的关键词，最多5个）</font>，用户在微信将按此值搜索！</span> <a href="javascript:;" id="get_key_btn">按店铺名称获取</a>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-1"><label for="long_lat">店铺经纬度</label></label>

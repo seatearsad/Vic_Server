@@ -239,7 +239,7 @@ class ConfigAction extends BaseAction{
 			//判断关键词
 			$keywords = trim($_POST['keywords']);
 			if(!empty($keywords)){
-				$tmp_key_arr = explode(' ',$keywords);
+				$tmp_key_arr = explode('|',$keywords);
 				$key_arr = array();
 				foreach($tmp_key_arr as $value){
 					if(!empty($value)){
@@ -480,7 +480,8 @@ class ConfigAction extends BaseAction{
 			//判断关键词
 			$keywords = trim($_POST['keywords']);
 			if(!empty($keywords)){
-				$tmp_key_arr = explode(' ',$keywords);
+				//$tmp_key_arr = explode(' ',$keywords);
+                $tmp_key_arr = explode('|',$keywords);
 				$key_arr = array();
 				foreach($tmp_key_arr as $value){
 					if(!empty($value)){
@@ -687,7 +688,7 @@ class ConfigAction extends BaseAction{
 			$keywords = D('Keywords')->where(array('third_type' => 'Merchant_store', 'third_id' => $condition_merchant_store['store_id']))->select();
 			$str = "";
 			foreach ($keywords as $key) {
-				$str .= $key['keyword'] . " ";
+				$str .= $key['keyword'] . "|";
 			}
 			$now_store['keywords'] = $str;
 

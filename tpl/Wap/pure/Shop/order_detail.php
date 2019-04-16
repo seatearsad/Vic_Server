@@ -70,6 +70,9 @@
     .g_details{
         margin-top: 10px;
     }
+    .infor .answer .fr,.infor li .e2c{
+        color: #ffa52d;
+    }
 </style>
 <body>
 <include file="Public:header"/>
@@ -195,8 +198,7 @@
             </dl>
         </div>
         <div class="answer clr">
-
-            <div class="fl">{pigcms{:L('_ORDER_TXT_')} ${pigcms{$order_details['discount_price']|floatval} {pigcms{:L('_DISCOUNT_TXT_')}-${pigcms{$order_details['minus_price']|floatval}</div>
+            <!--div class="fl">{pigcms{:L('_ORDER_TXT_')} ${pigcms{$order_details['discount_price']|floatval} {pigcms{:L('_DISCOUNT_TXT_')}-${pigcms{$order_details['minus_price']|floatval}</div-->
             <div class="fr">{pigcms{:L('_TOTAL_RECE_')}: ${pigcms{$order_details['price'] + $order_details['tip_charge']|floatval}</div>
         </div>
 
@@ -222,10 +224,10 @@
                 <li class="clr first">
                     <div class="fl match">{pigcms{:L('_DIST_INFO_')}</div>
                 </li>
-                <li class="clr">
+                <!--li class="clr">
                     <div class="fl">{pigcms{:L('_DIST_MODE_')}</div>
                     <div class="fr">{pigcms{:L('_PLAT_DIST_')}</div>
-                </li>
+                </li-->
                 <li class="clr">
                     <div class="fl">{pigcms{:L('_EXPECTED_TIME_')}</div>
                     <div class="fr">{pigcms{$order_details['expect_use_time']}</div>
@@ -240,9 +242,9 @@
                 <if condition="$order_details['deliver_info']">
                     <li class="clr">
                         <div class="fl">{pigcms{:L('_DIST_DETAIL_')}</div>
-                        <dl class="kd_dl kd_dls">
+                        <dl class="p90">
                             <dd>
-                                <h2 class="endt">{pigcms{:L('_DISTOR_TXT_')} ：{pigcms{$order_details['deliver_info']['name']} <a href="tel:{pigcms{$order_details['deliver_info']['phone']}">{pigcms{$order_details['deliver_info']['phone']}</a></h2>
+                                <h2 class="endt">{pigcms{$order_details['deliver_info']['name']} <a href="tel:{pigcms{$order_details['deliver_info']['phone']}">{pigcms{$order_details['deliver_info']['phone']}</a></h2>
                             </dd>
                         </dl>
                     </li>
@@ -374,10 +376,10 @@
                 <php>}</php>
                 <if condition="$order_details['status'] eq 2">
                     <li class="fl replace" data-url="{pigcms{:U('My/shop_feedback',array('order_id' => $order_details['order_id']))}">{pigcms{:L('_B_PURE_MY_73_')}</li>
-                    <li class="fr zlyd" data-url="{pigcms{:U('Shop/confirm_order', array('order_id' => $order_details['order_id'], 'store_id' => $store['store_id']))}">{pigcms{:L('_ONE_MORE_LIST_')}</li>
+                    <!--li class="fr zlyd" data-url="{pigcms{:U('Shop/confirm_order', array('order_id' => $order_details['order_id'], 'store_id' => $store['store_id']))}">{pigcms{:L('_ONE_MORE_LIST_')}</li-->
                 </if>
                 <else/>
-                <li class="fr zlyd" data-url="{pigcms{:U('Shop/confirm_order', array('order_id' => $order_details['order_id'], 'store_id' => $store['store_id']))}">{pigcms{:L('_ONE_MORE_LIST_')}</li>
+                <!--li class="fr zlyd" data-url="{pigcms{:U('Shop/confirm_order', array('order_id' => $order_details['order_id'], 'store_id' => $store['store_id']))}">{pigcms{:L('_ONE_MORE_LIST_')}</li-->
             </if>
         </ul>
     </div>

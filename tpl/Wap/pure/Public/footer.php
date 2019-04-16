@@ -3,6 +3,9 @@
         height: calc(49px + env(safe-area-inset-bottom));
         background-color: #F9F9F9;
     }
+    .footerMenu ul li a:hover{
+        background-color: #DDDDDD;
+    }
 </style>
 <if condition="empty($no_footer)">
 	<footer class="footerMenu <if condition="!$is_wexin_browser || $home_menu_list">wap</if>">

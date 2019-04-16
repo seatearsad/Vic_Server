@@ -37,6 +37,17 @@
 		</script>
 		<script type="text/javascript" src="{pigcms{$static_path}shop/js/shopClassicBase.js?t={pigcms{$_SERVER.REQUEST_TIME}" charset="utf-8"></script>
 	</head>
+    <style>
+        .pageLoadTipLoader::before{
+            border-bottom: #ffffff solid 5px;
+            border-top: rgba(255,255,255,0.35) solid 5px;
+            border-right: rgba(255,255,255,0.35) solid 5px;
+            border-left: rgba(255,255,255,0.35) solid 5px;
+        }
+        .searchBtn.so{
+            background-color: #ffa52d;
+        }
+    </style>
 	<body>
 		<div id="pageList" class="pageDiv" <if condition="$config['shop_show_footer']">style="padding-bottom:56px;"</if>>
 			<section id="listHeader" class="roundBg">

@@ -23,7 +23,7 @@
 	    }
 	
 	    .kv-line h6 {
-	        width: 10em;
+	        width: 8em;
             text-align: right;
             padding-left: 10px;
 	    }

@@ -108,6 +108,8 @@
     <div class="black_line"></div>
     <div class="or_div">or</div>
     <script src="{pigcms{$static_public}layer/layer.m.js"></script>
+    <script type="text/javascript" src="{pigcms{$static_public}js/artdialog/jquery.artDialog.js"></script>
+    <script type="text/javascript" src="{pigcms{$static_public}js/artdialog/iframeTools.js"></script>
     <script>
         $('.sign_btn').click(function () {
             var phone = $('input[name=phone]').val();
@@ -121,6 +123,7 @@
             }else{
                 $.post("{pigcms{:U('Login/index')}",{phone:phone,password:password},function(result){
                     if(result.status == '1'){
+                        artDialog.open.origin.location.reload();
                         window.location.href = "{pigcms{$referer}";
                     }else{
                         layer.open({

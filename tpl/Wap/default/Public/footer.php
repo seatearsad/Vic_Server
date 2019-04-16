@@ -121,7 +121,8 @@
         margin: 0px auto;
         color: #ffffff;
         padding: 20px 0px;
-        line-height: 22px
+        line-height: 22px;
+        font-size: 12px;
     }
     .grab_line{
         width: 90%;
