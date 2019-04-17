@@ -34,6 +34,15 @@
                 .main .content .tit{
                     border: 0;
                 }
+                .lang_div{
+                    color: white;
+                }
+                .lang_select:hover{
+                    color: white;
+                }
+                .main .content .tit{
+                    font-family: Helvetica;
+                }
 		</style>
 	</head>
 	<body>

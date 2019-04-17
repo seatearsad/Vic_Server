@@ -131,5 +131,10 @@
         setCookie('first_wap', '1',1);
         window.location.reload();
     });
+
+    var app_url = "https://itunes.apple.com/us/app/tutti/id1439900347?ls=1&mt=8";
+    $('.down_load').click(function () {
+        window.open(app_url);
+    });
 </script>
 </html>

@@ -1021,7 +1021,7 @@ function showShop(shopId){
 		//$('#shopProductRightBar2').width(window_width-100);
 
 		//$('#shopProductLeftBar2,#shopProductRightBar2').css('height',window_height-166-50);
-        $('#shopProductRightBar2').css('height',window_height-166-110);
+        $('#shopProductRightBar2').css('height',window_height-164-100);
 		//$('#shopProductRightBar2').width(window_width-100);
 
 		if(motify.checkIos()){

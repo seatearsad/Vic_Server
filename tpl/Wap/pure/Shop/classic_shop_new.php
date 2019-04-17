@@ -50,12 +50,12 @@
             }
             #container{
                 width: 100%;
-                padding-top: 10px;
             }
             #shopHeader{
                 position: relative;
                 background: none;
                 display: flex;
+                margin-top: 10px;
             }
             #shopBanner{
                 background: none;

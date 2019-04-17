@@ -1026,7 +1026,7 @@
         <if condition="$order_info['order_type'] != 'recharge'">
         <div class="all_list">
             <div class="order_note">
-                Estimated Time
+                Scheduled Delivery
                 <span class="coupon_more"></span>
                 <span class="est_time">ASAP</span>
                 <input type="hidden" name="est_time" id="est_time_input">
@@ -1038,7 +1038,7 @@
         <div class="all_list">
             <a class="react" href="{pigcms{:U('My/select_card',($coupon_url?$coupon_url :$_GET))}&coupon_type=system" >
                 <div class="av_coupon">
-                    Available Coupon
+                    Available Coupons
                     <span class="coupon_more"></span>
                 </div>
             </a>
@@ -1071,7 +1071,7 @@
                         <label class="mt">
                             <span class="pay-wrapper">
                                 <img src="./tpl/Static/blue/images/wap/dollar.png" style="height: 25px"/>
-                                <font style="color: #ffa52d">${pigcms{$now_user.now_money}</font>
+                                <font style="color: #ffa52d">${pigcms{$now_user.now_money}</font> &nbsp;&nbsp;Balance Pay
                                 <input type="checkbox" class="mt"  id="use_balance" name="use_balance"<if condition="$now_user['now_money'] eq 0 OR $merchant_balance gt $order_info['order_total_money'] ">disabled="disabled" value="1"<else /> value="0" checked="checked" </if>>
                             </span>
                         </label>
@@ -1086,6 +1086,7 @@
                                 <!--i class="bank-icon icon-{pigcms{$key}"></i-->
                                 <span class="pay-wrapper">
                                     <img src="{pigcms{$static_public}images/pay/{pigcms{$key}.png" style="height: 25px"/>
+                                    <if condition="$key eq 'offline'">Cash</if>
                                     <input type="radio" class="mt" value="{pigcms{$key}"  <php>if($key == 'moneris'){</php>checked="checked"<php>}</php> name="pay_type">
                                 </span>
                             </label>
@@ -1318,11 +1319,11 @@
     //获取当前年
     var year=myDate.getFullYear();
     //获取当前月
-    var month=myDate.getMonth()+1;
+    var month=myDate.getMonth();
     //获取当前日
-    var date=myDate.getDate()+1;
-    var h=myDate.getHours();       //获取当前小时数(0-23)
-    var m=myDate.getMinutes();
+    var date=myDate.getDate();
+    var h=myDate.getHours() + 1;       //获取当前小时数(0-23)
+    var m=myDate.getMinutes() + 30;
 
     $('#est_time_input').mobiscroll().datetime({
         theme: theme,
@@ -1332,8 +1333,8 @@
         dateOrder:'yyMdd',
         timeFormat: 'HH:ii',
         timeWheels: 'HHii',
-        minDate: new Date(),
-        maxDate: new Date(year,month,date),
+        minDate: new Date(year,month,date,h,m),
+        maxDate: new Date(year,month+1,date+1),
         lang: lang,
         stepMinute: 1
     });

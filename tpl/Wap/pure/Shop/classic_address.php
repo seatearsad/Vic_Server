@@ -272,30 +272,30 @@
 				<div id="pageAddressBackBtn" class="searhBackBtn"></div>
 				<div id="pageAddressSearch" class="searchBox">
 					<div class="searchIco"></div>
-					<input type="text" id="pageAddressSearchTxt" class="searchTxt" placeholder="请输入收货地址" autocomplete="off"/>
+					<input type="text" id="pageAddressSearchTxt" class="searchTxt" placeholder="{pigcms{:L('_PLEASE_INPUT_ADDRESS_')}" autocomplete="off"/>
 					<div class="delIco" id="pageAddressSearchDel"><div></div></div>
 				</div>
-				<div id="pageAddressSearchBtn" class="searchBtn">搜索</div>
+				<div id="pageAddressSearchBtn" class="searchBtn">{pigcms{:L('_SEARCH_TXT_')}</div>
 			</div>
 			<div id="pageAddressContent" class="searchAddressList">
 				<div id="pageAddressLocationList">
-					<div class="title">当前定位</div>
+					<div class="title">{pigcms{:L('_CURR_ADDRESS_')}</div>
 					<dl class="content">
 						<dd data-long="" data-lat="" data-name="">
 							<div class="name"></div>
 						</dd>
 					</dl>
 				</div>
-				<div id="pageAddressNowLocation">
+				<!--div id="pageAddressNowLocation">
 					<div class="title">当前选择</div>
 					<dl class="content">
 						<dd data-long="" data-lat="" data-name="">
 							<div class="name"></div>
 						</dd>
 					</dl>
-				</div>
+				</div-->
 				<div id="pageAddressUserList">
-					<div class="title">我的收货地址</div>
+					<div class="title">{pigcms{:L('_MY_ADDRESS_')}</div>
 					<dl class="content"></dl>
 				</div>
 			</div>

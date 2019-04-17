@@ -263,7 +263,7 @@
         <li style="background-image: none;height: 65px">
             <span class="w_line"></span>
         </li>
-        <li style="background-image: none">
+        <li id="menu_about" style="background-image: none">
             <span>{pigcms{:L('_B_PURE_MY_ABOUTUS_')}</span>
         </li>
         <li style="background-image: none">
@@ -299,6 +299,9 @@
     });
     $('#menu_partner').click(function () {
         window.location.href = "{pigcms{:U('Index/partner')}";
+    });
+    $('#menu_about').click(function () {
+        window.location.href = '{pigcms{$config.site_url}/about';
     });
 
     var init_top = $('#tutti_header').offset().top;

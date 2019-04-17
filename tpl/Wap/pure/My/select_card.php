@@ -265,7 +265,7 @@
 									<h6>{pigcms{:L('_MONEY_NUM_')}：</h6><p>${pigcms{$vo.discount}</p>
 								</div>
 								<div class="kv-line">
-									<h6>{pigcms{:L('_EXPIRE_DATE_')}：</h6><p>{pigcms{$vo.end_time|date='Y/m/d',###}</p>
+									<h6>{pigcms{:L('_EXPRIRY_DATE_')}：</h6><p>{pigcms{$vo.end_time|date='Y/m/d',###}</p>
 								</div>
 							</div>
 						</a>

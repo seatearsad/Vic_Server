@@ -73,6 +73,9 @@
     .infor .answer .fr,.infor li .e2c{
         color: #ffa52d;
     }
+    .infor .kd_dd .right .del{
+        text-decoration: none;
+    }
 </style>
 <body>
 <include file="Public:header"/>
@@ -90,7 +93,7 @@
     <div class="infor">
         <ul>
             <li class="first storext">
-                <a href="{pigcms{:U('Shop/index')}#shop-{pigcms{$store['store_id']}">
+                <a href="{pigcms{:U('Shop/classic_shop')}&shop_id={pigcms{$store['store_id']}">
                     <div class="img">
                         <img src="{pigcms{$store['image']}">
                     </div>
@@ -133,7 +136,7 @@
                 </dd>
                 <dd class="clr">
                     <div class="fl">{pigcms{:L('_TAXATION_TXT_')}</div>
-                    <div class="fr">${pigcms{$order_details['tax_price']}</div>
+                    <div class="fr">${pigcms{:round($order_details['tax_price'],2)}</div>
                 </dd>
                 <if condition="$order_details['deposit_price'] neq 0">
                     <dd class="clr">
@@ -291,7 +294,7 @@
                     <div class="p90">
                         <if condition="$order_details['change_price'] gt 0">
                             <p class="e2c">${pigcms{$order_details['price']}</p>
-                            <p class="kdsize">（{pigcms{:L('_BEFORE_MODIFY_')}：${pigcms{$order_details['change_price']|floatval}，{pigcms{:L('_NOTE_TXT_')}：{pigcms{$order_details['change_price_reason']}）</p>
+                            <p class="kdsize">{pigcms{:L('_BEFORE_MODIFY_')}：${pigcms{$order_details['change_price']|floatval}</p>
                             <else />
                             <p class="e2c">${pigcms{$order_details['price']}</p>
                         </if>

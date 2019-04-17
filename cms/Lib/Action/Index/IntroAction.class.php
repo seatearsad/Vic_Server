@@ -24,4 +24,11 @@ class IntroAction extends BaseAction{
         else
 		    $this->display();
     }
+
+    public function aboutus(){
+        $intro = D('Appintro')->where('id=1')->find();
+        $intro['name'] = $intro['title'];
+        $this->assign('now_link',$intro);
+        $this->display('index');
+    }
 }

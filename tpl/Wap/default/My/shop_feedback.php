@@ -23,7 +23,12 @@
 <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/lib_3a812b5.css">
 <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/shop_57c5f10.css">
 <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/shopcomment_4bd95ec.css">
-
+<style>
+    .comment-btn,
+    #widget-shopcomment-add .add-list .add-list-span .select{
+        background: #ffa52d;
+    }
+</style>
 <div id="pager"> <img src="{pigcms{$static_path}images/hm.gif" width="0" height="0" style="display:block">
     <div id="wrapper" style="background:#fff">
         <div id="fis_elm__2">
@@ -77,7 +82,8 @@
                         </ul>
                     </div>
                     <div class="add-list">
-                        <textarea class="text-area comment-desc" placeholder="{pigcms{:L('_YOUR_ADVICE_FOR_US_')}"></textarea>
+                        {pigcms{:L('_B_MY_COMMENT_')}
+                        <textarea class="text-area comment-desc"></textarea>
                     </div>
                     <div class="add-list">
                         <div class="add-list-title">{pigcms{:L('_THOMB_YOUR_FAV_')}</div>
@@ -109,11 +115,22 @@ $(document).ready(function(){
 		});
 // 		var minutes = $(".minutes").attr("time");
 		var postData = {'whole':whole, 'textAre':textAre, 'order_id':oid, 'goods_ids':goods_ids};
-		$.post("{pigcms{:U('My/add_comment')}", postData, function(data){
-			if (data.status == 1) {
-                layer.open({title:["{pigcms{:L('_B_D_LOGIN_TIP2_')}",'background-color:#FF658E;color:#fff;'],content:''+data.msg+'',btn: ["{pigcms{:L('_B_D_LOGIN_CONIERM_')}"],end:function(){window.location.href=data.url;}});
+		$.post("{pigcms{:U('My/add_comment')}", postData, function(data) {
+            if (data.status == 1) {
+                layer.open({
+                    title: "",
+                    content: '' + data.msg + '',
+                    btn: ["{pigcms{:L('_B_D_LOGIN_CONIERM_')}"],
+                    end: function () {
+                        window.location.href = data.url;
+                    }
+                });
             } else {
-            	layer.open({title:["{pigcms{:L('_B_D_LOGIN_TIP2_')}",'background-color:#FF658E;color:#fff;'],content:''+data.msg+'',btn: ["{pigcms{:L('_B_D_LOGIN_CONIERM_')}"]});
+                layer.open({
+                    title: "",
+                    content: '' + data.msg + '',
+                    btn: ["{pigcms{:L('_B_D_LOGIN_CONIERM_')}"]
+                });
             }
 		}, 'json');
 	});

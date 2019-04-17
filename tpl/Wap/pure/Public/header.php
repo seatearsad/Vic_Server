@@ -265,6 +265,9 @@
 <script type="text/javascript" src="{pigcms{$static_public}js/lang.js" charset="utf-8"></script>
 <script type="text/javascript" src="{pigcms{$static_path}js/jquery.cookie.js" charset="utf-8"></script>
 <script>
+    $('#header_logo').click(function () {
+        window.location.href = "{pigcms{$config.site_url}"+"/wap.php";
+    });
     var is_open_menu = false;
     $('.hamburger').click(function () {
         if(is_open_menu) {
