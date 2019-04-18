@@ -741,8 +741,6 @@ header #backBtn:after {
 }
 .is_close{
 	position: absolute;
-	top:10px;
-	right: 10px;
 	width: 60px;
 	height: 24px;
 	line-height: 24px;
@@ -750,6 +748,8 @@ header #backBtn:after {
 	text-align: center;
 	border-radius: 2px;
 	color: white;
+	bottom: 5px;
+	left: 30px;
 }
 .close_s{
 	background-color: silver;

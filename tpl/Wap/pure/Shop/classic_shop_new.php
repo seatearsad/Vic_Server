@@ -82,26 +82,26 @@
             #shopBanner .text{
                 height: 70px;
                 padding-left: 110px;
+                padding-top: 10px;
             }
             #shopBanner .text div{
                 color:#999;
                 height: 20px;
                 line-height: 20px;
             }
-            .is_close{
-                margin:10px 10px;
+            #shopBanner .text .is_close{
+                margin:0px 0px;
                 width: 5rem;
                 height: 20px;
                 line-height: 20px;
                 background-color: #ffa52d;
                 text-align: center;
                 border-radius: 2px;
-                font-size: .8em;
+                font-size: 1em;
                 color: white;
             }
-            .close_s{
+            #shopBanner .text .close_s{
                 background-color: silver;
-                font-size: .8em;
             }
             .shop_info{
                 position: absolute;
@@ -334,7 +334,6 @@
 			<section id="shopHeader">
 				<div id="backBtn" class="backBtn"></div>
 				<div id="shopTitle"></div>
-                <div class="is_close"></div>
                 <!--div class="shop_info" data-nav="merchant"></div-->
 				<!--div id="searchBtn" class="searchBtn"><div></div></div-->
 			</section>
@@ -344,6 +343,7 @@
 				</div>
 				<div class="text">
                     <div class="star">
+                        <div class="is_close">Open</div>
                         <i class="full"></i><i></i>
                     </div>
 					<div id="deliveryText"></div>

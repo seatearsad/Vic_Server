@@ -1,0 +1,20 @@
+{
+  "name": "Tutti",
+  "short_name": "Tutti",
+  "start_url": "/wap.php",
+  "display": "standalone",
+  "background_color": "#fff",
+  "theme_color": "#ffa52d",
+  "icons": [
+    {
+      "src": "/Icon-120.png",
+      "sizes": "120x120",
+      "type": "image/png"
+    },
+    {
+      "src": "/Icon-180.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}

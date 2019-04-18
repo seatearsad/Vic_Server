@@ -242,7 +242,6 @@
         }
         .dealcard .brand{
             width: 100%;
-            padding-right: 65px;
             overflow:hidden;
             white-space:nowrap;
             text-overflow:ellipsis;
@@ -312,10 +311,13 @@
                 <elseif condition="$config.guess_content_type eq 'shop'"/>
 
                 {{# for(var i = 0, len = d.length; i < len; i++){ }}
-                <dd class="recommend-link-url" data-url="./wap.php?c=Shop&a=classic_shop&shop_id={{ d[i].id }}" data-url-type="openRightFloatWindow">
+                <dd class="recommend-link-url" data-url="./wap.php?c=Shop&a=classic_shop&shop_id={{ d[i].id }}" data-url-type="openRightFloatWindow" {{# if(d[i].is_close){ }}style="opacity:0.6;"{{# } }}>
 
                     <div class="dealcard-img imgbox">
                         <img style="margin-left: 0px;position: absolute;"  src="{{ d[i].image }}" alt="{{ d[i].name }}">
+                        {{# if(d[i].is_close){ }}
+                        <div class="is_close close_s">CLOSED</div>
+                        {{# } }}
                     </div>
                     <div class="dealcard-block-right">
                         <div class="brand">{{ d[i].name }}</div>
@@ -333,11 +335,7 @@
                         {{# } }}
                         <div class="price"><span>{{ d[i].keywords }}</span></div>
                     </div>
-                    {{# if(d[i].is_close){ }}
-                    <div class="is_close close_s">CLOSED</div>
-                    {{# }else{ }}
-                    <div class="is_close">OPEN</div>
-                    {{# } }}
+
                     {{# if(d[i].coupon_count > 0){ }}
                     <div class="coupon {{# if(d[i].coupon_count > 2){ }}hasMore{{# } }}">
                         <ul>
