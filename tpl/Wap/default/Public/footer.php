@@ -3,8 +3,8 @@
     <div class="about_div">
         <p style="font-size: 20px;">TUTTI</p>
         <p>
-            Aiming for best local food delivery and bring communities closer by offering virous business model. Founded in 2017,
-            on-demand food delivery concierge service...
+            {pigcms{:getAboutDesc()}...
+            <span>Read More</span>
         </p>
     </div>
     <div class="grab_line"></div>
@@ -107,6 +107,10 @@
         $('.app_icon').click(function () {
             window.open(app_url);
         });
+
+        $('.about_div').click(function () {
+            window.location.href = "{pigcms{$config.site_url}/about";
+        });
     </script>
 </div>
 <style>
@@ -123,6 +127,13 @@
         padding: 20px 0px;
         line-height: 22px;
         font-size: 12px;
+        cursor: pointer;
+    }
+    .about_div span{
+        padding: 3px 3px;
+        border: 1px solid white;
+        border-radius: 2px;
+        font-size: 10px;
     }
     .grab_line{
         width: 90%;
