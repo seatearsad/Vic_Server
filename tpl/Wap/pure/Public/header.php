@@ -283,7 +283,7 @@
 
     var init_top = $('#tutti_header').offset().top;
     var init_margin = parseFloat($('#menu_memo').css('margin-top'));
-
+console.log(navigator.userAgent.toLowerCase());
     if(/(android|windows phone)/.test(navigator.userAgent.toLowerCase())){
         $('.down_close').trigger('click');
     }
