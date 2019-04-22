@@ -12,6 +12,10 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
     <meta name="format-detection" content="telephone=no"/>
     <meta name="format-detection" content="address=no"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8;application/json" />
+    <if condition="$is_ios eq 0">
+        <link rel="manifest" href="/manifest.json">
+    </if>
     <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/common.css"/>
     <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/index.css"/>
     <script type="text/javascript" src="{pigcms{:C('JQUERY_FILE_190')}" charset="utf-8"></script>
@@ -33,6 +37,29 @@
         <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/home_meal.css?216"/>
     </if>
     <script>
+        if(navigator.serviceWorker != null){
+            navigator.serviceWorker.register('/sw.js')
+                .then(function(registartion){
+                    console.log('支持sw:',registartion.scope)
+                }).catch(function (err) {
+                console.log('不支持sw:',err);
+            })
+        }else{
+            console.log('SW run fail');
+        }
+
+        window.addEventListener('beforeinstallprompt', function (e) {
+            e.userChoice.then(function (choiceResult) {
+                if (choiceResult.outcome === 'dismissed') {
+                    console.log('用户取消安装应用');
+                    //showmessage('用户取消安装应用');
+                }else{
+                    console.log('用户安装了应用');
+                    //showmessage('用户安装了应用');
+                }
+            });
+        });
+
         $(function(){
             $(document).on('click','.hasMore',function(){
                 $(this).toggleClass('showMore');
