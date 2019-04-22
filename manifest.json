@@ -1,10 +1,7 @@
 {
   "name": "Tutti",
   "short_name": "Tutti",
-  "start_url": "/wap.php",
-  "display": "standalone",
-  "background_color": "#fff",
-  "theme_color": "#ffa52d",
+  "description": "Food and Merchandise Delivery",
   "icons": [
     {
       "src": "/Icon-120.png",
@@ -16,5 +13,21 @@
       "sizes": "180x180",
       "type": "image/png"
     }
-  ]
+  ],
+  "share_target": {
+    "action": "compose",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  },
+  "start_url": "/wap.php",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F3F3F3",
+  "theme_color": "#ffa52d",
+  "related_applications": [],
+  "prefer_related_applications": false
 }
