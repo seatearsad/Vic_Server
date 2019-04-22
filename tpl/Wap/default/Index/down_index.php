@@ -28,6 +28,18 @@
             }else{
                 //window.location.href = './';
             }
+
+            window.addEventListener('beforeinstallprompt', function (e) {
+                e.userChoice.then(function (choiceResult) {
+                    if (choiceResult.outcome === 'dismissed') {
+                        //console.log('用户取消安装应用');
+                        showmessage('用户取消安装应用');
+                    }else{
+                        //console.log('用户安装了应用');
+                        showmessage('用户安装了应用');
+                    }
+                });
+            });
         </script>
     </if>
 </head>
@@ -141,22 +153,11 @@
         window.open(app_url);
     });
 
-
-    window.addEventListener('beforeinstallprompt', function (e) {
-        e.userChoice.then(function (choiceResult) {
-            if (choiceResult.outcome === 'dismissed') {
-                //console.log('用户取消安装应用');
-                layer.open({
-                    content:'用户取消安装应用'
-                });
-            }else{
-                //console.log('用户安装了应用');
-                layer.open({
-                    content:'用户安装了应用'
-                });
-            }
+    function showmessage(msg){
+        layer.open({
+            content:msg
         });
-    });
+    }
 
 </script>
 </html>
