@@ -146,7 +146,17 @@ class IndexAction extends BaseAction
 	    else
 	        $temp_name = 'down_index';
 
-	    $this->display($temp_name);
+        $agent = strtolower($_SERVER['HTTP_USER_AGENT']);
+        $is_iphone = (strpos($agent, 'iphone')) ? true : false;
+        $is_ipad = (strpos($agent, 'ipad')) ? true : false;
+        if($is_ipad || $is_iphone){
+            $is_ios = 1;
+        }else{
+            $is_ios = 0;
+        }
+        $this->assign('is_ios',$is_ios);
+
+        $this->display($temp_name);
     }
 	
 	public function index()

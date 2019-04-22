@@ -5,8 +5,12 @@
     <meta http-equiv="Cache-Control" content="no-cache">
     <meta http-equiv="Pragma" content="no-cache">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8;application/json" />
     <if condition="$config['site_favicon']">
         <link rel="shortcut icon" href="{pigcms{$config.site_favicon}"/>
+    </if>
+    <if condition="$is_ios eq 0">
+        <link rel="manifest" href="/manifest.json">
     </if>
     <!--title>{pigcms{$config.seo_title}</title-->
     <title>{pigcms{:L('_VIC_NAME_')}</title>
@@ -16,6 +20,7 @@
     <script src="{pigcms{$static_public}js/jquery.lazyload.js"></script>
     <script type="text/javascript" src="{pigcms{$static_public}js/lang/{pigcms{:C('DEFAULT_LANG')}.js" charset="utf-8"></script>
     <script type="text/javascript" src="{pigcms{$static_public}js/lang.js" charset="utf-8"></script>
+    <script src="{pigcms{$static_public}layer/layer.m.js"></script>
     <if condition="$config['wap_redirect']">
         <script>
             if(/(iphone|ipod|android|windows phone)/.test(navigator.userAgent.toLowerCase())){
@@ -23,7 +28,6 @@
             }else{
                 //window.location.href = './';
             }
-
         </script>
     </if>
 </head>
@@ -136,5 +140,23 @@
     $('.down_load').click(function () {
         window.open(app_url);
     });
+
+
+    window.addEventListener('beforeinstallprompt', function (e) {
+        e.userChoice.then(function (choiceResult) {
+            if (choiceResult.outcome === 'dismissed') {
+                //console.log('用户取消安装应用');
+                layer.open({
+                    content:'用户取消安装应用'
+                });
+            }else{
+                //console.log('用户安装了应用');
+                layer.open({
+                    content:'用户安装了应用'
+                });
+            }
+        });
+    });
+
 </script>
 </html>
