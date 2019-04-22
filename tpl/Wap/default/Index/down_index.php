@@ -122,7 +122,7 @@
         cursor: pointer;
     }
     .con_div{
-        margin: 20px auto 0 auto;
+        margin: 20px auto 50px auto;
         text-align: center;
         color: #999999;
         font-size: 1.1em;
