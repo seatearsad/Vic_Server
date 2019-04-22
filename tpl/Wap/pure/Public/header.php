@@ -283,16 +283,18 @@
 
     var init_top = $('#tutti_header').offset().top;
     var init_margin = parseFloat($('#menu_memo').css('margin-top'));
-console.log(navigator.userAgent.toLowerCase());
-    if(/(android|windows phone)/.test(navigator.userAgent.toLowerCase())){
-        $('.down_close').trigger('click');
-    }
+    console.log(navigator.userAgent.toLowerCase());
 
     $('.down_close').click(function () {
         $('.down_header').hide();
         init_top = 0;
         setCookie('close_app_tip', '1',1);
     });
+
+    if(/(android|windows phone)/.test(navigator.userAgent.toLowerCase())){
+        $('.down_header').hide();
+        init_top = 0;
+    }
 
     //$.cookie('close_app_tip',null);
     if($.cookie('close_app_tip') == 1){
