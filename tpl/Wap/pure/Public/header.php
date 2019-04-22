@@ -263,7 +263,6 @@
     </div>
 </div>
 <script type="text/javascript" src="{pigcms{$static_public}js/lang.js" charset="utf-8"></script>
-<script type="text/javascript" src="{pigcms{$static_path}js/jquery.cookie.js" charset="utf-8"></script>
 <script>
     $('#header_logo').click(function () {
         window.location.href = "{pigcms{$config.site_url}"+"/wap.php";
@@ -285,9 +284,7 @@
     var init_top = $('#tutti_header').offset().top;
     var init_margin = parseFloat($('#menu_memo').css('margin-top'));
 
-    var u = navigator.userAgent;
-    var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1;
-    if (isAndroid) {
+    if(/(android|windows phone)/.test(navigator.userAgent.toLowerCase())){
         $('.down_close').trigger('click');
     }
 
@@ -327,3 +324,4 @@
         window.location.href = $(this).data('url');
     });
 </script>
+<script type="text/javascript" src="{pigcms{$static_path}js/jquery.cookie.js" charset="utf-8"></script>
