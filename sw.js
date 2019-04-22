@@ -15,6 +15,7 @@ self.addEventListener('install',e =>{
     )
 });
 self.addEventListener('fetch',function(e){
+    if (e.request.method !== 'GET') return;
     e.respondWith(
         caches.match(e.request).then(function(response){
             if(response != null){
