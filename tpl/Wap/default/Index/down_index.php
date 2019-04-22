@@ -29,6 +29,18 @@
                 //window.location.href = './';
             }
 
+            // 检测浏览器是否支持SW
+            if(navigator.serviceWorker != null){
+                navigator.serviceWorker.register('/sw.js')
+                    .then(function(registartion){
+                        console.log('支持sw:',registartion.scope)
+                    }).catch(function (err) {
+                        console.log('不支持sw:',err);
+                })
+            }else{
+                console.log('SW run fail');
+            }
+
             window.addEventListener('beforeinstallprompt', function (e) {
                 e.userChoice.then(function (choiceResult) {
                     if (choiceResult.outcome === 'dismissed') {
