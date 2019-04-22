@@ -285,6 +285,12 @@
     var init_top = $('#tutti_header').offset().top;
     var init_margin = parseFloat($('#menu_memo').css('margin-top'));
 
+    var u = navigator.userAgent;
+    var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1;
+    if (isAndroid) {
+        $('.down_close').trigger('click');
+    }
+
     $('.down_close').click(function () {
         $('.down_header').hide();
         init_top = 0;
