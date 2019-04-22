@@ -7,9 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8;application/json" />
     <meta http-equiv="Access-Control-Allow-Origin" content="*">
-    <if condition="$config['site_favicon']">
+    <!--if condition="$config['site_favicon']">
         <link rel="shortcut icon" href="{pigcms{$config.site_favicon}"/>
-    </if>
+    </if-->
     <if condition="$is_ios eq 0">
         <link rel="manifest" href="/manifest.json">
     </if>
