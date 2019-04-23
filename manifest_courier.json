@@ -1,0 +1,33 @@
+{
+  "name": "Tutti Courier",
+  "short_name": "Tutti Courier",
+  "description": "Tutti Courier",
+  "icons": [
+    {
+      "src": "/Icon_courier-120.png",
+      "sizes": "120x120",
+      "type": "image/png"
+    },
+    {
+      "src": "/Icon_courier-180.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ],
+  "share_target": {
+    "action": "compose",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  },
+  "start_url": "/wap.php?g=Wap&c=Deliver&a=login",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F3F3F3",
+  "theme_color": "#ffa52d",
+  "related_applications": [],
+  "prefer_related_applications": false
+}

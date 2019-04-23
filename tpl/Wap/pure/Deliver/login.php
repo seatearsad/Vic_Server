@@ -6,6 +6,8 @@
 <meta http-equiv="Cache-Control" content="no-cache">
 <meta http-equiv="Pragma" content="no-cache">
 <meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8;application/json" />
+    <link rel="manifest" href="/manifest_courier.json">
 <title>{pigcms{:L('_COURIER_LOGIN_')}</title>
 <meta name="description" content="{pigcms{$config.seo_description}"/>
 <link href="{pigcms{$static_path}css/deliver.css" rel="stylesheet"/>
@@ -13,6 +15,31 @@
 <script src="{pigcms{$static_public}js/laytpl.js"></script>
 <script src="{pigcms{$static_path}layer/layer.m.js"></script>
 </head>
+<script>
+    // 检测浏览器是否支持SW
+    if(navigator.serviceWorker != null){
+        navigator.serviceWorker.register('/sw.js')
+            .then(function(registartion){
+                console.log('支持sw:',registartion.scope)
+            }).catch(function (err) {
+            console.log('不支持sw:',err);
+        })
+    }else{
+        console.log('SW run fail');
+    }
+
+    window.addEventListener('beforeinstallprompt', function (e) {
+        e.userChoice.then(function (choiceResult) {
+            if (choiceResult.outcome === 'dismissed') {
+                //console.log('用户取消安装应用');
+                showmessage('用户取消安装应用');
+            }else{
+                //console.log('用户安装了应用');
+                showmessage('用户安装了应用');
+            }
+        });
+    });
+</script>
 <body style="background:url({pigcms{$static_path}images/login_02.jpg) left bottom no-repeat #ebf3f8; background-size: 100% 137px;">
 	<section class="Land">
 	<div class="Land_top">

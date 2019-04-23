@@ -312,6 +312,11 @@
         init_top = 0;
     });
 
+    if(/(android|windows phone)/.test(navigator.userAgent.toLowerCase())){
+        $('.down_header').hide();
+        init_top = 0;
+    }
+
     $('.down_app_name').children('.name').html(app_name);
 
     $(window).scroll(function () {

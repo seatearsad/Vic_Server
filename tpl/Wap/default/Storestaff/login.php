@@ -8,7 +8,8 @@
     <meta charset="utf-8">
     <meta name="description" content="{pigcms{$config.seo_description}"/>
     <meta name="viewport" content="initial-scale=1, width=device-width, maximum-scale=1, user-scalable=no"/>
-
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8;application/json" />
+    <link rel="manifest" href="/manifest_partner.json">
     <link href="{pigcms{$static_path}css/eve.7c92a906.css" rel="stylesheet"/>
 	<link href="{pigcms{$static_path}css/index_wap.css" rel="stylesheet"/>
 	<link href="{pigcms{$static_path}css/idangerous.swiper.css" rel="stylesheet"/>
@@ -25,6 +26,32 @@
 	    .captcha img{margin-left:.2rem;}
 	    .captcha .btn{margin-top:-.15rem;margin-bottom:-.15rem;margin-left:.2rem;}
 	</style>
+
+    <script>
+        // 检测浏览器是否支持SW
+        if(navigator.serviceWorker != null){
+            navigator.serviceWorker.register('/sw.js')
+                .then(function(registartion){
+                    console.log('支持sw:',registartion.scope)
+                }).catch(function (err) {
+                console.log('不支持sw:',err);
+            })
+        }else{
+            console.log('SW run fail');
+        }
+
+        window.addEventListener('beforeinstallprompt', function (e) {
+            e.userChoice.then(function (choiceResult) {
+                if (choiceResult.outcome === 'dismissed') {
+                    //console.log('用户取消安装应用');
+                    showmessage('用户取消安装应用');
+                }else{
+                    //console.log('用户安装了应用');
+                    showmessage('用户安装了应用');
+                }
+            });
+        });
+    </script>
 </head>
 <body id="index" data-com="pagecommon">
         <!--<header  class="navbar">

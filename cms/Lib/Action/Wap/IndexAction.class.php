@@ -129,6 +129,16 @@ class IndexAction extends BaseAction
 		$this->homeInfo['info'] = $this->homeInfo['info'][0];
 		$this->assign('homeInfo', $this->homeInfo);
 
+        $agent = strtolower($_SERVER['HTTP_USER_AGENT']);
+        $is_iphone = (strpos($agent, 'iphone')) ? true : false;
+        $is_ipad = (strpos($agent, 'ipad')) ? true : false;
+        if($is_ipad || $is_iphone){
+            $is_ios = 1;
+        }else{
+            $is_ios = 0;
+        }
+        $this->assign('is_ios',$is_ios);
+
 		/* 粉丝行为分析 */
 		$this->behavior(array('mer_id' => $this->token, 'biz_id' => $this->homeInfo['id']));
 	}
@@ -145,16 +155,6 @@ class IndexAction extends BaseAction
 	        $temp_name = 'index';
 	    else
 	        $temp_name = 'down_index';
-
-        $agent = strtolower($_SERVER['HTTP_USER_AGENT']);
-        $is_iphone = (strpos($agent, 'iphone')) ? true : false;
-        $is_ipad = (strpos($agent, 'ipad')) ? true : false;
-        if($is_ipad || $is_iphone){
-            $is_ios = 1;
-        }else{
-            $is_ios = 0;
-        }
-        $this->assign('is_ios',$is_ios);
 
         $this->display($temp_name);
     }

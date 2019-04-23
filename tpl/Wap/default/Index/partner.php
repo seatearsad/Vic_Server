@@ -5,8 +5,12 @@
     <meta http-equiv="Cache-Control" content="no-cache">
     <meta http-equiv="Pragma" content="no-cache">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8;application/json" />
     <if condition="$config['site_favicon']">
         <link rel="shortcut icon" href="{pigcms{$config.site_favicon}"/>
+    </if>
+    <if condition="$is_ios eq 0">
+        <link rel="manifest" href="/manifest_partner.json">
     </if>
     <!--title>{pigcms{$config.seo_title}</title-->
     <title>{pigcms{:L('_VIC_NAME_')} - {pigcms{:L('_NEW_BECOME_COURIER_')}</title>
@@ -27,6 +31,29 @@
                 //window.location.href = './';
             }
 
+            // 检测浏览器是否支持SW
+            if(navigator.serviceWorker != null){
+                navigator.serviceWorker.register('/sw.js')
+                    .then(function(registartion){
+                        console.log('支持sw:',registartion.scope)
+                    }).catch(function (err) {
+                    console.log('不支持sw:',err);
+                })
+            }else{
+                console.log('SW run fail');
+            }
+
+            window.addEventListener('beforeinstallprompt', function (e) {
+                e.userChoice.then(function (choiceResult) {
+                    if (choiceResult.outcome === 'dismissed') {
+                        //console.log('用户取消安装应用');
+                        showmessage('用户取消安装应用');
+                    }else{
+                        //console.log('用户安装了应用');
+                        showmessage('用户安装了应用');
+                    }
+                });
+            });
         </script>
     </if>
 </head>
