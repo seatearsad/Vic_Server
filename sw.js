@@ -1,7 +1,4 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.1.0/workbox-sw.js");
-workbox.precaching([
-    // 注册成功后要立即缓存的资源列表
-]);
 
 workbox.routing.registerRoute(
     new RegExp('/upload/'),
