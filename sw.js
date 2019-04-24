@@ -1,6 +1,15 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.1.0/workbox-sw.js");
+workbox.precaching([
+    // 注册成功后要立即缓存的资源列表
+]);
+
+workbox.routing.registerRoute(
+    new RegExp('/upload/'),
+    new workbox.strategies.CacheFirst()
+);
+
 var cacheStorageKey = 'Tutti-pwa-';
-var version_num = '1.0.0';
+var version_num = '1.0.1';
 var cacheList=[
     '/tpl/Static/blue/images/new/icon.png',
     '/tpl/Wap/pure/static/css/index.css'
@@ -21,7 +30,7 @@ self.addEventListener('fetch',function(e){
             if(response != null){
                 return response
             }
-            return fetch(e.request)
+            return fetch(e.request.url)
         })
     )
 });
