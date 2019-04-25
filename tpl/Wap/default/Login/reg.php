@@ -187,12 +187,16 @@
                 if (is_tip) {
                     show_msg("{pigcms{:L('_PLEASE_INPUT_ALL_')}");
                 } else {
+                    var phone = $("input[name='phone']").val();
+                    var password = $("input[name='password']").val();
+                    var sms_code = $("input[name='sms_code']").val();
                     $.post("{pigcms{:U('Login/reg')}",{phone:phone,password:password,sms_code:sms_code},function(result){
                         if(result.status == '1'){
                             window.location.href = $('#reg-form').attr('location_url');
                         }else{
                             reg_flag = true;
-                            $('#tips').html(result.info).show();
+                            //$('#tips').html(result.info).show();
+                            show_msg(result.info);
                         }
                     });
                 }
