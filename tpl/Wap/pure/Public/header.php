@@ -263,6 +263,7 @@
     </div>
 </div>
 <script type="text/javascript" src="{pigcms{$static_public}js/lang.js" charset="utf-8"></script>
+<script src="{pigcms{$static_path}js/jquery.cookie.js"></script>
 <script>
     $('#header_logo').click(function () {
         window.location.href = "{pigcms{$config.site_url}"+"/wap.php";

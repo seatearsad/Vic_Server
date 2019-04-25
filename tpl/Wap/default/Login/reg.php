@@ -125,6 +125,8 @@
     <div class="black_line"></div>
     <div class="or_div">or</div>
     <script src="{pigcms{$static_public}layer/layer.m.js"></script>
+    <script type="text/javascript" src="{pigcms{$static_public}js/artdialog/jquery.artDialog.js"></script>
+    <script type="text/javascript" src="{pigcms{$static_public}js/artdialog/iframeTools.js"></script>
     <script>
         function show_msg(msg) {
             layer.open({
@@ -192,7 +194,9 @@
                     var sms_code = $("input[name='sms_code']").val();
                     $.post("{pigcms{:U('Login/reg')}",{phone:phone,password:password,sms_code:sms_code},function(result){
                         if(result.status == '1'){
-                            window.location.href = $('#reg-form').attr('location_url');
+                            //window.location.href = $('#reg-form').attr('location_url');
+                            artDialog.open.origin.location.reload();
+                            window.location.href = "{pigcms{:U('My/index')}";
                         }else{
                             reg_flag = true;
                             //$('#tips').html(result.info).show();
