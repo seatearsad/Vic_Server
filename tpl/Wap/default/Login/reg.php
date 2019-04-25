@@ -150,8 +150,9 @@
                         success:function(date){
                             if(date.error_code){
                                 countdown = 0;
-                            }else{
                                 show_msg(date.msg);
+                            }else{
+                                show_msg('Success');
                             }
                         }
 
