@@ -561,7 +561,7 @@ $(function(){
 								var em_for = $(item).attr('name');
 							}
 							if($(item).val() == ''){
-								$(item).parent().append('<em for="'+em_for+'" generated="true" class="error tips">必填项</em>');
+								$(item).parent().append('<em for="'+em_for+'" generated="true" class="error tips">Required</em>');
 							}else{
 								$(item).parent().append('<em for="'+em_for+'" generated="true" class="error success"></em>');
 							}

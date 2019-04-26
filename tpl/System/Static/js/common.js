@@ -1,6 +1,6 @@
 var confirmbtn = [
 	{
-		name:'确定',
+		name:'Confirm',
 		callback:function () {
 			var iframe = this.iframe.contentWindow;
 			if (iframe.document.body) {
@@ -13,11 +13,11 @@ var confirmbtn = [
 		},
 		focus:true
 	},
-	{name:'关闭'}
+	{name:'Close'}
 ];
 var addbtn = [
 	{
-		name:'添加',
+		name:'Add',
 		callback:function () {
 			var iframe = this.iframe.contentWindow;
 			if (iframe.document.body) {
@@ -30,11 +30,11 @@ var addbtn = [
 		},
 		focus:true
 	},
-	{name:'关闭'}
+	{name:'Close'}
 ];
 var editbtn = [
 	{
-		name:'编辑',
+		name:'Edit',
 		callback:function () {
 			var iframe = this.iframe.contentWindow;
 			if (iframe.document.body) {
@@ -47,7 +47,7 @@ var editbtn = [
 		},
 		focus:true
 	},
-	{name:'关闭'}
+	{name:'Close'}
 ];
 var verifybtn = [
 	{
@@ -70,7 +70,7 @@ var verifybtn = [
 
 var submitbtn = [
 	{
-		name:'提交',
+		name:'Submit',
 		callback:function () {
 			var iframe = this.iframe.contentWindow;
 			if (iframe.document.body) {
@@ -83,7 +83,7 @@ var submitbtn = [
 		},
 		focus:true
 	},
-	{name:'关闭'}
+	{name:'Close'}
 ];
 
 var importbtn = [
@@ -515,7 +515,7 @@ $(function(){
 								var em_for = $(item).attr('name');
 							}
 							if($(item).val() == ''){
-								$(item).parent().append('<em for="'+em_for+'" generated="true" class="error tips">必填项</em>');
+								$(item).parent().append('<em for="'+em_for+'" generated="true" class="error tips">Required</em>');
 							}else{
 								$(item).parent().append('<em for="'+em_for+'" generated="true" class="error success"></em>');
 							}

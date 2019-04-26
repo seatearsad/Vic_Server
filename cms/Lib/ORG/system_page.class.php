@@ -38,9 +38,9 @@ class Page{
 		}else{
 		   $url .= '&page=';
 		}
-		$str = '<span class="total"><span id="row_count">'.$this->totalRows.'</span> 条记录 '.$now.' / '.$total.' 页  </span>';
+		$str = '<span class="total"><span id="row_count">'.$this->totalRows.'</span> '.L('_BACK_PAGE_ORDERS_').' '.$now.' / '.$total.' '.L('_BACK_PAGE_NUM_').'   </span>';
 		if($now > 1){
-			$str .= '<a href="'.$url.($now-1).'" class="prev" title="上一页">上一页</a>';
+			$str .= '<a href="'.$url.($now-1).'" class="prev" title="Previous">'.L('_BACK_PREVIOUS_').'</a>';
 		}
 		if($now!=1 && $now>4 && $total>6){
 			$str .= '<a href="'.$url.'1" title="1">1</a><div class="page-numbers dots">…</div>';
@@ -55,7 +55,7 @@ class Page{
 			}
 			if($page != $now  && $page>0){
 				if($page<=$total){
-					$str .= '<a href="'.$url.$page.'" title="第'.$page.'页" class="pga">'.$page.'</a>';
+					$str .= '<a href="'.$url.$page.'" title="'.$page.'" class="pga">'.$page.'</a>';
 				}else{
 					break;
 				}
@@ -64,10 +64,10 @@ class Page{
 			}
 		}
 		if($total != $now && $now<$total-5 && $total>10){
-			$str .= '<span class="dots">…</span><a href="'.$url.$total.'" title="第'.$total.'页">'.$total.'</a>';
+			$str .= '<span class="dots">…</span><a href="'.$url.$total.'" title="'.$total.'">'.$total.'</a>';
 		}
 		if ($now != $total){
-			$str .= '<a href="'.$url.($now+1).'" class="next">下一页</a>';
+			$str .= '<a href="'.$url.($now+1).'" class="next">'.L('_BACK_NEXT_').'</a>';
 		}
 		
 		return $str;

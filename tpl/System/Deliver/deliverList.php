@@ -2,7 +2,7 @@
 		<div class="mainbox">
 			<div id="nav" class="mainnav_title">
 				<ul>
-					<a href="{pigcms{:U('Deliver/deliverList')}" class="on">配送列表</a>|
+					<a href="{pigcms{:U('Deliver/deliverList')}" class="on">{pigcms{:L('_BACK_DELIVERY_LIST_')}</a>|
 				</ul>
 			</div>
 			<table class="search_table" width="100%">
@@ -19,30 +19,30 @@
 									</select>
 							</span> -->
 							<span class="mar_l_10">
-								配送状态：<select id="status" name="deliver">
-										<option value="0" <if condition="$status eq 0">selected</if> >全部</option>
-										<option value="1" <if condition="$status eq 1">selected</if> >等待接单</option>
-										<option value="2" <if condition="$status eq 2">selected</if> >已接单</option>
-										<option value="3" <if condition="$status eq 3">selected</if> >已取货</option>
-										<option value="4" <if condition="$status eq 4">selected</if> >开始配送</option>
-										<option value="5" <if condition="$status eq 5">selected</if> >已完成</option>
+								{pigcms{:L('_BACK_DELIVERY_STATUS_')}：<select id="status" name="deliver">
+										<option value="0" <if condition="$status eq 0">selected</if> >{pigcms{:L('_BACK_ALL_')}</option>
+										<option value="1" <if condition="$status eq 1">selected</if> >{pigcms{:L('_BACK_AWAIT_')}</option>
+										<option value="2" <if condition="$status eq 2">selected</if> >{pigcms{:L('_BACK_CONFIRMED_')}</option>
+										<option value="3" <if condition="$status eq 3">selected</if> >{pigcms{:L('_BACK_PICKED_')}</option>
+										<option value="4" <if condition="$status eq 4">selected</if> >{pigcms{:L('_BACK_IN_TRANSIT_')}</option>
+										<option value="5" <if condition="$status eq 5">selected</if> >{pigcms{:L('_BACK_COMPLETED_')}</option>
 									</select>
 							</span>
-							<span class="mar_l_10">用户手机号：<input type="text" id="phone" name="phone" <if condition="$phone">value="{pigcms{$phone}"></if></span>
-							<span>开始时间筛选：</span>
+							<span class="mar_l_10">{pigcms{:L('_BACK_USER_PHONE_')}：<input type="text" id="phone" name="phone" <if condition="$phone">value="{pigcms{$phone}"></if></span>
+							<span>{pigcms{:L('_START_TIME_')}：</span>
 							<div style="display:inline-block;">
 								<select class='custom-date' id="time_value" name='select'>
-									<option value='1' <if condition="$day eq 1">selected</if>>今天</option>
-									<option value='7' <if condition="$day eq 7">selected</if>>7天</option>
-									<option value='30' <if condition="$day eq 30">selected</if>>30天</option>
-									<option value='180' <if condition="$day eq 180">selected</if>>180天</option>
-									<option value='365' <if condition="$day eq 365">selected</if>>365天</option>
-									<option value='custom' <if condition="$period">selected</if>>{pigcms{$period|default='自定义'}</option>
+									<option value='1' <if condition="$day eq 1">selected</if>>{pigcms{:L('_BACK_TODAY_')}</option>
+									<option value='7' <if condition="$day eq 7">selected</if>>7 {pigcms{:L('_BACK_DAYS_')}</option>
+									<option value='30' <if condition="$day eq 30">selected</if>>30 {pigcms{:L('_BACK_DAYS_')}</option>
+									<option value='180' <if condition="$day eq 180">selected</if>>180 {pigcms{:L('_BACK_DAYS_')}</option>
+									<option value='365' <if condition="$day eq 365">selected</if>>365 {pigcms{:L('_BACK_DAYS_')}</option>
+									<option value='custom' <if condition="$period">selected</if>>{pigcms{:L('_BACK_CUSTOMIZE_')}</option>
 								</select>
 							</div>
-							<span class="mar_l_10"><button id="search" class="btn btn-success">搜索</button></span>
+							<span class="mar_l_10"><button id="search" class="btn btn-success">{pigcms{:L('_BACK_SEARCH_')}</button></span>
 							<!--a href="{pigcms{:U('Deliver/export', array('status' => $status, 'day' => $day, 'phone'=> $phone, 'period' => $period))}" class="button" style="float:right;margin-right: 10px;">导出订单</a-->
-                            <a href="javascript:void(0);" class="button" style="float:right;margin-right: 10px;" onclick="window.top.artiframe('{pigcms{:U('Deliver/export')}','导出订单',920,520,true,false,false,false,'detail',true);">导出订单</a>
+                            <a href="javascript:void(0);" class="button" style="float:right;margin-right: 10px;" onclick="window.top.artiframe('{pigcms{:U('Deliver/export')}','{pigcms{:L(\'_BACK_DOWN_ORDER_\')}',920,520,true,false,false,false,'detail',true);">{pigcms{:L('_BACK_DOWN_ORDER_')}</a>
 						</div>
 					</td>
 				</tr>
@@ -53,25 +53,24 @@
 			
 						<thead>
 							<tr>
-								<th>配送ID</th>
-								<th>订单来源</th>
+								<th>ID</th>
+								<th>{pigcms{:L('_BACK_FROM_')}</th>
 								<!--th>配送员类型</th-->
-								<th>店铺名称</th>
-								
-								<th>客户昵称</th>
-								<th>客户手机</th>
-								<th>客户地址</th>
+								<th>{pigcms{:L('_BACK_STORE_NAME_')}</th>
+								<th>{pigcms{:L('_BACK_USER_NAME_')}</th>
+								<th>{pigcms{:L('_BACK_USER_PHONE_')}</th>
+								<th>{pigcms{:L('_BACK_CUSTOM_ADD_')}</th>
 								<!--th>支付方式</th-->
-								<th>支付状态</th>
-								<th>订单价格</th>
-								<th>应收现金</th>
-								<th>配送状态</th>
-								<th>配送员昵称</th>
-								<th>配送员手机号</th>
-								<th>开始时间</th>
-								<th>送达时间</th>
-								<th>分配配送员</th>
-								<th>操作</th>
+								<th>{pigcms{:L('_BACK_PAYMENT_STATUS_')}</th>
+								<th>{pigcms{:L('_BACK_ORDER_TOTAL_')}</th>
+								<th>{pigcms{:L('_BACK_CASH_RECE_')}</th>
+								<th>{pigcms{:L('_BACK_DELIVERY_STATUS_')}</th>
+								<th>{pigcms{:L('_BACK_COURIER_NICK_')}</th>
+								<th>{pigcms{:L('_BACK_COURIER_PHONE_')}</th>
+								<th>{pigcms{:L('_BACK_START_AT_')}</th>
+								<th>{pigcms{:L('_BACK_FINISH_AT_')}</th>
+								<th>{pigcms{:L('_BACK_ASS_COURIER_')}</th>
+								<th>{pigcms{:L('_BACK_CZ_')}</th>
 								<!--th>创建时间</th-->
 								
 							</tr>
@@ -81,7 +80,7 @@
 								<volist name="supply_info"  id="vo">
 									<tr class="<if condition="$i%2 eq 0">odd<else/>even</if>">
 										<td width="30">{pigcms{$vo.supply_id}</td>
-										<td width="40"><if condition="$vo['item'] eq 0">{pigcms{$config.meal_alias_name}<elseif condition="$vo['item'] eq 1" />外送系统<elseif condition="$vo['item'] eq 2" />{pigcms{$config.shop_alias_name}</if></td>
+										<td width="40"><if condition="$vo['item'] eq 0">{pigcms{:L('_BACK_DINE_')}<elseif condition="$vo['item'] eq 1" />外送系统<elseif condition="$vo['item'] eq 2" />{pigcms{:L('_BACK_DELIVERY_')}</if></td>
 										<!--td width="50">{pigcms{$vo.group}</td-->
 										<td width="80">{pigcms{$vo.storename}</td>
 										<td width="30">{pigcms{$vo.username}</td>
@@ -99,20 +98,20 @@
 										
 										<td width="80">
 										<if condition="$vo['status'] eq 0">
-										<font color="red">订单失效</font>
+										<font color="red">{pigcms{:L('_BACK_ORDER_FILED_')}</font>
 										<elseif condition="$vo['status'] eq 1" />
-										<a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Deliver/appoint_deliver',array('supply_id' => $vo['supply_id']))}','指派配送员(配送距离{pigcms{$vo['distance']})',480,380,true,false,false,editbtn,'edit',true);">指派配送员</a>
+										<a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Deliver/appoint_deliver',array('supply_id' => $vo['supply_id']))}','指派配送员(配送距离{pigcms{$vo['distance']})',480,380,true,false,false,editbtn,'edit',true);">{pigcms{:L('_BACK_ASS_DIST_')}</a>
 										<elseif condition="$vo['status'] lt 5" />
-										<a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Deliver/appoint_deliver',array('supply_id' => $vo['supply_id']))}','更换配送员(配送距离{pigcms{$vo['distance']})',480,380,true,false,false,editbtn,'edit',true);" style="color:red">更换配送员</a>
+										<a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Deliver/appoint_deliver',array('supply_id' => $vo['supply_id']))}','更换配送员(配送距离{pigcms{$vo['distance']})',480,380,true,false,false,editbtn,'edit',true);" style="color:red">{pigcms{:L('_BACK_CHANGE_COURIER_')}</a>
 										<else />
-										<font color="green">配送完成</font>
+										<font color="green">{pigcms{:L('_BACK_DELIVERED_')}</font>
 										</if>
 										</td>
 										<td width="80">
 										<if condition="$vo['status'] eq 0 OR $vo['status'] eq 5 OR $vo['status'] eq 1">
 										---
 										<else />
-										<a href="javascript:void(0);" style="color:green" data-supply="{pigcms{$vo['supply_id']}" class="change">修改成配送完成</a>
+										<a href="javascript:void(0);" style="color:green" data-supply="{pigcms{$vo['supply_id']}" class="change">{pigcms{:L('_BACK_SWITCH_COM_')}</a>
 										</if>
 										</td>
 										<!--td width="50">{pigcms{$vo.create_time}</td-->
@@ -120,7 +119,7 @@
 								</volist>
 								<tr><td class="textcenter pagebar" colspan="16">{pigcms{$pagebar}</td></tr>
 							<else/>
-								<tr><td class="textcenter red" colspan="16">列表为空！</td></tr>
+								<tr><td class="textcenter red" colspan="16">{pigcms{:L('_BACK_EMPTY_')}</td></tr>
 							</if>
 						</tbody>
 					</table>

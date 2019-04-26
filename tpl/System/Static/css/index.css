@@ -60,7 +60,7 @@ div.titlev{float:none; background:#FBFAF8; border:1px solid #d4d4d4; padding-top
 #menu_bg {background:#F7FBFC;}
 #lang {float:right;}
 
-#leftMenuBox {float:left;zoom:1;display:inline-block;zoom:1;*display:inline;    color: #58666e;background-color: #EEE;width:220px;}
+#leftMenuBox {float:left;zoom:1;display:inline-block;zoom:1;*display:inline;    color: #58666e;background-color: #EEE;width:240px;}
 #leftMenu {float:left;background:#F7FBFC;width:224px;}
 #leftMenu {margin:0px;}
 #leftMenu dl dt {float:left;background:url(img/admin_left_menu.gif) no-repeat 12px 6px;width:155px;height:29px;padding-left:35px; line-height:29px;border-bottom:1px solid #d5dfe8;text-align:left; font-size:14px;font-weight:bold;}
@@ -592,7 +592,7 @@ img {
 }
 #leftNavBox .font-bold{
 	/* font-weight:bold; */
-	font-size:14px;
+	font-size:12px;
 }
 #leftNavBox .pull-right{
 	margin-top: 4px;

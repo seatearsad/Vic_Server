@@ -2,7 +2,7 @@
 		<div class="mainbox">
 			<div id="nav" class="mainnav_title">
 				<ul>
-					<a href="{pigcms{:U('Deliver/user')}" class="on">配送员审核</a>|
+					<a href="{pigcms{:U('Deliver/user')}" class="on">{pigcms{:L('_BACK_COURIER_APP_')}</a>|
 				</ul>
 			</div>
 			<table class="search_table" width="100%">
@@ -11,13 +11,13 @@
 						<form action="{pigcms{:U('Deliver/user')}" method="get">
 							<input type="hidden" name="c" value="Deliver"/>
 							<input type="hidden" name="a" value="user"/>
-							筛选: <input type="text" name="keyword" class="input-text" value="{pigcms{$_GET['keyword']}"/>
+                            {pigcms{:L('_BACK_SEARCH_')}: <input type="text" name="keyword" class="input-text" value="{pigcms{$_GET['keyword']}"/>
 							<select name="searchtype">
-								<option value="uid" <if condition="$_GET['searchtype'] eq 'uid'">selected="selected"</if>>用户ID</option>
-								<option value="nickname" <if condition="$_GET['searchtype'] eq 'nickname'">selected="selected"</if>>昵称</option>
-								<option value="phone" <if condition="$_GET['searchtype'] eq 'phone'">selected="selected"</if>>手机号</option>
+								<option value="uid" <if condition="$_GET['searchtype'] eq 'uid'">selected="selected"</if>>{pigcms{:L('_BACK_USER_ID_')}</option>
+								<option value="nickname" <if condition="$_GET['searchtype'] eq 'nickname'">selected="selected"</if>>{pigcms{:L('_BACK_NICKNAME_')}</option>
+								<option value="phone" <if condition="$_GET['searchtype'] eq 'phone'">selected="selected"</if>>{pigcms{:L('_BACK_PHONE_NUM_')}</option>
 							</select>
-							<input type="submit" value="查询" class="button"/>
+							<input type="submit" value="{pigcms{:L('_BACK_SEARCH_')}" class="button"/>
 						</form>
 					</td>
 				</tr>
@@ -30,11 +30,11 @@
 								<th>ID</th>
 								<th>First Name</th>
                                 <th>Last Name</th>
-								<th>手机号</th>
-								<th>邮箱</th>
-								<th>注册时间</th>
-								<th class="textcenter">状态</th>
-								<th class="textcenter">操作</th>
+								<th>{pigcms{:L('_BACK_PHONE_NUM_')}</th>
+								<th>{pigcms{:L('_BACK_EMAIL_')}</th>
+								<th>{pigcms{:L('_BACK_REG_TIME_')}</th>
+								<th class="textcenter">{pigcms{:L('_BACK_STATUS_')}</th>
+								<th class="textcenter">{pigcms{:L('_BACK_CZ_')}</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -49,16 +49,16 @@
 										<td>{pigcms{$vo.create_time|date='Y-m-d H:i:s',###}</td>
 										<td class="textcenter">
                                             <if condition="$vo['reg_status'] eq 1">
-                                                <font color="red">完成注册</font>
+                                                <font color="red">{pigcms{:L('_BACK_REGISTERED_')}</font>
                                             </if>
                                             <if condition="$vo['reg_status'] eq 2">
-                                                <font color="green">完成第一步</font>
+                                                <font color="green">{pigcms{:L('_BACK_FIRST_STEP_')}</font>
                                             </if>
                                             <if condition="$vo['reg_status'] eq 3">
-                                                <font color="green">通过初步审核</font>
+                                                <font color="green">{pigcms{:L('_BACK_APPROVED_')}</font>
                                             </if>
                                             <if condition="$vo['reg_status'] eq 4">
-                                                <font color="green">领取配送箱</font>
+                                                <font color="green">{pigcms{:L('_BACK_DELIVER_BOX_')}</font>
                                             </if>
                                         </td>
 										<td class="textcenter">　
@@ -68,7 +68,7 @@
 								</volist>
 								<tr><td class="textcenter pagebar" colspan="10">{pigcms{$pagebar}</td></tr>
 							<else/>
-								<tr><td class="textcenter red" colspan="10">列表为空！</td></tr>
+								<tr><td class="textcenter red" colspan="10">{pigcms{:L('_BACK_EMPTY_')}</td></tr>
 							</if>
 						</tbody>
 					</table>

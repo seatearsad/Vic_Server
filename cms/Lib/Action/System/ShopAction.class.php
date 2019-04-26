@@ -366,7 +366,7 @@ class ShopAction extends BaseAction
             }
         }
         $this->assign(array('type' => $type, 'sort' => $sort, 'status' => $status,'pay_type'=>$pay_type));
-        $this->assign('status_list', D('Shop_order')->status_list_admin);
+        $this->assign('status_list', D('Shop_order')->getStatusList());
         $this->assign($result);
 
         $field = 'sum(price) AS total_price, sum(price - card_price - merchant_balance - balance_pay - payment_money - score_deducte - coupon_price - card_give_money) AS offline_price, sum(card_price + merchant_balance + balance_pay + payment_money + score_deducte + coupon_price + card_give_money) AS online_price';

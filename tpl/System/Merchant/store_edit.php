@@ -3,19 +3,19 @@
 		<input type="hidden" name="store_id" value="{pigcms{$store.store_id}"/>
 		<table cellpadding="0" cellspacing="0" class="frame_form" width="100%">
 			<tr>
-				<th width="80">店铺名称</th>
+				<th width="80">{pigcms{:L('_BACK_STORE_NAME_')}</th>
 				<td><input type="text" class="input fl" name="name" value="{pigcms{$store.name}" size="25" placeholder="店铺名称" validate="required:true"/></td>
 			</tr>
 			<tr>
-				<th width="80">联系电话</th>
+				<th width="80">{pigcms{:L('_BACK_STORE_PHONE_')}</th>
 				<td><input type="text" class="input fl" name="phone" size="25" value="{pigcms{$store.phone}" placeholder="店铺的电话" validate="required:true" tips="多个电话号码以空格分开"/></td>
 			</tr>
 			<tr>
-				<th width="80">店铺经纬度</th>
+				<th width="80">{pigcms{:L('_BACK_STORE_LAT_LONG_')}</th>
 				<td id="choose_map" default_long_lat="{pigcms{$store.long},{pigcms{$store.lat}"></td>
 			</tr>
 			<tr>
-				<th width="80">店铺所在地</th>
+				<th width="80">{pigcms{:L('_BACK_STORE_AREA_')}</th>
 				<!--td id="choose_cityarea" province_id="{pigcms{$store.province_id}" city_id="{pigcms{$store.city_id}" area_id="{pigcms{$store.area_id}" circle_id="{pigcms{$store.circle_id}" market_id="{pigcms{$store.market_id}"></td-->
                 <td id="city_area">
                     {pigcms{$store.city_name}
@@ -23,52 +23,52 @@
                 <input type="hidden" id="city_id" name="city_id" value="{pigcms{$store.city_id}">
 			</tr>
 			<tr>
-				<th width="80">店铺地址</th>
+				<th width="80">{pigcms{:L('_SHOP_ADDRESS_')}</th>
 				<td><input type="text" class="input fl" name="adress" id="adress" value="{pigcms{$store.adress}" size="25" placeholder="店铺的地址" validate="required:true"/></td>
 			</tr>
 			<tr>
-				<th width="80">店铺排序</th>
+				<th width="80">{pigcms{:L('_BACK_STORE_SORT_')}</th>
 				<td><input type="text" class="input fl" name="sort" size="5" value="{pigcms{$store.sort}" validate="required:true,number:true,maxlength:6" tips="默认添加顺序排序！手动调值，数值越大，排序越前"/></td>
 			</tr>
 			<tr>
-				<th width="80">{pigcms{$config.meal_alias_name}功能</th>
+				<th width="80">{pigcms{:L('_BACK_DINE_')}</th>
 				<td>
-					<span class="cb-enable"><label class="cb-enable <if condition="$store['have_meal'] eq 1">selected</if>"><span>开启</span><input type="radio" name="have_meal" value="1" <if condition="$store['have_meal'] eq 1">checked="checked"</if> /></label></span>
-					<span class="cb-disable"><label class="cb-disable <if condition="$store['have_meal'] eq 0">selected</if>"><span>关闭</span><input type="radio" name="have_meal" value="0" <if condition="$store['have_meal'] eq 0">checked="checked"</if>/></label></span>
+					<span class="cb-enable"><label class="cb-enable <if condition="$store['have_meal'] eq 1">selected</if>"><span>{pigcms{:L('_BACK_ON_')}</span><input type="radio" name="have_meal" value="1" <if condition="$store['have_meal'] eq 1">checked="checked"</if> /></label></span>
+					<span class="cb-disable"><label class="cb-disable <if condition="$store['have_meal'] eq 0">selected</if>"><span>{pigcms{:L('_BACK_OFF_')}</span><input type="radio" name="have_meal" value="0" <if condition="$store['have_meal'] eq 0">checked="checked"</if>/></label></span>
 				</td>
 			</tr>
 			<tr>
-				<th width="80">{pigcms{$config.group_alias_name}功能</th>
+				<th width="80">{pigcms{:L('_BACK_LUNCH_')}</th>
 				<td>
-					<span class="cb-enable"><label class="cb-enable <if condition="$store['have_group'] eq 1">selected</if>"><span>开启</span><input type="radio" name="have_group" value="1" <if condition="$store['have_group'] eq 1">checked="checked"</if> /></label></span>
-					<span class="cb-disable"><label class="cb-disable <if condition="$store['have_group'] eq 0">selected</if>"><span>关闭</span><input type="radio" name="have_group" value="0" <if condition="$store['have_group'] eq 0">checked="checked"</if>/></label></span>
+					<span class="cb-enable"><label class="cb-enable <if condition="$store['have_group'] eq 1">selected</if>"><span>{pigcms{:L('_BACK_ON_')}</span><input type="radio" name="have_group" value="1" <if condition="$store['have_group'] eq 1">checked="checked"</if> /></label></span>
+					<span class="cb-disable"><label class="cb-disable <if condition="$store['have_group'] eq 0">selected</if>"><span>{pigcms{:L('_BACK_OFF_')}</span><input type="radio" name="have_group" value="0" <if condition="$store['have_group'] eq 0">checked="checked"</if>/></label></span>
 				</td>
 			</tr>
 			<tr>
-				<th width="80">{pigcms{$config.shop_alias_name}功能</th>
+				<th width="80">{pigcms{:L('_BACK_DELIVERY_')}</th>
 				<td>
-					<span class="cb-enable"><label class="cb-enable <if condition="$store['have_shop'] eq 1">selected</if>"><span>开启</span><input type="radio" name="have_shop" value="1" <if condition="$store['have_shop'] eq 1">checked="checked"</if> /></label></span>
-					<span class="cb-disable"><label class="cb-disable <if condition="$store['have_shop'] eq 0">selected</if>"><span>关闭</span><input type="radio" name="have_shop" value="0" <if condition="$store['have_shop'] eq 0">checked="checked"</if>/></label></span>
+					<span class="cb-enable"><label class="cb-enable <if condition="$store['have_shop'] eq 1">selected</if>"><span>{pigcms{:L('_BACK_ON_')}</span><input type="radio" name="have_shop" value="1" <if condition="$store['have_shop'] eq 1">checked="checked"</if> /></label></span>
+					<span class="cb-disable"><label class="cb-disable <if condition="$store['have_shop'] eq 0">selected</if>"><span>{pigcms{:L('_BACK_OFF_')}</span><input type="radio" name="have_shop" value="0" <if condition="$store['have_shop'] eq 0">checked="checked"</if>/></label></span>
 				</td>
 			</tr>
 			<if condition="$config['store_open_waimai']">
 				<tr>
 					<th width="80">{pigcms{$config.waimai_alias_name}功能</th>
 					<td>
-						<span class="cb-enable"><label class="cb-enable <if condition="$store['have_waimai'] eq 1">selected</if>"><span>开启</span><input type="radio" name="have_waimai" value="1" <if condition="$store['have_waimai'] eq 1">checked="checked"</if> /></label></span>
-						<span class="cb-disable"><label class="cb-disable <if condition="$store['have_waimai'] eq 0">selected</if>"><span>关闭</span><input type="radio" name="have_waimai" value="0" <if condition="$store['have_waimai'] eq 0">checked="checked"</if>/></label></span>
+						<span class="cb-enable"><label class="cb-enable <if condition="$store['have_waimai'] eq 1">selected</if>"><span>{pigcms{:L('_BACK_ON_')}</span><input type="radio" name="have_waimai" value="1" <if condition="$store['have_waimai'] eq 1">checked="checked"</if> /></label></span>
+						<span class="cb-disable"><label class="cb-disable <if condition="$store['have_waimai'] eq 0">selected</if>"><span>{pigcms{:L('_BACK_OFF_')}</span><input type="radio" name="have_waimai" value="0" <if condition="$store['have_waimai'] eq 0">checked="checked"</if>/></label></span>
 					</td>
 				</tr>
 			</if>
 			<tr>
-				<th width="80">店铺状态</th>
+				<th width="80">{pigcms{:L('_STORE_STATUS_')}</th>
 				<td>
-					<span class="cb-enable"><label class="cb-enable <if condition="$store['status'] eq 1">selected</if>"><span>启用</span><input type="radio" name="status" value="1" <if condition="$store['status'] eq 1">checked="checked"</if> /></label></span>
-					<span class="cb-disable"><label class="cb-disable <if condition="$store['status'] eq 0">selected</if>"><span>关闭</span><input type="radio" name="status" value="0" <if condition="$store['status'] eq 0">checked="checked"</if>/></label></span>
+					<span class="cb-enable"><label class="cb-enable <if condition="$store['status'] eq 1">selected</if>"><span>{pigcms{:L('_BACK_ACTIVE_')}</span><input type="radio" name="status" value="1" <if condition="$store['status'] eq 1">checked="checked"</if> /></label></span>
+					<span class="cb-disable"><label class="cb-disable <if condition="$store['status'] eq 0">selected</if>"><span>{pigcms{:L('_BACK_CLOSED_')}</span><input type="radio" name="status" value="0" <if condition="$store['status'] eq 0">checked="checked"</if>/></label></span>
 				</td>
 			</tr>
             <tr>
-                <th width="80">税费</th>
+                <th width="80">{pigcms{:L('_BACK_TAX_')}</th>
                 <td><input type="text" class="input fl" name="tax_num" size="5" value="{pigcms{$store['tax_num']}" validate="required:true,number:true,maxlength:6" />%</td>
             </tr>
 		</table>

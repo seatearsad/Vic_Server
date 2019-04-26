@@ -13,12 +13,13 @@
 		<script type="text/javascript" src="{pigcms{$static_public}js/artdialog/iframeTools.js"></script>
 		<script type="text/javascript" src="{pigcms{$static_public}js/jquery.colorpicker.js"></script>
 		<script type="text/javascript" src="{pigcms{$static_public}js/screenfull.min.js"></script>
+        <script type="text/javascript" src="{pigcms{$static_public}js/lang.js"></script>
 		<link rel="stylesheet" type="text/css" href="{pigcms{$static_public}font-awesome/css/font-awesome.css"/>
 	</head>
 	<body style="background:#E2E9EA;overflow:hidden;">
 		<div id="Main_content" >
 			<div id="HelpBox" style="width:0px;position:relative;z-index:9999;right:-200px; height:100%; overflow:hidden">
-				<div id="right_open" style="position:fixed;right:0px;top:80px;cursor:pointer;"><img src="{pigcms{$static_path}images/jt_05.png" /></div>
+				<!--div id="right_open" style="position:fixed;right:0px;top:80px;cursor:pointer;"><img src="{pigcms{$static_path}images/jt_05.png" /></div-->
 				<div id="right_close" style="position:fixed;right:200px;top:80px;display:none;cursor:pointer;"><img src="{pigcms{$static_path}images/jt_04.png" /></div>
 				<div class="helpTitle">帮助中心&nbsp;&nbsp;<i class="fa fa-question-circle-o"></i></div>
 				<div class="helpContent">
@@ -107,7 +108,7 @@
 							<li class="active nav-top">
 								<a href="{pigcms{:U('Index/main')}" target="main" class="auto">
 									<i class="fa fa-line-chart icon"></i>
-									<span class="font-bold">概况</span>
+									<span class="font-bold">{pigcms{:L('_BACK_OVERVIEW_')}</span>
 								</a>
 							</li>
 							<volist name="system_menu" id="vo">
@@ -132,6 +133,29 @@
 									</ul>
 								</li>
 							</volist>
+                            <li class="nav-top">
+                                <a class="auto" href="#">
+										<span class="pull-right text-muted">
+											<i class="fa fa-fw fa-angle-right text"></i>
+											<i class="fa fa-fw fa-angle-down text-active"></i>
+										</span>
+                                    <i class="fa fa-newspaper-o icon"></i>
+                                    <span class="font-bold">{pigcms{:L('_LANG_TXT_')}</span>
+                                </a>
+                                <ul class="nav nav-sub dk">
+                                    <li class="sub-title">{pigcms{:L('_LANG_TXT_')}</li>
+                                    <li>
+                                        <a class="auto" href="javascript:changeLange('en-us')">
+                                            <span>English</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="auto" href="javascript:changeLange('zh-cn')">
+                                            <span>Chinese</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
 						</ul>
 					</div>
 				</div>
@@ -165,6 +189,11 @@
 				$("#right_close").hide();
 				$('#MainBox').css('margin-right','0px');
 			})
+
+            function changeLange(lang) {
+                setCookie('lang',lang,30);
+                window.location.reload();
+            }
 		</script>
 	</body>
 </html>

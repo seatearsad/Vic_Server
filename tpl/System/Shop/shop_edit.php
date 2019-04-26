@@ -3,20 +3,20 @@
 		<input type="hidden" name="id" value="{pigcms{$now_shop.store_id}"/>
 		<table cellpadding="0" cellspacing="0" class="frame_form" width="100%">
 			<tr>
-				<th width="90">店铺名称</th>
+				<th width="90">{pigcms{:L('_BACK_STORE_NAME_')}</th>
 				<td>{pigcms{$now_shop.name}</td>
 			</tr>
 			<tr>
-				<th width="90">服务范围类型</th>
+				<th width="90">{pigcms{:L('_BACK_DIST_TYPE_')}</th>
 				<td>
 					<select name="delivery_range_type" class="valid" tips="半径范围|自定义范围">
-					<option value="0" <if condition="$now_shop['delivery_range_type'] eq 0">selected</if>>半径范围</option>
-					<option value="1" <if condition="$now_shop['delivery_range_type'] eq 1">selected</if>>自定义范围</option>
+					<option value="0" <if condition="$now_shop['delivery_range_type'] eq 0">selected</if>>{pigcms{:L('_BACK_RADIUS_')}</option>
+					<!--option value="1" <if condition="$now_shop['delivery_range_type'] eq 1">selected</if>>自定义范围</option-->
 					</select>
 				</td>
 			</tr>
 			<tr class="delivery_range_type0">
-				<th width="90">服务范围</th>
+				<th width="90">{pigcms{:L('_BACK_DISTANCE_')}</th>
 				<td><input type="text" class="input fl" name="delivery_radius" value="{pigcms{$now_shop.delivery_radius|floatval}" id="reduce_money" size="10" tips="已店铺为起点的半径距离(单位：㎞)"/></td>
 			</tr>
 			<tr class="delivery_range_type1">
@@ -28,11 +28,11 @@
 				<td colspan="2"><div id="allmap" style="height:350px;"></div></td>
 			</tr>
 			<tr>
-				<th width="90">开启配送设置</th>
+				<th width="90">{pigcms{:L('_BACK_DELIVER_SET_')}</th>
 				<td>
 					<select name="s_is_open_own" class="valid" tips="是否开启平台对店铺的配送费单独设置，如果开启，下面的设置才有用，如果关闭那么采用平台的默认设置">
-					<option value="0" <if condition="$now_shop['s_is_open_own'] eq 0">selected</if>>关闭</option>
-					<option value="1" <if condition="$now_shop['s_is_open_own'] eq 1">selected</if>>开启</option>
+					<option value="0" <if condition="$now_shop['s_is_open_own'] eq 0">selected</if>>{pigcms{:L('_BACK_OFF_')}</option>
+					<option value="1" <if condition="$now_shop['s_is_open_own'] eq 1">selected</if>>{pigcms{:L('_BACK_ON_')}</option>
 					</select>
 				</td>
 			</tr>

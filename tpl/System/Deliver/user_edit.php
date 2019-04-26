@@ -6,31 +6,31 @@
 		<input type="hidden" name="uid" value="{pigcms{$now_user.uid}"/>
 		<table cellpadding="0" cellspacing="0" class="frame_form" width="100%">
 			<tr>
-                <th width="15%">姓</th>
+                <th width="15%">{pigcms{:L('_LAST_NAME_')}</th>
                 <td width="35%"><input type="text" class="input fl" name="family_name" size="20" validate="maxlength:50,required:true" value="{pigcms{$now_user.family_name}"/></td>
-                <th width="15%">名</th>
+                <th width="15%">{pigcms{:L('_FIRST_NAME_')}</th>
                 <td width="35%"><input type="text" class="input fl" name="name" size="20" validate="maxlength:50,required:true" value="{pigcms{$now_user.name}"/></td>
 			</tr>
             <tr>
-                <th width="15%">邮箱</th>
+                <th width="15%">{pigcms{:L('_EMAIL_TXT_')}</th>
                 <td width="35%"><input type="text" class="input fl" name="email" size="20" validate="maxlength:50,required:true" value="{pigcms{$now_user.email}" /></td>
-                <th width="15%">语言</th>
+                <th width="15%">{pigcms{:L('_LANG_TXT_')}</th>
                 <td width="35%">
                     <span class="cb-enable"><label class="cb-enable <if condition="$now_user['language'] eq 1">selected</if>"><span>English</span><input type="radio" name="language" value="1" <if condition="$now_user['language'] eq 1">checked="checked"</if> /></label></span>
-                    <span class="cb-disable"><label class="cb-disable <if condition="$now_user['language'] eq 0">selected</if>"><span>中文</span><input type="radio" name="language" value="0" <if condition="$now_user['language'] eq 0">checked="checked"</if> /></label></span>
+                    <span class="cb-disable"><label class="cb-disable <if condition="$now_user['language'] eq 0">selected</if>"><span>Chinese</span><input type="radio" name="language" value="0" <if condition="$now_user['language'] eq 0">checked="checked"</if> /></label></span>
                 </td>
             </tr>
 			<tr>
-				<th width="15%">密码</th>
+				<th width="15%">{pigcms{:L('_MERCHANT_PASSWORD_')}</th>
 				<td width="35%"><input type="text" class="input fl" name="pwd" size="20" value="" tips="不修改则不填写" /></td>
-				<th width="15%">状态</th>
+				<th width="15%">{pigcms{:L('_BACK_STATUS_')}</th>
 				<td width="35%" class="radio_box">
-					<span class="cb-enable"><label class="cb-enable <if condition="$now_user['status'] eq 1">selected</if>"><span>正常</span><input type="radio" name="status" value="1"  <if condition="$now_user['status'] eq 1">checked="checked"</if>/></label></span>
-					<span class="cb-disable"><label class="cb-disable <if condition="$now_user['status'] eq 0">selected</if>"><span>禁止</span><input type="radio" name="status" value="0"  <if condition="$now_user['status'] eq 0">checked="checked"</if>/></label></span>
+					<span class="cb-enable"><label class="cb-enable <if condition="$now_user['status'] eq 1">selected</if>"><span>{pigcms{:L('_BACK_NORMAL_')}</span><input type="radio" name="status" value="1"  <if condition="$now_user['status'] eq 1">checked="checked"</if>/></label></span>
+					<span class="cb-disable"><label class="cb-disable <if condition="$now_user['status'] eq 0">selected</if>"><span>{pigcms{:L('_BACK_FORBID_')}</span><input type="radio" name="status" value="0"  <if condition="$now_user['status'] eq 0">checked="checked"</if>/></label></span>
 				</td>
 			</tr>
 			<tr>
-			 	<th width="15%">所在地</th>
+			 	<th width="15%">{pigcms{:L('_BACK_DELIVER_AREA_')}</th>
 				<!--td id="choose_cityarea" colspan=3  province_id="{pigcms{$now_user.province_id}" city_id="{pigcms{$now_user.city_id}" area_id="{pigcms{$now_user.area_id}" circle_id="{pigcms{$now_user.circle_id}"></td-->
                 <td id="city_area">
                     {pigcms{$now_user.city_name}
@@ -38,20 +38,20 @@
                 <input type="hidden" id="city_id" name="city_id" value="{pigcms{$now_user.city_id}">
 			<tr>
 			<tr>
-				<th width="15%">配送范围</th>
-				<td width="35%"><input type="text" class="input fl" name="range" size="20" validate="required:true" value="{pigcms{$now_user.range}"/>公里</td>
-                <th width="15%">手机号</th>
+				<th width="15%">{pigcms{:L('_BACK_DELIVERY_AREA_')}</th>
+				<td width="35%"><input type="text" class="input fl" name="range" size="20" validate="required:true" value="{pigcms{$now_user.range}"/> {pigcms{:L('_BACK_MILES_')}</td>
+                <th width="15%">{pigcms{:L('_BACK_PHONE_NUM_')}</th>
                 <td width="35%"><input type="text" class="input fl" name="phone" size="20" validate="number:true,required:true" value="{pigcms{$now_user.phone}"/></td>
 			<tr>
 			</tr>
 			<tr>
-				<th width="15%">常驻地区</th>
+				<th width="15%">{pigcms{:L('_BACK_OFEN_ADD_')}</th>
 				<td width="35%"><input type="text" class="input fl" readonly="readonly" name="adress" id="adress" validate="required:true" value="{pigcms{$now_user.site}"/></td>
-				<th width="15%">配送员经纬度</th>
+				<th width="15%">{pigcms{:L('_BACK_COURIER_LOC_')}</th>
 				<td width="35%" class="radio_box"><input class="input fl" size="20" name="long_lat" id="long_lat" type="text" readonly="readonly" validate="required:true" value="{pigcms{$now_user.lng},{pigcms{$now_user.lat}"/></td>
 			</tr>
             <tr>
-                <th width="15%">银行卡</th>
+                <th width="15%">{pigcms{:L('_BACK_BANK_INFO_')}</th>
                 <td colspan=3>
                     <input type="text" placeholder="Account Holder Name" class="input fl" name="ahname" size="30" validate="maxlength:50,required:true" value="{pigcms{$card.ahname}" />
                 </td>
@@ -76,19 +76,19 @@
             <tr>
             <if condition="$img">
             <tr>
-                <th width="15%">驾照</th>
+                <th width="15%">{pigcms{:L('_BACK_DRIVER_LIC_')}</th>
                 <td colspan=3>
                     <img src="{pigcms{:C('config.site_url')}{pigcms{$img['driver_license']}" height="100"/>
                 </td>
             </tr>
             <tr>
-                <th width="15%">车辆保险</th>
+                <th width="15%">{pigcms{:L('_BACK_VEHICLE_INSU_')}</th>
                 <td colspan=3>
                     <img src="{pigcms{:C('config.site_url')}{pigcms{$img['insurance']}" height="100"/>
                 </td>
             </tr>
             <tr>
-                <th width="15%">工作证明</th>
+                <th width="15%">{pigcms{:L('_BACK_PROOF_WORK_')}</th>
                 <td colspan=3>
                     <img src="{pigcms{:C('config.site_url')}{pigcms{$img['certificate']}" height="100"/>
                     <!--input type="text" placeholder="SIN_Number" class="input fl" name="certificate" size="30" validate="maxlength:50,required:true" value="{pigcms{$img.certificate}" /-->
@@ -97,8 +97,8 @@
             </if>
 		</table>
 		<div class="btn hidden">
-			<input type="submit" name="dosubmit" id="dosubmit" value="提交" class="button" />
-			<input type="reset" value="取消" class="button" />
+			<input type="submit" name="dosubmit" id="dosubmit" value="{pigcms{:L('_BACK_SUBMIT_')}" class="button" />
+			<input type="reset" value="{pigcms{:L('_BACK_CANCEL_')}" class="button" />
 		</div>
 	</form>
 	<div id="modal-table" class="modal fade" tabindex="-1" style="display:block;">
@@ -106,13 +106,13 @@
 			<div class="modal-content" style="width:100%;">
 				<div class="modal-header no-padding" style="width:100%;">
 					<div class="table-header">
-						   拖动红色图标，经纬度框内将自动填充经纬度。
+						   {pigcms{:L('_BACK_DRAG_RED_PIN_')}
 					</div>
 				</div>
 				<div class="modal-body no-padding" style="width:100%;">
 					<form id="map-search" style="margin:10px;">
 						<input id="map-keyword" type="textbox" style="width:300px;" placeholder="尽量填写城市、区域、街道名" value="{pigcms{$now_user.site}"/>
-						<input type="submit" value="搜索"/>
+						<input type="submit" value="{pigcms{:L('_BACK_SEARCH_')}"/>
 					</form>
 					<div style="width: 650px; height: 250px; min-height: 250px;" id="cmmap"></div>
 				</div>

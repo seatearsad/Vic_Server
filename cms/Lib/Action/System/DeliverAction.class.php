@@ -367,14 +367,14 @@ class DeliverAction extends BaseAction {
 			$value['create_time'] = date("Y-m-d H:i:s", $value['create_time']);
 			$value['start_time'] = $value['start_time'] ? date("Y-m-d H:i:s", $value['start_time']) : '-';
 			$value['end_time'] = $value['end_time'] ? date("Y-m-d H:i:s", $value['end_time']) : '-';
-			$value['paid'] = $value['paid'] == 1 ? "已支付" : "未支付";
+			$value['paid'] = $value['paid'] == 1? L('_BACK_PAID_'): L('_STATUS_LIST_100_');
 			$value['pay_type'] = $value['pay_type'] == "offline" ? "线下支付" : "线上支付";
 			$value['distance'] = $value['distance'] ? $value['distance'] . 'km' : getRange(getDistance($value['from_lat'], $value['from_lnt'], $value['aim_lat'], $value['aim_lnt']));
 			//订单状态（0：订单失效，1:订单完成，2：商家未确认，3：商家已确认，4已取餐，5：正在配送，6：退单,7商家取消订单,8配送员已接单）
 			//配送状态(0失败 1等待接单 2接单 3取货 4开始配送 5完成）
 		    switch ($value['status']) {
 				case 1:
-					$value['order_status'] = '<font color="red">等待接单</font>';
+					$value['order_status'] = '<font color="red">'.L('_BACK_AWAIT_').'</font>';
                     //garfunkel 判断拒单
                     $assign = D('deliver_assign')->field(true)->where(array('supply_id'=>$value['supply_id']))->find();
                     if ($assign) {
@@ -395,19 +395,19 @@ class DeliverAction extends BaseAction {
                     }
 					break;
 				case 2:
-					$value['order_status'] = "已接单";
+					$value['order_status'] = L('_BACK_CONFIRMED_');
 					break;
 				case 3:
-					$value['order_status'] = "已取货";
+					$value['order_status'] = L('_BACK_PICKED_');
 					break;
 				case 4:
-					$value['order_status'] = "开始配送";
+					$value['order_status'] = L('_BACK_IN_TRANSIT_');
 					break;
 				case 5:
-					$value['order_status'] = "已完成";
+					$value['order_status'] = L('_BACK_COMPLETED_');
 					break;
 				default:
-					$value['order_status'] = "订单失效";
+					$value['order_status'] = L('_BACK_ORDER_FILED_');
 					break;
 			}
 		}

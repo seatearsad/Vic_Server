@@ -2,12 +2,12 @@
 		<div class="mainbox">
 			<div id="nav" class="mainnav_title">
 				<ul>
-					<a href="{pigcms{:U('Deliver/user')}">配送员管理</a>
+					<a href="{pigcms{:U('Deliver/user')}">{pigcms{:L('_BACK_COURIER_MANA_')}</a>
                     <if condition="$system_session['level'] neq 3">
 					<a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Deliver/user_add')}','添加配送员',680,560,true,false,false,editbtn,'edit',true);">添加配送员</a>
 					<a href="{pigcms{:U('Config/index',array('galias'=>'deliver','header'=>'Deliver/header'))}">配送配置</a>
                     </if>
-                    <a href="{pigcms{:U('Deliver/map')}" class="on">配送员监控</a>
+                    <a href="{pigcms{:U('Deliver/map')}" class="on">{pigcms{:L('_BACK_COURIER_MONI_')}</a>
 				</ul>
 			</div>
 			<div id="deliver_map">

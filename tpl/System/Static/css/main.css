@@ -123,9 +123,9 @@ h1 span {color:#ccc;font-size:10px;margin-left:10px;}
 }
 .chartDataDownBtn{
 	  background:#AC4034;
-    width: 120px;
+    width: 150px;
     height: 50px;
-    margin-left: 40px;
+    margin-left: 25px;
     /* margin-top: 10px; */
     line-height: 50px;
     text-align: center;
@@ -170,7 +170,7 @@ font: normal 12PX Helvetica,STHeiti,"Microsoft YaHei",Verdana,Arial,Tahoma,sans-
 	float: left;
     width: 100%;
     height: 36px;
-    line-height: 36px;
+    line-height: 20px;
     background: #EFEFEF;
     color: #777;
     font-weight: normal;

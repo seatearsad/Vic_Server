@@ -3,6 +3,23 @@ class Shop_orderModel extends Model
 {
 	public $status_list = array('-1' => '全部' ,'0' => '未接单', 1 => '已确认', 2 => '已消费', 3 => '已评价', 4 => '已退款', 5 => '已取消', 7 => '分配到自提点', 8 => '发货到自提点', 9 => '自提点接货', 10 => '自提点发货');
 	public $status_list_admin = array('-1' => '全部', '100'=>'未支付' ,'0' => '未接单', 1 => '已确认', 2 => '已消费', 3 => '已评价', 4 => '已退款', 5 => '已取消', 7 => '分配到自提点', 8 => '发货到自提点', 9 => '自提点接货', 10 => '自提点发货');
+
+	public function getStatusList(){
+        return array(
+        	'-1' => L('_BACK_ALL_'),
+			'100'=> L('_STATUS_LIST_100_'),
+			'0' => L('_STATUS_LIST_0_'),
+			1 => L('_B_PURE_MY_72_'),
+			2 => L('_STATUS_LIST_2_'),
+			3 => L('_B_PURE_MY_74_'),
+			4 => L('_B_PURE_MY_75_'),
+			5 => L('_B_PURE_MY_76_'),
+			7 => L('_B_PURE_MY_77_'),
+			8 => L('_B_PURE_MY_78_'),
+			9 => L('_B_PURE_MY_79_'),
+			10 => L('_B_PURE_MY_80_')
+		);
+	}
 	/**获取订单分类**/
 	public function get_order_cate($order_id){
 		$store_id = $this->field('store_id')->where(array('order_id'=>$order_id))->find();
@@ -912,52 +929,52 @@ class Shop_orderModel extends Model
 				case 0:
 // 					$order['css'] = 'inhand';
 // 					$order['show_status'] = '处理中';
-					$order['status_str'] = '<b style="color:red">未确认</b>';
+					$order['status_str'] = '<b style="color:red">'.L('_B_PURE_MY_71_').'</b>';
 					break;
 				case 1:
 // 					$order['css'] = 'confirm';
 // 					$order['show_status'] = '已确认';
-					$order['status_str'] = '<b style="color:green">已确认</b>';
+					$order['status_str'] = '<b style="color:green">'.L('_B_PURE_MY_72_').'</b>';
 					break;
 				case 2:
 // 					$order['css'] = 'confirm';
 // 					$order['show_status'] = '已消费';
-					$order['status_str'] = '<b style="color:green">已消费</b>';
+					$order['status_str'] = '<b style="color:green">'.L('_STATUS_LIST_2_').'</b>';
 					break;
 				case 3:
 // 					$order['css'] = 'complete';
 // 					$order['show_status'] = '已评价';
-					$order['status_str'] = '<b style="color:green">已评价</b>';
+					$order['status_str'] = '<b style="color:green">'.L('_B_PURE_MY_74_').'</b>';
 					break;
 				case 4:
 // 					$order['css'] = 'cancle';
 // 					$order['show_status'] = '已退款';
-					$order['status_str'] = '<del style="color:gray">已退款</del>';
+					$order['status_str'] = '<del style="color:gray">'.L('_B_PURE_MY_75_').'</del>';
 					break;
 				case 5:
 // 					$order['css'] = 'cancle';
 // 					$order['show_status'] = '已取消';
-					$order['status_str'] = '<del style="color:gray">已取消</del>';
+					$order['status_str'] = '<del style="color:gray">'.L('_B_PURE_MY_76_').'</del>';
 					break;
 				case 7:
 // 					$order['css'] = 'cancle';
 // 					$order['show_status'] = '已取消';
-					$order['status_str'] = '<b style="color:green">分配到自提点</b>';
+					$order['status_str'] = '<b style="color:green">'.L('_B_PURE_MY_77_').'</b>';
 					break;
 				case 8:
 // 					$order['css'] = 'cancle';
 // 					$order['show_status'] = '已取消';
-					$order['status_str'] = '<b style="color:green">发货到自提点</b>';
+					$order['status_str'] = '<b style="color:green">'.L('_B_PURE_MY_78_').'</b>';
 					break;
 				case 9:
 // 					$order['css'] = 'cancle';
 // 					$order['show_status'] = '已取消';
-					$order['status_str'] = '<b style="color:green">自提点接货</b>';
+					$order['status_str'] = '<b style="color:green">'.L('_B_PURE_MY_79_').'</b>';
 					break;
 				case 10:
 // 					$order['css'] = 'cancle';
 // 					$order['show_status'] = '已取消';
-					$order['status_str'] = '<del style="color:green">自提点发货</del>';
+					$order['status_str'] = '<del style="color:green">'.L('_B_PURE_MY_80_').'</del>';
 					break;
 			}
 

@@ -3,15 +3,15 @@
 		<input type="hidden" name="mer_id" value="{pigcms{$merchant.mer_id}"/>
 		<table cellpadding="0" cellspacing="0" class="frame_form" width="100%">
 			<tr>
-				<th width="160">商户帐号</th>
+				<th width="160">{pigcms{:L('_BACK_MER_ACC_')}</th>
 				<td><div class="show">{pigcms{$merchant.account}</div></td>
 			</tr>
 			<tr>
-				<th width="160">商户密码</th>
+				<th width="160">{pigcms{:L('_BACK_MER_PASS_')}</th>
 				<td><input type="password" id="check_pwd" check_width="180" check_event="keyup" class="input fl" name="pwd" value="" size="25" placeholder="不修改则不填写！" validate="minlength:6" tips="不修改则不填写！"/></td>
 			</tr>
 			<tr>
-				<th width="160">商户名称</th>
+				<th width="160">{pigcms{:L('_BACK_MER_NAME_')}</th>
 				<td><input type="text" class="input fl" name="name" value="{pigcms{$merchant.name}" size="25" placeholder="商户的公司名或..." validate="maxlength:20,required:true"/></td>
 			</tr>
 			<if condition="C('config.open_sub_mchid') eq 1">
@@ -90,11 +90,11 @@
 			</tr>
 			</if>
 			<tr>
-				<th width="160">联系电话</th>
+				<th width="160">{pigcms{:L('_BACK_MER_PHONE_')}</th>
 				<td><input type="text" class="input fl" name="phone" value="{pigcms{$merchant.phone}" size="25" placeholder="联系人的电话" validate="required:true" tips="多个电话号码以空格分开"/></td>
 			</tr>
 			<tr>
-				<th width="160">联系邮箱</th>
+				<th width="160">{pigcms{:L('_BACK_EMAIL_')}</th>
 				<td><input type="text" class="input fl" name="email" value="{pigcms{$merchant.email}" size="25" placeholder="可不填写" validate="email:true" tips="只供管理员后台记录，前台不显示"/></td>
 			</tr>
 			<tr style="display:none;">
@@ -102,7 +102,7 @@
 				<td><input type="text" class="input fl" name="bill_period" value="{pigcms{$merchant.bill_period}" size="25" placeholder="可不填写" validate="number:true,min:0" tips="对账周期，填0则按系统对账周期计算,最小为一天"/></td>
 			</tr>
 			<tr>
-				<th width="160">所在区域</th>
+				<th width="160">{pigcms{:L('_MERCHANT_AREA_')}</th>
 				<!--td id="choose_cityarea" province_id="{pigcms{$merchant.province_id}" city_id="{pigcms{$merchant.city_id}" area_id="{pigcms{$merchant.area_id}" circle_id="-1"></td-->
                 <td>
                     <select name="city_id">
@@ -113,52 +113,52 @@
                 </td>
 			</tr>
 			<tr>
-				<th width="160">到期时间</th>
-				<td><input type="text" class="input fl" name="merchant_end_time" value="{pigcms{$merchant.merchant_end_time}" size="25" onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm'})" tips="商户到期时间，到期之后不允许进入商户平台并关闭该商户！清空为永不过期"/></td>
+				<th width="160">{pigcms{:L('_BACK_EXPIRE_DATE_')}</th>
+				<td><input type="text" class="input fl" name="merchant_end_time" value="{pigcms{$merchant.merchant_end_time}" size="25" onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm',lang:'en'})" tips="商户到期时间，到期之后不允许进入商户平台并关闭该商户！清空为永不过期"/></td>
 			</tr>
 			<tr>
-				<th width="160">商户状态</th>
+				<th width="160">{pigcms{:L('_BACK_MER_STATUS_')}</th>
 				<td>
-					<span class="cb-enable"><label class="cb-enable <if condition="$merchant['status'] eq 1">selected</if>"><span>启用</span><input type="radio" name="status" value="1" <if condition="$merchant['status'] eq 1">checked="checked"</if> /></label></span>
-					<span class="cb-disable"><label class="cb-disable <if condition="$merchant['status'] neq 1">selected</if>"><span>关闭</span><input type="radio" name="status" value="0" <if condition="$merchant['status'] neq 1">checked="checked"</if>/></label></span>
+					<span class="cb-enable"><label class="cb-enable <if condition="$merchant['status'] eq 1">selected</if>"><span>{pigcms{:L('_BACK_ON_')}</span><input type="radio" name="status" value="1" <if condition="$merchant['status'] eq 1">checked="checked"</if> /></label></span>
+					<span class="cb-disable"><label class="cb-disable <if condition="$merchant['status'] neq 1">selected</if>"><span>{pigcms{:L('_BACK_OFF_')}</span><input type="radio" name="status" value="0" <if condition="$merchant['status'] neq 1">checked="checked"</if>/></label></span>
 				</td>
 			</tr>
 			<tr style="display:none">
-				<th width="160">线下支付</th>
+				<th width="160">{pigcms{:L('_OFFLINE_PAY_')}</th>
 				<td>
-					<span class="cb-enable"><label class="cb-enable <if condition="$merchant['is_close_offline'] eq 0">selected</if>"><span>启用</span><input type="radio" name="is_close_offline" value="0" <if condition="$merchant['is_close_offline'] eq 0">checked="checked"</if> /></label></span>
-					<span class="cb-disable"><label class="cb-disable <if condition="$merchant['is_close_offline'] eq 1">selected</if>"><span>关闭</span><input type="radio" name="is_close_offline" value="1" <if condition="$merchant['is_close_offline'] eq 1">checked="checked"</if>/></label></span>
+					<span class="cb-enable"><label class="cb-enable <if condition="$merchant['is_close_offline'] eq 0">selected</if>"><span>{pigcms{:L('_BACK_ON_')}</span><input type="radio" name="is_close_offline" value="0" <if condition="$merchant['is_close_offline'] eq 0">checked="checked"</if> /></label></span>
+					<span class="cb-disable"><label class="cb-disable <if condition="$merchant['is_close_offline'] eq 1">selected</if>"><span>{pigcms{:L('_BACK_OFF_')}</span><input type="radio" name="is_close_offline" value="1" <if condition="$merchant['is_close_offline'] eq 1">checked="checked"</if>/></label></span>
 				</td>
 			</tr>
 			<tr>
-				<th width="160">签约商家</th>
+				<th width="160">{pigcms{:L('_BACK_CONTRACT_MER_')}</th>
 				<td>
-					<span class="cb-enable"><label class="cb-enable <if condition="$merchant['issign'] eq 1">selected</if>"><span>是</span><input type="radio" name="issign" value="1" <if condition="$merchant['issign'] eq 1">checked="checked"</if> /></label></span>
-					<span class="cb-disable"><label class="cb-disable  <if condition="$merchant['issign'] neq 1">selected</if>"><span>否</span><input type="radio" name="issign" value="0"  <if condition="$merchant['issign'] neq 1">checked="checked"</if> /></label></span>
+					<span class="cb-enable"><label class="cb-enable <if condition="$merchant['issign'] eq 1">selected</if>"><span>Yes</span><input type="radio" name="issign" value="1" <if condition="$merchant['issign'] eq 1">checked="checked"</if> /></label></span>
+					<span class="cb-disable"><label class="cb-disable  <if condition="$merchant['issign'] neq 1">selected</if>"><span>No</span><input type="radio" name="issign" value="0"  <if condition="$merchant['issign'] neq 1">checked="checked"</if> /></label></span>
 					<em class="notice_tips" tips="开启后商家中心会显示此商家已签约标签即商家是优质客户，所有新增的产品都无需审核"></em>
 				</td>
 			</tr>
 			<tr>
-				<th width="160">认证商家</th>
+				<th width="160">{pigcms{:L('_BACK_CERTIFIED_MER_')}</th>
 				<td>
-					<span class="cb-enable"><label class="cb-enable <if condition="$merchant['isverify'] eq 1">selected</if>"><span>是</span><input type="radio" name="isverify" value="1" <if condition="$merchant['isverify'] eq 1">checked="checked"</if> /></label></span>
-					<span class="cb-disable"><label class="cb-disable <if condition="$merchant['isverify'] neq 1">selected</if>"><span>否</span><input type="radio" name="isverify" value="0"  <if condition="$merchant['isverify'] neq 1">checked="checked"</if> /></label></span>
+					<span class="cb-enable"><label class="cb-enable <if condition="$merchant['isverify'] eq 1">selected</if>"><span>Yes</span><input type="radio" name="isverify" value="1" <if condition="$merchant['isverify'] eq 1">checked="checked"</if> /></label></span>
+					<span class="cb-disable"><label class="cb-disable <if condition="$merchant['isverify'] neq 1">selected</if>"><span>No</span><input type="radio" name="isverify" value="0"  <if condition="$merchant['isverify'] neq 1">checked="checked"</if> /></label></span>
 					<em class="notice_tips" tips="开启后商家中心会显示此商家已认证标签"></em>
 				</td>
 			</tr>
 			<tr>
-				<th width="160">使用公众号</th>
+				<th width="160">{pigcms{:L('_BACK_USE_PUB_NUM_')}</th>
 				<td>
-					<span class="cb-enable"><label class="cb-enable <if condition="$merchant['is_open_oauth'] eq 1">selected</if>"><span>允许</span><input type="radio" name="is_open_oauth" value="1" <if condition="$merchant['is_open_oauth'] eq 1">checked="checked"</if> /></label></span>
-					<span class="cb-disable"><label class="cb-disable <if condition="$merchant['is_open_oauth'] eq 0">selected</if>"><span>禁止</span><input type="radio" name="is_open_oauth" value="0" <if condition="$merchant['is_open_oauth'] eq 0">checked="checked"</if>/></label></span>
+					<span class="cb-enable"><label class="cb-enable <if condition="$merchant['is_open_oauth'] eq 1">selected</if>"><span>{pigcms{:L('_BACK_ALLOW_')}</span><input type="radio" name="is_open_oauth" value="1" <if condition="$merchant['is_open_oauth'] eq 1">checked="checked"</if> /></label></span>
+					<span class="cb-disable"><label class="cb-disable <if condition="$merchant['is_open_oauth'] eq 0">selected</if>"><span>{pigcms{:L('_BACK_FORBID_')}</span><input type="radio" name="is_open_oauth" value="0" <if condition="$merchant['is_open_oauth'] eq 0">checked="checked"</if>/></label></span>
 				</td>
 			</tr>
 			<if condition="$config['is_open_weidian']">
 				<tr>
 					<th width="160">开微店</th>
 					<td>
-						<span class="cb-enable"><label class="cb-enable <if condition="$merchant['is_open_weidian'] eq 1">selected</if>"><span>允许</span><input type="radio" name="is_open_weidian" value="1" <if condition="$merchant['is_open_weidian'] eq 1">checked="checked"</if> /></label></span>
-						<span class="cb-disable"><label class="cb-disable <if condition="$merchant['is_open_weidian'] eq 0">selected</if>"><span>禁止</span><input type="radio" name="is_open_weidian" value="0" <if condition="$merchant['is_open_weidian'] eq 0">checked="checked"</if>/></label></span>
+						<span class="cb-enable"><label class="cb-enable <if condition="$merchant['is_open_weidian'] eq 1">selected</if>"><span>{pigcms{:L('_BACK_ALLOW_')}</span><input type="radio" name="is_open_weidian" value="1" <if condition="$merchant['is_open_weidian'] eq 1">checked="checked"</if> /></label></span>
+						<span class="cb-disable"><label class="cb-disable <if condition="$merchant['is_open_weidian'] eq 0">selected</if>"><span>{pigcms{:L('_BACK_FORBID_')}</span><input type="radio" name="is_open_weidian" value="0" <if condition="$merchant['is_open_weidian'] eq 0">checked="checked"</if>/></label></span>
 					</td>
 				</tr>
 			</if>
@@ -171,7 +171,7 @@
 					</td>
 				</tr>
 			</if>
-			<tr>
+			<!--tr>
 				<th width="160">抽成设置</th>
 				<td>
 				<a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Merchant/edit_percent',array('mer_id'=>$merchant['mer_id'],'type'=>'merchant'))}','编辑商家抽成比例',800,560,true,false,false,null,'edit_percent',true);" style="color:blue">设置商家抽成比例</a>&nbsp;&nbsp;&nbsp;&nbsp;
@@ -226,7 +226,7 @@
 			<tr>
 				<th width="160">进入网址</th>
 				<td><input type="text" class="input fl" name="a_href" value="{pigcms{$home_share.a_href}" size="60" placeholder="可不填写" tips="跳转到指定地方的网址"  validate="url:true"/></td>
-			</tr>
+			</tr-->
 		</table>
 		<div class="btn hidden">
 			<input type="submit" name="dosubmit" id="dosubmit" value="提交" class="button" />

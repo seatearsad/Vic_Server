@@ -5,16 +5,16 @@
 <input type="hidden" name="store_tax" id="store_tax" value="{pigcms{$store.tax_num}">
 <table cellpadding="0" cellspacing="0" class="frame_form" width="100%">
 	<tr>
-		<th colspan="1">订单编号</th>
+		<th colspan="1">{pigcms{:L('_BACK_ORDER_NUM_')}</th>
 		<th colspan="5">{pigcms{$order['real_orderid']}</th>
 	</tr>
 	<tr>
-		<th width="320">商品名称</th>
-		<th>单价</th>
-		<th>数量</th>
-        <th>税率</th>
-        <th>押金</th>
-		<th>规格属性详情</th>
+		<th width="320">{pigcms{:L('_BACK_ITEM_')}</th>
+		<th>{pigcms{:L('_BACK_RATE_')}</th>
+		<th>{pigcms{:L('_BACK_QUANTITY_')}</th>
+        <th>{pigcms{:L('_BACK_TAX_')}</th>
+        <th>{pigcms{:L('_STORE_PRODUCT_DEPOSIT_')}</th>
+		<th>{pigcms{:L('_BACK_REQUEST_')}</th>
 	</tr>
 	<volist name="order['info']" id="vo">
 	<tr id="good_list">
@@ -34,13 +34,13 @@
 	</tr>
 	</if>
 	<tr>
-		<th colspan="6">客户姓名：{pigcms{$order['username']}</th>
+		<th colspan="6">{pigcms{:L('_BACK_USER_NAME_')}：{pigcms{$order['username']}</th>
 	</tr>
 	<tr>
-		<th colspan="6">客户手机：{pigcms{$order['userphone']}</th>
+		<th colspan="6">{pigcms{:L('_BACK_USER_PHONE_')}：{pigcms{$order['userphone']}</th>
 	</tr>
 	<tr>
-        <th colspan="6">商品总价：$<span id="good_price">{pigcms{$order['goods_price']|floatval}</span>
+        <th colspan="6">{pigcms{:L('_BACK_SUBTOTAL_')}：$<span id="good_price">{pigcms{$order['goods_price']|floatval}</span>
             <if condition="$config.open_extra_price eq 1 AND $now_order.extra_price gt 0">
                 +{pigcms{$now_order.extra_price}{pigcms{$config.extra_price_alias_name}
             </if>
@@ -49,7 +49,7 @@
 	<if condition="$order['packing_charge'] gt 0">
 	<tr>
 		<th colspan="6">
-            {pigcms{$store['pack_alias']|default='打包费'}：
+            {pigcms{:L('_PACK_PRICE_')}：
             $<span id="packing_charge">{pigcms{$order['packing_charge']|floatval}</span>
         </th>
 	</tr>
@@ -58,19 +58,19 @@
 	</if>
 	<if condition="$order['freight_charge'] gt 0">
 	<tr>
-		<th colspan="6">{pigcms{$store['freight_alias']|default='配送费用'}：
+		<th colspan="6">{pigcms{:L('_DELI_PRICE_')}：
             $<input type="text" name="freight_charge" id="freight_charge" size="5" pattern="[0-9]*" value="{pigcms{$order['freight_charge']|floatval}">
         </th>
 	</tr>
 	</if>
     <tr>
-        <th colspan="6">税费：$<span id="tax_price">{pigcms{$order['tax_price']|floatval}</span></th>
+        <th colspan="6">{pigcms{:L('_BACK_TAX_')}：$<span id="tax_price">{pigcms{$order['tax_price']|floatval}</span></th>
     </tr>
     <tr>
-        <th colspan="6">押金：$<span id="deposit_price">{pigcms{$order['deposit_price']|floatval}</span></th>
+        <th colspan="6">{pigcms{:L('_STORE_PRODUCT_DEPOSIT_')}：$<span id="deposit_price">{pigcms{$order['deposit_price']|floatval}</span></th>
     </tr>
 	<tr>
-		<th colspan="6">订单总价：
+		<th colspan="6">{pigcms{:L('_ORDER_TOTAL_')}：
             $<span id="total_price">{pigcms{$order['price']|floatval}</span>
             <if condition="$config.open_extra_price eq 1 AND $now_order.extra_price gt 0">+{pigcms{$now_order.extra_price}{pigcms{$config.extra_price_alias_name}</if>
         </th>
@@ -82,34 +82,34 @@
 	</if>
 	<if condition="$order['coupon_id']">
 	<tr>
-		<th colspan="6">平台优惠券金额：${pigcms{$order['coupon_price']} 元</th>
+		<th colspan="6">{pigcms{:L('_BACK_SYS_CON_PRICE_')}：${pigcms{$order['coupon_price']} 元</th>
 	</tr>
 	</if>
 	<if condition="$order['pay_type'] eq 'offline' AND empty($order['third_id'])">
 	<tr>
-		<th colspan="6">线下需支付：${pigcms{$order['price']-$order['card_price']-$order['merchant_balance']-$order['balance_pay']-$order['payment_money']-$order['score_deducte']-$order['coupon_price']|floatval}元</th>
+		<th colspan="6">{pigcms{:L('_BACK_PAY_OFFLINE_')}：${pigcms{$order['price']-$order['card_price']-$order['merchant_balance']-$order['balance_pay']-$order['payment_money']-$order['score_deducte']-$order['coupon_price']|floatval}元</th>
 	</tr>
 	</if>
 	<tr>
-		<th colspan="6">支付状态：{pigcms{$order['pay_status']}</th>
+		<th colspan="6">{pigcms{:L('_BACK_PAYMENT_STATUS_')}：{pigcms{$order['pay_status']}</th>
 	</tr>
 	<tr>
-		<th colspan="6">支付方式：{pigcms{$order['pay_type_str']}</th>
+		<th colspan="6">{pigcms{:L('_BACK_PAYMENT_METHOD_')}：{pigcms{$order['pay_type_str']}</th>
 	</tr>
 	<tr>
-		<th colspan="6">订单状态：{pigcms{$order['status_str']}<if condition="$order['status'] eq 4">&nbsp;&nbsp;&nbsp;&nbsp;退款时间:{pigcms{$order['last_time']|date="Y-m-d H:i:s",###}</if></th>
+		<th colspan="6">{pigcms{:L('_BACK_ORDER_STATUS_')}：{pigcms{$order['status_str']}<if condition="$order['status'] eq 4">&nbsp;&nbsp;&nbsp;&nbsp;退款时间:{pigcms{$order['last_time']|date="Y-m-d H:i:s",###}</if></th>
 	</tr>
 	
 	<tr>
-		<th colspan="6">备注:{pigcms{$order['desc']|default="无"}</th>
+		<th colspan="6">{pigcms{:L('_NOTE_TXT_')}:{pigcms{$order['desc']|default="N/A"}</th>
 	</tr>
 </table>
     <input type="hidden" name="goods_price" value="{pigcms{$order['goods_price']|floatval}">
     <input type="hidden" name="price" value="{pigcms{$order['price']|floatval}">
     <input type="hidden" name="total_price" value="{pigcms{$order['price']|floatval}">
     <div class="btn hidden">
-        <input type="submit" name="dosubmit" id="dosubmit" value="提交" class="button" />
-        <input type="reset" value="取消" class="button" />
+        <input type="submit" name="dosubmit" id="dosubmit" value="{pigcms{:L('_BACK_SUBMIT_')}" class="button" />
+        <input type="reset" value="{pigcms{:L('_BACK_CANCEL_')}" class="button" />
     </div>
 </form>
 <script>

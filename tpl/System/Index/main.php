@@ -8,81 +8,81 @@
 	<div class="mainbox">
 		<link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/main.css" />
 		<div id="nav" class="mainnav_title">
-			<a href="{pigcms{:U('Index/main')}" class="on">网站概况</a>
+			<a href="{pigcms{:U('Index/main')}" class="on">{pigcms{:L('_BACK_OVERVIEW_')}</a>
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			<span>时间筛选：</span>
+			<span>{pigcms{:L('_BACK_TIME_SORT_')}：</span>
 			<div style="display:inline-block;">
 				<select class='custom-date' id="time_value" name='select'>
-				  <option  value='1'>今天</option>
-				  <option selected='selected' value='7'>7天</option>
-				  <option value='30'>30天</option>
-				  <option value='180'>180天</option>
-				  <option value='365'>365天</option>
-				  <option value='custom'>自定义</option>
+				  <option  value='1'>{pigcms{:L('_BACK_TODAY_')}</option>
+				  <option selected='selected' value='7'>7 {pigcms{:L('_BACK_DAYS_')}</option>
+				  <option value='30'>30 {pigcms{:L('_BACK_DAYS_')}</option>
+				  <option value='180'>180 {pigcms{:L('_BACK_DAYS_')}</option>
+				  <option value='365'>365 {pigcms{:L('_BACK_DAYS_')}</option>
+				  <option value='custom'>{pigcms{:L('_BACK_CUSTOMIZE_')}</option>
 				</select>
 			</div>
-			<input type="button" value="筛选报表" class="button" id="time"/>
+			<input type="button" value="{pigcms{:L('_BACK_SORT_TABLE_')}" class="button" id="time"/>
 		</div>
 		<div class="topTable" id="topTable">
 			<div class="echart" id="echart"></div>
 			<div class="chartFooter" id="chartFooter">
 				<ul>
-					<li class="all active" data-type="all">全部</li>
-					<li class="group" data-type="group">{pigcms{$config.group_alias_name}</li>
-					<li class="shop" data-type="shop">{pigcms{$config.shop_alias_name}</li>
-					<li class="meal" data-type="meal">{pigcms{$config.meal_alias_name}</li>
+					<li class="all active" data-type="all">{pigcms{:L('_BACK_ALL_')}</li>
+					<li class="group" data-type="group">{pigcms{:L('_BACK_LUNCH_')}</li>
+					<li class="shop" data-type="shop">{pigcms{:L('_BACK_DELIVERY_')}</li>
+					<li class="meal" data-type="meal">{pigcms{:L('_BACK_DINE_')}</li>
 					<if condition="$config['appoint_page_row']">
-						<li class="appoint" data-type="appoint">{pigcms{$config.appoint_alias_name}</li>
+						<li class="appoint" data-type="appoint">{pigcms{:L('_BACK_RESE_')}</li>
 					</if>
-					<if condition="$config['is_cashier'] OR $config['pay_in_store']">
+					<!--if condition="$config['is_cashier'] OR $config['pay_in_store']">
 						<li class="store" data-type="store">到店</li>
-					</if>
+					</if-->
 					<if condition="$config['is_open_weidian']">
 						<li class="weidian" data-type="weidian">微店</li>
 					</if>
-					<if condition="$config['wxapp_url']">
+					<!--if condition="$config['wxapp_url']">
 						<li class="wxapp" data-type="wxapp">营销</li>
-					</if>
+					</if-->
 					<!--li>营销</li-->
 				</ul>
 			</div>
 			<div class="chartWidget" id="chartWidget">
 				<div class="chartData">
 					<div class="chartDataCon" id="chartDataCon">
-						<p style="line-height:0.5em">订单量总数：<span id="orderCountNum"></span></p>
-						<p style="line-height:0.5em">消费量总数：<span id="consumeCountNum"></span></p>
-						<p style="line-height:0.5em">微信支付总金额：<span id="weixinPaymoney"></span>元</p>
-						<p style="line-height:0.5em">支付宝支付总金额：<span id="alipayPaymoney"></span>元</p>
+						<p style="line-height:0.5em">{pigcms{:L('_BACK_TOTAL_ORDER_')}：<span id="orderCountNum"></span></p>
+						<p style="line-height:0.5em">{pigcms{:L('_BACK_TOTAL_CONS_')}：<span id="consumeCountNum"></span></p>
+						<p style="line-height:1em">{pigcms{:L('_BACK_TOTAL_WEIXIN_')}：$<span id="weixinPaymoney"></span></p>
+						<p style="line-height:0.5em">{pigcms{:L('_BACK_TOTAL_ALIPAY_')}：$<span id="alipayPaymoney"></span></p>
 					</div>
 				</div>
 				<div class="chartDataDown">
-					<input type="button" class="chartDataDownBtn" id="chartDataDownBtn" onclick="exports();" value="下载报表"/>
+					<input type="button" class="chartDataDownBtn" id="chartDataDownBtn" onclick="exports();" value="{pigcms{:L('_BACK_DOWNLOAD_TABLE_')}"/>
 				</div>
 			</div>
 		</div>
 		<div class="bottomTable" id="bottomTable" style="margin-top:5px;">
 			<div class="box" style="width:35%;" id="bottomTableLeft">
-				<div class="top">数据总览</div>
+				<div class="top">{pigcms{:L('_BACK_DATA_OVER_')}</div>
 				<div class="body">
 					<div>
 						<ul>
-							<li><b>收入总数</b><br><span>${pigcms{$website_collect_count}</span></li>
-							<li><b>用户总数</b><br><span>{pigcms{$website_user_count}</span></li>
-							<li><b>商户总数</b><br><span>{pigcms{$website_merchant_count}</span></li>
-							<li><b>店铺总数</b><br><span>{pigcms{$website_merchant_store_count}</span></li>
-							<li><b>{pigcms{$config.group_alias_name}总数</b><br><span>{pigcms{$group_group_count}</span></li>
-							<li><b>{pigcms{$config.meal_alias_name}店铺总数</b><br><span>{pigcms{$meal_store_count}</span></li>
-							<li><b>{pigcms{$config.shop_alias_name}店铺总数</b><br><span>{pigcms{$shop_store_count}</span></li>
-							<li><b>{pigcms{$config.appoint_alias_name}总数</b><br><span>{pigcms{$appoint_group_count}</span></li>
-							<li><b style="color:#CC3366;">待审核商家数</b><br><span style="color:#CC3366;">{pigcms{$merchant_verify_count}</span></li>
-							<li><b style="color:#CC3366;">待审核店铺数</b><br><span style="color:#CC3366;">{pigcms{$merchant_verify_store_count}</span></li>
-							<li><b style="color:#CC3366;">待审核{pigcms{$config.group_alias_name}数</b><br><span style="color:#CC3366;">{pigcms{$group_verify_count}</span></li>
+							<li><b>{pigcms{:L('_BACK_TOTAL_INCOME_')}</b><br><span>${pigcms{$website_collect_count}</span></li>
+							<li><b>{pigcms{:L('_BACK_TOTAL_USER_')}</b><br><span>{pigcms{$website_user_count}</span></li>
+							<li><b>{pigcms{:L('_BACK_TOTAL_MER_')}</b><br><span>{pigcms{$website_merchant_count}</span></li>
+							<li><b>{pigcms{:L('_BACK_TOTAL_STORE_')}</b><br><span>{pigcms{$website_merchant_store_count}</span></li>
+							<li><b>{pigcms{:L('_BACK_TOTAL_LUNCH_')}</b><br><span>{pigcms{$group_group_count}</span></li>
+							<li><b>{pigcms{:L('_BACK_TOTAL_PICK_')}</b><br><span>{pigcms{$meal_store_count}</span></li>
+							<li><b>{pigcms{:L('_BACK_TOTAL_DELIVER_')}</b><br><span>{pigcms{$shop_store_count}</span></li>
+							<li><b>{pigcms{:L('_BACK_TOTAL_BOOKING_')}</b><br><span>{pigcms{$appoint_group_count}</span></li>
+							<li><b style="color:#CC3366;">{pigcms{:L('_BACK_PENDING_MER')}</b><br><span style="color:#CC3366;">{pigcms{$merchant_verify_count}</span></li>
+							<li><b style="color:#CC3366;">{pigcms{:L('_BACK_PENDING_STORE_')}</b><br><span style="color:#CC3366;">{pigcms{$merchant_verify_store_count}</span></li>
+							<li><b style="color:#CC3366;">{pigcms{:L('_BACK_PENDING_LUNCH')}</b><br><span style="color:#CC3366;">{pigcms{$group_verify_count}</span></li>
 							<li><b></b><br><span></span></li>
 						</ul>
 					</div>
 					<div style="clear:both;"></div>
 				</div>
-				<div class="top" >商家余额<!--(商家总余额：{pigcms{$mer_money.all_mer_money} 元,商家待提现：{pigcms{$mer_money['all_need_pay']} 元)--></div>				
+				<!--div class="top">商家余额(商家总余额：{pigcms{$mer_money.all_mer_money} 元,商家待提现：{pigcms{$mer_money['all_need_pay']} 元)</div-->
 				<div class="body">
 					<div id="merchantMoneyEcharts" style="background:#3486AC; /* margin: 0 auto; */">
 						
@@ -91,7 +91,7 @@
 				<div style="clear:both;"></div>
 			</div>
 			<div class="box" style="border-left:1px solid #f1f1f1;width:64.5%;" id="bottomTableRight">
-				<div class="top">用户分析</div>
+				<div class="top">{pigcms{:L('_BACK_USER_ANA_')}</div>
 				<div class="body" id="userEcharts">
 					<div id="userSexEcharts" >
 						
@@ -185,12 +185,12 @@
 			/* $('#bottomTable').css('min-height',$(window).height() - ($(window.parent).height()-50)/2); */
 			
 			
-			var merchantMoneyEchartsWidth = ($('#bottomTableLeft').width()-20)*0.8;
-			if(merchantMoneyEchartsWidth > 360){
-				merchantMoneyEchartsWidth = 360;
-			}
-			$('#merchantMoneyEcharts').height(merchantMoneyEchartsWidth);
-			$('#merchantMoneyEcharts').width(merchantMoneyEchartsWidth);
+			// var merchantMoneyEchartsWidth = ($('#bottomTableLeft').width()-20)*0.8;
+			// if(merchantMoneyEchartsWidth > 360){
+			// 	merchantMoneyEchartsWidth = 360;
+			// }
+			// $('#merchantMoneyEcharts').height(merchantMoneyEchartsWidth);
+			// $('#merchantMoneyEcharts').width(merchantMoneyEchartsWidth);
 			
 			
 			var merchantUserEchartsWidth = ($('#bottomTableRight').width())*0.4;
@@ -209,13 +209,13 @@
 			//var pay_date = echart_data['pay_type'];
 	
 			charts = {
-				weixin:{name:'userWechatEcharts',title:'绑定微信分析',part1:{value:'{pigcms{$user.weixin}',name:'已绑定',color:'#27c24c'},part2:{value:'{pigcms{$user['user_count']-$user['weixin']}',name:'未绑定',color:'#CCC'}},
-				phone:{name:'userPhoneEcharts',title:'绑定手机分析',part1:{value:'{pigcms{$user.phone}',name:'已绑定',color:'#3CB9B3'},part2:{value:'{pigcms{$user['user_count']-$user['phone']}',name:'未绑定',color:'#CCC'}},
+				weixin:{name:'userWechatEcharts',title:"{pigcms{:L('_BACK_WECHAT_ANA_')}",part1:{value:'{pigcms{$user.weixin}',name:"{pigcms{:L('_BACK_AUTH_')}",color:'#27c24c'},part2:{value:'{pigcms{$user['user_count']-$user['weixin']}',name:"{pigcms{:L('_BACK_UNAUTH_')}",color:'#CCC'}},
+				phone:{name:'userPhoneEcharts',title:"{pigcms{:L('_BACK_PHONE_ANA_')}",part1:{value:'{pigcms{$user.phone}',name:"{pigcms{:L('_BACK_CONNECTED_')}",color:'#3CB9B3'},part2:{value:'{pigcms{$user['user_count']-$user['phone']}',name:"{pigcms{:L('_BACK_NOT_CONN_')}",color:'#CCC'}},
 				//paytype:{name:'userPaytypeEcharts',title:'微信支付宝支付数据分析',part1:{value:pay_date.weixin,name:'微信支付',color:'#27c24c'},part2:{value:pay_date.alipay,name:'支付宝支付',color:'#CCC'}},
 				<if condition="C('config.pay_weixinapp_open')">app:{name:'userAppEcharts',title:'APP用户分析',part1:{value:'{pigcms{$user.app}',name:'使用',color:'#E37979'},part2:{value:'{pigcms{$user['user_count']-$user['phone']}',name:'未使用',color:'#D9D154'}},</if>
 			}
 			var sex = Object();
-			sex = {name:'userSexEcharts',title:'用户性别分析',part1:{value:'{pigcms{$user.men}',name:'男性',color:'#00A79D'},part2:{value:'{pigcms{$user.women}',name:'女性',color:'#ED0B5F'},part3:{value:'{pigcms{$user.unknow_user}',name:'未知',color:'#FC9F1E'}},
+			sex = {name:'userSexEcharts',title:"{pigcms{:L('_BACK_GENDER_ANA_')}",part1:{value:'{pigcms{$user.men}',name:"{pigcms{:L('_BACK_MALE_')}",color:'#00A79D'},part2:{value:'{pigcms{$user.women}',name:"{pigcms{:L('_BACK_FEMALE_')}",color:'#ED0B5F'},part3:{value:'{pigcms{$user.unknow_user}',name:"{pigcms{:L('_BACK_UNDEFINED_')}",color:'#FC9F1E'}},
 				
 			$.each(charts, function(index, val) {
 				var index  = echarts.init(document.getElementById(val.name));
@@ -330,75 +330,75 @@
 				
 			  sexs.setOption(option_sex);
 			
-			var mer = Object();
-			mer = {name:'merchantMoneyEcharts',title:'待提现金额占比',
-				part1:{
-					value:'{pigcms{$mer_money.all_money}',name:'商家总余额',color:'red'
-				},
-				// part2:{
-					// value:'{pigcms{$mer_money.all_mer_money}',name:'商家总余额',color:'blue'
-				// },
-				part3:{
-					value:'{pigcms{$mer_money['all_need_pay']/100}',name:'待提现金额',color:'green'
-				},
-				// part4:{
-					// value:'{pigcms{$mer_money.all_count}',name:'女性用户',color:'yellow'
-				// },
-			};
+			//var mer = Object();
+			// mer = {name:'merchantMoneyEcharts',title:'待提现金额占比',
+			// 	part1:{
+			// 		value:'{pigcms{$mer_money.all_money}',name:'商家总余额',color:'red'
+			// 	},
+			// 	// part2:{
+			// 		// value:'{pigcms{$mer_money.all_mer_money}',name:'商家总余额',color:'blue'
+			// 	// },
+			// 	part3:{
+			// 		value:'{pigcms{$mer_money['all_need_pay']/100}',name:'待提现金额',color:'green'
+			// 	},
+			// 	// part4:{
+			// 		// value:'{pigcms{$mer_money.all_count}',name:'女性用户',color:'yellow'
+			// 	// },
+			// };
 			
-			var mer_money  = echarts.init(document.getElementById(mer.name));
-				option_mer = {
-					title: {
-						text: mer.title,
-						x: 'center',
-						y: 'center',
-						itemGap: 20,
-						textStyle : {
-							color : 'red',
-							fontFamily : '微软雅黑',
-							fontSize : '14',
-							fontWeight : 'bold'
-						}
-					},
-					
-					tooltip: {},
-					series : [
-						{
-							name:'',
-							type:'pie',
-							radius: ['50%', '70%'],
-							avoidLabelOverlap: false,
-							center: ['50%', '50%'], 
-							 label: {
-								normal: {
-									textStyle: {
-										fontSize: 12,
-										color: '#235894'
-									}
-								}
-							},
-							
-							 labelLine: {
-								normal: {
-									lineStyle: {
-										color: '#235894'
-									}
-								}
-							},
-							data:[
-								{value:mer.part1.value, name:mer.part1.name},
-								{
-									value:mer.part3.value, 
-									name:mer.part3.name,
-									selected:true
-								},
-							
-							],
-						}
-					]
-				};
-				
-			  mer_money.setOption(option_mer);
+			// var mer_money  = echarts.init(document.getElementById(mer.name));
+			// 	option_mer = {
+			// 		title: {
+			// 			text: mer.title,
+			// 			x: 'center',
+			// 			y: 'center',
+			// 			itemGap: 20,
+			// 			textStyle : {
+			// 				color : 'red',
+			// 				fontFamily : '微软雅黑',
+			// 				fontSize : '14',
+			// 				fontWeight : 'bold'
+			// 			}
+			// 		},
+			//
+			// 		tooltip: {},
+			// 		series : [
+			// 			{
+			// 				name:'',
+			// 				type:'pie',
+			// 				radius: ['50%', '70%'],
+			// 				avoidLabelOverlap: false,
+			// 				center: ['50%', '50%'],
+			// 				 label: {
+			// 					normal: {
+			// 						textStyle: {
+			// 							fontSize: 12,
+			// 							color: '#235894'
+			// 						}
+			// 					}
+			// 				},
+			//
+			// 				 labelLine: {
+			// 					normal: {
+			// 						lineStyle: {
+			// 							color: '#235894'
+			// 						}
+			// 					}
+			// 				},
+			// 				data:[
+			// 					{value:mer.part1.value, name:mer.part1.name},
+			// 					{
+			// 						value:mer.part3.value,
+			// 						name:mer.part3.name,
+			// 						selected:true
+			// 					},
+			//
+			// 				],
+			// 			}
+			// 		]
+			// 	};
+			//
+			//   mer_money.setOption(option_mer);
 		}
 
 		
@@ -434,7 +434,8 @@
 			var option = {
 				
 				title : {
-					text: chart_title+'数据分析',
+					//text: chart_title+'数据分析',
+                    text:"{pigcms{:L('_BACK_SALES_ANA_')}",
 					x:'left',
 					textStyle:{
 						color:'#fff'
@@ -448,7 +449,7 @@
 					trigger: 'axis'
 				},
 				legend: {
-					data:['下单总金额','验证消费总金额'],
+					data:["{pigcms{:L('_BACK_TOTAL_SALES_')}","{pigcms{:L('_BACK_ACT_SALES_')}"],
 					textStyle:{
 						color:'#fff'
 					},
@@ -471,8 +472,8 @@
 						magicType: {
 							show : true,
 							title : {
-								line : '折线图模式',
-								bar : '柱形图模式',
+								line : "{pigcms{:L('_BACK_LINE_CHART_')}",
+								bar : "{pigcms{:L('_BACK_BAR_CHART_')}",
 								
 							},
 							type : ['line', 'bar'],
@@ -488,7 +489,7 @@
 						},
 						restore : {
 							show : true,
-							title : '初始化报表',
+							title : "{pigcms{:L('_BACK_INIT_TABLE_')}",
 							icon:'image://{pigcms{$static_path}images/echarts_refresh.png',
 							iconStyle:{
 								emphasis:{
@@ -498,7 +499,7 @@
 						},
 						saveAsImage : {
 							show: true,
-							title : '保存为图片',
+							title : "{pigcms{:L('_BACK_SAVE_IMG_')}",
 							name : chart_title+'数据分析('+subtxt+')',
 							// icon : chart_title+'数据分析('+subtxt+')',
 							lang : ['点击保存'],
@@ -547,7 +548,7 @@
 				
 				series : [
 					{
-						name:'下单总金额',
+						name:"{pigcms{:L('_BACK_TOTAL_SALES_')}",
 						type:'line',
 						tiled: '总量',
 						smooth:true,
@@ -573,7 +574,7 @@
 						data: income
 					},
 					{
-						name:'验证消费总金额',
+						name:"{pigcms{:L('_BACK_ACT_SALES_')}",
 						type:'line',
 						tiled: '总量',
 						smooth:true,

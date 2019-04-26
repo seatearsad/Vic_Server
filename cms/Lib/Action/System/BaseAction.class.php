@@ -158,6 +158,9 @@ class BaseAction extends Action{
 			$value['name'] =  str_replace('餐饮',$this->config['meal_alias_name'],$value['name']);
 			$value['name'] = str_replace('团购',$this->config['group_alias_name'],$value['name']);
 			$value['name'] = str_replace('预约',$this->config['appoint_alias_name'],$value['name']);
+
+			//garfunkel add
+            $value['name'] = lang_substr($value['name'],C('DEFAULT_LANG'));
 			if($value['fid'] == 0){
 				$system_menu[$value['id']] = $value;
 			}else{
