@@ -469,7 +469,7 @@ class DeliverAction extends BaseAction {
 			$users || $users = D('Deliver_user')->field(true)->where(array('city_id' => $store['city_id'], 'group' => 1, 'status' => 1))->select();
 			$users || $users = D('Deliver_user')->field(true)->where(array('province_id' => $store['province_id'], 'group' => 1, 'status' => 1))->select();
 			if (empty($users)) $this->error('没有合适的配送员');
-			
+			var_dump($users);die();
 			$uids = '';
 			$pre = '';
 			$data = array();
