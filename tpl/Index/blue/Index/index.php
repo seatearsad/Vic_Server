@@ -476,11 +476,11 @@
 
     var autocomplete;
     function initAutocomplete() {
-        autocomplete = new google.maps.places.Autocomplete(document.getElementById('address'), {types: ['geocode']});
+        autocomplete = new google.maps.places.Autocomplete(document.getElementById('address'), {types: ['geocode'],componentRestrictions: {country: ['ca']}});
         autocomplete.addListener('place_changed', fillInAddress);
     }
     function initAutocompleteBottom() {
-        autocomplete = new google.maps.places.Autocomplete(document.getElementById('address_bottom'), {types: ['geocode']});
+        autocomplete = new google.maps.places.Autocomplete(document.getElementById('address_bottom'), {types: ['geocode'],componentRestrictions: {country: ['ca']}});
         autocomplete.addListener('place_changed', fillInAddress);
     }
     function fillInAddress() {
@@ -491,6 +491,7 @@
         //wap
         $.cookie('userLocationLong',place.geometry.location.lng(),{expires:700,path:'/'});
         $.cookie('userLocationLat',place.geometry.location.lat(),{expires:700,path:'/'});
+        window.location.href = './shop';
     }
 </script>
 </html>

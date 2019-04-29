@@ -320,7 +320,8 @@ $(document).ready(function(){
 			}
 			
 			if (parseInt($(this).parents('ul').find('.on').size()) >= num) {
-				layer.msg('该属性最多能选' + num + '个');
+				//layer.msg('该属性最多能选' + num + '个');
+                layer.msg('Single answer required for every option.');
 			} else {
 				$(this).addClass("on");
 			}
@@ -363,7 +364,8 @@ function check_select(is_check)
 				}
 			});
 			if (num < 1 && is_check) {
-				layer.msg(fname + '规格必须选择一个');
+				//layer.msg(fname + '规格必须选择一个');
+				layer.msg('selection(s) required');
 				is_false = true;
 			}
 		} else {
@@ -376,11 +378,13 @@ function check_select(is_check)
 				}
 			});
 			if (num < 1 && is_check) {
-				layer.msg(fname + '属性至少选择一个');
+				//layer.msg(fname + '属性至少选择一个');
+                layer.msg('Please choose your ' + fname + ' option');
 				is_false = true;
 			}
 			if (num > select_num && is_check) {
-				layer.msg(fname + '属性最多选择' + select_num + '个');
+				//layer.msg(fname + '属性最多选择' + select_num + '个');
+				layer.msg('Single answer required for every option.');
 				is_false = true;
 			}
 			if (temp_data.length > 0) {
@@ -402,7 +406,8 @@ function check_select(is_check)
 			}
 		});
 		if (num < 1 && is_check) {
-			layer.msg(fname + '属性至少选择一个');
+			// layer.msg(fname + '属性至少选择一个');
+            layer.msg('Please choose your ' + fname + ' option');
 			is_false = true;
 		}
 		
@@ -423,7 +428,8 @@ function check_select(is_check)
 		}
 		
 		if (num > select_num && is_check) {
-			layer.msg(fname + '属性最多选择' + select_num + '个');
+			// layer.msg(fname + '属性最多选择' + select_num + '个');
+            layer.msg('Single answer required for every option.');
 			is_false = true;
 		}
 		if (temp_data.length > 0) {

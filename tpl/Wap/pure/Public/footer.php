@@ -8,7 +8,7 @@
     }
 </style>
 <if condition="empty($no_footer)">
-	<footer class="footerMenu <if condition="!$is_wexin_browser || $home_menu_list">wap</if>">
+	<footer class="footerMenu <if condition='!$is_wexin_browser || $home_menu_list'>wap</if>">
     <if condition="$home_menu_list">
 		<ul>
             <volist name='home_menu_list' id='vo'>
@@ -40,6 +40,7 @@
 			</li>
 		</ul>
     </if>
+    <script type="text/javascript" src="https://cdn.ywxi.net/js/1.js" async></script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-123655278-1"></script>
     <!-- Facebook Pixel Code -->
     <script>

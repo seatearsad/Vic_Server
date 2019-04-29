@@ -37,7 +37,7 @@
         border-right: 0;
         border-top: 0;
         border-bottom: 2px solid #666666;
-        font-size: 1.2em;
+        font-size: 1.1em;
         padding-left: 5px;
         margin-top: 10px;
         -moz-border-radius: 0px;
@@ -109,7 +109,7 @@
     </div>
     <div class="sign_input">
         <input type="text" name="nickname" placeholder="Full Name" >
-        <input type="tel" name="phone" placeholder="Phone Number">
+        <input type="tel" name="phone" placeholder="Phone Number ({pigcms{:L('_B_PURE_MY_10_')})">
         <input id="sms_code" name="sms_code" type="text" placeholder="Code" />
         <button id="reg_send_sms" type="button" onclick="sendsms(this)">{pigcms{:L('_B_D_LOGIN_RECEIVEMESSAGE_')}</button>
         <input type="text" name="email" placeholder="Email Address" >
@@ -135,12 +135,26 @@
                 content: msg
             });
         }
+        function checkPhone(phone) {
+            if(!/^\d{10,}$/.test(phone)){
+                return false;
+            }
+            return true;
+        }
+        function checkMail(mail) {
+            var reg = /\w+[@]{1}\w+[.]\w+/;
+            if(!reg.test(mail)){
+                return false;
+            }
+            return true;
+        }
         var countdown = 60;
         function sendsms(val){
             if($("input[name='phone']").val()==''){
                 show_msg("{pigcms{:L('_B_D_LOGIN_BLANKNUM_')}");
+            }else if(!checkPhone($("input[name='phone']").val())){
+                show_msg("{pigcms{:L('_B_LOGIN_ENTERGOODNO_')}");
             }else{
-
                 if(countdown==60){
                     $.ajax({
                         url: '{pigcms{$config.site_url}/index.php?g=Index&c=Smssend&a=sms_send',
@@ -155,7 +169,6 @@
                                 show_msg('Success');
                             }
                         }
-
                     });
                 }
                 if (countdown == 0) {
@@ -186,7 +199,11 @@
             });
             if($("input[name='password']").val() != $("input[name='con_password']").val()){
                 show_msg("{pigcms{:L('_B_LOGIN_DIFFERENTKEY_')}");
-            }else {
+            }else if(!checkPhone($("input[name='phone']").val())){
+                show_msg("{pigcms{:L('_B_LOGIN_ENTERGOODNO_')}");
+            }else if(!checkMail($("input[name='email']").val())){
+                show_msg('Please enter the correct email address');
+            }else{
                 if (is_tip) {
                     show_msg("{pigcms{:L('_PLEASE_INPUT_ALL_')}");
                 } else {

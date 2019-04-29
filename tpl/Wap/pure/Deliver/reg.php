@@ -51,7 +51,7 @@
         color: #fff;
         text-indent: 0px;
         font-size: 16px;
-        margin-top: 10%;
+        margin-top: 50px;
         padding: 0px;
         height: 40px;
     }
@@ -102,6 +102,9 @@
             <li class="Landd">
                 <input type="button" value="{pigcms{:L('_B_D_LOGIN_REG2_')}" id="reg_form" style="background-color: #FF0000;width: 50%;margin-left: 25%;">
             </li>
+            <li class="Landd">
+                <input type="button" value="{pigcms{:L('_COURIER_LOGIN_')}" id="login_btn" style="background-color: #1b9dff;width: 50%;margin-left: 25%;">
+            </li>
 		</ul>
 	</div>
         <input type="hidden" name="lng" id="lng">
@@ -114,6 +117,10 @@
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&libraries=places&language=en" async defer></script>
 <script type="text/javascript">
 $("body").css({"height":$(window).height()});
+
+$('#login_btn').click(function () {
+    window.location.href = "{pigcms{:U('Deliver/login')}";
+});
 
 $("#reg_form").click(function () {
     $(this).attr("disabled","disabled");
@@ -192,6 +199,20 @@ function sendsms(val) {
     }
 }
 
+function checkPhone(phone) {
+    if(!/^\d{10,}$/.test(phone)){
+        return false;
+    }
+    return true;
+}
+function checkMail(mail) {
+    var reg = /\w+[@]{1}\w+[.]\w+/;
+    if(!reg.test(mail)){
+        return false;
+    }
+    return true;
+}
+
 function check_form() {
     var is_check = true;
     $("#reg_list").find('input').each(function () {
@@ -201,14 +222,27 @@ function check_form() {
             return false;
         }
     });
+
+    if(is_check && !checkMail($('#email').val())){
+        is_check = false;
+        show_tip('Please enter the correct email address',$('#email'));
+    }
+
+    if(is_check && !checkPhone($('#mobile').val())){
+        is_check = false;
+        show_tip("{pigcms{:L('_B_LOGIN_ENTERGOODNO_')}",$('#mobile'));
+    }
+
     if(is_check && $('#pwd').val() != $('#c_pwd').val()){
         is_check = false;
         show_tip("{pigcms{:L('_B_LOGIN_DIFFERENTKEY_')}",$('#pwd'));
     }
+
     if(is_check && $('#pwd').val().length < 6){
         is_check = false;
         show_tip("{pigcms{:L('_B_D_LOGIN_6KEYWORD_')}",$('#pwd'));
     }
+
     return is_check;
 }
 
@@ -224,7 +258,7 @@ $('#address').focus(function () {
 
 var autocomplete;
 function initAutocomplete() {
-    autocomplete = new google.maps.places.Autocomplete(document.getElementById('address'), {types: ['geocode']});
+    autocomplete = new google.maps.places.Autocomplete(document.getElementById('address'), {types: ['geocode'],componentRestrictions: {country: ['ca']}});
     autocomplete.addListener('place_changed', fillInAddress);
 }
 function fillInAddress() {

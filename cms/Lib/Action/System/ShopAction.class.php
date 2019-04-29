@@ -623,7 +623,9 @@ class ShopAction extends BaseAction
                     $this->error('删除失败！--'.$result['retMsg']);
                 }
             }elseif($now_order['pay_type'] == '' && $now_order['paid'] == 1 && $now_order['balance_pay'] > 0){
-                $add_result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],L('_B_MY_REFUND_')  . '(' . $order_id . ') 增加余额');
+                //判断订单状态 已退款或已取消 不退款
+                if($now_order['status'] != 4 && $now_order['status'] != 5)
+                    $add_result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],L('_B_MY_REFUND_')  . '(' . $order_id . ') 增加余额');
             }
             ///////
             if ($shop_order->where("order_id=$order_id")->data($data)->save()){

@@ -980,6 +980,7 @@ class StorestaffAction extends BaseAction
 
     public function logout()
     {
+        D('Merchant_store_staff')->field(true)->where(array('id'=>$this->staff_session['id']))->save(array('device_id'=>''));
         session('staff_session', null);
         redirect(U('Storestaff/login'));
     }
@@ -2300,8 +2301,11 @@ class StorestaffAction extends BaseAction
             //计算配送费
             if ($user_adress) {
                 //获取两点之间的距离
-                $distance = getDistance($user_adress['latitude'], $user_adress['longitude'], $merchant_store['lat'], $merchant_store['long']);
-                $distance = $distance / 1000;
+                //$distance = getDistance($user_adress['latitude'], $user_adress['longitude'], $merchant_store['lat'], $merchant_store['long']);
+                //$distance = $distance / 1000;
+                $from = $merchant_store['lat'].','.$merchant_store['long'];
+                $aim = $user_adress['latitude'].','.$user_adress['longitude'];
+                $distance = getDistanceByGoogle($from,$aim);
                 //获取配送费用
                 $deliveryCfg = [];
                 $deliverys = D("Config")->get_gid_config(20);
@@ -2338,7 +2342,7 @@ class StorestaffAction extends BaseAction
             $return_data['freight_charge_tax']=$freight_charge_tax;//配送费税
             $return_data['address_id']=$user_add;//客户地址id
             $return_data['real_orderid']=$real_orderid;//订单编号
-            $return_data['desc']="Merchant--{$staff['name']}--order from restaurants";//备注
+            $return_data['desc']="Merchant--{$staff['name']}--order from merchant";//备注
             $return_data['goods_price_tax'] = $_POST['goods_tax'] ? $_POST['goods_tax'] : 0;
             $return_data['deposit'] = $_POST['goods_deposit'] ? $_POST['goods_deposit'] : 0;
             $return_data['all_tax'] = floatval(sprintf("%.2f", $return_data['goods_price_tax'])) + floatval(sprintf("%.2f", $freight_charge_tax));

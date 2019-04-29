@@ -516,7 +516,7 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 	<script>
 		var autocomplete;
 		function initAutocomplete() {
-			autocomplete = new google.maps.places.Autocomplete(document.getElementById('address-adress'), {types: ['geocode']});
+			autocomplete = new google.maps.places.Autocomplete(document.getElementById('address-adress'), {types: ['geocode'],componentRestrictions: {country: ['ca']}});
 			autocomplete.addListener('place_changed', fillInAddress);
 		}
 		function fillInAddress() {
