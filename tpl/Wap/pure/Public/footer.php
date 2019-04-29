@@ -40,7 +40,6 @@
 			</li>
 		</ul>
     </if>
-    <script type="text/javascript" src="https://cdn.ywxi.net/js/1.js" async></script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-123655278-1"></script>
     <!-- Facebook Pixel Code -->
     <script>
