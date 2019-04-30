@@ -118,7 +118,7 @@
             function show_msg(msg) {
                 layer.open({
                     title: "{pigcms{:L('_STORE_REMIND_')}",
-                    time: 1,
+                    time: 2,
                     content: msg
                 });
             }
