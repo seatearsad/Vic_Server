@@ -12,6 +12,8 @@
 <script src="{pigcms{:C('JQUERY_FILE')}"></script>
 <script src="{pigcms{$static_public}js/laytpl.js"></script>
 <script src="{pigcms{$static_path}layer/layer.m.js"></script>
+<script type="text/javascript" src="{pigcms{$static_public}js/mobiscroll/mobiscroll.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="{pigcms{$static_public}js/mobiscroll/mobiscroll.custom.min.css" media="all">
 </head>
 <style>
     body {
@@ -81,6 +83,9 @@
                 <input type="text" placeholder="{pigcms{:L('_LAST_NAME_')}*" id="l_name">
             </li>
             <li>
+                <input type="text" placeholder="{pigcms{:L('_BIRTHDAY_TXT_')}*" id="birthday">
+            </li>
+            <li>
                 <input type="text" placeholder="{pigcms{:L('_EMAIL_TXT_')}*" id="email">
             </li>
             <li>
@@ -128,6 +133,7 @@ $("#reg_form").click(function () {
         var form_data = {
             'first_name':$('#f_name').val(),
             'last_name':$('#l_name').val(),
+            'birthday':$('#birthday').val(),
             'address':$('#address').val(),
             'email':$('#email').val(),
             'phone':$('#mobile').val(),
@@ -320,5 +326,19 @@ function geolocate() {
         });
     }
 }
+
+var theme = "ios";
+var mode = "scroller";
+var display = "bottom";
+var lang="en";
+
+$('#birthday').mobiscroll().date({
+    theme: theme,
+    mode: mode,
+    display: display,
+    dateFormat: 'yyyy-mm-dd',
+    dateOrder:'yymmdd',
+    lang: lang
+});
 </script>
 </html>

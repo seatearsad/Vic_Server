@@ -246,6 +246,11 @@
             <div class="img_2">
                 <div style="text-align: left;margin-top:5px">Please submit your proof of work eligibility(passport,birth certificate,permanent residency card,work permit,study permit with valid permission to work off campus)</div>
             </div>
+            <ul>
+                <li>
+                    <input type="text" placeholder="SIN Number*" id="sin_num">
+                </li>
+            </ul>
             <!--div class="bank_title">
                 {pigcms{:L('_SIN_NUMBER_')}
             </div>
@@ -370,7 +375,7 @@ $('#reg_form').click(function () {
         }
     });
 
-    if($('#ahname').val() == '' || $('#transit').val() == '' || $('#institution').val() == '' || $('#account').val() == ''){
+    if($('#ahname').val() == '' || $('#transit').val() == '' || $('#institution').val() == '' || $('#account').val() == '' || $('#sin_num').val() == ''){
         is_next = false;
     }
 
@@ -384,8 +389,8 @@ $('#reg_form').click(function () {
             ahname:$('#ahname').val(),
             transit:$('#transit').val(),
             institution:$('#institution').val(),
-            account:$('#account').val()
-            //sin_num:$('#sin_num').val()
+            account:$('#account').val(),
+            sin_num:$('#sin_num').val()
         };
         $.ajax({
             url: "{pigcms{:U('Deliver/step_1')}",

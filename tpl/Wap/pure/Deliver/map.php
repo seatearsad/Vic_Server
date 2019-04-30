@@ -40,7 +40,7 @@ var start = 0;
 var end = 0;
 $(function(){
 
-    var pyrmont = {lat: {pigcms{$supply['from_lat']}, lng: {pigcms{$supply['from_lnt']}};
+    var pyrmont = {lat: {pigcms{$supply['aim_lat']}, lng: {pigcms{$supply['aim_lnt']}};
 	var map = null;
 	console.log(pyrmont);
 	map = new google.maps.Map(document.getElementById('map'), {
