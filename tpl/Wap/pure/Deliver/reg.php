@@ -165,20 +165,27 @@ $("#send_code").click(function () {
     if($("#mobile").val() == ''){
        show_tip("{pigcms{:L('_B_LOGIN_ENTERPHONENO_')}",$("mobile"));
        return false;
+    }else if(!checkPhone($("#mobile").val())){
+        show_tip("{pigcms{:L('_B_LOGIN_ENTERGOODNO_')}",$("mobile"));
+        return false;
     }
     sendsms(this);
 });
 var countdown = 60;
 function sendsms(val) {
-    if(countdown==60){
+    if (countdown == 60) {
         $.ajax({
             url: '{pigcms{$config.site_url}/index.php?g=Index&c=Smssend&a=sms_send_deliver',
             type: 'POST',
             dataType: 'json',
-            data: {phone: $("#mobile").val(),reg:1},
-            success:function(date){
-                if(date.error_code){
-                    layer.open({title:"{pigcms{:L('_B_D_LOGIN_TIP2_')}",content: date.msg, btn:["{pigcms{:L('_B_D_LOGIN_CONIERM_')}"]});
+            data: {phone: $("#mobile").val(), reg: 1},
+            success: function (date) {
+                if (date.error_code) {
+                    layer.open({
+                        title: "{pigcms{:L('_B_D_LOGIN_TIP2_')}",
+                        content: date.msg,
+                        btn: ["{pigcms{:L('_B_D_LOGIN_CONIERM_')}"]
+                    });
                 }
             }
 
@@ -186,16 +193,16 @@ function sendsms(val) {
     }
     if (countdown == 0) {
         val.removeAttribute("disabled");
-        val.innerText="{pigcms{:L('_B_D_LOGIN_RECEIVEMESSAGE_')}";
+        val.innerText = "{pigcms{:L('_B_D_LOGIN_RECEIVEMESSAGE_')}";
         countdown = 60;
         //clearTimeout(t);
     } else {
         val.setAttribute("disabled", true);
-        val.innerText="{pigcms{:L('_B_D_LOGIN_SENDAGAIN_')}(" + countdown + ")";
+        val.innerText = "{pigcms{:L('_B_D_LOGIN_SENDAGAIN_')}(" + countdown + ")";
         countdown--;
-        setTimeout(function() {
+        setTimeout(function () {
             sendsms(val);
-        },1000)
+        }, 1000)
     }
 }
 

@@ -513,7 +513,7 @@ class ShopAction extends BaseAction
             //同时修改配送员端的价格
             $deliver_data['money'] = $data['price'];
             $deliver_data['freight_charge'] = $freight_charge;
-            if($shop_order_data['pay_type'] != 'moneris')
+            if($shop_order_data['pay_type'] != 'moneris' && $shop_order_data['pay_type'] != '')
                 $deliver_data['deliver_cash'] = $data['price'];
             D('Deliver_supply')->field(true)->where(array('order_id'=>$order_id))->save($deliver_data);
 

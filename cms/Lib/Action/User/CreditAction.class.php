@@ -36,7 +36,7 @@ class CreditAction extends BaseAction {
         $recharge_str = '';
         foreach ($recharge as $v){
             $v_a = explode("|",$v);
-            $recharge_str .= L('Deposit_txt')." $".$v_a[0].' '.L('Earn_txt')." $".$v_a[0].'<br>';
+            $recharge_str .= L('Deposit_txt')." $".$v_a[0].' '.L('Earn_txt')." $".$v_a[1].'<br>';
         }
 
         $this->assign('recharge_str',$recharge_str);

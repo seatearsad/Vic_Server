@@ -321,7 +321,7 @@ $(document).ready(function(){
 			
 			if (parseInt($(this).parents('ul').find('.on').size()) >= num) {
 				//layer.msg('该属性最多能选' + num + '个');
-                layer.msg('Single answer required for every option.');
+                layer.msg(num + ' options maximum.');
 			} else {
 				$(this).addClass("on");
 			}
@@ -384,7 +384,7 @@ function check_select(is_check)
 			}
 			if (num > select_num && is_check) {
 				//layer.msg(fname + '属性最多选择' + select_num + '个');
-				layer.msg('Single answer required for every option.');
+                layer.msg(select_num + ' options maximum.');
 				is_false = true;
 			}
 			if (temp_data.length > 0) {
@@ -429,7 +429,7 @@ function check_select(is_check)
 		
 		if (num > select_num && is_check) {
 			// layer.msg(fname + '属性最多选择' + select_num + '个');
-            layer.msg('Single answer required for every option.');
+            layer.msg(select_num + ' options maximum.');
 			is_false = true;
 		}
 		if (temp_data.length > 0) {
