@@ -238,7 +238,7 @@ function check_form() {
 
     if(is_check && !checkMail($('#email').val())){
         is_check = false;
-        show_tip('Please enter the correct email address',$('#email'));
+        show_tip("{pigcms{:L('_BACK_RIGHT_EMAIL_')}",$('#email'));
     }
 
     if(is_check && !checkPhone($('#mobile').val())){

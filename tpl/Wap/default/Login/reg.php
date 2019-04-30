@@ -202,7 +202,7 @@
             }else if(!checkPhone($("input[name='phone']").val())){
                 show_msg("{pigcms{:L('_B_LOGIN_ENTERGOODNO_')}");
             }else if(!checkMail($("input[name='email']").val())){
-                show_msg('Please enter the correct email address');
+                show_msg("{pigcms{:L('_BACK_RIGHT_EMAIL_')}");
             }else{
                 if (is_tip) {
                     show_msg("{pigcms{:L('_PLEASE_INPUT_ALL_')}");
