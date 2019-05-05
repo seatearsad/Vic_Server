@@ -77,6 +77,7 @@ class DeliverAction extends BaseAction {
             $column['family_name'] = isset($_POST['family_name']) ? htmlspecialchars($_POST['family_name']) : '';
             $column['email'] = $_POST['email'];
             $column['language'] = intval($_POST['language']);
+            $column['birthday'] = $_POST['birthday'];
 
             $card['ahname'] = $_POST['ahname'];
             $card['transit'] = $_POST['transit'];
@@ -103,6 +104,12 @@ class DeliverAction extends BaseAction {
     		//
     		$card['deliver_id'] = $id;
             D('Deliver_card')->data($card)->add();
+
+            if($_POST['sin_num'] && $_POST['sin_num'] != '') {
+                $data['sin_num'] = $_POST['sin_num'];
+                $data['uid'] = $id;
+                D('Deliver_img')->add($data);
+            }
     		$this->success('保存成功');
     	}
     	//garfunkel 判断城市管理员
@@ -143,6 +150,7 @@ class DeliverAction extends BaseAction {
             $column['family_name'] = isset($_POST['family_name']) ? htmlspecialchars($_POST['family_name']) : '';
             $column['email'] = $_POST['email'];
             $column['language'] = intval($_POST['language']);
+            $column['birthday'] = $_POST['birthday'];
 
             $card['ahname'] = $_POST['ahname'];
             $card['transit'] = $_POST['transit'];
@@ -167,6 +175,15 @@ class DeliverAction extends BaseAction {
                 }else{
     		        $card['deliver_id'] = $uid;
                     D('Deliver_card')->data($card)->add();
+                }
+                if($_POST['sin_num'] && $_POST['sin_num'] != '') {
+    		        $data['sin_num'] = $_POST['sin_num'];
+    		        $data['uid'] = $uid;
+                    $deliver_img = D('Deliver_img')->where(array('uid' => $uid))->find();
+                    if ($deliver_img)
+                        D('Deliver_img')->save($data);
+                    else
+                        D('Deliver_img')->add($data);
                 }
     			$this->success('修改成功！');
     		}else{
