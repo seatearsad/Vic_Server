@@ -283,7 +283,8 @@ class MyAction extends BaseAction{
 
 			//验证短信验证码
 
-			if ($this->config['bind_phone_verify_sms']&&$this->config['sms_key']&&substr($_POST['phone'],0,10)!='1321234567') {
+			//if ($this->config['bind_phone_verify_sms']&&$this->config['sms_key']&&substr($_POST['phone'],0,10)!='1321234567') {
+            if($_POST['sms_code']){
 				$sms_verify_result = D('Smscodeverify')->verify($_POST['sms_code'], $_POST['phone']);
 				if ($sms_verify_result['error_code']) {
 					$this->error($sms_verify_result['msg']);
@@ -291,6 +292,7 @@ class MyAction extends BaseAction{
 					$modifypwd = $sms_verify_result['modifypwd'];
 				}
 			}
+
 
 			//if (!empty($modifypwd)||$this->config['bind_phone_verify_sms']=='0'||empty($this->config['sms_key'])) {
 			//$nowtime = time();

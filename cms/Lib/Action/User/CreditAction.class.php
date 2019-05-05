@@ -29,8 +29,20 @@ class CreditAction extends BaseAction {
 		$this->assign('openid',$this->now_user['openid']);
 		//余额记录列表
 		$this->assign(D('User_money_list')->get_list($this->now_user['uid']));
-		
-		$this->display();
+
+        $config = D('Config')->get_config();
+        $recharge_txt = $config['recharge_discount'];
+        $recharge = explode(",",$recharge_txt);
+        $recharge_str = '';
+        foreach ($recharge as $v){
+            $v_a = explode("|",$v);
+            $recharge_str .= L('Deposit_txt')." $".$v_a[0].' '.L('Earn_txt')." $".$v_a[1].'<br>';
+        }
+
+        $this->assign('recharge_str',$recharge_str);
+
+
+        $this->display();
     }
 	public function recharge(){
 		$data_user_recharge_order['uid'] = $this->now_user['uid'];

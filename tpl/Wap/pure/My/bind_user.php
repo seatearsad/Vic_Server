@@ -88,12 +88,12 @@
 			            		<dd class="dd-padding">
 			            			<input id="reg_phone" class="input-weak" type="text" placeholder="{pigcms{:L('_B_LOGIN_ENTERPHONENO_')}" name="phone" value="" />
 			            		</dd>
-								<if condition="C('config.bind_phone_verify_sms') AND C('config.sms_key')">
+								<!--if condition="C('config.bind_phone_verify_sms') AND C('config.sms_key')"-->
 			            		<dd class="kv-line-r dd-padding">
-			            			<input id="sms_code" class="input-weak kv-k" name = "vcode" type="text" placeholder="填写短信验证码" />
-			            			<button id="reg_send_sms" type="button" onclick="sendsms(this)" class="btn btn-weak kv-v">获取短信验证码</button>
+			            			<input id="sms_code" class="input-weak kv-k" name = "sms_code" type="text" placeholder="Code" />
+			            			<button id="reg_send_sms" type="button" onclick="sendsms(this)" class="btn btn-weak kv-v">{pigcms{:L('_B_D_LOGIN_RECEIVEMESSAGE_')}</button>
 			            		</dd>
-								</if>
+								<!--/if>
 								<if condition="$now_user['pwd'] eq '' OR $now_user['phone'] eq '' OR C('config.bind_phone_verify_sms') eq 0">
 									<dd class="kv-line-r dd-padding">
 										<input id="reg_pwd_password" class="input-weak kv-k" type="password" placeholder="<if condition="$now_user['phone'] eq ''">{pigcms{:L('_B_D_LOGIN_6KEYWORD_')}<else />{pigcms{:L('_VERCIF_OLD_PASS_')}</if>"/>
@@ -101,7 +101,7 @@
 										<input type="hidden" id="reg_password_type" value="0"/>
 										<button id="reg_changeWord" type="button" class="btn btn-weak kv-v">{pigcms{:L('_B_D_LOGIN_DISPLAY_')}</button>
 									</dd>
-								</if>
+								</if-->
 			        		</dl>
 			        	</dd>
 			        </dl>
@@ -111,30 +111,55 @@
 			        </div>
 			    </form>
 			</div>
+        <script src="{pigcms{$static_public}layer/layer.m.js"></script>
+        <script type="text/javascript" src="{pigcms{$static_public}js/artdialog/jquery.artDialog.js"></script>
+        <script type="text/javascript" src="{pigcms{$static_public}js/artdialog/iframeTools.js"></script>
 		<script type="text/javascript">
+            function show_msg(msg) {
+                layer.open({
+                    title: "{pigcms{:L('_STORE_REMIND_')}",
+                    time: 2,
+                    content: msg
+                });
+            }
+            function checkPhone(phone) {
+                if(!/^\d{10,}$/.test(phone)){
+                    return false;
+                }
+                return true;
+            }
+
 			var countdown = 60;
 			function sendsms(val){
 				if($("input[name='phone']").val()==''){
-					alert("{pigcms{:L('_B_LOGIN_ENTERPHONENO_')}");
-				}else{
-					
+					show_msg("{pigcms{:L('_B_LOGIN_ENTERPHONENO_')}");
+				}else if(!checkPhone($("input[name='phone']").val())){
+                    show_msg("{pigcms{:L('_B_LOGIN_ENTERGOODNO_')}");
+                }else{
 					if(countdown==60){
 						$.ajax({
 							url: '{pigcms{$config.site_url}/index.php?g=Index&c=Smssend&a=sms_send',
 							type: 'POST',
 							dataType: 'json',
-							data: {phone: $("input[name='phone']").val()},
-
+							data: {phone: $("input[name='phone']").val(),reg:1},
+                            success:function(date){
+                                if(date.error_code){
+                                    countdown = 0;
+                                    show_msg(date.msg);
+                                }else{
+                                    show_msg('Success');
+                                }
+                            }
 						});
 					}
 					if (countdown == 0) {
 						val.removeAttribute("disabled");
-						val.innerText="获取短信验证码";
+						val.innerText="{pigcms{:L('_B_D_LOGIN_RECEIVEMESSAGE_')}";
 						countdown = 60;
 						//clearTimeout(t);
 					} else {
 						val.setAttribute("disabled", true);
-						val.innerText="重新发送(" + countdown + ")";
+                        val.innerText="{pigcms{:L('_B_D_LOGIN_SENDAGAIN_')}(" + countdown + ")";
 						countdown--;
 						setTimeout(function() {
 							sendsms(val);
@@ -145,12 +170,39 @@
             $('#back_span').click(function () {
                 window.history.go(-1);
             });
+
+			$('#reg-form').submit(function (e) {
+                e.preventDefault();
+                sendPhone();
+            });
+			
+			function sendPhone() {
+                if($("input[name='phone']").val()==''){
+                    show_msg("{pigcms{:L('_B_LOGIN_ENTERPHONENO_')}");
+                }else if($("input[name='sms_code']").val()==''){
+                    show_msg("{pigcms{:L('_B_MY_ENTERCODE_')}");
+                }else if(!checkPhone($("input[name='phone']").val())){
+                    show_msg("{pigcms{:L('_B_LOGIN_ENTERGOODNO_')}");
+                }else{
+                    $.post("{pigcms{:U('My/bind_user')}",{phone:$("input[name='phone']").val(),sms_code:$("input[name='sms_code']").val()},function(result){
+                        if(result.status == '1'){
+                            //window.location.href = $('#reg-form').attr('location_url');
+                            artDialog.open.origin.location.reload();
+                            window.location.href = "{pigcms{:U('My/index')}";
+                        }else{
+                            reg_flag = true;
+                            //$('#tips').html(result.info).show();
+                            show_msg(result.info);
+                        }
+                    });
+                }
+            }
 		</script>
 		<script src="{pigcms{:C('JQUERY_FILE')}"></script>
         <script type="text/javascript" src="{pigcms{$static_public}js/lang/{pigcms{:C('DEFAULT_LANG')}.js" charset="utf-8"></script>
 		<script src="{pigcms{$static_path}js/common_wap.js"></script>
 		<script src="{pigcms{$static_path}js/bind_user.js"></script>
     </div>
-		<include file="Public:footer"/>
+
 	</body>
 </html>

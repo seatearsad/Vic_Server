@@ -62,7 +62,7 @@
 
     var autocomplete;
     function initAutocomplete() {
-        autocomplete = new google.maps.places.Autocomplete(document.getElementById('se-input-wd'), {types: ['geocode']});
+        autocomplete = new google.maps.places.Autocomplete(document.getElementById('se-input-wd'), {types: ['geocode'],componentRestrictions: {country: ['ca']}});
         autocomplete.addListener('place_changed', fillInAddress);
     }
     function fillInAddress() {

@@ -131,7 +131,7 @@
                         <p>{pigcms{:L('_PACK_PRICE_')}</p>
                     </li>
 					<li>
-						<h2>{pigcms{$store['delivery_time']}{pigcms{:L('_MINUTES_TXT_')}</h2>
+						<h2>{pigcms{$store['delivery_time']} {pigcms{:L('_MINUTES_TXT_')}</h2>
 						<p>{pigcms{:L('_DELI_TIME_')}</p>
 					</li>
 				</ul>

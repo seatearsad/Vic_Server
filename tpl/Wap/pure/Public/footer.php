@@ -8,7 +8,7 @@
     }
 </style>
 <if condition="empty($no_footer)">
-	<footer class="footerMenu <if condition="!$is_wexin_browser || $home_menu_list">wap</if>">
+	<footer class="footerMenu <if condition='!$is_wexin_browser || $home_menu_list'>wap</if>">
     <if condition="$home_menu_list">
 		<ul>
             <volist name='home_menu_list' id='vo'>

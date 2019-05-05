@@ -513,7 +513,7 @@ class ShopAction extends BaseAction
             //同时修改配送员端的价格
             $deliver_data['money'] = $data['price'];
             $deliver_data['freight_charge'] = $freight_charge;
-            if($shop_order_data['pay_type'] != 'moneris')
+            if($shop_order_data['pay_type'] != 'moneris' && $shop_order_data['pay_type'] != '')
                 $deliver_data['deliver_cash'] = $data['price'];
             D('Deliver_supply')->field(true)->where(array('order_id'=>$order_id))->save($deliver_data);
 
@@ -623,7 +623,9 @@ class ShopAction extends BaseAction
                     $this->error('删除失败！--'.$result['retMsg']);
                 }
             }elseif($now_order['pay_type'] == '' && $now_order['paid'] == 1 && $now_order['balance_pay'] > 0){
-                $add_result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],L('_B_MY_REFUND_')  . '(' . $order_id . ') 增加余额');
+                //判断订单状态 已退款或已取消 不退款
+                if($now_order['status'] != 4 && $now_order['status'] != 5)
+                    $add_result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],L('_B_MY_REFUND_')  . '(' . $order_id . ') 增加余额');
             }
             ///////
             if ($shop_order->where("order_id=$order_id")->data($data)->save()){

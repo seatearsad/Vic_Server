@@ -37,6 +37,9 @@
         <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/home_meal.css?216"/>
     </if>
     <script>
+        <if condition="$is_wexin_browser">
+
+        <else />
         if(navigator.serviceWorker != null){
             navigator.serviceWorker.register('/sw.js')
                 .then(function(registartion){
@@ -59,6 +62,7 @@
                 }
             });
         });
+        </if>
 
         $(function(){
             $(document).on('click','.hasMore',function(){

@@ -12,6 +12,8 @@
 <script src="{pigcms{:C('JQUERY_FILE')}"></script>
 <script src="{pigcms{$static_public}js/laytpl.js"></script>
 <script src="{pigcms{$static_path}layer/layer.m.js"></script>
+<script type="text/javascript" src="{pigcms{$static_public}js/mobiscroll/mobiscroll.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="{pigcms{$static_public}js/mobiscroll/mobiscroll.custom.min.css" media="all">
 </head>
 <style>
     body {
@@ -51,7 +53,7 @@
         color: #fff;
         text-indent: 0px;
         font-size: 16px;
-        margin-top: 10%;
+        margin-top: 50px;
         padding: 0px;
         height: 40px;
     }
@@ -81,6 +83,9 @@
                 <input type="text" placeholder="{pigcms{:L('_LAST_NAME_')}*" id="l_name">
             </li>
             <li>
+                <input type="text" placeholder="{pigcms{:L('_BIRTHDAY_TXT_')}*" id="birthday">
+            </li>
+            <li>
                 <input type="text" placeholder="{pigcms{:L('_EMAIL_TXT_')}*" id="email">
             </li>
             <li>
@@ -102,6 +107,9 @@
             <li class="Landd">
                 <input type="button" value="{pigcms{:L('_B_D_LOGIN_REG2_')}" id="reg_form" style="background-color: #FF0000;width: 50%;margin-left: 25%;">
             </li>
+            <li class="Landd">
+                <input type="button" value="{pigcms{:L('_COURIER_LOGIN_')}" id="login_btn" style="background-color: #1b9dff;width: 50%;margin-left: 25%;">
+            </li>
 		</ul>
 	</div>
         <input type="hidden" name="lng" id="lng">
@@ -115,12 +123,17 @@
 <script type="text/javascript">
 $("body").css({"height":$(window).height()});
 
+$('#login_btn').click(function () {
+    window.location.href = "{pigcms{:U('Deliver/login')}";
+});
+
 $("#reg_form").click(function () {
     $(this).attr("disabled","disabled");
     if(check_form()){
         var form_data = {
             'first_name':$('#f_name').val(),
             'last_name':$('#l_name').val(),
+            'birthday':$('#birthday').val(),
             'address':$('#address').val(),
             'email':$('#email').val(),
             'phone':$('#mobile').val(),
@@ -158,20 +171,27 @@ $("#send_code").click(function () {
     if($("#mobile").val() == ''){
        show_tip("{pigcms{:L('_B_LOGIN_ENTERPHONENO_')}",$("mobile"));
        return false;
+    }else if(!checkPhone($("#mobile").val())){
+        show_tip("{pigcms{:L('_B_LOGIN_ENTERGOODNO_')}",$("mobile"));
+        return false;
     }
     sendsms(this);
 });
 var countdown = 60;
 function sendsms(val) {
-    if(countdown==60){
+    if (countdown == 60) {
         $.ajax({
             url: '{pigcms{$config.site_url}/index.php?g=Index&c=Smssend&a=sms_send_deliver',
             type: 'POST',
             dataType: 'json',
-            data: {phone: $("#mobile").val(),reg:1},
-            success:function(date){
-                if(date.error_code){
-                    layer.open({title:"{pigcms{:L('_B_D_LOGIN_TIP2_')}",content: date.msg, btn:["{pigcms{:L('_B_D_LOGIN_CONIERM_')}"]});
+            data: {phone: $("#mobile").val(), reg: 1},
+            success: function (date) {
+                if (date.error_code) {
+                    layer.open({
+                        title: "{pigcms{:L('_B_D_LOGIN_TIP2_')}",
+                        content: date.msg,
+                        btn: ["{pigcms{:L('_B_D_LOGIN_CONIERM_')}"]
+                    });
                 }
             }
 
@@ -179,17 +199,31 @@ function sendsms(val) {
     }
     if (countdown == 0) {
         val.removeAttribute("disabled");
-        val.innerText="{pigcms{:L('_B_D_LOGIN_RECEIVEMESSAGE_')}";
+        val.innerText = "{pigcms{:L('_B_D_LOGIN_RECEIVEMESSAGE_')}";
         countdown = 60;
         //clearTimeout(t);
     } else {
         val.setAttribute("disabled", true);
-        val.innerText="{pigcms{:L('_B_D_LOGIN_SENDAGAIN_')}(" + countdown + ")";
+        val.innerText = "{pigcms{:L('_B_D_LOGIN_SENDAGAIN_')}(" + countdown + ")";
         countdown--;
-        setTimeout(function() {
+        setTimeout(function () {
             sendsms(val);
-        },1000)
+        }, 1000)
     }
+}
+
+function checkPhone(phone) {
+    if(!/^\d{10,}$/.test(phone)){
+        return false;
+    }
+    return true;
+}
+function checkMail(mail) {
+    var reg = /\w+[@]{1}\w+[.]\w+/;
+    if(!reg.test(mail)){
+        return false;
+    }
+    return true;
 }
 
 function check_form() {
@@ -201,14 +235,27 @@ function check_form() {
             return false;
         }
     });
+
+    if(is_check && !checkMail($('#email').val())){
+        is_check = false;
+        show_tip("{pigcms{:L('_BACK_RIGHT_EMAIL_')}",$('#email'));
+    }
+
+    if(is_check && !checkPhone($('#mobile').val())){
+        is_check = false;
+        show_tip("{pigcms{:L('_B_LOGIN_ENTERGOODNO_')}",$('#mobile'));
+    }
+
     if(is_check && $('#pwd').val() != $('#c_pwd').val()){
         is_check = false;
         show_tip("{pigcms{:L('_B_LOGIN_DIFFERENTKEY_')}",$('#pwd'));
     }
+
     if(is_check && $('#pwd').val().length < 6){
         is_check = false;
         show_tip("{pigcms{:L('_B_D_LOGIN_6KEYWORD_')}",$('#pwd'));
     }
+
     return is_check;
 }
 
@@ -224,7 +271,7 @@ $('#address').focus(function () {
 
 var autocomplete;
 function initAutocomplete() {
-    autocomplete = new google.maps.places.Autocomplete(document.getElementById('address'), {types: ['geocode']});
+    autocomplete = new google.maps.places.Autocomplete(document.getElementById('address'), {types: ['geocode'],componentRestrictions: {country: ['ca']}});
     autocomplete.addListener('place_changed', fillInAddress);
 }
 function fillInAddress() {
@@ -279,5 +326,19 @@ function geolocate() {
         });
     }
 }
+
+var theme = "ios";
+var mode = "scroller";
+var display = "bottom";
+var lang="en";
+
+$('#birthday').mobiscroll().date({
+    theme: theme,
+    mode: mode,
+    display: display,
+    dateFormat: 'yyyy-mm-dd',
+    dateOrder:'yymmdd',
+    lang: lang
+});
 </script>
 </html>

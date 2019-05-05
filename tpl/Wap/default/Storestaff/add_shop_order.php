@@ -59,7 +59,7 @@
                         <td>Add Order</td>
                     </tr>
                     <tr>
-                        <td>Name：<input type="text" name="name" value="{pigcms{$now_adress.name}" placeholder="Username"></td>
+                        <td>Name：<input type="text" name="name" value="{pigcms{$now_adress.name}" placeholder="Customer's Name"></td>
                     </tr>
                     <tr>
                         <td>Mobile：<input type="text" name="phone" value="{pigcms{$now_adress.phone}" placeholder="Mobile Number"></td>
@@ -110,7 +110,7 @@
                         <td>Note for driver：<input name="detail" value="{pigcms{$now_adress.detail}" type="text" placeholder="Note for driver"></td>
                     </tr>
                     <tr>
-                        <td>Price：<input type="text" value="{pigcms{$now_adress.goods_price}" name="goods_price" placeholder="Total Price befroe tax">
+                        <td>Price：<input type="text" value="{pigcms{$now_adress.goods_price}" name="goods_price" placeholder="Total price befroe tax">
                             <input type="hidden" name="adress" value="{pigcms{$now_adress.adress}" style="width: 50%">
                             <input type="hidden" name="longitude" value="{pigcms{$now_adress.longitude}" >
                             <input type="hidden" name="latitude" value="{pigcms{$now_adress.latitude}" >
@@ -118,7 +118,7 @@
                     </tr>
                     <tr>
                         <td>
-                            Tax：<input type="text" value="" name="goods_tax" placeholder="Tax">
+                            Tax：$<input type="text" value="" name="goods_tax" placeholder="Tax">
                         </td>
                     </tr>
                     <tr>

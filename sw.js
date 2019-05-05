@@ -1,6 +1,12 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.1.0/workbox-sw.js");
+
+workbox.routing.registerRoute(
+    new RegExp('/upload/'),
+    new workbox.strategies.CacheFirst()
+);
+
 var cacheStorageKey = 'Tutti-pwa-';
-var version_num = '1.0.0';
+var version_num = '1.0.1';
 var cacheList=[
     '/tpl/Static/blue/images/new/icon.png',
     '/tpl/Wap/pure/static/css/index.css'

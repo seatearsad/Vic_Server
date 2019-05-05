@@ -48,22 +48,21 @@ a.btn {
 	font-size:12px;margin-bottom:30px;
 }
 .pay_form #recharge_money,#truename,#withdraw_money{
-	line-height: 24px;
 	/* margin-left: 80px; */
 	width: 88px;
-	height: 24px;
+	height: 16px;
 	padding: 5px;
 	border: 1px solid #aaa;
-	line-height: 24px;
+	line-height: 16px;
 	vertical-align: top;
 }
 .pay_form .form-field label{
-	line-height:36px;
+	line-height:16px;
 }
 .pay_form .form-field .inline-link {
   margin: 0 0 0 8px;
   font-size: 12px;
-  line-height: 36px;
+  line-height: 26px;
   vertical-align: top;
   zoom: 1;
 }
@@ -212,10 +211,12 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 			$('#recharge_amount').click(function(){
 				art.dialog({
 					id: 'pay_handle',
-					title:'账户充值',
+					title:"{pigcms{:L('_RECHARGE_TXT_')}",
 					padding: 0,
 					width: 380,
-					height: 200,
+					height: 240,
+                    okVal:"{pigcms{:L('_B_PURE_MY_85_')}",
+                    cancelVal:"{pigcms{:L('_B_PURE_MY_86_')}",
 					lock: true,
 					resize: false,
 					background:'black',
@@ -226,7 +227,7 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 					left: '50%',
 					top: '38.2%',
 					opacity:'0.4',
-					content:'<div class="pay_form"><div class="pay_tip">小提示：账户充值，手机抢购更便捷！<br/>部分银行单笔支付额度有限制，建议每次充值小于499元</div><div class="form-field"><label for="recharge_money">充值金额：</label><input type="text" name="money" autocomplete="off" id="recharge_money"/><span class="inline-link">元</span></div><div id="money_tips" style="color:red;"></div></div>',
+					content:'<div class="pay_form"><div class="pay_tip">{pigcms{:L(\'Balance_pro\')}:<br/>{pigcms{$recharge_str}</div><div class="form-field"><label for="recharge_money">Amount：</label><span class="inline-link">$</span><input type="text" name="money" autocomplete="off" id="recharge_money"/></div><div id="money_tips" style="color:red;"></div></div>',
 					ok:function(){
 						var money = parseFloat($('#recharge_money').val());
 						if(isNaN(money)){

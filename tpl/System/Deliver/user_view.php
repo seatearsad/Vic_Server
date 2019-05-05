@@ -35,6 +35,8 @@
                 <td>
                     {pigcms{$now_user['city_name']}
                 </td>
+                <th width="15%">生日</th>
+                <td width="35%"><input type="text" class="input fl" name="birthday" size="20" validate="maxlength:50,required:true" value="{pigcms{$now_user.birthday}"/></td>
 			<tr>
 			<tr>
 				<th width="15%">{pigcms{:L('_BACK_DELIVERY_AREA_')}</th>
@@ -50,7 +52,13 @@
 				<td width="35%" class="radio_box"><input class="input fl" size="20" name="long_lat" id="long_lat" type="text" readonly="readonly" validate="required:true" value="{pigcms{$now_user.lng},{pigcms{$now_user.lat}"/></td>
 			</tr>
             <tr>
-                <th width="15%">{pigcms{:L('_BACK_BANK_INFO_')}</th>
+                <th width="15%">SIN Number</th>
+                <td colspan=3>
+                    <input type="text" placeholder="SIN Number" class="input fl" name="ahname" size="30" validate="maxlength:50,required:true" value="{pigcms{$img.sin_num}" />
+                </td>
+            </tr>
+            <tr>
+                <th width="15%">银行卡</th>
                 <td colspan=3>
                     <input type="text" placeholder="Account Holder Name" class="input fl" name="ahname" size="30" validate="maxlength:50,required:true" value="{pigcms{$card.ahname}" />
                 </td>

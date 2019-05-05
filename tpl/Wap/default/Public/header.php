@@ -212,6 +212,10 @@
         text-align: center;
         flex: 0 0 auto;
         cursor: pointer;
+        background-image: url("./tpl/Static/blue/images/wap/download.png");
+        background-size: auto 24px;
+        background-repeat: no-repeat;
+        background-position: center;
     }
 </style>
 <div class="down_header">
@@ -220,7 +224,7 @@
     <div class="down_app_name">
         <div class="name"></div>
     </div>
-    <div class="down_view">VIEW</div>
+    <div class="down_view"> </div>
 </div>
 <div id="tutti_header">
     <div id="header_menu">

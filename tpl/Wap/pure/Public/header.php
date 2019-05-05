@@ -217,6 +217,10 @@
         text-align: center;
         flex: 0 0 auto;
         cursor: pointer;
+        background-image: url("./tpl/Static/blue/images/wap/download.png");
+        background-size: auto 24px;
+        background-repeat: no-repeat;
+        background-position: center;
     }
     .down_icon{
         width: 46px;
@@ -247,7 +251,7 @@
     <div class="down_app_name">
         <div class="name">TUTTI - Online Food Community</div>
     </div>
-    <div class="down_view">VIEW</div>
+    <div class="down_view"> </div>
 </div>
 <div id="tutti_header">
     <div id="header_menu">
@@ -263,6 +267,7 @@
     </div>
 </div>
 <script type="text/javascript" src="{pigcms{$static_public}js/lang.js" charset="utf-8"></script>
+<script src="{pigcms{$static_path}js/jquery.cookie.js"></script>
 <script>
     $('#header_logo').click(function () {
         window.location.href = "{pigcms{$config.site_url}"+"/wap.php";

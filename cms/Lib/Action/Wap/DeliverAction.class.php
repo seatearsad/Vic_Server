@@ -1918,6 +1918,7 @@ class DeliverAction extends BaseAction
 	        $deliver_data['email'] = $_POST['email'];
 	        $deliver_data['name'] = $_POST['first_name'];
 	        $deliver_data['family_name'] = $_POST['last_name'];
+	        $deliver_data['birthday'] = $_POST['birthday'];
 	        $deliver_data['pwd'] = md5($_POST['password']);
 	        $deliver_data['site'] = $_POST['address'];
 	        $deliver_data['lng'] = sprintf('%.7f',$_POST['lng']);
@@ -1957,6 +1958,8 @@ class DeliverAction extends BaseAction
             $data['driver_license'] = $_POST['img_0'];
             $data['insurance'] = $_POST['img_1'];
             $data['certificate'] = $_POST['img_2'];
+
+            $data['sin_num'] = $_POST['sin_num'];
 
             $deliver_img = D('Deliver_img')->where(array('uid'=>$this->deliver_session['uid']))->find();
             if($deliver_img)
