@@ -47,7 +47,7 @@ class ExpressAction extends BaseAction{
 			$database_express = D('Express');
 			if($database_express->data($_POST)->save()){
 				S('express_list',NULL);
-				$this->success('修改成功！');
+				$this->success('Success');
 			}else{
 				$this->error('修改失败！请检查是否有过修改后重试~');
 			}

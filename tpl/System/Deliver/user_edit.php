@@ -21,7 +21,7 @@
                 </td>
             </tr>
 			<tr>
-				<th width="15%">{pigcms{:L('_MERCHANT_PASSWORD_')}</th>
+				<th width="15%">{pigcms{:L('_B_D_LOGIN_KEY1_')}</th>
 				<td width="35%"><input type="text" class="input fl" name="pwd" size="20" value="" tips="不修改则不填写" /></td>
 				<th width="15%">{pigcms{:L('_BACK_STATUS_')}</th>
 				<td width="35%" class="radio_box">
@@ -36,7 +36,7 @@
                     {pigcms{$now_user.city_name}
                 </td>
                 <input type="hidden" id="city_id" name="city_id" value="{pigcms{$now_user.city_id}">
-                <th width="15%">生日</th>
+                <th width="15%">{pigcms{:L('_BIRTHDAY_TXT_')}</th>
                 <td width="35%"><input type="text" class="input fl" name="birthday" size="20" validate="maxlength:50,required:true" value="{pigcms{$now_user.birthday}"/></td>
 			<tr>
 			<tr>

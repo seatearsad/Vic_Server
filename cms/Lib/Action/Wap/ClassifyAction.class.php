@@ -975,7 +975,7 @@ class ClassifyAction extends BaseAction {
 
             $insert_id = $userinputDb->where(array('id'=>$id))->data($insert_datas)->save();
             if ($insert_id > 0) {
-                $this->success_tips('修改成功！', U('Classify/myfabu', array('uid' => $uid)));
+                $this->success_tips('Success', U('Classify/myfabu', array('uid' => $uid)));
             } else {
                 $this->error_tips('修改失败，请重试！');
             }

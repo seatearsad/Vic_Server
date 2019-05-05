@@ -15,7 +15,7 @@
 				<td width="35%"><input type="text" class="input fl" name="phone" size="20" validate="number:true" value="{pigcms{$now_user.phone}" autocomplete="off"/></td>
 			</tr>
 			<tr>
-				<th width="15%">{pigcms{:L('_MERCHANT_PASSWORD_')}</th>
+				<th width="15%">{pigcms{:L('_B_D_LOGIN_KEY1_')}</th>
 				<td width="35%"><input type="password" class="input fl" name="pwd" size="20" value="" tips="不修改则不填写" autocomplete="off"/></td>
 				<th width="15%">{pigcms{:L('_BACK_GENDER_')}</th>
 				<td width="35%" class="radio_box">

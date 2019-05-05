@@ -89,7 +89,7 @@ class ScenicAction extends BaseAction{
 			);
 			$save	=	M('Scenic_list')->where(array('scenic_id'=>$scenic_id))->data($condition_merchant)->save();
 			if($save){
-				$this->success('修改成功！');
+				$this->success('Success');
 			}else{
 				$this->error('修改失败！请重试~');
 			}
@@ -210,7 +210,7 @@ class ScenicAction extends BaseAction{
 			);
 			$save	=	M('Scenic_aguide')->where($where)->data($condition_merchant)->save();
 			if($save){
-				$this->frame_submit_tips(1,'修改成功！');
+				$this->frame_submit_tips(1,'Success');
 			}else{
 				$this->frame_submit_tips(0,'修改失败！请重试~');
 			}
@@ -333,7 +333,7 @@ class ScenicAction extends BaseAction{
 		}
 		if($save){
 			M('Scenic_mate_order')->where($mate_id)->data(array('rela_status'=>4))->save();
-			$this->success('修改成功！');
+			$this->success('Success');
 		}else{
 			$this->error('关闭失败');
 		}
@@ -666,7 +666,7 @@ class ScenicAction extends BaseAction{
 			}
 			$res = M('Scenic_advert')->where(array('advert_id'=>$_POST['advert_id']))->data($arr)->save();
 			if($res){
-				$this->success('修改成功！');
+				$this->success('Success');
 			}else{
 				$this->error('修改失败！');
 			}
@@ -901,7 +901,7 @@ class ScenicAction extends BaseAction{
 			}
 			$add	=	M('Scenic_groom_category')->where(array('cat_id'=>$_POST['cat_id']))->data($condition_merchant)->save();
 			if($add){
-				$this->success('修改成功！');
+				$this->success('Success');
 			}else{
 				$this->error('修改失败！请重试~');
 			}
@@ -1003,7 +1003,7 @@ class ScenicAction extends BaseAction{
 			);
 			$add	=	M('Scenic_groom')->where(array('com_id'=>$_POST['com_id']))->data($condition_merchant)->save();
 			if($add){
-				$this->success('修改成功！');
+				$this->success('Success');
 			}else{
 				$this->error('修改失败！请重试~');
 			}
@@ -1061,7 +1061,7 @@ class ScenicAction extends BaseAction{
 			);
 			$arr	=	M('Scenic_about_category')->where($where)->data($arr)->save();
 			if($arr){
-				$this->success('修改成功！');
+				$this->success('Success');
 			}else{
 				$this->error('修改失败！');
 			}
@@ -1124,7 +1124,7 @@ class ScenicAction extends BaseAction{
 			);
 			$arr	=	M('Scenic_about')->where($where)->data($arr)->save();
 			if($arr){
-				$this->success('修改成功！');
+				$this->success('Success');
 			}else{
 				$this->error('修改失败！');
 			}

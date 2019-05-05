@@ -110,7 +110,7 @@ class ActivityAction extends BaseAction{
 			$database_extension_activity = D('Extension_activity');
 			if($database_extension_activity->data($_POST)->save()){
 				D('Image')->update_table_id('/upload/extension/' . $_POST['bg_pic'], $activity_id, 'extension_activity');
-				$this->frame_submit_tips(1,'修改成功！');
+				$this->frame_submit_tips(1,'Success');
 			}else{
 				$this->frame_submit_tips(0,'修改失败！请重试~');
 			}

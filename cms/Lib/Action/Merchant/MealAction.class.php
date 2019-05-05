@@ -814,7 +814,7 @@ class MealAction extends BaseAction{
 					$this->error('编辑失败！', U('Meal/table',array('store_id' => $now_store['store_id'])));
 					die;
 				}
-				$ok_tips = '修改成功！';
+				$ok_tips = 'Success';
 			}
 			$this->assign('now_table', $_POST);
 			$this->assign('ok_tips',$ok_tips);

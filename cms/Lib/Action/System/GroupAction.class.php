@@ -399,7 +399,7 @@ class GroupAction extends BaseAction{
 			$_POST['last_time'] = $_SERVER['REQUEST_TIME'];
 			$database_merchant_store = D('Merchant_store');
 			if($database_merchant_store->data($_POST)->save()){
-				$this->success('修改成功！');
+				$this->success('Success');
 			}else{
 				$this->error('修改失败！请检查内容是否有过修改（必须修改）后重试~');
 			}

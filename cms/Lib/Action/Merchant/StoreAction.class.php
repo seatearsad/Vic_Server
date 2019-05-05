@@ -471,7 +471,7 @@ class StoreAction extends BaseAction{
 
 
 			$this->group_notice($now_order,1);
-			$this->success('修改成功！');
+			$this->success('Success');
 		}else{
 			$this->error('修改失败！请重试。');
 		}
@@ -509,7 +509,7 @@ class StoreAction extends BaseAction{
 			D('Merchant_money_list')->add_money($this->store['mer_id'],'用户购买'.$now_order['name'].'记入收入',$now_order);
 
 			$this->group_notice($now_order,1);
-			$this->success('修改成功！');
+			$this->success('Success');
 		}else{
 			$this->error('修改失败！请重试。');
 		}
@@ -527,7 +527,7 @@ class StoreAction extends BaseAction{
 		$condition_group_order['order_id'] = $now_order['order_id'];
 		$data_group_order['merchant_remark'] = $_POST['merchant_remark'];
 		if(D('Group_order')->where($condition_group_order)->data($data_group_order)->save()){
-			$this->success('修改成功！');
+			$this->success('Success');
 		}else{
 			$this->error('修改失败！请重试。');
 		}
@@ -4146,7 +4146,7 @@ class StoreAction extends BaseAction{
 			if (D('Shop_order')->where($where)->save($data)) {
 				$phones = explode(' ', $this->store['phone']);
 				D('Shop_order_log')->add_log(array('order_id' => $order_id, 'status' => 30, 'name' => $this->staff_session['name'], 'phone' => $phones[0], 'note' => $change_price));
-				$this->success('修改成功');
+				$this->success('Success');
 			} else {
 				$this->error('修改出错，稍后重试！');
 			}

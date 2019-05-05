@@ -1212,7 +1212,7 @@ class AppointAction extends BaseAction
             $result = $database_merchant_workers->merchant_workers_edit($data, $where);
 
             if ($result) {
-                $this->success('修改成功！');
+                $this->success('Success');
             } else {
                 $this->error('修改失败！');
             }

@@ -215,7 +215,7 @@ class AreaAction extends BaseAction{
 						}
                     }
                 }
-				$this->success('修改成功！');
+				$this->success('Success');
 			}else{
 				$this->error('修改失败！请重试~');
 			}
@@ -399,7 +399,7 @@ class AreaAction extends BaseAction{
 					unset($_POST['pwd']);
 				}
 				$database_area->where(array('id' => $id))->data($_POST)->save();
-				$this->success('修改成功！');
+				$this->success('Success');
 			} else {
 				if (empty($_POST['pwd'])) {
 					$this->error('密码不能为空~');

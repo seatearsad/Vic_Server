@@ -368,7 +368,7 @@ class GiftAction extends BaseAction{
                     $model->sendTempMsg('TM00356', array('href' => $href, 'wecha_id' => $userInfo['openid'], 'first' =>  $this->config['gift_alias_name'].'兑换信息', 'work' => $express_info, 'remark' => '\n请点击查看详细信息！'));
                 }
 
-                $this->success('修改成功！');
+                $this->success('Success');
             }else{
                 $this->error('修改失败！请重试。');
             }

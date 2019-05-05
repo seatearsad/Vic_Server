@@ -165,7 +165,7 @@
         $.post(DeliverListUrl, "supply_id="+supply_id, function(json){
             mark = 0
             if (json.status) {
-                layer.open({title:['抢单提示：','background-color:#FF658E;color:#fff;'],content:'修改成功~',btn: ['确定'],end:function(){location.href = location.href;}});
+                layer.open({title:['抢单提示：','background-color:#FF658E;color:#fff;'],content:'Success',btn: ['确定'],end:function(){location.href = location.href;}});
             } else {
                 layer.open({
                     title: ['抢单提示：', 'background-color:#FF658E;color:#fff;'],

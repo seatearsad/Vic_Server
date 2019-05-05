@@ -367,7 +367,7 @@ class WorkerstaffAction extends BaseAction{
 				
 				
                     if(!$result['error']){
-                        $this->success("更新状态成功");
+                        $this->success("Successful");
                     }else{
                         $this->error("更新状态失败");
                     }
@@ -378,7 +378,7 @@ class WorkerstaffAction extends BaseAction{
                     $result = $database_appoint_order->where(array('order_id'=>$now_supply['order_id']))->data($data_order)->save();
 					
                     if($result){
-                        $this->success("更新状态成功");
+                        $this->success("Successful");
                     }else{
                         $this->error("更新状态失败");
                     }
@@ -522,7 +522,7 @@ class WorkerstaffAction extends BaseAction{
             }
             $insert_id = $database_merchant_workers->where($worker_where)->data($data)->save();
             if($insert_id){
-                $this->success_tips('修改成功！');
+                $this->success_tips('Success');
             }else{
                 $this->error_tips('修改失败！');
             }

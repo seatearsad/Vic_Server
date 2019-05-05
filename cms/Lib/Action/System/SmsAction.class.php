@@ -54,7 +54,7 @@ class SmsAction extends BaseAction
                 $config->where(array('var'=>$key))->data(array('value'=>$val))->save();
             }
 
-            $this->success("修改成功");
+            $this->success("Success");
         } else {
             $data = $config->select();
             $return = array();
@@ -92,7 +92,7 @@ class SmsAction extends BaseAction
                 }
             }
 
-            $this->success("修改成功");
+            $this->success("Success");
         } else {
             $data = $config->select();
             $return = array();
@@ -130,7 +130,7 @@ class SmsAction extends BaseAction
                 }
             }
 
-            $this->success("修改成功");
+            $this->success("Success");
         } else {
             $data = $config->select();
             $return = array();

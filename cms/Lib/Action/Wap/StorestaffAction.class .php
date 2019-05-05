@@ -721,7 +721,7 @@ exit;
             $now_order['verify_all'] = 1;
             $now_order['store_id'] = $this->store['store_id'];
             D('Merchant_money_list')->add_money($this->store['mer_id'], '用户购买' . $now_order['name'] . '记入收入', $now_order);
-            $this->success('修改成功！');
+            $this->success('Success');
         } else {
             $this->error('修改失败！请重试。');
         }
@@ -1484,7 +1484,7 @@ exit;
             $now_order['verify_all'] = 1;
             $now_order['store_id'] = $this->store['store_id'];
             D('Merchant_money_list')->add_money($this->store['mer_id'], '用户购买' . $now_order['name'] . '记入收入', $now_order);
-            $this->success('修改成功！');
+            $this->success('Success');
         } else {
             $this->error('修改失败！请重试。');
         }

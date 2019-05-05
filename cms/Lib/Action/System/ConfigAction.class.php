@@ -91,7 +91,7 @@ class ConfigAction extends BaseAction {
 			unlink('./source/plan/'.$top_domain.'md5.php');
 			unlink('./source/plan/time/'.$top_domain.'process.time');
 			
-			$this->success('修改成功!');
+			$this->success('Success');
 		}else{
 			$this->error('非法提交,请重新提交~');
 		}

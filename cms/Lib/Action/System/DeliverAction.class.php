@@ -94,7 +94,7 @@ class DeliverAction extends BaseAction {
     		}
     		$column['pwd'] = md5($column['pwd']);
     		if (D('Deliver_user')->field(true)->where(array('phone' => $column['phone']))->find()) {
-    			$this->error('该手机号已经是配送员账号了，不能重复申请');
+    			$this->error(L('_BACK_PHONE_ALREADY_'));
     		}
     		$id = D('deliver_user')->data($column)->add();
     		if(!$id){
@@ -157,7 +157,7 @@ class DeliverAction extends BaseAction {
     		}
     		$user = D('Deliver_user')->field(true)->where(array('phone' => $column['phone']))->find();
     		if ($user && $user['uid'] != $uid) {
-    			$this->error('该手机号已经是配送员账号了，不能重复申请');
+    			$this->error(L('_BACK_PHONE_ALREADY_'));
     		}
     		
     		if(D('deliver_user')->where(array('uid'=>$uid))->data($column)->save()){
@@ -168,7 +168,7 @@ class DeliverAction extends BaseAction {
     		        $card['deliver_id'] = $uid;
                     D('Deliver_card')->data($card)->add();
                 }
-    			$this->success('修改成功！');
+    			$this->success('Success');
     		}else{
     			$this->error('修改失败！请检查内容是否有过修改（必须修改）后重试~');
     		}
@@ -434,7 +434,7 @@ class DeliverAction extends BaseAction {
     		if ($supply['status'] > 4) $this->error('配送已完成，不能重新指派了');
     		$uid = isset($_POST['uid']) ? intval($_POST['uid']) : 0;
     		$user = D('Deliver_user')->field(true)->where(array('uid' => $uid, 'group' => 1, 'status' => 1))->find();
-    		if (empty($user)) $this->error('配送员不存在');
+    		if (empty($user)) $this->error('Courier does not exist');
     		$status = $supply['status'] == 1 ? 2 : $supply['status'];
     		$save_data = array('uid' => $uid, 'status' => $status);
 			if ($status == 2) {
@@ -584,7 +584,7 @@ class DeliverAction extends BaseAction {
     	$supply_id = isset($_GET['supply_id']) ? intval($_GET['supply_id']) : 0;
     	$supply = D('Deliver_supply')->field(true)->where(array('supply_id' => $supply_id, 'type' => 0))->find();
     	if (empty($supply)) exit(json_encode(array('error_code' => true, 'msg' => '不存在的数据')));
-    	if ($supply['status'] == 5 || $supply['status'] == 0) exit(json_encode(array('error_code' => false, 'msg' => '修改成功')));
+    	if ($supply['status'] == 5 || $supply['status'] == 0) exit(json_encode(array('error_code' => false, 'msg' => 'Success')));
     	if ($supply['status'] == 1) exit(json_encode(array('error_code' => true, 'msg' => '配送员还未接单，不能修改成已完成')));
     	
     	$columns = array();
@@ -670,7 +670,7 @@ class DeliverAction extends BaseAction {
 	    			D('Deliver_count')->add(array('uid' => $supply['uid'], 'today' => $date, 'num' => $num));
 	    		}
 	    	}
-	    	exit(json_encode(array('error_code' => false, 'msg' => "更新状态成功")));
+	    	exit(json_encode(array('error_code' => false, 'msg' => "Successful")));
     	} else {
     		exit(json_encode(array('error_code' => true, 'msg' => "更新状态失败")));
     	}
@@ -1223,7 +1223,7 @@ class DeliverAction extends BaseAction {
                 }
                 D('deliver_user')->where(array('uid' => $uid))->save($data);
 
-                $this->success('修改成功！');
+                $this->success('Success');
             }elseif ($deliver['reg_status'] == 4){
                 if($_POST['receive'] == 1){
                     $data['reg_status'] = 0;

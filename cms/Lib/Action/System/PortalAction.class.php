@@ -340,7 +340,7 @@ class PortalAction extends BaseAction {
 			$data['enroll_time'] = strtotime($_POST['enroll_time']);
 			$res = D('Portal_activity')->where(array('a_id'=>intval($_POST['a_id'])))->data($data)->save();
 			if($res){
-				$this->frame_submit_tips(1,'修改成功！');
+				$this->frame_submit_tips(1,'Success');
 			}else{
 				$this->frame_submit_tips(0,'修改失败！请重试~');
 			}

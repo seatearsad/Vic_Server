@@ -91,7 +91,7 @@ class WaimaiAction extends BaseAction
             $this->error("修改失败");
         }
 
-        $this->success("修改成功");
+        $this->success("Success");
     }
 
     /**
@@ -398,7 +398,7 @@ class WaimaiAction extends BaseAction
             if (false === $result) {
                 $this->error("修改失败");
             }
-            $this->success("修改成功");
+            $this->success("Success");
         } else {
             $data = D("Waimai_store_category")->find($cat_id);
             $this->assign($data);
@@ -596,7 +596,7 @@ class WaimaiAction extends BaseAction
      		$database_slider_category  = D('waimai_slider_category');
      		$result = $database_slider_category->where(array('cat_id'=>$id))->save($column);
      		if($result){
-     			$this->success('修改成功');
+     			$this->success('Success');
      		}
      		$this->error('修改失败');
      	}else{
@@ -677,7 +677,7 @@ class WaimaiAction extends BaseAction
      		$database_slider_category  = D('waimai_slider_category');
      		$result = $database_slider_category->where(array('cat_id'=>$id))->save($column);
      		if($result){
-     			$this->success('修改成功');
+     			$this->success('Success');
      		}
      		$this->error('修改失败');
      	}else{
@@ -718,7 +718,7 @@ class WaimaiAction extends BaseAction
 				$config->where(array('var'=>$key))->data(array('value'=>$val))->save();
 			}
 
-			$this->success("修改成功");
+			$this->success("Success");
 		} else {
 			$data = $config->select();
 			$return = array();

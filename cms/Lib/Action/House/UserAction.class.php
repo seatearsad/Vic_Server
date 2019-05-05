@@ -335,7 +335,7 @@ class UserAction extends BaseAction
 				$data_vacancy['type'] = 0;
 				//$database_house_village_user_vacancy->where($condition_vacancy)->data($data_vacancy)->save();
 				
-                $this->success('修改成功', U('User/index'));
+                $this->success('Success', U('User/index'));
                 exit;
             }
 

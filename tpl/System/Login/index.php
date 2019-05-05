@@ -1,28 +1,29 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN""http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
-		<title>后台登录 - {pigcms{$config.site_name}</title>
+		<title>{pigcms{:L('_BACK_LOGIN_')} - {pigcms{$config.site_name}</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<link rel="stylesheet" type="text/css" href="{pigcms{$static_path}login/login.css"/>
+        <script type="text/javascript" src="{pigcms{:C('JQUERY_FILE')}"></script>
 	</head>
 	<body>
 		<div id="login">
-			<h1>{pigcms{$config.site_name} - 后台登录</h1>
+			<h1>{pigcms{$config.site_name} - {pigcms{:L('_BACK_LOGIN_')}</h1>
 			<form method="post" id="form">
 				<p>
-					<label>用户名：</label>
+					<label>{pigcms{:L('_BACK_LOGIN_NAME_')}：</label>
 					<input class="text-input" type="text" name="account" id="account" value="{pigcms{$_GET.account}"/>
 				</p>
 				<p>
-					<label>密码：</label>
+					<label>{pigcms{:L('_B_D_LOGIN_KEY1_')}：</label>
 					<input class="text-input" type="password" name="pwd" id="pwd" value="{pigcms{$_GET.pwd}"/>
 				</p>
 				<p>
-					<label>验证码：</label>
+					<label>{pigcms{:L('_BACK_VER_CODE_')}：</label>
 					<input class="text-input" type="text" id="verify" style="width:60px;" maxlength="4" name="verify"/>
 					<span id="verify_box">
-						<img src="{pigcms{:U('Login/verify')}" id="verifyImg" onclick="fleshVerify('{pigcms{:U('Login/verify')}')" title="刷新验证码" alt="刷新验证码"/>
-						<a href="javascript:fleshVerify('{pigcms{:U('Login/verify')}')" id="fleshVerify">刷新验证码</a>
+						<img src="{pigcms{:U('Login/verify')}" id="verifyImg" onclick="fleshVerify('{pigcms{:U('Login/verify')}')" title="{pigcms{:L('_BACK_RE_CODE_')}" alt="{pigcms{:L('_BACK_RE_CODE_')}"/>
+						<a href="javascript:fleshVerify('{pigcms{:U('Login/verify')}')" id="fleshVerify">{pigcms{:L('_BACK_RE_CODE_')}</a>
 					</span>
 					<!--input class="text-input" type="text" id="code" style="width:60px;" maxlength="6" name="code"/>
 					<span id="verify_box">
@@ -30,12 +31,34 @@
 					</span-->
 				</p>
 				<p class="btn_p">
-					<input class="button" type="submit" value="登录后台" style="float:left">
-					<a href="javascript:void(0)" class="scan_login">扫码登录</a>
+					<input class="button" type="submit" value="{pigcms{:L('_B_D_LOGIN_LOGIN1_')}" style="float:left">
+					<!--a href="javascript:void(0)" class="scan_login">扫码登录</a-->
 				</p>
+                <div class="lang_div">
+                    Language
+                    <div class="lang_select">
+                        <div class="lang_en">English</div>
+                        <div class="lang_cn">Chinese</div>
+                    </div>
+                </div>
+
 			</form>	
 		</div>
-		<script type="text/javascript" src="{pigcms{:C('JQUERY_FILE')}"></script>
+        <style>
+            .lang_div{
+                float: right;
+                width: 100px;
+                text-align: center;
+                line-height: 30px;
+                background-color: white;
+            }
+            .lang_select{
+                display: none;
+                margin: 5px 0;
+                cursor: pointer;
+            }
+        </style>
+        <script src="{pigcms{$static_public}js/lang.js"></script>
 		<script src="{pigcms{$static_public}js/artdialog/jquery.artDialog.js"></script>
 		<script src="{pigcms{$static_public}js/artdialog/iframeTools.js"></script>
 		<script type="text/javascript">

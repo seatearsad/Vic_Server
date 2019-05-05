@@ -71,8 +71,8 @@
 			</div>
 			<div id="leftMenuBox">
 				<div id="leftHideBtn">
-					<i class="fa fa-dedent" title="收缩左侧导航"></i>
-					<i class="fa fa-indent" title="展开左侧导航"></i>
+					<i class="fa fa-dedent" title="{pigcms{:L('_BACK_LEFT_MIN_')}"></i>
+					<i class="fa fa-indent" title="{pigcms{:L('_BACK_LEFT_MAX_')}"></i>
 				</div>
 				<div id="leftProfile">
 					<div class="profile-2-wrapper">
@@ -162,8 +162,8 @@
 			</div>
 			<div id="MainBox" >
 				<div class="main_box">
-					<div id="fullscreenBtn" title="全屏显示"><i class="fa fa-expand"></i><i class="fa fa-compress"></i></div>
-					<div id="sx" onclick="main_refresh();" title="刷新框架"></div>
+					<div id="fullscreenBtn" title="{pigcms{:L('_BACK_FULL_SCREEN_')}"><i class="fa fa-expand"></i><i class="fa fa-compress"></i></div>
+					<div id="sx" onclick="main_refresh();" title="{pigcms{:L('_BACK_RE_FRAME_')}"></div>
 					<iframe name="main" id="Main" src="{pigcms{:U('Index/main')}" frameborder="false" scrolling="auto"  width="100%" height="auto" allowtransparency="true"></iframe>
 				</div>
 			</div>

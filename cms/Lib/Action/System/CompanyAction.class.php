@@ -38,7 +38,7 @@ class CompanyAction extends BaseAction{
         $ret = D('Fc_company')->where(array('company_id'=>intval($_POST['company_id'])))->data($data)->save();
 
         if($ret){
-            $this->frame_submit_tips(1,'修改成功！');
+            $this->frame_submit_tips(1,'Success');
         }else{
             $this->frame_submit_tips(0,'修改失败！请重试~');
         }

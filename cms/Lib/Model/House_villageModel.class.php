@@ -128,7 +128,7 @@ class House_villageModel extends Model{
                 return array('status'=>0,'msg'=>$this->getError());
             }else{
                 if($this->where($where)->save()){
-                    return array('status'=>1,'msg'=>'修改成功！');
+                    return array('status'=>1,'msg'=>'Success');
                 }else{
                     return array('status'=>0,'msg'=>'修改失败！');
                 }

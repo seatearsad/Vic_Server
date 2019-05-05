@@ -897,7 +897,7 @@ class WaimaiAction extends BaseAction{
 				$data['group'] = 2;
 				D("Waimai_order_log")->data($data)->add();
 			}
-			$this->success('修改成功');
+			$this->success('Success');
 		} else {
 			$this->error('修改失败');
 		}

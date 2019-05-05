@@ -577,7 +577,7 @@ class ShopAction extends BaseAction
 
             ////////
             if ($shop_order->where("order_id=$order_id")->data($data)->save()){
-                $this->success('修改成功！');
+                $this->success('Success');
             }else{
                 $this->error('修改失败！请检查内容是否有过修改（必须修改）后重试~');
             }

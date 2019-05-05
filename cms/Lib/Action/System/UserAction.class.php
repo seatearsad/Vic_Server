@@ -375,7 +375,7 @@ class UserAction extends BaseAction {
                 if (!empty($_POST['set_score'])) {
                     D('User_score_list')->add_row($now_user['uid'], $_POST['set_score_type'], $_POST['set_score'], '管理员后台操作', false,0,0,true);
                 }
-                $this->success('修改成功！');
+                $this->success('Success');
             } else {
                 $this->error('修改失败！请重试。');
             }

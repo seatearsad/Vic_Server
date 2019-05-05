@@ -431,7 +431,7 @@ class IndexAction extends BaseAction {
         $condition_group_order['order_id'] = $now_order['order_id'];
         $data_group_order['store_id'] = $_POST['store_id'];
         if (D('Group_order')->where($condition_group_order)->data($data_group_order)->save()) {
-            $this->success_tips('修改成功！');
+            $this->success_tips('Success');
         } else {
             $this->error_tips('修改失败！请重试。');
         }
@@ -448,7 +448,7 @@ class IndexAction extends BaseAction {
         $condition_group_order['order_id'] = $now_order['order_id'];
         $data_group_order['merchant_remark'] = $_POST['merchant_remark'];
         if (D('Group_order')->where($condition_group_order)->data($data_group_order)->save()) {
-            $this->success_tips('修改成功！');
+            $this->success_tips('Success');
         } else {
             $this->error_tips('修改失败！请重试。');
         }
@@ -837,7 +837,7 @@ class IndexAction extends BaseAction {
             $_POST['mer_id'] = $this->merchant_session['mer_id'];
             if ($id > 0) {
                 $tmpid = $mpackageDb->where(array('id' => $id))->save($_POST);
-                $this->success_tips('修改成功！', U('Index/gpro'));
+                $this->success_tips('Success', U('Index/gpro'));
                 exit();
             } else {
                 $tmpid = $mpackageDb->add($_POST);
@@ -960,7 +960,7 @@ class IndexAction extends BaseAction {
                 if (($store_id > 0) && ($goods_id > 0)) {
                     unset($_POST['store_id']);
                     if ($database_foodshop_goods->where(array('goods_id' => $goods_id, 'store_id' => $store_id))->save($_POST)) {
-                        $this->success_tips('修改成功', U('Index/mpro'));
+                        $this->success_tips('Success', U('Index/mpro'));
                     } else {
                         $this->error_tips('修改失败！');
                     }
@@ -1934,7 +1934,7 @@ class IndexAction extends BaseAction {
             if ($sql == false) {
                 exit(json_encode(array('error' => '2', 'msg' => '修改失败')));
             } else {
-                exit(json_encode(array('error' => '0', 'msg' => '修改成功')));
+                exit(json_encode(array('error' => '0', 'msg' => 'Success')));
             }
         } else {
             $id = $this->_get('staff_id', 'intval');

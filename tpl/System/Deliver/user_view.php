@@ -21,7 +21,7 @@
                 </td>
             </tr>
 			<tr>
-				<th width="15%">{pigcms{:L('_MERCHANT_PASSWORD_')}</th>
+				<th width="15%">{pigcms{:L('_B_D_LOGIN_KEY1_')}</th>
 				<td width="35%"><input type="text" class="input fl" name="pwd" size="20" value="" tips="不修改则不填写" /></td>
 				<th width="15%">{pigcms{:L('_BACK_STATUS_')}</th>
 				<td width="35%" class="radio_box">
@@ -58,7 +58,7 @@
                 </td>
             </tr>
             <tr>
-                <th width="15%">银行卡</th>
+                <th width="15%">{pigcms{:L('_BACK_BANK_INFO_')}</th>
                 <td colspan=3>
                     <input type="text" placeholder="Account Holder Name" class="input fl" name="ahname" size="30" validate="maxlength:50,required:true" value="{pigcms{$card.ahname}" />
                 </td>

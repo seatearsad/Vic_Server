@@ -79,7 +79,7 @@ class BusAction extends BaseAction{
     		}
 
     	if($ret){
-			$this->frame_submit_tips(1,'修改成功');
+			$this->frame_submit_tips(1,'Success');
 		}else{
 			$this->frame_submit_tips(0,'修改失败！请重试~');
 		}
@@ -156,7 +156,7 @@ class BusAction extends BaseAction{
 		$ret = D('Fc_bus_station')->where(array('station_id'=>$_POST['station_id']))->data($data)->save();
 
     	if($ret){
-			$this->frame_submit_tips(1,'修改成功');
+			$this->frame_submit_tips(1,'Success');
 		}else{
 			$this->frame_submit_tips(0,'修改失败！请重试~');
 		}

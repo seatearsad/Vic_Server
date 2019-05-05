@@ -215,7 +215,7 @@ class MerchantAction extends BaseAction{
 					}
 				}
 			}
-			$this->success('修改成功！');
+			$this->success('Success');
 // 			}else{
 // 				$this->error('修改失败！请检查内容是否有过修改（必须修改）后重试~');
 // 			}
@@ -387,7 +387,7 @@ class MerchantAction extends BaseAction{
             $_POST['area_id'] = 0;
 			$database_merchant_store = D('Merchant_store');
 			if($database_merchant_store->data($_POST)->save()){
-				$this->success('修改成功！');
+				$this->success('Success');
 			}else{
 				$this->error('修改失败！请检查内容是否有过修改（必须修改）后重试~');
 			}

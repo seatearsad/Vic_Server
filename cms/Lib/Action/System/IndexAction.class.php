@@ -814,7 +814,7 @@ class IndexAction extends BaseAction {
                     unset($_POST['pwd']);
                 }
                 $database_area->where(array('id' => $id))->data($_POST)->save();
-                $this->success('修改成功！');
+                $this->success('Success');
             } else {
             	//$_POST['level'] = 0;
                 if (empty($_POST['pwd'])) {

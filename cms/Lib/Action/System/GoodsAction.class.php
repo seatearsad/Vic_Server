@@ -253,7 +253,7 @@ class GoodsAction extends BaseAction
 			}
 			if ($id) {
 				if (M('Goods_properties_value')->where(array('id' => $id))->save(array('pid' => $pid, 'name' => $name))) {
-					$this->success('修改成功！');
+					$this->success('Success');
 				} else {
 					$this->error('修改失败！请重试~');
 				}

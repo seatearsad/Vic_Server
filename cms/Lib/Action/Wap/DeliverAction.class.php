@@ -540,7 +540,7 @@ class DeliverAction extends BaseAction
 				}
 				D('Shop_order_log')->add_log(array('order_id' => $order_id, 'status' => 4, 'name' => $this->deliver_session['name'], 'phone' => $this->deliver_session['phone']));
 			}
-			$this->success("更新状态成功");
+			$this->success("Successful");
 			exit;
 		}
 		$where = array();
@@ -701,7 +701,7 @@ class DeliverAction extends BaseAction
                 D('Deliver_route')->add($data);
             }
 
-			$this->success("更新状态成功");
+			$this->success("Successful");
 			exit;
 		}
 		$where = array();
@@ -943,7 +943,7 @@ class DeliverAction extends BaseAction
                 }
             }
 
-			$this->success("更新状态成功");
+			$this->success("Successful");
 			exit;
 		}
 		$where = array();

@@ -328,7 +328,7 @@ class CardAction extends BaseAction
 				$_POST['end'] 	= strtotime($this->_post('end','trim'));
 				$where 	= array('token'=>$this->token,'cardid'=>$cardid,'id'=>$this->_post('gid','intval'));		
 				D('Member_card_gifts')->where($where)->save($_POST);
-				$this->success('修改成功',U('Card/gifts',array('token'=>$this->token,'id'=>$cardid)));
+				$this->success('Success',U('Card/gifts',array('token'=>$this->token,'id'=>$cardid)));
 			}else{
 				$this->error(D('Member_card_gifts')->getError());
 			}

@@ -46,7 +46,7 @@ class SearchhotAction extends BaseAction{
 			$database_search_hot = D('Search_hot');
 			if($database_search_hot->data($_POST)->save()){
 				S('search_hot_list',NULL);
-				$this->success('修改成功！');
+				$this->success('Success');
 			}else{
 				$this->error('修改失败！请重试~');
 			}

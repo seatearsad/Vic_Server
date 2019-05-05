@@ -989,7 +989,7 @@ class ConfigAction extends BaseAction{
 			$data['store_id'] = $now_store['store_id'];
 			$data['name'] = $name;
 			if ($database_pay->data($data)->save()) {
-				$this->success('修改成功！！', U('Config/pay', array('store_id' => $now_store['store_id'])));
+				$this->success('Success', U('Config/pay', array('store_id' => $now_store['store_id'])));
 				exit;
 			} else {
 				$this->error('修改失败！！请重试。', U('Config/pay', array('store_id' => $now_store['store_id'])));

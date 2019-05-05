@@ -116,7 +116,7 @@ class SchoolAction extends BaseAction{
                 D('Fc_school_trait_middle')->data(array('school_id'=>$_POST['school_id'],'trait_id'=>$v))->add();
             }
 
-            $this->frame_submit_tips(1,'修改成功');
+            $this->frame_submit_tips(1,'Success');
         }else{
             $this->frame_submit_tips(0,'修改失败！请重试~');
         }
@@ -158,7 +158,7 @@ class SchoolAction extends BaseAction{
         }
   
         if($count == $i){
-            $this->frame_submit_tips(1,'修改成功');
+            $this->frame_submit_tips(1,'Success');
         }else{
             $this->frame_submit_tips(0,'修改失败！请重试~');
         }

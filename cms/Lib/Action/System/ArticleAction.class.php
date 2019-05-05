@@ -85,7 +85,7 @@ class ArticleAction extends BaseAction {
         $result = D('Fc_article_category')->where(array('id'=>$id))->data($data)->save();
 
         if($result){
-            $this->frame_submit_tips(1,'修改成功！');
+            $this->frame_submit_tips(1,'Success');
         }else{
             $this->frame_submit_tips(0,'修改失败！请重试~');
         }

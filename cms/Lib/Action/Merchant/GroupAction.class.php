@@ -1462,7 +1462,7 @@ class GroupAction extends BaseAction {
         $condition_group_order['order_id'] = $now_order['order_id'];
         $data_group_order['store_id'] = $_POST['store_id'];
         if (D('Group_order')->where($condition_group_order)->data($data_group_order)->save()) {
-            $this->success('修改成功！');
+            $this->success('Success');
         } else {
             $this->error('修改失败！请重试。');
         }
@@ -1479,7 +1479,7 @@ class GroupAction extends BaseAction {
         $condition_group_order['order_id'] = $now_order['order_id'];
         $data_group_order['merchant_remark'] = $_POST['merchant_remark'];
         if (D('Group_order')->where($condition_group_order)->data($data_group_order)->save()) {
-            $this->success('修改成功！');
+            $this->success('Success');
         } else {
             $this->error('修改失败！请重试。');
         }
@@ -1521,7 +1521,7 @@ class GroupAction extends BaseAction {
             $_POST['mer_id'] = $this->merchant_session['mer_id'];
             if ($id > 0) {
                 $tmpid = $mpackageDb->where(array('id' => $id))->save($_POST);
-                $this->success('修改成功！', U('Group/mpackage'));
+                $this->success('Success', U('Group/mpackage'));
                 exit();
             } else {
                 $tmpid = $mpackageDb->add($_POST);

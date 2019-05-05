@@ -281,7 +281,7 @@ class FrontmanagAction extends BaseAction {
 		}else{
 		   $Db_navset->add(array('navid' => $navid, 'mer_id' => $this->mer_id, 'isshow' => 1,'zhname' => $navm));
 		}
-		$this->dexit(array('error' => 0, 'msg' => '修改成功'));
+		$this->dexit(array('error' => 0, 'msg' => 'Success'));
 	}
     public function save_pic() {
         $cyid = intval($_POST['cyid']);

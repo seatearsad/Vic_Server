@@ -85,7 +85,7 @@ class DeliverAction extends BaseAction {
     		}
     		$column['pwd'] = md5($column['pwd']);
     		if (D('Deliver_user')->field(true)->where(array('phone' => $column['phone']))->find()) {
-    			$this->error('该手机号已经是配送员账号了，不能重复申请');
+    			$this->error(L('_BACK_PHONE_ALREADY_'));
     		}
     		$id = D('Deliver_user')->data($column)->add();
     		
@@ -141,11 +141,11 @@ class DeliverAction extends BaseAction {
     		}
     		$user = D('Deliver_user')->field(true)->where(array('phone' => $column['phone']))->find();
     		if ($user && $user['uid'] != $uid) {
-    			$this->error('该手机号已经是配送员账号了，不能重复申请');
+    			$this->error(L('_BACK_PHONE_ALREADY_'));
     		}
     		
     		if(D('deliver_user')->where(array('uid'=>$uid,'mer_id'=>$mer_id))->data($column)->save()){
-    			$this->success('修改成功！');
+    			$this->success('Success');
     		}else{
     			$this->error('修改失败！请检查内容是否有过修改（必须修改）后重试~');
     		}

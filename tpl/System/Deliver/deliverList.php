@@ -163,7 +163,7 @@
 			var supply_id = $(this).attr('data-supply'), obj = $(this);
 			window.top.art.dialog({
 				lock: true,
-				content: '您确定要将该配送订单修改成配送完成吗？修改后相应的订单状态变成已消费！',
+				content: "{pigcms{:L('_BACK_SURE_CHANGE_')}",
 				ok: function(){
 					$.get("{pigcms{:U('Deliver/change')}", {supply_id:supply_id}, function(response){
 						if (response.error_code) {

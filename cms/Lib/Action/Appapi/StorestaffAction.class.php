@@ -4263,7 +4263,7 @@ class StorestaffAction extends BaseAction{
 		if (D('Shop_order')->where($where)->save($data)) {
 			$phones = explode(' ', $this->staff_session['phone']);
 			D('Shop_order_log')->add_log(array('order_id' => $order_id, 'status' => 30, 'name' => $this->staff_session['name'], 'phone' => $phones[0], 'note' => $change_price));
-			$this->returnCode(0,'修改成功');
+			$this->returnCode(0,'Success');
 		} else {
 			$this->returnCode(1000,array(),'修改出错，稍后重试！');
 		}

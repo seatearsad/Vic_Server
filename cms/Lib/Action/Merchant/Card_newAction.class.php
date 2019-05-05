@@ -192,7 +192,7 @@ class Card_newAction extends BaseAction
                         $data_score['desc'] = '商家后台操作'.$des.'积分';
                         D('Card_new')->add_row($data_score);
                     }
-                    $this->success('修改成功！');
+                    $this->success('Success');
                 } else {
 
                     $this->error('修改失败！请重试。');

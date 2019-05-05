@@ -58,7 +58,7 @@ class IndexAction extends BaseAction{
 			$_SESSION['house']['has_service_slide'] = $_POST['has_service_slide'];
     		$result = D('House_village')->where($condition_village)->data($_POST)->save();
     		if($result !== false){
-    			$this->success('修改成功！');
+    			$this->success('Success');
     		}else{
     			$this->error('修改失败！请重试。');
     		}

@@ -157,7 +157,7 @@ class Appoint_categoryModel extends Model{
 
             $insert_id = $this->where($where)->data($data)->save();
             if($insert_id){
-                return array('status'=>1,'msg'=>'修改成功！');
+                return array('status'=>1,'msg'=>'Success');
             }else{
                 return array('status'=>0,'msg'=>'修改失败！');
             }

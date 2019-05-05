@@ -541,7 +541,7 @@ $(function(){
 						kind_editor.sync();
 					}
 					if($(form).attr('frame') == 'true' || $(form).attr('refresh') == 'true'){
-						window.top.msg(2,'表单提交中，请稍等...',true,360);
+						window.top.msg(2,'Submitting, please wait a moment.',true,360);
 						$.post($(form).attr('action'),$(form).serialize(),function(result){
 							if(result.status == 1){
 								if($(form).data('call_fun')){
@@ -559,7 +559,7 @@ $(function(){
 						});
 						return false;
 					}else{
-						window.top.msg(2,'表单提交中，请稍等...',true,360);
+						window.top.msg(2,'Submitting, please wait a moment.',true,360);
 						form.submit();
 					}
 				}

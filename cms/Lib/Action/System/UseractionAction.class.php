@@ -81,7 +81,7 @@ class UseractionAction extends BaseAction{
             if($database_action->data($_POST)->save()){
                 import('ORG.Util.Dir');
                 Dir::delDirnotself('./runtime');
-                $this->success('修改成功！');
+                $this->success('Success');
             }else{
                 $this->error('修改失败！请重试~');
             }

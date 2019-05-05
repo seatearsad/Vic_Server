@@ -350,7 +350,7 @@ function relationList($cid=1){
 		if(IS_POST){
 		$data=array('nickName'=>I('nickName'),'gender'=>I('gender'),'province'=>I('province'),'city'=>I('city'),'phone'=>I('phone'),'content'=>I('content'),'date'=>I('date'));
          if(M('circle_user')->where(array('id'=>I('id')))->save($data)){
-         	$this->success('修改成功');
+         	$this->success('Success');
          }else{
          	$this->error('修改失败');
          }
@@ -390,7 +390,7 @@ function modifyCollection(){
         $data['status']=I('post.status');
         $res=M('circle_collection')->where($where)->save($data);
 	        if($res){
-	        	$this->success('修改成功');
+	        	$this->success('Success');
 	        }else{
 	        	$this->error('修改失败');
 	        }
@@ -525,7 +525,7 @@ function addcomment(){
         $data['status']=I('post.status');
         $res=M('circle_relation')->where($where)->save($data);
 	        if($res){
-	        	$this->success('修改成功');
+	        	$this->success('Success');
 	        }else{
 	        	$this->error('修改失败');
 	        }

@@ -246,7 +246,7 @@ class VillageAction extends BaseAction
 
         $ret = D('Fc_village_img')->where(array('img_id'=>$data['img_id']))->data($data)->save();
         if($ret){
-            $this->frame_submit_tips(1,'修改成功！');
+            $this->frame_submit_tips(1,'Success');
         } else {
             $this->frame_submit_tips(0,'修改失败！请重试~');
         }
@@ -291,7 +291,7 @@ class VillageAction extends BaseAction
         }
 
         if($ret){
-            $this->frame_submit_tips(1,'修改成功！');
+            $this->frame_submit_tips(1,'Success');
         } else {
             $this->frame_submit_tips(0,'修改失败！请重试~');
         }
