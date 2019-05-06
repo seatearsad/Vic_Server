@@ -85,18 +85,19 @@ cursor: pointer;
 				<tr>
 					<td>Customer Phone Number：<a href="tel:{pigcms{$order.userphone}" class="totel">{pigcms{$order.userphone}</a></td>
 				</tr>
-				<tr>
+				<!--tr>
 					<td>Order Time： {pigcms{$order.create_time|date="Y-m-d H:i:s",###}</td>
-				</tr>
+				</tr-->
 				<tr>
 					<td>Payment Time：{pigcms{$order['pay_time']|date="Y-m-d H:i:s",###} </td>
 				</tr>
                 <tr>
-                    <td>Order prepared by：{pigcms{$supply['dining_time']} mins </td>
+                    <td>Food Preparation Time：{pigcms{$supply['dining_time']} mins </td>
                 </tr>
                 <if condition="$order['expect_use_time']">
 				<tr>
-					<td>Time of arrival：{pigcms{$order['expect_use_time']|date="Y-m-d H:i:s",###}</td>
+					<!--td>Scheduled Delivery：{pigcms{$order['expect_use_time']|date="Y-m-d H:i:s",###}</td-->
+                    <td>Scheduled Delivery：ASAP</td>
 				</tr>
 				</if>
 				<if condition="$order['is_pick_in_store'] eq 2">
@@ -104,163 +105,34 @@ cursor: pointer;
 					<td>Pick up address：{pigcms{$order['address']}</td>
 				</tr>
 				<else />
-				<tr>
+				<!--tr>
 					<td>Customer Address：{pigcms{$order['address']}</td>
-				</tr>
+				</tr-->
 				</if>
 				<!--tr>
 					<td>Delivery Method：{pigcms{$order['deliver_str']}</td>
-				</tr-->
-				<tr>
-					<td>Delivery Method：{pigcms{$order['deliver_status_str']}</td>
 				</tr>
 				<tr>
-					<td>Customer Comment： <b style="color:red">{pigcms{$order.desc|default='No'}</b</td>
+					<td>Delivery Method：{pigcms{$order['deliver_status_str']}</td>
+				</tr-->
+				<tr>
+					<td>Customer Comment： <if condition="$order['desc'] eq ''">N/A<else /><b style="color:#ffa52d">{pigcms{$order.desc}</b></if></td>
 				</tr>
 				
 				<if condition="$order['invoice_head']">
-				<tr>
+				<!--tr>
 					<td>invoice:{pigcms{$order['invoice_head']}</td>
-				</tr>
+				</tr-->
 				</if>
-				<tr>
+				<!--tr>
 				  <td>Payment status：{pigcms{$order['pay_status']}</td>
 				</tr>
 				<tr>
 				  <td>Payment Types： {pigcms{$order.pay_type_str}</td>
-				</tr>
+				</tr-->
 				<tr>
-					<td>Oder Status：{pigcms{$order['status_str']}</td>
+					<td>Order Status：{pigcms{$order['status_str']}</td>
 				</tr>
-				<if condition="$order['score_used_count']">
-				<tr>
-					<td>Use{pigcms{$config.score_name}：{pigcms{$order['score_used_count']} </td>
-				</tr>
-				<tr>
-					<td>{pigcms{$config.score_name}Cash Out：${pigcms{$order['score_deducte']|floatval} </td>
-				</tr>
-				</if>
-				
-				<if condition="$order['merchant_balance'] gt 0">
-				<tr>
-					<td>Merchant Balance：${pigcms{$order['merchant_balance']|floatval} </td>
-				</tr>
-				</if>
-				<if condition="$order['balance_pay'] gt 0">
-				<tr>
-					<td>Contracter Balance：${pigcms{$order['balance_pay']|floatval} </td>
-				</tr>
-				</if>
-				<if condition="$order['payment_money'] gt 0">
-				<tr>
-					<td>Online Payment：${pigcms{$order['payment_money']|floatval} </td>
-				</tr>
-				</if>
-				<if condition="$order['card_id']">
-				<tr>
-					<td>Store coupon amount：${pigcms{$order['card_price']} </td>
-				</tr>
-				</if>
-				<if condition="$order['coupon_id']">
-				<tr>
-					<td>Contracter coupon amount：${pigcms{$order['coupon_price']} </td>
-				</tr>
-				</if>
-				<if condition="$order['card_give_money'] gt 0">
-				<tr>
-					<td>Membership card balance：${pigcms{$order['card_give_money']|floatval} </td>
-				</tr>
-				</if>
-				<if condition="$order['card_discount'] neq 0 AND $order['card_discount'] neq 10">
-				<tr>
-					<td>Membership card：{pigcms{$order['card_discount']|floatval} % of Discount</td>
-				</tr>
-				</if>
-				<tr>
-					<td>Sub total：${pigcms{$order['offline_price']|floatval}</td>
-				</tr>
-				<if condition="!empty($order['use_time'])">		
-					<tr>
-						<td>Operating clerk：<span class="totel">{pigcms{$order.last_staff}</span> </td>
-					</tr>
-					<tr>
-						<td>Operating Time： {pigcms{$order.use_time|date='Y-m-d H:i:s',###}</td>
-					</tr>
-				</if>
-				<if condition="$order['paid'] eq 0">
-					<tr id="xfstatus">
-						<form enctype="multipart/form-data" method="post" action="{pigcms{:U('Storestaff/deliver_goods')}">
-							<td>Order Status：<span class="red">Not Paid</span>	
-								<div>
-									<input name="status" value="5" type="hidden" />
-									<input name="order_id" value="{pigcms{$order['order_id']}" type="hidden" />
-									<button id="merchant_remark_btn" class="submit" style="padding: 5px;margin: 12px auto;margin-top: 25px;background-color:#FF658E;border:1px solid #FF658E">Cancle order</button>
-								</div>
-							</td>
-						</form>
-					</tr>
-				<elseif condition="$order['is_pick_in_store'] eq 3" />
-					<form enctype="multipart/form-data" method="post" action="">
-					<input name="order_id" value="{pigcms{$order['order_id']}" type="hidden">
-					<input name="status" value="2" type="hidden" />
-					<!--tr>
-						<td>Order Status：
-						<select id="status" class="dropdown_select" >
-						 	<option value="0" <if condition="$order['status'] eq 0">selected</if>>Not Confirmed</option>
-						 	<option value="1" <if condition="$order['status'] eq 1">selected</if>>Confirm</option>
-						 	<option value="2" <if condition="$order['status'] eq 2">selected</if>>Consumed</option>
-						 	<option value="3" <if condition="$order['status'] eq 3">selected</if> disabled>Has been evaluated</option>
-						 	<option value="4" <if condition="$order['status'] eq 4">selected</if>>Refuned</option>
-						 	<option value="5" <if condition="$order['status'] eq 5">selected</if>>Cancled</option>
-						</select>
-						</td>
-					</tr-->
-					<tr>
-						<td>Delivery Company：<select name="express_id" class="dropdown_select" ><volist name="express_list" id="vo"><option value="{pigcms{$vo.id}" <if condition="$vo['id'] eq $order['express_id']">selected</if>>{pigcms{$vo.name}</option></volist></select></td>
-					</tr>
-					<tr>
-						<td>Tracking Number：<input name="express_number" value="{pigcms{$order['express_number']}" type="text" class="px" placeholder="Fill in Tracking Number"></td>
-					</tr>
-					<tr>
-						<td><button id="merchant_remark_btn" class="submit" style="padding: 5px;margin: 12px auto;margin-top: 25px;background-color:#FF658E;border:1px solid #FF658E">Send delivery</button></td>
-					</tr>
-					</form>
-				<elseif condition="$order['status'] eq 7" />
-					<tr id="xfstatus">
-						<form enctype="multipart/form-data" method="post" action="{pigcms{:U('Storestaff/deliver_goods')}">
-							<td>Order Status：<span class="red">To be delivered</span>	
-								<div>
-								<input name="status" value="8" type="hidden" />
-								<input name="order_id" value="{pigcms{$order['order_id']}" type="hidden" />
-								<button id="merchant_remark_btn" class="submit" style="padding: 5px;margin: 12px auto;margin-top: 25px;background-color:#FF658E;border:1px solid #FF658E">Shipped</button>
-								</div>
-							</td>
-						</form>
-					</tr>
-				<elseif condition="!in_array($order['status'], array(2,3,4,5)) AND $sure"/>
-					<tr id="xfstatus">
-						<form enctype="multipart/form-data" method="post" action="">
-							<td>Order Status：<span class="red">Incomplete</span>
-<!--								<div>-->
-<!--									<input name="status" value="2" type="hidden">-->
-<!--									<input name="order_id" value="{pigcms{$order['order_id']}" type="hidden">-->
-<!--									<button id="merchant_remark_btn" class="submit" style="padding: 5px;margin: 12px auto;margin-top: 25px;background-color:#FF658E;border:1px solid #FF658E">Confirm consumption</button>-->
-<!--									<span class="form_tips" style="color: red">-->
-<!--									Note：Into the state of consumption has been the same time if the state is not payment is modified to pay the line has been paid, the state can not be modified after the amendment	-->
-<!--									</span>-->
-<!--								</div>-->
-							</td>
-						</form>
-					</tr>
-				<elseif condition="$order['status'] eq 3 OR $order['status'] eq 2" />
-					<tr>
-						<td>Order Status：<span class="green"> Has been consumed</span></td>
-					</tr>
-				<elseif condition="empty($sure)" />
-					<tr>
-						<td>Order Status：<span class="green">Confirmed</span></td>
-					</tr>
-				</if>
 			</tbody>
 		</table>
 		<if condition="$order['cue_field']">
@@ -279,7 +151,7 @@ cursor: pointer;
 		</table>
 		</if>
 	</ul>
-	<a href="{pigcms{:U('Storestaff/shop_list')}" class="btn" style="background-color:#ffa64d;float:right;right:1rem;top:0.2rem;position:absolute;width:5rem;font-size:1rem;">back</a>
+	<!--a href="{pigcms{:U('Storestaff/shop_list')}" class="btn" style="background-color:#ffa64d;float:right;right:1rem;top:0.2rem;position:absolute;width:5rem;font-size:1rem;">back</a-->
     <if condition="$deliver">
         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&libraries=places&language=en"></script>
         <div style="margin-left: 10px">{pigcms{$deliver.name}({pigcms{$deliver.phone})</div>
@@ -336,9 +208,9 @@ cursor: pointer;
 				</tr>
 				<volist name="order['info']" id="info">
 				<tr>
-					<td style="color: blue">{pigcms{$info['name']} </td>
+					<td>{pigcms{$info['name']} </td>
 					<td class="cc">{pigcms{$info['price']|floatval}</td>
-					<td class="cc" style="color: blue">{pigcms{$info['num']} <span style="color: gray; font-size:10px">({pigcms{$info['unit']})</span></td>
+                    <td class="cc" <if condition="$info['num'] gt 1">style="color: #ffa52d"</if>>{pigcms{$info['num']} <span style="color: gray; font-size:10px">({pigcms{$info['unit']})</span></td>
 					<td class="rr">{pigcms{$info['spec']}</td>
 				</tr>
 				</volist>
@@ -359,7 +231,7 @@ cursor: pointer;
                     <td>Tax</td>
                     <td class="cc"></td>
                     <td class="cc"></td>
-                    <td class="rr">${pigcms{$order['tax_price']|floatval}</td>
+                    <td class="rr">${pigcms{:round($order['tax_price'],2)}</td>
                 </tr>
                 <if condition="$order['deposit_price'] gt 0">
                     <tr>
@@ -386,34 +258,34 @@ cursor: pointer;
 				</tr>
 				</if>
                 <if condition="$order['tip_charge'] gt 0">
-                    <tr>
+                    <!--tr>
                         <td>Tip</td>
                         <td class="cc"></td>
                         <td class="cc"></td>
                         <td class="rr">${pigcms{$order['tip_charge']|floatval}</td>
-                    </tr>
+                    </tr-->
                 </if>
-				<tr>
+				<!--tr>
 					<td>Merchant Discount</td>
 					<td class="cc"></td>
 					<td class="cc"></td>
 					<td class="rr"><span class="price">${pigcms{$order['merchant_reduce']|floatval}</span></td>
-				</tr>
+				</!--tr>
 				<tr>
 					<td>Tutti Coupon</td>
 					<td class="cc"></td>
 					<td class="cc"></td>
 					<td class="rr"><span class="price">${pigcms{$order['balance_reduce']|floatval}</span></td>
-				</tr>
+				</tr-->
 				<tr>
 					<td>Total</td>
 					<td class="cc"></td>
 					<td class="cc"></td>
-					<td class="rr"><span class="price">${pigcms{$order['price']+$order['tip_charge']|floatval}</span></td>
+					<td class="rr"><span class="price" style="color: #ffa52d">${pigcms{$order['price']+$order['tip_charge']|floatval}</span></td>
 				</tr>
                 <if condition="$order['paid'] eq 1 and $order['status'] eq 0">
                     <tr>
-                        <td>Estimated Time</td>
+                        <td>Food Preparation</td>
                         <td class="cc">
                             <input type="text" name="dining_time" pattern="^[0-9]*$" data-err="Error" style="height: 2rem" value="20">
                         </td>
