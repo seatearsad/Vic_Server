@@ -356,6 +356,8 @@ final class Sms {
 
         $url = 'https://fcm.googleapis.com/fcm/send';
         $data['to'] = $device_id;
+        //"priority": "high"
+        $data['priority'] = 'high';
         $data['data'] = array('message'=>'Message From Tutti');
         $data['notification'] = array('title'=>'Tutti','body'=>$message,"sound"=>"default");
 
