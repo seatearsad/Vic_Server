@@ -12,9 +12,9 @@ class StoreModel extends Model
     {
         $where = array('store_id' => $store_id);
         $now_store = D('Merchant_store')->field(true)->where($where)->find();
-        if ($now_store['status'] != 1) {
-            return null;
-        }
+//        if ($now_store['status'] != 1) {
+//            return null;
+//        }
         //资质认证
         if ($this->config['store_shop_auth'] == 1 && $now_store['auth'] < 3) {
             return null;
@@ -392,7 +392,7 @@ class StoreModel extends Model
             $returnList[$k]['price'] = $v['price'];
             $returnList[$k]['market_price'] = $v['old_price'];
             $returnList[$k]['desc'] = $v['des'];
-            $returnList[$k]['stock'] = 10000;//库存
+            $returnList[$k]['stock'] = $v['stock_num'] == -1 ? 10000 : $v['stock_num'];//10000;//库存
             $tmp_pic_arr = explode(';', $v['image']);
             if ($tmp_pic_arr[0] != '')
                 $returnList[$k]['default_image'] = $goods_image_class->get_image_by_path($tmp_pic_arr[0])['image'];
