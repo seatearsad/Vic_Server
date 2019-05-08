@@ -268,8 +268,8 @@ final class Sms {
 				'nationcode' => $nationcode
 			],
 			'time' => $random,
-			'tpl_id' => $data['tplid']
-            //'sign'  =>  'Island Life'//garfunkel 短信签名
+			'tpl_id' => $data['tplid'],
+            'sign'  =>  'Tutti'//garfunkel 短信签名
 		];
 		$newdata['sig'] = hash('sha256', "appkey=$appkey&random=$random&time={$random}&mobile=".$data['mobile']);
 
