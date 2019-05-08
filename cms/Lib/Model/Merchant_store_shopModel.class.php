@@ -65,7 +65,7 @@ class Merchant_store_shopModel extends Model
 
 
 		$condition_field = 's.*, m.*,mm.isverify';
-		$order = '';
+		$order = 's.store_is_close ASC,';
 		$time = date('H:i:s');
 
 

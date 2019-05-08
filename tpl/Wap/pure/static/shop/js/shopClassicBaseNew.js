@@ -1105,7 +1105,8 @@ function showShop(shopId){
         });
 
         $(document).on('click','#shopDetailPageLabel li',function(event){
-            var maxSize = $(this).closest('.row').data('num');
+            //var maxSize = $(this).closest('.row').data('num');
+            var maxSize = $(this).data('num');
             if(maxSize == 1){
                 $(this).addClass('active').siblings('li').removeClass('active');
             }else if(!$(this).hasClass('active')){

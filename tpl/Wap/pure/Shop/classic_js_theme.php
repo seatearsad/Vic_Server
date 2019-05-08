@@ -349,7 +349,7 @@
 			<div class="right fl">
 				<ul>
 					{{# var k = 0; for(var j in d[i].val){ }}
-						<li class="fl {{# if(k == 0 && d[i].num == 1){ }}active{{# } }}" data-label_list_id="{{ i }}" data-label_id="{{ j }}">{{ d[i].val[j] }}</li>
+						<li class="fl {{# if(k == 0 && d[i].num == 1){ }}active{{# } }}" data-num="{{ d[i].num }}" data-label_list_id="{{ i }}" data-label_id="{{ j }}">{{ d[i].val[j] }}</li>
 					{{#  k++; } }}
 				</ul>
 			</div>
