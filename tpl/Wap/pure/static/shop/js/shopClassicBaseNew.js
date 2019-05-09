@@ -902,7 +902,7 @@ function showGood(shop_id,product_id){
             }else{
                 $('#shopDetailPageContent').hide();
             }
-            $('#shopDetailPagePrice').html('$'+result.price+(result.extra_pay_price>0?'+'+result.extra_pay_price+result.extra_pay_price_name:'')+'<span class="unit"><em>/ </em>'+result.unit+'</span>'+(result.stock_num != -1 ? '<span data-stock="'+result.stock_num+'">Stock:'+result.stock_num+'</span>' : '<span data-stock="-1"></span>') + (result.deposit_price > 0 ? '<span>(Deposit:$'+ result.deposit_price +')</span>' : ''));
+            $('#shopDetailPagePrice').html('$'+result.price+(result.extra_pay_price>0?'+'+result.extra_pay_price+result.extra_pay_price_name:'')+'<span class="unit"><em>/ </em>'+result.unit+'</span>'+(result.stock_num != -1 ? '<span class=\'stock_span\' data-stock="'+result.stock_num+'">Stock:'+result.stock_num+'</span>' : '<span data-stock="-1"></span>') + (result.deposit_price > 0 ? '<span>(Deposit:$'+ result.deposit_price +')</span>' : ''));
             if(result.properties_list){
                 laytpl($('#productPropertiesTpl').html()).render(result.properties_list, function(html){
                     $('#shopDetailPageLabelBox').html(html);
@@ -1130,11 +1130,30 @@ function showShop(shopId){
                 motify.log('Store closed');
                 return false;
             }
-            var intStock = parseInt($('#shopDetailPagePrice span').data('stock'));
+            var intStock = parseInt($('#shopDetailPagePrice .stock_span').data('stock'));
             if(intStock != -1 && (intStock == 0 || intStock - parseInt($('#shopDetailPageNumber .number').html()) <= 0)){
-                motify.log('没有库存了');
+                motify.log(getLangStr('_NO_STOCK_'));
                 return false;
             }
+            //验证属性是否选择
+			var is_no_select = false;
+			$('#shopDetailPageLabelBox').find('.row').each(function () {
+				var num = 0;
+				var s_name = $(this).data('label_name');
+				$(this).find('li').each(function () {
+                    if ($(this).hasClass('active')) {
+						num++;
+                    }
+                });
+				if(num == 0){
+                    motify.log('selection(s) required');
+                    is_no_select = true;
+				}
+            });
+			if(is_no_select){
+				return false;
+			}
+
             tmpDomObj = $(this);
             if(!(motify.checkApp() && motify.checkAndroid())){
                 flyer.fly({
@@ -1387,7 +1406,7 @@ function changeProductSpec(){
 		});
 		var productSpecStr = productSpecId.join('_');
 		var nowProductSpect = nowProduct.list[productSpecStr];
-		$('#shopDetailPagePrice').html('$'+nowProductSpect.price+'<span class="unit"><em>/ </em>'+nowProduct.unit+'</span>'+(nowProductSpect.stock_num != -1 ? '<span data-stock="'+nowProductSpect.stock_num+'">Stock:'+nowProductSpect.stock_num+'</span>' : '<span data-stock="-1"></span>') + (nowProduct.deposit_price > 0 ? '<span>(Deposit:$'+ nowProduct.deposit_price +')</span>' : ''));
+		$('#shopDetailPagePrice').html('$'+nowProductSpect.price+'<span class="unit"><em>/ </em>'+nowProduct.unit+'</span>'+(nowProductSpect.stock_num != -1 ? '<span class=\'stock_span\' data-stock="'+nowProductSpect.stock_num+'">Stock:'+nowProductSpect.stock_num+'</span>' : '<span data-stock="-1"></span>') + (nowProduct.deposit_price > 0 ? '<span>(Deposit:$'+ nowProduct.deposit_price +')</span>' : ''));
 		
 		if(nowProduct.properties_list){
 			for(var i in nowProductSpect.properties){
