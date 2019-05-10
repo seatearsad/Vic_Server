@@ -1422,4 +1422,22 @@ class MerchantAction extends BaseAction{
 			}
 		}
 	}
+
+	public function store_apply(){
+        $database_merchant_store = D('Merchant_apply');
+
+        if ($this->system_session['area_id']) {
+            $area_index = $this->system_session['level'] == 1 ? 'area_id' : 'city_id';
+            $condition_merchant[$area_index] = $this->system_session['area_id'];
+        }
+        $condition_merchant = array();
+        $count_merchant = $database_merchant_store->where($condition_merchant)->count();
+        import('@.ORG.system_page');
+        $p = new Page($count_merchant, 15);
+        $store_list = $database_merchant_store->field(true)->where($condition_merchant)->order('id DESC')->limit($p->firstRow.','.$p->listRows)->select();
+        $this->assign('store_list', $store_list);
+        $pagebar = $p->show();
+        $this->assign('pagebar', $pagebar);
+	    $this->display();
+    }
 }
