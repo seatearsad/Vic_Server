@@ -54,7 +54,7 @@
             <tr>
                 <th width="15%">SIN Number</th>
                 <td colspan=3>
-                    <input type="text" placeholder="SIN Number" class="input fl" name="ahname" size="30" validate="maxlength:50,required:true" value="{pigcms{$img.sin_num}" />
+                    <input type="text" placeholder="SIN Number" class="input fl" name="sin_num" size="30" validate="maxlength:50,required:true" value="{pigcms{$img.sin_num}" />
                 </td>
             </tr>
             <tr>

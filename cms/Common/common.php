@@ -337,27 +337,60 @@ function getDeliveryFee($store_lat,$store_lng,$map_lat,$map_lng){
     $distance = getDistance($store_lat,$store_lng,$map_lat,$map_lng);
     $distance = $distance / 1000;
 
-    $deliveryCfg = [];
-    $deliverys = D("Config")->get_gid_config(20);
-    foreach($deliverys as $r){
-        $deliveryCfg[$r['name']] = $r['value'];
-    }
-
-    if($distance < 5) {
-        $delivery_fee = round($deliveryCfg['delivery_distance_1'], 2);
-    }elseif($distance > 5 && $distance <= 8) {
-        $delivery_fee = round($deliveryCfg['delivery_distance_2'], 2);
-    }elseif($distance > 8 && $distance <= 10) {
-        $delivery_fee = round($deliveryCfg['delivery_distance_3'], 2);
-    }elseif($distance > 10 && $distance <= 15) {
-        $delivery_fee = round($deliveryCfg['delivery_distance_4'], 2);
-    }elseif($distance > 15 && $distance <= 20) {
-        $delivery_fee = round($deliveryCfg['delivery_distance_5'], 2);
-    }else{
-        $delivery_fee = round($deliveryCfg['delivery_distance_more'], 2);
-    }
+//    $deliveryCfg = [];
+//    $deliverys = D("Config")->get_gid_config(20);
+//    foreach($deliverys as $r){
+//        $deliveryCfg[$r['name']] = $r['value'];
+//    }
+//
+//    if($distance < 5) {
+//        $delivery_fee = round($deliveryCfg['delivery_distance_1'], 2);
+//    }elseif($distance > 5 && $distance <= 8) {
+//        $delivery_fee = round($deliveryCfg['delivery_distance_2'], 2);
+//    }elseif($distance > 8 && $distance <= 10) {
+//        $delivery_fee = round($deliveryCfg['delivery_distance_3'], 2);
+//    }elseif($distance > 10 && $distance <= 15) {
+//        $delivery_fee = round($deliveryCfg['delivery_distance_4'], 2);
+//    }elseif($distance > 15 && $distance <= 20) {
+//        $delivery_fee = round($deliveryCfg['delivery_distance_5'], 2);
+//    }else{
+//        $delivery_fee = round($deliveryCfg['delivery_distance_more'], 2);
+//    }
+    $delivery_fee = calculateDeliveryFee($distance);
 
     return $delivery_fee;
+}
+//新计算配送费方法
+function calculateDeliveryFee($distance){
+    $fee_list = D('Deliver_rule')->select();
+
+    $fee = 0;
+    $max_distance = 0;
+    $init_fee = 0;
+    foreach ($fee_list as $k=>$v){
+        //基本公里数
+        if($v['type'] == 0){
+            $max_distance = $v['end'];
+            if($distance <= $v['end']){//小于基本公里数
+                $fee = $v['fee'];
+                break;
+            }else{//大于基本公里数 先记录基本费用
+                $init_fee = $v['fee'];
+            }
+        }else{
+            if($v['end'] > $max_distance) $max_distance = $v['end'];
+
+            if($distance > $v['end']){//大于本梯度最高公里数
+                $init_fee += ($v['end'] - $v['start'])*$v['fee'];
+            }else if($distance > $v['start'] && $distance <= $v['end']){//在此梯度间 结束计算
+                $fee = $init_fee + (ceil($distance) - $v['start'])*$v['fee'];
+            }
+        }
+    }
+
+    if($distance >= $max_distance) $fee = $init_fee;
+
+    return $fee;
 }
 
 function getRange($range,$space = true){

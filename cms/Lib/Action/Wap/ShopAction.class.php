@@ -2368,25 +2368,26 @@ class ShopAction extends BaseAction{
 			//var_dump($distance);die();
 
 			//获取配送费用
-			$deliveryCfg = [];
-			$deliverys = D("Config")->get_gid_config(20);
-			foreach($deliverys as $r){
-				$deliveryCfg[$r['name']] = $r['value'];
-			}
-			
-			if($distance < 5) {
-				$return['delivery_fee'] = round($deliveryCfg['delivery_distance_1'], 2);
-			}elseif($distance > 5 && $distance <= 8) {
-				$return['delivery_fee'] = round($deliveryCfg['delivery_distance_2'], 2);
-			}elseif($distance > 8 && $distance <= 10) {
-				$return['delivery_fee'] = round($deliveryCfg['delivery_distance_3'], 2);
-			}elseif($distance > 10 && $distance <= 15) {
-				$return['delivery_fee'] = round($deliveryCfg['delivery_distance_4'], 2);
-			}elseif($distance > 15 && $distance <= 20) {
-				$return['delivery_fee'] = round($deliveryCfg['delivery_distance_5'], 2);
-			}elseif($distance > 20) {
-				$return['delivery_fee'] = round($deliveryCfg['delivery_distance_more'], 2);
-			}
+//			$deliveryCfg = [];
+//			$deliverys = D("Config")->get_gid_config(20);
+//			foreach($deliverys as $r){
+//				$deliveryCfg[$r['name']] = $r['value'];
+//			}
+//
+//			if($distance < 5) {
+//				$return['delivery_fee'] = round($deliveryCfg['delivery_distance_1'], 2);
+//			}elseif($distance > 5 && $distance <= 8) {
+//				$return['delivery_fee'] = round($deliveryCfg['delivery_distance_2'], 2);
+//			}elseif($distance > 8 && $distance <= 10) {
+//				$return['delivery_fee'] = round($deliveryCfg['delivery_distance_3'], 2);
+//			}elseif($distance > 10 && $distance <= 15) {
+//				$return['delivery_fee'] = round($deliveryCfg['delivery_distance_4'], 2);
+//			}elseif($distance > 15 && $distance <= 20) {
+//				$return['delivery_fee'] = round($deliveryCfg['delivery_distance_5'], 2);
+//			}elseif($distance > 20) {
+//				$return['delivery_fee'] = round($deliveryCfg['delivery_distance_more'], 2);
+//			}
+            $return['delivery_fee'] = calculateDeliveryFee($distance);
 			$return['delivery_fee2'] = $return['delivery_fee'];
 
 			/*$pass_distance = $distance > $return['basic_distance'] ? floatval($distance - $return['basic_distance']) : 0;
@@ -2633,26 +2634,29 @@ class ShopAction extends BaseAction{
 				//计算配送费
 				//$distance = $distance / 1000;
 				//获取配送费用
-				$deliveryCfg = [];
-				$deliverys = D("Config")->get_gid_config(20);
-				foreach($deliverys as $r){
-					$deliveryCfg[$r['name']] = $r['value'];
-				}
-				
-				if($distance < 5) {
-					$return['delivery_fee'] = round($deliveryCfg['delivery_distance_1'], 2);
-				}elseif($distance > 5 && $distance <= 8) {
-					$return['delivery_fee'] = round($deliveryCfg['delivery_distance_2'], 2);
-				}elseif($distance > 8 && $distance <= 10) {
-					$return['delivery_fee'] = round($deliveryCfg['delivery_distance_3'], 2);
-				}elseif($distance > 10 && $distance <= 15) {
-					$return['delivery_fee'] = round($deliveryCfg['delivery_distance_4'], 2);
-				}elseif($distance > 15 && $distance <= 20) {
-					$return['delivery_fee'] = round($deliveryCfg['delivery_distance_5'], 2);
-				}elseif($distance > 20) {
-					$return['delivery_fee'] = round($deliveryCfg['delivery_distance_more'], 2);
-				}
+//				$deliveryCfg = [];
+//				$deliverys = D("Config")->get_gid_config(20);
+//				foreach($deliverys as $r){
+//					$deliveryCfg[$r['name']] = $r['value'];
+//				}
+//
+//				if($distance < 5) {
+//					$return['delivery_fee'] = round($deliveryCfg['delivery_distance_1'], 2);
+//				}elseif($distance > 5 && $distance <= 8) {
+//					$return['delivery_fee'] = round($deliveryCfg['delivery_distance_2'], 2);
+//				}elseif($distance > 8 && $distance <= 10) {
+//					$return['delivery_fee'] = round($deliveryCfg['delivery_distance_3'], 2);
+//				}elseif($distance > 10 && $distance <= 15) {
+//					$return['delivery_fee'] = round($deliveryCfg['delivery_distance_4'], 2);
+//				}elseif($distance > 15 && $distance <= 20) {
+//					$return['delivery_fee'] = round($deliveryCfg['delivery_distance_5'], 2);
+//				}elseif($distance > 20) {
+//					$return['delivery_fee'] = round($deliveryCfg['delivery_distance_more'], 2);
+//				}
+
+                $return['delivery_fee'] = calculateDeliveryFee($distance);
 				$return['delivery_fee2'] = $delivery_fee = $order_data['freight_charge'] = $return['delivery_fee'];
+
 
 				/*
 				if ($return['delivery_type'] == 5) {//快递配送

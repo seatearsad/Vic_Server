@@ -2307,24 +2307,25 @@ class StorestaffAction extends BaseAction
                 $aim = $user_adress['latitude'].','.$user_adress['longitude'];
                 $distance = getDistanceByGoogle($from,$aim);
                 //获取配送费用
-                $deliveryCfg = [];
-                $deliverys = D("Config")->get_gid_config(20);
-                foreach($deliverys as $r){
-                    $deliveryCfg[$r['name']] = $r['value'];
-                }
-                if($distance < 5) {
-                    $return['delivery_fee'] = round($deliveryCfg['delivery_distance_1'], 2);
-                }elseif($distance > 5 && $distance <= 8) {
-                    $return['delivery_fee'] = round($deliveryCfg['delivery_distance_2'], 2);
-                }elseif($distance > 8 && $distance <= 10) {
-                    $return['delivery_fee'] = round($deliveryCfg['delivery_distance_3'], 2);
-                }elseif($distance > 10 && $distance <= 15) {
-                    $return['delivery_fee'] = round($deliveryCfg['delivery_distance_4'], 2);
-                }elseif($distance > 15 && $distance <= 20) {
-                    $return['delivery_fee'] = round($deliveryCfg['delivery_distance_5'], 2);
-                }elseif($distance > 20) {
-                    $return['delivery_fee'] = round($deliveryCfg['delivery_distance_more'], 2);
-                }
+//                $deliveryCfg = [];
+//                $deliverys = D("Config")->get_gid_config(20);
+//                foreach($deliverys as $r){
+//                    $deliveryCfg[$r['name']] = $r['value'];
+//                }
+//                if($distance < 5) {
+//                    $return['delivery_fee'] = round($deliveryCfg['delivery_distance_1'], 2);
+//                }elseif($distance > 5 && $distance <= 8) {
+//                    $return['delivery_fee'] = round($deliveryCfg['delivery_distance_2'], 2);
+//                }elseif($distance > 8 && $distance <= 10) {
+//                    $return['delivery_fee'] = round($deliveryCfg['delivery_distance_3'], 2);
+//                }elseif($distance > 10 && $distance <= 15) {
+//                    $return['delivery_fee'] = round($deliveryCfg['delivery_distance_4'], 2);
+//                }elseif($distance > 15 && $distance <= 20) {
+//                    $return['delivery_fee'] = round($deliveryCfg['delivery_distance_5'], 2);
+//                }elseif($distance > 20) {
+//                    $return['delivery_fee'] = round($deliveryCfg['delivery_distance_more'], 2);
+//                }
+                $return['delivery_fee'] = calculateDeliveryFee($distance);
                 $return['delivery_fee2'] = $return['delivery_fee'];
             }
             $real_orderid  = date('ymdhis').substr(microtime(),2,8-strlen($staff['id'])).$staff['id'];//订单编号

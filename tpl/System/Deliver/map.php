@@ -5,7 +5,8 @@
 					<a href="{pigcms{:U('Deliver/user')}">{pigcms{:L('_BACK_COURIER_MANA_')}</a>
                     <if condition="$system_session['level'] neq 3">
 					<a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Deliver/user_add')}','添加配送员',680,560,true,false,false,editbtn,'edit',true);">添加配送员</a>
-					<a href="{pigcms{:U('Config/index',array('galias'=>'deliver','header'=>'Deliver/header'))}">配送配置</a>
+                    <!--a href="{pigcms{:U('Config/index',array('galias'=>'deliver','header'=>'Deliver/header'))}">配送配置</a-->
+                    <a href="{pigcms{:U('Deliver/rule')}">配送配置</a>
                     </if>
                     <a href="{pigcms{:U('Deliver/map')}" class="on">{pigcms{:L('_BACK_COURIER_MONI_')}</a>
 				</ul>
