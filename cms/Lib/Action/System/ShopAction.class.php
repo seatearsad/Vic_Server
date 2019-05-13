@@ -626,16 +626,19 @@ class ShopAction extends BaseAction
                     $this->error('删除失败！请重试~');
                 }
             }else if($now_order['pay_type'] == 'weixin' || $now_order['pay_type'] == 'alipay'){
-                import('@.ORG.pay.IotPay');
-                $IotPay = new IotPay();
-                $result = $IotPay->refund($now_order['uid'],$now_order['order_id'],'WEB');
-                if ($result['retCode'] == 'SUCCESS' && $result['resCode'] == 'SUCCESS'){
+                //判断订单状态 已退款或已取消 不退款
+                if($now_order['status'] != 4 && $now_order['status'] != 5) {
+                    import('@.ORG.pay.IotPay');
+                    $IotPay = new IotPay();
+                    $result = $IotPay->refund($now_order['uid'], $now_order['order_id'], 'WEB');
+                    if ($result['retCode'] == 'SUCCESS' && $result['resCode'] == 'SUCCESS') {
 //                    $data_shop_order['order_id'] = $now_order['order_id'];
 //                    $data_shop_order['status'] = 4;
 //                    $data_shop_order['last_time'] = time();
 //                    D('Shop_order')->data($data_shop_order)->save();
-                }else{
-                    $this->error('删除失败！--'.$result['retMsg']);
+                    } else {
+                        $this->error('删除失败！--' . $result['retMsg']);
+                    }
                 }
             }elseif($now_order['pay_type'] == '' && $now_order['paid'] == 1 && $now_order['balance_pay'] > 0){
                 //判断订单状态 已退款或已取消 不退款

@@ -77,6 +77,7 @@ class DeliverAction extends BaseAction {
             $column['family_name'] = isset($_POST['family_name']) ? htmlspecialchars($_POST['family_name']) : '';
             $column['email'] = $_POST['email'];
             $column['language'] = intval($_POST['language']);
+            $column['birthday'] = $_POST['birthday'];
 
             $card['ahname'] = $_POST['ahname'];
             $card['transit'] = $_POST['transit'];
@@ -103,6 +104,12 @@ class DeliverAction extends BaseAction {
     		//
     		$card['deliver_id'] = $id;
             D('Deliver_card')->data($card)->add();
+
+            if($_POST['sin_num'] && $_POST['sin_num'] != '') {
+                $data['sin_num'] = $_POST['sin_num'];
+                $data['uid'] = $id;
+                D('Deliver_img')->add($data);
+            }
     		$this->success('保存成功');
     	}
     	//garfunkel 判断城市管理员
@@ -143,6 +150,7 @@ class DeliverAction extends BaseAction {
             $column['family_name'] = isset($_POST['family_name']) ? htmlspecialchars($_POST['family_name']) : '';
             $column['email'] = $_POST['email'];
             $column['language'] = intval($_POST['language']);
+            $column['birthday'] = $_POST['birthday'];
 
             $card['ahname'] = $_POST['ahname'];
             $card['transit'] = $_POST['transit'];
@@ -167,6 +175,15 @@ class DeliverAction extends BaseAction {
                 }else{
     		        $card['deliver_id'] = $uid;
                     D('Deliver_card')->data($card)->add();
+                }
+                if($_POST['sin_num'] && $_POST['sin_num'] != '') {
+    		        $data['sin_num'] = $_POST['sin_num'];
+    		        $data['uid'] = $uid;
+                    $deliver_img = D('Deliver_img')->where(array('uid' => $uid))->find();
+                    if ($deliver_img)
+                        D('Deliver_img')->save($data);
+                    else
+                        D('Deliver_img')->add($data);
                 }
     			$this->success('Success');
     		}else{
@@ -1255,6 +1272,56 @@ class DeliverAction extends BaseAction {
             $this->assign('card',$card);
 
             $this->display();
+        }
+    }
+
+    public function rule(){
+        $base_rule = D('Deliver_rule')->where(array('type'=>0))->find();
+        $this->assign('base_rule',$base_rule);
+
+        $fee_list = D('Deliver_rule')->where(array('type'=>1))->select();
+        $this->assign('fee_list',$fee_list);
+        $this->display();
+    }
+
+    public function update_rule(){
+        if($_POST){
+            $base_data['start'] = 0;
+            $base_data['end'] = $_POST['base_rule_mile'];
+            $base_data['fee'] = $_POST['base_rule_fee'];
+            D('Deliver_rule')->where(array('type'=>0))->save($base_data);
+
+            $data = array();
+            $new_data = array();
+            foreach ($_POST as $k=>$v){
+                $key = explode('-',$k);
+
+                if(strpos($key[0],'new') !== false){
+                    $new_data[$key[1]][$key[0]] = $v;
+                }else{
+                    $data[$key[1]][$key[0]] = $v;
+                }
+            }
+
+            foreach ($new_data as $k=>$v){
+                $save_data['start'] = $v['start_mile_new'];
+                $save_data['end'] = $v['end_mile_new'];
+                $save_data['fee'] = $v['fee_new'];
+                $save_data['type'] = 1;
+
+                D('Deliver_rule')->add($save_data);
+            }
+
+            $save_data = array();
+            foreach ($data as $k=>$v){
+                $save_data['start'] = $v['start_mile'];
+                $save_data['end'] = $v['end_mile'];
+                $save_data['fee'] = $v['fee'];
+
+                D('Deliver_rule')->where(array('id'=>$k))->save($save_data);
+            }
+
+            exit(json_encode(array('error' => 0, 'msg' => 'Success！', 'dom_id' => 'account')));
         }
     }
 }

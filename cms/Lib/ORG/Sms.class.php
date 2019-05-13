@@ -268,8 +268,8 @@ final class Sms {
 				'nationcode' => $nationcode
 			],
 			'time' => $random,
-			'tpl_id' => $data['tplid']
-            //'sign'  =>  'Island Life'//garfunkel 短信签名
+			'tpl_id' => $data['tplid'],
+            'sign'  =>  'Tutti'//garfunkel 短信签名
 		];
 		$newdata['sig'] = hash('sha256', "appkey=$appkey&random=$random&time={$random}&mobile=".$data['mobile']);
 
@@ -356,8 +356,10 @@ final class Sms {
 
         $url = 'https://fcm.googleapis.com/fcm/send';
         $data['to'] = $device_id;
+        //"priority": "high"
+        $data['priority'] = 'high';
         $data['data'] = array('message'=>'Message From Tutti');
-        $data['notification'] = array('title'=>'Tutti','body'=>$message);
+        $data['notification'] = array('title'=>'Tutti','body'=>$message,"sound"=>"default");
 
 
         $ch = curl_init();

@@ -37,13 +37,13 @@ class StoreAction extends BaseAction
 		$return['cat_fid'] = $cat_fid;
 		$return['cat_id'] = $cat_id;
 
-		$lat = $_COOKIE['shop_select_lat'];
-		$long = $_COOKIE['shop_select_lng'];
+        $lat = $_COOKIE['shop_select_lat'] ? $_COOKIE['shop_select_lat'] : 0;
+        $long = $_COOKIE['shop_select_lng'] ? $_COOKIE['shop_select_lng'] : 0;
 		$where = array('deliver_type_pc' => $type_url, 'order' => $sort_url, 'lat' => $lat, 'long' => $long, 'cat_id' => $cat_id, 'cat_fid' => $cat_fid, 'page' => 1);
 // 		$key && $where['key'] = $key;
 		$lists = D('Merchant_store_shop')->get_list_by_option($where, 2);
 		
-		$result = $this->format_store_data($lists);
+		$result = $this->format_store_data($lists,$lat,$long);
 		
 		$return['store_list'] = $result;
 		$return['keyword'] = '';
@@ -59,7 +59,7 @@ class StoreAction extends BaseAction
 	}
 	
 	
-	private function format_store_data($lists) 
+	private function format_store_data($lists,$lat=0,$long=0)
 	{
 		$result = array();
 		$now_time = date('H:i:s');
@@ -79,7 +79,10 @@ class StoreAction extends BaseAction
 			$temp['delivery'] = $deliver_type == 2 ? 0 : $row['deliver'];//是否支持配送
 			$temp['delivery_time'] = $row['send_time'];//配送时长
 			$temp['delivery_price'] = floatval($row['basic_price']);//起送价
-			$temp['delivery_money'] = floatval($row['delivery_fee']);//配送费
+            if($lat == 0 && $long==0)
+			    $temp['delivery_money'] = floatval($row['delivery_fee']);//配送费
+            else
+                $temp['delivery_money'] = getDeliveryFee($row['lat'],$row['long'],$lat,$long);//配送费
 			$temp['delivery_system'] = $row['deliver_type'] == 0 || $row['deliver_type'] == 3 ? true : false;//是否是平台配送
 			$temp['deliver_type'] = $row['deliver_type'];//配送类型
 			$temp['is_close'] = 1;
@@ -411,13 +414,13 @@ class StoreAction extends BaseAction
 				}
 			}
 		}
-		$lat = $_COOKIE['shop_select_lat'];
-		$long = $_COOKIE['shop_select_lng'];
+        $lat = $_COOKIE['shop_select_lat'] ? $_COOKIE['shop_select_lat'] : 0;
+        $long = $_COOKIE['shop_select_lng'] ? $_COOKIE['shop_select_lng'] : 0;
 		$where = array('deliver_type_pc' => $deliver_type, 'order' => $order, 'lat' => $lat, 'long' => $long, 'cat_id' => $cat_id, 'cat_fid' => $cat_fid, 'page' => $page);
 		$key && $where['key'] = $key;
 
 		$lists = D('Merchant_store_shop')->get_list_by_option($where, 2);
-		$return = $this->format_store_data($lists);
+		$return = $this->format_store_data($lists,$lat,$long);
 		
 		echo json_encode(array('total' => $lists['total'], 'store_count' => count($return), 'store_list' => $return, 'next_page' => $lists['next_page']));
 	}
@@ -783,7 +786,15 @@ class StoreAction extends BaseAction
 
 
         //modify garfunkel
-        $store['delivery_money'] = C('config.delivery_distance_1');
+        $lat = $_COOKIE['shop_select_lat'] ? $_COOKIE['shop_select_lat'] : 0;
+        $long = $_COOKIE['shop_select_lng'] ? $_COOKIE['shop_select_lng'] : 0;
+
+        if($lat == 0 && $long == 0)
+            $store['delivery_money'] = C('config.delivery_distance_1');
+        else
+            $store['delivery_money'] = getDeliveryFee($store['lat'],$store['long'],$lat,$long);
+
+
         //$store['delivery_money'] = floatval($store['delivery_money']);
 // 		$store['delivery_money'] = $row['deliver_type'] == 0 ? C('config.delivery_fee') : $row['delivery_fee'];//配送费
 // 		$store['delivery_money'] = floatval($store['delivery_money']);//配送费

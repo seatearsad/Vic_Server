@@ -85,9 +85,9 @@ cursor: pointer;
 				<tr>
 					<td>客户电话：<a href="tel:{pigcms{$order.userphone}" class="totel">{pigcms{$order.userphone}</a></td>
 				</tr>
-				<tr>
+				<!--tr>
 					<td>下单时间： {pigcms{$order.create_time|date="Y-m-d H:i:s",###}</td>
-				</tr>
+				</tr-->
 				<tr>
 					<td>支付时间：{pigcms{$order['pay_time']|date="Y-m-d H:i:s",###} </td>
 				</tr>
@@ -96,7 +96,7 @@ cursor: pointer;
                 </tr>
 				<if condition="$order['expect_use_time']">
 				<tr>
-					<td style="font-weight: 800;color:red; ">到货时间：{pigcms{$order['expect_use_time']|date="Y-m-d H:i:s",###}</td>
+					<td style="font-weight: 800;color:red; ">到货时间：ASAP</td>
 				</tr>
 				</if>
 				<if condition="$order['is_pick_in_store'] eq 2">
@@ -104,163 +104,34 @@ cursor: pointer;
 					<td>自提地址：{pigcms{$order['address']}</td>
 				</tr>
 				<else />
-				<tr>
+				<!--tr>
 					<td>客户地址：{pigcms{$order['address']}</td>
-				</tr>
+				</tr-->
 				</if>
-				<tr>
+				<!--tr>
 					<td>配送方式：{pigcms{$order['deliver_str']}</td>
 				</tr>
 				<tr>
 					<td>配送状态：{pigcms{$order['deliver_status_str']}</td>
-				</tr>
+				</tr-->
 				<tr>
-					<td>客户留言： <b style="color:red">{pigcms{$order.desc|default='无'}</b></td>
+                    <td>客户留言： <if condition="$order['desc'] eq ''">无<else /><b style="color:#ffa52d">{pigcms{$order.desc}</b></if></td>
 				</tr>
 				
 				<if condition="$order['invoice_head']">
-				<tr>
+				<!--tr>
 					<td>发票抬头:{pigcms{$order['invoice_head']}</td>
-				</tr>
+				</tr-->
 				</if>
-				<tr>
+				<!--tr>
 				  <td>支付状态：{pigcms{$order['pay_status']}</td>
 				</tr>
 				<tr>
 				  <td>支付方式： {pigcms{$order.pay_type_str}</td>
-				</tr>
+				</tr-->
 				<tr>
 					<td>订单状态：{pigcms{$order['status_str']}</td>
 				</tr>
-				<if condition="$order['score_used_count']">
-				<tr>
-					<td>使用{pigcms{$config.score_name}：{pigcms{$order['score_used_count']} </td>
-				</tr>
-				<tr>
-					<td>{pigcms{$config.score_name}抵现：${pigcms{$order['score_deducte']|floatval}</td>
-				</tr>
-				</if>
-				
-				<if condition="$order['merchant_balance'] gt 0">
-				<tr>
-					<td>商家余额：${pigcms{$order['merchant_balance']|floatval} </td>
-				</tr>
-				</if>
-				<if condition="$order['balance_pay'] gt 0">
-				<tr>
-					<td>平台余额：${pigcms{$order['balance_pay']|floatval} </td>
-				</tr>
-				</if>
-				<if condition="$order['payment_money'] gt 0">
-				<tr>
-					<td>在线支付：${pigcms{$order['payment_money']|floatval} </td>
-				</tr>
-				</if>
-				<if condition="$order['card_id']">
-				<tr>
-					<td>店铺优惠券金额：${pigcms{$order['card_price']} </td>
-				</tr>
-				</if>
-				<if condition="$order['coupon_id']">
-				<tr>
-					<td>平台优惠券金额：${pigcms{$order['coupon_price']} </td>
-				</tr>
-				</if>
-				<if condition="$order['card_give_money'] gt 0">
-				<tr>
-					<td>会员卡余额：${pigcms{$order['card_give_money']|floatval} </td>
-				</tr>
-				</if>
-				<if condition="$order['card_discount'] neq 0 AND $order['card_discount'] neq 10">
-				<tr>
-					<td>会员卡：{pigcms{$order['card_discount']|floatval} 折优惠</td>
-				</tr>
-				</if>
-				<tr>
-					<td>应收现金：${pigcms{$order['offline_price']|floatval}</td>
-				</tr>
-				<if condition="!empty($order['use_time'])">		
-					<tr>
-						<td>操作店员：<span class="totel">{pigcms{$order.last_staff}</span> </td>
-					</tr>
-					<tr>
-						<td>操作时间： {pigcms{$order.use_time|date='Y-m-d H:i:s',###}</td>
-					</tr>
-				</if>
-				<if condition="$order['paid'] eq 0">
-					<tr id="xfstatus">
-						<form enctype="multipart/form-data" method="post" action="{pigcms{:U('Storestaff/deliver_goods')}">
-							<td>订单状态：<span class="red">未支付</span>	
-								<div>
-									<input name="status" value="5" type="hidden" />
-									<input name="order_id" value="{pigcms{$order['order_id']}" type="hidden" />
-									<button id="merchant_remark_btn" class="submit" style="padding: 5px;margin: 12px auto;margin-top: 25px;background-color:#FF658E;border:1px solid #FF658E">取消订单</button>
-								</div>
-							</td>
-						</form>
-					</tr>
-				<elseif condition="$order['is_pick_in_store'] eq 3" />
-					<form enctype="multipart/form-data" method="post" action="">
-					<input name="order_id" value="{pigcms{$order['order_id']}" type="hidden">
-					<input name="status" value="2" type="hidden" />
-					<!--tr>
-						<td>订单状态：
-						<select id="status" class="dropdown_select" >
-						 	<option value="0" <if condition="$order['status'] eq 0">selected</if>>未确认</option>
-						 	<option value="1" <if condition="$order['status'] eq 1">selected</if>>已确认</option>
-						 	<option value="2" <if condition="$order['status'] eq 2">selected</if>>已消费</option>
-						 	<option value="3" <if condition="$order['status'] eq 3">selected</if> disabled>已评价</option>
-						 	<option value="4" <if condition="$order['status'] eq 4">selected</if>>已退款</option>
-						 	<option value="5" <if condition="$order['status'] eq 5">selected</if>>已取消</option>
-						</select>
-						</td>
-					</tr-->
-					<tr>
-						<td>快递公司：<select name="express_id" class="dropdown_select" ><volist name="express_list" id="vo"><option value="{pigcms{$vo.id}" <if condition="$vo['id'] eq $order['express_id']">selected</if>>{pigcms{$vo.name}</option></volist></select></td>
-					</tr>
-					<tr>
-						<td>快递单号：<input name="express_number" value="{pigcms{$order['express_number']}" type="text" class="px" placeholder="填写快递单号"></td>
-					</tr>
-					<tr>
-						<td><button id="merchant_remark_btn" class="submit" style="padding: 5px;margin: 12px auto;margin-top: 25px;background-color:#FF658E;border:1px solid #FF658E">发送快递</button></td>
-					</tr>
-					</form>
-				<elseif condition="$order['status'] eq 7" />
-					<tr id="xfstatus">
-						<form enctype="multipart/form-data" method="post" action="{pigcms{:U('Storestaff/deliver_goods')}">
-							<td>订单状态：<span class="red">待发货</span>	
-								<div>
-								<input name="status" value="8" type="hidden" />
-								<input name="order_id" value="{pigcms{$order['order_id']}" type="hidden" />
-								<button id="merchant_remark_btn" class="submit" style="padding: 5px;margin: 12px auto;margin-top: 25px;background-color:#FF658E;border:1px solid #FF658E">发货</button>
-								</div>
-							</td>
-						</form>
-					</tr>
-				<elseif condition="!in_array($order['status'], array(2,3,4,5)) AND $sure"/>
-					<tr id="xfstatus">
-						<form enctype="multipart/form-data" method="post" action="">
-							<td>订单状态：<span class="red">未消费</span>	
-<!--								<div>-->
-<!--									<input name="status" value="2" type="hidden">-->
-<!--									<input name="order_id" value="{pigcms{$order['order_id']}" type="hidden">-->
-<!--									<button id="merchant_remark_btn" class="submit" style="padding: 5px;margin: 12px auto;margin-top: 25px;background-color:#FF658E;border:1px solid #FF658E">确认消费</button>-->
-<!--									<span class="form_tips" style="color: red">-->
-<!--									注：改成已消费状态后同时如果是未付款状态则修改成线下支付已支付，状态修改后就不能修改了	-->
-<!--									</span>-->
-<!--								</div>-->
-							</td>
-						</form>
-					</tr>
-				<elseif condition="$order['status'] eq 3 OR $order['status'] eq 2" />
-					<tr>
-						<td>订单状态：<span class="green"> 已消费</span></td>
-					</tr>
-				<elseif condition="empty($sure)" />
-					<tr>
-						<td>订单状态：<span class="green"> 已接单</span></td>
-					</tr>
-				</if>
 			</tbody>
 		</table>
 		<if condition="$order['cue_field']">
@@ -279,7 +150,7 @@ cursor: pointer;
 		</table>
 		</if>
 	</ul>
-	<a href="{pigcms{:U('Storestaff/shop_list')}" class="btn" style="float:right;right:1rem;top:0.2rem;position:absolute;width:5rem;font-size:1rem;background-color: #ffa64d">返 回</a>
+	<!--a href="{pigcms{:U('Storestaff/shop_list')}" class="btn" style="float:right;right:1rem;top:0.2rem;position:absolute;width:5rem;font-size:1rem;background-color: #ffa64d">返 回</a-->
     <if condition="$deliver">
         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&libraries=places&language=en"></script>
         <div style="margin-left: 10px">{pigcms{$deliver.name}({pigcms{$deliver.phone})</div>
@@ -336,9 +207,9 @@ cursor: pointer;
 				</tr>
 				<volist name="order['info']" id="info">
 				<tr>
-					<td style="color: blue">{pigcms{$info['name']} </td>
+					<td>{pigcms{$info['name']} </td>
 					<td class="cc">{pigcms{$info['price']|floatval}</td>
-					<td class="cc" style="color: blue">{pigcms{$info['num']} <span style="color: gray; font-size:10px">({pigcms{$info['unit']})</span></td>
+					<td class="cc" <if condition="$info['num'] gt 1">style="color: #ffa52d"</if>>{pigcms{$info['num']} <span style="color: gray; font-size:10px">({pigcms{$info['unit']})</span></td>
 					<td class="rr">{pigcms{$info['spec']}</td>
 				</tr>
 				</volist>
@@ -359,7 +230,7 @@ cursor: pointer;
                     <td>税费</td>
                     <td class="cc"></td>
                     <td class="cc"></td>
-                    <td class="rr">${pigcms{$order['tax_price']|floatval}</td>
+                    <td class="rr">${pigcms{:round($order['tax_price'],2)}</td>
                 </tr>
                 <if condition="$order['deposit_price'] gt 0">
                     <tr>
@@ -386,14 +257,14 @@ cursor: pointer;
 				</tr>
 				</if>
                 <if condition="$order['tip_charge'] gt 0">
-                    <tr>
+                    <!--tr>
                         <td>小费</td>
                         <td class="cc"></td>
                         <td class="cc"></td>
                         <td class="rr">${pigcms{$order['tip_charge']|floatval}</td>
-                    </tr>
+                    </tr-->
                 </if>
-				<tr>
+				<!--tr>
 					<td>商家优惠</td>
 					<td class="cc"></td>
 					<td class="cc"></td>
@@ -404,12 +275,12 @@ cursor: pointer;
 					<td class="cc"></td>
 					<td class="cc"></td>
 					<td class="rr"><span class="price">-${pigcms{$order['coupon_price']|floatval}</span></td>
-				</tr>
+				</tr-->
 				<tr>
 					<td>总额</td>
 					<td class="cc"></td>
 					<td class="cc"></td>
-					<td class="rr"><span class="price">${pigcms{$order['price']+$order['tip_charge']|floatval}</span></td>
+					<td class="rr"><span class="price" style="color: #ffa52d">${pigcms{$order['price']+$order['tip_charge']|floatval}</span></td>
 				</tr>
                 <if condition="$order['paid'] eq 1 and $order['status'] eq 0">
                 <tr>

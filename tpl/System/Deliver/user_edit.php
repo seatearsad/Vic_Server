@@ -52,14 +52,12 @@
 				<th width="15%">{pigcms{:L('_BACK_COURIER_LOC_')}</th>
 				<td width="35%" class="radio_box"><input class="input fl" size="20" name="long_lat" id="long_lat" type="text" readonly="readonly" validate="required:true" value="{pigcms{$now_user.lng},{pigcms{$now_user.lat}"/></td>
 			</tr>
-            <if condition="$img">
-                <tr>
-                    <th width="15%">SIN Number</th>
-                    <td colspan=3>
-                        <input type="text" placeholder="SIN Number" class="input fl" name="ahname" size="30" validate="maxlength:50,required:true" value="{pigcms{$img.sin_num}" />
-                    </td>
-                </tr>
-            </if>
+            <tr>
+                <th width="15%">SIN Number</th>
+                <td colspan=3>
+                    <input type="text" placeholder="SIN Number" class="input fl" name="sin_num" size="30" validate="maxlength:50,required:true" value="{pigcms{$img.sin_num}" />
+                </td>
+            </tr>
             <tr>
                 <th width="15%">{pigcms{:L('_BACK_BANK_INFO_')}</th>
                 <td colspan=3>
@@ -84,7 +82,7 @@
                     <input type="text" placeholder="Account" class="input fl" name="account" size="30" validate="maxlength:50,required:true" value="{pigcms{$card.account}" />
                 </td>
             <tr>
-            <if condition="$img">
+            <if condition="$img['driver_license']">
             <tr>
                 <th width="15%">{pigcms{:L('_BACK_DRIVER_LIC_')}</th>
                 <td colspan=3>
@@ -129,8 +127,24 @@
 			</div>
 		</div>
 	</div>
+<script type="text/javascript" src="{pigcms{$static_public}js/mobiscroll/mobiscroll.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="{pigcms{$static_public}js/mobiscroll/mobiscroll.custom.min.css" media="all">
 	<script type="text/javascript">
 	var static_public="{pigcms{$static_public}",static_path="{pigcms{$static_path}",merchant_index="{pigcms{:U('Index/index')}",choose_province="{pigcms{:U('Area/ajax_province')}",choose_city="{pigcms{:U('Area/ajax_city')}",choose_area="{pigcms{:U('Area/ajax_area')}",choose_circle="{pigcms{:U('Area/ajax_circle')}",choose_city_name="{pigcms{:U('Area/ajax_city_name')}";
+
+	var theme = "ios";
+    var mode = "scroller";
+    var display = "modal";
+    var lang="en";
+
+    $('input[name="birthday"]').mobiscroll().date({
+        theme: theme,
+        mode: mode,
+        display: display,
+        dateFormat: 'yyyy-mm-dd',
+        dateOrder:'yymmdd',
+        lang: lang
+    });
 	</script>
 	<!--<script type="text/javascript" src="{pigcms{$static_path}js/area.js"></script>-->
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&libraries=places&language=en"></script>

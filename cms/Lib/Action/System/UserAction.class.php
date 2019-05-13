@@ -883,7 +883,7 @@ class UserAction extends BaseAction {
                 $userInfo = D('User')->get_user($uid);
                 $sms_data['mobile'] = $userInfo['phone'];
                 $sms_data['sendto'] = 'user';
-                $sms_data['tplid'] = 188130;
+                $sms_data['tplid'] = 326488;
                 $sms_data['params'] = [];
                 Sms::sendSms2($sms_data);
             }
@@ -896,7 +896,7 @@ class UserAction extends BaseAction {
                     $userInfo = D('User')->get_user($v);
                     $sms_data['mobile'] = $userInfo['phone'];
                     $sms_data['sendto'] = 'user';
-                    $sms_data['tplid'] = 188130;
+                    $sms_data['tplid'] = 326488;
                     $sms_data['params'] = [];
                     Sms::sendSms2($sms_data);
                 }
