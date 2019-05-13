@@ -77,7 +77,7 @@
 	</tr>
 	<if condition="$order['card_id']">
 	<tr>
-		<th colspan="6">店铺优惠券金额：${pigcms{$order['card_price']} 元</th>
+		<th colspan="6">店铺优惠券金额：${pigcms{$order['card_price']} </th>
 	</tr>
 	</if>
 	<if condition="$order['coupon_id']">
@@ -97,7 +97,7 @@
 		<th colspan="6">{pigcms{:L('_BACK_PAYMENT_METHOD_')}：{pigcms{$order['pay_type_str']}</th>
 	</tr>
 	<tr>
-		<th colspan="6">{pigcms{:L('_BACK_ORDER_STATUS_')}：{pigcms{$order['status_str']}<if condition="$order['status'] eq 4">&nbsp;&nbsp;&nbsp;&nbsp;退款时间:{pigcms{$order['last_time']|date="Y-m-d H:i:s",###}</if></th>
+		<th colspan="6">{pigcms{:L('_BACK_ORDER_STATUS_')}：{pigcms{$order['status_str']}<if condition="$order['status'] eq 4">&nbsp;&nbsp;&nbsp;&nbsp;{pigcms{:L('_BACK_REFUND_TIME_')}:{pigcms{$order['last_time']|date="Y-m-d H:i:s",###}</if></th>
 	</tr>
 	
 	<tr>

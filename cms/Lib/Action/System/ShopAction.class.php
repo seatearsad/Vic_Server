@@ -375,6 +375,21 @@ class ShopAction extends BaseAction
         $result_total = isset($result_total[0]) ? $result_total[0] : '';
         $this->assign($result_total);
         $pay_method = D('Config')->get_pay_method('','',0);
+        foreach ($pay_method as $k=>&$v){
+            switch ($k){
+                case 'offline':
+                    $v['name'] = 'Cash';
+                    break;
+                case 'alipay':
+                    $v['name'] = 'AliPay';
+                    break;
+                case 'weixin':
+                    $v['name'] = 'Wechat Pay';
+                    break;
+                default:
+                    break;
+            }
+        }
         $this->assign('pay_method',$pay_method);
         $this->display();
     }

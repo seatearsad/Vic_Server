@@ -260,7 +260,7 @@ $.extend($.validator, {
 	},
 
 	messages: {
-		required: "必填项",
+		required: "Required",
 		remote: "数据已存在",
 		email: "请输入有效的邮箱",
 		url: "请输入有效的网址",

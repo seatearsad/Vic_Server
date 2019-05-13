@@ -24,14 +24,14 @@
     <li class="d_memo" title="Phone:{pigcms{$deliver.phone}">
         <span class="d_id">{pigcms{$deliver.uid}</span>
         <span class="d_name">{pigcms{$deliver.name}</span>
-        <span class="d_status">{pigcms{$deliver.order_count} 单配送中</span>
+        <span class="d_status">{pigcms{$deliver.order_count}{pigcms{:L('_BACK_ORDER_DELIVERY_')}</span>
         <span class="d_lat">{pigcms{$deliver.lat}</span>
         <span class="d_lng">{pigcms{$deliver.lng}</span>
         <span class="d_phone">{pigcms{$deliver.phone}</span>
     </li>
     </volist>
 </ul>
-<div id="e_call">紧急召唤</div>
+<div id="e_call">{pigcms{:L('_BACK_HAND_ALERT_')}</div>
 <include file="Public:footer"/>
 <style>
     #deliver_map{
@@ -41,7 +41,7 @@
     }
     #e_call{
         position: absolute;
-        width: 60px;
+        width: 180px;
         height: 30px;
         text-align: center;
         background-color: #0a51b9;
