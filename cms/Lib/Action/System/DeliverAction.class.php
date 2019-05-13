@@ -176,7 +176,6 @@ class DeliverAction extends BaseAction {
     		        $card['deliver_id'] = $uid;
                     D('Deliver_card')->data($card)->add();
                 }
-
                 if($_POST['sin_num'] && $_POST['sin_num'] != '') {
     		        $data['sin_num'] = $_POST['sin_num'];
     		        $data['uid'] = $uid;
