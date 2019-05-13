@@ -2,8 +2,8 @@
 		<div class="mainbox">
 			<div id="nav" class="mainnav_title">
 				<ul>
-					<a href="{pigcms{:U('Deliver/user')}">配送员管理</a>|
-					<a href="{pigcms{:U('Deliver/log_list', array('uid'=>$user['uid']))}" class="on">【{pigcms{$user['name']}】的配送记录</a>
+					<a href="{pigcms{:U('Deliver/user')}">{pigcms{:L('_BACK_COURIER_MANA_')}</a>|
+					<a href="{pigcms{:U('Deliver/log_list', array('uid'=>$user['uid']))}" class="on">【{pigcms{$user['name']}】{pigcms{:L('_BACK_COURIER_OVER_')}</a>
 				</ul>
 			</div>
 			<table class="search_table" width="100%">
@@ -13,16 +13,16 @@
 							<input type="hidden" name="c" value="Deliver"/>
 							<input type="hidden" name="a" value="log_list"/>
 							<input type="hidden" name="uid" value="{pigcms{$user['uid']}"/>
-							配送开始时间: <!--input type="text" name="keyword" class="input-text" value="{pigcms{$_GET['keyword']}"/>
+							{pigcms{:L('_BACK_START_DATE_')}: <!--input type="text" name="keyword" class="input-text" value="{pigcms{$_GET['keyword']}"/>
 							<select name="searchtype">
 								<option value="uid" <if condition="$_GET['searchtype'] eq 'uid'">selected="selected"</if>>用户ID</option>
 								<option value="nickname" <if condition="$_GET['searchtype'] eq 'nickname'">selected="selected"</if>>昵称</option>
 								<option value="phone" <if condition="$_GET['searchtype'] eq 'phone'">selected="selected"</if>>手机号</option>
 							</select-->
-							<input type="text" class="input-text" name="begin_time" style="width:160px;" value="{pigcms{$begin_time}" onfocus="WdatePicker({isShowClear:false,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})"/>&nbsp;&nbsp;&nbsp;到&nbsp;&nbsp;&nbsp;
+							<input type="text" class="input-text" name="begin_time" style="width:160px;" value="{pigcms{$begin_time}" onfocus="WdatePicker({isShowClear:false,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})"/>&nbsp;&nbsp;&nbsp;to&nbsp;&nbsp;&nbsp;
 							<input type="text" class="input-text" name="end_time" style="width:160px;" value="{pigcms{$end_time}" onfocus="WdatePicker({isShowClear:false,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})"/>&nbsp;&nbsp;&nbsp;
-							<input type="submit" value="查询" class="button"/>
-							<a href="{pigcms{:U('Deliver/export_user', array('begin_time' => $begin_time, 'end_time' => $end_time, 'uid' => $user['uid']))}" class="button" style="float:right;margin-right: 10px;">导出订单</a>
+							<input type="submit" value="{pigcms{:L('_BACK_SEARCH_')}" class="button"/>
+							<a href="{pigcms{:U('Deliver/export_user', array('begin_time' => $begin_time, 'end_time' => $end_time, 'uid' => $user['uid']))}" class="button" style="float:right;margin-right: 10px;">{pigcms{:L('_BACK_DOWN_ORDER_')}</a>
 						</form>
 					</td>
 				</tr>
@@ -33,19 +33,19 @@
 						<thead>
 							<tr>
 <!-- 								<th>订单ID</th> -->
-								<th>订单来源</th>
+								<th>{pigcms{:L('_C_ORDER_SOURCE_')}</th>
 								<!--th>配送员类型</th-->
-								<th>店铺名称</th>
-								<th>客户昵称</th>
-								<th>客户手机</th>
-								<th>客户地址</th>
+								<th>{pigcms{:L('_BACK_STORE_NAME_')}</th>
+								<th>{pigcms{:L('_BACK_USER_NAME_')}</th>
+								<th>{pigcms{:L('_BACK_USER_PHONE_')}</th>
+								<th>{pigcms{:L('_BACK_CUSTOM_ADD_')}</th>
 								<!--th>支付方式</th-->
-								<th>支付状态</th>
-								<th>订单价格</th>
-								<th>配送状态</th>
-								<th>开始时间</th>
-								<th>结束时间</th>
-								<th>应收现金</th>
+								<th>{pigcms{:L('_BACK_PAYMENT_STATUS_')}</th>
+								<th>{pigcms{:L('_BACK_ORDER_TOTAL_')}</th>
+								<th>{pigcms{:L('_BACK_DELIVERY_STATUS_')}</th>
+								<th>{pigcms{:L('_BACK_START_AT_')}</th>
+								<th>{pigcms{:L('_BACK_FINISH_AT_')}</th>
+								<th>{pigcms{:L('_BACK_CASH_RECE_')}</th>
 								<!--th>创建时间</th-->
 								
 							</tr>

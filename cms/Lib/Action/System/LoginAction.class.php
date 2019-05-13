@@ -89,16 +89,16 @@ class LoginAction extends BaseAction
 		if($now_admin['status'] != 1){
 			exit('-4');
 		}
-		$now_admin['show_account'] = '超级管理员';
+		$now_admin['show_account'] = 'Super Admin';
 		if ($now_admin['level'] == 1) {
 			if ($now_admin['area_id']) {
 				$area = D('Area')->field(true)->where(array('area_id' => $now_admin['area_id']))->find();
-				$now_admin['show_account'] = $area['area_name'] . '管理员';
+				$now_admin['show_account'] = $area['area_name'] . ' Admin';
 			}
 		}else if($now_admin['level'] == 2) {
-			$now_admin['show_account'] = '超级管理员';
+			$now_admin['show_account'] = 'Super Admin';
 		} else {
-			$now_admin['show_account'] = '普通管理员';
+			$now_admin['show_account'] = 'Territory Admin';
 		}
 		
 		$data_admin['id'] = $now_admin['id'];
@@ -138,14 +138,14 @@ class LoginAction extends BaseAction
 				exit(json_encode(array('err_code' => -4)));
 				exit('-4');
 			}
-			$now_admin['show_account'] = '超级管理员';
+			$now_admin['show_account'] = 'Super Admin';
 			if ($now_admin['level'] == 1) {
 				if ($now_admin['area_id']) {
 					$area = D('Area')->field(true)->where(array('area_id' => $now_admin['area_id']))->find();
-					$now_admin['show_account'] = $area['area_name'] . '管理员';
+					$now_admin['show_account'] = $area['area_name'] . ' Admin';
 				}
 			} else {
-				$now_admin['show_account'] = '普通管理员';
+				$now_admin['show_account'] = 'Territory Admin';
 			}
 			
 			$data_admin['id'] = $now_admin['id'];

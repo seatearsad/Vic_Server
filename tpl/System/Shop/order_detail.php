@@ -138,31 +138,31 @@
 	</tr>
 	</if>
 	<tr>
-		<th colspan="6">{pigcms{:L('_BACK_ACT_AM_PAID_')}：${pigcms{$order['price']|floatval} 元</th>
+		<th colspan="6">{pigcms{:L('_BACK_ACT_AM_PAID_')}：${pigcms{$order['price']|floatval} </th>
 	</tr>
 	<if condition="$order['score_used_count']">
 	<tr>
 		<th colspan="6">使用{pigcms{$config.score_name}：{pigcms{$order['score_used_count']} </th>
 	</tr>
 	<tr>
-		<th colspan="6">{pigcms{$config.score_name}抵现：${pigcms{$order['score_deducte']|floatval} 元</th>
+		<th colspan="6">{pigcms{$config.score_name}抵现：${pigcms{$order['score_deducte']|floatval} </th>
 	</tr>
 	</if>
 			
 	<if condition="$order['card_give_money'] gt 0">
 	<tr>
-		<th colspan="6">会员卡余额：${pigcms{$order['card_give_money']|floatval} 元</th>
+		<th colspan="6">会员卡余额：${pigcms{$order['card_give_money']|floatval} </th>
 	</tr>
 	</if>
 	
 	<if condition="$order['merchant_balance'] gt 0">
 	<tr>
-		<th colspan="6">商家余额：${pigcms{$order['merchant_balance']|floatval} 元</th>
+		<th colspan="6">商家余额：${pigcms{$order['merchant_balance']|floatval} </th>
 	</tr>
 	</if>
 	<if condition="$order['balance_pay'] gt 0">
 	<tr>
-		<th colspan="6">平台余额：${pigcms{$order['balance_pay']|floatval} 元</th>
+		<th colspan="6">{pigcms{:L('_BACK_TUTTI_CREDIT_')}：${pigcms{$order['balance_pay']|floatval}</th>
 	</tr>
 	</if>
 	<if condition="$order['payment_money'] gt 0">
@@ -192,7 +192,7 @@
 		<th colspan="6">{pigcms{:L('_BACK_PAYMENT_METHOD_')}：{pigcms{$order['pay_type_str']}</th>
 	</tr>
 	<tr>
-		<th colspan="6">{pigcms{:L('_BACK_ORDER_STATUS_')}：{pigcms{$order['status_str']}<if condition="$order['status'] eq 4">&nbsp;&nbsp;&nbsp;&nbsp;退款时间:{pigcms{$order['last_time']|date="Y-m-d H:i:s",###}</if></th>
+		<th colspan="6">{pigcms{:L('_BACK_ORDER_STATUS_')}：{pigcms{$order['status_str']}<if condition="$order['status'] eq 4">&nbsp;&nbsp;&nbsp;&nbsp;{pigcms{:L('_BACK_REFUND_TIME_')}:{pigcms{$order['last_time']|date="Y-m-d H:i:s",###}</if></th>
 	</tr>
 	
 	<tr>
