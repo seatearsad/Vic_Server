@@ -20,7 +20,7 @@
     <script type="text/javascript" src="{pigcms{$static_path}js/fastclick.js" charset="utf-8"></script>
     <script type="text/javascript" src="{pigcms{$static_path}layer/layer.m.js" charset="utf-8"></script>
     <script type="text/javascript" src="{pigcms{$static_path}js/common.js?t={pigcms{$_SERVER.REQUEST_TIME}" charset="utf-8"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&libraries=places&language=zh-CN"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&libraries=places&language=en"></script>
     <script type="text/javascript">
         <if condition="$user_long_lat">var last_user_long = "{pigcms{$user_long_lat.long}",last_user_lat = "{pigcms{$user_long_lat.lat}";<else/>var last_user_long = '0',last_user_lat  = '0';</if>
         var open_extra_price =Number("{pigcms{$config.open_extra_price}");
@@ -77,9 +77,51 @@
 
 <script>
     var window_width = $(window).width();
+
+    $("#pageAddressSearchTxt").focus(function () {
+        initAutocomplete();
+    });
+
     $(function () {
         showAddress();
     });
+
+    var autocomplete;
+    function initAutocomplete() {
+        autocomplete = new google.maps.places.Autocomplete(document.getElementById('pageAddressSearchTxt'), {types: ['geocode'],componentRestrictions: {country: ['ca']}});
+        autocomplete.addListener('place_changed', fillInAddress);
+    }
+
+    function fillInAddress() {
+        var place = autocomplete.getPlace();
+
+        $.cookie('shop_select_address', place.formatted_address,{expires:700,path:"/"});
+        $.cookie('shop_select_lng', place.geometry.location.lng(),{expires:700,path:"/"});
+        $.cookie('shop_select_lat', place.geometry.location.lat(),{expires:700,path:"/"});
+        //wap
+        $.cookie('userLocationName', place.formatted_address,{expires:700,path:"/"});
+        $.cookie('userLocationLong',place.geometry.location.lng(),{expires:700,path:'/'});
+        $.cookie('userLocationLat',place.geometry.location.lat(),{expires:700,path:'/'});
+
+        var add_com = place.address_components;
+        var is_get_city = false;
+        for(var i=0;i<add_com.length;i++){
+            if(add_com[i]['types'][0] == 'locality'){
+                is_get_city = true;
+                var city_name = add_com[i]['long_name'];
+                $.post("{pigcms{:U('Index/ajax_city_name')}",{city_name:city_name},function(result){
+                    if (result.error == 1){
+                        //$("input[name='city_id']").val(0);
+                    }else{
+                        //$("input[name='city_id']").val(result['info']['city_id']);
+                        $.cookie('userLocationCity', result['info']['city_id'],{expires:700,path:"/"});
+                    }
+                    window.location.href = './wap.php';
+                },'JSON');
+            }
+        }
+    }
+
     var hasLoadAddress=false,loadAddressTimer=null,addressGeocoder = false;
     function showAddress(){
         nowPage = 'address';
@@ -103,32 +145,30 @@
                 goBackPage();
             });
 
-
-
-            $("#pageAddressSearchTxt").bind('input', function(e){
-                var address = $.trim($(this).val());
-                if(address.length > 0){
-                    $('#pageAddressSearchDel,#pageAddressSearchContent').show();
-                    $('#pageAddressContent').hide();
-
-                    clearTimeout(loadAddressTimer);
-                    loadAddressTimer = setTimeout("searchAddress('"+address+"')", 500);
-                    $('#pageAddressSearchBtn').addClass('so');
-                }else{
-                    $('#pageAddressSearchDel').hide();
-                    $('#pageAddressSearchBtn').removeClass('so');
-
-                    $('#pageAddressContent').show();
-                    $('#pageAddressSearchContent').hide();
-                }
-            });
-            $('#pageAddressSearchBtn').click(function(){
-                var address = $.trim($("#pageAddressSearchTxt").val());
-                searchAddress(address);
-            });
+            // $("#pageAddressSearchTxt").bind('input', function(e){
+            //     var address = $.trim($(this).val());
+            //     if(address.length > 0){
+            //         $('#pageAddressSearchDel,#pageAddressSearchContent').show();
+            //         $('#pageAddressContent').hide();
+            //
+            //         clearTimeout(loadAddressTimer);
+            //         loadAddressTimer = setTimeout("searchAddress('"+address+"')", 500);
+            //         $('#pageAddressSearchBtn').addClass('so');
+            //     }else{
+            //         $('#pageAddressSearchDel').hide();
+            //         $('#pageAddressSearchBtn').removeClass('so');
+            //
+            //         $('#pageAddressContent').show();
+            //         $('#pageAddressSearchContent').hide();
+            //     }
+            // });
+            // $('#pageAddressSearchBtn').click(function(){
+            //     var address = $.trim($("#pageAddressSearchTxt").val());
+            //     searchAddress(address);
+            // });
 
             $('#pageAddressSearchDel').click(function(){
-                $('#pageAddressSearchTxt').val('').trigger('input');
+                //$('#pageAddressSearchTxt').val('').trigger('input');
                 /* $('#pageAddressSearchDel').hide(); */
             });
 
@@ -136,6 +176,11 @@
                 $('#pageAddressSearchDel').trigger('click');
                 user_long = $(this).data('long');
                 user_lat = $(this).data('lat');
+
+                city_id = $(this).data('city');
+                if(typeof(city_id) != 'undefined')
+                    $.cookie('userLocationCity', city_id,{expires:700,path:"/"});
+
                 $('#locationText').html($(this).data('name'));
 
                 $.cookie('userLocation',user_long+','+user_lat,{expires:700,path:'/'});
@@ -199,7 +244,7 @@
 
 <script id="listAddressListTpl" type="text/html">
     {{# for(var i = 0, len = d.length; i < len; i++){ }}
-    <dd data-long="{{ d[i].long }}" data-lat="{{ d[i].lat }}" data-name="{{ d[i].street }}" data-id="{{ d[i].id }}">
+    <dd data-long="{{ d[i].long }}" data-lat="{{ d[i].lat }}" data-name="{{ d[i].street }}" data-id="{{ d[i].id }}" data-city="{{ d[i].city_id}}">
         <div class="name">{{ d[i].street }} {{ d[i].house }}</div>
         <div class="desc">{{ d[i].name }} {{ d[i].phone }}</div>
     </dd>

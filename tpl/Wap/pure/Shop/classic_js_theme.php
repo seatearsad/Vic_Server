@@ -322,7 +322,7 @@
 </script>
 <script id="listAddressListTpl" type="text/html">
 	{{# for(var i = 0, len = d.length; i < len; i++){ }}
-		<dd data-long="{{ d[i].long }}" data-lat="{{ d[i].lat }}" data-name="{{ d[i].street }}" data-id="{{ d[i].id }}">
+		<dd data-long="{{ d[i].long }}" data-lat="{{ d[i].lat }}" data-name="{{ d[i].street }}" data-id="{{ d[i].id }}" data-city="{{ d[i].city_id}}">
 			<div class="name">{{ d[i].street }} {{ d[i].house }}</div>
 			<div class="desc">{{ d[i].name }} {{ d[i].phone }}</div>
 		</dd>

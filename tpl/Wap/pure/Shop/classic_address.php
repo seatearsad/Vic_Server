@@ -16,8 +16,9 @@
 		<script type="text/javascript" src="{pigcms{$static_path}js/idangerous.swiper.min.js" charset="utf-8"></script>
 		<script type="text/javascript" src="{pigcms{$static_path}js/fastclick.js" charset="utf-8"></script>
 		<script type="text/javascript" src="{pigcms{$static_path}layer/layer.m.js" charset="utf-8"></script>
-		<script type="text/javascript" src="http://api.map.baidu.com/api?type=quick&ak=4c1bb2055e24296bbaef36574877b4e2&v=1.0" charset="utf-8"></script>		
-		<script type="text/javascript" src="{pigcms{$static_path}js/common.js?220" charset="utf-8"></script>
+		<script type="text/javascript" src="http://api.map.baidu.com/api?type=quick&ak=4c1bb2055e24296bbaef36574877b4e2&v=1.0" charset="utf-8"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&libraries=places&language=en"></script>
+        <script type="text/javascript" src="{pigcms{$static_path}js/common.js?220" charset="utf-8"></script>
 		<script type="text/javascript">
 			var locationClassicHash = 'address';
 			var locationLastPage = "{pigcms{$_SERVER.HTTP_REFERER}";
@@ -328,6 +329,46 @@
 				"tTitle": "{pigcms{$config.shop_alias_name|default="快店"} - {pigcms{$config.site_name}",
 				"tContent": "{pigcms{$config.seo_description}"
 			};
+
+            $("#pageAddressSearchTxt").focus(function () {
+                initAutocomplete();
+            });
+
+            var autocomplete;
+            function initAutocomplete() {
+                autocomplete = new google.maps.places.Autocomplete(document.getElementById('pageAddressSearchTxt'), {types: ['geocode'],componentRestrictions: {country: ['ca']}});
+                autocomplete.addListener('place_changed', fillInAddress);
+            }
+
+            function fillInAddress() {
+                var place = autocomplete.getPlace();
+
+                $.cookie('shop_select_address', place.formatted_address,{expires:700,path:"/"});
+                $.cookie('shop_select_lng', place.geometry.location.lng(),{expires:700,path:"/"});
+                $.cookie('shop_select_lat', place.geometry.location.lat(),{expires:700,path:"/"});
+                //wap
+                $.cookie('userLocationName', place.formatted_address,{expires:700,path:"/"});
+                $.cookie('userLocationLong',place.geometry.location.lng(),{expires:700,path:'/'});
+                $.cookie('userLocationLat',place.geometry.location.lat(),{expires:700,path:'/'});
+
+                var add_com = place.address_components;
+                var is_get_city = false;
+                for(var i=0;i<add_com.length;i++){
+                    if(add_com[i]['types'][0] == 'locality'){
+                        is_get_city = true;
+                        var city_name = add_com[i]['long_name'];
+                        $.post("{pigcms{:U('Index/ajax_city_name')}",{city_name:city_name},function(result){
+                            if (result.error == 1){
+                                //$("input[name='city_id']").val(0);
+                            }else{
+                                //$("input[name='city_id']").val(result['info']['city_id']);
+                                $.cookie('userLocationCity', result['info']['city_id'],{expires:700,path:"/"});
+                            }
+                            redirectPage(locationLastPage);
+                        },'JSON');
+                    }
+                }
+            }
 		</script>
 		{pigcms{$shareScript}
 	</body>

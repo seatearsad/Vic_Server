@@ -539,30 +539,30 @@ function showAddress(){
 			goBackPage();
 		});
 		
-		$("#pageAddressSearchTxt").bind('input', function(e){
-			var address = $.trim($(this).val());
-			if(address.length > 0){
-				$('#pageAddressSearchDel,#pageAddressSearchContent').show();
-				$('#pageAddressContent').hide();
-				
-				clearTimeout(loadAddressTimer);
-				loadAddressTimer = setTimeout("searchAddress('"+address+"')", 500);
-				$('#pageAddressSearchBtn').addClass('so');
-			}else{
-				$('#pageAddressSearchDel').hide();
-				$('#pageAddressSearchBtn').removeClass('so');
-				
-				$('#pageAddressContent').show();
-				$('#pageAddressSearchContent').hide();
-			}
-		});
-		$('#pageAddressSearchBtn').click(function(){
-			var address = $.trim($("#pageAddressSearchTxt").val());
-			searchAddress(address);
-		});
+		// $("#pageAddressSearchTxt").bind('input', function(e){
+		// 	var address = $.trim($(this).val());
+		// 	if(address.length > 0){
+		// 		$('#pageAddressSearchDel,#pageAddressSearchContent').show();
+		// 		$('#pageAddressContent').hide();
+		//
+		// 		clearTimeout(loadAddressTimer);
+		// 		loadAddressTimer = setTimeout("searchAddress('"+address+"')", 500);
+		// 		$('#pageAddressSearchBtn').addClass('so');
+		// 	}else{
+		// 		$('#pageAddressSearchDel').hide();
+		// 		$('#pageAddressSearchBtn').removeClass('so');
+		//
+		// 		$('#pageAddressContent').show();
+		// 		$('#pageAddressSearchContent').hide();
+		// 	}
+		// });
+		// $('#pageAddressSearchBtn').click(function(){
+		// 	var address = $.trim($("#pageAddressSearchTxt").val());
+		// 	searchAddress(address);
+		// });
 		
 		$('#pageAddressSearchDel').click(function(){
-			$('#pageAddressSearchTxt').val('').trigger('input');
+			//$('#pageAddressSearchTxt').val('').trigger('input');
 			/* $('#pageAddressSearchDel').hide(); */
 		});
 		
@@ -570,6 +570,11 @@ function showAddress(){
 			$('#pageAddressSearchDel').trigger('click');
 			user_long = $(this).data('long');
 			user_lat = $(this).data('lat');
+
+            city_id = $(this).data('city');
+            if(typeof(city_id) != 'undefined')
+                $.cookie('userLocationCity', city_id,{expires:700,path:"/"});
+
 			$('#locationText').html($(this).data('name'));
 			
 			$.cookie('userLocation',user_long+','+user_lat,{expires:700,path:'/'});

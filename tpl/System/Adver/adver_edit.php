@@ -10,7 +10,7 @@
 				<th width="80">广告副标题</th>
 				<td><input type="text" class="input fl" name="sub_name" size="20" value="{pigcms{$now_adver.sub_name}" placeholder="请输入副标题" validate="required:true"/></td>
 			</tr>
-			<if condition="$many_city eq 1">
+			<!--if condition="$many_city eq 1"-->
 				<tr>
 					<th width="15%">通用广告</th>
 					<td width="35%" class="radio_box">
@@ -22,7 +22,7 @@
 					<th width="15%">所在区域</th>
 					<td width="85%" colspan="3" id="choose_cityareass" province_idss="{pigcms{$now_adver['province_id']}" city_idss="{pigcms{$now_adver['city_id']}"></td>
 				</tr>
-			</if>
+			<!--/if-->
 			<tr>
 				<th width="80">广告现图</th>
 				<td><img src="{pigcms{$config.site_url}/upload/adver/{pigcms{$now_adver.pic}" style="width:260px;height:80px;" class="view_msg"/></td>

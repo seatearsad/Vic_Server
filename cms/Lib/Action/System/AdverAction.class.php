@@ -7,6 +7,12 @@
  *
  */
 class AdverAction extends BaseAction{
+    public function _initialize(){
+        parent::_initialize();
+
+        $area_list = D('Area')->where(array('area_type'=>2))->select();
+        $this->assign('city_list',$area_list);
+    }
 	public function index(){
 		$database_adver_category  = D('Adver_category');
 		$category_list = $database_adver_category->field(true)->order('`cat_id` ASC')->select();

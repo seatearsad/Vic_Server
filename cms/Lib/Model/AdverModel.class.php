@@ -7,7 +7,8 @@ class AdverModel extends Model{
 			//return $adver_list;
 		}
 		
-		$now_city	=	C('config.now_city');
+		//$now_city	=	C('config.now_city');
+        $now_city = $_COOKIE['userLocationCity'] ? $_COOKIE['userLocationCity'] : 0;
 		$database_adver_category = D('Adver_category');
 		$condition_adver_category['cat_key'] = $cat_key;
 		$now_adver_category = $database_adver_category->field('`cat_id`')->where($condition_adver_category)->find();
@@ -17,7 +18,8 @@ class AdverModel extends Model{
 			$condition_adver['city_id'] = $now_city;
 			$adver_list = $this->field(true)->where($condition_adver)->order('`complete` DESC,`sort` DESC,`id` DESC')->limit($limit)->select();
 			$img_count  = count($adver_list);
-			$enough	=	$limit-$img_count;
+			//$enough	=	$limit-$img_count;
+            $enough	= 0;
 			if(empty($adver_list)){
 				$condition_adver['city_id'] = 0;
 				$adver_list	=	$this->field(true)->where($condition_adver)->order('`sort` DESC,`id` DESC')->limit($limit)->select();
