@@ -1521,7 +1521,7 @@ class ShopAction extends BaseAction{
 		if ($this->user_session['uid']) {
 			$adress_list = D('User_adress')->get_adress_list($this->user_session['uid']);
 			foreach ($adress_list as $row) {
-				$return[] = array('id'=>$row['adress_id'],'street' => $row['adress'], 'house' => $row['detail'], 'name' => $row['name'], 'phone' => $row['phone'], 'long' => $row['longitude'], 'lat' => $row['latitude']);
+				$return[] = array('id'=>$row['adress_id'],'street' => $row['adress'], 'house' => $row['detail'], 'name' => $row['name'], 'phone' => $row['phone'], 'long' => $row['longitude'], 'lat' => $row['latitude'],'city_id' => $row['city']);
 			}
 		}
 		echo json_encode($return);
