@@ -83,6 +83,12 @@ class AdverAction extends BaseAction{
 		$many_city	=	$this->config['many_city'];
 		$database_adver = D('Adver');
 		$condition_adver['cat_id'] = $now_category['cat_id'];
+
+		//garfunkel add
+        if($_GET['search_city'] && $_GET['search_city'] != 0){
+            $condition_adver['city_id'] = $_GET['search_city'];
+        }
+
 		$adver_list = $database_adver->field(true)->where($condition_adver)->order('`id` DESC')->select();
 		if($many_city == 1 && $adver_list){
 			foreach($adver_list as &$v){
