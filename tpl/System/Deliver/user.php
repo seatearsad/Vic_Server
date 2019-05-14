@@ -3,9 +3,10 @@
 			<div id="nav" class="mainnav_title">
 				<ul>
 					<a href="{pigcms{:U('Deliver/user')}" class="on">{pigcms{:L('_BACK_COURIER_MANA_')}</a>
-                    <if condition="$system_session['level'] neq 3">
-                    <a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Deliver/user_add')}','添加配送员',680,560,true,false,false,editbtn,'edit',true);">添加配送员</a>
+
+                    <a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Deliver/user_add')}','{pigcms{:L(\'_BACK_ADD_COURIER_\')}',680,560,true,false,false,editbtn,'edit',true);">{pigcms{:L('_BACK_ADD_COURIER_')}</a>
 					<!--a href="{pigcms{:U('Config/index',array('galias'=>'deliver','header'=>'Deliver/header'))}">配送配置</a-->
+                    <if condition="$system_session['level'] neq 3">
                     <a href="{pigcms{:U('Deliver/rule')}">配送配置</a>
                     </if>
                     <a href="{pigcms{:U('Deliver/map')}">{pigcms{:L('_BACK_COURIER_MONI_')}</a>
@@ -41,7 +42,7 @@
 								<th>{pigcms{:L('_BACK_DELIVERY_AREA_')}</th>
 								<th class="textcenter">{pigcms{:L('_BACK_STATUS_')}</th>
 								<th class="textcenter">{pigcms{:L('_BACK_TOTAL_DELIVERY_')}</th>
-								<th class="textcenter">{pigcms{:L('_BACK_CZ_')}</th>
+								<th class="textcenter">{pigcms{:L('_BACK_OVERVIEW_')}</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -59,7 +60,7 @@
 										<td class="textcenter">
 										<a style="width: 60px;" class="" href="{pigcms{:U('Deliver/count_log',array('uid'=>$vo['uid']))}">{pigcms{:L('_BACK_HISTORY_RECORD_')}</a>　 | 　
 										<a style="width: 60px;" class="" href="{pigcms{:U('Deliver/log_list',array('uid'=>$vo['uid']))}">{pigcms{:L('_BACK_HISTORY_DELI_')}</a>　 | 　
-										<a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Deliver/user_edit',array('uid'=>$vo['uid']))}','{pigcms{:L(\'_BACK_EDIT_CUSTOMER_\')}',680,560,true,false,false,editbtn,'edit',true);">{pigcms{:L('_BACK_EDIT_')}</a>
+										<a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Deliver/user_edit',array('uid'=>$vo['uid']))}','{pigcms{:L(\'_BACK_EDIT_COURIER_\')}',680,560,true,false,false,editbtn,'edit',true);">{pigcms{:L('_BACK_EDIT_')}</a>
 										</td>
 									</tr>
 								</volist>

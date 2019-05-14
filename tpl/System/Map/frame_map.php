@@ -107,11 +107,11 @@ $(function(){
 });
 </script>
 <style>.BMap_cpyCtrl{display:none;}</style>
-<div id="frame_map_tips" style="margin:0">(用鼠标滚轮可以缩放地图)&nbsp;&nbsp;&nbsp;&nbsp;拖动红色图标，左侧经纬度框内将自动填充经纬度。</div>
+<div id="frame_map_tips" style="margin:0">Drag the red icon for correct location</div>
 <div class="modal-body no-padding" style="width:100%;">
 	
-		<input id="map-keyword" type="textbox" style="width:300px;" placeholder="尽量填写城市、区域、街道名" value=""/>
-		<input type="submit" id="searchBtn" value="搜索"/>
+		<input id="map-keyword" type="textbox" style="width:300px;" placeholder="Enter your store address" value=""/>
+		<input type="submit" id="searchBtn" value="Search"/>
 	
 	<div id="map" style="height:478px;"></div>
 </div>

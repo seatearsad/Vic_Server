@@ -6,50 +6,50 @@
 		<input type="hidden" name="uid" value="{pigcms{$now_user.uid}"/>
 		<table cellpadding="0" cellspacing="0" class="frame_form" width="100%">
 			<tr>
-				<th width="15%">姓</th>
+				<th width="15%">{pigcms{:L('_LAST_NAME_')}</th>
 				<td width="35%"><input type="text" class="input fl" name="family_name" size="20" validate="maxlength:50,required:true"/></td>
-				<th width="15%">名</th>
+				<th width="15%">{pigcms{:L('_FIRST_NAME_')}</th>
 				<td width="35%"><input type="text" class="input fl" name="name" size="20" validate="maxlength:50,required:true"/></td>
 			</tr>
             <tr>
-                <th width="15%">邮箱</th>
+                <th width="15%">{pigcms{:L('_EMAIL_TXT_')}</th>
                 <td width="35%"><input type="text" class="input fl" name="email" size="20" validate="maxlength:50,required:true" /></td>
-                <th width="15%">语言</th>
+                <th width="15%">{pigcms{:L('_LANG_TXT_')}</th>
                 <td width="35%">
                     <span class="cb-enable"><label class="cb-enable"><span>English</span><input type="radio" name="language" value="1"  /></label></span>
-                    <span class="cb-disable"><label class="cb-disable selected"><span>中文</span><input type="radio" name="language" value="0"  /></label></span>
+                    <span class="cb-disable"><label class="cb-disable selected"><span>Chinese</span><input type="radio" name="language" value="0"  /></label></span>
                 </td>
             </tr>
 			<tr>
-				<th width="15%">密码</th>
+				<th width="15%">{pigcms{:L('_B_D_LOGIN_KEY1_')}</th>
 				<td width="35%"><input type="text" class="input fl" name="pwd" size="20" value="123456" tips="不修改则不填写" validate="required:true"/></td>
-				<th width="15%">状态</th>
+				<th width="15%">{pigcms{:L('_BACK_STATUS_')}</th>
 				<td width="35%" class="radio_box">
-					<span class="cb-enable"><label class="cb-enable <if condition="$now_user['status'] eq 1">selected</if>"><span>正常</span><input type="radio" name="status" value="1"  <if condition="$now_user['status'] eq 1">checked="checked"</if>/></label></span>
-					<span class="cb-disable"><label class="cb-disable <if condition="$now_user['status'] eq 0">selected</if>"><span>禁止</span><input type="radio" name="status" value="0"  <if condition="$now_user['status'] eq 0">checked="checked"</if>/></label></span>
+					<span class="cb-enable"><label class="cb-enable <if condition="$now_user['status'] eq 1">selected</if>"><span>{pigcms{:L('_BACK_NORMAL_')}</span><input type="radio" name="status" value="1"  <if condition="$now_user['status'] eq 1">checked="checked"</if>/></label></span>
+					<span class="cb-disable"><label class="cb-disable <if condition="$now_user['status'] eq 0">selected</if>"><span>{pigcms{:L('_BACK_FORBID_')}</span><input type="radio" name="status" value="0"  <if condition="$now_user['status'] eq 0">checked="checked"</if>/></label></span>
 				</td>
 			</tr>
 			<tr>
-			 	<th width="15%">所在地</th>
+			 	<th width="15%">{pigcms{:L('_BACK_DELIVER_AREA_')}</th>
 				<!--td id="choose_cityarea" colspan=3></td-->
                 <td id="city_area">
 
                 </td>
                 <input type="hidden" id="city_id" name="city_id">
-                <th width="15%">生日</th>
+                <th width="15%">{pigcms{:L('_BIRTHDAY_TXT_')}</th>
                 <td width="35%"><input type="text" class="input fl" name="birthday" size="20" validate="maxlength:50,required:true" /></td>
 			<tr>
 			<tr>
-				<th width="15%">配送范围</th>
+				<th width="15%">{pigcms{:L('_BACK_DELIVERY_AREA_')}</th>
 				<td width="35%"><input type="text" class="input fl" name="range" size="20" validate="required:true" value="5"/>公里</td>
-                <th width="15%">手机号</th>
+                <th width="15%">{pigcms{:L('_BACK_PHONE_NUM_')}</th>
                 <td width="35%"><input type="text" class="input fl" name="phone" size="20" validate="number:true,required:true" value="{pigcms{$now_user.phone}"/></td>
 			<tr>
 			</tr>
 			<tr>
-				<th width="15%">常驻地区</th>
+				<th width="15%">{pigcms{:L('_BACK_OFEN_ADD_')}</th>
 				<td width="35%"><input type="text" class="input fl" readonly="readonly" name="adress" id="adress" validate="required:true"/></td>
-				<th width="15%">配送员经纬度</th>
+				<th width="15%">{pigcms{:L('_BACK_COURIER_LOC_')}</th>
 				<td width="35%" class="radio_box"><input class="input fl" size="20" name="long_lat" id="long_lat" type="text" readonly="readonly" validate="required:true"/></td>
 			</tr>
             <tr>
@@ -59,7 +59,7 @@
                 </td>
             </tr>
             <tr>
-                <th width="15%">银行卡</th>
+                <th width="15%">{pigcms{:L('_BACK_BANK_INFO_')}</th>
                 <td colspan=3>
                         <input type="text" placeholder="Account Holder Name" class="input fl" name="ahname" size="30" validate="maxlength:50,required:true" />
                 </td>
@@ -84,8 +84,8 @@
             <tr>
 		</table>
 		<div class="btn hidden">
-			<input type="submit" name="dosubmit" id="dosubmit" value="提交" class="button" />
-			<input type="reset" value="取消" class="button" />
+			<input type="submit" name="dosubmit" id="dosubmit" value="{pigcms{:L('_BACK_SUBMIT_')}" class="button" />
+			<input type="reset" value="{pigcms{:L('_BACK_CANCEL_')}" class="button" />
 		</div>
 	</form>
 	<div id="modal-table" class="modal fade" tabindex="-1" style="display:block;">
@@ -93,13 +93,13 @@
 			<div class="modal-content" style="width:100%;">
 				<div class="modal-header no-padding" style="width:100%;">
 					<div class="table-header">
-						   拖动红色图标，经纬度框内将自动填充经纬度。
+                        {pigcms{:L('_BACK_DRAG_RED_PIN_')}
 					</div>
 				</div>
 				<div class="modal-body no-padding" style="width:100%;">
 					<form id="map-search" style="margin:10px;">
-						<input id="map-keyword" type="textbox" style="width:300px;" placeholder="尽量填写城市、区域、街道名"/>
-						<input type="submit" value="搜索"/>
+						<input id="map-keyword" type="textbox" style="width:300px;" placeholder="Enter your address"/>
+						<input type="submit" value="{pigcms{:L('_BACK_SEARCH_')}"/>
 					</form>
 					<div style="width: 650px; height: 250px; min-height: 250px;" id="cmmap"></div>
 				</div>

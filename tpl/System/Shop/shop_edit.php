@@ -9,7 +9,7 @@
 			<tr>
 				<th width="90">{pigcms{:L('_BACK_DIST_TYPE_')}</th>
 				<td>
-					<select name="delivery_range_type" class="valid" tips="半径范围|自定义范围">
+					<select name="delivery_range_type" class="valid">
 					<option value="0" <if condition="$now_shop['delivery_range_type'] eq 0">selected</if>>{pigcms{:L('_BACK_RADIUS_')}</option>
 					<!--option value="1" <if condition="$now_shop['delivery_range_type'] eq 1">selected</if>>自定义范围</option-->
 					</select>
@@ -17,7 +17,7 @@
 			</tr>
 			<tr class="delivery_range_type0">
 				<th width="90">{pigcms{:L('_BACK_DISTANCE_')}</th>
-				<td><input type="text" class="input fl" name="delivery_radius" value="{pigcms{$now_shop.delivery_radius|floatval}" id="reduce_money" size="10" tips="已店铺为起点的半径距离(单位：㎞)"/></td>
+				<td><input type="text" class="input fl" name="delivery_radius" value="{pigcms{$now_shop.delivery_radius|floatval}" id="reduce_money" size="10" /></td>
 			</tr>
 			<tr class="delivery_range_type1">
 				<td>自定义范围</td>
@@ -30,12 +30,13 @@
 			<tr>
 				<th width="90">{pigcms{:L('_BACK_DELIVER_SET_')}</th>
 				<td>
-					<select name="s_is_open_own" class="valid" tips="是否开启平台对店铺的配送费单独设置，如果开启，下面的设置才有用，如果关闭那么采用平台的默认设置">
+					<select name="s_is_open_own" class="valid">
 					<option value="0" <if condition="$now_shop['s_is_open_own'] eq 0">selected</if>>{pigcms{:L('_BACK_OFF_')}</option>
 					<option value="1" <if condition="$now_shop['s_is_open_own'] eq 1">selected</if>>{pigcms{:L('_BACK_ON_')}</option>
 					</select>
 				</td>
 			</tr>
+            <!--
 			<tr class="open_own" >
 				<th colspan="2" style="color:red">配送时间段一的设置</th>
 			</tr>
@@ -96,6 +97,7 @@
 				<td><input type="text" class="input fl" name="s_per_km_price2" value="{pigcms{$now_shop.s_per_km_price2|floatval}" id="reduce_money" size="10" tips="超出起步距离的路程每公里的单价，如果超出部分不是整数的情况下舍去零头取整数，距离是按直线距离算的（单位:元）"/></td>
 			</tr>
 			</if>
+            -->
 		</table>
 		<div class="btn hidden">
 			<input type="submit" name="dosubmit" id="dosubmit" value="提交" class="button" />

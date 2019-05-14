@@ -8,34 +8,40 @@ $(function(){
 	}
 	
 	$('#form').submit(function(){
-		notice('正在登录中~','loading');
+		notice('Login...','loading');
 		if($('#account').val()==''){
-			notice('请输入用户名~','error');
+			notice('Invalid Username!','error');
 			$('#account').focus();
 		}else if($('#pwd').val()==''){
-			notice('请输入密码~','error');
+			notice('Invalid Password!','error');
 			$('#pwd').focus();
 		}else if($('#verify').val().length!=4){
-			notice('请输入4位验证码~','error');
+			notice('Invalid Verification Code!','error');
 			$('#verify').focus();
 		}else{
 			$.post(login_check,$("#form").serialize(),function(data){
 				var msg;
 				var pic;
 				if(data==1){
-					msg = '登录成功,现在跳转~';
+					msg = 'Success!';
 					pic = 'ok';
 					setTimeout(function(){
 						window.parent.location = system_index;
 					},1000);
 				}else{
 					pic = 'error';
-					if(data==-1){$('#verify').focus();msg='验证码不正确！';}
-					else if(data==-2){$('#account').focus();msg='用户名不存在！';}
-					else if(data==-3){$('#pwd').focus();msg='密码错误！';}
-					else if(data==-4){$('#account').focus();msg='用户被禁止登录！';}
-					else if(data==-5){$('#account').focus();msg='登录信息保存失败,请重新登录！';}
-					else{msg='登录出现异常，请重试！';}
+					// if(data==-1){$('#verify').focus();msg='验证码不正确！';}
+					// else if(data==-2){$('#account').focus();msg='用户名不存在！';}
+					// else if(data==-3){$('#pwd').focus();msg='密码错误！';}
+					// else if(data==-4){$('#account').focus();msg='用户被禁止登录！';}
+					// else if(data==-5){$('#account').focus();msg='登录信息保存失败,请重新登录！';}
+					// else{msg='登录出现异常，请重试！';}
+                    if(data==-1){$('#verify').focus();msg='Invalid Verification Code!';}
+                    else if(data==-2){$('#account').focus();msg='Invalid Username!';}
+                    else if(data==-3){$('#pwd').focus();msg='Invalid Password!';}
+                    else if(data==-4){$('#account').focus();msg='用户被禁止登录！';}
+                    else if(data==-5){$('#account').focus();msg='登录信息保存失败,请重新登录！';}
+                    else{msg='登录出现异常，请重试！';}
 				}
 				notice(msg,pic);
 			});

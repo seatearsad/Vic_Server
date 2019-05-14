@@ -23,7 +23,7 @@
                 <input type="hidden" id="city_id" name="city_id" value="{pigcms{$store.city_id}">
 			</tr>
 			<tr>
-				<th width="80">{pigcms{:L('_SHOP_ADDRESS_')}</th>
+				<th width="80">{pigcms{:L('_BACK_STORE_ADDRESS_')}</th>
 				<td><input type="text" class="input fl" name="adress" id="adress" value="{pigcms{$store.adress}" size="25" placeholder="店铺的地址" validate="required:true"/></td>
 			</tr>
 			<tr>
@@ -64,7 +64,7 @@
 				<th width="80">{pigcms{:L('_STORE_STATUS_')}</th>
 				<td>
 					<span class="cb-enable"><label class="cb-enable <if condition="$store['status'] eq 1">selected</if>"><span>{pigcms{:L('_BACK_ACTIVE_')}</span><input type="radio" name="status" value="1" <if condition="$store['status'] eq 1">checked="checked"</if> /></label></span>
-					<span class="cb-disable"><label class="cb-disable <if condition="$store['status'] eq 0">selected</if>"><span>{pigcms{:L('_BACK_CLOSED_')}</span><input type="radio" name="status" value="0" <if condition="$store['status'] eq 0">checked="checked"</if>/></label></span>
+					<span class="cb-disable"><label class="cb-disable <if condition="$store['status'] eq 0">selected</if>"><span>{pigcms{:L('_BACK_FORBID_')}</span><input type="radio" name="status" value="0" <if condition="$store['status'] eq 0">checked="checked"</if>/></label></span>
 				</td>
 			</tr>
             <tr>

@@ -1,4 +1,9 @@
 <include file="Public:header"/>
+<style>
+    .table-list thead th{
+        line-height: 20px;
+    }
+</style>
 	<div class="mainbox">
 		<div id="nav" class="mainnav_title">
 			<ul>
@@ -138,7 +143,8 @@
 									<td><!-- {pigcms{$vo.pay_status} --><span style="color: green">{pigcms{$vo.pay_type_str}<br>({pigcms{$vo.pay_type})</span></td>
 									<td class="textcenter">
 										<if condition="$vo.status eq 0 AND $vo.paid eq 1">
-                                            <a data-href="{pigcms{:U('Shop/refund_update',array('order_id'=>$vo['order_id']))}" class="refund">{pigcms{:L('_BACK_MANUAL_REFUND_')}</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</if>
+                                            <a data-href="{pigcms{:U('Shop/refund_update',array('order_id'=>$vo['order_id']))}" class="refund">{pigcms{:L('_BACK_MANUAL_REFUND_')}</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        </if>
                                         <a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Shop/order_detail',array('order_id'=>$vo['order_id'],'frame_show'=>true))}','{pigcms{:L(\'_BACK_ORDER_DETAIL_\')}',920,520,true,false,false,false,'detail',true);">{pigcms{:L('_BACK_VIEW_')}</a>
                                         <php>if($vo['is_refund'] == 0){</php>
                                         <a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Shop/edit_order',array('order_id'=>$vo['order_id']))}','{pigcms{:L(\'_BACK_EDIT_\')}',920,520,true,false,false,editbtn,'edit',true);">{pigcms{:L('_BACK_EDIT_')}</a>
@@ -169,8 +175,10 @@ $(function(){
 	$('.refund').click(function(){
 		var get_url = $(this).data('href'), obj = $(this);
 		window.top.art.dialog({
-			content: '您确定要手动退款吗？只取修改订单状态！',
+            title:'Reminder',
+			content: 'Are you sure about refund?',
 			lock: true,
+            okVal:'Yes',
 			ok: function () {
 				this.close();
 				$.get(get_url,function(response){

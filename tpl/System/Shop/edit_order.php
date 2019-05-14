@@ -59,7 +59,7 @@
 	<if condition="$order['freight_charge'] gt 0">
 	<tr>
 		<th colspan="6">{pigcms{:L('_DELI_PRICE_')}：
-            $<input type="text" name="freight_charge" id="freight_charge" size="5" pattern="[0-9]*" value="{pigcms{$order['freight_charge']|floatval}">
+            $<input type="text" name="freight_charge" id="freight_charge" size="5" value="{pigcms{$order['freight_charge']|floatval}">
         </th>
 	</tr>
 	</if>

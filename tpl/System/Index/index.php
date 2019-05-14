@@ -6,7 +6,7 @@
 		<if condition="$config['site_favicon']">
 			<link rel="shortcut icon" href="{pigcms{$config.site_favicon}"/>
 		</if>
-		<title>后台管理 - {pigcms{$config.site_name}</title>
+		<title>Backend Management - {pigcms{$config.site_name}</title>
 		<script type="text/javascript">if(self!=top){window.top.location.href = "{pigcms{:U('Index/index')}";}var selected_module="{pigcms{:strval($_GET['module'])}",selected_action="{pigcms{:strval($_GET['action'])}",selected_url="{pigcms{:urldecode(strval(htmlspecialchars_decode($_GET['url'])))}";</script>
 		<script type="text/javascript" src="{pigcms{:C('JQUERY_FILE')}"></script>
 		<script type="text/javascript" src="{pigcms{$static_public}js/artdialog/jquery.artDialog.js"></script>
@@ -92,9 +92,9 @@
 								<if condition="$now_area"><li style="color:#999;">{pigcms{$now_area.area_name}</li></if>
 								<li>
 									<div class="btn-group btn-group-sm btn-group-justified">
-										<a href="{pigcms{$config.site_url}" target="_blank" class="toggle-visitors btn btn-dark tt-top tooltipstered" title="浏览网站"><i class="fa fa-tv"></i></a>
-										<a href="{pigcms{:U('Index/cache')}" target="main" class="btn btn-dark tt-top tooltipstered" title="清空缓存"><i class="fa fa-refresh"></i></a>
-										<a href="{pigcms{:U('Login/logout')}" class="toggle-stats btn btn-dark tt-top tooltipstered" title="退出登录"><i class="fa fa-sign-out"></i></a>
+										<a href="{pigcms{$config.site_url}" target="_blank" class="toggle-visitors btn btn-dark tt-top tooltipstered" title="TUTTI Website"><i class="fa fa-tv"></i></a>
+										<a href="{pigcms{:U('Index/cache')}" target="main" class="btn btn-dark tt-top tooltipstered" title="Clear Cache"><i class="fa fa-refresh"></i></a>
+										<a href="{pigcms{:U('Login/logout')}" class="toggle-stats btn btn-dark tt-top tooltipstered" title="Logout"><i class="fa fa-sign-out"></i></a>
 									</div>
 								</li>
 							</ul>
@@ -169,9 +169,6 @@
 			</div>
 			<div style="clear:both;"></div>
 		</div>
-		<!--if condition="$system_session['level'] eq 2">
-			<div id="footer" class="footer" >Powered by <a href="http://www.pigcms.com" target="_blank">Pigcms</a> Copyright 2017 © 合肥彼岸互联信息技术有限公司 版权所有<span id="run"></span></div>
-		</if-->
 		<script type="text/javascript" src="{pigcms{$static_path}js/index.js"></script>
 
 		<script type="text/javascript">

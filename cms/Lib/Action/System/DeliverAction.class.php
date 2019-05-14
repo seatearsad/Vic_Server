@@ -113,9 +113,9 @@ class DeliverAction extends BaseAction {
     		$this->success('保存成功');
     	}
     	//garfunkel 判断城市管理员
-        if($this->system_session['level'] == 3){
-            $this->error('当前管理员没有此权限');
-        }
+        //if($this->system_session['level'] == 3){
+            //$this->error('当前管理员没有此权限');
+        //}
     	$this->display();
     }
     
