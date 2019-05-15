@@ -478,11 +478,11 @@ class IndexAction extends BaseAction {
 
         $alias_c_name = $this->get_alias_c_name();
         if($day){
-            $p_title = $day.'天内';
+            $p_title = $day.' '.L('_BACK_DAYS_');
         }elseif($peroid){
             $p_title = $peroid;
         }
-        $title  = '数据分析('.$p_title.' '.date("Y-m-d H'i's").')';
+        $title  = 'Sales Summary('.$p_title.' '.date("Y-m-d H'i's").')';
         require_once APP_PATH . 'Lib/ORG/phpexcel/PHPExcel.php';
         $objExcel = new PHPExcel();
         $objProps = $objExcel->getProperties();

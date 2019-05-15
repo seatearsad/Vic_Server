@@ -1,4 +1,9 @@
 <include file="Public:header"/>
+<style>
+    .table-list thead th{
+        line-height: 20px;
+    }
+</style>
 		<div class="mainbox">
 			<div id="nav" class="mainnav_title">
 				<ul>
@@ -55,7 +60,7 @@
 								<volist name="supply_info"  id="vo">
 									<tr class="<if condition="$i%2 eq 0">odd<else/>even</if>">
 <!-- 										<td width="30">{pigcms{$vo.order_id}</td> -->
-										<td><if condition="$vo['item'] eq 0">{pigcms{$config.meal_alias_name}<elseif condition="$vo['item'] eq 1" />外送系统<elseif condition="$vo['item'] eq 2" />{pigcms{$config.shop_alias_name}</if></td>
+										<td><if condition="$vo['item'] eq 0">{pigcms{$config.meal_alias_name}<elseif condition="$vo['item'] eq 1" />外送系统<elseif condition="$vo['item'] eq 2" />{pigcms{:L('_BACK_DELIVERY_')}</if></td>
 										<!--td width="50">{pigcms{$vo.group}</td-->
 										<td>{pigcms{$vo.storename}</td>
 										<td>{pigcms{$vo.username}</td>
@@ -74,7 +79,7 @@
 								</volist>
 								<tr><td class="textcenter pagebar" colspan="16">{pigcms{$pagebar}</td></tr>
 							<else/>
-								<tr><td class="textcenter red" colspan="16">列表为空！</td></tr>
+								<tr><td class="textcenter red" colspan="16">{pigcms{:L('_BACK_EMPTY_')}</td></tr>
 							</if>
 						</tbody>
 					</table>

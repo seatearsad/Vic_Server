@@ -62,7 +62,7 @@
                                             </if>
                                         </td>
 										<td class="textcenter">　
-										<a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Deliver/user_view',array('uid'=>$vo['uid']))}','查看信息',680,560,true,false,false,editbtn,'edit',true);">编辑</a>
+										<a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Deliver/user_view',array('uid'=>$vo['uid']))}','{pigcms{:L(\'_BACK_EDIT_COURIER_\')}',680,560,true,false,false,editbtn,'edit',true);">{pigcms{:L('_BACK_EDIT_')}</a>
 										</td>
 									</tr>
 								</volist>

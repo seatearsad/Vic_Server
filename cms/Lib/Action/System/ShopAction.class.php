@@ -793,7 +793,7 @@ class ShopAction extends BaseAction
     {
         set_time_limit(0);
         require_once APP_PATH . 'Lib/ORG/phpexcel/PHPExcel.php';
-        $title = '订单信息';
+        $title = 'Order Summary';
         $objExcel = new PHPExcel();
         $objProps = $objExcel->getProperties();
         // 设置文档基本属性

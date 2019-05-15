@@ -64,7 +64,7 @@
 	</tr>
 	</if>
     <tr>
-        <th colspan="6">{pigcms{:L('_BACK_TAX_')}：$<span id="tax_price">{pigcms{$order['tax_price']|floatval}</span></th>
+        <th colspan="6">{pigcms{:L('_BACK_TAX_')}：$<span id="tax_price">{pigcms{:round($order['tax_price'],2)}</span></th>
     </tr>
     <tr>
         <th colspan="6">{pigcms{:L('_STORE_PRODUCT_DEPOSIT_')}：$<span id="deposit_price">{pigcms{$order['deposit_price']|floatval}</span></th>

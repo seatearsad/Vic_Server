@@ -485,13 +485,32 @@
     }
     function fillInAddress() {
         var place = autocomplete.getPlace();
+
         $.cookie('shop_select_address', place.formatted_address,{expires:700,path:"/"});
         $.cookie('shop_select_lng', place.geometry.location.lng(),{expires:700,path:"/"});
         $.cookie('shop_select_lat', place.geometry.location.lat(),{expires:700,path:"/"});
         //wap
+        $.cookie('userLocationName', place.formatted_address,{expires:700,path:"/"});
         $.cookie('userLocationLong',place.geometry.location.lng(),{expires:700,path:'/'});
         $.cookie('userLocationLat',place.geometry.location.lat(),{expires:700,path:'/'});
-        window.location.href = './shop';
+
+        var add_com = place.address_components;
+        var is_get_city = false;
+        for(var i=0;i<add_com.length;i++){
+            if(add_com[i]['types'][0] == 'locality'){
+                is_get_city = true;
+                var city_name = add_com[i]['long_name'];
+                $.post("{pigcms{:U('Index/ajax_city_name')}",{city_name:city_name},function(result){
+                    if (result.error == 1){
+                        //$("input[name='city_id']").val(0);
+                    }else{
+                        //$("input[name='city_id']").val(result['info']['city_id']);
+                        $.cookie('userLocationCity', result['info']['city_id'],{expires:700,path:"/"});
+                    }
+                    window.location.href = './shop';
+                },'JSON');
+            }
+        }
     }
 </script>
 </html>

@@ -575,13 +575,14 @@ $(function(){
 		var now_dom = $(this);
 		window.top.art.dialog({
 			icon: 'question',
-			title: '请确认',
+			title: 'Reminder',
 			id: 'msg' + Math.random(),
 			lock: true,
 			fixed: true,
 			opacity:'0.4',
 			resize: false,
-			content: '你确定这样操作吗？操作后可能不能恢复！' + (now_dom.attr('tip') ? '<br/><br/><div style="color:red;">'+now_dom.attr('tip')+'</div>' : ''),
+			content: 'There is no going back for deleting,are you sure about this?' + (now_dom.attr('tip') ? '<br/><br/><div style="color:red;">'+now_dom.attr('tip')+'</div>' : ''),
+			okVal:'Yes',
 			ok:function (){
 				$.post(now_dom.attr('url'),now_dom.attr('parameter'),function(result){
 					if(result.status == 1){
@@ -597,6 +598,7 @@ $(function(){
 					}
 				});
 			},
+			cancelVal:'Cancel',
 			cancel:true
 		});
 		return false;

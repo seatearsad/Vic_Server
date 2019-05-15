@@ -35,12 +35,12 @@
                 <td>
                     {pigcms{$now_user['city_name']}
                 </td>
-                <th width="15%">生日</th>
+                <th width="15%">{pigcms{:L('_BIRTHDAY_TXT_')}</th>
                 <td width="35%"><input type="text" class="input fl" name="birthday" size="20" validate="maxlength:50,required:true" value="{pigcms{$now_user.birthday}"/></td>
 			<tr>
 			<tr>
 				<th width="15%">{pigcms{:L('_BACK_DELIVERY_AREA_')}</th>
-				<td width="35%"><input type="text" class="input fl" name="range" size="20" validate="required:true" value="{pigcms{$now_user.range}"/> {pigcms{:L('_BACK_MILES_')}</td>
+				<td width="35%"><input type="text" class="input fl" name="range" size="20" validate="required:true" value="{pigcms{$now_user.range}"/></td>
                 <th width="15%">{pigcms{:L('_BACK_PHONE_NUM_')}</th>
                 <td width="35%"><input type="text" class="input fl" name="phone" size="20" validate="number:true,required:true" value="{pigcms{$now_user.phone}"/></td>
 			<tr>

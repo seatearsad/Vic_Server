@@ -287,7 +287,7 @@ function msg(status,msg,lock,time){
         icon: ico,
         time: time,
         /*background: '#FFF',*/
-        title: '提示信息',
+        title: 'Reminder',
         id: id,
 		opacity:'0.4',
         lock: lock,

@@ -20,7 +20,7 @@ $(function(){
 
 	//拖动图标结束
 	google.maps.event.addListener(marker, 'dragend', function (event) {
-		var message = "您的坐标设置成功！";
+		var message = "Success,location pinned!";
 		var infowindow = new google.maps.InfoWindow({
 				content: message,
 				size: new google.maps.Size(50, 50)

@@ -22,7 +22,7 @@
             </tr>
 			<tr>
 				<th width="15%">{pigcms{:L('_B_D_LOGIN_KEY1_')}</th>
-				<td width="35%"><input type="text" class="input fl" name="pwd" size="20" value="123456" tips="不修改则不填写" validate="required:true"/></td>
+				<td width="35%"><input type="text" class="input fl" name="pwd" size="20" value="123456" validate="required:true"/></td>
 				<th width="15%">{pigcms{:L('_BACK_STATUS_')}</th>
 				<td width="35%" class="radio_box">
 					<span class="cb-enable"><label class="cb-enable <if condition="$now_user['status'] eq 1">selected</if>"><span>{pigcms{:L('_BACK_NORMAL_')}</span><input type="radio" name="status" value="1"  <if condition="$now_user['status'] eq 1">checked="checked"</if>/></label></span>
@@ -41,7 +41,7 @@
 			<tr>
 			<tr>
 				<th width="15%">{pigcms{:L('_BACK_DELIVERY_AREA_')}</th>
-				<td width="35%"><input type="text" class="input fl" name="range" size="20" validate="required:true" value="5"/>公里</td>
+				<td width="35%"><input type="text" class="input fl" name="range" size="20" validate="required:true" value="5"/></td>
                 <th width="15%">{pigcms{:L('_BACK_PHONE_NUM_')}</th>
                 <td width="35%"><input type="text" class="input fl" name="phone" size="20" validate="number:true,required:true" value="{pigcms{$now_user.phone}"/></td>
 			<tr>

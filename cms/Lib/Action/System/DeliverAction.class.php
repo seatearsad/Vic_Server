@@ -478,7 +478,7 @@ class DeliverAction extends BaseAction {
 				$href = C('config.site_url').'/wap.php?c=Deliver&a=pick';
 				$model->sendTempMsg('OPENTM405486394', array('href' => $href, 'wecha_id' => $user['openid'], 'first' => $user['name'] . '您好！', 'keyword1' => '系统分配一个配送订单给您，请注意及时查收。', 'keyword2' => date('Y年m月d日 H:s'), 'keyword3' => '订单号：' . $supply['real_orderid'], 'remark' => '请您及时处理！'));
     		}
-    		$this->success('指派成功');
+    		$this->success('Assignment Success');
     	} else {
     		$store = D('Merchant_store')->field(true)->where(array('store_id' => $supply['store_id']))->find();
     		if (empty($store)) $this->error('店铺不存在');
@@ -562,28 +562,28 @@ class DeliverAction extends BaseAction {
             $value['create_time'] = date("Y-m-d H:i:s", $value['create_time']);
 			$value['start_time'] = $value['start_time'] ? date("Y-m-d H:i:s", $value['start_time']) : '-';
 			$value['end_time'] = $value['end_time'] ? date("Y-m-d H:i:s", $value['end_time']) : '-';
-            $value['paid'] = $value['paid'] == 1 ? "已支付" : "未支付";
+            $value['paid'] = $value['paid'] == 1 ? L('_BACK_PAID_') : L('_STATUS_LIST_100_');
             $value['pay_type'] = $value['pay_type'] == "offline" ? "线下支付" : "线上支付";
             //订单状态（0：订单失效，1:订单完成，2：商家未确认，3：商家已确认，4已取餐，5：正在配送，6：退单,7商家取消订单,8配送员已接单）
             //配送状态(0失败 1等待接单 2接单 3取货 4开始配送 5完成）
             switch ($value['status']) {
                 case 1:
-                    $value['order_status'] = '<font color="red">等待接单</font>';
+                    $value['order_status'] = '<font color="red">'.L('_BACK_AWAIT_').'</font>';
                     break;
                 case 2:
-                    $value['order_status'] = "接单";
+                    $value['order_status'] = L('_BACK_CONFIRMED_');
                     break;
                 case 3:
-                    $value['order_status'] = "取货";
+                    $value['order_status'] = L('_BACK_PICKED_');
                     break;
                 case 4:
-                    $value['order_status'] = "开始配送";
+                    $value['order_status'] = L('_BACK_IN_TRANSIT_');
                     break;
                 case 5:
-                    $value['order_status'] = "完成";
+                    $value['order_status'] = L('_BACK_COMPLETED_');
                     break;
                 default:
-                    $value['order_status'] = "订单失效";
+                    $value['order_status'] = L('_BACK_ORDER_FILED_');
                     break;
             }
         }
@@ -829,7 +829,7 @@ class DeliverAction extends BaseAction {
         }
 
         require_once APP_PATH . 'Lib/ORG/phpexcel/PHPExcel.php';
-        $title = '配送统计';
+        $title = 'Delivery Summary';
         $objExcel = new PHPExcel();
         $objProps = $objExcel->getProperties();
         // 设置文档基本属性
@@ -1028,9 +1028,10 @@ class DeliverAction extends BaseAction {
 		require_once APP_PATH . 'Lib/ORG/phpexcel/PHPExcel.php';
 		
 		if ($begin_time && $end_time) {
-			$title = '【' . $user['name'] . '】在' . $begin_time . '至' . $end_time . '时间段的配送记录列表';
+			//$title = '【' . $user['name'] . '】在' . $begin_time . '至' . $end_time . '时间段的配送记录列表';
+            $title = $user['name'] . '\'s Delivery Summary(' . $begin_time . '-' . $end_time . ')';
 		} else {
-			$title = '【' . $user['name'] . '】的配送记录列表';
+			$title = $user['name'] . '\'s Delivery Summary';
 		}
 		$objExcel = new PHPExcel();
 		$objProps = $objExcel->getProperties();

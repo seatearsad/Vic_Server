@@ -168,7 +168,7 @@ class UserAction extends BaseAction {
     public function export() {
     	set_time_limit(0);
     	require_once APP_PATH . 'Lib/ORG/phpexcel/PHPExcel.php';
-    	$title = '平台用户信息';
+    	$title = 'Customer Summary';
 		$objExcel = new PHPExcel();
 		$objProps = $objExcel->getProperties();
 		// 设置文档基本属性

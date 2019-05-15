@@ -102,7 +102,7 @@
 										<if condition="$vo['status'] eq 0">
 										<font color="red">{pigcms{:L('_BACK_ORDER_FILED_')}</font>
 										<elseif condition="$vo['status'] eq 1" />
-										<a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Deliver/appoint_deliver',array('supply_id' => $vo['supply_id']))}','指派配送员(配送距离{pigcms{$vo['distance']})',480,380,true,false,false,editbtn,'edit',true);">{pigcms{:L('_BACK_ASS_DIST_')}</a>
+										<a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Deliver/appoint_deliver',array('supply_id' => $vo['supply_id']))}','Courier Assignment({pigcms{$vo['distance']})',480,380,true,false,false,editbtn,'edit',true);">{pigcms{:L('_BACK_ASS_DIST_')}</a>
 										<elseif condition="$vo['status'] lt 5" />
 										<a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Deliver/appoint_deliver',array('supply_id' => $vo['supply_id']))}','{pigcms{:L(\'_BACK_CHANGE_COURIER_\')}({pigcms{$vo['distance']})',480,380,true,false,false,editbtn,'edit',true);" style="color:red">{pigcms{:L('_BACK_CHANGE_COURIER_')}</a>
 										<else />
