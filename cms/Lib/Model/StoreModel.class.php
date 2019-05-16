@@ -799,6 +799,7 @@ class StoreModel extends Model
         $http = new Http();
         $result = $http->curlGet($url);
 
+        $result = json_decode($result,true);
         $address = $result['results'][0]['address_components'];
 
         $city_name = '';
