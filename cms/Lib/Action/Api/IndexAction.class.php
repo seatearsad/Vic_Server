@@ -9,7 +9,13 @@
 class IndexAction extends BaseAction
 {
     public function index(){
+        if($_POST['lat'] != 'null' && $_POST['long'] != 'null'){
+            $lat = $_POST['lat'];
+            $long = $_POST['long'];
+        }
         //顶部广告
+        $_COOKIE['userLocationCity'] = $this->loadModel()->geocoderGoogle($lat,$long);
+
         $head_adver = D('Adver')->get_adver_by_key('app_index_top',5);
         if(empty($head_adver)){
             $head_adver = D('Adver')->get_adver_by_key('wap_index_top',5);
@@ -39,11 +45,6 @@ class IndexAction extends BaseAction
 
         $order = 'juli';
         $deliver_type =  'all';
-
-        if($_GET['lat'] != 'null' && $_GET['long'] != 'null'){
-            $lat = $_POST['lat'];
-            $long = $_POST['long'];
-        }
 
         $cat_id = 0;
         $cat_fid = 0;

@@ -792,4 +792,29 @@ class StoreModel extends Model
             }
         }
     }
+
+    public function geocoderGoogle($lat,$lng){
+        $url = 'https://maps.google.com/maps/api/geocode/json?key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&latlng='.$lat.','.$lng.'&language=en';
+        import('ORG.Net.Http');
+        $http = new Http();
+        $result = $http->curlGet($url);
+
+        $address = $result['result'][0]['address_components'];
+
+        $city_name = '';
+        foreach ($address as $v){
+            if($v['types'][0] == 'locality'){
+                $city_name = $v['long_name'];
+            }
+        }
+
+        $city_id = 0;
+        $where = array('area_name'=>$city_name,'area_type'=>2);
+        $area = D('Area')->where($where)->find();
+        if($area) {
+            $city_id = $area['area_id'];
+        }
+
+        return $city_id;
+    }
 }
