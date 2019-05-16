@@ -80,6 +80,8 @@ class IndexAction extends BaseAction
         }
         $arr['nav'] = $nav_list;
 
+        $arr['city_id'] = $_COOKIE['userLocationCity'];
+
         $this->returnCode(0,'data',$arr);
     }
 
