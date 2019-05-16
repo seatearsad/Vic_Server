@@ -799,7 +799,7 @@ class StoreModel extends Model
         $http = new Http();
         $result = $http->curlGet($url);
 
-        $address = $result['result'][0]['address_components'];
+        $address = $result['results'][0]['address_components'];
 
         $city_name = '';
         foreach ($address as $v){
