@@ -213,11 +213,11 @@ line-height: .7rem;
 					<div class="find_type_div">
 						<select name="ft" id="find_type" onchange="toJmupURl(this.value);">							
 							<option value="">Select</option>
-							<option value="st" <php>if($ftype=='st') echo "selected='selected'";</php>>Pending order</option>
-							<option value="oid" <php>if($ftype=='oid') echo "selected='selected'";</php>>order Number</option>
+							<option value="st" <php>if($ftype=='st') echo "selected='selected'";</php>>Pending Order</option>
+							<option value="oid" <php>if($ftype=='oid') echo "selected='selected'";</php>>Order Number</option>
 							<option value="xm" <php>if($ftype=='xm') echo "selected='selected'";</php>>Custmer Name</option>
 							<option value="dh" <php>if($ftype=='dh') echo "selected='selected'";</php>>Custmer Phone Number</option>
-							<option value="mps" <php>if($ftype=='mps') echo "selected='selected'";</php>>Order serial number</option>									
+							<option value="mps" <php>if($ftype=='mps') echo "selected='selected'";</php>>Order Serial Number</option>
 						</select>
 					</div>
 					<div class="find_txt_div"><input name="fv" id="find_value" type="text" value="{pigcms{$fvalue}"/></div>

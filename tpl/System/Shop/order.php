@@ -46,11 +46,13 @@
 						<input type="submit" value="{pigcms{:L('_BACK_SEARCH_')}" class="button"/>　
 					</form>
 				</td>
+                <if condition="$system_session['level'] neq 3">
 				<td>
 					<b>{pigcms{:L('_BACK_A_RECE_')}：{pigcms{$total_price|floatval}</b>　
 					<b>{pigcms{:L('_BACK_A_PAID_ON_')}：{pigcms{$online_price|floatval}</b>　
 					<b>{pigcms{:L('_BACK_A_PAID_CASH_')}：{pigcms{$offline_price|floatval}</b>
 				</td>
+                </if>
 				<td>
 				<a href="{pigcms{:U('Shop/export',$_GET)}" class="button" style="float:right;margin-right: 10px;">{pigcms{:L('_BACK_DOWN_ORDER_')}</a>
 				</td>

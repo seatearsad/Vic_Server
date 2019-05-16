@@ -71,15 +71,15 @@ class DeliverAction extends BaseAction
 			$database_deliver_user = D('Deliver_user');
 			$now_user = $database_deliver_user->field(true)->where($condition_deliver_user)->find();
 			if (empty($now_user)) {
-				exit(json_encode(array('error' => 2, 'msg' => '帐号不存在！', 'dom_id' => 'account')));
+				exit(json_encode(array('error' => 2, 'msg' => L('_DE_ACCOUNT_NOT_'), 'dom_id' => 'account')));
 			}
 			//garfunkel add && $now_user['reg_status'] == 0 判断是否完成注册步骤
 			if (empty($now_user['status']) && $now_user['reg_status'] == 0) {
-				exit(json_encode(array('error' => 2, 'msg' => '此账号已冻结！', 'dom_id' => 'account')));
+				exit(json_encode(array('error' => 2, 'msg' => L('_DE_ACCOUNT_SUS_'), 'dom_id' => 'account')));
 			}
 			$pwd = md5(trim($_POST['pwd']));
 			if ($pwd != $now_user['pwd']) {
-				exit(json_encode(array('error' => 3, 'msg' => '密码错误！', 'dom_id' => 'pwd')));
+				exit(json_encode(array('error' => 3, 'msg' => L('_DE_PASS_ERROR_'), 'dom_id' => 'pwd')));
 			}
 			$data_deliver_user['last_time'] = $_SERVER['REQUEST_TIME'];
 			if ($database_deliver_user->where(array('uid'=>$now_user['uid']))->data($data_deliver_user)->save()) {

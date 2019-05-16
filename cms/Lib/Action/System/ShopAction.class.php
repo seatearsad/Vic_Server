@@ -647,7 +647,7 @@ class ShopAction extends BaseAction
             }
             ///////
             if ($shop_order->where("order_id=$order_id")->data($data)->save()){
-                $this->success('删除成功！');
+                $this->success('Order Deleted!');
             }else{
                 $this->error('删除失败！请重试~');
             }

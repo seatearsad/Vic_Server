@@ -66,8 +66,8 @@
 $(document).ready(function(){
 	$('.Setup').click(function(){
 		layer.open({
-			title:['{pigcms{:L("_B_D_LOGIN_TIP2_")}：','background-color:#FF658E;color:#fff;'],
-			content:'{pigcms{:L("_LOGOUT_TXT_")}？',
+			title:['Reminder','background-color:#ffa52d;color:#fff;'],
+			content:'Are you sure about logging out?',
 			btn: ['Yes', 'No'],
 			shadeClose: false,
 			yes: function(){

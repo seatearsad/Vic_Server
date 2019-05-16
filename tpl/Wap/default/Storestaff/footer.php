@@ -17,7 +17,7 @@
 				<img src="{pigcms{$static_path}images/s22KaR0Wtc.png"/>
 				<p>
 				<if condition="$language eq 'en'">
-					<if condition="$config.meal_alias_name eq '到店'">Dine</if>
+					<if condition="$config.meal_alias_name eq '到店'">Pickup</if>
 				</if>
 				<if condition="$language eq 'cn'">{pigcms{$config.meal_alias_name}</if>
 				</p>
@@ -40,7 +40,7 @@
 					<img src="{pigcms{$static_path}images/3YQLfzfuGx.png"/>
 					<p>
 					<if condition="$language eq 'cn'">预约</if>
-					<if condition="$language eq 'en'">Reservation</if>
+					<if condition="$language eq 'en'">Booking</if>
 					</p>
 					</a>
 				</li>

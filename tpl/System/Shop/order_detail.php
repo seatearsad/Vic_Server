@@ -37,7 +37,7 @@
 	</volist>
 	<if condition="($order.status eq 0 OR $order.status eq 5) AND $order.paid eq 1">
 	<tr>
-		<th colspan="6"><a href="javascript:void(0)" onclick="refund_confirm();"><font color="blue">手动退款</font></a></th>
+		<th colspan="6"><a href="javascript:void(0)" onclick="refund_confirm();"><font color="blue">{pigcms{:L('_BACK_MANUAL_REFUND_')}</font></a></th>
 	</tr>
 	</if>
 	<tr>
@@ -180,11 +180,11 @@
 		<th colspan="6">{pigcms{:L('_BACK_SYS_CON_PRICE_')}：${pigcms{$order['coupon_price']}</th>
 	</tr>
 	</if>
-	<if condition="$order['pay_type'] eq 'offline' AND empty($order['third_id'])">
+	<!--if condition="$order['pay_type'] eq 'offline' AND empty($order['third_id'])">
 	<tr>
 		<th colspan="6">{pigcms{:L('_BACK_PAY_OFFLINE_')}：${pigcms{$order['price']-$order['card_price']-$order['merchant_balance']-$order['balance_pay']-$order['payment_money']-$order['score_deducte']-$order['coupon_price']|floatval}元</th>
 	</tr>
-	</if>
+	</if-->
 	<tr>
 		<th colspan="6">{pigcms{:L('_BACK_PAYMENT_STATUS_')}：{pigcms{$order['pay_status']}</th>
 	</tr>

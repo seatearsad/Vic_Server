@@ -97,6 +97,7 @@ $(function () {
 	        mode: 'scroller', //日期选择模式
 			display: 'bottom', //显示方式
 			dateFormat: 'yyyy-mm-dd',
+            lang:'en',
 			onSelect: function (valueText, inst) {
 				$("#appDate").val(valueText);
 				if ($("#appDate1").val() == '') {
@@ -112,6 +113,7 @@ $(function () {
 	        mode: 'scroller', //日期选择模式
 			display: 'bottom', //显示方式
 			dateFormat: 'yyyy-mm-dd',
+            lang:'en',
 			onSelect: function (valueText, inst) {
 				$("#appDate1").val(valueText);
 				if ($("#appDate").val() == '') {

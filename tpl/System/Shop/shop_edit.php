@@ -19,14 +19,14 @@
 				<th width="90">{pigcms{:L('_BACK_DISTANCE_')}</th>
 				<td><input type="text" class="input fl" name="delivery_radius" value="{pigcms{$now_shop.delivery_radius|floatval}" id="reduce_money" size="10" /></td>
 			</tr>
-			<tr class="delivery_range_type1">
+			<!--tr class="delivery_range_type1">
 				<td>自定义范围</td>
 				<td><input type="button" class="button" value="绘制配送范围" id="baiduMap"/></td>
 			</tr>
 			<tr class="delivery_range_type1">
 			    <input type="hidden" name="delivery_range_polygon" id="delivery_range_polygon" />
 				<td colspan="2"><div id="allmap" style="height:350px;"></div></td>
-			</tr>
+			</tr-->
 			<tr>
 				<th width="90">{pigcms{:L('_BACK_DELIVER_SET_')}</th>
 				<td>
