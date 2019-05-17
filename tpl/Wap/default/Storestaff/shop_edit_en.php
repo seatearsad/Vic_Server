@@ -320,9 +320,10 @@ cursor: pointer;
             if(result.status == 1){
                 window.location.href = "{pigcms{:U('Storestaff/shop_list')}";
             }else{
+                alert(result.info);
                 window.location.reload();
             }
-        });
+        },'json');
         return false;
     });
 </script>

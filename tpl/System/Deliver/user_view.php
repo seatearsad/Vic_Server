@@ -121,8 +121,8 @@
                 <tr>
                     <th width="15%">{pigcms{:L('_BACK_WHETHER_RECE_')}</th>
                     <td colspan=3>
-                        <span class="cb-enable"><label class="cb-enable"><span>{pigcms{:L('_BACK_HAS_RECE_')}</span><input type="radio" name="receive" value="1"  /></label></span>
-                        <span class="cb-disable"><label class="cb-disable selected"><span>{pigcms{:L('_BACK_UNCOLLECTED_')}</span><input type="radio" name="receive" value="0" checked="checked" /></label></span>
+                        <span class="cb-enable"><label class="cb-enable"><span>Yes</span><input type="radio" name="receive" value="1"  /></label></span>
+                        <span class="cb-disable"><label class="cb-disable selected"><span>No</span><input type="radio" name="receive" value="0" checked="checked" /></label></span>
                     </td>
                 </tr>
             </if>

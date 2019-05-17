@@ -1133,7 +1133,7 @@ class IndexAction extends BaseAction
             if (D('Shop_order')->data($data_shop_order)->save()) {
                 $return = $this->shop_refund_detail($now_order, $store_id);
                 if ($return['error_code']) {
-                    $this->returnCode(1,'info',array(),$result['msg']);
+                    $this->returnCode(1,'info',array(),$return['msg']);
                 }
             } else {
                 $this->returnCode(1,'info',array(),L('_B_MY_CANCELLLOSE_'));

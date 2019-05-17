@@ -1576,16 +1576,17 @@ class StorestaffAction extends BaseAction
         $order_id = $condition['order_id'] = intval($_POST['order_id']);
         $condition['store_id'] = $this->store['store_id'];
         $order = $database->field(true)->where($condition)->find();
+
         if (empty($order)) {
             $this->error('订单不存在！');
             exit;
         }
-        if ($order['status'] > 0) {
-            $this->error('该单已接，不要重复接单');
+        if ($order['status'] == 4 || $order['status'] == 5) {
+            $this->error('Failed! This order just been canceled by the customer.');
             exit;
         }
-        if ($order['status'] == 4 || $order['status'] == 5) {
-            $this->error('订单已取消，不能接单！');
+        if ($order['status'] > 0) {
+            $this->error('该单已接，不要重复接单');
             exit;
         }
         if ($order['is_refund']) {

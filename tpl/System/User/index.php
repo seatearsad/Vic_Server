@@ -137,9 +137,9 @@
         }
 
         if(ua == "")
-            alert("请选择用户");
+            alert("Please select customers!");
         else
-            window.top.artiframe("{pigcms{:U('User/send_coupon',array('uid'=>'"+ua+"'))}",'发优惠券',700,400,true,false,false,'','edit',true)
+            window.top.artiframe("{pigcms{:U('User/send_coupon',array('uid'=>'"+ua+"'))}",'{pigcms{:L(\'_BACK_ASS_COUPON_\')}',700,400,true,false,false,'','edit',true)
     })
 </script>
 <include file="Public:footer"/>

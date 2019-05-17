@@ -2,12 +2,12 @@
 <table cellpadding="0" cellspacing="0" class="frame_form" width="100%">
     <tr>
         <td width="15%">ID</td>
-        <td width="15%">名称</td>
-        <td width="15%">总数</td>
-        <td width="15%">已领</td>
-        <td width="15%">时间</td>
-        <td width="15%">优惠</td>
-        <td width="15%">发放</td>
+        <td width="15%">Title</td>
+        <td width="15%">Total</td>
+        <td width="15%">Claimed</td>
+        <td width="15%">Valid Date</td>
+        <td width="15%">Promotion</td>
+        <td width="15%">Action</td>
     <tr/>
     <script type="text/javascript">
         function send_user(cid){
@@ -26,9 +26,9 @@
             <th width="15%">{pigcms{$vo.name}</th>
             <th width="15%">{pigcms{$vo.num}</th>
             <th width="15%">{pigcms{$vo.had_pull}</th>
-            <th width="15%">{pigcms{$vo.start_time|date='Y-m-d',###} 到 {pigcms{$vo.end_time|date='Y-m-d',###}</th>
-            <th width="15%">满 {pigcms{$vo.order_money} 减 {pigcms{$vo.discount} 元</th>
-            <th width="15%"><if condition="$vo.is_l eq 1"> <span style="color:red">已发</span> <else /> <a href="javascript:send_user({pigcms{$vo.coupon_id});" style="color: #0b6041">发放</a> </if></th>
+            <th width="15%">{pigcms{$vo.start_time|date='Y-m-d',###} - {pigcms{$vo.end_time|date='Y-m-d',###}</th>
+            <th width="15%">{pigcms{:replace_lang_str(L('_MAN_NUM_REDUCE_'),$vo['order_money'])}{pigcms{:replace_lang_str(L('_MAN_REDUCE_NUM_'),$vo['discount'])}</th>
+            <th width="15%"><if condition="$vo.is_l eq 1"> <span style="color:red">Assigned</span> <else /> <a href="javascript:send_user({pigcms{$vo.coupon_id});" style="color: #0b6041">Assign</a> </if></th>
         <tr/>
     </volist>
 </table>

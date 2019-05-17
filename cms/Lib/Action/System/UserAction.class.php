@@ -116,7 +116,7 @@ class UserAction extends BaseAction {
         }
 
         $this->assign('user_list', $user_list);
-        $this->assign('client', array(0=>'WAP端',1=>'苹果',2=>'安卓',3=>'电脑',4=>'小程序',5=>'微信'));
+        $this->assign('client', array(0=>'WAP',1=>'Apple',2=>'Android',3=>'PC',4=>'小程序',5=>'Wechat'));
         $this->display();
     }
 
