@@ -243,6 +243,73 @@ class IndexAction extends BaseAction
         $this->returnCode($code,'info',array(),$result['msg']);
     }
 
+    public function sendForgetCode(){
+        $phone = $_POST['phone'];
+
+        if(empty($phone)){
+            $this->returnCode(1,'info',array(),'No phone number');
+        }
+
+        $user = D('User')->where(array('phone'=>$phone))->find();
+        if(!$user)
+            $this->returnCode(1,'info',array(),'Phone Number Error');
+
+        $vcode = createRandomStr(6,true,true);
+
+        $sms_data['uid'] = 0;
+        $sms_data['mobile'] = $phone;
+        $sms_data['sendto'] = 'user';
+        $sms_data['tplid'] = 169244;
+        $sms_data['params'] = [
+            $vcode
+        ];
+        Sms::sendSms2($sms_data);
+
+        $user_modifypwdDb = M('User_modifypwd');
+        $addtime = time();
+        $expiry = $addtime + 5 * 60; /*             * **五分钟有效期*** */
+        $data = array('telphone' => $phone, 'vfcode' => $vcode, 'expiry' => $expiry, 'addtime' => $addtime);
+        $insert_id = $user_modifypwdDb->add($data);
+
+        $this->returnCode(0,'info',array(),'Success');
+    }
+
+    public function userForget(){
+        $phone = $_POST['phone'];
+        $vcode = $_POST['vcode'];
+
+        if(D('User_modifypwd')->where(array('vfcode'=>$vcode,'telphone'=>$phone))->find()){
+            $this->returnCode(0,'info',array(),'Success');
+        }else{
+            $this->returnCode(1,'info',array(),L('_SMS_CODE_ERROR_'));
+        }
+    }
+
+    public function forgetToPassword(){
+        $phone = $_POST['phone'];
+        $pwd = $_POST['password'];
+
+        $data['pwd'] = md5($pwd);
+        D('User')->where(array('phone'=>$phone))->save($data);
+
+        $this->returnCode(0,'info',array(),'Success');
+    }
+
+    public function oldToPassword(){
+        $uid = $_POST['uid'];
+        $old_pwd = $_POST['old_pwd'];
+        $new_pwd = $_POST['new_pwd'];
+
+        $user = D('User')->where(array('uid'=>$uid))->find();
+        if(md5($old_pwd) != $user['pwd']){
+            $this->returnCode(1,'info',array(),L('_B_MY_WRONGKEY_'));
+        }else{
+            $data['pwd'] = md5($new_pwd);
+            D('User')->where(array('uid'=>$uid))->save($data);
+            $this->returnCode(0,'info',array(),'Success');
+        }
+    }
+
     public function userReg(){
         $phone = $_POST['phone'];
         $vcode = $_POST['vcode'];
