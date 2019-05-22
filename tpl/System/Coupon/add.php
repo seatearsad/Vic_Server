@@ -16,25 +16,25 @@
 	<form id="myform" method="post" action="{pigcms{:U('Coupon/add')}" frame="true" refresh="true">
 		<table cellpadding="0" cellspacing="0" class="frame_form" width="100%">
 			<tr>
-				<td width="100">优惠券名称：</td>
+				<td width="100">{pigcms{:L('_STORE_PRO_NAME_')}：</td>
 				<td>
 				<input type="text"  style="width:300px;" class="input fl" name="name" value=""  validate="required:true" autocomplete="off" />
 				</td>
-				<td>上限9个汉字长度</td>	  
+				<td></td>
 			</tr>
 			<tr>
-				<td width="100">微信展示图片：</td>
-				<td><input type="text"  style="width:200px;" name="img" class="input input-image" value=""  validate="required:true" readonly>&nbsp;&nbsp;<a href="javascript:void(0)" class="btn btn-sm btn-success J_selectImage"  style="background: #87b87f!important;border-color: #87b87f;color:#fff;">上传图片</a></td>
-				<td>图片尺寸建议 正方形 200 X 200</td>			
-			</tr>
-			
-			<tr>
-				<td width="100">微信分享图片：</td>
-				<td><input type="text"  style="width:200px;" name="wx_share_img" class="input input-image" value="{pigcms{$coupon.wx_share_img}"  validate="required:true" readonly>&nbsp;&nbsp;<a href="javascript:void(0)" class="btn btn-sm btn-success J_selectImage"  style="background: #87b87f!important;border-color: #87b87f;color:#fff;">上传图片</a></td>
-				<td>不上传图片则不能生产二维码</td>			
+				<td width="100">{pigcms{:L('_BACK_W_SHOW_IMG_')}：</td>
+				<td><input type="text"  style="width:200px;" name="img" class="input input-image" value=""  validate="required:true" readonly>&nbsp;&nbsp;<a href="javascript:void(0)" class="btn btn-sm btn-success J_selectImage"  style="background: #87b87f!important;border-color: #87b87f;color:#fff;">{pigcms{:L('_STORE_UPLOAD_PIC_')}</a></td>
+				<td>200 X 200</td>
 			</tr>
 			
 			<tr>
+				<td width="100">{pigcms{:L('_BACK_W_SHARE_IMG_')}：</td>
+				<td><input type="text"  style="width:200px;" name="wx_share_img" class="input input-image" value="{pigcms{$coupon.wx_share_img}"  validate="required:true" readonly>&nbsp;&nbsp;<a href="javascript:void(0)" class="btn btn-sm btn-success J_selectImage"  style="background: #87b87f!important;border-color: #87b87f;color:#fff;">{pigcms{:L('_STORE_UPLOAD_PIC_')}</a></td>
+				<td></td>
+			</tr>
+			
+			<tr style="display:none">
 				<td width="100">同步到微信卡券：</td>
 				<td colspan="2">
 					<span class="cb-enable"><label class="cb-enable "><span>是</span><input type="radio" name="sync_wx" value="1" /></label></span>
@@ -156,23 +156,23 @@
 				</td>
 			</tr>
 			<tr>
-				<td width="100">是否只允许新用户使用：</td>
+				<td width="100">{pigcms{:L('_BACK_ONLY_NEW_USER_')}：</td>
 				<td>
-					<span class="cb-enable"><label class="cb-enable <if condition="$coupon['allow_new'] eq 1"> selected</if>"><span>是</span><input type="radio" name="allow_new" value="1" <if condition="$coupon['allow_new'] eq 1"> checked="checked"</if>/></label></span>
-					<span class="cb-disable"><label class="cb-disable <if condition="$coupon['allow_new'] eq 0"> selected</if>"><span>否</span><input type="radio" name="allow_new" value="0" <if condition="$coupon['allow_new'] eq 0"> checked="checked"</if>/></label></span>
+					<span class="cb-enable"><label class="cb-enable <if condition="$coupon['allow_new'] eq 1"> selected</if>"><span>Yes</span><input type="radio" name="allow_new" value="1" <if condition="$coupon['allow_new'] eq 1"> checked="checked"</if>/></label></span>
+					<span class="cb-disable"><label class="cb-disable <if condition="$coupon['allow_new'] eq 0"> selected</if>"><span>No</span><input type="radio" name="allow_new" value="0" <if condition="$coupon['allow_new'] eq 0"> checked="checked"</if>/></label></span>
 				</td>
-				<td>未购买相应分类则视为新用户</td>
+				<td></td>
 			</tr>
 			<tr>
-				<td width="100">使用平台：</td>
+				<td width="100">{pigcms{:L('_BACK_USE_PLAT_')}：</td>
 				<td colspan="2">
 					<volist name="platform" id="vo">
 						<input type="checkbox" name="platform[]" value="{pigcms{$key}">{pigcms{$vo}
 					</volist>
 				</td>
 			</tr>
-			<tr>
-				<td width="100">使用类别：</td>
+			<tr style="display:none">
+				<td width="100">{pigcms{:L('_BACK_USE_TYPE_')}：</td>
 				<td colspan="2">
 				<select name="cate_name">
 					<option value="all">全选</option>
@@ -182,78 +182,78 @@
 				</select>
 				</td>
 			</tr>
-			<tr>
+			<tr style="display:none">
 				<td width="100">使用分类：</td>
 				<td id="cate_id" colspan="2">
 					
 				</td>
 			</tr>
-			<tr>
+			<tr style="display:none">
 				<td width="100">微信展示简短描述(微信卡包优惠说明)：</td>
 				<td colspan="2">
-				<textarea name="des" value=""  autocomplete="off" validate="required:true"></textarea>
+				<textarea name="des" value=""  autocomplete="off" validate="required:true">1</textarea>
 				</td>
 			</tr>
-			<tr>
+			<tr style="display:none">
 				<td width="100">领取页面详细描述(微信卡包使用须知)：</td>
 				<td >
-				<textarea name="des_detial" value=""  autocomplete="off" validate="required:true"></textarea>
+				<textarea name="des_detial" value=""  autocomplete="off" validate="required:true">1</textarea>
 				</td>
 				<td>每条描述请换行</td>
 			</tr>
 			
 			<tr>
-				<td width="100">数量：</td>
+				<td width="100">{pigcms{:L('_BACK_QUANTITY_')}：</td>
 				<td colspan="2">
 				<input type="text" class="input fl" name="num" value=""  autocomplete="off" validate="required:true,digits:true,min:1">
 				</td>
 			</tr>
 			<tr>
-				<td width="100">领取数量限制：</td>
+				<td width="100">{pigcms{:L('_BACK_PICK_NUM_LIM_')}：</td>
 				<td colspan="2">
 				<input type="text" class="input fl" name="limit" value="1"  autocomplete="off" validate="required:true,digits:true,min:1">
 				</td>
 			</tr>
 			<tr>
-				<td width="100">使用数量限制：</td>
+				<td width="100">{pigcms{:L('_BACK_USE_NUM_LIM_')}：</td>
 				<td colspan="2">
 				<input type="text" class="input fl" name="use_limit" value=""  autocomplete="off" validate="required:true,digits:true,min:1">
 				</td>
 			</tr>
 			<tr>
-				<td width="100">优惠金额：</td>
+				<td width="100">{pigcms{:L('_BACK_DIS_PRICE_')}：</td>
 				<td colspan="2">
 				<input type="text" class="input fl" name="discount" value=""  autocomplete="off" validate="required:true,number:true,min:0.01">
 				</td>
 			</tr>
 			<tr>
-				<td width="100">最小订单金额：</td>
+				<td width="100">{pigcms{:L('_BACK_MIN_PRICE_')}：</td>
 				<td colspan="2">
 				<input type="text" class="input fl" name="order_money" value=""  autocomplete="off" validate="required:true,number:true,min:0.01">
 				</td>
 			</tr>
 			<tr>
-				<td width="100">起始时间：</td>
+				<td width="100">{pigcms{:L('_TIME_TXT_')}：</td>
 				<td colspan="2">
-					<input type="text" class="input-text" name="start_time" style="width:120px;" id="d4311"  value="" onfocus="WdatePicker({isShowClear:false,readOnly:true,dateFmt:'yyyy-MM-dd'})"/>-
-					<input type="text" class="input-text" name="end_time" style="width:120px;" id="d4311" value="" onfocus="WdatePicker({isShowClear:false,readOnly:true,dateFmt:'yyyy-MM-dd'})" />
+					<input type="text" class="input-text" name="start_time" style="width:120px;" id="d4311"  value="" onfocus="WdatePicker({isShowClear:false,readOnly:true,dateFmt:'yyyy-MM-dd',lang:'en'})"/>-
+					<input type="text" class="input-text" name="end_time" style="width:120px;" id="d4311" value="" onfocus="WdatePicker({isShowClear:false,readOnly:true,dateFmt:'yyyy-MM-dd',lang:'en'})" />
 				</td>
 			</tr>
 			<tr>
-				<td width="100">状态</td>
+				<td width="100">{pigcms{:L('_BACK_STATUS_')}</td>
 				<td colspan="2">
-					<span class="cb-enable"><label class="cb-enable selected"><span>启用</span><input type="radio" name="status" value="1" checked="checked"/></label></span>
-					<span class="cb-disable"><label class="cb-disable "><span>禁用</span><input type="radio" name="status" value="0" /></label></span>
+					<span class="cb-enable"><label class="cb-enable selected"><span>{pigcms{:L('_BACK_ACTIVE_')}</span><input type="radio" name="status" value="1" checked="checked"/></label></span>
+					<span class="cb-disable"><label class="cb-disable "><span>{pigcms{:L('_BACK_FORBID_')}</span><input type="radio" name="status" value="0" /></label></span>
 				</td>
 			</tr>
             <tr>
-                <td width="100">领取口令：</td>
+                <td width="100">{pigcms{:L('_BACK_PICK_KEY_')}：</td>
                 <td><input type="text" class="input fl" style="margin-left:4px;" name="notice" value=""  autocomplete="off"></td>
             </tr>
 		</table>
 		<div class="btn hidden">
-			<input type="submit" name="dosubmit" id="dosubmit" value="提交" class="button" />
-			<input type="reset" value="取消" class="button" />
+			<input type="submit" name="dosubmit" id="dosubmit" value="{pigcms{:L('_BACK_SUBMIT_')}" class="button" />
+			<input type="reset" value="{pigcms{:L('_BACK_CANCEL_')}" class="button" />
 		</div>
 		
 	</form>
