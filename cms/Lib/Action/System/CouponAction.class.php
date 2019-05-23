@@ -188,7 +188,7 @@ class CouponAction extends BaseAction {
 
 						}
 					}
-					$this->success('添加优惠券成功！'.$errormsg);
+					$this->success('Success!'.$errormsg);
 				}else{
 					$this->error('添加失败！');
 				}
@@ -247,7 +247,7 @@ class CouponAction extends BaseAction {
 					$num_less= $add<0?$_POST['num_add']:0;
 					$errorms = D('System_coupon')->decrease_sku($num_add,$num_less,$_POST['coupon_id']);
 
-					$this->success('保存成功！'.$errorms);
+					$this->success('Success!'.$errorms);
 				}else{
 					$this->error('保存失败！');
 				}
