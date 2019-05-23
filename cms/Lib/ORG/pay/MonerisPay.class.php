@@ -90,8 +90,9 @@ class MonerisPay
                 }
             }
         }
+
         if($uid != 0)
-            $this->savePayData($resp,$data['rvarwap'],$data['tip'],$data['order_type']);
+            $this->savePayData($resp,$data['rvarwap'],$data['tip'],$data['order_type'],$data['note'],$data['est_time']);
 
         return $resp;
     }
@@ -157,7 +158,7 @@ class MonerisPay
     }
 
     //存储支付数据
-    public function savePayData($resp,$is_wap,$tip,$order_type){
+    public function savePayData($resp,$is_wap,$tip,$order_type,$desc = '',$expect_use_time = ''){
 //        if($resp['complete'] == 'true'){//支付成功
         if(!$order_type) $order_type = "shop";
         if($resp['responseCode'] != "null" && $resp['responseCode'] < 50){
@@ -187,10 +188,10 @@ class MonerisPay
                 $order_param['invoice_head'] = $resp['txnNumber'];//借用发票头这个字段存储交易号
                 $order_param['tip_charge'] = $tip;
                 //garfunkel add 19.4.9
-                if($_POST['note'] && $_POST['note'] != '')
-                    $order_param['desc'] = $_POST['note'];
-                if($_POST['est_time'] && $_POST['est_time'] != ''){
-                    $order_param['expect_use_time'] = strtotime($_POST['est_time']);
+                if($desc && $desc != '')
+                    $order_param['desc'] = $desc;
+                if($expect_use_time && $expect_use_time != ''){
+                    $order_param['expect_use_time'] = strtotime($expect_use_time);
                 }
 
                 $result = D('Shop_order')->after_pay($order_param);

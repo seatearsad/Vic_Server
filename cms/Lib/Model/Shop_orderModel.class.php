@@ -378,6 +378,14 @@ class Shop_orderModel extends Model
 		$data_shop_order['score_deducte']     	= !empty($data_shop_order['score_deducte'])?(float)$data_shop_order['score_deducte']:0;
 		$data_shop_order['last_time'] 			= $_SERVER['REQUEST_TIME'];
 		$data_shop_order['submit_order_time'] 	= $_SERVER['REQUEST_TIME'];
+		//garfunkel add
+        if($order_info['desc']){
+            $data_shop_order['desc'] = $order_info['desc'];
+        }
+        if($order_info['expect_use_time']){
+            $data_shop_order['expect_use_time'] = $order_info['expect_use_time'];
+        }
+
 		if ($this->where($condition_shop_order)->data($data_shop_order)->save()) {
 			return array('error_code' => false, 'msg' => '保存订单成功！');
 		} else {
@@ -401,8 +409,12 @@ class Shop_orderModel extends Model
 				'order_total_money' => $order_info['order_total_money'],
 				'balance_pay' => $order_info['balance_pay'],
 				'merchant_balance' => $order_info['merchant_balance'],
-				'is_own'	=> $order_info['is_own'] ? $order_info['is_own'] : 0
+				'is_own'	=> $order_info['is_own'] ? $order_info['is_own'] : 0,
 			);
+
+			if($order_info['desc']) $order_param['desc'] = $order_info['desc'];
+        	if($order_info['expect_use_time']) $order_param['expect_use_time'] = $order_info['expect_use_time'];
+
 			$result_after_pay = $this->after_pay($order_param);
 			if($result_after_pay['error']){
 				return array('error_code' => true,'msg'=>$result_after_pay['msg']);
@@ -614,7 +626,6 @@ class Shop_orderModel extends Model
 			$data_shop_order['shop_pass'] = implode('', $shop_pass_array);
 
 			D('Action_relation')->add_user_action($now_order['order_id'], 'shop');
-
 			if($this->where($where)->save($data_shop_order)){
 				D('Scroll_msg')->add_msg('shop',$now_user['uid'],'用户'.$now_user['nickname'].'于'.date('Y-m-d H:i',$_SERVER['REQUEST_TIME']).'购买'.C('config.shop_alias_name').'成功');
 

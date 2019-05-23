@@ -574,7 +574,8 @@
                                 'coupon_id':$('input[name="coupon_id"]').val(),
                                 'tip':$('#tip_num').text().replace('$', ""),
                                 'order_type':"{pigcms{$order_info.order_type}",
-                                'note':$('input[name="note"]').val()
+                                'note':$('input[name="note"]').val(),
+                                'est_time':$('#est_time_input').val()
                             };
 
                             //alert(re_data['order_type']);
@@ -602,7 +603,8 @@
                                 'coupon_id':$('input[name="coupon_id"]').val(),
                                 'tip':$('#tip_num').text().replace('$', ""),
                                 'order_type':"{pigcms{$order_info.order_type}",
-                                'note':$('input[name="note"]').val()
+                                'note':$('input[name="note"]').val(),
+                                'est_time':$('#est_time_input').val()
                             };
                             //alert(re_data['order_type']);
                             $.post($('#moneris_form').attr('action'),re_data,function(data){
@@ -643,7 +645,8 @@
                         'tip':$('#tip_num').text().replace('$', ""),
                         'order_type':"{pigcms{$order_info.order_type}",
                         'pay_type':pay_type,
-                        'note':$('input[name="note"]').val()
+                        'note':$('input[name="note"]').val(),
+                        'est_time':$('#est_time_input').val()
                     };
                     $.post('{pigcms{:U("Pay/WeixinAndAli")}',re_data,function(data){
                         layer.closeAll();
@@ -804,6 +807,11 @@
         cursor: pointer;
     }
     .est_time{
+        color: #ffa52d;
+        float: right;
+        margin-right: 20px;
+    }
+    .coupon_span{
         color: #ffa52d;
         float: right;
         margin-right: 20px;
@@ -1049,7 +1057,7 @@
                     <php>}else{</php>
                     {pigcms{:replace_lang_str(L('_MAN_NUM_REDUCE_'),$system_coupon['discount'])}{pigcms{:replace_lang_str(L('_MAN_REDUCE_NUM_'),$system_coupon['order_money'])}
                     <php>}</php>
-                    <span class="est_time">-${pigcms{$system_coupon['discount']}</span>
+                    <span class="coupon_span">-${pigcms{$system_coupon['discount']}</span>
                 </div>
             <?php }else{ ?>
                 <div class="apply_div">
