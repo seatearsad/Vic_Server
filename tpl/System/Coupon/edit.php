@@ -173,7 +173,7 @@
 				</td>
 			</tr>
 			<tr>
-				<td width="100">{pigcms{:L('_BACK_USE_TYPE_')}：</td>
+				<td width="100">{pigcms{:L('_BACK_USE_CATE_')}：</td>
 				<td>
 				{pigcms{$coupon.cate_name}
 				</td>
@@ -209,7 +209,7 @@
 					<option value="0">Add</option>
 					<option value="1">Reduce</option>
 				</select>
-				<input type="text" class="input fl" style="margin-left:4px;" name="num_add" value=""  autocomplete="off" validate="digits:true,min:1">已经被领了{pigcms{$coupon.had_pull}张
+				<input type="text" class="input fl" style="margin-left:4px;" name="num_add" value=""  autocomplete="off" validate="digits:true,min:1">{pigcms{:replace_lang_str(L('_BACK_ALREADY_CLAIM_'),$coupon['had_pull'])}
 				</td>
 			</tr>
 			
@@ -243,7 +243,27 @@
 					{pigcms{$coupon.start_time|date='Y-m-d',###}——{pigcms{$coupon.end_time|date='Y-m-d',###}
 				</td>
 			</tr>
-			
+            <if condition="$system_session['level'] neq 3">
+                <tr>
+                    <td width="100">通用</td>
+                    <td colspan="2">
+                        <span class="cb-enable"><label <if condition="$coupon['city_id'] eq 0">class="cb-enable selected"<else />class="cb-enable"</if>><span>通用</span><input id="yes" type="radio" name="currency" value="1" <if condition="$coupon['city_id'] eq 0">checked="checked"</if> /></label></span>
+                        <span class="cb-disable"><label <if condition="$coupon['city_id'] eq 0">class="cb-disable"<else />class="cb-disable selected"</if> ><span>不通用</span><input id="no" type="radio" name="currency" value="2" <if condition="$coupon['city_id'] neq 0">checked="checked"</if> /></label></span>
+                    </td>
+                </tr>
+                <tr id="adver_region" <if condition="$coupon['city_id'] eq 0">style="display:none;"</if>>
+                    <td width="100">{pigcms{:L('_B_PURE_MY_13_')}</td>
+                    <td colspan="2" id="choose_cityareass" province_idss="" city_idss="{pigcms{$coupon.city_id}"></td>
+                </tr>
+                <else />
+                <tr>
+                    <td width="100">{pigcms{:L('_B_PURE_MY_13_')}：</td>
+                    <td colspan="2">
+                        {pigcms{$city['area_name']}
+                        <input type="hidden" name="city_id" value="{pigcms{$city['area_id']}">
+                    </td>
+                </tr>
+            </if>
 			<if condition="($coupon.status eq 0) OR ($coupon.status eq 1)">
 			<tr>
 				<td width="100">{pigcms{:L('_BACK_STATUS_')}</td>
@@ -346,6 +366,13 @@
 				});
 			}
 		}
+
+        $("#yes").click(function(){
+            $("#adver_region").hide();
+        })
+        $("#no").click(function(){
+            $("#adver_region").show();
+        })
 	</script>
 
 	

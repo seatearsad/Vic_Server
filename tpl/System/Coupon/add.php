@@ -239,6 +239,27 @@
 					<input type="text" class="input-text" name="end_time" style="width:120px;" id="d4311" value="" onfocus="WdatePicker({isShowClear:false,readOnly:true,dateFmt:'yyyy-MM-dd',lang:'en'})" />
 				</td>
 			</tr>
+            <if condition="$system_session['level'] neq 3">
+            <tr>
+                <td width="100">通用</td>
+                <td colspan="2">
+                    <span class="cb-enable"><label class="cb-enable selected"><span>通用</span><input id="yes" type="radio" name="currency" value="1" checked="checked" /></label></span>
+                    <span class="cb-disable"><label class="cb-disable"><span>不通用</span><input id="no" type="radio" name="currency" value="2" /></label></span>
+                </td>
+            </tr>
+            <tr id="adver_region" style="display:none;">
+                <td width="100">{pigcms{:L('_B_PURE_MY_13_')}</td>
+                <td colspan="2" id="choose_cityareass" province_idss="" city_idss=""></td>
+            </tr>
+            <else />
+            <tr>
+                <td width="100">{pigcms{:L('_B_PURE_MY_13_')}：</td>
+                <td colspan="2">
+                        {pigcms{$city['area_name']}
+                        <input type="hidden" name="city_id" value="{pigcms{$city['area_id']}">
+                </td>
+            </tr>
+            </if>
 			<tr>
 				<td width="100">{pigcms{:L('_BACK_STATUS_')}</td>
 				<td colspan="2">
@@ -286,7 +307,6 @@
 			});
 	</script>
 	<script type="text/javascript">
-	 
 		$(document).ready(function() {
 			var post_url = "{pigcms{:U('Coupon/ajax_ordertype_cateid')}";
 				$('select[name="cate_name"]').change(function(event) {
@@ -361,8 +381,13 @@
 				});
 			}
 		}
-		
-		
+
+        $("#yes").click(function(){
+            $("#adver_region").hide();
+        })
+        $("#no").click(function(){
+            $("#adver_region").show();
+        })
 	</script>
 	
 <include file="Public:footer"/>

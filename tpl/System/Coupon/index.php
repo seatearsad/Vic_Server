@@ -42,6 +42,7 @@
                     <col/>
                     <col/>
                     <col/>
+                    <col/>
                     <col width="180" align="center"/>
                 </colgroup>
                 <thead>
@@ -58,6 +59,7 @@
                     <th>{pigcms{:L('_PURCHASE_TXT_')}</th>
                     <th class="textcenter">{pigcms{:L('_BACK_ONLY_NEW_USER_')}</th>
                     <!--th>查看二维码</th-->
+                    <th class="textcenter">{pigcms{:L('_B_PURE_MY_13_')}</th>
                     <th class="textcenter">{pigcms{:L('_BACK_STATUS_')}</th>
                     <th class="textcenter">{pigcms{:L('_BACK_CZ_')}</th>
                 </tr>
@@ -84,13 +86,14 @@
                             </td>
                             <td class="textcenter"><if condition="$vo['allow_new'] eq 1"><font color="green">Yes</font><else /><font color="red">No</font></if></td>
                             <!--td><a href="{pigcms{$config.site_url}/index.php?g=Index&c=Recognition&a=see_qrcode&type=coupon&id={pigcms{$vo.coupon_id}" class="see_qrcode">渠道消息二维码</a>&nbsp;&nbsp; <if condition="$vo.wx_qrcode neq ''"><a href="{pigcms{:U('Coupon/see_qrcode',array('id'=>$vo['coupon_id']))}" class="see_qrcode">微信卡券二维码</a></if></td-->
+                            <td class="textcenter">{pigcms{$vo.city_name}</td>
                             <td class="textcenter"><if condition="$vo['status'] eq 1"><font color="green">{pigcms{:L('_BACK_ACTIVE_')}</font><elseif condition="$vo['status'] eq 2"/><font color="blue">{pigcms{:L('_EXPIRED_TXT_')}</font><elseif condition="$vo['status'] eq 3" /><font color="black">领完了</font><else /><font color="red">{pigcms{:L('_BACK_FORBID_')}</font></if></td>
-                            <td class="textcenter"><a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Coupon/edit',array('coupon_id'=>$vo['coupon_id']))}','编辑优惠券信息',800,500,true,false,false,editbtn,'edit',true);">{pigcms{:L('_BACK_EDIT_')}</a></td>
+                            <td class="textcenter"><a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Coupon/edit',array('coupon_id'=>$vo['coupon_id']))}','{pigcms{:L(\'_BACK_EDIT_COU_INFO_\')}',800,500,true,false,false,editbtn,'edit',true);">{pigcms{:L('_BACK_EDIT_')}</a></td>
                         </tr>
                     </volist>
-                    <tr><td class="textcenter pagebar" colspan="13">{pigcms{$pagebar}</td></tr>
+                    <tr><td class="textcenter pagebar" colspan="14">{pigcms{$pagebar}</td></tr>
                     <else/>
-                    <tr><td class="textcenter red" colspan="13">{pigcms{:L('_BACK_EMPTY_')}</td></tr>
+                    <tr><td class="textcenter red" colspan="14">{pigcms{:L('_BACK_EMPTY_')}</td></tr>
                 </if>
                 </tbody>
             </table>
