@@ -17,7 +17,7 @@
 							<input type="hidden" name="a" value="had_pull"/>
                             {pigcms{:L('_BACK_SEARCH_')}: <input type="text" name="keyword" class="input-text" value="{pigcms{$_GET['keyword']}"/>
 							<select name="searchtype">
-								<option value="name" <if condition="$_GET['searchtype'] eq 'name'">selected="selected"</if>>{pigcms{:L('_STORE_PRO_NAME_')}</option>
+								<option value="name" <if condition="$_GET['searchtype'] eq 'name'">selected="selected"</if>>{pigcms{:L('_BACK_COUPON_NAME_')}</option>
 								<option value="nickname" <if condition="$_GET['searchtype'] eq 'nickname'">selected="selected"</if>>{pigcms{:L('_BACK_LOGIN_NAME_')}</option>
 							</select>
 							<input type="submit" value="{pigcms{:L('_BACK_SEARCH_')}" class="button"/>
@@ -39,7 +39,7 @@
 						<thead>
 							<tr>
 								<th>ID</th>
-								<th>{pigcms{:L('_STORE_PRO_NAME_')}</th>
+								<th>{pigcms{:L('_BACK_COUPON_NAME_')}</th>
 								<th>{pigcms{:L('_BACK_LOGIN_NAME_')}</th>
 							
 								<th>{pigcms{:L('_BACK_QUANTITY_')}</th>

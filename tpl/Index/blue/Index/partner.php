@@ -301,7 +301,7 @@
 
     var autocomplete;
     function initAutocomplete() {
-        autocomplete = new google.maps.places.Autocomplete(document.getElementById('address'), {types: ['geocode']});
+        autocomplete = new google.maps.places.Autocomplete(document.getElementById('address'), {types: ['geocode'],componentRestrictions: {country: ['ca']}});
         autocomplete.addListener('place_changed', fillInAddress);
     }
     function fillInAddress() {

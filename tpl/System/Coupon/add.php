@@ -22,9 +22,9 @@
 				</td>
 				<td></td>
 			</tr>
-			<tr>
+			<!--tr>
 				<td width="100">{pigcms{:L('_BACK_W_SHOW_IMG_')}：</td>
-				<td><input type="text"  style="width:200px;" name="img" class="input input-image" value=""  validate="required:true" readonly>&nbsp;&nbsp;<a href="javascript:void(0)" class="btn btn-sm btn-success J_selectImage"  style="background: #87b87f!important;border-color: #87b87f;color:#fff;">{pigcms{:L('_STORE_UPLOAD_PIC_')}</a></td>
+				<td><input type="text"  style="width:200px;" name="img" class="input input-image" value=""  readonly>&nbsp;&nbsp;<a href="javascript:void(0)" class="btn btn-sm btn-success J_selectImage"  style="background: #87b87f!important;border-color: #87b87f;color:#fff;">{pigcms{:L('_STORE_UPLOAD_PIC_')}</a></td>
 				<td>200 X 200</td>
 			</tr>
 			
@@ -32,7 +32,7 @@
 				<td width="100">{pigcms{:L('_BACK_W_SHARE_IMG_')}：</td>
 				<td><input type="text"  style="width:200px;" name="wx_share_img" class="input input-image" value="{pigcms{$coupon.wx_share_img}"  validate="required:true" readonly>&nbsp;&nbsp;<a href="javascript:void(0)" class="btn btn-sm btn-success J_selectImage"  style="background: #87b87f!important;border-color: #87b87f;color:#fff;">{pigcms{:L('_STORE_UPLOAD_PIC_')}</a></td>
 				<td></td>
-			</tr>
+			</tr-->
 			
 			<tr style="display:none">
 				<td width="100">同步到微信卡券：</td>
@@ -167,7 +167,7 @@
 				<td width="100">{pigcms{:L('_BACK_USE_PLAT_')}：</td>
 				<td colspan="2">
 					<volist name="platform" id="vo">
-						<input type="checkbox" name="platform[]" value="{pigcms{$key}">{pigcms{$vo}
+						<input type="checkbox" name="platform[]" value="{pigcms{$key}" checked="checked">{pigcms{$vo}
 					</volist>
 				</td>
 			</tr>
@@ -233,7 +233,7 @@
 				</td>
 			</tr>
 			<tr>
-				<td width="100">{pigcms{:L('_TIME_TXT_')}：</td>
+				<td width="100">{pigcms{:L('_BACK_PERIOD_')}：</td>
 				<td colspan="2">
 					<input type="text" class="input-text" name="start_time" style="width:120px;" id="d4311"  value="" onfocus="WdatePicker({isShowClear:false,readOnly:true,dateFmt:'yyyy-MM-dd',lang:'en'})"/>-
 					<input type="text" class="input-text" name="end_time" style="width:120px;" id="d4311" value="" onfocus="WdatePicker({isShowClear:false,readOnly:true,dateFmt:'yyyy-MM-dd',lang:'en'})" />

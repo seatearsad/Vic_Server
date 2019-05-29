@@ -172,13 +172,13 @@
 				{pigcms{$coupon.platform}
 				</td>
 			</tr>
-			<tr>
+			<!--tr>
 				<td width="100">{pigcms{:L('_BACK_USE_CATE_')}：</td>
 				<td>
 				{pigcms{$coupon.cate_name}
 				</td>
 				
-			</tr>
+			</tr-->
 			<tr style="display:none">
 				<td width="100">使用分类：</td>
 				<td id="cate_id">
@@ -238,7 +238,7 @@
 				</td>
 			</tr>
 			<tr>
-				<td width="100">{pigcms{:L('_TIME_TXT_')}：</td>
+				<td width="100">{pigcms{:L('_BACK_PERIOD_')}：</td>
 				<td>
 					{pigcms{$coupon.start_time|date='Y-m-d',###}——{pigcms{$coupon.end_time|date='Y-m-d',###}
 				</td>

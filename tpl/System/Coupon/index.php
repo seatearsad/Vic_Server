@@ -40,22 +40,22 @@
                     <col/>
                     <col/>
                     <col/>
+                    <!--col/>
                     <col/>
-                    <col/>
-                    <col/>
+                    <col/-->
                     <col width="180" align="center"/>
                 </colgroup>
                 <thead>
                 <tr>
                     <th>ID</th>
                     <th>{pigcms{:L('_STORE_PRO_NAME_')}</th>
-                    <th>{pigcms{:L('_BACK_IMAGE_')}</th>
+                    <!--th>{pigcms{:L('_BACK_IMAGE_')}</th-->
                     <th>{pigcms{:L('_BACK_USE_PLAT_')}</th>
-                    <th>{pigcms{:L('_BACK_USE_TYPE_')}</th>
-                    <th>{pigcms{:L('_BACK_USE_CATE_')}</th>
-                    <th>{pigcms{:L('_ALL_TXT_')}</th>
+                    <!--th>{pigcms{:L('_BACK_USE_TYPE_')}</th>
+                    <th>{pigcms{:L('_BACK_USE_CATE_')}</th-->
+                    <th>{pigcms{:L('_BACK_COUPON_TOTAL_')}</th>
                     <th>{pigcms{:L('_BACK_HAS_RECE_')}</th>
-                    <th>{pigcms{:L('_TIME_TXT_')}</th>
+                    <th>{pigcms{:L('_BACK_PERIOD_')}</th>
                     <th>{pigcms{:L('_PURCHASE_TXT_')}</th>
                     <th class="textcenter">{pigcms{:L('_BACK_ONLY_NEW_USER_')}</th>
                     <!--th>查看二维码</th-->
@@ -70,10 +70,10 @@
                         <tr>
                             <td>{pigcms{$vo.coupon_id}</td>
                             <td>{pigcms{$vo.name}</td>
-                            <td><img src="{pigcms{$vo.img}"></td>
+                            <!--td><img src="{pigcms{$vo.img}"></td-->
                             <td><volist name="vo.platform" id="vv">{pigcms{$platform[$vv]}&nbsp;&nbsp;</volist></td>
-                            <td><if condition="$vo.cate_name eq 'all'">{pigcms{:L('_BACK_ALL_TYPE_')}<else />{pigcms{$category[$vo['cate_name']]}</if></td>
-                            <td><if condition="$vo.cate_id eq '0'">{pigcms{:L('_ALL_CLASSIF_')}<else />{pigcms{$vo['cate_id']}</if></td>
+                            <!--td><if condition="$vo.cate_name eq 'all'">{pigcms{:L('_BACK_ALL_TYPE_')}<else />{pigcms{$category[$vo['cate_name']]}</if></td>
+                            <td><if condition="$vo.cate_id eq '0'">{pigcms{:L('_ALL_CLASSIF_')}<else />{pigcms{$vo['cate_id']}</if></td-->
                             <td>{pigcms{$vo.num}</td>
                             <td>{pigcms{$vo.had_pull}</td>
                             <td>{pigcms{$vo.start_time|date='Y-m-d',###} - {pigcms{$vo.end_time|date='Y-m-d',###}</td>
@@ -91,9 +91,9 @@
                             <td class="textcenter"><a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Coupon/edit',array('coupon_id'=>$vo['coupon_id']))}','{pigcms{:L(\'_BACK_EDIT_COU_INFO_\')}',800,500,true,false,false,editbtn,'edit',true);">{pigcms{:L('_BACK_EDIT_')}</a></td>
                         </tr>
                     </volist>
-                    <tr><td class="textcenter pagebar" colspan="14">{pigcms{$pagebar}</td></tr>
+                    <tr><td class="textcenter pagebar" colspan="11">{pigcms{$pagebar}</td></tr>
                     <else/>
-                    <tr><td class="textcenter red" colspan="14">{pigcms{:L('_BACK_EMPTY_')}</td></tr>
+                    <tr><td class="textcenter red" colspan="11">{pigcms{:L('_BACK_EMPTY_')}</td></tr>
                 </if>
                 </tbody>
             </table>
