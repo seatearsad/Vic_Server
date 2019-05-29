@@ -32,7 +32,7 @@
 			<tr>
 			 	<th width="15%">{pigcms{:L('_BACK_DELIVER_AREA_')}</th>
 				<!--td id="choose_cityarea" colspan=3  province_id="{pigcms{$now_user.province_id}" city_id="{pigcms{$now_user.city_id}" area_id="{pigcms{$now_user.area_id}" circle_id="{pigcms{$now_user.circle_id}"></td-->
-                <td>
+                <td id="city_name">
                     {pigcms{$now_user['city_name']}
                 </td>
                 <th width="15%">{pigcms{:L('_BIRTHDAY_TXT_')}</th>
@@ -47,9 +47,11 @@
 			</tr>
 			<tr>
 				<th width="15%">{pigcms{:L('_BACK_OFEN_ADD_')}</th>
-				<td width="35%"><input type="text" class="input fl" readonly="readonly" name="adress" id="adress" validate="required:true" value="{pigcms{$now_user.site}"/></td>
+				<td width="85%" colspan=3><input type="text" size="50" class="input fl" name="adress" id="adress" validate="required:true" value="{pigcms{$now_user.site}"/></td>
+            </tr>
+            <tr>
 				<th width="15%">{pigcms{:L('_BACK_COURIER_LOC_')}</th>
-				<td width="35%" class="radio_box"><input class="input fl" size="20" name="long_lat" id="long_lat" type="text" readonly="readonly" validate="required:true" value="{pigcms{$now_user.lng},{pigcms{$now_user.lat}"/></td>
+				<td width="85%" colspan=3><input class="input fl" size="20" name="long_lat" id="long_lat" type="text" readonly="readonly" validate="required:true" value="{pigcms{$now_user.lng},{pigcms{$now_user.lat}"/></td>
 			</tr>
             <tr>
                 <th width="15%">SIN Number</th>
@@ -156,8 +158,8 @@
 	var static_public="{pigcms{$static_public}",static_path="{pigcms{$static_path}",merchant_index="{pigcms{:U('Index/index')}",choose_province="{pigcms{:U('Area/ajax_province')}",choose_city="{pigcms{:U('Area/ajax_city')}",choose_area="{pigcms{:U('Area/ajax_area')}",choose_circle="{pigcms{:U('Area/ajax_circle')}";
 	</script>
 
-	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&libraries=places&language=en"></script>
 	<script type="text/javascript" src="{pigcms{$static_path}js/map.js"></script-->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&libraries=places&language=en"></script>
 <script>
     $('img').click(function () {
         //alert($(this).attr('src'));
@@ -171,5 +173,40 @@
             $('#review_desc').hide();
         }
     });
+
+    $('#adress').focus(function () {
+        initAutocomplete();
+    });
+
+    var autocomplete;
+    function initAutocomplete() {
+        autocomplete = new google.maps.places.Autocomplete(document.getElementById('adress'), {types: ['geocode'],componentRestrictions: {country: ['ca']}});
+        autocomplete.addListener('place_changed', fillInAddress);
+    }
+    function fillInAddress() {
+        var place = autocomplete.getPlace();
+        //$("input[name='lng']").val(place.geometry.location.lng());
+        //$("input[name='lat']").val(place.geometry.location.lat());
+        $('#long_lat').val(place.geometry.location.lng() + ',' +place.geometry.location.lat());
+
+        var add_com = place.address_components;
+        console.log(add_com);
+        var is_get_city = false;
+        for(var i=0;i<add_com.length;i++){
+            if(add_com[i]['types'][0] == 'locality'){
+                is_get_city = true;
+                var city_name = add_com[i]['long_name'];
+                $.post("{pigcms{$config.site_url}/index.php?g=Index&c=Index&a=ajax_city_name",{city_name:city_name},function(result){
+                    if (result.error == 1){
+                        $("input[name='city_id']").val(0);
+                        $('#city_name').html('');
+                    }else{
+                        $("input[name='city_id']").val(result['info']['city_id']);
+                        $('#city_name').html(city_name);
+                    }
+                },'JSON');
+            }
+        }
+    }
 </script>
 <include file="Public:footer"/>

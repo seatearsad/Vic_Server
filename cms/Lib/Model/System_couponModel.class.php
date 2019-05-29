@@ -210,8 +210,8 @@ class System_couponModel extends Model{
     }
 
     public function cate_platform(){
-        $category=array('group'=>C('config.group_alias_name'),'meal'=>C('config.meal_alias_name'),'appoint'=>C('config.appoint_alias_name'),'shop'=>C('config.shop_alias_name'),'all'=>'全品类通用');
-        $platform=array('wap'=>'移动网页','app'=>'App','weixin'=>'微信');
+        $category=array('group'=>C('config.group_alias_name'),'meal'=>C('config.meal_alias_name'),'appoint'=>C('config.appoint_alias_name'),'shop'=>C('config.shop_alias_name'),'all'=>'All');
+        $platform=array('wap'=>'WAP','app'=>'App','weixin'=>'WeChat');
         return array('category'=>$category,'platform'=>$platform);
     }
 

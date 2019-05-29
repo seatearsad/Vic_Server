@@ -5,8 +5,8 @@
 		<div class="mainbox">
 			<div id="nav" class="mainnav_title">
 				<ul>
-					<a href="{pigcms{:U('Coupon/index')}">平台优惠券列表</a>
-					<a href="{pigcms{:U('Coupon/had_pull')}" class="on">领取列表</a>
+					<a href="{pigcms{:U('Coupon/index')}">{pigcms{:L('_BACK_COUPON_LIST_')}</a>
+					<a href="{pigcms{:U('Coupon/had_pull')}" class="on">{pigcms{:L('_BACK_PICK_COU_LIST_')}</a>
 				</ul>
 			</div>
 			<table class="search_table" width="100%">
@@ -15,12 +15,12 @@
 						<form action="{pigcms{:U('Coupon/had_pull')}" method="get">
 							<input type="hidden" name="c" value="Coupon"/>
 							<input type="hidden" name="a" value="had_pull"/>
-							筛选: <input type="text" name="keyword" class="input-text" value="{pigcms{$_GET['keyword']}"/>
+                            {pigcms{:L('_BACK_SEARCH_')}: <input type="text" name="keyword" class="input-text" value="{pigcms{$_GET['keyword']}"/>
 							<select name="searchtype">
-								<option value="name" <if condition="$_GET['searchtype'] eq 'name'">selected="selected"</if>>优惠券标题</option>
-								<option value="nickname" <if condition="$_GET['searchtype'] eq 'nickname'">selected="selected"</if>>用户昵称</option>
+								<option value="name" <if condition="$_GET['searchtype'] eq 'name'">selected="selected"</if>>{pigcms{:L('_BACK_COUPON_NAME_')}</option>
+								<option value="nickname" <if condition="$_GET['searchtype'] eq 'nickname'">selected="selected"</if>>{pigcms{:L('_BACK_LOGIN_NAME_')}</option>
 							</select>
-							<input type="submit" value="查询" class="button"/>
+							<input type="submit" value="{pigcms{:L('_BACK_SEARCH_')}" class="button"/>
 						</form>
 					</td>
 				</tr>
@@ -39,12 +39,12 @@
 						<thead>
 							<tr>
 								<th>ID</th>
-								<th>优惠券名称</th>
-								<th>用户名</th>
+								<th>{pigcms{:L('_BACK_COUPON_NAME_')}</th>
+								<th>{pigcms{:L('_BACK_LOGIN_NAME_')}</th>
 							
-								<th>数量</th>
-								<th>领取时间</th>
-								<th class="textcenter">状态</th>
+								<th>{pigcms{:L('_BACK_QUANTITY_')}</th>
+								<th>{pigcms{:L('_BACK_LING_TIME_')}</th>
+								<th class="textcenter">{pigcms{:L('_BACK_STATUS_')}</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -57,12 +57,12 @@
 										
 										<td>{pigcms{$vo.num}</td>
 										<td>{pigcms{$vo.receive_time|date='Y-m-d',###}</td>
-										<td class="textcenter"><if condition="$vo['is_use'] eq 1"><font color="green">已使用</font><elseif condition="$vo['is_use'] eq 0" /><font color="red">未使用</font><else /><font color="red">待审核</font></if></td>
+										<td class="textcenter"><if condition="$vo['is_use'] eq 1"><font color="green">Used</font><elseif condition="$vo['is_use'] eq 0" /><font color="red">Not Yet</font><else /><font color="red">{pigcms{:L('_BACK_PENDING_')}</font></if></td>
 									</tr>
 								</volist>
 								<tr><td class="textcenter pagebar" colspan="7">{pigcms{$pagebar}</td></tr>
 							<else/>
-								<tr><td class="textcenter red" colspan="7">列表为空！</td></tr>
+								<tr><td class="textcenter red" colspan="7">{pigcms{:L('_BACK_EMPTY_')}</td></tr>
 							</if>
 						</tbody>
 					</table>
