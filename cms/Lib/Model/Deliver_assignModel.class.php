@@ -84,8 +84,12 @@ class Deliver_assignModel extends Model
                 //总派单次数已到
                 if((int)$v['assign_num'] >= self::CHANGE_TOTAL_TIMES){
                     $data['deliver_id'] = 0;
-                    //群发短信
-                    $user_list = D('Deliver_user')->field(true)->where(array('status'=>1,'work_status'=>0))->order('uid asc')->select();
+                    //获取当前订单的相关信息
+                    $supply = D('Deliver_supply')->field(true)->where(array('supply_id'=>$v['supply_id']))->find();
+                    //获取店铺信息
+                    $store = D('Merchant_store')->field(true)->where(array('store_id'=>$supply['store_id']))->find();
+                    //群发短信 筛选城市
+                    $user_list = D('Deliver_user')->field(true)->where(array('status'=>1,'work_status'=>0,'city_id'=>$store['city_id']))->order('uid asc')->select();
                     $record = explode(',',$v['record']);
                     foreach ($user_list as $deliver){
                         if(!in_array($deliver['uid'],$record) && !in_array($deliver['uid'],$send_list)){

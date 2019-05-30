@@ -45,17 +45,17 @@ class Page{
 		}
 		$str.= '';
 		if($now > 1){
-			$str .= '<a href="'.$url.($now-1).'" class="btn btn-weak">上一页</a>';
+			$str .= '<a href="'.$url.($now-1).'" class="btn btn-weak">Previous</a>';
 		}else{
-			$str .= '<a class="btn btn-weak btn-disabled">上一页</a>';
+			$str .= '<a class="btn btn-weak btn-disabled">Previous</a>';
 		}
 
 		$str .= '&nbsp;<span class="pager-current">'.$now.'</span>&nbsp;';
 
 		if ($now != $total){
-			$str .= '<a href="'.$url.($now+1).'" class="btn btn-weak">下一页</a>';
+			$str .= '<a href="'.$url.($now+1).'" class="btn btn-weak">Next</a>';
 		}else{
-			$str .= '<a class="btn btn-weak btn-disabled">下一页</a>';
+			$str .= '<a class="btn btn-weak btn-disabled">Next</a>';
 		}
 		
 		return $str;
