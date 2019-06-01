@@ -524,8 +524,11 @@ class IndexAction extends BaseAction
         $sid = D('Cart')->field(true)->where(array('uid'=>$uid,'fid'=>$cart_array[0]['fid']))->find()['sid'];
 
         $return = D('Shop_goods')->checkCart($sid, $uid, $orderData);
+        //garfunkel add
+        $store = D('Merchant_store')->where(array('store_id'=>$return['store_id']))->find();
+        $area = D('Area')->where(array('area_id'=>$store['city_id']))->find();
 
-        $now_time = time();
+        $now_time = time()+ $area['jetlag']*3600;
         $order_data = array();
         $order_data['mer_id'] = $return['mer_id'];
         $order_data['store_id'] = $return['store_id'];

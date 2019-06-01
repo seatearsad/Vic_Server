@@ -684,8 +684,9 @@ class StoreModel extends Model
 
     public function get_store_delivery_time($sid){
         $shop_store = D("Merchant_store_shop")->field(true)->where(array('store_id' => $sid))->find();
-
-        $delivery_time = time() + $shop_store['send_time']*60;
+        $store = D('Merchant_store')->where(array('store_id'=>$sid))->find();
+        $area = D('Area')->where(array('area_id'=>$store['city_id']))->find();
+        $delivery_time = time() + $area['jetlag']*3600 + $shop_store['send_time']*60;
         
         return $delivery_time;
     }

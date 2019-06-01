@@ -588,8 +588,14 @@ class Shop_orderModel extends Model
 				}
 			}
 
+			//garfunkel add
+			$store = D('Merchant_store')->where(array('store_id'=>$now_order['store_id']))->find();
+			$area = D('Area')->where(array('area_id'=>$store['city_id']))->find();
+
 			$data_shop_order = array();
 			$data_shop_order['pay_time'] = isset($order_param['pay_time']) && $order_param['pay_time'] ? strtotime($order_param['pay_time']) : $_SERVER['REQUEST_TIME'];
+			//garfunkel add
+			$data_shop_order['pay_time'] += $area['jetlag']*3600;
 			$data_shop_order['payment_money'] = floatval($order_param['pay_money']);//在线支付的钱
 			$data_shop_order['pay_type'] = $order_param['pay_type'];
 			$data_shop_order['third_id'] = $order_param['third_id'];
