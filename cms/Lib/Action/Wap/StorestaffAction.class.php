@@ -72,6 +72,11 @@ class StorestaffAction extends BaseAction
             if (empty($now_staff)) {
                 exit(json_encode(array('error' => 2, 'msg' => '帐号不存在！', 'dom_id' => 'account')));
             }
+            //garfunkel add
+            $store = D('Merchant_store')->where(array('store_id'=>$now_staff['store_id']))->find();
+            $now_staff['city_id'] = $store['city_id'];
+            $now_staff['province_id'] = $store['province_id'];
+            //
             $pwd = md5(trim($_POST['pwd']));
             if ($pwd != $now_staff['password']) {
                 exit(json_encode(array('error' => 3, 'msg' => '密码错误！', 'dom_id' => 'pwd')));
@@ -2359,9 +2364,16 @@ class StorestaffAction extends BaseAction
     //@ydhl-wangchuanyaun 保存店员下单
     public function save_shop_oder(){
         if (IS_POST){
-            $_POST['create_time']=strtotime(date("Y-m-d H:i:s"));//下单时间
+            //garfunkel add
+            $area = D('Area')->where(array('area_id'=>$this->staff_session['city_id']))->find();
+            if($area)
+                $add_time = $area['jetlag']*3600;
+            else
+                $add_time = 0;
+
+            $_POST['create_time']=strtotime(date("Y-m-d H:i:s"))+$add_time;//下单时间
             $_POST['paid']=1;//是否支付
-            $_POST['pay_time']=strtotime(date("Y-m-d H:i:s"));//支付时间，为了排序  靠前显示
+            $_POST['pay_time']=strtotime(date("Y-m-d H:i:s"))+$add_time;//支付时间，为了排序  靠前显示
             $_POST['pay_type']='offline';//支付类型
 
             //**代客下单 用discount_price记录税费**

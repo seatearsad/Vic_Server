@@ -178,8 +178,8 @@ class Deliver_assignModel extends Model
         //获取店铺信息
         $store = D('Merchant_store')->field(true)->where(array('store_id'=>$supply['store_id']))->find();
 
-        //获取当前所有上班状态的配送员 包含现在手中订单数量及状态
-        $user_list = D('Deliver_user')->field(true)->where(array('status'=>1,'work_status'=>0))->order('uid asc')->select();
+        //获取当前所有上班状态的配送员 包含现在手中订单数量及状态 06.02 add 过滤城市
+        $user_list = D('Deliver_user')->field(true)->where(array('status'=>1,'work_status'=>0,'city_id'=>$store['city_id']))->order('uid asc')->select();
         $deliver_list = array();
         foreach ($user_list as $k => $v){
             //获取之前的派单记录
