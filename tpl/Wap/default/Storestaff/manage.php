@@ -314,11 +314,16 @@ function pushDeviceToken(token) {
     return message;
 }
 //更新Android 设备token
-var android_token = '';
 if(typeof (window.linkJs) != 'undefined'){
-    if(android_token == ''){
-        android_token = window.linkJs.getDeviceId();
-        alert(android_token);
+    var android_token = window.linkJs.getDeviceId();
+    if(android_token != "{pigcms{$staff_session['device_id']}"){
+        $.post("{pigcms{:U('Storestaff/update_device')}", {'token':token}, function(result) {
+            if(result){
+                message = result.message;
+            }else {
+                message = 'Error';
+            }
+        });
     }
 }
 
