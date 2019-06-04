@@ -47,15 +47,18 @@ class StorestaffAction extends BaseAction
 
     public function login()
     {
-
         //设置cookie
         if(isset($_GET['lang'])) {
             setcookie('language', $_GET['lang']);
             $lang = $_GET['lang'] == 'cn' ? 'zh-cn' : 'en-us';
             setcookie('lang', $lang, $_SERVER['REQUEST_TIME'] + 72000000);
             Header("Location:/wap.php?g=Wap&c=Storestaff&a=login");
+        }else{
+            $lang = C('DEFAULT_LANG') == 'zh-cn' ? 'cn' : 'en';
+            setcookie('language', $lang);
+            $_COOKIE['language'] = $lang;
         }
-
+        
         //if(isset($_COOKIE['language'])) {
         $this->assign('language', isset($_COOKIE['language']) ? $_COOKIE['language'] : 'cn');
         //}
