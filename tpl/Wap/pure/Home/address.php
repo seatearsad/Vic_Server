@@ -88,16 +88,21 @@
 
     var autocomplete;
     function initAutocomplete() {
-        autocomplete = new google.maps.places.Autocomplete(document.getElementById('pageAddressSearchTxt'), {types: ['geocode'],componentRestrictions: {country: ['ca']}});
-        autocomplete.addListener('place_changed', fillInAddress);
-        // need to stop prop of the touchend event
-        if (navigator.userAgent.match(/(iPad|iPhone|iPod)/g)) {
-            setTimeout(function() {
-                var container = document.getElementsByClassName('pac-container')[0];
-                container.addEventListener('touchend', function(e) {
-                    e.stopImmediatePropagation();
-                });
-            }, 500);
+        if(typeof(autocomplete) == 'undefined') {
+            autocomplete = new google.maps.places.Autocomplete(document.getElementById('pageAddressSearchTxt'), {
+                types: ['geocode'],
+                componentRestrictions: {country: ['ca']}
+            });
+            autocomplete.addListener('place_changed', fillInAddress);
+            // need to stop prop of the touchend event
+            if (navigator.userAgent.match(/(iPad|iPhone|iPod)/g)) {
+                setTimeout(function () {
+                    var container = document.getElementsByClassName('pac-container')[0];
+                    container.addEventListener('touchend', function (e) {
+                        e.stopImmediatePropagation();
+                    });
+                }, 500);
+            }
         }
     }
 
