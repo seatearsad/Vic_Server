@@ -317,7 +317,8 @@ function pushDeviceToken(token) {
 if(typeof (window.linkJs) != 'undefined'){
     var android_token = window.linkJs.getDeviceId();
     if(android_token != "{pigcms{$staff_session['device_id']}"){
-        $.post("{pigcms{:U('Storestaff/update_device')}", {'token':token}, function(result) {
+        var message = '';
+        $.post("{pigcms{:U('Storestaff/update_device')}", {'token':android_token}, function(result) {
             if(result){
                 message = result.message;
             }else {
