@@ -515,6 +515,7 @@
     </div>
 </div-->
 <include file="Public:footer"/>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&libraries=places&language=en"></script>
 <script type="text/javascript">
     window.shareData = {
         "moduleName":"Home",
@@ -567,6 +568,33 @@
         }
         var cha_num = curr_num - base_num;
         $('#category').find('ul').animate({scrollLeft:cha_num * width},500);
+    }
+    //
+    if($.cookie('userLocationLong') && $.cookie('userLocationLat') && !$.cookie('userLocationCity')){
+        var geocoder = new google.maps.Geocoder();
+        var request = {
+            location:{lat:parseFloat($.cookie('userLocationLat')), lng:parseFloat($.cookie('userLocationLong'))}
+        }
+        geocoder.geocode(request, function(results, status){
+            if(status == 'OK') {
+                console.log(results[0].address_components);
+                var add_com = results[0].address_components;
+                var is_get_city = false;
+                for(var i=0;i<add_com.length;i++){
+                    if(add_com[i]['types'][0] == 'locality'){
+                        is_get_city = true;
+                        var city_name = add_com[i]['long_name'];
+                        $.post("{pigcms{:U('Index/ajax_city_name')}",{city_name:city_name},function(result){
+                            if (result.error == 1){
+                                $.cookie('userLocationCity', 0,{expires:700,path:"/"});
+                            }else{
+                                $.cookie('userLocationCity', result['info']['city_id'],{expires:700,path:"/"});
+                            }
+                        },'JSON');
+                    }
+                }
+            }
+        });
     }
 </script>
 {pigcms{$shareScript}
