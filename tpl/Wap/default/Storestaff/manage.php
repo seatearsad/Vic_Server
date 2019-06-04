@@ -313,6 +313,12 @@ function pushDeviceToken(token) {
     });
     return message;
 }
+//更新Android 设备token
+if(typeof (window.linkJs) != 'undefined'){
+    var android_token = window.linkJs.getDeviceId();
+    alert(android_token);
+}
+
 $(document).ready(function(){
 	var is_click = false;
 	$('.js-add-order').click(function(){
