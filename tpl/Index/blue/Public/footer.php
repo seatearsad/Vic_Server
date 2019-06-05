@@ -40,9 +40,9 @@
         <div class="open_time">
             <ul>
                 <li class="open_img"></li>
-                <li>11:00 am - 1:00 am</li>
+                <li>10:00 am - 1:00 am</li>
                 <li><a href="mailto:info@tutti.app">info@tutti.app</a></li>
-                <li><a href="tel:12505906668">1-250-590-6668</a></li>
+                <li><a href="tel:18883996668">1-888-399-6668</a></li>
             </ul>
         </div>
         <div class="footer_app">
