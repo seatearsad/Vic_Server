@@ -111,6 +111,13 @@
     <script type="text/javascript" src="{pigcms{$static_public}js/artdialog/jquery.artDialog.js"></script>
     <script type="text/javascript" src="{pigcms{$static_public}js/artdialog/iframeTools.js"></script>
     <script>
+        var android_token = '';
+        //获取Android 设备token
+        if(typeof (window.linkJs) != 'undefined'){
+            android_token = window.linkJs.getDeviceId();
+            alert(android_token);
+        }
+        //garfunkel add android token 06.05
         $('.sign_btn').click(function () {
             var phone = $('input[name=phone]').val();
             var password = $('input[name=password]').val();
@@ -121,7 +128,7 @@
                     content: "{pigcms{:L('_PLEASE_INPUT_ALL_')}"
                 });
             }else{
-                $.post("{pigcms{:U('Login/index')}",{phone:phone,password:password},function(result){
+                $.post("{pigcms{:U('Login/index')}",{phone:phone,password:password,token:android_token},function(result){
                     if(result.status == '1'){
                         artDialog.open.origin.location.reload();
                         window.location.href = "{pigcms{$referer}";
