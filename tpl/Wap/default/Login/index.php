@@ -115,7 +115,6 @@
         //获取Android 设备token
         if(typeof (window.linkJs) != 'undefined'){
             android_token = window.linkJs.getDeviceId();
-            alert(android_token);
         }
         //garfunkel add android token 06.05
         $('.sign_btn').click(function () {

@@ -7,6 +7,10 @@ class LoginAction extends BaseAction{
 				$this->error($login_result['msg']);
 			}else{
 				$now_user = $login_result['user'];
+				//garfunkel add update token
+                if($_POST['token'] && $_POST['token'] != '' && $_POST['token'] != $now_user['device_id']){
+                    D('User')->where(array('uid'=>$now_user['uid']))->save(array('device_id'=>$_POST['token']));
+                }
 				session('user',$now_user);
                 session('openid', $now_user['openid']);
 				setcookie('login_name',$now_user['phone'],$_SERVER['REQUEST_TIME']+10000000,'/');
