@@ -296,10 +296,10 @@
         setCookie('close_app_tip', '1',1);
     });
 
-    if(/(tutti_android)/.test(navigator.userAgent.toLowerCase())){
-        $('.down_header').hide();
-        init_top = 0;
-    }
+    // if(/(tutti_android)/.test(navigator.userAgent.toLowerCase())){
+    //     $('.down_header').hide();
+    //     init_top = 0;
+    // }
 
     //$.cookie('close_app_tip',null);
     if($.cookie('close_app_tip') == 1){

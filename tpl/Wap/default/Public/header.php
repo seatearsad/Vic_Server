@@ -316,10 +316,10 @@
         init_top = 0;
     });
 
-    if(/(android|windows phone)/.test(navigator.userAgent.toLowerCase())){
-        $('.down_header').hide();
-        init_top = 0;
-    }
+    // if(/(android|windows phone)/.test(navigator.userAgent.toLowerCase())){
+    //     $('.down_header').hide();
+    //     init_top = 0;
+    // }
 
     $('.down_app_name').children('.name').html(app_name);
 
@@ -347,6 +347,10 @@
         window.location.href = "{pigcms{:U('Login/index')}&referer=" + encodeURIComponent(window.location.href);
     });
     $('.down_view').click(function () {
-        window.open(app_url);
+        if(/(android)/.test(navigator.userAgent.toLowerCase())){
+            window.open('https://play.google.com/store/apps/details?id=com.kavl.tutti.user');
+        }else{
+            window.open(app_url);
+        }
     });
 </script>
