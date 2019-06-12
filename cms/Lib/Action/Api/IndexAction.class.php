@@ -1760,6 +1760,44 @@ class IndexAction extends BaseAction
         $week_num = date("w");
         $hour = date('H');
 
+        if($hour >= 0 && $hour < 5) {
+            $hour = $hour + 24;
+            $week_num = $week_num - 1 < 0 ? 6 : $week_num - 1;
+        }
+//        $hour = 11;
+//        $week_num = 3;
+
+        /**
+         * 当开启紧急召唤时不修改所有送餐员当前的工作状态
+         */
+
         echo "week:".$week_num.";Hour:".intval($hour);
+        //获取时间id
+        $all_list = D('Deliver_schedule_time')->select();
+        $time_ids = array();
+        foreach ($all_list as $v){
+            if(!isset($city[$v['city_id']]))
+                $city[$v['city_id']] = D('Area')->where(array('area_id'=>$v['city_id']))->find();
+
+            $hour = $hour + $city[$v['city_id']]['jetlag'];
+            if($hour == $v['start_time']){
+                $daylist = explode(',', $v['week_num']);
+                if (in_array($week_num, $daylist)) {
+                    $time_ids[] = $v['id'];
+                }
+            }
+        }
+        //获取所有上班送餐员的id
+        $schedule_list = D('Deliver_schedule')->where(array('time_id' => array('in', $time_ids),'week_num'=>$week_num,'whether'=>1,'status'=>1))->select();
+        $work_delver_list = array();
+        foreach ($schedule_list as $v){
+            $work_delver_list[] = $v['uid'];
+        }
+        //全部下班
+        D('Deliver_user')->where(array('status'=>1,'work_status'=>0))->save(array('work_status'=>1));
+        //执行上班
+        D('Deliver_user')->where(array('status'=>1,'uid'=>array('in',$work_delver_list)))->save(array('work_status'=>0));
+
+        //var_dump($work_delver_list);
     }
 }
