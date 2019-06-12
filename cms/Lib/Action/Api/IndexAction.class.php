@@ -1755,4 +1755,11 @@ class IndexAction extends BaseAction
         $result = Sms::sendMessageToGoogle($device_id,$message);
         var_dump($result);
     }
+
+    public function updateDeliver(){
+        $week_num = date("w");
+        $hour = date('H');
+
+        echo "week:".$week_num.";Hour:".intval($hour);
+    }
 }

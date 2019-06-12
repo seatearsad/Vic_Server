@@ -2072,6 +2072,130 @@ class DeliverAction extends BaseAction
         $this->display();
     }
 
+    public function schedule(){
+        $week_num = date("w");
+        $today = time();
+
+        $work_list = $this->getDeliverWorkList();
+        $this->assign('work_list',json_encode($work_list));
+
+        $this->assign('week_num',$week_num);
+        $this->assign('today',$today);
+	    $this->display();
+    }
+
+    public function set_schedule(){
+	    if($_POST){
+	        $uid = $this->deliver_session['uid'];
+	        $default_list = $_POST['default_list'];
+	        $data = $_POST['data'];
+            //每次更新删除之前所有的记录
+            D('Deliver_schedule')->where(array('uid'=>$uid))->delete();
+
+            $save_list = array();
+            foreach ($data as $k=>$v){
+                $week_num = $k;
+                foreach ($v as $kk=>$vv){
+                    $time_id = $vv['id'];
+                    if($vv['is_check'] && $vv['is_check'] == 1){
+                        //$save_list[$week_num][] = $time_id;
+                        $save_data['uid'] = $uid;
+                        $save_data['week_num'] = $week_num;
+                        $save_data['time_id'] = $time_id;
+                        $save_data['whether'] = 1;
+                        $save_data['set_time'] = date('Y-m-d H:i:s');
+                        $save_data['status'] = 1;
+                        //是否repeat
+                        if(isset($default_list[$week_num])){
+                            if($default_list[$week_num] == 1)
+                                $save_data['is_repeat'] = 1;
+                            else
+                                $save_data['is_repeat'] = 0;
+                        }else{
+                            $save_data['is_repeat'] = 1;
+                        }
+
+                        $save_list[] = $save_data;
+                    }
+                }
+            }
+            D('Deliver_schedule')->addAll($save_list);
+
+            exit(json_encode(array('error'=>0,'msg'=>'Success')));
+        }else {
+            $week_num = date("w");
+            $today = date('Y-m-d');
+            $this->assign('week_num', $week_num);
+            $this->assign('today', $today);
+
+            $default_list = array();
+
+            $work_list = $this->getDeliverWorkList();
+
+            $city_id = $this->deliver_session['city_id'];
+            $time_list = D('Deliver_schedule_time')->where(array('city_id' => $city_id))->order('start_time asc')->select();
+            //根据星期排序
+            $work_time_list = array();
+            for ($i = 0; $i < 7; $i++) {
+                foreach ($time_list as $v) {
+                    $daylist = explode(',', $v['week_num']);
+                    if (in_array($i, $daylist)) {
+                        if(in_array($v['id'],$work_list[$i]['id_list']))
+                            $v['is_check'] = 1;
+
+                        $work_time_list[$i][] = $v;
+                    }
+                }
+
+                if(isset($work_list[$i]['is_repeat'])) {
+                    if ($work_list[$i]['is_repeat'] == 1)
+                        $default_list[$i] = 1;
+                    else
+                        $default_list[$i] = 0;
+                }
+            }
+
+            $this->assign('work_time_list', json_encode($work_time_list));
+            $this->assign('default_list',json_encode($default_list));
+            $this->display();
+        }
+    }
+
+    public function getDeliverWorkList(){
+	    $uid = $this->deliver_session['uid'];
+
+	    $list = D('Deliver_schedule')->where(array('uid'=>$uid))->select();
+
+	    $re_list = array();
+	    foreach ($list as $v){
+            $re_list[$v['week_num']]['is_repeat'] = $v['is_repeat'];
+            $re_list[$v['week_num']]['id_list'][] = $v['time_id'];
+            $time_data = D('Deliver_schedule_time')->where(array('id' => $v['time_id']))->find();
+            $re_list[$v['week_num']]['ids'][] = $time_data;
+        }
+
+        foreach ($re_list as &$v){
+            array_multisort(array_column($v['ids'],'start_time'),SORT_ASC,$v['ids']);
+        }
+
+        return $re_list;
+    }
+
+    public function ajax_schedule_time_list(){
+	    $week_num = $_GET['week'];
+	    $time_list = D('Deliver_schedule_time')->select();
+
+	    $show_list = array();
+	    foreach ($time_list as $v){
+            $daylist = explode(',',$v['week_num']);
+            if(in_array($week_num,$daylist)){
+                $show_list[] = $v['start_time'].':00 ~ '.$v['end_time'].':00';
+            }
+        }
+
+        exit(json_encode($show_list));
+    }
+
     public function ajax_upload()
     {
         if ($_FILES['file']['error'] != 4) {
