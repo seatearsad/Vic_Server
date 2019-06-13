@@ -73,15 +73,15 @@
     <section class="bottom">
         <div class="bottom_n">
             <ul>
-                <li class="Statistics Statisticson fl">
-                    <a href="javascript:void(0);">{pigcms{:L('_STATISTICS_TXT_')}</a>
+                <li class="Statistics fl">
+                    <a href="{pigcms{:U('Deliver/schedule')}">{pigcms{:L('_DELIVER_SCHEDULE_')}</a>
                 </li>
                 <li class="home fl">
                       <a href="{pigcms{:U('Deliver/index')}">
                         <i></i>{pigcms{:L('_HOME_TXT_')}
                       </a>
                 </li>
-                 <li class="My fl">
+                 <li class="My Myon fl">
                     <a href="{pigcms{:U('Deliver/info')}">{pigcms{:L('_PROFILE_TXT_')}</a>
                 </li>
             </ul>

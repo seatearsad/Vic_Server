@@ -9,6 +9,7 @@
                     <a href="{pigcms{:U('Deliver/rule')}">配送配置</a>
                     </if>
                     <a href="{pigcms{:U('Deliver/map')}" class="on">{pigcms{:L('_BACK_COURIER_MONI_')}</a>
+                    <a href="{pigcms{:U('Deliver/schedule')}">{pigcms{:L('_DELIVER_SCHEDULE_')}</a>
 				</ul>
 			</div>
 			<div id="deliver_map">

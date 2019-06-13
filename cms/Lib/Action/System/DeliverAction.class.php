@@ -1325,4 +1325,67 @@ class DeliverAction extends BaseAction {
             exit(json_encode(array('error' => 0, 'msg' => 'Success！', 'dom_id' => 'account')));
         }
     }
+
+    public function schedule(){
+        //城市管理员
+        if($this->system_session['level'] == 3){
+            $city[] = $this->system_session['area_id'];
+        }else{
+            $city = D('Area')->where(array('area_type'=>2))->select();
+        }
+
+        $week_num = date("w");
+        $today = time();
+
+        $this->assign('city',$city);
+        $this->assign('week_num',$week_num);
+        $this->assign('today',$today);
+
+        $this->display();
+    }
+
+    public function ajax_get_city_schedule(){
+        $city_id = $_POST['city_id'];
+        if($this->system_session['level'] == 3){
+            $city_id = $this->system_session['area_id'];
+        }
+
+        $time_list = D('Deliver_schedule_time')->where(array('city_id' => $city_id))->order('start_time asc')->select();
+        //根据星期排序
+        $work_time_list = array();
+        for ($i = 0; $i < 7; $i++) {
+            foreach ($time_list as $v) {
+                $daylist = explode(',', $v['week_num']);
+
+                $week_min = $this->WeekExplodeNum($v['min_num']);
+                $week_max = $this->WeekExplodeNum($v['max_num']);
+
+                if (in_array($i, $daylist)) {
+                    $v['min'] = isset($week_min[$i]) ? $week_min[$i] : 0;
+                    $v['max'] = isset($week_max[$i]) ? $week_max[$i] : 0;
+                    $user_list = D('Deliver_schedule')->where(array('time_id'=>$v['id'],'week_num'=>$i,'whether'=>1,'status'=>1))->select();
+                    $v['curr_num'] = count($user_list);
+
+                    $work_time_list[$i][] = $v;
+                }
+            }
+        }
+
+        $return_data['time_list'] = $time_list;
+        $return_data['work_time_list'] = $work_time_list;
+
+        exit(json_encode($return_data));
+    }
+
+    public function WeekExplodeNum($num_str){
+        $num_arr = array();
+
+        $f_str = explode(',',$num_str);
+        foreach ($f_str as $v){
+            $s_str = explode('|',$v);
+            $num_arr[$s_str[0]] = $s_str[1];
+        }
+
+        return $num_arr;
+    }
 }

@@ -105,7 +105,7 @@
 		<div class="bottom_n">
 			<ul>
 				<li class="Statistics fl">
-                    <a href="{pigcms{:U('Deliver/tongji')}">{pigcms{:L('_STATISTICS_TXT_')}</a>
+                    <a href="{pigcms{:U('Deliver/schedule')}">{pigcms{:L('_DELIVER_SCHEDULE_')}</a>
 				</li>
 				<li class="home homeon fl">
 					<a href="javascript:void(0);"><i></i>{pigcms{:L('_HOME_TXT_')}</a>

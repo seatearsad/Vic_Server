@@ -25,6 +25,10 @@
             <if condition="$deliver_session['store_id']">
             <span class="mc"> {pigcms{$store['name']}</span>
             </if>
+
+            <div style="text-align: right;padding-right: 10px;font-size: 16px">
+                <a href="{pigcms{:U('Deliver/tongji')}" style="color: white">{pigcms{:L('_STATISTICS_TXT_')}</a>
+            </div>
         </div>
         <div class="MyEx_end">
             <ul>
@@ -49,7 +53,7 @@
         <div class="bottom_n">
             <ul>
                 <li class="Statistics fl">
-                    <a href="{pigcms{:U('Deliver/tongji')}">{pigcms{:L('_STATISTICS_TXT_')}</a>
+                    <a href="{pigcms{:U('Deliver/schedule')}">{pigcms{:L('_DELIVER_SCHEDULE_')}</a>
                 </li>
                 <li class="home fl">
                       <a href="{pigcms{:U('Deliver/index')}">

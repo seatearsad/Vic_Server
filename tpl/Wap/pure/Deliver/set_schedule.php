@@ -201,7 +201,6 @@
         var init_num = parseInt("{pigcms{$week_num}");
 
         var default_list = JSON.parse('{pigcms{$default_list}');
-        console.log(default_list);
 
         var html = '';
         for(var i=0;i<7;i++){
