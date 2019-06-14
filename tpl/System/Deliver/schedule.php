@@ -122,11 +122,14 @@
         'SAT'
     ];
 
-    var city_id = "{pigcms{$city[0]['area_id']}";
+    var city_id = $('#city_select').val();
 
     $('#city_select').change(function () {
         city_id = $(this).val();
         getWorkList();
+        new_num = 0;
+        $('#new_list').html('');
+        $('#add_submit').hide();
     });
 
     getWorkList();
@@ -199,6 +202,10 @@
 
         var type = $(this).attr('name');
 
+        if($(this).val() == ''){
+            alert("{pigcms{:L('_PLEASE_INPUT_ALL_')}");
+            $(this).val(work_time_list[week_num][time_id][type]);
+        }
         var num = parseInt($(this).val());
 
         work_time_list[week_num][time_id][type] = num;
@@ -221,17 +228,26 @@
     $('#add_set').click(function () {
         new_num = new_num + 1;
         var html_td = '<td class="textcenter">';
-        var html = '<tr>';
+        var html = '<tr data-id="'+new_num+'">';
         html += html_td + '<input type="text" name="start_time" data-id="new_'+new_num+'" data-num="'+init_num+'">' + ' -- ' + '<input type="text" name="end_time" data-id="new_'+new_num+'" data-num="'+init_num+'">' + '</td>';
         html += html_td + '<input type="text" name="min" data-id="new_'+new_num+'" data-num="'+init_num+'" value="0"></td>';
         html += html_td + '<input type="text" name="max" data-id="new_'+new_num+'" data-num="'+init_num+'" value="0"></td>';
-        html += html_td +'<input type="text" name="new_week_num" data-id="new_'+new_num+'" value="0,1,2,3,4,5,6"></td>';
+        html += html_td +'<input type="text" name="week_num" data-id="new_'+new_num+'" value="0,1,2,3,4,5,6"> <a href="javascript:delAdd('+new_num+')">X</a></td>';
 
         html += '</tr>';
 
         $('#new_list').append(html);
         $('#add_submit').show();
     });
+
+    function delAdd(num){
+        $('#new_list').find('tr').each(function () {
+            var new_num = $(this).data('id');
+            if(new_num == num){
+                $(this).remove();
+            }
+        });
+    }
     
     $('#add_submit').click(function () {
         var is_send = true;
@@ -240,25 +256,46 @@
                 is_send = false;
             }
         });
-        if(is_send){
 
+        var re_data = {};
+        re_data['city_id'] = city_id;
+        re_data['data'] = {};
+        if(is_send){
+            $('#new_list').find('tr').each(function () {
+                var new_num = $(this).data('id');
+                var new_data = {};
+                $(this).find('input').each(function () {
+                    var name = $(this).attr('name');
+                    new_data[name] = $(this).val();
+                });
+                re_data['data'][new_num] = new_data;
+            });
+
+            $.post("{pigcms{:U('Deliver/schedule_add_time')}", re_data, function (data) {
+                if (data.error == 0) {
+                    alert(data.msg);
+                    window.location.reload();
+                } else {
+                    alert('Fail');
+                }
+            },'json');
         }else{
             alert("{pigcms{:L('_PLEASE_INPUT_ALL_')}");
         }
     });
     $('#submit').click(function () {
         var is_send = true;
-        var re_data = {};
+        var re_data = work_time_list;
 
         if(is_send) {
-            // $.post("{pigcms{:U('Deliver/update_rule')}", re_data, function (data) {
-            //     if (data.error == 0) {
-            //         alert(data.msg);
-            //         window.location.reload();
-            //     } else {
-            //         alert('Fail');
-            //     }
-            // },'json');
+            $.post("{pigcms{:U('Deliver/update_schedule_time')}", {'data':re_data}, function (data) {
+                if (data.error == 0) {
+                    alert(data.msg);
+                    window.location.reload();
+                } else {
+                    alert('Fail');
+                }
+            },'json');
         }else{
             alert("{pigcms{:L('_PLEASE_INPUT_ALL_')}");
         }

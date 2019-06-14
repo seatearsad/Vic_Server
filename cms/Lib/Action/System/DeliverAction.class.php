@@ -1388,4 +1388,56 @@ class DeliverAction extends BaseAction {
 
         return $num_arr;
     }
+
+    public function schedule_add_time(){
+        $city_id = $_POST['city_id'];
+        $save_data = array();
+
+        foreach ($_POST['data'] as $v){
+            $min_num = '';
+            $max_num = '';
+            $week_list = explode(',',$v['week_num']);
+            foreach ($week_list as $w){
+                $min_num .= $w.'|'.$v['min'].',';
+                $max_num .= $w.'|'.$v['max'].',';
+            }
+
+            $data['start_time'] = $v['start_time'];
+            $data['end_time'] = $v['end_time'];
+            $data['status'] = 1;
+            $data['city_id'] = $city_id;
+            $data['week_num'] = $v['week_num'];
+            $data['min_num'] = substr($min_num,0,strlen($min_num)-1);
+            $data['max_num'] = substr($max_num,0,strlen($max_num)-1);
+
+            $save_data[] = $data;
+        }
+        //var_dump($save_data);die();
+        D('Deliver_schedule_time')->addAll($save_data);
+
+        exit(json_encode(array('error'=>0,'msg'=>'Success')));
+    }
+
+    public function update_schedule_time(){
+        $data = $_POST['data'];
+        $save_data = array();
+        foreach ($data as $k=>$v){
+            foreach ($v as $vv){
+                if(!isset($save_data[$vv['id']])){
+                    $save_data[$vv['id']]['min_num'] = $k.'|'.$vv['min'];
+                    $save_data[$vv['id']]['max_num'] = $k.'|'.$vv['max'];
+                }else{
+                    $save_data[$vv['id']]['min_num'] .= ','.$k.'|'.$vv['min'];
+                    $save_data[$vv['id']]['max_num'] .= ','.$k.'|'.$vv['max'];
+                }
+            }
+        }
+
+        //var_dump($save_data);
+        foreach ($save_data as $k => $v){
+            D('Deliver_schedule_time')->where(array('id'=>$k))->save($v);
+        }
+
+        exit(json_encode(array('error'=>0,'msg'=>'Success')));
+    }
 }

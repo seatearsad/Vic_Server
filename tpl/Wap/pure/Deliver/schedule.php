@@ -138,7 +138,7 @@
 
         </div>
         <div id="set_btn">
-            Manager
+            Setting
         </div>
 	</section>
 	<section class="bottom">

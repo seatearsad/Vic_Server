@@ -112,10 +112,13 @@
     .w_i{
         width: 20%;
     }
-    .w_r{
+    .w_r,.w_nr{
         width: 5px;
         height: 28px;
         background-color: #ffa52d;
+    }
+    .w_nr{
+        background:none;
     }
     #work_time input{
         float: right;
@@ -236,7 +239,11 @@
             var time_list = work_time_list[init_num];
             var html = '';
             for(var i=0;i<time_list.length;i++){
-                html += '<div><span class="w_r"></span><span class="w_t">';
+                if(time_list[i]['is_recomm'] == 1)
+                    html += '<div><span class="w_r"></span><span class="w_t">';
+                else
+                    html += '<div><span class="w_nr"></span><span class="w_t">';
+
                 html += format_time(time_list[i]['start_time']) + ' -- ' +  format_time(time_list[i]['end_time']);
                 html += '</span><span class="w_i">';
                 if(time_list[i]['is_check'])

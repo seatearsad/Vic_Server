@@ -2143,6 +2143,21 @@ class DeliverAction extends BaseAction
                         if(in_array($v['id'],$work_list[$i]['id_list']))
                             $v['is_check'] = 1;
 
+                        $d_total = D('Deliver_schedule')->where(array('time_id'=>$v['id'],'week_num'=>$i,'status'=>1))->select();
+                        $min_num_list = explode(',',$v['min_num']);
+                        $min_num = 0;
+                        foreach ($min_num_list as $w){
+                            $t_num = explode('|',$w);
+                            if ($i == $t_num[0]){
+                                $min_num = $t_num[1];
+                            }
+                        }
+                        if($min_num > count($d_total)){
+                            $v['is_recomm'] = 1;
+                        }else{
+                            $v['is_recomm'] = 0;
+                        }
+
                         $work_time_list[$i][] = $v;
                     }
                 }
