@@ -1329,7 +1329,7 @@ class DeliverAction extends BaseAction {
     public function schedule(){
         //城市管理员
         if($this->system_session['level'] == 3){
-            $city[] = $this->system_session['area_id'];
+            $city[] = D('Area')->where(array('area_id'=>$this->system_session['area_id']))->find();
         }else{
             $city = D('Area')->where(array('area_type'=>2))->select();
         }
