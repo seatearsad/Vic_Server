@@ -1792,6 +1792,10 @@ class IndexAction extends BaseAction
         $work_delver_list = array();
         foreach ($schedule_list as $v){
             $work_delver_list[] = $v['uid'];
+            //如果为不repeat的 此时删除
+            if($v['is_repeat'] != 1){
+                D('Deliver_schedule')->where($v)->delete();
+            }
         }
         //全部下班
         D('Deliver_user')->where(array('status'=>1,'work_status'=>0))->save(array('work_status'=>1));
