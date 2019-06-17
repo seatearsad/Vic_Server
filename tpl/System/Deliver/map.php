@@ -12,6 +12,17 @@
                     <a href="{pigcms{:U('Deliver/schedule')}">{pigcms{:L('_DELIVER_SCHEDULE_')}</a>
 				</ul>
 			</div>
+            <div style="margin: 10px 0;">
+                City:
+                <select name="searchtype" id="city_select">
+                    <volist name="city" id="vo">
+                        <option value="{pigcms{$vo.area_id}" <if condition="$city_id eq $vo['area_id']">selected="selected"</if>>{pigcms{$vo.area_name}</option>
+                    </volist>
+                </select>
+                <if condition="$curr_city['urgent_time'] neq 0">
+                    <div id="send_sms">Send SMS</div>
+                </if>
+            </div>
 			<div id="deliver_map">
 
             </div>
@@ -33,7 +44,11 @@
     </li>
     </volist>
 </ul>
-<div id="e_call">{pigcms{:L('_BACK_HAND_ALERT_')}</div>
+<if condition="$curr_city['urgent_time'] eq 0">
+    <div id="e_call">{pigcms{:L('_BACK_HAND_ALERT_')}</div>
+<else />
+    <div id="r_e_call">{pigcms{:L('_BACK_HAND_ALERT_')}</div>
+</if>
 <include file="Public:footer"/>
 <style>
     #deliver_map{
@@ -41,7 +56,21 @@
         border: 1px #999999 solid;
         height: 550px;
     }
-    #e_call{
+
+    #send_sms{
+        width: 180px;
+        height: 30px;
+        text-align: center;
+        background-color: #ffa52d;
+        cursor: pointer;
+        color: #FFFFFF;
+        float: right;
+        line-height: 30px;
+        font-weight: bold;
+        border: 1px #cccccc solid;
+        margin-right: 20px;
+    }
+    #e_call,#r_e_call{
         position: absolute;
         width: 180px;
         height: 30px;
@@ -49,11 +78,14 @@
         background-color: #0a51b9;
         cursor: pointer;
         color: #FFFFFF;
-        top:70px;
+        top:120px;
         right: 50px;
         line-height: 30px;
         font-weight: bold;
         border: 1px #cccccc solid;
+    }
+    #r_e_call{
+        background-color: #999999;
     }
 
     #deliver_list{
@@ -61,7 +93,7 @@
         width: 300px;
         border: 1px #cccccc solid;
         left:20px;
-        top:70px;
+        top:120px;
         border-bottom: 0px;
         background-color: #ffffff;
     }
@@ -105,14 +137,27 @@
 </style>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&libraries=places&language={pigcms{:C('DEFAULT_LANG')}"></script>
 <script type="text/javascript">
+    var city_id = $('#city_select').val();
+    $('#city_select').change(function () {
+        city_id = $(this).val();
+        window.location.href = "{pigcms{:U('Deliver/map')}" + "&city_id="+city_id;
+    });
+
+    var init_lat = $('body').find('.d_memo').first().children('.d_lat').text();
+    var init_lng = $('body').find('.d_memo').first().children('.d_lng').text();
+
+    if(init_lat == '' || init_lng == ''){
+        init_lat = 48.4245911;
+        init_lng = -123.3667908;
+    }
     var mapOptions = {
         zoom: 18,
-        center: {lat:48.4245911, lng:-123.3667908}
+        center: {lat:parseFloat(init_lat), lng:parseFloat(init_lng)}
     }
 
     var map = new google.maps.Map(document.getElementById('deliver_map'), mapOptions);
 
-    var myLatlng = new google.maps.LatLng(48.4245911,-123.3667908);
+    //var myLatlng = new google.maps.LatLng(48.4245911,-123.3667908);
 
     var markers = [];
 
@@ -180,7 +225,20 @@
     });
 
     $('#e_call').click(function () {
-        $.post("{pigcms{:U('Deliver/e_call')}", {}, function(result) {
+        $.post("{pigcms{:U('Deliver/e_call')}", {'city_id':city_id}, function(result) {
+            if(result){
+                message = result.msg;
+            }else {
+                message = 'Error';
+            }
+
+            alert(message);
+            window.location.reload();
+        },'json');
+    });
+
+    $('#send_sms').click(function () {
+        $.post("{pigcms{:U('Deliver/urgent_send')}", {'city_id':city_id}, function(result) {
             if(result){
                 message = result.msg;
             }else {

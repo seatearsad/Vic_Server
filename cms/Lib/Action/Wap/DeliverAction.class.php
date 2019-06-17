@@ -59,6 +59,14 @@ class DeliverAction extends BaseAction
 // 		if (ACTION_NAME == 'index') {
 // 			redirect(U('grab'));
 // 		}
+
+        //garfunke add 更新城市紧急呼叫状态
+        $city = D('Area')->where(array('area_type'=>2))->select();
+        foreach ($city as $v){
+            if($v['urgent_time'] != 0 && $v['urgent_time'] > time()+7200){
+                D('Area')->where(array('area_id'=>$v['area_id']))->save(array('urgent_time'=>0));
+            }
+        }
 	}
 	
 	/**

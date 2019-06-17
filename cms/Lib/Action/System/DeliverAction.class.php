@@ -17,7 +17,20 @@ class DeliverAction extends BaseAction {
 		$this->deliver_store = D("Deliver_store");
 		$this->deliver_location = D("Deliver_location");
 		$this->deliver_supply = D("Deliver_supply");
+
 	}
+
+    public function __construct()
+    {
+        parent::__construct();
+        //garfunke add 更新城市紧急呼叫状态
+        $city = D('Area')->where(array('area_type'=>2))->select();
+        foreach ($city as $v){
+            if($v['urgent_time'] != 0 && $v['urgent_time']+7200 <= time()){
+                D('Area')->where(array('area_id'=>$v['area_id']))->save(array('urgent_time'=>0));
+            }
+        }
+    }
 	/**
 	 * 配送员列表
 	 */
@@ -1155,12 +1168,32 @@ class DeliverAction extends BaseAction {
 	}
 
 	public function map(){
+        //城市管理员
+        if($this->system_session['level'] == 3){
+            $city[] = D('Area')->where(array('area_id'=>$this->system_session['area_id']))->find();
+        }else{
+            $city = D('Area')->where(array('area_type'=>2))->select();
+        }
+        $this->assign('city',$city);
+
+        $city_id = $_GET['city_id'] ? $_GET['city_id'] : $city[0]['area_id'];
+        $this->assign('city_id',$city_id);
+
+        foreach ($city as $v){
+            if($v['area_id'] == $city_id){
+                $this->assign('curr_city',$v);
+            }
+        }
+
+
         //获取当前所有上班状态的配送员 包含现在手中订单数量及状态
         $where['status'] = 1;
         $where['work_status'] = 0;
         //garfunkel 判断城市管理员
         if($this->system_session['level'] == 3){
             $where['city_id'] = $this->system_session['area_id'];
+        }else{//admin
+            $where['city_id'] = $city_id;
         }
         $user_list = D('Deliver_user')->field(true)->where($where)->order('uid asc')->select();
         foreach ($user_list as &$deliver){
@@ -1173,22 +1206,53 @@ class DeliverAction extends BaseAction {
     }
 
     public function e_call(){
-        $user_list = D('Deliver_user')->field(true)->where(array('status'=>1,'work_status'=>1))->order('uid asc')->select();
-        foreach ($user_list as $deliver){
-            if($deliver['device_id'] && $deliver['device_id'] != ''){
-                $message = 'Tutti are short on hands now! Please log in to your account and start to Accept Order! Tutti thanks your help!';
-                Sms::sendMessageToGoogle($deliver['device_id'],$message,3);
-            }else {
-                $sms_data['uid'] = 0;
-                $sms_data['mobile'] = $deliver['phone'];
-                $sms_data['sendto'] = 'deliver';
-                $sms_data['tplid'] = 247163;
-                $sms_data['params'] = [];
-                Sms::sendSms2($sms_data);
-            }
-        }
+        if(isset($_POST['city_id'])) {
+            $city_id = $_POST['city_id'];
+//            $user_list = D('Deliver_user')->field(true)->where(array('status' => 1, 'work_status' => 1,'city_id'=>$city_id))->order('uid asc')->select();
+//            foreach ($user_list as $deliver) {
+//                if ($deliver['device_id'] && $deliver['device_id'] != '') {
+//                    $message = 'Tutti are short on hands now! Please log in to your account and start to Accept Order! Tutti thanks your help!';
+//                    Sms::sendMessageToGoogle($deliver['device_id'], $message, 3);
+//                } else {
+//                    $sms_data['uid'] = 0;
+//                    $sms_data['mobile'] = $deliver['phone'];
+//                    $sms_data['sendto'] = 'deliver';
+//                    $sms_data['tplid'] = 247163;
+//                    $sms_data['params'] = [];
+//                    Sms::sendSms2($sms_data);
+//                }
+//            }
+            $curr_time = time();
+            D('Area')->where(array('area_id'=>$city_id))->save(array('urgent_time'=>$curr_time));
 
-        exit(json_encode(array('error' => 0, 'msg' => 'Success！', 'dom_id' => 'account')));
+            exit(json_encode(array('error' => 0, 'msg' => 'Success！', 'dom_id' => 'account')));
+        }else{
+            exit(json_encode(array('error' => 1, 'msg' => 'Fail,City not exist！', 'dom_id' => 'account')));
+        }
+    }
+
+    public function urgent_send(){
+        if(isset($_POST['city_id'])) {
+            $city_id = $_POST['city_id'];
+            $user_list = D('Deliver_user')->field(true)->where(array('status' => 1, 'work_status' => 1,'city_id'=>$city_id))->order('uid asc')->select();
+            foreach ($user_list as $deliver) {
+//                if ($deliver['device_id'] && $deliver['device_id'] != '') {
+//                    $message = 'Tutti are short on hands now! Please log in to your account and start to Accept Order! Tutti thanks your help!';
+//                    Sms::sendMessageToGoogle($deliver['device_id'], $message, 3);
+//                } else {
+                    $sms_data['uid'] = 0;
+                    $sms_data['mobile'] = $deliver['phone'];
+                    $sms_data['sendto'] = 'deliver';
+                    $sms_data['tplid'] = 247163;
+                    $sms_data['params'] = [];
+                    Sms::sendSms2($sms_data);
+//                }
+            }
+
+            exit(json_encode(array('error' => 0, 'msg' => 'Success！', 'dom_id' => 'account')));
+        }else{
+            exit(json_encode(array('error' => 1, 'msg' => 'Fail,City not exist！', 'dom_id' => 'account')));
+        }
     }
 
     public function review(){
@@ -1336,6 +1400,9 @@ class DeliverAction extends BaseAction {
 
         $week_num = date("w");
         $today = time();
+
+        if(isset($_GET['city_id']))
+            $this->assign('city_id',$_GET['city_id']);
 
         $this->assign('city',$city);
         $this->assign('week_num',$week_num);

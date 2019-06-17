@@ -273,13 +273,15 @@
         }
 
         function format_time(t_time){
-            if(t_time <= 12)
+            if(t_time < 12)
                 t_time = t_time + ':00 AM';
-            // else if(t_time == 12)
-            //     t_time = t_time + ':00 PM';
-            else if(t_time > 12 && t_time <= 24)
+            else if(t_time == 12)
+                t_time = t_time + ':00 PM';
+            else if(t_time > 12 && t_time < 24)
                 t_time = t_time-12 + ':00 PM';
-            else if(t_time > 24)
+            else if(t_time == 24)
+                t_time = t_time-12 + ':00 AM';
+            else if(t_time >= 24)
                 t_time = t_time-24 + ':00 AM';
 
             return t_time;

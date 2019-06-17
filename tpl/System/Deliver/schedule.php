@@ -19,7 +19,7 @@
                 City:
                 <select name="searchtype" id="city_select">
                     <volist name="city" id="vo">
-                        <option value="{pigcms{$vo.area_id}">{pigcms{$vo.area_name}</option>
+                        <option value="{pigcms{$vo.area_id}" <if condition="$city_id eq $vo['area_id']">selected="selected"</if>>{pigcms{$vo.area_name}</option>
                     </volist>
                 </select>
             </div>
@@ -51,7 +51,7 @@
                     </tbody>
                 </table>
 
-                <div id="submit">Edit</div>
+                <div id="submit">Save</div>
             </div>
 <include file="Public:footer"/>
 <style>
@@ -212,13 +212,15 @@
     }
 
     function format_time(t_time){
-        if(t_time <= 12)
+        if(t_time < 12)
             t_time = t_time + ':00 AM';
-        // else if(t_time == 12)
-        //     t_time = t_time + ':00 PM';
-        else if(t_time > 12 && t_time <= 24)
+        else if(t_time == 12)
+            t_time = t_time + ':00 PM';
+        else if(t_time > 12 && t_time < 24)
             t_time = t_time-12 + ':00 PM';
-        else if(t_time > 24)
+        else if(t_time == 24)
+            t_time = t_time-12 + ':00 AM';
+        else if(t_time >= 24)
             t_time = t_time-24 + ':00 AM';
 
         return t_time;
@@ -274,7 +276,8 @@
             $.post("{pigcms{:U('Deliver/schedule_add_time')}", re_data, function (data) {
                 if (data.error == 0) {
                     alert(data.msg);
-                    window.location.reload();
+                    //window.location.reload();
+                    window.location.href = "{pigcms{:U('Deliver/schedule')}&city_id="+city_id;
                 } else {
                     alert('Fail');
                 }
