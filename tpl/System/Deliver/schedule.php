@@ -44,6 +44,7 @@
                         <th class="textcenter">Min</th>
                         <th class="textcenter">Max</th>
                         <th class="textcenter">Current</th>
+                        <th class="textcenter">Edit</th>
                     </tr>
                     </thead>
                     <tbody id="work_list">
@@ -185,6 +186,7 @@
                 html += html_td + '<input type="text" name="min" data-id="'+i+'" data-num="'+init_num+'" value="' + work_list[i]['min'] +'"></td>';
                 html += html_td + '<input type="text" name="max" data-id="'+i+'" data-num="'+init_num+'" value="' + work_list[i]['max'] +'"></td>';
                 html += html_td + work_list[i]['curr_num'] +'</td>';
+                html += html_td + '<a href="javascript:del_time('+ init_num + ',' + work_list[i]['id'] +')">X</a>' +'</td>';
 
                 html += '</tr>';
             }
@@ -209,6 +211,21 @@
         var num = parseInt($(this).val());
 
         work_time_list[week_num][time_id][type] = num;
+    }
+
+    function del_time(week_num,time_id) {
+        var re_data = {
+            'week_num':week_num,
+            'time_id':time_id
+        }
+        $.post("{pigcms{:U('Deliver/schedule_del_time')}", re_data, function (data) {
+            if (data.error == 0) {
+                alert(data.msg);
+                window.location.reload();
+            } else {
+                alert('Fail');
+            }
+        },'json');
     }
 
     function format_time(t_time){
@@ -239,8 +256,15 @@
         html += '</tr>';
 
         $('#new_list').append(html);
+        //$('#new_list').off("blur","input[name='start_time']");
+        //$('#new_list').on("blur","input[name='start_time']",this,check_time);
+
         $('#add_submit').show();
     });
+    
+    // function check_time() {
+    //
+    // }
 
     function delAdd(num){
         $('#new_list').find('tr').each(function () {
@@ -292,13 +316,15 @@
 
         if(is_send) {
             $.post("{pigcms{:U('Deliver/update_schedule_time')}", {'data':re_data}, function (data) {
-                if (data.error == 0) {
-                    alert(data.msg);
-                    window.location.reload();
-                } else {
-                    alert('Fail');
-                }
-            },'json');
+                // if (data.error == 0) {
+                //     alert('Success');
+                //     window.location.reload();
+                // } else {
+                //     alert('Fail');
+                // }
+                alert('Success');
+                window.location.reload();
+            });
         }else{
             alert("{pigcms{:L('_PLEASE_INPUT_ALL_')}");
         }

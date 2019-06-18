@@ -35,10 +35,14 @@ class DeliverAction extends BaseAction
 						$this->error_tips("您的账号已禁止");
 						exit;
 					}
+                    //garfunkel add 更新一下session
+                    $this->deliver_session = $user;
+                    session('deliver_session', serialize($user));
 				}
 // 				if (ACTION_NAME == 'login') {
 // 					redirect(U('Deliver/grab'));
 // 				}
+
 				$this->assign('deliver_session', $this->deliver_session);
 			}
 		}
@@ -63,11 +67,50 @@ class DeliverAction extends BaseAction
         //garfunke add 更新城市紧急呼叫状态
         $city = D('Area')->where(array('area_type'=>2))->select();
         foreach ($city as $v){
-            if($v['urgent_time'] != 0 && $v['urgent_time'] > time()+7200){
+            if($v['urgent_time'] != 0 && $v['urgent_time']+7200 <= time()){
                 D('Area')->where(array('area_id'=>$v['area_id']))->save(array('urgent_time'=>0));
+                $this->updateDeliverWorkStatus($v);
             }
         }
 	}
+
+	public function updateDeliverWorkStatus($city){
+        $week_num = date("w");
+        $hour = date('H');
+
+        if($hour >= 0 && $hour < 5) {
+            $hour = $hour + 24;
+            $week_num = $week_num - 1 < 0 ? 6 : $week_num - 1;
+        }
+
+        $all_list = D('Deliver_schedule_time')->where(array('city_id'=>$city['area_id']))->select();
+        $time_ids = array();
+        foreach ($all_list as $v){
+            $new_hour = $hour + $city['jetlag'];
+            if($new_hour == $v['start_time']){
+                $daylist = explode(',', $v['week_num']);
+                if (in_array($week_num, $daylist)) {
+                    $time_ids[] = $v['id'];
+                }
+            }
+        }
+
+        //获取所有上班送餐员的id
+        $schedule_list = D('Deliver_schedule')->where(array('time_id' => array('in', $time_ids),'week_num'=>$week_num,'whether'=>1,'status'=>1))->select();
+        $work_delver_list = array();
+        foreach ($schedule_list as $v){
+            $work_delver_list[] = $v['uid'];
+            //如果为不repeat的 此时删除
+            if($v['is_repeat'] != 1){
+                D('Deliver_schedule')->where($v)->delete();
+            }
+        }
+        //全部下班
+        D('Deliver_user')->where(array('status'=>1,'work_status'=>0,'city_id'=>$city['area_id']))->save(array('work_status'=>1));
+        //执行上班
+        D('Deliver_user')->where(array('status'=>1,'uid'=>array('in',$work_delver_list),'city_id'=>$city['area_id']))->save(array('work_status'=>0));
+
+    }
 	
 	/**
 	 * 登录
@@ -140,8 +183,13 @@ class DeliverAction extends BaseAction
 	    $deliver = D('Deliver_user')->field('reg_status')->where(['uid' => $this->deliver_session['uid']])->find();
 	    if($deliver['reg_status'] != 0)
             header('Location:'.U('Deliver/step_'.$deliver['reg_status']));
-		//修改上下班状态
-		if($_GET['action'] == 'changeWorkstatus') {
+
+        $city_id = $this->deliver_session['city_id'];
+        $city = D('Area')->where(array('area_id'=>$city_id))->find();
+        $this->assign('city',$city);
+
+	    //修改上下班状态 只有在紧急状态下才能修改上班状态
+		if($_GET['action'] == 'changeWorkstatus' && $city['urgent_time'] != 0) {
 			D('Deliver_user')->where(['uid' => $this->deliver_session['uid']])->save(['work_status' => $_GET['type']]);
 			$this->deliver_session['work_status'] = $_GET['type'];
 			session('deliver_session', serialize($this->deliver_session));
@@ -156,28 +204,33 @@ class DeliverAction extends BaseAction
 			$store['image'] = $images ? array_shift($images) : '';
 			$this->assign('store', $store);
 		}
-		
-
-		$my_distance = $this->deliver_session['range'] * 1000;
-		$time = time();
-		$where = "`create_time`<$time AND `status`=1 AND ROUND(6378.138 * 2 * ASIN(SQRT(POW(SIN(({$this->deliver_session['lat']}*PI()/180-`from_lat`*PI()/180)/2),2)+COS({$this->deliver_session['lat']}*PI()/180)*COS(`from_lat`*PI()/180)*POW(SIN(({$this->deliver_session['lng']}*PI()/180-`from_lnt`*PI()/180)/2),2)))*1000) < $my_distance ";
-		if ($this->deliver_session['group'] == 2 && $this->deliver_session['store_id']) {
-			$where = "`type`= 1 AND `store_id`=" . $this->deliver_session['store_id'] . " AND " . $where;
-		} else {
-			$where = "`type`= 0 AND " . $where;
-		}
-		//$gray_count = D("Deliver_supply")->where($where)->count();
-		//garfunkel 添加派单逻辑
-        $gray_list = D("Deliver_supply")->where($where)->select();
-        $gray_count = 0;
-        foreach ($gray_list as $k=>$v){
-            $supply_id = $v['supply_id'];
-            $deliver_assign = D('Deliver_assign')->field(true)->where(array('supply_id'=>$supply_id))->find();
-            $record_array = explode(',',$deliver_assign['record']);
-            //派单列表中不存在 || 派单列表中开放 || 指定派单 && 不在转接等候期
-            if(!$deliver_assign || ($deliver_assign['deliver_id'] == 0 && !in_array($this->deliver_session['uid'],$record_array)) || $deliver_assign['deliver_id'] == $this->deliver_session['uid']){
-                $gray_count += 1;
+        if($this->deliver_session['work_status'] == 0 || $city['urgent_time'] != 0) {
+            $my_distance = $this->deliver_session['range'] * 1000;
+            $time = time();
+            $where = "`create_time`<$time AND `status`=1 AND ROUND(6378.138 * 2 * ASIN(SQRT(POW(SIN(({$this->deliver_session['lat']}*PI()/180-`from_lat`*PI()/180)/2),2)+COS({$this->deliver_session['lat']}*PI()/180)*COS(`from_lat`*PI()/180)*POW(SIN(({$this->deliver_session['lng']}*PI()/180-`from_lnt`*PI()/180)/2),2)))*1000) < $my_distance ";
+            if ($this->deliver_session['group'] == 2 && $this->deliver_session['store_id']) {
+                $where = "`type`= 1 AND `store_id`=" . $this->deliver_session['store_id'] . " AND " . $where;
+            } else {
+                $where = "`type`= 0 AND " . $where;
             }
+            //$gray_count = D("Deliver_supply")->where($where)->count();
+            //garfunkel 添加派单逻辑
+            $gray_list = D("Deliver_supply")->where($where)->select();
+            $gray_count = 0;
+            foreach ($gray_list as $k => $v) {
+                $store = D('Merchant_store')->field(true)->where(array('store_id' => $v['store_id']))->find();
+                if ($store['city_id'] == $city_id) {
+                    $supply_id = $v['supply_id'];
+                    $deliver_assign = D('Deliver_assign')->field(true)->where(array('supply_id' => $supply_id))->find();
+                    $record_array = explode(',', $deliver_assign['record']);
+                    //派单列表中不存在 || 派单列表中开放 || 指定派单 && 不在转接等候期
+                    if (!$deliver_assign || ($deliver_assign['deliver_id'] == 0 && !in_array($this->deliver_session['uid'], $record_array)) || $deliver_assign['deliver_id'] == $this->deliver_session['uid']) {
+                        $gray_count += 1;
+                    }
+                }
+            }
+        }else{
+		    $gray_count = 0;
         }
 		
 		$deliver_count = D('Deliver_supply')->where(array('uid' => $this->deliver_session['uid'], 'status' => array(array('gt', 1), array('lt', 5))))->count();
@@ -193,26 +246,37 @@ class DeliverAction extends BaseAction
 	}
 	public function index_count()
 	{
-		$my_distance = $this->deliver_session['range'] * 1000;
-		$time = time();
-		$where = "`create_time`<$time AND `status`=1 AND ROUND(6378.138 * 2 * ASIN(SQRT(POW(SIN(({$this->deliver_session['lat']}*PI()/180-`from_lat`*PI()/180)/2),2)+COS({$this->deliver_session['lat']}*PI()/180)*COS(`from_lat`*PI()/180)*POW(SIN(({$this->deliver_session['lng']}*PI()/180-`from_lnt`*PI()/180)/2),2)))*1000) < $my_distance ";
-		if ($this->deliver_session['group'] == 2 && $this->deliver_session['store_id']) {
-			$where = "`type`= 1 AND `store_id`=" . $this->deliver_session['store_id'] . " AND " . $where;
-		} else {
-			$where = "`type`= 0 AND " . $where;
-		}
-		//$gray_count = D("Deliver_supply")->where($where)->count();
-        //garfunkel 添加派单逻辑
-        $gray_list = D("Deliver_supply")->where($where)->select();
-        $gray_count = 0;
-        foreach ($gray_list as $k=>$v){
-            $supply_id = $v['supply_id'];
-            $deliver_assign = D('Deliver_assign')->field(true)->where(array('supply_id'=>$supply_id))->find();
-            $record_array = explode(',',$deliver_assign['record']);
-            //派单列表中不存在 || 派单列表中开放 || 指定派单 && 不在转接等候期
-            if(!$deliver_assign || ($deliver_assign['deliver_id'] == 0 && !in_array($this->deliver_session['uid'],$record_array)) || $deliver_assign['deliver_id'] == $this->deliver_session['uid']){
-                $gray_count += 1;
+        $city_id = $this->deliver_session['city_id'];
+        $city = D('Area')->where(array('area_id'=>$city_id))->find();
+
+	    if($this->deliver_session['work_status'] == 0 || $city['urgent_time'] != 0) {
+            $my_distance = $this->deliver_session['range'] * 1000;
+            $time = time();
+            $where = "`create_time`<$time AND `status`=1 AND ROUND(6378.138 * 2 * ASIN(SQRT(POW(SIN(({$this->deliver_session['lat']}*PI()/180-`from_lat`*PI()/180)/2),2)+COS({$this->deliver_session['lat']}*PI()/180)*COS(`from_lat`*PI()/180)*POW(SIN(({$this->deliver_session['lng']}*PI()/180-`from_lnt`*PI()/180)/2),2)))*1000) < $my_distance ";
+            if ($this->deliver_session['group'] == 2 && $this->deliver_session['store_id']) {
+                $where = "`type`= 1 AND `store_id`=" . $this->deliver_session['store_id'] . " AND " . $where;
+            } else {
+                $where = "`type`= 0 AND " . $where;
             }
+
+            //$gray_count = D("Deliver_supply")->where($where)->count();
+            //garfunkel 添加派单逻辑
+            $gray_list = D("Deliver_supply")->where($where)->select();
+            $gray_count = 0;
+            foreach ($gray_list as $k => $v) {
+                $store = D('Merchant_store')->field(true)->where(array('store_id' => $v['store_id']))->find();
+                if ($store['city_id'] == $city_id) {
+                    $supply_id = $v['supply_id'];
+                    $deliver_assign = D('Deliver_assign')->field(true)->where(array('supply_id' => $supply_id))->find();
+                    $record_array = explode(',', $deliver_assign['record']);
+                    //派单列表中不存在 || 派单列表中开放 || 指定派单 && 不在转接等候期
+                    if (!$deliver_assign || ($deliver_assign['deliver_id'] == 0 && !in_array($this->deliver_session['uid'], $record_array)) || $deliver_assign['deliver_id'] == $this->deliver_session['uid']) {
+                        $gray_count += 1;
+                    }
+                }
+            }
+        }else{
+            $gray_count = 0;
         }
 		
 		$deliver_count = D('Deliver_supply')->where(array('uid' => $this->deliver_session['uid'], 'status' => array(array('gt', 0), array('lt', 5))))->count();
@@ -288,6 +352,12 @@ class DeliverAction extends BaseAction
 					exit;
 				}
 			}
+
+			if($this->deliver_session['work_status'] != 0){
+                $this->error("请先修改您的上班状态");
+                exit;
+            }
+
 			$supply_id = intval(I("supply_id"));
 			if (!$supply_id) {
 				$this->error("参数错误");
@@ -400,30 +470,38 @@ class DeliverAction extends BaseAction
 		}
 		
 		if (IS_AJAX) {
-			$lat = isset($_GET['lat']) && $_GET['lat'] ? $_GET['lat'] : $this->deliver_session['lat'];
-			$lng = isset($_GET['lng']) && $_GET['lng'] ? $_GET['lng'] : $this->deliver_session['lng'];
+            $city_id = $this->deliver_session['city_id'];
+            $city = D('Area')->where(array('area_id'=>$city_id))->find();
 
-			$my_lnt = $this->deliver_session['lng'];
-			$my_lat = $this->deliver_session['lat'];
-			$my_distance = $this->deliver_session['range'] * 1000;
-			
-			$where = "`status`=1 AND ROUND(6378.138 * 2 * ASIN(SQRT(POW(SIN(({$my_lat}*PI()/180-`from_lat`*PI()/180)/2),2)+COS({$my_lat}*PI()/180)*COS(`from_lat`*PI()/180)*POW(SIN(({$my_lnt}*PI()/180-`from_lnt`*PI()/180)/2),2)))*1000) < $my_distance ";
-			if ($this->deliver_session['group'] == 2 && $this->deliver_session['store_id']) {
-				$where = "`type`= 1 AND `store_id`=" . $this->deliver_session['store_id'] . " AND " . $where;
-			} else {
-				$where = "`type`= 0 AND " . $where;
-			}
-			
-			//$list = D('Deliver_supply')->field(true)->where($where)->order("`create_time` DESC")->select();
-            //garfunkel 添加派单逻辑
-            $grab_list = D('Deliver_supply')->field(true)->where($where)->order("`create_time` DESC")->select();
-            foreach ($grab_list as $k=>$v){
-                $supply_id = $v['supply_id'];
-                $deliver_assign = D('Deliver_assign')->field(true)->where(array('supply_id'=>$supply_id))->find();
-                $record_array = explode(',',$deliver_assign['record']);
-                //派单列表中不存在 || 派单列表中开放 && 未拒单 || 指定派单 && 不在转接等候期
-                if(!$deliver_assign || ($deliver_assign['deliver_id'] == 0 && !in_array($this->deliver_session['uid'],$record_array)) || $deliver_assign['deliver_id'] == $this->deliver_session['uid']){
-                    $list[] = $v;
+            if($this->deliver_session['work_status'] == 0 || $city['urgent_time'] != 0) {
+                $lat = isset($_GET['lat']) && $_GET['lat'] ? $_GET['lat'] : $this->deliver_session['lat'];
+                $lng = isset($_GET['lng']) && $_GET['lng'] ? $_GET['lng'] : $this->deliver_session['lng'];
+
+                $my_lnt = $this->deliver_session['lng'];
+                $my_lat = $this->deliver_session['lat'];
+                $my_distance = $this->deliver_session['range'] * 1000;
+
+                $where = "`status`=1 AND ROUND(6378.138 * 2 * ASIN(SQRT(POW(SIN(({$my_lat}*PI()/180-`from_lat`*PI()/180)/2),2)+COS({$my_lat}*PI()/180)*COS(`from_lat`*PI()/180)*POW(SIN(({$my_lnt}*PI()/180-`from_lnt`*PI()/180)/2),2)))*1000) < $my_distance ";
+                if ($this->deliver_session['group'] == 2 && $this->deliver_session['store_id']) {
+                    $where = "`type`= 1 AND `store_id`=" . $this->deliver_session['store_id'] . " AND " . $where;
+                } else {
+                    $where = "`type`= 0 AND " . $where;
+                }
+
+                //$list = D('Deliver_supply')->field(true)->where($where)->order("`create_time` DESC")->select();
+                //garfunkel 添加派单逻辑
+                $grab_list = D('Deliver_supply')->field(true)->where($where)->order("`create_time` DESC")->select();
+                foreach ($grab_list as $k => $v) {
+                    $store = D('Merchant_store')->field(true)->where(array('store_id' => $v['store_id']))->find();
+                    if ($store['city_id'] == $city_id) {
+                        $supply_id = $v['supply_id'];
+                        $deliver_assign = D('Deliver_assign')->field(true)->where(array('supply_id' => $supply_id))->find();
+                        $record_array = explode(',', $deliver_assign['record']);
+                        //派单列表中不存在 || 派单列表中开放 && 未拒单 || 指定派单 && 不在转接等候期
+                        if (!$deliver_assign || ($deliver_assign['deliver_id'] == 0 && !in_array($this->deliver_session['uid'], $record_array)) || $deliver_assign['deliver_id'] == $this->deliver_session['uid']) {
+                            $list[] = $v;
+                        }
+                    }
                 }
             }
 			if (empty($list)) {

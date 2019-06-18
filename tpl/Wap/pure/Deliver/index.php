@@ -65,11 +65,19 @@
 				<h2>{pigcms{$deliver_session['name']}<i> , {pigcms{:L('_HELLO_TXT_')}</i></h2>
 				<p>
 					<if condition="$deliver_session['store_id']">{pigcms{:L('_COURIER_TXT_')}-{pigcms{$store['name']}<else />{pigcms{:L('_COURIER_TXT_')}</if>
-					<!--<if condition="$deliver_session['work_status'] eq '1'">
-					<a href="javascript:void(0)" class="startOrder" ref="0">{pigcms{:L('_CLOCK_IN_')}</a>
-					<else />
-					<a href="javascript:void(0)" class="stopOrder" ref="1">{pigcms{:L('_CLOCK_OUT_')}</a>
-					</if>-->
+                    <if condition="$city['urgent_time'] neq 0">
+                        <if condition="$deliver_session['work_status'] eq '1'">
+                        <a href="javascript:void(0)" class="startOrder" ref="0">{pigcms{:L('_CLOCK_IN_')}</a>
+                        <else />
+                        <a href="javascript:void(0)" class="stopOrder" ref="1">{pigcms{:L('_CLOCK_OUT_')}</a>
+                        </if>
+                    <else />
+                        - <if condition="$deliver_session['work_status'] eq '1'">
+                            <span>Rest</span>
+                        <else />
+                            <span>Work</span>
+                        </if>
+                    </if>
 				</p>
 			</div>
 		</div>

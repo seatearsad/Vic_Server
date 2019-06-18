@@ -134,6 +134,9 @@
         outline: 0;
         background-color: white;
     }
+    input.mt[type="checkbox"]:disabled{
+        background-color: #cccccc;
+    }
     input.mt[type="checkbox"]:checked {
         background-color: #ffa52d;
         border: 0;
@@ -166,7 +169,7 @@
 
         </div>
         <div class="radio_box" style="float: right;margin-right: 5%;margin-top: 20px">
-            <span style="float: left;margin-right: 10px;line-height: 24px">Default</span>
+            <span style="float: left;margin-right: 10px;line-height: 24px">Repeat</span>
             <span class="cb-enable"><label class="cb-enable selected"><span>On</span><input type="radio" name="repeat" value="1" checked="checked"/></label></span>
             <span class="cb-disable"><label class="cb-disable"><span>Off</span><input type="radio" name="repeat" value="0" /></label></span>
         </div>
@@ -184,24 +187,30 @@
     <script type="text/javascript" src="{pigcms{$static_public}js/artdialog/jquery.artDialog.js"></script>
 	<script type="text/javascript">
         //开关
-        $('.cb-enable').click(function(){
+        $('.cb-enable').click(repeat_enable);
+        $('.cb-disable').click(repeat_disable);
+
+        function repeat_enable(){
             $(this).find('label').addClass('selected');
             $(this).find('label').find('input').prop('checked',true);
             $(this).next('.cb-disable').find('label').find('input').prop('checked',false);
             $(this).next('.cb-disable').find('label').removeClass('selected');
             default_list[init_num]= 1;
-        });
-        $('.cb-disable').click(function(){
+        }
+
+        function repeat_disable(){
             $(this).find('label').addClass('selected');
             $(this).find('label').find('input').prop('checked',true);
             $(this).prev('.cb-enable').find('label').find('input').prop('checked',false);
             $(this).prev('.cb-enable').find('label').removeClass('selected');
             default_list[init_num] = 0;
-        });
+        }
 
         var work_time_list = JSON.parse('{pigcms{$work_time_list}');
 
         var init_num = parseInt("{pigcms{$week_num}");
+
+        var today_week = parseInt("{pigcms{$week_num}");
 
         var default_list = JSON.parse('{pigcms{$default_list}');
 
@@ -238,6 +247,15 @@
         function getWorkTime(init_num) {
             var time_list = work_time_list[init_num];
             var html = '';
+
+            var show_date = new Date();
+            var h = show_date.getHours();
+
+            var is_set = true;
+
+            if(init_num == today_week && h > time_list[0]['start_time']){
+                is_set = false;
+            }
             for(var i=0;i<time_list.length;i++){
                 if(time_list[i]['is_recomm'] == 1)
                     html += '<div><span class="w_r"></span><span class="w_t">';
@@ -256,10 +274,30 @@
             $('#work_time').html(html);
             $('.mt').bind('click',this,mt_click);
 
-            if(typeof(default_list[init_num]) == 'undefined' || default_list[init_num] == 1){
-                $('.cb-enable').trigger('click');
+            if(!is_set){
+                $('#work_time').find('input').each(function () {
+                    $(this).attr('disabled','disabled');
+                });
+
+                if(typeof(default_list[init_num]) == 'undefined' || default_list[init_num] == 1){
+                    $('.cb-enable').trigger('click');
+                }else{
+                    $('.cb-disable').trigger('click');
+                }
+
+                $('.cb-enable').unbind('click');
+                $('.cb-disable').unbind('click');
             }else{
-                $('.cb-disable').trigger('click');
+                $('.cb-enable').unbind('click');
+                $('.cb-disable').unbind('click');
+                $('.cb-enable').click(repeat_enable);
+                $('.cb-disable').click(repeat_disable);
+
+                if(typeof(default_list[init_num]) == 'undefined' || default_list[init_num] == 1){
+                    $('.cb-enable').trigger('click');
+                }else{
+                    $('.cb-disable').trigger('click');
+                }
             }
         }
 

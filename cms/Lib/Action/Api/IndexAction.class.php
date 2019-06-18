@@ -1773,35 +1773,46 @@ class IndexAction extends BaseAction
          */
 
         echo "week:".$week_num.";Hour:".intval($hour);
-        //获取时间id
-        $all_list = D('Deliver_schedule_time')->select();
-        $time_ids = array();
-        foreach ($all_list as $v){
-            if(!isset($city[$v['city_id']]))
-                $city[$v['city_id']] = D('Area')->where(array('area_id'=>$v['city_id']))->find();
-
-            $hour = $hour + $city[$v['city_id']]['jetlag'];
-            if($hour == $v['start_time']){
-                $daylist = explode(',', $v['week_num']);
-                if (in_array($week_num, $daylist)) {
-                    $time_ids[] = $v['id'];
+        $city = D('Area')->where(array('area_type'=>2))->select();
+        foreach ($city as $k=>$c){
+            //获取时间id
+            $all_list = D('Deliver_schedule_time')->where(array('city_id'=>$c['area_id']))->select();
+            $time_ids = array();
+            foreach ($all_list as $v){
+                $new_hour = $hour + $c['jetlag'];
+                if($new_hour == $v['start_time']){
+                    $daylist = explode(',', $v['week_num']);
+                    if (in_array($week_num, $daylist)) {
+                        $time_ids[] = $v['id'];
+                    }
                 }
             }
-        }
-        //获取所有上班送餐员的id
-        $schedule_list = D('Deliver_schedule')->where(array('time_id' => array('in', $time_ids),'week_num'=>$week_num,'whether'=>1,'status'=>1))->select();
-        $work_delver_list = array();
-        foreach ($schedule_list as $v){
-            $work_delver_list[] = $v['uid'];
-            //如果为不repeat的 此时删除
-            if($v['is_repeat'] != 1){
-                D('Deliver_schedule')->where($v)->delete();
+
+            //获取所有上班送餐员的id
+            $schedule_list = D('Deliver_schedule')->where(array('time_id' => array('in', $time_ids),'week_num'=>$week_num,'whether'=>1,'status'=>1))->select();
+            $work_delver_list = array();
+            foreach ($schedule_list as $v){
+                $work_delver_list[] = $v['uid'];
+
+                $is_del = true;
+                //处在紧急状态
+                if($c['urgent_time'] != 0){
+                    if($c['urgent_time'] + 3600 < time()){
+                        $is_del = false;
+                    }
+                }
+                //如果为不repeat的 此时删除
+                if($v['is_repeat'] != 1 && $is_del){
+                    D('Deliver_schedule')->where($v)->delete();
+                }
+            }
+            if($c['urgent_time'] == 0) {//非紧急召唤状态时
+                //全部下班
+                D('Deliver_user')->where(array('status' => 1, 'work_status' => 0,'city_id'=>$c['area_id']))->save(array('work_status' => 1));
+                //执行上班
+                D('Deliver_user')->where(array('status' => 1, 'uid' => array('in', $work_delver_list),'city_id'=>$c['area_id']))->save(array('work_status' => 0));
             }
         }
-        //全部下班
-        D('Deliver_user')->where(array('status'=>1,'work_status'=>0))->save(array('work_status'=>1));
-        //执行上班
-        D('Deliver_user')->where(array('status'=>1,'uid'=>array('in',$work_delver_list)))->save(array('work_status'=>0));
 
         //var_dump($work_delver_list);
     }

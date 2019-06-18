@@ -28,8 +28,47 @@ class DeliverAction extends BaseAction {
         foreach ($city as $v){
             if($v['urgent_time'] != 0 && $v['urgent_time']+7200 <= time()){
                 D('Area')->where(array('area_id'=>$v['area_id']))->save(array('urgent_time'=>0));
+                $this->updateDeliverWorkStatus($v);
             }
         }
+    }
+
+    public function updateDeliverWorkStatus($city){
+        $week_num = date("w");
+        $hour = date('H');
+
+        if($hour >= 0 && $hour < 5) {
+            $hour = $hour + 24;
+            $week_num = $week_num - 1 < 0 ? 6 : $week_num - 1;
+        }
+
+        $all_list = D('Deliver_schedule_time')->where(array('city_id'=>$city['area_id']))->select();
+        $time_ids = array();
+        foreach ($all_list as $v){
+            $new_hour = $hour + $city['jetlag'];
+            if($new_hour == $v['start_time']){
+                $daylist = explode(',', $v['week_num']);
+                if (in_array($week_num, $daylist)) {
+                    $time_ids[] = $v['id'];
+                }
+            }
+        }
+
+        //获取所有上班送餐员的id
+        $schedule_list = D('Deliver_schedule')->where(array('time_id' => array('in', $time_ids),'week_num'=>$week_num,'whether'=>1,'status'=>1))->select();
+        $work_delver_list = array();
+        foreach ($schedule_list as $v){
+            $work_delver_list[] = $v['uid'];
+            //如果为不repeat的 此时删除
+            if($v['is_repeat'] != 1){
+                D('Deliver_schedule')->where($v)->delete();
+            }
+        }
+        //全部下班
+        D('Deliver_user')->where(array('status'=>1,'work_status'=>0,'city_id'=>$city['area_id']))->save(array('work_status'=>1));
+        //执行上班
+        D('Deliver_user')->where(array('status'=>1,'uid'=>array('in',$work_delver_list),'city_id'=>$city['area_id']))->save(array('work_status'=>0));
+
     }
 	/**
 	 * 配送员列表
@@ -1481,6 +1520,32 @@ class DeliverAction extends BaseAction {
         }
         //var_dump($save_data);die();
         D('Deliver_schedule_time')->addAll($save_data);
+
+        exit(json_encode(array('error'=>0,'msg'=>'Success')));
+    }
+
+    public function schedule_del_time(){
+        $week_num = $_POST['week_num'];
+        $time_id = $_POST['time_id'];
+
+        $schedule_time = D('Deliver_schedule_time')->where(array('id'=>$time_id))->find();
+        $all_week = explode(',',$schedule_time['week_num']);
+        if(in_array($week_num,$all_week)) {
+            if(count($all_week) == 1){
+                D('Deliver_schedule_time')->where(array('id'=>$time_id))->delete();
+            }else {
+                foreach ($all_week as $k=>$v) {
+                    if($week_num == $v){
+                        unset($all_week[$k]);
+                    }
+                }
+
+                $new_week = implode(',',$all_week);
+                D('Deliver_schedule_time')->where(array('id'=>$time_id))->save(array('week_num'=>$new_week));
+            }
+
+            D('Deliver_schedule')->where(array('time_id'=>$time_id,'week_num'=>$week_num))->delete();
+        }
 
         exit(json_encode(array('error'=>0,'msg'=>'Success')));
     }
