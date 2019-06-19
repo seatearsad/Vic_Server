@@ -600,7 +600,7 @@
     if(/(tutti_android)/.test(navigator.userAgent.toLowerCase())){
         var user_id = "{pigcms{$user_session['uid']}";
         if(user_id == ""){
-            if(typeof (window.linkJs) != 'undefined'){
+            if(typeof (window.linkJs.getUserInfo) != 'undefined'){
                 var str = window.linkJs.getUserInfo();
 
                 var user_str = str.split(',');
