@@ -136,7 +136,7 @@
 				        </dd-->
                         <dd class="dd-padding kv-line">
                             <h6>Unit:</h6>
-                            <input name="detail" type="text" class="kv-v input-weak" placeholder="{pigcms{:L('_B_PURE_MY_20_')}" pattern=".{2,}" data-err="{pigcms{:L('_B_PURE_MY_21_')}" value="{pigcms{$now_adress.detail}">
+                            <input name="detail" type="text" class="kv-v input-weak" placeholder="{pigcms{:L('_B_PURE_MY_20_')}" data-err="{pigcms{:L('_B_PURE_MY_21_')}" value="{pigcms{$now_adress.detail}">
                         </dd>
 		        		<dd class="dd-padding kv-line" id="color-gray">
 		        			<h6>{pigcms{:L('_B_PURE_MY_15_')}:</h6>

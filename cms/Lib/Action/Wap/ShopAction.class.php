@@ -2515,8 +2515,10 @@ class ShopAction extends BaseAction{
 					}
 // 				}
 			}
-			//var_dump($return);die();
-			$now_time = time();
+			//var_dump($return['store']);die();
+
+            $area = D('Area')->where(array('area_id'=>$return['store']['city_id']))->find();
+			$now_time = time() + $area['jetlag']*3600;
 			$order_data = array();
 			$order_data['mer_id'] = $return['mer_id'];
 			$order_data['store_id'] = $return['store_id'];
@@ -2596,7 +2598,7 @@ class ShopAction extends BaseAction{
 					if ($arrive_date != date('Y-m-d')) {
 						$arrive_time = strtotime($arrive_date . $start_time);
 					} else {
-						$arrive_time = time() + $return['store']['send_time'] * 60;
+						$arrive_time = $now_time + $return['store']['send_time'] * 60;
 						if ($start_time == $stop_time && $start_time == '00:00:00') {
 
 						} else {
@@ -2628,8 +2630,10 @@ class ShopAction extends BaseAction{
 				} else {
 					$arrive_time = strtotime($arrive_date . $arrive_time);
 				}
+                if($arrive_time)
+                    $arrive_time = $arrive_time + $area['jetlag']*3600;
 
-				$order_data['expect_use_time'] = $arrive_time ? $arrive_time : time() + $return['store']['send_time'] * 60;//客户期望使用时间
+				$order_data['expect_use_time'] = $arrive_time ? $arrive_time : $now_time + $return['store']['send_time'] * 60;//客户期望使用时间
 
 				//计算配送费
 				//$distance = $distance / 1000;

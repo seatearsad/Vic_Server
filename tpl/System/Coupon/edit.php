@@ -17,23 +17,23 @@
 		<table cellpadding="0" cellspacing="0" class="frame_form" width="100%">
 		<input type="hidden" name="coupon_id" value="{pigcms{$coupon.coupon_id}">
 			<tr>
-				<td width="100">优惠券名称：</td>
+				<td width="100">{pigcms{:L('_STORE_PRO_NAME_')}：</td>
 				<td>
 				{pigcms{$coupon.name}
 				</td>
 			</tr>
-			<tr>
+			<tr style="display: none;">
 				<td width="100">优惠券图标：</td>
 				<td><input type="text"  style="width:200px;" name="img" class="input input-image" value="{pigcms{$coupon.img}"  validate="required:true" readonly>&nbsp;&nbsp;<a href="javascript:void(0)" class="btn btn-sm btn-success J_selectImage"  style="background: #87b87f!important;border-color: #87b87f;color:#fff;">上传图片</a></td>
 				<td>图片尺寸建议 正方形 200 X 200</td>			
 			</tr>
 			
-			<tr>
+			<tr style="display: none;">
 				<td width="100">微信分享图片：</td>
 				<td><input type="text"  style="width:200px;" name="wx_share_img" class="input input-image" value="{pigcms{$coupon.wx_share_img}"  validate="required:true" readonly>&nbsp;&nbsp;<a href="javascript:void(0)" class="btn btn-sm btn-success J_selectImage"  style="background: #87b87f!important;border-color: #87b87f;color:#fff;">上传图片</a></td>
 				<td><font color="red">不上传图片则不能生产二维码</font></td>			
 			</tr>
-			<tr>
+			<tr style="display: none;">
 				<td width="100">同步到微信卡券：</td>
 				<td colspan="2">
 					<if condition="$coupon['sync_wx'] eq 1"><span>是</span><else /><span>否</span></if>
@@ -160,38 +160,38 @@
 			</tr>
 		
 			<tr>
-				<td width="100">是否只允许新用户使用：</td>
+				<td width="100">{pigcms{:L('_BACK_ONLY_NEW_USER_')}：</td>
 				<td>
-					<if condition="$coupon['allow_new'] eq 1">是<elseif condition="$coupon['allow_new'] eq 0"/>否</if>
+					<if condition="$coupon['allow_new'] eq 1">Yes<elseif condition="$coupon['allow_new'] eq 0"/>No</if>
 				</td>
 				
 			</tr>
 			<tr>
-				<td width="100">使用平台：</td>
+				<td width="100">{pigcms{:L('_BACK_USE_PLAT_')}：</td>
 				<td>
 				{pigcms{$coupon.platform}
 				</td>
 			</tr>
-			<tr>
-				<td width="100">使用类别：</td>
+			<!--tr>
+				<td width="100">{pigcms{:L('_BACK_USE_CATE_')}：</td>
 				<td>
 				{pigcms{$coupon.cate_name}
 				</td>
 				
-			</tr>
-			<tr>
+			</tr-->
+			<tr style="display:none">
 				<td width="100">使用分类：</td>
 				<td id="cate_id">
 				{pigcms{$coupon.cate_id}
 				</td>
 			</tr>
-			<tr>
+			<tr style="display: none;">
 				<td width="100">微信展示简短描述(微信卡包优惠说明)：</td>
 				<td>
 				<textarea name="des" value=""  autocomplete="off" validate="required:true">{pigcms{$coupon.des}</textarea>
 				</td>
 			</tr>
-			<tr>
+			<tr style="display: none;">
 				<td width="100">领取页面详细描述(微信卡包使用须知)：</td>
 				<td>
 				<textarea name="des_detial" value=""  autocomplete="off" validate="required:true">{pigcms{$coupon.des_detial}</textarea>
@@ -199,62 +199,82 @@
 				<td>每条描述请换行</td>
 			</tr>
 			<tr>
-				<td width="100">数量：{pigcms{$coupon.now_num}</td>
+				<td width="100">{pigcms{:L('_BACK_QUANTITY_')}：{pigcms{$coupon.now_num}</td>
 				<td width="85%" colspan="3">
 				
 				<input type="hidden" name="status" value="{pigcms{$coupon.status}"/>
 				<input type="hidden" name="had_pull" value="{pigcms{$coupon.had_pull}"/>
 				<input type="hidden" name="num" value="{pigcms{$coupon.now_num}"/>
 				<select name="add" class="fl">
-					<option value="0">增加</option>
-					<option value="1">减少</option>
+					<option value="0">Add</option>
+					<option value="1">Reduce</option>
 				</select>
-				<input type="text" class="input fl" style="margin-left:4px;" name="num_add" value=""  autocomplete="off" validate="digits:true,min:1">已经被领了{pigcms{$coupon.had_pull}张
+				<input type="text" class="input fl" style="margin-left:4px;" name="num_add" value=""  autocomplete="off" validate="digits:true,min:1">{pigcms{:replace_lang_str(L('_BACK_ALREADY_CLAIM_'),$coupon['had_pull'])}
 				</td>
 			</tr>
 			
 			<tr>
-				<td width="100">领取数量限制：</td>
+				<td width="100">{pigcms{:L('_BACK_PICK_NUM_LIM_')}：</td>
 				<td>
 				{pigcms{$coupon.limit}
 				</td>
 			</tr>
 			<tr>
-				<td width="100">使用数量限制：</td>
+				<td width="100">{pigcms{:L('_BACK_USE_NUM_LIM_')}：</td>
 				<td>
 				{pigcms{$coupon.use_limit}
 				</td>
 			</tr>
 			<tr>
-				<td width="100">优惠金额：</td>
+				<td width="100">{pigcms{:L('_BACK_DIS_PRICE_')}：</td>
 				<td>
 				{pigcms{$coupon.discount}
 				</td>
 			</tr>
 			<tr>
-				<td width="100">最小订单金额：</td>
+				<td width="100">{pigcms{:L('_BACK_MIN_PRICE_')}：</td>
 				<td>
 				{pigcms{$coupon.order_money}
 				</td>
 			</tr>
 			<tr>
-				<td width="100">起始时间：</td>
+				<td width="100">{pigcms{:L('_BACK_PERIOD_')}：</td>
 				<td>
-					{pigcms{$coupon.start_time|date='Y年m月d日',###}——{pigcms{$coupon.end_time|date='Y年m月d日',###}
+					{pigcms{$coupon.start_time|date='Y-m-d',###}——{pigcms{$coupon.end_time|date='Y-m-d',###}
 				</td>
 			</tr>
-			
+            <if condition="$system_session['level'] neq 3">
+                <tr>
+                    <td width="100">通用</td>
+                    <td colspan="2">
+                        <span class="cb-enable"><label <if condition="$coupon['city_id'] eq 0">class="cb-enable selected"<else />class="cb-enable"</if>><span>通用</span><input id="yes" type="radio" name="currency" value="1" <if condition="$coupon['city_id'] eq 0">checked="checked"</if> /></label></span>
+                        <span class="cb-disable"><label <if condition="$coupon['city_id'] eq 0">class="cb-disable"<else />class="cb-disable selected"</if> ><span>不通用</span><input id="no" type="radio" name="currency" value="2" <if condition="$coupon['city_id'] neq 0">checked="checked"</if> /></label></span>
+                    </td>
+                </tr>
+                <tr id="adver_region" <if condition="$coupon['city_id'] eq 0">style="display:none;"</if>>
+                    <td width="100">{pigcms{:L('_B_PURE_MY_13_')}</td>
+                    <td colspan="2" id="choose_cityareass" province_idss="" city_idss="{pigcms{$coupon.city_id}"></td>
+                </tr>
+                <else />
+                <tr>
+                    <td width="100">{pigcms{:L('_B_PURE_MY_13_')}：</td>
+                    <td colspan="2">
+                        {pigcms{$city['area_name']}
+                        <input type="hidden" name="city_id" value="{pigcms{$city['area_id']}">
+                    </td>
+                </tr>
+            </if>
 			<if condition="($coupon.status eq 0) OR ($coupon.status eq 1)">
 			<tr>
-				<td width="100">状态</td>
+				<td width="100">{pigcms{:L('_BACK_STATUS_')}</td>
 				<td>
-					<span class="cb-enable"><label class="cb-enable <if condition="$coupon['status'] eq 1">selected</if>"><span>启用</span><input type="radio" name="status" value="1" <if condition="$coupon['status'] eq 1">checked="checked"</if>/></label></span>
-					<span class="cb-disable"><label class="cb-disable <if condition="$coupon['status'] eq 0">selected</if>"><span>不启用</span><input type="radio" name="status" value="0" <if condition="$coupon['status'] eq 0">checked="checked"</if>/></label></span>
+					<span class="cb-enable"><label class="cb-enable <if condition="$coupon['status'] eq 1">selected</if>"><span>{pigcms{:L('_BACK_ACTIVE_')}</span><input type="radio" name="status" value="1" <if condition="$coupon['status'] eq 1">checked="checked"</if>/></label></span>
+					<span class="cb-disable"><label class="cb-disable <if condition="$coupon['status'] eq 0">selected</if>"><span>{pigcms{:L('_BACK_FORBID_')}</span><input type="radio" name="status" value="0" <if condition="$coupon['status'] eq 0">checked="checked"</if>/></label></span>
 				</td>
 			</tr>
 			</if>
             <tr>
-                <td width="100">领取口令：</td>
+                <td width="100">{pigcms{:L('_BACK_PICK_KEY_')}：</td>
                 <td>
                     {pigcms{$coupon['notice']}
                 </td>
@@ -346,6 +366,13 @@
 				});
 			}
 		}
+
+        $("#yes").click(function(){
+            $("#adver_region").hide();
+        })
+        $("#no").click(function(){
+            $("#adver_region").show();
+        })
 	</script>
 
 	

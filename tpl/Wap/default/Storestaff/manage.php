@@ -304,15 +304,32 @@ line-height: .7rem;
 //更新app 设备token
 function pushDeviceToken(token) {
     var message = '';
-    $.post("{pigcms{:U('Storestaff/update_device')}", {'token':token}, function(result) {
-        if(result){
-            message = result.message;
-        }else {
-            message = 'Error';
-        }
-    });
+    if(token != "{pigcms{$staff_session['device_id']}") {
+        $.post("{pigcms{:U('Storestaff/update_device')}", {'token': token}, function (result) {
+            if (result) {
+                message = result.message;
+            } else {
+                message = 'Error';
+            }
+        });
+    }
     return message;
 }
+//更新Android 设备token
+if(typeof (window.linkJs) != 'undefined'){
+    var android_token = window.linkJs.getDeviceId();
+    if(android_token != "{pigcms{$staff_session['device_id']}"){
+        var message = '';
+        $.post("{pigcms{:U('Storestaff/update_device')}", {'token':android_token}, function(result) {
+            if(result){
+                message = result.message;
+            }else {
+                message = 'Error';
+            }
+        });
+    }
+}
+
 $(document).ready(function(){
 	var is_click = false;
 	$('.js-add-order').click(function(){

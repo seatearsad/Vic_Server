@@ -98,8 +98,8 @@
 	font-size: 11px;
 }
 .dealcard .price span.delivery{
-	border-left: 1px solid #bbb;
-    padding-left: 8px;
+	/*border-left: 1px solid #bbb;
+    padding-left: 8px;*/
 	margin-left: 0px;
 }
 .dealcard .coupon {

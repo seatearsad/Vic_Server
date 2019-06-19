@@ -64,7 +64,7 @@
                     <tr>
                         <td>Mobile：<input type="text" name="phone" value="{pigcms{$now_adress.phone}" placeholder="Mobile Number"></td>
                     </tr>
-                    <tr>
+                    <!--tr>
                         <td>Province：
                             <select name="province">
                                 <if condition="$now_adress">
@@ -99,7 +99,7 @@
                                 </volist>
                             </select>
                         </td>
-                    </tr>
+                    </tr-->
                     <tr>
                         <td>Address：
                             <?php if(!empty($now_adress['adress'])){echo $now_adress['adress'];} ?>
@@ -114,6 +114,9 @@
                             <input type="hidden" name="adress" value="{pigcms{$now_adress.adress}" style="width: 50%">
                             <input type="hidden" name="longitude" value="{pigcms{$now_adress.longitude}" >
                             <input type="hidden" name="latitude" value="{pigcms{$now_adress.latitude}" >
+                            <input type="hidden" name="province" value="{pigcms{$staff_session['province_id']}">
+                            <input type="hidden" name="city" value="{pigcms{$staff_session['city_id']}">
+                            <input type="hidden" name="area" value="0">
                         </td>
                     </tr>
                     <tr>

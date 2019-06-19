@@ -378,6 +378,14 @@ class Shop_orderModel extends Model
 		$data_shop_order['score_deducte']     	= !empty($data_shop_order['score_deducte'])?(float)$data_shop_order['score_deducte']:0;
 		$data_shop_order['last_time'] 			= $_SERVER['REQUEST_TIME'];
 		$data_shop_order['submit_order_time'] 	= $_SERVER['REQUEST_TIME'];
+		//garfunkel add
+        if($order_info['desc']){
+            $data_shop_order['desc'] = $order_info['desc'];
+        }
+        if($order_info['expect_use_time']){
+            $data_shop_order['expect_use_time'] = $order_info['expect_use_time'];
+        }
+
 		if ($this->where($condition_shop_order)->data($data_shop_order)->save()) {
 			return array('error_code' => false, 'msg' => '保存订单成功！');
 		} else {
@@ -401,8 +409,12 @@ class Shop_orderModel extends Model
 				'order_total_money' => $order_info['order_total_money'],
 				'balance_pay' => $order_info['balance_pay'],
 				'merchant_balance' => $order_info['merchant_balance'],
-				'is_own'	=> $order_info['is_own'] ? $order_info['is_own'] : 0
+				'is_own'	=> $order_info['is_own'] ? $order_info['is_own'] : 0,
 			);
+
+			if($order_info['desc']) $order_param['desc'] = $order_info['desc'];
+        	if($order_info['expect_use_time']) $order_param['expect_use_time'] = $order_info['expect_use_time'];
+
 			$result_after_pay = $this->after_pay($order_param);
 			if($result_after_pay['error']){
 				return array('error_code' => true,'msg'=>$result_after_pay['msg']);
@@ -576,8 +588,14 @@ class Shop_orderModel extends Model
 				}
 			}
 
+			//garfunkel add
+			$store = D('Merchant_store')->where(array('store_id'=>$now_order['store_id']))->find();
+			$area = D('Area')->where(array('area_id'=>$store['city_id']))->find();
+
 			$data_shop_order = array();
 			$data_shop_order['pay_time'] = isset($order_param['pay_time']) && $order_param['pay_time'] ? strtotime($order_param['pay_time']) : $_SERVER['REQUEST_TIME'];
+			//garfunkel add
+			$data_shop_order['pay_time'] += $area['jetlag']*3600;
 			$data_shop_order['payment_money'] = floatval($order_param['pay_money']);//在线支付的钱
 			$data_shop_order['pay_type'] = $order_param['pay_type'];
 			$data_shop_order['third_id'] = $order_param['third_id'];
@@ -614,7 +632,6 @@ class Shop_orderModel extends Model
 			$data_shop_order['shop_pass'] = implode('', $shop_pass_array);
 
 			D('Action_relation')->add_user_action($now_order['order_id'], 'shop');
-
 			if($this->where($where)->save($data_shop_order)){
 				D('Scroll_msg')->add_msg('shop',$now_user['uid'],'用户'.$now_user['nickname'].'于'.date('Y-m-d H:i',$_SERVER['REQUEST_TIME']).'购买'.C('config.shop_alias_name').'成功');
 

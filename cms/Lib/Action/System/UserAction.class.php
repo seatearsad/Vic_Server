@@ -853,6 +853,8 @@ class UserAction extends BaseAction {
         $coupon = D('System_coupon');
 
         $where = array('status' => 1,'allow_new'=>0);
+        if($this->system_session['level'] == 3)
+            $where['city_id'] = $this->system_session['area_id'];
 
         $list = $coupon->field(true)->where($where)->order('`last_time` DESC')->select();
 

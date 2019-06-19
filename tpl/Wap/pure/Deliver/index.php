@@ -36,14 +36,30 @@
     function pushDeviceToken(token) {
         device_token = token;
         var message = '';
-        $.post("{pigcms{:U('Deliver/update_device')}", {'token':token}, function(result) {
-            if(result){
-                message = result.message;
-            }else {
-                message = 'Error';
-            }
-        });
+        if(device_token != "{pigcms{$deliver_session['device_id']}") {
+            $.post("{pigcms{:U('Deliver/update_device')}", {'token': token}, function (result) {
+                if (result) {
+                    message = result.message;
+                } else {
+                    message = 'Error';
+                }
+            });
+        }
         return message;
+    }
+    //更新Android 设备token
+    if(typeof (window.linkJs) != 'undefined'){
+        var android_token = window.linkJs.getDeviceId();
+        if(android_token != "{pigcms{$deliver_session['device_id']}"){
+            var message = '';
+            $.post("{pigcms{:U('Deliver/update_device')}", {'token':android_token}, function(result) {
+                if(result){
+                    message = result.message;
+                }else {
+                    message = 'Error';
+                }
+            });
+        }
     }
 </script>
 <style>

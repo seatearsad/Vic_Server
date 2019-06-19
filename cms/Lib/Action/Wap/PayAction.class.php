@@ -2544,6 +2544,11 @@ class PayAction extends BaseAction{
                     //先处理一下订单信息
                     //处理小费
                     $order_data = array('tip_charge'=>$_POST['tip']);
+                    if($_POST['note'] && $_POST['note'] != '')
+                        $order_data['desc'] = $_POST['note'];
+                    if($_POST['est_time'] && $_POST['est_time'] != ''){
+                        $order_data['expect_use_time'] = strtotime($_POST['est_time']);
+                    }
                     //处理优惠券
                     if($_POST['coupon_id']){
                         $now_coupon = D('System_coupon')->get_coupon_by_id($_POST['coupon_id']);

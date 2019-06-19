@@ -508,16 +508,16 @@ function getUserLocation(options){
 		},function(error){
 			switch (error.code){
 				case error.PERMISSION_DENIED:
-					options['errorMsg'] = 'Please enable location access while using';
+					options['errorMsg'] = 'Location share was denied permission to find you. Please enter your address manually.';
 					break; 
 				case error.POSITION_UNAVAILABLE:
-					options['errorMsg'] = '获取位置信息失败,位置信息不可用';
+					options['errorMsg'] = 'Unable to access location,please enter address manually.';
 					break; 
 				case error.TIMEOUT:
-					options['errorMsg'] = '获取位置信息失败,请求获取用户位置超时';
+					options['errorMsg'] = 'Unable to access location,please enter address manually.';
 					break; 
 				case error.UNKNOWN_ERROR:
-					options['errorMsg'] = '获取位置信息失败,定位系统失效';
+					options['errorMsg'] = 'Unable to access location,please enter address manually.';
 					break;
 			}
 			alert(options['errorMsg']);

@@ -336,8 +336,22 @@
 
             var autocomplete;
             function initAutocomplete() {
-                autocomplete = new google.maps.places.Autocomplete(document.getElementById('pageAddressSearchTxt'), {types: ['geocode'],componentRestrictions: {country: ['ca']}});
-                autocomplete.addListener('place_changed', fillInAddress);
+                if(typeof(autocomplete) == 'undefined') {
+                    autocomplete = new google.maps.places.Autocomplete(document.getElementById('pageAddressSearchTxt'), {
+                        types: ['geocode'],
+                        componentRestrictions: {country: ['ca']}
+                    });
+                    autocomplete.addListener('place_changed', fillInAddress);
+                    // need to stop prop of the touchend event
+                    if (navigator.userAgent.match(/(iPad|iPhone|iPod)/g)) {
+                        setTimeout(function () {
+                            var container = document.getElementsByClassName('pac-container')[0];
+                            container.addEventListener('touchend', function (e) {
+                                e.stopImmediatePropagation();
+                            });
+                        }, 500);
+                    }
+                }
             }
 
             function fillInAddress() {
@@ -360,6 +374,7 @@
                         $.post("{pigcms{:U('Index/ajax_city_name')}",{city_name:city_name},function(result){
                             if (result.error == 1){
                                 //$("input[name='city_id']").val(0);
+                                $.cookie('userLocationCity', 0,{expires:700,path:"/"});
                             }else{
                                 //$("input[name='city_id']").val(result['info']['city_id']);
                                 $.cookie('userLocationCity', result['info']['city_id'],{expires:700,path:"/"});

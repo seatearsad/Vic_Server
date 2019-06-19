@@ -243,6 +243,73 @@ class IndexAction extends BaseAction
         $this->returnCode($code,'info',array(),$result['msg']);
     }
 
+    public function sendForgetCode(){
+        $phone = $_POST['phone'];
+
+        if(empty($phone)){
+            $this->returnCode(1,'info',array(),'No phone number');
+        }
+
+        $user = D('User')->where(array('phone'=>$phone))->find();
+        if(!$user)
+            $this->returnCode(1,'info',array(),'Phone Number Error');
+
+        $vcode = createRandomStr(6,true,true);
+
+        $sms_data['uid'] = 0;
+        $sms_data['mobile'] = $phone;
+        $sms_data['sendto'] = 'user';
+        $sms_data['tplid'] = 169244;
+        $sms_data['params'] = [
+            $vcode
+        ];
+        Sms::sendSms2($sms_data);
+
+        $user_modifypwdDb = M('User_modifypwd');
+        $addtime = time();
+        $expiry = $addtime + 5 * 60; /*             * **五分钟有效期*** */
+        $data = array('telphone' => $phone, 'vfcode' => $vcode, 'expiry' => $expiry, 'addtime' => $addtime);
+        $insert_id = $user_modifypwdDb->add($data);
+
+        $this->returnCode(0,'info',array(),'Success');
+    }
+
+    public function userForget(){
+        $phone = $_POST['phone'];
+        $vcode = $_POST['vcode'];
+
+        if(D('User_modifypwd')->where(array('vfcode'=>$vcode,'telphone'=>$phone))->find()){
+            $this->returnCode(0,'info',array(),'Success');
+        }else{
+            $this->returnCode(1,'info',array(),L('_SMS_CODE_ERROR_'));
+        }
+    }
+
+    public function forgetToPassword(){
+        $phone = $_POST['phone'];
+        $pwd = $_POST['password'];
+
+        $data['pwd'] = md5($pwd);
+        D('User')->where(array('phone'=>$phone))->save($data);
+
+        $this->returnCode(0,'info',array(),'Success');
+    }
+
+    public function oldToPassword(){
+        $uid = $_POST['uid'];
+        $old_pwd = $_POST['old_pwd'];
+        $new_pwd = $_POST['new_pwd'];
+
+        $user = D('User')->where(array('uid'=>$uid))->find();
+        if(md5($old_pwd) != $user['pwd']){
+            $this->returnCode(1,'info',array(),L('_B_MY_WRONGKEY_'));
+        }else{
+            $data['pwd'] = md5($new_pwd);
+            D('User')->where(array('uid'=>$uid))->save($data);
+            $this->returnCode(0,'info',array(),'Success');
+        }
+    }
+
     public function userReg(){
         $phone = $_POST['phone'];
         $vcode = $_POST['vcode'];
@@ -457,8 +524,11 @@ class IndexAction extends BaseAction
         $sid = D('Cart')->field(true)->where(array('uid'=>$uid,'fid'=>$cart_array[0]['fid']))->find()['sid'];
 
         $return = D('Shop_goods')->checkCart($sid, $uid, $orderData);
+        //garfunkel add
+        $store = D('Merchant_store')->where(array('store_id'=>$return['store_id']))->find();
+        $area = D('Area')->where(array('area_id'=>$store['city_id']))->find();
 
-        $now_time = time();
+        $now_time = time()+ $area['jetlag']*3600;
         $order_data = array();
         $order_data['mer_id'] = $return['mer_id'];
         $order_data['store_id'] = $return['store_id'];
@@ -1751,9 +1821,9 @@ class IndexAction extends BaseAction
     }
 
     public function TestGoogle(){
-        $device_id = 'cx-enHUoavg:APA91bFZbnqoVg4wtewEDjPQ6cAgZyZctCAK4-wlOEfpbC91xRouYjtJZon5GlbAUE6cMw4p4ft63mkanr6RgLJ0HHnO51gyw3y2Z6Be9plqKCTy2yI3hiaPtxl9vHwSUtxp7hmy1Kx3';
+        $device_id = 'fzuWmcht3tk:APA91bFHgC90SPECiD6Cp-vuNNLqljkalhd2X4gW3Sg0GJuYxqsLjw_FQOuIft348gx-JkZkCRON8IttwKe_oMQrDxGfDNjBu4f6vC82v2oftYrGecgJGBMxYenLfzJxMmPYfoM98RDh';
         $message = 'Your order (1133999) has been successfully canceled at 2019-01-07 07:10:01 at vicisland store, we are looking forward to seeing you again.';
-        $result = Sms::sendMessageToGoogle($device_id,$message);
+        $result = Sms::sendMessageToGoogle($device_id,$message,2);
         var_dump($result);
     }
 

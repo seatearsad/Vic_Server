@@ -97,7 +97,14 @@ cursor: pointer;
                 <if condition="$order['expect_use_time']">
 				<tr>
 					<!--td>Scheduled Delivery：{pigcms{$order['expect_use_time']|date="Y-m-d H:i:s",###}</td-->
-                    <td>Scheduled Delivery：ASAP</td>
+                    <td>
+                        Scheduled Delivery：
+                        <?php if (($order['expect_use_time'] - $order['pay_time'])>=3600){?>
+                            {pigcms{$order['expect_use_time']|date="Y-m-d H:i",###}
+                        <?php }else{ ?>
+                            ASAP
+                        <?php } ?>
+                    </td>
 				</tr>
 				</if>
 				<if condition="$order['is_pick_in_store'] eq 2">

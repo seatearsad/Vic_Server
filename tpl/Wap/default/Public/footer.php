@@ -45,9 +45,9 @@
         </div>
         <div>
             <ul>
-                <li>11:00 am - 1:00 am</li>
+                <li>10:00 am - 1:00 am</li>
                 <li><a href="mailto:info@tutti.app">info@tutti.app</a></li>
-                <li><a href="tel:12505906668">1-250-590-6668</a></li>
+                <li><a href="tel:18883996668">1-888-399-6668</a></li>
             </ul>
         </div>
         <div class="footer_app">
@@ -98,10 +98,11 @@
     <script src="{pigcms{$static_public}js/lang.js"></script>
     <script>
         $('.apk_icon').click(function () {
-            layer.open({
-                title:"{pigcms{:L('_STORE_REMIND_')}",
-                content:'Coming Soon'
-            });
+            // layer.open({
+            //     title:"{pigcms{:L('_STORE_REMIND_')}",
+            //     content:'Coming Soon'
+            // });
+            window.open('https://play.google.com/store/apps/details?id=com.kavl.tutti.user');
         });
         var app_url = 'https://itunes.apple.com/us/app/tutti/id1439900347?ls=1&mt=8';
         $('.app_icon').click(function () {

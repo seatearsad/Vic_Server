@@ -14,6 +14,8 @@ class CouponAction extends BaseAction {
 				}
 			}
 			$condition_coupon['delete'] = 0;
+			if($this->system_session['level'] == 3)
+                $condition_coupon['city_id'] = $this->system_session['area_id'];
 			//排序 /*/
 			$order_string = '`coupon_id` DESC';
 			if($_GET['sort']){
@@ -48,7 +50,12 @@ class CouponAction extends BaseAction {
 					D('System_coupon')->where(array('coupon_id'=>$v['coupon_id']))->setField('status',2);
 					$v['status']=2;
 				}
-
+				if($v['city_id'] != 0){
+                    $city = D('Area')->where(array('area_id'=>$v['city_id']))->find();
+                    $v['city_name'] = $city['area_name'];
+                }else{
+                    $v['city_name'] = 'All';
+                }
 			}
 			$return =  D('System_coupon')->cate_platform();
 			$this->assign("category",$return['category']);
@@ -96,6 +103,20 @@ class CouponAction extends BaseAction {
 				$data['start_time']=strtotime($data['start_time']);
 				$data['end_time']=strtotime($data['end_time'])+86399;//到 23:59:59
 				$data['add_time']=$data['last_time']=time();
+
+				//garfunkel add
+                if($_POST['city_id']){
+                    $data['city_id'] = $_POST['city_id'];
+                }
+
+                if($_POST['currency']){
+                    if($_POST['currency'] == 2){
+                        $data['city_id'] = $_POST['city_idss'];
+                    }else{
+                        $data['city_id'] = 0;
+                    }
+                }
+
 				if($id = D('System_coupon')->add($data)){
 					if($_POST['sync_wx']) {
 						import('@.ORG.weixincard');
@@ -167,13 +188,19 @@ class CouponAction extends BaseAction {
 
 						}
 					}
-					$this->success('添加优惠券成功！'.$errormsg);
+					$this->success('Success!'.$errormsg);
 				}else{
 					$this->error('添加失败！');
 				}
 			}else {
 				$return =  D('System_coupon')->cate_platform();
 				$color_list =  D('System_coupon')->color_list();
+
+				if($this->system_session['level'] == 3){
+				    $area_id = $this->system_session['area_id'];
+				    $city = D('Area')->where(array('area_id'=>$area_id))->find();
+				    $this->assign('city',$city);
+                }
 				$this->assign("color_list",$color_list);
 				$this->assign("category",$return['category']);
 				$this->assign("platform",$return['platform']);
@@ -203,12 +230,24 @@ class CouponAction extends BaseAction {
 				unset($_POST['dosubmit']);
 				$data = $_POST;
 				$data['last_time']=time();
+                //garfunkel add
+                if($_POST['city_id']){
+                    $data['city_id'] = $_POST['city_id'];
+                }
+
+                if($_POST['currency']){
+                    if($_POST['currency'] == 2){
+                        $data['city_id'] = $_POST['city_idss'];
+                    }else{
+                        $data['city_id'] = 0;
+                    }
+                }
 				if(D('System_coupon')->where(array('coupon_id'=>$_POST['coupon_id']))->save($data)){
 					$num_add = $add>0?$_POST['num_add']:0;
 					$num_less= $add<0?$_POST['num_add']:0;
 					$errorms = D('System_coupon')->decrease_sku($num_add,$num_less,$_POST['coupon_id']);
 
-					$this->success('保存成功！'.$errorms);
+					$this->success('Success!'.$errorms);
 				}else{
 					$this->error('保存失败！');
 				}
@@ -227,15 +266,21 @@ class CouponAction extends BaseAction {
 					$vv = $return['platform'][$vv];
 				}
 				$coupon['platform'] = implode(',',$coupon['platform']);
-				$coupon['cate_name'] = $coupon['cate_name']=='all'?'全部类别':$return['category'][$coupon['cate_name']];
+				$coupon['cate_name'] = $coupon['cate_name']=='all'?'All':$return['category'][$coupon['cate_name']];
 				if(empty($coupon['cate_id'])) {
-					$coupon['cate_id'] = '全部分类';
+					$coupon['cate_id'] = 'All';
 				}else{
 					$coupon['cate_id'] = unserialize($coupon['cate_id']);
 					$coupon['cate_id'] = $coupon['cate_id']['cat_name'];
 				}
 				$color_list =  D('System_coupon')->color_list();
 				$coupon['color'] = $color_list[$coupon['color']];
+
+                if($this->system_session['level'] == 3){
+                    $area_id = $this->system_session['area_id'];
+                    $city = D('Area')->where(array('area_id'=>$area_id))->find();
+                    $this->assign('city',$city);
+                }
 				$this->assign("coupon",$coupon);
 				$this->display();
 			}
@@ -261,6 +306,9 @@ class CouponAction extends BaseAction {
 					$where['u.nickname'] =array('like', "%".$_GET['keyword']."%");
 				}
 			}
+            if($this->system_session['level'] == 3) {
+                $where['c.city_id'] = $this->system_session['area_id'];
+            }
 			$coupon = M('System_coupon_hadpull');
 			$count_count = $coupon->join('as h left join '.C('DB_PREFIX').'system_coupon c ON h.coupon_id = c.coupon_id')->join(C('DB_PREFIX').'user u ON h.uid = u.uid')->field('h.id,c.name,u.nickname,h.num,h.receive_time,h.is_use,h.phone')->where($where)->count();
 			import('@.ORG.system_page');

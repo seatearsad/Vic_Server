@@ -849,7 +849,12 @@ class ShoporderAction extends BaseAction
     				exit(json_encode(array('error_code' => true, 'msg' => '不存在的地址')));
     			}
     		}
-    		$now_time = time();
+
+            //garfunkel add
+            $store = D('Merchant_store')->where(array('store_id'=>$return['store_id']))->find();
+            $area = D('Area')->where(array('area_id'=>$store['city_id']))->find();
+
+    		$now_time = time() + $area['jetlag']*3600;
 			$orderid = date('ymdhis').substr(microtime(),2,8-strlen($this->user_session['uid'])).$this->user_session['uid'];
 			$order_data = array();
 			$order_data['real_orderid'] = $orderid;
@@ -979,8 +984,10 @@ class ShoporderAction extends BaseAction
 						}
 					}
 				}
+                if($arrive_time)
+                    $arrive_time = $arrive_time + $area['jetlag']*3600;
 				
-				$order_data['expect_use_time'] = $arrive_time ? $arrive_time : time() + $return['store']['send_time'] * 60;//客户期望使用时间
+				$order_data['expect_use_time'] = $arrive_time ? $arrive_time : $now_time + $return['store']['send_time'] * 60;//客户期望使用时间
 				
 				
 				//计算配送费

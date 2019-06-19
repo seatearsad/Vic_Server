@@ -6,7 +6,11 @@ class Shop_order_logModel extends Model
 		if (empty($param['order_id'])) return false;
 		if ($order = D('Shop_order')->field(true)->where(array('order_id' => $param['order_id']))->find()) {
 			//状态(0：用户下单，1：用户支付，2：店员接单，3：配送员接单，4：配送员取货，5：配送员送达，6：配送结束，7：店员验证消费，8：用户完成评论，9用户退款，10用户取消订单)
-			$data = array('dateline' => time());
+            //garfunkel add
+            $store = D('Merchant_store')->where(array('store_id'=>$order['store_id']))->find();
+            $area = D('Area')->where(array('area_id'=>$store['city_id']))->find();
+            $dateline = time() + $area['jetlag']*3600;
+            $data = array('dateline' => $dateline);
 			$data['order_id'] = intval($param['order_id']);
 			$data['status'] = isset($param['status']) ? intval($param['status']) : 0;
 			$data['phone'] = isset($param['phone']) ? $param['phone'] : '';

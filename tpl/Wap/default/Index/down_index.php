@@ -163,7 +163,11 @@
 
     var app_url = "https://itunes.apple.com/us/app/tutti/id1439900347?ls=1&mt=8";
     $('.down_load').click(function () {
-        window.open(app_url);
+        if(/(android)/.test(navigator.userAgent.toLowerCase())){
+            window.open('https://play.google.com/store/apps/details?id=com.kavl.tutti.user');
+        }else{
+            window.open(app_url);
+        }
     });
 
     function showmessage(msg){
