@@ -129,6 +129,9 @@
             }else{
                 $.post("{pigcms{:U('Login/index')}",{phone:phone,password:password,token:android_token},function(result){
                     if(result.status == '1'){
+                        if(typeof (window.linkJs) != 'undefined'){
+                            window.linkJs.saveUser(phone,password);
+                        }
                         artDialog.open.origin.location.reload();
                         window.location.href = "{pigcms{$referer}";
                     }else{
