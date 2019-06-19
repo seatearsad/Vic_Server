@@ -153,6 +153,9 @@
         window.history.go(-1);
     });
     $('#logout').on('click',function(){
+        if(typeof (window.linkJs) != 'undefined'){
+            window.linkJs.delUser();
+        }
         location.href =	"{pigcms{:U('Login/logout')}";
     });
 </script>
