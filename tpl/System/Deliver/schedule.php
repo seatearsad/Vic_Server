@@ -23,6 +23,7 @@
                     </volist>
                 </select>
             </div>
+            <if condition="$system_session['level'] neq 3">
             <div id="add_set">
                 Add Time
             </div>
@@ -32,7 +33,7 @@
                 </tbody>
             </table>
             <div id="add_submit" style="display: none;">Add</div>
-
+            </if>
             <div id="week_list">
 
             </div>
@@ -44,7 +45,9 @@
                         <th class="textcenter">Min</th>
                         <th class="textcenter">Max</th>
                         <th class="textcenter">Current</th>
+                        <if condition="$system_session['level'] neq 3">
                         <th class="textcenter">Edit</th>
+                        </if>
                     </tr>
                     </thead>
                     <tbody id="work_list">
@@ -178,6 +181,7 @@
     function showWorkList() {
         var work_list = work_time_list[init_num];
         var html = '';
+        var level = "{pigcms{$system_session['level']}";
         if(typeof(work_list) != 'undefined') {
             for (var i = 0; i < work_list.length; i++) {
                 var html_td = '<td class="textcenter">';
@@ -186,7 +190,9 @@
                 html += html_td + '<input type="text" name="min" data-id="'+i+'" data-num="'+init_num+'" value="' + work_list[i]['min'] +'"></td>';
                 html += html_td + '<input type="text" name="max" data-id="'+i+'" data-num="'+init_num+'" value="' + work_list[i]['max'] +'"></td>';
                 html += html_td + work_list[i]['curr_num'] +'</td>';
-                html += html_td + '<a href="javascript:del_time('+ init_num + ',' + work_list[i]['id'] +')">X</a>' +'</td>';
+
+                if(level != '3')
+                    html += html_td + '<a href="javascript:del_time('+ init_num + ',' + work_list[i]['id'] +')">X</a>' +'</td>';
 
                 html += '</tr>';
             }

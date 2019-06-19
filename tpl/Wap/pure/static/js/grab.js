@@ -13,9 +13,9 @@ $(function(){
 		$.post(location_url, "supply_id="+supply_id, function(json){
 			mark = 0;
 			if (json.status) {
-				layer.open({title:['Tips：','background-color:#FF658E;color:#fff;'],content:json.info,btn: ['Confirm'],end:function(){}});
+				layer.open({title:[' ','background-color:#FF658E;color:#fff;'],content:json.info,btn: ['Confirm'],end:function(){}});
 			} else {
-				layer.open({title:['Tips：','background-color:#FF658E;color:#fff;'],content:json.info,btn: ['Confirm'],end:function(){}});
+				layer.open({title:[' ','background-color:#FF658E;color:#fff;'],content:json.info,btn: ['Confirm'],end:function(){}});
 			}
 			$(".supply_"+supply_id).remove();
 		});
@@ -33,9 +33,9 @@ $(function(){
         $.post(reject_url, "supply_id="+supply_id, function(json){
             mark = 0;
             if (json.status) {
-                layer.open({title:['Tips：','background-color:#FF658E;color:#fff;'],content:json.info,btn: ['Confirm'],end:function(){}});
+                layer.open({title:[' ','background-color:#FF658E;color:#fff;'],content:json.info,btn: ['Confirm'],end:function(){}});
             } else {
-                layer.open({title:['Tips：','background-color:#FF658E;color:#fff;'],content:json.info,btn: ['Confirm'],end:function(){}});
+                layer.open({title:[' ','background-color:#FF658E;color:#fff;'],content:json.info,btn: ['Confirm'],end:function(){}});
             }
             $(".supply_"+supply_id).remove();
         });

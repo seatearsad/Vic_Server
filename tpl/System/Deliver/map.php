@@ -19,8 +19,10 @@
                         <option value="{pigcms{$vo.area_id}" <if condition="$city_id eq $vo['area_id']">selected="selected"</if>>{pigcms{$vo.area_name}</option>
                     </volist>
                 </select>
-                <if condition="$curr_city['urgent_time'] neq 0">
-                    <div id="send_sms">Send SMS</div>
+                <if condition="$system_session['level'] neq 3">
+                    <if condition="$curr_city['urgent_time'] neq 0">
+                        <div id="send_sms">Send SMS</div>
+                    </if>
                 </if>
             </div>
 			<div id="deliver_map">
@@ -44,10 +46,12 @@
     </li>
     </volist>
 </ul>
-<if condition="$curr_city['urgent_time'] eq 0">
-    <div id="e_call">{pigcms{:L('_BACK_HAND_ALERT_')}</div>
-<else />
-    <div id="r_e_call">{pigcms{:L('_BACK_HAND_ALERT_')}</div>
+<if condition="$system_session['level'] neq 3">
+    <if condition="$curr_city['urgent_time'] eq 0">
+        <div id="e_call">{pigcms{:L('_BACK_HAND_ALERT_')}</div>
+    <else />
+        <div id="r_e_call">{pigcms{:L('_BACK_HAND_ALERT_')}</div>
+    </if>
 </if>
 <include file="Public:footer"/>
 <style>

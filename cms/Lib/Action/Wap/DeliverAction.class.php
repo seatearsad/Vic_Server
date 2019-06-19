@@ -354,7 +354,7 @@ class DeliverAction extends BaseAction
 			}
 
 			if($this->deliver_session['work_status'] != 0){
-                $this->error("请先修改您的上班状态");
+                $this->error(L('_PLEASE_WORKING_'));
                 exit;
             }
 

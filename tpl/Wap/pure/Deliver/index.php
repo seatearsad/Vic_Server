@@ -73,9 +73,9 @@
                         </if>
                     <else />
                         - <if condition="$deliver_session['work_status'] eq '1'">
-                            <span>Rest</span>
+                            <span>Off Work</span>
                         <else />
-                            <span>Work</span>
+                            <span>Working</span>
                         </if>
                     </if>
 				</p>
