@@ -596,6 +596,17 @@
             }
         });
     }
+
+    if(/(tutti_android)/.test(navigator.userAgent.toLowerCase())){
+        var user_id = "{pigcms{$user_session['uid']}";
+        if(user_id != ""){
+            if(typeof (window.linkJs) != 'undefined'){
+                var str = window.linkJs.getUserInfo();
+                alert(str);
+            }
+        }
+    }
+
 </script>
 {pigcms{$shareScript}
 </body>
