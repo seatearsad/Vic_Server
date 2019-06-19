@@ -602,7 +602,15 @@
         if(user_id == ""){
             if(typeof (window.linkJs) != 'undefined'){
                 var str = window.linkJs.getUserInfo();
-                alert(str);
+
+                var user_str = str.split(',');
+                var phone = user_str[0];
+                var password = user_str[1];
+                $.post("{pigcms{:U('Login/index')}",{phone:phone,password:password},function(result){
+                    if(result.status == '1'){
+                        //window.location.reload();
+                    }
+                });
             }
         }
     }
