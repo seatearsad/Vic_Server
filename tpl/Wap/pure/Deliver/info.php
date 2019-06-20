@@ -12,6 +12,29 @@
 <script src="{pigcms{:C('JQUERY_FILE')}"></script>
 <script type="text/javascript" src="{pigcms{$static_path}layer/layer.m.js" charset="utf-8"></script>
 </head>
+<style>
+    #doc_list{
+        width: 100%;
+        margin-top: 20px;
+        margin-bottom: 100px;
+    }
+    #doc_list div{
+        box-sizing: border-box;
+        width: 100%;
+        height:40px;
+        line-height: 40px;
+        margin: 10px auto;
+        padding-left: 22%;
+        background-color: white;
+        background-image: url("{pigcms{$static_public}images/deliver/folder.png");
+        background-repeat: no-repeat;
+        background-size: auto 88%;
+        background-position: 10% center;
+    }
+    #doc_list a{
+        text-decoration: underline;
+    }
+</style>
 <body>
     <section class="MyEx">
         <div class="MyEx_top">
@@ -45,7 +68,12 @@
                     <p>{pigcms{:L('_C_TOTAL_DIST_')}</p>
                 </li>
             </ul> 
-           
+            <!--div id="doc_list">
+                <div>
+                    <a href="#">123.pdf</a>
+                </div>
+                <div>233</div>
+            </div-->
         </div>
         <a href="javascript:void(0);" class="Setup"></a>
     </section>

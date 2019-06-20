@@ -138,7 +138,7 @@
 
         </div>
         <div id="set_btn">
-            Setting
+            Scheduling
         </div>
 	</section>
 	<section class="bottom">

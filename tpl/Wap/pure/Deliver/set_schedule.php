@@ -169,7 +169,7 @@
 
         </div>
         <div class="radio_box" style="float: right;margin-right: 5%;margin-top: 20px">
-            <span style="float: left;margin-right: 10px;line-height: 24px">Repeat</span>
+            <span style="float: left;margin-right: 10px;line-height: 24px">Repeat Weekly</span>
             <span class="cb-enable"><label class="cb-enable selected"><span>On</span><input type="radio" name="repeat" value="1" checked="checked"/></label></span>
             <span class="cb-disable"><label class="cb-disable"><span>Off</span><input type="radio" name="repeat" value="0" /></label></span>
         </div>
@@ -253,7 +253,7 @@
 
             var is_set = true;
 
-            if(init_num == today_week && h > time_list[0]['start_time']){
+            if(init_num == today_week && h >= time_list[0]['start_time']){
                 is_set = false;
             }
             for(var i=0;i<time_list.length;i++){
