@@ -318,19 +318,30 @@
     });
     $('#submit').click(function () {
         var is_send = true;
-        var re_data = work_time_list;
+        var re_data = {};
+
+        for(var i=0;i<work_time_list.length;i++){
+            re_data[i] = {};
+            for(var j=0;j<work_time_list[i].length;j++){
+                var time_data = {};
+                time_data['id'] = work_time_list[i][j]['id'];
+                time_data['min'] = work_time_list[i][j]['min'];
+                time_data['max'] = work_time_list[i][j]['max'];
+                re_data[i][j] = time_data;
+            }
+        }
 
         if(is_send) {
             $.post("{pigcms{:U('Deliver/update_schedule_time')}", {'data':re_data}, function (data) {
-                // if (data.error == 0) {
-                //     alert('Success');
-                //     window.location.reload();
-                // } else {
-                //     alert('Fail');
-                // }
-                alert('Success');
-                window.location.reload();
-            });
+                if (data.error == 0) {
+                    alert('Success');
+                    window.location.reload();
+                } else {
+                    alert('Fail');
+                }
+                //alert('Success');
+                //window.location.reload();
+            },"json");
         }else{
             alert("{pigcms{:L('_PLEASE_INPUT_ALL_')}");
         }

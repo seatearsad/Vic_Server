@@ -21,7 +21,6 @@
     #doc_list div{
         box-sizing: border-box;
         width: 100%;
-        height:40px;
         line-height: 40px;
         margin: 10px auto;
         padding-left: 22%;
@@ -68,12 +67,20 @@
                     <p>{pigcms{:L('_C_TOTAL_DIST_')}</p>
                 </li>
             </ul> 
-            <!--div id="doc_list">
+            <div id="doc_list">
                 <div>
-                    <a href="#">123.pdf</a>
+                    <a href="https://www.tutti.app/Courier_Instructions_and_Responsibilities.pdf" target="_blank">Instructions and Responsibilities</a>
                 </div>
-                <div>233</div>
-            </div-->
+                <div>
+                    <a href="https://www.tutti.app/Courier_Scheduling.pdf" target="_blank">Courier Scheduling</a>
+                </div>
+                <div>
+                    <a href="https://www.tutti.app/Tutti_Courier_Bag_Setup.pdf" target="_blank">Tutti Courier Bag Setup</a>
+                </div>
+                <div>
+                    <a href="https://www.tutti.app/Courier_Reward_Plan.pdf" target="_blank">Courier Reward Plan</a>
+                </div>
+            </div>
         </div>
         <a href="javascript:void(0);" class="Setup"></a>
     </section>

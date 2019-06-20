@@ -106,7 +106,7 @@
 </style>
 </head>
 <body>
-	<section class="clerk">
+	<section class="clerk" style="margin-bottom: 100px">
 		<!--div class="clerk_top">
 			<div class="fl clerk_img">
 				<if condition="$deliver_session['store_id']">
