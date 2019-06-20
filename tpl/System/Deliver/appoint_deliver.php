@@ -10,10 +10,17 @@
 			</tr>
 			<volist name="users" id="row">
 			<tr>
-				<th width="90">{pigcms{$row['name']}</th>
-				<th width="90">{pigcms{$row['phone']}</th>
-<!-- 				<th width="90">{pigcms{$row['range']}</th> -->
-				<th width="90">{pigcms{$row['now_range']}</th>
+                <if condition="$row['work_status'] eq 0">
+                    <th width="90">{pigcms{$row['name']}</th>
+                    <th width="90">{pigcms{$row['phone']}</th>
+                    <!-- 				<th width="90">{pigcms{$row['range']}</th> -->
+                    <th width="90">{pigcms{$row['now_range']}</th>
+                <else />
+                    <td width="90">{pigcms{$row['name']}</td>
+                    <td width="90">{pigcms{$row['phone']}</td>
+    <!-- 				<th width="90">{pigcms{$row['range']}</th> -->
+                    <td width="90">{pigcms{$row['now_range']}</td>
+                </if>
 				<td><input type="radio" name="uid" value="{pigcms{$row['uid']}" /></td>
 			</tr>
 			</volist>
