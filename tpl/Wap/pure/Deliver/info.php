@@ -69,16 +69,16 @@
             </ul> 
             <div id="doc_list">
                 <div>
-                    <a href="https://www.tutti.app/Courier_Instructions_and_Responsibilities.pdf" target="_blank">Instructions and Responsibilities</a>
+                    <a href="https://www.tutti.app/Courier_Instructions_and_Responsibilities.pdf">Instructions and Responsibilities</a>
                 </div>
                 <div>
-                    <a href="https://www.tutti.app/Courier_Scheduling.pdf" target="_blank">Courier Scheduling</a>
+                    <a href="https://www.tutti.app/Courier_Scheduling.pdf">Courier Scheduling</a>
                 </div>
                 <div>
-                    <a href="https://www.tutti.app/Tutti_Courier_Bag_Setup.pdf" target="_blank">Tutti Courier Bag Setup</a>
+                    <a href="https://www.tutti.app/Tutti_Courier_Bag_Setup.pdf">Tutti Courier Bag Setup</a>
                 </div>
                 <div>
-                    <a href="https://www.tutti.app/Courier_Reward_Plan.pdf" target="_blank">Courier Reward Plan</a>
+                    <a href="https://www.tutti.app/Courier_Reward_Plan.pdf">Courier Reward Plan</a>
                 </div>
             </div>
         </div>
