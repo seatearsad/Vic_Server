@@ -252,4 +252,37 @@
             alert(message);
         },'json');
     });
+
+    var urgent_time = parseInt("{pigcms{$curr_city['urgent_time']}");
+    var curr_time = 0;
+    var show_time = 0;
+    if(urgent_time != 0){
+        curr_time = parseInt("{pigcms{:time()}");
+        show_time = 7200 - (curr_time - urgent_time);
+    }
+    show_time_func();
+    function show_time_func() {
+        if(urgent_time != 0){
+            if(show_time == 0){
+                window.location.reload();
+            }else {
+                var h = parseInt(show_time / 3600);
+                var i = parseInt((show_time - 3600 * h) / 60);
+                var s = (show_time - 3600 * h) % 60;
+                if (s < 10)
+                    s = '0' + s;
+
+                var time_str = h + ':' + i + ':' + s;
+
+                $('#r_e_call').html(time_str);
+                
+                show_time -= 1;
+
+                window.setTimeout(function () {
+                    show_time_func()
+                }, 1000);
+            }
+        }
+    }
+
 </script>
