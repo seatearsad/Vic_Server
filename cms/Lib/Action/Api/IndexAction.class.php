@@ -1886,4 +1886,13 @@ class IndexAction extends BaseAction
 
         //var_dump($work_delver_list);
     }
+
+    public function test_pdf(){
+        import('@.ORG.mpdf.mpdf');
+        $mpdf = new mPDF();
+
+        $mpdf->WriteHTML('<h1>Hello world!</h1>');
+        $fileName = 'Tutti.pdf';
+        $mpdf->Output($fileName,'I');
+    }
 }

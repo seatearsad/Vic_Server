@@ -144,9 +144,13 @@ class DeliverAction extends BaseAction
 			if ($this->is_wexin_browser && !empty($_SESSION['openid'])) {
 				$this->assign('openid', $_SESSION['openid']);
 			}
-			$referer = isset($_GET['referer']) ? htmlspecialchars_decode(urldecode($_GET['referer']),ENT_QUOTES) : '';
-			$this->assign('refererUrl', $referer);
-			$this->display();
+			if($this->deliver_session){
+                redirect(U('Deliver/index'));
+            }else {
+                $referer = isset($_GET['referer']) ? htmlspecialchars_decode(urldecode($_GET['referer']), ENT_QUOTES) : '';
+                $this->assign('refererUrl', $referer);
+                $this->display();
+            }
 		}
 	}
 	
