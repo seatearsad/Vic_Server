@@ -287,9 +287,9 @@
 							<if condition="$order['paid'] eq 0">
 							<a href="javascript::void(0)" onclick="del_order({pigcms{$order['order_id']})"><img src="{pigcms{$static_path}images/u282.png"></a>
 							</if>
-							<if condition="in_array($order['status'],array(2,3))">
+                            <!--<if condition="in_array($order['status'],array(2,3))">
 							<a href="javascript::void(0)" onclick="del_order({pigcms{$order['order_id']})"><img src="{pigcms{$static_path}images/u282.png"></a>
-							</if>
+							</if>-->
 							</dd>
 							<dd class="dealcard dd-padding">
 									<div class="dealcard-img imgbox" onclick="window.location.href = '{pigcms{$order.order_url}';">

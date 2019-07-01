@@ -129,8 +129,10 @@
             }else{
                 $.post("{pigcms{:U('Login/index')}",{phone:phone,password:password,token:android_token},function(result){
                     if(result.status == '1'){
-                        if(typeof (window.linkJs.saveUser) != 'undefined'){
-                            window.linkJs.saveUser(phone,password);
+                        if(/(tutti_android)/.test(navigator.userAgent.toLowerCase())) {
+                            if (typeof (window.linkJs.saveUser) != 'undefined') {
+                                window.linkJs.saveUser(phone, password);
+                            }
                         }
                         artDialog.open.origin.location.reload();
                         window.location.href = "{pigcms{$referer}";

@@ -118,11 +118,11 @@
 	$('#login_account').focus();
 	$('#login_form').submit(function(){
 		if($('#login_account').val()==''){
-			alert('请输入帐 号~');
+			alert('Account is empty');
 			$('#login_account').focus();
 			return false;
 		}else if($('#login_pwd').val()==''){
-			alert('请输入密码~');
+			alert('Please enter your password');
 			$('#login_pwd').focus();
 		}else{
 			$.post(login_check,$("#login_form").serialize(),function(result){

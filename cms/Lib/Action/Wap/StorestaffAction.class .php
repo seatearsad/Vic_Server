@@ -55,11 +55,11 @@ class StorestaffAction extends BaseAction
             $now_staff = $database_store_staff->field(true)->where($condition_store_staff)->find();
 
             if (empty($now_staff)) {
-                exit(json_encode(array('error' => 2, 'msg' => '帐号不存在！', 'dom_id' => 'account')));
+                exit(json_encode(array('error' => 2, 'msg' => L('_DE_ACCOUNT_NOT_'), 'dom_id' => 'account')));
             }
             $pwd = md5(trim($_POST['pwd']));
             if ($pwd != $now_staff['password']) {
-                exit(json_encode(array('error' => 3, 'msg' => '密码错误！', 'dom_id' => 'pwd')));
+                exit(json_encode(array('error' => 3, 'msg' => L('_DE_PASS_ERROR_'), 'dom_id' => 'pwd')));
             }
             $data_store_staff['id'] = $now_staff['id'];
             $data_store_staff['last_time'] = $_SERVER['REQUEST_TIME'];

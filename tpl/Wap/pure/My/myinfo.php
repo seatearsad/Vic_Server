@@ -153,8 +153,10 @@
         window.history.go(-1);
     });
     $('#logout').on('click',function(){
-        if(typeof (window.linkJs.delUser) != 'undefined'){
-            window.linkJs.delUser();
+        if(/(tutti_android)/.test(navigator.userAgent.toLowerCase())) {
+            if (typeof (window.linkJs.delUser) != 'undefined') {
+                window.linkJs.delUser();
+            }
         }
         location.href =	"{pigcms{:U('Login/logout')}";
     });
