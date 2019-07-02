@@ -152,6 +152,21 @@ function updatePosition(lat,lng){
 
     return message;
 }
+
+$(function () {
+    if (navigator.geolocation) {
+        setInterval(function(){
+            navigator.geolocation.getCurrentPosition(function (position) {
+                lat = position.coords.latitude;
+                lng = position.coords.longitude;
+            });
+
+            if(typeof(lat) != "undefined"){
+                updatePosition(lat,lng);
+            }
+        }, 10000);
+    }
+})
 </script>
 <include file="menu"/>
 </body>

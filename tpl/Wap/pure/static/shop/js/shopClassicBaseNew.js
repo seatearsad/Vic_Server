@@ -467,7 +467,7 @@ function showShopSearch(){
 		$('#pageShopSearchBtn').click(function(){
 			var address = $.trim($("#pageShopSearchTxt").val());
 			if(address == ''){
-				motify.log('请您输入店铺名称');
+				motify.log('Please enter store name.');
 			}else{
 				isSearchListShow = false;
 				if(user_long == '0'){
@@ -1112,7 +1112,7 @@ function showShop(shopId){
             }else if(!$(this).hasClass('active')){
                 var tmpActiveSize = $(this).closest('ul').find('.active').size();
                 if(tmpActiveSize >= maxSize){
-                    motify.log($(this).closest('.row').data('label_name')+' 您最多能选择 '+maxSize+' 个');
+                    motify.log($(this).closest('.row').data('label_name')+' Options Maximum '+maxSize+'');
                 }else{
                     /* if(tmpActiveSize == maxSize-1){
                         motify.log('您最多能选择 '+maxSize+' 个，现在已经选择满了');
@@ -1494,7 +1494,7 @@ function cartFunction(type,obj,dataObj){
 		if(dataObj != 'productPage' && dataObj.hasClass('cartDD')){
 			var tmpStock = parseInt(dataObj.data('stock'));
 			if(tmpStock != -1 && productCart[productKey] && productCart[productKey]['count'] >= tmpStock){
-				motify.log('没有库存了');
+				motify.log(getLangStr('_NO_STOCK_'));
 				return false;
 			}
 		}

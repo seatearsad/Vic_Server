@@ -38,6 +38,21 @@
                 updatePosition(position.coords.latitude,position.coords.longitude);
             });
         }
+
+        $(function () {
+            if (navigator.geolocation) {
+                setInterval(function(){
+                    navigator.geolocation.getCurrentPosition(function (position) {
+                        lat = position.coords.latitude;
+                        lng = position.coords.longitude;
+                    });
+
+                    if(typeof(lat) != "undefined"){
+                        updatePosition(lat,lng);
+                    }
+                }, 10000);
+            }
+        })
 	</script>
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&libraries=places&language=zh-CN"></script>
 	<script type="text/javascript" src="{pigcms{$static_path}js/grab.js?211" charset="utf-8"></script>

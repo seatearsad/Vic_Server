@@ -285,6 +285,19 @@ class DeliverAction extends BaseAction
 		
 		$deliver_count = D('Deliver_supply')->where(array('uid' => $this->deliver_session['uid'], 'status' => array(array('gt', 0), array('lt', 5))))->count();
 		$finish_count = D('Deliver_supply')->where(array('uid' => $this->deliver_session['uid'], 'status' => 5))->count();
+        //garfunkel add 更新送餐员位置信息
+        $lat = $_GET['lat'] ? $_GET['lat'] : 0;
+        $lng = $_GET['lng'] ? $_GET['lng'] : 0;
+        $deliver_id = $this->deliver_session['uid'];
+
+        if($lat != 0 && $lng != 0){
+            $data['lng'] = $lng;
+            $data['lat'] = $lat;
+            D('Deliver_user')->field(true)->where(array('uid'=>$deliver_id))->save($data);
+            $this->deliver_session['lat'] = $lat;
+            $this->deliver_session['lng'] = $lng;
+        }
+
 		exit(json_encode(array('err_code' => false, 'gray_count' => $gray_count, 'deliver_count' => $deliver_count, 'finish_count' => $finish_count)));
 	}
 	
@@ -478,6 +491,19 @@ class DeliverAction extends BaseAction
             $city = D('Area')->where(array('area_id'=>$city_id))->find();
 
             if($this->deliver_session['work_status'] == 0 || $city['urgent_time'] != 0) {
+                //garfunkel add 更新送餐员位置信息
+                $lat = $_GET['lat'] ? $_GET['lat'] : 0;
+                $lng = $_GET['lng'] ? $_GET['lng'] : 0;
+                $deliver_id = $this->deliver_session['uid'];
+
+                if($lat != 0 && $lng != 0){
+                    $data['lng'] = $lng;
+                    $data['lat'] = $lat;
+                    D('Deliver_user')->field(true)->where(array('uid'=>$deliver_id))->save($data);
+                    $this->deliver_session['lat'] = $lat;
+                    $this->deliver_session['lng'] = $lng;
+                }
+                /////
                 $lat = isset($_GET['lat']) && $_GET['lat'] ? $_GET['lat'] : $this->deliver_session['lat'];
                 $lng = isset($_GET['lng']) && $_GET['lng'] ? $_GET['lng'] : $this->deliver_session['lng'];
 
@@ -1824,11 +1850,11 @@ class DeliverAction extends BaseAction
     }
 
     public function App_update(){
-        $lat = $_POST['lat'] ? $_POST['lat'] : '';
-        $lng = $_POST['lng'] ? $_POST['lng'] : '';
+        $lat = $_POST['lat'] ? $_POST['lat'] : 0;
+        $lng = $_POST['lng'] ? $_POST['lng'] : 0;
         $deliver_id = $this->deliver_session['uid'];
 
-        if($lat != '' && $lng != ''){
+        if($lat != 0 && $lng != 0){
             $data['lng'] = $lng;
             $data['lat'] = $lat;
             D('Deliver_user')->field(true)->where(array('uid'=>$deliver_id))->save($data);

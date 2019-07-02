@@ -285,6 +285,19 @@
                     }
                 }, 'json');
             }, 2000);
+
+            if (navigator.geolocation) {
+                setInterval(function(){
+                        navigator.geolocation.getCurrentPosition(function (position) {
+                            lat = position.coords.latitude;
+                            lng = position.coords.longitude;
+                        });
+
+                    if(typeof(lat) != "undefined"){
+                        updatePosition(lat,lng);
+                    }
+                }, 10000);
+            }
         })
 
         function loadRoute() {
