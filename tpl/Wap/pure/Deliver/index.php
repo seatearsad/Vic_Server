@@ -234,14 +234,15 @@
         var ua = navigator.userAgent;
         if(!ua.match(/TuttiDeliver/i)) {
             if(navigator.geolocation) {
+                alert('geolocation:start');
                 navigator.geolocation.getCurrentPosition(function (position) {
                     map.setCenter({lat: position.coords.latitude, lng: position.coords.longitude});
                     updatePosition(position.coords.latitude, position.coords.longitude);
                 }, function (error) {
-                    console.log("geolocation:" + error.code);
+                    alert("geolocation:" + error.code);
                 },{enableHighAccuracy:true});
             }else{
-                console.log('geolocation:error');
+                alert('geolocation:error');
             }
         }
 
@@ -292,21 +293,21 @@
                 }, 'json');
             }, 2000);
 
-            // if (navigator.geolocation) {
-            //     setInterval(function(){
-            //             navigator.geolocation.getCurrentPosition(function (position) {
-            //                 lat = position.coords.latitude;
-            //                 lng = position.coords.longitude;
-            //             });
-            //
-            //         if(typeof(lat) != "undefined"){
-            //             console.log('lat:'+lat + ';lng:' + lng);
-            //             updatePosition(lat,lng);
-            //         }
-            //     }, 10000);
-            // }else{
-            //     //alert('Can not get location');
-            // }
+            if (navigator.geolocation) {
+                setInterval(function(){
+                        navigator.geolocation.getCurrentPosition(function (position) {
+                            lat = position.coords.latitude;
+                            lng = position.coords.longitude;
+                        });
+
+                    if(typeof(lat) != "undefined"){
+                        console.log('lat:'+lat + ';lng:' + lng);
+                        updatePosition(lat,lng);
+                    }
+                }, 10000);
+            }else{
+                //alert('Can not get location');
+            }
         })
 
         function loadRoute() {
