@@ -234,16 +234,16 @@
         var ua = navigator.userAgent;
         if(!ua.match(/TuttiDeliver/i)) {
             if(navigator.geolocation) {
-                alert('geolocation:start');
+                //alert('geolocation:start');
                 navigator.geolocation.getCurrentPosition(function (position) {
-                    alert("geolocation_lat:" + position.coords.latitude);
+                    //alert("geolocation_lat:" + position.coords.latitude);
                     map.setCenter({lat: position.coords.latitude, lng: position.coords.longitude});
                     updatePosition(position.coords.latitude, position.coords.longitude);
                 }, function (error) {
-                    alert("geolocation:" + error.code);
+                    //alert("geolocation:" + error.code);
                 },{enableHighAccuracy:true});
             }else{
-                alert('geolocation:error');
+                //alert('geolocation:error');
             }
         }
 
