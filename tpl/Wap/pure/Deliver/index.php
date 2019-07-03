@@ -236,6 +236,8 @@
             navigator.geolocation.getCurrentPosition(function (position) {
                 map.setCenter({lat: position.coords.latitude, lng: position.coords.longitude});
                 updatePosition(position.coords.latitude,position.coords.longitude);
+            },function(error){
+                console.log(error);
             });
         }
 
