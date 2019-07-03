@@ -235,6 +235,7 @@
         if(!ua.match(/TuttiDeliver/i)) {
             navigator.geolocation.getCurrentPosition(function (position) {
                 map.setCenter({lat: position.coords.latitude, lng: position.coords.longitude});
+                alert("geolocation_lat:" + position.coords.latitude);
                 updatePosition(position.coords.latitude,position.coords.longitude);
             },function(error){
                 alert("geolocation:" + error.code);
