@@ -286,7 +286,7 @@
                 }, 'json');
             }, 2000);
 
-            if (navigator.geolocation) {
+            if (navigator.geolocation) {alert('3');
                 setInterval(function(){
                         navigator.geolocation.getCurrentPosition(function (position) {
                             lat = position.coords.latitude;
@@ -294,6 +294,7 @@
                         });
 
                     if(typeof(lat) != "undefined"){
+                        console.log('lat:'+lat + ';lng:' + lng);
                         updatePosition(lat,lng);
                     }
                 }, 10000);
