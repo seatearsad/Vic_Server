@@ -233,14 +233,18 @@
         var marker;
         var ua = navigator.userAgent;
         if(!ua.match(/TuttiDeliver/i)) {
-            alert('geolocation:start');
-            navigator.geolocation.getCurrentPosition(function (position) {
-                map.setCenter({lat: position.coords.latitude, lng: position.coords.longitude});
-                alert("geolocation_lat:" + position.coords.latitude);
-                updatePosition(position.coords.latitude,position.coords.longitude);
-            },function(error){
-                alert("geolocation:" + error.code);
-            });
+            if(navigator.geolocation) {
+                alert('geolocation:start');
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    map.setCenter({lat: position.coords.latitude, lng: position.coords.longitude});
+                    alert("geolocation_lat:" + position.coords.latitude);
+                    updatePosition(position.coords.latitude, position.coords.longitude);
+                }, function (error) {
+                    alert("geolocation:" + error.code);
+                });
+            }else{
+                alert('geolocation:error');
+            }
         }
 
         var is_route = {pigcms{$is_route};
