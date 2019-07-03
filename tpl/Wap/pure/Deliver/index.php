@@ -233,6 +233,7 @@
         var marker;
         var ua = navigator.userAgent;
         if(!ua.match(/TuttiDeliver/i)) {
+            alert('geolocation:start');
             navigator.geolocation.getCurrentPosition(function (position) {
                 map.setCenter({lat: position.coords.latitude, lng: position.coords.longitude});
                 alert("geolocation_lat:" + position.coords.latitude);
