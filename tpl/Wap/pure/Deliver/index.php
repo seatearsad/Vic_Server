@@ -292,21 +292,21 @@
                 }, 'json');
             }, 2000);
 
-            if (navigator.geolocation) {
-                setInterval(function(){
-                        navigator.geolocation.getCurrentPosition(function (position) {
-                            lat = position.coords.latitude;
-                            lng = position.coords.longitude;
-                        });
-
-                    if(typeof(lat) != "undefined"){
-                        console.log('lat:'+lat + ';lng:' + lng);
-                        updatePosition(lat,lng);
-                    }
-                }, 10000);
-            }else{
-                //alert('Can not get location');
-            }
+            // if (navigator.geolocation) {
+            //     setInterval(function(){
+            //             navigator.geolocation.getCurrentPosition(function (position) {
+            //                 lat = position.coords.latitude;
+            //                 lng = position.coords.longitude;
+            //             });
+            //
+            //         if(typeof(lat) != "undefined"){
+            //             console.log('lat:'+lat + ';lng:' + lng);
+            //             updatePosition(lat,lng);
+            //         }
+            //     }, 10000);
+            // }else{
+            //     //alert('Can not get location');
+            // }
         })
 
         function loadRoute() {
