@@ -289,13 +289,15 @@
             }, 2000);
 
             if (navigator.geolocation) {
+
+                alert('1');
                 setInterval(function(){
-                        navigator.geolocation.getCurrentPosition(function (position) {
+                        navigator.geolocation.getCurrentPosition(function (position) {alert('2');
                             lat = position.coords.latitude;
                             lng = position.coords.longitude;
                         });
 
-                    if(typeof(lat) != "undefined"){
+                    if(typeof(lat) != "undefined"){alert('3');
                         console.log('lat:'+lat + ';lng:' + lng);
                         updatePosition(lat,lng);
                     }
