@@ -289,21 +289,19 @@
             }, 2000);
 
             if (navigator.geolocation) {
-
-                alert('1');
                 setInterval(function(){
-                        navigator.geolocation.getCurrentPosition(function (position) {alert('2');
+                        navigator.geolocation.getCurrentPosition(function (position) {
                             lat = position.coords.latitude;
                             lng = position.coords.longitude;
                         });
 
-                    if(typeof(lat) != "undefined"){alert('3');
+                    if(typeof(lat) != "undefined"){
                         console.log('lat:'+lat + ';lng:' + lng);
                         updatePosition(lat,lng);
                     }
                 }, 10000);
             }else{
-                alert('Can not get location');
+                //alert('Can not get location');
             }
         })
 
