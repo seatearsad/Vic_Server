@@ -239,7 +239,7 @@
                     updatePosition(position.coords.latitude, position.coords.longitude);
                 }, function (error) {
                     console.log("geolocation:" + error.code);
-                });
+                },{enableHighAccuracy:true});
             }else{
                 console.log('geolocation:error');
             }
