@@ -286,7 +286,7 @@
                 }, 'json');
             }, 2000);
 
-            if (navigator.geolocation) {alert('3');
+            if (navigator.geolocation) {
                 setInterval(function(){
                         navigator.geolocation.getCurrentPosition(function (position) {
                             lat = position.coords.latitude;
