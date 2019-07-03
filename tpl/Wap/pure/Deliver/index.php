@@ -237,7 +237,7 @@
                 map.setCenter({lat: position.coords.latitude, lng: position.coords.longitude});
                 updatePosition(position.coords.latitude,position.coords.longitude);
             },function(error){
-                alert("geolocation:" + error.code);
+                console.log(error);
             });
         }
 
@@ -300,6 +300,8 @@
                         updatePosition(lat,lng);
                     }
                 }, 10000);
+            }else{
+                alert('Can not get location');
             }
         })
 
