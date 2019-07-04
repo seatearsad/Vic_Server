@@ -240,8 +240,8 @@
                     map.setCenter({lat: position.coords.latitude, lng: position.coords.longitude});
                     updatePosition(position.coords.latitude, position.coords.longitude);
                 }, function (error) {
-                    //alert("geolocation:" + error.code);
-                },{enableHighAccuracy:true});
+                    alert("geolocation:" + error.code);
+                },{enableHighAccuracy:true,timeout:5000});
             }else{
                 //alert('geolocation:error');
             }
