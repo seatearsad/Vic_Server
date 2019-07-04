@@ -489,7 +489,7 @@ class StoreModel extends Model
         $sms_data['uid'] = 0;
         $sms_data['mobile'] = $_POST['phone'];
         $sms_data['sendto'] = 'user';
-        $sms_data['tplid'] = 169243;
+        $sms_data['tplid'] = 367023;
         $sms_data['params'] = [
             $vcode
         ];

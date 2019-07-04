@@ -422,9 +422,9 @@
 								if((order_list[i]['paid'] == 0)){
 									shtml +='<a href="javascript:void(0)" onclick="del_order('+order_list[i]["order_id"]+')"><img src="{pigcms{$static_path}images/u282.png"></a>';
 								}
-								if((order_list[i]['status']==2) || (order_list[i]['status']==3)){
-									shtml +='<a href="javascript:void(0)" onclick="del_order('+order_list[i]["order_id"]+')"><img src="{pigcms{$static_path}images/u282.png"></a>';
-								}
+								// if((order_list[i]['status']==2) || (order_list[i]['status']==3)){
+								// 	shtml +='<a href="javascript:void(0)" onclick="del_order('+order_list[i]["order_id"]+')"><img src="{pigcms{$static_path}images/u282.png"></a>';
+								// }
 								shtml += '</dd>';
 								shtml += '<dd class="dealcard dd-padding">';
 								shtml += '<div class="dealcard-img imgbox" onclick="window.location.href = \''+order_list[i]['order_url']+'\';">';
