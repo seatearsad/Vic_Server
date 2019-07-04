@@ -287,7 +287,7 @@
         }
         
         function onError(error) {
-            alert(error.info + '||' + error.message);
+            console.log(error.info + '||' + error.message);
         }
 
         var is_route = {pigcms{$is_route};
