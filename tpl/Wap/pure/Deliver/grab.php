@@ -16,7 +16,8 @@
 	<script type="text/javascript" src="{pigcms{$static_path}layer/layer.m.js" charset="utf-8"></script>
 	<script src="{pigcms{$static_public}js/laytpl.js"></script>
 <!-- 	<script type="text/javascript" src="{pigcms{$static_path}js/common.js?210" charset="utf-8"></script> -->
-	<script type="text/javascript">
+    <script src="https://webapi.amap.com/maps?v=1.4.15&key=05c7ac0deb8eea9377a0ae555efc6b92"></script>
+    <script type="text/javascript">
 		var location_url = "{pigcms{:U('Deliver/grab')}", detail_url = "{pigcms{:U('Deliver/detail')}", lat = "{pigcms{$deliver_session['lat']}", lng = "{pigcms{$deliver_session['lng']}", static_path = "{pigcms{$static_path}";
         var reject_url = "{pigcms{:U('Deliver/reject')}";
         //ios app 更新位置
@@ -32,27 +33,78 @@
 
             return message;
         }
-        var ua = navigator.userAgent;
-        if(!ua.match(/TuttiDeliver/i)) {
+
+        //定位是否有问题
+        var location_error = false;
+
+        if(navigator.geolocation) {
+            //alert('geolocation:start');
             navigator.geolocation.getCurrentPosition(function (position) {
-                updatePosition(position.coords.latitude,position.coords.longitude);
+                //alert("geolocation_lat:" + position.coords.latitude);
+                updatePosition(position.coords.latitude, position.coords.longitude);
+                run_update_location();
+            }, function (error) {
+                console.log("geolocation:" + error.code);
+                location_error = true;
+                run_Amap();
+                run_update_location();
+            },{enableHighAccuracy:true,timeout:10000});
+        }else{
+            //alert('geolocation:error');
+        }
+
+        function run_Amap() {
+            var mapObj = new AMap.Map('iCenter');
+            mapObj.plugin('AMap.Geolocation', function () {
+                geolocation = new AMap.Geolocation({
+                    enableHighAccuracy: true,//是否使用高精度定位，默认:true
+                    timeout: 10000,          //超过10秒后停止定位，默认：无穷大
+                    maximumAge: 0,           //定位结果缓存0毫秒，默认：0
+                    convert: true,           //自动偏移坐标，偏移后的坐标为高德坐标，默认：true
+                    showButton: true,        //显示定位按钮，默认：true
+                    buttonPosition: 'LB',    //定位按钮停靠位置，默认：'LB'，左下角
+                    buttonOffset: new AMap.Pixel(10, 20),//定位按钮与设置的停靠位置的偏移量，默认：Pixel(10, 20)
+                    showMarker: true,        //定位成功后在定位到的位置显示点标记，默认：true
+                    showCircle: true,        //定位成功后用圆圈表示定位精度范围，默认：true
+                    panToLocation: true,     //定位成功后将定位到的位置作为地图中心点，默认：true
+                    zoomToAccuracy:true      //定位成功后调整地图视野范围使定位位置及精度范围视野内可见，默认：false
+                });
+                mapObj.addControl(geolocation);
+                geolocation.getCurrentPosition();
+                AMap.event.addListener(geolocation, 'complete', onComplete);//返回定位信息
+                AMap.event.addListener(geolocation, 'error', onError);      //返回定位出错信息
             });
         }
 
-        $(function () {
-            if (navigator.geolocation) {
+        function onComplete(result) {
+            console.log(result.position + ' | ' + result.location_type);
+            var lat = result.position.getLat();
+            var lng = result.position.getLng();
+            updatePosition(lat,lng);
+        }
+
+        function onError(error) {
+            console.log(error.info + '||' + error.message);
+        }
+
+        function run_update_location() {
+            if(location_error){
+                setInterval(function(){
+                    run_Amap();
+                }, 10000);
+            }else{
                 setInterval(function(){
                     navigator.geolocation.getCurrentPosition(function (position) {
                         lat = position.coords.latitude;
                         lng = position.coords.longitude;
                     });
-
+                    console.log('run getCurrentPosition');
                     if(typeof(lat) != "undefined"){
                         updatePosition(lat,lng);
                     }
                 }, 10000);
             }
-        })
+        }
 	</script>
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&libraries=places&language=zh-CN"></script>
 	<script type="text/javascript" src="{pigcms{$static_path}js/grab.js?211" charset="utf-8"></script>

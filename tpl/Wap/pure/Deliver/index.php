@@ -236,7 +236,7 @@
 
         var marker;
         var ua = navigator.userAgent;
-        if(!ua.match(/TuttiDeliver/i)) {
+        //if(!ua.match(/TuttiDeliver/i)) {
             if(navigator.geolocation) {
                 //alert('geolocation:start');
                 navigator.geolocation.getCurrentPosition(function (position) {
@@ -253,7 +253,7 @@
             }else{
                 //alert('geolocation:error');
             }
-        }
+        //}
         
         function run_Amap() {
             var mapObj = new AMap.Map('iCenter');
