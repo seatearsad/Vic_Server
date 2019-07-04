@@ -241,7 +241,7 @@
                     updatePosition(position.coords.latitude, position.coords.longitude);
                 }, function (error) {
                     alert("geolocation:" + error.code);
-                },{enableHighAccuracy:true,timeout:5000});
+                },{enableHighAccuracy:true,timeout:50000});
             }else{
                 //alert('geolocation:error');
             }
