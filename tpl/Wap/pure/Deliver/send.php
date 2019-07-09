@@ -163,7 +163,7 @@ if(navigator.geolocation) {
         // location_error = true;
         // run_Amap();
         // run_update_location();
-    },{enableHighAccuracy:true,timeout:10000});
+    },{enableHighAccuracy:true,timeout:50000});
 }else{
     //alert('geolocation:error');
 }
