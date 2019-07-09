@@ -16,7 +16,7 @@
 	<script type="text/javascript" src="{pigcms{$static_path}layer/layer.m.js" charset="utf-8"></script>
 	<script src="{pigcms{$static_public}js/laytpl.js"></script>
 <!-- 	<script type="text/javascript" src="{pigcms{$static_path}js/common.js?210" charset="utf-8"></script> -->
-    <script src="https://webapi.amap.com/maps?v=1.4.15&key=05c7ac0deb8eea9377a0ae555efc6b92"></script>
+    <!--script src="https://webapi.amap.com/maps?v=1.4.15&key=05c7ac0deb8eea9377a0ae555efc6b92"></script-->
     <script type="text/javascript">
 		var location_url = "{pigcms{:U('Deliver/grab')}", detail_url = "{pigcms{:U('Deliver/detail')}", lat = "{pigcms{$deliver_session['lat']}", lng = "{pigcms{$deliver_session['lng']}", static_path = "{pigcms{$static_path}";
         var reject_url = "{pigcms{:U('Deliver/reject')}";
@@ -45,9 +45,9 @@
                 run_update_location();
             }, function (error) {
                 console.log("geolocation:" + error.code);
-                location_error = true;
-                run_Amap();
-                run_update_location();
+                // location_error = true;
+                // run_Amap();
+                // run_update_location();
             },{enableHighAccuracy:true,timeout:10000});
         }else{
             //alert('geolocation:error');

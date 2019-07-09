@@ -141,7 +141,7 @@
 		</div>
 	</section>
 	<script type="text/javascript">$('#biz-map').height($(window).height()-267);</script>
-    <script src="https://webapi.amap.com/maps?v=1.4.15&key=05c7ac0deb8eea9377a0ae555efc6b92"></script>
+    <!--script src="https://webapi.amap.com/maps?v=1.4.15&key=05c7ac0deb8eea9377a0ae555efc6b92"></script-->
 <!-- 	<script src="http://api.map.baidu.com/api?type=quick&ak=4c1bb2055e24296bbaef36574877b4e2&v=1.0"></script> -->
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&libraries=places&language={pigcms{:C('DEFAULT_LANG')}"></script>
 	<script type="text/javascript">
@@ -246,9 +246,9 @@
                     run_update_location();
                 }, function (error) {
                     console.log("geolocation:" + error.code);
-                    location_error = true;
-                    run_Amap();
-                    run_update_location();
+                    //location_error = true;
+                    //run_Amap();
+                    //run_update_location();
                 },{enableHighAccuracy:true,timeout:10000});
             }else{
                 //alert('geolocation:error');

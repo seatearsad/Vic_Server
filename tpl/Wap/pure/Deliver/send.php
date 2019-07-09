@@ -89,7 +89,7 @@
 		</if>
 	</div>
 </section>
-<script src="https://webapi.amap.com/maps?v=1.4.15&key=05c7ac0deb8eea9377a0ae555efc6b92"></script>
+<!--script src="https://webapi.amap.com/maps?v=1.4.15&key=05c7ac0deb8eea9377a0ae555efc6b92"></script-->
 <script type="text/javascript">
 $(function(){
 	$(".delivery p em").each(function(){
@@ -160,9 +160,9 @@ if(navigator.geolocation) {
         run_update_location();
     }, function (error) {
         console.log("geolocation:" + error.code);
-        location_error = true;
-        run_Amap();
-        run_update_location();
+        // location_error = true;
+        // run_Amap();
+        // run_update_location();
     },{enableHighAccuracy:true,timeout:10000});
 }else{
     //alert('geolocation:error');
