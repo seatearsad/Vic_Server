@@ -1216,7 +1216,7 @@
         <div id="agree_div">
             <input type="checkbox" name="is_agree" class="form-field" id="is_agree" value="1" checked="checked"/>
             By clicking the box,you are agree with
-            <a href="./intro/5.html" target="_blank">Team of Use</a> and <a href="./intro/2.html" target="_blank">Privacy Policy</a>
+            <a href="./intro/5.html" target="_blank">Terms of Use</a> and <a href="./intro/2.html" target="_blank">Privacy Policy</a>
         </div>
 
         <button type="button" class="confirm_btn">{pigcms{:L('_B_D_LOGIN_CONIERM_')}</button>
