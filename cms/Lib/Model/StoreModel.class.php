@@ -8,7 +8,7 @@
 
 class StoreModel extends Model
 {
-    public function get_store_by_id($store_id)
+    public function get_store_by_id($store_id,$lat,$lng)
     {
         $where = array('store_id' => $store_id);
         $now_store = D('Merchant_store')->field(true)->where($where)->find();
@@ -279,7 +279,10 @@ class StoreModel extends Model
 
 
         //modify garfunkel
-        $store['shipfee'] = C('config.delivery_distance_1');
+        if($lat != 0 && $lng != 0)
+            $store['shipfee'] = getDeliveryFee($row['lat'],$row['long'],$lat,$lng);
+        else
+            $store['shipfee'] = C('config.delivery_distance_1');
         //$store['delivery_money'] = floatval($store['delivery_money']);
 // 		$store['delivery_money'] = $row['deliver_type'] == 0 ? C('config.delivery_fee') : $row['delivery_fee'];//配送费
 // 		$store['delivery_money'] = floatval($store['delivery_money']);//配送费
