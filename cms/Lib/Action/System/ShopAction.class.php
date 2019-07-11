@@ -486,7 +486,7 @@ class ShopAction extends BaseAction
                 //如果商品数量更新
                 if($_POST[$good_id] != $good['num']){
                     $good['num'] = $_POST[$good_id];
-                    D('Shop_order_detail')->where(array('order_id'=>$order_id))->save($good);
+                    D('Shop_order_detail')->where(array('order_id'=>$order_id,'goods_id'=>$good['goods_id']))->save($good);
                 }
             }
             //garfunkel add 记录原始价格

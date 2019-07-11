@@ -1766,7 +1766,7 @@ class ShopAction extends BaseAction
             $is_last = true;
             foreach ($result_list as &$val){
                 $curr_order = $val['real_orderid'];
-                if($val['good_num'] == 0){//代客下单
+                if($val['uid'] == 0){//当用户ID(uid)为0时 -- 代客下单
                     //记录上一张订单的税费和押金
                     $all_record[$curr_order]['all_tax'] = $val['discount_price'];
                     $all_record[$curr_order]['all_deposit'] = $val['packing_charge'];
