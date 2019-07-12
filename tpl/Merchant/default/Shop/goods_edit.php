@@ -232,11 +232,15 @@
 									<if condition="$now_goods['spec_list']">
 									<tbody>
 										<tr>
-											<th>商品编码</th>
+											<!--th>商品编码</th-->
 											<volist name="now_goods['spec_list']" id="gs">
 											<th>{pigcms{$gs['name']}</th>
 											</volist>
-											<th style="display:none">原价</th><th>进价</th><th>现价</th><th>限时价</th><th>库存</th>
+											<th style="display:none">原价</th>
+                                            <!--th>进价</th-->
+                                            <th>现价</th>
+                                            <th>限时价</th>
+                                            <th>库存</th>
 											<volist name="now_goods['properties_list']" id="gp">
 											<th>{pigcms{$gp['name']}(可选个数)</th>
 											</volist>
@@ -244,13 +248,13 @@
 										
 										<volist name="now_goods['list']" id="gl" key="num">
 											<tr id="{pigcms{$gl['index']}">
-												<td><input type="text" class="txt" name="numbers[]" value="{pigcms{$gl['number']}" style="width:100%;"></td>
+												<!--td><input type="text" class="txt" name="numbers[]" value="{pigcms{$gl['number']}" style="width:100%;"></td-->
 												<volist name="gl['spec']" id="g">
 												<td>{pigcms{$g['spec_val_name']}</td>
 												</volist>
 												
 												<td style="display:none"><input type="text" class="txt" name="old_prices[]" value="{pigcms{$gl['old_price']}" style="width:80px;"></td>
-												<td><input type="text" class="txt" name="cost_prices[]" value="{pigcms{$gl['cost_price']}" style="width:80px;"></td>
+												<!--td><input type="text" class="txt" name="cost_prices[]" value="{pigcms{$gl['cost_price']}" style="width:80px;"></td-->
 												<td><input type="text" class="txt" name="prices[]" value="{pigcms{$gl['price']}" style="width:80px;"></td>
 												<td><input type="text" class="txt" name="seckill_prices[]" value="{pigcms{$gl['seckill_price']}" style="width:80px;"></td>
 												<td><input type="text" class="txt" name="stock_nums[]" value="{pigcms{$gl['stock_num']}" style="width:80px;"></td>
