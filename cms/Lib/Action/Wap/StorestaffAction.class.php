@@ -73,7 +73,7 @@ class StorestaffAction extends BaseAction
             $now_staff = $database_store_staff->field(true)->where($condition_store_staff)->find();
 
             if (empty($now_staff)) {
-                exit(json_encode(array('error' => 2, 'msg' => '帐号不存在！', 'dom_id' => 'account')));
+                exit(json_encode(array('error' => 2, 'msg' => 'Account does not exist!', 'dom_id' => 'account')));
             }
             //garfunkel add
             $store = D('Merchant_store')->where(array('store_id'=>$now_staff['store_id']))->find();
@@ -82,7 +82,7 @@ class StorestaffAction extends BaseAction
             //
             $pwd = md5(trim($_POST['pwd']));
             if ($pwd != $now_staff['password']) {
-                exit(json_encode(array('error' => 3, 'msg' => '密码错误！', 'dom_id' => 'pwd')));
+                exit(json_encode(array('error' => 3, 'msg' => 'Wrong password!', 'dom_id' => 'pwd')));
             }
             $data_store_staff['id'] = $now_staff['id'];
             $data_store_staff['last_time'] = $_SERVER['REQUEST_TIME'];
