@@ -37,6 +37,7 @@
 			width:10px;
 	    }
 	</style>
+        <include file="Public:facebook"/>
 </head>
 <body>
 	<dl style="padding:0 10px;background-color:#fff;margin-top:10px;margin-bottom:10px;">

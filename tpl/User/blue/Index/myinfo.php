@@ -35,6 +35,7 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 		#content .address-field-list .form-field .address-city, #content .address-field-list .form-field .address-district, #content .address-field-list .form-field .address-province{margin:3px 10px 0 0;width:140px;height:30px;}
 		#address-form .input{width:230px;}
 	</style>
+    <include file="Public:facebook"/>
 </head>
 <body id="orders" class="has-order-nav" style="position:static;">
 <include file="Public:header_top"/>

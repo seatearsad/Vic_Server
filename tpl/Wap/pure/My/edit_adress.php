@@ -72,7 +72,8 @@
         input.mt[type="checkbox"]:checked{
             background-color: #ffa52d;
         }
-	</style>  
+	</style>
+    <include file="Public:facebook"/>
 </head>
 <body id="index" data-com="pagecommon">
 <include file="Public:header"/>

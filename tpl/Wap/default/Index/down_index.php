@@ -55,6 +55,7 @@
             });
         </script>
     </if>
+    <include file="Public:facebook"/>
 </head>
 <style>
     *{

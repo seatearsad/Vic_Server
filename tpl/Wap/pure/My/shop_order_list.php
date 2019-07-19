@@ -247,6 +247,7 @@
             display: block;
         }
 	</style>
+    <include file="Public:facebook"/>
 </head>
 <body id="index">
 <include file="Public:header"/>

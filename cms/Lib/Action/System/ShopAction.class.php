@@ -1026,4 +1026,196 @@ class ShopAction extends BaseAction
         $objWriter->save('php://output');
         exit();
     }
+
+    public function export_total(){
+        set_time_limit(0);
+        require_once APP_PATH . 'Lib/ORG/phpexcel/PHPExcel.php';
+        $title = 'Order Total';
+
+        if(!$_GET['begin_time'] || !$_GET['end_time']){
+            $this->error('请选择时间！');
+        }else{
+            if ($_GET['begin_time']>$_GET['end_time']) {
+                $this->error_tips("结束时间应大于开始时间");
+            }
+
+            $condition_where ="where o.is_del=0  AND (o.status=2 or o.status=3) and paid=1";
+            $title .= '('.$_GET['begin_time'].' - '.$_GET['end_time'].')';
+            $period = array(strtotime($_GET['begin_time']." 00:00:00"),strtotime($_GET['end_time']." 23:59:59"));
+            $condition_where .=  " AND (o.create_time BETWEEN ".$period[0].' AND '.$period[1].")";
+        }
+
+        $sql = "SELECT  o.*, m.name AS merchant_name,g.name as good_name,g.tax_num as good_tax,g.deposit_price,s.tax_num as store_tax,s.proportion as store_pro,d.price as good_price ,d.unit,d.cost_price, d.num as good_num, s.name AS store_name FROM " . C('DB_PREFIX') . "shop_order AS o LEFT JOIN " . C('DB_PREFIX') . "merchant_store AS s ON s.store_id=o.store_id LEFT JOIN " . C('DB_PREFIX') . "merchant AS m ON `s`.`mer_id`=`m`.`mer_id` LEFT JOIN " . C('DB_PREFIX') . "shop_order_detail AS d ON `d`.`order_id`=`o`.`order_id`  LEFT JOIN " . C('DB_PREFIX') . "shop_goods AS g ON `g`.`goods_id`=`d`.`goods_id` ".$condition_where." ORDER BY o.order_id DESC";
+
+        $result_list = D()->query($sql);
+
+        //计算订单税费及押金
+        $all_tax = 0;
+        $all_deposit = 0;
+        $all_record = array();
+        $record_id = '';
+        $freight_tax = 0;
+        $packing_tax = 0;
+        $total_tax = 0;
+        $curr_cash = 0;
+        //subtotal
+        $total_goods_price = 0;
+        $total_goods_tax = 0;
+        $total_freight_price = 0;
+        $total_freight_tax = 0;
+        $total_packing_price = 0;
+        $total_packing_tax = 0;
+        $total_all_tax = 0;
+        $total_deposit = 0;
+        $total_all_price = 0;
+        $total_cash = 0;
+        //商品抽成总数
+        $total_goods_price_pro = 0;
+        //商品税点抽成总数
+        $total_goods_tax_pro = 0;
+        //订单总数
+        $order_count = 0;
+
+        //结束循环后是否存储最后一张订单，如果最后一张是代客下单为 false;
+        $is_last = true;
+        $last_pro = 0;
+        foreach ($result_list as &$val){
+            $curr_order = $val['real_orderid'];
+            if($val['uid'] == 0){//当用户ID(uid)为0时 -- 代客下单
+                //记录上一张订单的税费和押金
+                $all_record[$curr_order]['all_tax'] = $val['discount_price'];
+                $all_record[$curr_order]['all_deposit'] = $val['packing_charge'];
+                $val['packing_charge'] = 0;
+                $all_record[$curr_order]['freight_tax'] = $val['freight_charge']*$val['store_tax']/100;
+                $all_record[$curr_order]['packing_tax'] = $val['packing_charge']*$val['store_tax']/100;
+                $all_record[$curr_order]['total_tax'] = $val['discount_price'] + ($val['freight_charge']+$val['packing_charge'])*$val['store_tax']/100;
+
+                $all_record[$curr_order]['cash'] = $val['price'];
+                $is_last = false;
+
+                $total_goods_price += $val['goods_price'];
+                $total_goods_price_pro += $val['goods_price'] * $val['store_pro'] / 100;
+                $total_goods_tax += $val['discount_price'];
+                $total_goods_tax_pro += $val['discount_price'] * $val['store_pro'] / 100;
+                $total_freight_price += $val['freight_charge'];
+                $total_freight_tax += $val['freight_charge']*$val['store_tax']/100;
+                $total_packing_price += $val['packing_charge'];
+                $total_packing_tax += $val['packing_charge']*$val['store_tax']/100;
+                $total_all_tax += $all_record[$curr_order]['total_tax'];
+                $total_deposit += $all_record[$curr_order]['all_deposit'];
+                $total_all_price += $val['price'];
+                $total_cash += $val['price'];
+
+                $order_count++;
+            }else{
+                if($curr_order != $record_id){
+                    $order_count++;
+                    //记录上一张订单的税费和押金
+                    if($record_id != '') {
+                        $all_record[$record_id]['all_tax'] = $all_tax;
+                        $all_record[$record_id]['all_deposit'] = $all_deposit;
+                        $all_record[$record_id]['total_tax'] = $all_tax + $all_record[$record_id]['freight_tax'] + $all_record[$record_id]['packing_tax'];
+
+                        $total_goods_tax += $all_tax;
+                        $total_goods_tax_pro += $all_tax * $val['store_pro'] / 100;
+                        $total_deposit += $all_deposit;
+                        $total_all_tax += $all_record[$record_id]['total_tax'];
+                    }
+                    //记录最新订单的基本数值
+                    $total_goods_price += $val['goods_price'];
+                    $total_goods_price_pro += $val['goods_price'] * $val['store_pro'] / 100;
+                    $total_freight_price += $val['freight_charge'];
+                    $total_freight_tax += $val['freight_charge']*$val['store_tax']/100;
+                    $total_packing_price += $val['packing_charge'];
+                    $total_packing_tax += $val['packing_charge']*$val['store_tax']/100;
+                    $total_all_price += $val['price'];
+
+                    $all_record[$curr_order]['freight_tax'] = $val['freight_charge']*$val['store_tax']/100;
+                    $all_record[$curr_order]['packing_tax'] = $val['packing_charge']*$val['store_tax']/100;
+                    if($val['pay_type'] == 'offline' || $val['pay_type'] == 'cash') {
+                        $all_record[$curr_order]['cash'] = $val['price'];
+                        $total_cash += $val['price'];
+                    }
+
+                    //清空商品税费
+                    $all_tax = 0;//($val['freight_charge'] + $val['packing_charge'])*$val['store_tax']/100;
+                    //清空押金
+                    $all_deposit = 0;
+                }
+
+                $all_tax += $val['good_price'] * $val['good_tax']/100*$val['good_num'];
+                $all_deposit += $val['deposit_price']*$val['good_num'];
+                $total_tax = $all_tax + ($val['freight_charge']+$val['packing_charge'])*$val['store_tax']/100;
+
+                $record_id = $curr_order;
+                $is_last = true;
+                $last_pro = $val['$all_tax'];
+            }
+        }
+        //记录最后一张订单
+        if ($is_last){
+            $all_record[$record_id]['all_tax'] = $all_tax;
+            $all_record[$record_id]['all_deposit'] = $all_deposit;
+            $all_record[$record_id]['total_tax'] = $total_tax;
+
+            $total_goods_tax += $all_tax;
+            $total_goods_tax_pro += $all_tax * $last_pro / 100;
+            $total_deposit += $all_deposit;
+            $total_all_tax += $total_tax;
+        }
+
+        $objExcel = new PHPExcel();
+        $objProps = $objExcel->getProperties();
+        // 设置文档基本属性
+        $objProps->setCreator($title);
+        $objProps->setTitle($title);
+        $objProps->setSubject($title);
+        $objProps->setDescription($title);
+
+        $objExcel->createSheet();
+        $objExcel->setActiveSheetIndex(0);
+        $objExcel->getActiveSheet()->setTitle('Order Total');
+        $objActSheet = $objExcel->getActiveSheet();
+        $objExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
+        $objExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
+        $objExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
+        $objExcel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
+        $objExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
+        $objExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
+        $objExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
+        $objExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
+
+        $objActSheet->setCellValue('A1', '订单数量');
+        $objActSheet->setCellValue('B1', '税前商品总金额');
+        $objActSheet->setCellValue('C1', '商品税费总金额');
+        $objActSheet->setCellValue('D1', '配送费总金额');
+        $objActSheet->setCellValue('E1', '配送费税费总金额');
+        $objActSheet->setCellValue('F1', '税前商品抽成总金额');
+        $objActSheet->setCellValue('G1', '商品税费抽成总金额');//无
+        $objActSheet->setCellValue('H1', '订单总金额');
+        $index = 2;
+        $objActSheet->setCellValueExplicit('A' . $index, $order_count,PHPExcel_Cell_DataType::TYPE_NUMERIC);
+        $objActSheet->setCellValueExplicit('B' . $index, floatval(sprintf("%.2f", $total_goods_price)),PHPExcel_Cell_DataType::TYPE_NUMERIC);
+        $objActSheet->setCellValueExplicit('C' . $index, floatval(sprintf("%.2f", $total_goods_tax)),PHPExcel_Cell_DataType::TYPE_NUMERIC);
+        $objActSheet->setCellValueExplicit('D' . $index, floatval(sprintf("%.2f", $total_freight_price)),PHPExcel_Cell_DataType::TYPE_NUMERIC);
+        $objActSheet->setCellValueExplicit('E' . $index, floatval(sprintf("%.2f", $total_freight_tax)),PHPExcel_Cell_DataType::TYPE_NUMERIC);
+        $objActSheet->setCellValueExplicit('F' . $index, floatval(sprintf("%.2f", $total_goods_price_pro)),PHPExcel_Cell_DataType::TYPE_NUMERIC);
+        $objActSheet->setCellValueExplicit('G' . $index, floatval(sprintf("%.2f", $total_goods_tax_pro)),PHPExcel_Cell_DataType::TYPE_NUMERIC);
+        $objActSheet->setCellValueExplicit('H' . $index, floatval(sprintf("%.2f", $total_all_price)),PHPExcel_Cell_DataType::TYPE_NUMERIC);
+
+        //输出
+        $objWriter = new PHPExcel_Writer_Excel5($objExcel);
+        ob_end_clean();
+        header("Pragma: public");
+        header("Expires: 0");
+        header("Cache-Control:must-revalidate, post-check=0, pre-check=0");
+        header("Content-Type:application/force-download");
+        header("Content-Type:application/vnd.ms-execl");
+        header("Content-Type:application/octet-stream");
+        header("Content-Type:application/download");
+        header('Content-Disposition:attachment;filename="'.$title.'.xls"');
+        header("Content-Transfer-Encoding:binary");
+        $objWriter->save('php://output');
+        exit();
+    }
 }

@@ -70,6 +70,7 @@
                 color: #ffa52d;
             }
 		</style>
+        <include file="Public:facebook"/>
 	</head>
 	<body>
     <include file="Public:header"/>

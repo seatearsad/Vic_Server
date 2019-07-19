@@ -33,6 +33,7 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 <style>
 .orders-wrapper .order-title .del:after{ content:'取消'}
 </style>
+    <include file="Public:facebook"/>
 </head>
 <body id="orders" class="has-order-nav" style="position:static;">
 <include file="Public:header_top"/>

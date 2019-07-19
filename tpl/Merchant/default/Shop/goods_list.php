@@ -78,6 +78,9 @@
 												<a title="删除" class="red" style="padding-right:8px;" href="{pigcms{:U('Shop/goods_del',array('goods_id'=>$vo['goods_id']))}">
 													<i class="ace-icon fa fa-trash-o bigger-130"></i>
 												</a>
+                                                <a title="复制" class="blue" style="padding-right:8px;" href="{pigcms{:U('Shop/goods_copy',array('goods_id'=>$vo['goods_id']))}">
+                                                    <i class="ace-icon fa fa-file-o bigger-130"></i>
+                                                </a>
 											</td>
 										</tr>
 									</volist>
@@ -101,6 +104,10 @@ $(function(){
 	jQuery(document).on('click','#shopList a.red',function(){
 		if(!confirm('确定要删除这条数据吗?不可恢复。')) return false;
 	});
+
+    jQuery(document).on('click','#shopList a.blue',function(){
+        if(!confirm('确定要复制此产品吗？')) return false;
+    });
 });
 function CreateShop(){
 	window.location.href = "{pigcms{:U('Shop/goods_add',array('sort_id' => $now_sort['sort_id']))}";

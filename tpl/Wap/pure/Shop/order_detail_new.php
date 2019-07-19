@@ -14,6 +14,7 @@
         <meta name="format-detection" content="address=no"/>
         <link href="{pigcms{$static_path}shop/css/order_detail.css" rel="stylesheet"/>
         <script type="text/javascript" src="{pigcms{:C('JQUERY_FILE_190')}" charset="utf-8"></script>
+        <include file="Public:facebook"/>
     </head>
     <body>
         <section class="public">

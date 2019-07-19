@@ -19,6 +19,7 @@
 	<link rel="stylesheet" type="text/css" href="{pigcms{$config.site_url}/tpl/Static/default/css/qrcode.v74a11a81.css" />
 	<link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/footer.css" />
 	<script src="{pigcms{$static_public}js/jquery.min.js"></script>
+    <include file="Public:facebook"/>
 </head>
 <body id="login" class="theme--www" style="position: static;">
 	<header id="site-mast" class="site-mast site-mast--mini">

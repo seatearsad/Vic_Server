@@ -26,6 +26,7 @@
 	    .captcha img{margin-left:.2rem;}
 	    .captcha .btn{margin-top:-.15rem;margin-bottom:-.15rem;margin-left:.2rem;}
 	</style>
+    <include file="Public:facebook"/>
 </head>
 <body id="index" data-com="pagecommon">
         <!--header  class="navbar">

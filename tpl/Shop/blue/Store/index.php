@@ -34,6 +34,7 @@
             height: 365px;
         }
     </style>
+    <include file="Public:facebook"/>
 </head>
 <body style="background: #f5f5f5;">
 	<section class="shoptop">

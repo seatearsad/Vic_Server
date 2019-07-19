@@ -33,6 +33,7 @@
 
         </script>
     </if>
+    <include file="Public:facebook"/>
 </head>
 	<body>
 		<!-- 公用导航 -->

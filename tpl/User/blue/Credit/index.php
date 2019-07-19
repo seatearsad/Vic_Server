@@ -88,6 +88,7 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 <![endif]-->
 <script src="{pigcms{$static_public}js/artdialog/jquery.artDialog.js"></script>
 <script src="{pigcms{$static_public}js/artdialog/iframeTools.js"></script>
+    <include file="Public:facebook"/>
 </head>
 <body id="credit" class="has-order-nav" style="position:static;">
 <include file="Public:header_top"/>

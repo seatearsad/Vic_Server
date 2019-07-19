@@ -230,4 +230,7 @@ class IndexAction extends BaseAction{
         $this->success($href);
     }
 
+//    public function get_html(){
+//        $this->display();
+//    }
 }

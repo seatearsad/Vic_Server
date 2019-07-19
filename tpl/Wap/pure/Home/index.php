@@ -279,6 +279,7 @@
             font-size: 1.05em;
         }
     </style>
+    <include file="Public:facebook"/>
 </head>
 <body>
 <include file="Public:header"/>

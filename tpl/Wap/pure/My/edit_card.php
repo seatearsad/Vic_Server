@@ -70,7 +70,8 @@
             left: 8%;
             cursor: pointer;
         }
-	</style>  
+	</style>
+    <include file="Public:facebook"/>
 </head>
 <body id="index" data-com="pagecommon">
 <include file="Public:header"/>

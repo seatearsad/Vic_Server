@@ -39,6 +39,7 @@
 			width:10px;
 	    }
 	</style>
+        <include file="Public:facebook"/>
 </head>
 <body>
 	<div style="text-align:center;background-color:#fff;padding:10px 0;">

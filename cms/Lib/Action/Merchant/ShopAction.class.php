@@ -624,7 +624,7 @@ class ShopAction extends BaseAction
         $count_goods = $database_goods->where($condition_goods)->count();
         import('@.ORG.merchant_page');
         $p = new Page($count_goods, 20);
-        $goods_list = $database_goods->field(true)->where($condition_goods)->order('`sort` DESC, `goods_id` ASC')->limit($p->firstRow . ',' . $p->listRows)->select();
+        $goods_list = $database_goods->field(true)->where($condition_goods)->order('`sort` DESC, `goods_id` DESC')->limit($p->firstRow . ',' . $p->listRows)->select();
 
         $plist = array();
         $prints = D('Orderprinter')->where(array('mer_id' => $now_store['mer_id'], 'store_id' => $now_store['store_id']))->select();
@@ -1050,6 +1050,67 @@ class ShopAction extends BaseAction
         }else{
             $this->error('删除失败！请检查后重试。');
         }
+    }
+    /* 商品复制 */
+    public function goods_copy(){
+        $now_goods = $this->check_goods($_GET['goods_id']);
+        $database_goods = D('Shop_goods');
+        $condition_goods['goods_id'] = $now_goods['goods_id'];
+
+        $goods = $database_goods->where($condition_goods)->find();
+        if($goods){
+            //添加新产品 去掉id 清零
+            unset($goods['goods_id']);
+            $goods['name'] = $goods['name'].'_Copy';
+            $goods['sell_count'] = 0;
+            $goods['sell_mouth'] = 0;
+            $goods['today_sell_count'] = 0;
+            $goods['sell_day'] = 0;
+            $goods['today_sell_spec'] = '';
+
+            $new_goods_id = $database_goods->add($goods);
+            //如果有规格设置
+            if($goods['spec_value'] != ''){
+                $spec = D('Shop_goods_spec')->where(array('goods_id'=>$now_goods['goods_id']))->select();
+
+                foreach ($spec as $v){
+                    $new_spac['goods_id'] = $new_goods_id;
+                    $new_spac['store_id'] = $v['store_id'];
+                    $new_spac['name'] = $v['name'];
+
+                    $spac_id = D('Shop_goods_spec')->add($new_spac);
+
+                    $spac_val = D('Shop_goods_spec_value')->where(array('sid'=>$v['id']))->order('id asc')->select();
+
+                    foreach ($spac_val as $val){
+                        $new_val['sid'] = $spac_id;
+                        $new_val['name'] = $val['name'];
+
+                        $new_val_id = D('Shop_goods_spec_value')->add($new_val);
+
+                        $goods['spec_value'] = str_replace($val['id'],$new_val_id,$goods['spec_value']);
+                    }
+                }
+
+                $database_goods->where(array('goods_id'=>$new_goods_id))->save(array('spec_value'=>$goods['spec_value']));
+            }
+            //如果有属性
+            if($goods['is_properties'] == 1){
+                $properties = D('Shop_goods_properties')->where(array('goods_id'=>$now_goods['goods_id']))->select();
+                $add_list = array();
+                foreach($properties as $pro){
+                    $new_pro['goods_id'] = $new_goods_id;
+                    $new_pro['name'] = $pro['name'];
+                    $new_pro['val'] = $pro['val'];
+                    $new_pro['num'] = $pro['num'];
+
+                    $add_list[] = $new_pro;
+                }
+
+                D('Shop_goods_properties')->addAll($add_list);
+            }
+        }
+        $this->success('复制成功！');
     }
     /* 商品状态 */
     public function goods_status()
@@ -2033,6 +2094,348 @@ class ShopAction extends BaseAction
         if($_POST['sort_id'] != 0) $where['sort_id'] = $_POST['sort_id'];
         D('Shop_goods')->where($where)->save($data);
         $this->success('Success');
+    }
+
+    public function export_pdf(){
+        $store = D('Merchant_store')->where(array('store_id'=>$_GET['store_id']))->find();
+
+        $where = array();
+        $condition_where = 'WHERE o.store_id = '.$_GET['store_id'];
+        $where['store_id'] =$_GET['store_id'];
+
+        if(!empty($_GET['keyword'])){
+            if ($_GET['searchtype'] == 'real_orderid') {
+                $where['real_orderid'] = htmlspecialchars($_GET['keyword']);
+                $condition_where .= ' AND o.real_orderid = "'. htmlspecialchars($_GET['keyword']).'"';
+            } elseif ($_GET['searchtype'] == 'orderid') {
+                $where['orderid'] = htmlspecialchars($_GET['keyword']);
+                $tmp_result = M('Tmp_orderid')->where(array('orderid'=>$where['orderid']))->find();
+                unset($where['orderid']);
+                $where['order_id'] = $tmp_result['order_id'];
+                $condition_where .= ' AND o.order_id = '. $tmp_result['order_id'];
+            } elseif ($_GET['searchtype'] == 'name') {
+                $where['username'] = htmlspecialchars($_GET['keyword']);
+                $condition_where .=  ' AND o.username = "'.  htmlspecialchars($_GET['keyword']).'"';
+            } elseif ($_GET['searchtype'] == 'phone') {
+                $where['userphone'] = htmlspecialchars($_GET['keyword']);
+                $condition_where .= ' AND o.userphone = "'.  htmlspecialchars($_GET['keyword']).'"';
+            } elseif ($_GET['searchtype'] == 'third_id') {
+                $where['third_id'] =$_GET['keyword'];
+            }
+
+        }
+        $status = isset($_GET['status']) ? intval($_GET['status']) : -1;
+        $type = isset($_GET['type']) && $_GET['type'] ? $_GET['type'] : '';
+        $sort = isset($_GET['sort']) && $_GET['sort'] ? $_GET['sort'] : '';
+        $pay_type = isset($_GET['pay_type']) && $_GET['pay_type'] ? $_GET['pay_type'] : '';
+        if ($sort != 'DESC' && $sort != 'ASC') $sort = '';
+        if ($type != 'price' && $type != 'pay_time') $type = '';
+
+        if($status == 100){
+            $where['paid'] = 0;
+            $condition_where .= ' AND o.paid=0';
+        }else if ($status != -1) {
+            $where['status'] = $status;
+            $condition_where .= ' AND o.status='.$status;
+        }else if($status == -1){
+            $where['status'] = array(array('gt', 1), array('lt', 4));
+            $condition_where .= ' AND (o.status=2 or o.status=3)';
+        }
+
+        if($pay_type&&$pay_type!='balance'){
+            $where['pay_type'] = $pay_type;
+            $condition_where .= ' AND o.pay_type="'.$pay_type.'"';
+        }else if($pay_type=='balance'){
+            $where['_string'] = "(`balance_pay`<>0 OR `merchant_balance` <> 0 )";
+            $condition_where .= ' AND (`o`.`balance_pay`<>0 OR `o`.`merchant_balance` <> 0 )';
+        }
+
+        if(!empty($_GET['begin_time'])&&!empty($_GET['end_time'])){
+            if ($_GET['begin_time']>$_GET['end_time']) {
+                $this->error_tips("结束时间应大于开始时间");
+            }
+            $period = array(strtotime($_GET['begin_time']." 00:00:00"),strtotime($_GET['end_time']." 23:59:59"));
+            $where['_string'] =( $where['_string']?' AND ':''). " (create_time BETWEEN ".$period[0].' AND '.$period[1].")";
+            $condition_where .=  " AND (o.create_time BETWEEN ".$period[0].' AND '.$period[1].")";
+        }
+        $condition_where.=" AND o.is_del=0";
+        $where['is_del'] = 0;
+
+        $sql = "SELECT  o.*, m.name AS merchant_name,g.name as good_name,g.tax_num as good_tax,g.deposit_price,s.tax_num as store_tax,d.price as good_price ,d.unit,d.cost_price, d.num as good_num, s.name AS store_name FROM " . C('DB_PREFIX') . "shop_order AS o LEFT JOIN " . C('DB_PREFIX') . "merchant_store AS s ON s.store_id=o.store_id LEFT JOIN " . C('DB_PREFIX') . "merchant AS m ON `s`.`mer_id`=`m`.`mer_id` LEFT JOIN " . C('DB_PREFIX') . "shop_order_detail AS d ON `d`.`order_id`=`o`.`order_id`  LEFT JOIN " . C('DB_PREFIX') . "shop_goods AS g ON `g`.`goods_id`=`d`.`goods_id` ".$condition_where." ORDER BY o.order_id DESC";
+
+        $result_list = D()->query($sql);
+
+        //计算订单税费及押金
+        $all_tax = 0;
+        $all_deposit = 0;
+        $all_record = array();
+        $record_id = '';
+        $freight_tax = 0;
+        $packing_tax = 0;
+        $total_tax = 0;
+        $curr_cash = 0;
+        //subtotal
+        $total_goods_price = 0;
+        $total_goods_tax = 0;
+        $total_freight_price = 0;
+        $total_freight_tax = 0;
+        $total_packing_price = 0;
+        $total_packing_tax = 0;
+        $total_all_tax = 0;
+        $total_deposit = 0;
+        $total_all_price = 0;
+        $total_cash = 0;
+
+
+        //结束循环后是否存储最后一张订单，如果最后一张是代客下单为 false;
+        $is_last = true;
+        foreach ($result_list as &$val){
+            $curr_order = $val['real_orderid'];
+            if($val['uid'] == 0){//当用户ID(uid)为0时 -- 代客下单
+                //记录上一张订单的税费和押金
+                $all_record[$curr_order]['all_tax'] = $val['discount_price'];
+                $all_record[$curr_order]['all_deposit'] = $val['packing_charge'];
+                $val['packing_charge'] = 0;
+                $all_record[$curr_order]['freight_tax'] = $val['freight_charge']*$val['store_tax']/100;
+                $all_record[$curr_order]['packing_tax'] = $val['packing_charge']*$val['store_tax']/100;
+                $all_record[$curr_order]['total_tax'] = $val['discount_price'] + ($val['freight_charge']+$val['packing_charge'])*$val['store_tax']/100;
+
+                $all_record[$curr_order]['cash'] = $val['price'];
+                $is_last = false;
+
+                $total_goods_price += $val['goods_price'];
+                $total_goods_tax += $val['discount_price'];
+                $total_freight_price += $val['freight_charge'];
+                $total_freight_tax += $val['freight_charge']*$val['store_tax']/100;
+                $total_packing_price += $val['packing_charge'];
+                $total_packing_tax += $val['packing_charge']*$val['store_tax']/100;
+                $total_all_tax += $all_record[$curr_order]['total_tax'];
+                $total_deposit += $all_record[$curr_order]['all_deposit'];
+                $total_all_price += $val['price'];
+                $total_cash += $val['price'];
+            }else{
+                if($curr_order != $record_id){
+                    //记录上一张订单的税费和押金
+                    if($record_id != '') {
+                        $all_record[$record_id]['all_tax'] = $all_tax;
+                        $all_record[$record_id]['all_deposit'] = $all_deposit;
+                        $all_record[$record_id]['total_tax'] = $all_tax + $all_record[$record_id]['freight_tax'] + $all_record[$record_id]['packing_tax'];
+
+                        $total_goods_tax += $all_tax;
+                        $total_deposit += $all_deposit;
+                        $total_all_tax += $all_record[$record_id]['total_tax'];
+                    }
+                    //记录最新订单的基本数值
+                    $total_goods_price += $val['goods_price'];
+                    $total_freight_price += $val['freight_charge'];
+                    $total_freight_tax += $val['freight_charge']*$val['store_tax']/100;
+                    $total_packing_price += $val['packing_charge'];
+                    $total_packing_tax += $val['packing_charge']*$val['store_tax']/100;
+                    $total_all_price += $val['price'];
+
+                    $all_record[$curr_order]['freight_tax'] = $val['freight_charge']*$val['store_tax']/100;
+                    $all_record[$curr_order]['packing_tax'] = $val['packing_charge']*$val['store_tax']/100;
+                    if($val['pay_type'] == 'offline' || $val['pay_type'] == 'cash') {
+                        $all_record[$curr_order]['cash'] = $val['price'];
+                        $total_cash += $val['price'];
+                    }
+
+                    //清空商品税费
+                    $all_tax = 0;//($val['freight_charge'] + $val['packing_charge'])*$val['store_tax']/100;
+                    //清空押金
+                    $all_deposit = 0;
+                }
+
+                $all_tax += $val['good_price'] * $val['good_tax']/100*$val['good_num'];
+                $all_deposit += $val['deposit_price']*$val['good_num'];
+                $total_tax = $all_tax + ($val['freight_charge']+$val['packing_charge'])*$val['store_tax']/100;
+
+                $record_id = $curr_order;
+                $is_last = true;
+            }
+        }
+        //记录最后一张订单
+        if ($is_last){
+            $all_record[$record_id]['all_tax'] = $all_tax;
+            $all_record[$record_id]['all_deposit'] = $all_deposit;
+            $all_record[$record_id]['total_tax'] = $total_tax;
+
+            $total_goods_tax += $all_tax;
+            $total_deposit += $all_deposit;
+            $total_all_tax += $total_tax;
+        }
+
+        $begin_time = date('m/d/Y',strtotime($_GET['begin_time'].' 00:00:00'));
+        $end_time = date('m/d/Y',strtotime($_GET['end_time'].' 00:00:00'));
+
+        import('@.ORG.mpdf.mpdf');
+        $mpdf = new mPDF();
+        $html = $this->get_html($store,$begin_time,$end_time,$total_goods_price,$total_goods_tax,$total_packing_price,$total_deposit);
+
+        $mpdf->WriteHTML($html);
+        $fileName = $store['name'].'('.$begin_time.' - '.$end_time.').pdf';
+        $mpdf->Output($fileName,'I');
+    }
+
+    public function get_html($store,$begin_time,$end_time,$good_price,$good_tax,$packing,$deposit){
+        $good_pro = $good_price * $store['proportion'] / 100;
+        $tax_pro = $good_tax * $store['proportion'] / 100;
+
+        $all_price = $good_price + $good_tax + $packing + $deposit - $good_pro - $tax_pro;
+
+        $html = '<table style="font-family:Roboto;border-collapse: collapse; width: 900px; position: relative;">
+                    <tbody>
+                        <tr>
+                            <td width="120">
+                                <img src="./static/tutti_branding.png" width="100" height="100" />
+                            </td>
+                            <td>
+                                <p style="color: #666;">TUTTI
+                                <p style="font-size: 12px;color:#999999;line-height: 20px;">801-747 Fort Street</p>
+                                <p style="font-size: 12px;color:#999999;line-height: 20px;">Victoria, BC V8W 3E9</p>
+                                <p style="font-size: 12px;color:#999999;line-height: 20px;">1-888-399-6668</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="height: 20px"></td>
+                        </tr>
+                        <tr>
+                            <td style="font-size: 24px;font-weight: bold" colspan="2">
+                                Semi-monthly Statement
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="color:#777;font-size: 12px;font-weight: bold">
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                '.$begin_time.' - '.$end_time.'
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="height: 20px"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="color:#333;font-size: 12px;font-weight: bold">
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                Statement for
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="color:#333;font-size: 12px;">
+                                &nbsp;&nbsp;
+                                '.$store['name'].'
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="color:#333;font-size: 12px;">
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                '.$store['adress'].'
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="height: 20px;border-bottom: 1px solid #999"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="height: 20px"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" style="color:#333;font-size: 12px;font-weight: bold;height: 25px">
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                Description
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" align="right">
+                                <table style="border-bottom: 1px solid #999;">
+                                    <tr>
+                                        <td style="color:#333;font-size: 11px;width: 580px;height: 20px;" align="left">
+                                            &nbsp;Earnings before tax
+                                        </td>
+                                        <td align="right" style="color:#666;font-size: 11px;width: 70px;">
+                                            '.floatval(sprintf("%.2f", $good_price)).'
+                                            &nbsp;&nbsp;
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table style="border-bottom: 1px solid #999;">
+                                    <tr>
+                                        <td style="color:#333;font-size: 11px;width: 580px;height: 20px;" align="left">
+                                            &nbsp;Tax received from sales
+                                        </td>
+                                        <td align="right" style="color:#666;font-size: 11px;width: 70px;">
+                                            '.floatval(sprintf("%.2f", $good_tax)).'
+                                            &nbsp;&nbsp;
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table style="border-bottom: 1px solid #999;">
+                                    <tr>
+                                        <td style="color:#333;font-size: 11px;width: 580px;height: 20px;" align="left">
+                                            &nbsp;Packing Fee
+                                        </td>
+                                        <td align="right" style="color:#666;font-size: 11px;width: 70px;">
+                                            '.floatval(sprintf("%.2f", $packing)).'
+                                            &nbsp;&nbsp;
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table style="border-bottom: 1px solid #999;">
+                                    <tr>
+                                        <td style="color:#333;font-size: 11px;width: 580px;height: 20px;" align="left">
+                                            &nbsp;Bottle Deposit
+                                        </td>
+                                        <td align="right" style="color:#666;font-size: 11px;width: 70px;">
+                                            '.floatval(sprintf("%.2f", $deposit)).'
+                                            &nbsp;&nbsp;
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table style="border-bottom: 1px solid #999;">
+                                    <tr>
+                                        <td style="color:#333;font-size: 11px;width: 580px;height: 20px;" align="left">
+                                            &nbsp;'.$store['proportion'].'% (service charge on sales)
+                                        </td>
+                                        <td align="right" style="color:#666;font-size: 11px;width: 70px;">
+                                            -'.floatval(sprintf("%.2f", $good_pro)).'
+                                            &nbsp;&nbsp;
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table style="border-bottom: 1px solid #999;">
+                                    <tr>
+                                        <td style="color:#333;font-size: 11px;width: 580px;height: 20px;" align="left">
+                                            &nbsp;GST (GST #721938728RT0001) (service charge on tax)
+                                        </td>
+                                        <td align="right" style="color:#666;font-size: 11px;width: 70px;">
+                                            -'.floatval(sprintf("%.2f", $tax_pro)).'
+                                            &nbsp;&nbsp;
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table>
+                                    <tr>
+                                        <td style="color:#333;font-size: 11px;width: 580px;height: 30px;" align="left">
+                                            &nbsp;Net amount to be sent to vendor
+                                        </td>
+                                        <td align="right" style="color:#333;font-size: 12px;font-weight: bold;width: 70px;">
+                                            '.floatval(sprintf("%.2f", $all_price)).'
+                                            &nbsp;
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="height: 100px"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="font-size: 10px;font-family: Arial" align="center">
+                                2019 © Tutti Technologies * Please allow three to five business days for the funds to arrive.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>';
+
+        return $html;
     }
 
 }

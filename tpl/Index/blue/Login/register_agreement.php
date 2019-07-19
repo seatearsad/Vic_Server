@@ -2,6 +2,7 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <include file="Public:facebook"/>
 	</head>
 	<body>
 		<p style="margin-top:20px;margin-bottom:20px;text-align:center;">用户注册协议</p>

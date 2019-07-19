@@ -103,6 +103,7 @@
             cursor: pointer;
         }
 	</style>
+        <include file="Public:facebook"/>
 </head>
 <body>
 		<if condition="$_SESSION['source'] neq 1">

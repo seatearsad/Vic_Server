@@ -117,6 +117,7 @@
             background-color: #ffa52d;
         }
 	</style>
+    <include file="Public:facebook"/>
 </head>
 <body id="index">
 <include file="Public:header"/>

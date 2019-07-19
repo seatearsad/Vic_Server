@@ -40,6 +40,7 @@ filter:alpha(opacity=50);
 <![endif]-->
 <script src="{pigcms{$static_public}js/artdialog/jquery.artDialog.js"></script>
 <script src="{pigcms{$static_public}js/artdialog/iframeTools.js"></script>
+    <include file="Public:facebook"/>
 </head>
 <body>
  <include file="Public:header_top"/>

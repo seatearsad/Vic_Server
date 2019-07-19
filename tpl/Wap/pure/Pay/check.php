@@ -17,6 +17,7 @@
     <link href="{pigcms{$static_path}css/check.css" rel="stylesheet"/>
     <link rel="stylesheet" type="text/css" href="{pigcms{$static_public}js/mobiscroll/mobiscroll.custom.min.css" media="all">
     <script type="text/javascript" src="{pigcms{$static_public}js/mobiscroll/mobiscroll.custom.min.js"></script>
+    <include file="Public:facebook"/>
 </head>
 <body>
 

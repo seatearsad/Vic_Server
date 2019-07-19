@@ -10,6 +10,7 @@
 	<meta name="format-detection" content="telephone=no">
 	<meta name="format-detection" content="address=no">
     <script src="{pigcms{:C('JQUERY_FILE')}"></script>
+    <include file="Public:facebook"/>
 </head>
 <body>
     <div id="map"></div>

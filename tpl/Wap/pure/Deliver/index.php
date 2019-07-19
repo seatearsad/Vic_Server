@@ -66,6 +66,7 @@
 	.startOrder{color: #fff;float: right;background: green;border: 1px solid #ccc;padding: 5px 10px 5px 10px;}
 	.stopOrder{color: #000;float: right;background: #ccc;border: 1px solid #ccc;padding: 5px 10px 5px 10px;}
 </style>
+    <include file="Public:facebook"/>
 </head>
 <body>
 	<section class="clerk">

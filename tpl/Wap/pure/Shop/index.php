@@ -20,6 +20,7 @@
         <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/common.css"/>
         <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/index.css"/>
         <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}shop/css/home_shop.css"/>
+        <include file="Public:facebook"/>
 	</head>
     <style>
         #container{

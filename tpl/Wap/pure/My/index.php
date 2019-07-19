@@ -97,6 +97,7 @@
             background-image: url("./tpl/Static/blue/images/wap/language.png");
         }
 	</style>
+        <include file="Public:facebook"/>
 </head>
 <body>
     <include file="Public:header"/>

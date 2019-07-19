@@ -54,7 +54,8 @@
 									<option value="balance" <if condition="'balance' eq $pay_type">selected="selected"</if>>余额支付</option>
 							</select>
 							<input type="submit" value="查询" class="button"/>　
-							<a href="{pigcms{:U('Shop/export', $_GET)}" class="btn btn-success" style="float:right;margin-right: 10px;">导出订单</a>
+                            <a href="{pigcms{:U('Shop/export_pdf', $_GET)}" class="btn btn-success" style="float:right;margin-right: 10px;">导出PDF</a>
+                            <a href="{pigcms{:U('Shop/export', $_GET)}" class="btn btn-success" style="float:right;margin-right: 10px;">导出订单</a>
 						</form>
 					</div>
 					

@@ -59,12 +59,12 @@ $this->biDirectional=false;			// automatically determine BIDI text in LTR page
 
 // AUTOMATIC FONT SELECTION
 // Based on script and/or language
-$this->autoScriptToLang = false;		// mPDF 6.0 (similar to previously using function SetAutoFont() )
+$this->autoScriptToLang = true;		// mPDF 6.0 (similar to previously using function SetAutoFont() )
 $this->baseScript = 1;				// =Latin; to set another base script see constants in classes/ucdn.php
 $this->autoVietnamese = true;
 $this->autoArabic = true;
 
-$this->autoLangToFont = false;		// mPDF 6.0 (similar to old useLang)
+$this->autoLangToFont = true;		// mPDF 6.0 (similar to old useLang)
 
 $this->useSubstitutions = false;		// Substitute missing characters in UTF-8(multibyte) documents - from other fonts
 $this->falseBoldWeight = 5;			// Weight for bold text when using an artificial (outline) bold; value 0 (off) - 10 (rec. max)

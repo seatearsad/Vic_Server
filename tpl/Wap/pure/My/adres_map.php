@@ -8,6 +8,7 @@
 	<meta name="keywords" content="{pigcms{$config.seo_keywords}">
 	<meta name="description" content="{pigcms{$config.seo_description}">
 	<title>{pigcms{:L('_B_PURE_MY_01_')}</title>
+    <include file="Public:facebook"/>
 </head>
 <body class=" hIphone" style="padding-bottom: initial;">
 <div id="fis_elm__0"></div>

@@ -91,6 +91,7 @@
             line-height: 40px;
         }
 	</style>
+        <include file="Public:facebook"/>
 </head>
 <body>
     <include file="Public:header"/>

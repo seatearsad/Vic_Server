@@ -11,6 +11,7 @@
 	<meta name="format-detection" content="address=no">
     <link href="{pigcms{$static_path}css/eve.7c92a906.css" rel="stylesheet"/>
     <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/common.css?215"/>
+    <include file="Public:facebook"/>
 </head>
 <style>
     .main{

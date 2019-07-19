@@ -20,6 +20,7 @@
 	<link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/footer.css" />
 	<script src="{pigcms{$static_public}js/jquery.min.js"></script>
 	<style type="text/css">.noact{background-image:none !important;color: #969696 !important;background-color: #CACACA !important;}</style>
+    <include file="Public:facebook"/>
 </head>
 <body id="login" class="theme--www" style="position: static;">
 	<header id="site-mast" class="site-mast site-mast--mini">

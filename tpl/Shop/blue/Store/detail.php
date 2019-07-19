@@ -27,6 +27,7 @@
 	<script src="{pigcms{$static_path}js/jquery-1.9.1.min.js"></script>
 	<script src="{pigcms{$static_path}js/html5shiv.min.js"></script>
 	<![endif]-->
+    <include file="Public:facebook"/>
 </head>
 <body style="background: #f5f5f5;">
 	<section class="shoptop">

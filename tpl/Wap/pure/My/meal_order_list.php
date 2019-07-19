@@ -193,6 +193,7 @@
 		.order-num-foot span.order-pay{ color:#06c1bb;padding:.2rem .5rem}
 		
 	</style>
+    <include file="Public:facebook"/>
 </head>
 <body id="index">
          <div id="tips" class="tips"></div>

@@ -39,6 +39,7 @@
 		</script>
         <script type="text/javascript" src="{pigcms{$static_public}js/lang/{pigcms{:C('DEFAULT_LANG')}.js" charset="utf-8"></script>
 		<script type="text/javascript" src="{pigcms{$static_path}shop/js/shopClassicBaseNew.js?t={pigcms{$_SERVER.REQUEST_TIME}" charset="utf-8"></script>
+        <include file="Public:facebook"/>
 	</head>
         <style>
             *{

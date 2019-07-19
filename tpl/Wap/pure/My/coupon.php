@@ -103,6 +103,7 @@
             margin: 10px auto;
         }
 	</style>
+        <include file="Public:facebook"/>
 </head>
 <body>
     <include file="Public:header"/>
