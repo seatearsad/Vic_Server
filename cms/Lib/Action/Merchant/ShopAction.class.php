@@ -2286,71 +2286,74 @@ class ShopAction extends BaseAction
         $html = '<table style="font-family:Roboto;border-collapse: collapse; width: 900px; position: relative;">
                     <tbody>
                         <tr>
-                            <td width="120">
-                                <img src="./static/tutti_branding.png" width="100" height="100" />
+                            <td width="180">
+                                <img src="./static/tutti_branding.png" width="160" height="160" />
                             </td>
-                            <td>
-                                <p style="color: #666;">TUTTI
-                                <p style="font-size: 12px;color:#999999;line-height: 20px;">801-747 Fort Street</p>
-                                <p style="font-size: 12px;color:#999999;line-height: 20px;">Victoria, BC V8W 3E9</p>
-                                <p style="font-size: 12px;color:#999999;line-height: 20px;">1-888-399-6668</p>
+                            <td width="720">
+                                <p style="font-size:28px;color: #666;">TUTTI
+                                <p style="font-size: 16px;color:#999999;line-height: 20px;">801-747 Fort Street</p>
+                                <p style="font-size: 16px;color:#999999;line-height: 20px;">Victoria, BC V8W 3E9</p>
+                                <p style="font-size: 16px;color:#999999;line-height: 20px;">1-888-399-6668</p>
                             </td>
                         </tr>
                         <tr>
                             <td colspan="2" style="height: 20px"></td>
                         </tr>
                         <tr>
-                            <td style="font-size: 24px;font-weight: bold" colspan="2">
+                            <td style="font-size: 32px;font-weight: bold" colspan="2">
                                 Semi-monthly Statement
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="2" style="color:#777;font-size: 12px;font-weight: bold">
+                            <td colspan="2" style="color:#777;font-size: 16px;font-weight: bold">
                                 &nbsp;&nbsp;&nbsp;&nbsp;
                                 '.$begin_time.' - '.$end_time.'
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="2" style="height: 20px"></td>
+                            <td colspan="2" style="height: 40px"></td>
                         </tr>
                         <tr>
-                            <td colspan="2" style="color:#333;font-size: 12px;font-weight: bold">
+                            <td colspan="2" style="color:#333;font-size: 18px;font-weight: bold">
                                 &nbsp;&nbsp;&nbsp;&nbsp;
                                 Statement for
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="2" style="color:#333;font-size: 12px;">
+                            <td colspan="2" style="color:#333;font-size: 18px;">
                                 &nbsp;&nbsp;
                                 '.$store['name'].'
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="2" style="color:#333;font-size: 12px;">
+                            <td colspan="2" style="color:#333;font-size: 18px;">
                                 &nbsp;&nbsp;&nbsp;&nbsp;
                                 '.$store['adress'].'
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="2" style="height: 20px;border-bottom: 1px solid #999"></td>
+                            <td colspan="2" style="height: 40px;border-bottom: 1px solid #999"></td>
                         </tr>
                         <tr>
-                            <td colspan="2" style="height: 20px"></td>
+                            <td colspan="2" style="height: 40px"></td>
                         </tr>
                         <tr>
-                            <td colspan="3" style="color:#333;font-size: 12px;font-weight: bold;height: 25px">
+                            <td colspan="3" style="color:#333;font-size: 18px;font-weight: bold;height: 25px">
                                 &nbsp;&nbsp;&nbsp;&nbsp;
                                 Description
                             </td>
                         </tr>
                         <tr>
+                            <td colspan="2" style="height: 10px"></td>
+                        </tr>
+                        <tr>
                             <td colspan="2" align="right">
                                 <table style="border-bottom: 1px solid #999;">
                                     <tr>
-                                        <td style="color:#333;font-size: 11px;width: 580px;height: 20px;" align="left">
+                                        <td style="color:#333;font-size: 16px;width: 755px;height: 30px;" align="left">
                                             &nbsp;Earnings before tax
                                         </td>
-                                        <td align="right" style="color:#666;font-size: 11px;width: 70px;">
+                                        <td align="right" style="color:#666;font-size: 16px;width: 120px;">
                                             '.floatval(sprintf("%.2f", $good_price)).'
                                             &nbsp;&nbsp;
                                         </td>
@@ -2358,10 +2361,10 @@ class ShopAction extends BaseAction
                                 </table>
                                 <table style="border-bottom: 1px solid #999;">
                                     <tr>
-                                        <td style="color:#333;font-size: 11px;width: 580px;height: 20px;" align="left">
+                                        <td style="color:#333;font-size: 16px;width: 755px;height: 30px;" align="left">
                                             &nbsp;Tax received from sales
                                         </td>
-                                        <td align="right" style="color:#666;font-size: 11px;width: 70px;">
+                                        <td align="right" style="color:#666;font-size: 16px;width: 120px;">
                                             '.floatval(sprintf("%.2f", $good_tax)).'
                                             &nbsp;&nbsp;
                                         </td>
@@ -2369,10 +2372,10 @@ class ShopAction extends BaseAction
                                 </table>
                                 <table style="border-bottom: 1px solid #999;">
                                     <tr>
-                                        <td style="color:#333;font-size: 11px;width: 580px;height: 20px;" align="left">
+                                        <td style="color:#333;font-size: 16px;width: 755px;height: 30px;" align="left">
                                             &nbsp;Packing Fee
                                         </td>
-                                        <td align="right" style="color:#666;font-size: 11px;width: 70px;">
+                                        <td align="right" style="color:#666;font-size: 16px;width: 120px;">
                                             '.floatval(sprintf("%.2f", $packing)).'
                                             &nbsp;&nbsp;
                                         </td>
@@ -2380,10 +2383,10 @@ class ShopAction extends BaseAction
                                 </table>
                                 <table style="border-bottom: 1px solid #999;">
                                     <tr>
-                                        <td style="color:#333;font-size: 11px;width: 580px;height: 20px;" align="left">
+                                        <td style="color:#333;font-size: 16px;width: 755px;height: 30px;" align="left">
                                             &nbsp;Bottle Deposit
                                         </td>
-                                        <td align="right" style="color:#666;font-size: 11px;width: 70px;">
+                                        <td align="right" style="color:#666;font-size: 16px;width: 120px;">
                                             '.floatval(sprintf("%.2f", $deposit)).'
                                             &nbsp;&nbsp;
                                         </td>
@@ -2391,10 +2394,10 @@ class ShopAction extends BaseAction
                                 </table>
                                 <table style="border-bottom: 1px solid #999;">
                                     <tr>
-                                        <td style="color:#333;font-size: 11px;width: 580px;height: 20px;" align="left">
+                                        <td style="color:#333;font-size: 16px;width: 755px;height: 30px;" align="left">
                                             &nbsp;'.$store['proportion'].'% (service charge on sales)
                                         </td>
-                                        <td align="right" style="color:#666;font-size: 11px;width: 70px;">
+                                        <td align="right" style="color:#666;font-size: 16px;width: 120px;">
                                             -'.floatval(sprintf("%.2f", $good_pro)).'
                                             &nbsp;&nbsp;
                                         </td>
@@ -2402,10 +2405,10 @@ class ShopAction extends BaseAction
                                 </table>
                                 <table style="border-bottom: 1px solid #999;">
                                     <tr>
-                                        <td style="color:#333;font-size: 11px;width: 580px;height: 20px;" align="left">
+                                        <td style="color:#333;font-size: 16px;width: 755px;height: 30px;" align="left">
                                             &nbsp;GST (GST #721938728RT0001) (service charge on tax)
                                         </td>
-                                        <td align="right" style="color:#666;font-size: 11px;width: 70px;">
+                                        <td align="right" style="color:#666;font-size: 16px;width: 120px;">
                                             -'.floatval(sprintf("%.2f", $tax_pro)).'
                                             &nbsp;&nbsp;
                                         </td>
@@ -2413,10 +2416,10 @@ class ShopAction extends BaseAction
                                 </table>
                                 <table>
                                     <tr>
-                                        <td style="color:#333;font-size: 11px;width: 580px;height: 30px;" align="left">
+                                        <td style="color:#333;font-size: 16px;width: 755px;height: 40px;" align="left">
                                             &nbsp;Net amount to be sent to vendor
                                         </td>
-                                        <td align="right" style="color:#333;font-size: 12px;font-weight: bold;width: 70px;">
+                                        <td align="right" style="color:#333;font-size: 18px;font-weight: bold;width: 120px;">
                                             '.floatval(sprintf("%.2f", $all_price)).'
                                             &nbsp;
                                         </td>
@@ -2425,10 +2428,10 @@ class ShopAction extends BaseAction
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="2" style="height: 100px"></td>
+                            <td colspan="2" style="height: 550px"></td>
                         </tr>
                         <tr>
-                            <td colspan="2" style="font-size: 10px;font-family: Arial" align="center">
+                            <td colspan="2" style="font-size: 14px;font-family: Arial" align="center">
                                 2019 © Tutti Technologies * Please allow three to five business days for the funds to arrive.
                             </td>
                         </tr>
