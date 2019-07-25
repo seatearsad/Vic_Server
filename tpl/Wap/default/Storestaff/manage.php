@@ -330,6 +330,15 @@ if(typeof (window.linkJs) != 'undefined'){
     }
 }
 
+if(/(tutti_android)/.test(navigator.userAgent.toLowerCase())){
+    var html = '<li id="set_printer"><div>{pigcms{:L(\'_STORE_SET_PRINTER_\')}</div></li>';
+    $('#features').append(html);
+}
+
+$('#set_printer').click(function () {
+    window.linkJs.gotoPrinter();
+});
+
 $(document).ready(function(){
 	var is_click = false;
 	$('.js-add-order').click(function(){
