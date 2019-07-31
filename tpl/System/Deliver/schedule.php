@@ -220,18 +220,22 @@
     }
 
     function del_time(week_num,time_id) {
-        var re_data = {
-            'week_num':week_num,
-            'time_id':time_id
-        }
-        $.post("{pigcms{:U('Deliver/schedule_del_time')}", re_data, function (data) {
-            if (data.error == 0) {
-                alert(data.msg);
-                window.location.reload();
-            } else {
-                alert('Fail');
+        if(confirm("{pigcms{:L('_B_PURE_MY_84_')}")) {
+            var re_data = {
+                'week_num':week_num,
+                'time_id':time_id
             }
-        },'json');
+            $.post("{pigcms{:U('Deliver/schedule_del_time')}", re_data, function (data) {
+                if (data.error == 0) {
+                    alert(data.msg);
+                    window.location.reload();
+                } else {
+                    alert('Fail');
+                }
+            },'json');
+        }else{
+            //return false;
+        }
     }
 
     function format_time(t_time){

@@ -67,6 +67,9 @@ cursor: pointer;
 </style>
 </head>
 <body>
+<div style="padding: 0.8rem;background-color: #ffa52d">
+    <a href="javascript:void(0);" onclick="return window.history.go(-1);" style="color: white"> < 返回</a>
+</div>
 <div style="padding: 0.2rem;"> 
 	<ul class="round">
 		<table width="100%" border="0" cellpadding="0" cellspacing="0" class="cpbiaoge">

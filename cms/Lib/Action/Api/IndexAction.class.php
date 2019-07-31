@@ -133,7 +133,9 @@ class IndexAction extends BaseAction
 
     public function getStore(){
         $sid = $_POST['sid'];
-        $store = $this->loadModel()->get_store_by_id($sid);
+        $lat = $_POST['lat'] ? $_POST['lat'] : 0;
+        $lng = $_POST['lng'] ? $_POST['lng'] : 0;
+        $store = $this->loadModel()->get_store_by_id($sid,$lat,$lng);
 
         $this->returnCode(0,'info',$store);
 
@@ -492,9 +494,9 @@ class IndexAction extends BaseAction
                 }
             }
             if($v['proper'] != ''){
-                $t_pro['data'] = array();
                 $pro_list = explode('_',$v['proper']);
                 foreach ($pro_list as $vv){
+                    $t_pro['data'] = array();
                     $t_pro['type'] = 'pro';
 
                     $ids = explode(',',$vv);
@@ -1347,7 +1349,7 @@ class IndexAction extends BaseAction
         return $go_refund_param;
     }
 
-    public  function coupon_code(){
+    public function coupon_code(){
         $code = $_POST['code'];
         $uid = $_POST['uid'];
 
@@ -1364,8 +1366,29 @@ class IndexAction extends BaseAction
         }else{
             $this->returnCode(1,'info',array(),L('_NOT_EXCHANGE_CODE_'));
         }
-
-        $this->returnCode(0,'info',$result,'success');
+        if(isset($result) && $result['error_code'] == 0)
+            $this->returnCode(0,'info',$result,'success');
+        else{
+            $msg_str = '';
+            switch ($result['error_code']){
+                case 1:
+                    $msg_str = 'The coupon code has been entered incorrectly';
+                    break;
+                case 2:
+                    $msg_str = 'The coupon has expired.';
+                    break;
+                case 3:
+                    $msg_str = '';
+                    break;
+                case 4:
+                    $msg_str = 'The coupon is for new users only.';
+                    break;
+                case 5:
+                    $msg_str = L('_AL_EXCHANGE_CODE_');
+                    break;
+            }
+            $this->returnCode(1,'info',array(),$msg_str);
+        }
     }
     //未支付 取消订单
     public function cancelOrder(){
@@ -1665,6 +1688,13 @@ class IndexAction extends BaseAction
 
         $userInfo = D('User')->get_user($uid);
         $info['now_money'] = round($userInfo['now_money'],2);
+
+        if(isset($_POST['order_id'])){
+            $order_id = $_POST['order_id'];
+            $sid = D('Shop_order')->where(array('order_id'=>$order_id))->find()['store_id'];
+            $store = D('Store')->get_store_by_id($sid);
+            $info['pay_method'] = explode('|',$store['pay_method']);
+        }
 
         $this->returnCode(0,'info',$info,'success');
     }
