@@ -68,6 +68,11 @@ cursor: pointer;
 <body>
 <div style="padding: 0.8rem;background-color: #ffa52d">
     <a href="javascript:void(0);" onclick="return window.history.go(-1);" style="color: white"> < Back</a>
+    <div id="print_order" style="position: absolute;right: 20px;top:12px;color: white;cursor: pointer;">
+        <if condition="$order['paid'] eq 1 and $order['status'] neq 0">
+            Print Order
+        </if>
+    </div>
 </div>
 <div style="padding: 0.2rem;"> 
 	<ul class="round">
@@ -334,6 +339,18 @@ cursor: pointer;
             }
         },'json');
         return false;
+    });
+
+    if(/(tutti_android)/.test(navigator.userAgent.toLowerCase())){
+        $('#print_order').show();
+    }else{
+        $('#print_order').hide();
+    }
+    
+    $('#print_order').click(function () {
+        if(typeof (window.linkJs) != 'undefined'){
+            window.linkJs.printer_order("1","2");
+        }
     });
 </script>
 <div class="footReturn">
