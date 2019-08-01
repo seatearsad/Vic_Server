@@ -356,6 +356,17 @@ cursor: pointer;
                 $order['deliver_log_list'] = "";
                 $order['store_name'] = $shop['name'];
                 $order['store_phone'] = $shop['phone'];
+                $order['pay_time_str'] = date("Y-m-d H:i:s",$order['pay_time']);
+                $order['desc'] = $order['desc'] == "" ? "N/A" : $order['desc'];
+
+                if (($order['expect_use_time'] - $order['pay_time'])>=3600){
+                    $order['expect_use_time'] = date("Y-m-d H:i:s",$order['expect_use_time']);
+                }else{
+                    $order['expect_use_time'] = "ASAP";
+                }
+
+                $order['dining_time'] = $supply['dining_time'];
+
                 $order_data = $order;
             ?>
             window.linkJs.printer_order('{pigcms{:json_encode($order_data)}','{pigcms{:json_encode($order_info)}');
