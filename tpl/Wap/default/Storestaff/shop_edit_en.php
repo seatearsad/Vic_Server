@@ -352,6 +352,8 @@ cursor: pointer;
             <?php
                 $order_info = $order['info'];
                 $order['info'] = "";
+                $order['pay_status'] = "";
+                $order['deliver_log_list'] = "";
                 $order_data = $order;
             ?>
             window.linkJs.printer_order('{pigcms{:json_encode($order_data)}','{pigcms{:json_encode($order_info)}');
