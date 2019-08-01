@@ -354,7 +354,7 @@ cursor: pointer;
                 $order['info'] = "";
                 $order_data = $order;
             ?>
-            window.linkJs.printer_order('{pigcms{:json_encode($orde_data)}','{pigcms{:json_encode($order_info)}');
+            window.linkJs.printer_order('{pigcms{:json_encode($order_data)}','{pigcms{:json_encode($order_info)}');
         }
     });
 </script>
