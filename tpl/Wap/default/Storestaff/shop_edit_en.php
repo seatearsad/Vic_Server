@@ -349,7 +349,12 @@ cursor: pointer;
 
     $('#print_order').click(function () {
         if(typeof (window.linkJs) != 'undefined'){
-            window.linkJs.printer_order('{pigcms{:json_encode($order)}');
+            <?php
+                $order_info = $order['info'];
+                $order['info'] = "";
+                $order_data = $order;
+            ?>
+            window.linkJs.printer_order('{pigcms{:json_encode($orde_data)}','{pigcms{:json_encode($order_info)}');
         }
     });
 </script>
