@@ -346,10 +346,10 @@ cursor: pointer;
     }else{
         $('#print_order').hide();
     }
-    
+
     $('#print_order').click(function () {
         if(typeof (window.linkJs) != 'undefined'){
-            window.linkJs.printer_order("1","2");
+            window.linkJs.printer_order({pigcms{:json_encode($order)});
         }
     });
 </script>
