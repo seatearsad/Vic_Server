@@ -349,7 +349,7 @@ cursor: pointer;
 
     $('#print_order').click(function () {
         if(typeof (window.linkJs) != 'undefined'){
-            window.linkJs.printer_order({pigcms{:json_encode($order)});
+            window.linkJs.printer_order("{pigcms{:json_encode($order)}");
         }
     });
 </script>
