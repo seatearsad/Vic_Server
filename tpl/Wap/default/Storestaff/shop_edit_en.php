@@ -365,7 +365,7 @@ cursor: pointer;
                     $order['expect_use_time'] = "ASAP";
                 }
 
-                $order['dining_time'] = $supply['dining_time'];
+                $order['dining_time'] = $supply['dining_time'] ? $supply['dining_time'] : '';
 
                 $order_data = $order;
             ?>
