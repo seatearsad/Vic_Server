@@ -357,6 +357,8 @@ cursor: pointer;
             $order_data['info'] = "";
             $order_data['pay_status'] = "";
             $order_data['deliver_log_list'] = "";
+            $order_data['deliver_info'] = "";
+            $order_data['deliver_user_info'] = "";
             $order_data['store_name'] = $shop['name'];
             $order_data['store_phone'] = $shop['phone'];
             $order_data['pay_time_str'] = date("Y-m-d H:i:s",$order['pay_time']);
