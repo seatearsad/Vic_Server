@@ -69,6 +69,11 @@ cursor: pointer;
 <body>
 <div style="padding: 0.8rem;background-color: #ffa52d">
     <a href="javascript:void(0);" onclick="return window.history.go(-1);" style="color: white"> < 返回</a>
+    <div id="print_order" style="position: absolute;right: 20px;top:12px;color: white;cursor: pointer;">
+        <if condition="$order['paid'] eq 1 and $order['status'] neq 0">
+            打印订单
+        </if>
+    </div>
 </div>
 <div style="padding: 0.2rem;"> 
 	<ul class="round">
@@ -335,6 +340,42 @@ cursor: pointer;
         },'json');
         return false;
     });
+
+    if(/(tutti_android)/.test(navigator.userAgent.toLowerCase())){
+        $('#print_order').show();
+    }else{
+        $('#print_order').hide();
+    }
+
+    function printOrderToAndroid(){
+        if(typeof (window.linkJs) != 'undefined'){
+            <?php
+            $order_info = $order['info'];
+
+            $order_data = $order;
+
+            $order_data['info'] = "";
+            $order_data['pay_status'] = "";
+            $order_data['deliver_log_list'] = "";
+            $order_data['store_name'] = $shop['name'];
+            $order_data['store_phone'] = $shop['phone'];
+            $order_data['pay_time_str'] = date("Y-m-d H:i:s",$order['pay_time']);
+            $order_data['desc'] = $order['desc'] == "" ? "N/A" : $order['desc'];
+
+            if (($order_data['expect_use_time'] - $order_data['pay_time'])>=3600){
+                $order_data['expect_use_time'] = date("Y-m-d H:i:s",$order_data['expect_use_time']);
+            }else{
+                $order_data['expect_use_time'] = "ASAP";
+            }
+
+            $order_data['dining_time'] = $supply['dining_time'] ? $supply['dining_time'] : '';
+            ?>
+            window.linkJs.printer_order('{pigcms{:json_encode($order_data)}','{pigcms{:json_encode($order_info)}');
+        }
+    }
+
+    $('#print_order').click(printOrderToAndroid);
+    
 </script>
 <div class="footReturn">
 	<div class="clr"></div>
