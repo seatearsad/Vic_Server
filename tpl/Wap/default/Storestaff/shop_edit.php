@@ -332,7 +332,10 @@ cursor: pointer;
         $.post("{pigcms{:U('Storestaff/shop_order_confirm')}",{order_id:"{pigcms{$order['order_id']}",status:1,dining_time:time_val},function(result){
             is_send = false;
             if(result.status == 1){
-                window.location.href = "{pigcms{:U('Storestaff/shop_list')}";
+                printOrderToAndroid(time_val);
+                setTimeout(function () {
+                    window.location.href = "{pigcms{:U('Storestaff/shop_list')}";
+                },1000);
             }else{
                 alert(result.info);
                 window.location.reload();
@@ -347,7 +350,10 @@ cursor: pointer;
         $('#print_order').hide();
     }
 
-    function printOrderToAndroid(){
+    function printOrderToAndroid(time_val){
+        if(typeof (time_val) == "undefined"){
+            time_val = "0";
+        }
         if(typeof (window.linkJs) != 'undefined'){
             <?php
             $order_info = $order['info'];
@@ -372,7 +378,7 @@ cursor: pointer;
 
             $order_data['dining_time'] = $supply['dining_time'] ? $supply['dining_time'] : '';
             ?>
-            window.linkJs.printer_order('{pigcms{:json_encode($order_data)}','{pigcms{:json_encode($order_info)}');
+            window.linkJs.printer_order('{pigcms{:json_encode($order_data)}','{pigcms{:json_encode($order_info)}',time_val);
         }
     }
 
