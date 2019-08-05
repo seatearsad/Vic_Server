@@ -339,7 +339,8 @@ $('#set_printer').click(function () {
     if(/(tutti_android)/.test(navigator.userAgent.toLowerCase()))
         window.linkJs.gotoPrinter();
     else
-        alert("Set Printer Click!");
+        //alert("Set Printer Click!");operatePrinter
+        window.webkit.messageHandlers.operatePrinter.postMessage([0]);
 });
 
 $(document).ready(function(){
