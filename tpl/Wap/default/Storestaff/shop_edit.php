@@ -359,8 +359,8 @@ cursor: pointer;
         $i = 0;
         $info_str = "";
         foreach ($order_info as $v){
-            if($i > 0) $info_str += "|";
-            $info_str += $v['name'] + "#" + $v['num'] + "#" + $v['spec'];
+            if($i > 0) $info_str .= "|";
+            $info_str .= $v['name']."#".$v['num']."#".$v['spec'];
             $i++;
         }
 
