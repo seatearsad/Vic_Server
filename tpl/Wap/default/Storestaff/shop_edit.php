@@ -383,7 +383,7 @@ cursor: pointer;
         }
         if(/(tuttipartner)/.test(navigator.userAgent.toLowerCase())) {
             var order_detail = "{pigcms{:json_encode($order_data)}";
-            window.webkit.messageHandlers.printer_order.postMessage(["aaa", 1, time_val]);
+            window.webkit.messageHandlers.printer_order.postMessage(["aaa", 1, 0]);
         }
     }
 
