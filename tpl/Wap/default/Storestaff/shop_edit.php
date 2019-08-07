@@ -382,7 +382,8 @@ cursor: pointer;
                 window.linkJs.printer_order('{pigcms{:json_encode($order_data)}','{pigcms{:json_encode($order_info)}',time_val);
         }
         if(/(tuttipartner)/.test(navigator.userAgent.toLowerCase())) {
-            window.webkit.messageHandlers.printer_order.postMessage(["aaa", 1, time_val]);
+            var order_id = "{pigcms{$order_data['real_orderid']}";
+            window.webkit.messageHandlers.printer_order.postMessage([order_id, 1, 0]);
         }
     }
 
