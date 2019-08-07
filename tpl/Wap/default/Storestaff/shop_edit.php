@@ -352,7 +352,7 @@ cursor: pointer;
 
     function printOrderToAndroid(time_val){
         if(typeof (time_val) == "undefined"){
-            time_val = "0";
+            time_val = 0;
         }
         <?php
         $order_info = $order['info'];
@@ -399,7 +399,7 @@ cursor: pointer;
 
             var orderInfo = "{pigcms{$info_str}" ;
 
-            window.webkit.messageHandlers.printer_order.postMessage([orderDetail, orderInfo, 0]);
+            window.webkit.messageHandlers.printer_order.postMessage([orderDetail, orderInfo, time_val]);
         }
     }
 
