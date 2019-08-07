@@ -344,7 +344,7 @@ cursor: pointer;
         return false;
     });
 
-    if(/(tutti_android)/.test(navigator.userAgent.toLowerCase())){
+    if(/(tutti_android)/.test(navigator.userAgent.toLowerCase()) || /(tuttipartner)/.test(navigator.userAgent.toLowerCase())){
         $('#print_order').show();
     }else{
         $('#print_order').hide();
@@ -378,7 +378,13 @@ cursor: pointer;
 
             $order_data['dining_time'] = $supply['dining_time'] ? $supply['dining_time'] : '';
             ?>
-            window.linkJs.printer_order('{pigcms{:json_encode($order_data)}','{pigcms{:json_encode($order_info)}',time_val);
+
+
+            if(/(tutti_android)/.test(navigator.userAgent.toLowerCase()))
+                window.linkJs.printer_order('{pigcms{:json_encode($order_data)}','{pigcms{:json_encode($order_info)}',time_val);
+            else
+               // window.webkit.messageHandlers.operatePrinter.postMessage([0]);
+                window.webkit.messageHandlers.printer_order.postMessage(['{pigcms{:json_encode($order_data)}','{pigcms{:json_encode($order_info)}',time_val]);
         }
     }
 
