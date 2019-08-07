@@ -354,6 +354,7 @@ cursor: pointer;
         if(typeof (time_val) == "undefined"){
             time_val = "0";
         }
+
         <?php
         $order_info = $order['info'];
 
@@ -382,7 +383,7 @@ cursor: pointer;
                 window.linkJs.printer_order('{pigcms{:json_encode($order_data)}','{pigcms{:json_encode($order_info)}',time_val);
         }
         if(/(tuttipartner)/.test(navigator.userAgent.toLowerCase())) {
-            var order_detail = "{pigcms{:json_encode($order_data)}";
+            //var order_detail = "{pigcms{:json_encode($order_data)}";
             window.webkit.messageHandlers.printer_order.postMessage([order_detail, 1, 0]);
         }
     }

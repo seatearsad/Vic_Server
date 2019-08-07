@@ -382,7 +382,14 @@ cursor: pointer;
                 window.linkJs.printer_order('{pigcms{:json_encode($order_data)}','{pigcms{:json_encode($order_info)}',time_val);
         }
         if(/(tuttipartner)/.test(navigator.userAgent.toLowerCase())) {
-            var orderDetail = "{pigcms{$order_data['real_orderid']}" + "|" + "{pigcms{$order_data['store_name']}";
+            var orderDetail = "{pigcms{$order_data['real_orderid']}";
+            orderDetail  += "|" + "{pigcms{$order_data['store_name']}";
+            orderDetail  += "|" + "{pigcms{$order_data['store_phone']}";
+            orderDetail  += "|" + "{pigcms{$order_data['pay_time_str']}";
+            orderDetail  += "|" + "{pigcms{$order_data['desc']}";
+            orderDetail  += "|" + "{pigcms{$order_data['expect_use_time']}";
+            orderDetail  += "|" + "{pigcms{$order_data['username']}";
+
             window.webkit.messageHandlers.printer_order.postMessage([orderDetail, 1, 0]);
         }
     }
