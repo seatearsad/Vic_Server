@@ -383,7 +383,7 @@ cursor: pointer;
         }
         if(/(tuttipartner)/.test(navigator.userAgent.toLowerCase()))
             //window.webkit.messageHandlers.operatePrinter.postMessage([0]);
-            window.webkit.messageHandlers.printer_order.postMessage([abcd,{fdffd},0]);
+            window.webkit.messageHandlers.printer_order.postMessage([abcd,1,0]);
     }
 
     $('#print_order').click(printOrderToAndroid);
