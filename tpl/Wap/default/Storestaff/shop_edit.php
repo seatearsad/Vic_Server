@@ -356,6 +356,13 @@ cursor: pointer;
         }
         <?php
         $order_info = $order['info'];
+        $i = 0;
+        $info_str = "";
+        foreach ($order_info as $v){
+            if($i > 0) $info_str += "|";
+            $info_str += $v['name'] + "#" + $v['num'] + "#" + $v['spec'];
+            $i++;
+        }
 
         $order_data = $order;
 
@@ -390,7 +397,9 @@ cursor: pointer;
             orderDetail  += "|" + "{pigcms{$order_data['expect_use_time']}";
             orderDetail  += "|" + "{pigcms{$order_data['username']}";
 
-            window.webkit.messageHandlers.printer_order.postMessage([orderDetail, 1, 0]);
+            var orderInfo = "{pigcms{$info_str}" ;
+
+            window.webkit.messageHandlers.printer_order.postMessage([orderDetail, orderInfo, 0]);
         }
     }
 
