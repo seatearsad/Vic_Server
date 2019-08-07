@@ -381,9 +381,10 @@ cursor: pointer;
             if(/(tutti_android)/.test(navigator.userAgent.toLowerCase()))
                 window.linkJs.printer_order('{pigcms{:json_encode($order_data)}','{pigcms{:json_encode($order_info)}',time_val);
         }
-        if(/(tuttipartner)/.test(navigator.userAgent.toLowerCase()))
-            //window.webkit.messageHandlers.operatePrinter.postMessage([0]);
-            window.webkit.messageHandlers.printer_order.postMessage(["abcd",1,0]);
+        if(/(tuttipartner)/.test(navigator.userAgent.toLowerCase())) {
+            var order_detail = "{pigcms{:json_encode($order_data)}";
+            window.webkit.messageHandlers.printer_order.postMessage([order_detail, 1, 0]);
+        }
     }
 
     $('#print_order').click(printOrderToAndroid);
