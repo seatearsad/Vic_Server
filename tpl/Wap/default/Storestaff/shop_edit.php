@@ -399,6 +399,8 @@ cursor: pointer;
 
             var orderInfo = "{pigcms{$info_str}" ;
 
+            alert(time_val);
+
             window.webkit.messageHandlers.printer_order.postMessage([orderDetail, orderInfo, time_val]);
         }
     }
