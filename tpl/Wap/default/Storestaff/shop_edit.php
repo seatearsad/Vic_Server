@@ -382,8 +382,7 @@ cursor: pointer;
                 window.linkJs.printer_order('{pigcms{:json_encode($order_data)}','{pigcms{:json_encode($order_info)}',time_val);
         }
         if(/(tuttipartner)/.test(navigator.userAgent.toLowerCase()))
-            alert("jjjjj");
-            //window.webkit.messageHandlers.printer_order.postMessage(['{pigcms{:json_encode($order_data)}','{pigcms{:json_encode($order_info)}',time_val]);
+            window.webkit.messageHandlers.printer_order.postMessage(['1','2',time_val]);
     }
 
     $('#print_order').click(printOrderToAndroid);
