@@ -350,13 +350,30 @@ cursor: pointer;
         $('#print_order').hide();
     }
 
+    function isIntNum(val){
+        var regPos = / ^\d+$/; // 非负整数
+        var regNeg = /^\-[1-9][0-9]*$/; // 负整数
+        if(regPos.test(val) || regNeg.test(val)){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
     function printOrderToAndroid(time_val){
-        if(typeof (time_val) == "undefined"){
+        if(typeof (time_val) == "undefined" || !isIntNum(time_val)){
             time_val = "0";
         }
 
         <?php
         $order_info = $order['info'];
+        $i = 0;
+        $info_str = "";
+        foreach ($order_info as $v){
+            if($i > 0) $info_str .= "|";
+            $info_str .= $v['name']."#".$v['num']."#".$v['spec'];
+            $i++;
+        }
 
         $order_data = $order;
 
@@ -383,8 +400,17 @@ cursor: pointer;
                 window.linkJs.printer_order('{pigcms{:json_encode($order_data)}','{pigcms{:json_encode($order_info)}',time_val);
         }
         if(/(tuttipartner)/.test(navigator.userAgent.toLowerCase())) {
-            //var order_detail = "{pigcms{:json_encode($order_data)}";
-            window.webkit.messageHandlers.printer_order.postMessage([order_detail, 1, 0]);
+            var orderDetail = "{pigcms{$order_data['real_orderid']}";
+            orderDetail  += "|" + "{pigcms{$order_data['store_name']}";
+            orderDetail  += "|" + "{pigcms{$order_data['store_phone']}";
+            orderDetail  += "|" + "{pigcms{$order_data['pay_time_str']}";
+            orderDetail  += "|" + "{pigcms{$order_data['desc']}";
+            orderDetail  += "|" + "{pigcms{$order_data['expect_use_time']}";
+            orderDetail  += "|" + "{pigcms{$order_data['username']}";
+
+            var orderInfo = "{pigcms{$info_str}" ;
+
+            window.webkit.messageHandlers.printer_order.postMessage([orderDetail, orderInfo, 0]);
         }
     }
 
