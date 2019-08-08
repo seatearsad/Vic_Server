@@ -350,12 +350,21 @@ cursor: pointer;
         $('#print_order').hide();
     }
 
-    function printOrderToAndroid(time_val){
-        if(typeof (time_val) == "undefined"){
-            time_val = 0;
-            alert(time_val);
+    function isIntNum(val){
+        var regPos = / ^\d+$/; // 非负整数
+        var regNeg = /^\-[1-9][0-9]*$/; // 负整数
+        if(regPos.test(val) || regNeg.test(val)){
+            return true;
+        }else{
+            return false;
         }
-        alert("000" + time_val);
+    }
+
+    function printOrderToAndroid(time_val){
+        if(typeof (time_val) == "undefined" || !isIntNum(time_val)){
+            time_val = "0";
+        }
+
         <?php
         $order_info = $order['info'];
         $i = 0;
