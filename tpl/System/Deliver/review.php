@@ -2,15 +2,15 @@
 		<div class="mainbox">
 			<div id="nav" class="mainnav_title">
 				<ul>
-					<a href="{pigcms{:U('Deliver/user')}" class="on">{pigcms{:L('_BACK_COURIER_APP_')}</a>|
+					<a href="{pigcms{:U('Deliver/review')}" class="on">{pigcms{:L('_BACK_COURIER_APP_')}</a>|
 				</ul>
 			</div>
 			<table class="search_table" width="100%">
 				<tr>
 					<td>
-						<form action="{pigcms{:U('Deliver/user')}" method="get">
+						<form action="{pigcms{:U('Deliver/review')}" method="get">
 							<input type="hidden" name="c" value="Deliver"/>
-							<input type="hidden" name="a" value="user"/>
+							<input type="hidden" name="a" value="review"/>
                             {pigcms{:L('_BACK_SEARCH_')}: <input type="text" name="keyword" class="input-text" value="{pigcms{$_GET['keyword']}"/>
 							<select name="searchtype">
 								<option value="uid" <if condition="$_GET['searchtype'] eq 'uid'">selected="selected"</if>>{pigcms{:L('_BACK_USER_ID_')}</option>

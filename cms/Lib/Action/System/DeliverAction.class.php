@@ -703,8 +703,8 @@ class DeliverAction extends BaseAction {
 	    			if ($order['is_pick_in_store'] == 0) {//平台配送
 	    				if ($order['paid'] == 0 || ($order['pay_type'] == 'offline' && empty($order['third_id']))) {
 	    					$data['paid'] = $order['paid'] == 0 ? 1 : $order['paid'];
-	    					$data['pay_type'] = '';
-	    					$data['balance_pay'] = $supply['deliver_cash'];
+	    					//$data['pay_type'] = '';
+	    					//$data['balance_pay'] = $supply['deliver_cash'];
 	    				}
 	    			} else {
 	    				if ($order['paid'] == 0) {
@@ -718,8 +718,9 @@ class DeliverAction extends BaseAction {
 	    			if ($result = D("Shop_order")->where(array('order_id' => $order['order_id']))->data($data)->save()) {
 	    				if ($order['is_pick_in_store'] == 0) {//平台配送
 	    					if ($order['paid'] == 0 || ($order['pay_type'] == 'offline' && empty($order['third_id']))) {
-	    						D('User_money_list')->add_row($order['uid'], 1, $supply['deliver_cash'], '用户充值用于购买快店产品');
-	    						D('User_money_list')->add_row($order['uid'], 2, $supply['deliver_cash'], '用户购买快店产品');
+	    						//garfunkel modify
+	    					    //D('User_money_list')->add_row($order['uid'], 1, $supply['deliver_cash'], '用户充值用于购买快店产品');
+	    						//D('User_money_list')->add_row($order['uid'], 2, $supply['deliver_cash'], '用户购买快店产品');
 	    					}
 	    				}
 	    				D('Pick_order')->where(array('store_id' => $order['store_id'], 'order_id' => $order['order_id']))->save(array('status' => 4));

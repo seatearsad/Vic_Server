@@ -81,14 +81,14 @@
                     <div class="fr f14 c25">{pigcms{$order['create_time']|date="Y-m-d H:i",###}</div>
                 </li>
                 <li class="clr p10">
+                    <div class="fl f16 c80">{pigcms{:L('_MEAL_TIME_')}</div>
+                    <div class="fr f14 c25">{pigcms{$supply['meal_time']}</div>
+                </li>
+                <li class="clr p10">
                     <div class="fl f16 c80">{pigcms{:L('_EXPECTED_TIME_')}</div>
                     <div class="fr f14 c25">{pigcms{$supply['appoint_time']}</div>
                 </li>
-                <li class="clr p10">
-                    <div class="fl f16 c80">{pigcms{:L('_DELI_TIME_')}</div>
-                    <div class="fr f14 c25">{pigcms{$supply['end_time']}</div>
-                </li>
-                
+
                 <if condition="$supply['get_type'] neq 2">
 	                <li class="clr p10">
 	                    <div class="fl f16 c80">{pigcms{:L('_C_ORDER_TYPE_')}</div>
