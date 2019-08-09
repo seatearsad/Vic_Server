@@ -344,7 +344,7 @@
                     layer.open({
                         title: "{pigcms{:L('_STORE_REMIND_')}",
                         time: 1,
-                        content: "提交成功，我们会尽快与您联系"
+                        content: "Success! We will contact you as soon as possible. Thank you!"
                     });
                 }
             },'JSON');
