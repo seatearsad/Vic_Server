@@ -84,10 +84,21 @@ class DeliverAction extends BaseAction {
                 $condition_user['phone'] = array('like', '%' . $_GET['keyword'] . '%');
             }
         }
+
+        if($_GET['city_id']){
+            $this->assign('city_id',$_GET['city_id']);
+            if($_GET['city_id'] != 0)
+                $condition_user['city_id'] = $_GET['city_id'];
+        }else{
+            $this->assign('city_id',0);
+        }
         //garfunkel 判断城市管理员
         if($this->system_session['level'] == 3){
             $condition_user['city_id'] = $this->system_session['area_id'];
         }
+
+        $city = D('Area')->where(array('area_type'=>2))->select();
+
         $condition_user['group'] = 1;
         $count_user = $this->deliver_user->where($condition_user)->count();
         import('@.ORG.system_page');
@@ -97,6 +108,7 @@ class DeliverAction extends BaseAction {
         $this->assign('user_list', $user_list);
         $pagebar = $p->show();
         $this->assign('pagebar', $pagebar);
+        $this->assign('city',$city);
         $this->display();
     }
     
@@ -400,6 +412,18 @@ class DeliverAction extends BaseAction {
             $sql .= " AND m.city_id=".$this->system_session['area_id'];
             $sql_count .= " AND m.city_id=".$this->system_session['area_id'];
         }
+
+        if($_GET['city_id']){
+            $this->assign('city_id',$_GET['city_id']);
+            if($_GET['city_id'] != 0){
+                $sql .= " AND m.city_id=".$_GET['city_id'];
+                $sql_count .= " AND m.city_id=".$_GET['city_id'];
+            }
+        }else{
+            $this->assign('city_id',0);
+        }
+        $city = D('Area')->where(array('area_type'=>2))->select();
+        $this->assign('city',$city);
 
 		if ($phone) {
 			$sql .= " AND s.phone=".$phone;
@@ -1306,6 +1330,18 @@ class DeliverAction extends BaseAction {
                 $condition_user['phone'] = array('like', '%' . $_GET['keyword'] . '%');
             }
         }
+
+        if($_GET['city_id']){
+            $this->assign('city_id',$_GET['city_id']);
+            if($_GET['city_id'] != 0){
+                $condition_user['city_id'] = $_GET['city_id'];
+            }
+        }else{
+            $this->assign('city_id',0);
+        }
+        $city = D('Area')->where(array('area_type'=>2))->select();
+        $this->assign('city',$city);
+
         //未审核的
         $condition_user['group'] = 0;
         $condition_user['reg_status'] = array('neq',0);

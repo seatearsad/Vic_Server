@@ -256,6 +256,17 @@ class ShopAction extends BaseAction
             $where_store[$area_index] = $this->system_session['area_id'];
         }
 
+        if($_GET['city_id']){
+            $this->assign('city_id',$_GET['city_id']);
+            if($_GET['city_id'] != 0){
+                $where_store['city_id'] = $_GET['city_id'];
+            }
+        }else{
+            $this->assign('city_id',0);
+        }
+        $city = D('Area')->where(array('area_type'=>2))->select();
+        $this->assign('city',$city);
+
         $store_ids = array();
         $where = array();
         if ($where_store) {

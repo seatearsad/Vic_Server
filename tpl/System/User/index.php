@@ -32,7 +32,15 @@
 							{pigcms{:L('_BACK_BAN_U_BAL_')}：$<if condition="$user_balance['close']">{pigcms{$user_balance['close']}<else/>0</if>
 							<a href="{pigcms{:U('User/export')}" class="button" style="float:right;margin-right: 10px;">{pigcms{:L('_BACK_EXPORT_U_')}</a>
 						</form>
-						
+                        <if condition="$system_session['level'] neq 3">
+                            City:
+                            <select name="searchtype" id="city_select">
+                                <option value="0" <if condition="$city_id eq '' or $city_id eq 0">selected="selected"</if>>All</option>
+                                <volist name="city" id="vo">
+                                    <option value="{pigcms{$vo.area_id}" <if condition="$city_id eq $vo['area_id']">selected="selected"</if>>{pigcms{$vo.area_name}</option>
+                                </volist>
+                            </select>
+                        </if>
 					</td>
 				</tr>
 			</table>
@@ -111,6 +119,12 @@
 			</form>
 		</div>
 <script type="text/javascript">
+    var city_id = $('#city_select').val();
+    $('#city_select').change(function () {
+        city_id = $(this).val();
+        window.location.href = "{pigcms{:U('User/index')}" + "&city_id="+city_id;
+    });
+
     $("#select_all").click(function(){
         var is_all = true;
         var groupCheckbox=$("input[name='check']");
