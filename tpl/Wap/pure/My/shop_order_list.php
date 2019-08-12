@@ -265,10 +265,10 @@
 						<span>{pigcms{:L('_B_PURE_MY_65_')}</span>
 					</a>
 					</li><li data-status='1'><a href="javascript:void(0)" tab-id="3" class="react ">
-						<span>{pigcms{:L('_B_PURE_MY_66_')}</span>
+						<span>{pigcms{:L('_ORDER_PAID_STATUS_')}</span>
 					</a>
 					</li><li data-status='2'><a href="javascript:void(0)" tab-id="4" class="react " >
-						<span>{pigcms{:L('_B_PURE_MY_67_')}</span>
+						<span>{pigcms{:L('_ORDER_REFUND_STATUS_')}</span>
 					</a>
 					</li>
 				</ul>

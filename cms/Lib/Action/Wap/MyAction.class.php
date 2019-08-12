@@ -3163,11 +3163,12 @@ class MyAction extends BaseAction{
 			$where .= " AND store_id=".intval($_GET['store_id']);
 		}
 		if ($status == -1) {
-			$where .= " AND paid=0";
+			$where .= " AND paid=0 AND status < 4";
 		} elseif ($status == 1) {
-			$where .= " AND paid=1 AND status<2";
+			//$where .= " AND paid=1 AND status<2";
+            $where .= " AND paid=1 AND status < 4";
 		} elseif ($status == 2) {
-			$where .= " AND paid=1 AND status=2";
+			$where .= " AND (status=4 OR status=5)";
 		}
 
 		$order_list = D("Shop_order")->field(true)->where($where)->order('order_id DESC')->select();
@@ -5820,9 +5821,9 @@ class MyAction extends BaseAction{
             if ($cid) {
                 $l_id = D('System_coupon_hadpull')->field(true)->where(array('uid' => $uid, 'coupon_id' => $cid))->find();
 
-                if ($l_id == null)
+                if ($l_id == null) {
                     $result = D('System_coupon')->had_pull($cid, $uid);
-                else
+                }else
                     exit(json_encode(array('error_code' => 1, 'msg' => L('_AL_EXCHANGE_CODE_'))));
             } else {
                 exit(json_encode(array('error_code' => 1, 'msg' => L('_NOT_EXCHANGE_CODE_'))));

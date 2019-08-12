@@ -283,19 +283,19 @@ class System_couponModel extends Model{
         $is_new = D('User')->check_new($uid,$coupon['cate_name']);
 
         if(empty($coupon)){
-            return array('error_code'=>1,'coupon'=>$coupon);
+            return array('error_code'=>1,'coupon'=>$coupon,'msg'=>L('_NOT_EXCHANGE_CODE_'));
         }else if($coupon['allow_new']&&!$is_new){
-            return array('error_code'=>4,'coupon'=>$coupon);
+            return array('error_code'=>4,'coupon'=>$coupon,'msg'=>L('_COUPON_ERROR_IS_NEW_'));
         }else if($coupon['end_time']<$_SERVER['REQUEST_TIME']){
             $this->where($where)->setField('status',2);
-            return array('error_code'=>2,'coupon'=>$coupon);
+            return array('error_code'=>2,'coupon'=>$coupon,'msg'=>L('_COUPON_ERROR_EXPIRE_'));
         }else if($coupon['status']==0){
-            return array('error_code'=>1,'coupon'=>$coupon);
+            return array('error_code'=>1,'coupon'=>$coupon,'msg'=>L('_NOT_EXCHANGE_CODE_'));
         }else if($coupon['status']==2){
-            return array('error_code'=>2,'coupon'=>$coupon);
+            return array('error_code'=>2,'coupon'=>$coupon,'msg'=>L('_COUPON_ERROR_EXPIRE_'));
         }else if($coupon['num']===$coupon['had_pull']||$coupon['status']==3){
             $this->field(true)->where($where)->setField('status',3);
-            return array('error_code'=>3,'coupon'=>$coupon);
+            return array('error_code'=>3,'coupon'=>$coupon,'msg'=>L('_COUPON_ERROR_MAX'));
         }else{
             $hadpull = M('System_coupon_hadpull');
             $hadpull_count = $hadpull->where(array('uid'=>$uid,'coupon_id'=>$coupon_id))->count();
@@ -321,10 +321,10 @@ class System_couponModel extends Model{
                         return array('error_code'=>0,'coupon'=>$coupon);
                     }
                 } else {
-                    return array('error_code'=>1,'coupon'=>$coupon);
+                    return array('error_code'=>1,'coupon'=>$coupon,'msg'=>L('_NOT_EXCHANGE_CODE_'));
                 }
             }else{
-                return array('error_code'=>5,'coupon'=>$coupon);
+                return array('error_code'=>5,'coupon'=>$coupon,'msg'=>L('_COUPON_ERROR_MAX'));
             }
         }
     }
