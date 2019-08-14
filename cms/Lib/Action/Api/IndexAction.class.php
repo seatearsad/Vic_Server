@@ -99,9 +99,15 @@ class IndexAction extends BaseAction
 
         $key = '';
         $where = array('deliver_type' => $deliver_type, 'order' => $order, 'lat' => $lat, 'long' => $long, 'cat_id' => $cat_id, 'cat_fid' => $cat_fid, 'page' => $page,'limit'=>$limit);
-        $key && $where['key'] = $key;
+        if($_POST['keyword']){
+            $key = $_POST['keyword'];
+            $key && $where['key'] = $key;
+            $shop_list = D('Merchant_store_shop')->get_list_arrange($where,1,1);
+        }else{
+            $shop_list = D('Merchant_store_shop')->get_list_arrange($where,3,1,$limit,$page,$lat,$long);
+        }
 
-        $shop_list = D('Merchant_store_shop')->get_list_arrange($where,3,1,$limit,$page,$lat,$long);
+
 
         if(!$shop_list['list']){
             $shop_list['list'] = array();
