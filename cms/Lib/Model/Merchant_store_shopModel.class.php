@@ -51,7 +51,12 @@ class Merchant_store_shopModel extends Model
 		}
 
 		if (isset($where['key']) && $where['key']) {
-			$condition_where .= " AND `s`.`name` LIKE '%{$where['key']}%'";
+            $s_list = D('Keywords')->where(array('third_type'=>'Merchant_store','keyword'=>array('like','%'.$where['key'].'%')))->select();
+            $key_where = "";
+            foreach ($s_list as $v){
+                $key_where .= " OR `s`.`store_id`=".$v['third_id'];
+            }
+			$condition_where .= " AND (`s`.`name` LIKE '%{$where['key']}%' OR `s`.`txt_info` LIKE '%{$where['key']}%'".$key_where.")";
 		}
 // 		$area_id && $condition_where .= " AND s.area_id={$area_id}";
 // 		$circle_id && $condition_where .= " AND s.circle_id={$circle_id}";
