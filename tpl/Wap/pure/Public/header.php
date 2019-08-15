@@ -310,7 +310,7 @@
     </div>
 </div>
 <div id="search_label">
-    <input type="search" id="search_key" name="search_key" placeholder="{pigcms{:L('_SEARCH_STORE_GOODS_')}" />
+    <input type="text" id="search_key" name="search_key" placeholder="{pigcms{:L('_SEARCH_STORE_GOODS_')}" />
     <input type="button" name="search_btn" id="search_btn" value="Search">
 </div>
 <script type="text/javascript" src="{pigcms{$static_public}js/lang.js" charset="utf-8"></script>
