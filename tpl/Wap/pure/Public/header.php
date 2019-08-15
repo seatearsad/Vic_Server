@@ -17,7 +17,7 @@
     #search_label{
         width: 100%;
         height: 40px;
-        background-color: #AAAAAA;
+        background-color: #ffa52d;
         position: fixed;
         display: none;
         z-index: 999;
@@ -310,7 +310,7 @@
     </div>
 </div>
 <div id="search_label">
-    <input type="text" id="search_key" name="search_key" placeholder="{pigcms{:L('_PUSH_SEARCH_KEY_')}" />
+    <input type="search" id="search_key" name="search_key" placeholder="{pigcms{:L('_SEARCH_STORE_GOODS_')}" />
     <input type="button" name="search_btn" id="search_btn" value="Search">
 </div>
 <script type="text/javascript" src="{pigcms{$static_public}js/lang.js" charset="utf-8"></script>
@@ -398,6 +398,10 @@
         }else{
             $('#search_label').hide();
         }
+    });
+
+    $('#search_label').click(function () {
+        $('#search_key').focus();
     });
 
     $('#search_btn').click(function () {

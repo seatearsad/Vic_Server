@@ -214,6 +214,9 @@
                         $('#storeList .dealcard').html('');
                         is_more = false;
                         $('#storeListLoadTip').hide();
+                        if(keyword != ''){
+                            $('#storeList .dealcard').html('<div style="text-align: center">Sorry, no results found.</div>');
+                        }
                     }
                     //isSearchListShow = false;
                     //pageLoadHides();
