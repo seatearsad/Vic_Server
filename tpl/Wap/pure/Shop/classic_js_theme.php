@@ -232,7 +232,7 @@
 									<div class="skill_discount" style="margin-top: 5px;">{pigcms{:L('_LIMIT_TIME_DISCOUNT_')}</div>
 								{{# } }}
 							</div>
-							{{# if(d[i].product_list[j].has_format){ }}
+							{{# if(d[i].product_list[j].has_format || d[i].product_list[j].has_dish){ }}
 								<div class="product_btn">
                                     {pigcms{:L('_OPTIONAL_SPEC_')}
 								</div>
@@ -341,6 +341,20 @@
 			</div>
 		</div>
 	{{# } }}
+</script>
+<script id="productDishTpl" type="text/html">
+    {{# for(var i in d){ }}
+    <div class="row clearfix">
+        <div class="left">{{ d[i].name }}</div>
+        <div class="right fl">
+            <ul data-dish_name="{{ d[i].name }}">
+                {{# var k = 0; for(var j in d[i].list){ }}
+                <li class="fl" data-min="{{d[i].min}}" data-max="{{d[i].max}}" data-dish_val_id="{{ d[i].list[j].id }}"  data-dish_id="{{ d[i].list[j].dish_id}}" data-dish_price="{{ d[i].list[j].price }}">{{ d[i].list[j].name }} +${{ d[i].list[j].price }}</li>
+                {{#  k++; } }}
+            </ul>
+        </div>
+    </div>
+    {{# } }}
 </script>
 <script id="productPropertiesTpl" type="text/html">
 	{{# for(var i in d){ }}

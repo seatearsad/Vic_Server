@@ -81,6 +81,9 @@
                                                 <a title="复制" class="blue" style="padding-right:8px;" href="{pigcms{:U('Shop/goods_copy',array('goods_id'=>$vo['goods_id']))}">
                                                     <i class="ace-icon fa fa-file-o bigger-130"></i>
                                                 </a>
+                                                <a title="配菜" class="pink" style="padding-right:8px;" href="{pigcms{:U('Shop/side_dish',array('goods_id'=>$vo['goods_id']))}">
+                                                    <i class="ace-icon fa fa-inbox bigger-130"></i>
+                                                </a>
 											</td>
 										</tr>
 									</volist>

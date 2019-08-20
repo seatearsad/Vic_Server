@@ -1396,6 +1396,12 @@ class ShopAction extends BaseAction{
                     if ($r['spec_value'] || $r['is_properties']) {
                         $glist['has_format'] = true;
                     }
+                    //garfunkel add side_dish
+                    $glist['has_dish'] = false;
+                    if(D('Side_dish')->where(array('goods_id'=>$r['goods_id']))->find()){
+                        $glist['has_dish'] = true;
+                    }
+                    //
                     if($r['extra_pay_price']>0){
                         $glist['extra_pay_price']=$r['extra_pay_price'];
                         $glist['extra_pay_price_name']=$this->config['extra_price_alias_name'];
@@ -1510,6 +1516,14 @@ class ShopAction extends BaseAction{
 		        $now_goods['spec_list'][$k]['list'][$kk]['name'] = lang_substr($vv['name'],C('DEFAULT_LANG'));
             }
         }
+
+        //garfunkel add side_dish
+        $dish_list = D('Side_dish')->where(array('goods_id'=>$goods_id))->select();
+		foreach ($dish_list as &$v){
+		    $values = D('Side_dish_value')->where(array('dish_id'=>$v['id']))->select();
+		    $v['list'] = $values;
+        }
+        $now_goods['side_dish'] = $dish_list;
 
         ///
 		if(empty($now_goods)){

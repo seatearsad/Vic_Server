@@ -1026,6 +1026,121 @@ class ShopAction extends BaseAction
         $this->display();
     }
 
+    /**
+     * 商品配菜管理
+     */
+    public function side_dish(){
+        $now_goods = $this->check_goods($_GET['goods_id']);
+        $now_sort = $this->check_sort($now_goods['sort_id']);
+        $now_store = $this->check_store($now_sort['store_id']);
+
+        $dish_list = D('Side_dish')->where(array('goods_id'=>$now_goods['goods_id']))->select();
+        foreach ($dish_list as &$v){
+            $count_value = count(D('Side_dish_value')->where(array('dish_id'=>$v['id']))->select());
+            $v['count'] = $count_value;
+        }
+
+        $this->assign('now_goods', $now_goods);
+        $this->assign('now_sort', $now_sort);
+        $this->assign('now_store', $now_store);
+        $this->assign('dish_list',$dish_list);
+        $this->display();
+    }
+
+    /**
+     * 添加配菜
+     */
+    public function dish_add(){
+        if($_POST){
+            $now_goods = $this->check_goods($_POST['goods_id']);
+            $dish_id = $_POST['dish_id'];
+
+            $dish_db = D('Side_dish');
+
+            $side_dish['goods_id'] = $now_goods['goods_id'];
+            $side_dish['name'] = $_POST['dish_name'];
+            $side_dish['min'] = $_POST['min'];
+            $side_dish['max'] = $_POST['max'];
+            $side_dish['type'] = $_POST['dish_type'];
+
+            if($dish_id && $dish_id != 0){//已有配菜
+                //$side_dish['id'] = $dish_id;
+                $dish_db->where(array('id'=>$dish_id))->save($side_dish);
+            }else{//新配菜
+                $dish_id = $dish_db->add($side_dish);
+                if(!$dish_id){
+                    $this->error('保存失败！请重试！', U('Shop/side_dish', array('goods_id' => $now_goods['goods_id'])));
+                }
+            }
+
+            foreach ($_POST as $k=>$v){
+                $k_arr = explode('-',$k);
+                if($k_arr[0] == 'value_price_new'){
+                    $new_value[$k_arr[1]]['price'] = $v;
+                }elseif($k_arr[0] == 'value_name_new') {
+                    $new_value[$k_arr[1]]['name'] = $v;
+                }elseif($k_arr[0] == 'value_price'){
+                    $old_value[$k_arr[1]]['price'] = $v;
+                }elseif($k_arr[0] == 'value_name'){
+                    $old_value[$k_arr[1]]['name'] = $v;
+                }
+            }
+
+            $dish_value_db = D('Side_dish_value');
+            foreach ($new_value as $v){
+                $add['dish_id'] = $dish_id;
+                $add['name'] = $v['name'];
+                $add['price'] = $v['price'];
+                $add_arr[] = $add;
+            }
+            $dish_value_db->addAll($add_arr);
+
+            foreach ($old_value as $k=>$v){
+                $dish_value_db->where(array('id'=>$k))->save($v);
+            }
+
+            $this->success('成功！', U('Shop/dish_add', array('goods_id' => $now_goods['goods_id'],'dish_id'=>$dish_id)));
+        }else {
+            $now_goods = $this->check_goods($_GET['goods_id']);
+            $now_sort = $this->check_sort($now_goods['sort_id']);
+            $now_store = $this->check_store($now_sort['store_id']);
+
+            if($_GET['dish_id']){
+                $side_dish = D('Side_dish')->where(array('id'=>$_GET['dish_id']))->find();
+                $dish_value = D('Side_dish_value')->where(array('dish_id'=>$_GET['dish_id']))->select();
+
+                $this->assign('dish_id',$_GET['dish_id']);
+                $this->assign('side_dish',$side_dish);
+                $this->assign('dish_value',$dish_value);
+            }
+
+            $this->assign('now_goods', $now_goods);
+            $this->assign('now_sort', $now_sort);
+            $this->assign('now_store', $now_store);
+            $this->display();
+        }
+    }
+
+    public function dish_del(){
+        $now_goods = $this->check_goods($_GET['goods_id']);
+        if($_GET['dish_id']){
+            $dish_id = $_GET['dish_id'];
+            D('Side_dish')->where(array('id'=>$dish_id))->delete();
+            D('Side_dish_value')->where(array('dish_id'=>$dish_id))->delete();
+
+            $this->success('删除成功！', U('Shop/side_dish', array('goods_id' => $now_goods['goods_id'])));
+        }else{
+            $this->error('此配菜不存在', U('Shop/side_dish', array('goods_id' => $now_goods['goods_id'])));
+        }
+    }
+
+    public function del_dish_value(){
+        if($_POST['dish_value_id']){
+            D('Side_dish_value')->where(array('id'=>$_POST['dish_value_id']))->delete();
+            exit(json_encode(array('error' => 0,'message' =>'Success')));
+        }
+        exit(json_encode(array('error' => 1,'message' =>'没有该单品')));
+    }
 
     /* 商品删除 */
     public function goods_del()
@@ -2063,7 +2178,6 @@ class ShopAction extends BaseAction
             exit('0');
         }
     }
-
 
     public function sort_order()
     {
