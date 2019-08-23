@@ -488,6 +488,41 @@ class UserModel extends Model
 		}
 	}
 
+    public function getUserOrderNum($phone,$cate_name){
+        $user = $this->field('uid')->where(array('phone'=>$phone))->find();
+        if(empty($user)){
+            $user = $this->field('uid')->where(array('uid'=>$phone))->find();
+        }
+        $m = new Model();
+        $table = array(C('DB_PREFIX').'group_order',C('DB_PREFIX').'meal_order',C('DB_PREFIX').'appoint_order',C('DB_PREFIX').'shop_order',C('DB_PREFIX').'foodshop_order');
+        $count = 0;
+        $where['uid']=$user['uid'];
+        switch($cate_name){
+            case 'all':
+                foreach($table as  $v){
+                    $count += $m->table($v)->where($where)->count('order_id');
+                }
+                break;
+            case 'group':
+                $count  = $m->table($table[0])->where($where)->count('order_id');
+                break;
+            case 'meal':
+                $count  = $m->table($table[1])->where($where)->count('order_id');
+                break;
+            case 'appoint':
+                $count  = $m->table($table[2])->where($where)->count('order_id');
+                break;
+            case 'shop':
+                $count  = $m->table($table[3])->where($where)->count('order_id');
+                break;
+            case 'foodshop':
+                $count  = $m->table($table[4])->where($where)->count('order_id');
+                break;
+        }
+
+        return $count;
+    }
+
 	public function check_score_can_use($uid,$money,$order_type,$group_id,$mer_id){
 		$now_user = $this->get_user($uid);
 		$score_count = $now_user['score_count'];

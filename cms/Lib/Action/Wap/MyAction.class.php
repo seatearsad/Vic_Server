@@ -490,6 +490,16 @@ class MyAction extends BaseAction{
 			}else{
 				$coupon_list = D('System_coupon')->get_noworder_coupon_list($now_order, $_GET['type'], $this->user_session['phone'], $this->user_session['uid'], $platform);
 			}
+
+            //获取活动优惠券
+            $event_coupon_list = D('New_event')->getUserCoupon($this->user_session['uid'],0,$now_order['total_money']);
+            if(!$coupon_list) $coupon_list = array();
+            if(count($event_coupon_list) > 0){
+                foreach ($event_coupon_list as &$v){
+                    $v['id'] = $v['coupon_id'].'_'.$v['id'];
+                }
+                $coupon_list = array_merge($coupon_list,$event_coupon_list);
+            }
 		}
 		if(!empty($coupon_list)){
 			$param = $_GET;
@@ -3283,7 +3293,17 @@ class MyAction extends BaseAction{
 			$coupon_list = D('System_coupon')->get_user_coupon_list($this->user_session['uid'], $this->user_session['phone']);
 
 			$this->assign('cate_platform', D('System_coupon')->cate_platform());
+
+            //获取活动优惠券
+            $event_coupon_list = D('New_event')->getUserCoupon($this->user_session['uid']);
+            if(!$coupon_list) $coupon_list = array();
+            if(count($event_coupon_list) > 0){
+                $coupon_list = array_merge($coupon_list,$event_coupon_list);
+            }
+            //var_dump($coupon_list);die();
 		}
+
+
 		$tmp = array();
 		foreach ($coupon_list as $key => $v) {
 		    $v['name'] = lang_substr($v['name'],C('DEFAULT_LANG'));
@@ -5872,6 +5892,56 @@ class MyAction extends BaseAction{
             $this->success('Success',$data);
         }
     }
+
+    public function invitation(){
+        $user = D('User')->where(array('uid'=>$this->user_session['uid']))->find();
+
+        if($user['invitation_code'] == '') {
+            $code = $this->getInvitationCode(6);
+            $data['invitation_code'] = $code;
+            D('User')->where(array('uid'=>$this->user_session['uid']))->save($data);
+        }else {
+            $code = $user['invitation_code'];
+        }
+
+        $link = U('Login/reg')."&code=".base64_encode($code);
+        //$url_str = base64_encode($code);
+
+        var_dump(strtoupper($code));
+        echo '<a href="'.$link.'" target="blank">'.$link.'</a>';
+    }
+
+    function getInvitationCode($len){
+        $code = $this->getRandomStr($len);
+        if(D('User')->where(array('invitation_code'=>$code))->find()){
+            $code = $this->getInvitationCode($len);
+        }
+
+        return $code;
+    }
+
+    function getRandomStr($len, $special=false){
+        $chars = array("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k",
+         "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v",
+         "w", "x", "y", "z", "0", "1", "2",
+         "3", "4", "5", "6", "7", "8", "9"
+        );
+
+        if($special){
+            $chars = array_merge($chars, array("!", "@", "#", "$", "?", "|", "{", "/", ":", ";",
+             "%", "^", "&", "*", "(", ")", "-", "_", "[", "]",
+             "}", "<", ">", "~", "+", "=", ",", "."
+            ));
+        }
+
+        $charsLen = count($chars) - 1;
+        shuffle($chars);//打乱数组顺序
+        $str = '';
+        for($i=0; $i<$len; $i++){
+            $str .= $chars[mt_rand(0, $charsLen)];//随机取出一位
+        }
+        return $str;
+	}
 
 }
 ?>

@@ -65,12 +65,23 @@ class LoginAction extends BaseAction{
 					$modifypwd = $sms_verify_result['modifypwd'];
 				}
 			}
+            //garfunkel add 邀请码
+			if($_POST['invitation_code']){
+			    $code = strtolower($_POST['invitation_code']);
+                $invi_user = $database_user->where(array('invitation_code'=>$code))->find();
+                if($invi_user){
+                    $data_user['invitation_user'] = $invi_user['uid'];
+                }
+            }
+
 			$data_user['pwd'] = md5($_POST['password']);
 
 			$data_user['nickname'] = $_POST['nickname'] ? $_POST['nickname'] : substr($data_user['phone'],0,3).'****'.substr($data_user['phone'],7);
 
 			$data_user['add_time'] = $data_user['last_time'] = $_SERVER['REQUEST_TIME'];
 			$data_user['add_ip'] = $data_user['last_ip'] = get_client_ip(1);
+
+			$data_user['email'] = $_POST['email'];
 
 			/****判断此用户是否在user_import表中***/
 			$user_importDb=D('User_import');
@@ -87,7 +98,7 @@ class LoginAction extends BaseAction{
 				if($this->config['reg_verify_sms']){
 					$data_user['status'] = 1; //开启注册验证短信就不需要审核
 				}else{
-					$data_user['status'] = 2; /*             * *未审核*** */
+					$data_user['status'] = 2; /* * *未审核*** */
 
 				}
 			   // $data_user['now_money'] = 0;
@@ -106,8 +117,15 @@ class LoginAction extends BaseAction{
 						D('User')->add_score($uid,$this->config['register_give_score'], L('_B_LOGIN_NEWGIFTWORD_').$this->config['score_name']);
 						D('Scroll_msg')->add_msg('reg',$uid,L('_B_LOGIN_USER_').$data_user['nickname'].date('Y-m-d H:i',$_SERVER['REQUEST_TIME']).L('_B_LOGIN_NEWGIFTSUCESSSCORE_').$this->config['score_name'].$this->config['register_give_score']);
 					}
-					
 				}
+				//garfunkel add
+                if($invi_user){
+                    $invi_user['invitation_reg_num'] += 1;
+                    D('User')->where(array('uid'=>$invi_user['uid']))->save($invi_user);
+                }
+                //garfunkel add 查找是否有新用户送券活动 并添加优惠券
+                D('New_event')->addEventCouponByType(1,$uid);
+
 				$session['uid'] = $uid;
 				$session['phone'] = $data_user['phone'];
 				session('user',$session);
@@ -127,6 +145,11 @@ class LoginAction extends BaseAction{
 			if(!empty($this->user_session)){
 				redirect(U('My/index'));
 			}
+
+			if($_GET['code']){
+			    $code = base64_decode($_GET['code']);
+			    $this->assign('invitation_code',strtoupper($code));
+            }
 			$this->display();
 		}
 	}
