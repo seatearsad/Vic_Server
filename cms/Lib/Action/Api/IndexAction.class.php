@@ -317,14 +317,17 @@ class IndexAction extends BaseAction
         $vcode = $_POST['vcode'];
         $pwd = $_POST['password'];
         $token = $_POST['token'];
+        $invi_code = $_POST['invi_code'];
 
-        $result = $this->loadModel()->reg_phone_pwd_vcode($phone,$vcode,$pwd);
+        $result = $this->loadModel()->reg_phone_pwd_vcode($phone,$vcode,$pwd,$invi_code);
 
         if ($result['error_code'])
             $code = 1;
         else{
             $code = 0;
             D('User')->where(array('uid'=>$result['uid']))->save(array('device_id'=>$token));
+            //garfunkel add 查找是否有新用户送券活动 并添加优惠券
+            D('New_event')->addEventCouponByType(1,$result['uid']);
         }
 
         $this->returnCode($code,'info',$result,$result['msg']);
@@ -604,13 +607,24 @@ class IndexAction extends BaseAction
 
         //处理优惠券
         if($_POST['coupon_id'] && $_POST['coupon_id'] != -1){
-            $now_coupon = D('System_coupon')->get_coupon_by_id($_POST['coupon_id']);
-            if(!empty($now_coupon)){
-                $coupon_data = D('System_coupon_hadpull')->field(true)->where(array('id'=>$_POST['coupon_id']))->find();
-                $coupon_real_id = $coupon_data['coupon_id'];
-                $coupon = D('System_coupon')->get_coupon($coupon_real_id);
-                $order_data['coupon_id'] = $_POST['coupon_id'];
-                $order_data['coupon_price'] = $coupon['discount'];
+            //如果选择的为活动优惠券
+            if(strpos($_POST['coupon_id'],'event')!== false) {
+                $event = explode('_',$_POST['coupon_id']);
+                $coupon_id = $event[1];
+                if($coupon_id){
+                    $coupon = D('New_event_coupon')->where(array('id'=>$coupon_id))->find();
+                    $order_data['coupon_id'] = $_POST['coupon_id'];
+                    $order_data['coupon_price'] = $coupon['discount'];
+                }
+            }else {
+                $now_coupon = D('System_coupon')->get_coupon_by_id($_POST['coupon_id']);
+                if (!empty($now_coupon)) {
+                    $coupon_data = D('System_coupon_hadpull')->field(true)->where(array('id' => $_POST['coupon_id']))->find();
+                    $coupon_real_id = $coupon_data['coupon_id'];
+                    $coupon = D('System_coupon')->get_coupon($coupon_real_id);
+                    $order_data['coupon_id'] = $_POST['coupon_id'];
+                    $order_data['coupon_price'] = $coupon['discount'];
+                }
             }
         }
         $order_data['is_mobile_pay'] = 2;
@@ -1115,6 +1129,13 @@ class IndexAction extends BaseAction
         $uid = $_POST['uid'];
         $coupon_list = D('System_coupon')->get_user_coupon_list($uid);
 
+        //获取活动优惠券
+        $event_coupon_list = D('New_event')->getUserCoupon($uid);
+        if(!$coupon_list) $coupon_list = array();
+        if(count($event_coupon_list) > 0){
+            $coupon_list = array_merge($coupon_list,$event_coupon_list);
+        }
+
         $tmp = array();
         foreach ($coupon_list as $key => $v) {
             if(!$v['is_use']){
@@ -1171,6 +1192,16 @@ class IndexAction extends BaseAction
 //        $model = new Model();
 //        $coupon_list = $model->query($sql);
         $coupon_list = D('System_coupon')->get_user_coupon_list($uid);
+
+        if(empty($coupon_list)){
+            $event_coupon = D('New_event')->getUserCoupon($uid,0,$amount);
+            if($event_coupon) {
+                foreach ($event_coupon as &$system_coupon) {
+                    $system_coupon['id'] = $system_coupon['coupon_id'] . '_' . $system_coupon['id'];
+                    $coupon_list[] = $system_coupon;
+                }
+            }
+        }
 
         $tmp = array();
         foreach ($coupon_list as $key => $v) {
