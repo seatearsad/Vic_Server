@@ -71,6 +71,8 @@ class LoginAction extends BaseAction{
                 $invi_user = $database_user->where(array('invitation_code'=>$code))->find();
                 if($invi_user){
                     $data_user['invitation_user'] = $invi_user['uid'];
+                }else{
+                    $this->error('此邀请码不存在!');
                 }
             }
 
