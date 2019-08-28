@@ -229,7 +229,7 @@
     $('#send_code').click(function () {
         if(/(tutti_android)/.test(navigator.userAgent.toLowerCase())) {
             if (typeof (window.linkJs.send_invitation) != 'undefined') {
-                window.linkJs.send_invitation("{pigcms{$user_session['nickname']}","{pigcms{$code}","{pigcms{$link}");
+                window.linkJs.send_invitation("{pigcms{$send_msg}");
             }
         }else{
 

@@ -5912,13 +5912,16 @@ class MyAction extends BaseAction{
             $code = $user['invitation_code'];
         }
 
-        $link = U('Login/reg')."&code=".base64_encode($code);
+        $link = C('config.site_url').U('Login/reg')."&code=".base64_encode($code);
         //$url_str = base64_encode($code);
 
         //var_dump(strtoupper($code));
         $this->assign('code',strtoupper($code));
         $this->assign('link',$link);
 
+        $msg = $this->user_session['nickname']." invites you to order delivery from Tutti! Sign up using your code ".$code." or the link below to get $20 in coupons when you place your first order! (".$link.")";
+
+        $this->assign('send_msg',$msg);
         //获取邀请活动是否存在
         $event_list = D('New_event')->getEventList(1,2);
         if($event_list){
