@@ -1725,6 +1725,33 @@ class IndexAction extends BaseAction
             $sid = D('Shop_order')->where(array('order_id'=>$order_id))->find()['store_id'];
             $store = D('Store')->get_store_by_id($sid);
             $info['pay_method'] = explode('|',$store['pay_method']);
+        }else{
+            $event_list = D('New_event')->getEventList(1,2);
+            if($event_list){
+                $event = reset($event_list);
+                $info['is_event'] = 1;
+                $info['event'] = $event;
+            }else{
+                $info['is_event'] = 0;
+            }
+        }
+
+        $this->returnCode(0,'info',$info,'success');
+    }
+
+    public function get_invitation(){
+        $uid = $_POST['uid'];
+
+        $user_code = D('User')->getUserInvitationCode($uid);
+        $info['invi_code'] = $user_code;
+
+        $event_list = D('New_event')->getEventList(1,2);
+        if($event_list){
+            $event = reset($event_list);
+            $info['is_event'] = 1;
+            $info['event'] = $event;
+        }else{
+            $info['is_event'] = 0;
         }
 
         $this->returnCode(0,'info',$info,'success');

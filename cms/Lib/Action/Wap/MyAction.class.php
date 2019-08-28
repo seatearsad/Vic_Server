@@ -5902,15 +5902,17 @@ class MyAction extends BaseAction{
     }
 
     public function invitation(){
-        $user = D('User')->where(array('uid'=>$this->user_session['uid']))->find();
+//        $user = D('User')->where(array('uid'=>$this->user_session['uid']))->find();
+//
+//        if($user['invitation_code'] == '') {
+//            $code = $this->getInvitationCode(6);
+//            $data['invitation_code'] = $code;
+//            D('User')->where(array('uid'=>$this->user_session['uid']))->save($data);
+//        }else {
+//            $code = $user['invitation_code'];
+//        }
 
-        if($user['invitation_code'] == '') {
-            $code = $this->getInvitationCode(6);
-            $data['invitation_code'] = $code;
-            D('User')->where(array('uid'=>$this->user_session['uid']))->save($data);
-        }else {
-            $code = $user['invitation_code'];
-        }
+        $code = D('User')->getUserInvitationCode($this->user_session['uid']);
 
         $link = C('config.site_url').U('Login/reg')."&code=".base64_encode($code);
         //$url_str = base64_encode($code);
@@ -5981,38 +5983,6 @@ class MyAction extends BaseAction{
     function send_sms_invi(){
         var_dump($_POST);
     }
-
-    function getInvitationCode($len){
-        $code = $this->getRandomStr($len);
-        if(D('User')->where(array('invitation_code'=>$code))->find()){
-            $code = $this->getInvitationCode($len);
-        }
-
-        return $code;
-    }
-
-    function getRandomStr($len, $special=false){
-        $chars = array("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k",
-         "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v",
-         "w", "x", "y", "z", "0", "1", "2",
-         "3", "4", "5", "6", "7", "8", "9"
-        );
-
-        if($special){
-            $chars = array_merge($chars, array("!", "@", "#", "$", "?", "|", "{", "/", ":", ";",
-             "%", "^", "&", "*", "(", ")", "-", "_", "[", "]",
-             "}", "<", ">", "~", "+", "=", ",", "."
-            ));
-        }
-
-        $charsLen = count($chars) - 1;
-        shuffle($chars);//打乱数组顺序
-        $str = '';
-        for($i=0; $i<$len; $i++){
-            $str .= $chars[mt_rand(0, $charsLen)];//随机取出一位
-        }
-        return $str;
-	}
 
 }
 ?>
