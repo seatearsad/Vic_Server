@@ -5955,13 +5955,14 @@ class MyAction extends BaseAction{
         $mail->Password = 'kkrzakbtivctdtdm';                 // SMTP password 这里改成对应邮箱密码
         $mail->SMTPSecure = 'ssl';                            // Enable TLS encryption, `ssl` also accepted
         $mail->Port = 465;
-        $mail->Charset='UTF-8';
+        //$mail->Charset='UTF-8';
 
         $mail->setFrom('caesark882@gmail.com', 'Caesark');
         $mail->addAddress($address, $address);
 
         $mail->isHTML(true);
-        $mail->Subject = $title;
+        $subject = "=?UTF-8?B?".base64_encode($title)."?=";
+        $mail->Subject = $subject;
         $mail->Body    = $body;
         $mail->AltBody = '';
 
