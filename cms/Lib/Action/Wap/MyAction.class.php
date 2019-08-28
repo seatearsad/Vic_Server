@@ -5962,11 +5962,12 @@ class MyAction extends BaseAction{
 
         $mail->isHTML(true);
         $subject = "=?UTF-8?B?".base64_encode($title)."?=";
+        $body = "=?UTF-8?B?".base64_encode($body)."?=";
         $mail->Subject = $subject;
         $mail->Body    = $body;
         $mail->AltBody = '';
 
-        if(!$mail->send())
+        if($mail->send())
             exit(json_encode(array('status' => 1, 'msg' => "Success")));
         else
             exit(json_encode(array('status' => 0, 'msg' => "Fail")));
