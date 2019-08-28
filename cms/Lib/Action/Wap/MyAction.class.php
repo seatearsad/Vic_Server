@@ -5948,7 +5948,7 @@ class MyAction extends BaseAction{
 
         $mail = new PHPMailer\PHPMailer\PHPMailer();
 
-        $mail->Charset='UTF-8';
+        $mail->Charset='GB2312';
 
         $mail->isSMTP();                                      // Set mailer to use SMTP
         $mail->Host = 'smtp.gmail.com';                       // Specify main and backup SMTP servers. 这里改成smtp.gmail.com
@@ -5965,7 +5965,7 @@ class MyAction extends BaseAction{
         $mail->isHTML(true);
         $subject = "=?UTF-8?B?".base64_encode($title)."?=";
         $mail->Subject = $subject;
-        $mail->MsgHTML = $body;
+        $mail->Body    = $body;
         $mail->AltBody = '';
 
         if($mail->send())
