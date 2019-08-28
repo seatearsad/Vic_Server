@@ -5948,7 +5948,7 @@ class MyAction extends BaseAction{
 
         $mail = new PHPMailer\PHPMailer\PHPMailer();
 
-        $mail->Charset ='GB2312';
+        $mail->Charset ='UTF-8';
         $mail->Encoding = "base64";
 
         $mail->isSMTP();                                      // Set mailer to use SMTP
