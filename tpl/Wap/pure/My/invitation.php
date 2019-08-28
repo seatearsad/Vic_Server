@@ -232,7 +232,26 @@
                 window.linkJs.send_invitation("{pigcms{$send_msg}");
             }
         }else{
-
+            if(send_type == 0){
+                if(!checkMail($("input[name='send_msg']").val())){
+                    alert("{pigcms{:L('_BACK_RIGHT_EMAIL_')}");
+                }else{
+                    var url = "{pigcms{:U('My/send_email_invi')}";
+                }
+            }else{
+                if(!checkPhone($("input[name='send_msg']").val())){
+                    show_msg("{pigcms{:L('_B_LOGIN_ENTERGOODNO_')}");
+                }else{
+                    var url = "{pigcms{:U('My/send_sms_invi')}";
+                }
+            }
+            $.post(url,{'address':$("input[name='send_msg']").val(),'code':"{pigcms{$code}",'link':"{pigcms{$link}"},function(result){
+                if(result.status == '1'){
+                    alert('Success');
+                }else{
+                    alert(result.info);
+                }
+            },'json');
         }
     });
 
@@ -250,6 +269,20 @@
 
         }
     });
+
+    function checkPhone(phone) {
+        if(!/^\d{10,}$/.test(phone)){
+            return false;
+        }
+        return true;
+    }
+    function checkMail(mail) {
+        var reg = /\w+[@]{1}\w+[.]\w+/;
+        if(!reg.test(mail)){
+            return false;
+        }
+        return true;
+    }
 </script>
 </body>
 </html>

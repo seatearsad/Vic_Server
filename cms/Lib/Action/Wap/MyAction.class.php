@@ -5932,6 +5932,48 @@ class MyAction extends BaseAction{
         $this->display();
     }
 
+    function send_email_invi(){
+        $address = $_POST['address'];
+        $code = $_POST['code'];
+        $link = $_POST['link'];
+        $title = $this->user_session['nickname']." sent you coupons!";
+        $body = "Looking for delivery services of your favourite restaurants? ".$this->user_session['nickname']." invites you to order with Tutti Delivery! Sign up using your code or the link below to get $20 in coupons when you place your first order!";
+        $body .= "<br><br><a href='".$link."' style='font-size: 18px;'>Sign Up Here</a>";
+        $body .= "<br><br>Your code is ".$code;
+        $body .= "<br><br>Term may apply";
+
+        require './mailer/PHPMailer.php';
+        require './mailer/SMTP.php';
+        require './mailer/Exception.php';
+
+        $mail = new PHPMailer\PHPMailer\PHPMailer();
+
+        $mail->isSMTP();                                      // Set mailer to use SMTP
+        $mail->Host = 'smtp.gmail.com';                       // Specify main and backup SMTP servers. 这里改成smtp.gmail.com
+        $mail->SMTPAuth = true;                               // Enable SMTP authentication
+        $mail->Username = 'caesark882@gmail.com';             // SMTP username 这里改成自己的gmail邮箱，最好新注册一个，因为后期设置会导致安全性降低
+        $mail->Password = 'kkrzakbtivctdtdm';                 // SMTP password 这里改成对应邮箱密码
+        $mail->SMTPSecure = 'ssl';                            // Enable TLS encryption, `ssl` also accepted
+        $mail->Port = 465;
+
+        $mail->setFrom('caesark882@gmail.com', 'Caesark');
+        $mail->addAddress($address, $address);
+
+        $mail->isHTML(true);
+        $mail->Subject = $title;
+        $mail->Body    = $body;
+        $mail->AltBody = '';
+
+        if(!$mail->send())
+            exit(json_encode(array('status' => 1, 'msg' => "Success")));
+        else
+            exit(json_encode(array('status' => 0, 'msg' => "Fail")));
+    }
+
+    function send_sms_invi(){
+        var_dump($_POST);
+    }
+
     function getInvitationCode($len){
         $code = $this->getRandomStr($len);
         if(D('User')->where(array('invitation_code'=>$code))->find()){
