@@ -5947,6 +5947,8 @@ class MyAction extends BaseAction{
         require './mailer/Exception.php';
 
         $mail = new PHPMailer\PHPMailer\PHPMailer();
+        
+        $mail->Charset='UTF-8';
 
         $mail->isSMTP();                                      // Set mailer to use SMTP
         $mail->Host = 'smtp.gmail.com';                       // Specify main and backup SMTP servers. 这里改成smtp.gmail.com
@@ -5955,14 +5957,13 @@ class MyAction extends BaseAction{
         $mail->Password = 'kkrzakbtivctdtdm';                 // SMTP password 这里改成对应邮箱密码
         $mail->SMTPSecure = 'ssl';                            // Enable TLS encryption, `ssl` also accepted
         $mail->Port = 465;
-        //$mail->Charset='UTF-8';
+
 
         $mail->setFrom('caesark882@gmail.com', 'Caesark');
         $mail->addAddress($address, $address);
 
         $mail->isHTML(true);
         $subject = "=?UTF-8?B?".base64_encode($title)."?=";
-        $body = "=?UTF-8?B?".base64_encode($body)."?=";
         $mail->Subject = $subject;
         $mail->Body    = $body;
         $mail->AltBody = '';
