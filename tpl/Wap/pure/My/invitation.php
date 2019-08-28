@@ -246,10 +246,10 @@
                 }
             }
             $.post(url,{'address':$("input[name='send_msg']").val(),'code':"{pigcms{$code}",'link':"{pigcms{$link}"},function(result){
-                if(result.status == '1'){
+                if(result.status == 1){
                     alert('Success');
                 }else{
-                    alert(result.info);
+                    alert(result.msg);
                 }
             },'json');
         }
