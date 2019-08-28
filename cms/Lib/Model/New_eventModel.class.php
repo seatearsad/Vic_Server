@@ -15,20 +15,30 @@ class New_eventModel extends Model
      * 1 正常
      * 2 过期
      */
-    public function getEventList($status){
+    public function getEventList($status=-1,$type=-1){
         $where = array();
         if($status != -1){
             $where['status'] = $status;
         }
+        if($type != -1){
+            $where['type'] = $type;
+        }
 
         $list = $this->field(true)->where($where)->select();
+        $new_list = array();
         foreach ($list as &$v){
             $v['type_name'] = $this->getTypeName($v['type']);
             $v = $this->checkExpiry($v);
             $v['status_name'] = $this->getStausName($v['status']);
+            if($status != -1){
+                if($v['status'] == $status)
+                    $new_list[] = $v;
+            }else{
+                $new_list[] = $v;
+            }
         }
 
-        return $list;
+        return $new_list;
     }
 
     /**

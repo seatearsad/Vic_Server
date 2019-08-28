@@ -81,6 +81,14 @@ class MyAction extends BaseAction{
 			$scroll_msg = D('Scroll_msg')->get_msg();
 			$this->assign('scroll_msg',$scroll_msg);
 		}
+
+		//获取邀请活动是否存在
+        $event_list = D('New_event')->getEventList(1,2);
+		if($event_list){
+		    $event = reset($event_list);
+		    $this->assign('event',$event);
+        }
+
 		$this->display();
 
 	}
@@ -5907,8 +5915,18 @@ class MyAction extends BaseAction{
         $link = U('Login/reg')."&code=".base64_encode($code);
         //$url_str = base64_encode($code);
 
-        var_dump(strtoupper($code));
-        echo '<a href="'.$link.'" target="blank">'.$link.'</a>';
+        //var_dump(strtoupper($code));
+        $this->assign('code',strtoupper($code));
+        $this->assign('link',$link);
+
+        //获取邀请活动是否存在
+        $event_list = D('New_event')->getEventList(1,2);
+        if($event_list){
+            $event = reset($event_list);
+            $this->assign('event',$event);
+        }
+
+        $this->display();
     }
 
     function getInvitationCode($len){

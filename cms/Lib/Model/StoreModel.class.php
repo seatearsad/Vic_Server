@@ -520,7 +520,7 @@ class StoreModel extends Model
                 $data_user['invitation_user'] = $invi_user['uid'];
             }else{
                 $result['error_code'] = true;
-                $result['msg'] = '此邀请码不存在!';
+                $result['msg'] = L('_INVALID_INVI_CODE_');
                 return $result;
             }
         }

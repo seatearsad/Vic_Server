@@ -72,7 +72,7 @@ class LoginAction extends BaseAction{
                 if($invi_user){
                     $data_user['invitation_user'] = $invi_user['uid'];
                 }else{
-                    $this->error('此邀请码不存在!');
+                    $this->error(L('_INVALID_INVI_CODE_'));
                 }
             }
 
