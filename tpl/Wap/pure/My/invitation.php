@@ -156,6 +156,19 @@
             cursor: pointer;
             text-align: center;
         }
+        #send_load{
+            width: 80%;
+            height: 35px;
+            font-size: 18px;
+            font-weight: bold;
+            line-height: 35px;
+            margin: 10px auto 60px auto;
+            background-color: #999999;
+            color: white;
+            border-radius: 5px;
+            text-align: center;
+            display: none;
+        }
         #send_div{
             width: 80%;
             margin: 10px auto;
@@ -216,6 +229,9 @@
     <div id="send_code">
         {pigcms{:L('_SEND_INVI_CODE_')}
     </div>
+    <div id="send_load">
+        {pigcms{:L('_DEALING_TXT_')}
+    </div>
 </div>
 <include file="Public:footer"/>
 <script>
@@ -240,18 +256,32 @@
                 }
             }else{
                 if(!checkPhone($("input[name='send_msg']").val())){
-                    show_msg("{pigcms{:L('_B_LOGIN_ENTERGOODNO_')}");
+                    alert("{pigcms{:L('_B_LOGIN_ENTERGOODNO_')}");
                 }else{
                     var url = "{pigcms{:U('My/send_sms_invi')}";
                 }
             }
-            $.post(url,{'address':$("input[name='send_msg']").val(),'code':"{pigcms{$code}",'link':"{pigcms{$link}"},function(result){
-                if(result.status == 1){
-                    alert('Success');
-                }else{
-                    alert(result.msg);
-                }
-            },'json');
+            if(typeof (url) != 'undefined') {
+                $('#send_code').hide();
+                $('#send_load').show();
+                $.post(url, {
+                    'address': $("input[name='send_msg']").val(),
+                    'code': "{pigcms{$code}",
+                    'link': "{pigcms{$link}"
+                }, function (result) {
+                    if (result.status == 1) {
+                        alert('Success');
+                    } else {
+                        alert(result.msg);
+                    }
+                    $('#send_code').show();
+                    $('#send_load').hide();
+                }, 'json').error(function () {
+                    alert('Error');
+                    $('#send_code').show();
+                    $('#send_load').hide();
+                });
+            }
         }
     });
 
