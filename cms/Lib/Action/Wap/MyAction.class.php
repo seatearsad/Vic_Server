@@ -5919,7 +5919,7 @@ class MyAction extends BaseAction{
         $this->assign('code',strtoupper($code));
         $this->assign('link',$link);
 
-        $msg = $this->user_session['nickname']." invites you to order delivery from Tutti! Sign up using your code ".$code." or the link below to get $20 in coupons when you place your first order! (".$link.")";
+        $msg = $this->user_session['nickname']." invites you to order delivery from Tutti! Sign up using your code ".strtoupper($code)." or the link below to get $20 in coupons when you place your first order! (".$link.")";
 
         $this->assign('send_msg',$msg);
         //获取邀请活动是否存在
