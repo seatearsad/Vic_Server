@@ -5947,7 +5947,7 @@ class MyAction extends BaseAction{
         require './mailer/Exception.php';
 
         $mail = new PHPMailer\PHPMailer\PHPMailer();
-        
+
         $mail->Charset='UTF-8';
 
         $mail->isSMTP();                                      // Set mailer to use SMTP
@@ -5965,7 +5965,7 @@ class MyAction extends BaseAction{
         $mail->isHTML(true);
         $subject = "=?UTF-8?B?".base64_encode($title)."?=";
         $mail->Subject = $subject;
-        $mail->Body    = $body;
+        $mail->MsgHTML = $body;
         $mail->AltBody = '';
 
         if($mail->send())
