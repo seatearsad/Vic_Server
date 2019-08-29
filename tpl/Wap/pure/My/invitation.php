@@ -267,7 +267,8 @@
                 $.post(url, {
                     'address': $("input[name='send_msg']").val(),
                     'code': "{pigcms{$code}",
-                    'link': "{pigcms{$link}"
+                    'link': "{pigcms{$link}",
+                    'amount':"{pigcms{$event.coupon_amount}"
                 }, function (result) {
                     if (result.status == 1) {
                         alert('Success');

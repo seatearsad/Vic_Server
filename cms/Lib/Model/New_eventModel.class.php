@@ -30,6 +30,7 @@ class New_eventModel extends Model
             $v['type_name'] = $this->getTypeName($v['type']);
             $v = $this->checkExpiry($v);
             $v['status_name'] = $this->getStausName($v['status']);
+            $v['coupon_amount'] = $this->getEventCouponAmount($v['id']);
             if($status != -1){
                 if($v['status'] == $status)
                     $new_list[] = $v;
@@ -39,6 +40,23 @@ class New_eventModel extends Model
         }
 
         return $new_list;
+    }
+
+    /**
+     * 获取活动所有优惠劵的金额
+     * @param $event_id
+     * @param int $type
+     * @return int
+     */
+    public function getEventCouponAmount($event_id,$type=0){
+        $coupon_list = D('New_event_coupon')->where(array('event_id'=>$event_id,'type'=>$type))->select();
+
+        $amount = 0;
+        foreach ($coupon_list as $v){
+            $amount += $v['discount'];
+        }
+
+        return $amount;
     }
 
     /**

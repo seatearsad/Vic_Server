@@ -5921,14 +5921,14 @@ class MyAction extends BaseAction{
         $this->assign('code',strtoupper($code));
         $this->assign('link',$link);
 
-        $msg = $this->user_session['nickname']." invites you to order delivery from Tutti! Sign up using your code ".strtoupper($code)." or the link below to get $20 in coupons when you place your first order! (".$link.")";
-
-        $this->assign('send_msg',$msg);
         //获取邀请活动是否存在
         $event_list = D('New_event')->getEventList(1,2);
         if($event_list){
             $event = reset($event_list);
             $this->assign('event',$event);
+
+            $msg = $this->user_session['nickname']." invites you to order delivery from Tutti! Sign up using your code ".strtoupper($code)." or the link below to get $".$event['coupon_amount']." in coupons when you place your first order! (".$link.")";
+            $this->assign('send_msg',$msg);
         }
 
         $this->display();
@@ -5938,8 +5938,9 @@ class MyAction extends BaseAction{
         $address = $_POST['address'];
         $code = $_POST['code'];
         $link = $_POST['link'];
+        $coupon_amount = $_POST['amount'];
         $title = $this->user_session['nickname']." sent you coupons!";
-        $body = "Looking for delivery services of your favourite restaurants? ".$this->user_session['nickname']." invites you to order with Tutti Delivery! Sign up using your code or the link below to get $20 in coupons when you place your first order!";
+        $body = "Looking for delivery services of your favourite restaurants? ".$this->user_session['nickname']." invites you to order with Tutti Delivery! Sign up using your code or the link below to get $".$coupon_amount." in coupons when you place your first order!";
         $body .= "<br><br><a href='".$link."' style='font-size: 18px;'>Sign Up Here</a>";
         $body .= "<br><br>Your code is ".$code;
         $body .= "<br><br>Term may apply";
@@ -5982,6 +5983,11 @@ class MyAction extends BaseAction{
 
     function send_sms_invi(){
         var_dump($_POST);
+        $user_name = $this->user_session['nickname'];
+        $code = $_POST['code'];
+        $link = $_POST['link'];
+        $coupon_amount = $_POST['amount'];
+
     }
 
 }
