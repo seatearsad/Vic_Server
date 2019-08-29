@@ -1743,7 +1743,7 @@ class IndexAction extends BaseAction
         $uid = $_POST['uid'];
 
         $user_code = D('User')->getUserInvitationCode($uid);
-        $info['invi_code'] = $user_code;
+        $info['invi_code'] = strtoupper($user_code);
 
         $event_list = D('New_event')->getEventList(1,2);
         if($event_list){
@@ -1753,6 +1753,14 @@ class IndexAction extends BaseAction
         }else{
             $info['is_event'] = 0;
         }
+
+        $link = C('config.site_url').U('Login/reg')."&code=".base64_encode($user_code);
+        $info['link'] = $link;
+
+        $userInfo = D('User')->get_user($uid);
+
+        $msg = $userInfo['nickname']." invites you to order delivery from Tutti! Sign up using your code ".strtoupper($user_code)." or the link below to get $20 in coupons when you place your first order! (".$link.")";
+        $info['msg'] = $msg;
 
         $this->returnCode(0,'info',$info,'success');
     }
