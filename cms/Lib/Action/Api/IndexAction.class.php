@@ -1759,7 +1759,7 @@ class IndexAction extends BaseAction
 
         $userInfo = D('User')->get_user($uid);
 
-        $msg = $userInfo['nickname']." invites you to order delivery from Tutti! Sign up using your code ".strtoupper($user_code)." or the link below to get $20 in coupons when you place your first order! (".$link.")";
+        $msg = $userInfo['nickname']." invites you to order delivery from Tutti! Sign up using your code ".strtoupper($user_code)." or the link below to get $20 in coupons when you place your first order! ";
         $info['msg'] = $msg;
 
         $this->returnCode(0,'info',$info,'success');
