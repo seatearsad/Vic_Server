@@ -5954,7 +5954,7 @@ class MyAction extends BaseAction{
         $mail->Encoding = "base64";
 
         $mail->isSMTP();                                      // Set mailer to use SMTP
-        $mail->Host = 'smtp.gmail.com';                       // Specify main and backup SMTP servers. 这里改成smtp.gmail.com
+        $mail->Host = 'smtp-relay.gmail.com';                       // Specify main and backup SMTP servers. 这里改成smtp.gmail.com
         $mail->SMTPAuth = true;                               // Enable SMTP authentication
         $mail->Username = 'info@tutti.app';             // SMTP username 这里改成自己的gmail邮箱，最好新注册一个，因为后期设置会导致安全性降低
         $mail->Password = 'uxxziisbkmnzprcs';                 // SMTP password 这里改成对应邮箱密码
