@@ -5982,11 +5982,27 @@ class MyAction extends BaseAction{
     }
 
     function send_sms_invi(){
-        var_dump($_POST);
+        //var_dump($_POST);
+        $address = $_POST['address'];
+
         $user_name = $this->user_session['nickname'];
         $code = $_POST['code'];
         $link = $_POST['link'];
-        $coupon_amount = $_POST['amount'];
+        $coupon_amount = '$'.$_POST['amount'];
+
+        $sms_data['uid'] = 0;
+        $sms_data['mobile'] = $address;
+        $sms_data['sendto'] = 'user';
+        $sms_data['tplid'] = 407667;
+        $sms_data['params'] = [
+            $user_name,
+            $code,
+            $coupon_amount,
+            $link
+        ];
+        Sms::sendSms2($sms_data);
+
+        exit(json_encode(array('status' => 1, 'msg' => "Success")));
 
     }
 
