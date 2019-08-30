@@ -66,6 +66,9 @@ class EventAction extends BaseAction
             $this->assign('event',$event);
 
             $coupon_list = D('New_event_coupon')->where(array('event_id'=>$event_id))->select();
+            foreach ($coupon_list as &$v){
+                $v = D('New_event')->getCouponUserNum($v);
+            }
             $this->assign('coupon_list',$coupon_list);
 
             $this->display();
@@ -73,6 +76,8 @@ class EventAction extends BaseAction
             $this->error('未定义活动~');
         }
     }
+
+
 
     public function add_coupon(){
         if($_GET['event_id']){

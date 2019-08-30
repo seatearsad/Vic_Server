@@ -221,4 +221,21 @@ class New_eventModel extends Model
 
         return $list;
     }
+
+    public function getCouponUserNum($coupon){
+        $user_list = D('New_event_user')->where(array('event_coupon_id'=>$coupon['id']))->select();
+        //var_dump($user_list);var_dump(time());die();
+        foreach($user_list as $v){
+            if(time() > $v['expiry_time'] && $v['is_use'] == 0) {
+                $v['is_use'] = 2;
+                D('New_event_user')->where(array('id'=>$v['id']))->save($v);
+            }
+        }
+
+        $coupon['all_num'] = D('New_event_user')->where(array('event_coupon_id'=>$coupon['id']))->count();
+        $coupon['use_num'] = D('New_event_user')->where(array('event_coupon_id'=>$coupon['id'],'is_use'=>1))->count();
+        $coupon['expiry_num'] = D('New_event_user')->where(array('event_coupon_id'=>$coupon['id'],'is_use'=>2))->count();
+
+        return $coupon;
+    }
 }
