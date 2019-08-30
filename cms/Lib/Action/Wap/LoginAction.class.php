@@ -148,8 +148,8 @@ class LoginAction extends BaseAction{
 				redirect(U('My/index'));
 			}
 
-			if($_GET['code']){
-			    $code = base64_decode($_GET['code']);
+			if($_GET['invi_code']){
+			    $code = base64_decode($_GET['invi_code']);
 			    $this->assign('invitation_code',strtoupper($code));
             }
 			$this->display();
