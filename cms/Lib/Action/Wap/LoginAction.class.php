@@ -33,7 +33,12 @@ class LoginAction extends BaseAction{
 			$this->assign('referer',$referer);
 
 			if($this->is_wexin_browser){
-				redirect(U('Login/weixin',array('referer'=>urlencode($referer))));exit;
+				redirect(U('Login/weixin',array('referer'=>urlencode($referer))));
+				//garfunkel add invitation code
+				if($_GET['invi_code']){
+				    session('invi_code',$_GET['invi_code']);
+                }
+				exit;
 			}
 			$this->display();
 		}
@@ -151,7 +156,12 @@ class LoginAction extends BaseAction{
 			if($_GET['invi_code']){
 			    $code = base64_decode($_GET['invi_code']);
 			    $this->assign('invitation_code',strtoupper($code));
+
+                if($this->is_wexin_browser){
+                    redirect(U('Login/index'),array('invi_code',$code));
+                }
             }
+
 			$this->display();
 		}
 	}
@@ -323,6 +333,19 @@ class LoginAction extends BaseAction{
 					'avatar' 	=> $jsonrt['headimgurl'],
 					'is_follow' 	=> $is_follow,
 				);
+
+				//garfunkel add invitation code
+                if($_SESSION['invi_code']){
+                    //garfunkel add 邀请码
+                    $code = strtolower($_SESSION['invi_code']);
+                    $invi_user = D('User')->where(array('invitation_code'=>$code))->find();
+                    if($invi_user){
+                        $data_user['invitation_user'] = $invi_user['uid'];
+                    }
+
+                    unset($_SESSION['invi_code']);
+                }
+
 				$_SESSION['weixin']['user'] = $data_user;
 				$this->assign('referer',$referer);
 				if($this->config['weixin_login_bind']){
@@ -565,6 +588,15 @@ class LoginAction extends BaseAction{
 				$now_user = $login_result['user'];
 				session('user',$now_user);
 				$referer = !empty($_SESSION['weixin']['referer']) ? $_SESSION['weixin']['referer'] : U('Home/index');
+
+                //garfunkel add
+                if($now_user['invitation_user'] && $now_user['invitation_user'] != 0){
+                    $invi_user = D('User')->where(array('uid'=>$now_user['invitation_user']))->find();
+                    $invi_user['invitation_reg_num'] += 1;
+                    D('User')->where(array('uid'=>$invi_user['uid']))->save($invi_user);
+                }
+                //garfunkel add 查找是否有新用户送券活动 并添加优惠券
+                D('New_event')->addEventCouponByType(1,$now_user['uid']);
 
 				unset($_SESSION['weixin']);
 				redirect($referer);
