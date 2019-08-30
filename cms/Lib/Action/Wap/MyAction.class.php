@@ -5911,10 +5911,9 @@ class MyAction extends BaseAction{
 //        }else {
 //            $code = $user['invitation_code'];
 //        }
-
         $code = D('User')->getUserInvitationCode($this->user_session['uid']);
 
-        $link = C('config.site_url').U('Login/reg')."&code=".base64_encode($code);
+        $link = C('config.site_url')."/invite/".base64_encode($code);
         //$url_str = base64_encode($code);
 
         //var_dump(strtoupper($code));
@@ -5955,18 +5954,19 @@ class MyAction extends BaseAction{
         $mail->Encoding = "base64";
 
         $mail->isSMTP();                                      // Set mailer to use SMTP
-        $mail->Host = 'smtp.gmail.com';                       // Specify main and backup SMTP servers. 这里改成smtp.gmail.com
+        //$mail->Host = 'smtp.gmail.com';
+        $mail->Host = 'smtp-relay.gmail.com';                  // Specify main and backup SMTP servers. 这里改成smtp.gmail.com
         $mail->SMTPAuth = true;                               // Enable SMTP authentication
-        //$mail->Username = 'info@tutti.app';             // SMTP username 这里改成自己的gmail邮箱，最好新注册一个，因为后期设置会导致安全性降低
-        //$mail->Password = 'uxxziisbkmnzprcs';                 // SMTP password 这里改成对应邮箱密码
-        $mail->Username = 'caesark882@gmail.com';                 // SMTP username 这里改成自己的gmail邮箱，最好新注册一个，因为后期设置会导致安全性降低
-        $mail->Password = 'kkrzakbtivctdtdm';
+        $mail->Username = 'info@tutti.app';             // SMTP username 这里改成自己的gmail邮箱，最好新注册一个，因为后期设置会导致安全性降低
+        $mail->Password = 'uxxziisbkmnzprcs';                 // SMTP password 这里改成对应邮箱密码
+        //$mail->Username = 'caesark882@gmail.com';                 // SMTP username 这里改成自己的gmail邮箱，最好新注册一个，因为后期设置会导致安全性降低
+        //$mail->Password = 'kkrzakbtivctdtdm';
         $mail->SMTPSecure = 'ssl';                            // Enable TLS encryption, `ssl` also accepted
         $mail->Port = 465;
 
 
-        //$mail->setFrom('info@tutti.app', 'Tutti');
-        $mail->setFrom('caesark882@gmail.com', 'Caesark');
+        $mail->setFrom('info@tutti.app', 'Tutti');
+        //$mail->setFrom('caesark882@gmail.com', 'Caesark');
         $mail->addAddress($address, $address);
 
         $mail->isHTML(true);

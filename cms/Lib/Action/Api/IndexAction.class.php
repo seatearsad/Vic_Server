@@ -1754,7 +1754,7 @@ class IndexAction extends BaseAction
             $info['is_event'] = 0;
         }
 
-        $link = C('config.site_url').U('Login/reg')."&code=".base64_encode($user_code);
+        $link = C('config.site_url')."/invite/".base64_encode($user_code);
         $info['link'] = $link;
 
         $userInfo = D('User')->get_user($uid);
