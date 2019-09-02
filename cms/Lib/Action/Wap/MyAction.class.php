@@ -5955,7 +5955,7 @@ class MyAction extends BaseAction{
         $body = '<table style="width: 98%; position: relative;margin: 0 auto">
                     <tr>
                         <td>
-                            <img src="./tpl/Static/blue/images/new/mail_back.png" style="width: 100%;"/>
+                            <img src="'.C('config.site_url').'/tpl/Static/blue/images/new/mail_back.png" style="width: 100%;"/>
                         </td>
                     </tr>
                     <tr>
