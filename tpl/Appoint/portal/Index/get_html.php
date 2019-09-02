@@ -11,30 +11,32 @@
     .logo{
         width:100px;
         height: 100px;
-        background-image: url("./tpl/Static/blue/images/new/icon.png");
-        background-repeat: no-repeat;
-        background-size: 100% auto;
-        background-position: center;
         border-radius: 50px;
         margin-top: 10px;
         margin-left:10%;
         position: relative;
         z-index: 99;
     }
+    .logo img{
+        width: 100%;
+        height: 100px;
+        border-radius: 50px;
+    }
     .mail_back{
         width: 94%;
         height: 200px;
         margin: -50px auto 0 auto;
-        background-image: url("./tpl/Static/blue/images/new/mail_back.jpg");
-        background-repeat: no-repeat;
-        background-size: 100% auto;
-        background-position: top center;
+        overflow: hidden;
+    }
+    .mail_back img{
+        width: 100%;
+
     }
     .logo div{
         color: white;
         font-weight: bold;
         text-align: center;
-        padding-top: 110px;
+        padding-top: 10px;
         width: 100px;
         font-family:Arial;
     }
@@ -56,7 +58,7 @@
         color: white;
         text-decoration: none;
         display: block;
-        font-size: 24px;
+        font-size: 18px;
     }
     .footer{
         width: 100%;
@@ -69,11 +71,14 @@
 </style>
 <body>
     <div class="logo">
+        <img src="http://54.190.29.18/tpl/Static/blue/images/new/icon.png"/>
         <div>
             TUTTI <br> DELIVERY
         </div>
     </div>
-    <div class="mail_back"></div>
+    <div class="mail_back">
+        <img src="http://54.190.29.18/tpl/Static/blue/images/new/mail_back.jpg"/>
+    </div>
     <div class="mail_body">
         Looking for delivery services of your favourite restaurants? Tutti invites you to order with Tutti Delivery! Sign up using your code or the link below to get $18 in coupons when you place your first order!
     </div>
