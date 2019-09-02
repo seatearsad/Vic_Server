@@ -5951,7 +5951,7 @@ class MyAction extends BaseAction{
                     .logo{
                         width:100px;
                         height: 100px;
-                        background-image: url('.C('config.site_url').'"/tpl/Static/blue/images/new/icon.png");
+                        background-image: url("'.C('config.site_url').'/tpl/Static/blue/images/new/icon.png");
                         background-repeat: no-repeat;
                         background-size: 100% auto;
                         background-position: center;
@@ -5965,7 +5965,7 @@ class MyAction extends BaseAction{
                         width: 94%;
                         height: 200px;
                         margin: -50px auto 0 auto;
-                        background-image: url('.C('config.site_url').'"/tpl/Static/blue/images/new/mail_back.jpg");
+                        background-image: url("'.C('config.site_url').'/tpl/Static/blue/images/new/mail_back.jpg");
                         background-repeat: no-repeat;
                         background-size: 100% auto;
                         background-position: top center;
