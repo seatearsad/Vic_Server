@@ -5939,10 +5939,102 @@ class MyAction extends BaseAction{
         $link = $_POST['link'];
         $coupon_amount = $_POST['amount'];
         $title = $this->user_session['nickname']." sent you coupons!";
-        $body = "Looking for delivery services of your favourite restaurants? ".$this->user_session['nickname']." invites you to order with Tutti Delivery! Sign up using your code or the link below to get $".$coupon_amount." in coupons when you place your first order!";
-        $body .= "<br><br><a href='".$link."' style='font-size: 18px;'>Sign Up Here</a>";
-        $body .= "<br><br>Your code is ".$code;
-        $body .= "<br><br>Term may apply";
+        //$body = "Looking for delivery services of your favourite restaurants? ".$this->user_session['nickname']." invites you to order with Tutti Delivery! Sign up using your code or the link below to get $".$coupon_amount." in coupons when you place your first order!";
+        //$body .= "<br><br><a href='".$link."' style='font-size: 18px;'>Sign Up Here</a>";
+        //$body .= "<br><br>Your code is ".$code;
+        //$body .= "<br><br>Term may apply";
+
+        $body = '<style>
+                    *{
+                        margin: 0;
+                    }
+                    .logo{
+                        width:100px;
+                        height: 100px;
+                        background-image: url('.C('config.site_url').'"/tpl/Static/blue/images/new/icon.png");
+                        background-repeat: no-repeat;
+                        background-size: 100% auto;
+                        background-position: center;
+                        border-radius: 50px;
+                        margin-top: 10px;
+                        margin-left:10%;
+                        position: relative;
+                        z-index: 99;
+                    }
+                    .mail_back{
+                        width: 94%;
+                        height: 200px;
+                        margin: -50px auto 0 auto;
+                        background-image: url('.C('config.site_url').'"/tpl/Static/blue/images/new/mail_back.jpg");
+                        background-repeat: no-repeat;
+                        background-size: 100% auto;
+                        background-position: top center;
+                    }
+                    .logo div{
+                        color: white;
+                        font-weight: bold;
+                        text-align: center;
+                        padding-top: 110px;
+                        width: 100px;
+                        font-family:Arial;
+                    }
+                    .mail_body{
+                        width: 94%;
+                        margin: 10px auto;
+                        font-size: 14px;
+                    }
+                    .invi_btn{
+                        width: 40%;
+                        height: 50px;
+                        margin: 20px auto;
+                        border-radius: 5px;
+                        background-color: #ffa52d;
+                        line-height: 50px;
+                        text-align: center;
+                    }
+                    .invi_btn a{
+                        color: white;
+                        text-decoration: none;
+                        display: block;
+                        font-size: 24px;
+                    }
+                    .footer{
+                        width: 100%;
+                        background-color: #cccccc;
+                        padding:20px 3%;
+                        color: #333333;
+                        margin-top: 50px;
+                        font-size: 12px;
+                    }
+                </style>
+                
+                    <div class="logo">
+                        <div>
+                            TUTTI <br /> DELIVERY
+                        </div>
+                    </div>
+                    <div class="mail_back"></div>
+                    <div class="mail_body">
+                        Looking for delivery services of your favourite restaurants? '.$this->user_session['nickname'].' invites you to order with Tutti Delivery! Sign up using code '.$code.' or the link below to get $'.$coupon_amount.' in coupons when you place your first order!
+                    </div>
+                    <div class="invi_btn">
+                        <a href="'.$link.'">SIGN UP HERE</a>
+                    </div>
+                    <div class="footer">
+                        <div>
+                            * This offer is valid for new users only.
+                        </div>
+                        <div>
+                            * Minimum purchase is required and may very from different coupons.
+                        </div>
+                        <div>
+                            * Only one coupon can be used for each order.
+                        </div>
+                
+                        <div style="margin-top: 120px; font-size: 10px; text-align: center">
+                            © 2019 Kavl Technology Ltd.All rights reserved
+                        </div>
+                    </div>';
 
         require './mailer/PHPMailer.php';
         require './mailer/SMTP.php';
