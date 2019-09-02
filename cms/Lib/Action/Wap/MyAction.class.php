@@ -5952,32 +5952,44 @@ class MyAction extends BaseAction{
         //$body .= "<br><br>Your code is ".$code;
         //$body .= "<br><br>Term may apply";
 
-        $body = '<div class="mail_back" style="width: 100%;height: 350px;margin: 0px auto 0 auto;overflow: hidden;">
-                    <img src="'.C('config.site_url').'/tpl/Static/blue/images/new/mail_back.png" style="width: 100%;"/>
-                </div>
-                <div class="mail_body" style="width: 100%;margin: 10px auto;font-size: 14px;">
-                    Looking for delivery services of your favourite restaurants? '.$this->user_session['nickname'].' invites you to order with Tutti Delivery! Sign up using code '.$code.' or the link below to get $'.$coupon_amount.' in coupons when you place your first order!
-                </div>
-                <div class="invi_btn" style="width: 40%;height: 50px;margin: 20px auto;border-radius: 5px;background-color: #ffa52d;line-height: 50px;text-align: center;">
-                    <a href="'.$link.'" style="color: white;text-decoration: none;display: block;font-size: 18px;">
-                        SIGN UP HERE
-                    </a>
-                </div>
-                <div class="footer" style="width: 100%;background-color: #cccccc;padding:20px 3%;color: #333333;margin-top: 50px;font-size: 12px;">
-                    <div>
-                        * This offer is valid for new users only.
-                    </div>
-                    <div>
-                        * Minimum purchase is required and may very from different coupons.
-                    </div>
-                    <div>
-                        * Only one coupon can be used for each order.
-                    </div>
-            
-                    <div style="margin-top: 120px; font-size: 10px; text-align: center">
-                        © 2019 Kavl Technology Ltd.All rights reserved
-                    </div>
-                </div>';
+        $body = '<table style="width: 98%; position: relative;margin: 0 auto">
+                    <tr>
+                        <td>
+                            <img src="./tpl/Static/blue/images/new/mail_back.png" style="width: 100%;"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Looking for delivery services of your favourite restaurants? '.$this->user_session['nickname'].' invites you to order with Tutti Delivery! Sign up using code '.$code.' or the link below to get $'.$coupon_amount.' in coupons when you place your first order!
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="invi_btn" style="width: 40%;height: 50px;margin: 20px auto;border-radius: 5px;background-color: #ffa52d;line-height: 50px;text-align: center;">
+                                <a href="'.$link.'" style="color: white;text-decoration: none;display: block;font-size: 18px;">
+                                    SIGN UP HERE
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 100%;background-color: #cccccc;padding:2% 2%;color: #333333;font-size: 12px;">
+                            <div>
+                                * This offer is valid for new users only.
+                            </div>
+                            <div>
+                                * Minimum purchase is required and may very from different coupons.
+                            </div>
+                            <div>
+                                * Only one coupon can be used for each order.
+                            </div>
+                
+                            <div style="margin-top: 120px; font-size: 10px; text-align: center">
+                                © 2019 Kavl Technology Ltd.All rights reserved
+                            </div>
+                        </td>
+                    </tr>
+                </table>';
 
         require './mailer/PHPMailer.php';
         require './mailer/SMTP.php';
