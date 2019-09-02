@@ -232,6 +232,11 @@ class New_eventModel extends Model
             $v['type'] = 'all';
             $v['start_time'] = $v['create_time'];
             $v['end_time'] = $v['expiry_time'];
+            if(C('DEFAULT_LANG') == 'zh-cn'){
+                $v['discount_desc'] = replace_lang_str(L('_MAN_NUM_REDUCE_'),$v['order_money']).replace_lang_str(L('_MAN_REDUCE_NUM_'),$v['discount']);
+            }else{
+                $v['discount_desc'] = replace_lang_str(L('_MAN_NUM_REDUCE_'),$v['discount']).replace_lang_str(L('_MAN_REDUCE_NUM_'),$v['order_money']);
+            }
             $list[] = $v;
         }
 

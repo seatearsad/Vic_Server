@@ -1165,6 +1165,9 @@ class IndexAction extends BaseAction
         $coupon['name'] = lang_substr($coupon['name'],C('DEFAULT_LANG'));
         $coupon['des'] = lang_substr($coupon['des'],C('DEFAULT_LANG'));
 
+        if($coupon['discount_desc'])
+            $coupon['desc'] = $coupon['discount_desc'];
+
         $data['name'] = $coupon['name'];
         $data['desc'] = $coupon['des'];
         $data['rowiID'] = $coupon['id'];
