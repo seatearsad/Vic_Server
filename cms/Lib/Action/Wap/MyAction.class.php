@@ -5952,16 +5952,10 @@ class MyAction extends BaseAction{
         //$body .= "<br><br>Your code is ".$code;
         //$body .= "<br><br>Term may apply";
 
-        $body = '<div class="logo" style="width:100px;height: 100px;border-radius: 50px;margin-top: 10px;margin-left:10%;position: relative;z-index: 99;">
-                    <img src="'.C('config.site_url').'/tpl/Static/blue/images/new/icon.png" style="width: 100%;height: 100px;border-radius: 50px;"/>
-                    <div style="color: white;font-weight: bold;text-align: center;padding-top: 10px;width: 100px;font-family:Arial;">
-                        TUTTI <br> DELIVERY
-                    </div>
+        $body = '<div class="mail_back" style="width: 100%;height: 350px;margin: 0px auto 0 auto;overflow: hidden;">
+                    <img src="'.C('config.site_url').'/tpl/Static/blue/images/new/mail_back.png" style="width: 100%;"/>
                 </div>
-                <div class="mail_back" style="width: 94%;height: 200px;margin: -50px auto 0 auto;overflow: hidden;">
-                    <img src="'.C('config.site_url').'/tpl/Static/blue/images/new/mail_back.jpg" style="width: 100%;"/>
-                </div>
-                <div class="mail_body" style="width: 94%;margin: 10px auto;font-size: 14px;">
+                <div class="mail_body" style="width: 100%;margin: 10px auto;font-size: 14px;">
                     Looking for delivery services of your favourite restaurants? '.$this->user_session['nickname'].' invites you to order with Tutti Delivery! Sign up using code '.$code.' or the link below to get $'.$coupon_amount.' in coupons when you place your first order!
                 </div>
                 <div class="invi_btn" style="width: 40%;height: 50px;margin: 20px auto;border-radius: 5px;background-color: #ffa52d;line-height: 50px;text-align: center;">

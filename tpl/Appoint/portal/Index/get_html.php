@@ -4,102 +4,32 @@
     <meta charset="UTF-8">
     <title>Tutti</title>
 </head>
-<style>
-    *{
-        margin: 0;
-    }
-    .logo{
-        width:100px;
-        height: 100px;
-        border-radius: 50px;
-        margin-top: 10px;
-        margin-left:10%;
-        position: relative;
-        z-index: 99;
-    }
-    .logo img{
-        width: 100%;
-        height: 100px;
-        border-radius: 50px;
-    }
-    .mail_back{
-        width: 94%;
-        height: 200px;
-        margin: -50px auto 0 auto;
-        overflow: hidden;
-    }
-    .mail_back img{
-        width: 100%;
+<div class="mail_back" style="width: 100%;height: 350px;margin: 0px auto 0 auto;overflow: hidden;">
+    <img src="./tpl/Static/blue/images/new/mail_back.png" style="width: 100%;"/>
+</div>
+<div class="mail_body" style="width: 100%;margin: 10px auto;font-size: 14px;">
+    Looking for delivery services of your favourite restaurants? tutti invites you to order with Tutti Delivery! Sign up using code  or the link below to get $10 in coupons when you place your first order!
+</div>
+<div class="invi_btn" style="width: 40%;height: 50px;margin: 20px auto;border-radius: 5px;background-color: #ffa52d;line-height: 50px;text-align: center;">
+    <a href="#" style="color: white;text-decoration: none;display: block;font-size: 18px;">
+        SIGN UP HERE
+    </a>
+</div>
+<div class="footer" style="width: 100%;background-color: #cccccc;padding:20px 3%;color: #333333;margin-top: 50px;font-size: 12px;">
+    <div>
+        * This offer is valid for new users only.
+    </div>
+    <div>
+        * Minimum purchase is required and may very from different coupons.
+    </div>
+    <div>
+        * Only one coupon can be used for each order.
+    </div>
 
-    }
-    .logo div{
-        color: white;
-        font-weight: bold;
-        text-align: center;
-        padding-top: 10px;
-        width: 100px;
-        font-family:Arial;
-    }
-    .mail_body{
-        width: 94%;
-        margin: 10px auto;
-        font-size: 14px;
-    }
-    .invi_btn{
-        width: 40%;
-        height: 50px;
-        margin: 20px auto;
-        border-radius: 5px;
-        background-color: #ffa52d;
-        line-height: 50px;
-        text-align: center;
-    }
-    .invi_btn a{
-        color: white;
-        text-decoration: none;
-        display: block;
-        font-size: 18px;
-    }
-    .footer{
-        width: 100%;
-        background-color: #cccccc;
-        padding:20px 3%;
-        color: #333333;
-        margin-top: 50px;
-        font-size: 12px;
-    }
-</style>
-<body>
-    <div class="logo">
-        <img src="http://54.190.29.18/tpl/Static/blue/images/new/icon.png"/>
-        <div>
-            TUTTI <br> DELIVERY
-        </div>
+    <div style="margin-top: 120px; font-size: 10px; text-align: center">
+        © 2019 Kavl Technology Ltd.All rights reserved
     </div>
-    <div class="mail_back">
-        <img src="http://54.190.29.18/tpl/Static/blue/images/new/mail_back.jpg"/>
-    </div>
-    <div class="mail_body">
-        Looking for delivery services of your favourite restaurants? Tutti invites you to order with Tutti Delivery! Sign up using your code or the link below to get $18 in coupons when you place your first order!
-    </div>
-    <div class="invi_btn">
-        <a href="#">SIGN UP HERE</a>
-    </div>
-    <div class="footer">
-        <div>
-            * This offer is valid for new users only.
-        </div>
-        <div>
-            * Minimum purchase is required and may very from different coupons.
-        </div>
-        <div>
-            * Only one coupon can be used for each order.
-        </div>
-
-        <div style="margin-top: 120px; font-size: 10px; text-align: center">
-            &copy 2019 Kavl Technology Ltd.All rights reserved
-        </div>
-    </div>
+</div>
 <!--table style="font-family:Roboto;border-collapse: collapse; width: 900px; position: relative;">
     <tbody>
         <tr>
