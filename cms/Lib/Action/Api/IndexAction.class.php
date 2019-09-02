@@ -1169,7 +1169,7 @@ class IndexAction extends BaseAction
             $data['desc'] = $coupon['discount_desc'];
 
         $data['name'] = $coupon['name'];
-        $data['desc'] = $coupon['des'];
+        //$data['desc'] = $coupon['des'];
         $data['rowiID'] = $coupon['id'];
         $data['limitMoney'] = $coupon['order_money'];
         $data['money'] = $coupon['discount'];
