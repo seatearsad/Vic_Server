@@ -1735,6 +1735,8 @@ class IndexAction extends BaseAction
             $event_list = D('New_event')->getEventList(1,2);
             if($event_list){
                 $event = reset($event_list);
+                $event['name'] = lang_substr($event['name'],C('DEFAULT_LANG'));
+                $event['desc'] = lang_substr($event['desc'],C('DEFAULT_LANG'));
                 $info['is_event'] = 1;
                 $info['event'] = $event;
             }else{
@@ -1754,6 +1756,8 @@ class IndexAction extends BaseAction
         $event_list = D('New_event')->getEventList(1,2);
         if($event_list){
             $event = reset($event_list);
+            $event['name'] = lang_substr($event['name'],C('DEFAULT_LANG'));
+            $event['desc'] = lang_substr($event['desc'],C('DEFAULT_LANG'));
             $info['is_event'] = 1;
             $info['event'] = $event;
         }else{
