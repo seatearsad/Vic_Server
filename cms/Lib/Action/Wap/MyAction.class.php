@@ -6011,13 +6011,13 @@ class MyAction extends BaseAction{
                 </style>
                 
                     <div class="logo">
-                        <img src="http://54.190.29.18/tpl/Static/blue/images/new/icon.png"/>
+                        <img src="'.C('config.site_url').'/tpl/Static/blue/images/new/icon.png"/>
                         <div>
                             TUTTI <br> DELIVERY
                         </div>
                     </div>
                     <div class="mail_back">
-                        <img src="http://54.190.29.18/tpl/Static/blue/images/new/mail_back.jpg"/>
+                        <img src="'.C('config.site_url').'/tpl/Static/blue/images/new/mail_back.jpg"/>
                     </div>
                     <div class="mail_body">
                         Looking for delivery services of your favourite restaurants? '.$this->user_session['nickname'].' invites you to order with Tutti Delivery! Sign up using code '.$code.' or the link below to get $'.$coupon_amount.' in coupons when you place your first order!
