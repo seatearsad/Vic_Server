@@ -32,8 +32,14 @@ class New_eventModel extends Model
             $v['status_name'] = $this->getStausName($v['status']);
             $v['coupon_amount'] = $this->getEventCouponAmount($v['id']);
             if($status != -1){
-                if($v['status'] == $status)
-                    $new_list[] = $v;
+                if($v['status'] == $status) {
+                    if($status == 1 && $v['begin_time'] != 0){
+                        if($v['begin_time'] < time())
+                            $new_list[] = $v;
+                    }else{
+                        $new_list[] = $v;
+                    }
+                }
             }else{
                 $new_list[] = $v;
             }
@@ -115,42 +121,52 @@ class New_eventModel extends Model
     public function addEventCouponByType($type,$user_id){
         if($this->userIsEvent($type,$user_id)) {
             $event = $this->where(array('type' => $type, 'status' => 1))->find();
+            $event = $this->checkExpiry($event);
+
+            if($event['status'] != 1){
+                return false;
+            }
+
             if ($event) {
-                $today = strtotime(date('Y-m-d'));
+                if ($event['begin_time'] != 0 && $event['begin_time'] > time()){
+                    return false;
+                }else {
+                    $today = strtotime(date('Y-m-d'));
 
-                $event_id = $event['id'];
-                $coupon_list = D('New_event_coupon')->where(array('event_id' => $event_id))->select();
-                //添加给自己的优惠券
-                $coupon_add_self = array();
-                //添加给邀请者的优惠券
-                $coupon_add_invi = array();
+                    $event_id = $event['id'];
+                    $coupon_list = D('New_event_coupon')->where(array('event_id' => $event_id))->select();
+                    //添加给自己的优惠券
+                    $coupon_add_self = array();
+                    //添加给邀请者的优惠券
+                    $coupon_add_invi = array();
 
-                $user = D('User')->where(array('uid' => $user_id))->find();
+                    $user = D('User')->where(array('uid' => $user_id))->find();
 
-                foreach ($coupon_list as $v) {
-                    $data = array();
-                    $data['event_coupon_id'] = $v['id'];
+                    foreach ($coupon_list as $v) {
+                        $data = array();
+                        $data['event_coupon_id'] = $v['id'];
 
-                    $data['create_time'] = time();
-                    $data['expiry_time'] = $today + ($v['limit_day'] + 1) * 24 * 3600 - 1;
-                    if ($v['type'] == 0) {
-                        $data['uid'] = $user_id;
-                        $coupon_add_self[] = $data;
-                    } else {
-                        if ($user['invitation_user'] != 0) {
-                            $data['uid'] = $user['invitation_user'];
-                            $coupon_add_invi[] = $data;
+                        $data['create_time'] = time();
+                        $data['expiry_time'] = $today + ($v['limit_day'] + 1) * 24 * 3600 - 1;
+                        if ($v['type'] == 0) {
+                            $data['uid'] = $user_id;
+                            $coupon_add_self[] = $data;
+                        } else {
+                            if ($user['invitation_user'] != 0) {
+                                $data['uid'] = $user['invitation_user'];
+                                $coupon_add_invi[] = $data;
+                            }
                         }
                     }
+
+                    if (count($coupon_add_self) > 0)
+                        D('New_event_user')->addAll($coupon_add_self);
+
+                    if (count($coupon_add_invi) > 0)
+                        D('New_event_user')->addAll($coupon_add_invi);
+
+                    return true;
                 }
-
-                if (count($coupon_add_self) > 0)
-                    D('New_event_user')->addAll($coupon_add_self);
-
-                if (count($coupon_add_invi) > 0)
-                    D('New_event_user')->addAll($coupon_add_invi);
-
-                return true;
             }
             return false;
         }
