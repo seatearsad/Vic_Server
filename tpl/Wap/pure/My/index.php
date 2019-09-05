@@ -96,6 +96,24 @@
         .main ul a:nth-child(5) li div{
             background-image: url("./tpl/Static/blue/images/wap/language.png");
         }
+
+        #event_div{
+            width: 90%;
+            height: 80px;
+            margin-left: 5%;
+            background-color: white;
+            margin-top: 10px;
+            border-radius: 10px;
+            padding: 10px 2% 10px 70px;
+            background-image: url("./tpl/Static/blue/images/new/gift_icon.png");
+            background-repeat: no-repeat;
+            background-size: 55px auto;
+            background-position: 10px 10px;
+        }
+        #event_name{
+            font-weight: bold;
+            font-size: 18px;
+        }
 	</style>
         <include file="Public:facebook"/>
 </head>
@@ -110,7 +128,14 @@
         <div class="user_name">{pigcms{$now_user['nickname']}</div>
         <div class="gray_line"></div>
         <div class="gray_k"></div>
-
+        <if condition="$event">
+            <a href="{pigcms{:U('My/invitation')}">
+                <div id="event_div">
+                    <div id="event_name">{pigcms{$event.name}</div>
+                    <div id="event_desc">{pigcms{$event.desc}</div>
+                </div>
+            </a>
+        </if>
         <ul>
             <a href="{pigcms{:U('My/myinfo')}">
             <li>

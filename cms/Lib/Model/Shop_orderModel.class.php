@@ -258,33 +258,33 @@ class Shop_orderModel extends Model
 			return $this->wap_after_pay_before($order_info);
 		}
 		$data_shop_order['card_discount'] = $merchant_balance['card_discount'];
-			if ($now_coupon['card_price'] >0) {
-				$data_shop_order['card_id'] = $now_coupon['merc_id'];
-				$data_shop_order['card_price'] = round($now_coupon['card_price'] * 100)/100;
-				if ($now_coupon['card_price'] >= $pay_money) {
-					$order_result = $this->wap_pay_save_order($order_info, $data_shop_order);
-					if ($order_result['error_code']) {
-						return $order_result;
-					}
-					return $this->wap_after_pay_before($order_info);
+		if ($now_coupon['card_price'] >0) {
+			$data_shop_order['card_id'] = $now_coupon['merc_id'];
+			$data_shop_order['card_price'] = round($now_coupon['card_price'] * 100)/100;
+			if ($now_coupon['card_price'] >= $pay_money) {
+				$order_result = $this->wap_pay_save_order($order_info, $data_shop_order);
+				if ($order_result['error_code']) {
+					return $order_result;
 				}
-				$pay_money -= round($now_coupon['card_price'] * 100)/100;
-				$pay_money = round($pay_money * 100)/100;
+				return $this->wap_after_pay_before($order_info);
 			}
+			$pay_money -= round($now_coupon['card_price'] * 100)/100;
+			$pay_money = round($pay_money * 100)/100;
+		}
 
-			if ($now_coupon['coupon_price'] >0) {
-				$data_shop_order['coupon_id'] = $now_coupon['sysc_id'];
-				$data_shop_order['coupon_price'] = round($now_coupon['coupon_price'] * 100)/100;
-				if ($now_coupon['coupon_price'] >= $pay_money) {
-					$order_result = $this->wap_pay_save_order($order_info, $data_shop_order);
-					if ($order_result['error_code']) {
-						return $order_result;
-					}
-					return $this->wap_after_pay_before($order_info);
+		if ($now_coupon['coupon_price'] >0) {
+			$data_shop_order['coupon_id'] = $now_coupon['sysc_id'];
+			$data_shop_order['coupon_price'] = round($now_coupon['coupon_price'] * 100)/100;
+			if ($now_coupon['coupon_price'] >= $pay_money) {
+				$order_result = $this->wap_pay_save_order($order_info, $data_shop_order);
+				if ($order_result['error_code']) {
+					return $order_result;
 				}
-				$pay_money -= round($now_coupon['coupon_price'] * 100)/100;
-				$pay_money = round($pay_money * 100)/100;
+				return $this->wap_after_pay_before($order_info);
 			}
+			$pay_money -= round($now_coupon['coupon_price'] * 100)/100;
+			$pay_money = round($pay_money * 100)/100;
+		}
 
 		// 使用积分
         if(!empty($order_info['score_deducte'])&&$order_info['use_score']){
@@ -480,10 +480,18 @@ class Shop_orderModel extends Model
 
 			//判断平台优惠券
 			if($now_order['coupon_id']){
-				$now_coupon = D('System_coupon')->get_coupon_by_id($now_order['coupon_id']);
-				if(empty($now_coupon)){
-					return $this->wap_after_pay_error($now_order,$order_param,'您选择的优惠券不存在！');
-				}
+				if(strpos($now_order['coupon_id'],'event')!== false) {
+                    $event = explode('_',$now_order['coupon_id']);
+                    $event_coupon_id = $event[2];
+                    if(!D('New_event_user')->where(array('id'=>$event_coupon_id))->find()){
+                        return $this->wap_after_pay_error($now_order, $order_param, '您选择的优惠券不存在！');
+					}
+                }else {
+                    $now_coupon = D('System_coupon')->get_coupon_by_id($now_order['coupon_id']);
+                    if (empty($now_coupon)) {
+                        return $this->wap_after_pay_error($now_order, $order_param, '您选择的优惠券不存在！');
+                    }
+                }
 			}
 
 			//判断会员卡余额
@@ -528,7 +536,22 @@ class Shop_orderModel extends Model
 
 			//如果使用了平台优惠券
 			if($now_order['coupon_id']){
-				$use_result = D('System_coupon')->user_coupon($now_order['coupon_id'],$now_order['order_id'],$order_param['order_type'],$now_order['mer_id'],$now_order['uid']);
+				if(strpos($now_order['coupon_id'],'event')!== false) {
+                    $event = explode('_',$now_order['coupon_id']);
+                    $event_coupon_id = $event[2];
+                    $event_data['use_time'] = time();
+                    $event_data['is_use'] = 1;
+
+                    if(D('New_event_user')->where(array('id'=>$event_coupon_id))->save($event_data)){
+                        $use_result['error_code'] = false;
+                    }else{
+                        $use_result['error_code'] = true;
+                        $use_result['msg'] = "优惠券不存在";
+                    }
+                }else{
+                    $use_result = D('System_coupon')->user_coupon($now_order['coupon_id'], $now_order['order_id'], $order_param['order_type'], $now_order['mer_id'], $now_order['uid']);
+				}
+                //var_dump($use_result);die();
 				if($use_result['error_code']){
 					return array('error'=>1,'msg'=>$use_result['msg']);
 				}else{//garfunkel add
@@ -847,6 +870,19 @@ class Shop_orderModel extends Model
                         D('Shop_order_log')->add_log(array('order_id' => $now_order['order_id'], 'status' => 2, 'name' => '自动接单', 'phone' => ''));
                     }
                 }
+
+                //garfunkel add 查找是否有新用户送券活动 并添加优惠券
+                $order_total_num = D('User')->getUserOrderNum($now_order['uid'],'all');
+				if($order_total_num == 1) {
+                    if(D('New_event')->addEventCouponByType(2, $now_order['uid'])){
+                        $user = D('User')->where(array('uid' => $now_order['uid']))->find();
+                        if($user['invitation_user'] != 0){
+                            $invitation_user = D('User')->where(array('uid' => $user['invitation_user']))->find();
+                            D('User')->where(array('uid' => $user['invitation_user']))->save(array('invitation_order_num'=>($invitation_user['invitation_order_num']+1)));
+						}
+					}
+                }
+
                 //-----------------------add auto order 2017-03-06--------------------------------------
 				
 				/* 粉丝行为分析 */

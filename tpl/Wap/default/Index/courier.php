@@ -343,7 +343,6 @@
         </div>
         <div class="desc_txt">
             {pigcms{:L('_NEW_WEEKLY_CONTENT_')}
-            features.
         </div></div>
 </div>
 <div class="white_line"></div>
