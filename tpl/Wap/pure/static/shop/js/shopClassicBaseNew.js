@@ -1208,6 +1208,24 @@ function showShop(shopId){
                     is_no_select = true;
 				}
             });
+			//验证配送是否选择
+            $.each($('#shopDetailPageDish .row'),function(i,item){
+            	var num = 0;
+            	var min_num = $(item).data('min');
+            	var dish_name = $(item).data('name');
+                $.each($(item).find('li.active'),function(j,jtem){
+                    num += 1;
+                });
+                $.each($(item).find('div.dish_memo'),function (j,jtem) {
+                    var this_num = parseInt($(jtem).children('.number').html());
+                    num += this_num;
+                });
+                if(num < min_num){
+                    motify.log(dish_name + ' selection(s) '+min_num+' required');
+                    is_no_select = true;
+                }
+            });
+
 			if(is_no_select){
 				return false;
 			}

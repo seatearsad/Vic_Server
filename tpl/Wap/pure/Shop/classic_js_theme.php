@@ -345,7 +345,7 @@
 <script id="productDishTpl" type="text/html">
     {{# for(var i in d){ }}
     {{# if(d[i].type == 0){ }}
-    <div class="row clearfix">
+    <div class="row clearfix" id="shopDetailPageDish_{{ d[i].id}}" data-min="{{d[i].min}}" data-name="{{ d[i].name }}">
         <div class="left">{{ d[i].name }}</div>
         <div class="right fl">
             <ul data-dish_name="{{ d[i].name }}">
@@ -361,7 +361,7 @@
         </div>
     </div>
     {{# }else{ }}
-    <div class="row clearfix" id="shopDetailPageDish_{{ d[i].id}}">
+    <div class="row clearfix" id="shopDetailPageDish_{{ d[i].id}}" data-min="{{d[i].min}}" data-name="{{ d[i].name }}">
         <div class="left">{{ d[i].name }}</div>
         {{# var k = 0; for(var j in d[i].list){ }}
         <div style="display: flex;border-bottom: 1px solid silver;padding: 5px 0;">
