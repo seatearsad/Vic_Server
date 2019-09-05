@@ -1628,11 +1628,22 @@ class Shop_goodsModel extends Model
                 $num = $row['count'];
                 $spec_ids = array();
                 $pro_ids = array();
-                $str_s = array(); $str_p = array();
+                $dish_ids = array();
+                $str_s = array(); $str_p = array();$str_d = array();
                 foreach ($row['productParam'] as $r) {
                     if ($r['type'] == 'spec') {
                         $spec_ids[] = $r['id'];
                         $str_s[] = $r['name'];
+                    }elseif ($r['type'] == 'side_dish'){//garfunkel add dish
+                        foreach ($r['data'] as $d) {
+                            if($d['dish_num'] > 1){
+                                $str_d[] = $d['dish_val_name'].'*'.$d['dish_num'];
+                            }else{
+                                $str_d[] = $d['dish_val_name'];
+                            }
+
+                            $dish_ids[] = $d['dish_id'].','.$d['dish_val_id'].','.$d['dish_num'].','.$d['dish_price'];
+                        }
                     } else {
                         foreach ($r['data'] as $d) {
                             $str_p[] = $d['name'];
@@ -1644,11 +1655,20 @@ class Shop_goodsModel extends Model
 
                 $pro_str = count($pro_ids)>0 ? implode('|',$pro_ids) : '';
 
+                $dish_str = count($dish_ids)>0 ? implode('|',$dish_ids) : '';
+
                 $t_return = $this->check_stock($goods_id, $num, $spec_str, $store_shop['stock_type'], $store_id);
                 if ($t_return['status'] == 0) {
                     return array('error_code' => true, 'msg' => $t_return['msg']);
                 } elseif ($t_return['status'] == 2) {
                     return array('error_code' => true, 'msg' => $t_return['msg']);
+                }
+                //garfunkel add dish
+                if(count($dish_ids) > 0){
+                    foreach ($dish_ids as $v){
+                        $dish = explode(',',$v);
+                        $t_return['price'] += $dish[3]*$dish[2];
+                    }
                 }
                 $total += $num;
                 $price += $t_return['price'] * $num;
@@ -1735,6 +1755,8 @@ class Shop_goodsModel extends Model
                 $str = '';
                 $str_s && $str = implode(',', $str_s);
                 $str_p && $str = $str ? $str . ';' . implode(',', $str_p) : implode(',', $str_p);
+                $str_d && $str = $str ? $str . ';' . implode(',',$str_d) : implode(',',$str_d);
+
                 $goods[] = array(
                     'name' => $row['productName'],
                     'is_seckill_price' => $t_return['is_seckill_price'],//是否是秒杀价(0:否，1：是)
@@ -1754,6 +1776,7 @@ class Shop_goodsModel extends Model
                     'str' => $str,
                     'spec_id' => $spec_str,
                     'pro_id' => $pro_str,
+                    'dish_id' => $dish_str,
                     'extra_price' => $row['productExtraPrice'],
                     'tax_num'   => $t_return['tax_num'],
                     'deposit_price' =>  $t_return['deposit_price']

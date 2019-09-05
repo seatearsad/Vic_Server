@@ -1520,7 +1520,11 @@ class ShopAction extends BaseAction{
         //garfunkel add side_dish
         $dish_list = D('Side_dish')->where(array('goods_id'=>$goods_id))->select();
 		foreach ($dish_list as &$v){
+		    $v['name'] = lang_substr($v['name'],C('DEFAULT_LANG'));
 		    $values = D('Side_dish_value')->where(array('dish_id'=>$v['id']))->select();
+		    foreach ($values as &$vv){
+                $vv['name'] = lang_substr($vv['name'],C('DEFAULT_LANG'));
+            }
 		    $v['list'] = $values;
         }
         $now_goods['side_dish'] = $dish_list;

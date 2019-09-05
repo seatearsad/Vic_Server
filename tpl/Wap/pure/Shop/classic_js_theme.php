@@ -344,16 +344,42 @@
 </script>
 <script id="productDishTpl" type="text/html">
     {{# for(var i in d){ }}
+    {{# if(d[i].type == 0){ }}
     <div class="row clearfix">
         <div class="left">{{ d[i].name }}</div>
         <div class="right fl">
             <ul data-dish_name="{{ d[i].name }}">
                 {{# var k = 0; for(var j in d[i].list){ }}
-                <li class="fl" data-min="{{d[i].min}}" data-max="{{d[i].max}}" data-dish_val_id="{{ d[i].list[j].id }}"  data-dish_id="{{ d[i].list[j].dish_id}}" data-dish_price="{{ d[i].list[j].price }}">{{ d[i].list[j].name }} +${{ d[i].list[j].price }}</li>
+                <li class="fl" data-min="{{d[i].min}}" data-max="{{d[i].max}}" data-dish_val_id="{{ d[i].list[j].id }}"  data-dish_id="{{ d[i].list[j].dish_id}}" data-dish_price="{{ d[i].list[j].price }}" data-dish_val_name="{{ d[i].list[j].name }}" data-dish_name="{{ d[i].name }}">
+                    {{ d[i].list[j].name }}
+                    {{# if(d[i].list[j].price > 0){ }}
+                        +${{ d[i].list[j].price }}
+                    {{# } }}
+                </li>
                 {{#  k++; } }}
             </ul>
         </div>
     </div>
+    {{# }else{ }}
+    <div class="row clearfix" id="shopDetailPageDish_{{ d[i].id}}">
+        <div class="left">{{ d[i].name }}</div>
+        {{# var k = 0; for(var j in d[i].list){ }}
+        <div style="display: flex;border-bottom: 1px solid silver;padding: 5px 0;">
+            <div style="display: flex;flex: 1 1 100%;">
+            {{ d[i].list[j].name }}
+            {{# if(d[i].list[j].price > 0){ }}
+            +${{ d[i].list[j].price }}
+            {{# } }}
+            </div>
+            <div style="display: flex;flex: 0 0 auto" class="dish_memo" data-dish_val_name="{{ d[i].list[j].name }}" data-dish_name="{{ d[i].name }}" data-dish_val_id="{{ d[i].list[j].id }}"  data-dish_id="{{ d[i].list[j].dish_id}}" data-min="{{d[i].min}}" data-max="{{d[i].max}}" data-dish_price="{{ d[i].list[j].price }}">
+                <div class="product_btn min"></div>
+                <div class="product_btn number">0</div>
+                <div class="product_btn plus"></div>
+            </div>
+        </div>
+        {{#  k++; } }}
+    </div>
+    {{# } }}
     {{# } }}
 </script>
 <script id="productPropertiesTpl" type="text/html">
@@ -390,7 +416,15 @@
 							for(var j in d[i].productParam){
 								if(d[i].productParam[j].type == 'spec'){
 									tmpParam.push(d[i].productParam[j].name);
-								}else{
+								}else if(d[i].productParam[j].type == 'side_dish'){
+                                    for(var k in d[i].productParam[j].data){
+                                        if(d[i].productParam[j].data[k].dish_num > 1){
+                                            tmpParam.push(d[i].productParam[j].data[k].dish_val_name + '*' + d[i].productParam[j].data[k].dish_num);
+                                        }else{
+                                            tmpParam.push(d[i].productParam[j].data[k].dish_val_name);
+                                        }
+                                    }
+                                }else{
 									for(var k in d[i].productParam[j].data){
 										tmpParam.push(d[i].productParam[j].data[k].name);
 									}

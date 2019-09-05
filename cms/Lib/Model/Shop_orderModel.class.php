@@ -1718,6 +1718,7 @@ class Shop_orderModel extends Model
                     'spec' => $grow['str'], 
                     'spec_id' => $grow['spec_id'],
                     'pro_id' => $grow['pro_id'],
+                    'dish_id' => $grow['dish_id'],
                     'create_time' => time(),
                     'extra_price' => isset($grow['extra_price']) ? floatval($grow['extra_price']) : 0
                 );

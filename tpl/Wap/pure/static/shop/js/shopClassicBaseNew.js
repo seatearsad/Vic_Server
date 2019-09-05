@@ -918,9 +918,9 @@ function showGood(shop_id,product_id){
                 });
             }
             if(result.side_dish){
-                laytpl($('#productDishTpl').html()).render(result.side_dish, function(html){
-                    $('#shopDetailPageDish').html(html);
-                });
+				laytpl($('#productDishTpl').html()).render(result.side_dish, function (html) {
+					$('#shopDetailPageDish').html(html);
+				});
             }
             $('#shopDetailPageNumber .number').addClass('productNum-'+result.goods_id);
 
@@ -1132,6 +1132,34 @@ function showShop(shopId){
                 $(this).removeClass('active');
             }
             changeProductSpec();
+        });
+
+        $(document).on('click','#shopDetailPageDish .product_btn.plus',function () {
+        	var max = parseInt($(this).parent().data('max'));
+
+            var dish_id = $(this).parent().data('dish_id');
+			var curr_all_num = 0;
+            $(this).parents('#shopDetailPageDish_'+dish_id).find('.dish_memo').each(function () {
+                curr_all_num += parseInt($(this).children('.number').html());
+            });
+
+
+            //alert($(this).parent().data('dish_name'));
+            var curr_num = parseInt($(this).parent().children('.number').html());
+			if(curr_all_num < max) {
+                $(this).parent().children('.number').html(curr_num + 1);
+                changeProductSpec();
+            }else {
+                motify.log($(this).parent().data('dish_name') + ' Options Maximum ' + max + '');
+            }
+        });
+
+        $(document).on('click','#shopDetailPageDish .product_btn.min',function () {
+            var curr_num = parseInt($(this).parent().children('.number').html());
+            if(curr_num > 0) {
+                $(this).parent().children('.number').html(curr_num - 1);
+                changeProductSpec();
+            }
         });
 
         $(document).on('click','#shopDetailPageLabel li',function(event){
@@ -1463,9 +1491,19 @@ function changeProductSpec(){
             $.each($(item).find('li.active'),function(j,jtem){
                 productDish.push($(jtem).data('dish_id')+'_'+$(jtem).data('dish_val_id'));
                 curr_price += parseFloat($(jtem).data('dish_price'));
+                nowProductCartLabel = nowProductCartLabel+'_'+$(jtem).data('dish_id')+'_'+$(jtem).data('dish_val_id')+'_1';
             });
+            $.each($(item).find('div.dish_memo'),function (j,jtem) {
+                var this_num = parseInt($(jtem).children('.number').html());
+                if(this_num > 0) {
+                    productDish.push($(jtem).data('dish_id') + '_' + $(jtem).data('dish_val_id') + '_' + this_num);
+                    curr_price += parseFloat($(jtem).data('dish_price')) * this_num;
+                    nowProductCartLabel = nowProductCartLabel+'_'+$(jtem).data('dish_id')+'_'+$(jtem).data('dish_val_id')+ '_' + this_num;
+                }
+            })
         });
 	}
+
 	if(typeof (nowProductSpect) != 'undefined')
     	$('#shopDetailPagePrice').html('$'+curr_price+'<span class="unit"><em>/ </em>'+nowProduct.unit+'</span>'+(nowProductSpect.stock_num != -1 ? '<span class=\'stock_span\' data-stock="'+nowProductSpect.stock_num+'">Stock:'+nowProductSpect.stock_num+'</span>' : '<span data-stock="-1"></span>') + (nowProduct.deposit_price > 0 ? '<span>(Deposit:$'+ nowProduct.deposit_price +')</span>' : ''));
 	else
@@ -1473,6 +1511,7 @@ function changeProductSpec(){
 
 	$('#shopDetailPageNumber .number').attr('class','product_btn number');
 	$('#shopDetailPageNumber .number').addClass('productNum-'+nowProductCartLabel);
+
 	if(productCart[nowProductCartLabel]){
 		$('#shopDetailPageNumber').show();
 		$('#shopDetailPageNumber .number').html(productCart[nowProductCartLabel].count);
@@ -1522,6 +1561,25 @@ function cartFunction(type,obj,dataObj){
 				productParam.push({'type':'properties','data':tmpProductProperties});
 			});
 		}
+        if(nowProduct.side_dish){
+            var tmpProductDish = [];
+            $.each($('#shopDetailPageDish .row'),function(i,item){
+                $.each($(item).find('li.active'),function(j,jtem){
+                    productKey = productKey+'_'+$(jtem).data('dish_id')+'_'+$(jtem).data('dish_val_id')+'_1';
+                    tmpProductDish.push({'dish_id':$(jtem).data('dish_id'),'dish_val_id':$(jtem).data('dish_val_id'),'dish_num':1,'dish_name':$(jtem).data('dish_name'),'dish_val_name':$(jtem).data('dish_val_name'),'dish_price':$(jtem).data('dish_price')});
+                    productPrice += parseFloat($(jtem).data('dish_price'));
+                });
+                $.each($(item).find('div.dish_memo'),function (j,jtem) {
+                    var this_num = parseInt($(jtem).children('.number').html());
+                    if(this_num > 0) {
+                        productKey = productKey+'_'+$(jtem).data('dish_id')+'_'+$(jtem).data('dish_val_id')+'_'+this_num;
+                        tmpProductDish.push({'dish_id':$(jtem).data('dish_id'),'dish_val_id':$(jtem).data('dish_val_id'),'dish_num':this_num,'dish_name':$(jtem).data('dish_name'),'dish_val_name':$(jtem).data('dish_val_name'),'dish_price':$(jtem).data('dish_price')});
+                        productPrice += parseFloat($(jtem).data('dish_price')) * this_num;
+                    }
+                });
+                productParam.push({'type':'side_dish','data':tmpProductDish});
+            });
+        }
 	}else if(type != 'count'){
 		if(dataObj.hasClass('cartDD') && dataObj.find('.cartLeft').hasClass('hasSpec')){
 			var productKey = dataObj.find('.spec').data('product_id');
@@ -1772,7 +1830,13 @@ function showShopContent(nav){
 							for(var j in tmpObj){
 								if(tmpObj[j].type == 'spec'){
 									tmpSpec.push(tmpObj[j].id);
-								}else{
+								}else if(tmpObj[j].type == 'side_dish'){
+                                    for(var k in tmpObj[j].data) {
+                                        tmpSpec.push(tmpObj[j].data[k].dish_id);
+                                        tmpSpec.push(tmpObj[j].data[k].dish_val_id);
+                                        tmpSpec.push(tmpObj[j].data[k].dish_num);
+                                    }
+                                }else{
 									for(var k in tmpObj[j].data){
 										tmpSpec.push(tmpObj[j].data[k].list_id);
 										tmpSpec.push(tmpObj[j].data[k].id);
@@ -1917,7 +1981,13 @@ function showGoodsBySortId(sortId, shopId)
 						for(var j in tmpObj){
 							if(tmpObj[j].type == 'spec'){
 								tmpSpec.push(tmpObj[j].id);
-							}else{
+							}else if(tmpObj[j].type == 'side_dish'){
+                                for(var k in tmpObj[j].data) {
+                                    tmpSpec.push(tmpObj[j].data[k].dish_id);
+                                    tmpSpec.push(tmpObj[j].data[k].dish_val_id);
+                                    tmpSpec.push(tmpObj[j].data[k].dish_num);
+                                }
+                            }else{
 								for(var k in tmpObj[j].data){
 									tmpSpec.push(tmpObj[j].data[k].list_id);
 									tmpSpec.push(tmpObj[j].data[k].id);

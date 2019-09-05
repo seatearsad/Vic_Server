@@ -2083,15 +2083,18 @@ em.merchant_invoice:before{
 }
 #shopDetailPageFormat .row,#shopDetailPageDish .row,#shopDetailPageLabel .row{
 	line-height: 30px;
+    /**
     padding-left:64px;
+    */
 }
 #shopDetailPageFormat .row:last-child,#shopDetailPageDish .row:last-child,#shopDetailPageLabel .row:last-child{
 	margin-bottom:0px;
 }
 #shopDetailPageFormat .row .left,#shopDetailPageDish .row .left,#shopDetailPageLabel .row .left{
-    width:56px;
+    /**width:56px;
 	position:absolute;
 	left:15px;
+	*/
 }
 #shopDetailPageFormat .row .left,#shopDetailPageDish .row .left{
 	
@@ -2156,7 +2159,7 @@ em.merchant_invoice:before{
     padding: 0px 12px;
     border-radius: 3px;
 }
-#shopDetailPageNumber .product_btn,#shopProductCartBox .product_btn {
+#shopDetailPageNumber .product_btn,#shopProductCartBox .product_btn,#shopDetailPageDish .product_btn {
     font-size: 10px;
     border: 1px solid #ccc;
     border-radius: 10px;
@@ -2165,13 +2168,13 @@ em.merchant_invoice:before{
 	float:right;
     position: relative;
 }
-#shopDetailPageNumber .product_btn.plus, #shopDetailPageNumber .product_btn.min,#shopProductCartBox .product_btn.plus, #shopProductCartBox .product_btn.min  {
+#shopDetailPageNumber .product_btn.plus, #shopDetailPageNumber .product_btn.min,#shopProductCartBox .product_btn.plus, #shopProductCartBox .product_btn.min,#shopDetailPageDish .product_btn.plus,#shopDetailPageDish .product_btn.min  {
     width: 28px;
     height: 28px;
     border-radius: 100%;
     padding: 0px;
 }
-#shopDetailPageNumber .product_btn.plus:before, #shopDetailPageNumber .product_btn.plus:after ,#shopProductCartBox .product_btn.plus:before, #shopProductCartBox .product_btn.plus:after{
+#shopDetailPageNumber .product_btn.plus:before, #shopDetailPageNumber .product_btn.plus:after ,#shopProductCartBox .product_btn.plus:before, #shopProductCartBox .product_btn.plus:after,#shopDetailPageDish .product_btn.plus:before,#shopDetailPageDish .product_btn.plus:after{
     content: '';
     height: 2px;
     width: 10px;
@@ -2184,13 +2187,13 @@ em.merchant_invoice:before{
     top: 12px;
     left: 9px;
 }
-#shopDetailPageNumber .product_btn.plus:after ,#shopProductCartBox .product_btn.plus:after {
+#shopDetailPageNumber .product_btn.plus:after ,#shopProductCartBox .product_btn.plus:after,#shopDetailPageDish .product_btn.plus:after {
     height: 10px;
     width: 2px;
     top: 8px;
     left: 13px;
 }
-#shopDetailPageNumber .product_btn.min:before ,#shopProductCartBox .product_btn.min:before {
+#shopDetailPageNumber .product_btn.min:before ,#shopProductCartBox .product_btn.min:before,#shopDetailPageDish .product_btn.min:before {
     content: '';
     height: 2px;
     width: 10px;
@@ -2204,7 +2207,7 @@ em.merchant_invoice:before{
     left: 9px;
 }
 
-#shopDetailPageNumber .product_btn.number ,#shopProductCartBox .product_btn.number{
+#shopDetailPageNumber .product_btn.number ,#shopProductCartBox .product_btn.number,#shopDetailPageDish .product_btn.number{
     border: none;
     font-size: 14px;
     padding: 0;
