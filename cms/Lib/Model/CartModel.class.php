@@ -8,7 +8,7 @@
 
 class CartModel extends Model
 {
-    public function add_cart($uid,$fid,$num=1,$spec = "",$proper = ""){
+    public function add_cart($uid,$fid,$num=1,$spec = "",$proper = "",$dish_id = ""){
         $data['uid'] = $uid;
         $data['fid'] = $fid;
 
@@ -18,9 +18,10 @@ class CartModel extends Model
         $data['num'] = $num;
         $data['spec'] = $spec;
         $data['proper'] = $proper;
+        $data['dish_id'] = $dish_id;
         $data['time'] = date("Y-m-d H:i:s");
 
-        $item = $this->field(true)->where(array('uid'=>$uid,'fid'=>$fid,'spec'=>$spec,'proper'=>$proper))->find();
+        $item = $this->field(true)->where(array('uid'=>$uid,'fid'=>$fid,'spec'=>$spec,'proper'=>$proper,'dish_id'=>$dish_id))->find();
 
         if(empty($item) && $data['num'] > 0){
             $id = $this->data($data)->add();

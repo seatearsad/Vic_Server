@@ -407,11 +407,17 @@ class StoreModel extends Model
             $returnList[$k]['quantity'] = empty($v['quantity'])? "0" : $v['quantity'];
             $returnList[$k]['spec'] = empty($v['spec']) ? "" : $v['spec'];
             $returnList[$k]['proper'] = empty($v['proper']) ? "" : $v['proper'];
+
             //是否有规格及属性选择
             if($v['spec_value'] || $v['is_properties'])
                 $returnList[$k]['has_format'] = true;
             else
                 $returnList[$k]['has_format'] = false;
+
+            //garfunkel add side_dish
+            if(D('Side_dish')->where(array('goods_id'=>$v['goods_id']))->find()){
+                $returnList[$k]['has_format'] = true;
+            }
 
             $spec_desc = "";
             if($returnList[$k]['spec'] != ""){

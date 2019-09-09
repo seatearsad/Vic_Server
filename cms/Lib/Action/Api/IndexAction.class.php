@@ -354,8 +354,9 @@ class IndexAction extends BaseAction
         $num = !empty($_POST['num']) ? $_POST['num']:1;
         $spec = empty($_POST['spec']) ? "" : $_POST['spec'];
         $proper = empty($_POST['proper']) ? "" : $_POST['proper'];
+        $dish_id = empty($_POST['dish_id']) ? "" : $_POST['dish_id'];
 
-        D('Cart')->add_cart($uid,$fid,$num,$spec,$proper);
+        D('Cart')->add_cart($uid,$fid,$num,$spec,$proper,$dish_id);
 
         $this->returnCode(0,'info',array(),'success');
     }
@@ -955,8 +956,19 @@ class IndexAction extends BaseAction
                 $now_goods['spec_list'][$k]['list'][$kk]['name'] = lang_substr($vv['name'],C('DEFAULT_LANG'));
             }
         }
-
         $result['spec_list'] = $now_goods['spec_list'];
+
+        //garfunkel add side_dish
+        $dish_list = D('Side_dish')->where(array('goods_id'=>$fid))->select();
+        foreach ($dish_list as &$v){
+            $v['name'] = lang_substr($v['name'],C('DEFAULT_LANG'));
+            $values = D('Side_dish_value')->where(array('dish_id'=>$v['id']))->select();
+            foreach ($values as &$vv){
+                $vv['name'] = lang_substr($vv['name'],C('DEFAULT_LANG'));
+            }
+            $v['list'] = $values;
+        }
+        $result['side_dish'] = $dish_list;
 
         $result['list'] = $now_goods['list'];
 
