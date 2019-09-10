@@ -53,16 +53,34 @@ class MonerisPay
 
         /****************************** Request Object *******************************/
 
+        /****************************** CVD Object ********************************/
+        $card_cvd = '';
+        if($data['cvd'] && $data['cvd'] != ''){
+            $card_cvd = $data['cvd'];
+        }
+
+        if($card_cvd != '') {
+            $cvdTemplate = array(
+                'cvd_indicator' => '1',
+                'cvd_value' => $card_cvd
+            );
+
+            $mpgCvdInfo = new mpgCvdInfo ($cvdTemplate);
+            $mpgTxn->setCvdInfo($mpgCvdInfo);
+        }
+
+
         $mpgRequest = new mpgRequest($mpgTxn);
         $mpgRequest->setProcCountryCode("CA"); //"US" for sending transaction to US environment
         $mpgRequest->setTestMode(false);
+        //$mpgRequest->setTestMode(true);
 
         $mpgHttpPost  =new mpgHttpsPost($store_id,$api_token,$mpgRequest);
 
         $mpgResponse=$mpgHttpPost->getMpgResponse();
-        $resp = $this->arrageResp($mpgResponse,$txnArray['pan'],$txnArray['expdate'],0,$order_id);
+        $resp = $this->arrageResp($mpgResponse,$txnArray['pan'],$txnArray['expdate'],0,$order_id,$card_cvd);
 
-        if($resp['responseCode'] < 50 && $data['save'] == 1){//如果需要存储
+        if($resp['responseCode'] != "null" && $resp['responseCode'] < 50 && $data['save'] == 1){//如果需要存储
             $isC = D('User_card')->getCardByUserAndNum($uid,$data['card_num']);
             if(!$isC) {
                 D('User_card')->clearIsDefaultByUid($uid);
@@ -71,22 +89,39 @@ class MonerisPay
                 $data['create_time'] = date("Y-m-d H:i:s");
                 //存储的时候为YYMM
                 $data['expiry'] = transYM($data['expiry']);
-                D('User_card')->field(true)->add($data);
+                $data['credit_id'] = D('User_card')->field(true)->add($data);
             }
         }
 
-        if($resp['responseCode'] < 50){
-            //处理优惠券
-            if($data['coupon_id']){
-                $now_coupon = D('System_coupon')->get_coupon_by_id($data['coupon_id']);
-                if(!empty($now_coupon)){
-                    $coupon_data = D('System_coupon_hadpull')->field(true)->where(array('id'=>$data['coupon_id']))->find();
-                    $coupon_real_id = $coupon_data['coupon_id'];
-                    $coupon = D('System_coupon')->get_coupon($coupon_real_id);
+        if($resp['responseCode'] != "null" && $resp['responseCode'] < 50){
+            //如果需要验证CVD
+            if($card_cvd != '') {
+                if(strpos($resp['cvdResultCode'],'M')!==false || strpos($resp['cvdResultCode'],'Y')!==false){
+                    if($data['credit_id']){
+                        $data['cvd'] = $card_cvd;
+                        $data['status'] = 1;
+                        $data['verification_time'] = time();
+                        D('User_card')->field(true)->where(array('id'=>$data['credit_id']))->save($data);
+                    }
+                    //处理优惠券
+                    if($data['coupon_id']){
+                        $now_coupon = D('System_coupon')->get_coupon_by_id($data['coupon_id']);
+                        if(!empty($now_coupon)){
+                            $coupon_data = D('System_coupon_hadpull')->field(true)->where(array('id'=>$data['coupon_id']))->find();
+                            $coupon_real_id = $coupon_data['coupon_id'];
+                            $coupon = D('System_coupon')->get_coupon($coupon_real_id);
 
-                    $in_coupon = array('coupon_id'=>$data['coupon_id'],'coupon_price'=>$coupon['discount']);
+                            $in_coupon = array('coupon_id'=>$data['coupon_id'],'coupon_price'=>$coupon['discount']);
 
-                    D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->save($in_coupon);
+                            D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->save($in_coupon);
+                        }
+                    }
+                }else{
+                    //验证CVD 为通过 将responseCode修改后存储一次error记录并退款
+                    $resp['responseCode'] = 7513;
+                    $resp['message'] = 'CVD Error';
+                    D('Pay_moneris_record_error')->add($resp);
+                    $this->refund($uid,$order_id);
                 }
             }
         }
@@ -98,7 +133,7 @@ class MonerisPay
     }
 
     //处理返回数据 $record_type 存储记录的类型 0初次支付记录 1删单退款记录（用户删单、系统删单）2 二次付款记录 3退还部分款项记录
-    public function arrageResp($mpgResponse,$pan,$expiry,$record_type = 0,$order_id){
+    public function arrageResp($mpgResponse,$pan,$expiry,$record_type = 0,$order_id,$card_cvd=''){
         /*卡类型 M = MasterCard V = Visa AX = American Express  NO = Discover（仅限加拿大）
         C1 = JCB（仅限加拿大）SE =Sears（仅限加拿大）D =借方（仅限加拿大）*/
         $resp['card_type'] = $mpgResponse->getCardType();
@@ -133,6 +168,15 @@ class MonerisPay
         $resp['order_id'] = $order[1];
         //test use
         //if($resp['order_id'] == null) $resp['order_id'] = 1;
+
+        //garfunkel add
+        if($card_cvd != '') {
+            $resp['cvdResultCode'] = $mpgResponse->getCvdResultCode();
+        }else {
+            $resp['cvdResultCode'] = '';
+        }
+
+        $resp['cvd'] = $card_cvd;
 
         $resp['pan'] = $pan;
         $resp['expiry'] = $expiry;

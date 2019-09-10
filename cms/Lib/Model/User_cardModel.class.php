@@ -18,10 +18,31 @@ class User_cardModel extends Model
             return false;
     }
 
-    public function getCardListByUid($uid){
+    /**
+     * @param $uid
+     * @param int $status 0需验证 1正常
+     * @return mixed
+     */
+    public function getCardListByUid($uid,$status = -1){
         $where = array('uid'=>$uid);
 
+        if($status != -1){
+            $where['status'] = $status;
+        }
+
         $result = $this->field(true)->where($where)->order('is_default desc,id asc')->select();
+        //过滤卡的验证时间
+        $save_verification_day = 30;
+        foreach ($result as &$v){
+            if($v['verification_time'] != '' && $v['status'] == 1) {
+                $veri_time = $v['verification_time'] + 30 * 24 * 60 * 60;
+                if ($veri_time < time()) {
+                    $v['status'] = 0;
+                    $v['verification_time'] = '';
+                    $this->field(true)->where(array('id'=>$v['id']))->save($v);
+                }
+            }
+        }
 
         return $result;
     }
