@@ -717,6 +717,18 @@ a.see_tmp_qrcode {
                                         content: "{pigcms{:L('_PAYMENT_SUCCESS_')}"
                                     });
                                     setTimeout("window.location.href = '"+data.url+"'",200);
+                                }else{
+                                    art.dialog({
+                                        title: 'Message',
+                                        id: 'moneris_pay',
+                                        opacity:'0.4',
+                                        lock:true,
+                                        fixed: true,
+                                        resize: false,
+                                        content: data.info
+                                    });
+                                    $("#J-order-pay-button").val("{pigcms{:L('_B_PURE_MY_81_')}");
+                                    $("#J-order-pay-button").removeAttr("disabled");
                                 }
                             });
                         }else{
@@ -752,9 +764,27 @@ a.see_tmp_qrcode {
 
                        $.post($('#moneris_form').attr('action'),re_data,function(data){
                            if(data.status == 1){
+                               art.dialog({
+                                   title: 'Message',
+                                   id: 'moneris_pay',
+                                   opacity:'0.4',
+                                   lock:true,
+                                   fixed: true,
+                                   resize: false,
+                                   content: "{pigcms{:L('_PAYMENT_SUCCESS_')}"
+                               });
+                               
                                setTimeout("window.location.href = '"+data.url+"'",200);
                            }else{
-                               alert(data.info);
+                               art.dialog({
+                                   title: 'Message',
+                                   id: 'moneris_pay',
+                                   opacity:'0.4',
+                                   lock:true,
+                                   fixed: true,
+                                   resize: false,
+                                   content: data.info
+                               });
                                $("#J-order-pay-button").val("{pigcms{:L('_B_PURE_MY_81_')}");
                                $("#J-order-pay-button").removeAttr("disabled");
                            }
