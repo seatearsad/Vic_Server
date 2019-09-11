@@ -1066,7 +1066,7 @@ class PayAction extends BaseAction{
         $moneris_pay = new MonerisPay();
         $resp = $moneris_pay->payment($_POST,$this->user_session['uid']);
         //var_dump($resp);
-        if($resp['responseCode'] < 50){
+        if($resp['responseCode'] != 'null' && $resp['responseCode'] < 50){
             $order = explode("_",$_POST['order_id']);
             $order_id = $order[1];
             $url =U("User/Index/shop_order_view",array('order_id'=>$order_id));
