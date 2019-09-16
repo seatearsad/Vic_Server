@@ -2707,17 +2707,21 @@ class PayAction extends BaseAction{
     }
 
     public function secure3d(){
-        $PaRes = $_POST['PaRes'];
-        $MD = $_POST['MD'];
-        import('@.ORG.pay.MonerisPay');
-        $moneris_pay = new MonerisPay();
+        if($_POST['PaRes'] && $_POST['MD']) {
+            $PaRes = $_POST['PaRes'];
+            $MD = $_POST['MD'];
+            import('@.ORG.pay.MonerisPay');
+            $moneris_pay = new MonerisPay();
 
-        $resp = $moneris_pay->MPI_Acs($PaRes,$MD);
+            $resp = $moneris_pay->MPI_Acs($PaRes, $MD);
 
-        if($resp['responseCode'] != 'null' && $resp['responseCode'] < 50){
-            $this->success(L('_PAYMENT_SUCCESS_'),$resp['url']);
+            if ($resp['responseCode'] != 'null' && $resp['responseCode'] < 50) {
+                $this->success(L('_PAYMENT_SUCCESS_'), $resp['url']);
+            } else {
+                $this->error($resp['message'], $resp['url']);
+            }
         }else{
-            $this->error($resp['message'],$resp['url']);
+            $this->error();
         }
 
         //$this->success($result['message'], $result['url']);
