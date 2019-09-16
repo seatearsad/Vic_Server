@@ -144,6 +144,11 @@
                 <div>Wallet</div>
             </li>
             </a>
+            <a href="{pigcms{:U('invitation')}">
+                <li>
+                    <div>Invitation Code</div>
+                </li>
+            </a>
         </ul>
 
         <div id="logout">Log out</div>

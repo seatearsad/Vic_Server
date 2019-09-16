@@ -69,9 +69,15 @@ class UserAction extends BaseAction {
                         case 'score':
                             $order_string = ' order by u.`score_count` DESC';
                             break;
+                        case 'invi_reg':
+                            $order_string = ' order by u.`invitation_reg_num` DESC';
+                            break;
+                        case 'invi_order':
+                            $order_string = ' order by u.`invitation_order_num` DESC';
+                            break;
                     }
                 }
-                //var_dump($sql_count.$where);die();
+                //var_dump($sql.$where.$order_string);die();
                 $count = D()->query($sql_count.$where.$order_string);
                 $count_user = $count[0]['count(*)'];
                 if($count_user > 0){

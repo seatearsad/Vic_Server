@@ -323,14 +323,17 @@ class IndexAction extends BaseAction
         $vcode = $_POST['vcode'];
         $pwd = $_POST['password'];
         $token = $_POST['token'];
+        $invi_code = $_POST['invi_code'];
 
-        $result = $this->loadModel()->reg_phone_pwd_vcode($phone,$vcode,$pwd);
+        $result = $this->loadModel()->reg_phone_pwd_vcode($phone,$vcode,$pwd,$invi_code);
 
         if ($result['error_code'])
             $code = 1;
         else{
             $code = 0;
             D('User')->where(array('uid'=>$result['uid']))->save(array('device_id'=>$token));
+            //garfunkel add 查找是否有新用户送券活动 并添加优惠券
+            D('New_event')->addEventCouponByType(1,$result['uid']);
         }
 
         $this->returnCode($code,'info',$result,$result['msg']);
@@ -610,13 +613,24 @@ class IndexAction extends BaseAction
 
         //处理优惠券
         if($_POST['coupon_id'] && $_POST['coupon_id'] != -1){
-            $now_coupon = D('System_coupon')->get_coupon_by_id($_POST['coupon_id']);
-            if(!empty($now_coupon)){
-                $coupon_data = D('System_coupon_hadpull')->field(true)->where(array('id'=>$_POST['coupon_id']))->find();
-                $coupon_real_id = $coupon_data['coupon_id'];
-                $coupon = D('System_coupon')->get_coupon($coupon_real_id);
-                $order_data['coupon_id'] = $_POST['coupon_id'];
-                $order_data['coupon_price'] = $coupon['discount'];
+            //如果选择的为活动优惠券
+            if(strpos($_POST['coupon_id'],'event')!== false) {
+                $event = explode('_',$_POST['coupon_id']);
+                $coupon_id = $event[1];
+                if($coupon_id){
+                    $coupon = D('New_event_coupon')->where(array('id'=>$coupon_id))->find();
+                    $order_data['coupon_id'] = $_POST['coupon_id'];
+                    $order_data['coupon_price'] = $coupon['discount'];
+                }
+            }else {
+                $now_coupon = D('System_coupon')->get_coupon_by_id($_POST['coupon_id']);
+                if (!empty($now_coupon)) {
+                    $coupon_data = D('System_coupon_hadpull')->field(true)->where(array('id' => $_POST['coupon_id']))->find();
+                    $coupon_real_id = $coupon_data['coupon_id'];
+                    $coupon = D('System_coupon')->get_coupon($coupon_real_id);
+                    $order_data['coupon_id'] = $_POST['coupon_id'];
+                    $order_data['coupon_price'] = $coupon['discount'];
+                }
             }
         }
         $order_data['is_mobile_pay'] = 2;
@@ -1121,6 +1135,13 @@ class IndexAction extends BaseAction
         $uid = $_POST['uid'];
         $coupon_list = D('System_coupon')->get_user_coupon_list($uid);
 
+        //获取活动优惠券
+        $event_coupon_list = D('New_event')->getUserCoupon($uid);
+        if(!$coupon_list) $coupon_list = array();
+        if(count($event_coupon_list) > 0){
+            $coupon_list = array_merge($coupon_list,$event_coupon_list);
+        }
+
         $tmp = array();
         foreach ($coupon_list as $key => $v) {
             if(!$v['is_use']){
@@ -1144,8 +1165,11 @@ class IndexAction extends BaseAction
         $coupon['name'] = lang_substr($coupon['name'],C('DEFAULT_LANG'));
         $coupon['des'] = lang_substr($coupon['des'],C('DEFAULT_LANG'));
 
+        if($coupon['discount_desc'])
+            $data['desc'] = $coupon['discount_desc'];
+
         $data['name'] = $coupon['name'];
-        $data['desc'] = $coupon['des'];
+        //$data['desc'] = $coupon['des'];
         $data['rowiID'] = $coupon['id'];
         $data['limitMoney'] = $coupon['order_money'];
         $data['money'] = $coupon['discount'];
@@ -1177,6 +1201,16 @@ class IndexAction extends BaseAction
 //        $model = new Model();
 //        $coupon_list = $model->query($sql);
         $coupon_list = D('System_coupon')->get_user_coupon_list($uid);
+
+        if(empty($coupon_list)){
+            $event_coupon = D('New_event')->getUserCoupon($uid,0,$amount);
+            if($event_coupon) {
+                foreach ($event_coupon as &$system_coupon) {
+                    $system_coupon['id'] = $system_coupon['coupon_id'] . '_' . $system_coupon['id'];
+                    $coupon_list[] = $system_coupon;
+                }
+            }
+        }
 
         $tmp = array();
         foreach ($coupon_list as $key => $v) {
@@ -1700,7 +1734,46 @@ class IndexAction extends BaseAction
             $sid = D('Shop_order')->where(array('order_id'=>$order_id))->find()['store_id'];
             $store = D('Store')->get_store_by_id($sid);
             $info['pay_method'] = explode('|',$store['pay_method']);
+        }else{
+            $event_list = D('New_event')->getEventList(1,2);
+            if($event_list){
+                $event = reset($event_list);
+                $event['name'] = lang_substr($event['name'],C('DEFAULT_LANG'));
+                $event['desc'] = lang_substr($event['desc'],C('DEFAULT_LANG'));
+                $info['is_event'] = 1;
+                $info['event'] = $event;
+            }else{
+                $info['is_event'] = 0;
+            }
         }
+
+        $this->returnCode(0,'info',$info,'success');
+    }
+
+    public function get_invitation(){
+        $uid = $_POST['uid'];
+
+        $user_code = D('User')->getUserInvitationCode($uid);
+        $info['invi_code'] = strtoupper($user_code);
+
+        $event_list = D('New_event')->getEventList(1,2);
+        if($event_list){
+            $event = reset($event_list);
+            $event['name'] = lang_substr($event['name'],C('DEFAULT_LANG'));
+            $event['desc'] = lang_substr($event['desc'],C('DEFAULT_LANG'));
+            $info['is_event'] = 1;
+            $info['event'] = $event;
+        }else{
+            $info['is_event'] = 0;
+        }
+
+        $link = C('config.site_url')."/invite/".base64_encode($user_code);
+        $info['link'] = $link;
+
+        $userInfo = D('User')->get_user($uid);
+
+        $msg = $userInfo['nickname']." invites you to order delivery from Tutti! Sign up using your code ".strtoupper($user_code)." or the link below to get $".$event['coupon_amount']." in coupons when you place your first order! ";
+        $info['msg'] = $msg;
 
         $this->returnCode(0,'info',$info,'success');
     }

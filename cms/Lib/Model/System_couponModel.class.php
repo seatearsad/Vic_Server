@@ -132,6 +132,12 @@ class System_couponModel extends Model{
             if($v['end_time']<$_SERVER['REQUEST_TIME']&&$v['is_use']!=1){
                 $v['is_use'] = 2;
             }
+
+            if(C('DEFAULT_LANG') == 'zh-cn'){
+                $v['discount_desc'] = replace_lang_str(L('_MAN_NUM_REDUCE_'),$v['order_money']).replace_lang_str(L('_MAN_REDUCE_NUM_'),$v['discount']);
+            }else{
+                $v['discount_desc'] = replace_lang_str(L('_MAN_NUM_REDUCE_'),$v['discount']).replace_lang_str(L('_MAN_REDUCE_NUM_'),$v['order_money']);
+            }
         }
         return $res;
     }

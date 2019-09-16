@@ -81,6 +81,16 @@ class MyAction extends BaseAction{
 			$scroll_msg = D('Scroll_msg')->get_msg();
 			$this->assign('scroll_msg',$scroll_msg);
 		}
+
+		//获取邀请活动是否存在
+        $event_list = D('New_event')->getEventList(1,2);
+		if($event_list){
+		    $event = reset($event_list);
+            $event['name'] = lang_substr($event['name'],C('DEFAULT_LANG'));
+            $event['desc'] = lang_substr($event['desc'],C('DEFAULT_LANG'));
+		    $this->assign('event',$event);
+        }
+
 		$this->display();
 
 	}
@@ -490,6 +500,16 @@ class MyAction extends BaseAction{
 			}else{
 				$coupon_list = D('System_coupon')->get_noworder_coupon_list($now_order, $_GET['type'], $this->user_session['phone'], $this->user_session['uid'], $platform);
 			}
+
+            //获取活动优惠券
+            $event_coupon_list = D('New_event')->getUserCoupon($this->user_session['uid'],0,$now_order['total_money']);
+            if(!$coupon_list) $coupon_list = array();
+            if(count($event_coupon_list) > 0){
+                foreach ($event_coupon_list as &$v){
+                    $v['id'] = $v['coupon_id'].'_'.$v['id'];
+                }
+                $coupon_list = array_merge($coupon_list,$event_coupon_list);
+            }
 		}
 		if(!empty($coupon_list)){
 			$param = $_GET;
@@ -3290,7 +3310,17 @@ class MyAction extends BaseAction{
 			$coupon_list = D('System_coupon')->get_user_coupon_list($this->user_session['uid'], $this->user_session['phone']);
 
 			$this->assign('cate_platform', D('System_coupon')->cate_platform());
+
+            //获取活动优惠券
+            $event_coupon_list = D('New_event')->getUserCoupon($this->user_session['uid']);
+            if(!$coupon_list) $coupon_list = array();
+            if(count($event_coupon_list) > 0){
+                $coupon_list = array_merge($coupon_list,$event_coupon_list);
+            }
+            //var_dump($coupon_list);die();
 		}
+
+
 		$tmp = array();
 		foreach ($coupon_list as $key => $v) {
 		    $v['name'] = lang_substr($v['name'],C('DEFAULT_LANG'));
@@ -5878,6 +5908,154 @@ class MyAction extends BaseAction{
 	        $data['lng'] = $deliver['lng'];
             $this->success('Success',$data);
         }
+    }
+
+    public function invitation(){
+//        $user = D('User')->where(array('uid'=>$this->user_session['uid']))->find();
+//
+//        if($user['invitation_code'] == '') {
+//            $code = $this->getInvitationCode(6);
+//            $data['invitation_code'] = $code;
+//            D('User')->where(array('uid'=>$this->user_session['uid']))->save($data);
+//        }else {
+//            $code = $user['invitation_code'];
+//        }
+        $code = D('User')->getUserInvitationCode($this->user_session['uid']);
+
+        $link = C('config.site_url')."/invite/".base64_encode($code);
+        //$url_str = base64_encode($code);
+
+        //var_dump(strtoupper($code));
+        $this->assign('code',strtoupper($code));
+        $this->assign('link',$link);
+
+        //获取邀请活动是否存在
+        $event_list = D('New_event')->getEventList(1,2);
+        if($event_list){
+            $event = reset($event_list);
+            $event['name'] = lang_substr($event['name'],C('DEFAULT_LANG'));
+            $event['desc'] = lang_substr($event['desc'],C('DEFAULT_LANG'));
+            $this->assign('event',$event);
+
+            $msg = $this->user_session['nickname']." invites you to order delivery from Tutti! Sign up using your code ".strtoupper($code)." or the link below to get $".$event['coupon_amount']." in coupons when you place your first order! (".$link.")";
+            $this->assign('send_msg',$msg);
+        }
+
+        $this->display();
+    }
+
+    function send_email_invi(){
+        $where = array('tab_id'=>'gmail','gid'=>42);
+        $result = D('Config')->field(true)->where($where)->find();
+        $password = $result['value'];
+
+        $address = $_POST['address'];
+        $code = $_POST['code'];
+        $link = $_POST['link'];
+        $coupon_amount = $_POST['amount'];
+        $title = $this->user_session['nickname']." sent you coupons!";
+        //$body = "Looking for delivery services of your favourite restaurants? ".$this->user_session['nickname']." invites you to order with Tutti Delivery! Sign up using your code or the link below to get $".$coupon_amount." in coupons when you place your first order!";
+        //$body .= "<br><br><a href='".$link."' style='font-size: 18px;'>Sign Up Here</a>";
+        //$body .= "<br><br>Your code is ".$code;
+        //$body .= "<br><br>Term may apply";
+
+        $body = '<table style="width: 98%; position: relative;margin: 0 auto">
+                    <tr>
+                        <td>
+                            <img src="'.C('config.site_url').'/tpl/Static/blue/images/new/mail_back.png" style="width: 100%;"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Looking for delivery services of your favourite restaurants? '.$this->user_session['nickname'].' invites you to order with Tutti Delivery! Sign up using code '.$code.' or the link below to get $'.$coupon_amount.' in coupons when you place your first order!
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="invi_btn" style="width: 40%;height: 50px;margin: 20px auto;border-radius: 5px;background-color: #ffa52d;line-height: 50px;text-align: center;">
+                                <a href="'.$link.'" style="color: white;text-decoration: none;display: block;font-size: 18px;">
+                                    SIGN UP HERE
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 100%;background-color: #cccccc;padding:2% 2%;color: #333333;font-size: 12px;">
+                            <div>
+                                * This offer is valid for new users only.
+                            </div>
+                            <div>
+                                * Minimum purchase is required and may very from different coupons.
+                            </div>
+                            <div>
+                                * Only one coupon can be used for each order.
+                            </div>
+                
+                            <div style="margin-top: 120px; font-size: 10px; text-align: center">
+                                © 2019 Kavl Technology Ltd.All rights reserved
+                            </div>
+                        </td>
+                    </tr>
+                </table>';
+
+        require './mailer/PHPMailer.php';
+        require './mailer/SMTP.php';
+        require './mailer/Exception.php';
+
+        $mail = new PHPMailer\PHPMailer\PHPMailer();
+
+        $mail->CharSet ='UTF-8';
+        $mail->Encoding = "base64";
+
+        $mail->isSMTP();                                      // Set mailer to use SMTP
+        //$mail->Host = 'smtp.gmail.com';
+        $mail->Host = 'smtp-relay.gmail.com';                  // Specify main and backup SMTP servers. 这里改成smtp.gmail.com
+        $mail->SMTPAuth = true;                               // Enable SMTP authentication
+        $mail->Username = 'info@tutti.app';                    // SMTP username 这里改成自己的gmail邮箱，最好新注册一个，因为后期设置会导致安全性降低
+        $mail->Password = $password;                 // SMTP password 这里改成对应邮箱密码
+        $mail->SMTPSecure = 'ssl';                            // Enable TLS encryption, `ssl` also accepted
+        $mail->Port = 465;
+
+
+        $mail->setFrom('info@tutti.app', 'Tutti');
+        //$mail->setFrom('caesark882@gmail.com', 'Caesark');
+        $mail->addAddress($address, $address);
+
+        $mail->isHTML(true);
+        $subject = "=?UTF-8?B?".base64_encode($title)."?=";
+        $mail->Subject = $subject;
+        $mail->Body    = $body;
+        $mail->AltBody = '';
+
+        if($mail->send())
+            exit(json_encode(array('status' => 1, 'msg' => "Success")));
+        else
+            exit(json_encode(array('status' => 0, 'msg' => $mail->ErrorInfo)));
+    }
+
+    function send_sms_invi(){
+        //var_dump($_POST);
+        $address = $_POST['address'];
+
+        $user_name = $this->user_session['nickname'];
+        $code = $_POST['code'];
+        $link = $_POST['link'];
+        $coupon_amount = '$'.$_POST['amount'];
+
+        $sms_data['uid'] = 0;
+        $sms_data['mobile'] = $address;
+        $sms_data['sendto'] = 'user';
+        $sms_data['tplid'] = 407667;
+        $sms_data['params'] = [
+            $user_name,
+            $code,
+            $coupon_amount,
+            $link
+        ];
+        Sms::sendSms2($sms_data);
+
+        exit(json_encode(array('status' => 1, 'msg' => "Success")));
+
     }
 
 }

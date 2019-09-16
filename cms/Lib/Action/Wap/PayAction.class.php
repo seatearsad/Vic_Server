@@ -7,6 +7,7 @@ class PayAction extends BaseAction{
         }else{
             $this->indep_house = 'wap.php';
         }
+        //var_dump($_POST);die();
     }
     public function check(){
         if(count($_POST) > 0) {
@@ -233,8 +234,27 @@ class PayAction extends BaseAction{
                     }
                     $system_coupon = reset($now_coupon);
 
+                    if(empty($system_coupon)){
+                        $event_coupon = D('New_event')->getUserCoupon($this->user_session['uid'],0,$tmp_order['total_money']);
+                        if($event_coupon) {
+                            $system_coupon = reset($event_coupon);
+                            $system_coupon['id'] = $system_coupon['coupon_id'] . '_' . $system_coupon['id'];
+                            //var_dump($system_coupon);die();
+                        }
+                    }
                 } else {
-                    $system_coupon = D('System_coupon')->get_coupon_info($_GET['sysc_id']);
+                    $sysc_id = $_GET['sysc_id'];
+                    //如果选择的为活动优惠券
+                    if(strpos($sysc_id,'event')!== false){
+                        $event = explode('_',$sysc_id);
+                        $event_coupon_id = $event[2];
+                        $list = D('New_event')->getUserCoupon($this->user_session['uid'],0,$tmp_order['total_money'],$event_coupon_id);
+                        $system_coupon = reset($list);
+                        if($system_coupon)
+                            $system_coupon['id'] = $system_coupon['coupon_id'].'_'.$system_coupon['id'];
+                    }else {
+                        $system_coupon = D('System_coupon')->get_coupon_info($_GET['sysc_id']);
+                    }
                 }
             }
 
@@ -256,6 +276,7 @@ class PayAction extends BaseAction{
 
 
             if (!empty($system_coupon)) {
+                //$system_coupon['coupon_url_param'] = array('sysc_id' => $system_coupon['id'], 'order_id' => $order_info['order_id'], 'type' => $_GET['type']);
                 $system_coupon['coupon_url_param'] = array('sysc_id' => $system_coupon['id'], 'order_id' => $order_info['order_id'], 'type' => $_GET['type']);
                 if($system_coupon['discount']>=$tmp_order['total_money']){
                     $ban_mer_coupon=1;
@@ -651,9 +672,20 @@ class PayAction extends BaseAction{
                     unset($_SESSION['merc_id']);
                 }
                 if ((!empty($_POST['coupon_id'])&&$_POST['coupon_id']==$_SESSION['sysc_id'])||($_POST['ticket']&&$_POST['coupon_id']&&$_POST['use_sys_coupon'])) {
-                    $system_coupon = D('System_coupon')->get_coupon_by_id($_POST['coupon_id']);
-                    $now_coupon['coupon_price'] = $system_coupon['price'];
-                    $now_coupon['sysc_id'] = $system_coupon['id'];
+                    //如果选择的为活动优惠券
+                    if(strpos($_POST['coupon_id'],'event')!== false) {
+                        $event = explode('_',$_POST['coupon_id']);
+                        $coupon_id = $event[1];
+                        if($coupon_id){
+                            $coupon = D('New_event_coupon')->where(array('id'=>$coupon_id))->find();
+                            $now_coupon['coupon_price'] = $coupon['discount'];
+                            $now_coupon['sysc_id'] = $_POST['coupon_id'];
+                        }
+                    }else{
+                        $system_coupon = D('System_coupon')->get_coupon_by_id($_POST['coupon_id']);
+                        $now_coupon['coupon_price'] = $system_coupon['price'];
+                        $now_coupon['sysc_id'] = $system_coupon['id'];
+                    }
                     unset($_SESSION['sysc_id']);
                 }
             }
@@ -2534,14 +2566,25 @@ class PayAction extends BaseAction{
                 }
                 //处理优惠券
                 if($_POST['coupon_id']){
-                    $now_coupon = D('System_coupon')->get_coupon_by_id($_POST['coupon_id']);
-                    if(!empty($now_coupon)){
-                        $coupon_data = D('System_coupon_hadpull')->field(true)->where(array('id'=>$_POST['coupon_id']))->find();
-                        $coupon_real_id = $coupon_data['coupon_id'];
-                        $coupon = D('System_coupon')->get_coupon($coupon_real_id);
+                    //如果选择的为活动优惠券
+                    if(strpos($_POST['coupon_id'],'event')!== false) {
+                        $event = explode('_',$_POST['coupon_id']);
+                        $coupon_id = $event[1];
+                        if($coupon_id){
+                            $coupon = D('New_event_coupon')->where(array('id'=>$coupon_id))->find();
+                            $in_coupon = array('coupon_id' => $_POST['coupon_id'], 'coupon_price' => $coupon['discount']);
+                            $order_data = array_merge($order_data, $in_coupon);
+                        }
+                    }else {
+                        $now_coupon = D('System_coupon')->get_coupon_by_id($_POST['coupon_id']);
+                        if (!empty($now_coupon)) {
+                            $coupon_data = D('System_coupon_hadpull')->field(true)->where(array('id' => $_POST['coupon_id']))->find();
+                            $coupon_real_id = $coupon_data['coupon_id'];
+                            $coupon = D('System_coupon')->get_coupon($coupon_real_id);
 
-                        $in_coupon = array('coupon_id'=>$data['coupon_id'],'coupon_price'=>$coupon['discount']);
-                        $order_data = array_merge($order_data,$in_coupon);
+                            $in_coupon = array('coupon_id' => $_POST['coupon_id'], 'coupon_price' => $coupon['discount']);
+                            $order_data = array_merge($order_data, $in_coupon);
+                        }
                     }
                 }
                 D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->save($order_data);
@@ -2564,14 +2607,25 @@ class PayAction extends BaseAction{
                     }
                     //处理优惠券
                     if($_POST['coupon_id']){
-                        $now_coupon = D('System_coupon')->get_coupon_by_id($_POST['coupon_id']);
-                        if(!empty($now_coupon)){
-                            $coupon_data = D('System_coupon_hadpull')->field(true)->where(array('id'=>$_POST['coupon_id']))->find();
-                            $coupon_real_id = $coupon_data['coupon_id'];
-                            $coupon = D('System_coupon')->get_coupon($coupon_real_id);
+                        //如果选择的为活动优惠券
+                        if(strpos($_POST['coupon_id'],'event')!== false) {
+                            $event = explode('_',$_POST['coupon_id']);
+                            $coupon_id = $event[1];
+                            if($coupon_id){
+                                $coupon = D('New_event_coupon')->where(array('id'=>$coupon_id))->find();
+                                $in_coupon = array('coupon_id' => $_POST['coupon_id'], 'coupon_price' => $coupon['discount']);
+                                $order_data = array_merge($order_data, $in_coupon);
+                            }
+                        }else {
+                            $now_coupon = D('System_coupon')->get_coupon_by_id($_POST['coupon_id']);
+                            if (!empty($now_coupon)) {
+                                $coupon_data = D('System_coupon_hadpull')->field(true)->where(array('id' => $_POST['coupon_id']))->find();
+                                $coupon_real_id = $coupon_data['coupon_id'];
+                                $coupon = D('System_coupon')->get_coupon($coupon_real_id);
 
-                            $in_coupon = array('coupon_id'=>$data['coupon_id'],'coupon_price'=>$coupon['discount']);
-                            $order_data = array_merge($order_data,$in_coupon);
+                                $in_coupon = array('coupon_id' => $data['coupon_id'], 'coupon_price' => $coupon['discount']);
+                                $order_data = array_merge($order_data, $in_coupon);
+                            }
                         }
                     }
                     D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->save($order_data);

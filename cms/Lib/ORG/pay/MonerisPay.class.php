@@ -113,35 +113,49 @@ class MonerisPay
             }
         }
 
-        if($resp['responseCode'] != "null" && $resp['responseCode'] < 50){
+        if($resp['responseCode'] != "null" && $resp['responseCode'] < 50) {
             //如果需要验证CVD
-            if($card_cvd != '') {
-                if(strpos($resp['cvdResultCode'],'M')!==false || strpos($resp['cvdResultCode'],'Y')!==false){
-                    if($data['credit_id']){
+            if ($card_cvd != '') {
+                if (strpos($resp['cvdResultCode'], 'M') !== false || strpos($resp['cvdResultCode'], 'Y') !== false) {
+                    if ($data['credit_id']) {
                         $data['cvd'] = $card_cvd;
                         $data['status'] = 1;
                         $data['verification_time'] = time();
-                        D('User_card')->field(true)->where(array('id'=>$data['credit_id']))->save($data);
+                        D('User_card')->field(true)->where(array('id' => $data['credit_id']))->save($data);
                     }
-                    //处理优惠券
-                    if($data['coupon_id']){
-                        $now_coupon = D('System_coupon')->get_coupon_by_id($data['coupon_id']);
-                        if(!empty($now_coupon)){
-                            $coupon_data = D('System_coupon_hadpull')->field(true)->where(array('id'=>$data['coupon_id']))->find();
-                            $coupon_real_id = $coupon_data['coupon_id'];
-                            $coupon = D('System_coupon')->get_coupon($coupon_real_id);
-
-                            $in_coupon = array('coupon_id'=>$data['coupon_id'],'coupon_price'=>$coupon['discount']);
-
-                            D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->save($in_coupon);
-                        }
-                    }
-                }else{
+                } else {
                     //验证CVD 为通过 将responseCode修改后存储一次error记录并退款
                     $resp['responseCode'] = 7513;
                     $resp['message'] = 'CVD Error';
                     D('Pay_moneris_record_error')->add($resp);
-                    $this->refund($uid,$order_id);
+                    $this->refund($uid, $order_id);
+                }
+            }
+
+            //处理优惠券
+            if($data['coupon_id']){
+                //如果选择的为活动优惠券
+                if(strpos($data['coupon_id'],'event')!== false) {
+                    $event = explode('_',$data['coupon_id']);
+                    $event_coupon_id = $event[2];
+                    $list = D('New_event')->getUserCoupon($uid,0,-1,$event_coupon_id);
+                    $now_coupon = reset($list);
+                    if(!empty($now_coupon)){
+                        $coupon = D('New_event_coupon')->where(array('id'=>$now_coupon['event_coupon_id']))->find();
+                        $in_coupon = array('coupon_id' => $data['coupon_id'], 'coupon_price' => $coupon['discount']);
+                        D('Shop_order')->field(true)->where(array('order_id' => $order_id))->save($in_coupon);
+                    }
+                }else{
+                    $now_coupon = D('System_coupon')->get_coupon_by_id($data['coupon_id']);
+                    if (!empty($now_coupon)) {
+                        $coupon_data = D('System_coupon_hadpull')->field(true)->where(array('id' => $data['coupon_id']))->find();
+                        $coupon_real_id = $coupon_data['coupon_id'];
+                        $coupon = D('System_coupon')->get_coupon($coupon_real_id);
+
+                        $in_coupon = array('coupon_id' => $data['coupon_id'], 'coupon_price' => $coupon['discount']);
+
+                        D('Shop_order')->field(true)->where(array('order_id' => $order_id))->save($in_coupon);
+                    }
                 }
             }
         }
@@ -679,6 +693,33 @@ class MonerisPay
                     $in_coupon = array('coupon_id'=>$orderInfo['coupon_id'],'coupon_price'=>$coupon['discount']);
 
                     D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->save($in_coupon);
+                }
+            }
+
+            //处理优惠券
+            if($orderInfo['coupon_id']){
+                //如果选择的为活动优惠券
+                if(strpos($orderInfo['coupon_id'],'event')!== false) {
+                    $event = explode('_',$orderInfo['coupon_id']);
+                    $event_coupon_id = $event[2];
+                    $list = D('New_event')->getUserCoupon($orderInfo['uid'],0,-1,$event_coupon_id);
+                    $now_coupon = reset($list);
+                    if(!empty($now_coupon)){
+                        $coupon = D('New_event_coupon')->where(array('id'=>$now_coupon['event_coupon_id']))->find();
+                        $in_coupon = array('coupon_id' => $data['coupon_id'], 'coupon_price' => $coupon['discount']);
+                        D('Shop_order')->field(true)->where(array('order_id' => $order_id))->save($in_coupon);
+                    }
+                }else{
+                    $now_coupon = D('System_coupon')->get_coupon_by_id($orderInfo['coupon_id']);
+                    if (!empty($now_coupon)) {
+                        $coupon_data = D('System_coupon_hadpull')->field(true)->where(array('id' => $orderInfo['coupon_id']))->find();
+                        $coupon_real_id = $coupon_data['coupon_id'];
+                        $coupon = D('System_coupon')->get_coupon($coupon_real_id);
+
+                        $in_coupon = array('coupon_id' => $data['coupon_id'], 'coupon_price' => $coupon['discount']);
+
+                        D('Shop_order')->field(true)->where(array('order_id' => $order_id))->save($in_coupon);
+                    }
                 }
             }
         }

@@ -1675,7 +1675,7 @@ class StorestaffAction extends BaseAction
             //add garfunkel
             $userInfo = D('User')->field(true)->where(array('uid'=>$order['uid']))->find();
             if($userInfo['device_id'] != ""){
-                $message = 'Your order has been accepted by the store, they are preparing your order now. Our Courier is on the way, thank you for your patient.';
+                $message = 'Your order has been accepted by the store, they are preparing it now. Our Courier is on the way, thank you for your patience!';
                 Sms::sendMessageToGoogle($userInfo['device_id'],$message);
             }else{
                 $sms_data['uid'] = $order['uid'];

@@ -506,18 +506,38 @@ class StoreModel extends Model
         return array('error_code' => false, 'msg' => '');
     }
 
-    public function reg_phone_pwd_vcode($phone,$vcode,$pwd){
+    public function reg_phone_pwd_vcode($phone,$vcode,$pwd,$invi_code = ''){
         $verify_result = D('Smscodeverify')->verify($vcode, $phone);
 
         if($verify_result['error_code'])
             return $verify_result;
 
+        //garfunkel add 邀请码
+        if($invi_code != ''){
+            $code = strtolower($invi_code);
+            $invi_user = D('User')->where(array('invitation_code'=>$code))->find();
+            if($invi_user){
+                $data_user['invitation_user'] = $invi_user['uid'];
+            }else{
+                $result['error_code'] = true;
+                $result['msg'] = L('_INVALID_INVI_CODE_');
+                return $result;
+            }
+        }
+
         $result = D('User')->checkreg($phone, $pwd);
 
         if (!empty($result['user'])) {
-           $userInfo = $this->getUserInfo($phone,$pwd);
+            $userInfo = $this->getUserInfo($phone,$pwd);
 
-           return $userInfo;
+            if($invi_user){
+                $invi_user['invitation_reg_num'] += 1;
+                D('User')->where(array('uid'=>$invi_user['uid']))->save($invi_user);
+                if($data_user['invitation_user'])
+                    D('User')->where(array('uid'=>$userInfo['uid']))->save($data_user);
+            }
+
+            return $userInfo;
         }else{
             return $result;
         }
