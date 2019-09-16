@@ -471,6 +471,7 @@ a.see_tmp_qrcode {
 				                            </span>
 				                        </td>
 			                    	</tr>
+                                    <if condition="$order_info['order_type'] != 'recharge'">
 			                    	<if condition="$score_count gt 0">
 										<tr>
 											<td style="text-align:left;"  class="deal-component-quantity ">
@@ -498,6 +499,7 @@ a.see_tmp_qrcode {
 											</td>
 										</tr>
 									</if>
+                                    </if>
 								<if condition="$order_info['order_type'] != 'recharge'">
 									<tr>						
 										<td style="text-align:left;">
@@ -551,6 +553,7 @@ a.see_tmp_qrcode {
                                     </div>
                                 </div>
                                 <div class="clr" style="border-bottom: 1px #cccccc solid"></div>
+                                <if condition="$order_info['order_type'] != 'recharge'">
                                 <div id="tip_label">
                                     <div class="payment-banktit">
                                         <b class="open">
@@ -584,6 +587,10 @@ a.see_tmp_qrcode {
                                         </div>
                                     </div>
                                 </div>
+                                <else />
+                                    <span id="tip_num" style="display: none;">$0</span>
+                                    <span id="add_tip" style="display: none;">$0</span>
+                                </if>
 								<div class="clr" style="border-bottom: 1px #cccccc solid"></div>
                                 <div id="card">
                                     <div class="payment-banktit">
@@ -702,33 +709,46 @@ a.see_tmp_qrcode {
                                 'order_id':"Tutti{pigcms{$order_info.order_type}_{pigcms{$order_info.order_id}",
                                 'cust_id':'{pigcms{:md5($order_info.uid)}',
                                 'rvarwap':$('input[name="rvarwap"]').val(),
+                                'order_type':"{pigcms{$order_info.order_type}",
                                 'tip':$('#tip_num').text().replace('$', "")
                             };
 
                             $.post($('#moneris_form').attr('action'),re_data,function(data){
-                                if(data.status == 1){
+                                if(typeof (data.mode) != 'undefined' && data.mode == 'mpi'){
                                     art.dialog({
-                                        title: 'Message',
+                                        title:'',
                                         id: 'moneris_pay',
                                         opacity:'0.4',
                                         lock:true,
                                         fixed: true,
                                         resize: false,
-                                        content: "{pigcms{:L('_PAYMENT_SUCCESS_')}"
+                                        content:data.html
                                     });
-                                    setTimeout("window.location.href = '"+data.url+"'",200);
-                                }else{
-                                    art.dialog({
-                                        title: 'Message',
-                                        id: 'moneris_pay',
-                                        opacity:'0.4',
-                                        lock:true,
-                                        fixed: true,
-                                        resize: false,
-                                        content: data.info
-                                    });
-                                    $("#J-order-pay-button").val("{pigcms{:L('_B_PURE_MY_81_')}");
-                                    $("#J-order-pay-button").removeAttr("disabled");
+                                }else {
+                                    if (data.status == 1) {
+                                        art.dialog({
+                                            title: 'Message',
+                                            id: 'moneris_pay',
+                                            opacity: '0.4',
+                                            lock: true,
+                                            fixed: true,
+                                            resize: false,
+                                            content: "{pigcms{:L('_PAYMENT_SUCCESS_')}"
+                                        });
+                                        setTimeout("window.location.href = '" + data.url + "'", 200);
+                                    } else {
+                                        art.dialog({
+                                            title: 'Message',
+                                            id: 'moneris_pay',
+                                            opacity: '0.4',
+                                            lock: true,
+                                            fixed: true,
+                                            resize: false,
+                                            content: data.info
+                                        });
+                                        $("#J-order-pay-button").val("{pigcms{:L('_B_PURE_MY_81_')}");
+                                        $("#J-order-pay-button").removeAttr("disabled");
+                                    }
                                 }
                             });
                         }else{
@@ -745,6 +765,7 @@ a.see_tmp_qrcode {
                            'order_id':"Tutti{pigcms{$order_info.order_type}_{pigcms{$order_info.order_id}",
                            'cust_id':'{pigcms{:md5($order_info.uid)}',
                            'rvarwap':$('input[name="rvarwap"]').val(),
+                           'order_type':"{pigcms{$order_info.order_type}",
                            'tip':$('#tip_num').text().replace('$', "")
                        };
 
@@ -763,30 +784,42 @@ a.see_tmp_qrcode {
                        }
 
                        $.post($('#moneris_form').attr('action'),re_data,function(data){
-                           if(data.status == 1){
+                           if(typeof (data.mode) != 'undefined' && data.mode == 'mpi'){
                                art.dialog({
-                                   title: 'Message',
+                                   title:'',
                                    id: 'moneris_pay',
                                    opacity:'0.4',
                                    lock:true,
                                    fixed: true,
                                    resize: false,
-                                   content: "{pigcms{:L('_PAYMENT_SUCCESS_')}"
+                                   content:data.html
                                });
-                               
-                               setTimeout("window.location.href = '"+data.url+"'",200);
-                           }else{
-                               art.dialog({
-                                   title: 'Message',
-                                   id: 'moneris_pay',
-                                   opacity:'0.4',
-                                   lock:true,
-                                   fixed: true,
-                                   resize: false,
-                                   content: data.info
-                               });
-                               $("#J-order-pay-button").val("{pigcms{:L('_B_PURE_MY_81_')}");
-                               $("#J-order-pay-button").removeAttr("disabled");
+                           }else {
+                               if (data.status == 1) {
+                                   art.dialog({
+                                       title: 'Message',
+                                       id: 'moneris_pay',
+                                       opacity: '0.4',
+                                       lock: true,
+                                       fixed: true,
+                                       resize: false,
+                                       content: "{pigcms{:L('_PAYMENT_SUCCESS_')}"
+                                   });
+
+                                   setTimeout("window.location.href = '" + data.url + "'", 200);
+                               } else {
+                                   art.dialog({
+                                       title: 'Message',
+                                       id: 'moneris_pay',
+                                       opacity: '0.4',
+                                       lock: true,
+                                       fixed: true,
+                                       resize: false,
+                                       content: data.info
+                                   });
+                                   $("#J-order-pay-button").val("{pigcms{:L('_B_PURE_MY_81_')}");
+                                   $("#J-order-pay-button").removeAttr("disabled");
+                               }
                            }
                        });
                    }

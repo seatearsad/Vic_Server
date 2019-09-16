@@ -583,9 +583,16 @@
                             //alert(re_data['order_type']);
                             $.post($('#moneris_form').attr('action'),re_data,function(data){
                                 layer.closeAll();
-                                layer.open({title:['Message'],content:data.info});
-                                if(data.status == 1){
-                                    setTimeout("window.location.href = '"+data.url+"'",200);
+                                if(typeof (data.mode) != 'undefined' && data.mode == 'mpi'){
+                                    layer.open({
+                                        title:'',
+                                        content:data.html
+                                    });
+                                }else {
+                                    layer.open({title: ['Message'], content: data.info});
+                                    if (data.status == 1) {
+                                        setTimeout("window.location.href = '" + data.url + "'", 200);
+                                    }
                                 }
                             });
                         }else{
@@ -622,11 +629,18 @@
                             //alert(re_data['order_type']);
                             $.post($('#moneris_form').attr('action'),re_data,function(data){
                                 layer.closeAll();
-                                layer.open({title:['Message'],content:data.info});
-                                if(data.status == 1){
-                                    setTimeout("window.location.href = '"+data.url+"'",200);
-                                }else{
+                                if(typeof (data.mode) != 'undefined' && data.mode == 'mpi'){
+                                    layer.open({
+                                        title:'',
+                                        content:data.html
+                                    });
+                                }else {
+                                    layer.open({title: ['Message'], content: data.info});
+                                    if (data.status == 1) {
+                                        setTimeout("window.location.href = '" + data.url + "'", 200);
+                                    } else {
 
+                                    }
                                 }
                             });
                         }else{
@@ -1585,7 +1599,6 @@
         }
         return isT;
     }
-
 </script>
 <style>
     .form-field--error{

@@ -183,9 +183,14 @@ class PayAction extends BaseAction{
 //			$order_info['order_id']=$orderid;
 //		}
 
-		if(empty($pay_list)){
-			$this->error_tips('系统管理员没开启任一一种支付方式！');
-		}
+		if($_GET['type'] != 'recharge'){
+            if(empty($pay_list)) {
+                $this->error_tips('系统管理员没开启任一一种支付方式！');
+            }
+		}else{
+            $pay_list = $pay_method;
+        }
+
 		$this->assign('pay_method',$pay_list);
 		//garfunkel add 获取信用卡
         $card_list = D('User_card')->getCardListByUid($this->user_session['uid']);
@@ -1064,8 +1069,17 @@ class PayAction extends BaseAction{
     public function MonerisPay(){
         import('@.ORG.pay.MonerisPay');
         $moneris_pay = new MonerisPay();
-        $resp = $moneris_pay->payment($_POST,$this->user_session['uid']);
+        $resp = $moneris_pay->payment($_POST,$this->user_session['uid'],1);
         //var_dump($resp);
+        if($resp['requestMode'] && $resp['requestMode'] == "mpi"){
+            if($resp['mpiSuccess'] == "true"){
+                $result = array('error_code' => false,'mode'=>$resp['requestMode'],'html'=>$resp['mpiInLineForm'], 'msg' => $resp['message']);
+                $this->ajaxReturn($result);
+            }else{
+                $this->error($resp['message'],'',true);
+            }
+        }
+
         if($resp['responseCode'] != 'null' && $resp['responseCode'] < 50){
             $order = explode("_",$_POST['order_id']);
             $order_id = $order[1];
