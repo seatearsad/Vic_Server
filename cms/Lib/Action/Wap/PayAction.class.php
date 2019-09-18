@@ -2707,6 +2707,42 @@ class PayAction extends BaseAction{
     }
 
     public function secure3d(){
+        if($_GET['PaReq'] && $_GET['TermUrl'] && $_GET['MD'] && $_GET['ACSUrl']){
+            $inLineForm ='<html><head><title>Title for Page</title></head><SCRIPT LANGUAGE="Javascript" >' .
+                "<!--
+				function OnLoadEvent()
+				{
+					document.downloadForm.submit();
+				}
+				-->
+				</SCRIPT>" .
+                '<body onload="OnLoadEvent()">
+					<form name="downloadForm" action="' . urldecode($_GET['ACSUrl']) .
+                '" method="POST">
+					<br>
+					<br>
+					<center>
+					<h1>Processing your 3-D Secure Transaction</h1>
+					<h2>
+					JavaScript is currently disabled or is not supported
+					by your browser.<br>
+					<h3>Please click on the Submit button to continue
+					the processing of your 3-D secure
+					transaction.</h3>
+					<input type="submit" value="Submit">
+					</center>
+					<input type="hidden" name="PaReq" value="' . str_replace(' ','+',urldecode($_GET['PaReq'])) . '">
+					<input type="hidden" name="MD" value="' . urldecode($_GET['MD']) . '">
+					<input type="hidden" name="TermUrl" value="' . urldecode($_GET['TermUrl']) .'">
+				</form>
+				</body>
+				</html>';
+            //$inLineForm = urldecode($_GET['ACSUrl']).'-'.urldecode($_GET['PaReq']).'-'.urldecode($_GET['MD']).'-'.urldecode($_GET['TermUrl']);
+            //$inLineForm = str_replace(' ','',urldecode($_GET['PaReq']));
+            echo $inLineForm;
+            exit();
+        }
+
         if($_POST['PaRes'] && $_POST['MD']) {
             $PaRes = $_POST['PaRes'];
             $MD = $_POST['MD'];
@@ -2716,9 +2752,23 @@ class PayAction extends BaseAction{
             $resp = $moneris_pay->MPI_Acs($PaRes, $MD);
 
             if ($resp['responseCode'] != 'null' && $resp['responseCode'] < 50) {
-                $this->success(L('_PAYMENT_SUCCESS_'), $resp['url']);
+                if(strpos($resp['url'],'#')!== false) {
+                    $this->success(L('_PAYMENT_SUCCESS_'), $resp['url']);
+                }else{
+                    $script = '<SCRIPT LANGUAGE="Javascript" >var ua = navigator.userAgent;
+                            if(ua.match(/TuttiiOS/i)){
+                                  window.webkit.messageHandlers.payComplate.postMessage(["'.$resp['url'].'"]);
+                            }</SCRIPT>';
+                    echo $script;
+                    exit();
+                }
             } else {
-                $this->error($resp['message'], $resp['url']);
+                if(strpos($resp['url'],'#')!== false) {
+                    $this->error($resp['message'], $resp['url']);
+                }else{
+                    echo $resp['message'];
+                    exit();
+                }
             }
         }else{
             $this->error();
