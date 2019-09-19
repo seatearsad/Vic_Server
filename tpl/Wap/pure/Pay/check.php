@@ -1144,7 +1144,7 @@
                                         <if condition="$card['status'] eq 0">
                                             <div style="line-height: 20px;float:left;width: 100%;margin-left:.2rem;margin-top: 5px;margin-bottom: 5px;">
                                                 <span style="float: left;width:50px;">CVD：</span>
-                                                <input type="text" maxlength="3" size="20" name="old_cvd" class="form-field" id="old_cvd" value="" style="float: left"/>
+                                                <input type="text" maxlength="3" size="20" name="old_cvd" class="form-field" id="old_cvd" placeholder="3 digites on the back of your card" value="" style="float: left"/>
                                             </div>
                                         </if>
                                     </if>
@@ -1170,7 +1170,7 @@
                                         </div>
                                         <div style="line-height: 20px;float:left;width: 100%;margin-bottom: 5px;">
                                             <span style="float: left;width:150px;">CVD：</span>
-                                            <input type="text" maxlength="3" size="20" name="cvd" class="form-field" id="cvd" value="" style="float: left"/>
+                                            <input type="text" maxlength="3" size="20" name="cvd" class="form-field" placeholder="3 digites on the back of your card" id="cvd" value="" style="float: left"/>
                                         </div>
                                     </dd>
                                 </dl>

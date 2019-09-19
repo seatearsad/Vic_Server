@@ -616,7 +616,7 @@ a.see_tmp_qrcode {
                                                         <if condition="$vo['status'] eq 0">
                                                             <div>
                                                                 <span style="width:50px;display:-moz-inline-box;display:inline-block;">CVD：</span>
-                                                                <input type="text" maxlength="3" size="20" name="cvd_{pigcms{$vo.id}" id="cvd_{pigcms{$vo.id}" value="" style="border: 1px #333333 solid;"/>
+                                                                <input type="text" maxlength="3" size="20" name="cvd_{pigcms{$vo.id}" id="cvd_{pigcms{$vo.id}" placeholder="3 digites on the back of your card" value="" style="border: 1px #333333 solid;"/>
                                                             </div>
                                                         </if>
                                                     </volist>
@@ -649,7 +649,7 @@ a.see_tmp_qrcode {
                                                     </div>
                                                     <div>
                                                         <span style="width:150px;display:-moz-inline-box;display:inline-block;">CVD：</span>
-                                                        <input type="text" maxlength="3" size="20" name="cvd" id="cvd" value="" style="border: 1px #333333 solid;"/>
+                                                        <input type="text" maxlength="3" size="20" name="cvd" id="cvd" placeholder="3 digites on the back of your card" value="" style="border: 1px #333333 solid;"/>
                                                     </div>
                                                 </ul>
                                             </div>
