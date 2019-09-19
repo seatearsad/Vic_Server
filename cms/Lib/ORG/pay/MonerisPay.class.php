@@ -25,8 +25,8 @@ class MonerisPay
         }
 
         $this->countryCode = 'CA';
-        //$this->testMode = true;
-        $this->testMode = false;
+        $this->testMode = true;
+//        $this->testMode = false;
     }
 
     /**
