@@ -25,8 +25,8 @@ class MonerisPay
         }
 
         $this->countryCode = 'CA';
-        $this->testMode = true;
-//        $this->testMode = false;
+        //$this->testMode = true;
+        $this->testMode = false;
     }
 
     /**
@@ -534,8 +534,10 @@ class MonerisPay
         else
         {
             //print("\nMpiMessage = " . $mpgResponse->getMpiMessage());
+            if(!$resp['message'] || $resp['message'] == '')
+                $resp['message'] = $mpgResponse->getMessage();
         }
-        var_dump($mpgResponse);die();
+        //var_dump($mpgResponse);die();
         return $resp;
     }
 
