@@ -971,24 +971,36 @@ class UserAction extends BaseAction {
         }
     }
 
-    public function recharge_refund(){
-        $order_id = $_POST['order_id'];
-        $uid = $_POST['uid'];
-
-        import('@.ORG.pay.MonerisPay');
-        $moneris_pay = new MonerisPay();
-
-        $resp = $moneris_pay->refund($uid, $order_id,-1,1,1);
-
-        if($resp['responseCode'] != 'null' && $resp['responseCode'] < 50){
-            $data_shop_order['order_id'] = $order_id;
-            //$data_shop_order['status'] = 4;
-            $data_shop_order['last_time'] = time();
-            D('User_recharge_order')->data($data_shop_order)->save();
-
-            $this->success(L('_PAYMENT_SUCCESS_'),'',true);
-        }
-
-        $this->error('Fail','',true);
-    }
+//    public function recharge_refund(){
+//        /**  tpl/System/User/recharge_list add javascript
+//         * function recharge_refund(order_id,uid) {
+//            $.post("{pigcms{:U('User/recharge_refund')}",{'order_id':order_id,'uid':uid},function(data){
+//            if (data.status == 1) {
+//            alert(data.info);
+//            //window.location.reload();
+//            }else{
+//            alert('Fail');
+//            }
+//            },'JSON');
+//            }
+//         */
+//        $order_id = $_POST['order_id'];
+//        $uid = $_POST['uid'];
+//
+//        import('@.ORG.pay.MonerisPay');
+//        $moneris_pay = new MonerisPay();
+//
+//        $resp = $moneris_pay->refund($uid, $order_id,-1,1,1);
+//
+//        if($resp['responseCode'] != 'null' && $resp['responseCode'] < 50){
+//            $data_shop_order['order_id'] = $order_id;
+//            //$data_shop_order['status'] = 4;
+//            $data_shop_order['last_time'] = time();
+//            D('User_recharge_order')->data($data_shop_order)->save();
+//
+//            $this->success(L('_PAYMENT_SUCCESS_'),'',true);
+//        }
+//
+//        $this->error('Fail','',true);
+//    }
 }

@@ -285,10 +285,10 @@ class MonerisPay
      * $type 0 shop_order | 1 User_recharge_order
     */
     public function refund($uid,$order_id,$change_amount = -1,$record_type = 1,$type=0){
-        if($type == 0)
+        //if($type == 0)
             $order = D('Shop_order')->field(true)->where(array('order_id'=>$order_id,'paid'=>1,'pay_type'=>'moneris'))->find();
-        else
-            $order = D('User_recharge_order')->field(true)->where(array('order_id'=>$order_id,'paid'=>1,'pay_type'=>'moneris'))->find();
+        //else
+            //$order = D('User_recharge_order')->field(true)->where(array('order_id'=>$order_id,'paid'=>1,'pay_type'=>'moneris'))->find();
 
         if($order){
             if ($record_type == 1){
