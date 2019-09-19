@@ -970,7 +970,7 @@ class IndexAction extends BaseAction
         $moneris_pay = new MonerisPay();
         //app 支付标识
         $_POST['rvarwap'] = 2;
-        $resp = $moneris_pay->payment($_POST,$_POST['uid'],$_POST['rvarwap']);
+        $resp = $moneris_pay->payment($_POST,$_POST['uid'],3);
         if($resp['requestMode'] && $resp['requestMode'] == "mpi"){
             if($resp['mpiSuccess'] == "true"){
                 $result = array('error_code' => false,'mode'=>$resp['requestMode'],'PaReq'=>urlencode($resp['MpiPaReq']),'TermUrl' => urlencode($resp['MpiTermUrl']),'MD' => urlencode($resp['MpiMD']),'ACSUrl' => urlencode($resp['MpiACSUrl']),'site_url'=>$resp['MpiTermUrl']);

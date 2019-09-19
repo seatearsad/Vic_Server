@@ -2753,21 +2753,21 @@ class PayAction extends BaseAction{
 
             if ($resp['responseCode'] != 'null' && $resp['responseCode'] < 50) {
                 if(strpos($resp['url'],'#')!== false) {
-                    $this->success(L('_PAYMENT_SUCCESS_'), $resp['url']);
-                }else{
                     $script = '<SCRIPT LANGUAGE="Javascript" >var ua = navigator.userAgent;
                             if(ua.match(/TuttiiOS/i)){
                                   window.webkit.messageHandlers.payComplate.postMessage(["'.$resp['url'].'"]);
                             }</SCRIPT>';
                     echo $script;
                     exit();
+                }else{
+                    $this->success(L('_PAYMENT_SUCCESS_'), $resp['url']);
                 }
             } else {
                 if(strpos($resp['url'],'#')!== false) {
-                    $this->error($resp['message'], $resp['url']);
-                }else{
                     echo $resp['message'];
                     exit();
+                }else{
+                    $this->error($resp['message'], $resp['url']);
                 }
             }
         }else{

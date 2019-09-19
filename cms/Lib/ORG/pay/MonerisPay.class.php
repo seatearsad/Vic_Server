@@ -733,7 +733,7 @@ class MonerisPay
         }
 
         //1Web(PC) 2Wap 3App
-        $is_wap = $orderInfo['order_from'] == 1 ? 0 : 1;
+        $is_wap = $orderInfo['order_from']-1;
 
         $this->savePayData($resp,$is_wap,$orderInfo['tip'],$orderInfo['order_type']);
 
