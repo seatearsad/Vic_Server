@@ -537,7 +537,7 @@ class MonerisPay
             if(!$resp['message'] || $resp['message'] == '')
                 $resp['message'] = $mpgResponse->getMessage();
         }
-        var_dump($mpgResponse);die();
+        //var_dump($mpgResponse);die();
         return $resp;
     }
 
