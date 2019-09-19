@@ -282,9 +282,14 @@ class MonerisPay
     /*
      * $order_id 为系统原始订单ID
      * $change_amount 为要退还的金额 当不输入是为-1，即订单金额全部退回
+     * $type 0 shop_order | 1 User_recharge_order
     */
-    public function refund($uid,$order_id,$change_amount = -1,$record_type = 1){
-        $order = D('Shop_order')->field(true)->where(array('order_id'=>$order_id,'paid'=>1,'pay_type'=>'moneris'))->find();
+    public function refund($uid,$order_id,$change_amount = -1,$record_type = 1,$type=0){
+        if($type == 0)
+            $order = D('Shop_order')->field(true)->where(array('order_id'=>$order_id,'paid'=>1,'pay_type'=>'moneris'))->find();
+        else
+            $order = D('User_recharge_order')->field(true)->where(array('order_id'=>$order_id,'paid'=>1,'pay_type'=>'moneris'))->find();
+
         if($order){
             if ($record_type == 1){
                 $record = D('Pay_moneris_record')->field(true)->where(array('order_id'=>$order_id))->find();
@@ -298,6 +303,7 @@ class MonerisPay
 
 
 //            if($record){
+            $record_type = 3;
             if($record && !$del_record){//正式的使用此判断
                 //初始化退款差额
                 $cha = 0;

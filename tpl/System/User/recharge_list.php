@@ -1,4 +1,4 @@
-$
+<include file="Public:header"/>
 		<div class="mainbox">
 			<div id="nav" class="mainnav_title">
 				<ul>
@@ -63,7 +63,10 @@ $
 											下单时间：{pigcms{$vo['add_time']|date='Y-m-d H:i:s',###}<br/>
 											<if condition="$vo['paid']">付款时间：{pigcms{$vo['pay_time']|date='Y-m-d H:i:s',###}</if>
 										</td>
-										<td class="textcenter"><a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('User/order_detail',array('order_id'=>$vo['order_id']))}','查看充值订单详情',800,560,true,false,false,false,'order_edit',true);">查看详情</a></td>
+										<td class="textcenter">
+                                            <a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('User/order_detail',array('order_id'=>$vo['order_id']))}','查看充值订单详情',800,560,true,false,false,false,'order_edit',true);">查看详情</a>
+                                            <a href="javascript:void(0);" onclick="recharge_refund('{pigcms{$vo.order_id}','{pigcms{$vo.uid}')">退款</a>
+                                        </td>
 									</tr>
 								</volist>
 								<tr><td class="textcenter pagebar" colspan="6">{pigcms{$pagebar}</td></tr>
@@ -81,6 +84,15 @@ $(function(){
 		location.href = "{pigcms{:U('User/recharge_list')}&status=" + $(this).val();
 	});
 });
-
+function recharge_refund(order_id,uid) {
+    $.post("{pigcms{:U('User/recharge_refund')}",{'order_id':order_id,'uid':uid},function(data){
+        if (data.status == 1) {
+            alert(data.info);
+            //window.location.reload();
+        }else{
+            alert('Fail');
+        }
+    },'JSON');
+}
 </script>
 <include file="Public:footer"/>
