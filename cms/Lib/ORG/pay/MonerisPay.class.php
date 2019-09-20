@@ -36,7 +36,7 @@ class MonerisPay
      * @return mixed
      */
     public function payment($data,$uid,$from_type){
-        if($data['order_type'] == 'recharge' || $data['charge_total'] >= 300){
+        if($data['order_type'] == 'recharge' || $data['charge_total'] >= 251){
             return $this->mpi_transaction($data,$uid,$from_type);
         }
 
