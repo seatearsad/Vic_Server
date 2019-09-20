@@ -487,8 +487,9 @@ class MonerisPay
         $save = $data['save'] ? $data['save'] : 0;
         $tip = $data['tip'] ? $data['tip'] : 0;
         $coupon_id = $data['coupon_id'] ? $data['coupon_id'] : '';
+        $card_user_name = $data['name'] ? $data['name'] : '';
 
-        $orderInfo = '-'.$data['order_type'].'-'.$data['order_id'].'-'.$from_type.'-'.$save.'-'.$tip.'-'.$coupon_id.'-'.$data_key.'-';
+        $orderInfo = '-'.$data['order_type'].'-'.$data['order_id'].'-'.$from_type.'-'.$save.'-'.$tip.'-'.$coupon_id.'-'.$card_user_name.'-'.$data_key.'-';
         //$data_key='gvOULripl7gcabGJmM1vOlnj2';
         $amount=$data['charge_total'];
         $xid = sprintf("%'920d", rand());
@@ -693,23 +694,11 @@ class MonerisPay
                     D('User_card')->clearIsDefaultByUid($orderInfo['uid']);
                     $data['is_default'] = 1;
                     $data['uid'] = $orderInfo['uid'];
+                    $data['card_num'] = $orderInfo['card_num'];
+                    $data['name'] = $orderInfo['card_name'];
                     $data['create_time'] = date("Y-m-d H:i:s");
                     $data['expiry'] = $expiry_date;
                     $data['credit_id'] = D('User_card')->field(true)->add($data);
-                }
-            }
-
-            //处理优惠券
-            if($orderInfo['coupon_id'] != ''){
-                $now_coupon = D('System_coupon')->get_coupon_by_id($orderInfo['coupon_id']);
-                if(!empty($now_coupon)){
-                    $coupon_data = D('System_coupon_hadpull')->field(true)->where(array('id'=>$orderInfo['coupon_id']))->find();
-                    $coupon_real_id = $coupon_data['coupon_id'];
-                    $coupon = D('System_coupon')->get_coupon($coupon_real_id);
-
-                    $in_coupon = array('coupon_id'=>$orderInfo['coupon_id'],'coupon_price'=>$coupon['discount']);
-
-                    D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->save($in_coupon);
                 }
             }
 
@@ -723,8 +712,8 @@ class MonerisPay
                     $now_coupon = reset($list);
                     if(!empty($now_coupon)){
                         $coupon = D('New_event_coupon')->where(array('id'=>$now_coupon['event_coupon_id']))->find();
-                        $in_coupon = array('coupon_id' => $data['coupon_id'], 'coupon_price' => $coupon['discount']);
-                        D('Shop_order')->field(true)->where(array('order_id' => $order_id))->save($in_coupon);
+                        $in_coupon = array('coupon_id' => $orderInfo['coupon_id'], 'coupon_price' => $coupon['discount']);
+                        D('Shop_order')->field(true)->where(array('order_id' => $orderInfo['order_id']))->save($in_coupon);
                     }
                 }else{
                     $now_coupon = D('System_coupon')->get_coupon_by_id($orderInfo['coupon_id']);
@@ -735,7 +724,7 @@ class MonerisPay
 
                         $in_coupon = array('coupon_id' => $data['coupon_id'], 'coupon_price' => $coupon['discount']);
 
-                        D('Shop_order')->field(true)->where(array('order_id' => $order_id))->save($in_coupon);
+                        D('Shop_order')->field(true)->where(array('order_id' => $orderInfo['order_id']))->save($in_coupon);
                     }
                 }
             }
@@ -752,7 +741,7 @@ class MonerisPay
     }
 
     public function getOrderInfoFromMD($MD){
-        //$orderInfo = '-'.$data['order_type'].'-'.$data['order_id'].'-'.$from_type.'-'.$save.'-'.$tip.'-'.$coupon_id.'-'.$data_key.'-';
+        //$orderInfo = '-'.$data['order_type'].'-'.$data['order_id'].'-'.$from_type.'-'.$save.'-'.$tip.'-'.$coupon_id.'-'.$card_user_name.'-'.$data_key.'-';
         $arr = explode('-',$MD);
         $orderInfo['order_type'] = $arr[1];
         $orderInfo['orderId'] = $arr[2];
@@ -760,8 +749,9 @@ class MonerisPay
         $orderInfo['save'] = $arr[4];
         $orderInfo['tip'] = $arr[5];
         $orderInfo['coupon_id'] = $arr[6];
-        $data_key = $arr[7];
-        $orderInfo['amount'] = $arr[8];
+        $orderInfo['card_name'] = $arr[7];
+        $data_key = $arr[8];
+        $orderInfo['amount'] = $arr[9];
 
         $order_id_str = explode("_",$orderInfo['orderId']);
         $orderInfo['order_id'] = $order_id_str[1];
