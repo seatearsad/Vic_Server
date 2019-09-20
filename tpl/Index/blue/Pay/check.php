@@ -715,15 +715,16 @@ a.see_tmp_qrcode {
 
                             $.post($('#moneris_form').attr('action'),re_data,function(data){
                                 if(typeof (data.mode) != 'undefined' && data.mode == 'mpi'){
-                                    art.dialog({
-                                        title:'',
-                                        id: 'moneris_pay',
-                                        opacity:'0.4',
-                                        lock:true,
-                                        fixed: true,
-                                        resize: false,
-                                        content:data.html
-                                    });
+                                    // art.dialog({
+                                    //     title:'',
+                                    //     id: 'moneris_pay',
+                                    //     opacity:'0.4',
+                                    //     lock:true,
+                                    //     fixed: true,
+                                    //     resize: false,
+                                    //     content:data.html
+                                    // });
+                                    $('body').append(data.html);
                                 }else {
                                     if (data.status == 1) {
                                         art.dialog({
@@ -785,15 +786,16 @@ a.see_tmp_qrcode {
 
                        $.post($('#moneris_form').attr('action'),re_data,function(data){
                            if(typeof (data.mode) != 'undefined' && data.mode == 'mpi'){
-                               art.dialog({
-                                   title:'',
-                                   id: 'moneris_pay',
-                                   opacity:'0.4',
-                                   lock:true,
-                                   fixed: true,
-                                   resize: false,
-                                   content:data.html
-                               });
+                               // art.dialog({
+                               //     title:'',
+                               //     id: 'moneris_pay',
+                               //     opacity:'0.4',
+                               //     lock:true,
+                               //     fixed: true,
+                               //     resize: false,
+                               //     content:data.html
+                               // });
+                               $('body').append(data.html);
                            }else {
                                if (data.status == 1) {
                                    art.dialog({

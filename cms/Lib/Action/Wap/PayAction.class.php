@@ -2719,6 +2719,7 @@ class PayAction extends BaseAction{
                 '<body onload="OnLoadEvent()">
 					<form name="downloadForm" action="' . urldecode($_GET['ACSUrl']) .
                 '" method="POST">
+					<noscript>
 					<br>
 					<br>
 					<center>
@@ -2731,6 +2732,7 @@ class PayAction extends BaseAction{
 					transaction.</h3>
 					<input type="submit" value="Submit">
 					</center>
+					</noscript>
 					<input type="hidden" name="PaReq" value="' . str_replace(' ','+',urldecode($_GET['PaReq'])) . '">
 					<input type="hidden" name="MD" value="' . urldecode($_GET['MD']) . '">
 					<input type="hidden" name="TermUrl" value="' . urldecode($_GET['TermUrl']) .'">

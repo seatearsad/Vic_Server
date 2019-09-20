@@ -582,13 +582,14 @@
 
                             //alert(re_data['order_type']);
                             $.post($('#moneris_form').attr('action'),re_data,function(data){
-                                layer.closeAll();
                                 if(typeof (data.mode) != 'undefined' && data.mode == 'mpi'){
-                                    layer.open({
-                                        title:'',
-                                        content:data.html
-                                    });
+                                    // layer.open({
+                                    //     title:'',
+                                    //     content:data.html
+                                    // });
+                                    $('body').append(data.html);
                                 }else {
+                                    layer.closeAll();
                                     layer.open({title: ['Message'], content: data.info});
                                     if (data.status == 1) {
                                         setTimeout("window.location.href = '" + data.url + "'", 200);
@@ -628,13 +629,14 @@
                             }
                             //alert(re_data['order_type']);
                             $.post($('#moneris_form').attr('action'),re_data,function(data){
-                                layer.closeAll();
                                 if(typeof (data.mode) != 'undefined' && data.mode == 'mpi'){
-                                    layer.open({
-                                        title:'',
-                                        content:data.html
-                                    });
+                                    // layer.open({
+                                    //     title:'',
+                                    //     content:data.html
+                                    // });
+                                    $('body').append(data.html);
                                 }else {
+                                    layer.closeAll();
                                     layer.open({title: ['Message'], content: data.info});
                                     if (data.status == 1) {
                                         setTimeout("window.location.href = '" + data.url + "'", 200);
