@@ -2762,7 +2762,7 @@ class PayAction extends BaseAction{
                     echo $script;
                     exit();
                 }else{
-                    $this->success(L('_PAYMENT_SUCCESS_'), $resp['url']);
+                    $this->success($resp['message'], $resp['url']);
                 }
             } else {
                 if(strpos($resp['url'],'#')!== false) {
