@@ -101,7 +101,7 @@
         <input type="password" placeholder="Password" name="password" />
     </div>
     <div class="forget_div">
-        Forget password? <a href="#">Find my password</a>
+        Forget password? <a href="{pigcms{:U('Login/forgetpwd')}">Find my password</a>
     </div>
     <div class="sign_btn">
         Sign in

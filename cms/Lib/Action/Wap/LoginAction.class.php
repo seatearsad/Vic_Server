@@ -169,15 +169,61 @@ class LoginAction extends BaseAction{
 
 	//忘记密码
 	public function forgetpwd() {
-		$accphone = isset($_GET['accphone']) ? trim($_GET['accphone']) : '';
-		$this->assign('accphone', $accphone);
-		//modify garfunkel
-		if($this->config['reg_verify_sms']){
-			$this->display();
-		}else{
-			$this->error_tips(L('_B_LOGIN_NOMESSAGE_'));
-		}
+	    if($_POST){
+            $phone = $_POST['phone'];
+            $vcode = $_POST['sms_code'];
+            $pwd = $_POST['password'];
+
+            if(D('User_modifypwd')->where(array('vfcode'=>$vcode,'telphone'=>$phone))->find()){
+                $data['pwd'] = md5($pwd);
+                D('User')->where(array('phone'=>$phone))->save($data);
+
+                $this->success('Success','',true);
+            }else{
+                $this->error(L('_SMS_CODE_ERROR_'),'',true);
+            }
+        }else {
+            $accphone = isset($_GET['accphone']) ? trim($_GET['accphone']) : '';
+            $this->assign('accphone', $accphone);
+            //modify garfunkel
+            if ($this->config['reg_verify_sms']) {
+                $this->display();
+            } else {
+                $this->error_tips(L('_B_LOGIN_NOMESSAGE_'));
+            }
+        }
 	}
+
+	public function sendForgetCode(){
+        $phone = $_POST['phone'];
+
+        if(empty($phone)){
+            exit(json_encode(array('error_code' => 1, 'msg' => 'No phone number')));
+        }
+
+        $user = D('User')->where(array('phone'=>$phone))->find();
+        if(!$user)
+            exit(json_encode(array('error_code' => 1, 'msg' => 'Phone Number Error')));
+
+        $vcode = createRandomStr(6,true,true);
+
+        $sms_data['uid'] = 0;
+        $sms_data['mobile'] = $phone;
+        $sms_data['sendto'] = 'user';
+        $sms_data['tplid'] = 169244;
+        $sms_data['params'] = [
+            $vcode
+        ];
+        Sms::sendSms2($sms_data);
+
+        $user_modifypwdDb = M('User_modifypwd');
+        $addtime = time();
+        $expiry = $addtime + 5 * 60; /*             * **五分钟有效期*** */
+        $data = array('telphone' => $phone, 'vfcode' => $vcode, 'expiry' => $expiry, 'addtime' => $addtime);
+        $insert_id = $user_modifypwdDb->add($data);
+
+        exit(json_encode(array('error_code' => 0)));
+    }
 
 	public function pwdModify() {
 		$pm = trim($_GET['pm']);
