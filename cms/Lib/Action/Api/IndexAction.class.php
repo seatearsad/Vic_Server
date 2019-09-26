@@ -102,7 +102,7 @@ class IndexAction extends BaseAction
         if($_POST['keyword']){
             $key = $_POST['keyword'];
             $key && $where['key'] = $key;
-            $shop_list = D('Merchant_store_shop')->get_list_arrange($where,1,1);
+            $shop_list = D('Merchant_store_shop')->get_list_arrange($where,1,1,$limit,$page,$lat,$long);
         }else{
             $shop_list = D('Merchant_store_shop')->get_list_arrange($where,3,1,$limit,$page,$lat,$long);
         }
