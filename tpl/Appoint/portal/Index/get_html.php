@@ -2,15 +2,74 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Tutti</title>
 </head>
-<style>
-    *{
-        margin: 0;
-    }
-</style>
-<body>
-<table style="font-family:Roboto;border-collapse: collapse; width: 900px; position: relative;">
+<!--div class="mail_back" style="width: 100%;height: 350px;margin: 0px auto 0 auto;overflow: hidden;">
+    <img src="./tpl/Static/blue/images/new/mail_back.png" style="width: 100%;"/>
+</div>
+<div class="mail_body" style="width: 100%;margin: 10px auto;font-size: 14px;">
+    Looking for delivery services of your favourite restaurants? tutti invites you to order with Tutti Delivery! Sign up using code  or the link below to get $10 in coupons when you place your first order!
+</div>
+<div class="invi_btn" style="width: 40%;height: 50px;margin: 20px auto;border-radius: 5px;background-color: #ffa52d;line-height: 50px;text-align: center;">
+    <a href="#" style="color: white;text-decoration: none;display: block;font-size: 18px;">
+        SIGN UP HERE
+    </a>
+</div>
+<div class="footer" style="width: 100%;background-color: #cccccc;padding:20px 3%;color: #333333;margin-top: 50px;font-size: 12px;">
+    <div>
+        * This offer is valid for new users only.
+    </div>
+    <div>
+        * Minimum purchase is required and may very from different coupons.
+    </div>
+    <div>
+        * Only one coupon can be used for each order.
+    </div>
+
+    <div style="margin-top: 120px; font-size: 10px; text-align: center">
+        © 2019 Kavl Technology Ltd.All rights reserved
+    </div>
+</div-->
+<table style="width: 98%; position: relative;margin: 0 auto">
+    <tr>
+        <td>
+            <img src="./tpl/Static/blue/images/new/mail_back.png" style="width: 100%;"/>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Looking for delivery services of your favourite restaurants? tutti invites you to order with Tutti Delivery! Sign up using code  or the link below to get $10 in coupons when you place your first order!
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <div class="invi_btn" style="width: 40%;height: 50px;margin: 20px auto;border-radius: 5px;background-color: #ffa52d;line-height: 50px;text-align: center;">
+                <a href="#" style="color: white;text-decoration: none;display: block;font-size: 18px;">
+                    SIGN UP HERE
+                </a>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td style="width: 100%;background-color: #cccccc;padding:2% 2%;color: #333333;font-size: 12px;">
+            <div>
+                * This offer is valid for new users only.
+            </div>
+            <div>
+                * Minimum purchase is required and may very from different coupons.
+            </div>
+            <div>
+                * Only one coupon can be used for each order.
+            </div>
+
+            <div style="margin-top: 120px; font-size: 10px; text-align: center">
+                © 2019 Kavl Technology Ltd.All rights reserved
+            </div>
+        </td>
+    </tr>
+</table>
+
+<!--table style="font-family:Roboto;border-collapse: collapse; width: 900px; position: relative;">
     <tbody>
         <tr>
             <td width="120">
@@ -160,6 +219,6 @@
             </td>
         </tr>
     </tbody>
-</table>
+</table-->
 </body>
 </html>

@@ -33,7 +33,12 @@ class LoginAction extends BaseAction{
 			$this->assign('referer',$referer);
 
 			if($this->is_wexin_browser){
-				redirect(U('Login/weixin',array('referer'=>urlencode($referer))));exit;
+				redirect(U('Login/weixin',array('referer'=>urlencode($referer))));
+				//garfunkel add invitation code
+				if($_GET['invi_code']){
+				    session('invi_code',$_GET['invi_code']);
+                }
+				exit;
 			}
 			$this->display();
 		}
@@ -65,12 +70,25 @@ class LoginAction extends BaseAction{
 					$modifypwd = $sms_verify_result['modifypwd'];
 				}
 			}
+            //garfunkel add 邀请码
+			if($_POST['invitation_code']){
+			    $code = strtolower($_POST['invitation_code']);
+                $invi_user = $database_user->where(array('invitation_code'=>$code))->find();
+                if($invi_user){
+                    $data_user['invitation_user'] = $invi_user['uid'];
+                }else{
+                    $this->error(L('_INVALID_INVI_CODE_'));
+                }
+            }
+
 			$data_user['pwd'] = md5($_POST['password']);
 
 			$data_user['nickname'] = $_POST['nickname'] ? $_POST['nickname'] : substr($data_user['phone'],0,3).'****'.substr($data_user['phone'],7);
 
 			$data_user['add_time'] = $data_user['last_time'] = $_SERVER['REQUEST_TIME'];
 			$data_user['add_ip'] = $data_user['last_ip'] = get_client_ip(1);
+
+			$data_user['email'] = $_POST['email'];
 
 			/****判断此用户是否在user_import表中***/
 			$user_importDb=D('User_import');
@@ -87,7 +105,7 @@ class LoginAction extends BaseAction{
 				if($this->config['reg_verify_sms']){
 					$data_user['status'] = 1; //开启注册验证短信就不需要审核
 				}else{
-					$data_user['status'] = 2; /*             * *未审核*** */
+					$data_user['status'] = 2; /* * *未审核*** */
 
 				}
 			   // $data_user['now_money'] = 0;
@@ -106,8 +124,15 @@ class LoginAction extends BaseAction{
 						D('User')->add_score($uid,$this->config['register_give_score'], L('_B_LOGIN_NEWGIFTWORD_').$this->config['score_name']);
 						D('Scroll_msg')->add_msg('reg',$uid,L('_B_LOGIN_USER_').$data_user['nickname'].date('Y-m-d H:i',$_SERVER['REQUEST_TIME']).L('_B_LOGIN_NEWGIFTSUCESSSCORE_').$this->config['score_name'].$this->config['register_give_score']);
 					}
-					
 				}
+				//garfunkel add
+                if($invi_user){
+                    $invi_user['invitation_reg_num'] += 1;
+                    D('User')->where(array('uid'=>$invi_user['uid']))->save($invi_user);
+                }
+                //garfunkel add 查找是否有新用户送券活动 并添加优惠券
+                D('New_event')->addEventCouponByType(1,$uid);
+
 				$session['uid'] = $uid;
 				$session['phone'] = $data_user['phone'];
 				session('user',$session);
@@ -127,6 +152,16 @@ class LoginAction extends BaseAction{
 			if(!empty($this->user_session)){
 				redirect(U('My/index'));
 			}
+
+			if($_GET['invi_code']){
+			    $code = base64_decode($_GET['invi_code']);
+			    $this->assign('invitation_code',strtoupper($code));
+
+                if($this->is_wexin_browser){
+                    redirect(U('Login/index'),array('invi_code',$code));
+                }
+            }
+
 			$this->display();
 		}
 	}
@@ -134,15 +169,61 @@ class LoginAction extends BaseAction{
 
 	//忘记密码
 	public function forgetpwd() {
-		$accphone = isset($_GET['accphone']) ? trim($_GET['accphone']) : '';
-		$this->assign('accphone', $accphone);
-		//modify garfunkel
-		if($this->config['reg_verify_sms']){
-			$this->display();
-		}else{
-			$this->error_tips(L('_B_LOGIN_NOMESSAGE_'));
-		}
+	    if($_POST){
+            $phone = $_POST['phone'];
+            $vcode = $_POST['sms_code'];
+            $pwd = $_POST['password'];
+
+            if(D('User_modifypwd')->where(array('vfcode'=>$vcode,'telphone'=>$phone))->find()){
+                $data['pwd'] = md5($pwd);
+                D('User')->where(array('phone'=>$phone))->save($data);
+
+                $this->success('Success','',true);
+            }else{
+                $this->error(L('_SMS_CODE_ERROR_'),'',true);
+            }
+        }else {
+            $accphone = isset($_GET['accphone']) ? trim($_GET['accphone']) : '';
+            $this->assign('accphone', $accphone);
+            //modify garfunkel
+            if ($this->config['reg_verify_sms']) {
+                $this->display();
+            } else {
+                $this->error_tips(L('_B_LOGIN_NOMESSAGE_'));
+            }
+        }
 	}
+
+	public function sendForgetCode(){
+        $phone = $_POST['phone'];
+
+        if(empty($phone)){
+            exit(json_encode(array('error_code' => 1, 'msg' => 'No phone number')));
+        }
+
+        $user = D('User')->where(array('phone'=>$phone))->find();
+        if(!$user)
+            exit(json_encode(array('error_code' => 1, 'msg' => 'Phone Number Error')));
+
+        $vcode = createRandomStr(6,true,true);
+
+        $sms_data['uid'] = 0;
+        $sms_data['mobile'] = $phone;
+        $sms_data['sendto'] = 'user';
+        $sms_data['tplid'] = 169244;
+        $sms_data['params'] = [
+            $vcode
+        ];
+        Sms::sendSms2($sms_data);
+
+        $user_modifypwdDb = M('User_modifypwd');
+        $addtime = time();
+        $expiry = $addtime + 5 * 60; /*             * **五分钟有效期*** */
+        $data = array('telphone' => $phone, 'vfcode' => $vcode, 'expiry' => $expiry, 'addtime' => $addtime);
+        $insert_id = $user_modifypwdDb->add($data);
+
+        exit(json_encode(array('error_code' => 0)));
+    }
 
 	public function pwdModify() {
 		$pm = trim($_GET['pm']);
@@ -298,6 +379,19 @@ class LoginAction extends BaseAction{
 					'avatar' 	=> $jsonrt['headimgurl'],
 					'is_follow' 	=> $is_follow,
 				);
+
+				//garfunkel add invitation code
+                if($_SESSION['invi_code']){
+                    //garfunkel add 邀请码
+                    $code = strtolower($_SESSION['invi_code']);
+                    $invi_user = D('User')->where(array('invitation_code'=>$code))->find();
+                    if($invi_user){
+                        $data_user['invitation_user'] = $invi_user['uid'];
+                    }
+
+                    unset($_SESSION['invi_code']);
+                }
+
 				$_SESSION['weixin']['user'] = $data_user;
 				$this->assign('referer',$referer);
 				if($this->config['weixin_login_bind']){
@@ -540,6 +634,15 @@ class LoginAction extends BaseAction{
 				$now_user = $login_result['user'];
 				session('user',$now_user);
 				$referer = !empty($_SESSION['weixin']['referer']) ? $_SESSION['weixin']['referer'] : U('Home/index');
+
+                //garfunkel add
+                if($now_user['invitation_user'] && $now_user['invitation_user'] != 0){
+                    $invi_user = D('User')->where(array('uid'=>$now_user['invitation_user']))->find();
+                    $invi_user['invitation_reg_num'] += 1;
+                    D('User')->where(array('uid'=>$invi_user['uid']))->save($invi_user);
+                }
+                //garfunkel add 查找是否有新用户送券活动 并添加优惠券
+                D('New_event')->addEventCouponByType(1,$now_user['uid']);
 
 				unset($_SESSION['weixin']);
 				redirect($referer);

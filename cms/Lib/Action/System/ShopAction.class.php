@@ -256,6 +256,17 @@ class ShopAction extends BaseAction
             $where_store[$area_index] = $this->system_session['area_id'];
         }
 
+        if($_GET['city_id']){
+            $this->assign('city_id',$_GET['city_id']);
+            if($_GET['city_id'] != 0){
+                $where_store['city_id'] = $_GET['city_id'];
+            }
+        }else{
+            $this->assign('city_id',0);
+        }
+        $city = D('Area')->where(array('area_type'=>2))->select();
+        $this->assign('city',$city);
+
         $store_ids = array();
         $where = array();
         if ($where_store) {
@@ -479,16 +490,6 @@ class ShopAction extends BaseAction
                 $this->error('订单不存在或已经删除，请刷新后重试');
             }
 
-            //更新订单商品
-            $good_list = D('Shop_order_detail')->field(true)->where(array('order_id'=>$order_id))->select();
-            foreach ($good_list as $good){
-                $good_id = 'good_'.$good['goods_id'];
-                //如果商品数量更新
-                if($_POST[$good_id] != $good['num']){
-                    $good['num'] = $_POST[$good_id];
-                    D('Shop_order_detail')->where(array('order_id'=>$order_id,'goods_id'=>$good['goods_id']))->save($good);
-                }
-            }
             //garfunkel add 记录原始价格
             $data['change_price'] = $shop_order_data['price'];
 
@@ -524,13 +525,6 @@ class ShopAction extends BaseAction
             $data['is_refund'] = 1;
             //计算修改后的价格差 原始价格 - 修改价格
             $cha = $shop_order_data['price'] - $data['price'];
-
-            //同时修改配送员端的价格
-            $deliver_data['money'] = $data['price'];
-            $deliver_data['freight_charge'] = $freight_charge;
-            if($shop_order_data['pay_type'] != 'moneris' && $shop_order_data['pay_type'] != '')
-                $deliver_data['deliver_cash'] = $data['price'];
-            D('Deliver_supply')->field(true)->where(array('order_id'=>$order_id))->save($deliver_data);
 
             //是否使用线上付款
             if($shop_order_data['pay_type'] == 'moneris' && $shop_order_data['paid'] == 1){
@@ -583,6 +577,8 @@ class ShopAction extends BaseAction
                         if ($use_result['error_code']) {
                             $this->error( $use_result['msg']);
                         }
+                    }else{
+                        $this->error("用户余额不足，不能修改订单价格");
                     }
                 }
 
@@ -592,6 +588,23 @@ class ShopAction extends BaseAction
 
             ////////
             if ($shop_order->where("order_id=$order_id")->data($data)->save()){
+                //更新订单商品
+                $good_list = D('Shop_order_detail')->field(true)->where(array('order_id'=>$order_id))->select();
+                foreach ($good_list as $good){
+                    $good_id = 'good_'.$good['goods_id'];
+                    //如果商品数量更新
+                    if($_POST[$good_id] != $good['num']){
+                        $good['num'] = $_POST[$good_id];
+                        D('Shop_order_detail')->where(array('order_id'=>$order_id,'goods_id'=>$good['goods_id']))->save($good);
+                    }
+                }
+                //同时修改配送员端的价格
+                $deliver_data['money'] = $data['price'];
+                $deliver_data['freight_charge'] = $freight_charge;
+                if($shop_order_data['pay_type'] != 'moneris' && $shop_order_data['pay_type'] != '')
+                    $deliver_data['deliver_cash'] = $data['price'];
+                D('Deliver_supply')->field(true)->where(array('order_id'=>$order_id))->save($deliver_data);
+
                 $this->success('Success');
             }else{
                 $this->error('修改失败！请检查内容是否有过修改（必须修改）后重试~');

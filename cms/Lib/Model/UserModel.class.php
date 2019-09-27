@@ -488,6 +488,42 @@ class UserModel extends Model
 		}
 	}
 
+    public function getUserOrderNum($phone,$cate_name){
+        $user = $this->field('uid')->where(array('phone'=>$phone))->find();
+        if(empty($user)){
+            $user = $this->field('uid')->where(array('uid'=>$phone))->find();
+        }
+        $m = new Model();
+        $table = array(C('DB_PREFIX').'group_order',C('DB_PREFIX').'meal_order',C('DB_PREFIX').'appoint_order',C('DB_PREFIX').'shop_order',C('DB_PREFIX').'foodshop_order');
+        $count = 0;
+        $where['uid']=$user['uid'];
+        $where['paid'] = 1;
+        switch($cate_name){
+            case 'all':
+                foreach($table as  $v){
+                    $count += $m->table($v)->where($where)->count('order_id');
+                }
+                break;
+            case 'group':
+                $count  = $m->table($table[0])->where($where)->count('order_id');
+                break;
+            case 'meal':
+                $count  = $m->table($table[1])->where($where)->count('order_id');
+                break;
+            case 'appoint':
+                $count  = $m->table($table[2])->where($where)->count('order_id');
+                break;
+            case 'shop':
+                $count  = $m->table($table[3])->where($where)->count('order_id');
+                break;
+            case 'foodshop':
+                $count  = $m->table($table[4])->where($where)->count('order_id');
+                break;
+        }
+
+        return $count;
+    }
+
 	public function check_score_can_use($uid,$money,$order_type,$group_id,$mer_id){
 		$now_user = $this->get_user($uid);
 		$score_count = $now_user['score_count'];
@@ -608,5 +644,49 @@ class UserModel extends Model
 		return $today_sign_num;
 	}
 
+    public function getUserInvitationCode($uid){
+        $user = $this->where(array('uid'=>$uid))->find();
+
+        if($user['invitation_code'] == '') {
+            $code = $this->getInvitationCode(6);
+            $data['invitation_code'] = $code;
+            $this->where(array('uid'=>$uid))->save($data);
+        }else {
+            $code = $user['invitation_code'];
+        }
+
+        return $code;
+    }
+    function getInvitationCode($len){
+        $code = $this->getRandomStr($len);
+        if($this->where(array('invitation_code'=>$code))->find()){
+            $code = $this->getInvitationCode($len);
+        }
+
+        return $code;
+    }
+
+    function getRandomStr($len, $special=false){
+        $chars = array("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k",
+            "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v",
+            "w", "x", "y", "z", "0", "1", "2",
+            "3", "4", "5", "6", "7", "8", "9"
+        );
+
+        if($special){
+            $chars = array_merge($chars, array("!", "@", "#", "$", "?", "|", "{", "/", ":", ";",
+                "%", "^", "&", "*", "(", ")", "-", "_", "[", "]",
+                "}", "<", ">", "~", "+", "=", ",", "."
+            ));
+        }
+
+        $charsLen = count($chars) - 1;
+        shuffle($chars);//打乱数组顺序
+        $str = '';
+        for($i=0; $i<$len; $i++){
+            $str .= $chars[mt_rand(0, $charsLen)];//随机取出一位
+        }
+        return $str;
+    }
 }
 ?>

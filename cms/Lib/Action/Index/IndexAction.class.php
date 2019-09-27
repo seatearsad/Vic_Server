@@ -237,8 +237,10 @@ class IndexAction extends BaseAction {
         $mail->Port = 465;
 
         $mail->setFrom('caesark882@gmail.com', 'Caesark');
+        $mail->addAddress('caesar@tutti.app', 'Caesar');
+        $mail->addAddress('adam@tutti.app','Adam');
         $mail->addAddress('garfunkel@126.com', 'Garfunkel');
-        $mail->addAddress('jheary@tutti.app', 'Heary');
+        //$mail->addAddress('jheary@tutti.app', 'Heary');
         //$mail->addAddress('ellen@example.com');               // Name is optional
         //$mail->addReplyTo('info@example.com', 'Information');
         //$mail->addCC('cc@example.com');

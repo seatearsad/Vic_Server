@@ -2,136 +2,228 @@
 <html>
 <head>
     <meta charset="utf-8"/>
-	<title>{pigcms{:L('_B_LOGIN_RECOMENDNEWGIFSCORE_')}  - {pigcms{$config.site_name}</title>
-    <meta name="viewport" content="initial-scale=1, width=device-width, maximum-scale=1, user-scalable=no">
-	<meta name="apple-mobile-web-app-capable" content="yes">
-	<meta name='apple-touch-fullscreen' content='yes'>
-	<meta name="apple-mobile-web-app-status-bar-style" content="black">
-	<meta name="format-detection" content="telephone=no">
-	<meta name="format-detection" content="address=no">
-
-    <link href="{pigcms{$static_path}css/eve.7c92a906.css" rel="stylesheet"/>
-	<link href="{pigcms{$static_path}css/index_wap.css" rel="stylesheet"/>
-	<link href="{pigcms{$static_path}css/idangerous.swiper.css" rel="stylesheet"/>
-	<style>
-		#login{margin: 0.5rem 0.2rem;}
-		.btn-wrapper{margin:.28rem 0;}
-		dl.list{border-bottom:0;border:1px solid #ddd8ce;}
-		dl.list:first-child{border-top:1px solid #ddd8ce;}
-		dl.list dd dl{padding-right:0.2rem;}
-		dl.list dd dl>.dd-padding, dl.list dd dl dd>.react, dl.list dd dl>dt{padding-right:0;}
-	    .nav{text-align: center;}
-	    .subline{margin:.28rem .2rem;}
-	    .subline li{display:inline-block;}
-	    .captcha img{margin-left:.2rem;}
-	    .captcha .btn{margin-top:-.15rem;margin-bottom:-.15rem;margin-left:.2rem;}
-	</style>
+    <if condition="$config['site_favicon']">
+        <link rel="shortcut icon" href="{pigcms{$config.site_favicon}"/>
+    </if>
+	<title>{pigcms{:L('_B_D_LOGIN_LOGIN1_')} - {pigcms{:L('_VIC_NAME_')}</title>
+    <meta name="keywords" content="{pigcms{$config.seo_keywords}" />
+    <meta name="description" content="{pigcms{$config.seo_description}" />
+    <meta name="viewport" content="initial-scale=1, width=device-width, maximum-scale=1, user-scalable=no"/>
+	<meta name="apple-mobile-web-app-capable" content="yes"/>
+	<meta name='apple-touch-fullscreen' content='yes'/>
+	<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+	<meta name="format-detection" content="telephone=no"/>
+	<meta name="format-detection" content="address=no"/>
+    <script src="{pigcms{$static_path}js/jquery-1.7.2.js"></script>
     <include file="Public:facebook"/>
 </head>
-<body id="index" data-com="pagecommon">
-        <!--header  class="navbar">
-            <div class="nav-wrap-left">
-                <a class="react back" href="javascript:history.back()"><i class="text-icon icon-back"></i></a>
-            </div>
-            <h1 class="nav-header">{pigcms{$config.site_name}</h1>
-            <div class="nav-wrap-right">
-                <a class="react" href="{pigcms{:U('Home/index')}">
-                    <span class="nav-btn"><i class="text-icon">⟰</i>{pigcms{:L('_B_D_LOGIN_HPME1_')}</span>
-                </a>
-            </div>
-        </header-->
-        <div id="container">
-        	<div id="tips" style="-webkit-transform-origin:0px 0px;opacity:1;-webkit-transform:scale(1, 1);"></div>
-			<div id="login">
-			    
-			        <dl class="list list-in">
-			        	<dd>
-			        		<dl>
-			            		<dd class="dd-padding">
-			            			<input id="phone" class="input-weak" type="tel" placeholder="{pigcms{:L('_B_D_LOGIN_TEL_')}" name="phone" value="" required="">
-			            		</dd>
-								<if condition=" C('config.reg_verify_sms')">
-			            		<dd class="kv-line-r dd-padding">
-			            			<input id="vfycode" class="input-weak kv-k" name = "vcode" type="text" placeholder="{pigcms{:L('_B_D_LOGIN_FILLMESSAGE_')}" required/>
-			            			<button id="reg_send_sms" type="button" onclick="sendsms(this)" class="btn btn-weak kv-v">{pigcms{:L('_B_D_LOGIN_RECEIVEMESSAGE_')}</button>
-			            		</dd>
-								</if>
-			            		
-			        		</dl>
-			        	</dd>
-			        </dl>
-			        <div class="btn-wrapper">
-						<button type="submit" onclick="forgetpwd(this);" class="btn btn-larger btn-block">{pigcms{:L('_B_D_LOGIN_SUB_')}</button>
-			        </div>
-			   
-			</div>
-			<ul class="subline">
-			    <li><a href="{pigcms{:U('Login/index')}">{pigcms{:L('_B_D_LOGIN_LOGINNOW_')}</a></li>
-			</ul>
-		</div>
-		<script type="text/javascript">
-			var flage='';
-			function  forgetpwd(val){
-				
-					var vfycode  = $('#vfycode').val();
-					$.ajax({
-						url: '{pigcms{$config.site_url}/index.php?g=Index&c=Login&a=Generate',
-						type: 'POST',
-						dataType: 'json',
-						data: {phone: $("input[name='phone']").val(),vfycode:vfycode,tmpid:1},
-						success:function(date){
-							if(date.error_code==2){
-								window.location.href="{pigcms{:U('Login/pwdModify')}&pm="+date.urlpm;
-							}else{
-								$('#tips').html(date.msg).show();
-							}
-						}
-					});
-				
-			}
-			
-			var countdown = 60;
-			function sendsms(val){
-				if($("input[name='phone']").val()==''){
-					alert("{pigcms{:L('_B_D_LOGIN_BLANKNUM_')}");
-				}else{
-					
-					if(countdown==60){
-						$.ajax({
-							url: '{pigcms{$config.site_url}/index.php?g=Index&c=Login&a=Generate',
-							type: 'POST',
-							dataType: 'json',
-							data: {phone: $("input[name='phone']").val(),vfycode:'',tmpid:0},
-							success:function(date){
-								flage=date.id;
-								if(date.error_code){
-									$('#tips').html(date.msg).show();
-								}
-							}
-
-						});
-					}
-					if (countdown == 0) {
-						val.removeAttribute("disabled");
-						val.innerText="{pigcms{:L('_B_D_LOGIN_RECEIVEMESSAGE_')}";
-						countdown = 60;
-						//clearTimeout(t);
-					} else {
-						val.setAttribute("disabled", true);
-						val.innerText="{pigcms{:L('_B_D_LOGIN_SENDAGAIN_')}(" + countdown + ")";
-						countdown--;
-						setTimeout(function() {
-							sendsms(val);
-						},1000)
-					}
-				}
-			}
-		</script>
-		<script src="{pigcms{:C('JQUERY_FILE')}"></script>
-		<script src="{pigcms{$static_path}js/common_wap.js"></script>
-		<script src="{pigcms{$static_path}js/reg.js"></script>
-		<include file="Public:footer"/>
-
-{pigcms{$hideScript}
-	</body>
+<style>
+    *{
+        margin: 0px;
+        box-sizing: border-box;
+        font-family: Helvetica;
+        -moz-osx-font-smoothing: grayscale;
+    }
+    .sign_title{
+        margin-top: 50px;
+        text-align: center;
+        font-size: 2.2em;
+        font-weight: bold;
+    }
+    .sign_input{
+        width: 75%;
+        margin: 50px auto 0 auto;
+    }
+    .sign_input input{
+        width: 100%;
+        height: 50px;
+        border-left: 0;
+        border-right: 0;
+        border-top: 0;
+        border-bottom: 2px solid #666666;
+        font-size: 1.1em;
+        padding-left: 5px;
+        margin-top: 10px;
+        -moz-border-radius: 0px;
+        -webkit-border-radius: 0px;
+        border-radius: 0px;
+    }
+    .sign_input input:focus{
+        border-bottom: 2px solid #ffa52d;
+    }
+    #sms_code{
+        width: 45%;
+    }
+    .forget_div{
+        margin-top: 10px;
+        text-align: center;
+        font-size: 0.95em;
+        color: #666666;
+    }
+    .forget_div a{
+        color: #666666;
+    }
+    .sign_btn{
+        margin: 60px auto 0 auto;
+        text-align: center;
+        width: 80%;
+        height: 45px;
+        line-height: 45px;
+        font-size: 1.8em;
+        font-weight: bold;
+        background-color: #ffa52d;
+        color: #ffffff;
+        -moz-border-radius: 5px;
+        -webkit-border-radius: 5px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    .black_line{
+        width: 100%;
+        height: 2px;
+        background-color:#333333;
+        margin-top: 80px;
+    }
+    .or_div{
+        width: 12%;
+        margin: -10px auto 0 auto;
+        text-align: center;
+        height: 20px;
+        line-height: 20px;
+        background-color: white;
+        font-size: 1.2em;
+        color: #666666;
+    }
+    #reg_send_sms{
+        width: 50%;
+        margin-left: 3%;
+        height: 50px;
+        background-color: #ffa52d;
+        color: white;
+        border: 0px;
+        font-size: 1em;
+        -moz-border-radius: 5px;
+        -webkit-border-radius: 5px;
+        border-radius: 5px;
+    }
+</style>
+<body>
+    <div class="sign_title">
+        Forget Password
+    </div>
+    <div class="sign_input">
+        <input type="tel" name="phone" placeholder="Phone Number">
+        <input id="sms_code" name="sms_code" type="text" placeholder="Code" />
+        <button id="reg_send_sms" type="button" onclick="sendsms(this)">{pigcms{:L('_B_D_LOGIN_RECEIVEMESSAGE_')}</button>
+        <input type="password" placeholder="Password" name="password" />
+        <input type="password" placeholder="Confirm Password" name="con_password" />
+    </div>
+    <div class="sign_btn">
+        Submit
+    </div>
+    <div class="forget_div">
+        <a href="{pigcms{:U('Login/index')}"><< Sign in</a>
+    </div>
+    <script src="{pigcms{$static_public}layer/layer.m.js"></script>
+    <script type="text/javascript" src="{pigcms{$static_public}js/artdialog/jquery.artDialog.js"></script>
+    <script type="text/javascript" src="{pigcms{$static_public}js/artdialog/iframeTools.js"></script>
+    <script>
+        function show_msg(msg) {
+            layer.open({
+                title: "{pigcms{:L('_STORE_REMIND_')}",
+                time: 2,
+                content: msg
+            });
+        }
+        function checkPhone(phone) {
+            if(!/^\d{10,}$/.test(phone)){
+                return false;
+            }
+            return true;
+        }
+        function checkMail(mail) {
+            var reg = /\w+[@]{1}\w+[.]\w+/;
+            if(!reg.test(mail)){
+                return false;
+            }
+            return true;
+        }
+        var countdown = 60;
+        function sendsms(val){
+            if($("input[name='phone']").val()==''){
+                show_msg("{pigcms{:L('_B_D_LOGIN_BLANKNUM_')}");
+            }else if(!checkPhone($("input[name='phone']").val())){
+                show_msg("{pigcms{:L('_B_LOGIN_ENTERGOODNO_')}");
+            }else{
+                if(countdown==60){
+                    $.ajax({
+                        url: "{pigcms{:U('Login/sendForgetCode')}",
+                        type: 'POST',
+                        dataType: 'json',
+                        data: {phone: $("input[name='phone']").val()},
+                        success:function(date){
+                            if(date.error_code){
+                                countdown = 0;
+                                show_msg(date.msg);
+                            }else{
+                                show_msg('Success');
+                            }
+                        }
+                    });
+                }
+                if (countdown == 0) {
+                    val.removeAttribute("disabled");
+                    val.innerText="{pigcms{:L('_B_D_LOGIN_RECEIVEMESSAGE_')}";
+                    countdown = 60;
+                    //clearTimeout(t);
+                } else {
+                    val.setAttribute("disabled", true);
+                    val.innerText="{pigcms{:L('_B_D_LOGIN_SENDAGAIN_')}(" + countdown + ")";
+                    countdown--;
+                    setTimeout(function() {
+                        sendsms(val);
+                    },1000)
+                }
+            }
+        }
+        
+        $('.sign_btn').click(function () {
+            var is_tip = false;
+            var re_data = {};
+            $('.sign_input').find('input').each(function () {
+                if($(this).attr('name') != 'invitation_code' && $(this).val() == ''){
+                    is_tip = true;
+                }else{
+                    re_data[$(this).attr('name')] = $(this).val();
+                }
+            });
+            if($("input[name='password']").val() != $("input[name='con_password']").val()){
+                show_msg("{pigcms{:L('_B_LOGIN_DIFFERENTKEY_')}");
+            }else if(!checkPhone($("input[name='phone']").val())){
+                show_msg("{pigcms{:L('_B_LOGIN_ENTERGOODNO_')}");
+            }else{
+                if (is_tip) {
+                    show_msg("{pigcms{:L('_PLEASE_INPUT_ALL_')}");
+                } else {
+                    var phone = $("input[name='phone']").val();
+                    var password = $("input[name='password']").val();
+                    var sms_code = $("input[name='sms_code']").val();
+                    //$.post("{pigcms{:U('Login/reg')}",{phone:phone,password:password,sms_code:sms_code},function(result){
+                    $.post("{pigcms{:U('Login/forgetpwd')}",re_data,function(result){
+                        if(result.status == '1'){
+                            //window.location.href = $('#reg-form').attr('location_url');
+                            show_msg(result.info);
+                            artDialog.open.origin.location.reload();
+                            window.location.href = "{pigcms{:U('Login/index')}";
+                        }else{
+                            reg_flag = true;
+                            //$('#tips').html(result.info).show();
+                            show_msg(result.info);
+                        }
+                    });
+                }
+            }
+        });
+    </script>
+</body>
 </html>

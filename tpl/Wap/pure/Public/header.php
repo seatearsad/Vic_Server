@@ -14,12 +14,32 @@
         position: fixed;
         z-index: 999;
     }
+    #search_label{
+        width: 100%;
+        height: 40px;
+        background-color: #ffa52d;
+        position: fixed;
+        display: none;
+        z-index: 999;
+    }
     #header_menu{
         display: flex;
         flex: 1 1 100%;
     }
     #header_sign{
         flex: 1 1 100%;
+    }
+    .header_search{
+        width: 50px;
+        height: 50px;
+        margin-top: 5px;
+        margin-right: 10px;
+        float: right;
+        background-image: url("./tpl/Static/blue/images/new/search.png");
+        background-repeat: no-repeat;
+        background-size: auto 70%;
+        background-position: center;
+        cursor: pointer;
     }
     #header_logo{
         margin: 2px auto;
@@ -244,6 +264,28 @@
         background-position: center;
         cursor: pointer;
     }
+    #search_key{
+        width: 70%;
+        height: 30px;
+        margin-left: 10px;
+        margin-top: 5px;
+        background-color: white;
+        border: 0px;
+        border-radius: 5px;
+    }
+    #search_btn{
+        color: #ffffff;
+        background: none;
+        width: auto;
+        height: 30px;
+        margin-top: 5px;
+        margin-right: 5px;
+        float: right;
+        border: 1px solid #ffffff;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+    }
 </style>
 <div class="down_header">
     <div class="down_close">X</div>
@@ -264,11 +306,24 @@
     </div>
     <div id="header_logo"></div>
     <div id="header_sign">
+        <div class="header_search"></div>
     </div>
+</div>
+<div id="search_label">
+    <input type="text" id="search_key" name="search_key" placeholder="{pigcms{:L('_SEARCH_STORE_GOODS_')}" />
+    <input type="button" name="search_btn" id="search_btn" value="Search">
 </div>
 <script type="text/javascript" src="{pigcms{$static_public}js/lang.js" charset="utf-8"></script>
 <script src="{pigcms{$static_path}js/jquery.cookie.js"></script>
 <script>
+    var keyword = '';
+    <if condition="$keyword">
+        keyword = "{pigcms{$keyword}";
+        $('#search_label').show();
+        $('#search_key').val(keyword);
+    </if>
+    $('#search_label').css('margin-top',$('#tutti_header').height());
+
     $('#header_logo').click(function () {
         window.location.href = "{pigcms{$config.site_url}"+"/wap.php";
     });
@@ -312,15 +367,17 @@
         if((top > 0 && top <= init_top) || top < 0){
             $('#tutti_header').css('margin-top',-top);
             $('#menu_memo').css('margin-top',init_margin-top);
+            $('#search_label').css('margin-top',-top+$('#tutti_header').height());
         }
         if(top > init_top){
             $('#tutti_header').css('margin-top',-init_top);
             $('#menu_memo').css('margin-top',init_margin - init_top);
+            $('#search_label').css('margin-top',-init_top+$('#tutti_header').height());
         }
         if(top == 0){
             $('#tutti_header').css('margin-top',0);
             $('#menu_memo').css('margin-top',init_margin);
-
+            $('#search_label').css('margin-top',$('#tutti_header').height());
         }
     });
     var app_url = 'https://itunes.apple.com/us/app/tutti/id1439900347?ls=1&mt=8';
@@ -333,6 +390,27 @@
     });
     $('.local_div').click(function () {
         window.location.href = $(this).data('url');
+    });
+
+    $('.header_search').click(function () {
+        if($('#search_label').is(":hidden")){
+            $('#search_label').show();
+        }else{
+            $('#search_label').hide();
+        }
+    });
+
+    $('#search_label').click(function () {
+        $('#search_key').focus();
+    });
+
+    $('#search_btn').click(function () {
+        var keyword = $('#search_key').val();
+        if(keyword == ''){
+            window.location.href = "{pigcms{:U('Shop/index')}";
+        }else{
+            window.location.href = "{pigcms{:U('Shop/index')}" + "&key=" + keyword;
+        }
     });
 </script>
 <script type="text/javascript" src="{pigcms{$static_path}js/jquery.cookie.js" charset="utf-8"></script>

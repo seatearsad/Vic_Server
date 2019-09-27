@@ -32,7 +32,15 @@
 							{pigcms{:L('_BACK_BAN_U_BAL_')}：$<if condition="$user_balance['close']">{pigcms{$user_balance['close']}<else/>0</if>
 							<a href="{pigcms{:U('User/export')}" class="button" style="float:right;margin-right: 10px;">{pigcms{:L('_BACK_EXPORT_U_')}</a>
 						</form>
-						
+                        <if condition="$system_session['level'] neq 3">
+                            City:
+                            <select name="searchtype" id="city_select">
+                                <option value="0" <if condition="$city_id eq '' or $city_id eq 0">selected="selected"</if>>All</option>
+                                <volist name="city" id="vo">
+                                    <option value="{pigcms{$vo.area_id}" <if condition="$city_id eq $vo['area_id']">selected="selected"</if>>{pigcms{$vo.area_name}</option>
+                                </volist>
+                            </select>
+                        </if>
 					</td>
 				</tr>
 			</table>
@@ -59,8 +67,10 @@
 								<th><a href="{pigcms{:U('User/index',array('sort'=>'lastTime'))}" style="color:blue;">{pigcms{:L('_BACK_LAST_TIME_')}</a></th>
 								<th>{pigcms{:L('_BACK_LAST_LOC_')}</th>
 								<th class="textcenter"><a href="{pigcms{:U('User/index',array('sort'=>'money'))}" style="color:blue;">{pigcms{:L('_BACK_BALANCE_SHOW_')}</a></th>
-								<th class="textcenter"><a href="{pigcms{:U('User/index',array('sort'=>'score'))}" style="color:blue;">{pigcms{:L('_BACK_POINTS_')}</a></th>
+								<!--th class="textcenter"><a href="{pigcms{:U('User/index',array('sort'=>'score'))}" style="color:blue;">{pigcms{:L('_BACK_POINTS_')}</a></th-->
 								<th class="textcenter">{pigcms{:L('_BACK_FROM_')}</th>
+                                <th class="textcenter"><a href="{pigcms{:U('User/index',array('sort'=>'invi_reg'))}" style="color:blue;">邀请注册数</a></th>
+                                <th class="textcenter"><a href="{pigcms{:U('User/index',array('sort'=>'invi_order'))}" style="color:blue;">邀请下单数</a></th>
 								<th class="textcenter">{pigcms{:L('_BACK_STATUS_')}</th>
 								<th class="textcenter">{pigcms{:L('_BACK_CZ_')}</th>
 							</tr>
@@ -78,7 +88,7 @@
 										<td>{pigcms{$vo.last_time|date='Y-m-d H:i:s',###}</td>
 										<td>{pigcms{$vo.last_ip_txt}</td>
 										<td class="textcenter">${pigcms{$vo.now_money|floatval=###}</td>
-										<td class="textcenter">{pigcms{$vo.score_count}</td>
+										<!--td class="textcenter">{pigcms{$vo.score_count}</td-->
 										<td class="textcenter"><php>if(strpos($vo['source'],'weixin')===1){</php>
 										{pigcms{$client.5}
 										<php>}elseif(strpos($vo['source'],'wxapp')===1){</php>
@@ -86,6 +96,8 @@
 										<php>}else{</php>
 										{pigcms{$client[$vo['client']]}
 										<php>}</php></td>
+                                        <td class="textcenter">{pigcms{$vo.invitation_reg_num}</td>
+                                        <td class="textcenter">{pigcms{$vo.invitation_order_num}</td>
 										<td class="textcenter"><if condition="$vo['status'] eq 1"><font color="green">{pigcms{:L('_BACK_NORMAL_')}</font><elseif condition="$vo['status'] eq 2" /><font color="red">{pigcms{:L('_BACK_PENDING_')}</font><else /><font color="red">{pigcms{:L('_BACK_BANNED_')}</font></if></td>
 										<td class="textcenter">
                                             <a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('User/edit',array('uid'=>$vo['uid']))}','{pigcms{:L(\'_BACK_EDIT_CUSTOMER_\')}',680,560,true,false,false,editbtn,'edit',true);"><if condition="$vo['status'] eq 2">{pigcms{:L('_BACK_PENDING_')}<else />{pigcms{:L('_BACK_EDIT_')}</if></a>
@@ -111,6 +123,12 @@
 			</form>
 		</div>
 <script type="text/javascript">
+    var city_id = $('#city_select').val();
+    $('#city_select').change(function () {
+        city_id = $(this).val();
+        window.location.href = "{pigcms{:U('User/index')}" + "&city_id="+city_id;
+    });
+
     $("#select_all").click(function(){
         var is_all = true;
         var groupCheckbox=$("input[name='check']");

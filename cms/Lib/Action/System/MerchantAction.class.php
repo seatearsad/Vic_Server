@@ -45,7 +45,16 @@ class MerchantAction extends BaseAction{
 				break;
 
 		}
-
+        if($_GET['city_id']){
+            $this->assign('city_id',$_GET['city_id']);
+            if($_GET['city_id'] != 0){
+                $condition_merchant['city_id'] = $_GET['city_id'];
+            }
+        }else{
+            $this->assign('city_id',0);
+        }
+        $city = D('Area')->where(array('area_type'=>2))->select();
+        $this->assign('city',$city);
 
 		if ($this->system_session['area_id']) {
 			$area_index = $this->system_session['level'] == 1 ? 'area_id' : 'city_id';

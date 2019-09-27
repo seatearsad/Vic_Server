@@ -11,15 +11,15 @@ class ShopAction extends BaseAction
         $database_merchant_store = D('Merchant_store');
         $condition_merchant_store['mer_id'] = $mer_id;
         $condition_merchant_store['have_shop'] = '1';
-        $condition_merchant_store['status'] = '1';
+        $condition_merchant_store['status'] = 'neq 2';
         $count_store = $database_merchant_store->where($condition_merchant_store)->count();
 
         $db_arr = array(C('DB_PREFIX') . 'area' => 'a', C('DB_PREFIX') . 'merchant_store' => 's');
         import('@.ORG.merchant_page');
         $p = new Page($count_store, 30);
 
-        $sql = "SELECT `s`.`store_id`, `s`.`mer_id`, `s`.`name`, `s`.`adress`, `s`.`phone`, `s`.`sort`, `ss`.`store_theme`, `ss`.`store_id` AS sid FROM ". C('DB_PREFIX') . "merchant_store AS s LEFT JOIN  ". C('DB_PREFIX') . "merchant_store_shop AS ss ON `s`.`store_id`=`ss`.`store_id`";
-        $sql .= " WHERE `s`.`mer_id`={$mer_id} AND `s`.`status`='1' AND `s`.`have_shop`='1'";
+        $sql = "SELECT `s`.`store_id`, `s`.`mer_id`, `s`.`name`, `s`.`adress`, `s`.`phone`, `s`.`sort`, `s`.`status`, `ss`.`store_theme`, `ss`.`store_id` AS sid FROM ". C('DB_PREFIX') . "merchant_store AS s LEFT JOIN  ". C('DB_PREFIX') . "merchant_store_shop AS ss ON `s`.`store_id`=`ss`.`store_id`";
+        $sql .= " WHERE `s`.`mer_id`={$mer_id} AND (`s`.`status`='1' OR `s`.`status`='0') AND `s`.`have_shop`='1'";
         $sql .= " ORDER BY `s`.`sort` DESC,`s`.`store_id` ASC";
         $sql .= " LIMIT {$p->firstRow}, {$p->listRows}";
         $store_list = D()->query($sql);
@@ -1014,7 +1014,8 @@ class ShopAction extends BaseAction
         $this->assign('category_list', json_encode($category_list));
 
         $sort_list = D('Shop_goods_sort')->lists($now_store['store_id'], false);
-        $this->assign('sort_list', json_encode($sort_list));
+        $sort_list = str_replace("'","\'",json_encode($sort_list));
+        $this->assign('sort_list', $sort_list);
         $ids = D('Shop_goods_sort')->getIds($now_sort['sort_id'], $now_store['store_id']);
         $this->assign('select_ids', json_encode($ids));
 
@@ -2050,6 +2051,16 @@ class ShopAction extends BaseAction
             exit('1');
         } else {
             exit;
+        }
+    }
+
+    public function change_status(){
+        $now_store = $this->check_store(intval($_POST['id']));
+        $store_status = $_POST['type'] == 'open' ? 1 : 0;
+        if(D('Merchant_store')->where(array('store_id'=>$now_store['store_id']))->save(array('status'=>$store_status))){
+            exit('1');
+        }else{
+            exit('0');
         }
     }
 

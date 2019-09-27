@@ -576,15 +576,24 @@
                                 'tip':$('#tip_num').text().replace('$', ""),
                                 'order_type':"{pigcms{$order_info.order_type}",
                                 'note':$('input[name="note"]').val(),
-                                'est_time':$('#est_time_input').val()
+                                'est_time':$('#est_time_input').val(),
+                                'cvd':$('#cvd').val()
                             };
 
                             //alert(re_data['order_type']);
                             $.post($('#moneris_form').attr('action'),re_data,function(data){
-                                layer.closeAll();
-                                layer.open({title:['Message'],content:data.info});
-                                if(data.status == 1){
-                                    setTimeout("window.location.href = '"+data.url+"'",200);
+                                if(typeof (data.mode) != 'undefined' && data.mode == 'mpi'){
+                                    // layer.open({
+                                    //     title:'',
+                                    //     content:data.html
+                                    // });
+                                    $('body').append(data.html);
+                                }else {
+                                    layer.closeAll();
+                                    layer.open({title: ['Message'], content: data.info});
+                                    if (data.status == 1) {
+                                        setTimeout("window.location.href = '" + data.url + "'", 200);
+                                    }
                                 }
                             });
                         }else{
@@ -607,14 +616,33 @@
                                 'note':$('input[name="note"]').val(),
                                 'est_time':$('#est_time_input').val()
                             };
+                            var card_stauts = "{pigcms{$card['status']}";
+                            if(card_stauts == 0){
+                                var old_cvd = $('input[name="old_cvd"]').val();
+                                if(!/^\d{3}$/.test(old_cvd)){
+                                    alert('Please input CVD');
+                                    layer.closeAll();
+                                    return false;
+                                }else{
+                                    re_data['cvd'] = old_cvd;
+                                }
+                            }
                             //alert(re_data['order_type']);
                             $.post($('#moneris_form').attr('action'),re_data,function(data){
-                                layer.closeAll();
-                                layer.open({title:['Message'],content:data.info});
-                                if(data.status == 1){
-                                    setTimeout("window.location.href = '"+data.url+"'",200);
-                                }else{
+                                if(typeof (data.mode) != 'undefined' && data.mode == 'mpi'){
+                                    // layer.open({
+                                    //     title:'',
+                                    //     content:data.html
+                                    // });
+                                    $('body').append(data.html);
+                                }else {
+                                    layer.closeAll();
+                                    layer.open({title: ['Message'], content: data.info});
+                                    if (data.status == 1) {
+                                        setTimeout("window.location.href = '" + data.url + "'", 200);
+                                    } else {
 
+                                    }
                                 }
                             });
                         }else{
@@ -1107,7 +1135,7 @@
                                             <input type="radio" name="pay_card_type" value="0" class="mt" checked=checked> {pigcms{:L('_USE_OLD_CARD_')}
                                         </div>
                                         <a href="{pigcms{:U('My/credit',array('order_id'=>$order_info['order_id'],'type'=>$order_info['order_type']))}">
-                                            <dd class="more dd-padding" style="border-bottom: 1px #cccccc solid;">
+                                            <dd class="more dd-padding">
                                                 <label class="mt">
                                                     <span class="pay-wrapper">
                                                            {pigcms{$card['name']} -- {pigcms{$card['card_num']}
@@ -1115,8 +1143,14 @@
                                                 </label>
                                             </dd>
                                         </a>
+                                        <if condition="$card['status'] eq 0">
+                                            <div style="line-height: 20px;float:left;width: 100%;margin-left:.2rem;margin-top: 5px;margin-bottom: 5px;">
+                                                <span style="float: left;width:50px;">CVD：</span>
+                                                <input type="text" maxlength="3" size="20" name="old_cvd" class="form-field" id="old_cvd" placeholder="3 digites on the back of your card" value="" style="float: left"/>
+                                            </div>
+                                        </if>
                                     </if>
-                                    <dd class="dd-padding">
+                                    <dd class="dd-padding" style="border-top: 1px #cccccc solid;">
                                         <div style="line-height: 20px;float:left;width: 100%;margin-bottom: 15px;">
                                             <input type="radio" name="pay_card_type" value="1" class="mt" <if condition="!$card">checked=checked</if>> {pigcms{:L('_USE_NEW_CARD_')}
                                         </div>
@@ -1135,6 +1169,10 @@
                                         <div style="line-height: 20px;float:left;width: 100%;margin-bottom: 5px;">
                                             <span style="float: left;width:150px;">{pigcms{:L('_IS_SAVE_')}：</span>
                                             <input type="checkbox" name="save" class="form-field" id="save" value="1" style="float: left;width:20px;height: 20px;"/>
+                                        </div>
+                                        <div style="line-height: 20px;float:left;width: 100%;margin-bottom: 5px;">
+                                            <span style="float: left;width:150px;">CVD：</span>
+                                            <input type="text" maxlength="3" size="20" name="cvd" class="form-field" placeholder="3 digites on the back of your card" id="cvd" value="" style="float: left"/>
                                         </div>
                                     </dd>
                                 </dl>
@@ -1543,14 +1581,26 @@
             }
         }
     });
+
+    $('#cvd').live('focusin focusout',function(event){
+        if(event.type == 'focusin'){
+            $(this).siblings('.inline-tip').remove();$(this).closest('.form-field').removeClass('form-field--error');
+        }else{
+            $(this).val($.trim($(this).val()));
+            var cvd = $(this).val();
+            if(!/^\d{3}$/.test(cvd)){
+                $(this).after("<span class='inline-tip'><i class='tip-status tip-status--opinfo'></i></span>").closest('.form-field').addClass('form-field--error');
+            }
+        }
+    });
+
     function check_card(){
         var isT = true;
-        if($('#card_name').val().length < 2 || !/^\d{13,}$/.test($('#card_num').val()) || $('#expiry').val().length != 4 ){
+        if($('#card_name').val().length < 2 || !/^\d{13,}$/.test($('#card_num').val()) || $('#expiry').val().length != 4 || !/^\d{3}$/.test($('#cvd').val())){
             isT = false;
         }
         return isT;
     }
-
 </script>
 <style>
     .form-field--error{

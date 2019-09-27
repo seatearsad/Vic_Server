@@ -46,6 +46,15 @@
                                 Download Courier Statistics
                             </a>
 						</div>
+                        <if condition="$system_session['level'] neq 3">
+                        City:
+                        <select name="searchtype" id="city_select">
+                            <option value="0" <if condition="$city_id eq '' or $city_id eq 0">selected="selected"</if>>All</option>
+                            <volist name="city" id="vo">
+                                <option value="{pigcms{$vo.area_id}" <if condition="$city_id eq $vo['area_id']">selected="selected"</if>>{pigcms{$vo.area_name}</option>
+                            </volist>
+                        </select>
+                        </if>
 					</td>
 				</tr>
 			</table>
@@ -129,6 +138,12 @@
 			</form>
 		</div>
 <script>
+    var city_id = $('#city_select').val();
+    $('#city_select').change(function () {
+        city_id = $(this).val();
+        window.location.href = "{pigcms{:U('Deliver/deliverList')}" + "&city_id="+city_id;
+    });
+
 	var selectStoreId = {pigcms{:$selectStoreId? $selectStoreId: 0};
 	var selectUserId = {pigcms{:$selectUserId? $selectUserId: 0};
 	$(function(){

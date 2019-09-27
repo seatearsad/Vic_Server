@@ -2,6 +2,9 @@
 <html>
 <head>
     <meta charset="utf-8"/>
+    <if condition="$config['site_favicon']">
+        <link rel="shortcut icon" href="{pigcms{$config.site_favicon}"/>
+    </if>
 	<title>{pigcms{:L('_B_D_LOGIN_LOGIN1_')} - {pigcms{:L('_VIC_NAME_')}</title>
     <meta name="keywords" content="{pigcms{$config.seo_keywords}" />
     <meta name="description" content="{pigcms{$config.seo_description}" />
@@ -116,6 +119,7 @@
         <input type="text" name="email" placeholder="Email Address" >
         <input type="password" placeholder="Password" name="password" />
         <input type="password" placeholder="Confirm Password" name="con_password" />
+        <input type="text" name="invitation_code" placeholder="Invitation Code" <if condition="$invitation_code">value="{pigcms{$invitation_code}" readonly="readonly"</if> >
     </div>
     <div class="sign_btn">
         Sign up
@@ -192,7 +196,7 @@
             var is_tip = false;
             var re_data = {};
             $('.sign_input').find('input').each(function () {
-                if($(this).val() == ''){
+                if($(this).attr('name') != 'invitation_code' && $(this).val() == ''){
                     is_tip = true;
                 }else{
                     re_data[$(this).attr('name')] = $(this).val();
@@ -211,7 +215,8 @@
                     var phone = $("input[name='phone']").val();
                     var password = $("input[name='password']").val();
                     var sms_code = $("input[name='sms_code']").val();
-                    $.post("{pigcms{:U('Login/reg')}",{phone:phone,password:password,sms_code:sms_code},function(result){
+                    //$.post("{pigcms{:U('Login/reg')}",{phone:phone,password:password,sms_code:sms_code},function(result){
+                    $.post("{pigcms{:U('Login/reg')}",re_data,function(result){
                         if(result.status == '1'){
                             //window.location.href = $('#reg-form').attr('location_url');
                             artDialog.open.origin.location.reload();

@@ -676,7 +676,8 @@ class DeliverAction extends BaseAction
 			$val['deliver_cash'] = floatval($val['deliver_cash']);
 			$val['distance'] = floatval($val['distance']);
 			$val['freight_charge'] = floatval($val['freight_charge']);
-			$val['create_time'] = date('Y-m-d H:i', $val['create_time']);
+            $val['meal_time'] = date('Y-m-d H:i',($val['create_time'] + $val['dining_time']*60));
+            $val['create_time'] = date('Y-m-d H:i', $val['create_time']);
 			$val['appoint_time'] = date('Y-m-d H:i', $val['appoint_time']);
 			$val['order_time'] = $val['order_time'] ? date('Y-m-d H:i', $val['order_time']) : '--';
 			$val['real_orderid'] = $val['real_orderid'] ? $val['real_orderid'] : $val['order_id'];
@@ -1228,6 +1229,7 @@ class DeliverAction extends BaseAction
 		$supply['deliver_cash'] = floatval($supply['deliver_cash']);
 		$supply['distance'] = floatval($supply['distance']);
 		$supply['freight_charge'] = floatval($supply['freight_charge']);
+        $supply['meal_time'] = date('Y-m-d H:i',($supply['create_time'] + $supply['dining_time']*60));
 		$supply['create_time'] = date('Y-m-d H:i', $supply['create_time']);
 		$supply['appoint_time'] = date('Y-m-d H:i', $supply['appoint_time']);
 		$supply['order_time'] = $supply['order_time'] ? date('Y-m-d H:i', $supply['order_time']) : '--';

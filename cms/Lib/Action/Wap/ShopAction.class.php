@@ -22,6 +22,10 @@ class ShopAction extends BaseAction{
         }
         $this->assign('category',$nav_list);
 
+        if($_GET['key']){
+            $this->assign('keyword',$_GET['key']);
+        }
+
 		$this->getFooterMenu();
 		$this->display();
 	}

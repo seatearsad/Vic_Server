@@ -32,7 +32,8 @@
 									<th class="button-column" width="140">商品分类管理</th>
 									<th class="button-column" width="140">店铺优惠</th>
 									<th width="160">克隆商品至其他店铺</th>
-									<th width="160">是否开通商城</th>
+									<th width="160">店铺状态</th>
+                                    <!--th width="160">是否开通商城</th-->
 								</tr>
 							</thead>
 							<tbody>
@@ -75,7 +76,8 @@
 											</td>
 											<td>
 												<label class="statusSwitch" style="display:inline-block;">
-													<input name="switch-field-1" class="ace ace-switch ace-switch-6" type="checkbox" data-id="{pigcms{$vo['store_id']}" <if condition="$vo['store_theme'] eq 1">checked="checked" data-status="OPEN"<else/>data-status="CLOSED"</if>/>
+													<input name="switch-field-1" class="ace ace-switch ace-switch-6" type="checkbox" data-id="{pigcms{$vo['store_id']}" <if condition="$vo['status'] eq 1">checked="checked" data-status="OPEN"<else/>data-status="CLOSED"</if>/>
+                                                    <!--input name="switch-field-1" class="ace ace-switch ace-switch-6" type="checkbox" data-id="{pigcms{$vo['store_id']}" <if condition="$vo['store_theme'] eq 1">checked="checked" data-status="OPEN"<else/>data-status="CLOSED"</if>/-->
 													<span class="lbl"></span>
 												</label>
 											</td>
@@ -166,8 +168,10 @@
 			}else{		//关闭
 				type = 'close';
 			}
+			alert(type);
 			$.ajax({
-				url:"{pigcms{:U('Shop/change_mall')}",
+				//url:"{pigcms{:U('Shop/change_mall')}",
+                url:"{pigcms{:U('Shop/change_status')}",
 				type:"post",
 				data:{"type":type,"id":id,"status1":status1,"status2":status2,"attribute":attribute},
 				dataType:"text",

@@ -343,13 +343,31 @@
                 if (result.error == 0){
                     layer.open({
                         title: "{pigcms{:L('_STORE_REMIND_')}",
-                        time: 1,
-                        content: "提交成功，我们会尽快与您联系"
+                        time: 2,
+                        content: "Success! We will contact you as soon as possible. Thank you!"
+                    });
+                    $('.become_form').find('input').each(function () {
+                        $(this).val('');
                     });
                 }
             },'JSON');
         }
     });
+
+    function checkPhone(phone) {
+        if(!/^\d{10,}$/.test(phone)){
+            return false;
+        }
+        return true;
+    }
+    function checkMail(mail) {
+        var reg = /\w+[@]{1}\w+[.]\w+/;
+        if(!reg.test(mail)){
+            return false;
+        }
+        return true;
+    }
+
     function checkForm() {
         var is_tip = false;
         $('.become_form').find('input').each(function () {
@@ -357,6 +375,18 @@
                 is_tip = true;
             }
         });
+
+        if($("input[name='store_name']").val().length < 3){
+            is_tip = true;
+        }
+
+        if(!checkPhone($("input[name='phone']").val())){
+            is_tip = true;
+        }
+
+        if(!checkMail($("input[name='email']").val())){
+            is_tip = true;
+        }
 
         return is_tip;
     }

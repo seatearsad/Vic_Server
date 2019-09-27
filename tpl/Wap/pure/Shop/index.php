@@ -193,7 +193,7 @@
                     cat_id = 0;
                     cat_fid = curr_cat_id;
                 }
-                $.getJSON("{pigcms{:U('ajax_list')}",{cat_id:cat_id,cat_fid:cat_fid,user_lat:user_lat,user_long:user_long,page:page,key:''},function(result){
+                $.getJSON("{pigcms{:U('ajax_list')}",{cat_id:cat_id,cat_fid:cat_fid,user_lat:user_lat,user_long:user_long,page:page,key:keyword},function(result){
                     if(result.store_list && result.store_list.length > 0){
                         laytpl($('#listShopTpl').html()).render(result.store_list, function(html){
                             if(newPage){
@@ -214,6 +214,9 @@
                         $('#storeList .dealcard').html('');
                         is_more = false;
                         $('#storeListLoadTip').hide();
+                        if(keyword != ''){
+                            $('#storeList .dealcard').html('<div style="text-align: center">Sorry, no results found.</div>');
+                        }
                     }
                     //isSearchListShow = false;
                     //pageLoadHides();

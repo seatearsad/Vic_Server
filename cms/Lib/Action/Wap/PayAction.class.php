@@ -7,8 +7,13 @@ class PayAction extends BaseAction{
         }else{
             $this->indep_house = 'wap.php';
         }
+        //var_dump($_POST);die();
     }
     public function check(){
+        if(count($_POST) > 0) {
+            var_dump($_POST);
+            die();
+        }
         if(empty($this->user_session)){
             $this->error_tips(L('_B_MY_LOGINFIRST_'),U('Login/index'));
         }
@@ -229,8 +234,27 @@ class PayAction extends BaseAction{
                     }
                     $system_coupon = reset($now_coupon);
 
+                    if(empty($system_coupon)){
+                        $event_coupon = D('New_event')->getUserCoupon($this->user_session['uid'],0,$tmp_order['total_money']);
+                        if($event_coupon) {
+                            $system_coupon = reset($event_coupon);
+                            $system_coupon['id'] = $system_coupon['coupon_id'] . '_' . $system_coupon['id'];
+                            //var_dump($system_coupon);die();
+                        }
+                    }
                 } else {
-                    $system_coupon = D('System_coupon')->get_coupon_info($_GET['sysc_id']);
+                    $sysc_id = $_GET['sysc_id'];
+                    //如果选择的为活动优惠券
+                    if(strpos($sysc_id,'event')!== false){
+                        $event = explode('_',$sysc_id);
+                        $event_coupon_id = $event[2];
+                        $list = D('New_event')->getUserCoupon($this->user_session['uid'],0,$tmp_order['total_money'],$event_coupon_id);
+                        $system_coupon = reset($list);
+                        if($system_coupon)
+                            $system_coupon['id'] = $system_coupon['coupon_id'].'_'.$system_coupon['id'];
+                    }else {
+                        $system_coupon = D('System_coupon')->get_coupon_info($_GET['sysc_id']);
+                    }
                 }
             }
 
@@ -252,6 +276,7 @@ class PayAction extends BaseAction{
 
 
             if (!empty($system_coupon)) {
+                //$system_coupon['coupon_url_param'] = array('sysc_id' => $system_coupon['id'], 'order_id' => $order_info['order_id'], 'type' => $_GET['type']);
                 $system_coupon['coupon_url_param'] = array('sysc_id' => $system_coupon['id'], 'order_id' => $order_info['order_id'], 'type' => $_GET['type']);
                 if($system_coupon['discount']>=$tmp_order['total_money']){
                     $ban_mer_coupon=1;
@@ -647,9 +672,20 @@ class PayAction extends BaseAction{
                     unset($_SESSION['merc_id']);
                 }
                 if ((!empty($_POST['coupon_id'])&&$_POST['coupon_id']==$_SESSION['sysc_id'])||($_POST['ticket']&&$_POST['coupon_id']&&$_POST['use_sys_coupon'])) {
-                    $system_coupon = D('System_coupon')->get_coupon_by_id($_POST['coupon_id']);
-                    $now_coupon['coupon_price'] = $system_coupon['price'];
-                    $now_coupon['sysc_id'] = $system_coupon['id'];
+                    //如果选择的为活动优惠券
+                    if(strpos($_POST['coupon_id'],'event')!== false) {
+                        $event = explode('_',$_POST['coupon_id']);
+                        $coupon_id = $event[1];
+                        if($coupon_id){
+                            $coupon = D('New_event_coupon')->where(array('id'=>$coupon_id))->find();
+                            $now_coupon['coupon_price'] = $coupon['discount'];
+                            $now_coupon['sysc_id'] = $_POST['coupon_id'];
+                        }
+                    }else{
+                        $system_coupon = D('System_coupon')->get_coupon_by_id($_POST['coupon_id']);
+                        $now_coupon['coupon_price'] = $system_coupon['price'];
+                        $now_coupon['sysc_id'] = $system_coupon['id'];
+                    }
                     unset($_SESSION['sysc_id']);
                 }
             }
@@ -2427,8 +2463,17 @@ class PayAction extends BaseAction{
     public function MonerisPay(){
         import('@.ORG.pay.MonerisPay');
         $moneris_pay = new MonerisPay();
-        $resp = $moneris_pay->payment($_POST,$this->user_session['uid']);
-//        var_dump($resp);die();
+        $resp = $moneris_pay->payment($_POST,$this->user_session['uid'],2);
+        //var_dump($resp);die();
+        if($resp['requestMode'] && $resp['requestMode'] == "mpi"){
+            if($resp['mpiSuccess'] == "true"){
+                $result = array('error_code' => false,'mode'=>$resp['requestMode'],'html'=>$resp['mpiInLineForm'], 'msg' => $resp['message']);
+                $this->ajaxReturn($result);
+            }else{
+                $this->error($resp['message'],'',true);
+            }
+        }
+
         if($resp['responseCode'] != 'null' && $resp['responseCode'] < 50){
             if(!$_POST['order_type']) $_POST['order_type'] = "shop";
             if($_POST['order_type'] == "recharge"){
@@ -2521,14 +2566,25 @@ class PayAction extends BaseAction{
                 }
                 //处理优惠券
                 if($_POST['coupon_id']){
-                    $now_coupon = D('System_coupon')->get_coupon_by_id($_POST['coupon_id']);
-                    if(!empty($now_coupon)){
-                        $coupon_data = D('System_coupon_hadpull')->field(true)->where(array('id'=>$_POST['coupon_id']))->find();
-                        $coupon_real_id = $coupon_data['coupon_id'];
-                        $coupon = D('System_coupon')->get_coupon($coupon_real_id);
+                    //如果选择的为活动优惠券
+                    if(strpos($_POST['coupon_id'],'event')!== false) {
+                        $event = explode('_',$_POST['coupon_id']);
+                        $coupon_id = $event[1];
+                        if($coupon_id){
+                            $coupon = D('New_event_coupon')->where(array('id'=>$coupon_id))->find();
+                            $in_coupon = array('coupon_id' => $_POST['coupon_id'], 'coupon_price' => $coupon['discount']);
+                            $order_data = array_merge($order_data, $in_coupon);
+                        }
+                    }else {
+                        $now_coupon = D('System_coupon')->get_coupon_by_id($_POST['coupon_id']);
+                        if (!empty($now_coupon)) {
+                            $coupon_data = D('System_coupon_hadpull')->field(true)->where(array('id' => $_POST['coupon_id']))->find();
+                            $coupon_real_id = $coupon_data['coupon_id'];
+                            $coupon = D('System_coupon')->get_coupon($coupon_real_id);
 
-                        $in_coupon = array('coupon_id'=>$data['coupon_id'],'coupon_price'=>$coupon['discount']);
-                        $order_data = array_merge($order_data,$in_coupon);
+                            $in_coupon = array('coupon_id' => $_POST['coupon_id'], 'coupon_price' => $coupon['discount']);
+                            $order_data = array_merge($order_data, $in_coupon);
+                        }
                     }
                 }
                 D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->save($order_data);
@@ -2551,14 +2607,25 @@ class PayAction extends BaseAction{
                     }
                     //处理优惠券
                     if($_POST['coupon_id']){
-                        $now_coupon = D('System_coupon')->get_coupon_by_id($_POST['coupon_id']);
-                        if(!empty($now_coupon)){
-                            $coupon_data = D('System_coupon_hadpull')->field(true)->where(array('id'=>$_POST['coupon_id']))->find();
-                            $coupon_real_id = $coupon_data['coupon_id'];
-                            $coupon = D('System_coupon')->get_coupon($coupon_real_id);
+                        //如果选择的为活动优惠券
+                        if(strpos($_POST['coupon_id'],'event')!== false) {
+                            $event = explode('_',$_POST['coupon_id']);
+                            $coupon_id = $event[1];
+                            if($coupon_id){
+                                $coupon = D('New_event_coupon')->where(array('id'=>$coupon_id))->find();
+                                $in_coupon = array('coupon_id' => $_POST['coupon_id'], 'coupon_price' => $coupon['discount']);
+                                $order_data = array_merge($order_data, $in_coupon);
+                            }
+                        }else {
+                            $now_coupon = D('System_coupon')->get_coupon_by_id($_POST['coupon_id']);
+                            if (!empty($now_coupon)) {
+                                $coupon_data = D('System_coupon_hadpull')->field(true)->where(array('id' => $_POST['coupon_id']))->find();
+                                $coupon_real_id = $coupon_data['coupon_id'];
+                                $coupon = D('System_coupon')->get_coupon($coupon_real_id);
 
-                            $in_coupon = array('coupon_id'=>$data['coupon_id'],'coupon_price'=>$coupon['discount']);
-                            $order_data = array_merge($order_data,$in_coupon);
+                                $in_coupon = array('coupon_id' => $data['coupon_id'], 'coupon_price' => $coupon['discount']);
+                                $order_data = array_merge($order_data, $in_coupon);
+                            }
                         }
                     }
                     D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->save($order_data);
@@ -2637,6 +2704,79 @@ class PayAction extends BaseAction{
                 return strtoupper($sign);
             }
         }
+    }
+
+    public function secure3d(){
+        if($_GET['PaReq'] && $_GET['TermUrl'] && $_GET['MD'] && $_GET['ACSUrl']){
+            $inLineForm ='<html><head><title>Title for Page</title></head><SCRIPT LANGUAGE="Javascript" >' .
+                "<!--
+				function OnLoadEvent()
+				{
+					document.downloadForm.submit();
+				}
+				-->
+				</SCRIPT>" .
+                '<body onload="OnLoadEvent()">
+					<form name="downloadForm" action="' . urldecode($_GET['ACSUrl']) .
+                '" method="POST">
+					<noscript>
+					<br>
+					<br>
+					<center>
+					<h1>Processing your 3-D Secure Transaction</h1>
+					<h2>
+					JavaScript is currently disabled or is not supported
+					by your browser.<br>
+					<h3>Please click on the Submit button to continue
+					the processing of your 3-D secure
+					transaction.</h3>
+					<input type="submit" value="Submit">
+					</center>
+					</noscript>
+					<input type="hidden" name="PaReq" value="' . str_replace(' ','+',urldecode($_GET['PaReq'])) . '">
+					<input type="hidden" name="MD" value="' . urldecode($_GET['MD']) . '">
+					<input type="hidden" name="TermUrl" value="' . urldecode($_GET['TermUrl']) .'">
+				</form>
+				</body>
+				</html>';
+            //$inLineForm = urldecode($_GET['ACSUrl']).'-'.urldecode($_GET['PaReq']).'-'.urldecode($_GET['MD']).'-'.urldecode($_GET['TermUrl']);
+            //$inLineForm = str_replace(' ','',urldecode($_GET['PaReq']));
+            echo $inLineForm;
+            exit();
+        }
+
+        if($_POST['PaRes'] && $_POST['MD']) {
+            $PaRes = $_POST['PaRes'];
+            $MD = $_POST['MD'];
+            import('@.ORG.pay.MonerisPay');
+            $moneris_pay = new MonerisPay();
+
+            $resp = $moneris_pay->MPI_Acs($PaRes, $MD);
+
+            if ($resp['responseCode'] != 'null' && $resp['responseCode'] < 50) {
+                if(strpos($resp['url'],'#')!== false) {
+                    $script = '<SCRIPT LANGUAGE="Javascript" >var ua = navigator.userAgent;
+                            if(ua.match(/TuttiiOS/i)){
+                                  window.webkit.messageHandlers.payComplate.postMessage(["'.$resp['url'].'"]);
+                            }</SCRIPT>';
+                    echo $script;
+                    exit();
+                }else{
+                    $this->success($resp['message'], $resp['url']);
+                }
+            } else {
+                if(strpos($resp['url'],'#')!== false) {
+                    echo $resp['message'];
+                    exit();
+                }else{
+                    $this->error($resp['message'], $resp['url']);
+                }
+            }
+        }else{
+            $this->error();
+        }
+
+        //$this->success($result['message'], $result['url']);
     }
 }
 ?>

@@ -2,6 +2,9 @@
 <html>
 <head>
     <meta charset="utf-8"/>
+    <if condition="$config['site_favicon']">
+        <link rel="shortcut icon" href="{pigcms{$config.site_favicon}"/>
+    </if>
 	<title>{pigcms{:L('_B_D_LOGIN_LOGIN1_')} - {pigcms{:L('_VIC_NAME_')}</title>
     <meta name="keywords" content="{pigcms{$config.seo_keywords}" />
     <meta name="description" content="{pigcms{$config.seo_description}" />
@@ -98,7 +101,7 @@
         <input type="password" placeholder="Password" name="password" />
     </div>
     <div class="forget_div">
-        Forget password? <a href="#">Find my password</a>
+        Forget password? <a href="{pigcms{:U('Login/forgetpwd')}">Find my password</a>
     </div>
     <div class="sign_btn">
         Sign in

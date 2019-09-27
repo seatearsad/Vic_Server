@@ -63,8 +63,9 @@
 				</p>
 			</div>
 			<div class="Namelist p10 f14">
-				<h2 class="f15 c3">{pigcms{$row['name']} <span class="c6"><a href="tel:{pigcms{$row['phone']}">{pigcms{$row['phone']}</a></span></h2> 
-				<p class="c9">{pigcms{:L('_EXPECTED_TIME_')}：{pigcms{$row['appoint_time']}</p>
+				<h2 class="f15 c3">{pigcms{$row['name']} <span class="c6"><a href="tel:{pigcms{$row['phone']}">{pigcms{$row['phone']}</a></span></h2>
+                <p class="c9">{pigcms{:L('_MEAL_TIME_')}：{pigcms{$row['meal_time']}</p>
+                <p class="c9">{pigcms{:L('_EXPECTED_TIME_')}：{pigcms{$row['appoint_time']}</p>
 				<if condition="$row['note']">
 				<p class="c9">{pigcms{:L('_NOTE_INFO_')}：{pigcms{$row['note']}</p>
 				</if>

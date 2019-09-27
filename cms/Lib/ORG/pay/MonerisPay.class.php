@@ -8,16 +8,36 @@
 
 class MonerisPay
 {
-    public function payment($data,$uid){
+    protected $store_id;
+    protected $api_token;
+    protected $countryCode;
+    protected $testMode;
+    public function __construct(){
         import('@.ORG.pay.MonerisPay.mpgClasses');
 
         $where = array('tab_id'=>'moneris','gid'=>7);
         $result = D('Config')->field(true)->where($where)->select();
         foreach($result as $v){
             if($v['info'] == 'store_id')
-                $store_id = $v['value'];
+                $this->store_id = $v['value'];
             elseif ($v['info'] == 'token')
-                $api_token = $v['value'];
+                $this->api_token = $v['value'];
+        }
+
+        $this->countryCode = 'CA';
+        //$this->testMode = true;
+        $this->testMode = false;
+    }
+
+    /**
+     * @param $data
+     * @param $uid
+     * @param $from_type 1Web(PC) 2Wap 3App
+     * @return mixed
+     */
+    public function payment($data,$uid,$from_type){
+        if($data['order_type'] == 'recharge' || $data['charge_total'] >= 251){
+            return $this->mpi_transaction($data,$uid,$from_type);
         }
 
         $txnArray['type'] = 'purchase';
@@ -53,16 +73,34 @@ class MonerisPay
 
         /****************************** Request Object *******************************/
 
-        $mpgRequest = new mpgRequest($mpgTxn);
-        $mpgRequest->setProcCountryCode("CA"); //"US" for sending transaction to US environment
-        $mpgRequest->setTestMode(false);
+        /****************************** CVD Object ********************************/
+        $card_cvd = '';
+        if($data['cvd'] && $data['cvd'] != ''){
+            $card_cvd = $data['cvd'];
+        }
 
-        $mpgHttpPost  =new mpgHttpsPost($store_id,$api_token,$mpgRequest);
+        if($card_cvd != '') {
+            $cvdTemplate = array(
+                'cvd_indicator' => '1',
+                'cvd_value' => $card_cvd
+            );
+
+            $mpgCvdInfo = new mpgCvdInfo ($cvdTemplate);
+            $mpgTxn->setCvdInfo($mpgCvdInfo);
+        }
+
+
+        $mpgRequest = new mpgRequest($mpgTxn);
+        $mpgRequest->setProcCountryCode($this->countryCode); //"US" for sending transaction to US environment
+        $mpgRequest->setTestMode($this->testMode);
+        //$mpgRequest->setTestMode(true);
+
+        $mpgHttpPost  =new mpgHttpsPost($this->store_id,$this->api_token,$mpgRequest);
 
         $mpgResponse=$mpgHttpPost->getMpgResponse();
-        $resp = $this->arrageResp($mpgResponse,$txnArray['pan'],$txnArray['expdate'],0,$order_id);
+        $resp = $this->arrageResp($mpgResponse,$txnArray['pan'],$txnArray['expdate'],0,$order_id,$card_cvd);
 
-        if($resp['responseCode'] < 50 && $data['save'] == 1){//如果需要存储
+        if($resp['responseCode'] != "null" && $resp['responseCode'] < 50 && $data['save'] == 1){//如果需要存储
             $isC = D('User_card')->getCardByUserAndNum($uid,$data['card_num']);
             if(!$isC) {
                 D('User_card')->clearIsDefaultByUid($uid);
@@ -71,22 +109,53 @@ class MonerisPay
                 $data['create_time'] = date("Y-m-d H:i:s");
                 //存储的时候为YYMM
                 $data['expiry'] = transYM($data['expiry']);
-                D('User_card')->field(true)->add($data);
+                $data['credit_id'] = D('User_card')->field(true)->add($data);
             }
         }
 
-        if($resp['responseCode'] < 50){
+        if($resp['responseCode'] != "null" && $resp['responseCode'] < 50) {
+            //如果需要验证CVD
+            if ($card_cvd != '') {
+                if (strpos($resp['cvdResultCode'], 'M') !== false || strpos($resp['cvdResultCode'], 'Y') !== false) {
+                    if ($data['credit_id']) {
+                        $data['cvd'] = $card_cvd;
+                        $data['status'] = 1;
+                        $data['verification_time'] = time();
+                        D('User_card')->field(true)->where(array('id' => $data['credit_id']))->save($data);
+                    }
+                } else {
+                    //验证CVD 为通过 将responseCode修改后存储一次error记录并退款
+                    $resp['responseCode'] = 7513;
+                    $resp['message'] = 'CVD Error';
+                    D('Pay_moneris_record_error')->add($resp);
+                    $this->refund($uid, $order_id);
+                }
+            }
+
             //处理优惠券
             if($data['coupon_id']){
-                $now_coupon = D('System_coupon')->get_coupon_by_id($data['coupon_id']);
-                if(!empty($now_coupon)){
-                    $coupon_data = D('System_coupon_hadpull')->field(true)->where(array('id'=>$data['coupon_id']))->find();
-                    $coupon_real_id = $coupon_data['coupon_id'];
-                    $coupon = D('System_coupon')->get_coupon($coupon_real_id);
+                //如果选择的为活动优惠券
+                if(strpos($data['coupon_id'],'event')!== false) {
+                    $event = explode('_',$data['coupon_id']);
+                    $event_coupon_id = $event[2];
+                    $list = D('New_event')->getUserCoupon($uid,0,-1,$event_coupon_id);
+                    $now_coupon = reset($list);
+                    if(!empty($now_coupon)){
+                        $coupon = D('New_event_coupon')->where(array('id'=>$now_coupon['event_coupon_id']))->find();
+                        $in_coupon = array('coupon_id' => $data['coupon_id'], 'coupon_price' => $coupon['discount']);
+                        D('Shop_order')->field(true)->where(array('order_id' => $order_id))->save($in_coupon);
+                    }
+                }else{
+                    $now_coupon = D('System_coupon')->get_coupon_by_id($data['coupon_id']);
+                    if (!empty($now_coupon)) {
+                        $coupon_data = D('System_coupon_hadpull')->field(true)->where(array('id' => $data['coupon_id']))->find();
+                        $coupon_real_id = $coupon_data['coupon_id'];
+                        $coupon = D('System_coupon')->get_coupon($coupon_real_id);
 
-                    $in_coupon = array('coupon_id'=>$data['coupon_id'],'coupon_price'=>$coupon['discount']);
+                        $in_coupon = array('coupon_id' => $data['coupon_id'], 'coupon_price' => $coupon['discount']);
 
-                    D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->save($in_coupon);
+                        D('Shop_order')->field(true)->where(array('order_id' => $order_id))->save($in_coupon);
+                    }
                 }
             }
         }
@@ -98,7 +167,7 @@ class MonerisPay
     }
 
     //处理返回数据 $record_type 存储记录的类型 0初次支付记录 1删单退款记录（用户删单、系统删单）2 二次付款记录 3退还部分款项记录
-    public function arrageResp($mpgResponse,$pan,$expiry,$record_type = 0,$order_id){
+    public function arrageResp($mpgResponse,$pan,$expiry,$record_type = 0,$order_id,$card_cvd=''){
         /*卡类型 M = MasterCard V = Visa AX = American Express  NO = Discover（仅限加拿大）
         C1 = JCB（仅限加拿大）SE =Sears（仅限加拿大）D =借方（仅限加拿大）*/
         $resp['card_type'] = $mpgResponse->getCardType();
@@ -133,6 +202,15 @@ class MonerisPay
         $resp['order_id'] = $order[1];
         //test use
         //if($resp['order_id'] == null) $resp['order_id'] = 1;
+
+        //garfunkel add
+        if($card_cvd != '') {
+            $resp['cvdResultCode'] = $mpgResponse->getCvdResultCode();
+        }else {
+            $resp['cvdResultCode'] = '';
+        }
+
+        $resp['cvd'] = $card_cvd;
 
         $resp['pan'] = $pan;
         $resp['expiry'] = $expiry;
@@ -204,9 +282,14 @@ class MonerisPay
     /*
      * $order_id 为系统原始订单ID
      * $change_amount 为要退还的金额 当不输入是为-1，即订单金额全部退回
+     * $type 0 shop_order | 1 User_recharge_order
     */
-    public function refund($uid,$order_id,$change_amount = -1,$record_type = 1){
-        $order = D('Shop_order')->field(true)->where(array('order_id'=>$order_id,'paid'=>1,'pay_type'=>'moneris'))->find();
+    public function refund($uid,$order_id,$change_amount = -1,$record_type = 1,$type=0){
+        //if($type == 0)
+            $order = D('Shop_order')->field(true)->where(array('order_id'=>$order_id,'paid'=>1,'pay_type'=>'moneris'))->find();
+        //else
+            //$order = D('User_recharge_order')->field(true)->where(array('order_id'=>$order_id,'paid'=>1,'pay_type'=>'moneris'))->find();
+
         if($order){
             if ($record_type == 1){
                 $record = D('Pay_moneris_record')->field(true)->where(array('order_id'=>$order_id))->find();
@@ -220,6 +303,7 @@ class MonerisPay
 
 
 //            if($record){
+            $record_type = 3;
             if($record && !$del_record){//正式的使用此判断
                 //初始化退款差额
                 $cha = 0;
@@ -244,23 +328,14 @@ class MonerisPay
 
                 //$txnArray['amount'] = $record['transAmount'];
                 //$txnArray['cust_id'] = $uid;
-                $where = array('tab_id'=>'moneris','gid'=>7);
-                $result = D('Config')->field(true)->where($where)->select();
-                foreach($result as $v){
-                    if($v['info'] == 'store_id')
-                        $store_id = $v['value'];
-                    elseif ($v['info'] == 'token')
-                        $api_token = $v['value'];
-                }
-//                var_dump($txnArray);
-                import('@.ORG.pay.MonerisPay.mpgClasses');
+
                 $mpgTxn = new mpgTransaction($txnArray);
 
                 $mpgRequest = new mpgRequest($mpgTxn);
-                $mpgRequest->setProcCountryCode("CA"); //"US" for sending transaction to US environment
-                $mpgRequest->setTestMode(false);
+                $mpgRequest->setProcCountryCode($this->countryCode); //"US" for sending transaction to US environment
+                $mpgRequest->setTestMode($this->testMode);
 
-                $mpgHttpPost  =new mpgHttpsPost($store_id,$api_token,$mpgRequest);
+                $mpgHttpPost  =new mpgHttpsPost($this->store_id,$this->api_token,$mpgRequest);
                 $mpgResponse=$mpgHttpPost->getMpgResponse();
 
 //                $record_type = 3;//退还部分款项
@@ -279,9 +354,9 @@ class MonerisPay
                     $mpgTxn = new mpgTransaction($txnArray);
 
                     $mpgRequest = new mpgRequest($mpgTxn);
-                    $mpgRequest->setProcCountryCode("CA"); //"US" for sending transaction to US environment
-                    $mpgRequest->setTestMode(false);
-                    $mpgHttpPost  =new mpgHttpsPost($store_id,$api_token,$mpgRequest);
+                    $mpgRequest->setProcCountryCode($this->countryCode); //"US" for sending transaction to US environment
+                    $mpgRequest->setTestMode($this->testMode);
+                    $mpgHttpPost  =new mpgHttpsPost($this->store_id,$this->api_token,$mpgRequest);
                     $mpgResponse=$mpgHttpPost->getMpgResponse();
 
                     $resp = $this->arrageResp($mpgResponse,'','',$record_type,$order_id);
@@ -310,23 +385,13 @@ class MonerisPay
             }
             $txnArray['amount'] = $change_amount == -1 ? $record['transAmount'] : $change_amount;
             $txnArray['cust_id'] = $uid;
-            import('@.ORG.pay.MonerisPay.mpgClasses');
             $mpgTxn = new mpgTransaction($txnArray);
 
             $mpgRequest = new mpgRequest($mpgTxn);
-            $mpgRequest->setProcCountryCode("CA"); //"US" for sending transaction to US environment
-            $mpgRequest->setTestMode(false);
+            $mpgRequest->setProcCountryCode($this->countryCode); //"US" for sending transaction to US environment
+            $mpgRequest->setTestMode($this->testMode);
 
-            $where = array('tab_id'=>'moneris','gid'=>7);
-            $result = D('Config')->field(true)->where($where)->select();
-            foreach($result as $v){
-                if($v['info'] == 'store_id')
-                    $store_id = $v['value'];
-                elseif ($v['info'] == 'token')
-                    $api_token = $v['value'];
-            }
-
-            $mpgHttpPost  =new mpgHttpsPost($store_id,$api_token,$mpgRequest);
+            $mpgHttpPost  =new mpgHttpsPost($this->store_id,$this->api_token,$mpgRequest);
             $mpgResponse=$mpgHttpPost->getMpgResponse();
             $resp = $this->arrageResp($mpgResponse,'','',3,$order_id);
 
@@ -335,16 +400,6 @@ class MonerisPay
     }
 
     public function addPay($uid,$order_id,$change_amount){
-        import('@.ORG.pay.MonerisPay.mpgClasses');
-        $where = array('tab_id'=>'moneris','gid'=>7);
-        $result = D('Config')->field(true)->where($where)->select();
-        foreach($result as $v){
-            if($v['info'] == 'store_id')
-                $store_id = $v['value'];
-            elseif ($v['info'] == 'token')
-                $api_token = $v['value'];
-        }
-
         $txnArray['type'] = 'purchase';
         $txnArray['crypt_type'] = '7';
 
@@ -368,14 +423,378 @@ class MonerisPay
         /****************************** Request Object *******************************/
 
         $mpgRequest = new mpgRequest($mpgTxn);
-        $mpgRequest->setProcCountryCode("CA"); //"US" for sending transaction to US environment
-        $mpgRequest->setTestMode(false);
+        $mpgRequest->setProcCountryCode($this->countryCode); //"US" for sending transaction to US environment
+        $mpgRequest->setTestMode($this->testMode);
 
-        $mpgHttpPost  =new mpgHttpsPost($store_id,$api_token,$mpgRequest);
+        $mpgHttpPost  =new mpgHttpsPost($this->store_id,$this->api_token,$mpgRequest);
 
         $mpgResponse=$mpgHttpPost->getMpgResponse();
         $resp = $this->arrageResp($mpgResponse,$txnArray['pan'],$txnArray['expdate'],2,$order_id);
 
         return $resp;
+    }
+
+    /**
+     * @param $data
+     * @param $uid
+     * @param $from_type 1Web(PC) 2Wap 3App
+     * @return mixed
+     */
+    public function mpi_transaction($data,$uid,$from_type){
+        if($data['credit_id']){//存储卡的
+            $vault_card = D('Vault_card')->where(array('user_card_id'=>$data['credit_id']))->find();
+            if($vault_card){
+                $data_key = $vault_card['data_key'];
+            }else{
+                $result = $this->addVaultCard($data['credit_id'],$uid);
+                if($result['resSuccess'] == "true")
+                    $data_key = $result['data_key'];
+                else
+                    return $result;
+            }
+        }else{//直接输入卡号的
+            $vault_card = D('Vault_card')->where(array('card_num'=>$data['card_num'],'expiry'=>transYM($data['expiry'])))->find();
+            if($vault_card){
+                $data_key = $vault_card['data_key'];
+            }else {
+                $card['card_num'] = $data['card_num'];
+                $card['expiry'] = transYM($data['expiry']);
+                $card['name'] = $data['name'];
+                $card['cvd'] = $data['cvd'];
+                $result = $this->addVaultCard(0, $uid, $card);
+                if ($result['resSuccess'] == "true")
+                    $data_key = $result['data_key'];
+                else
+                    return $result;
+            }
+        }
+
+        $order = explode("_",$data['order_id']);
+        $order_id = $order[1];
+        $order_param = array();
+        if($data['note'] && $data['note'] != '')
+            $order_param['desc'] = $data['note'];
+        if($data['est_time'] && $data['est_time'] != ''){
+            $order_param['expect_use_time'] = strtotime($data['est_time']);
+        }
+
+        if(count($order_param) > 0)
+            D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->save($order_param);
+
+
+        if(!$data['order_type']) $data['order_type'] = "shop";
+
+        $save = $data['save'] ? $data['save'] : 0;
+        $tip = $data['tip'] ? $data['tip'] : 0;
+        $coupon_id = $data['coupon_id'] ? $data['coupon_id'] : '';
+        $card_user_name = $data['name'] ? $data['name'] : '';
+
+        $orderInfo = '-'.$data['order_type'].'-'.$data['order_id'].'-'.$from_type.'-'.$save.'-'.$tip.'-'.$coupon_id.'-'.$card_user_name.'-'.$data_key.'-';
+        //$data_key='gvOULripl7gcabGJmM1vOlnj2';
+        $amount=$data['charge_total'];
+        $xid = sprintf("%'920d", rand());
+        $MD = $xid.$orderInfo.$amount;
+        $site_url = C('config.config_site_url') == '' ? 'https://www.tutti.app' : C('config.config_site_url');
+        //$site_url = C('config.config_site_url') == '' ? 'http://www.vicisland.ca' : C('config.config_site_url');
+        //$site_url = C('config.config_site_url') == '' ? 'http://54.190.29.18' : C('config.config_site_url');
+        $merchantUrl = $site_url.'/secure3d';//.$_SERVER["HTTP_REFERER"];
+        $accept = $_SERVER['HTTP_ACCEPT'];
+        $userAgent = $_SERVER['HTTP_USER_AGENT'];
+
+        $txnArray =array('type'=>'res_mpitxn',
+            'data_key'=>$data_key,
+            'amount'=>$amount,
+            'xid'=>$xid,
+            'MD'=>$MD,
+            'merchantUrl'=>$merchantUrl,
+            'accept'=>$accept,
+            'userAgent'=>$userAgent
+        );
+        //var_dump($txnArray);die();
+
+        $mpgTxn = new mpgTransaction($txnArray);
+        /************************ Request Object **********************************/
+        $mpgRequest = new mpgRequest($mpgTxn);
+        $mpgRequest->setProcCountryCode($this->countryCode); //"US" for sending transaction to US environment
+        $mpgRequest->setTestMode($this->testMode); //false or comment out this line for production transactions
+        /************************ mpgHttpsPost Object ******************************/
+        $mpgHttpPost = new mpgHttpsPost($this->store_id,$this->api_token,$mpgRequest);
+        /************************ Response Object **********************************/
+        $mpgResponse=$mpgHttpPost->getMpgResponse();
+        //print("\nMpiSuccess = " . $mpgResponse->getMpiSuccess());
+
+        $resp['requestMode'] = "mpi";
+        $resp['mpiSuccess'] = $mpgResponse->getMpiSuccess();
+        $resp['message'] = $mpgResponse->getMpiMessage();
+        if($mpgResponse->getMpiSuccess() == "true")
+        {
+            //print($mpgResponse->getMpiInLineForm());
+            $resp['mpiInLineForm'] = $mpgResponse->getMpiInLineForm();
+            //$resp['mpiInLineForm'] = str_replace('<noscript>','',$resp['mpiInLineForm']);
+            //$resp['mpiInLineForm'] = str_replace('</noscript>','',$resp['mpiInLineForm']);
+            $resp['mpiInLineForm'] .= '<SCRIPT LANGUAGE="Javascript">OnLoadEvent();</SCRIPT>';
+
+            $resp['MpiPaReq'] = $mpgResponse->getMpiPaReq();
+            $resp['MpiTermUrl'] = $mpgResponse->getMpiTermUrl();
+            $resp['MpiMD'] = $mpgResponse->getMpiMD();
+            $resp['MpiACSUrl'] = $mpgResponse->getMpiACSUrl();
+        }
+        else
+        {
+            //print("\nMpiMessage = " . $mpgResponse->getMpiMessage());
+            if(!$resp['message'] || $resp['message'] == '')
+                $resp['message'] = $mpgResponse->getMessage();
+        }
+        //var_dump($mpgResponse);die();
+        return $resp;
+    }
+
+    public function addVaultCard($card_id,$uid,$card = array()){
+        if($card_id != 0){
+            $card = D('User_card')->field(true)->where(array('id'=>$card_id))->find();
+        }
+
+        $user = D('User')->where(array('uid'=>$uid))->find();
+
+        /************************* Transactional Variables ****************************/
+
+        $type='res_add_cc';
+        $cust_id=$uid;
+        $phone = $user['phone'];
+        $email = $user['email'] == '' ? $phone."@tutti.app" : $user['email'];
+        $note = $user['nickname'];
+        $pan = $card['card_num'];
+        $expiry_date = $card['expiry'];
+        $crypt_type='1';
+
+        /*********************** Transactional Associative Array **********************/
+
+        $txnArray=array('type'=>$type,
+            'cust_id'=>$cust_id,
+            'phone'=>$phone,
+            'email'=>$email,
+            'note'=>$note,
+            'pan'=>$pan,
+            'expdate'=>$expiry_date,
+            'crypt_type'=>$crypt_type
+        );
+
+        $mpgTxn = new mpgTransaction($txnArray);
+
+        $mpgRequest = new mpgRequest($mpgTxn);
+        $mpgRequest->setProcCountryCode($this->countryCode);
+        $mpgRequest->setTestMode($this->testMode);
+
+        $mpgHttpPost  =new mpgHttpsPost($this->store_id,$this->api_token,$mpgRequest);
+
+        $mpgResponse=$mpgHttpPost->getMpgResponse();
+
+        //响应代码
+        $resp['responseCode'] = $mpgResponse->getResponseCode();
+        //返回消息
+        $resp['message'] = $mpgResponse->getMessage();
+        $resp['resSuccess'] = $mpgResponse->getResSuccess();
+        if($resp['resSuccess'] == "true") {
+            $resp['data_key'] = $mpgResponse->getDataKey();
+            if($card_id != 0)
+                $vault_card['user_card_id'] = $card_id;
+            else{
+                $vault_card['name'] = $card['name'];
+                $vault_card['card_num'] = $card['card_num'];
+                $vault_card['expiry'] = $card['expiry'];
+            }
+
+            $vault_card['uid'] = $uid;
+            $vault_card['data_key'] = $resp['data_key'];
+
+            D('Vault_card')->add($vault_card);
+        }else {
+            $resp['data_key'] = "";
+        }
+
+        return $resp;
+    }
+
+    public function MPI_Acs($PaRes,$MD){
+        $type='acs';
+
+        $txnArray=array(
+            'type'=>$type,
+            'PaRes'=>$PaRes,
+            'MD'=>$MD,
+        );
+
+        $mpgTxn = new mpgTransaction($txnArray);
+
+        $mpgRequest = new mpgRequest($mpgTxn);
+        $mpgRequest->setProcCountryCode($this->countryCode); //"US" for sending transaction to US environment
+        $mpgRequest->setTestMode($this->testMode);
+
+        $mpgHttpPost  =new mpgHttpsPost($this->store_id,$this->api_token,$mpgRequest);
+
+        $mpgResponse=$mpgHttpPost->getMpgResponse();
+        //var_dump($mpgResponse);die();
+        //print("\nMpiMessage = " . $mpgResponse->getMpiMessage());
+        //print("\nMpiSuccess = " . $mpgResponse->getMpiSuccess());
+        $message = $mpgResponse->getMpiSuccess();
+
+        if (strcmp($mpgResponse->getMpiSuccess(),"true") == 0)
+        {
+            $cavv = $mpgResponse->getMpiCavv();
+            $eci = $mpgResponse->getMpiEci();
+
+            return $this->MPI_Cavv($MD,$cavv,$eci);
+        }else{
+            $result['message'] = $message;
+            $orderInfo = $this->getOrderInfoFromMD($MD);
+            $result['url'] = $orderInfo['url'];
+
+            return $result;
+        }
+    }
+
+    public function MPI_Cavv($MD,$cavv,$eci){
+        $orderInfo = $this->getOrderInfoFromMD($MD);
+
+        $type = 'cavv_purchase';
+        $order_id = $orderInfo['orderId'];
+        $cust_id = $orderInfo['uid'];
+        $amount = $orderInfo['amount'];
+        $pan = $orderInfo['card_num'];
+        $expiry_date = $orderInfo['expiry'];
+        $crypt_type = '7';
+
+        $txnArray=array(
+            'type'=>$type,
+            'order_id'=>$order_id,
+            'cust_id'=>$cust_id,
+            'amount'=>$amount,
+            'pan'=>$pan,
+            'expdate'=>$expiry_date,
+            'cavv'=>$cavv,
+            'crypt_type'=>$crypt_type,
+            'dynamic_descriptor'=>'3dsecure'
+        );
+
+        $mpgTxn = new mpgTransaction($txnArray);
+
+        $mpgRequest = new mpgRequest($mpgTxn);
+        $mpgRequest->setProcCountryCode($this->countryCode); //"US" for sending transaction to US environment
+        $mpgRequest->setTestMode($this->testMode);
+
+        $mpgHttpPost = new mpgHttpsPost($this->store_id,$this->api_token,$mpgRequest);
+
+        $mpgResponse = $mpgHttpPost->getMpgResponse();
+        $resp = $this->arrageResp($mpgResponse,$txnArray['pan'],$txnArray['expdate'],0,$order_id);
+
+        if($resp['responseCode'] != "null" && $resp['responseCode'] < 50){
+            if($orderInfo['save'] == 1) {
+                $isC = D('User_card')->getCardByUserAndNum($orderInfo['uid'], $pan);
+                if (!$isC) {
+                    D('User_card')->clearIsDefaultByUid($orderInfo['uid']);
+                    $data['is_default'] = 1;
+                    $data['uid'] = $orderInfo['uid'];
+                    $data['card_num'] = $orderInfo['card_num'];
+                    $data['name'] = $orderInfo['card_name'];
+                    $data['create_time'] = date("Y-m-d H:i:s");
+                    $data['expiry'] = $expiry_date;
+                    $data['credit_id'] = D('User_card')->field(true)->add($data);
+                }
+            }
+
+            //处理优惠券
+            if($orderInfo['coupon_id']){
+                //如果选择的为活动优惠券
+                if(strpos($orderInfo['coupon_id'],'event')!== false) {
+                    $event = explode('_',$orderInfo['coupon_id']);
+                    $event_coupon_id = $event[2];
+                    $list = D('New_event')->getUserCoupon($orderInfo['uid'],0,-1,$event_coupon_id);
+                    $now_coupon = reset($list);
+                    if(!empty($now_coupon)){
+                        $coupon = D('New_event_coupon')->where(array('id'=>$now_coupon['event_coupon_id']))->find();
+                        $in_coupon = array('coupon_id' => $orderInfo['coupon_id'], 'coupon_price' => $coupon['discount']);
+                        D('Shop_order')->field(true)->where(array('order_id' => $orderInfo['order_id']))->save($in_coupon);
+                    }
+                }else{
+                    $now_coupon = D('System_coupon')->get_coupon_by_id($orderInfo['coupon_id']);
+                    if (!empty($now_coupon)) {
+                        $coupon_data = D('System_coupon_hadpull')->field(true)->where(array('id' => $orderInfo['coupon_id']))->find();
+                        $coupon_real_id = $coupon_data['coupon_id'];
+                        $coupon = D('System_coupon')->get_coupon($coupon_real_id);
+
+                        $in_coupon = array('coupon_id' => $data['coupon_id'], 'coupon_price' => $coupon['discount']);
+
+                        D('Shop_order')->field(true)->where(array('order_id' => $orderInfo['order_id']))->save($in_coupon);
+                    }
+                }
+            }
+        }
+
+        //1Web(PC) 2Wap 3App
+        $is_wap = $orderInfo['order_from']-1;
+
+        $this->savePayData($resp,$is_wap,$orderInfo['tip'],$orderInfo['order_type']);
+
+        $resp['url'] = $orderInfo['url'];
+
+        return $resp;
+    }
+
+    public function getOrderInfoFromMD($MD){
+        //$orderInfo = '-'.$data['order_type'].'-'.$data['order_id'].'-'.$from_type.'-'.$save.'-'.$tip.'-'.$coupon_id.'-'.$card_user_name.'-'.$data_key.'-';
+        $arr = explode('-',$MD);
+        $orderInfo['order_type'] = $arr[1];
+        $orderInfo['orderId'] = $arr[2];
+        $orderInfo['order_from'] = $arr[3];
+        $orderInfo['save'] = $arr[4];
+        $orderInfo['tip'] = $arr[5];
+        $orderInfo['coupon_id'] = $arr[6];
+        $orderInfo['card_name'] = $arr[7];
+        $data_key = $arr[8];
+        $orderInfo['amount'] = $arr[9];
+
+        $order_id_str = explode("_",$orderInfo['orderId']);
+        $orderInfo['order_id'] = $order_id_str[1];
+
+        if($orderInfo['order_type'] == 'recharge')
+            $order = D('User_recharge_order')->where(array('order_id'=>$orderInfo['order_id']))->find();
+        else
+            $order = D('Shop_order')->where(array('order_id'=>$orderInfo['order_id']))->find();
+
+        $orderInfo['uid'] = $order['uid'];
+
+        $vault_card = D('Vault_card')->where(array('data_key'=>$data_key))->find();
+        if($vault_card['user_card_id'] == 0){
+            $orderInfo['card_num'] = $vault_card['card_num'];
+            $orderInfo['expiry'] = $vault_card['expiry'];
+        }else{
+            $card = D('User_card')->where(array('id'=>$vault_card['user_card_id']))->find();
+            $orderInfo['card_num'] = $card['card_num'];
+            $orderInfo['expiry'] = $card['expiry'];
+        }
+
+        //1Web(PC) 2Wap 3App
+        if($orderInfo['order_from'] == 1){
+            if($orderInfo['order_type'] == 'recharge')
+                $url = C('config.config_site_url').'/index.php?g=User&c=Credit&a=index';
+            else
+                $url = C('config.config_site_url').'/index.php?g=User&c=Index&a=shop_order_view&order_id='.$orderInfo['order_id'];
+
+            $orderInfo['url'] = $url;
+        }elseif($orderInfo['order_from'] == 2){
+            if($orderInfo['order_type'] == 'recharge')
+                $url = U("Wap/My/my_money");
+            else
+                $url = $url =U("Wap/Shop/status",array('order_id'=>$orderInfo['order_id']));
+
+            $orderInfo['url'] = $url;
+        }else{
+            if($orderInfo['order_type'] == 'recharge')
+                $orderInfo['url'] = '#recharge_'.$orderInfo['order_id'];
+            else
+                $orderInfo['url'] = '#'.$orderInfo['order_id'];
+        }
+
+        return $orderInfo;
     }
 }
