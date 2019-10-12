@@ -407,6 +407,7 @@ cursor: pointer;
             orderDetail  += "|" + "{pigcms{$order_data['desc']}";
             orderDetail  += "|" + "{pigcms{$order_data['expect_use_time']}";
             orderDetail  += "|" + "{pigcms{$order_data['username']}";
+            orderDetail  += "|" + "{pigcms{$order_data['userphone']}";
 
             var orderInfo = "{pigcms{$info_str}" ;
 
