@@ -408,6 +408,7 @@ cursor: pointer;
             orderDetail  += "|" + "{pigcms{$order_data['expect_use_time']}";
             orderDetail  += "|" + "{pigcms{$order_data['username']}";
             orderDetail  += "|" + "{pigcms{$order_data['userphone']}";
+            orderDetail  += "|$" + "{pigcms{$order['goods_price']|floatval}";
 
             var orderInfo = "{pigcms{$info_str}" ;
 
