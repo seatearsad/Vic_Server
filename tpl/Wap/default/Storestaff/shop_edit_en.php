@@ -361,8 +361,8 @@ cursor: pointer;
     }
 
     function printOrderToAndroid(time_val){
-        if(typeof (time_val) == "undefined" || !isIntNum(time_val)){
-            time_val = 0;
+        if(typeof (time_val) == "undefined" || !/^[0-9]*$/.test(time_val)){
+            time_val = "0";
         }
 
         <?php
@@ -410,7 +410,7 @@ cursor: pointer;
             orderDetail  += "|" + "{pigcms{$order_data['userphone']}";
             orderDetail  += "|$" + "{pigcms{$order['goods_price']|floatval}";
 
-            if(time_val == 0)
+            if(time_val == "0")
                 time_val = "{pigcms{$order_data['dining_time']}";
 
             var orderInfo = "{pigcms{$info_str}" ;
