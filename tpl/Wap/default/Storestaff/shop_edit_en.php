@@ -362,7 +362,7 @@ cursor: pointer;
 
     function printOrderToAndroid(time_val){
         if(typeof (time_val) == "undefined" || !isIntNum(time_val)){
-            time_val = "0";
+            time_val = 0;
         }
 
         <?php
@@ -393,7 +393,7 @@ cursor: pointer;
             $order_data['expect_use_time'] = "ASAP";
         }
 
-        $order_data['dining_time'] = $supply['dining_time'] ? $supply['dining_time'] : '';
+        $order_data['dining_time'] = $supply['dining_time'] ? $supply['dining_time'] : '0';
         ?>
         if(typeof (window.linkJs) != 'undefined'){
             if(/(tutti_android)/.test(navigator.userAgent.toLowerCase()))
@@ -410,9 +410,12 @@ cursor: pointer;
             orderDetail  += "|" + "{pigcms{$order_data['userphone']}";
             orderDetail  += "|$" + "{pigcms{$order['goods_price']|floatval}";
 
+            if(time_val == 0)
+                time_val = "{pigcms{$order_data['dining_time']}";
+
             var orderInfo = "{pigcms{$info_str}" ;
 
-            window.webkit.messageHandlers.printer_order.postMessage([orderDetail, orderInfo, 0]);
+            window.webkit.messageHandlers.printer_order.postMessage([orderDetail, orderInfo, time_val]);
         }
     }
 
