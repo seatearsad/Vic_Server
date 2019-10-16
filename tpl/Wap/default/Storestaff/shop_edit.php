@@ -350,6 +350,18 @@ cursor: pointer;
         $('#print_order').hide();
     }
 
+    function pushUserPrinter(status){
+        if(status == '1'){
+            if(/(tutti_android)/.test(navigator.userAgent.toLowerCase()) || /(tuttipartner)/.test(navigator.userAgent.toLowerCase())){
+                $('#print_order').show();
+            }else{
+                $('#print_order').hide();
+            }
+        }else{
+            $('#print_order').hide();
+        }
+    }
+
     function isIntNum(val){
         var regPos = / ^\d+$/; // 非负整数
         var regNeg = /^\-[1-9][0-9]*$/; // 负整数
