@@ -361,6 +361,11 @@ cursor: pointer;
             $('#print_order').hide();
         }
     }
+    //Android
+    if(typeof (window.linkJs) != 'undefined') {
+        var is_use = window.linkJs.getUsePrinter();
+        pushUserPrinter(is_use);
+    }
 
     function isIntNum(val){
         var regPos = / ^\d+$/; // 非负整数
