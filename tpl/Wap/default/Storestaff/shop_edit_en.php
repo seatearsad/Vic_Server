@@ -391,7 +391,7 @@ cursor: pointer;
             if(strpos($v['name'], "'") !== false) {
                 $v['name'] = str_replace("'",'’',$v['name']);
             }
-            if(strpos($shop['spec'], "'") !== false) {
+            if(strpos($v['spec'], "'") !== false) {
                 $v['spec'] = str_replace("'",'’',$v['spec']);
             }
             $info_str .= $v['name']."#".$v['num']."#".$v['spec'];
