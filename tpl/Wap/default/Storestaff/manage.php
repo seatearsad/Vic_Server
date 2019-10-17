@@ -339,13 +339,6 @@ function pushPrinterNameAndUse(name,use) {
     $('#printer_name').html(name);
 }
 
-if(typeof (window.linkJs) != 'undefined') {
-    var printer = window.linkJs.updatePrinterUseAndName();
-    var allStr = printer.split("|");
-
-    pushPrinterNameAndUse(allStr[1],allStr[0]);
-}
-
 if(/(tutti_android)/.test(navigator.userAgent.toLowerCase()) || /(tuttipartner)/.test(navigator.userAgent.toLowerCase())){
     var html = '<li id="set_printer"><div>{pigcms{:L(\'_STORE_SET_PRINTER_\')}</div>';
     html += '<div id="use_status" style="position: absolute;margin-top:1px;width: 30%;">' +
@@ -355,6 +348,13 @@ if(/(tutti_android)/.test(navigator.userAgent.toLowerCase()) || /(tuttipartner)/
         '' +
         '</div></li>';
     $('#features').append(html);
+}
+
+if(typeof (window.linkJs) != 'undefined') {
+    var printer = window.linkJs.updatePrinterUseAndName();
+    var allStr = printer.split("|");
+
+    pushPrinterNameAndUse(allStr[1],allStr[0]);
 }
 
 $('#set_printer').click(function () {
