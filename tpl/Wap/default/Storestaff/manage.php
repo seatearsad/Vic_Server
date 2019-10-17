@@ -331,6 +331,13 @@ if(typeof (window.linkJs) != 'undefined'){
     }
 }
 
+if(typeof (window.linkJs) != 'undefined') {
+    var printer = window.linkJs.updatePrinterUseAndName();
+    var allStr = printer.split("|");
+
+    pushPrinterNameAndUse(allStr[1],allStr[0]);
+}
+
 function pushPrinterNameAndUse(name,use) {
     var is_use = 'NO';
     if(use == '1') is_use = 'YES';
