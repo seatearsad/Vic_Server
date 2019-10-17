@@ -246,6 +246,7 @@ line-height: .7rem;
     margin-top: 10px;
     cursor: pointer;
 }
+
 #features li div{
     margin-top:40px;
     word-wrap:break-word;
@@ -332,6 +333,12 @@ if(typeof (window.linkJs) != 'undefined'){
 
 if(/(tutti_android)/.test(navigator.userAgent.toLowerCase()) || /(tuttipartner)/.test(navigator.userAgent.toLowerCase())){
     var html = '<li id="set_printer"><div>{pigcms{:L(\'_STORE_SET_PRINTER_\')}</div></li>';
+    html += '<div id="use_status" style="position: absolute;margin-top:1px;width: 30%;">' +
+        'TEst' +
+        '</div>' +
+        '<div id="printer_name" style="position: absolute;margin-top:18px;width: 30%;">' +
+        'Test' +
+        '</div>';
     $('#features').append(html);
 }
 
