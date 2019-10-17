@@ -386,7 +386,7 @@ cursor: pointer;
         $order_info = $order['info'];
         $i = 0;
         $info_str = "";
-        foreach ($order_info as $v){
+        foreach ($order_info as &$v){
             if($i > 0) $info_str .= "|";
             if(strpos($v['name'], "'") !== false) {
                 $v['name'] = str_replace("'",'’',$v['name']);
