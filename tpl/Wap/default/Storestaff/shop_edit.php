@@ -403,6 +403,7 @@ cursor: pointer;
         if(strpos($order['username'], "'") !== false) {
             $order['username'] = str_replace("'",'’',$order['username']);
         }
+        $order_data['username'] = $order['username'];
         $order_data['info'] = "";
         $order_data['pay_status'] = "";
         $order_data['deliver_log_list'] = "";
