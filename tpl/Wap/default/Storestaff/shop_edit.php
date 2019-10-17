@@ -404,6 +404,12 @@ cursor: pointer;
             $order['username'] = str_replace("'",'’',$order['username']);
         }
         $order_data['username'] = $order['username'];
+
+        if(strpos($order['last_staff'], "'") !== false) {
+            $order['last_staff'] = str_replace("'",'’',$order['last_staff']);
+        }
+        $order_data['last_staff'] = $order['last_staff'];
+        
         $order_data['info'] = "";
         $order_data['pay_status'] = "";
         $order_data['deliver_log_list'] = "";
