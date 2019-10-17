@@ -331,13 +331,21 @@ if(typeof (window.linkJs) != 'undefined'){
     }
 }
 
+function pushPrinterNameAndUse(name,use) {
+    var is_use = 'NO';
+    if(use == '1') is_use = 'YES';
+
+    $('#use_status').html(is_use);
+    $('#printer_name').html(name);
+}
+
 if(/(tutti_android)/.test(navigator.userAgent.toLowerCase()) || /(tuttipartner)/.test(navigator.userAgent.toLowerCase())){
     var html = '<li id="set_printer"><div>{pigcms{:L(\'_STORE_SET_PRINTER_\')}</div>';
     html += '<div id="use_status" style="position: absolute;margin-top:1px;width: 30%;">' +
-        'TEst' +
+        '' +
         '</div>' +
         '<div id="printer_name" style="position: absolute;margin-top:18px;width: 30%;">' +
-        'Test' +
+        '' +
         '</div></li>';
     $('#features').append(html);
 }
