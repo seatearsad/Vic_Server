@@ -388,12 +388,21 @@ cursor: pointer;
         $info_str = "";
         foreach ($order_info as $v){
             if($i > 0) $info_str .= "|";
+            if(strpos($v['name'], "'") !== false) {
+                $v['name'] = str_replace("'",'’',$v['name']);
+            }
+            if(strpos($shop['spec'], "'") !== false) {
+                $v['spec'] = str_replace("'",'’',$v['spec']);
+            }
             $info_str .= $v['name']."#".$v['num']."#".$v['spec'];
             $i++;
         }
 
         $order_data = $order;
 
+        if(strpos($order['username'], "'") !== false) {
+            $order['username'] = str_replace("'",'’',$order['username']);
+        }
         $order_data['info'] = "";
         $order_data['pay_status'] = "";
         $order_data['deliver_log_list'] = "";
@@ -405,6 +414,9 @@ cursor: pointer;
         $order_data['store_name'] = $shop['name'];
         $order_data['store_phone'] = $shop['phone'];
         $order_data['pay_time_str'] = date("Y-m-d H:i:s",$order['pay_time']);
+        if(strpos($order['desc'], "'") !== false) {
+            $order['desc'] = str_replace("'",'’',$order['desc']);
+        }
         $order_data['desc'] = $order['desc'] == "" ? "N/A" : $order['desc'];
 
         if (($order_data['expect_use_time'] - $order_data['pay_time'])>=3600){
