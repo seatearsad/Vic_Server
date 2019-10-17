@@ -331,19 +331,19 @@ if(typeof (window.linkJs) != 'undefined'){
     }
 }
 
-if(typeof (window.linkJs) != 'undefined') {
-    var printer = window.linkJs.updatePrinterUseAndName();
-    var allStr = printer.split("|");
-
-    pushPrinterNameAndUse(allStr[1],allStr[0]);
-}
-
 function pushPrinterNameAndUse(name,use) {
     var is_use = 'NO';
     if(use == '1') is_use = 'YES';
 
     $('#use_status').html(is_use);
     $('#printer_name').html(name);
+}
+
+if(typeof (window.linkJs) != 'undefined') {
+    var printer = window.linkJs.updatePrinterUseAndName();
+    var allStr = printer.split("|");
+
+    pushPrinterNameAndUse(allStr[1],allStr[0]);
 }
 
 if(/(tutti_android)/.test(navigator.userAgent.toLowerCase()) || /(tuttipartner)/.test(navigator.userAgent.toLowerCase())){
