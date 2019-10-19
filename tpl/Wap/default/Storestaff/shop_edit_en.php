@@ -405,6 +405,11 @@ cursor: pointer;
         }
         $order_data['username'] = $order['username'];
 
+        if(strpos($order['address'], "'") !== false) {
+            $order['address'] = str_replace("'",'’',$order['address']);
+        }
+        $order_data['address'] = $order['address'];
+
         if(strpos($order['last_staff'], "'") !== false) {
             $order['last_staff'] = str_replace("'",'’',$order['last_staff']);
         }
