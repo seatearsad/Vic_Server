@@ -415,9 +415,33 @@ class StoreModel extends Model
                 $returnList[$k]['has_format'] = false;
 
             //garfunkel add side_dish
+            $returnList[$k]['dish_id'] = $v['dish_id'];
+            $dish_desc = "";
             if(D('Side_dish')->where(array('goods_id'=>$v['goods_id']))->find()){
                 $returnList[$k]['has_format'] = true;
+                $add_price = 0;
+
+                if($v['dish_id'] != "" && $v['dish_id'] != null){
+                    $dish_list = explode("|",$v['dish_id']);
+                    foreach($dish_list as $vv){
+                        $one_dish = explode(",",$vv);
+                        //0 dish_id 1 id 2 num 3 price
+                        if($one_dish[3] > 0){
+                            $add_price += $one_dish[3]*$one_dish[2];
+                        }
+
+                        $dish_vale = D('Side_dish_value')->where(array('id'=>$one_dish[1]))->find();
+                        $dish_vale['name'] = lang_substr($dish_vale['name'],C('DEFAULT_LANG'));
+
+                        $add_str = $one_dish[2] > 1 ? $dish_vale['name']."*".$one_dish[2] : $dish_vale['name'];
+
+                        $dish_desc = $dish_desc == "" ? $add_str : $dish_desc.";".$add_str;
+                    }
+
+                    $returnList[$k]['price'] = $returnList[$k]['price'] + $add_price;
+                }
             }
+            $returnList[$k]['dish_desc'] = $dish_desc;
 
             $spec_desc = "";
             if($returnList[$k]['spec'] != ""){

@@ -444,11 +444,11 @@
                             <div class="content">{pigcms{:L('_CONTENT_TXT_')}</div>
                         </div>
 						<div id="shopDetailPageFormat">{pigcms{:L('_PRODUCT_STOCK_')}</div>
-                        <div id="shopDetailPageDish">{pigcms{:L('_PRODUCT_STOCK_')}</div>
 						<div id="shopDetailPageLabel">
 							<!--div class="tip">{pigcms{:L('_WANT_TO_NOT_')}<div class="question"></div></div-->
 							<div id="shopDetailPageLabelBox"></div>
 						</div>
+                        <div id="shopDetailPageDish">{pigcms{:L('_PRODUCT_STOCK_')}</div>
                         <div id="shopDetailPageBar" class="clearfix">
                             <div class="fl" id="shopDetailPagePrice">{pigcms{:L('_PRICE_TXT_')}</div>
                             <div class="fr">

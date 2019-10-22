@@ -1635,14 +1635,18 @@ class Shop_goodsModel extends Model
                         $spec_ids[] = $r['id'];
                         $str_s[] = $r['name'];
                     }elseif ($r['type'] == 'side_dish'){//garfunkel add dish
-                        foreach ($r['data'] as $d) {
-                            if($d['dish_num'] > 1){
-                                $str_d[] = $d['dish_val_name'].'*'.$d['dish_num'];
-                            }else{
-                                $str_d[] = $d['dish_val_name'];
-                            }
+                        if($r['data']) {
+                            foreach ($r['data'] as $d) {
+                                if ($d['dish_num'] > 1) {
+                                    $str_d[] = $d['dish_val_name'] . '*' . $d['dish_num'];
+                                } else {
+                                    $str_d[] = $d['dish_val_name'];
+                                }
 
-                            $dish_ids[] = $d['dish_id'].','.$d['dish_val_id'].','.$d['dish_num'].','.$d['dish_price'];
+                                $dish_ids[] = $d['dish_id'] . ',' . $d['dish_val_id'] . ',' . $d['dish_num'] . ',' . $d['dish_price'];
+                            }
+                        }else if($r['dish_id']){
+                            $dish_ids = explode("|",$r['dish_id']);
                         }
                     } else {
                         foreach ($r['data'] as $d) {

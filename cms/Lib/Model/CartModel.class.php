@@ -74,9 +74,11 @@ class CartModel extends Model
             $good['quantity'] = $v['num'];
             $good['spec'] = $v['spec'];
             $good['proper'] = $v['proper'];
+            $good['dish_id'] = $v['dish_id'];
             $goodList[] = $good;
         }
         $goodList = D('Store')->arrange_goods_for_goods($goodList);
+
         foreach($goodList as $v){
             //$good = D('Shop_goods')->field(true)->where(array('goods_id' => $v['fid']))->find();
             foreach($result['info'] as $kk => $vv){
@@ -145,7 +147,31 @@ class CartModel extends Model
             }
             $t_good['proper_desc'] = $proper_desc;
 
-            $t_good['attr'] = $spec_desc . " " .$proper_desc;
+            $t_good['dish_id'] = $v['dish_id'];
+            $dish_desc = "";
+            $add_price = 0;
+            if($v['dish_id'] != "" && $v['dish_id'] != null){
+                $dish_list = explode("|",$v['dish_id']);
+                foreach($dish_list as $vv){
+                    $one_dish = explode(",",$vv);
+                    //0 dish_id 1 id 2 num 3 price
+                    if($one_dish[3] > 0){
+                        $add_price += $one_dish[3]*$one_dish[2];
+                    }
+
+                    $dish_vale = D('Side_dish_value')->where(array('id'=>$one_dish[1]))->find();
+                    $dish_vale['name'] = lang_substr($dish_vale['name'],C('DEFAULT_LANG'));
+
+                    $add_str = $one_dish[2] > 1 ? $dish_vale['name']."*".$one_dish[2] : $dish_vale['name'];
+
+                    $dish_desc = $dish_desc == "" ? $add_str : $dish_desc.";".$add_str;
+                }
+
+                $good['price'] = $good['price'] + $add_price;
+            }
+            $t_good['dish_desc'] = $dish_desc;
+
+            $t_good['attr'] = $spec_desc . " " .$proper_desc ." ".$dish_desc;
             $t_good['price'] = $good['price'];
             $t_good['tax_num'] = $good['tax_num'];
             $t_good['deposit_price'] = $good['deposit_price'];

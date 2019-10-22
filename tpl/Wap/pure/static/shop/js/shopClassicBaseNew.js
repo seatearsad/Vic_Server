@@ -1120,7 +1120,7 @@ function showShop(shopId){
                 $(this).addClass('active').siblings('li').removeClass('active');
             }else if(!$(this).hasClass('active')){
                 var tmpActiveSize = $(this).closest('ul').find('.active').size();
-                if(tmpActiveSize >= max){
+                if(max != -1 && tmpActiveSize >= max){
                     motify.log($(this).closest('ul').data('dish_name')+' Options Maximum '+max+'');
                 }else{
                     /* if(tmpActiveSize == maxSize-1){
@@ -1146,7 +1146,7 @@ function showShop(shopId){
 
             //alert($(this).parent().data('dish_name'));
             var curr_num = parseInt($(this).parent().children('.number').html());
-			if(curr_all_num < max) {
+			if(max == -1 || curr_all_num < max) {
                 $(this).parent().children('.number').html(curr_num + 1);
                 changeProductSpec();
             }else {

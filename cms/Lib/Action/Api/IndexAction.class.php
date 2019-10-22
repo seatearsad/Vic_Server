@@ -367,8 +367,13 @@ class IndexAction extends BaseAction
         $num = !empty($_POST['num']) ? $_POST['num']:1;
         $spec = $_POST['spec'];
         $proper = $_POST['proper'];
+        if($_POST['dish']){
+            $dish_id = $_POST['dish'];
+        }else{
+            $dish_id = "";
+        }
 
-        D('Cart')->add_cart($uid,$fid,$num,$spec,$proper);
+        D('Cart')->add_cart($uid,$fid,$num,$spec,$proper,$dish_id);
 
         $this->returnCode(0,'info',array(),'success');
     }
@@ -489,6 +494,7 @@ class IndexAction extends BaseAction
                     }
                 }
             }
+
             $t_good['productPrice'] = $good['price'];
             $t_good['productStock'] = $good['stock_num'];
             $t_good['productParam'] = array();
@@ -523,6 +529,12 @@ class IndexAction extends BaseAction
                 }
             }
 
+            if($v['dish_id'] != "" && $v['dish_id'] != null){
+                $t_dish['type'] = 'side_dish';
+                $t_dish['dish_id'] = $v['dish_id'];
+                $t_good['productParam'][] = $t_dish;
+            }
+
             $t_good['count'] = $v['stock'];
             $t_good['tax_num'] = $good['tax_num'];
             $t_good['deposit_price'] = $good['deposit_price'];
@@ -534,8 +546,8 @@ class IndexAction extends BaseAction
         }
 
         $sid = D('Cart')->field(true)->where(array('uid'=>$uid,'fid'=>$cart_array[0]['fid']))->find()['sid'];
-
         $return = D('Shop_goods')->checkCart($sid, $uid, $orderData);
+
         //garfunkel add
         $store = D('Merchant_store')->where(array('store_id'=>$return['store_id']))->find();
         $area = D('Area')->where(array('area_id'=>$store['city_id']))->find();
@@ -882,7 +894,7 @@ class IndexAction extends BaseAction
             $spec_ids = explode('_',$v['spec_id']);
             foreach ($spec_ids as $vv){
                 $spec = D('Shop_goods_spec_value')->field(true)->where(array('id'=>$vv))->find();
-                $spec_desc = $spec_desc == '' ? lang_substr($spec['name'],$lang) : $spec_desc.','.lang_substr($spec['name'],$lang);
+                $spec_desc = $spec_desc == '' ? lang_substr($spec['name'],C('DEFAULT_LANG')) : $spec_desc.','.lang_substr($spec['name'],C('DEFAULT_LANG'));
             }
 
             if($v['pro_id'] != '')
@@ -897,11 +909,28 @@ class IndexAction extends BaseAction
 
                 $pro = D('Shop_goods_properties')->field(true)->where(array('id'=>$proId))->find();
                 $nameList = explode(',',$pro['val']);
-                $name = lang_substr($nameList[$sId],$lang);
+                $name = lang_substr($nameList[$sId],C('DEFAULT_LANG'));
 
                 $spec_desc = $spec_desc == '' ? $name : $spec_desc.','.$name;
             }
             $goods['spec_desc'] = $spec_desc;
+
+            if($v['dish_id'] != "" && $v['dish_id'] != null){
+                $dish_desc = "";
+                $dish_list = explode("|",$v['dish_id']);
+                foreach($dish_list as $vv){
+                    $one_dish = explode(",",$vv);
+                    //0 dish_id 1 id 2 num 3 price
+
+                    $dish_vale = D('Side_dish_value')->where(array('id'=>$one_dish[1]))->find();
+                    $dish_vale['name'] = lang_substr($dish_vale['name'],C('DEFAULT_LANG'));
+
+                    $add_str = $one_dish[2] > 1 ? $dish_vale['name']."*".$one_dish[2] : $dish_vale['name'];
+
+                    $dish_desc = $dish_desc == "" ? $add_str : $dish_desc.";".$add_str;
+                }
+                $goods['spec_desc'] = $goods['spec_desc'] == '' ? $dish_desc : $goods['spec_desc']." ".$dish_desc;
+            }
 
             $good = D('Shop_goods')->field(true)->where(array('goods_id' => $v['goods_id']))->find();
             $tax_price += $v['price'] * $good['tax_num']/100 * $v['num'];
@@ -968,7 +997,11 @@ class IndexAction extends BaseAction
             }
             $v['list'] = $values;
         }
-        $result['side_dish'] = $dish_list;
+
+        if($dish_list)
+            $result['side_dish'] = $dish_list;
+        else
+            $result['side_dish'] = "";
 
         $result['list'] = $now_goods['list'];
 
