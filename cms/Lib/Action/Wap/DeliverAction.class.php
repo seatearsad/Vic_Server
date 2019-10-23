@@ -1344,7 +1344,7 @@ class DeliverAction extends BaseAction
 			$this->assign('order', $order);
 
 			$goods = D('Shop_order_detail')->field(true)->where(array('order_id' => $supply['order_id']))->select();
-			foreach ($goods as &$g) {
+			foreach ($goods as $k=>&$g) {
                 $g_id = $g['goods_id'];
                 $t_goods = D('Shop_goods')->get_goods_by_id($g_id);
                 $g['name'] = $t_goods['name'];
@@ -1352,6 +1352,26 @@ class DeliverAction extends BaseAction
 					$g['name'] = $g['name'] . '(' . $g['spec'] . ')';
 				}
 				$g['tools_money'] = 0;
+
+                if($g['dish_id'] != "" && $g['dish_id'] != null){
+                    $dish_desc = array();
+                    $dish_list = explode("|",$g['dish_id']);
+                    foreach($dish_list as $vv){
+                        $one_dish = explode(",",$vv);
+                        //0 dish_id 1 id 2 num 3 price
+                        $dish = D('Side_dish')->where(array('id'=>$one_dish[0]))->find();
+                        $dish_name = lang_substr($dish['name'],C('DEFAULT_LANG'));
+                        $dish_vale = D('Side_dish_value')->where(array('id'=>$one_dish[1]))->find();
+                        $dish_vale['name'] = lang_substr($dish_vale['name'],C('DEFAULT_LANG'));
+
+                        $add_str = $one_dish[2] > 1 ? $dish_vale['name']."*".$one_dish[2] : $dish_vale['name'];
+
+                        $dish_desc[$dish['id']]['name'] = $dish_name;
+                        $dish_desc[$dish['id']]['list'][] = $add_str;
+                    }
+
+                    $goods[$k]['dish'] = $dish_desc;
+                }
 			}
 			$this->assign('goods', $goods);
 			//店铺信息

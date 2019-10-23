@@ -434,6 +434,24 @@ class ShopAction extends BaseAction
                     $order['info'][$k]['deposit_price'] = $goods['deposit_price'];
                     $deposit_price += $goods['deposit_price'] * $v['num'];
                     $tax_price += $v['price'] * $goods['tax_num'] / 100 * $v['num'];
+
+                    if($v['dish_id'] != "" && $v['dish_id'] != null){
+                        $dish_desc = "";
+                        $dish_list = explode("|",$v['dish_id']);
+                        foreach($dish_list as $vv){
+                            $one_dish = explode(",",$vv);
+                            //0 dish_id 1 id 2 num 3 price
+
+                            $dish_vale = D('Side_dish_value')->where(array('id'=>$one_dish[1]))->find();
+                            $dish_vale['name'] = lang_substr($dish_vale['name'],C('DEFAULT_LANG'));
+
+                            $add_str = $one_dish[2] > 1 ? $dish_vale['name']."*".$one_dish[2] : $dish_vale['name'];
+
+                            $dish_desc = $dish_desc == "" ? $add_str : $dish_desc.";".$add_str;
+                        }
+
+                        $order['info'][$k]['spec'] = $order['info'][$k]['spec'] == "" ? $dish_desc : $order['info'][$k]['spec'] ." " .$dish_desc;
+                    }
                 }
                 $order['deposit_price'] = $deposit_price;
                 $order['tax_price'] = $tax_price + ($order['freight_charge'] + $order['packing_charge']) * $store['tax_num'] / 100;
@@ -468,6 +486,24 @@ class ShopAction extends BaseAction
                     $order['info'][$k]['deposit_price'] = $goods['deposit_price'];
                     $deposit_price += $goods['deposit_price']*$v['num'];
                     $tax_price += $v['price'] * $goods['tax_num']/100 * $v['num'];
+
+                    if($v['dish_id'] != "" && $v['dish_id'] != null){
+                        $dish_desc = "";
+                        $dish_list = explode("|",$v['dish_id']);
+                        foreach($dish_list as $vv){
+                            $one_dish = explode(",",$vv);
+                            //0 dish_id 1 id 2 num 3 price
+
+                            $dish_vale = D('Side_dish_value')->where(array('id'=>$one_dish[1]))->find();
+                            $dish_vale['name'] = lang_substr($dish_vale['name'],C('DEFAULT_LANG'));
+
+                            $add_str = $one_dish[2] > 1 ? $dish_vale['name']."*".$one_dish[2] : $dish_vale['name'];
+
+                            $dish_desc = $dish_desc == "" ? $add_str : $dish_desc.";".$add_str;
+                        }
+
+                        $order['info'][$k]['spec'] = $order['info'][$k]['spec'] == "" ? $dish_desc : $order['info'][$k]['spec'] ." " .$dish_desc;
+                    }
                 }
                 $order['deposit_price'] = $deposit_price;
                 $order['tax_price'] = $tax_price + ($order['freight_charge'] + $order['packing_charge']) * $store['tax_num']/100;

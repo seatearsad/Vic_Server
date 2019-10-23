@@ -220,7 +220,17 @@ cursor: pointer;
 					<td>{pigcms{$info['name']} </td>
 					<td class="cc">{pigcms{$info['price']|floatval}</td>
                     <td class="cc" <if condition="$info['num'] gt 1">style="color: #ffa52d"</if>>{pigcms{$info['num']} <span style="color: gray; font-size:10px">({pigcms{$info['unit']})</span></td>
-					<td class="rr">{pigcms{$info['spec']}</td>
+					<td class="rr">
+                        {pigcms{$info['spec']}
+                        <volist name="info['dish']" id="dish">
+                            <div>
+                                {pigcms{$dish['name']}
+                                <volist name="dish['list']" id="dish_one">
+                                    <br><label style="color:#999;font-size: 12px">- {pigcms{$dish_one}</label>
+                                </volist>
+                            </div>
+                        </volist>
+                    </td>
 				</tr>
 				</volist>
             </if>

@@ -35,7 +35,17 @@
                 	<volist name="goods" id="gdetail">
                     <li class="clr">
                         <dl>
-                            <dd>{pigcms{$gdetail['name']}</dd>
+                            <dd>
+                                {pigcms{$gdetail['name']}
+                                <volist name="gdetail['dish']" id="dish">
+                                    <div>
+                                        {pigcms{$dish['name']}
+                                        <volist name="dish['list']" id="dish_one">
+                                            <br><label style="color:#999;font-size: 12px">- {pigcms{$dish_one}</label>
+                                        </volist>
+                                    </div>
+                                </volist>
+                            </dd>
                             <dd class="on"><i>x</i> {pigcms{$gdetail['num']}</dd>
                             <if condition="$supply['status'] eq 5">
                             <dd class="rig"><span><i>$</i>{pigcms{$gdetail['price']|floatval}</span></dd>

@@ -1116,12 +1116,17 @@ function showShop(shopId){
 			var min = $(this).data('min')
 			var max = $(this).data('max');
 
-            if(max == 1){
-                $(this).addClass('active').siblings('li').removeClass('active');
-            }else if(!$(this).hasClass('active')){
+            // if(max == 1){
+            //     $(this).addClass('active').siblings('li').removeClass('active');
+            // }else
+			if(!$(this).hasClass('active')){
                 var tmpActiveSize = $(this).closest('ul').find('.active').size();
                 if(max != -1 && tmpActiveSize >= max){
-                    motify.log($(this).closest('ul').data('dish_name')+' Options Maximum '+max+'');
+                    // if(max == 1){
+                    //     $(this).addClass('active').siblings('li').removeClass('active');
+                    // }else {
+                        motify.log($(this).closest('ul').data('dish_name') + ' Options Maximum ' + max + '');
+                    //}
                 }else{
                     /* if(tmpActiveSize == maxSize-1){
                         motify.log('您最多能选择 '+maxSize+' 个，现在已经选择满了');

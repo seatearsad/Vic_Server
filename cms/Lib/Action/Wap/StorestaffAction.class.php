@@ -1501,6 +1501,26 @@ class StorestaffAction extends BaseAction
                 }
                 if ($spec_desc != '')
                     $order['info'][$k]['spec'] = $spec_desc;
+
+                if($v['dish_id'] != "" && $v['dish_id'] != null){
+                    $dish_desc = array();
+                    $dish_list = explode("|",$v['dish_id']);
+                    foreach($dish_list as $vv){
+                        $one_dish = explode(",",$vv);
+                        //0 dish_id 1 id 2 num 3 price
+                        $dish = D('Side_dish')->where(array('id'=>$one_dish[0]))->find();
+                        $dish_name = lang_substr($dish['name'],C('DEFAULT_LANG'));
+                        $dish_vale = D('Side_dish_value')->where(array('id'=>$one_dish[1]))->find();
+                        $dish_vale['name'] = lang_substr($dish_vale['name'],C('DEFAULT_LANG'));
+
+                        $add_str = $one_dish[2] > 1 ? $dish_vale['name']."*".$one_dish[2] : $dish_vale['name'];
+
+                        $dish_desc[$dish['id']]['name'] = $dish_name;
+                        $dish_desc[$dish['id']]['list'][] = $add_str;
+                    }
+
+                    $order['info'][$k]['dish'] = $dish_desc;
+                }
             }
             $store = D('Merchant_store')->field(true)->where(array('store_id' => $order['store_id']))->find();
             $tax_price = $tax_price + ($order['freight_charge'] + $order['packing_charge'])*$store['tax_num']/100;
