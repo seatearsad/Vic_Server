@@ -471,6 +471,7 @@ a.see_tmp_qrcode {
 				                            </span>
 				                        </td>
 			                    	</tr>
+                                    <if condition="$order_info['order_type'] != 'recharge'">
 			                    	<if condition="$score_count gt 0">
 										<tr>
 											<td style="text-align:left;"  class="deal-component-quantity ">
@@ -498,6 +499,7 @@ a.see_tmp_qrcode {
 											</td>
 										</tr>
 									</if>
+                                    </if>
 								<if condition="$order_info['order_type'] != 'recharge'">
 									<tr>						
 										<td style="text-align:left;">
@@ -551,6 +553,7 @@ a.see_tmp_qrcode {
                                     </div>
                                 </div>
                                 <div class="clr" style="border-bottom: 1px #cccccc solid"></div>
+                                <if condition="$order_info['order_type'] != 'recharge'">
                                 <div id="tip_label">
                                     <div class="payment-banktit">
                                         <b class="open">
@@ -584,6 +587,10 @@ a.see_tmp_qrcode {
                                         </div>
                                     </div>
                                 </div>
+                                <else />
+                                    <span id="tip_num" style="display: none;">$0</span>
+                                    <span id="add_tip" style="display: none;">$0</span>
+                                </if>
 								<div class="clr" style="border-bottom: 1px #cccccc solid"></div>
                                 <div id="card">
                                     <div class="payment-banktit">
@@ -606,6 +613,12 @@ a.see_tmp_qrcode {
                                                             <input type="radio" name="card_id" value="{pigcms{$vo.id}">
                                                             {pigcms{$vo.name} -- {pigcms{$vo.card_num}
                                                         </div>
+                                                        <if condition="$vo['status'] eq 0">
+                                                            <div>
+                                                                <span style="width:50px;display:-moz-inline-box;display:inline-block;">CVD：</span>
+                                                                <input type="text" maxlength="3" size="20" name="cvd_{pigcms{$vo.id}" id="cvd_{pigcms{$vo.id}" placeholder="3 digites on the back of your card" value="" style="border: 1px #333333 solid;"/>
+                                                            </div>
+                                                        </if>
                                                     </volist>
                                                 </if>
                                             </ul>
@@ -633,6 +646,10 @@ a.see_tmp_qrcode {
                                                     <div>
                                                         <span style="width:150px;display:-moz-inline-box;display:inline-block;">{pigcms{:L('_IS_SAVE_')}：</span>
                                                         <input type="checkbox" name="save" id="save" value="1"/>
+                                                    </div>
+                                                    <div>
+                                                        <span style="width:150px;display:-moz-inline-box;display:inline-block;">CVD：</span>
+                                                        <input type="text" maxlength="3" size="20" name="cvd" id="cvd" placeholder="3 digites on the back of your card" value="" style="border: 1px #333333 solid;"/>
                                                     </div>
                                                 </ul>
                                             </div>
@@ -685,26 +702,54 @@ a.see_tmp_qrcode {
                                 'name':$('#card_name').val(),
                                 'card_num':$('#card_num').val(),
                                 'expiry':$('#expiry').val(),
+                                'cvd':$('#cvd').val(),
                                 'save':$('input[name="save"]:checked').val(),
                                 // 'charge_total':$('input[name="charge_total"]').val(),
                                 'charge_total':$('#add_tip').text().replace('$', ""),
                                 'order_id':"Tutti{pigcms{$order_info.order_type}_{pigcms{$order_info.order_id}",
                                 'cust_id':'{pigcms{:md5($order_info.uid)}',
                                 'rvarwap':$('input[name="rvarwap"]').val(),
+                                'order_type':"{pigcms{$order_info.order_type}",
                                 'tip':$('#tip_num').text().replace('$', "")
                             };
+
                             $.post($('#moneris_form').attr('action'),re_data,function(data){
-                                if(data.status == 1){
-                                    art.dialog({
-                                        title: 'Message',
-                                        id: 'moneris_pay',
-                                        opacity:'0.4',
-                                        lock:true,
-                                        fixed: true,
-                                        resize: false,
-                                        content: "{pigcms{:L('_PAYMENT_SUCCESS_')}"
-                                    });
-                                    setTimeout("window.location.href = '"+data.url+"'",200);
+                                if(typeof (data.mode) != 'undefined' && data.mode == 'mpi'){
+                                    // art.dialog({
+                                    //     title:'',
+                                    //     id: 'moneris_pay',
+                                    //     opacity:'0.4',
+                                    //     lock:true,
+                                    //     fixed: true,
+                                    //     resize: false,
+                                    //     content:data.html
+                                    // });
+                                    $('body').append(data.html);
+                                }else {
+                                    if (data.status == 1) {
+                                        art.dialog({
+                                            title: 'Message',
+                                            id: 'moneris_pay',
+                                            opacity: '0.4',
+                                            lock: true,
+                                            fixed: true,
+                                            resize: false,
+                                            content: "{pigcms{:L('_PAYMENT_SUCCESS_')}"
+                                        });
+                                        setTimeout("window.location.href = '" + data.url + "'", 200);
+                                    } else {
+                                        art.dialog({
+                                            title: 'Message',
+                                            id: 'moneris_pay',
+                                            opacity: '0.4',
+                                            lock: true,
+                                            fixed: true,
+                                            resize: false,
+                                            content: data.info
+                                        });
+                                        $("#J-order-pay-button").val("{pigcms{:L('_B_PURE_MY_81_')}");
+                                        $("#J-order-pay-button").removeAttr("disabled");
+                                    }
                                 }
                             });
                         }else{
@@ -721,15 +766,62 @@ a.see_tmp_qrcode {
                            'order_id':"Tutti{pigcms{$order_info.order_type}_{pigcms{$order_info.order_id}",
                            'cust_id':'{pigcms{:md5($order_info.uid)}',
                            'rvarwap':$('input[name="rvarwap"]').val(),
+                           'order_type':"{pigcms{$order_info.order_type}",
                            'tip':$('#tip_num').text().replace('$', "")
                        };
-                       $.post($('#moneris_form').attr('action'),re_data,function(data){
-                           if(data.status == 1){
-                               setTimeout("window.location.href = '"+data.url+"'",200);
-                           }else{
-                               alert(data.info);
+
+                       var cvd_id = 'cvd_'+$('input[name="credit_id"]').val();
+
+                       var cvd = $('#'+cvd_id).val();
+                       if(typeof (cvd) != "undefined"){
+                           if(!/^\d{3}$/.test(cvd)){
+                               alert('Please input CVD');
                                $("#J-order-pay-button").val("{pigcms{:L('_B_PURE_MY_81_')}");
                                $("#J-order-pay-button").removeAttr("disabled");
+                               return false;
+                           }else{
+                               re_data['cvd'] = cvd;
+                           }
+                       }
+
+                       $.post($('#moneris_form').attr('action'),re_data,function(data){
+                           if(typeof (data.mode) != 'undefined' && data.mode == 'mpi'){
+                               // art.dialog({
+                               //     title:'',
+                               //     id: 'moneris_pay',
+                               //     opacity:'0.4',
+                               //     lock:true,
+                               //     fixed: true,
+                               //     resize: false,
+                               //     content:data.html
+                               // });
+                               $('body').append(data.html);
+                           }else {
+                               if (data.status == 1) {
+                                   art.dialog({
+                                       title: 'Message',
+                                       id: 'moneris_pay',
+                                       opacity: '0.4',
+                                       lock: true,
+                                       fixed: true,
+                                       resize: false,
+                                       content: "{pigcms{:L('_PAYMENT_SUCCESS_')}"
+                                   });
+
+                                   setTimeout("window.location.href = '" + data.url + "'", 200);
+                               } else {
+                                   art.dialog({
+                                       title: 'Message',
+                                       id: 'moneris_pay',
+                                       opacity: '0.4',
+                                       lock: true,
+                                       fixed: true,
+                                       resize: false,
+                                       content: data.info
+                                   });
+                                   $("#J-order-pay-button").val("{pigcms{:L('_B_PURE_MY_81_')}");
+                                   $("#J-order-pay-button").removeAttr("disabled");
+                               }
                            }
                        });
                    }
@@ -1003,7 +1095,7 @@ a.see_tmp_qrcode {
         });
 
         $('input[name="card_id"]').click(function(){
-            $('input[name="credit_id"]').val(this.val());
+            $('input[name="credit_id"]').val($(this).val());
         });
 
         function isShowCredit(){
@@ -1072,9 +1164,21 @@ a.see_tmp_qrcode {
                 }
             }
         });
+
+        $('#cvd').live('focusin focusout',function(event){
+            if(event.type == 'focusin'){
+                $(this).siblings('.inline-tip').remove();$(this).closest('.form-field').removeClass('form-field--error');
+            }else{
+                $(this).val($.trim($(this).val()));
+                var cvd = $(this).val();
+                if(!/^\d{3}$/.test(cvd)){
+                    $(this).after("<span class='inline-tip'><i class='tip-status tip-status--opinfo'></i></span>").closest('.form-field').addClass('form-field--error');
+                }
+            }
+        });
         function check_card(){
             var isT = true;
-            if($('#card_name').val().length < 2 || !/^\d{13,}$/.test($('#card_num').val()) || $('#expiry').val().length != 4 ){
+            if($('#card_name').val().length < 2 || !/^\d{13,}$/.test($('#card_num').val()) || $('#expiry').val().length != 4 || !/^\d{3}$/.test($('#cvd').val())){
                 isT = false;
             }
             return isT;

@@ -1,4 +1,4 @@
-$
+<include file="Public:header"/>
 		<div class="mainbox">
 			<div id="nav" class="mainnav_title">
 				<ul>

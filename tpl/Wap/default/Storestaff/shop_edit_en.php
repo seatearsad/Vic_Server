@@ -68,6 +68,11 @@ cursor: pointer;
 <body>
 <div style="padding: 0.8rem;background-color: #ffa52d">
     <a href="javascript:void(0);" onclick="return window.history.go(-1);" style="color: white"> < Back</a>
+    <div id="print_order" style="position: absolute;right: 20px;top:12px;color: white;cursor: pointer;">
+        <if condition="$order['paid'] eq 1 and $order['status'] neq 0">
+            Print Order
+        </if>
+    </div>
 </div>
 <div style="padding: 0.2rem;"> 
 	<ul class="round">
@@ -337,7 +342,10 @@ cursor: pointer;
         $.post("{pigcms{:U('Storestaff/shop_order_confirm')}",{order_id:"{pigcms{$order['order_id']}",status:1,dining_time:time_val},function(result){
             is_send = false;
             if(result.status == 1){
-                window.location.href = "{pigcms{:U('Storestaff/shop_list')}";
+                printOrderToAndroid(time_val);
+                setTimeout(function () {
+                    window.location.href = "{pigcms{:U('Storestaff/shop_list')}";
+                },1000);
             }else{
                 alert(result.info);
                 window.location.reload();
@@ -345,6 +353,128 @@ cursor: pointer;
         },'json');
         return false;
     });
+
+    if(/(tutti_android)/.test(navigator.userAgent.toLowerCase()) || /(tuttipartner)/.test(navigator.userAgent.toLowerCase())){
+        $('#print_order').show();
+    }else{
+        $('#print_order').hide();
+    }
+
+    function pushUserPrinter(status){
+        if(status == '1'){
+            if(/(tutti_android)/.test(navigator.userAgent.toLowerCase()) || /(tuttipartner)/.test(navigator.userAgent.toLowerCase())){
+                $('#print_order').show();
+            }else{
+                $('#print_order').hide();
+            }
+        }else{
+            $('#print_order').hide();
+        }
+    }
+    //Android
+    if(typeof (window.linkJs) != 'undefined') {
+        var is_use = window.linkJs.getUsePrinter();
+        pushUserPrinter(is_use);
+    }
+
+    function isIntNum(val){
+        var regPos = / ^\d+$/; // 非负整数
+        var regNeg = /^\-[1-9][0-9]*$/; // 负整数
+        if(regPos.test(val) || regNeg.test(val)){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    function printOrderToAndroid(time_val){
+        if(typeof (time_val) == "undefined" || !/^[0-9]*$/.test(time_val)){
+            time_val = "0";
+        }
+
+        <?php
+        $order_info = $order['info'];
+        $i = 0;
+        $info_str = "";
+        foreach ($order_info as &$v){
+            if($i > 0) $info_str .= "|";
+            if(strpos($v['name'], "'") !== false) {
+                $v['name'] = str_replace("'",'’',$v['name']);
+            }
+            if(strpos($v['spec'], "'") !== false) {
+                $v['spec'] = str_replace("'",'’',$v['spec']);
+            }
+            $info_str .= $v['name']."#".$v['num']."#".$v['spec'];
+            $i++;
+        }
+
+        $order_data = $order;
+
+        if(strpos($order['username'], "'") !== false) {
+            $order['username'] = str_replace("'",'’',$order['username']);
+        }
+        $order_data['username'] = $order['username'];
+
+        if(strpos($order['address'], "'") !== false) {
+            $order['address'] = str_replace("'",'’',$order['address']);
+        }
+        $order_data['address'] = $order['address'];
+
+        if(strpos($order['last_staff'], "'") !== false) {
+            $order['last_staff'] = str_replace("'",'’',$order['last_staff']);
+        }
+        $order_data['last_staff'] = $order['last_staff'];
+
+        $order_data['info'] = "";
+        $order_data['pay_status'] = "";
+        $order_data['deliver_log_list'] = "";
+        $order_data['deliver_info'] = "";
+        $order_data['deliver_user_info'] = "";
+        if(strpos($shop['name'], "'") !== false) {
+            $shop['name'] = str_replace("'",'’',$shop['name']);
+        }
+        $order_data['store_name'] = $shop['name'];
+        $order_data['store_phone'] = $shop['phone'];
+        $order_data['pay_time_str'] = date("Y-m-d H:i:s",$order['pay_time']);
+        if(strpos($order['desc'], "'") !== false) {
+            $order['desc'] = str_replace("'",'’',$order['desc']);
+        }
+        $order_data['desc'] = $order['desc'] == "" ? "N/A" : $order['desc'];
+
+        if (($order_data['expect_use_time'] - $order_data['pay_time'])>=3600){
+            $order_data['expect_use_time'] = date("Y-m-d H:i:s",$order_data['expect_use_time']);
+        }else{
+            $order_data['expect_use_time'] = "ASAP";
+        }
+
+        $order_data['dining_time'] = $supply['dining_time'] ? $supply['dining_time'] : '0';
+        ?>
+        if(typeof (window.linkJs) != 'undefined'){
+            if(/(tutti_android)/.test(navigator.userAgent.toLowerCase()))
+                window.linkJs.printer_order('{pigcms{:json_encode($order_data)}','{pigcms{:json_encode($order_info)}',time_val);
+        }
+        if(/(tuttipartner)/.test(navigator.userAgent.toLowerCase())) {
+            var orderDetail = "{pigcms{$order_data['real_orderid']}";
+            orderDetail  += "|" + "{pigcms{$order_data['store_name']}";
+            orderDetail  += "|" + "{pigcms{$order_data['store_phone']}";
+            orderDetail  += "|" + "{pigcms{$order_data['pay_time_str']}";
+            orderDetail  += "|" + "{pigcms{$order_data['desc']}";
+            orderDetail  += "|" + "{pigcms{$order_data['expect_use_time']}";
+            orderDetail  += "|" + "{pigcms{$order_data['username']}";
+            orderDetail  += "|" + "{pigcms{$order_data['userphone']}";
+            orderDetail  += "|$" + "{pigcms{$order['goods_price']|floatval}";
+
+            if(time_val == "0")
+                time_val = "{pigcms{$order_data['dining_time']}";
+
+            var orderInfo = "{pigcms{$info_str}" ;
+
+            window.webkit.messageHandlers.printer_order.postMessage([orderDetail, orderInfo, time_val]);
+        }
+    }
+
+    $('#print_order').click(printOrderToAndroid);
+
 </script>
 <div class="footReturn">
 	<div class="clr"></div>

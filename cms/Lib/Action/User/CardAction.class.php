@@ -41,6 +41,13 @@ class CardAction extends  BaseAction{
 
             if($_POST['card_id'] && $_POST['card_id'] != ''){
                 $data['id'] = $_POST['card_id'];
+                $card = D('User_card')->field(true)->where(array('id'=>$data['id']))->find();
+                if($card['card_num'] != $data['card_num'] || $card['expiry'] != $data['expiry']) {
+                    //garfunkel 如果修改信用卡信息将验证信息清零
+                    $data['cvd'] = '';
+                    $data['verification_time'] = '';
+                    $data['status'] = 0;
+                }
                 D('User_card')->field(true)->where(array('id'=>$data['id']))->save($data);
                 $this->success(L('_OPERATION_SUCCESS_'));
             }else{

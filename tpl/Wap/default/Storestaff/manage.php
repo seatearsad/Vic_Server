@@ -246,6 +246,7 @@ line-height: .7rem;
     margin-top: 10px;
     cursor: pointer;
 }
+
 #features li div{
     margin-top:40px;
     word-wrap:break-word;
@@ -329,6 +330,40 @@ if(typeof (window.linkJs) != 'undefined'){
         });
     }
 }
+
+function pushPrinterNameAndUse(name,use) {
+    var is_use = 'NO';
+    if(use == '1') is_use = 'YES';
+
+    $('#use_status').html(is_use);
+    $('#printer_name').html(name);
+}
+
+if(/(tutti_android)/.test(navigator.userAgent.toLowerCase()) || /(tuttipartner)/.test(navigator.userAgent.toLowerCase())){
+    var html = '<li id="set_printer"><div>{pigcms{:L(\'_STORE_SET_PRINTER_\')}</div>';
+    html += '<div id="use_status" style="position: absolute;margin-top:1px;width: 30%;">' +
+        '' +
+        '</div>' +
+        '<div id="printer_name" style="position: absolute;margin-top:18px;width: 30%;">' +
+        '' +
+        '</div></li>';
+    $('#features').append(html);
+}
+
+if(typeof (window.linkJs) != 'undefined') {
+    var printer = window.linkJs.updatePrinterUseAndName();
+    var allStr = printer.split("|");
+
+    pushPrinterNameAndUse(allStr[1],allStr[0]);
+}
+
+$('#set_printer').click(function () {
+    if(/(tutti_android)/.test(navigator.userAgent.toLowerCase()))
+        window.linkJs.gotoPrinter();
+    else
+        //alert("Set Printer Click!");operatePrinter
+        window.webkit.messageHandlers.operatePrinter.postMessage([0]);
+});
 
 $(document).ready(function(){
 	var is_click = false;

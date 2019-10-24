@@ -990,6 +990,7 @@ class ShopAction extends BaseAction
             $objActSheet->setCellValue('V1', '客户地址');
             $objActSheet->setCellValue('W1', '客户电话');
             $objActSheet->setCellValue('X1', '送达时间');
+            $objActSheet->setCellValue('Y1', '小费');
             $sql = "SELECT  o.*, m.name AS merchant_name,d.name as good_name,d.price as good_price ,d.unit,d.cost_price, d.num as good_num, s.name AS store_name FROM " . C('DB_PREFIX') . "shop_order AS o LEFT JOIN " . C('DB_PREFIX') . "merchant_store AS s ON s.store_id=o.store_id LEFT JOIN " . C('DB_PREFIX') . "merchant AS m ON `s`.`mer_id`=`m`.`mer_id` LEFT JOIN " . C('DB_PREFIX') . "shop_order_detail AS d ON `d`.`order_id`=`o`.`order_id` ".$condition_where." ORDER BY o.order_id DESC LIMIT " . $i * 1000 . ",1000";
             //
             //$sql = "SELECT  o.*, m.name AS merchant_name,d.name as good_name,d.price as good_price ,d.unit,d.cost_price, d.num as good_num, s.name AS store_name FROM " . C('DB_PREFIX') . "shop_order AS o INNER JOIN " . C('DB_PREFIX') . "merchant_store AS s ON s.store_id=o.store_id INNER JOIN " . C('DB_PREFIX') . "merchant AS m ON `s`.`mer_id`=`m`.`mer_id` INNER JOIN " . C('DB_PREFIX') . "shop_order_detail AS d ON `d`.`order_id`=`o`.`order_id` ".$condition_where." ORDER BY o.order_id DESC LIMIT " . $i * 1000 . ",1000";
@@ -1026,6 +1027,7 @@ class ShopAction extends BaseAction
                         $objActSheet->setCellValueExplicit('V' . $index, '');//客户地址
                         $objActSheet->setCellValueExplicit('W' . $index, '');//客户电话
                         $objActSheet->setCellValueExplicit('X' . $index, '');//送达时间
+                        $objActSheet->setCellValueExplicit('Y' . $index, '');
                         $index++;
                     }else{
                         $index++;
@@ -1049,10 +1051,11 @@ class ShopAction extends BaseAction
                         $objActSheet->setCellValueExplicit('R' . $index, $value['unit']);//单位
                         $objActSheet->setCellValueExplicit('S' . $index, floatval($value['balance_reduce']),PHPExcel_Cell_DataType::TYPE_NUMERIC);//平台优惠
                         $objActSheet->setCellValueExplicit('T' . $index, floatval($value['merchant_reduce']),PHPExcel_Cell_DataType::TYPE_NUMERIC);//商家优惠
-                        $objActSheet->setCellValueExplicit('W' . $index, floatval($value['payment_money']),PHPExcel_Cell_DataType::TYPE_NUMERIC);//在线支付金额
-                        $objActSheet->setCellValueExplicit('U' . $index, $value['address'] . ' ');//客户地址
-                        $objActSheet->setCellValueExplicit('V' . $index, $value['userphone'] . ' ');//客户电话
-                        $objActSheet->setCellValueExplicit('W' . $index, $value['use_time'] ? date('Y-m-d H:i:s', $value['use_time']) : '');//送达时间
+                        $objActSheet->setCellValueExplicit('U' . $index, floatval($value['payment_money']),PHPExcel_Cell_DataType::TYPE_NUMERIC);//在线支付金额
+                        $objActSheet->setCellValueExplicit('V' . $index, $value['address'] . ' ');//客户地址
+                        $objActSheet->setCellValueExplicit('W' . $index, $value['userphone'] . ' ');//客户电话
+                        $objActSheet->setCellValueExplicit('X' . $index, $value['use_time'] ? date('Y-m-d H:i:s', $value['use_time']) : '');//送达时间
+                        $objActSheet->setCellValueExplicit('Y' . $index, floatval(sprintf("%.2f",$value['tip_charge'])),PHPExcel_Cell_DataType::TYPE_NUMERIC);//商品总价（税前）////无
                         $index++;
                     }
                     $tmp_id = $value['real_orderid'];
@@ -1124,6 +1127,8 @@ class ShopAction extends BaseAction
         $total_goods_tax_pro = 0;
         //订单总数
         $order_count = 0;
+        //小费总数
+        $total_tip = 0;
 
         //结束循环后是否存储最后一张订单，如果最后一张是代客下单为 false;
         $is_last = true;
@@ -1154,6 +1159,7 @@ class ShopAction extends BaseAction
                 $total_deposit += $all_record[$curr_order]['all_deposit'];
                 $total_all_price += $val['price'];
                 $total_cash += $val['price'];
+                $total_tip += $val['tip_charge'];
 
                 $order_count++;
             }else{
@@ -1178,6 +1184,7 @@ class ShopAction extends BaseAction
                     $total_packing_price += $val['packing_charge'];
                     $total_packing_tax += $val['packing_charge']*$val['store_tax']/100;
                     $total_all_price += $val['price'];
+                    $total_tip += $val['tip_charge'];
 
                     $all_record[$curr_order]['freight_tax'] = $val['freight_charge']*$val['store_tax']/100;
                     $all_record[$curr_order]['packing_tax'] = $val['packing_charge']*$val['store_tax']/100;
@@ -1242,6 +1249,7 @@ class ShopAction extends BaseAction
         $objActSheet->setCellValue('F1', '税前商品抽成总金额');
         $objActSheet->setCellValue('G1', '商品税费抽成总金额');//无
         $objActSheet->setCellValue('H1', '订单总金额');
+        $objActSheet->setCellValue('I1', '小费总数');
         $index = 2;
         $objActSheet->setCellValueExplicit('A' . $index, $order_count,PHPExcel_Cell_DataType::TYPE_NUMERIC);
         $objActSheet->setCellValueExplicit('B' . $index, floatval(sprintf("%.2f", $total_goods_price)),PHPExcel_Cell_DataType::TYPE_NUMERIC);
@@ -1251,6 +1259,7 @@ class ShopAction extends BaseAction
         $objActSheet->setCellValueExplicit('F' . $index, floatval(sprintf("%.2f", $total_goods_price_pro)),PHPExcel_Cell_DataType::TYPE_NUMERIC);
         $objActSheet->setCellValueExplicit('G' . $index, floatval(sprintf("%.2f", $total_goods_tax_pro)),PHPExcel_Cell_DataType::TYPE_NUMERIC);
         $objActSheet->setCellValueExplicit('H' . $index, floatval(sprintf("%.2f", $total_all_price)),PHPExcel_Cell_DataType::TYPE_NUMERIC);
+        $objActSheet->setCellValueExplicit('I' . $index, floatval(sprintf("%.2f", $total_tip)),PHPExcel_Cell_DataType::TYPE_NUMERIC);
 
         //输出
         $objWriter = new PHPExcel_Writer_Excel5($objExcel);

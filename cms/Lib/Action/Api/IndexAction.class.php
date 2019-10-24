@@ -102,7 +102,7 @@ class IndexAction extends BaseAction
         if($_POST['keyword']){
             $key = $_POST['keyword'];
             $key && $where['key'] = $key;
-            $shop_list = D('Merchant_store_shop')->get_list_arrange($where,1,1);
+            $shop_list = D('Merchant_store_shop')->get_list_arrange($where,1,1,$limit,$page,$lat,$long);
         }else{
             $shop_list = D('Merchant_store_shop')->get_list_arrange($where,3,1,$limit,$page,$lat,$long);
         }
@@ -1015,7 +1015,17 @@ class IndexAction extends BaseAction
         $moneris_pay = new MonerisPay();
         //app 支付标识
         $_POST['rvarwap'] = 2;
-        $resp = $moneris_pay->payment($_POST,$_POST['uid']);
+        $resp = $moneris_pay->payment($_POST,$_POST['uid'],3);
+        if($resp['requestMode'] && $resp['requestMode'] == "mpi"){
+            if($resp['mpiSuccess'] == "true"){
+                $result = array('error_code' => false,'mode'=>$resp['requestMode'],'PaReq'=>urlencode($resp['MpiPaReq']),'TermUrl' => urlencode($resp['MpiTermUrl']),'MD' => urlencode($resp['MpiMD']),'ACSUrl' => urlencode($resp['MpiACSUrl']),'site_url'=>$resp['MpiTermUrl']);
+                //$this->ajaxReturn($result);
+                $this->returnCode(0,'info',$result,'success');
+            }else{
+                $this->returnCode(1,'info',array(),$resp['message']);
+            }
+        }
+
         if($resp['responseCode'] != 'null' && $resp['responseCode'] < 50){
             //$order = explode("_",$_POST['order_id']);
             //$order_id = $order[1];
