@@ -26,7 +26,7 @@ class CartModel extends Model
             $where['dish_id'] = $dish_id;
 
 
-        $item = $this->field(true)->where(where)->find();
+        $item = $this->field(true)->where($where)->find();
 
         if(empty($item) && $data['num'] > 0){
             $id = $this->data($data)->add();
