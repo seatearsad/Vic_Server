@@ -458,10 +458,13 @@ cursor: pointer;
         $order_data['deliver_log_list'] = "";
         $order_data['deliver_info'] = "";
         $order_data['deliver_user_info'] = "";
+
+        $shop['name'] = lang_substr($shop['name'],C('DEFAULT_LANG'));
         if(strpos($shop['name'], "'") !== false) {
             $shop['name'] = str_replace("'",'’',$shop['name']);
         }
         $order_data['store_name'] = $shop['name'];
+        
         $order_data['store_phone'] = $shop['phone'];
         $order_data['pay_time_str'] = date("Y-m-d H:i:s",$order['pay_time']);
         if(strpos($order['desc'], "'") !== false) {
