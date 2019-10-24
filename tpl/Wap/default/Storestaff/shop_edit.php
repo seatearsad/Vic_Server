@@ -405,6 +405,29 @@ cursor: pointer;
                 $v['spec'] = str_replace("'",'’',$v['spec']);
             }
             $info_str .= $v['name']."#".$v['num']."#".$v['spec'];
+
+            $dish_arr = "";
+            if($v['dish']){
+                if(strpos($v['dish']['name'], "'") !== false) {
+                    $v['dish']['name'] = str_replace("'",'’',$v['dish']['name']);
+                }
+
+                $dish_arr = $v['dish']['name'] ."@@";
+                $c_num = 0;
+                foreach($v['dish']['list'] as &$d_one){
+                    if(strpos($d_one, "'") !== false) {
+                        $d_one = str_replace("'",'’',$d_one);
+                    }
+
+                    $dish_arr .= $c_num == 0 ? $d_one : "^^".$d_one;
+                    $c_num++;
+                }
+
+            }
+            $info_str .= "#".$dish_arr;
+
+            $v['dish_desc'] = $dish_arr;
+
             $i++;
         }
 
