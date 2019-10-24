@@ -408,19 +408,24 @@ cursor: pointer;
 
             $dish_arr = "";
             if($v['dish']){
-                if(strpos($v['dish']['name'], "'") !== false) {
-                    $v['dish']['name'] = str_replace("'",'’',$v['dish']['name']);
-                }
-
-                $dish_arr = $v['dish']['name'] ."@@";
-                $c_num = 0;
-                foreach($v['dish']['list'] as &$d_one){
-                    if(strpos($d_one, "'") !== false) {
-                        $d_one = str_replace("'",'’',$d_one);
+                $d_num = 0;
+                foreach ($v['dish'] as &$dish_one) {
+                    if (strpos($dish_one['name'], "'") !== false) {
+                        $dish_one['name'] = str_replace("'", '’', $v['dish']['name']);
                     }
 
-                    $dish_arr .= $c_num == 0 ? $d_one : "^^".$d_one;
-                    $c_num++;
+                    $dish_arr .= $d_num == 0 ? $dish_one['name'] . "@@" : "@^".$dish_one['name'] . "@@";
+                    $c_num = 0;
+                    foreach ($dish_one['list'] as &$d_one) {
+                        if (strpos($d_one, "'") !== false) {
+                            $d_one = str_replace("'", '’', $d_one);
+                        }
+
+                        $dish_arr .= $c_num == 0 ? $d_one : "^^" . $d_one;
+                        $c_num++;
+                    }
+
+                    $d_num++;
                 }
 
             }
