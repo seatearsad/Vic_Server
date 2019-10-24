@@ -26,7 +26,7 @@ class CartModel extends Model
             $where['dish_id'] = $dish_id;
 
 
-        $item = $this->field(true)->where($where)->find();
+        $item = $this->field(true)->where(where)->find();
 
         if(empty($item) && $data['num'] > 0){
             $id = $this->data($data)->add();
@@ -67,7 +67,7 @@ class CartModel extends Model
                 }
             }
 
-            $allmoney += $good['price']*$v['num'];
+            //$allmoney += $good['price']*$v['num'];
             if ($resid != $good['store_id']){
                 $store = D('Store')->get_store_by_id($good['store_id']);
 
@@ -91,6 +91,7 @@ class CartModel extends Model
                     $result['info'][$kk]['foods'][] = $v;
                 }
             }
+            $allmoney += $v['price']*$v['num'];
         }
 
 
