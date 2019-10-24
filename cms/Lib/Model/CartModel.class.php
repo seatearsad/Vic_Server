@@ -91,7 +91,7 @@ class CartModel extends Model
                     $result['info'][$kk]['foods'][] = $v;
                 }
             }
-            $allmoney += $v['price']*$v['num'];
+            $allmoney += $v['price']*$v['quantity'];
         }
 
 
