@@ -414,14 +414,14 @@ cursor: pointer;
                         $dish_one['name'] = str_replace("'", '’', $v['dish']['name']);
                     }
 
-                    $dish_arr .= $d_num == 0 ? $dish_one['name'] . "@@" : "@^".$dish_one['name'] . "@@";
+                    $dish_arr .= $d_num == 0 ? $dish_one['name'] . "@@" : "@%".$dish_one['name'] . "@@";
                     $c_num = 0;
                     foreach ($dish_one['list'] as &$d_one) {
                         if (strpos($d_one, "'") !== false) {
                             $d_one = str_replace("'", '’', $d_one);
                         }
 
-                        $dish_arr .= $c_num == 0 ? $d_one : "^^" . $d_one;
+                        $dish_arr .= $c_num == 0 ? $d_one : "%%" . $d_one;
                         $c_num++;
                     }
 
