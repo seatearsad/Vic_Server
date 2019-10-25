@@ -1824,7 +1824,7 @@ em.merchant_invoice:before{
     z-index:2;
 }
 #shopDetailPageContent{
-	margin-bottom: 20px;
+	margin-bottom: -20px;
 }
 #shopProductCart{
 	position: fixed;

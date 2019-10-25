@@ -112,9 +112,6 @@
                                 <em class="d40">折</em>
                             </if>
                             {pigcms{$goods['name']}</h2>
-                        <if condition="!empty($goods['spec'])">
-                            <p>{pigcms{$goods['spec']}</p>
-                        </if>
                     </div>
                     <div class="clr fr right">
                         <div class="fl ride">x{pigcms{$goods['num']}</div>
@@ -122,6 +119,9 @@
                         <div class="fl price">${pigcms{$goods['discount_total']}</div>
                     </div>
                 </dd>
+                <if condition="!empty($goods['spec'])">
+                    <p style="font-size: 12px;color: #808080;margin-right: 5px">{pigcms{$goods['spec']}</p>
+                </if>
             </volist>
         </dl>
         <div class="mealfee">

@@ -823,6 +823,11 @@
     .goods_spec{
         font-size: .8em;
         color: #999;
+        margin-top: -10px;
+        margin-left: 40px;
+        padding-bottom: 10px;
+        margin-right: 10px;
+        line-height: 1.2em;
     }
     .order_note{
         line-height: 30px;
@@ -1029,11 +1034,11 @@
             <dd>
                 <div class="goods_name">
                     <div>{pigcms{$vo['name']}</div>
-                    <div class="goods_spec">{pigcms{$vo['spec']}</div>
                 </div>
                 <div class="goods_num">{pigcms{$vo['num']}</div>
                 <div class="goods_price">${pigcms{$vo['price']}</div>
             </dd>
+            <div class="goods_spec">{pigcms{$vo['spec']}</div>
         </volist>
     </dl>
 

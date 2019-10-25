@@ -332,6 +332,7 @@
 	{{# for(var i in d){ }}
 		<div class="row clearfix">
 			<div class="left">{{ d[i].name }}</div>
+            <div>* Required. Please choose 1.</div>
 			<div class="right fl">
 				<ul>
 					{{# var k = 0; for(var j in d[i].list){ }}
@@ -347,6 +348,25 @@
     {{# if(d[i].type == 0){ }}
     <div class="row clearfix" id="shopDetailPageDish_{{ d[i].id}}" data-min="{{d[i].min}}" data-name="{{ d[i].name }}">
         <div class="left">{{ d[i].name }}</div>
+        <div>
+            {{# if(d[i].min == d[i].max){ }}
+            * Required. Please choose exactly {{ d[i].min }}
+            {{# }else if(d[i].min == 0){
+                if(d[i].max == -1){
+            }}
+            * Optional. Choose as many as you’d like.
+                {{# }else{ }}
+            *Optional. Choose at most {{ d[i].max }}
+                {{# } }}
+            {{# }else if(d[i].min != 0){
+                if(d[i].max == -1){
+            }}
+            *Required. Please choose at least {{ d[i].max }}.
+                {{# }else{ }}
+            *Required. Please choose between {{ d[i].min }} to {{ d[i].max }}.
+                {{# } }}
+            {{# } }}
+        </div>
         <div class="right fl">
             <ul data-dish_name="{{ d[i].name }}">
                 {{# var k = 0; for(var j in d[i].list){ }}
@@ -363,9 +383,28 @@
     {{# }else{ }}
     <div class="row clearfix" id="shopDetailPageDish_{{ d[i].id}}" data-min="{{d[i].min}}" data-name="{{ d[i].name }}">
         <div class="left">{{ d[i].name }}</div>
+        <div>
+            {{# if(d[i].min == d[i].max){ }}
+            * Required. Please choose exactly {{ d[i].min }}
+            {{# }else if(d[i].min == 0){
+            if(d[i].max == -1){
+            }}
+            * Optional. Choose as many as you’d like.
+            {{# }else{ }}
+            *Optional. Choose at most {{ d[i].max }}
+            {{# } }}
+            {{# }else if(d[i].min != 0){
+            if(d[i].max == -1){
+            }}
+            *Required. Please choose at least {{ d[i].min }}.
+            {{# }else{ }}
+            *Required. Please choose between {{ d[i].min }} to {{ d[i].max }}.
+            {{# } }}
+            {{# } }}
+        </div>
         {{# var k = 0; for(var j in d[i].list){ }}
         <div style="display: flex;border-bottom: 1px solid silver;padding: 5px 0;">
-            <div style="display: flex;flex: 1 1 100%;">
+            <div class="dish_name" style="display: flex;flex: 1 1 100%;">
             {{ d[i].list[j].name }}
             {{# if(d[i].list[j].price > 0){ }}
             +${{ d[i].list[j].price }}
@@ -386,6 +425,13 @@
 	{{# for(var i in d){ }}
 		<div class="row clearfix productProperties_{{ d[i].id }}" data-label_name="{{ d[i].name }}" data-num="{{ d[i].num }}">
 			<div class="left">{{ d[i].name }}</div>
+            <div>
+                {{# if(d[i].num == 1){ }}
+                * Required. Please choose 1.
+                {{# }else{ }}
+                * Required. Please choose between 1 and {{ d[i].num }}
+                {{# } }}
+            </div>
 			<div class="right fl">
 				<ul>
 					{{# var k = 0; for(var j in d[i].val){ }}
@@ -406,8 +452,11 @@
 <script id="productCartBoxTpl" type="text/html">
 	<dl>
         <dt class="clearfix">{pigcms{:L('_CART_TXT_')}<div id="shopProductCartDel">{pigcms{:L('_CLEAR_TXT_')}</div></dt>
-		{{# for(var i in d){ console.log(d[i])}}
-			<dd class="clearfix cartDD" data-product_id="{{ d[i].productId }}" data-product_price="{{ d[i].productPrice }}" data-product_name="{{ d[i].productName }}" data-stock="{{ d[i].productStock }}">
+		{{# for(var i in d){
+            console.log(d[i]);
+            var t_price = d[i].productPrice.toFixed(2);
+        }}
+			<dd class="clearfix cartDD" data-product_id="{{ d[i].productId }}" data-product_price="{{ t_price }}" data-product_name="{{ d[i].productName }}" data-stock="{{ d[i].productStock }}">
 				<div class="cartLeft {{# if(d[i].productParam.length > 0){ }}hasSpec{{# } }}">
 					<div class="name">{{ d[i].productName }}</div>
 					{{# if(d[i].productParam.length > 0){ }}
@@ -417,13 +466,7 @@
 								if(d[i].productParam[j].type == 'spec'){
 									tmpParam.push(d[i].productParam[j].name);
 								}else if(d[i].productParam[j].type == 'side_dish'){
-                                    for(var k in d[i].productParam[j].data){
-                                        if(d[i].productParam[j].data[k].dish_num > 1){
-                                            tmpParam.push(d[i].productParam[j].data[k].dish_val_name + '*' + d[i].productParam[j].data[k].dish_num);
-                                        }else{
-                                            tmpParam.push(d[i].productParam[j].data[k].dish_val_name);
-                                        }
-                                    }
+                                    tmpParam.push(d[i].productParam[j].dish_name);
                                 }else{
 									for(var k in d[i].productParam[j].data){
 										tmpParam.push(d[i].productParam[j].data[k].name);
@@ -439,7 +482,7 @@
 					<div class="product_btn plus cart"></div>
 					<div class="product_btn number cart productNum-{{ i }}">{{ d[i].count }}</div>
 					<div class="product_btn min cart"></div>
-					<div class="price">${{ d[i].productPrice }}</div>
+					<div class="price">${{ t_price }}</div>
 				</div>
 			</dd>
 		{{# } }}
