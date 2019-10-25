@@ -1527,6 +1527,8 @@ function changeProductSpec(){
         });
 	}
 
+	curr_price = curr_price.toFixed(2);
+	
 	if(typeof (nowProductSpect) != 'undefined')
     	$('#shopDetailPagePrice').html('$'+curr_price+'<span class="unit"><em>/ </em>'+nowProduct.unit+'</span>'+(nowProductSpect.stock_num != -1 ? '<span class=\'stock_span\' data-stock="'+nowProductSpect.stock_num+'">Stock:'+nowProductSpect.stock_num+'</span>' : '<span data-stock="-1"></span>') + (nowProduct.deposit_price > 0 ? '<span>(Deposit:$'+ nowProduct.deposit_price +')</span>' : ''));
 	else
