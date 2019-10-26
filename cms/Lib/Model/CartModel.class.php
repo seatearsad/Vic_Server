@@ -177,7 +177,7 @@ class CartModel extends Model
             }
             $t_good['dish_desc'] = $dish_desc;
 
-            $t_good['attr'] = $spec_desc . " " .$proper_desc ." ".$dish_desc;
+            $t_good['attr'] = $spec_desc . ";" .$proper_desc .";".$dish_desc;
             $t_good['price'] = $good['price'];
             $t_good['tax_num'] = $good['tax_num'];
             $t_good['deposit_price'] = $good['deposit_price'];

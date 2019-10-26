@@ -361,7 +361,7 @@
             {{# }else if(d[i].min != 0){
                 if(d[i].max == -1){
             }}
-            *Required. Please choose at least {{ d[i].max }}.
+            *Required. Please choose at least {{ d[i].min }}.
                 {{# }else{ }}
             *Required. Please choose between {{ d[i].min }} to {{ d[i].max }}.
                 {{# } }}
