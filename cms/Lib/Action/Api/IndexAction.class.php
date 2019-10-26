@@ -897,11 +897,14 @@ class IndexAction extends BaseAction
                 $spec_desc = $spec_desc == '' ? lang_substr($spec['name'],C('DEFAULT_LANG')) : $spec_desc.','.lang_substr($spec['name'],C('DEFAULT_LANG'));
             }
 
+            $goods['spec_desc'] = $spec_desc;
+
             if($v['pro_id'] != '')
                 $pro_ids = explode('|',$v['pro_id']);
             else
                 $pro_ids = array();
 
+            $spec_desc = "";
             foreach ($pro_ids as $vv){
                 $ids = explode(',',$vv);
                 $proId = $ids[0];
@@ -913,7 +916,7 @@ class IndexAction extends BaseAction
 
                 $spec_desc = $spec_desc == '' ? $name : $spec_desc.','.$name;
             }
-            $goods['spec_desc'] = $spec_desc;
+            $goods['spec_desc'] = $goods['spec_desc'] == '' ? $spec_desc : $goods['spec_desc'].";".$spec_desc;
 
             if($v['dish_id'] != "" && $v['dish_id'] != null){
                 $dish_desc = "";
@@ -929,7 +932,7 @@ class IndexAction extends BaseAction
 
                     $dish_desc = $dish_desc == "" ? $add_str : $dish_desc.";".$add_str;
                 }
-                $goods['spec_desc'] = $goods['spec_desc'] == '' ? $dish_desc : $goods['spec_desc']." ".$dish_desc;
+                $goods['spec_desc'] = $goods['spec_desc'] == '' ? $dish_desc : $goods['spec_desc'].";".$dish_desc;
             }
 
             $good = D('Shop_goods')->field(true)->where(array('goods_id' => $v['goods_id']))->find();
