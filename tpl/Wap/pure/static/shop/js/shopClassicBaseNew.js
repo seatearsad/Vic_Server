@@ -1724,7 +1724,7 @@ function cartFunction(type,obj,dataObj){
 	
 	$('#shopProductCart #cartNumber').html(productCartNumber);
 	$('#shopProductCart #cartMoney').html(productCartMoney.toFixed(2));
-	
+
 	if(productCartNumber == 0){
 		//$('#checkCartEmpty').removeClass('noEmpty').show().html(getLangStr('_NUM_DELI_PRICE_',(nowShop.store.delivery_price).toFixed(2)));
         $('#checkCartEmpty').removeClass('noEmpty').show().html();
@@ -1736,7 +1736,16 @@ function cartFunction(type,obj,dataObj){
         $('#checkCartEmpty').addClass('noEmpty').show().html();
 	}else{
 		$('#checkCartEmpty').hide();
-		$('#checkCart').show();	
+		$('#checkCart').show();
+		if(nowShop.store.free_delivery == 1){
+			if(nowShop.store.event.use_price - productCartMoney.toFixed(2) <= 0){
+                $('#free_delivery').html("Enjoy <label style='color: #ffa52d'>Free</label> delivery!");
+			}else{
+				var cha = (nowShop.store.event.use_price - productCartMoney.toFixed(2)).toFixed(2);
+                $('#free_delivery').html("$" + (cha) + " to <label style='color: #ffa52d'>Free</label> delivery!");
+			}
+		}
+
 	}
 	
 	if(productCartNumber > 0){

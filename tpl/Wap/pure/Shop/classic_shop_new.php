@@ -261,6 +261,13 @@
                 top: 17px;
                 left: 6px;
             }
+            #free_delivery{
+                line-height: 20px;
+                color: white;
+                position: absolute;
+                bottom: 0px;
+                font-size: 12px;
+            }
         </style>
 	<body>
     <div id="container">
@@ -387,7 +394,10 @@
 							<div class="cart">
 								<div id="cartNumber">0</div>
 							</div>
-							<div class="price">{pigcms{:L('_TOTAL_TXT_')}$<span id="cartMoney">0</span></div>
+							<div class="price">
+                                {pigcms{:L('_TOTAL_TXT_')}$<span id="cartMoney">0</span>
+                                <div id="free_delivery"></div>
+                            </div>
 						</div>
 						<div id="emptyCart">
 							<div class="cart"></div>{pigcms{:L('_CART_EMPTY_')}

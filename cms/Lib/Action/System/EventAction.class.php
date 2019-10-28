@@ -15,10 +15,16 @@ class EventAction extends BaseAction
     }
 
     public function add(){
+        $type_list = D('New_event')->getTypeName(-1);
+
+        $this->assign('type',$type_list);
         $this->display();
     }
 
     public function edit(){
+        $type_list = D('New_event')->getTypeName(-1);
+        $this->assign('type',$type_list);
+
         $event = D('New_event')->where(array('id'=>$_GET['id']))->find();
         $event['type_name'] = D('New_event')->getTypeName($event['type']);
         $this->assign('event',$event);
@@ -83,6 +89,8 @@ class EventAction extends BaseAction
         if($_GET['event_id']){
             $event_id = $_GET['event_id'];
             $this->assign('event_id',$event_id);
+            $event = D('New_event')->where(array('id'=>$event_id))->find();
+            $this->assign('event_type',$event['type']);
             $this->display();
         }else{
             $this->frame_submit_tips(0,'请先选择活动！');
@@ -94,6 +102,8 @@ class EventAction extends BaseAction
             $coupon = D('New_event_coupon')->where(array('id'=>$_GET['id']))->find();
             $this->assign('coupon',$coupon);
             $this->assign('event_id',$coupon['event_id']);
+            $event = D('New_event')->where(array('id'=>$coupon['event_id']))->find();
+            $this->assign('event_type',$event['type']);
             $this->display('add_coupon');
         }else{
             $this->frame_submit_tips(0,'请先选择优惠券！');

@@ -18,8 +18,11 @@
 				<th width="80">活动类型</th>
 				<td>
                     <select name="type">
-                        <option value="1" <if condition="$event.type eq 1">selected</if>>新用户注册</option>
-                        <option value="2" <if condition="$event.type eq 2">selected</if>>新用户邀请</option>
+                        <volist name="type" id="vo">
+                            <if condition="$i gt 1">
+                                <option value="{pigcms{$i-1}" <if condition="$event.type eq ($i-1)">selected</if>>{pigcms{$vo}</option>
+                            </if>
+                        </volist>
                     </select>
                 </td>
 			</tr>

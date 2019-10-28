@@ -28,17 +28,41 @@
                 </td>
             </tr>
             <tr>
-                <th width="80">限制天数</th>
+                <th width="80">
+                    <if condition="$event_type eq 3">
+                        限制公里数
+                        <else />
+                        限制天数
+                    </if>
+                </th>
                 <td>
                     <input type="text" class="input fl" name="limit_day" size="20" validate="maxlength:20,required:true" value="{pigcms{$coupon.limit_day|default=''}" />
                 </td>
             </tr>
             <tr>
-                <th width="80">优惠券类型</th>
+                <th width="80">
+                    <if condition="$event_type eq 3">
+                        可否使用优惠券
+                        <else />
+                        优惠券类型
+                    </if>
+                </th>
                 <td>
                     <select name="type">
-                        <option value="0" <if condition="$coupon.type eq 0">selected</if>>本人</option>
-                        <option value="1" <if condition="$coupon.type eq 1">selected</if>>邀请者</option>
+                        <option value="0" <if condition="$coupon.type eq 0">selected</if>>
+                        <if condition="$event_type eq 3">
+                            不可
+                            <else />
+                            本人
+                        </if>
+                        </option>
+                        <option value="1" <if condition="$coupon.type eq 1">selected</if>>
+                        <if condition="$event_type eq 3">
+                            可用
+                            <else />
+                            邀请人
+                        </if>
+                        </option>
                     </select>
                 </td>
             </tr>

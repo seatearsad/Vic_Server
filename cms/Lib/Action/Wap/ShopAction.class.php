@@ -238,11 +238,22 @@ class ShopAction extends BaseAction{
 		}
 		$return = array();
 		$now_time = date('H:i:s');
+
+        //garfunkel获取减免配送费的活动
+        $eventList = D('New_event')->getEventList(1,3);
+        $delivery_coupon = "";
+        if(count($eventList) > 0) {
+            foreach ($eventList as $event) {
+                $delivery_coupon = D('New_event_coupon')->where(array('event_id' => $event['id'], 'type' => 0))->find();
+            }
+        }
+
 		foreach ($lists['shop_list'] as $row) {
 			$temp = array();
 			$temp['id'] = $row['store_id'];
 			//modify garfunkel 判断语言
 			$temp['name'] = lang_substr($row['name'],C('DEFAULT_LANG'));
+			$temp['juli'] = $row['juli'];
 			$temp['range'] = $row['range'];
 			$temp['image'] = $row['image'];
 			$temp['star'] = $row['score_mean'];
@@ -503,6 +514,21 @@ class ShopAction extends BaseAction{
 				}
 			}
 			$temp['coupon_count'] = count($temp['coupon_list']);
+
+            $temp['free_delivery'] = 0;
+            $temp['event'] = "";
+
+            if($delivery_coupon != "" && $delivery_coupon['limit_day']*1000 >= $row['juli']){
+                $temp['free_delivery'] = 1;
+                $t_event['use_price'] = $delivery_coupon['use_price'];
+                $t_event['discount'] = $delivery_coupon['discount'];
+                $t_event['miles'] = $delivery_coupon['limit_day']*1000;
+
+                $temp['event'] = $t_event;
+
+                //$temp['delivery_money'] =  $temp['delivery_money'] - $delivery_coupon['discount'];
+            }
+
 			$return[] = $temp;
 		}
 		echo json_encode(array('store_list' => $return, 'has_more' => $lists['has_more'] ? true : false));
@@ -1231,9 +1257,33 @@ class ShopAction extends BaseAction{
             //$store['delivery_money'] = $is_have_two_time ? $row['delivery_fee2'] : $row['delivery_fee'];
         }
 
+        //garfunkel获取减免配送费的活动
+        $eventList = D('New_event')->getEventList(1,3);
+        $delivery_coupon = "";
+        if(count($eventList) > 0) {
+            foreach ($eventList as $event) {
+                $delivery_coupon = D('New_event_coupon')->where(array('event_id' => $event['id'], 'type' => 0))->find();
+            }
+        }
+
         //modify garfunkel
         if($user_long_lat && $user_long_lat['lat'] != 0){
+            $store['distance'] = getDistance($store['lat'],$store['long'],$user_long_lat['lat'],$user_long_lat['long']);
             $store['delivery_money'] = getDeliveryFee($store['lat'],$store['long'],$user_long_lat['lat'],$user_long_lat['long']);
+
+            $store['free_delivery'] = 0;
+            $store['event'] = "";
+
+            if($delivery_coupon != "" && $delivery_coupon['limit_day']*1000 >= $store['distance']){
+                $store['free_delivery'] = 1;
+                $t_event['use_price'] = $delivery_coupon['use_price'];
+                $t_event['discount'] = $delivery_coupon['discount'];
+                $t_event['miles'] = $delivery_coupon['limit_day']*1000;
+
+                $store['event'] = $t_event;
+
+                //$temp['delivery_money'] =  $temp['delivery_money'] - $delivery_coupon['discount'];
+            }
         }else{
             $store['delivery_money'] = C('config.delivery_distance_1');
         }
@@ -2380,12 +2430,48 @@ class ShopAction extends BaseAction{
 			}
 		}
 
+        //garfunkel获取减免配送费的活动
+        $eventList = D('New_event')->getEventList(1,3);
+        $delivery_coupon = "";
+        if(count($eventList) > 0) {
+            foreach ($eventList as $event) {
+                $delivery_coupon = D('New_event_coupon')->where(array('event_id' => $event['id'], 'type' => 0))->find();
+            }
+        }
+
+//            $store['free_delivery'] = 0;
+//            $store['event'] = "";
+//
+//            if($delivery_coupon != "" && $delivery_coupon['limit_day']*1000 >= $store['distance']){
+//                $store['free_delivery'] = 1;
+//                $t_event['use_price'] = $delivery_coupon['use_price'];
+//                $t_event['discount'] = $delivery_coupon['discount'];
+//                $t_event['miles'] = $delivery_coupon['limit_day']*1000;
+//
+//                $store['event'] = $t_event;
+//
+//                //$temp['delivery_money'] =  $temp['delivery_money'] - $delivery_coupon['discount'];
+//            }
+
 		//计算配送费
 		if ($user_adress) {
 			//$distance = getDistance($user_adress['latitude'], $user_adress['longitude'], $return['store']['lat'], $return['store']['long']);
             $from = $return['store']['lat'].','.$return['store']['long'];
             $aim = $user_adress['latitude'].','.$user_adress['longitude'];
-            $distance = getDistanceByGoogle($from,$aim);
+
+            $distance = getDistance($return['store']['lat'],$return['store']['long'],$user_adress['latitude'],$user_adress['longitude']);
+            $return['store']['free_delivery'] = 0;
+            $return['store']['event'] = "";
+            if($delivery_coupon != "" && $delivery_coupon['limit_day']*1000 >= $distance){
+                $return['store']['free_delivery'] = 1;
+                $t_event['use_price'] = $delivery_coupon['use_price'];
+                $t_event['discount'] = $delivery_coupon['discount'];
+                $t_event['miles'] = $delivery_coupon['limit_day']*1000;
+
+                $return['store']['event'] = $t_event;
+            }else {
+                $distance = getDistanceByGoogle($from, $aim);
+            }
 			//$distance = $distance / 1000;
 			//var_dump($distance);die();
 

@@ -81,6 +81,16 @@ class GroupserviceAction extends BaseAction{
 			$return = array();
 			$now_time = date('H:i:s');
 			$n= 1;
+
+			//garfunkel获取减免配送费的活动
+            $eventList = D('New_event')->getEventList(1,3);
+            $delivery_coupon = "";
+            if(count($eventList) > 0) {
+                foreach ($eventList as $event) {
+                    $delivery_coupon = D('New_event_coupon')->where(array('event_id' => $event['id'], 'type' => 0))->find();
+                }
+            }
+
 			foreach ($lists['shop_list'] as $row) {
 				if($n>$page_count ||$page>$page_max || ($page == $page_max && $n>$limit%$page_count&&$limit%$page_count!=0) )
 					break;
@@ -300,12 +310,6 @@ class GroupserviceAction extends BaseAction{
                 }
                 //end  @wangchuanyuan
 
-
-
-
-
-
-
 				$temp['coupon_list'] = array();
 				if ($row['is_invoice']) {
 					$temp['coupon_list']['invoice'] = floatval($row['invoice_price']);
@@ -361,8 +365,22 @@ class GroupserviceAction extends BaseAction{
 				}
 				$temp['coupon_count'] = count($temp['coupon_list']);
 				$temp['coupon_list'] = $this->parseCoupon($temp['coupon_list'],'array');
-				$return[] = $temp;
 
+				$temp['free_delivery'] = 0;
+				$temp['event'] = "";
+
+				if($delivery_coupon != "" && $delivery_coupon['limit_day']*1000 >= $row['juli']){
+					$temp['free_delivery'] = 1;
+					$t_event['use_price'] = $delivery_coupon['use_price'];
+					$t_event['discount'] = $delivery_coupon['discount'];
+					$t_event['miles'] = $delivery_coupon['limit_day']*1000;
+
+					$temp['event'] = $t_event;
+
+                    //$temp['delivery_money'] =  $temp['delivery_money'] - $delivery_coupon['discount'];
+				}
+
+				$return[] = $temp;
 			}
 			$new_group_list =$return;
 

@@ -229,6 +229,15 @@ a {
 .menu_wrap{
     margin-top: 90px;
 }
+#free_delivery{
+    background-color: white;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    color: #ffa52d;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
 </style>
 </head>
 <script type="text/javascript" src="{pigcms{$static_path}shop/js/scroller.js"></script>
@@ -236,6 +245,18 @@ a {
 <include file="Public:header"/>
 <div class="container">
 	<form name="cart_confirm_form" action="{pigcms{:U('Shop/save_order',array('store_id'=> $store['store_id'], 'mer_id' => $store['mer_id'], 'frm' => $_GET['frm'], 'village_id'=>$village_id))}" method="post">
+        <if condition="$store['free_delivery'] eq 1">
+        <div id="free_delivery">
+            <php>
+                if(sprintf("%.2f",$store['event']['use_price']) > floatval($vip_discount_money)){
+                    $cha = sprintf("%.2f",$store['event']['use_price']) - floatval($vip_discount_money);
+            </php>
+                You're ${pigcms{$cha} away from free delivery!
+            <php>}else{</php>
+                You're eligible for free delivery!
+            <php>}</php>
+        </div>
+        </if>
         <a href="{pigcms{:U('My/adress',array('buy_type' => 'shop', 'store_id'=>$store['store_id'], 'village_id'=>$village_id, 'mer_id' => $store['mer_id'], 'frm' => $_GET['frm'], 'current_id'=>$user_adress['adress_id'], 'order_id' => $order_id))}">
         <div class="user_address">
             <div>{pigcms{$user_adress['name']} {pigcms{$user_adress['phone']}</div>

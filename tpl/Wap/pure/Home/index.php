@@ -281,6 +281,18 @@
             text-overflow:ellipsis;
             font-size: 1.05em;
         }
+        .free_delivery{
+            position: absolute;
+            color: #ffa52d;
+            top: 30px;
+            right: 5px;
+            width: 50px;
+            height: 30px;
+            background-image: url("./tpl/Static/blue/images/new/badge.png");
+            background-size: auto 100%;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
     </style>
     <include file="Public:facebook"/>
 </head>
@@ -401,6 +413,9 @@
                         <div class="more">{{ getLangStr('_EVENT_NUM_',d[i].coupon_count) }}</div>
                         {{# } }}
                     </div>
+                    {{# } }}
+                    {{# if(d[i].free_delivery == 1){ }}
+                        <div class="free_delivery"></div>
                     {{# } }}
                 </dd>
                 {{# } }}

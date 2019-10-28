@@ -69,10 +69,14 @@ class New_eventModel extends Model
      * @param $type
      * 1 新用户注册
      * 2 新用户邀请
+     * 3 规定范围内免配送费
      */
     public function getTypeName($type){
-        $typeName = ['无效活动','新用户注册','新用户邀请'];
-        return $typeName[$type];
+        $typeName = ['无效活动','新用户注册','新用户邀请','规定范围内免配送费'];
+        if($type == -1)
+            return $typeName;
+        else
+            return $typeName[$type];
     }
 
     public function getStausName($status){
@@ -101,6 +105,11 @@ class New_eventModel extends Model
         return true;
     }
 
+    /**
+     * @param $event
+     * @return mixed
+     * 检测活动是否过期
+     */
     public function checkExpiry($event){
         $t_time = time();
         if($event['end_time'] > 0) {
@@ -117,6 +126,7 @@ class New_eventModel extends Model
     /**
      * @param $type 活动类型
      * @param $user_id 用户id
+     * 为用户添加coupon
      */
     public function addEventCouponByType($type,$user_id){
         if($this->userIsEvent($type,$user_id)) {
@@ -148,6 +158,16 @@ class New_eventModel extends Model
 
                         $data['create_time'] = time();
                         $data['expiry_time'] = $today + ($v['limit_day'] + 1) * 24 * 3600 - 1;
+                        //////////////
+                        /**
+                         * 使用于type=3的活动-即为立即使用类型
+                         */
+                        if($event['type'] == 3){
+                            $data['use_time'] = $data['expiry_time'];
+                            $data['is_use'] = 1;
+                        }
+                        /////////////
+
                         if ($v['type'] == 0) {
                             $data['uid'] = $user_id;
                             $coupon_add_self[] = $data;
@@ -243,6 +263,11 @@ class New_eventModel extends Model
         return $list;
     }
 
+    /**
+     * 整理某活动所有coupon的状态
+     * @param $coupon 某活动的couponList
+     * @return mixed
+     */
     public function getCouponUserNum($coupon){
         $user_list = D('New_event_user')->where(array('event_coupon_id'=>$coupon['id']))->select();
         //var_dump($user_list);var_dump(time());die();
