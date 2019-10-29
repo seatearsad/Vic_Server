@@ -146,7 +146,7 @@
                                     </td>
 									<td>${pigcms{$vo['price'] + $vo['tip_charge']|floatval}</td>
                                     <td>${pigcms{$vo['tip_charge']|floatval}</td>
-									<td>${pigcms{$vo.coupon_price|floatval}</td>
+									<td>${pigcms{$vo['coupon_price'] + $vo['delivery_discount']|floatval}</td>
 									<td>${pigcms{$vo.merchant_reduce|floatval}</td>
 									<td>${pigcms{$vo.offline_price|floatval}</td>
 									<td>${pigcms{$vo['duty_price']|floatval}</td>

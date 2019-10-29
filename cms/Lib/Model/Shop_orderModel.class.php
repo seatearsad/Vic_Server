@@ -126,7 +126,7 @@ class Shop_orderModel extends Model
 					'order_total_money'	=>	$now_order['price'],//当前需要支付的金额
                 	'goods_price'		=>	$now_order['goods_price'],
 					'order_type'		=>	'shop',
-					'extra_price'	=>	$now_order['extra_price'],
+					'extra_price'		=>	$now_order['extra_price'],
 					'real_orderid' 		=> $now_order['real_orderid'],
 					'tax_num'			=>	$merchant_store['tax_num'],
 					'tip_charge'		=>	$now_order['tip_charge'],
@@ -134,7 +134,9 @@ class Shop_orderModel extends Model
 					'deposit_price'		=>	$deposit_price,
 					'username'          =>  $now_order['username'],
 					'phone'             =>  $now_order['userphone'],
-					'address'           =>  $now_order['address']
+					'address'           =>  $now_order['address'],
+					'delivery_discount'	=>	$now_order['delivery_discount'],
+                	'delivery_discount_type'	=>	$now_order['delivery_discount_type']
 			);
 		} else {
 			$order_info = array(
@@ -159,7 +161,7 @@ class Shop_orderModel extends Model
 				'order_type'		=>	'shop',
 				'img'				=> C('config.site_url').'/upload/store/'.$imgs[0],
 				'order_txt_type'	=>	$str,
-				'extra_price'	=>	$now_order['extra_price'],
+				'extra_price'		=>	$now_order['extra_price'],
                 'real_orderid' 		=> $now_order['real_orderid'],
                 'tax_num'			=>	$merchant_store['tax_num'],
                 'tip_charge'		=>	$now_order['tip_charge'],
@@ -167,7 +169,9 @@ class Shop_orderModel extends Model
                 'deposit_price'		=>	$deposit_price,
                 'username'          =>  $now_order['username'],
                 'phone'             =>  $now_order['userphone'],
-                'address'           =>  $now_order['address']
+                'address'           =>  $now_order['address'],
+				'delivery_discount'	=>	$now_order['delivery_discount'],
+                'delivery_discount_type'	=>	$now_order['delivery_discount_type']
 			);
 		}
 		return array('error' => 0, 'order_info' => $order_info);
@@ -238,6 +242,12 @@ class Shop_orderModel extends Model
 	public function wap_befor_pay($order_info, $now_coupon, $merchant_balance, $now_user)
 	{
 		$pay_money = round($order_info['order_total_money'] * 100) / 100; //本次支付的总金额
+
+		//减免配送费活动
+		if($order_info['delivery_discount'] > 0){
+			$pay_money = sprintf("%.2f",$pay_money - $order_info['delivery_discount']);
+		}
+
 		if($merchant_balance['card_discount']>0){
 			$pay_money = sprintf("%.2f",($pay_money-$order_info['freight_charge'])*$merchant_balance['card_discount']/10)+$order_info['freight_charge'];
 		}
@@ -372,7 +382,7 @@ class Shop_orderModel extends Model
 		$data_shop_order['coupon_price'] 		= !empty($data_shop_order['coupon_price']) ? $data_shop_order['coupon_price'] : 0;
 		$data_shop_order['merchant_balance'] 	= !empty($data_shop_order['merchant_balance']) ? $data_shop_order['merchant_balance'] : 0;
 		$data_shop_order['card_give_money'] 	= !empty($data_shop_order['card_give_money']) ? $data_shop_order['card_give_money'] : 0;
-		$data_shop_order['card_discount'] 	= !empty($data_shop_order['card_discount']) ? $data_shop_order['card_discount'] : 0;
+		$data_shop_order['card_discount'] 		= !empty($data_shop_order['card_discount']) ? $data_shop_order['card_discount'] : 0;
 		$data_shop_order['balance_pay'] 		= !empty($data_shop_order['balance_pay']) ? $data_shop_order['balance_pay'] : 0;
 		$data_shop_order['score_used_count']  	= !empty($data_shop_order['score_used_count'])?$data_shop_order['score_used_count']:0;
 		$data_shop_order['score_deducte']     	= !empty($data_shop_order['score_deducte'])?(float)$data_shop_order['score_deducte']:0;
@@ -976,7 +986,7 @@ class Shop_orderModel extends Model
 			}
 		}
 		foreach ($list as &$order) {
-			$order['offline_price'] = round($order['price'] +$order['extra_price'] + $order['tip_charge'] - round($order['card_price'] + $order['merchant_balance'] + $order['card_give_money'] +$order['balance_pay'] + $order['payment_money'] + $order['score_deducte'] + $order['coupon_price'], 2), 2);
+			$order['offline_price'] = round($order['price'] +$order['extra_price'] + $order['tip_charge'] - round($order['card_price'] + $order['merchant_balance'] + $order['card_give_money'] +$order['balance_pay'] + $order['payment_money'] + $order['score_deducte'] + $order['coupon_price'] + $order['delivery_discount'], 2), 2);
 			$order['deliver_info'] = $order['deliver_info'] ? unserialize($order['deliver_info']) : '';
 			switch ($order['status']) {
 				case 0:
@@ -1131,7 +1141,7 @@ class Shop_orderModel extends Model
 		    $order['discount_detail'] = '';
 		}
 		$order['date'] = date('Y-m-d H:i:s', $order['create_time']);
-		$order['offline_price'] = round($order['price'] +$order['extra_price'] + $order['tip_charge'] - round($order['card_price'] + $order['card_give_money'] +$order['merchant_balance'] + $order['balance_pay'] + $order['payment_money'] + $order['score_deducte'] + $order['coupon_price'], 2), 2);
+		$order['offline_price'] = round($order['price'] +$order['extra_price'] + $order['tip_charge'] - round($order['card_price'] + $order['card_give_money'] +$order['merchant_balance'] + $order['balance_pay'] + $order['payment_money'] + $order['score_deducte'] + $order['coupon_price'] + $order['delivery_discount'], 2), 2);
 		switch ($order['status']) {
 			case 0:
 				$order['css'] = 'inhand';

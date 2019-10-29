@@ -2591,6 +2591,15 @@ class ShopAction extends BaseAction{
 				}
 			}
 
+            //garfunkel获取减免配送费的活动
+            $eventList = D('New_event')->getEventList(1,3);
+            $delivery_coupon = "";
+            if(count($eventList) > 0) {
+                foreach ($eventList as $event) {
+                    $delivery_coupon = D('New_event_coupon')->where(array('event_id' => $event['id'], 'type' => 0))->find();
+                }
+            }
+            /////
 			if ($deliver_type != 1) {//配送方式是：非自提和非快递配送
 				if (empty($name)) $this->error_tips('联系人不能为空');
 				if (empty($phone)) $this->error_tips('联系电话不能为空');
@@ -2598,10 +2607,24 @@ class ShopAction extends BaseAction{
 					if ($user_address = D('User_adress')->field(true)->where(array('adress_id' => $address_id, 'uid' => $this->user_session['uid']))->find()) {
 						if ($user_address['longitude'] != 0 && $user_address['latitude'] != 0) {
 						    if ($return['store']['delivery_range_type'] == 0) {
-    							//$distance = getDistance($user_address['latitude'], $user_address['longitude'], $return['store']['lat'], $return['store']['long']);
                                 $from = $return['store']['lat'].','.$return['store']['long'];
                                 $aim = $user_address['latitude'].','.$user_address['longitude'];
-                                $distance = getDistanceByGoogle($from,$aim);
+                                $distance = getDistance($return['store']['lat'],$return['store']['long'],$user_address['latitude'],$user_address['longitude']);
+                                $return['store']['free_delivery'] = 0;
+                                $return['store']['event'] = "";
+                                if($delivery_coupon != "" && $delivery_coupon['limit_day']*1000 >= $distance){
+                                    $return['store']['free_delivery'] = 1;
+                                    $t_event['use_price'] = $delivery_coupon['use_price'];
+                                    $t_event['discount'] = $delivery_coupon['discount'];
+                                    $t_event['miles'] = $delivery_coupon['limit_day']*1000;
+                                    $t_event['type'] = $delivery_coupon['type'];
+
+                                    $return['store']['event'] = $t_event;
+                                    $distance = $distance/1000;
+                                }else {
+                                    $distance = getDistanceByGoogle($from, $aim);
+                                }
+
     							$delivery_radius = $return['store']['delivery_radius'] * 1000;
     							if ($distance > $delivery_radius && $return['delivery_type'] != 5) {
     								//$this->error_tips('您到本店的距离是' . $distance . '米,超过了' . $delivery_radius . '米的配送范围');
@@ -2768,7 +2791,13 @@ class ShopAction extends BaseAction{
 
                 $return['delivery_fee'] = calculateDeliveryFee($distance);
 				$return['delivery_fee2'] = $delivery_fee = $order_data['freight_charge'] = $return['delivery_fee'];
-
+                //garfunkel 如果存在减免配送费的活动
+				if($return['store']['event']){
+				    if($return['price'] >= $return['store']['event']['use_price']) {
+                        $order_data['delivery_discount'] = $return['store']['event']['discount'];
+                        $order_data['delivery_discount_type'] = $return['store']['event']['type'];
+                    }
+                }
 
 				/*
 				if ($return['delivery_type'] == 5) {//快递配送
@@ -3295,7 +3324,8 @@ class ShopAction extends BaseAction{
                 'deliver_log_list' => D('Shop_order_log')->where(array('order_id' => $order['order_id']))->order('id DESC')->find(),
                 'deliver_info' => unserialize($order['deliver_info']),
                 'pay_type' => $order['pay_type'],
-                'tip_charge' => $order['tip_charge']
+                'tip_charge' => $order['tip_charge'],
+                'delivery_discount'=>$order['delivery_discount']
             );
             $tax_price = 0;
             $deposit_price = 0;

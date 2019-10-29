@@ -213,6 +213,16 @@
             input.mt[type="radio"]:checked{
                 background-color: #ffa52d;
             }
+            #delivery_desc{
+                background-color: white;
+                line-height: 18px;
+                color: #999999;
+                margin-top: 5px;
+                margin-bottom: 5px;
+                padding-left: 5px;
+                padding-right: 5px;
+                font-size: 12px;
+            }
 		</style>
         <include file="Public:facebook"/>
 	</head>
@@ -220,6 +230,12 @@
     <include file="Public:header"/>
     <div class="main">
 		<div id="tips" class="tips"></div>
+        <if condition="$delivery_type eq 0">
+        <div id="delivery_desc">
+            Please note that you cannot use multiple discounts at the same time.
+            To use your coupon,your other discount may be affected.
+        </div>
+        </if>
 		<dl class="list" style="margin-top:0rem;display:none">
 		    <dd>
 				<ul class="orderindex">

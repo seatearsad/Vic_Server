@@ -536,6 +536,10 @@ class MyAction extends BaseAction{
 			$param['unsys_coupon']=1;
 		}
 
+		if($_GET['delivery_type']){
+		    $this->assign('delivery_type',$_GET['delivery_type']);
+        }
+
 
 		$this->assign('unselect',U('Pay/check',$param));
 		$this->display();

@@ -63,6 +63,10 @@
         var  sysc_price = Number("<?php if($system_coupon['discount']>0){ ?>{pigcms{$system_coupon.discount}<?php }else{?>0<?php }?>");
         var  total_money = Number("{pigcms{$order_info.order_total_money}");
         var  card_discount = Number("<?php if($card_info['discount']){ ?>{pigcms{$card_info.discount}<?php }else{?>10<?php }?>");
+        var  delivery_discount = Number("{pigcms{$order_info.delivery_discount}");
+        <?php if($order_info['delivery_discount_type'] == 0 && $system_coupon['discount']>0){ ?>
+            delivery_discount = 0;
+        <?php } ?>
         if(order_type=='shop'||order_type=='mall'){
             var freigh_money = Number("{pigcms{$order_info.freight_charge}");
             total_money = (total_money-freigh_money)*card_discount/10+freigh_money-wx_cheap-merc_price;
@@ -303,10 +307,12 @@
                 if(open_extra_price==1&&score_money>0){
                     extra_price_str = $('input[name="score_change"]').val()+'元宝';
                     $('#pay_in_fact').html('{pigcms{:L("_ACTUAL_PAYMENT_")}：<b style="color:red">$'+(total_money-sysc_price-score_money).toFixed(2)+'+'+extra_price_str+'</b>');
-                    $('input[name="charge_total"]').val((total_money-sysc_price-score_money).toFixed(2));
+                    // $('input[name="charge_total"]').val((total_money-sysc_price-score_money).toFixed(2));
+                    $('input[name="charge_total"]').val((total_money-sysc_price-score_money-delivery_discount).toFixed(2));
                 }else{
                     $('#pay_in_fact').html('{pigcms{:L("_ACTUAL_PAYMENT_")}：<b style="color:red">$'+(total_money-sysc_price).toFixed(2)+'</b>');
-                    $('input[name="charge_total"]').val((total_money-sysc_price).toFixed(2));
+                    // $('input[name="charge_total"]').val((total_money-sysc_price).toFixed(2));
+                    $('input[name="charge_total"]').val((total_money-sysc_price-delivery_discount).toFixed(2));
                 }
             }
             var pay_score = 0
@@ -577,7 +583,8 @@
                                 'order_type':"{pigcms{$order_info.order_type}",
                                 'note':$('input[name="note"]').val(),
                                 'est_time':$('#est_time_input').val(),
-                                'cvd':$('#cvd').val()
+                                'cvd':$('#cvd').val(),
+                                'delivery_discount':delivery_discount
                             };
 
                             //alert(re_data['order_type']);
@@ -614,7 +621,8 @@
                                 'tip':$('#tip_num').text().replace('$', ""),
                                 'order_type':"{pigcms{$order_info.order_type}",
                                 'note':$('input[name="note"]').val(),
-                                'est_time':$('#est_time_input').val()
+                                'est_time':$('#est_time_input').val(),
+                                'delivery_discount':delivery_discount
                             };
                             var card_stauts = "{pigcms{$card['status']}";
                             if(card_stauts == 0){
@@ -675,7 +683,8 @@
                         'order_type':"{pigcms{$order_info.order_type}",
                         'pay_type':pay_type,
                         'note':$('input[name="note"]').val(),
-                        'est_time':$('#est_time_input').val()
+                        'est_time':$('#est_time_input').val(),
+                        'delivery_discount':delivery_discount
                     };
                     $.post('{pigcms{:U("Pay/WeixinAndAli")}',re_data,function(data){
                         layer.closeAll();
@@ -1019,6 +1028,10 @@
         line-height: 30px;
         border-radius: 2px;
     }
+    #free_delivery{
+        text-align: center;
+        color: #ffa52d;
+    }
 </style>
 <include file="Public:header"/>
 <div class="wrapper-list">
@@ -1065,6 +1078,7 @@
         <input type="hidden" name="merchant_balance" value="{pigcms{$merchant_balance}">
         <input type="hidden" name="balance_money" value="{pigcms{$now_user.now_money}">
         <input type="hidden" name="tip" value="">
+        <input type="hidden" name="delivery_discount" value="{pigcms{$order_info.delivery_discount}">
         <if condition="$order_info['order_type'] != 'recharge'">
         <div class="all_list">
             <div class="order_note">
@@ -1078,7 +1092,7 @@
             </div>
         </div>
         <div class="all_list">
-            <a class="react" href="{pigcms{:U('My/select_card',($coupon_url?$coupon_url :$_GET))}&coupon_type=system" >
+            <a class="react" href="{pigcms{:U('My/select_card',($coupon_url?$coupon_url :$_GET))}&coupon_type=system&delivery_type={pigcms{$order_info['delivery_discount_type']}" >
                 <div class="av_coupon">
                     Available Coupons
                     <span class="coupon_more"></span>
@@ -1221,6 +1235,11 @@
         <div class="all_list">
             <if condition="$order_info['order_type'] != 'recharge'">
             <div class="price_list">
+                <if condition="$order_info['delivery_discount'] neq 0">
+                <div id="free_delivery">
+                    You're eligible for free delivery!
+                </div>
+                </if>
                 <div>
                     Subtotal <span>${pigcms{$order_info['goods_price']}</span>
                 </div>
@@ -1250,6 +1269,13 @@
                         -${pigcms{:sprintf("%.2f",$system_coupon['discount'])}
                     </span>
                 </div>
+                <?php } ?>
+                <?php if(($system_coupon && $order_info['delivery_discount_type'] == 1) || !$system_coupon){ ?>
+                <if condition="$order_info['delivery_discount'] neq 0">
+                    <div style="color: #ffa52d">
+                        Save <span>-${pigcms{:sprintf("%.2f",$order_info['delivery_discount'])}</span>
+                    </div>
+                </if>
                 <?php } ?>
             </div>
             </if>
@@ -1492,6 +1518,7 @@
             $('input[name="pay_type"]').removeAttr('checked');
             $('#tip_label').show();
             $('#credit').hide();
+            CalTip();
         }else{
             var pay_type = $('input[name="pay_type"]:checked').val();
             if(pay_type == 'moneris'){

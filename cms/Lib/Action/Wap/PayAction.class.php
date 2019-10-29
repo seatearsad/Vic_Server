@@ -71,6 +71,7 @@ class PayAction extends BaseAction{
         }
         $order_info = $now_order['order_info'];
         //var_dump($order_info);die();
+
         //ADD garfunkel
         $order_info['order_name'] = lang_substr($order_info['order_name'],C('DEFAULT_LANG'));
         if($this->config['open_extra_price']==1&&($order_info['order_type']!='appoint'||$order_info['discount_status'])){
@@ -80,7 +81,7 @@ class PayAction extends BaseAction{
             $order_info['order_extra_price'] = 0;
             $order_info['extra_price'] = 0;
         }
-        $this->assign('order_info',$order_info);
+        //$this->assign('order_info',$order_info);
 
         //garfunkel 如果修改信用卡的选择
         if($_GET['card_id']){
@@ -255,6 +256,8 @@ class PayAction extends BaseAction{
                     }else {
                         $system_coupon = D('System_coupon')->get_coupon_info($_GET['sysc_id']);
                     }
+                    if($order_info['delivery_discount_type'] == 0)
+                        $order_info['delivery_discount'] = 0;
                 }
             }
 
@@ -275,7 +278,7 @@ class PayAction extends BaseAction{
             }
 
 
-            if (!empty($system_coupon)) {
+            if (($order_info['delivery_discount_type'] == 1 && !empty($system_coupon)) || ($order_info['delivery_discount'] == 0 && !empty($system_coupon))) {
                 //$system_coupon['coupon_url_param'] = array('sysc_id' => $system_coupon['id'], 'order_id' => $order_info['order_id'], 'type' => $_GET['type']);
                 $system_coupon['coupon_url_param'] = array('sysc_id' => $system_coupon['id'], 'order_id' => $order_info['order_id'], 'type' => $_GET['type']);
                 if($system_coupon['discount']>=$tmp_order['total_money']){
@@ -291,8 +294,6 @@ class PayAction extends BaseAction{
             } else {
                 $system_coupon['coupon_url_param'] = array();
             }
-
-
 
             $coupon_url = array_merge($mer_coupon['coupon_url_param'], $system_coupon['coupon_url_param']);
             if($_GET['unsys_coupon']&&!empty($coupon_url)){
@@ -316,6 +317,8 @@ class PayAction extends BaseAction{
             $this->assign('merchant_balance', $merchant_balance);
 
         }
+
+        $this->assign('order_info',$order_info);
 
         //使用积分
         $score_can_use_count=0;
@@ -705,6 +708,13 @@ class PayAction extends BaseAction{
                     $merchant_balance['card_money'] = $card_info['card_money'];
                     $merchant_balance['card_give_money'] = $card_info['card_money_give'];
                     $merchant_balance['card_discount'] = empty($card_info['discount'])||(isset($order_info['discount_status'])&&!$order_info['discount_status'])?10:$card_info['discount'];
+                }
+            }
+            //判断是否有减免配送费活动
+            if($_POST['delivery_discount'] != null){
+                $order_info['delivery_discount'] = $_POST['delivery_discount'];
+                if($order_info['order_type'] == 'shop' || $order_info['order_type'] == 'mall'){
+                    D('Shop_order')->field(true)->where(array('order_id'=>$order_info['order_id']))->save(array('delivery_discount'=>$order_info['delivery_discount']));
                 }
             }
         }
@@ -2475,6 +2485,14 @@ class PayAction extends BaseAction{
         }
 
         if($resp['responseCode'] != 'null' && $resp['responseCode'] < 50){
+            //判断是否有减免配送费活动
+            if($_POST['delivery_discount'] != null){
+                $order_info['delivery_discount'] = $_POST['delivery_discount'];
+                if($order_info['order_type'] == 'shop' || $order_info['order_type'] == 'mall'){
+                    D('Shop_order')->field(true)->where(array('order_id'=>$order_info['order_id']))->save(array('delivery_discount'=>$order_info['delivery_discount']));
+                }
+            }
+
             if(!$_POST['order_type']) $_POST['order_type'] = "shop";
             if($_POST['order_type'] == "recharge"){
                 $url = U("Wap/My/my_money");
@@ -2490,7 +2508,7 @@ class PayAction extends BaseAction{
         }
     }
 
-    public function WeixinAndAli(){
+    public function WeixinAndAli(){var_dump($_POST);die();
         //获取支付的相关配置数据
         $where = array('tab_id'=>'alipay','gid'=>7);
         $result = D('Config')->field(true)->where($where)->select();
@@ -2587,6 +2605,12 @@ class PayAction extends BaseAction{
                         }
                     }
                 }
+
+                //判断是否有减免配送费活动
+                if($_POST['delivery_discount'] != null){
+                    $order_data['delivery_discount'] = $_POST['delivery_discount'];
+                }
+
                 D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->save($order_data);
                 $this->success('', $result['url']);
             }
