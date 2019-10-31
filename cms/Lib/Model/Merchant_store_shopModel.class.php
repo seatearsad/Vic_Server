@@ -903,6 +903,16 @@ class Merchant_store_shopModel extends Model
 //        if($page > $total_page || $page < 0){
 //            return $return;
 //        }
+
+        //garfunkel获取减免配送费的活动
+        $eventList = D('New_event')->getEventList(1,3);
+        $delivery_coupon = "";
+        if(count($eventList) > 0) {
+            foreach ($eventList as $event) {
+                $delivery_coupon = D('New_event_coupon')->where(array('event_id' => $event['id']))->find();
+            }
+        }
+
         foreach ($t_list['shop_list'] as $row) {
 
 //            if(!($n > $page_begin && $n <= $page_end)){
@@ -1151,6 +1161,20 @@ class Merchant_store_shopModel extends Model
             }
             $temp['coupon_count'] = count($temp['coupon_list']);
             //$temp['coupon_list'] = $this->parseCoupon($temp['coupon_list'],'array');
+
+            $temp['free_delivery'] = 0;
+            $temp['event'] = "";
+            if($delivery_coupon != "" && $delivery_coupon['limit_day']*1000 >= $row['juli']){
+                $temp['free_delivery'] = 1;
+                $t_event['use_price'] = $delivery_coupon['use_price'];
+                $t_event['discount'] = $delivery_coupon['discount'];
+                $t_event['miles'] = $delivery_coupon['limit_day']*1000;
+
+                $temp['event'] = $t_event;
+
+                //$temp['delivery_money'] =  $temp['delivery_money'] - $delivery_coupon['discount'];
+            }
+
             $return['list'][] = $temp;
         }
         $return['count'] = $t_list['total'];

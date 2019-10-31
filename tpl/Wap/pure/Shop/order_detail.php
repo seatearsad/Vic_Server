@@ -150,12 +150,6 @@
                         <div class="fr">${pigcms{$order_details['tip_charge']}</div>
                     </dd>
                 </if>
-                <if condition="$order_details['delivery_discount'] neq 0">
-                    <dd class="clr" style="color: #ffa52d">
-                        <div class="fl">Save</div>
-                        <div class="fr">-${pigcms{$order_details['delivery_discount']}</div>
-                    </dd>
-                </if>
             </dl>
         </div>
 
@@ -330,6 +324,12 @@
                     <li class="clr">
                         <div class="fl">{pigcms{:L('_SHOP_COUP_')}</div>
                         <div class="fr e2c">-${pigcms{$order_details['card_price']|floatval}</div>
+                    </li>
+                </if>
+                <if condition="$order_details['delivery_discount'] neq 0">
+                    <li class="clr" style="color: #ffa52d">
+                        <div class="fl">Save</div>
+                        <div class="fr e2c">-${pigcms{$order_details['delivery_discount']}</div>
                     </li>
                 </if>
                 <if condition="$order_details['score_deducte'] gt 0">

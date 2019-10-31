@@ -244,7 +244,7 @@ class ShopAction extends BaseAction{
         $delivery_coupon = "";
         if(count($eventList) > 0) {
             foreach ($eventList as $event) {
-                $delivery_coupon = D('New_event_coupon')->where(array('event_id' => $event['id'], 'type' => 0))->find();
+                $delivery_coupon = D('New_event_coupon')->where(array('event_id' => $event['id']))->find();
             }
         }
 
@@ -1262,7 +1262,7 @@ class ShopAction extends BaseAction{
         $delivery_coupon = "";
         if(count($eventList) > 0) {
             foreach ($eventList as $event) {
-                $delivery_coupon = D('New_event_coupon')->where(array('event_id' => $event['id'], 'type' => 0))->find();
+                $delivery_coupon = D('New_event_coupon')->where(array('event_id' => $event['id']))->find();
             }
         }
 
@@ -2435,7 +2435,7 @@ class ShopAction extends BaseAction{
         $delivery_coupon = "";
         if(count($eventList) > 0) {
             foreach ($eventList as $event) {
-                $delivery_coupon = D('New_event_coupon')->where(array('event_id' => $event['id'], 'type' => 0))->find();
+                $delivery_coupon = D('New_event_coupon')->where(array('event_id' => $event['id']))->find();
             }
         }
 
@@ -2596,7 +2596,7 @@ class ShopAction extends BaseAction{
             $delivery_coupon = "";
             if(count($eventList) > 0) {
                 foreach ($eventList as $event) {
-                    $delivery_coupon = D('New_event_coupon')->where(array('event_id' => $event['id'], 'type' => 0))->find();
+                    $delivery_coupon = D('New_event_coupon')->where(array('event_id' => $event['id']))->find();
                 }
             }
             /////

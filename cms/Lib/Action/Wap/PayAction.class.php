@@ -715,6 +715,7 @@ class PayAction extends BaseAction{
                 $order_info['delivery_discount'] = $_POST['delivery_discount'];
                 if($order_info['order_type'] == 'shop' || $order_info['order_type'] == 'mall'){
                     D('Shop_order')->field(true)->where(array('order_id'=>$order_info['order_id']))->save(array('delivery_discount'=>$order_info['delivery_discount']));
+                    D('New_event')->addEventCouponByType(3,$this->user_session['uid']);
                 }
             }
         }
@@ -2490,6 +2491,7 @@ class PayAction extends BaseAction{
                 $order_info['delivery_discount'] = $_POST['delivery_discount'];
                 if($order_info['order_type'] == 'shop' || $order_info['order_type'] == 'mall'){
                     D('Shop_order')->field(true)->where(array('order_id'=>$order_info['order_id']))->save(array('delivery_discount'=>$order_info['delivery_discount']));
+                    D('New_event')->addEventCouponByType(3,$this->user_session['uid']);
                 }
             }
 
@@ -2508,7 +2510,7 @@ class PayAction extends BaseAction{
         }
     }
 
-    public function WeixinAndAli(){var_dump($_POST);die();
+    public function WeixinAndAli(){
         //获取支付的相关配置数据
         $where = array('tab_id'=>'alipay','gid'=>7);
         $result = D('Config')->field(true)->where($where)->select();
@@ -2609,6 +2611,7 @@ class PayAction extends BaseAction{
                 //判断是否有减免配送费活动
                 if($_POST['delivery_discount'] != null){
                     $order_data['delivery_discount'] = $_POST['delivery_discount'];
+                    D('New_event')->addEventCouponByType(3,$this->user_session['uid']);
                 }
 
                 D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->save($order_data);
@@ -2652,6 +2655,13 @@ class PayAction extends BaseAction{
                             }
                         }
                     }
+
+                    //判断是否有减免配送费活动
+                    if($_POST['delivery_discount'] != null){
+                        $order_data['delivery_discount'] = $_POST['delivery_discount'];
+                        D('New_event')->addEventCouponByType(3,$this->user_session['uid']);
+                    }
+
                     D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->save($order_data);
                     //=========
                     if($pay_type == 'weixin')

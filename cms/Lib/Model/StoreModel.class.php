@@ -277,11 +277,32 @@ class StoreModel extends Model
             $store['delivery_money'] = $is_have_two_time ? $row['delivery_fee2'] : $row['delivery_fee'];
         }
 
-
+        //garfunkel获取减免配送费的活动
+        $eventList = D('New_event')->getEventList(1,3);
+        $delivery_coupon = "";
+        if(count($eventList) > 0) {
+            foreach ($eventList as $event) {
+                $delivery_coupon = D('New_event_coupon')->where(array('event_id' => $event['id']))->find();
+            }
+        }
         //modify garfunkel
-        if($lat != 0 && $lng != 0)
-            $store['shipfee'] = getDeliveryFee($row['lat'],$row['long'],$lat,$lng);
-        else
+        if($lat != 0 && $lng != 0) {
+            $store['shipfee'] = getDeliveryFee($row['lat'], $row['long'], $lat, $lng);
+
+            $distance = getDistance($row['lat'], $row['long'], $lat, $lng);
+            $store['free_delivery'] = 0;
+            $store['event'] = "";
+            if($delivery_coupon != "" && $delivery_coupon['limit_day']*1000 >= $distance){
+                $store['free_delivery'] = 1;
+                $t_event['use_price'] = $delivery_coupon['use_price'];
+                $t_event['discount'] = $delivery_coupon['discount'];
+                $t_event['miles'] = $delivery_coupon['limit_day']*1000;
+
+                $store['event'] = $t_event;
+
+                //$temp['delivery_money'] =  $temp['delivery_money'] - $delivery_coupon['discount'];
+            }
+        }else
             $store['shipfee'] = C('config.delivery_distance_1');
         //$store['delivery_money'] = floatval($store['delivery_money']);
 // 		$store['delivery_money'] = $row['deliver_type'] == 0 ? C('config.delivery_fee') : $row['delivery_fee'];//配送费

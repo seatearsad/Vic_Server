@@ -165,16 +165,17 @@ class New_eventModel extends Model
                         if($event['type'] == 3){
                             $data['use_time'] = $data['expiry_time'];
                             $data['is_use'] = 1;
-                        }
-                        /////////////
-
-                        if ($v['type'] == 0) {
                             $data['uid'] = $user_id;
                             $coupon_add_self[] = $data;
                         } else {
-                            if ($user['invitation_user'] != 0) {
-                                $data['uid'] = $user['invitation_user'];
-                                $coupon_add_invi[] = $data;
+                            if ($v['type'] == 0) {
+                                $data['uid'] = $user_id;
+                                $coupon_add_self[] = $data;
+                            } else {
+                                if ($user['invitation_user'] != 0) {
+                                    $data['uid'] = $user['invitation_user'];
+                                    $coupon_add_invi[] = $data;
+                                }
                             }
                         }
                     }
@@ -208,6 +209,9 @@ class New_eventModel extends Model
                 if($user['invitation_user'] != 0){
                     $is_re = true;
                 }
+                break;
+            case 3:
+                $is_re = true;
                 break;
             default:
                 break;
