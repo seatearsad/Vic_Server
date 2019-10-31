@@ -380,8 +380,9 @@ class IndexAction extends BaseAction
 
     public function getCart(){
         $uid = $_POST['uid'];
+        $storeId = $_POST['storeId'] ? $_POST['storeId'] : 0;
 
-        $result = D('Cart')->get_cart($uid);
+        $result = D('Cart')->get_cart($uid,$storeId);
 
         $this->returnCode(0,'',$result,'success');
     }
@@ -461,9 +462,10 @@ class IndexAction extends BaseAction
         $result = D('Cart')->getCartList($uid,$cart_array);
         //平台优惠劵
         $_POST['amount'] = $result['total_pay_price'];
-        $coupon = $this->getCanCoupon();
 
+        $coupon = $this->getCanCoupon();
         $result['coupon'] = $coupon;
+
         //账户余额
         $userInfo = D('User')->get_user($uid);
         $result['now_money'] = round($userInfo['now_money'],2);
@@ -648,6 +650,8 @@ class IndexAction extends BaseAction
         }
         $order_data['is_mobile_pay'] = 2;
 
+        $order_data['delivery_discount'] = $_POST['delivery_discount'] ? $_POST['delivery_discount'] : 0;
+
         $order_id = D('Shop_order')->saveOrder($order_data, $return);
         //清除购物车中的内容
         D('Cart')->delCart($uid,$cart_array);
@@ -668,7 +672,7 @@ class IndexAction extends BaseAction
             $userInfo = D('User')->get_user($uid);
             $now_money = round($userInfo['now_money'],2);
 
-            $data['balance_pay'] = $order_data['price'] + $order_data['tip_charge'] - $order_data['coupon_price'];
+            $data['balance_pay'] = $order_data['price'] + $order_data['tip_charge'] - $order_data['coupon_price'] - $order_data['delivery_discount'];
             if($now_money >= $data['balance_pay']){
                 D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->save($data);
 
@@ -692,7 +696,7 @@ class IndexAction extends BaseAction
         }else if($_POST['pay_type'] == 3){//信用卡支付
 
         }else if($_POST['pay_type'] == 1){//支付宝
-            $price = $order_data['price'] + $order_data['tip_charge'] - $order_data['coupon_price'];
+            $price = $order_data['price'] + $order_data['tip_charge'] - $order_data['coupon_price'] - $order_data['delivery_discount'];
             $result = $this->loadModel()->WeixinAndAli($_POST['pay_type'],$order_id,$price,$_POST['ip']);
             if($result['resCode'] == 'SUCCESS'){
                 $this->returnCode(0,'result',$result,'success');
@@ -700,7 +704,7 @@ class IndexAction extends BaseAction
                 $this->returnCode(1,'info',$result,$result['retMsg']);
             }
         }else if($_POST['pay_type'] == 2){//微信支付
-            $price = $order_data['price'] + $order_data['tip_charge'] - $order_data['coupon_price'];
+            $price = $order_data['price'] + $order_data['tip_charge'] - $order_data['coupon_price'] - $order_data['delivery_discount'];
             $result = $this->loadModel()->WeixinAndAli($_POST['pay_type'],$order_id,$price,$_POST['ip']);
             if($result['resCode'] == 'SUCCESS'){
                 $this->returnCode(0,'result',$result,'success');
@@ -780,6 +784,7 @@ class IndexAction extends BaseAction
             $t['paid'] = $val['paid'];
             $t['order_id'] = $val['order_id'];
             $t['discount'] = $val['coupon_price'];
+            $t['delivery_discount'] = $val['delivery_discount'];
 
             $delivery = D('Deliver_supply')->field(true)->where(array('order_id'=>$val['order_id']))->find();
             if($delivery) {
@@ -873,7 +878,7 @@ class IndexAction extends BaseAction
         $order_detail['address1'] = "";
 
         $order_detail['promotion_discount'] = "0";
-        $order_detail['discount'] = $order['coupon_price'];
+        $order_detail['discount'] = $order['coupon_price'] + $order['delivery_discount'];
 
         $store = D('Store')->get_store_by_id($order['store_id']);
         $order_detail['site_name'] = $store['site_name'];
@@ -1047,6 +1052,7 @@ class IndexAction extends BaseAction
         $order_id = $_POST['order_id'];
         $price = $_POST['price'];
         $tip = $_POST['tip'];
+        $delivery_discount = $_POST['delivery_discount'] ? $_POST['delivery_discount'] : 0;
 
         if($_POST['pay_type'] == 0){//线下支付 直接进入支付流程
             D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->save(array('tip_charge'=>$tip));
@@ -1065,7 +1071,7 @@ class IndexAction extends BaseAction
             $userInfo = D('User')->get_user($uid);
             $now_money = round($userInfo['now_money'],2);
 
-            $data['balance_pay'] = $price + $tip;
+            $data['balance_pay'] = $price + $tip - $delivery_discount;
             if($now_money >= $data['balance_pay']){
                 D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->save($data);
 
@@ -1087,7 +1093,7 @@ class IndexAction extends BaseAction
                 $this->returnCode(1, 'info', array(), L('_B_MY_NOMONEY_'));
             }
         }else if($_POST['pay_type'] == 1){//支付宝
-            $price = $price + $tip;
+            $price = $price + $tip - $delivery_discount;
             $result = $this->loadModel()->WeixinAndAli($_POST['pay_type'],$order_id,$price,$_POST['ip']);
             if($result['resCode'] == 'SUCCESS'){
                 $this->returnCode(0,'result',$result,'success');
@@ -1095,7 +1101,7 @@ class IndexAction extends BaseAction
                 $this->returnCode(1,'info',array(),'fail');
             }
         }else if($_POST['pay_type'] == 2){//微信支付
-            $price = $price + $tip;
+            $price = $price + $tip - $delivery_discount;
             $result = $this->loadModel()->WeixinAndAli($_POST['pay_type'],$order_id,$price,$_POST['ip']);
             if($result['resCode'] == 'SUCCESS'){
                 $this->returnCode(0,'result',$result,'success');

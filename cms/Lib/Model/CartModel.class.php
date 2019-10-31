@@ -42,8 +42,12 @@ class CartModel extends Model
         return true;
     }
 
-    public function get_cart($uid){
+    public function get_cart($uid,$storeId = 0){
         $where['uid'] = $uid;
+
+        if($storeId != 0){
+            $where['sid'] = $storeId;
+        }
 
         $cartList = $this->field(true)->where($where)->order('itemId asc')->select();
         $result = array();
@@ -54,6 +58,18 @@ class CartModel extends Model
         $resid = 0;
 
         $goodList = array();
+
+        //garfunkel获取减免配送费的活动
+        $eventList = D('New_event')->getEventList(1,3);
+        $delivery_coupon = "";
+        if(count($eventList) > 0) {
+            foreach ($eventList as $event) {
+                $delivery_coupon = D('New_event_coupon')->where(array('event_id' => $event['id']))->find();
+            }
+        }
+        //获取用户默认地址
+        $address = D('Store')->getDefaultAdr($uid);
+
         foreach($cartList as $v){
             $allnum += $v['num'];
             $good = D('Shop_goods')->field(true)->where(array('goods_id' => $v['fid']))->find();
@@ -70,8 +86,23 @@ class CartModel extends Model
             //$allmoney += $good['price']*$v['num'];
             if ($resid != $good['store_id']){
                 $store = D('Store')->get_store_by_id($good['store_id']);
-
                 $resid = $good['store_id'];
+
+                $store['free_delivery'] = 0;
+                $store['event'] = "";
+                if($address){
+                    $distance = getDistance($store['lat'], $store['lng'], $address['mapLat'], $address['mapLng']);
+                    if($delivery_coupon != "" && $delivery_coupon['limit_day']*1000 >= $distance){
+                        $store['free_delivery'] = 1;
+                        $t_event['use_price'] = $delivery_coupon['use_price'];
+                        $t_event['discount'] = $delivery_coupon['discount'];
+                        $t_event['miles'] = $delivery_coupon['limit_day']*1000;
+
+                        $store['event'] = $t_event;
+
+                        //$temp['delivery_money'] =  $temp['delivery_money'] - $delivery_coupon['discount'];
+                    }
+                }
 
                 if(!in_array($store,$result['info']))
                     $result['info'][] = $store;
@@ -203,6 +234,45 @@ class CartModel extends Model
         $total_pay_price += $store['pack_fee'];
         //获取配送费
         $delivey_fee = D('Store')->CalculationDeliveryFee($uid,$sid);
+        //garfunkel获取减免配送费的活动
+        $eventList = D('New_event')->getEventList(1,3);
+        $delivery_coupon = "";
+        if(count($eventList) > 0) {
+            foreach ($eventList as $event) {
+                $delivery_coupon = D('New_event_coupon')->where(array('event_id' => $event['id']))->find();
+            }
+        }
+
+        $address = D('Store')->getDefaultAdr($uid);
+        $store = D('Store')->get_store_by_id($sid);
+
+        $distance = getDistance($store['lat'], $store['lng'], $address['mapLat'], $address['mapLng']);
+        $store['free_delivery'] = 0;
+        $store['event'] = "";
+
+        $result['is_free_delivery'] = 0;
+        $result['delivery_discount'] = 0;
+        $result['delivery_free_type'] = 1;
+
+        if($delivery_coupon != "" && $delivery_coupon['limit_day']*1000 >= $distance){
+            $store['free_delivery'] = 1;
+            $t_event['use_price'] = $delivery_coupon['use_price'];
+            $t_event['discount'] = $delivery_coupon['discount'];
+            $t_event['miles'] = $delivery_coupon['limit_day']*1000;
+
+            $store['event'] = $t_event;
+
+            if($total_price >= $delivery_coupon['use_price']){
+                $delivey_fee = getDeliveryFee($store['lat'], $store['lng'], $address['mapLat'], $address['mapLng']);
+                $result['is_free_delivery'] = 1;
+                $result['delivery_discount'] = $delivery_coupon['discount'];
+                $result['delivery_free_type'] = $delivery_coupon['type'];
+            }
+
+            //$temp['delivery_money'] =  $temp['delivery_money'] - $delivery_coupon['discount'];
+        }
+        ///////-garfunkel-减免配送费////////
+
         $result['ship_fee'] = $delivey_fee;
         $total_pay_price += $delivey_fee;
         //获取预计到达时间
