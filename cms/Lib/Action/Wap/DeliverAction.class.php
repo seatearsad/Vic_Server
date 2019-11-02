@@ -1340,7 +1340,7 @@ class DeliverAction extends BaseAction
 
 			//garfunkel add
             $order['subtotal_price'] = $order['price'] + $order['tip_charge'];
-            $order['deliver_cash'] = round($order['price'] +$order['extra_price'] + $order['tip_charge'] - round($order['card_price'] + $order['merchant_balance'] + $order['card_give_money'] +$order['balance_pay'] + $order['payment_money'] + $order['score_deducte'] + $order['coupon_price'], 2), 2);
+            $order['deliver_cash'] = round($order['price'] +$order['extra_price'] + $order['tip_charge'] - round($order['card_price'] + $order['merchant_balance'] + $order['card_give_money'] +$order['balance_pay'] + $order['payment_money'] + $order['score_deducte'] + $order['coupon_price'] + $order['delivery_discount'], 2), 2);
 			$this->assign('order', $order);
 
 			$goods = D('Shop_order_detail')->field(true)->where(array('order_id' => $supply['order_id']))->select();

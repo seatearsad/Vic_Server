@@ -1646,9 +1646,9 @@ class Shop_goodsModel extends Model
                                 $dish_ids[] = $d['dish_id'] . ',' . $d['dish_val_id'] . ',' . $d['dish_num'] . ',' . $d['dish_price'];
                             }
                         }else if($r['dish_id']){
-                            $dish_ids = explode("|",$r['dish_id']);
+                            $curr_dish = explode("|",$r['dish_id']);
                             $dish_desc = "";
-                            foreach($dish_ids as $vv){
+                            foreach($curr_dish as $vv){
                                 $one_dish = explode(",",$vv);
 
                                 $dish_vale = D('Side_dish_value')->where(array('id'=>$one_dish[1]))->find();
@@ -1658,6 +1658,7 @@ class Shop_goodsModel extends Model
 
                                 $dish_desc = $dish_desc == "" ? $add_str : $dish_desc.";".$add_str;
                             }
+                            $dish_ids = array_merge($dish_ids,$curr_dish);
                             $str_d[] = $dish_desc;
                         }
                     } else {

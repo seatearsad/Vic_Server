@@ -526,7 +526,7 @@ class ShopAction extends BaseAction{
 
                 $temp['event'] = $t_event;
 
-                //$temp['delivery_money'] =  $temp['delivery_money'] - $delivery_coupon['discount'];
+                $temp['delivery_money'] =  $temp['delivery_money'] - $delivery_coupon['discount'];
             }
 
 			$return[] = $temp;
