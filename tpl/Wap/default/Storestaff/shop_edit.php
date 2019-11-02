@@ -66,7 +66,7 @@ cursor: pointer;
     }
 </style>
 </head>
-<body>
+<table>
 <div style="padding: 0.8rem;background-color: #ffa52d">
     <a href="javascript:void(0);" onclick="return window.history.go(-1);" style="color: white"> < 返回</a>
     <div id="print_order" style="position: absolute;right: 20px;top:12px;color: white;cursor: pointer;">
@@ -215,30 +215,45 @@ cursor: pointer;
 			<tbody>
             <if condition="$order['info']">
 				<tr>
-					<th>商品名称</th>
-					<th class="cc">单价</th>
-					<th class="cc">数量</th>
-					<th class="rr">规格属性</th>
+                    <th>数量</th>
+                    <th>商品名称</th>
+                    <th class="cc">单价</th>
 				</tr>
 				<volist name="order['info']" id="info">
 				<tr>
-					<td>{pigcms{$info['name']} </td>
-					<td class="cc">{pigcms{$info['price']|floatval}</td>
-					<td class="cc" <if condition="$info['num'] gt 1">style="color: #ffa52d"</if>>{pigcms{$info['num']} <span style="color: gray; font-size:10px">({pigcms{$info['unit']})</span></td>
-					<td class="rr">
-                        {pigcms{$info['spec']}
-                        <volist name="info['dish']" id="dish">
-                            <div>
-                                {pigcms{$dish['name']}
+                    <td valign="top" <if condition="$info['num'] gt 1">style="color: #ffa52d"</if>>{pigcms{$info['num']} <!--span style="color: gray; font-size:10px">({pigcms{$info['unit']})</span--></td>
+                    <td>
+                        {pigcms{$info['name']}
+                        <table width="100%" border="0" cellpadding="0" cellspacing="0" class="cpbiaoge">
+                            <volist name="info['spec_arr']" id="spec">
+                                <tr style="border: 0px;">
+                                    <td style="font-size:12px;color: #666666;border-bottom:0px;padding:2px 0px 2px 5px">
+                                        {pigcms{$spec}
+                                    </td>
+                            </volist>
+                            <volist name="info['pro_arr']" id="pro">
+                                <tr style="border: 0px;">
+                                    <td style="font-size:12px;color: #666666;border-bottom:0px;padding:2px 0px 2px 5px">
+                                        {pigcms{$pro}
+                                    </td>
+                            </volist>
+                            <volist name="info['dish']" id="dish">
                                 <volist name="dish['list']" id="dish_one">
-                                    <br><label style="color:#999;font-size: 12px">- {pigcms{$dish_one}</label>
+                                    <tr style="border: 0px;">
+                                        <td style="font-size:12px;color: #666666;border-bottom:0px;padding:2px 0px 2px 5px">
+                                            {pigcms{$dish_one}
+                                        </td>
                                 </volist>
-                            </div>
-                        </volist>
+                            </volist>
+                        </table>
                     </td>
+                    <td valign="top" class="cc">{pigcms{$info['price']|floatval}</td>
 				</tr>
-				</volist>
             </if>
+            </tbody>
+        </table>
+        <table width="100%" border="0" cellpadding="0" cellspacing="0" class="cpbiaoge">
+            <tbody>
                 <tr>
                     <th></th>
                     <th class="cc"></th>

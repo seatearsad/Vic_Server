@@ -1477,10 +1477,16 @@ class StorestaffAction extends BaseAction
                 $deposit_price += $goods['deposit_price'] * $v['num'];
                 //garfunkel 显示规格和分类
                 $spec_desc = '';
-                $spec_ids = explode('_',$v['spec_id']);
+                $spec_arr = array();
+                if($v['spec_id'] != "")
+                    $spec_ids = explode('_',$v['spec_id']);
+                else
+                    $spec_ids = array();
+
                 foreach ($spec_ids as $vv){
                     $spec = D('Shop_goods_spec_value')->field(true)->where(array('id'=>$vv))->find();
                     $spec_desc = $spec_desc == '' ? lang_substr($spec['name'],$lang) : $spec_desc.','.lang_substr($spec['name'],$lang);
+                    $spec_arr[] = lang_substr($spec['name'],$lang);
                 }
 
                 if($v['pro_id'] != '')
@@ -1488,6 +1494,7 @@ class StorestaffAction extends BaseAction
                 else
                     $pro_ids = array();
 
+                $pro_arr = array();
                 foreach ($pro_ids as $vv){
                     $ids = explode(',',$vv);
                     $proId = $ids[0];
@@ -1498,9 +1505,13 @@ class StorestaffAction extends BaseAction
                     $name = lang_substr($nameList[$sId],$lang);
 
                     $spec_desc = $spec_desc == '' ? $name : $spec_desc.','.$name;
+                    $pro_arr[] = $name;
                 }
                 if ($spec_desc != '')
                     $order['info'][$k]['spec'] = $spec_desc;
+
+                $order['info'][$k]['spec_arr'] = $spec_arr;
+                $order['info'][$k]['pro_arr'] = $pro_arr;
 
                 if($v['dish_id'] != "" && $v['dish_id'] != null){
                     $dish_desc = array();
@@ -1513,7 +1524,7 @@ class StorestaffAction extends BaseAction
                         $dish_vale = D('Side_dish_value')->where(array('id'=>$one_dish[1]))->find();
                         $dish_vale['name'] = lang_substr($dish_vale['name'],C('DEFAULT_LANG'));
 
-                        $add_str = $one_dish[2] > 1 ? $dish_vale['name']."*".$one_dish[2] : $dish_vale['name'];
+                        $add_str = $one_dish[2] > 1 ? $dish_vale['name']."<label style='color:red'>*".$one_dish[2]."</label>" : $dish_vale['name'];
 
                         $dish_desc[$dish['id']]['name'] = $dish_name;
                         $dish_desc[$dish['id']]['list'][] = $add_str;
