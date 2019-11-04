@@ -425,6 +425,18 @@ cursor: pointer;
             }
             $info_str .= $v['name']."#".$v['num']."#".$v['spec'];
 
+            foreach ($v['spec_arr'] as& $ss){
+                if(strpos($ss, "'") !== false) {
+                    $ss = str_replace("'",'’',$ss);
+                }
+            }
+
+            foreach ($v['pro_arr'] as& $pp){
+                if(strpos($pp, "'") !== false) {
+                    $pp = str_replace("'",'’',$pp);
+                }
+            }
+            
             $dish_arr = "";
             if($v['dish']){
                 $d_num = 0;
