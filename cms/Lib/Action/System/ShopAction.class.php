@@ -381,7 +381,7 @@ class ShopAction extends BaseAction
         $this->assign($result);
 
         $field = 'sum(price) AS total_price, sum(price - card_price - merchant_balance - balance_pay - payment_money - score_deducte - coupon_price - card_give_money) AS offline_price, sum(card_price + merchant_balance + balance_pay + payment_money + score_deducte + coupon_price + card_give_money) AS online_price';
-        $count_where = "paid=1 AND status<>4 AND status<>5 AND (pay_type<>'offline' OR (pay_type='offline' AND third_id<>''))";
+        $count_where = "paid=1 AND status<>4 AND status<>5 AND (pay_type<>'offline' OR ((pay_type='offline' || pay_type='Cash') AND third_id<>''))";
         $result_total = D('Shop_order')->field($field)->where($count_where)->select();
         $result_total = isset($result_total[0]) ? $result_total[0] : '';
         $this->assign($result_total);
