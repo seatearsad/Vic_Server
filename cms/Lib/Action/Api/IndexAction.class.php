@@ -992,8 +992,8 @@ class IndexAction extends BaseAction
             foreach($v['list'] as $kk => $vv){
                 $now_goods['spec_list'][$k]['list'][$kk]['name'] = lang_substr($vv['name'],C('DEFAULT_LANG'));
             }
-            ksort($v['list']);
-            $now_goods['spec_list'][$k]['list'] = $v['list'];
+            //ksort($v['list']);
+            //$now_goods['spec_list'][$k]['list'] = $v['list'];
         }
         $result['spec_list'] = $now_goods['spec_list'];
 
