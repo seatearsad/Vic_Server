@@ -893,10 +893,10 @@ class DeliverAction extends BaseAction
 				$columns['pay_type'] = 'Cash';
 			}
 				
-			$result = $this->deliver_supply->where(array("supply_id"=>$supply_id, 'status'=>4))->data($columns)->save();
-			if (false === $result) {
-				$this->error("更新状态失败");exit;
-			}
+			//$result = $this->deliver_supply->where(array("supply_id"=>$supply_id, 'status'=>4))->data($columns)->save();
+			//if (false === $result) {
+			//	$this->error("更新状态失败");exit;
+			//}
 			
 			if ($supply['item'] == 1) {
 			
@@ -959,10 +959,9 @@ class DeliverAction extends BaseAction
 				if ($order = D("Shop_order")->field(true)->where(array('order_id' => $order_id))->find()) {
 					//配送状态更改成已完成，订单状态改成已消费
 					$data = array('order_status' => 5, 'status' => 2);
-					
-					
+
 					if ($order['is_pick_in_store'] == 0) {//平台配送
-						if ($order['paid'] == 0 || ($order['pay_type'] == 'offline' && empty($order['third_id']))) {
+						if ($order['paid'] == 0 || (($order['pay_type'] == 'offline' || $order['pay_type'] == 'Cash') && empty($order['third_id']))) {
 							$data['paid'] = $order['paid'] == 0 ? 1 : $order['paid'];
 							$data['pay_type'] = 'Cash';
 							$data['balance_pay'] = $supply['deliver_cash'];
@@ -974,6 +973,7 @@ class DeliverAction extends BaseAction
 							if (empty($order['pay_type']) && empty($order['pay_time'])) $data['pay_type'] = 'offline';
 						}
 					}
+					
 					if (empty($order['pay_time'])) $data['pay_time'] = time();
 					if (empty($order['use_time'])) $data['use_time'] = time();
 					if (empty($order['third_id'])) $data['third_id'] = $order['order_id'];
