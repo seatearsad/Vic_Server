@@ -497,7 +497,6 @@ class IndexAction extends BaseAction
                 }
             }
 
-            $t_good['productPrice'] = $good['price'];
             $t_good['productStock'] = $good['stock_num'];
             $t_good['productParam'] = array();
             if($v['spec'] != ''){
@@ -535,7 +534,15 @@ class IndexAction extends BaseAction
                 $t_dish['type'] = 'side_dish';
                 $t_dish['dish_id'] = $v['dish_id'];
                 $t_good['productParam'][] = $t_dish;
+
+                $dish_list = explode('|',$v['dish_id']);
+                foreach($dish_list as $dish_value){
+                    $one_dish = explode(",",$dish_value);
+                    //0 dish_id 1 id 2 num 3 price
+                    $good['price'] = $good['price'] + $one_dish[3]*$one_dish[2];
+                }
             }
+            $t_good['productPrice'] = $good['price'];
 
             $t_good['count'] = $v['stock'];
             $t_good['tax_num'] = $good['tax_num'];
