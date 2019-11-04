@@ -230,12 +230,14 @@ cursor: pointer;
                                     <td style="font-size:12px;color: #666666;border-bottom:0px;padding:2px 0px 2px 5px">
                                         {pigcms{$spec}
                                     </td>
+                                </tr>
                             </volist>
                             <volist name="info['pro_arr']" id="pro">
                                 <tr style="border: 0px;">
                                     <td style="font-size:12px;color: #666666;border-bottom:0px;padding:2px 0px 2px 5px">
                                         {pigcms{$pro}
                                     </td>
+                                </tr>
                             </volist>
                             <volist name="info['dish']" id="dish">
                                 <volist name="dish['list']" id="dish_one">
@@ -243,6 +245,7 @@ cursor: pointer;
                                         <td style="font-size:12px;color: #666666;border-bottom:0px;padding:2px 0px 2px 5px">
                                             {pigcms{$dish_one}
                                         </td>
+                                    </tr>
                                 </volist>
                             </volist>
                             </table>
