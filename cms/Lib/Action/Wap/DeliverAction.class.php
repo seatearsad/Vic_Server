@@ -893,10 +893,10 @@ class DeliverAction extends BaseAction
 				$columns['pay_type'] = 'Cash';
 			}
 				
-			//$result = $this->deliver_supply->where(array("supply_id"=>$supply_id, 'status'=>4))->data($columns)->save();
-			//if (false === $result) {
-			//	$this->error("更新状态失败");exit;
-			//}
+			$result = $this->deliver_supply->where(array("supply_id"=>$supply_id, 'status'=>4))->data($columns)->save();
+			if (false === $result) {
+				$this->error("更新状态失败");exit;
+			}
 			
 			if ($supply['item'] == 1) {
 			
