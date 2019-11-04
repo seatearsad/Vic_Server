@@ -252,7 +252,6 @@ cursor: pointer;
                         </td>
                         <td valign="top" class="cc">{pigcms{$info['price']|floatval}</td>
                     </tr>
-
                 </volist>
             </if>
             </tbody>
