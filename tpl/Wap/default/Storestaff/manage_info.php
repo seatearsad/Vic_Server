@@ -363,7 +363,7 @@
         <tr>
             <td width="30%" style="text-align: right"></td>
             <td width="70%" style="text-align: left">
-                <input type="text" name="name_cn" placeholder="{pigcms{:L('_CHINESE_TXT_')}" value="{pigcms{$store['cn_name']}">
+                <input type="text" name="name_cn" placeholder="{pigcms{:L('_CHINESE_STORE_NAME_')}" value="{pigcms{$store['cn_name']}">
             </td>
         </tr>
         <tr>

@@ -1524,7 +1524,7 @@ class StorestaffAction extends BaseAction
                         $dish_vale = D('Side_dish_value')->where(array('id'=>$one_dish[1]))->find();
                         $dish_vale['name'] = lang_substr($dish_vale['name'],C('DEFAULT_LANG'));
 
-                        $add_str = $one_dish[2] > 1 ? $dish_vale['name']."<label style='color:red'>*".$one_dish[2]."</label>" : $dish_vale['name'];
+                        $add_str = $one_dish[2] > 1 ? $dish_vale['name']."*".$one_dish[2] : $dish_vale['name'];
 
                         $dish_desc[$dish['id']]['name'] = $dish_name;
                         $dish_desc[$dish['id']]['list'][] = $add_str;

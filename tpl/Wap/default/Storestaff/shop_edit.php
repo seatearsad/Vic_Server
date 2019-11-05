@@ -243,6 +243,12 @@ cursor: pointer;
                                 <volist name="dish['list']" id="dish_one">
                                     <tr style="border: 0px;">
                                         <td style="font-size:12px;color: #666666;border-bottom:0px;padding:2px 0px 2px 5px">
+                                            <php>
+                                                if(strpos($dish_one,'*') !== false){
+                                                    $dish_one = str_replace('*','<label style="color: red">*',$dish_one);
+                                                    $dish_one .= '</label>';
+                                                }
+                                            </php>
                                             {pigcms{$dish_one}
                                         </td>
                                     </tr>

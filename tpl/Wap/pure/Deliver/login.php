@@ -56,6 +56,9 @@
 				<input type="password" placeholder="{pigcms{:L('_B_D_LOGIN_KEY1_')}" id="login_pwd">
 				<a href="javascript:void(0)"></a>
 			</li>
+            <li id="findpwd" style="text-align: center;color: #999999;margin-bottom: 5px;cursor: pointer;">
+                Forget password? Find my password
+            </li>
 			<li class="Landd">
 				<input type="button" value="{pigcms{:L('_B_D_LOGIN_LOGIN1_')}" id="login_form">
 			</li>
@@ -83,6 +86,9 @@ var openid = false;
 <if condition="isset($openid) AND !empty($openid)">
 	openid = "{pigcms{$openid}";
 </if>
+$("#findpwd").click(function () {
+    window.location.href = "{pigcms{:U('Deliver/forgetpwd')}";
+});
 $(function(){
     var ua = navigator.userAgent;
     // alert(ua);

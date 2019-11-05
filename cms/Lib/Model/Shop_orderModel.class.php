@@ -88,7 +88,7 @@ class Shop_orderModel extends Model
 			$trow['tax_num'] = $goods['tax_num'];
 			$trow['deposit_price'] = $goods['deposit_price'];
             $tax_price += $trow['price'] * $goods['tax_num']/100 * $trow['num'];
-            $deposit_price += $goods['deposit_price'];
+            $deposit_price += $goods['deposit_price'] * $trow['num'];
 		}
         $tax_price = $tax_price + ($now_order['freight_charge'] + $now_order['packing_charge']) * $merchant_store['tax_num']/100;
 

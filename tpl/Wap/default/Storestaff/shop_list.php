@@ -242,7 +242,7 @@ line-height: .7rem;
 							<li class="btm_li"><span class="dth">订单总价：</span><span class="td red">${pigcms{$vo.price|floatval}<if condition="$config.open_extra_price eq 1 AND $vo.extra_price gt 0">+{pigcms{$vo.extra_price}{pigcms{$config.extra_price_alias_name}</if></span></li>
 							<li>
 							<span class="dth">支付状态：</span>
-							<if condition="empty($vo['third_id']) AND ($vo['pay_type'] eq 'offline')" >
+							<if condition="empty($vo['third_id']) AND ($vo['pay_type'] eq 'offline' OR $vo['pay_type'] eq 'Cash')" >
 								<span style="color: red">线下未支付</span>
 							<elseif condition="$vo['paid'] eq 0" />
 								<span style="color: red">未支付</span>
@@ -259,7 +259,7 @@ line-height: .7rem;
 								<else />
 <!--								<a title="操作订单" class="green edit_btn js-add-order js-add-order-{pigcms{$vo.order_id}" style="color: green; float:right" href="javascript:;" js-order="{pigcms{$vo.order_id}">接单</a>
 								<a title="操作订单" class="green edit_btn js-add-order js-add-order-{pigcms{$vo.order_id}" style="color: #fff;background-color: #FF658E;position: absolute;right: 0rem; top: .15rem;width: 1.2rem;height: .7rem;text-align: center;line-height: .7rem;float:right" href="javascript:;" js-order="{pigcms{$vo.order_id}">接单</a-->
-                                    <a title="操作订单" class="green edit_btn" style="color: #fff;background-color: #ffa64d;position: absolute;right: 0rem; top: .15rem;width: 1.2rem;height: .7rem;text-align: center;line-height: .7rem;float:right" href="{pigcms{:U('Storestaff/shop_edit',array('order_id'=>$vo['order_id']))}">接单</a>
+                                    <a title="操作订单" class="green edit_btn" style="color: #fff;background-color: #ffa64d;position: absolute;right: 0rem; top: .15rem;width: 1.2rem;height: .7rem;text-align: center;line-height: .7rem;float:right" href="{pigcms{:U('Storestaff/shop_edit',array('order_id'=>$vo['order_id']))}">查看订单</a>
 								</if>
 							<elseif condition="$vo['status'] eq 1" />
 							<a title="已接单" class="green edit_btn" style="color: green; float:right" href="javascript:;" >已接单</a>

@@ -26,7 +26,6 @@
 	    .captcha img{margin-left:.2rem;}
 	    .captcha .btn{margin-top:-.15rem;margin-bottom:-.15rem;margin-left:.2rem;}
 	</style>
-
     <script>
         // 检测浏览器是否支持SW
         if(navigator.serviceWorker != null){
@@ -89,10 +88,23 @@
 			</div>
 		</div>
 		<script src="{pigcms{:C('JQUERY_FILE')}"></script>
+        <script src="{pigcms{$static_path}js/jquery.cookie.js"></script>
 		<script src="{pigcms{$static_public}js/laytpl.js"></script>
 	    <script src="{pigcms{$static_path}layer/layer.m.js"></script>
 		<script type="text/javascript">
             var ua = navigator.userAgent;
+
+            var user_name = $.cookie('merchant_user');
+            var user_pass = $.cookie('merchant_pass');
+
+            if(typeof (user_name) != "undefined" && typeof (user_pass) != "undefined"){
+                if(!ua.match(/TuttiPartner/i)){
+                    $('#login_account').val(user_name);
+                    $('#login_pwd').val(user_pass);
+                }
+            }
+
+
             var device_token = '';
             function pushDeviceToken(token) {
                 device_token = token;
@@ -164,7 +176,7 @@
 
 						}, no: function(){
 							setTimeout(function(){
-								window.parent.location = store_index;
+                                window.parent.location = store_index;
 							},1000);
 						}
 					});
@@ -176,6 +188,10 @@
 
 					}else if(result.error == 0 && !openid){
 						setTimeout(function(){
+                            if(!ua.match(/TuttiPartner/i)){
+                                $.cookie('merchant_user',$('#login_account').val());
+                                $.cookie('merchant_pass',$('#login_pwd').val());
+                            }
 							window.parent.location = store_index;
 						},1000);
 					}else{

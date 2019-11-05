@@ -23,7 +23,7 @@ class DeliverAction extends BaseAction
 			}
 			
 			if (empty($this->deliver_session)) {
-				if (ACTION_NAME != 'login' && ACTION_NAME != 'reg' &&  ACTION_NAME != 'ajax_city_name') {
+				if (ACTION_NAME != 'login' && ACTION_NAME != 'reg' &&  ACTION_NAME != 'ajax_city_name' && ACTION_NAME != 'forgetpwd') {
 					redirect(U('Deliver/login', array('referer' => urlencode('http://' . $_SERVER['HTTP_HOST'] . (!empty($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'])))));
 					exit();
 				}
@@ -2388,5 +2388,38 @@ class DeliverAction extends BaseAction
         }
         $return['info'] = $data;
         exit(json_encode($return));
+    }
+
+    public function forgetpwd(){
+	    if($_POST){
+            if(isset($_POST['phone']) && !empty($_POST['phone'])) {
+                $condition_user['phone'] = $_POST['phone'];
+
+                if (!D('Deliver_user')->field('`uid`')->where($condition_user)->find()) {
+                    $result = array('error_code' => true, 'msg' => 'Phone Number Error!');
+                }
+                if (!empty($result)) {
+                    $this->ajaxReturn($result);
+                }
+
+                $data['vfcode'] = $_POST['sms_code'];
+                if(!D('User_modifypwd')->field('id')->where($data)->find()){
+                    $result = array('error_code' => true, 'msg' => L('_SMS_CODE_ERROR_'));
+                    $this->ajaxReturn($result);
+                }
+
+                $deliver_data['pwd'] = md5($_POST['password']);
+
+                D('Deliver_user')->where($condition_user)->save($deliver_data);
+
+                D('User_modifypwd')->where(array('vfcode' => $data['vfcode'], 'telphone' => $_POST['phone']))->delete();
+
+                $this->ajaxReturn(array('error_code' => true, 'msg' => 'Success!'));
+            }else{
+                $this->ajaxReturn(array('error_code' => true, 'msg' => L('_PLEASE_INPUT_ALL_')));
+            }
+        }else{
+	        $this->display();
+        }
     }
 }

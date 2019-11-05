@@ -243,7 +243,7 @@ line-height: .7rem;
 							<li class="btm_li"><span class="dth">Order Total：</span><span class="td red">${pigcms{$vo.price|floatval}<if condition="$config.open_extra_price eq 1 AND $vo.extra_price gt 0">+{pigcms{$vo.extra_price}{pigcms{$config.extra_price_alias_name}</if></span></li>
 							<li>
 							<span class="dth">Payment Method：</span>
-							<if condition="empty($vo['third_id']) AND ($vo['pay_type'] eq 'offline')" >
+							<if condition="empty($vo['third_id']) AND ($vo['pay_type'] eq 'offline' OR $vo['pay_type'] eq 'Cash')" >
 								<span style="color: red">Not Paid</span>
 							<elseif condition="$vo['paid'] eq 0" />
 								<span style="color: red">Not Paid</span>
@@ -262,7 +262,7 @@ line-height: .7rem;
 								<else />
 								<!--a title="Operate order" class="green edit_btn js-add-order js-add-order-{pigcms{$vo.order_id}" style="color: green; float:right" href="javascript:;" js-order="{pigcms{$vo.order_id}">Confirm</a>
 								<a title="Operate order" class="green edit_btn js-add-order js-add-order-{pigcms{$vo.order_id}" style="color: #fff;background-color: #FF658E;position: absolute;right: 0rem; top: .15rem;width: 1.2rem;height: .7rem;text-align: center;line-height: .7rem;float:right" href="javascript:;" js-order="{pigcms{$vo.order_id}">Confirm</a-->
-                                    <a title="操作订单" class="green edit_btn" style="color: #fff;background-color: #ffa64d;position: absolute;right: 0rem; top: .15rem;width: 1.2rem;height: .7rem;text-align: center;line-height: .7rem;float:right" href="{pigcms{:U('Storestaff/shop_edit',array('order_id'=>$vo['order_id']))}">Confirm</a>
+                                    <a title="Review" class="green edit_btn" style="color: #fff;background-color: #ffa64d;position: absolute;right: 0rem; top: .15rem;width: 1.2rem;height: .7rem;text-align: center;line-height: .7rem;float:right" href="{pigcms{:U('Storestaff/shop_edit',array('order_id'=>$vo['order_id']))}">Review</a>
 								</if>
 							<elseif condition="$vo['status'] eq 1" />
 							<a title="Confirmed" class="green edit_btn" style="color: green; float:right" href="javascript:;" >Confirmed</a>

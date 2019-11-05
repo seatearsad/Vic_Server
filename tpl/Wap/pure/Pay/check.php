@@ -1253,7 +1253,7 @@
                 </if>
                 <if condition="$order_info['deposit_price'] != 0">
                 <div>
-                    {pigcms{:L('_DEPOSIT_TXT_')} <span>${pigcms{$order_info['deposit_price']}</span>
+                    {pigcms{:L('_DEPOSIT_TXT_')} <span>${pigcms{:sprintf("%.2f",$order_info['deposit_price'])}</span>
                 </div>
                 </if>
                 <div>
