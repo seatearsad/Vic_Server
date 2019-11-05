@@ -1890,7 +1890,7 @@ class IndexAction extends BaseAction
 //        die('henhao');
         $from = $_GET['from'];
         $aim = $_GET['aim'];
-        $url = 'https://maps.googleapis.com/maps/api/directions/json?origin='.$from.'&destination='.$aim.'&key=AIzaSyCKlguA2QFIUVwWTo3danbOqSKv3nYbBCg&language=en';
+        $url = 'https://maps.googleapis.com/maps/api/directions/json?origin='.$from.'&destination='.$aim.'&key=AIzaSyAxHAPoWlRu2Mz8APLwM8Ae6B3x1MJUlvU&language=en';
         import('ORG.Net.Http');
         $http = new Http();
         $result = $http->curlGet($url);
