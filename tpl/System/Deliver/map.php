@@ -139,7 +139,7 @@
         display: none;
     }
 </style>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&libraries=places&language={pigcms{:C('DEFAULT_LANG')}"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKlguA2QFIUVwWTo3danbOqSKv3nYbBCg&libraries=places&language={pigcms{:C('DEFAULT_LANG')}"></script>
 <script type="text/javascript">
     var city_id = $('#city_select').val();
     $('#city_select').change(function () {

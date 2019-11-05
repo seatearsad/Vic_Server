@@ -20,7 +20,7 @@
 	<script src="{pigcms{$static_path}js/html5shiv.min.js"></script>
 	<![endif]-->
     <script type="text/javascript" src="{pigcms{$static_public}js/lang/{pigcms{:C('DEFAULT_LANG')}.js" charset="utf-8"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&libraries=places&language={pigcms{:C('DEFAULT_LANG')}"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKlguA2QFIUVwWTo3danbOqSKv3nYbBCg&libraries=places&language={pigcms{:C('DEFAULT_LANG')}"></script>
     <script src="{pigcms{$static_path}js/shop_menu.js"></script>
     <include file="Public:facebook"/>
 </head>

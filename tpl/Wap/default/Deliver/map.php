@@ -35,7 +35,7 @@
 </div>
 <div class="global-mask layout"></div>
 <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=4c1bb2055e24296bbaef36574877b4e2"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&libraries=places&language=zh-CN"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKlguA2QFIUVwWTo3danbOqSKv3nYbBCg&libraries=places&language=zh-CN"></script>
 <script src="{pigcms{$static_path}js/convertor.js"></script>
 <script>
 var wHeight = $(window).height() - 50;

@@ -124,6 +124,6 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
      </script>
 	<include file="Public:footer"/>
 
-	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&libraries=places" async defer></script>
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKlguA2QFIUVwWTo3danbOqSKv3nYbBCg&libraries=places" async defer></script>
 </body>
 </html>

@@ -296,7 +296,7 @@ function getDistance($lat1, $lng1, $lat2, $lng2){
 
 function getDistanceByGoogle($from,$aim){
     //$url = 'http://54.190.29.18/index.php?g=Api&c=Index&a=testDistance&from='.$from.'&aim='.$aim;
-    $url = 'https://maps.googleapis.com/maps/api/directions/json?origin='.$from.'&destination='.$aim.'&key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&language=en';
+    $url = 'https://maps.googleapis.com/maps/api/directions/json?origin='.$from.'&destination='.$aim.'&key=AIzaSyCKlguA2QFIUVwWTo3danbOqSKv3nYbBCg&language=en';
     import('ORG.Net.Http');
     $http = new Http();
     $result = $http->curlGet($url);

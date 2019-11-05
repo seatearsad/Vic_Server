@@ -14,7 +14,7 @@
 </head>
 <body>
     <div id="map"></div>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&libraries=places&language=en"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKlguA2QFIUVwWTo3danbOqSKv3nYbBCg&libraries=places&language=en"></script>
     <script>
         var lat = parseFloat("{pigcms{$deliver.lat}");
         var lng = parseFloat("{pigcms{$deliver.lng}");

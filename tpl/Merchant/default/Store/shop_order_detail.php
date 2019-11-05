@@ -126,7 +126,7 @@
 				<th colspan="2"><strong>配送信息</strong></th>
 			</tr>
             <if condition="$deliver">
-                <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&libraries=places&language=en"></script>
+                <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKlguA2QFIUVwWTo3danbOqSKv3nYbBCg&libraries=places&language=en"></script>
                 <tr>
                     <th colspan="2">
                         <div id="deliver_map" style="width: 100%;height: 300px;"></div>

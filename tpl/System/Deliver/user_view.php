@@ -159,7 +159,7 @@
 	</script>
 
 	<script type="text/javascript" src="{pigcms{$static_path}js/map.js"></script-->
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&libraries=places&language=en"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKlguA2QFIUVwWTo3danbOqSKv3nYbBCg&libraries=places&language=en"></script>
 <script>
     $('img').click(function () {
         //alert($(this).attr('src'));

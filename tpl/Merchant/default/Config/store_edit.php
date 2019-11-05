@@ -501,7 +501,7 @@
 var static_public="{pigcms{$static_public}",static_path="{pigcms{$static_path}",merchant_index="{pigcms{:U('Index/index')}",choose_province="{pigcms{:U('Area/ajax_province')}",choose_city="{pigcms{:U('Area/ajax_city')}",choose_area="{pigcms{:U('Area/ajax_area')}",choose_circle="{pigcms{:U('Area/ajax_circle')}",choose_market="{pigcms{:U('Area/ajax_market')}",choose_cat_fid="{pigcms{:U('Merchant_category/ajax_cat_fid')}",choose_cat_id="{pigcms{:U('Merchant_category/ajax_cat_id')}",choose_place_id="{pigcms{:U('Merchant_category/ajax_place_id')}",choose_city_name="{pigcms{:U('Area/ajax_city_name')}";
 </script>
 <script type="text/javascript" src="{pigcms{$static_path}js/area.js"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&libraries=places&language=en"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKlguA2QFIUVwWTo3danbOqSKv3nYbBCg&libraries=places&language=en"></script>
 <script type="text/javascript" src="{pigcms{$static_path}js/map.js"></script>
 <script type="text/javascript" src="{pigcms{$static_path}js/merchant_category.js"></script>
 <script type="text/javascript">

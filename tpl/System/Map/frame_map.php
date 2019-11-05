@@ -1,6 +1,6 @@
 <include file="Public:header"/>
 
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&libraries=places&language=en"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKlguA2QFIUVwWTo3danbOqSKv3nYbBCg&libraries=places&language=en"></script>
 <script type="text/javascript">
     var choose_city_name="{pigcms{:U('Area/ajax_city_name')}";
 $(function(){

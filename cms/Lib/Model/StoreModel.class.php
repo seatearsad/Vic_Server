@@ -869,7 +869,7 @@ class StoreModel extends Model
     }
 
     public function geocoderGoogle($lat,$lng){
-        $url = 'https://maps.google.com/maps/api/geocode/json?key=AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA&latlng='.$lat.','.$lng.'&language=en';
+        $url = 'https://maps.google.com/maps/api/geocode/json?key=AIzaSyCKlguA2QFIUVwWTo3danbOqSKv3nYbBCg&latlng='.$lat.','.$lng.'&language=en';
         import('ORG.Net.Http');
         $http = new Http();
         $result = $http->curlGet($url);
