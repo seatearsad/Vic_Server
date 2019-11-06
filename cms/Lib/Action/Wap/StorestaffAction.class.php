@@ -1625,7 +1625,7 @@ class StorestaffAction extends BaseAction
             exit;
         }
         if ($order['status'] == 4 || $order['status'] == 5) {
-            $this->error('Failed! This order just been canceled by the customer.');
+            $this->error('Failed! Order canceled by the customer');
             exit;
         }
         if ($order['status'] > 0) {
