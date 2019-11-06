@@ -1507,8 +1507,8 @@ class StorestaffAction extends BaseAction
                     $spec_desc = $spec_desc == '' ? $name : $spec_desc.','.$name;
                     $pro_arr[] = $name;
                 }
-                if ($spec_desc != '')
-                    $order['info'][$k]['spec'] = $spec_desc;
+                //if ($spec_desc != '')
+                $order['info'][$k]['spec'] = $spec_desc;
 
                 $order['info'][$k]['spec_arr'] = $spec_arr;
                 $order['info'][$k]['pro_arr'] = $pro_arr;
