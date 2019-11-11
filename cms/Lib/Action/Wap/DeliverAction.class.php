@@ -2414,7 +2414,7 @@ class DeliverAction extends BaseAction
 
                 D('User_modifypwd')->where(array('vfcode' => $data['vfcode'], 'telphone' => $_POST['phone']))->delete();
 
-                $this->ajaxReturn(array('error_code' => true, 'msg' => 'Success!'));
+                $this->ajaxReturn(array('error_code' => false, 'msg' => 'Success!'));
             }else{
                 $this->ajaxReturn(array('error_code' => true, 'msg' => L('_PLEASE_INPUT_ALL_')));
             }

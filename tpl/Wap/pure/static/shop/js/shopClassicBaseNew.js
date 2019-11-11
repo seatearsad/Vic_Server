@@ -1464,6 +1464,11 @@ function showShop(shopId){
 			
 			changeWechatShare('shop',{title:nowShop.store.name,desc:nowShop.store.txt_info,imgUrl:nowShop.store.image,link:shopShareUrl+nowShop.store.id});
             if(nowShop.store.shop_remind != ''){
+                // var remind = nowShop.store.shop_remind.split('\n');
+                // var shop_remind = "";
+                // for(var str of remind){
+                 //    shop_remind += '<p>'+str+'</p>';
+				// }
                 pageLoadHides();
                 var remindTipLayer = layer.open({
                     content: nowShop.store.shop_remind,

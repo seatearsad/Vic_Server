@@ -2956,7 +2956,7 @@ class StorestaffAction extends BaseAction
             $param['thumbMaxWidth'] = $width;
             $param['thumbMaxHeight'] = $height;
             $param['thumbRemoveOrigin'] = false;
-            $image = D('Image')->handle($this->store['store_id'], 'goods', 1, $param);
+            $image = D('Image')->handle($this->store['mer_id'], 'goods', 1, $param);
             if ($image['error']) {
                 exit(json_encode(array('error' => 1,'message' =>$image['msg'])));
             } else {
