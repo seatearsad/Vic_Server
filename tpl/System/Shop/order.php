@@ -181,16 +181,16 @@
     var city_id = $('#city_select').val();
     $('#city_select').change(function () {
         city_id = $(this).val();
-        window.location.href = "{pigcms{:U('Shop/order')}" + "&city_id="+city_id;
+        window.location.href = "{pigcms{:U('Shop/order', array('type' => $type, 'sort' => $sort,'status'=>$status,'pay_type'=>$pay_type))}" + "&city_id="+city_id;
     });
 
 $(function(){
 	$('#status').change(function(){
-		location.href = "{pigcms{:U('Shop/order', array('type' => $type, 'sort' => $sort))}&status=" + $(this).val();
+		location.href = "{pigcms{:U('Shop/order', array('type' => $type, 'sort' => $sort,'pay_type'=>$pay_type,'city_id'=>$city_id))}&status=" + $(this).val();
 	});
 	
 	$('#pay_type').change(function(){
-		location.href = "{pigcms{:U('Shop/order', array('type' => $type, 'sort' => $sort))}&pay_type=" + $(this).val();
+		location.href = "{pigcms{:U('Shop/order', array('type' => $type, 'sort' => $sort,'status'=>$status,'city_id'=>$city_id))}&pay_type=" + $(this).val();
 	});	
 
 	$('.refund').click(function(){

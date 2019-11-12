@@ -322,10 +322,13 @@ class ShopAction extends BaseAction
         }else if ($status != -1) {
             $where['status'] = $status;
         }
-        if($pay_type&&$pay_type!='balance'){
+        if($pay_type&&$pay_type!='balance'&&$pay_type!='offline'){
             $where['pay_type'] = $pay_type;
-        }else if($pay_type=='balance'){
-            $where['_string'] = $where['_string'] == "" ? "(`balance_pay`<>0 OR `merchant_balance` <> 0 )" : $where['_string']." and (`balance_pay`<>0 OR `merchant_balance` <> 0 )";
+        }elseif($pay_type=='offline'){
+            $where['_string'] = $where['_string'] == "" ? "(`pay_type`='offline' OR `pay_type`='Cash' )" : $where['_string']." and (`pay_type`='offline' OR `pay_type`='Cash' )";
+        }
+        else if($pay_type=='balance'){
+            $where['_string'] = $where['_string'] == "" ? "`pay_type`<>'Cash' and (`balance_pay`<>0 OR `merchant_balance` <> 0 )" : $where['_string']." and `pay_type`<>'Cash' and (`balance_pay`<>0 OR `merchant_balance` <> 0 )";
         }
 
         if(!empty($_GET['begin_time'])&&!empty($_GET['end_time'])){
