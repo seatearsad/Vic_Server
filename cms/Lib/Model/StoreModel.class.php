@@ -382,16 +382,54 @@ class StoreModel extends Model
         $condition_goods_sort['store_id'] = $storeId;
         $sort_list = $database_goods_sort->field(true)->where($condition_goods_sort)->order('`sort_id` ASC')->select();
 
-        return $sort_list;
+        $new_list = array();
+        $today = date('w');
+        $curr_time = intval(date('Hi',time()));
+        foreach ($sort_list as $key => $row) {
+            $is_add = true;
+            if (!empty($row['is_weekshow'])) {
+                $week_arr = explode(',', $row['week']);
+                if (!in_array($today, $week_arr)) {
+                    $is_add = false;
+                }
+            }
+
+            if($row['is_time'] == 1){
+                $time_list = explode(',',$row['show_time']);
+                foreach ($time_list as &$t){
+                    $t = str_replace(':','',$t);
+                }
+                if(!($curr_time >= $time_list[0] && $curr_time < $time_list[1])){
+                    $is_add = false;
+                }
+            }
+
+            if($is_add)
+                $new_list[] = $row;
+        }
+        //$sort_list = $database_goods_sort->lists($storeId, true);
+
+        return $new_list;
     }
 
     public function get_goods_by_storeId($storeId){
         $data_goods = D('Shop_goods');
         $good_list = $data_goods ->field(true)->where(array('store_id' => $storeId, 'status' => 1))->order('goods_id ASC')->select();
-        foreach ($good_list as &$v){
-            $v['des'] = preg_replace("/<([^>]*)>/","",$v['des']);
+
+        $sort_list = $this->get_goods_group_by_storeId($storeId);
+        $sortIdList = array();
+        foreach ($sort_list as $sort){
+            $sortIdList[] = $sort['sort_id'];
         }
-        return $good_list;
+
+        $new_list = array();
+        foreach ($good_list as $k=>&$v){
+            if(in_array($v['sort_id'],$sortIdList)) {
+                $v['des'] = preg_replace("/<([^>]*)>/", "", $v['des']);
+                $new_list[] = $v;
+            }
+        }
+        return $new_list;
     }
 
     public function arrange_group_for_goods($groupList){

@@ -64,6 +64,8 @@ class Shop_goods_sortModel extends Model
         }
         unset($tmpMap);
         $today = date('w');
+        $curr_time = intval(date('Hi',time()));
+
         if ($is_hide) {
             foreach ($list as $key => $row) {
                 if (!empty($row['is_weekshow'])) {
@@ -72,8 +74,19 @@ class Shop_goods_sortModel extends Model
                         unset($list[$key]);
                     }
                 }
+
+                if($row['is_time'] == 1){
+                    $time_list = explode(',',$row['show_time']);
+                    foreach ($time_list as &$t){
+                        $t = str_replace(':','',$t);
+                    }
+                    if(!($curr_time >= $time_list[0] && $curr_time < $time_list[1])){
+                        unset($list[$key]);
+                    }
+                }
             }
         }
+
         return $list;
     }
     

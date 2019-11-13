@@ -433,6 +433,12 @@ class ShopAction extends BaseAction
                     $_POST['image'] = $rand_num.','.$tmp_img[1];
                 }
                 $data_goods_sort['image'] = $_POST['image'] ?: '';
+
+                $data_goods_sort['is_time'] = intval($_POST['is_time']);
+                if($_POST['begin_time'] != '' && $_POST['end_time'] != ''){
+                    $data_goods_sort['show_time'] = $_POST['begin_time'].','.$_POST['end_time'];
+                }
+
                 if ($database_goods_sort->data($data_goods_sort)->add()) {
                     if ($sort && $sort['operation_type'] == 2) {
                         $database_goods_sort->where(array('sort_id' => $sort['sort_id']))->save(array('operation_type' => 1));
@@ -484,6 +490,9 @@ class ShopAction extends BaseAction
             $fid = 0;
             $sort = null;
         }
+
+        $error_tips = '';
+        $ok_tips = '';
         if (IS_POST) {
             if (empty($_POST['sort_name'])) {
                 $error_tips = '分类名称必填！'.'<br/>';
@@ -500,6 +509,10 @@ class ShopAction extends BaseAction
                 $data_goods_sort['print_id'] = intval($_POST['print_id']);
                 $data_goods_sort['fid'] = $fid;
 
+                $data_goods_sort['is_time'] = intval($_POST['is_time']);
+                if($_POST['begin_time'] != '' && $_POST['end_time'] != ''){
+                    $data_goods_sort['show_time'] = $_POST['begin_time'].','.$_POST['end_time'];
+                }
                 //$data_goods_sort['level'] = 1;
                 if ($sort) {
                     // 				    $data_goods_sort['level'] = $sort['level'] + 1;
@@ -1283,6 +1296,12 @@ class ShopAction extends BaseAction
         }
         if ($now_sort['week'] != null) {
             $now_sort['week'] = explode(',', $now_sort['week']);
+        }
+
+        if($now_sort['show_time'] != ''){
+            $all_time = explode(',',$now_sort['show_time']);
+            $now_sort['begin_time'] = $all_time[0];
+            $now_sort['end_time'] = $all_time[1];
         }
         return $now_sort;
     }
