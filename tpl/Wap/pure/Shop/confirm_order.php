@@ -765,7 +765,19 @@ $(document).ready(function () {
 				}
 			});
 			return false;*/
-			document.cart_confirm_form.submit();
+			$.post("{pigcms{:U('Shop/checkGoodsTime')}",{'store_id':"{pigcms{$store['store_id']}"},function(data){
+                if(data.error){
+                    motify.log(data.msg);
+                    $.cookie('shop_cart_'+"{pigcms{$store['store_id']}",JSON.stringify(data.cartList),{expires:700,path:'/'});
+                    setTimeout(function(){
+                        window.location.reload();
+                    },3000);
+                }else{
+                    document.cart_confirm_form.submit();
+                }
+            },"json");
+
+
 		}
 		return false;
 	});

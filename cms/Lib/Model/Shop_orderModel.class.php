@@ -4,6 +4,24 @@ class Shop_orderModel extends Model
 	public $status_list = array('-1' => '全部' ,'0' => '未接单', 1 => '已确认', 2 => '已消费', 3 => '已评价', 4 => '已退款', 5 => '已取消', 7 => '分配到自提点', 8 => '发货到自提点', 9 => '自提点接货', 10 => '自提点发货');
 	public $status_list_admin = array('-1' => '全部', '100'=>'未支付' ,'0' => '未接单', 1 => '已确认', 2 => '已消费', 3 => '已评价', 4 => '已退款', 5 => '已取消', 7 => '分配到自提点', 8 => '发货到自提点', 9 => '自提点接货', 10 => '自提点发货');
 
+    public function __construct(){
+        parent::__construct();
+
+        $allList = $this->where(array('paid'=>0))->order('create_time asc')->select();
+        $delList = array();
+        foreach ($allList as $order){
+			$store = D('Merchant_store')->where(array('store_id'=>$order['store_id']))->find();
+			$jetlag = D('Area')->field('jetlag')->where(array('area_id'=>$store['city_id']))->find()['jetlag'];
+			$cha = time() + $jetlag*3600 - $order['create_time'];
+			if($cha > 300){
+				$delList[] = $order['order_id'];
+			}
+		}
+
+		$this->where(array('order_id'=>array('in',$delList)))->delete();
+		D('Shop_order_detail')->where(array('order_id'=>array('in',$delList)))->delete();
+    }
+
 	public function getStatusList(){
         return array(
         	'-1' => L('_BACK_ALL_'),
@@ -136,7 +154,8 @@ class Shop_orderModel extends Model
 					'phone'             =>  $now_order['userphone'],
 					'address'           =>  $now_order['address'],
 					'delivery_discount'	=>	$now_order['delivery_discount'],
-                	'delivery_discount_type'	=>	$now_order['delivery_discount_type']
+                	'delivery_discount_type'	=>	$now_order['delivery_discount_type'],
+					'create_time'		=>	$now_order['create_time']
 			);
 		} else {
 			$order_info = array(
@@ -171,7 +190,8 @@ class Shop_orderModel extends Model
                 'phone'             =>  $now_order['userphone'],
                 'address'           =>  $now_order['address'],
 				'delivery_discount'	=>	$now_order['delivery_discount'],
-                'delivery_discount_type'	=>	$now_order['delivery_discount_type']
+                'delivery_discount_type'	=>	$now_order['delivery_discount_type'],
+                'create_time'		=>	$now_order['create_time']
 			);
 		}
 		return array('error' => 0, 'order_info' => $order_info);

@@ -3155,6 +3155,8 @@ class MyAction extends BaseAction{
 				$images = $store_image_class->get_allImage_by_path($li['pic_info']);
 				$li['image'] = $images ? array_shift($images) : array();
 				unset($li['status']);
+                $city = D('Area')->where(array('area_id'=>$li['city_id']))->find();
+                $li['jetlag'] = $city['jetlag'];
 				$m[$li['store_id']] = $li;
 			}
 		}
@@ -3214,6 +3216,8 @@ class MyAction extends BaseAction{
 				$images = $store_image_class->get_allImage_by_path($li['pic_info']);
 				$li['image'] = $images ? array_shift($images) : array();
 				unset($li['status']);
+                $city = D('Area')->where(array('area_id'=>$li['city_id']))->find();
+                $li['jetlag'] = $city['jetlag'];
 				$m[$li['store_id']] = $li;
 			}
 		}
@@ -3229,7 +3233,7 @@ class MyAction extends BaseAction{
 		foreach($list as $key=>$val){
             $list[$key]['name'] = lang_substr($val['name'],C('DEFAULT_LANG'));
 			$list[$key]['order_url'] = U('Shop/status', array('order_id' => $val['order_id']));
-			$list[$key]['create_time'] = date('Y-m-d',$val['create_time']);
+			$list[$key]['create_time_show'] = date('Y-m-d',$val['create_time']);
             $supply = D('Deliver_supply')->where(array('order_id'=>$val['order_id']))->find();
             if($supply['status'] > 1 && $supply['status'] < 5){
                 $t_deliver = D('Deliver_user')->field(true)->where(array('uid'=>$supply['uid']))->find();

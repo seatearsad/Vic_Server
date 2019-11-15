@@ -1288,7 +1288,7 @@
             By clicking the box,you are agree with
             <a href="./intro/5.html" target="_blank">Terms of Use</a> and <a href="./intro/2.html" target="_blank">Privacy Policy</a>
         </div>
-
+        <div style="text-align: center; color: #ffa52d; margin-bottom: -10px" id="count_down"></div>
         <button type="button" class="confirm_btn">{pigcms{:L('_B_D_LOGIN_CONIERM_')}</button>
             <!--div style="background-color: #FFFFFF; height: 53px;position: fixed;bottom: 0;left: 0;right: 0;z-index: 900;-webkit-tap-highlight-color: rgba(0, 0, 0, 0);height: 49px;width: 100%;">
                 <div id="need_pay_title" style="    position: absolute;margin-top: 18px;margin-left: 0.3rem;">
@@ -1633,6 +1633,37 @@
         }
         return isT;
     }
+
+    var create_time = "{pigcms{$order_info.create_time}";
+    var jetlag = "{pigcms{$jetlag}";
+    var curr_time = parseInt("{pigcms{:time()}") + parseInt(jetlag)*3600;
+
+    var cha_time = 300 - (curr_time - create_time);
+    function update_pay_time() {
+        var h = parseInt(cha_time / 3600);
+        var i = parseInt((cha_time - 3600 * h) / 60);
+        var s = (cha_time - 3600 * h) % 60;
+        if (i < 10) i = '0' + i;
+        if (s < 10) s = '0' + s;
+
+        //var time_str = h + ':' + i + ':' + s;
+        var time_str = i + ':' + s;
+
+        $('#count_down').html(time_str);
+
+        if(cha_time < 0){
+            layer.open({content:'Pay time error!',shadeClose:false,btn:['OK'],yes:function(){
+                window.location.href = "{pigcms{:U('My/shop_order_list')}";
+            }});
+        }else {
+            window.setTimeout(function () {
+                cha_time--;
+                update_pay_time()
+            }, 1000);
+        }
+    }
+
+    update_pay_time();
 </script>
 <style>
     .form-field--error{

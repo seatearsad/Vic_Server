@@ -550,6 +550,8 @@ class PayAction extends BaseAction{
                     $pay_list[$k] = $pay_method[$k];
                 }
             }
+            $city = D('Area')->where(array('area_id'=>$store['city_id']))->find();
+            $this->assign('jetlag',$city['jetlag']);
         }else{
             foreach ($pay_method as $k => $v) {
                 $pay_method[$k]['name'] = lang_substr($v['name'], C('DEFAULT_LANG'));

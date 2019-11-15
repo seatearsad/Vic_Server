@@ -460,6 +460,7 @@ class IndexAction extends BaseAction
         $cart_array = json_decode(html_entity_decode($cartList),true);
 
         $result = D('Cart')->getCartList($uid,$cart_array);
+
         //平台优惠劵
         $_POST['amount'] = $result['total_pay_price'];
 
@@ -484,6 +485,33 @@ class IndexAction extends BaseAction
         $tax_price = 0;
         $deposit_price = 0;
         $orderData = array();
+
+        //判断商品是否还在可销售的时间段
+        $store_id = D('Cart')->field(true)->where(array('uid'=>$uid,'fid'=>$cart_array[0]['fid']))->find()['sid'];
+        $sortList = D('Shop_goods_sort')->lists($store_id, true);
+        $sortIdList = array();
+
+        $is_cut = false;
+        foreach ($sortList as $k => $sl){
+            $sortIdList[] = $sl['sort_id'];
+        }
+
+        foreach ($cart_array as $product) {
+            $goodsId = $product['fid'];
+            $goods = D('Shop_goods')->where(array('goods_id' => $goodsId))->find();
+
+            if(!in_array($goods['sort_id'],$sortIdList)){
+                $is_cut = true;
+                D('Cart')->where(array('uid'=>$uid,'fid'=>$goodsId))->delete();
+            }
+        }
+
+        if($is_cut){
+            $this->returnCode(1,'',array(),"Please note that you have one or more items that are no longer available at this moment. They have been removed from you order. We're sorry for any inconvenience!");
+        }
+
+        ///////////
+
         foreach ($cart_array as $v){
             $good = D('Shop_goods')->field(true)->where(array('goods_id' => $v['fid']))->find();
             $t_good['productId'] = $v['fid'];
@@ -779,6 +807,7 @@ class IndexAction extends BaseAction
             $t['storeID'] = $val['store_id'];
             $t['storeName'] = lang_substr($val['name'],C('DEFAULT_LANG'));
             $t['createDate'] = date('Y-m-d',$val['create_time']);
+            $t['create_time'] = $val['create_time'];
             $t['goodsCount'] = $val['num'];
             $t['goodsPrice'] = $val['goods_price'];
             $t['status'] = $val['status'];
@@ -802,6 +831,14 @@ class IndexAction extends BaseAction
                     $t['deliver_lat'] = $deliver['lat'];
                 }
             }
+
+            $t['jetlag'] = 0;
+            if($val['paid'] == 0) {
+                $store = D('Merchant_store')->where(array('store_id' => $val['store_id']))->find();
+                $area = D('Area')->where(array('area_id'=>$store['city_id']))->find();
+                $t['jetlag'] = $area['jetlag'];
+            }
+            $t['now_time'] = time();
 
             $result['info'][] = $t;
         }
@@ -870,6 +907,7 @@ class IndexAction extends BaseAction
             }
         }
 
+        $order_detail['paid'] = $order['paid'];
         $order_detail['add_time'] = date('Y-m-d H:i:s',$order['create_time']);
         //$order_detail['payname'] = $order_detail['paymodel'] = D('Store')->getPayTypeName($order['pay_type']);
         $order_detail['packing_fee'] = $order['packing_charge'];
@@ -886,6 +924,17 @@ class IndexAction extends BaseAction
 
         $order_detail['promotion_discount'] = "0";
         $order_detail['discount'] = $order['coupon_price'] + $order['delivery_discount'];
+        $order_detail['create_time'] = $order['create_time'];
+
+
+
+        $order_detail['jetlag'] = 0;
+        if($order['paid'] == 0) {
+            $store = D('Merchant_store')->where(array('store_id' => $order['store_id']))->find();
+            $area = D('Area')->where(array('area_id'=>$store['city_id']))->find();
+            $order_detail['jetlag'] = $area['jetlag'];
+        }
+        $order_detail['now_time'] = time();
 
         $store = D('Store')->get_store_by_id($order['store_id']);
         $order_detail['site_name'] = $store['site_name'];

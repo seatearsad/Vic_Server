@@ -2217,6 +2217,40 @@ class ShopAction extends BaseAction{
         }
         return $productCart;
     }
+
+    public function checkGoodsTime(){
+        $store_id = isset($_POST['store_id']) ? intval($_POST['store_id']) : 0;
+        $newCart = array();
+        if($store_id != 0) {
+            $productCart = $this->getCookieData($store_id);
+            if(!empty($productCart)) {
+                $sortList = D('Shop_goods_sort')->lists($store_id, true);
+                $sortIdList = array();
+                foreach ($sortList as $k => $sl){
+                    $sortIdList[] = $sl['sort_id'];
+                }
+
+                foreach ($productCart as $product) {
+                    $goodsId = $product['productId'];
+                    $goods = D('Shop_goods')->where(array('goods_id' => $goodsId))->find();
+
+                    if(in_array($goods['sort_id'],$sortIdList)){
+                        $newCart[] = $product;
+                    }
+                }
+            }
+        }
+
+        $is_error = false;
+        if(count($productCart) > count($newCart)){
+            $is_error = true;
+            $msg = "Please note that you have one or more items that are no longer available at this moment. They have been removed from you order. We're sorry for any inconvenience!";
+        }else{
+            $msg = "";
+        }
+
+        echo json_encode(array('error'=>$is_error,'msg'=>$msg,'cartList'=>$newCart));
+    }
     
 	public function confirm_order()
 	{

@@ -282,7 +282,7 @@
 				<div tab-id="1" class="tab active">
 
 				<volist name="order_list" id="order">
-					<dd>
+					<dd id="my_order_{pigcms{$order['order_id']}">
 						<dl>
 							<dd class="order-num"><span id="ord_num">{pigcms{$order.real_orderid}</span>
 							<if condition="$order['paid'] eq 0">
@@ -304,6 +304,7 @@
                                     <div class="order_btn">
                                         <if condition="empty($order['paid']) AND ($order['status'] lt 2 OR $order['status'] eq 7)" >
                                             <span onclick="location.href='{pigcms{:U('Pay/check',array('type'=>'shop','order_id'=>$order['order_id']))}'">{pigcms{:L('_B_PURE_MY_81_')}</span>
+                                            <label class="count_down" style="color: grey" data-time="{pigcms{$order['create_time']}" data-id="{pigcms{$order['order_id']}" data-jet="{pigcms{$order['jetlag']}"></label>
                                             <elseif condition="$order['status'] == 2"/>
                                             <span onclick="location.href='{pigcms{:U('My/shop_feedback',array('order_id'=>$order['order_id']))}'">{pigcms{:L('_B_PURE_MY_82_')}</span>
                                             <else />
@@ -419,6 +420,7 @@
 							var shtml = '<dd>';
 							var order_list = data['order_list'];
 							for(var i in order_list){
+							    shtml += '<dd id="my_order_'+order_list[i]["order_id"]+'">';
 								shtml += '<dl><dd class="order-num"><span id="ord_num">'+order_list[i]["real_orderid"]+'</span>';
 								if((order_list[i]['paid'] == 0)){
 									shtml +='<a href="javascript:void(0)" onclick="del_order('+order_list[i]["order_id"]+')"><img src="{pigcms{$static_path}images/u282.png"></a>';
@@ -434,7 +436,7 @@
 								shtml += '<div class="dealcard-block-right"  onclick="window.location.href = \''+order_list[i]['order_url']+'\';">';
 								shtml += '<div class="dealcard-brand single-line">'+order_list[i]['name']+'</div>';
 								shtml += '<div class="total_price">Total:'+order_list[i]['price']+'</div>'
-								shtml += '<small>Total item:'+order_list[i]['num']+'&nbsp;&nbsp;'+order_list[i]['create_time']+'</small>';
+								shtml += '<small>Total item:'+order_list[i]['num']+'&nbsp;&nbsp;'+order_list[i]['create_time_show']+'</small>';
                                 shtml += '</div>';
 
                                 shtml += '<div class="order_btn">';
@@ -442,6 +444,7 @@
                                      var url = "{pigcms{:U('Pay/check')}";
                                      url += '&type=shop&order_id='+order_list[i]['order_id'];
                                      shtml +='<span onclick="location.href=\''+url+'\'">{pigcms{:L('_B_PURE_MY_81_')}</span>';
+                                     shtml += '<label class="count_down" style="color: grey" data-time="'+order_list[i]['create_time']+'" data-id="'+order_list[i]['order_id']+'"data-jet="'+order_list[i]['jetlag']+'"></label>'
                                  }else if(order_list[i]['status'] == 2){
                                      var url = "{pigcms{:U('My/shop_feedback')}";
                                      url += '&order_id='+order_list[i]['order_id'];
@@ -523,7 +526,7 @@
 								// 	 shtml+='<a></a>';
 								//  }
 								// shtml +='</dd>';
-                                shtml +='</dl><div style=" height:10px; background:#f0efed"></div>';
+                                shtml +='</dl></dd><div style=" height:10px; background:#f0efed"></div>';
 							}
 						}else{
 							var shtml ='<dd><dd class="dealcard dd-padding" style=" text-align:center; background:#fff; width:100%">{pigcms{:L('_B_PURE_MY_83_')}</dd></dd>';
@@ -555,6 +558,38 @@
 			});
 
 			}
+
+			var num = 0;
+            var curr_time = parseInt("{pigcms{:time()}");
+			function update_pay_time() {
+                $('#orders').find('.count_down').each(function () {
+                    var create_time = $(this).data('time');
+                    var jetlag = parseInt($(this).data('jet'))*3600;
+                    var cha_time = 300 - (curr_time + jetlag - create_time + num);
+
+                    var h = parseInt(cha_time / 3600);
+                    var i = parseInt((cha_time - 3600 * h) / 60);
+                    var s = (cha_time - 3600 * h) % 60;
+                    if (i < 10) i = '0' + i;
+                    if (s < 10) s = '0' + s;
+
+                    //var time_str = h + ':' + i + ':' + s;
+                    var time_str = i + ':' + s;
+
+                    $(this).html(time_str);
+
+                    var cid = $(this).data('id');
+                    var allStr = "my_order_"+cid;
+                    if(cha_time < 0)
+                        $("#"+allStr).remove();
+                });
+                window.setTimeout(function () {
+                    num++;
+                    update_pay_time()
+                }, 1000);
+            }
+
+            update_pay_time();
 		</script>
 </div>
 <include file="Public:footer"/>
