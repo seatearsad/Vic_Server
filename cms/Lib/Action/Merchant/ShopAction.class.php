@@ -2585,4 +2585,54 @@ class ShopAction extends BaseAction
         return $html;
     }
 
+    public function import_excel(){
+        if($_POST['data']) {
+            $store_id = $_POST['store_id'];
+            $sort_id = $_POST['sort_id'];
+            $data = $_POST['data'];
+
+            $time = time();
+            $goodsList = array();
+            foreach($data as $goods){
+                $t_goods = array();
+                $t_goods['store_id'] = $store_id;
+                $t_goods['sort_id'] = $sort_id;
+                if(!$goods['English Name'] && !$goods['Chinese Name']){
+                    break;
+                }else{
+                    $t_goods['name'] = $goods['English Name'] ? $goods['English Name'] : "";
+                    if($goods['Chinese Name']){
+                        $t_goods['name'] = $t_goods['name'] == "" ? $goods['Chinese Name'] : $t_goods['name']."|".$goods['Chinese Name'];
+                    }
+                }
+
+                if(!$goods['English Unit'] && !$goods['Chinese Unit']){
+                    break;
+                }else{
+                    $t_goods['unit'] = $goods['English Unit'] ? $goods['English Unit'] : "";
+                    if($goods['Chinese Unit']){
+                        $t_goods['unit'] = $t_goods['unit'] == "" ? $goods['Chinese Unit'] : $t_goods['unit']."|".$goods['Chinese Unit'];
+                    }
+                }
+
+                $t_goods['price'] = $goods['Price'];
+                $t_goods['desc'] = $goods['Describe'];
+                $t_goods['last_time'] = $time;
+                $t_goods['status'] = 1;
+                $t_goods['stock_num'] = $goods['Stock'];
+                $t_goods['tax_num'] = $goods['Tax'];
+                $t_goods['deposit_price'] = $goods['Bottle Deposit'];
+
+                $goodsList[] = $t_goods;
+            }
+
+            if(D('Shop_goods')->addAll($goodsList)){
+                exit(json_encode(array('error_code' => false, 'msg' => 'Success')));
+            }else{
+                exit(json_encode(array('error_code' => true, 'msg' => 'Save Error')));
+            }
+        }else{
+            exit(json_encode(array('error_code' => true, 'msg' => 'Data Error')));
+        }
+    }
 }
