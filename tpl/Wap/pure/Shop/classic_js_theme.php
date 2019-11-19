@@ -228,7 +228,12 @@
                                         {{# } }}
                                     </div>
 								{{# } }}
-								{{# if(d[i].product_list[j].is_seckill_price){ }}
+
+                                {{# if(d[i].is_time == 1){ }}
+                                <div style="color: grey;font-size: 11px;margin-top: 5px;">*Available from {{ d[i].begin_time }} to {{ d[i].end_time }}</div>
+                                {{# } }}
+
+                                {{# if(d[i].product_list[j].is_seckill_price){ }}
 									<div class="skill_discount" style="margin-top: 5px;">{pigcms{:L('_LIMIT_TIME_DISCOUNT_')}</div>
 								{{# } }}
 							</div>

@@ -892,6 +892,10 @@ function showGood(shop_id,product_id){
             $('#shopDetailPageTitle .title').html(result.name);
             //$('#shopDetailPageTitle .desc').html(getLangStr('_MONTH_SALE_NUM_' , result.sell_count)+ ' ' +getLangStr('_PRAISE_TXT_')+result.reply_count);
             //$('#shopDetailPageTitle .desc').html(getLangStr('_PRAISE_TXT_')+result.reply_count);
+			if(result.is_time == 1){
+				var timeStr = "*This item is available from "+result.begin_time+" to "+result.end_time;
+                $('#shopDetailPageTitle .desc').html(timeStr);
+			}
             $('#shopDetailPageFormat').empty();
             $('#shopDetailPageDish').empty();
             if(result.des != ''){

@@ -1414,10 +1414,12 @@ class ShopAction extends BaseAction{
         } else {
             $sortList = D('Shop_goods_sort')->lists($store_id, true);
             $sortIdList = array();
+            $sortListById = array();
             //Add Garfunkel 判断语言
             foreach ($sortList as $k => $sl){
                 $sortList[$k]['cat_name'] = lang_substr($sl['sort_name'],C('DEFAULT_LANG'));
                 $sortIdList[] = $sl['sort_id'];
+                $sortListById[$sl['sort_id']] = $sl;
             }
             $firstSort = reset($sortList);
             //$sortId = isset($firstSort['sort_id']) ? $firstSort['sort_id'] : 0;
@@ -1429,6 +1431,13 @@ class ShopAction extends BaseAction{
                     //modify garfunkel 判断语言
                     $temp['cat_name'] = lang_substr($row['sort_name'], C('DEFAULT_LANG'));
                     $temp['sort_discount'] = $row['sort_discount'] / 10;
+
+                    $temp['is_time'] = $sortListById[$row['sort_id']]['is_time'];
+                    if($sortListById[$row['sort_id']]['is_time'] == 1) {
+                        $show_time = explode(',',$sortListById[$row['sort_id']]['show_time']);
+                        $temp['begin_time'] = $show_time[0];
+                        $temp['end_time'] = $show_time[1];
+                    }
                     foreach ($row['goods_list'] as $r) {
                         $glist = array();
                         $glist['product_id'] = $r['goods_id'];
@@ -2287,6 +2296,14 @@ class ShopAction extends BaseAction{
         foreach ($return['goods'] as $k=>$v){
 		    $return['goods'][$k]['name'] = lang_substr($v['name'],C('DEFAULT_LANG'));
 		    $return['goods'][$k]['unit'] = lang_substr($v['unit'],C('DEFAULT_LANG'));
+
+            $now_sort = D('Shop_goods_sort')->where(array('sort_id'=>$v['sort_id']))->find();
+            $return['goods'][$k]['is_time'] = $now_sort['is_time'];
+            if($now_sort['is_time'] == 1){
+                $show_time = explode(',',$now_sort['show_time']);
+                $return['goods'][$k]['begin_time'] = $show_time[0];
+                $return['goods'][$k]['end_time'] = $show_time[1];
+            }
         }
         //
 		$village_id = isset($_GET['village_id']) ? intval($_GET['village_id']) : 0;

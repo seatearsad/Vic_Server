@@ -438,6 +438,14 @@ class StoreModel extends Model
             $returnList[$k]['id'] = $v['sort_id'];
             $returnList[$k]['sid'] = $v['store_id'];
             $returnList[$k]['title'] = lang_substr($v['sort_name'],C('DEFAULT_LANG'));
+
+            $now_sort = D('Shop_goods_sort')->where(array('sort_id'=>$v['sort_id']))->find();
+            $returnList[$k]['is_time'] = $now_sort['is_time'];
+            if($now_sort['is_time'] == 1){
+                $show_time = explode(',',$now_sort['show_time']);
+                $returnList[$k]['begin_time'] = $show_time[0];
+                $returnList[$k]['end_time'] = $show_time[1];
+            }
         }
 
         return $returnList;

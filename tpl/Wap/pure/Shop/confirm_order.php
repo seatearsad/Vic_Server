@@ -294,6 +294,9 @@ a {
                             <span style="color: gray; font-size:10px">({pigcms{:L('_DEPOSIT_TXT_')}:${pigcms{$ditem['deposit_price']})</span>
                         </if>
                     </strong>
+                    <if condition="$ditem.is_time eq 1">
+                    <div style="color: grey;font-size: 11px;">*Available from {pigcms{$ditem['begin_time']} to {pigcms{$ditem['end_time']}</div>
+                    </if>
 				</div>
 			</div>
 		</li>

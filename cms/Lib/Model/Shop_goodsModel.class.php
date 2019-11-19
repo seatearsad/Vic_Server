@@ -681,6 +681,15 @@ class Shop_goodsModel extends Model
 		}
 		$nowtime = time();
 		$now_goods['is_new'] = (($nowtime - $now_goods['last_time']) > 864000) ? 0 : 1;
+
+		$now_sort = D('Shop_goods_sort')->where(array('sort_id'=>$now_goods['sort_id']))->find();
+		$now_goods['is_time'] = $now_sort['is_time'];
+		if($now_sort['is_time'] == 1){
+            $show_time = explode(',',$now_sort['show_time']);
+            $now_goods['begin_time'] = $show_time[0];
+            $now_goods['end_time'] = $show_time[1];
+        }
+
 		return $now_goods;
 	}
 	
