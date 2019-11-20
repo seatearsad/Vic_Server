@@ -474,6 +474,18 @@ class StoreModel extends Model
             $returnList[$k]['quantity'] = empty($v['quantity'])? "0" : $v['quantity'];
             $returnList[$k]['spec'] = empty($v['spec']) ? "" : $v['spec'];
             $returnList[$k]['proper'] = empty($v['proper']) ? "" : $v['proper'];
+            //显示时间判断
+            $now_sort = D('Shop_goods_sort')->where(array('sort_id'=>$v['sort_id']))->find();
+            $returnList[$k]['is_time'] = $now_sort['is_time'];
+            if($now_sort['is_time'] == 1){
+                $show_time = explode(',',$now_sort['show_time']);
+                $returnList[$k]['begin_time'] = $show_time[0];
+                $returnList[$k]['end_time'] = $show_time[1];
+            }
+            $returnList[$k]['is_weekshow'] = $now_sort['is_weekshow'];
+            if($now_sort['is_weekshow'] == 1){
+                $returnList[$k]['week'] = $now_sort['week'];
+            }
 
             //是否有规格及属性选择
             if($v['spec_value'] || $v['is_properties'])
