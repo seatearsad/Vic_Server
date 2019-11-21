@@ -241,3 +241,16 @@
         color: #ffa52d;
     }
 </style>
+<script type="text/javascript">
+    window.zESettings = {
+        webWidget: {
+            color: {
+                launcher: '#ffa52d', // This will also update the badge
+                launcherText: '#ffffff',
+            }
+        }
+    };
+</script>
+<!-- Start of tuttidelivery Zendesk Widget script -->
+<script id="ze-snippet" src="https://static.zdassets.com/ekr/snippet.js?key=fe2c146c-36c1-4a86-807d-0ebeaa3d0a58"> </script>
+<!-- End of tuttidelivery Zendesk Widget script -->
