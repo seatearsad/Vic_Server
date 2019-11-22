@@ -165,5 +165,47 @@
         </ul>
     </div>
 	<include file="Public:footer"/>
+    <script type="text/javascript">
+        window.zESettings = {
+            webWidget: {
+                color: {
+                    launcher: '#ffa52d', // This will also update the badge
+                    launcherText: '#ffffff',
+                },
+                mobile: {
+                    labelVisible: true
+                },
+                offset: {
+                    mobile: {
+                        horizontal: '-10px',
+                        vertical: '35px'
+                    }
+                }
+            }
+        };
+    </script>
+    <!-- Start of tuttidelivery Zendesk Widget script -->
+    <script id="ze-snippet" src="https://static.zdassets.com/ekr/snippet.js?key=fe2c146c-36c1-4a86-807d-0ebeaa3d0a58"> </script>
+    <!-- End of tuttidelivery Zendesk Widget script -->
+
+    <script type="text/javascript">
+        zE('webWidget', 'identify', {
+            name: "{pigcms{$now_user['nickname']}",
+            email:"{pigcms{$now_user['email']}",
+            phone:"{pigcms{$now_user['phone']}",
+            organization: "User_{pigcms{$now_user['uid']}"
+        });
+        zE('webWidget', 'prefill', {
+            name: {
+                value: "{pigcms{$now_user['nickname']}"
+            },
+            email: {
+                value: "{pigcms{$now_user['email']}"
+            },
+            phone: {
+                value: "{pigcms{$now_user['phone']}"
+            }
+        });
+    </script>
 </body>
 </html>

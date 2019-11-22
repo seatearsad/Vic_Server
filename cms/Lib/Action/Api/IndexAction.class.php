@@ -1850,6 +1850,8 @@ class IndexAction extends BaseAction
 
         $userInfo = D('User')->get_user($uid);
         $info['now_money'] = round($userInfo['now_money'],2);
+        $info['phone'] = $userInfo['phone'];
+        $info['email'] = $userInfo['email'];
 
         if(isset($_POST['order_id'])){
             $order_id = $_POST['order_id'];
