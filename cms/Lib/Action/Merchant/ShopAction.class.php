@@ -329,6 +329,11 @@ class ShopAction extends BaseAction
                 }
                 $value['week_str'] = $week_str;
             }
+            if($value['show_time'] != ''){
+                $show_time = explode(',',$value['show_time']);
+                $value['begin_time'] = $show_time[0];
+                $value['end_time'] = $show_time[1];
+            }
         }
         $this->assign('sort_list', $sort_list);
         $this->display();
@@ -595,7 +600,14 @@ class ShopAction extends BaseAction
         $now_store = $this->check_store($now_sort['store_id']);
         $database_goods_sort = D('Shop_goods_sort');
         $condition_goods_sort['sort_id'] = $now_sort['sort_id'];
-        $data_goods_sort['is_weekshow'] = $_POST['type'] == 'open' ? '1' : '0';
+
+        $data_goods_sort = array();
+        if($_POST['attribute'] == 'show_week')
+            $data_goods_sort['is_weekshow'] = $_POST['type'] == 'open' ? '1' : '0';
+
+        if($_POST['attribute'] == 'show_time')
+            $data_goods_sort['is_time'] = $_POST['type'] == 'open' ? '1' : '0';
+
         if ($database_goods_sort->where($condition_goods_sort)->data($data_goods_sort)->save()) {
             exit('1');
         } else {
@@ -2616,7 +2628,7 @@ class ShopAction extends BaseAction
                 }
 
                 $t_goods['price'] = $goods['Price'];
-                $t_goods['desc'] = $goods['Describe'];
+                $t_goods['des'] = $goods['Describe'];
                 $t_goods['last_time'] = $time;
                 $t_goods['status'] = 1;
                 $t_goods['stock_num'] = $goods['Stock'];

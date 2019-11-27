@@ -34,8 +34,8 @@
 									<th>编号</th>
 									<th>排序</th>
 									<th>分类名称</th>
-									<th>是否开启只星期几显示</th>
 									<th>星期几显示</th>
+									<th>显示时间段</th>
 									<th>商品管理</th>
 									<th>操作</th>
 								</tr>
@@ -49,11 +49,20 @@
 											<td>{pigcms{$vo.sort_name}</td>
 											<td>
 												<label class="statusSwitch" style="display:inline-block;">
-													<input name="switch-field-1" class="ace ace-switch ace-switch-6" type="checkbox" data-id="{pigcms{$vo.sort_id}" <if condition="$vo['is_weekshow'] eq 1">checked="checked" data-status="OPEN"<else/>data-status="CLOSED"</if>/>
+													<input name="switch-field-1" class="ace ace-switch ace-switch-6" type="checkbox" data-type="show_week" data-id="{pigcms{$vo.sort_id}" <if condition="$vo['is_weekshow'] eq 1">checked="checked" data-status="OPEN"<else/>data-status="CLOSED"</if>/>
 													<span class="lbl"></span>
 												</label>
+                                                <div>{pigcms{$vo.week_str}</div>
 											</td>
-											<td>{pigcms{$vo.week_str}</td>
+											<td>
+                                                <label class="statusSwitch" style="display:inline-block;">
+                                                    <input name="switch-field-1" class="ace ace-switch ace-switch-6" type="checkbox" data-type="show_time" data-id="{pigcms{$vo.sort_id}" <if condition="$vo['is_time'] eq 1">checked="checked" data-status="OPEN"<else/>data-status="CLOSED"</if>/>
+                                                    <span class="lbl"></span>
+                                                </label>
+                                                <if condition="$vo['begin_time']">
+                                                <div>{pigcms{$vo.begin_time} - {pigcms{$vo.end_time}</div>
+                                                </if>
+                                            </td>
 											<td>
 											     <if condition="$vo['operation_type'] eq 2">
 											         <a style="width: 60px;" class="label label-sm label-purple" href="{pigcms{:U('Shop/goods_sort',array('fid' => $vo['sort_id'], 'store_id' => $vo['store_id']))}">子分类</a>
@@ -124,7 +133,8 @@ function updateStatus(dom1, dom2, status1, status2, attribute){
 	}).click(function(){
 		var _this = $(this),
 		 	type = 'open',
-		 	id = $(this).attr("data-id");
+		 	id = $(this).attr("data-id"),
+            attribute = $(this).data('type');
 		_this.attr("disabled",true);
 		if(_this.attr("checked")){	//开启
 			type = 'open';

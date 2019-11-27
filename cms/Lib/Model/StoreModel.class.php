@@ -380,7 +380,7 @@ class StoreModel extends Model
     public function get_goods_group_by_storeId($storeId){
         $database_goods_sort = D('Shop_goods_sort');
         $condition_goods_sort['store_id'] = $storeId;
-        $sort_list = $database_goods_sort->field(true)->where($condition_goods_sort)->order('`sort_id` ASC')->select();
+        $sort_list = $database_goods_sort->field(true)->where($condition_goods_sort)->order('`sort` desc,`sort_id` ASC')->select();
 
         $new_list = array();
         $today = date('w');

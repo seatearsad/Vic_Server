@@ -689,6 +689,88 @@ class Shop_goodsModel extends Model
             $now_goods['begin_time'] = $show_time[0];
             $now_goods['end_time'] = $show_time[1];
         }
+        $now_goods['is_weekshow'] = $now_sort['is_weekshow'];
+		$weekStr = "";
+        $weekList = explode(',',$now_sort['week']);
+
+        if($now_sort['is_weekshow'] == 1) {
+            $is_weekend = true;
+            $is_workTime = true;
+
+            if (count($weekList) == 2) {
+                foreach ($weekList as $week) {
+                    if ($week != 6 || $week != 0) {
+                        $is_weekend = false;
+                    }
+                }
+
+                if ($is_weekend) $weekStr = "on weekends";
+            } else {
+                $is_weekend = false;
+            }
+
+            if (count($weekList) == 5) {
+                foreach ($weekList as $week) {
+                    if ($week == 6 || $week == 0) {
+                        $is_workTime = false;
+                    }
+                }
+
+                if ($is_workTime) $weekStr = "on weekdays";
+            } else {
+                $is_workTime = false;
+            }
+
+            if (!$is_workTime && !$is_weekend) {
+                if (count($weekList) != 7) {
+                    $weekEn = "";
+                    $i = 1;
+                    foreach ($weekList as $week) {
+                        switch ($week) {
+                            case 0:
+                                $weekEn = "Sunday";
+                                break;
+                            case 1:
+                                $weekEn = "Monday";
+                                break;
+                            case 2:
+                                $weekEn = "Tuesday";
+                                break;
+                            case 3:
+                                $weekEn = "Wednesday";
+                                break;
+                            case 4:
+                                $weekEn = "Thursday";
+                                break;
+                            case 5:
+                                $weekEn = "Friday";
+                                break;
+                            case 6:
+                                $weekEn = "Saturday";
+                                break;
+
+                            default:
+                                break;
+                        }
+
+                        if ($i > 1 && $i == count($weekList)) {
+                            $weekStr = $weekStr.", and ".$weekEn;
+                        } else if ($i == 1) {
+                            $weekStr = $weekStr."on ".$weekEn;
+                        } else {
+                            $weekStr = $weekStr.", ".$weekEn;
+                        }
+                        $i++;
+                    }
+                } else {
+                    $weekStr = "every day";
+                }
+            }
+        }else{
+            $weekStr = "every day";
+        }
+
+        $now_goods['weekStr'] = $weekStr;
 
 		return $now_goods;
 	}
