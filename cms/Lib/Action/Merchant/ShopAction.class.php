@@ -644,8 +644,15 @@ class ShopAction extends BaseAction
         $this->assign('now_sort', $now_sort);
         $this->assign('now_store', $now_store);
 
+        $is_hide = isset($_GET['hidden']) ? $_GET['hidden'] : 1;
+        $this->assign('is_hide',$is_hide);
+
         $database_goods = D('Shop_goods');
         $condition_goods['sort_id'] = $now_sort['sort_id'];
+
+        if($is_hide == 1)
+            $condition_goods['status'] = array('neq',2);
+
         $count_goods = $database_goods->where($condition_goods)->count();
         import('@.ORG.merchant_page');
         $p = new Page($count_goods, 20);
@@ -1262,7 +1269,16 @@ class ShopAction extends BaseAction
 
         $database_goods = D('Shop_goods');
         $condition_goods['goods_id'] = $now_goods['goods_id'];
-        $data_goods['status'] = $_POST['type'] == 'open' ? '1' : '0';
+
+        $data_goods = array();
+        if($_POST['type'] == 'hidden'){
+            if($_POST['attribute'] == 1)
+                $data_goods['status'] = 2;
+            else
+                $data_goods['status'] = 1;
+        }else {
+            $data_goods['status'] = $_POST['type'] == 'open' ? '1' : '0';
+        }
         if($database_goods->where($condition_goods)->data($data_goods)->save()){
             exit('1');
         }else{

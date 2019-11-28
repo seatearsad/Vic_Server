@@ -8,7 +8,7 @@
 <script type="text/javascript" src="{pigcms{$static_path}shop/js/jquery1.8.3.js"></script>
 <script type="text/javascript" src="{pigcms{$static_path}shop/js/dialog.js"></script>
 <script type="text/javascript" src="{pigcms{$static_path}shop/js/mobiscroll_min.js"></script>
-
+<script type="text/javascript" src="{pigcms{$static_path}layer/layer.m.js" charset="utf-8"></script>
 <title>{pigcms{$store['name']|default="快店"}</title>
 <meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
 <meta name="Keywords" content="">
@@ -770,11 +770,16 @@ $(document).ready(function () {
 			return false;*/
 			$.post("{pigcms{:U('Shop/checkGoodsTime')}",{'store_id':"{pigcms{$store['store_id']}"},function(data){
                 if(data.error){
-                    motify.log(data.msg);
+                    //motify.log(data.msg);
                     $.cookie('shop_cart_'+"{pigcms{$store['store_id']}",JSON.stringify(data.cartList),{expires:700,path:'/'});
-                    setTimeout(function(){
-                        window.location.reload();
-                    },3000);
+                    var remindTipLayer = layer.open({
+                        content: data.msg,
+                        btn: ['Confirm'],
+                        end: function(){
+                            layer.close(remindTipLayer);
+                            window.location.reload();
+                        }
+                    });
                 }else{
                     document.cart_confirm_form.submit();
                 }

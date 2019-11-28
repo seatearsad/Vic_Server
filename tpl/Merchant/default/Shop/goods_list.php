@@ -25,6 +25,17 @@
                     <button class="btn btn-success" onclick="Modify_tax({pigcms{$now_sort.store_id},{pigcms{$now_sort.sort_id})">修改全部税率</button>
                     <button style="float: right" class="btn btn-success" onclick="ImportExcel()">导入Excel</button>
                     <input type="file" id="inputExcel" style="display:none;">
+                    <div style="float: right;margin-top: 20px;margin-right: 20px">
+                        <label style="float: left">
+                            <if condition="$is_hide eq 1">
+                                不显示被隐藏菜单
+                            <else/>
+                                显示被隐藏菜单
+                            </if>
+                        </label>
+                        <input name="switch-field-1" id="hide_btn" class="ace ace-switch ace-switch-6" type="checkbox" <if condition="$is_hide eq 0">checked="checked"</if>/>
+                        <span class="lbl"></span>
+                    </div>
                     <div id="shopList" class="grid-view">
 						<table class="table table-striped table-bordered table-hover">
 							<thead>
@@ -68,18 +79,28 @@
 											<td class="button-column">{pigcms{$vo.last_time|date='Y-m-d H:i:s',###}</td>
 											<td class="button-column">{pigcms{$vo.print_name}</td>
 											<td class="button-column">
+                                                <if condition="$vo['status'] eq 2">
+                                                    <img src="{pigcms{$static_path}images/noteye.png" width="30" />
+                                                    <else/>
 												<label class="statusSwitch" style="display:inline-block;">
 													<input name="switch-field-1" class="ace ace-switch ace-switch-6" type="checkbox" data-id="{pigcms{$vo.goods_id}" <if condition="$vo['status'] eq 1">checked="checked" data-status="OPEN"<else/>data-status="CLOSED"</if>/>
 													<span class="lbl"></span>
 												</label>
+                                                </if>
 											</td>
 											<td class="button-column">
 												<a title="修改" class="green" style="padding-right:8px;" href="{pigcms{:U('Shop/goods_edit',array('goods_id'=>$vo['goods_id'],'page'=>$_GET['page']))}">
 													<i class="ace-icon fa fa-pencil bigger-130"></i>
 												</a>
-												<a title="删除" class="red" style="padding-right:8px;" href="{pigcms{:U('Shop/goods_del',array('goods_id'=>$vo['goods_id']))}">
-													<i class="ace-icon fa fa-trash-o bigger-130"></i>
-												</a>
+                                                <if condition="$vo['status'] eq 2">
+                                                    <a title="还原" class="orange" style="padding-right:8px;" href="javascript:hiddenGoods({pigcms{$vo['goods_id']},0);">
+                                                        <i class="ace-icon fa fa-refresh bigger-130"></i>
+                                                    </a>
+                                                <else/>
+                                                    <a title="删除" class="red" style="padding-right:8px;" href="javascript:hiddenGoods({pigcms{$vo['goods_id']},1);">
+                                                        <i class="ace-icon fa fa-trash-o bigger-130"></i>
+                                                    </a>
+                                                </if>
                                                 <a title="复制" class="blue" style="padding-right:8px;" href="{pigcms{:U('Shop/goods_copy',array('goods_id'=>$vo['goods_id']))}">
                                                     <i class="ace-icon fa fa-file-o bigger-130"></i>
                                                 </a>
@@ -108,13 +129,29 @@ $(function(){
 	updateStatus(".statusSwitch .ace-switch", ".statusSwitch", "OPEN", "CLOSED", "shopstatus");
 	
 	jQuery(document).on('click','#shopList a.red',function(){
-		if(!confirm('确定要删除这条数据吗?不可恢复。')) return false;
+		if(!confirm('是否确定隐藏此菜品？（此菜品只会被隐藏，隐藏后用户和商家将看不到。此菜品不会被彻底删除，可被复原）')) return false;
 	});
+
+    jQuery(document).on('click','#shopList a.orange',function(){
+        if(!confirm('是否确认还原被隐藏菜品？还原后此菜品商家可见')) return false;
+    });
 
     jQuery(document).on('click','#shopList a.blue',function(){
         if(!confirm('确定要复制此产品吗？')) return false;
     });
 });
+
+function hiddenGoods(goods_id,attribute) {
+    $.ajax({
+        url:"{pigcms{:U('Shop/goods_status')}",
+        type:"post",
+        data:{"type":"hidden","id":goods_id,"status1":0,"status2":2,"attribute":attribute},
+        dataType:"text",
+        success:function(d){
+            window.location.reload();
+        }
+    });
+}
 function CreateShop(){
 	window.location.href = "{pigcms{:U('Shop/goods_add',array('sort_id' => $now_sort['sort_id']))}";
 }
@@ -213,6 +250,13 @@ $('#inputExcel').change(function (e) {
 
     // 以二进制方式打开文件
     fileReader.readAsBinaryString(files[0]);
+});
+
+$('#hide_btn').click(function () {
+    var is_hide = "{pigcms{$is_hide}";
+    is_hide = is_hide == "1" ? 0 : 1;
+
+    window.location.href = "{pigcms{:U('Shop/goods_list',array('sort_id' => $now_sort['sort_id']))}"+"&hidden="+is_hide;
 });
 </script>
 <include file="Public:footer"/>

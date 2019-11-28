@@ -2621,6 +2621,8 @@ class StorestaffAction extends BaseAction
 
         $database_goods = D('Shop_goods');
         $condition_goods['sort_id'] = $sort_id;
+        //不展现已隐藏的产品
+        $condition_goods['status'] = array('neq',2);
         $count_goods = $database_goods->where($condition_goods)->count();
         import('@.ORG.merchant_goods');
         $p = new Page($count_goods, 10);
