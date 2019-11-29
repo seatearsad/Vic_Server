@@ -773,7 +773,7 @@ $(document).ready(function () {
                     //motify.log(data.msg);
                     $.cookie('shop_cart_'+"{pigcms{$store['store_id']}",JSON.stringify(data.cartList),{expires:700,path:'/'});
                     var remindTipLayer = layer.open({
-                        content: data.msg,
+                        content: "<label style='word-break: break-word;'>" + data.msg + "</label>",
                         btn: ['Confirm'],
                         end: function(){
                             layer.close(remindTipLayer);
