@@ -3137,7 +3137,6 @@ class MyAction extends BaseAction{
 // 		$status == 1 && $where['status'] = 0;
 // 		$status == 2 && $where['status'] = 1;
 
-
  		$where .= " AND is_del = 0";
 		$order_list = D("Shop_order")->get_order_list($where, 'order_id DESC', 11);//field(true)->where($where)->order('order_id DESC')->select();
 		$order_list = $order_list['order_list'];
