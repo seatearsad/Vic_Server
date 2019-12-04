@@ -1652,8 +1652,8 @@
         $('#count_down').html(time_str);
 
         if(cha_time < 0){
-            layer.open({content:'Pay time error!',shadeClose:false,btn:['OK'],yes:function(){
-                window.location.href = "{pigcms{:U('My/shop_order_list')}";
+            layer.open({content:'Payment over-time. You will be directed back to the menu.',shadeClose:false,btn:['OK'],yes:function(){
+                window.location.href = "{pigcms{:U('Shop/classic_shop')}&shop_id={pigcms{$order_info.store_id}";
             }});
         }else {
             window.setTimeout(function () {
