@@ -1005,6 +1005,8 @@ class Shop_orderModel extends Model
 				$notOffline =($now_merchant['is_close_offline'] == 0 && $now_merchant['is_offline'] == 1) ? 0 : 1;
 			}
 		}
+
+		var_dump($list);die();
 		foreach ($list as &$order) {
 			$order['offline_price'] = round($order['price'] +$order['extra_price'] + $order['tip_charge'] - round($order['card_price'] + $order['merchant_balance'] + $order['card_give_money'] +$order['balance_pay'] + $order['payment_money'] + $order['score_deducte'] + $order['coupon_price'] + $order['delivery_discount'], 2), 2);
 			$order['deliver_info'] = $order['deliver_info'] ? unserialize($order['deliver_info']) : '';
