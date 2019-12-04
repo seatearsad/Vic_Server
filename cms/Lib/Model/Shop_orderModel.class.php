@@ -9,19 +9,19 @@ class Shop_orderModel extends Model
 
         $allList = $this->where(array('paid'=>0))->order('create_time asc')->select();
         $delList = array();
-        foreach ($allList as $order){
-			$store = D('Merchant_store')->where(array('store_id'=>$order['store_id']))->find();
-			if($store)
-				$jetlag = D('Area')->field('jetlag')->where(array('area_id'=>$store['city_id']))->find()['jetlag'];
-			if($jetlag)
-				$cha = time() + $jetlag*3600 - $order['create_time'];
-			if($cha && $cha > 300){
-				$delList[] = $order['order_id'];
-			}
-		}
-
-		$this->where(array('order_id'=>array('in',$delList)))->delete();
-		D('Shop_order_detail')->where(array('order_id'=>array('in',$delList)))->delete();
+//        foreach ($allList as $order){
+//			$store = D('Merchant_store')->where(array('store_id'=>$order['store_id']))->find();
+//			if($store)
+//				$jetlag = D('Area')->field('jetlag')->where(array('area_id'=>$store['city_id']))->find()['jetlag'];
+//			if($jetlag)
+//				$cha = time() + $jetlag*3600 - $order['create_time'];
+//			if($cha && $cha > 300){
+//				$delList[] = $order['order_id'];
+//			}
+//		}
+//
+//		$this->where(array('order_id'=>array('in',$delList)))->delete();
+//		D('Shop_order_detail')->where(array('order_id'=>array('in',$delList)))->delete();
     }
 
 	public function getStatusList(){
