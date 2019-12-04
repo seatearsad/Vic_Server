@@ -4,11 +4,11 @@ class Shop_orderModel extends Model
 	public $status_list = array('-1' => '全部' ,'0' => '未接单', 1 => '已确认', 2 => '已消费', 3 => '已评价', 4 => '已退款', 5 => '已取消', 7 => '分配到自提点', 8 => '发货到自提点', 9 => '自提点接货', 10 => '自提点发货');
 	public $status_list_admin = array('-1' => '全部', '100'=>'未支付' ,'0' => '未接单', 1 => '已确认', 2 => '已消费', 3 => '已评价', 4 => '已退款', 5 => '已取消', 7 => '分配到自提点', 8 => '发货到自提点', 9 => '自提点接货', 10 => '自提点发货');
 
-    public function __construct(){
-        parent::__construct();
+//    public function __construct(){
+      //  parent::__construct();
 
-        $allList = $this->where(array('paid'=>0))->order('create_time asc')->select();
-        $delList = array();
+        //$allList = $this->where(array('paid'=>0))->order('create_time asc')->select();
+        //$delList = array();
 //        foreach ($allList as $order){
 //			$store = D('Merchant_store')->where(array('store_id'=>$order['store_id']))->find();
 //			if($store)
@@ -22,7 +22,7 @@ class Shop_orderModel extends Model
 //
 //		$this->where(array('order_id'=>array('in',$delList)))->delete();
 //		D('Shop_order_detail')->where(array('order_id'=>array('in',$delList)))->delete();
-    }
+    //}
 
 	public function getStatusList(){
         return array(
