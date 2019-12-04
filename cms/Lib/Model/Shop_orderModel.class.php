@@ -7,7 +7,7 @@ class Shop_orderModel extends Model
     public function __construct(){
         parent::__construct();
 
-        $allList = $this->where(array('paid'=>0))->order('create_time asc')->select();
+        //$allList = $this->where(array('paid'=>0))->order('create_time asc')->select();
         //$delList = array();
 //        foreach ($allList as $order){
 //			$store = D('Merchant_store')->where(array('store_id'=>$order['store_id']))->find();
