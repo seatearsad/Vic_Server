@@ -967,11 +967,13 @@ class Shop_orderModel extends Model
 
 	public function get_order_list($where = array(), $order = 'pay_time DESC', $is_wap = false)
 	{
+		var_dump($where);
 		if (isset($where['status']) && $where['status'] === 0) $where['paid'] = 1;
 		if (is_array($where)) $where['is_del'] = 0;
 		if($is_wap != 10){
 			$count = $this->where($where)->count();
 		}
+		var_dump($count);die();
 		if ($is_wap == 4) {
 	        import('@.ORG.wap_group_page');
 	        $p = new Page($count, 20, 'p');
@@ -1006,7 +1008,6 @@ class Shop_orderModel extends Model
 			}
 		}
 
-		var_dump($list);die();
 		foreach ($list as &$order) {
 			$order['offline_price'] = round($order['price'] +$order['extra_price'] + $order['tip_charge'] - round($order['card_price'] + $order['merchant_balance'] + $order['card_give_money'] +$order['balance_pay'] + $order['payment_money'] + $order['score_deducte'] + $order['coupon_price'] + $order['delivery_discount'], 2), 2);
 			$order['deliver_info'] = $order['deliver_info'] ? unserialize($order['deliver_info']) : '';

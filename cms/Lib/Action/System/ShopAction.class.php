@@ -341,7 +341,6 @@ class ShopAction extends BaseAction
         }
 
         $result = D("Shop_order")->get_order_list($where, $order_sort, 3);
-        var_dump($result);die();
         $list = isset($result['order_list']) ? $result['order_list'] : '';
         $store_ids = array();
         foreach ($list as $l) {
