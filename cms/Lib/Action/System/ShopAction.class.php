@@ -339,8 +339,9 @@ class ShopAction extends BaseAction
             $where['_string'] .=( $where['_string']?' AND ':''). " (create_time BETWEEN ".$period[0].' AND '.$period[1].")";
             //$condition_where['_string']=$time_condition;
         }
-        var_dump($where);die();
+
         $result = D("Shop_order")->get_order_list($where, $order_sort, 3);
+        var_dump($result);die();
         $list = isset($result['order_list']) ? $result['order_list'] : '';
         $store_ids = array();
         foreach ($list as $l) {
