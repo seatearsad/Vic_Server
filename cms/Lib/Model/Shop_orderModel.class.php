@@ -11,9 +11,11 @@ class Shop_orderModel extends Model
         $delList = array();
         foreach ($allList as $order){
 			$store = D('Merchant_store')->where(array('store_id'=>$order['store_id']))->find();
-			$jetlag = D('Area')->field('jetlag')->where(array('area_id'=>$store['city_id']))->find()['jetlag'];
-			$cha = time() + $jetlag*3600 - $order['create_time'];
-			if($cha > 300){
+			if($store)
+				$jetlag = D('Area')->field('jetlag')->where(array('area_id'=>$store['city_id']))->find()['jetlag'];
+			if($jetlag)
+				$cha = time() + $jetlag*3600 - $order['create_time'];
+			if($cha && $cha > 300){
 				$delList[] = $order['order_id'];
 			}
 		}
@@ -967,13 +969,11 @@ class Shop_orderModel extends Model
 
 	public function get_order_list($where = array(), $order = 'pay_time DESC', $is_wap = false)
 	{
-		var_dump($where);
 		if (isset($where['status']) && $where['status'] === 0) $where['paid'] = 1;
 		if (is_array($where)) $where['is_del'] = 0;
 		if($is_wap != 10){
 			$count = $this->where($where)->count();
 		}
-		var_dump($count);die();
 		if ($is_wap == 4) {
 	        import('@.ORG.wap_group_page');
 	        $p = new Page($count, 20, 'p');
