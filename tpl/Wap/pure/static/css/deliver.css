@@ -96,12 +96,12 @@ body{ padding:0px; margin:0px auto; font-size:14px; min-width:320px; max-width:6
 .clerk .clerk_r h2{ font-size: 18px; color: #333333; }
 .clerk .clerk_r h2 i{ color: #ff6666; font-size: 14px; }
 .clerk .clerk_r p{ font-size: 15px; color: #666666; overflow: hidden; white-space: nowrap;text-overflow: ellipsis;-o-text-overflow: ellipsis; }
-.clerk .clerk_end{ background: #fff;  }
-.clerk .clerk_end li{ width: 33%; text-align: center; line-height:30px;   position: relative;}
-.clerk .clerk_end li a{ display: block;padding: 25px 0; }
-.clerk .clerk_end li h2{ font-size: 30px; font-family: "Arial"; }
-.clerk .clerk_end li p{ font-size: 16px; font-size: #333333; }
-.clerk .clerk_end li i{ position: absolute; height: 5px; width: 100%; top: 0px; left: 0px;  }
+.clerk .clerk_end{ background: #fff;}
+.clerk .clerk_end li{ width: 33%; text-align: center; line-height:20px;   position: relative;}
+.clerk .clerk_end li a{ display: block;padding: 8px 0; }
+.clerk .clerk_end li h2{ font-size: 18px; font-family: "Arial"; }
+.clerk .clerk_end li p{ font-size: 13px; font-size: #333333; }
+.clerk .clerk_end li i{ position: absolute; height: 2px; width: 100%; top: 0px; left: 0px;  }
 .clerk .clerk_end li.Grab i{  background: -webkit-linear-gradient(left, #fb5d68 0%,#f06793 100%) top center; }
 .clerk .clerk_end li.Grab h2{ color: #fd6254; }
 .clerk .clerk_end li.Handle{ border: #e7e7e7 1px solid; border-top: none; border-bottom: none; }
@@ -182,7 +182,7 @@ body{ padding:0px; margin:0px auto; font-size:14px; min-width:320px; max-width:6
 
 
 /*5-订单详情*/
-.PsorderX{  border-bottom: #e7e7e7 1px solid; margin-bottom: 10px; }
+.PsorderX{  border-bottom: #e7e7e7 1px solid; margin-bottom: 90px; }
 .details{ background: url(../images/nybjt_03.jpg) top #fff; background-size: 21px 4px;     background-repeat: repeat-x; margin-bottom: 10px; border-bottom: #e7e7e7 1px solid;   }
 .details .details_top{ padding: 18px 0; line-height: 24px; position: relative; }
 .details .details_top p{ line-height: 20px; padding-right: 35px; }
@@ -191,15 +191,16 @@ body{ padding:0px; margin:0px auto; font-size:14px; min-width:320px; max-width:6
 .details .details_top h2 i{ font-size: 18px; }
 .details .details_top span{ padding-left: 70px; display: block; }
 
-.Psorder{ background: #fff; }
+.Psorder{ background: #fff;}
 .Psorder .Psorder_top{ border-bottom: #e7e7e7 1px solid;}
-.Psorder .Psorder_top h2{ line-height: 53px; background: url(../images/dindxqt_20.png) left center no-repeat; background-size: 13px 14px; padding-left: 20px; }
-.Psorder .Psorder_end{ padding: 12px 10px; border-bottom: #e7e7e7 1px solid;}
-.Psorder .Psorder_end dd{ float: left; width: 40%; font-size: 14px; color: #666666; line-height: 24px;  }
-.Psorder .Psorder_end dd.on{ text-align: center; width: 20% }
+.Psorder .Psorder_top h2{ line-height: 30px; background: url(../images/dindxqt_20.png) left center no-repeat; background-size: 13px 14px; padding-left: 20px; font-size: 14px}
+.Psorder .Psorder_end{ padding: 5px 10px; border-bottom: #e7e7e7 1px solid;}
+.Psorder .Psorder_end dd{ float: left; width: 43%; font-size: 12px; color: #333333; line-height: 22px;  }
+.Psorder .Psorder_end dd.on{ text-align: center; width: 10% }
 .Psorder .Psorder_end dd.rig{ text-align: right; }
 .Psorder .Psorder_end dd i{ font-size: 12px; }
 .Psorder .Psorder_end span{ min-width: 28px; display: inline-block; text-align: left; }
+.Psorder .Psorder_end li{border-bottom: 1px dashed #e7e7e7;font-size: 10px}
 
 .details_list { background: #fff; padding: 10px; }
 .details_list p{ line-height: 24px; text-align: right; }
@@ -209,9 +210,9 @@ body{ padding:0px; margin:0px auto; font-size:14px; min-width:320px; max-width:6
 .Remarks{ background: #fff; border-top: #e7e7e7 1px solid; padding: 15px 10px; }
 .Remarks .Remarks_rig{ padding-left: 40px; font-size: 14px; color: #999999;  text-align: right; }
 
-.information{ margin-bottom: 10px;  }
+.information{background-color: white; border-bottom: #e7e7e7 1px solid; padding: 10px 0;}
 .information .Psorder_top h2{ background: url(../images/dindxqt_24.png) left center no-repeat;  background-size: 11px 14px; }
-.information .information_end li{ line-height: 44px; border-bottom: #e7e7e7 1px solid; }
+.information .information_end li{ line-height: 30px;}
 .information .information_end li .c80{ color: #808080; }
 .information .information_end li .c25{ color: #25e28b; }
 
@@ -219,6 +220,7 @@ body{ padding:0px; margin:0px auto; font-size:14px; min-width:320px; max-width:6
 .Merchant .Psorder_top h2{ background: url(../images/dindxqt_27.png) left center no-repeat;  background-size: 14px 14px; }
 .Ps_bottom{ position: fixed; bottom: 0px; left: 0px; width: 100%; }
 .Ps_bottom a{  padding: 10px 30%; }
+.Ps_bottom div{width:95%;font-size: 10px;margin: 0 auto;}
 
 /*统计*/
 .Statistics .Statistics_top{ background: #fff; }

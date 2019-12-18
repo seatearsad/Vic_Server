@@ -45,7 +45,7 @@ $(function(){
 	console.log(pyrmont);
 	map = new google.maps.Map(document.getElementById('map'), {
 		center: pyrmont,
-        zoom: 15,
+        zoom: 16,
         mapTypeId: 'terrain'
 	});
 	
@@ -53,14 +53,16 @@ $(function(){
 	var marker = new google.maps.Marker({
 		position: {lng: {pigcms{$supply['aim_lnt']}, lat: {pigcms{$supply['aim_lat']}},
         map: map,
-        icon:"{pigcms{$static_path}/images/map/my_pos.png"
+        title:"Destination",
+        icon:"{pigcms{$static_path}images/map/use_icon.png"
     });
 
     //店铺图标
     var marker2 = new google.maps.Marker({
 		position: {lng: {pigcms{$supply['from_lnt']}, lat: {pigcms{$supply['from_lat']}},
         map: map,
-        icon:"{pigcms{$static_path}/images/map/store_pos.png"
+        title:"Pick Up Point",
+        icon:"{pigcms{$static_path}images/map/store_icon.png"
     });
 
     //配送员位置

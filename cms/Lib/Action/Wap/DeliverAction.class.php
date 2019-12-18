@@ -540,7 +540,13 @@ class DeliverAction extends BaseAction
 						}
 						break;
 				}
-				$val['deliver_cash'] = floatval($val['deliver_cash']);
+
+                $show_create_time = time() -$val['create_time'];
+                $show_dining_time = time() - ($val['create_time'] + $val['dining_time']*60);
+                $val['show_create_time'] = show_time_ago($show_create_time);
+                $val['show_dining_time'] = show_time_ago($show_dining_time);
+
+                $val['deliver_cash'] = floatval($val['deliver_cash']);
 				$val['distance'] = floatval($val['distance']);
 				$val['freight_charge'] = floatval($val['freight_charge']);
                 $val['meal_time'] = date('Y-m-d H:i',($val['create_time'] + $val['dining_time']*60));
@@ -550,8 +556,6 @@ class DeliverAction extends BaseAction
 				$val['real_orderid'] = $val['real_orderid'] ? $val['real_orderid'] : $val['order_id'];
 				$val['store_distance'] = getRange(getDistance($val['from_lat'], $val['from_lnt'], $lat, $lng));
 				$val['map_url'] = U('Deliver/map', array('supply_id' => $val['supply_id']));
-
-
 
 				$order = D('Shop_order')->get_order_by_orderid($val['order_id']);
 				$val['tip_charge'] = $order['tip_charge'];
@@ -564,6 +568,119 @@ class DeliverAction extends BaseAction
 		
 		$this->display();
 	}
+
+	public function process(){
+        $city_id = $this->deliver_session['city_id'];
+        $city = D('Area')->where(array('area_id'=>$city_id))->find();
+
+        if($this->deliver_session['work_status'] == 0 || $city['urgent_time'] != 0) {
+            $my_distance = $this->deliver_session['range'] * 1000;
+            $time = time();
+            $where = "`create_time`<$time AND `status`=1 AND ROUND(6378.138 * 2 * ASIN(SQRT(POW(SIN(({$this->deliver_session['lat']}*PI()/180-`from_lat`*PI()/180)/2),2)+COS({$this->deliver_session['lat']}*PI()/180)*COS(`from_lat`*PI()/180)*POW(SIN(({$this->deliver_session['lng']}*PI()/180-`from_lnt`*PI()/180)/2),2)))*1000) < $my_distance ";
+            if ($this->deliver_session['group'] == 2 && $this->deliver_session['store_id']) {
+                $where = "`type`= 1 AND `store_id`=" . $this->deliver_session['store_id'] . " AND " . $where;
+            } else {
+                $where = "`type`= 0 AND " . $where;
+            }
+
+            //$gray_count = D("Deliver_supply")->where($where)->count();
+            //garfunkel 添加派单逻辑
+            $gray_list = D("Deliver_supply")->where($where)->select();
+            $gray_count = 0;
+            foreach ($gray_list as $k => $v) {
+                $store = D('Merchant_store')->field(true)->where(array('store_id' => $v['store_id']))->find();
+                if ($store['city_id'] == $city_id) {
+                    $supply_id = $v['supply_id'];
+                    $deliver_assign = D('Deliver_assign')->field(true)->where(array('supply_id' => $supply_id))->find();
+                    $record_array = explode(',', $deliver_assign['record']);
+                    //派单列表中不存在 || 派单列表中开放 || 指定派单 && 不在转接等候期
+                    if (!$deliver_assign || ($deliver_assign['deliver_id'] == 0 && !in_array($this->deliver_session['uid'], $record_array)) || $deliver_assign['deliver_id'] == $this->deliver_session['uid']) {
+                        $gray_count += 1;
+                    }
+                }
+            }
+        }else{
+            $gray_count = 0;
+        }
+
+        $deliver_count = D('Deliver_supply')->where(array('uid' => $this->deliver_session['uid'], 'status' => array(array('gt', 0), array('lt', 5))))->count();
+
+        $this->assign(array('gray_count' => $gray_count, 'deliver_count' => $deliver_count));
+	    $this->display();
+    }
+
+    public function get_process(){
+	    if(IS_POST){
+	        $status = $_POST['status'];
+
+            $uid = $this->deliver_session['uid'];
+            $where = array();
+            if($status == 0)
+                $where['status'] = array("between","2,4");
+            else
+                $where['status'] = $status;
+
+            $where['uid'] = $uid;
+            if ($this->deliver_session['group'] == 2 && $this->deliver_session['store_id']) {
+                $where['store_id'] = $this->deliver_session['store_id'];
+            }
+            $list = $this->deliver_supply->field(true)->where($where)->order("`create_time` DESC")->select();
+            if (false === $list) {
+                $this->error("系统错误");
+                exit;
+            }
+
+            if(!$list){
+                $list = array();
+            }
+
+            foreach ($list as &$val) {
+                switch ($val['pay_type']) {
+                    case 'offline':
+                    case 'Cash':
+                        $val['pay_method'] = 0;
+                        break;
+                    default:
+                        if ($val['paid']) {
+                            $val['pay_method'] = 1;
+                        } else {
+                            $val['pay_method'] = 0;
+                        }
+                        break;
+                }
+
+                $show_create_time = time() -$val['create_time'];
+                $show_dining_time = time() - ($val['create_time'] + $val['dining_time']*60);
+                $val['show_create_time'] = show_time_ago($show_create_time);
+                $val['show_dining_time'] = show_time_ago($show_dining_time);
+
+                $val['deliver_cash'] = floatval($val['deliver_cash']);
+                $val['distance'] = floatval($val['distance']);
+                $val['freight_charge'] = floatval($val['freight_charge']);
+                $val['meal_time'] = date('Y-m-d H:i',($val['create_time'] + $val['dining_time']*60));
+                $val['create_time'] = date('Y-m-d H:i', $val['create_time']);
+                $val['appoint_time'] = date('Y-m-d H:i', $val['appoint_time']);
+                $val['order_time'] = $val['order_time'] ? date('Y-m-d H:i', $val['order_time']) : '--';
+                $val['real_orderid'] = $val['real_orderid'] ? $val['real_orderid'] : $val['order_id'];
+// 			$val['store_distance'] = getRange(getDistance($val['from_lat'], $val['from_lnt'], $lat, $lng));
+                $val['map_url'] = U('Deliver/map', array('supply_id' => $val['supply_id']));
+                if ($val['change_log']) {
+                    $changes = explode(',', $val['change_log']);
+                    $uid = array_pop($changes);
+                    $val['change_name'] = $this->getDeliverUser($uid);
+                }
+
+                $store = D('Merchant_store')->field(true)->where(array('store_id'=>$val['store_id']))->find();
+                $val['store_name'] = lang_substr($store['name'],C('DEFAULT_LANG'));
+            }
+
+            $acc_num = $this->deliver_supply->where(array('status'=>2,'uid'=>$uid))->count();
+            $pick_num = $this->deliver_supply->where(array('status'=>3,'uid'=>$uid))->count();
+            $route_num = $this->deliver_supply->where(array('status'=>4,'uid'=>$uid))->count();
+
+            exit(json_encode(array('error_code' => false, 'list' => $list,'anum'=>$acc_num,'pnum'=>$pick_num,'rnum'=>$route_num)));
+        }
+    }
 	
 	//取
 	public function pick() 
@@ -647,56 +764,56 @@ class DeliverAction extends BaseAction
 			$this->success("Successful");
 			exit;
 		}
-		$where = array();
-		$where['status'] = 2;
-		$where['uid'] = $uid;
-		if ($this->deliver_session['group'] == 2 && $this->deliver_session['store_id']) {
-			$where['store_id'] = $this->deliver_session['store_id'];
-		}
-		$list = $this->deliver_supply->field(true)->where($where)->order("`create_time` DESC")->select();
-		if (false === $list) {
-			$this->error("系统错误");
-			exit;
-		}
-		
-		foreach ($list as &$val) {
-			switch ($val['pay_type']) {
-				case 'offline':
-                case 'Cash':
-					$val['pay_method'] = 0;
-					break;
-				default:
-					if ($val['paid']) {
-						$val['pay_method'] = 1;
-					} else {
-						$val['pay_method'] = 0;
-					}
-					break;
-			}
-			$val['deliver_cash'] = floatval($val['deliver_cash']);
-			$val['distance'] = floatval($val['distance']);
-			$val['freight_charge'] = floatval($val['freight_charge']);
-            $val['meal_time'] = date('Y-m-d H:i',($val['create_time'] + $val['dining_time']*60));
-            $val['create_time'] = date('Y-m-d H:i', $val['create_time']);
-			$val['appoint_time'] = date('Y-m-d H:i', $val['appoint_time']);
-			$val['order_time'] = $val['order_time'] ? date('Y-m-d H:i', $val['order_time']) : '--';
-			$val['real_orderid'] = $val['real_orderid'] ? $val['real_orderid'] : $val['order_id'];
-// 			$val['store_distance'] = getRange(getDistance($val['from_lat'], $val['from_lnt'], $lat, $lng));
-			$val['map_url'] = U('Deliver/map', array('supply_id' => $val['supply_id']));
-			if ($val['change_log']) {
-				$changes = explode(',', $val['change_log']);
-				$uid = array_pop($changes);
-				$val['change_name'] = $this->getDeliverUser($uid);
-			}
-//            $order = D('Shop_order')->get_order_by_orderid($val['order_id']);
-//            $val['tip_charge'] = $order['tip_charge'];
-//            $val['uid'] = $order['uid'];
-//            $val['deliver_cash'] = $val['deliver_cash'];
-            $store = D('Merchant_store')->field(true)->where(array('store_id'=>$val['store_id']))->find();
-            $val['store_name'] = lang_substr($store['name'],C('DEFAULT_LANG'));
-		}
-		$this->assign('list', $list);
-		$this->display();
+//		$where = array();
+//		$where['status'] = 2;
+//		$where['uid'] = $uid;
+//		if ($this->deliver_session['group'] == 2 && $this->deliver_session['store_id']) {
+//			$where['store_id'] = $this->deliver_session['store_id'];
+//		}
+//		$list = $this->deliver_supply->field(true)->where($where)->order("`create_time` DESC")->select();
+//		if (false === $list) {
+//			$this->error("系统错误");
+//			exit;
+//		}
+//
+//		foreach ($list as &$val) {
+//			switch ($val['pay_type']) {
+//				case 'offline':
+//                case 'Cash':
+//					$val['pay_method'] = 0;
+//					break;
+//				default:
+//					if ($val['paid']) {
+//						$val['pay_method'] = 1;
+//					} else {
+//						$val['pay_method'] = 0;
+//					}
+//					break;
+//			}
+//			$val['deliver_cash'] = floatval($val['deliver_cash']);
+//			$val['distance'] = floatval($val['distance']);
+//			$val['freight_charge'] = floatval($val['freight_charge']);
+//            $val['meal_time'] = date('Y-m-d H:i',($val['create_time'] + $val['dining_time']*60));
+//            $val['create_time'] = date('Y-m-d H:i', $val['create_time']);
+//			$val['appoint_time'] = date('Y-m-d H:i', $val['appoint_time']);
+//			$val['order_time'] = $val['order_time'] ? date('Y-m-d H:i', $val['order_time']) : '--';
+//			$val['real_orderid'] = $val['real_orderid'] ? $val['real_orderid'] : $val['order_id'];
+//// 			$val['store_distance'] = getRange(getDistance($val['from_lat'], $val['from_lnt'], $lat, $lng));
+//			$val['map_url'] = U('Deliver/map', array('supply_id' => $val['supply_id']));
+//			if ($val['change_log']) {
+//				$changes = explode(',', $val['change_log']);
+//				$uid = array_pop($changes);
+//				$val['change_name'] = $this->getDeliverUser($uid);
+//			}
+////            $order = D('Shop_order')->get_order_by_orderid($val['order_id']);
+////            $val['tip_charge'] = $order['tip_charge'];
+////            $val['uid'] = $order['uid'];
+////            $val['deliver_cash'] = $val['deliver_cash'];
+//            $store = D('Merchant_store')->field(true)->where(array('store_id'=>$val['store_id']))->find();
+//            $val['store_name'] = lang_substr($store['name'],C('DEFAULT_LANG'));
+//		}
+//		$this->assign('list', $list);
+//		$this->display();
 	}
 	
 	private function getDeliverUser($uid)
@@ -809,55 +926,55 @@ class DeliverAction extends BaseAction
 			$this->success("Successful");
 			exit;
 		}
-		$where = array();
-		$where['status'] = 3;
-		// $where['item'] = 1;
-		$where['uid'] = $uid;
-		if ($this->deliver_session['group'] == 2 && $this->deliver_session['store_id']) {
-			$where['store_id'] = $this->deliver_session['store_id'];
-		}
-		$list = $this->deliver_supply->field(true)->where($where)->order("`create_time` DESC")->select();
-		if (false === $list) {
-			$this->error("系统错误");exit;
-		}
-		
-		foreach ($list as &$val) {
-			switch ($val['pay_type']) {
-				case 'offline':
-                case 'Cash':
-					$val['pay_method'] = 0;
-					break;
-				default:
-					if ($val['paid']) {
-						$val['pay_method'] = 1;
-					} else {
-						$val['pay_method'] = 0;
-					}
-					break;
-			}
-			$val['deliver_cash'] = floatval($val['deliver_cash']);
-			$val['distance'] = floatval($val['distance']);
-			$val['freight_charge'] = floatval($val['freight_charge']);
-			$val['create_time'] = date('Y-m-d H:i', $val['create_time']);
-			$val['appoint_time'] = date('Y-m-d H:i', $val['appoint_time']);
-			$val['order_time'] = $val['order_time'] ? date('Y-m-d H:i', $val['order_time']) : '--';
-			$val['real_orderid'] = $val['real_orderid'] ? $val['real_orderid'] : $val['order_id'];
-// 			$val['store_distance'] = getRange(getDistance($val['from_lat'], $val['from_lnt'], $lat, $lng));
-			$val['map_url'] = U('Deliver/map', array('supply_id' => $val['supply_id']));
-			if ($val['change_log']) {
-				$changes = explode(',', $val['change_log']);
-				$uid = array_pop($changes);
-				$val['change_name'] = $this->getDeliverUser($uid);
-			}
-
-            $order = D('Shop_order')->get_order_by_orderid($val['order_id']);
-            $val['tip_charge'] = $order['tip_charge'];
-            $val['uid'] = $order['uid'];
-            $store = D('Merchant_store')->field(true)->where(array('store_id'=>$val['store_id']))->find();
-            $val['store_name'] = lang_substr($store['name'],C('DEFAULT_LANG'));
-		}
-		$this->assign('list', $list);
-		$this->display();
+//		$where = array();
+//		$where['status'] = 3;
+//		// $where['item'] = 1;
+//		$where['uid'] = $uid;
+//		if ($this->deliver_session['group'] == 2 && $this->deliver_session['store_id']) {
+//			$where['store_id'] = $this->deliver_session['store_id'];
+//		}
+//		$list = $this->deliver_supply->field(true)->where($where)->order("`create_time` DESC")->select();
+//		if (false === $list) {
+//			$this->error("系统错误");exit;
+//		}
+//
+//		foreach ($list as &$val) {
+//			switch ($val['pay_type']) {
+//				case 'offline':
+//                case 'Cash':
+//					$val['pay_method'] = 0;
+//					break;
+//				default:
+//					if ($val['paid']) {
+//						$val['pay_method'] = 1;
+//					} else {
+//						$val['pay_method'] = 0;
+//					}
+//					break;
+//			}
+//			$val['deliver_cash'] = floatval($val['deliver_cash']);
+//			$val['distance'] = floatval($val['distance']);
+//			$val['freight_charge'] = floatval($val['freight_charge']);
+//			$val['create_time'] = date('Y-m-d H:i', $val['create_time']);
+//			$val['appoint_time'] = date('Y-m-d H:i', $val['appoint_time']);
+//			$val['order_time'] = $val['order_time'] ? date('Y-m-d H:i', $val['order_time']) : '--';
+//			$val['real_orderid'] = $val['real_orderid'] ? $val['real_orderid'] : $val['order_id'];
+//// 			$val['store_distance'] = getRange(getDistance($val['from_lat'], $val['from_lnt'], $lat, $lng));
+//			$val['map_url'] = U('Deliver/map', array('supply_id' => $val['supply_id']));
+//			if ($val['change_log']) {
+//				$changes = explode(',', $val['change_log']);
+//				$uid = array_pop($changes);
+//				$val['change_name'] = $this->getDeliverUser($uid);
+//			}
+//
+//            $order = D('Shop_order')->get_order_by_orderid($val['order_id']);
+//            $val['tip_charge'] = $order['tip_charge'];
+//            $val['uid'] = $order['uid'];
+//            $store = D('Merchant_store')->field(true)->where(array('store_id'=>$val['store_id']))->find();
+//            $val['store_name'] = lang_substr($store['name'],C('DEFAULT_LANG'));
+//		}
+//		$this->assign('list', $list);
+//		$this->display();
 	}
 	
 	//我的
@@ -1051,55 +1168,55 @@ class DeliverAction extends BaseAction
 			$this->success("Successful");
 			exit;
 		}
-		$where = array();
-		$where['status'] = 4;
-		// $where['item'] = 1;
-		$where['uid'] = $uid;
-		$where['is_hide'] = 0;
-		if ($this->deliver_session['group'] == 2 && $this->deliver_session['store_id']) {
-			$where['store_id'] = $this->deliver_session['store_id'];
-		}
-		$list = $this->deliver_supply->field(true)->where($where)->order("`create_time` DESC")->select();
-		if (false === $list) {
-			$this->error("系统错误");exit;
-		}
-		
-		foreach ($list as &$val) {
-			switch ($val['pay_type']) {
-				case 'offline':
-                case 'Cash':
-					$val['pay_method'] = 0;
-					break;
-				default:
-					if ($val['paid']) {
-						$val['pay_method'] = 1;
-					} else {
-						$val['pay_method'] = 0;
-					}
-					break;
-			}
-			$val['deliver_cash'] = floatval($val['deliver_cash']);
-			$val['distance'] = floatval($val['distance']);
-			$val['freight_charge'] = floatval($val['freight_charge']);
-			$val['create_time'] = date('Y-m-d H:i', $val['create_time']);
-			$val['appoint_time'] = date('Y-m-d H:i', $val['appoint_time']);
-			$val['order_time'] = $val['order_time'] ? date('Y-m-d H:i', $val['order_time']) : '--';
-			$val['real_orderid'] = $val['real_orderid'] ? $val['real_orderid'] : $val['order_id'];
-// 			$val['store_distance'] = getRange(getDistance($val['from_lat'], $val['from_lnt'], $lat, $lng));
-			$val['map_url'] = U('Deliver/map', array('supply_id' => $val['supply_id']));
-			if ($val['change_log']) {
-				$changes = explode(',', $val['change_log']);
-				$uid = array_pop($changes);
-				$val['change_name'] = $this->getDeliverUser($uid);
-			}
-            $order = D('Shop_order')->get_order_by_orderid($val['order_id']);
-            $val['tip_charge'] = $order['tip_charge'];
-            $val['uid'] = $order['uid'];
-            $store = D('Merchant_store')->field(true)->where(array('store_id'=>$val['store_id']))->find();
-            $val['store_name'] = lang_substr($store['name'],C('DEFAULT_LANG'));
-		}
-		$this->assign('list', $list);
-		$this->display();
+//		$where = array();
+//		$where['status'] = 4;
+//		// $where['item'] = 1;
+//		$where['uid'] = $uid;
+//		$where['is_hide'] = 0;
+//		if ($this->deliver_session['group'] == 2 && $this->deliver_session['store_id']) {
+//			$where['store_id'] = $this->deliver_session['store_id'];
+//		}
+//		$list = $this->deliver_supply->field(true)->where($where)->order("`create_time` DESC")->select();
+//		if (false === $list) {
+//			$this->error("系统错误");exit;
+//		}
+//
+//		foreach ($list as &$val) {
+//			switch ($val['pay_type']) {
+//				case 'offline':
+//                case 'Cash':
+//					$val['pay_method'] = 0;
+//					break;
+//				default:
+//					if ($val['paid']) {
+//						$val['pay_method'] = 1;
+//					} else {
+//						$val['pay_method'] = 0;
+//					}
+//					break;
+//			}
+//			$val['deliver_cash'] = floatval($val['deliver_cash']);
+//			$val['distance'] = floatval($val['distance']);
+//			$val['freight_charge'] = floatval($val['freight_charge']);
+//			$val['create_time'] = date('Y-m-d H:i', $val['create_time']);
+//			$val['appoint_time'] = date('Y-m-d H:i', $val['appoint_time']);
+//			$val['order_time'] = $val['order_time'] ? date('Y-m-d H:i', $val['order_time']) : '--';
+//			$val['real_orderid'] = $val['real_orderid'] ? $val['real_orderid'] : $val['order_id'];
+//// 			$val['store_distance'] = getRange(getDistance($val['from_lat'], $val['from_lnt'], $lat, $lng));
+//			$val['map_url'] = U('Deliver/map', array('supply_id' => $val['supply_id']));
+//			if ($val['change_log']) {
+//				$changes = explode(',', $val['change_log']);
+//				$uid = array_pop($changes);
+//				$val['change_name'] = $this->getDeliverUser($uid);
+//			}
+//            $order = D('Shop_order')->get_order_by_orderid($val['order_id']);
+//            $val['tip_charge'] = $order['tip_charge'];
+//            $val['uid'] = $order['uid'];
+//            $store = D('Merchant_store')->field(true)->where(array('store_id'=>$val['store_id']))->find();
+//            $val['store_name'] = lang_substr($store['name'],C('DEFAULT_LANG'));
+//		}
+//		$this->assign('list', $list);
+//		$this->display();
 	}
 
 
@@ -1341,6 +1458,11 @@ class DeliverAction extends BaseAction
 			//garfunkel add
             $order['subtotal_price'] = $order['price'] + $order['tip_charge'];
             $order['deliver_cash'] = round($order['price'] +$order['extra_price'] + $order['tip_charge'] - round($order['card_price'] + $order['merchant_balance'] + $order['card_give_money'] +$order['balance_pay'] + $order['payment_money'] + $order['score_deducte'] + $order['coupon_price'] + $order['delivery_discount'], 2), 2);
+
+            $address = D('User_adress')->where(array('adress_id'=>$order['address_id']))->find();
+            $order['user_address'] = $address['adress'];
+            $order['user_address_detail'] = $address['detail'];
+
 			$this->assign('order', $order);
 
 			$goods = D('Shop_order_detail')->field(true)->where(array('order_id' => $supply['order_id']))->select();
@@ -1352,6 +1474,35 @@ class DeliverAction extends BaseAction
 					$g['name'] = $g['name'] . '(' . $g['spec'] . ')';
 				}
 				$g['tools_money'] = 0;
+
+                $spec_desc = '';
+                $spec_ids = explode('_',$g['spec_id']);
+                foreach ($spec_ids as $vv){
+                    $spec = D('Shop_goods_spec_value')->field(true)->where(array('id'=>$vv))->find();
+                    $spec_desc[] = lang_substr($spec['name'],C('DEFAULT_LANG'));
+                }
+
+                //$goods['spec_desc'] = $spec_desc;
+
+                if($g['pro_id'] != '')
+                    $pro_ids = explode('|',$g['pro_id']);
+                else
+                    $pro_ids = array();
+
+                $spec_desc = "";
+                foreach ($pro_ids as $vv){
+                    $ids = explode(',',$vv);
+                    $proId = $ids[0];
+                    $sId = $ids[1];
+
+                    $pro = D('Shop_goods_properties')->field(true)->where(array('id'=>$proId))->find();
+                    $nameList = explode(',',$pro['val']);
+                    $name = lang_substr($nameList[$sId],C('DEFAULT_LANG'));
+
+                    $spec_desc[] = $name;
+                }
+                $goods[$k]['spec_desc'] = $spec_desc;
+
 
                 if($g['dish_id'] != "" && $g['dish_id'] != null){
                     $dish_desc = array();

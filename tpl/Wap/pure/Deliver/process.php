@@ -79,12 +79,12 @@
         border-left: 2px solid #F4F4F4;
         box-sizing: border-box;
     }
-    .grab i{
-        background-color: #fd6254;
+    .deliver i{
+        background-color: #32620e;
     }
     #container{
         width: 98%;
-        margin: 145px auto 0 auto;
+        margin: 190px auto 20px auto;
     }
     #grab_list{
         color: #333333;
@@ -94,6 +94,11 @@
         margin-top: 3px;
         padding: 5px 2%;
         border-bottom: 1px dashed silver;
+        background-image: url("./tpl/Static/blue/images/new/or_arrow.png");
+        background-repeat: no-repeat;
+        background-position: center right 5px;
+        background-size: auto 20%;
+        cursor: pointer;
     }
     .order_title .pay_status{
         float: right;
@@ -102,6 +107,7 @@
         padding: 1px 4px;
         color: cornflowerblue;
         font-size: 10px;
+        margin-top: -40px;
     }
     .order_title .pay_status_red{
         float: right;
@@ -110,6 +116,7 @@
         padding: 1px 4px;
         color: indianred;
         font-size: 10px;
+        margin-top: -40px;
     }
     .order_time{
         font-size: 9px;
@@ -124,6 +131,14 @@
     }
     .order_time .time_show{
         color: red;
+    }
+    .order_cash{
+        padding: 5px 2%;
+        font-size: 10px;
+        color: #999999;
+    }
+    .order_cash label{
+        color: orangered;
     }
     .order_address{
         padding: 5px 2%;
@@ -152,6 +167,16 @@
         border: 1px solid dimgrey;
         color: dimgrey;
         font-size: 10px;
+    }
+    .note_label{
+        float: left;
+        width: 25px;
+        height: 25px;
+        margin-top: -5px;
+        background-image: url("{pigcms{$static_path}img/note_icon.png");
+        background-size: auto 100%;
+        background-repeat: no-repeat;
+        background-position: left;
     }
     .order_address div{
         width: 100%;
@@ -186,22 +211,160 @@
         background-position: left;
         cursor: pointer;
     }
-    .accept_btn{
+    .phone_btn{
+        float: left;
+        width: 55px;
+        border: 1px solid #59a422;
+        border-radius: 2px;
+        color: #59a422;
+        font-size: 8px;
+        padding-top: 2px;
+        padding-bottom: 2px;
+        padding-left: 24px;
+        padding-right: 0px;
+        margin-bottom: 10px;
+        box-sizing: padding-box;
+        background-image: url("{pigcms{$static_path}img/phone_icon.png");
+        background-size: auto 80%;
+        background-repeat: no-repeat;
+        background-position: left 2px center;
+        cursor: pointer;
+        height: 21px;
+        line-height: 21px;
+        margin-left: 10px;
+    }
+    .accept_btn_2,.accept_btn_3,.accept_btn_4{
         float: right;
-        width: 75%;
+        width: 45%;
         text-align: center;
-        background-color: limegreen;
         border-radius: 3px;
         height: 28px;
         line-height: 28px;
         color: white;
         cursor: pointer;
     }
+    .accept_btn_2{
+        background-color: #7ed957;
+        font-size: 11px;
+    }
+    .accept_btn_3{
+        background-color: #f48383;
+    }
+    .accept_btn_4{
+        background-color: #38b6ff;
+    }
+
     #gray_count{
         color: #fd6254;
     }
     #deliver_count{
         color: #32620e;
+    }
+    #top_menu{
+        width: 98%;
+        margin: 0px auto;
+        text-align: center;
+    }
+    #top_menu li{
+        list-style-type: none;
+        display: inline-block;
+        padding-left: 8px;
+        padding-right: 8px;
+        border-radius: 2px;
+        font-size: 9px;
+        margin-right: 3%;
+        color: #333333;
+        height: 33px;
+        cursor: pointer;
+    }
+    #top_menu label{
+        float: left;
+        cursor: pointer;
+        width: 100%;
+    }
+    #top_menu span{
+        position: relative;
+        float: left;
+        margin-top: 2px;
+        font-size: 10px;
+        width: 100%;
+    }
+    #top_menu .all{
+        font-size: 11px;
+        color: #ffa52d;
+        border: 1px solid #ffa52d;
+    }
+    #top_menu .all label{
+        margin-top: 8px;
+        text-align: center;
+    }
+    #top_menu .all.curr{
+        background-color: #ffa52d;
+        color: white;
+    }
+    #top_menu .accept{
+        border: 1px solid limegreen;
+    }
+    #top_menu .accept.curr{
+        background-color: limegreen;
+        color: white;
+    }
+    #top_menu .accept label{
+        margin-top: 2px;
+    }
+    #top_menu .accept span{
+        color: limegreen;
+    }
+    #top_menu .accept.curr span{
+        color: white;
+    }
+    #top_menu .pickup{
+        border: 1px solid orangered;
+    }
+    #top_menu .pickup.curr{
+        background-color: orangered;
+        color: white;
+    }
+    #top_menu .pickup.curr span{
+        color: white;
+    }
+    #top_menu .pickup label{
+        margin-top: 2px;
+    }
+    #top_menu .pickup span{
+        color: orangered;
+    }
+    #top_menu .route{
+        border: 1px solid cornflowerblue;
+    }
+    #top_menu .route.curr{
+        background-color: cornflowerblue;
+        color: white;
+    }
+    #top_menu .route.curr span{
+        color: white;
+    }
+    #top_menu .route label{
+        margin-top: 2px;
+    }
+    #top_menu .route span{
+        color: cornflowerblue;
+    }
+
+    .status_2,.status_3,.status_4{
+        font-size: 10px;
+        padding: 3px 5px;
+        color: white;
+        border-radius: 2px;
+    }
+    .status_2{
+        background-color: limegreen;
+    }
+    .status_3{
+        background-color: orangered;
+    }
+    .status_4{
+        background-color: cornflowerblue;
     }
 </style>
 <body>
@@ -211,7 +374,7 @@
 		<div class="clerk_end">
 			<ul class="clr">
 				<li class="grab fl">
-					<a href="{pigcms{:U('Deliver/grab')}">
+					<a href="{pigcms{:U('Deliver/index')}">
 						<i></i>
 						<h2 id="gray_count">{pigcms{$gray_count}</h2>
 						<p>{pigcms{:L('_C_ORDER_PENDING_')}</p>
@@ -226,7 +389,26 @@
 				</li>
 			</ul>
 		</div>
-        <div style="background-color: #F4F4F4;height: 15px;width: 100%"></div>
+        <div style="background-color: #F4F4F4;width: 100%;height: 15px;"></div>
+        <div style="background-color: #F4F4F4;width: 100%;height: 45px;">
+            <ul id="top_menu">
+                <li class="all curr" data-type="0">
+                    <label>All</label>
+                </li>
+                <li class="accept" data-type="2">
+                    <span>0</span>
+                    <label>Just Accepted</label>
+                </li>
+                <li class="pickup" data-type="3">
+                    <span>0</span>
+                    <label>Picked Up</label>
+                </li>
+                <li class="route" data-type="4">
+                    <span>0</span>
+                    <label>En Route</label>
+                </li>
+            </ul>
+        </div>
 	</section>
     <div id="container">
         <div class="scroller" id="scroller">
@@ -234,12 +416,21 @@
         </div>
     </div>
     <script src="{pigcms{$static_public}js/laytpl.js"></script>
-    <script type="text/javascript" src="{pigcms{$static_path}js/grab.js?211" charset="utf-8"></script>
     <script id="replyListBoxTpl" type="text/html">
         {{# for(var i = 0, len = d.list.length; i < len; i++){ }}
         <section class="robbed supply_{{ d.list[i].supply_id }}" data-id="{{ d.list[i].supply_id }}">
-            <div class="order_title">
-                <span>{{ d.list[i].store_name }}</span>
+            <div class="order_title" data-id="{{ d.list[i].supply_id }}">
+                <span class="status_{{ d.list[i].status }}">
+                    Order # {{ d.list[i].order_id }} -
+                    {{# if(d.list[i].status == 2){ }}
+                        Waiting for pick-up
+                    {{# } else if(d.list[i].status == 3) { }}
+                        Order in hand, waiting for delivery
+                    {{# } else { }}
+                        Arriving, heading to the destination
+                    {{# } }}
+                </span>
+                <div style="margin-top: 5px">{{ d.list[i].store_name }}</div>
                 {{# if(d.list[i].pay_method == 1){ }}
                 <span class="pay_status">
                     Paid
@@ -252,12 +443,15 @@
                 <div class="order_time">
                     <span>Order placed</span>
                     <span class="time_show">{{ d.list[i].show_create_time }}</span>
+                    {{# if(d.list[i].status == 2){ }}
                     <label> | </label>
                     <span>Order is ready</span>
                     <span class="time_show">{{ d.list[i].show_dining_time }}</span>
+                    {{# } }}
                 </div>
             </div>
             <div class="order_address">
+                {{# if(d.list[i].status == 2){ }}
                 <div>
                     <span class="from_label">
                         From
@@ -265,10 +459,11 @@
                     <span class="address">
                         {{ d.list[i].from_site }}
                         <span class="address_bottom">
-                            You are {{ d.list[i].store_distance }} away from this restaurant.
+
                         </span>
                     </span>
                 </div>
+                {{# } }}
                 <div>
                     <span class="to_label">
                         To
@@ -280,16 +475,38 @@
                         </span>
                     </span>
                 </div>
+                {{# if(d.list[i].desc != '' && d.list[i].status == 4){ }}
+                <div>
+                    <span class="note_label"></span>
+                    <span class="address">
+                        {{ d.list[i].note }}
+                    </span>
+                </div>
+                {{# } }}
             </div>
+            {{# if(d.list[i].pay_method == 0 && d.list[i].status == 4){ }}
+            <div class="order_cash">
+                Amount Due on Delivery : <label>${{ d.list[i].deliver_cash }}</label>
+            </div>
+            {{# } }}
             <div class="order_btn">
-                <a href="{{ d.list[i].map_url }}">
-                <span class="location_btn">
+                <span class="location_btn" data-status="{{ d.list[i].status }}" data-from="{{ d.list[i].from_site }}" data-aim="{{ d.list[i].aim_site }}">
                     Check Location
                 </span>
+                <a href="tel:{{ d.list[i].phone }}">
+                <span class="phone_btn">
+                    {{ d.list[i].phone }}
+                </span>
                 </a>
-                <a href="javascript:void(0);" class="rob" data-spid="{{ d.list[i].supply_id }}">
-                <span class="accept_btn">
-                    Accept
+                <a href="javascript:sendRequest({{ d.list[i].status }},{{ d.list[i].supply_id }});">
+                <span class="accept_btn_{{ d.list[i].status }}">
+                    {{# if(d.list[i].status == 2){ }}
+                        I'm at the Restaurant
+                    {{# } else if(d.list[i].status == 3) { }}
+                        Start Delivery
+                    {{# } else { }}
+                        Order Completed
+                    {{# } }}
                 </span>
                 </a>
             </div>
@@ -297,6 +514,91 @@
         {{# } }}
     </script>
 	<script type="text/javascript">
+        var curr_status = 0;
+        $('#top_menu').find('li').each(function () {
+            $(this).bind('click',function () {
+                changeStatus(this);
+            });
+
+        });
+
+        function changeStatus(obj) {
+            $('#top_menu').find('li').each(function () {
+                $(this).removeClass('curr');
+            });
+            $(obj).addClass('curr');
+            getList($(obj).data('type'));
+        }
+
+        getList(curr_status);
+        function getList(status) {
+            curr_status = status;
+
+            $.post("{pigcms{:U('Deliver/get_process')}",{"status":status,'lat':lat, 'lng':lng},function(result){
+                if(!result.error_code){
+                    laytpl($('#replyListBoxTpl').html()).render(result, function(html){
+                        $('#container').html(html);
+                    });
+
+                    $('.accept span').html(result.anum);
+                    $('.pickup span').html(result.pnum);
+                    $('.route span').html(result.rnum);
+
+                    $('.order_title').click(function () {
+                        var supply_id = $(this).data('id');
+                        var order_url = "{pigcms{:U('Deliver/detail', array('supply_id'=>'"+supply_id+"'))}";
+                        location.href = order_url;
+                    });
+                    
+                    $('.location_btn').click(function () {
+                        var status = $(this).data('status');
+                        var url = '';
+                        if(status == 2)
+                            url = "https://maps.google.com/maps?q="+$(this).data('from')+"&z=17&hl=en";
+                        else
+                            url = "https://maps.google.com/maps?q="+$(this).data('aim')+"&z=17&hl=en";
+
+                        location.href = url;
+                    });
+                }else{
+                    alert("Error");
+                }
+            },'json');
+        }
+
+        function sendRequest(status,supply_id) {
+            var DeliverListUrl = "";
+            var content_msg = "";
+
+            switch (status){
+                case 2:
+                    var order_url = "{pigcms{:U('Deliver/detail', array('supply_id'=>'"+supply_id+"'))}";
+                    location.href = order_url;
+                    return false;
+                    break;
+                case 3:
+                    DeliverListUrl = "{pigcms{:U('Deliver/send')}";
+                    content_msg = 'Order status updated';
+                    break;
+                case 4:
+                    DeliverListUrl = "{pigcms{:U('Deliver/my')}";
+                    content_msg = 'Order Completed';
+                    break;
+
+                default:
+                    break;
+            }
+
+            $.post(DeliverListUrl, "supply_id="+supply_id, function(json){
+                if (json.status) {
+                    layer.open({title:['Reminder','background-color:#ffa52d;color:#fff;'],content:content_msg,btn: ['Confirm'],end:getList(curr_status)});
+                } else {
+                    layer.open({title:['Reminder','background-color:#ffa52d;color:#fff;'],content:'Error',btn: ['Confirm'],end:function(){}});
+                }
+            });
+        }
+        
+
         //定位是否有问题
         var location_error = false;
 
@@ -329,34 +631,19 @@
             map.setCenter({lat: lat, lng: lng});
             updatePosition(lat,lng);
         }
-        
+
         function onError(error) {
             console.log(error.info + '||' + error.message);
         }
 
-        var is_route = {pigcms{$is_route};
+        //var is_route = {pigcms{$is_route};
         var self_position = new google.maps.LatLng({pigcms{$deliver_session['lat']}, {pigcms{$deliver_session['lng']});
         var mapOptions = {
             zoom: 16,
             center: self_position
-        }
-
-        function loadPosition(){
-            marker = new google.maps.Marker({
-                position: self_position,
-                map: map,
-                icon:"{pigcms{$static_path}images/map/my_pos.png"
-            });
-        }
-
+        };
 
         $(function () {
-            if(is_route == 1){//如果已有路线规划 显示路线图
-                loadRoute();
-            }else{
-                loadPosition();
-            }
-
             setInterval(function(){
                 $.get("{pigcms{:U('Deliver/index_count')}", function(response){
                     if (response.err_code == false) {
@@ -385,28 +672,6 @@
                     }
                 }, 10000);
             }
-        }
-
-        function loadRoute() {
-            var directionsService = new google.maps.DirectionsService();
-            var directionsDisplay = new google.maps.DirectionsRenderer();
-            var haight = self_position;
-            var oceanBeach = new google.maps.LatLng({pigcms{$route['destination_lat']?$route['destination_lat']:0}, {pigcms{$route['destination_lng']?$route['destination_lng']:0});
-
-            directionsDisplay.setMap(map);
-
-
-            //var selectedMode = document.getElementById('biz-map').value;
-            var request = {
-                origin: haight,
-                destination: oceanBeach,
-                travelMode: 'DRIVING'
-            };
-            directionsService.route(request, function (response, status) {
-                if (status == 'OK') {
-                    directionsDisplay.setDirections(response);
-                }
-            });
         }
     </script>
 </body>
