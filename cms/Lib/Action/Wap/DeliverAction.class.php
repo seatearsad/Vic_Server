@@ -2401,8 +2401,10 @@ class DeliverAction extends BaseAction
             exit(json_encode(array('error'=>0,'msg'=>'Success')));
         }else {
             $week_num = date("w");
+            $link_num = $_GET['num'] ? $_GET['num'] : $week_num;
             $today = date('Y-m-d');
             $this->assign('week_num', $week_num);
+            $this->assign('link_num',$link_num);
             $this->assign('today', $today);
 
             $default_list = array();
@@ -2468,6 +2470,39 @@ class DeliverAction extends BaseAction
 
         foreach ($re_list as &$v){
             array_multisort(array_column($v['ids'],'start_time'),SORT_ASC,$v['ids']);
+        }
+        //处理连续的时间段
+        foreach ($re_list as &$v){
+            $before_time = -1;
+            $is_continue = false;
+            $end_list = array();
+            $start_time = 0;
+            $end_time = 0;
+            foreach ($v['ids'] as $vv){
+                if($before_time == -1) {
+                    $start_time = $vv['start_time'];
+                    $end_time = $vv['end_time'];
+                }else{
+                    if($before_time == $vv['start_time']){
+                        $end_time = $vv['end_time'];
+                    }else{
+                        $new['start_time'] = $start_time;
+                        $new['end_time'] = $end_time;
+
+                        $end_list[] = $new;
+
+                        $start_time = $vv['start_time'];
+                        $end_time = $vv['end_time'];
+                    }
+                }
+                $before_time = $vv['end_time'];
+            }
+            $new['start_time'] = $start_time;
+            $new['end_time'] = $end_time;
+
+            $end_list[] = $new;
+
+            $v['ids'] = $end_list;
         }
 
         return $re_list;

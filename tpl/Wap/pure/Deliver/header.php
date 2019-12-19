@@ -159,6 +159,7 @@
             <span class="line"></span>
             <span class="line"></span>
         </div>
+        <if condition="ACTION_NAME eq 'index' OR ACTION_NAME eq 'process'">
         <div class="menu_font">Status:
             <if condition="$deliver_session['work_status'] eq '1'">
                 <span class="off_shift">Off Work</span>
@@ -166,9 +167,11 @@
                 <span class="on_shift">On-Shift</span>
             </if>
         </div>
+        </if>
     </div>
+
     <div id="header_sign">
-        <if condition="$city['urgent_time'] neq 0">
+        <if condition="$city['urgent_time'] neq 0 && (ACTION_NAME eq 'index' OR ACTION_NAME eq 'process')">
             <if condition="$deliver_session['work_status'] eq '1'">
                 <a href="javascript:void(0)" class="startOrder" ref="0">{pigcms{:L('_CLOCK_IN_')}</a>
                 <else />
@@ -176,6 +179,7 @@
             </if>
         </if>
     </div>
+
 </div>
 <div id="menu_memo">
     <div id="user_hi">

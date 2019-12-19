@@ -45,62 +45,55 @@
 <style>
 	.startOrder{color: #fff;float: right;background: green;border: 1px solid #ccc;padding: 5px 10px 5px 10px;}
 	.stopOrder{color: #000;float: right;background: #ccc;border: 1px solid #ccc;padding: 5px 10px 5px 10px;}
-    *{
-        color: #666666;
-        font-size: 12px;
-    }
 
     #week_list{
         margin-top: 10px;
-        margin-right: 10px;
         display: flex;
     }
     #week_list div{
-        width: 20px;
-        height: 60px;
-        line-height: 30px;
+        width: 44px;
+        height: 44px;
+        line-height: 44px;
         background-color: white;
-        border-radius: 2px;
+        border-radius: 22px;
         text-align: center;
-        margin-left: 1.5%;
+        color: #999999;
+        margin-left: 1%;
         flex: 1 1 auto;
-        font-size: 12px;
         cursor: pointer;
     }
-    #week_list div.is_set{
-        background-image: url("{pigcms{$static_path}img/set_y.png");
-        background-repeat: no-repeat;
-        background-position: center bottom 10px;
-        background-size: auto 30%;
-    }
-    #week_list div.active.is_set{
-        background-image: url("{pigcms{$static_path}img/set_w.png");
-    }
     #week_list div.active{
-        color: white;
-        background-color: #ffa52d;
+        width: 48px;
+        height: 48px;
+        line-height: 48px;
+        border-radius: 24px;
+        color: #2999f1;
     }
     #date_div{
         width: 100%;
         text-align: center;
         margin-top: 10px;
-        font-size: 12px;
-        text-decoration: underline;
+        font-size: 16px;
+        color: grey;
     }
     #set_btn{
         box-sizing: border-box;
-        width: 100px;
-        height: 25px;
-        line-height: 25px;
+        width: 150px;
+        height: 30px;
+        line-height: 30px;
         text-align: center;
         color: white;
-        font-size: 12px;
-        background-color: #ffa52d;
-        margin: 10px 10px 20px auto;
+        background-color: #33A1FF;
+        margin: 10px auto;
+        background-image: url("{pigcms{$static_path}images/settings.png");
+        background-repeat: no-repeat;
+        background-size: auto 80%;
+        background-position: 10px 4px;
         cursor: pointer;
+        padding-left: 20px;
     }
     #work_list{
-        width: 70%;
+        width: 80%;
         margin: 10px auto;
         text-align: center;
     }
@@ -108,39 +101,67 @@
         height: 30px;
         margin-top: 10px;
         line-height: 30px;
-        font-size: 12px;
-        border: 1px solid #ffa52d;
         background-color: white;
-    }
-    #list_txt{
-        font-size: 9px;margin: 20px auto;color: #999999;width: 80%;
     }
 </style>
 </head>
 <body>
-    <include file="header" />
-	<section class="clerk" style="margin-top: 70px;text-align: center">
-        <div id="set_btn">
-            Add a Shift
-        </div>
+	<section class="clerk" style="margin-bottom: 100px">
+		<!--div class="clerk_top">
+			<div class="fl clerk_img">
+				<if condition="$deliver_session['store_id']">
+                <span style="background: url({pigcms{$store['image']}) center no-repeat; background-size: contain;"></span>
+                <else />
+                <span style="background: url(<if condition="$config['wechat_share_img']">{pigcms{$config.wechat_share_img}<else/>{pigcms{$config.site_logo}</if>) center no-repeat; background-size: contain;"></span>
+                </if>
+			</div>
+			<div class="clerk_r">
+				<h2>{pigcms{$deliver_session['name']}<i> , {pigcms{:L('_HELLO_TXT_')}</i></h2>
+				<p>
+					<if condition="$deliver_session['store_id']">{pigcms{:L('_COURIER_TXT_')}-{pigcms{$store['name']}<else />{pigcms{:L('_COURIER_TXT_')}</if>
+					<if condition="$deliver_session['work_status'] eq '1'">
+					<a href="javascript:void(0)" class="startOrder" ref="0">{pigcms{:L('_CLOCK_IN_')}</a>
+					<else />
+					<a href="javascript:void(0)" class="stopOrder" ref="1">{pigcms{:L('_CLOCK_OUT_')}</a>
+					</if>
+				</p>
+                <div id="set_btn">设置</div>
+			</div>
+		</div-->
 		<div id="week_list">
 
 		</div>
         <div id="date_div">
             {pigcms{:date('Y-m-d',$today)}
         </div>
-        <div style="margin: 20px auto">
-            My Shift:
-        </div>
         <div id="work_list">
 
         </div>
-        <div id="list_txt">
-
+        <div id="set_btn">
+            Scheduling
         </div>
+	</section>
+	<section class="bottom">
+		<div class="bottom_n">
+			<ul>
+				<li class="Statistics Statisticson fl">
+                    <a href="{pigcms{:U('Deliver/schedule')}">{pigcms{:L('_DELIVER_SCHEDULE_')}</a>
+				</li>
+				<li class="home fl">
+					<a href="{pigcms{:U('Deliver/index')}"><i></i>{pigcms{:L('_HOME_TXT_')}</a>
+				</li>
+				<li class="My fl">
+					<a href="{pigcms{:U('Deliver/info')}">{pigcms{:L('_PROFILE_TXT_')}</a>
+				</li>
+			</ul>
+		</div>
 	</section>
 <!-- 	<script src="http://api.map.baidu.com/api?type=quick&ak=4c1bb2055e24296bbaef36574877b4e2&v=1.0"></script> -->
 	<script type="text/javascript">
+        $('#set_btn').click(function () {
+            window.location.href = "{pigcms{:U('Deliver/set_schedule')}";
+        });
+
         var work_list = JSON.parse('{pigcms{$work_list}');
 
         var time_str = parseInt("{pigcms{$today}");
@@ -150,17 +171,10 @@
             var curr_num = init_num + i;
             if(curr_num > 6) curr_num = curr_num - 7;
 
-            var className = '';
-            if(typeof(work_list[curr_num]) != 'undefined'){
-                className = 'is_set';
-            }
-
-            if(i == 0) {
-                className += " active";
-                html += '<div class="'+className+'" data-id="' + curr_num + '" data-num="' + i + '">';
-            }else {
-                html += '<div class="'+className+'" data-id="' + curr_num + '" data-num="' + i + '">';
-            }
+            if(i == 0)
+                html += '<div class="active" data-id="'+curr_num+'" data-num="'+i+'">';
+            else
+                html += '<div data-id="'+curr_num+'" data-num="'+i+'">';
 
             html += week_all[curr_num];
             html += '</div>';
@@ -183,7 +197,7 @@
                 if($(this).data('id') == init_num){
                     $(this).addClass('active');
                 }else{
-                    $(this).removeClass('active');
+                    $(this).removeClass();
                 }
             });
 
@@ -192,32 +206,17 @@
 
         function set_work_list() {
             var html = '';
-            var list_txt = '';
-
             if(typeof(work_list[init_num]) != 'undefined'){
                 var curr_work = work_list[init_num]['ids'];
-
-                if(curr_work.length > 0) {
-                    for (var i = 0; i < curr_work.length; i++) {
-                        html += '<div>';
-                        html += format_time(curr_work[i]['start_time']) + ' -- ' + format_time(curr_work[i]['end_time']);
-                        html += '</div>';
-                    }
-                    list_txt = 'You can click on "Add a Shift" to add or modify your schedule.';
-                }else{
-                    list_txt = 'You haven\'t scheduled any shifts on this day. Please click "Add a Shift" to add or modify your shifts.';
+                for(var i=0;i<curr_work.length;i++) {
+                    html += '<div>';
+                    html += format_time(curr_work[i]['start_time']) + ' -- ' + format_time(curr_work[i]['end_time']);
+                    html += '</div>';
                 }
-            }else{
-                list_txt = 'You haven\'t scheduled any shifts on this day. Please click "Add a Shift" to add or modify your shifts.';
             }
 
-            $('#list_txt').html(list_txt);
             $('#work_list').html(html);
         }
-
-        $('#set_btn').click(function () {
-            window.location.href = "{pigcms{:U('Deliver/set_schedule')}&num="+init_num;
-        });
 
         function format_time(t_time){
             if(t_time < 12)

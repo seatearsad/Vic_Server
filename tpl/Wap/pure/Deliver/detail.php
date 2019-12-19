@@ -192,6 +192,20 @@
                         </div>
                     </li>
                     <li class="clr p10">
+                        <div class="fl c80">Order Type</div>
+                        <div class="fr c80">
+                            <if condition="$supply['get_type'] eq 1">
+                                Assigned
+                            </if>
+                            <if condition="$supply['get_type'] eq 2">
+                                From Courier - {pigcms{$supply['change_name']}
+                            </if>
+                            <if condition="$supply['get_type'] eq 0">
+                                Accepted
+                            </if>
+                        </div>
+                    </li>
+                    <li class="clr p10">
                         <div class="fl c80">Delivery Fee</div>
                         <div class="fr c80">${pigcms{$order['freight_charge']}</div>
                     </li>

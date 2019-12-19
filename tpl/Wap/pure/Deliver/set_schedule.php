@@ -214,12 +214,14 @@
 
         var default_list = JSON.parse('{pigcms{$default_list}');
 
+        var link_num = parseInt("{pigcms{$link_num}");
+
         var html = '';
         for(var i=0;i<7;i++){
             var curr_num = init_num + i;
             if(curr_num > 6) curr_num = curr_num - 7;
 
-            if(i == 0)
+            if(link_num == curr_num)
                 html += '<div class="active" data-id="'+curr_num+'" data-num="'+i+'">';
             else
                 html += '<div data-id="'+curr_num+'" data-num="'+i+'">';
@@ -230,7 +232,7 @@
 
         $('#week_list').html(html);
 
-        getWorkTime(init_num);
+        getWorkTime(link_num);
 
         $('#week_list').children('div').click(function () {
             init_num = $(this).data('id');
