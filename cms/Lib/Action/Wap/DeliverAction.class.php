@@ -1749,7 +1749,7 @@ class DeliverAction extends BaseAction
 		$this->display();
 	}
 	
-	public function tongji()
+	public function orders()
 	{
 		$begin_time = isset($_GET['begin_time']) && $_GET['begin_time'] ? $_GET['begin_time'] : '';
 		$end_time = isset($_GET['end_time']) && $_GET['end_time'] ? $_GET['end_time'] : '';
@@ -1773,6 +1773,100 @@ class DeliverAction extends BaseAction
 		}
 		$result['begin_time'] = $begin_time;
 		$result['end_time'] = $end_time;
+
+        $b_date = $_GET['begin_time'].' 00:00:00';
+        $e_date = $_GET['end_time'].' 24:00:00';
+
+        $b_time = strtotime($b_date);
+        $e_time = strtotime($e_date);
+
+        $sql = "SELECT s.*, u.name, u.phone,o.tip_charge,o.price,o.pay_type as payType,o.coupon_price FROM " . C('DB_PREFIX') . "deliver_supply AS s INNER JOIN " . C('DB_PREFIX') . "deliver_user AS u ON s.uid=u.uid LEFT JOIN " . C('DB_PREFIX') . "shop_order AS o ON s.order_id=o.order_id";
+
+        $sql .= ' where s.uid = '.$this->deliver_session['uid'].' and s.status = 5 and o.is_del = 0';
+        if ($begin_time && $end_time)
+            $sql .= ' and s.create_time >='.$b_time.' and s.create_time <='.$e_time;
+        $sql .= " order by s.create_time DESC";
+        $list = D()->query($sql);
+        foreach ($list as $k=>&$val){
+            $result['tip'] = $result['tip'] ? $result['tip'] + $val['tip_charge'] : $val['tip_charge'];
+            if($val['coupon_price'] > 0) $val['price'] = $val['price'] - $val['coupon_price'];
+            $val['pay_type'] = $val['payType'];
+            if($val['pay_type'] == 'offline' || $val['pay_type'] == 'Cash'){//统计现金
+                $result['offline_money'] = $result['offline_money'] ? $result['offline_money'] + $val['price'] : $val['price'];
+            }else{
+                $result['online_money'] = $result['online_money'] ? $result['online_money'] + $val['price'] : $val['price'];
+            }
+
+            $result['freight_charge'] = $result['freight_charge'] ? $result['freight_charge'] + $val['freight_charge'] : $val['freight_charge'];
+
+            switch ($val['pay_type']) {
+                case 'offline':
+                case 'Cash':
+                    $val['pay_method'] = 0;
+                    break;
+                default:
+                    if ($val['paid']) {
+                        $val['pay_method'] = 1;
+                    } else {
+                        $val['pay_method'] = 0;
+                    }
+                    break;
+            }
+
+            $val['show_time'] = show_time($val['end_time'] - $val['create_time']);
+
+            $val['deliver_cash'] = floatval($val['deliver_cash']);
+            $val['distance'] = floatval($val['distance']);
+            $val['freight_charge'] = floatval($val['freight_charge']);
+            $val['create_time'] = date('Y-m-d H:i', $val['create_time']);
+            $val['appoint_time'] = date('Y-m-d H:i', $val['appoint_time']);
+            $val['order_time'] = $val['order_time'] ? date('Y-m-d H:i', $val['order_time']) : '--';
+            $val['end_time'] = $val['end_time'] ? date('Y-m-d H:i', $val['end_time']) : '未送达';
+            $val['real_orderid'] = $val['real_orderid'] ? $val['real_orderid'] : $val['order_id'];
+// 			$val['store_distance'] = getRange(getDistance($val['from_lat'], $val['from_lnt'], $lat, $lng));
+            $val['map_url'] = U('Deliver/map', array('supply_id' => $val['supply_id']));
+            if ($val['change_log']) {
+                $changes = explode(',', $val['change_log']);
+                $uid = array_pop($changes);
+                $val['change_name'] = $this->getDeliverUser($uid);
+            }
+            $order = D('Shop_order')->get_order_by_orderid($val['order_id']);
+            $val['tip_charge'] = $order['tip_charge'];
+            $val['uid'] = $order['uid'];
+            $store = D('Merchant_store')->field(true)->where(array('store_id'=>$val['store_id']))->find();
+            $val['store_name'] = lang_substr($store['name'],C('DEFAULT_LANG'));
+        }
+
+        $result['order_count'] = count($list);
+
+		$this->assign($result);
+		$this->assign('list',$list);
+		$this->display();
+	}
+
+	public function statistics(){
+        $begin_time = isset($_GET['begin_time']) && $_GET['begin_time'] ? $_GET['begin_time'] : '';
+        $end_time = isset($_GET['end_time']) && $_GET['end_time'] ? $_GET['end_time'] : '';
+        $where = array('uid' => $this->deliver_session['uid'], 'status' => 5);
+        if ($begin_time && $end_time) {
+            $where['end_time'] = array(array('gt', strtotime($begin_time)), array('lt', strtotime($end_time . '23:59:59')));
+        }
+
+//		$result = D('Deliver_supply')->field('sum(deliver_cash) as offline_money, sum(money-deliver_cash) as online_money, sum(freight_charge) as freight_charge')->where($where)->find();
+//      $result = D('Deliver_supply')->field('sum(freight_charge) as freight_charge')->where($where)->find();
+        $count_list = D('Deliver_supply')->field('count(1) as cnt, get_type')->where($where)->group('get_type')->select();
+
+        foreach ($count_list as $row) {
+            if ($row['get_type'] == 0) {
+                $result['self_count'] = $row['cnt'];
+            } elseif ($row['get_type'] == 1) {
+                $result['system_count'] = $row['cnt'];
+            } elseif ($row['get_type'] == 2) {
+                $result['change_count'] = $row['cnt'];
+            }
+        }
+        $result['begin_time'] = $begin_time;
+        $result['end_time'] = $end_time;
 
         $b_date = $_GET['begin_time'].' 00:00:00';
         $e_date = $_GET['end_time'].' 24:00:00';
@@ -1836,10 +1930,49 @@ class DeliverAction extends BaseAction
 
         $result['order_count'] = count($list);
 
-		$this->assign($result);
-		$this->assign('list',$list);
-		$this->display();
-	}
+        $this->assign($result);
+        $this->assign('list',$list);
+
+        $today = date('Y-m-d',time());
+        $today_begin = strtotime($today.'00:00');
+
+        $month = date('Y-m',time());
+        $month_begin = strtotime($month."-01 00:00");
+
+        $where = array('uid' => $this->deliver_session['uid'], 'status' => 5);
+        $where['end_time'] = array(array('gt', $today_begin), array('lt', time()));
+
+        $today_data = D('Deliver_supply')->where($where)->find();
+        $t_data['num'] = count($today_data);
+        $all_t_money = 0;
+        $all_t_distance = 0;
+        foreach ($today_data as $v){
+            $order = D('Shop_order')->get_order_by_orderid($v['order_id']);
+            $all_t_money += $v['freight_charge'];
+            $all_t_money += $order['tip_charge'];
+            $all_t_distance += $v['distance'];
+        }
+        $t_data['money'] = $all_t_money;
+        $t_data['distance'] = $all_t_distance;
+        $this->assign('today_data',$t_data);
+
+        $where['end_time'] = array(array('gt', $month_begin), array('lt', time()));
+        $month_data = D('Deliver_supply')->where($where)->find();
+        $m_data['num'] = count($month_data);
+        $all_m_money = 0;
+        $all_m_distance = 0;
+        foreach ($month_data as $v){
+            $order = D('Shop_order')->get_order_by_orderid($v['order_id']);
+            $all_m_money += $v['freight_charge'];
+            $all_m_money += $order['tip_charge'];
+            $all_m_distance += $v['distance'];
+        }
+        $m_data['money'] = $all_m_money;
+        $m_data['distance'] = $all_m_distance;
+        $this->assign('month_data',$m_data);
+
+        $this->display();
+    }
 	
 	public function finish()
 	{

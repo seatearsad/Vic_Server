@@ -242,6 +242,7 @@
             </div>
         </section>
     </div>
+    <if condition="$supply['status'] neq 5">
     <div class="sign_bottom Ps_bottom">
     	<if condition="$supply['status'] eq 1">
     	<a href="javascript:void(0);" data-id="{pigcms{$supply['supply_id']}" data-status="{pigcms{$supply['status']}" data-url="{pigcms{:U('Deliver/grab')}">{pigcms{:L('_TICK_ORDER_')}</a>
@@ -253,9 +254,10 @@
     	<elseif condition="$supply['status'] eq 4" />
     	<a href="javascript:void(0);" data-id="{pigcms{$supply['supply_id']}" data-status="{pigcms{$supply['status']}" data-url="{pigcms{:U('Deliver/my')}">{pigcms{:L('_ARRIVAL_TXT_')}</a>
     	<elseif condition="$supply['status'] eq 5" />
-    	<!--a href="javascript:void(0);" data-id="{pigcms{$supply['supply_id']}" data-status="{pigcms{$supply['status']}" data-url="{pigcms{:U('Deliver/del')}">{pigcms{:L('_B_PURE_MY_27_')}</a-->
+
     	</if>
-    </div>     
+    </div>
+    </if>
 </body>
 <script>
     function setCookie(c_name,value,expiredays)

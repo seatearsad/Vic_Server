@@ -232,7 +232,7 @@
         location.href = "{pigcms{:U('Deliver/schedule')}"
     });
     $('#menu_stat').click(function () {
-        location.href = "{pigcms{:U('Deliver/tongji')}"
+        location.href = "{pigcms{:U('Deliver/statistics')}"
     });
     $('#menu_account').click(function () {
         location.href = "{pigcms{:U('Deliver/info')}"
@@ -268,6 +268,10 @@
                 window.parent.location = "{pigcms{:U('Deliver/logout')}";
             }
         });
+    });
+
+    $('#user_hi').click(function () {
+        location.href = "{pigcms{:U('Deliver/index')}";
     });
     $("#setting").click(function () {
 

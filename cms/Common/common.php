@@ -947,4 +947,16 @@ function show_time_ago($time){
 
     return $time_str;
 }
+
+function show_time($time){
+    $hour = intval($time / 3600);
+    $min = intval(($time-($hour*3600)) / 60);
+
+    if($hour > 0)
+        $time_str = $hour." hr ".$min." min";
+    else
+        $time_str = $min." min ago";
+
+    return $time_str;
+}
 ?>

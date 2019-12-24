@@ -40,11 +40,35 @@
         });
     });
 </script>
-<body style="background:url({pigcms{$static_path}images/login_02.jpg) left bottom no-repeat #ebf3f8; background-size: 100% 137px;">
+<style>
+    #lang_div{
+        color: #666666;
+        line-height: 30px;
+        padding-left: 30px;
+        margin-top: 10px;
+        margin-left: 10px;
+        background-image:url('{pigcms{$static_path}img/language.png');
+        background-repeat: no-repeat;
+        background-position: center left;
+        background-size:auto 80%;
+    }
+    #lang_div span{
+        cursor: pointer;
+    }
+    #lang_div span.act{
+        color: #ffa52d;
+    }
+</style>
+<body style="background:url('{pigcms{$static_path}img/login_bg.png');">
+<div id="lang_div">
+    <span data-type="en-us" class="act">EN</span>
+    <label> / </label>
+    <span data-type="zh-cn"">CH</span>
+</div>
 	<section class="Land">
 	<div class="Land_top">
-		<span class="fillet" style="background: url(<if condition="$config['wechat_share_img']">{pigcms{$config.wechat_share_img}<else/>{pigcms{$config.site_logo}</if>) center no-repeat; background-size: contain;"></span>
-		<h2>{pigcms{:L('_COURIER_CENTER_')}</h2>
+		<span class="fillet" style="background: url('./tpl/Static/blue/images/new/icon.png') center no-repeat; background-size: contain;"></span>
+		<h2>TUTTI COURIER</h2>
 	</div>
 	<div class="Land_end">
 		<ul>
@@ -56,21 +80,22 @@
 				<input type="password" placeholder="{pigcms{:L('_B_D_LOGIN_KEY1_')}" id="login_pwd">
 				<a href="javascript:void(0)"></a>
 			</li>
-            <li id="findpwd" style="text-align: center;color: #999999;margin-bottom: 5px;cursor: pointer;">
-                Forget password? Find my password
+            <li id="findpwd" style="font-size:10px;text-decoration:underline;text-align: right;color: #666666;margin-bottom: 15px;cursor: pointer;">
+                Forgot Password?
             </li>
 			<li class="Landd">
 				<input type="button" value="{pigcms{:L('_B_D_LOGIN_LOGIN1_')}" id="login_form">
 			</li>
-            <li class="Landd" style="margin-bottom: 30px;">
-                <php>if(C('DEFAULT_LANG') == 'zh-cn'){</php>
-                <input type="button" value="English" class="lang_en" id="lang">
-                <php>}else{</php>
-                <input type="button" value="Chinese" class="lang_cn" id="lang">
-                <php>}</php>
+            <li >
+                <div style="border-bottom: 1px dashed #999999;color:#999999;text-align: center;">
+                    OR
+                </div>
             </li>
-            <li class="Landd">
-                <input type="button" value="{pigcms{:L('_B_D_LOGIN_REG2_')}" id="reg_form" style="background-color: #FF0000;width: 50%;margin-left: 25%;">
+            <li class="Landd" style="color:#666666;text-align: center;margin-top: 20px">
+                Want to Become a Tutti Courier?
+                <div id="reg_form" style="color: royalblue;">
+                    Sign Up Here.
+                </div>
             </li>
 		</ul>
 	</div>     
@@ -97,11 +122,11 @@ $(function(){
 		if (is_click_login) return false;
 		is_click_login = true;
 		if ($('#login_phone').val()=='') {
-			layer.open({title:["{pigcms{:L('_B_D_LOGIN_TIP2_')}：",'background-color:#FF658E;color:#fff;'],content:"{pigcms{:L('_B_LOGIN_ENTERPHONENO_')}",btn: ["{pigcms{:L('_B_D_LOGIN_CONIERM_')}"],end:function(){}});
+			layer.open({title:["{pigcms{:L('_B_D_LOGIN_TIP2_')}：",'background-color:#ffa52d;color:#fff;'],content:"{pigcms{:L('_B_LOGIN_ENTERPHONENO_')}",btn: ["{pigcms{:L('_B_D_LOGIN_CONIERM_')}"],end:function(){}});
 			is_click_login = false;
 			return false;
 		} else if ($('#login_pwd').val()=='') {
-			layer.open({title:["{pigcms{:L('_B_D_LOGIN_TIP2_')}：",'background-color:#FF658E;color:#fff;'],content:"{pigcms{:L('_B_LOGIN_ENTERKEY_')}",btn: ["{pigcms{:L('_B_D_LOGIN_CONIERM_')}"],end:function(){}});
+			layer.open({title:["{pigcms{:L('_B_D_LOGIN_TIP2_')}：",'background-color:#ffa52d;color:#fff;'],content:"{pigcms{:L('_B_LOGIN_ENTERKEY_')}",btn: ["{pigcms{:L('_B_D_LOGIN_CONIERM_')}"],end:function(){}});
 			is_click_login = false;
 			return false;
 		} else {
@@ -171,6 +196,29 @@ function putUserNP(name,password) {
 
 $("#reg_form").click(function () {
     window.location.href = "{pigcms{:U('Deliver/reg')}";
+});
+
+
+var language = "{pigcms{:C('DEFAULT_LANG')}";
+setLanguage(language);
+function setLanguage(language){
+    this.language = language;
+    setCookie('lang',language,30);
+    $('#lang_div').find('span').each(function () {
+        if($(this).data('type') == language)
+            $(this).addClass('act');
+        else
+            $(this).removeClass('act');
+    });
+}
+
+$('#lang_div').find('span').each(function () {
+    $(this).click(function () {
+        if($(this).data('type') != language){
+            setLanguage($(this).data('type'));
+            location.reload();
+        }
+    });
 });
 </script>   
 </html>

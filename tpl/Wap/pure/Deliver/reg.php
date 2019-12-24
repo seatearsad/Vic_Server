@@ -32,83 +32,106 @@
         top: 5%;
         width: 100%;
     }
-    li input {
-        width: 94%;
-        height: 15px;
-        padding: 10px 0;
-        text-indent: 10px;
-        color: #1b9dff;
-        font-size: 14px;
-        background-color: transparent;
-        border-bottom: 1px solid;
-        margin-left: 3%;
+    li{
+        text-align: center;
         margin-top: 10px;
     }
-    li input:focus{
-        border-bottom: 1px solid #FF0000;
+    li input {
+        width: 55%;
+        height: 15px;
+        padding: 8px 0;
+        text-indent: 10px;
+        color: #333333;
+        font-size: 14px;
+        background-color: white;
+        border-radius: 5px;
+        margin-left: 1%;
+        margin-top: 2px;
+        font-size: 12px;
     }
+
     li.Landd input {
-        background: #1b9dff;
-        background-color: rgb(27, 157, 255);
+        background: #ffa52d;
         color: #fff;
         text-indent: 0px;
-        font-size: 16px;
-        margin-top: 50px;
+        font-size: 12px;
+        margin-top: 30px;
+        margin-left: 0;
         padding: 0px;
-        height: 40px;
+        height: 30px;
     }
     #send_code{
-        background: #1b9dff;
-        background-color: rgb(27, 157, 255);
+        background: #ffa52d;
         color: #fff;
         text-indent: 0px;
-        font-size: 14px;
+        border-radius: 2px;
+        font-size: 10px;
         padding: 0px;
-        height: 40px;
+        height: 30px;
     }
-    input#f_name,input#l_name,input#sms_code,#send_code{
-        width: 45%;
+    li span{
+        text-align: left;
+        display: inline-block;
+        width: 35%;
+        font-size: 12px;
+    }
+    input#sms_code{
+        width: 25%;
+    }
+    #send_code{
+        width: 30%;
     }
 </style>
-<body style="background:url({pigcms{$static_path}images/login_02.jpg) left bottom no-repeat #ebf3f8; background-size: 100% 137px;">
+<body style="background:url('{pigcms{$static_path}img/login_bg.png');">
 	<section>
-	<div class="Land_top">
-		<h2>{pigcms{:L('_COURIER_CENTER_')}</h2>
-        <h2>{pigcms{:L('_B_D_LOGIN_REG2_')}</h2>
+	<div class="Land_top" style="color:#333333;">
+        <span class="fillet" style="background: url('./tpl/Static/blue/images/new/icon.png') center no-repeat; background-size: contain;"></span>
+		<div>Become a Tutti Courier</div>
+        <div style="color: #999999;font-size: 12px;margin-top: 10px;">Register Now!</div>
 	</div>
 	<div id="reg_list">
 		<ul>
             <li>
+                <span>{pigcms{:L('_FIRST_NAME_')}:</span>
                 <input type="text" placeholder="{pigcms{:L('_FIRST_NAME_')}*" id="f_name">
+            </li>
+            <li>
+                <span>{pigcms{:L('_LAST_NAME_')}:</span>
                 <input type="text" placeholder="{pigcms{:L('_LAST_NAME_')}*" id="l_name">
             </li>
             <li>
+                <span>{pigcms{:L('_BIRTHDAY_TXT_')}:</span>
                 <input type="text" placeholder="{pigcms{:L('_BIRTHDAY_TXT_')}*" id="birthday">
             </li>
             <li>
+                <span>{pigcms{:L('_EMAIL_TXT_')}:</span>
                 <input type="text" placeholder="{pigcms{:L('_EMAIL_TXT_')}*" id="email">
             </li>
-            <li>
+            <!--li>
                 <input type="text" placeholder="{pigcms{:L('_ADDRESS_TXT_')}*" id="address">
-            </li>
+            </li-->
 			<li>
+                <span>{pigcms{:L('_B_D_LOGIN_TEL_')}:</span>
 			  	<input type="text" placeholder="{pigcms{:L('_B_D_LOGIN_TEL_')}*" id="mobile">
 			</li>
             <li>
+                <span>{pigcms{:L('_B_D_LOGIN_FILLMESSAGE_')}:</span>
                 <input type="text" placeholder="{pigcms{:L('_B_D_LOGIN_FILLMESSAGE_')}*" id="sms_code">
                 <button class="btn" id="send_code">{pigcms{:L('_B_D_LOGIN_RECEIVEMESSAGE_')}</button>
             </li>
 			<li>
+                <span>{pigcms{:L('_B_D_LOGIN_KEY1_')}:</span>
 				<input type="password" placeholder="{pigcms{:L('_B_D_LOGIN_KEY1_')}*" id="pwd">
 			</li>
             <li>
+                <span>{pigcms{:L('_B_D_LOGIN_CONFIRMKEY_')}:</span>
                 <input type="password" placeholder="{pigcms{:L('_B_D_LOGIN_CONFIRMKEY_')}*" id="c_pwd">
             </li>
             <li class="Landd">
-                <input type="button" value="{pigcms{:L('_B_D_LOGIN_REG2_')}" id="reg_form" style="background-color: #FF0000;width: 50%;margin-left: 25%;">
+                <input type="button" value="Register" id="reg_form" style="background-color: #ffa52d;width: 50%;">
             </li>
             <li class="Landd">
-                <input type="button" value="{pigcms{:L('_COURIER_LOGIN_')}" id="login_btn" style="background-color: #1b9dff;width: 50%;margin-left: 25%;">
+                <input type="button" value="{pigcms{:L('_COURIER_LOGIN_')}" id="login_btn" style="background-color: #1b9dff;width: 50%;">
             </li>
 		</ul>
 	</div>
