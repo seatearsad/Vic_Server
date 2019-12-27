@@ -50,6 +50,13 @@
 <body>
     <include file="header" />
     <div style="height: 70px"></div>
+    <div style="text-align: center">
+        <if condition="$begin_time neq '' and $end_time neq ''">
+            {pigcms{$begin_time} -- {pigcms{$end_time}
+        <else />
+            All Orders
+        </if>
+    </div>
     <volist name="list" id="order">
         <section class="robbed go_detail supply_{pigcms{$order.supply_id}" data-id="{pigcms{$order.supply_id}">
             <div class="order_title">

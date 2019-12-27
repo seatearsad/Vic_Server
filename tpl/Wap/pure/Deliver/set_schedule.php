@@ -63,43 +63,42 @@
 
     #week_list{
         margin-top: 10px;
+        margin-right: 10px;
         display: flex;
     }
     #week_list div{
-        width: 44px;
-        height: 44px;
-        line-height: 44px;
+        width: 20px;
+        height: 50px;
+        line-height: 50px;
         background-color: white;
-        border-radius: 22px;
+        border-radius: 2px;
         text-align: center;
-        color: #999999;
-        margin-left: 1%;
+        margin-left: 1.5%;
         flex: 1 1 auto;
+        font-size: 12px;
         cursor: pointer;
     }
     #week_list div.active{
-        width: 48px;
-        height: 48px;
-        line-height: 48px;
-        border-radius: 24px;
-        color: #2999f1;
+        color: white;
+        background-color: #ffa52d;
     }
     #work_time,#recom{
         width: 90%;
         margin-left: 5%;
         margin-top: 10px;
+        font-size: 12px;
         clear: both;
     }
     #recom{
-        height: 30px;
-        line-height: 30px;
+        height: 25px;
+        line-height: 25px;
         color: #ffa52d;
     }
     #work_time div{
         width: 100%;
-        height: 30px;
-        line-height: 30px;
-        font-size: 16px;
+        height: 25px;
+        line-height: 25px;
+        font-size: 12px;
     }
     #work_time span,#recom span{
         float: left;
@@ -113,9 +112,12 @@
         width: 20%;
     }
     .w_r,.w_nr{
-        width: 5px;
-        height: 28px;
-        background-color: #ffa52d;
+        width: 5%;
+        height: 22px;
+        background-image: url("{pigcms{$static_path}img/recomm.png");
+        background-size: auto 100%;
+        background-repeat: no-repeat;
+        background-position: center;
     }
     .w_nr{
         background:none;
@@ -125,12 +127,12 @@
     }
     input.mt[type="radio"], input.mt[type="checkbox"] {
         -webkit-appearance: none;
-        width: 1.5rem;
-        height: 1.5rem;
+        width: 1.2rem;
+        height: 1.2rem;
         border: .02rem solid #ddd8ce;
         text-align: center;
         vertical-align: middle;
-        line-height: 1.5rem;
+        line-height: 1.2rem;
         outline: 0;
         background-color: white;
     }
@@ -148,7 +150,7 @@
     }
     input.mt[type="checkbox"]:checked::after {
         content: "✓";
-        font-size: 1.4rem;
+        font-size: 1.2rem;
         font-family: base_icon;
     }
     .clerk{
@@ -157,7 +159,8 @@
 </style>
 </head>
 <body>
-	<section class="clerk">
+<include file="header" />
+	<section class="clerk" style="margin-top: 70px;">
         <div id="week_list">
 
         </div>
@@ -169,16 +172,16 @@
 
         </div>
         <div class="radio_box" style="float: right;margin-right: 5%;margin-top: 20px">
-            <span style="float: left;margin-right: 10px;line-height: 24px">Repeat Weekly</span>
+            <span style="font-size:12px;float: left;margin-right: 10px;line-height: 24px">Repeat Weekly</span>
             <span class="cb-enable"><label class="cb-enable selected"><span>On</span><input type="radio" name="repeat" value="1" checked="checked"/></label></span>
             <span class="cb-disable"><label class="cb-disable"><span>Off</span><input type="radio" name="repeat" value="0" /></label></span>
         </div>
 	</section>
-	<section class="bottom" style="height: 50px;line-height: 50px;text-align: center">
-		<div class="btn_c" style="float: left;width: 80px;background-color: grey;color:white;cursor: pointer">
+	<section class="bottom" style="height: 40px;line-height: 40px;text-align: center;font-size: 12px;">
+		<div class="btn_c" style="float: left;width: 60px;background-color: grey;color:white;cursor: pointer">
 			Cancel
 		</div>
-        <div class="btn_s" style="float: right;width: 80px;background-color: #33A1FF;color: white;cursor: pointer">
+        <div class="btn_s" style="float: right;width: 60px;background-color: #ffa52d;color: white;cursor: pointer">
             Save
         </div>
 	</section>

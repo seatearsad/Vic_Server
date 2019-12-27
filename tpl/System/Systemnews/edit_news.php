@@ -5,7 +5,7 @@
 			<tr>
 				<th width="80">标题</th>
 				<input type="hidden" name="id" value="{pigcms{$news.id}" />
-				<td><input type="text" class="input fl" name="title" value="{pigcms{$news.title}" size="75" placeholder="快报标题" validate="maxlength:50,required:true"/></td>
+				<td><input type="text" class="input fl" name="title" value="{pigcms{$news.title}" size="75" placeholder="标题" validate="maxlength:50,required:true"/></td>
 			</tr>
 			<tr>
 				<th width="80">分类</th>
@@ -22,7 +22,7 @@
 			<tr>
 				<th width="80">排序</th>
 			
-				<td><input type="text" class="input fl" name="sort" value="{pigcms{$news.sort}"  placeholder="快报标题" validate="maxlength:50,digits:true,required:true"/></td>
+				<td><input type="text" class="input fl" name="sort" value="{pigcms{$news.sort}" validate="maxlength:50,digits:true,required:true"/></td>
 			</tr>
 			<tr>
 				<th width="80">内容</th>

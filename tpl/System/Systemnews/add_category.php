@@ -1,9 +1,20 @@
 <include file="Public:header"/>
 	<form id="myform" method="post" action="{pigcms{:U('Systemnews/add_category')}" frame="true" refresh="true">
 		<table cellpadding="0" cellspacing="0" class="frame_form" width="100%">
+            <tr>
+                <th width="80">总分类</th>
+                <input type="hidden" name="type" value="0" />
+                <td>
+                    <select name="all_type" id="select_type">
+                        <volist name="all_type" id="type">
+                            <option value="{pigcms{$key}">{pigcms{$type}</option>
+                        </volist>
+                    </select>
+                </td>
+            </tr>
 			<tr>
 				<th width="80">标题</th>
-				<td><input type="text" class="input fl" name="name" size="75" placeholder="快报分类" validate="maxlength:50,required:true"/></td>
+				<td><input type="text" class="input fl" name="name" size="75" placeholder="文章分类" validate="maxlength:50,required:true"/></td>
 			</tr>
 			<tr>
 				<th width="80">排序</th>
@@ -22,5 +33,9 @@
 			<input type="reset" value="取消" class="button" />
 		</div>
 	</form>
-	
+<script>
+    $('#select_type').change(function () {
+        $("input[name='type']").val($(this).val());
+    });
+</script>
 <include file="Public:footer"/>

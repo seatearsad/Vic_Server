@@ -102,7 +102,7 @@ function list_detail(lat, lng)
 {
 	$.get(location_url, {'lat':lat, 'lng':lng}, function(result){
 		if (result.err_code) {
-			$('#container').html('<div class="psnone" ><img src="' + static_path + 'images/qdz_02.jpg"></div>');
+			//$('#container').html('<div class="psnone" ><img src="' + static_path + 'images/qdz_02.jpg"></div>');
 			return false;
 		}
 		laytpl($('#replyListBoxTpl').html()).render(result, function(html){

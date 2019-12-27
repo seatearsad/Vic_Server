@@ -1,9 +1,34 @@
 <?php
 	class SystemnewsAction extends BaseAction{
+	    protected $all_type;
+        public function __construct()
+        {
+            parent::__construct();
+
+            $this->all_type = array(
+                '0'=>'平台新闻',
+                '1'=>'常见问题',
+                '2'=>'送餐员规则',
+                '3'=>'送餐员活动'
+            );
+
+            $this->assign('all_type',$this->all_type);
+        }
 		public function index(){
 			$news = D('System_news')->select();
 			$this->assign("news",$news[0]);
-			$category = D('System_news_category')->order('sort DESC')->select();
+			if(isset($_GET['type'])) {
+                $category = D('System_news_category')->where(array('type' => $_GET['type']))->order('sort DESC')->select();
+                $this->assign('select_type',$_GET['type']);
+            }else {
+                $category = D('System_news_category')->order('sort DESC')->select();
+                $this->assign('select_type',-1);
+            }
+
+			foreach ($category as &$v){
+			    $count = D('System_news')->where(array('category_id'=>$v['id']))->count();
+			    $v['count'] = $count;
+            }
 			$this->assign("category",$category);
 			$this->display();
 		}
@@ -98,6 +123,7 @@
 				$data['name'] = $_POST['name'];
 				$data['sort'] = $_POST['sort'];
 				$data['status'] = $_POST['status'];
+                $data['type']=$_POST['type'];
 				if(D('System_news_category')->add($data)){
 					$this->success('添加分类成功！');
 				}else{
@@ -113,6 +139,7 @@
 				$data['name']=$_POST['name'];
 				$data['sort']=$_POST['sort'];
 				$data['status']=$_POST['status'];
+				$data['type']=$_POST['type'];
 				if(D('System_news_category')->where(array('id'=>$_POST['id']))->save($data)){
 					$this->success('更新成功！');
 				}else{

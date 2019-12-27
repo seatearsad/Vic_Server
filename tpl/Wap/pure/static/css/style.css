@@ -297,7 +297,7 @@ font-family: inherit;
 .pagebar .next,.pagebar .prev{width:52px;}
 
 .cb-enable, .cb-disable, .cb-enable span, .cb-disable span {
-background: url(img/form_onoff.png) repeat-x;
+background: url(img/form_onoff_new.png) repeat-x;
 display: block;
 float: left;
 cursor: pointer;

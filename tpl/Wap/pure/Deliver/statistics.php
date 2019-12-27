@@ -242,7 +242,13 @@ function updatePosition(lat,lng){
 }
 
 $('.order_history').click(function () {
-    location.href = "{pigcms{:U('Deliver/orders')}";
+    var begin_time = "{pigcms{$begin_time}";
+    var end_time = "{pigcms{$end_time}";
+
+    if(begin_time != '' && end_time != '')
+        location.href = "{pigcms{:U('Deliver/orders')}&begin_time="+begin_time+"&end_time="+end_time;
+    else
+        location.href = "{pigcms{:U('Deliver/orders')}";
 });
 
 $('.my_earning').find('.btn').each(function () {

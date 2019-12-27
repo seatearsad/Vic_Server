@@ -1609,4 +1609,8 @@ class DeliverAction extends BaseAction {
 
         exit(json_encode(array('error'=>0,'msg'=>'Success')));
     }
+
+    public function doc(){
+
+    }
 }

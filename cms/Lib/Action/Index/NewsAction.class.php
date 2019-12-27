@@ -4,14 +4,15 @@
  */
  
  class NewsAction extends BaseAction{
+     protected $type = 0;
 	 public function index(){
             $cate = D('System_news_category');
-            $news_cat = $cate->where(array('status'=>1))->order('sort DESC')->select();
+            $news_cat = $cate->where(array('status'=>1,'type'=>$this->type))->order('sort DESC')->select();
             $this->assign('news_cat',$news_cat);
             $cat_id = $_GET['category_id'];
 
             if($cat_id){
-                $where =array('category_id'=>$cat_id,'status'=>1);
+                $where =array('category_id'=>$cat_id,'status'=>1,'type'=>$this->type);
                 $count_news =  D('System_news')->where($where)->count();
                 import('@.ORG.news_page');
                 $p = new Page($count_news, 15,'page');
@@ -29,6 +30,7 @@
             }else{
                 $news = M('System_news');
                 $where['n.status'] = 1;
+                $where['c.type'] = $this->type;
                 $count_news = $news->where($where)->count();
                 import('@.ORG.news_page');
                 $p = new Page($count_news, 15,'page');

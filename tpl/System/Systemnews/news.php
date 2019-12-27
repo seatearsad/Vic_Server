@@ -2,9 +2,9 @@
 		<div class="mainbox">
 			<div id="nav" class="mainnav_title">
 				<ul>
-					<a href="{pigcms{:U('Systemnews/index')}">平台快报</a>
-					<a href="{pigcms{:U('Systemnews/news',array('category_id'=>$_GET['category_id']))}" class="on">快报分类-{pigcms{$category_name}</a>|
-					<a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Systemnews/add_news',array('category_id'=>$_GET['category_id']))}','添加平台快报',800,500,true,false,false,addbtn,'add',true);">添加平台快报</a>
+					<a href="{pigcms{:U('Systemnews/index')}">平台文章</a>
+					<a href="{pigcms{:U('Systemnews/news',array('category_id'=>$_GET['category_id']))}" class="on">{pigcms{$category_name}</a>|
+					<a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Systemnews/add_news',array('category_id'=>$_GET['category_id']))}','添加{pigcms{$category_name}',800,500,true,false,false,addbtn,'add',true);">添加{pigcms{$category_name}</a>
 				</ul>
 			</div>
 			
@@ -16,8 +16,8 @@
 							<input type="hidden" name="a" value="news"/>
 							筛选: <input type="text" name="keyword" class="input-text" value="{pigcms{$_GET['keyword']}"/>
 							<select name="searchtype">
-								<option value="title" <if condition="$_GET['searchtype'] eq 'title'">selected="selected"</if>>快报标题</option>
-								<option value="id" <if condition="$_GET['searchtype'] eq 'id'">selected="selected"</if>>快报ID</option>
+								<option value="title" <if condition="$_GET['searchtype'] eq 'title'">selected="selected"</if>>文章标题</option>
+								<option value="id" <if condition="$_GET['searchtype'] eq 'id'">selected="selected"</if>>文章ID</option>
 							</select>
 							<input type="submit" value="查询" class="button"/>
 						</form>

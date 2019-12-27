@@ -1758,8 +1758,6 @@ class DeliverAction extends BaseAction
 			$where['end_time'] = array(array('gt', strtotime($begin_time)), array('lt', strtotime($end_time . '23:59:59')));
 		}
 
-//		$result = D('Deliver_supply')->field('sum(deliver_cash) as offline_money, sum(money-deliver_cash) as online_money, sum(freight_charge) as freight_charge')->where($where)->find();
-//      $result = D('Deliver_supply')->field('sum(freight_charge) as freight_charge')->where($where)->find();
 		$count_list = D('Deliver_supply')->field('count(1) as cnt, get_type')->where($where)->group('get_type')->select();
 		
 		foreach ($count_list as $row) {
@@ -2739,6 +2737,31 @@ class DeliverAction extends BaseAction
             }
         }else{
 	        $this->display();
+        }
+    }
+
+    public function inst(){
+	    $type = array(2,3);
+	    if(isset($_GET['did'])){
+            $news = D('System_news')->where(array('id'=>$_GET['did']))->find();
+
+            $this->assign('doc',$news);
+            $this->display('inst_doc');
+        }else {
+            $wap_index_top_adver = D('Adver')->get_adver_by_key('wap_index_top',5);
+            $this->assign('wap_index_top_adver',$wap_index_top_adver);
+
+            $category = D('System_news_category')->field('id')->where(array('type' => array('in', $type)))->select();
+
+            $cates = array();
+            foreach ($category as $v) {
+                $cates[] = intval($v['id']);
+            }
+
+            $news = D('System_news')->where(array('category_id' => array('in', $cates)))->select();
+
+            $this->assign('list', $news);
+            $this->display();
         }
     }
 }

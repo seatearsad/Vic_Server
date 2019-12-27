@@ -11,7 +11,7 @@
 <link href="{pigcms{$static_path}css/deliver.css" rel="stylesheet"/>
 <script src="{pigcms{:C('JQUERY_FILE')}"></script>
 <script>
-    var location_url = "{pigcms{:U('Deliver/grab')}",lat = "{pigcms{$deliver_session['lat']}", lng = "{pigcms{$deliver_session['lng']}"
+    var location_url = "{pigcms{:U('Deliver/grab')}",lat = "{pigcms{$deliver_session['lat']}", lng = "{pigcms{$deliver_session['lng']}";
 	$(function(){
 		$(".startOrder,.stopOrder").click(function(){
 			$.get("/wap.php?g=Wap&c=Deliver&a=index&action=changeWorkstatus&type="+$(this).attr('ref'), function(){

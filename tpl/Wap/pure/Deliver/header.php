@@ -234,6 +234,9 @@
     $('#menu_stat').click(function () {
         location.href = "{pigcms{:U('Deliver/statistics')}"
     });
+    $('#menu_inst').click(function () {
+        location.href = "{pigcms{:U('Deliver/inst')}"
+    });
     $('#menu_account').click(function () {
         location.href = "{pigcms{:U('Deliver/info')}"
     });

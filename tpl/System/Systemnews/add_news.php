@@ -3,7 +3,7 @@
 		<table cellpadding="0" cellspacing="0" class="frame_form" width="100%">
 			<tr>
 				<th width="80">标题</th>
-				<td><input type="text" class="input fl" name="title" size="75" placeholder="快报标题" validate="maxlength:50,required:true"/></td>
+				<td><input type="text" class="input fl" name="title" size="75" placeholder="标题" validate="maxlength:50,required:true"/></td>
 			</tr>
 			<tr>
 				<th width="80">分类</th>
