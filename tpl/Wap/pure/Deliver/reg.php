@@ -107,9 +107,6 @@
                 <span>{pigcms{:L('_EMAIL_TXT_')}:</span>
                 <input type="text" placeholder="{pigcms{:L('_EMAIL_TXT_')}*" id="email">
             </li>
-            <!--li>
-                <input type="text" placeholder="{pigcms{:L('_ADDRESS_TXT_')}*" id="address">
-            </li-->
 			<li>
                 <span>{pigcms{:L('_B_D_LOGIN_TEL_')}:</span>
 			  	<input type="text" placeholder="{pigcms{:L('_B_D_LOGIN_TEL_')}*" id="mobile">
@@ -135,10 +132,6 @@
             </li>
 		</ul>
 	</div>
-        <input type="hidden" name="lng" id="lng">
-        <input type="hidden" name="lat" id="lat">
-        <input type="hidden" name="city_id" id="city_id">
-        <input type="hidden" name="province_id" id="province_id">
 	</section>
 </body>
 <script src="{pigcms{$static_public}js/lang.js"></script>
@@ -157,15 +150,10 @@ $("#reg_form").click(function () {
             'first_name':$('#f_name').val(),
             'last_name':$('#l_name').val(),
             'birthday':$('#birthday').val(),
-            'address':$('#address').val(),
             'email':$('#email').val(),
             'phone':$('#mobile').val(),
             'sms_code':$('#sms_code').val(),
-            'password':$('#pwd').val(),
-            'lng':$('#lng').val(),
-            'lat':$('#lat').val(),
-            'city_id':$('#city_id').val(),
-            'province_id':$('#province_id').val()
+            'password':$('#pwd').val()
         };
         $.ajax({
             url: "{pigcms{:U('Deliver/reg')}",
@@ -288,52 +276,6 @@ function show_tip(msg,input) {
     }});
 }
 
-$('#address').focus(function () {
-    initAutocomplete();
-});
-
-var autocomplete;
-function initAutocomplete() {
-    autocomplete = new google.maps.places.Autocomplete(document.getElementById('address'), {types: ['geocode'],componentRestrictions: {country: ['ca']}});
-    autocomplete.addListener('place_changed', fillInAddress);
-}
-function fillInAddress() {
-    var place = autocomplete.getPlace();
-    $("input[name='lng']").val(place.geometry.location.lng());
-    $("input[name='lat']").val(place.geometry.location.lat());
-
-    var geocoder = new google.maps.Geocoder();
-    var request = {
-        location:{lat:place.geometry.location.lat(), lng:place.geometry.location.lng()}
-    }
-    geocoder.geocode(request, function(results, status){
-        if(status == 'OK') {
-            console.log(results[0].address_components);
-            var add_com = results[0].address_components;
-            var is_get_city = false;
-            for(var i=0;i<add_com.length;i++){
-                if(add_com[i]['types'][0] == 'locality'){
-                    is_get_city = true;
-                    var city_name = add_com[i]['long_name'];
-                    $.post("{pigcms{:U('Deliver/ajax_city_name')}",{city_name:city_name},function(result){
-                        if (result.error == 1){
-                            $('#city_id').val(0);
-                            $('#province_id').val(0);
-                        }else{
-                            $('#city_id').val(result['info']['city_id']);
-                            $('#province_id').val(result['info']['province_id']);
-                        }
-                    },'JSON');
-                }
-            }
-            if(!is_get_city) {
-                $('#city_id').val(0);
-                $('#province_id').val(0);
-            }
-        }
-        console.log(results);
-    });
-}
 function geolocate() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(position) {

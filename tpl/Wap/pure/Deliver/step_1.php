@@ -1,16 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-<meta http-equiv="Expires" content="-1">
-<meta http-equiv="Cache-Control" content="no-cache">
-<meta http-equiv="Pragma" content="no-cache">
-<meta charset="utf-8">
-<title>{pigcms{:L('_COURIER_CENTER_')}</title>
-<meta name="description" content="{pigcms{$config.seo_description}"/>
-<script src="{pigcms{:C('JQUERY_FILE')}"></script>
-<script src="{pigcms{$static_public}js/laytpl.js"></script>
-<script src="{pigcms{$static_path}layer/layer.m.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta http-equiv="Expires" content="-1">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta charset="utf-8">
+    <title>{pigcms{:L('_COURIER_CENTER_')}</title>
+    <meta name="description" content="{pigcms{$config.seo_description}"/>
+    <link href="{pigcms{$static_path}css/deliver.css" rel="stylesheet"/>
+    <script src="{pigcms{:C('JQUERY_FILE')}"></script>
+    <script src="{pigcms{$static_public}js/laytpl.js"></script>
+    <script src="{pigcms{$static_path}layer/layer.m.js"></script>
+    <script type="text/javascript" src="{pigcms{$static_public}js/mobiscroll/mobiscroll.custom.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{pigcms{$static_public}js/mobiscroll/mobiscroll.custom.min.css" media="all">
 </head>
 <style>
     body {
@@ -18,391 +21,261 @@
         margin: 0px auto;
         font-size: 14px;
         min-width: 320px;
-        max-width: 640px;
-        background-color: #dcdcdc;
-        color: #626160;
+        max-width: 100%;
+        background-color: #f4f4f4;
+        color: #333333;
         position: relative;
         -webkit-tap-highlight-color: rgba(0,0,0,0);
-        font-family: Helvetica;
     }
     section{
         position: absolute;
-        background-color: #ffffff;
-        width: 80%;
-        left: 10%;
-        margin-top: -40px;
-        box-shadow: 0 1px 4px 0 rgba(0,0,0,0.37)
+        top: 2%;
+        width: 100%;
+        font-size: 10px;
+        color: #666666;
     }
-    ul{
-        padding-left: 0px;
+    #step_now{
+        width:80%;
+        margin: 20px auto;
+        font-size: 0;
     }
-    li {
-        list-style-type: none;
+    #step_now div{
+        font-size: 10px;
+        text-align: left;
+    }
+    #step_now ul{
+        margin-top: 2px;
+    }
+    #step_now li{
+        display: inline-block;
+        width: 25%;
+        height: 5px;
+        background-color: #F4F4F4;
+    }
+    #step_now li:nth-child(1).act{
+        background-color: #ffde59;
+    }
+    #step_now li:nth-child(2).act{
+        background-color: #ffbd59;
+    }
+    #step_now li:nth-child(3).act{
+        background-color: #ffa52d;
+    }
+    #step_now li:nth-child(4).act{
+        background-color: #ffa99a;
+    }
+    #memo{
+        width:80%;
+        margin: 20px auto 5px auto;
+        text-align: center;
+    }
+    li{
+        text-align: center;
+        margin-top: 10px;
     }
     li input {
-        width: 100%;
+        width: 55%;
         height: 15px;
-        padding: 10px 0;
+        padding: 8px 0;
         text-indent: 10px;
-        color: #1b9dff;
-        font-size: 14px;
-        background-color: transparent;
-        margin-top: 10px;
-        border: none;
-        border-bottom: 1px solid;
-    }
-    li input:focus{
-        border-bottom: 1px solid #FF0000;
-    }
-    input[type="file"] {
-        display: block;
-        position: absolute;
-        opacity: 0;
-        -ms-filter: 'alpha(opacity=0)';
-    }
-    #J_selectImage_0,#J_selectImage_1,#J_selectImage_2{
-        background: #1b9dff;
-        background-color: rgb(27, 157, 255);
-        background-image: url("{pigcms{$static_public}images/deliver/step1_upload.png");
-        background-size: 40px 40px;
-        background-repeat: no-repeat;
-        background-position:center bottom;
-        color: #fff;
-        text-indent: 0px;
-        font-size: 14px;
-        padding: 0px;
-        height: 60px;
-        display: inline-block;
-        width: 100%;
-    }
-    .bank_title{
-        background: #1b9dff;
-        background-color: rgb(27, 157, 255);
-        color: #fff;
-        text-indent: 0px;
-        font-size: 14px;
-        padding: 0px;
-        height: 40px;
-        display: inline-block;
-        width: 100%;
-        line-height: 40px;
-        text-align: center;
-    }
-    .top_back{
-        position: relative;
-        width: 100%;
-        top: 0%;
-        height:100px;
-        background-color: #4f9cf6;
-    }
-    .top_two_back{
-        position: relative;
-        width: 100%;
-        top: 0%;
-        height:10px;
-        background-color: #535353;
-    }
-    .col-sm-1{
-        margin-left: 20px;
-        width: 100px;
-        line-height: 40px;
-    }
-    .img_0,.img_1,.img_2{
-        width: 100%;
-        height: 100px;
-        text-align: center;
-        line-height: 20px;
-    }
-    .img_0 img,.img_1 img,.img_2 img{
-        height: 100px;
-    }
-    .tt_title{
-        font-size: 20px;
-        color: white;
-        height: 50px;
-        line-height: 50px;
-        position: absolute;
-        margin-top: 10px;
-        font-weight: bold;
-        margin-left: -40px;
-    }
-    .Land_top {
-        text-align: center;
-        color: #626160;
-        width: 100%;
-        float: left;
-        margin-top: 10px;
-    }
-    .Land_top h2{
-        color: #1b9dff;
-        width: 100%;
-    }
-    .step{
-        width: 25%;
-        height: 40px;
-        float: left;
-        text-align: left;
+        color: #333333;
+        background-color: white;
+        border-radius: 5px;
+        margin-left: 1%;
+        margin-top: 2px;
         font-size: 12px;
-        min-width: 140px;
     }
-    .step .back{
-        width: 20px;
-        height: 20px;
-        background-color:#a0a0a0;
-        border-radius: 50%;
-        -moz-border-radius: 50%;
-        -webkit-border-radius: 50%;
-        text-align: center;
-        margin-left: 20px;
-        color: #ffffff;
+    li select{
+        width: 55%;
+        height: 31px;
+        text-indent: 5px;
+        border-radius: 5px;
     }
-    .step span{
-        position: absolute;
-        line-height: 20px;
-    }
-    .step_title{
-        margin-left: 42px;
-        word-wrap: break-word;
-    }
-    .step .curr{
-        background-color:#f39824;
-    }
-    #reg_form {
+    li.Landd input {
+        background: #ffa52d;
         color: #fff;
         text-indent: 0px;
-        font-size: 16px;
+        font-size: 12px;
+        margin-top: 30px;
+        margin-left: 0;
         padding: 0px;
-        height: 40px;
-        background-color: transparent;
-        border: 0px;
-        margin-bottom: 20px;
-        cursor: pointer;
-        margin-top: 20px;
+        height: 30px;
+    }
+    #send_code{
+        background: #ffa52d;
+        color: #fff;
+        text-indent: 0px;
+        border-radius: 2px;
+        font-size: 10px;
+        padding: 0px;
+        height: 30px;
+    }
+    li span{
+        text-align: left;
+        display: inline-block;
+        width: 35%;
+        font-size: 12px;
+    }
+    input#sms_code{
+        width: 25%;
+    }
+    #send_code{
+        width: 30%;
     }
 </style>
-<body style="background:#ebf3f8; background-size: 100% 137px;max-width: 100%">
-    <div class="top_back">
-        <img src="{pigcms{$config.site_logo}" height=60>
-        <span class="tt_title">{pigcms{:L('_COURIER_CENTER_')}</span>
+<body style="background:url('{pigcms{$static_path}img/login_bg.png');">
+<section>
+    <div class="Land_top" style="color:#333333;">
+        <span class="fillet" style="background: url('./tpl/Static/blue/images/new/icon.png') center no-repeat; background-size: contain;"></span>
+        <div style="font-size: 14px">Become a Tutti Courier</div>
+        <div style="color: #999999;font-size: 10px;margin: 10px auto;width: 90%;">
+            Thank you for signing up with Tutti Courier! Your account has been created successfully. Please complete the following steps to get started!
+        </div>
     </div>
-    <div class="top_two_back"></div>
-    <form enctype="multipart/form-data" class="form-horizontal" method="post">
-	<section>
-        <div class="Land_top">
-            <span class="step">
-                <span class="back curr">1</span>
-                <span class="step_title" style="color:#f39824">{pigcms{:L('_DELIVER_STEP_1_')}</span>
-            </span>
-            <span class="step">
-                <span class="back">2</span>
-                <span class="step_title">{pigcms{:L('_DELIVER_STEP_2_')}</span>
-            </span>
-            <span class="step">
-                <span class="back">3</span>
-                <span class="step_title">{pigcms{:L('_DELIVER_STEP_3_')}</span>
-            </span>
-            <span class="step">
-                <span class="back">4</span>
-                <span class="step_title">{pigcms{:L('_DELIVER_STEP_4_')}</span>
-            </span>
-        </div>
-        <div class="Land_top">
-            <h2>{pigcms{:L('_DELIVER_STEP_1_')}</h2>
-        </div>
-
-	<div id="reg_list">
-        <div style="margin: 10px auto;width: 80%;">
-            {pigcms{:L('_IMAGE_REMARK_')}
-        </div>
-
-        <div style="margin: 10px auto;width: 80%;">
-            <div style="display:inline-block;" id="J_selectImage_0">
-                <div class="btn btn-sm btn-success" style="position:relative;height:60px;line-height: 30px;text-align: center;">
-                    {pigcms{:L('_DRIVER_LICENSE_')}
-                </div>
-            </div>
-            <div class="img_0">
-
-            </div>
-        </div>
-
-        <div style="margin: 10px auto;width: 80%;">
-            <div style="display:inline-block;" id="J_selectImage_1">
-                <div class="btn btn-sm btn-success" style="position:relative;height:60px;line-height: 30px;text-align: center;">
-                    {pigcms{:L('_VEHICLE_INSURANCE_')}
-                </div>
-            </div>
-            <div class="img_1">
-
-            </div>
-        </div>
-
-        <div style="margin: 10px auto;width: 80%;">
-            <div style="display:inline-block;" id="J_selectImage_2">
-                <div class="btn btn-sm btn-success" style="position:relative;height:60px;line-height: 30px;text-align: center;">
-                    {pigcms{:L('_SIN_NUMBER_')}
-                </div>
-            </div>
-            <div class="img_2">
-                <div style="text-align: left;margin-top:5px">Please submit your proof of work eligibility(passport,birth certificate,permanent residency card,work permit,study permit with valid permission to work off campus)</div>
-            </div>
-            <ul>
-                <li>
-                    <input type="text" placeholder="SIN Number*" id="sin_num">
-                </li>
-            </ul>
-            <!--div class="bank_title">
-                {pigcms{:L('_SIN_NUMBER_')}
-            </div>
-            <ul>
-                <li>
-                    <input type="text" placeholder="{pigcms{:L('_SIN_NUMBER_')}*" id="sin_num">
-                </li>
-            </ul-->
-
-            <div class="bank_title">
-                {pigcms{:L('_BANKING_INFO_')}
-            </div>
-            <ul>
-                <li>
-                    {pigcms{:L('_BANK_REMARK_')}
-                </li>
-                <li>
-                    <input type="text" placeholder="Account Holder Name*" id="ahname">
-                </li>
-                <li>
-                    <input type="text" placeholder="Account*(7-12 digit)" id="account">
-                </li>
-                <li>
-                    <input type="text" placeholder="Transit(Branch)*(5-digit)" id="transit">
-                </li>
-                <li>
-                    <input type="text" placeholder="Institution*(3-digit)" id="institution">
-                </li>
-            </ul>
-        </div>
-	</div>
-    <div>
-        <span id="filename_0" style="display: none;"></span>
-        <span id="filename_1" style="display: none;"></span>
-        <span id="filename_2" style="display: none;"></span>
-        <input type="button" value="{pigcms{:L('_NEXT_TXT_')}" id="reg_form" style="background-color:#407ec7;width: 50%;margin-left: 25%;">
+    <div id="step_now">
+        <div>1.Information Needed</div>
+        <ul>
+            <li class="act"></li><li></li><li></li><li></li>
+        </ul>
     </div>
-	</section>
-    </form>
+    <div id="memo">
+        All information are kept securely and used for delivery and taxation purpose.
+    </div>
+    <div id="reg_list">
+        <ul>
+            <li>
+                <span>Delivery City:</span>
+                <select name="city_id" id="city_id">
+                    <volist name="city_list" id="city">
+                    <option value="{pigcms{$city['area_id']}">{pigcms{$city['area_name']}</option>
+                    </volist>
+                </select>
+            </li>
+            <li>
+                <span>{pigcms{:L('_ADDRESS_TXT_')}:</span>
+                <input type="text" placeholder="{pigcms{:L('_ADDRESS_TXT_')}" id="address">
+            </li>
+            <li>
+                <span>SIN Number:</span>
+                <input type="text" placeholder="SIN Number" id="sin_num">
+            </li>
+            <li class="Landd">
+                <input type="button" value="Continue" id="reg_form" style="background-color: #ffa52d;width: 50%;">
+            </li>
+        </ul>
+        <input type="hidden" name="lng" id="lng">
+        <input type="hidden" name="lat" id="lat">
+    </div>
+</section>
 </body>
 <script src="{pigcms{$static_public}js/lang.js"></script>
-<script type="text/javascript" src="{pigcms{$static_public}js/webuploader.min.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKlguA2QFIUVwWTo3danbOqSKv3nYbBCg&libraries=places&language=en" async defer></script>
 <script type="text/javascript">
-$("body").css({"height":$(window).height()});
+    $("body").css({"height":$(window).height()});
 
-var  uploader = WebUploader.create({
-    auto: true,
-    swf: '{pigcms{$static_public}js/Uploader.swf',
-    server: "{pigcms{:U('Deliver/ajax_upload')}",
-    accept: {
-        title: 'Images',
-        extensions: 'gif,jpg,jpeg,png',
-        mimeTypes: 'image/gif,image/jpeg,image/jpg,image/png'
-    }
-});
-uploader.addButton({
-    id:'#J_selectImage_0',
-    name:'image_0',
-    multiple:false
-});
-uploader.addButton({
-    id:'#J_selectImage_1',
-    name:'image_1',
-    multiple:false
-});
-uploader.addButton({
-    id:'#J_selectImage_2',
-    name:'image_2',
-    multiple:false
-});
-uploader.on('fileQueued',function(file){
-    if($('.upload_pic_li').size() >= 5){
-        uploader.cancelFile(file);
-        alert('最多上传5个图片！');
-        return false;
-    }
-});
-uploader.on('uploadSuccess',function(file,response){
-    if(response.error == 0){
-        var fid = file.source.ruid;
-        var ruid = fid.split('_');
-        var img = findImg(ruid[1],response.file);
-        img.html('<img src="'+response.url+'"/>');
-    }else{
-        alert(response.info);
-    }
-});
-
-uploader.on('uploadError', function(file,reason){
-    $('.loading'+file.id).remove();
-    alert('上传失败！请重试。');
-});
-
-function findImg(fid,file) {
-    var img = '';
-    var all = 3;
-    for(var i=0;i<all;i++) {
-        $('#J_selectImage_' + i).children('div').each(function () {
-            if (typeof($(this).attr('id')) != 'undefined') {
-                var arr = $(this).attr('id').split('_');
-                if (arr[2] == fid) {
-                    img = $('.img_' + i);
-                    $('#filename_'+i).html(file);
-                }
-            }
-        });
-    }
-
-    return img;
-}
-
-$('#reg_form').click(function () {
-    var is_next = true;
-    $('body').find('span').each(function () {
-        if (typeof($(this).attr('id')) != 'undefined'){
-            var span_id = $(this).attr('id').split('_');
-            if(span_id[0] == 'filename'){
-                if ($(this).html() == ''){
-                    is_next = false;
-                }
-            }
-        }
+    $('#login_btn').click(function () {
+        window.location.href = "{pigcms{:U('Deliver/login')}";
     });
 
-    if($('#ahname').val() == '' || $('#transit').val() == '' || $('#institution').val() == '' || $('#account').val() == '' || $('#sin_num').val() == ''){
-        is_next = false;
+    $("#reg_form").click(function () {
+        $(this).attr("disabled","disabled");
+        if(check_form()){
+            var form_data = {
+                'address':$('#address').val(),
+                'lng':$('#lng').val(),
+                'lat':$('#lat').val(),
+                'city_id':$('#city_id').val(),
+                'sin_num':$('#sin_num').val()
+            };
+            $.ajax({
+                url: "{pigcms{:U('Deliver/step_1')}",
+                type: 'POST',
+                dataType: 'json',
+                data: form_data,
+                success:function(date){
+                    if(date.error_code){
+                        show_tip(date.msg,$("#sin_num"));
+                        $("#reg_form").removeAttr("disabled");
+                    }else{
+                        // layer.open({title:"{pigcms{:L('_B_D_LOGIN_TIP2_')}",content: date.msg,skin: 'msg', time:1,end:function () {
+                        //         window.parent.location = "{pigcms{:U('Deliver/step_2')}";
+                        // }});
+                        window.parent.location = "{pigcms{:U('Deliver/step_2')}";
+                    }
+                }
+
+            });
+        }else{
+            $(this).removeAttr("disabled");
+        }
+
+    });
+
+    function checkPhone(phone) {
+        if(!/^\d{10,}$/.test(phone)){
+            return false;
+        }
+        return true;
+    }
+    function checkMail(mail) {
+        var reg = /\w+[@]{1}\w+[.]\w+/;
+        if(!reg.test(mail)){
+            return false;
+        }
+        return true;
     }
 
-    if(!is_next)
-        alert("{pigcms{:L('_PLEASE_INPUT_ALL_')}");
-    else{
-        var post_data = {
-            img_0:$('#filename_0').html(),
-            img_1:$('#filename_1').html(),
-            img_2:$('#filename_2').html(),
-            ahname:$('#ahname').val(),
-            transit:$('#transit').val(),
-            institution:$('#institution').val(),
-            account:$('#account').val(),
-            sin_num:$('#sin_num').val()
-        };
-        $.ajax({
-            url: "{pigcms{:U('Deliver/step_1')}",
-            type: 'POST',
-            dataType: 'json',
-            data: post_data,
-            success:function(date){
-                window.parent.location = "{pigcms{:U('Deliver/step_2')}";
-            }
+    function check_form() {
+        var is_check = true;
+        // $("#reg_list").find('input').each(function () {
+        //     if($(this).val() == ''){
+        //         show_tip("{pigcms{:L('_PLEASE_INPUT_ALL_')}",$(this));
+        //         is_check = false;
+        //         return false;
+        //     }
+        // });
+        if($("input[name='lng']").val() == '')
+            $("input[name='lng']").val(0);
+        if($("input[name='lat']").val() == '')
+            $("input[name='lat']").val(0);
 
-        });
+        return is_check;
     }
-});
+
+    function show_tip(msg,input) {
+        layer.open({title:"{pigcms{:L('_B_D_LOGIN_TIP2_')}",content: msg, btn:["{pigcms{:L('_B_D_LOGIN_CONIERM_')}"],end:function () {
+                input.focus();
+            }});
+    }
+
+    $('#address').focus(function () {
+        initAutocomplete();
+    });
+
+    var autocomplete;
+    function initAutocomplete() {
+        autocomplete = new google.maps.places.Autocomplete(document.getElementById('address'), {types: ['geocode'],componentRestrictions: {country: ['ca']}});
+        autocomplete.addListener('place_changed', fillInAddress);
+    }
+    function fillInAddress() {
+        var place = autocomplete.getPlace();
+        $("input[name='lng']").val(place.geometry.location.lng());
+        $("input[name='lat']").val(place.geometry.location.lat());
+    }
+    function geolocate() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                var geolocation = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+                var circle = new google.maps.Circle({
+                    center: geolocation,
+                    radius: position.coords.accuracy
+                });
+                autocomplete.setBounds(circle.getBounds());
+            });
+        }
+    }
 </script>
 </html>

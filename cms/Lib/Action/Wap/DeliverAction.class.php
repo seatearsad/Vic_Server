@@ -2328,9 +2328,9 @@ class DeliverAction extends BaseAction
 	        $deliver_data['family_name'] = $_POST['last_name'];
 	        $deliver_data['birthday'] = $_POST['birthday'];
 	        $deliver_data['pwd'] = md5($_POST['password']);
-	        $deliver_data['site'] = $_POST['address'];
-	        $deliver_data['lng'] = sprintf('%.7f',$_POST['lng']);
-	        $deliver_data['lat'] = sprintf('%.7f',$_POST['lat']);
+	        //$deliver_data['site'] = $_POST['address'];
+	        //$deliver_data['lng'] = sprintf('%.7f',$_POST['lng']);
+	        //$deliver_data['lat'] = sprintf('%.7f',$_POST['lat']);
 	        $deliver_data['range'] = 50;
 
 	        if(C('DEFAULT_LANG') == 'zh-cn')
@@ -2339,9 +2339,9 @@ class DeliverAction extends BaseAction
 	            $deliver_data['language'] = 1;
 
 	        $deliver_data['create_time'] = time();
-	        //暂时写死 之后选择城市
-	        $deliver_data['city_id'] = $_POST['city_id'];
-	        $deliver_data['province_id'] = $_POST['province_id'];
+
+	        $deliver_data['city_id'] = 0;
+	        $deliver_data['province_id'] = 0;
 	        $deliver_data['circle_id'] = 3446;
 	        $deliver_data['area_id'] = 0;
 
@@ -2363,9 +2363,9 @@ class DeliverAction extends BaseAction
         $database_deliver_user = D('Deliver_user');
         if($_POST){
             $data['uid'] = $this->deliver_session['uid'];
-            $data['driver_license'] = $_POST['img_0'];
-            $data['insurance'] = $_POST['img_1'];
-            $data['certificate'] = $_POST['img_2'];
+            //$data['driver_license'] = $_POST['img_0'];
+            //$data['insurance'] = $_POST['img_1'];
+            //$data['certificate'] = $_POST['img_2'];
 
             $data['sin_num'] = $_POST['sin_num'];
 
@@ -2375,20 +2375,27 @@ class DeliverAction extends BaseAction
             else
                 D('Deliver_img')->add($data);
 
-            $card_data['ahname'] = $_POST['ahname'];
-            $card_data['transit'] = $_POST['transit'];
-            $card_data['institution'] = $_POST['institution'];
-            $card_data['account'] = $_POST['account'];
+            //$card_data['ahname'] = $_POST['ahname'];
+            //$card_data['transit'] = $_POST['transit'];
+            //$card_data['institution'] = $_POST['institution'];
+            //$card_data['account'] = $_POST['account'];
 
-            $deliver_card = D('Deliver_card')->field(true)->where(array('deliver_id'=>$this->deliver_session['uid']))->find();
-            if($deliver_card)
-                D('Deliver_card')->where(array('deliver_id'=>$this->deliver_session['uid']))->save($card_data);
-            else{
-                $card_data['deliver_id'] = $this->deliver_session['uid'];
-                D('Deliver_card')->add($card_data);
-            }
+            //$deliver_card = D('Deliver_card')->field(true)->where(array('deliver_id'=>$this->deliver_session['uid']))->find();
+            //if($deliver_card)
+            //    D('Deliver_card')->where(array('deliver_id'=>$this->deliver_session['uid']))->save($card_data);
+            //else{
+            //    $card_data['deliver_id'] = $this->deliver_session['uid'];
+            //    D('Deliver_card')->add($card_data);
+            //}
 
-            $database_deliver_user->where(array('uid' => $this->deliver_session['uid']))->save(array('reg_status'=>2));
+            //新修改的注册流程
+            $userdata['site'] = $_POST['address'] ? $_POST['address'] : '';
+            $userdata['lng'] = $_POST['lng'] ? $_POST['lng'] : '0';
+            $userdata['lat'] = $_POST['lat'] ? $_POST['lat'] : '0';
+            $userdata['city_id'] = $_POST['city_id'] ? $_POST['city_id'] : '0';
+            $userdata['reg_status'] = 2;
+
+            $database_deliver_user->where(array('uid' => $this->deliver_session['uid']))->save($userdata);
 
             $result = array('error_code'=>false,'msg'=>L('_B_LOGIN_REGISTSUCESS_'));
             $this->ajaxReturn($result);
@@ -2400,6 +2407,9 @@ class DeliverAction extends BaseAction
             $deliver_img = D('Deliver_img')->field(true)->where(array('uid'=>$this->deliver_session['uid']))->find();
             if ($deliver_img)
                 $this->assign('deliver_img',$deliver_img);
+
+            $city_list = D('Area')->where(array('is_open'=>1,'area_type'=>2))->select();
+            $this->assign('city_list',$city_list);
 
             $this->display();
         }
