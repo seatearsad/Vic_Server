@@ -51,6 +51,7 @@
         width: 25%;
         height: 5px;
         background-color: #F4F4F4;
+        margin-top: 0;
     }
     #step_now li:nth-child(1).act{
         background-color: #ffde59;

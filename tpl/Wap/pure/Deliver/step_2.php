@@ -106,6 +106,13 @@
         padding: 10px 15px;
         border-radius: 3px;
     }
+    .img_0,.img_1,.img_2{
+        width: 100%;
+        text-align: center;
+    }
+    .img_0 img,.img_1 img,.img_2 img{
+        height: 100px;
+    }
 </style>
 <body style="background:url('{pigcms{$static_path}img/login_bg.png');">
 <section>
@@ -163,7 +170,7 @@
     </div>
     <div style="margin: 10px auto;width: 85%;">
         <div style="display:inline-block;" id="J_selectImage_2">
-            <div class="btn btn-sm btn-success" style="position:relative;height:50px;line-height: 50px;text-align: center;">
+            <div class="btn btn-sm btn-success" style="position:relative;height:50px;line-height: 50px;text-align: left;">
                 Upload Proof of Work Eligibility here
             </div>
         </div>
@@ -172,7 +179,13 @@
         </div>
     </div>
     <div id="memo" style="text-align: center;margin-top: 20px">
-        <input type="button" value="Save and Continue">
+        <span id="filename_0" style="display: none;"></span>
+        <span id="filename_1" style="display: none;"></span>
+        <span id="filename_2" style="display: none;"></span>
+        <input type="button" value="Save and Continue" id="reg_form">
+    </div>
+    <div id="memo" style="text-align: center;color: silver;margin-bottom: 30px;">
+        If you don't have all of these documents in hand at the moment, you can save what you have and skip the others for now. You still have the access to upload these photos later.
     </div>
 </section>
 
@@ -219,6 +232,7 @@
             var ruid = fid.split('_');
             var img = findImg(ruid[1],response.file);
             img.html('<img src="'+response.url+'"/>');
+            img.css("height","100px");
         }else{
             alert(response.info);
         }
@@ -232,11 +246,17 @@
     function findImg(fid,file) {
         var img = '';
         var all = 3;
+        var curr = 0;
         for(var i=0;i<all;i++) {
             $('#J_selectImage_' + i).children('div').each(function () {
                 if (typeof($(this).attr('id')) != 'undefined') {
+                    if(i > curr){
+                        var top = parseInt($(this).css("top"));
+                        $(this).css("top",top+100+"px");
+                    }
                     var arr = $(this).attr('id').split('_');
                     if (arr[2] == fid) {
+                        curr = i;
                         img = $('.img_' + i);
                         $('#filename_'+i).html(file);
                     }
@@ -249,20 +269,20 @@
 
     $('#reg_form').click(function () {
         var is_next = true;
-        $('body').find('span').each(function () {
-            if (typeof($(this).attr('id')) != 'undefined'){
-                var span_id = $(this).attr('id').split('_');
-                if(span_id[0] == 'filename'){
-                    if ($(this).html() == ''){
-                        is_next = false;
-                    }
-                }
-            }
-        });
+        // $('body').find('span').each(function () {
+        //     if (typeof($(this).attr('id')) != 'undefined'){
+        //         var span_id = $(this).attr('id').split('_');
+        //         if(span_id[0] == 'filename'){
+        //             if ($(this).html() == ''){
+        //                 is_next = false;
+        //             }
+        //         }
+        //     }
+        // });
 
-        if($('#ahname').val() == '' || $('#transit').val() == '' || $('#institution').val() == '' || $('#account').val() == '' || $('#sin_num').val() == ''){
-            is_next = false;
-        }
+        // if($('#ahname').val() == '' || $('#transit').val() == '' || $('#institution').val() == '' || $('#account').val() == '' || $('#sin_num').val() == ''){
+        //     is_next = false;
+        // }
 
         if(!is_next)
             alert("{pigcms{:L('_PLEASE_INPUT_ALL_')}");
@@ -270,20 +290,15 @@
             var post_data = {
                 img_0:$('#filename_0').html(),
                 img_1:$('#filename_1').html(),
-                img_2:$('#filename_2').html(),
-                ahname:$('#ahname').val(),
-                transit:$('#transit').val(),
-                institution:$('#institution').val(),
-                account:$('#account').val(),
-                sin_num:$('#sin_num').val()
+                img_2:$('#filename_2').html()
             };
             $.ajax({
-                url: "{pigcms{:U('Deliver/step_1')}",
+                url: "{pigcms{:U('Deliver/step_2')}",
                 type: 'POST',
                 dataType: 'json',
                 data: post_data,
                 success:function(date){
-                    window.parent.location = "{pigcms{:U('Deliver/step_2')}";
+                    window.parent.location = "{pigcms{:U('Deliver/step_3')}";
                 }
 
             });

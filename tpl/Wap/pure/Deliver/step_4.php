@@ -132,5 +132,8 @@
         <input type="button" value="Continue Completing My Application">
     </div>
 </section>
+<script>
+    $("body").css({"height":$(window).height()});
+</script>
 </body>
 </html>

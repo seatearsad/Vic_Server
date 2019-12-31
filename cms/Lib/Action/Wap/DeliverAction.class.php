@@ -2367,7 +2367,7 @@ class DeliverAction extends BaseAction
             //$data['insurance'] = $_POST['img_1'];
             //$data['certificate'] = $_POST['img_2'];
 
-            $data['sin_num'] = $_POST['sin_num'];
+            $data['sin_num'] = $_POST['sin_num'] ? $_POST['sin_num'] : "";
 
             $deliver_img = D('Deliver_img')->where(array('uid'=>$this->deliver_session['uid']))->find();
             if($deliver_img)
@@ -2417,10 +2417,24 @@ class DeliverAction extends BaseAction
 
     public function step_2(){
         $database_deliver_user = D('Deliver_user');
-        $now_user = $database_deliver_user->field(true)->where(array('uid' => $this->deliver_session['uid']))->find();
-        if($now_user['reg_status'] != 2)
-            header('Location:'.U('Deliver/step_'.$now_user['reg_status']));
-        $this->display();
+        if($_POST){
+            $data['uid'] = $this->deliver_session['uid'];
+            $data['driver_license'] = $_POST['img_0'];
+            $data['insurance'] = $_POST['img_1'];
+            $data['certificate'] = $_POST['img_2'];
+
+            D('Deliver_img')->save($data);
+
+            $database_deliver_user->where(array('uid' => $this->deliver_session['uid']))->save(array('reg_status'=>3));
+
+            $result = array('error_code'=>false,'msg'=>L('_B_LOGIN_REGISTSUCESS_'));
+            $this->ajaxReturn($result);
+        }else {
+            $now_user = $database_deliver_user->field(true)->where(array('uid' => $this->deliver_session['uid']))->find();
+            if ($now_user['reg_status'] != 2)
+                header('Location:' . U('Deliver/step_' . $now_user['reg_status']));
+            $this->display();
+        }
     }
 
     public function step_3(){
@@ -2485,8 +2499,13 @@ class DeliverAction extends BaseAction
     public function step_4(){
         $database_deliver_user = D('Deliver_user');
         $now_user = $database_deliver_user->field(true)->where(array('uid' => $this->deliver_session['uid']))->find();
-        if($now_user['reg_status'] != 4)
-            header('Location:'.U('Deliver/step_'.$now_user['reg_status']));
+        if($now_user['reg_status'] != 4) {
+            if($_GET['type'] == 'jump'){
+                D('Deliver_user')->where(array('uid'=>$this->deliver_session['uid']))->save(array('reg_status'=>4));
+            }else {
+                header('Location:' . U('Deliver/step_' . $now_user['reg_status']));
+            }
+        }
         $this->display();
     }
 
