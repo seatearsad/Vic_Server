@@ -238,7 +238,7 @@
         location.href = "{pigcms{:U('Deliver/inst')}"
     });
     $('#menu_account').click(function () {
-        location.href = "{pigcms{:U('Deliver/info')}"
+        location.href = "{pigcms{:U('Deliver/account')}"
     });
 
     var init_top = $('#tutti_header').offset().top;

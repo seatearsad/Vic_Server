@@ -160,13 +160,38 @@
                 <span>SIN Number:</span>
                 <input type="text" placeholder="SIN Number" id="sin_num">
             </li>
+            <li style="text-align: left;width: 91%;margin:10px auto">
+                <div style="font-size: 14px">
+                    Banking Information
+                </div>
+                <div>
+                    This information is used for your payroll deposits.
+                </div>
+            </li>
+            <li>
+                <span>Full Name:</span>
+                <input type="text" placeholder="Account holder's name" id="ahname">
+            </li>
+            <li>
+                <span>Institution Number:</span>
+                <input type="text" placeholder="3 digits" id="institution">
+            </li>
+            <li>
+                <span>Transit Number:</span>
+                <input type="text" placeholder="5 digits" id="transit">
+            </li>
+            <li>
+                <span>Account Number:</span>
+                <input type="text" placeholder="7 to 12 digits" id="account">
+            </li>
             <li class="Landd">
-                <input type="button" value="Continue" id="reg_form" style="background-color: #ffa52d;width: 50%;">
+                <input type="button" value="Save & Continue" id="reg_form" style="background-color: #ffa52d;width: 50%;">
             </li>
         </ul>
         <input type="hidden" name="lng" id="lng">
         <input type="hidden" name="lat" id="lat">
     </div>
+    <div style="margin-bottom: 20px"></div>
 </section>
 </body>
 <script src="{pigcms{$static_public}js/lang.js"></script>
@@ -186,7 +211,11 @@
                 'lng':$('#lng').val(),
                 'lat':$('#lat').val(),
                 'city_id':$('#city_id').val(),
-                'sin_num':$('#sin_num').val()
+                'sin_num':$('#sin_num').val(),
+                'ahname':$('#ahname').val(),
+                'transit':$('#transit').val(),
+                'institution':$('#institution').val(),
+                'account':$('#account').val()
             };
             $.ajax({
                 url: "{pigcms{:U('Deliver/step_1')}",

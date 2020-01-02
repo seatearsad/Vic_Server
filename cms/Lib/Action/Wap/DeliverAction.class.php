@@ -2375,18 +2375,18 @@ class DeliverAction extends BaseAction
             else
                 D('Deliver_img')->add($data);
 
-            //$card_data['ahname'] = $_POST['ahname'];
-            //$card_data['transit'] = $_POST['transit'];
-            //$card_data['institution'] = $_POST['institution'];
-            //$card_data['account'] = $_POST['account'];
+            $card_data['ahname'] = $_POST['ahname'];
+            $card_data['transit'] = $_POST['transit'];
+            $card_data['institution'] = $_POST['institution'];
+            $card_data['account'] = $_POST['account'];
 
-            //$deliver_card = D('Deliver_card')->field(true)->where(array('deliver_id'=>$this->deliver_session['uid']))->find();
-            //if($deliver_card)
-            //    D('Deliver_card')->where(array('deliver_id'=>$this->deliver_session['uid']))->save($card_data);
-            //else{
-            //    $card_data['deliver_id'] = $this->deliver_session['uid'];
-            //    D('Deliver_card')->add($card_data);
-            //}
+            $deliver_card = D('Deliver_card')->field(true)->where(array('deliver_id'=>$this->deliver_session['uid']))->find();
+            if($deliver_card)
+                D('Deliver_card')->where(array('deliver_id'=>$this->deliver_session['uid']))->save($card_data);
+            else{
+                $card_data['deliver_id'] = $this->deliver_session['uid'];
+                D('Deliver_card')->add($card_data);
+            }
 
             //新修改的注册流程
             $userdata['site'] = $_POST['address'] ? $_POST['address'] : '';
@@ -2792,5 +2792,51 @@ class DeliverAction extends BaseAction
             $this->assign('list', $news);
             $this->display();
         }
+    }
+
+    public function account(){
+	    $city = D('Area')->where(array('area_id'=>$this->deliver_session['city_id']))->find();
+	    $this->assign('city',$city);
+
+        $deliver_img = D('Deliver_img')->where(array('uid'=>$this->deliver_session['uid']))->find();
+        $this->assign('deliver_img',$deliver_img);
+	    $this->display();
+    }
+
+    public function change_pwd(){
+	    if($_POST){
+            $old_pwd = md5($_POST['old_pwd']);
+            if($old_pwd != $this->deliver_session['pwd']){
+                exit(json_encode(array('error' => 1,'message' =>'当前密码不正确')));
+            }else{
+                $new_pwd = md5($_POST['new_pwd']);
+                D('Deliver_user')->where(array('uid'=>$this->deliver_session['uid']))->save(array('pwd'=>$new_pwd));
+                exit(json_encode(array('error' => 0,'message' =>'Success')));
+            }
+        }else{
+	        $this->display();
+        }
+    }
+
+    public function bank_info(){
+	    $is_pwd = 0;
+        if($_POST){
+            if($_POST['pwd'] && $_POST['pwd'] != '') {
+                $pwd = md5($_POST['pwd']);
+                if ($pwd != $this->deliver_session['pwd']) {
+                    $is_pwd = 2;
+                } else {
+                    $is_pwd = 1;
+                    $deliver_card = D('Deliver_card')->field(true)->where(array('deliver_id'=>$this->deliver_session['uid']))->find();
+                    $this->assign('deliver_card',$deliver_card);
+                }
+            }else{
+
+            }
+        }
+
+        $this->assign('is_pwd',$is_pwd);
+        $this->display();
+
     }
 }
