@@ -22,7 +22,7 @@
         font-size: 14px;
         min-width: 320px;
         max-width: 100%;
-        background-color: #f4f4f4;
+        background-color: white;
         color: #333333;
         position: relative;
         -webkit-tap-highlight-color: rgba(0,0,0,0);
@@ -73,7 +73,7 @@
     #step_title{
         width:80%;
         margin: 20px auto 5px auto;
-        font-size: 14px;
+        font-size: 12px;
         color: #333333;
     }
     input[type="file"] {
@@ -83,9 +83,9 @@
         -ms-filter: 'alpha(opacity=0)';
     }
     #J_selectImage_0,#J_selectImage_1,#J_selectImage_2{
-        background-color: white;
+        background-color: #EEEEEE;
         background-image: url("{pigcms{$static_path}img/step2.png");
-        background-size: 40px 40px;
+        background-size: 35px 35px;
         background-repeat: no-repeat;
         background-position:left 10px center;
         color: #666666;
@@ -113,28 +113,83 @@
     .img_0 img,.img_1 img,.img_2 img{
         height: 100px;
     }
+    li{
+        text-align: center;
+        margin-top: 10px;
+    }
+    li input {
+        width: 55%;
+        height: 15px;
+        padding: 8px 0;
+        text-indent: 10px;
+        color: #333333;
+        background-color: #EEEEEE;
+        border-radius: 5px;
+        margin-left: 1%;
+        margin-top: 2px;
+        font-size: 12px;
+    }
+    li select{
+        width: 55%;
+        height: 31px;
+        text-indent: 5px;
+        border-radius: 5px;
+        background-color: #EEEEEE;
+    }
+    li.Landd input {
+        background: #ffa52d;
+        color: #fff;
+        text-indent: 0px;
+        font-size: 12px;
+        margin-top: 30px;
+        margin-left: 0;
+        padding: 0px;
+        height: 30px;
+    }
+    li span{
+        text-align: left;
+        display: inline-block;
+        width: 42%;
+        font-size: 12px;
+    }
+    #reg_list{
+        width: 80%;
+        margin: 60px auto 0 auto;
+    }
 </style>
-<body style="background:url('{pigcms{$static_path}img/login_bg.png');">
+<body>
+<include file="header" />
 <section>
-    <div class="Land_top" style="color:#333333;">
-        <span class="fillet" style="background: url('./tpl/Static/blue/images/new/icon.png') center no-repeat; background-size: contain;"></span>
-        <div style="font-size: 14px">Become a Tutti Courier</div>
-        <div style="color: #999999;font-size: 10px;margin: 10px auto;width: 90%;">
-            Please complete the following steps to get started!<br/>
-            All information are kept securely and used for delivery and taxation purpose.
-        </div>
-    </div>
-    <div id="step_now">
-        <div>2.Document Uploading</div>
+    <div id="reg_list">
         <ul>
-            <li class="act"></li><li class="act"></li><li></li><li></li>
+            <li>
+                <span>Delivery City:</span>
+                <select name="city_id" id="city_id">
+                    <volist name="city_list" id="city">
+                        <option value="{pigcms{$city['area_id']}" <if condition="$deliver_session['city_id'] eq $city['area_id']">selected="selected"</if>>{pigcms{$city['area_name']}</option>
+                    </volist>
+                </select>
+            </li>
+            <li>
+                <span>{pigcms{:L('_ADDRESS_TXT_')}:</span>
+                <input type="text" placeholder="{pigcms{:L('_ADDRESS_TXT_')}" id="address" value="{pigcms{$deliver_session['site']}">
+            </li>
+            <li>
+                <span>SIN Number:</span>
+                <input type="text" placeholder="SIN Number" id="sin_num" value="{pigcms{$deliver_img['sin_num']}">
+            </li>
         </ul>
+        <input type="hidden" name="lng" id="lng" value="{pigcms{$deliver_session['lng']}">
+        <input type="hidden" name="lat" id="lat" value="{pigcms{$deliver_session['lat']}">
     </div>
     <div id="step_title">
-        a.Driver's License
+        Document Upload
     </div>
     <div id="memo">
         Please make sure the photo is clear, especially the name and expiration date. Photos that are unclear or invalid may result in verification failure and delay your application.
+    </div>
+    <div id="step_title">
+        Driver's License
     </div>
     <div style="margin: 10px auto;width: 85%;">
         <div style="display:inline-block;" id="J_selectImage_0">
@@ -142,15 +197,18 @@
                 Upload a photo of your Diver's License here
             </div>
         </div>
-        <div class="img_0">
+        <if condition="$deliver_img['driver_license'] eq ''">
+            <div class="img_0">
 
-        </div>
+            </div>
+         <else />
+            <div class="img_0" style="height: 100px">
+                <img src="{pigcms{$deliver_img['driver_license']}"/>
+            </div>
+        </if>
     </div>
     <div id="step_title">
-        b.Vehicle Insurance
-    </div>
-    <div id="memo">
-        Please make sure the photo is clear, especially the name and expiration date of the insurance. Photos that are unclear or invalid may result in verification failure and delay your application.
+        Vehicle Insurance
     </div>
     <div style="margin: 10px auto;width: 85%;">
         <div style="display:inline-block;" id="J_selectImage_1">
@@ -158,15 +216,21 @@
                 Upload a photo of your Vehicle Insurance here
             </div>
         </div>
-        <div class="img_1">
+        <if condition="$deliver_img['insurance'] eq ''">
+            <div class="img_1">
 
-        </div>
+            </div>
+        <else />
+            <div class="img_1" style="height: 100px">
+                <img src="{pigcms{$deliver_img['insurance']}"/>
+            </div>
+        </if>
     </div>
     <div id="step_title">
-        c.Proof of Work Eligibility
+        Work Eligibility
     </div>
     <div id="memo">
-        This may be a valid passport, residency card, birth certificate, citizenship card, work permit, or a study permit that allow off-campus work. Please make sure the photo is clear, especially the name and expiration date of the document.Photos that are unclear or invalid may result in verification failure and delay your application.
+        This may be a valid passport, residency card, birth certificate, citizenship card, work permit, or a study permit that allow off-campus work.
     </div>
     <div style="margin: 10px auto;width: 85%;">
         <div style="display:inline-block;" id="J_selectImage_2">
@@ -174,23 +238,39 @@
                 Upload Proof of Work Eligibility here
             </div>
         </div>
-        <div class="img_2">
+        <if condition="$deliver_img['certificate'] eq ''">
+            <div class="img_2">
 
-        </div>
+            </div>
+        <else />
+            <div class="img_2" style="height: 100px">
+                <img src="{pigcms{$deliver_img['certificate']}"/>
+            </div>
+        </if>
     </div>
     <div id="memo" style="text-align: center;margin-top: 20px">
-        <span id="filename_0" style="display: none;"></span>
-        <span id="filename_1" style="display: none;"></span>
-        <span id="filename_2" style="display: none;"></span>
-        <input type="button" value="Save and Continue" id="reg_form">
-    </div>
-    <div id="memo" style="text-align: center;color: silver;margin-bottom: 30px;">
-        If you don't have all of these documents in hand at the moment, you can save what you have and skip the others for now. You still have the access to upload these photos later.
+        <span id="filename_0" style="display: none;">
+            <if condition="$deliver_img['driver_license'] neq ''">
+                {pigcms{$deliver_img['driver_license']}
+            </if>
+        </span>
+        <span id="filename_1" style="display: none;">
+            <if condition="$deliver_img['insurance'] neq ''">
+                {pigcms{$deliver_img['insurance']}
+            </if>
+        </span>
+        <span id="filename_2" style="display: none;">
+            <if condition="$deliver_img['certificate'] neq ''">
+                {pigcms{$deliver_img['certificate']}
+            </if>
+        </span>
+        <input type="button" value="Save" id="reg_form">
     </div>
 </section>
 
 <script src="{pigcms{$static_public}js/lang.js"></script>
 <script type="text/javascript" src="{pigcms{$static_public}js/webuploader.min.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKlguA2QFIUVwWTo3danbOqSKv3nYbBCg&libraries=places&language=en" async defer></script>
 <script type="text/javascript">
     $("body").css({"height":$(window).height()});
 
@@ -295,22 +375,42 @@
             alert("{pigcms{:L('_PLEASE_INPUT_ALL_')}");
         else{
             var post_data = {
-                img_0:$('#filename_0').html(),
-                img_1:$('#filename_1').html(),
-                img_2:$('#filename_2').html()
+                'address':$('#address').val(),
+                'lng':$('#lng').val(),
+                'lat':$('#lat').val(),
+                'city_id':$('#city_id').val(),
+                'sin_num':$('#sin_num').val(),
+                'img_0':$.trim($('#filename_0').html()),
+                'img_1':$.trim($('#filename_1').html()),
+                'img_2':$.trim($('#filename_2').html())
             };
             $.ajax({
-                url: "{pigcms{:U('Deliver/step_2')}",
+                url: "{pigcms{:U('Deliver/ver_info')}",
                 type: 'POST',
                 dataType: 'json',
                 data: post_data,
                 success:function(date){
-                    window.parent.location = "{pigcms{:U('Deliver/step_3')}";
+                    window.parent.location = "{pigcms{:U('Deliver/account')}";
                 }
 
             });
         }
     });
+
+    $('#address').focus(function () {
+        initAutocomplete();
+    });
+
+    var autocomplete;
+    function initAutocomplete() {
+        autocomplete = new google.maps.places.Autocomplete(document.getElementById('address'), {types: ['geocode'],componentRestrictions: {country: ['ca']}});
+        autocomplete.addListener('place_changed', fillInAddress);
+    }
+    function fillInAddress() {
+        var place = autocomplete.getPlace();
+        $("input[name='lng']").val(place.geometry.location.lng());
+        $("input[name='lat']").val(place.geometry.location.lat());
+    }
 </script>
 </body>
 </html>

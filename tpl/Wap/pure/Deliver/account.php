@@ -125,6 +125,14 @@
     .ver::before{
         background-color: #ffa52d;
     }
+    .error_ver{
+        display: inline-block;
+        vertical-align: middle;
+        background-image:url('{pigcms{$static_path}img/error_ver.png');
+        background-size: 100%;
+        width: 1.1rem;
+        height: 1.1rem;
+    }
 </style>
 </head>
 <body>
@@ -161,7 +169,11 @@
         </div>
         <div id="info">
             <span class="l_span">Courier Verification Info</span>
-            <span class="r_span">Update</span>
+            <if condition="$deliver_session['status'] eq 1">
+                <span class="r_span"><lable class="ver"></lable> View</span>
+            <else />
+                <span class="r_span"><lable class="error_ver"></lable> Update</span>
+            </if>
         </div>
         <div class="list">
             <span class="l_span">City:</span>
@@ -172,37 +184,53 @@
 
             <span class="l_span">SIN Number:</span>
             <span class="r_span">
-                <if condition="$deliver_img['sin_num'] eq ''">
-                    Please Update <lable class="nver"></lable>
+                <if condition="$deliver_session['status'] eq 1">
+                    Approved
                 <else />
-                    Verified <lable class="ver"></lable>
+                    <if condition="$deliver_img['sin_num'] eq ''">
+                        Please Update
+                    <else />
+                        Waiting for Approval
+                    </if>
                 </if>
             </span>
 
             <span class="l_span">Driver's License:</span>
             <span class="r_span">
-                <if condition="$deliver_img['driver_license'] eq ''">
-                    Please Update <lable class="nver"></lable>
+                <if condition="$deliver_session['status'] eq 1">
+                    Approved
                 <else />
-                    Verified <lable class="ver"></lable>
+                    <if condition="$deliver_img['driver_license'] eq ''">
+                        Please Update
+                    <else />
+                        Waiting for Approval
+                    </if>
                 </if>
             </span>
 
             <span class="l_span">Vehicle Insurance:</span>
             <span class="r_span">
-                <if condition="$deliver_img['insurance'] eq ''">
-                    Please Update <lable class="nver"></lable>
+                <if condition="$deliver_session['status'] eq 1">
+                    Approved
                 <else />
-                    Verified <lable class="ver"></lable>
+                    <if condition="$deliver_img['insurance'] eq ''">
+                        Please Update <lable class="nver"></lable>
+                    <else />
+                        Waiting for Approval
+                    </if>
                 </if>
             </span>
 
             <span class="l_span">Work Eligibility:</span>
             <span class="r_span">
-                <if condition="$deliver_img['certificate'] eq ''">
-                    Please Update <lable class="nver"></lable>
+                <if condition="$deliver_session['status'] eq 1">
+                    Approved
                 <else />
-                    Verified <lable class="ver"></lable>
+                    <if condition="$deliver_img['certificate'] eq ''">
+                        Please Update
+                    <else />
+                        Waiting for Approval
+                    </if>
                 </if>
             </span>
         </div>
@@ -217,6 +245,9 @@
 	<script type="text/javascript">
         $('#change_pwd').click(function () {
             location.href = "{pigcms{:U('Deliver/change_pwd')}";
+        });
+        $('#info').click(function () {
+            location.href = "{pigcms{:U('Deliver/ver_info')}";
         });
         $('#bank').click(function () {
             location.href = "{pigcms{:U('Deliver/bank_info')}";

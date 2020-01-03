@@ -208,7 +208,7 @@
         </li>
     </ul>
     <div id="menu_bottom">
-        <div id="setting">Setting</div>
+        <!--div id="setting">Setting</div-->
         <div id="logout">Log Out</div>
     </div>
 </div>
@@ -229,16 +229,19 @@
     });
 
     $('#menu_shift').click(function () {
-        location.href = "{pigcms{:U('Deliver/schedule')}"
+        location.href = "{pigcms{:U('Deliver/schedule')}";
     });
     $('#menu_stat').click(function () {
-        location.href = "{pigcms{:U('Deliver/statistics')}"
+        location.href = "{pigcms{:U('Deliver/statistics')}";
     });
     $('#menu_inst').click(function () {
-        location.href = "{pigcms{:U('Deliver/inst')}"
+        location.href = "{pigcms{:U('Deliver/inst')}";
     });
     $('#menu_account').click(function () {
-        location.href = "{pigcms{:U('Deliver/account')}"
+        location.href = "{pigcms{:U('Deliver/account')}";
+    });
+    $('#menu_support').click(function () {
+        location.href = "{pigcms{:U('Deliver/support')}";
     });
 
     var init_top = $('#tutti_header').offset().top;

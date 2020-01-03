@@ -116,16 +116,16 @@
         <else />
             <div class="card_div">
                 <span class="input_title">Full Name:</span>
-                <input type="text" placeholder="Account holder's name" name="ahname" value="{pigcms{$deliver_card['ahname']}" readonly="readonly">
+                <input type="text" placeholder="Account holder's name" name="ahname" id="ahname" value="{pigcms{$deliver_card['ahname']}" readonly="readonly">
 
                 <span class="input_title">Institution Number:</span>
-                <input type="text" placeholder="3 digits" name="institution" value="{pigcms{$deliver_card['institution']}" readonly="readonly">
+                <input type="text" maxlength="3" placeholder="3 digits" name="institution" id="institution" value="{pigcms{$deliver_card['institution']}" readonly="readonly">
 
                 <span class="input_title">Transit Number:</span>
-                <input type="text" placeholder="5 digits" name="transit" value="{pigcms{$deliver_card['transit']}" readonly="readonly">
+                <input type="text" maxlength="5" placeholder="5 digits" name="transit" id="transit" value="{pigcms{$deliver_card['transit']}" readonly="readonly">
 
                 <span class="input_title">Account Number:</span>
-                <input type="text" placeholder="7 to 12 digits" name="account" value="{pigcms{$deliver_card['account']}" readonly="readonly">
+                <input type="text" maxlength="12" minlength="7" placeholder="7 to 12 digits" name="account" id="account" value="{pigcms{$deliver_card['account']}" readonly="readonly">
             </div>
             <div class="tip" id="edit_div" style="display: none;margin-top: 10px">
                 Please make sure the above information is correct before your submission. Incorrect information may result in failure of the deposit.
@@ -156,7 +156,43 @@
                         $('#myform').submit();
                     }
                 }else{
-                    //alert('Editing');
+                    var is_submit = true;
+                    $('#all').find('input').each(function () {
+                        if($(this).val() == ''){
+                            is_submit = false;
+                        }
+                    });
+                    if(!is_submit){
+                        alert("{pigcms{:L('_PLEASE_INPUT_ALL_')}");
+                    }else{
+                        var form_data = {
+                            'ahname':$('#ahname').val(),
+                            'transit':$('#transit').val(),
+                            'institution':$('#institution').val(),
+                            'account':$('#account').val()
+                        };
+                        $.ajax({
+                            url: "{pigcms{:U('Deliver/bank_info')}",
+                            type: 'POST',
+                            dataType: 'json',
+                            data: form_data,
+                            success:function(date){
+                                if(date.error != 0){
+                                    alert(date.message);
+                                }else{
+                                    layer.open({title:"{pigcms{:L('_B_D_LOGIN_TIP2_')}",content: date.message,skin: 'msg', time:1,end:function () {
+                                            $('#save').html('Edit');
+                                            $('#edit_div').hide();
+                                            $('body').find('input').each(function () {
+                                                $(this).attr("readonly","readonly");
+                                            });
+                                            is_pwd = 1;
+                                    }});
+                                }
+                            }
+
+                        });
+                    }
                 }
             }else{
                 $('#save').html('Confirm & Submit');

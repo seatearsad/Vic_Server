@@ -128,8 +128,13 @@
     <div id="memo">
         We recommend you to finish uploading all required information in order to get started quickly. You can do so by clicking on the "Continue Completing My Application" below.
     </div>
+    <div id="memo" style="text-decoration: underline">
+        <a href="{pigcms{:U('Deliver/account')}">
+        Completing My Application
+        </a>
+    </div>
     <div id="memo">
-        <input type="button" value="Continue Completing My Application">
+        If you have any questions about uploading photos of the required documents, you can also bring the documents in when picking up your delivery bag.
     </div>
 </section>
 <script>
