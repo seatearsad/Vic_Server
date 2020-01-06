@@ -169,7 +169,7 @@
         </div>
         <div id="info">
             <span class="l_span">Courier Verification Info</span>
-            <if condition="$deliver_session['status'] eq 1">
+            <if condition="$deliver_session['group'] eq 1">
                 <span class="r_span"><lable class="ver"></lable> View</span>
             <else />
                 <span class="r_span"><lable class="error_ver"></lable> Update</span>
@@ -184,7 +184,7 @@
 
             <span class="l_span">SIN Number:</span>
             <span class="r_span">
-                <if condition="$deliver_session['status'] eq 1">
+                <if condition="$deliver_session['group'] eq 1">
                     Approved
                 <else />
                     <if condition="$deliver_img['sin_num'] eq ''">
@@ -197,7 +197,7 @@
 
             <span class="l_span">Driver's License:</span>
             <span class="r_span">
-                <if condition="$deliver_session['status'] eq 1">
+                <if condition="$deliver_session['group'] eq 1">
                     Approved
                 <else />
                     <if condition="$deliver_img['driver_license'] eq ''">
@@ -210,7 +210,7 @@
 
             <span class="l_span">Vehicle Insurance:</span>
             <span class="r_span">
-                <if condition="$deliver_session['status'] eq 1">
+                <if condition="$deliver_session['group'] eq 1">
                     Approved
                 <else />
                     <if condition="$deliver_img['insurance'] eq ''">
@@ -223,7 +223,7 @@
 
             <span class="l_span">Work Eligibility:</span>
             <span class="r_span">
-                <if condition="$deliver_session['status'] eq 1">
+                <if condition="$deliver_session['group'] eq 1">
                     Approved
                 <else />
                     <if condition="$deliver_img['certificate'] eq ''">

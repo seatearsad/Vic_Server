@@ -146,7 +146,7 @@
         padding: 0px;
         height: 30px;
     }
-    li span{
+    #reg_list li span{
         text-align: left;
         display: inline-block;
         width: 42%;
@@ -156,19 +156,44 @@
         width: 80%;
         margin: 60px auto 0 auto;
     }
+    #review_tip{
+        width: 100%;
+        margin: 20px auto;
+        border-radius: 5px;
+        border: 2px solid red;
+        padding: 10px 20px 10px 50px;
+        box-sizing: border-box;
+        font-size: 10px;
+        background-repeat: no-repeat;
+        background-position: center left 9px;
+        background-size:32px auto;
+        background-image:url('{pigcms{$static_path}img/review_tip.png');
+    }
 </style>
 <body>
 <include file="header" />
 <section>
     <div id="reg_list">
+        <if condition="$deliver_img['review_desc'] neq '' and $deliver_session['group'] neq 1">
+        <div id="review_tip">
+            Sorry, your application is disapproved for the following reason(s):
+            {pigcms{$deliver_img['review_desc']}
+        </div>
+        </if>
         <ul>
             <li>
                 <span>Delivery City:</span>
+                <if condition="$deliver_session['group'] neq 1">
                 <select name="city_id" id="city_id">
                     <volist name="city_list" id="city">
                         <option value="{pigcms{$city['area_id']}" <if condition="$deliver_session['city_id'] eq $city['area_id']">selected="selected"</if>>{pigcms{$city['area_name']}</option>
                     </volist>
                 </select>
+                <else />
+                    <label style="width: 55%;display: inline-block;text-align: left">
+                    {pigcms{$city_name}
+                    </label>
+                </if>
             </li>
             <li>
                 <span>{pigcms{:L('_ADDRESS_TXT_')}:</span>
@@ -185,18 +210,22 @@
     <div id="step_title">
         Document Upload
     </div>
+    <if condition="$deliver_session['group'] neq 1">
     <div id="memo">
         Please make sure the photo is clear, especially the name and expiration date. Photos that are unclear or invalid may result in verification failure and delay your application.
     </div>
+    </if>
     <div id="step_title">
         Driver's License
     </div>
     <div style="margin: 10px auto;width: 85%;">
+        <if condition="$deliver_session['group'] neq 1">
         <div style="display:inline-block;" id="J_selectImage_0">
             <div class="btn btn-sm btn-success" style="position:relative;height:50px;line-height: 50px;text-align: left;">
                 Upload a photo of your Diver's License here
             </div>
         </div>
+        </if>
         <if condition="$deliver_img['driver_license'] eq ''">
             <div class="img_0">
 
@@ -211,11 +240,13 @@
         Vehicle Insurance
     </div>
     <div style="margin: 10px auto;width: 85%;">
+        <if condition="$deliver_session['group'] neq 1">
         <div style="display:inline-block;" id="J_selectImage_1">
             <div class="btn btn-sm btn-success" style="position:relative;height:50px;line-height: 50px;text-align: left;">
                 Upload a photo of your Vehicle Insurance here
             </div>
         </div>
+        </if>
         <if condition="$deliver_img['insurance'] eq ''">
             <div class="img_1">
 
@@ -233,11 +264,13 @@
         This may be a valid passport, residency card, birth certificate, citizenship card, work permit, or a study permit that allow off-campus work.
     </div>
     <div style="margin: 10px auto;width: 85%;">
+        <if condition="$deliver_session['group'] neq 1">
         <div style="display:inline-block;" id="J_selectImage_2">
             <div class="btn btn-sm btn-success" style="position:relative;height:50px;line-height: 50px;text-align: left;">
                 Upload Proof of Work Eligibility here
             </div>
         </div>
+        </if>
         <if condition="$deliver_img['certificate'] eq ''">
             <div class="img_2">
 
@@ -264,7 +297,9 @@
                 {pigcms{$deliver_img['certificate']}
             </if>
         </span>
+        <if condition="$deliver_session['group'] neq 1">
         <input type="button" value="Save" id="reg_form">
+        </if>
     </div>
 </section>
 
@@ -410,6 +445,14 @@
         var place = autocomplete.getPlace();
         $("input[name='lng']").val(place.geometry.location.lng());
         $("input[name='lat']").val(place.geometry.location.lat());
+    }
+
+
+    var group = "{pigcms{$deliver_session['group']}";
+    if(group == 1){
+        $('body').find('input').each(function () {
+            $(this).attr("readonly","readonly");
+        });
     }
 </script>
 </body>

@@ -213,7 +213,7 @@
 				<li class="grab fl">
 					<a href="{pigcms{:U('Deliver/grab')}">
 						<i></i>
-						<h2 id="gray_count">{pigcms{$gray_count}</h2>
+						<h2 id="gray_count">0</h2>
 						<p>{pigcms{:L('_C_ORDER_PENDING_')}</p>
 					</a>
 				</li>
@@ -230,11 +230,37 @@
 	</section>
     <div id="container">
         <div class="scroller" id="scroller">
-            <div id="grab_list"></div>
+            <div id="grab_list">
+                <div style="width: 80%;margin: 10px auto;font-size: 12px;color: #666666;text-align: center;">
+                    Please go to "My Account" to complete all required information and documents in order to accept orders.
+                    <a href="{pigcms{:U('Deliver/account')}">
+                    <div style="background-color: #ffa52d;color: white;line-height: 30px;width: 80%;margin: 10px auto;border-radius: 5px;">
+                        My Account
+                    </div>
+                    </a>
+                </div>
+
+
+            </div>
         </div>
     </div>
     <script src="{pigcms{$static_public}js/laytpl.js"></script>
-    <script type="text/javascript" src="{pigcms{$static_path}js/grab.js?211" charset="utf-8"></script>
+    <if condition="$deliver_session['reg_status'] eq 0 and $deliver_session['group'] eq 1">
+        <script type="text/javascript" src="{pigcms{$static_path}js/grab.js?211" charset="utf-8"></script>
+        <script>
+            $('#grab_list').html('');
+            $('#gray_count').html('{pigcms{$gray_count}');
+            setInterval(function(){
+                $.get("{pigcms{:U('Deliver/index_count')}", function(response){
+                    if (response.err_code == false) {
+                        $('#gray_count').html(response.gray_count);
+                        $('#deliver_count').html(response.deliver_count);
+                        $('#finish_count').html(response.finish_count);
+                    }
+                }, 'json');
+            }, 2000);
+        </script>
+    </if>
     <script id="replyListBoxTpl" type="text/html">
         {{# for(var i = 0, len = d.list.length; i < len; i++){ }}
         <section class="robbed supply_{{ d.list[i].supply_id }}" data-id="{{ d.list[i].supply_id }}">
@@ -356,16 +382,6 @@
             }else{
                 loadPosition();
             }
-
-            setInterval(function(){
-                $.get("{pigcms{:U('Deliver/index_count')}", function(response){
-                    if (response.err_code == false) {
-                        $('#gray_count').html(response.gray_count);
-                        $('#deliver_count').html(response.deliver_count);
-                        $('#finish_count').html(response.finish_count);
-                    }
-                }, 'json');
-            }, 2000);
         });
 
         function run_update_location() {

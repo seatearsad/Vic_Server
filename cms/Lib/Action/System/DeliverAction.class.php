@@ -1252,6 +1252,7 @@ class DeliverAction extends BaseAction {
 
         //获取当前所有上班状态的配送员 包含现在手中订单数量及状态
         $where['status'] = 1;
+        $where['group'] = 1;
         $where['work_status'] = 0;
         //garfunkel 判断城市管理员
         if($this->system_session['level'] == 3){
@@ -1343,7 +1344,7 @@ class DeliverAction extends BaseAction {
         $this->assign('city',$city);
 
         //未审核的
-        $condition_user['group'] = 0;
+        //$condition_user['group'] = array('between','-1,0');
         $condition_user['reg_status'] = array('neq',0);
         //garfunkel 判断城市管理员
         if($this->system_session['level'] == 3){
@@ -1363,29 +1364,37 @@ class DeliverAction extends BaseAction {
         if($_POST) {
             $uid = $_POST['uid'];
             $deliver = D('deliver_user')->where(array('uid' => $uid))->find();
-            if ($deliver['reg_status'] == 2) {
-                $review_status = $_POST['review'];
-                if ($review_status == 1) {//通过
-                    $data['reg_status'] = 3;
-
-                    $sms_data['uid'] = $uid;
-                    $sms_data['mobile'] = $deliver['phone'];
-                    $sms_data['sendto'] = 'deliver';
-                    $sms_data['tplid'] = 275882;
-                    $sms_data['params'] = [];
-                    Sms::sendSms2($sms_data);
-                } else {//未通过
-                    $data['reg_status'] = 1;
+            $review_status = $_POST['review'];
+            if ($review_status == 1) {//通过
+                //$data['reg_status'] = 3;
+                $data['group'] = 1;
+                $sms_data['uid'] = $uid;
+                $sms_data['mobile'] = $deliver['phone'];
+                $sms_data['sendto'] = 'deliver';
+                $sms_data['tplid'] = 275882;
+                $sms_data['params'] = [];
+                Sms::sendSms2($sms_data);
+                if($deliver['reg_status'] == 5){
+                    $data['reg_status'] = 0;
+                }
+            } else {//未通过
+                //$data['reg_status'] = 1;
+                if($_POST['review_desc'] && $_POST['review_desc'] != '') {
+                    $data['group'] = -1;
                     $data_img['review_desc'] = $_POST['review_desc'];
                     D('Deliver_img')->where(array('uid' => $uid))->save($data_img);
                 }
-                D('deliver_user')->where(array('uid' => $uid))->save($data);
+            }
+            D('deliver_user')->where(array('uid' => $uid))->save($data);
 
-                $this->success('Success');
-            }elseif ($deliver['reg_status'] == 4){
+            if ($deliver['reg_status'] == 4){
                 if($_POST['receive'] == 1){
-                    $data['reg_status'] = 0;
-                    $data['group'] = 1;
+                    if($deliver['group'] == 1){
+                        $data['reg_status'] = 0;
+                    }
+                    if(!isset($data['reg_status']) || $data['reg_status'] != 0) {
+                        $data['reg_status'] = 5;
+                    }
                     $data['status'] = 1;
                     D('deliver_user')->where(array('uid' => $uid))->save($data);
                 }

@@ -81,7 +81,7 @@
 				<a href="javascript:void(0)"></a>
 			</li>
             <li id="findpwd" style="font-size:10px;text-decoration:underline;text-align: right;color: #666666;margin-bottom: 15px;cursor: pointer;">
-                Forgot Password?
+                {pigcms{:L('_ND_FORGOTPASSWORD_')}
             </li>
 			<li class="Landd">
 				<input type="button" value="{pigcms{:L('_B_D_LOGIN_LOGIN1_')}" id="login_form">
@@ -92,9 +92,9 @@
                 </div>
             </li>
             <li class="Landd" style="color:#666666;text-align: center;margin-top: 20px">
-                Want to Become a Tutti Courier?
+                {pigcms{:L('_ND_WANTTOBEACOURIER_')}
                 <div id="reg_form" style="color: royalblue;">
-                    Sign Up Here.
+                    {pigcms{:L('_ND_SIGNUP_')}
                 </div>
             </li>
 		</ul>

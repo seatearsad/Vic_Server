@@ -162,9 +162,9 @@
         <if condition="ACTION_NAME eq 'index' OR ACTION_NAME eq 'process'">
         <div class="menu_font">Status:
             <if condition="$deliver_session['work_status'] eq '1'">
-                <span class="off_shift">Off Work</span>
+                <span class="off_shift">{pigcms{:L('_ND_OFFSHIFT_')}</span>
             <else />
-                <span class="on_shift">On-Shift</span>
+                <span class="on_shift">{pigcms{:L('_ND_ONSHIFT_')}</span>
             </if>
         </div>
         </if>
@@ -183,28 +183,28 @@
 </div>
 <div id="menu_memo">
     <div id="user_hi">
-        Hi {pigcms{$deliver_session['name']} !
+        {pigcms{:replace_lang_str(L('_ND_HI_'),$deliver_session['name'])}
     </div>
     <ul>
         <li id="menu_shift">
             <span class="m_img"> </span>
-            <span>My Shifts</span>
+            <span>{pigcms{:L('_ND_MYSHIFTS_')}</span>
         </li>
         <li id="menu_stat">
             <span class="m_img"> </span>
-            <span>My Statistics</span>
+            <span>{pigcms{:L('_ND_MYSTATISTICS_')}</span>
         </li>
         <li id="menu_inst">
             <span class="m_img"> </span>
-            <span>Instructions & Announcement</span>
+            <span>{pigcms{:L('_ND_INSANN_')}</span>
         </li>
         <li id="menu_account">
             <span class="m_img"> </span>
-            <span>My Account</span>
+            <span>{pigcms{:L('_ND_MYACCOUNT_')}</span>
         </li>
         <li id="menu_support">
             <span class="m_img"> </span>
-            <span>Courier Support</span>
+            <span>{pigcms{:L('_ND_COURIERSUPPORT_')}</span>
         </li>
     </ul>
     <div id="menu_bottom">

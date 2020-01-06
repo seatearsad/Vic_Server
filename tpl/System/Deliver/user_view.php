@@ -104,7 +104,7 @@
                 </td>
             </tr>
             </if>
-            <if condition="$now_user['reg_status'] eq 2">
+            <if condition="$now_user['group'] neq 1">
             <tr>
                 <th width="15%">{pigcms{:L('_BACK_WHETHER_PASS_')}</th>
                 <td colspan=3>
@@ -112,10 +112,10 @@
                     <span class="cb-disable"><label class="cb-disable"><span>{pigcms{:L('_BACK_NO_PASS_REVIEW_')}</span><input type="radio" name="review" value="0" /></label></span>
                 </td>
             </tr>
-            <tr id="review_desc" style="display: none">
+                <tr id="review_desc" <if condition="$img['review_desc'] eq ''">style="display: none"</if>>
                 <th width="15%">{pigcms{:L('_BACK_REVIEW_DESC_')}</th>
                 <td colspan=3>
-                    <input type="text" class="input fl" name="review_desc">
+                    <input type="text" class="input fl" name="review_desc" value="{pigcms{$img['review_desc']}">
                 </td>
             </tr>
             </if>

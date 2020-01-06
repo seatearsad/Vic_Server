@@ -73,11 +73,14 @@ class DeliverAction extends BaseAction
             }
         }
 
-        $save_address = array('login','reg','ajax_city_name','ajax_upload','forgetpwd','account','change_pwd','bank_info','step_1','step_2','step_3','step_4','support','ver_info');
+        $save_address = array('login','reg','ajax_city_name','ajax_upload','forgetpwd','account','change_pwd','bank_info','step_1','step_2','step_3','step_4','step_5','support','ver_info');
         if(!in_array(ACTION_NAME,$save_address)) {
             $deliver = D('Deliver_user')->field('reg_status')->where(['uid' => $this->deliver_session['uid']])->find();
-            if ($deliver['reg_status'] != 0)
+            if ($deliver['reg_status'] != 0 && !($deliver['reg_status'] == 5 && ACTION_NAME == 'index'))
                 header('Location:' . U('Deliver/step_' . $deliver['reg_status']));
+        }else{
+            if(ACTION_NAME == 'step_5')
+                header('Location:' . U('Deliver/index'));
         }
 	}
 
@@ -191,9 +194,9 @@ class DeliverAction extends BaseAction
 	public function index() 
 	{
 
-	    $deliver = D('Deliver_user')->field('reg_status')->where(['uid' => $this->deliver_session['uid']])->find();
-	    if($deliver['reg_status'] != 0)
-            header('Location:'.U('Deliver/step_'.$deliver['reg_status']));
+	    //$deliver = D('Deliver_user')->field('reg_status')->where(['uid' => $this->deliver_session['uid']])->find();
+	    //if($deliver['reg_status'] != 0)
+        //    header('Location:'.U('Deliver/step_'.$deliver['reg_status']));
 
         $city_id = $this->deliver_session['city_id'];
         $city = D('Area')->where(array('area_id'=>$city_id))->find();
@@ -2354,6 +2357,7 @@ class DeliverAction extends BaseAction
 
 	        //注册状态
             $deliver_data['reg_status'] = 1;
+            $deliver_data['last_time'] = time();
 	        $deliver_id = D('Deliver_user')->add($deliver_data);
 
             $database_deliver_user = D('Deliver_user');
@@ -2401,6 +2405,7 @@ class DeliverAction extends BaseAction
             $userdata['lat'] = $_POST['lat'] ? $_POST['lat'] : '0';
             $userdata['city_id'] = $_POST['city_id'] ? $_POST['city_id'] : '0';
             $userdata['reg_status'] = 2;
+            $userdata['last_time'] = time();
 
             $database_deliver_user->where(array('uid' => $this->deliver_session['uid']))->save($userdata);
 
@@ -2432,7 +2437,7 @@ class DeliverAction extends BaseAction
 
             D('Deliver_img')->save($data);
 
-            $database_deliver_user->where(array('uid' => $this->deliver_session['uid']))->save(array('reg_status'=>3));
+            $database_deliver_user->where(array('uid' => $this->deliver_session['uid']))->save(array('reg_status'=>3,'last_time'=>time()));
 
             $result = array('error_code'=>false,'msg'=>L('_B_LOGIN_REGISTSUCESS_'));
             $this->ajaxReturn($result);
@@ -2487,7 +2492,7 @@ class DeliverAction extends BaseAction
 
                 D('Deliver_img')->where(array('uid'=>$this->deliver_session['uid']))->save($data);
 
-                D('Deliver_user')->where(array('uid'=>$this->deliver_session['uid']))->save(array('reg_status'=>4));
+                D('Deliver_user')->where(array('uid'=>$this->deliver_session['uid']))->save(array('reg_status'=>4,'last_time'=>time()));
 
                 $result = array('error_code' => false, 'msg' => L('_PAYMENT_SUCCESS_'));
             }else{
@@ -2845,6 +2850,9 @@ class DeliverAction extends BaseAction
 
                 D('Deliver_card')->where(array('deliver_id'=>$this->deliver_session['uid']))->save($card_data);
 
+                $userdata['last_time'] = time();
+                D('Deliver_user')->where(array('uid' => $this->deliver_session['uid']))->save($userdata);
+
                 exit(json_encode(array('error' => 0,'message' =>'Success')));
             }
         }
@@ -2865,6 +2873,7 @@ class DeliverAction extends BaseAction
             $userdata['lng'] = $_POST['lng'] ? $_POST['lng'] : '0';
             $userdata['lat'] = $_POST['lat'] ? $_POST['lat'] : '0';
             $userdata['city_id'] = $_POST['city_id'] ? $_POST['city_id'] : '0';
+            $userdata['last_time'] = time();
 
             $database_deliver_user->where(array('uid' => $this->deliver_session['uid']))->save($userdata);
 
@@ -2881,6 +2890,9 @@ class DeliverAction extends BaseAction
         }else {
             $city_list = D('Area')->where(array('is_open' => 1, 'area_type' => 2))->select();
             $this->assign('city_list', $city_list);
+
+            $city = D('Area')->where(array('area_id'=>$this->deliver_session['city_id']))->find();
+            $this->assign('city_name',$city['area_name']);
 
             $deliver_img = D('Deliver_img')->where(array('uid' => $this->deliver_session['uid']))->find();
             $this->assign('deliver_img', $deliver_img);

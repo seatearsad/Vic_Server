@@ -69,6 +69,9 @@
                                             <if condition="$vo['reg_status'] eq 4">
                                                 <font color="green">{pigcms{:L('_BACK_DELIVER_BOX_')}</font>
                                             </if>
+                                            <if condition="$vo['reg_status'] eq 5">
+                                                <font color="red">未通过审核</font>
+                                            </if>
                                         </td>
 										<td class="textcenter">　
 										<a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Deliver/user_view',array('uid'=>$vo['uid']))}','{pigcms{:L(\'_BACK_EDIT_COURIER_\')}',680,560,true,false,false,editbtn,'edit',true);">{pigcms{:L('_BACK_EDIT_')}</a>
