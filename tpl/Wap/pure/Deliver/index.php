@@ -214,14 +214,14 @@
 					<a href="{pigcms{:U('Deliver/grab')}">
 						<i></i>
 						<h2 id="gray_count">0</h2>
-						<p>{pigcms{:L('_C_ORDER_PENDING_')}</p>
+						<p>{pigcms{:L('_ND_PENDINGORDERS_')}</p>
 					</a>
 				</li>
 				<li class="deliver fl">
 					<a href="{pigcms{:U('Deliver/process')}">
 						<i></i>
 						<h2 id="deliver_count">{pigcms{$deliver_count}</h2>
-						<p>{pigcms{:L('_C_PROCESSING_')}</p>
+						<p>{pigcms{:L('_ND_MYORDERS_')}</p>
 					</a>
 				</li>
 			</ul>
@@ -235,7 +235,7 @@
                     Please go to "My Account" to complete all required information and documents in order to accept orders.
                     <a href="{pigcms{:U('Deliver/account')}">
                     <div style="background-color: #ffa52d;color: white;line-height: 30px;width: 80%;margin: 10px auto;border-radius: 5px;">
-                        My Account
+                        {pigcms{:L('_ND_MYACCOUNT_”')}
                     </div>
                     </a>
                 </div>
@@ -266,14 +266,20 @@
         <section class="robbed supply_{{ d.list[i].supply_id }}" data-id="{{ d.list[i].supply_id }}">
             <div class="order_title">
                 <span>{{ d.list[i].store_name }}</span>
-                {{# if(d.list[i].pay_method == 1){ }}
-                <span class="pay_status">
-                    Paid
-                </span>
+                {{# if(d.list[i].uid == 0){ }}
+                    <span class="pay_status_red">
+                        {pigcms{:L('_ND_UNPAID_')}
+                    </span>
                 {{# } else { }}
-                <span class="pay_status_red">
-                    Cash
-                </span>
+                    {{# if(d.list[i].pay_method == 1){ }}
+                    <span class="pay_status">
+                        {pigcms{:L('_ND_PAID_')}
+                    </span>
+                    {{# } else { }}
+                    <span class="pay_status_red">
+                        {pigcms{:L('_ND_CASH_')}
+                    </span>
+                    {{# } }}
                 {{# } }}
                 <div class="order_time">
                     <span>Order placed</span>
@@ -286,7 +292,7 @@
             <div class="order_address">
                 <div>
                     <span class="from_label">
-                        From
+                        {pigcms{:L('_ND_FROM_')}
                     </span>
                     <span class="address">
                         {{ d.list[i].from_site }}
@@ -297,12 +303,12 @@
                 </div>
                 <div>
                     <span class="to_label">
-                        To
+                        {pigcms{:L('_ND_TO_')}
                     </span>
                     <span class="address">
                         {{ d.list[i].aim_site }}
                         <span class="address_bottom">
-                            Delivery Fee:${{ d.list[i].freight_charge }}
+                            {pigcms{:L('_DELI_PRICE_')}:${{ d.list[i].freight_charge }}
                         </span>
                     </span>
                 </div>
@@ -310,12 +316,12 @@
             <div class="order_btn">
                 <a href="{{ d.list[i].map_url }}">
                 <span class="location_btn">
-                    Check Location
+                    {pigcms{:L('_ND_CHECKLOCATIONS_')}
                 </span>
                 </a>
                 <a href="javascript:void(0);" class="rob" data-spid="{{ d.list[i].supply_id }}">
                 <span class="accept_btn">
-                    Accept
+                    {pigcms{:L('_ND_ACCEPT_')}
                 </span>
                 </a>
             </div>

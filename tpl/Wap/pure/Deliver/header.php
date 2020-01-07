@@ -194,6 +194,10 @@
             <span class="m_img"> </span>
             <span>{pigcms{:L('_ND_MYSTATISTICS_')}</span>
         </li>
+        <li id="menu_order">
+            <span class="m_img"> </span>
+            <span>{pigcms{:L('_ND_ORDERHISTORY_')}</span>
+        </li>
         <li id="menu_inst">
             <span class="m_img"> </span>
             <span>{pigcms{:L('_ND_INSANN_')}</span>
@@ -233,6 +237,9 @@
     });
     $('#menu_stat').click(function () {
         location.href = "{pigcms{:U('Deliver/statistics')}";
+    });
+    $('#menu_order').click(function () {
+        location.href = "{pigcms{:U('Deliver/orders')}";
     });
     $('#menu_inst').click(function () {
         location.href = "{pigcms{:U('Deliver/inst')}";

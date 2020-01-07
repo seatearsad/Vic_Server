@@ -53,7 +53,7 @@ $(function(){
 	var marker = new google.maps.Marker({
 		position: {lng: {pigcms{$supply['aim_lnt']}, lat: {pigcms{$supply['aim_lat']}},
         map: map,
-        title:"Destination",
+        title:"{pigcms{:L('_ND_DESTINATION_')}",
         icon:"{pigcms{$static_path}images/map/use_icon.png"
     });
 
@@ -61,7 +61,7 @@ $(function(){
     var marker2 = new google.maps.Marker({
 		position: {lng: {pigcms{$supply['from_lnt']}, lat: {pigcms{$supply['from_lat']}},
         map: map,
-        title:"Pick Up Point",
+        title:"{pigcms{:L('_ND_PICKUPPOINT_')}",
         icon:"{pigcms{$static_path}images/map/store_icon.png"
     });
 

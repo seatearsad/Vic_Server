@@ -89,17 +89,17 @@
 <section>
     <div class="Land_top" style="color:#333333;">
         <span class="fillet" style="background: url('./tpl/Static/blue/images/new/icon.png') center no-repeat; background-size: contain;"></span>
-        <div style="font-size: 14px">Become a Tutti Courier</div>
+        <div style="font-size: 14px">{pigcms{:L('_ND_BECOMEACOURIER_')}</div>
         <div style="color: #999999;font-size: 12px;margin-top: 10px;">Thank you! You are almost there!</div>
     </div>
     <div id="step_now">
-        <div>4.Get your bag</div>
+        <div>4.{pigcms{:L('_ND_GETYOURBAG_')}</div>
         <ul>
         <li class="act"></li><li class="act"></li><li class="act"></li><li class="act"></li>
         </ul>
     </div>
     <div id="memo">
-        Please come to pick up your delivery bag at the below location during our hours:
+        {pigcms{:L('_ND_PICKUPNOTICE0_')}
     </div>
     <div id="address">
         <div>
@@ -120,21 +120,21 @@
         </div>
     </div>
     <div id="memo">
-        Our staff will provide instructions on how to use our app and accept delivery orders. You can also bring in any questions you have.
+        {pigcms{:L('_ND_PICKUPNOTICE1_')}
     </div>
     <div style="border-bottom: 1px dashed #666666;margin: 20px auto;width: 80%;">
 
     </div>
     <div id="memo">
-        We recommend you to finish uploading all required information in order to get started quickly. You can do so by clicking on the "Continue Completing My Application" below.
+        {pigcms{:L('_ND_PICKUPNOTICE2_')}
     </div>
     <div id="memo" style="text-decoration: underline">
         <a href="{pigcms{:U('Deliver/account')}">
-        Completing My Application
+        {pigcms{:L('_ND_COMPLETINGAPP_')}
         </a>
     </div>
     <div id="memo">
-        If you have any questions about uploading photos of the required documents, you can also bring the documents in when picking up your delivery bag.
+        {pigcms{:L('_ND_PICKUPNOTICE3_')}
     </div>
 </section>
 <script>

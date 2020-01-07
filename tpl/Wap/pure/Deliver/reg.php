@@ -86,7 +86,7 @@
 	<section>
 	<div class="Land_top" style="color:#333333;">
         <span class="fillet" style="background: url('./tpl/Static/blue/images/new/icon.png') center no-repeat; background-size: contain;"></span>
-		<div>Become a Tutti Courier</div>
+		<div>{pigcms{:L('_ND_BECOMEACOURIER_')}</div>
         <div style="color: #999999;font-size: 12px;margin-top: 10px;">Register Now!</div>
 	</div>
 	<div id="reg_list">
@@ -125,7 +125,7 @@
                 <input type="password" placeholder="{pigcms{:L('_B_D_LOGIN_CONFIRMKEY_')}*" id="c_pwd">
             </li>
             <li class="Landd">
-                <input type="button" value="Register" id="reg_form" style="background-color: #ffa52d;width: 50%;">
+                <input type="button" value="{pigcms{:L('_ND_REGISTER_')}" id="reg_form" style="background-color: #ffa52d;width: 50%;">
             </li>
             <li class="Landd">
                 <input type="button" value="{pigcms{:L('_COURIER_LOGIN_')}" id="login_btn" style="background-color: #1b9dff;width: 50%;">

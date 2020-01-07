@@ -182,7 +182,7 @@
         </if>
         <ul>
             <li>
-                <span>Delivery City:</span>
+                <span>{pigcms{:L('_ND_DELIVERYCITY_')}:</span>
                 <if condition="$deliver_session['group'] neq 1">
                 <select name="city_id" id="city_id">
                     <volist name="city_list" id="city">
@@ -196,8 +196,8 @@
                 </if>
             </li>
             <li>
-                <span>{pigcms{:L('_ADDRESS_TXT_')}:</span>
-                <input type="text" placeholder="{pigcms{:L('_ADDRESS_TXT_')}" id="address" value="{pigcms{$deliver_session['site']}">
+                <span>{pigcms{:L('_ND_ADDRESS_')}:</span>
+                <input type="text" placeholder="{pigcms{:L('_ND_ADDRESS_')}" id="address" value="{pigcms{$deliver_session['site']}">
             </li>
             <li>
                 <span>SIN Number:</span>
@@ -208,21 +208,21 @@
         <input type="hidden" name="lat" id="lat" value="{pigcms{$deliver_session['lat']}">
     </div>
     <div id="step_title">
-        Document Upload
+        {pigcms{:L('_ND_DOCUPLOAD_')}
     </div>
     <if condition="$deliver_session['group'] neq 1">
     <div id="memo">
-        Please make sure the photo is clear, especially the name and expiration date. Photos that are unclear or invalid may result in verification failure and delay your application.
+        {pigcms{:L('_ND_UPLOADNOTIC_')}
     </div>
     </if>
     <div id="step_title">
-        Driver's License
+        {pigcms{:L('_ND_DRIVERSLICENSE_')}
     </div>
     <div style="margin: 10px auto;width: 85%;">
         <if condition="$deliver_session['group'] neq 1">
         <div style="display:inline-block;" id="J_selectImage_0">
             <div class="btn btn-sm btn-success" style="position:relative;height:50px;line-height: 50px;text-align: left;">
-                Upload a photo of your Diver's License here
+                {pigcms{:L('_ND_UPLOAD1_')}
             </div>
         </div>
         </if>
@@ -237,13 +237,13 @@
         </if>
     </div>
     <div id="step_title">
-        Vehicle Insurance
+        {pigcms{:L('_ND_VEHICLEINSUR_')}
     </div>
     <div style="margin: 10px auto;width: 85%;">
         <if condition="$deliver_session['group'] neq 1">
         <div style="display:inline-block;" id="J_selectImage_1">
             <div class="btn btn-sm btn-success" style="position:relative;height:50px;line-height: 50px;text-align: left;">
-                Upload a photo of your Vehicle Insurance here
+                {pigcms{:L('_ND_UPLOAD2_')}
             </div>
         </div>
         </if>
@@ -258,16 +258,16 @@
         </if>
     </div>
     <div id="step_title">
-        Work Eligibility
+        {pigcms{:L('_ND_WORKELIGIBILITY_')}
     </div>
     <div id="memo">
-        This may be a valid passport, residency card, birth certificate, citizenship card, work permit, or a study permit that allow off-campus work.
+        {pigcms{:L('_ND_ELIGIBILITYNOTICE_')}
     </div>
     <div style="margin: 10px auto;width: 85%;">
         <if condition="$deliver_session['group'] neq 1">
         <div style="display:inline-block;" id="J_selectImage_2">
             <div class="btn btn-sm btn-success" style="position:relative;height:50px;line-height: 50px;text-align: left;">
-                Upload Proof of Work Eligibility here
+                {pigcms{:L('_ND_UPLOAD3_')}
             </div>
         </div>
         </if>

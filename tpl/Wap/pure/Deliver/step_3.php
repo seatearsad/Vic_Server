@@ -129,14 +129,14 @@
 <section>
     <div class="Land_top" style="color:#333333;">
         <span class="fillet" style="background: url('./tpl/Static/blue/images/new/icon.png') center no-repeat; background-size: contain;"></span>
-        <div style="font-size: 14px">Become a Tutti Courier</div>
+        <div style="font-size: 14px">{pigcms{:L('_ND_BECOMEACOURIER_')}</div>
         <div style="color: #999999;font-size: 10px;margin: 10px auto;width: 90%;">
             Please complete the following steps to get started!<br/>
             All information are kept securely and used for delivery and taxation purpose.
         </div>
     </div>
     <div id="step_now">
-        <div>3.Tutti Delivery Bag</div>
+        <div>3.{pigcms{:L('_ND_DELIVERYBAG_')}</div>
         <ul>
             <li class="act"></li><li class="act"></li><li class="act"></li><li></li>
         </ul>
@@ -172,7 +172,7 @@
                 </div>
             </li>
             <li class="Landd">
-                <input type="button" value="Pay In Person When Pick Up The Bag" id="jump_btn" style="background-color: dodgerblue;font-size:10px;width: 55%;margin-top: 10px;margin-bottom: 30px">
+                <input type="button" value="{pigcms{:L('_ND_PAYINPERSON_')}" id="jump_btn" style="background-color: dodgerblue;font-size:10px;width: 55%;margin-top: 10px;margin-bottom: 30px">
             </li>
         </ul>
     </div>

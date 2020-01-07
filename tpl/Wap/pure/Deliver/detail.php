@@ -82,7 +82,7 @@
         </div>
     </section>
     <div id="order_menu">
-        <span class="curr" data-id="0">Order Detail</span>
+        <span class="curr" data-id="0">{pigcms{:L('_ND_ORDERDETAIL_')}</span>
         <span data-id="1">Order Info</span>
     </div>
 
@@ -93,7 +93,7 @@
         </div>
         <div class="Psorder">
             <div class="Psorder_top p10">
-                <h2 class="f16 c3">{pigcms{:L('_ORDER_DETAIL_')}</h2>
+                <h2 class="f16 c3">{pigcms{:L('_ND_ORDERDETAIL_')}</h2>
                 <div style="color: #333333">{pigcms{:lang_substr($store['name'],C('DEFAULT_LANG'))}</div>
             </div>
 
@@ -247,7 +247,7 @@
     	<if condition="$supply['status'] eq 1">
     	<a href="javascript:void(0);" data-id="{pigcms{$supply['supply_id']}" data-status="{pigcms{$supply['status']}" data-url="{pigcms{:U('Deliver/grab')}">{pigcms{:L('_TICK_ORDER_')}</a>
     	<elseif condition="$supply['status'] eq 2" />
-        <div>*Please make sure you have shown the order detail to restaurant staff in order to avoid order mess-up or missing items.</div>
+        <div>{pigcms{:L('_ND_PICKUPNOTICE_')}</div>
     	<a href="javascript:void(0);" data-id="{pigcms{$supply['supply_id']}" data-status="{pigcms{$supply['status']}" data-url="{pigcms{:U('Deliver/pick')}">{pigcms{:L('_C_PICK_UP_')}</a>
     	<elseif condition="$supply['status'] eq 3" />
     	<a href="javascript:void(0);" data-id="{pigcms{$supply['supply_id']}" data-status="{pigcms{$supply['status']}" data-url="{pigcms{:U('Deliver/send')}">{pigcms{:L('_DELI_TXT_')}</a>

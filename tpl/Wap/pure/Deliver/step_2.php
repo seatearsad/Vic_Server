@@ -118,28 +118,27 @@
 <section>
     <div class="Land_top" style="color:#333333;">
         <span class="fillet" style="background: url('./tpl/Static/blue/images/new/icon.png') center no-repeat; background-size: contain;"></span>
-        <div style="font-size: 14px">Become a Tutti Courier</div>
+        <div style="font-size: 14px">{pigcms{:L('_ND_BECOMEACOURIER_')}</div>
         <div style="color: #999999;font-size: 10px;margin: 10px auto;width: 90%;">
-            Please complete the following steps to get started!<br/>
-            All information are kept securely and used for delivery and taxation purpose.
+            {pigcms{:L('_ND_UPLOADNOTICE_')}
         </div>
     </div>
     <div id="step_now">
-        <div>2.Document Uploading</div>
+        <div>2.{pigcms{:L('_ND_DOCUPLOAD_')}</div>
         <ul>
             <li class="act"></li><li class="act"></li><li></li><li></li>
         </ul>
     </div>
     <div id="step_title">
-        a.Driver's License
+        a.{pigcms{:L('_ND_DRIVERSLICENSE_')}
     </div>
     <div id="memo">
-        Please make sure the photo is clear, especially the name and expiration date. Photos that are unclear or invalid may result in verification failure and delay your application.
+        {pigcms{:L('_ND_UPLOADNOTIC_')}
     </div>
     <div style="margin: 10px auto;width: 85%;">
         <div style="display:inline-block;" id="J_selectImage_0">
             <div class="btn btn-sm btn-success" style="position:relative;height:50px;line-height: 50px;text-align: left;">
-                Upload a photo of your Diver's License here
+                {pigcms{:L('_ND_UPLOAD1_')}
             </div>
         </div>
         <div class="img_0">
@@ -147,15 +146,15 @@
         </div>
     </div>
     <div id="step_title">
-        b.Vehicle Insurance
+        b.{pigcms{:L('_ND_VEHICLEINSUR_')}
     </div>
     <div id="memo">
-        Please make sure the photo is clear, especially the name and expiration date of the insurance. Photos that are unclear or invalid may result in verification failure and delay your application.
+        {pigcms{:L('_ND_UPLOADNOTIC_')}
     </div>
     <div style="margin: 10px auto;width: 85%;">
         <div style="display:inline-block;" id="J_selectImage_1">
             <div class="btn btn-sm btn-success" style="position:relative;height:50px;line-height: 50px;text-align: left;">
-                Upload a photo of your Vehicle Insurance here
+                {pigcms{:L('_ND_UPLOAD2_')}
             </div>
         </div>
         <div class="img_1">
@@ -163,15 +162,15 @@
         </div>
     </div>
     <div id="step_title">
-        c.Proof of Work Eligibility
+        c.{pigcms{:L('_ND_WORKELIGIBILITY_')}
     </div>
     <div id="memo">
-        This may be a valid passport, residency card, birth certificate, citizenship card, work permit, or a study permit that allow off-campus work. Please make sure the photo is clear, especially the name and expiration date of the document.Photos that are unclear or invalid may result in verification failure and delay your application.
+        {pigcms{:L('_ND_ELIGIBILITYNOTICE_')}
     </div>
     <div style="margin: 10px auto;width: 85%;">
         <div style="display:inline-block;" id="J_selectImage_2">
             <div class="btn btn-sm btn-success" style="position:relative;height:50px;line-height: 50px;text-align: left;">
-                Upload Proof of Work Eligibility here
+                {pigcms{:L('_ND_UPLOAD3_')}
             </div>
         </div>
         <div class="img_2">
@@ -182,10 +181,10 @@
         <span id="filename_0" style="display: none;"></span>
         <span id="filename_1" style="display: none;"></span>
         <span id="filename_2" style="display: none;"></span>
-        <input type="button" value="Save and Continue" id="reg_form">
+        <input type="button" value="{pigcms{:L('_ND_SAVENCONTINUE_')}" id="reg_form">
     </div>
     <div id="memo" style="text-align: center;color: silver;margin-bottom: 30px;">
-        If you don't have all of these documents in hand at the moment, you can save what you have and skip the others for now. You still have the access to upload these photos later.
+        {pigcms{:L('_ND_SKIPUPLOAD_')}
     </div>
 </section>
 

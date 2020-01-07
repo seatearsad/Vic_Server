@@ -377,14 +377,14 @@
 					<a href="{pigcms{:U('Deliver/index')}">
 						<i></i>
 						<h2 id="gray_count">{pigcms{$gray_count}</h2>
-						<p>{pigcms{:L('_C_ORDER_PENDING_')}</p>
+                        <p>{pigcms{:L('_ND_PENDINGORDERS_')}</p>
 					</a>
 				</li>
 				<li class="deliver fl">
 					<a href="{pigcms{:U('Deliver/process')}">
 						<i></i>
 						<h2 id="deliver_count">{pigcms{$deliver_count}</h2>
-						<p>{pigcms{:L('_C_PROCESSING_')}</p>
+                        <p>{pigcms{:L('_ND_MYORDERS_')}</p>
 					</a>
 				</li>
 			</ul>
@@ -393,19 +393,19 @@
         <div style="background-color: #F4F4F4;width: 100%;height: 45px;">
             <ul id="top_menu">
                 <li class="all curr" data-type="0">
-                    <label>All</label>
+                    <label>{pigcms{:L('_ND_ALL_')}</label>
                 </li>
                 <li class="accept" data-type="2">
                     <span>0</span>
-                    <label>Just Accepted</label>
+                    <label>{pigcms{:L('_ND_JUSTACCEPTED_')}</label>
                 </li>
                 <li class="pickup" data-type="3">
                     <span>0</span>
-                    <label>Picked Up</label>
+                    <label>{pigcms{:L('_ND_PICKEDUP_')}</label>
                 </li>
                 <li class="route" data-type="4">
                     <span>0</span>
-                    <label>En Route</label>
+                    <label>{pigcms{:L('_ND_ENROUTE_')}</label>
                 </li>
             </ul>
         </div>
@@ -423,22 +423,28 @@
                 <span class="status_{{ d.list[i].status }}">
                     Order # {{ d.list[i].order_id }} -
                     {{# if(d.list[i].status == 2){ }}
-                        Waiting for pick-up
+                        {pigcms{:L('_ND_WAITING_')}
                     {{# } else if(d.list[i].status == 3) { }}
-                        Order in hand, waiting for delivery
+                        {pigcms{:L('_ND_INHAND_')}
                     {{# } else { }}
-                        Arriving, heading to the destination
+                        {pigcms{:L('_ND_ARRIVING_')}
                     {{# } }}
                 </span>
                 <div style="margin-top: 5px">{{ d.list[i].store_name }}</div>
-                {{# if(d.list[i].pay_method == 1){ }}
-                <span class="pay_status">
-                    Paid
-                </span>
-                {{# } else { }}
+                {{# if(d.list[i].uid == 0){ }}
                 <span class="pay_status_red">
-                    Cash
-                </span>
+                        {pigcms{:L('_ND_UNPAID_')}
+                    </span>
+                {{# } else { }}
+                    {{# if(d.list[i].pay_method == 1){ }}
+                    <span class="pay_status">
+                            {pigcms{:L('_ND_PAID_')}
+                        </span>
+                    {{# } else { }}
+                    <span class="pay_status_red">
+                            {pigcms{:L('_ND_CASH_')}
+                        </span>
+                    {{# } }}
                 {{# } }}
                 <div class="order_time">
                     <span>Order placed</span>
@@ -454,7 +460,7 @@
                 {{# if(d.list[i].status == 2){ }}
                 <div>
                     <span class="from_label">
-                        From
+                        {pigcms{:L('_ND_FROM_')}
                     </span>
                     <span class="address">
                         {{ d.list[i].from_site }}
@@ -466,12 +472,12 @@
                 {{# } }}
                 <div>
                     <span class="to_label">
-                        To
+                        {pigcms{:L('_ND_TO_')}
                     </span>
                     <span class="address">
                         {{ d.list[i].aim_site }}
                         <span class="address_bottom">
-                            Delivery Fee:${{ d.list[i].freight_charge }}
+                            {pigcms{:L('_DELI_PRICE_')}:${{ d.list[i].freight_charge }}
                         </span>
                     </span>
                 </div>
@@ -486,12 +492,12 @@
             </div>
             {{# if(d.list[i].pay_method == 0 && d.list[i].status == 4){ }}
             <div class="order_cash">
-                Amount Due on Delivery : <label>${{ d.list[i].deliver_cash }}</label>
+                {pigcms{:L('_ACTUAL_PAYMENT_')} : <label>${{ d.list[i].deliver_cash }}</label>
             </div>
             {{# } }}
             <div class="order_btn">
                 <span class="location_btn" data-status="{{ d.list[i].status }}" data-from="{{ d.list[i].from_site }}" data-aim="{{ d.list[i].aim_site }}">
-                    Check Location
+                    {pigcms{:L('_ND_CHECKLOCATIONS_')}
                 </span>
                 <a href="tel:{{ d.list[i].phone }}">
                 <span class="phone_btn">
@@ -501,11 +507,11 @@
                 <a href="javascript:sendRequest({{ d.list[i].status }},{{ d.list[i].supply_id }});">
                 <span class="accept_btn_{{ d.list[i].status }}">
                     {{# if(d.list[i].status == 2){ }}
-                        I'm at the Restaurant
+                        {pigcms{:L('_ND_IMATREST_')}
                     {{# } else if(d.list[i].status == 3) { }}
-                        Start Delivery
+                        {pigcms{:L('_ND_STARTDELIVERY_')}
                     {{# } else { }}
-                        Order Completed
+                        {pigcms{:L('_ND_ORDERCOMPLETED_')}
                     {{# } }}
                 </span>
                 </a>

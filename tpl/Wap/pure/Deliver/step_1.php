@@ -128,24 +128,24 @@
 <section>
     <div class="Land_top" style="color:#333333;">
         <span class="fillet" style="background: url('./tpl/Static/blue/images/new/icon.png') center no-repeat; background-size: contain;"></span>
-        <div style="font-size: 14px">Become a Tutti Courier</div>
+        <div style="font-size: 14px">{pigcms{:L('_ND_BECOMEACOURIER_')}</div>
         <div style="color: #999999;font-size: 10px;margin: 10px auto;width: 90%;">
-            Thank you for signing up with Tutti Courier! Your account has been created successfully. Please complete the following steps to get started!
+            {pigcms{:L('_ND_ACCTSUCCESS_')}
         </div>
     </div>
     <div id="step_now">
-        <div>1.Information Needed</div>
+        <div>1.{pigcms{:L('_ND_INFORMATIONNEEDED_')}</div>
         <ul>
             <li class="act"></li><li></li><li></li><li></li>
         </ul>
     </div>
     <div id="memo">
-        All information are kept securely and used for delivery and taxation purpose.
+        {pigcms{:L('_ND_INFORMATIONSECURE_')}
     </div>
     <div id="reg_list">
         <ul>
             <li>
-                <span>Delivery City:</span>
+                <span>{pigcms{:L('_ND_DELIVERYCITY_')}:</span>
                 <select name="city_id" id="city_id">
                     <volist name="city_list" id="city">
                     <option value="{pigcms{$city['area_id']}">{pigcms{$city['area_name']}</option>
@@ -153,8 +153,8 @@
                 </select>
             </li>
             <li>
-                <span>{pigcms{:L('_ADDRESS_TXT_')}:</span>
-                <input type="text" placeholder="{pigcms{:L('_ADDRESS_TXT_')}" id="address">
+                <span>{pigcms{:L('_ND_ADDRESS_')}:</span>
+                <input type="text" placeholder="{pigcms{:L('_ND_ADDRESS_')}" id="address">
             </li>
             <li>
                 <span>SIN Number:</span>
@@ -162,10 +162,10 @@
             </li>
             <li style="text-align: left;width: 91%;margin:10px auto">
                 <div style="font-size: 14px">
-                    Banking Information
+                    {pigcms{:L('_ND_BANKINGINFO_')}
                 </div>
                 <div>
-                    This information is used for your payroll deposits.
+                    {pigcms{:L('_ND_BANKINGINFONOTICE_')}
                 </div>
             </li>
             <li>
