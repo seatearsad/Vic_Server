@@ -107,7 +107,7 @@
         padding: 1px 4px;
         color: cornflowerblue;
         font-size: 10px;
-        margin-top: -40px;
+        margin-top: -35px;
     }
     .order_title .pay_status_red{
         float: right;
@@ -116,7 +116,7 @@
         padding: 1px 4px;
         color: indianred;
         font-size: 10px;
-        margin-top: -40px;
+        margin-top: -35px;
     }
     .order_time{
         font-size: 9px;
@@ -205,7 +205,7 @@
         padding-right: 0px;
         margin-bottom: 10px;
         box-sizing: padding-box;
-        background-image: url("{pigcms{$static_path}img/location_icon.png");
+        background-image: url("{pigcms{$static_path}img/google_map_icon.png");
         background-size: auto 90%;
         background-repeat: no-repeat;
         background-position: left;
@@ -213,7 +213,7 @@
     }
     .phone_btn{
         float: left;
-        width: 55px;
+        width: 50px;
         border: 1px solid #59a422;
         border-radius: 2px;
         color: #59a422;
@@ -230,7 +230,6 @@
         background-position: left 2px center;
         cursor: pointer;
         height: 21px;
-        line-height: 21px;
         margin-left: 10px;
     }
     .accept_btn_2,.accept_btn_3,.accept_btn_4{
@@ -451,7 +450,13 @@
                     <span class="time_show">{{ d.list[i].show_create_time }}</span>
                     {{# if(d.list[i].status == 2){ }}
                     <label> | </label>
-                    <span>Order is ready</span>
+                    <span>
+                        {{# if(d.list[i].is_dinning == 1){ }}
+                            Order is ready
+                        {{# } else { }}
+                            Order will be ready in
+                        {{# } }}
+                    </span>
                     <span class="time_show">{{ d.list[i].show_dining_time }}</span>
                     {{# } }}
                 </div>
@@ -475,7 +480,7 @@
                         {pigcms{:L('_ND_TO_')}
                     </span>
                     <span class="address">
-                        {{ d.list[i].aim_site }}
+                        {{ d.list[i].user_address.adress }}
                         <span class="address_bottom">
                             {pigcms{:L('_DELI_PRICE_')}:${{ d.list[i].freight_charge }}
                         </span>
@@ -485,7 +490,7 @@
                 <div>
                     <span class="note_label"></span>
                     <span class="address">
-                        {{ d.list[i].note }}
+                        {{ d.list[i].user_address.detail }}
                     </span>
                 </div>
                 {{# } }}
@@ -497,11 +502,15 @@
             {{# } }}
             <div class="order_btn">
                 <span class="location_btn" data-status="{{ d.list[i].status }}" data-from="{{ d.list[i].from_site }}" data-aim="{{ d.list[i].aim_site }}">
-                    {pigcms{:L('_ND_CHECKLOCATIONS_')}
+                    {{# if(d.list[i].status == 2){ }}
+                        {pigcms{:L('_ND_ROUTE_MERCHANT_')}
+                    {{# } else { }}
+                        {pigcms{:L('_ND_ROUTE_CUSTOMER_')}
+                    {{# } }}
                 </span>
                 <a href="tel:{{ d.list[i].phone }}">
                 <span class="phone_btn">
-                    {{ d.list[i].phone }}
+                    {pigcms{:L('_ND_CALL_CUSTOMER_')}
                 </span>
                 </a>
                 <a href="javascript:sendRequest({{ d.list[i].status }},{{ d.list[i].supply_id }});">
@@ -520,6 +529,16 @@
         {{# } }}
     </script>
 	<script type="text/javascript">
+        setInterval(function(){
+            $.get("{pigcms{:U('Deliver/index_count')}", function(response){
+                if (response.err_code == false) {
+                    $('#gray_count').html(response.gray_count);
+                    $('#deliver_count').html(response.deliver_count);
+                    $('#finish_count').html(response.finish_count);
+                }
+            }, 'json');
+        }, 2000);
+
         var curr_status = 0;
         $('#top_menu').find('li').each(function () {
             $(this).bind('click',function () {

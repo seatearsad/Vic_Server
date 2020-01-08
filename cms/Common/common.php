@@ -937,13 +937,17 @@ function getAboutDesc(){
 }
 
 function show_time_ago($time){
-    $hour = intval($time / 3600);
-    $min = intval(($time-($hour*3600)) / 60);
+    if($time < 0){
+        $time_str = show_time($time*-1);
+    }else {
+        $hour = intval($time / 3600);
+        $min = intval(($time - ($hour * 3600)) / 60);
 
-    if($hour > 0)
-        $time_str = $hour." hr ".$min." min ago";
-    else
-        $time_str = $min." min ago";
+        if ($hour > 0)
+            $time_str = $hour . " hr " . $min . " min ago";
+        else
+            $time_str = $min . " min ago";
+    }
 
     return $time_str;
 }
@@ -955,7 +959,7 @@ function show_time($time){
     if($hour > 0)
         $time_str = $hour." hr ".$min." min";
     else
-        $time_str = $min." min ago";
+        $time_str = $min." min";
 
     return $time_str;
 }

@@ -54,7 +54,7 @@
         <if condition="$begin_time neq '' and $end_time neq ''">
             {pigcms{$begin_time} -- {pigcms{$end_time}
         <else />
-            All Orders
+            {pigcms{:L('_ND_ALLORDERS_')}
         </if>
     </div>
     <volist name="list" id="order">
@@ -65,11 +65,11 @@
                 <span style="margin-left: 10px;">{pigcms{$order['show_time']}</span>
                 <if condition="$order['pay_method'] eq 1">
                 <span class="pay_status">
-                    Paid
+                    {pigcms{:L('_ND_PAID_')}
                 </span>
                 <else />
                 <span class="pay_status_red">
-                    Cash
+                    {pigcms{:L('_ND_CASH_')}
                 </span>
                 </if>
             </div>
@@ -77,7 +77,7 @@
                 {pigcms{$order.store_name}
             </div>
             <div style="margin-top: 5px;">
-                Amount Due on Delivery :
+                {pigcms{:L('_ACTUAL_PAYMENT_')} :
                 <if condition="$order['pay_method'] eq 1">
                     $0.00
                 <else />
@@ -85,10 +85,10 @@
                 </if>
             </div>
             <div style="margin-top: 5px;">
-                Delivery Fee : ${pigcms{$order.freight_charge}
+                {pigcms{:L('_DELI_PRICE_')} : ${pigcms{$order.freight_charge}
             </div>
             <div style="margin-top: 5px;">
-                Tips : ${pigcms{$order.tip_charge}
+                {pigcms{:L('_ND_TIPS_')} : ${pigcms{$order.tip_charge}
             </div>
         </section>
     </volist>

@@ -83,7 +83,7 @@
     </section>
     <div id="order_menu">
         <span class="curr" data-id="0">{pigcms{:L('_ND_ORDERDETAIL_')}</span>
-        <span data-id="1">Order Info</span>
+        <span data-id="1">{pigcms{:L('_ND_ORDERINFO_')}</span>
     </div>
 
     <section class="PsorderX" id="order_detail">
@@ -93,8 +93,7 @@
         </div>
         <div class="Psorder">
             <div class="Psorder_top p10">
-                <h2 class="f16 c3">{pigcms{:L('_ND_ORDERDETAIL_')}</h2>
-                <div style="color: #333333">{pigcms{:lang_substr($store['name'],C('DEFAULT_LANG'))}</div>
+                <div style="color: #333333;line-height: 30px">{pigcms{:lang_substr($store['name'],C('DEFAULT_LANG'))}</div>
             </div>
 
             <div class="Psorder_end p10">
@@ -141,48 +140,48 @@
         <div class="details_list">
             <!--p class="c9 f14">{pigcms{:L('_B_PURE_MY_69_')}：{pigcms{$order['num']}</p-->
             <!--p class="c9 f14">{pigcms{:L('_B_PURE_MY_70_')}：{pigcms{$order['subtotal_price']|floatval}</p-->
-            <p class="f16 red">{pigcms{:L('_ACTUAL_PAYMENT_')}：${pigcms{$order['deliver_cash']|floatval}</p>
+            <p class="f16 red">{pigcms{:L('_ND_DUEONDELIVERY_')}：${pigcms{$order['deliver_cash']|floatval}</p>
             <!--p class="f14 bur">{pigcms{:L('_PAYMENT_MODE_')}： {pigcms{$order['pay_type_name']} ({pigcms{$order['pay_type']})</p-->
         </div>
     </section>
     <div id="order_info">
         <section class="information">
-            <div class="info_title p10">Restaurant Info</div>
+            <div class="info_title p10">{pigcms{:L('_ND_RESTAURANTINFO_')}</div>
             <div class="information_end">
                 <ul>
                     <li class="clr p10">
-                        <div class="fl c80">Restaurant</div>
+                        <div class="fl c80">{pigcms{:L('_ND_RESTAURANT_')}</div>
                         <div class="fr c80">{pigcms{:lang_substr($store['name'],C('DEFAULT_LANG'))}</div>
                     </li>
                     <li class="clr p10">
-                        <div class="fl c80">Address</div>
+                        <div class="fl c80">{pigcms{:L('_ND_RESTADDRESS_')}</div>
                         <div class="fr c80">{pigcms{$store['adress']}</div>
                     </li>
                     <li class="clr p10">
-                        <div class="fl c80">Number</div>
+                        <div class="fl c80">{pigcms{:L('_ND_RESTNUM_')}</div>
                         <div class="fr c80"><php>$phoneArr = explode(' ',$store['phone']);</php><volist name="phoneArr" id="vo"><div><a href="tel:{pigcms{$vo}" style="color:blue;">{pigcms{$vo}</a></div></volist></div>
                     </li>
                 </ul>
             </div>
         </section>
         <section class="information">
-            <div class="info_title p10">Order Info</div>
+            <div class="info_title p10">{pigcms{:L('_ND_RESTAURANTINFO_')}</div>
             <div class="information_end">
                 <ul>
                     <li class="clr p10">
-                        <div class="fl c80">Order Number</div>
+                        <div class="fl c80">{pigcms{:L('_ND_ORDERNUMBERL_')}</div>
                         <div class="fr c80">{pigcms{$order['real_orderid']}</div>
                     </li>
                     <li class="clr p10">
-                        <div class="fl c80">Payment Time</div>
+                        <div class="fl c80">{pigcms{:L('_ND_PAYMENTTIME_')}</div>
                         <div class="fr c80">{pigcms{$order['create_time']|date="Y-m-d H:i",###}</div>
                     </li>
                     <li class="clr p10">
-                        <div class="fl c80">Food Preparation Time</div>
+                        <div class="fl c80">{pigcms{:L('_ND_FOODPREPTIME_')}</div>
                         <div class="fr c80">{pigcms{$supply['meal_time']}</div>
                     </li>
                     <li class="clr p10">
-                        <div class="fl c80">Completion Time</div>
+                        <div class="fl c80">{pigcms{:L('_ND_COMPLETIONTIME_')}</div>
                         <div class="fr c80">
                             <if condition="$order['end_time'] eq ''">
                                 N/A
@@ -192,7 +191,7 @@
                         </div>
                     </li>
                     <li class="clr p10">
-                        <div class="fl c80">Order Type</div>
+                        <div class="fl c80">{pigcms{:L('_ND_ORDERTYPE_')}</div>
                         <div class="fr c80">
                             <if condition="$supply['get_type'] eq 1">
                                 Assigned
@@ -206,16 +205,16 @@
                         </div>
                     </li>
                     <li class="clr p10">
-                        <div class="fl c80">Delivery Fee</div>
+                        <div class="fl c80">{pigcms{:L('_ND_DELIVERYFEE_')}</div>
                         <div class="fr c80">${pigcms{$order['freight_charge']}</div>
                     </li>
                     <li class="clr p10">
-                        <div class="fl c80">Tips</div>
+                        <div class="fl c80">{pigcms{:L('_ND_TIP_')}</div>
                         <div class="fr c80">
                             <if condition="$supply['status'] eq 5">
                                 ${pigcms{$order['tip_charge']}
                             <else />
-                                Available after completion
+                                {pigcms{:L('_ND_TIP1_')}
                             </if>
                         </div>
                     </li>
@@ -223,19 +222,19 @@
             </div>
         </section>
         <section class="information">
-            <div class="info_title p10">Customer Info</div>
+            <div class="info_title p10">{pigcms{:L('_ND_CUSTOMERINFO_')}</div>
             <div class="information_end">
                 <ul>
                     <li class="clr p10">
-                        <div class="fl c80">Number</div>
+                        <div class="fl c80">{pigcms{:L('_ND_CUSTNUMBER_')}</div>
                         <div class="fr c80"><a href="tel:{pigcms{$supply['phone']}" style="color:blue;">{pigcms{$supply['phone']}</a></div>
                     </li>
                     <li class="clr p10">
-                        <div class="fl c80">Address</div>
+                        <div class="fl c80">{pigcms{:L('_ND_CUSTADDRESS_')}</div>
                         <div class="fr c80">{pigcms{$order['user_address']}</div>
                     </li>
                     <li class="clr p10">
-                        <div class="fl c80">Instructions</div>
+                        <div class="fl c80">{pigcms{:L('_ND_CUSTADDRESSINS_')}</div>
                         <div class="fr c80">{pigcms{$order['user_address_detail']}</div>
                     </li>
                 </ul>
@@ -248,7 +247,7 @@
     	<a href="javascript:void(0);" data-id="{pigcms{$supply['supply_id']}" data-status="{pigcms{$supply['status']}" data-url="{pigcms{:U('Deliver/grab')}">{pigcms{:L('_TICK_ORDER_')}</a>
     	<elseif condition="$supply['status'] eq 2" />
         <div>{pigcms{:L('_ND_PICKUPNOTICE_')}</div>
-    	<a href="javascript:void(0);" data-id="{pigcms{$supply['supply_id']}" data-status="{pigcms{$supply['status']}" data-url="{pigcms{:U('Deliver/pick')}">{pigcms{:L('_C_PICK_UP_')}</a>
+    	<a href="javascript:void(0);" data-id="{pigcms{$supply['supply_id']}" data-status="{pigcms{$supply['status']}" data-url="{pigcms{:U('Deliver/pick')}">{pigcms{:L('_ND_PICKEDUP_')}</a>
     	<elseif condition="$supply['status'] eq 3" />
     	<a href="javascript:void(0);" data-id="{pigcms{$supply['supply_id']}" data-status="{pigcms{$supply['status']}" data-url="{pigcms{:U('Deliver/send')}">{pigcms{:L('_DELI_TXT_')}</a>
     	<elseif condition="$supply['status'] eq 4" />

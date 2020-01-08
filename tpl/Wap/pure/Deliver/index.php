@@ -285,7 +285,13 @@
                     <span>Order placed</span>
                     <span class="time_show">{{ d.list[i].show_create_time }}</span>
                     <label> | </label>
-                    <span>Order is ready</span>
+                    <span>
+                        {{# if(d.list[i].is_dinning == 1){ }}
+                            Order is ready
+                        {{# } else { }}
+                            Order will be ready in
+                        {{# } }}
+                    </span>
                     <span class="time_show">{{ d.list[i].show_dining_time }}</span>
                 </div>
             </div>
@@ -306,7 +312,7 @@
                         {pigcms{:L('_ND_TO_')}
                     </span>
                     <span class="address">
-                        {{ d.list[i].aim_site }}
+                        {{ d.list[i].user_address.adress }}
                         <span class="address_bottom">
                             {pigcms{:L('_DELI_PRICE_')}:${{ d.list[i].freight_charge }}
                         </span>

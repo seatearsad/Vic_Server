@@ -121,7 +121,7 @@
     <include file="header" />
 	<section class="clerk" style="margin-top: 70px;text-align: center">
         <div id="set_btn">
-            Add a Shift
+            {pigcms{:L('_ND_ADDSHIFT_')}
         </div>
 		<div id="week_list">
 
@@ -130,7 +130,7 @@
             {pigcms{:date('Y-m-d',$today)}
         </div>
         <div style="margin: 20px auto">
-            My Shift:
+            {pigcms{:L('_ND_MYSHIFT_')}:
         </div>
         <div id="work_list">
 
@@ -203,12 +203,12 @@
                         html += format_time(curr_work[i]['start_time']) + ' -- ' + format_time(curr_work[i]['end_time']);
                         html += '</div>';
                     }
-                    list_txt = 'You can click on "Add a Shift" to add or modify your schedule.';
+                    list_txt = '{pigcms{:L('_ND_MYSHIFT2_')}';
                 }else{
-                    list_txt = 'You haven\'t scheduled any shifts on this day. Please click "Add a Shift" to add or modify your shifts.';
+                    list_txt = '{pigcms{:L('_ND_MYSHIFT1_')}';
                 }
             }else{
-                list_txt = 'You haven\'t scheduled any shifts on this day. Please click "Add a Shift" to add or modify your shifts.';
+                list_txt = '{pigcms{:L('_ND_MYSHIFT1_')}';
             }
 
             $('#list_txt').html(list_txt);

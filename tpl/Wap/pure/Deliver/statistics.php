@@ -114,48 +114,48 @@
         <div class="Statistics_top clr">
             <a href="javascript:void(0);" id="begin">
                 <h2><i>{pigcms{:L('_START_TIME_')}</i></h2>
-                <input type="text" readonly="readonly" placeholder="Please choose begin date"  name="appDate" id="appDate" value="{pigcms{$begin_time}">
+                <input type="text" readonly="readonly" placeholder="{pigcms{:L('_ND_STARTDATE_')}"  name="appDate" id="appDate" value="{pigcms{$begin_time}">
             </a>
             <a href="javascript:void(0)" id="end">
                 <h2><i>{pigcms{:L('_END_TIME_')}</i></h2>
-                <input type="text" readonly="readonly" placeholder="Please choose end date"  name="appDate1" id="appDate1" value="{pigcms{$end_time}">
+                <input type="text" readonly="readonly" placeholder="{pigcms{:L('_ND_ENDDATE_')}"  name="appDate1" id="appDate1" value="{pigcms{$end_time}">
             </a>
         </div>
         <section class="summary">
-            <div style="margin: 5px auto;">Income Summary</div>
+            <div style="margin: 5px auto;">{pigcms{:L('_ND_SUMMARY_')}</div>
             <div style="font-size: 0px">
-                <span class="su_left y_c">Total Order</span>
+                <span class="su_left y_c">{pigcms{:L('_ND_TOTALORDER_')}</span>
                 <span class="su_right y_c">{pigcms{$order_count|default=0}</span>
             </div>
             <div style="font-size: 0px">
-                <span class="su_left">Total Delivery</span>
+                <span class="su_left">{pigcms{:L('_ND_TOTALDELIVERYFEE_')}</span>
                 <span class="su_right">${pigcms{$freight_charge|floatval}</span>
             </div>
             <div style="font-size: 0px">
-                <span class="su_left">Tips</span>
+                <span class="su_left">{pigcms{:L('_ND_TIPS_')}</span>
                 <span class="su_right">${pigcms{$tip|default=0}+</span>
             </div>
             <div style="font-size: 0px">
-                <span class="su_left y_c">Actual Earning</span>
+                <span class="su_left y_c">{pigcms{:L('_ND_ACTUALEARN_')}</span>
                 <span class="su_right y_c">{pigcms{$freight_charge+$tip}+</span>
             </div>
             <div style="font-size: 0px">
-                <span class="su_left">Cash Received</span>
+                <span class="su_left">{pigcms{:L('_ND_CASHREC_')}</span>
                 <span class="su_right">(${pigcms{$offline_money|floatval})</span>
             </div>
             <div style="font-size: 0px">
-                <span class="su_left">Amount Payable</span>
+                <span class="su_left">{pigcms{:L('_ND_AMOUNTPAYABLE_')}</span>
                 <span class="su_right">${pigcms{$freight_charge+$tip-$offline_money|floatval}</span>
             </div>
             <div class="order_history">
-                View Order History
+                {pigcms{:L('_ND_VIEWORDERHIS_')}
             </div>
         </section>
 
         <section class="my_earning">
-            <span>My Earning</span>
-            <span class="btn act" data-type="0">Today</span>
-            <span class="btn" data-type="1">This Month</span>
+            <span>{pigcms{:L('_ND_MYEARNING_')}</span>
+            <span class="btn act" data-type="0">{pigcms{:L('_ND_TODAY_')}</span>
+            <span class="btn" data-type="1">{pigcms{:L('_ND_MONTH_')}</span>
             <span> = </span>
             <span id="all_money">${pigcms{$today_data['money']}</span>
         </section>

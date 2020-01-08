@@ -553,6 +553,12 @@ class DeliverAction extends BaseAction
 
                 $show_create_time = time() -$val['create_time'];
                 $show_dining_time = time() - ($val['create_time'] + $val['dining_time']*60);
+
+                if($show_dining_time < 0)
+                    $val['is_dinning'] = 0;
+                else
+                    $val['is_dinning'] = 1;
+
                 $val['show_create_time'] = show_time_ago($show_create_time);
                 $val['show_dining_time'] = show_time_ago($show_dining_time);
 
@@ -570,6 +576,10 @@ class DeliverAction extends BaseAction
 				$order = D('Shop_order')->get_order_by_orderid($val['order_id']);
 				$val['tip_charge'] = $order['tip_charge'];
                 $val['uid'] = $order['uid'];
+
+                $address = D('User_adress')->where(array('adress_id'=>$order['address_id']))->find();
+                $val['user_address'] = $address;
+
                 $store = D('Merchant_store')->field(true)->where(array('store_id'=>$val['store_id']))->find();
                 $val['store_name'] = lang_substr($store['name'],C('DEFAULT_LANG'));
 			}
@@ -661,6 +671,12 @@ class DeliverAction extends BaseAction
 
                 $show_create_time = time() -$val['create_time'];
                 $show_dining_time = time() - ($val['create_time'] + $val['dining_time']*60);
+
+                if($show_dining_time < 0)
+                    $val['is_dinning'] = 0;
+                else
+                    $val['is_dinning'] = 1;
+
                 $val['show_create_time'] = show_time_ago($show_create_time);
                 $val['show_dining_time'] = show_time_ago($show_dining_time);
 
@@ -679,6 +695,10 @@ class DeliverAction extends BaseAction
                     $uid = array_pop($changes);
                     $val['change_name'] = $this->getDeliverUser($uid);
                 }
+
+                $order = D('Shop_order')->get_order_by_orderid($val['order_id']);
+                $address = D('User_adress')->where(array('adress_id'=>$order['address_id']))->find();
+                $val['user_address'] = $address;
 
                 $store = D('Merchant_store')->field(true)->where(array('store_id'=>$val['store_id']))->find();
                 $val['store_name'] = lang_substr($store['name'],C('DEFAULT_LANG'));
@@ -1480,9 +1500,9 @@ class DeliverAction extends BaseAction
                 $g_id = $g['goods_id'];
                 $t_goods = D('Shop_goods')->get_goods_by_id($g_id);
                 $g['name'] = $t_goods['name'];
-				if ($g['spec']) {
-					$g['name'] = $g['name'] . '(' . $g['spec'] . ')';
-				}
+//				if ($g['spec']) {
+//					$g['name'] = $g['name'] . '(' . $g['spec'] . ')';
+//				}
 				$g['tools_money'] = 0;
 
                 $spec_desc = '';

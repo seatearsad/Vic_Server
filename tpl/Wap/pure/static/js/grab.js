@@ -38,6 +38,7 @@ $(function(){
                 layer.open({title:[' ','background-color:#ffa52d;color:#fff;'],content:json.info,btn: ['Confirm'],end:function(){}});
             }
             $(".supply_"+supply_id).remove();
+            updateNum();
         });
     });
 	getList();
@@ -112,4 +113,14 @@ function list_detail(lat, lng)
 	    	});
 		});
 	}, 'json');
+}
+
+function updateNum() {
+    $.get("{pigcms{:U('Deliver/index_count')}", function(response){
+        if (response.err_code == false) {
+            $('#gray_count').html(response.gray_count);
+            $('#deliver_count').html(response.deliver_count);
+            $('#finish_count').html(response.finish_count);
+        }
+    }, 'json');
 }
