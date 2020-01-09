@@ -51,8 +51,8 @@
     }
     .menu_font{
         margin-top: 16px;
-        margin-left: 20px;
-        font-size: 0.8em;
+        margin-left: 15px;
+        font-size: 0.95em;
         height: 30px;
         line-height: 30px;
     }

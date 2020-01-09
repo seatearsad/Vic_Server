@@ -95,13 +95,17 @@
         padding: 5px 2%;
         border-bottom: 1px dashed silver;
     }
+    .order_title .store_name{
+        font-size: 14px;
+        color: #333333;
+    }
     .order_title .pay_status{
         float: right;
         border: 1px solid cornflowerblue;
         border-radius: 2px;
         padding: 1px 4px;
         color: cornflowerblue;
-        font-size: 10px;
+        font-size: 12px;
     }
     .order_title .pay_status_red{
         float: right;
@@ -109,7 +113,7 @@
         border-radius: 2px;
         padding: 1px 4px;
         color: indianred;
-        font-size: 10px;
+        font-size: 12px;
     }
     .order_time{
         font-size: 9px;
@@ -120,7 +124,7 @@
         margin: 0 3px;
     }
     .order_time span{
-        color: #999999;
+        color: #666666;
     }
     .order_time .time_show{
         color: red;
@@ -143,7 +147,8 @@
     .order_address .address{
         float: right;
         width: 86%;
-        font-size: 11px;
+        font-size: 13px;
+        color: #333333;
     }
     .to_label{
         float: left;
@@ -155,7 +160,7 @@
     }
     .order_address div{
         width: 100%;
-        height: 30px;
+        height: 45px;
     }
     .order_address .address_bottom{
         font-size: 9px;
@@ -164,19 +169,19 @@
         margin-top: 2px;
     }
     .order_btn{
-        padding: 2px 3%;
+        padding: 2px 2%;
         height: 40px;
     }
     .location_btn{
         float: left;
-        width: 40px;
+        width: 50px;
         border: 1px solid #ffa52d;
         border-radius: 2px;
         color: #ffa52d;
-        font-size: 8px;
+        font-size: 10px;
         padding-top: 2px;
         padding-bottom: 2px;
-        padding-left: 24px;
+        padding-left: 29px;
         padding-right: 0px;
         margin-bottom: 10px;
         box-sizing: padding-box;
@@ -188,12 +193,13 @@
     }
     .accept_btn{
         float: right;
-        width: 75%;
+        width: 70%;
         text-align: center;
         background-color: limegreen;
         border-radius: 3px;
-        height: 28px;
-        line-height: 28px;
+        height: 35px;
+        line-height: 35px;
+        font-size: 14px;
         color: white;
         cursor: pointer;
     }
@@ -265,7 +271,7 @@
         {{# for(var i = 0, len = d.list.length; i < len; i++){ }}
         <section class="robbed supply_{{ d.list[i].supply_id }}" data-id="{{ d.list[i].supply_id }}">
             <div class="order_title">
-                <span>{{ d.list[i].store_name }}</span>
+                <span class="store_name">{{ d.list[i].store_name }}</span>
                 {{# if(d.list[i].uid == 0){ }}
                     <span class="pay_status_red">
                         {pigcms{:L('_ND_UNPAID_')}

@@ -96,9 +96,14 @@
         border-bottom: 1px dashed silver;
         background-image: url("./tpl/Static/blue/images/new/or_arrow.png");
         background-repeat: no-repeat;
-        background-position: center right 5px;
-        background-size: auto 20%;
+        background-position: bottom 12px right 5px;
+        background-size: auto 16%;
         cursor: pointer;
+    }
+    .order_title .store_name{
+        font-size: 14px;
+        color: #333333;
+        padding-left: 5px;
     }
     .order_title .pay_status{
         float: right;
@@ -106,8 +111,8 @@
         border-radius: 2px;
         padding: 1px 4px;
         color: cornflowerblue;
-        font-size: 10px;
-        margin-top: -35px;
+        font-size: 12px;
+        margin-top: -20px;
     }
     .order_title .pay_status_red{
         float: right;
@@ -115,27 +120,28 @@
         border-radius: 2px;
         padding: 1px 4px;
         color: indianred;
-        font-size: 10px;
-        margin-top: -35px;
+        font-size: 12px;
+        margin-top: -20px;
     }
     .order_time{
         font-size: 9px;
         height: 30px;
         line-height: 30px;
+        padding-left: 5px;
     }
     .order_time label{
         margin: 0 3px;
     }
     .order_time span{
-        color: #999999;
+        color: #666666;
     }
     .order_time .time_show{
         color: red;
     }
     .order_cash{
         padding: 5px 2%;
-        font-size: 10px;
-        color: #999999;
+        font-size: 12px;
+        color: #333333;
     }
     .order_cash label{
         color: orangered;
@@ -158,7 +164,8 @@
     .order_address .address{
         float: right;
         width: 86%;
-        font-size: 11px;
+        font-size: 13px;
+        color: #333333;
     }
     .to_label{
         float: left;
@@ -189,65 +196,66 @@
         margin-top: 2px;
     }
     .order_btn{
-        padding: 2px 3%;
+        padding: 2px 2%;
         height: 40px;
     }
     .location_btn{
         float: left;
-        width: 40px;
+        width: 55px;
         border: 1px solid #ffa52d;
         border-radius: 2px;
         color: #ffa52d;
-        font-size: 8px;
+        font-size: 10px;
         padding-top: 2px;
         padding-bottom: 2px;
-        padding-left: 24px;
+        padding-left: 30px;
         padding-right: 0px;
         margin-bottom: 10px;
         box-sizing: padding-box;
         background-image: url("{pigcms{$static_path}img/google_map_icon.png");
-        background-size: auto 90%;
+        background-size: auto 80%;
         background-repeat: no-repeat;
         background-position: left;
         cursor: pointer;
     }
     .phone_btn{
         float: left;
-        width: 50px;
+        width: 52px;
         border: 1px solid #59a422;
         border-radius: 2px;
         color: #59a422;
-        font-size: 8px;
+        font-size: 10px;
         padding-top: 2px;
         padding-bottom: 2px;
-        padding-left: 24px;
+        padding-left: 28px;
         padding-right: 0px;
         margin-bottom: 10px;
         box-sizing: padding-box;
         background-image: url("{pigcms{$static_path}img/phone_icon.png");
-        background-size: auto 80%;
+        background-size: auto 70%;
         background-repeat: no-repeat;
         background-position: left 2px center;
         cursor: pointer;
-        height: 21px;
         margin-left: 10px;
     }
     .accept_btn_2,.accept_btn_3,.accept_btn_4{
         float: right;
-        width: 45%;
+        width: 35%;
         text-align: center;
         border-radius: 3px;
-        height: 28px;
-        line-height: 28px;
+        height: 35px;
+        line-height: 35px;
         color: white;
         cursor: pointer;
+        font-size: 12px;
     }
     .accept_btn_2{
         background-color: #7ed957;
-        font-size: 11px;
+        line-height: 16px;
     }
     .accept_btn_3{
         background-color: #f48383;
+
     }
     .accept_btn_4{
         background-color: #38b6ff;
@@ -270,10 +278,10 @@
         padding-left: 8px;
         padding-right: 8px;
         border-radius: 2px;
-        font-size: 9px;
-        margin-right: 3%;
+        font-size: 11px;
+        margin-right: 2%;
         color: #333333;
-        height: 33px;
+        height: 38px;
         cursor: pointer;
     }
     #top_menu label{
@@ -285,16 +293,16 @@
         position: relative;
         float: left;
         margin-top: 2px;
-        font-size: 10px;
+        font-size: 12px;
         width: 100%;
     }
     #top_menu .all{
-        font-size: 11px;
+        font-size: 12px;
         color: #ffa52d;
         border: 1px solid #ffa52d;
     }
     #top_menu .all label{
-        margin-top: 8px;
+        margin-top: 11px;
         text-align: center;
     }
     #top_menu .all.curr{
@@ -302,26 +310,25 @@
         color: white;
     }
     #top_menu .accept{
-        border: 1px solid limegreen;
+        border: 1px solid #59A422;
+        color: #59A422;
     }
     #top_menu .accept.curr{
-        background-color: limegreen;
+        background-color: #59A422;
         color: white;
     }
     #top_menu .accept label{
         margin-top: 2px;
     }
-    #top_menu .accept span{
-        color: limegreen;
-    }
     #top_menu .accept.curr span{
         color: white;
     }
     #top_menu .pickup{
-        border: 1px solid orangered;
+        border: 1px solid #ff5757;
+        color: #ff5757;
     }
     #top_menu .pickup.curr{
-        background-color: orangered;
+        background-color: #ff5757;
         color: white;
     }
     #top_menu .pickup.curr span{
@@ -330,14 +337,12 @@
     #top_menu .pickup label{
         margin-top: 2px;
     }
-    #top_menu .pickup span{
-        color: orangered;
-    }
     #top_menu .route{
-        border: 1px solid cornflowerblue;
+        border: 1px solid #5271ff;
+        color: #5271ff;
     }
     #top_menu .route.curr{
-        background-color: cornflowerblue;
+        background-color: #5271ff;
         color: white;
     }
     #top_menu .route.curr span{
@@ -346,24 +351,23 @@
     #top_menu .route label{
         margin-top: 2px;
     }
-    #top_menu .route span{
-        color: cornflowerblue;
-    }
 
     .status_2,.status_3,.status_4{
-        font-size: 10px;
+        font-size: 12px;
         padding: 3px 5px;
         color: white;
-        border-radius: 2px;
+        border-radius: 1px;
+        width: 100%;
+        display: inline-block;
     }
     .status_2{
-        background-color: limegreen;
+        background-color: #59A422;
     }
     .status_3{
-        background-color: orangered;
+        background-color: #ff5757;
     }
     .status_4{
-        background-color: cornflowerblue;
+        background-color: #5271ff;
     }
 </style>
 <body>
@@ -429,7 +433,7 @@
                         {pigcms{:L('_ND_ARRIVING_')}
                     {{# } }}
                 </span>
-                <div style="margin-top: 5px">{{ d.list[i].store_name }}</div>
+                <div class="store_name" style="margin-top: 5px">{{ d.list[i].store_name }}</div>
                 {{# if(d.list[i].uid == 0){ }}
                 <span class="pay_status_red">
                         {pigcms{:L('_ND_UNPAID_')}
