@@ -172,7 +172,7 @@
 
         </div>
         <div class="radio_box" style="float: right;margin-right: 5%;margin-top: 20px">
-            <span style="font-size:12px;float: left;margin-right: 10px;line-height: 24px">{pigmcs{:L('_ND_REPEATWEEKLY_')}</span>
+            <span style="font-size:12px;float: left;margin-right: 10px;line-height: 24px">{pigcms{:L('_ND_REPEATWEEKLY_')}</span>
             <span class="cb-enable"><label class="cb-enable selected"><span>On</span><input type="radio" name="repeat" value="1" checked="checked"/></label></span>
             <span class="cb-disable"><label class="cb-disable"><span>Off</span><input type="radio" name="repeat" value="0" /></label></span>
         </div>
