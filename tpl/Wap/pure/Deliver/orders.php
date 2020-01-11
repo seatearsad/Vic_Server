@@ -135,13 +135,13 @@ $(function () {
 	$("#end").mobiscroll($.extend(enddate['date'], enddate['default']));
 });
 
-var is_flag = false;
+//var is_flag = false;
 $(document).on('click', '.go_detail', function(e){
     //e.stopPropagation();
-    if (is_flag) {
-        return false;
-    }
-    is_flag = true;
+    // if (is_flag) {
+    //     return false;
+    // }
+    // is_flag = true;
     var supply_id = $(this).attr("data-id");
     location.href = DetailUrl.replace(/d%/, supply_id);
 });
