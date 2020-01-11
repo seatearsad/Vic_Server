@@ -41,8 +41,7 @@
     .robbed{
         background-image: url("./tpl/Static/blue/images/new/or_arrow.png");
         background-repeat: no-repeat;
-        background-position-x: right 5px;
-        background-position-y: 70%;
+        background-position:top 70% right 5px;
         background-size: auto 20%;
         box-sizing: border-box;
     }
@@ -88,7 +87,12 @@
                 {pigcms{:L('_DELI_PRICE_')} : ${pigcms{$order.freight_charge}
             </div>
             <div style="margin-top: 5px;">
-                {pigcms{:L('_ND_TIPS_')} : ${pigcms{$order.tip_charge}
+                {pigcms{:L('_ND_TIPS_')} :
+                <if condition="$order['pay_method'] eq 1">
+                    ${pigcms{$order.tip_charge}
+                <else />
+                    N/A
+                </if>
             </div>
         </section>
     </volist>
@@ -133,7 +137,7 @@ $(function () {
 
 var is_flag = false;
 $(document).on('click', '.go_detail', function(e){
-    e.stopPropagation();
+    //e.stopPropagation();
     if (is_flag) {
         return false;
     }
