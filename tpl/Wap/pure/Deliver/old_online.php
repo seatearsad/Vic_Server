@@ -15,46 +15,39 @@
 
     <style>
         .tip_s{width: 32%; height: 40px; border: 1px #999999 solid;line-height: 40px;text-align: center;font-size: 16px;display:-moz-inline-box;display:inline-block;cursor: pointer}
-        .tip_on{background-color: #ffa52d;color: #ffffff;border-color:#ffa52d }
+        .tip_on{background-color: #06c1ae;color: #ffffff;border-color:#06c1ae }
         input{border: 1px #333333 solid;}
-        .robbed{
-            padding: 5px 10px;
-            background:#fff;
-            font-size: 10px;
-            color:#999999;
-            width: 100%;
-            border: 0;
-        }
-        .Namelist {
-            padding: 2px 10px;
-            border-bottom: #e7e7e7 1px dashed;
-            position: relative;
-        }
     </style>
 </head>
 <body>
 <section class="nav_end clr">
+	<div class="Dgrab" id="Dgrab1">
 		<if condition="$list">
 		<volist name="list" id="row">
-        <section class="details p10">
-            <div class="details_top">
-                <h2 class="f16 c3">
-                    Order #{pigcms{$row['order_id']}
-                </h2>
-                <div style="color: #ffa52d">
-                    {pigcms{$row['note']}
-                </div>
-            </div>
-        </section>
 		<section class="robbed supply_{pigcms{$row['supply_id']}" data-id="{pigcms{$row.supply_id}">
-			<div class="Title m10" data-id="{pigcms{$row.supply_id}" style="border: 0;">
-				<h2 class="f16 c3">{pigcms{:lang_substr($row['store_name'],C('DEFAULT_LANG'))}</h2>
+			<div class="Online c9 p10 f14" data-id="{pigcms{$row.supply_id}">
+				<span>
+                    {pigcms{:L('_B_PURE_MY_68_')}: {pigcms{$row['real_orderid']}
+                    <if condition="$row['uid'] eq 0">
+                        ({pigcms{:L('_PAY_FROM_MER_')})
+                    </if>
+                </span>
+				<if condition="$row['pay_method'] eq 1">
+				<a href="javascript:;" class="fr cd p10">{pigcms{:L('moneris')}</a>
+				<else />
+				<a href="javascript:;" class="fr cd p10 on">{pigcms{:L('offline')}</a>
+				</if>
+				
+			</div>
+			<div class="Title m10" data-id="{pigcms{$row.supply_id}">
+				<h2 class="f16 c3">{pigcms{$row['store_name']}</h2>
+				<p class="f14 c9">{pigcms{:L('_ORDER_TIME_')}：{pigcms{$row['order_time']}</p>
 				<if condition="$row['get_type'] eq 1">
 				<div class="leaflets">{pigcms{:L('_C_SYS_ASS_ORDER_')}</div>
 				</if>
 			</div>
 			<div class="Namelist p10 f14">
-				<p style="height: 20px;font-size: 12px;color: #666666">
+				<p class="red" style="height: 30px;">
                     {pigcms{:L('_TOTAL_RECE_')}：<i>${pigcms{$row['deliver_cash']}</i>
                     <INPUT TYPE="HIDDEN" NAME="charge_total" VALUE="{pigcms{$row['deliver_cash']}">
                 </p>
@@ -115,6 +108,7 @@
 			</div>
 		<!-- 空白图 -->
 		</if>
+	</div>
 </section>
 <script type="text/javascript">
 $(function(){

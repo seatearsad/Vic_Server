@@ -115,6 +115,14 @@
         color: indianred;
         font-size: 12px;
     }
+    .order_title .pay_status_red_d{
+        float: right;
+        border: 1px solid red;
+        border-radius: 2px;
+        padding: 1px 4px;
+        color: red;
+        font-size: 12px;
+    }
     .order_time{
         font-size: 9px;
         height: 30px;
@@ -273,7 +281,7 @@
             <div class="order_title">
                 <span class="store_name">{{ d.list[i].store_name }}</span>
                 {{# if(d.list[i].uid == 0){ }}
-                    <span class="pay_status_red">
+                    <span class="pay_status_red_d">
                         {pigcms{:L('_ND_UNPAID_')}
                     </span>
                 {{# } else { }}

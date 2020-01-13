@@ -697,6 +697,7 @@ class DeliverAction extends BaseAction
                 }
 
                 $order = D('Shop_order')->get_order_by_orderid($val['order_id']);
+                $val['customer_id'] = $order['uid'];
                 $val['tip_charge'] = $order['tip_charge'];
                 $address = D('User_adress')->where(array('adress_id'=>$order['address_id']))->find();
                 $val['user_address'] = $address;

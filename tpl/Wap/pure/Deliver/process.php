@@ -123,6 +123,15 @@
         font-size: 12px;
         margin-top: -20px;
     }
+    .order_title .pay_status_red_d{
+        float: right;
+        border: 1px solid red;
+        border-radius: 2px;
+        padding: 1px 4px;
+        color: red;
+        font-size: 12px;
+        margin-top: -20px;
+    }
     .order_time{
         font-size: 9px;
         height: 30px;
@@ -434,8 +443,8 @@
                     {{# } }}
                 </span>
                 <div class="store_name" style="margin-top: 5px">{{ d.list[i].store_name }}</div>
-                {{# if(d.list[i].uid == 0){ }}
-                <span class="pay_status_red">
+                {{# if(d.list[i].customer_id == 0){ }}
+                <span class="pay_status_red_d">
                         {pigcms{:L('_ND_UNPAID_')}
                     </span>
                 {{# } else { }}
@@ -502,8 +511,12 @@
             {{# if(d.list[i].pay_method == 0 && d.list[i].status == 4){ }}
             <div class="order_cash">
                 {pigcms{:L('_ACTUAL_PAYMENT_')} : <label>${{ d.list[i].deliver_cash }}</label>
+                {{# if(d.list[i].customer_id == 0){ }}
+                <input type="button" value="Or Pay Online" style="width: 80px;height: 30px;color: #ffa52d;background-color:white;border: 1px solid #ffa52d;margin-left:10px;" class="t_online" data-id="{{ d.list[i].supply_id }}">
+                {{# } }}
             </div>
             {{# } }}
+
             <div class="order_btn">
                 <span class="location_btn" data-status="{{ d.list[i].status }}" data-from="{{ d.list[i].from_site }}" data-aim="{{ d.list[i].user_address.adress }}">
                     {{# if(d.list[i].status == 2){ }}
@@ -533,6 +546,15 @@
         {{# } }}
     </script>
 	<script type="text/javascript">
+        //$(".t_online").bind("click",onlinePay);
+        // //garfunkel add
+        function onlinePay(e){
+            var supply_id = $(this).attr("data-id");
+            var DetailUrl = "{pigcms{:U('Wap/Deliver/online', array('supply_id'=>'d%','lang'=>'en'))}";
+            location.href = DetailUrl.replace(/d%/, supply_id);
+        }
+
+
         setInterval(function(){
             $.get("{pigcms{:U('Deliver/index_count')}", function(response){
                 if (response.err_code == false) {
@@ -589,6 +611,7 @@
 
                         location.href = url;
                     });
+                    $(".t_online").bind("click",onlinePay);
                 }else{
                     alert("Error");
                 }
