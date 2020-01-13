@@ -99,17 +99,23 @@
         height: 25px;
         line-height: 25px;
         font-size: 12px;
+        margin-top: 5px;
     }
     #work_time span,#recom span{
         float: left;
     }
 
     .w_t{
-        width: 73%;
+        width: 83%;
         margin-left: 2%;
+        height: 25px;
+        border: 1px solid #ffa52d;
+        background-color: white;
+        box-sizing: border-box;
+        text-align: center;
     }
     .w_i{
-        width: 20%;
+        width: 10%;
     }
     .w_r,.w_nr{
         width: 5%;
@@ -123,7 +129,9 @@
         background:none;
     }
     #work_time input{
-        float: right;
+        float: left;
+        margin-left: 10px;
+        margin-top: 2px;
     }
     input.mt[type="radio"], input.mt[type="checkbox"] {
         -webkit-appearance: none;
@@ -166,25 +174,28 @@
         </div>
         <div id="recom">
             <span class="w_r"></span>
-            <span class="w_t">{pigcms{:L('_ND_RECOM_')}</span>
+            <span style="margin-left: 10px;">{pigcms{:L('_ND_RECOM_')}</span>
         </div>
         <div id="work_time">
 
         </div>
-        <div class="radio_box" style="float: right;margin-right: 5%;margin-top: 20px">
+        <div class="radio_box" style="float: left;margin-left: 5%;margin-top: 30px">
             <span style="font-size:12px;float: left;margin-right: 10px;line-height: 24px">{pigcms{:L('_ND_REPEATWEEKLY_')}</span>
             <span class="cb-enable"><label class="cb-enable selected"><span>On</span><input type="radio" name="repeat" value="1" checked="checked"/></label></span>
             <span class="cb-disable"><label class="cb-disable"><span>Off</span><input type="radio" name="repeat" value="0" /></label></span>
         </div>
+        <div class="btn_s" style="float: right;margin-top:20px;margin-right:5%;text-align: center;height: 40px;line-height: 40px;width: 60px;background-color: #ffa52d;color: white;cursor: pointer">
+            Save
+        </div>
 	</section>
-	<section class="bottom" style="height: 40px;line-height: 40px;text-align: center;font-size: 12px;">
+	<!--section class="bottom" style="height: 40px;line-height: 40px;text-align: center;font-size: 12px;">
 		<div class="btn_c" style="float: left;width: 60px;background-color: grey;color:white;cursor: pointer">
 			Cancel
 		</div>
         <div class="btn_s" style="float: right;width: 60px;background-color: #ffa52d;color: white;cursor: pointer">
             Save
         </div>
-	</section>
+	</section-->
 <!-- 	<script src="http://api.map.baidu.com/api?type=quick&ak=4c1bb2055e24296bbaef36574877b4e2&v=1.0"></script> -->
     <script src="{pigcms{$static_public}layer/layer.m.js"></script>
     <script type="text/javascript" src="{pigcms{$static_public}js/artdialog/jquery.artDialog.js"></script>
@@ -233,6 +244,8 @@
             html += '</div>';
         }
 
+        init_num = link_num;
+
         $('#week_list').html(html);
 
         getWorkTime(link_num);
@@ -263,16 +276,17 @@
             }
             for(var i=0;i<time_list.length;i++){
                 if(time_list[i]['is_recomm'] == 1)
-                    html += '<div><span class="w_r"></span><span class="w_t">';
+                    html += '<div><span class="w_r"></span><span class="w_i">';
                 else
-                    html += '<div><span class="w_nr"></span><span class="w_t">';
+                    html += '<div><span class="w_nr"></span><span class="w_i">';
 
-                html += format_time(time_list[i]['start_time']) + ' -- ' +  format_time(time_list[i]['end_time']);
-                html += '</span><span class="w_i">';
                 if(time_list[i]['is_check'])
                     html += '<input type="checkbox" class="mt" data-id="'+init_num+'" data-num="'+i+'" name="work_time_'+init_num+'[]" value="'+time_list[i]['id']+'" checked="checked">';
                 else
                     html += '<input type="checkbox" class="mt" data-id="'+init_num+'" data-num="'+i+'" name="work_time_'+init_num+'[]" value="'+time_list[i]['id']+'">';
+
+                html += '</span><span class="w_t">';
+                html += format_time(time_list[i]['start_time']) + ' -- ' +  format_time(time_list[i]['end_time']);
                 html += '</span></div>';
             }
 

@@ -697,6 +697,7 @@ class DeliverAction extends BaseAction
                 }
 
                 $order = D('Shop_order')->get_order_by_orderid($val['order_id']);
+                $val['tip_charge'] = $order['tip_charge'];
                 $address = D('User_adress')->where(array('adress_id'=>$order['address_id']))->find();
                 $val['user_address'] = $address;
 
@@ -1492,6 +1493,20 @@ class DeliverAction extends BaseAction
             $address = D('User_adress')->where(array('adress_id'=>$order['address_id']))->find();
             $order['user_address'] = $address['adress'];
             $order['user_address_detail'] = $address['detail'];
+
+            switch ($order['pay_type']) {
+                case 'offline':
+                case 'Cash':
+                $order['pay_method'] = 0;
+                    break;
+                default:
+                    if ($order['paid']) {
+                        $order['pay_method'] = 1;
+                    } else {
+                        $order['pay_method'] = 0;
+                    }
+                    break;
+            }
 
 			$this->assign('order', $order);
 
@@ -2593,7 +2608,7 @@ class DeliverAction extends BaseAction
             exit(json_encode(array('error'=>0,'msg'=>'Success')));
         }else {
             $week_num = date("w");
-            $link_num = $_GET['num'] ? $_GET['num'] : $week_num;
+            $link_num = isset($_GET['num']) ? $_GET['num'] : $week_num;
             $today = date('Y-m-d');
             $this->assign('week_num', $week_num);
             $this->assign('link_num',$link_num);
@@ -2735,7 +2750,7 @@ class DeliverAction extends BaseAction
             $param['thumbMaxWidth'] = $width;
             $param['thumbMaxHeight'] = $height;
             $param['thumbRemoveOrigin'] = false;
-            $image = D('Image')->handle($this->deliver_session['uid'], 'deliver', 1, $param);
+            $image = D('Image')->handle($this->deliver_session['uid'], 'deliver', 1, $param,false);
             if ($image['error']) {
                 exit(json_encode(array('error' => 1,'message' =>$image['msg'])));
             } else {
@@ -2809,7 +2824,7 @@ class DeliverAction extends BaseAction
             $this->assign('doc',$news);
             $this->display('inst_doc');
         }else {
-            $wap_index_top_adver = D('Adver')->get_adver_by_key('wap_index_top',5);
+            $wap_index_top_adver = D('Adver')->get_adver_by_key('app_courier_promotion',5);
             $this->assign('wap_index_top_adver',$wap_index_top_adver);
 
             $category = D('System_news_category')->field('id')->where(array('type' => array('in', $type)))->select();
@@ -2894,6 +2909,7 @@ class DeliverAction extends BaseAction
             $userdata['lat'] = $_POST['lat'] ? $_POST['lat'] : '0';
             $userdata['city_id'] = $_POST['city_id'] ? $_POST['city_id'] : '0';
             $userdata['last_time'] = time();
+            $userdata['group'] = 0;
 
             $database_deliver_user->where(array('uid' => $this->deliver_session['uid']))->save($userdata);
 

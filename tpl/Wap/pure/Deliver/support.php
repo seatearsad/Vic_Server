@@ -47,6 +47,7 @@
     }
     #mail{
         background-image:url('{pigcms{$static_path}img/mail_or.png');
+        cursor: pointer;
     }
 </style>
 </head>
@@ -63,7 +64,6 @@
         </div>
     </div>
     </a>
-    <a href="mailto:hr@tutti.app">
     <div id="mail">
         <div>
             Account and Payment Questions
@@ -72,6 +72,16 @@
             For inquiries about your account info, payment status, and other questions, please email our human resource department at hr@tutti.app.
         </div>
     </div>
-    </a>
+<script>
+    var ua = navigator.userAgent;
+    $('#mail').click(function () {
+        if(!ua.match(/TuttiDeliver/i)) {
+            location.href = "mailto:hr@tutti.app";
+        }else{
+            alert("Please send email to hr@tutti.app");
+        }
+    });
+
+</script>
 </body>
 </html>

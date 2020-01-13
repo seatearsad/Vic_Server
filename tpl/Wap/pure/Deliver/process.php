@@ -157,8 +157,8 @@
         float: left;
         border-radius: 2px;
         padding: 1px 4px;
-        border: 1px solid lightblue;
-        color: lightblue;
+        border: 1px solid #5271ff;
+        color: #5271ff;
         font-size: 10px;
     }
     .order_address .address{
@@ -171,8 +171,8 @@
         float: left;
         border-radius: 2px;
         padding: 1px 4px;
-        border: 1px solid dimgrey;
-        color: dimgrey;
+        border: 1px solid #59a422;
+        color: #59a422;
         font-size: 10px;
     }
     .note_label{
@@ -505,7 +505,7 @@
             </div>
             {{# } }}
             <div class="order_btn">
-                <span class="location_btn" data-status="{{ d.list[i].status }}" data-from="{{ d.list[i].from_site }}" data-aim="{{ d.list[i].aim_site }}">
+                <span class="location_btn" data-status="{{ d.list[i].status }}" data-from="{{ d.list[i].from_site }}" data-aim="{{ d.list[i].user_address.adress }}">
                     {{# if(d.list[i].status == 2){ }}
                         {pigcms{:L('_ND_ROUTE_MERCHANT_')}
                     {{# } else { }}
@@ -517,7 +517,7 @@
                     {pigcms{:L('_ND_CALL_CUSTOMER_')}
                 </span>
                 </a>
-                <a href="javascript:sendRequest({{ d.list[i].status }},{{ d.list[i].supply_id }});">
+                <a href="javascript:sendRequest({{ d.list[i].status }},{{ d.list[i].supply_id }},{{ d.list[i].pay_method }},{{ d.list[i].freight_charge }},{{ d.list[i].tip_charge }});">
                 <span class="accept_btn_{{ d.list[i].status }}">
                     {{# if(d.list[i].status == 2){ }}
                         {pigcms{:L('_ND_IMATREST_')}
@@ -595,7 +595,7 @@
             },'json');
         }
 
-        function sendRequest(status,supply_id) {
+        function sendRequest(status,supply_id,pay_method,dfee,tfee) {
             var DeliverListUrl = "";
             var content_msg = "";
 
@@ -611,7 +611,11 @@
                     break;
                 case 4:
                     DeliverListUrl = "{pigcms{:U('Deliver/my')}";
-                    content_msg = 'Order Completed';
+                    if(pay_method == 1)
+                        //content_msg = "{pigcms{:replace_lang_str(L('_ND_HI_'),$deliver_session['name'])}";
+                        content_msg = "Order Completed! Delivery Fee: $"+dfee+". Tips: $"+tfee+". Thank you for your delivery!"
+                    else
+                        content_msg = "{pigcms{:L('_ND_CASHORDERNOTICE_')}";
                     break;
 
                 default:
@@ -620,9 +624,12 @@
 
             $.post(DeliverListUrl, "supply_id="+supply_id, function(json){
                 if (json.status) {
-                    layer.open({title:['Reminder','background-color:#ffa52d;color:#fff;'],content:content_msg,btn: ['Confirm'],end:getList(curr_status)});
+                    if(status == 4)
+                        layer.open({title:['{pigcms{:L("_ND_TISHI_")}','background-color:#ffa52d;color:#fff;'],content:content_msg,btn: ['{pigcms{:L("_ND_CONFIRM1_")}'],end:getList(curr_status)});
+                    else
+                        layer.open({title:['{pigcms{:L("_ND_TISHI_")}','background-color:#ffa52d;color:#fff;'], time: 2, content: content_msg,end:getList(curr_status)});
                 } else {
-                    layer.open({title:['Reminder','background-color:#ffa52d;color:#fff;'],content:'Error',btn: ['Confirm'],end:function(){}});
+                    layer.open({title:['{pigcms{:L("_ND_TISHI_")}','background-color:#ffa52d;color:#fff;'],content:'Error',btn: ['{pigcms{:L("_ND_CONFIRM1_")}'],end:function(){}});
                 }
             });
         }

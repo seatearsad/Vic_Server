@@ -27,7 +27,7 @@
     #all_list{
         width: 90%;
         margin: 10px auto;
-        font-size: 12px;
+        font-size: 13px;
         color: #666666;
     }
     #list_title{
@@ -37,6 +37,7 @@
     #all_list li{
         padding-left: 20px;
         text-decoration: underline;
+        line-height: 24px;
     }
 </style>
 <body>

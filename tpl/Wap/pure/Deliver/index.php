@@ -140,8 +140,8 @@
         float: left;
         border-radius: 2px;
         padding: 1px 4px;
-        border: 1px solid lightblue;
-        color: lightblue;
+        border: 1px solid #5271ff;
+        color: #5271ff;
         font-size: 10px;
     }
     .order_address .address{
@@ -154,8 +154,8 @@
         float: left;
         border-radius: 2px;
         padding: 1px 4px;
-        border: 1px solid dimgrey;
-        color: dimgrey;
+        border: 1px solid #59a422;
+        color: #59a422;
         font-size: 10px;
     }
     .order_address div{

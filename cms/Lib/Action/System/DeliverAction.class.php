@@ -1354,6 +1354,17 @@ class DeliverAction extends BaseAction {
         import('@.ORG.system_page');
         $p = new Page($count_user, 15);
         $user_list = $this->deliver_user->field(true)->where($condition_user)->order('`last_time` DESC')->limit($p->firstRow . ',' . $p->listRows)->select();
+        foreach ($user_list as &$v){
+            $is_online = 0;
+            if($v['reg_status'] == 4){
+                $deliver_img = D('Deliver_img')->field(true)->where(array('uid' => $v['uid']))->find();
+                if($deliver_img['card_num'] != '' && $deliver_img['txnNumber'] != ''){
+                    $is_online = 1;
+                }
+            }
+
+            $v['is_online_pay'] = $is_online;
+        }
         $this->assign('user_list', $user_list);
         $pagebar = $p->show();
         $this->assign('pagebar', $pagebar);

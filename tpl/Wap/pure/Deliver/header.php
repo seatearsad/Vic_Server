@@ -36,7 +36,7 @@
     .hamburger .line {
         width: 25px;
         height: 3px;
-        background-color: #3f3f3f;
+        background-color: #ffa52d;
         display: block;
         margin: 5px auto;
         -moz-border-radius: 3px;
@@ -149,6 +149,50 @@
         color: #ffa52d;
         float: right;
         cursor: pointer;
+        line-height: 30px;
+    }
+    #lang_div{
+        color: #666666;
+        line-height: 30px;
+        padding-left: 30px;
+        float: left;
+        background-image:url('{pigcms{$static_path}img/language.png');
+        background-repeat: no-repeat;
+        background-position: center left;
+        background-size:auto 80%;
+    }
+    #lang_div span{
+        cursor: pointer;
+    }
+    #lang_div span.act{
+        color: #ffa52d;
+    }
+    .m_img{
+        width: 35px;
+        background-repeat: no-repeat;
+        background-position: center left;
+        background-size:auto 70%;
+    }
+    #menu_home .m_img{
+        background-image:url('{pigcms{$static_path}img/deliver_menu/home.png');
+    }
+    #menu_shift .m_img{
+        background-image:url('{pigcms{$static_path}img/deliver_menu/shift.png');
+    }
+    #menu_stat .m_img{
+        background-image:url('{pigcms{$static_path}img/deliver_menu/static.png');
+    }
+    #menu_order .m_img{
+        background-image:url('{pigcms{$static_path}img/deliver_menu/order.png');
+    }
+    #menu_inst .m_img{
+        background-image:url('{pigcms{$static_path}img/deliver_menu/inst.png');
+    }
+    #menu_account .m_img{
+        background-image:url('{pigcms{$static_path}img/deliver_menu/account.png');
+    }
+    #menu_support .m_img{
+        background-image:url('{pigcms{$static_path}img/deliver_menu/support.png');
     }
 </style>
 
@@ -186,6 +230,10 @@
         {pigcms{:replace_lang_str(L('_ND_HI_'),$deliver_session['name'])}
     </div>
     <ul>
+        <li id="menu_home">
+            <span class="m_img"> </span>
+            <span>{pigcms{:L('_ND_HOME_')}</span>
+        </li>
         <li id="menu_shift">
             <span class="m_img"> </span>
             <span>{pigcms{:L('_ND_MYSHIFTS_')}</span>
@@ -213,10 +261,16 @@
     </ul>
     <div id="menu_bottom">
         <!--div id="setting">Setting</div-->
+        <div id="lang_div">
+            <span data-type="en-us" class="act">EN</span>
+            <label> / </label>
+            <span data-type="zh-cn"">CH</span>
+        </div>
         <div id="logout">Log Out</div>
     </div>
 </div>
 <script type="text/javascript" src="{pigcms{$static_path}layer/layer.m.js" charset="utf-8"></script>
+<script src="{pigcms{$static_public}js/lang.js"></script>
 <script>
     var is_open_menu = false;
     $('.hamburger').click(function () {
@@ -283,10 +337,32 @@
         });
     });
 
-    $('#user_hi').click(function () {
+    $('#menu_home').click(function () {
         location.href = "{pigcms{:U('Deliver/index')}";
     });
     $("#setting").click(function () {
 
+    });
+
+    var language = "{pigcms{:C('DEFAULT_LANG')}";
+    setLanguage(language);
+    function setLanguage(language){
+        this.language = language;
+        setCookie('lang',language,30);
+        $('#lang_div').find('span').each(function () {
+            if($(this).data('type') == language)
+                $(this).addClass('act');
+            else
+                $(this).removeClass('act');
+        });
+    }
+
+    $('#lang_div').find('span').each(function () {
+        $(this).click(function () {
+            if($(this).data('type') != language){
+                setLanguage($(this).data('type'));
+                location.reload();
+            }
+        });
     });
 </script>

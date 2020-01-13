@@ -22,7 +22,7 @@
         border-radius: 2px;
         padding: 1px 4px;
         color: cornflowerblue;
-        font-size: 10px;
+        font-size: 12px;
     }
     .order_title .pay_status_red{
         float: right;
@@ -30,13 +30,14 @@
         border-radius: 2px;
         padding: 1px 4px;
         color: indianred;
-        font-size: 10px;
+        font-size: 12px;
     }
     .store_name{
         color: #333333;
         padding-top: 5px;
         padding-bottom: 5px;
         border-bottom: 1px dashed #999999;
+        font-size: 14px;
     }
     .robbed{
         background-image: url("./tpl/Static/blue/images/new/or_arrow.png");
@@ -44,6 +45,8 @@
         background-position:top 70% right 5px;
         background-size: auto 20%;
         box-sizing: border-box;
+        color: #666666;
+        font-size: 11px;
     }
 </style>
 <body>
@@ -60,8 +63,8 @@
         <section class="robbed go_detail supply_{pigcms{$order.supply_id}" data-id="{pigcms{$order.supply_id}">
             <div class="order_title">
                 <span>Order # {pigcms{$order.order_id}</span>
-                <span style="margin-left: 10px;">{pigcms{$order['end_time']}</span>
-                <span style="margin-left: 10px;">{pigcms{$order['show_time']}</span>
+                <span style="margin-left: 10px;color: #999999;font-size: 10px;">{pigcms{$order['end_time']}</span>
+                <span style="margin-left: 10px;color: #999999;font-size: 10px;">{pigcms{$order['show_time']}</span>
                 <if condition="$order['pay_method'] eq 1">
                 <span class="pay_status">
                     {pigcms{:L('_ND_PAID_')}

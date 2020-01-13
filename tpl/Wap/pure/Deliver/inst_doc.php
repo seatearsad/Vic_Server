@@ -8,7 +8,6 @@
     <meta charset="utf-8">
     <title>Instructions & Announcement</title>
     <meta name="description" content="{pigcms{$config.seo_description}"/>
-    <link href="{pigcms{$static_path}css/deliver.css" rel="stylesheet"/>
     <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/mobiscroll.2.13.2.css"/>
     <script src="{pigcms{:C('JQUERY_FILE')}"></script>
     <!-- <script type="text/javascript" src="{pigcms{$static_path}js/swiper.min.js"></script> -->
@@ -30,10 +29,6 @@
     #list_time{
         text-align: center;font-size: 10px;color: #999999;
         margin-bottom: 10px;
-    }
-    #all_list li{
-        padding-left: 20px;
-        text-decoration: underline;
     }
 </style>
 <body>

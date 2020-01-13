@@ -212,7 +212,11 @@
                         <div class="fl c80">{pigcms{:L('_ND_TIP_')}</div>
                         <div class="fr c80">
                             <if condition="$supply['status'] eq 5">
-                                ${pigcms{$order['tip_charge']}
+                                <if condition="$order['pay_method'] eq 1">
+                                    ${pigcms{$order.tip_charge}
+                                <else />
+                                    N/A
+                                </if>
                             <else />
                                 {pigcms{:L('_ND_TIP1_')}
                             </if>
@@ -221,6 +225,7 @@
                 </ul>
             </div>
         </section>
+        <if condition="$supply['status'] neq 5">
         <section class="information">
             <div class="info_title p10">{pigcms{:L('_ND_CUSTOMERINFO_')}</div>
             <div class="information_end">
@@ -240,6 +245,7 @@
                 </ul>
             </div>
         </section>
+        </if>
     </div>
     <if condition="$supply['status'] neq 5">
     <div class="sign_bottom Ps_bottom">
@@ -343,11 +349,26 @@ $(document).ready(function(){
 			$.post(post_url, {'supply_id':supply_id}, function(json){
 				mark = 0;
 				if (json.status) {
-					layer.open({title:['操作提示：','background-color:#FF658E;color:#fff;'], content:json.info, btn: ['确定'], end:function(){
-						location.reload();
-					}});
+                    if(status == 4) {
+                        var pay_method = "{pigcms{$order['pay_method']}";
+                        var content = "{pigcms{:L('_ND_CASHORDERNOTICE_')}";
+                        if(pay_method == 1){
+                            content = "Order Completed! Delivery Fee: ${pigcms{$order.freight_charge}. Tips: ${pigcms{$order.tip_charge}. Thank you for your delivery!"
+                        }
+                        layer.open({
+                            title: ['{pigcms{:L("_ND_TISHI_")}', 'background-color:#ffa52d;color:#fff;'],
+                            content: content,
+                            btn: ['{pigcms{:L("_ND_CONFIRM1_")}'],
+                            end: function () {
+                                location.reload();
+                            }
+                        });
+                    }else
+                        layer.open({title:['{pigcms{:L("_ND_TISHI_")}','background-color:#ffa52d;color:#fff;'], time: 2, content: json.info,end:function () {
+                            location.reload();
+                        }});
 				} else {
-					layer.open({title:['操作提示：','background-color:#FF658E;color:#fff;'], content:json.info, btn: ['确定'], end:function(){}});
+					layer.open({title:['{pigcms{:L("_ND_TISHI_")}','background-color:#FF658E;color:#fff;'], content:json.info, btn: ['{pigcms{:L("_ND_CONFIRM1_")}'], end:function(){}});
 				}
 				$(".supply_"+supply_id).remove();
 			});

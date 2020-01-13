@@ -57,20 +57,31 @@
 										<td>{pigcms{$vo.email}</td>
 										<td>{pigcms{$vo.create_time|date='Y-m-d H:i:s',###}</td>
 										<td class="textcenter">
-                                            <if condition="$vo['reg_status'] eq 1">
+                                            <if condition="$vo['reg_status'] neq 4 and $vo['reg_status'] neq 5">
                                                 <font color="red">{pigcms{:L('_BACK_REGISTERED_')}</font>
                                             </if>
-                                            <if condition="$vo['reg_status'] eq 2">
-                                                <font color="green">{pigcms{:L('_BACK_FIRST_STEP_')}</font>
-                                            </if>
-                                            <if condition="$vo['reg_status'] eq 3">
-                                                <font color="green">{pigcms{:L('_BACK_APPROVED_')}</font>
-                                            </if>
                                             <if condition="$vo['reg_status'] eq 4">
-                                                <font color="green">{pigcms{:L('_BACK_DELIVER_BOX_')}</font>
+                                                <font color="green">
+                                                    {pigcms{:L('_BACK_DELIVER_BOX_')}
+                                                    <if condition="$vo['is_online_pay'] eq 1">
+                                                        (Paid)
+                                                    <else />
+                                                        (Unpaid)
+                                                    </if>
+                                                </font>
+                                                |
                                             </if>
-                                            <if condition="$vo['reg_status'] eq 5">
-                                                <font color="red">未通过审核</font>
+
+                                            <if condition="$vo['reg_status'] eq 4 or $vo['reg_status'] eq 5">
+                                                <if condition="$vo['group'] eq 0">
+                                                    <font color="red">等待审核</font>
+                                                </if>
+                                                <if condition="$vo['group'] eq -1">
+                                                    <font color="red">未通过审核</font>
+                                                </if>
+                                                <if condition="$vo['group'] eq 1">
+                                                    <font color="green">通过审核</font>
+                                                </if>
                                             </if>
                                         </td>
 										<td class="textcenter">　

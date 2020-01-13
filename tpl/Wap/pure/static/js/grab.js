@@ -8,12 +8,12 @@ $(function(){
 			return false;
 		}
 		mark = 1;
-		e.stopPropagation();
+		//e.stopPropagation();
 		var supply_id = $(this).attr("data-spid");
 		$.post(location_url, "supply_id="+supply_id, function(json){
 			mark = 0;
 			if (json.status) {
-				layer.open({title:[' ','background-color:#ffa52d;color:#fff;'],content:json.info,btn: ['Confirm'],end:function(){}});
+                layer.open({title:['Tips','background-color:#ffa52d;color:#fff;'], time:2, content:json.info,end:function(){}});
 			} else {
 				layer.open({title:[' ','background-color:#ffa52d;color:#fff;'],content:json.info,btn: ['Confirm'],end:function(){}});
 			}
@@ -33,7 +33,7 @@ $(function(){
         $.post(reject_url, "supply_id="+supply_id, function(json){
             mark = 0;
             if (json.status) {
-                layer.open({title:[' ','background-color:#ffa52d;color:#fff;'],content:json.info,btn: ['Confirm'],end:function(){}});
+                layer.open({title:['Tips','background-color:#ffa52d;color:#fff;'], time:2, content:json.info,end:function(){}});
             } else {
                 layer.open({title:[' ','background-color:#ffa52d;color:#fff;'],content:json.info,btn: ['Confirm'],end:function(){}});
             }
@@ -89,11 +89,11 @@ function getList() {
 			return false;
 		}
 		$('.psnone').hide();
-		laytpl($('#replyListBoxTpl').html()).render(result, function(html){
+		laytpl($('#replyListBoxTpl').html()).render(result, function (html) {
 			$('#container').html(html);
-		    $(".delivery p em").each(function(){
-		        $(this).width($(window).width() - $(this).siblings("i").width() -55) 
-	    	});
+			$(".delivery p em").each(function () {
+				$(this).width($(window).width() - $(this).siblings("i").width() - 55)
+			});
 		});
 	}, 'json');
 }
@@ -104,6 +104,7 @@ function list_detail(lat, lng)
 	$.get(location_url, {'lat':lat, 'lng':lng}, function(result){
 		if (result.err_code) {
 			//$('#container').html('<div class="psnone" ><img src="' + static_path + 'images/qdz_02.jpg"></div>');
+            $('#grab_list').html('<p style="text-align: center;width: 90%;margin: auto;">All orders are taken by other couriers. Please wait for the next available order.</p>');
 			return false;
 		}
 		laytpl($('#replyListBoxTpl').html()).render(result, function(html){
