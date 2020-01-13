@@ -18,7 +18,7 @@
     #all_list{
         width: 90%;
         margin: 10px auto;
-        font-size: 12px;
+        font-size: 14px;
         color: #666666;
     }
     #list_title{
@@ -27,7 +27,8 @@
         margin-bottom: 5px;
     }
     #list_time{
-        text-align: center;font-size: 10px;color: #999999;
+        text-align: center;
+        font-size: 12px;color: #999999;
         margin-bottom: 10px;
     }
 </style>
