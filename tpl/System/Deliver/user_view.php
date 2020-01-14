@@ -1,6 +1,34 @@
 <include file="Public:header"/>
 <style>
-
+    input[type="file"] {
+        display: block;
+        position: absolute;
+        opacity: 0;
+        -ms-filter: 'alpha(opacity=0)';
+    }
+    #J_selectImage_0,#J_selectImage_1,#J_selectImage_2{
+        background-color: #ffa52d;
+        color:white;
+        text-indent: 0px;
+        border-radius: 5px;
+        padding: 0px;
+        height: 50px;
+        line-height: 50px;
+        box-sizing: border-box;
+        display: inline-block;
+        width: 100%;
+    }
+    .img_0,.img_1,.img_2{
+        width: 100%;
+        text-align: center;
+    }
+    .img_0 img,.img_1 img,.img_2 img{
+        height: 100px;
+    }
+    .btn{
+        background:none;
+        padding:0 12px;
+    }
 </style>
 	<form id="myform" method="post" action="{pigcms{:U('Deliver/user_view')}" frame="true" refresh="true">
 		<input type="hidden" name="uid" value="{pigcms{$now_user.uid}"/>
@@ -87,20 +115,58 @@
             <tr>
                 <th width="15%">{pigcms{:L('_BACK_DRIVER_LIC_')}</th>
                 <td colspan=3>
-                    <img src="{pigcms{:C('config.site_url')}{pigcms{$img['driver_license']}" height="100"/>
+                    <div style="display:inline-block;" id="J_selectImage_0">
+                        <div class="btn btn-sm btn-success" style="position:relative;height:50px;line-height: 50px;text-align: left;">
+                            {pigcms{:L('_ND_UPLOAD1_')}
+                        </div>
+                    </div>
+                    <if condition="$img['driver_license'] eq ''">
+                        <div class="img_0">
+
+                        </div>
+                    <else />
+                        <div class="img_0" style="height: 100px">
+                            <img src="{pigcms{:C('config.site_url')}{pigcms{$img['driver_license']}" height="100"/>
+                        </div>
+                    </if>
                 </td>
             </tr>
             <tr>
                 <th width="15%">{pigcms{:L('_BACK_VEHICLE_INSU_')}</th>
                 <td colspan=3>
-                    <img src="{pigcms{:C('config.site_url')}{pigcms{$img['insurance']}" height="100"/>
+                    <div style="display:inline-block;" id="J_selectImage_1">
+                        <div class="btn btn-sm btn-success" style="position:relative;height:50px;line-height: 50px;text-align: left;">
+                            {pigcms{:L('_ND_UPLOAD2_')}
+                        </div>
+                    </div>
+                    <if condition="$img['insurance'] eq ''">
+                        <div class="img_1">
+
+                        </div>
+                        <else />
+                        <div class="img_1" style="height: 100px">
+                            <img src="{pigcms{:C('config.site_url')}{pigcms{$img['insurance']}" height="100"/>
+                        </div>
+                    </if>
                 </td>
             </tr>
             <tr>
                 <th width="15%">{pigcms{:L('_BACK_PROOF_WORK_')}</th>
                 <td colspan=3>
-                    <img src="{pigcms{:C('config.site_url')}{pigcms{$img['certificate']}" height="100"/>
-                    <!--input type="text" placeholder="SIN_Number" class="input fl" name="certificate" size="30" validate="maxlength:50,required:true" value="{pigcms{$img.certificate}" /-->
+                    <div style="display:inline-block;" id="J_selectImage_2">
+                        <div class="btn btn-sm btn-success" style="position:relative;height:50px;line-height: 50px;text-align: left;">
+                            {pigcms{:L('_ND_UPLOAD3_')}
+                        </div>
+                    </div>
+                    <if condition="$img['certificate'] eq ''">
+                        <div class="img_2">
+
+                        </div>
+                        <else />
+                        <div class="img_2" style="height: 100px">
+                            <img src="{pigcms{:C('config.site_url')}{pigcms{$img['certificate']}" height="100"/>
+                        </div>
+                    </if>
                 </td>
             </tr>
             </if>
@@ -131,6 +197,9 @@
 		</table>
         <input type="hidden" name="city_id" id="city_id" value="{pigcms{$now_user['city_id']}">
         <input type="hidden" name="province_id" id="province_id" value="{pigcms{$now_user['province_id']}">
+        <input type="hidden" name="driver_license" id="filename_0" value="{pigcms{$img['driver_license']}">
+        <input type="hidden" name="insurance" id="filename_1" value="{pigcms{$img['insurance']}">
+        <input type="hidden" name="certificate" id="filename_2" value="{pigcms{$img['certificate']}">
 		<div class="btn hidden">
 			<input type="submit" name="dosubmit" id="dosubmit" value="{pigcms{:L('_BACK_SUBMIT_')}" class="button" />
 			<input type="reset" value="{pigcms{:L('_BACK_CANCEL_')}" class="button" />
@@ -159,8 +228,89 @@
 	</script>
 
 	<script type="text/javascript" src="{pigcms{$static_path}js/map.js"></script-->
+<script type="text/javascript" src="{pigcms{$static_public}js/webuploader.min.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKlguA2QFIUVwWTo3danbOqSKv3nYbBCg&libraries=places&language=en"></script>
 <script>
+    var  uploader = WebUploader.create({
+        auto: true,
+        swf: '{pigcms{$static_public}js/Uploader.swf',
+        server: "{pigcms{:U('Deliver/ajax_upload')}&uid={pigcms{$now_user.uid}",
+        accept: {
+            title: 'Images',
+            extensions: 'gif,jpg,jpeg,png',
+            mimeTypes: 'image/gif,image/jpeg,image/jpg,image/png'
+        }
+    });
+    uploader.addButton({
+        id:'#J_selectImage_0',
+        name:'image_0',
+        multiple:false
+    });
+    uploader.addButton({
+        id:'#J_selectImage_1',
+        name:'image_1',
+        multiple:false
+    });
+    uploader.addButton({
+        id:'#J_selectImage_2',
+        name:'image_2',
+        multiple:false
+    });
+    uploader.on('fileQueued',function(file){
+        if($('.upload_pic_li').size() >= 5){
+            uploader.cancelFile(file);
+            alert('最多上传5个图片！');
+            return false;
+        }
+    });
+    uploader.on('uploadSuccess',function(file,response){
+        if(response.error == 0){
+            var fid = file.source.ruid;
+            var ruid = fid.split('_');
+            var img = findImg(ruid[1],response.file);
+            img.html('<img src="'+response.url+'"/>');
+            img.css("height","100px");
+        }else{
+            alert(response.info);
+        }
+    });
+
+    uploader.on('uploadError', function(file,reason){
+        $('.loading'+file.id).remove();
+        alert('上传失败！请重试。');
+    });
+
+    function findImg(fid,file) {
+        var img = '';
+        var all = 3;
+        var curr = 0;
+        var is_addcss = false;
+        for(var i=0;i<all;i++) {
+            $('#J_selectImage_' + i).children('div').each(function () {
+                if (typeof($(this).attr('id')) != 'undefined') {
+                    if(is_addcss && i > curr){
+                        var top = parseInt($(this).css("top"));
+                        $(this).css("top",top+100+"px");
+                    }
+                    var arr = $(this).attr('id').split('_');
+                    if (arr[2] == fid) {
+                        curr = i;
+                        img = $('.img_' + i);
+                        if($.trim(img.html()) == ''){
+                            is_addcss = true;
+                        }else{
+                            is_addcss = false;
+                        }
+
+                        $('#filename_'+i).val(file);
+                    }
+                }
+            });
+        }
+
+        return img;
+    }
+
     $('img').click(function () {
         //alert($(this).attr('src'));
         window.top.artiframe($(this).attr('src'),'查看',600,500,true,false,false);

@@ -14,14 +14,14 @@
 	<script type="text/javascript" src="{pigcms{$static_path}layer/layer.m.js" charset="utf-8"></script>
 
     <style>
-        .tip_s{width: 32%; height: 40px; border: 1px #999999 solid;line-height: 40px;text-align: center;font-size: 16px;display:-moz-inline-box;display:inline-block;cursor: pointer}
+        .tip_s{width: 30%; height: 40px; border: 1px #999999 solid;line-height: 40px;text-align: center;font-size: 16px;display:-moz-inline-box;display:inline-block;cursor: pointer}
         .tip_on{background-color: #ffa52d;color: #ffffff;border-color:#ffa52d }
-        input{border: 1px #333333 solid;}
+        input{border: 1px #999999 solid;width: 50%;}
         .robbed{
             padding: 5px 10px;
             background:#fff;
-            font-size: 10px;
-            color:#999999;
+            font-size: 14px;
+            color:#333333;
             width: 100%;
             border: 0;
         }
@@ -29,6 +29,11 @@
             padding: 2px 10px;
             border-bottom: #e7e7e7 1px dashed;
             position: relative;
+        }
+        .sign_bottom a.service{
+            background-color: #ffa52d;
+            box-shadow: none;
+            border-radius: 5px;
         }
     </style>
 </head>
@@ -60,7 +65,7 @@
                 </p>
 			</div>
             <div id="tip_label" class="normal-fieldset" style="height: 100%;margin-bottom: 20px;">
-                <h4 style="margin: .3rem .2rem .2rem;">{pigcms{:L('_TIP_TXT_')}</h4>
+                <h4 style="margin: .8rem .2rem;">1. {pigcms{:L('_ND_TIP_')}</h4>
                 <dl class="list">
                     <dd class="dd-padding">
                         <div id="tip_list" style="margin: auto;width: 98%">
@@ -75,17 +80,22 @@
                             </span>
                         </div>
                         <div style="margin: 20px auto 5px;width: 98%">
-                            {pigcms{:L('_SELF_ENTER_TIP_')}: $ <input type="text" id="tip_fee" name="tip_fee" size="20" style="height: 25px;">
+                            Input: $ <input type="text" id="tip_fee" name="tip_fee" size="20" style="height: 25px;">
                         </div>
-                        <div style="margin: 20px auto 5px;width: 98%;font-size: 16px;">
-                            <span>{pigcms{:L('_TIP_TXT_')}:</span><span id="tip_num">$0</span>
-                            <span style="color: #ff0000;">{pigcms{:L('_B_PURE_MY_70_')}:</span><span id="add_tip">$0</span>
+                        <div style="margin: 20px auto 5px;width: 98%;">
+                            <div style="margin-bottom: 5px;"><span>{pigcms{:L('_ND_TIP_')}:</span><span id="tip_num">$0</span></div>
+                            <span>{pigcms{:L('_B_PURE_MY_70_')}:</span><span id="add_tip">$0</span>
                         </div>
                     </dd>
                 </dl>
             </div>
-            <div id="credit" class="normal-fieldset" style="width: 90%;margin-bottom:120px;margin-left: 10px;border-top: 1px #333333 solid;" >
-                <h4 style="margin: .3rem .2rem .2rem;">{pigcms{:L('_CREDIT_CARD_')}</h4>
+            <div id="credit" class="normal-fieldset" style="margin-bottom:120px;margin-left: 10px;border-top: 1px #333333 dashed;" >
+                <h4 style="margin: .8rem 0;">
+                    2. Payment
+                </h4>
+                <div style="margin-bottom: 10px">
+                    Thank you for using Tutti! Your payment information are processed securely.
+                </div>
                 <dl class="list">
                     <dd class="dd-padding">
                         <div style="line-height: 20px;float:left;width: 100%;margin-bottom: 5px;">
@@ -292,6 +302,5 @@ function updatePosition(lat,lng){
     return message;
 }
 </script>
-<include file="menu"/>
 </body>
 </html>

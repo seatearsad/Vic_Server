@@ -1396,6 +1396,12 @@ class DeliverAction extends BaseAction {
                     D('Deliver_img')->where(array('uid' => $uid))->save($data_img);
                 }
             }
+
+            $data_img['driver_license'] = $_POST['driver_license'];
+            $data_img['insurance'] = $_POST['insurance'];
+            $data_img['certificate'] = $_POST['certificate'];
+            D('Deliver_img')->where(array('uid' => $uid))->save($data_img);
+
             D('deliver_user')->where(array('uid' => $uid))->save($data);
 
             if ($deliver['reg_status'] == 4){
@@ -1632,5 +1638,33 @@ class DeliverAction extends BaseAction {
 
     public function doc(){
 
+    }
+
+    public function ajax_upload()
+    {
+        if ($_FILES['file']['error'] != 4) {
+            $uid = $_GET['uid'];
+            $width = '900,450';
+            $height = '500,250';
+            $param = array('size' => $this->config['group_pic_size']);
+            $param['thumb'] = true;
+            $param['imageClassPath'] = 'ORG.Util.Image';
+            $param['thumbPrefix'] = 'm_,s_';
+            $param['thumbMaxWidth'] = $width;
+            $param['thumbMaxHeight'] = $height;
+            $param['thumbRemoveOrigin'] = false;
+            $image = D('Image')->handle($uid, 'deliver', 1, $param,false);
+            if ($image['error']) {
+                exit(json_encode(array('error' => 1,'message' =>$image['msg'])));
+            } else {
+                $title = $image['title']['file'];
+                $goods_image_class = new goods_image();
+                $url = $goods_image_class->get_delver_image_by_path($title, 's');
+                $file = $image['url']['file'];
+                exit(json_encode(array('error' => 0, 'url' => $url, 'title' => $title,'file'=>$file)));
+            }
+        } else {
+            exit(json_encode(array('error' => 1,'message' =>'没有选择图片')));
+        }
     }
 }
