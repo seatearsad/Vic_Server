@@ -319,10 +319,32 @@
     $('input:radio[name=review]').click(function () {
         if($(this).val() == 0){//未通过
             $('#review_desc').show();
+            cancel_req();
         }else{
             $('#review_desc').hide();
+            set_req();
         }
     });
+
+    function cancel_req(){
+        $('body').find('input').each(function () {
+            $(this).validate({
+                required:false
+            });
+        });
+        $("#myform").validate().resetForm();
+    }
+
+    function set_req(){
+        $('body').find('input').each(function () {
+            if($(this).attr('type') == 'text'){
+                $(this).validate({
+                    required:true
+                });
+            }
+        });
+        $("#myform").validate().resetForm();
+    }
 
     $('#adress').focus(function () {
         initAutocomplete();

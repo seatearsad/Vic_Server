@@ -73,14 +73,18 @@
                                             </if>
 
                                             <if condition="$vo['reg_status'] eq 4 or $vo['reg_status'] eq 5">
-                                                <if condition="$vo['group'] eq 0">
-                                                    <font color="red">等待审核</font>
-                                                </if>
-                                                <if condition="$vo['group'] eq -1">
-                                                    <font color="red">未通过审核</font>
-                                                </if>
-                                                <if condition="$vo['group'] eq 1">
-                                                    <font color="green">通过审核</font>
+                                                <if condition="$vo['is_upload'] eq 0">
+                                                    <font color="red">未完成填写</font>
+                                                <else />
+                                                    <if condition="$vo['group'] eq 0">
+                                                        <font color="red">等待审核</font>
+                                                    </if>
+                                                    <if condition="$vo['group'] eq -1">
+                                                        <font color="red">未通过审核</font>
+                                                    </if>
+                                                    <if condition="$vo['group'] eq 1">
+                                                        <font color="green">通过审核</font>
+                                                    </if>
                                                 </if>
                                             </if>
                                         </td>

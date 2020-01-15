@@ -214,7 +214,7 @@
                     Approved
                 <else />
                     <if condition="$deliver_img['insurance'] eq ''">
-                        Please Update <lable class="nver"></lable>
+                        Please Update
                     <else />
                         Waiting for Approval
                     </if>

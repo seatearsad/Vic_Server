@@ -140,7 +140,7 @@
         <div class="details_list">
             <!--p class="c9 f14">{pigcms{:L('_B_PURE_MY_69_')}：{pigcms{$order['num']}</p-->
             <!--p class="c9 f14">{pigcms{:L('_B_PURE_MY_70_')}：{pigcms{$order['subtotal_price']|floatval}</p-->
-            <p class="f16 red">{pigcms{:L('_ND_DUEONDELIVERY_')}：${pigcms{$order['deliver_cash']|floatval}</p>
+            <p class="f16 red">{pigcms{:L('_ND_DUEONDELIVERY_')}：${pigcms{$supply['deliver_cash']|floatval}</p>
             <!--p class="f14 bur">{pigcms{:L('_PAYMENT_MODE_')}： {pigcms{$order['pay_type_name']} ({pigcms{$order['pay_type']})</p-->
         </div>
     </section>
@@ -255,9 +255,9 @@
         <div>{pigcms{:L('_ND_PICKUPNOTICE_')}</div>
     	<a href="javascript:void(0);" data-id="{pigcms{$supply['supply_id']}" data-status="{pigcms{$supply['status']}" data-url="{pigcms{:U('Deliver/pick')}">{pigcms{:L('_ND_PICKEDUP_')}</a>
     	<elseif condition="$supply['status'] eq 3" />
-    	<a href="javascript:void(0);" data-id="{pigcms{$supply['supply_id']}" data-status="{pigcms{$supply['status']}" data-url="{pigcms{:U('Deliver/send')}">{pigcms{:L('_DELI_TXT_')}</a>
+    	<a href="javascript:void(0);" data-id="{pigcms{$supply['supply_id']}" data-status="{pigcms{$supply['status']}" data-url="{pigcms{:U('Deliver/send')}" style="background-color: #f48383;box-shadow: none;">{pigcms{:L('_DELI_TXT_')}</a>
     	<elseif condition="$supply['status'] eq 4" />
-    	<a href="javascript:void(0);" data-id="{pigcms{$supply['supply_id']}" data-status="{pigcms{$supply['status']}" data-url="{pigcms{:U('Deliver/my')}">{pigcms{:L('_ARRIVAL_TXT_')}</a>
+    	<a href="javascript:void(0);" data-id="{pigcms{$supply['supply_id']}" data-status="{pigcms{$supply['status']}" data-url="{pigcms{:U('Deliver/my')}" style="background-color: #38b6ff;box-shadow: none;">{pigcms{:L('_ARRIVAL_TXT_')}</a>
     	<elseif condition="$supply['status'] eq 5" />
 
     	</if>
@@ -363,10 +363,20 @@ $(document).ready(function(){
                                 location.reload();
                             }
                         });
-                    }else
-                        layer.open({title:['{pigcms{:L("_ND_TISHI_")}','background-color:#ffa52d;color:#fff;'], time: 2, content: json.info,end:function () {
-                            location.reload();
-                        }});
+                    }else {
+                        if(status == 2){
+                            location.href = "{pigcms{:U('Deliver/process')}";
+                        }else {
+                            layer.open({
+                                title: ['{pigcms{:L("_ND_TISHI_")}', 'background-color:#ffa52d;color:#fff;'],
+                                time: 2,
+                                content: json.info,
+                                end: function () {
+                                    location.reload();
+                                }
+                            });
+                        }
+                    }
 				} else {
 					layer.open({title:['{pigcms{:L("_ND_TISHI_")}','background-color:#FF658E;color:#fff;'], content:json.info, btn: ['{pigcms{:L("_ND_CONFIRM1_")}'], end:function(){}});
 				}

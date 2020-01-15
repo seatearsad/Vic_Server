@@ -50,19 +50,27 @@ $(function(){
 	});
 	
 	//我的图标
+    var use_icon = {
+        url: "{pigcms{$static_path}images/map/use_icon.png", // url
+        scaledSize: new google.maps.Size(50, 50), // scaled size
+    };
 	var marker = new google.maps.Marker({
 		position: {lng: {pigcms{$supply['aim_lnt']}, lat: {pigcms{$supply['aim_lat']}},
         map: map,
         title:"{pigcms{:L('_ND_DESTINATION_')}",
-        icon:"{pigcms{$static_path}images/map/use_icon.png"
+        icon:use_icon
     });
 
     //店铺图标
+    var store_icon = {
+        url: "{pigcms{$static_path}images/map/store_icon.png", // url
+        scaledSize: new google.maps.Size(50, 50), // scaled size
+    };
     var marker2 = new google.maps.Marker({
 		position: {lng: {pigcms{$supply['from_lnt']}, lat: {pigcms{$supply['from_lat']}},
         map: map,
         title:"{pigcms{:L('_ND_PICKUPPOINT_')}",
-        icon:"{pigcms{$static_path}images/map/store_icon.png"
+        icon:store_icon
     });
 
     //配送员位置

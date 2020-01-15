@@ -586,7 +586,7 @@ class DeliverAction extends BaseAction
 			exit(json_encode(array('err_code' => false, 'list' => $list)));
 		}
 		
-		$this->display();
+		//$this->display();
 	}
 
 	public function process(){

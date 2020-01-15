@@ -1356,14 +1356,19 @@ class DeliverAction extends BaseAction {
         $user_list = $this->deliver_user->field(true)->where($condition_user)->order('`last_time` DESC')->limit($p->firstRow . ',' . $p->listRows)->select();
         foreach ($user_list as &$v){
             $is_online = 0;
+            $is_upload = 0;
             if($v['reg_status'] == 4){
                 $deliver_img = D('Deliver_img')->field(true)->where(array('uid' => $v['uid']))->find();
                 if($deliver_img['card_num'] != '' && $deliver_img['txnNumber'] != ''){
                     $is_online = 1;
                 }
+                if($deliver_img['driver_license'] != '' && $deliver_img['insurance'] != '' && $deliver_img['certificate'] != '' && $deliver_img['sin_num'] != ''){
+                    $is_upload = 1;
+                }
             }
 
             $v['is_online_pay'] = $is_online;
+            $v['is_upload'] = $is_upload;
         }
         $this->assign('user_list', $user_list);
         $pagebar = $p->show();
@@ -1382,7 +1387,7 @@ class DeliverAction extends BaseAction {
                 $sms_data['uid'] = $uid;
                 $sms_data['mobile'] = $deliver['phone'];
                 $sms_data['sendto'] = 'deliver';
-                $sms_data['tplid'] = 275882;
+                $sms_data['tplid'] = 522180;
                 $sms_data['params'] = [];
                 Sms::sendSms2($sms_data);
                 if($deliver['reg_status'] == 5){

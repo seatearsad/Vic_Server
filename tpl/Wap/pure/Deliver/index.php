@@ -225,7 +225,7 @@
 		<div class="clerk_end">
 			<ul class="clr">
 				<li class="grab fl">
-					<a href="{pigcms{:U('Deliver/grab')}">
+					<a href="{pigcms{:U('Deliver/index')}">
 						<i></i>
 						<h2 id="gray_count">0</h2>
 						<p>{pigcms{:L('_ND_PENDINGORDERS_')}</p>
@@ -249,12 +249,10 @@
                     Please go to "My Account" to complete all required information and documents in order to accept orders.
                     <a href="{pigcms{:U('Deliver/account')}">
                     <div style="background-color: #ffa52d;color: white;line-height: 30px;width: 80%;margin: 10px auto;border-radius: 5px;">
-                        {pigcms{:L('_ND_MYACCOUNT_”')}
+                        {pigcms{:L('_ND_MYACCOUNT_')}
                     </div>
                     </a>
                 </div>
-
-
             </div>
         </div>
     </div>
