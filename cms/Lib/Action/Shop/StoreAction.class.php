@@ -1,62 +1,62 @@
 <?php
 class StoreAction extends BaseAction
 {
-	public function index()
-	{
-		$this->select_address();
-		$return['category_list'] = D('Shop_category')->lists(true);
-		//modify garfunkel
-        foreach ($return['category_list'] as $k => $v){
-            $return['category_list'][$k]['cat_name'] = lang_substr($v['cat_name'],C('DEFAULT_LANG'));
-            foreach ($v['son_list'] as $kk => $vv){
-                $return['category_list'][$k]['son_list'][$kk]['cat_name'] = lang_substr($vv['cat_name'],C('DEFAULT_LANG'));
-            }
-        }
-
-		$cat_url = isset($_GET['cat_url']) ? $_GET['cat_url'] : 'all';
-		$sort_url = isset($_GET['sort_url']) ? $_GET['sort_url'] : 'juli';
-		$type_url = isset($_GET['type_url']) ? intval($_GET['type_url']) : '-1';
-		
-		$cat_fid = $cat_id = 0;
-		if ($cat_url != 'all') {
-			$now_category = D('Shop_category')->get_category_by_catUrl($cat_url);
-			if ($now_category) {
-				if ($now_category['cat_fid']) {
-					$cat_id = $now_category['cat_id'];
-					$cat_fid = $now_category['cat_fid'];
-				} else {
-					$cat_id = 0;
-					$cat_fid = $now_category['cat_id'];
-				}
-			}
-		}
-		$return['type_url'] = $type_url;
-		$return['sort_url'] = $sort_url;
-		$return['cat_url'] = $cat_url;
-		$return['keyword'] = '';
-		$return['cat_fid'] = $cat_fid;
-		$return['cat_id'] = $cat_id;
-
-        $lat = $_COOKIE['shop_select_lat'] ? $_COOKIE['shop_select_lat'] : 0;
-        $long = $_COOKIE['shop_select_lng'] ? $_COOKIE['shop_select_lng'] : 0;
-		$where = array('deliver_type_pc' => $type_url, 'order' => $sort_url, 'lat' => $lat, 'long' => $long, 'cat_id' => $cat_id, 'cat_fid' => $cat_fid, 'page' => 1);
-// 		$key && $where['key'] = $key;
-		$lists = D('Merchant_store_shop')->get_list_by_option($where, 2);
-		
-		$result = $this->format_store_data($lists,$lat,$long);
-		
-		$return['store_list'] = $result;
-		$return['keyword'] = '';
-		$return['total'] = $lists['total'];
-		$return['store_count'] = count($result);
-		$return['next_page'] = $lists['next_page'];
-
-        $index_top_adver = D('Adver')->get_adver_by_key('index_top');
-        $this->assign('index_top_adver',$index_top_adver);
-		
-		$this->assign($return);
-		$this->display();
-	}
+//	public function index()
+//	{
+//		$this->select_address();
+//		$return['category_list'] = D('Shop_category')->lists(true);
+//		//modify garfunkel
+//        foreach ($return['category_list'] as $k => $v){
+//            $return['category_list'][$k]['cat_name'] = lang_substr($v['cat_name'],C('DEFAULT_LANG'));
+//            foreach ($v['son_list'] as $kk => $vv){
+//                $return['category_list'][$k]['son_list'][$kk]['cat_name'] = lang_substr($vv['cat_name'],C('DEFAULT_LANG'));
+//            }
+//        }
+//
+//		$cat_url = isset($_GET['cat_url']) ? $_GET['cat_url'] : 'all';
+//		$sort_url = isset($_GET['sort_url']) ? $_GET['sort_url'] : 'juli';
+//		$type_url = isset($_GET['type_url']) ? intval($_GET['type_url']) : '-1';
+//
+//		$cat_fid = $cat_id = 0;
+//		if ($cat_url != 'all') {
+//			$now_category = D('Shop_category')->get_category_by_catUrl($cat_url);
+//			if ($now_category) {
+//				if ($now_category['cat_fid']) {
+//					$cat_id = $now_category['cat_id'];
+//					$cat_fid = $now_category['cat_fid'];
+//				} else {
+//					$cat_id = 0;
+//					$cat_fid = $now_category['cat_id'];
+//				}
+//			}
+//		}
+//		$return['type_url'] = $type_url;
+//		$return['sort_url'] = $sort_url;
+//		$return['cat_url'] = $cat_url;
+//		$return['keyword'] = '';
+//		$return['cat_fid'] = $cat_fid;
+//		$return['cat_id'] = $cat_id;
+//
+//        $lat = $_COOKIE['shop_select_lat'] ? $_COOKIE['shop_select_lat'] : 0;
+//        $long = $_COOKIE['shop_select_lng'] ? $_COOKIE['shop_select_lng'] : 0;
+//		$where = array('deliver_type_pc' => $type_url, 'order' => $sort_url, 'lat' => $lat, 'long' => $long, 'cat_id' => $cat_id, 'cat_fid' => $cat_fid, 'page' => 1);
+//// 		$key && $where['key'] = $key;
+//		$lists = D('Merchant_store_shop')->get_list_by_option($where, 2);
+//
+//		$result = $this->format_store_data($lists,$lat,$long);
+//
+//		$return['store_list'] = $result;
+//		$return['keyword'] = '';
+//		$return['total'] = $lists['total'];
+//		$return['store_count'] = count($result);
+//		$return['next_page'] = $lists['next_page'];
+//
+//        $index_top_adver = D('Adver')->get_adver_by_key('index_top');
+//        $this->assign('index_top_adver',$index_top_adver);
+//
+//		$this->assign($return);
+//		$this->display();
+//	}
 	
 	
 	private function format_store_data($lists,$lat=0,$long=0)

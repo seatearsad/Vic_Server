@@ -97,7 +97,6 @@
 							</volist>
 						</ul>
 					</nav>
-					<a target="_blank" href="{pigcms{$config.site_url}/topic/weixin.html" class="nav-inner__side"></a>
 				</div>
 			</div>
 		</header>

@@ -541,63 +541,63 @@ class ClassifyAction extends BaseAction {
 
     /*     * **展示页面*** */
 
-    public function ShowDetail() {
-        $vid = intval($_GET['vid']);
-        $vid = $vid > 0 ? $vid : 0;
-        $content = false;
-        if ($vid > 0) {
-            $database_classify_usercollect = D('Classify_usercollect');
-            $classify_usercollect_info = $database_classify_usercollect->where(array('vid'=>$vid,'uid'=>$this->user_session['uid']))->find();
-            if(!empty($classify_usercollect_info)){
-                $this->assign('classify_usercollect_info' , $classify_usercollect_info);
-            }
-
-            M('Classify_userinput')->where(array('id' => $vid, 'status' => 1))->setInc('views');
-            $tmpdata = M('Classify_userinput')->field(true)->where(array('id' => $vid, 'status' => 1))->find();
-            if (!empty($tmpdata)) {
-                $content = !empty($tmpdata['content']) ? unserialize($tmpdata['content']) : false;
-                $imgarr = !empty($tmpdata['imgs']) ? unserialize($tmpdata['imgs']) : false;
-                $tmpdata['updatetime'] = date('Y-m-d H:i', $tmpdata['updatetime']);
-                $category = D('Classify_category');
-                $mycategory = $category->field('cid,fcid,pfcid,subdir,cat_name')->where(array('cid' => $tmpdata['cid']))->find();
-                $tmpdata['cat_name'] = $mycategory['cat_name'];
-                unset($f_category, $mycategory);
-                $tmpdata['s_c'] = array();
-                if ($tmpdata['sub3dir'] > 0) {
-                    $tmpdata['s_c'] = $category->field('cid,fcid,pfcid,subdir,cat_name')->where(array('cid' => $tmpdata['sub3dir']))->find();
-                }
-                foreach($imgarr as &$v){
-                    $v=$this->config['site_url'].$v;
-                }
-                $tmpdata['description'] = htmlspecialchars_decode($tmpdata['description'], ENT_QUOTES);
-                $tmpdata['otherdesc'] = !empty($tmpdata['otherdesc']) ? htmlspecialchars_decode($tmpdata['otherdesc'], ENT_QUOTES) :'';
-                $this->assign('detail', $tmpdata);
-                $this->assign('content', $content);
-                $this->assign('imglist', $imgarr);
-                $this->assign('vid', $vid);
-                $this->assign('client_ip', get_client_ip());
-
-
-                $database_classify_order = D('Classify_order');
-                $classify_order_where['paid'] = 1;
-                $classify_order_where['classify_userinput_id'] = $_GET['vid'] + 0;
-                $classify_order_info = $database_classify_order->where($classify_order_where)->find();
-						
-				$user = D('User')->field(true)->where(array('uid' => $tmpdata['uid']))->find();			
-				if($_SESSION['openid'] && $user['openid']){
-					$key = $this->get_encrypt_key(array('app_id'=>$this->config['im_appid'],'openid' => $_SESSION['openid']), $this->config['im_appkey']);
-					$im_url = ($this->config['im_url'] ? $this->config['im_url'] : 'http://im-link.weihubao.com').'/?app_id=' . $this->config['im_appid'] . '&openid=' . $_SESSION['openid'] . '&key=' . $key;
-					$this->assign('im_url', $im_url . '#group_' . $user['openid']);
-				}
-				
-                $this->assign('classify_order_info', $classify_order_info);
-                $this->display();
-                exit();
-            }
-        }
-        $this->redirect(U('Classify/index'));
-        exit();
-    }
+//    public function ShowDetail() {
+//        $vid = intval($_GET['vid']);
+//        $vid = $vid > 0 ? $vid : 0;
+//        $content = false;
+//        if ($vid > 0) {
+//            $database_classify_usercollect = D('Classify_usercollect');
+//            $classify_usercollect_info = $database_classify_usercollect->where(array('vid'=>$vid,'uid'=>$this->user_session['uid']))->find();
+//            if(!empty($classify_usercollect_info)){
+//                $this->assign('classify_usercollect_info' , $classify_usercollect_info);
+//            }
+//
+//            M('Classify_userinput')->where(array('id' => $vid, 'status' => 1))->setInc('views');
+//            $tmpdata = M('Classify_userinput')->field(true)->where(array('id' => $vid, 'status' => 1))->find();
+//            if (!empty($tmpdata)) {
+//                $content = !empty($tmpdata['content']) ? unserialize($tmpdata['content']) : false;
+//                $imgarr = !empty($tmpdata['imgs']) ? unserialize($tmpdata['imgs']) : false;
+//                $tmpdata['updatetime'] = date('Y-m-d H:i', $tmpdata['updatetime']);
+//                $category = D('Classify_category');
+//                $mycategory = $category->field('cid,fcid,pfcid,subdir,cat_name')->where(array('cid' => $tmpdata['cid']))->find();
+//                $tmpdata['cat_name'] = $mycategory['cat_name'];
+//                unset($f_category, $mycategory);
+//                $tmpdata['s_c'] = array();
+//                if ($tmpdata['sub3dir'] > 0) {
+//                    $tmpdata['s_c'] = $category->field('cid,fcid,pfcid,subdir,cat_name')->where(array('cid' => $tmpdata['sub3dir']))->find();
+//                }
+//                foreach($imgarr as &$v){
+//                    $v=$this->config['site_url'].$v;
+//                }
+//                $tmpdata['description'] = htmlspecialchars_decode($tmpdata['description'], ENT_QUOTES);
+//                $tmpdata['otherdesc'] = !empty($tmpdata['otherdesc']) ? htmlspecialchars_decode($tmpdata['otherdesc'], ENT_QUOTES) :'';
+//                $this->assign('detail', $tmpdata);
+//                $this->assign('content', $content);
+//                $this->assign('imglist', $imgarr);
+//                $this->assign('vid', $vid);
+//                $this->assign('client_ip', get_client_ip());
+//
+//
+//                $database_classify_order = D('Classify_order');
+//                $classify_order_where['paid'] = 1;
+//                $classify_order_where['classify_userinput_id'] = $_GET['vid'] + 0;
+//                $classify_order_info = $database_classify_order->where($classify_order_where)->find();
+//
+//				$user = D('User')->field(true)->where(array('uid' => $tmpdata['uid']))->find();
+//				if($_SESSION['openid'] && $user['openid']){
+//					$key = $this->get_encrypt_key(array('app_id'=>$this->config['im_appid'],'openid' => $_SESSION['openid']), $this->config['im_appkey']);
+//					$im_url = ($this->config['im_url'] ? $this->config['im_url'] : 'http://im-link.weihubao.com').'/?app_id=' . $this->config['im_appid'] . '&openid=' . $_SESSION['openid'] . '&key=' . $key;
+//					$this->assign('im_url', $im_url . '#group_' . $user['openid']);
+//				}
+//
+//                $this->assign('classify_order_info', $classify_order_info);
+//                $this->display();
+//                exit();
+//            }
+//        }
+//        $this->redirect(U('Classify/index'));
+//        exit();
+//    }
 
     /*     * **更新浏览量*** */
 

@@ -86,6 +86,7 @@ function getList() {
 	$.get(location_url, {'lat':lat, 'lng':lng}, function(result){
 		if (result.err_code) {
 			$('.psnone').show();
+            $('#container').html('<p style="text-align: center;width: 90%;margin: auto;">All orders are taken by other couriers. Please wait for the next available order.</p>');
 			return false;
 		}
 		$('.psnone').hide();

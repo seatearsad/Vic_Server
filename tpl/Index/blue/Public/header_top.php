@@ -17,11 +17,6 @@
 					<a class="user-info__logout" href="{pigcms{:UU('Index/Login/logout')}">{pigcms{:L('_LOGOUT_TXT_')}</a>
 				</p>
 			</if>
-			<div class="span">|</div>
-			<div class="weixin cf">
-				<div class="weixin_txt"><a href="{pigcms{$config.config_site_url}/topic/weixin.html" target="_blank"> {pigcms{:L('_WECHAT_EDITION_')} </a></div>
-				<div class="weixin_icon"><p><span>|</span><a href="{pigcms{$config.config_site_url}/topic/weixin.html" target="_blank">{pigcms{:L('_GO_TO_WECHAT_')}</a></p><img src="{pigcms{$config.wechat_qrcode}"/></div>
-			</div>
             <div class="span">|</div>
             <div class="lang_txt">{pigcms{:L('_LANG_TXT_')} : </div>
             <div class="lang_div">
@@ -84,22 +79,6 @@
 			</a>
 			<div></div>
 		</div>
-		<!--div class="search">
-			<form action="{pigcms{:U('Group/Search/index')}" method="post" group_action="{pigcms{:U('Group/Search/index')}" meal_action="{pigcms{:U('Meal/Search/index')}">
-				<div class="form_sec">
-					<div class="form_sec_txt group">{pigcms{:L('_LUNCH_TXT_')}</div>
-					<div class="form_sec_txt1 meal">{pigcms{:L('_OUT_TXT_')}</div>
-				</div>
-				<input name="w" class="input" type="text" placeholder="{pigcms{:L('_INPUT_PRODUCT_OR_NAME_')}"/>
-				<button value="" class="btnclick"><img src="{pigcms{$static_path}images/o2o1_20.png" /></button>
-			</form>
-			<div class="search_txt">
-				<volist name="search_hot_list" id="vo">
-					<a href="{pigcms{$vo.url}"><span>{pigcms{$vo.name}</span></a>
-				</volist>
-			</div>
-		</div-->
-		
     </div>
     <script src="{pigcms{$static_public}js/lang.js"></script>
 </header>

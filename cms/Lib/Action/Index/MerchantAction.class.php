@@ -101,58 +101,58 @@ class MerchantAction extends BaseAction {
         $this->assign('isindex', $isindex);
     }
 
-    public function index() {
-        /*         * **粉丝*** */
-        $table = array(C('DB_PREFIX') . 'merchant_user_relation' => 'm', C('DB_PREFIX') . 'user' => 'u');
-        $condition = "`m`.`openid`=`u`.`openid` AND `m`.`mer_id`='$this->merid'";
-        $fans_count = D('')->table($table)->where($condition)->count();
-        $this->assign('fans_count', $fans_count);
-        $fans_list = D('')->table($table)->where($condition)->order('u.uid DESC')->limit('0,12')->select();
-        $this->assign('fans_list', $fans_list);
-        /*         * *商家相册10张图*** */
-        $merchant_imgDb = D('Merchant_imgs');
-        $imgs = $merchant_imgDb->where(array('mer_id' => $this->merid))->order('id DESC')->limit('0,10')->select();
-        $this->assign('mimgs', $imgs);
-		$collecttmp=D('User_collect')->where(array('id'=>$this->merid,'uid'=>$this->uid,'type'=>'merchant_id'))->find();
-        //商家动态
-        $introduce = D('Merchant_introduce')->field('id,mer_id,title,sort,cyid,addtime')->where(array('mer_id' => $this->merid, 'isfabu' => 1, 'comefrom' => '1'))->order('sort DESC,id DESC')->limit('0,5')->select();
-        $this->assign('introduce', $introduce);
-		$this->assign('collectid', !empty($collecttmp) ? $collecttmp['collect_id']:0);
-		
-		$mer_front_center = D('Adver')->get_adver_by_key('mer_front_center', 5);
-		$this->merreviews(5);
-        $this->assign('mer_front_center', $mer_front_center);
-		
-        $this->display();
-    }
+//    public function index() {
+//        /*         * **粉丝*** */
+//        $table = array(C('DB_PREFIX') . 'merchant_user_relation' => 'm', C('DB_PREFIX') . 'user' => 'u');
+//        $condition = "`m`.`openid`=`u`.`openid` AND `m`.`mer_id`='$this->merid'";
+//        $fans_count = D('')->table($table)->where($condition)->count();
+//        $this->assign('fans_count', $fans_count);
+//        $fans_list = D('')->table($table)->where($condition)->order('u.uid DESC')->limit('0,12')->select();
+//        $this->assign('fans_list', $fans_list);
+//        /*         * *商家相册10张图*** */
+//        $merchant_imgDb = D('Merchant_imgs');
+//        $imgs = $merchant_imgDb->where(array('mer_id' => $this->merid))->order('id DESC')->limit('0,10')->select();
+//        $this->assign('mimgs', $imgs);
+//		$collecttmp=D('User_collect')->where(array('id'=>$this->merid,'uid'=>$this->uid,'type'=>'merchant_id'))->find();
+//        //商家动态
+//        $introduce = D('Merchant_introduce')->field('id,mer_id,title,sort,cyid,addtime')->where(array('mer_id' => $this->merid, 'isfabu' => 1, 'comefrom' => '1'))->order('sort DESC,id DESC')->limit('0,5')->select();
+//        $this->assign('introduce', $introduce);
+//		$this->assign('collectid', !empty($collecttmp) ? $collecttmp['collect_id']:0);
+//
+//		$mer_front_center = D('Adver')->get_adver_by_key('mer_front_center', 5);
+//		$this->merreviews(5);
+//        $this->assign('mer_front_center', $mer_front_center);
+//
+//        $this->display();
+//    }
 
-    public function merintroduce() {
-        $merchant_inDb = D('Merchant_introduce');
-        $introduce = $merchant_inDb->where(array('mer_id' => $this->merid, 'isfabu' => 1, 'comefrom' => '0'))->order('sort DESC,id ASC')->limit('0,10')->select();
-        //print_r($introduce);
-        $this->assign('introduce', $introduce);
-        $this->display();
-    }
+//    public function merintroduce() {
+//        $merchant_inDb = D('Merchant_introduce');
+//        $introduce = $merchant_inDb->where(array('mer_id' => $this->merid, 'isfabu' => 1, 'comefrom' => '0'))->order('sort DESC,id ASC')->limit('0,10')->select();
+//        //print_r($introduce);
+//        $this->assign('introduce', $introduce);
+//        $this->display();
+//    }
 
-    public function mernews() {
-        $cyid = isset($_GET['cyid']) ? intval($_GET['cyid']) : 0;
-        $merchant_inDb = D('Merchant_introduce');
-        $where = array('mer_id' => $this->merid, 'isfabu' => 1, 'comefrom' => '1');
-        if ($cyid > 0)
-            $where['cyid'] = $cyid;
-        $_count = $merchant_inDb->where($where)->count();
-        import('@.ORG.common_page');
-        $p = new Page($_count, 20);
-        $pagebar = $p->show();
-        $this->assign('pagebar', $pagebar);
-        $introduce = $merchant_inDb->field('id,mer_id,title,sort,cyid,addtime')->where($where)->order('sort DESC,id DESC')->limit($p->firstRow . ',' . $p->listRows)->select();
-        $merchant_cyDb = D('Merchant_classify');
-        $classify = $merchant_cyDb->where(array('mer_id' => $this->merid, 'typ' => '0'))->order('sort DESC,id ASC')->limit('0,10')->select();
-        $this->assign('cyid', $cyid);
-        $this->assign('classify', $classify);
-        $this->assign('introduce', $introduce);
-        $this->display();
-    }
+//    public function mernews() {
+//        $cyid = isset($_GET['cyid']) ? intval($_GET['cyid']) : 0;
+//        $merchant_inDb = D('Merchant_introduce');
+//        $where = array('mer_id' => $this->merid, 'isfabu' => 1, 'comefrom' => '1');
+//        if ($cyid > 0)
+//            $where['cyid'] = $cyid;
+//        $_count = $merchant_inDb->where($where)->count();
+//        import('@.ORG.common_page');
+//        $p = new Page($_count, 20);
+//        $pagebar = $p->show();
+//        $this->assign('pagebar', $pagebar);
+//        $introduce = $merchant_inDb->field('id,mer_id,title,sort,cyid,addtime')->where($where)->order('sort DESC,id DESC')->limit($p->firstRow . ',' . $p->listRows)->select();
+//        $merchant_cyDb = D('Merchant_classify');
+//        $classify = $merchant_cyDb->where(array('mer_id' => $this->merid, 'typ' => '0'))->order('sort DESC,id ASC')->limit('0,10')->select();
+//        $this->assign('cyid', $cyid);
+//        $this->assign('classify', $classify);
+//        $this->assign('introduce', $introduce);
+//        $this->display();
+//    }
 
     public function newsdetail() {
         $newsid = isset($_GET['newsid']) ? intval($_GET['newsid']) : 0;
@@ -167,149 +167,149 @@ class MerchantAction extends BaseAction {
         $this->display();
     }
 
-    public function mergallery() {
-        $cyid = isset($_GET['cyid']) ? intval($_GET['cyid']) : 0;
-        $merchant_imgDb = D('Merchant_imgs');
-        $where = array('mer_id' => $this->merid);
-        if ($cyid > 0)
-            $where['cyid'] = $cyid;
-        /* $_count = $merchant_imgDb->where($where)->count();
-          import('@.ORG.common_page');
-          $p = new Page($_count, 16);
-          $pagebar = $p->show();
-          $this->assign('pagebar', $pagebar);
-          $imgarr = $merchant_imgDb->where($where)->order('id DESC')->limit($p->firstRow . ',' . $p->listRows)->select(); */
-        $imgarr = $merchant_imgDb->where($where)->order('id DESC')->select();
-        $merchant_cyDb = D('Merchant_classify');
-        $classify = $merchant_cyDb->where(array('mer_id' => $this->merid, 'typ' => '1'))->order('sort DESC,id ASC')->limit('0,10')->select();
-        $this->assign('cyid', $cyid);
-        $this->assign('classify', $classify);
-        $this->assign('imgarr', $imgarr);
-        $this->display();
-    }
+//    public function mergallery() {
+//        $cyid = isset($_GET['cyid']) ? intval($_GET['cyid']) : 0;
+//        $merchant_imgDb = D('Merchant_imgs');
+//        $where = array('mer_id' => $this->merid);
+//        if ($cyid > 0)
+//            $where['cyid'] = $cyid;
+//        /* $_count = $merchant_imgDb->where($where)->count();
+//          import('@.ORG.common_page');
+//          $p = new Page($_count, 16);
+//          $pagebar = $p->show();
+//          $this->assign('pagebar', $pagebar);
+//          $imgarr = $merchant_imgDb->where($where)->order('id DESC')->limit($p->firstRow . ',' . $p->listRows)->select(); */
+//        $imgarr = $merchant_imgDb->where($where)->order('id DESC')->select();
+//        $merchant_cyDb = D('Merchant_classify');
+//        $classify = $merchant_cyDb->where(array('mer_id' => $this->merid, 'typ' => '1'))->order('sort DESC,id ASC')->limit('0,10')->select();
+//        $this->assign('cyid', $cyid);
+//        $this->assign('classify', $classify);
+//        $this->assign('imgarr', $imgarr);
+//        $this->display();
+//    }
 
-    public function merclient() {
-        /*         * ***merchant_navcom中客户服务对应的navid 为 7***** */
-        $navset = D('Merchant_navset')->where(array('navid' => 7, 'mer_id' => $this->merid))->find();
-        $datatmp = array('content' => '');
-        if (!empty($navset) && ($navset['intrid'] > 0)) {
-            $datatmp = D('Merchant_introduce')->where(array('id' => $navset['intrid'], 'mer_id' => $this->merid, 'comefrom' => 7))->find();
-        }
-        $this->assign('datatmp', $datatmp);
-        $this->display();
-    }
-
-    public function merjoin() {
-        /*         * ***merchant_navcom中客户服务对应的navid 为 8***** */
-        $navset = D('Merchant_navset')->where(array('navid' => 8, 'mer_id' => $this->merid))->find();
-        $datatmp = array('content' => '');
-        if (!empty($navset) && ($navset['intrid'] > 0)) {
-            $datatmp = D('Merchant_introduce')->where(array('id' => $navset['intrid'], 'mer_id' => $this->merid, 'comefrom' => 7))->find();
-        }
-        $this->assign('datatmp', $datatmp);
-        $this->display();
-    }
-
-    public function mermap() {
-        $store_id = intval($_GET['sid']);
-        $jointable = C('DB_PREFIX') . 'area';
-        $this->merchant_store_Db->join('as ms LEFT JOIN ' . $jointable . ' as ar on ms.area_id=ar.area_id');
-        $store_list = $this->merchant_store_Db->field('ms.*,ar.area_name')->where(array('ms.mer_id' => $this->merid,'ms.status' =>'1' ))->order('ms.ismain DESC,ms.store_id ASC')->select();
-        $this->assign('store_id', $store_id);
-        $this->assign('storelist', $store_list);
-        $this->display();
-    }
+//    public function merclient() {
+//        /*         * ***merchant_navcom中客户服务对应的navid 为 7***** */
+//        $navset = D('Merchant_navset')->where(array('navid' => 7, 'mer_id' => $this->merid))->find();
+//        $datatmp = array('content' => '');
+//        if (!empty($navset) && ($navset['intrid'] > 0)) {
+//            $datatmp = D('Merchant_introduce')->where(array('id' => $navset['intrid'], 'mer_id' => $this->merid, 'comefrom' => 7))->find();
+//        }
+//        $this->assign('datatmp', $datatmp);
+//        $this->display();
+//    }
+//
+//    public function merjoin() {
+//        /*         * ***merchant_navcom中客户服务对应的navid 为 8***** */
+//        $navset = D('Merchant_navset')->where(array('navid' => 8, 'mer_id' => $this->merid))->find();
+//        $datatmp = array('content' => '');
+//        if (!empty($navset) && ($navset['intrid'] > 0)) {
+//            $datatmp = D('Merchant_introduce')->where(array('id' => $navset['intrid'], 'mer_id' => $this->merid, 'comefrom' => 7))->find();
+//        }
+//        $this->assign('datatmp', $datatmp);
+//        $this->display();
+//    }
+//
+//    public function mermap() {
+//        $store_id = intval($_GET['sid']);
+//        $jointable = C('DB_PREFIX') . 'area';
+//        $this->merchant_store_Db->join('as ms LEFT JOIN ' . $jointable . ' as ar on ms.area_id=ar.area_id');
+//        $store_list = $this->merchant_store_Db->field('ms.*,ar.area_name')->where(array('ms.mer_id' => $this->merid,'ms.status' =>'1' ))->order('ms.ismain DESC,ms.store_id ASC')->select();
+//        $this->assign('store_id', $store_id);
+//        $this->assign('storelist', $store_list);
+//        $this->display();
+//    }
 
     /*     * *点评** */
 
-    public function merreviews($pagesize = 0) {
-		$flage=$pagesize;
-        $st = intval($_GET['st']);
-        $st = $st > 0 ? $st : 0;
-        $level = array(1 => 'high', 2 => 'mid', 3 => 'low', 4 => 'withpic');
-        $st_str = isset($level[$st]) ? $level[$st] : 'all';
-        $ord = intval($_GET['ord']);
-        $ord = $ord > 0 ? $ord : 0;
-        $orderarr = array(1 => 'time', 2 => 'score');
-        $ordstr = isset($orderarr[$ord]) ? $orderarr[$ord] : '';
-        $pagesize = $pagesize > 0 ? $pagesize : 10;
-        $reply_return = D('Reply')->get_reply_listByid($this->merid, 0, $st_str, $ordstr, $pagesize);
-        //print_r($reply_return);
-        $this->assign('st', $st);
-        $this->assign('ord', $ord);
-        $this->assign('reviews', $reply_return);
-		if($flage==5){
-		
-		}else{
-          $this->display();
-		}
-    }
+//    public function merreviews($pagesize = 0) {
+//		$flage=$pagesize;
+//        $st = intval($_GET['st']);
+//        $st = $st > 0 ? $st : 0;
+//        $level = array(1 => 'high', 2 => 'mid', 3 => 'low', 4 => 'withpic');
+//        $st_str = isset($level[$st]) ? $level[$st] : 'all';
+//        $ord = intval($_GET['ord']);
+//        $ord = $ord > 0 ? $ord : 0;
+//        $orderarr = array(1 => 'time', 2 => 'score');
+//        $ordstr = isset($orderarr[$ord]) ? $orderarr[$ord] : '';
+//        $pagesize = $pagesize > 0 ? $pagesize : 10;
+//        $reply_return = D('Reply')->get_reply_listByid($this->merid, 0, $st_str, $ordstr, $pagesize);
+//        //print_r($reply_return);
+//        $this->assign('st', $st);
+//        $this->assign('ord', $ord);
+//        $this->assign('reviews', $reply_return);
+//		if($flage==5){
+//
+//		}else{
+//          $this->display();
+//		}
+//    }
 
     /*     * ******商家活动--团购********** */
 
-    public function meractivity() {
-        $purchase = D('Group')->get_grouplist_by_MerchantId($this->merid, 20);
-        $this->assign('purchase', $purchase);
-        $this->display();
-    }
+//    public function meractivity() {
+//        $purchase = D('Group')->get_grouplist_by_MerchantId($this->merid, 20);
+//        $this->assign('purchase', $purchase);
+//        $this->display();
+//    }
 
-    public function mergoods() {
-        $sid = intval($_GET['sid']);
-        if ($this->merchant_store_data['have_shop'] != 1)
-            $this->error_tips('商家的主店铺没有开通'.$this->config['meal_alias_name'].'功能！',trim($this->config['site_url'],'/').'/merindex/'.$this->merid.'.html');
-        $m_store_id = $this->merchant_store_data['store_id'];
-
-        $ord = intval($_GET['ord']);
-
-        switch ($ord) {
-            case 1:
-                $order = 'goods_id DESC';
-                break;
-            case 2:
-                $order = 'price ASC';
-                break;
-            default:
-                $order = 'goods_id DESC';
-                $ord = 0;
-                break;
-        }
-        $where = array('store_id' => $m_store_id, 'status' => 1);
-        if ($sid > 0) {
-            $where['sort_id'] = $sid;
-        } else {
-            $sid = 0;
-        }
-//         $meal_Db = D('Meal');
-        /*$_count = $meal_Db->where($where)->count();
-        import('@.ORG.common_page');
-        $p = new Page($_count, 20);
-        $pagebar = $p->show();
-        $this->assign('pagebar', $pagebar);
-
-        $meal_pro = D('Meal')->where($where)->order($order)->limit($p->firstRow . ',' . $p->listRows)->select();
-		*/
-		$meal_pro = D('Shop_goods')->where($where)->order($order)->select();
-		$meal_image_class = new goods_image();
-		foreach ($meal_pro as $kk => $vv) {
-			$image = '';
-			if(!empty($vv['image'])){
-				$tmp_pic_arr = explode(';', $vv['image']);
-				foreach ($tmp_pic_arr as $key => $value) {
-					if ($image) continue;
-					$image = $meal_image_class->get_image_by_path($value, 's');
-				}
-			}
-			$m['image'] = $meal_pro[$kk]['image'] = $image;
-		}
-		$meal_mulu = D('Shop_goods_sort')->where(array('store_id' => $m_store_id))->order('sort ASC,sort_id  DESC')->select();
-		
-        $this->assign('ord', $ord);
-        $this->assign('sortid', $sid);
-        $this->assign('mstoreid', $m_store_id);
-        $this->assign('meal_pro', $meal_pro);
-        $this->assign('mealmulu', $meal_mulu);
-        $this->display();
-    }
+//    public function mergoods() {
+//        $sid = intval($_GET['sid']);
+//        if ($this->merchant_store_data['have_shop'] != 1)
+//            $this->error_tips('商家的主店铺没有开通'.$this->config['meal_alias_name'].'功能！',trim($this->config['site_url'],'/').'/merindex/'.$this->merid.'.html');
+//        $m_store_id = $this->merchant_store_data['store_id'];
+//
+//        $ord = intval($_GET['ord']);
+//
+//        switch ($ord) {
+//            case 1:
+//                $order = 'goods_id DESC';
+//                break;
+//            case 2:
+//                $order = 'price ASC';
+//                break;
+//            default:
+//                $order = 'goods_id DESC';
+//                $ord = 0;
+//                break;
+//        }
+//        $where = array('store_id' => $m_store_id, 'status' => 1);
+//        if ($sid > 0) {
+//            $where['sort_id'] = $sid;
+//        } else {
+//            $sid = 0;
+//        }
+////         $meal_Db = D('Meal');
+//        /*$_count = $meal_Db->where($where)->count();
+//        import('@.ORG.common_page');
+//        $p = new Page($_count, 20);
+//        $pagebar = $p->show();
+//        $this->assign('pagebar', $pagebar);
+//
+//        $meal_pro = D('Meal')->where($where)->order($order)->limit($p->firstRow . ',' . $p->listRows)->select();
+//		*/
+//		$meal_pro = D('Shop_goods')->where($where)->order($order)->select();
+//		$meal_image_class = new goods_image();
+//		foreach ($meal_pro as $kk => $vv) {
+//			$image = '';
+//			if(!empty($vv['image'])){
+//				$tmp_pic_arr = explode(';', $vv['image']);
+//				foreach ($tmp_pic_arr as $key => $value) {
+//					if ($image) continue;
+//					$image = $meal_image_class->get_image_by_path($value, 's');
+//				}
+//			}
+//			$m['image'] = $meal_pro[$kk]['image'] = $image;
+//		}
+//		$meal_mulu = D('Shop_goods_sort')->where(array('store_id' => $m_store_id))->order('sort ASC,sort_id  DESC')->select();
+//
+//        $this->assign('ord', $ord);
+//        $this->assign('sortid', $sid);
+//        $this->assign('mstoreid', $m_store_id);
+//        $this->assign('meal_pro', $meal_pro);
+//        $this->assign('mealmulu', $meal_mulu);
+//        $this->display();
+//    }
      /******收藏******/
 	 public function merCollect(){
 	    if(empty($this->user_session)){

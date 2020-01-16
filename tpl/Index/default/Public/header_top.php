@@ -16,12 +16,6 @@
             </li>
 			<li class="mobile-info__item dropdown">
 				<a class="dropdown__toggle" href="javascript:void(0);"><i class="icon-mobile F-glob F-glob-phone"></i>微信版<i class="tri tri--dropdown"></i></a>
-				<div class="dropdown-menu dropdown-menu--app">
-					<a class="app-block" href="{pigcms{$config.site_url}/topic/weixin.html" target="_blank">
-						<span class="app-block__title">访问微信版</span>
-						<span class="app-block__content" style="background:url({pigcms{$config.wechat_qrcode});background-size:100%;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='{pigcms{$config.wechat_qrcode}',sizingMethod='scale');"></span>
-					</a>
-				</div>
 			</li>
 		</ul>
 		<ul class="site-mast__user-w">

@@ -17,11 +17,6 @@
 					<a class="user-info__logout" href="{pigcms{:UU('Index/Login/logout')}">退出</a>
 				</p>
 			</if>
-			<div class="span">|</div>
-			<div class="weixin cf">
-				<div class="weixin_txt"><a href="{pigcms{$config.config_site_url}/topic/weixin.html" target="_blank"> 微信版</a></div>
-				<div class="weixin_icon"><p><span>|</span><a href="{pigcms{$config.config_site_url}/topic/weixin.html" target="_blank">访问微信版</a></p><img src="{pigcms{$config.wechat_qrcode}"/></div>
-			</div>
         </div>
         <div class="list">
 
