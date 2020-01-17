@@ -61,8 +61,6 @@
                 }
             });
         }
-
-        window.linkJs.openGoogleMap("wangjing");
     }
 </script>
     <include file="Public:facebook"/>
