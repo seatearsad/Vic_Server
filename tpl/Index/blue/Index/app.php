@@ -7,7 +7,7 @@
 			<link rel="shortcut icon" href="{pigcms{$config.site_favicon}"/>
 		</if>
 		<!--title>{pigcms{$config.seo_title}</title-->
-        <title>{pigcms{:L('_VIC_NAME_')} - {pigcms{:L('_NEW_BECOME_COURIER_')}</title>
+        <title>{pigcms{:L('_VIC_NAME_')}</title>
 		<meta name="keywords" content="{pigcms{$config.seo_keywords}" />
 		<meta name="description" content="{pigcms{$config.seo_description}" />
 		<script src="{pigcms{$static_path}js/jquery-1.7.2.js"></script>
