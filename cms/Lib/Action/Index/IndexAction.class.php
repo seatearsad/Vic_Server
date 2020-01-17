@@ -115,6 +115,10 @@ class IndexAction extends BaseAction {
         $this->display();
     }
 
+    public function app(){
+        $this->display();
+    }
+
     public function partner(){
         if($_POST){
             $_POST['create_time'] = date('Y-m-d H:i:s');

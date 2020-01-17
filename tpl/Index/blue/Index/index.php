@@ -446,7 +446,7 @@
         var link = '';
         switch (i){
             case 1:
-                link = './shop';
+                link = './app';
                 break;
             case 2:
                 link = './courier';
@@ -464,7 +464,7 @@
     });
     
     $('.link_btn').click(function () {
-        window.location.href = './shop';
+        window.location.href = './app';
     });
 
     $('#address').focus(function () {
@@ -508,7 +508,7 @@
                         //$("input[name='city_id']").val(result['info']['city_id']);
                         $.cookie('userLocationCity', result['info']['city_id'],{expires:700,path:"/"});
                     }
-                    window.location.href = './shop';
+                    window.location.href = './app';
                 },'JSON');
             }
         }
