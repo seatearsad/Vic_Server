@@ -603,13 +603,23 @@
                     
                     $('.location_btn').click(function () {
                         var status = $(this).data('status');
-                        var url = '';
-                        if(status == 2)
-                            url = "https://maps.google.com/maps?q="+$(this).data('from')+"&z=17&hl=en";
-                        else
-                            url = "https://maps.google.com/maps?q="+$(this).data('aim')+"&z=17&hl=en";
+                        if(typeof (window.linkJs) != 'undefined'){
+                            var address;
+                            if (status == 2)
+                                address = $(this).data('from');
+                            else
+                                address = $(this).data('aim');
 
-                        location.href = url;
+                            window.linkJs.openGoogleMap(address);
+                        }else {
+                            var url = '';
+                            if (status == 2)
+                                url = "https://maps.google.com/maps?q=" + $(this).data('from') + "&z=17&hl=en";
+                            else
+                                url = "https://maps.google.com/maps?q=" + $(this).data('aim') + "&z=17&hl=en";
+
+                            location.href = url;
+                        }
                     });
                     $(".t_online").bind("click",onlinePay);
                 }else{
