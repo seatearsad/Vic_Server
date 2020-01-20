@@ -78,16 +78,24 @@
         background-color: #ffa52d;
     }
     .earn_show{
-        display: inline-block;
-        font-size: 10px;
+        font-size: 12px;
         color: #777777;
-        text-align: center;
-        width: 40%;
+        width: 80%;
         margin-left: 5%;
         margin-top: 20px;
         border-radius: 2px;
-        padding: 5px 5px;
+        padding: 8px 5%;
         box-sizing: padding-box;
+        border: 1px solid #ffa52d;
+    }
+    .earn_show div{
+        display: inline-block;
+    }
+    .earn_show .earn_num{
+        color: #ffa52d;
+    }
+    .earn_title{
+        margin-left: 5px;
     }
     .border_red{
         border: 1px solid orangered;
@@ -159,17 +167,17 @@
             <span> = </span>
             <span id="all_money">${pigcms{$today_data['money']}</span>
         </section>
-        <div class="earn_show border_red">
+        <div class="earn_show">
             <div class="earn_num" id="all_count">{pigcms{$today_data['num']}</div>
-            <div>Orders Deliverd</div>
+            <div class="earn_title">Orders Delivered in Total</div>
         </div>
-        <div class="earn_show border_green">
-            <div class="earn_num" id="all_distance">{pigcms{$today_data['distance']}KM</div>
-            <div>Driven with Tutti</div>
+        <div class="earn_show">
+            <div class="earn_num" id="all_distance">{pigcms{$today_data['distance']} Km</div>
+            <div class="earn_title">Driven with Tutti</div>
         </div>
-        <div class="earn_show border_blue">
+        <div class="earn_show">
             <div class="earn_num" id="all_ave">${pigcms{$today_data['money']/$today_data['num']|floatval}</div>
-            <div>Ave. Earning/Order</div>
+            <div class="earn_title">Average Earning per Order</div>
         </div>
     </section>
 <script type="text/javascript">

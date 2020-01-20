@@ -56,7 +56,7 @@
         #memo{
             width: 35%;
             margin: 0px auto;
-            padding-top: 14%;
+            padding-top: 16%;
             font-size: 18px;
             font-weight: bold;
             text-align: center;
@@ -144,6 +144,6 @@
 	</body>
 
     <script>
-        $('.main').height($('.main').width()/2);
+        $('.main').height($('.main').width()*0.55);
     </script>
 </html>
