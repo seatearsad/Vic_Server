@@ -9,7 +9,7 @@
 	<meta name="apple-mobile-web-app-status-bar-style" content="black">
 	<meta name="format-detection" content="telephone=no">
 	<meta name="format-detection" content="address=no">
-	<link href="{pigcms{$static_path}css/deliver.css" rel="stylesheet"/>
+	<link href="{pigcms{$static_path}css/deliver.css?v=1.0.4" rel="stylesheet"/>
 	<script type="text/javascript" src="{pigcms{:C('JQUERY_FILE_190')}"></script>
 	<script type="text/javascript" src="{pigcms{$static_path}layer/layer.m.js" charset="utf-8"></script>
 </head>

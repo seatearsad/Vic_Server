@@ -8,7 +8,7 @@
 <meta charset="utf-8">
 <title>My Statistics</title>
 <meta name="description" content="{pigcms{$config.seo_description}"/>
-<link href="{pigcms{$static_path}css/deliver.css" rel="stylesheet"/>
+<link href="{pigcms{$static_path}css/deliver.css?v=1.0.4" rel="stylesheet"/>
 <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/mobiscroll.2.13.2.css"/>
 <script src="{pigcms{:C('JQUERY_FILE')}"></script>
 <!-- <script type="text/javascript" src="{pigcms{$static_path}js/swiper.min.js"></script> -->
