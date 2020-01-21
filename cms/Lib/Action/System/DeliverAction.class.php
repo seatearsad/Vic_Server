@@ -1411,7 +1411,7 @@ class DeliverAction extends BaseAction {
 
             if ($deliver['reg_status'] == 4){
                 if($_POST['receive'] == 1){
-                    if($deliver['group'] == 1){
+                    if($data['group'] == 1){
                         $data['reg_status'] = 0;
                     }
                     if(!isset($data['reg_status']) || $data['reg_status'] != 0) {
