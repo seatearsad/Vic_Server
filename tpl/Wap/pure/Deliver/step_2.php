@@ -129,6 +129,9 @@
             <li class="act"></li><li class="act"></li><li></li><li></li>
         </ul>
     </div>
+    <div id="memo" class="android_tip">
+        Please use your browser to upload images if the uploading function does not work here. To do so, visit www.tutti.app and click on Menu > Become a Courier > Get Started.
+    </div>
     <div id="step_title">
         a.{pigcms{:L('_ND_DRIVERSLICENSE_')}
     </div>
@@ -191,6 +194,9 @@
 <script src="{pigcms{$static_public}js/lang.js"></script>
 <script type="text/javascript" src="{pigcms{$static_public}js/webuploader.min.js"></script>
 <script type="text/javascript">
+    if(!/(tutti_android)/.test(navigator.userAgent.toLowerCase())){
+        $('.android_tip').hide();
+    }
     $("body").css({"height":$(window).height()});
 
     var  uploader = WebUploader.create({

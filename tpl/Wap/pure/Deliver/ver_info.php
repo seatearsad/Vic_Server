@@ -214,6 +214,9 @@
     <div id="memo">
         {pigcms{:L('_ND_UPLOADNOTIC_')}
     </div>
+    <div id="memo" class="android_tip">
+        Please use your browser to upload images if the uploading function does not work here. To do so, visit www.tutti.app and click on Menu > Become a Courier > Get Started.
+    </div>
     </if>
     <div id="step_title">
         {pigcms{:L('_ND_DRIVERSLICENSE_')}
@@ -308,8 +311,10 @@
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKlguA2QFIUVwWTo3danbOqSKv3nYbBCg&libraries=places&language=en" async defer></script>
 <script type="text/javascript">
     $("body").css({"height":$(window).height()});
-
-    var  uploader = WebUploader.create({
+    if(!/(tutti_android)/.test(navigator.userAgent.toLowerCase())){
+        $('.android_tip').hide();
+    }
+    var uploader = WebUploader.create({
         auto: true,
         swf: '{pigcms{$static_public}js/Uploader.swf',
         server: "{pigcms{:U('Deliver/ajax_upload')}",
