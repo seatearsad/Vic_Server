@@ -74,22 +74,22 @@ $(function(){
     });
 
     //配送员位置
-    navigator.geolocation.getCurrentPosition(function (position) {  
-        console.log(position);
-        var marker = new google.maps.Marker({
-                position: {lat: position.coords.latitude, lng:position.coords.longitude},
-                map: map,
-                icon: "{pigcms{$static_path}/images/map/deliver_pos.png"
-            });
+    //navigator.geolocation.getCurrentPosition(function (position) {
+        //console.log(position);
+        // var marker = new google.maps.Marker({
+        //         position: {lat: position.coords.latitude, lng:position.coords.longitude},
+        //         map: map,
+        //         icon: "{pigcms{$static_path}/images/map/deliver_pos.png"
+        //     });
 
-        start = {lat: position.coords.latitude, lng:position.coords.longitude};
-        <if condition="$supply['status'] eq 2">
-        end = {lng:{pigcms{$supply['from_lnt']}, lat:{pigcms{$supply['from_lat']}};
-        <else />
-        end = {lng:{pigcms{$supply['aim_lnt']}, lat:{pigcms{$supply['aim_lat']}};
-        </if>
-        seachLine([start,end]);
-    });  
+        // start = {lat: position.coords.latitude, lng:position.coords.longitude};
+        // <if condition="$supply['status'] eq 2">
+        // end = {lng:{pigcms{$supply['from_lnt']}, lat:{pigcms{$supply['from_lat']}};
+        // <else />
+        // end = {lng:{pigcms{$supply['aim_lnt']}, lat:{pigcms{$supply['aim_lat']}};
+        // </if>
+        // seachLine([start,end]);
+    //});
 
         /*
     var geolocation = new BMap.Geolocation();
