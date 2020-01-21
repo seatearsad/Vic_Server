@@ -8,7 +8,7 @@
 <meta charset="utf-8">
 <title>{pigcms{:L('_COURIER_TXT_')}</title>
 <meta name="description" content="{pigcms{$config.seo_description}"/>
-<link href="{pigcms{$static_path}css/deliver.css" rel="stylesheet"/>
+<link href="{pigcms{$static_path}css/deliver.css?v=1.0.4" rel="stylesheet"/>
 <script src="{pigcms{:C('JQUERY_FILE')}"></script>
 <script>
     var location_url = "{pigcms{:U('Deliver/grab')}",lat = "{pigcms{$deliver_session['lat']}", lng = "{pigcms{$deliver_session['lng']}";

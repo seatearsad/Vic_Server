@@ -10,7 +10,7 @@
     <link rel="manifest" href="/manifest_courier.json">
 <title>{pigcms{:L('_COURIER_LOGIN_')}</title>
 <meta name="description" content="{pigcms{$config.seo_description}"/>
-<link href="{pigcms{$static_path}css/deliver.css" rel="stylesheet"/>
+<link href="{pigcms{$static_path}css/deliver.css?v=1.0.4" rel="stylesheet"/>
 <script src="{pigcms{:C('JQUERY_FILE')}"></script>
 <script src="{pigcms{$static_public}js/laytpl.js"></script>
 <script src="{pigcms{$static_path}layer/layer.m.js"></script>
