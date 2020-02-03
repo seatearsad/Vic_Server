@@ -20,7 +20,7 @@
             <ul>
                 <li class="list_head">INFORMATION</li>
                 <li><a href="{pigcms{$config.site_url}/about" target="_blank">About Us</a></li>
-                <li><a href="#" target="_blank">Blogs</a></li>
+                <li><a href="{pigcms{$config.site_url}/news" target="_blank">Blogs</a></li>
                 <li><a href="{pigcms{$config.site_url}/courier" target="_blank">Become a Courier</a></li>
                 <li><a href="{pigcms{$config.site_url}/partner" target="_blank">Become a Partner</a></li>
                 <li class="lang_div">

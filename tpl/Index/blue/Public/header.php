@@ -223,7 +223,7 @@
         <li id="menu_about" style="background-image: none">
             <span>{pigcms{:L('_B_PURE_MY_ABOUTUS_')}</span>
         </li>
-        <li style="background-image: none">
+        <li id="menu_blog" style="background-image: none">
             <span>{pigcms{:L('_NEW_BLOGS_')}</span>
         </li>
         <li style="background-image: none">
@@ -259,6 +259,9 @@
     });
     $('#menu_about').click(function () {
         window.location.href = '{pigcms{$config.site_url}/about';
+    });
+    $('#menu_blog').click(function () {
+        window.location.href = '{pigcms{$config.site_url}/news';
     });
     
     $('.sign_btn').click(function () {

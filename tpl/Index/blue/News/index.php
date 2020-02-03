@@ -3,118 +3,341 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=Edge">
-		<title><if condition="$news">{pigcms{$news.title}<elseif condition="$now_cat"/>{pigcms{$now_cat.name}<else />平台快报</if> - {pigcms{$config.site_name}</title>
+		<if condition="$config['site_favicon']">
+			<link rel="shortcut icon" href="{pigcms{$config.site_favicon}"/>
+		</if>
+		<!--title>{pigcms{$config.seo_title}</title-->
+        <title>{pigcms{:L('_VIC_NAME_')} - Blog</title>
 		<meta name="keywords" content="{pigcms{$config.seo_keywords}" />
 		<meta name="description" content="{pigcms{$config.seo_description}" />
-		<link href="{pigcms{$static_path}css/css.css" type="text/css"  rel="stylesheet" />
-		<link href="{pigcms{$static_path}css/header.css"  rel="stylesheet"  type="text/css" />
-		<link href="{pigcms{$static_path}css/intro.css"  rel="stylesheet"  type="text/css" />
-		<style>
-			
-			.content .mt{height:25px;border:1px solid #d0e4c2;margin-bottom:10px;padding:5px 10px;background:#fcfffa;}
-			.content h2{float:left;width:60px;height:22px;padding:0;color:#333;line-height:22px;font-size:14px;font-weight:normal;}
-			.content .mt .extra{float:right;width:6px;height:28px;}
-			.content .mt .form{float:left;width:220px;height:28px;}
-			.content .mt .text{width:110px; height:18px;line-height:18px;padding:2px;margin:1px 10px 0 20px;border:1px solid; border-color:#ccc;}
-			.content .mt .btn-search{width:53px;height:25px;border:0;line-height:22px;text-align:center;background:url(//misc.360buyimg.com/product/skin/2012/i/newicon20130422.png?ver=20130423) no-repeat -103px -112px;cursor:pointer;}
-			.content .mc{border:1px solid #EBEBEB;margin-bottom:10px;}
-			.content h5{height:30px;line-height:30px;padding-left:10px;background:#f7f7f7;color:#666;}
-			.content h5 span{float:right;width:135px;margin-right:10px;text-align:right;}
-			.content ul{padding:15px 10px 20px;}
-			.content li{padding:3px 0;height:24px;line-height:24px;overflow:hidden;zoom:1;border-bottom:1px dotted #ddd;}
-			.content li a{color:#005ea7;}
-			.content li div{float:left;margin-right:5px;}
-			.content li span{float:right;margin-left:5px;color:#999;font-family:Verdana;}
-			.content li .line{float:none;height:10px;overflow:hidden;margin-top:11px;}
-			.summary{text-align:center;color:#999;margin-bottom:15px;}
-			
-		</style>
 		<script src="{pigcms{$static_path}js/jquery-1.7.2.js"></script>
 		<script src="{pigcms{$static_public}js/jquery.lazyload.js"></script>
-		<script type="text/javascript">
-	      //var  meal_alias_name = "{pigcms{$config.meal_alias_name}";
-	    </script>
+		<script src="{pigcms{$static_path}js/jquery.nav.js"></script>
+		<script src="{pigcms{$static_path}js/navfix.js"></script>
+        <script type="text/javascript" src="{pigcms{$static_public}js/lang/{pigcms{:C('DEFAULT_LANG')}.js" charset="utf-8"></script>
 		<script src="{pigcms{$static_path}js/common.js"></script>
-		<!--[if IE 6]>
-		<script  src="{pigcms{$static_path}js/DD_belatedPNG_0.0.8a.js" mce_src="{pigcms{$static_path}js/DD_belatedPNG_0.0.8a.js"></script>
-		<script type="text/javascript">
-		   /* EXAMPLE */
-		   DD_belatedPNG.fix('.enter,.enter a,.enter a:hover');
-
-		   /* string argument can be any CSS selector */
-		   /* .png_bg example is unnecessary */
-		   /* change it to what suits you! */
-		</script>
-		<script type="text/javascript">DD_belatedPNG.fix('*');</script>
-		<style type="text/css">
-				body{behavior:url("{pigcms{$static_path}css/csshover.htc"); 
+		<script src="{pigcms{$static_path}js/index.activity.js"></script>
+		<if condition="$config['wap_redirect']">
+			<script>
+				if(/(iphone|ipod|android|windows phone)/.test(navigator.userAgent.toLowerCase())){
+					<if condition="$config['wap_redirect'] eq 1">
+						window.location.href = './wap';
+					<else/>
+						if(confirm('系统检测到您可能正在使用手机访问，是否要跳转到手机版网站？')){
+							window.location.href = './wap';
+						}
+					</if>
 				}
-				.category_list li:hover .bmbox {
-		filter:alpha(opacity=50);
-			 
-					}
-		  .gd_box{	display: none;}
-		</style>
-		<![endif]-->
+
+			</script>
+		</if>
+        <include file="Public:facebook"/>
 	</head>
+    <style>
+        *{
+            margin: 0px;
+            box-sizing: border-box;
+            font-family: Helvetica;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        body{
+            min-width: 1024px;
+            color: #3f3f3f;
+        }
+        .white_line{
+            width: 96%;
+            height: 3px;
+            margin:50px auto;
+            -moz-border-radius: 3px;
+            -webkit-border-radius: 3px;
+            border-radius: 3px;
+            background-color: #ffffff;
+        }
+        .how_memo .how_box:nth-child(1) .how_img{
+            background-image: url("./tpl/Static/blue/images/new/courier/mobile_app.png");
+        }
+        .how_memo .how_box:nth-child(2) .how_img{
+            background-image: url("./tpl/Static/blue/images/new/courier/to_store.png");
+        }
+        .how_memo .how_box:nth-child(3) .how_img{
+            background-image: url("./tpl/Static/blue/images/new/courier/car.png");
+        }
+        .how_memo .how_box:nth-child(4) .how_img{
+            background-image: url("./tpl/Static/blue/images/new/courier/hand_over.png");
+        }
+        .reg_desc{
+            height: 330px;
+        }
+        .reg_show{
+            width: 90%;
+            height: 200px;
+            margin: 10px auto 10px auto;
+            display: flex;
+        }
+        .desc_left{
+            -moz-transform:scaleX(-1);
+            -webkit-transform:scaleX(-1);
+            -o-transform:scaleX(-1);
+            transform:scaleX(-1);
+        }
+        .desc_left,.desc_right{
+            height: 200px;
+            width: 40px;
+            background-image: url("./tpl/Static/blue/images/new/black_arrow.png");
+            background-size: auto 30px;
+            background-repeat: no-repeat;
+            background-position: center right;
+            cursor: pointer;
+            z-index: 99;
+        }
+        .desc_left:hover,.desc_right:hover{
+            background-image: url("./tpl/Static/blue/images/new/or_arrow.png");
+        }
+        .desc_center{
+            flex: 1 1 100%;
+            position: relative;
+            overflow: hidden;
+        }
+        .desc_all{
+            width: 100%;
+            height: 180px;
+            position: absolute;
+            transform: translate3d(120%, 0, 0);
+            -webkit-transition: all 0.5s ease-in-out;
+            -o-transition: all 0.5s ease-in-out;
+            transition: all 0.5s ease-in-out;
+            text-align: center;
+            background-color: #F5F5F5;
+            display: flex;
+        }
+        .desc_pro{
+            transform: translate3d(-100%, 0, 0);
+        }
+        .desc_next{
+            transform: translate3d(100%, 0, 0);
+        }
+        .desc_curr{
+            transform: translate3d(0%, 0, 0);
+        }
+        .reg_title{
+            font-size: 28px;
+            font-weight: bold;
+            width: 50%;
+            flex: 1 1 100%;
+        }
+        .reg_title img{
+            width: 100%;
+        }
+        .reg_txt{
+            font-size: 14px;
+            width: 50%;
+            flex: 1 1 100%;
+            padding: 3%;
+            text-align: left;
+            box-sizing: border-box;
+        }
+        .desc_point{
+            position: absolute;
+            bottom: 0px;
+            width: 100%;
+            height: 20px;
+            text-align: center;
+        }
+        .desc_point ul{
+            margin: 0 auto;
+            padding: 0;
+        }
+        .desc_point ul li{
+            width: 30px;
+            height: 5px;
+            background-color: #CCCCCC;
+            display: inline-block;
+            margin-left: 5px;
+            list-style: none;
+        }
+        .desc_point ul li.curr_li{
+            background-color: #ffa52d;
+        }
+        .doc_sub{
+            font-size: 16px;
+            font-weight: bold;
+            color: #666666;
+        }
+        .doc_title{
+            font-weight: bold;
+            font-size: 40px;
+            color: #ffa52d;
+            margin: 10px 0;
+        }
+        .doc_time{
+            font-size: 12px;
+            color: #999999;
+        }
+        .doc_content{
+            margin: 20px 0;
+        }
+    </style>
 	<body>
-		<include file="Public:header_top"/>
-		<div class="body"> 
-		
-			<div class="w main">
-				<div id="Position" class="margin_b6">
-					<a href="{pigcms{$config.site_url}">首页</a><span>&gt;</span>&nbsp;<a href="/news/" style="font-size:12px;">平台快报</a><if condition="$now_cat"><span>&gt;</span>&nbsp;<a href="/news/cat-{pigcms{$now_cat.id}.html" style="font-size:12px;">{pigcms{$now_cat.name}</a></if><if condition="$news"><span>&gt;</span>&nbsp;<a href="/news/{pigcms{$news.id}.html" style="font-size:12px;">{pigcms{$news.title}</a></if></div>
-					<div class="left">
-						<h2>平台快报</h2>
-						<ul class="conact_side">
-							<volist name="news_cat" id="vo">
-								<li><a href="/news/cat-{pigcms{$vo.id}.html" >{pigcms{$vo.name}</a></li>
-							</volist>
-						</ul>
-						<div class="borderlr"></div>
-						<div class="corner_b">
-							<div class="corner_bl"></div>
-							<div class="corner_br"></div>
-						</div>
-					</div>
-					<div class="right">
-						<div class="corner_t">
-							<div class="corner_tl"></div>
-							<div class="corner_tr"></div>
-						</div>
-						<div class="corner_c"></div>
-						<div class="content">
-						<if condition="$news">	
-							<h1 class="tit" style="margin-bottom:5px;">{pigcms{$news.title}</h1>
-							<div class="summary">时间:&nbsp;{pigcms{$news.add_time|date='Y-m-d H:i:s',###}</div>
-							{pigcms{$news['content']}
-							
-						<else />
-							<h5><span>发表时间</span>标题</h5>
-							<ul>
-							<volist name="news_title" id="vo">
-								<li>
-									<div>
-										<a href="/news/{pigcms{$vo.id}.html"><font class="skcolor_ljg"></font>【<if condition="$now_cat">{pigcms{$now_cat.name}<else />{pigcms{$vo.name}</if>】{pigcms{$vo.title} </a>
-									</div>
-									<span>{pigcms{$vo.add_time|date='Y-m-d H:i:s',###}</span>
-									<div class="line"></div>
-								</li>
-							</volist>
-							
-							</ul>
-							<div class="paginator-wrapper">{pigcms{$pagebar}</div>
-						</if>
-						</div>
-						
-						<!--[if !ie]>内容 结束<![endif]-->
-						<div class="corner_b"><div class="corner_bl"></div><div class="corner_br"></div></div>
-						<!--[if !ie]>help_tips 开始<![endif]-->
-						<!--[if !ie]>help_tips 结束<![endif]-->
-					</div>
-					<!--[if !ie]>right 结束<![endif]-->
-				</div>
+        <include file="Public:header"/>
+        <div class="reg_desc">
+            <div class="reg_show">
+                <div class="desc_left"></div>
+                <div class="desc_center">
+                    <div class="desc_all">
+                        <div class="reg_title">
+                            <img src="{pigcms{$static_path}images/new/doc_img.png" />
+                        </div>
+                        <div class="reg_txt">
+                            <div class="doc_sub">
+                                [VICTORAI] SUB TITLE SUB TITLE SUB
+                            </div>
+                            <div class="doc_title">
+                                1.WHY DO PEOPLE ORDER DELIVERIES?
+                            </div>
+                            <div class="doc_time">
+                                Posted on Jan 20
+                            </div>
+                            <div class="doc_content">
+                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Suscipit officia neque beatae at inventore excepturi numquam sint commodi alias, quam consequuntur corporis ex, distinctio
+                            </div>
+                        </div>
+                    </div>
+                    <div class="desc_all">
+                        <div class="reg_title">
+                            <img src="{pigcms{$static_path}images/new/doc_img.png" />
+                        </div>
+                        <div class="reg_txt">
+                            <div class="doc_sub">
+                                [VICTORAI] SUB TITLE SUB TITLE SUB
+                            </div>
+                            <div class="doc_title">
+                                2.WHY DO PEOPLE ORDER DELIVERIES?
+                            </div>
+                            <div class="doc_time">
+                                Posted on Jan 20
+                            </div>
+                            <div class="doc_content">
+                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Suscipit officia neque beatae at inventore excepturi numquam sint commodi alias, quam consequuntur corporis ex, distinctio
+                            </div>
+                        </div>
+                    </div>
+                    <div class="desc_all">
+                        <div class="reg_title">
+                            <img src="{pigcms{$static_path}images/new/doc_img.png" />
+                        </div>
+                        <div class="reg_txt">
+                            <div class="doc_sub">
+                                [VICTORAI] SUB TITLE SUB TITLE SUB
+                            </div>
+                            <div class="doc_title">
+                                3.WHY DO PEOPLE ORDER DELIVERIES?
+                            </div>
+                            <div class="doc_time">
+                                Posted on Jan 20
+                            </div>
+                            <div class="doc_content">
+                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Suscipit officia neque beatae at inventore excepturi numquam sint commodi alias, quam consequuntur corporis ex, distinctio
+                            </div>
+                        </div>
+                    </div>
+                    <div class="desc_point">
+                        <ul>
+                            <li></li>
+                            <li></li>
+                            <li></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="desc_right"></div>
+
+            </div>
         </div>
-		<include file="Public:footer"/>
+        <include file="Public:footer"/>
 	</body>
+<script>
+    var desc_num = 3;
+    var curr_num = 1;
+
+    var timeoutId;
+    changeDesc();
+
+    function changeDesc() {
+        var i = 1;
+        curr_num = curr_num == 0 ? desc_num : curr_num;
+        curr_num = curr_num > desc_num ? curr_num - desc_num : curr_num;
+
+        var next_num = curr_num + 1;
+        next_num = next_num > desc_num ? 1 : next_num;
+
+        var pro_num = curr_num - 1;
+        pro_num = pro_num == 0 ? desc_num : pro_num;
+        $('.desc_center').find('.desc_all').each(function () {
+            if(i == curr_num){
+                $(this).css('opacity',1);
+                $(this).attr('class','desc_all desc_curr');
+                var j = 1;
+                $('.desc_point').find('li').each(function () {
+                    if(j == i){
+                        $(this).addClass('curr_li');
+                    }else{
+                        $(this).removeClass('curr_li');
+                    }
+                    j++;
+                });
+            }
+            else if(i == next_num){
+                $(this).css('opacity',0);
+                $(this).attr('class','desc_all desc_next');
+            }
+            else if(i == pro_num){
+                $(this).css('opacity',0);
+                $(this).attr('class','desc_all desc_pro');
+            }else{
+                $(this).css('opacity',0);
+                $(this).attr('class','desc_all');
+            }
+
+            i++;
+        });
+
+        if (typeof(timeoutId) != 'undefined') {
+            clearTimeout(timeoutId);
+        }
+
+        timeoutId = setTimeout(function(){
+            curr_num += 1;
+            changeDesc();
+        },5000);
+    }
+
+    $('.desc_right').click(function () {
+        //if(desc_num > curr_num){
+            curr_num += 1;
+            changeDesc();
+        //}
+    });
+    $('.desc_left').click(function () {
+        //if(curr_num > 1){
+            curr_num -= 1;
+            changeDesc();
+        //}
+    });
+
+    var courier_link = '{pigcms{$config.site_url}/wap.php?g=Wap&c=Deliver&a=login';
+    $('.app_now').click(function () {
+        window.location.href = courier_link;
+    });
+    $('.become_btn').click(function () {
+        window.location.href = courier_link;
+    });
+
+    var width = $('.desc_center').width();
+    var height = width / 3;
+    var t_height = height + 20;
+    $('.desc_all').height(height);
+    $('.reg_desc').height(t_height);
+    $('.reg_show').height(t_height);
+    $('.desc_left').height(t_height);
+    $('.desc_right').height(t_height);
+</script>
 </html>

@@ -84,6 +84,11 @@
 				$data['status'] = $_POST['status'];
 				$data['category_id'] = $_POST['category_id'];
 				$data['add_time'] = $data['last_time']=time();
+
+				$data['cover'] = $_POST['cover'] ? $_POST['cover'] : '';
+                $data['top_img'] = $_POST['top_img'] ? $_POST['top_img'] : '';
+                $data['city_id'] = $_POST['city_id'] ? $_POST['city_id'] : 0;
+
 				if(D('System_news')->add($data)){
 					$this->success('添加公告成功！');
 				}else{
@@ -92,6 +97,14 @@
 			}else {
 				$category = D('System_news_category')->select();
 				$this->assign("category",$category);
+
+				if($_GET['category_id']){
+				    $curr_cate = D('System_news_category')->where(array('id'=>$_GET['category_id']))->find();
+                    $this->assign("curr_cate",$curr_cate);
+                }
+
+				$city = D('Area')->where(array('is_open'=>1,'area_type'=>2))->select();
+				$this->assign('city',$city);
 				$this->display();
 			}
 		}
@@ -104,6 +117,11 @@
 				$data['category_id'] = $_POST['category_id'];
 				$data['status'] = $_POST['status'];
 				$data['last_time'] = time();
+
+                $data['cover'] = $_POST['cover'] ? $_POST['cover'] : '';
+                $data['top_img'] = $_POST['top_img'] ? $_POST['top_img'] : '';
+                $data['city_id'] = $_POST['city_id'] ? $_POST['city_id'] : 0;
+
 				if(D('System_news')->where('id='.$_POST['id'])->save($data)){
 					$this->success('保存成功！');
 				}else{
@@ -114,6 +132,13 @@
 				$this->assign("news",$news);
 				$category = D('System_news_category')->select();
 				$this->assign("category",$category);
+
+                $curr_cate = D('System_news_category')->where(array('id'=>$news['category_id']))->find();
+                $this->assign("curr_cate",$curr_cate);
+
+                $city = D('Area')->where(array('is_open'=>1,'area_type'=>2))->select();
+                $this->assign('city',$city);
+
 				$this->display();
 			}
 		}
@@ -172,4 +197,39 @@
 				}
 			}
 		}
+
+        public function ajax_upload()
+        {
+            if ($_FILES['file']['error'] != 4) {
+                //$store_id = isset($_GET['store_id']) ? intval($_GET['store_id']) : 0;
+                //$shop = D('Merchant_store_shop')->field('store_theme')->where(array('store_id' => $store_id))->find();
+                //$store_theme = isset($shop['store_theme']) ? intval($shop['store_theme']) : 0;
+                //if ($store_theme) {
+                //$width = '900,450';
+                //$height = '900,450';
+                //} else {
+                $width = '900,450';
+                $height = '500,250';
+                //}
+                $param = array('size' => $this->config['group_pic_size']);
+                $param['thumb'] = true;
+                $param['imageClassPath'] = 'ORG.Util.Image';
+                $param['thumbPrefix'] = 'm_,s_';
+                $param['thumbMaxWidth'] = $width;
+                $param['thumbMaxHeight'] = $height;
+                $param['thumbRemoveOrigin'] = false;
+                $image = D('Image')->handle($_GET['cate_id'], 'system_news', 1, $param,false);
+                if ($image['error']) {
+                    exit(json_encode(array('error' => 1,'message' =>$image['msg'])));
+                } else {
+                    $title = $image['title']['file'];
+                    $image_tmp = explode(',', $title);
+                    $url = C('config.site_url') . '/upload/system_news/' . $image_tmp[0] . '/s_' . $image_tmp['1'];
+                    $file = $image['url']['file'];
+                    exit(json_encode(array('error' => 0, 'url' => $url, 'title' => $title,'file'=>$file)));
+                }
+            } else {
+                exit(json_encode(array('error' => 1,'message' =>'没有选择图片')));
+            }
+        }
 	}
