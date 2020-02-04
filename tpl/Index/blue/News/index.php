@@ -53,18 +53,6 @@
             border-radius: 3px;
             background-color: #ffffff;
         }
-        .how_memo .how_box:nth-child(1) .how_img{
-            background-image: url("./tpl/Static/blue/images/new/courier/mobile_app.png");
-        }
-        .how_memo .how_box:nth-child(2) .how_img{
-            background-image: url("./tpl/Static/blue/images/new/courier/to_store.png");
-        }
-        .how_memo .how_box:nth-child(3) .how_img{
-            background-image: url("./tpl/Static/blue/images/new/courier/car.png");
-        }
-        .how_memo .how_box:nth-child(4) .how_img{
-            background-image: url("./tpl/Static/blue/images/new/courier/hand_over.png");
-        }
         .reg_desc{
             height: 330px;
         }
@@ -176,6 +164,101 @@
         .doc_content{
             margin: 20px 0;
         }
+
+        .main{
+            width: 90%;
+            margin: 10px auto;
+        }
+        .main_left{
+            display: inline-block;
+            width: 59%;
+        }
+        .main_right{
+            display: inline-block;
+            width: 36%;
+            margin-left: 4%;
+            vertical-align: top;
+        }
+        .cate_list{
+            width: 100%;
+            border-bottom: 3px solid #ffa52d;
+        }
+        .cate_list span{
+            margin-left: 20px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .cate_list span.curr_cate{
+            color: #ffa52d;
+        }
+        .cate_list span.cate_more{
+            float: right;
+            color: #666666;
+            font-weight: normal;
+            margin-right: 5px;
+        }
+        .right_title{
+            border-bottom: 3px solid #ffa52d;
+            font-weight: bold;
+            padding-right: 10px;
+            display: inherit;
+        }
+        .left_list,.right_list{
+            width: 100%;
+            padding: 0;
+            margin-top: 30px;
+        }
+        .left_list li{
+            background-color: #F5F5F5;
+            height: 90px;
+            list-style: none;
+            display: flex;
+            margin-bottom: 20px;
+        }
+        .right_list li{
+            list-style: none;
+            margin-bottom: 20px;
+            display: flex;
+        }
+        .right_list li label{
+            width: 10px;
+            height: 10px;
+            background-color: #ffa52d;
+            display: inline-block;
+            flex: 0 0 auto;
+            transform:rotate(45deg);
+            -ms-transform:rotate(45deg); /* IE 9 */
+            -webkit-transform:rotate(45deg);
+            vertical-align: center;
+            margin: auto 5px;
+        }
+        .right_list span{
+            display: inline-block;
+            flex: 1 1 100%;
+            padding: 0px 50px 0px 10px;
+        }
+        .left_list span{
+            display: inline-block;
+            vertical-align: top;
+        }
+        .left_img{
+            width: 135px;
+            flex: 0 0 auto;
+        }
+        .left_title{
+            height: 90px;
+            padding: 10px 15px;
+            box-sizing: border-box;
+            flex: 1 1 100%;
+        }
+        .list_title{
+            font-weight: bold;
+        }
+        .list_sub{
+            font-size: 12px;
+            margin: 7px 0;
+            color: #666666;
+        }
     </style>
 	<body>
         <include file="Public:header"/>
@@ -249,7 +332,99 @@
                     </div>
                 </div>
                 <div class="desc_right"></div>
-
+            </div>
+        </div>
+        <div class="main" style="margin-top: 50px">
+            <div class="main_left">
+                <div class="cate_list">
+                    <span class="curr_cate" style="margin-left: 0;">ALL POSTS</span>
+                    <span>FOOD & DRINKS</span>
+                    <span>NEWS</span>
+                    <span>OTHERS</span>
+                    <span class="cate_more">MORE >></span>
+                </div>
+                <ul class="left_list">
+                    <li>
+                        <div class="left_img">
+                            <img src="{pigcms{$static_path}images/new/doc_img.png" alt="" style="width: 100%"/>
+                        </div>
+                        <div class="left_title">
+                            <div class="list_title">
+                                Why do people order deliveries? Blabla monday tuesday sunday everyday
+                            </div>
+                            <div class="list_sub">
+                                SUB TITLE SUB TITLE SUB TITLE
+                            </div>
+                            <div class="doc_time">
+                                Posted on Jan 20
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="left_img">
+                            <img src="{pigcms{$static_path}images/new/doc_img.png" alt="" style="width: 100%"/>
+                        </div>
+                        <div class="left_title">
+                            <div class="list_title">
+                                Why do people order deliveries? Blabla monday tuesday sunday everyday
+                            </div>
+                            <div class="list_sub">
+                                SUB TITLE SUB TITLE SUB TITLE
+                            </div>
+                            <div class="doc_time">
+                                Posted on Jan 20
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="left_img">
+                            <img src="{pigcms{$static_path}images/new/doc_img.png" alt="" style="width: 100%"/>
+                        </div>
+                        <div class="left_title">
+                            <div class="list_title">
+                                Why do people order deliveries? Blabla monday tuesday sunday everyday
+                            </div>
+                            <div class="list_sub">
+                                SUB TITLE SUB TITLE SUB TITLE
+                            </div>
+                            <div class="doc_time">
+                                Posted on Jan 20
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <div class="view_more">
+                    VIEW ALL POSTS ABOUT FOOD & DRINKS >>
+                </div>
+            </div>
+            <div class="main_right">
+                <div class="right_title">POPULAR POSTS</div>
+                <ul class="right_list">
+                    <li>
+                        <label></label>
+                        <span>
+                            Savvy Saanich Senior Shuts Down Potential Phone Fraudster
+                        </span>
+                    </li>
+                    <li>
+                        <label></label>
+                        <span>
+                            Police release footage of suspects who broke into apartment building in Victoria (VIDEO)
+                        </span>
+                    </li>
+                    <li>
+                        <label></label>
+                        <span>
+                            Police release footage of suspects who broke into apartment building in Victoria (VIDEO)
+                        </span>
+                    </li>
+                    <li>
+                        <label></label>
+                        <span>
+                            Police release footage of suspects who broke into apartment building in Victoria (VIDEO)
+                        </span>
+                    </li>
+                </ul>
             </div>
         </div>
         <include file="Public:footer"/>
