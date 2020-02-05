@@ -44,6 +44,11 @@
             min-width: 1024px;
             color: #3f3f3f;
         }
+        a{
+            display: contents;
+            color:#3f3f3f;
+            text-decoration: none;
+        }
         .white_line{
             width: 96%;
             height: 3px;
@@ -337,93 +342,77 @@
         <div class="main" style="margin-top: 50px">
             <div class="main_left">
                 <div class="cate_list">
-                    <span class="curr_cate" style="margin-left: 0;">ALL POSTS</span>
-                    <span>FOOD & DRINKS</span>
-                    <span>NEWS</span>
-                    <span>OTHERS</span>
+                    <span class="curr_cate" style="margin-left: 0;" data-id="0">ALL POSTS</span>
+                    <volist name="cate_list['cate']" id="vo">
+                        <span data-id="{pigcms{$vo.id}">{pigcms{$vo.name}</span>
+                    </volist>
                     <span class="cate_more">MORE >></span>
                 </div>
-                <ul class="left_list">
+                <ul class="left_list" id="list_0">
+                    <volist name="news_all" id="vo">
                     <li>
+                        <a href="/news/{pigcms{$vo.id}">
                         <div class="left_img">
-                            <img src="{pigcms{$static_path}images/new/doc_img.png" alt="" style="width: 100%"/>
+                            <img src="{pigcms{$vo.cover}" alt="" style="width: 100%"/>
                         </div>
                         <div class="left_title">
                             <div class="list_title">
-                                Why do people order deliveries? Blabla monday tuesday sunday everyday
+                                {pigcms{$vo.title}
                             </div>
                             <div class="list_sub">
                                 SUB TITLE SUB TITLE SUB TITLE
                             </div>
                             <div class="doc_time">
-                                Posted on Jan 20
+                                Posted on {pigcms{$vo.last_time|date='M d Y',###}
                             </div>
                         </div>
+                        </a>
                     </li>
-                    <li>
-                        <div class="left_img">
-                            <img src="{pigcms{$static_path}images/new/doc_img.png" alt="" style="width: 100%"/>
-                        </div>
-                        <div class="left_title">
-                            <div class="list_title">
-                                Why do people order deliveries? Blabla monday tuesday sunday everyday
-                            </div>
-                            <div class="list_sub">
-                                SUB TITLE SUB TITLE SUB TITLE
-                            </div>
-                            <div class="doc_time">
-                                Posted on Jan 20
-                            </div>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="left_img">
-                            <img src="{pigcms{$static_path}images/new/doc_img.png" alt="" style="width: 100%"/>
-                        </div>
-                        <div class="left_title">
-                            <div class="list_title">
-                                Why do people order deliveries? Blabla monday tuesday sunday everyday
-                            </div>
-                            <div class="list_sub">
-                                SUB TITLE SUB TITLE SUB TITLE
-                            </div>
-                            <div class="doc_time">
-                                Posted on Jan 20
-                            </div>
-                        </div>
-                    </li>
+                    </volist>
                 </ul>
+                <volist name="cate_list['news']" id="vo_cate">
+                <ul class="left_list" id="list_{pigcms{$key}" style="display: none">
+                    <volist name="vo_cate" id="vo">
+                        <li>
+                            <a href="/news/{pigcms{$vo.id}">
+                                <div class="left_img">
+                                    <img src="{pigcms{$vo.cover}" alt="" style="width: 100%"/>
+                                </div>
+                                <div class="left_title">
+                                    <div class="list_title">
+                                        {pigcms{$vo.title}
+                                    </div>
+                                    <div class="list_sub">
+                                        SUB TITLE SUB TITLE SUB TITLE
+                                    </div>
+                                    <div class="doc_time">
+                                        Posted on {pigcms{$vo.last_time|date='M d Y',###}
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                    </volist>
+                </ul>
+                </volist>
                 <div class="view_more">
-                    VIEW ALL POSTS ABOUT FOOD & DRINKS >>
+                    <a href="/news/cat-0">
+                        VIEW ALL POSTS<label></label> >>
+                    </a>
                 </div>
             </div>
             <div class="main_right">
                 <div class="right_title">POPULAR POSTS</div>
                 <ul class="right_list">
+                    <volist name="news_all" id="vo">
                     <li>
+                        <a href="/news/{pigcms{$vo.id}">
                         <label></label>
                         <span>
-                            Savvy Saanich Senior Shuts Down Potential Phone Fraudster
+                            {pigcms{$vo.title}
                         </span>
+                        </a>
                     </li>
-                    <li>
-                        <label></label>
-                        <span>
-                            Police release footage of suspects who broke into apartment building in Victoria (VIDEO)
-                        </span>
-                    </li>
-                    <li>
-                        <label></label>
-                        <span>
-                            Police release footage of suspects who broke into apartment building in Victoria (VIDEO)
-                        </span>
-                    </li>
-                    <li>
-                        <label></label>
-                        <span>
-                            Police release footage of suspects who broke into apartment building in Victoria (VIDEO)
-                        </span>
-                    </li>
+                    </volist>
                 </ul>
             </div>
         </div>
@@ -514,5 +503,35 @@
     $('.reg_show').height(t_height);
     $('.desc_left').height(t_height);
     $('.desc_right').height(t_height);
+
+    $('.cate_list').find('span').each(function () {
+        $(this).click(function () {
+            var class_name = $(this).attr('class');
+            if(class_name != 'curr_cate' && class_name != 'cate_more'){
+                $('.cate_list').find('span').each(function () {
+                    if($(this).attr('class') == 'curr_cate')
+                        $(this).removeClass();
+                });
+
+                var cate_id = $(this).data('id');
+                var id_name = '#list_'+cate_id;
+
+                $('body').find('.left_list').each(function () {
+                    $(this).hide();
+                });
+                $(id_name).show();
+                $(this).addClass('curr_cate');
+
+                var cate_name = '';
+                if(cate_id != 0)
+                    cate_name = ' ABOUT ' + $(this).html();
+
+                $('.view_more label').html(cate_name);
+                $('.view_more a').attr('href','/news/cat-'+cate_id);
+            }else if(class_name == 'cate_more'){
+                window.location.href = '/news/cat-0';
+            }
+        });
+    });
 </script>
 </html>
