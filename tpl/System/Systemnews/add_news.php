@@ -108,7 +108,7 @@
         var uploader = WebUploader.create({
             auto: true,
             swf: '{pigcms{$static_public}js/Uploader.swf',
-            server: "{pigcms{:U('System/systemnews/ajax_upload')}&cate_id={pigcms{$curr_cate.id}",
+            server: "{pigcms{:U('System/Systemnews/ajax_upload')}&cate_id={pigcms{$curr_cate.id}",
             accept: {
                 title: 'Images',
                 extensions: 'gif,jpg,jpeg,png',
