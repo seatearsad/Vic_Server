@@ -63,6 +63,23 @@ cursor: pointer;
     line-height: 3rem;
     cursor: pointer;
 }
+#new_msg{
+    width: 230px;
+    text-align: center;
+}
+#new_msg a{
+    display: inline-block;
+    width: 100%;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    color: white;
+    border: 1px solid white;
+    border-radius: 5px;
+    margin-top: 20px;
+    font-weight: bold;
+    font-size: 20px;
+}
 </style>
 </head>
 <body>
@@ -543,7 +560,10 @@ cursor: pointer;
 
     $('#print_order').click(printOrderToAndroid);
 
+    var new_img = "{pigcms{$static_path}images/new_order.png";
+    var new_url = "{pigcms{:U('Storestaff/getNewOrder')}";
 </script>
+<script type="text/javascript" src="{pigcms{$static_path}js/new_order.js"></script>
 <div class="footReturn">
 	<div class="clr"></div>
 	<div class="window" id="windowcenter">
