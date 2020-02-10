@@ -139,6 +139,8 @@
         .desc_point ul{
             margin: 0 auto;
             padding: 0;
+            vertical-align: middle;
+            display: inline;
         }
         .desc_point ul li{
             width: 30px;
@@ -271,68 +273,34 @@
             <div class="reg_show">
                 <div class="desc_left"></div>
                 <div class="desc_center">
+                    <volist name="commend" id="vo">
+                    <a href="/news/{pigcms{$vo.id}">
                     <div class="desc_all">
                         <div class="reg_title">
-                            <img src="{pigcms{$static_path}images/new/doc_img.png" />
+                            <img src="{pigcms{$vo.cover}" />
                         </div>
                         <div class="reg_txt">
                             <div class="doc_sub">
-                                [VICTORAI] SUB TITLE SUB TITLE SUB
+                                {pigcms{$vo.sub_title}
                             </div>
                             <div class="doc_title">
-                                1.WHY DO PEOPLE ORDER DELIVERIES?
+                                {pigcms{$vo.title}
                             </div>
                             <div class="doc_time">
-                                Posted on Jan 20
+                                Posted on {pigcms{$vo.last_time|date='M d Y',###}
                             </div>
                             <div class="doc_content">
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Suscipit officia neque beatae at inventore excepturi numquam sint commodi alias, quam consequuntur corporis ex, distinctio
+                                {pigcms{$vo.desc}
                             </div>
                         </div>
                     </div>
-                    <div class="desc_all">
-                        <div class="reg_title">
-                            <img src="{pigcms{$static_path}images/new/doc_img.png" />
-                        </div>
-                        <div class="reg_txt">
-                            <div class="doc_sub">
-                                [VICTORAI] SUB TITLE SUB TITLE SUB
-                            </div>
-                            <div class="doc_title">
-                                2.WHY DO PEOPLE ORDER DELIVERIES?
-                            </div>
-                            <div class="doc_time">
-                                Posted on Jan 20
-                            </div>
-                            <div class="doc_content">
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Suscipit officia neque beatae at inventore excepturi numquam sint commodi alias, quam consequuntur corporis ex, distinctio
-                            </div>
-                        </div>
-                    </div>
-                    <div class="desc_all">
-                        <div class="reg_title">
-                            <img src="{pigcms{$static_path}images/new/doc_img.png" />
-                        </div>
-                        <div class="reg_txt">
-                            <div class="doc_sub">
-                                [VICTORAI] SUB TITLE SUB TITLE SUB
-                            </div>
-                            <div class="doc_title">
-                                3.WHY DO PEOPLE ORDER DELIVERIES?
-                            </div>
-                            <div class="doc_time">
-                                Posted on Jan 20
-                            </div>
-                            <div class="doc_content">
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Suscipit officia neque beatae at inventore excepturi numquam sint commodi alias, quam consequuntur corporis ex, distinctio
-                            </div>
-                        </div>
-                    </div>
+                    </a>
+                    </volist>
                     <div class="desc_point">
                         <ul>
+                            <volist name="commend" id="vo">
                             <li></li>
-                            <li></li>
-                            <li></li>
+                            </volist>
                         </ul>
                     </div>
                 </div>
@@ -360,7 +328,7 @@
                                 {pigcms{$vo.title}
                             </div>
                             <div class="list_sub">
-                                SUB TITLE SUB TITLE SUB TITLE
+                                {pigcms{$vo.sub_title}
                             </div>
                             <div class="doc_time">
                                 Posted on {pigcms{$vo.last_time|date='M d Y',###}
@@ -383,7 +351,7 @@
                                         {pigcms{$vo.title}
                                     </div>
                                     <div class="list_sub">
-                                        SUB TITLE SUB TITLE SUB TITLE
+                                        {pigcms{$vo.sub_title}
                                     </div>
                                     <div class="doc_time">
                                         Posted on {pigcms{$vo.last_time|date='M d Y',###}
@@ -419,7 +387,7 @@
         <include file="Public:footer"/>
 	</body>
 <script>
-    var desc_num = 3;
+    var desc_num = '{pigcms{$commend_num}';
     var curr_num = 1;
 
     var timeoutId;

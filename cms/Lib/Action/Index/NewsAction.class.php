@@ -13,24 +13,17 @@
 
             if(isset($cat_id)){
                 if($cat_id != 0){
-                    $where =array('category_id'=>$cat_id,'status'=>1,'type'=>$this->type);
                     $now_cat = $cate->where(array('id'=>$cat_id))->find();
                 }else{
-                    $where =array('status'=>1,'type'=>$this->type);
                     $now_cat['id'] = 0;
                     $now_cat['name'] = 'ALL POSTS';
                 }
 
                 $this->assign('now_cat',$now_cat);
 
-                $count_news =  D('System_news')->where($where)->count();
-                import('@.ORG.news_page');
-                $p = new Page($count_news, 15,'page');
-                $news_title = D('System_news')->field('id,title,add_time,last_time,cover')->where($where)->order('sort DESC,id DESC')->limit($p->firstRow . ',' . $p->listRows)->select();
-                $this->assign('news_title',$news_title);
-
-                $pagebar = $p->show();
-                $this->assign('pagebar', $pagebar);
+                $news = $this->getCateList(5,$now_cat['id'],true);
+                $this->assign('news_title',$news['list']);
+                $this->assign('pagebar', $news['page']);
 
                 $this->display('category');
             }else if(!empty($_GET['id'])){
@@ -41,6 +34,8 @@
 
                 $cate_news = $this->getCateList(5, $now_cat['id'], false);
                 $this->assign('cate_list',$cate_news['list']);
+
+                D('System_news')->where(array('id'=>$_GET['id']))->save(array('view_num'=>$news['view_num']+1));
 
                 $this->display('news');
             }else{
@@ -63,12 +58,16 @@
                 }
 
                 $this->assign('cate_list',$cate_show);
+
+                $commend = $this->getCateList(5,0,false,true);
+                $this->assign('commend',$commend['list']);
+                $this->assign('commend_num',count($commend['list']));
                 $this->display();
             }
 
 	 }
 
-	 public function getCateList($num=3,$cate_id=0,$is_page=false){
+	 public function getCateList($num=3,$cate_id=0,$is_page=false,$is_commend=false){
          $news = M('System_news');
          $where['n.status'] = 1;
          $where['c.type'] = $this->type;
@@ -76,10 +75,14 @@
          if($cate_id != 0){
              $where['n.category_id'] = $cate_id;
          }
-         $count_news = $news->where($where)->count();
+
+         if($is_commend)
+             $where['n.is_commend'] = 1;
+
+         $count_news = $news->join('as n left join '.C('DB_PREFIX').'system_news_category c ON c.id = n.category_id ')->where($where)->count();
          import('@.ORG.news_page');
          $p = new Page($count_news, $num,'page');
-         $news_list = $news->field('n.id,n.title,n.cover,n.top_img,n.add_time,n.last_time,c.name')->join('as n left join '.C('DB_PREFIX').'system_news_category c ON c.id = n.category_id ')->where($where)->order('n.sort DESC,n.id DESC')->limit($p->firstRow . ',' . $p->listRows)->select();
+         $news_list = $news->field('n.*,c.name')->join('as n left join '.C('DB_PREFIX').'system_news_category c ON c.id = n.category_id ')->where($where)->order('n.sort DESC,n.id DESC')->limit($p->firstRow . ',' . $p->listRows)->select();
          $pagebar = $p->show();
 
          $return['list'] = $news_list;

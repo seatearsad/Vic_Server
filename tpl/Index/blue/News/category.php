@@ -156,6 +156,19 @@
             font-size: 12px;
             color: #999999;
         }
+        .paginator{
+            padding: 0 5px;
+            text-align: right;
+        }
+        .paginator li{
+            display: inline-block;
+            margin-left: 6px;
+            font-size: 14px;
+        }
+        .paginator li.current a{
+            font-weight: bold;
+            color: #ffa52d;
+        }
     </style>
 	<body>
         <include file="Public:header"/>
@@ -176,7 +189,7 @@
                                         {pigcms{$vo.title}
                                     </div>
                                     <div class="list_sub">
-                                        SUB TITLE SUB TITLE SUB TITLE
+                                        {pigcms{$vo.sub_title}
                                     </div>
                                     <div class="doc_time">
                                         Posted on {pigcms{$vo.last_time|date='M d Y',###}
@@ -186,6 +199,7 @@
                         </li>
                     </volist>
                 </ul>
+                {pigcms{$pagebar}
             </div>
             <div class="main_right">
                 <div class="right_title">CATEGORIES</div>

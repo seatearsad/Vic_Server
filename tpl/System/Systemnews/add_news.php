@@ -29,6 +29,18 @@
 				<th width="80">标题</th>
 				<td><input type="text" class="input fl" name="title" size="75" placeholder="标题" validate="maxlength:50,required:true"/></td>
 			</tr>
+            <tr>
+                <th width="80">副标题</th>
+                <td><input type="text" class="input fl" name="sub_title" size="75" placeholder="副标题" validate="maxlength:50,required:true"/></td>
+            </tr>
+            <tr>
+                <th width="80">关键词</th>
+                <td><input type="text" class="input fl" name="keyword" size="75" placeholder="关键词" validate="maxlength:100,required:true"/></td>
+            </tr>
+            <tr>
+                <th width="80">简述</th>
+                <td><input type="text" class="input fl" name="desc" size="75" placeholder="简述" validate="maxlength:150,required:true"/></td>
+            </tr>
 			<tr>
 				<th width="80">分类</th>
 				<if condition="$category">
@@ -94,6 +106,13 @@
 					<span class="cb-disable"><label class="cb-disable "><span>禁用</span><input type="radio" name="status" value="0" /></label></span>
 				</td>
 			</tr>
+            <tr>
+                <th width="80">推荐</th>
+                <td>
+                    <span class="cb-enable"><label class="cb-enable selected"><span>推荐</span><input type="radio" name="is_commend" value="1" checked="checked"/></label></span>
+                    <span class="cb-disable"><label class="cb-disable "><span>关闭</span><input type="radio" name="is_commend" value="0" /></label></span>
+                </td>
+            </tr>
 		</table>
         <input id="filename_0" type="hidden" name="cover">
         <input id="filename_1" type="hidden" name="top_img">

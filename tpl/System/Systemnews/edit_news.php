@@ -31,6 +31,18 @@
 				<input type="hidden" name="id" value="{pigcms{$news.id}" />
 				<td><input type="text" class="input fl" name="title" value="{pigcms{$news.title}" size="75" placeholder="标题" validate="maxlength:50,required:true"/></td>
 			</tr>
+            <tr>
+                <th width="80">副标题</th>
+                <td><input type="text" class="input fl" name="sub_title" value="{pigcms{$news.sub_title}" size="75" placeholder="副标题" validate="maxlength:50,required:true"/></td>
+            </tr>
+            <tr>
+                <th width="80">关键词</th>
+                <td><input type="text" class="input fl" name="keyword" size="75" value="{pigcms{$news.keyword}" placeholder="关键词" validate="maxlength:100,required:true"/></td>
+            </tr>
+            <tr>
+                <th width="80">简述</th>
+                <td><input type="text" class="input fl" name="desc" size="75" value="{pigcms{$news.desc}" placeholder="简述" validate="maxlength:150,required:true"/></td>
+            </tr>
 			<tr>
 				<th width="80">分类</th>
 				<if condition="$category">
@@ -100,6 +112,13 @@
 					<span class="cb-disable"><label class="cb-disable <if condition="$news['status'] eq 0">selected</if>"><span>禁用</span><input type="radio" name="status" value="0"  <if condition="$news['status'] eq 0">checked="checked"</if>/></label></span>
 				</td>
 			</tr>
+            <tr>
+                <th width="80">推荐</th>
+                <td>
+                    <span class="cb-enable"><label class="cb-enable <if condition="$news['is_commend'] eq 1">selected</if>"><span>推荐</span><input type="radio" name="is_commend" value="1" checked="checked"/></label></span>
+                    <span class="cb-disable"><label class="cb-disable <if condition="$news['is_commend'] eq 0">selected</if>"><span>关闭</span><input type="radio" name="is_commend" value="0" /></label></span>
+                </td>
+            </tr>
 		</table>
         <input id="filename_0" type="hidden" name="cover" value="{pigcms{$news.cover}" />
         <input id="filename_1" type="hidden" name="top_img" value="{pigcms{$news.top_img}" />

@@ -39,57 +39,108 @@ class Page{
 		}
 		$this->firstRow = $listRows*($this->nowPage-1);
 	}
+//    public function show(){
+//		if($this->totalRows == 0) return false;
+//		$now = $this->nowPage;
+//		$total = $this->totalPage;
+//		$page_val = $this->page_val;
+//		$url  =  $_SERVER['REQUEST_URI'].(strpos($_SERVER['REQUEST_URI'],'?')?'':"?");
+//        $parse = parse_url($url);
+//        if(isset($parse['query'])){
+//            parse_str($parse['query'],$params);
+//            unset($params[$page_val]);
+//			if(!empty($params)){
+//				$url  = $parse['path'].'?'.http_build_query($params).'&'.$page_val.'=';
+//			}else{
+//				$url = $parse['path'].'?'.$page_val.'=';
+//			}
+//        }else{
+//			$url .= ''.$page_val.'=';
+//		}
+//		$str.= '<div class="paginator-wrapper">';
+//		$str.= '<ul class="paginator paginator--notri paginator--large">';
+//		if($now > 2){
+//			$str .= '<li class="previous"><a href="'.$url.'1">首页</a></li>';
+//		}
+//		if($now > 1){
+//			$str .= '<li class="previous"><a href="'.$url.($now-1).'"><i class="tri"></i>上一页</a></li>';
+//		}
+//		for($i=1;$i<=5;$i++){
+//			if($now <= 1){
+//				$page = $i;
+//			}elseif($now > $total-1){
+//				$page = $total-5+$i;
+//			}else{
+//				$page = $now-3+$i;
+//			}
+//			if($page != $now  && $page>0){
+//				if($page<=$total){
+//					$str .= '<li><a href="'.$url.$page.'" title="第'.$page.'页">'.$page.'</a></li>';
+//				}else{
+//					break;
+//				}
+//			}else{
+//				if($page == $now) $str .= '<li class="current"><a>'.$page.'</a></li>';
+//			}
+//		}
+//		if ($now != $total){
+//			$str .= '<li class="next"><a href="'.$url.($now+1).'"><i class="tri"></i>下一页</a></li>';
+//		}
+//		$str .= '</ul>';
+//		$str .= '</div>';
+//
+//		return $str;
+//    }
+
     public function show(){
-		if($this->totalRows == 0) return false;
-		$now = $this->nowPage;
-		$total = $this->totalPage;
-		$page_val = $this->page_val;
-		$url  =  $_SERVER['REQUEST_URI'].(strpos($_SERVER['REQUEST_URI'],'?')?'':"?");
+        if($this->totalRows == 0) return false;
+        $now = $this->nowPage;
+        $total = $this->totalPage;
+        $page_val = $this->page_val;
+        $url  =  $_SERVER['REQUEST_URI'].(strpos($_SERVER['REQUEST_URI'],'?')?'':"?");
         $parse = parse_url($url);
         if(isset($parse['query'])){
             parse_str($parse['query'],$params);
             unset($params[$page_val]);
-			if(!empty($params)){
-				$url  = $parse['path'].'?'.http_build_query($params).'&'.$page_val.'=';
-			}else{
-				$url = $parse['path'].'?'.$page_val.'=';
-			}
+            if(!empty($params)){
+                $url  = $parse['path'].'?'.http_build_query($params).'&'.$page_val.'=';
+            }else{
+                $url = $parse['path'].'?'.$page_val.'=';
+            }
         }else{
-			$url .= ''.$page_val.'=';
-		}
-		$str.= '<div class="paginator-wrapper">';
-		$str.= '<ul class="paginator paginator--notri paginator--large">';
-		if($now > 2){
-			$str .= '<li class="previous"><a href="'.$url.'1">首页</a></li>';
-		}
-		if($now > 1){
-			$str .= '<li class="previous"><a href="'.$url.($now-1).'"><i class="tri"></i>上一页</a></li>';
-		}
-		for($i=1;$i<=5;$i++){
-			if($now <= 1){
-				$page = $i;
-			}elseif($now > $total-1){
-				$page = $total-5+$i;
-			}else{
-				$page = $now-3+$i;
-			}
-			if($page != $now  && $page>0){
-				if($page<=$total){
-					$str .= '<li><a href="'.$url.$page.'" title="第'.$page.'页">'.$page.'</a></li>';
-				}else{
-					break;
-				}
-			}else{
-				if($page == $now) $str .= '<li class="current"><a>'.$page.'</a></li>';
-			}
-		}
-		if ($now != $total){
-			$str .= '<li class="next"><a href="'.$url.($now+1).'"><i class="tri"></i>下一页</a></li>';
-		}
-		$str .= '</ul>';
-		$str .= '</div>';
-		
-		return $str;
+            $url .= ''.$page_val.'=';
+        }
+        $str.= '<div class="paginator-wrapper">';
+        $str.= '<ul class="paginator paginator--notri paginator--large">';
+//        if($now > 2){
+//            $str .= '<li class="previous"><a href="'.$url.'1">首页</a></li>';
+//        }
+//        if($now > 1){
+//            $str .= '<li class="previous"><a href="'.$url.($now-1).'"><i class="tri"></i>上一页</a></li>';
+//        }
+        $str .= '<li style="margin-right: 10px;">Page '.$now.'/'.$total.'</li>';
+        for($i=1;$i<=5;$i++){
+            if($now <= 1){
+                $page = $i;
+            }elseif($now > $total-1){
+                $page = $total-5+$i;
+            }else{
+                $page = $now-3+$i;
+            }
+            if($page != $now  && $page>0){
+                if($page<=$total){
+                    $str .= '<li><a href="'.$url.$page.'" title="第'.$page.'页">'.$page.'</a></li>';
+                }else{
+                    break;
+                }
+            }else{
+                if($page == $now) $str .= '<li class="current"><a>'.$page.'</a></li>';
+            }
+        }
+        $str .= '</ul>';
+        $str .= '</div>';
+
+        return $str;
     }
 }
 ?>

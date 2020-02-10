@@ -89,6 +89,11 @@
                 $data['top_img'] = $_POST['top_img'] ? $_POST['top_img'] : '';
                 $data['city_id'] = $_POST['city_id'] ? $_POST['city_id'] : 0;
 
+                $data['sub_title'] = $_POST['sub_title'];
+                $data['keyword'] = $_POST['keyword'];
+                $data['desc'] = $_POST['desc'];
+                $data['is_commend'] = $_POST['is_commend'];
+
 				if(D('System_news')->add($data)){
 					$this->success('添加公告成功！');
 				}else{
@@ -121,6 +126,11 @@
                 $data['cover'] = $_POST['cover'] ? $_POST['cover'] : '';
                 $data['top_img'] = $_POST['top_img'] ? $_POST['top_img'] : '';
                 $data['city_id'] = $_POST['city_id'] ? $_POST['city_id'] : 0;
+
+                $data['sub_title'] = $_POST['sub_title'];
+                $data['keyword'] = $_POST['keyword'];
+                $data['desc'] = $_POST['desc'];
+                $data['is_commend'] = $_POST['is_commend'];
 
 				if(D('System_news')->where('id='.$_POST['id'])->save($data)){
 					$this->success('保存成功！');
