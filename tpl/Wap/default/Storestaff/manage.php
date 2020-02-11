@@ -316,6 +316,12 @@ line-height: .7rem;
         </ul>
     </div>
     <include file="Storestaff:footer"/>
+    <script>
+        var new_img = "{pigcms{$static_path}images/new_order.png";
+        var new_url = "{pigcms{:U('Storestaff/getNewOrder')}";
+        var link_url = "{pigcms{:U('Storestaff/shop_list')}";
+    </script>
+    <script type="text/javascript" src="{pigcms{$static_path}js/new_order.js"></script>
 </body>
 <script type="text/javascript" src="{pigcms{$static_public}js/artdialog/jquery.artDialog.js"></script>
 <script type="text/javascript">
@@ -630,9 +636,5 @@ $('#manage_product').click(function () {
 $('#info').click(function () {
     window.location.href = '{pigcms{:U("Storestaff/manage_info")}';
 });
-var new_img = "{pigcms{$static_path}images/new_order.png";
-var new_url = "{pigcms{:U('Storestaff/getNewOrder')}";
-var link_url = "{pigcms{:U('Storestaff/shop_list')}";
 </script>
-<script type="text/javascript" src="{pigcms{$static_path}js/new_order.js"></script>
 </html>
