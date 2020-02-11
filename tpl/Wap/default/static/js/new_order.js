@@ -3,7 +3,7 @@ var message = "<div id=\"new_msg\">" +
     "                <div style=\"margin-top: 10px\">" +
     "                    You have one or more orders need to be confirmed. Please check the delivery page." +
     "                </div>" +
-    "                <a href=\"{pigcms{:U('Storestaff/shop_list')}\">" +
+    "                <a href=\""+link_url+"\">" +
     "                    View" +
     "                </a>" +
     "            </div>";
