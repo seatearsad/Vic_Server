@@ -1,4 +1,4 @@
-var message = "<div id=\"new_msg\">" +
+var tip_message = "<div id=\"new_msg\">" +
     "                <img src=\""+new_img+"\" width=\"120\">" +
     "                <div style=\"margin-top: 10px\">" +
     "                    You have one or more orders need to be confirmed. Please check the delivery page." +
@@ -17,7 +17,7 @@ function getNewOrder(){
             if(result.is_new == 1){
                 layer.open({
                     title:[' ','border:none'],
-                    content:message,
+                    content:tip_message,
                     style: 'border:none; background-color:#ffa52d; color:#fff;'
                 });
             }
