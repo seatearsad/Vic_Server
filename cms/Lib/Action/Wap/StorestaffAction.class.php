@@ -3054,4 +3054,30 @@ class StorestaffAction extends BaseAction
                 return '';
         }
     }
+
+    public function getNewOrder(){
+        $last_time = $_POST['last_time'];
+        $store_id = intval($this->store['store_id']);
+        $where['mer_id'] = $this->store['mer_id'];
+        $where['store_id'] = $store_id;
+        $where['paid'] = 1;
+
+        $order = D('Shop_order')->field(array('order_id','create_time'))->where($where)->order('create_time desc')->find();
+        if($order){
+            if($last_time == 0) {
+                $data['is_new'] = 0;
+            }else{
+                if($order['create_time'] > $last_time)
+                    $data['is_new'] = 1;
+                else
+                    $data['is_new'] = 0;
+            }
+            $data['new_time'] = $order['create_time'];
+            $data['error'] = 0;
+        }else{
+            $data['error'] = 1;
+        }
+
+        exit(json_encode($data));
+    }
 }

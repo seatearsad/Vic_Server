@@ -200,6 +200,24 @@ line-height: .7rem;
   .dealcard-block-right li.btm_li{
      margin-bottom: .18rem;
  }
+
+        #new_msg{
+            width: 230px;
+            text-align: center;
+        }
+        #new_msg a{
+            display: inline-block;
+            width: 100%;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            color: white;
+            border: 1px solid white;
+            border-radius: 5px;
+            margin-top: 20px;
+            font-weight: bold;
+            font-size: 20px;
+        }
 </style>
 </head>
 <body>
@@ -389,7 +407,11 @@ $(document).ready(function(){
 		window.document.find_form.submit();
 		return false;
 	});
+	var new_img = "{pigcms{$static_path}images/new_order.png";
+	var new_url = "{pigcms{:U('Storestaff/getNewOrder')}";
+    var link_url = "{pigcms{:U('Storestaff/shop_list')}";
 </script>
+<script type="text/javascript" src="{pigcms{$static_path}js/new_order.js"></script>
 {pigcms{$shareScript}
 <script type="text/javascript">
 function is_mobile(){
