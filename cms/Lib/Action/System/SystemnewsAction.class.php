@@ -159,6 +159,8 @@
 				$data['sort'] = $_POST['sort'];
 				$data['status'] = $_POST['status'];
                 $data['type']=$_POST['type'];
+                $data['link_img'] = $_POST['link_img'];
+                $data['link_url'] = $_POST['link_url'];
 				if(D('System_news_category')->add($data)){
 					$this->success('添加分类成功！');
 				}else{
@@ -175,6 +177,8 @@
 				$data['sort']=$_POST['sort'];
 				$data['status']=$_POST['status'];
 				$data['type']=$_POST['type'];
+                $data['link_img'] = $_POST['link_img'];
+                $data['link_url'] = $_POST['link_url'];
 				if(D('System_news_category')->where(array('id'=>$_POST['id']))->save($data)){
 					$this->success('更新成功！');
 				}else{

@@ -215,6 +215,14 @@
                     </li>
                     </volist>
                 </ul>
+
+                <if condition="$now_cat.link_img">
+                    <div>
+                        <a href="{pigcms{$now_cat.link_url}">
+                            <img src="{pigcms{$now_cat.link_img}" style="width: 100%">
+                        </a>
+                    </div>
+                </if>
             </div>
         </div>
         <include file="Public:footer"/>
