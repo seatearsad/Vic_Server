@@ -20,6 +20,9 @@ function getNewOrder(){
                     content:tip_message,
                     style: 'border:none; background-color:#ffa52d; color:#fff;'
                 });
+                var audio = new Audio();
+                audio.src = sound_url;
+                audio.play();
             }
         }
         setTimeout(getNewOrder,3000);

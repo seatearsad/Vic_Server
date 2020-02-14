@@ -563,6 +563,7 @@ cursor: pointer;
     var new_img = "{pigcms{$static_path}images/new_order.png";
     var new_url = "{pigcms{:U('Storestaff/getNewOrder')}";
     var link_url = "{pigcms{:U('Storestaff/shop_list')}";
+    var sound_url = "{pigcms{$static_public}sound/soft-bells.mp3";
 </script>
 <script type="text/javascript" src="{pigcms{$static_path}js/new_order.js"></script>
 <div class="footReturn">
