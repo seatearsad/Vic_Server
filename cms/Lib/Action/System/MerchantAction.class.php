@@ -1449,4 +1449,65 @@ class MerchantAction extends BaseAction{
         $this->assign('pagebar', $pagebar);
 	    $this->display();
     }
+
+    public function store_list(){
+        //搜索
+        if(!empty($_GET['keyword'])){
+            if($_GET['searchtype'] == 'mer_id'){
+                $where['s.mer_id'] = $_GET['keyword'];
+            }else if($_GET['searchtype'] == 'account'){
+                $where['s.account'] = array('like','%'.$_GET['keyword'].'%');
+            }else if($_GET['searchtype'] == 'name'){
+                $where['s.name'] = array('like','%'.$_GET['keyword'].'%');
+            }else if($_GET['searchtype'] == 'phone'){
+                $where['s.phone'] = array('like','%'.$_GET['keyword'].'%');
+            }
+        }
+        $searchstatus = intval($_GET['searchstatus']);
+        switch($searchstatus){
+            case 0://全部
+                //$condition_merchant['s.status'] = 1;
+                break;
+            case 1://正常
+                $where['s.status'] = 1;
+                break;
+            case 2://关闭
+                $where['s.status'] = array('neq',1);
+                break;
+        }
+
+        if($_GET['city_id']){
+            $this->assign('city_id',$_GET['city_id']);
+            if($_GET['city_id'] != 0){
+                $where['s.city_id'] = $_GET['city_id'];
+            }
+        }else{
+            $this->assign('city_id',0);
+        }
+        $city = D('Area')->where(array('area_type'=>2))->select();
+        $this->assign('city',$city);
+
+	    $where['m.status'] = 1;
+
+        import('@.ORG.system_page');
+        $count_store = D('Merchant_store')->join('as s left join '.C('DB_PREFIX').'merchant m ON m.mer_id = s.mer_id ')->where($where)->count();
+        $p = new Page($count_store, 15);
+        $store_list = D('Merchant_store')->field('s.*,m.name as merchant_name')->join('as s left join '.C('DB_PREFIX').'merchant m ON m.mer_id = s.mer_id ')->where($where)->order('m.mer_id DESC')->limit($p->firstRow . ',' . $p->listRows)->select();
+        foreach ($store_list as &$store){
+            $is_all_zero = true;
+            for($i=1;$i<=21;++$i){
+                if($store['open_'.$i] != "00:00:00" || $store['close_'.$i] != "00:00:00"){
+                    $is_all_zero = false;
+                }
+            }
+
+            $store['all_zero'] = $is_all_zero;
+        }
+        $this->assign('store_list',$store_list);
+
+        $pagebar = $p->show();
+        $this->assign('pagebar', $pagebar);
+
+        $this->display();
+    }
 }
