@@ -264,7 +264,7 @@ class ShopAction extends BaseAction
         }else{
             $this->assign('city_id',0);
         }
-        $city = D('Area')->where(array('area_type'=>2))->select();
+        $city = D('Area')->where(array('area_type'=>2,'is_open'=>1))->select();
         $this->assign('city',$city);
 
         $store_ids = array();
@@ -1108,6 +1108,10 @@ class ShopAction extends BaseAction
             $title .= '('.$_GET['begin_time'].' - '.$_GET['end_time'].')';
             $period = array(strtotime($_GET['begin_time']." 00:00:00"),strtotime($_GET['end_time']." 23:59:59"));
             $condition_where .=  " AND (o.create_time BETWEEN ".$period[0].' AND '.$period[1].")";
+        }
+
+        if($_GET['city_id']){
+            $condition_where .= " AND s.city_id=".$_GET['city_id'];
         }
 
         $sql = "SELECT  o.*, m.name AS merchant_name,g.name as good_name,g.tax_num as good_tax,g.deposit_price,s.tax_num as store_tax,s.proportion as store_pro,d.price as good_price ,d.unit,d.cost_price, d.num as good_num, s.name AS store_name FROM " . C('DB_PREFIX') . "shop_order AS o LEFT JOIN " . C('DB_PREFIX') . "merchant_store AS s ON s.store_id=o.store_id LEFT JOIN " . C('DB_PREFIX') . "merchant AS m ON `s`.`mer_id`=`m`.`mer_id` LEFT JOIN " . C('DB_PREFIX') . "shop_order_detail AS d ON `d`.`order_id`=`o`.`order_id`  LEFT JOIN " . C('DB_PREFIX') . "shop_goods AS g ON `g`.`goods_id`=`d`.`goods_id` ".$condition_where." ORDER BY o.order_id DESC";

@@ -97,7 +97,7 @@ class DeliverAction extends BaseAction {
             $condition_user['city_id'] = $this->system_session['area_id'];
         }
 
-        $city = D('Area')->where(array('area_type'=>2))->select();
+        $city = D('Area')->where(array('area_type'=>2,'is_open'=>1))->select();
 
         $condition_user['group'] = 1;
         $count_user = $this->deliver_user->where($condition_user)->count();
@@ -422,7 +422,7 @@ class DeliverAction extends BaseAction {
         }else{
             $this->assign('city_id',0);
         }
-        $city = D('Area')->where(array('area_type'=>2))->select();
+        $city = D('Area')->where(array('area_type'=>2,'is_open'=>1))->select();
         $this->assign('city',$city);
 
 		if ($phone) {
@@ -1340,7 +1340,7 @@ class DeliverAction extends BaseAction {
         }else{
             $this->assign('city_id',0);
         }
-        $city = D('Area')->where(array('area_type'=>2))->select();
+        $city = D('Area')->where(array('area_type'=>2,'is_open'=>1))->select();
         $this->assign('city',$city);
 
         //未审核的

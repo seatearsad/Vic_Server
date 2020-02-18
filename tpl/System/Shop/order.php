@@ -181,7 +181,7 @@
     var city_id = $('#city_select').val();
     $('#city_select').change(function () {
         city_id = $(this).val();
-        window.location.href = "{pigcms{:U('Shop/order', array('type' => $type, 'sort' => $sort,'status'=>$status,'pay_type'=>$pay_type))}" + "&city_id="+city_id;
+        window.location.href = "{pigcms{:U('Shop/order', $_GET)}" + "&city_id="+city_id;
     });
 
 $(function(){

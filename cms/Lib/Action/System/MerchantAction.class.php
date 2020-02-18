@@ -53,7 +53,7 @@ class MerchantAction extends BaseAction{
         }else{
             $this->assign('city_id',0);
         }
-        $city = D('Area')->where(array('area_type'=>2))->select();
+        $city = D('Area')->where(array('area_type'=>2,'is_open'=>1))->select();
         $this->assign('city',$city);
 
 		if ($this->system_session['area_id']) {
@@ -1484,7 +1484,7 @@ class MerchantAction extends BaseAction{
         }else{
             $this->assign('city_id',0);
         }
-        $city = D('Area')->where(array('area_type'=>2))->select();
+        $city = D('Area')->where(array('area_type'=>2,'is_open'=>1))->select();
         $this->assign('city',$city);
 
 	    $where['m.status'] = 1;
