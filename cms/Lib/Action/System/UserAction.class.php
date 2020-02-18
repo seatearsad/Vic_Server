@@ -30,7 +30,7 @@ class UserAction extends BaseAction {
                 }else{
                     $this->assign('city_id',0);
                 }
-                $city = D('Area')->where(array('area_type'=>2))->select();
+                $city = D('Area')->where(array('area_type'=>2,'is_open'=>1))->select();
                 $this->assign('city',$city);
 
                 if (!empty($_GET['keyword'])) {
