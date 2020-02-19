@@ -1104,7 +1104,7 @@ class ShopAction extends BaseAction
                 $this->error_tips("结束时间应大于开始时间");
             }
 
-            $condition_where ="where o.is_del=0  AND (o.status=2 or o.status=3) and paid=1";
+            $condition_where ="where o.is_del=0  AND (o.status=2 or o.status=3) and o.paid=1";
             $title .= '('.$_GET['begin_time'].' - '.$_GET['end_time'].')';
             $period = array(strtotime($_GET['begin_time']." 00:00:00"),strtotime($_GET['end_time']." 23:59:59"));
             $condition_where .=  " AND (o.create_time BETWEEN ".$period[0].' AND '.$period[1].")";
@@ -1114,10 +1114,15 @@ class ShopAction extends BaseAction
             $condition_where .= " AND s.city_id=".$_GET['city_id'];
             $city = D('Area')->where(array('area_id'=>$_GET['city_id']))->find();
             $title .= ' - '.$city['area_name'];
+
+            $where['city_id'] = $_GET['city_id'];
         }
 
-        $sql = "SELECT COUNT(o.order_id) as count,SUM(o.price) as sum,s.`name` as store_name FROM " . C('DB_PREFIX') . "merchant_store AS s LEFT JOIN " . C('DB_PREFIX') . "shop_order AS o ON s.store_id=o.store_id ".$condition_where." GROUP BY s.store_id ORDER BY SUM(o.price) DESC";
+        $sql = "SELECT COUNT(o.order_id) as count,SUM(o.price) as sum,s.`name` as store_name,s.store_id FROM " . C('DB_PREFIX') . "merchant_store AS s LEFT JOIN " . C('DB_PREFIX') . "shop_order AS o ON s.store_id=o.store_id ".$condition_where." GROUP BY s.store_id ORDER BY SUM(o.price) DESC";
         $list = D()->query($sql);
+
+        $where['status'] = 1;
+        $store_list = D('Merchant_store')->where($where)->select();
 
         $objExcel = new PHPExcel();
         $objProps = $objExcel->getProperties();
@@ -1139,11 +1144,27 @@ class ShopAction extends BaseAction
         $objActSheet->setCellValue('B1', '销售金额');
         $objActSheet->setCellValue('C1', '店铺名称');
         $index = 2;
+
+        $store_id_list = array();
         foreach ($list as $store) {
             $objActSheet->setCellValueExplicit('A' . $index, $store['count'], PHPExcel_Cell_DataType::TYPE_NUMERIC);
             $objActSheet->setCellValueExplicit('B' . $index, '$'.floatval(sprintf("%.2f", $store['sum'])));
             $objActSheet->setCellValueExplicit('C' . $index, $store['store_name']);
             $index++;
+
+            $store_id_list[] = $store['store_id'];
+        }
+
+        foreach ($store_list as $store){
+            if(!in_array($store['store_id'],$store_id_list)){
+                $merchant = D('Merchant')->where(array('mer_id'=>$store['mer_id']))->find();
+                if($merchant['status'] == 1) {
+                    $objActSheet->setCellValueExplicit('A' . $index, 0, PHPExcel_Cell_DataType::TYPE_NUMERIC);
+                    $objActSheet->setCellValueExplicit('B' . $index, '$0.00');
+                    $objActSheet->setCellValueExplicit('C' . $index, $store['name']);
+                    $index++;
+                }
+            }
         }
 
         //输出
