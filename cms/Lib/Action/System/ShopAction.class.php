@@ -1148,7 +1148,7 @@ class ShopAction extends BaseAction
         $store_id_list = array();
         foreach ($list as $store) {
             $objActSheet->setCellValueExplicit('A' . $index, $store['count'], PHPExcel_Cell_DataType::TYPE_NUMERIC);
-            $objActSheet->setCellValueExplicit('B' . $index, '$'.floatval(sprintf("%.2f", $store['sum'])));
+            $objActSheet->setCellValueExplicit('B' . $index, floatval(sprintf("%.2f", $store['sum'])), PHPExcel_Cell_DataType::TYPE_NUMERIC);
             $objActSheet->setCellValueExplicit('C' . $index, $store['store_name']);
             $index++;
 
@@ -1160,7 +1160,7 @@ class ShopAction extends BaseAction
                 $merchant = D('Merchant')->where(array('mer_id'=>$store['mer_id']))->find();
                 if($merchant['status'] == 1) {
                     $objActSheet->setCellValueExplicit('A' . $index, 0, PHPExcel_Cell_DataType::TYPE_NUMERIC);
-                    $objActSheet->setCellValueExplicit('B' . $index, '$0.00');
+                    $objActSheet->setCellValueExplicit('B' . $index, 0.00, PHPExcel_Cell_DataType::TYPE_NUMERIC);
                     $objActSheet->setCellValueExplicit('C' . $index, $store['name']);
                     $index++;
                 }
@@ -1236,7 +1236,7 @@ class ShopAction extends BaseAction
 
         foreach ($list as $store) {
             $objActSheet->setCellValueExplicit('A' . $index, $store['count'], PHPExcel_Cell_DataType::TYPE_NUMERIC);
-            $objActSheet->setCellValueExplicit('B' . $index, '$'.floatval(sprintf("%.2f", $store['sum'])));
+            $objActSheet->setCellValueExplicit('B' . $index, floatval(sprintf("%.2f", $store['sum'])), PHPExcel_Cell_DataType::TYPE_NUMERIC);
             $objActSheet->setCellValueExplicit('C' . $index, $store['username']);
             $objActSheet->setCellValueExplicit('D' . $index, date('Y-m-d',$store['add_time']));
             $index++;
