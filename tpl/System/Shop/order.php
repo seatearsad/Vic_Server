@@ -67,6 +67,7 @@
                     <if condition="$system_session['level'] eq 2">
                         <a href="{pigcms{:U('Shop/export_total',$_GET)}" class="button" style="float:right;margin-right: 10px;">总表</a>
                         <a href="{pigcms{:U('Shop/export_store',$_GET)}" class="button" style="float:right;margin-right: 10px;">店铺排行</a>
+                        <a href="{pigcms{:U('Shop/export_user',$_GET)}" class="button" style="float:right;margin-right: 10px;">用户排行</a>
                     </if>
 				</td>
 			</tr>

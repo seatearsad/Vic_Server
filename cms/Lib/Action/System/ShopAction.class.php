@@ -1183,6 +1183,81 @@ class ShopAction extends BaseAction
         exit();
     }
 
+    public function export_user(){
+        set_time_limit(0);
+        require_once APP_PATH . 'Lib/ORG/phpexcel/PHPExcel.php';
+        $title = 'User Ranking';
+
+        if(!$_GET['begin_time'] || !$_GET['end_time']){
+            $this->error('请选择时间！');
+        }else{
+            if ($_GET['begin_time']>$_GET['end_time']) {
+                $this->error_tips("结束时间应大于开始时间");
+            }
+
+            $condition_where ="where o.is_del=0  AND (o.status=2 or o.status=3) and o.paid=1";
+            $title .= '('.$_GET['begin_time'].' - '.$_GET['end_time'].')';
+            $period = array(strtotime($_GET['begin_time']." 00:00:00"),strtotime($_GET['end_time']." 23:59:59"));
+            $condition_where .=  " AND (o.create_time BETWEEN ".$period[0].' AND '.$period[1].")";
+        }
+
+        if($_GET['city_id']){
+            $condition_where .= " AND s.city_id=".$_GET['city_id'];
+            $city = D('Area')->where(array('area_id'=>$_GET['city_id']))->find();
+            $title .= ' - '.$city['area_name'];
+
+            $where['city_id'] = $_GET['city_id'];
+        }
+
+        $sql = "SELECT COUNT(o.order_id) as count,SUM(o.price) as sum,o.username,u.add_time FROM " . C('DB_PREFIX') . "shop_order AS o LEFT JOIN " . C('DB_PREFIX') . "merchant_store AS s ON s.store_id=o.store_id LEFT JOIN " . C('DB_PREFIX') . "user as u ON u.uid=o.uid ".$condition_where." GROUP BY s.store_id ORDER BY SUM(o.price) DESC";
+        $list = D()->query($sql);
+
+        $objExcel = new PHPExcel();
+        $objProps = $objExcel->getProperties();
+        // 设置文档基本属性
+        $objProps->setCreator($title);
+        $objProps->setTitle($title);
+        $objProps->setSubject($title);
+        $objProps->setDescription($title);
+
+        $objExcel->createSheet();
+        $objExcel->setActiveSheetIndex(0);
+        $objExcel->getActiveSheet()->setTitle('Ranking');
+        $objActSheet = $objExcel->getActiveSheet();
+        $objExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
+        $objExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
+        $objExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
+
+        $objActSheet->setCellValue('A1', '订单数量');
+        $objActSheet->setCellValue('B1', '销售金额');
+        $objActSheet->setCellValue('C1', '用户名');
+        $objActSheet->setCellValue('D1', '注册时间');
+        $index = 2;
+
+        foreach ($list as $store) {
+            $objActSheet->setCellValueExplicit('A' . $index, $store['count'], PHPExcel_Cell_DataType::TYPE_NUMERIC);
+            $objActSheet->setCellValueExplicit('B' . $index, '$'.floatval(sprintf("%.2f", $store['sum'])));
+            $objActSheet->setCellValueExplicit('C' . $index, $store['username']);
+            $objActSheet->setCellValueExplicit('D' . $index, date('Y-m-d',$store['add_time']));
+            $index++;
+        }
+
+        //输出
+        $objWriter = new PHPExcel_Writer_Excel5($objExcel);
+        ob_end_clean();
+        header("Pragma: public");
+        header("Expires: 0");
+        header("Cache-Control:must-revalidate, post-check=0, pre-check=0");
+        header("Content-Type:application/force-download");
+        header("Content-Type:application/vnd.ms-execl");
+        header("Content-Type:application/octet-stream");
+        header("Content-Type:application/download");
+        header('Content-Disposition:attachment;filename="'.$title.'.xls"');
+        header("Content-Transfer-Encoding:binary");
+        $objWriter->save('php://output');
+        exit();
+    }
+
     public function export_total(){
         set_time_limit(0);
         require_once APP_PATH . 'Lib/ORG/phpexcel/PHPExcel.php';
