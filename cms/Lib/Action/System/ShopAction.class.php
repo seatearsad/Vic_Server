@@ -1209,7 +1209,7 @@ class ShopAction extends BaseAction
             $where['city_id'] = $_GET['city_id'];
         }
 
-        $sql = "SELECT COUNT(o.order_id) as count,SUM(o.price) as sum,o.username,u.add_time FROM " . C('DB_PREFIX') . "shop_order AS o LEFT JOIN " . C('DB_PREFIX') . "merchant_store AS s ON s.store_id=o.store_id LEFT JOIN " . C('DB_PREFIX') . "user as u ON u.uid=o.uid ".$condition_where." GROUP BY s.store_id ORDER BY SUM(o.price) DESC";
+        $sql = "SELECT COUNT(o.order_id) as count,SUM(o.price) as sum,o.username,u.add_time FROM " . C('DB_PREFIX') . "shop_order AS o LEFT JOIN " . C('DB_PREFIX') . "merchant_store AS s ON s.store_id=o.store_id LEFT JOIN " . C('DB_PREFIX') . "user as u ON u.uid=o.uid ".$condition_where." GROUP BY o.uid ORDER BY SUM(o.price) DESC";
         $list = D()->query($sql);
 
         $objExcel = new PHPExcel();
