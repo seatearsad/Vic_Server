@@ -107,7 +107,13 @@ class IndexAction extends BaseAction
             $shop_list = D('Merchant_store_shop')->get_list_arrange($where,3,1,$limit,$page,$lat,$long);
         }
 
+        if($cat_id == 0)
+            $cat_where['cat_id'] = $cat_fid;
+        else
+            $cat_where['cat_id'] = $cat_id;
 
+        $category = D('Shop_category')->field(true)->where(array('cat_id'=>$cat_fid))->find();
+        $result['cat_name'] = lang_substr($category['cat_name'], C('DEFAULT_LANG'));
 
         if(!$shop_list['list']){
             $shop_list['list'] = array();
