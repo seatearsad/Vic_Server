@@ -222,7 +222,8 @@ class IndexAction extends BaseAction
             $userInfo['openid'] = $user['openid'];
             $userInfo['login_type'] = $type;
             //记录设备号
-            D('User')->where(array('uid'=>$userInfo['uid']))->save(array('device_id'=>$token));
+            if($token != '')
+                D('User')->where(array('uid'=>$userInfo['uid']))->save(array('device_id'=>$token));
         }
 
         $this->returnCode(0,'info',$userInfo);
