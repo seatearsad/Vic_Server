@@ -3132,7 +3132,9 @@ class MyAction extends BaseAction{
 			$where .= " AND paid=1 AND status<2";
 		} elseif ($status == 2) {
 			$where .= " AND paid=1 AND status=2";
-		}
+		}else{//付款超时，待删除
+            $where .= " AND status<>6";
+        }
 // 		$status == -1 && $where['paid'] = 0;
 // 		$status == 1 && $where['status'] = 0;
 // 		$status == 2 && $where['status'] = 1;
@@ -3201,7 +3203,9 @@ class MyAction extends BaseAction{
             $where .= " AND paid=1 AND status < 4";
 		} elseif ($status == 2) {
 			$where .= " AND (status=4 OR status=5)";
-		}
+		}else{//付款超时，待删除
+		    $where .= " AND status<>6";
+        }
 
 		$order_list = D("Shop_order")->field(true)->where($where)->order('order_id DESC')->select();
 		foreach ($order_list as $st) {

@@ -1,7 +1,7 @@
 <?php
 class Shop_orderModel extends Model
 {
-	public $status_list = array('-1' => '全部' ,'0' => '未接单', 1 => '已确认', 2 => '已消费', 3 => '已评价', 4 => '已退款', 5 => '已取消', 7 => '分配到自提点', 8 => '发货到自提点', 9 => '自提点接货', 10 => '自提点发货');
+	public $status_list = array('-1' => '全部' ,'0' => '未接单', 1 => '已确认', 2 => '已消费', 3 => '已评价', 4 => '已退款', 5 => '已取消',6=>'付款超时，待删除', 7 => '分配到自提点', 8 => '发货到自提点', 9 => '自提点接货', 10 => '自提点发货');
 	public $status_list_admin = array('-1' => '全部', '100'=>'未支付' ,'0' => '未接单', 1 => '已确认', 2 => '已消费', 3 => '已评价', 4 => '已退款', 5 => '已取消', 7 => '分配到自提点', 8 => '发货到自提点', 9 => '自提点接货', 10 => '自提点发货');
 
     public function __construct(){
@@ -9,14 +9,21 @@ class Shop_orderModel extends Model
 
         $allList = $this->where(array('paid'=>0))->order('create_time asc')->select();
         $delList = array();
+        $overtimeList = array();
         foreach ($allList as $order){
 			$store = D('Merchant_store')->where(array('store_id'=>$order['store_id']))->find();
 			$jetlag = D('Area')->field('jetlag')->where(array('area_id'=>$store['city_id']))->find()['jetlag'];
 			$cha = time() + $jetlag*3600 - $order['create_time'];
-			if($cha > 300){
+			//超过5分钟的放入待删除状态 status=6
+			if($cha > 300 && $order['status'] != 6){
+				$overtimeList[] = $order['order_id'];
+			}
+			//超过2小时后删除
+			if($cha > 7200 && $order['status'] == 6){
 				$delList[] = $order['order_id'];
 			}
 		}
+        $this->where(array('order_id'=>array('in',$overtimeList)))->save(array('status'=>6));
 
 		$this->where(array('order_id'=>array('in',$delList)))->delete();
 		D('Shop_order_detail')->where(array('order_id'=>array('in',$delList)))->delete();
@@ -659,6 +666,10 @@ class Shop_orderModel extends Model
 			$data_shop_order['paid'] = 1;
 			//garfunkel add moneris
 			$data_shop_order['invoice_head'] = $order_param['invoice_head']?$order_param['invoice_head']:'';
+
+			//超过付款时间的返回订单
+			if($now_order['status'] == 6)
+				$data_shop_order['status'] = 0;
 
 			if ($now_order['card_discount']) {
 				$data_shop_order['price'] = sprintf("%.2f", ($now_order['price']-$now_order['freight_charge']) * $now_order['card_discount']/10)+$now_order['freight_charge'];//floor($now_order['price'] * $now_order['card_discount'] * 10) / 100;

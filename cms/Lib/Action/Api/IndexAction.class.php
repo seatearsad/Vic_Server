@@ -778,11 +778,13 @@ class IndexAction extends BaseAction
 
         $where = "is_del=0 AND uid={$uid}";
         if ($status == 0) {
-            $where .= " AND paid=0";
+            $where .= " AND paid=0 AND status<4";
         } elseif ($status == 1) {
             $where .= " AND paid=1 AND status=2";
         } elseif ($status == 2) {
-            $where .= " AND paid=1 AND status=4";
+            $where .= " AND paid=1 AND (status=4 OR status=5)";
+        }else{//付款超时，待删除
+            $where .= " AND status<>6";
         }
 
         $where .= " AND is_del = 0";
