@@ -130,8 +130,8 @@
         <span class="fillet" style="background: url('./tpl/Static/blue/images/new/icon.png') center no-repeat; background-size: contain;"></span>
         <div style="font-size: 14px">{pigcms{:L('_ND_BECOMEACOURIER_')}</div>
         <div style="color: red;font-size: 10px;margin: 10px auto;width: 90%;">
-            <!--{pigcms{:L('_ND_ACCTSUCCESS_')}-->
-            Registration is temporarily unavailable at this point due to shortage in delivery bags. We'll inform you by email when registration is back to active. We're sorry for the inconvenience and thank you for your understanding!
+            {pigcms{:L('_ND_ACCTSUCCESS_')}
+            <!-- Registration is temporarily unavailable at this point due to shortage in delivery bags. We'll inform you by email when registration is back to active. We're sorry for the inconvenience and thank you for your understanding!-->
         </div>
     </div>
     <div id="step_now">
@@ -186,7 +186,7 @@
                 <input type="text" placeholder="7 to 12 digits" id="account">
             </li>
             <li class="Landd">
-                <input type="button" value="Save & Continue" style="background-color: #CCCCCC;width: 50%;">
+                <input type="button" value="Save & Continue" id="reg_form" style="background-color: #ffa52d;width: 50%;">
             </li>
         </ul>
         <input type="hidden" name="lng" id="lng">
