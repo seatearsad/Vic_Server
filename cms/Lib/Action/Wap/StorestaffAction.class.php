@@ -3114,6 +3114,7 @@ class StorestaffAction extends BaseAction
         $where['store_id'] = $store_id;
         $where['paid'] = 1;
         $where['status'] = array('lt',2);
+        $where['is_del'] = 0;
 
         $order = D('Shop_order')->field(array('order_id','create_time'))->where($where)->order('create_time desc')->find();
         if($order){
