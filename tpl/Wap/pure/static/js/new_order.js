@@ -61,8 +61,13 @@ function click_order_list(order) {
 }
 
 function getOrderDetail(order_id) {
+    layer.open({
+        type:2,
+        content:'Loading...'
+    });
     $.post(detail_url,{order_id:order_id},function(result) {
         if (result.error == 0) {
+            layer.closeAll();
             if(result.order_data != null){
                 this_order = result.order_data;
                 order_info = this_order.info;
