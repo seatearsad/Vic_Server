@@ -43,6 +43,21 @@ class StorestaffAction extends BaseAction
         $this->language = isset($_COOKIE['language']) ? $_COOKIE['language'] : 'cn';
         $this->assign('language', $this->language);
         $this->assign('merchantstatic_path', $this->config['site_url'] . '/tpl/Merchant/static/');
+        //
+        $shop = D('Merchant_store')->field(true)->where(array('store_id' => $this->store['store_id']))->find();
+        $shop['name'] = lang_substr($shop['name'],C('DEFAULT_LANG'));
+        $store_image_class = new store_image();
+        $images = $store_image_class->get_allImage_by_path($shop['pic_info']);
+        $shop['image'] = $images ? array_shift($images) : '';
+
+        if($shop['store_is_close'] != 0){
+            $shop = checkAutoOpen($shop);
+        }
+
+        $shop_status = getClose($shop);
+        $shop['is_close'] = $shop_status['is_close'] ? 1 : 0;
+
+        $this->assign('store',$shop);
     }
 
     public function login()
@@ -125,7 +140,7 @@ class StorestaffAction extends BaseAction
 
     public function index()
     {
-        redirect(U('Storestaff/manage'));
+        //redirect(U('Storestaff/manage'));
 //        if ($this->store['have_shop']) {
 //            //redirect(U('Storestaff/shop_list'));
 //            redirect(U('Storestaff/manage'));
@@ -137,7 +152,44 @@ class StorestaffAction extends BaseAction
 //            echo "该店铺没有开启{$this->config['group_alias_name']}，{$this->config['meal_alias_name']}，{$this->config['shop_alias_name']}中的任何一个";
 //            exit();
 //        }
-        exit();
+        $store_id = intval($this->store['store_id']);
+        $where = array('mer_id' => $this->store['mer_id'], 'store_id' => $store_id);
+        $stauts = isset($_GET['st']) ? intval(trim($_GET['st'])) : false;
+        $ftype = isset($_GET['ft']) ? trim($_GET['ft']) : '';
+        $fvalue = isset($_GET['fv']) ? trim(htmlspecialchars($_GET['fv'])) : '';
+        $where['paid'] = 1;
+        if (empty($ftype) && ($stauts == 1)) {
+            $where['status'] = 0;
+            $ftype = 'st';
+        }
+        switch ($ftype) {
+            case 'oid': //订单id
+                $fvalue && $where['real_orderid'] = array('like', "%$fvalue%");
+                break;
+            case 'xm':  //下单人姓名
+                $fvalue && $where['name'] = array('like', "%$fvalue%");
+                break;
+            case 'dh':  //下单人电话
+                $fvalue && $where['phone'] = array('like', "%$fvalue%");
+                break;
+            case 'mps': //消费码
+                $fvalue && $where['orderid'] = $fvalue;
+                break;
+            default:
+                break;
+        }
+        $this->assign('ftype', $ftype);
+        $this->assign('fvalue', $fvalue);
+
+        $where['mer_id'] = $this->store['mer_id'];
+        $where['store_id'] = $store_id;
+        $this->assign(D("Shop_order")->get_order_list($where, 'paid DESC, order_id DESC', 4));
+
+        $shop = D('Merchant_store_shop')->field(true)->where(array('store_id' => $this->store['store_id']))->find();
+        $shop = array_merge($this->store, $shop);
+        $this->assign('now_store', $shop);
+
+        $this->display();
     }
 
     /* 团购相关 */
@@ -3061,6 +3113,7 @@ class StorestaffAction extends BaseAction
         $where['mer_id'] = $this->store['mer_id'];
         $where['store_id'] = $store_id;
         $where['paid'] = 1;
+        $where['status'] = array('lt',2);
 
         $order = D('Shop_order')->field(array('order_id','create_time'))->where($where)->order('create_time desc')->find();
         if($order){
@@ -3078,6 +3131,226 @@ class StorestaffAction extends BaseAction
             $data['error'] = 1;
         }
 
+//        if($last_time == 0)
+            $list = D('Shop_order')->field(array('order_id','status'))->where($where)->order('status asc,create_time desc')->select();
+//        else {
+//            $where['create_time'] = array('gt',$last_time);
+//            $list = D('Shop_order')->field(array('order_id','status'))->where($where)->order('status asc,create_time desc')->select();
+//        }
+        $data['list'] = $list;
+
         exit(json_encode($data));
+    }
+
+    function getOrderDetail(){
+        $order_id = isset($_POST['order_id']) ? intval($_POST['order_id']) : 0;
+        $store_id = intval($this->store['store_id']);
+        $sure = true;
+        $order = D("Shop_order")->get_order_detail(array('mer_id' => $this->store['mer_id'], 'order_id' => $order_id, 'store_id' => $store_id));
+        if ($order['is_pick_in_store'] == 3) {
+            $express_list = D('Express')->get_express_list();
+            $this->assign('express_list',$express_list);
+        } elseif ($order['is_pick_in_store'] == 0) {
+            $supply = D('Deliver_supply')->field(true)->where(array('order_id' => $order['order_id'], 'item' => 2))->find();
+            if (isset($supply['uid']) && $supply['uid']) {
+                $sure = false;
+                if($supply['status'] == 2 || $supply['status'] == 3){
+                    $t_deliver = D('Deliver_user')->field(true)->where(array('uid'=>$supply['uid']))->find();
+                    $this->assign('deliver',$t_deliver);
+                }
+            }
+            $this->assign('supply',$supply);
+        }
+        //add garfunkel
+        $tax_price = 0;
+        $deposit_price = 0;
+        //$lang = $this->language == 'cn' ? 'zh-cn' : 'en-us';
+
+        foreach ($order['info'] as $k => $v){
+            $g_id = $v['goods_id'];
+            $goods = D('Shop_goods')->get_goods_by_id($g_id);
+            $order['info'][$k]['unit'] = lang_substr($goods['unit'],C('DEFAULT_LANG'));
+            $order['info'][$k]['name'] = lang_substr($goods['name'],C('DEFAULT_LANG'));
+
+            $tax_price += $v['price'] * $goods['tax_num']/100 * $v['num'];
+            $deposit_price += $goods['deposit_price'] * $v['num'];
+            //garfunkel 显示规格和分类
+            $spec_desc = '';
+            $spec_arr = array();
+            if($v['spec_id'] != "")
+                $spec_ids = explode('_',$v['spec_id']);
+            else
+                $spec_ids = array();
+
+            foreach ($spec_ids as $vv){
+                $spec = D('Shop_goods_spec_value')->field(true)->where(array('id'=>$vv))->find();
+                $spec_desc = $spec_desc == '' ? lang_substr($spec['name'],C('DEFAULT_LANG')) : $spec_desc.','.lang_substr($spec['name'],C('DEFAULT_LANG'));
+                $spec_arr[] = lang_substr($spec['name'],C('DEFAULT_LANG'));
+            }
+
+            if($v['pro_id'] != '')
+                $pro_ids = explode('|',$v['pro_id']);
+            else
+                $pro_ids = array();
+
+            $pro_arr = array();
+            foreach ($pro_ids as $vv){
+                $ids = explode(',',$vv);
+                $proId = $ids[0];
+                $sId = $ids[1];
+
+                $pro = D('Shop_goods_properties')->field(true)->where(array('id'=>$proId))->find();
+                $nameList = explode(',',$pro['val']);
+                $name = lang_substr($nameList[$sId],C('DEFAULT_LANG'));
+
+                $spec_desc = $spec_desc == '' ? $name : $spec_desc.','.$name;
+                $pro_arr[] = $name;
+            }
+            //if ($spec_desc != '')
+            $order['info'][$k]['spec'] = $spec_desc;
+
+            $order['info'][$k]['spec_arr'] = $spec_arr;
+            $order['info'][$k]['pro_arr'] = $pro_arr;
+
+            if($v['dish_id'] != "" && $v['dish_id'] != null){
+                $dish_desc = array();
+                $dish_list = explode("|",$v['dish_id']);
+                foreach($dish_list as $vv){
+                    $one_dish = explode(",",$vv);
+                    //0 dish_id 1 id 2 num 3 price
+                    $dish = D('Side_dish')->where(array('id'=>$one_dish[0]))->find();
+                    $dish_name = lang_substr($dish['name'],C('DEFAULT_LANG'));
+                    $dish_vale = D('Side_dish_value')->where(array('id'=>$one_dish[1]))->find();
+                    $dish_vale['name'] = lang_substr($dish_vale['name'],C('DEFAULT_LANG'));
+
+                    $add_str = $one_dish[2] > 1 ? $dish_vale['name']."*".$one_dish[2] : $dish_vale['name'];
+
+                    $dish_desc[$dish['id']]['name'] = $dish_name;
+                    $dish_desc[$dish['id']]['list'][] = $add_str;
+                }
+
+                $order['info'][$k]['dish'] = $dish_desc;
+            }
+        }
+
+        $store = D('Merchant_store')->field(true)->where(array('store_id' => $order['store_id']))->find();
+        $tax_price = $tax_price + ($order['freight_charge'] + $order['packing_charge'])*$store['tax_num']/100;
+        $order['tax_price'] = $tax_price;
+        $order['deposit_price'] = $deposit_price;
+        //代客下单
+        if($order['num'] == 0){
+            $order['deposit_price'] = $order['packing_charge'];
+            $order['good_tax_price'] = $order['discount_price'];
+            $order['packing_charge'] = 0;
+            $order['tax_price'] = $order['good_tax_price'] + ($order['freight_charge'] + $order['packing_charge']) * $store['tax_num']/100;
+        }
+        $order['tax_price'] = round($order['tax_price'],2);
+
+        $data['error'] = 0;
+        //$data['order'] = $order;
+
+        $shop = D('Merchant_store')->field(true)->where(array('store_id' => $order['store_id']))->find();
+        $order_data = $order;
+
+        if(strpos($order['username'], "'") !== false) {
+            $order['username'] = str_replace("'",'’',$order['username']);
+        }
+        $order_data['username'] = $order['username'];
+
+        if(strpos($order['address'], "'") !== false) {
+            $order['address'] = str_replace("'",'’',$order['address']);
+        }
+        $order_data['address'] = $order['address'];
+
+        if(strpos($order['last_staff'], "'") !== false) {
+            $order['last_staff'] = str_replace("'",'’',$order['last_staff']);
+        }
+        $order_data['last_staff'] = $order['last_staff'];
+
+        $order_data['pay_status'] = "";
+        $order_data['deliver_log_list'] = "";
+        $order_data['deliver_info'] = "";
+        $order_data['deliver_user_info'] = "";
+
+        $shop['name'] = lang_substr($shop['name'],C('DEFAULT_LANG'));
+        if(strpos($shop['name'], "'") !== false) {
+            $shop['name'] = str_replace("'",'’',$shop['name']);
+        }
+        $order_data['store_name'] = $shop['name'];
+
+        $order_data['store_phone'] = $shop['phone'];
+        $order_data['pay_time_str'] = date("Y-m-d H:i:s",$order['pay_time']);
+        if(strpos($order['desc'], "'") !== false) {
+            $order['desc'] = str_replace("'",'’',$order['desc']);
+        }
+        $order_data['desc'] = $order['desc'] == "" ? "N/A" : $order['desc'];
+
+        if (($order_data['expect_use_time'] - $order_data['pay_time'])>=3600){
+            $order_data['expect_use_time'] = date("Y-m-d H:i:s",$order_data['expect_use_time']);
+        }else{
+            $order_data['expect_use_time'] = "ASAP";
+        }
+
+        $order_data['dining_time'] = $supply['dining_time'] ? $supply['dining_time'] : '0';
+
+        $data['order_data'] = $order_data;
+
+        $i = 0;
+        $info_str = "";
+        foreach ($order['info'] as &$v){
+            if($i > 0) $info_str .= "|";
+            if(strpos($v['name'], "'") !== false) {
+                $v['name'] = str_replace("'",'’',$v['name']);
+            }
+            if(strpos($v['spec'], "'") !== false) {
+                $v['spec'] = str_replace("'",'’',$v['spec']);
+            }
+            $info_str .= $v['name']."#".$v['num']."#".$v['spec'];
+
+            foreach ($v['spec_arr'] as& $ss){
+                if(strpos($ss, "'") !== false) {
+                    $ss = str_replace("'",'’',$ss);
+                }
+            }
+
+            foreach ($v['pro_arr'] as& $pp){
+                if(strpos($pp, "'") !== false) {
+                    $pp = str_replace("'",'’',$pp);
+                }
+            }
+
+            $dish_arr = "";
+            if($v['dish']){
+                $d_num = 0;
+                foreach ($v['dish'] as &$dish_one) {
+                    if (strpos($dish_one['name'], "'") !== false) {
+                        $dish_one['name'] = str_replace("'", '’', $v['dish']['name']);
+                    }
+
+                    $dish_arr .= $d_num == 0 ? $dish_one['name'] . "@@" : "@%".$dish_one['name'] . "@@";
+                    $c_num = 0;
+                    foreach ($dish_one['list'] as &$d_one) {
+                        if (strpos($d_one, "'") !== false) {
+                            $d_one = str_replace("'", '’', $d_one);
+                        }
+
+                        $dish_arr .= $c_num == 0 ? $d_one : "%%" . $d_one;
+                        $c_num++;
+                    }
+
+                    $d_num++;
+                }
+
+            }
+            $info_str .= "#".$dish_arr;
+
+            $v['dish_desc'] = $dish_arr;
+
+            $i++;
+        }
+
+        $data['info_str'] = $info_str;
+
+        $this->ajaxReturn($data);
     }
 }

@@ -1,0 +1,218 @@
+body{
+    background-color: white;
+}
+.t_color{
+    color: #ffa52d;
+}
+.w_color{
+    color: white;
+}
+.g_line{
+    margin-top: 10px;
+    border-bottom: 1px solid #cccccc;
+}
+.b_line{
+    margin-top: 10px;
+    border-bottom: 1px solid #333333;
+}
+#main{
+    margin-top: 60px;
+    display: flex;
+}
+.order_list{
+    width: 350px;
+    max-width: 100%;
+    background-color: #e8e5e5;
+}
+.list_top{
+    margin-top: 10px;
+    padding-left: 50px;
+    line-height: 30px;
+    cursor: pointer;
+    color: #666666;
+    background-image: url("../img/staff_menu/left_arrow.png");
+    background-size:auto 90%;
+    background-position: center left 10px;
+    background-repeat: no-repeat;
+}
+.show_list{
+    width: 80px;
+    height: 48px;
+    background-image: url("../img/staff_menu/show_list.png");
+    background-size:100% auto;
+    background-position: center;
+    position: absolute;
+    margin-left: -15px;
+    margin-top: -10px;
+}
+.show_list,.order_list{
+    transition-property: all;
+    -moz-transition-property: all; /* Firefox 4 */
+    -webkit-transition-property:all; /* Safari 和 Chrome */
+    -o-transition-property:all;/* Opera */
+    transition-duration: 0.5s;
+    -moz-transition-duration: 0.5s; /* Firefox 4 */
+    -webkit-transition-duration: 0.5s; /* Safari 和 Chrome */
+    -o-transition-duration: 0.5s; /* Opera */
+}
+#new_msg{
+    width: 230px;
+    text-align: center;
+}
+#new_msg a{
+    display: inline-block;
+    width: 100%;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    color: white;
+    border: 1px solid white;
+    border-radius: 5px;
+    margin-top: 20px;
+    font-weight: bold;
+    font-size: 20px;
+}
+.list_ul{
+    margin-top: 10px;
+    overflow: auto;
+}
+.list_ul li{
+    width: 100%;
+    line-height: 50px;
+    font-size: 16px;
+    padding:0 10%;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+.list_ul li.act_li{
+    background: white;
+}
+.list_ul .new_order{
+    float: right;
+    width: 80px;
+    height: 40px;
+    background: #ffa52d;
+    border-radius: 5px;
+    color: white;
+    line-height: 40px;
+    text-align: center;
+    margin-top: 5px;
+}
+.list_ul .confirm_order{
+    float: right;
+    color: #008137;
+}
+#detail_div{
+    overflow: auto;
+}
+.order_detail{
+    padding: 20px 15px 0px 15px;
+    flex: 1 1 100%;
+    color: #666666;
+    position: relative;
+    box-sizing: border-box;
+}
+.detail_title{
+    font-size: 16px;
+    line-height: 50px;
+    font-weight: bold;
+}
+.detail_note{
+    border-radius: 3px;
+    border: 2px solid #ffa52d;
+    line-height: 35px;
+    box-sizing: border-box;
+    width: 100%;
+    font-size: 16px;
+    margin-top: 10px;
+    padding:0 15px;
+}
+.order_item{
+    margin-top: 10px;
+    display: flex;
+    line-height: 30px;
+    color: black;
+    font-weight: bold;
+    font-size: 14px;
+}
+.dish_line{
+    font-weight: normal;
+    margin-top: 0;
+    line-height: 20px;
+    color: #666666;
+}
+.item_num{
+    padding:0 7px;
+    box-sizing: border-box;
+    width: 33px;
+    display: inline-block;
+}
+.num_one{
+    border: 2px solid #333333;
+    border-radius: 5px;
+}
+.num_more{
+    border: 2px solid #ffa52d;
+    border-radius: 5px;
+    background: #ffa52d;
+    color: white;
+}
+.item_name{
+    flex: 1 1 100%;
+    margin-left: 5%;
+}
+.con_layer{
+    width: 100%;
+    height: 50px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    background: white;
+    padding-top: 5px;
+    box-sizing: border-box;
+    display: none;
+}
+.confirm_txt{
+    font-weight: bold;
+    width: 80px;
+    height: 30px;
+    line-height: 15px;
+    margin:5px 2% ;
+    display: inline-block;
+    text-align: center;
+}
+.confirm_time{
+    width: 110px;
+    height: 40px;
+    margin-top: 0px;
+    vertical-align: top;
+    text-align: center;
+}
+.confirm_btn{
+    width: 35%;
+    height: 40px;
+    background: #ffa52d;
+    border-radius: 5px;
+    display: inline-block;
+    float: right;
+    margin-right: 10px;
+    text-align: center;
+    line-height: 40px;
+}
+.order_total{
+    margin-top: 10px;
+    line-height: 25px;
+    text-align: right;
+    font-weight: bold;
+    color: #777777;
+    margin-bottom: 30px;
+}
+.order_print{
+    float: right;
+    padding:0 5px;
+    background: #ffa52d;
+    text-align: center;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
