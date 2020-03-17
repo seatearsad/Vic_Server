@@ -194,6 +194,16 @@
         background-repeat: no-repeat;
         background-position: left;
     }
+    .touch_label{
+        float: left;
+        width: 25px;
+        height: 25px;
+        margin-top: -5px;
+        background-image: url("{pigcms{$static_path}img/not_touch.png");
+        background-size: auto 100%;
+        background-repeat: no-repeat;
+        background-position: left;
+    }
     .order_address div{
         width: 100%;
         height: 30px;
@@ -504,6 +514,14 @@
                     <span class="note_label"></span>
                     <span class="address">
                         {{ d.list[i].user_address.detail }}
+                    </span>
+                </div>
+                {{# } }}
+                {{#if(d.list[i].not_touch == 1 && d.list[i].status == 4){ }}
+                <div>
+                    <span class="touch_label"></span>
+                    <span class="address">
+                        <label style="font-weight: bold">No Contact Delivery</label> (Please see customer notes or contact customer for delivery instruction)
                     </span>
                 </div>
                 {{# } }}

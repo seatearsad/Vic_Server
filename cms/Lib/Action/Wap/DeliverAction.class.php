@@ -701,6 +701,7 @@ class DeliverAction extends BaseAction
                 $val['tip_charge'] = $order['tip_charge'];
                 $address = D('User_adress')->where(array('adress_id'=>$order['address_id']))->find();
                 $val['user_address'] = $address;
+                $val['not_touch'] = $order['not_touch'];
 
                 $store = D('Merchant_store')->field(true)->where(array('store_id'=>$val['store_id']))->find();
                 $val['store_name'] = lang_substr($store['name'],C('DEFAULT_LANG'));

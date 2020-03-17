@@ -584,7 +584,8 @@
                                 'note':$('input[name="note"]').val(),
                                 'est_time':$('#est_time_input').val(),
                                 'cvd':$('#cvd').val(),
-                                'delivery_discount':delivery_discount
+                                'delivery_discount':delivery_discount,
+                                'not_touch':$('input[name="not_touch"]:checked').val()
                             };
 
                             //alert(re_data['order_type']);
@@ -622,7 +623,8 @@
                                 'order_type':"{pigcms{$order_info.order_type}",
                                 'note':$('input[name="note"]').val(),
                                 'est_time':$('#est_time_input').val(),
-                                'delivery_discount':delivery_discount
+                                'delivery_discount':delivery_discount,
+                                'not_touch':$('input[name="not_touch"]:checked').val()
                             };
                             var card_stauts = "{pigcms{$card['status']}";
                             if(card_stauts == 0){
@@ -684,7 +686,8 @@
                         'pay_type':pay_type,
                         'note':$('input[name="note"]').val(),
                         'est_time':$('#est_time_input').val(),
-                        'delivery_discount':delivery_discount
+                        'delivery_discount':delivery_discount,
+                        'not_touch':$('input[name="not_touch"]:checked').val()
                     };
                     $.post('{pigcms{:U("Pay/WeixinAndAli")}',re_data,function(data){
                         layer.closeAll();
@@ -881,6 +884,14 @@
     .note_div{
         height: 45px;
         padding-top: 7px;
+    }
+    .touch_tip{
+        width: 90%;
+        margin: 10px auto 0 auto;
+        border: 2px solid #ffa52d;
+        padding: 10px;
+        box-sizing: border-box;
+        font-size: 12px;
     }
     .apply_div{
         height: 45px;
@@ -1087,6 +1098,15 @@
                 <span class="est_time">ASAP</span>
                 <input type="hidden" name="est_time" id="est_time_input">
             </div>
+            <if condition="$not_touch['status'] eq 1">
+            <div class="touch_tip">
+                <div style="font-weight: bold;">
+                    <input type="checkbox" class="mt" value="1" name="not_touch" style="border-radius: 0;width: .40rem;height: .40rem;line-height: .40rem;">
+                    {pigcms{$not_touch.title}
+                </div>
+                <div style="margin-top: 8px;color: #999999">{pigcms{$not_touch.content}</div>
+            </div>
+            </if>
             <div class="note_div">
                 <input type="text" name="note" class="note_input" placeholder="Note">
             </div>

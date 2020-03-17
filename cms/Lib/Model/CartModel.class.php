@@ -263,9 +263,13 @@ class CartModel extends Model
             $store['event'] = $t_event;
 
             if($total_price >= $delivery_coupon['use_price']){
-                $delivey_fee = getDeliveryFee($store['lat'], $store['lng'], $address['mapLat'], $address['mapLng']);
+                //$delivey_fee = getDeliveryFee($store['lat'], $store['lng'], $address['mapLat'], $address['mapLng']);
                 $result['is_free_delivery'] = 1;
-                $result['delivery_discount'] = $delivery_coupon['discount'];
+                if($delivey_fee < $delivery_coupon['discount'])
+                    $result['delivery_discount'] = $delivey_fee;
+                else
+                    $result['delivery_discount'] = $delivery_coupon['discount'];
+
                 $result['delivery_free_type'] = $delivery_coupon['type'];
             }
 
@@ -291,6 +295,25 @@ class CartModel extends Model
         $result['pay_method'] = explode('|',$store['pay_method']);
 
         $result['full_discount'] = '0';
+
+        $config = D('Config')->get_gid_config(43);
+        $not_touch = array();
+        foreach ($config as $v){
+            if($v['name'] == 'not_touch'){
+                $txt = explode('|',$v['value']);
+                $not_touch['title'] = $txt[0];
+                $not_touch['content'] = $txt[1];
+            }
+
+            if($v['name'] == 'not_touch_enable'){
+                if($v['value'] == '1'){
+                    $not_touch['status'] = 1;
+                }else{
+                    $not_touch['status'] = 0;
+                }
+            }
+        }
+        $result['not_touch'] = $not_touch;
 
         return $result;
     }

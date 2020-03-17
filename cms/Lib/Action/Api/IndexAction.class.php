@@ -703,6 +703,7 @@ class IndexAction extends BaseAction
         $order_data['is_mobile_pay'] = 2;
 
         $order_data['delivery_discount'] = $_POST['delivery_discount'] ? $_POST['delivery_discount'] : 0;
+        $order_data['not_touch'] = $_POST['not_touch'] ? $_POST['not_touch'] : 0;
 
         $order_id = D('Shop_order')->saveOrder($order_data, $return);
         //清除购物车中的内容

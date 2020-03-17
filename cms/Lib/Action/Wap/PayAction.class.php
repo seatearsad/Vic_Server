@@ -569,7 +569,24 @@ class PayAction extends BaseAction{
             $this->behavior(array('model'=>'Play_meal','mer_id'=>$order_info['mer_id'],'biz_id'=>$order_info['order_id']),true);
         }
 
+        $config = D('Config')->get_gid_config(43);
+        $not_touch = array();
+        foreach ($config as $v){
+            if($v['name'] == 'not_touch'){
+                $txt = explode('|',$v['value']);
+                $not_touch['title'] = $txt[0];
+                $not_touch['content'] = $txt[1];
+            }
 
+            if($v['name'] == 'not_touch_enable'){
+                if($v['value'] == '1'){
+                    $not_touch['status'] = 1;
+                }else{
+                    $not_touch['status'] = 0;
+                }
+            }
+        }
+        $this->assign('not_touch',$not_touch);
 
         $this->assign('type',$_GET['type']);
         $this->assign('order_id',$_GET['order_id']);
@@ -725,6 +742,10 @@ class PayAction extends BaseAction{
         //用户信息
         $now_user = D('User')->get_user($this->user_session['uid']);
 
+        //无接触配送
+        if($_POST['not_touch'] != null && $_POST['not_touch'] == 1){
+            D('Shop_order')->field(true)->where(array('order_id'=>$order_info['order_id']))->save(array('not_touch'=>1));
+        }
 
         if(empty($now_user)){
             $this->error_tips(L('_NO_GET_INFO_'));
@@ -2497,6 +2518,11 @@ class PayAction extends BaseAction{
                 }
             }
 
+            //无接触配送
+            if($_POST['not_touch'] != null && $_POST['not_touch'] == 1){
+                D('Shop_order')->field(true)->where(array('order_id'=>$order_info['order_id']))->save(array('not_touch'=>1));
+            }
+
             if(!$_POST['order_type']) $_POST['order_type'] = "shop";
             if($_POST['order_type'] == "recharge"){
                 $url = U("Wap/My/my_money");
@@ -2615,6 +2641,10 @@ class PayAction extends BaseAction{
                     $order_data['delivery_discount'] = $_POST['delivery_discount'];
                     D('New_event')->addEventCouponByType(3,$this->user_session['uid']);
                 }
+                //无接触配送
+                if($_POST['not_touch'] != null && $_POST['not_touch'] == 1){
+                    $order_data['not_touch'] = 1;
+                }
 
                 D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->save($order_data);
                 $this->success('', $result['url']);
@@ -2662,6 +2692,10 @@ class PayAction extends BaseAction{
                     if($_POST['delivery_discount'] != null){
                         $order_data['delivery_discount'] = $_POST['delivery_discount'];
                         D('New_event')->addEventCouponByType(3,$this->user_session['uid']);
+                    }
+                    //无接触配送
+                    if($_POST['not_touch'] != null && $_POST['not_touch'] == 1){
+                        $order_data['not_touch'] = 1;
                     }
 
                     D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->save($order_data);

@@ -2849,7 +2849,12 @@ class ShopAction extends BaseAction{
                 //garfunkel 如果存在减免配送费的活动
 				if($return['store']['event']){
 				    if($return['price'] >= $return['store']['event']['use_price']) {
-                        $order_data['delivery_discount'] = $return['store']['event']['discount'];
+				        //如果优惠金额大于配送费
+				        if($return['delivery_fee'] < $return['store']['event']['discount'])
+                            $order_data['delivery_discount'] = $return['delivery_fee'];
+				        else
+                            $order_data['delivery_discount'] = $return['store']['event']['discount'];
+
                         $order_data['delivery_discount_type'] = $return['store']['event']['type'];
                     }
                 }
