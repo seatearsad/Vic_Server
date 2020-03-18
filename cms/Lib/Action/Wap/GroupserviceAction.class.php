@@ -378,6 +378,7 @@ class GroupserviceAction extends BaseAction{
 					$temp['event'] = $t_event;
 
                     $temp['delivery_money'] =  $temp['delivery_money'] - $delivery_coupon['discount'];
+                    $temp['delivery_money'] = $temp['delivery_money'] < 0 ? 0 : $temp['delivery_money'];
 				}
 
 				$return[] = $temp;
