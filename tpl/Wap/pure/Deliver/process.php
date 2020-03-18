@@ -151,6 +151,7 @@
         padding: 5px 2%;
         font-size: 12px;
         color: #333333;
+        margin-top: 8px;
     }
     .order_cash label{
         color: orangered;
