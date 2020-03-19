@@ -2668,18 +2668,19 @@ class ShopAction extends BaseAction{
                                 $distance = getDistance($return['store']['lat'],$return['store']['long'],$user_address['latitude'],$user_address['longitude']);
                                 $return['store']['free_delivery'] = 0;
                                 $return['store']['event'] = "";
-                                if($delivery_coupon != "" && $delivery_coupon['limit_day']*1000 >= $distance){
+                                if($delivery_coupon != "" && $delivery_coupon['limit_day']*1000 >= $distance) {
                                     $return['store']['free_delivery'] = 1;
                                     $t_event['use_price'] = $delivery_coupon['use_price'];
                                     $t_event['discount'] = $delivery_coupon['discount'];
-                                    $t_event['miles'] = $delivery_coupon['limit_day']*1000;
+                                    $t_event['miles'] = $delivery_coupon['limit_day'] * 1000;
                                     $t_event['type'] = $delivery_coupon['type'];
 
                                     $return['store']['event'] = $t_event;
-                                    $distance = $distance/1000;
-                                }else {
-                                    $distance = getDistanceByGoogle($from, $aim);
+                                    //$distance = $distance/1000;
                                 }
+                                //}else {
+                                    $distance = getDistanceByGoogle($from, $aim);
+                                //}
 
     							$delivery_radius = $return['store']['delivery_radius'] * 1000;
     							if ($distance > $delivery_radius && $return['delivery_type'] != 5) {
