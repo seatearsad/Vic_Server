@@ -317,19 +317,19 @@
     });
 
     $('#menu_shift').click(function () {
-        location.href = "{pigcms{:U('Storestaff/schedule')}";
+        location.href = "{pigcms{:U('Storestaff/add_shop_order')}";
     });
     $('#menu_stat').click(function () {
-        location.href = "{pigcms{:U('Storestaff/statistics')}";
+        location.href = "{pigcms{:U('Storestaff/manage_product')}";
     });
     $('#menu_order').click(function () {
-        location.href = "{pigcms{:U('Storestaff/orders')}";
+        //location.href = "{pigcms{:U('Storestaff/orders')}";
     });
     $('#menu_inst').click(function () {
-        location.href = "{pigcms{:U('Storestaff/inst')}";
+        //location.href = "{pigcms{:U('Storestaff/inst')}";
     });
     $('#menu_account').click(function () {
-        location.href = "{pigcms{:U('Storestaff/account')}";
+        //location.href = "{pigcms{:U('Storestaff/account')}";
     });
     // $('#menu_support').click(function () {
     //     location.href = "{pigcms{:U('Storestaff/support')}";

@@ -204,6 +204,7 @@
             {{ d.desc }}
         </span>
         </div>
+        {{# if(d.info != null){ }}
         {{# for(var i = 0, len = d.info.length; i < len; i++){ }}
         {{# if(i > 0){ }}
         <div class="g_line"></div>
@@ -259,7 +260,7 @@
         {{# } }}
         {{# } }}
         <div class="b_line"></div>
-
+        {{# } }}
 
         <div class="order_total">
             <div>Subtotal: ${{ d.goods_price }}</div>

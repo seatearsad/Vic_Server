@@ -2367,16 +2367,16 @@ class StorestaffAction extends BaseAction
             if (!trim($_POST['phone'])){
                 $this->error_tips('请输入客户电话');
             }
-            if (!trim($_POST['adress'])){
+            if (!trim($_POST['address'])){
                 $this->error_tips('请输入客户位置');
             }
-            if (!trim($_POST['detail'])){
-                $this->error_tips('请输入客户详细地址');
-            }
+//            if (!trim($_POST['detail'])){
+//                $this->error_tips('请输入客户详细地址');
+//            }
             if (!trim($_POST['goods_price'])){
                 $this->error_tips('请输入商品总价');
             }
-            if (!$_POST['longitude'] ||!$_POST['latitude'] ||!$_POST['adress']){
+            if (!$_POST['longitude'] ||!$_POST['latitude'] ||!$_POST['address']){
                 $this->error_tips('请选择位置');
             }
 
@@ -2387,20 +2387,20 @@ class StorestaffAction extends BaseAction
             $_POST['longitude']=sprintf("%10.6f", $_POST['longitude']);
             $_POST['latitude']=sprintf("%10.6f", $_POST['latitude']);
             //先保存用户地址，在使用用户的地址来计算配送费
-            unset($_POST['goods_price']);
-            $user_add = M('UserAdress')->data($_POST)->add();
-            if ($user_add){
-                $user_adress = M('UserAdress')->field(true)->find($user_add);
-            }else{
-                $this->error('地址保存失败！请重试');
-            }
+            //unset($_POST['goods_price']);
+//            $user_add = M('UserAdress')->data($_POST)->add();
+//            if ($user_add){
+//                $user_adress = M('UserAdress')->field(true)->find($user_add);
+//            }else{
+//                $this->error('地址保存失败！请重试');
+//            }
             //计算配送费
-            if ($user_adress) {
+            //if ($user_adress) {
                 //获取两点之间的距离
                 //$distance = getDistance($user_adress['latitude'], $user_adress['longitude'], $merchant_store['lat'], $merchant_store['long']);
                 //$distance = $distance / 1000;
                 $from = $merchant_store['lat'].','.$merchant_store['long'];
-                $aim = $user_adress['latitude'].','.$user_adress['longitude'];
+                $aim = $_POST['latitude'].','.$_POST['longitude'];
                 $distance = getDistanceByGoogle($from,$aim);
                 //获取配送费用
 //                $deliveryCfg = [];
@@ -2423,7 +2423,7 @@ class StorestaffAction extends BaseAction
 //                }
                 $return['delivery_fee'] = calculateDeliveryFee($distance);
                 $return['delivery_fee2'] = $return['delivery_fee'];
-            }
+            //}
             $real_orderid  = date('ymdhis').substr(microtime(),2,8-strlen($staff['id'])).$staff['id'];//订单编号
             //商品税费
             $return_data=[];
@@ -2437,7 +2437,7 @@ class StorestaffAction extends BaseAction
             //$return_data['goods_price_tax']=$goods_price_tax;//商品税
             $return_data['freight_charge']=floatval(sprintf("%.2f", $return['delivery_fee']));//配送费
             $return_data['freight_charge_tax']=$freight_charge_tax;//配送费税
-            $return_data['address_id']=$user_add;//客户地址id
+            //$return_data['address_id']=$user_add;//客户地址id
             $return_data['real_orderid']=$real_orderid;//订单编号
             $return_data['desc']="Merchant--{$staff['name']}--order from merchant";//备注
             $return_data['goods_price_tax'] = $_POST['goods_tax'] ? $_POST['goods_tax'] : 0;
@@ -2466,14 +2466,21 @@ class StorestaffAction extends BaseAction
             $_POST['pay_time']=strtotime(date("Y-m-d H:i:s"))+$add_time;//支付时间，为了排序  靠前显示
             $_POST['pay_type']='offline';//支付类型
 
+            $user_add = M('UserAdress')->data($_POST)->add();
+            if ($user_add){
+                $user_adress = M('UserAdress')->field(true)->find($user_add);
+            }else{
+                $this->error('地址保存失败！请重试');
+            }
+            $_POST['address_id']=$user_add;//客户地址id
+
             //**代客下单 用discount_price记录税费**
             //**代客下单 用packing_charge记录押金**
-
             $order = M('Shop_order')->data($_POST)->add();
             if ($order){
                 //清除cookie
                 cookie('staff_address',null,'');
-                $this->success_tips('Success',U('Storestaff/shop_list'));
+                $this->success_tips('Success',U('Storestaff/index'));
 
             }else{
                 $this->error_tips('Fail');
@@ -2588,6 +2595,8 @@ class StorestaffAction extends BaseAction
                 $value['week_str'] = $week_str;
             }
             $value['sort_name'] = lang_substr($value['sort_name'],C('DEFAULT_LANG'));
+            $value['normal_count'] = D('Shop_goods')->where(array('sort_id'=>$value['sort_id'],'status'=>1))->count();
+            $value['stop_count'] = D('Shop_goods')->where(array('sort_id'=>$value['sort_id'],'status'=>0))->count();
         }
         $this->assign('sort_list', $sort_list);
         $this->assign('store',$shop);
@@ -2669,6 +2678,19 @@ class StorestaffAction extends BaseAction
         $sort_id = $_GET['sort_id'];
         $sort = D('Shop_goods_sort')->where(array('sort_id'=>$sort_id))->find();
         $sort['sort_name'] = lang_substr($sort['sort_name'],C('DEFAULT_LANG'));
+        if($sort['is_time'] == 1){
+            $sort['show_time'] = str_replace(',',' - ',$sort['show_time']);
+        }
+        $week_en = array('Sun','Mon','Tue','Wed','Thur','Fri','Sat');
+        if($sort['is_weekshow'] == 1){
+            $week_list = explode(',',$sort['week']);
+            $week_arr = array();
+            foreach ($week_list as $v){
+                $week_arr[] = $week_en[$v];
+            }
+            $sort['week_show'] = implode(', ',$week_arr);
+        }
+
         $this->assign('sort',$sort);
 
         $database_goods = D('Shop_goods');
@@ -3353,5 +3375,46 @@ class StorestaffAction extends BaseAction
         $data['info_str'] = $info_str;
 
         $this->ajaxReturn($data);
+    }
+
+    public function ajax_city_name(){
+        $city_name = $_POST['city_name'];
+        $where = array('area_name'=>$city_name,'area_type'=>2);
+        $area = D('Area')->where($where)->find();
+        $data = array();
+        if($area){
+            $data['area_id'] = 0;
+            $data['city_id'] = $area['area_id'];
+            $data['province_id'] = $area['area_pid'];
+
+            $return['error'] = 0;
+        }else{
+            $return['error'] = 1;
+        }
+        $return['info'] = $data;
+        exit(json_encode($return));
+    }
+
+    public function getGoodsList(){
+        $database_goods = D('Shop_goods');
+        $condition_goods['sort_id'] = $_POST['sort_id'];
+        //不展现已隐藏的产品
+        if($_POST['select_type']== 1)
+            $condition_goods['status'] = array('eq',1);
+        elseif($_POST['select_type']== 2)
+            $condition_goods['status'] = array('eq',0);
+        else
+            $condition_goods['status'] = array('neq',2);
+
+        $goods_list = $database_goods->field(true)->where($condition_goods)->order('`sort` DESC, `goods_id` ASC')->select();
+        foreach($goods_list as &$val){
+            $val['name'] = lang_substr($val['name'],C('DEFAULT_LANG'));
+            $val['unit'] = lang_substr($val['unit'],C('DEFAULT_LANG'));
+        }
+
+        $return['list'] = $goods_list;
+        $return['error'] = 0;
+
+        exit(json_encode($return));
     }
 }
