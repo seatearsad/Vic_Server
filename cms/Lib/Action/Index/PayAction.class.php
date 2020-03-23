@@ -1308,7 +1308,8 @@ class PayAction extends BaseAction{
                     if($is_jump){
                         if($rData['channelId'] == 'WX_JSAPI' || $rData['channelId'] == 'ALIPAY_WAP' || $rData['channelId'] == 'WX_MWEB'){
 
-                            $url = '/wap.php?g=Wap&c=Shop&a=status&order_id='.$order_id;
+                            //$url = '/wap.php?g=Wap&c=Shop&a=status&order_id='.$order_id;
+                            $url = '/wap.php?g=Wap&c=My&a=shop_order_list';
                         }else{
                             $url =U("User/Index/shop_order_view",array('order_id'=>$order_id));
                         }
