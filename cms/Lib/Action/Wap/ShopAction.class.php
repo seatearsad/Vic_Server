@@ -3157,7 +3157,8 @@ class ShopAction extends BaseAction{
 			$this->assign('order', $order);
 			$this->display();
 		} else {
-			$this->error_tips('错误的订单信息！');
+			//$this->error_tips('错误的订单信息！');
+            echo "错误的订单信息！";
 		}
 	}
 
