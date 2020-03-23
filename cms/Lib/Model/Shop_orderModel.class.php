@@ -1164,7 +1164,6 @@ class Shop_orderModel extends Model
 	{
 		$where['is_del'] = 0;
 		$order = $this->field(true)->where($where)->find();
-		var_dump($where);
 		if (empty($order)) return false;
 		$order['info'] = D('Shop_order_detail')->field(true)->where(array('order_id' => $order['order_id']))->select();
 		$order['cue_field'] = isset($order['cue_field']) && $order['cue_field'] ? unserialize($order['cue_field']) : '';
@@ -1321,7 +1320,6 @@ class Shop_orderModel extends Model
 		if ($user = D('User')->field(true)->where(array('uid' => $order['uid']))->find()) {
 			$order['register_phone'] = $user['phone'];
 		}
-        var_dump($order);die();
 		return $order;
 	}
 
