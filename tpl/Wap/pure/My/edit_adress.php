@@ -163,6 +163,8 @@
 				<input type="hidden" name="longitude" value="{pigcms{$now_adress.longitude}"/>
 				<input type="hidden" name="latitude" value="{pigcms{$now_adress.latitude}"/>
 				<input type="hidden" name="adress" value="{pigcms{$now_adress.adress}"/>
+                <input type="hidden" name="city" value="{pigcms{$now_adress.city}"/>
+                <input type="hidden" name="province" value="{pigcms{$now_adress.province}" />
 				<button type="submit" class="btn btn-block btn-larger"><if condition="$now_adress">{pigcms{:L('_B_PURE_MY_25_')}<else/>{pigcms{:L('_B_PURE_MY_26_')}</if></button>
 				<if condition="$now_adress"><button type="button" class="btn btn-block btn-larger" style=" background:#fff; color:#000; margin-top:.1rem" id="address_del">{pigcms{:L('_B_PURE_MY_27_')}</button></if>
 		    </div>
