@@ -3257,9 +3257,12 @@ class StorestaffAction extends BaseAction
         }
 
         $store = D('Merchant_store')->field(true)->where(array('store_id' => $order['store_id']))->find();
-        $tax_price = $tax_price + ($order['freight_charge'] + $order['packing_charge'])*$store['tax_num']/100;
+        //$tax_price = $tax_price + ($order['freight_charge'] + $order['packing_charge'])*$store['tax_num']/100;
+        $tax_price = $tax_price + ($order['packing_charge'])*$store['tax_num']/100;
         $order['tax_price'] = $tax_price;
         $order['deposit_price'] = $deposit_price;
+        $order['tutti_comm'] = round(($order['goods_price'] + $tax_price)*$store['proportion']/100,2);
+        $order['merchant_refund'] = round(($order['goods_price'] + $tax_price) - $order['tutti_comm'],2);
         //代客下单
         if($order['num'] == 0){
             $order['deposit_price'] = $order['packing_charge'];
@@ -3416,5 +3419,136 @@ class StorestaffAction extends BaseAction
         $return['error'] = 0;
 
         exit(json_encode($return));
+    }
+
+    public function category_setting(){
+        if($_POST){
+            $sort_id = $_POST['sort_id'];
+            $data['sort_name'] = trim($_POST['en_name']);
+            $data['sort_name'] = trim($_POST['cn_name']) != '' ? $data['sort_name'].'|'.trim($_POST['cn_name']) : $data['sort_name'];
+            $data['sort'] = $_POST['sort'];
+            $data['is_weekshow'] = $_POST['is_weekshow'];
+            if($data['is_weekshow'] == 1)
+                $data['week'] = $_POST['week'];
+            $data['is_time'] = $_POST['is_time'];
+            if($data['is_time'] == 1)
+                $data['show_time'] = $_POST['begin_time'].','.$_POST['end_time'];
+
+            D('Shop_goods_sort')->where(array('sort_id'=>$sort_id))->save($data);
+
+            exit(json_encode(array('error'=>0)));
+        }else {
+            $store_id = intval($this->store['store_id']);
+            $sort_id = $_GET['sort_id'];
+            $sort = D('Shop_goods_sort')->where(array('sort_id' => $sort_id, 'store_id' => $store_id))->find();
+            $name = explode('|', $sort['sort_name']);
+            $sort['en_name'] = $name[0];
+            $sort['cn_name'] = $name[1];
+            $sort['week'] = explode(',', $sort['week']);
+            $time = explode(',', $sort['show_time']);
+            $sort['begin_time'] = $time[0];
+            $sort['end_time'] = $time[1];
+
+            $this->assign('sort', $sort);
+            $this->display();
+        }
+    }
+
+    public function add_item(){
+        if($_POST){
+            $sort_id = $_POST['sort_id'];
+
+            $goods_data['sort_id'] = $sort_id;
+            $goods_data['store_id'] = $this->store['store_id'];
+            if($_POST['cn_name'] && $_POST['cn_name'] != '')
+                $name = $_POST['en_name'].'|'.$_POST['cn_name'];
+            else
+                $name = $_POST['en_name'];
+
+            $goods_data['name'] = $name;
+            $goods_data['unit'] = "order|份";
+            $goods_data['price'] = $_POST['price'];
+            $goods_data['image'] = $_POST['product_image'] ? $_POST['product_image'] : '';
+            $goods_data['des'] = $_POST['desc'] ? $_POST['desc'] : '';
+            $goods_data['sort'] = $_POST['sort'] ? $_POST['sort'] : 0;
+            $goods_data['last_time'] = time();
+            $goods_data['status'] = 1;
+            $goods_data['tax_num'] = 5;
+            $goods_data['deposit_price'] = $_POST['deposit'] ? $_POST['deposit'] : 0;
+
+            if($_POST['goods_id'] && $_POST['goods_id'] != 0){
+
+            }else{
+                $goods = D('Shop_goods')->add($goods_data);
+                if($goods)
+                    exit(json_encode(array('error'=>0,'goods'=>$goods)));
+                else
+                    exit(json_encode(array('error'=>1)));
+            }
+        }else {
+            $sort_id = $_GET['sort_id'];
+            $sort = D('Shop_goods_sort')->where(array('sort_id' => $sort_id))->find();
+            $sort['sort_name'] = lang_substr($sort['sort_name'], C('DEFAULT_LANG'));
+            $this->assign('sort', $sort);
+
+            $sort_list = D('Shop_goods_sort')->where(array('store_id' => $this->store['store_id']))->order('sort desc')->select();
+            $this->assign('sort_list', $sort_list);
+
+            if ($_GET['goods_id']) {
+                $goods_id = $_GET['goods_id'];
+                $database_shop_goods = D('Shop_goods');
+                $condition_goods['goods_id'] = $goods_id;
+                $now_goods = $database_shop_goods->field(true)->where($condition_goods)->find();
+                if (empty($now_goods)) {
+                    $this->error('商品不存在！');
+                }
+                if (!empty($now_goods['image'])) {
+                    $goods_image_class = new goods_image();
+                    $tmp_pic_arr = explode(';', $now_goods['image']);
+                    foreach ($tmp_pic_arr as $key => $value) {
+                        $now_goods['pic_arr'][$key]['title'] = $value;
+                        $now_goods['pic_arr'][$key]['url'] = $goods_image_class->get_image_by_path($value, 's');
+                    }
+                }
+
+                $return = $database_shop_goods->format_spec_value($now_goods['spec_value'], $now_goods['goods_id']);
+                $now_goods['json'] = isset($return['json']) ? json_encode($return['json']) : '';
+                $now_goods['properties_list'] = isset($return['properties_list']) ? $return['properties_list'] : '';
+                $now_goods['spec_list'] = isset($return['spec_list']) ? $return['spec_list'] : '';
+                $now_goods['list'] = isset($return['list']) ? $return['list'] : '';
+
+                $good_name = explode('|', $now_goods['name']);
+                $now_goods['en_name'] = $good_name[0];
+                $now_goods['cn_name'] = $good_name[1];
+
+                $now_goods['spec_num'] = is_array($now_goods['spec_list']) ? count($now_goods['spec_list']) : 0;
+                //var_dump($now_goods);die();
+                $this->assign('goods', $now_goods);
+            }
+            $goods_id = $_GET['goods_id'] ? $_GET['goods_id'] : 0;
+            $this->assign('sort_id', $sort_id);
+            $this->assign('goods_id', $goods_id);
+
+            $this->display();
+        }
+    }
+
+    public function show_item(){
+        $goods_id = $_GET['goods_id'];
+        $goods = D('Shop_goods')->where(array('goods_id'=>$goods_id))->find();
+        $name = explode('|',$goods['name']);
+        $goods['en_name'] = $name[0];
+        $goods['cn_name'] = $name[1];
+        $goods_image_class = new goods_image();
+        $goods['image_url'] = $goods_image_class->get_image_by_path($goods['image'], 's');
+
+        $this->assign('goods',$goods);
+
+        $sort_id = $goods['sort_id'];
+        $sort = D('Shop_goods_sort')->where(array('sort_id' => $sort_id))->find();
+        $sort['sort_name'] = lang_substr($sort['sort_name'], C('DEFAULT_LANG'));
+        $this->assign('sort', $sort);
+
+        $this->display();
     }
 }

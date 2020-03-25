@@ -100,7 +100,11 @@
     });
 
     function loadGoods(goods_id) {
-
+        window.location.href = "{pigcms{:U('Storestaff/show_item')}&sort_id={pigcms{$sort['sort_id']}&goods_id="+goods_id;
     }
+
+    $('.add_btn').click(function () {
+        window.location.href = "{pigcms{:U('Storestaff/add_item')}&sort_id={pigcms{$sort['sort_id']}";
+    });
 </script>
 

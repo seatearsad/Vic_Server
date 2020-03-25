@@ -61,8 +61,7 @@
         window.location.href = "{pigcms{:U('Storestaff/goods_list')}&sort_id="+sort_id;
     });
     function edit_cate(sort_id,fid){
-        art.dialog.data('domid', sort_id);
-        art.dialog.open('?g=Wap&c=Storestaff&a=manage_edit_cate&sort_id='+sort_id+'&fid='+fid,{lock:true,title:"{pigcms{:L('_STORE_EDIT_PRO_CATE_')}",background: '#000',opacity: 0.45});
+        window.location.href = "{pigcms{:U('Storestaff/category_setting')}&sort_id="+sort_id;
     }
     function stopDefault(e) {
         e = e || window.event;

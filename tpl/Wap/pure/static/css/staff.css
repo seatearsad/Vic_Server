@@ -369,3 +369,17 @@ body{
 .stop{
     background-image: url("../img/staff_menu/stop_item.png");
 }
+
+.img_btn{
+    width: 50%;
+    line-height: 35px;
+    background-image: url("../img/staff_menu/upload_bg.png");
+    background-repeat: no-repeat;
+    background-position: center left 10px;
+    background-size:auto 80%;
+    background-color: #ffa52d;
+    color: white;
+    padding-left: 50px;
+    border-radius: 3px;
+    font-weight: bold;
+}

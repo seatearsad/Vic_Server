@@ -265,9 +265,14 @@
         <div class="order_total">
             <div>Subtotal: ${{ d.goods_price }}</div>
             <div>Tax: ${{ d.tax_price }}</div>
-            <div>Tutti Commission: $33.33</div>
+            <div>Tutti Commission: ${{ d.tutti_comm }}</div>
+            {{# if(d.packing_charge > 0){ }}
             <div>Package Fee: ${{ d.packing_charge }}</div>
-            <div>Merchant Refund: $33.33</div>
+            {{# } }}
+            {{# if(d.deposit_price > 0){ }}
+            <div>Bottle Deposit: ${{ d.deposit_price }}</div>
+            {{# } }}
+            <div>Merchant Refund: ${{ d.merchant_refund }}</div>
         </div>
     </script>
 </body>
