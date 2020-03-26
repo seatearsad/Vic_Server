@@ -63,7 +63,7 @@
     {{# } }}
         <div class="goods_name">{{ d[i].name }}</div>
         <div class="goods_price">${{ d[i].price }}</div>
-        <div class="goods_option" style="padding-left: 20px;box-sizing: border-box;">3</div>
+        <div class="goods_option" style="padding-left: 20px;box-sizing: border-box;">{{ d[i].option_num }}</div>
         <div class="goods_btn"></div>
     </div>
     {{# } }}

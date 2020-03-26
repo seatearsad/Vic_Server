@@ -3413,6 +3413,12 @@ class StorestaffAction extends BaseAction
         foreach($goods_list as &$val){
             $val['name'] = lang_substr($val['name'],C('DEFAULT_LANG'));
             $val['unit'] = lang_substr($val['unit'],C('DEFAULT_LANG'));
+
+            $spec_num = D('Shop_goods_spec')->where(array('goods_id'=>$val['goods_id']))->count();
+            $pro_num = D('Shop_goods_properties')->where(array('goods_id'=>$val['goods_id']))->count();
+            $dish_num = D('Side_dish')->where(array('goods_id'=>$val['goods_id']))->count();
+
+            $val['option_num'] = $spec_num+$pro_num+$dish_num;
         }
 
         $return['list'] = $goods_list;
@@ -3542,6 +3548,49 @@ class StorestaffAction extends BaseAction
         $goods_image_class = new goods_image();
         $goods['image_url'] = $goods_image_class->get_image_by_path($goods['image'], 's');
 
+        $dish = D('Side_dish')->where(array('goods_id'=>$goods_id))->select();
+        foreach ($dish as &$d) {
+            $d['name'] = lang_substr($d['name'],C('DEFAULT_LANG'));
+            $dish_val = D('Side_dish_value')->where(array('dish_id'=>$d['id']))->select();
+            $d['val_num'] = count($dish_val);
+            $d['value'] = $dish_val;
+
+            if($d['min'] == $d['max']){
+                $desc = '* Required. Please choose exactly '.$d['min'];
+            }else if($d['min'] == 0){
+                if($d['max'] == -1){
+                    $desc = '* Optional. Choose as many as you’d like.';
+                }else{
+                    $desc = '*Optional. Choose at most '.$d['max'];
+                }
+            }else if($d['min'] != 0){
+                if($d['max'] == -1){
+                    $desc = '*Required. Please choose at least '.$d['min'];
+                }else{
+                    $desc = '*Required. Please choose between '.$d['min'].' to '.$d['max'];
+                }
+            }
+
+            $d['desc'] = $desc;
+        }
+        $goods['dish'] = $dish;
+
+        $pro = D('Shop_goods_properties')->where(array('goods_id'=>$goods_id))->select();
+        foreach ($pro as &$p){
+            $p['name'] = lang_substr($p['name'],C('DEFAULT_LANG'));
+            $p['value'] = explode(',',$p['val']);
+            $p['val_num'] = count($p['value']);
+        }
+        $goods['properties'] = $pro;
+
+        $spec = D('Shop_goods_spec')->where(array('goods_id'=>$goods_id))->select();
+        foreach ($spec as &$s){
+            $s['name'] = lang_substr($s['name'],C('DEFAULT_LANG'));
+            $s['value'] = D('Shop_goods_spec_value')->where(array('sid'=>$s['id']))->select();
+            $s['val_num'] = count($s['value']);
+        }
+        $goods['spec'] = $spec;
+
         $this->assign('goods',$goods);
 
         $sort_id = $goods['sort_id'];
@@ -3550,5 +3599,28 @@ class StorestaffAction extends BaseAction
         $this->assign('sort', $sort);
 
         $this->display();
+    }
+
+    public function change_status_item(){
+        $goods_id = $_POST['goods_id'];
+        $status = $_POST['status'];
+        if($goods_id && $goods_id != ''){
+            D('Shop_goods')->where(array('goods_id'=>$goods_id))->save(array('status'=>$status));
+            exit(json_encode(array('error'=>0)));
+        }else{
+            exit(json_encode(array('error'=>1)));
+        }
+    }
+
+    public function add_dish(){
+        if($_POST){
+
+        }else {
+            $goods_id = $_GET['goods_id'];
+            $goods = D('Shop_goods')->where(array('goods_id'=>$goods_id))->find();
+
+            $this->assign('goods',$goods);
+            $this->display();
+        }
     }
 }

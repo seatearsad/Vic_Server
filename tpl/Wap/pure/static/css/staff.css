@@ -383,3 +383,123 @@ body{
     border-radius: 3px;
     font-weight: bold;
 }
+
+.edit_div{
+    display: flex;
+    margin-top: 20px;
+}
+.edit_div div{
+    line-height: 35px;
+    background-color: #CCCCCC;
+    border-radius: 5px;
+    text-align: center;
+    color: #666666;
+    font-weight: bold;
+    cursor: pointer;
+}
+.edit_div .del_btn{
+    width: 20%;
+    background-image: url("../img/staff_menu/del_icon.png");
+    background-repeat: no-repeat;
+    background-position: center left 2%;
+    background-size:auto 65%;
+    padding-left: 5px;
+}
+.edit_div .status_btn{
+    width: 70%;
+    margin-left: 10%;
+}
+.edit_div .status_0{
+    background-color: #59A422;
+    color: white;
+}
+
+.option_div{
+    display: flex;
+    margin-top: 20px;
+}
+.option_div div{
+    width: 45%;
+    margin: 0 3%;
+    line-height: 30px;
+    text-align: center;
+    border-radius: 5px;
+    border: 1px solid #999999;
+}
+.option_div .act_op{
+    border: 1px solid #ffa52d;
+    color: #ffa52d;
+}
+
+.option_one{
+    border: 1px solid #ffa52d;
+    border-radius: 3px;
+    margin-top: 15px;
+    padding: 10px 5px 5px 5px;
+    box-sizing: border-box;
+}
+.dish_edit{
+    background-image: url("../img/staff_menu/edit_icon.png");
+    background-repeat: no-repeat;
+    background-position: center right 10px;
+    background-size:auto 60%;
+}
+.op_name{
+    font-size: 16px;
+    font-weight: bold;
+}
+.op_desc{
+    line-height: 30px;
+    border-bottom: 1px dashed #999999;
+}
+.op_open{
+    -moz-transform:rotate(180deg);
+    -webkit-transform:rotate(180deg);
+    transform:rotate(180deg);
+    filter:progid:DXImageTransform.Microsoft.BasicImage(rotation=2);
+}
+.op_num{
+    line-height: 30px;
+    font-weight: bold;
+}
+.op_num .s_f{
+    display: inline-block;
+    float: right;
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+    background-image: url("../img/staff_menu/s_icon.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size:auto 80%;
+}
+.op_val_list{
+    display: none;
+}
+.op_val_list div{
+    line-height: 18px;
+}
+
+.double_input{
+    display: flex;
+}
+.double_input .input_one{
+    width: 45%;
+}
+.input_one input{
+    margin-top: 5px;
+    width: 100%;
+    border: 1px solid #ffa52d;
+    line-height: 25px;
+    border-radius: 3px;
+}
+.dish_val_del{
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    vertical-align: bottom;
+    background-image: url("../img/staff_menu/del_icon.png");
+    background-repeat: no-repeat;
+    background-position: center left;
+    background-size:auto 65%;
+}

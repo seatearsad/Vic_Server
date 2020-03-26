@@ -1,7 +1,13 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Add An Item</title>
+    <title>
+        <if condition="$goods_id">
+            Edit An Item
+            <else />
+            Add An Item
+        </if>
+    </title>
     <meta name="viewport" content="initial-scale=1, width=device-width, maximum-scale=1, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name='apple-touch-fullscreen' content='yes'>
@@ -46,7 +52,13 @@
 <body>
 <include file="header" />
 <div id="main">
-    <div style="text-align: center;font-size: 16px;">Add An Item</div>
+    <div style="text-align: center;font-size: 16px;">
+        <if condition="$goods_id">
+            Edit An Item
+            <else />
+            Add An Item
+        </if>
+    </div>
     <div class="order_input">
         <div class="input_title">
             Item Name (English)*
