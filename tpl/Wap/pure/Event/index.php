@@ -201,15 +201,15 @@
                 layer.closeAll();
                 if(result.error_code){
                     layer.open({title:"{pigcms{:L('_B_D_LOGIN_TIP2_')}",content:result.msg, btn:["{pigcms{:L('_B_D_LOGIN_CONIERM_')}"]});
-                    $(".confirm_btn").click(function () {
-                        send_donate();
-                    });
-                    $('.confirm_btn').html('Confirm & Donate');
                 }else{
                     layer.open({
                         title:"{pigcms{:L('_B_D_LOGIN_TIP2_')}",content: result.msg,skin: 'msg', time:1
                     });
                 }
+                $(".confirm_btn").click(function () {
+                    send_donate();
+                });
+                $('.confirm_btn').html('Confirm & Donate');
             },'JSON');
         }
     }
