@@ -358,6 +358,7 @@
 					<div id="deliveryText"></div>
 					<div id="shopNoticeText"></div>
 				</div>
+                <div>fdsafdsa</div>
 				<!--div class="discount">
 					<div class="noticeBox"><div class="notice"><div></div></div></div>
 					<span id="shopCouponText"></span>
