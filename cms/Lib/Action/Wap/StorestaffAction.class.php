@@ -3598,6 +3598,9 @@ class StorestaffAction extends BaseAction
         $sort['sort_name'] = lang_substr($sort['sort_name'], C('DEFAULT_LANG'));
         $this->assign('sort', $sort);
 
+        $show_type = $_GET['type'] ? $_GET['type'] : 0;
+        $this->assign('show_type',$show_type);
+
         $this->display();
     }
 
@@ -3614,13 +3617,90 @@ class StorestaffAction extends BaseAction
 
     public function add_dish(){
         if($_POST){
+            $data['name'] = $_POST['name'];
+            $data['min'] = $_POST['min'];
+            $data['max'] = $_POST['max'];
+            $data['type'] = $_POST['type'];
+            $data['goods_id'] = $_POST['goods_id'];
+
+            if($_POST['dish_id'] && $_POST['dish_id'] != ''){
+                $dish_id = $_POST['dish_id'];
+                D('Side_dish')->where(array('id'=>$dish_id))->save($data);
+            }else{
+                $dish_id = D('Side_dish')->add($data);
+            }
+
+            $add_val = array();
+            $edit_val = array();
+            foreach ($_POST as $k=>$v){
+                if(strpos($k,'val_') !== false){
+                    $val_key = explode('_',$k);
+                    $add_val[$val_key[3]]['dish_id'] = $dish_id;
+                    if($val_key[2] == 'new'){
+                        if($val_key[1] == 'name')
+                            $add_val[$val_key[3]]['name'] = $v;
+                        if($val_key[1] == 'price')
+                            $add_val[$val_key[3]]['price'] = $v;
+                    }
+                    if($val_key[2] == 'dish'){
+                        if($val_key[1] == 'name')
+                            $edit_val[$val_key[3]]['name'] = $v;
+                        if($val_key[1] == 'price')
+                            $edit_val[$val_key[3]]['price'] = $v;
+                    }
+                }
+            }
+
+            D('Side_dish_value')->addAll($add_val);
+
+            foreach($edit_val as $k=>$v){
+                D('Side_dish_value')->where(array('id'=>$k))->save($v);
+            }
+
+            if($dish_id)
+                exit(json_encode(array('error'=>0)));
+            else
+                exit(json_encode(array('error'=>1)));
 
         }else {
             $goods_id = $_GET['goods_id'];
             $goods = D('Shop_goods')->where(array('goods_id'=>$goods_id))->find();
 
+            if($_GET['dish_id'] && $_GET['dish_id'] != ''){
+                $dish_id = $_GET['dish_id'];
+
+                $dish = D('Side_dish')->where(array('id'=>$dish_id))->find();
+
+                $dish['value'] = D('Side_dish_value')->where(array('dish_id'=>$dish_id))->select();
+
+                $this->assign('dish',$dish);
+            }
+
             $this->assign('goods',$goods);
             $this->display();
+        }
+    }
+
+    public function del_dish(){
+        if($_POST['dish_id']){
+            $dish_id = $_POST['dish_id'];
+            D('Side_dish')->where(array('id'=>$dish_id))->delete();
+            D('Side_dish_value')->where(array('dish_id'=>$dish_id))->delete();
+
+            exit(json_encode(array('error'=>0)));
+        }else{
+            exit(json_encode(array('error'=>1)));
+        }
+    }
+
+    public function del_dish_val(){
+        if($_POST['val_id']){
+            $val_id = $_POST['val_id'];
+            D('Side_dish_value')->where(array('id'=>$val_id))->delete();
+
+            exit(json_encode(array('error'=>0)));
+        }else{
+            exit(json_encode(array('error'=>1)));
         }
     }
 }

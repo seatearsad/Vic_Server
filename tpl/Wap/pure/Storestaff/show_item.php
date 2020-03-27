@@ -62,8 +62,8 @@
 <include file="header" />
 <div id="main">
     <div style="text-align: center;font-size: 16px;display: flex">
-        <div class="top_btn act_btn" data-type="0">Basic Information</div>
-        <div class="top_btn" data-type="1">Option/Add-On</div>
+        <div class="top_btn <if condition='$show_type eq 0'>act_btn</if>" data-type="0">Basic Information</div>
+        <div class="top_btn <if condition='$show_type eq 1'>act_btn</if>" data-type="1">Option/Add-On</div>
     </div>
     <div id="base" style="display: none;">
         <div class="order_input">
@@ -259,7 +259,7 @@
             }
         },'JSON');
     }
-    var show_type = 0;
+    var show_type = "{pigcms{$show_type}";
     show_div();
     $('.top_btn').click(function () {
         $('.top_btn').removeClass('act_btn');
@@ -296,7 +296,7 @@
 
     $('.dish_edit').click(function () {
         var dish_id = $(this).parent('div').data('dish_id');
-        alert(dish_id);
+        window.location.href = "{pigcms{:U('Storestaff/add_dish')}&goods_id={pigcms{$goods.goods_id}&dish_id="+dish_id;
     });
 
     $('.op_num').click(function () {

@@ -482,6 +482,7 @@ body{
 
 .double_input{
     display: flex;
+    margin-top: 10px;
 }
 .double_input .input_one{
     width: 45%;
@@ -501,5 +502,19 @@ body{
     background-image: url("../img/staff_menu/del_icon.png");
     background-repeat: no-repeat;
     background-position: center left;
+    background-size:auto 65%;
+}
+.del_dish{
+    width: 15%;
+    text-align: center;
+    color: white;
+    background-color: #CCCCCC;
+    line-height: 35px;
+    margin: 15px auto;
+    border-radius: 5px;
+    cursor: pointer;
+    background-image: url("../img/staff_menu/del_icon.png");
+    background-repeat: no-repeat;
+    background-position: center;
     background-size:auto 65%;
 }
