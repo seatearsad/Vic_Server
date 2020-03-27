@@ -26,7 +26,7 @@ class EventAction extends BaseAction
             $txnArray['expdate'] = transYM($_POST['e_date']);
             $txnArray['order_id'] = 'Tutti_Ferris_'.time();
             $txnArray['cust_id'] = $this->deliver_session['uid'];
-            $txnArray['amount'] = round(intval($_POST['choose_num']),2);
+            $txnArray['amount'] = $_POST['choose_num'].".00";
 
             /**************************** Transaction Object *****************************/
 
