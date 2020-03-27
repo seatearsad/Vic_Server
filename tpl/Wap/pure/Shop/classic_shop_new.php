@@ -268,6 +268,15 @@
                 bottom: 0px;
                 font-size: 12px;
             }
+            .donate_btn{
+                position: absolute;
+                top: 0px;
+                right: 20px;
+                border: 1px solid #ffa52d;
+                color: #ffa52d;
+                padding: 3px;
+                border-radius: 3px;
+            }
         </style>
 	<body>
     <div id="container">
@@ -358,6 +367,11 @@
 					<div id="deliveryText"></div>
 					<div id="shopNoticeText"></div>
 				</div>
+                <if condition="$_GET['shop_id'] eq 292">
+                    <a href="./wap.php?c=Event&a=index">
+                <div class="donate_btn">Donate a Meal</div>
+                    </a>
+                </if>
 				<!--div class="discount">
 					<div class="noticeBox"><div class="notice"><div></div></div></div>
 					<span id="shopCouponText"></span>
