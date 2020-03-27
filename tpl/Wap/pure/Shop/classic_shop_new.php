@@ -270,7 +270,7 @@
             }
             .donate_btn{
                 position: absolute;
-                top: 10px;
+                top: 0px;
                 right: 20px;
                 border: 1px solid #ffa52d;
                 color: #ffa52d;
@@ -369,7 +369,7 @@
 				</div>
                 <if condition="$_GET['shop_id'] eq 292">
                     <a href="./wap.php?c=Event&a=index">
-                <div class="donate_btn">Donate Meal</div>
+                <div class="donate_btn">Donate a Meal</div>
                     </a>
                 </if>
 				<!--div class="discount">
