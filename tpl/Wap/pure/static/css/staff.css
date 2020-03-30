@@ -518,3 +518,30 @@ body{
     background-position: center;
     background-size:auto 65%;
 }
+.to_btn{
+    width: 100%;
+    line-height: 35px;
+    border: 1px solid #ffa52d;
+    border-radius: 5px;
+    color: #ffa52d;
+    text-align: center;
+    font-size: 16px;
+    cursor: pointer;
+    background-image: url("../img/staff_menu/or_arrow.png");
+    background-size: auto 20px;
+    background-repeat: no-repeat;
+    background-position:center right 10px;
+}
+.order_h_list{
+    width: 100%;
+    font-size: 16px;
+    margin: 5px auto;
+    border-bottom: 1px solid #999999;
+    line-height: 35px;
+    padding: 0 10px;
+    box-sizing: border-box;
+}
+.order_h_list span{
+    display: inline-block;
+    margin-left: 5px;
+}

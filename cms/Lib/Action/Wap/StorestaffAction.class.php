@@ -3703,4 +3703,23 @@ class StorestaffAction extends BaseAction
             exit(json_encode(array('error'=>1)));
         }
     }
+
+    public function orders(){
+        $store_id = intval($this->store['store_id']);
+        $where = array('mer_id' => $this->store['mer_id'], 'store_id' => $store_id);
+        $where['status'] = array('egt',2);
+
+        if($_GET['begin_time'] && $_GET['end_time']){
+            $where['create_time'] = array('between',strtotime($_GET['begin_time']).",".strtotime($_GET['end_time']));
+        }
+
+        $list = D('Shop_order')->field(array('order_id','create_time','goods_price','status'))->where($where)->order('status asc,create_time desc')->select();
+
+        $this->assign('order_list',$list);
+        $this->display();
+    }
+
+    public function show_order(){
+        $this->display();
+    }
 }

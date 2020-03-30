@@ -196,10 +196,10 @@
         background-image:url('{pigcms{$static_path}img/staff_menu/menu-3.png');
     }
     #menu_order .m_img{
-        background-image:url('{pigcms{$static_path}img/staff_menu/menu-4.png');
+        background-image:url('{pigcms{$static_path}img/staff_menu/menu-5.png');
     }
     #menu_inst .m_img{
-        background-image:url('{pigcms{$static_path}img/staff_menu/menu-5.png');
+        background-image:url('{pigcms{$static_path}img/staff_menu/menu-4.png');
     }
     #menu_account .m_img{
         background-image:url('{pigcms{$static_path}img/staff_menu/menu-6.png');
@@ -239,11 +239,11 @@
             <span class="m_img"> </span>
             <span>Menu/Product Management</span>
         </li>
-        <li id="menu_order">
+        <li id="menu_inst">
             <span class="m_img"> </span>
             <span>Account Management</span>
         </li>
-        <li id="menu_inst">
+        <li id="menu_order">
             <span class="m_img"> </span>
             <span>Order History & Statistics</span>
         </li>
@@ -323,10 +323,10 @@
         location.href = "{pigcms{:U('Storestaff/manage_product')}";
     });
     $('#menu_order').click(function () {
-        //location.href = "{pigcms{:U('Storestaff/orders')}";
+        location.href = "{pigcms{:U('Storestaff/orders')}";
     });
     $('#menu_inst').click(function () {
-        //location.href = "{pigcms{:U('Storestaff/inst')}";
+        location.href = "{pigcms{:U('Storestaff/manage_info')}";
     });
     $('#menu_account').click(function () {
         //location.href = "{pigcms{:U('Storestaff/account')}";
