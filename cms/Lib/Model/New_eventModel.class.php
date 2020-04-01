@@ -70,9 +70,10 @@ class New_eventModel extends Model
      * 1 新用户注册
      * 2 新用户邀请
      * 3 规定范围内免配送费
+     * 4 店铺满减活动
      */
     public function getTypeName($type){
-        $typeName = ['无效活动','新用户注册','新用户邀请','规定范围内免配送费'];
+        $typeName = ['无效活动','新用户注册','新用户邀请','规定范围内免配送费','店铺满减活动'];
         if($type == -1)
             return $typeName;
         else
@@ -162,7 +163,7 @@ class New_eventModel extends Model
                         /**
                          * 使用于type=3的活动-即为立即使用类型
                          */
-                        if($event['type'] == 3){
+                        if($event['type'] == 3 || $event['type'] == 4){
                             $data['use_time'] = $data['expiry_time'];
                             $data['is_use'] = 1;
                             $data['uid'] = $user_id;
@@ -211,6 +212,9 @@ class New_eventModel extends Model
                 }
                 break;
             case 3:
+                $is_re = true;
+                break;
+            case 4:
                 $is_re = true;
                 break;
             default:

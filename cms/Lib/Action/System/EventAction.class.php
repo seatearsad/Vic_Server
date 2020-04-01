@@ -69,11 +69,24 @@ class EventAction extends BaseAction
         $event_id = $_GET['id'];
         if($event_id){
             $event = D('New_event')->where(array('id'=>$event_id))->find();
+
+            $type_name = '限制天数';
+            if($event['type'] == 3){
+                $type_name = '限制公里数';
+            }else if($event['type'] == 4){
+                $type_name = '店铺';
+            }
+            $event['type_name'] = $type_name;
+
             $this->assign('event',$event);
 
             $coupon_list = D('New_event_coupon')->where(array('event_id'=>$event_id))->select();
             foreach ($coupon_list as &$v){
                 $v = D('New_event')->getCouponUserNum($v);
+                if($event['type'] == 4){
+                    $store = D('Merchant_store')->field('name')->where(array('store_id'=>$v['limit_day']))->find();
+                    $v['store_name'] = lang_substr($store['name'],C('DEFAULT_LANG'));
+                }
             }
             $this->assign('coupon_list',$coupon_list);
 
@@ -91,6 +104,13 @@ class EventAction extends BaseAction
             $this->assign('event_id',$event_id);
             $event = D('New_event')->where(array('id'=>$event_id))->find();
             $this->assign('event_type',$event['type']);
+            $type_name = '限制天数';
+            if($event['type'] == 3){
+                $type_name = '限制公里数';
+            }else if($event['type'] == 4){
+                $type_name = '店铺ID';
+            }
+            $this->assign('type_name',$type_name);
             $this->display();
         }else{
             $this->frame_submit_tips(0,'请先选择活动！');

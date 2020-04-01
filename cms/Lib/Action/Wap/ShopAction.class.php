@@ -2655,6 +2655,12 @@ class ShopAction extends BaseAction{
                     $delivery_coupon = D('New_event_coupon')->where(array('event_id' => $event['id']))->find();
                 }
             }
+            //garfunkel店铺满减活动
+            $eventList = D('New_event')->getEventList(1,4);
+            $store_coupon = "";
+            if(count($eventList) > 0) {
+                $store_coupon = D('New_event_coupon')->where(array('event_id' => $eventList[0]['id'],'limit_day'=>$store_id))->find();
+            }
             /////
 			if ($deliver_type != 1) {//配送方式是：非自提和非快递配送
 				if (empty($name)) $this->error_tips('联系人不能为空');
@@ -2858,6 +2864,13 @@ class ShopAction extends BaseAction{
                             $order_data['delivery_discount'] = $return['store']['event']['discount'];
 
                         $order_data['delivery_discount_type'] = $return['store']['event']['type'];
+                    }
+                }
+                //garfunke 店铺满减活动
+                if($store_coupon && $store_coupon != ''){
+                    if($return['price'] >= $store_coupon['use_price']) {
+                        $order_data['merchant_reduce'] = $store_coupon['discount'];
+                        $order_data['merchant_reduce_type'] = $store_coupon['type'];
                     }
                 }
 
