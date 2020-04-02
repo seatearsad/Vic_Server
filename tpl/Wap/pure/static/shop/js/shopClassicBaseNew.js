@@ -1463,7 +1463,14 @@ function showShop(shopId){
                 //$('#checkCartEmpty').html(getLangStr('_NUM_DELI_PRICE_',result.store.delivery_price.toFixed(2)));
                 $('.is_close').html('OPEN');
 			}
-			
+			var reduce_html = '';
+			if(result.store.reduce) {
+                for (var i = 0; i < result.store.reduce.length; ++i) {
+                    reduce_html += '<span>' + result.store.reduce[i] + '</span>';
+                }
+                $('.star').html(reduce_html);
+            }
+
 			nowShop = result;
 			
 			$('#shopProductBox,#shopMerchantBox,#shopReplyBox').data('isShow','0');

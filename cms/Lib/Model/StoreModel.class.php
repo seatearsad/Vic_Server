@@ -285,6 +285,25 @@ class StoreModel extends Model
                 $delivery_coupon = D('New_event_coupon')->where(array('event_id' => $event['id']))->find();
             }
         }
+
+        //garfunkel店铺满减活动
+        $eventList = D('New_event')->getEventList(1,4);
+        $store_coupon = "";
+        if(count($eventList) > 0) {
+            $store_coupon = D('New_event_coupon')->field('use_price,discount')->where(array('event_id' => $eventList[0]['id'],'limit_day'=>$store_id))->order('use_price asc')->select();
+            if(count($store_coupon) > 0){
+                foreach ($store_coupon as $c) {
+                    if (C('DEFAULT_LANG') == 'zh-cn') {
+                        $reduce[] = replace_lang_str(L('_MAN_NUM_REDUCE_'), '$' . $c['use_price']) . replace_lang_str(L('_MAN_REDUCE_NUM_'), '$' . $c['discount']);
+                    } else {
+                        $reduce[] = replace_lang_str(L('_MAN_NUM_REDUCE_'), '$' . $c['discount']) . '$' . $c['use_price'];
+                    }
+                    $reduce_str[] = $c['use_price'].'|'.$c['discount'];
+                }
+                $store['reduce'] = $reduce;
+                $store['merchant_reduce'] = $reduce_str;
+            }
+        }
         //modify garfunkel
         if($lat != 0 && $lng != 0) {
             $store['shipfee'] = getDeliveryFee($row['lat'], $row['long'], $lat, $lng);

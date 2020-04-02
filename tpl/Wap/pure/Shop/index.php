@@ -81,6 +81,18 @@
             background-repeat: no-repeat;
             background-position: center;
         }
+        .off_over{
+            font-size: 11px;
+            color: #ffa52d;
+            background-image: url("./tpl/Static/blue/images/new/off_over_icon.png");
+            background-size: auto 120%;
+            background-repeat: no-repeat;
+            background-position: center left;
+            padding-left: 20px;
+        }
+        .recommend-link-url{
+            line-height: 1.2;
+        }
     </style>
 	<body>
     <include file="Public:header"/>
@@ -138,6 +150,9 @@
                     </div>
                     {{# } }}
                     <div class="price"><span>{{ d[i].keywords }}</span></div>
+                    {{# if(d[i].merchant_reduce_list){ }}
+                        <div class="off_over">{{ d[i].merchant_reduce_list }}</div>
+                    {{# } }}
                 </div>
                 {{# if(d[i].coupon_count > 0){ }}
                 <div class="coupon {{# if(d[i].coupon_count > 2){ }}hasMore{{# } }}">

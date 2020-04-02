@@ -1304,6 +1304,7 @@ class ShopAction extends BaseAction
         $total_deposit = 0;
         $total_all_price = 0;
         $total_cash = 0;
+        $total_reduce = 0;
         //商品抽成总数
         $total_goods_price_pro = 0;
         //商品税点抽成总数
@@ -1331,7 +1332,7 @@ class ShopAction extends BaseAction
                 $is_last = false;
 
                 $total_goods_price += $val['goods_price'];
-                $total_goods_price_pro += $val['goods_price'] * $val['store_pro'] / 100;
+                $total_goods_price_pro += ($val['goods_price'] - $val['merchant_reduce']) * $val['store_pro'] / 100;
                 $total_goods_tax += $val['discount_price'];
                 $total_goods_tax_pro += $val['discount_price'] * $val['store_pro'] / 100;
                 $total_freight_price += $val['freight_charge'];
@@ -1343,6 +1344,7 @@ class ShopAction extends BaseAction
                 $total_all_price += $val['price'];
                 $total_cash += $val['price'];
                 $total_tip += $val['tip_charge'];
+                $total_reduce += $val['merchant_reduce'];
 
                 $order_count++;
             }else{
@@ -1361,13 +1363,14 @@ class ShopAction extends BaseAction
                     }
                     //记录最新订单的基本数值
                     $total_goods_price += $val['goods_price'];
-                    $total_goods_price_pro += $val['goods_price'] * $val['store_pro'] / 100;
+                    $total_goods_price_pro += ($val['goods_price'] - $val['merchant_reduce']) * $val['store_pro'] / 100;
                     $total_freight_price += $val['freight_charge'];
                     $total_freight_tax += $val['freight_charge']*$val['store_tax']/100;
                     $total_packing_price += $val['packing_charge'];
                     $total_packing_tax += $val['packing_charge']*$val['store_tax']/100;
                     $total_all_price += $val['price'];
                     $total_tip += $val['tip_charge'];
+                    $total_reduce += $val['merchant_reduce'];
 
                     $all_record[$curr_order]['freight_tax'] = $val['freight_charge']*$val['store_tax']/100;
                     $all_record[$curr_order]['packing_tax'] = $val['packing_charge']*$val['store_tax']/100;
@@ -1435,13 +1438,13 @@ class ShopAction extends BaseAction
         $objActSheet->setCellValue('I1', '小费总数');
         $index = 2;
         $objActSheet->setCellValueExplicit('A' . $index, $order_count,PHPExcel_Cell_DataType::TYPE_NUMERIC);
-        $objActSheet->setCellValueExplicit('B' . $index, floatval(sprintf("%.2f", $total_goods_price)),PHPExcel_Cell_DataType::TYPE_NUMERIC);
+        $objActSheet->setCellValueExplicit('B' . $index, floatval(sprintf("%.2f", ($total_goods_price - $total_reduce))),PHPExcel_Cell_DataType::TYPE_NUMERIC);
         $objActSheet->setCellValueExplicit('C' . $index, floatval(sprintf("%.2f", $total_goods_tax)),PHPExcel_Cell_DataType::TYPE_NUMERIC);
         $objActSheet->setCellValueExplicit('D' . $index, floatval(sprintf("%.2f", $total_freight_price)),PHPExcel_Cell_DataType::TYPE_NUMERIC);
         $objActSheet->setCellValueExplicit('E' . $index, floatval(sprintf("%.2f", $total_freight_tax)),PHPExcel_Cell_DataType::TYPE_NUMERIC);
         $objActSheet->setCellValueExplicit('F' . $index, floatval(sprintf("%.2f", $total_goods_price_pro)),PHPExcel_Cell_DataType::TYPE_NUMERIC);
         $objActSheet->setCellValueExplicit('G' . $index, floatval(sprintf("%.2f", $total_goods_tax_pro)),PHPExcel_Cell_DataType::TYPE_NUMERIC);
-        $objActSheet->setCellValueExplicit('H' . $index, floatval(sprintf("%.2f", $total_all_price)),PHPExcel_Cell_DataType::TYPE_NUMERIC);
+        $objActSheet->setCellValueExplicit('H' . $index, floatval(sprintf("%.2f", ($total_all_price - $total_reduce))),PHPExcel_Cell_DataType::TYPE_NUMERIC);
         $objActSheet->setCellValueExplicit('I' . $index, floatval(sprintf("%.2f", $total_tip)),PHPExcel_Cell_DataType::TYPE_NUMERIC);
 
         //输出

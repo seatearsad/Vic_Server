@@ -82,7 +82,7 @@
             }
             #shopBanner .text{
                 height: 70px;
-                padding-left: 110px;
+                padding-left: 120px;
                 padding-top: 10px;
             }
             #shopBanner .text div{
@@ -90,8 +90,7 @@
                 height: 20px;
                 line-height: 20px;
             }
-            #shopBanner .text .is_close{
-                margin:0px 0px;
+            .is_close{
                 width: 5rem;
                 height: 20px;
                 line-height: 20px;
@@ -100,8 +99,11 @@
                 border-radius: 2px;
                 font-size: 1em;
                 color: white;
+                position: absolute;
+                top: 50px;
+                left: 32px;
             }
-            #shopBanner .text .close_s{
+            .close_s{
                 background-color: silver;
             }
             .shop_info{
@@ -277,6 +279,13 @@
                 padding: 3px;
                 border-radius: 3px;
             }
+            .star span{
+                border: 1px solid #ffa52d;
+                border-radius: 2px;
+                padding: 2px 2px;
+                color: #ffa52d;
+                margin-right: 5px;
+            }
         </style>
 	<body>
     <div id="container">
@@ -359,9 +368,9 @@
 				<div class="leftIco">
 					<div id="shopIcon"></div>
 				</div>
+                <div class="is_close">Open</div>
 				<div class="text">
                     <div class="star">
-                        <div class="is_close">Open</div>
                         <i class="full"></i><i></i>
                     </div>
 					<div id="deliveryText"></div>

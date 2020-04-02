@@ -58,11 +58,11 @@
         </div>
         <div class="link_icon">
             <ul>
-                <li><a href="https://www.facebook.com/tuttilifestyle/" target="_blank"></a></li>
-                <li><a href="https://www.instagram.com/tuttilifestyle/?hl=en" target="_blank"></a></li>
-                <li><a href="https://twitter.com/tuttilifestyle" target="_blank"></a></li>
-                <li><a href="https://www.youtube.com/channel/UCdXYWCKbNRPysK9dZ9rtC2A?view_as=public" target="_blank"></a></li>
-                <li><a href="https://www.linkedin.com/company/tuttilifestyle/about/" target="_blank"></a></li>
+                <li><a href="https://www.facebook.com/tuttidelivery" target="_blank"></a></li>
+                <li><a href="https://www.instagram.com/tuttidelivery/" target="_blank"></a></li>
+                <li><a href="https://twitter.com/tuttidelivery" target="_blank"></a></li>
+                <li><a href="https://www.youtube.com/channel/UCdXYWCKbNRPysK9dZ9rtC2A" target="_blank"></a></li>
+                <li><a href="https://www.linkedin.com/company/tuttilifestyle" target="_blank"></a></li>
             </ul>
         </div>
     </div>

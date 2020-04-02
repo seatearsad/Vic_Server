@@ -1919,7 +1919,7 @@ class DeliverAction extends BaseAction
         $b_time = strtotime($b_date);
         $e_time = strtotime($e_date);
 
-        $sql = "SELECT s.*, u.name, u.phone,o.tip_charge,o.price,o.pay_type as payType,o.coupon_price,o.delivery_discount FROM " . C('DB_PREFIX') . "deliver_supply AS s INNER JOIN " . C('DB_PREFIX') . "deliver_user AS u ON s.uid=u.uid LEFT JOIN " . C('DB_PREFIX') . "shop_order AS o ON s.order_id=o.order_id";
+        $sql = "SELECT s.*, u.name, u.phone,o.tip_charge,o.price,o.pay_type as payType,o.coupon_price,o.delivery_discount,o.merchant_reduce FROM " . C('DB_PREFIX') . "deliver_supply AS s INNER JOIN " . C('DB_PREFIX') . "deliver_user AS u ON s.uid=u.uid LEFT JOIN " . C('DB_PREFIX') . "shop_order AS o ON s.order_id=o.order_id";
 
         $sql .= ' where s.uid = '.$this->deliver_session['uid'].' and s.status = 5 and o.is_del = 0';
         if ($begin_time && $end_time)
@@ -1930,6 +1930,7 @@ class DeliverAction extends BaseAction
             $result['tip'] = $result['tip'] ? $result['tip'] + $val['tip_charge'] : $val['tip_charge'];
             if($val['coupon_price'] > 0) $val['price'] = $val['price'] - $val['coupon_price'];
             if($val['delivery_discount'] > 0) $val['price'] = $val['price'] - $val['delivery_discount'];
+            if($val['merchant_reduce'] > 0) $val['price'] = $val['price'] - $val['merchant_reduce'];
             $val['pay_type'] = $val['payType'];
             if($val['pay_type'] == 'offline' || $val['pay_type'] == 'Cash'){//统计现金
                 $result['offline_money'] = $result['offline_money'] ? $result['offline_money'] + $val['price'] : $val['price'];

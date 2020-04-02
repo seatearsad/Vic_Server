@@ -2357,6 +2357,7 @@ class ShopAction extends BaseAction
         $total_deposit = 0;
         $total_all_price = 0;
         $total_cash = 0;
+        $total_reduce = 0;
 
 
         //结束循环后是否存储最后一张订单，如果最后一张是代客下单为 false;
@@ -2385,6 +2386,7 @@ class ShopAction extends BaseAction
                 $total_deposit += $all_record[$curr_order]['all_deposit'];
                 $total_all_price += $val['price'];
                 $total_cash += $val['price'];
+                $total_reduce += $val['merchant_reduce'];
             }else{
                 if($curr_order != $record_id){
                     //记录上一张订单的税费和押金
@@ -2404,6 +2406,7 @@ class ShopAction extends BaseAction
                     $total_packing_price += $val['packing_charge'];
                     $total_packing_tax += $val['packing_charge']*$val['store_tax']/100;
                     $total_all_price += $val['price'];
+                    $total_reduce += $val['merchant_reduce'];
 
                     $all_record[$curr_order]['freight_tax'] = $val['freight_charge']*$val['store_tax']/100;
                     $all_record[$curr_order]['packing_tax'] = $val['packing_charge']*$val['store_tax']/100;
@@ -2442,18 +2445,18 @@ class ShopAction extends BaseAction
 
         import('@.ORG.mpdf.mpdf');
         $mpdf = new mPDF();
-        $html = $this->get_html($store,$begin_time,$end_time,$total_goods_price,$total_goods_tax,$total_packing_price,$total_deposit);
+        $html = $this->get_html($store,$begin_time,$end_time,$total_goods_price,$total_goods_tax,$total_packing_price,$total_deposit,$total_reduce);
 
         $mpdf->WriteHTML($html);
         $fileName = $store['name'].'('.$begin_time.' - '.$end_time.').pdf';
         $mpdf->Output($fileName,'I');
     }
 
-    public function get_html($store,$begin_time,$end_time,$good_price,$good_tax,$packing,$deposit){
-        $good_pro = $good_price * $store['proportion'] / 100;
+    public function get_html($store,$begin_time,$end_time,$good_price,$good_tax,$packing,$deposit,$reduce){
+        $good_pro = ($good_price - $reduce) * $store['proportion'] / 100;
         $tax_pro = $good_tax * $store['proportion'] / 100;
 
-        $all_price = $good_price + $good_tax + $packing + $deposit - $good_pro - $tax_pro;
+        $all_price = $good_price + $good_tax + $packing + $deposit - $good_pro - $tax_pro - $reduce;
 
         $html = '<table style="font-family:Roboto;border-collapse: collapse; width: 900px; position: relative;">
                     <tbody>
@@ -2545,6 +2548,17 @@ class ShopAction extends BaseAction
                                 <table style="border-bottom: 1px solid #999;">
                                     <tr>
                                         <td style="color:#333;font-size: 16px;width: 755px;height: 30px;" align="left">
+                                            &nbsp;Merchant Discounts
+                                        </td>
+                                        <td align="right" style="color:#666;font-size: 16px;width: 120px;">
+                                            -'.floatval(sprintf("%.2f", $reduce)).'
+                                            &nbsp;&nbsp;
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table style="border-bottom: 1px solid #999;">
+                                    <tr>
+                                        <td style="color:#333;font-size: 16px;width: 755px;height: 30px;" align="left">
                                             &nbsp;Packing Fee
                                         </td>
                                         <td align="right" style="color:#666;font-size: 16px;width: 120px;">
@@ -2600,7 +2614,7 @@ class ShopAction extends BaseAction
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="2" style="height: 550px"></td>
+                            <td colspan="2" style="height: 530px"></td>
                         </tr>
                         <tr>
                             <td colspan="2" style="font-size: 14px;font-family: Arial" align="center">

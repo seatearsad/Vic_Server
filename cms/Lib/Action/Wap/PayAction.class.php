@@ -753,8 +753,6 @@ class PayAction extends BaseAction{
                 $order_info['merchant_reduce'] = $_POST['merchant_reduce'];
                 if($order_info['order_type'] == 'shop' || $order_info['order_type'] == 'mall'){
                     D('Shop_order')->field(true)->where(array('order_id'=>$order_info['order_id']))->save(array('merchant_reduce'=>$order_info['merchant_reduce']));
-                    if($order_info['merchant_reduce'] > 0)
-                        D('New_event')->addEventCouponByType(4,$this->user_session['uid']);
                 }
             }
         }
@@ -2543,8 +2541,6 @@ class PayAction extends BaseAction{
                 $order_info['merchant_reduce'] = $_POST['merchant_reduce'];
                 if($order_info['order_type'] == 'shop' || $order_info['order_type'] == 'mall'){
                     D('Shop_order')->field(true)->where(array('order_id'=>$order_info['order_id']))->save(array('merchant_reduce'=>$order_info['merchant_reduce']));
-                    if($order_info['merchant_reduce'] > 0)
-                        D('New_event')->addEventCouponByType(4,$this->user_session['uid']);
                 }
             }
 
@@ -2675,8 +2671,6 @@ class PayAction extends BaseAction{
                 //店铺满减
                 if($_POST['merchant_reduce'] != null){
                     $order_data['merchant_reduce'] = $_POST['merchant_reduce'];
-                    if($order_data['merchant_reduce'] > 0)
-                        D('New_event')->addEventCouponByType(4,$this->user_session['uid']);
                 }
                 //无接触配送
                 if($_POST['not_touch'] != null && $_POST['not_touch'] == 1){
@@ -2734,8 +2728,6 @@ class PayAction extends BaseAction{
                     //店铺满减
                     if($_POST['merchant_reduce'] != null){
                         $order_data['merchant_reduce'] = $_POST['merchant_reduce'];
-                        if($order_data['merchant_reduce'] > 0)
-                            D('New_event')->addEventCouponByType(4,$this->user_session['uid']);
                     }
                     //无接触配送
                     if($_POST['not_touch'] != null && $_POST['not_touch'] == 1){
