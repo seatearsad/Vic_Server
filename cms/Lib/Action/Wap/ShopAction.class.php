@@ -530,6 +530,20 @@ class ShopAction extends BaseAction{
                 $temp['delivery_money'] = $temp['delivery_money'] < 0 ? 0 : $temp['delivery_money'];
             }
 
+            //garfunkel店铺满减活动
+            $eventList = D('New_event')->getEventList(1,4);
+            $store_coupon = "";
+            if(count($eventList) > 0) {
+                $store_coupon = D('New_event_coupon')->where(array('event_id' => $eventList[0]['id'],'limit_day'=>$row['store_id']))->order('use_price asc')->select();
+                if(count($store_coupon) > 0){
+                    if(C('DEFAULT_LANG') == 'zh-cn'){
+                        $temp['merchant_reduce_list'] = replace_lang_str(L('_MAN_NUM_REDUCE_'),'$'.$store_coupon[0]['use_price']).replace_lang_str(L('_MAN_REDUCE_NUM_'),'$'.$store_coupon[0]['discount']);
+                    }else{
+                        $temp['merchant_reduce_list'] = replace_lang_str(L('_MAN_NUM_REDUCE_'),'$'.$store_coupon[0]['discount']).'$'.$store_coupon[0]['use_price'];
+                    }
+                }
+            }
+
 			$return[] = $temp;
 		}
 		echo json_encode(array('store_list' => $return, 'has_more' => $lists['has_more'] ? true : false));
@@ -1264,6 +1278,22 @@ class ShopAction extends BaseAction{
         if(count($eventList) > 0) {
             foreach ($eventList as $event) {
                 $delivery_coupon = D('New_event_coupon')->where(array('event_id' => $event['id']))->find();
+            }
+        }
+        //garfunkel店铺满减活动
+        $eventList = D('New_event')->getEventList(1,4);
+        $store_coupon = "";
+        if(count($eventList) > 0) {
+            $store_coupon = D('New_event_coupon')->where(array('event_id' => $eventList[0]['id'],'limit_day'=>$store_id))->order('use_price asc')->select();
+            if(count($store_coupon) > 0){
+                foreach ($store_coupon as $c) {
+                    if (C('DEFAULT_LANG') == 'zh-cn') {
+                        $reduce[] = replace_lang_str(L('_MAN_NUM_REDUCE_'), '$' . $c['use_price']) . replace_lang_str(L('_MAN_REDUCE_NUM_'), '$' . $c['discount']);
+                    } else {
+                        $reduce[] = replace_lang_str(L('_MAN_NUM_REDUCE_'), '$' . $c['discount']) . '$' . $c['use_price'];
+                    }
+                }
+                $store['reduce'] = $reduce;
             }
         }
 
@@ -2580,6 +2610,19 @@ class ShopAction extends BaseAction{
 		} else {
 			$pick_address = $pick_list[0];
 		}
+        //garfunkel店铺满减活动
+        $eventList = D('New_event')->getEventList(1,4);
+        $store_coupon = "";
+        if(count($eventList) > 0) {
+            $store_coupon = D('New_event_coupon')->where(array('event_id' => $eventList[0]['id'],'limit_day'=>$store_id))->order('use_price asc')->select();
+            if($store_coupon && $store_coupon != ''){
+                foreach ($store_coupon as $c){
+                    if($return['vip_discount_money'] >= $c['use_price']){
+                        $return['merchant_reduce'] = $c['discount'];
+                    }
+                }
+            }
+        }
         //garfunkel add
         //$tax = $return['store']['tax_num'] / 100 + 1;
 		$return['tax_price'] = $return['tax_price'] + ($return['delivery_fee'] + $store_shop['pack_fee'])*$return['store']['tax_num'] / 100;
@@ -2654,6 +2697,12 @@ class ShopAction extends BaseAction{
                 foreach ($eventList as $event) {
                     $delivery_coupon = D('New_event_coupon')->where(array('event_id' => $event['id']))->find();
                 }
+            }
+            //garfunkel店铺满减活动
+            $eventList = D('New_event')->getEventList(1,4);
+            $store_coupon = "";
+            if(count($eventList) > 0) {
+                $store_coupon = D('New_event_coupon')->where(array('event_id' => $eventList[0]['id'],'limit_day'=>$store_id))->order('use_price asc')->select();
             }
             /////
 			if ($deliver_type != 1) {//配送方式是：非自提和非快递配送
@@ -2858,6 +2907,15 @@ class ShopAction extends BaseAction{
                             $order_data['delivery_discount'] = $return['store']['event']['discount'];
 
                         $order_data['delivery_discount_type'] = $return['store']['event']['type'];
+                    }
+                }
+                //garfunke 店铺满减活动
+                if($store_coupon && $store_coupon != ''){
+				    foreach($store_coupon as $c){
+                        if($return['price'] >= $c['use_price']) {
+                            $order_data['merchant_reduce'] = $c['discount'];
+                            $order_data['merchant_reduce_type'] = $c['type'];
+                        }
                     }
                 }
 

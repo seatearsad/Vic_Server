@@ -223,7 +223,15 @@ class PayAction extends BaseAction{
                     $tmp_order['total_money']-=$cheap_info['wx_cheap'];
                 }
             }
-
+            //是否与其他优惠互斥
+            $is_chi = false;
+            if($order_info['delivery_discount'] > 0 && $order_info['delivery_discount_type'] == 0){
+                $is_chi = true;
+            }
+            if($order_info['merchant_reduce'] > 0 && $order_info['merchant_reduce_type'] == 0){
+                $is_chi = true;
+            }
+            $order_info['is_c'] = $is_chi ? 0 : 1;
             //平台优惠券
             if (($tmp_order['total_money'] > $mer_coupon['discount'] || empty($mer_coupon))&&$_GET['unsys_coupon']!=1&&($order_info['discount_status']||!isset($order_info['discount_status']))) {
                 $tmp_order['total_money'] -= empty($mer_coupon['discount']) ? 0 : $mer_coupon['discount'];
@@ -258,6 +266,8 @@ class PayAction extends BaseAction{
                     }
                     if($order_info['delivery_discount_type'] == 0)
                         $order_info['delivery_discount'] = 0;
+                    if($order_info['merchant_reduce_type'] == 0)
+                        $order_info['merchant_reduce'] = 0;
                 }
             }
 
@@ -277,8 +287,8 @@ class PayAction extends BaseAction{
                 $mer_coupon['coupon_url_param'] = array();
             }
 
-
-            if (($order_info['delivery_discount_type'] == 1 && !empty($system_coupon)) || ($order_info['delivery_discount'] == 0 && !empty($system_coupon))) {
+            if(!($order_info['delivery_discount_type'] == 0 && $order_info['delivery_discount'] != 0) && !($order_info['merchant_reduce_type'] == 0 && $order_info['merchant_reduce'] != 0) && !empty($system_coupon)){
+            //if (($order_info['merchant_reduce_type'] == 1 && $order_info['delivery_discount_type'] == 1 && !empty($system_coupon)) || ($order_info['merchant_reduce'] == 0 && $order_info['delivery_discount'] == 0 && !empty($system_coupon))) {
                 //$system_coupon['coupon_url_param'] = array('sysc_id' => $system_coupon['id'], 'order_id' => $order_info['order_id'], 'type' => $_GET['type']);
                 $system_coupon['coupon_url_param'] = array('sysc_id' => $system_coupon['id'], 'order_id' => $order_info['order_id'], 'type' => $_GET['type']);
                 if($system_coupon['discount']>=$tmp_order['total_money']){
@@ -734,7 +744,15 @@ class PayAction extends BaseAction{
                 $order_info['delivery_discount'] = $_POST['delivery_discount'];
                 if($order_info['order_type'] == 'shop' || $order_info['order_type'] == 'mall'){
                     D('Shop_order')->field(true)->where(array('order_id'=>$order_info['order_id']))->save(array('delivery_discount'=>$order_info['delivery_discount']));
-                    D('New_event')->addEventCouponByType(3,$this->user_session['uid']);
+                    if($order_info['delivery_discount'] > 0)
+                        D('New_event')->addEventCouponByType(3,$this->user_session['uid']);
+                }
+            }
+            //店铺满减
+            if($_POST['merchant_reduce'] != null){
+                $order_info['merchant_reduce'] = $_POST['merchant_reduce'];
+                if($order_info['order_type'] == 'shop' || $order_info['order_type'] == 'mall'){
+                    D('Shop_order')->field(true)->where(array('order_id'=>$order_info['order_id']))->save(array('merchant_reduce'=>$order_info['merchant_reduce']));
                 }
             }
         }
@@ -2514,7 +2532,15 @@ class PayAction extends BaseAction{
                 $order_info['delivery_discount'] = $_POST['delivery_discount'];
                 if($order_info['order_type'] == 'shop' || $order_info['order_type'] == 'mall'){
                     D('Shop_order')->field(true)->where(array('order_id'=>$order_info['order_id']))->save(array('delivery_discount'=>$order_info['delivery_discount']));
-                    D('New_event')->addEventCouponByType(3,$this->user_session['uid']);
+                    if($order_info['delivery_discount'] > 0)
+                        D('New_event')->addEventCouponByType(3,$this->user_session['uid']);
+                }
+            }
+            //店铺满减
+            if($_POST['merchant_reduce'] != null){
+                $order_info['merchant_reduce'] = $_POST['merchant_reduce'];
+                if($order_info['order_type'] == 'shop' || $order_info['order_type'] == 'mall'){
+                    D('Shop_order')->field(true)->where(array('order_id'=>$order_info['order_id']))->save(array('merchant_reduce'=>$order_info['merchant_reduce']));
                 }
             }
 
@@ -2639,7 +2665,12 @@ class PayAction extends BaseAction{
                 //判断是否有减免配送费活动
                 if($_POST['delivery_discount'] != null){
                     $order_data['delivery_discount'] = $_POST['delivery_discount'];
-                    D('New_event')->addEventCouponByType(3,$this->user_session['uid']);
+                    if($order_data['delivery_discount'] > 0)
+                        D('New_event')->addEventCouponByType(3,$this->user_session['uid']);
+                }
+                //店铺满减
+                if($_POST['merchant_reduce'] != null){
+                    $order_data['merchant_reduce'] = $_POST['merchant_reduce'];
                 }
                 //无接触配送
                 if($_POST['not_touch'] != null && $_POST['not_touch'] == 1){
@@ -2691,7 +2722,12 @@ class PayAction extends BaseAction{
                     //判断是否有减免配送费活动
                     if($_POST['delivery_discount'] != null){
                         $order_data['delivery_discount'] = $_POST['delivery_discount'];
-                        D('New_event')->addEventCouponByType(3,$this->user_session['uid']);
+                        if($order_data['delivery_discount'] > 0)
+                            D('New_event')->addEventCouponByType(3,$this->user_session['uid']);
+                    }
+                    //店铺满减
+                    if($_POST['merchant_reduce'] != null){
+                        $order_data['merchant_reduce'] = $_POST['merchant_reduce'];
                     }
                     //无接触配送
                     if($_POST['not_touch'] != null && $_POST['not_touch'] == 1){

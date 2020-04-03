@@ -277,6 +277,23 @@ class CartModel extends Model
         }
         ///////-garfunkel-减免配送费////////
 
+        ///////-garfunkel-店铺满减////////
+        $result['merchant_reduce'] = 0;
+        $result['merchant_reduce_type'] = 0;
+        $eventList = D('New_event')->getEventList(1,4);
+        $store_coupon = "";
+        if(count($eventList) > 0) {
+            $store_coupon = D('New_event_coupon')->where(array('event_id' => $eventList[0]['id'],'limit_day'=>$sid))->order('use_price asc')->select();
+        }
+        if(count($store_coupon) > 0) {
+            foreach ($store_coupon as $c) {
+                if ($total_price >= $c['use_price']) {
+                    $result['merchant_reduce'] = $c['discount'];
+                    $result['merchant_reduce_type'] = $c['type'];
+                }
+            }
+        }
+        ///////-garfunkel-店铺满减////////
         $result['ship_fee'] = $delivey_fee;
         $total_pay_price += $delivey_fee;
         //获取预计到达时间

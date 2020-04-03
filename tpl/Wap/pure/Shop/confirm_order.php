@@ -238,6 +238,14 @@ a {
     margin-top: 5px;
     margin-bottom: 10px;
 }
+.reduce_txt{
+    color: #ffa52d;
+    text-align: center;
+    line-height: 15px;
+    width: 80%;
+    margin: 5px auto;
+    word-break: break-word;
+}
 </style>
 </head>
 <script type="text/javascript" src="{pigcms{$static_path}shop/js/scroller.js"></script>
@@ -267,6 +275,12 @@ a {
             </div>
         </div>
         </a>
+        <if condition="$merchant_reduce gt 0">
+            <div class="reduce_txt">
+                <img src="./tpl/Static/blue/images/new/off_over_icon.png" height="25">
+                Your ${pigcms{$merchant_reduce} discount will be applied at the checkout page.
+            </div>
+        </if>
     <section class="menu_wrap pay_wrap">
 		<if condition="!empty($goods)">
 		<ul class="menu_list order_list" id="orderList">
@@ -410,7 +424,7 @@ a {
 	<p>
 		<span class="fr">{pigcms{:L('_TOTAL_RECE_')}：<strong>$<span id="totalPrice_">{pigcms{:sprintf("%.2f",$vip_discount_money)}<if condition="$extra_price gt 0 AND $config.open_extra_price eq 1">+{pigcms{$extra_price|floatval}{pigcms{$config.extra_price_alias_name}</if></span></strong></span>
 		<!--p id="show_delivery_fee" <if condition="$delivery_type eq 2 OR $pick_addr_id OR $now_time_value eq 2">style="display:none"</if>>{pigcms{:L('_DELI_PRICE_')}：${pigcms{$delivery_fee}，{pigcms{:L('_TAXATION_TXT_')}: ${pigcms{$tax_price}</p-->
-		<if condition="$have_two_time">	
+        <if condition="$have_two_time">
 		<p id="show_delivery_fee2" <if condition="$now_time_value eq 1">style="display:none"</if>>{pigcms{:L('_DELI_PRICE_')}：${pigcms{$delivery_fee2}</p>
 		</if>	
 	</p>

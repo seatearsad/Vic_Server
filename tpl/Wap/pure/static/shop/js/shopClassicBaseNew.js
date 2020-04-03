@@ -1463,7 +1463,14 @@ function showShop(shopId){
                 //$('#checkCartEmpty').html(getLangStr('_NUM_DELI_PRICE_',result.store.delivery_price.toFixed(2)));
                 $('.is_close').html('OPEN');
 			}
-			
+			var reduce_html = '';
+			if(result.store.reduce) {
+                for (var i = 0; i < result.store.reduce.length; ++i) {
+                    reduce_html += '<span>' + result.store.reduce[i] + '</span>';
+                }
+                $('.star').html(reduce_html);
+            }
+
 			nowShop = result;
 			
 			$('#shopProductBox,#shopMerchantBox,#shopReplyBox').data('isShow','0');
@@ -1956,6 +1963,16 @@ function showShopContent(nav){
             $('#shopMerchantDescBox .address').attr('data-url','map&param='+nowShop.store.id+'-'+nowShop.store.long+'-'+nowShop.store.lat+'-'+encodeURIComponent(nowShop.store.name)+'-'+encodeURIComponent(nowShop.store.adress)).html('<span></span>'+ getLangStr('_SHOP_ADDRESS_') +'：'+nowShop.store.adress);
             $('#shopMerchantDescBox .openTime').html(getLangStr('_BUSINESS_TIME_')+'：'+nowShop.store.time);
             $('#shopMerchantDescBox .merchantNotice').html(getLangStr('_SHOP_NOTICE_') + '：'+nowShop.store.store_notice);
+            var reduce_html = '';
+            if(nowShop.store.reduce) {
+                for (var i = 0; i < nowShop.store.reduce.length; ++i) {
+                	if(i == 0)
+                    	reduce_html += '<span>' + nowShop.store.reduce[i] + '</span>';
+                	else
+                        reduce_html += '<span>&nbsp;;&nbsp;' + nowShop.store.reduce[i] + '</span>';
+                }
+                $('#shopMerchantDescBox .merchantReduce').html(reduce_html);
+            }
             // if(nowShop.store.isverify==1){
             //     $('#shopMerchantDescBox').append('<dd class="merchantVerify">'+ getLangStr('_SHOP_CERTIFICATION_') + getLangStr('_CERTIFIED_') +'</dd>');
             // }

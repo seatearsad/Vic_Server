@@ -103,10 +103,10 @@
     </div>
     <div id="address">
         <div>
-            747 Fort St.#801
+            #218-852 Fort St
         </div>
         <div>
-            Victoria, BC V8W 3E9
+            Victoria BC
         </div>
         <div>&nbsp;</div>
         <div style="color: #999999">

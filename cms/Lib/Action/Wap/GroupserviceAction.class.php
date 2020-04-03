@@ -381,6 +381,20 @@ class GroupserviceAction extends BaseAction{
                     $temp['delivery_money'] = $temp['delivery_money'] < 0 ? 0 : $temp['delivery_money'];
 				}
 
+                //garfunkel店铺满减活动
+                $eventList = D('New_event')->getEventList(1,4);
+                $store_coupon = "";
+                if(count($eventList) > 0) {
+                    $store_coupon = D('New_event_coupon')->where(array('event_id' => $eventList[0]['id'],'limit_day'=>$row['store_id']))->order('use_price asc')->select();
+                    if(count($store_coupon) > 0){
+                        if(C('DEFAULT_LANG') == 'zh-cn'){
+                            $temp['merchant_reduce_list'] = replace_lang_str(L('_MAN_NUM_REDUCE_'),'$'.$store_coupon[0]['use_price']).replace_lang_str(L('_MAN_REDUCE_NUM_'),'$'.$store_coupon[0]['discount']);
+                        }else{
+                            $temp['merchant_reduce_list'] = replace_lang_str(L('_MAN_NUM_REDUCE_'),'$'.$store_coupon[0]['discount']).'$'.$store_coupon[0]['use_price'];
+                        }
+                    }
+                }
+
 				$return[] = $temp;
 			}
 			$new_group_list =$return;

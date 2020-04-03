@@ -537,9 +537,14 @@ class MyAction extends BaseAction{
 		}
 
 		if($_GET['delivery_type']){
+		    //减免配送和店铺满减 只要有一个与系统优惠券互斥
+            if($_GET['merchant_type']){
+                if($_GET['merchant_type'] == 0){
+                    $_GET['delivery_type'] = $_GET['merchant_type'];
+                }
+            }
 		    $this->assign('delivery_type',$_GET['delivery_type']);
         }
-
 
 		$this->assign('unselect',U('Pay/check',$param));
 		$this->display();

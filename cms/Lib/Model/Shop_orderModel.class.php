@@ -162,7 +162,9 @@ class Shop_orderModel extends Model
 					'address'           =>  $now_order['address'],
 					'delivery_discount'	=>	$now_order['delivery_discount'],
                 	'delivery_discount_type'	=>	$now_order['delivery_discount_type'],
-					'create_time'		=>	$now_order['create_time']
+					'create_time'		=>	$now_order['create_time'],
+                	'merchant_reduce'	=>	$now_order['merchant_reduce'],
+                	'merchant_reduce_type'	=>	$now_order['merchant_reduce_type']
 			);
 		} else {
 			$order_info = array(
@@ -198,7 +200,9 @@ class Shop_orderModel extends Model
                 'address'           =>  $now_order['address'],
 				'delivery_discount'	=>	$now_order['delivery_discount'],
                 'delivery_discount_type'	=>	$now_order['delivery_discount_type'],
-                'create_time'		=>	$now_order['create_time']
+                'create_time'		=>	$now_order['create_time'],
+				'merchant_reduce'	=>	$now_order['merchant_reduce'],
+                'merchant_reduce_type'	=>	$now_order['merchant_reduce_type']
 			);
 		}
 		return array('error' => 0, 'order_info' => $order_info);
@@ -1018,7 +1022,7 @@ class Shop_orderModel extends Model
 		}
 
 		foreach ($list as &$order) {
-			$order['offline_price'] = round($order['price'] +$order['extra_price'] + $order['tip_charge'] - round($order['card_price'] + $order['merchant_balance'] + $order['card_give_money'] +$order['balance_pay'] + $order['payment_money'] + $order['score_deducte'] + $order['coupon_price'] + $order['delivery_discount'], 2), 2);
+			$order['offline_price'] = round($order['price'] +$order['extra_price'] + $order['tip_charge'] - round($order['card_price'] + $order['merchant_balance'] + $order['card_give_money'] +$order['balance_pay'] + $order['payment_money'] + $order['score_deducte'] + $order['coupon_price'] + $order['delivery_discount'] + $order['merchant_reduce'], 2), 2);
 			$order['deliver_info'] = $order['deliver_info'] ? unserialize($order['deliver_info']) : '';
 			switch ($order['status']) {
 				case 0:
