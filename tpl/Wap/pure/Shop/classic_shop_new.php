@@ -290,6 +290,9 @@
                 color: #ffa52d;
                 margin-right: 5px;
             }
+            #shopMerchantBox .merchantReduce{
+                color: #ffa52d;
+            }
         </style>
 	<body>
     <div id="container">
@@ -452,6 +455,7 @@
 						<dd class="openTime">{pigcms{:L('_BUSINESS_TIME_')}</dd>
 						<!--dd class="deliveryType">{pigcms{:L('_DIST_SERVICE_')}</dd-->
 						<dd class="merchantNotice">{pigcms{:L('_SHOP_NOTICE_')}</dd>
+                        <dd class="merchantReduce"></dd>
 					</dl>
 					<if condition="!$merchant_link_showOther">
 						<dl id="shopMerchantLinkBox">
