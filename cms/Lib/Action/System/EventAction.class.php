@@ -149,4 +149,26 @@ class EventAction extends BaseAction
             $this->frame_submit_tips(1, 'Success！');
         }
     }
+
+    public function coupon_del(){
+        $id = $_POST['id'];
+        $msg = '';
+        if($id){
+            $coupon = D('New_event_coupon')->where(array('id'=>$id))->find();
+            if($coupon){
+                $event = D('New_event')->where(array('id'=>$coupon['event_id']))->find();
+                if($event['type'] == 4){
+                    D('New_event_coupon')->where(array('id'=>$id))->delete();
+                    $this->success('Success');
+                }else{
+                    $msg = "Can not Delete!";
+                }
+            }else{
+                $msg = "Coupon Error";
+            }
+        }else{
+            $msg = "ID Error";
+        }
+        $this->error($msg);
+    }
 }
