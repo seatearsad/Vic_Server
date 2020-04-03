@@ -545,3 +545,22 @@ body{
     display: inline-block;
     margin-left: 5px;
 }
+.status_btn{
+    display: inline-block;
+    float: right;
+    line-height: 30px;
+    padding:0 10px 0 35px;
+    background-color: #ffa52d;
+    color: white;
+    border-radius: 3px;
+    background-image: url("../img/staff_menu/resume.png");
+    background-size: auto 80%;
+    background-repeat: no-repeat;
+    background-position:center left 5px;
+    cursor: pointer;
+}
+.to_close{
+    background-image: url("../img/staff_menu/pause.png");
+    background-color: #CCCCCC;
+    color: #666666;
+}
