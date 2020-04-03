@@ -244,7 +244,7 @@ a {
     line-height: 15px;
     width: 80%;
     margin: 5px auto;
-    word-break: break-all;
+    word-break: break-word;
 }
 </style>
 </head>
