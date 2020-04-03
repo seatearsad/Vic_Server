@@ -286,7 +286,7 @@
             .star span{
                 border: 1px solid #ffa52d;
                 border-radius: 2px;
-                padding: 2px 2px;
+                padding: 0px 2px;
                 color: #ffa52d;
                 margin-right: 5px;
             }
