@@ -83,12 +83,15 @@
             #shopBanner .text{
                 height: 70px;
                 padding-left: 120px;
-                padding-top: 10px;
+                padding-top: 5px;
             }
             #shopBanner .text div{
                 color:#999;
                 height: 20px;
                 line-height: 20px;
+            }
+            #shopBanner .text .star{
+                height: 25px;
             }
             .is_close{
                 width: 5rem;
@@ -278,6 +281,9 @@
                 color: #ffa52d;
                 padding: 3px;
                 border-radius: 3px;
+            }
+            .star{
+                height: 25px;
             }
             .star span{
                 border: 1px solid #ffa52d;

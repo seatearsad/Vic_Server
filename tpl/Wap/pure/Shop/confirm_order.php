@@ -241,8 +241,10 @@ a {
 .reduce_txt{
     color: #ffa52d;
     text-align: center;
-    line-height: 25px;
-    margin-top: 5px;
+    line-height: 15px;
+    width: 80%;
+    margin: 5px auto;
+    word-break: break-all;
 }
 </style>
 </head>

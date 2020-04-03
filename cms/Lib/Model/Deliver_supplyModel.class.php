@@ -97,7 +97,7 @@ class Deliver_supplyModel extends Model
                 $supply['real_orderid'] = isset($order['real_orderid']) ? $order['real_orderid'] : '';
                 $supply['pay_type'] = $order['pay_type'];
                 $supply['money'] = $order['price'];
-                $supply['deliver_cash'] = round($order['price']+$order['extra_price'] - round($order['card_price'] + $order['merchant_balance'] + $order['card_give_money'] +$order['balance_pay'] + $order['payment_money'] + $order['score_deducte'] + $order['coupon_price'] + $order['delivery_discount'], 2), 2);
+                $supply['deliver_cash'] = round($order['price']+$order['extra_price'] - round($order['card_price'] + $order['merchant_balance'] + $order['card_give_money'] +$order['balance_pay'] + $order['payment_money'] + $order['score_deducte'] + $order['coupon_price'] + $order['delivery_discount'] + $order['merchant_reduce'], 2), 2);
                 $supply['deliver_cash'] = max(0, $supply['deliver_cash']);
                 $supply['store_id'] = $store['store_id'];
                 $supply['store_name'] = $store['name'];
