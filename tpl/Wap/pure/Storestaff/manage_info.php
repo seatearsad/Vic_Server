@@ -65,6 +65,7 @@
                 </if>
             </div>
         </div>
+        <div class="edit_info">Edit</div>
         <div class="order_input">
             <div class="input_title">
                 Store Name (English):<label>{pigcms{$store.en_name}</label>
@@ -191,6 +192,10 @@
 
             });
         }
+    });
+    
+    $('.edit_info').click(function () {
+        window.location.href = "{pigcms{:U('Storestaff/manage_info')}&edit=1";
     });
 </script>
 </body>

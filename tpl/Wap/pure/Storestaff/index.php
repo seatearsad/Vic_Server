@@ -266,6 +266,9 @@
             <div>Subtotal: ${{ d.goods_price }}</div>
             <div>Tax: ${{ d.tax_price }}</div>
             <div>Tutti Commission: ${{ d.tutti_comm }}</div>
+            {{# if(d.merchant_reduce > 0){ }}
+            <div>Merchant Discounts: ${{ d.merchant_reduce }}</div>
+            {{# } }}
             {{# if(d.packing_charge > 0){ }}
             <div>Package Fee: ${{ d.packing_charge }}</div>
             {{# } }}

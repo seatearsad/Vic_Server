@@ -3085,6 +3085,7 @@ class StorestaffAction extends BaseAction
             $data['phone'] = $_POST['phone'];
             $data['pic_info'] = $_POST['pic_info'];
             $data['txt_info'] = $_POST['txt_info'] ? $_POST['txt_info'] : '';
+            $data['feature'] = $_POST['feature'] ? $_POST['feature'] : '';
 
             D('Merchant_store')->where(array('store_id' => $this->store['store_id']))->save($data);
 
@@ -3104,7 +3105,11 @@ class StorestaffAction extends BaseAction
 
             $this->assign('store',$shop);
 
-            $this->display();
+            if($_GET['edit'] && $_GET['edit'] == 1){
+                $this->display('info_edit');
+            }else {
+                $this->display();
+            }
         }
     }
 
@@ -3261,8 +3266,8 @@ class StorestaffAction extends BaseAction
         $tax_price = $tax_price + ($order['packing_charge'])*$store['tax_num']/100;
         $order['tax_price'] = $tax_price;
         $order['deposit_price'] = $deposit_price;
-        $order['tutti_comm'] = round(($order['goods_price'] + $tax_price)*$store['proportion']/100,2);
-        $order['merchant_refund'] = round(($order['goods_price'] + $tax_price) - $order['tutti_comm'],2);
+        $order['tutti_comm'] = round(($order['goods_price'] - $order['merchant_reduce'] + $tax_price)*$store['proportion']/100,2);
+        $order['merchant_refund'] = round(($order['goods_price'] - $order['merchant_reduce'] + $tax_price) - $order['tutti_comm'],2);
         //代客下单
         if($order['num'] == 0){
             $order['deposit_price'] = $order['packing_charge'];
