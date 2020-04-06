@@ -1313,6 +1313,10 @@ class ShopAction extends BaseAction
         $order_count = 0;
         //小费总数
         $total_tip = 0;
+        //优惠券使用金额总数
+        $total_coupon_discount = 0;
+        //配送费减免总数
+        $total_delivery_discount = 0;
 
         //结束循环后是否存储最后一张订单，如果最后一张是代客下单为 false;
         $is_last = true;
@@ -1345,6 +1349,8 @@ class ShopAction extends BaseAction
                 $total_cash += $val['price'];
                 $total_tip += $val['tip_charge'];
                 $total_reduce += $val['merchant_reduce'];
+                $total_coupon_discount += $val['coupon_price'];
+                $total_delivery_discount += $val['delivery_discount'];
 
                 $order_count++;
             }else{
@@ -1371,6 +1377,8 @@ class ShopAction extends BaseAction
                     $total_all_price += $val['price'];
                     $total_tip += $val['tip_charge'];
                     $total_reduce += $val['merchant_reduce'];
+                    $total_coupon_discount += $val['coupon_price'];
+                    $total_delivery_discount += $val['delivery_discount'];
 
                     $all_record[$curr_order]['freight_tax'] = $val['freight_charge']*$val['store_tax']/100;
                     $all_record[$curr_order]['packing_tax'] = $val['packing_charge']*$val['store_tax']/100;
@@ -1436,6 +1444,8 @@ class ShopAction extends BaseAction
         $objActSheet->setCellValue('G1', '商品税费抽成总金额');//无
         $objActSheet->setCellValue('H1', '订单总金额');
         $objActSheet->setCellValue('I1', '小费总数');
+        $objActSheet->setCellValue('J1', '优惠券金额总数');
+        $objActSheet->setCellValue('K1', '免配送费金额总数');
         $index = 2;
         $objActSheet->setCellValueExplicit('A' . $index, $order_count,PHPExcel_Cell_DataType::TYPE_NUMERIC);
         $objActSheet->setCellValueExplicit('B' . $index, floatval(sprintf("%.2f", ($total_goods_price - $total_reduce))),PHPExcel_Cell_DataType::TYPE_NUMERIC);
@@ -1446,6 +1456,8 @@ class ShopAction extends BaseAction
         $objActSheet->setCellValueExplicit('G' . $index, floatval(sprintf("%.2f", $total_goods_tax_pro)),PHPExcel_Cell_DataType::TYPE_NUMERIC);
         $objActSheet->setCellValueExplicit('H' . $index, floatval(sprintf("%.2f", ($total_all_price - $total_reduce))),PHPExcel_Cell_DataType::TYPE_NUMERIC);
         $objActSheet->setCellValueExplicit('I' . $index, floatval(sprintf("%.2f", $total_tip)),PHPExcel_Cell_DataType::TYPE_NUMERIC);
+        $objActSheet->setCellValueExplicit('J' . $index, floatval(sprintf("%.2f", $total_coupon_discount)),PHPExcel_Cell_DataType::TYPE_NUMERIC);
+        $objActSheet->setCellValueExplicit('K' . $index, floatval(sprintf("%.2f", $total_delivery_discount)),PHPExcel_Cell_DataType::TYPE_NUMERIC);
 
         //输出
         $objWriter = new PHPExcel_Writer_Excel5($objExcel);
