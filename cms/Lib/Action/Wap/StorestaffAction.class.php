@@ -112,7 +112,7 @@ class StorestaffAction extends BaseAction
                 $this->assign('openid', $_SESSION['openid']);
             }
             if($this->staff_session){
-                redirect(U('Storestaff/manage'));
+                redirect(U('Storestaff/manage_info'));
             }else {
                 $referer = isset($_GET['referer']) ? htmlspecialchars_decode(urldecode($_GET['referer']), ENT_QUOTES) : '';
                 $this->assign('refererUrl', $referer);
@@ -2541,6 +2541,28 @@ class StorestaffAction extends BaseAction
         $data['status'] = $store['status'] == 1 ? 0 : 1;
         D('Merchant_store')->where(array('store_id' => $this->store['store_id']))->save($data);
 
+        if($data['status'] == 0){
+            $reason = '';
+            switch ($_POST['reason_type']){
+                case 1:
+                    $reason = 'My store will be temporarily closed for holidays/vacations.';
+                    break;
+                case 2:
+                    $reason = 'I don\'t get many orders.';
+                    break;
+                case 3:
+                    $reason = 'Other : '.$_POST['reason_other'];
+                    break;
+                default:
+                    break;
+            }
+            $title = 'Store Close ('.$this->store['name'].')';
+            $body = '<p>Reason : '.$reason.'</p>';
+
+            $mail = $this->getMail($title,$body);
+            $mail->send();
+        }
+
         $this->success('Success');
     }
 
@@ -3726,5 +3748,58 @@ class StorestaffAction extends BaseAction
 
     public function show_order(){
         $this->display();
+    }
+    
+    public function change_pwd(){
+        if($_POST){
+            $curr_pwd = $_POST['curr_pwd'];
+            $new_pwd = $_POST['new_pwd'];
+            if(md5($curr_pwd) != $this->staff_session['password']){
+                exit(json_encode(array('error'=>1)));
+            }else{
+                $data['password'] = md5($new_pwd);
+
+                D('Merchant_store_staff')->where(array('id'=>$this->staff_session['id']))->save($data);
+
+                $this->staff_session['password'] = md5($new_pwd);
+                session('staff_session', serialize($this->staff_session));
+                exit(json_encode(array('error' => 0)));
+            }
+        }else{
+            var_dump($this->staff_session);
+            $this->display();
+        }
+    }
+
+    public function vacation(){
+        //$this->assign('store',$this->store);
+        $this->display();
+    }
+
+    function getMail($title,$body){
+        require './mailer/PHPMailer.php';
+        require './mailer/SMTP.php';
+        require './mailer/Exception.php';
+
+        $mail = new PHPMailer\PHPMailer\PHPMailer();
+
+        $mail->isSMTP();                                      // Set mailer to use SMTP
+        $mail->Host = 'smtp.gmail.com';                       // Specify main and backup SMTP servers. 这里改成smtp.gmail.com
+        $mail->SMTPAuth = true;                               // Enable SMTP authentication
+        $mail->Username = 'caesark882@gmail.com';             // SMTP username 这里改成自己的gmail邮箱，最好新注册一个，因为后期设置会导致安全性降低
+        $mail->Password = 'kkrzakbtivctdtdm';                 // SMTP password 这里改成对应邮箱密码
+        $mail->SMTPSecure = 'ssl';                            // Enable TLS encryption, `ssl` also accepted
+        $mail->Port = 465;
+
+        $mail->setFrom('caesark882@gmail.com', 'Caesark');
+        //$mail->addAddress('caesar@tutti.app', 'Caesar');
+        $mail->addAddress('garfunkel@126.com', 'Garfunkel');
+
+        $mail->isHTML(true);
+        $mail->Subject = $title;
+        $mail->Body    = $body;
+        $mail->AltBody = '';
+
+        return $mail;
     }
 }

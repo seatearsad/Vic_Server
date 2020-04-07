@@ -197,6 +197,18 @@
     $('.edit_info').click(function () {
         window.location.href = "{pigcms{:U('Storestaff/manage_info')}&edit=1";
     });
+
+    $('#manage_time').click(function () {
+        window.location.href = "{pigcms{:U('Storestaff/manage_time')}";
+    });
+
+    $('#manage_pwd').click(function () {
+        window.location.href = "{pigcms{:U('Storestaff/change_pwd')}";
+    });
+
+    $('#manage_mode').click(function () {
+        window.location.href = "{pigcms{:U('Storestaff/vacation')}";
+    });
 </script>
 </body>
 </html>

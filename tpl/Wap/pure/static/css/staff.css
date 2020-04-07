@@ -577,3 +577,45 @@ body{
     background-position: center right 10px;
     background-size:auto 60%;
 }
+.manage_time_title{
+    text-align: center;
+    line-height: 50px;
+    border-bottom: 2px solid #ccc;
+}
+.top_10{
+    margin-top: 10px;
+}
+.v_mode_title{
+    font-size: 16px;
+    display:flex;
+    font-weight:bold;
+    color: #333333;
+}
+.turn_btn{
+    width: 120px;
+    height: 30px;
+    border-radius: 5px;
+    background-color: #ffa52d;
+    padding: 2px 2px;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+.turn_btn span{
+    display: inline-block;
+    width: 50px;
+    height: 26px;
+    line-height: 26px;
+    background-color: white;
+    text-align: center;
+    border-radius: 5px;
+}
+.turn_off{
+    margin-left: 60px;
+}
+.reason_div{
+    line-height: 30px;
+}
+#reason_input{
+    border: none;
+    border-bottom: 1px solid #999999;
+}
