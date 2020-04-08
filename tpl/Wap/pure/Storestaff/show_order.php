@@ -106,8 +106,11 @@
     </script>
     <script id="OrderDetailTpl" type="text/html">
         <div class="detail_title">
-            Order #{{ d.order_id }} ( <span class="t_color">Please Confirm</span> )
-            {{# if(d.status > 0 && d.is_app == 'true'){ }}
+            Order #{{ d.order_id }}
+            {{# if(d.status == 0){ }}
+            ( <span class="t_color">Please Confirm</span> )
+            {{# } }}
+            {{# if(d.status > 0 && d.is_app){ }}
             <span class="order_print" id="print_order"></span>
             {{# } }}
         </div>
