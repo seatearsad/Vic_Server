@@ -212,11 +212,12 @@ body{
 }
 .order_print{
     float: right;
-    padding:0 5px;
-    background: #ffa52d;
-    text-align: center;
-    color: white;
-    border-radius: 5px;
+    width: 50px;
+    height: 50px;
+    background-image: url("../img/staff_menu/print_icon.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size:auto 80%;
     cursor: pointer;
 }
 
@@ -279,7 +280,6 @@ body{
     min-height: 50px;
     position: relative;
     vertical-align: center;
-    min-width: 400px;
     float: left;
     color: #666666;
 }

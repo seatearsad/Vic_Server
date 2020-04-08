@@ -67,5 +67,12 @@
         e = e || window.event;
         e.stopPropagation();
     }
+    var all_height = $(window).height();
+    var all_width = $(window).width();
+    if(all_height > all_width){
+        $('.cate_list').css('width','100%');
+    }else{
+        $('.cate_list').css('width','49%');
+    }
 </script>
 

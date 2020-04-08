@@ -108,7 +108,7 @@
         <div class="detail_title">
             Order #{{ d.order_id }} ( <span class="t_color">Please Confirm</span> )
             {{# if(d.status > 0 && d.is_app){ }}
-            <span class="order_print" id="print_order">Print Order</span>
+            <span class="order_print" id="print_order"></span>
             {{# } }}
         </div>
         <div class="detail_user">
