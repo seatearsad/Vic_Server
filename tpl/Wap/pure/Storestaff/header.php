@@ -256,8 +256,8 @@
             <span class="m_img"> </span>
             <span>Printing Settings</span>
         </li>
-        <div class="print_memo" id="use_status">123</div>
-        <div class="print_memo" id="printer_name">456</div>
+        <div class="print_memo" id="use_status"></div>
+        <div class="print_memo" id="printer_name"></div>
     </ul>
     <div id="menu_bottom">
         <!--div id="setting">Setting</div-->
@@ -272,17 +272,17 @@
 <script type="text/javascript" src="{pigcms{$static_path}layer/layer.m.js" charset="utf-8"></script>
 <script src="{pigcms{$static_public}js/lang.js"></script>
 <script>
-    if(/(tutti_android)/.test(navigator.userAgent.toLowerCase()) || /(tuttipartner)/.test(navigator.userAgent.toLowerCase())){
-        $('#menu_print').show();
-        $('.print_memo').show();
-    }else{
-        $('#menu_print').hide();
-        $('.print_memo').hide();
-    }
+    // if(/(tutti_android)/.test(navigator.userAgent.toLowerCase()) || /(tuttipartner)/.test(navigator.userAgent.toLowerCase())){
+    //     $('#menu_print').show();
+    //     $('.print_memo').show();
+    // }else{
+    //     $('#menu_print').hide();
+    //     $('.print_memo').hide();
+    // }
 
     function pushPrinterNameAndUse(name,use) {
-        var is_use = 'NO';
-        if(use == '1') is_use = 'YES';
+        var is_use = '<img src="{pigcms{$static_path}img/staff_menu/normal_item.png" width="15"> NO';
+        if(use == '1') is_use = '<img src="{pigcms{$static_path}img/staff_menu/stop_item.png" width="15"> YES';
 
         $('#use_status').html(is_use);
         $('#printer_name').html(name);
