@@ -3510,14 +3510,15 @@ class StorestaffAction extends BaseAction
             $goods_data['deposit_price'] = $_POST['deposit'] ? $_POST['deposit'] : 0;
 
             if($_POST['goods_id'] && $_POST['goods_id'] != 0){
-
+                D('Shop_goods')->where(array('goods_id'=>$_POST['goods_id']))->save($goods_data);
+                $goods = $_POST['goods_id'];
             }else{
                 $goods = D('Shop_goods')->add($goods_data);
-                if($goods)
-                    exit(json_encode(array('error'=>0,'goods'=>$goods)));
-                else
-                    exit(json_encode(array('error'=>1)));
             }
+            if($goods)
+                exit(json_encode(array('error'=>0,'goods'=>$goods)));
+            else
+                exit(json_encode(array('error'=>1)));
         }else {
             $sort_id = $_GET['sort_id'];
             $sort = D('Shop_goods_sort')->where(array('sort_id' => $sort_id))->find();
