@@ -61,6 +61,10 @@ function click_order_list(order) {
 }
 
 function getOrderDetail(order_id) {
+    if(typeof (is_detail_hide) != 'undefined'){
+        if(is_detail_hide)
+            $('.list_top').trigger('click');
+    }
     layer.open({
         type:2,
         content:'Loading...'
@@ -75,7 +79,7 @@ function getOrderDetail(order_id) {
                 this_order.is_app = is_app;
                 laytpl($('#OrderDetailTpl').html()).render(this_order, function(html){
                     $('#detail_div').html(html);
-                    alert(this_order.status);
+
                     if(this_order.status == 0) {
                         $('.con_layer').show();
                         $('#item_all_num').html(this_order.num);
