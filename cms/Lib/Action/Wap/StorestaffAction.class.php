@@ -3165,7 +3165,7 @@ class StorestaffAction extends BaseAction
         $where['status'] = array('lt',2);
         $where['is_del'] = 0;
 
-        $order = D('Shop_order')->field(array('order_id','create_time'))->where($where)->order('create_time desc')->find();
+        $order = D('Shop_order')->field(array('order_id','create_time','username'))->where($where)->order('create_time desc')->find();
         if($order){
             if($last_time == 0) {
                 $data['is_new'] = 0;
@@ -3182,7 +3182,7 @@ class StorestaffAction extends BaseAction
         }
 
 //        if($last_time == 0)
-            $list = D('Shop_order')->field(array('order_id','status'))->where($where)->order('status asc,create_time desc')->select();
+            $list = D('Shop_order')->field(array('order_id','status','username'))->where($where)->order('status asc,create_time desc')->select();
 //        else {
 //            $where['create_time'] = array('gt',$last_time);
 //            $list = D('Shop_order')->field(array('order_id','status'))->where($where)->order('status asc,create_time desc')->select();
@@ -3289,7 +3289,7 @@ class StorestaffAction extends BaseAction
         $order['tax_price'] = $tax_price;
         $order['deposit_price'] = $deposit_price;
         $order['tutti_comm'] = round(($order['goods_price'] - $order['merchant_reduce'] + $tax_price)*$store['proportion']/100,2);
-        $order['merchant_refund'] = round(($order['goods_price'] - $order['merchant_reduce'] + $tax_price) - $order['tutti_comm'],2);
+        $order['merchant_refund'] = round(($order['goods_price'] + $order['deposit_price'] + $order['packing_charge'] - $order['merchant_reduce'] + $tax_price) - $order['tutti_comm'],2);
         //代客下单
         if($order['num'] == 0){
             $order['deposit_price'] = $order['packing_charge'];

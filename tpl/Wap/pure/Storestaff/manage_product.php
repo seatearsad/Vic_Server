@@ -38,6 +38,7 @@
                     <label class="r_color">{pigcms{$vo.stop_count} Inactive Item(s)</label>
                 </if>
                     {pigcms{$vo.normal_count} Active Item(s)
+                    &nbsp;&nbsp;Order:{pigcms{$vo.sort}
             </div>
             <span class="cate_set" data-id="{pigcms{$vo.sort_id}" data-fid=""{pigcms{$vo.fid}"></span>
         </div>

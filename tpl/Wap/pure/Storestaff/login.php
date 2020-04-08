@@ -8,7 +8,7 @@
 <meta charset="utf-8">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8;application/json" />
     <link rel="manifest" href="/manifest_courier.json">
-<title>{pigcms{:L('_COURIER_LOGIN_')}</title>
+<title>Merchant Login</title>
 <meta name="description" content="{pigcms{$config.seo_description}"/>
 <link href="{pigcms{$static_path}css/deliver.css?v=1.0.4" rel="stylesheet"/>
 <script src="{pigcms{:C('JQUERY_FILE')}"></script>

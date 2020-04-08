@@ -170,7 +170,11 @@
             <div class="order_item dish_line">
                 <span class="item_num"></span>
                 <span class="item_name">
-                 &nbsp;&nbsp;&nbsp;&nbsp;{{ d.info[i].dish[j].list[k] }}
+                 {{# var name=d.info[i].dish[j].list[k].split("*") }}
+                 &nbsp;&nbsp;&nbsp;&nbsp;{{ name[0] }}
+                    {{# if(typeof(name[1]) != 'undefined'){ }}
+                    <label class="r_color">*{{ name[1] }}</label>
+                    {{# } }}
                 </span>
                 <span class="item_price"></span>
             </div>

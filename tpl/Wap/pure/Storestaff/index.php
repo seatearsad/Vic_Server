@@ -34,11 +34,16 @@
                     Food Preparation
                 </span>
                 <select class="confirm_time" name="dining_time" autocomplete="off">
-                    <option value="5">5 min</option>
                     <option value="10">10 min</option>
                     <option value="20" selected="selected">20 min</option>
                     <option value="30">30 min</option>
                     <option value="40">40 min</option>
+                    <option value="50">50 min</option>
+                    <option value="60">60 min</option>
+                    <option value="70">70 min</option>
+                    <option value="80">80 min</option>
+                    <option value="90">90 min</option>
+                    <option value="100">100 min</option>
                 </select>
                 <span class="confirm_btn w_color">
                     Confirm <label id="item_all_num">7</label> Item(s)
@@ -92,7 +97,7 @@
         $(function () {
             $(".order_list").height(all_height - header_height);
             $(".order_detail").height(all_height - header_height);
-            $('#detail_div').height(all_height - header_height - 50);
+            $('#detail_div').height(all_height - header_height - 70);
             $('.list_ul').height(all_height - header_height - 50);
             if(all_width > all_height){
                 $('.show_list').hide();
@@ -209,6 +214,7 @@
         {{# for(var i = 0, len = d.length; i < len; i++){ }}
         <li data-id="{{ d[i].order_id }}">
             <span>#{{ d[i].order_id }}</span>
+            <span>{{ d[i].username }}</span>
             {{# if(d[i].status == 1){ }}
             <span class="confirm_order">Confirmed</span>
             {{# }else{ }}
@@ -283,7 +289,11 @@
             <div class="order_item dish_line">
                 <span class="item_num"></span>
                 <span class="item_name">
-                 &nbsp;&nbsp;&nbsp;&nbsp;{{ d.info[i].dish[j].list[k] }}
+                    {{# var name=d.info[i].dish[j].list[k].split("*") }}
+                 &nbsp;&nbsp;&nbsp;&nbsp;{{ name[0] }}
+                    {{# if(typeof(name[1]) != 'undefined'){ }}
+                    <label class="r_color">*{{ name[1] }}</label>
+                    {{# } }}
                 </span>
                 <span class="item_price"></span>
             </div>
@@ -297,9 +307,9 @@
         <div class="order_total">
             <div>Subtotal: ${{ d.goods_price }}</div>
             <div>Tax: ${{ d.tax_price }}</div>
-            <div>Tutti Commission: ${{ d.tutti_comm }}</div>
+            <div>Tutti Commission: -${{ d.tutti_comm }}</div>
             {{# if(d.merchant_reduce > 0){ }}
-            <div>Merchant Discounts: ${{ d.merchant_reduce }}</div>
+            <div>Merchant Discounts: -${{ d.merchant_reduce }}</div>
             {{# } }}
             {{# if(d.packing_charge > 0){ }}
             <div>Package Fee: ${{ d.packing_charge }}</div>

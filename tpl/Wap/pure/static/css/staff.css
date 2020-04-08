@@ -82,7 +82,7 @@ body{
 }
 .list_ul li{
     width: 100%;
-    line-height: 50px;
+    line-height: 60px;
     font-size: 16px;
     padding:0 10%;
     box-sizing: border-box;
@@ -100,7 +100,7 @@ body{
     color: white;
     line-height: 40px;
     text-align: center;
-    margin-top: 5px;
+    margin-top: 10px;
 }
 .list_ul .confirm_order{
     float: right;
@@ -120,6 +120,7 @@ body{
     font-size: 16px;
     line-height: 50px;
     font-weight: bold;
+    margin-top: 30px;
 }
 .detail_note{
     border-radius: 3px;
@@ -167,12 +168,12 @@ body{
 }
 .con_layer{
     width: 100%;
-    height: 50px;
+    height: 70px;
     position: absolute;
     bottom: 0;
     left: 0;
-    background: white;
-    padding-top: 5px;
+    background: #ffa52d;
+    padding-top: 15px;
     box-sizing: border-box;
     display: none;
 }
@@ -184,6 +185,7 @@ body{
     margin:5px 2% ;
     display: inline-block;
     text-align: center;
+    color: white;
 }
 .confirm_time{
     width: 110px;
@@ -194,14 +196,15 @@ body{
 }
 .confirm_btn{
     width: 35%;
-    height: 40px;
+    height: 35px;
     background: #ffa52d;
     border-radius: 5px;
     display: inline-block;
     float: right;
     margin-right: 10px;
     text-align: center;
-    line-height: 40px;
+    line-height: 35px;
+    border: 1px solid white;
 }
 .order_total{
     margin-top: 10px;
@@ -359,10 +362,14 @@ body{
 }
 .goods_btn{
     width: 10%;
+    padding-left: 15px;
+    box-sizing: border-box;
+    /**
     background-image: url("../img/staff_menu/or_arrow.png");
     background-size: auto 20px;
     background-repeat: no-repeat;
     background-position:center right 10px;
+    */
 }
 .normal{
     background-image: url("../img/staff_menu/normal_item.png");
@@ -399,7 +406,7 @@ body{
     cursor: pointer;
 }
 .edit_div .del_btn{
-    width: 20%;
+    width: 28%;
     background-image: url("../img/staff_menu/del_icon.png");
     background-repeat: no-repeat;
     background-position: center left 2%;
@@ -407,8 +414,8 @@ body{
     padding-left: 5px;
 }
 .edit_div .status_btn{
-    width: 70%;
-    margin-left: 10%;
+    width: 65%;
+    margin-left: 7%;
 }
 .edit_div .status_0{
     background-color: #59A422;

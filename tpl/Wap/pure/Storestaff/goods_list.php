@@ -48,7 +48,7 @@
         <div class="goods_name">Name</div>
         <div class="goods_price">Price</div>
         <div class="goods_option">Options</div>
-        <div style="width: 10%;"></div>
+        <div style="width: 10%;">Order</div>
     </div>
     <div id="goodsList"></div>
 </div>
@@ -64,7 +64,7 @@
         <div class="goods_name">{{ d[i].name }}</div>
         <div class="goods_price">${{ d[i].price }}</div>
         <div class="goods_option" style="padding-left: 20px;box-sizing: border-box;">{{ d[i].option_num }}</div>
-        <div class="goods_btn"></div>
+        <div class="goods_btn">{{ d[i].sort }}</div>
     </div>
     {{# } }}
 </script>

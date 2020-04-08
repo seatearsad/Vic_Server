@@ -124,6 +124,9 @@
         <div class="confirm_btn_order" id="confirm_order" style="width: 100%;">
             Edit
         </div>
+        <div class="confirm_btn_order" id="back_list" style="width: 100%;background-color: #77b800">
+            Done
+        </div>
     </div>
     <div id="option" style="display: none;">
         <div style="text-align: center;font-size: 16px; margin: 10px 0;">
@@ -313,6 +316,10 @@
     
     $('.add_btn').click(function () {
         window.location.href = "{pigcms{:U('Storestaff/add_dish')}&goods_id={pigcms{$goods.goods_id}";
+    });
+    
+    $('#back_list').click(function () {
+        window.location.href = "{pigcms{:U('Storestaff/goods_list')}&sort_id={pigcms{$goods['sort_id']}";
     });
 </script>
 </body>

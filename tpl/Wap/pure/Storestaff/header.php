@@ -97,11 +97,11 @@
     }
     #menu_memo ul li{
         list-style-type: none;
-        height: 30px;
-        line-height: 30px;
+        height: 40px;
+        line-height: 40px;
         cursor: pointer;
         background-image: url("./tpl/Static/blue/images/new/black_arrow.png");
-        background-size: auto 16px;
+        background-size: auto 20px;
         background-repeat: no-repeat;
         background-position: right;
         display: flex;
@@ -281,8 +281,8 @@
     // }
 
     function pushPrinterNameAndUse(name,use) {
-        var is_use = '<img src="{pigcms{$static_path}img/staff_menu/normal_item.png" width="15"> NO';
-        if(use == '1') is_use = '<img src="{pigcms{$static_path}img/staff_menu/stop_item.png" width="15"> YES';
+        var is_use = '<img src="{pigcms{$static_path}img/staff_menu/stop_item.png" width="15"> NO';
+        if(use == '1') is_use = '<img src="{pigcms{$static_path}img/staff_menu/normal_item.png" width="15"> YES';
 
         $('#use_status').html(is_use);
         $('#printer_name').html(name);
