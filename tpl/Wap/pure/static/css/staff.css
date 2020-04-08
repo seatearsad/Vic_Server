@@ -26,6 +26,7 @@ body{
     width: 350px;
     max-width: 100%;
     background-color: #e8e5e5;
+    flex: 0 0 auto;
 }
 .list_top{
     margin-top: 10px;
