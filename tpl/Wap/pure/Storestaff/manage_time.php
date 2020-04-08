@@ -483,10 +483,10 @@ line-height: .7rem;
     //         $('.week_time').css('height','317px');
     //     }
     // });
-    if($(window).height() > $(window).width()){
-        //$('.submit').css('margin-top','50px');
-        $('.week_time').css('height','547px');
-    }
+    // if($(window).height() > $(window).width()){
+    //     //$('.submit').css('margin-top','50px');
+    //     //$('.week_time').css('height','547px');
+    // }
 
 
 </script>

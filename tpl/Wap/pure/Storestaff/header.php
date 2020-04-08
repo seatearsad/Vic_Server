@@ -54,10 +54,10 @@
         overflow: hidden;
         white-space:nowrap;
         text-overflow: ellipsis;
-        width: 240px;
-        padding: 0 10px;
+        width: 100%;
         text-align: center;
         color: white;
+        position: absolute;
     }
     #hamburger-1.is-active .line:nth-child(1) {
         -webkit-transform: translateY(8px) rotate(45deg);
