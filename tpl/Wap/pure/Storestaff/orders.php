@@ -66,9 +66,9 @@
         </a>
     </div>
 
-    <div class="to_btn" id="to_report" style="width: 100%">
+    <!--div class="to_btn" id="to_report" style="width: 100%">
         View Report
-    </div>
+    </div-->
     <volist name="order_list" id="vo">
         <div class="order_h_list" data-id="{pigcms{$vo.order_id}">
             <span style="width: 20%;">#{pigcms{$vo.order_id}</span>

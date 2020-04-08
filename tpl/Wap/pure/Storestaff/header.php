@@ -247,10 +247,10 @@
             <span class="m_img"> </span>
             <span>Order History & Statistics</span>
         </li>
-        <li id="menu_account">
+        <!--li id="menu_account">
             <span class="m_img"> </span>
             <span>Merchant Support</span>
-        </li>
+        </li-->
         <li id="menu_print">
             <span class="m_img"> </span>
             <span>Printing Settings</span>
@@ -271,13 +271,13 @@
 <script type="text/javascript" src="{pigcms{$static_path}layer/layer.m.js" charset="utf-8"></script>
 <script src="{pigcms{$static_public}js/lang.js"></script>
 <script>
-    // if(/(tutti_android)/.test(navigator.userAgent.toLowerCase()) || /(tuttipartner)/.test(navigator.userAgent.toLowerCase())){
-    //     $('#menu_print').show();
-    //     $('.print_memo').show();
-    // }else{
-    //     $('#menu_print').hide();
-    //     $('.print_memo').hide();
-    // }
+    if(/(tutti_android)/.test(navigator.userAgent.toLowerCase()) || /(tuttipartner)/.test(navigator.userAgent.toLowerCase())){
+        $('#menu_print').show();
+        $('.print_memo').show();
+    }else{
+        $('#menu_print').hide();
+        $('.print_memo').hide();
+    }
 
     function pushPrinterNameAndUse(name,use) {
         var is_use = 'NO';
