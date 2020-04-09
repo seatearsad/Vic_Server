@@ -70,7 +70,8 @@
         </div>
         <input type="text" name="deposit" value="" />
     </div>
-    <div style="margin-top: 10px">
+
+    <div style="margin-top: 25px;line-height: 20px;">
         Please note that <label class="bold_black">Tutti couriers do NOT carry any POS machine for delivery</label>,
         and <label class="bold_black">only accept cash or online payments.</label>
         If the customer chooses to pay online, he or she will input her payment information on courier's phone using Tutti Courier App.

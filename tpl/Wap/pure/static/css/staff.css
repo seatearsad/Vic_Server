@@ -166,7 +166,7 @@ body{
     flex: 1 1 100%;
     margin-left: 5%;
 }
-.con_layer{
+.con_layer,.con_layer_confirm{
     width: 100%;
     height: 70px;
     position: absolute;
@@ -176,6 +176,19 @@ body{
     padding-top: 15px;
     box-sizing: border-box;
     display: none;
+}
+.con_layer_confirm{
+    background: #CCCCCC;
+}
+.con_layer_confirm span{
+    line-height: 35px;
+    height: 35px;
+}
+.con_layer_confirm .confirm_txt{
+    color: #666666;
+    font-weight: normal;
+    width: 120px;
+    margin-top: 0px;
 }
 .confirm_txt{
     font-weight: bold;
@@ -205,6 +218,11 @@ body{
     text-align: center;
     line-height: 35px;
     border: 1px solid white;
+}
+.con_layer_confirm .confirm_btn{
+    border: 0px;
+    background:none;
+    color: #77b800;
 }
 .order_total{
     margin-top: 10px;

@@ -65,6 +65,21 @@
             <label style="color: #999999;">Bottle Deposit (If applicable):</label>${pigcms{$post_data['deposit']}
         </div>
     </div>
+    <div class="order_input" style="margin-top: 20px">
+        <div class="input_title">Food Preparation Time*</div>
+        <select class="confirm_time" name="dining_time" autocomplete="off" style="margin-top:5px;height: 30px;width: 200px">
+            <option value="10">10 min</option>
+            <option value="20" selected="selected">20 min</option>
+            <option value="30">30 min</option>
+            <option value="40">40 min</option>
+            <option value="50">50 min</option>
+            <option value="60">60 min</option>
+            <option value="70">70 min</option>
+            <option value="80">80 min</option>
+            <option value="90">90 min</option>
+            <option value="100">100 min</option>
+        </select>
+    </div>
     <div style="margin-top: 20px">
         Please note that <label class="bold_black">Tutti couriers do NOT carry any POS machine for delivery</label>,
         and <label class="bold_black">only accept cash or online payments.</label>
@@ -122,7 +137,7 @@
         if(is_read){
             $("#add-shop-order").submit();
         }else{
-            alert('Please check ????！');
+            alert('Check required!');
         }
     });
 </script>

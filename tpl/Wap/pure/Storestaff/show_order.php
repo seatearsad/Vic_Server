@@ -107,9 +107,21 @@
     <script id="OrderDetailTpl" type="text/html">
         <div class="detail_title">
             Order #{{ d.order_id }}
+            (
             {{# if(d.status == 0){ }}
-            ( <span class="t_color">Please Confirm</span> )
+            <span class="t_color">Please Confirm</span>
+            {{# }else if(d.order_status == 1){ }}
+            <span class="t_color">Waiting for a Courier</span>
+            {{# }else if(d.order_status == 2){ }}
+            <span class="t_color">Waiting for a Courier</span>
+            {{# }else if(d.order_status == 3){ }}
+            <span class="t_color">Picked Up</span>
+            {{# }else if(d.order_status == 4){ }}
+            <span class="t_color">Arriving</span>
+            {{# }else if(d.order_status == 5){ }}
+            <span class="t_color">Completed</span>
             {{# } }}
+            )
             {{# if(d.status > 0 && d.is_app){ }}
             <span class="order_print" id="print_order"></span>
             {{# } }}

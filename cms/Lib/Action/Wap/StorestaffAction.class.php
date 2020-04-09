@@ -2476,12 +2476,47 @@ class StorestaffAction extends BaseAction
 
             //**代客下单 用discount_price记录税费**
             //**代客下单 用packing_charge记录押金**
-            $order = M('Shop_order')->data($_POST)->add();
-            if ($order){
+            $order_id = M('Shop_order')->data($_POST)->add();
+            if ($order_id){
                 //清除cookie
                 cookie('staff_address',null,'');
-                $this->success_tips('Success',U('Storestaff/index'));
+                $data['status'] = 1;
+                $data['order_status'] = 1;
+                $data['last_staff'] = $this->staff_session['name'];
+                $data['last_time'] = time();
 
+                $condition['order_id'] = $order_id;
+                $condition['status'] = 0;
+
+                $order = D('Shop_order')->where(array('order_id'=>$order_id))->find();
+
+                if (D('Shop_order')->where($condition)->save($data)) {
+                    if ($order['is_pick_in_store'] != 2 && $order['is_pick_in_store'] != 3) {
+                        $result = D('Deliver_supply')->saveOrder($order_id, $this->store);
+                        if ($result['error_code']) {
+                            D('Shop_order')->where(array('order_id' => $order_id))->save(array('status' => 0, 'order_status' => 0, 'last_time' => time()));
+                            $this->error_tips($result['msg']);
+                            exit;
+                        }
+                    }
+                    $phones = explode(' ', $this->store['phone']);
+                    D('Shop_order_log')->add_log(array('order_id' => $order_id, 'status' => 2, 'name' => $this->staff_session['name'], 'phone' => $phones[0]));
+
+                    //add garfunkel
+                    $userInfo = D('User')->field(true)->where(array('uid' => $order['uid']))->find();
+                    if ($userInfo['device_id'] != "") {
+                        $message = 'Your order has been accepted by the store, they are preparing it now. Our Courier is on the way, thank you for your patience!';
+                        Sms::sendMessageToGoogle($userInfo['device_id'], $message);
+                    } else {
+                        $sms_data['uid'] = $order['uid'];
+                        $sms_data['mobile'] = $order['userphone'];
+                        $sms_data['sendto'] = 'user';
+                        $sms_data['tplid'] = 172700;
+                        $sms_data['params'] = [];
+                        Sms::sendSms2($sms_data);
+                    }
+                    $this->success_tips('Success', U('Storestaff/index'));
+                }
             }else{
                 $this->error_tips('Fail');
             }
@@ -3345,6 +3380,28 @@ class StorestaffAction extends BaseAction
         }
 
         $order_data['dining_time'] = $supply['dining_time'] ? $supply['dining_time'] : '0';
+
+        $cha_time = time() - $order_data['create_time'];
+        if(intval($cha_time/3600) == 0)
+            $hour = '00';
+        elseif(intval($cha_time/3600) < 10)
+            $hour = '0'.intval($cha_time/3600);
+        else
+            $hour = intval($cha_time/3600);
+
+        $cha_time = $cha_time - intval($hour)*3600 < 0 ? 0 : $cha_time - intval($hour)*3600;
+
+        if(intval($cha_time/60) == 0)
+            $fen = '00';
+        elseif(intval($cha_time/60) < 10)
+            $fen = '0'.intval($cha_time/60);
+        else
+            $fen = intval($cha_time/60);
+
+        $cha_time = $cha_time - intval($fen)*60 < 0 ? 0 : $cha_time - intval($fen)*60;
+        $cha_time = $cha_time < 10 ? '0'.$cha_time : $cha_time;
+
+        $order_data['time_cha'] = $hour.":".$fen;
 
         $data['order_data'] = $order_data;
 

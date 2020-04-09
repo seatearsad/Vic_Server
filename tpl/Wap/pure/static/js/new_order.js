@@ -82,9 +82,13 @@ function getOrderDetail(order_id) {
 
                     if(this_order.status == 0) {
                         $('.con_layer').show();
+                        $('.con_layer_confirm').hide();
                         $('#item_all_num').html(this_order.num);
                     }else {
                         $('.con_layer').hide();
+                        $('.con_layer_confirm').show();
+                        $('.cha_time').html(this_order.time_cha);
+                        $('#item_all_con_num').html(this_order.num);
                         $('#print_order').unbind('click');
                         $('#print_order').click(printOrderToAndroid);
                     }
