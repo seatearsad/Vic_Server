@@ -141,7 +141,7 @@
         data['en_name'] = $('input[name="cate_name_en"]').val();
         data['cn_name'] = $('input[name="cate_name_cn"]').val();
         data['sort'] = $('input[name="sort"]').val();
-        data['is_weekshow'] = $('select[name="is_weekshow"]').val();
+        data['is_weekshow'] = $('select[name="is_weekshow"] option:selected').val();
         var week_num = '';
         var i=0;
         $('#main').find('input[name="week[]"]').each(function () {
@@ -154,7 +154,7 @@
            i++;
         });
         data['week'] = week_num;
-        data['is_time'] = $('select[name="is_time"]').val();
+        data['is_time'] = $('select[name="is_time"] option:selected').val();
         data['begin_time'] = $('input[name="begin_time"]').val();
         data['end_time'] = $('input[name="end_time"]').val();
         data['sort_id'] = "{pigcms{$sort.sort_id}";

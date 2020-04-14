@@ -138,7 +138,7 @@
         data['name'] = $('input[name="name"]').val();
         data['min'] = $('input[name="min"]').val();
         data['max'] = $('input[name="max"]').val();
-        data['type'] = $('select[name="type"]').val();
+        data['type'] = $('select[name="type"] option:selected').val();
         data['dish_id'] = $('input[name="dish_id"]').val();
         data['goods_id'] = "{pigcms{$goods['goods_id']}"
 

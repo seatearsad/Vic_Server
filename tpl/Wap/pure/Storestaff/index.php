@@ -26,9 +26,7 @@
         </div>
         <div class="order_detail">
             <div class="show_list"></div>
-            <div id="detail_div">
-
-            </div>
+            <div id="detail_div"></div>
             <div class="con_layer">
                 <span class="confirm_txt">
                     Food Preparation
@@ -54,6 +52,21 @@
                     Order Ready by
                 </span>
                 <span class="cha_time"></span>
+                <div id="add_dining_time" style="position: absolute;top:32px;left: 20px">
+                    <select class="confirm_time" name="add_dining_time" autocomplete="off" style="width:160px;">
+                        <option value="10">Another 10 min</option>
+                        <option value="20" selected="selected">Another 20 min</option>
+                        <option value="30">Another 30 min</option>
+                        <option value="40">Another 40 min</option>
+                        <option value="50">Another 50 min</option>
+                        <option value="60">Another 60 min</option>
+                        <option value="70">Another 70 min</option>
+                        <option value="80">Another 80 min</option>
+                        <option value="90">Another 90 min</option>
+                        <option value="100">Another 100 min</option>
+                    </select>
+                    <span class="add_time_btn">Add</span>
+                </div>
                 <span class="confirm_btn w_color">
                     <label id="item_all_con_num">7</label> Item(s)
                     Confirmed
@@ -125,6 +138,10 @@
             if(is_detail_hide) {
                 $('.order_detail').show();
                 $('.order_detail').children().show();
+                if(click_id == 0){
+                    $('.con_layer').hide();
+                    $('.con_layer_confirm').hide();
+                }
             }
         });
         $('.show_list').click(function () {
@@ -156,7 +173,7 @@
                 type:2,
                 content:'Loading...'
             });
-            var time_val = $('.confirm_time').val();
+            var time_val = $('select[name="dining_time"] option:selected').val();
             is_send = true;
 
             $.post("{pigcms{:U('Storestaff/shop_order_confirm')}",{order_id:click_id,status:1,dining_time:time_val},function(result){
@@ -219,6 +236,56 @@
                 is_app = true;
             }
         }
+        function moni_click() {
+            $('.show_list').trigger('click');
+        }
+        $('.add_time_btn').click(function () {
+            var add_time = $('select[name="add_dining_time"] option:selected').val();
+            layer.open({
+                type:2,
+                content:'Loading...'
+            });
+            $.post("{pigcms{:U('Storestaff/add_dining_time')}",{order_id:click_id,dining_time:add_time},function(result){
+                if(result.error == 0){
+                    setTimeout(function () {
+                        layer.closeAll();
+                        getNewOrder();
+                        getOrderDetail(click_id);
+                    },1000);
+                }else{
+                    alert(result.info);
+                    window.location.reload();
+                }
+            },'json');
+        });
+    </script>
+    <script id="NotOrderShow" type="text/html">
+        <div id="staff_show_div">
+            <div class="logo">
+                <img src="{pigcms{$static_path}img/staff_menu/tutti_branding.png" width="100" />
+            </div>
+            <div>
+                Welcome to Tutti Delivery Dashboard! You can view and confirm your delivery orders here.
+            </div>
+            <div style="margin-top: 20px;font-weight: bold;font-size: 16px;color: #999999">
+                Waiting for Your Next Order
+            </div>
+        </div>
+    </script>
+    <script id="HasOrderShow" type="text/html">
+        <a href="javascript:moni_click()" style="color: #666666">
+        <div id="staff_show_div">
+            <div class="logo">
+                <img src="{pigcms{$static_path}img/staff_menu/new_order.png" width="100" />
+            </div>
+            <div>
+                Welcome to Tutti Delivery Dashboard! You can view and confirm your delivery orders here.
+            </div>
+            <div style="margin-top: 20px;font-weight: bold;font-size: 16px;color: #ffa52d;">
+                You have {{ d.len }} new order(s) now!
+            </div>
+        </div>
+        </a>
     </script>
     <script id="OrderListTpl" type="text/html">
         {{# for(var i = 0, len = d.length; i < len; i++){ }}

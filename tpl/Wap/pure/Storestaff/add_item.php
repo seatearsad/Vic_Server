@@ -168,7 +168,7 @@
         data['price'] = $('input[name="price"]').val();
         data['desc'] = $('textarea[name="desc"]').val();
         data['product_image'] = $('input[name="product_pic"]').val();
-        data['sort_id'] = $('select[name="category"]').val();
+        data['sort_id'] = $('select[name="category"] option:selected').val();
         data['sort'] = $('input[name="sort"]').val();
         data['deposit'] = $('input[name="deposit_price"]').val();
         data['goods_id'] = $('input[name="goods_id"]').val();

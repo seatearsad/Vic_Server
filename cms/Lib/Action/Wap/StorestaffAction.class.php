@@ -112,7 +112,7 @@ class StorestaffAction extends BaseAction
                 $this->assign('openid', $_SESSION['openid']);
             }
             if($this->staff_session){
-                redirect(U('Storestaff/manage_info'));
+                redirect(U('Storestaff/home'));
             }else {
                 $referer = isset($_GET['referer']) ? htmlspecialchars_decode(urldecode($_GET['referer']), ENT_QUOTES) : '';
                 $this->assign('refererUrl', $referer);
@@ -136,6 +136,10 @@ class StorestaffAction extends BaseAction
             }
         }
         exit(json_encode(array('error' => 1)));
+    }
+
+    public function home(){
+        $this->display();
     }
 
     public function index()
@@ -3862,5 +3866,20 @@ class StorestaffAction extends BaseAction
         $mail->AltBody = '';
 
         return $mail;
+    }
+
+    public function add_dining_time(){
+        if($_POST) {
+            $order_id = $_POST['order_id'];
+            $add_time = $_POST['dining_time'];
+
+            $supply = D('Deliver_supply')->where(array('order_id'=>$order_id))->find();
+            $data['dining_time'] = $supply['dining_time'] + $add_time;
+            D('Deliver_supply')->where(array('order_id'=>$order_id))->save($data);
+
+            exit(json_encode(array('error'=>0)));
+        }else{
+            exit(json_encode(array('error'=>1)));
+        }
     }
 }

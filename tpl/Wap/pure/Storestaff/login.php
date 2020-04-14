@@ -133,7 +133,7 @@
         $('#login_pwd').val(password);
     }
 
-var store_index = "{pigcms{:U('Storestaff/index')}";
+var store_index = "{pigcms{:U('Storestaff/home')}";
 <if condition="!empty($refererUrl)">
 	store_index = "{pigcms{$refererUrl}";
 </if>

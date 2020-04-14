@@ -27,7 +27,7 @@ function getNewOrder(){
                 audio.src = sound_url;
                 audio.play();
             }
-            if(result.list != null){
+            if(result.list != null && document.getElementById('OrderListTpl')){
                 laytpl($('#OrderListTpl').html()).render(result.list, function(html){
                     $('.list_ul').html(html);
                     if(click_id != 0){
@@ -42,6 +42,17 @@ function getNewOrder(){
                         click_order_list($(this));
                     });
                 });
+                if(document.getElementById('detail_div') && click_id == 0){
+                    laytpl($('#HasOrderShow').html()).render({len:result.list.length}, function(html){
+                        $('#detail_div').html(html);
+                    });
+                }
+            }else {
+                if(document.getElementById('detail_div')){
+                    laytpl($('#NotOrderShow').html()).render({}, function(html){
+                        $('#detail_div').html(html);
+                    });
+                }
             }
         }
         setTimeout(getNewOrder,3000);
@@ -88,7 +99,13 @@ function getOrderDetail(order_id) {
                         $('.con_layer').hide();
                         $('.con_layer_confirm').show();
                         $('.cha_time').html(this_order.time_cha);
-                        $('#item_all_con_num').html(this_order.num);
+
+                        if(this_order.order_status == 1)
+                            $('#add_dining_time').show();
+                        else
+                            $('#add_dining_time').hide();
+
+                        $('#item_all_con_num').html(this_order.num +'-'+ this_order.dining_time);
                         $('#print_order').unbind('click');
                         $('#print_order').click(printOrderToAndroid);
                     }
