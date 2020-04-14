@@ -674,7 +674,7 @@ class StoreModel extends Model
     public function get_comment_sid($sid,$type,$order_type = 3){
         if($type == 1)
             $tab = 'wrong';
-        else if($type = 0)
+        else if($type == 0)
             $tab = '';
         else
             $tab = 'good';
