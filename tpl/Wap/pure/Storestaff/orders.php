@@ -50,6 +50,7 @@
         line-height: 20px;
         border: none;
         color: #999999;
+        margin-bottom: 2px;
     }
 </style>
 <body>
