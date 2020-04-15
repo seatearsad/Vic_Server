@@ -23,6 +23,9 @@
     input.mt[type="radio"]:checked, input.mt[type="checkbox"]:checked {
         background-color: #ffa52d;
     }
+    .show_order_memo{
+        font-size: 16px;
+    }
 </style>
 <body>
 <include file="header" />
@@ -32,37 +35,37 @@
     <div class="input_title" style="margin-top: 30px">Please confirm the following information:</div>
     <div class="order_input">
         <div class="input_title">
-            <label style="color: #999999;">Customer Name*:</label>{pigcms{$post_data['name']}
+            <label style="color: #999999;">Customer Name*: </label><label class="show_order_memo"> {pigcms{$post_data['name']}</label>
         </div>
     </div>
     <div class="order_input">
         <div class="input_title">
-            <label style="color: #999999;">Customer Contact Number*:</label>{pigcms{$post_data['phone']}
+            <label style="color: #999999;">Customer Contact Number*: </label><label class="show_order_memo"> {pigcms{$post_data['phone']}</label>
         </div>
     </div>
     <div class="order_input">
         <div class="input_title">
-            <label style="color: #999999;">Select Delivery Address*:</label>{pigcms{$post_data['address']}
+            <label style="color: #999999;">Select Delivery Address*: </label><label class="show_order_memo"> {pigcms{$post_data['address']}</label>
         </div>
     </div>
     <div class="order_input">
         <div class="input_title">
-            <label style="color: #999999;">Delivery Instructions:</label>{pigcms{$post_data['detail']}
+            <label style="color: #999999;">Delivery Instructions: </label><label class="show_order_memo"> {pigcms{$post_data['detail']}</label>
         </div>
     </div>
     <div class="order_input">
         <div class="input_title">
-            <label style="color: #999999;">Subtotal (Before Tax)*:</label>${pigcms{$post_data['goods_price']}
+            <label style="color: #999999;">Subtotal (Before Tax)*: </label><label class="show_order_memo"> ${pigcms{$post_data['goods_price']}</label>
         </div>
     </div>
     <div class="order_input">
         <div class="input_title">
-            <label style="color: #999999;">Tax Amount ($)*:</label>${pigcms{$post_data['goods_tax']}
+            <label style="color: #999999;">Tax Amount ($)*: </label><label class="show_order_memo"> ${pigcms{$post_data['goods_tax']}</label>
         </div>
     </div>
     <div class="order_input">
         <div class="input_title">
-            <label style="color: #999999;">Bottle Deposit (If applicable):</label>${pigcms{$post_data['deposit']}
+            <label style="color: #999999;">Bottle Deposit (If applicable): </label><label class="show_order_memo"> ${pigcms{$post_data['deposit']}</label>
         </div>
     </div>
     <div class="order_input" style="margin-top: 20px">

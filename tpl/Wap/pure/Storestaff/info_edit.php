@@ -73,6 +73,10 @@
         </div>
     </div>
     <div class="order_input">
+        <div class="img_size">
+            Image Size Ratio:<br>
+            Width:Height = 1.66:1
+        </div>
         <div class="img_btn" id="upload_img">Upload An Image</div>
         <div id="product_img" style="margin-top: 5px">
             <if condition="$store['image'] neq ''">

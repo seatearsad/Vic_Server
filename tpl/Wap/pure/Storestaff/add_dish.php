@@ -133,7 +133,10 @@
 <script>
     $('#confirm_order').click(function () {
         if($('input[name="name"]').val() == '' || $('input[name="min"]').val() == '' || $('input[name="max"]').val() == ''){
-            alert('Please input required optional.');
+            layer.open({
+                content: "Please input required optional.",
+                btn: ["{pigcms{:L('_B_D_LOGIN_CONIERM_')}"]
+            });
             return false;
         }
         var data = {};
@@ -144,14 +147,26 @@
         data['dish_id'] = $('input[name="dish_id"]').val();
         data['goods_id'] = "{pigcms{$goods['goods_id']}"
 
+        var is_continue = true;
         $('#add_choice_div').find('input[name="dish_val_name"]').each(function () {
             if($(this).val() != ''){
                 var id = $(this).parent().data('id');
                 data['val_name_'+id] = $(this).val();
                 data['val_price_'+id] = $(this).parent().children('input[name="dish_val_price"]').val();
-                if(data['val_price_'+id] == '') data['val_price'+id] = 0;
+                if(data['val_price_'+id] == ''){
+                    is_continue = false;
+                }
+                //if(data['val_price_'+id] == '') data['val_price'+id] = 0;
             }
         });
+
+        if(!is_continue){
+            layer.open({
+                content: "Please input price.",
+                btn: ["{pigcms{:L('_B_D_LOGIN_CONIERM_')}"]
+            });
+            return false;
+        }
 
         layer.open({
             type:2,
@@ -201,57 +216,65 @@
 
     function del_choice(dish_val_div) {
         var dish_val_id = dish_val_div.data('id');
-        if(!confirm('确定要删除吗?不可恢复!')){
-            return false;
-        }else{
-            if(dish_val_id.indexOf('new')!=-1)
-                dish_val_div.remove();
-            else{
-                var str = dish_val_id.split('_');
-                $.post("{pigcms{:U('Storestaff/del_dish_val')}",{val_id:str[1]},function(result) {
-                    if(result.error == 0)
-                        dish_val_div.remove();
-                    else
+        layer.open({
+            title:"{pigcms{:L('_STORE_REMIND_')}",
+            content:'确定要删除吗?不可恢复!',
+            btn: ["{pigcms{:L('_B_D_LOGIN_CONIERM_')}","{pigcms{:L('_B_D_LOGIN_CANCEL_')}"],
+            yes: function(index){
+                layer.close(index);
+                if(dish_val_id.indexOf('new')!=-1)
+                    dish_val_div.remove();
+                else{
+                    var str = dish_val_id.split('_');
+                    $.post("{pigcms{:U('Storestaff/del_dish_val')}",{val_id:str[1]},function(result) {
+                        if(result.error == 0)
+                            dish_val_div.remove();
+                        else
+                            layer.open({
+                                content: "Fail",
+                                type: 2,
+                                time: 1
+                            });
+                    },'JSON');
+                }
+            }
+        });
+    }
+    
+    $('.del_dish').click(function () {
+        layer.open({
+            title:"{pigcms{:L('_STORE_REMIND_')}",
+            content:'确定要删除吗?不可恢复!',
+            btn: ["{pigcms{:L('_B_D_LOGIN_CONIERM_')}","{pigcms{:L('_B_D_LOGIN_CANCEL_')}"],
+            yes: function(index){
+                layer.close(index);
+                var data = {};
+                data['dish_id'] = $('input[name="dish_id"]').val();
+                layer.open({
+                    type:2,
+                    content:'Loading...'
+                });
+                $.post("{pigcms{:U('Storestaff/del_dish')}",data,function(result) {
+                    if(result.error == 0){
+                        layer.closeAll();
+                        layer.open({
+                            content: "Success",
+                            type:2,
+                            time:1,
+                            end:function () {
+                                window.location.href = "{pigcms{:U('Storestaff/show_item')}&goods_id={pigcms{$goods['goods_id']}&sort_id={pigcms{$goods['sort_id']}&type=1";
+                            }
+                        });
+                    }else{
                         layer.open({
                             content: "Fail",
                             type: 2,
                             time: 1
                         });
+                    }
                 },'JSON');
             }
-        }
-    }
-    
-    $('.del_dish').click(function () {
-        if(!confirm('确定要删除吗?不可恢复!')){
-            return false;
-        }else{
-            var data = {};
-            data['dish_id'] = $('input[name="dish_id"]').val();
-            layer.open({
-                type:2,
-                content:'Loading...'
-            });
-            $.post("{pigcms{:U('Storestaff/del_dish')}",data,function(result) {
-                if(result.error == 0){
-                    layer.closeAll();
-                    layer.open({
-                        content: "Success",
-                        type:2,
-                        time:1,
-                        end:function () {
-                            window.location.href = "{pigcms{:U('Storestaff/show_item')}&goods_id={pigcms{$goods['goods_id']}&sort_id={pigcms{$goods['sort_id']}&type=1";
-                        }
-                    });
-                }else{
-                    layer.open({
-                        content: "Fail",
-                        type: 2,
-                        time: 1
-                    });
-                }
-            },'JSON');
-        }
+        });
     });
 
     $('.dish_type_img').click(function () {

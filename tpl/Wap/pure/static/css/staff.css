@@ -412,6 +412,7 @@ body{
     padding-left: 50px;
     border-radius: 3px;
     font-weight: bold;
+    box-sizing: border-box;
 }
 
 .edit_div{
@@ -700,4 +701,11 @@ body{
     background-size: 90% auto;
     background-repeat: no-repeat;
     background-position:center;
+}
+.img_size{
+    width: 50%;
+    height: 30px;
+    float: right;
+    padding-left: 10px;
+    box-sizing: border-box;
 }

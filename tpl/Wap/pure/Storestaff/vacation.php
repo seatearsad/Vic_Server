@@ -93,13 +93,19 @@
         if(store_status == 1){
             var data = {};
             if(typeof($('input:radio[name="reason"]:checked').val()) == 'undefined'){
-                alert('Please choose a reason');
+                layer.open({
+                    content: "Please choose a reason",
+                    btn: ["{pigcms{:L('_B_D_LOGIN_CONIERM_')}"]
+                });
                 return false;
             }else{
                 data['reason_type'] = $('input:radio[name="reason"]:checked').val();
                 if($('input:radio[name="reason"]:checked').val() == 3){
                     if(typeof ($('input[name="reason_other"]').val()) == 'undefined' || $('input[name="reason_other"]').val() == ''){
-                        alert('Please input other reason');
+                        layer.open({
+                            content: "Please input other reason",
+                            btn: ["{pigcms{:L('_B_D_LOGIN_CONIERM_')}"]
+                        });
                         return false;
                     }else {
                         //alert($('input[name="reason_other"]').val());

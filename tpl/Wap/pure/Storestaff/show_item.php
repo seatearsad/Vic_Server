@@ -45,6 +45,7 @@
     .item_show{
         color: #ffa52d;
         font-weight: bold;
+        font-size: 16px;
     }
     .top_btn{
         flex: 1 1 100%;
@@ -219,12 +220,16 @@
     });
     
     $('.del_btn').click(function () {
-        if(!confirm('确定要删除吗?不可恢复!'))
-            return false;
-        else{
-            var goods_id = $(this).data('id');
-            change_status(goods_id,2);
-        }
+        layer.open({
+            title:"{pigcms{:L('_STORE_REMIND_')}",
+            content:'确定要删除吗?不可恢复!',
+            btn: ["{pigcms{:L('_B_D_LOGIN_CONIERM_')}","{pigcms{:L('_B_D_LOGIN_CANCEL_')}"],
+            yes: function(index){
+                layer.close(index);
+                var goods_id = $('.del_btn').data('id');
+                change_status(goods_id,2);
+            }
+        });
     });
     
     $('.status_btn').click(function () {

@@ -146,7 +146,7 @@
         var i=0;
         $('#main').find('input[name="week[]"]').each(function () {
            if($(this).prop("checked")){
-               if(i == 0)
+               if(week_num == '')
                    week_num += $(this).val();
                else
                    week_num += ','+$(this).val();

@@ -32,7 +32,8 @@
         width: 40%;
         line-height: 20px;
         border: 1px solid #ffa52d;
-        border-radius: 5px
+        border-radius: 5px;
+        height: 60px;
     }
     .Statistics_top a h2{
         background: url('{pigcms{$static_path}images/tjt_03.png') no-repeat;
