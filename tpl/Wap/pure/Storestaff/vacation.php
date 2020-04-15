@@ -67,7 +67,7 @@
         </div>
     </div>
     <div style="margin-top: 30px">
-        By turning on the vacation mode, your store will be closed on Tutti platform. If you set a re-open date, it will automatically open on the designated date. If you choose "Manually Re-open, you will turn the vacation mode "OFF" to have your store back to open.
+        By turning on the vacation mode, your store will be closed on Tutti platform and you will need to manually turn it off to re-open your store online.
     </div>
 </div>
 <script type="text/javascript" src="{pigcms{$static_public}js/artdialog/jquery.artDialog.js"></script>

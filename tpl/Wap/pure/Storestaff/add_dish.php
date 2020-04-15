@@ -36,11 +36,12 @@
         height: 80px;
     }
     select{
-        width: 100%;
+        width: 80%;
         height: 30px;
         margin-top: 5px;
         border: 1px solid #ffa52d;
         border-radius: 3px;
+        vertical-align: top;
     }
     input[type="file"] {
         position: absolute;
@@ -66,17 +67,17 @@
             <div class="input_title">
                 Choose At Least *
             </div>
-            <input type="text" name="min" placeholder="0" value="{pigcms{$dish.min}" />
+            <input type="text" name="min" placeholder="Input Min. Number" value="{pigcms{$dish.min}" />
         </div>
         <div class="input_one" style="margin-left: 10%">
             <div class="input_title">
                 Choose At Most *
             </div>
-            <input type="text" name="max" placeholder="-1" value="{pigcms{$dish.max}" />
+            <input type="text" name="max" placeholder="Input Max. Number" value="{pigcms{$dish.max}" />
         </div>
     </div>
     <div style="margin: 5px 0 15px 0;">
-        Choose"0" to make it optional; choose "Unlimited" to allow customers add as many as they'd like.
+        Input "0" to make it optional; input "-1" to indicate "unlimited"; input the exact same number for both min. and max. to required customers choose an exact number of options.
     </div>
     <div class="order_input">
         <div class="input_title">
@@ -90,6 +91,7 @@
                 No, allow quantity modification
             </option>
         </select>
+        <span class="dish_type_img"></span>
     </div>
     <div class="order_input" id="add_choice_div">
         <div class="input_title">
@@ -250,6 +252,10 @@
                 }
             },'JSON');
         }
+    });
+
+    $('.dish_type_img').click(function () {
+        alert('dish_type_meno');
     });
 </script>
 </body>

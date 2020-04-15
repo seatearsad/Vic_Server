@@ -190,6 +190,9 @@
     #menu_home .m_img{
         background-image:url('{pigcms{$static_path}img/staff_menu/menu-1.png');
     }
+    #menu_dash .m_img{
+        background-image:url('{pigcms{$static_path}img/staff_menu/dash_icon.png');
+    }
     #menu_shift .m_img{
         background-image:url('{pigcms{$static_path}img/staff_menu/menu-2.png');
     }
@@ -229,6 +232,10 @@
 <div id="menu_memo">
     <ul>
         <li id="menu_home">
+            <span class="m_img"> </span>
+            <span>Home</span>
+        </li>
+        <li id="menu_dash">
             <span class="m_img"> </span>
             <span>Delivery Dashboard</span>
         </li>
@@ -369,6 +376,9 @@
     });
 
     $('#menu_home').click(function () {
+        location.href = "{pigcms{:U('Storestaff/home')}";
+    });
+    $('#menu_dash').click(function () {
         location.href = "{pigcms{:U('Storestaff/index')}";
     });
     $("#setting").click(function () {

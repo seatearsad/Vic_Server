@@ -169,7 +169,10 @@
                 layer.open({
                     content: "Success",
                     type:2,
-                    time:1
+                    time:1,
+                    end:function () {
+                        window.location.href = "{pigcms{:U('Storestaff/manage_product')}";
+                    }
                 });
             }
         },'JSON');

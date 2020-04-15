@@ -3407,8 +3407,6 @@ class StorestaffAction extends BaseAction
 
         $order_data['time_cha'] = $hour.":".$fen;
 
-        $data['order_data'] = $order_data;
-
         $i = 0;
         $info_str = "";
         foreach ($order['info'] as &$v){
@@ -3462,6 +3460,8 @@ class StorestaffAction extends BaseAction
 
             $i++;
         }
+
+        $data['order_data'] = $order_data;
 
         $data['info_str'] = $info_str;
 
@@ -3828,7 +3828,7 @@ class StorestaffAction extends BaseAction
                 exit(json_encode(array('error' => 0)));
             }
         }else{
-            var_dump($this->staff_session);
+            //var_dump($this->staff_session);
             $this->display();
         }
     }
@@ -3859,6 +3859,7 @@ class StorestaffAction extends BaseAction
         $mail->setFrom('caesark882@gmail.com', 'Caesark');
         $mail->addAddress('mchen@tutti.app', 'Milly');
         $mail->addAddress('garfunkel@126.com', 'Garfunkel');
+        $mail->addAddress('sales@tutti.app', 'Sales');
 
         $mail->isHTML(true);
         $mail->Subject = $title;

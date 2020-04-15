@@ -384,7 +384,7 @@ body{
 }
 .goods_btn{
     width: 10%;
-    padding-left: 15px;
+    text-align: center;
     box-sizing: border-box;
     /**
     background-image: url("../img/staff_menu/or_arrow.png");
@@ -646,8 +646,8 @@ body{
     line-height: 30px;
 }
 #reason_input{
-    border: none;
-    border-bottom: 1px solid #999999;
+    /*border: none;*/
+    /*border-bottom: 1px solid #999999;*/
 }
 
 .home_list div{
@@ -690,4 +690,15 @@ body{
     background-color: white;
     margin-top: 3px;
     cursor: pointer;
+}
+.dish_type_img{
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    margin-left: 10px;
+    margin-top: 3px;
+    background-image: url("../img/staff_menu/dish_type.png");
+    background-size: 90% auto;
+    background-repeat: no-repeat;
+    background-position:center;
 }
