@@ -3322,6 +3322,60 @@ class StorestaffAction extends BaseAction
             }
         }
 
+        $i = 0;
+        $info_str = "";
+        foreach ($order['info'] as &$v){
+            if($i > 0) $info_str .= "|";
+            if(strpos($v['name'], "'") !== false) {
+                $v['name'] = str_replace("'",'’',$v['name']);
+            }
+            if(strpos($v['spec'], "'") !== false) {
+                $v['spec'] = str_replace("'",'’',$v['spec']);
+            }
+            $info_str .= $v['name']."#".$v['num']."#".$v['spec'];
+
+            foreach ($v['spec_arr'] as& $ss){
+                if(strpos($ss, "'") !== false) {
+                    $ss = str_replace("'",'’',$ss);
+                }
+            }
+
+            foreach ($v['pro_arr'] as& $pp){
+                if(strpos($pp, "'") !== false) {
+                    $pp = str_replace("'",'’',$pp);
+                }
+            }
+
+            $dish_arr = "";
+            if($v['dish']){
+                $d_num = 0;
+                foreach ($v['dish'] as &$dish_one) {
+                    if (strpos($dish_one['name'], "'") !== false) {
+                        $dish_one['name'] = str_replace("'", '’', $v['dish']['name']);
+                    }
+
+                    $dish_arr .= $d_num == 0 ? $dish_one['name'] . "@@" : "@%".$dish_one['name'] . "@@";
+                    $c_num = 0;
+                    foreach ($dish_one['list'] as &$d_one) {
+                        if (strpos($d_one, "'") !== false) {
+                            $d_one = str_replace("'", '’', $d_one);
+                        }
+
+                        $dish_arr .= $c_num == 0 ? $d_one : "%%" . $d_one;
+                        $c_num++;
+                    }
+
+                    $d_num++;
+                }
+
+            }
+            $info_str .= "#".$dish_arr;
+
+            $v['dish_desc'] = $dish_arr;
+
+            $i++;
+        }
+
         $store = D('Merchant_store')->field(true)->where(array('store_id' => $order['store_id']))->find();
         //$tax_price = $tax_price + ($order['freight_charge'] + $order['packing_charge'])*$store['tax_num']/100;
         $tax_price = $tax_price + ($order['packing_charge'])*$store['tax_num']/100;
@@ -3406,60 +3460,6 @@ class StorestaffAction extends BaseAction
         $cha_time = $cha_time < 10 ? '0'.$cha_time : $cha_time;
 
         $order_data['time_cha'] = $hour.":".$fen;
-
-        $i = 0;
-        $info_str = "";
-        foreach ($order['info'] as &$v){
-            if($i > 0) $info_str .= "|";
-            if(strpos($v['name'], "'") !== false) {
-                $v['name'] = str_replace("'",'’',$v['name']);
-            }
-            if(strpos($v['spec'], "'") !== false) {
-                $v['spec'] = str_replace("'",'’',$v['spec']);
-            }
-            $info_str .= $v['name']."#".$v['num']."#".$v['spec'];
-
-            foreach ($v['spec_arr'] as& $ss){
-                if(strpos($ss, "'") !== false) {
-                    $ss = str_replace("'",'’',$ss);
-                }
-            }
-
-            foreach ($v['pro_arr'] as& $pp){
-                if(strpos($pp, "'") !== false) {
-                    $pp = str_replace("'",'’',$pp);
-                }
-            }
-
-            $dish_arr = "";
-            if($v['dish']){
-                $d_num = 0;
-                foreach ($v['dish'] as &$dish_one) {
-                    if (strpos($dish_one['name'], "'") !== false) {
-                        $dish_one['name'] = str_replace("'", '’', $v['dish']['name']);
-                    }
-
-                    $dish_arr .= $d_num == 0 ? $dish_one['name'] . "@@" : "@%".$dish_one['name'] . "@@";
-                    $c_num = 0;
-                    foreach ($dish_one['list'] as &$d_one) {
-                        if (strpos($d_one, "'") !== false) {
-                            $d_one = str_replace("'", '’', $d_one);
-                        }
-
-                        $dish_arr .= $c_num == 0 ? $d_one : "%%" . $d_one;
-                        $c_num++;
-                    }
-
-                    $d_num++;
-                }
-
-            }
-            $info_str .= "#".$dish_arr;
-
-            $v['dish_desc'] = $dish_arr;
-
-            $i++;
-        }
 
         $data['order_data'] = $order_data;
 
