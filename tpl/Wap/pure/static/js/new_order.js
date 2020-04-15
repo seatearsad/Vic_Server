@@ -85,7 +85,7 @@ function getOrderDetail(order_id) {
             layer.closeAll();
             if(result.order_data != null){
                 this_order = result.order_data;
-                order_info = this_order.info;
+                order_info = this_order.info_str;
 
                 this_order.is_app = is_app;
                 laytpl($('#OrderDetailTpl').html()).render(this_order, function(html){
@@ -105,7 +105,7 @@ function getOrderDetail(order_id) {
                         else
                             $('#add_dining_time').hide();
 
-                        $('#item_all_con_num').html(this_order.num +'-'+ this_order.dining_time);
+                        $('#item_all_con_num').html(this_order.num);
                         $('#print_order').unbind('click');
                         $('#print_order').click(printOrderToAndroid);
                     }

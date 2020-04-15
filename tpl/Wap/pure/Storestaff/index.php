@@ -53,7 +53,7 @@
                 </span>
                 <span class="cha_time"></span>
                 <div id="add_dining_time" style="position: absolute;top:32px;left: 20px">
-                    <select class="confirm_time" name="add_dining_time" autocomplete="off" style="width:160px;">
+                    <select class="confirm_time" name="add_dining_time" autocomplete="off" style="width:160px;height: 30px">
                         <option value="10">Another 10 min</option>
                         <option value="20" selected="selected">Another 20 min</option>
                         <option value="30">Another 30 min</option>
