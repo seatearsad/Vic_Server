@@ -85,7 +85,7 @@ function getOrderDetail(order_id) {
             layer.closeAll();
             if(result.order_data != null){
                 this_order = result.order_data;
-                order_info = this_order.info_str;
+                order_info = result.info_str;
 
                 this_order.is_app = is_app;
                 laytpl($('#OrderDetailTpl').html()).render(this_order, function(html){
