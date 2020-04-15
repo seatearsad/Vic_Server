@@ -3227,6 +3227,10 @@ class StorestaffAction extends BaseAction
 //            $list = D('Shop_order')->field(array('order_id','status'))->where($where)->order('status asc,create_time desc')->select();
 //        }
         $data['list'] = $list;
+        $where['status'] = 0;
+        $data['new_num'] = D('Shop_order')->where($where)->count();
+        $where['status'] = 1;
+        $data['con_num'] = D('Shop_order')->where($where)->count();
 
         exit(json_encode($data));
     }

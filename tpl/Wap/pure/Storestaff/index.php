@@ -81,7 +81,7 @@
         var sound_url = "{pigcms{$static_public}sound/soft-bells.mp3";
         var detail_url = "{pigcms{:U('Storestaff/getOrderDetail')}";
     </script>
-    <script type="text/javascript" src="{pigcms{$static_path}js/new_order.js?v=2.1"></script>
+    <script type="text/javascript" src="{pigcms{$static_path}js/new_order.js?v=2.2"></script>
     <script>
         //更新app 设备token
         function pushDeviceToken(token) {
@@ -270,6 +270,11 @@
             <div style="margin-top: 20px;font-weight: bold;font-size: 16px;color: #999999">
                 Waiting for Your Next Order
             </div>
+            {{# if(d.con_len > 0){ }}
+            <div style="color: #999999">
+                You have {{ d.con_len }} order(s) in process now.
+            </div>
+            {{# } }}
         </div>
     </script>
     <script id="HasOrderShow" type="text/html">
@@ -281,9 +286,14 @@
             <div>
                 Welcome to Tutti Delivery Dashboard! You can view and confirm your delivery orders here.
             </div>
-            <div style="margin-top: 20px;font-weight: bold;font-size: 16px;color: #ffa52d;">
+            <div style="margin-top: 20px;font-weight: bold;font-size: 16px;color:white;background-color: #ffa52d;line-height: 35px;border-radius: 3px;">
                 You have {{ d.len }} new order(s) now!
             </div>
+            {{# if(d.con_len > 0){ }}
+            <div style="margin-top: 10px;color: #ffa52d">
+                {{ d.con_len }} order(s) are in process.
+            </div>
+            {{# } }}
         </div>
         </a>
     </script>

@@ -43,13 +43,18 @@ function getNewOrder(){
                     });
                 });
                 if(document.getElementById('detail_div') && click_id == 0){
-                    laytpl($('#HasOrderShow').html()).render({len:result.list.length}, function(html){
-                        $('#detail_div').html(html);
-                    });
+                    if(result.new_num > 0)
+                        laytpl($('#HasOrderShow').html()).render({len:result.new_num,con_len:result.con_num}, function(html){
+                            $('#detail_div').html(html);
+                        });
+                    else
+                        laytpl($('#NotOrderShow').html()).render({con_len:result.con_num}, function(html){
+                            $('#detail_div').html(html);
+                        });
                 }
             }else {
                 if(document.getElementById('detail_div')){
-                    laytpl($('#NotOrderShow').html()).render({}, function(html){
+                    laytpl($('#NotOrderShow').html()).render({con_len:0}, function(html){
                         $('#detail_div').html(html);
                     });
                 }
