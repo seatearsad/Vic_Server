@@ -278,7 +278,30 @@
     });
 
     $('.dish_type_img').click(function () {
-        alert('dish_type_meno');
+        var img_1 = "{pigcms{$static_path}img/staff_menu/dish_ex_1.jpg";
+        var img_2 = "{pigcms{$static_path}img/staff_menu/dish_ex_2.jpg";
+        var tip_message = "<div>" +
+            "                <div style='text-align: center;font-weight: bold;margin-top: -20px;'>" +
+            "                    Allow customers to choose the same option multiple times?" +
+            "                </div>" +
+            "                <div style='margin-top: 20px'>"+
+            "                    When you choose \"No\", it means you only allow users to choose one of each add-on item under an option. See an example below:" +
+            "                </div>" +
+            "                <div style='text-align: center;'>"+
+            "                <img src=\""+img_1+"\" width=\"230\">" +
+            "                </div>" +
+            "                <div style='margin-top: 20px'>"+
+            "                    When you choose \"Yes\", it means you allow users to modify the quantity of an add-on item under an option. See an example below:" +
+            "                </div>" +
+            "                <div style='text-align: center;'>"+
+            "                <img src=\""+img_2+"\" width=\"230\">" +
+            "                </div>" +
+            "            </div>";
+        layer.open({
+            title:[' ','border:none'],
+            content:tip_message,
+            style: 'border:2px solid #ffa52d; background-color:#fff; color:#666;'
+        });
     });
 </script>
 </body>

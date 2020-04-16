@@ -12,6 +12,7 @@ var last_time = 0;
 var click_id = 0;
 var this_order;
 var order_info;
+var time_out;
 getNewOrder();
 function getNewOrder(){
     $.post(new_url,{last_time:last_time},function(result){
@@ -53,7 +54,7 @@ function getNewOrder(){
                         });
                 }
             }else {
-                if(document.getElementById('detail_div')){
+                if(document.getElementById('detail_div') && document.getElementById('NotOrderShow')){
                     laytpl($('#NotOrderShow').html()).render({con_len:0}, function(html){
                         $('#detail_div').html(html);
                     });
@@ -77,6 +78,7 @@ function click_order_list(order) {
 }
 
 function getOrderDetail(order_id) {
+    if(time_out) clearTimeout(time_out);
     if(typeof (is_detail_hide) != 'undefined'){
         if(is_detail_hide)
             $('.list_top').trigger('click');
@@ -105,9 +107,10 @@ function getOrderDetail(order_id) {
                         $('.con_layer_confirm').show();
                         $('.cha_time').html(this_order.time_cha);
 
-                        if(this_order.order_status == 1)
+                        if(this_order.order_status == 1) {
                             $('#add_dining_time').show();
-                        else
+                            cal_time_show(this_order,0,1);
+                        }else
                             $('#add_dining_time').hide();
 
                         $('#item_all_con_num').html(this_order.num);
@@ -118,4 +121,48 @@ function getOrderDetail(order_id) {
             }
         }
     },'JSON');
+}
+
+function cal_time_show(order,cha) {
+    var rece_time = order.rece_time;
+    var dining_time = order.dining_time;
+    var now_time = order.now_time;
+
+    if(now_time - rece_time > dining_time*60){
+        //var show_text = 'Order should be ready';
+        var show_time = show_time_by_order(now_time - rece_time - dining_time*60 + cha);
+
+        $('.cha_time').html("<label class='t_color'>"+show_time+ " ago</label>");
+        time_out = setTimeout(function(){
+            cha++;
+            cal_time_show(order,cha);
+        },1000);
+    }else{
+        var g_time = parseInt(rece_time) + parseInt(dining_time)*60 - now_time - cha;
+
+        if(g_time < 0){
+            getOrderDetail(order.order_id);
+            return false;
+        }else {
+            var show_time = show_time_by_order(g_time);
+
+            $('.cha_time').html("<label style='color: darkgreen'> in " + show_time + "</label>");
+            time_out = setTimeout(function () {
+                cha++;
+                cal_time_show(order, cha);
+            }, 1000);
+        }
+    }
+}
+
+function show_time_by_order(time) {
+    var h = parseInt(time/3600);
+    var m = parseInt(time%3600/60);
+    m = m<10 ? '0'+m : m;
+    var s = parseInt(time%60);
+    s = s<10 ? '0'+s : s;
+
+    var str = h == 0 ? m+':'+s : h+':'+m+':'+s;
+
+    return str;
 }

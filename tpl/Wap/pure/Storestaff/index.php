@@ -49,7 +49,7 @@
             </div>
             <div class="con_layer_confirm">
                 <span class="confirm_txt">
-                    Order Ready by
+                    Order should be ready
                 </span>
                 <span class="cha_time"></span>
                 <div id="add_dining_time" style="position: absolute;top:32px;left: 20px">

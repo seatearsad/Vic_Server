@@ -3442,6 +3442,8 @@ class StorestaffAction extends BaseAction
         }
 
         $order_data['dining_time'] = $supply['dining_time'] ? $supply['dining_time'] : '0';
+        $order_data['rece_time'] = $supply['create_time'] ? $supply['create_time'] : '0';
+        $order_data['now_time'] = time();
 
         $cha_time = time() - $order_data['create_time'];
         if(intval($cha_time/3600) == 0)
