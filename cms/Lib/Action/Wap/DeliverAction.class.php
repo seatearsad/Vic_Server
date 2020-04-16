@@ -700,6 +700,10 @@ class DeliverAction extends BaseAction
                 $val['customer_id'] = $order['uid'];
                 $val['tip_charge'] = $order['tip_charge'];
                 $address = D('User_adress')->where(array('adress_id'=>$order['address_id']))->find();
+                if(!$address){
+                    $address['adress'] = $val['aim_site'];
+                    $address['detail'] = '';
+                }
                 $val['user_address'] = $address;
                 $val['not_touch'] = $order['not_touch'];
 

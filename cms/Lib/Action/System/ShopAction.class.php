@@ -300,6 +300,8 @@ class ShopAction extends BaseAction
                 $where['userphone'] = htmlspecialchars($_GET['keyword']);
             }elseif ($_GET['searchtype'] == 'third_id') {
                 $where['third_id'] =$_GET['keyword'];
+            }elseif ($_GET['searchtype'] == 'id'){
+                $where['uid'] =$_GET['keyword'];
             }
         }
         $status = isset($_GET['status']) ? intval($_GET['status']) : -1;
