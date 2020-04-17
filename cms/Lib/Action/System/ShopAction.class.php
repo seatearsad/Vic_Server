@@ -1506,9 +1506,15 @@ class ShopAction extends BaseAction
                             case 6:
                                 $status_txt = "<div>送达时间：";
                                 break;
+                            case 33:
+                                $status_txt = "<div style='color: #ff5757'>增加出餐时间：".$v['note'].'分钟</div>';
+                                break;
 
                         }
-                        $show_list[] = $status_txt . ' ' . date('H:i', $v['dateline']).'</div>';
+                        if($v['status'] != 33)
+                            $show_list[] = $status_txt . ' ' . date('H:i', $v['dateline']).'</div>';
+                        else
+                            $show_list[] = $status_txt;
                         if($v['status'] == 2){
                             $supply = D('Deliver_supply')->where(array("order_id"=>$order_id))->find();
                             $show_list[] = "<div style='color: #ff5757'>预计出餐：" . ' ' . date('H:i', $v['dateline']+$supply['dining_time']*60).'</div>';
