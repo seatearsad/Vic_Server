@@ -1,7 +1,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Category List</title>
+    <title>{pigcms{:L('QW_CATEGORYLIST')}</title>
     <meta name="viewport" content="initial-scale=1, width=device-width, maximum-scale=1, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name='apple-touch-fullscreen' content='yes'>
@@ -26,19 +26,21 @@
 <body>
 <include file="header" />
 <div id="main">
-    <div style="text-align: center;font-size: 16px;">Category List</div>
+    <div style="text-align: center;font-size: 16px;">{pigcms{:L('QW_CATEGORYLIST')}</div>
     <div class="confirm_btn_order" id="add_category" style="width: 100%">
-        <span class="cate_btn">Add A Category</span>
+        <span class="cate_btn">{pigcms{:L('QW_ADDCATEGORY')}</span>
     </div>
     <volist name="sort_list" id="vo">
         <div class="cate_list <if condition='$i%2 eq 1'>list_right</if>" data-id="{pigcms{$vo.sort_id}">
             <div style="font-weight: bold;line-height: 25px;">{pigcms{$vo.sort_name}</div>
             <div>
                 <if condition="$vo['stop_count'] gt 0 ">
-                    <label class="r_color">{pigcms{$vo.stop_count} Inactive Item(s)</label>
+                    <label class="r_color">
+                        {pigcms{:replace_lang_str(L('QW_INACTIVEITEM'),$vo['stop_count'])}
+                    </label>
                 </if>
-                    {pigcms{$vo.normal_count} Active Item(s)
-                    &nbsp;&nbsp;Order:{pigcms{$vo.sort}
+                    {pigcms{:replace_lang_str(L('QW_ACTIVEITEM'),$vo['normal_count'])}
+                    &nbsp;&nbsp;{pigcms{:L('QW_MENUORDER')}:{pigcms{$vo.sort}
             </div>
             <span class="cate_set" data-id="{pigcms{$vo.sort_id}" data-fid=""{pigcms{$vo.fid}"></span>
         </div>

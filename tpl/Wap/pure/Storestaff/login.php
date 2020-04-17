@@ -8,7 +8,7 @@
 <meta charset="utf-8">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8;application/json" />
     <link rel="manifest" href="/manifest_courier.json">
-<title>Merchant Login</title>
+<title>{pigcms{:L('QW_MERCHANTLOGIN')}</title>
 <meta name="description" content="{pigcms{$config.seo_description}"/>
 <link href="{pigcms{$static_path}css/deliver.css?v=1.0.4" rel="stylesheet"/>
 <script src="{pigcms{:C('JQUERY_FILE')}"></script>
@@ -95,7 +95,7 @@
 	<div class="Land_end">
 		<ul>
 			<li class="number">
-			  	<input type="text" name="account" placeholder="Account Name" id="login_account">
+			  	<input type="text" name="account" placeholder="{pigcms{:L('QW_ACCOUNTNAME')}" id="login_account">
 				<a href="javascript:void(0)"></a>
 			</li>
 			<li class="Password">

@@ -63,31 +63,31 @@
 <include file="header" />
 <div id="main">
     <div style="text-align: center;font-size: 16px;display: flex">
-        <div class="top_btn <if condition='$show_type eq 0'>act_btn</if>" data-type="0">Basic Information</div>
-        <div class="top_btn <if condition='$show_type eq 1'>act_btn</if>" data-type="1">Option/Add-On</div>
+        <div class="top_btn <if condition='$show_type eq 0'>act_btn</if>" data-type="0">{pigcms{:L('QW_MENUBASICINFO')}</div>
+        <div class="top_btn <if condition='$show_type eq 1'>act_btn</if>" data-type="1">{pigcms{:L('QW_OPTIONADDON')}</div>
     </div>
     <div id="base" style="display: none;">
         <div class="order_input">
             <div class="input_title">
-                Item Name (English)*
+                {pigcms{:L('QW_ITEMNAMEENG')}*
             </div>
             <div class="item_show">{pigcms{$goods.en_name}</div>
         </div>
         <div class="order_input">
             <div class="input_title">
-                Item Name (Mandarin)
+                {pigcms{:L('QW_ITEMNAMECHIN')}
             </div>
             <div class="item_show">{pigcms{$goods.cn_name}</div>
         </div>
         <div class="order_input">
             <div class="input_title">
-                Price*
+                {pigcms{:L('QW_MENUPRICE')}*
             </div>
             <div class="item_show">{pigcms{$goods.price}</div>
         </div>
         <div class="order_input">
             <div class="input_title">
-                Description (Recommended)
+                {pigcms{:L('QW_DESCRIPTION')}
             </div>
             <div class="item_show">{pigcms{$goods.des}</div>
         </div>
@@ -98,13 +98,13 @@
         </div>
         <div class="order_input">
             <div class="input_title">
-                Category
+                {pigcms{:L('QW_CATEGORY')}
             </div>
             <div class="item_show">{pigcms{$sort.sort_name}</div>
         </div>
         <div class="order_input">
             <div class="input_title">
-                Listing Order
+                {pigcms{:L('QW_LISTINGORDER')}
             </div>
             <div class="item_show">{pigcms{$goods.sort}</div>
         </div>
@@ -115,18 +115,18 @@
             <div class="item_show">{pigcms{$goods.deposit_price}</div>
         </div>
         <div class="edit_div">
-            <div class="del_btn" data-id="{pigcms{$goods['goods_id']}">Delete</div>
+            <div class="del_btn" data-id="{pigcms{$goods['goods_id']}">{pigcms{:L('QW_DELETE')}</div>
             <if condition="$goods['status'] eq 1">
-                <div class="status_btn" data-status="{pigcms{$goods['status']}" data-id="{pigcms{$goods['goods_id']}">Deactivate this Item</div>
+                <div class="status_btn" data-status="{pigcms{$goods['status']}" data-id="{pigcms{$goods['goods_id']}">{pigcms{:L('QW_DEACTIVATE')}</div>
             <else />
-                <div class="status_btn status_0" data-status="{pigcms{$goods['status']}" data-id="{pigcms{$goods['goods_id']}">Reactivate this Item</div>
+                <div class="status_btn status_0" data-status="{pigcms{$goods['status']}" data-id="{pigcms{$goods['goods_id']}">{pigcms{:L('QW_ITEMACTIVATE')}</div>
             </if>
         </div>
         <div class="confirm_btn_order" id="confirm_order" style="width: 100%;">
-            Edit
+            {pigcms{:L('QW_EDIT')}
         </div>
         <div class="confirm_btn_order" id="back_list" style="width: 100%;background-color: #77b800">
-            Done
+            {pigcms{:L('QW_DONE')}
         </div>
     </div>
     <div id="option" style="display: none;">
@@ -141,7 +141,7 @@
         </if>
         <div class="op_1" style="margin-top: 20px">
             <div class="add_btn" style="width: 100%">
-                <span class="cate_btn">Add Options / Add-On</span>
+                <span class="cate_btn">{pigcms{:L('QW_ADDOPTION')}</span>
             </div>
             <div class="option_list">
                 <volist name="goods['dish']" id='vo'>
@@ -151,7 +151,7 @@
                         <div class="op_desc">{pigcms{$vo['desc']}</div>
                     </div>
                     <div class="op_num">
-                        {pigcms{$vo['val_num']} Options
+                        {pigcms{$vo['val_num']} {pigcms{:L('QW_NUMOPT')}
                         <span class="s_f"></span>
                     </div>
                     <div class="op_val_list">
@@ -178,7 +178,7 @@
                     <div class="op_name">{pigcms{$vo['name']}</div>
                     <div class="op_desc"> &nbsp;{pigcms{$vo['desc']}</div>
                     <div class="op_num">
-                        {pigcms{$vo['val_num']} Options
+                        {pigcms{$vo['val_num']} {pigcms{:L('QW_NUMOPT')}
                         <span class="s_f"></span>
                     </div>
                     <div class="op_val_list">
@@ -195,7 +195,7 @@
                     <div class="op_name">{pigcms{$vo['name']}</div>
                     <div class="op_desc">&nbsp;{pigcms{$vo['desc']}</div>
                     <div class="op_num">
-                        {pigcms{$vo['val_num']} Options
+                        {pigcms{$vo['val_num']} {pigcms{:L('QW_NUMOPT')}
                         <span class="s_f"></span>
                     </div>
                     <div class="op_val_list">
@@ -222,7 +222,7 @@
     $('.del_btn').click(function () {
         layer.open({
             title:"{pigcms{:L('_STORE_REMIND_')}",
-            content:'确定要删除吗?不可恢复!',
+            content:"{pigcms{:L('QW_DELETEREMINDER')}",
             btn: ["{pigcms{:L('_B_D_LOGIN_CONIERM_')}","{pigcms{:L('_B_D_LOGIN_CANCEL_')}"],
             yes: function(index){
                 layer.close(index);

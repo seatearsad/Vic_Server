@@ -38,17 +38,17 @@
     </div>
     <div class="add_product">
         <div class="add_btn">
-            <span class="cate_btn">Add An Item</span>
+            <span class="cate_btn">{pigcms{:L('QW_ADDITEM')}</span>
         </div>
         <div class="pro_btn act" data-type="0">All<br>Item(s)</div>
         <div class="pro_btn" data-type="1">Active<br>Item(s)</div>
         <div class="pro_btn" data-type="2">Inactive<br>Item(s)</div>
     </div>
     <div class="goods_list">
-        <div class="goods_name">Name</div>
-        <div class="goods_price">Price</div>
-        <div class="goods_option">Options</div>
-        <div style="width: 10%;">Order</div>
+        <div class="goods_name">{pigcms{:L('QW_MENUNAME')}</div>
+        <div class="goods_price">{pigcms{:L('QW_MENUPRICE')}</div>
+        <div class="goods_option">{pigcms{:L('QW_OPTIONS')}</div>
+        <div style="width: 10%;">{pigcms{:L('QW_ITEMORDER')}</div>
     </div>
     <div id="goodsList"></div>
 </div>

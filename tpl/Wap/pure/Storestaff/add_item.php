@@ -5,7 +5,7 @@
         <if condition="$goods_id">
             Edit An Item
             <else />
-            Add An Item
+            {pigcms{:L('QW_ADDITEM')}
         </if>
     </title>
     <meta name="viewport" content="initial-scale=1, width=device-width, maximum-scale=1, user-scalable=no">
@@ -56,39 +56,39 @@
         <if condition="$goods_id">
             Edit An Item
             <else />
-            Add An Item
+            {pigcms{:L('QW_ADDITEM')}
         </if>
     </div>
     <div class="order_input">
         <div class="input_title">
-            Item Name (English)*
+            {pigcms{:L('QW_ITEMNAMEENG')}*
         </div>
         <input type="text" name="name_en" placeholder="English (Required)" value="{pigcms{$goods.en_name}" />
     </div>
     <div class="order_input">
         <div class="input_title">
-            Item Name (Mandarin)
+            {pigcms{:L('QW_ITEMNAMECHIN')}
         </div>
         <input type="text" name="name_cn" placeholder="Mandarin (Optional)" value="{pigcms{$goods.cn_name}" />
     </div>
     <div class="order_input">
         <div class="input_title">
-            Price*
+            {pigcms{:L('QW_MENUPRICE')}*
         </div>
         <input type="text" name="price" placeholder="0.00" value="{pigcms{$goods.price}" />
     </div>
     <div class="order_input">
         <div class="input_title">
-            Description (Recommended)
+            {pigcms{:L('QW_DESCRIPTION')}
         </div>
         <textarea name="desc">{pigcms{$goods.dsc}</textarea>
     </div>
     <div class="order_input">
         <div class="img_size">
-            Image Size Ratio:<br>
-            Width:Height = 1.8:1
+            {pigcms{:L('QW_IMAGESIZEA')}<br>
+            {pigcms{:L('QW_IMAGESIZEB')}
         </div>
-        <div class="img_btn" id="upload_img">Upload An Image</div>
+        <div class="img_btn" id="upload_img">{pigcms{:L('QW_UPLOADIMAGE')}</div>
         <div id="product_img">
             <if condition="$goods['image'] neq ''">
             <img src="{pigcms{$goods['pic_arr'][0]['url']}" width="200" />
@@ -98,7 +98,7 @@
     </div>
     <div class="order_input">
         <div class="input_title">
-            Category
+            {pigcms{:L('QW_CATEGORY')}
         </div>
         <select name="category" autocomplete="off">
             <volist name="sort_list" id="vo">
@@ -108,7 +108,7 @@
     </div>
     <div class="order_input">
         <div class="input_title">
-            Listing Order
+            {pigcms{:L('QW_LISTINGORDER')}
         </div>
         <input type="text" name="sort" value="{pigcms{$goods.sort}" />
         <div>
@@ -123,7 +123,7 @@
     </div>
     <input type="hidden" name="goods_id" value="{pigcms{$goods.goods_id}" />
     <div class="confirm_btn_order" id="confirm_order">
-        Continue
+        {pigcms{:L('QW_CONTINUE')}
     </div>
 </div>
 <script type="text/javascript" src="{pigcms{$static_public}js/artdialog/jquery.artDialog.js"></script>

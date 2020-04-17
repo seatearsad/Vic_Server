@@ -233,27 +233,27 @@
     <ul>
         <li id="menu_home">
             <span class="m_img"> </span>
-            <span>Home</span>
+            <span>{pigcms{:L('QW_HOME')}</span>
         </li>
         <li id="menu_dash">
             <span class="m_img"> </span>
-            <span>Delivery Dashboard</span>
+            <span>{pigcms{:L('QW_DELIVERYDASHBOARD')}</span>
         </li>
         <li id="menu_shift">
             <span class="m_img"> </span>
-            <span>Add An Order</span>
+            <span>{pigcms{:L('QW_ADDANORDER')}</span>
         </li>
         <li id="menu_stat">
             <span class="m_img"> </span>
-            <span>Menu/Product Management</span>
+            <span>{pigcms{:L('QW_MENUMANAGEMENT')}</span>
         </li>
         <li id="menu_inst">
             <span class="m_img"> </span>
-            <span>Account Management</span>
+            <span>{pigcms{:L('QW_ACCOUNTMANAGEMENT')}</span>
         </li>
         <li id="menu_order">
             <span class="m_img"> </span>
-            <span>Order History & Statistics</span>
+            <span>{pigcms{:L('QW_ORDERHISTORY')}</span>
         </li>
         <!--li id="menu_account">
             <span class="m_img"> </span>
@@ -261,7 +261,7 @@
         </li-->
         <li id="menu_print">
             <span class="m_img"> </span>
-            <span>Printing Settings</span>
+            <span>{pigcms{:L('QW_PRINTINGSETTINGS')}</span>
         </li>
         <div class="print_memo" id="use_status"></div>
         <div class="print_memo" id="printer_name"></div>
@@ -273,19 +273,19 @@
             <label> / </label>
             <span data-type="zh-cn"">CH</span>
         </div>
-        <div id="logout">Log Out</div>
+        <div id="logout">{pigcms{:L('QW_LOGOUT')}</div>
     </div>
 </div>
 <script type="text/javascript" src="{pigcms{$static_path}layer/layer.m.js" charset="utf-8"></script>
 <script src="{pigcms{$static_public}js/lang.js"></script>
 <script>
-    // if(/(tutti_android)/.test(navigator.userAgent.toLowerCase()) || /(tuttipartner)/.test(navigator.userAgent.toLowerCase())){
-    //     $('#menu_print').show();
-    //     $('.print_memo').show();
-    // }else{
-    //     $('#menu_print').hide();
-    //     $('.print_memo').hide();
-    // }
+    if(/(tutti_android)/.test(navigator.userAgent.toLowerCase()) || /(tuttipartner)/.test(navigator.userAgent.toLowerCase())){
+        $('#menu_print').show();
+        $('.print_memo').show();
+    }else{
+        $('#menu_print').hide();
+        $('.print_memo').hide();
+    }
 
     function pushPrinterNameAndUse(name,use) {
         var is_use = '<img src="{pigcms{$static_path}img/staff_menu/stop_item.png" width="15"> NO';

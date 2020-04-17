@@ -76,12 +76,12 @@
             <span style="width: 20%;">#{pigcms{$vo.order_id}</span>
             <span>{pigcms{$vo.create_time|date="Y-m-d H:i",###}</span>
             <span style="width: 15%;">${pigcms{$vo.goods_price}</span>
-            <span style="float: right">
+            <span style="float: right;margin-top: 5px">
                 <if condition="$vo['status'] eq 2 or $vo['status'] eq 3">
-                Completed
+                <img src="{pigcms{$static_path}img/staff_menu/normal_item.png" width="20" />
                 </if>
                 <if condition="$vo['status'] eq 4 or $vo['status'] eq 5">
-                Cancelled
+                <img src="{pigcms{$static_path}img/staff_menu/stop_item.png" width="20" />
                 </if>
             </span>
         </div>

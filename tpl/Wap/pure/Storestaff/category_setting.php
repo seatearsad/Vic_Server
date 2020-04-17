@@ -48,33 +48,33 @@
     <div style="text-align: center;font-size: 16px;">Category Setting</div>
     <div class="order_input">
         <div class="input_title">
-            Category Name (English)*
+            {pigcms{:L('QW_CATENAMEENG')}*
         </div>
         <input type="text" name="cate_name_en" value="{pigcms{$sort.en_name}" />
     </div>
     <div class="order_input">
         <div class="input_title">
-            Category Name (Chinese)
+            {pigcms{:L('QW_CATENAMECHIN')}
         </div>
         <input type="text" name="cate_name_cn" value="{pigcms{$sort.cn_name}" />
     </div>
     <div style="border-bottom: 1px dashed #666666;margin-top: 20px"></div>
     <div class="order_input">
         <div class="input_title">
-            Category Order
+            {pigcms{:L('QW_CATEORDER')}
         </div>
         <input type="text" name="sort" value="{pigcms{$sort.sort}" />
         <div>
-            Category with a large number will be listed on top for customers.
+            {pigcms{:L('QW_CATEORDERDES')}
         </div>
     </div>
     <div class="order_input">
         <div class="input_title">
-            Category Show Day(s)
+            {pigcms{:L('QW_CATESHOWDAY')}
         </div>
         <select name="is_weekshow" autocomplete="off">
-            <option value="0" <if condition="$sort['is_weekshow'] eq 0">selected="selected"</if>>Off</option>
-            <option value="1" <if condition="$sort['is_weekshow'] eq 1">selected="selected"</if>>On</option>
+            <option value="0" <if condition="$sort['is_weekshow'] eq 0">selected="selected"</if>>{pigcms{:L('QW_OFF')}</option>
+            <option value="1" <if condition="$sort['is_weekshow'] eq 1">selected="selected"</if>>{pigcms{:L('QW_ON')}</option>
         </select>
         <div>
             <input id="week_check" type="checkbox" value="1" name="week[]" <if condition="in_array('1',$sort['week'])">checked="checked"</if>><label class="week_en">MON</label>
@@ -91,11 +91,11 @@
     </div>
     <div class="order_input">
         <div class="input_title">
-            Category Show Time
+            {pigcms{:L('QW_CATESHOWTIME')}
         </div>
         <select name="is_time" autocomplete="off">
-            <option value="0" <if condition="$sort['is_time'] eq 0">selected="selected"</if>>Off</option>
-            <option value="1" <if condition="$sort['is_time'] eq 1">selected="selected"</if>>On</option>
+            <option value="0" <if condition="$sort['is_time'] eq 0">selected="selected"</if>>{pigcms{:L('QW_OFF')}</option>
+            <option value="1" <if condition="$sort['is_time'] eq 1">selected="selected"</if>>{pigcms{:L('QW_ON')}</option>
         </select>
         <input class="col-sm-1" size="10" name="begin_time" id="begin_time" type="text" placeholder="00:00" value="{pigcms{$sort.begin_time}" />
         <label style="">&nbsp; - &nbsp;</label>
@@ -105,7 +105,7 @@
         </div>
     </div>
     <div class="confirm_btn_order" id="confirm_order">
-        Save
+        {pigcms{:L('QW_SAVE')}
     </div>
 </div>
 <script type="text/javascript" src="{pigcms{$static_public}js/artdialog/jquery.artDialog.js"></script>

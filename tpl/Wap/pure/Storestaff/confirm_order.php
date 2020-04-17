@@ -31,41 +31,41 @@
 <include file="header" />
 <form id="add-shop-order" enctype="multipart/form-data" method="post" action="{pigcms{:U('Storestaff/save_shop_oder')}">
 <div id="main">
-    <div id="edit_btn">Edit</div>
-    <div class="input_title" style="margin-top: 30px">Please confirm the following information:</div>
+    <div id="edit_btn">{pigcms{:L('QW_EDIT')}</div>
+    <div class="input_title" style="margin-top: 30px">{pigcms{:L('QW_CONFIRMINFO')}:</div>
     <div class="order_input">
         <div class="input_title">
-            <label style="color: #999999;">Customer Name*: </label><label class="show_order_memo"> {pigcms{$post_data['name']}</label>
+            <label style="color: #999999;">{pigcms{:L('QW_CUSTOMERNAME')}*: </label><label class="show_order_memo"> {pigcms{$post_data['name']}</label>
         </div>
     </div>
     <div class="order_input">
         <div class="input_title">
-            <label style="color: #999999;">Customer Contact Number*: </label><label class="show_order_memo"> {pigcms{$post_data['phone']}</label>
+            <label style="color: #999999;">{pigcms{:L('QW_CUSTOMERNUMBER')}*: </label><label class="show_order_memo"> {pigcms{$post_data['phone']}</label>
         </div>
     </div>
     <div class="order_input">
         <div class="input_title">
-            <label style="color: #999999;">Select Delivery Address*: </label><label class="show_order_memo"> {pigcms{$post_data['address']}</label>
+            <label style="color: #999999;">{pigcms{:L('QW_ADDRESS')}*: </label><label class="show_order_memo"> {pigcms{$post_data['address']}</label>
         </div>
     </div>
     <div class="order_input">
         <div class="input_title">
-            <label style="color: #999999;">Delivery Instructions: </label><label class="show_order_memo"> {pigcms{$post_data['detail']}</label>
+            <label style="color: #999999;">{pigcms{:L('QW_DELIVERYINSTRUCTION')}: </label><label class="show_order_memo"> {pigcms{$post_data['detail']}</label>
         </div>
     </div>
     <div class="order_input">
         <div class="input_title">
-            <label style="color: #999999;">Subtotal (Before Tax)*: </label><label class="show_order_memo"> ${pigcms{$post_data['goods_price']}</label>
+            <label style="color: #999999;">{pigcms{:L('QW_AOSUBTOTAL')}*: </label><label class="show_order_memo"> ${pigcms{$post_data['goods_price']}</label>
         </div>
     </div>
     <div class="order_input">
         <div class="input_title">
-            <label style="color: #999999;">Tax Amount ($)*: </label><label class="show_order_memo"> ${pigcms{$post_data['goods_tax']}</label>
+            <label style="color: #999999;">{pigcms{:L('QW_AOTAX')}*: </label><label class="show_order_memo"> ${pigcms{$post_data['goods_tax']}</label>
         </div>
     </div>
     <div class="order_input">
         <div class="input_title">
-            <label style="color: #999999;">Bottle Deposit (If applicable): </label><label class="show_order_memo"> ${pigcms{$post_data['deposit']}</label>
+            <label style="color: #999999;">{pigcms{:L('QW_AOBOTTLEDEPOSIT')}: </label><label class="show_order_memo"> ${pigcms{$post_data['deposit']}</label>
         </div>
     </div>
     <div class="order_input" style="margin-top: 20px">
@@ -118,7 +118,7 @@
     <input type="hidden" name="city" value="{pigcms{$post_data['city_id']}" />
     <input type="hidden" name="area" value="{pigcms{$post_data['area']}" />
     <div class="confirm_btn_order" id="confirm_order">
-        Place & Accept the Order
+        {pigcms{:L('QW_PLACENCONFIRM')}
     </div>
 </div>
 </form>

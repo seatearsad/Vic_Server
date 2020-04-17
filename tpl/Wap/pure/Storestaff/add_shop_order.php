@@ -30,43 +30,43 @@
     </div>
     <div class="order_input">
         <div class="input_title">
-            Customer Name*
+            {pigcms{:L('QW_CUSTOMERNAME')}*
         </div>
         <input type="text" name="name" value="" />
     </div>
     <div class="order_input">
         <div class="input_title">
-            Customer Contact Number*
+            {pigcms{:L('QW_CUSTOMERNUMBER')}*
         </div>
         <input type="text" name="phone" value="" />
     </div>
     <div class="order_input">
         <div class="input_title">
-            Select Delivery Address*
+            {pigcms{:L('QW_ADDRESS')}*
         </div>
         <input type="text" name="address" id="address" value="" />
     </div>
     <div class="order_input">
         <div class="input_title">
-            Delivery Instructions
+            {pigcms{:L('QW_DELIVERYINSTRUCTION')}
         </div>
         <input type="text" name="detail" value="" />
     </div>
     <div class="order_input">
         <div class="input_title">
-            Subtotal (Before Tax)*
+            {pigcms{:L('QW_AOSUBTOTAL')}*
         </div>
         <input type="text" name="goods_price" value="" />
     </div>
     <div class="order_input">
         <div class="input_title">
-            Tax Amount ($)*
+            {pigcms{:L('QW_AOTAX')}*
         </div>
         <input type="text" name="goods_tax" value="" />
     </div>
     <div class="order_input">
         <div class="input_title">
-            Bottle Deposit (If applicable)
+            {pigcms{:L('QW_AOBOTTLEDEPOSIT')}
         </div>
         <input type="text" name="deposit" value="" />
     </div>
@@ -84,7 +84,7 @@
     <input type="hidden" name="city_id" />
     <input type="hidden" name="area" value="0">
     <div class="confirm_btn_order" id="confirm_order">
-        Continue
+        {pigcms{:L('QW_CONTINUE')}
     </div>
 </div>
 </form>

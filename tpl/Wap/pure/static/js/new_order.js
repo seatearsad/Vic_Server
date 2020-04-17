@@ -107,7 +107,7 @@ function getOrderDetail(order_id) {
                         $('.con_layer_confirm').show();
                         $('.cha_time').html(this_order.time_cha);
 
-                        if(this_order.order_status == 1) {
+                        if(this_order.order_status == 1 || this_order.order_status == 2) {
                             $('#add_dining_time').show();
                             cal_time_show(this_order,0,1);
                         }else

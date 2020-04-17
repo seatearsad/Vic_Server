@@ -58,22 +58,22 @@
     </div>
     <div class="order_input">
         <div class="input_title">
-            Option Title *
+            {pigcms{:L('QW_OPTIONTITLE')} *
         </div>
         <input type="text" name="name" placeholder="" value="{pigcms{$dish.name}" />
     </div>
     <div class="double_input">
         <div class="input_one">
             <div class="input_title">
-                Choose At Least *
+                {pigcms{:L('QW_ATLEAST')} *
             </div>
-            <input type="text" name="min" placeholder="Input Min. Number" value="{pigcms{$dish.min}" />
+            <input type="text" name="min" placeholder="{pigcms{:L('QW_MIN')}" value="{pigcms{$dish.min}" />
         </div>
         <div class="input_one" style="margin-left: 10%">
             <div class="input_title">
-                Choose At Most *
+                {pigcms{:L('QW_ATMOST')} *
             </div>
-            <input type="text" name="max" placeholder="Input Max. Number" value="{pigcms{$dish.max}" />
+            <input type="text" name="max" placeholder="{pigcms{:L('QW_MAX')}" value="{pigcms{$dish.max}" />
         </div>
     </div>
     <div style="margin: 5px 0 15px 0;">
@@ -81,21 +81,21 @@
     </div>
     <div class="order_input">
         <div class="input_title">
-            Allow customers to choose the same option mutiple times?
+            {pigcms{:L('QW_SINGLEMULTI')}
         </div>
         <select name="type" autocomplete="off">
             <option value="1" <if condition="$dish['type'] eq 1">selected="selected"</if>>
-                Yes, allow quantity modification
+                {pigcms{:L('QW_YES')}
             </option>
             <option value="0" <if condition="$dish['type'] eq 0">selected="selected"</if>>
-                No, allow quantity modification
+                {pigcms{:L('QW_NO')}
             </option>
         </select>
         <span class="dish_type_img"></span>
     </div>
     <div class="order_input" id="add_choice_div">
         <div class="input_title">
-            Choices & Price
+            {pigcms{:L('QW_CHOICEPRICE')}
         </div>
         <volist name="dish['value']" id='vo'>
             <div data-id="dish_{pigcms{$vo['id']}">
@@ -111,7 +111,7 @@
         </div>
     </div>
     <div class="confirm_btn_order" id="add_choice" style="width: 100%;">
-        Add A Choice
+        {pigcms{:L('QW_ADDCHOICE')}
     </div>
     <input type="hidden" name="dish_id" value="{pigcms{$dish['id']}" />
     <if condition="$dish['id']">

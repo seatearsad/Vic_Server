@@ -30,11 +30,11 @@
         Hi,<label style="font-weight: bold">{pigcms{$store.name}</label>
     </div>
     <div style="text-align: center;font-size: 18px;margin-top: 30px">
-        Your current store status:
+        {pigcms{:L('QW_STORESTATUS')}:
         <if condition="$store['status'] eq 1">
-            <label style="color: forestgreen">Active</label>
+            <label style="color: forestgreen">{pigcms{:L('QW_ACTIVE')}</label>
             <else />
-            <label style="color: darkred">Inactive</label>
+            <label style="color: darkred">{pigcms{:L('QW_CLOSED')}</label>
         </if>
     </div>
     <div class="home_list">

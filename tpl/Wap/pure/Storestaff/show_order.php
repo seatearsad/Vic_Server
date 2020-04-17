@@ -109,17 +109,17 @@
             Order #{{ d.order_id }}
             (
             {{# if(d.status == 0){ }}
-            <span class="t_color">Please Confirm</span>
+            <span class="t_color">{pigcms{:L('QW_PLEASECONFIRM')}</span>
             {{# }else if(d.order_status == 1){ }}
-            <span class="t_color">Waiting for a Courier</span>
+            <span class="t_color">{pigcms{:L('QW_WAITING')}</span>
             {{# }else if(d.order_status == 2){ }}
-            <span class="t_color">Waiting for a Courier</span>
+            <span class="t_color">{pigcms{:L('QW_Accepted')}</span>
             {{# }else if(d.order_status == 3){ }}
-            <span class="t_color">Picked Up</span>
+            <span class="t_color">{pigcms{:L('QW_PICKED')}</span>
             {{# }else if(d.order_status == 4){ }}
-            <span class="t_color">Arriving</span>
+            <span class="t_color">{pigcms{:L('QW_ARRIVING')}</span>
             {{# }else if(d.order_status == 5){ }}
-            <span class="t_color">Completed</span>
+            <span class="t_color">{pigcms{:L('QW_COMPLETED')}</span>
             {{# } }}
             )
             {{# if(d.status > 0 && d.is_app){ }}
@@ -130,8 +130,8 @@
             Placed by {{ d.username }} at {{ d.date }}
         </div>
         <div class="detail_note">
-            Note:
-        <span class="t_color">
+            {pigcms{:L('QW_NOTE')}:
+            <span class="t_color">
             {{ d.desc }}
         </span>
         </div>
@@ -179,17 +179,17 @@
             <span class="item_price"></span>
         </div>
         {{# for(var k in d.info[i].dish[j].list){ }}
-            <div class="order_item dish_line">
-                <span class="item_num"></span>
-                <span class="item_name">
-                 {{# var name=d.info[i].dish[j].list[k].split("*") }}
+        <div class="order_item dish_line">
+            <span class="item_num"></span>
+            <span class="item_name">
+                    {{# var name=d.info[i].dish[j].list[k].split("*") }}
                  &nbsp;&nbsp;&nbsp;&nbsp;{{ name[0] }}
                     {{# if(typeof(name[1]) != 'undefined'){ }}
                     <label class="r_color">*{{ name[1] }}</label>
                     {{# } }}
                 </span>
-                <span class="item_price"></span>
-            </div>
+            <span class="item_price"></span>
+        </div>
         {{# } }}
         {{# } }}
         {{# } }}
@@ -198,16 +198,19 @@
         {{# } }}
 
         <div class="order_total">
-            <div>Subtotal: ${{ d.goods_price }}</div>
-            <div>Tax: ${{ d.tax_price }}</div>
-            <div>Tutti Commission: ${{ d.tutti_comm }}</div>
+            <div>{pigcms{:L('QW_SUBTOTAL')}: ${{ d.goods_price }}</div>
+            <div>{pigcms{:L('QW_TAX')}: ${{ d.tax_price }}</div>
+            <div>{pigcms{:L('QW_COMMISSION')}: -${{ d.tutti_comm }}</div>
+            {{# if(d.merchant_reduce > 0){ }}
+            <div>{pigcms{:L('QW_MERCHANTDISCOUNT')}: -${{ d.merchant_reduce }}</div>
+            {{# } }}
             {{# if(d.packing_charge > 0){ }}
-            <div>Package Fee: ${{ d.packing_charge }}</div>
+            <div>{pigcms{:L('QW_PACKAGEFEE')}: ${{ d.packing_charge }}</div>
             {{# } }}
             {{# if(d.deposit_price > 0){ }}
-            <div>Bottle Deposit: ${{ d.deposit_price }}</div>
+            <div>{pigcms{:L('QW_BOTTLEDEPOSIT')}: ${{ d.deposit_price }}</div>
             {{# } }}
-            <div>Merchant Refund: ${{ d.merchant_refund }}</div>
+            <div>{pigcms{:L('QW_MERCHANTREFUND')}: ${{ d.merchant_refund }}</div>
         </div>
     </script>
 </body>
