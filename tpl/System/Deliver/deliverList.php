@@ -89,7 +89,7 @@
 						<tbody>
 							<if condition="is_array($supply_info)">
 								<volist name="supply_info"  id="vo">
-									<tr class="<if condition="$i%2 eq 0">odd<else/>even</if>">
+									<tr class="<if condition='$i%2 eq 0'>odd<else/>even</if> order_line" data-id="{pigcms{$vo.order_id}">
 										<td width="30">{pigcms{$vo.supply_id}</td>
 										<td width="40"><if condition="$vo['item'] eq 0">{pigcms{:L('_BACK_DINE_')}<elseif condition="$vo['item'] eq 1" />外送系统<elseif condition="$vo['item'] eq 2" />{pigcms{:L('_BACK_DELIVERY_')}</if></td>
 										<!--td width="50">{pigcms{$vo.group}</td-->
@@ -137,6 +137,9 @@
 				</div>
 			</form>
 		</div>
+<div class="order_status_show">
+    fff
+</div>
 <script>
     var city_id = $('#city_select').val();
     $('#city_select').change(function () {
@@ -198,6 +201,38 @@
 			});
 		});
 	});
+
+    var hover_id = 0;
+    var time_out;
+    $('.order_line').mouseover(function () {
+        var curr_id = $(this).data('id');
+        if(hover_id != curr_id){
+            hover_id = curr_id;
+            var this_y = $(this).position().top+40;
+            $.post("{pigcms{:U('Shop/get_order_status')}",{"order_id":hover_id},function(result){
+                if(result.error == 0){
+                    var html = '';
+                    for(var i=0;i<result['list'].length;++i){
+                        html += result['list'][i];
+                    }
+                    if(html != '') {
+                        $('.order_status_show').html(html);
+                        $('.order_status_show').css('top', this_y);
+                        $('.order_status_show').show();
+                    }
+                }
+            },'JSON');
+        }
+    });
+
+    $('.order_line').mouseout(function () {
+        hover_id = 0;
+        $('.order_status_show').hide();
+    });
+
+    function getMouse(e) {
+        e = e  || window.event;
+    }
 </script>
 <style>
 .drp-popup{top:90px !important}
@@ -205,6 +240,16 @@
 .deliver_search select{height: 20px;}
 .deliver_search .mar_l_10{margin-left: 10px;}
 .deliver_search .btn{height: 23px;line-height: 16px; padding: 0px 12px;}
+.order_status_show{
+    position: absolute;
+    width: 300px;
+    height: 180px;
+    background-color: #EEEEEE;
+    left: 20px;
+    display: none;
+    padding: 10px;
+    line-height: 1.8;
+}
 </style>
 <script type="text/javascript" src="{pigcms{$static_public}js/date-picker/index.js"></script>
 <link rel="stylesheet" type="text/css" href="{pigcms{$static_public}js/date-picker/index.css" />

@@ -135,7 +135,7 @@
 					<tbody>
 						<if condition="is_array($order_list)">
 							<volist name="order_list" id="vo">
-								<tr>
+								<tr class="order_line" data-id="{pigcms{$vo.order_id}">
 									<td>{pigcms{$vo.real_orderid}</td>
 									<!--td>{pigcms{$vo.merchant_name}</td-->
 									<td>{pigcms{$vo.store_name}</td>
@@ -222,7 +222,6 @@ $(function(){
 		});
 	});
 });
-
 
 </script>
 <include file="Public:footer"/>
