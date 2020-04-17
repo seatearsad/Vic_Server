@@ -25,6 +25,7 @@
 							<option value="s_name" <if condition="$_GET['searchtype'] eq 's_name'">selected="selected"</if>>{pigcms{:L('_BACK_STORE_NAME_')}</option>
 							<option value="name" <if condition="$_GET['searchtype'] eq 'name'">selected="selected"</if>>{pigcms{:L('_BACK_USER_NAME_')}</option>
 							<option value="phone" <if condition="$_GET['searchtype'] eq 'phone'">selected="selected"</if>>{pigcms{:L('_BACK_USER_PHONE_')}</option>
+                            <option value="id" <if condition="$_GET['searchtype'] eq 'id'">selected="selected"</if>>ID</option>
 						</select>
 						<font color="#000">{pigcms{:L('_BACK_DATE_SELECT_')}：</font>
 						<input type="text" class="input-text" name="begin_time" style="width:120px;" id="d4311"  value="{pigcms{$_GET.begin_time}" onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd',lang:'en'})"/>
@@ -134,7 +135,7 @@
 					<tbody>
 						<if condition="is_array($order_list)">
 							<volist name="order_list" id="vo">
-								<tr>
+								<tr class="order_line" data-id="{pigcms{$vo.order_id}">
 									<td>{pigcms{$vo.real_orderid}</td>
 									<!--td>{pigcms{$vo.merchant_name}</td-->
 									<td>{pigcms{$vo.store_name}</td>
@@ -221,7 +222,6 @@ $(function(){
 		});
 	});
 });
-
 
 </script>
 <include file="Public:footer"/>

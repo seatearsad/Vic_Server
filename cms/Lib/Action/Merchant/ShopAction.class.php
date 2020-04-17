@@ -2466,8 +2466,8 @@ class ShopAction extends BaseAction
                             </td>
                             <td width="720">
                                 <p style="font-size:28px;color: #666;">TUTTI
-                                <p style="font-size: 16px;color:#999999;line-height: 20px;">801-747 Fort Street</p>
-                                <p style="font-size: 16px;color:#999999;line-height: 20px;">Victoria, BC V8W 3E9</p>
+                                <p style="font-size: 16px;color:#999999;line-height: 20px;">218-852 Fort St.</p>
+                                <p style="font-size: 16px;color:#999999;line-height: 20px;">Victoria BC V8W 1H8</p>
                                 <p style="font-size: 16px;color:#999999;line-height: 20px;">1-888-399-6668</p>
                             </td>
                         </tr>

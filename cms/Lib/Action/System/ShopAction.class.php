@@ -300,6 +300,8 @@ class ShopAction extends BaseAction
                 $where['userphone'] = htmlspecialchars($_GET['keyword']);
             }elseif ($_GET['searchtype'] == 'third_id') {
                 $where['third_id'] =$_GET['keyword'];
+            }elseif ($_GET['searchtype'] == 'id'){
+                $where['uid'] =$_GET['keyword'];
             }
         }
         $status = isset($_GET['status']) ? intval($_GET['status']) : -1;
@@ -1473,5 +1475,55 @@ class ShopAction extends BaseAction
         header("Content-Transfer-Encoding:binary");
         $objWriter->save('php://output');
         exit();
+    }
+
+    public function get_order_status(){
+        if($_POST){
+            $order_id = $_POST['order_id'];
+            $list = D('Shop_order_log')->where(array('order_id'=>$order_id))->select();
+
+            if($list){
+                $show_list = array();
+                foreach ($list as $v){
+                    if($v['status'] != 0) {
+                        $status_txt = "";
+                        switch ($v['status']) {
+                            case 1:
+                                $status_txt = "<div>顾客下单：";
+                                break;
+                            case 2:
+                                $status_txt = "<div style='color: #ffa52d'>商家接单：";
+                                break;
+                            case 3:
+                                $status_txt = "<div>送餐员接单：";
+                                break;
+                            case 4:
+                                $status_txt = "<div style='color: #008037'>已取货：";
+                                break;
+                            case 5:
+                                $status_txt = "<div style='color: #004aad'>开始配送：";
+                                break;
+                            case 6:
+                                $status_txt = "<div>送达时间：";
+                                break;
+
+                        }
+                        $show_list[] = $status_txt . ' ' . date('H:i', $v['dateline']).'</div>';
+                        if($v['status'] == 2){
+                            $supply = D('Deliver_supply')->where(array("order_id"=>$order_id))->find();
+                            $show_list[] = "<div style='color: #ff5757'>预计出餐：" . ' ' . date('H:i', $v['dateline']+$supply['dining_time']*60).'</div>';
+                            if(!$supply['uid'])
+                                array_unshift($show_list,'<div>顾客下单： ' . date('H:i', $v['dateline']).'</div>');
+                        }
+                    }
+                }
+                $data['error'] = 0;
+                $data['list'] = $show_list;
+                exit(json_encode($data));
+            }else{
+                $data['error'] = 1;
+                exit(json_encode($data));
+            }
+        }
     }
 }
