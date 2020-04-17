@@ -205,23 +205,27 @@
     var hover_id = 0;
     var time_out;
     $('.order_line').mouseover(function () {
+        if(typeof (time_out) != "undefined") clearTimeout(time_out);
+        
         var curr_id = $(this).data('id');
         if(hover_id != curr_id){
             hover_id = curr_id;
             var this_y = $(this).position().top+40;
-            $.post("{pigcms{:U('Shop/get_order_status')}",{"order_id":hover_id},function(result){
-                if(result.error == 0){
-                    var html = '';
-                    for(var i=0;i<result['list'].length;++i){
-                        html += result['list'][i];
+            time_out = setTimeout(function () {
+                $.post("{pigcms{:U('Shop/get_order_status')}",{"order_id":hover_id},function(result){
+                    if(result.error == 0){
+                        var html = '';
+                        for(var i=0;i<result['list'].length;++i){
+                            html += result['list'][i];
+                        }
+                        if(html != '') {
+                            $('.order_status_show').html(html);
+                            $('.order_status_show').css('top', this_y);
+                            $('.order_status_show').show();
+                        }
                     }
-                    if(html != '') {
-                        $('.order_status_show').html(html);
-                        $('.order_status_show').css('top', this_y);
-                        $('.order_status_show').show();
-                    }
-                }
-            },'JSON');
+                },'JSON');
+            },1000);
         }
     });
 
