@@ -20,13 +20,20 @@
         display: inline-block;
         font-size: 12px;
     }
+    .input_title{
+        font-size: 14px;
+    }
+    .order_input input{
+        line-height: 35px;
+        font-size: 14px;
+    }
 </style>
 <body>
 <include file="header" />
 <form id="add-shop-order" enctype="multipart/form-data" method="post" action="{pigcms{:U('Storestaff/confirm_order')}">
 <div id="main">
     <div>
-        Many customers still prefer to call-in and requesting a delivery. You can place an delivery order here and input delivery information. Our driver can deliver the order to the customer for you. Commission and delivery fee will be applied as normal Tutti order.
+        {pigcms{:L('QW_ADDORDERA')}
     </div>
     <div class="order_input">
         <div class="input_title">
@@ -72,11 +79,12 @@
     </div>
 
     <div style="margin-top: 25px;line-height: 20px;">
-        Please note that <label class="bold_black">Tutti couriers do NOT carry any POS machine for delivery</label>,
+        <!--Please note that <label class="bold_black">Tutti couriers do NOT carry any POS machine for delivery</label>,
         and <label class="bold_black">only accept cash or online payments.</label>
         If the customer chooses to pay online, he or she will input her payment information on courier's phone using Tutti Courier App.
         <label class="bold_black">Please confirm that you have informed the customer the above information before placing the order.</label>
-        Tutti does not hold responsibilities if the customer refuses to pay due to payment method unawareness.
+        Tutti does not hold responsibilities if the customer refuses to pay due to payment method unawareness.-->
+        {pigcms{:L('QW_ADDORDERB')}
     </div>
     <input type="hidden" name="longitude" />
     <input type="hidden" name="latitude" />

@@ -48,7 +48,7 @@
         <div class="goods_name">{pigcms{:L('QW_MENUNAME')}</div>
         <div class="goods_price">{pigcms{:L('QW_MENUPRICE')}</div>
         <div class="goods_option">{pigcms{:L('QW_OPTIONS')}</div>
-        <div style="width: 10%;">{pigcms{:L('QW_ITEMORDER')}</div>
+        <div style="width: 10%;text-align: center;">{pigcms{:L('QW_ITEMORDER')}</div>
     </div>
     <div id="goodsList"></div>
 </div>

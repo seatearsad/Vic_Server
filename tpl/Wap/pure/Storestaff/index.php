@@ -265,10 +265,10 @@
                 <img src="{pigcms{$static_path}img/staff_menu/tutti_branding.png" width="100" />
             </div>
             <div>
-                Welcome to Tutti Delivery Dashboard! You can view and confirm your delivery orders here.
+                {pigcms{:L('QW_NONEWORDERA')}
             </div>
             <div style="margin-top: 20px;font-weight: bold;font-size: 16px;color: #999999">
-                Waiting for Your Next Order
+                {pigcms{:L('QW_NONEWORDERB')}
             </div>
             {{# if(d.con_len > 0){ }}
             <div style="color: #999999">
@@ -284,7 +284,7 @@
                 <img src="{pigcms{$static_path}img/staff_menu/new_order.png" width="100" />
             </div>
             <div>
-                Welcome to Tutti Delivery Dashboard! You can view and confirm your delivery orders here.
+                {pigcms{:L('QW_NONEWORDERA')}
             </div>
             <div style="margin-top: 20px;font-weight: bold;font-size: 16px;color:white;background-color: #ffa52d;line-height: 35px;border-radius: 3px;">
                 You have {{ d.len }} new order(s) now!

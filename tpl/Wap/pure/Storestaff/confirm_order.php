@@ -84,16 +84,12 @@
         </select>
     </div>
     <div style="margin-top: 20px">
-        Please note that <label class="bold_black">Tutti couriers do NOT carry any POS machine for delivery</label>,
-        and <label class="bold_black">only accept cash or online payments.</label>
-        If the customer chooses to pay online, he or she will input her payment information on courier's phone using Tutti Courier App.
-        <label class="bold_black">Please confirm that you have informed the customer the above information before placing the order.</label>
-        Tutti does not hold responsibilities if the customer refuses to pay due to payment method unawareness.
+        {pigcms{:L('QW_ADDORDERB')}
     </div>
     <div style="margin-top: 20px">
         <input type="checkbox" class="mt" value="1" name="is_read" style="border-radius: 0;width: .40rem;height: .40rem;line-height: .40rem;">
         <label style="line-height: 20px">
-            I have read the above information and confirm that I've informed the customer the above payment methods.
+            {pigcms{:L('QW_ADDORDERC')}
         </label>
     </div>
     <input type="hidden" name="staff_id" value="{pigcms{$return_data['staff_id']}">

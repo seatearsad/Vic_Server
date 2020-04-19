@@ -197,8 +197,7 @@ line-height: .7rem;
 }
 .time_list{
     margin-top:.2rem;
-    width: 98%;
-    margin-left: 1%;
+    width: 100%;
     height: 400px;
 }
 .time_list ul{
@@ -227,7 +226,9 @@ line-height: .7rem;
     color: #ffffff;
     cursor: pointer;
 }
-
+html{
+    min-width: 0px;
+}
 </style>
 </head>
 <body>

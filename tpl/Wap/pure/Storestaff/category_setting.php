@@ -29,7 +29,7 @@
         width: 20%;
     }
     select{
-        height: 30px;
+        height: 40px;
         width: 20%;
     }
     #week_check{
@@ -40,6 +40,13 @@
     .week_en{
         line-height: 20px;
         vertical-align: bottom;
+    }
+    .input_title{
+        font-size: 14px;
+    }
+    .order_input input{
+        line-height: 30px;
+        font-size: 14px;
     }
 </style>
 <body>
@@ -86,7 +93,7 @@
             <input id="week_check" type="checkbox" value="0" name="week[]" <if condition="in_array('0',$sort['week'])">checked="checked"</if>><label class="week_en">SUN</label>
         </div>
         <div style="margin-top: 5px">
-            Turn on if this category will be available to customers only in certain days (e.g. Choosing Saturday and Sunday means that this category will be available on every weekends)
+            {pigcms{:L('QW_CATESHOWDAYDESCR')}
         </div>
     </div>
     <div class="order_input">
@@ -101,7 +108,7 @@
         <label style="">&nbsp; - &nbsp;</label>
         <input class="col-sm-1" size="10" name="end_time" id="end_time" type="text" placeholder="00:00" value="{pigcms{$sort.end_time}" />
         <div style="margin-top: 5px">
-            Turn on if this category will be available to customers only in a period of time (e.g. Setting 11:30 - 14:30 means that this category will be available from 11:30 to 14:30 for all/selected days).
+            {pigcms{:L('QW_CATESHOWTIMEDESCR')}
         </div>
     </div>
     <div class="confirm_btn_order" id="confirm_order">

@@ -47,20 +47,20 @@
         <div class="order_input" style="margin-bottom: 20px;line-height: 30px;">
             <div class="input_title">
                 <label>
-                    Store Status:
+                    {pigcms{:L('QW_STORESTAT')}:
                     <if condition="$store['store_is_close'] eq 0">
-                        Active
+                        {pigcms{:L('QW_ACTIVE')}
                         <else />
-                        Inactive
+                        {pigcms{:L('QW_CLOSED')}
                     </if>
                 </label>
                 <if condition="$store['store_is_close'] eq 0">
                     <span class="status_btn to_close">
-                        Pause My Store
+                        {pigcms{:L('QW_PAUSESTORE')}
                     </span>
                     <else />
                     <span class="status_btn">
-                        Resume My Store
+                        {pigcms{:L('QW_PAUSESTOREOPEN')}
                     </span>
                 </if>
             </div>
@@ -68,27 +68,27 @@
         <div class="edit_info">Edit</div>
         <div class="order_input">
             <div class="input_title">
-                Store Name (English):<label>{pigcms{$store.en_name}</label>
+                {pigcms{:L('QW_STORENAMEENGLISH')}:<label>{pigcms{$store.en_name}</label>
             </div>
         </div>
         <div class="order_input">
             <div class="input_title">
-                Store Name (Mandarin):<label>{pigcms{$store.cn_name}</label>
+                {pigcms{:L('QW_STORENAMECHINESE')}:<label>{pigcms{$store.cn_name}</label>
             </div>
         </div>
         <div class="order_input">
             <div class="input_title">
-                Store Phone Number:<label>{pigcms{$store.phone}</label>
+                {pigcms{:L('QW_STOREPHONE')}:<label>{pigcms{$store.phone}</label>
             </div>
         </div>
         <div class="order_input">
             <div class="input_title">
-                Email Address:<label>{pigcms{$store.email}</label>
+                {pigcms{:L('QW_STOREEMAIL')}:<label>{pigcms{$store.email}</label>
             </div>
         </div>
         <div class="order_input">
             <div class="input_title">
-                Logo/Image:
+                {pigcms{:L('QW_STORELOGO')}:
             </div>
             <div id="product_img">
                 <img src="{pigcms{$store.image}" width="200" />
@@ -96,26 +96,26 @@
         </div>
         <div class="order_input">
             <div class="input_title">
-                Description:
+                {pigcms{:L('QW_STOREDESCRP')}:
             </div>
             <div class="item_show">{pigcms{$store.txt_info}</div>
         </div>
         <div class="order_input">
             <div class="input_title">
-                Keywords:
+                {pigcms{:L('QW_KEYWORDS')}:
             </div>
             <div class="item_show">{pigcms{$store.feature}</div>
         </div>
     </div>
 
     <div class="to_btn" id="manage_time" style="margin-top: 30px;">
-        Manage Delivery Hours
+        {pigcms{:L('QW_HOURS')}
     </div>
     <div class="to_btn" id="manage_pwd" style="margin-top: 10px;">
-        Change My Password
+        {pigcms{:L('QW_CHANGE_PASSWORD')}
     </div>
     <div class="to_btn" id="manage_mode" style="margin-top: 10px;">
-        Vacation Mode
+        {pigcms{:L('QW_CLOSURE')}
     </div>
 </div>
 <script type="text/javascript" src="{pigcms{$static_public}js/artdialog/jquery.artDialog.js"></script>
@@ -155,7 +155,7 @@
         if(is_close == 0){//操作 关闭店铺
             layer.open({
                 title:"{pigcms{:L('_STORE_REMIND_')}",
-                content:"{pigcms{:L('_STORE_CLOSE_TIP_')}",
+                content:"Are you sure to pause your store? It will automatically re-open on your next operating time frame.",
                 btn: ["{pigcms{:L('_B_D_LOGIN_CONIERM_')}","{pigcms{:L('_B_D_LOGIN_CANCEL_')}"],
                 yes: function(index){
                     layer.close(index);

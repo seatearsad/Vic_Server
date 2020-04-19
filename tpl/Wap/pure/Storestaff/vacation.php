@@ -33,8 +33,8 @@
     <div class="v_mode_title">
         <div style="flex: 1 1 100%;line-height: 30px">Vacation Mode</div>
         <div class="turn_btn">
-            <span class="turn_on">ON</span>
-            <span class="turn_off">OFF</span>
+            <span class="turn_on">OPEN</span>
+            <span class="turn_off">CLOSED</span>
         </div>
     </div>
     <div id="reason">
@@ -46,28 +46,28 @@
                 <input type="radio" name="reason" value="1">
             </span>
             <span>
-                My store will be temporarily closed for holidays/vacations.
+                {pigcms{:L('QW_REASONA')}
             </span>
         </div>
-        <div class="reason_div">
+        <!--div class="reason_div">
             <span>
                 <input type="radio" name="reason" value="2">
             </span>
             <span>
                 I don't get many orders.
             </span>
-        </div>
+        </div-->
         <div class="reason_div">
             <span>
                 <input type="radio" name="reason" value="3">
             </span>
             <span>
-                Other : <input type="text" id="reason_input" name="reason_other" />
+                {pigcms{:L('QW_REASONC')} : <input type="text" id="reason_input" name="reason_other" />
             </span>
         </div>
     </div>
     <div style="margin-top: 30px">
-        By turning on the vacation mode, your store will be closed on Tutti platform and you will need to manually turn it off to re-open your store online.
+        {pigcms{:L('QW_CLOSUREDESCR')}
     </div>
 </div>
 <script type="text/javascript" src="{pigcms{$static_public}js/artdialog/jquery.artDialog.js"></script>

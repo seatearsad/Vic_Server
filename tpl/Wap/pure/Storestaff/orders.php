@@ -59,11 +59,11 @@
     <div style="text-align: center;font-size: 16px;">{pigcms{$store.name}</div>
     <div class="Statistics_top clr">
         <a href="javascript:void(0);" id="begin">
-            <h2>Start Date</h2>
+            <h2>{pigcms{:L('QW_STARTDATE')}</h2>
             <input type="text" readonly="readonly" placeholder="{pigcms{:L('_ND_STARTDATE_')}"  name="appDate" id="appDate" value="{pigcms{$_GET['begin_time']}">
         </a>
         <a href="javascript:void(0)" id="end">
-            <h2>End Date</h2>
+            <h2>{pigcms{:L('QW_ENDDATE')}</h2>
             <input type="text" readonly="readonly" placeholder="{pigcms{:L('_ND_ENDDATE_')}"  name="appDate1" id="appDate1" value="{pigcms{$_GET['end_time']}">
         </a>
     </div>

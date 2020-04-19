@@ -49,6 +49,13 @@
         opacity: 0;
         -ms-filter: 'alpha(opacity=0)';
     }
+    .input_title{
+        font-size: 14px;
+    }
+    .order_input input{
+        line-height: 30px;
+        font-size: 14px;
+    }
 </style>
 <body>
 <include file="header" />
@@ -67,16 +74,34 @@
             <div class="input_title">
                 {pigcms{:L('QW_ATLEAST')} *
             </div>
-            <input type="text" name="min" placeholder="{pigcms{:L('QW_MIN')}" value="{pigcms{$dish.min}" />
+            <select name="min" autocomplete="off">
+                <option value="-10">{pigcms{:L('QW_MIN')}</option>
+                <php>
+                    for($i=0;$i<=100;++$i){
+                </php>
+                <option value="{pigcms{$i}" <if condition="isset($dish['min']) and $i eq $dish['min']">selected=selected</if>>{pigcms{$i}</option>
+                <php>
+                    }
+                </php>
+            </select>
         </div>
         <div class="input_one" style="margin-left: 10%">
             <div class="input_title">
                 {pigcms{:L('QW_ATMOST')} *
             </div>
-            <input type="text" name="max" placeholder="{pigcms{:L('QW_MAX')}" value="{pigcms{$dish.max}" />
+            <select name="max" autocomplete="off">
+                <option value="-10">{pigcms{:L('QW_MAX')}</option>
+                <php>
+                    for($i=-1;$i<=100;++$i){
+                </php>
+                <option value="{pigcms{$i}" <if condition="$dish['max'] and $i eq $dish['max']">selected=selected</if>>{pigcms{$i}</option>
+                <php>
+                    }
+                </php>
+            </select>
         </div>
     </div>
-    <div style="margin: 5px 0 15px 0;">
+    <div style="margin: 5px 0 15px 0;display: none;">
         Input "0" to make it optional; input "-1" to indicate "unlimited"; input the exact same number for both min. and max. to required customers choose an exact number of options.
     </div>
     <div class="order_input">
@@ -132,7 +157,7 @@
 <script type="text/javascript" src="{pigcms{$static_public}js/artdialog/iframeTools.js"></script>
 <script>
     $('#confirm_order').click(function () {
-        if($('input[name="name"]').val() == '' || $('input[name="min"]').val() == '' || $('input[name="max"]').val() == ''){
+        if($('input[name="name"]').val() == '' || $('select[name="min"] option:selected').val() == -10 || $('select[name="max"] option:selected').val() == -10){
             layer.open({
                 content: "Please input required optional.",
                 btn: ["{pigcms{:L('_B_D_LOGIN_CONIERM_')}"]
@@ -141,8 +166,8 @@
         }
         var data = {};
         data['name'] = $('input[name="name"]').val();
-        data['min'] = $('input[name="min"]').val();
-        data['max'] = $('input[name="max"]').val();
+        data['min'] = $('select[name="min"] option:selected').val();
+        data['max'] = $('select[name="max"] option:selected').val();
         data['type'] = $('select[name="type"] option:selected').val();
         data['dish_id'] = $('input[name="dish_id"]').val();
         data['goods_id'] = "{pigcms{$goods['goods_id']}"
@@ -282,16 +307,16 @@
         var img_2 = "{pigcms{$static_path}img/staff_menu/dish_ex_2.jpg";
         var tip_message = "<div>" +
             "                <div style='text-align: center;font-weight: bold;margin-top: -20px;'>" +
-            "                    Allow customers to choose the same option multiple times?" +
+            "                    {pigcms{:L('QW_SINGLEMULTI')}" +
             "                </div>" +
             "                <div style='margin-top: 20px'>"+
-            "                    When you choose \"No\", it means you only allow users to choose one of each add-on item under an option. See an example below:" +
+            '                    {pigcms{:L('QW_SINGLEMULTIDESCRA')}' +
             "                </div>" +
             "                <div style='text-align: center;'>"+
             "                <img src=\""+img_1+"\" width=\"230\">" +
             "                </div>" +
             "                <div style='margin-top: 20px'>"+
-            "                    When you choose \"Yes\", it means you allow users to modify the quantity of an add-on item under an option. See an example below:" +
+            '                    {pigcms{:L('QW_SINGLEMULTIDESCRB')}' +
             "                </div>" +
             "                <div style='text-align: center;'>"+
             "                <img src=\""+img_2+"\" width=\"230\">" +

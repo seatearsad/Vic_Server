@@ -32,7 +32,7 @@
     </div>
     <volist name="sort_list" id="vo">
         <div class="cate_list <if condition='$i%2 eq 1'>list_right</if>" data-id="{pigcms{$vo.sort_id}">
-            <div style="font-weight: bold;line-height: 25px;">{pigcms{$vo.sort_name}</div>
+            <div style="font-weight: bold;line-height: 25px;font-size: 14px;">{pigcms{$vo.sort_name}</div>
             <div>
                 <if condition="$vo['stop_count'] gt 0 ">
                     <label class="r_color">

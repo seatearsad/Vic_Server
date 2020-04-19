@@ -191,8 +191,8 @@ body{
 .con_layer_confirm .confirm_txt{
     color: #666666;
     font-weight: normal;
-    width: 140px;
-    margin-top: 0px;
+    width: 150px;
+    margin: 0px 0px 5px 0px;
 }
 .confirm_txt{
     font-weight: bold;
@@ -212,7 +212,7 @@ body{
     text-align: center;
 }
 .confirm_btn{
-    width: 35%;
+    width: 30%;
     height: 35px;
     background: #ffa52d;
     border-radius: 5px;
@@ -226,7 +226,7 @@ body{
 .con_layer_confirm .confirm_btn{
     border: 0px;
     background:none;
-    color: #77b800;
+    color: #008137;
 }
 .order_total{
     margin-top: 10px;
@@ -362,6 +362,7 @@ body{
 .goods_name{
     width: 45%;
     padding-left: 8%;
+    color: #666666;
 }
 .goods_price{
     width: 25%;
@@ -478,10 +479,12 @@ body{
 .op_name{
     font-size: 16px;
     font-weight: bold;
+    color: #666666;
 }
 .op_desc{
     line-height: 30px;
     border-bottom: 1px dashed #999999;
+    color: #666666;
 }
 .op_open{
     -moz-transform:rotate(180deg);
@@ -623,22 +626,24 @@ body{
     color: #333333;
 }
 .turn_btn{
-    width: 120px;
+    width: 130px;
     height: 30px;
     border-radius: 5px;
     background-color: #ffa52d;
     padding: 2px 2px;
     box-sizing: border-box;
     cursor: pointer;
+    flex: 0 0 auto;
 }
 .turn_btn span{
     display: inline-block;
-    width: 50px;
+    width: 60px;
     height: 26px;
     line-height: 26px;
     background-color: white;
     text-align: center;
     border-radius: 5px;
+    font-size: 14px;
 }
 .turn_off{
     margin-left: 60px;

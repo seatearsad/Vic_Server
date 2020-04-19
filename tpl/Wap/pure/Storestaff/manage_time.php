@@ -303,7 +303,7 @@ line-height: .7rem;
         </ul>
         <div class="week_time">
             <dl>
-                <dd class="top_10">Time Frame 1</dd>
+                <dd class="top_10">{pigcms{:L('QW_TIMEA')}</dd>
                 <dd class="top_10"></dd>
                 <dd id="time_dd">
                     <input type="text" name="open_time_1" id="open_time_1">
@@ -311,7 +311,7 @@ line-height: .7rem;
                 <dd id="time_dd">
                     <input type="text" name="close_time_1" id="close_time_1">
                 </dd>
-                <dd class="top_10">Time Frame 2</dd>
+                <dd class="top_10">{pigcms{:L('QW_TIMEB')}</dd>
                 <dd class="top_10"></dd>
                 <dd id="time_dd">
                     <input type="text" name="open_time_2" id="open_time_2">
@@ -319,7 +319,7 @@ line-height: .7rem;
                 <dd id="time_dd">
                     <input type="text" name="close_time_2" id="close_time_2">
                 </dd>
-                <dd class="top_10">Time Frame 3</dd>
+                <dd class="top_10">{pigcms{:L('QW_TIMEC')}</dd>
                 <dd class="top_10"></dd>
                 <dd id="time_dd">
                     <input type="text" name="open_time_3" id="open_time_3">
@@ -337,7 +337,7 @@ line-height: .7rem;
         <div class="time_desc">* {pigcms{:L('_STORE_TIME_TIP_4_')}.</div>
     </div>
     <div class="confirm_btn_order" id="submit">
-            Submit
+            {pigcms{:L('QW_SUBMIT')}
     </div>
     <form id="time_form" autocomplete="off" method="post" action="{pigcms{:U('Storestaff/edit_time')}">
         <php>

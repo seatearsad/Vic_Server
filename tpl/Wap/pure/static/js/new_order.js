@@ -28,7 +28,7 @@ function getNewOrder(){
                 audio.src = sound_url;
                 audio.play();
             }
-            if(result.list != null && document.getElementById('OrderListTpl')){
+            if(result.list != null && result.list.length > 0 && document.getElementById('OrderListTpl')){
                 laytpl($('#OrderListTpl').html()).render(result.list, function(html){
                     $('.list_ul').html(html);
                     if(click_id != 0){

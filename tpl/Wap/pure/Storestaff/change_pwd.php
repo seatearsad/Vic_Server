@@ -26,6 +26,13 @@
         width: 100%;
         box-sizing: border-box;
     }
+    .input_title{
+        font-size: 14px;
+    }
+    .order_input input{
+        line-height: 30px;
+        font-size: 14px;
+    }
 </style>
 <body>
 <include file="header" />
@@ -34,22 +41,22 @@
         Change My Password
     </div>
     <div class="order_input">
-        <input type="text" name="curr_pwd" placeholder="Current Password" value="" />
+        <input type="text" name="curr_pwd" placeholder="{pigcms{:L('QW_CURRENTPASS')}" value="" />
     </div>
     <div class="order_input">
-        <input type="text" name="new_pwd" placeholder="New Password" value="" />
+        <input type="text" name="new_pwd" placeholder="{pigcms{:L('QW_NEWPASSWORD')}" value="" />
     </div>
     <div class="order_input">
-        <input type="text" name="re_pwd" placeholder="Re-enter Password" value="" />
+        <input type="text" name="re_pwd" placeholder="{pigcms{:L('QW_RENEWPASS')}" value="" />
     </div>
     <div class="top_10 r_color" id="error_tip" style="display: none">
         *Sorry, the current password you provide is incorrect. Please try again.
     </div>
     <div class="top_10">
-        If you forgot your current password, please contact customer support to get a temporary password.
+        {pigcms{:L('QW_IFFORGETPASS')}
     </div>
     <div class="confirm_btn_order" id="confirm_order">
-        Continue
+        {pigcms{:L('QW_CONTINUE')}
     </div>
 </div>
 <script type="text/javascript" src="{pigcms{$static_public}js/artdialog/jquery.artDialog.js"></script>

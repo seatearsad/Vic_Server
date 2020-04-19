@@ -135,8 +135,8 @@
         </div>
         <if condition="$goods['spec_value'] neq '' or $goods['is_properties'] eq 1">
         <div class="option_div">
-            <div class="act_op" data-option="1">Options 1</div>
-            <div data-option="2">Options 2</div>
+            <div class="act_op" data-option="1">{pigcms{:L('QW_OPTIONA')}</div>
+            <div data-option="2">{pigcms{:L('QW_OPTIONB')}</div>
         </div>
         </if>
         <div class="op_1" style="margin-top: 20px">
@@ -171,7 +171,7 @@
         <if condition="$goods['spec_value'] neq '' or $goods['is_properties'] eq 1">
         <div class="op_2" style="display: none">
             <div style="margin-top: 10px;text-align: center">
-                Options under this section will be gradually changed in a format of Options 1 by our customer support team. To deleted or make changes, please contact 1-888-399-6668.
+                {pigcms{:L('QW_OPTIONBDESCR')}
             </div>
             <volist name="goods['properties']" id='vo'>
                 <div class="option_one">

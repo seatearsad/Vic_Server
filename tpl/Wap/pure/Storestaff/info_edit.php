@@ -44,6 +44,13 @@
         opacity: 0;
         -ms-filter: 'alpha(opacity=0)';
     }
+    .input_title{
+        font-size: 14px;
+    }
+    .order_input input{
+        line-height: 30px;
+        font-size: 14px;
+    }
 </style>
 <body>
 <include file="header" />
