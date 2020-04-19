@@ -102,9 +102,9 @@
 				<input type="password" name="pwd" placeholder="{pigcms{:L('_B_D_LOGIN_KEY1_')}" id="login_pwd">
 				<a href="javascript:void(0)"></a>
 			</li>
-            <li id="findpwd" style="font-size:10px;text-decoration:underline;text-align: right;color: #666666;margin-bottom: 15px;cursor: pointer;">
+            <!--li id="findpwd" style="font-size:10px;text-decoration:underline;text-align: right;color: #666666;margin-bottom: 15px;cursor: pointer;">
                 {pigcms{:L('_ND_FORGOTPASSWORD_')}
-            </li>
+            </li-->
 			<li class="Landd">
 				<input type="button" value="{pigcms{:L('_B_D_LOGIN_LOGIN1_')}" id="login_form">
 			</li>
