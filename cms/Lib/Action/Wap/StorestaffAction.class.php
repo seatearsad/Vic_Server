@@ -3886,6 +3886,35 @@ class StorestaffAction extends BaseAction
 
             D('Shop_order_log')->add_log(array('order_id' => $order_id, 'status' => 33, 'note' => $add_time));
 
+            $order = D('Shop_order')->where(array('order_id'=>$order_id))->find();
+            $store = D('Merchant_store')->where(array('store_id'=>$order['store_id']))->find();
+            $store['name'] = lang_substr($store['name'], 'en-us');
+            //发送给用户
+            $sms_data['uid'] = 0;
+            $sms_data['mobile'] = $order['userphone'];
+            $sms_data['sendto'] = 'user';
+            $sms_data['tplid'] = 583927;
+            $sms_data['params'] = [
+                $store['name'],
+                $add_time
+            ];
+            Sms::sendSms2($sms_data);
+
+            //发送给送餐员
+            if($order['order_status'] > 1) {
+                $deliver = D('Deliver_user')->where(array('uid'=>$supply['uid']))->find();
+                $sms_data['uid'] = 0;
+                $sms_data['mobile'] = $deliver['phone'];
+                $sms_data['sendto'] = 'deliver';
+                $sms_data['tplid'] = 583930;
+                $sms_data['params'] = [
+                    $store['name'],
+                    $add_time,
+                    $order_id
+                ];
+                Sms::sendSms2($sms_data);
+            }
+
             exit(json_encode(array('error'=>0)));
         }else{
             exit(json_encode(array('error'=>1)));
