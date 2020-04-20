@@ -3806,6 +3806,7 @@ class StorestaffAction extends BaseAction
         $store_id = intval($this->store['store_id']);
         $where = array('mer_id' => $this->store['mer_id'], 'store_id' => $store_id);
         $where['status'] = array('between','2,4');
+        $where['is_del'] = 0;
 
         if($_GET['begin_time'] && $_GET['end_time']){
             $where['create_time'] = array('between',strtotime($_GET['begin_time']).",".strtotime($_GET['end_time']." 23:59:59"));
