@@ -127,7 +127,7 @@
             {{# } }}
         </div>
         <div class="detail_user">
-            Placed by {{ d.username }} at {{ d.date }}
+            Placed by {{ d.username }} ({{ d.userphone }}) at {{ d.date }}
         </div>
         <div class="detail_note">
             {pigcms{:L('QW_NOTE')}:
