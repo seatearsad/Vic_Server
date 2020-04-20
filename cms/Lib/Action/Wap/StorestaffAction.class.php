@@ -3901,7 +3901,7 @@ class StorestaffAction extends BaseAction
             Sms::sendSms2($sms_data);
 
             //发送给送餐员
-            if($order['order_status'] > 1) {
+            if($order['order_status'] > 1 && $supply['uid']) {
                 $deliver = D('Deliver_user')->where(array('uid'=>$supply['uid']))->find();
                 $sms_data['uid'] = 0;
                 $sms_data['mobile'] = $deliver['phone'];
