@@ -27,7 +27,7 @@
 <include file="header" />
 <div id="main">
     <div style="text-align: center;font-size: 18px;">
-        Hi,<label style="font-weight: bold">{pigcms{$store.name}</label>
+        Hi, <label style="font-weight: bold">{pigcms{$store.name}</label>
     </div>
     <div style="text-align: center;font-size: 18px;margin-top: 30px">
         {pigcms{:L('QW_STORESTATUS')}:
@@ -58,7 +58,7 @@
     var sound_url = "{pigcms{$static_public}sound/soft-bells.mp3";
     var detail_url = "{pigcms{:U('Storestaff/getOrderDetail')}";
 </script>
-<script type="text/javascript" src="{pigcms{$static_path}js/new_order.js?v=1.9"></script>
+<script type="text/javascript" src="{pigcms{$static_path}js/new_order.js?v=2.3"></script>
 <script>
     var all_height = $(window).height();
     var all_width = $(window).width();

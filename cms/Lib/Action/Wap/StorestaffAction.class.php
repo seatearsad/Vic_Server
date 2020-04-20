@@ -3217,7 +3217,7 @@ class StorestaffAction extends BaseAction
             $data['new_time'] = $order['create_time'];
             $data['error'] = 0;
         }else{
-            $data['error'] = 1;
+            $data['error'] = 0;
         }
 
 //        if($last_time == 0)
@@ -3392,7 +3392,9 @@ class StorestaffAction extends BaseAction
             $order['deposit_price'] = $order['packing_charge'];
             $order['good_tax_price'] = $order['discount_price'];
             $order['packing_charge'] = 0;
-            $order['tax_price'] = $order['good_tax_price'] + ($order['freight_charge'] + $order['packing_charge']) * $store['tax_num']/100;
+            //$order['tax_price'] = $order['good_tax_price'] + ($order['freight_charge'] + $order['packing_charge']) * $store['tax_num']/100;
+            $order['tax_price'] = $order['good_tax_price'];
+            $order['tutti_comm'] = round(($order['goods_price'] - $order['merchant_reduce'] + $order['tax_price'])*$store['proportion']/100,2);
         }
         $order['tax_price'] = round($order['tax_price'],2);
 
@@ -3805,10 +3807,10 @@ class StorestaffAction extends BaseAction
         $where['status'] = array('egt',2);
 
         if($_GET['begin_time'] && $_GET['end_time']){
-            $where['create_time'] = array('between',strtotime($_GET['begin_time']).",".strtotime($_GET['end_time']));
+            $where['create_time'] = array('between',strtotime($_GET['begin_time']).",".strtotime($_GET['end_time']." 23:59:59"));
         }
 
-        $list = D('Shop_order')->field(array('order_id','create_time','goods_price','status'))->where($where)->order('status asc,create_time desc')->select();
+        $list = D('Shop_order')->field(array('order_id','create_time','goods_price','status'))->where($where)->order('create_time desc')->select();
 
         $this->assign('order_list',$list);
         $this->display();

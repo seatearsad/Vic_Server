@@ -83,7 +83,7 @@
             <option value="100">100 min</option>
         </select>
     </div>
-    <div style="margin-top: 20px">
+    <div style="margin-top: 20px;font-size: 14px;color: #666666;font-weight: bold;">
         {pigcms{:L('QW_ADDORDERB')}
     </div>
     <div style="margin-top: 20px">

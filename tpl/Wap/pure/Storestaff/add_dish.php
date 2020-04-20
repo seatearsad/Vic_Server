@@ -91,10 +91,11 @@
             </div>
             <select name="max" autocomplete="off">
                 <option value="-10">{pigcms{:L('QW_MAX')}</option>
+                <option value="-1" <if condition="isset($dish['max']) and -1 eq $dish['max']">selected=selected</if>>{pigcms{:L('QW_UNLIMITED')}</option>
                 <php>
-                    for($i=-1;$i<=100;++$i){
+                    for($i=1;$i<=100;++$i){
                 </php>
-                <option value="{pigcms{$i}" <if condition="$dish['max'] and $i eq $dish['max']">selected=selected</if>>{pigcms{$i}</option>
+                <option value="{pigcms{$i}" <if condition="isset($dish['max']) and $i eq $dish['max']">selected=selected</if>>{pigcms{$i}</option>
                 <php>
                     }
                 </php>
@@ -160,6 +161,13 @@
         if($('input[name="name"]').val() == '' || $('select[name="min"] option:selected').val() == -10 || $('select[name="max"] option:selected').val() == -10){
             layer.open({
                 content: "Please input required optional.",
+                btn: ["{pigcms{:L('_B_D_LOGIN_CONIERM_')}"]
+            });
+            return false;
+        }
+        if(parseInt($('select[name="max"] option:selected').val()) != -1 && parseInt($('select[name="min"] option:selected').val()) > parseInt($('select[name="max"] option:selected').val())){
+            layer.open({
+                content: "{pigcms{:L('QW_TIP_MINMAX')}",
                 btn: ["{pigcms{:L('_B_D_LOGIN_CONIERM_')}"]
             });
             return false;

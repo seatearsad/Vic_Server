@@ -109,9 +109,14 @@ function getOrderDetail(order_id) {
 
                         if(this_order.order_status == 1 || this_order.order_status == 2) {
                             $('#add_dining_time').show();
+                            $('.con_layer_confirm .confirm_txt').show();
+                            $('.con_layer_confirm .cha_time').show();
                             cal_time_show(this_order,0,1);
-                        }else
+                        }else {
                             $('#add_dining_time').hide();
+                            $('.con_layer_confirm .confirm_txt').hide();
+                            $('.con_layer_confirm .cha_time').hide();
+                        }
 
                         $('#item_all_con_num').html(this_order.num);
                         $('#print_order').unbind('click');

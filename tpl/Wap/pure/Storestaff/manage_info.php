@@ -155,7 +155,7 @@
         if(is_close == 0){//操作 关闭店铺
             layer.open({
                 title:"{pigcms{:L('_STORE_REMIND_')}",
-                content:"Are you sure to pause your store? It will automatically re-open on your next operating time frame.",
+                content:"{pigcms{:L('QW_STOP_STORE')}",
                 btn: ["{pigcms{:L('_B_D_LOGIN_CONIERM_')}","{pigcms{:L('_B_D_LOGIN_CANCEL_')}"],
                 yes: function(index){
                     layer.close(index);
