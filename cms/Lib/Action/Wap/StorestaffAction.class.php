@@ -3395,6 +3395,7 @@ class StorestaffAction extends BaseAction
             //$order['tax_price'] = $order['good_tax_price'] + ($order['freight_charge'] + $order['packing_charge']) * $store['tax_num']/100;
             $order['tax_price'] = $order['good_tax_price'];
             $order['tutti_comm'] = round(($order['goods_price'] - $order['merchant_reduce'] + $order['tax_price'])*$store['proportion']/100,2);
+            $order['merchant_refund'] = round(($order['goods_price'] + $order['deposit_price'] + $order['packing_charge'] - $order['merchant_reduce'] + $order['tax_price']) - $order['tutti_comm'],2);
         }
         $order['tax_price'] = round($order['tax_price'],2);
 
@@ -3804,7 +3805,7 @@ class StorestaffAction extends BaseAction
     public function orders(){
         $store_id = intval($this->store['store_id']);
         $where = array('mer_id' => $this->store['mer_id'], 'store_id' => $store_id);
-        $where['status'] = array('egt',2);
+        $where['status'] = array('between','2,4');
 
         if($_GET['begin_time'] && $_GET['end_time']){
             $where['create_time'] = array('between',strtotime($_GET['begin_time']).",".strtotime($_GET['end_time']." 23:59:59"));

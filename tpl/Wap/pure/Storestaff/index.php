@@ -272,7 +272,7 @@
             </div>
             {{# if(d.con_len > 0){ }}
             <div style="color: #999999">
-                You have {{ d.con_len }} order(s) in process now.
+                You have {{ d.con_len }} order(s) in progress now.
             </div>
             {{# } }}
         </div>
