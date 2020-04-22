@@ -2302,4 +2302,27 @@ class IndexAction extends BaseAction
         $fileName = 'Tutti.pdf';
         $mpdf->Output($fileName,'I');
     }
+
+    public function test_tran(){
+        $url = 'https://translation.googleapis.com/language/translate/v2?key=AIzaSyAxHAPoWlRu2Mz8APLwM8Ae6B3x1MJUlvU';
+        $headers = array();
+        $headers[]='Content-Type: application/json';
+        $data = [
+            'q'=> '我最喜欢的城市是堪培拉',
+            'source'=>'zh-CN',
+            'target'=>'en',
+            'format'=>'text',
+            'model'=>''
+        ];
+        $data = json_encode($data);
+        //$res = curl($url,'post',$data,$headers);
+
+        //$url = 'https://maps.googleapis.com/maps/api/place/autocomplete/json?input='.urlencode($_GET['query']).'&types=address&key=AIzaSyAxHAPoWlRu2Mz8APLwM8Ae6B3x1MJUlvU&location=48.43016873926502,-123.34303379055086&radius=50000&components=country:ca&language=en';
+        import('ORG.Net.Http');
+        $http = new Http();
+        $result = $http->curlPost($url,$data);
+
+        var_dump($result);die();
+    }
 }
+
