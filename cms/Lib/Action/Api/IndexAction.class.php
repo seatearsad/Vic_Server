@@ -2304,7 +2304,7 @@ class IndexAction extends BaseAction
     }
 
     public function test_tran(){
-        $url = 'https://translation.googleapis.com/language/translate/v2?key=AIzaSyAxHAPoWlRu2Mz8APLwM8Ae6B3x1MJUlvU';
+        $url = 'https://translation.googleapis.com/language/translate/v2';
         $headers = array();
         $headers[]='Content-Type: application/json';
         $data = [
@@ -2312,6 +2312,7 @@ class IndexAction extends BaseAction
             'source'=> 'en',
             'target'=> 'es',
             'format'=> 'text',
+            'key'=>'AIzaSyAxHAPoWlRu2Mz8APLwM8Ae6B3x1MJUlvU'
         ];
         $data = json_encode($data);
         //$res = curl($url,'post',$data,$headers);
