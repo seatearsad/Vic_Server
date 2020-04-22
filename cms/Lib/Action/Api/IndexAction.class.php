@@ -2312,7 +2312,7 @@ class IndexAction extends BaseAction
             'source'=>'zh-CN',
             'target'=>'en',
             'format'=>'text',
-            'model'=>''
+            'model'=>'base'
         ];
         $data = json_encode($data);
         //$res = curl($url,'post',$data,$headers);
