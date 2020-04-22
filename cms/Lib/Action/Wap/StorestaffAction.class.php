@@ -1773,6 +1773,20 @@ class StorestaffAction extends BaseAction
                 Sms::sendSms2($sms_data);
             }
 
+            if(isset($_POST['dining_time']) && $_POST['dining_time'] >= 40){
+                $store = D('Merchant_store')->where(array('store_id'=>$order['store_id']))->find();
+                $store['name'] = lang_substr($store['name'], 'en-us');
+                $sms_data['uid'] = $order['uid'];
+                $sms_data['mobile'] = $order['userphone'];
+                $sms_data['sendto'] = 'user';
+                $sms_data['tplid'] = 585843;
+                $sms_data['params'] = [
+                    $store['name'],
+                    $_POST['dining_time']
+                ];
+                Sms::sendSms2($sms_data);
+            }
+
             //发送信息
             //获取所有的配送员
 //            $rs = D('Deliver_user')->field(true)->where(array('status' => 1, 'work_status' => 0))->select();
