@@ -2304,24 +2304,25 @@ class IndexAction extends BaseAction
     }
 
     public function test_tran(){
-        $url = 'https://translation.googleapis.com/language/translate/v2';
-        $headers = array();
-        $headers[]='Content-Type: application/json';
-        $data = [
-            'q'=> 'like you',
-            'source'=> 'en',
-            'target'=> 'es',
-            'format'=> 'text',
-            'key'=>'AIzaSyAxHAPoWlRu2Mz8APLwM8Ae6B3x1MJUlvU'
-        ];
-        $data = json_encode($data);
-        //$res = curl($url,'post',$data,$headers);
-
-        //$url = 'https://maps.googleapis.com/maps/api/place/autocomplete/json?input='.urlencode($_GET['query']).'&types=address&key=AIzaSyAxHAPoWlRu2Mz8APLwM8Ae6B3x1MJUlvU&location=48.43016873926502,-123.34303379055086&radius=50000&components=country:ca&language=en';
         import('ORG.Net.Http');
         $http = new Http();
-        $result = $http->curlPost($url,$data);
 
+        $url = 'https://translation.googleapis.com/language/translate/v2?key=AIzaSyAxHAPoWlRu2Mz8APLwM8Ae6B3x1MJUlvU&target=es&q=like';
+//        $headers = array();
+//        $headers[]='Content-Type: application/json';
+//        $data = [
+//            'q'=> 'like you',
+//            'source'=> 'en',
+//            'target'=> 'es',
+//            'format'=> 'text',
+//        ];
+        //$data = json_encode($data);
+        //$result = curl($url,'post',$data,$headers);
+
+        //$url = 'https://maps.googleapis.com/maps/api/place/autocomplete/json?input='.urlencode($_GET['query']).'&types=address&key=AIzaSyAxHAPoWlRu2Mz8APLwM8Ae6B3x1MJUlvU&location=48.43016873926502,-123.34303379055086&radius=50000&components=country:ca&language=en';
+
+        //$result = $http->curlPost($url,$data);
+        $result = $http->curlGet($url);
         var_dump($result);die();
     }
 }
