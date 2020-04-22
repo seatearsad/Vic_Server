@@ -2308,11 +2308,10 @@ class IndexAction extends BaseAction
         $headers = array();
         $headers[]='Content-Type: application/json';
         $data = [
-            'q'=> '我最喜欢的城市是堪培拉',
-            'source'=>'zh-CN',
-            'target'=>'en',
-            'format'=>'text',
-            'model'=>'base'
+            'q'=> 'like you',
+            'source'=> 'en',
+            'target'=> 'es',
+            'format'=> 'text',
         ];
         $data = json_encode($data);
         //$res = curl($url,'post',$data,$headers);
