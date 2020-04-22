@@ -2307,8 +2307,8 @@ class IndexAction extends BaseAction
         import('ORG.Net.Http');
         $http = new Http();
 
-        $q = $_POST['text'];
-        $url = 'https://translation.googleapis.com/language/translate/v2?key=AIzaSyAxHAPoWlRu2Mz8APLwM8Ae6B3x1MJUlvU&target=zh-CH&q='+urlencode($q);
+        //$q = $_POST['text'];
+        $url = 'https://translation.googleapis.com/language/translate/v2?key=AIzaSyAxHAPoWlRu2Mz8APLwM8Ae6B3x1MJUlvU&target=zh-CH&q='+urlencode("Hellow world!");
 //        $headers = array();
 //        $headers[]='Content-Type: application/json';
 //        $data = [
