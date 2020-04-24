@@ -1897,6 +1897,17 @@ class IndexAction extends BaseAction
         $this->returnCode(0,'info',$info,'success');
     }
 
+    public function set_nickname(){
+        $uid = $_POST['uid'];
+        $nickname = $_POST['nickname'];
+
+        if($nickname && $nickname!= ''){
+            D('User')->where(array('uid'=>$uid))->save(array('nickname'=>$nickname));
+        }
+
+        $this->returnCode(0,'info',array(),'success');
+    }
+
     public function get_invitation(){
         $uid = $_POST['uid'];
 
