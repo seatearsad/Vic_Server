@@ -87,6 +87,12 @@
         </div>
         <div class="order_input">
             <div class="input_title">
+                商品税率*
+            </div>
+            <div class="item_show">{pigcms{$goods.tax_num} %</div>
+        </div>
+        <div class="order_input">
+            <div class="input_title">
                 {pigcms{:L('QW_DESCRIPTION')}
             </div>
             <div class="item_show">{pigcms{$goods.des}</div>

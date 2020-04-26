@@ -79,6 +79,12 @@
     </div>
     <div class="order_input">
         <div class="input_title">
+            商品税率 % *
+        </div>
+        <input type="text" name="tax_num" placeholder="0.00" value="{pigcms{$goods.tax_num|default=$now_store['default_tax']}" />
+    </div>
+    <div class="order_input">
+        <div class="input_title">
             {pigcms{:L('QW_DESCRIPTION')}
         </div>
         <textarea name="desc">{pigcms{$goods.dsc}</textarea>
@@ -162,7 +168,7 @@
     });
 
     $('#confirm_order').click(function () {
-        if($('input[name="name_en"]').val() == '' || $('input[name="price"]').val() == ''){
+        if($('input[name="name_en"]').val() == '' || $('input[name="price"]').val() == '' || $('input[name="tax_num"]').val() == ''){
             alert('Please input required optional.');
             return false;
         }
@@ -176,6 +182,7 @@
         data['sort'] = $('input[name="sort"]').val();
         data['deposit'] = $('input[name="deposit_price"]').val();
         data['goods_id'] = $('input[name="goods_id"]').val();
+        data['tax_num'] = $('input[name="tax_num"]').val();
 
         layer.open({
             type:2,

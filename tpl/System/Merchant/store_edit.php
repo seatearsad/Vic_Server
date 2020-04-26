@@ -75,6 +75,10 @@
                 <th width="80">{pigcms{:L('_BACK_PROPORTION_')}</th>
                 <td><input type="text" class="input fl" name="proportion" size="5" value="{pigcms{$store['proportion']}" validate="required:true,number:true,maxlength:6" />%</td>
             </tr>
+            <tr>
+                <th width="80">商品默认税率</th>
+                <td><input type="text" class="input fl" name="default_tax" size="5" value="{pigcms{$store['default_tax']}" validate="required:true,number:true,maxlength:6" />%</td>
+            </tr>
 		</table>
 		<div class="btn hidden">
 			<input type="submit" name="dosubmit" id="dosubmit" value="提交" class="button" />

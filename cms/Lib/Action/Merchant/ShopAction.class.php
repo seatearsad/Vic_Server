@@ -1257,6 +1257,29 @@ class ShopAction extends BaseAction
 
                 D('Shop_goods_properties')->addAll($add_list);
             }
+
+            //复制配菜
+            $dish_list = D('Side_dish')->where(array('goods_id'=>$now_goods['goods_id']))->select();
+            if($dish_list && count($dish_list)){
+                $new_dish_v_list = array();
+                foreach ($dish_list as $dish){
+                    $value_list = D('Side_dish_value')->where(array('dish_id'=>$dish['id']))->select();
+                    $new_dish = $dish;
+                    $new_dish['goods_id'] = $new_goods_id;
+                    unset($new_dish['id']);
+
+                    $new_dish_id = D('Side_dish')->add($new_dish);
+
+                    foreach ($value_list as $v){
+                        $new_value = $v;
+                        $new_value['dish_id'] = $new_dish_id;
+                        unset($new_value['id']);
+
+                        $new_dish_v_list[] = $new_value;
+                    }
+                }
+                D('Side_dish_value')->addAll($new_dish_v_list);
+            }
         }
         $this->success('复制成功！');
     }

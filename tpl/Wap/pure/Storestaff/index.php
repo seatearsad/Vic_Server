@@ -328,7 +328,7 @@
             <span class="t_color">{pigcms{:L('QW_COMPLETED')}</span>
             {{# } }}
             )
-            {{# if(d.status > 0 && d.is_app){ }}
+            {{# if(d.status > 0 && d.status < 4 && d.is_app){ }}
             <span class="order_print" id="print_order"></span>
             {{# } }}
         </div>

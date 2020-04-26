@@ -64,7 +64,7 @@
 			
 						<thead>
 							<tr>
-								<th>ID</th>
+								<th>OrderID</th>
 								<th>{pigcms{:L('_BACK_FROM_')}</th>
 								<!--th>配送员类型</th-->
 								<th>{pigcms{:L('_BACK_STORE_NAME_')}</th>
@@ -90,7 +90,7 @@
 							<if condition="is_array($supply_info)">
 								<volist name="supply_info"  id="vo">
 									<tr class="<if condition='$i%2 eq 0'>odd<else/>even</if> order_line" data-id="{pigcms{$vo.order_id}">
-										<td width="30">{pigcms{$vo.supply_id}</td>
+										<td width="30">{pigcms{$vo.order_id}</td>
 										<td width="40"><if condition="$vo['item'] eq 0">{pigcms{:L('_BACK_DINE_')}<elseif condition="$vo['item'] eq 1" />外送系统<elseif condition="$vo['item'] eq 2" />{pigcms{:L('_BACK_DELIVERY_')}</if></td>
 										<!--td width="50">{pigcms{$vo.group}</td-->
 										<td width="80">{pigcms{$vo.storename}</td>

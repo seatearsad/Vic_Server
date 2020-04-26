@@ -3590,7 +3590,7 @@ class StorestaffAction extends BaseAction
             $goods_data['sort'] = $_POST['sort'] ? $_POST['sort'] : 0;
             $goods_data['last_time'] = time();
             $goods_data['status'] = 1;
-            $goods_data['tax_num'] = 5;
+            $goods_data['tax_num'] = $_POST['tax_num'] ? $_POST['tax_num'] : $this->store['default_tax'];
             $goods_data['deposit_price'] = $_POST['deposit'] ? $_POST['deposit'] : 0;
 
             if($_POST['goods_id'] && $_POST['goods_id'] != 0){
@@ -3608,6 +3608,8 @@ class StorestaffAction extends BaseAction
             $sort = D('Shop_goods_sort')->where(array('sort_id' => $sort_id))->find();
             $sort['sort_name'] = lang_substr($sort['sort_name'], C('DEFAULT_LANG'));
             $this->assign('sort', $sort);
+
+            $this->assign('now_store',$this->store);
 
             $sort_list = D('Shop_goods_sort')->where(array('store_id' => $this->store['store_id']))->order('sort desc')->select();
             $this->assign('sort_list', $sort_list);
