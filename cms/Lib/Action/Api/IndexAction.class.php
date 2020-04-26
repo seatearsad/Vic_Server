@@ -1914,11 +1914,25 @@ class IndexAction extends BaseAction
         $newPwd = $_POST['newPwd'];
 
         $user = D('User')->where(array('uid'=>$uid))->find();
-        if($user['password'] != md5($oldPwd)){
+        if($user['pwd'] != md5($oldPwd)){
             $this->returnCode(1,'info',array(),L('_B_MY_WRONGKEY_'));
         }else{
-            D('User')->where(array('uid'=>$uid))->save(array('password'=>md5($newPwd)));
+            D('User')->where(array('uid'=>$uid))->save(array('pwd'=>md5($newPwd)));
             $this->returnCode(0,'info',array(),'success');
+        }
+    }
+
+    public function setEmail(){
+        $uid = $_POST['uid'];
+        if($_POST['email']){
+            $result = D('User')->save_user($uid,'email',$_POST['email']);
+            if($result['error']){
+                $this->returnCode(1,'info',array(),'Error');
+            }else{
+                $this->returnCode(0,'info',array(),'success');
+            }
+        }else{
+            $this->returnCode(1,'info',array(),'Error');
         }
     }
 
