@@ -1908,6 +1908,20 @@ class IndexAction extends BaseAction
         $this->returnCode(0,'info',array(),'success');
     }
 
+    public function changePassword(){
+        $uid = $_POST['uid'];
+        $oldPwd = $_POST['oldPwd'];
+        $newPwd = $_POST['newPwd'];
+
+        $user = D('User')->where(array('uid'=>$uid))->find();
+        if($user['password'] != md5($oldPwd)){
+            $this->returnCode(1,'info',array(),L('_B_MY_WRONGKEY_'));
+        }else{
+            D('User')->where(array('uid'=>$uid))->save(array('password'=>md5($newPwd)));
+            $this->returnCode(0,'info',array(),'success');
+        }
+    }
+
     public function get_invitation(){
         $uid = $_POST['uid'];
 
