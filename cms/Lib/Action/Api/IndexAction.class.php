@@ -1922,6 +1922,33 @@ class IndexAction extends BaseAction
         }
     }
 
+    public function setPhone(){
+        $uid = $_POST['uid'];
+        $phone = $_POST['phone'];
+        $vcode = $_POST['vcode'];
+        $database_user = D('User');
+        if(empty($_POST['phone'])){
+            $this->returnCode(1,'info',array(),L('_B_LOGIN_ENTERPHONENO_'));
+        }
+
+        $condition_user['phone'] = $_POST['phone'];
+        if($database_user->field(true)->where($condition_user)->find()){
+            $this->returnCode(1,'info',array(),L('_B_MY_HAVETELNUM_'));
+        }
+
+        if($vcode){
+            $sms_verify_result = D('Smscodeverify')->verify($vcode, $_POST['phone']);
+            if ($sms_verify_result['error_code']) {
+                $this->returnCode(1,'info',array(),$sms_verify_result['msg']);
+            } else {
+                $modifypwd = $sms_verify_result['modifypwd'];
+            }
+        }
+
+        $database_user->where(array('uid'=>$uid))->save(array('phone'=>$phone));
+        $this->returnCode(0,'info',array(),'success');
+    }
+
     public function setEmail(){
         $uid = $_POST['uid'];
         if($_POST['email']){
