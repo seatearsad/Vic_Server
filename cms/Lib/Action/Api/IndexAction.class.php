@@ -439,7 +439,7 @@ class IndexAction extends BaseAction
 
         $result = $this->loadModel()->addUserAddress($data);
 
-        $this->returnCode(0,'info',$result,'success');
+        $this->returnCode(0,'info',array(),'success');
     }
 
     public function delUserAddress(){
