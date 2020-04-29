@@ -700,7 +700,8 @@ class IndexAction extends BaseAction
                 }
             }
         }
-        $order_data['is_mobile_pay'] = 2;
+        //garfunkel 判断来源 2or3 Apple app | 4 Android
+        $order_data['is_mobile_pay'] = $_POST['cer_type'];;
 
         $order_data['delivery_discount'] = $_POST['delivery_discount'] ? $_POST['delivery_discount'] : 0;
         $order_data['merchant_reduce'] = $_POST['merchant_reduce'] ? $_POST['merchant_reduce'] : 0;
