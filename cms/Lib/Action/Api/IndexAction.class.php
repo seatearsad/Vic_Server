@@ -2157,7 +2157,7 @@ class IndexAction extends BaseAction
                         'lat' => $place['result']['geometry']['location']['lat'],
                         'long' => $place['result']['geometry']['location']['lng'],
                         'address' => $v['description'],
-                        'city_name'=>$v['term'][2]['value']
+                        'city_name'=>$v['terms'][2]['value']
                     ];
                 }
                 //exit(json_encode(array('status'=>1,'result'=>$return)));
