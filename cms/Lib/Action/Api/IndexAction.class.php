@@ -2138,6 +2138,72 @@ class IndexAction extends BaseAction
 
     }
 
+    public function suggestion(){
+        header("Content-type: application/json");
+        $url = 'https://maps.googleapis.com/maps/api/place/autocomplete/json?input='.urlencode($_POST['query']).'&types=address&key=AIzaSyAxHAPoWlRu2Mz8APLwM8Ae6B3x1MJUlvU&location=48.43016873926502,-123.34303379055086&radius=50000&components=country:ca&language=en';
+        import('ORG.Net.Http');
+        $http = new Http();
+        $result = $http->curlGet($url);
+        if($result){
+            $result = json_decode($result,true);
+            if($result['status'] == 'OK' && count($result['predictions']) > 0){
+                $return = [];
+                foreach($result['predictions'] as $v) {
+                    $place_url = 'https://maps.googleapis.com/maps/api/place/details/json?placeid='.$v['place_id'].'&key=AIzaSyAxHAPoWlRu2Mz8APLwM8Ae6B3x1MJUlvU&fields=geometry&language=en';
+                    $place = $http->curlGet($place_url);
+                    $place = json_decode($place,true);
+                    $return[] = [
+                        'name' => $v['description'],
+                        'lat' => $place['result']['geometry']['location']['lat'],
+                        'long' => $place['result']['geometry']['location']['lng'],
+                        'address' => $v['description'],
+                        'city_name'=>$v['term'][2]['value']
+                    ];
+                }
+                //exit(json_encode(array('status'=>1,'result'=>$return)));
+                $this->returnCode(0,'info',$return,'success');
+            }else{
+                //exit(json_encode(array('status'=>2,'result'=>'没有查找到内容')));
+                $this->returnCode(1,'info',array(),'没有查找到内容');
+            }
+        }else{
+            //exit(json_encode(array('status'=>0,'result'=>'获取失败')));
+            $this->returnCode(1,'info',array(),'获取失败');
+        }
+    }
+
+    public function geocoderGoogle($lng, $lat){
+        $url = 'https://maps.google.com/maps/api/geocode/json?latlng='.$lat.','.$lng.'&language=en&sensor=false&key=AIzaSyAxHAPoWlRu2Mz8APLwM8Ae6B3x1MJUlvU';
+        import('ORG.Net.Http');
+        $http = new Http();
+        $result = $http->curlGet($url);
+        if($result){
+            $result = json_decode($result,true);
+            if($result['status'] == 'OK' && count($result['results']) > 0){
+                $return = [];
+                foreach($result['results'] as $v) {
+                    $city_name = "";
+                    foreach ($v['address_components'] as $add_com){
+                        if($add_com['types'][0] == 'locality'){
+                            $city_name = $add_com['long_name'];
+                        }
+                    }
+                    $return[] = [
+                        'name' => $v['address_components'][0]['long_name'],
+                        'lat' => $v['geometry']['location']['lat'],
+                        'long' => $v['geometry']['location']['lng'],
+                        'address' => $v['formatted_address'],
+                        'city_name'=>$city_name
+                    ];
+                }
+                $this->returnCode(0,'info',$return,'success');
+                //exit(json_encode(array('status'=>1,'result'=>$return)));
+            }
+        }
+        //exit(json_encode(array('status'=>2,'result'=>'没有查找到内容')));
+        $this->returnCode(1,'info',array(),'没有查找到内容');
+    }
+
     public function AlipayTest(){
         $result = $this->loadModel()->WeixinAndAli(2,111,1);
         var_dump($result);
