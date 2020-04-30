@@ -2009,22 +2009,26 @@ class IndexAction extends BaseAction
     public function getRechargeDisForAndroid(){
         $config = D('Config')->get_config();
         $recharge_txt = $config['recharge_discount'];
-        $recharge = explode(",",$recharge_txt);
-        $recharge_list = array();
-        foreach ($recharge as $v){
-            $v_a = explode("|",$v);
-            $t_value['amount'] = $v_a[0];
-            $t_value['discount'] = $v_a[1];
+        if($recharge_txt == ''){
+            $this->returnCode(0, 'info', array(), 'success');
+        }else {
+            $recharge = explode(",", $recharge_txt);
+            $recharge_list = array();
+            foreach ($recharge as $v) {
+                $v_a = explode("|", $v);
+                $t_value['amount'] = $v_a[0];
+                $t_value['discount'] = $v_a[1];
 
-            $recharge_list[] = $t_value;
-        }
+                $recharge_list[] = $t_value;
+            }
 
-        $score = [];
-        foreach ($recharge_list as $key => $value) {
-            $score[$key] = $value['amount'];
+            $score = [];
+            foreach ($recharge_list as $key => $value) {
+                $score[$key] = $value['amount'];
+            }
+            array_multisort($score, SORT_ASC, $recharge_list);
+            $this->returnCode(0, 'info', $recharge_list, 'success');
         }
-        array_multisort($score, SORT_ASC, $recharge_list);
-        $this->returnCode(0,'info',$recharge_list,'success');
     }
 
     public function createRechargeOrder(){
