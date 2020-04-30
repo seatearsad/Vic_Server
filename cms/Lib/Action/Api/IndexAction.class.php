@@ -2172,7 +2172,9 @@ class IndexAction extends BaseAction
         }
     }
 
-    public function geocoderGoogle($lng, $lat){
+    public function geocoderGoogle(){
+        $lat = $_POST['lat'];
+        $lng = $_POST['lng'];
         $url = 'https://maps.google.com/maps/api/geocode/json?latlng='.$lat.','.$lng.'&language=en&sensor=false&key=AIzaSyAxHAPoWlRu2Mz8APLwM8Ae6B3x1MJUlvU';
         import('ORG.Net.Http');
         $http = new Http();
