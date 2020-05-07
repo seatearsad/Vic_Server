@@ -2400,9 +2400,11 @@ class IndexAction extends BaseAction
         import('ORG.Net.Http');
         $http = new Http();
 
-        $url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=".$app_id."&secret=".$app_secret;
+        $url = "https://openapi.baidu.com/oauth/2.0/token?grant_type=client_credentials&client_id=XU7nTWQzS9vn32bckmrhHbTu&client_secret=1375720f23eed9b7b787e728de5dd1c2";
+        //$url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=".$app_id."&secret=".$app_secret;
         var_dump($url);
         $result = $http->curlGet($url);
+        //$result = httpRequest($url);
         var_dump($result);die();
     }
 }
