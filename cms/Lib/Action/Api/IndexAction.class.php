@@ -2391,5 +2391,19 @@ class IndexAction extends BaseAction
         $result = $http->curlGet($url);
         var_dump($result);die();
     }
+
+    public function test_wechat(){
+        $config = D('Config')->get_config();
+        $app_id = $config['wechat_appid'];
+        $app_secret = $config['wechat_appsecret'];
+
+        import('ORG.Net.Http');
+        $http = new Http();
+
+        $url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=".$app_id."&secret=".$app_secret;
+        var_dump($url);
+        $result = $http->curlGet($url);
+        var_dump($result);die();
+    }
 }
 
