@@ -143,7 +143,7 @@
     </div>
     <div id="memo">
         <img src="{pigcms{$static_public}images/deliver_box.png" width="120px">
-        <br/>$50.00
+        <br/>$55.00
     </div>
     <div id="reg_list">
         <ul>
