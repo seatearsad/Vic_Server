@@ -1163,7 +1163,7 @@ class Merchant_store_shopModel extends Model
             //$temp['coupon_list'] = $this->parseCoupon($temp['coupon_list'],'array');
 
             $temp['free_delivery'] = 0;
-            $temp['event'] = "";
+            $temp['event'] = array("use_price"=>"0","discount"=>"0","miles"=>0);
             if($delivery_coupon != "" && $delivery_coupon['limit_day']*1000 >= $row['juli']){
                 $temp['free_delivery'] = 1;
                 $t_event['use_price'] = $delivery_coupon['use_price'];
