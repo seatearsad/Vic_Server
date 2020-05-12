@@ -1159,6 +1159,7 @@ class Merchant_store_shopModel extends Model
 //                    }
 //                }
 //            }
+            
             $temp['coupon_count'] = count($temp['coupon_list']);
             //$temp['coupon_list'] = $this->parseCoupon($temp['coupon_list'],'array');
 
