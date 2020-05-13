@@ -717,7 +717,7 @@ class IndexAction extends BaseAction
             $order_param['order_type'] = 'shop';
             $order_param['pay_time'] = date();
             $order_param['pay_type'] = 'Cash';
-            $order_param['is_mobile'] = 2;
+            $order_param['is_mobile'] = $order_data['is_mobile_pay'];
             $order_param['is_own'] = 0;
             $order_param['third_id'] = 0;
 
@@ -736,7 +736,7 @@ class IndexAction extends BaseAction
                     'pay_type' => '',
                     'order_type'=> 'shop',
                     'third_id' => '',
-                    'is_mobile' => 2,
+                    'is_mobile' => $order_data['is_mobile_pay'],
                     'pay_money' => 0,
                     'order_total_money' => $order_data['price'] + $order_data['tip_charge'] - $order_data['coupon_price'],
                     'balance_pay' => $order_data['price'] + $order_data['tip_charge'] - $order_data['coupon_price'],
@@ -1143,7 +1143,7 @@ class IndexAction extends BaseAction
             $order_param['order_type'] = 'shop';
             $order_param['pay_time'] = date();
             $order_param['pay_type'] = 'Cash';
-            $order_param['is_mobile'] = 2;
+            //$order_param['is_mobile'] = 2;
             $order_param['is_own'] = 0;
             $order_param['third_id'] = 0;
 
@@ -1162,7 +1162,7 @@ class IndexAction extends BaseAction
                     'pay_type' => '',
                     'order_type'=> 'shop',
                     'third_id' => '',
-                    'is_mobile' => 2,
+                    //'is_mobile' => 2,
                     'pay_money' => 0,
                     'order_total_money' => $price + $tip,
                     'balance_pay' => $price + $tip,
@@ -2045,7 +2045,7 @@ class IndexAction extends BaseAction
         $data_user_recharge_order['money'] = $money;
         // $data_user_recharge_order['order_name'] = '帐户余额在线充值';
         $data_user_recharge_order['add_time'] = $_SERVER['REQUEST_TIME'];
-        $data_user_recharge_order['is_mobile_pay'] = 2;
+        $data_user_recharge_order['is_mobile_pay'] = $_POST['cer_type'] ? $_POST['cer_type'] :2;
 
         if($order_id = D('User_recharge_order')->data($data_user_recharge_order)->add()){
             $this->returnCode(0,'info',$order_id,'success');
