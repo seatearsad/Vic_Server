@@ -808,6 +808,7 @@ class IndexAction extends BaseAction
                 $images = $store_image_class->get_allImage_by_path($li['pic_info']);
                 $li['image'] = $images ? array_shift($images) : array();
                 unset($li['status']);
+                $li['pay_method'] = explode('|',$li['pay_method']);
                 $m[$li['store_id']] = $li;
             }
         }
@@ -844,6 +845,7 @@ class IndexAction extends BaseAction
             $t['discount'] = $val['coupon_price'];
             $t['delivery_discount'] = $val['delivery_discount'];
             $t['merchant_reduce'] = $val['merchant_reduce'];
+            $t['pay_method'] = $val['pay_method'];
 
             $delivery = D('Deliver_supply')->field(true)->where(array('order_id'=>$val['order_id']))->find();
             if($delivery) {
