@@ -1191,6 +1191,13 @@ class Merchant_store_shopModel extends Model
                 }
             }
 
+            $keywords = D('Keywords')->where(array('third_type' => 'Merchant_store', 'third_id' => $row['store_id']))->select();
+            $str = "";
+            foreach ($keywords as $key) {
+                $str .= $key['keyword'] . " ";
+            }
+            $temp['keywords'] = $str;
+
             $return['list'][] = $temp;
         }
         $return['count'] = $t_list['total'];
