@@ -331,6 +331,26 @@ class IndexAction extends BaseAction
         $pwd = $_POST['password'];
         $token = $_POST['token'];
         $invi_code = $_POST['invi_code'];
+        $source = '';
+
+        $from = $_POST['from'] ? $_POST['from'] : 0;
+
+        switch ($from){
+            case 1:
+                $source = 'Wap';
+                break;
+            case 2:
+                $source = 'App';
+                break;
+            case 3:
+                $source = 'App';
+                break;
+            case 4:
+                $source = 'Android';
+                break;
+            default:
+                break;
+        }
 
         $result = $this->loadModel()->reg_phone_pwd_vcode($phone,$vcode,$pwd,$invi_code);
 
@@ -338,7 +358,7 @@ class IndexAction extends BaseAction
             $code = 1;
         else{
             $code = 0;
-            D('User')->where(array('uid'=>$result['uid']))->save(array('device_id'=>$token));
+            D('User')->where(array('uid'=>$result['uid']))->save(array('device_id'=>$token,'source'=>$source));
             //garfunkel add 查找是否有新用户送券活动 并添加优惠券
             D('New_event')->addEventCouponByType(1,$result['uid']);
         }
