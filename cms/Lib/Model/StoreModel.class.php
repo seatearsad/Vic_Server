@@ -861,7 +861,7 @@ class StoreModel extends Model
             L('_ORDER_STATUS_1_'),
             L('_ORDER_STATUS_2_'),
             L('_ORDER_STATUS_3_'),
-            L('_ORDER_STATUS_4_') ,
+            L('_ORDER_STATUS_4_'),
             L('_ORDER_STATUS_5_'),
             L('_ORDER_STATUS_6_'),
             L('_ORDER_STATUS_7_'),
@@ -873,9 +873,33 @@ class StoreModel extends Model
             L('_ORDER_STATUS_13_'),
             L('_ORDER_STATUS_14_'),
             L('_ORDER_STATUS_15_'),
-            30 => L('_ORDER_STATUS_30_'));
+            30 => L('_ORDER_STATUS_30_'),
+            33 => L('_ORDER_STATUS_33_'));
 
         return $status_list[$status];
+    }
+
+    public function getOrderStatusMark($status,$order_id,$log){
+        $mark = "";
+        switch ($status){
+            case 1:
+                $mark = "等待商家接单...";
+                break;
+            case 2:
+                $delivery = D('Deliver_supply')->where(array('order_id'=>$order_id))->find();
+                $mark = replace_lang_str("预计出餐时间:%s min",$delivery['dining_time']);
+                break;
+            case 3:
+                $mark = replace_lang_str("您的订单将有送餐员%s为您配送",$log['name']);
+                break;
+            case 33:
+                $mark = replace_lang_str("您的商家需要额外%smin出餐",$log['note']);
+                break;
+            default:
+                break;
+        }
+
+        return $mark;
     }
 
     public function getOrderStatusName($status){

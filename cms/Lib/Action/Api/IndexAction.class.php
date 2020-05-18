@@ -918,8 +918,8 @@ class IndexAction extends BaseAction
         $status = D('Shop_order_log')->field(true)->where(array('order_id' => $order['order_id']))->order('id DESC')->select();
         foreach ($status as $v){
             $data['status'] = $v['status'];
-            $data['mark'] = D('Store')->getOrderStatusStr($v['status']);
-            $data['name'] = $data['mark'];
+            $data['name'] = D('Store')->getOrderStatusStr($v['status']);
+            $data['mark'] = D('Store')->getOrderStatusMark($v['status'],$order['order_id'],$v);
             $data['createDate'] = date('Y-m-d H:i:s',$v['dateline']);
 
             $result[] = $data;
@@ -937,6 +937,7 @@ class IndexAction extends BaseAction
             $order_detail['payname'] = L('_UNPAID_TXT_');
         }else{
             $order_detail['statusname'] = D('Store')->getOrderStatusName($order['status']);
+            $order_detail['status'] = $order['status'];
             $order_detail['pay_type'] = $order['pay_type'];
             //$order_detail['payname'] = $order['pay_type'] == 'moneris' ? 'Paid Online' : 'Cash';
             if($order['pay_type'] == 'moneris'){
@@ -952,6 +953,7 @@ class IndexAction extends BaseAction
             }
         }
 
+        $order_detail['orderId'] = $order['order_id'];
         $order_detail['paid'] = $order['paid'];
         $order_detail['add_time'] = date('Y-m-d H:i:s',$order['create_time']);
         //$order_detail['payname'] = $order_detail['paymodel'] = D('Store')->getPayTypeName($order['pay_type']);
