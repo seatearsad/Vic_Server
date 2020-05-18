@@ -433,7 +433,7 @@ class StoreModel extends Model
 
     public function get_goods_by_storeId($storeId){
         $data_goods = D('Shop_goods');
-        $good_list = $data_goods ->field(true)->where(array('store_id' => $storeId, 'status' => 1))->order('goods_id ASC')->select();
+        $good_list = $data_goods ->field(true)->where(array('store_id' => $storeId, 'status' => 1))->order('sort desc,goods_id ASC')->select();
 
         $sort_list = $this->get_goods_group_by_storeId($storeId);
         $sortIdList = array();
