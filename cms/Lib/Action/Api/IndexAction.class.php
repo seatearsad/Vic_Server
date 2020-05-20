@@ -2076,6 +2076,19 @@ class IndexAction extends BaseAction
         }
     }
 
+    public function getRechargeList(){
+        $page = $_POST['page'];
+        $uid = $_POST['uid'];
+
+        $transaction = D('User_money_list')->get_list($uid,$page,20);
+        $transaction['count'] = 20;
+        foreach($transaction['money_list'] as $k=>$v){
+            $transaction['money_list'][$k]['time_s'] = date('Y-m-d H:i',$v['time']);
+        }
+        unset($transaction['pagebar']);
+        $this->returnCode(0,'info',$transaction,'success');
+    }
+
     public function testDistance(){
 //        die('henhao');
         $from = $_GET['from'];
