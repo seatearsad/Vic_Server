@@ -2085,6 +2085,9 @@ class IndexAction extends BaseAction
         foreach($transaction['money_list'] as $k=>$v){
             $transaction['money_list'][$k]['time_s'] = date('Y-m-d H:i',$v['time']);
         }
+        if(!$transaction['money_list'])
+            $transaction['money_list'] = array();
+        
         unset($transaction['pagebar']);
         $this->returnCode(0,'info',$transaction,'success');
     }
