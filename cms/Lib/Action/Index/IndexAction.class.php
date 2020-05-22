@@ -262,4 +262,8 @@ class IndexAction extends BaseAction {
 
         return $mail;
     }
+
+    public function map(){
+        $this->display();
+    }
 }
