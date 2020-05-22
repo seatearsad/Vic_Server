@@ -34,7 +34,6 @@
         var lng= Number(getQueryString("lng"));
         var lat=Number(getQueryString("lat"));
         var label=getQueryString("label");
-        alert(lng + lat);
         var uluru = {lat: lat, lng: lng};
         // The map, centered at Uluru
         var map = new google.maps.Map(
