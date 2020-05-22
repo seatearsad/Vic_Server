@@ -1349,6 +1349,7 @@ class IndexAction extends BaseAction
         $data['beginDate'] = date('Y.m.d',$coupon['start_time']);
         $data['endDate'] = date('Y.m.d',$coupon['end_time']);
         $data['type'] = "2";
+        $data['is_new'] = $coupon['allow_new'];
 
         if($coupon['is_use'] == 0)
             $data['status'] = $coupon['is_use'];
