@@ -634,7 +634,7 @@ class StoreModel extends Model
         return array('error_code' => false, 'msg' => '');
     }
 
-    public function reg_phone_pwd_vcode($phone,$vcode,$pwd,$invi_code = ''){
+    public function reg_phone_pwd_vcode($phone,$vcode,$pwd,$invi_code = '',$userName = '',$email = ''){
         $verify_result = D('Smscodeverify')->verify($vcode, $phone);
 
         if($verify_result['error_code'])
@@ -653,7 +653,7 @@ class StoreModel extends Model
             }
         }
 
-        $result = D('User')->checkreg($phone, $pwd);
+        $result = D('User')->checkreg($phone, $pwd,$userName,$email);
 
         if (!empty($result['user'])) {
             $userInfo = $this->getUserInfo($phone,$pwd);

@@ -352,7 +352,10 @@ class IndexAction extends BaseAction
                 break;
         }
 
-        $result = $this->loadModel()->reg_phone_pwd_vcode($phone,$vcode,$pwd,$invi_code);
+        $uname = $_POST['uname'] ? $_POST['uname'] : "";
+        $email = $_POST['email'] ? $_POST['email'] : "";
+
+        $result = $this->loadModel()->reg_phone_pwd_vcode($phone,$vcode,$pwd,$invi_code,$uname,$email);
 
         if ($result['error_code'])
             $code = 1;
@@ -2087,7 +2090,7 @@ class IndexAction extends BaseAction
         }
         if(!$transaction['money_list'])
             $transaction['money_list'] = array();
-        
+
         unset($transaction['pagebar']);
         $this->returnCode(0,'info',$transaction,'success');
     }
