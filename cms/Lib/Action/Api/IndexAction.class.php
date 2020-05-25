@@ -294,7 +294,11 @@ class IndexAction extends BaseAction
         $vcode = $_POST['vcode'];
 
         if(D('User_modifypwd')->where(array('vfcode'=>$vcode,'telphone'=>$phone))->find()){
-            $this->returnCode(0,'info',array(),'Success');
+            if($_POST['type'] == 1){
+                $this->forgetToPassword();
+            }else{
+                $this->returnCode(0,'info',array(),'Success');
+            }
         }else{
             $this->returnCode(1,'info',array(),L('_SMS_CODE_ERROR_'));
         }
