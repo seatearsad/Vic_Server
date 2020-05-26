@@ -134,16 +134,6 @@
                     <div class="fl"><span style="line-height: 20px;display: inline-block;">{pigcms{:L('V2_SERVICEFEE')}</span> <img src="{pigcms{$static_path}img/index/tax_fee.png" id="tax_fee_img" width="20" style="vertical-align: middle;margin-left: 5px;" /></div>
                     <div class="fr">${pigcms{:number_format($order_details['packing_charge'] + $order_details['tax_price'] + $order_details['deposit_price'] + $order_details['service_fee'],2)}</div>
                 </dd>
-                <!--dd class="clr">
-                    <div class="fl">{pigcms{:L('_TAXATION_TXT_')}</div>
-                    <div class="fr">${pigcms{:round($order_details['tax_price'],2)}</div>
-                </dd>
-                <if condition="$order_details['deposit_price'] neq 0">
-                    <dd class="clr">
-                        <div class="fl">{pigcms{:L('_DEPOSIT_TXT_')}</div>
-                        <div class="fr">${pigcms{$order_details['deposit_price']}</div>
-                    </dd>
-                </if-->
                 <if condition="$order_details['tip_charge'] neq 0">
                     <dd class="clr">
                         <div class="fl">{pigcms{:L('_TIP_TXT_')}</div>
