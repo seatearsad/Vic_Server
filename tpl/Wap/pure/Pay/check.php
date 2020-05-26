@@ -64,6 +64,7 @@
         var  total_money = Number("{pigcms{$order_info.order_total_money}");
         var  card_discount = Number("<?php if($card_info['discount']){ ?>{pigcms{$card_info.discount}<?php }else{?>10<?php }?>");
         var  delivery_discount = Number("{pigcms{$order_info.delivery_discount}");
+        var  service_fee = Number("{pigcms{$order_info.service_fee}");
         <?php if($order_info['delivery_discount_type'] == 0 && $system_coupon['discount']>0){ ?>
             delivery_discount = 0;
         <?php } ?>
@@ -587,7 +588,8 @@
                                 'cvd':$('#cvd').val(),
                                 'delivery_discount':delivery_discount,
                                 'not_touch':$('input[name="not_touch"]:checked').val(),
-                                'merchant_reduce':merchant_reduce
+                                'merchant_reduce':merchant_reduce,
+                                'service_fee':service_fee
                             };
 
                             //alert(re_data['order_type']);
@@ -627,7 +629,8 @@
                                 'est_time':$('#est_time_input').val(),
                                 'delivery_discount':delivery_discount,
                                 'not_touch':$('input[name="not_touch"]:checked').val(),
-                                'merchant_reduce':merchant_reduce
+                                'merchant_reduce':merchant_reduce,
+                                'service_fee':service_fee
                             };
                             var card_stauts = "{pigcms{$card['status']}";
                             if(card_stauts == 0){
@@ -691,7 +694,8 @@
                         'est_time':$('#est_time_input').val(),
                         'delivery_discount':delivery_discount,
                         'not_touch':$('input[name="not_touch"]:checked').val(),
-                        'merchant_reduce':merchant_reduce
+                        'merchant_reduce':merchant_reduce,
+                        'service_fee':service_fee
                     };
                     $.post('{pigcms{:U("Pay/WeixinAndAli")}',re_data,function(data){
                         layer.closeAll();
@@ -1095,6 +1099,7 @@
         <input type="hidden" name="tip" value="">
         <input type="hidden" name="delivery_discount" value="{pigcms{$order_info.delivery_discount}">
         <input type="hidden" name="merchant_reduce" value="{pigcms{$order_info.merchant_reduce}">
+        <input type="hidden" name="service_fee" value="{pigcms{$order_info.service_fee}">
         <if condition="$order_info['order_type'] != 'recharge'">
         <div class="all_list">
             <div class="order_note">
@@ -1286,6 +1291,9 @@
                 </div>
                 <div>
                     {pigcms{:L('_TAXATION_TXT_')} <span>${pigcms{:sprintf("%.2f",$order_info['tax_price'])}</span>
+                </div>
+                <div>
+                    {pigcms{:L('_SERVICE_FEE_')} <span>${pigcms{:sprintf("%.2f",$order_info['service_fee'])}</span>
                 </div>
                 <?php if($system_coupon){ ?>
                 <div>
