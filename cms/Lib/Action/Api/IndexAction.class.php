@@ -669,6 +669,8 @@ class IndexAction extends BaseAction
         $order_data['is_pick_in_store'] = 0;
 
         $order_data['goods_price'] = $return['price'];//商品的价格
+        //garfunkel 计算服务费
+        $order_data['service_fee'] = number_format($order_data['goods_price'] * $return['store']['service_fee']/100,2);
         $order_data['extra_price'] = $return['extra_price'];//另外要支付的金额
         $order_data['discount_price'] = $return['vip_discount_money'];//商品折扣后的总价
         //modify garfunkel

@@ -306,9 +306,12 @@ class CartModel extends Model
         $result['hongbao'] = array();
         $result['total_market_price'] = $total_market_price;
         $result['food_total_price'] = $total_price;
-        $result['total_pay_price'] = round($total_pay_price,2);
-        $result['tax_price'] = round($tax_price,2);
-        $result['deposit_price'] = round($deposit_price,2);
+        //garfunkel 计算服务费
+        $result['service_fee'] = number_format($total_price * $store['service_fee']/100,2);
+        $total_pay_price = $total_pay_price + $result['service_fee'];
+        $result['total_pay_price'] = number_format($total_pay_price,2);
+        $result['tax_price'] = number_format($tax_price,2);
+        $result['deposit_price'] = number_format($deposit_price,2);
         $result['pay_method'] = explode('|',$store['pay_method']);
 
         $result['full_discount'] = '0';

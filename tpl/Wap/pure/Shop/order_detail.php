@@ -443,7 +443,7 @@
         "<div class='b_font' style='width: "+width+"px;margin-top: 10px'>{pigcms{:L('V2_BOTTLEDEPOSIT')}:${pigcms{:number_format($order_details['deposit_price'],2)}</div>" +
         "<div style='width: "+width+"px;'>{pigcms{:L('V2_BOTTLEDEPOSITDES')}</div>" +
         "<div class='b_font' style='width: "+width+"px;margin-top: 10px'>{pigcms{:L('V2_SERVICEFEEDES')}:${pigcms{:number_format($order_details['service_fee'],2)}</div>" +
-        "<div style='width: "+width+"px;'>{pigcms{:L('V2_TOTALTAXNFEES')}</div>" +
+        "<div style='width: "+width+"px;'>{pigcms{:replace_lang_str(L('V2_TOTALTAXNFEES'),$store['service_fee'])}</div>" +
         "<div class='b_font' style='width: "+width+"px;text-align: right;margin-top: 15px;margin-bottom: 10px;'>{pigcms{:L('V2_SERVICEFEE')}:{pigcms{:number_format($order_details['packing_charge'] + $order_details['tax_price'] + $order_details['deposit_price'] + $order_details['service_fee'],2)}</div>";
 
     $('#tax_fee_img').click(function () {

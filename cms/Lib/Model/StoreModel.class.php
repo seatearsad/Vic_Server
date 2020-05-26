@@ -225,6 +225,7 @@ class StoreModel extends Model
         $store['delivery_price'] = floatval($row['basic_price']);//起送价
         $store['tax_num'] = $row['tax_num'];
         $store['deposit_price'] = floatval($row['deposit_price']);
+        $store['service_fee'] = $row['service_fee'];
 
         //$store['deliver_name'] = $delivers[$row['deliver_type']];
         $is_have_two_time = 0;//是否是第二时段的配送显示
