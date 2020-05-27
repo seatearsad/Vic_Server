@@ -681,7 +681,7 @@ class IndexAction extends BaseAction
         //$order_data['price'] = $order_data['price'] * 1.05; //税费
 
         $tax_price = $tax_price + ($delivery_fee + $return['store']['pack_fee'])*$return['store']['tax_num']/100;
-        $order_data['total_price'] = $return['price'] + $tax_price + $deposit_price + $delivery_fee + $return['store']['pack_fee'];
+        $order_data['total_price'] = $return['price'] + $tax_price + $deposit_price + $delivery_fee + $return['store']['pack_fee'] + $order_data['service_fee'];
         $order_data['price'] = $order_data['total_price'];
 
         $order_data['discount_detail'] = $return['discount_list'] ? serialize($return['discount_list']) : '';//优惠详情
@@ -977,7 +977,7 @@ class IndexAction extends BaseAction
         $order_detail['phone'] = $order['userphone'];
         $order_detail['address2'] = $order['address'];
         $order_detail['address1'] = "";
-
+        $order_detail['service_fee'] = $order['service_fee'];
         $order_detail['promotion_discount'] = "0";
         $order_detail['discount'] = $order['coupon_price'] + $order['delivery_discount'] + $order['merchant_reduce'];
         $order_detail['create_time'] = $order['create_time'];
@@ -995,6 +995,7 @@ class IndexAction extends BaseAction
         $store = D('Store')->get_store_by_id($order['store_id']);
         $order_detail['site_name'] = $store['site_name'];
         $order_detail['tel'] = $store['phone'];
+        $order_detail['store_service_fee'] = $store['service_fee'];
 
         $result['order'] = $order_detail;
 
