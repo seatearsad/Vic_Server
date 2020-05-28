@@ -781,7 +781,7 @@ class IndexAction extends BaseAction
 
         }else if($_POST['pay_type'] == 1){//支付宝
             $price = $order_data['price'] + $order_data['tip_charge'] - $order_data['coupon_price'] - $order_data['delivery_discount'] - $order_data['merchant_reduce'];
-            $result = $this->loadModel()->WeixinAndAli($_POST['pay_type'],$order_id,$price,$_POST['ip']);
+            $result = $this->loadModel()->WeixinAndAli($_POST['pay_type'],$order_id,$price,$_POST['ip'],$_POST['cer_type']);
             if($result['resCode'] == 'SUCCESS'){
                 $this->returnCode(0,'result',$result,'success');
             }else{
@@ -789,7 +789,7 @@ class IndexAction extends BaseAction
             }
         }else if($_POST['pay_type'] == 2){//微信支付
             $price = $order_data['price'] + $order_data['tip_charge'] - $order_data['coupon_price'] - $order_data['delivery_discount'] - $order_data['merchant_reduce'];
-            $result = $this->loadModel()->WeixinAndAli($_POST['pay_type'],$order_id,$price,$_POST['ip']);
+            $result = $this->loadModel()->WeixinAndAli($_POST['pay_type'],$order_id,$price,$_POST['ip'],$_POST['cer_type']);
             if($result['resCode'] == 'SUCCESS'){
                 $this->returnCode(0,'result',$result,'success');
             }else{
