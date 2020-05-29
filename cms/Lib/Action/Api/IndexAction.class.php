@@ -1170,6 +1170,8 @@ class IndexAction extends BaseAction
         $delivery_discount = $_POST['delivery_discount'] ? $_POST['delivery_discount'] : 0;
         $merchant_reduce = $_POST['merchant_reduce'] ? $_POST['merchant_reduce'] : 0;
 
+        $_POST['cer_type'] = $_POST['cer_type'] ? $_POST['cer_type'] : 3;
+
         if($_POST['pay_type'] == 0){//线下支付 直接进入支付流程
             D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->save(array('tip_charge'=>$tip));
             $order_param['order_id'] = $order_id;
