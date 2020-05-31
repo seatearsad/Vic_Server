@@ -1758,7 +1758,7 @@ class Shop_orderModel extends Model
 
             //add garfunkel 添加语音
             $txt = "This is a important message from island life , the customer has canceled the last order.";
-            Sms::send_voice_message($sms_data['mobile'],$txt);
+            //Sms::send_voice_message($sms_data['mobile'],$txt);
 		}
 
 		//退款时销量回滚
