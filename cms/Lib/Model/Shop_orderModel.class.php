@@ -890,7 +890,11 @@ class Shop_orderModel extends Model
 						}
 					}
                     $txt = "Hi there, Tutti got a new order for you, can you please confirm online now!";
-					Sms::send_voice_message($sms_data['mobile'],$txt);
+                    try {
+                        Sms::send_voice_message($sms_data['mobile'], $txt);
+                    }catch (Exception $e){
+
+                    }
 				}
 
 				if ($now_order['order_from'] == 6 && $now_order['is_pick_in_store'] == 2 && $now_order['staff_id'] > 0) {
@@ -1758,7 +1762,11 @@ class Shop_orderModel extends Model
 
             //add garfunkel 添加语音
             $txt = "This is a important message from island life , the customer has canceled the last order.";
-            //Sms::send_voice_message($sms_data['mobile'],$txt);
+            try {
+                Sms::send_voice_message($sms_data['mobile'], $txt);
+            }catch (Exception $e){
+
+			}
 		}
 
 		//退款时销量回滚
