@@ -1284,7 +1284,7 @@ class PayAction extends BaseAction{
                 if($sign == $_POST['sign']){
                     $now_order = D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->find();
                     if($now_order['paid'] == 0){
-                        if($rData['channelId'] == 'WX_JSAPI') {//如果是公众号支付
+                        if($rData['channeId'] == 'WX_JSAPI') {//如果是公众号支付
                             $order = explode("_", $rData['param1']);
                             $order_id = $order[1];
                         }
