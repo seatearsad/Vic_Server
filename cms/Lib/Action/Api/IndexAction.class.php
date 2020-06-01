@@ -1705,7 +1705,7 @@ class IndexAction extends BaseAction
 
                         //add garfunkel 添加语音
                         $txt = "This is a important message from island life , the customer has canceled the last order.";
-                        Sms::send_voice_message($sms_data['mobile'],$txt);
+                        //Sms::send_voice_message($sms_data['mobile'],$txt);
                     }
                     $this->returnCode(0,'info',array(),L('_B_MY_USEOFFLINECHANGEREFUND_'));
                 }
