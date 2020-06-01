@@ -1271,6 +1271,7 @@ class PayAction extends BaseAction{
             $rData['device'] = $_POST['device'];
             $rData['channelId'] = $_POST['channelId'];
             $rData['status'] = $_POST['status'];
+            $rData['openid'] = $_POST['openid'];
 
             //获取订单id
             $order = explode("_",$rData['mchOrderNo']);
