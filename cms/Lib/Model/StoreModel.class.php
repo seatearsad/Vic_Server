@@ -978,6 +978,8 @@ class StoreModel extends Model
         import('ORG.Net.Http');
         $http = new Http();
         $result = $http->curlPost($pay_url,'params='.json_encode($data));
+        $result['payParams']['timeStamp'] = (string)$result['payParams']['timeStamp'];
+        $result['payParams']['nonceStr'] = (string)$result['payParams']['nonceStr'];
         file_put_contents("./test_log.txt",date("Y/m/d")."   ".date("h:i:sa")."   "."Request" ."   ". $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'--'.json_encode($data).'----'.json_encode($result,JSON_UNESCAPED_UNICODE)."\r\n",FILE_APPEND);
         return $result;
     }
