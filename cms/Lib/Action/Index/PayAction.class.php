@@ -1279,7 +1279,7 @@ class PayAction extends BaseAction{
 
             if($rData['status'] == 2){
                 $sign = $this->getSign($rData,$key);
-                var_dump($sign.'=='. $_POST['sign']);
+                //var_dump($sign.'=='. $_POST['sign']);
                 //验证签名
                 if($sign == $_POST['sign']){
                     $now_order = D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->find();
@@ -1308,6 +1308,19 @@ class PayAction extends BaseAction{
                     echo 'success';
                     if($is_jump){
                         if($rData['channeId'] == 'WX_JSAPI' || $rData['channeId'] == 'ALIPAY_WAP' || $rData['channeId'] == 'WX_MWEB'){
+
+                            //$url = '/wap.php?g=Wap&c=Shop&a=status&order_id='.$order_id;
+                            $url = '/wap.php?g=Wap&c=My&a=shop_order_list';
+                        }else{
+                            $url =U("User/Index/shop_order_view",array('order_id'=>$order_id));
+                        }
+                        sleep(1);
+
+                        header('Location:'.$url);
+                    }
+                }else{
+                    if($is_jump){
+                        if($rData['channelId'] == 'WX_JSAPI'){
 
                             //$url = '/wap.php?g=Wap&c=Shop&a=status&order_id='.$order_id;
                             $url = '/wap.php?g=Wap&c=My&a=shop_order_list';
