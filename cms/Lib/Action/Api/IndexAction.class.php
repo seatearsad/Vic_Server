@@ -1447,7 +1447,7 @@ class IndexAction extends BaseAction
             }else if($now_order['pay_type'] == 'weixin' || $now_order['pay_type'] == 'alipay'){
                 import('@.ORG.pay.IotPay');
                 $IotPay = new IotPay();
-                $result = $IotPay->refund($uid,$now_order['order_id'],'WEB');
+                $result = $IotPay->refund($uid,$now_order['order_id'],'APP');
                 if ($result['retCode'] == 'SUCCESS' && $result['resCode'] == 'SUCCESS'){
                     $data_shop_order['order_id'] = $now_order['order_id'];
                     $data_shop_order['status'] = 4;
