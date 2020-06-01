@@ -1269,7 +1269,7 @@ class PayAction extends BaseAction{
             $rData['clientIp'] = $_POST['clientIp'] ? $_POST['clientIp'] : '';
             $rData['currency'] = $_POST['currency'];
             $rData['device'] = $_POST['device'];
-            $rData['channeId'] = $_POST['channelId'];
+            $rData['channeId'] = $_POST['channeId'];
             $rData['status'] = $_POST['status'];
             $rData['openid'] = $_POST['openid'];
 
