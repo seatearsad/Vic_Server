@@ -1289,7 +1289,7 @@ class PayAction extends BaseAction{
                             $order_id = $order[1];
                         }
                         //获取支付方式
-                        $channel = explode("_",$rData['channelId']);
+                        $channel = explode("_",$rData['channeId']);
                         $payment = $channel[0] == 'WX' ? 'weixin' : 'alipay';
                         //换算支付金额
                         $amount = $rData['amount'] / 100;
@@ -1307,7 +1307,7 @@ class PayAction extends BaseAction{
                     }
                     echo 'success';
                     if($is_jump){
-                        if($rData['channelId'] == 'WX_JSAPI' || $rData['channelId'] == 'ALIPAY_WAP' || $rData['channelId'] == 'WX_MWEB'){
+                        if($rData['channeId'] == 'WX_JSAPI' || $rData['channeId'] == 'ALIPAY_WAP' || $rData['channeId'] == 'WX_MWEB'){
 
                             //$url = '/wap.php?g=Wap&c=Shop&a=status&order_id='.$order_id;
                             $url = '/wap.php?g=Wap&c=My&a=shop_order_list';
