@@ -1107,63 +1107,64 @@ class Merchant_store_shopModel extends Model
             //end  @wangchuanyuan
 
             $temp['coupon_list'] = array();
-            if ($row['is_invoice']) {
-                $temp['coupon_list']['invoice'] = floatval($row['invoice_price']);
-            }
-            if ($row['store_discount'] != 0 && $row['store_discount'] != 100) {
-                $temp['coupon_list']['discount'] = $row['store_discount']/10;
-            }
-            $system_delivery = array();
-            foreach ($row['system_discount'] as $row_d) {
-                if ($row_d['type'] == 0) {//新单
-                    $temp['coupon_list']['system_newuser'][] = array('money' => floatval($row_d['full_money']), 'minus' => floatval($row_d['reduce_money']));
-                } elseif ($row_d['type'] == 1) {//满减
-                    $temp['coupon_list']['system_minus'][] = array('money' => floatval($row_d['full_money']), 'minus' => floatval($row_d['reduce_money']));
-                } elseif ($row_d['type'] == 2) {//配送
-                    if ($row_d['full_money'] > 0 && $row_d['reduce_money'] > 0) {
-                        $system_delivery[] = array('money' => floatval($row_d['full_money']), 'minus' => floatval($row_d['reduce_money']));
-                    }
-                }
-            }
-            foreach ($row['merchant_discount'] as $row_m) {
-                if ($row_m['type'] == 0) {
-                    $temp['coupon_list']['newuser'][] = array('money' => floatval($row_m['full_money']), 'minus' => floatval($row_m['reduce_money']));
-                } elseif ($row_m['type'] == 1) {
-                    $temp['coupon_list']['minus'][] = array('money' => floatval($row_m['full_money']), 'minus' => floatval($row_m['reduce_money']));
-                }
-            }
-            if ($row['deliver']) {
-                if ($temp['delivery_system']) {
-                    $system_delivery && $temp['coupon_list']['delivery'] = $system_delivery;
-                } else {
-                    if ($row['is_have_two_time']) {
-                        if ($row['reach_delivery_fee_type2'] == 0) {
-                            if ($row['basic_price'] > 0 && $row['delivery_fee2'] > 0) {
-                                $temp['coupon_list']['delivery'][] = array('money' => floatval($row['basic_price']), 'minus' => floatval($row['delivery_fee2']));
-                            }
-                        } elseif ($row['reach_delivery_fee_type2'] == 1) {
-                            //$temp['coupon_list']['delivery'] = array('money' => false, 'minus' => $row['delivery_fee']);
-                        } elseif ($row['reach_delivery_fee_type2'] == 2) {
-                            $row['delivery_fee2'] && $temp['coupon_list']['delivery'][] = array('money' => floatval($row['no_delivery_fee_value2']), 'minus' => floatval($row['delivery_fee2']));
-                        }
-                    } else {
-                        if ($row['reach_delivery_fee_type'] == 0) {
-                            if ($row['basic_price'] > 0 && $row['delivery_fee'] > 0) {
-                                $temp['coupon_list']['delivery'][] = array('money' => floatval($row['basic_price']), 'minus' => floatval($row['delivery_fee']));
-                            }
-                        } elseif ($row['reach_delivery_fee_type'] == 1) {
-                            //$temp['coupon_list']['delivery'] = array('money' => false, 'minus' => $row['delivery_fee']);
-                        } elseif ($row['reach_delivery_fee_type'] == 2) {
-                            $row['delivery_fee'] && $temp['coupon_list']['delivery'][] = array('money' => floatval($row['no_delivery_fee_value']), 'minus' => floatval($row['delivery_fee']));
-                        }
-                    }
-                }
-            }
+//            if ($row['is_invoice']) {
+//                $temp['coupon_list']['invoice'] = floatval($row['invoice_price']);
+//            }
+//            if ($row['store_discount'] != 0 && $row['store_discount'] != 100) {
+//                $temp['coupon_list']['discount'] = $row['store_discount']/10;
+//            }
+//            $system_delivery = array();
+//            foreach ($row['system_discount'] as $row_d) {
+//                if ($row_d['type'] == 0) {//新单
+//                    $temp['coupon_list']['system_newuser'][] = array('money' => floatval($row_d['full_money']), 'minus' => floatval($row_d['reduce_money']));
+//                } elseif ($row_d['type'] == 1) {//满减
+//                    $temp['coupon_list']['system_minus'][] = array('money' => floatval($row_d['full_money']), 'minus' => floatval($row_d['reduce_money']));
+//                } elseif ($row_d['type'] == 2) {//配送
+//                    if ($row_d['full_money'] > 0 && $row_d['reduce_money'] > 0) {
+//                        $system_delivery[] = array('money' => floatval($row_d['full_money']), 'minus' => floatval($row_d['reduce_money']));
+//                    }
+//                }
+//            }
+//            foreach ($row['merchant_discount'] as $row_m) {
+//                if ($row_m['type'] == 0) {
+//                    $temp['coupon_list']['newuser'][] = array('money' => floatval($row_m['full_money']), 'minus' => floatval($row_m['reduce_money']));
+//                } elseif ($row_m['type'] == 1) {
+//                    $temp['coupon_list']['minus'][] = array('money' => floatval($row_m['full_money']), 'minus' => floatval($row_m['reduce_money']));
+//                }
+//            }
+//            if ($row['deliver']) {
+//                if ($temp['delivery_system']) {
+//                    $system_delivery && $temp['coupon_list']['delivery'] = $system_delivery;
+//                } else {
+//                    if ($row['is_have_two_time']) {
+//                        if ($row['reach_delivery_fee_type2'] == 0) {
+//                            if ($row['basic_price'] > 0 && $row['delivery_fee2'] > 0) {
+//                                $temp['coupon_list']['delivery'][] = array('money' => floatval($row['basic_price']), 'minus' => floatval($row['delivery_fee2']));
+//                            }
+//                        } elseif ($row['reach_delivery_fee_type2'] == 1) {
+//                            //$temp['coupon_list']['delivery'] = array('money' => false, 'minus' => $row['delivery_fee']);
+//                        } elseif ($row['reach_delivery_fee_type2'] == 2) {
+//                            $row['delivery_fee2'] && $temp['coupon_list']['delivery'][] = array('money' => floatval($row['no_delivery_fee_value2']), 'minus' => floatval($row['delivery_fee2']));
+//                        }
+//                    } else {
+//                        if ($row['reach_delivery_fee_type'] == 0) {
+//                            if ($row['basic_price'] > 0 && $row['delivery_fee'] > 0) {
+//                                $temp['coupon_list']['delivery'][] = array('money' => floatval($row['basic_price']), 'minus' => floatval($row['delivery_fee']));
+//                            }
+//                        } elseif ($row['reach_delivery_fee_type'] == 1) {
+//                            //$temp['coupon_list']['delivery'] = array('money' => false, 'minus' => $row['delivery_fee']);
+//                        } elseif ($row['reach_delivery_fee_type'] == 2) {
+//                            $row['delivery_fee'] && $temp['coupon_list']['delivery'][] = array('money' => floatval($row['no_delivery_fee_value']), 'minus' => floatval($row['delivery_fee']));
+//                        }
+//                    }
+//                }
+//            }
+            
             $temp['coupon_count'] = count($temp['coupon_list']);
             //$temp['coupon_list'] = $this->parseCoupon($temp['coupon_list'],'array');
 
             $temp['free_delivery'] = 0;
-            $temp['event'] = "";
+            $temp['event'] = array("use_price"=>"0","discount"=>"0","miles"=>0);
             if($delivery_coupon != "" && $delivery_coupon['limit_day']*1000 >= $row['juli']){
                 $temp['free_delivery'] = 1;
                 $t_event['use_price'] = $delivery_coupon['use_price'];
@@ -1189,6 +1190,13 @@ class Merchant_store_shopModel extends Model
                     }
                 }
             }
+
+            $keywords = D('Keywords')->where(array('third_type' => 'Merchant_store', 'third_id' => $row['store_id']))->select();
+            $str = "";
+            foreach ($keywords as $key) {
+                $str .= $key['keyword'] . " ";
+            }
+            $temp['keywords'] = $str;
 
             $return['list'][] = $temp;
         }

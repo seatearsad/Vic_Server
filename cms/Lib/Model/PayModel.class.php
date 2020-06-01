@@ -49,9 +49,11 @@ class PayModel extends Model{
 		}
 		if($is_mobile_pay == 1){
 			$pay_type_txt .= '('.L('_WEICHAT_END_').')';
-		} elseif ($is_mobile_pay == 2) {
+		} elseif ($is_mobile_pay == 2 || $is_mobile_pay == 3) {
 			$pay_type_txt .= '(App)';
-		}
+		} elseif($is_mobile_pay == 4){
+            $pay_type_txt .= '(Android)';
+        }
 		return $pay_type_txt;
 	}
 }

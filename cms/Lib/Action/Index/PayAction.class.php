@@ -1255,6 +1255,7 @@ class PayAction extends BaseAction{
         }
         //$json_data = '{"payOrderId":"P00181221140838553334009319","amount":"1","mchId":"10000029","mchOrderNo":"Tuttishop_11377_1545372518","subject":"Tutti+Order+11377","paySuccTime":"1545372518567","sign":"66D651F73E42758E2015B5C2D1BCF526","channelOrderNo":"2018122122001343950505016972","backType":"1","param1":"","param2":"","clientIp":"127.0.0.1","currency":"CAD","device":"WEB","channelId":"ALIPAY_PC","status":"2"}';
         //$_POST = json_decode($json_data,true);
+        $channelId = "";
         if($_POST){
             $rData['payOrderId'] = $_POST['payOrderId'];
             $rData['amount'] = $_POST['amount'];
@@ -1269,8 +1270,16 @@ class PayAction extends BaseAction{
             $rData['clientIp'] = $_POST['clientIp'] ? $_POST['clientIp'] : '';
             $rData['currency'] = $_POST['currency'];
             $rData['device'] = $_POST['device'];
-            $rData['channelId'] = $_POST['channelId'];
+            if($_POST['channeId']) {
+                $rData['channeId'] = $_POST['channeId'];
+                $channelId = $_POST['channeId'];
+            }
+            if($_POST['channelId']) {
+                $rData['channelId'] = $_POST['channelId'];
+                $channelId = $_POST['channelId'];
+            }
             $rData['status'] = $_POST['status'];
+            $rData['openid'] = $_POST['openid'];
 
             //获取订单id
             $order = explode("_",$rData['mchOrderNo']);
@@ -1282,13 +1291,13 @@ class PayAction extends BaseAction{
                 //验证签名
                 if($sign == $_POST['sign']){
                     $now_order = D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->find();
-                    if($now_order['pain'] == 0){
-                        if($rData['channelId'] == 'WX_JSAPI') {//如果是公众号支付
+                    if($now_order['paid'] == 0){
+                        if($channelId == 'WX_JSAPI') {//如果是公众号支付
                             $order = explode("_", $rData['param1']);
                             $order_id = $order[1];
                         }
                         //获取支付方式
-                        $channel = explode("_",$rData['channelId']);
+                        $channel = explode("_",$channelId);
                         $payment = $channel[0] == 'WX' ? 'weixin' : 'alipay';
                         //换算支付金额
                         $amount = $rData['amount'] / 100;
@@ -1306,7 +1315,20 @@ class PayAction extends BaseAction{
                     }
                     echo 'success';
                     if($is_jump){
-                        if($rData['channelId'] == 'WX_JSAPI' || $rData['channelId'] == 'ALIPAY_WAP' || $rData['channelId'] == 'WX_MWEB'){
+                        if($channelId == 'WX_JSAPI' || $channelId == 'ALIPAY_WAP' || $channelId == 'WX_MWEB'){
+
+                            //$url = '/wap.php?g=Wap&c=Shop&a=status&order_id='.$order_id;
+                            $url = '/wap.php?g=Wap&c=My&a=shop_order_list';
+                        }else{
+                            $url =U("User/Index/shop_order_view",array('order_id'=>$order_id));
+                        }
+                        sleep(1);
+
+                        header('Location:'.$url);
+                    }
+                }else{
+                    if($is_jump){
+                        if($channelId == 'WX_JSAPI'){
 
                             //$url = '/wap.php?g=Wap&c=Shop&a=status&order_id='.$order_id;
                             $url = '/wap.php?g=Wap&c=My&a=shop_order_list';

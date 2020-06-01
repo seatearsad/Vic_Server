@@ -33,6 +33,7 @@ class User_money_listModel extends Model{
 			$return['money_list'] = $this->field(true)->where($condition_user_money_list)->order('`time` DESC')->limit($p->firstRow.',10')->select();
 		}
 		$return['pagebar'] = $p->show();
+		$return['recordCount'] = $count;
 		return $return;
 	}
 	/*获取列表*/

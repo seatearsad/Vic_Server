@@ -89,7 +89,7 @@ class CartModel extends Model
                 $resid = $good['store_id'];
 
                 $store['free_delivery'] = 0;
-                $store['event'] = "";
+                $store['event'] = array("use_price"=>"0","discount"=>"0","miles"=>0);
                 if($address){
                     $distance = getDistance($store['lat'], $store['lng'], $address['mapLat'], $address['mapLng']);
                     if($delivery_coupon != "" && $delivery_coupon['limit_day']*1000 >= $distance){

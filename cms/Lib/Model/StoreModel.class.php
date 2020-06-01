@@ -310,7 +310,7 @@ class StoreModel extends Model
 
             $distance = getDistance($row['lat'], $row['long'], $lat, $lng);
             $store['free_delivery'] = 0;
-            $store['event'] = "";
+            $store['event'] = array("use_price"=>"0","discount"=>"0","miles"=>0);
             if($delivery_coupon != "" && $delivery_coupon['limit_day']*1000 >= $distance){
                 $store['free_delivery'] = 1;
                 $t_event['use_price'] = $delivery_coupon['use_price'];
@@ -433,7 +433,7 @@ class StoreModel extends Model
 
     public function get_goods_by_storeId($storeId){
         $data_goods = D('Shop_goods');
-        $good_list = $data_goods ->field(true)->where(array('store_id' => $storeId, 'status' => 1))->order('goods_id ASC')->select();
+        $good_list = $data_goods ->field(true)->where(array('store_id' => $storeId, 'status' => 1))->order('sort desc,goods_id ASC')->select();
 
         $sort_list = $this->get_goods_group_by_storeId($storeId);
         $sortIdList = array();
@@ -634,7 +634,7 @@ class StoreModel extends Model
         return array('error_code' => false, 'msg' => '');
     }
 
-    public function reg_phone_pwd_vcode($phone,$vcode,$pwd,$invi_code = ''){
+    public function reg_phone_pwd_vcode($phone,$vcode,$pwd,$invi_code = '',$userName = '',$email = ''){
         $verify_result = D('Smscodeverify')->verify($vcode, $phone);
 
         if($verify_result['error_code'])
@@ -653,7 +653,7 @@ class StoreModel extends Model
             }
         }
 
-        $result = D('User')->checkreg($phone, $pwd);
+        $result = D('User')->checkreg($phone, $pwd,$userName,$email);
 
         if (!empty($result['user'])) {
             $userInfo = $this->getUserInfo($phone,$pwd);
@@ -861,7 +861,7 @@ class StoreModel extends Model
             L('_ORDER_STATUS_1_'),
             L('_ORDER_STATUS_2_'),
             L('_ORDER_STATUS_3_'),
-            L('_ORDER_STATUS_4_') ,
+            L('_ORDER_STATUS_4_'),
             L('_ORDER_STATUS_5_'),
             L('_ORDER_STATUS_6_'),
             L('_ORDER_STATUS_7_'),
@@ -873,9 +873,33 @@ class StoreModel extends Model
             L('_ORDER_STATUS_13_'),
             L('_ORDER_STATUS_14_'),
             L('_ORDER_STATUS_15_'),
-            30 => L('_ORDER_STATUS_30_'));
+            30 => L('_ORDER_STATUS_30_'),
+            33 => L('_ORDER_STATUS_33_'));
 
         return $status_list[$status];
+    }
+
+    public function getOrderStatusMark($status,$order_id,$log){
+        $mark = "";
+        switch ($status){
+            case 1:
+                $mark = "等待商家接单...";
+                break;
+            case 2:
+                $delivery = D('Deliver_supply')->where(array('order_id'=>$order_id))->find();
+                $mark = replace_lang_str("预计出餐时间:%s min",$delivery['dining_time']);
+                break;
+            case 3:
+                $mark = replace_lang_str("您的订单将有送餐员%s为您配送",$log['name']);
+                break;
+            case 33:
+                $mark = replace_lang_str("您的商家需要额外%smin出餐",$log['note']);
+                break;
+            default:
+                break;
+        }
+
+        return $mark;
     }
 
     public function getOrderStatusName($status){
@@ -885,7 +909,16 @@ class StoreModel extends Model
         return $name_list[$status];
     }
 
-    public function WeixinAndAli($pay_type,$order_id,$price,$ip){
+
+    /**
+     * @param $pay_type
+     * @param $order_id
+     * @param $price
+     * @param $ip
+     * @param int $from 订单来源 3-Apple 4-Android
+     * @return array|mixed
+     */
+    public function WeixinAndAli($pay_type,$order_id,$price,$ip,$from=3){
         //获取支付的相关配置数据
         $where = array('tab_id'=>'alipay','gid'=>7);
         $result = D('Config')->field(true)->where($where)->select();
@@ -897,11 +930,30 @@ class StoreModel extends Model
             if($payData['name'] == 'pay_alipay_pid')
                 $pay_url = $payData['value'];
         }
+        $where = array('tab_id'=>'alipayapp','gid'=>23);
+        $result = D('Config')->field(true)->where($where)->select();
+        foreach ($result as $payData){
+            if($payData['name'] == 'pay_alipay_app_private_key_ios')
+                $apple_app_id = $payData['value'];
+            if($payData['name'] == 'pay_alipay_app_private_key_android')
+                $android_app_id = $payData['value'];
+        }
 
         $channelId = '';
         //微信支付
         if($pay_type == 2) {
             $channelId = 'WX_APP';
+            $type = 'apppay';
+            if($from == 3){
+                $appId  = $apple_app_id;
+            }else if($from == 4){
+                $appId  = $android_app_id;
+            }
+
+            $extra = json_encode(array(
+                'type' => $type,
+                'appId' => $appId,
+            ));
         }
         //支付宝支付
         if($pay_type == 1)
@@ -919,11 +971,15 @@ class StoreModel extends Model
         $data['notifyUrl'] = 'https://www.tutti.app/notify';
         $data['subject'] = 'Tutti Order '.$order_id;
         $data['body'] = 'Tutti Order';
+        //微信支付需要的参数
+        if($pay_type == 2) $data['extra'] = $extra;
         $data['sign'] = $this->getSign($data,$pay_key);
  
         import('ORG.Net.Http');
         $http = new Http();
         $result = $http->curlPost($pay_url,'params='.json_encode($data));
+        $result['payParams']['timeStamp'] = (string)$result['payParams']['timeStamp'];
+        $result['payParams']['nonceStr'] = (string)$result['payParams']['nonceStr'];
         file_put_contents("./test_log.txt",date("Y/m/d")."   ".date("h:i:sa")."   "."Request" ."   ". $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'--'.json_encode($data).'----'.json_encode($result,JSON_UNESCAPED_UNICODE)."\r\n",FILE_APPEND);
         return $result;
     }
