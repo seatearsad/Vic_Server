@@ -1278,7 +1278,7 @@ class PayAction extends BaseAction{
 
             if($rData['status'] == 2){
                 $sign = $this->getSign($rData,$key);
-                //var_dump($sign.'=='. $_POST['sign']);
+                var_dump($sign.'=='. $_POST['sign']);
                 //验证签名
                 if($sign == $_POST['sign']){
                     $now_order = D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->find();
