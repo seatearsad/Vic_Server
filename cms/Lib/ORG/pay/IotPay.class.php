@@ -46,7 +46,7 @@ class IotPay
             //var_dump($data);die();
             import('ORG.Net.Http');
             $http = new Http();
-            $pay_url = 'http://pay.4jicao.com/api/refund/create_order';
+            $pay_url = 'https://api.iotpaycloud.com/v1/refund_order';
             $result = $http->curlPost($pay_url,'params='.json_encode($data));
             //var_dump($result);die();
             return $result;
