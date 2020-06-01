@@ -1135,8 +1135,8 @@ class DeliverAction extends BaseAction
 						
 						if ($order['is_pick_in_store'] == 0) {//平台配送
 							if ($order['paid'] == 0 || ($order['pay_type'] == 'offline' && empty($order['third_id']))) {
-								D('User_money_list')->add_row($order['uid'], 1, $supply['deliver_cash'], '配送员模拟手动充值');
-								D('User_money_list')->add_row($order['uid'], 2, $supply['deliver_cash'], '用户购买快店产品');
+								//D('User_money_list')->add_row($order['uid'], 1, $supply['deliver_cash'], '配送员模拟手动充值');
+								//D('User_money_list')->add_row($order['uid'], 2, $supply['deliver_cash'], '用户购买快店产品');
 							}
 						}
 						

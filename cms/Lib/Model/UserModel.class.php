@@ -252,7 +252,7 @@ class UserModel extends Model
 	}
 
 	/*帐号密码注册*/
-	public function checkreg($phone,$pwd){
+	public function checkreg($phone,$pwd,$userName = '',$email = ''){
 		if (empty($phone)) {
 			return array('error_code' => true, 'msg' => L('_B_LOGIN_ENTERPHONENO_'));
 		}
@@ -272,8 +272,12 @@ class UserModel extends Model
 		$data_user['phone'] = $phone;
 		$data_user['pwd'] = md5($pwd);
 		$data_user['status'] = 1;
-		$data_user['nickname'] = substr($phone,0,3).'****'.substr($phone,7);
+		if($userName == '')
+		    $data_user['nickname'] = substr($phone,0,3).'****'.substr($phone,7);
+		else
+		    $data_user['nickname'] = $userName;
 
+        $data_user['email'] = $email;
 		$data_user['add_time'] = $data_user['last_time'] = $_SERVER['REQUEST_TIME'];
 		$data_user['add_ip'] = $data_user['last_ip'] = get_client_ip(1);
 		$data_user['score_clean_time'] = $_SERVER['REQUEST_TIME'];

@@ -310,7 +310,7 @@ class StoreModel extends Model
 
             $distance = getDistance($row['lat'], $row['long'], $lat, $lng);
             $store['free_delivery'] = 0;
-            $store['event'] = "";
+            $store['event'] = array("use_price"=>"0","discount"=>"0","miles"=>0);
             if($delivery_coupon != "" && $delivery_coupon['limit_day']*1000 >= $distance){
                 $store['free_delivery'] = 1;
                 $t_event['use_price'] = $delivery_coupon['use_price'];
@@ -433,7 +433,7 @@ class StoreModel extends Model
 
     public function get_goods_by_storeId($storeId){
         $data_goods = D('Shop_goods');
-        $good_list = $data_goods ->field(true)->where(array('store_id' => $storeId, 'status' => 1))->order('goods_id ASC')->select();
+        $good_list = $data_goods ->field(true)->where(array('store_id' => $storeId, 'status' => 1))->order('sort desc,goods_id ASC')->select();
 
         $sort_list = $this->get_goods_group_by_storeId($storeId);
         $sortIdList = array();
@@ -634,7 +634,7 @@ class StoreModel extends Model
         return array('error_code' => false, 'msg' => '');
     }
 
-    public function reg_phone_pwd_vcode($phone,$vcode,$pwd,$invi_code = ''){
+    public function reg_phone_pwd_vcode($phone,$vcode,$pwd,$invi_code = '',$userName = '',$email = ''){
         $verify_result = D('Smscodeverify')->verify($vcode, $phone);
 
         if($verify_result['error_code'])
@@ -653,7 +653,7 @@ class StoreModel extends Model
             }
         }
 
-        $result = D('User')->checkreg($phone, $pwd);
+        $result = D('User')->checkreg($phone, $pwd,$userName,$email);
 
         if (!empty($result['user'])) {
             $userInfo = $this->getUserInfo($phone,$pwd);
@@ -861,7 +861,7 @@ class StoreModel extends Model
             L('_ORDER_STATUS_1_'),
             L('_ORDER_STATUS_2_'),
             L('_ORDER_STATUS_3_'),
-            L('_ORDER_STATUS_4_') ,
+            L('_ORDER_STATUS_4_'),
             L('_ORDER_STATUS_5_'),
             L('_ORDER_STATUS_6_'),
             L('_ORDER_STATUS_7_'),
@@ -873,9 +873,33 @@ class StoreModel extends Model
             L('_ORDER_STATUS_13_'),
             L('_ORDER_STATUS_14_'),
             L('_ORDER_STATUS_15_'),
-            30 => L('_ORDER_STATUS_30_'));
+            30 => L('_ORDER_STATUS_30_'),
+            33 => L('_ORDER_STATUS_33_'));
 
         return $status_list[$status];
+    }
+
+    public function getOrderStatusMark($status,$order_id,$log){
+        $mark = "";
+        switch ($status){
+            case 1:
+                $mark = "等待商家接单...";
+                break;
+            case 2:
+                $delivery = D('Deliver_supply')->where(array('order_id'=>$order_id))->find();
+                $mark = replace_lang_str("预计出餐时间:%s min",$delivery['dining_time']);
+                break;
+            case 3:
+                $mark = replace_lang_str("您的订单将有送餐员%s为您配送",$log['name']);
+                break;
+            case 33:
+                $mark = replace_lang_str("您的商家需要额外%smin出餐",$log['note']);
+                break;
+            default:
+                break;
+        }
+
+        return $mark;
     }
 
     public function getOrderStatusName($status){

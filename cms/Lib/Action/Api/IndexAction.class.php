@@ -294,7 +294,11 @@ class IndexAction extends BaseAction
         $vcode = $_POST['vcode'];
 
         if(D('User_modifypwd')->where(array('vfcode'=>$vcode,'telphone'=>$phone))->find()){
-            $this->returnCode(0,'info',array(),'Success');
+            if($_POST['type'] == 1){
+                $this->forgetToPassword();
+            }else{
+                $this->returnCode(0,'info',array(),'Success');
+            }
         }else{
             $this->returnCode(1,'info',array(),L('_SMS_CODE_ERROR_'));
         }
@@ -331,14 +335,37 @@ class IndexAction extends BaseAction
         $pwd = $_POST['password'];
         $token = $_POST['token'];
         $invi_code = $_POST['invi_code'];
+        $source = '';
 
-        $result = $this->loadModel()->reg_phone_pwd_vcode($phone,$vcode,$pwd,$invi_code);
+        $from = $_POST['from'] ? $_POST['from'] : 0;
+
+        switch ($from){
+            case 1:
+                $source = 'Wap';
+                break;
+            case 2:
+                $source = 'App';
+                break;
+            case 3:
+                $source = 'App';
+                break;
+            case 4:
+                $source = 'Android';
+                break;
+            default:
+                break;
+        }
+
+        $uname = $_POST['uname'] ? $_POST['uname'] : "";
+        $email = $_POST['email'] ? $_POST['email'] : "";
+
+        $result = $this->loadModel()->reg_phone_pwd_vcode($phone,$vcode,$pwd,$invi_code,$uname,$email);
 
         if ($result['error_code'])
             $code = 1;
         else{
             $code = 0;
-            D('User')->where(array('uid'=>$result['uid']))->save(array('device_id'=>$token));
+            D('User')->where(array('uid'=>$result['uid']))->save(array('device_id'=>$token,'source'=>$source));
             //garfunkel add 查找是否有新用户送券活动 并添加优惠券
             D('New_event')->addEventCouponByType(1,$result['uid']);
         }
@@ -439,7 +466,7 @@ class IndexAction extends BaseAction
 
         $result = $this->loadModel()->addUserAddress($data);
 
-        $this->returnCode(0,'info',$result,'success');
+        $this->returnCode(0,'info',array(),'success');
     }
 
     public function delUserAddress(){
@@ -476,7 +503,7 @@ class IndexAction extends BaseAction
 
         //账户余额
         $userInfo = D('User')->get_user($uid);
-        $result['now_money'] = round($userInfo['now_money'],2);
+        $result['now_money'] = number_format($userInfo['now_money'],2);
 
         $this->returnCode(0,'',$result,'success');
     }
@@ -700,7 +727,8 @@ class IndexAction extends BaseAction
                 }
             }
         }
-        $order_data['is_mobile_pay'] = 2;
+        //garfunkel 判断来源 2or3 Apple app | 4 Android
+        $order_data['is_mobile_pay'] = $_POST['cer_type'];;
 
         $order_data['delivery_discount'] = $_POST['delivery_discount'] ? $_POST['delivery_discount'] : 0;
         $order_data['merchant_reduce'] = $_POST['merchant_reduce'] ? $_POST['merchant_reduce'] : 0;
@@ -716,7 +744,7 @@ class IndexAction extends BaseAction
             $order_param['order_type'] = 'shop';
             $order_param['pay_time'] = date();
             $order_param['pay_type'] = 'Cash';
-            $order_param['is_mobile'] = 2;
+            $order_param['is_mobile'] = $order_data['is_mobile_pay'];
             $order_param['is_own'] = 0;
             $order_param['third_id'] = 0;
 
@@ -724,7 +752,7 @@ class IndexAction extends BaseAction
         }elseif($_POST['pay_type'] == 4){//余额支付
             //账户余额
             $userInfo = D('User')->get_user($uid);
-            $now_money = round($userInfo['now_money'],2);
+            $now_money = number_format($userInfo['now_money'],2);
 
             $data['balance_pay'] = $order_data['price'] + $order_data['tip_charge'] - $order_data['coupon_price'] - $order_data['delivery_discount'];
             if($now_money >= $data['balance_pay']){
@@ -735,7 +763,7 @@ class IndexAction extends BaseAction
                     'pay_type' => '',
                     'order_type'=> 'shop',
                     'third_id' => '',
-                    'is_mobile' => 2,
+                    'is_mobile' => $order_data['is_mobile_pay'],
                     'pay_money' => 0,
                     'order_total_money' => $order_data['price'] + $order_data['tip_charge'] - $order_data['coupon_price'],
                     'balance_pay' => $order_data['price'] + $order_data['tip_charge'] - $order_data['coupon_price'],
@@ -807,6 +835,7 @@ class IndexAction extends BaseAction
                 $images = $store_image_class->get_allImage_by_path($li['pic_info']);
                 $li['image'] = $images ? array_shift($images) : array();
                 unset($li['status']);
+                $li['pay_method'] = explode('|',$li['pay_method']);
                 $m[$li['store_id']] = $li;
             }
         }
@@ -843,6 +872,7 @@ class IndexAction extends BaseAction
             $t['discount'] = $val['coupon_price'];
             $t['delivery_discount'] = $val['delivery_discount'];
             $t['merchant_reduce'] = $val['merchant_reduce'];
+            $t['pay_method'] = $val['pay_method'];
 
             $delivery = D('Deliver_supply')->field(true)->where(array('order_id'=>$val['order_id']))->find();
             if($delivery) {
@@ -895,8 +925,8 @@ class IndexAction extends BaseAction
         $status = D('Shop_order_log')->field(true)->where(array('order_id' => $order['order_id']))->order('id DESC')->select();
         foreach ($status as $v){
             $data['status'] = $v['status'];
-            $data['mark'] = D('Store')->getOrderStatusStr($v['status']);
-            $data['name'] = $data['mark'];
+            $data['name'] = D('Store')->getOrderStatusStr($v['status']);
+            $data['mark'] = D('Store')->getOrderStatusMark($v['status'],$order['order_id'],$v);
             $data['createDate'] = date('Y-m-d H:i:s',$v['dateline']);
 
             $result[] = $data;
@@ -914,6 +944,7 @@ class IndexAction extends BaseAction
             $order_detail['payname'] = L('_UNPAID_TXT_');
         }else{
             $order_detail['statusname'] = D('Store')->getOrderStatusName($order['status']);
+            $order_detail['status'] = $order['status'];
             $order_detail['pay_type'] = $order['pay_type'];
             //$order_detail['payname'] = $order['pay_type'] == 'moneris' ? 'Paid Online' : 'Cash';
             if($order['pay_type'] == 'moneris'){
@@ -929,6 +960,7 @@ class IndexAction extends BaseAction
             }
         }
 
+        $order_detail['orderId'] = $order['order_id'];
         $order_detail['paid'] = $order['paid'];
         $order_detail['add_time'] = date('Y-m-d H:i:s',$order['create_time']);
         //$order_detail['payname'] = $order_detail['paymodel'] = D('Store')->getPayTypeName($order['pay_type']);
@@ -1027,7 +1059,7 @@ class IndexAction extends BaseAction
 
         $result['food'] = $food;
         $tax_price = $tax_price + ($order['packing_charge'] + $order['freight_charge'])*$store['tax_num']/100;
-        $result['order']['tax_price'] = $tax_price;
+        $result['order']['tax_price'] = number_format($tax_price,2);
         $result['order']['deposit_price'] = $deposit_price;
         $result['order']['subtotal'] = $order['price'];
 
@@ -1142,7 +1174,7 @@ class IndexAction extends BaseAction
             $order_param['order_type'] = 'shop';
             $order_param['pay_time'] = date();
             $order_param['pay_type'] = 'Cash';
-            $order_param['is_mobile'] = 2;
+            //$order_param['is_mobile'] = 2;
             $order_param['is_own'] = 0;
             $order_param['third_id'] = 0;
 
@@ -1150,7 +1182,7 @@ class IndexAction extends BaseAction
         }elseif($_POST['pay_type'] == 4){//余额支付
             //账户余额
             $userInfo = D('User')->get_user($uid);
-            $now_money = round($userInfo['now_money'],2);
+            $now_money = number_format($userInfo['now_money'],2);
 
             $data['balance_pay'] = $price + $tip - $delivery_discount - $merchant_reduce;
             if($now_money >= $data['balance_pay']){
@@ -1161,7 +1193,7 @@ class IndexAction extends BaseAction
                     'pay_type' => '',
                     'order_type'=> 'shop',
                     'third_id' => '',
-                    'is_mobile' => 2,
+                    //'is_mobile' => 2,
                     'pay_money' => 0,
                     'order_total_money' => $price + $tip,
                     'balance_pay' => $price + $tip,
@@ -1321,6 +1353,7 @@ class IndexAction extends BaseAction
         $data['beginDate'] = date('Y.m.d',$coupon['start_time']);
         $data['endDate'] = date('Y.m.d',$coupon['end_time']);
         $data['type'] = "2";
+        $data['is_new'] = $coupon['allow_new'];
 
         if($coupon['is_use'] == 0)
             $data['status'] = $coupon['is_use'];
@@ -1872,7 +1905,7 @@ class IndexAction extends BaseAction
         $uid = $_POST['uid'];
 
         $userInfo = D('User')->get_user($uid);
-        $info['now_money'] = round($userInfo['now_money'],2);
+        $info['now_money'] = number_format($userInfo['now_money'],2);
         $info['phone'] = $userInfo['phone'];
         $info['email'] = $userInfo['email'];
 
@@ -2005,6 +2038,31 @@ class IndexAction extends BaseAction
         $this->returnCode(0,'info',$recharge_list,'success');
     }
 
+    public function getRechargeDisForAndroid(){
+        $config = D('Config')->get_config();
+        $recharge_txt = $config['recharge_discount'];
+        if($recharge_txt == ''){
+            $this->returnCode(0, 'info', array(), 'success');
+        }else {
+            $recharge = explode(",", $recharge_txt);
+            $recharge_list = array();
+            foreach ($recharge as $v) {
+                $v_a = explode("|", $v);
+                $t_value['amount'] = $v_a[0];
+                $t_value['discount'] = $v_a[1];
+
+                $recharge_list[] = $t_value;
+            }
+
+            $score = [];
+            foreach ($recharge_list as $key => $value) {
+                $score[$key] = $value['amount'];
+            }
+            array_multisort($score, SORT_ASC, $recharge_list);
+            $this->returnCode(0, 'info', $recharge_list, 'success');
+        }
+    }
+
     public function createRechargeOrder(){
         $uid = $_POST['uid'];
         $data_user_recharge_order['uid'] = $uid;
@@ -2019,11 +2077,27 @@ class IndexAction extends BaseAction
         $data_user_recharge_order['money'] = $money;
         // $data_user_recharge_order['order_name'] = '帐户余额在线充值';
         $data_user_recharge_order['add_time'] = $_SERVER['REQUEST_TIME'];
-        $data_user_recharge_order['is_mobile_pay'] = 2;
+        $data_user_recharge_order['is_mobile_pay'] = $_POST['cer_type'] ? $_POST['cer_type'] :2;
 
         if($order_id = D('User_recharge_order')->data($data_user_recharge_order)->add()){
             $this->returnCode(0,'info',$order_id,'success');
         }
+    }
+
+    public function getRechargeList(){
+        $page = $_POST['page'];
+        $uid = $_POST['uid'];
+
+        $transaction = D('User_money_list')->get_list($uid,$page,20);
+        $transaction['count'] = 20;
+        foreach($transaction['money_list'] as $k=>$v){
+            $transaction['money_list'][$k]['time_s'] = date('Y-m-d H:i',$v['time']);
+        }
+        if(!$transaction['money_list'])
+            $transaction['money_list'] = array();
+
+        unset($transaction['pagebar']);
+        $this->returnCode(0,'info',$transaction,'success');
     }
 
     public function testDistance(){
@@ -2135,6 +2209,74 @@ class IndexAction extends BaseAction
         }
         $this->returnCode(0,'info',array(),'success');
 
+    }
+
+    public function suggestion(){
+        header("Content-type: application/json");
+        $url = 'https://maps.googleapis.com/maps/api/place/autocomplete/json?input='.urlencode($_POST['query']).'&types=address&key=AIzaSyAxHAPoWlRu2Mz8APLwM8Ae6B3x1MJUlvU&location=48.43016873926502,-123.34303379055086&radius=50000&components=country:ca&language=en';
+        import('ORG.Net.Http');
+        $http = new Http();
+        $result = $http->curlGet($url);
+        if($result){
+            $result = json_decode($result,true);
+            if($result['status'] == 'OK' && count($result['predictions']) > 0){
+                $return = [];
+                foreach($result['predictions'] as $v) {
+                    $place_url = 'https://maps.googleapis.com/maps/api/place/details/json?placeid='.$v['place_id'].'&key=AIzaSyAxHAPoWlRu2Mz8APLwM8Ae6B3x1MJUlvU&fields=geometry&language=en';
+                    $place = $http->curlGet($place_url);
+                    $place = json_decode($place,true);
+                    $return[] = [
+                        'name' => $v['description'],
+                        'lat' => $place['result']['geometry']['location']['lat'],
+                        'long' => $place['result']['geometry']['location']['lng'],
+                        'address' => $v['description'],
+                        'city_name'=>$v['terms'][2]['value']
+                    ];
+                }
+                //exit(json_encode(array('status'=>1,'result'=>$return)));
+                $this->returnCode(0,'info',$return,'success');
+            }else{
+                //exit(json_encode(array('status'=>2,'result'=>'没有查找到内容')));
+                $this->returnCode(1,'info',array(),'没有查找到内容');
+            }
+        }else{
+            //exit(json_encode(array('status'=>0,'result'=>'获取失败')));
+            $this->returnCode(1,'info',array(),'获取失败');
+        }
+    }
+
+    public function geocoderGoogle(){
+        $lat = $_POST['lat'];
+        $lng = $_POST['lng'];
+        $url = 'https://maps.google.com/maps/api/geocode/json?latlng='.$lat.','.$lng.'&language=en&sensor=false&key=AIzaSyAxHAPoWlRu2Mz8APLwM8Ae6B3x1MJUlvU';
+        import('ORG.Net.Http');
+        $http = new Http();
+        $result = $http->curlGet($url);
+        if($result){
+            $result = json_decode($result,true);
+            if($result['status'] == 'OK' && count($result['results']) > 0){
+                $return = [];
+                foreach($result['results'] as $v) {
+                    $city_name = "";
+                    foreach ($v['address_components'] as $add_com){
+                        if($add_com['types'][0] == 'locality'){
+                            $city_name = $add_com['long_name'];
+                        }
+                    }
+                    $return[] = [
+                        'name' => $v['address_components'][0]['long_name'],
+                        'lat' => $v['geometry']['location']['lat'],
+                        'long' => $v['geometry']['location']['lng'],
+                        'address' => $v['formatted_address'],
+                        'city_name'=>$city_name
+                    ];
+                }
+                $this->returnCode(0,'info',$return,'success');
+                //exit(json_encode(array('status'=>1,'result'=>$return)));
+            }
+        }
+        //exit(json_encode(array('status'=>2,'result'=>'没有查找到内容')));
+        $this->returnCode(1,'info',array(),'没有查找到内容');
     }
 
     public function AlipayTest(){

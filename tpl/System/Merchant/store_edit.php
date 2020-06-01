@@ -79,6 +79,10 @@
                 <th width="80">商品默认税率</th>
                 <td><input type="text" class="input fl" name="default_tax" size="5" value="{pigcms{$store['default_tax']}" validate="required:true,number:true,maxlength:6" />%</td>
             </tr>
+            <tr>
+                <th width="80">服务费比例</th>
+                <td><input type="text" class="input fl" name="service_fee" size="5" value="{pigcms{$store['service_fee']}" validate="required:true,number:true,maxlength:6" />%</td>
+            </tr>
 		</table>
 		<div class="btn hidden">
 			<input type="submit" name="dosubmit" id="dosubmit" value="提交" class="button" />
