@@ -35,7 +35,7 @@ class IotPay
             $data['currency'] = 'CAD';
             $data['refundAmount'] = $order['payment_money']*100;
             $data['clientIp'] = real_ip();
-            $data['device'] =$device;
+            //$data['device'] =$device;
             //$data['notifyUrl'] = 'https://www.tutti.app/notify';
             $data['loginName'] = 'jwsj218';
             //import('ORG.Crypt.Des');
@@ -43,7 +43,7 @@ class IotPay
             $data['password'] = $this->encrypt('il1234','IotPay66','98765432');
             $data['payOrderId'] = $order['invoice_head'];
             $data['sign'] = $this->getSign($data);
-            //var_dump($data);die();
+            var_dump($data);die();
             import('ORG.Net.Http');
             $http = new Http();
             $pay_url = 'https://api.iotpaycloud.com/v1/refund_order';
