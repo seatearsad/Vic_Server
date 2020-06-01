@@ -1320,7 +1320,7 @@ class PayAction extends BaseAction{
                     }
                 }else{
                     if($is_jump){
-                        if($rData['channelId'] == 'WX_JSAPI'){
+                        if($_POST['channelId'] == 'WX_JSAPI'){
 
                             //$url = '/wap.php?g=Wap&c=Shop&a=status&order_id='.$order_id;
                             $url = '/wap.php?g=Wap&c=My&a=shop_order_list';
