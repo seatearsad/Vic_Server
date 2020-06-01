@@ -909,7 +909,16 @@ class StoreModel extends Model
         return $name_list[$status];
     }
 
-    public function WeixinAndAli($pay_type,$order_id,$price,$ip){
+
+    /**
+     * @param $pay_type
+     * @param $order_id
+     * @param $price
+     * @param $ip
+     * @param int $from 订单来源 3-Apple 4-Android
+     * @return array|mixed
+     */
+    public function WeixinAndAli($pay_type,$order_id,$price,$ip,$from=3){
         //获取支付的相关配置数据
         $where = array('tab_id'=>'alipay','gid'=>7);
         $result = D('Config')->field(true)->where($where)->select();
@@ -921,11 +930,30 @@ class StoreModel extends Model
             if($payData['name'] == 'pay_alipay_pid')
                 $pay_url = $payData['value'];
         }
+        $where = array('tab_id'=>'alipayapp','gid'=>23);
+        $result = D('Config')->field(true)->where($where)->select();
+        foreach ($result as $payData){
+            if($payData['name'] == 'pay_alipay_app_private_key_ios')
+                $apple_app_id = $payData['value'];
+            if($payData['name'] == 'pay_alipay_app_private_key_android')
+                $android_app_id = $payData['value'];
+        }
 
         $channelId = '';
         //微信支付
         if($pay_type == 2) {
             $channelId = 'WX_APP';
+            $type = 'apppay';
+            if($from == 3){
+                $appId  = $apple_app_id;
+            }else if($from == 4){
+                $appId  = $android_app_id;
+            }
+
+            $extra = json_encode(array(
+                'type' => $type,
+                'appId' => $appId,
+            ));
         }
         //支付宝支付
         if($pay_type == 1)
@@ -943,6 +971,8 @@ class StoreModel extends Model
         $data['notifyUrl'] = 'https://www.tutti.app/notify';
         $data['subject'] = 'Tutti Order '.$order_id;
         $data['body'] = 'Tutti Order';
+        //微信支付需要的参数
+        if($pay_type == 2) $data['extra'] = $extra;
         $data['sign'] = $this->getSign($data,$pay_key);
 
         import('ORG.Net.Http');
