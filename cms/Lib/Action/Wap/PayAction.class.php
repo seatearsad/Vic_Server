@@ -2584,7 +2584,8 @@ class PayAction extends BaseAction{
         //微信公众号 选择微信支付
         if($this->is_wexin_browser && $pay_type == 'weixin') {
             $channelId = 'WX_JSAPI';
-            $pay_url = 'http://open.4jicao.com/goods/payForSubmit';
+            //$pay_url = 'http://open.4jicao.com/goods/payForSubmit';
+            $pay_url = 'https://api.iotpaycloud.com/v1/payForSubmit';
         }
         //H5 选择微信支付
         if(!$this->is_wexin_browser && $pay_type == 'weixin')
