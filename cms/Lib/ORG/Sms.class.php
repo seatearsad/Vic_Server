@@ -318,7 +318,8 @@ final class Sms {
 
         $TTSText = $ttxt;
 
-        $proxy = "https://api.call-em-all.com/webservices/ceaapi_v3-2-13.asmx?WSDL";
+        $proxy = "http://api.call-em-all.com/webservices/ceaapi_v3-2-13.asmx?wsdl";
+        //libxml_disable_entity_loader(false);
         $client = new SoapClient($proxy, array("trace" => true));
 
         $request = array (
