@@ -1710,7 +1710,7 @@ class IndexAction extends BaseAction
 
                         //add garfunkel 添加语音
                         $txt = "This is a important message from island life , the customer has canceled the last order.";
-                        //Sms::send_voice_message($sms_data['mobile'],$txt);
+                        Sms::send_voice_message($sms_data['mobile'],$txt);
                     }
                     $this->returnCode(0,'info',array(),L('_B_MY_USEOFFLINECHANGEREFUND_'));
                 }
@@ -1953,7 +1953,7 @@ class IndexAction extends BaseAction
 
         $user = D('User')->where(array('uid'=>$uid))->find();
         if($user['pwd'] != md5($oldPwd)){
-            $this->returnCode(1,'info',array(),L('_B_MY_WRONGKEY_'));
+            $this->returnCode(1,'info',array(),L('_API_PASSWORD_ERROR'));
         }else{
             D('User')->where(array('uid'=>$uid))->save(array('pwd'=>md5($newPwd)));
             $this->returnCode(0,'info',array(),'success');
@@ -1971,13 +1971,13 @@ class IndexAction extends BaseAction
 
         $condition_user['phone'] = $_POST['phone'];
         if($database_user->field(true)->where($condition_user)->find()){
-            $this->returnCode(1,'info',array(),L('_B_MY_HAVETELNUM_'));
+            $this->returnCode(1,'info',array(),L('_API_PHONE_ERROR'));
         }
 
         if($vcode){
             $sms_verify_result = D('Smscodeverify')->verify($vcode, $_POST['phone']);
             if ($sms_verify_result['error_code']) {
-                $this->returnCode(1,'info',array(),$sms_verify_result['msg']);
+                $this->returnCode(1,'info',array(),L('_API_VERCODE_ERROR'));
             } else {
                 $modifypwd = $sms_verify_result['modifypwd'];
             }
