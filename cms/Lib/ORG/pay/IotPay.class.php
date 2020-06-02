@@ -36,17 +36,17 @@ class IotPay
             $data['refundAmount'] = $order['payment_money']*100;
             $data['clientIp'] = real_ip();
             //$data['device'] =$device;
-            $data['notifyUrl'] = 'https://www.tutti.app/notify';
+            //$data['notifyUrl'] = 'https://www.tutti.app/notify';
             $data['loginName'] = 'jwsj218';
             //import('ORG.Crypt.Des');
             //$data['password'] = bin2hex(Des::encrypt('il1234','IotPay66'));
             $data['password'] = $this->encrypt('il1234','IotPay66','98765432');
             $data['payOrderId'] = $order['invoice_head'];
-            $data['sign'] = $this->getSign($data);
+            $data['sign'] = $this->getSign($data,$pay_key);
             //var_dump($data);die();
             import('ORG.Net.Http');
             $http = new Http();
-            $pay_url = 'http://pay.4jicao.com/api/refund/create_order';
+            $pay_url = 'https://api.iotpaycloud.com/v1/refund_order';
             $result = $http->curlPost($pay_url,'params='.json_encode($data));
             //var_dump($result);die();
             return $result;
@@ -77,14 +77,23 @@ class IotPay
      * @des 3DES加密
      */
     private function encrypt($input, $key, $iv, $base64 = true){
-        $size = 8;
-        $input = self::pkcs5_pad($input, $size);
-        $encryption_descriptor = mcrypt_module_open(MCRYPT_3DES, '', 'cbc', '');
-        mcrypt_generic_init($encryption_descriptor, $key, $iv);
-        $data = mcrypt_generic($encryption_descriptor, $input);
-        mcrypt_generic_deinit($encryption_descriptor);
-        mcrypt_module_close($encryption_descriptor);
-        return base64_encode($data);
+//        $size = 8;
+//        $input = self::pkcs5_pad($input, $size);
+//        $encryption_descriptor = mcrypt_module_open(MCRYPT_3DES, '', 'cbc', '');
+//        mcrypt_generic_init($encryption_descriptor, $key, $iv);
+//        $data = mcrypt_generic($encryption_descriptor, $input);
+//        mcrypt_generic_deinit($encryption_descriptor);
+//        mcrypt_module_close($encryption_descriptor);
+//        return base64_encode($data);
+
+        $key = $key;
+        $iv = $iv;
+        $pass_enc = $input;
+        $block = mcrypt_get_block_size('des', 'cbc');
+        $pad = $block - (strlen($pass_enc) % $block);
+        $pass_enc .= str_repeat(chr($pad), $pad);
+        $pass_enc = mcrypt_encrypt(MCRYPT_DES, $key, $pass_enc, MCRYPT_MODE_CBC, $iv);
+        return strtr(base64_encode($pass_enc), '+/', '-_');
     }
 
     /**

@@ -2584,7 +2584,8 @@ class PayAction extends BaseAction{
         //微信公众号 选择微信支付
         if($this->is_wexin_browser && $pay_type == 'weixin') {
             $channelId = 'WX_JSAPI';
-            $pay_url = 'http://open.4jicao.com/goods/payForSubmit';
+            //$pay_url = 'http://open.4jicao.com/goods/payForSubmit';
+            $pay_url = 'https://api.iotpaycloud.com/v1/payForSubmit';
         }
         //H5 选择微信支付
         if(!$this->is_wexin_browser && $pay_type == 'weixin')
@@ -2624,10 +2625,10 @@ class PayAction extends BaseAction{
         //ksort($data);
         //var_dump($data);
         //var_dump(json_encode($data));
-        file_put_contents("./test_log.txt",date("Y/m/d")."   ".date("h:i:sa")."   "."Request" ."   ". $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'--'.json_encode($data)."\r\n",FILE_APPEND);
         import('ORG.Net.Http');
         $http = new Http();
         $result = $http->curlPost($pay_url,'params='.json_encode($data));
+        file_put_contents("./test_log.txt",date("Y/m/d")."   ".date("h:i:sa")."   "."Request" ."   ". $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'--'.json_encode($data).'----'.json_encode($result,JSON_UNESCAPED_UNICODE)."\r\n",FILE_APPEND);
         //var_dump($result);
         if($channelId == 'WX_JSAPI' || $channelId == 'WX_MWEB'){
             if($result['success']){
