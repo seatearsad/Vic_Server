@@ -5034,7 +5034,7 @@ class MyAction extends BaseAction{
 
                         //add garfunkel 添加语音
                         $txt = "This is a important message from island life , the customer has canceled the last order.";
-                        //Sms::send_voice_message($sms_data['mobile'],$txt);
+                        Sms::send_voice_message($sms_data['mobile'],$txt);
                     }
                     $this->success_tips(L('_B_MY_USEOFFLINECHANGEREFUND_'),U('Shop/status',array('order_id' => $now_order['order_id'], 'store_id' => $store_id, 'mer_id' => $this->mer_id)));
 				}
