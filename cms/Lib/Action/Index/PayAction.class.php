@@ -1328,7 +1328,7 @@ class PayAction extends BaseAction{
                     }
                 }else{
                     if($is_jump){
-                        if($channelId == 'WX_JSAPI'){
+                        if($channelId == 'WX_JSAPI' || $channelId == 'ALIPAY_WAP' || $channelId == 'WX_MWEB'){
 
                             //$url = '/wap.php?g=Wap&c=Shop&a=status&order_id='.$order_id;
                             $url = '/wap.php?g=Wap&c=My&a=shop_order_list';
@@ -1340,8 +1340,20 @@ class PayAction extends BaseAction{
                         header('Location:'.$url);
                     }
                 }
-            }
+            }else{
+                if($is_jump){
+                    if($channelId == 'WX_JSAPI' || $channelId == 'ALIPAY_WAP' || $channelId == 'WX_MWEB'){
 
+                        //$url = '/wap.php?g=Wap&c=Shop&a=status&order_id='.$order_id;
+                        $url = '/wap.php?g=Wap&c=My&a=shop_order_list';
+                    }else{
+                        $url =U("User/Index/shop_order_view",array('order_id'=>$order_id));
+                    }
+                    sleep(1);
+
+                    header('Location:'.$url);
+                }
+            }
         }else{
             echo 'Error';
         }
