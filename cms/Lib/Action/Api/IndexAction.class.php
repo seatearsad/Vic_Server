@@ -503,7 +503,7 @@ class IndexAction extends BaseAction
 
         //账户余额
         $userInfo = D('User')->get_user($uid);
-        $result['now_money'] = number_format($userInfo['now_money'],2);
+        $result['now_money'] = round($userInfo['now_money'],2);
 
         $this->returnCode(0,'',$result,'success');
     }
@@ -752,7 +752,7 @@ class IndexAction extends BaseAction
         }elseif($_POST['pay_type'] == 4){//余额支付
             //账户余额
             $userInfo = D('User')->get_user($uid);
-            $now_money = number_format($userInfo['now_money'],2);
+            $now_money = round($userInfo['now_money'],2);
 
             $data['balance_pay'] = $order_data['price'] + $order_data['tip_charge'] - $order_data['coupon_price'] - $order_data['delivery_discount'];
             if($now_money >= $data['balance_pay']){
@@ -1184,7 +1184,7 @@ class IndexAction extends BaseAction
         }elseif($_POST['pay_type'] == 4){//余额支付
             //账户余额
             $userInfo = D('User')->get_user($uid);
-            $now_money = number_format($userInfo['now_money'],2);
+            $now_money = round($userInfo['now_money'],2);
 
             $data['balance_pay'] = $price + $tip - $delivery_discount - $merchant_reduce;
             if($now_money >= $data['balance_pay']){
