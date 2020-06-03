@@ -225,6 +225,7 @@ class StoreModel extends Model
         $store['delivery_price'] = floatval($row['basic_price']);//起送价
         $store['tax_num'] = $row['tax_num'];
         $store['deposit_price'] = floatval($row['deposit_price']);
+        $store['service_fee'] = $row['service_fee'];
 
         //$store['deliver_name'] = $delivers[$row['deliver_type']];
         $is_have_two_time = 0;//是否是第二时段的配送显示
@@ -883,17 +884,17 @@ class StoreModel extends Model
         $mark = "";
         switch ($status){
             case 1:
-                $mark = "等待商家接单...";
+                $mark = L('V2_PAYMENTSUCCESSDES');
                 break;
             case 2:
                 $delivery = D('Deliver_supply')->where(array('order_id'=>$order_id))->find();
-                $mark = replace_lang_str("预计出餐时间:%s min",$delivery['dining_time']);
+                $mark = replace_lang_str(L('V2_ORDERCONFRIMDES'),$delivery['dining_time']);
                 break;
             case 3:
-                $mark = replace_lang_str("您的订单将有送餐员%s为您配送",$log['name']);
+                $mark = replace_lang_str(L('V2_COURIERCONFIRMDES'),$log['name']);
                 break;
             case 33:
-                $mark = replace_lang_str("您的商家需要额外%smin出餐",$log['note']);
+                $mark = replace_lang_str(L('V2_POTENTIALDELAYDES'),$log['note']);
                 break;
             default:
                 break;
@@ -908,7 +909,6 @@ class StoreModel extends Model
 
         return $name_list[$status];
     }
-
 
     /**
      * @param $pay_type

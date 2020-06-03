@@ -2981,6 +2981,8 @@ class ShopAction extends BaseAction{
 // 			}
 
 			$order_data['goods_price'] = $return['price'];//商品的价格
+            //garfunkel 计算服务费
+            $order_data['service_fee'] = number_format($order_data['goods_price'] * $return['store']['service_fee']/100,2);
 			$order_data['extra_price'] = $return['extra_price'];//另外要支付的金额
 			$order_data['discount_price'] = $return['vip_discount_money'];//商品折扣后的总价
             //modify garfunkel
@@ -2993,7 +2995,7 @@ class ShopAction extends BaseAction{
             //$order_data['price'] = $order_data['price'] * 1.05; //税费
 
             $return['tax_price'] = $return['tax_price'] + ($delivery_fee + $return['store']['pack_fee'])*$return['store']['tax_num'] / 100;
-            $order_data['price'] = $return['price'] + $return['delivery_fee'] + $return['store']['pack_fee'] + $return['tax_price'] + $return['deposit_price'];
+            $order_data['price'] = $return['price'] + $return['delivery_fee'] + $return['store']['pack_fee'] + $return['tax_price'] + $return['deposit_price'] + $order_data['service_fee'];
             $order_data['total_price'] = $order_data['price'];
 
             $order_data['discount_detail'] = $return['discount_list'] ? serialize($return['discount_list']) : '';//优惠详情
@@ -3447,7 +3449,8 @@ class ShopAction extends BaseAction{
                 'deliver_info' => unserialize($order['deliver_info']),
                 'pay_type' => $order['pay_type'],
                 'tip_charge' => $order['tip_charge'],
-                'delivery_discount'=>$order['delivery_discount']
+                'delivery_discount'=>$order['delivery_discount'],
+                'service_fee'=>$order['service_fee']
             );
             $tax_price = 0;
             $deposit_price = 0;

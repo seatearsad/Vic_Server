@@ -164,7 +164,9 @@ class Shop_orderModel extends Model
                 	'delivery_discount_type'	=>	$now_order['delivery_discount_type'],
 					'create_time'		=>	$now_order['create_time'],
                 	'merchant_reduce'	=>	$now_order['merchant_reduce'],
-                	'merchant_reduce_type'	=>	$now_order['merchant_reduce_type']
+                	'merchant_reduce_type'	=>	$now_order['merchant_reduce_type'],
+					'service_fee'		=>	$now_order['service_fee'],
+					'store_service_fee' =>	$merchant_store['service_fee']
 			);
 		} else {
 			$order_info = array(
@@ -202,7 +204,9 @@ class Shop_orderModel extends Model
                 'delivery_discount_type'	=>	$now_order['delivery_discount_type'],
                 'create_time'		=>	$now_order['create_time'],
 				'merchant_reduce'	=>	$now_order['merchant_reduce'],
-                'merchant_reduce_type'	=>	$now_order['merchant_reduce_type']
+                'merchant_reduce_type'	=>	$now_order['merchant_reduce_type'],
+                'service_fee'		=>	$now_order['service_fee'],
+                'store_service_fee' =>	$merchant_store['service_fee']
 			);
 		}
 		return array('error' => 0, 'order_info' => $order_info);

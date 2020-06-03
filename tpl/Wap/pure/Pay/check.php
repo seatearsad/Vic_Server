@@ -64,6 +64,7 @@
         var  total_money = Number("{pigcms{$order_info.order_total_money}");
         var  card_discount = Number("<?php if($card_info['discount']){ ?>{pigcms{$card_info.discount}<?php }else{?>10<?php }?>");
         var  delivery_discount = Number("{pigcms{$order_info.delivery_discount}");
+        var  service_fee = Number("{pigcms{$order_info.service_fee}");
         <?php if($order_info['delivery_discount_type'] == 0 && $system_coupon['discount']>0){ ?>
             delivery_discount = 0;
         <?php } ?>
@@ -587,7 +588,8 @@
                                 'cvd':$('#cvd').val(),
                                 'delivery_discount':delivery_discount,
                                 'not_touch':$('input[name="not_touch"]:checked').val(),
-                                'merchant_reduce':merchant_reduce
+                                'merchant_reduce':merchant_reduce,
+                                'service_fee':service_fee
                             };
 
                             //alert(re_data['order_type']);
@@ -627,7 +629,8 @@
                                 'est_time':$('#est_time_input').val(),
                                 'delivery_discount':delivery_discount,
                                 'not_touch':$('input[name="not_touch"]:checked').val(),
-                                'merchant_reduce':merchant_reduce
+                                'merchant_reduce':merchant_reduce,
+                                'service_fee':service_fee
                             };
                             var card_stauts = "{pigcms{$card['status']}";
                             if(card_stauts == 0){
@@ -691,7 +694,8 @@
                         'est_time':$('#est_time_input').val(),
                         'delivery_discount':delivery_discount,
                         'not_touch':$('input[name="not_touch"]:checked').val(),
-                        'merchant_reduce':merchant_reduce
+                        'merchant_reduce':merchant_reduce,
+                        'service_fee':service_fee
                     };
                     $.post('{pigcms{:U("Pay/WeixinAndAli")}',re_data,function(data){
                         layer.closeAll();
@@ -1095,6 +1099,7 @@
         <input type="hidden" name="tip" value="">
         <input type="hidden" name="delivery_discount" value="{pigcms{$order_info.delivery_discount}">
         <input type="hidden" name="merchant_reduce" value="{pigcms{$order_info.merchant_reduce}">
+        <input type="hidden" name="service_fee" value="{pigcms{$order_info.service_fee}">
         <if condition="$order_info['order_type'] != 'recharge'">
         <div class="all_list">
             <div class="order_note">
@@ -1271,7 +1276,11 @@
                 <div>
                     {pigcms{:L('_DELI_PRICE_')} <span>${pigcms{$order_info['freight_charge']}</span>
                 </div>
-                <if condition="$order_info['packing_charge'] != 0">
+                <div>
+                    {pigcms{:L('V2_SERVICEFEE')} <img src="{pigcms{$static_path}img/index/tax_fee.png" id="tax_fee_img" width="20" style="vertical-align: middle;margin-left: 5px;" />
+                    <span>${pigcms{:number_format($order_info['packing_charge'] + $order_info['deposit_price'] + $order_info['tax_price'] + $order_info['service_fee'],2)}</span>
+                </div>
+                <!--if condition="$order_info['packing_charge'] != 0">
                 <div>
                     {pigcms{:L('_PACK_PRICE_')} <span>${pigcms{$order_info['packing_charge']}</span>
                 </div>
@@ -1282,10 +1291,13 @@
                 </div>
                 </if>
                 <div>
-                    {pigcms{:L('_TIP_TXT_')} <span class="tip_show"></span>
+                    {pigcms{:L('_TAXATION_TXT_')} <span>${pigcms{:sprintf("%.2f",$order_info['tax_price'])}</span>
                 </div>
                 <div>
-                    {pigcms{:L('_TAXATION_TXT_')} <span>${pigcms{:sprintf("%.2f",$order_info['tax_price'])}</span>
+                    {pigcms{:L('_SERVICE_FEE_')} <span>${pigcms{:sprintf("%.2f",$order_info['service_fee'])}</span>
+                </div-->
+                <div>
+                    {pigcms{:L('_TIP_TXT_')} <span class="tip_show"></span>
                 </div>
                 <?php if($system_coupon){ ?>
                 <div>
@@ -1687,10 +1699,36 @@
     }
 
     update_pay_time();
+
+    var width = $(window).width()*2/3;
+
+    var msg = "<div class='b_font' style='width: "+width+"px;text-align: center;'>{pigcms{:L('V2_SERVICEFEE')}</div>" +
+        "<div class='b_font' style='width: "+width+"px;margin-top: 10px'>{pigcms{:L('V2_TAX')}:${pigcms{:number_format($order_info['tax_price'],2)}</div>" +
+        "<div style='width: "+width+"px;'>{pigcms{:L('V2_TAXDES')}</div>" +
+        "<div class='b_font' style='width: "+width+"px;margin-top: 10px'>{pigcms{:L('V2_PACKINGFEE')}:${pigcms{:number_format($order_info['packing_charge'],2)}</div>" +
+        "<div style='width: "+width+"px;'>{pigcms{:L('V2_PACKINGFEEDES')}</div>" +
+        "<div class='b_font' style='width: "+width+"px;margin-top: 10px'>{pigcms{:L('V2_BOTTLEDEPOSIT')}:${pigcms{:number_format($order_info['deposit_price'],2)}</div>" +
+        "<div style='width: "+width+"px;'>{pigcms{:L('V2_BOTTLEDEPOSITDES')}</div>" +
+        "<div class='b_font' style='width: "+width+"px;margin-top: 10px'>{pigcms{:L('V2_SERVICEFEEDES')}:${pigcms{:number_format($order_info['service_fee'],2)}</div>" +
+        "<div style='width: "+width+"px;'>{pigcms{:replace_lang_str(L('V2_TOTALTAXNFEES'),$order_info['store_service_fee'])}</div>" +
+        "<div class='b_font' style='width: "+width+"px;text-align: right;margin-top: 15px;margin-bottom: 10px;'>{pigcms{:L('V2_SERVICEFEE')}:{pigcms{:number_format($order_info['packing_charge'] + $order_info['tax_price'] + $order_info['deposit_price'] + $order_info['service_fee'],2)}</div>";
+
+    $('#tax_fee_img').click(function () {
+        layer.open({
+            title:["",'border:none'],
+            content:msg,
+            style: 'border:none; background-color:#fff; color:#999;'
+        });
+    });
 </script>
 <style>
     .form-field--error{
         border:1px #FF0000 solid;
+    }
+    .b_font{
+        color: #555;
+        font-weight: bold;
+        font-size: 16px;
     }
 </style>
 <if condition="$cheap_info['can_buy'] heq false">
