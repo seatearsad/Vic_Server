@@ -1352,7 +1352,11 @@ class IndexAction extends BaseAction
 
         $data['name'] = $coupon['name'];
         //$data['desc'] = $coupon['des'];
-        $data['rowiID'] = $coupon['coupon_id'];
+        if(strpos($coupon['coupon_id'],'event')!== false) {
+            $data['rowiID'] = $coupon['coupon_id'];
+        }else{
+            $data['rowiID'] = $coupon['id'];
+        }
         $data['limitMoney'] = $coupon['order_money'];
         $data['money'] = $coupon['discount'];
         $data['beginDate'] = date('Y.m.d',$coupon['start_time']);
@@ -1385,14 +1389,20 @@ class IndexAction extends BaseAction
 //        $coupon_list = $model->query($sql);
         $coupon_list = D('System_coupon')->get_user_coupon_list($uid);
 
-        if(empty($coupon_list)){
-            $event_coupon = D('New_event')->getUserCoupon($uid,0,$amount);
-            if($event_coupon) {
-                foreach ($event_coupon as &$system_coupon) {
-                    $system_coupon['id'] = $system_coupon['coupon_id'] . '_' . $system_coupon['id'];
-                    $coupon_list[] = $system_coupon;
-                }
-            }
+        //if(empty($coupon_list)){
+//            $event_coupon = D('New_event')->getUserCoupon($uid,0,$amount);
+//            if($event_coupon) {
+//                foreach ($event_coupon as &$system_coupon) {
+//                    $system_coupon['id'] = $system_coupon['coupon_id'] . '_' . $system_coupon['id'];
+//                    $coupon_list[] = $system_coupon;
+//                }
+//            }
+        //}
+
+        $event_coupon = D('New_event')->getUserCoupon($uid,0,$amount);
+        if(!$coupon_list) $coupon_list = array();
+        if(count($event_coupon) > 0){
+            $coupon_list = array_merge($coupon_list,$event_coupon);
         }
 
         $tmp = array();
