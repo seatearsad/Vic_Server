@@ -1905,7 +1905,6 @@ class IndexAction extends BaseAction
 
     public function get_user_info(){
         $uid = $_POST['uid'];
-
         $userInfo = D('User')->get_user($uid);
         $info['now_money'] = round($userInfo['now_money'],2);
         $info['phone'] = $userInfo['phone'];
