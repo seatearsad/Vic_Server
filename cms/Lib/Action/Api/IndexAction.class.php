@@ -1352,7 +1352,7 @@ class IndexAction extends BaseAction
 
         $data['name'] = $coupon['name'];
         //$data['desc'] = $coupon['des'];
-        $data['rowiID'] = $coupon['id'];
+        $data['rowiID'] = $coupon['coupon_id'];
         $data['limitMoney'] = $coupon['order_money'];
         $data['money'] = $coupon['discount'];
         $data['beginDate'] = date('Y.m.d',$coupon['start_time']);
