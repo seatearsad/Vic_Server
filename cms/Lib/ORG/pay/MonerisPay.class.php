@@ -260,7 +260,7 @@ class MonerisPay
                 $order_param['pay_time'] = $resp['transDate'] . ' ' . $resp['transTime'];
                 $order_param['pay_money'] = $resp['transAmount'];
                 $order_param['pay_type'] = 'moneris';
-                $order_param['is_mobile'] = $is_wap;
+                //$order_param['is_mobile'] = $is_wap;
                 $order_param['is_own'] = 0;
                 $order_param['third_id'] = 0;
                 $order_param['invoice_head'] = $resp['txnNumber'];//借用发票头这个字段存储交易号
