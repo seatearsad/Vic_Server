@@ -593,7 +593,7 @@ class MonerisPay
         //响应代码
         $resp['responseCode'] = $mpgResponse->getResponseCode();
         //返回消息
-        $resp['message'] = $mpgResponse->getMessage();
+        $resp['message'] = $mpgResponse->getMessage().'2222';
         $resp['resSuccess'] = $mpgResponse->getResSuccess();
         if($resp['resSuccess'] == "true") {
             $resp['data_key'] = $mpgResponse->getDataKey();
