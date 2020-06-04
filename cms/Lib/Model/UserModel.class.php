@@ -50,7 +50,7 @@ class UserModel extends Model
 				if($type){
 					return array('error_code' => true, 'msg' => '20120008');
 				}else{
-					return array('error_code' => true, 'msg' => '该帐号被禁止登录!');
+					return array('error_code' => true, 'msg' => L('_API_FROZEN_USER_'));
 				}
 			}
 			if($now_user['status'] == 2){
