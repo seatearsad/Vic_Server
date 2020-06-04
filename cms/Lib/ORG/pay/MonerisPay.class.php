@@ -469,7 +469,7 @@ class MonerisPay
                     return $result;
             }
         }
-
+        die('aaa');
         $order = explode("_",$data['order_id']);
         $order_id = $order[1];
         $order_param = array();
