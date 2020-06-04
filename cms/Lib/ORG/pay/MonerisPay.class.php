@@ -118,10 +118,10 @@ class MonerisPay
             if ($card_cvd != '') {
                 if (strpos($resp['cvdResultCode'], 'M') !== false || strpos($resp['cvdResultCode'], 'Y') !== false) {
                     if ($data['credit_id']) {
-                        $data['cvd'] = $card_cvd;
-                        $data['status'] = 1;
-                        $data['verification_time'] = time();
-                        D('User_card')->field(true)->where(array('id' => $data['credit_id']))->save($data);
+                        $data_card['cvd'] = $card_cvd;
+                        $data_card['status'] = 1;
+                        $data_card['verification_time'] = time();
+                        D('User_card')->field(true)->where(array('id' => $data['credit_id']))->save($data_card);
                     }
                 } else {
                     //验证CVD 为通过 将responseCode修改后存储一次error记录并退款
