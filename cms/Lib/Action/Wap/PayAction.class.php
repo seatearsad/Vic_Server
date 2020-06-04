@@ -2527,11 +2527,13 @@ class PayAction extends BaseAction{
         }
 
         if($resp['responseCode'] != 'null' && $resp['responseCode'] < 50){
+            $order = explode("_",$_POST['order_id']);
+            $order_id = $order[1];
             //判断是否有减免配送费活动
             if($_POST['delivery_discount'] != null){
                 $order_info['delivery_discount'] = $_POST['delivery_discount'];
-                if($order_info['order_type'] == 'shop' || $order_info['order_type'] == 'mall'){
-                    D('Shop_order')->field(true)->where(array('order_id'=>$order_info['order_id']))->save(array('delivery_discount'=>$order_info['delivery_discount']));
+                if($_POST['order_type'] == 'shop' || $_POST['order_type'] == 'mall'){
+                    D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->save(array('delivery_discount'=>$order_info['delivery_discount']));
                     if($order_info['delivery_discount'] > 0)
                         D('New_event')->addEventCouponByType(3,$this->user_session['uid']);
                 }
@@ -2539,14 +2541,14 @@ class PayAction extends BaseAction{
             //店铺满减
             if($_POST['merchant_reduce'] != null){
                 $order_info['merchant_reduce'] = $_POST['merchant_reduce'];
-                if($order_info['order_type'] == 'shop' || $order_info['order_type'] == 'mall'){
-                    D('Shop_order')->field(true)->where(array('order_id'=>$order_info['order_id']))->save(array('merchant_reduce'=>$order_info['merchant_reduce']));
+                if($_POST['order_type'] == 'shop' || $_POST['order_type'] == 'mall'){
+                    D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->save(array('merchant_reduce'=>$order_info['merchant_reduce']));
                 }
             }
 
             //无接触配送
             if($_POST['not_touch'] != null && $_POST['not_touch'] == 1){
-                D('Shop_order')->field(true)->where(array('order_id'=>$order_info['order_id']))->save(array('not_touch'=>1));
+                D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->save(array('not_touch'=>1));
             }
 
             if(!$_POST['order_type']) $_POST['order_type'] = "shop";
