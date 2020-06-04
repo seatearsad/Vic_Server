@@ -36,6 +36,7 @@ class MonerisPay
      * @return mixed
      */
     public function payment($data,$uid,$from_type){
+        //判断金额还需在api user_card_default 方法中修改
         if($data['order_type'] == 'recharge' || $data['charge_total'] >= 251){
             return $this->mpi_transaction($data,$uid,$from_type);
         }

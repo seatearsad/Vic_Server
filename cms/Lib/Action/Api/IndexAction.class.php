@@ -1235,10 +1235,15 @@ class IndexAction extends BaseAction
         $uid = $_POST['uid'];
         $card = D('User_card')->getCardListByUid($uid);
 
-        if($card)
-            $this->returnCode(0,'info',$card[0],'success');
-        else
-            $this->returnCode(0,'info',array('id'=>'0'),'success');
+        $save_price = 251;
+
+        if($card) {
+            $send_card = $card[0];
+            $send_card['save_price'] = $save_price;
+            $this->returnCode(0, 'info', $card[0], 'success');
+        }else {
+            $this->returnCode(0, 'info', array('id' => '0','save_price'=>251), 'success');
+        }
     }
 
     public function getUserCard(){
