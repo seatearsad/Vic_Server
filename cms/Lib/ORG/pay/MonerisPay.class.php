@@ -544,7 +544,7 @@ class MonerisPay
         {
             //print("\nMpiMessage = " . $mpgResponse->getMpiMessage());
             if(!$resp['message'] || $resp['message'] == '')
-                $resp['message'] = $mpgResponse->getMessage();
+                $resp['message'] = $mpgResponse->getMessage().'1111';
         }
         //var_dump($mpgResponse);die();
         return $resp;
