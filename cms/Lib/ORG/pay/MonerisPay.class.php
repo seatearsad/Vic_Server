@@ -469,7 +469,7 @@ class MonerisPay
                     return $result;
             }
         }
-        die('aaa');
+
         $order = explode("_",$data['order_id']);
         $order_id = $order[1];
         $order_param = array();
@@ -589,7 +589,7 @@ class MonerisPay
         $mpgHttpPost  =new mpgHttpsPost($this->store_id,$this->api_token,$mpgRequest);
 
         $mpgResponse=$mpgHttpPost->getMpgResponse();
-
+        var_dump($mpgResponse);die();
         //响应代码
         $resp['responseCode'] = $mpgResponse->getResponseCode();
         //返回消息
