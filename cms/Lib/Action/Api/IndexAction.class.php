@@ -1240,7 +1240,7 @@ class IndexAction extends BaseAction
         if($card) {
             $send_card = $card[0];
             $send_card['save_price'] = $save_price;
-            $this->returnCode(0, 'info', $card[0], 'success');
+            $this->returnCode(0, 'info', $send_card, 'success');
         }else {
             $this->returnCode(0, 'info', array('id' => '0','save_price'=>251), 'success');
         }
