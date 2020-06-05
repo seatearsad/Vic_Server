@@ -495,9 +495,9 @@ class MonerisPay
         $amount=$data['charge_total'];
         $xid = sprintf("%'920d", rand());
         $MD = $xid.$orderInfo.$amount;
-        $site_url = C('config.config_site_url') == '' ? 'https://www.tutti.app' : C('config.config_site_url');
+//        $site_url = C('config.config_site_url') == '' ? 'https://www.tutti.app' : C('config.config_site_url');
         //$site_url = C('config.config_site_url') == '' ? 'http://www.vicisland.ca' : C('config.config_site_url');
-//        $site_url = C('config.config_site_url') == '' ? 'http://54.190.29.18' : C('config.config_site_url');
+        $site_url = C('config.config_site_url') == '' ? 'http://54.190.29.18' : C('config.config_site_url');
         $merchantUrl = $site_url.'/secure3d';//.$_SERVER["HTTP_REFERER"];
         $accept = $_SERVER['HTTP_ACCEPT'];
         $userAgent = $_SERVER['HTTP_USER_AGENT'];

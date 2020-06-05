@@ -2867,7 +2867,13 @@ class PayAction extends BaseAction{
                     $script = '<SCRIPT LANGUAGE="Javascript" >var ua = navigator.userAgent;
                             if(ua.match(/TuttiiOS/i)){
                                   window.webkit.messageHandlers.payComplate.postMessage(["'.$resp['url'].'"]);
-                            }</SCRIPT>';
+                            }
+                            if(/(tutti_android)/.test(navigator.userAgent.toLowerCase())) {
+                                if (typeof (window.activity.showToast) != "undefined") {
+                                    window.activity.showToast("'.$resp['url'].'");
+                                }
+                            }
+                            </SCRIPT>';
                     echo $script;
                     exit();
                 }else{
