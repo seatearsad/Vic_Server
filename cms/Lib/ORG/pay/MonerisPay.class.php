@@ -511,7 +511,7 @@ class MonerisPay
             'accept'=>$accept,
             'userAgent'=>$userAgent
         );
-        var_dump($txnArray);//die();
+        //var_dump($txnArray);//die();
 
         $mpgTxn = new mpgTransaction($txnArray);
         /************************ Request Object **********************************/
@@ -523,7 +523,7 @@ class MonerisPay
         /************************ Response Object **********************************/
         $mpgResponse=$mpgHttpPost->getMpgResponse();
         //print("\nMpiSuccess = " . $mpgResponse->getMpiSuccess());
-        var_dump($mpgResponse);die();
+        //var_dump($mpgResponse);die();
         $resp['requestMode'] = "mpi";
         $resp['mpiSuccess'] = $mpgResponse->getMpiSuccess();
         $resp['message'] = $mpgResponse->getMpiMessage();
