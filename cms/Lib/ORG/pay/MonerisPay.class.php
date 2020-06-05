@@ -511,7 +511,7 @@ class MonerisPay
             'accept'=>$accept,
             'userAgent'=>$userAgent
         );
-        //var_dump($txnArray);die();
+        var_dump($txnArray);//die();
 
         $mpgTxn = new mpgTransaction($txnArray);
         /************************ Request Object **********************************/
