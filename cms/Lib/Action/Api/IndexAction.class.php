@@ -628,7 +628,7 @@ class IndexAction extends BaseAction
 
         $sid = D('Cart')->field(true)->where(array('uid'=>$uid,'fid'=>$cart_array[0]['fid']))->find()['sid'];
         $return = D('Shop_goods')->checkCart($sid, $uid, $orderData);
-        var_dump($return);die();
+
         //garfunkel add
         $store = D('Merchant_store')->where(array('store_id'=>$return['store_id']))->find();
         $area = D('Area')->where(array('area_id'=>$store['city_id']))->find();
@@ -735,10 +735,10 @@ class IndexAction extends BaseAction
         $order_data['delivery_discount'] = $_POST['delivery_discount'] ? $_POST['delivery_discount'] : 0;
         $order_data['merchant_reduce'] = $_POST['merchant_reduce'] ? $_POST['merchant_reduce'] : 0;
         $order_data['not_touch'] = $_POST['not_touch'] ? $_POST['not_touch'] : 0;
-        var_dump($order_data);die();
+
         $order_id = D('Shop_order')->saveOrder($order_data, $return);
         //清除购物车中的内容
-        //D('Cart')->delCart($uid,$cart_array);
+        D('Cart')->delCart($uid,$cart_array);
         //die($order_id);
         if($_POST['pay_type'] == 0){//线下支付 直接进入支付流程
             $order_param['order_id'] = $order_id;
