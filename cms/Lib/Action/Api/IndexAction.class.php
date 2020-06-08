@@ -519,7 +519,7 @@ class IndexAction extends BaseAction
         $tax_price = 0;
         $deposit_price = 0;
         $orderData = array();
-
+        var_dump($cart_array[0]['fid']);die();
         //判断商品是否还在可销售的时间段
         $store_id = D('Cart')->field(true)->where(array('uid'=>$uid,'fid'=>$cart_array[0]['fid']))->find()['sid'];
         $sortList = D('Shop_goods_sort')->lists($store_id, true);
