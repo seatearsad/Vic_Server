@@ -519,7 +519,7 @@ class IndexAction extends BaseAction
         $tax_price = 0;
         $deposit_price = 0;
         $orderData = array();
-        var_dump($cart_array[0]['fid']);die();
+
         //判断商品是否还在可销售的时间段
         $store_id = D('Cart')->field(true)->where(array('uid'=>$uid,'fid'=>$cart_array[0]['fid']))->find()['sid'];
         $sortList = D('Shop_goods_sort')->lists($store_id, true);
@@ -628,7 +628,7 @@ class IndexAction extends BaseAction
 
         $sid = D('Cart')->field(true)->where(array('uid'=>$uid,'fid'=>$cart_array[0]['fid']))->find()['sid'];
         $return = D('Shop_goods')->checkCart($sid, $uid, $orderData);
-
+        var_dump($return);die();
         //garfunkel add
         $store = D('Merchant_store')->where(array('store_id'=>$return['store_id']))->find();
         $area = D('Area')->where(array('area_id'=>$store['city_id']))->find();
