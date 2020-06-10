@@ -976,6 +976,7 @@ function translationCnToEn($str_cn){
     $url = 'https://translation.googleapis.com/language/translate/v2?key=AIzaSyAxHAPoWlRu2Mz8APLwM8Ae6B3x1MJUlvU&target=en&source=zh&q='.urlencode($str_cn);
     $result = $http->curlGet($url);
     //var_dump($result);die();
+    $result = json_decode($result);
     return $result['data']['translations'][0]['translatedText'];
 }
 ?>
