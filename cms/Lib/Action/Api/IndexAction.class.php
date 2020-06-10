@@ -736,6 +736,12 @@ class IndexAction extends BaseAction
         $order_data['merchant_reduce'] = $_POST['merchant_reduce'] ? $_POST['merchant_reduce'] : 0;
         $order_data['not_touch'] = $_POST['not_touch'] ? $_POST['not_touch'] : 0;
 
+        if(!checkEnglish($order_data['desc']) && trim($order_data['desc']) != ''){
+            $order_data['desc_en'] = translationCnToEn($order_data['desc']);
+        }else{
+            $order_data['desc_en'] = '';
+        }
+
         $order_id = D('Shop_order')->saveOrder($order_data, $return);
         //清除购物车中的内容
         D('Cart')->delCart($uid,$cart_array);
