@@ -1498,6 +1498,11 @@ class DeliverAction extends BaseAction
 
             $address = D('User_adress')->where(array('adress_id'=>$order['address_id']))->find();
             $order['user_address'] = $address['adress'];
+
+            //获取翻译
+            if(C('DEFAULT_LANG') != 'zh-cn' && $address['detail_en'] != ''){
+                $address['detail'] = $address['detail_en'];
+            }
             $order['user_address_detail'] = $address['detail'];
 
             switch ($order['pay_type']) {
