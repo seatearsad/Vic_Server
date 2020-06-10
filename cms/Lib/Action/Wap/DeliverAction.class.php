@@ -705,6 +705,13 @@ class DeliverAction extends BaseAction
                     $address['detail'] = '';
                 }
                 //获取翻译
+                if(C('DEFAULT_LANG') != 'zh-cn'){
+                    if(!checkEnglish($address['detail']) && $address['detail'] != '' && $address['detail_en'] == ''){
+                        $detail_en = translationCnToEn($address['detail']);
+                        D('User_adress')->where(array('adress_id'=>$order['address_id']))->save(array('detail_en'=>$detail_en));
+                        $address['detail_en'] = $detail_en;
+                    }
+                }
                 if(C('DEFAULT_LANG') != 'zh-cn' && $address['detail_en'] != ''){
                     $address['detail'] = $address['detail_en'];
                 }
@@ -1504,6 +1511,13 @@ class DeliverAction extends BaseAction
             $order['user_address'] = $address['adress'];
 
             //获取翻译
+            if(C('DEFAULT_LANG') != 'zh-cn'){
+                if(!checkEnglish($address['detail']) && $address['detail'] != '' && $address['detail_en'] == ''){
+                    $detail_en = translationCnToEn($address['detail']);
+                    D('User_adress')->where(array('adress_id'=>$order['address_id']))->save(array('detail_en'=>$detail_en));
+                    $address['detail_en'] = $detail_en;
+                }
+            }
             if(C('DEFAULT_LANG') != 'zh-cn' && $address['detail_en'] != ''){
                 $address['detail'] = $address['detail_en'];
             }
