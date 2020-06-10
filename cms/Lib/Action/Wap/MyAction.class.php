@@ -5390,6 +5390,12 @@ class MyAction extends BaseAction{
 		$data_reply['add_time'] = $_SERVER['REQUEST_TIME'];
 		$data_reply['add_ip'] = get_client_ip(1);
 		$data_reply['goods'] = $goods;
+
+        if(!checkEnglish($comment) && trim($comment) != ''){
+            $data_reply['comment_en'] = translationCnToEn($comment);
+        }else{
+            $data_reply['comment_en'] = '';
+        }
 // 		echo "<pre/>";
 // 		print_r($data_reply);die;
 		if ($database_reply->data($data_reply)->add()) {
