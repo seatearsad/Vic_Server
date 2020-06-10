@@ -1397,9 +1397,6 @@ class DeliverAction extends BaseAction
 			$supply['change_name'] = $this->getDeliverUser($uid);
 		}
 		
-		
-		$this->assign('supply', $supply);
-		
 		if ($supply['item'] == 1) {//外送系统的外送
 			//订单信息
 			$where = array();
@@ -1483,7 +1480,10 @@ class DeliverAction extends BaseAction
 			$where = array();
 			$where['order_id'] = $supply['order_id'];
 			$order = D("Shop_order")->where($where)->find();
-
+            //获取翻译文字
+            if(C('DEFAULT_LANG') != 'zh-cn' && $order['desc_en'] != ''){
+                $supply['note'] = $order['desc_en'];
+            }
 			if (empty($order)) {
 				$this->error_tips("订单信息有误");
 				exit;
@@ -1580,6 +1580,7 @@ class DeliverAction extends BaseAction
                     $goods[$k]['dish'] = $dish_desc;
                 }
 			}
+            $this->assign('supply', $supply);
 			$this->assign('goods', $goods);
 			//店铺信息
 			$store = D()->field(true)->table(array(C('DB_PREFIX').'merchant_store'=>'ms', C('DB_PREFIX').'merchant_store_shop'=>'ml'))->where("ms.store_id=".$order['store_id']." AND ms.store_id=ml.store_id")->find();
