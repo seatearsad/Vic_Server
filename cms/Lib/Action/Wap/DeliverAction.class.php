@@ -704,6 +704,10 @@ class DeliverAction extends BaseAction
                     $address['adress'] = $val['aim_site'];
                     $address['detail'] = '';
                 }
+                //获取翻译
+                if(C('DEFAULT_LANG') != 'zh-cn' && $address['detail_en'] != ''){
+                    $address['detail'] = $address['detail_en'];
+                }
                 $val['user_address'] = $address;
                 $val['not_touch'] = $order['not_touch'];
 
