@@ -32,6 +32,13 @@ class User_adressModel extends Model{
 	}
 	/*保存地址*/
 	public function post_form_save($uid){
+	    //添加备注翻译
+        if(!checkEnglish($_POST['detail']) && trim($_POST['detail']) != ''){
+            $_POST['detail_en'] = translationCnToEn($_POST['detail']);
+        }else{
+            $_POST['detail_en'] = '';
+        }
+        //
 		if($_POST['adress_id']){
 			$condition_user_adress['adress_id'] = $_POST['adress_id'];
 			$condition_user_adress['uid'] = $uid;
