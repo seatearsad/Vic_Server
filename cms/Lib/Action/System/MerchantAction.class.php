@@ -1212,7 +1212,7 @@ class MerchantAction extends BaseAction{
 
 		if(!checkEnglish($reply['comment'])){
 		    $comment_en = translationCnToEn($reply['comment']);
-		    var_dump($comment_en);die();
+		    var_dump($comment_en);
         }
 		$this->assign('bg_color','#F3F3F3');
 		$this->assign('reply', $reply);
