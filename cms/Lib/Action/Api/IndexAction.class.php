@@ -1901,6 +1901,12 @@ class IndexAction extends BaseAction
         $data_reply['merchant_reply_content'] = "";
         $data_reply['merchant_reply_time'] = 0;
 
+        if(!checkEnglish($comment) && trim($comment) != ''){
+            $data_reply['comment_en'] = translationCnToEn($comment);
+        }else{
+            $data_reply['comment_en'] = '';
+        }
+
 // 		echo "<pre/>";
 // 		print_r($data_reply);die;
         if ($database_reply->data($data_reply)->add()) {
