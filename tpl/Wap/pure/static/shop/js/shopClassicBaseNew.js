@@ -2038,7 +2038,7 @@ function showShopContent(nav){
 						$('#shopReplyBox dl').html(html);
 					});
 					
-					if(result.total < result.now){
+					if(result.total > result.now){
 						$('#showMoreReply').show();
 					}else{
 						$('#showMoreReply').hide();
