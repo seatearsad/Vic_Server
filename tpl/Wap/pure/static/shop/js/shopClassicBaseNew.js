@@ -1373,7 +1373,7 @@ function showShop(shopId){
 					$('#shopReplyBox dl').html(html);
 				});
 				$('#showMoreReply').data('page','2');
-				if(result.total < result.now){
+				if(result.total > result.now){
 					$('#showMoreReply').show();
 				}else{
 					$('#showMoreReply').hide();
