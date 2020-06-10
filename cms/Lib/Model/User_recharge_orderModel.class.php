@@ -193,7 +193,7 @@ class User_recharge_orderModel extends Model{
 
 			if($this->where($where)->save($data_user_recharge_order)){
                 $add_money = $data_user_recharge_order['payment_money'] + $money_plus;
-				D('User')->add_money($now_order['uid'],$add_money,'在线充值+'.$money_plus);
+				D('User')->add_money($now_order['uid'],$add_money,'余额充值',0,0,0,'Top Up');
 				D('Scroll_msg')->add_msg('user_recharge',$now_user['uid'],'用户'.$now_user['nickname'].'于'.date('Y-m-d H:i',$_SERVER['REQUEST_TIME']).'充值成功！');
 				if($order_param['order_type'] == 'waimai-recharge'){
 					return array('error'=>0,'msg'=>'充值成功！','url'=>U('Waimai/User/index'));

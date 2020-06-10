@@ -365,13 +365,13 @@ class UserModel extends Model
 	}
 
 	/*增加用户的钱*/
-	public function add_money($uid,$money,$desc,$ask=0,$ask_id=0,$type_id=0){
+	public function add_money($uid,$money,$desc,$ask=0,$ask_id=0,$type_id=0,$desc_en){
 		$condition_user['uid'] = $uid;
 		if($type_id>0){
 			D('Fenrun')->add_recommend_award($uid,$type_id,1,$money,$desc);
 		}else {
 			if ($this->where($condition_user)->setInc('now_money', $money)) {
-				D('User_money_list')->add_row($uid, 1, $money, $desc, true, $ask, $ask_id);
+				D('User_money_list')->add_row($uid, 1, $money, $desc, true, $ask, $ask_id,$desc_en);
 				return array('error_code' => false, 'msg' => 'OK');
 			} else {
 				return array('error_code' => true, 'msg' => '用户余额充值失败！请联系管理员协助解决。');
@@ -390,7 +390,7 @@ class UserModel extends Model
 	}
 
 	/*使用用户的钱*/
-	public function user_money($uid,$money,$desc,$ask=0,$ask_id=0,$withdraw=0){
+	public function user_money($uid,$money,$desc,$ask=0,$ask_id=0,$withdraw=0,$desc_en=''){
 		$condition_user['uid'] = $uid;
 		if($this->where($condition_user)->setDec('now_money',$money)){
 			$score_recharge_money = $this->where($condition_user)->getField('score_recharge_money');
@@ -399,7 +399,7 @@ class UserModel extends Model
 				$this->where($condition_user)->setDec('score_recharge_money',$now_score_recharge_money);
 				D('User_money_list')->add_row($uid,2,$now_score_recharge_money,C('config.score_name')."兑换余额记录减扣 ".$now_score_recharge_money." 元",true,$ask,$ask_id);
 			}
-			D('User_money_list')->add_row($uid,2,$money,$desc,true,$ask,$ask_id);
+			D('User_money_list')->add_row($uid,2,$money,$desc,true,$ask,$ask_id,$desc_en);
 			return array('error_code' =>false,'msg' =>'OK');
 		}else{
 			return array('error_code' => true, 'msg' => '用户余额扣除失败！请联系管理员协助解决。');

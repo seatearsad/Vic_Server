@@ -809,14 +809,40 @@ class IndexAction extends BaseAction
         $_GET['page'] = $_POST['page'];
 
         $where = "is_del=0 AND uid={$uid}";
-        if ($status == 0) {
-            $where .= " AND paid=0 AND status<4";
-        } elseif ($status == 1) {
-            $where .= " AND paid=1 AND status=2";
-        } elseif ($status == 2) {
-            $where .= " AND paid=1 AND (status=4 OR status=5)";
-        }else{//付款超时，待删除
-            $where .= " AND status<>6";
+        //orderStatus -1 全部；0 未付款；1 已付款；2 退款；3 进行中；4 待评价；5 已完成
+
+//        if ($status == 0) {
+//            $where .= " AND paid=0 AND status<4";
+//        } elseif ($status == 1) {
+//            $where .= " AND paid=1 AND status=2";
+//        } elseif ($status == 2) {
+//            $where .= " AND paid=1 AND (status=4 OR status=5)";
+//        }else{//付款超时，待删除
+//            $where .= " AND status<>6";
+//        }
+
+        switch ($status){
+            case 0:
+                $where .= " AND paid=0 AND status<4";
+                break;
+            case 1:
+                $where .= " AND paid=1 AND status=2";
+                break;
+            case 2:
+                $where .= " AND paid=1 AND (status=4 OR status=5)";
+                break;
+            case 3:
+                $where .= " AND status<2";
+                break;
+            case 4:
+                $where .= " AND status=2";
+                break;
+            case 5:
+                $where .= " AND status=3";
+                break;
+            default://付款超时，待删除
+                $where .= " AND status<>6";
+                break;
         }
 
         $where .= " AND is_del = 0";
@@ -1596,35 +1622,17 @@ class IndexAction extends BaseAction
         if($cid){
             $l_id = D('System_coupon_hadpull')->field(true)->where(array('uid'=>$uid,'coupon_id'=>$cid))->find();
 
-            if($l_id == null)
-                $result = D('System_coupon')->had_pull($cid,$uid);
-            else
+            if($l_id == null) {
+                $result = D('System_coupon')->had_pull($cid, $uid);
+                if(isset($result) && $result['error_code'] == 0)
+                    $this->returnCode(0,'info',$result,'success');
+                else{
+                    $this->returnCode(1,'info',array(),$result['msg']);
+                }
+            }else
                 $this->returnCode(1,'info',array(),L('_AL_EXCHANGE_CODE_'));
         }else{
             $this->returnCode(1,'info',array(),L('_NOT_EXCHANGE_CODE_'));
-        }
-        if(isset($result) && $result['error_code'] == 0)
-            $this->returnCode(0,'info',$result,'success');
-        else{
-            $msg_str = '';
-            switch ($result['error_code']){
-                case 1:
-                    $msg_str = 'The coupon code has been entered incorrectly';
-                    break;
-                case 2:
-                    $msg_str = 'The coupon has expired.';
-                    break;
-                case 3:
-                    $msg_str = '';
-                    break;
-                case 4:
-                    $msg_str = 'The coupon is for new users only.';
-                    break;
-                case 5:
-                    $msg_str = L('_AL_EXCHANGE_CODE_');
-                    break;
-            }
-            $this->returnCode(1,'info',array(),$msg_str);
         }
     }
     //未支付 取消订单
@@ -2110,6 +2118,9 @@ class IndexAction extends BaseAction
         $transaction['count'] = 20;
         foreach($transaction['money_list'] as $k=>$v){
             $transaction['money_list'][$k]['time_s'] = date('Y-m-d H:i',$v['time']);
+            if(C('DEFAULT_LANG') != 'zh-cn' && $v['desc_en'] != ''){
+                $transaction['money_list'][$k]['desc'] = $v['desc_en'];
+            }
         }
         if(!$transaction['money_list'])
             $transaction['money_list'] = array();
@@ -2533,7 +2544,7 @@ class IndexAction extends BaseAction
         import('ORG.Net.Http');
         $http = new Http();
 
-        $url = 'https://translation.googleapis.com/language/translate/v2?key=AIzaSyAxHAPoWlRu2Mz8APLwM8Ae6B3x1MJUlvU&target=en&source=zh&q='.urlencode('从昨天开始，我忘了。');
+        $url = 'https://translation.googleapis.com/language/translate/v2?key=AIzaSyAxHAPoWlRu2Mz8APLwM8Ae6B3x1MJUlvU&target=en&source=zh&q='.urlencode('从昨天开始，I forgot。');
 //        $headers = array();
 //        $headers[]='Content-Type: application/json';
 //        $data = [
