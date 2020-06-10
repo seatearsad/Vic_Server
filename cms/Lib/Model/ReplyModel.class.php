@@ -105,6 +105,12 @@ class ReplyModel extends Model{
 					}
 					$pic_arr = array_merge($pic_arr,$tmp_arr);
 				}
+                //选择翻译后的评论
+                if(C('DEFAULT_LANG') != 'zh-cn'){
+                    if(!checkEnglish($value['comment']) && ($value['comment_en'] != '' && $value['comment_en'] != null)){
+                        $reply_list[$key]['comment'] = $value['comment_en'];
+                    }
+                }
 			}
 			if ($order_type == 0) {
 				$pic_filepath = 'group';
