@@ -1218,9 +1218,10 @@ class MerchantAction extends BaseAction{
 				$reply['pics'][] = $tmp_value;
 			}
 		}
-        if($reply['comment'] != '' && $reply['comment_en'] == '') {
+        if($reply['comment'] != '' && ($reply['comment_en'] == '' || $reply['comment_en'] == null)) {
             if (!checkEnglish($reply['comment'])) {
                 $comment_en = translationCnToEn($reply['comment']);
+                var_dump("translation");
                 D('Reply')->where(array('pigcms_id' => $reply_id))->save(array('comment_en' => $comment_en));
                 $reply['comment_en'] = $comment_en;
             }
