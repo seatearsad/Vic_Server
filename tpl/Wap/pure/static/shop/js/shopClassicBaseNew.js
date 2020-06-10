@@ -1393,7 +1393,7 @@ function showShop(shopId){
 
 				$('#showMoreReply').data('page',(nowPage+1));
 				
-				if(result.total < result.now){
+				if(result.total > result.now){
 					$('#showMoreReply').show();
 				}else{
 					$('#showMoreReply').hide();
