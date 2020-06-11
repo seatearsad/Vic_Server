@@ -190,40 +190,62 @@ class IndexAction extends BaseAction
         $type = $_POST['type'];
 
         $token = $_POST['token'];
-        if($type == 2){//微信登录
-            $result = D('User')->autologin('openid', $openid);
+        $email = $_POST['email'] ? $_POST['email'] : '';
+        //type 01Tutti 2微信 3Facebook 4Google 5Apple
+        $result = D('User')->autologin('openid', $openid,$type);
 
-            if(!$result['user']){
-                $data_user = array(
-                    'openid' 	=> $openid,
-                    'union_id' 	=> '',
-                    'nickname' 	=> $nickname,
-                    'sex' 		=> $sex,
-                    'province' 	=> $province,
-                    'city' 		=> $city,
-                    'avatar' 	=> $face_pic,
-                    'is_follow' => 1,
-                );
-                $reg_result = D('User')->autoreg($data_user);
-                if($reg_result['error_code']){
-                    $user['uid'] = '0';
-                }else{
-                    $user = D('User')->get_user($openid,'openid');
-                }
+        if(!$result['user']){
+            $data_user = array(
+                'openid' 	=> $openid,
+                'union_id' 	=> '',
+                'nickname' 	=> $nickname,
+                'sex' 		=> $sex,
+                'province' 	=> $province,
+                'city' 		=> $city,
+                'avatar' 	=> $face_pic,
+                'is_follow' => 1,
+                'login_type'=> $type,
+                'email'     => $email
+            );
+            $reg_result = D('User')->autoreg($data_user);
+            if($reg_result['error_code']){
+                $user['uid'] = '0';
             }else{
-                $user = $result['user'];
+                $user = D('User')->get_user($openid,'openid');
             }
+        }else{
+            $user = $result['user'];
+        }
 
 
-            $userInfo['uid'] = $user['uid'];
-            $userInfo['uname'] = $user['nickname'];
-            $userInfo['password'] = $user['pwd'];
-            $userInfo['outsrc'] = $user['avatar'];
-            $userInfo['openid'] = $user['openid'];
-            $userInfo['login_type'] = $type;
-            //记录设备号
-            if($token != '')
-                D('User')->where(array('uid'=>$userInfo['uid']))->save(array('device_id'=>$token));
+        $userInfo['uid'] = $user['uid'];
+        $userInfo['uname'] = $user['nickname'];
+        $userInfo['password'] = $user['pwd'];
+        $userInfo['outsrc'] = $user['avatar'];
+        $userInfo['openid'] = $user['openid'];
+        $userInfo['login_type'] = $type;
+        //记录设备号
+        if($token != '') {
+            $from = $_POST['from'] ? $_POST['from'] : 0;
+
+            switch ($from){
+                case 1:
+                    $source = 'Wap';
+                    break;
+                case 2:
+                    $source = 'App';
+                    break;
+                case 3:
+                    $source = 'App';
+                    break;
+                case 4:
+                    $source = 'Android';
+                    break;
+                default:
+                    $source = 'Web';
+                    break;
+            }
+            D('User')->where(array('uid' => $userInfo['uid']))->save(array('device_id' => $token,'source'=>$source));
         }
 
         $this->returnCode(0,'info',$userInfo);

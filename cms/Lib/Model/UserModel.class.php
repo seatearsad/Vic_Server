@@ -115,7 +115,7 @@ class UserModel extends Model
 		}
 	}
 	/*手机号、union_id、open_id 直接登录入口*/
-	public function autologin($field,$value){
+	public function autologin($field,$value,$type=0){
 		$condition_user[$field] = $value;
 		$now_user = $this->field(true)->where($condition_user)->find();
 		if($now_user){
@@ -128,6 +128,7 @@ class UserModel extends Model
 			$condition_save_user['uid'] = $now_user['uid'];
 			$data_save_user['last_time'] = $_SERVER['REQUEST_TIME'];
 			$data_save_user['last_ip'] = get_client_ip(1);
+			$data_save_user['login_type'] = $type;
 			$this->where($condition_save_user)->data($data_save_user)->save();
 
 			return array('error_code' => false, 'msg' => 'OK' ,'user'=>$now_user);
