@@ -525,6 +525,7 @@ class IndexAction extends BaseAction
 
         //账户余额
         $userInfo = D('User')->get_user($uid);
+        $result['is_bind_phone'] = $userInfo['phone'] == '' ? 0 : 1;
         $result['now_money'] = round($userInfo['now_money'],2);
 
         $this->returnCode(0,'',$result,'success');

@@ -18,15 +18,21 @@ function getNewOrder(){
     $.post(new_url,{last_time:last_time},function(result){
         if(result.error == 0){
             last_time = result.new_time;
-            if(result.is_new == 1){
+            if(result.is_new == 0){
                 layer.open({
                     title:[' ','border:none'],
                     content:tip_message,
                     style: 'border:none; background-color:#ffa52d; color:#fff;'
                 });
-                var audio = new Audio();
-                audio.src = sound_url;
-                audio.play();
+                if(navigator.userAgent.match(/TuttiPartner/i))
+                    window.webkit.messageHandlers.newOrderSound.postMessage([0]);
+                else if(/(tutti_android)/.test(navigator.userAgent.toLowerCase()))
+                    window.linkJs.newOrderSound();
+                else {
+                    var audio = new Audio();
+                    audio.src = sound_url;
+                    audio.play();
+                }
             }
             if(result.list != null && result.list.length > 0 && document.getElementById('OrderListTpl')){
                 laytpl($('#OrderListTpl').html()).render(result.list, function(html){
@@ -61,7 +67,7 @@ function getNewOrder(){
                 }
             }
         }
-        setTimeout(getNewOrder,3000);
+        //setTimeout(getNewOrder,3000);
     },'JSON');
 }
 
