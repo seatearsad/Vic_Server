@@ -46,7 +46,7 @@
         var sound_url = "{pigcms{$static_public}sound/soft-bells.mp3";
         var detail_url = "{pigcms{:U('Storestaff/getOrderDetail')}";
     </script>
-    <script type="text/javascript" src="{pigcms{$static_path}js/new_order.js?v=2.4"></script>
+    <script type="text/javascript" src="{pigcms{$static_path}js/new_order.js?v=2.5"></script>
     <script>
         var order_id = "{pigcms{$_GET['order_id']}";
 

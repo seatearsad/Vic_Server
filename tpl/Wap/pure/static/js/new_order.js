@@ -67,7 +67,7 @@ function getNewOrder(){
                 }
             }
         }
-        //setTimeout(getNewOrder,3000);
+        setTimeout(getNewOrder,3000);
     },'JSON');
 }
 
