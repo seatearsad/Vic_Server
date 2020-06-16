@@ -62,6 +62,12 @@
             });
         }
     }
+
+    function appToPosition(lat,long){
+        updatePosition(lat,long);
+
+        return "{pigcms{$deliver_session['uid']}";
+    }
 </script>
     <include file="Public:facebook"/>
 </head>
