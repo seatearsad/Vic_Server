@@ -360,22 +360,22 @@
         var marker;
         var ua = navigator.userAgent;
         //if(!ua.match(/TuttiDeliver/i)) {
-        //     if(navigator.geolocation) {
-        //         //alert('geolocation:start');
-        //         navigator.geolocation.getCurrentPosition(function (position) {
-        //             //alert("geolocation_lat:" + position.coords.latitude);
-        //             map.setCenter({lat: position.coords.latitude, lng: position.coords.longitude});
-        //             updatePosition(position.coords.latitude, position.coords.longitude);
-        //             run_update_location();
-        //         }, function (error) {
-        //             console.log("geolocation:" + error.code);
-        //             //location_error = true;
-        //             //run_Amap();
-        //             //run_update_location();
-        //         },{enableHighAccuracy:true,timeout:50000});
-        //     }else{
-        //         //alert('geolocation:error');
-        //     }
+            if(navigator.geolocation) {
+                //alert('geolocation:start');
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    //alert("geolocation_lat:" + position.coords.latitude);
+                    map.setCenter({lat: position.coords.latitude, lng: position.coords.longitude});
+                    updatePosition(position.coords.latitude, position.coords.longitude);
+                    run_update_location();
+                }, function (error) {
+                    console.log("geolocation:" + error.code);
+                    //location_error = true;
+                    //run_Amap();
+                    //run_update_location();
+                },{enableHighAccuracy:true,timeout:50000});
+            }else{
+                //alert('geolocation:error');
+            }
         //}
 
 
