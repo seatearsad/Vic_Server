@@ -365,7 +365,7 @@
                 navigator.geolocation.getCurrentPosition(function (position) {
                     //alert("geolocation_lat:" + position.coords.latitude);
                     map.setCenter({lat: position.coords.latitude, lng: position.coords.longitude});
-                    updatePosition(position.coords.latitude, position.coords.longitude);
+                    //updatePosition(position.coords.latitude, position.coords.longitude);
                     run_update_location();
                 }, function (error) {
                     console.log("geolocation:" + error.code);
@@ -384,7 +384,7 @@
             var lat = result.position.getLat();
             var lng = result.position.getLng();
             map.setCenter({lat: lat, lng: lng});
-            updatePosition(lat,lng);
+            //updatePosition(lat,lng);
         }
         
         function onError(error) {
@@ -428,7 +428,7 @@
                     });
                     console.log('run getCurrentPosition');
                     if(typeof(lat) != "undefined"){
-                        updatePosition(lat,lng);
+                        //updatePosition(lat,lng);
                     }
                 }, 10000);
             }
