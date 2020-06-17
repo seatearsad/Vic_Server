@@ -21,7 +21,7 @@
 	})
     //ios app 更新位置
     function updatePosition(lat,lng){
-        alert('updatePosition');
+        alert('updatePosition'+lat+','+lng);
         var message = '';
         $.post("{pigcms{:U('Deliver/App_update')}", {'lat':lat, 'lng':lng}, function(result) {
             if(result){
