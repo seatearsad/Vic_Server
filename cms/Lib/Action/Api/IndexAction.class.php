@@ -183,7 +183,7 @@ class IndexAction extends BaseAction
 //        );
         $nickname = $_POST['nickname'];
         $openid = $_POST['openid'];
-        $face_pic = $_POST['face_pic'];
+        $face_pic = htmlspecialchars_decode($_POST['face_pic']);
         $sex = $_POST['sex'];
         $province = $_POST['province'];
         $city = $_POST['city'];
