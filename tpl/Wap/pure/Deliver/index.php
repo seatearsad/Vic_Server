@@ -423,8 +423,8 @@
             }else{
                 setInterval(function(){
                     navigator.geolocation.getCurrentPosition(function (position) {
-                        lat = position.coords.latitude;
-                        lng = position.coords.longitude;
+                        //lat = position.coords.latitude;
+                        //lng = position.coords.longitude;
                     });
                     console.log('run getCurrentPosition');
                     if(typeof(lat) != "undefined"){
