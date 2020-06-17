@@ -21,15 +21,13 @@
 	})
     //ios app 更新位置
     function updatePosition(lat,lng){
-        alert('updatePosition'+lat+','+lng);
         var message = '';
-        $.post("{pigcms{:U('Deliver/App_update')}", {'lat':lat, 'lng':lng}, function(result) {
+	    $.post("{pigcms{:U('Deliver/App_update')}", {'lat':lat, 'lng':lng}, function(result) {
             if(result){
                 message = result.msg;
             }else {
                 message = 'Error';
             }
-            alert(message);
             return message;
         },'json');
     }
@@ -365,7 +363,7 @@
                 navigator.geolocation.getCurrentPosition(function (position) {
                     //alert("geolocation_lat:" + position.coords.latitude);
                     map.setCenter({lat: position.coords.latitude, lng: position.coords.longitude});
-                    //updatePosition(position.coords.latitude, position.coords.longitude);
+                    updatePosition(position.coords.latitude, position.coords.longitude);
                     run_update_location();
                 }, function (error) {
                     console.log("geolocation:" + error.code);
@@ -384,7 +382,7 @@
             var lat = result.position.getLat();
             var lng = result.position.getLng();
             map.setCenter({lat: lat, lng: lng});
-            //updatePosition(lat,lng);
+            updatePosition(lat,lng);
         }
         
         function onError(error) {
@@ -423,12 +421,12 @@
             }else{
                 setInterval(function(){
                     navigator.geolocation.getCurrentPosition(function (position) {
-                        //lat = position.coords.latitude;
-                        //lng = position.coords.longitude;
+                        lat = position.coords.latitude;
+                        lng = position.coords.longitude;
                     });
                     console.log('run getCurrentPosition');
                     if(typeof(lat) != "undefined"){
-                        //updatePosition(lat,lng);
+                        updatePosition(lat,lng);
                     }
                 }, 10000);
             }
