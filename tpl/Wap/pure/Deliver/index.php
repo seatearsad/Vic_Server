@@ -21,16 +21,16 @@
 	})
     //ios app 更新位置
     function updatePosition(lat,lng){
+        alert('updatePosition');
         var message = '';
-	    $.post("{pigcms{:U('Deliver/App_update')}", {'lat':lat, 'lng':lng}, function(result) {
+        $.post("{pigcms{:U('Deliver/App_update')}", {'lat':lat, 'lng':lng}, function(result) {
             if(result){
                 message = result.message;
             }else {
                 message = 'Error';
             }
+            return message;
         });
-
-	    return message;
     }
     //更新app 设备token
     var device_token = '';
