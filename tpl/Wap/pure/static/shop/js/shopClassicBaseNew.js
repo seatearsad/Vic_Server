@@ -6,7 +6,8 @@ $(function(){
 	FastClick.attach(document.body);
 	
 	$('body').width(window_width);
-	$('body,.pageDiv').css({width:window_width,'min-height':window_height});
+	$('body').css({width:window_width,'min-height':window_height});
+	$('.pageDiv').css({width:window_width,'min-height':window_height,'max-width':640});
 
     $(window).bind('hashchange',function(){
         hash_handle();
@@ -851,9 +852,9 @@ function showGood(shop_id,product_id){
     $('#shopDetailPage').height(window_height-50);
 
     if(nowShop.store.store_theme == '0'){
-        $('#shopDetailPageImgbox').css({height:window_width*500/900,width:window_width});
+        //$('#shopDetailPageImgbox').css({height:window_width*500/900,width:window_width});
     }else if(nowShop.store.store_theme == '1'){
-        $('#shopDetailPageImgbox').css({height:window_width,width:window_width});
+        //$('#shopDetailPageImgbox').css({height:window_width,width:window_width});
     }
 
     if(product_id == nowProduct.goods_id){
@@ -1025,7 +1026,7 @@ function showShop(shopId){
 
 	if(isShowShop == false){
 		$('#shopContentBar').height(window_height-166);
-		$('#shopContentBar>div').css({width:window_width});
+		$('#shopContentBar>div').css({width:window_width,'max-width':640});
 		
 		$('#shopContentBar #shopProductBox').css('left','0px');
 		$('#shopContentBar #shopReplyBox').css('left',window_width+'px');
