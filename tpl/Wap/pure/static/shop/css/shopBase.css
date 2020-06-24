@@ -2696,6 +2696,7 @@ em.merchant_invoice:before{
     bottom: 50px;
     z-index: 126;
 	overflow-y:auto;
+    max-width: 640px;
 }
 #shopProductCartBox dt{
 	position: relative;
