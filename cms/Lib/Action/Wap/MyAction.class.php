@@ -145,6 +145,9 @@ class MyAction extends BaseAction{
 		$transaction['count'] = count($transaction['money_list']);
 		foreach($transaction['money_list'] as $k=>$v){
 			$transaction['money_list'][$k]['time_s']	=	date('Y/m/d H:i',$v['time']);
+            if(C('DEFAULT_LANG') != 'zh-cn' && $v['desc_en'] != ''){
+                $transaction['money_list'][$k]['desc'] = $v['desc_en'];
+            }
 		}
 		echo json_encode($transaction);
 	}

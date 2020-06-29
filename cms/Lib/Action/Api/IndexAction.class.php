@@ -69,7 +69,7 @@ class IndexAction extends BaseAction
         $arr['best']['info'] = $shop_list['list'];
         $arr['best']['count'] = $shop_list['count'];
         //获取顶级分类
-        $category = D('Shop_category')->field(true)->where(array('cat_fid'=>0))->select();
+        $category = D('Shop_category')->field(true)->where(array('cat_fid'=>0))->order('cat_sort desc')->select();
         $nav_list = array();
         foreach ($category as $v){
             $nav['title'] = lang_substr($v['cat_name'],C('DEFAULT_LANG'));
