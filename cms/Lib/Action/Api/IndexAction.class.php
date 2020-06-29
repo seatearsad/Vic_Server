@@ -73,7 +73,7 @@ class IndexAction extends BaseAction
         $nav_list = array();
         foreach ($category as $v){
             $nav['title'] = lang_substr($v['cat_name'],C('DEFAULT_LANG'));
-            $nav['image'] = 'https://www.tutti.app/static/images/category/'.$v['cat_url'].'.png';
+            $nav['image'] = 'https://www.tutti.app/static/images/category/'.$v['cat_url'].'.png?v=1.2.0';
             $nav['id'] = $v['cat_id'];
 
             $nav_list[] = $nav;
