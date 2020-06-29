@@ -51,6 +51,9 @@
             }
             #container{
                 width: 100%;
+                max-width:640px;
+                min-width:320px;
+                margin:0 auto;
             }
             #shopHeader{
                 position: relative;
@@ -233,6 +236,7 @@
             #shopProductCart{
                 background-color: #949494;
                 padding-bottom: env(safe-area-inset-bottom);
+                max-width: 640px;
             }
             #shopProductCartBox dt{
                 border-left: 0;

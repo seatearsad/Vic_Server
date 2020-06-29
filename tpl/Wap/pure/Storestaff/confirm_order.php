@@ -134,7 +134,12 @@
 
     $('#confirm_order').click(function () {
         if(is_read){
+            layer.open({
+                type:2,
+                content:'Loading...'
+            });
             $("#add-shop-order").submit();
+            $(this).unbind('click');
         }else{
             alert('Check required!');
         }
