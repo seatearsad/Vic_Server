@@ -24,9 +24,15 @@ function getNewOrder(){
                     content:tip_message,
                     style: 'border:none; background-color:#ffa52d; color:#fff;'
                 });
-                var audio = new Audio();
-                audio.src = sound_url;
-                audio.play();
+                if(navigator.userAgent.match(/TuttiPartner/i))
+                    window.webkit.messageHandlers.newOrderSound.postMessage([0]);
+                else if(/(tutti_android)/.test(navigator.userAgent.toLowerCase()))
+                    window.linkJs.newOrderSound();
+                else {
+                    var audio = new Audio();
+                    audio.src = sound_url;
+                    audio.play();
+                }
             }
             if(result.list != null && result.list.length > 0 && document.getElementById('OrderListTpl')){
                 laytpl($('#OrderListTpl').html()).render(result.list, function(html){

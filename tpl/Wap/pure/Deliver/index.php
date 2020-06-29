@@ -24,13 +24,12 @@
         var message = '';
 	    $.post("{pigcms{:U('Deliver/App_update')}", {'lat':lat, 'lng':lng}, function(result) {
             if(result){
-                message = result.message;
+                message = result.msg;
             }else {
                 message = 'Error';
             }
-        });
-
-	    return message;
+            return message;
+        },'json');
     }
     //更新app 设备token
     var device_token = '';
