@@ -518,7 +518,7 @@ class IndexAction extends BaseAction
         $result = D('Cart')->getCartList($uid,$cart_array);
 
         //平台优惠劵
-        $_POST['amount'] = $result['total_pay_price'];
+        $_POST['amount'] = $result['food_total_price'];
 
         $coupon = $this->getCanCoupon();
         $result['coupon'] = $coupon;
@@ -1375,6 +1375,8 @@ class IndexAction extends BaseAction
 
     public function getCouponByUser(){
         $uid = $_POST['uid'];
+        $amount = $_POST['amount'] ? $_POST['amount'] : -1;
+
         $coupon_list = D('System_coupon')->get_user_coupon_list($uid);
 
         //获取活动优惠券
@@ -1388,10 +1390,21 @@ class IndexAction extends BaseAction
         }
 
         $tmp = array();
+        $canTmp = array();
+        $notCanTmp = array();
         foreach ($coupon_list as $key => $v) {
             if(!$v['is_use']){
                 $coupon = $this->arrange_coupon($v);
-                $tmp[] = $coupon;
+                if($amount > 0){
+                    if($v['order_money'] <= $amount){
+                        $coupon['canUse'] = 1;
+                        $canTmp[] = $coupon;
+                    }else{
+                        $coupon['canUse'] = 0;
+                        $notCanTmp[] = $coupon;
+                    }
+                }
+                //$tmp[] = $coupon;
             }
 //            if (!empty($tmp[$v['is_use']][$v['coupon_id']])) {
 //                $tmp[$v['is_use']][$v['coupon_id']]['get_num']++;
@@ -1403,6 +1416,13 @@ class IndexAction extends BaseAction
 //            }
 
         }
+
+//        if($amount > 0) {
+//            $last_names = array_column($tmp, 'canUse');
+//            array_multisort($last_names, SORT_DESC, $tmp);
+//        }
+        $tmp = array_merge($canTmp,$notCanTmp);
+
         $this->returnCode(0,'info',$tmp,'success');
     }
 
@@ -1653,9 +1673,10 @@ class IndexAction extends BaseAction
 
             if($l_id == null) {
                 $result = D('System_coupon')->had_pull($cid, $uid);
-                if(isset($result) && $result['error_code'] == 0)
-                    $this->returnCode(0,'info',$result,'success');
-                else{
+                if(isset($result) && $result['error_code'] == 0) {
+                    $coupon = $this->arrange_coupon($result['coupon']);
+                    $this->returnCode(0, 'info', $coupon, 'success');
+                }else{
                     $this->returnCode(1,'info',array(),$result['msg']);
                 }
             }else
