@@ -1403,8 +1403,10 @@ class IndexAction extends BaseAction
                         $coupon['canUse'] = 0;
                         $notCanTmp[] = $coupon;
                     }
+                }else {
+                    $coupon['canUse'] = 1;
+                    $tmp[] = $coupon;
                 }
-                //$tmp[] = $coupon;
             }
 //            if (!empty($tmp[$v['is_use']][$v['coupon_id']])) {
 //                $tmp[$v['is_use']][$v['coupon_id']]['get_num']++;
@@ -1421,7 +1423,8 @@ class IndexAction extends BaseAction
 //            $last_names = array_column($tmp, 'canUse');
 //            array_multisort($last_names, SORT_DESC, $tmp);
 //        }
-        $tmp = array_merge($canTmp,$notCanTmp);
+        if($amount > 0)
+            $tmp = array_merge($canTmp,$notCanTmp);
 
         $this->returnCode(0,'info',$tmp,'success');
     }
