@@ -407,6 +407,12 @@ class StoreModel extends Model
         $curr_time = intval(date('Hi',time()));
         foreach ($sort_list as $key => $row) {
             $is_add = true;
+            if(D('Shop_goods')->field(true)->where(array('sort_id' => $row['sort_id'], 'status' => 1))->count() > 0){
+                $is_add = true;
+            }else{
+                $is_add = false;
+            }
+
             if (!empty($row['is_weekshow'])) {
                 $week_arr = explode(',', $row['week']);
                 if (!in_array($today, $week_arr)) {
