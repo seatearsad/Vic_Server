@@ -162,7 +162,9 @@ class System_couponModel extends Model{
         }else{
             return array();
         }
-        $where['order_money'] = array('ELT',$now_order['total_money']);
+        //$where['order_money'] = array('ELT',$now_order['total_money']);
+        //garfunkel 修改优惠券选择金额
+        $where['order_money'] = array('ELT',$now_order['goods_price']);
         //$order_cate = D(ucfirst($table).'_order')->get_order_cate($now_order['order_id']);
         if($order_type!='store'){
             $order_cate = D(ucfirst($table).'_order')->get_order_cate($now_order['order_id']);
