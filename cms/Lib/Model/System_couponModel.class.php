@@ -97,6 +97,16 @@ class System_couponModel extends Model{
         return $res;
     }
     public function get_user_coupon_list($uid,$phone,$is_use='' ){
+        //如果不是新用户 删除所有新用户使用的优惠券
+        $is_new = D('User')->check_new($uid,'all');
+        if(!$is_new){
+            $list = D('System_coupon')->where(array('allow_new'=>1,'status'=>1))->select();
+
+            foreach ($list as $c){
+                D('System_coupon_hadpull')->where(array('uid'=>$uid,'coupon_id'=>$c['coupon_id']))->delete();
+            }
+        }
+
         //$where['c.end_time'] = array('gt',time());
         $where['c.status'] = array('neq',0);  //状态正常
         $where['h.uid'] = $uid;

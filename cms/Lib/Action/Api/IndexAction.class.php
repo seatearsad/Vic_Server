@@ -1599,7 +1599,7 @@ class IndexAction extends BaseAction
 
         //平台余额退款
         if ($now_order['balance_pay'] != '0.00') {
-            $add_result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],L('_B_MY_REFUND_') . $mer_store['name'] . '(' . $order_id . ') 增加余额');
+            $add_result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],'退款 '.$order_id.' 增加余额',0,0,0,"Order Cancellation (Order # ".$order_id.")");
 
             $param = array('refund_time' => time());
             if($result['error_code']){

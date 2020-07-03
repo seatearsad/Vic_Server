@@ -1439,7 +1439,7 @@ class StoreAction extends BaseAction{
 		$order_refund_params = array();
 		//平台余额退款
 		if ($order['balance_pay'] != '0.00') {
-			$add_result = D('User')->add_money($order['uid'],$order['balance_pay'],'退款 '.$order['order_name'].' 增加余额');
+			$add_result = D('User')->add_money($order['uid'],$order['balance_pay'],'退款 '.$order['order_name'].' 增加余额',0,0,0,"Order Cancellation (Order # ".$order['order_name'].")");
 			if (!$add_result) {
 				D()->rollback();
 				$this->error("平台余额退款失败");
