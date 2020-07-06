@@ -400,7 +400,7 @@ class UserModel extends Model
 				$this->where($condition_user)->setDec('score_recharge_money',$now_score_recharge_money);
 				D('User_money_list')->add_row($uid,2,$now_score_recharge_money,C('config.score_name')."兑换余额记录减扣 ".$now_score_recharge_money." 元",true,$ask,$ask_id);
 			}
-			D('User_money_list')->add_row($uid,2,$money,$desc,true,$ask,$ask_id,$desc_en);
+			D('User_money_list')->add_row($uid,2,$money,$desc,true,$ask,$ask_id,false,$desc_en);
 			return array('error_code' =>false,'msg' =>'OK');
 		}else{
 			return array('error_code' => true, 'msg' => '用户余额扣除失败！请联系管理员协助解决。');
