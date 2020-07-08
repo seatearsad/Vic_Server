@@ -50,7 +50,9 @@ function resetBodyHeight(){
 
 function hash_handle(){
     var locationHash = location.hash.replace("#","");
-    if(locationHash.split('-')[0] == "good") {
+    if(locationHash == "search"){
+        locationHashItem = locationHash;
+	}else if(locationHash.split('-')[0] == "good") {
         var locationHashParam = locationHash.split('-');
         var locationHashItem = locationHashParam[0];
     }else{
@@ -58,7 +60,7 @@ function hash_handle(){
         var locationHashItem = locationHashParam[0];
 	}
 
-	if(locationHashItem != 'shop' && locationHashItem != 'good'){
+	if(locationHashItem != 'shop' && locationHashItem != 'good' && locationHashItem != "search"){
 		changeWechatShare('plat');
 	}
 	switch(locationHashItem){
@@ -83,6 +85,9 @@ function hash_handle(){
 			break;
 		case 'good':
 			showGood(locationHashParam[1],locationHashParam[2]);
+			break;
+		case 'search':
+			showSearch();
 			break;
 		default:
 			showList();
@@ -841,6 +846,22 @@ var isShowGood = false;
 // 	});
 // }
 
+function showSearch() {
+    if(nowPage != 'shop'){
+        //location.hash = 'shop-'+shop_id;
+        window.history.go(-1);
+        return false;
+    }
+
+    pageLoadTips();
+    $('body').css('overflow','hidden');
+    $('#shopSearchPage').height(window_height-100);
+
+    $('#shopContentBar').show();
+    $('#shopSearchPage').show().scrollTop(0).addClass('sliderLeft');
+    pageLoadHides();
+}
+
 function showGood(shop_id,product_id){
     if(nowPage != 'shop'){
         //location.hash = 'shop-'+shop_id;
@@ -1108,12 +1129,38 @@ function showShop(shopId){
             location.hash = 'good-'+shopId+'-'+$(this).data('product_id');
 		});
 
+        $(document).on('click','#searchBtn',function(event){
+            //redirectPage(ajax_url_root+'classic_good&shop_id='+shopId+'&good_id='+$(this).data('product_id'));
+            location.hash = 'search';
+        });
+
         $('#shopDetailpageClose').click(function(){
-            $('#shopDetailPage,#shopContentBar,#shopBanner').hide();
+            $('#shopDetailPage,#shopContentBar,#shopBanner,#shopSearchPage').hide();
             $('#shopTitle').empty();
             $('body').css('overflow-y','auto');
-            $('#shopDetailPage,#pageCat').removeClass('sliderLeft');
+            $('#shopDetailPage,#pageCat,#shopSearchPage').removeClass('sliderLeft');
             goBackPage();
+        });
+
+        $('#shopSearchpageClose').click(function(){
+            $('#shopSearchPage,#shopContentBar,#shopBanner').hide();
+            $('#shopTitle').empty();
+            $('body').css('overflow-y','auto');
+            $('#shopSearchPage,#pageCat').removeClass('sliderLeft');
+            goBackPage();
+        });
+
+        $("#search_btn").click(function () {
+            $.getJSON(ajax_url_root+'ajaxSearchGoods',{store_id:shopId,keyword:$("#search_input").val()},function(result){
+            	if(result.is_result == 1) {
+                    laytpl($('#shopProductRightBarTpl').html()).render(result.product_list, function (html) {
+                        $('#shopSearchResult dl').html(html);
+                    });
+                }else{
+            		var html = '<dd id="shopProductRightBar2-0" data-cat_id="0"><div class="cat_name">未搜索到结果</div></dd>'
+                    $('#shopSearchResult dl').html(html);
+				}
+            });
         });
 
         $(document).on('click','#shopDetailPageFormat li',function(event){

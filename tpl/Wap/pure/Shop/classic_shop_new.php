@@ -179,7 +179,7 @@
             #shopProductLeftBar2 dd.active span{
                 color: #ffa52d;
             }
-            #shopProductRightBar2{
+            #shopProductRightBar2,#shopSearchResult{
                 width: 96%;
                 float: none;
                 margin: 0 auto;
@@ -190,37 +190,41 @@
             #shopMenuBar li.active::after{
                 background-color: #ffa52d;
             }
-            #shopProductRightBar2 .cat_name{
+            #shopProductRightBar2 .cat_name,#shopSearchResult .cat_name{
                 padding-left: 0;
                 text-align: center;
                 color: silver;
                 font-size: 1.2em;
             }
-            #shopProductRightBar2 dl{
+            #shopProductRightBar2 dl,#shopSearchResult dl{
                 background: none;
             }
-            #shopProductRightBar2 ul{
+            #shopProductRightBar2 ul,#shopSearchResult ul{
                 background-color: white;
             }
-            #shopProductRightBar2 li .position_img{
+            #shopProductRightBar2 li .position_img,#shopSearchResult li .position_img{
                 width: 100px;
             }
-            #shopProductRightBar2 li .product_text{
+            #shopProductRightBar2 li .product_text,#shopSearchResult li .product_text{
                 margin-left: 110px;
                 height: 60px;
             }
-            #shopProductRightBar2 li .product_btn,#shopProductCartBox .product_btn.plus,#shopProductCartBox .product_btn.min{
+            #shopProductRightBar2 li .product_btn,#shopProductCartBox .product_btn.plus,#shopProductCartBox .product_btn.min,#shopSearchResult li .product_btn{
                 border: 1px solid #ffa52d;
             }
-            #shopProductRightBar2 li .product_btn.plus::after,#shopProductCartBox .product_btn.plus::after{
+            #shopProductRightBar2 li .product_btn.plus::after,#shopProductCartBox .product_btn.plus::after,#shopSearchResult li .product_btn.plus::after{
                 background-color: #ffa52d;
             }
-            #shopProductRightBar2 li .product_btn.min::before,#shopProductRightBar2 li .product_btn.plus::before,#shopProductCartBox .product_btn.min::before,#shopProductCartBox .product_btn.plus::before{
+            #shopProductRightBar2 li .product_btn.min::before,#shopProductRightBar2 li .product_btn.plus::before,
+            #shopProductCartBox .product_btn.min::before,#shopProductCartBox .product_btn.plus::before,
+            #shopSearchResult li .product_btn.min::before,#shopSearchResult li .product_btn.plus::before{
                 background-color: #ffa52d;
             }
             #shopProductCartBox dd .cartRight .price,
             #shopProductRightBar2 li .product_btn,
             #shopProductRightBar2 li .product_text .price,
+            #shopSearchResult li .product_btn,
+            #shopSearchResult li .product_text .price,
             #shopDetailPageBar .fl,
             .msg-option .btn{
                 color: #ffa52d;
@@ -373,7 +377,7 @@
 				<div id="backBtn" class="backBtn"></div>
 				<div id="shopTitle"></div>
                 <!--div class="shop_info" data-nav="merchant"></div-->
-				<!--div id="searchBtn" class="searchBtn"><div></div></div-->
+				<div id="searchBtn" class="searchBtn"><div></div></div>
 			</section>
 			<section id="shopBanner">
 				<div class="leftIco">
@@ -507,6 +511,18 @@
                         </div>
 					</div>
 				</div>
+                <div id="shopSearchPage" style="display:none;">
+                    <div class-s="scrollerBox">
+                        <div id="shopSearchpageClose" class="closeBtn"><div></div></div>
+                        <div id="shopSearchBoxDiv">
+                            <input type="text" name="searckey" id="search_input" />
+                            <span id="search_btn">Search</span>
+                        </div>
+                        <div id="shopSearchResult">
+                            <dl></dl>
+                        </div>
+                    </div>
+                </div>
 			</section>
 		</div>
 		<div id="pageMap" class="pageDiv">

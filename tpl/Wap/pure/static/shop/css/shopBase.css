@@ -1669,82 +1669,82 @@ em.merchant_invoice:before{
     
 }
 
-#shopProductRightBar2 dl{
+#shopProductRightBar2 dl,#shopSearchResult dl{
     margin-left: 5px;
     background-color:white;
 }
-#shopProductRightBar2 dd{
+#shopProductRightBar2 dd,#shopSearchResult dd{
     border-bottom: 1px solid #f1f1f1;   
 }
-#shopProductRightBar2 .cat_name{
+#shopProductRightBar2 .cat_name,#shopSearchResult .cat_name{
     height: 40px;
     line-height: 40px;
     padding-left: 10px;
     border-bottom: 1px solid #f1f1f1;
 }
-#shopProductRightBar2 .cat_name span{
+#shopProductRightBar2 .cat_name span,#shopSearchResult .cat_name span{
     font-size: 12px;
     color: red;
 }
-#shopProductRightBar2 ul{
+#shopProductRightBar2 ul,#shopSearchResult ul{
     padding-left: 10px;
 }
-#shopProductRightBar2 li{
+#shopProductRightBar2 li,#shopSearchResult li{
     position:relative;
     padding: 8px 0;
     border-bottom: 1px solid #f1f1f1;
 }
-#shopProductRightBar2 li:last-child{
+#shopProductRightBar2 li:last-child,#shopSearchResult li:last-child{
     border-bottom:0px;
 }
-#shopProductRightBar2 li .position_img{
+#shopProductRightBar2 li .position_img,#shopSearchResult li .position_img{
     position: absolute;
     width: 60px;
     height: 60px;
     overflow: hidden;
 }
-#shopProductRightBar2 li .position_img img{
+#shopProductRightBar2 li .position_img img,#shopSearchResult li .position_img img{
     width: 108px;
     /* width: 100%; */
     height: 100%;
     margin-left: -24px;
 }
-#shopProductRightBar2 li .mall img{
+#shopProductRightBar2 li .mall img,#shopSearchResult li .mall img{
     margin-left: 0px;
 }
-#shopProductRightBar2 li .product_text{
+#shopProductRightBar2 li .product_text,#shopSearchResult li .product_text{
     margin-left: 70px;
 }
-#shopProductRightBar2 li .product_text .title{
+#shopProductRightBar2 li .product_text .title,#shopSearchResult li .product_text .title{
     
 }
-#shopProductRightBar2 li .product_text .sale{
+#shopProductRightBar2 li .product_text .sale,#shopSearchResult li .product_text .sale{
     font-size: 11px;
     color:#bbb; 
     margin: 2px 0;
 }
-#shopProductRightBar2 li .product_text .price{
+#shopProductRightBar2 li .product_text .price,#shopSearchResult li .product_text .price{
     color:red;
     font-size:12px;
 }
-#shopProductRightBar2 li .product_text .price span{
+#shopProductRightBar2 li .product_text .price span,#shopSearchResult li .product_text .price span{
     color: #bbb;
     text-decoration: line-through;
     margin-left: 5px;
 }
-#shopProductRightBar2 li .product_text .price .unit{
+#shopProductRightBar2 li .product_text .price .unit,#shopSearchResult li .product_text .price .unit{
     color:#bbb;
     margin-left:4px;
     display:inline-block;
 }
-#shopProductRightBar2 li .product_text .price .unit em{
+#shopProductRightBar2 li .product_text .price .unit em,#shopSearchResult li .product_text .price .unit em{
     color: #e1e1e1;
 }
-#shopProductRightBar2 li .product_text .seckill{
+#shopProductRightBar2 li .product_text .seckill,#shopSearchResult li .product_text .seckill{
     color: #bbb;
     font-size:11px;
 }
-#shopProductRightBar2 li .product_btn{
+#shopProductRightBar2 li .product_btn,#shopSearchResult li .product_btn{
     position: absolute;
     right: 10px;
     /*bottom: 6px;*/
@@ -1756,7 +1756,7 @@ em.merchant_invoice:before{
     z-index: 1;
     top: 46px;
 }
-#shopProductRightBar2 li .product_btn.plus,#shopProductRightBar2 li .product_btn.min{
+#shopProductRightBar2 li .product_btn.plus,#shopProductRightBar2 li .product_btn.min,#shopSearchResult li .product_btn.plus,#shopSearchResult li .product_btn.min{
     width:28px;
     height:28px;
     border-radius:100%;
@@ -1764,7 +1764,7 @@ em.merchant_invoice:before{
     background: white;
     top: 40px;
 }
-#shopProductRightBar2 li .product_btn.plus:before, #shopProductRightBar2 li .product_btn.plus:after {
+#shopProductRightBar2 li .product_btn.plus:before, #shopProductRightBar2 li .product_btn.plus:after,#shopSearchResult li .product_btn.plus:before, #shopSearchResult li .product_btn.plus:after {
     content: '';
     height: 2px;
     width: 10px;
@@ -1777,13 +1777,13 @@ em.merchant_invoice:before{
     top: 12px;
     left: 9px;
 }
-#shopProductRightBar2 li .product_btn.plus:after{
+#shopProductRightBar2 li .product_btn.plus:after,#shopSearchResult li .product_btn.plus:after{
     height: 10px;
     width: 2px;
     top: 8px;
     left: 13px;
 }
-#shopProductRightBar2 li .product_btn.number{
+#shopProductRightBar2 li .product_btn.number,#shopSearchResult li .product_btn.number{
     border: none;
     right: 38px;
     font-size: 14px;
@@ -1793,10 +1793,10 @@ em.merchant_invoice:before{
     line-height: 30px;
 	top: 40px;
 }
-#shopProductRightBar2 li .product_btn.min{
+#shopProductRightBar2 li .product_btn.min,#shopSearchResult li .product_btn.min{
     right:60px;
 }
-#shopProductRightBar2 li .product_btn.min:before{
+#shopProductRightBar2 li .product_btn.min:before,#shopSearchResult li .product_btn.min:before{
     content: '';
     height: 2px;
     width: 10px;
@@ -1809,7 +1809,7 @@ em.merchant_invoice:before{
     top: 12px;
     left: 9px;
 }
-#shopProductRightBar2 li .bgPlusBack{
+#shopProductRightBar2 li .bgPlusBack,#shopSearchResult li .bgPlusBack{
     position: absolute;
     right: 0;
     bottom: 0px;
@@ -1817,7 +1817,7 @@ em.merchant_invoice:before{
     height: 42px;
     z-index:2;
 }
-#shopProductRightBar2 li .bgMinBack{
+#shopProductRightBar2 li .bgMinBack,#shopSearchResult li .bgMinBack{
     position: absolute;
     right: 52px;
     bottom: 0px;
@@ -2012,7 +2012,7 @@ em.merchant_invoice:before{
 
 
 
-#shopContentBar #shopDetailPage{
+#shopContentBar #shopDetailPage,#shopContentBar #shopSearchPage{
 	top:0px;
 	position:fixed;
 	z-index:122;
@@ -2270,15 +2270,18 @@ em.merchant_invoice:before{
 }
 .searchBtn{
 	position: absolute;
-    width: 50px;
-    height: 38px;
-    line-height: 38px;
-    top: 6px;
-    right: 6px;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    top: 3px;
+    right: 10px;
     text-align: center;
-    background-color: #B5B5B5;
     color: white;
     padding: 0 6px;
+    background-image: url("/tpl/Static/blue/images/new/search.png");
+    background-repeat: no-repeat;
+    background-size: auto 100%;
+    cursor: pointer;
 }
 .searchBtn.so{
 	background-color: #06c1ae;
@@ -2956,6 +2959,26 @@ em.merchant_invoice:before{
 	margin-top: -21px;
 	margin-bottom: 5px;
 	background-size: 14px;
+}
+
+#search_input{
+    width: 70%;
+    background: #ccc;
+    border: 0;
+    height: 30px;
+    border-radius: 5px;
+    margin: 3% 0 0 10%;
+    padding-left: 10px;
+}
+#search_btn{
+    display: inline-block;
+    width: 12%;
+    background: #ffa52d;
+    border-radius: 5px;
+    color: white;
+    text-align: center;
+    line-height: 30px;
+    cursor: pointer;
 }
 
 .photo_s{  margin-bottom:12px; }
