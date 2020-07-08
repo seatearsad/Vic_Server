@@ -372,7 +372,7 @@ class UserModel extends Model
 			D('Fenrun')->add_recommend_award($uid,$type_id,1,$money,$desc);
 		}else {
 			if ($this->where($condition_user)->setInc('now_money', $money)) {
-				D('User_money_list')->add_row($uid, 1, $money, $desc, true, $ask, $ask_id,$desc_en);
+				D('User_money_list')->add_row($uid, 1, $money, $desc, true, $ask, $ask_id,false,$desc_en);
 				return array('error_code' => false, 'msg' => 'OK');
 			} else {
 				return array('error_code' => true, 'msg' => '用户余额充值失败！请联系管理员协助解决。');
