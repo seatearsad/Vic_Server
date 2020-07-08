@@ -1151,16 +1151,23 @@ function showShop(shopId){
         });
 
         $("#search_btn").click(function () {
-            $.getJSON(ajax_url_root+'ajaxSearchGoods',{store_id:shopId,keyword:$("#search_input").val()},function(result){
-            	if(result.is_result == 1) {
-                    laytpl($('#shopProductRightBarTpl').html()).render(result.product_list, function (html) {
+        	if($("#search_input").val() == ""){
+        		alert("请输入关键词");
+			}else {
+                $.getJSON(ajax_url_root + 'ajaxSearchGoods', {
+                    store_id: shopId,
+                    keyword: $("#search_input").val()
+                }, function (result) {
+                    if (result.is_result == 1) {
+                        laytpl($('#shopProductRightBarTpl').html()).render(result.product_list, function (html) {
+                            $('#shopSearchResult dl').html(html);
+                        });
+                    } else {
+                        var html = '<dd id="shopProductRightBar2-0" data-cat_id="0"><div class="cat_name">未搜索到结果</div></dd>'
                         $('#shopSearchResult dl').html(html);
-                    });
-                }else{
-            		var html = '<dd id="shopProductRightBar2-0" data-cat_id="0"><div class="cat_name">未搜索到结果</div></dd>'
-                    $('#shopSearchResult dl').html(html);
-				}
-            });
+                    }
+                });
+            }
         });
 
         $(document).on('click','#shopDetailPageFormat li',function(event){
