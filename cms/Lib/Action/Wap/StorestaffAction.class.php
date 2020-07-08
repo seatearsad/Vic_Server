@@ -3232,6 +3232,8 @@ class StorestaffAction extends BaseAction
             $data['error'] = 0;
         }else{
             $data['error'] = 0;
+            if($last_time == 0) $data['new_time'] = time() - 300;
+            else $data = $last_time;
         }
 
 //        if($last_time == 0)
