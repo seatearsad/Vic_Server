@@ -847,6 +847,12 @@ var isShowGood = false;
 // 	});
 // }
 
+function showStoreCategory() {
+    $('body').css('overflow','hidden');
+
+    $('#shopContentBar').show();
+    $('#shopCatBar').show().scrollTop(0).addClass('sliderLeft');
+}
 function showSearch() {
     if(nowPage != 'shop'){
         //location.hash = 'shop-'+shop_id;
@@ -1064,6 +1070,7 @@ function showShop(shopId){
 		
 		//$('#shopProductLeftBar2,#shopProductRightBar2,#shopProductBottomBar').css('height',window_height-166-50);
         $('#shopProductRightBar2,#shopProductBottomBar').css('height',window_height-166-50);
+        $('#shopCatBar .content').css('height',window_height-166-90);
 		$('#shopMerchantBox,#shopReplyBox').css({height:window_height-166,'overflow-y':'auto'});
 		//$('#shopProductRightBar2').width(window_width-100);
 
@@ -1104,6 +1111,8 @@ function showShop(shopId){
 			$('#shopCatBar .title').removeClass('show');
 			$('#shopCatBar .content').hide();
 			$('#shopPageCatShade').hide();
+            $('#shopCatBar').hide();
+            $('#shopCatBar').removeClass('sliderLeft');
 			// alert('#shopProductBottomBar li.product_cat_'+$(this).data('cat_id'));
 			$('#shopCatBar .title').html($(this).html());
 			if($(this).data('cat_id') == '0'){
@@ -1112,6 +1121,8 @@ function showShop(shopId){
 				$('#shopProductBottomBar li').hide();
 				$('#shopProductBottomBar li.product_cat_'+$(this).data('cat_id')).show();
 			}
+			$('#shopProductLeftBar2 dl').scrollLeft($('#shopProductLeftBar2-'+$(this).data('cat_id')).offset().left - $('#shopProductLeftBar2 dl').offset().left+$('#shopProductLeftBar2 dl').scrollLeft());
+			$('#shopProductRightBar2').scrollTop($('#shopProductRightBar2-'+$(this).data('cat_id')).offset().top-$('#shopProductRightBar2').offset().top+$('#shopProductRightBar2').scrollTop());
 		});
 		
 		$('#pageShop #backBtn').click(function(){
@@ -1628,7 +1639,11 @@ function showShop(shopId){
 		});
 	}
 	$('#shopContentBar,#shopBanner').show();
-	
+
+
+	$('.sub_right').click(function () {
+		showStoreCategory();
+    });
 	// setTimeout(function(){
 		// pageLoadHides();
 	// },1500);
@@ -2026,6 +2041,9 @@ function showShopContent(nav){
 					laytpl($('#shopProductRightBarTpl').html()).render(nowShop.product_list, function(html){
 						$('#shopProductRightBar2 dl').html(html);
 					});
+                    laytpl($('#shopProductTopBarTpl').html()).render(nowShop.product_list, function(html){
+                        $('#shopCatBar .content ul').html(html);
+                    });
 				} else if (nowShop.store.tmpl == '1') {
 					laytpl($('#shopProductTopBarTpl').html()).render(nowShop.product_list, function(html){
 						$('#shopCatBar .content ul').html(html);

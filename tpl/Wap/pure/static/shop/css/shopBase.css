@@ -1132,21 +1132,23 @@ em.merchant_invoice:before{
     width: 100%;
 	background:white;
 	display:none;
+    overflow-y: auto;
+    /**
     padding-bottom: 16px;
+    */
 }
 #shopCatBar .content li{
     float: left;
     width: 42%;
-    margin:0 3%;
+    margin:5px 3%;
     text-align: center;
     border: 1px solid #ccc;
     border-radius: 5px;
 	padding: 4px 0;
-    margin-top: 10px;
 }
 #shopCatBar .content li.active{
-	border: 1px solid #06c1ae;
-	color:#06c1ae;
+	border: 1px solid #ffa52d;
+	color:#ffa52d;
 }
 #shopCatBar .content li span{
 	font-size: 12px;
