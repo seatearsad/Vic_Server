@@ -570,7 +570,7 @@ class IndexAction extends BaseAction
         }
 
         if($is_cut){
-            $this->returnCode(1,'',array(),"Please note that you have one or more items that are no longer available at this moment. They have been removed from you order. We're sorry for any inconvenience!");
+            $this->returnCode(1,'',array(),"Please note that you have one or more items in your cart that are currently unavailable. They have been removed from your order. We are sorry for any inconvenience!");
         }
 
         if($is_error){
