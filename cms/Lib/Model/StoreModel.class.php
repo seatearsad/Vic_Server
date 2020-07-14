@@ -434,9 +434,16 @@ class StoreModel extends Model
 
     public function get_goods_by_storeId($storeId){
         $data_goods = D('Shop_goods');
-        $good_list = $data_goods ->field(true)->where(array('store_id' => $storeId, 'status' => 1))->order('sort desc,goods_id ASC')->select();
+
+        $where['store_id'] = $storeId;
+        $where['status'] = 1;
+        if($_POST['keyword'] && trim($_POST['keyword']) != "")
+            $where['name']=array('like', '%' . $_POST['keyword'] . '%');
+
+        $good_list = $data_goods ->field(true)->where($where)->order('sort desc,goods_id ASC')->select();
 
         $sort_list = $this->get_goods_group_by_storeId($storeId);
+
         $sortIdList = array();
         foreach ($sort_list as $sort){
             $sortIdList[] = $sort['sort_id'];
@@ -446,6 +453,16 @@ class StoreModel extends Model
         foreach ($good_list as $k=>&$v){
             if(in_array($v['sort_id'],$sortIdList)) {
                 $v['des'] = preg_replace("/<([^>]*)>/", "", $v['des']);
+                //商品搜索时使用
+                if($_POST['uid']){
+                    $uid = $_POST['uid'];
+                    $num = 0;
+                    $cart_list = D('Cart')->where(array('uid'=>$uid,'fid'=>$v['goods_id']))->select();
+                    foreach ($cart_list as $c){
+                        $num += $c['num'];
+                    }
+                    $v['quantity'] = strval($num);
+                }
                 $new_list[] = $v;
             }
         }
