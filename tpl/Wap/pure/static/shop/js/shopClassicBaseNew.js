@@ -1514,7 +1514,7 @@ function showShop(shopId){
 					$('#shopReplyBox dl').html(html);
 				});
 				$('#showMoreReply').data('page','2');
-				if(result.total < result.now){
+				if(result.total > result.now){
 					$('#showMoreReply').show();
 				}else{
 					$('#showMoreReply').hide();
@@ -1534,7 +1534,7 @@ function showShop(shopId){
 
 				$('#showMoreReply').data('page',(nowPage+1));
 				
-				if(result.total < result.now){
+				if(result.total > result.now){
 					$('#showMoreReply').show();
 				}else{
 					$('#showMoreReply').hide();
@@ -2190,7 +2190,7 @@ function showShopContent(nav){
 						$('#shopReplyBox dl').html(html);
 					});
 					
-					if(result.total < result.now){
+					if(result.total > result.now){
 						$('#showMoreReply').show();
 					}else{
 						$('#showMoreReply').hide();

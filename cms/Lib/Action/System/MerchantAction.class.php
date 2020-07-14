@@ -1141,6 +1141,15 @@ class MerchantAction extends BaseAction{
 
 		$sql = "SELECT r.*, m.name AS m_name, s.name AS s_name, u.nickname, u.phone FROM " . C('DB_PREFIX') . "merchant AS m INNER JOIN " . C('DB_PREFIX') . "reply AS r ON r.mer_id = m.mer_id INNER JOIN " . C('DB_PREFIX') . "user AS u ON r.uid=u.uid LEFT JOIN " . C('DB_PREFIX') . "merchant_store AS s ON s.store_id=r.store_id {$where} ORDER BY r.pigcms_id DESC LIMIT {$p->firstRow},{$p->listRows}";
 		$reply_list = D()->query($sql);
+//		foreach($reply_list as &$reply){
+//            if($reply['comment'] != '' && $reply['comment_en'] == '') {
+//                if (!checkEnglish($reply['comment'])) {
+//                    $comment_en = translationCnToEn($reply['comment']);
+//                    D('Reply')->where(array('pigcms_id' => $reply['pigcms_id']))->save(array('comment_en' => $comment_en));
+//                    $reply['comment_en'] = $comment_en;
+//                }
+//            }
+//        }
 		$this->assign('reply_list', $reply_list);
 		$this->assign('pagebar', $p->show());
 		$this->display();
@@ -1209,6 +1218,14 @@ class MerchantAction extends BaseAction{
 				$reply['pics'][] = $tmp_value;
 			}
 		}
+        if($reply['comment'] != '' && ($reply['comment_en'] == '' || $reply['comment_en'] == null)) {
+            if (!checkEnglish($reply['comment'])) {
+                $comment_en = translationCnToEn($reply['comment']);
+                var_dump("translation");
+                D('Reply')->where(array('pigcms_id' => $reply_id))->save(array('comment_en' => $comment_en));
+                $reply['comment_en'] = $comment_en;
+            }
+        }
 		$this->assign('bg_color','#F3F3F3');
 		$this->assign('reply', $reply);
 		$this->display();

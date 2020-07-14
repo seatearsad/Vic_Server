@@ -326,7 +326,7 @@ class Store_orderModel extends Model
 
 			//如果用户使用了余额支付，则扣除相应的金额。
 			if(!empty($balance_pay)){
-				$use_result = D('User')->user_money($now_order['uid'],$balance_pay,'购买 '.$now_order['order_name'].' 扣除余额');
+				$use_result = D('User')->user_money($now_order['uid'],$balance_pay,'订单消费 (订单号:'.$now_order['order_name'].')',0,0,0,'Purchase (Order # '.$now_order['order_name'].')');
 				if($use_result['error_code']){
 					return array('error'=>1,'msg'=>$use_result['msg']);
 				}

@@ -650,7 +650,7 @@ class Shop_orderModel extends Model
 
 			//如果用户使用了余额支付，则扣除相应的金额。
 			if (!empty($balance_pay)) {
-				$use_result = D('User')->user_money($now_order['uid'], $balance_pay, '购买 ' . $now_order['order_id'] . ' 扣除余额');
+				$use_result = D('User')->user_money($now_order['uid'], $balance_pay, '购买 ' . $now_order['order_id'] . ' 扣除余额',0,0,0,"Purchase (Order # ".$now_order['order_id'].")");
 				if ($use_result['error_code']) {
 					return array('error' => 1, 'msg' => $use_result['msg']);
 				}
@@ -1689,7 +1689,7 @@ class Shop_orderModel extends Model
 
 		//平台余额退款
 		if ($now_order['balance_pay'] != '0.00') {
-			$add_result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],'退款 ' . $mer_store['name'] . '(' . $order_id . ') 增加余额');
+			$add_result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],'退款 ' . $mer_store['name'] . '(' . $order_id . ') 增加余额',0,0,0,"Order Cancellation (Order # ".$order_id.")");
 
 			$param = array('refund_time' => time());
 			if($result['error_code']){

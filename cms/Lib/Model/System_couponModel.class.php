@@ -97,6 +97,16 @@ class System_couponModel extends Model{
         return $res;
     }
     public function get_user_coupon_list($uid,$phone,$is_use='' ){
+        //如果不是新用户 删除所有新用户使用的优惠券
+        $is_new = D('User')->check_new($uid,'all');
+        if(!$is_new){
+            $list = D('System_coupon')->where(array('allow_new'=>1,'status'=>1))->select();
+
+            foreach ($list as $c){
+                D('System_coupon_hadpull')->where(array('uid'=>$uid,'coupon_id'=>$c['coupon_id']))->delete();
+            }
+        }
+
         //$where['c.end_time'] = array('gt',time());
         $where['c.status'] = array('neq',0);  //状态正常
         $where['h.uid'] = $uid;
@@ -162,7 +172,9 @@ class System_couponModel extends Model{
         }else{
             return array();
         }
-        $where['order_money'] = array('ELT',$now_order['total_money']);
+        //$where['order_money'] = array('ELT',$now_order['total_money']);
+        //garfunkel 修改优惠券选择金额
+        $where['order_money'] = array('ELT',$now_order['goods_price']);
         //$order_cate = D(ucfirst($table).'_order')->get_order_cate($now_order['order_id']);
         if($order_type!='store'){
             $order_cate = D(ucfirst($table).'_order')->get_order_cate($now_order['order_id']);
@@ -317,13 +329,15 @@ class System_couponModel extends Model{
                     }
                     $data['uid']  = $uid;
                     $coupon = $this->get_coupon($coupon_id);
-                    if ($hadpull->add($data)) {
+                    if ($hadId = $hadpull->add($data)) {
                         if($now_user = M('User')->where(array('uid'=>$uid))->find()){
                             $model = new templateNews(C('config.wechat_appid'), C('config.wechat_appsecret'));
                             $cate_platform = $this->cate_platform();
                             $model->sendTempMsg('TM00251', array('href' => C('config.site_url').'/'.U('Wap/My/card_list',array('carpon_type'=>'system')), 'wecha_id' => $now_user['openid'], 'first' =>  '您成功领取了'.$cate_platform['category'][$coupon['cate_name']].'优惠券', 'toName' => $now_user['nickname'], 'gift' => $coupon['name'],'time'=>date("Y年m月d日 H:i"), 'remark' => '有效期'.date("Y-m-d",$coupon['start_time']).' 至 '.date("Y-m-d",$coupon['end_time'])));
                         }
                         $coupon['has_get'] = $hadpull_count+1;
+                        $coupon['id'] = $hadId;
+                        $coupon['is_use'] = 0;
                         return array('error_code'=>0,'coupon'=>$coupon);
                     }
                 } else {

@@ -1,7 +1,7 @@
 <?php
 class User_money_listModel extends Model{
 	/*增加记录行数*/
-	public function add_row($uid,$type,$money,$msg,$record_ip = true,$ask=0,$ask_id=0,$admin=false){
+	public function add_row($uid,$type,$money,$msg,$record_ip = true,$ask=0,$ask_id=0,$admin=false,$desc_en=''){
 		$data_user_money_list['uid'] = $uid;
 		$data_user_money_list['type'] = $type;
 		$data_user_money_list['money'] = $money;
@@ -9,6 +9,8 @@ class User_money_listModel extends Model{
 		$data_user_money_list['time'] = $_SERVER['REQUEST_TIME'];
 		$data_user_money_list['ask'] = $ask;
 		$data_user_money_list['ask_id'] = $ask_id;
+
+		$data_user_money_list['desc_en'] = $desc_en;
 		if($_SESSION['system']['id']&&$admin){
 			$data_user_money_list['admin_id'] = $_SESSION['system']['id'];
 		}

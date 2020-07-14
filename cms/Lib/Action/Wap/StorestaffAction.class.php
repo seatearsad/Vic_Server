@@ -3452,6 +3452,10 @@ class StorestaffAction extends BaseAction
         if(strpos($order['desc'], "'") !== false) {
             $order['desc'] = str_replace("'",'’',$order['desc']);
         }
+        //获取翻译文字
+        if(C('DEFAULT_LANG') != 'zh-cn' && $order['desc_en'] != ''){
+            $order['desc'] = $order['desc_en'];
+        }
         $order_data['desc'] = $order['desc'] == "" ? "N/A" : $order['desc'];
 
         if (($order_data['expect_use_time'] - $order_data['pay_time'])>=3600){

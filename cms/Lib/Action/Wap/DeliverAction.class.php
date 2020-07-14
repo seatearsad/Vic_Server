@@ -704,6 +704,17 @@ class DeliverAction extends BaseAction
                     $address['adress'] = $val['aim_site'];
                     $address['detail'] = '';
                 }
+                //获取翻译
+                if(C('DEFAULT_LANG') != 'zh-cn'){
+                    if(!checkEnglish($address['detail']) && $address['detail'] != '' && $address['detail_en'] == ''){
+                        $detail_en = translationCnToEn($address['detail']);
+                        D('User_adress')->where(array('adress_id'=>$order['address_id']))->save(array('detail_en'=>$detail_en));
+                        $address['detail_en'] = $detail_en;
+                    }
+                }
+                if(C('DEFAULT_LANG') != 'zh-cn' && $address['detail_en'] != ''){
+                    $address['detail'] = $address['detail_en'];
+                }
                 $val['user_address'] = $address;
                 $val['not_touch'] = $order['not_touch'];
 
@@ -1397,9 +1408,6 @@ class DeliverAction extends BaseAction
 			$supply['change_name'] = $this->getDeliverUser($uid);
 		}
 		
-		
-		$this->assign('supply', $supply);
-		
 		if ($supply['item'] == 1) {//外送系统的外送
 			//订单信息
 			$where = array();
@@ -1483,7 +1491,10 @@ class DeliverAction extends BaseAction
 			$where = array();
 			$where['order_id'] = $supply['order_id'];
 			$order = D("Shop_order")->where($where)->find();
-
+            //获取翻译文字
+            if(C('DEFAULT_LANG') != 'zh-cn' && $order['desc_en'] != ''){
+                $supply['note'] = $order['desc_en'];
+            }
 			if (empty($order)) {
 				$this->error_tips("订单信息有误");
 				exit;
@@ -1498,6 +1509,18 @@ class DeliverAction extends BaseAction
 
             $address = D('User_adress')->where(array('adress_id'=>$order['address_id']))->find();
             $order['user_address'] = $address['adress'];
+
+            //获取翻译
+            if(C('DEFAULT_LANG') != 'zh-cn'){
+                if(!checkEnglish($address['detail']) && $address['detail'] != '' && $address['detail_en'] == ''){
+                    $detail_en = translationCnToEn($address['detail']);
+                    D('User_adress')->where(array('adress_id'=>$order['address_id']))->save(array('detail_en'=>$detail_en));
+                    $address['detail_en'] = $detail_en;
+                }
+            }
+            if(C('DEFAULT_LANG') != 'zh-cn' && $address['detail_en'] != ''){
+                $address['detail'] = $address['detail_en'];
+            }
             $order['user_address_detail'] = $address['detail'];
 
             switch ($order['pay_type']) {
@@ -1575,6 +1598,7 @@ class DeliverAction extends BaseAction
                     $goods[$k]['dish'] = $dish_desc;
                 }
 			}
+            $this->assign('supply', $supply);
 			$this->assign('goods', $goods);
 			//店铺信息
 			$store = D()->field(true)->table(array(C('DB_PREFIX').'merchant_store'=>'ms', C('DB_PREFIX').'merchant_store_shop'=>'ml'))->where("ms.store_id=".$order['store_id']." AND ms.store_id=ml.store_id")->find();

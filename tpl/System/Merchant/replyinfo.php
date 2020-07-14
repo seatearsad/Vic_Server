@@ -37,7 +37,10 @@
 				<th width="80">评论内容</th>
 				<td><input type="text" class="input fl" name="cat_url" id="cat_url" value="{pigcms{$reply.comment}" size="25" placeholder="英文或数字" validate="maxlength:20,required:true,en_num:true" tips="只能使用英文或数字，用于网址（url）中的标记！建议使用分类的拼音"/></td>
 			</tr>
-			
+            <tr>
+                <th width="80">翻译评论内容</th>
+                <td><input type="text" class="input fl" name="cat_url" id="cat_url" value="{pigcms{$reply.comment_en}" size="25" placeholder="英文或数字" validate="maxlength:20,required:true,en_num:true" tips="只能使用英文或数字，用于网址（url）中的标记！建议使用分类的拼音"/></td>
+            </tr>
 			<if condition="!empty($reply['pics'])">
 				<tr>
 					<th width="80">分类现图</th>

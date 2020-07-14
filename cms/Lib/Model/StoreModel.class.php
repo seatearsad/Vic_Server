@@ -407,6 +407,12 @@ class StoreModel extends Model
         $curr_time = intval(date('Hi',time()));
         foreach ($sort_list as $key => $row) {
             $is_add = true;
+            if(D('Shop_goods')->field(true)->where(array('sort_id' => $row['sort_id'], 'status' => 1))->count() > 0){
+                $is_add = true;
+            }else{
+                $is_add = false;
+            }
+
             if (!empty($row['is_weekshow'])) {
                 $week_arr = explode(',', $row['week']);
                 if (!in_array($today, $week_arr)) {
@@ -766,6 +772,12 @@ class StoreModel extends Model
 
     public function addUserAddress($data){
         $addressModle = D('User_adress');
+        //添加备注翻译
+        if(!checkEnglish($data['detail']) && trim($data['detail']) != ''){
+            $data['detail_en'] = translationCnToEn($data['detail']);
+        }else{
+            $data['detail_en'] = '';
+        }
         if($data['adress_id'] != 0){
             $condition_user_adress['adress_id'] = $data['adress_id'];
             $condition_user_adress['uid'] = $data['uid'];

@@ -69,11 +69,11 @@ class IndexAction extends BaseAction
         $arr['best']['info'] = $shop_list['list'];
         $arr['best']['count'] = $shop_list['count'];
         //获取顶级分类
-        $category = D('Shop_category')->field(true)->where(array('cat_fid'=>0))->select();
+        $category = D('Shop_category')->field(true)->where(array('cat_fid'=>0))->order('cat_sort desc')->select();
         $nav_list = array();
         foreach ($category as $v){
             $nav['title'] = lang_substr($v['cat_name'],C('DEFAULT_LANG'));
-            $nav['image'] = 'https://www.tutti.app/static/images/category/'.$v['cat_url'].'.png';
+            $nav['image'] = 'https://www.tutti.app/static/images/category/'.$v['cat_url'].'.png?v=1.2.0';
             $nav['id'] = $v['cat_id'];
 
             $nav_list[] = $nav;
@@ -183,47 +183,69 @@ class IndexAction extends BaseAction
 //        );
         $nickname = $_POST['nickname'];
         $openid = $_POST['openid'];
-        $face_pic = $_POST['face_pic'];
+        $face_pic = htmlspecialchars_decode($_POST['face_pic']);
         $sex = $_POST['sex'];
         $province = $_POST['province'];
         $city = $_POST['city'];
         $type = $_POST['type'];
 
         $token = $_POST['token'];
-        if($type == 2){//微信登录
-            $result = D('User')->autologin('openid', $openid);
+        $email = $_POST['email'] ? $_POST['email'] : '';
+        //type 01Tutti 2微信 3Facebook 4Google 5Apple
+        $result = D('User')->autologin('openid', $openid,$type);
 
-            if(!$result['user']){
-                $data_user = array(
-                    'openid' 	=> $openid,
-                    'union_id' 	=> '',
-                    'nickname' 	=> $nickname,
-                    'sex' 		=> $sex,
-                    'province' 	=> $province,
-                    'city' 		=> $city,
-                    'avatar' 	=> $face_pic,
-                    'is_follow' => 1,
-                );
-                $reg_result = D('User')->autoreg($data_user);
-                if($reg_result['error_code']){
-                    $user['uid'] = '0';
-                }else{
-                    $user = D('User')->get_user($openid,'openid');
-                }
+        if(!$result['user']){
+            $data_user = array(
+                'openid' 	=> $openid,
+                'union_id' 	=> '',
+                'nickname' 	=> $nickname,
+                'sex' 		=> $sex,
+                'province' 	=> $province,
+                'city' 		=> $city,
+                'avatar' 	=> $face_pic,
+                'is_follow' => 1,
+                'login_type'=> $type,
+                'email'     => $email
+            );
+            $reg_result = D('User')->autoreg($data_user);
+            if($reg_result['error_code']){
+                $user['uid'] = '0';
             }else{
-                $user = $result['user'];
+                $user = D('User')->get_user($openid,'openid');
             }
+        }else{
+            $user = $result['user'];
+        }
 
 
-            $userInfo['uid'] = $user['uid'];
-            $userInfo['uname'] = $user['nickname'];
-            $userInfo['password'] = $user['pwd'];
-            $userInfo['outsrc'] = $user['avatar'];
-            $userInfo['openid'] = $user['openid'];
-            $userInfo['login_type'] = $type;
-            //记录设备号
-            if($token != '')
-                D('User')->where(array('uid'=>$userInfo['uid']))->save(array('device_id'=>$token));
+        $userInfo['uid'] = $user['uid'];
+        $userInfo['uname'] = $user['nickname'];
+        $userInfo['password'] = $user['pwd'];
+        $userInfo['outsrc'] = $user['avatar'];
+        $userInfo['openid'] = $user['openid'];
+        $userInfo['login_type'] = $type;
+        //记录设备号
+        if($token != '') {
+            $from = $_POST['from'] ? $_POST['from'] : 0;
+
+            switch ($from){
+                case 1:
+                    $source = 'Wap';
+                    break;
+                case 2:
+                    $source = 'App';
+                    break;
+                case 3:
+                    $source = 'App';
+                    break;
+                case 4:
+                    $source = 'Android';
+                    break;
+                default:
+                    $source = 'Web';
+                    break;
+            }
+            D('User')->where(array('uid' => $userInfo['uid']))->save(array('device_id' => $token,'source'=>$source));
         }
 
         $this->returnCode(0,'info',$userInfo);
@@ -496,13 +518,14 @@ class IndexAction extends BaseAction
         $result = D('Cart')->getCartList($uid,$cart_array);
 
         //平台优惠劵
-        $_POST['amount'] = $result['total_pay_price'];
+        $_POST['amount'] = $result['food_total_price'];
 
         $coupon = $this->getCanCoupon();
         $result['coupon'] = $coupon;
 
         //账户余额
         $userInfo = D('User')->get_user($uid);
+        $result['is_bind_phone'] = $userInfo['phone'] == '' ? 0 : 1;
         $result['now_money'] = round($userInfo['now_money'],2);
 
         $this->returnCode(0,'',$result,'success');
@@ -547,7 +570,7 @@ class IndexAction extends BaseAction
         }
 
         if($is_cut){
-            $this->returnCode(1,'',array(),"Please note that you have one or more items that are no longer available at this moment. They have been removed from you order. We're sorry for any inconvenience!");
+            $this->returnCode(1,'',array(),"Please note that you have one or more items in your cart that are currently unavailable. They have been removed from your order. We are sorry for any inconvenience!");
         }
 
         if($is_error){
@@ -736,6 +759,12 @@ class IndexAction extends BaseAction
         $order_data['merchant_reduce'] = $_POST['merchant_reduce'] ? $_POST['merchant_reduce'] : 0;
         $order_data['not_touch'] = $_POST['not_touch'] ? $_POST['not_touch'] : 0;
 
+        if(!checkEnglish($order_data['desc']) && trim($order_data['desc']) != ''){
+            $order_data['desc_en'] = translationCnToEn($order_data['desc']);
+        }else{
+            $order_data['desc_en'] = '';
+        }
+
         $order_id = D('Shop_order')->saveOrder($order_data, $return);
         //清除购物车中的内容
         D('Cart')->delCart($uid,$cart_array);
@@ -809,14 +838,40 @@ class IndexAction extends BaseAction
         $_GET['page'] = $_POST['page'];
 
         $where = "is_del=0 AND uid={$uid}";
-        if ($status == 0) {
-            $where .= " AND paid=0 AND status<4";
-        } elseif ($status == 1) {
-            $where .= " AND paid=1 AND status=2";
-        } elseif ($status == 2) {
-            $where .= " AND paid=1 AND (status=4 OR status=5)";
-        }else{//付款超时，待删除
-            $where .= " AND status<>6";
+        //orderStatus -1 全部；0 未付款；1 已付款；2 退款；3 进行中；4 待评价；5 已完成
+
+//        if ($status == 0) {
+//            $where .= " AND paid=0 AND status<4";
+//        } elseif ($status == 1) {
+//            $where .= " AND paid=1 AND status=2";
+//        } elseif ($status == 2) {
+//            $where .= " AND paid=1 AND (status=4 OR status=5)";
+//        }else{//付款超时，待删除
+//            $where .= " AND status<>6";
+//        }
+
+        switch ($status){
+            case 0:
+                $where .= " AND paid=0 AND status<4";
+                break;
+            case 1:
+                $where .= " AND paid=1 AND status=2";
+                break;
+            case 2:
+                $where .= " AND paid=1 AND (status=4 OR status=5)";
+                break;
+            case 3:
+                $where .= " AND status<2";
+                break;
+            case 4:
+                $where .= " AND status=2";
+                break;
+            case 5:
+                $where .= " AND status=3";
+                break;
+            default://付款超时，待删除
+                $where .= " AND status<>6";
+                break;
         }
 
         $where .= " AND is_del = 0";
@@ -1320,6 +1375,8 @@ class IndexAction extends BaseAction
 
     public function getCouponByUser(){
         $uid = $_POST['uid'];
+        $amount = $_POST['amount'] ? $_POST['amount'] : -1;
+
         $coupon_list = D('System_coupon')->get_user_coupon_list($uid);
 
         //获取活动优惠券
@@ -1333,10 +1390,23 @@ class IndexAction extends BaseAction
         }
 
         $tmp = array();
+        $canTmp = array();
+        $notCanTmp = array();
         foreach ($coupon_list as $key => $v) {
             if(!$v['is_use']){
                 $coupon = $this->arrange_coupon($v);
-                $tmp[] = $coupon;
+                if($amount > 0){
+                    if($v['order_money'] <= $amount){
+                        $coupon['canUse'] = 1;
+                        $canTmp[] = $coupon;
+                    }else{
+                        $coupon['canUse'] = 0;
+                        $notCanTmp[] = $coupon;
+                    }
+                }else {
+                    $coupon['canUse'] = 1;
+                    $tmp[] = $coupon;
+                }
             }
 //            if (!empty($tmp[$v['is_use']][$v['coupon_id']])) {
 //                $tmp[$v['is_use']][$v['coupon_id']]['get_num']++;
@@ -1348,6 +1418,14 @@ class IndexAction extends BaseAction
 //            }
 
         }
+
+//        if($amount > 0) {
+//            $last_names = array_column($tmp, 'canUse');
+//            array_multisort($last_names, SORT_DESC, $tmp);
+//        }
+        if($amount > 0)
+            $tmp = array_merge($canTmp,$notCanTmp);
+
         $this->returnCode(0,'info',$tmp,'success');
     }
 
@@ -1521,7 +1599,7 @@ class IndexAction extends BaseAction
 
         //平台余额退款
         if ($now_order['balance_pay'] != '0.00') {
-            $add_result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],L('_B_MY_REFUND_') . $mer_store['name'] . '(' . $order_id . ') 增加余额');
+            $add_result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],'退款 '.$order_id.' 增加余额',0,0,0,"Order Cancellation (Order # ".$order_id.")");
 
             $param = array('refund_time' => time());
             if($result['error_code']){
@@ -1596,35 +1674,18 @@ class IndexAction extends BaseAction
         if($cid){
             $l_id = D('System_coupon_hadpull')->field(true)->where(array('uid'=>$uid,'coupon_id'=>$cid))->find();
 
-            if($l_id == null)
-                $result = D('System_coupon')->had_pull($cid,$uid);
-            else
+            if($l_id == null) {
+                $result = D('System_coupon')->had_pull($cid, $uid);
+                if(isset($result) && $result['error_code'] == 0) {
+                    $coupon = $this->arrange_coupon($result['coupon']);
+                    $this->returnCode(0, 'info', $coupon, 'success');
+                }else{
+                    $this->returnCode(1,'info',array(),$result['msg']);
+                }
+            }else
                 $this->returnCode(1,'info',array(),L('_AL_EXCHANGE_CODE_'));
         }else{
             $this->returnCode(1,'info',array(),L('_NOT_EXCHANGE_CODE_'));
-        }
-        if(isset($result) && $result['error_code'] == 0)
-            $this->returnCode(0,'info',$result,'success');
-        else{
-            $msg_str = '';
-            switch ($result['error_code']){
-                case 1:
-                    $msg_str = 'The coupon code has been entered incorrectly';
-                    break;
-                case 2:
-                    $msg_str = 'The coupon has expired.';
-                    break;
-                case 3:
-                    $msg_str = '';
-                    break;
-                case 4:
-                    $msg_str = 'The coupon is for new users only.';
-                    break;
-                case 5:
-                    $msg_str = L('_AL_EXCHANGE_CODE_');
-                    break;
-            }
-            $this->returnCode(1,'info',array(),$msg_str);
         }
     }
     //未支付 取消订单
@@ -1893,6 +1954,12 @@ class IndexAction extends BaseAction
         $data_reply['merchant_reply_content'] = "";
         $data_reply['merchant_reply_time'] = 0;
 
+        if(!checkEnglish($comment) && trim($comment) != ''){
+            $data_reply['comment_en'] = translationCnToEn($comment);
+        }else{
+            $data_reply['comment_en'] = '';
+        }
+
 // 		echo "<pre/>";
 // 		print_r($data_reply);die;
         if ($database_reply->data($data_reply)->add()) {
@@ -2110,6 +2177,9 @@ class IndexAction extends BaseAction
         $transaction['count'] = 20;
         foreach($transaction['money_list'] as $k=>$v){
             $transaction['money_list'][$k]['time_s'] = date('Y-m-d H:i',$v['time']);
+            if(C('DEFAULT_LANG') != 'zh-cn' && $v['desc_en'] != ''){
+                $transaction['money_list'][$k]['desc'] = $v['desc_en'];
+            }
         }
         if(!$transaction['money_list'])
             $transaction['money_list'] = array();
@@ -2530,10 +2600,10 @@ class IndexAction extends BaseAction
     }
 
     public function test_tran(){
-        import('ORG.Net.Http');
-        $http = new Http();
+//        import('ORG.Net.Http');
+//        $http = new Http();
 
-        $url = 'https://translation.googleapis.com/language/translate/v2?key=AIzaSyAxHAPoWlRu2Mz8APLwM8Ae6B3x1MJUlvU&target=en&source=zh&q='.urlencode('从昨天开始，我忘了。');
+//        $url = 'https://translation.googleapis.com/language/translate/v2?key=AIzaSyAxHAPoWlRu2Mz8APLwM8Ae6B3x1MJUlvU&target=en&source=zh&q='.urlencode('从昨天开始，I forgot。');
 //        $headers = array();
 //        $headers[]='Content-Type: application/json';
 //        $data = [
@@ -2548,8 +2618,8 @@ class IndexAction extends BaseAction
         //$url = 'https://maps.googleapis.com/maps/api/place/autocomplete/json?input='.urlencode($_GET['query']).'&types=address&key=AIzaSyAxHAPoWlRu2Mz8APLwM8Ae6B3x1MJUlvU&location=48.43016873926502,-123.34303379055086&radius=50000&components=country:ca&language=en';
 
         //$result = $http->curlPost($url,$data);
-        $result = $http->curlGet($url);
-        var_dump($result);die();
+//        $result = $http->curlGet($url);
+//        var_dump($result);die();
     }
 
     public function test_wechat(){

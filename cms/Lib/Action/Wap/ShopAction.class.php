@@ -2341,7 +2341,7 @@ class ShopAction extends BaseAction{
         $is_error = false;
         if(count($productCart) > count($newCart)){
             $is_error = true;
-            $msg = "Please note that you have one or more items that are no longer available at this moment. They have been removed from you order. We're sorry for any inconvenience!";
+            $msg = "Please note that you have one or more items in your cart that are currently unavailable. They have been removed from your order. We are sorry for any inconvenience!";
         }else{
             $msg = "";
         }

@@ -2243,6 +2243,9 @@ class ShopAction extends BaseAction
         $now_store = $this->check_store(intval($_POST['id']));
         $store_status = $_POST['type'] == 'open' ? 1 : 0;
         if(D('Merchant_store')->where(array('store_id'=>$now_store['store_id']))->save(array('status'=>$store_status))){
+            if($store_status == 0){
+                D('Cart')->where(array('sid'=>$now_store['store_id']))->delete();
+            }
             exit('1');
         }else{
             exit('0');

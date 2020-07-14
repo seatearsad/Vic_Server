@@ -145,6 +145,9 @@ class MyAction extends BaseAction{
 		$transaction['count'] = count($transaction['money_list']);
 		foreach($transaction['money_list'] as $k=>$v){
 			$transaction['money_list'][$k]['time_s']	=	date('Y/m/d H:i',$v['time']);
+            if(C('DEFAULT_LANG') != 'zh-cn' && $v['desc_en'] != ''){
+                $transaction['money_list'][$k]['desc'] = $v['desc_en'];
+            }
 		}
 		echo json_encode($transaction);
 	}
@@ -1445,7 +1448,7 @@ class MyAction extends BaseAction{
 
 				//平台余额退款
 				if($now_order['balance_pay'] != '0.00'){
-					$add_result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],L('_B_MY_REFUND_').$now_order['order_name'].' 增加余额');
+					$add_result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],'订单退款 (订单号:'.$now_order['order_name'].')',0,0,0,'Order Cancellation (Order #'.$now_order['order_name'].')');
 
 					$param = array('refund_time' => time());
 					if($result['error_code']){
@@ -1612,7 +1615,7 @@ class MyAction extends BaseAction{
 
 		//平台余额退款
 		if($now_order['balance_pay'] != '0.00'){
-			$add_result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],L('_B_MY_REFUND_').$now_order['order_name'].' 增加余额');
+			$add_result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],'订单退款 (订单号:'.$now_order['order_name'].')',0,0,0,'Order Cancellation (Order #'.$now_order['order_name'].')');
 
 			$param = array('refund_time' => time());
 			if($result['error_code']){
@@ -1845,7 +1848,7 @@ class MyAction extends BaseAction{
 
 				//平台余额退款
 				if($now_order['balance_pay'] != '0.00'){
-					$result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],L('_B_MY_REFUND_').$now_order['order_name'].' 增加余额');
+					$result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],'订单退款 (订单号:'.$now_order['order_name'].')',0,0,0,'Order Cancellation (Order #'.$now_order['order_name'].')');
 
 					$param = array('refund_time' => time());
 					if($result['error_code']){
@@ -2020,7 +2023,7 @@ class MyAction extends BaseAction{
 			}
 			if($now_order['balance_pay']>0){
 
-				$result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],L('_B_MY_REFUND_').$now_order['order_name'].' 增加余额');
+				$result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],'订单退款 (订单号:'.$now_order['order_name'].')',0,0,0,'Order Cancellation (Order #'.$now_order['order_name'].')');
 				$param = array('refund_time' => time());
 				if($result['error_code']){
 					$param['err_msg'] = $result['msg'];
@@ -2421,7 +2424,7 @@ class MyAction extends BaseAction{
 
 		//平台余额退款
 		if($now_order['system_balance'] != '0.00'){
-			$result = D('User')->add_money($now_order['uid'],$now_order['system_balance'],L('_B_MY_REFUND_').$now_order['order_name'].' 增加余额');
+			$result = D('User')->add_money($now_order['uid'],$now_order['system_balance'],'订单退款 (订单号:'.$now_order['order_name'].')',0,0,0,'Order Cancellation (Order #'.$now_order['order_name'].')');
 			$param = array('refund_time' => time());
 			if($result['error_code']){
 				$param['err_msg'] = $result['msg'];
@@ -4351,7 +4354,7 @@ class MyAction extends BaseAction{
 
 		//平台余额退款
 		if($now_order['balance_pay'] != '0.00'){
-			$add_result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],L('_B_MY_REFUND_').$now_order['order_name'].' 增加余额');
+			$add_result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],'订单退款 (订单号:'.$now_order['order_name'].')',0,0,0,'Order Cancellation (Order #'.$now_order['order_name'].')');
 
 			$param = array('refund_time' => time());
 			if($result['error_code']){
@@ -5207,7 +5210,7 @@ class MyAction extends BaseAction{
 
 		//平台余额退款
 		if ($now_order['balance_pay'] != '0.00') {
-			$add_result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],L('_B_MY_REFUND_') . $mer_store['name'] . '(' . $order_id . ') 增加余额');
+			$add_result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],'订单退款 (订单号:'.$now_order['order_name'].')',0,0,0,'Order Cancellation (Order #'.$now_order['order_name'].')');
 
 			$param = array('refund_time' => time());
 			if($result['error_code']){
@@ -5390,6 +5393,12 @@ class MyAction extends BaseAction{
 		$data_reply['add_time'] = $_SERVER['REQUEST_TIME'];
 		$data_reply['add_ip'] = get_client_ip(1);
 		$data_reply['goods'] = $goods;
+
+        if(!checkEnglish($comment) && trim($comment) != ''){
+            $data_reply['comment_en'] = translationCnToEn($comment);
+        }else{
+            $data_reply['comment_en'] = '';
+        }
 // 		echo "<pre/>";
 // 		print_r($data_reply);die;
 		if ($database_reply->data($data_reply)->add()) {

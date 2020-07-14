@@ -872,7 +872,7 @@ class Alipay{
 		$order_param['ret_detail'] = '退款到用户的账号余额的金额';
 		$order_param['refund_time'] = time();
 		
-		D('User')->add_money($this->order_info['uid'], $this->pay_money, '支付宝退款 '.$this->order_info['order_name'].' 增加余额');
+		D('User')->add_money($this->order_info['uid'], $this->pay_money, '退款 '.$this->order_info['order_name'].' 增加余额',0,0,0,"Order Cancellation (Order # ".$this->order_info['order_name'].")");
 		
 		return array('error' => 0, 'type' => 'ok','msg' => '退款申请成功！', 'refund_param' => $order_param);
 		

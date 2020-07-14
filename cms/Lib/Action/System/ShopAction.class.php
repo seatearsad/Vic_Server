@@ -647,12 +647,14 @@ class ShopAction extends BaseAction
                 $new_price = $shop_order_data['balance_pay'] - $cha;
                 if($cha > 0){//需要退款
                     $cha = sprintf("%.2f", $cha);
-                    $add_result = D('User')->add_money($shop_order_data['uid'],$cha,L('_B_MY_REFUND_')  . '(' . $order_id . ') 修改价格 退还金额');
+                    //$add_result = D('User')->add_money($shop_order_data['uid'],$cha,L('_B_MY_REFUND_')  . '(' . $order_id . ') 修改价格 退还金额');
+                    $add_result = D('User')->add_money($shop_order_data['uid'],$cha,'修改价格：退还余额 (' . $order_id . ')',0,0,0,'Adjustment: Credit Return (' . $order_id . ')');
                 }elseif($cha < 0){//需要追加付款
                     $user = D('User')->field(true)->where(array('uid'=>$shop_order_data['uid']))->find();
                     $cha = sprintf("%.2f", $cha*-1);
                     if($user['now_money'] >= $cha){
-                        $use_result = D('User')->user_money($shop_order_data['uid'], $cha, '购买 ' . $shop_order_data['order_id'] . ' 修改价格 追加付款');
+                        //$use_result = D('User')->user_money($shop_order_data['uid'], $cha, '购买 ' . $shop_order_data['order_id'] . ' 修改价格 追加付款');
+                        $use_result = D('User')->user_money($shop_order_data['uid'], $cha, '修改价格：追加消费 (' . $order_id . ')',0,0,0,'Adjustment: Credit Charge (' . $order_id . ')');
                         if ($use_result['error_code']) {
                             $this->error( $use_result['msg']);
                         }
@@ -735,7 +737,7 @@ class ShopAction extends BaseAction
             }elseif($now_order['pay_type'] == '' && $now_order['paid'] == 1 && $now_order['balance_pay'] > 0){
                 //判断订单状态 已退款或已取消 不退款
                 if($now_order['status'] != 4 && $now_order['status'] != 5)
-                    $add_result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],L('_B_MY_REFUND_')  . '(' . $order_id . ') 增加余额');
+                    $add_result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],'退款 '.$order_id.' 增加余额',0,0,0,"Order Cancellation (Order # ".$order_id.")");
             }
             ///////
             if ($shop_order->where("order_id=$order_id")->data($data)->save()){
@@ -872,7 +874,7 @@ class ShopAction extends BaseAction
                 $this->error('删除失败！请重试~');
             }
         }elseif($now_order['pay_type'] == '' && $now_order['paid'] == 1 && $now_order['balance_pay'] > 0){
-            $add_result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],L('_B_MY_REFUND_')  . '(' . $_GET['order_id'] . ') 增加余额');
+            $add_result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],'退款 '.$_GET['order_id'].' 增加余额',0,0,0,"Order Cancellation (Order # ".$_GET['order_id'].")");
         }
         if($database_shop_order->where($condition_shop_order)->setField('status',4)){
             $this->success('订单状态已改为已退款！');
