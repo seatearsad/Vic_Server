@@ -12,7 +12,7 @@
 		<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
 		<meta name="format-detection" content="telephone=no"/>
 		<meta name="format-detection" content="address=no"/>
-		<link rel="stylesheet" type="text/css" href="{pigcms{$static_path}shop/css/shopBase.css?v=1.1"/>
+		<link rel="stylesheet" type="text/css" href="{pigcms{$static_path}shop/css/shopBase.css?v=1.2"/>
 		<script type="text/javascript" src="{pigcms{:C('JQUERY_FILE_190')}" charset="utf-8"></script>
 		<script type="text/javascript" src="{pigcms{$static_path}js/iscroll.js?220" charset="utf-8"></script>
 		<script type="text/javascript" src="{pigcms{$static_path}js/idangerous.swiper.min.js" charset="utf-8"></script>
@@ -514,7 +514,7 @@
                 <div id="shopSearchPage" style="display:none;">
                     <div class-s="scrollerBox">
                         <div id="shopSearchpageClose" class="closeBtn"><div></div></div>
-                        <div id="shopSearchBoxDiv">
+                        <div id="shopSearchBoxDiv" style="padding: 3% 0 0 10%;">
                             <input type="text" name="searckey" id="search_input" placeholder="Search items within this store" />
                             <span id="search_btn">Search</span>
                         </div>

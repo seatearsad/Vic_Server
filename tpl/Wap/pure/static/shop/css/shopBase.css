@@ -2964,12 +2964,11 @@ em.merchant_invoice:before{
 }
 
 #search_input{
-    width: 70%;
+    width: 80%;
     background: #ccc;
     border: 0;
     height: 30px;
     border-radius: 5px;
-    margin: 3% 0 0 10%;
     padding-left: 10px;
     position: relative;
 }
