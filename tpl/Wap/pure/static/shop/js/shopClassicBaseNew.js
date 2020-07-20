@@ -1248,11 +1248,11 @@ function showShop(shopId){
                         }else{
                             cartFunction('count');
                         }
-                        pageLoadHides();
                     } else {
                         var html = '<dd id="shopProductRightBar2-0" data-cat_id="0"><div class="cat_name">未搜索到结果</div></dd>'
                         $('#shopSearchResult dl').html(html);
                     }
+                    pageLoadHides();
                 });
             }
         });

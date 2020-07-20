@@ -515,7 +515,7 @@
                     <div class-s="scrollerBox">
                         <div id="shopSearchpageClose" class="closeBtn"><div></div></div>
                         <div id="shopSearchBoxDiv">
-                            <input type="text" name="searckey" id="search_input" />
+                            <input type="text" name="searckey" id="search_input" placeholder="Search items within this store" />
                             <span id="search_btn">Search</span>
                         </div>
                         <div id="shopSearchResult">

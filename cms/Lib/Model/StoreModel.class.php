@@ -460,7 +460,7 @@ class StoreModel extends Model
             if(in_array($v['sort_id'],$sortIdList)) {
                 $v['des'] = preg_replace("/<([^>]*)>/", "", $v['des']);
                 //商品搜索时使用
-                if($_POST['uid']){
+                if($_POST['uid'] && $_POST['uid'] != 0){
                     $uid = $_POST['uid'];
                     $num = 0;
                     $cart_list = D('Cart')->where(array('uid'=>$uid,'fid'=>$v['goods_id']))->select();

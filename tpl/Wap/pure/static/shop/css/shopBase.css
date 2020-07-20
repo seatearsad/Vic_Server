@@ -2971,8 +2971,10 @@ em.merchant_invoice:before{
     border-radius: 5px;
     margin: 3% 0 0 10%;
     padding-left: 10px;
+    position: relative;
 }
 #search_btn{
+    position: relative;
     display: inline-block;
     width: 12%;
     background: #ffa52d;
