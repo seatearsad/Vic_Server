@@ -514,7 +514,7 @@
                 <div id="shopSearchPage" style="display:none;">
                     <div class-s="scrollerBox">
                         <div id="shopSearchpageClose" class="closeBtn"><div></div></div>
-                        <div id="shopSearchBoxDiv" style="padding: 3% 0 0 10%;">
+                        <div id="shopSearchBoxDiv" style="padding: 20px 0 0 70px;">
                             <input type="text" name="searckey" id="search_input" placeholder="Search items within this store" />
                             <span id="search_btn">Search</span>
                         </div>
