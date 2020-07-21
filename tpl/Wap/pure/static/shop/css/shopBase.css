@@ -2272,17 +2272,18 @@ em.merchant_invoice:before{
 }
 .searchBtn{
 	position: absolute;
-    width: 30px;
-    height: 30px;
+    width: 50px;
+    height: 50px;
     line-height: 30px;
     top: 3px;
     right: 10px;
     text-align: center;
     color: white;
-    padding: 0 6px;
+    padding: 0px;
     background-image: url("/tpl/Static/blue/images/new/search.png");
     background-repeat: no-repeat;
-    background-size: auto 100%;
+    background-size: auto 80%;
+    background-position: center;
     cursor: pointer;
 }
 .searchBtn.so{
