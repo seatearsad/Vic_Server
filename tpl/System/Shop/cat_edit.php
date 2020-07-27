@@ -32,6 +32,45 @@
 					</select>
 				</td>
 			</tr>
+            <if condition="$parentid eq 0">
+                <tr>
+                    <th width="90">分类类型</th>
+                    <td>
+                        <span class="cb-enable"><label class="cb-enable <if condition="$now_category['cat_type'] eq 0">selected</if>"><span>普通分类</span><input type="radio" name="cat_type" value="0" <if condition="$now_category['cat_type'] eq 0">checked="checked"</if> /></label></span>
+                        <span class="cb-disable"><label class="cb-disable <if condition="$now_category['cat_type'] eq 1">selected</if>"><span>推广分类</span><input type="radio" name="cat_type" value="1" <if condition="$now_category['cat_type'] eq 1">checked="checked"</if> /></label></span>
+                    </td>
+                </tr>
+                <tr>
+                    <th width="90">城市</th>
+                    <td>
+                        <select name="city_id">
+                            <option value="0" <if condition="$now_category['city_id'] eq 0">selected</if>>通用</option>
+                            <volist name="city" id="vo">
+                                <option value="{pigcms{$vo.area_id}" <if condition="$now_category['city_id'] eq $vo['area_id']">selected</if>>{pigcms{$vo.area_name}</option>
+                            </volist>
+                        </select>
+                    </td>
+                </tr>
+            <else />
+                <tr>
+                    <th width="90">分类类型</th>
+                    <td style="vertical-align: middle">
+                        <if condition="$category['cat_type'] eq 0">
+                            普通分类
+                            <else />
+                            推广分类
+                        </if>
+                        <input type="hidden" name="cat_type" value="{pigcms{$category.cat_type}" >
+                    </td>
+                </tr>
+                <tr>
+                    <th width="90">城市</th>
+                    <td style="vertical-align: middle">
+                        {pigcms{$category.city_name}
+                        <input type="hidden" name="city_id" value="{pigcms{$category.city_id}" >
+                    </td>
+                </tr>
+            </if>
 		</table>
 		<div class="btn hidden">
 			<input type="submit" name="dosubmit" id="dosubmit" value="提交" class="button" />

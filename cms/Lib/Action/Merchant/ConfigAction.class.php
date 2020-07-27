@@ -185,12 +185,12 @@ class ConfigAction extends BaseAction{
 		$this->display();
 	}
 	public function store_ajax_upload_pic() {
-		if ($_FILES['imgFile']['error'] != 4) {
+		if ($_FILES['file']['error'] != 4) {
 			$image = D('Image')->handle($this->merchant_session['mer_id'], 'store', 1);
 			if ($image['error']) {
 				exit(json_encode($image));
 			} else {
-				$title = $image['title']['imgFile'];
+				$title = $image['title']['file'];
 				$store_image_class = new store_image();
 				$url = $store_image_class->get_image_by_path($title);
 				exit(json_encode(array('error' => 0, 'url' => $url, 'title' => $title)));

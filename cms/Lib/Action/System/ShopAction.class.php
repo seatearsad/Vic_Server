@@ -10,12 +10,39 @@ class ShopAction extends BaseAction
     public function index()
     {
         $parentid = isset($_GET['parentid']) ? intval($_GET['parentid']) : 0;
+        $city_name = "通用";
+        if($_GET['city_id']){
+            $this->assign('city_id',$_GET['city_id']);
+            if($_GET['city_id'] != 0){
+                $where_cate['city_id'] = $_GET['city_id'];
+                $where_list['city_id'] = $_GET['city_id'];
+            }
+        }else{
+            $this->assign('city_id',0);
+        }
+        $this->assign('city_name',$city_name);
+
+        $where_cate['cat_id'] = $parentid;
         $database_shop_category = D('Shop_category');
-        $category = $database_shop_category->field(true)->where(array('cat_id' => $parentid))->find();
-        $category_list = $database_shop_category->field(true)->where(array('cat_fid' => $parentid))->order('`cat_sort` DESC,`cat_id` ASC')->select();
+        $category = $database_shop_category->field(true)->where($where_cate)->find();
+
+        $where_list['cat_fid'] = $parentid;
+        $category_list = $database_shop_category->field(true)->where($where_list)->order('`cat_sort` DESC,`cat_id` ASC')->select();
+        foreach ($category_list as &$v){
+            if($v['city_id'] == 0)
+                $v['city_name'] = "通用";
+            else {
+                $c = D('Area')->where(array('area_type' => 2, 'is_open' => 1, 'area_id' => $v['city_id']))->find();
+                $v['city_name'] = $c['area_name'];
+            }
+        }
         $this->assign('category', $category);
         $this->assign('category_list', $category_list);
         $this->assign('parentid', $parentid);
+
+        $city = D('Area')->where(array('area_type'=>2,'is_open'=>1))->select();
+        $this->assign('city',$city);
+
         $this->display();
     }
 
@@ -24,6 +51,21 @@ class ShopAction extends BaseAction
         $this->assign('bg_color','#F3F3F3');
         $parentid = isset($_GET['parentid']) ? intval($_GET['parentid']) : 0;
         $this->assign('parentid', $parentid);
+        $city = D('Area')->where(array('area_type'=>2,'is_open'=>1))->select();
+        $this->assign('city',$city);
+
+        if($parentid != 0){
+            $database_shop_category = D('Shop_category');
+            $condition_now_shop_category['cat_id'] = $parentid;
+            $now_category = $database_shop_category->field(true)->where($condition_now_shop_category)->find();
+            if($now_category['city_id'] != 0) {
+                $c = D('Area')->where(array('area_type' => 2, 'is_open' => 1, 'area_id' => $now_category['city_id']))->find();
+                $now_category['city_name'] = $c['area_name'];
+            }else{
+                $now_category['city_name'] = "通用";
+            }
+            $this->assign('category',$now_category);
+        }
         $this->display();
     }
     public function cat_modify()
@@ -52,6 +94,23 @@ class ShopAction extends BaseAction
         }
         $this->assign('parentid', $parentid);
         $this->assign('now_category', $now_category);
+
+        $city = D('Area')->where(array('area_type'=>2,'is_open'=>1))->select();
+        $this->assign('city',$city);
+
+        if($parentid != 0){
+            $database_shop_category = D('Shop_category');
+            $condition_now_shop_category['cat_id'] = $parentid;
+            $now_category = $database_shop_category->field(true)->where($condition_now_shop_category)->find();
+            if($now_category['city_id'] != 0) {
+                $c = D('Area')->where(array('area_type' => 2, 'is_open' => 1, 'area_id' => $now_category['city_id']))->find();
+                $now_category['city_name'] = $c['area_name'];
+            }else{
+                $now_category['city_name'] = "通用";
+            }
+            $this->assign('category',$now_category);
+        }
+
         $this->display();
     }
 

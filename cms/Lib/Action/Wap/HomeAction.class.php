@@ -164,7 +164,7 @@ class HomeAction extends BaseAction{
 		}
 		//garfunkel add
         //获取顶级分类
-        $category = D('Shop_category')->field(true)->where(array('cat_fid'=>0))->select();
+        $category = D('Shop_category')->field(true)->where(array('cat_fid'=>0,'cat_type'=>0))->select();
         $nav_list = array();
         foreach ($category as $v){
             $nav['title'] = lang_substr($v['cat_name'],C('DEFAULT_LANG'));
