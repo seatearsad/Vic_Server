@@ -80,14 +80,16 @@
 									</select>
 									<span class="form_tips"> 开启：快店中的商品显示为侧重图片模板，店铺中的商品设置了商城属性后，商品就会进入商城中；关闭：快店中的商品显示为侧重文字模板，商品在商城中不显示。</span>
 								</div>
-								<div class="form-group background" <if condition="$store_shop['store_theme'] eq 0">style="display:none"</if>>
+                                <!--if condition="$store_shop['store_theme'] eq 0">style="display:none"</if-->
+								<div class="form-group background">
 									<label class="col-sm-1">商城店铺背景</label>
 									<div style="display:inline-block;" id="J_selectImage">
 										<div class="btn btn-sm btn-success" style="position:relative;width:78px;height:34px;">上传图片</div>
 									</div>
 									<span class="form_tips red"> 商城店铺背景建议上传尺寸：640*420。</span>
 								</div>
-								<div class="form-group background" <if condition="$store_shop['store_theme'] eq 0">style="display:none"</if>>
+                                <!--if condition="$store_shop['store_theme'] eq 0">style="display:none"</if-->
+								<div class="form-group background">
 									<label class="col-sm-1">图片预览</label>
 									<div id="upload_pic_box">
 										<ul id="upload_pic_ul">

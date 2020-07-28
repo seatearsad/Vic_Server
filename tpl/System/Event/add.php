@@ -17,7 +17,7 @@
 			<tr>
 				<th width="80">活动类型</th>
 				<td>
-                    <select name="type">
+                    <select name="type" id="select_type">
                         <volist name="type" id="vo">
                             <if condition="$i gt 1">
                                 <option value="{pigcms{$i-1}" <if condition="$event.type eq ($i-1)">selected</if>>{pigcms{$vo}</option>
@@ -40,6 +40,17 @@
                     <span id="clear_end">清空</span>
                 </td>
 			</tr>
+            <tr id="city_tr" <if condition="$event['type'] neq 3">style="display: none;"</if>>
+                <th width="80">城市</th>
+                <td>
+                    <select name="city_id">
+                        <option value="0" <if condition="$event and $event['city_id'] eq 0">selected="selected"</if>>通用</option>
+                        <volist name="city" id="vo">
+                            <option value="{pigcms{$vo.area_id}" <if condition="$event and $event['city_id'] eq $vo['area_id']">selected="selected"</if>>{pigcms{$vo.area_name}</option>
+                        </volist>
+                    </select>
+                </td>
+            </tr>
 		</table>
 		<div class="btn hidden">
 			<input type="submit" name="dosubmit" id="dosubmit" value="提交" class="button" />
@@ -61,6 +72,14 @@
     });
     $('#clear_end').click(function () {
         $('input[name=end_time]').val('');
+    });
+    $('#select_type').change(function () {
+        var type = $(this).val();
+        if(type == 3){
+            $('#city_tr').show();
+        }else{
+            $('#city_tr').hide();
+        }
     });
 </script>
 <include file="Public:footer"/>

@@ -2203,7 +2203,7 @@ class ShopAction extends BaseAction
             $param['thumbRemoveOrigin'] = false;
             $image = D('Image')->handle($this->merchant_session['mer_id'], 'background', 1, $param);
             if ($image['error']) {
-                exit(json_encode(array('error' => 1,'message' =>$image['msg'])));
+                exit(json_encode(array('error' => 1,'message' =>$image['message'])));
             } else {
                 $title = $image['title']['file'];
                 $image_tmp = explode(',', $title);

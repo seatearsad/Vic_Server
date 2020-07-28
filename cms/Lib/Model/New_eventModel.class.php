@@ -31,6 +31,12 @@ class New_eventModel extends Model
             $v = $this->checkExpiry($v);
             $v['status_name'] = $this->getStausName($v['status']);
             $v['coupon_amount'] = $this->getEventCouponAmount($v['id']);
+            if($v['city_id'] == 0){
+                $v['city_name'] = '通用';
+            }else{
+                $c = D('Area')->where(array('area_type' => 2, 'is_open' => 1, 'area_id' => $v['city_id']))->find();
+                $v['city_name'] = $c['area_name'];
+            }
             if($status != -1){
                 if($v['status'] == $status) {
                     if($status == 1 && $v['begin_time'] != 0){
@@ -91,13 +97,17 @@ class New_eventModel extends Model
      *
      * 返回true 为不存在此类型的活动 false 为存在
      */
-    public function checkEventType($type,$event_id=0){
+    public function checkEventType($type,$event_id=0,$city_id=0){
         if($event_id != 0){
             $where['id'] = array('neq',$event_id);
         }
 
         $where['type'] = $type;
         $where['status'] = 1;
+        //暂时先判断是否为减免配送费活动
+        if($type == 3){
+            $where['city_id'] = $city_id;
+        }
 
         if($this->where($where)->find()){
             return false;

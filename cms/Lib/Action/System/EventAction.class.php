@@ -18,6 +18,8 @@ class EventAction extends BaseAction
         $type_list = D('New_event')->getTypeName(-1);
 
         $this->assign('type',$type_list);
+        $city = D('Area')->where(array('area_type'=>2,'is_open'=>1))->select();
+        $this->assign('city',$city);
         $this->display();
     }
 
@@ -28,6 +30,8 @@ class EventAction extends BaseAction
         $event = D('New_event')->where(array('id'=>$_GET['id']))->find();
         $event['type_name'] = D('New_event')->getTypeName($event['type']);
         $this->assign('event',$event);
+        $city = D('Area')->where(array('area_type'=>2,'is_open'=>1))->select();
+        $this->assign('city',$city);
         $this->display('add');
     }
 
@@ -35,6 +39,7 @@ class EventAction extends BaseAction
         $data['name'] = $_POST['name'];
         $data['desc'] = $_POST['desc'];
         $data['type'] = $_POST['type'];
+        $data['city_id'] = $_POST['city_id'] ? $_POST['city_id'] : 0;
 
         if($_POST['begin_time'])
             $data['begin_time'] = strtotime($_POST['begin_time']);
@@ -48,14 +53,14 @@ class EventAction extends BaseAction
 
         if($_POST){
             if($_POST['event_id'] && $_POST['event_id'] != 0){
-                if(D('New_event')->checkEventType($data['type'],$_POST['event_id'])) {
+                if(D('New_event')->checkEventType($data['type'],$_POST['event_id'],$data['city_id'])) {
                     $where['id'] = $_POST['event_id'];
                     D('New_event')->where($where)->save($data);
                     $this->frame_submit_tips(1, 'Success！');
                 }
                 $this->frame_submit_tips(0,'此活动类型已存在！');
             }else{
-                if(D('New_event')->checkEventType($data['type'])){
+                if(D('New_event')->checkEventType($data['type'],0,$data['city_id'])){
                     D('New_event')->add($data);
                     $this->frame_submit_tips(1, 'Success！');
                 }else{
