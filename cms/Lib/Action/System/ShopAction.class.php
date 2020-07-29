@@ -35,6 +35,13 @@ class ShopAction extends BaseAction
                 $c = D('Area')->where(array('area_type' => 2, 'is_open' => 1, 'area_id' => $v['city_id']))->find();
                 $v['city_name'] = $c['area_name'];
             }
+            if($parentid == 0){
+                $allList = D('Shop_category_relation')->field('store_id')->where(array('cat_fid' => $v['cat_id']))->group('store_id')->select();
+            }else{
+                $allList = D('Shop_category_relation')->field('store_id')->where(array('cat_id' => $v['cat_id']))->group('store_id')->select();
+            }
+
+            $v['store_num'] = count($allList);
         }
         $this->assign('category', $category);
         $this->assign('category_list', $category_list);
@@ -189,6 +196,33 @@ class ShopAction extends BaseAction
             $this->error('非法提交,请重新提交~');
         }
     }
+
+    public function cat_store(){
+        $cat_id = $_GET['cat_id'];
+        $cat_fid = $_GET['parentid'];
+
+        if($cat_id && $cat_id != 0) {
+            if ($cat_fid == 0) {
+                $where['cat_fid'] = $cat_id;
+            } else {
+                $where['cat_id'] = $cat_id;
+            }
+
+            $list = D('Shop_category_relation')->where($where)->select();
+            $store_id_list = array();
+            foreach ($list as $v) {
+                $store_id_list[] = $v['store_id'];
+            }
+            $where_store['store_id'] = array('in', $store_id_list);
+
+
+            $store_list = D('Merchant_store')->field('`name`,`status`')->where($where_store)->order('status asc')->select();
+            $this->assign('store_list',$store_list);
+
+            $this->display();
+        }
+    }
+
     // 预约自定义表单所有字段展示
     public function cue_field(){
         $condition_now_appoint_category['cat_id'] = intval($_GET['cat_id']);
