@@ -12,6 +12,21 @@
 				</ul>
 			</div>
 		</div>
+        <table class="search_table" width="100%">
+            <tr>
+                <td>
+                    <if condition="$system_session['level'] neq 3 and $parentid eq 0">
+                        City:
+                        <select name="searchtype" id="city_select">
+                            <option value="0" <if condition="$city_id eq '' or $city_id eq 0">selected="selected"</if>>通用</option>
+                            <volist name="city" id="vo">
+                                <option value="{pigcms{$vo.area_id}" <if condition="$city_id eq $vo['area_id']">selected="selected"</if>>{pigcms{$vo.area_name}</option>
+                            </volist>
+                        </select>
+                    </if>
+                </td>
+            </tr>
+        </table>
         <div class="table-list">
             <div>
                 基本配置：
@@ -89,6 +104,8 @@
     }
 </style>
 <script>
+    var city_id = $('#city_select').val();
+
     var new_num = 0;
     $('#add_set').click(function () {
         new_num = new_num + 1;
@@ -123,6 +140,8 @@
             }
         });
 
+        re_data['city_id'] = city_id;
+
         if(is_send) {
             $.post("{pigcms{:U('Deliver/update_rule')}", re_data, function (data) {
                 if (data.error == 0) {
@@ -135,5 +154,10 @@
         }else{
             alert("{pigcms{:L('_PLEASE_INPUT_ALL_')}");
         }
+    });
+
+    $('#city_select').change(function () {
+        city_id = $(this).val();
+        window.location.href = "{pigcms{:U('Deliver/rule', $_GET)}" + "&city_id="+city_id;
     });
 </script>

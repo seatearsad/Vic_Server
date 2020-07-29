@@ -1450,11 +1450,17 @@ class DeliverAction extends BaseAction {
     }
 
     public function rule(){
-        $base_rule = D('Deliver_rule')->where(array('type'=>0))->find();
+        $city_id = $_GET['city_id'] ? $_GET['city_id'] : 0;
+        $this->assign('city_id',$city_id);
+
+        $base_rule = D('Deliver_rule')->where(array('type'=>0,'city_id'=>$city_id))->find();
         $this->assign('base_rule',$base_rule);
 
-        $fee_list = D('Deliver_rule')->where(array('type'=>1))->select();
+        $fee_list = D('Deliver_rule')->where(array('type'=>1,'city_id'=>$city_id))->select();
         $this->assign('fee_list',$fee_list);
+
+        $city = D('Area')->where(array('area_type'=>2,'is_open'=>1))->select();
+        $this->assign('city',$city);
         $this->display();
     }
 
@@ -1463,7 +1469,15 @@ class DeliverAction extends BaseAction {
             $base_data['start'] = 0;
             $base_data['end'] = $_POST['base_rule_mile'];
             $base_data['fee'] = $_POST['base_rule_fee'];
-            D('Deliver_rule')->where(array('type'=>0))->save($base_data);
+            $city_id = $_POST['city_id'];
+
+            if(D('Deliver_rule')->where(array('type'=>0,'city_id'=>$city_id))->find()) {
+                D('Deliver_rule')->where(array('type' => 0,'city_id'=>$city_id))->save($base_data);
+            }else{
+                $base_data['city_id'] = $city_id;
+                $base_data['type'] = 0;
+                D('Deliver_rule')->add($base_data);
+            }
 
             $data = array();
             $new_data = array();
@@ -1482,6 +1496,7 @@ class DeliverAction extends BaseAction {
                 $save_data['end'] = $v['end_mile_new'];
                 $save_data['fee'] = $v['fee_new'];
                 $save_data['type'] = 1;
+                $save_data['city_id'] = $city_id;
 
                 D('Deliver_rule')->add($save_data);
             }
