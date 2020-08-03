@@ -69,7 +69,12 @@ class IndexAction extends BaseAction
         $arr['best']['info'] = $shop_list['list'];
         $arr['best']['count'] = $shop_list['count'];
         //获取顶级分类
-        $category = D('Shop_category')->field(true)->where(array('cat_fid'=>0,'cat_type'=>0))->order('cat_sort desc')->select();
+        $city_id = $_COOKIE['userLocationCity'] ? $_COOKIE['userLocationCity'] : 0;
+        //$city_id = 105;
+        $category = D('Shop_category')->field(true)->where(array('cat_fid'=>0,'cat_type'=>0,'city_id'=>$city_id))->order('cat_sort desc')->select();
+        if(count($category) == 0){
+            $category = D('Shop_category')->field(true)->where(array('cat_fid'=>0,'cat_type'=>0,'city_id'=>0))->order('cat_sort desc')->select();
+        }
         $nav_list = array();
         foreach ($category as $v){
             $nav['title'] = lang_substr($v['cat_name'],C('DEFAULT_LANG'));

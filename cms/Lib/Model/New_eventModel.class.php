@@ -15,13 +15,17 @@ class New_eventModel extends Model
      * 1 正常
      * 2 过期
      */
-    public function getEventList($status=-1,$type=-1){
+    public function getEventList($status=-1,$type=-1,$city_id=0){
         $where = array();
         if($status != -1){
             $where['status'] = $status;
         }
         if($type != -1){
             $where['type'] = $type;
+        }
+        //配送费减免 需要关联城市
+        if($type == 3 && $city_id != 0){
+            $where['city_id'] = $city_id;
         }
 
         $list = $this->field(true)->where($where)->select();

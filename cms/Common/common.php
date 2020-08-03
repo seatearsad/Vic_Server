@@ -330,7 +330,7 @@ function getDistanceByGoogle($from,$aim){
 //    $this->returnCode(0,'info',$result,'success');
 }
 
-function getDeliveryFee($store_lat,$store_lng,$map_lat,$map_lng){
+function getDeliveryFee($store_lat,$store_lng,$map_lat,$map_lng,$city_id=0){
     //$from = $store_lat.','.$store_lng;
     //$aim = $map_lat.','.$map_lng;
     //$distance = getDistanceByGoogle($from,$aim);
@@ -356,14 +356,16 @@ function getDeliveryFee($store_lat,$store_lng,$map_lat,$map_lng){
 //    }else{
 //        $delivery_fee = round($deliveryCfg['delivery_distance_more'], 2);
 //    }
-    $delivery_fee = calculateDeliveryFee($distance);
+    $delivery_fee = calculateDeliveryFee($distance,$city_id);
 
     return $delivery_fee;
 }
 //新计算配送费方法
-function calculateDeliveryFee($distance){
-    $fee_list = D('Deliver_rule')->select();
-
+function calculateDeliveryFee($distance,$city_id=0){
+    $fee_list = D('Deliver_rule')->where(array('city_id'=>$city_id))->select();
+    if(!$fee_list || count($fee_list )==0){
+        $fee_list = D('Deliver_rule')->where(array('city_id'=>0))->select();
+    }
     $fee = 0;
     $max_distance = 0;
     $init_fee = 0;

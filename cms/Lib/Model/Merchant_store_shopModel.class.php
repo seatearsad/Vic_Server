@@ -304,7 +304,11 @@ class Merchant_store_shopModel extends Model
 			$v['url'] = C('config.site_url') . '/shop/' . $v['store_id'] . '.html';
 			$v['area_name'] = isset($temp[$v['circle_id']]) ? $temp[$v['circle_id']]['area_name'] : '';
 			$images = $store_image_class->get_allImage_by_path($v['pic_info']);
+			//第一位为店铺logo
 			$v['image'] = $images ? array_shift($images) : array();
+			//下面为店铺展示图片 不包含logo
+			$v['image_list'] = $images ? $images : array();
+			$v['image_count'] = count($v['image_list']);
 			$v['mean_money'] = floatval($v['mean_money']);
 			$v['wap_url'] = U('Shop/shop', array('mer_id' => $v['mer_id'], 'store_id' => $v['store_id']));
 			$v['deliver'] = $v['deliver_type'] == 2 ? false : true;
@@ -905,14 +909,16 @@ class Merchant_store_shopModel extends Model
 //        }
 
         //garfunkel获取减免配送费的活动
-        $eventList = D('New_event')->getEventList(1,3);
+        $city_id = D('Store')->geocoderGoogle($lat,$long);
+        $city_id = $city_id ? $city_id : 0;
+        $eventList = D('New_event')->getEventList(1,3,$city_id);
         $delivery_coupon = "";
         if(count($eventList) > 0) {
             foreach ($eventList as $event) {
                 $delivery_coupon = D('New_event_coupon')->where(array('event_id' => $event['id']))->find();
             }
         }
-
+        //var_dump($t_list['shop_list']);die();
         foreach ($t_list['shop_list'] as $row) {
 
 //            if(!($n > $page_begin && $n <= $page_end)){
@@ -924,6 +930,8 @@ class Merchant_store_shopModel extends Model
             $temp = array();
             $temp['site_id'] = $row['store_id'];
             $temp['logo'] = $row['image'];
+            $temp['image_list'] = $row['image_list'];
+            $temp['image_count'] = $row['image_count'];
             //modify garfunkel 判断语言
             $temp['site_name'] = lang_substr($row['name'],C('DEFAULT_LANG'));
             $temp['shop_sale'] = $row['sale_count'];
@@ -938,7 +946,7 @@ class Merchant_store_shopModel extends Model
             $temp['time'] = $row['send_time'];//配送时长
             $temp['delivery_price'] = floatval($row['basic_price']);//起送价
             if($lat != 0 && $long != 0){
-                $temp['delivery_money'] = getDeliveryFee($row['lat'],$row['long'],$lat,$long);
+                $temp['delivery_money'] = getDeliveryFee($row['lat'],$row['long'],$lat,$long,$row['city_id']);
             }else{
                 $temp['delivery_money'] = floatval($row['delivery_fee']);//配送费
             }
