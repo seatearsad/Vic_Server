@@ -398,7 +398,10 @@
 								</div>
 								<div class="form-group">
 									<label class="col-sm-1">店铺图片</label>
-									<a href="javascript:void(0)" class="btn btn-sm btn-success" id="J_selectImage">上传图片</a>
+                                    <div style="display:inline-block;position:relative;width:78px;height:34px;" id="J_selectImage">
+                                        <div class="btn btn-sm btn-success">上传图片</div>
+                                    </div>
+									<!--a href="javascript:void(0)" class="btn btn-sm btn-success" id="J_selectImage">上传图片</a-->
 									<span class="form_tips">第一张将作为主图片！最多上传10个图片！图片宽度建议为700px，高度建议为420px。</span>
 								</div>
 								<div class="form-group">
@@ -539,70 +542,115 @@ zoom: 1;
 #upload_pic_box{margin-top:20px;height:150px;}
 #upload_pic_box .upload_pic_li{width:130px;float:left;list-style:none;}
 #upload_pic_box img{width:100px;height:70px;border:1px solid #ccc;}
+.webuploader-container{
+    position:relative;
+}
+.webuploader-container div{
+    width: 78px!important;
+    height: 34px!important;
+}
+.webuploader-element-invisible {
+    position: absolute !important;
+    clip: rect(1px 1px 1px 1px);
+    clip: rect(1px,1px,1px,1px);
+}
 </style>
 <link rel="stylesheet" href="{pigcms{$static_public}kindeditor/themes/default/default.css">
 <script src="{pigcms{$static_public}kindeditor/kindeditor.js"></script>
 <script src="{pigcms{$static_public}kindeditor/lang/zh_CN.js"></script>
+<script type="text/javascript" src="{pigcms{$static_public}js/webuploader.min.js"></script>
 <script type="text/javascript">
-KindEditor.ready(function(K){
-	var editor = K.editor({
-		allowFileManager : true
-	});
-	K('#J_selectImage').click(function(){
-		if($('.upload_pic_li').size() >= 10){
-			alert('最多上传10个图片！');
-			return false;
-		}
-		editor.uploadJson = "{pigcms{:U('Config/store_ajax_upload_pic')}";
-		editor.loadPlugin('image', function(){
-			editor.plugin.imageDialog({
-				showRemote : false,
-				imageUrl : K('#course_pic').val(),
-				clickFn : function(url, title, width, height, border, align) {
-					$('#upload_pic_ul').append('<li class="upload_pic_li"><img src="'+url+'"/><input type="hidden" name="pic[]" value="'+title+'"/><br/><a href="#" onclick="deleteImage(\''+title+'\',this);return false;">[ 删除 ]</a></li>');
-					editor.hideDialog();
-				}
-			});
-		});
-	});
+// KindEditor.ready(function(K){
+// 	var editor = K.editor({
+// 		allowFileManager : true
+// 	});
+// 	K('#J_selectImage').click(function(){
+// 		if($('.upload_pic_li').size() >= 10){
+// 			alert('最多上传10个图片！');
+// 			return false;
+// 		}
+// 		editor.uploadJson = "{pigcms{:U('Config/store_ajax_upload_pic')}";
+// 		editor.loadPlugin('image', function(){
+// 			editor.plugin.imageDialog({
+// 				showRemote : false,
+// 				imageUrl : K('#course_pic').val(),
+// 				clickFn : function(url, title, width, height, border, align) {
+// 					$('#upload_pic_ul').append('<li class="upload_pic_li"><img src="'+url+'"/><input type="hidden" name="pic[]" value="'+title+'"/><br/><a href="#" onclick="deleteImage(\''+title+'\',this);return false;">[ 删除 ]</a></li>');
+// 					editor.hideDialog();
+// 				}
+// 			});
+// 		});
+// 	});
+//
+// 	$('#edit_form').submit(function(){
+// 		$('#edit_form button[type="submit"]').prop('disabled',true).html('保存中...');
+// 		$.post("{pigcms{:U('Config/store_add')}",$('#edit_form').serialize(),function(result){
+// 			if(result.status == 1){
+// 				alert(result.info);
+// 				window.location.href = "{pigcms{:U('Config/store')}";
+// 			}else{
+// 				$('#edit_form button[type="submit"]').prop('disabled',false).html('<i class="ace-icon fa fa-check bigger-110"></i>保存');
+// 				alert(result.info);
+// 			}
+// 		})
+// 		return false;
+// 	});
+//
+// 	$('#get_key_btn').click(function(){
+// 		var s_name = $('input[name="name"]');
+// 		s_name.val($.trim(s_name.val()));
+// 		$('#keywords').val($.trim($('#keywords').val()));
+// 		if(s_name.val().length == 0){
+// 			alert('请先填写店铺名称！');
+// 			s_name.focus();
+// 		}else if($('#keywords').val().length != 0){
+// 			alert('请先删除您填写的关键词！');
+// 			$('#keywords').focus();
+// 		}else{
+// 			$.get("{pigcms{:U('Index/Scws/ajax_getKeywords')}",{title:s_name.val()},function(result){
+// 				result = $.parseJSON(result);
+// 				if(result.num == 0){
+// 					alert('您的店铺名称没有提取到关键词，请手动填写关键词！');
+// 					$('#keywords').focus();
+// 				}else{
+// 					$('#keywords').val(result.list.join(' ')).focus();
+// 				}
+// 			});
+// 		}
+// 	});
+// });
 
-	$('#edit_form').submit(function(){
-		$('#edit_form button[type="submit"]').prop('disabled',true).html('保存中...');
-		$.post("{pigcms{:U('Config/store_add')}",$('#edit_form').serialize(),function(result){
-			if(result.status == 1){
-				alert(result.info);
-				window.location.href = "{pigcms{:U('Config/store')}";
-			}else{
-				$('#edit_form button[type="submit"]').prop('disabled',false).html('<i class="ace-icon fa fa-check bigger-110"></i>保存');
-				alert(result.info);
-			}
-		})
-		return false;
-	});
-
-	$('#get_key_btn').click(function(){
-		var s_name = $('input[name="name"]');
-		s_name.val($.trim(s_name.val()));
-		$('#keywords').val($.trim($('#keywords').val()));
-		if(s_name.val().length == 0){
-			alert('请先填写店铺名称！');
-			s_name.focus();
-		}else if($('#keywords').val().length != 0){
-			alert('请先删除您填写的关键词！');
-			$('#keywords').focus();
-		}else{
-			$.get("{pigcms{:U('Index/Scws/ajax_getKeywords')}",{title:s_name.val()},function(result){
-				result = $.parseJSON(result);
-				if(result.num == 0){
-					alert('您的店铺名称没有提取到关键词，请手动填写关键词！');
-					$('#keywords').focus();
-				}else{
-					$('#keywords').val(result.list.join(' ')).focus();
-				}
-			});
-		}
-	});
+var uploader = WebUploader.create({
+    auto: true,
+    swf: '{pigcms{$static_public}js/Uploader.swf',
+    server: "{pigcms{:U('Config/store_ajax_upload_pic', array('store_id' => $now_store['store_id']))}",
+    pick: '#J_selectImage',
+    accept: {
+        title: 'Images',
+        extensions: 'gif,jpg,jpeg,png',
+        mimeTypes: 'image/gif,image/jpeg,image/jpg,image/png'
+    }
 });
+uploader.on('fileQueued',function(file){
+    if($('.upload_pic_li').size() >= 10){
+        uploader.cancelFile(file);
+        alert('最多上传10张图片！');
+        return false;
+    }
+});
+uploader.on('uploadSuccess',function(file,response){
+    if(response.error == 0){
+        $('#upload_pic_ul').append('<li class="upload_pic_li"><img src="'+response.url+'"/><input type="hidden" name="pic[]" value="'+response.title+'"/><br/><a href="#" onclick="deleteImage(\''+response.title+'\',this);return false;">[ 删除 ]</a></li>');
+    }else{
+        alert(response.info);
+    }
+});
+
+uploader.on('uploadError', function(file,reason){
+    $('.loading'+file.id).remove();
+    alert('上传失败！请重试。');
+});
+
 function deleteImage(path,obj){
 	$.post("{pigcms{:U('Config/store_ajax_del_pic')}",{path:path});
 	$(obj).closest('.upload_pic_li').remove();

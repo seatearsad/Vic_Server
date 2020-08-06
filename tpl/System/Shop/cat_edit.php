@@ -113,7 +113,7 @@
     });
     uploader.on('uploadSuccess',function(file,response){
         if(response.error == 0){
-            $('#upload_pic_ul').html('<img src="'+response.url+'"/><input type="hidden" name="cat_img" value="'+response.title+'"/>');
+            $('#upload_pic_ul').html('<img src="'+response.url+'" width="80"/><input type="hidden" name="cat_img" value="'+response.title+'"/>');
         }else{
             alert(response.info);
         }
