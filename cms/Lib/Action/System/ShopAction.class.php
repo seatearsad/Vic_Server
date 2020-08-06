@@ -96,6 +96,8 @@ class ShopAction extends BaseAction
         $database_shop_category = D('Shop_category');
         $condition_now_shop_category['cat_id'] = intval($_GET['cat_id']);
         $now_category = $database_shop_category->field(true)->where($condition_now_shop_category)->find();
+        $cate_image_class = new category_image();
+        $now_category['img_url'] = $cate_image_class->get_image_by_path($now_category['cat_img']);
         if (empty($now_category)) {
             $this->frame_error_tips('没有找到该分类信息！');
         }
@@ -115,6 +117,7 @@ class ShopAction extends BaseAction
             }else{
                 $now_category['city_name'] = "通用";
             }
+
             $this->assign('category',$now_category);
         }
 
@@ -194,6 +197,22 @@ class ShopAction extends BaseAction
             }
         } else {
             $this->error('非法提交,请重新提交~');
+        }
+    }
+
+    public function ajax_upload_pic() {
+        if ($_FILES['file']['error'] != 4) {
+            $image = D('Image')->handle($_GET['cat_fid'], 'category', 1);
+            if ($image['error']) {
+                exit(json_encode(array('error' => 1,'message' =>$image['message'])));
+            } else {
+                $title = $image['title']['file'];
+                $cate_image_class = new category_image();
+                $url = $cate_image_class->get_image_by_path($title);
+                exit(json_encode(array('error' => 0, 'url' => $url, 'title' => $title)));
+            }
+        } else {
+            exit(json_encode(array('error' => 1,'message' =>'没有选择图片')));
         }
     }
 

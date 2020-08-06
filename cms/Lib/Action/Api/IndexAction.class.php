@@ -76,14 +76,61 @@ class IndexAction extends BaseAction
             $category = D('Shop_category')->field(true)->where(array('cat_fid'=>0,'cat_type'=>0,'city_id'=>0))->order('cat_sort desc')->select();
         }
         $nav_list = array();
+        $categoryList = array();
         foreach ($category as $v){
             $nav['title'] = lang_substr($v['cat_name'],C('DEFAULT_LANG'));
             $nav['image'] = 'https://www.tutti.app/static/images/category/'.$v['cat_url'].'.png?v=1.2.0';
             $nav['id'] = $v['cat_id'];
-
+            $categoryList[] = $v['cat_id'];
             $nav_list[] = $nav;
         }
         $arr['nav'] = $nav_list;
+
+        $sub_where['cat_fid'] = array('in',$categoryList);
+        $subCategory = D('Shop_category')->where($sub_where)->order('cat_sort desc')->select();
+        $sub_nav_list = array();
+        foreach ($subCategory as $v){
+            $sub_nav['title'] = lang_substr($v['cat_name'],C('DEFAULT_LANG'));
+            $cate_image_class = new category_image();
+            if($v['cat_img'] != '') {
+                $sub_nav['image'] = $cate_image_class->get_image_by_path($v['cat_img']);
+            }else{
+                $sub_nav['image'] = '';
+            }
+            $sub_nav['id'] = $v['cat_id'];
+            $sub_nav['fid'] = $v['cat_fid'];
+
+            $sub_nav_list[] = $sub_nav;
+        }
+        $arr['sub_nav'] = $sub_nav_list;
+
+        //获取推荐列表
+        $re_category = D('Shop_category')->field(true)->where(array('cat_fid'=>0,'cat_type'=>1,'city_id'=>$city_id))->order('cat_sort desc')->select();
+        $categoryList = array();
+        foreach ($re_category as $v){
+            $categoryList[] = $v['cat_id'];
+        }
+        $sub_where['cat_fid'] = array('in',$categoryList);
+        $subCategory = D('Shop_category')->where($sub_where)->order('cat_sort desc')->select();
+        $recommend_list = array();
+        foreach ($subCategory as $v){
+            $sub_recommend['title'] = lang_substr($v['cat_name'],C('DEFAULT_LANG'));
+            $sub_recommend['id'] = $v['cat_id'];
+            $sub_recommend['fid'] = $v['cat_fid'];
+            $sub_recommend['info'] = array();
+            $storeList = D('Shop_category_relation')->where(array('cat_id'=>$v['cat_id']))->select();
+            foreach ($storeList as $store){
+                //$count_news = $news->join('as n left join '.C('DB_PREFIX').'system_news_category c ON c.id = n.category_id ')->where($where)->count();
+                $storeMemo = D('Merchant_store')->field('st.store_id,st.name,sh.background,st.txt_info')->join('as st left join '.C('DB_PREFIX').'merchant_store_shop sh on st.store_id = sh.store_id ')->where(array('st.store_id'=>$store['store_id']))->find();
+                $storeMemo['name'] = lang_substr($storeMemo['name'],C('DEFAULT_LANG'));
+                $image_tmp = explode(',', $storeMemo['background']);
+                $storeMemo['background'] = C('config.site_url') . '/upload/background/' . $image_tmp[0] . '/' . $image_tmp['1'];
+                $sub_recommend['info'][] = $storeMemo;
+            }
+
+            $recommend_list[] = $sub_recommend;
+        }
+        $arr['recommend'] = $recommend_list;
 
         $this->returnCode(0,'data',$arr);
     }

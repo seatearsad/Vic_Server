@@ -31,6 +31,16 @@
 					</select>
 				</td>
 			</tr>
+            <tr>
+                <th width="90">图片</th>
+                <td>
+                    <div style="display:inline-block;position:relative;width:78px;height:30px;" id="J_selectImage">
+                        <div class="btn btn-sm btn-success">上传图片</div>
+                    </div>
+                    <div id="upload_pic_ul">
+                    </div>
+                </td>
+            </tr>
             <if condition="$parentid eq 0">
                 <tr>
                     <th width="90">分类类型</th>
@@ -76,4 +86,65 @@
 			<input type="reset" value="取消" class="button" />
 		</div>
 	</form>
+<script type="text/javascript" src="{pigcms{$static_public}js/webuploader.min.js"></script>
+<script>
+    var uploader = WebUploader.create({
+        auto: true,
+        swf: '{pigcms{$static_public}js/Uploader.swf',
+        server: "{pigcms{:U('Shop/ajax_upload_pic', array('cat_fid'=>$parentid))}",
+        pick: '#J_selectImage',
+        accept: {
+            title: 'Images',
+            extensions: 'gif,jpg,jpeg,png',
+            mimeTypes: 'image/gif,image/jpeg,image/jpg,image/png'
+        }
+    });
+    uploader.on('fileQueued',function(file){
+        if($('.upload_pic_li').size() >= 1){
+            uploader.cancelFile(file);
+            alert('最多上传1张图片！');
+            return false;
+        }
+    });
+    uploader.on('uploadSuccess',function(file,response){
+        if(response.error == 0){
+            $('#upload_pic_ul').html('<img src="'+response.url+'" width="40"/><input type="hidden" name="cat_img" value="'+response.title+'"/>');
+        }else{
+            alert(response.info);
+        }
+    });
+
+    uploader.on('uploadError', function(file,reason){
+        $('.loading'+file.id).remove();
+        alert('上传失败！请重试。');
+    });
+</script>
+<style>
+    .webuploader-container div {
+        width: 78px !important;
+        height: 30px !important;
+        box-sizing: border-box;
+    }
+    .btn-success, .btn-success:focus {
+        background-color: #87b87f !important;
+        border-color: #87b87f;
+        color: white;
+    }
+    .btn-sm {
+        border-width: 4px;
+        font-size: 13px;
+        line-height: 1.39;
+    }
+    .webuploader-element-invisible {
+        position: absolute !important;
+        clip: rect(1px 1px 1px 1px);
+        clip: rect(1px,1px,1px,1px);
+    }
+    input[type="file"] {
+        display: block;
+        font-family: inherit;
+        font-size: inherit;
+        line-height: inherit;
+    }
+</style>
 <include file="Public:footer"/>
