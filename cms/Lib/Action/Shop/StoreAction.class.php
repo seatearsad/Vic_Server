@@ -82,7 +82,7 @@ class StoreAction extends BaseAction
             if($lat == 0 && $long==0)
 			    $temp['delivery_money'] = floatval($row['delivery_fee']);//配送费
             else
-                $temp['delivery_money'] = getDeliveryFee($row['lat'],$row['long'],$lat,$long);//配送费
+                $temp['delivery_money'] = getDeliveryFee($row['lat'],$row['long'],$lat,$long,$row['city_id']);//配送费
 			$temp['delivery_system'] = $row['deliver_type'] == 0 || $row['deliver_type'] == 3 ? true : false;//是否是平台配送
 			$temp['deliver_type'] = $row['deliver_type'];//配送类型
 			$temp['is_close'] = 1;
@@ -792,7 +792,7 @@ class StoreAction extends BaseAction
         if($lat == 0 && $long == 0)
             $store['delivery_money'] = C('config.delivery_distance_1');
         else
-            $store['delivery_money'] = getDeliveryFee($store['lat'],$store['long'],$lat,$long);
+            $store['delivery_money'] = getDeliveryFee($store['lat'],$store['long'],$lat,$long,$row['city_id']);
 
 
         //$store['delivery_money'] = floatval($store['delivery_money']);

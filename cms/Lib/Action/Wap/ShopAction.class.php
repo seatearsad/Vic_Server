@@ -263,7 +263,7 @@ class ShopAction extends BaseAction{
 			$temp['delivery_time'] = $row['send_time'];//配送时长
 			$temp['delivery_price'] = floatval($row['basic_price']);//起送价
             if($lat != 0 && $long != 0){
-                $temp['delivery_money'] = getDeliveryFee($row['lat'],$row['long'],$lat,$long);
+                $temp['delivery_money'] = getDeliveryFee($row['lat'],$row['long'],$lat,$long,$row['city_id']);
             }else{
                 $temp['delivery_money'] = floatval($row['delivery_fee']);//配送费
             }
@@ -845,7 +845,7 @@ class ShopAction extends BaseAction{
 
         //modify garfunkel
         if($user_long_lat && $user_long_lat['lat'] != 0){
-            $store['delivery_money'] = getDeliveryFee($store['lat'],$store['long'],$user_long_lat['lat'],$user_long_lat['long']);
+            $store['delivery_money'] = getDeliveryFee($store['lat'],$store['long'],$user_long_lat['lat'],$user_long_lat['long'],$row['city_id']);
         }else{
             $store['delivery_money'] = C('config.delivery_distance_1');
         }
@@ -1300,7 +1300,7 @@ class ShopAction extends BaseAction{
         //modify garfunkel
         if($user_long_lat && $user_long_lat['lat'] != 0){
             $store['distance'] = getDistance($store['lat'],$store['long'],$user_long_lat['lat'],$user_long_lat['long']);
-            $store['delivery_money'] = getDeliveryFee($store['lat'],$store['long'],$user_long_lat['lat'],$user_long_lat['long']);
+            $store['delivery_money'] = getDeliveryFee($store['lat'],$store['long'],$user_long_lat['lat'],$user_long_lat['long'],$row['city_id']);
 
             $store['free_delivery'] = 0;
             $store['event'] = "";

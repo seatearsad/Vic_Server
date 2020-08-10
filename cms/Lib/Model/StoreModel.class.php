@@ -307,7 +307,7 @@ class StoreModel extends Model
         }
         //modify garfunkel
         if($lat != 0 && $lng != 0) {
-            $store['shipfee'] = getDeliveryFee($row['lat'], $row['long'], $lat, $lng);
+            $store['shipfee'] = getDeliveryFee($row['lat'], $row['long'], $lat, $lng,$row['city_id']);
 
             $distance = getDistance($row['lat'], $row['long'], $lat, $lng);
             $store['free_delivery'] = 0;
