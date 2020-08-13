@@ -122,7 +122,7 @@ class IndexAction extends BaseAction
             $sub_recommend['info'] = array();
             $closeArr = array();
             $openArr = array();
-            $storeList = D('Shop_category_relation')->where(array('cat_id'=>$v['cat_id']))->select();
+            $storeList = D('Shop_category_relation')->where(array('cat_id'=>$v['cat_id']))->order('store_sort desc')->select();
             $allClose = true;
             foreach ($storeList as $store){
                 $storeRow = D('Merchant_store')->field('st.*,sh.background')->join('as st left join ' . C('DB_PREFIX') . 'merchant_store_shop sh on st.store_id = sh.store_id ')->where(array('st.store_id' => $store['store_id']))->find();

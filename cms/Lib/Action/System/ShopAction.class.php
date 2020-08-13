@@ -217,28 +217,54 @@ class ShopAction extends BaseAction
     }
 
     public function cat_store(){
-        $cat_id = $_GET['cat_id'];
-        $cat_fid = $_GET['parentid'];
+        if($_POST){
+            $cat_id = $_POST['cat_id'];
+            $cat_fid = $_POST['cat_fid'];
 
-        if($cat_id && $cat_id != 0) {
-            if ($cat_fid == 0) {
-                $where['cat_fid'] = $cat_id;
-            } else {
-                $where['cat_id'] = $cat_id;
+            $where['cat_id'] = $cat_id;
+            $where['cat_fid'] = $cat_fid;
+            foreach ($_POST as $k=>$v){
+                if(strpos($k,'cat_sort') !== false){
+                    $str_arr = explode('_',$k);
+                    $where['store_id'] = $str_arr[2];
+                    $data['store_sort'] = $v;
+                    D('Shop_category_relation')->where($where)->save($data);
+                }
             }
+            $this->success('编辑成功！');
+        }else {
+            $cat_id = $_GET['cat_id'];
+            $cat_fid = $_GET['parentid'];
+            $this->assign('cat_id', $cat_id);
+            $this->assign('cat_fid', $cat_fid);
 
-            $list = D('Shop_category_relation')->where($where)->select();
-            $store_id_list = array();
-            foreach ($list as $v) {
-                $store_id_list[] = $v['store_id'];
+            if ($cat_id && $cat_id != 0) {
+                if ($cat_fid == 0) {
+                    $where['cat_fid'] = $cat_id;
+                } else {
+                    $where['cat_id'] = $cat_id;
+                }
+
+                $list = D('Shop_category_relation')->where($where)->order('store_sort desc')->select();
+                $store_id_list = array();
+                $store_sort = array();
+                foreach ($list as $v) {
+                    $store_id_list[] = $v['store_id'];
+                    $store_sort[$v['store_id']] = $v['store_sort'];
+                }
+                $where_store['store_id'] = array('in', $store_id_list);
+
+
+                $store_list = D('Merchant_store')->field('store_id,`name`,`status`')->where($where_store)->order('status asc')->select();
+                foreach ($store_list as &$store) {
+                    $store['cat_sort'] = $store_sort[$store['store_id']];
+                }
+                $cmf_arr = array_column($store_list, 'cat_sort');
+                array_multisort($cmf_arr, SORT_DESC, $store_list);
+                $this->assign('store_list', $store_list);
+
+                $this->display();
             }
-            $where_store['store_id'] = array('in', $store_id_list);
-
-
-            $store_list = D('Merchant_store')->field('`name`,`status`')->where($where_store)->order('status asc')->select();
-            $this->assign('store_list',$store_list);
-
-            $this->display();
         }
     }
 
