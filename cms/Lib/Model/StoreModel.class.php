@@ -41,6 +41,7 @@ class StoreModel extends Model
         $store['isverify'] = $merchant['isverify'];
         $store['lng'] = $row['long'];
         $store['lat'] = $row['lat'];
+        $store['city_id'] = $row['city_id'];
         $store['store_theme'] = $row['store_theme'];
         $store['address'] = $row['adress'];
         $store['shop_remind'] = $row['shop_remind'];
@@ -858,7 +859,7 @@ class StoreModel extends Model
 //        }else{
 //            $delivery_fee = round($deliveryCfg['delivery_distance_more'], 2);
 //        }
-        $delivery_fee = calculateDeliveryFee($distance);
+        $delivery_fee = calculateDeliveryFee($distance,$store['city_id']);
 
         return $delivery_fee;
     }

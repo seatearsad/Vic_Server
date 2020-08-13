@@ -2439,7 +2439,7 @@ class StorestaffAction extends BaseAction
 //                }elseif($distance > 20) {
 //                    $return['delivery_fee'] = round($deliveryCfg['delivery_distance_more'], 2);
 //                }
-                $return['delivery_fee'] = calculateDeliveryFee($distance);
+                $return['delivery_fee'] = calculateDeliveryFee($distance,$merchant_store['city_id']);
                 $return['delivery_fee2'] = $return['delivery_fee'];
             //}
             $real_orderid  = date('ymdhis').substr(microtime(),2,8-strlen($staff['id'])).$staff['id'];//订单编号
