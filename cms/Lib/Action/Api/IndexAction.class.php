@@ -126,6 +126,7 @@ class IndexAction extends BaseAction
             $allClose = true;
             foreach ($storeList as $store){
                 $storeRow = D('Merchant_store')->field('st.*,sh.background')->join('as st left join ' . C('DB_PREFIX') . 'merchant_store_shop sh on st.store_id = sh.store_id ')->where(array('st.store_id' => $store['store_id']))->find();
+                $storeMemo['store_id'] = $storeRow['store_id'];
                 $storeMemo['name'] = lang_substr($storeRow['name'], C('DEFAULT_LANG'));
                 $image_tmp = explode(',', $storeRow['background']);
                 $storeMemo['background'] = C('config.site_url') . '/upload/background/' . $image_tmp[0] . '/' . $image_tmp['1'];
@@ -270,7 +271,7 @@ class IndexAction extends BaseAction
                     $closeArr[] = $storeMemo;
                 }
             }
-            $sub_recommend['info'] = array_merge($openArr,$closeArr);
+            $sub_recommend['info'] = array_slice(array_merge($openArr,$closeArr),0,5);
 
             if(count($sub_recommend['info']) > 0 && !$allClose) {
                 $recommend_list[] = $sub_recommend;
