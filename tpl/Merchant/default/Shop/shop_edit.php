@@ -180,6 +180,10 @@
                                     <label class="col-sm-1"><label for="Config_notice">店铺提示</label></label>
                                     <textarea class="col-sm-3" rows="4" name="shop_remind" id="Config_notice">{pigcms{$store_shop.shop_remind}</textarea>
                                 </div>
+                                <div class="form-group">
+                                    <label class="col-sm-1"><label for="Config_notice">店铺创建时间</label></label>
+                                    <input class="col-sm-1" size="20" maxlength="20" name="create_time" type="text" value="{pigcms{$store_shop.create_time|date='Y-m-d',###}" onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd',lang:'en'})" />
+                                </div>
 								<div class="form-group deliver" <if condition="in_array($store_shop['deliver_type'], array(0,2,3,5))">style="display:none"</if>>
 									<label class="col-sm-1" for="Config_delivery_radius">服务距离</label>
 									<div class="col-sm-10">

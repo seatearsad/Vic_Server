@@ -123,6 +123,7 @@ class ShopAction extends BaseAction
                     $_POST['delivery_radius'] == 0;
                 }
                 if (empty($store_shop['create_time'])) $_POST['create_time'] = time();
+                else $_POST['create_time'] = strtotime($_POST['create_time']);
                 $operat_shop = $database_merchant_store_shop->data($_POST)->save();
             } else {
                 if ($deliver_type == 0 || $deliver_type == 3) {

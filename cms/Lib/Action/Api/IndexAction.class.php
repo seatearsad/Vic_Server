@@ -43,7 +43,11 @@ class IndexAction extends BaseAction
         $page	=	$_POST['page']?$_POST['page']:0;
         $limit = 5;
 
-        $order = 'juli';
+        $sort = $_POST['sort'] ? $_POST['sort'] : 0;
+
+        if($sort == 0) $order = 'juli';
+        else $order = 'create_time';
+
         $deliver_type =  'all';
 
         $cat_id = 0;
