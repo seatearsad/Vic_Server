@@ -1182,8 +1182,8 @@ class Merchant_store_shopModel extends Model
 
                 $temp['event'] = $t_event;
 
-                $temp['delivery_money'] =  $temp['delivery_money'] - $delivery_coupon['discount'];
-                $temp['delivery_money'] = $temp['delivery_money'] < 0 ? 0 : $temp['delivery_money'];
+                //$temp['delivery_money'] =  $temp['delivery_money'] - $delivery_coupon['discount'];
+                //$temp['delivery_money'] = $temp['delivery_money'] < 0 ? 0 : $temp['delivery_money'];
             }
 
             //garfunkel店铺满减活动
