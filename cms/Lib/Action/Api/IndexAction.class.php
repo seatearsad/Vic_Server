@@ -132,8 +132,12 @@ class IndexAction extends BaseAction
                 $storeRow = D('Merchant_store')->field('st.*,sh.background')->join('as st left join ' . C('DB_PREFIX') . 'merchant_store_shop sh on st.store_id = sh.store_id ')->where(array('st.store_id' => $store['store_id']))->find();
                 $storeMemo['store_id'] = $storeRow['store_id'];
                 $storeMemo['name'] = lang_substr($storeRow['name'], C('DEFAULT_LANG'));
-                $image_tmp = explode(',', $storeRow['background']);
-                $storeMemo['background'] = C('config.site_url') . '/upload/background/' . $image_tmp[0] . '/' . $image_tmp['1'];
+                if($storeRow['background'] && $storeRow['background'] != '') {
+                    $image_tmp = explode(',', $storeRow['background']);
+                    $storeMemo['background'] = C('config.site_url') . '/upload/background/' . $image_tmp[0] . '/' . $image_tmp['1'];
+                }else{
+                    $storeMemo['background'] = '';
+                }
                 $storeMemo['txt_info'] = $storeRow['txt_info'];
                 $storeMemo['is_close'] = 1;
 
