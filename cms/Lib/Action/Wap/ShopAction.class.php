@@ -239,8 +239,11 @@ class ShopAction extends BaseAction{
 		$return = array();
 		$now_time = date('H:i:s');
 
+        //$city_id = D('Store')->geocoderGoogle($lat,$long);
+        $city_id = $city_id ? $city_id : 105;
+
         //garfunkel获取减免配送费的活动
-        $eventList = D('New_event')->getEventList(1,3);
+        $eventList = D('New_event')->getEventList(1,3,$city_id);
         $delivery_coupon = "";
         if(count($eventList) > 0) {
             foreach ($eventList as $event) {
@@ -256,6 +259,8 @@ class ShopAction extends BaseAction{
 			$temp['juli'] = $row['juli'];
 			$temp['range'] = $row['range'];
 			$temp['image'] = $row['image'];
+            $temp['image_list'] = $row['image_list'];
+            $temp['image_count'] = $row['image_count'];
 			$temp['star'] = $row['score_mean'];
 			$temp['month_sale_count'] = $row['sale_count'];
 			$temp['merchant_store_month_sale_count'] = $row['merchant_store_month_sale_count'];//月售量
@@ -523,11 +528,12 @@ class ShopAction extends BaseAction{
                 $t_event['use_price'] = $delivery_coupon['use_price'];
                 $t_event['discount'] = $delivery_coupon['discount'];
                 $t_event['miles'] = $delivery_coupon['limit_day']*1000;
+                $t_event['desc'] = $delivery_coupon['desc'];
 
                 $temp['event'] = $t_event;
 
-                $temp['delivery_money'] =  $temp['delivery_money'] - $delivery_coupon['discount'];
-                $temp['delivery_money'] = $temp['delivery_money'] < 0 ? 0 : $temp['delivery_money'];
+                //$temp['delivery_money'] =  $temp['delivery_money'] - $delivery_coupon['discount'];
+                //$temp['delivery_money'] = $temp['delivery_money'] < 0 ? 0 : $temp['delivery_money'];
             }
 
             //garfunkel店铺满减活动

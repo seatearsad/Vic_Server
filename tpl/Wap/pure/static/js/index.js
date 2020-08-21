@@ -177,28 +177,56 @@ $(function(){
 });
 var like_page	=	1;
 var page_count	=	10;
+var has_more = true;
 function getRecommendList(){
-    pageLoadTip({showBg:false});
-	$.post(window.location.pathname+'?c=Groupservice&a=indexRecommendList&page='+like_page+'&long='+$.cookie('userLocationLong')+'&lat='+$.cookie('userLocationLat'),function(result){
-		if(guess_content_type == 'group' || guess_content_type == 'shop'){
-			if(result.length < page_count){
+	pageLoadTip({showBg: false});
+	$.post(window.location.pathname + '?c=Groupservice&a=indexRecommendList&page=' + like_page + '&long=' + $.cookie('userLocationLong') + '&lat=' + $.cookie('userLocationLat') + '&sort=' + sortType, function (result) {
+		if (guess_content_type == 'group' || guess_content_type == 'shop') {
+			if (result.length < page_count) {
 				$("#moress").remove();
 			}
-		}else if(guess_content_type == 'meal'){
-			if(result.store_list.length < page_count){
+		} else if (guess_content_type == 'meal') {
+			if (result.store_list.length < page_count) {
 				$("#moress").remove();
 			}
 		}
-		if(result!=''){
-			laytpl($('#indexRecommendBoxTpl').html()).render(result, function (html) {
+		if (result != '') {
+			if (like_page == 1) $('.youlike').show().find('.likeBox').empty();
+			laytpl($('#indexRecommendBoxTpl').html()).render(result.store, function (html) {
 				$('.youlike').show().find('.likeBox').append(html);
 			});
+
+            if (like_page == 1) {
+                var html = '';
+                for (var i = 0; i < result.sub_nav.length; ++i) {
+                    var nav = result.sub_nav[i];
+                    html += "<a href='" + window.location.pathname + "?c=Shop&a=index&cat=" + nav.fid + '-' + nav.id + "'>" +
+                        "<li>" +
+                        "<div>" +
+                        "<img src='" + nav.image + "' />" +
+                        "</div>" +
+                        "<div>" + nav.title + "</div>" +
+                        "</li>"
+                }
+
+                $('#category ul').html(html);
+
+                laytpl($('#indexRecommendListTpl').html()).render(result.recommend, function (html) {
+                    $('#recommendList').html(html);
+                });
+            }
 		}
-		like_page	=	like_page+page_count;
-		if(like_page >= guess_num){
+
+		//like_page	=	like_page+page_count;
+		if (like_page >= guess_num) {
 			$("#moress").remove();
 		}
-        pageLoadTipHide();
+
+		pageLoadTipHide();
+        if(result.has_more){
+            like_page++;
+            has_more = result.has_more;
+        }
 		//myScroll.refresh();
 	});
 }

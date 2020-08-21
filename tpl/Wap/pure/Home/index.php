@@ -21,6 +21,7 @@
     </if>
     <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/common.css"/>
     <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/index.css"/>
+    <link rel="stylesheet" type="text/css" href="{pigcms{$static_public}js/mobileSelect/mobileSelect.css"/>
     <script type="text/javascript" src="{pigcms{:C('JQUERY_FILE_190')}" charset="utf-8"></script>
     <script type="text/javascript" src="{pigcms{$static_path}js/idangerous.swiper.min.js" charset="utf-8"></script>
     <script type="text/javascript" src="{pigcms{$static_path}js/fastclick.js" charset="utf-8"></script>
@@ -34,6 +35,7 @@
     <script type="text/javascript" src="{pigcms{$static_path}js/index.js" charset="utf-8"></script>
     <script type="text/javascript" src="{pigcms{$static_public}js/lang/{pigcms{:C('DEFAULT_LANG')}.js" charset="utf-8"></script>
     <script type="text/javascript" src="{pigcms{$static_path}js/common.js" charset="utf-8"></script>
+    <script type="text/javascript" src="{pigcms{$static_public}js/mobileSelect/mobileSelect.js"></script>
     <if condition="$config.guess_content_type eq 'shop'">
         <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}shop/css/home_shop.css"/>
         <elseif condition="$config.guess_content_type eq 'meal'" />
@@ -305,6 +307,97 @@
         .recommend-link-url{
             line-height: 1.2;
         }
+        .banner{
+            width: 96%;
+            margin: 10px auto;
+        }
+        .swiper-container{
+            border-radius: 15px;
+        }
+
+        .store_img{
+            position: relative;
+        }
+        .store_img ul{
+            width: 99%;
+            padding: 10px;
+            overflow: auto;
+            white-space: nowrap;
+            box-sizing: border-box;
+        }
+        .store_img li{
+            display: inline-block;
+            width: 40%;
+            margin-left: 10px;
+        }
+        .store_img li img,#recommendList li img{
+            border-radius: 5px;
+        }
+        .closeLayer{
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            opacity: 0.6;
+            top: 0;
+            background: #333333;
+        }
+        .close_txt{
+            margin-bottom: 5px;
+            color: white;
+            text-align: center;
+            width: 100%;
+            position: absolute;
+            bottom: 5px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .show_span{
+            display: inline-block;
+            padding: 0 2px;
+            font-size: 12px;
+            color: #ffa52d;
+            border: 1px solid #ffa52d;
+            border-radius: 2px;
+            line-height: 1.5;
+        }
+        #recommendList{
+            background: white;
+        }
+        #recommendList dd{
+            padding:20px 2% 10px 2%;
+        }
+        #recommendList ul{
+            width: 99%;
+            padding: 10px 0;
+            overflow: auto;
+            white-space: nowrap;
+            box-sizing: border-box;
+        }
+        #recommendList li{
+            display: inline-block;
+            width: 55%;
+            margin-left: 10px;
+        }
+        .view_all_span{
+            float: right;
+            font-weight: bold;
+        }
+        .view_all_span a{
+            color: #ffa52d;
+        }
+        .all_title{
+            margin: 10px 2% 0 3%;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        #sort_select{
+            float: right;
+            padding-left: 25px;
+            color: #545454;
+            background-image: url("{pigcms{$static_public}images/arrow-bottom-new.png");
+            background-repeat: no-repeat;
+            background-size:auto 90%;
+        }
     </style>
     <include file="Public:facebook"/>
 </head>
@@ -331,7 +424,7 @@
         <div id="category">
             <div class="cate_left"></div>
             <ul>
-                <volist name="category" id="vo">
+                <!--volist name="category" id="vo">
                     <a href="{pigcms{:U('Shop/index')}&cat={pigcms{$vo['id']}">
                     <li>
                         <div>
@@ -340,12 +433,18 @@
                         <div>{pigcms{$vo['title']}</div>
                     </li>
                     </a>
-                </volist>
+                </volist-->
             </ul>
             <div class="cate_right"></div>
         </div>
-        <div class="gray_line"></div>
-        <div class="recom">Recommendation</div>
+        <div id="recommendList"></div>
+        <!--div class="gray_line"></div-->
+        <div class="all_title">
+            <span>All Restaurants</span>
+            <span id="sort_select">
+                Closest to You
+            </span>
+        </div>
 
         <section class="youlike hide">
             <dl class="likeBox dealcard"></dl>
@@ -370,6 +469,41 @@
                 <elseif condition="$config.guess_content_type eq 'shop'"/>
 
                 {{# for(var i = 0, len = d.length; i < len; i++){ }}
+                {{# if(d[i].image_count > 0){ }}
+                <dd class="recommend-link-url" data-url="./wap.php?c=Shop&a=classic_shop&shop_id={{ d[i].id }}" data-url-type="openRightFloatWindow" style="padding: 0;border-radius: 5px;">
+                    <div class="store_img">
+                        {{# if(d[i].image_count == 1){ }}
+                        <img src="{{ d[i].image_list[0] }}" style="width: 100%;display: block;" />
+                        {{# }else{ }}
+                        <ul>
+                            {{# for(var j = 0; j < d[i].image_count; j++){ }}
+                            <li {{# if(j==0){ }}style="margin-left:0;"{{# } }}><img src="{{ d[i].image_list[j] }}" style="width: 100%" /></li>
+                            {{# } }}
+                        </ul>
+                        {{# } }}
+                        {{# if(d[i].is_close){ }}
+                        <div class="closeLayer"></div>
+                        <div class="close_txt">Currently Closed</div>
+                        {{# } }}
+                    </div>
+                    <div class="brand" style="margin-left: 10px">{{ d[i].name }}
+                        {{# if(d[i].star > 0){ }}
+                        <span style="color:grey;">{{ d[i].star }}</span>
+                        <img src="./static/images/icon-star-enter.png" width="12">
+                        {{# } }}
+                    </div>
+                    <div class="brand" style="margin-left: 10px;font-size: 12px;color: grey">${{ d[i].delivery_money }} + · {{ d[i].keywords }}</div>
+                    <div class="brand" style="margin-left: 10px;margin-bottom: 5px;">
+                        {{# if(d[i].free_delivery == 1){ }}
+                        <span class="show_span" style="margin-right: 5px;">{{ d[i].event.desc }}</span>
+                        {{# } }}
+                        {{# if(d[i].merchant_reduce_list){ }}
+                        <span class="show_span">{{ d[i].merchant_reduce_list }}</span>
+                        {{# } }}
+                        &nbsp;
+                    </div>
+                </dd>
+                {{# }else{ }}
                 <dd class="recommend-link-url" data-url="./wap.php?c=Shop&a=classic_shop&shop_id={{ d[i].id }}" data-url-type="openRightFloatWindow" {{# if(d[i].is_close){ }}style="opacity:0.6;"{{# } }}>
 
                     <div class="dealcard-img imgbox">
@@ -433,6 +567,7 @@
                         <div class="free_delivery"></div>
                     {{# } }}
                 </dd>
+                {{# } }}
                 {{# } }}
                 <elseif condition="$config.guess_content_type eq 'meal'"/>
                 {{# for(var i = 0, len = d.store_list.length; i < len; i++){ }}
@@ -539,6 +674,39 @@
                 {{# } }}
             </if>
         </script>
+
+        <script id="indexRecommendListTpl" type="text/html">
+            {{# for(var i = 0, len = d.length; i < len; i++){ }}
+                <dd>
+                    <div>
+                    <span style="font-size: 18px;font-weight: bold;">{{ d[i].title }}</span>
+                    <span class="view_all_span" data-id="{{ d[i].fid }}-{{ d[i].id }}">
+                        <a href="./wap.php?c=Shop&a=index&cat={{ d[i].fid }}-{{ d[i].id }}">
+                        View All
+                        </a>
+                    </span>
+                    </div>
+
+                    <ul>
+                        {{# for(var j = 0, jlen = d[i].info.length; j < jlen; j++){ }}
+                        <a href="./wap.php?c=Shop&a=classic_shop&shop_id={{ d[i].info[j].store_id }}">
+                        <li {{# if(j==0){ }}style="margin-left:0;"{{# } }} data-id="{{ d[i].info[j].store_id }}" class="recomm_store">
+                            <div style="position: relative;margin-bottom: 2px">
+                                <img src="{{ d[i].info[j].background }}" style="width: 100%;display: block;" />
+                                {{# if(d[i].info[j].is_close){ }}
+                                <div class="closeLayer" style="border-radius: 5px;"></div>
+                                <div class="close_txt" style="font-size: 16px">Currently Closed</div>
+                                {{# } }}
+                            </div>
+                            <div>{{ d[i].info[j].name }}</div>
+                            <div style="color: grey;">{{ d[i].info[j].txt_info }}</div>
+                        </li>
+                        </a>
+                        {{# } }}
+                    </ul>
+                </dd>
+            {{# } }}
+        </script>
     </div>
 </div>
 <!--div id="pageLoadTipShade" class="pageLoadTipBg">
@@ -551,6 +719,7 @@
 <include file="Public:footer"/>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKlguA2QFIUVwWTo3danbOqSKv3nYbBCg&libraries=places&language=en"></script>
 <script type="text/javascript">
+    var sortType = 0;
     window.shareData = {
         "moduleName":"Home",
         "moduleID":"0",
@@ -631,6 +800,19 @@
         });
     }
 
+    $(window).scroll(function(){
+        var doc_height = $(document).height();
+        var scroll_top = $(document).scrollTop();
+        var window_height = $(window).height();
+
+        if(scroll_top + window_height >= doc_height-60){
+            if(has_more) {
+                has_more = false;
+                getRecommendList();
+            }
+        }
+    });
+
     if(/(tutti_android)/.test(navigator.userAgent.toLowerCase())){
         var user_id = "{pigcms{$user_session['uid']}";
         if(user_id == ""){
@@ -648,6 +830,26 @@
             }
         }
     }
+
+    var sortArr=['Closest to You','Date Added'];
+
+    var mobileSelect1 = new MobileSelect({
+        trigger: '#sort_select',
+        title: 'Sort',
+        wheels: [
+            {data: sortArr}
+        ],
+        position:[0], //初始化定位 打开时默认选中的哪个 如果不填默认为0
+        transitionEnd:function(indexArr, data){
+            //console.log(data);
+        },
+        callback:function(indexArr, data){
+            console.log(indexArr);
+            sortType = indexArr[0];
+            like_page = 1;
+            getRecommendList();
+        }
+    });
 
 </script>
 {pigcms{$shareScript}

@@ -676,11 +676,11 @@ header #backBtn:after {
 	height: 80px;
 	white-space: nowrap;
 	float:left;
-	overflow:hidden;
+	overflow:auto;
 	display: inline;
 }
 #category ul li{
-	width: 25%;
+	width: 22%;
 	text-align: center;
 	color: silver;
 	display: inline-block;

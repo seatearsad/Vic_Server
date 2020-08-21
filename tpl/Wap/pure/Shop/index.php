@@ -93,6 +93,52 @@
         .recommend-link-url{
             line-height: 1.2;
         }
+
+        .store_img{
+            position: relative;
+        }
+        .store_img ul{
+            width: 99%;
+            padding: 10px;
+            overflow: auto;
+            white-space: nowrap;
+            box-sizing: border-box;
+        }
+        .store_img li{
+            display: inline-block;
+            width: 40%;
+            margin-left: 10px;
+        }
+        .store_img li img{
+            border-radius: 5px;
+        }
+        .store_img .closeLayer{
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            opacity: 0.6;
+            top: 0;
+            background: #333333;
+        }
+        .close_txt{
+            margin-bottom: 5px;
+            color: white;
+            text-align: center;
+            width: 100%;
+            position: absolute;
+            bottom: 5px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .show_span{
+            display: inline-block;
+            padding: 0 2px;
+            font-size: 12px;
+            color: #ffa52d;
+            border: 1px solid #ffa52d;
+            border-radius: 2px;
+            line-height: 1.5;
+        }
     </style>
 	<body>
     <include file="Public:header"/>
@@ -128,6 +174,41 @@
         </div>
         <script id="listShopTpl" type="text/html">
             {{# for(var i = 0, len = d.length; i < len; i++){ }}
+            {{# if(d[i].image_count > 0){ }}
+            <dd class="recommend-link-url" data-url="./wap.php?c=Shop&a=classic_shop&shop_id={{ d[i].id }}" data-url-type="openRightFloatWindow" style="padding: 0;border-radius: 5px;">
+                <div class="store_img">
+                    {{# if(d[i].image_count == 1){ }}
+                    <img src="{{ d[i].image_list[0] }}" style="width: 100%" />
+                    {{# }else{ }}
+                    <ul>
+                        {{# for(var j = 0; j < d[i].image_count; j++){ }}
+                        <li {{# if(j==0){ }}style="margin-left:0;"{{# } }}><img src="{{ d[i].image_list[j] }}" style="width: 100%" /></li>
+                        {{# } }}
+                    </ul>
+                    {{# } }}
+                    {{# if(d[i].is_close){ }}
+                    <div class="closeLayer"></div>
+                    <div class="close_txt">Currently Closed</div>
+                    {{# } }}
+                </div>
+                <div class="brand" style="margin-left: 10px">{{ d[i].name }}
+                    {{# if(d[i].star > 0){ }}
+                    <span style="color:grey;">{{ d[i].star }}</span>
+                    <img src="./static/images/icon-star-enter.png" width="12">
+                    {{# } }}
+                </div>
+                <div class="brand" style="margin-left: 10px;font-size: 12px;color: grey">${{ d[i].delivery_money }} + · {{ d[i].keywords }}</div>
+                <div class="brand" style="margin-left: 10px;margin-bottom: 5px;">
+                    {{# if(d[i].free_delivery == 1){ }}
+                    <span class="show_span" style="margin-right: 5px;">{{ d[i].event.desc }}</span>
+                    {{# } }}
+                    {{# if(d[i].merchant_reduce_list){ }}
+                    <span class="show_span">{{ d[i].merchant_reduce_list }}</span>
+                    {{# } }}
+                    &nbsp;
+                </div>
+            </dd>
+            {{# }else{ }}
             <dd class="recommend-link-url" data-url="./wap.php?c=Shop&a=classic_shop&shop_id={{ d[i].id }}" data-url-type="openRightFloatWindow" {{# if(d[i].is_close){ }}style="opacity:0.6;"{{# } }}>
                 <div class="dealcard-img imgbox">
                     <img style="margin-left: 0px;position: absolute;"  src="{{ d[i].image }}" alt="{{ d[i].name }}">
@@ -189,6 +270,7 @@
                 <div class="free_delivery"></div>
                 {{# } }}
             </dd>
+            {{# } }}
             {{# } }}
         </script>
     </div>
@@ -315,6 +397,7 @@
 
                         var cat_id = cat_str[1];
                         if(cat_id != curr_cat_id){
+                            layer.closeAll();
                             curr_cat_id = cat_id;
                             $('#category').find('li').each(function () {
                                 if($(this).attr('data-id') == cat_id) {
