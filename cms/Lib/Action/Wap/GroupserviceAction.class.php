@@ -72,8 +72,8 @@ class GroupserviceAction extends BaseAction{
 			$cat_id = 0;
 			$cat_fid = 0;
 
-            //$city_id = D('Store')->geocoderGoogle($lat,$long);
-            $city_id = $city_id ? $city_id : 105;
+            $city_id = D('Store')->geocoderGoogle($lat,$long);
+            $city_id = $city_id ? $city_id : 0;
 
 			if($_GET['lat'] != 'null' && $_GET['lat'] != 'undefined' && $_GET['long'] != 'null' && $_GET['long'] != 'undefined'){
 				$lat = $_GET['lat'];

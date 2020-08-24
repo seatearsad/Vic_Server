@@ -11,7 +11,17 @@ class ShopAction extends BaseAction{
 		$user_long_lat = D('User_long_lat')->getLocation($_SESSION['openid'],0);
 		$this->assign('user_long_lat',$user_long_lat);
 
-        $category = D('Shop_category')->field(true)->where(array('cat_fid'=>0,'cat_type'=>0))->select();
+        $lat = isset($user_long_lat['lat']) ? $user_long_lat['lat'] : 0;
+        $long = isset($user_long_lat['long']) ? $user_long_lat['long'] : 0;
+
+        $city_id = D('Store')->geocoderGoogle($lat,$long);
+        $city_id = $city_id ? $city_id : 0;
+
+        //$category = D('Shop_category')->field(true)->where(array('cat_fid'=>0,'cat_type'=>0))->select();
+        $category = D('Shop_category')->field(true)->where(array('cat_fid'=>0,'cat_type'=>0,'city_id'=>$city_id))->order('cat_sort desc')->select();
+        if(count($category) == 0){
+            $category = D('Shop_category')->field(true)->where(array('cat_fid'=>0,'cat_type'=>0,'city_id'=>0))->order('cat_sort desc')->select();
+        }
         $nav_list = array();
         foreach ($category as $v){
             $nav['title'] = lang_substr($v['cat_name'],C('DEFAULT_LANG'));
@@ -121,19 +131,26 @@ class ShopAction extends BaseAction{
 
 	public function ajax_cat(){
         $cat_id = $_POST['id'];
-        $list = D('Shop_category')->field(true)->where(array('cat_fid'=>$cat_id))->order('cat_sort desc')->select();
+        $list = D('Shop_category')->field(true)->where(array('cat_fid'=>$cat_id,'cat_status'=>1))->order('cat_sort desc')->select();
         $nav_list = array();
+
+        //$is_recommend = false;
         foreach ($list as $v){
             $nav['title'] = lang_substr($v['cat_name'],C('DEFAULT_LANG'));
             $nav['id'] = $v['cat_id'];
             $nav['url'] = '#cat-'.$cat_id.'-'.$v['cat_id'];
             $nav_list[] = $nav;
+//            if($v['cat_type'] == 1){
+//                $is_recommend = true;
+//            }
         }
 
-        $all['title'] = 'All';
-        $all['id'] = 0;
-        $all['url'] = '#cat-'.$cat_id;
-        array_unshift($nav_list,$all);
+        //if(!$is_recommend) {
+            $all['title'] = 'All';
+            $all['id'] = 0;
+            $all['url'] = '#cat-' . $cat_id;
+            array_unshift($nav_list, $all);
+        //}
 
         $return['status'] = 1;
         $return['list'] = $nav_list;

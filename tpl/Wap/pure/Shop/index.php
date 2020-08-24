@@ -399,10 +399,11 @@
                         if(cat_id != curr_cat_id){
                             layer.closeAll();
                             curr_cat_id = cat_id;
+
+                            getCateSubList(cat_id);
                             $('#category').find('li').each(function () {
                                 if($(this).attr('data-id') == cat_id) {
                                     $(this).css('background', '#f5f5f5f5');
-                                    getCateSubList(cat_id);
                                 }else{
                                     $(this).css('background', 'none');
                                 }
