@@ -29,26 +29,27 @@ class User_long_latModel extends Model{
 	 *
 	*/
 	public function getLocation($openid,$timeout=120,$user_long_lat=array()){
-		if($openid){
-			if(empty($user_long_lat)){
-				$user_long_lat = $this->where(array('open_id' => $openid))->find();
-			}
-//            print_r($user_long_lat);exit;
-			if($user_long_lat && $user_long_lat['long']){
-
-				return array('long'=>$user_long_lat['long'],'lat'=>$user_long_lat['lat'],'dateline'=>$user_long_lat['dateline']);
-				/*if($timeout != 0 && $user_long_lat['dateline'] < $_SERVER['REQUEST_TIME'] - $timeout){
-					return array();
-				}*/
-				/*import('@.ORG.longlat');
-				$longlat_class = new longlat();
-				$location2 = $longlat_class->gpsToBaidu($user_long_lat['lat'], $user_long_lat['long']);
-				var_dump($location2);
-				return array('long'=>$location2['lng'],'lat'=>$location2['lat'],'dateline'=>$user_long_lat['dateline']);*/
-			}else{
-				return array();
-			}
-		}elseif($_REQUEST['latitude'] && $_REQUEST['longitude']){
+//		if($openid){
+//			if(empty($user_long_lat)){
+//				$user_long_lat = $this->where(array('open_id' => $openid))->find();
+//			}
+////            print_r($user_long_lat);exit;
+//			if($user_long_lat && $user_long_lat['long']){
+//
+//				return array('long'=>$user_long_lat['long'],'lat'=>$user_long_lat['lat'],'dateline'=>$user_long_lat['dateline']);
+//				/*if($timeout != 0 && $user_long_lat['dateline'] < $_SERVER['REQUEST_TIME'] - $timeout){
+//					return array();
+//				}*/
+//				/*import('@.ORG.longlat');
+//				$longlat_class = new longlat();
+//				$location2 = $longlat_class->gpsToBaidu($user_long_lat['lat'], $user_long_lat['long']);
+//				var_dump($location2);
+//				return array('long'=>$location2['lng'],'lat'=>$location2['lat'],'dateline'=>$user_long_lat['dateline']);*/
+//			}else{
+//				return array();
+//			}
+//		}else
+		if($_REQUEST['latitude'] && $_REQUEST['longitude']){
 //			if ($_REQUEST['locateType']=='baidu') {
 //				import('@.ORG.longlat');
 //				$longlat_class = new longlat();
