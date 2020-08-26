@@ -64,7 +64,7 @@
         color: #666666;
     }
     .sign_btn{
-        margin: 60px auto 0 auto;
+        margin: 40px auto 0 auto;
         text-align: center;
         width: 80%;
         height: 45px;
@@ -106,6 +106,16 @@
         -webkit-border-radius: 5px;
         border-radius: 5px;
     }
+    #agree_div{
+        margin: 20px auto 0 auto;
+        text-align: center;
+        width: 80%;
+        line-height: 1.5;
+        color: #333333;
+    }
+    #agree_div a{
+        color: black;
+    }
 </style>
 <body>
     <div class="sign_title">
@@ -120,6 +130,12 @@
         <input type="password" placeholder="Password" name="password" />
         <input type="password" placeholder="Confirm Password" name="con_password" />
         <input type="text" name="invitation_code" placeholder="Invitation Code" <if condition="$invitation_code">value="{pigcms{$invitation_code}" readonly="readonly"</if> >
+    </div>
+    <div id="agree_div">
+        By clicking Sign Up or signing up using your Google, Facebook, Apple or WeChat account, you agree to our
+        <a href="/intro/5.html" target="_blank">Terms of Use</a>
+        and
+        <a href="/intro/5.html" target="_blank">Privacy Policy</a>.
     </div>
     <div class="sign_btn">
         Sign up

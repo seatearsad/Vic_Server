@@ -398,6 +398,12 @@
             background-repeat: no-repeat;
             background-size:auto 90%;
         }
+        #moress{
+            width: 100%;
+            text-align: center;
+            line-height: 1.8;
+            margin-top: 5px;
+        }
     </style>
     <include file="Public:facebook"/>
 </head>
@@ -448,6 +454,7 @@
 
         <section class="youlike hide">
             <dl class="likeBox dealcard"></dl>
+            <div id="moress">{pigcms{:L('_LOADING_TXT_')}</div>
         </section>
         <script id="indexRecommendBoxTpl" type="text/html">
             <if condition="$config.guess_content_type eq 'group'">

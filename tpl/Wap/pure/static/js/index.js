@@ -180,14 +180,15 @@ var page_count	=	10;
 var has_more = true;
 function getRecommendList(){
 	pageLoadTip({showBg: false});
+	has_more = false;
 	$.post(window.location.pathname + '?c=Groupservice&a=indexRecommendList&page=' + like_page + '&long=' + $.cookie('userLocationLong') + '&lat=' + $.cookie('userLocationLat') + '&sort=' + sortType, function (result) {
 		if (guess_content_type == 'group' || guess_content_type == 'shop') {
 			if (result.length < page_count) {
-				$("#moress").remove();
+				//$("#moress").remove();
 			}
 		} else if (guess_content_type == 'meal') {
 			if (result.store_list.length < page_count) {
-				$("#moress").remove();
+				//$("#moress").remove();
 			}
 		}
 		if (result != '') {
@@ -219,14 +220,16 @@ function getRecommendList(){
 
 		//like_page	=	like_page+page_count;
 		if (like_page >= guess_num) {
-			$("#moress").remove();
+			//$("#moress").remove();
 		}
 
 		pageLoadTipHide();
         if(result.has_more){
             like_page++;
             has_more = result.has_more;
-        }
+        }else{
+            $("#moress").remove();
+		}
 		//myScroll.refresh();
 	});
 }

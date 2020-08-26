@@ -1104,7 +1104,7 @@
         <div class="all_list">
             <div class="order_note">
                 Scheduled Delivery
-                <span class="coupon_more"></span>
+                <!--span class="coupon_more"></span-->
                 <span class="est_time">ASAP</span>
                 <input type="hidden" name="est_time" id="est_time_input">
             </div>
@@ -1420,7 +1420,7 @@
     }
     
     $('.order_note').click(function () {
-        $('#est_time_input').trigger('click');
+        //$('#est_time_input').trigger('click');
     });
 
     var theme = "ios";
