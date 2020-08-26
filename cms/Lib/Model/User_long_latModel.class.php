@@ -49,20 +49,21 @@ class User_long_latModel extends Model{
 				return array();
 			}
 		}elseif($_REQUEST['latitude'] && $_REQUEST['longitude']){
-			if ($_REQUEST['locateType']=='baidu') {
-				import('@.ORG.longlat');
-				$longlat_class = new longlat();
-				$location2 = $longlat_class->gpsToBaidu($_REQUEST['latitude'], $_REQUEST['longitude']);
-				return array('long'=>$location2['lng'],'lat'=>$location2['lat'],'dateline'=>$_SERVER['REQUEST_TIME']);
-			}else{
+//			if ($_REQUEST['locateType']=='baidu') {
+//				import('@.ORG.longlat');
+//				$longlat_class = new longlat();
+//				$location2 = $longlat_class->gpsToBaidu($_REQUEST['latitude'], $_REQUEST['longitude']);
+//				return array('long'=>$location2['lng'],'lat'=>$location2['lat'],'dateline'=>$_SERVER['REQUEST_TIME']);
+//			}else{
 				return array('long'=>$_REQUEST['latitude'],'lat'=>$_REQUEST['longitude'],'dateline'=>$_SERVER['REQUEST_TIME']);
-			}
+			//}
 		}else{
 			if($_COOKIE['userLocationLong'] && $_COOKIE['userLocationLat']){
-				import('@.ORG.longlat');
-				$longlat_class = new longlat();
-				$location2 = $longlat_class->gpsToBaidu($_COOKIE['userLocationLat'], $_COOKIE['userLocationLong']);
-				return array('long'=>$location2['lng'],'lat'=>$location2['lat'],'dateline'=>$_SERVER['REQUEST_TIME']);
+//				import('@.ORG.longlat');
+//				$longlat_class = new longlat();
+//				$location2 = $longlat_class->gpsToBaidu($_COOKIE['userLocationLat'], $_COOKIE['userLocationLong']);
+//				return array('long'=>$location2['lng'],'lat'=>$location2['lat'],'dateline'=>$_SERVER['REQUEST_TIME']);
+                return array('long'=>$_COOKIE['userLocationLong'],'lat'=>$_COOKIE['userLocationLat'],'dateline'=>$_SERVER['REQUEST_TIME']);
 			}
 			return array();
 		}

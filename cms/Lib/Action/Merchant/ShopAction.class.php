@@ -240,6 +240,10 @@ class ShopAction extends BaseAction
             }
             $sysnc = empty($store_shop) ? 1 : 0;
             $this->assign('sysnc', $sysnc);
+            //
+            if($sysnc == 1){
+                $store_shop['create_time'] = time();
+            }
 
             $close_old_store = $now_store['store_type'] == 0 || $now_store['store_type'] == 2 ? 1 : 0;
 
