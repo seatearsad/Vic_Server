@@ -404,6 +404,15 @@
             line-height: 1.8;
             margin-top: 5px;
         }
+        #category{
+            overflow: hidden;
+        }
+        #category ul{
+            height: 90px;
+        }
+        #recommendList ul::-webkit-scrollbar,#category ul::-webkit-scrollbar,.store_img ul::-webkit-scrollbar{
+            display: none;
+        }
     </style>
     <include file="Public:facebook"/>
 </head>
