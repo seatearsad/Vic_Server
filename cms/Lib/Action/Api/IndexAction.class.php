@@ -336,12 +336,15 @@ class IndexAction extends BaseAction
     public function getCategorySubList(){
         $cate_fid = $_POST['category'];
         $category = D('Shop_category')->field(true)->where(array('cat_fid'=>$cate_fid,'cat_status'=>1))->order('cat_sort desc')->select();
+        $cat_type = 0;
         foreach ($category as &$v) {
             $v['cat_name'] = lang_substr($v['cat_name'], C('DEFAULT_LANG'));
             $v['cat_id'] = $v['cat_id'];
+            $cat_type = $v['cat_type'];
         }
         $all['cat_name'] = 'All';
         $all['cat_id'] = 0;
+        $all['cat_type'] = $cat_type;
         if($category)
             array_unshift($category,$all);
         else
