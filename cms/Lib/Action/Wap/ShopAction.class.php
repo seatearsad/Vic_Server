@@ -134,15 +134,15 @@ class ShopAction extends BaseAction{
         $list = D('Shop_category')->field(true)->where(array('cat_fid'=>$cat_id,'cat_status'=>1))->order('cat_sort desc')->select();
         $nav_list = array();
 
-        //$is_recommend = false;
+        $is_recommend = false;
         foreach ($list as $v){
             $nav['title'] = lang_substr($v['cat_name'],C('DEFAULT_LANG'));
             $nav['id'] = $v['cat_id'];
             $nav['url'] = '#cat-'.$cat_id.'-'.$v['cat_id'];
             $nav_list[] = $nav;
-//            if($v['cat_type'] == 1){
-//                $is_recommend = true;
-//            }
+            if($v['cat_type'] == 1){
+                $is_recommend = true;
+            }
         }
 
         //if(!$is_recommend) {
@@ -154,6 +154,7 @@ class ShopAction extends BaseAction{
 
         $return['status'] = 1;
         $return['list'] = $nav_list;
+        $return['is_recommend'] = $is_recommend ? 1 : 0;
 
         exit(json_encode($return));
 
@@ -256,8 +257,8 @@ class ShopAction extends BaseAction{
 		$return = array();
 		$now_time = date('H:i:s');
 
-        //$city_id = D('Store')->geocoderGoogle($lat,$long);
-        $city_id = $city_id ? $city_id : 105;
+        $city_id = D('Store')->geocoderGoogle($lat,$long);
+        $city_id = $city_id ? $city_id : 0;
 
         //garfunkel获取减免配送费的活动
         $eventList = D('New_event')->getEventList(1,3,$city_id);
@@ -1246,6 +1247,7 @@ class ShopAction extends BaseAction{
         $store['delivery'] = $row['deliver_type'] == 2 ? false : true;//是否支持配送
         $store['delivery_time'] = $row['send_time'];//配送时长
         $store['delivery_price'] = floatval($row['basic_price']);//起送价
+        $store['city_id'] = $row['city_id'];
         
         $is_have_two_time = 0;//是否是第二时段的配送显示
         
@@ -1322,8 +1324,12 @@ class ShopAction extends BaseAction{
 
         //modify garfunkel
         if($user_long_lat && $user_long_lat['lat'] != 0){
-            $store['distance'] = getDistance($store['lat'],$store['long'],$user_long_lat['lat'],$user_long_lat['long']);
-            $store['delivery_money'] = getDeliveryFee($store['lat'],$store['long'],$user_long_lat['lat'],$user_long_lat['long'],$row['city_id']);
+            //$store['distance'] = getDistance($store['lat'],$store['long'],$user_long_lat['lat'],$user_long_lat['long']);
+            $from = $store['lat'].','.$store['long'];
+            $aim = $user_long_lat['lat'].','.$user_long_lat['long'];
+            $store['distance'] = getDistanceByGoogle($from,$aim);
+            $store['delivery_money'] = calculateDeliveryFee($store['distance'],$store['city_id']);
+            //$store['delivery_money'] = getDeliveryFee($store['lat'],$store['long'],$user_long_lat['lat'],$user_long_lat['long'],$row['city_id']);
 
             $store['free_delivery'] = 0;
             $store['event'] = "";

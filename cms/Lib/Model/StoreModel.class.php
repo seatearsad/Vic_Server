@@ -227,6 +227,7 @@ class StoreModel extends Model
         $store['tax_num'] = $row['tax_num'];
         $store['deposit_price'] = floatval($row['deposit_price']);
         $store['service_fee'] = $row['service_fee'];
+        $store['city_id'] = $row['city_id'];
 
         //$store['deliver_name'] = $delivers[$row['deliver_type']];
         $is_have_two_time = 0;//是否是第二时段的配送显示
@@ -308,9 +309,13 @@ class StoreModel extends Model
         }
         //modify garfunkel
         if($lat != 0 && $lng != 0) {
-            $store['shipfee'] = getDeliveryFee($row['lat'], $row['long'], $lat, $lng,$row['city_id']);
+            $from = $row['lat'].','.$row['long'];
+            $aim = $lat.','.$lng;
+            $distance = getDistanceByGoogle($from,$aim);
+            $store['shipfee'] = calculateDeliveryFee($distance,$store['city_id']);
+            //$store['shipfee'] = getDeliveryFee($row['lat'], $row['long'], $lat, $lng,$row['city_id']);
 
-            $distance = getDistance($row['lat'], $row['long'], $lat, $lng);
+            //$distance = getDistance($row['lat'], $row['long'], $lat, $lng);
             $store['free_delivery'] = 0;
             $store['event'] = array("use_price"=>"0","discount"=>"0","miles"=>0);
             if($delivery_coupon != "" && $delivery_coupon['limit_day']*1000 >= $distance){

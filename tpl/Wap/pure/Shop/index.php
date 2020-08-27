@@ -444,6 +444,9 @@
                     if(data.status == 1){
                         addSubList(data.list);
                         showShopList(true);
+                        if(data.is_recommend == 1){
+                            $("#category").hide();
+                        }
                     }
                 },'json');
             }
