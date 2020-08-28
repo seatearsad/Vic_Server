@@ -709,7 +709,7 @@
                                 {{# } }}
                             </div>
                             <div>{{ d[i].info[j].name }}</div>
-                            <div style="color: grey;">{{ d[i].info[j].txt_info }}</div>
+                            <div style="color: grey;overflow: hidden;text-overflow: ellipsis;">{{ d[i].info[j].txt_info }}</div>
                         </li>
                         </a>
                         {{# } }}
