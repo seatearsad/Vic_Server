@@ -318,7 +318,8 @@ class IndexAction extends BaseAction
 
         $where = array('deliver_type' => $deliver_type, 'order' => $order, 'lat' => $lat, 'long' => $long, 'cat_id' => $cat_id, 'cat_fid' => $cat_fid, 'page' => $page, 'limit' => $limit);
         if($category['cat_type'] == 1){
-            $shop_list = D('Merchant_store_shop')->get_list_arrange($where,1,2,$limit,$page,$lat,$long);
+            if($page == 1)
+                $shop_list = D('Merchant_store_shop')->get_list_arrange($where,1,2,$limit,$page,$lat,$long);
         }else {
             $key = '';
             if ($_POST['keyword']) {
