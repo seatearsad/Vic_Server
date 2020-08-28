@@ -442,7 +442,7 @@ class GroupserviceAction extends BaseAction{
             }
             $new_group_list['sub_nav'] = $sub_nav_list;
 
-            $recommend_list = $this->getRecommendList($city_id);
+            $recommend_list = $this->getRecommendList($city_id,$lat,$long);
 
             $new_group_list['recommend'] = $recommend_list;
 
@@ -587,7 +587,7 @@ class GroupserviceAction extends BaseAction{
 		}
 	}
 
-	public function getRecommendList($city_id){
+	public function getRecommendList($city_id,$lat,$lng){
         //获取推荐列表
         $re_category = D('Shop_category')->field(true)->where(array('cat_fid'=>0,'cat_type'=>1,'city_id'=>$city_id))->order('cat_sort desc')->select();
         $categoryList = array();
@@ -608,7 +608,7 @@ class GroupserviceAction extends BaseAction{
             $storeList = D('Shop_category_relation')->where(array('cat_id'=>$v['cat_id']))->order('store_sort desc')->select();
             $allClose = true;
             foreach ($storeList as $store){
-                $storeRow = D('Merchant_store')->field('st.*,sh.background')->join('as st left join ' . C('DB_PREFIX') . 'merchant_store_shop sh on st.store_id = sh.store_id ')->where(array('st.store_id' => $store['store_id']))->find();
+                $storeRow = D('Merchant_store')->field('st.*,sh.background,sh.delivery_radius')->join('as st left join ' . C('DB_PREFIX') . 'merchant_store_shop sh on st.store_id = sh.store_id ')->where(array('st.store_id' => $store['store_id']))->find();
                 $storeMemo['store_id'] = $storeRow['store_id'];
                 $storeMemo['name'] = lang_substr($storeRow['name'], C('DEFAULT_LANG'));
                 $image_tmp = explode(',', $storeRow['background']);
@@ -747,11 +747,14 @@ class GroupserviceAction extends BaseAction{
                     $storeMemo['is_close'] = 1;
                 }
 
-                if($storeMemo['is_close'] == 0){
-                    $allClose = false;
-                    $openArr[] = $storeMemo;
-                }else{
-                    $closeArr[] = $storeMemo;
+                $distance = getDistance($lat,$lng,$storeMemo['lat'],$storeMemo['long']);
+                if($distance < $storeRow['delivery_radius']) {
+                    if ($storeMemo['is_close'] == 0) {
+                        $allClose = false;
+                        $openArr[] = $storeMemo;
+                    } else {
+                        $closeArr[] = $storeMemo;
+                    }
                 }
             }
             $sub_recommend['info'] = array_slice(array_merge($openArr,$closeArr),0,5);

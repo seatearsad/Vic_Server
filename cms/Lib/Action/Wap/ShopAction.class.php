@@ -246,19 +246,24 @@ class ShopAction extends BaseAction{
 			}
 		}
 
-		$where = array('deliver_type' => $deliver_type, 'order' => $order, 'lat' => $lat, 'long' => $long, 'cat_id' => $cat_id, 'cat_fid' => $cat_fid, 'page' => $page);
-		$key && $where['key'] = $key;
-
-		if($is_wap > 0){
-			$lists = D('Merchant_store_shop')->get_list_by_option($where,$is_wap); 
-		}else{
-			$lists = D('Merchant_store_shop')->get_list_by_option($where);
-		}
-		$return = array();
-		$now_time = date('H:i:s');
-
         $city_id = D('Store')->geocoderGoogle($lat,$long);
         $city_id = $city_id ? $city_id : 0;
+
+        $now_category = D('Shop_category')->where(array('cat_id'=>$cat_id))->find();
+        if($now_category['cat_type'] == 1){
+            $lists = $this->getRecommendList($city_id,$lat,$long,$cat_id,$cat_fid);
+        }else {
+            $where = array('deliver_type' => $deliver_type, 'order' => $order, 'lat' => $lat, 'long' => $long, 'cat_id' => $cat_id, 'cat_fid' => $cat_fid, 'page' => $page);
+            $key && $where['key'] = $key;
+
+            if ($is_wap > 0) {
+                $lists = D('Merchant_store_shop')->get_list_by_option($where, $is_wap);
+            } else {
+                $lists = D('Merchant_store_shop')->get_list_by_option($where);
+            }
+        }
+		$return = array();
+		$now_time = date('H:i:s');
 
         //garfunkel获取减免配送费的活动
         $eventList = D('New_event')->getEventList(1,3,$city_id);
@@ -3569,6 +3574,294 @@ class ShopAction extends BaseAction{
         } else {
             $this->error_tips('订单信息错误！');
         }
+    }
+
+
+    public function getRecommendList($city_id,$lat,$lng,$cat_id,$cat_fid){
+        //获取推荐列表
+        $closeArr = array();
+        $openArr = array();
+        $storeList = D('Shop_category_relation')->where(array('cat_id'=>$cat_id))->order('store_sort desc')->select();
+        $allClose = true;
+        $temp = array();
+
+        $store_image_class = new store_image();
+        foreach ($storeList as $store){
+            $storeRow = D('Merchant_store')->field('st.*,sh.*')->join('as st left join ' . C('DB_PREFIX') . 'merchant_store_shop sh on st.store_id = sh.store_id ')->where(array('st.store_id' => $store['store_id']))->find();
+
+            $storeRow['url'] = C('config.site_url') . '/shop/' . $storeRow['store_id'] . '.html';
+            //$v['area_name'] = isset($temp[$v['circle_id']]) ? $temp[$storeRow['circle_id']]['area_name'] : '';
+            $images = $store_image_class->get_allImage_by_path($storeRow['pic_info']);
+            //第一位为店铺logo
+            $storeRow['image'] = $images ? array_shift($images) : array();
+            //下面为店铺展示图片 不包含logo
+            $storeRow['image_list'] = $images ? $images : array();
+            $storeRow['image_count'] = count($storeRow['image_list']);
+            $storeRow['mean_money'] = floatval($storeRow['mean_money']);
+            $storeRow['wap_url'] = U('Shop/shop', array('mer_id' => $storeRow['mer_id'], 'store_id' => $storeRow['store_id']));
+            $storeRow['deliver'] = $storeRow['deliver_type'] == 2 ? false : true;
+
+            if ($storeRow['juli']) {
+                $storeRow['range'] = getRange($storeRow['juli']);
+                $jl = $storeRow['juli'];
+            }
+
+            if (in_array($storeRow['deliver_type'], array(3, 4)) && $jl > $storeRow['delivery_radius'] * 1000) {
+                $storeRow['deliver'] = 0;
+            }
+            //$merchant_store_month_sale_count = M('shop_order')->where(array('store_id'=>array('eq',$storeRow['store_id']),'status'=>array('eq','2'),'create_time'=>array('between',"{$begin_month},{$end_month}")))->count('order_id');
+            //$storeRow$v['merchant_store_month_sale_count'] = $merchant_store_month_sale_count?$merchant_store_month_sale_count:0;
+//			$v['state'] = 0;//根据营业时间判断
+//			$time = date('H:i:s');
+//			if ($v['open_1'] == '00:00:00' && $v['close_1'] == '00:00:00') {
+//				$v['state'] = 1;
+//			} elseif (($v['open_1'] < $time && $v['close_1'] > $time) || ($v['open_2'] < $time && $v['close_2'] > $time) || ($v['open_3'] < $time && $v['close_3'] > $time)) {
+//				$v['state'] = 1;
+//			}
+
+            $storeRow['state'] = 0;//根据营业时间判断
+            $time = date('H:i:s');
+
+            //@wangchuanyuan 周一到周天
+            $date = date("w");//今天是星期几 @ydhl-wangchuanyuan 20171106
+            switch ($date){
+                case 1 :
+                    if (($storeRow['open_1'] < $time && $storeRow['close_1'] > $time) || ($storeRow['open_2'] < $time && $storeRow['close_2'] > $time) || ($storeRow['open_3'] < $time && $storeRow['close_3'] > $time)){
+                        $storeRow['state'] = 1;
+                    }
+                    break;
+                case 2 ://周二
+                    if (($storeRow['open_4'] < $time && $storeRow['close_4'] > $time) || ($storeRow['open_5'] < $time && $storeRow['close_5'] > $time) || ($storeRow['open_6'] < $time && $storeRow['close_6'] > $time)){
+                        $storeRow['state'] = 1;
+                    }
+                    break;
+                case 3 ://周三
+                    if (($storeRow['open_7'] < $time && $storeRow['close_7'] > $time) || ($storeRow['open_8'] < $time && $storeRow['close_8'] > $time) || ($storeRow['open_9'] < $time && $storeRow['close_9'] > $time)){
+                        $storeRow['state'] = 1;
+                    }
+                    break;
+                case 4 :
+                    if (($storeRow['open_10'] < $time && $storeRow['close_10'] > $time) || ($storeRow['open_11'] < $time && $storeRow['close_11'] > $time) || ($storeRow['open_12'] < $time && $storeRow['close_12'] > $time)){
+                        $storeRow['state'] = 1;
+                    }
+                    break;
+                case 5 :
+                    if (($storeRow['open_13'] < $time && $storeRow['close_13'] > $time) || ($storeRow['open_14'] < $time && $storeRow['close_14'] > $time) || ($storeRow['open_15'] < $time && $storeRow['close_15'] > $time)){
+                        $storeRow['state'] = 1;
+                    }
+                    break;
+                case 6 :
+                    if (($storeRow['open_16'] < $time && $storeRow['close_16'] > $time) || ($storeRow['open_17'] < $time && $storeRow['close_17'] > $time) || ($storeRow['open_18'] < $time && $storeRow['close_18'] > $time)){
+                        $storeRow['state'] = 1;
+                    }
+                    break;
+                case 0 :
+                    if (($storeRow['open_19'] < $time && $storeRow['close_19'] > $time) || ($storeRow['open_20'] < $time && $storeRow['close_20'] > $time) || ($storeRow['open_21'] < $time && $storeRow['close_21'] > $time)){
+                        $storeRow['state'] = 1;
+                    }
+                    break;
+                default :
+                    $storeRow['state'] = 0;
+            }
+            //end  @wangchuanyuan
+
+            //$storeRow['system_discount'] = isset($discounts[0]) ? $discounts[0] : null;
+            //$storeRow['merchant_discount'] = isset($discounts[$storeRow['store_id']]) ? $discounts[$storeRow['store_id']] : null;
+
+            $is_have_two_time = 0;//是否是第二时段的配送显示
+            if ($storeRow['deliver_type'] == 0 || $storeRow['deliver_type'] == 3) {
+                if ($delivery_time = C('config.delivery_time')) {
+                    $delivery_times = explode('-', $delivery_time);
+                    $start_time = $delivery_times[0] . ':00';
+                    $stop_time = $delivery_times[1] . ':00';
+                    if (!($start_time == $stop_time && $start_time == '00:00:00')) {
+                        if ($delivery_time2 = C('config.delivery_time2')) {
+                            $delivery_times2 = explode('-', $delivery_time2);
+                            $start_time2 = $delivery_times2[0];
+                            $stop_time2 = $delivery_times2[1];
+                            if (!($start_time2 == $stop_time2 && $start_time2 == '00:00:00')) {
+                                $is_have_two_time = 1;
+                            }
+                        }
+                    }
+                }
+
+                if ($is_have_two_time) {
+                    if ($time <= $stop_time || $time > $stop_time2) {
+                        $is_have_two_time = 0;
+                    }
+                }
+            } else {
+                if (!($storeRow['delivertime_start'] == $storeRow['delivertime_stop'] && $storeRow['delivertime_start'] == '00:00:00')) {
+                    if (!($storeRow['delivertime_start2'] == $storeRow['delivertime_stop2'] && $storeRow['delivertime_start2'] == '00:00:00')) {
+                        $is_have_two_time = 1;
+                    }
+                }
+
+                if ($is_have_two_time) {
+                    if ($time <= $storeRow['delivertime_stop'] || $time > $storeRow['delivertime_stop2']) {
+                        $is_have_two_time = 0;
+                    }
+                }
+
+                //$v['delivery_fee'] = $is_have_two_time ? $v['delivery_fee2'] : $v['delivery_fee'];
+            }
+
+            //modify garfunkel
+            $storeRow['delivery_fee'] = C('config.delivery_distance_1');
+
+            $storeRow['is_have_two_time'] = $is_have_two_time;
+
+
+
+            $storeRow['name'] = lang_substr($storeRow['name'], C('DEFAULT_LANG'));
+            $storeRow['is_close'] = 1;
+
+            //@wangchuanyuan 周一到周天
+            $date = date("w");//今天是星期几 @ydhl-wangchuanyuan 20171106
+            $now_time = date('H:i:s');
+            switch ($date){
+                case 1 :
+                    if ($storeRow['open_1'] != '00:00:00' || $storeRow['close_1'] != '00:00:00'){
+                        if ($storeRow['open_1'] < $now_time && $now_time < $storeRow['close_1']) {
+                            $storeRow['is_close'] = 0;
+                        }
+                    }
+                    if($storeRow['open_2'] != '00:00:00' || $storeRow['close_2'] != '00:00:00'){
+                        if($storeRow['open_2'] < $now_time && $now_time < $storeRow['close_2']) {
+                            $storeRow['is_close'] = 0;
+                        }
+                    }
+                    if($storeRow['open_3'] != '00:00:00' || $storeRow['close_3'] != '00:00:00'){
+                        if ($storeRow['open_3'] < $now_time && $now_time < $storeRow['close_3']) {
+                            $storeRow['is_close'] = 0;
+                        }
+                    }
+                    break;
+                case 2 ://周二
+                    if ($storeRow['open_4'] != '00:00:00' || $storeRow['close_4'] != '00:00:00') {
+                        if ($storeRow['open_4'] < $now_time && $now_time < $storeRow['close_4']){
+                            $storeRow['is_close'] = 0;
+                        }
+                    }
+                    if ($storeRow['open_5'] != '00:00:00' || $storeRow['close_5'] != '00:00:00') {
+                        if ($storeRow['open_5'] < $now_time && $now_time < $storeRow['close_5']){
+                            $storeRow['is_close'] = 0;
+                        }
+                    }
+                    if ($storeRow['open_6'] != '00:00:00' || $storeRow['close_6'] != '00:00:00') {
+                        if ($storeRow['open_6'] < $now_time && $now_time < $storeRow['close_6']){
+                            $storeRow['is_close'] = 0;
+                        }
+                    }
+                    break;
+                case 3 ://周三
+                    if ($storeRow['open_7'] != '00:00:00' || $storeRow['close_7'] != '00:00:00') {
+                        if ($storeRow['open_7'] < $now_time && $now_time < $storeRow['close_7']){
+                            $storeRow['is_close'] = 0;
+                        }
+                    }
+                    if ($storeRow['open_8'] != '00:00:00' || $storeRow['close_8'] != '00:00:00') {
+                        if ($storeRow['open_8'] < $now_time && $now_time < $storeRow['close_8']){
+                            $storeRow['is_close'] = 0;
+                        }
+                    }
+                    if ($storeRow['open_9'] != '00:00:00' || $storeRow['close_9'] != '00:00:00') {
+                        if ($storeRow['open_9'] < $now_time && $now_time < $storeRow['close_9']){
+                            $storeRow['is_close'] = 0;
+                        }
+                    }
+                    break;
+                case 4 :
+                    if ($storeRow['open_10'] != '00:00:00' || $storeRow['close_10'] != '00:00:00') {
+                        if ($storeRow['open_10'] < $now_time && $now_time < $storeRow['close_10']){
+                            $storeRow['is_close'] = 0;
+                        }
+                    }
+                    if ($storeRow['open_11'] != '00:00:00' || $storeRow['close_11'] != '00:00:00') {
+                        if ($storeRow['open_11'] < $now_time && $now_time < $storeRow['close_11']){
+                            $storeRow['is_close'] = 0;
+                        }
+                    }
+                    if ($storeRow['open_12'] != '00:00:00' || $storeRow['close_12'] != '00:00:00') {
+                        if ($storeRow['open_12'] < $now_time && $now_time < $storeRow['close_12']){
+                            $storeRow['is_close'] = 0;
+                        }
+                    }
+                    break;
+                case 5 :
+                    if ($storeRow['open_13'] != '00:00:00' || $storeRow['close_13'] != '00:00:00') {
+                        if ($storeRow['open_13'] < $now_time && $now_time < $storeRow['close_13']){
+                            $storeRow['is_close'] = 0;
+                        }
+                    }
+                    if ($storeRow['open_14'] != '00:00:00' || $storeRow['close_14'] != '00:00:00') {
+                        if ($storeRow['open_14'] < $now_time && $now_time < $storeRow['close_14']){
+                            $storeRow['is_close'] = 0;
+                        }
+                    }
+                    if ($storeRow['open_15'] != '00:00:00' || $storeRow['close_15'] != '00:00:00') {
+                        if ($storeRow['open_15'] < $now_time && $now_time < $storeRow['close_15']){
+                            $storeRow['is_close'] = 0;
+                        }
+                    }
+                    break;
+                case 6 :
+                    if ($storeRow['open_16'] != '00:00:00' || $storeRow['close_16'] != '00:00:00') {
+                        if ($storeRow['open_16'] < $now_time && $now_time < $storeRow['close_16']){
+                            $storeRow['is_close'] = 0;
+                        }
+                    }
+                    if ($storeRow['open_17'] != '00:00:00' || $storeRow['close_17'] != '00:00:00') {
+                        if ($storeRow['open_17'] < $now_time && $now_time < $storeRow['close_17']){
+                            $storeRow['is_close'] = 0;
+                        }
+                    }
+                    if ($storeRow['open_18'] != '00:00:00' || $storeRow['close_18'] != '00:00:00') {
+                        if ($storeRow['open_18'] < $now_time && $now_time < $storeRow['close_18']){
+                            $storeRow['is_close'] = 0;
+                        }
+                    }
+                    break;
+                case 0 :
+                    if ($storeRow['open_19'] != '00:00:00' || $storeRow['close_19'] != '00:00:00') {
+                        if ($storeRow['open_19'] < $now_time && $now_time < $storeRow['close_19']){
+                            $storeRow['is_close'] = 0;
+                        }
+                    }
+                    if ($storeRow['open_20'] != '00:00:00' || $storeRow['close_20'] != '00:00:00') {
+                        if ($storeRow['open_20'] < $now_time && $now_time < $storeRow['close_20']){
+                            $storeRow['is_close'] = 0;
+                        }
+                    }
+                    if ($storeRow['open_21'] != '00:00:00' || $storeRow['close_21'] != '00:00:00') {
+                        if ($storeRow['open_21'] < $now_time && $now_time < $storeRow['close_21']){
+                            $storeRow['is_close'] = 0;
+                        }
+                    }
+                    break;
+                default :
+                    $storeRow['is_close'] = 1;
+            }
+            //garfunkel add
+            if($storeRow['store_is_close'] != 0){
+                $storeRow['is_close'] = 1;
+            }
+
+            $distance = getDistance($lat,$lng,$storeRow['lat'],$storeRow['long']);
+            if($distance < $storeRow['delivery_radius']) {
+                if ($storeRow['is_close'] == 0) {
+                    $allClose = false;
+                    $openArr[] = $storeRow;
+                } else {
+                    $closeArr[] = $storeRow;
+                }
+            }
+        }
+        $sub_recommend['shop_list'] = array_merge($openArr,$closeArr);
+        $sub_recommend['has_more'] = false;
+
+        return $sub_recommend;
     }
     
 }
