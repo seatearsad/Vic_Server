@@ -129,7 +129,7 @@ class IndexAction extends BaseAction
             $storeList = D('Shop_category_relation')->where(array('cat_id'=>$v['cat_id']))->order('store_sort desc')->select();
             $allClose = true;
             foreach ($storeList as $store){
-                $storeRow = D('Merchant_store')->field('st.*,sh.background')->join('as st left join ' . C('DB_PREFIX') . 'merchant_store_shop sh on st.store_id = sh.store_id ')->where(array('st.store_id' => $store['store_id']))->find();
+                $storeRow = D('Merchant_store')->field('st.*,sh.background,sh.delivery_radius')->join('as st left join ' . C('DB_PREFIX') . 'merchant_store_shop sh on st.store_id = sh.store_id ')->where(array('st.store_id' => $store['store_id']))->find();
                 $storeMemo['store_id'] = $storeRow['store_id'];
                 $storeMemo['name'] = lang_substr($storeRow['name'], C('DEFAULT_LANG'));
                 if($storeRow['background'] && $storeRow['background'] != '') {
@@ -272,11 +272,14 @@ class IndexAction extends BaseAction
                     $storeMemo['is_close'] = 1;
                 }
 
-                if($storeMemo['is_close'] == 0){
-                    $allClose = false;
-                    $openArr[] = $storeMemo;
-                }else{
-                    $closeArr[] = $storeMemo;
+                $distance = getDistance($lat,$long,$storeRow['lat'],$storeRow['long']);
+                if($distance < $storeRow['delivery_radius']*1000) {
+                    if ($storeMemo['is_close'] == 0) {
+                        $allClose = false;
+                        $openArr[] = $storeMemo;
+                    } else {
+                        $closeArr[] = $storeMemo;
+                    }
                 }
             }
             $sub_recommend['info'] = array_slice(array_merge($openArr,$closeArr),0,5);
@@ -304,15 +307,6 @@ class IndexAction extends BaseAction
         $cat_id = intval($_POST['cate_id']);
         $cat_fid = intval($_POST['category']);
 
-        $key = '';
-        $where = array('deliver_type' => $deliver_type, 'order' => $order, 'lat' => $lat, 'long' => $long, 'cat_id' => $cat_id, 'cat_fid' => $cat_fid, 'page' => $page,'limit'=>$limit);
-        if($_POST['keyword']){
-            $key = $_POST['keyword'];
-            $key && $where['key'] = $key;
-            $shop_list = D('Merchant_store_shop')->get_list_arrange($where,1,1,$limit,$page,$lat,$long);
-        }else{
-            $shop_list = D('Merchant_store_shop')->get_list_arrange($where,3,1,$limit,$page,$lat,$long);
-        }
 
         if($cat_id == 0)
             $cat_where['cat_id'] = $cat_fid;
@@ -321,6 +315,21 @@ class IndexAction extends BaseAction
 
         $category = D('Shop_category')->field(true)->where(array('cat_id'=>$cat_fid))->find();
         $result['cat_name'] = lang_substr($category['cat_name'], C('DEFAULT_LANG'));
+
+        $where = array('deliver_type' => $deliver_type, 'order' => $order, 'lat' => $lat, 'long' => $long, 'cat_id' => $cat_id, 'cat_fid' => $cat_fid, 'page' => $page, 'limit' => $limit);
+        if($category['cat_type'] == 1){
+            $shop_list = D('Merchant_store_shop')->get_list_arrange($where,1,2,$limit,$page,$lat,$long);
+        }else {
+            $key = '';
+            if ($_POST['keyword']) {
+                $key = $_POST['keyword'];
+                $key && $where['key'] = $key;
+                $shop_list = D('Merchant_store_shop')->get_list_arrange($where, 1, 1, $limit, $page, $lat, $long);
+            } else {
+                $shop_list = D('Merchant_store_shop')->get_list_arrange($where, 3, 1, $limit, $page, $lat, $long);
+            }
+
+        }
 
         if(!$shop_list['list']){
             $shop_list['list'] = array();

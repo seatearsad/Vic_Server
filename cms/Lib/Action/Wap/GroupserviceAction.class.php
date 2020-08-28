@@ -72,15 +72,15 @@ class GroupserviceAction extends BaseAction{
 			$cat_id = 0;
 			$cat_fid = 0;
 
-            $city_id = D('Store')->geocoderGoogle($lat,$long);
-            $city_id = $city_id ? $city_id : 0;
-
 			if($_GET['lat'] != 'null' && $_GET['lat'] != 'undefined' && $_GET['long'] != 'null' && $_GET['long'] != 'undefined'){
 				$lat = $_GET['lat'];
 				$long = $_GET['long'];
 			}
 
-			$where = array('deliver_type' => $deliver_type, 'order' => $order, 'lat' => $lat, 'long' => $long, 'cat_id' => $cat_id, 'cat_fid' => $cat_fid, 'page' => $page);
+            $city_id = D('Store')->geocoderGoogle($lat,$long);
+            $city_id = $city_id ? $city_id : 0;
+
+            $where = array('deliver_type' => $deliver_type, 'order' => $order, 'lat' => $lat, 'long' => $long, 'cat_id' => $cat_id, 'cat_fid' => $cat_fid, 'page' => $page);
 			$key && $where['key'] = $key;
 
 			$lists = D('Merchant_store_shop')->get_list_by_option($where,3);
@@ -747,8 +747,10 @@ class GroupserviceAction extends BaseAction{
                     $storeMemo['is_close'] = 1;
                 }
 
-                $distance = getDistance($lat,$lng,$storeMemo['lat'],$storeMemo['long']);
-                if($distance < $storeRow['delivery_radius']) {
+                $distance = getDistance($lat,$lng,$storeRow['lat'],$storeRow['long']);
+                $storeMemo['distance'] = $distance;
+                $storeMemo['delivery_radius'] = $storeRow['delivery_radius'];
+                if($distance < $storeRow['delivery_radius']*1000) {
                     if ($storeMemo['is_close'] == 0) {
                         $allClose = false;
                         $openArr[] = $storeMemo;
