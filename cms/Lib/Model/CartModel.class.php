@@ -59,14 +59,6 @@ class CartModel extends Model
 
         $goodList = array();
 
-        //garfunkel获取减免配送费的活动
-        $eventList = D('New_event')->getEventList(1,3);
-        $delivery_coupon = "";
-        if(count($eventList) > 0) {
-            foreach ($eventList as $event) {
-                $delivery_coupon = D('New_event_coupon')->where(array('event_id' => $event['id']))->find();
-            }
-        }
         //获取用户默认地址
         $address = D('Store')->getDefaultAdr($uid);
 
@@ -86,6 +78,16 @@ class CartModel extends Model
             //$allmoney += $good['price']*$v['num'];
             if ($resid != $good['store_id']){
                 $store = D('Store')->get_store_by_id($good['store_id']);
+
+                //garfunkel获取减免配送费的活动
+                $eventList = D('New_event')->getEventList(1,3,$store['city_id']);
+                $delivery_coupon = "";
+                if(count($eventList) > 0) {
+                    foreach ($eventList as $event) {
+                        $delivery_coupon = D('New_event_coupon')->where(array('event_id' => $event['id']))->find();
+                    }
+                }
+
                 $resid = $good['store_id'];
 
                 $store['free_delivery'] = 0;
@@ -235,7 +237,7 @@ class CartModel extends Model
         //获取配送费
         $delivey_fee = D('Store')->CalculationDeliveryFee($uid,$sid);
         //garfunkel获取减免配送费的活动
-        $eventList = D('New_event')->getEventList(1,3);
+        $eventList = D('New_event')->getEventList(1,3,$store['city_id']);
         $delivery_coupon = "";
         if(count($eventList) > 0) {
             foreach ($eventList as $event) {

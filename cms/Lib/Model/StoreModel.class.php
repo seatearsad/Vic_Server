@@ -281,7 +281,7 @@ class StoreModel extends Model
         }
 
         //garfunkel获取减免配送费的活动
-        $eventList = D('New_event')->getEventList(1,3);
+        $eventList = D('New_event')->getEventList(1,3,$store['city_id']);
         $delivery_coupon = "";
         if(count($eventList) > 0) {
             foreach ($eventList as $event) {
