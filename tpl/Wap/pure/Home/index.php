@@ -20,7 +20,7 @@
         <link rel="manifest" href="/manifest.json">
     </if>
     <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/common.css"/>
-    <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/index.css"/>
+    <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/index.css?v=1.2"/>
     <link rel="stylesheet" type="text/css" href="{pigcms{$static_public}js/mobileSelect/mobileSelect.css"/>
     <script type="text/javascript" src="{pigcms{:C('JQUERY_FILE_190')}" charset="utf-8"></script>
     <script type="text/javascript" src="{pigcms{$static_path}js/idangerous.swiper.min.js" charset="utf-8"></script>
