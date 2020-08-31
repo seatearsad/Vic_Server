@@ -323,6 +323,7 @@ class StoreModel extends Model
                 $t_event['use_price'] = $delivery_coupon['use_price'];
                 $t_event['discount'] = $delivery_coupon['discount'];
                 $t_event['miles'] = $delivery_coupon['limit_day']*1000;
+                $t_event['desc'] = $delivery_coupon['desc'];
 
                 $store['event'] = $t_event;
 

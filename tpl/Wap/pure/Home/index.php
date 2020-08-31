@@ -33,7 +33,7 @@
         var address_url = "{pigcms{:U('Home/address')}";
         var static_url = "{pigcms{$static_public}";
     </script>
-    <script type="text/javascript" src="{pigcms{$static_path}js/index.js" charset="utf-8"></script>
+    <script type="text/javascript" src="{pigcms{$static_path}js/index.js?v=1.2" charset="utf-8"></script>
     <script type="text/javascript" src="{pigcms{$static_public}js/lang/{pigcms{:C('DEFAULT_LANG')}.js" charset="utf-8"></script>
     <script type="text/javascript" src="{pigcms{$static_path}js/common.js" charset="utf-8"></script>
     <script type="text/javascript" src="{pigcms{$static_public}js/mobileSelect/mobileSelect.js"></script>
