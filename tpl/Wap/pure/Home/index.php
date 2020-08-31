@@ -31,6 +31,7 @@
         var group_index_sort_url="{pigcms{:U('Home/group_index_sort')}";
         <if condition="$user_long_lat">var user_long = "{pigcms{$user_long_lat.long}",user_lat = "{pigcms{$user_long_lat.lat}";<else/>var user_long = '0',user_lat  = '0';</if>var app_version="{pigcms{$_REQUEST['app_version']}"
         var address_url = "{pigcms{:U('Home/address')}";
+        var static_url = "{pigcms{$static_public}";
     </script>
     <script type="text/javascript" src="{pigcms{$static_path}js/index.js" charset="utf-8"></script>
     <script type="text/javascript" src="{pigcms{$static_public}js/lang/{pigcms{:C('DEFAULT_LANG')}.js" charset="utf-8"></script>

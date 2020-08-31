@@ -201,6 +201,9 @@ function getRecommendList(){
                 var html = '';
                 for (var i = 0; i < result.sub_nav.length; ++i) {
                     var nav = result.sub_nav[i];
+                    if(nav.image == ""){
+                    	nav.image =static_url+"images/icon_category_default.png";
+					}
                     html += "<a href='" + window.location.pathname + "?c=Shop&a=index&cat=" + nav.fid + '-' + nav.id + "'>" +
                         "<li>" +
                         "<div>" +
