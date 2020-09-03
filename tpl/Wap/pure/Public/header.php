@@ -13,6 +13,11 @@
         background-color: #ffffff;
         position: fixed;
         z-index: 999;
+        left: 0;
+        right: 0;
+        max-width: 640px;
+        min-width: 320px;
+        margin: 0 auto;
     }
     #search_label{
         width: 100%;
@@ -21,6 +26,11 @@
         position: fixed;
         display: none;
         z-index: 999;
+        left: 0;
+        right: 0;
+        max-width: 640px;
+        min-width: 320px;
+        margin: 0 auto;
     }
     #header_menu{
         display: flex;
@@ -212,6 +222,9 @@
         width: 100%;
         height: 60px;
         display: flex;
+        max-width: 640px;
+        min-width: 320px;
+        margin: 0 auto;
     }
     .down_close{
         width: 10%;

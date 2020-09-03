@@ -38,6 +38,14 @@
     .searchBtn.so{
         background-color: #ffa52d;
     }
+    #pageLoadTipShade,#pageAddress,#pageLoadTipBox,.searchHeader{
+        max-width: 640px;
+        min-width: 320px;
+        margin: 0 auto;
+    }
+    .searchTxt{
+        width: 90%;
+    }
 </style>
 <body>
 <div id="pageLoadTipShade" class="pageLoadTipBg">
@@ -55,7 +63,7 @@
             <input type="text" id="pageAddressSearchTxt" class="searchTxt" placeholder="{pigcms{:L('_PLEASE_INPUT_ADDRESS_')}" autocomplete="off"/>
             <div class="delIco" id="pageAddressSearchDel"><div></div></div>
         </div>
-        <div id="pageAddressSearchBtn" class="searchBtn">{pigcms{:L('_SEARCH_TXT_')}</div>
+        <div id="pageAddressSearchBtn" class="searchBtn">&nbsp;</div>
     </div>
     <div id="pageAddressContent" class="searchAddressList">
         <div id="pageAddressLocationList">
@@ -146,11 +154,11 @@
 
         if(user_long == "0" || $('#pageAddressHeader').hasClass('mustHideBack')){
             $('#pageAddressHeader').addClass('hideBack');
-            $('#pageAddressSearchTxt').width(window_width-74-32-6);
+            //$('#pageAddressSearchTxt').width(window_width-74-32-6);
             $('#pageAddressHeader').removeClass('mustHideBack');
         }else{
             $('#pageAddressHeader').removeClass('hideBack');
-            $('#pageAddressSearchTxt').width(window_width-124-32);
+            //$('#pageAddressSearchTxt').width(window_width-124-32);
         }
         addressGeocoder = true;
 

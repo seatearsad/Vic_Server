@@ -794,6 +794,9 @@
     .wrapper-list{
         padding-top: 70px;
         margin-bottom: 70px;
+        max-width: 640px;
+        min-width: 320px;
+        margin: 0 auto;
     }
     .user_address{
         width: 100%;

@@ -209,6 +209,9 @@
             .main{
                 width: 100%;
                 padding-top: 60px;
+                max-width: 640px;
+                min-width: 320px;
+                margin: 0 auto;
             }
             input.mt[type="radio"]:checked{
                 background-color: #ffa52d;

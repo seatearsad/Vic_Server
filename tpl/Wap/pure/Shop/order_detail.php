@@ -19,6 +19,9 @@
     .main{
         width: 100%;
         padding-top: 60px;
+        max-width: 640px;
+        min-width: 320px;
+        margin: 0 auto;
     }
     .gray_line{
         width: 100%;
@@ -33,6 +36,7 @@
         height: 30px;
         line-height: 30px;
         margin-top: 15px;
+        position: relative;
     }
     .this_nav span{
         width: 50px;

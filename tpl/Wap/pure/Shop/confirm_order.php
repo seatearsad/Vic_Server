@@ -490,7 +490,7 @@ var motify = {
 $(document).ready(function () {
 	$(window).scrollTop(1);
 	setTimeout(function(){
-		$('div.fixed').css({'bottom':'0px','left':'0px'});
+		$('div.fixed').css({'bottom':'0px','left':'0px','right':'0px','max-width':'640px','margin':'0 auto'});
 	},1000);
     var maxYear = '{pigcms{$maxYear}';
     var maxMouth = '{pigcms{$maxMouth}';

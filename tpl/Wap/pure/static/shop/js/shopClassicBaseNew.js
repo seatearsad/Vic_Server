@@ -527,7 +527,7 @@ function showAddress(){
 	
 	if($.cookie('userLocationName') && $.cookie('userLocationLong') && $.cookie('userLocationLat')){
 		$('#pageAddressHeader').removeClass('hideBack');
-		$('#pageAddressSearchTxt').width(window_width-124-32);
+		//$('#pageAddressSearchTxt').width(window_width-124-32);
 		$('#pageAddressNowLocation').show().find('.content dd').data({'long':$.trim($.cookie('userLocationLong')),'lat':$.cookie('userLocationLat'),'name':$.cookie('userLocationName')}).find('.name').html($.cookie('userLocationName'));
 	}else{
 		$('#pageAddressNowLocation').remove();

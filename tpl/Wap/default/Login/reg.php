@@ -24,6 +24,11 @@
         font-family: Helvetica;
         -moz-osx-font-smoothing: grayscale;
     }
+    body{
+        max-width: 640px;
+        min-width: 320px;
+        margin: 0 auto;
+    }
     .sign_title{
         margin-top: 50px;
         text-align: center;

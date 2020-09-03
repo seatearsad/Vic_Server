@@ -622,11 +622,11 @@ function showAddress(){
 	
 	if(user_long == "0" || $('#pageAddressHeader').hasClass('mustHideBack')){
 		$('#pageAddressHeader').addClass('hideBack');
-		$('#pageAddressSearchTxt').width(window_width-74-32-6);
+		//$('#pageAddressSearchTxt').width(window_width-74-32-6);
 		$('#pageAddressHeader').removeClass('mustHideBack');
 	}else{
 		$('#pageAddressHeader').removeClass('hideBack');
-		$('#pageAddressSearchTxt').width(window_width-124-32);
+		//$('#pageAddressSearchTxt').width(window_width-124-32);
 	}
 	addressGeocoder = true;
 

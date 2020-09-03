@@ -48,6 +48,14 @@
         .searchBtn.so{
             background-color: #ffa52d;
         }
+        #pageLoadTipShade,#pageAddress,#pageLoadTipBox,.searchHeader{
+            max-width: 640px;
+            min-width: 320px;
+            margin: 0 auto;
+        }
+        .searchTxt{
+            width: 90%;
+        }
     </style>
 	<body>
 		<div id="pageList" class="pageDiv" <if condition="$config['shop_show_footer']">style="padding-bottom:56px;"</if>>
@@ -276,7 +284,7 @@
 					<input type="text" id="pageAddressSearchTxt" class="searchTxt" placeholder="{pigcms{:L('_PLEASE_INPUT_ADDRESS_')}" autocomplete="off"/>
 					<div class="delIco" id="pageAddressSearchDel"><div></div></div>
 				</div>
-				<div id="pageAddressSearchBtn" class="searchBtn">{pigcms{:L('_SEARCH_TXT_')}</div>
+				<div id="pageAddressSearchBtn" class="searchBtn"></div>
 			</div>
 			<div id="pageAddressContent" class="searchAddressList">
 				<div id="pageAddressLocationList">

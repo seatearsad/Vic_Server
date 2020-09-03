@@ -26,6 +26,9 @@
         #container{
             width: 100%;
             padding-top: 60px;
+            max-width: 640px;
+            min-width: 320px;
+            margin: 0 auto;
         }
         .cate_left,.cate_right,.sub_left,.sub_right{
             background-image: url("./tpl/Static/blue/images/new/black_arrow.png");

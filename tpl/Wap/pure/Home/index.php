@@ -77,7 +77,7 @@
                 return false;
             });
             //var banner_height	=	screen.width/320;
-            var banner_height	=	$(window).width()/320;
+            var banner_height	=	$('#container').width()*0.96/320;
             banner_height	=	 Math.ceil(banner_height*119);
             $("#banner_hei").css('height',banner_height);
         });
@@ -105,6 +105,9 @@
         #container{
             width: 100%;
             padding-top: 60px;
+            max-width: 640px;
+            min-width: 320px;
+            margin: 0 auto;
         }
         .cate_left,.cate_right{
             background-image: url("./tpl/Static/blue/images/new/black_arrow.png");
