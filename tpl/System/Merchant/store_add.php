@@ -68,6 +68,13 @@
 				</td>
 			</tr>
             <tr>
+                <th width="80">支付加密</th>
+                <td>
+                    <span class="cb-enable"><label class="cb-enable selected"><span>加密</span><input type="radio" name="pay_secret" value="1" checked="checked" /></label></span>
+                    <span class="cb-disable"><label class="cb-disable"><span>不加密</span><input type="radio" name="pay_secret" value="0" /></label></span>
+                </td>
+            </tr>
+            <tr>
                 <th width="80">税费</th>
                 <td><input type="text" class="input fl" name="tax_num" size="5" value="5" validate="required:true,number:true,maxlength:6" />%</td>
             </tr>

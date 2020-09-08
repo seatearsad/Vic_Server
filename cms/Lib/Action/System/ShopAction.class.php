@@ -160,6 +160,42 @@ class ShopAction extends BaseAction
         }
     }
 
+    public function cat_pay(){
+        if($_POST){
+            $cat_id = $_POST['cat_id'];
+            $cat_fid = $_POST['cat_fid'];
+
+            if($cat_id && $cat_id != 0) {
+                if ($cat_fid == 0) {
+                    $where['cat_fid'] = $cat_id;
+                }else{
+                    $where['cat_id'] = $cat_id;
+                }
+                $list = D('Shop_category_relation')->field('store_id')->where($where)->select();
+                $all_list = array();
+                foreach($list as $v){
+                    $all_list[] = intval($v['store_id']);
+                }
+                //var_dump($all_list);die();
+                D('Merchant_store')->where(array('store_id'=>array('in',$all_list)))->save(array('pay_secret'=>$_POST['pay_secret']));
+                $this->success('编辑成功！');
+            }else{
+                $this->error('分类不存在！');
+            }
+        }else {
+            $parentid = isset($_GET['parentid']) ? intval($_GET['parentid']) : 0;
+            $database_shop_category = D('Shop_category');
+            $condition_now_shop_category['cat_id'] = intval($_GET['cat_id']);
+            $now_category = $database_shop_category->field(true)->where($condition_now_shop_category)->find();
+            if (empty($now_category)) {
+                $this->frame_error_tips('没有找到该分类信息！');
+            }
+            $this->assign('parentid', $parentid);
+            $this->assign('now_category', $now_category);
+            $this->display();
+        }
+    }
+
     public function cat_amend()
     {
         if (IS_POST) {
