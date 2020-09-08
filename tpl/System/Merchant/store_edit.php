@@ -68,6 +68,13 @@
 				</td>
 			</tr>
             <tr>
+                <th width="80">支付加密</th>
+                <td>
+                    <span class="cb-enable"><label class="cb-enable <if condition="$store['pay_secret'] eq 1">selected</if>"><span>加密</span><input type="radio" name="pay_secret" value="1" <if condition="$store['pay_secret'] eq 1">checked="checked"</if> /></label></span>
+                    <span class="cb-disable"><label class="cb-disable <if condition="$store['pay_secret'] eq 0">selected</if>"><span>不加密</span><input type="radio" name="pay_secret" value="0" <if condition="$store['pay_secret'] eq 0">checked="checked"</if>/></label></span>
+                </td>
+            </tr>
+            <tr>
                 <th width="80">{pigcms{:L('_BACK_TAX_')}</th>
                 <td><input type="text" class="input fl" name="tax_num" size="5" value="{pigcms{$store['tax_num']}" validate="required:true,number:true,maxlength:6" />%</td>
             </tr>

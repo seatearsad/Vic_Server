@@ -36,8 +36,13 @@ class MonerisPay
      * @return mixed
      */
     public function payment($data,$uid,$from_type){
+        $order = explode("_",$data['order_id']);
+        $order_id = $order[1];
+        $order = D('Shop_order')->where(array('order_id'=>$order_id))->find();
+        $store = D('Merchant_store')->where(array('store_id'=>$order['store_id']))->find();
+
         //判断金额还需在api user_card_default 方法中修改
-        if($data['order_type'] == 'recharge' || $data['charge_total'] >= 251){
+        if($data['order_type'] == 'recharge' || $data['charge_total'] >= 251 || $store['pay_secret'] == 1){
             return $this->mpi_transaction($data,$uid,$from_type);
         }
 
@@ -55,8 +60,6 @@ class MonerisPay
         }
 
         //或者这张订单之前的错误回复
-        $order = explode("_",$data['order_id']);
-        $order_id = $order[1];
         $error_list = D('Pay_moneris_record_error')->field(true)->where(array('order_id'=>$order_id))->select();
         $count = count($error_list);
         if($count > 0)
