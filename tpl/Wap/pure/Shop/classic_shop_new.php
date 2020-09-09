@@ -489,8 +489,8 @@
 							<div class="desc"></div>
 						</div>
                         <div id="shopDetailPageContent">
-                            <!--div class="title">{pigcms{:L('_PRODUCT_DESC_')}</div-->
-                            <div class="content">{pigcms{:L('_CONTENT_TXT_')}</div>
+                            <!--div class="title">{pigcms{:L('_PRODUCT_DESC_')}</div>
+                            <div class="content">{pigcms{:L('_CONTENT_TXT_')}</div-->
                         </div>
 						<div id="shopDetailPageFormat">{pigcms{:L('_PRODUCT_STOCK_')}</div>
 						<div id="shopDetailPageLabel">
