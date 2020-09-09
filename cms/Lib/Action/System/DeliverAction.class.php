@@ -1275,20 +1275,20 @@ class DeliverAction extends BaseAction {
     public function e_call(){
         if(isset($_POST['city_id'])) {
             $city_id = $_POST['city_id'];
-//            $user_list = D('Deliver_user')->field(true)->where(array('status' => 1, 'work_status' => 1,'city_id'=>$city_id))->order('uid asc')->select();
-//            foreach ($user_list as $deliver) {
-//                if ($deliver['device_id'] && $deliver['device_id'] != '') {
-//                    $message = 'Tutti are short on hands now! Please log in to your account and start to Accept Order! Tutti thanks your help!';
-//                    Sms::sendMessageToGoogle($deliver['device_id'], $message, 3);
-//                } else {
-//                    $sms_data['uid'] = 0;
-//                    $sms_data['mobile'] = $deliver['phone'];
-//                    $sms_data['sendto'] = 'deliver';
-//                    $sms_data['tplid'] = 247163;
-//                    $sms_data['params'] = [];
-//                    Sms::sendSms2($sms_data);
-//                }
-//            }
+            $user_list = D('Deliver_user')->field(true)->where(array('status' => 1, 'work_status' => 1,'city_id'=>$city_id))->order('uid asc')->select();
+            foreach ($user_list as $deliver) {
+                if ($deliver['device_id'] && $deliver['device_id'] != '') {
+                    $message = 'Tutti are short on hands now! Please log in to your account and start to Accept Order! Tutti thanks your help!';
+                    Sms::sendMessageToGoogle($deliver['device_id'], $message, 3);
+                } else {
+                    $sms_data['uid'] = 0;
+                    $sms_data['mobile'] = $deliver['phone'];
+                    $sms_data['sendto'] = 'deliver';
+                    $sms_data['tplid'] = 247163;
+                    $sms_data['params'] = [];
+                    Sms::sendSms2($sms_data);
+                }
+            }
             $curr_time = time();
             D('Area')->where(array('area_id'=>$city_id))->save(array('urgent_time'=>$curr_time));
 
