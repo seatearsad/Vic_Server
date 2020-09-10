@@ -804,7 +804,7 @@ function showGood(shop_id,product_id){
 				$('#shopDetailPageContent .content').html(result.des).show();
 				$('#shopDetailPageContent').show();
 			}else if(nowShop.store.delivery){
-				$('#shopDetailPageContent .content').html(getLangStr('_REMINDER_STRING_')).show();
+				//$('#shopDetailPageContent .content').html(getLangStr('_REMINDER_STRING_')).show();
 				$('#shopDetailPageContent').show();
 			}else{
 				$('#shopDetailPageContent').hide();

@@ -413,8 +413,8 @@
                             <div id="shopDetailPageLabelBox"></div>
                         </div>
                         <div id="shopDetailPageContent">
-                            <div class="title">{pigcms{:L('_PRODUCT_DESC_')}</div>
-                            <div class="content">{pigcms{:L('_CONTENT_TXT_')}</div>
+                            <!--div class="title">{pigcms{:L('_PRODUCT_DESC_')}</div>
+                            <div class="content">{pigcms{:L('_CONTENT_TXT_')}</div-->
 						</div>
 					</div>
 				</div>

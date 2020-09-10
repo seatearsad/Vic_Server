@@ -1240,7 +1240,7 @@
         </div>
         <if condition="$order_info['order_type'] != 'recharge'">
             <div id="tip_label" class="normal-fieldset">
-                <dl class="list" style="border-bottom: 0;">
+                <dl class="list" style="border-bottom: 0;position: relative;">
                     <div class="tip_title">
                         <div>{pigcms{:L('_TIP_TXT_')}</div>
                         <div id="tip_list">
