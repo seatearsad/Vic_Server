@@ -229,111 +229,119 @@ class UserAction extends BaseAction {
     }
 
     public function export() {
-    	set_time_limit(0);
-    	require_once APP_PATH . 'Lib/ORG/phpexcel/PHPExcel.php';
-    	$title = 'Customer Summary';
-		$objExcel = new PHPExcel();
-		$objProps = $objExcel->getProperties();
-		// 设置文档基本属性
-		$objProps->setCreator($title);
-		$objProps->setTitle($title);
-		$objProps->setSubject($title);
-		$objProps->setDescription($title);
+        if(!$_GET['begin_time'] || !$_GET['end_time']){
+            $this->error("请选择时间段");
+        }else {
+            set_time_limit(0);
+            require_once APP_PATH . 'Lib/ORG/phpexcel/PHPExcel.php';
+            $title = 'Customer Summary';
+            $objExcel = new PHPExcel();
+            $objProps = $objExcel->getProperties();
+            // 设置文档基本属性
+            $objProps->setCreator($title);
+            $objProps->setTitle($title);
+            $objProps->setSubject($title);
+            $objProps->setDescription($title);
 
-		// 设置当前的sheet
+            // 设置当前的sheet
+            $begin_time = strtotime($_GET['begin_time']);
+            $end_time = strtotime($_GET['end_time']);
 
-		$database_user = D('User');
-		$count_user = $database_user->count();
+            $where['add_time'] = array('between',array($begin_time,$end_time));
 
-		$length = ceil($count_user/1000);
-		for ($i = 0; $i < $length; $i++) {
-			$i && $objExcel->createSheet();
-			$objExcel->setActiveSheetIndex($i);
+            $database_user = D('User');
+            $count_user = $database_user->where($where)->count();
 
-			$objExcel->getActiveSheet()->setTitle('第' . ($i+1) . '个一千个用户');
-			$objActSheet = $objExcel->getActiveSheet();
+            $length = ceil($count_user / 1000);
+            for ($i = 0; $i < $length; $i++) {
+                $i && $objExcel->createSheet();
+                $objExcel->setActiveSheetIndex($i);
 
-			$objActSheet->setCellValue('A1', '用户ID');
-			$objActSheet->setCellValue('B1', '昵称');
-			$objActSheet->setCellValue('C1', '真实姓名');
-			$objActSheet->setCellValue('D1', '手机号');
-			$objActSheet->setCellValue('E1', '性别 (男； 女； 其他)');
-			$objActSheet->setCellValue('F1', '省份');
-			$objActSheet->setCellValue('G1', '城市');
-			$objActSheet->setCellValue('H1', 'QQ');
-			$objActSheet->setCellValue('I1', '注册时间');
-			$objActSheet->setCellValue('J1', '注册IP');
-			$objActSheet->setCellValue('K1', '最后登录时间');
-			$objActSheet->setCellValue('L1', '最后登录IP');
-			$objActSheet->setCellValue('M1', $this->config['score_name']);
-			$objActSheet->setCellValue('N1', '余额');
-			$objActSheet->setCellValue('O1', '不可提现的余额');
-			$objActSheet->setCellValue('P1', '是否手机认证');
-			$objActSheet->setCellValue('Q1', '是否关注公众号');
-			$objActSheet->setCellValue('R1', '账号是否正常');
+                //$objExcel->getActiveSheet()->setTitle('第' . ($i + 1) . '个一千个用户');
+                $objExcel->getActiveSheet()->setTitle( strval($i*1000+1).' - '.strval($i*1000+1000));
+                $objActSheet = $objExcel->getActiveSheet();
+
+                $objActSheet->setCellValue('A1', '用户ID');
+                $objActSheet->setCellValue('B1', '昵称');
+                $objActSheet->setCellValue('C1', ' ');
+                $objActSheet->setCellValue('D1', '手机号');
+                $objActSheet->setCellValue('E1', 'Email');
+//                $objActSheet->setCellValue('F1', '省份');
+//                $objActSheet->setCellValue('G1', '城市');
+//                $objActSheet->setCellValue('H1', 'QQ');
+                $objActSheet->setCellValue('F1', '注册时间');
+//                $objActSheet->setCellValue('J1', '注册IP');
+//                $objActSheet->setCellValue('K1', '最后登录时间');
+//                $objActSheet->setCellValue('L1', '最后登录IP');
+//                $objActSheet->setCellValue('M1', $this->config['score_name']);
+//                $objActSheet->setCellValue('N1', '余额');
+//                $objActSheet->setCellValue('O1', '不可提现的余额');
+//                $objActSheet->setCellValue('P1', '是否手机认证');
+//                $objActSheet->setCellValue('Q1', '是否关注公众号');
+//                $objActSheet->setCellValue('R1', '账号是否正常');
 
 
+                $user_list = $database_user->field(true)->where($where)->limit($i * 1000 . ',1000')->order('add_time desc')->select();
+                if (!empty($user_list)) {
+                    import('ORG.Net.IpLocation');
+                    $IpLocation = new IpLocation();
+                    $index = 2;
+                    foreach ($user_list as $value) {
 
+                        $objActSheet->setCellValueExplicit('A' . $index, $value['uid']);
+                        $objActSheet->setCellValueExplicit('B' . $index, $value['nickname']);
+                        $objActSheet->setCellValueExplicit('C' . $index, $value['truename']);
+                        $objActSheet->setCellValueExplicit('D' . $index, $value['phone'] . ' ');
+                        $objActSheet->setCellValueExplicit('E' . $index, $value['email']);
+                        //$sex = $value['sex'] == 0 ? '未知' : ($value['sex'] == 1 ? '男' : '女');
+                        //$objActSheet->setCellValueExplicit('E' . $index, $sex);
 
-			$user_list = $database_user->field(true)->limit($i * 1000 . ',1000')->select();
-			if (!empty($user_list)) {
-				import('ORG.Net.IpLocation');
-				$IpLocation = new IpLocation();
-				$index = 2;
-				foreach ($user_list as $value) {
+//                        $objActSheet->setCellValueExplicit('F' . $index, $value['province']);
+//                        $objActSheet->setCellValueExplicit('G' . $index, $value['city']);
+//                        $objActSheet->setCellValueExplicit('H' . $index, $value['qq'] . ' ');
+                        $objActSheet->setCellValueExplicit('F' . $index, date('Y-m-d H:i:s', $value['add_time']));
 
-					$objActSheet->setCellValueExplicit('A' . $index, $value['uid']);
-					$objActSheet->setCellValueExplicit('B' . $index, $value['nickname']);
-					$objActSheet->setCellValueExplicit('C' . $index, $value['truename']);
-					$objActSheet->setCellValueExplicit('D' . $index, $value['phone'] . ' ');
-					$sex = $value['sex'] == 0 ? '未知' : ($value['sex'] == 1 ? '男' : '女');
-					$objActSheet->setCellValueExplicit('E' . $index, $sex);
+//                        $last_location = $IpLocation->getlocation(long2ip($value['add_ip']));
+//                        $add_ip = iconv('GBK', 'UTF-8', $last_location['country']);
+//                        $objActSheet->setCellValueExplicit('J' . $index, $add_ip);
+//
+//                        $objActSheet->setCellValueExplicit('K' . $index, date('Y-m-d H:i:s', $value['last_time']));
+//
+//                        $last_location = $IpLocation->getlocation(long2ip($value['last_ip']));
+//                        $last_ip = iconv('GBK', 'UTF-8', $last_location['country']);
+//                        $objActSheet->setCellValueExplicit('L' . $index, $last_ip);
+//
+//                        $objActSheet->setCellValueExplicit('M' . $index, $value['score_count'] . ' ');
+//                        $objActSheet->setCellValueExplicit('N' . $index, $value['now_money'] . ' ');
+//                        $objActSheet->setCellValueExplicit('O' . $index, $value['score_recharge_moeny'] . ' ');
+//                        $is_check_phone = $value['is_check_phone'] == 0 ? '否' : '是';
+//                        $objActSheet->setCellValueExplicit('P' . $index, $is_check_phone);
+//                        $is_follow = $value['is_follow'] ? '是' : '否';
+//                        $objActSheet->setCellValueExplicit('Q' . $index, $is_follow);
+//                        $status = $value['status'] ? '正常' : '禁用';
+//                        $objActSheet->setCellValueExplicit('R' . $index, $status);
 
-					$objActSheet->setCellValueExplicit('F' . $index, $value['province']);
-					$objActSheet->setCellValueExplicit('G' . $index, $value['city']);
-					$objActSheet->setCellValueExplicit('H' . $index, $value['qq'] . ' ');
-					$objActSheet->setCellValueExplicit('I' . $index, date('Y-m-d H:i:s', $value['add_time']));
-
-					$last_location = $IpLocation->getlocation(long2ip($value['add_ip']));
-					$add_ip = iconv('GBK', 'UTF-8', $last_location['country']);
-					$objActSheet->setCellValueExplicit('J' . $index, $add_ip);
-
-					$objActSheet->setCellValueExplicit('K' . $index, date('Y-m-d H:i:s', $value['last_time']));
-
-					$last_location = $IpLocation->getlocation(long2ip($value['last_ip']));
-					$last_ip = iconv('GBK', 'UTF-8', $last_location['country']);
-					$objActSheet->setCellValueExplicit('L' . $index, $last_ip);
-
-					$objActSheet->setCellValueExplicit('M' . $index, $value['score_count'] . ' ');
-					$objActSheet->setCellValueExplicit('N' . $index, $value['now_money'] . ' ');
-					$objActSheet->setCellValueExplicit('O' . $index, $value['score_recharge_moeny'] . ' ');
-					$is_check_phone = $value['is_check_phone'] == 0 ? '否' : '是';
-					$objActSheet->setCellValueExplicit('P' . $index, $is_check_phone);
-					$is_follow = $value['is_follow'] ? '是' : '否';
-					$objActSheet->setCellValueExplicit('Q' . $index, $is_follow);
-					$status = $value['status'] ? '正常' : '禁用';
-					$objActSheet->setCellValueExplicit('R' . $index, $status);
-
-					$index++;
-				}
-			}
-			sleep(2);
-		}
-		//输出
-		$objWriter = new PHPExcel_Writer_Excel5($objExcel);
-		ob_end_clean();
-		header("Pragma: public");
-		header("Expires: 0");
-		header("Cache-Control:must-revalidate, post-check=0, pre-check=0");
-		header("Content-Type:application/force-download");
-		header("Content-Type:application/vnd.ms-execl");
-		header("Content-Type:application/octet-stream");
-		header("Content-Type:application/download");
-		header('Content-Disposition:attachment;filename="'.$title.'_' . date("Y-m-d h:i:sa", time()) . '.xls"');
-		header("Content-Transfer-Encoding:binary");
-		$objWriter->save('php://output');
-		exit();
-
+                        $index++;
+                    }
+                }
+                sleep(2);
+            }
+            //输出
+            $objWriter = new PHPExcel_Writer_Excel5($objExcel);
+            ob_end_clean();
+            header("Pragma: public");
+            header("Expires: 0");
+            header("Cache-Control:must-revalidate, post-check=0, pre-check=0");
+            header("Content-Type:application/force-download");
+            header("Content-Type:application/vnd.ms-execl");
+            header("Content-Type:application/octet-stream");
+            header("Content-Type:application/download");
+            //header('Content-Disposition:attachment;filename="' . $title . '_' . date("Y-m-d h:i:sa", time()) . '.xls"');
+            header('Content-Disposition:attachment;filename="' . $title . '_' . $_GET['begin_time'].' - '.$_GET['end_time']. '.xls"');
+            header("Content-Transfer-Encoding:binary");
+            $objWriter->save('php://output');
+            exit();
+        }
     }
 
     public function amend() {

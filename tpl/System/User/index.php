@@ -30,7 +30,7 @@
 							{pigcms{:L('_BACK_USER_BALANCE_')}：$<if condition="$user_balance['count']">{pigcms{$user_balance['count']}<else/>0</if>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 							{pigcms{:L('_BACK_ACT_U_BAL_')}：$<if condition="$user_balance['open']">{pigcms{$user_balance['open']}<else/>0</if>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 							{pigcms{:L('_BACK_BAN_U_BAL_')}：$<if condition="$user_balance['close']">{pigcms{$user_balance['close']}<else/>0</if>
-							<a href="{pigcms{:U('User/export')}" class="button" style="float:right;margin-right: 10px;">{pigcms{:L('_BACK_EXPORT_U_')}</a>
+							<a href="{pigcms{:U('User/export',array('begin_time'=>$_GET['begin_time'],'end_time'=>$_GET['end_time']))}" class="button" style="float:right;margin-right: 10px;">{pigcms{:L('_BACK_EXPORT_U_')}</a>
 						</form>
                         <if condition="$system_session['level'] neq 3">
                             City:
@@ -64,6 +64,7 @@
 								<th><a href="{pigcms{:U('User/index',array('sort'=>'uid'))}" style="color:blue;">ID</a></th>
 								<th>{pigcms{:L('_BACK_NICKNAME_')}</th>
 								<th>{pigcms{:L('_BACK_PHONE_NUM_')}</th>
+                                <th>Email</th>
 								<th><a href="{pigcms{:U('User/index',array('sort'=>'lastTime'))}" style="color:blue;">{pigcms{:L('_BACK_LAST_TIME_')}</a></th>
 								<th>{pigcms{:L('_BACK_LAST_LOC_')}</th>
 								<th class="textcenter"><a href="{pigcms{:U('User/index',array('sort'=>'money'))}" style="color:blue;">{pigcms{:L('_BACK_BALANCE_SHOW_')}</a></th>
@@ -85,6 +86,7 @@
 										<td>{pigcms{$vo.uid}</td>
 										<td>{pigcms{$vo.nickname}</td>
 										<td>{pigcms{$vo.phone}</td>
+                                        <td>{pigcms{$vo.email}</td>
 										<td>{pigcms{$vo.last_time|date='Y-m-d H:i:s',###}</td>
 										<td>{pigcms{$vo.last_ip_txt}</td>
 										<td class="textcenter">${pigcms{$vo.now_money|floatval=###}</td>
@@ -112,7 +114,7 @@
                                     <td class="textcenter pagebar">
                                         <span style="cursor: pointer" id="send_all">{pigcms{:L('_BACK_SEND_GROUP_CON_')}</span>
                                     </td>
-                                    <td class="textcenter pagebar" colspan="9">{pigcms{$pagebar}</td>
+                                    <td class="textcenter pagebar" colspan="11">{pigcms{$pagebar}</td>
                                 </tr>
 							<else/>
 								<tr><td class="textcenter red" colspan="11">{pigcms{:L('_BACK_EMPTY_')}</td></tr>

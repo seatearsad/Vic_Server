@@ -1776,6 +1776,23 @@ class ShopAction extends BaseAction
                         $goods['sort_id'] = $target_sort_id;
                         $goods['print_id'] = 0;
                         $target_goods_id = M('Shop_goods')->add($goods);
+                        //side_dish
+                        $dish_list = D('Side_dish')->where(array('goods_id'=>$source_goods_id))->select();
+                        if(count($dish_list) > 0){
+                            foreach ($dish_list as $dish){
+                                $old_dish_id = $dish['id'];
+                                unset($dish['id']);
+                                $dish['goods_id'] = $target_goods_id;
+                                $dish_id = D('Side_dish')->add($dish);
+                                $dish_value_list = D('Side_dish_value')->where(array('dish_id'=>$old_dish_id))->select();
+                                foreach ($dish_value_list as $dish_value){
+                                    unset($dish_value['id']);
+                                    $dish_value['dish_id'] = $dish_id;
+                                    D('Side_dish_value')->add($dish_value);
+                                }
+                            }
+                        }
+                        
                         $pro_map = $spec_map = $spec_value_map = array();
                         if ($goods['is_properties']) {
                             $properties = M('Shop_goods_properties')->field(true)->where(array('goods_id' => $source_goods_id))->select();
