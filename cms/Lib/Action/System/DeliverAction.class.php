@@ -960,6 +960,77 @@ class DeliverAction extends BaseAction {
         exit();
     }
 
+    public function export_deliver(){
+        $list = D('Deliver_user')->where(array('group'=>1))->select();
+        foreach ($list as &$deliver){
+            $area = D('Area')->where(array('area_id'=>$deliver['city_id']))->find();
+            $deliver['city_name'] = $area['area_name'];
+
+            $other = D('Deliver_img')->where(array('uid'=>$deliver['uid']))->find();
+            $deliver['sin_num'] = $other['sin_num'];
+
+            $deliver['status_name'] = $deliver['status'] == 1 ? 'Active' : 'Inactive';
+        }
+
+        require_once APP_PATH . 'Lib/ORG/phpexcel/PHPExcel.php';
+        $title = 'Deliver List';
+        $objExcel = new PHPExcel();
+        $objProps = $objExcel->getProperties();
+        // 设置文档基本属性
+        $objProps->setCreator($title);
+        $objProps->setTitle($title);
+        $objProps->setSubject($title);
+        $objProps->setDescription($title);
+
+        $objExcel->createSheet();
+        $objExcel->setActiveSheetIndex(0);
+
+        $objExcel->getActiveSheet()->setTitle($title);
+        $objActSheet = $objExcel->getActiveSheet();
+
+        $objActSheet->setCellValue('A1', 'Driver ID');
+        $objActSheet->setCellValue('B1', 'Status');
+        $objActSheet->setCellValue('C1', 'First Name');
+        $objActSheet->setCellValue('D1', 'Last Name');
+        $objActSheet->setCellValue('E1', 'Phone #');
+        $objActSheet->setCellValue('F1', 'Email Address');
+        $objActSheet->setCellValue('G1', 'City');
+        $objActSheet->setCellValue('H1', 'Address');
+        $objActSheet->setCellValue('I1', 'Date of Birth');
+        $objActSheet->setCellValue('J1', 'SIN#');
+
+        $index = 2;
+        foreach ($list as $k=>$v){
+//            $show_list[$k]['total'] = $v['tip'] + $v['freight'] - $v['cash'];
+            $objActSheet->setCellValueExplicit('A'.$index,$v['uid']);
+            $objActSheet->setCellValueExplicit('B'.$index,$v['status_name']);
+            $objActSheet->setCellValueExplicit('C'.$index,$v['name']);
+            $objActSheet->setCellValueExplicit('D'.$index,$v['family_name']);
+            $objActSheet->setCellValueExplicit('E'.$index,$v['phone']);
+            $objActSheet->setCellValueExplicit('F'.$index,$v['email']);
+            $objActSheet->setCellValueExplicit('G'.$index,$v['city_name']);
+            $objActSheet->setCellValueExplicit('H'.$index,$v['site']);
+            $objActSheet->setCellValueExplicit('I'.$index,$v['birthday']);
+            $objActSheet->setCellValueExplicit('J'.$index,$v['sin_num']);
+            $index++;
+        }
+
+
+        $objWriter = new PHPExcel_Writer_Excel5($objExcel);
+        ob_end_clean();
+        header("Pragma: public");
+        header("Expires: 0");
+        header("Cache-Control:must-revalidate, post-check=0, pre-check=0");
+        header("Content-Type:application/force-download");
+        header("Content-Type:application/vnd.ms-execl");
+        header("Content-Type:application/octet-stream");
+        header("Content-Type:application/download");
+        header('Content-Disposition:attachment;filename="'.$title.'_' . date("Y-m-d h:i:s", time()) . '.xls"');
+        header("Content-Transfer-Encoding:binary");
+        $objWriter->save('php://output');
+        exit();
+    }
+
 	public function export() 
 	{
 	    //if(!$_POST && !$_GET){

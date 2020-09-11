@@ -36,6 +36,9 @@
                             </volist>
                         </select>
                         </if>
+                        <a href="{pigcms{:U('Deliver/export_deliver')}" class="button" style="float:right;margin-right: 10px;">
+                            导出送餐员
+                        </a>
 					</td>
 				</tr>
 			</table>
