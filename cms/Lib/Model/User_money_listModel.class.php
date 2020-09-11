@@ -53,9 +53,11 @@ class User_money_listModel extends Model{
 		}
 		$count = $this->join('as l left join '.C('DB_PREFIX').'admin a ON a.id = l.admin_id')->where($where)->count();
 		$p = new Page($count, 20);
-		$recharge_list = $this->field('l.pigcms_id,l.money,l.desc,l.time,l.admin_id,l.uid,u.nickname,u.phone,a.realname,a.level')->join('as l left join '.C('DB_PREFIX').'user u ON l.uid = u.uid left join '.C('DB_PREFIX').'admin a ON a.id = l.admin_id')->where($where)->order('l.pigcms_id DESC')->limit($p->firstRow,$p->listRows)->select();
+		$recharge_list = $this->field('l.pigcms_id,l.money,l.type,l.desc,l.time,l.admin_id,l.uid,u.nickname,u.phone,a.realname,a.level')->join('as l left join '.C('DB_PREFIX').'user u ON l.uid = u.uid left join '.C('DB_PREFIX').'admin a ON a.id = l.admin_id')->where($where)->order('l.pigcms_id DESC')->limit($p->firstRow,$p->listRows)->select();
 
-		return $recharge_list;
+        $return['pagebar'] = $p->show();
+        $return['list'] = $recharge_list;
+		return $return;
 	}
 }
 ?>

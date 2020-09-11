@@ -919,7 +919,8 @@ class UserAction extends BaseAction {
         }
         $recharge_list =  D('User_money_list')->get_admin_recharge_list($where,1);
 
-        $this->assign('recharge_list',$recharge_list);
+        $this->assign('recharge_list',$recharge_list['list']);
+        $this->assign('pagebar',$recharge_list['pagebar']);
         $this->display();
     }
     //garfunkel add
