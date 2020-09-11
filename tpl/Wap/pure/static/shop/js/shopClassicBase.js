@@ -684,7 +684,8 @@ function showGood(shop_id,product_id){
 				$('#shopDetailPageContent').show();
 			}else if(nowShop.store.delivery){
 				//$('#shopDetailPageContent .content').html(getLangStr('_REMINDER_STRING_')).show();
-				$('#shopDetailPageContent').show();
+				//$('#shopDetailPageContent').show();
+                $('#shopDetailPageContent').hide();
 			}else{
 				$('#shopDetailPageContent').hide();
 			}
