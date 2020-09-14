@@ -135,6 +135,7 @@ class Deliver_supplyModel extends Model
 //                         $this->sendMsg($supply);
                         //garfunkel 添加派单逻辑
                         D('Deliver_assign')->createAssign($supply,$addResult);
+                        D('Shop_order')->where(array('order_id'=>$order_id))->save(array('dining_time'=>$supply['dining_time']));
                         return array('error_code' => 0, 'msg' => '接单成功！');
                     } else {
                         return array('error_code' => 1, 'msg' => '保存订单失败');

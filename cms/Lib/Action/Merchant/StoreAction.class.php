@@ -5138,6 +5138,8 @@ class StoreAction extends BaseAction{
 					$detail_data['sort_id'] = $grow['sort_id'];
 					$detail_data['old_price'] = floatval($grow['old_price']);
 					$detail_data['discount_price'] = floatval($grow['discount_price']);
+                    $detail_data['tax_num'] = $grow['tax_num'];
+                    $detail_data['deposit_price'] = $grow['deposit_price'];
 					D('Shop_order_detail')->add($detail_data);
 					$order_data['reduce_stock_type'] && $goods_obj->update_stock($grow);//修改库存
 				}

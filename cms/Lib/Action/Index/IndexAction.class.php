@@ -236,14 +236,14 @@ class IndexAction extends BaseAction {
         $mail = new PHPMailer\PHPMailer\PHPMailer();
 
         $mail->isSMTP();                                      // Set mailer to use SMTP
-        $mail->Host = 'smtp.gmail.com';  // Specify main and backup SMTP servers. 这里改成smtp.gmail.com
+        $mail->Host = 'smtp.gmail.com';                       // Specify main and backup SMTP servers. 这里改成smtp.gmail.com
         $mail->SMTPAuth = true;                               // Enable SMTP authentication
-        $mail->Username = 'caesark882@gmail.com';                 // SMTP username 这里改成自己的gmail邮箱，最好新注册一个，因为后期设置会导致安全性降低
-        $mail->Password = $gmail_pwd;                           // SMTP password 这里改成对应邮箱密码
+        $mail->Username = 'donotreply.tutti@gmail.com';       // SMTP username 这里改成自己的gmail邮箱，最好新注册一个，因为后期设置会导致安全性降低
+        $mail->Password = $gmail_pwd;                         // SMTP password 这里改成对应邮箱密码
         $mail->SMTPSecure = 'ssl';                            // Enable TLS encryption, `ssl` also accepted
         $mail->Port = 465;
 
-        $mail->setFrom('caesark882@gmail.com', 'Caesark');
+        $mail->setFrom('donotreply.tutti@gmail.com', 'Tutti');
         $mail->addAddress('caesar@tutti.app', 'Caesar');
         $mail->addAddress('adam@tutti.app','Adam');
         $mail->addAddress('garfunkel@126.com', 'Garfunkel');
