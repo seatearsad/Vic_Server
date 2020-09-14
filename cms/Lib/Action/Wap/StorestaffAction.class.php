@@ -3909,6 +3909,7 @@ class StorestaffAction extends BaseAction
             $supply = D('Deliver_supply')->where(array('order_id'=>$order_id))->find();
             $data['dining_time'] = $supply['dining_time'] + $add_time;
             D('Deliver_supply')->where(array('order_id'=>$order_id))->save($data);
+            D('Shop_order')->where(array('order_id'=>$order_id))->save($data);
 
             D('Shop_order_log')->add_log(array('order_id' => $order_id, 'status' => 33, 'note' => $add_time));
 
