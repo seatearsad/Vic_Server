@@ -59,6 +59,12 @@
                 </td>
             </tr>
             <tr>
+                <th width="15%">备注</th>
+                <td colspan=3>
+                    <textarea name="remark">{pigcms{$now_user.remark}</textarea>
+                </td>
+            </tr>
+            <tr>
                 <th width="15%">{pigcms{:L('_BACK_BANK_INFO_')}</th>
                 <td colspan=3>
                         <input type="text" placeholder="Account Holder Name" class="input fl" name="ahname" size="30" validate="maxlength:50,required:true" />

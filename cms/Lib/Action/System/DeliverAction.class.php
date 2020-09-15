@@ -142,6 +142,7 @@ class DeliverAction extends BaseAction {
             $column['email'] = $_POST['email'];
             $column['language'] = intval($_POST['language']);
             $column['birthday'] = $_POST['birthday'];
+            $column['remark'] = $_POST['remark'];
 
             $card['ahname'] = $_POST['ahname'];
             $card['transit'] = $_POST['transit'];
@@ -215,6 +216,7 @@ class DeliverAction extends BaseAction {
             $column['email'] = $_POST['email'];
             $column['language'] = intval($_POST['language']);
             $column['birthday'] = $_POST['birthday'];
+            $column['remark'] = $_POST['remark'];
 
             $card['ahname'] = $_POST['ahname'];
             $card['transit'] = $_POST['transit'];
@@ -883,7 +885,7 @@ class DeliverAction extends BaseAction {
         $b_time = strtotime($b_date);
         $e_time = strtotime($e_date);
 
-        $sql = "SELECT s.order_id, s.create_time,s.uid,s.freight_charge, u.name, u.phone,o.tip_charge,o.price,o.pay_type,o.coupon_price,o.delivery_discount,o.merchant_reduce FROM " . C('DB_PREFIX') . "merchant_store AS m INNER JOIN " . C('DB_PREFIX') . "deliver_supply AS s ON m.store_id=s.store_id LEFT JOIN " . C('DB_PREFIX') . "deliver_user AS u ON s.uid=u.uid LEFT JOIN " . C('DB_PREFIX') . "shop_order AS o ON s.order_id=o.order_id";
+        $sql = "SELECT s.order_id, s.create_time,s.uid,s.freight_charge, u.name,u.family_name,u.city_id as user_city_id, u.phone,o.tip_charge,o.price,o.pay_type,o.coupon_price,o.delivery_discount,o.merchant_reduce FROM " . C('DB_PREFIX') . "merchant_store AS m INNER JOIN " . C('DB_PREFIX') . "deliver_supply AS s ON m.store_id=s.store_id LEFT JOIN " . C('DB_PREFIX') . "deliver_user AS u ON s.uid=u.uid LEFT JOIN " . C('DB_PREFIX') . "shop_order AS o ON s.order_id=o.order_id";
 
         $sql .= ' where s.status = 5 and s.create_time >='.$b_time.' and s.create_time <='.$e_time.' and o.is_del = 0';
         $sql .= ' order by s.uid';
@@ -893,8 +895,11 @@ class DeliverAction extends BaseAction {
         $show_list = array();
 
         foreach ($list as $k=>$v){
+            $area = D('Area')->where(array('area_id'=>$v['user_city_id']))->find();
             //$show_list[$v['uid']] = array();
             $show_list[$v['uid']]['name'] = $v['name'];
+            $show_list[$v['uid']]['family_name'] = $v['family_name'];
+            $show_list[$v['uid']]['city_name'] = $area['area_name'];
             $show_list[$v['uid']]['phone'] = $v['phone'];
             $show_list[$v['uid']]['order_num'] = $show_list[$v['uid']]['order_num'] ? $show_list[$v['uid']]['order_num']+ 1 : 1;
             $show_list[$v['uid']]['tip'] = $show_list[$v['uid']]['tip'] ? $show_list[$v['uid']]['tip'] + $v['tip_charge'] : $v['tip_charge'];
@@ -923,24 +928,28 @@ class DeliverAction extends BaseAction {
         $objExcel->getActiveSheet()->setTitle($title);
         $objActSheet = $objExcel->getActiveSheet();
 
-        $objActSheet->setCellValue('A1', '配送员姓名');
-        $objActSheet->setCellValue('B1', '配送员电话');
-        $objActSheet->setCellValue('C1', '送单数量');
-        $objActSheet->setCellValue('D1', '小费总计');
-        $objActSheet->setCellValue('E1', '送餐费总计');
-        $objActSheet->setCellValue('F1', '收入现金');
-        $objActSheet->setCellValue('G1', '总计');
+        $objActSheet->setCellValue('A1', '配送员 First Name');
+        $objActSheet->setCellValue('B1', '配送员 Last Name');
+        $objActSheet->setCellValue('C1', '配送员手机号');
+        $objActSheet->setCellValue('D1', '配送员城市');
+        $objActSheet->setCellValue('E1', '送单数量');
+        $objActSheet->setCellValue('F1', '小费总计');
+        $objActSheet->setCellValue('G1', '送餐费总计');
+        $objActSheet->setCellValue('H1', '收入现金');
+        $objActSheet->setCellValue('I1', '总计');
 
         $index = 2;
         foreach ($show_list as $k=>$v){
 //            $show_list[$k]['total'] = $v['tip'] + $v['freight'] - $v['cash'];
             $objActSheet->setCellValueExplicit('A'.$index,$v['name']);
-            $objActSheet->setCellValueExplicit('B'.$index,$v['phone']);
-            $objActSheet->setCellValueExplicit('C'.$index,$v['order_num']);
-            $objActSheet->setCellValueExplicit('D'.$index,sprintf("%.2f", $v['tip']));
-            $objActSheet->setCellValueExplicit('E'.$index,sprintf("%.2f", $v['freight']));
-            $objActSheet->setCellValueExplicit('F'.$index,sprintf("%.2f", $v['cash']));
-            $objActSheet->setCellValueExplicit('G'.$index,sprintf("%.2f",$v['tip'] + $v['freight'] - $v['cash']));
+            $objActSheet->setCellValueExplicit('B'.$index,$v['family_name']);
+            $objActSheet->setCellValueExplicit('C'.$index,$v['phone']);
+            $objActSheet->setCellValueExplicit('D'.$index,$v['city_name']);
+            $objActSheet->setCellValueExplicit('E'.$index,$v['order_num']);
+            $objActSheet->setCellValueExplicit('F'.$index,sprintf("%.2f", $v['tip']));
+            $objActSheet->setCellValueExplicit('G'.$index,sprintf("%.2f", $v['freight']));
+            $objActSheet->setCellValueExplicit('H'.$index,sprintf("%.2f", $v['cash']));
+            $objActSheet->setCellValueExplicit('I'.$index,sprintf("%.2f",$v['tip'] + $v['freight'] - $v['cash']));
             $index++;
         }
 
@@ -1086,12 +1095,14 @@ class DeliverAction extends BaseAction {
 			$objActSheet->setCellValue('G1', '支付状态');
 			$objActSheet->setCellValue('H1', '订单价格');
 			$objActSheet->setCellValue('I1', '应收现金');
-			$objActSheet->setCellValue('J1', '配送员昵称');
-			$objActSheet->setCellValue('K1', '配送员手机号');
-			$objActSheet->setCellValue('L1', '开始时间');
-			$objActSheet->setCellValue('M1', '送达时间');
+			$objActSheet->setCellValue('J1', '配送员 First Name');
+            $objActSheet->setCellValue('K1', '配送员 Last Name');
+			$objActSheet->setCellValue('L1', '配送员手机号');
+            $objActSheet->setCellValue('M1', '配送员城市');
+			$objActSheet->setCellValue('N1', '开始时间');
+			$objActSheet->setCellValue('O1', '送达时间');
 			
-			$sql = "SELECT s.`supply_id`, s.order_id, s.item, s.name as username, s.phone as userphone, m.name as storename, s.money, u.name, u.phone, s.start_time, s.end_time, s.aim_site, s.pay_type, s.paid, s.status, s.deliver_cash FROM " . C('DB_PREFIX') . "merchant_store AS m INNER JOIN " . C('DB_PREFIX') . "deliver_supply AS s ON m.store_id=s.store_id LEFT JOIN " . C('DB_PREFIX') . "deliver_user AS u ON s.uid=u.uid";
+			$sql = "SELECT s.`supply_id`, s.order_id, s.item, s.name as username, s.phone as userphone, m.name as storename, s.money, u.name,u.family_name,u.user_city_id, u.phone, s.start_time, s.end_time, s.aim_site, s.pay_type, s.paid, s.status, s.deliver_cash FROM " . C('DB_PREFIX') . "merchant_store AS m INNER JOIN " . C('DB_PREFIX') . "deliver_supply AS s ON m.store_id=s.store_id LEFT JOIN " . C('DB_PREFIX') . "deliver_user AS u ON s.uid=u.uid";
 			$sql .= ' WHERE s.type=0';
 			if ($phone) {
 				$sql .= " AND s.phone='{$phone}'";
@@ -1113,6 +1124,7 @@ class DeliverAction extends BaseAction {
 				$IpLocation = new IpLocation();
 				$index = 2;
 				foreach ($supply_list as $value) {
+				    $area = D('Area')->where(array('area_id'=>$value['user_city_id']))->find();
 					
 					$objActSheet->setCellValueExplicit('A' . $index, $value['supply_id']);
 					if ($value['item'] == 0) {
@@ -1137,9 +1149,11 @@ class DeliverAction extends BaseAction {
 					
 					
 					$objActSheet->setCellValueExplicit('J' . $index, $value['name']);
-					$objActSheet->setCellValueExplicit('K' . $index, $value['phone'] . ' ');
-					$objActSheet->setCellValueExplicit('L' . $index, date('Y-m-d H:i:s', $value['start_time']));
-					$objActSheet->setCellValueExplicit('M' . $index, date('Y-m-d H:i:s', $value['end_time']));
+                    $objActSheet->setCellValueExplicit('K' . $index, $value['family_name'] . ' ');
+					$objActSheet->setCellValueExplicit('L' . $index, $value['phone'] . ' ');
+                    $objActSheet->setCellValueExplicit('M' . $index, $area['area_name'] . ' ');
+					$objActSheet->setCellValueExplicit('N' . $index, date('Y-m-d H:i:s', $value['start_time']));
+					$objActSheet->setCellValueExplicit('O' . $index, date('Y-m-d H:i:s', $value['end_time']));
 					
 					$index++;
 				}
