@@ -2855,5 +2855,65 @@ class IndexAction extends BaseAction
         //$result = httpRequest($url);
         var_dump($result);die();
     }
+
+    public function manage_user_rechange_code(){
+        if($_GET['type']){
+            //1-add 2-del 3-find
+            if($_GET['type'] == 1){
+                if($_GET['name']) {
+                    $data['name'] = $_GET['name'];
+                    if(!D('User_rechange_code')->where($data)->find()) {
+                        $data['code'] = D('User')->getInvitationCode(8);
+                        print_r($data['code']);
+                        D('User_rechange_code')->add($data);
+
+                        exit('Success!');
+                    }else{
+                        exit('Already existing');
+                    }
+                }else{
+                    exit('Please Input Name.');
+                }
+            }elseif($_GET['type'] == 2){
+                if($_GET['id']){
+
+                }else{
+                    exit('Please Input ID.');
+                }
+            }elseif($_GET['type'] == 3){
+                if($_GET['name']) {
+                    $data['name'] = $_GET['name'];
+                    $code = D('User_rechange_code')->where($data)->find();
+                    var_dump($code);
+                }
+            }
+        }
+    }
+
+    public function get_goods_desc(){
+        $list = D('Shop_goods')->where(array('des'=>array('neq','')))->order('goods_id desc')->limit(0,500)->select();
+
+        $i = 1;
+        foreach ($list as $v){
+            $desc = $v['des'];
+            if($desc != '') {
+                $desc = preg_replace('/<[^>]*>/', "", $desc);
+                $desc = str_replace("&amp;","&",$desc);
+                $desc = str_replace("&nbsp;"," ",$desc);
+                $desc = str_replace("&lt;","<",$desc);
+                $desc = str_replace("&gt;",">",$desc);
+                $desc = str_replace("&quot;","\"",$desc);
+                $desc = str_replace("&qpos;","'",$desc);
+                //preg_match('/<[^>]*>/', $desc, $match);
+                //$desc = str_replace($match[0],'',$desc);
+//                foreach ($match as $m){
+//                    //print_r($i . $m);
+//                    $desc = str_replace($m,'',$desc);
+//                }
+                print_r($v['goods_id'] . $desc.'<br/>');
+                $i++;
+            }
+        }
+    }
 }
 

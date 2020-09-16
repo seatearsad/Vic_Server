@@ -138,7 +138,7 @@
 	</tr>
 	</if>
 	<tr>
-		<th colspan="6">{pigcms{:L('_BACK_ACT_AM_PAID_')}：${pigcms{$order['price']|floatval} </th>
+		<th colspan="6">{pigcms{:L('_BACK_ACT_AM_PAID_')}：${pigcms{$order['price']-$order['merchant_reduce']-$order['delivery_discount']|floatval} </th>
 	</tr>
 	<if condition="$order['score_used_count']">
 	<tr>

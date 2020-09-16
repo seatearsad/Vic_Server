@@ -885,7 +885,7 @@ class DeliverAction extends BaseAction {
         $b_time = strtotime($b_date);
         $e_time = strtotime($e_date);
 
-        $sql = "SELECT s.order_id, s.create_time,s.uid,s.freight_charge, u.name,u.family_name,u.city_id as user_city_id, u.phone,o.tip_charge,o.price,o.pay_type,o.coupon_price,o.delivery_discount,o.merchant_reduce FROM " . C('DB_PREFIX') . "merchant_store AS m INNER JOIN " . C('DB_PREFIX') . "deliver_supply AS s ON m.store_id=s.store_id LEFT JOIN " . C('DB_PREFIX') . "deliver_user AS u ON s.uid=u.uid LEFT JOIN " . C('DB_PREFIX') . "shop_order AS o ON s.order_id=o.order_id";
+        $sql = "SELECT s.order_id, s.create_time,s.uid,s.freight_charge, u.name,u.family_name,u.city_id as user_city_id, u.phone,u.remark,o.tip_charge,o.price,o.pay_type,o.coupon_price,o.delivery_discount,o.merchant_reduce FROM " . C('DB_PREFIX') . "merchant_store AS m INNER JOIN " . C('DB_PREFIX') . "deliver_supply AS s ON m.store_id=s.store_id LEFT JOIN " . C('DB_PREFIX') . "deliver_user AS u ON s.uid=u.uid LEFT JOIN " . C('DB_PREFIX') . "shop_order AS o ON s.order_id=o.order_id";
 
         $sql .= ' where s.status = 5 and s.create_time >='.$b_time.' and s.create_time <='.$e_time.' and o.is_del = 0';
         $sql .= ' order by s.uid';
@@ -901,6 +901,7 @@ class DeliverAction extends BaseAction {
             $show_list[$v['uid']]['family_name'] = $v['family_name'];
             $show_list[$v['uid']]['city_name'] = $area['area_name'];
             $show_list[$v['uid']]['phone'] = $v['phone'];
+            $show_list[$v['uid']]['remark'] = $v['remark'];
             $show_list[$v['uid']]['order_num'] = $show_list[$v['uid']]['order_num'] ? $show_list[$v['uid']]['order_num']+ 1 : 1;
             $show_list[$v['uid']]['tip'] = $show_list[$v['uid']]['tip'] ? $show_list[$v['uid']]['tip'] + $v['tip_charge'] : $v['tip_charge'];
             $show_list[$v['uid']]['freight'] = $show_list[$v['uid']]['freight'] ? $show_list[$v['uid']]['freight'] + $v['freight_charge'] : $v['freight_charge'];
@@ -937,6 +938,7 @@ class DeliverAction extends BaseAction {
         $objActSheet->setCellValue('G1', '送餐费总计');
         $objActSheet->setCellValue('H1', '收入现金');
         $objActSheet->setCellValue('I1', '总计');
+        $objActSheet->setCellValue('J1', '配送员备注');
 
         $index = 2;
         foreach ($show_list as $k=>$v){
@@ -950,6 +952,7 @@ class DeliverAction extends BaseAction {
             $objActSheet->setCellValueExplicit('G'.$index,sprintf("%.2f", $v['freight']));
             $objActSheet->setCellValueExplicit('H'.$index,sprintf("%.2f", $v['cash']));
             $objActSheet->setCellValueExplicit('I'.$index,sprintf("%.2f",$v['tip'] + $v['freight'] - $v['cash']));
+            $objActSheet->setCellValueExplicit('J'.$index,$v['remark']);
             $index++;
         }
 
