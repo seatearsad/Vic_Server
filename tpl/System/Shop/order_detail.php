@@ -161,14 +161,14 @@
 	</tr>
 	</if>
 	<if condition="$order['balance_pay'] gt 0">
-	<tr>
+	<!--tr>
 		<th colspan="6">{pigcms{:L('_BACK_TUTTI_CREDIT_')}：${pigcms{$order['balance_pay']|floatval}</th>
-	</tr>
+	</tr-->
 	</if>
 	<if condition="$order['payment_money'] gt 0">
-	<tr>
+	<!--tr>
 		<th colspan="6">{pigcms{:L('_ONLINE_PAY_')}：${pigcms{$order['payment_money']|floatval}</th>
-	</tr>
+	</tr-->
 	</if>
 	<if condition="$order['card_id']">
 	<tr>

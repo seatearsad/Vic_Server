@@ -391,7 +391,7 @@ class UserAction extends BaseAction {
             $data_user['truename'] = trim($_POST['truename']);
 
             $_POST['set_money'] = floatval($_POST['set_money']);
-            if (!empty($_POST['set_money'])) {
+            if (!empty($_POST['set_money']) && D('User_rechange_code')->where(array('code'=>$_POST['user_code_curr']))->find()) {
                 if ($_POST['set_money_type'] == 1) {
                     $data_user['now_money'] = $now_user['now_money'] + $_POST['set_money'];
                 } else {
@@ -439,13 +439,15 @@ class UserAction extends BaseAction {
 
 
             $data_user['level'] = intval($_POST['level']);
+
             if ($database_user->where($condition_user)->data($data_user)->save()) {
                 if (!empty($_POST['set_money'])) {
+                    $user_code = D('User_rechange_code')->where(array('code'=>$_POST['user_code_curr']))->find();
                     if($_POST['set_money_type'] == 1)
-                        $msg = 'Added by Tutti Administrator';
+                        $msg = 'Added by Tutti Administrator '.$user_code['name'];
                     else
-                        $msg = 'Deducted by Tutti Administrator';
-                    D('User_money_list')->add_row($now_user['uid'], $_POST['set_money_type'], $_POST['set_money'], '管理员后台操作', false,0,0,true,$msg);
+                        $msg = 'Deducted by Tutti Administrator '.$user_code['name'];
+                    D('User_money_list')->add_row($now_user['uid'], $_POST['set_money_type'], $_POST['set_money'], '管理员后台操作'.$user_code['name'], false,0,0,true,$msg);
                 }
                 if (!empty($_POST['set_score'])) {
                     D('User_score_list')->add_row($now_user['uid'], $_POST['set_score_type'], $_POST['set_score'], '管理员后台操作', false,0,0,true);
@@ -981,6 +983,16 @@ class UserAction extends BaseAction {
             }
 
             echo json_encode(array('error_code'=> 0,'msg'=>''));
+        }
+    }
+
+    public function send_user_code(){
+        $code = $_POST['code'];
+        $user_code = D('User_rechange_code')->where(array('code'=>$code))->find();
+        if($user_code){
+            exit(json_encode(array('status'=>1,'result'=>$user_code,'msg'=>'Code Success!')));
+        }else{
+            exit(json_encode(array('status'=>0,'result'=>'','msg'=>'Code Error!')));
         }
     }
 

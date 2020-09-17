@@ -74,17 +74,14 @@
 				<th width="15%">{pigcms{:L('_BACK_LAST_VIP_')}</th>
 				<td width="35%"><div style="height:24px;line-height:24px;">{pigcms{$now_user.last_ip|long2ip=###}</div></td>
 			</tr>
-		
-			<tr <php>if($can_recharge==0){echo 'style="display:none"';}</php>>
-				<th width="15%">{pigcms{:L('_BACK_BALANCE_SHOW_')}</th>
-				<td width="85%" colspan="3"><div style="height:30px;line-height:24px;">现在余额：${pigcms{$now_user.now_money|floatval=###} &nbsp;&nbsp;&nbsp;&nbsp;<select name="set_money_type"><option value="1">增加</option><option value="2">减少</option></select>&nbsp;&nbsp;<input type="text" class="input" name="set_money" size="10" validate="number:true" tips="此处填写增加或减少的额度，不是将余额变为此处填写的值"/></div></td>
-			</tr>
-			<tr <php>if($can_recharge==0 || $config['open_frozen_money']==0){echo 'style="display:none"';}</php>>
-				<th width="15%">余额冻结</th>
-				<td width="85%" colspan="3">
-				<div style="height:30px;line-height:24px;"><input type="text" class="input fl" name="frozen_money" size="10" validate="number:true,min:0" value="{pigcms{$now_user.frozen_money}"  tips="冻结金额"/>
-				</div></td>
-			</tr>
+            <tr id="code_tr">
+            <th width="15%">用户码</th>
+            <td width="85%" colspan="3">
+                <input type="text" class="input fl" name="user_rechange_code" id="user_rechange_code" value="" style="width: 30%" />
+                <button id="send_code" type="button" style="margin-left: 10px;height: 30px;">Send</button>
+            </td>
+            </tr>
+
 			<tr <php>if($can_recharge==0 || $config['open_frozen_money']==0){echo 'style="display:none"';}</php>>
 				<th width="15%">冻结时间</th>
 				<td width="85%" colspan="3"><div style="height:30px;line-height:24px;">
@@ -100,10 +97,7 @@
 				<input type="text" class="input" name="frozen_reason" size="40" value="{pigcms{$now_user.frozen_reason}" tips="冻结理由"/>
 				</div></td>
 			</tr>
-			<tr <php>if($can_recharge==0){echo 'style="display:none"';}</php>> 
-				<th width="15%">{pigcms{$config.score_name}</th>
-				<td width="85%" colspan="3"><div style="height:30px;line-height:24px;">现在{pigcms{$config.score_name}：{pigcms{$now_user.score_count} &nbsp;&nbsp;&nbsp;&nbsp;<select name="set_score_type"><option value="1">增加</option><option value="2">减少</option></select>&nbsp;&nbsp;<input type="text" class="input" name="set_score" size="10" validate="number:true" tips="此处填写增加或减少的{pigcms{$config.score_name}，不是将{pigcms{$config.score_name}变为此处填写的值"/></div></td>
-			</tr>
+
 			<!--tr>
 				<th width="15%">实体卡</th>
 				<td width="85%" colspan="3"><div style="height:30px;line-height:24px;">实体卡卡号<input type="text" class="input" name="cardid" size="16"  value="{pigcms{$now_user.cardid}" validate="number:true" tips="此处填写实体卡卡号"/>实体卡余额<input type="text" class="input" name="balance_money" size="10" value="{pigcms{$balance_money}" validate="number:true" tips="此处填写实体卡余额"/></div></td>
@@ -132,7 +126,31 @@
 					</div>
 				</td>
 			</tr-->
-		</table>
+        </table>
+        <script>
+            var balance_show = "{pigcms{:L('_BACK_BALANCE_SHOW_')}";
+            var now_money = '{pigcms{$now_user.now_money|floatval=###}';
+            $('#send_code').click(function () {
+                if($('#user_rechange_code').val() != '') {
+                    $.post("{pigcms{:U('User/send_user_code')}", {'code': $('#user_rechange_code').val()}, function (data) {
+                        if(data.status == 1){
+                            var html = '<tr>' +
+                                       '<th width="15%">'+balance_show+'</th>' +
+                                       '<td width="85%" colspan="3"><div style="height:30px;line-height:24px;">现在余额：$'+now_money+' &nbsp;&nbsp;&nbsp;&nbsp;<select name="set_money_type"><option value="1">增加</option><option value="2">减少</option></select>&nbsp;&nbsp;<input type="text" class="input" name="set_money" size="10" validate="number:true" tips="此处填写增加或减少的额度，不是将余额变为此处填写的值"/></div></td>' +
+                                       '<input type="hidden" name="user_code_curr" value="'+$('#user_rechange_code').val()+'">'
+                                       '</tr>'
+
+                            $('.frame_form').append(html);
+                            $('#code_tr').hide();
+                        }else{
+                            alert(data.msg);
+                        }
+                    }, 'json');
+                }else{
+                    alert('Please Input Code');
+                }
+            });
+        </script>
 		<div class="btn hidden">
 			<input type="submit" name="dosubmit" id="dosubmit" value="提交" class="button" />
 			<input type="reset" value="取消" class="button" />

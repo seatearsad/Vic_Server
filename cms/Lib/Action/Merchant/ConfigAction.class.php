@@ -656,7 +656,7 @@ class ConfigAction extends BaseAction{
 				//判断关键词
 				if(!empty($key_arr)){
 					foreach($key_arr as $value){
-						$data_keywords['keyword'] = $value;
+						$data_keywords['keyword'] = fulltext_filter($value);
 						$database_keywords->data($data_keywords)->add();
 					}
 				}

@@ -94,6 +94,9 @@ class ShopAction extends BaseAction
                 }
             }
 
+
+            $_POST['store_notice'] = fulltext_filter($_POST['store_notice']);
+            $_POST['shop_remind'] = fulltext_filter($_POST['shop_remind']);
             $_POST['store_discount'] = intval(floatval($_POST['store_discount']) * 10);
             $_POST['store_discount'] = ($_POST['store_discount'] > 100 || $_POST['store_discount'] < 0) ? 0 : $_POST['store_discount'];
 
@@ -394,7 +397,7 @@ class ShopAction extends BaseAction
             } else {
                 $database_goods_sort = D('Shop_goods_sort');
                 $data_goods_sort['store_id'] = $now_store['store_id'];
-                $data_goods_sort['sort_name'] = $_POST['sort_name'];
+                $data_goods_sort['sort_name'] = fulltext_filter($_POST['sort_name']);
                 $data_goods_sort['sort'] = intval($_POST['sort']);
                 $data_goods_sort['sort_discount'] = intval(floatval($_POST['sort_discount']) * 10);
                 $data_goods_sort['sort_discount'] = ($data_goods_sort['sort_discount'] > 100 || $data_goods_sort['sort_discount'] < 0) ? 0 : $data_goods_sort['sort_discount'];
@@ -509,7 +512,7 @@ class ShopAction extends BaseAction
             } else {
                 $database_goods_sort = D('Shop_goods_sort');
                 $data_goods_sort['sort_id'] = $now_sort['sort_id'];
-                $data_goods_sort['sort_name'] = $_POST['sort_name'];
+                $data_goods_sort['sort_name'] = fulltext_filter($_POST['sort_name']);
                 $data_goods_sort['sort'] = intval($_POST['sort']);
                 $data_goods_sort['sort_discount'] = intval(floatval($_POST['sort_discount']) * 10);
                 $data_goods_sort['sort_discount'] = ($data_goods_sort['sort_discount'] > 100 || $data_goods_sort['sort_discount'] < 0) ? 0 : $data_goods_sort['sort_discount'];
@@ -714,6 +717,7 @@ class ShopAction extends BaseAction
                 //$error_tips .= '请至少上传一张照片！'.'<br/>';
             }
 
+            $_POST['name'] = fulltext_filter($_POST['name']);
             $_POST['des'] = fulltext_filter($_POST['des']);
 
             $img_mer_id = sprintf("%09d", $this->merchant_session['mer_id']);
@@ -941,6 +945,7 @@ class ShopAction extends BaseAction
                 //$error_tips .= '请至少上传一张照片！'.'<br/>';
             }
 
+            $_POST['name'] = fulltext_filter($_POST['name']);
             $_POST['des'] = fulltext_filter($_POST['des']);
 
             $img_mer_id = sprintf("%09d", $this->merchant_session['mer_id']);
@@ -1095,7 +1100,7 @@ class ShopAction extends BaseAction
             $dish_db = D('Side_dish');
 
             $side_dish['goods_id'] = $now_goods['goods_id'];
-            $side_dish['name'] = $_POST['dish_name'];
+            $side_dish['name'] = fulltext_filter($_POST['dish_name']);
             $side_dish['min'] = $_POST['min'];
             $side_dish['max'] = $_POST['max'];
             $side_dish['type'] = $_POST['dish_type'];
@@ -1115,11 +1120,11 @@ class ShopAction extends BaseAction
                 if($k_arr[0] == 'value_price_new'){
                     $new_value[$k_arr[1]]['price'] = $v;
                 }elseif($k_arr[0] == 'value_name_new') {
-                    $new_value[$k_arr[1]]['name'] = $v;
+                    $new_value[$k_arr[1]]['name'] = fulltext_filter($v);
                 }elseif($k_arr[0] == 'value_price'){
                     $old_value[$k_arr[1]]['price'] = $v;
                 }elseif($k_arr[0] == 'value_name'){
-                    $old_value[$k_arr[1]]['name'] = $v;
+                    $old_value[$k_arr[1]]['name'] = fulltext_filter($v);
                 }
             }
 
