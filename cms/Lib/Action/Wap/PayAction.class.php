@@ -744,8 +744,10 @@ class PayAction extends BaseAction{
                 $order_info['delivery_discount'] = $_POST['delivery_discount'];
                 if($order_info['order_type'] == 'shop' || $order_info['order_type'] == 'mall'){
                     D('Shop_order')->field(true)->where(array('order_id'=>$order_info['order_id']))->save(array('delivery_discount'=>$order_info['delivery_discount']));
-                    if($order_info['delivery_discount'] > 0)
-                        D('New_event')->addEventCouponByType(3,$this->user_session['uid']);
+                    if($order_info['delivery_discount'] > 0) {
+                        D('New_event')->addEventCouponByType(3, $this->user_session['uid']);
+                        $order_info['order_total_money'] = $order_info['order_total_money'] - $order_info['delivery_discount'];
+                    }
                 }
             }
             //店铺满减
@@ -753,6 +755,7 @@ class PayAction extends BaseAction{
                 $order_info['merchant_reduce'] = $_POST['merchant_reduce'];
                 if($order_info['order_type'] == 'shop' || $order_info['order_type'] == 'mall'){
                     D('Shop_order')->field(true)->where(array('order_id'=>$order_info['order_id']))->save(array('merchant_reduce'=>$order_info['merchant_reduce']));
+                    $order_info['order_total_money'] = $order_info['order_total_money'] - $order_info['merchant_reduce'];
                 }
             }
         }

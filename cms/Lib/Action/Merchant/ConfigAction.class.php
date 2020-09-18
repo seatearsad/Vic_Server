@@ -610,6 +610,7 @@ class ConfigAction extends BaseAction{
 // 			}
 			$_POST['office_time'] = '';
 
+			$_POST['name'] = fulltext_filter($_POST['name']);
 			$_POST['sort'] = intval($_POST['sort']);
 			$long_lat = explode(',',$_POST['long_lat']);
 			$_POST['long'] = $long_lat[0];

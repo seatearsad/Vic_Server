@@ -447,7 +447,7 @@ class UserAction extends BaseAction {
                         $msg = 'Added by Tutti Administrator '.$user_code['name'];
                     else
                         $msg = 'Deducted by Tutti Administrator '.$user_code['name'];
-                    D('User_money_list')->add_row($now_user['uid'], $_POST['set_money_type'], $_POST['set_money'], '管理员后台操作'.$user_code['name'], false,0,0,true,$msg);
+                    D('User_money_list')->add_row($now_user['uid'], $_POST['set_money_type'], $_POST['set_money'], '管理员后台操作 '.$user_code['name'], false,0,0,true,$msg);
                 }
                 if (!empty($_POST['set_score'])) {
                     D('User_score_list')->add_row($now_user['uid'], $_POST['set_score_type'], $_POST['set_score'], '管理员后台操作', false,0,0,true);
