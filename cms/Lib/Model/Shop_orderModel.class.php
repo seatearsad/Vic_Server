@@ -280,7 +280,7 @@ class Shop_orderModel extends Model
 
 		//减免配送费活动
 		if($order_info['delivery_discount'] > 0){
-			$pay_money = sprintf("%.2f",$pay_money - $order_info['delivery_discount']);
+			//$pay_money = sprintf("%.2f",$pay_money - $order_info['delivery_discount']);
 		}
 
 		if($merchant_balance['card_discount']>0){

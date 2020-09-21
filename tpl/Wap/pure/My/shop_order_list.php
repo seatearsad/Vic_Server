@@ -301,7 +301,7 @@
 									</div>
 									<div class="dealcard-block-right" onclick="window.location.href = '{pigcms{$order.order_url}';">
 										<div class="dealcard-brand single-line">{pigcms{$order.name}</div>
-                                        <div class="total_price">Total:${pigcms{$order['price']|floatval}</div>
+                                        <div class="total_price">Total:${pigcms{$order['total_price']+$order['tip_charge']-$order['coupon_price']-$order['delivery_discount']-$order['merchant_reduce']|floatval}</div>
 										<small>Total item:{pigcms{$order.num}&nbsp;&nbsp;{pigcms{:date('Y-m-d',$order['create_time'])} </small>
 									</div>
                                     <div class="order_btn">

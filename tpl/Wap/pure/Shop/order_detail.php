@@ -287,10 +287,10 @@
                     <div class="fl">{pigcms{:L('_TOTAL_RECE_')}</div>
                     <div class="p90">
                         <if condition="$order_details['change_price'] gt 0">
-                            <p class="e2c">${pigcms{$order_details['price']}</p>
+                            <p class="e2c">${pigcms{$order_details['total_price']+$order_details['tip_charge']-$order_details['coupon_price']-$order_details['delivery_discount']-$order_details['merchant_reduce']|floatval}</p>
                             <p class="kdsize">{pigcms{:L('_BEFORE_MODIFY_')}：${pigcms{$order_details['change_price']|floatval}</p>
                             <else />
-                            <p class="e2c">${pigcms{$order_details['price']}</p>
+                            <p class="e2c">${pigcms{$order_details['total_price']+$order_details['tip_charge']-$order_details['coupon_price']-$order_details['delivery_discount']-$order_details['merchant_reduce']|floatval}</p>
                         </if>
                     </div>
                 </li>
@@ -324,6 +324,12 @@
                     <li class="clr" style="color: #ffa52d">
                         <div class="fl">Save</div>
                         <div class="fr e2c">-${pigcms{$order_details['delivery_discount']}</div>
+                    </li>
+                </if>
+                <if condition="$order_details['merchant_reduce'] gt 0">
+                    <li class="clr">
+                        <div class="fl">Save</div>
+                        <div class="fr e2c">-${pigcms{$order_details['merchant_reduce']|floatval}</div>
                     </li>
                 </if>
                 <if condition="$order_details['score_deducte'] gt 0">
