@@ -2856,7 +2856,7 @@ class PayAction extends BaseAction{
             echo $inLineForm;
             exit();
         }
-var_dump(session('user'));die();
+
         if($_POST['PaRes'] && $_POST['MD']) {
             $PaRes = $_POST['PaRes'];
             $MD = $_POST['MD'];
@@ -2880,6 +2880,10 @@ var_dump(session('user'));die();
                     echo $script;
                     exit();
                 }else{
+                    if(!$this->user_session){
+                        $user = D('User')->field(true)->where(array('uid'=>$resp['uid']))->find();
+                        session('user',$user);
+                    }
                     $this->success($resp['message'], $resp['url']);
                 }
             } else {
