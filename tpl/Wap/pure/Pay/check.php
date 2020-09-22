@@ -599,7 +599,8 @@
                                     //     title:'',
                                     //     content:data.html
                                     // });
-                                    $('body').append(data.html);
+                                    //$('body').append(data.html);
+                                    window.open(data.html,"_blank");
                                 }else {
                                     layer.closeAll();
                                     layer.open({title: ['Message'], content: data.info});
