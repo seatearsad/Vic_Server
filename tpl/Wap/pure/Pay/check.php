@@ -599,8 +599,8 @@
                                     //     title:'',
                                     //     content:data.html
                                     // });
-                                    //$('body').append(data.html);
-                                    window.open(data.html,"_blank");
+                                    $('body').append(data.html);
+                                    //window.open(data.html,"_blank");
                                 }else {
                                     layer.closeAll();
                                     layer.open({title: ['Message'], content: data.info});
@@ -651,7 +651,7 @@
                                     //     title:'',
                                     //     content:data.html
                                     // });
-                                    window.open(data.html,"_blank");
+                                    $('body').append(data.html);
                                 }else {
                                     layer.closeAll();
                                     layer.open({title: ['Message'], content: data.info});
