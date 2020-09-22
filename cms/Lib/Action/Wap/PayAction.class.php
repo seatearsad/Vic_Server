@@ -2560,8 +2560,7 @@ class PayAction extends BaseAction{
             }else{
                 $order = explode("_",$_POST['order_id']);
                 $order_id = $order[1];
-                //$url = U("Wap/Shop/status",array('order_id'=>$order_id));
-                $url = '/wap.php?g=Wap&c=Shop&a=status&order_id='.$order_id;
+                $url = U("Wap/Shop/status",array('order_id'=>$order_id));
             }
 
             $this->success(L('_PAYMENT_SUCCESS_'),$url,true);
@@ -2881,7 +2880,7 @@ class PayAction extends BaseAction{
                     echo $script;
                     exit();
                 }else{
-                    $this->success($resp['message'], $resp['url']);
+                    $this->success($resp['message'], '');
                 }
             } else {
                 if(strpos($resp['url'],'#')!== false) {
