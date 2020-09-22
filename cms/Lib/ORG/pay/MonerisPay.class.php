@@ -787,8 +787,8 @@ class MonerisPay
             if($orderInfo['order_type'] == 'recharge')
                 $url = C('config.config_site_url').'/index.php?g=User&c=Credit&a=index';
             else {
-                if(strpos($_SERVER['SERVER_NAME'],'tutti.app') !== false)
-                    $url = 'https://'.$_SERVER['SERVER_NAME'].'/index.php?g=User&c=Index&a=shop_order_view&order_id=' . $orderInfo['order_id'];
+                if(strpos($_SERVER['HTTP_HOST'],'tutti.app') !== false)
+                    $url = 'https://'.$_SERVER['HTTP_HOST'].'/index.php?g=User&c=Index&a=shop_order_view&order_id=' . $orderInfo['order_id'];
                 else
                     $url = C('config.config_site_url') . '/index.php?g=User&c=Index&a=shop_order_view&order_id=' . $orderInfo['order_id'];
             }
@@ -798,8 +798,8 @@ class MonerisPay
             if($orderInfo['order_type'] == 'recharge')
                 $url = U("Wap/My/my_money");
             else {
-                if(strpos($_SERVER['SERVER_NAME'],'tutti.app') !== false)
-                    $url = 'https://'.$_SERVER['SERVER_NAME'].'/wap.php?g=Wap&c=Shop&a=status&order_id=' . $orderInfo['order_id'];
+                if(strpos($_SERVER['HTTP_HOST'],'tutti.app') !== false)
+                    $url = 'https://'.$_SERVER['HTTP_HOST'].'/wap.php?g=Wap&c=Shop&a=status&order_id=' . $orderInfo['order_id'];
                 else
                     $url = U("Wap/Shop/status", array('order_id' => $orderInfo['order_id']));
             }
