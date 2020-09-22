@@ -107,7 +107,10 @@
         <include file="Public:header"/>
         <section class="main">
             <div id="memo">
-                <div>{pigcms{:L('_NEW_APP_PAGE_T')}</div>
+                <div>
+                    {pigcms{:L('_NEW_APP_PAGE_T')}<br>
+                    <a href="/wap.php" style="color: #3f3f3f;text-decoration: underline;line-height: 25px;">{pigcms{:L('_NEW_APP_PAGE_T_LINK')}</a>
+                </div>
                 <div id="code_div">
                     <div>
                         <img src="./tpl/Static/blue/images/new/code/app_store.png"/>
