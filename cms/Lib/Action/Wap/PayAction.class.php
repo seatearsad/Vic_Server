@@ -2885,7 +2885,6 @@ class PayAction extends BaseAction{
                         session('user',$user);
                         $this->user_session = session('user');
                     }
-                    var_dump(session('user'));die();
                     $this->success($resp['message'], $resp['url']);
                 }
             } else {

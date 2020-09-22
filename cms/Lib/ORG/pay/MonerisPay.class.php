@@ -657,6 +657,7 @@ class MonerisPay
             $result['message'] = $message;
             $orderInfo = $this->getOrderInfoFromMD($MD);
             $result['url'] = $orderInfo['url'];
+            $result['uid'] = $orderInfo['uid'];
 
             return $result;
         }
