@@ -2883,6 +2883,7 @@ class PayAction extends BaseAction{
                     if(!$this->user_session){
                         $user = D('User')->field(true)->where(array('uid'=>$resp['uid']))->find();
                         session('user',$user);
+                        $this->user_session = session('user');
                     }
                     $this->success($resp['message'], $resp['url']);
                 }
