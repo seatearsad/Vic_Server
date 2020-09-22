@@ -503,7 +503,7 @@ class MonerisPay
             $site_url = 'https://'.$_SERVER['SERVER_NAME'];
         else
             $site_url = C('config.config_site_url') == '' ? 'https://www.tutti.app' : C('config.config_site_url');
-        var_dump($site_url);die();
+        var_dump($_SERVER['SERVER_NAME'].$site_url);die();
         //$site_url = C('config.config_site_url') == '' ? 'http://www.vicisland.ca' : C('config.config_site_url');
 //        $site_url = C('config.config_site_url') == '' ? 'http://54.190.29.18' : C('config.config_site_url');
         $merchantUrl = $site_url.'/secure3d';//.$_SERVER["HTTP_REFERER"];
