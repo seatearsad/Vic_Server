@@ -2880,13 +2880,12 @@ class PayAction extends BaseAction{
                     echo $script;
                     exit();
                 }else{
-                    var_dump($resp['uid']);
                     if(empty($this->user_session)){
                         $user = D('User')->field(true)->where(array('uid'=>$resp['uid']))->find();
                         session('user',$user);
                         $this->user_session = session('user');
                     }
-                    var_dump(session('user'));die();
+                    
                     $this->success($resp['message'], $resp['url']);
                 }
             } else {
