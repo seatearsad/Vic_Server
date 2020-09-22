@@ -2891,7 +2891,7 @@ class IndexAction extends BaseAction
     }
 
     public function get_goods_desc(){
-        $list = D('Shop_goods')->where(array('des'=>array('neq','')))->order('goods_id desc')->limit(0,500)->select();
+        $list = D('Shop_goods')->where(array('des'=>array('neq','')))->order('goods_id desc')->select();
 
         $i = 1;
         foreach ($list as $v){
@@ -2900,10 +2900,10 @@ class IndexAction extends BaseAction
                 $desc = preg_replace('/<[^>]*>/', "", $desc);
                 $desc = str_replace("&amp;","&",$desc);
                 $desc = str_replace("&nbsp;"," ",$desc);
-                $desc = str_replace("&lt;","<",$desc);
-                $desc = str_replace("&gt;",">",$desc);
-                $desc = str_replace("&quot;","\"",$desc);
-                $desc = str_replace("&qpos;","'",$desc);
+                //$desc = str_replace("&lt;","<",$desc);
+                //$desc = str_replace("&gt;",">",$desc);
+                //$desc = str_replace("&quot;","\"",$desc);
+                //$desc = str_replace("&qpos;","'",$desc);
                 //preg_match('/<[^>]*>/', $desc, $match);
                 //$desc = str_replace($match[0],'',$desc);
 //                foreach ($match as $m){
@@ -2911,6 +2911,7 @@ class IndexAction extends BaseAction
 //                    $desc = str_replace($m,'',$desc);
 //                }
                 print_r($v['goods_id'] . $desc.'<br/>');
+                D('Shop_goods')->where(array('goods_id'=>$v['goods_id']))->save(array('des'=>$desc));
                 $i++;
             }
         }
