@@ -746,6 +746,7 @@ class MonerisPay
         $this->savePayData($resp,$is_wap,$orderInfo['tip'],$orderInfo['order_type']);
 
         $resp['url'] = $orderInfo['url'];
+        $resp['uid'] = $orderInfo['uid'];
 
         return $resp;
     }
