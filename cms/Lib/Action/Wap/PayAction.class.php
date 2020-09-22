@@ -2856,7 +2856,7 @@ class PayAction extends BaseAction{
             echo $inLineForm;
             exit();
         }
-
+var_dump(session('user'));die();
         if($_POST['PaRes'] && $_POST['MD']) {
             $PaRes = $_POST['PaRes'];
             $MD = $_POST['MD'];
