@@ -2213,6 +2213,8 @@ class IndexAction extends BaseAction
         $info['now_money'] = round($userInfo['now_money'],2);
         $info['phone'] = $userInfo['phone'];
         $info['email'] = $userInfo['email'];
+        $coupon = $this->getCouponByUser();
+        $info['coupon_num'] = count($coupon);
 
         if(isset($_POST['order_id'])){
             $order_id = $_POST['order_id'];
