@@ -1680,7 +1680,7 @@ class IndexAction extends BaseAction
     public function getCanCoupon(){
         $uid = $_POST['uid'];
         //订单金额
-        $amount = $_POST['amount'];
+        $amount = $_POST['amount'] ? $_POST['amount'] : -1;
 //        $today = time();
 
 //        $sql = 'select c.coupon_id,h.id,c.discount,c.order_money from '.C('DB_PREFIX').'system_coupon_hadpull as h left join '.C('DB_PREFIX').'system_coupon as c on h.coupon_id = c.coupon_id';
@@ -2213,7 +2213,7 @@ class IndexAction extends BaseAction
         $info['now_money'] = round($userInfo['now_money'],2);
         $info['phone'] = $userInfo['phone'];
         $info['email'] = $userInfo['email'];
-        $coupon = $this->getCouponByUser();
+        $coupon = $this->getCanCoupon();
         $info['coupon_num'] = count($coupon);
 
         if(isset($_POST['order_id'])){
