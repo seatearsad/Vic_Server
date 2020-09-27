@@ -1709,9 +1709,16 @@ class IndexAction extends BaseAction
 
         $tmp = array();
         foreach ($coupon_list as $key => $v) {
-            if (!$v['is_use'] && $v['order_money']<=$amount) {
-                $coupon = $this->arrange_coupon($v);
-                $tmp[] = $coupon;
+            if($amount < 0){
+                if (!$v['is_use']) {
+                    $coupon = $this->arrange_coupon($v);
+                    $tmp[] = $coupon;
+                }
+            }else{
+                if (!$v['is_use'] && $v['order_money']<=$amount) {
+                    $coupon = $this->arrange_coupon($v);
+                    $tmp[] = $coupon;
+                }
             }
         }
         return $tmp;
