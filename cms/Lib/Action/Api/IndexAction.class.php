@@ -2349,12 +2349,7 @@ class IndexAction extends BaseAction
         }
 
         krsort($recharge_list);
-
-        $uid = $_POST['uid'];
-        $userInfo = D('User')->get_user($uid);
-        $info['now_money'] = round($userInfo['now_money'],2);
-        $info['list'] = $recharge_list;
-        $this->returnCode(0,'info',$info,'success');
+        $this->returnCode(0,'info',$recharge_list,'success');
     }
 
     public function getRechargeDisForAndroid(){
