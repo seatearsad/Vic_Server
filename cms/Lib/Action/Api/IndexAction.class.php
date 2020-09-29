@@ -2222,6 +2222,8 @@ class IndexAction extends BaseAction
         $info['email'] = $userInfo['email'];
         $coupon = $this->getCanCoupon();
         $info['coupon_num'] = count($coupon);
+        $user_code = D('User')->getUserInvitationCode($uid);
+        $info['invi_code'] = strtoupper($user_code);
 
         if(isset($_POST['order_id'])){
             $order_id = $_POST['order_id'];
