@@ -18,9 +18,14 @@
 				<th width="80">{pigcms{:L('_BACK_STORE_AREA_')}</th>
 				<!--td id="choose_cityarea" province_id="{pigcms{$store.province_id}" city_id="{pigcms{$store.city_id}" area_id="{pigcms{$store.area_id}" circle_id="{pigcms{$store.circle_id}" market_id="{pigcms{$store.market_id}"></td-->
                 <td id="city_area">
-                    {pigcms{$store.city_name}
+                    <select name="city_id" id="city_select">
+                        <option value="0" <if condition="$store['city_id'] eq '' or $store['city_id'] eq 0">selected="selected"</if>>All</option>
+                        <volist name="city" id="vo">
+                            <option value="{pigcms{$vo.area_id}" <if condition="$store['city_id'] eq $vo['area_id']">selected="selected"</if>>{pigcms{$vo.area_name}</option>
+                        </volist>
+                    </select>
                 </td>
-                <input type="hidden" id="city_id" name="city_id" value="{pigcms{$store.city_id}">
+                <!--input type="hidden" id="city_id" name="city_id" value="{pigcms{$store.city_id}"-->
 			</tr>
 			<tr>
 				<th width="80">{pigcms{:L('_BACK_STORE_ADDRESS_')}</th>

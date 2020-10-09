@@ -377,6 +377,9 @@ class MerchantAction extends BaseAction{
         $city = D('Area')->where(array('area_id'=>$store['city_id']))->find();
 		$store['city_name'] = $city['area_name'];
 
+        $city = D('Area')->where(array('area_type'=>2,'is_open'=>1))->select();
+        $this->assign('city',$city);
+
         $this->assign('store',$store);
 
 		$this->assign('bg_color','#F3F3F3');
