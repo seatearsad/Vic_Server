@@ -47,8 +47,8 @@ class StoreModel extends Model
         $store['shop_remind'] = $row['shop_remind'];
         $store['pay_method'] = $row['pay_method'];
 
-        if($store['background'] && $store['background'] != '') {
-            $image_tmp = explode(',', $store['background']);
+        if($row['background'] && $row['background'] != '') {
+            $image_tmp = explode(',', $row['background']);
             $store['background'] = C('config.site_url') . '/upload/background/' . $image_tmp[0] . '/' . $image_tmp['1'];
         }else{
             $store['background'] = '';
