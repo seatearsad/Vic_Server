@@ -47,6 +47,13 @@ class StoreModel extends Model
         $store['shop_remind'] = $row['shop_remind'];
         $store['pay_method'] = $row['pay_method'];
 
+        if($store['background'] && $store['background'] != '') {
+            $image_tmp = explode(',', $store['background']);
+            $store['background'] = C('config.site_url') . '/upload/background/' . $image_tmp[0] . '/' . $image_tmp['1'];
+        }else{
+            $store['background'] = '';
+        }
+
         $store['is_close'] = 1;
         $now_time = date('H:i:s');
 
