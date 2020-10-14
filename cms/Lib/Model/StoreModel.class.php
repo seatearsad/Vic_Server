@@ -74,7 +74,8 @@ class StoreModel extends Model
             if($time_list[$day_num] == ""){
                 $time_list[$day_num] = $open_time[$i];
             }else{
-                $time_list[$day_num] .= ", ".$open_time[$i];
+                if($open_time[$i] != "")
+                    $time_list[$day_num] .= ", ".$open_time[$i];
             }
         }
 
