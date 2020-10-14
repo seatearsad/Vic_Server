@@ -65,7 +65,7 @@ class StoreModel extends Model
         for ($i = 0;$i < 21;++$i){
             $this_num = $i + 1;
             if ($row['open_'.$this_num] != '00:00:00' || $row['close_'.$this_num] != '00:00:00'){
-                $open_time[$i] = substr($row['open_'.$this_num], 0, -3) . '-' . substr($row['open_'.$this_num], 0, -3);
+                $open_time[$i] = substr($row['open_'.$this_num], 0, -3) . '-' . substr($row['close_'.$this_num], 0, -3);
             }else{
                 $open_time[$i] = "";
             }
