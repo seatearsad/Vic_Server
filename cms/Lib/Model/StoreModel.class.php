@@ -60,6 +60,25 @@ class StoreModel extends Model
         if($row['store_is_close'] != 0){
             $row = checkAutoOpen($row);
         }
+
+        $time_list = array();
+        for ($i = 0;$i < 21;++$i){
+            $this_num = $i + 1;
+            if ($row['open_'.$this_num] != '00:00:00' || $row['close_'.$this_num] != '00:00:00'){
+                $open_time[$i] = substr($row['open_'.$this_num], 0, -3) . '-' . substr($row['open_'.$this_num], 0, -3);
+            }else{
+                $open_time[$i] = "";
+            }
+
+            $day_num = $i/3;
+            if($time_list[$day_num] == ""){
+                $time_list[$day_num] = $open_time[$i];
+            }else{
+                $time_list[$day_num] .= ", ".$open_time[$i];
+            }
+        }
+
+        $store['open_list'] = $time_list;
         //@wangchuanyuan 周一到周天
         $date = date("w");//今天是星期几 @ydhl-wangchuanyuan 20171106
         switch ($date){
