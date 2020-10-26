@@ -272,13 +272,15 @@ class IndexAction extends BaseAction
                     $storeMemo['is_close'] = 1;
                 }
 
-                $distance = getDistance($lat,$long,$storeRow['lat'],$storeRow['long']);
-                if($distance < $storeRow['delivery_radius']*1000) {
-                    if ($storeMemo['is_close'] == 0) {
-                        $allClose = false;
-                        $openArr[] = $storeMemo;
-                    } else {
-                        $closeArr[] = $storeMemo;
+                if($storeRow['status'] == 1) {
+                    $distance = getDistance($lat, $long, $storeRow['lat'], $storeRow['long']);
+                    if ($distance < $storeRow['delivery_radius'] * 1000) {
+                        if ($storeMemo['is_close'] == 0) {
+                            $allClose = false;
+                            $openArr[] = $storeMemo;
+                        } else {
+                            $closeArr[] = $storeMemo;
+                        }
                     }
                 }
             }

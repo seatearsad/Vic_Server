@@ -1154,6 +1154,14 @@ class DeliverAction extends BaseAction
 						D('Pick_order')->where(array('store_id' => $order['store_id'], 'order_id' => $order['order_id']))->save(array('status' => 4));
 						$this->shop_notice($order);
 						D('Shop_order_log')->add_log(array('order_id' => $order_id, 'status' => 6, 'name' => $this->deliver_session['name'], 'phone' => $this->deliver_session['phone']));
+                        /**
+                        $sms_data['uid'] = $order['uid'];
+                        $sms_data['mobile'] = $order['userphone'];
+                        $sms_data['sendto'] = 'user';
+                        $sms_data['tplid'] = 172700;
+                        $sms_data['params'] = [];
+                        Sms::sendSms2($sms_data);
+                         **/
 					} else {
 						$this->rollback($supply_id, 4);
 						$this->error("更新订单信息错误");

@@ -930,6 +930,7 @@ class Shop_orderModel extends Model
                     if(D('New_event')->addEventCouponByType(2, $now_order['uid'])){
                         $user = D('User')->where(array('uid' => $now_order['uid']))->find();
                         if($user['invitation_user'] != 0){
+                        	//在此处添加发送给邀请者短信
                             $invitation_user = D('User')->where(array('uid' => $user['invitation_user']))->find();
                             D('User')->where(array('uid' => $user['invitation_user']))->save(array('invitation_order_num'=>($invitation_user['invitation_order_num']+1)));
 						}

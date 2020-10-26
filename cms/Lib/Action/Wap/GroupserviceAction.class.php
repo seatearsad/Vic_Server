@@ -747,15 +747,17 @@ class GroupserviceAction extends BaseAction{
                     $storeMemo['is_close'] = 1;
                 }
 
-                $distance = getDistance($lat,$lng,$storeRow['lat'],$storeRow['long']);
-                $storeMemo['distance'] = $distance;
-                $storeMemo['delivery_radius'] = $storeRow['delivery_radius'];
-                if($distance < $storeRow['delivery_radius']*1000) {
-                    if ($storeMemo['is_close'] == 0) {
-                        $allClose = false;
-                        $openArr[] = $storeMemo;
-                    } else {
-                        $closeArr[] = $storeMemo;
+                if($storeRow['status'] == 1) {
+                    $distance = getDistance($lat, $lng, $storeRow['lat'], $storeRow['long']);
+                    $storeMemo['distance'] = $distance;
+                    $storeMemo['delivery_radius'] = $storeRow['delivery_radius'];
+                    if ($distance < $storeRow['delivery_radius'] * 1000) {
+                        if ($storeMemo['is_close'] == 0) {
+                            $allClose = false;
+                            $openArr[] = $storeMemo;
+                        } else {
+                            $closeArr[] = $storeMemo;
+                        }
                     }
                 }
             }

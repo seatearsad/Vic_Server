@@ -1494,14 +1494,16 @@ class Merchant_store_shopModel extends Model
                     $storeRow['is_close'] = 1;
                 }
 
-                $distance = getDistance($lat, $lng, $storeRow['lat'], $storeRow['long']);
-                $storeRow['distance'] = $distance;
-                if ($distance < $storeRow['delivery_radius'] * 1000) {
-                    if ($storeRow['is_close'] == 0) {
-                        $allClose = false;
-                        $openArr[] = $storeRow;
-                    } else {
-                        $closeArr[] = $storeRow;
+                if($storeRow['status'] == 1) {
+                    $distance = getDistance($lat, $lng, $storeRow['lat'], $storeRow['long']);
+                    $storeRow['distance'] = $distance;
+                    if ($distance < $storeRow['delivery_radius'] * 1000) {
+                        if ($storeRow['is_close'] == 0) {
+                            $allClose = false;
+                            $openArr[] = $storeRow;
+                        } else {
+                            $closeArr[] = $storeRow;
+                        }
                     }
                 }
             }
