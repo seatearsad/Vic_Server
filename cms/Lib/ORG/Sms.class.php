@@ -398,7 +398,7 @@ final class Sms {
     public function telesign_send_sms($phone,$ttxt,$type=0){
         $typeName = array("ARN","MKT","OTP");//提醒，营销，验证码
 
-        $where = array('tab_id'=>'telesign','gid'=>44);
+        $where = array('tab_id'=>'telesign','gid'=>45);
         $result = D('Config')->field(true)->where($where)->select();
         foreach($result as $v){
             if($v['name'] == 'telesign_customer')
