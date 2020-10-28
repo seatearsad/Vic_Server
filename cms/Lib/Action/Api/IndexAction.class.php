@@ -663,6 +663,15 @@ class IndexAction extends BaseAction
         $this->returnCode(0,'',$result,'success');
     }
 
+    public function delCart(){
+        $uid = $_POST['uid'];
+        $storeId = $_POST['storeId'] ? $_POST['storeId'] : 0;
+
+        $result = D('Cart')->del_cart($uid,$storeId);
+
+        $this->returnCode(0,'info',$result,'success');
+    }
+
     public function getUserDefaultAddress(){
         $uid = $_POST['uid'];
 

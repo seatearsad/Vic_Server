@@ -135,6 +135,19 @@ class CartModel extends Model
         return $result;
     }
 
+    public function del_cart($uid,$storeId = 0)
+    {
+        $where['uid'] = $uid;
+
+        if ($storeId != 0) {
+            $where['sid'] = $storeId;
+        }
+
+        $this->where($where)->delete();
+
+        return array();
+    }
+
     public function getCartList($uid,$cartList){
         $list = array();
         $total_price = 0;
