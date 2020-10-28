@@ -518,7 +518,7 @@ class Deliver_assignModel extends Model
     private function sendMsg($uid){
         $deliver = D('Deliver_user')->field(true)->where(array('uid'=>$uid))->find();
         if($deliver['device_id'] && $deliver['device_id'] != ''){
-            $message = 'There is a new order for you to pick up, please go to "Pending List" take the order.';
+            $message = 'There is a new order for you to pick up. Please go to “Pending List” to take the order.';
             Sms::sendMessageToGoogle($deliver['device_id'],$message,3);
         }else{
             $sms_data = [
@@ -528,7 +528,9 @@ class Deliver_assignModel extends Model
                 'params' => [],
                 'content' => '有一个新的订单可以配送，请前往个人中心抢单。'
             ];
-            Sms::sendSms2($sms_data);
+            //Sms::sendSms2($sms_data);
+            $sms_txt = "There is a new order for you to pick up. Please go to “Pending List” to take the order.";
+            Sms::telesign_send_sms($deliver['phone'],$sms_txt,0);
         }
     }
 

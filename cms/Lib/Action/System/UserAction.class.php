@@ -965,7 +965,10 @@ class UserAction extends BaseAction {
                 $sms_data['sendto'] = 'user';
                 $sms_data['tplid'] = 326488;
                 $sms_data['params'] = [];
-                Sms::sendSms2($sms_data);
+                //Sms::sendSms2($sms_data);
+                $sms_txt = "Tutti has added a new coupon to your account! Please log in to your account and check available coupons for details. Reply T to unsubscribe.";
+                Sms::telesign_send_sms($userInfo['phone'],$sms_txt,1);
+
             }
             exit(json_encode($result));
         }else{
@@ -978,7 +981,9 @@ class UserAction extends BaseAction {
                     $sms_data['sendto'] = 'user';
                     $sms_data['tplid'] = 326488;
                     $sms_data['params'] = [];
-                    Sms::sendSms2($sms_data);
+                    //Sms::sendSms2($sms_data);
+                    $sms_txt = "Tutti has added a new coupon to your account! Please log in to your account and check available coupons for details. Reply T to unsubscribe.";
+                    Sms::telesign_send_sms($userInfo['phone'],$sms_txt,1);
                 }
             }
 

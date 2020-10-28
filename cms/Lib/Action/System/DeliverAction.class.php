@@ -1366,7 +1366,7 @@ class DeliverAction extends BaseAction {
             $user_list = D('Deliver_user')->field(true)->where(array('status' => 1, 'work_status' => 1,'city_id'=>$city_id))->order('uid asc')->select();
             foreach ($user_list as $deliver) {
                 if ($deliver['device_id'] && $deliver['device_id'] != '') {
-                    $message = 'Tutti are short on hands now! Please log in to your account and start to Accept Order! Tutti thanks your help!';
+                    $message = 'Tutti is short on hands! Please log in to your account to start to accept orders. Thank you for your help!';
                     Sms::sendMessageToGoogle($deliver['device_id'], $message, 3);
                 } else {
                     $sms_data['uid'] = 0;
@@ -1374,7 +1374,9 @@ class DeliverAction extends BaseAction {
                     $sms_data['sendto'] = 'deliver';
                     $sms_data['tplid'] = 247163;
                     $sms_data['params'] = [];
-                    Sms::sendSms2($sms_data);
+                    //Sms::sendSms2($sms_data);
+                    $sms_txt = "Tutti is short on hands! Please log in to your account to start to accept orders. Thank you for your help!";
+                    Sms::telesign_send_sms($deliver['phone'],$sms_txt,0);
                 }
             }
             $curr_time = time();
@@ -1400,7 +1402,10 @@ class DeliverAction extends BaseAction {
                     $sms_data['sendto'] = 'deliver';
                     $sms_data['tplid'] = 247163;
                     $sms_data['params'] = [];
-                    Sms::sendSms2($sms_data);
+                    //Sms::sendSms2($sms_data);
+
+                    $sms_txt = "Tutti is short on hands! Please log in to your account to start to accept orders. Thank you for your help!";
+                    Sms::telesign_send_sms($deliver['phone'],$sms_txt,0);
 //                }
             }
 
@@ -1479,7 +1484,9 @@ class DeliverAction extends BaseAction {
                 $sms_data['sendto'] = 'deliver';
                 $sms_data['tplid'] = 522180;
                 $sms_data['params'] = [];
-                Sms::sendSms2($sms_data);
+                //Sms::sendSms2($sms_data);
+                $sms_txt = "Congratulations! Your courier application has been approved and your account is now active. You can start scheduling your shifts and accepting delivery orders. Welcome to the Tutti team!";
+                Sms::telesign_send_sms($deliver['phone'],$sms_txt,0);
                 if($deliver['reg_status'] == 5){
                     $data['reg_status'] = 0;
                 }

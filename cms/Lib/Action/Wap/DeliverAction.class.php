@@ -1154,14 +1154,11 @@ class DeliverAction extends BaseAction
 						D('Pick_order')->where(array('store_id' => $order['store_id'], 'order_id' => $order['order_id']))->save(array('status' => 4));
 						$this->shop_notice($order);
 						D('Shop_order_log')->add_log(array('order_id' => $order_id, 'status' => 6, 'name' => $this->deliver_session['name'], 'phone' => $this->deliver_session['phone']));
-                        /**
-                        $sms_data['uid'] = $order['uid'];
-                        $sms_data['mobile'] = $order['userphone'];
-                        $sms_data['sendto'] = 'user';
-                        $sms_data['tplid'] = 172700;
-                        $sms_data['params'] = [];
-                        Sms::sendSms2($sms_data);
-                         **/
+
+                        $store = D('Merchant_store')->where(array('store_id'=>$order['store_id']))->find();
+                        $store['name'] = lang_substr($store['name'], 'en-us');
+                        $sms_txt = "Your order from ".$store['name']." has arrived. Please feel free to contact the Tutti Support Team if there are any issues with your order. Thank you for choosing Tutti!";
+                        Sms::telesign_send_sms($order['userphone'],$sms_txt,0);
 					} else {
 						$this->rollback($supply_id, 4);
 						$this->error("更新订单信息错误");

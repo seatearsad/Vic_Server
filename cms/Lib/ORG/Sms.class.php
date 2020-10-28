@@ -394,6 +394,44 @@ final class Sms {
             return $result;
         }
     }
+
+    public function telesign_send_sms($phone,$ttxt,$type=0){
+        $typeName = array("ARN","MKT","OTP");//提醒，营销，验证码
+
+        $where = array('tab_id'=>'telesign','gid'=>44);
+        $result = D('Config')->field(true)->where($where)->select();
+        foreach($result as $v){
+            if($v['name'] == 'telesign_customer')
+                $customer_id = $v['value'];
+            elseif ($v['name'] == 'telesign_api')
+                $api_key = $v['value'];
+        }
+
+        $nationcode = "+86";
+        if(strlen($phone) != 11) {
+            $nationcode = "+1";
+        }
+
+        $data['message'] = $ttxt;
+        $data['message_type'] = $typeName[$type];
+        $data['phone_number'] = $nationcode.$phone;
+
+        $url = "https://rest-api.telesign.com/v1/messaging";
+        $ch = curl_init();
+        $headers[] = "Content-type: application/x-www-form-urlencoded";
+        $headers[] = "Authorization: Basic ".base64_encode("$customer_id:$api_key");
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+        $result = curl_exec($ch);
+        //关闭curl
+        curl_close($ch);
+
+        //var_dump($result);die();
+        return true;
+    }
 }
 
 ?>
