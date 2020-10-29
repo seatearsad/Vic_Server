@@ -1363,7 +1363,7 @@ class DeliverAction extends BaseAction {
     public function e_call(){
         if(isset($_POST['city_id'])) {
             $city_id = $_POST['city_id'];
-            /**
+            /*
             $user_list = D('Deliver_user')->field(true)->where(array('status' => 1, 'work_status' => 1,'city_id'=>$city_id))->order('uid asc')->select();
             foreach ($user_list as $deliver) {
                 if ($deliver['device_id'] && $deliver['device_id'] != '') {
@@ -1380,7 +1380,7 @@ class DeliverAction extends BaseAction {
                     Sms::telesign_send_sms($deliver['phone'],$sms_txt,0);
                 }
             }
-             **/
+             */
             $curr_time = time();
             D('Area')->where(array('area_id'=>$city_id))->save(array('urgent_time'=>$curr_time));
 
