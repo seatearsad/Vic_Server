@@ -719,6 +719,7 @@ class ShopAction extends BaseAction
 
             $_POST['name'] = fulltext_filter($_POST['name']);
             $_POST['des'] = fulltext_filter($_POST['des']);
+            $_POST['des'] = preg_replace('/<[^>]*>/', "", $_POST['des']);
 
             $img_mer_id = sprintf("%09d", $this->merchant_session['mer_id']);
             $rand_num = substr($img_mer_id, 0, 3) . '/' . substr($img_mer_id, 3, 3) . '/' . substr($img_mer_id, 6, 3);

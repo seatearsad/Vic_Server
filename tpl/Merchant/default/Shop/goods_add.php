@@ -143,7 +143,8 @@
 							<div id="txtintro" class="tab-pane">
 								<div class="form-group" >
 									<label class="col-sm-1">商品描述：</label>
-									<textarea name="des" id="content" style="width:702px;">{pigcms{$now_goods.des}</textarea>
+									<!--textarea name="des" id="content" style="width:702px;">{pigcms{$now_goods.des}</textarea-->
+                                    <textarea name="des" style="width:702px;height: 200px">{pigcms{$now_goods.des}</textarea>
 								</div>
 							</div>
 							<div id="txtimage" class="tab-pane">

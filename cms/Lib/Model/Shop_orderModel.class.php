@@ -939,7 +939,8 @@ class Shop_orderModel extends Model
                             $invitation_user = D('User')->where(array('uid' => $user['invitation_user']))->find();
                             D('User')->where(array('uid' => $user['invitation_user']))->save(array('invitation_order_num'=>($invitation_user['invitation_order_num']+1)));
 
-                            $sms_txt = "Congratulations! Your friend ".$user['nickname']." has placed an order using your referral code! Please go to Account > Coupon to use your referral coupons before they expire. ".$invitation_user['invitation_order_num']+1." of your referrals have placed their first order! Thank you for your support!";
+                            $invitation_order_num = $invitation_user['invitation_order_num']+1;
+                            $sms_txt = "Congratulations! Your friend ".$user['nickname']." has placed an order using your referral code! Please go to Account > Coupon to use your referral coupons before they expire. ".$invitation_order_num." of your referrals have placed their first order! Thank you for your support!";
                             Sms::telesign_send_sms($invitation_user['phone'],$sms_txt,0);
 						}
 					}

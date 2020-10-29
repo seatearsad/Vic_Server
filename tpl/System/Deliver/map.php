@@ -22,6 +22,7 @@
                 <if condition="$system_session['level'] neq 3">
                     <if condition="$curr_city['urgent_time'] neq 0">
                         <div id="send_sms">Send SMS</div>
+                        <div id="send_notify">Send Notify</div>
                     </if>
                 </if>
             </div>
@@ -61,7 +62,7 @@
         height: 550px;
     }
 
-    #send_sms{
+    #send_sms,#send_notify{
         width: 180px;
         height: 30px;
         text-align: center;
@@ -242,7 +243,19 @@
     });
 
     $('#send_sms').click(function () {
-        $.post("{pigcms{:U('Deliver/urgent_send')}", {'city_id':city_id}, function(result) {
+        $.post("{pigcms{:U('Deliver/urgent_send')}", {'city_id':city_id,'type':'0'}, function(result) {
+            if(result){
+                message = result.msg;
+            }else {
+                message = 'Error';
+            }
+
+            alert(message);
+        },'json');
+    });
+
+    $('#send_notify').click(function () {
+        $.post("{pigcms{:U('Deliver/urgent_send')}", {'city_id':city_id,'type':'1'}, function(result) {
             if(result){
                 message = result.msg;
             }else {

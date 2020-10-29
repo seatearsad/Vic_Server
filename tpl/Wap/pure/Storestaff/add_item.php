@@ -79,7 +79,7 @@
     </div>
     <div class="order_input">
         <div class="input_title">
-            商品税率 % *
+            {pigcms{:L('QW_TAXRATE')} *
         </div>
         <input type="text" name="tax_num" placeholder="0.00" value="{pigcms{$goods.tax_num|default=$now_store['default_tax']}" />
     </div>
