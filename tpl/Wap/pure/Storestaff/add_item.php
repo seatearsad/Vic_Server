@@ -87,7 +87,7 @@
         <div class="input_title">
             {pigcms{:L('QW_DESCRIPTION')}
         </div>
-        <textarea name="desc">{pigcms{$goods.dsc}</textarea>
+        <textarea name="desc">{pigcms{$goods.des}</textarea>
     </div>
     <div class="order_input">
         <div class="img_size">

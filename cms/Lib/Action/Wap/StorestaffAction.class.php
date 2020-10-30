@@ -3761,8 +3761,8 @@ class StorestaffAction extends BaseAction
             foreach ($_POST as $k=>$v){
                 if(strpos($k,'val_') !== false){
                     $val_key = explode('_',$k);
-                    $add_val[$val_key[3]]['dish_id'] = $dish_id;
                     if($val_key[2] == 'new'){
+                        $add_val[$val_key[3]]['dish_id'] = $dish_id;
                         if($val_key[1] == 'name')
                             $add_val[$val_key[3]]['name'] = $v;
                         if($val_key[1] == 'price')

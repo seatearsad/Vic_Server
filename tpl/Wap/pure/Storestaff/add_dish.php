@@ -251,7 +251,7 @@
         var dish_val_id = dish_val_div.data('id');
         layer.open({
             title:"{pigcms{:L('_STORE_REMIND_')}",
-            content:'确定要删除吗?不可恢复!',
+            content:"{pigcms{:L('QW_DELETEDISHREMINDER')}",
             btn: ["{pigcms{:L('_B_D_LOGIN_CONIERM_')}","{pigcms{:L('_B_D_LOGIN_CANCEL_')}"],
             yes: function(index){
                 layer.close(index);
@@ -277,7 +277,7 @@
     $('.del_dish').click(function () {
         layer.open({
             title:"{pigcms{:L('_STORE_REMIND_')}",
-            content:'确定要删除吗?不可恢复!',
+            content:"{pigcms{:L('QW_DELETEDISHREMINDER')}",
             btn: ["{pigcms{:L('_B_D_LOGIN_CONIERM_')}","{pigcms{:L('_B_D_LOGIN_CANCEL_')}"],
             yes: function(index){
                 layer.close(index);
