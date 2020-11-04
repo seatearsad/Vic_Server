@@ -228,6 +228,13 @@ class CartModel extends Model
             $t_good['attr'].= $t_good['attr'] == "" ? $proper_desc : ";".$proper_desc;
             $t_good['attr'].= $t_good['attr'] == "" ? $dish_desc : ";".$dish_desc;
 
+            if($t_good['attr'] == ""){
+                $t_good['attr_num'] = 0;
+            }else {
+                $attr_arr = explode(";", $t_good['attr']);
+                $t_good['attr_num'] = count($attr_arr);
+            }
+
             $t_good['price'] = $good['price'];
             $t_good['tax_num'] = $good['tax_num'];
             $t_good['deposit_price'] = $good['deposit_price'];
