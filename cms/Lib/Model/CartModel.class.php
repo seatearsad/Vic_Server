@@ -178,7 +178,7 @@ class CartModel extends Model
                 $spec_list = explode("_",$t_good['spec']);
                 foreach($spec_list as $vv){
                     $spec = D('Shop_goods_spec_value')->field(true)->where(array('id'=>$vv))->find();
-                    $spec_desc = $spec_desc == '' ? lang_substr($spec['name'],C('DEFAULT_LANG')) : $spec_desc.','.lang_substr($spec['name'],C('DEFAULT_LANG'));
+                    $spec_desc = $spec_desc == '' ? lang_substr($spec['name'],C('DEFAULT_LANG')) : $spec_desc.';'.lang_substr($spec['name'],C('DEFAULT_LANG'));
                 }
             }
             $t_good['spec_desc'] = $spec_desc;
@@ -195,7 +195,7 @@ class CartModel extends Model
                     $nameList = explode(',',$pro['val']);
                     $name = lang_substr($nameList[$sId],C('DEFAULT_LANG'));
 
-                    $proper_desc = $proper_desc == '' ? $name : $proper_desc.','.$name;
+                    $proper_desc = $proper_desc == '' ? $name : $proper_desc.';'.$name;
                 }
             }
             $t_good['proper_desc'] = $proper_desc;
