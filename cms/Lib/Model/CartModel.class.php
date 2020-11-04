@@ -326,6 +326,7 @@ class CartModel extends Model
         $tax_price = $tax_price + ($store['pack_fee'] + $delivey_fee)*$store['tax_num']/100;
         $total_pay_price = $total_pay_price + $tax_price + $deposit_price;
 
+        $result['store_name'] = lang_substr($store['name'],C('DEFAULT_LANG'));
         $result['expect_time'] = date('Y-m-d H:i',$delivery_time);
         $result['hongbao'] = array();
         $result['total_market_price'] = $total_market_price;
