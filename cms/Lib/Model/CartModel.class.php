@@ -267,7 +267,6 @@ class CartModel extends Model
         }
 
         $address = D('Store')->getDefaultAdr($uid);
-        $store = D('Store')->get_store_by_id($sid);
 
         $distance = getDistance($store['lat'], $store['lng'], $address['mapLat'], $address['mapLng']);
         $store['free_delivery'] = 0;
@@ -326,7 +325,7 @@ class CartModel extends Model
         $tax_price = $tax_price + ($store['pack_fee'] + $delivey_fee)*$store['tax_num']/100;
         $total_pay_price = $total_pay_price + $tax_price + $deposit_price;
 
-        $result['store_name'] = lang_substr($store['name'],C('DEFAULT_LANG'));
+        $result['store_name'] = $store['site_name'];
         $result['expect_time'] = date('Y-m-d H:i',$delivery_time);
         $result['hongbao'] = array();
         $result['total_market_price'] = $total_market_price;
