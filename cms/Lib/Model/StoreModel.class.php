@@ -627,8 +627,8 @@ class StoreModel extends Model
 
             $returnList[$k]['proper_desc'] = $proper_desc;
             $returnList[$k]['attr'] = $spec_desc;
-            $returnList[$k]['attr'].= $returnList['attr'] == "" ? $proper_desc : ";".$proper_desc;
-            $returnList[$k]['attr'].= $returnList['attr'] == "" ? $dish_desc : ";".$dish_desc;
+            $returnList[$k]['attr'].= $returnList[$k]['attr'] == "" ? $proper_desc : ";".$proper_desc;
+            $returnList[$k]['attr'].= $returnList[$k]['attr'] == "" ? $dish_desc : ";".$dish_desc;
 
             if($returnList[$k]['attr'] == ""){
                 $returnList[$k]['attr_num'] = 0;
