@@ -604,7 +604,7 @@ class StoreModel extends Model
                 $spec_list = explode("_",$returnList[$k]['spec']);
                 foreach($spec_list as $vv){
                     $spec = D('Shop_goods_spec_value')->field(true)->where(array('id'=>$vv))->find();
-                    $spec_desc = $spec_desc == '' ? lang_substr($spec['name'],C('DEFAULT_LANG')) : $spec_desc.','.lang_substr($spec['name'],C('DEFAULT_LANG'));
+                    $spec_desc = $spec_desc == '' ? lang_substr($spec['name'],C('DEFAULT_LANG')) : $spec_desc.';'.lang_substr($spec['name'],C('DEFAULT_LANG'));
                 }
             }
             $returnList[$k]['spec_desc'] = $spec_desc;
@@ -621,10 +621,21 @@ class StoreModel extends Model
                     $nameList = explode(',',$pro['val']);
                     $name = lang_substr($nameList[$sId],C('DEFAULT_LANG'));
 
-                    $proper_desc = $proper_desc == '' ? $name : $proper_desc.','.$name;
+                    $proper_desc = $proper_desc == '' ? $name : $proper_desc.';'.$name;
                 }
             }
+
             $returnList[$k]['proper_desc'] = $proper_desc;
+            $returnList[$k]['attr'] = $spec_desc;
+            $returnList[$k]['attr'].= $returnList['attr'] == "" ? $proper_desc : ";".$proper_desc;
+            $returnList[$k]['attr'].= $returnList['attr'] == "" ? $dish_desc : ";".$dish_desc;
+
+            if($returnList[$k]['attr'] == ""){
+                $returnList[$k]['attr_num'] = 0;
+            }else {
+                $attr_arr = explode(";", $returnList[$k]['attr']);
+                $returnList[$k]['attr_num'] = count($attr_arr);
+            }
 
             $returnList[$k]['deposit'] = $v['deposit_price'];
             $returnList[$k]['tax_num'] = $v['tax_num'];
