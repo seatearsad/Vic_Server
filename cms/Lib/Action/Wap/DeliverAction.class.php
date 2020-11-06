@@ -1157,8 +1157,8 @@ class DeliverAction extends BaseAction
 
                         $store = D('Merchant_store')->where(array('store_id'=>$order['store_id']))->find();
                         $store['name'] = lang_substr($store['name'], 'en-us');
-                        //$sms_txt = "Your order from ".$store['name']." has arrived. Please feel free to contact the Tutti Support Team if there are any issues with your order. Thank you for choosing Tutti!";
-                        //Sms::telesign_send_sms($order['userphone'],$sms_txt,0);
+                        $sms_txt = "Your order from ".$store['name']." has arrived. Please feel free to contact the Tutti Support Team if there are any issues with your order. Thank you for choosing Tutti!";
+                        Sms::telesign_send_sms($order['userphone'],$sms_txt,0);
 					} else {
 						$this->rollback($supply_id, 4);
 						$this->error("更新订单信息错误");

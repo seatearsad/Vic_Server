@@ -1770,9 +1770,9 @@ class StorestaffAction extends BaseAction
                 $sms_data['sendto'] = 'user';
                 $sms_data['tplid'] = 172700;
                 $sms_data['params'] = [];
-                Sms::sendSms2($sms_data);
-                //$sms_txt = "Your order has been accepted by the store, they are preparing your order now. Our Courier is on the way, thank you for your patience.";
-                //Sms::telesign_send_sms($order['userphone'],$sms_txt,0);
+                //Sms::sendSms2($sms_data);
+                $sms_txt = "Your order has been accepted by the store, they are preparing your order now. Our Courier is on the way, thank you for your patience.";
+                Sms::telesign_send_sms($order['userphone'],$sms_txt,0);
             }
 
             if(isset($_POST['dining_time']) && $_POST['dining_time'] >= 40){
@@ -1786,9 +1786,9 @@ class StorestaffAction extends BaseAction
                     $store['name'],
                     $_POST['dining_time']
                 ];
-                Sms::sendSms2($sms_data);
-                //$sms_txt = "We’d like to inform you that ".$store['name']." needs ".$_POST['dining_time']." minutes to finish preparing your order. Estimated delivery time may be longer than expected. Thank you for your patience!";
-                //Sms::telesign_send_sms($order['userphone'],$sms_txt,0);
+                //Sms::sendSms2($sms_data);
+                $sms_txt = "We’d like to inform you that ".$store['name']." needs ".$_POST['dining_time']." minutes to finish preparing your order. Estimated delivery time may be longer than expected. Thank you for your patience!";
+                Sms::telesign_send_sms($order['userphone'],$sms_txt,0);
             }
 
             //发送信息
@@ -2535,9 +2535,9 @@ class StorestaffAction extends BaseAction
                         $sms_data['sendto'] = 'user';
                         $sms_data['tplid'] = 172700;
                         $sms_data['params'] = [];
-                        Sms::sendSms2($sms_data);
-                        //$sms_txt = "Your order has been accepted by the store, they are preparing your order now. Our Courier is on the way, thank you for your patience.";
-                        //Sms::telesign_send_sms($order['userphone'],$sms_txt,0);
+                        //Sms::sendSms2($sms_data);
+                        $sms_txt = "Your order has been accepted by the store, they are preparing your order now. Our Courier is on the way, thank you for your patience.";
+                        Sms::telesign_send_sms($order['userphone'],$sms_txt,0);
                     }
                     $this->success_tips('Success', U('Storestaff/index'));
                 }
@@ -3931,9 +3931,9 @@ class StorestaffAction extends BaseAction
                 $store['name'],
                 $add_time
             ];
-            Sms::sendSms2($sms_data);
-            //$sms_txt = $store['name']." has informed us that they need another ".$add_time." min to finish preparing your food. We apologize for any inconvenience. Your driver will pick up your meal according to this new preparation time. Thank you for your patience!";
-            //Sms::telesign_send_sms($order['userphone'],$sms_txt,0);
+            //Sms::sendSms2($sms_data);
+            $sms_txt = $store['name']." has informed us that they need another ".$add_time." min to finish preparing your food. We apologize for any inconvenience. Your driver will pick up your meal according to this new preparation time. Thank you for your patience!";
+            Sms::telesign_send_sms($order['userphone'],$sms_txt,0);
 
             //发送给送餐员
             if($order['order_status'] > 1 && $supply['uid']) {
@@ -3947,9 +3947,9 @@ class StorestaffAction extends BaseAction
                     $add_time,
                     $order_id
                 ];
-                Sms::sendSms2($sms_data);
-                //$sms_txt = $store['name']." will need another ".$add_time." min to prepare Order #".$order_id.". Please adjust your plan accordingly to ensure all orders are picked up and delivered on time. Thank you!";
-                //Sms::telesign_send_sms($deliver['phone'],$sms_txt,0);
+                //Sms::sendSms2($sms_data);
+                $sms_txt = $store['name']." will need another ".$add_time." min to prepare Order #".$order_id.". Please adjust your plan accordingly to ensure all orders are picked up and delivered on time. Thank you!";
+                Sms::telesign_send_sms($deliver['phone'],$sms_txt,0);
             }
 
             exit(json_encode(array('error'=>0)));

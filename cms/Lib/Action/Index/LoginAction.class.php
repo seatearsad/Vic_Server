@@ -107,9 +107,9 @@ class LoginAction extends BaseAction {
             $sms_data['params'] = [
                 $vcode
             ];
-            Sms::sendSms2($sms_data);
-            //$sms_txt = "This is your verification code for password recovery. Your code is: ".$vcode;
-            //Sms::telesign_send_sms($_POST['phone'],$sms_txt,0);
+            //Sms::sendSms2($sms_data);
+            $sms_txt = "This is your verification code for password recovery. Your code is: ".$vcode;
+            Sms::telesign_send_sms($_POST['phone'],$sms_txt,0);
 
             $addtime = time();
             $expiry = $addtime + 5 * 60; /*             * **五分钟有效期*** */

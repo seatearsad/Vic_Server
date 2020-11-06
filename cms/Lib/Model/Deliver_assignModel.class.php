@@ -528,9 +528,9 @@ class Deliver_assignModel extends Model
                 'params' => [],
                 'content' => '有一个新的订单可以配送，请前往个人中心抢单。'
             ];
-            Sms::sendSms2($sms_data);
-            //$sms_txt = "There is a new order for you to pick up. Please go to “Pending List” to take the order.";
-            //Sms::telesign_send_sms($deliver['phone'],$sms_txt,0);
+            //Sms::sendSms2($sms_data);
+            $sms_txt = "There is a new order for you to pick up. Please go to “Pending List” to take the order.";
+            Sms::telesign_send_sms($deliver['phone'],$sms_txt,0);
         }
     }
 

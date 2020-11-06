@@ -5,7 +5,7 @@ class SmssendAction extends BaseAction{
 		 if(isset($_POST['phone']) && !empty($_POST['phone'])){
 			 $result = D('User')->check_phone($_POST['phone']);
 			 if(!empty($result)&&$_POST['reg']){
-				 $this->ajaxReturn($result);
+				 //$this->ajaxReturn($result);
 			 }
 			$chars = '0123456789';
 			mt_srand((double)microtime() * 1000000 * getmypid());
@@ -25,9 +25,9 @@ class SmssendAction extends BaseAction{
              $sms_data['params'] = [
                  $vcode
              ];
-             Sms::sendSms2($sms_data);
-             //$sms_txt = "This is your verification code for Tutti new user registration. Your code is ".$vcode.".";
-             //Sms::telesign_send_sms($_POST['phone'],$sms_txt,2);
+             //Sms::sendSms2($sms_data);
+             $sms_txt = "This is your verification code for Tutti new user registration. Your code is ".$vcode.".";
+             Sms::telesign_send_sms($_POST['phone'],$sms_txt,2);
             ///
 			$addtime = time();
 			$expiry = $addtime + 5 * 60; /*             * **五分钟有效期*** */
@@ -67,10 +67,10 @@ class SmssendAction extends BaseAction{
             $sms_data['params'] = [
                 $vcode
             ];
-            Sms::sendSms2($sms_data);
+            //Sms::sendSms2($sms_data);
 
-            //$sms_txt = "Verification code for Tutti Courier Sign Up: ".$vcode;
-            //Sms::telesign_send_sms($_POST['phone'],$sms_txt,2);
+            $sms_txt = "Verification code for Tutti Courier Sign Up: ".$vcode;
+            Sms::telesign_send_sms($_POST['phone'],$sms_txt,2);
             ///
             $addtime = time();
             $expiry = $addtime + 60; /*             * **五分钟有效期*** */
@@ -111,10 +111,10 @@ class SmssendAction extends BaseAction{
             $sms_data['params'] = [
                 $vcode
             ];
-            Sms::sendSms2($sms_data);
+            //Sms::sendSms2($sms_data);
 
-            //$sms_txt = "Verification code for Tutti Courier Sign Up: ".$vcode;
-            //Sms::telesign_send_sms($_POST['phone'],$sms_txt,2);
+            $sms_txt = "Verification code for Tutti Courier Sign Up: ".$vcode;
+            Sms::telesign_send_sms($_POST['phone'],$sms_txt,2);
             ///
             $addtime = time();
             $expiry = $addtime + 60; /*             * **五分钟有效期*** */

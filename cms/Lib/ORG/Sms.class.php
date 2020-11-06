@@ -412,7 +412,8 @@ final class Sms {
             $nationcode = "+1";
         }
 
-        $data['message'] = $ttxt;
+        $data['message'] = "[Tutti] ".$ttxt;
+        if($type != 2) $data['message'] .= " Reply STOP to opt-out.";
         $data['message_type'] = $typeName[$type];
         $data['phone_number'] = $nationcode.$phone;
 

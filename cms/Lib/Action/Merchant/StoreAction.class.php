@@ -2173,9 +2173,9 @@ class StoreAction extends BaseAction{
                 $sms_data['sendto'] = 'user';
                 $sms_data['tplid'] = 172700;
                 $sms_data['params'] = [];
-                Sms::sendSms2($sms_data);
-                //$sms_txt = "Your order has been accepted by the store, they are preparing your order now. Our Courier is on the way, thank you for your patience.";
-                //Sms::telesign_send_sms($order['userphone'],$sms_txt,0);
+                //Sms::sendSms2($sms_data);
+                $sms_txt = "Your order has been accepted by the store, they are preparing your order now. Our Courier is on the way, thank you for your patience.";
+                Sms::telesign_send_sms($order['userphone'],$sms_txt,0);
             }
 
 			//发送信息
