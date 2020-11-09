@@ -764,8 +764,15 @@ class IndexAction extends BaseAction
         $uid = $_POST['uid'];
         $cartList = $_POST['cart_list'];
         $note = $_POST['order_mark'];
+        //New UI
+        $address_mark = $_POST['address_mark'];
 
         $adr_id = $_POST['addr_item_id'];
+
+        $address = D('User_adress')->where(array('adress_id'=>$adr_id))->find();
+        if($address_mark != $address['detail']){
+            D('User_adress')->where(array('adress_id'=>$adr_id))->save(array('detail'=>$address_mark));
+        }
 
         $cart_array = json_decode(html_entity_decode($cartList),true);
         $tax_price = 0;
