@@ -1149,7 +1149,7 @@ class IndexAction extends BaseAction
             $t['payTypeName'] = D('Store')->getPayTypeName($val['pay_type']);
             $t['storeID'] = $val['store_id'];
             $t['storeName'] = lang_substr($val['name'],C('DEFAULT_LANG'));
-            $t['createDate'] = date('Y-m-d',$val['create_time']);
+            $t['createDate'] = date('Y-m-d H:i',$val['create_time']);
             $t['create_time'] = $val['create_time'];
             $t['goodsCount'] = $val['num'];
             $t['goodsPrice'] = $val['goods_price'];
