@@ -1123,7 +1123,7 @@ class IndexAction extends BaseAction
         $m = array();
         if ($store_ids) {
             $store_image_class = new store_image();
-            $merchant_list = D("Merchant_store")->where(array('store_id' => array('in', $store_ids)))->select();
+            $merchant_list = D("Merchant_store")->field('s.*,sh.background')->join('as s left join '.C('DB_PREFIX').'merchant_store_shop sh ON sh.store_id = s.store_id ')->where(array('s.store_id' => array('in', $store_ids)))->select();
             foreach ($merchant_list as $li) {
                 $images = $store_image_class->get_allImage_by_path($li['pic_info']);
                 $li['image'] = $images ? array_shift($images) : array();
