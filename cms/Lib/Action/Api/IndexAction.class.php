@@ -1166,6 +1166,12 @@ class IndexAction extends BaseAction
             $t['delivery_discount'] = $val['delivery_discount'];
             $t['merchant_reduce'] = $val['merchant_reduce'];
             $t['pay_method'] = $val['pay_method'];
+            if($val['background'] && $val['background'] != '') {
+                $image_tmp = explode(',', $val['background']);
+                $t['background'] = C('config.site_url') . '/upload/background/' . $image_tmp[0] . '/' . $image_tmp['1'];
+            }else{
+                $t['background'] = '';
+            }
 
             $delivery = D('Deliver_supply')->field(true)->where(array('order_id'=>$val['order_id']))->find();
             if($delivery) {
