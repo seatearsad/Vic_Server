@@ -1105,6 +1105,9 @@ class IndexAction extends BaseAction
             case 5:
                 $where .= " AND status=3";
                 break;
+            case 6:
+                $where .= " AND (status=2 OR status=3)";
+                break;
             default://付款超时，待删除
                 $where .= " AND status<>6";
                 break;
