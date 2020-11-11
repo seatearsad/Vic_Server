@@ -1282,8 +1282,6 @@ class IndexAction extends BaseAction
         $order_detail['discount'] = $order['coupon_price'] + $order['delivery_discount'] + $order['merchant_reduce'];
         $order_detail['create_time'] = $order['create_time'];
 
-
-
         $order_detail['jetlag'] = 0;
         if($order['paid'] == 0) {
             $store = D('Merchant_store')->where(array('store_id' => $order['store_id']))->find();
@@ -1296,6 +1294,7 @@ class IndexAction extends BaseAction
         $order_detail['site_name'] = $store['site_name'];
         $order_detail['tel'] = $store['phone'];
         $order_detail['store_service_fee'] = $store['service_fee'];
+        $order_detail['background'] = $store['background'];
 
         $result['order'] = $order_detail;
 
