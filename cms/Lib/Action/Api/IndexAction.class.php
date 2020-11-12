@@ -1311,7 +1311,7 @@ class IndexAction extends BaseAction
             $spec_ids = explode('_',$v['spec_id']);
             foreach ($spec_ids as $vv){
                 $spec = D('Shop_goods_spec_value')->field(true)->where(array('id'=>$vv))->find();
-                $spec_desc = $spec_desc == '' ? lang_substr($spec['name'],C('DEFAULT_LANG')) : $spec_desc.','.lang_substr($spec['name'],C('DEFAULT_LANG'));
+                $spec_desc = $spec_desc == '' ? lang_substr($spec['name'],C('DEFAULT_LANG')) : $spec_desc.';'.lang_substr($spec['name'],C('DEFAULT_LANG'));
             }
 
             $goods['spec_desc'] = $spec_desc;
@@ -1331,7 +1331,7 @@ class IndexAction extends BaseAction
                 $nameList = explode(',',$pro['val']);
                 $name = lang_substr($nameList[$sId],C('DEFAULT_LANG'));
 
-                $spec_desc = $spec_desc == '' ? $name : $spec_desc.','.$name;
+                $spec_desc = $spec_desc == '' ? $name : $spec_desc.';'.$name;
             }
             $goods['spec_desc'] = $goods['spec_desc'] == '' ? $spec_desc : $goods['spec_desc'].";".$spec_desc;
 
