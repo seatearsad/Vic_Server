@@ -954,7 +954,7 @@ class StoreModel extends Model
         return $status_list[$status];
     }
 
-    public function getOrderStatusName($status){
+    public function getOrderStatusLogName($status){
         $status_list = array(
             L('_ORDER_STATUS_0_'),
             L('_ORDER_STATUS_0_'),
@@ -1029,12 +1029,12 @@ class StoreModel extends Model
         return $mark;
     }
 
-//    public function getOrderStatusName($status){
-//        $name_list = array(L('_B_PURE_MY_71_'),L('_B_PURE_MY_72_'),L('_B_PURE_MY_73_'),L('_B_PURE_MY_74_'),L('_B_PURE_MY_75_')
-//        ,L('_B_PURE_MY_76_'),L('_B_PURE_MY_77_'),L('_B_PURE_MY_78_'),L('_B_PURE_MY_79_'),L('_B_PURE_MY_80_'));
-//
-//        return $name_list[$status];
-//    }
+    public function getOrderStatusName($status){
+        $name_list = array(L('_B_PURE_MY_71_'),L('_B_PURE_MY_72_'),L('_B_PURE_MY_73_'),L('_B_PURE_MY_74_'),L('_B_PURE_MY_75_')
+        ,L('_B_PURE_MY_76_'),L('_B_PURE_MY_77_'),L('_B_PURE_MY_78_'),L('_B_PURE_MY_79_'),L('_B_PURE_MY_80_'));
+
+        return $name_list[$status];
+    }
 
     /**
      * @param $pay_type

@@ -1158,7 +1158,9 @@ class IndexAction extends BaseAction
             $t['goodsPrice'] = $val['goods_price'];
             $t['status'] = $val['status'];
             $t['isComment'] = "1";
-            $t['statusName'] = D('Store')->getOrderStatusName($val['status']);
+            //$t['statusName'] = D('Store')->getOrderStatusName($val['status']);
+            $status = D('Shop_order_log')->field(true)->where(array('order_id' => $val['order_id']))->order('id DESC')->find();
+            $t['statusName'] = D('Store')->getOrderStatusLogName($status['status']);
             $t['goodsImage'] = $val['image'];
             $t['orderType'] = "0";
             $t['tip_fee'] = $val['tip_charge'];
@@ -1297,7 +1299,7 @@ class IndexAction extends BaseAction
         $order_detail['background'] = $store['background'];
 
         $status = D('Shop_order_log')->field(true)->where(array('order_id' => $order['order_id']))->order('id DESC')->find();
-        $order_detail['statusName'] = D('Store')->getOrderStatusName($status['status']);
+        $order_detail['statusName'] = D('Store')->getOrderStatusLogName($status['status']);
         $order_detail['statusDesc'] = D('Store')->getOrderStatusDesc($status['status'],$order,$status,$store['site_name']);
 
         $result['order'] = $order_detail;
