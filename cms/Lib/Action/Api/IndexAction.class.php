@@ -1276,7 +1276,7 @@ class IndexAction extends BaseAction
         $order_detail['uname'] = $order['username'];
         $order_detail['phone'] = $order['userphone'];
         $order_detail['address2'] = $order['address'];
-        $order_detail['address1'] = "";
+        $order_detail['address1'] = $order['desc'];
         $order_detail['service_fee'] = $order['service_fee'];
         $order_detail['promotion_discount'] = "0";
         $order_detail['discount'] = $order['coupon_price'] + $order['delivery_discount'] + $order['merchant_reduce'];
