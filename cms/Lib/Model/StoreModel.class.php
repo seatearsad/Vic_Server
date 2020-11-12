@@ -954,6 +954,58 @@ class StoreModel extends Model
         return $status_list[$status];
     }
 
+    public function getOrderStatusName($status){
+        $status_list = array(
+            L('_ORDER_STATUS_0_'),
+            L('_ORDER_STATUS_0_'),
+            "Preparing your order",
+            "Preparing your order",
+            "Order picked up",
+            "Heading to you",
+            "Order complete",
+            L('_ORDER_STATUS_7_'),
+            L('_ORDER_STATUS_8_'),
+            L('_ORDER_STATUS_9_'),
+            L('_ORDER_STATUS_10_'),
+            L('_ORDER_STATUS_11_'),
+            L('_ORDER_STATUS_12_'),
+            L('_ORDER_STATUS_13_'),
+            L('_ORDER_STATUS_14_'),
+            L('_ORDER_STATUS_15_'),
+            30 => L('_ORDER_STATUS_30_'),
+            33 => L('_ORDER_STATUS_33_'));
+
+        return $status_list[$status];
+    }
+
+    public function getOrderStatusDesc($status,$order,$log,$storeName){
+        $desc = "";
+        if($status == 0 || $status == 1){
+            $desc = "Waiting for (".$storeName.") to confirm your order";
+        }
+
+        if($status == 2 || $status == 3){
+            $delivery = D('Deliver_supply')->where(array('order_id'=>$order['order_id']))->find();
+            $now_time = time();
+            $check_time = $order['create_time'] + $delivery['dining_time'];
+            if($now_time < $check_time)
+                $desc = "Your order is expected to be ready by ".date("H:i",$check_time);
+            else
+                $desc = "Your order is ready and will be picked up shortly.";
+        }
+
+        if($status == 4)
+            $desc = "Your courier has picked up your order.";
+
+        if($status == 5)
+            $desc = "Your courier is heading to you with your order.";
+
+        if($status == 6)
+            $desc = "Enjoy! Thank you for ordering with Tutti! ";
+
+        return $desc;
+    }
+
     public function getOrderStatusMark($status,$order_id,$log){
         $mark = "";
         switch ($status){
@@ -977,12 +1029,12 @@ class StoreModel extends Model
         return $mark;
     }
 
-    public function getOrderStatusName($status){
-        $name_list = array(L('_B_PURE_MY_71_'),L('_B_PURE_MY_72_'),L('_B_PURE_MY_73_'),L('_B_PURE_MY_74_'),L('_B_PURE_MY_75_')
-        ,L('_B_PURE_MY_76_'),L('_B_PURE_MY_77_'),L('_B_PURE_MY_78_'),L('_B_PURE_MY_79_'),L('_B_PURE_MY_80_'));
-
-        return $name_list[$status];
-    }
+//    public function getOrderStatusName($status){
+//        $name_list = array(L('_B_PURE_MY_71_'),L('_B_PURE_MY_72_'),L('_B_PURE_MY_73_'),L('_B_PURE_MY_74_'),L('_B_PURE_MY_75_')
+//        ,L('_B_PURE_MY_76_'),L('_B_PURE_MY_77_'),L('_B_PURE_MY_78_'),L('_B_PURE_MY_79_'),L('_B_PURE_MY_80_'));
+//
+//        return $name_list[$status];
+//    }
 
     /**
      * @param $pay_type

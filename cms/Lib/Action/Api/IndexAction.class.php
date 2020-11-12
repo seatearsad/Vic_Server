@@ -1296,6 +1296,10 @@ class IndexAction extends BaseAction
         $order_detail['store_service_fee'] = $store['service_fee'];
         $order_detail['background'] = $store['background'];
 
+        $status = D('Shop_order_log')->field(true)->where(array('order_id' => $order['order_id']))->order('id DESC')->find();
+        $order_detail['statusName'] = D('Store')->getOrderStatusName($status['status']);
+        $order_detail['statusDesc'] = D('Store')->getOrderStatusDesc($status['status'],$order,$status,$store['site_name']);
+
         $result['order'] = $order_detail;
 
         $tax_price = 0;
