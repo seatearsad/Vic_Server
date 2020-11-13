@@ -1253,6 +1253,7 @@ class IndexAction extends BaseAction
         if($order['paid'] == 0){
             $order_detail['statusname'] = L('_UNPAID_TXT_');
             $order_detail['payname'] = L('_UNPAID_TXT_');
+            $order_detail['score'] = 0;
         }else{
             $order_detail['statusname'] = D('Store')->getOrderStatusName($order['status']);
             $order_detail['status'] = $order['status'];
@@ -1268,6 +1269,13 @@ class IndexAction extends BaseAction
                 $order_detail['payname'] = 'AliPay';
             }else{
                 $order_detail['payname'] = 'Cash';
+            }
+
+            if($order['status'] == 3){
+                $reply = D('Reply')->where(array('order_id'=>$order['order_id']))->find();
+                $order_detail['score'] = $reply['score'];
+            }else{
+                $order_detail['score'] = 0;
             }
         }
 
