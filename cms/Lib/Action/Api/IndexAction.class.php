@@ -1178,6 +1178,13 @@ class IndexAction extends BaseAction
                 $t['background'] = '';
             }
 
+            if($val['status'] == 3){
+                $reply = D('Reply')->where(array('order_id'=>$val['order_id']))->find();
+                $t['score'] = $reply['score'];
+            }else{
+                $t['score'] = 0;
+            }
+
             $delivery = D('Deliver_supply')->field(true)->where(array('order_id'=>$val['order_id']))->find();
             if($delivery) {
                 if($delivery['status'] > 1 && $delivery['status'] < 5){
