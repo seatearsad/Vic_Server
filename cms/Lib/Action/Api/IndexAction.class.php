@@ -1306,6 +1306,7 @@ class IndexAction extends BaseAction
         $order_detail['background'] = $store['background'];
 
         $status = D('Shop_order_log')->field(true)->where(array('order_id' => $order['order_id']))->order('id DESC')->find();
+        $order_detail['status_log'] = $status['status'];
         $order_detail['statusName'] = D('Store')->getOrderStatusLogName($status['status']);
         $order_detail['statusDesc'] = D('Store')->getOrderStatusDesc($status['status'],$order,$status,$store['site_name']);
 
