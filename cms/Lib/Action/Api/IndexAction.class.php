@@ -1454,6 +1454,38 @@ class IndexAction extends BaseAction
         $this->returnCode(0,'',$result,'success');
     }
 
+    public function reorderById(){
+        $uid = $_POST['uid'];
+        $order_id = $_POST['order_id'];
+
+        if($uid && $order_id){
+            $order_list = D('Order_detail')->where(array('order_id'=>$order_id))->select();
+            if($order_list){
+                $add_list = array();
+                foreach ($order_list as $detail){
+                    $data = array();
+                    $data['uid'] = $uid;
+                    $data['fid'] = $detail['goods_id'];
+                    $data['num'] = $detail['num'];
+                    $data['sid'] = $detail['store_id'];
+                    $data['status'] = 0;
+                    $data['spec'] = $detail['spec_id'];
+                    $data['proper'] = $detail['pro_id'];
+                    $data['dish_id'] = $detail['dish_id'];
+                    $data['time'] = date("Y-m-d H:i:s");
+
+                    $add_list[] = $data;
+                }
+
+                D('Cart')->addAll($add_list);
+            }
+
+            $this->returnCode(0,'',array(),'success');
+        }else{
+            $this->returnCode(1,'info',array(),'Fail');
+        }
+    }
+
     public function credit_pay(){
         import('@.ORG.pay.MonerisPay');
         $moneris_pay = new MonerisPay();
