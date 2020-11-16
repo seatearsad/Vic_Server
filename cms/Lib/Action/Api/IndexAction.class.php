@@ -1459,7 +1459,7 @@ class IndexAction extends BaseAction
         $order_id = $_POST['order_id'];
 
         if($uid && $order_id){
-            $order_list = D('Order_detail')->where(array('order_id'=>$order_id))->select();
+            $order_list = D('Shop_order_detail')->where(array('order_id'=>$order_id))->select();
             if($order_list){
                 $add_list = array();
                 foreach ($order_list as $detail){
@@ -1476,7 +1476,7 @@ class IndexAction extends BaseAction
 
                     $add_list[] = $data;
                 }
-
+                
                 D('Cart')->addAll($add_list);
             }
 
