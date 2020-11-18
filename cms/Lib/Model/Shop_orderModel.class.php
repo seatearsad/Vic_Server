@@ -865,7 +865,8 @@ class Shop_orderModel extends Model
 					}
 					//Sms::sendSms2($sms_data);
                     $sms_txt = "Your order (".$now_order['real_orderid'].") has paid ".$offline." successfully at ".$store['name']." store.";
-                    Sms::telesign_send_sms($now_order['userphone'],$sms_txt,0);
+                    //Sms::telesign_send_sms($now_order['userphone'],$sms_txt,0);
+					Sms::sendTwilioSms($now_order['userphone'],$sms_txt);
 				}
 				if (C('config.sms_shop_success_order') == 2 || C('config.sms_shop_success_order') == 3) {
 					$store_phpne = explode(' ',$store['phone']);
@@ -933,15 +934,33 @@ class Shop_orderModel extends Model
                         $user = D('User')->where(array('uid' => $now_order['uid']))->find();
                         if($user['invitation_user'] != 0){
                         	//在此处添加发送给邀请者短信
+                            $sms_data['uid'] = 0;
+                            $sms_data['mobile'] = $user['phone'];
+                            $sms_data['sendto'] = 'user';
+                            $sms_data['tplid'] = 774547;
+                            $sms_data['params'] = [];
+                            //Sms::sendSms2($sms_data);
 							$sms_txt = "Congratulations! You have received new coupons because you placed an order using a referral code. Please go to Account > Coupon to view and use your referral coupons before they expire!";
-                            Sms::telesign_send_sms($user['phone'],$sms_txt,0);
+                            //Sms::telesign_send_sms($user['phone'],$sms_txt,0);
+							Sms::sendTwilioSms($user['phone'],$sms_txt);
 
                             $invitation_user = D('User')->where(array('uid' => $user['invitation_user']))->find();
                             D('User')->where(array('uid' => $user['invitation_user']))->save(array('invitation_order_num'=>($invitation_user['invitation_order_num']+1)));
 
                             $invitation_order_num = $invitation_user['invitation_order_num']+1;
+                            $sms_data['uid'] = 0;
+                            $sms_data['mobile'] = $invitation_user['phone'];
+                            $sms_data['sendto'] = 'user';
+                            $sms_data['tplid'] = 774539;
+                            $sms_data['params'] = [
+                                $user['nickname'],
+                                $invitation_order_num
+                            ];
+                            //Sms::sendSms2($sms_data);
+
                             $sms_txt = "Congratulations! Your friend ".$user['nickname']." has placed an order using your referral code! Please go to Account > Coupon to use your referral coupons before they expire. ".$invitation_order_num." of your referrals have placed their first order! Thank you for your support!";
-                            Sms::telesign_send_sms($invitation_user['phone'],$sms_txt,0);
+                            //Sms::telesign_send_sms($invitation_user['phone'],$sms_txt,0);
+							Sms::sendTwilioSms($invitation_user['phone'],$sms_txt);
 						}
 					}
                 }
@@ -1487,7 +1506,8 @@ class Shop_orderModel extends Model
 			$sms_data['tplid'] = 169224;
 			//Sms::sendSms2($sms_data);
             $sms_txt = "Your order (".$order['real_orderid'].") at ".$store['name']." store has been completed. If you have any further question, please feel free to contact us.";
-            Sms::telesign_send_sms($order['userphone'],$sms_txt,0);
+            //Sms::telesign_send_sms($order['userphone'],$sms_txt,0);
+			Sms::sendTwilioSms($order['userphone'],$sms_txt);
 		}
 		if (C('config.sms_shop_finish_order') == 2 || C('config.sms_shop_finish_order') == 3) {
 			$sms_data['uid'] = 0;
@@ -1761,9 +1781,10 @@ class Shop_orderModel extends Model
                 $mer_store['name']
 			];
 			$sms_data['tplid'] = 169203;
-			Sms::sendSms2($sms_data);
+			//Sms::sendSms2($sms_data);
             $sms_txt = "Your order (".$order_id.") has been successfully canceled and refunded at ".date('Y-m-d H:i:s')." at ".$mer_store['name']." store, we are looking forward to seeing you again.";
-            Sms::telesign_send_sms($sms_data['mobile'],$sms_txt,0);
+            //Sms::telesign_send_sms($sms_data['mobile'],$sms_txt,0);
+			Sms::sendTwilioSms($sms_data['mobile'],$sms_txt);
 		}
 		if (C('config.sms_shop_cancel_order') == 2 || C('config.sms_shop_cancel_order') == 3) {
 			$sms_data['uid'] = 0;

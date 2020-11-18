@@ -525,7 +525,8 @@ class IndexAction extends BaseAction
         //Sms::sendSms2($sms_data);
 
         $sms_txt = "This is your verification code for password recovery. Your code is: ".$vcode;
-        Sms::telesign_send_sms($phone,$sms_txt,2);
+        //Sms::telesign_send_sms($phone,$sms_txt,2);
+        Sms::sendTwilioSms($phone,$sms_txt);
 
         $user_modifypwdDb = M('User_modifypwd');
         $addtime = time();
@@ -1995,7 +1996,8 @@ class IndexAction extends BaseAction
                         $sms_data['tplid'] = 171187;
                         //Sms::sendSms2($sms_data);
                         $sms_txt = "Your order (".$order_id.") has been successfully canceled at ".date('Y-m-d H:i:s')." at ".lang_substr($mer_store['name'],'en-us')." store, we are looking forward to seeing you again.";
-                        Sms::telesign_send_sms($sms_data['mobile'],$sms_txt,0);
+                        //Sms::telesign_send_sms($sms_data['mobile'],$sms_txt,0);
+                        Sms::sendTwilioSms($sms_data['mobile'],$sms_txt);
                     }
                     if (C('config.sms_shop_cancel_order') == 2 || C('config.sms_shop_cancel_order') == 3) {
                         $sms_data['uid'] = 0;
@@ -2511,7 +2513,8 @@ class IndexAction extends BaseAction
             //Sms::sendSms2($sms_data);
 
             $sms_txt = "Tutti is short on hands! Please log in to your account to start to accept orders. Thank you for your help!";
-            Sms::telesign_send_sms($deliver['phone'],$sms_txt,0);
+            //Sms::telesign_send_sms($deliver['phone'],$sms_txt,0);
+            Sms::sendTwilioSms($deliver['phone'],$sms_txt);
         }
     }
 

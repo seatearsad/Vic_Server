@@ -433,6 +433,46 @@ final class Sms {
         //var_dump($result);die();
         return true;
     }
+
+    public function sendTwilioSms($phone,$ttxt){
+        require_once('cms/Lib/ORG/Twilio/Twilio.php');
+
+        $where = array('tab_id'=>'twilio','gid'=>46);
+        $result = D('Config')->field(true)->where($where)->select();
+
+        foreach($result as $v){
+            if($v['name'] == 'twilio_sid')
+                $AccountSid = $v['value'];
+            elseif ($v['name'] == 'twilio_token')
+                $AuthToken = $v['value'];
+            elseif($v['name'] == 'twilio_phone')
+                $fromPhone = $v['value'];
+        }
+
+        // set your AccountSid and AuthToken from www.twilio.com/user/account
+
+        $nationcode = "+86";
+        if(strlen($phone) != 11) {
+            $nationcode = "+1";
+        }
+
+        $data['message'] = "[Tutti] ".$ttxt;
+        $data['phone_number'] = $nationcode.$phone;
+
+
+        $client = new Services_Twilio($AccountSid, $AuthToken);
+        $parameter = array(
+            "From" => $fromPhone,
+            "To" => $data['phone_number'],
+            "Body" => $data['message'],
+        );
+
+        $message = $client->account->messages->create($parameter);
+
+        // Display a confirmation message on the screen
+        //echo "Sent message {$message->sid}";
+        return true;
+    }
 }
 
 ?>

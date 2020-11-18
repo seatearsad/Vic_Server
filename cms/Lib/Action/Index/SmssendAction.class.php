@@ -27,7 +27,8 @@ class SmssendAction extends BaseAction{
              ];
              //Sms::sendSms2($sms_data);
              $sms_txt = "This is your verification code for Tutti new user registration. Your code is ".$vcode.".";
-             Sms::telesign_send_sms($_POST['phone'],$sms_txt,2);
+             //Sms::telesign_send_sms($_POST['phone'],$sms_txt,2);
+             Sms::sendTwilioSms($_POST['phone'],$sms_txt);
             ///
 			$addtime = time();
 			$expiry = $addtime + 5 * 60; /*             * **五分钟有效期*** */
@@ -70,7 +71,8 @@ class SmssendAction extends BaseAction{
             //Sms::sendSms2($sms_data);
 
             $sms_txt = "Verification code for Tutti Courier Sign Up: ".$vcode;
-            Sms::telesign_send_sms($_POST['phone'],$sms_txt,2);
+            //Sms::telesign_send_sms($_POST['phone'],$sms_txt,2);
+            Sms::sendTwilioSms($_POST['phone'],$sms_txt);
             ///
             $addtime = time();
             $expiry = $addtime + 60; /*             * **五分钟有效期*** */
@@ -114,7 +116,8 @@ class SmssendAction extends BaseAction{
             //Sms::sendSms2($sms_data);
 
             $sms_txt = "Verification code for Tutti Courier Sign Up: ".$vcode;
-            Sms::telesign_send_sms($_POST['phone'],$sms_txt,2);
+            //Sms::telesign_send_sms($_POST['phone'],$sms_txt,2);
+            Sms::sendTwilioSms($_POST['phone'],$sms_txt);
             ///
             $addtime = time();
             $expiry = $addtime + 60; /*             * **五分钟有效期*** */

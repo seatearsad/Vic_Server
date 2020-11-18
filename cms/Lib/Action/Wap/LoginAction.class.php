@@ -216,7 +216,8 @@ class LoginAction extends BaseAction{
         ];
         //Sms::sendSms2($sms_data);
         $sms_txt = "This is your verification code for password recovery. Your code is: ".$vcode;
-        Sms::telesign_send_sms($phone,$sms_txt,0);
+        //Sms::telesign_send_sms($phone,$sms_txt,0);
+        Sms::sendTwilioSms($phone,$sms_txt);
 
         $user_modifypwdDb = M('User_modifypwd');
         $addtime = time();

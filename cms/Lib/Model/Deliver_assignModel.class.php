@@ -530,7 +530,8 @@ class Deliver_assignModel extends Model
             ];
             //Sms::sendSms2($sms_data);
             $sms_txt = "There is a new order for you to pick up. Please go to “Pending List” to take the order.";
-            Sms::telesign_send_sms($deliver['phone'],$sms_txt,0);
+            //Sms::telesign_send_sms($deliver['phone'],$sms_txt,0);
+            Sms::sendTwilioSms($deliver['phone'],$sms_txt);
         }
     }
 

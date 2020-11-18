@@ -1410,7 +1410,8 @@ class DeliverAction extends BaseAction {
                     //Sms::sendSms2($sms_data);
 
                     $sms_txt = "Tutti is short on hands! Please log in to your account to start to accept orders. Thank you for your help!";
-                    Sms::telesign_send_sms($deliver['phone'],$sms_txt,0);
+                    //Sms::telesign_send_sms($deliver['phone'],$sms_txt,0);
+                    Sms::sendTwilioSms($deliver['phone'],$sms_txt);
                 }
             }
 
@@ -1491,7 +1492,8 @@ class DeliverAction extends BaseAction {
                 $sms_data['params'] = [];
                 //Sms::sendSms2($sms_data);
                 $sms_txt = "Congratulations! Your courier application has been approved and your account is now active. You can start scheduling your shifts and accepting delivery orders. Welcome to the Tutti team!";
-                Sms::telesign_send_sms($deliver['phone'],$sms_txt,0);
+                //Sms::telesign_send_sms($deliver['phone'],$sms_txt,0);
+                Sms::sendTwilioSms($deliver['phone'],$sms_txt);
                 if($deliver['reg_status'] == 5){
                     $data['reg_status'] = 0;
                 }

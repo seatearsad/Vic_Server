@@ -1157,8 +1157,19 @@ class DeliverAction extends BaseAction
 
                         $store = D('Merchant_store')->where(array('store_id'=>$order['store_id']))->find();
                         $store['name'] = lang_substr($store['name'], 'en-us');
+
+                        $sms_data['uid'] = 0;
+                        $sms_data['mobile'] = $order['userphone'];
+                        $sms_data['sendto'] = 'user';
+                        $sms_data['tplid'] = 774533;
+                        $sms_data['params'] = [
+                            $store['name']
+                        ];
+                        //Sms::sendSms2($sms_data);
+
                         $sms_txt = "Your order from ".$store['name']." has arrived. Please feel free to contact the Tutti Support Team if there are any issues with your order. Thank you for choosing Tutti!";
-                        Sms::telesign_send_sms($order['userphone'],$sms_txt,0);
+                        //Sms::telesign_send_sms($order['userphone'],$sms_txt,0);
+                        Sms::sendTwilioSms($order['userphone'],$sms_txt);
 					} else {
 						$this->rollback($supply_id, 4);
 						$this->error("更新订单信息错误");
