@@ -1062,9 +1062,12 @@ class IndexAction extends BaseAction
             }
         }
 
-        if($order_id != 0)
-            $this->returnCode(0,'main_id',$order_id,'success');
-        else
+        if($order_id != 0) {
+            $order = D('Shop_order')->where(array('order_id'=>$order_id))->find();
+            $returnData['main_id'] = $order_id;
+            $returnData['orderNo'] = $order['real_orderid'];
+            $this->returnCode(0, '', $returnData, 'success');
+        }else
             $this->returnCode(1,'info',array(),'fail');
     }
 
