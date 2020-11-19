@@ -1260,7 +1260,7 @@ class IndexAction extends BaseAction
         }else{
             $order_detail['statusname'] = D('Store')->getOrderStatusName($order['status']);
             $order_detail['status'] = $order['status'];
-            $order_detail['pay_type'] = $order['pay_type'];
+
             //$order_detail['payname'] = $order['pay_type'] == 'moneris' ? 'Paid Online' : 'Cash';
             if($order['pay_type'] == 'moneris'){
                 $order_detail['payname'] = 'Paid Online';
@@ -1282,6 +1282,7 @@ class IndexAction extends BaseAction
             }
         }
 
+        $order_detail['pay_type'] = $order['pay_type'];
         $order_detail['orderId'] = $order['order_id'];
         $order_detail['paid'] = $order['paid'];
         $order_detail['add_time'] = date('Y-m-d H:i:s',$order['create_time']);
@@ -1301,6 +1302,8 @@ class IndexAction extends BaseAction
         $order_detail['promotion_discount'] = "0";
         $order_detail['discount'] = $order['coupon_price'] + $order['delivery_discount'] + $order['merchant_reduce'];
         $order_detail['create_time'] = $order['create_time'];
+        $order_detail['delivery_discount'] = $order['delivery_discount'];
+        $order_detail['merchant_reduce'] = $order['merchant_reduce'];
 
         $order_detail['jetlag'] = 0;
         if($order['paid'] == 0) {
@@ -1315,6 +1318,7 @@ class IndexAction extends BaseAction
         $order_detail['tel'] = $store['phone'];
         $order_detail['store_service_fee'] = $store['service_fee'];
         $order_detail['background'] = $store['background'];
+        $order_detail['pay_method'] = $store['pay_method'];
 
         $status = D('Shop_order_log')->field(true)->where(array('order_id' => $order['order_id']))->order('id DESC')->find();
         $order_detail['status_log'] = $status['status'];
