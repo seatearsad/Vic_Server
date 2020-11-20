@@ -5976,7 +5976,7 @@ class MyAction extends BaseAction{
         $where = array('tab_id'=>'gmail','gid'=>42);
         $result = D('Config')->field(true)->where($where)->find();
         $password = $result['value'];
-        var_dump($password);die();
+        
         $address = $_POST['address'];
         $code = $_POST['code'];
         $link = $_POST['link'];
