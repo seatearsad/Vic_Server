@@ -966,7 +966,7 @@ class UserAction extends BaseAction {
                 $sms_data['tplid'] = 326488;
                 $sms_data['params'] = [];
                 //Sms::sendSms2($sms_data);
-                $sms_txt = "Tutti has added a new coupon to your account! Please log in to your account and check available coupons for details. Reply T to unsubscribe.";
+                $sms_txt = "Tutti has added a new coupon to your account! Please log in to your account and check available coupons for details.";
                 //Sms::telesign_send_sms($userInfo['phone'],$sms_txt,1);
                 Sms::sendTwilioSms($userInfo['phone'],$sms_txt);
 
@@ -983,7 +983,7 @@ class UserAction extends BaseAction {
                     $sms_data['tplid'] = 326488;
                     $sms_data['params'] = [];
                     //Sms::sendSms2($sms_data);
-                    $sms_txt = "Tutti has added a new coupon to your account! Please log in to your account and check available coupons for details. Reply T to unsubscribe.";
+                    $sms_txt = "Tutti has added a new coupon to your account! Please log in to your account and check available coupons for details.";
                     //Sms::telesign_send_sms($userInfo['phone'],$sms_txt,1);
                     Sms::sendTwilioSms($userInfo['phone'],$sms_txt);
                 }
