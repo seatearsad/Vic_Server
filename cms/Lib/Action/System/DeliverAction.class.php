@@ -1394,7 +1394,7 @@ class DeliverAction extends BaseAction {
         $type = $_POST['type'] ? $_POST['type'] : 0;
         if(isset($_POST['city_id'])) {
             $city_id = $_POST['city_id'];
-            $user_list = D('Deliver_user')->field(true)->where(array('status' => 1, 'work_status' => 1,'city_id'=>$city_id))->order('uid asc')->select();
+            $user_list = D('Deliver_user')->field(true)->where(array('status' => 1, 'work_status' => 1,'city_id'=>$city_id,'group'=>1))->order('uid asc')->select();
             var_dump($user_list);die();
             foreach ($user_list as $deliver) {
                 if($type == 1) {
