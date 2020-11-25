@@ -2223,6 +2223,8 @@ class IndexAction extends BaseAction
         $score_deliver = $_POST['score2'];
         $is_late = $_POST['righttime'] == 1 ? 0 : 1;
 
+        $comment_deliver = $_POST['comment_deliver'] ? $_POST['comment_deliver'] : "";
+
         $now_order = D('Shop_order')->get_order_detail(array('uid' => $uid, 'order_id' => $order_id));
 
         if (empty($now_order)) {
@@ -2268,6 +2270,7 @@ class IndexAction extends BaseAction
         $data_reply['score_store'] = $score_store;
         $data_reply['score_deliver'] = $score_deliver;
         $data_reply['is_late'] = $is_late;
+        $data_reply['comment_deliver'] = $comment_deliver;
 
         $data_reply['merchant_reply_content'] = "";
         $data_reply['merchant_reply_time'] = 0;
@@ -2276,6 +2279,12 @@ class IndexAction extends BaseAction
             $data_reply['comment_en'] = translationCnToEn($comment);
         }else{
             $data_reply['comment_en'] = '';
+        }
+
+        if(!checkEnglish($comment_deliver) && trim($comment_deliver) != ''){
+            $data_reply['comment_deliver_en'] = translationCnToEn($comment_deliver);
+        }else{
+            $data_reply['comment_deliver_en'] = '';
         }
 
 // 		echo "<pre/>";
