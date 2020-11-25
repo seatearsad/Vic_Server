@@ -959,8 +959,8 @@ class StoreModel extends Model
             L('_ORDER_STATUS_0_'),
             L('_ORDER_STATUS_0_'),
             "Preparing your order",
+            "Preparing your order",
             "Order picked up",
-            "Heading to you",
             "Heading to you",
             "Order complete",//未评论
             "Order complete",//并评论完成
@@ -984,7 +984,7 @@ class StoreModel extends Model
             $desc = "Waiting for (".$storeName.") to confirm your order";
         }
 
-        if($status == 2){
+        if($status == 2 || $status == 3){
             $delivery = D('Deliver_supply')->where(array('order_id'=>$order['order_id']))->find();
             $now_time = time();
             $check_time = $order['create_time'] + $delivery['dining_time'];
@@ -994,10 +994,10 @@ class StoreModel extends Model
                 $desc = "Your order is ready and will be picked up shortly.";
         }
 
-        if($status == 3)
+        if($status == 4)
             $desc = "Your courier has picked up your order.";
 
-        if($status == 4 || $status == 5)
+        if($status == 5)
             $desc = "Your courier is heading to you with your order.";
 
         if($status == 6 || $status == 7)
