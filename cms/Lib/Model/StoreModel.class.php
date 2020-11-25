@@ -961,9 +961,9 @@ class StoreModel extends Model
             "Preparing your order",
             "Order picked up",
             "Heading to you",
+            "Heading to you",
             "Order complete",//未评论
             "Order complete",//并评论完成
-            L('_ORDER_STATUS_7_'),
             L('_ORDER_STATUS_8_'),
             L('_ORDER_STATUS_9_'),
             L('_ORDER_STATUS_10_'),
@@ -997,10 +997,10 @@ class StoreModel extends Model
         if($status == 3)
             $desc = "Your courier has picked up your order.";
 
-        if($status == 4)
+        if($status == 4 || $status == 5)
             $desc = "Your courier is heading to you with your order.";
 
-        if($status == 5 || $status == 6)
+        if($status == 6 || $status == 7)
             $desc = "Enjoy! Thank you for ordering with Tutti! ";
 
         return $desc;
