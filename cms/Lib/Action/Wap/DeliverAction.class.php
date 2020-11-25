@@ -578,7 +578,16 @@ class DeliverAction extends BaseAction
                 $val['uid'] = $order['uid'];
 
                 $address = D('User_adress')->where(array('adress_id'=>$order['address_id']))->find();
-                $val['user_address'] = $address;
+                if($address) {
+                    $val['user_address'] = $address;
+                }else{
+                    $address = array();
+                    $address['adress_id'] = 0;
+                    $address['uid'] = $order['uid'];
+                    $address['adress'] = $val['aim_site'];
+                    $address['longitude'] = $val['aim_lnt'];
+                    $address['latitude'] = $val['aim_lat'];
+                }
 
                 $store = D('Merchant_store')->field(true)->where(array('store_id'=>$val['store_id']))->find();
                 $val['store_name'] = lang_substr($store['name'],C('DEFAULT_LANG'));
