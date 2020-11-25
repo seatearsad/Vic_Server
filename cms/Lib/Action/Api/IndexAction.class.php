@@ -1409,9 +1409,10 @@ class IndexAction extends BaseAction
             else
                 $result['order']['empname'] = '';
 
-            if($delivery['status'] > 1 && $delivery['status'] < 5){
-                $result['order']['deliver_name'] = $deliver['name'];
-                $result['order']['deliver_phone'] = $deliver['phone'];
+            $result['order']['deliver_name'] = $deliver['name'];
+            $result['order']['deliver_phone'] = $deliver['phone'];
+            
+            if($delivery['status'] > 1 && $delivery['status'] <= 5){
                 $result['order']['deliver_lng'] = $deliver['lng'];
                 $result['order']['deliver_lat'] = $deliver['lat'];
             }
