@@ -957,6 +957,7 @@ class StoreModel extends Model
     public function getOrderStatusLogName($status){
         $status_list = array(
             L('_ORDER_STATUS_0_'),
+            L('_ORDER_STATUS_0_'),
             "Preparing your order",
             "Order picked up",
             "Heading to you",
