@@ -1162,7 +1162,7 @@ class IndexAction extends BaseAction
             $t['status'] = $val['status'];
             $t['isComment'] = "1";
             //$t['statusName'] = D('Store')->getOrderStatusName($val['status']);
-            $status = D('Shop_order_log')->field(true)->where(array('order_id' => $val['order_id']))->order('id DESC')->find();
+            $status = D('Shop_order_log')->field(true)->where(array('order_id' => $val['order_id']))->order('status DESC')->find();
             $t['statusName'] = D('Store')->getOrderStatusLogName($status['status']);
             $t['goodsImage'] = $val['image'];
             $t['orderType'] = "0";
