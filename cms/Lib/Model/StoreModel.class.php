@@ -980,11 +980,11 @@ class StoreModel extends Model
 
     public function getOrderStatusDesc($status,$order,$log,$storeName){
         $desc = "";
-        if($status == 0){
+        if($status == 0 || $status == 1){
             $desc = "Waiting for (".$storeName.") to confirm your order";
         }
 
-        if($status == 1 || $status == 2){
+        if($status == 2){
             $delivery = D('Deliver_supply')->where(array('order_id'=>$order['order_id']))->find();
             $now_time = time();
             $check_time = $order['create_time'] + $delivery['dining_time'];
