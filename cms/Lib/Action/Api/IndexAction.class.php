@@ -1411,7 +1411,7 @@ class IndexAction extends BaseAction
 
             $result['order']['deliver_name'] = $deliver['name'];
             $result['order']['deliver_phone'] = $deliver['phone'];
-            
+
             if($delivery['status'] > 1 && $delivery['status'] <= 5){
                 $result['order']['deliver_lng'] = $deliver['lng'];
                 $result['order']['deliver_lat'] = $deliver['lat'];
@@ -1475,31 +1475,41 @@ class IndexAction extends BaseAction
         $uid = $_POST['uid'];
         $order_id = $_POST['order_id'];
 
-        if($uid && $order_id){
-            $order_list = D('Shop_order_detail')->where(array('order_id'=>$order_id))->select();
-            if($order_list){
-                $add_list = array();
-                foreach ($order_list as $detail){
-                    $data = array();
-                    $data['uid'] = $uid;
-                    $data['fid'] = $detail['goods_id'];
-                    $data['num'] = $detail['num'];
-                    $data['sid'] = $detail['store_id'];
-                    $data['status'] = 0;
-                    $data['spec'] = $detail['spec_id'];
-                    $data['proper'] = $detail['pro_id'];
-                    $data['dish_id'] = $detail['dish_id'];
-                    $data['time'] = date("Y-m-d H:i:s");
+        $order = D('Shop_order')->where(array('order_id'=>$order_id))->find();
+        if($order) {
+            $store = $this->loadModel()->get_store_by_id($order['store_id'],0,0);
+            if($store['is_close'] == 1){
+                $this->returnCode(1, 'info', array(), 'Sorry, this store is currently unavailable.');
+            }else {
+                if ($uid && $order_id) {
+                    $order_list = D('Shop_order_detail')->where(array('order_id' => $order_id))->select();
+                    if ($order_list) {
+                        $add_list = array();
+                        foreach ($order_list as $detail) {
+                            $data = array();
+                            $data['uid'] = $uid;
+                            $data['fid'] = $detail['goods_id'];
+                            $data['num'] = $detail['num'];
+                            $data['sid'] = $detail['store_id'];
+                            $data['status'] = 0;
+                            $data['spec'] = $detail['spec_id'];
+                            $data['proper'] = $detail['pro_id'];
+                            $data['dish_id'] = $detail['dish_id'];
+                            $data['time'] = date("Y-m-d H:i:s");
 
-                    $add_list[] = $data;
+                            $add_list[] = $data;
+                        }
+
+                        D('Cart')->addAll($add_list);
+                    }
+
+                    $this->returnCode(0, '', array(), 'success');
+                } else {
+                    $this->returnCode(1, 'info', array(), 'Fail');
                 }
-                
-                D('Cart')->addAll($add_list);
             }
-
-            $this->returnCode(0,'',array(),'success');
         }else{
-            $this->returnCode(1,'info',array(),'Fail');
+            $this->returnCode(1, 'info', array(), 'Fail');
         }
     }
 
