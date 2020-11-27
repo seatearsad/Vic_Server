@@ -427,7 +427,7 @@ class StoreModel extends Model
             }
         }
 
-        $store['is_close'] = $now_store['status'] == 0 ? "1" : "0";
+        if($now_store['status'] == 0) $store['is_close'] = "1";
         $store['shopstatus'] = $store['is_close'] == 0 ? "1" : "0";
 
         return $store;
