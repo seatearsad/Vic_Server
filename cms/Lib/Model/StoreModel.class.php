@@ -802,7 +802,7 @@ class StoreModel extends Model
     public function getUserAdr($uid){
         $addressModle = D('User_adress');
 
-        $adr = $addressModle->field(true)->where(array('uid'=>$uid))->order('`default` DESC')->select();
+        $adr = $addressModle->field(true)->where(array('uid'=>$uid))->order('adress_id desc')->select();//'`default` DESC'
 
         foreach ($adr as $v){
             $result[] = $this->arrange_address($v);
