@@ -747,18 +747,22 @@ class IndexAction extends BaseAction
 
         $result = D('Cart')->getCartList($uid,$cart_array);
 
-        //平台优惠劵
-        $_POST['amount'] = $result['food_total_price'];
+        if($result['store_name']) {
+            //平台优惠劵
+            $_POST['amount'] = $result['food_total_price'];
 
-        $coupon = $this->getCanCoupon();
-        $result['coupon'] = $coupon;
+            $coupon = $this->getCanCoupon();
+            $result['coupon'] = $coupon;
 
-        //账户余额
-        $userInfo = D('User')->get_user($uid);
-        $result['is_bind_phone'] = $userInfo['phone'] == '' ? 0 : 1;
-        $result['now_money'] = round($userInfo['now_money'],2);
+            //账户余额
+            $userInfo = D('User')->get_user($uid);
+            $result['is_bind_phone'] = $userInfo['phone'] == '' ? 0 : 1;
+            $result['now_money'] = round($userInfo['now_money'], 2);
 
-        $this->returnCode(0,'',$result,'success');
+            $this->returnCode(0, '', $result, 'success');
+        }else{
+            $this->returnCode(1,'info',array(),'Cart is Empty');
+        }
     }
 
     public function saveOrder(){
@@ -1294,6 +1298,7 @@ class IndexAction extends BaseAction
         $order_detail['ship_fee'] = $order['freight_charge'];
         $order_detail['tip_fee'] = $order['tip_charge'];
         $order_detail['food_amount'] = $order['goods_price'];
+        $order_detail['goods_count'] = $order['num'];
         $order_detail['order_id'] = $order_id;
         $order_detail['expect_time'] = date('Y-m-d H:i:s',$order['expect_use_time']);
         $order_detail['site_id'] = $order['store_id'];
