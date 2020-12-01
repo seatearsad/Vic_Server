@@ -739,6 +739,49 @@ class IndexAction extends BaseAction
         $this->returnCode(0,'info',array(),'success');
     }
 
+    public function checkCart()
+    {
+        $uid = $_POST['uid'];
+        $cartList = $_POST['cart_list'];
+
+        $cart_array = json_decode(html_entity_decode($cartList), true);
+
+        $week = date('w');
+        $currTime = date('H:i:s');
+
+        $del_list = array();
+        foreach ($cart_array as $c_good){
+            $goods = D('Shop_goods')->where(array('goods_id'=>$c_good['fid']))->find();
+            $goods_sort = D('Shop_goods_sort')->where(array('sort_id'=>$goods['sort_id']))->find();
+
+            $is_continue = true;
+            if($goods_sort['is_weekshow'] == 1){
+                $weekList = explode(',',$goods_sort['week']);
+                if(!in_array($week,$weekList)){
+                    $item['foods_name'] = lang_substr($goods['name'],C('DEFAULT_LANG'));
+                    $del_list[] = $item;
+                    $is_continue = false;
+                    D('Cart')->where(array('uid'=>$uid,'fid'=>$c_good['fid']))->delete();
+                }
+            }
+
+            if($is_continue && $goods_sort['is_time'] == 1){
+                $showTime = explode(',',$goods_sort['show_time']);
+                if(!($currTime >= $showTime[0] && $currTime < $showTime[1])){
+                    $item['foods_name'] = lang_substr($goods['name'],C('DEFAULT_LANG'));
+                    $del_list[] = $item;
+                    D('Cart')->where(array('uid'=>$uid,'fid'=>$c_good['fid']))->delete();
+                }
+            }
+        }
+
+        if(count($del_list) == 0){
+            $this->returnCode(0, 'info', array(), 'success');
+        }else{
+            $this->returnCode(1,'info',$del_list,'fail');
+        }
+    }
+
     public function confirmCart(){
         $uid = $_POST['uid'];
         $cartList = $_POST['cart_list'];
