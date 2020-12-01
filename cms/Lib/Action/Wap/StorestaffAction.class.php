@@ -1705,6 +1705,7 @@ class StorestaffAction extends BaseAction
         if ($database->where($condition)->save($data)) {
             if ($order['is_pick_in_store'] != 2 && $order['is_pick_in_store'] != 3) {
                 $result = D('Deliver_supply')->saveOrder($order_id, $this->store);
+                var_dump($result);die();
                 if ($result['error_code']) {
                     D('Shop_order')->where(array('order_id' => $order_id))->save(array('status' => 0, 'order_status' => 0, 'last_time' => time()));
                     $this->error_tips($result['msg']);
