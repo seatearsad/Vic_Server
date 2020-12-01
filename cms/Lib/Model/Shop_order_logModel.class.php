@@ -30,10 +30,7 @@ class Shop_order_logModel extends Model
 				$apppush = new Apppush();
 				$apppush->send($order, 'shop');
 			}
-
-			$result = $this->add($data);
-			var_dump($result);die();
-			//return $this->add($data);
+			return $this->add($data);
 		}
 	}
 }
