@@ -294,12 +294,12 @@ abstract class Base_Services_Twilio extends Services_Twilio_Resource
             $this->last_response = $decoded;
             return $decoded;
         }
-        throw new Services_Twilio_RestException(
-            $status,
-            isset($decoded->message) ? $decoded->message : '',
-            isset($decoded->code) ? $decoded->code : null,
-            isset($decoded->more_info) ? $decoded->more_info : null
-        );
+//        throw new Services_Twilio_RestException(
+//            $status,
+//            isset($decoded->message) ? $decoded->message : '',
+//            isset($decoded->code) ? $decoded->code : null,
+//            isset($decoded->more_info) ? $decoded->more_info : null
+//        );
     }
 }
 
