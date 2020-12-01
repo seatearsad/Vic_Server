@@ -758,8 +758,7 @@ class IndexAction extends BaseAction
             if($goods_sort['is_weekshow'] == 1){
                 $weekList = explode(',',$goods_sort['week']);
                 if(!in_array($week,$weekList)){
-                    $item['foods_name'] = lang_substr($goods['name'],C('DEFAULT_LANG'));
-                    $del_list[] = $item;
+                    $del_list[] = lang_substr($goods['name'],C('DEFAULT_LANG'));
                     $is_continue = false;
                     D('Cart')->where(array('uid'=>$uid,'fid'=>$c_good['fid']))->delete();
                 }
@@ -768,8 +767,7 @@ class IndexAction extends BaseAction
             if($is_continue && $goods_sort['is_time'] == 1){
                 $showTime = explode(',',$goods_sort['show_time']);
                 if(!($currTime >= $showTime[0] && $currTime < $showTime[1])){
-                    $item['foods_name'] = lang_substr($goods['name'],C('DEFAULT_LANG'));
-                    $del_list[] = $item;
+                    $del_list[] = lang_substr($goods['name'],C('DEFAULT_LANG'));
                     D('Cart')->where(array('uid'=>$uid,'fid'=>$c_good['fid']))->delete();
                 }
             }
