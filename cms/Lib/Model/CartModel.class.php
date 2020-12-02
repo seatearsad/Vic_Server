@@ -79,19 +79,12 @@ class CartModel extends Model
             if ($resid != $good['store_id']){
                 $store = D('Store')->get_store_by_id($good['store_id']);
 
-                //garfunkel获取减免配送费的活动
-                $eventList = D('New_event')->getEventList(1,3,$store['city_id']);
-                $delivery_coupon = "";
-                if(count($eventList) > 0) {
-                    foreach ($eventList as $event) {
-                        $delivery_coupon = D('New_event_coupon')->where(array('event_id' => $event['id']))->find();
-                    }
-                }
-
                 $resid = $good['store_id'];
 
                 $store['free_delivery'] = 0;
                 $store['event'] = array("use_price"=>"0","discount"=>"0","miles"=>0);
+                //garfunkel获取减免配送费的活动
+                $delivery_coupon = D('New_event')->getFreeDeliverCoupon($good['store_id'],$store['city_id']);
                 if($address){
                     $distance = getDistance($store['lat'], $store['lng'], $address['mapLat'], $address['mapLng']);
                     if($delivery_coupon != "" && $delivery_coupon['limit_day']*1000 >= $distance){
@@ -100,6 +93,7 @@ class CartModel extends Model
                         $t_event['discount'] = $delivery_coupon['discount'];
                         $t_event['miles'] = $delivery_coupon['limit_day']*1000;
                         $t_event['desc'] = $delivery_coupon['desc'];
+                        $t_event['event_type'] = $delivery_coupon['event_type'];
 
                         $store['event'] = $t_event;
 
@@ -238,13 +232,7 @@ class CartModel extends Model
         //获取配送费
         $delivey_fee = D('Store')->CalculationDeliveryFee($uid,$sid);
         //garfunkel获取减免配送费的活动
-        $eventList = D('New_event')->getEventList(1,3,$store['city_id']);
-        $delivery_coupon = "";
-        if(count($eventList) > 0) {
-            foreach ($eventList as $event) {
-                $delivery_coupon = D('New_event_coupon')->where(array('event_id' => $event['id']))->find();
-            }
-        }
+        $delivery_coupon = D('New_event')->getFreeDeliverCoupon($sid,$store['city_id']);
 
         $address = D('Store')->getDefaultAdr($uid);
         $store = D('Store')->get_store_by_id($sid);
@@ -263,6 +251,7 @@ class CartModel extends Model
             $t_event['discount'] = $delivery_coupon['discount'];
             $t_event['miles'] = $delivery_coupon['limit_day']*1000;
             $t_event['desc'] = $delivery_coupon['desc'];
+            $t_event['event_type'] = $delivery_coupon['event_type'];
 
             $store['event'] = $t_event;
 

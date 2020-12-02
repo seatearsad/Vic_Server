@@ -81,9 +81,10 @@ class New_eventModel extends Model
      * 2 新用户邀请
      * 3 规定范围内免配送费
      * 4 店铺满减活动
+     * 5 店铺减免配送费
      */
     public function getTypeName($type){
-        $typeName = ['无效活动','新用户注册','新用户邀请','规定范围内免配送费','店铺满减活动'];
+        $typeName = ['无效活动','新用户注册','新用户邀请','规定范围内免配送费','店铺满减活动','店铺减免配送费'];
         if($type == -1)
             return $typeName;
         else
@@ -113,8 +114,11 @@ class New_eventModel extends Model
             $where['city_id'] = $city_id;
         }
 
-        if($this->where($where)->find()){
-            return false;
+        //店铺减免配送费不判断是否存在
+        if($type != 5) {
+            if ($this->where($where)->find()) {
+                return false;
+            }
         }
 
         return true;
@@ -305,5 +309,39 @@ class New_eventModel extends Model
         $coupon['expiry_num'] = D('New_event_user')->where(array('event_coupon_id'=>$coupon['id'],'is_use'=>2))->count();
 
         return $coupon;
+    }
+
+    public function getFreeDeliverCoupon($store_id,$city_id=0){
+        //首先获取平台减免获得
+        $eventList = $this->getEventList(1,3,$city_id);
+        $delivery_coupon = "";
+        if(count($eventList) > 0) {
+            foreach ($eventList as $event) {
+                $store_coupon = D('New_event_coupon')->where(array('event_id' => $event['id']))->find();
+                if($store_coupon) {
+                    $delivery_coupon = $store_coupon;
+                    $delivery_coupon['event_type'] = 0;
+                }
+            }
+        }
+
+        //店铺减免配送费 如果店铺减免存在便替换平台减免
+        $eventList = $this->getEventList(1,5);
+        if(count($eventList) > 0) {
+            foreach ($eventList as $event) {
+                $store_coupon = D('New_event_coupon')->where(array('event_id' => $event['id'], 'limit_day' => $store_id))->order('use_price asc')->find();
+                if ($store_coupon) {
+                    $delivery_coupon = $store_coupon;
+                    //暂时设定为20公里内减免
+                    $delivery_coupon['limit_day'] = 50;
+                    $delivery_coupon['event_type'] = $event['id'];
+                }
+            }
+        }
+//        if(is_array($delivery_coupon)){
+//            var_dump($delivery_coupon);
+//            die();
+//        }
+        return $delivery_coupon;
     }
 }
