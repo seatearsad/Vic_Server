@@ -776,7 +776,7 @@ class IndexAction extends BaseAction
         if(count($del_list) == 0){
             $this->returnCode(0, 'info', array(), 'success');
         }else{
-            $this->returnCode(1,'info',$del_list,'fail');
+            $this->returnCode(1,'info',$del_list,'checkcarterror');
         }
     }
 
