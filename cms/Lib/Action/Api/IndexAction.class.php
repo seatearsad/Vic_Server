@@ -1692,9 +1692,14 @@ class IndexAction extends BaseAction
         $card = D('User_card')->getCardListByUid($uid);
 
         $save_price = 251;
-
+        $send_card = $card[0];
+        foreach ($card as $v){
+            if($v['is_default'] == 1){
+                $send_card = $v;
+            }
+        }
         if($card) {
-            $send_card = $card[0];
+            //$send_card = $card[0];
             $send_card['save_price'] = $save_price;
             $this->returnCode(0, 'info', $send_card, 'success');
         }else {
