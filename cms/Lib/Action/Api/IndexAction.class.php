@@ -1589,6 +1589,35 @@ class IndexAction extends BaseAction
         }
     }
 
+    public function credit_pay_android(){
+        import('@.ORG.pay.MonerisPay');
+        $moneris_pay = new MonerisPay();
+        //app 支付标识
+        $_POST['rvarwap'] = 2;
+        $resp = $moneris_pay->payment($_POST,$_POST['uid'],3);
+        if($resp['requestMode'] && $resp['requestMode'] == "mpi"){
+            if($resp['mpiSuccess'] == "true"){
+                $result = array('error_code' => false,'mode'=>$resp['requestMode'],'PaReq'=>urlencode($resp['MpiPaReq']),'TermUrl' => urlencode($resp['MpiTermUrl']),'MD' => urlencode($resp['MpiMD']),'ACSUrl' => urlencode($resp['MpiACSUrl']),'site_url'=>$resp['MpiTermUrl']);
+                //$this->ajaxReturn($result);
+                $this->returnCode(0,'info',$result,'success');
+            }else{
+                $this->returnCode(1,'info',array(),$resp['message']);
+            }
+        }
+
+        if($resp['responseCode'] != 'null' && $resp['responseCode'] < 50){
+            //$order = explode("_",$_POST['order_id']);
+            //$order_id = $order[1];
+            //$url =U("Wap/Shop/status",array('order_id'=>$order_id));
+            $result = array('error_code' => false,'mode'=>'','PaReq'=>'','TermUrl' => '','MD' => '','ACSUrl' => '','site_url'=>'');
+            $this->returnCode(0,'info',$result,'success');
+            //$this->success(L('_PAYMENT_SUCCESS_'),$url,true);
+        }else{
+            $this->returnCode(1,'info',array(),$resp['message']);
+//            $this->error($resp['message'],'',true);
+        }
+    }
+
     public function ToPay(){
         $uid = $_POST['uid'];
         $order_id = $_POST['order_id'];
