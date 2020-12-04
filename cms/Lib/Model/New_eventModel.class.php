@@ -267,6 +267,7 @@ class New_eventModel extends Model
             if(time() > $v['expiry_time']) {
                 $v['is_user'] = 2;
                 D('New_event_user')->where(array('id'=>$v['id']))->save($v);
+                continue;
             }
 
             $v['coupon_id'] = 'event_'.$v['event_coupon_id'];
