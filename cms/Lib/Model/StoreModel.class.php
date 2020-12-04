@@ -1002,7 +1002,7 @@ class StoreModel extends Model
         if($status == 5)
             $desc = "Your courier is heading to you with your order.";
 
-        if($status == 6 || $status == 7)
+        if($status == 6 || $status == 7 || $status == 8)
             $desc = "Enjoy! Thank you for ordering with Tutti! ";
 
         return $desc;
