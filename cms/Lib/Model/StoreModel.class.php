@@ -964,9 +964,9 @@ class StoreModel extends Model
             "Preparing your order",
             "Order picked up",
             "Heading to you",
-            "Order complete",//未评论
+            "Order complete",
             "Order complete",//并评论完成
-            L('_ORDER_STATUS_8_'),
+            "Order complete",//评论完成
             L('_ORDER_STATUS_9_'),
             L('_ORDER_STATUS_10_'),
             L('_ORDER_STATUS_11_'),
@@ -983,7 +983,7 @@ class StoreModel extends Model
     public function getOrderStatusDesc($status,$order,$log,$storeName){
         $desc = "";
         if($status == 0 || $status == 1){
-            $desc = "Waiting for (".$storeName.") to confirm your order";
+            $desc = "Waiting for ".$storeName." to confirm your order";
         }
 
         if($status == 2 || $status == 3){
