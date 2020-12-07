@@ -991,7 +991,6 @@ class StoreModel extends Model
             $now_time = time();
             $check_time = $delivery['create_time'] + $delivery['dining_time']*60;
             if($add_time > 0){
-                $check_time = $check_time + $add_time*60;
                 $desc = "The restaurant needs another ".$add_time." min to prepare your order, so your order is expected to be ready by ". date("H:i", $check_time);;
             }else {
                 if ($now_time < $check_time)
