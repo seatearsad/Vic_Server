@@ -302,7 +302,7 @@ class CartModel extends Model
 
         ///////-garfunkel-店铺满减////////
         $result['merchant_reduce'] = 0;
-        $result['merchant_reduce_type'] = 0;
+        $result['merchant_reduce_type'] = 1;
         $eventList = D('New_event')->getEventList(1,4);
         $store_coupon = "";
         if(count($eventList) > 0) {
