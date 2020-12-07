@@ -980,7 +980,7 @@ class StoreModel extends Model
         return $status_list[$status];
     }
 
-    public function getOrderStatusDesc($status,$order,$log,$storeName){
+    public function getOrderStatusDesc($status,$order,$log,$storeName,$add_time=0){
         $desc = "";
         if($status == 0 || $status == 1){
             $desc = "Waiting for ".$storeName." to confirm your order";
@@ -989,11 +989,16 @@ class StoreModel extends Model
         if($status == 2 || $status == 3){
             $delivery = D('Deliver_supply')->where(array('order_id'=>$order['order_id']))->find();
             $now_time = time();
-            $check_time = $order['create_time'] + $delivery['dining_time'];
-            if($now_time < $check_time)
-                $desc = "Your order is expected to be ready by ".date("H:i",$check_time);
-            else
-                $desc = "Your order is ready and will be picked up shortly.";
+            $check_time = $delivery['create_time'] + $delivery['dining_time']*60;
+            if($add_time > 0){
+                $check_time = $check_time + $add_time*60;
+                $desc = "The restaurant needs another ".$add_time." min to prepare your order, so your order is expected to be ready by ". date("H:i", $check_time);;
+            }else {
+                if ($now_time < $check_time)
+                    $desc = "Your order is expected to be ready by " . date("H:i", $check_time);
+                else
+                    $desc = "Your order is ready and will be picked up shortly.";
+            }
         }
 
         if($status == 4)

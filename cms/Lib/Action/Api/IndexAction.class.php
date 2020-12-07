@@ -1370,9 +1370,14 @@ class IndexAction extends BaseAction
         $order_detail['pay_method'] = $store['pay_method'];
 
         $status = D('Shop_order_log')->field(true)->where(array('order_id' => $order['order_id']))->order('id DESC')->find();
+        $add_time = 0;
+        if($status['status'] == 33){
+            $status['status'] = 2;
+            $add_time = $status['note'];
+        }
         $order_detail['status_log'] = $status['status'];
         $order_detail['statusName'] = D('Store')->getOrderStatusLogName($status['status']);
-        $order_detail['statusDesc'] = D('Store')->getOrderStatusDesc($status['status'],$order,$status,$store['site_name']);
+        $order_detail['statusDesc'] = D('Store')->getOrderStatusDesc($status['status'],$order,$status,$store['site_name'],$add_time);
 
         if($order['paid'] == 0) {
             $order_detail['statusName'] = "Unpaid";
