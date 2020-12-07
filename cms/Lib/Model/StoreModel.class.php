@@ -991,6 +991,11 @@ class StoreModel extends Model
             $now_time = time();
             $check_time = $delivery['create_time'] + $delivery['dining_time']*60;
             if($add_time > 0){
+                $add_log = D('Shop_order_log')->field(true)->where(array('order_id' => $order['order_id'],'status'=>33))->order('id DESC')->select();
+                $add_time = 0;
+                foreach ($add_log as $v){
+                    $add_time += $v['note'];
+                }
                 $desc = "The restaurant needs another ".$add_time." min to prepare your order, so your order is expected to be ready by ". date("H:i", $check_time);;
             }else {
                 if ($now_time < $check_time)
