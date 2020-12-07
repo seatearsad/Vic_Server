@@ -556,6 +556,23 @@ class IndexAction extends BaseAction
         $this->returnCode(0,'info',array(),'Success');
     }
 
+    public function userForgotPwd(){
+        $uid = $_POST['uid'];
+        $vcode = $_POST['vcode'];
+        $pwd = $_POST['new_pwd'];
+
+        $user = D('User')->where(array('uid'=>$uid))->find();
+
+        if(D('User_modifypwd')->where(array('vfcode'=>$vcode,'telphone'=>$user['phone']))->find()){
+            $data['pwd'] = md5($pwd);
+            D('User')->where(array('uid'=>$uid))->save($data);
+
+            $this->returnCode(0,'info',array(),'Success');
+        }else{
+            $this->returnCode(1,'info',array(),L('_SMS_CODE_ERROR_'));
+        }
+    }
+
     public function oldToPassword(){
         $uid = $_POST['uid'];
         $old_pwd = $_POST['old_pwd'];
