@@ -1373,7 +1373,8 @@ class IndexAction extends BaseAction
         $order_detail['merchant_reduce'] = $order['merchant_reduce'];
 
         $address = D('User_adress')->where(array('adress_id'=>$order['address_id']))->find();
-        $order_detail['address2'] = $address['adress'].' ('.$address['detail'].')';
+        if($address && $address['detail'] != '')
+            $order_detail['address2'] = $address['adress'].' ('.$address['detail'].')';
 
         $order_detail['jetlag'] = 0;
         if($order['paid'] == 0) {
