@@ -1372,6 +1372,9 @@ class IndexAction extends BaseAction
         $order_detail['delivery_discount'] = $order['delivery_discount'];
         $order_detail['merchant_reduce'] = $order['merchant_reduce'];
 
+        $address = D('User_adress')->where(array('adress_id'=>$order['address_id']))->find();
+        $order_detail['address2'] = $address['adress'].' ('.$address['detail'].')';
+
         $order_detail['jetlag'] = 0;
         if($order['paid'] == 0) {
             $store = D('Merchant_store')->where(array('store_id' => $order['store_id']))->find();
