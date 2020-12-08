@@ -463,6 +463,7 @@ class UserModel extends Model
 		$table = array(C('DB_PREFIX').'group_order',C('DB_PREFIX').'meal_order',C('DB_PREFIX').'appoint_order',C('DB_PREFIX').'shop_order',C('DB_PREFIX').'foodshop_order');
 		$count = 0;
 		$where['uid']=$user['uid'];
+		$where['paid'] = 1;
 		switch($cate_name){
 			case 'all':
 				foreach($table as  $v){

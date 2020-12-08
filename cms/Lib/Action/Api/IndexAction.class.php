@@ -1329,9 +1329,9 @@ class IndexAction extends BaseAction
 
             //$order_detail['payname'] = $order['pay_type'] == 'moneris' ? 'Paid Online' : 'Cash';
             if($order['pay_type'] == 'moneris'){
-                $order_detail['payname'] = 'Paid Online';
+                $order_detail['payname'] = 'Credit Card';
             }elseif ($order['pay_type'] == ''){
-                $order_detail['payname'] = 'Pay by balance';
+                $order_detail['payname'] = 'Balance';
             }elseif ($order['pay_type'] == 'weixin'){
                 $order_detail['payname'] = 'WeiXin';
             }elseif ($order['pay_type'] == 'alipay'){
