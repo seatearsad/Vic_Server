@@ -1373,6 +1373,8 @@ class IndexAction extends BaseAction
         $order_detail['merchant_reduce'] = $order['merchant_reduce'];
 
         $address = D('User_adress')->where(array('adress_id'=>$order['address_id']))->find();
+        $order_detail['user_lat'] = $address['latitude'];
+        $order_detail['user_lng'] = $address['longitude'];
         if($address && $address['detail'] != '')
             $order_detail['address2'] = $address['adress'].' ('.$address['detail'].')';
 
@@ -1390,6 +1392,8 @@ class IndexAction extends BaseAction
         $order_detail['store_service_fee'] = $store['service_fee'];
         $order_detail['background'] = $store['background'];
         $order_detail['pay_method'] = $store['pay_method'];
+        $order_detail['store_lat'] = $store['lat'];
+        $order_detail['store_lng'] = $store['long'];
 
         $status = D('Shop_order_log')->field(true)->where(array('order_id' => $order['order_id']))->order('id DESC')->find();
         $add_time = 0;

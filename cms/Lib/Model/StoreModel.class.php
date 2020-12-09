@@ -1002,7 +1002,7 @@ class StoreModel extends Model
                 if ($add_time == 0)
                     $desc = "Your order is expected to be ready by " . date("H:i", $check_time);
                 else
-                    $desc = "The restaurant needs another ".$add_time." min to prepare your order, so your order is expected to be ready by ". date("H:i", $check_time);;
+                    $desc = "The restaurant needs another ".$add_time." min to prepare your order, so your order is expected to be ready by ". date("H:i", $check_time);
             }else {
                 $desc = "Your order is ready and will be picked up shortly.";
             }
