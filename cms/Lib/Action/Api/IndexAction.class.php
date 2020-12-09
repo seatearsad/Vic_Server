@@ -1393,7 +1393,7 @@ class IndexAction extends BaseAction
         $order_detail['background'] = $store['background'];
         $order_detail['pay_method'] = $store['pay_method'];
         $order_detail['store_lat'] = $store['lat'];
-        $order_detail['store_lng'] = $store['long'];
+        $order_detail['store_lng'] = $store['lng'];
 
         $status = D('Shop_order_log')->field(true)->where(array('order_id' => $order['order_id']))->order('id DESC')->find();
         $add_time = 0;
