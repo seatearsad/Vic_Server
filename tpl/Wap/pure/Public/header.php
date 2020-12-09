@@ -37,7 +37,8 @@
         flex: 1 1 100%;
     }
     #header_sign{
-        flex: 1 1 100%;
+        /*flex: 1 1 100%;*/
+        flex: 0 0 auto;
     }
     .header_search{
         width: 50px;
@@ -311,13 +312,15 @@
 <div id="tutti_header">
     <div id="header_menu">
         <if condition="MODULE_NAME == 'Home'">
-        <div class="local_div" data-url="{pigcms{:U('Home/address')}"></div>
+            <div class="local_div" data-url="{pigcms{:U('Home/address')}"></div>
+            <div id="header_address_div" style="line-height: 60px;font-size: 18px;color: gray;"></div>
         </if>
         <if condition="MODULE_NAME == 'Shop' && ACTION_NAME == 'index'">
             <div class="local_div" data-url="{pigcms{:U('Shop/classic_address')}"></div>
+            <div id="header_address_div" style="line-height: 60px;font-size: 16px;color: gray;"></div>
         </if>
     </div>
-    <div id="header_logo"></div>
+    <!--div id="header_logo"></div-->
     <div id="header_sign">
         <div class="header_search"></div>
     </div>
@@ -425,5 +428,7 @@
             window.location.href = "{pigcms{:U('Shop/index')}" + "&key=" + keyword;
         }
     });
+
+    $('#header_address_div').html($.cookie('userLocationName'));
 </script>
 <script type="text/javascript" src="{pigcms{$static_path}js/jquery.cookie.js" charset="utf-8"></script>
