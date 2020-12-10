@@ -21,9 +21,9 @@ class CartModel extends Model
         $data['dish_id'] = $dish_id;
         $data['time'] = date("Y-m-d H:i:s");
 
-        $where = array('uid'=>$uid,'fid'=>$fid,'spec'=>$spec,'proper'=>$proper);
-        if($dish_id != "")
-            $where['dish_id'] = $dish_id;
+        $where = array('uid'=>$uid,'fid'=>$fid,'spec'=>$spec,'proper'=>$proper,'dish_id'=>$dish_id);
+        //if($dish_id != "")
+        //    $where['dish_id'] = $dish_id;
 
 
         $item = $this->field(true)->where($where)->find();
