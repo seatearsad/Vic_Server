@@ -1223,12 +1223,13 @@ class IndexAction extends BaseAction
             $t['goodsCount'] = $val['num'];
             $t['goodsPrice'] = $val['goods_price'];
             $t['status'] = $val['status'];
+            $t['statusName'] = D('Store')->getOrderStatusName($val['status']);
             $t['isComment'] = "1";
             //$t['statusName'] = D('Store')->getOrderStatusName($val['status']);
-            $status = D('Shop_order_log')->field(true)->where(array('order_id' => $val['order_id']))->order('status DESC')->find();
+            $status = D('Shop_order_log')->field(true)->where(array('order_id' => $val['order_id']))->order('id DESC')->find();
             $status['status'] = $status['status'] == 33 ? 2 : $status['status'];
             $t['statusLog'] = $status['status'];
-            $t['statusName'] = D('Store')->getOrderStatusLogName($status['status']);
+            $t['statusLogName'] = D('Store')->getOrderStatusLogName($status['status']);
             $t['goodsImage'] = $val['image'];
             $t['orderType'] = "0";
             $t['tip_fee'] = $val['tip_charge'];
