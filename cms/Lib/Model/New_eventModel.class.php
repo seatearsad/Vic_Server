@@ -334,7 +334,7 @@ class New_eventModel extends Model
                 if ($store_coupon) {
                     $delivery_coupon = $store_coupon;
                     //暂时设定为20公里内减免
-                    $delivery_coupon['limit_day'] = 50;
+                    $delivery_coupon['limit_day'] = 20;
                     $delivery_coupon['event_type'] = $event['id'];
                 }
             }
