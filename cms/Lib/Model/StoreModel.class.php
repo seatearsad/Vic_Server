@@ -47,12 +47,39 @@ class StoreModel extends Model
         $store['shop_remind'] = $row['shop_remind'];
         $store['pay_method'] = $row['pay_method'];
 
+        if($row['background'] && $row['background'] != '') {
+            $image_tmp = explode(',', $row['background']);
+            $store['background'] = C('config.site_url') . '/upload/background/' . $image_tmp[0] . '/' . $image_tmp['1'];
+        }else{
+            $store['background'] = '';
+        }
+
         $store['is_close'] = 1;
         $now_time = date('H:i:s');
 
         if($row['store_is_close'] != 0){
             $row = checkAutoOpen($row);
         }
+
+        $time_list = array();
+        for ($i = 0;$i < 21;++$i){
+            $this_num = $i + 1;
+            if ($row['open_'.$this_num] != '00:00:00' || $row['close_'.$this_num] != '00:00:00'){
+                $open_time[$i] = substr($row['open_'.$this_num], 0, -3) . '-' . substr($row['close_'.$this_num], 0, -3);
+            }else{
+                $open_time[$i] = "";
+            }
+
+            $day_num = $i/3;
+            if($time_list[$day_num] == ""){
+                $time_list[$day_num] = $open_time[$i];
+            }else{
+                if($open_time[$i] != "")
+                    $time_list[$day_num] .= ", ".$open_time[$i];
+            }
+        }
+
+        $store['open_list'] = $time_list;
         //@wangchuanyuan 周一到周天
         $date = date("w");//今天是星期几 @ydhl-wangchuanyuan 20171106
         switch ($date){
@@ -394,6 +421,8 @@ class StoreModel extends Model
                 }
             }
         }
+
+        if($now_store['status'] == 0) $store['is_close'] = "1";
         $store['shopstatus'] = $store['is_close'] == 0 ? "1" : "0";
 
         return $store;
@@ -572,7 +601,7 @@ class StoreModel extends Model
                 $spec_list = explode("_",$returnList[$k]['spec']);
                 foreach($spec_list as $vv){
                     $spec = D('Shop_goods_spec_value')->field(true)->where(array('id'=>$vv))->find();
-                    $spec_desc = $spec_desc == '' ? lang_substr($spec['name'],C('DEFAULT_LANG')) : $spec_desc.','.lang_substr($spec['name'],C('DEFAULT_LANG'));
+                    $spec_desc = $spec_desc == '' ? lang_substr($spec['name'],C('DEFAULT_LANG')) : $spec_desc.';'.lang_substr($spec['name'],C('DEFAULT_LANG'));
                 }
             }
             $returnList[$k]['spec_desc'] = $spec_desc;
@@ -589,10 +618,21 @@ class StoreModel extends Model
                     $nameList = explode(',',$pro['val']);
                     $name = lang_substr($nameList[$sId],C('DEFAULT_LANG'));
 
-                    $proper_desc = $proper_desc == '' ? $name : $proper_desc.','.$name;
+                    $proper_desc = $proper_desc == '' ? $name : $proper_desc.';'.$name;
                 }
             }
+
             $returnList[$k]['proper_desc'] = $proper_desc;
+            $returnList[$k]['attr'] = $spec_desc;
+            $returnList[$k]['attr'].= $returnList[$k]['attr'] == "" ? $proper_desc : ";".$proper_desc;
+            $returnList[$k]['attr'].= $returnList[$k]['attr'] == "" ? $dish_desc : ";".$dish_desc;
+
+            if($returnList[$k]['attr'] == ""){
+                $returnList[$k]['attr_num'] = 0;
+            }else {
+                $attr_arr = explode(";", $returnList[$k]['attr']);
+                $returnList[$k]['attr_num'] = count($attr_arr);
+            }
 
             $returnList[$k]['deposit'] = $v['deposit_price'];
             $returnList[$k]['tax_num'] = $v['tax_num'];
@@ -759,7 +799,7 @@ class StoreModel extends Model
     public function getUserAdr($uid){
         $addressModle = D('User_adress');
 
-        $adr = $addressModle->field(true)->where(array('uid'=>$uid))->order('`default` DESC')->select();
+        $adr = $addressModle->field(true)->where(array('uid'=>$uid))->order('adress_id desc')->select();//'`default` DESC'
 
         foreach ($adr as $v){
             $result[] = $this->arrange_address($v);
@@ -911,6 +951,70 @@ class StoreModel extends Model
             33 => L('_ORDER_STATUS_33_'));
 
         return $status_list[$status];
+    }
+
+    public function getOrderStatusLogName($status){
+        $status_list = array(
+            L('_ORDER_STATUS_0_'),
+            L('_ORDER_STATUS_0_'),
+            "Preparing your order",
+            "Preparing your order",
+            "Order picked up",
+            "Heading to you",
+            "Order complete",
+            "Order complete",//并评论完成
+            "Order complete",//评论完成
+            L('_ORDER_STATUS_9_'),
+            L('_ORDER_STATUS_10_'),
+            L('_ORDER_STATUS_11_'),
+            L('_ORDER_STATUS_12_'),
+            L('_ORDER_STATUS_13_'),
+            L('_ORDER_STATUS_14_'),
+            L('_ORDER_STATUS_15_'),
+            30 => L('_ORDER_STATUS_30_'),
+            33 => L('_ORDER_STATUS_33_'));
+
+        return $status_list[$status];
+    }
+
+    public function getOrderStatusDesc($status,$order,$log,$storeName,$add_time=0){
+        $desc = "";
+        if($status == 0 || $status == 1){
+            $desc = "Waiting for ".$storeName." to confirm your order";
+        }
+
+        if($status == 2 || $status == 3){
+            $delivery = D('Deliver_supply')->where(array('order_id'=>$order['order_id']))->find();
+            $now_time = time();
+            $check_time = $delivery['create_time'] + $delivery['dining_time']*60;
+            if($add_time > 0) {
+                $add_log = D('Shop_order_log')->field(true)->where(array('order_id' => $order['order_id'], 'status' => 33))->order('id DESC')->select();
+                $add_time = 0;
+                foreach ($add_log as $v) {
+                    $add_time += $v['note'];
+                }
+            }
+
+            if($now_time < $check_time){
+                if ($add_time == 0)
+                    $desc = "Your order is expected to be ready by " . date("H:i", $check_time);
+                else
+                    $desc = "The restaurant needs another ".$add_time." min to prepare your order, so your order is expected to be ready by ". date("H:i", $check_time);
+            }else {
+                $desc = "Your order is ready and will be picked up shortly.";
+            }
+        }
+
+        if($status == 4)
+            $desc = "Your courier has picked up your order.";
+
+        if($status == 5)
+            $desc = "Your courier is heading to you with your order.";
+
+        if($status == 6 || $status == 7 || $status == 8)
+            $desc = "Enjoy! Thank you for ordering with Tutti! ";
+
+        return $desc;
     }
 
     public function getOrderStatusMark($status,$order_id,$log){

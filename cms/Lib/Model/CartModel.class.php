@@ -129,6 +129,19 @@ class CartModel extends Model
         return $result;
     }
 
+    public function del_cart($uid,$storeId = 0)
+    {
+        $where['uid'] = $uid;
+
+        if ($storeId != 0) {
+            $where['sid'] = $storeId;
+        }
+
+        $this->where($where)->delete();
+
+        return array();
+    }
+
     public function getCartList($uid,$cartList){
         $list = array();
         $total_price = 0;
@@ -159,7 +172,7 @@ class CartModel extends Model
                 $spec_list = explode("_",$t_good['spec']);
                 foreach($spec_list as $vv){
                     $spec = D('Shop_goods_spec_value')->field(true)->where(array('id'=>$vv))->find();
-                    $spec_desc = $spec_desc == '' ? lang_substr($spec['name'],C('DEFAULT_LANG')) : $spec_desc.','.lang_substr($spec['name'],C('DEFAULT_LANG'));
+                    $spec_desc = $spec_desc == '' ? lang_substr($spec['name'],C('DEFAULT_LANG')) : $spec_desc.';'.lang_substr($spec['name'],C('DEFAULT_LANG'));
                 }
             }
             $t_good['spec_desc'] = $spec_desc;
@@ -176,7 +189,7 @@ class CartModel extends Model
                     $nameList = explode(',',$pro['val']);
                     $name = lang_substr($nameList[$sId],C('DEFAULT_LANG'));
 
-                    $proper_desc = $proper_desc == '' ? $name : $proper_desc.','.$name;
+                    $proper_desc = $proper_desc == '' ? $name : $proper_desc.';'.$name;
                 }
             }
             $t_good['proper_desc'] = $proper_desc;
@@ -209,6 +222,13 @@ class CartModel extends Model
             $t_good['attr'].= $t_good['attr'] == "" ? $proper_desc : ";".$proper_desc;
             $t_good['attr'].= $t_good['attr'] == "" ? $dish_desc : ";".$dish_desc;
 
+            if($t_good['attr'] == ""){
+                $t_good['attr_num'] = 0;
+            }else {
+                $attr_arr = explode(";", $t_good['attr']);
+                $t_good['attr_num'] = count($attr_arr);
+            }
+
             $t_good['price'] = $good['price'];
             $t_good['tax_num'] = $good['tax_num'];
             $t_good['deposit_price'] = $good['deposit_price'];
@@ -235,7 +255,6 @@ class CartModel extends Model
         $delivery_coupon = D('New_event')->getFreeDeliverCoupon($sid,$store['city_id']);
 
         $address = D('Store')->getDefaultAdr($uid);
-        $store = D('Store')->get_store_by_id($sid);
 
         $distance = getDistance($store['lat'], $store['lng'], $address['mapLat'], $address['mapLng']);
         $store['free_delivery'] = 0;
@@ -272,7 +291,7 @@ class CartModel extends Model
 
         ///////-garfunkel-店铺满减////////
         $result['merchant_reduce'] = 0;
-        $result['merchant_reduce_type'] = 0;
+        $result['merchant_reduce_type'] = 1;
         $eventList = D('New_event')->getEventList(1,4);
         $store_coupon = "";
         if(count($eventList) > 0) {
@@ -295,6 +314,7 @@ class CartModel extends Model
         $tax_price = $tax_price + ($store['pack_fee'] + $delivey_fee)*$store['tax_num']/100;
         $total_pay_price = $total_pay_price + $tax_price + $deposit_price;
 
+        $result['store_name'] = $store['site_name'];
         $result['expect_time'] = date('Y-m-d H:i',$delivery_time);
         $result['hongbao'] = array();
         $result['total_market_price'] = $total_market_price;

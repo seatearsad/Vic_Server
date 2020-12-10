@@ -29,8 +29,8 @@ class User_cardModel extends Model
         if($status != -1){
             $where['status'] = $status;
         }
-
-        $result = $this->field(true)->where($where)->order('is_default desc,id asc')->select();
+        //is_default desc,
+        $result = $this->field(true)->where($where)->order('id asc')->select();
         //过滤卡的验证时间
         $save_verification_day = 30;
         foreach ($result as &$v){
