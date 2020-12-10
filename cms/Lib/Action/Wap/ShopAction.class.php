@@ -270,13 +270,6 @@ class ShopAction extends BaseAction{
 		$now_time = date('H:i:s');
 
         //garfunkel获取减免配送费的活动
-        $eventList = D('New_event')->getEventList(1,3,$city_id);
-        $delivery_coupon = "";
-        if(count($eventList) > 0) {
-            foreach ($eventList as $event) {
-                $delivery_coupon = D('New_event_coupon')->where(array('event_id' => $event['id']))->find();
-            }
-        }
 
 		foreach ($lists['shop_list'] as $row) {
 			$temp = array();
@@ -549,13 +542,14 @@ class ShopAction extends BaseAction{
 
             $temp['free_delivery'] = 0;
             $temp['event'] = "";
-
+            $delivery_coupon = D('New_event')->getFreeDeliverCoupon($row['store_id'],$city_id);
             if($delivery_coupon != "" && $delivery_coupon['limit_day']*1000 >= $row['juli']){
                 $temp['free_delivery'] = 1;
                 $t_event['use_price'] = $delivery_coupon['use_price'];
                 $t_event['discount'] = $delivery_coupon['discount'];
                 $t_event['miles'] = $delivery_coupon['limit_day']*1000;
                 $t_event['desc'] = $delivery_coupon['desc'];
+                $t_event['event_type'] = $delivery_coupon['event_type'];
 
                 $temp['event'] = $t_event;
 
@@ -1307,13 +1301,8 @@ class ShopAction extends BaseAction{
         }
 
         //garfunkel获取减免配送费的活动
-        $eventList = D('New_event')->getEventList(1,3,$store['city_id']);
-        $delivery_coupon = "";
-        if(count($eventList) > 0) {
-            foreach ($eventList as $event) {
-                $delivery_coupon = D('New_event_coupon')->where(array('event_id' => $event['id']))->find();
-            }
-        }
+        $delivery_coupon = D('New_event')->getFreeDeliverCoupon($store_id,$store['city_id']);
+
         //garfunkel店铺满减活动
         $eventList = D('New_event')->getEventList(1,4);
         $store_coupon = "";
@@ -1349,6 +1338,7 @@ class ShopAction extends BaseAction{
                 $t_event['discount'] = $delivery_coupon['discount'];
                 $t_event['miles'] = $delivery_coupon['limit_day']*1000;
                 $t_event['desc'] = $delivery_coupon['desc'];
+                $t_event['event_type'] = $delivery_coupon['event_type'];
 
                 $store['event'] = $t_event;
 
@@ -2613,13 +2603,7 @@ class ShopAction extends BaseAction{
 		}
 
         //garfunkel获取减免配送费的活动
-        $eventList = D('New_event')->getEventList(1,3,$return['store']['city_id']);
-        $delivery_coupon = "";
-        if(count($eventList) > 0) {
-            foreach ($eventList as $event) {
-                $delivery_coupon = D('New_event_coupon')->where(array('event_id' => $event['id']))->find();
-            }
-        }
+        $delivery_coupon = D('New_event')->getFreeDeliverCoupon($store_id,$return['store']['city_id']);
 
 //            $store['free_delivery'] = 0;
 //            $store['event'] = "";
@@ -2650,6 +2634,7 @@ class ShopAction extends BaseAction{
                 $t_event['discount'] = $delivery_coupon['discount'];
                 $t_event['miles'] = $delivery_coupon['limit_day']*1000;
                 $t_event['desc'] = $delivery_coupon['desc'];
+                $t_event['event_type'] = $delivery_coupon['event_type'];
 
                 $return['store']['event'] = $t_event;
             }else {
@@ -2788,13 +2773,8 @@ class ShopAction extends BaseAction{
 			}
 
             //garfunkel获取减免配送费的活动
-            $eventList = D('New_event')->getEventList(1,3,$return['store']['city_id']);
-            $delivery_coupon = "";
-            if(count($eventList) > 0) {
-                foreach ($eventList as $event) {
-                    $delivery_coupon = D('New_event_coupon')->where(array('event_id' => $event['id']))->find();
-                }
-            }
+            $delivery_coupon = D('New_event')->getFreeDeliverCoupon($store_id,$return['store']['city_id']);
+
             //garfunkel店铺满减活动
             $eventList = D('New_event')->getEventList(1,4);
             $store_coupon = "";
@@ -2821,6 +2801,7 @@ class ShopAction extends BaseAction{
                                     $t_event['miles'] = $delivery_coupon['limit_day'] * 1000;
                                     $t_event['type'] = $delivery_coupon['type'];
                                     $t_event['desc'] = $delivery_coupon['desc'];
+                                    $t_event['event_type'] = $delivery_coupon['event_type'];
 
                                     $return['store']['event'] = $t_event;
                                     //$distance = $distance/1000;
@@ -3004,7 +2985,10 @@ class ShopAction extends BaseAction{
 				        else
                             $order_data['delivery_discount'] = $return['store']['event']['discount'];
 
+				        //是否可与优惠券公用 0不可 1可以
                         $order_data['delivery_discount_type'] = $return['store']['event']['type'];
+                        //平台活动还是店铺活动 0平台 1店铺活动的id
+                        $order_data['delivery_discount_event'] = $return['store']['event']['event_type'];
                     }
                 }
                 //garfunke 店铺满减活动

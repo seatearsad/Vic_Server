@@ -75,20 +75,14 @@ class EventAction extends BaseAction
         if($event_id){
             $event = D('New_event')->where(array('id'=>$event_id))->find();
 
-            $type_name = '限制天数';
-            if($event['type'] == 3){
-                $type_name = '限制公里数';
-            }else if($event['type'] == 4){
-                $type_name = '店铺';
-            }
-            $event['type_name'] = $type_name;
+            $event['type_name'] = $this->getTypeSetName($event);
 
             $this->assign('event',$event);
 
             $coupon_list = D('New_event_coupon')->where(array('event_id'=>$event_id))->select();
             foreach ($coupon_list as &$v){
                 $v = D('New_event')->getCouponUserNum($v);
-                if($event['type'] == 4){
+                if($event['type'] == 4 || $event['type'] == 5){
                     $store = D('Merchant_store')->field('name')->where(array('store_id'=>$v['limit_day']))->find();
                     $v['store_name'] = lang_substr($store['name'],C('DEFAULT_LANG'));
                 }
@@ -109,13 +103,7 @@ class EventAction extends BaseAction
             $this->assign('event_id',$event_id);
             $event = D('New_event')->where(array('id'=>$event_id))->find();
             $this->assign('event_type',$event['type']);
-            $type_name = '限制天数';
-            if($event['type'] == 3){
-                $type_name = '限制公里数';
-            }else if($event['type'] == 4){
-                $type_name = '店铺ID';
-            }
-            $this->assign('type_name',$type_name);
+            $this->assign('type_name',$this->getTypeSetName($event));
             $this->display();
         }else{
             $this->frame_submit_tips(0,'请先选择活动！');
@@ -129,10 +117,22 @@ class EventAction extends BaseAction
             $this->assign('event_id',$coupon['event_id']);
             $event = D('New_event')->where(array('id'=>$coupon['event_id']))->find();
             $this->assign('event_type',$event['type']);
+            $this->assign('type_name',$this->getTypeSetName($event));
             $this->display('add_coupon');
         }else{
             $this->frame_submit_tips(0,'请先选择优惠券！');
         }
+    }
+
+    public function getTypeSetName($event){
+        $type_name = '限制天数';
+        if($event['type'] == 3){
+            $type_name = '限制公里数';
+        }else if($event['type'] == 4 || $event['type'] == 5){
+            $type_name = '店铺ID';
+        }
+
+        return $type_name;
     }
 
     public function coupon_modify(){
