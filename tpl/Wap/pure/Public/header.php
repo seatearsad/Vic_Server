@@ -37,8 +37,10 @@
         flex: 1 1 100%;
     }
     #header_sign{
-        /*flex: 1 1 100%;*/
-        flex: 0 0 auto;
+        /*flex: 1 1 100%;
+        flex: 0 0 auto;*/
+        position: absolute;
+        right: 0;
     }
     .header_search{
         width: 50px;
@@ -300,6 +302,16 @@
         font-size: 16px;
         cursor: pointer;
     }
+    #header_address_div {
+        line-height: 60px;
+        font-size: 16px;
+        color: gray;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        word-break: break-all;
+        width: 65%;
+    }
 </style>
 <div class="down_header">
     <div class="down_close">X</div>
@@ -313,11 +325,11 @@
     <div id="header_menu">
         <if condition="MODULE_NAME == 'Home'">
             <div class="local_div" data-url="{pigcms{:U('Home/address')}"></div>
-            <div id="header_address_div" style="line-height: 60px;font-size: 18px;color: gray;"></div>
+            <div id="header_address_div"></div>
         </if>
         <if condition="MODULE_NAME == 'Shop' && ACTION_NAME == 'index'">
             <div class="local_div" data-url="{pigcms{:U('Shop/classic_address')}"></div>
-            <div id="header_address_div" style="line-height: 60px;font-size: 16px;color: gray;"></div>
+            <div id="header_address_div"></div>
         </if>
     </div>
     <!--div id="header_logo"></div-->
