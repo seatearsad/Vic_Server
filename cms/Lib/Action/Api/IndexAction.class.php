@@ -1746,7 +1746,7 @@ class IndexAction extends BaseAction
             $card_list = array();
         else{
             foreach ($card_list as $k=>$v){
-                $card_list[$k]['expiry'] = transYM($v['expiry']);
+                //$card_list[$k]['expiry'] = transYM($v['expiry']);
             }
         }
 
