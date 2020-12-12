@@ -1065,6 +1065,7 @@ class IndexAction extends BaseAction
         }
 
         $order_id = D('Shop_order')->saveOrder($order_data, $return);
+        $order = D('Shop_order')->where(array('order_id'=>$order_id))->find();
         //清除购物车中的内容
         D('Cart')->delCart($uid,$cart_array);
         //die($order_id);
@@ -1111,6 +1112,8 @@ class IndexAction extends BaseAction
             $price = $order_data['price'] + $order_data['tip_charge'] - $order_data['coupon_price'] - $order_data['delivery_discount'] - $order_data['merchant_reduce'];
             $result = $this->loadModel()->WeixinAndAli($_POST['pay_type'],$order_id,$price,$_POST['ip'],$_POST['cer_type']);
             if($result['resCode'] == 'SUCCESS'){
+                $result['main_id'] = $order_id;
+                $result['orderNo'] = $order['real_orderid'];
                 $this->returnCode(0,'result',$result,'success');
             }else{
                 $this->returnCode(1,'info',$result,$result['retMsg']);
@@ -1119,6 +1122,8 @@ class IndexAction extends BaseAction
             $price = $order_data['price'] + $order_data['tip_charge'] - $order_data['coupon_price'] - $order_data['delivery_discount'] - $order_data['merchant_reduce'];
             $result = $this->loadModel()->WeixinAndAli($_POST['pay_type'],$order_id,$price,$_POST['ip'],$_POST['cer_type']);
             if($result['resCode'] == 'SUCCESS'){
+                $result['main_id'] = $order_id;
+                $result['orderNo'] = $order['real_orderid'];
                 $this->returnCode(0,'result',$result,'success');
             }else{
                 $this->returnCode(1,'info',array(),'fail');
@@ -1126,7 +1131,6 @@ class IndexAction extends BaseAction
         }
 
         if($order_id != 0) {
-            $order = D('Shop_order')->where(array('order_id'=>$order_id))->find();
             $returnData['main_id'] = $order_id;
             $returnData['orderNo'] = $order['real_orderid'];
             $this->returnCode(0, '', $returnData, 'success');
