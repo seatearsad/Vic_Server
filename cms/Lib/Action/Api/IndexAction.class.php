@@ -1746,7 +1746,7 @@ class IndexAction extends BaseAction
             $card_list = array();
         else{
             foreach ($card_list as $k=>$v){
-                //$card_list[$k]['expiry'] = transYM($v['expiry']);
+                $card_list[$k]['expiry'] = transYM($v['expiry']);
             }
         }
 
@@ -1762,6 +1762,9 @@ class IndexAction extends BaseAction
         D('User_card')->field(true)->where(array('id'=>$card_id))->save(array('is_default'=>1));
 
         $card_list = D('User_card')->getCardListByUid($uid);
+        foreach ($card_list as $k=>$v){
+            $card_list[$k]['expiry'] = transYM($v['expiry']);
+        }
 
         $this->returnCode(0,'info',$card_list,'success');
     }
