@@ -1403,7 +1403,10 @@ class IndexAction extends BaseAction
         $status = D('Shop_order_log')->field(true)->where(array('order_id' => $order['order_id']))->order('id DESC')->find();
         $add_time = 0;
         if($status['status'] == 33){
-            $status['status'] = 2;
+            if(D('Shop_order_log')->field(true)->where(array('order_id' => $order['order_id'], 'status' => 3))->order('id DESC')->find())
+                $status['status'] = 3;
+            else
+                $status['status'] = 2;
             $add_time = $status['note'];
         }else {
             if ($add_time_log = D('Shop_order_log')->field(true)->where(array('order_id' => $order['order_id'], 'status' => 33))->order('id DESC')->find()) {
