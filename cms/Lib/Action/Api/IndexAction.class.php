@@ -1411,6 +1411,10 @@ class IndexAction extends BaseAction
         if($status['status'] == 33){
             $status['status'] = 2;
             $add_time = $status['note'];
+        }else {
+            if ($add_time_log = D('Shop_order_log')->field(true)->where(array('order_id' => $order['order_id'], 'status' => 33))->order('id DESC')->find()) {
+                $add_time = $add_time_log['note'];
+            }
         }
         $order_detail['status_log'] = $status['status'];
         $order_detail['statusName'] = D('Store')->getOrderStatusLogName($status['status']);
