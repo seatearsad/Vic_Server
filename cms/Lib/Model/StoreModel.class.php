@@ -955,15 +955,15 @@ class StoreModel extends Model
 
     public function getOrderStatusLogName($status){
         $status_list = array(
-            L('_ORDER_STATUS_0_'),
-            L('_ORDER_STATUS_0_'),
-            "Preparing your order",
-            "Preparing your order",
-            "Order picked up",
-            "Heading to you",
-            "Order complete",
-            "Order complete",//并评论完成
-            "Order complete",//评论完成
+            L('V3_CONFIRMING'),
+            L('V3_CONFIRMING'),
+            L('V3_PREPARING'),
+            L('V3_PREPARING'),
+            L('V3_PICKEDUP'),
+            L('V3_HEADINGTOYOU'),
+            L('V3_COMPLETE'),
+            L('V3_COMPLETE'),//并评论完成
+            L('V3_COMPLETE'),//评论完成
             L('_ORDER_STATUS_9_'),
             L('_ORDER_STATUS_10_'),
             L('_ORDER_STATUS_11_'),
@@ -980,7 +980,7 @@ class StoreModel extends Model
     public function getOrderStatusDesc($status,$order,$log,$storeName,$add_time=0){
         $desc = "";
         if($status == 0 || $status == 1){
-            $desc = "Waiting for ".$storeName." to confirm your order";
+            $desc = replace_lang_str(L('V3_CONFIRMINGSUB'),$storeName);
         }
 
         if($status == 2 || $status == 3){
@@ -997,22 +997,23 @@ class StoreModel extends Model
 
             if($now_time < $check_time){
                 if ($add_time == 0)
-                    $desc = "Your order is expected to be ready by " . date("H:i", $check_time);
+                    $desc = replace_lang_str(L('V3_PREPARINGSUB1'),date("H:i", $check_time));
                 else
-                    $desc = "The restaurant needs another ".$add_time." min to prepare your order, so your order is expected to be ready by ". date("H:i", $check_time);
+                    $desc = replace_lang_str(L('V3_PREPARINGSUB2_1'),$add_time);
+                    $desc .= replace_lang_str(L('V3_PREPARINGSUB2_2'),date("H:i", $check_time));
             }else {
-                $desc = "Your order is ready and will be picked up shortly.";
+                $desc = L('V3_PREPARINGSUB3');
             }
         }
 
         if($status == 4)
-            $desc = "Your courier has picked up your order.";
+            $desc = L('V3_PICKEDUPSUB');
 
         if($status == 5)
-            $desc = "Your courier is heading to you with your order.";
+            $desc = L('V3_HEADINGTOYOUSUB');
 
         if($status == 6 || $status == 7 || $status == 8)
-            $desc = "Enjoy! Thank you for ordering with Tutti! ";
+            $desc = L('V3_COMPLETESUB');
 
         return $desc;
     }
