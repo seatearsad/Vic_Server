@@ -998,9 +998,10 @@ class StoreModel extends Model
             if($now_time < $check_time){
                 if ($add_time == 0)
                     $desc = replace_lang_str(L('V3_PREPARINGSUB1'),date("H:i", $check_time));
-                else
-                    $desc = replace_lang_str(L('V3_PREPARINGSUB2_1'),$add_time);
-                    $desc .= replace_lang_str(L('V3_PREPARINGSUB2_2'),date("H:i", $check_time));
+                else {
+                    $desc = replace_lang_str(L('V3_PREPARINGSUB2_1'), $add_time);
+                    $desc .= replace_lang_str(L('V3_PREPARINGSUB2_2'), date("H:i", $check_time));
+                }
             }else {
                 $desc = L('V3_PREPARINGSUB3');
             }
