@@ -339,7 +339,7 @@ class StoreModel extends Model
             //$distance = getDistance($row['lat'], $row['long'], $lat, $lng);
             $store['free_delivery'] = 0;
             $store['event'] = array("use_price"=>"0","discount"=>"0","miles"=>0);
-            if($delivery_coupon != "" && $delivery_coupon['limit_day']*1000 >= $distance){
+            if($delivery_coupon != "" && $delivery_coupon['limit_day']*1000 >= $distance*1000){
                 $store['free_delivery'] = 1;
                 $t_event['use_price'] = $delivery_coupon['use_price'];
                 $t_event['discount'] = $delivery_coupon['discount'];
