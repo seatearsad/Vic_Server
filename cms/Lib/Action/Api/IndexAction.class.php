@@ -1327,13 +1327,14 @@ class IndexAction extends BaseAction
     }
 
     public function getOrderDetail(){
-        $order_No = $_POST['order_id'];//长id
-        $order_id = $_POST['orderId'];//短id
+        $order_id = $_POST['order_id'];//长id
+        $orderId = $_POST['orderId'];//短id
 
-        if($order_id && $order_id != '')
-            $order = D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->find();
-        else
-            $order = D('Shop_order')->field(true)->where(array('real_orderid'=>$order_No))->find();
+        if($orderId && $orderId != '') {
+            $order = D('Shop_order')->field(true)->where(array('order_id' => $orderId))->find();
+            $order_id = $order['real_orderid'];
+        }else
+            $order = D('Shop_order')->field(true)->where(array('real_orderid'=>$order_id))->find();
 
         if($order['paid'] == 0){
             $order_detail['statusname'] = L('_UNPAID_TXT_');
