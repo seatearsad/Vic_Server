@@ -1682,7 +1682,7 @@ class IndexAction extends BaseAction
         $merchant_reduce = $_POST['merchant_reduce'] ? $_POST['merchant_reduce'] : 0;
 
         $_POST['cer_type'] = $_POST['cer_type'] ? $_POST['cer_type'] : 3;
-
+        $order = D('Shop_order')->where(array('order_id'=>$order_id))->find();
         if($_POST['pay_type'] == 0){//线下支付 直接进入支付流程
             D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->save(array('tip_charge'=>$tip));
             $order_param['order_id'] = $order_id;
@@ -1725,6 +1725,8 @@ class IndexAction extends BaseAction
             $price = $price + $tip - $delivery_discount - $merchant_reduce;
             $result = $this->loadModel()->WeixinAndAli($_POST['pay_type'],$order_id,$price,$_POST['ip'],$_POST['cer_type']);
             if($result['resCode'] == 'SUCCESS'){
+                $result['main_id'] = $order_id;
+                $result['orderNo'] = $order['real_orderid'];
                 $this->returnCode(0,'result',$result,'success');
             }else{
                 $this->returnCode(1,'info',array(),'fail');
@@ -1733,6 +1735,8 @@ class IndexAction extends BaseAction
             $price = $price + $tip - $delivery_discount - $merchant_reduce;
             $result = $this->loadModel()->WeixinAndAli($_POST['pay_type'],$order_id,$price,$_POST['ip'],$_POST['cer_type']);
             if($result['resCode'] == 'SUCCESS'){
+                $result['main_id'] = $order_id;
+                $result['orderNo'] = $order['real_orderid'];
                 $this->returnCode(0,'result',$result,'success');
             }else{
                 $this->returnCode(1,'info',array(),'fail');
