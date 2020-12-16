@@ -2890,7 +2890,18 @@ class PayAction extends BaseAction{
                 }
             } else {
                 if(strpos($resp['url'],'#')!== false) {
-                    echo $resp['message'];
+                    //echo $resp['message'];
+                    $script = '<SCRIPT LANGUAGE="Javascript" >var ua = navigator.userAgent;
+                            if(ua.match(/TuttiiOS/i)){
+                                  window.webkit.messageHandlers.payFail.postMessage(["'.$resp['url'].'"]);
+                            }
+                            if(/(tutti_android)/.test(navigator.userAgent.toLowerCase())) {
+                                if (typeof (window.activity.showFailToast) != "undefined") {
+                                    window.activity.showFailToast("'.$resp['url'].'");
+                                }
+                            }
+                            </SCRIPT>';
+                    echo $script;
                     exit();
                 }else{
                     $this->error($resp['message'], $resp['url']);
