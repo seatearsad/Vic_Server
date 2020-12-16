@@ -1092,6 +1092,7 @@ class IndexAction extends BaseAction
             $now_money = round($userInfo['now_money'],2);
 
             $data['balance_pay'] = $order_data['price'] + $order_data['tip_charge'] - $order_data['coupon_price'] - $order_data['delivery_discount'] - $order_data['merchant_reduce'];
+            $data['balance_pay'] = round($data['balance_pay'],2);
             if($now_money >= $data['balance_pay']){
                 D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->save($data);
 
