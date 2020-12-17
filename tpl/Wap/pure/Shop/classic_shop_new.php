@@ -12,7 +12,7 @@
 		<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
 		<meta name="format-detection" content="telephone=no"/>
 		<meta name="format-detection" content="address=no"/>
-		<link rel="stylesheet" type="text/css" href="{pigcms{$static_path}shop/css/shopBase.css?v=1.3"/>
+		<link rel="stylesheet" type="text/css" href="{pigcms{$static_path}shop/css/shopBase.css?v=1.6"/>
 		<script type="text/javascript" src="{pigcms{:C('JQUERY_FILE_190')}" charset="utf-8"></script>
 		<script type="text/javascript" src="{pigcms{$static_path}js/iscroll.js?220" charset="utf-8"></script>
 		<script type="text/javascript" src="{pigcms{$static_path}js/idangerous.swiper.min.js" charset="utf-8"></script>
@@ -203,11 +203,11 @@
                 background-color: white;
             }
             #shopProductRightBar2 li .position_img,#shopSearchResult li .position_img{
-                width: 100px;
+                width: 80px;
             }
             #shopProductRightBar2 li .product_text,#shopSearchResult li .product_text{
-                margin-left: 110px;
-                height: 60px;
+                margin-left: 100px;
+                height: 80px;
             }
             #shopProductRightBar2 li .product_btn,#shopProductCartBox .product_btn.plus,#shopProductCartBox .product_btn.min,#shopSearchResult li .product_btn{
                 border: 1px solid #ffa52d;

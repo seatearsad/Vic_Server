@@ -1701,15 +1701,15 @@ em.merchant_invoice:before{
 }
 #shopProductRightBar2 li .position_img,#shopSearchResult li .position_img{
     position: absolute;
-    width: 60px;
-    height: 60px;
+    width: 80px;
+    height: 80px;
     overflow: hidden;
 }
 #shopProductRightBar2 li .position_img img,#shopSearchResult li .position_img img{
-    width: 108px;
-    /* width: 100%; */
-    height: 100%;
-    margin-left: -24px;
+    width: 80px;
+    height: 80px;
+    /* width: 100%;
+    margin-left: -24px;*/
 }
 #shopProductRightBar2 li .mall img,#shopSearchResult li .mall img{
     margin-left: 0px;
@@ -1718,7 +1718,7 @@ em.merchant_invoice:before{
     margin-left: 70px;
 }
 #shopProductRightBar2 li .product_text .title,#shopSearchResult li .product_text .title{
-    
+    height: 42px;
 }
 #shopProductRightBar2 li .product_text .sale,#shopSearchResult li .product_text .sale{
     font-size: 11px;
@@ -1756,7 +1756,7 @@ em.merchant_invoice:before{
     padding:2px 5px;
     color: #666;
     z-index: 1;
-    top: 46px;
+    top: 66px;
 }
 #shopProductRightBar2 li .product_btn.plus,#shopProductRightBar2 li .product_btn.min,#shopSearchResult li .product_btn.plus,#shopSearchResult li .product_btn.min{
     width:28px;
@@ -1764,7 +1764,7 @@ em.merchant_invoice:before{
     border-radius:100%;
     padding:0px;
     background: white;
-    top: 40px;
+    top: 60px;
 }
 #shopProductRightBar2 li .product_btn.plus:before, #shopProductRightBar2 li .product_btn.plus:after,#shopSearchResult li .product_btn.plus:before, #shopSearchResult li .product_btn.plus:after {
     content: '';
@@ -1793,7 +1793,7 @@ em.merchant_invoice:before{
     width: 24px;
     text-align: center;
     line-height: 30px;
-	top: 40px;
+	top: 60px;
 }
 #shopProductRightBar2 li .product_btn.min,#shopSearchResult li .product_btn.min{
     right:60px;
@@ -2072,8 +2072,10 @@ em.merchant_invoice:before{
     -ms-transform: rotate(45deg);
 }
 #shopDetailPageImgbox img{
-	width: 100%;
-    height: 100%;
+	width: 50%;
+    height: auto;
+    margin-left: 25%;
+    margin-top: 10px;
 }
 #shopDetailPageTitle,#shopDetailPageFormat,#shopDetailPageDish,#shopDetailPageLabel,#shopDetailPageContent{
 	padding:70px 15px 10px 15px;
