@@ -642,6 +642,9 @@ class ShopAction extends BaseAction
                 $order['good_tax_price'] = $order['discount_price'];
                 $order['packing_charge'] = 0;
                 $order['tax_price'] = $order['good_tax_price'] + ($order['freight_charge'] + $order['packing_charge']) * $store['tax_num']/100;
+
+                $address = D('User_adress')->where(array('adress_id'=>$order['address_id']))->find();
+                $order['deliver_note'] = $address['detail'];
             }else {
                 foreach ($order['info'] as $k => $v) {
                     $g_id = $v['goods_id'];

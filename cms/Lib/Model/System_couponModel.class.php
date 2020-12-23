@@ -295,7 +295,7 @@ class System_couponModel extends Model{
     }
 
     //领取方法
-    public function had_pull($coupon_id,$uid,$card_code){
+    public function had_pull($coupon_id,$uid,$card_code,$admin_name=""){
         $where['coupon_id']=$coupon_id;
         $coupon = $this->get_coupon($coupon_id);
         $is_new = D('User')->check_new($uid,$coupon['cate_name']);
@@ -328,6 +328,7 @@ class System_couponModel extends Model{
                         $data['wx_card_code']  = $card_code;
                     }
                     $data['uid']  = $uid;
+                    $data['admin_name'] = $admin_name;
                     $coupon = $this->get_coupon($coupon_id);
                     if ($hadId = $hadpull->add($data)) {
                         if($now_user = M('User')->where(array('uid'=>$uid))->find()){
