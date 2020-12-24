@@ -295,7 +295,7 @@
                             layer.open({
                                 content: result.message,
                                 type: 2,
-                                time: 1
+                                time: 2
                             });
                     },'JSON');
                 }
