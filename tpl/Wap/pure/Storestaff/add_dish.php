@@ -226,7 +226,7 @@
             }
         }
         if(!is_value){
-            alert("请添加配菜单品！");
+            alert("Please add a choice first.");
             return false;
         }
 

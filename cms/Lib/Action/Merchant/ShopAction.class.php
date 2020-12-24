@@ -1188,7 +1188,7 @@ class ShopAction extends BaseAction
             }
             exit(json_encode(array('error' => 1, 'message' => '没有该单品')));
         }else{
-            exit(json_encode(array('error' => 1, 'message' => '至少要有一个单品存在！')));
+            exit(json_encode(array('error' => 1, 'message' => 'You need to have at least one choice for this option. Please add a new choice before deleting this one.')));
         }
     }
 
