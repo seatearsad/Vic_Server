@@ -3165,7 +3165,7 @@ class IndexAction extends BaseAction
             }
         }
     }
-
+    /**
     public function get_goods_desc(){
         $list = D('Shop_goods')->where(array('des'=>array('neq','')))->order('goods_id desc')->select();
 
@@ -3204,5 +3204,6 @@ class IndexAction extends BaseAction
             }
         }
     }
+     */
 }
 
