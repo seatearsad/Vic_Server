@@ -1179,11 +1179,17 @@ class ShopAction extends BaseAction
     }
 
     public function del_dish_value(){
-        if($_POST['dish_value_id']){
-            D('Side_dish_value')->where(array('id'=>$_POST['dish_value_id']))->delete();
-            exit(json_encode(array('error' => 0,'message' =>'Success')));
+        $dish_id = $_POST['dish_id'];
+        $dish_value_count = D('Side_dish_value')->where(array('dish_id'=>$dish_id))->count();
+        if($dish_value_count > 1) {
+            if ($_POST['dish_value_id']) {
+                D('Side_dish_value')->where(array('id' => $_POST['dish_value_id']))->delete();
+                exit(json_encode(array('error' => 0, 'message' => 'Success')));
+            }
+            exit(json_encode(array('error' => 1, 'message' => '没有该单品')));
+        }else{
+            exit(json_encode(array('error' => 1, 'message' => '至少要有一个单品存在！')));
         }
-        exit(json_encode(array('error' => 1,'message' =>'没有该单品')));
     }
 
     /* 商品删除 */

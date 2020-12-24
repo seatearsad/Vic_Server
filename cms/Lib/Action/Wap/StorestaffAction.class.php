@@ -3823,13 +3823,19 @@ class StorestaffAction extends BaseAction
     }
 
     public function del_dish_val(){
-        if($_POST['val_id']){
-            $val_id = $_POST['val_id'];
-            D('Side_dish_value')->where(array('id'=>$val_id))->delete();
+        $dish_id = $_POST['dish_id'];
+        $dish_value_count = D('Side_dish_value')->where(array('dish_id'=>$dish_id))->count();
+        if($dish_value_count > 1) {
+            if ($_POST['val_id']) {
+                $val_id = $_POST['val_id'];
+                D('Side_dish_value')->where(array('id' => $val_id))->delete();
 
-            exit(json_encode(array('error'=>0)));
+                exit(json_encode(array('error' => 0)));
+            } else {
+                exit(json_encode(array('error' => 1, 'message' => '没有该单品')));
+            }
         }else{
-            exit(json_encode(array('error'=>1)));
+            exit(json_encode(array('error' => 1, 'message' => '至少要有一个单品存在！')));
         }
     }
 

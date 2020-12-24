@@ -128,11 +128,11 @@
             if(f_tid[0] == 'new'){
                 $('#'+tid).remove();
             }else{
-                $.post("{pigcms{:U('Shop/del_dish_value')}", {'dish_value_id':f_tid[1]}, function (result) {
+                $.post("{pigcms{:U('Shop/del_dish_value')}", {'dish_value_id':f_tid[1],'dish_id':'{pigcms{$dish_id}'}, function (result) {
                     if(result['error'] == 0){
                         $('#'+tid).remove();
                     }else{
-                        alert('删除失败！');
+                        alert(result['message']);
                     }
                 },'json');
             }

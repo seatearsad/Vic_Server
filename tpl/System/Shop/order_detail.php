@@ -198,9 +198,6 @@
 	<tr>
 		<th colspan="6">{pigcms{:L('_NOTE_TXT_')}:{pigcms{$order['desc']|default="N/A"}</th>
 	</tr>
-    <tr>
-        <th colspan="6">Deliver Note:{pigcms{$order['deliver_note']|default="N/A"}</th>
-    </tr>
 	<if condition="$order['invoice_head']">
 		<tr>
 			<th colspan="6">{pigcms{:L('_BACK_RECEIPT_')}:{pigcms{$order['invoice_head']}</th>
