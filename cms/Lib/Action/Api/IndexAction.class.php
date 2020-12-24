@@ -3194,7 +3194,7 @@ class IndexAction extends BaseAction
     }
 
     public function del_no_value_dish(){
-        $list = D('Side_dish')->select();
+        $list = D('Side_dish')->order('id asc')->limit(1,1000)->select();
 
         foreach ($list as $v){
             $value_count = D('Side_dish_value')->where(array('dish_id'=>$v['id']))->count();
