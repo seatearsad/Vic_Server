@@ -3192,5 +3192,16 @@ class IndexAction extends BaseAction
             }
         }
     }
+
+    public function del_no_value_dish(){
+        $list = D('Side_dish')->select();
+
+        foreach ($list as $v){
+            $value_count = D('Side_dish_value')->where(array('dish_id'=>$v['id']))->count();
+            if($value_count == 0){
+                D('Side_dish')->where(array('id'=>$v['id']))->delete();
+            }
+        }
+    }
 }
 
