@@ -2695,6 +2695,7 @@ class IndexAction extends BaseAction
 
     public function updateAssign(){
         $id = D('Deliver_assign')->check_assign();
+
         //garfunkel add 暂时关掉自动紧急呼叫
         //$this->deliver_e_call();
         //var_dump($id);
@@ -2933,6 +2934,15 @@ class IndexAction extends BaseAction
         }
 
         //var_dump($work_delver_list);
+    }
+
+    public function updateSql(){
+        $sql = "show full processlist";
+        $model = new Model();
+        $list = $model->query($sql);
+        foreach ($list as $v){
+            echo $v['Info'];
+        }
     }
 
     public function test_pdf(){
