@@ -2700,7 +2700,7 @@ class IndexAction extends BaseAction
         $model = new Model();
         $list = $model->query($sql);
         foreach ($list as $v){
-            echo $v['info'];
+            echo $v['Info'];
         }
 
         //garfunkel add 暂时关掉自动紧急呼叫
