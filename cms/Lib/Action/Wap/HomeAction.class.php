@@ -62,7 +62,7 @@ class HomeAction extends BaseAction{
 		$this->assign('wap_index_center_adver',$wap_index_center_adver);
 
 		//首页附近模块
-		$around = M('Wap_around')->order('sort DESC')->limit(3)->select(); 
+		$around = M('Wap_around')->order('sort DESC')->limit(3)->select();
 		$this->assign('wap_around',$around);
 
 		//导航条
