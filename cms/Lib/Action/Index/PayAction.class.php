@@ -1280,7 +1280,9 @@ class PayAction extends BaseAction{
             }
             $rData['status'] = $_POST['status'];
             $rData['openid'] = $_POST['openid'];
-            $rData['currencyAmount'] = $_POST['currencyAmount'];
+            //新增加参数
+            if(isset($_POST['currencyAmount']))
+                $rData['currencyAmount'] = $_POST['currencyAmount'];
             //获取订单id
             $order = explode("_",$rData['mchOrderNo']);
             $order_id = $order[1];
