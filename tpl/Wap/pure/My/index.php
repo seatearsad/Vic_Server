@@ -62,6 +62,16 @@
             background-color: #cccccc;
         }
 
+        .obutton {
+            width: 70px;
+            background-color: #ffa52d;
+            border-radius: 10px;
+            color:#ffffff;
+            padding: 5px 10px 5px 10px;
+            border-color: #ffa52d;
+            border-width: 0px;
+        }
+
         .gray_k {
             width: 10%;
             height: 2px;
@@ -102,7 +112,7 @@
         }
 
         /*.main ul a:nth-child(2) li div {*/
-            /*background-image: url("./tpl/Static/blue/images/wap/balance.png");*/
+        /*background-image: url("./tpl/Static/blue/images/wap/balance.png");*/
         /*}*/
 
         .main ul a:nth-child(2) li div {
@@ -110,7 +120,7 @@
         }
 
         /*.main ul a:nth-child(4) li div {*/
-            /*background-image: url("./tpl/Static/blue/images/wap/orders.png");*/
+        /*background-image: url("./tpl/Static/blue/images/wap/orders.png");*/
         /*}*/
 
         .main ul a:nth-child(3) li div {
@@ -118,14 +128,15 @@
         }
 
         #event_div {
+            clear:both;
             width: 90%;
             margin-left: 5%;
             background-color: rgba(255, 165, 44, 0.21);
-            margin-top: 10px;
+            margin-top: 5px;
             border-radius: 10px;
-            border-style:solid;
-            border-width:2px;
-            border-color:#ffa52d;
+            border-style: solid;
+            border-width: 2px;
+            border-color: #ffa52d;
             padding: 10px 2% 10px 70px;
             background-image: url("./tpl/Static/blue/images/new/gift_icon.png");
             background-repeat: no-repeat;
@@ -136,19 +147,21 @@
         #event_name {
             font-weight: bold;
             font-size: 19px;
-            color:#ffa52d;
+            color: #ffa52d;
         }
+
         #event_desc {
             font-size: 14px;
         }
+
         #courier_div {
             width: 90%;
             margin-left: 5%;
             background-color: rgba(1, 98, 255, 0.2);
             margin-top: 20px;
             border-radius: 10px;
-            border-style:solid;
-            border-width:2px;
+            border-style: solid;
+            border-width: 2px;
             border-color: #013cff;
             padding: 10px 2% 10px 70px;
             background-image: url("./tpl/Static/blue/images/new/icon_deliver.png");
@@ -162,8 +175,43 @@
             font-size: 19px;
             color: #013cff;
         }
+
         #courier_desc {
             font-size: 14px;
+        }
+
+        .GreyText {
+            color: #4e4d4d;
+        }
+        .LightGreyText {
+            color: #919191;
+        }
+        .MidSizeText {
+            font-size: 12px;
+        }
+        .NormalSizeText {
+            font-size: 18px;
+        }
+        .BigSizeText {
+            font-size: 26px;
+            font-weight:bold;
+        }
+        .MainColorText{
+            color: #ffa52d;
+        }
+        .div_h{
+            float:left;
+        }
+
+        .right_align{
+            position: absolute;
+            right:5px;
+        }
+        .space_left{
+            margin-left: 20px;
+        }
+        .space_left_2{
+            margin-left: 50px;
         }
     </style>
     <include file="Public:facebook"/>
@@ -171,14 +219,19 @@
 <body>
 <include file="Public:header"/>
 <div class="main">
-    <div>{pigcms{:replace_lang_str(L('_ND_HI_'),$now_user['nickname'])}
+    <div style="position:relative;width: 90%;margin-left: 5%;margin-top: 10px;margin-bottom: 10px;display: inline-block;">
+        <div class="NormalSizeText">{pigcms{:replace_lang_str(L('_ND_HI_'),$now_user['nickname'])}
+        </div>
+        <div class="BigSizeText MainColorText div_h">{pigcms{$coupon_number}<div  class="LightGreyText MidSizeText">{pigcms{:L('QW_V2_COUPONS')}</div>
+        </div>
+        <div class="BigSizeText MainColorText div_h space_left"> ${pigcms{$now_user.now_money_two}<div  class="LightGreyText MidSizeText">{pigcms{:L('QW_V2_CREDITS')}</div>
+        </div>
+        <div class="right_align">
+            <button class="obutton" type="button" onclick="window.location.href='./wap.php?g=Wap&c=My&a=recharge';">
+                {pigcms{:L('_RECHARGE_TXT_')}
+            </button>
+        </div>
     </div>
-    <div>{pigcms{$coupon_number}{pigcms{:L('QW_V2_COUPONS')}, ${pigcms{$now_user.now_money_two}{pigcms{:L('QW_V2_CREDITS')}
-    </div>
-    <div>
-        <button type="button">{pigcms{:L('_RECHARGE_TXT_')}</button>
-    </div>
-
     <div class="gray_k"></div>
     <if condition="$event">
         <a href="{pigcms{:U('My/invitation')}">
@@ -194,21 +247,21 @@
                 <div>Profile</div>
             </li>
         </a>
-<!--        <a href="{pigcms{:U('My/my_money')}">-->
-<!--            <li>-->
-<!--                <div>Balance</div>-->
-<!--            </li>-->
-<!--        </a>-->
+        <!--        <a href="{pigcms{:U('My/my_money')}">-->
+        <!--            <li>-->
+        <!--                <div>Balance</div>-->
+        <!--            </li>-->
+        <!--        </a>-->
         <a href="{pigcms{:U('My/coupon')}">
             <li>
                 <div>Coupon</div>
             </li>
         </a>
-<!--        <a href="{pigcms{:U('My/shop_order_list')}">-->
-<!--            <li>-->
-<!--                <div>Orders</div>-->
-<!--            </li>-->
-<!--        </a>-->
+        <!--        <a href="{pigcms{:U('My/shop_order_list')}">-->
+        <!--            <li>-->
+        <!--                <div>Orders</div>-->
+        <!--            </li>-->
+        <!--        </a>-->
         <a href="{pigcms{:U('My/language')}">
             <li>
                 <div>Language</div>
