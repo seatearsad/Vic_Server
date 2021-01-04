@@ -10,6 +10,7 @@
 	<meta name="format-detection" content="telephone=no">
 	<meta name="format-detection" content="address=no">
     <link href="{pigcms{$static_path}css/eve.7c92a906.css" rel="stylesheet"/>
+    <link href="{pigcms{$static_path}css/eve.peter.share.css" rel="stylesheet"/>
     <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/common.css?215"/>
     <script type="text/javascript" src="{pigcms{:C('JQUERY_FILE_190')}" charset="utf-8"></script>
     <style>
@@ -22,9 +23,9 @@
 	        padding: .28rem .2rem;
 	    }
 
-        input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill{
-            -webkit-box-shadow: 0 0 0px 1000px #ff2c4c inset
-        }
+        /*input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill{*/
+            /*-webkit-box-shadow: 0 0 0px 1000px #ff2c4c inset*/
+        /*}*/
 	    .kv-line h6 {
 	        width: 8em;
             text-align: right;
@@ -80,25 +81,6 @@
         input.mt[type="checkbox"]:checked{
             background-color: #ffa52d;
         }
-
-        .list_form dl.list{
-            border-top: 1px solid #ddd8ce;
-            border-bottom: 1px solid #ddd8ce;
-            -moz-border-radius: 10px;
-            -webkit-border-radius: 10px;
-            border-radius: 10px;
-            margin-top: .2rem;
-            width: 95%;
-            margin-bottom: 0;
-            margin-left: auto;
-            margin-right: auto;
-            background-color: #fff
-        }
-
-        .list_form dl.list-in{
-            border-top: 0
-        }
-
 	</style>
     <include file="Public:facebook"/>
 </head>

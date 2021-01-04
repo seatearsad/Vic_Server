@@ -80,7 +80,7 @@
             -webkit-transform:scaleX(-1);
             -o-transform:scaleX(-1);
             transform:scaleX(-1);
-            background-image: url("./tpl/Static/blue/images/new/black_arrow.png");
+            background-image: url("./tpl/Static/blue/images/new/black_arrow.php");
             background-size: auto 20px;
             background-repeat: no-repeat;
             background-position: right center;

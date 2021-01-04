@@ -385,7 +385,7 @@ input.mt[type=radio]:checked:after, input.mt[type=checkbox]:checked:after {
 input.input-weak, textarea.input-weak {
     border: 0;
     word-wrap: break-word;
-    height: .6rem;
+    height: .9rem;
     margin: -.15rem 0;
     text-indent: 0.1rem;
     line-height: 1;

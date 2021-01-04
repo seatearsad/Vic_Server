@@ -1,0 +1,26 @@
+@charset "UTF-8";
+
+.confirmlist li a.blacktext {
+    color: #000;
+}
+
+.confirmlist li a.orangetext {
+    color: #ffa52d;
+}
+.list_form dl.list{
+    border-top: 1px solid #ddd8ce;
+    border-bottom: 1px solid #ddd8ce;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    margin-top: .2rem;
+    width: 95%;
+    margin-bottom: 0;
+    margin-left: auto;
+    margin-right: auto;
+    background-color:#f4f4f4;
+}
+
+.list_form dl.list-in{
+    border-top: 0
+}
