@@ -130,6 +130,7 @@
         #event_div {
             clear:both;
             width: 90%;
+            height: 80px;
             margin-left: 5%;
             background-color: rgba(255, 165, 44, 0.21);
             margin-top: 5px;
@@ -157,6 +158,7 @@
         #courier_div {
             width: 90%;
             margin-left: 5%;
+            height: 80px;
             background-color: rgba(1, 98, 255, 0.2);
             margin-top: 20px;
             margin-bottom: 20px;
