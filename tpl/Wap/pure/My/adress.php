@@ -64,10 +64,14 @@
 	        text-align: center;
 	    }
 	
-	    .confirmlist li a {
-	        color: #ffa52d;
+	    .confirmlist li a.blacktext {
+	        color: #000;
 	    }
-	
+
+        .confirmlist li a.orangetext {
+            color: #ffa52d;
+        }
+
 	    .confirmlist li:last-child {
 	        border-right: none;
 	    }
@@ -120,6 +124,23 @@
         input.mt[type="radio"]:checked, input.mt[type="checkbox"]:checked{
             background-color: #ffa52d;
         }
+        .list_form dl.list{
+            border-top: 1px solid #ddd8ce;
+            border-bottom: 1px solid #ddd8ce;
+            -moz-border-radius: 10px;
+            -webkit-border-radius: 10px;
+            border-radius: 10px;
+            margin-top: .2rem;
+            width: 95%;
+            margin-bottom: 0;
+            margin-left: auto;
+            margin-right: auto;
+            background-color: #fff
+        }
+
+        .list_form dl.list-in{
+            border-top: 0
+        }
 	</style>
     <include file="Public:facebook"/>
 </head>
@@ -136,6 +157,7 @@
 		    <a class="address-add btn btn-larger btn-warning btn-block" href="{pigcms{:U('My/edit_adress',$_GET)}">{pigcms{:L('_ADD_NEW_ADDRESS_')}</a>
 		</div>
 		<volist name="adress_list" id="vo">
+            <div class="list_form">
 			<dl class="list <if condition="$vo['default']">active</if>">
 		        <dd class="address-wrapper <if condition="!$vo['select_url']">dd-padding</if>">
 		        	<if condition="$vo['select_url']">
@@ -144,22 +166,22 @@
 			         </if>
 			            <div class="address-container">
 			                <div class="kv-line">
-			                    <h6>{pigcms{:L('_B_PURE_MY_06_')}：</h6><p>{pigcms{$vo.name}</p>
+			                    <p>{pigcms{$vo.name}({pigcms{$vo.phone})</p>
 			                </div>
+<!--			                <div class="kv-line">-->
+<!--			                    <h6>{pigcms{:L('_B_D_LOGIN_TEL_')}：</h6><p></p>-->
+<!--			                </div>-->
+<!--			                <div class="kv-line">-->
+<!--			                    <h6>Unit：</h6><p>{pigcms{$vo.detail} {pigcms{$vo.city_txt}</p>-->
+<!--			                </div>-->
 			                <div class="kv-line">
-			                    <h6>{pigcms{:L('_B_D_LOGIN_TEL_')}：</h6><p>{pigcms{$vo.phone}</p>
+			                    <p>{pigcms{$vo.adress}</p>
 			                </div>
-			                <div class="kv-line">
-			                    <h6>Unit：</h6><p>{pigcms{$vo.detail} {pigcms{$vo.city_txt}</p>
-			                </div>
-			                <div class="kv-line">
-			                    <h6>{pigcms{:L('_B_PURE_MY_19_')}：</h6><p>{pigcms{$vo.adress}</p>
-			                </div>
-							<if condition="$vo['zipcode']">
-								<div class="kv-line">
-									<h6>{pigcms{:L('_B_PURE_MY_22_')}：</h6><p>{pigcms{$vo.zipcode}</p>
-								</div>
-							</if>
+<!--							<if condition="$vo['zipcode']">-->
+<!--								<div class="kv-line">-->
+<!--									<h6>{pigcms{:L('_B_PURE_MY_22_')}：</h6><p>{pigcms{$vo.zipcode}</p>-->
+<!--								</div>-->
+<!--							</if>-->
 			            </div>
 			        <if condition="$vo['select_url']">
 		            	</a>
@@ -167,10 +189,12 @@
 		        </dd>
 		        <dd>
 	                <ul class="confirmlist">
-	                    <li><a class="react" href="{pigcms{$vo.edit_url}">{pigcms{:L('_EDIT_TXT_')}</a></li><li><a class="react mj-del" href="{pigcms{$vo.del_url}">{pigcms{:L('_B_PURE_MY_27_')}</a></li>
+                        <li><a class="blacktext react mj-del" href="{pigcms{$vo.del_url}">{pigcms{:L('_B_PURE_MY_27_')}</a></li>
+	                    <li><a class="orangetext react" href="{pigcms{$vo.edit_url}">{pigcms{:L('_EDIT_TXT_')}</a></li>
 	                </ul>
 		        </dd>
 		    </dl>
+            </div>
 	    </volist>
     	<script src="{pigcms{:C('JQUERY_FILE')}"></script>
 		<script src="{pigcms{$static_path}js/jquery.cookie.js"></script> 

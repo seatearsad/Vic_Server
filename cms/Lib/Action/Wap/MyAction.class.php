@@ -13,6 +13,7 @@ class MyAction extends BaseAction{
 			}
 		}
 		$now_user = D('User')->get_user($this->user_session['uid']);
+
 		if(empty($now_user)){
 			session('user',null);
 			$this->error_tips(L('_B_MY_NOACCOUNT_'),U('Login/index'));
@@ -114,6 +115,8 @@ class MyAction extends BaseAction{
 		} else {
 			$merchant_url = $this->config['site_url'] . '/index.php?g=WapMerchant&c=Index&a=merreg&uid=' . $this->user_session['uid'];
 		}
+        $invitationcode = D('User')->getUserInvitationCode($this->user_session['uid']);
+        $this->assign('invitationcode', $invitationcode);
 		$this->assign('merchant_url', $merchant_url);
 		$this->display();
 	}
@@ -598,9 +601,7 @@ class MyAction extends BaseAction{
 				$adress_list[$key]['del_url'] = U('My/del_adress',$param);
 			}
 
-
 			$this->assign('adress_list',$adress_list);
-
 
 			$database_area = D('Area');
 			$now_city_area = $database_area->where(array('area_id'=>$this->config['now_city']))->find();

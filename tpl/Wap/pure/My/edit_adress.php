@@ -21,12 +21,16 @@
 	    dd>label.react {
 	        padding: .28rem .2rem;
 	    }
-	
+
+        input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill{
+            -webkit-box-shadow: 0 0 0px 1000px #ff2c4c inset
+        }
 	    .kv-line h6 {
 	        width: 8em;
             text-align: right;
             padding-left: 10px;
 	    }
+
 		.btn {
 			background: #ffa52d;
 		}
@@ -76,6 +80,25 @@
         input.mt[type="checkbox"]:checked{
             background-color: #ffa52d;
         }
+
+        .list_form dl.list{
+            border-top: 1px solid #ddd8ce;
+            border-bottom: 1px solid #ddd8ce;
+            -moz-border-radius: 10px;
+            -webkit-border-radius: 10px;
+            border-radius: 10px;
+            margin-top: .2rem;
+            width: 95%;
+            margin-bottom: 0;
+            margin-left: auto;
+            margin-right: auto;
+            background-color: #fff
+        }
+
+        .list_form dl.list-in{
+            border-top: 0
+        }
+
 	</style>
     <include file="Public:facebook"/>
 </head>
@@ -92,17 +115,15 @@
     </div>
     <div class="gray_line"></div>
         <div id="tips" class="tips"></div>
-        <form id="form" method="post" action="{pigcms{:U('My/edit_adress')}">
+        <form id="form" method="post" action="{pigcms{:U('My/edit_adress')}" class="list_form">
         
 		    <dl class="list list-in">
 		    	<dd>
 		    		<dl>
 		        		<dd class="dd-padding kv-line">
-		        			<h6>{pigcms{:L('_B_PURE_MY_06_')}:</h6>
 		        			<input name="name" type="text" class="kv-v input-weak" placeholder="{pigcms{:L('_B_PURE_MY_07_')}" pattern=".{2,}" data-err="{pigcms{:L('_B_PURE_MY_08_')}" value="{pigcms{$now_adress.name}">
 		        		</dd>
 		        		<dd class="dd-padding kv-line">
-		        			<h6>{pigcms{:L('_B_PURE_MY_09_')}:</h6>
 		        			<input name="phone" type="tel" class="kv-v input-weak" placeholder="{pigcms{:L('_B_PURE_MY_10_')}" pattern="\d{3}[\d\*]{4,}" data-err="{pigcms{:L('_B_PURE_MY_11_')}" value="{pigcms{$now_adress.phone}">
 		        		</dd>
 		        		<!--dd class="dd-padding kv-line">
@@ -139,20 +160,17 @@
 				                </select>
 				            </label>
 				        </dd-->
-                        <dd class="dd-padding kv-line">
-                            <h6>Unit:</h6>
-                            <input name="detail" type="text" class="kv-v input-weak" placeholder="{pigcms{:L('_B_PURE_MY_20_')}" data-err="{pigcms{:L('_B_PURE_MY_21_')}" value="{pigcms{$now_adress.detail}">
-                        </dd>
 		        		<dd class="dd-padding kv-line" id="color-gray">
-		        			<h6>{pigcms{:L('_B_PURE_MY_15_')}:</h6>
 	                        <i class="icon-location" data-node="icon"></i><span class="color-gray" data-node="addAddress" style="margin-left: .1rem;margin-top: -.2em;display: block;"><?php if(!empty($now_adress['adress'])): ?><?php echo $now_adress['adress']; ?><?php else : ?><img src="{pigcms{$static_path}images/location.png" style=" width:25px; height:25px"/><?php endif; ?></span> <i class="right_arrow"></i>
 	                        <!--div class="weaksuggestion"> {pigcms{:L('_B_PURE_MY_16_')}<i class="toptriangle"></i> </div-->
 		        			<!--textarea name="adress" class="input-weak kv-v" placeholder="{pigcms{:L('_B_PURE_MY_17_')}" pattern="^.{5,60}$" data-err="{pigcms{:L('_B_PURE_MY_18_')}">{pigcms{$now_adress.adress}</textarea-->
 		        		</dd>
-		        		<dd class="dd-padding kv-line">
-		        			<h6>{pigcms{:L('_B_PURE_MY_22_')}:</h6>
-		        			<input type="text" name="zipcode" class="input-weak kv-v" placeholder="{pigcms{:L('_B_PURE_MY_23_')}"  maxlength="6" value="<if condition="$now_adress['zipcode']">{pigcms{$now_adress.zipcode}</if>"/>
-		        		</dd>
+                        <dd class="dd-padding kv-line">
+                            <textarea name="detail" type="text" class="multi-line kv-v input-weak" placeholder="{pigcms{:L('_B_PURE_MY_20_')}" data-err="{pigcms{:L('_B_PURE_MY_21_')}" value="{pigcms{$now_adress.detail}" rows="3" ></textarea>
+                        </dd>
+<!--		        		<dd class="dd-padding kv-line">-->
+<!--		        			<input type="text" name="zipcode" class="input-weak kv-v" placeholder="{pigcms{:L('_B_PURE_MY_23_')}"  maxlength="6" value="<if condition="$now_adress['zipcode']">{pigcms{$now_adress.zipcode}</if>"/>-->
+<!--		        		</dd>-->
 		        		<dd>
 			            	<label class="react">
 			                	<input type="checkbox" name="default" value="1" class="mt"  <if condition="$now_adress['default']">checked="checked"</if>/>
@@ -170,8 +188,10 @@
                 <input type="hidden" name="city" value="{pigcms{$now_adress.city}"/>
                 <input type="hidden" name="province" value="{pigcms{$now_adress.province}" />
 				<button type="submit" class="btn btn-block btn-larger"><if condition="$now_adress">{pigcms{:L('_B_PURE_MY_25_')}<else/>{pigcms{:L('_B_PURE_MY_26_')}</if></button>
-				<if condition="$now_adress"><button type="button" class="btn btn-block btn-larger" style=" background:#fff; color:#000; margin-top:.1rem" id="address_del">{pigcms{:L('_B_PURE_MY_27_')}</button></if>
-		    </div>
+
+<!--                <if condition="$now_adress"><button type="button" class="btn btn-block btn-larger" style=" background:#fff; color:#000; margin-top:.1rem" id="address_del">{pigcms{:L('_B_PURE_MY_27_')}</button></if>-->
+
+            </div>
 		</form>
     	<script src="{pigcms{:C('JQUERY_FILE')}"></script>
 		<script src="{pigcms{$static_path}js/jquery.cookie.js"></script> 

@@ -45,6 +45,9 @@
             width: 90%;
             height: 50px;
             margin-left: 5%;
+            -moz-border-radius: 10px;
+            -webkit-border-radius: 10px;
+            border-radius: 10px;
             background-color: white;
             list-style: none;
             margin-bottom: 10px;

@@ -137,7 +137,7 @@
             border-style: solid;
             border-width: 2px;
             border-color: #ffa52d;
-            padding: 10px 2% 10px 70px;
+            padding: 5px 2% 5px 70px;
             background-image: url("./tpl/Static/blue/images/new/gift_icon.png");
             background-repeat: no-repeat;
             background-size: 55px auto;
@@ -146,12 +146,12 @@
 
         #event_name {
             font-weight: bold;
-            font-size: 19px;
+            font-size: 16px;
             color: #ffa52d;
         }
 
         #event_desc {
-            font-size: 14px;
+            font-size: 13px;
         }
 
         #courier_div {
@@ -159,11 +159,12 @@
             margin-left: 5%;
             background-color: rgba(1, 98, 255, 0.2);
             margin-top: 20px;
+            margin-bottom: 20px;
             border-radius: 10px;
             border-style: solid;
             border-width: 2px;
             border-color: #013cff;
-            padding: 10px 2% 10px 70px;
+            padding: 5px 2% 5px 70px;
             background-image: url("./tpl/Static/blue/images/new/icon_deliver.png");
             background-repeat: no-repeat;
             background-size: 55px auto;
@@ -172,12 +173,12 @@
 
         #courier_name {
             font-weight: bold;
-            font-size: 19px;
+            font-size: 16px;
             color: #013cff;
         }
 
         #courier_desc {
-            font-size: 14px;
+            font-size: 13px;
         }
 
         .GreyText {
