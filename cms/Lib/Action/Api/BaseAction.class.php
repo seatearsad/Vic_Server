@@ -50,14 +50,15 @@ class BaseAction extends Action
             unset($data['sign']);
             $data['a'] = ACTION_NAME;
             ksort($data);
-//            $data_str = "{";
             foreach ($data as &$v){
                 $v = html_entity_decode($v);
                 $v = str_replace("\"","",$v);
                 $v = str_replace("\n","",$v);
             }
-//            $data_str.="}";
-            $self_sign = MD5(json_encode($data).$secret_key);
+
+            $data_str = "a:".ACTION_NAME.",time:".$_POST['time'].",version:".$_POST['version'];
+
+            $self_sign = MD5($data_str.$secret_key);
             $this->curr_sign = $self_sign;
 //            var_dump(json_encode($data).$secret_key."|".$self_sign);
 //            die();
