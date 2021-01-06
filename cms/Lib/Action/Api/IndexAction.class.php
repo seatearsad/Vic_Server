@@ -1401,6 +1401,7 @@ class IndexAction extends BaseAction
         $order_detail['create_time'] = $order['create_time'];
         $order_detail['delivery_discount'] = $order['delivery_discount'];
         $order_detail['merchant_reduce'] = $order['merchant_reduce'];
+        $order_detail['coupon_discount'] = $order['coupon_price'];
 
         $address = D('User_adress')->where(array('adress_id'=>$order['address_id']))->find();
         $order_detail['user_lat'] = $address['latitude'];
