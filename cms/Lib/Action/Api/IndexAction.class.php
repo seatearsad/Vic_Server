@@ -1057,10 +1057,22 @@ class IndexAction extends BaseAction
                 }
             }
         }
-        //garfunkel 判断来源 2or3 Apple app | 4 Android
-        $order_data['is_mobile_pay'] = $_POST['cer_type'];;
 
-        $order_data['delivery_discount'] = $_POST['delivery_discount'] ? $_POST['delivery_discount'] : 0;
+        if($_POST['delivery_discount']) {
+            $order_data['delivery_discount'] = $_POST['delivery_discount'];
+            $delivery_coupon = D('New_event')->getFreeDeliverCoupon($return['store_id'], $store['city_id']);
+            $distance = getDistance($store['lat'], $store['long'], $address['latitude'], $address['longitude']);
+            if ($delivery_coupon != "" && $delivery_coupon['limit_day'] * 1000 >= $distance) {
+                $order_data['delivery_discount_event'] = $delivery_coupon['event_type'];
+            }
+        }else{
+            $order_data['delivery_discount'] = 0;
+        }
+
+        //garfunkel 判断来源 2or3 Apple app | 4 Android
+        $order_data['is_mobile_pay'] = $_POST['cer_type'];
+
+        //$order_data['delivery_discount'] = $_POST['delivery_discount'] ? $_POST['delivery_discount'] : 0;
         $order_data['merchant_reduce'] = $_POST['merchant_reduce'] ? $_POST['merchant_reduce'] : 0;
         $order_data['not_touch'] = $_POST['not_touch'] ? $_POST['not_touch'] : 0;
 
