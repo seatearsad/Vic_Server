@@ -50,12 +50,12 @@
             width: 90%;
             height: 50px;
             margin-left: 5%;
+            margin-bottom: 15px;
             background-color: white;
             list-style: none;
             -moz-border-radius: 10px;
             -webkit-border-radius: 10px;
             border-radius: 10px;
-            margin-bottom: 10px;
             background-image: url("./tpl/Static/blue/images/new/icon_right_arrow.png");
             background-size: auto 16px;
             background-repeat: no-repeat;
@@ -124,11 +124,6 @@
 <body>
     <include file="Public:header"/>
     <div class="main">
-        <div class="this_nav">
-            <span id="back_span"></span>
-            Profile
-        </div>
-        <div class="gray_line"></div>
         <ul>
             <a href="{pigcms{:U('adress')}">
                 <li>

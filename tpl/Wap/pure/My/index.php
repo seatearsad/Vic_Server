@@ -127,7 +127,13 @@
             background-image: url("./tpl/Static/blue/images/wap/language.png");
         }
 
+        .ad_outter{
+            position: absolute;
+            transform: translateY(-50%);
+            top: 50%;
+        }
         #event_div {
+            position:relative;
             clear:both;
             width: 90%;
             height: 80px;
@@ -153,9 +159,11 @@
 
         #event_desc {
             font-size: 13px;
+            margin-right: 8px;
         }
 
         #courier_div {
+            position: relative;
             width: 90%;
             margin-left: 5%;
             height: 80px;
@@ -177,15 +185,14 @@
             font-weight: bold;
             font-size: 16px;
             color: #013cff;
+
         }
 
         #courier_desc {
             font-size: 13px;
+            margin-right: 8px;
         }
 
-        .GreyText {
-            color: #4e4d4d;
-        }
         .LightGreyText {
             color: #919191;
         }
@@ -231,23 +238,26 @@
         </div>
         <div class="right_align">
             <button class="obutton" type="button" onclick="window.location.href='./wap.php?g=Wap&c=My&a=recharge';">
-                {pigcms{:L('_RECHARGE_TXT_')}
+                {pigcms{:L('V2_PAGETITLE_ADDUP')}
             </button>
         </div>
     </div>
     <div class="gray_k"></div>
     <if condition="$event">
         <a href="{pigcms{:U('My/invitation')}">
+
             <div id="event_div">
+                <div class="ad_outter">
                 <div id="event_name">{pigcms{$event.name}</div>
                 <div id="event_desc">{pigcms{$event.desc}</div>
+            </div>
             </div>
         </a>
     </if>
     <ul>
         <a href="{pigcms{:U('My/myinfo')}">
             <li>
-                <div>Profile</div>
+                <div>{pigcms{:L('V2_ACCOUNT_MENU_PROFILE')}</div>
             </li>
         </a>
         <!--        <a href="{pigcms{:U('My/my_money')}">-->
@@ -257,7 +267,7 @@
         <!--        </a>-->
         <a href="{pigcms{:U('My/coupon')}">
             <li>
-                <div>Coupon</div>
+                <div>{pigcms{:L('V2_ACCOUNT_MENU_COUPONS')}</div>
             </li>
         </a>
         <!--        <a href="{pigcms{:U('My/shop_order_list')}">-->
@@ -267,14 +277,16 @@
         <!--        </a>-->
         <a href="{pigcms{:U('My/language')}">
             <li>
-                <div>Language</div>
+                <div>{pigcms{:L('V2_ACCOUNT_MENU_SWITCHLANG')}</div>
             </li>
         </a>
     </ul>
     <a href="https://www.tutti.app/wap.php?g=Wap&c=Index&a=courier">
         <div id="courier_div">
+            <div class="ad_outter">
             <div id="courier_name">{pigcms{:L('QW_V2_COURIER_TITLE')}</div>
             <div id="courier_desc">{pigcms{:L('QW_V2_COURIER_DESC')}</div>
+            </div>
         </div>
     </a>
 </div>

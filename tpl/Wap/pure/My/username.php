@@ -9,7 +9,7 @@
 	<meta name="apple-mobile-web-app-status-bar-style" content="black">
 	<meta name="format-detection" content="telephone=no">
 	<meta name="format-detection" content="address=no">
-    <link href="{pigcms{$static_path}css/eve.7c92a906.css" rel="stylesheet"/>
+    <link href="{pigcms{$static_path}css/eve.7c92a906.peter.css" rel="stylesheet"/>
     <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/common.css?215"/>
     <script type="text/javascript" src="{pigcms{:C('JQUERY_FILE_190')}" charset="utf-8"></script>
     <include file="Public:facebook"/>
@@ -64,17 +64,12 @@
 <body id="index">
     <include file="Public:header"/>
     <div class="main">
-        <div class="this_nav">
-            <span id="back_span"></span>
-            {pigcms{:L('_B_PURE_MY_54_')}
-        </div>
-        <div class="gray_line"></div>
         <if condition="$error">
         	<div id="tips" class="tips tips-err" style="display:block;">{pigcms{$error}</div>
         <else/>
         	<div id="tips" class="tips"></div>
         </if>
-        <form id="form" method="post" action="{pigcms{:U('My/username')}">
+        <form id="form" method="post" action="{pigcms{:U('My/username')}"  class="list_form">
 		    <dl class="list">
 		        <dd class="dd-padding">
 		            <input id="username" placeholder="{pigcms{:L('_B_MY_ENTERNEWNAME_')}" class="input-weak" type="text" name="nickname" value="{pigcms{$now_user.nickname}">

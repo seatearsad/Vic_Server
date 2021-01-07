@@ -9,8 +9,7 @@
 	<meta name="apple-mobile-web-app-status-bar-style" content="black">
 	<meta name="format-detection" content="telephone=no">
 	<meta name="format-detection" content="address=no">
-    <link href="{pigcms{$static_path}css/eve.7c92a906.css" rel="stylesheet"/>
-    <link href="{pigcms{$static_path}css/eve.peter.share.css" rel="stylesheet"/>
+    <link href="{pigcms{$static_path}css/eve.7c92a906.peter.css" rel="stylesheet"/>
     <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/common.css?215"/>
     <script type="text/javascript" src="{pigcms{:C('JQUERY_FILE_190')}" charset="utf-8"></script>
     <style>
@@ -25,7 +24,9 @@
 	        margin: .2rem .2rem;
 	        padding: 0;
 	    }
-	
+        .address-wrapper {
+            border-bottom: 2px solid #e5e5e5;
+        }
 	    .address-wrapper a {
 	        display: -webkit-box;
 	        display: -moz-box;
@@ -134,11 +135,6 @@
 <body id="index">
 <include file="Public:header"/>
 <div class="main">
-    <div class="this_nav">
-        <span id="back_span"></span>
-        Wallet
-    </div>
-    <div class="gray_line"></div>
         <div id="tips" class="tips"></div>
         <div class="wrapper btn-wrapper">
             <if condition="$order_id">
@@ -148,7 +144,7 @@
             </if>
 		</div>
 		<volist name="card_list" id="vo">
-            <div class="list_form">
+
 			<dl class="list <if condition="$vo['is_default']">active</if>">
                 <dd class="address-wrapper <if condition="$order_id">dd-padding</if>">
                     <if condition="$order_id">

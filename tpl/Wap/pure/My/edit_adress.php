@@ -9,8 +9,7 @@
 	<meta name="apple-mobile-web-app-status-bar-style" content="black">
 	<meta name="format-detection" content="telephone=no">
 	<meta name="format-detection" content="address=no">
-    <link href="{pigcms{$static_path}css/eve.7c92a906.css" rel="stylesheet"/>
-    <link href="{pigcms{$static_path}css/eve.peter.share.css" rel="stylesheet"/>
+    <link href="{pigcms{$static_path}css/eve.7c92a906.peter.css" rel="stylesheet"/>
     <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/common.css?215"/>
     <script type="text/javascript" src="{pigcms{:C('JQUERY_FILE_190')}" charset="utf-8"></script>
     <style>
@@ -97,9 +96,8 @@
     </div>
     <div class="gray_line"></div>
         <div id="tips" class="tips"></div>
-        <form id="form" method="post" action="{pigcms{:U('My/edit_adress')}" class="list_form">
-        
-		    <dl class="list list-in">
+        <form id="form" method="post" action="{pigcms{:U('My/edit_adress')}" class="detail_block">
+		    <dl class="list">
 		    	<dd>
 		    		<dl>
 		        		<dd class="dd-padding kv-line">

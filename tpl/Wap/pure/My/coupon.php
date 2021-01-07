@@ -11,12 +11,13 @@
 		<meta name="format-detection" content="telephone=no"/>
 		<meta name="format-detection" content="address=no"/>
 		<link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/common.css?215"/>
-		<script type="text/javascript" src="{pigcms{:C('JQUERY_FILE_190')}" charset="utf-8"></script>
 		<script type="text/javascript" src="{pigcms{$static_path}js/iscroll.js?444" charset="utf-8"></script>
 		<script type="text/javascript" src="{pigcms{$static_path}js/idangerous.swiper.min.js" charset="utf-8"></script>
 		<script type="text/javascript" src="{pigcms{$static_path}js/fastclick.js" charset="utf-8"></script>
 		<script type="text/javascript" src="{pigcms{$static_path}layer/layer.m.js" charset="utf-8"></script>
+        <link href="{pigcms{$static_path}css/eve.7c92a906.peter.css" rel="stylesheet"/>
         <link type="text/css" rel="stylesheet" href="{pigcms{$static_path}my_card/css/card_new.css"/>
+        <script type="text/javascript" src="{pigcms{:C('JQUERY_FILE_190')}" charset="utf-8"></script>
     <style>
         .main{
             width: 100%;
@@ -39,7 +40,7 @@
             margin: -2px auto 0 auto;
         }
         .main ul{
-            margin: 20px 0 0;
+            margin: 0px 0 0;
             width: 100%;
         }
         .main ul li{
@@ -103,26 +104,42 @@
             color: #ffa52d;
         }
         .Muse{
-            width: 89%;
-            margin: 10px auto;
+            width: 94%;
+            margin: 0px auto;
         }
+        .div_outer{
+            display: -webkit-flex;
+            display: flex;
+            width: 90%;
+            margin-left: 5%;
+        }
+
 	</style>
         <include file="Public:facebook"/>
 </head>
 <body>
     <include file="Public:header"/>
     <div class="main Coupon">
-        <div class="this_nav">
-            <span id="back_span"></span>
-            Coupon
+        <if condition="$error">
+            <div id="tips" class="tips tips-err" style="display:block;">{pigcms{$error}</div>
+            <else/>
+            <div id="tips" class="tips"></div>
+        </if>
+        <div class="div-space"></div>
+        <div class="div_outer" style="margin-bottom: 10px">
+            <div>Redeem a Coupon Code</div>
         </div>
-        <div class="gray_line"></div>
+        <div class="div_outer">
+            <input placeholder="{pigcms{:L('_INPUT_EXCHANGE_CODE_')}" class="input-radius" type="text" name="code" value="" maxlength="20">
+            <button type="submit" id="exchange" class="btn btn-inline btn-larger2">{pigcms{:L('_EXCHANGE_TXT_')}</button>
+        </div>
+        <div class="div-space"></div>
+        <div class="div-space"></div>
+        <div class="div-space"></div>
+        <div class="div_outer" style="margin-bottom: 0px">
+            <div>Available Coupon</div>
+        </div>
         <ul class="end_ul">
-            <a href="{pigcms{:U('card_list')}&coupon_type=system&use=0">
-                <li>
-                    <div>Available</div>
-                </li>
-            </a>
             <if condition="$coupon">
                 <dl class="Muse">
                     <dd>
@@ -160,23 +177,33 @@
                     </dd>
                 </dl>
             </if>
-            <a href="{pigcms{:U('exchangeCode')}">
-                <li>
-                    <div>{pigcms{:L('_EXCHANGE_COUPON_')}</div>
-                </li>
-            </a>
-            <a href="{pigcms{:U('card_list')}&coupon_type=system&use=1">
-            <li>
-                <div>History</div>
-            </li>
-            </a>
+
         </ul>
     </div>
     <include file="Public:footer"/>
 <script>
-    $('#back_span').click(function () {
-        window.history.go(-1);
-    });
+    //garfunkel add
+    $("#exchange").click(function(){
+        var code = $("input[name='code']").val();
+        if(code == ""){
+            alert("{pigcms{:L('_INPUT_EXCHANGE_CODE_')}");
+        } else{
+            exchange_code(code);
+        }
+    })
+
+    function exchange_code(code){
+        $.ajax({url:"{pigcms{:U('My/exchangeCode')}",type:"post",data:"code="+code,dataType:"json",success:function(data){
+                if(data.error_code == 0){
+                    alert('success');
+                    window.location.reload();
+                }else{
+                    alert(data.msg);
+                }
+            }
+        });
+    }
+
     $('#logout').on('click',function(){
         location.href =	"{pigcms{:U('Login/logout')}";
     });

@@ -10,17 +10,15 @@
 		<meta name="format-detection" content="telephone=no"/>
 		<meta name="format-detection" content="address=no"/>
         <script type="text/javascript" src="{pigcms{:C('JQUERY_FILE_190')}" charset="utf-8"></script>
-		<link href="{pigcms{$static_path}css/eve.7c92a906.css" rel="stylesheet"/>
+		<link href="{pigcms{$static_path}css/eve.7c92a906.peter.css" rel="stylesheet"/>
 		<link href="{pigcms{$static_path}css/index_wap.css" rel="stylesheet"/>
 		<link href="{pigcms{$static_path}css/idangerous.swiper.css" rel="stylesheet"/>
         <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/common.css?215"/>
+
 		<style>
 			/*#login{margin: 0.5rem 0.2rem;}*/
 			.btn-wrapper{margin:.28rem 0;}
-			dl.list{border-bottom:0;border:1px solid #ddd8ce;}
-			dl.list:first-child{border-top:1px solid #ddd8ce;}
-			dl.list dd dl{padding-right:0.2rem;}
-			dl.list dd dl>.dd-padding, dl.list dd dl dd>.react, dl.list dd dl>dt{padding-right:0;}
+
 			.nav{text-align: center;}
 			.subline{margin:.28rem .2rem;}
 			.subline li{display:inline-block;}
@@ -40,32 +38,7 @@
                 margin-bottom: 15px;
                 background-color: #cccccc;
             }
-            .this_nav{
-                width: 100%;
-                text-align: center;
-                font-size: 1.8em;
-                height: 30px;
-                line-height: 30px;
-                margin-top: 15px;
-                position: relative;
-            }
-            .this_nav span{
-                width: 50px;
-                height: 30px;
-                display:-moz-inline-box;
-                display:inline-block;
-                -moz-transform:scaleX(-1);
-                -webkit-transform:scaleX(-1);
-                -o-transform:scaleX(-1);
-                transform:scaleX(-1);
-                background-image: url("./tpl/Static/blue/images/new/black_arrow.png");
-                background-size: auto 20px;
-                background-repeat: no-repeat;
-                background-position: right center;
-                position: absolute;
-                left: 8%;
-                cursor: pointer;
-            }
+
             .btn-larger{
                 background-color: #ffa52d;
             }
@@ -79,14 +52,10 @@
 	<body>
     <include file="Public:header"/>
     <div class="main">
-        <div class="this_nav">
-            <span id="back_span"></span>
-            Phone Number
-        </div>
-        <div class="gray_line"></div>
+
         	<div id="tips"></div>
 			<div id="login">
-				<form id="reg-form" action="{pigcms{:U('My/bind_user')}" autocomplete="off" method="post" location_url="{pigcms{$referer}" login_url="{pigcms{:U('Login/index')}">
+				<form id="reg-form" action="{pigcms{:U('My/bind_user')}" autocomplete="off" method="post" location_url="{pigcms{$referer}" login_url="{pigcms{:U('Login/index')}" class="detail_block">
 			        <dl class="list list-in">
 			        	<dd>
 			        		<dl>

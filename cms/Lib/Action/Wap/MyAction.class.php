@@ -725,8 +725,8 @@ class MyAction extends BaseAction{
         }else if($_GET['id']){
 	        $card = D('User_card')->field(true)->where(array('id'=>$_GET['id']))->find();
             $this->assign('card',$card);
+            $this->assign('card_id',$_GET['id']);
         }
-
 	    $this->display();
     }
 
@@ -775,7 +775,9 @@ class MyAction extends BaseAction{
 	}
 	/*添加编辑地址*/
 	public function edit_adress(){
-		if(IS_POST){
+		$id=0;
+	    if(IS_POST){
+
 			if(empty($_POST['adress'])){
 				$this->error(L('_B_MY_NOPOSITION_'));
 			}
@@ -788,6 +790,7 @@ class MyAction extends BaseAction{
 		}else{
 			$database_area = D('Area');
 			$id = $_GET['adress_id'];
+            $this->assign('address_id',$id);
 			if(cookie('user_address') === '0' || cookie("user_address") == "") {
 // 				$where['address_id'] = $id;
 // 				$where['uid'] = $this->_uid;
@@ -869,6 +872,7 @@ class MyAction extends BaseAction{
 			unset($params['adress_id']);
 			$this->assign('params',$params);
 		}
+
 
 		$this->display();
 	}
@@ -3301,6 +3305,7 @@ class MyAction extends BaseAction{
             $this->assign('coupon', array_shift($tmp[0]));
         }
 
+        //$this->card_list();
         $this->display();
     }
 
@@ -3310,6 +3315,7 @@ class MyAction extends BaseAction{
 		// $this->error_tips('请使用微信浏览优惠券！');
 		// }
 		$use = empty($_GET['use']) ? '0' : $_GET['use'];
+        $use = 0;
 		if($use == 0){
 		    $title = 'Available';
 		    $class_name = 'Muse';
@@ -3339,7 +3345,6 @@ class MyAction extends BaseAction{
             }
             //var_dump($coupon_list);die();
 		}
-
 
 		$tmp = array();
 		foreach ($coupon_list as $key => $v) {
@@ -3373,12 +3378,86 @@ class MyAction extends BaseAction{
 			}
 
 		}
+		//var_dump($tmp);
 		if($use == 0)
 		    $this->assign('coupon_list', $tmp[0]);
 		else
             $this->assign('coupon_list', array_merge($tmp[1],$tmp[2]));
 		$this->display();
 	}
+
+    public function card_list_with_use(){
+        // if(!$this->is_wexin_browser){
+        // $this->error_tips('请使用微信浏览优惠券！');
+        // }
+        $use = 0;
+        if($use == 0){
+            $title = 'Available';
+            $class_name = 'Muse';
+        }else{
+            $title = 'History';
+            $class_name = 'Expired';
+        }
+
+        if($_GET['coupon_type']=='mer') {
+            $coupon_list = D('Card_new_coupon')->get_user_all_coupon_list($this->user_session['uid']);
+            $this->assign('cate_platform', D('Card_new_coupon')->cate_platform());
+        }else{
+            $coupon_list=array();
+
+            $coupon_list = D('System_coupon')->get_user_coupon_list($this->user_session['uid'], $this->user_session['phone']);
+
+            $this->assign('cate_platform', D('System_coupon')->cate_platform());
+
+            //获取活动优惠券
+            $event_coupon_list = D('New_event')->getUserCoupon($this->user_session['uid']);
+            if(!$coupon_list) $coupon_list = array();
+            if(count($event_coupon_list) > 0){
+                $coupon_list = array_merge($coupon_list,$event_coupon_list);
+            }
+            //var_dump($coupon_list);die();
+        }
+
+
+        $tmp = array();
+        foreach ($coupon_list as $key => $v) {
+            $v['name'] = lang_substr($v['name'],C('DEFAULT_LANG'));
+            $v['des'] = lang_substr($v['des'],C('DEFAULT_LANG'));
+            if (!empty($tmp[$v['is_use']][$v['coupon_id']])) {
+                $tmp[$v['is_use']][$v['coupon_id']]['get_num']++;
+            } else {
+                $tmp[$v['is_use']][$v['coupon_id']] = $v;
+                $mer = M('Merchant')->where(array('mer_id'=>$v['mer_id']))->find();
+                $tmp[$v['is_use']][$v['coupon_id']]['merchant']=$mer['name'];
+                $tmp[$v['is_use']][$v['coupon_id']]['get_num'] = 1;
+                switch($v['type']){
+                    case 'all':
+                        $url = $this->config['site_url'].'/wap.php';
+                        break;
+                    case 'group':
+                        $url = $this->config['site_url'].'/wap.php?g=Wap&c=Group&a=index';
+                        break;
+                    case 'meal':
+                        $url = $this->config['site_url'].'/wap.php?g=Wap&c=Meal_list&a=index';
+                        break;
+                    case 'appoint':
+                        $url = $this->config['site_url'].'/wap.php?g=Wap&c=Appoint&a=index';
+                        break;
+                    case 'shop':
+                        $url = $this->config['site_url'].'/wap.php?g=Wap&c=Shop&a=index';
+                        break;
+                }
+                $tmp[$v['is_use']][$v['coupon_id']]['url'] = $url;
+            }
+
+        }
+        //var_dump($tmp);
+        if($use == 0)
+            $this->assign('coupon_list', $tmp[0]);
+        else
+            $this->assign('coupon_list', array_merge($tmp[1],$tmp[2]));
+
+    }
 
 
 	public function cards()
