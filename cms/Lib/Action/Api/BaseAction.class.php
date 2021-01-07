@@ -10,7 +10,6 @@ class BaseAction extends Action
     protected $user_session;
     protected $app_version;
     protected $voic_baidu = array();
-    protected $curr_sign;
     protected function _initialize()
     {
         if(empty($_POST)){
@@ -44,7 +43,8 @@ class BaseAction extends Action
 
     public function checkSign(){
         $secret_key = $this->config['api_secret_key'];
-        if($_POST['sign']){
+        $version = (int)str_replace(".","",$_POST['version']);
+        if($version >= 260){
             $data = $_POST;
             $sign = strtolower($data['sign']);
             unset($data['sign']);
@@ -59,9 +59,10 @@ class BaseAction extends Action
             $data_str = "a:".ACTION_NAME.",time:".$_POST['time'].",version:".$_POST['version'];
 
             $self_sign = MD5($data_str.$secret_key);
-            $this->curr_sign = $self_sign;
-//            var_dump(json_encode($data).$secret_key."|".$self_sign);
-//            die();
+
+            if($self_sign != $sign){
+                $this->returnCode(1,'info',array(),'Sign Error');
+            }
         }
     }
 
@@ -104,7 +105,7 @@ class BaseAction extends Action
                 'fail'=>$error
             );
         }
-        $array['sign'] = $this->curr_sign;
+
         echo json_encode($array);
         exit();
     }
