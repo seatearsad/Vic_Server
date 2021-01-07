@@ -15,8 +15,10 @@
     <script type="text/javascript" src="{pigcms{$static_path}js/iscroll.js?444" charset="utf-8"></script>
     <script type="text/javascript" src="{pigcms{$static_path}js/idangerous.swiper.min.js" charset="utf-8"></script>
     <script type="text/javascript" src="{pigcms{$static_path}js/fastclick.js" charset="utf-8"></script>
+    <script type="text/javascript" src="{pigcms{$static_path}js/clipboard.js" charset="utf-8"></script>
     <script type="text/javascript" src="{pigcms{$static_path}layer/layer.m.js" charset="utf-8"></script>
     <link type="text/css" rel="stylesheet" href="{pigcms{$static_path}my_card/css/card_new.css"/>
+    <link href="{pigcms{$static_path}css/eve.7c92a906.peter.css" rel="stylesheet"/>
     <style>
         .main{
             width: 100%;
@@ -110,14 +112,14 @@
             width: 90%;
             margin: 0px auto;
             font-weight: bold;
-            font-size: 20px;
+            font-size: 18px;
             text-align: center;
         }
         #event_img{
             width: 90%;
             margin: 10px auto;
             height: 130px;
-            background-image: url("./tpl/Static/blue/images/new/coupon_icon.png");
+            background-image: url("./tpl/Static/blue/images/new/gift_icon.png");
             background-repeat: no-repeat;
             background-size: auto 100%;
             background-position: center;
@@ -125,10 +127,18 @@
         #event_desc {
             width: 85%;
             margin: 10px auto;
+            font-size: 16px;
         }
         #share_txt{
             width: 90%;
             margin: 0px auto;
+            text-align: left;
+            font-size: 18px;
+        }
+        #share_or{
+            width: 90%;
+            margin: 0px auto;
+            font-size: 18px;
             text-align: center;
         }
         #invi_code{
@@ -148,12 +158,12 @@
             background-color: #f4f4f4;
         }
         #send_code{
-            width: 80%;
-            height: 35px;
+            width: 85%;
+            height: 45px;
             font-size: 18px;
             font-weight: bold;
-            line-height: 35px;
-            margin: 10px auto 60px auto;
+            line-height: 45px;
+            margin: 20px auto 60px auto;
             background-color: #ffa52d;
             color: white;
             border-radius: 5px;
@@ -198,37 +208,48 @@
             line-height: 40px;
             margin: 5px auto;
         }
+        .div_outer{
+            display: -webkit-flex;
+            display: flex;
+            width: 85%;
+            margin-left: 8%;
+        }
     </style>
     <include file="Public:facebook"/>
 </head>
 <body>
 <include file="Public:header"/>
 <div class="main">
-    <div class="this_nav">
-        <span id="back_span"></span>
-    </div>
+    <div class="div-space"></div>
+    <div id="event_img"></div>
     <div id="event_name">
         {pigcms{$event.name}
     </div>
-    <div id="event_img"></div>
     <div id="event_desc">
         {pigcms{$event.desc}
     </div>
-    <div id="share_txt">
+    <div class="div-space"></div>
+    <div class="div-space"></div>
+    <div class="div-space"></div>
+    <div class="div_outer">
         {pigcms{:L('_SHARE_INVI_CODE_')}
     </div>
-    <div id="invi_code">
-        <input type="text" name="invi_code" value="{pigcms{$code}" readonly="readonly">
+    <div class="div-space"></div>
+    <div class="div_outer">
+        <input placeholder="{pigcms{:L('_INPUT_EXCHANGE_CODE_')}" class="input-radius2" id="icode" type="text" name="invi_code" value="{pigcms{$code}" readonly="readonly">
+        <button type="submit" id="exchange" class="btn btn-inline btn-larger2 cbtn" data-clipboard-target="#icode">COPY</button>
     </div>
-    <div id="share_txt">
+    <div class="div-space"></div>
+    <div id="share_or">
         or
     </div>
-    <div id="send_div">
+    <div class="div_outer">
         <ul id="send_type">
             <li class="active">Email</li>
             <li>SMS</li>
-        </ul>
-        <input type="text" name="send_msg" id="send_msg" placeholder="Email Address">
+        </ul></div>
+        <div class="div_outer">
+        <input type="text" name="send_msg" id="send_msg" placeholder="Email Address" class="input-radius-4">
     </div>
     <div id="send_code">
         {pigcms{:L('_SEND_INVI_CODE_')}
@@ -236,9 +257,26 @@
     <div id="send_load">
         {pigcms{:L('_DEALING_TXT_')}
     </div>
+    <div id=NewsToolBox></div>
 </div>
 <include file="Public:footer"/>
 <script>
+
+    var clipboard = new ClipboardJS('.cbtn');
+
+    clipboard.on('success', function(e) {
+        //alert("Copy successful!");
+        layer.open({type:3,content: 'Copy successful!', time: 1});
+        e.clearSelection();
+    });
+
+    clipboard.on('error', function(e) {
+        //console.error('Action:', e.action);
+        //console.error('Trigger:', e.trigger);
+        layer.open({type:3,content: 'Sorry,Copy failed!', time: 1});
+        //alert("Copy fail!");
+    });
+
     if(/(tutti_android)/.test(navigator.userAgent.toLowerCase())) {
         $('#send_div').hide();
     }

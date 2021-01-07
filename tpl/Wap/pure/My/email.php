@@ -59,6 +59,12 @@
         width: 50%;
         margin: 0 auto;
     }
+    .div_outer{
+        display: -webkit-flex;
+        display: flex;
+        width: 90%;
+        margin-left: 5%;
+    }
 </style>
 <body id="index">
     <include file="Public:header"/>
@@ -75,7 +81,9 @@
 		            <input id="email" class="input-weak" type="text" name="email" value="{pigcms{$now_user.email}">
 		        </dd>
 		    </dl>
-		    <div class="btn-wrapper"><button type="submit" class="btn btn-block btn-larger">{pigcms{:L('_B_D_LOGIN_CONIERM_')}</button></div>
+            <div class="div-space"></div>
+            <div class="div-space"></div>
+		    <div class="div_outer"><button type="submit" class="btn-whole-h btn-block btn-larger">{pigcms{:L('_B_D_LOGIN_CONIERM_')}</button></div>
 		</form>
     	<script src="{pigcms{:C('JQUERY_FILE')}"></script>
 		<script src="{pigcms{$static_path}js/common_wap.js"></script>

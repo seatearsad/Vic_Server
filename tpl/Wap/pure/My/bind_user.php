@@ -31,13 +31,7 @@
                 min-width: 320px;
                 margin: 0 auto;
             }
-            .gray_line{
-                width: 100%;
-                height: 2px;
-                margin-top: 15px;
-                margin-bottom: 15px;
-                background-color: #cccccc;
-            }
+
 
             .btn-larger{
                 background-color: #ffa52d;
@@ -45,6 +39,18 @@
             .btn-weak{
                 border: .02rem solid #ffa52d;
                 color: #ffa52d;
+            }
+            .div_inner{
+                display: -webkit-flex;
+                display: flex;
+                width: 98%;
+                margin-left: 0;
+            }
+            .div_outer{
+                display: -webkit-flex;
+                display: flex;
+                width: 90%;
+                margin-left: 5%;
             }
 		</style>
         <include file="Public:facebook"/>
@@ -63,10 +69,11 @@
 			            			<input id="reg_phone" class="input-weak" type="text" placeholder="{pigcms{:L('_B_LOGIN_ENTERPHONENO_')}" name="phone" value="" />
 			            		</dd>
 								<!--if condition="C('config.bind_phone_verify_sms') AND C('config.sms_key')"-->
-			            		<dd class="kv-line-r dd-padding">
-			            			<input id="sms_code" class="input-weak kv-k" name = "sms_code" type="text" placeholder="Code" />
-			            			<button id="reg_send_sms" type="button" onclick="sendsms(this)" class="btn btn-weak kv-v">{pigcms{:L('_B_D_LOGIN_RECEIVEMESSAGE_')}</button>
-			            		</dd>
+                                <div class="div-space"></div>
+                                <div class="div_inner">
+			            			<input id="sms_code" class="input-radius" name = "sms_code" type="text" placeholder="Code" />
+			            			<button id="reg_send_sms" type="button" onclick="sendsms(this)" class="btn btn-inline btn-larger2">{pigcms{:L('_B_D_LOGIN_RECEIVEMESSAGE_')}</button>
+			            		</div>
 								<!--/if>
 								<if condition="$now_user['pwd'] eq '' OR $now_user['phone'] eq '' OR C('config.bind_phone_verify_sms') eq 0">
 									<dd class="kv-line-r dd-padding">
@@ -79,9 +86,12 @@
 			        		</dl>
 			        	</dd>
 			        </dl>
-			        <div class="btn-wrapper">
+                    <div class="div-space"></div>
+                    <div class="div-space"></div>
+                    <div class="div-space"></div>
+			        <div class="div_outer">
 <!--						<button type="submit" class="btn btn-larger btn-block">注册并绑定</button>-->
-						<button type="submit" class="btn btn-larger btn-block">{pigcms{:L('_B_D_LOGIN_CONIERM_')}</button>
+						<button type="submit" class="btn-whole-h btn-larger btn-block">{pigcms{:L('_B_D_LOGIN_CONIERM_')}</button>
 			        </div>
 			    </form>
 			</div>

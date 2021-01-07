@@ -382,6 +382,28 @@ input.mt[type=radio]:checked:after, input.mt[type=checkbox]:checked:after {
     color: #ccc
 }
 input.input-radius {
+      flex: 1 1 100%;
+      border: 0;
+      word-wrap: break-word;
+      height: .9rem;
+      margin: 0rem 0;
+      text-indent: 0.1rem;
+      line-height: 1;
+      font-size: .3rem;
+      border-radius: 10px 0px 0px 10px;
+  }
+input.input-radius-4 {
+    flex: 1 1 100%;
+    border: 0;
+    word-wrap: break-word;
+    height: .9rem;
+    margin: 0rem 0;
+    text-indent: 0.2rem;
+    line-height: 1;
+    font-size: .3rem;
+    border-radius: 10px 10px 10px 10px;
+}
+input.input-radius2 {
     flex: 1 1 100%;
     border: 0;
     word-wrap: break-word;
@@ -389,7 +411,8 @@ input.input-radius {
     margin: 0rem 0;
     text-indent: 0.1rem;
     line-height: 1;
-    font-size: .3rem;
+    color:#ffa52d;
+    font-size: .45rem;
     border-radius: 10px 0px 0px 10px;
 }
 input.input-weak, textarea.input-weak {
@@ -531,6 +554,25 @@ button:focus {
     border-radius: 0px 10px 10px 0px;
 }
 
+.btn-whole-h {
+    width: 100%;
+    background-color: #ffa52d;
+    display: inline-block;
+    margin: 0;
+    text-align: center;
+    height: .6rem;
+    padding: 0 .32rem;
+    border-radius: .06rem;
+    color: #fff;
+    border: 0;
+    background-color: #ffa52d;
+    font-size: .28rem;
+    vertical-align: middle;
+    line-height: .6rem;
+    box-sizing: border-box;
+    cursor: pointer;
+    -webkit-user-select: none
+}
 .btn-large {
     height: .8rem;
     line-height: .8rem;

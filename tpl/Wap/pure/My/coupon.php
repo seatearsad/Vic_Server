@@ -120,6 +120,8 @@
 <body>
     <include file="Public:header"/>
     <div class="main Coupon">
+        <div class="div-space"></div>
+        <div class="div-space"></div>
         <if condition="$error">
             <div id="tips" class="tips tips-err" style="display:block;">{pigcms{$error}</div>
             <else/>

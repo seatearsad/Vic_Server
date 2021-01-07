@@ -55,10 +55,18 @@
         left: 8%;
         cursor: pointer;
     }
-    .btn{
-        background-color: #ffa52d;
-        width: 50%;
-        margin: 0 auto;
+
+    .div_outer{
+        display: -webkit-flex;
+        display: flex;
+        width: 90%;
+        margin-left: 5%;
+    }
+    .div_inner{
+        display: -webkit-flex;
+        display: flex;
+        width: 90%;
+        margin-left: 5%;
     }
 </style>
 <body id="index">
@@ -69,14 +77,21 @@
         <else/>
         	<div id="tips" class="tips"></div>
         </if>
+        <div class="div-space"></div>
+        <div class="div-space"></div>
         <form id="form" method="post" action="{pigcms{:U('My/username')}"  class="list_form">
-		    <dl class="list">
+		    <dl class="list" style="width: 90%">
 		        <dd class="dd-padding">
 		            <input id="username" placeholder="{pigcms{:L('_B_MY_ENTERNEWNAME_')}" class="input-weak" type="text" name="nickname" value="{pigcms{$now_user.nickname}">
 		        </dd>
 		    </dl>
 		    <!--p class="btn-wrapper">{pigcms{:L('_NICKNAME_GZ_1_')} , {pigcms{:L('_NICKNAME_GZ_2_')}</p-->
-		    <div class="btn-wrapper"><button type="submit" class="btn btn-block btn-larger">{pigcms{:L('_B_D_LOGIN_CONIERM_')}</button></div>
+            <div class="div-space"></div>
+            <div class="div-space"></div>
+
+            <div class="div_inner">
+                <button type="submit" class="btn-whole-h btn-block btn-larger">{pigcms{:L('_B_D_LOGIN_CONIERM_')}</button>
+            </div>
 		</form>
     	<script src="{pigcms{:C('JQUERY_FILE')}"></script>
 		<script src="{pigcms{$static_path}js/common_wap.js"></script>
