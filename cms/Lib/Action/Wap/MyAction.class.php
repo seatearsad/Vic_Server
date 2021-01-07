@@ -127,7 +127,44 @@ class MyAction extends BaseAction{
 		}else{
 			$_SESSION['source']	=	2;
 		}
-		$this->display();
+        if($_POST['money']){
+            if(IS_POST){
+                $data_user_recharge_order['uid'] = $this->now_user['uid'];
+                $money = floatval($_POST['money']);
+                if(empty($money) || $money > 10000){
+                    $this->error('请输入有效的金额！最高不能超过1万元。');
+                }
+                if($_POST['label']){
+                    $data_user_recharge_order['label'] = $_POST['label'];
+                }
+                $data_user_recharge_order['money'] = $money;
+                // $data_user_recharge_order['order_name'] = '帐户余额在线充值';
+                $data_user_recharge_order['add_time'] = $_SERVER['REQUEST_TIME'];
+                $data_user_recharge_order['is_mobile_pay'] = 1;
+
+                if($order_id = D('User_recharge_order')->data($data_user_recharge_order)->add()){
+                    if($_GET['type']=='gift'){
+                        redirect(U('Pay/check',array('order_id'=>$order_id,'type'=>'gift')));
+                    }elseif($_GET['type']=='classify') {
+                        redirect(U('Pay/check',array('order_id'=>$order_id,'type'=>'classify')));
+                    }else{
+                        redirect(U('Pay/check',array('order_id'=>$order_id,'type'=>'recharge')));
+                    }
+                }
+            }
+        }else{
+            $config = D('Config')->get_config();
+            $recharge_txt = $config['recharge_discount'];
+            $recharge = explode(",",$recharge_txt);
+            $recharge_list = array();
+            foreach ($recharge as $v){
+                $v_a = explode("|",$v);
+                $recharge_list[$v_a[0]] = $v_a[1];
+            }
+            //krsort($recharge_list);
+            $this->assign('recharge_list',$recharge_list);
+            $this->display();
+        }
 	}
 	//	完善资料页面
 	public function inputinfo(){

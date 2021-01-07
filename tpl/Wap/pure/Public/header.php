@@ -448,6 +448,20 @@
                     {pigcms{:L('V2_PAGETITLE_PAYMENTMETHODS_EDIT')}
                 </div>
             </if>
+
+            <if condition="ACTION_NAME == 'my_money'">
+                <div class="this_header">
+                    <span id="back_button_span"></span>
+                    {pigcms{:L('V2_PAGETITLE_CREDITES')}
+                </div>
+            </if>
+            <if condition="ACTION_NAME == 'transaction'">
+                <div class="this_header">
+                    <span id="back_button_span"></span>
+                    {pigcms{:L('V2_PAGETITLE_CREDITES_HISTORY')}
+                </div>
+            </if>
+
             <if condition="ACTION_NAME == 'username'">
                 <div class="this_header">
                     <span id="back_button_span"></span>

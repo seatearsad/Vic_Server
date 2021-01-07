@@ -1284,22 +1284,7 @@
                     {pigcms{:L('V2_SERVICEFEE')} <img src="{pigcms{$static_path}img/index/tax_fee.png" id="tax_fee_img" width="20" style="vertical-align: middle;margin-left: 5px;" />
                     <span>${pigcms{:number_format($order_info['packing_charge'] + $order_info['deposit_price'] + $order_info['tax_price'] + $order_info['service_fee'],2)}</span>
                 </div>
-                <!--if condition="$order_info['packing_charge'] != 0">
-                <div>
-                    {pigcms{:L('_PACK_PRICE_')} <span>${pigcms{$order_info['packing_charge']}</span>
-                </div>
-                </if>
-                <if condition="$order_info['deposit_price'] != 0">
-                <div>
-                    {pigcms{:L('_DEPOSIT_TXT_')} <span>${pigcms{:sprintf("%.2f",$order_info['deposit_price'])}</span>
-                </div>
-                </if>
-                <div>
-                    {pigcms{:L('_TAXATION_TXT_')} <span>${pigcms{:sprintf("%.2f",$order_info['tax_price'])}</span>
-                </div>
-                <div>
-                    {pigcms{:L('_SERVICE_FEE_')} <span>${pigcms{:sprintf("%.2f",$order_info['service_fee'])}</span>
-                </div-->
+
                 <div>
                     {pigcms{:L('_TIP_TXT_')} <span class="tip_show"></span>
                 </div>
@@ -1701,9 +1686,9 @@
             }, 1000);
         }
     }
-
+    <if condition="$order_info['order_type'] != 'recharge'">
     update_pay_time();
-
+    </if>
     var width = $(window).width()*2/3;
 
     var msg = "<div class='b_font' style='width: "+width+"px;text-align: center;'>{pigcms{:L('V2_SERVICEFEE')}</div>" +

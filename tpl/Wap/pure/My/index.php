@@ -237,7 +237,7 @@
         <div class="BigSizeText MainColorText div_h space_left"> ${pigcms{$now_user.now_money_two}<div  class="LightGreyText MidSizeText">{pigcms{:L('QW_V2_CREDITS')}</div>
         </div>
         <div class="right_align">
-            <button class="obutton" type="button" onclick="window.location.href='./wap.php?g=Wap&c=My&a=recharge';">
+            <button class="obutton" type="button" onclick="window.location.href='./wap.php?g=Wap&c=My&a=my_money';">
                 {pigcms{:L('V2_PAGETITLE_ADDUP')}
             </button>
         </div>
@@ -260,11 +260,11 @@
                 <div>{pigcms{:L('V2_ACCOUNT_MENU_PROFILE')}</div>
             </li>
         </a>
-        <!--        <a href="{pigcms{:U('My/my_money')}">-->
-        <!--            <li>-->
-        <!--                <div>Balance</div>-->
-        <!--            </li>-->
-        <!--        </a>-->
+<!--                <a href="{pigcms{:U('My/my_money')}">-->
+<!--                    <li>-->
+<!--                        <div>Balance</div>-->
+<!--                    </li>-->
+<!--                </a>-->
         <a href="{pigcms{:U('My/coupon')}">
             <li>
                 <div>{pigcms{:L('V2_ACCOUNT_MENU_COUPONS')}</div>
