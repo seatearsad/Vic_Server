@@ -2815,6 +2815,7 @@ class IndexAction extends BaseAction
         import('ORG.Net.Http');
         $http = new Http();
         $result = $http->curlGet($url);
+        var_dump($result);die();
         if($result){
             $result = json_decode($result,true);
             if($result['status'] == 'OK' && count($result['predictions']) > 0){
