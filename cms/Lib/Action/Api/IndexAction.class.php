@@ -2820,15 +2820,28 @@ class IndexAction extends BaseAction
             if($result['status'] == 'OK' && count($result['predictions']) > 0){
                 $return = [];
                 foreach($result['predictions'] as $v) {
-                    $place_url = 'https://maps.googleapis.com/maps/api/place/details/json?placeid='.$v['place_id'].'&key=AIzaSyAxHAPoWlRu2Mz8APLwM8Ae6B3x1MJUlvU&fields=geometry&language=en';
-                    $place = $http->curlGet($place_url);
-                    $place = json_decode($place,true);
+//                    $place_url = 'https://maps.googleapis.com/maps/api/place/details/json?placeid='.$v['place_id'].'&key=AIzaSyAxHAPoWlRu2Mz8APLwM8Ae6B3x1MJUlvU&fields=geometry&language=en';
+//                    $place = $http->curlGet($place_url);
+//                    $place = json_decode($place,true);
+//                    $return[] = [
+//                        'name' => $v['description'],
+//                        'lat' => $place['result']['geometry']['location']['lat'],
+//                        'long' => $place['result']['geometry']['location']['lng'],
+//                        'address' => $v['description'],
+//                        'city_name'=>$v['terms'][2]['value']
+//                    ];
+                    $city_name = "";
+                    foreach ($v['address_components'] as $add_com){
+                        if($add_com['types'][0] == 'locality'){
+                            $city_name = $add_com['long_name'];
+                        }
+                    }
                     $return[] = [
-                        'name' => $v['description'],
-                        'lat' => $place['result']['geometry']['location']['lat'],
-                        'long' => $place['result']['geometry']['location']['lng'],
-                        'address' => $v['description'],
-                        'city_name'=>$v['terms'][2]['value']
+                        'name' => $v['address_components'][0]['long_name'],
+                        'lat' => $v['geometry']['location']['lat'],
+                        'long' => $v['geometry']['location']['lng'],
+                        'address' => $v['formatted_address'],
+                        'city_name'=>$city_name
                     ];
                 }
                 //exit(json_encode(array('status'=>1,'result'=>$return)));
