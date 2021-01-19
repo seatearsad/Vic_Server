@@ -14,8 +14,8 @@ class ShopAction extends BaseAction{
         $lat = isset($user_long_lat['lat']) ? $user_long_lat['lat'] : 0;
         $long = isset($user_long_lat['long']) ? $user_long_lat['long'] : 0;
 
-        $city_id = D('Store')->geocoderGoogle($lat,$long);
-        $city_id = $city_id ? $city_id : 0;
+        //$city_id = D('Store')->geocoderGoogle($lat,$long);
+        $city_id = $city_id ? $city_id : 105;
 
         //$category = D('Shop_category')->field(true)->where(array('cat_fid'=>0,'cat_type'=>0))->select();
         $category = D('Shop_category')->field(true)->where(array('cat_fid'=>0,'cat_type'=>0,'city_id'=>$city_id))->order('cat_sort desc')->select();
@@ -246,8 +246,8 @@ class ShopAction extends BaseAction{
 			}
 		}
 
-        $city_id = D('Store')->geocoderGoogle($lat,$long);
-        $city_id = $city_id ? $city_id : 0;
+        //$city_id = D('Store')->geocoderGoogle($lat,$long);
+        $city_id = $city_id ? $city_id : 105;
 
         if($cat_id == 0)
             $now_category = D('Shop_category')->where(array('cat_id'=>$cat_fid))->find();
@@ -1726,15 +1726,30 @@ class ShopAction extends BaseAction{
 		}
 		echo json_encode($now_goods);
 	}
-
+    /*我的收货地址*/
+    public function ajax_set_address_default()
+    {
+        $return = array();
+        if ($this->user_session['uid']) {
+            $aid=$_GET['aid'];
+            $adress_rt = D('User_adress')->set_default($this->user_session['uid'],$aid);
+            $return[]=array("succ"=>1);
+            //foreach ($adress_list as $row) {
+            //    $return[] = array('id'=>$row['adress_id'],'checked'=>$row['checked'],'street' => $row['adress'], 'house' => $row['detail'], 'name' => $row['name'], 'phone' => $row['phone'], 'long' => $row['longitude'], 'lat' => $row['latitude'],'city_id' => $row['city']);
+            //}
+        }
+        echo json_encode($return);
+    }
 	/*我的收货地址*/
 	public function ajax_address()
 	{
 		$return = array();
 		if ($this->user_session['uid']) {
-			$adress_list = D('User_adress')->get_adress_list($this->user_session['uid']);
+		    $lastid=$_GET['lastid'];
+            $adress_list = D('User_adress')->get_adress_list($this->user_session['uid'],$lastid);
+
 			foreach ($adress_list as $row) {
-				$return[] = array('id'=>$row['adress_id'],'street' => $row['adress'], 'house' => $row['detail'], 'name' => $row['name'], 'phone' => $row['phone'], 'long' => $row['longitude'], 'lat' => $row['latitude'],'city_id' => $row['city']);
+				$return[] = array('id'=>$row['adress_id'],'default'=>$row['default'],'street' => $row['adress'], 'house' => $row['detail'], 'name' => $row['name'], 'phone' => $row['phone'], 'long' => $row['longitude'], 'lat' => $row['latitude'],'city_id' => $row['city']);
 			}
 		}
 		echo json_encode($return);

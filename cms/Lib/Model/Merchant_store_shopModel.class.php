@@ -884,8 +884,8 @@ class Merchant_store_shopModel extends Model
      */
     public function get_list_arrange($where = array(), $is_wap = 1,$type = 1,$limit,$page = 1,$lat=0,$long=0)
     {
-        $city_id = D('Store')->geocoderGoogle($lat,$long);
-        $city_id = $city_id ? $city_id : 0;
+        //$city_id = D('Store')->geocoderGoogle($lat,$long);
+        $city_id = $city_id ? $city_id : 105;
 
         switch ($type){
             case 1:

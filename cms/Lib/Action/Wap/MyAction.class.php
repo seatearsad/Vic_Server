@@ -827,6 +827,8 @@ class MyAction extends BaseAction{
 		}else{
 			$database_area = D('Area');
 			$id = $_GET['adress_id'];
+            $from = $_GET['from'];
+            $this->assign('from',$from);
             $this->assign('address_id',$id);
 			if(cookie('user_address') === '0' || cookie("user_address") == "") {
 // 				$where['address_id'] = $id;
