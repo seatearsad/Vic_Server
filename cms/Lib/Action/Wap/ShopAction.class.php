@@ -1017,11 +1017,13 @@ class ShopAction extends BaseAction{
             exit;
         }
         $now_shop = D('Merchant_store_shop')->field(true)->where($where)->find();
+
         $now_mer = M('Merchant')->field('isverify')->where(array('mer_id'=>$now_store['mer_id']))->find();
         if (empty($now_shop) || empty($now_store)) {
             echo json_encode(array());
             exit;
         }
+
         $auth_files = array();
         if (!empty($now_store['auth_files'])) {
             $auth_file_class = new auth_file();
@@ -1238,9 +1240,6 @@ class ShopAction extends BaseAction{
         //end  @wangchuanyuan
 
 
-
-
-
         $store['home_url'] = U('Index/index', array('token' => $row['mer_id']));
         //modify garfunkel 判断语言
         $store['name'] = lang_substr($row['name'],C('DEFAULT_LANG'));
@@ -1429,6 +1428,7 @@ class ShopAction extends BaseAction{
         if ($store['tmpl']) {
             $today = date('Ymd');
             $product_list = D('Shop_goods')->get_list_by_storeid($store_id);
+
             foreach ($product_list as $row) {
                 $temp = array();
                 $temp['cat_id'] = $row['sort_id'];
@@ -1438,6 +1438,7 @@ class ShopAction extends BaseAction{
                 foreach ($row['goods_list'] as $r) {
                     $glist = array();
                     $glist['product_id'] = $r['goods_id'];
+                    $glist['product_desc'] = $r['des'];
                     //modify garfunkel 判断语言
                     $glist['product_name'] = lang_substr($r['name'],C('DEFAULT_LANG'));
                     $glist['product_price'] = $r['price'];
@@ -1495,6 +1496,7 @@ class ShopAction extends BaseAction{
             $firstSort = reset($sortList);
             //$sortId = isset($firstSort['sort_id']) ? $firstSort['sort_id'] : 0;
             $product_list = D('Shop_goods')->get_list_by_storeid($store_id);
+
             foreach ($product_list as $row) {
                 if(in_array($row['sort_id'],$sortIdList)) {
                     $temp = array();
@@ -1512,6 +1514,7 @@ class ShopAction extends BaseAction{
                     foreach ($row['goods_list'] as $r) {
                         $glist = array();
                         $glist['product_id'] = $r['goods_id'];
+                        $glist['product_desc'] = $r['des'];
                         //modify garfunkel 判断语言
                         $glist['product_name'] = lang_substr($r['name'], C('DEFAULT_LANG'));
                         $glist['product_price'] = $r['price'];
@@ -1649,6 +1652,7 @@ class ShopAction extends BaseAction{
                 //modify garfunkel 判断语言
                 $glist['product_name'] = lang_substr($r['name'], C('DEFAULT_LANG'));
                 $glist['product_price'] = $r['price'];
+                $glist['product_desc'] = $r['des'];
                 $glist['is_seckill_price'] = $r['is_seckill_price'];
                 $glist['o_price'] = $r['o_price'];
                 $glist['number'] = $r['number'];

@@ -214,7 +214,8 @@
 								<div class="title">{{ d[i].product_list[j].product_name }}</div>
                                 <!--div class="sale">{{ getLangStr('_MONTH_SALE_NUM_',d[i].product_list[j].product_sale) }} {{ getLangStr('_PRAISE_TXT_') }} {{ d[i].product_list[j].product_reply }}</div-->
                                 <!--div class="sale">{{ getLangStr('_PRAISE_TXT_') }} {{ d[i].product_list[j].product_reply }}</div-->
-								{{# if(d[i].product_list[j].has_format){ }}
+                                <div class="desc">{{ d[i].product_list[j].product_desc }}</div>
+                                {{# if(d[i].product_list[j].has_format){ }}
 									<div class="price">${{ d[i].product_list[j].product_price }}
                                         {{# if(d[i].product_list[j].deposit_price > 0){ }}
                                         <span class="sale" style="text-decoration: none;">({pigcms{:L('_DEPOSIT_TXT_')}:${{ d[i].product_list[j].deposit_price }})</span>
@@ -229,16 +230,16 @@
                                     </div>
 								{{# } }}
 
-                                {{# if(d[i].is_time == 1){ }}
-                                <div style="color: grey;font-size: 11px;margin-top: 5px;">*Available from {{ d[i].begin_time }} to {{ d[i].end_time }}</div>
-                                {{# } }}
+<!--                                {{# if(d[i].is_time == 1){ }}-->
+<!--                                <div style="color: grey;font-size: 11px;margin-top: 5px;">*Available from {{ d[i].begin_time }} to {{ d[i].end_time }}</div>-->
+<!--                                {{# } }}-->
 
                                 {{# if(d[i].product_list[j].is_seckill_price){ }}
 									<div class="skill_discount" style="margin-top: 5px;">{pigcms{:L('_LIMIT_TIME_DISCOUNT_')}</div>
 								{{# } }}
 							</div>
 							{{# if(d[i].product_list[j].has_format || d[i].product_list[j].has_dish){ }}
-								<div class="product_btn">
+								<div class="product_btn" style="color:#ffa52d;">
                                     {pigcms{:L('_OPTIONAL_SPEC_')}
 								</div>
 							{{# }else{ }}
@@ -253,9 +254,6 @@
 		{{# } }}
 	{{# } }}
 </script>
-
-
-
 
 
 <script id="shopProductTopBarTpl" type="text/html">

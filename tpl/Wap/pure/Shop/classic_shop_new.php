@@ -54,27 +54,70 @@
                 max-width:640px;
                 min-width:320px;
                 margin:0 auto;
+                height: 900px;
             }
             #shopHeader{
-                position: relative;
-                background: none;
-                display: flex;
-                margin-top: 10px;
+                position: fixed;
+                top: 0px;
+                height: 60px;
+                padding-top: 6px;
             }
+
             #shopBanner{
-                background: none;
+                width: 90%;
+                height: 130px;
+                left:5%;
+                border-radius: 10px;
+                border:2px solid #eeeeee;
+                right:auto;
+                background: #fff;
                 margin-top: 0;
+                margin-bottom: 10px;
+                padding-top:0px;
             }
             #shopTitle{
-                color: #333;
+                margin-left: 0px;
+                margin-top: 3px;
+                margin-bottom:0px;
+                font-size: 24px;
+                color: #000000;
                 overflow:hidden;
                 text-overflow:ellipsis;
                 white-space:nowrap;
                 flex:1 1 100%
             }
+            #shopTitle_Header{
+                opacity: 0;
+                margin-left: 60px;
+                margin-top: 5px;
+                font-size: 22px;
+            }
+            #deliveryText{
+                margin-bottom: 5px;
+            }
+            #shopNoticeText{
+                margin-bottom: 5px;
+                height: 22px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+            .backBtn {
+                position: absolute;
+                width: 40px;
+                height: 40px;
+                top: 8px;
+                left:15px;
+                background: #fff;
+                border-radius: 20px;
+            }
             .backBtn::after{
                 border-top: 2px solid #999;
                 border-left: 2px solid #999;
+                left:16px;
+            }
+            .searchBtn{
+                background-image: url(/tpl/Static/blue/images/new/icon_shop_search.png);
             }
             #shopBanner .leftIco{
                 left:30px;
@@ -85,13 +128,11 @@
             }
             #shopBanner .text{
                 height: 70px;
-                padding-left: 120px;
+                padding-left: 10px;
                 padding-top: 0px;
             }
             #shopBanner .text div{
-                color:#999;
-                height: 20px;
-                line-height: 20px;
+                /*line-height: 1.5;*/
             }
             #shopBanner .text .star{
                 height: 25px;
@@ -127,9 +168,10 @@
                 content: none;
             }
             #shopProductLeftBar2{
+                height: 51px;
                 width: 100%;
                 display: flex;
-                background: none;
+                background: #f4f4f4;
                 border-bottom: 1px solid silver;
             }
             .sub_left,.sub_right{
@@ -147,6 +189,9 @@
                 -webkit-transform: scaleX(-1);
                 -o-transform: scaleX(-1);
                 transform: scaleX(-1);
+            }
+            #shopContentBar{
+                background: #f4f4f4;
             }
             #shopProductLeftBar2 dd span{
                 background: none;
@@ -180,33 +225,50 @@
                 color: #ffa52d;
             }
             #shopProductRightBar2,#shopSearchResult{
-                width: 96%;
+                width: 100%;
                 float: none;
-                margin: 0 auto;
+                background: #f4f4f4;
+                margin: 20px auto;
+                padding: 5px 8px 5px 5px;
+            }
+            #shopMenuBar{
+                height: 42px;
+                margin-bottom: -1px;
+                position: sticky;
+                position:-webkit-sticky;
             }
             #shopMenuBar li.active{
                 color: #ffa52d;
+                background-color: #f4f4f4;
             }
             #shopMenuBar li.active::after{
                 background-color: #ffa52d;
             }
             #shopProductRightBar2 .cat_name,#shopSearchResult .cat_name{
-                padding-left: 0;
-                text-align: center;
-                color: silver;
+                padding-left: 10px;
+                text-align: left;
+                color: black;
                 font-size: 1.2em;
+                border-radius: 10px 10px 0px 0px;
+                background: white;
+                margin-top: 10px;
+                font-weight: bold;
             }
             #shopProductRightBar2 dl,#shopSearchResult dl{
                 background: none;
+                padding-bottom: 30px;
             }
             #shopProductRightBar2 ul,#shopSearchResult ul{
                 background-color: white;
+                border-radius: 0px 0px 10px 10px;
+                margin-top: -1px;
             }
             #shopProductRightBar2 li .position_img,#shopSearchResult li .position_img{
                 width: 80px;
+                border-radius: 5px;
             }
             #shopProductRightBar2 li .product_text,#shopSearchResult li .product_text{
-                margin-left: 100px;
+                margin-left: 90px;
                 height: 80px;
             }
             #shopProductRightBar2 li .product_btn,#shopProductCartBox .product_btn.plus,#shopProductCartBox .product_btn.min,#shopSearchResult li .product_btn{
@@ -221,14 +283,22 @@
                 background-color: #ffa52d;
             }
             #shopProductCartBox dd .cartRight .price,
-            #shopProductRightBar2 li .product_btn,
             #shopProductRightBar2 li .product_text .price,
-            #shopSearchResult li .product_btn,
             #shopSearchResult li .product_text .price,
+
             #shopDetailPageBar .fl,
             .msg-option .btn{
                 color: #ffa52d;
             }
+            #shopSearchResult li .product_btn.number,
+            #shopProductRightBar2 li .product_text .price,
+            #shopProductRightBar2 li .product_btn,
+            #shopSearchResult li .product_text .price,
+            .msg-option .btn{
+                color: #000;
+            }
+
+
             #shopProductCart #cartNumber,
             #shopProductCart #cartInfo .cart,
             #shopProductCart #checkCart,
@@ -301,6 +371,54 @@
             #shopMerchantBox .merchantReduce{
                 color: #ffa52d;
             }
+            #background_area{
+                position:fixed;
+                margin-top: 0px;
+                background-color: #f4f4f4;
+                width: 100%;
+                height:260px;
+                background-image: url("");
+                background-repeat:no-repeat;
+                background-size:100% ;
+                -moz-background-size:100%
+                z-index: 0;
+            }
+            #shopBanner .text {
+                padding-top: 0px;
+                padding-left: 10px;
+                padding-right: 5px;
+                margin-bottom: 5px;
+            }
+            #stars{
+                position: absolute;
+                background-image:url("/tpl/Static/blue/images/new/ic_rating_one.png");
+                background-size:20px 20px;
+                background-repeat: no-repeat;
+                background-position: 25px 0px ;
+                right: 10px;
+                top: 10px;
+                width: 45px;
+            }
+            #stars span{
+                font-size: 16px;
+            }
+            #stars div{
+                display: inline;
+                background-image:url("/tpl/Static/blue/images/new/ic_rating_one.png");
+                background-size:20px 20px;
+                height: 20px;
+                width:20px;
+            }
+            /*#div_space::before {  content: ' ';*/
+                /*position: fixed;*/
+                /*z-index: -1;*/
+                /*top: 0;*/
+                /*right: 0;*/
+                /*bottom: 0;*/
+                /*left: 0;*/
+                /*background: url(http://www.vicisland.ca:8087/upload/goods/000/000/056/s_5cd0f9372c58d367.png) no-repeat 0 top #f2f8fa;*/
+                /*background-size: 100% auto;*/
+            /*}*/
         </style>
 	<body>
     <div id="container">
@@ -375,21 +493,23 @@
 		<div id="pageShop" class="pageDiv">
 			<section id="shopHeader">
 				<div id="backBtn" class="backBtn"></div>
-				<div id="shopTitle"></div>
+                <div id="shopTitle_Header"></div>
                 <!--div class="shop_info" data-nav="merchant"></div-->
 				<div id="searchBtn" class="searchBtn"><div></div></div>
 			</section>
+            <div id="background_area">
+            </div>
+            <div id="div_space" style="width: 100%;height:120px">
+            </div>
 			<section id="shopBanner">
-				<div class="leftIco">
-					<div id="shopIcon"></div>
-				</div>
-                <div class="is_close">Open</div>
 				<div class="text">
+                    <div id="stars"><span id="stars_text">.</span><div id="rating"></div></div>
+                    <div id="shopTitle"></div>
+					<div id="deliveryText"></div>
+					<div id="shopNoticeText"></div>
                     <div class="star">
                         <i class="full"></i><i></i>
                     </div>
-					<div id="deliveryText"></div>
-					<div id="shopNoticeText"></div>
 				</div>
                 <if condition="$_GET['shop_id'] eq 292">
                     <a href="./wap.php?c=Event&a=index">
@@ -477,6 +597,7 @@
 				</div>
 				<div id="shopPageShade" style="display:none;"></div>
 				<div id="shopPageCatShade"></div>
+<!--                可选规格对话框-->
 				<div id="shopDetailPage" style="display:none;">
 					<div class-s="scrollerBox">
 						<div id="shopDetailpageClose" class="closeBtn"><div></div></div>
@@ -511,6 +632,7 @@
                         </div>
 					</div>
 				</div>
+
                 <div id="shopSearchPage" style="display:none;">
                     <div class-s="scrollerBox">
                         <div id="shopSearchpageClose" class="closeBtn"><div></div></div>
@@ -599,6 +721,16 @@
 		<include file="Shop:classic_js_theme"/>
     </div>
 		<script type="text/javascript">
+            $(document).ready(function(){
+                $('#container').css('height',window.screen.availHeight+200);
+                $('#pageShop').css('height',window.screen.availHeight+200);
+
+                //alert(document.body.clientHeight);
+                //alert(window.screen.availHeight);
+                $('#shopProductRightBar2').css('height',window.screen.availHeight-200);
+                //$('#shopProductRightBar2').css('height',30);
+            });
+
 			window.shareData = {
 				"moduleName":"Shop",
 				"moduleID":"0",

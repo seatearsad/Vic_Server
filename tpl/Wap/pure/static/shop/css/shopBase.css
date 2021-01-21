@@ -924,8 +924,8 @@ em.merchant_invoice:before{
 #shopHeader {
     height:36px;
 	/* background:-webkit-gradient(linear, 0% 0%, 100% 0%,from(#06c1ae), color-stop(0.6, #2BF9E3), to(#06c1ae)); */
-	background:-webkit-gradient(linear, 0% 0%, 100% 0%,from(#06c1ae), color-stop(0.6, orange), to(#06c1ae));
-	/* background:-webkit-gradient(linear, 0% 0%, 100% 0%,from(#06c1ae), color-stop(0.55, #D09831), to(#06c1ae)); */
+    /* background:-webkit-gradient(linear, 0% 0%, 100% 0%,from(#06c1ae), color-stop(0.6, orange), to(#06c1ae));*/
+    /* background:-webkit-gradient(linear, 0% 0%, 100% 0%,from(#06c1ae), color-stop(0.55, #D09831), to(#06c1ae)); */
     display: -webkit-box;
     position: fixed;
     width: 100%;
@@ -964,7 +964,7 @@ em.merchant_invoice:before{
 	margin-top:36px;
 	background:-webkit-gradient(linear, 0% 0%, 100% 0%,from(#06c1ae), color-stop(0.6, orange), to(#06c1ae));
 	position:relative;
-	padding-top: 0px;
+	padding-top: 5px;
 	overflow: hidden;
 }
 #shopBanner:after{
@@ -1001,14 +1001,14 @@ em.merchant_invoice:before{
 	margin-bottom:5px;
 }
 #shopBanner .text div{
-	font-size:12px;
-	color:white;
-	line-height:26px;
-	height:26px;
-    overflow: hidden;
-    word-break: keep-all;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+    /*font-size:12px;*/
+    /*color:white;*/
+    /*line-height:26px;*/
+    /*height:26px;*/
+    /*overflow: hidden;*/
+    /*word-break: keep-all;*/
+    /*white-space: nowrap;*/
+    /*text-overflow: ellipsis;*/
 }
 #shopBanner .discount{
 	line-height:30px;
@@ -1280,6 +1280,7 @@ em.merchant_invoice:before{
     text-align: left;
     text-align: center;
     color: #333;
+    background-color: #f4f4f4;
     position: relative;
     height: 40px;
     line-height: 40px;
@@ -1693,7 +1694,7 @@ em.merchant_invoice:before{
 }
 #shopProductRightBar2 li,#shopSearchResult li{
     position:relative;
-    padding: 8px 0;
+    padding: 20px 5px;
     border-bottom: 1px solid #f1f1f1;
 }
 #shopProductRightBar2 li:last-child,#shopSearchResult li:last-child{
@@ -1713,21 +1714,39 @@ em.merchant_invoice:before{
 }
 #shopProductRightBar2 li .mall img,#shopSearchResult li .mall img{
     margin-left: 0px;
+    width: auto;
 }
 #shopProductRightBar2 li .product_text,#shopSearchResult li .product_text{
     margin-left: 70px;
 }
 #shopProductRightBar2 li .product_text .title,#shopSearchResult li .product_text .title{
-    height: 42px;
+    height: 20px;
+    color: #000;
+    font-size: 16px;
+    margin-bottom: 8px;
+    line-height: 1.2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    /*height: 42px;*/
+}
+#shopProductRightBar2 li .product_text .desc,#shopSearchResult li .product_text .desc{
+    height: 38px;
+    color: #868585;
+    font-size: 14px;
+    margin-bottom: 5px;
+    overflow: hidden;
+    height: 39px;
+    line-height: 1.3;
 }
 #shopProductRightBar2 li .product_text .sale,#shopSearchResult li .product_text .sale{
     font-size: 11px;
-    color:#bbb; 
+    color:#bbb;
     margin: 2px 0;
 }
 #shopProductRightBar2 li .product_text .price,#shopSearchResult li .product_text .price{
-    color:red;
-    font-size:12px;
+    color:black;
+    font-size:14px;
 }
 #shopProductRightBar2 li .product_text .price span,#shopSearchResult li .product_text .price span{
     color: #bbb;
@@ -1756,7 +1775,7 @@ em.merchant_invoice:before{
     padding:2px 5px;
     color: #666;
     z-index: 1;
-    top: 66px;
+    top: 88px;
 }
 #shopProductRightBar2 li .product_btn.plus,#shopProductRightBar2 li .product_btn.min,#shopSearchResult li .product_btn.plus,#shopSearchResult li .product_btn.min{
     width:28px;
@@ -1764,7 +1783,7 @@ em.merchant_invoice:before{
     border-radius:100%;
     padding:0px;
     background: white;
-    top: 60px;
+    top: 85px;
 }
 #shopProductRightBar2 li .product_btn.plus:before, #shopProductRightBar2 li .product_btn.plus:after,#shopSearchResult li .product_btn.plus:before, #shopSearchResult li .product_btn.plus:after {
     content: '';
@@ -1793,7 +1812,7 @@ em.merchant_invoice:before{
     width: 24px;
     text-align: center;
     line-height: 30px;
-	top: 60px;
+	top: 84px;
 }
 #shopProductRightBar2 li .product_btn.min,#shopSearchResult li .product_btn.min{
     right:60px;
@@ -2967,7 +2986,7 @@ em.merchant_invoice:before{
 }
 
 #search_input{
-    width: 75%;
+    width: 70%;
     background: #ccc;
     border: 0;
     height: 30px;
@@ -2978,7 +2997,7 @@ em.merchant_invoice:before{
 #search_btn{
     position: relative;
     display: inline-block;
-    width: 15%;
+    width: 58px;
     background: #ffa52d;
     border-radius: 5px;
     color: white;
