@@ -897,6 +897,7 @@ class DeliverAction extends BaseAction {
         foreach ($list as $k=>$v){
             $area = D('Area')->where(array('area_id'=>$v['user_city_id']))->find();
             //$show_list[$v['uid']] = array();
+            $show_list[$v['uid']]['id'] = $v['uid'];
             $show_list[$v['uid']]['name'] = $v['name'];
             $show_list[$v['uid']]['family_name'] = $v['family_name'];
             $show_list[$v['uid']]['city_name'] = $area['area_name'];
@@ -929,30 +930,32 @@ class DeliverAction extends BaseAction {
         $objExcel->getActiveSheet()->setTitle($title);
         $objActSheet = $objExcel->getActiveSheet();
 
-        $objActSheet->setCellValue('A1', '配送员 First Name');
-        $objActSheet->setCellValue('B1', '配送员 Last Name');
-        $objActSheet->setCellValue('C1', '配送员手机号');
-        $objActSheet->setCellValue('D1', '配送员城市');
-        $objActSheet->setCellValue('E1', '送单数量');
-        $objActSheet->setCellValue('F1', '小费总计');
-        $objActSheet->setCellValue('G1', '送餐费总计');
-        $objActSheet->setCellValue('H1', '收入现金');
-        $objActSheet->setCellValue('I1', '总计');
-        $objActSheet->setCellValue('J1', '配送员备注');
+        $objActSheet->setCellValue('A1', 'ID');
+        $objActSheet->setCellValue('B1', '配送员 First Name');
+        $objActSheet->setCellValue('C1', '配送员 Last Name');
+        $objActSheet->setCellValue('D1', '配送员手机号');
+        $objActSheet->setCellValue('E1', '配送员城市');
+        $objActSheet->setCellValue('F1', '送单数量');
+        $objActSheet->setCellValue('G1', '小费总计');
+        $objActSheet->setCellValue('H1', '送餐费总计');
+        $objActSheet->setCellValue('I1', '收入现金');
+        $objActSheet->setCellValue('J1', '总计');
+        $objActSheet->setCellValue('K1', '配送员备注');
 
         $index = 2;
         foreach ($show_list as $k=>$v){
 //            $show_list[$k]['total'] = $v['tip'] + $v['freight'] - $v['cash'];
-            $objActSheet->setCellValueExplicit('A'.$index,$v['name']);
-            $objActSheet->setCellValueExplicit('B'.$index,$v['family_name']);
-            $objActSheet->setCellValueExplicit('C'.$index,$v['phone']);
-            $objActSheet->setCellValueExplicit('D'.$index,$v['city_name']);
-            $objActSheet->setCellValueExplicit('E'.$index,$v['order_num']);
-            $objActSheet->setCellValueExplicit('F'.$index,sprintf("%.2f", $v['tip']));
-            $objActSheet->setCellValueExplicit('G'.$index,sprintf("%.2f", $v['freight']));
-            $objActSheet->setCellValueExplicit('H'.$index,sprintf("%.2f", $v['cash']));
-            $objActSheet->setCellValueExplicit('I'.$index,sprintf("%.2f",$v['tip'] + $v['freight'] - $v['cash']));
-            $objActSheet->setCellValueExplicit('J'.$index,$v['remark']);
+            $objActSheet->setCellValueExplicit('A'.$index,$v['id']);
+            $objActSheet->setCellValueExplicit('B'.$index,$v['name']);
+            $objActSheet->setCellValueExplicit('C'.$index,$v['family_name']);
+            $objActSheet->setCellValueExplicit('D'.$index,$v['phone']);
+            $objActSheet->setCellValueExplicit('E'.$index,$v['city_name']);
+            $objActSheet->setCellValueExplicit('F'.$index,$v['order_num']);
+            $objActSheet->setCellValueExplicit('G'.$index,sprintf("%.2f", $v['tip']));
+            $objActSheet->setCellValueExplicit('H'.$index,sprintf("%.2f", $v['freight']));
+            $objActSheet->setCellValueExplicit('I'.$index,sprintf("%.2f", $v['cash']));
+            $objActSheet->setCellValueExplicit('J'.$index,sprintf("%.2f",$v['tip'] + $v['freight'] - $v['cash']));
+            $objActSheet->setCellValueExplicit('K'.$index,$v['remark']);
             $index++;
         }
 
