@@ -879,6 +879,7 @@ class DeliverAction extends BaseAction {
 	}
 
 	public function new_export(){
+        ini_set("memory_limit","80M");
         $b_date = $_GET['begin'].' 00:00:00';
         $e_date = $_GET['end'].' 24:00:00';
 
