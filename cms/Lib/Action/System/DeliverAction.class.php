@@ -892,7 +892,7 @@ class DeliverAction extends BaseAction {
         $sql .= ' order by s.uid';
 
         $list = D()->query($sql);
-
+        var_dump($list);die();
         $show_list = array();
 
         foreach ($list as $k=>$v){
