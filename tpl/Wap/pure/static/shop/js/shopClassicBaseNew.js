@@ -851,9 +851,12 @@ var isShowGood = false;
 
 function showStoreCategory() {
     //$('body').css('overflow','hidden');
+    var scrollRightTop =document.documentElement.scrollTop;
 
     $('#shopContentBar').show();
+    $('#shopProductLeftBar2').css("top","140px");
     $('#shopCatBar').show().scrollTop(0).addClass('sliderLeft');
+
 }
 function showSearch() {
     if(nowPage != 'shop'){
@@ -1125,6 +1128,7 @@ function showShop(shopId){
 			}
 		});
 		$(document).on('click','#shopCatBar .content li',function(){
+
 			$(this).addClass('active').siblings().removeClass('active');
 			$('#shopCatBar .title').removeClass('show');
 			$('#shopCatBar .content').hide();
@@ -1138,9 +1142,12 @@ function showShop(shopId){
 			}else{
 				$('#shopProductBottomBar li').hide();
 				$('#shopProductBottomBar li.product_cat_'+$(this).data('cat_id')).show();
-			}
-			$('#shopProductLeftBar2 dl').scrollLeft($('#shopProductLeftBar2-'+$(this).data('cat_id')).offset().left - $('#shopProductLeftBar2 dl').offset().left+$('#shopProductLeftBar2 dl').scrollLeft());
-			$('#shopProductRightBar2').scrollTop($('#shopProductRightBar2-'+$(this).data('cat_id')).offset().top-$('#shopProductRightBar2').offset().top+$('#shopProductRightBar2').scrollTop());
+                $('#shopProductLeftBar2 dl').scrollLeft($('#shopProductLeftBar2-'+$(this).data('cat_id')).offset().left - $('#shopProductLeftBar2 dl').offset().left+$('#shopProductLeftBar2 dl').scrollLeft());
+                $('#shopProductRightBar2').scrollTop($('#shopProductRightBar2-'+$(this).data('cat_id')).offset().top-$('#shopProductRightBar2').offset().top+$('#shopProductRightBar2').scrollTop());
+
+            }
+			$('#shopProductLeftBar2').css("top","101px");
+
 		});
 		
 		$('#pageShop #backBtn').click(function(){
@@ -1593,10 +1600,16 @@ function showShop(shopId){
 
 		function scrollProductEvent(phoneType){
 			//var scrollRightTop = $('#shopMenuBar').css('display') == 'none' ? $('#shopProductBottomBar').scrollTop() :$('#shopProductRightBar2').scrollTop();
-
+            //$('#pageShop').css('height',document.body.clientHeight+200);
+            //$('#shopProductRightBar2').css('height',document.body.clientHeight-200);
             var scrollRightTop =document.documentElement.scrollTop;
+            //var shopMenuBarTop=document.getElementById("shopMenuBar").clientY;
+            $('#debug').html(scrollRightTop);
 			//console.log(scrollRightTop);
+
 			if(scrollRightTop >=200){ // 已经折叠
+				console.log(200);
+				//if (scrollRightTop>200) document.documentElement.scrollTop=200;
                 $('#shopProductRightBar2').css("overflow-y","auto");
                 $('#shopBanner').css("opacity","0");
                 $('#shopHeader').css('background','rgba(255,255,255,'+ 1 +')')
@@ -1604,6 +1617,7 @@ function showShop(shopId){
                 $('#shopTitle_Header').css("margin-top",5)
 				//$(window).scrollTop($('#shopMenuBar').css('display') == 'none' ? $('#shopCatBar').offset().top-50 : $('#shopMenuBar').offset().top-50);
 			}else{		//正在打开
+                console.log(1);
                 $('#shopProductRightBar2').css("overflow-y","hidden");
                 $('#shopBanner').css("opacity",1-(scrollRightTop/200));
 				var start_fade_offset=160;
@@ -1615,7 +1629,6 @@ function showShop(shopId){
                     $('#shopTitle_Header').css("opacity","0");
                     $('#shopTitle_Header').css("margin-top",20)
 				}
-
 
                 $('#shopHeader').css('background','rgba(255,255,255,'+ scrollRightTop/200 +')')
 			}

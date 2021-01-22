@@ -54,7 +54,7 @@
                 max-width:640px;
                 min-width:320px;
                 margin:0 auto;
-                height: 900px;
+                /*height: 900px;*/
             }
             #shopHeader{
                 position: fixed;
@@ -173,6 +173,10 @@
                 display: flex;
                 background: #f4f4f4;
                 border-bottom: 1px solid silver;
+                position: sticky;
+                position: -webkit-sticky;
+                top: 101px;
+                z-index: 98;
             }
             .sub_left,.sub_right{
                 width: 6%;
@@ -236,6 +240,8 @@
                 margin-bottom: -1px;
                 position: sticky;
                 position:-webkit-sticky;
+                top:60px;
+                z-index: 98;
             }
             #shopMenuBar li.active{
                 color: #ffa52d;
@@ -419,8 +425,17 @@
                 /*background: url(http://www.vicisland.ca:8087/upload/goods/000/000/056/s_5cd0f9372c58d367.png) no-repeat 0 top #f2f8fa;*/
                 /*background-size: 100% auto;*/
             /*}*/
+            #pageShop {
+                overflow:initial;
+            }
+            #shopCatBar {
+                position: sticky;
+                z-index: 113;
+                top: 101px;
+            }
         </style>
 	<body>
+    <div id="debug" style="position: fixed;color:red;width:auto;height: 40px;left:30px;top:200px;z-index: 1000000;">111</div>
     <div id="container">
 		<div id="pageList" class="pageDiv" <if condition="$config['shop_show_footer']">style="padding-bottom:56px;"</if>>
 			<section id="listHeader" class="roundBg">
@@ -722,12 +737,34 @@
     </div>
 		<script type="text/javascript">
             $(document).ready(function(){
-                $('#container').css('height',window.screen.availHeight+200);
-                $('#pageShop').css('height',window.screen.availHeight+200);
+                //alert("document.body.clientHeight="+document.body.clientHeight);
+                //alert("window.screen.availHeight="+window.screen.availHeight);
 
-                //alert(document.body.clientHeight);
-                //alert(window.screen.availHeight);
-                $('#shopProductRightBar2').css('height',window.screen.availHeight-200);
+                var s = "";
+                s += " 网页可见区域宽："+ document.body.clientWidth+"\n";
+                s += " 网页可见区域高："+ document.body.clientHeight+"\n";
+                s += " 网页可见区域宽："+ document.body.offsetWidth + " (包括边线和滚动条的宽)"+"\n";
+                s += " 网页可见区域高："+ document.body.offsetHeight + " (包括边线的宽)"+"\n";
+                s += " 网页正文全文宽："+ document.body.scrollWidth+"\n";
+                s += " 网页正文全文高："+ document.body.scrollHeight+"\n";
+                // s += " 网页被卷去的高(ff)："+ document.body.scrollTop+"\n";
+                // s += " 网页被卷去的高(ie)："+ document.documentElement.scrollTop+"\n";
+                // s += " 网页被卷去的左："+ document.body.scrollLeft+"\n";
+                // s += " 网页正文部分上："+ window.screenTop+"\n";
+                // s += " 网页正文部分左："+ window.screenLeft+"\n";
+                s += " 屏幕分辨率的高："+ window.screen.height+"\n";
+                s += " 屏幕分辨率的宽："+ window.screen.width+"\n";
+                s += " 屏幕可用工作区高度："+ window.screen.availHeight+"\n";
+                s += " 屏幕可用工作区宽度："+ window.screen.availWidth+"\n";
+                s += " 你的屏幕设置是 "+ window.screen.colorDepth +" 位彩色"+"\n";
+                 s += " 你的屏幕设置 "+ window.screen.deviceXDPI +" 像素/英寸"+"\n";
+
+                //alert (s);
+                //$('#container').css('height',document.body.clientHeight+200);
+                var clh=document.body.clientHeight;
+                $('#pageShop').css('height',clh+400);
+                $('#shopProductRightBar2').css('height',clh);
+                //alert (document.body.clientHeight);
                 //$('#shopProductRightBar2').css('height',30);
             });
 
