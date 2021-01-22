@@ -787,8 +787,8 @@ class StoreModel extends Model
         $addressModle = D('User_adress');
 
         $address = $addressModle->field(true)->where(array('uid'=>$uid,'default'=>1))->find();
-        if ($address == null)
-            $address = $addressModle->field(true)->where(array('uid'=>$uid))->find();
+        //if ($address == null)
+        //    $address = $addressModle->field(true)->where(array('uid'=>$uid))->find();
 
         if($address != null)
             $result = $this->arrange_address($address);
@@ -876,33 +876,18 @@ class StoreModel extends Model
     public function CalculationDeliveryFee($uid,$sid){
         $address = $this->getDefaultAdr($uid);
         $store = $this->get_store_by_id($sid);
-        
+
         //$distance = getDistance($address['mapLat'], $address['mapLng'], $store['lat'], $store['lng']);
         //$distance = $distance / 1000;
-        $from = $store['lat'].','.$store['lng'];
-        $aim = $address['mapLat'].','.$address['mapLng'];
-        $distance = getDistanceByGoogle($from,$aim);
+        if($address) {
+            $from = $store['lat'] . ',' . $store['lng'];
+            $aim = $address['mapLat'] . ',' . $address['mapLng'];
+            $distance = getDistanceByGoogle($from, $aim);
 
-//        $deliveryCfg = [];
-//        $deliverys = D("Config")->get_gid_config(20);
-//        foreach($deliverys as $r){
-//            $deliveryCfg[$r['name']] = $r['value'];
-//        }
-//
-//        if($distance < 5) {
-//            $delivery_fee = round($deliveryCfg['delivery_distance_1'], 2);
-//        }elseif($distance > 5 && $distance <= 8) {
-//            $delivery_fee = round($deliveryCfg['delivery_distance_2'], 2);
-//        }elseif($distance > 8 && $distance <= 10) {
-//            $delivery_fee = round($deliveryCfg['delivery_distance_3'], 2);
-//        }elseif($distance > 10 && $distance <= 15) {
-//            $delivery_fee = round($deliveryCfg['delivery_distance_4'], 2);
-//        }elseif($distance > 15 && $distance <= 20) {
-//            $delivery_fee = round($deliveryCfg['delivery_distance_5'], 2);
-//        }else{
-//            $delivery_fee = round($deliveryCfg['delivery_distance_more'], 2);
-//        }
-        $delivery_fee = calculateDeliveryFee($distance,$store['city_id']);
+            $delivery_fee = calculateDeliveryFee($distance, $store['city_id']);
+        }else{
+            $delivery_fee = 0;
+        }
 
         return $delivery_fee;
     }
