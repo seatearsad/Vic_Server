@@ -879,7 +879,6 @@ class DeliverAction extends BaseAction {
 	}
 
 	public function new_export(){
-        ini_set("memory_limit","80M");
         $b_date = $_GET['begin'].' 00:00:00';
         $e_date = $_GET['end'].' 24:00:00';
 
@@ -890,7 +889,7 @@ class DeliverAction extends BaseAction {
 
         $sql .= ' where s.status = 5 and s.create_time >='.$b_time.' and s.create_time <='.$e_time.' and o.is_del = 0';
         $sql .= ' order by s.uid';
-        var_dump($sql);die();
+
         $list = D()->query($sql);
 
         $show_list = array();
