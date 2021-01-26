@@ -1,68 +1,50 @@
 <div class="footer">
-    <div class="about_div">
+    <!--div class="about_div">
         <p style="font-size: 20px;">TUTTI</p>
         <p>
             {pigcms{:getAboutDesc()}...
             <span>Read More</span>
         </p>
-    </div>
-    <div class="grab_line"></div>
+    </div-->
     <div class="footer_memo">
-        <div>
+        <div style="flex: 1 1 80%;display: inherit;position: relative">
             <ul>
-                <li class="list_head">LEGAL</li>
-                <pigcms:footer_link var_name="footer_link_list">
-                    <li><a href="{pigcms{$vo.url}" target="_blank">{pigcms{$vo.name}</a></li>
-                </pigcms:footer_link>
+                <li class="list_head">{pigcms{:L('7ABOUTUS')}</li>
+                <li style="font-family: Montserrat-light;">{pigcms{:getAboutDesc()}...</li>
             </ul>
+            <div class="about_more_btn" id="about_div">{pigcms{:L('LEARNMORE')}</div>
         </div>
         <div class="footer_info">
             <ul>
-                <li class="list_head">INFORMATION</li>
-                <li><a href="{pigcms{$config.site_url}/about" target="_blank">About Us</a></li>
-                <!--li><a href="{pigcms{$config.site_url}/news" target="_blank">Blogs</a></li-->
-                <li><a href="javascript:void(0);">Blogs</a></li>
-                <li><a href="{pigcms{$config.site_url}/courier" target="_blank">Become a Courier</a></li>
-                <li><a href="{pigcms{$config.site_url}/partner" target="_blank">Become a Partner</a></li>
-                <li class="lang_div">
-                    <if condition="C('DEFAULT_LANG') == 'zh-cn'">
-                        Chinese
-                        <else />
-                        English
-                    </if>
-                    <span style="font-weight: bold"> &or;</span>
-                    <div class="lang_select">
-                        <div class="lang_en">English</div>
-                        <div class="lang_cn">Chinese</div>
-                    </div>
-                </li>
-            </ul>
-        </div>
-        <div class="open_time">
-            <ul>
-                <li class="open_img"></li>
-                <li>10:00 am - 1:00 am</li>
-                <li><a href="mailto:info@tutti.app">info@tutti.app</a></li>
-                <li><a href="tel:18883996668">1-888-399-6668</a></li>
+                <li class="list_head">{pigcms{:L('7NAV')}</li>
+                <li><a href="#download">{pigcms{:L('7DOWNLOADAPP')}</a></li>
+                <li><a href="{pigcms{$config.site_url}/wap.php">{pigcms{:L('7ORDERNOW')}</a></li>
+                <li><a href="javascript:void(0);">{pigcms{:L('7BLOG')}</a></li>
+                <li><a href="{pigcms{$config.site_url}/intro/5.html" target="_blank">{pigcms{:L('7TERMSOFUSE')}</a></li>
+                <li><a href="{pigcms{$config.site_url}/intro/2.html" target="_blank">{pigcms{:L('7PRIVACY')}</a></li>
             </ul>
         </div>
         <div class="footer_app">
             <ul>
+                <li class="list_head">{pigcms{:L('7PARTNERSHIP')}</li>
+                <li><a href="{pigcms{$config.site_url}/partner">{pigcms{:L('7MERCHANT')}</a></li>
+                <li><a href="{pigcms{$config.site_url}/courier">{pigcms{:L('7COURIER')}</a></li>
                 <li class="app_icon"></li>
                 <li class="apk_icon"></li>
             </ul>
         </div>
     </div>
+    <div class="grab_line"></div>
     <div class="copy_div">
-        &copy; 2019 Kavl Technology Ltd.All rights reserved
+        Copyright © 2020 Kavl Technology Ltd. All rights reserved
     </div>
     <div class="link_icon">
         <ul>
             <li><a href="https://www.facebook.com/tuttidelivery" target="_blank"></a></li>
             <li><a href="https://www.instagram.com/tuttidelivery/" target="_blank"></a></li>
             <li><a href="https://twitter.com/tuttidelivery" target="_blank"></a></li>
-            <li><a href="https://www.youtube.com/channel/UCdXYWCKbNRPysK9dZ9rtC2A" target="_blank"></a></li>
             <li><a href="https://www.linkedin.com/company/tuttilifestyle" target="_blank"></a></li>
+            <li><a href="https://www.youtube.com/channel/UCdXYWCKbNRPysK9dZ9rtC2A" target="_blank"></a></li>
         </ul>
     </div>
     <script type="text/javascript" src="https://cdn.ywxi.net/js/1.js" async></script>
@@ -89,7 +71,7 @@
             window.open(app_url);
         });
         
-        $('.about_div').click(function () {
+        $('#about_div').click(function () {
             window.location.href = "{pigcms{$config.site_url}/about";
         });
     </script>
@@ -97,7 +79,6 @@
 <style>
     .footer{
         width: 100%;
-        margin-top: 100px;
         background-color: #232323;
         height: 500px;
         position: relative;
@@ -117,23 +98,22 @@
         font-size: 10px;
     }
     .grab_line{
-        width: 90%;
-        height: 3px;
+        width: 80%;
+        height: 1px;
         margin:10px auto;
-        -moz-border-radius: 3px;
-        -webkit-border-radius: 3px;
-        border-radius: 3px;
-        background-color: #949494;
+        background-color: white;
     }
     .footer_memo{
-        width: 90%;
+        width: 80%;
         margin:50px auto;
-        color: #ffffff;
+        color: lightgray;
         display: flex;
+        padding-top: 50px;
     }
     .footer_memo a{
         color: #ffffff;
         text-decoration: none;
+        font-family: Montserrat-light;
     }
     .footer_memo a:hover{
         color: #ffa52d;
@@ -141,18 +121,19 @@
     .footer_memo ul{
         margin: 0px 0px 0px 30px;
         padding: 10px 0px;
-        width: 150px;
+        width: 400px;
     }
     .footer_memo ul li{
         list-style: none;
         height: 30px;
         line-height: 30px;
-        font-size: 12px;
+        font-size: 16px;
+        /*font-weight: lighter;*/
     }
     .footer_memo .list_head{
-        height: 40px;
+        height: 50px;
         line-height: 40px;
-        font-size: 16px;
+        font-size: 22px;
         font-weight: bold;
     }
     .open_time{
@@ -172,18 +153,18 @@
         background-position: center;
     }
     .footer_app{
-        flex: 1 1 100%;
+        /*flex: 1 1 100%;*/
     }
     .footer_app ul{
         margin: 0 auto;
-        width: 250px;
+        width: 280px;
     }
     .footer_app .app_icon{
         height: 70px;
         background-image: url("{pigcms{$config.site_url}/tpl/Static/blue/images/new/Apple_app_store_icon.png");
         background-size: auto 50px;
         background-repeat: no-repeat;
-        background-position: right;
+        background-position: left;
         cursor: pointer;
     }
     .footer_app .apk_icon{
@@ -191,16 +172,18 @@
         background-image: url("{pigcms{$config.site_url}/tpl/Static/blue/images/new/AndroidButton.png");
         background-size: auto 50px;
         background-repeat: no-repeat;
-        background-position: right;
+        background-position: left;
         cursor: pointer;
     }
     .copy_div{
-        font-size: 13px;
-        text-align: center;
-        color: #707070;
+        font-size: 18px;
+        text-align: left;
+        color: lightgray;
+        margin-left: 10.5%;
+        line-height: 50px;
     }
     .link_icon ul{
-        margin: -35px 8% 0 0;
+        margin: -45px 10.5% 0 0;
         padding: 0;
         float: right;
     }
@@ -227,11 +210,12 @@
         background-image: url("{pigcms{$config.site_url}/tpl/Static/blue/images/new/icons/twitter.png");
     }
     .link_icon li:nth-child(4){
-        background-image: url("{pigcms{$config.site_url}/tpl/Static/blue/images/new/icons/youtube.png");
-    }
-    .link_icon li:nth-child(5){
         background-image: url("{pigcms{$config.site_url}/tpl/Static/blue/images/new/icons/linkedin.png");
     }
+    .link_icon li:nth-child(5){
+        background-image: url("{pigcms{$config.site_url}/tpl/Static/blue/images/new/icons/youtube.png");
+    }
+
     .lang_div{
         cursor: pointer;
     }
@@ -240,6 +224,21 @@
     }
     .lang_select div:hover{
         color: #ffa52d;
+    }
+    .about_more_btn{
+        width: 180px;
+        background-color: #ffa52d;
+        border-radius: 20px;
+        height: 50px;
+        line-height: 50px;
+        margin: 10px auto 0 30px;
+        text-align: center;
+        color: white;
+        font-size: 20px;
+        display: block;
+        position: absolute;
+        bottom: 10px;
+        cursor: pointer;
     }
 </style>
 <script type="text/javascript">
@@ -253,5 +252,5 @@
     };
 </script>
 <!-- Start of tuttidelivery Zendesk Widget script -->
-<script id="ze-snippet" src="https://static.zdassets.com/ekr/snippet.js?key=fe2c146c-36c1-4a86-807d-0ebeaa3d0a58"> </script>
+<!--script id="ze-snippet" src="https://static.zdassets.com/ekr/snippet.js?key=fe2c146c-36c1-4a86-807d-0ebeaa3d0a58"> </script-->
 <!-- End of tuttidelivery Zendesk Widget script -->

@@ -1,62 +1,32 @@
-<script type="text/javascript" src="{pigcms{$static_public}js/lang.js" charset="utf-8"></script>
 <div class="footer">
     <div class="about_div">
-        <p style="font-size: 20px;">TUTTI</p>
-        <p>
+        <p style="font-size: 18px;font-weight: bold">{pigcms{:L('7ABOUTUS')}</p>
+        <p style="font-family: Montserrat-light;margin-top: 10px">
             {pigcms{:getAboutDesc()}...
-            <span>Read More</span>
         </p>
+        <div class="learn_btn">{pigcms{:L('LEARNMORE')}</div>
     </div>
-    <div class="grab_line"></div>
     <div class="footer_memo">
-        <div>
+        <div style="width: 40%">
             <ul>
-                <li class="list_head">LEGAL</li>
-                <pigcms:footer_link var_name="footer_link_list">
-                    <li><a href="{pigcms{$vo.url}" target="_blank">{pigcms{$vo.name}</a></li>
-                </pigcms:footer_link>
+                <li class="list_head">{pigcms{:L('7NAV')}</li>
+                <li><a href="#download">{pigcms{:L('7DOWNLOADAPP')}</a></li>
+                <li><a href="{pigcms{$config.site_url}/wap.php">{pigcms{:L('7ORDERNOW')}</a></li>
+                <li><a href="javascript:void(0);">{pigcms{:L('7BLOG')}</a></li>
+                <li><a href="{pigcms{$config.site_url}/intro/5.html" target="_blank">{pigcms{:L('7TERMSOFUSE')}</a></li>
+                <li><a href="{pigcms{$config.site_url}/intro/2.html" target="_blank">{pigcms{:L('7PRIVACY')}</a></li>
             </ul>
         </div>
-        <div class="footer_info">
+        <div class="footer_info" style="width: 60%">
             <ul>
-                <li class="list_head">INFORMATION</li>
-                <li><a href="{pigcms{$config.site_url}/about" target="_blank">About Us</a></li>
-                <li><a href="#" target="_blank">Blogs</a></li>
-                <li><a href="{pigcms{:U('Index/courier')}" target="_blank">Become a Courier</a></li>
-                <li><a href="{pigcms{:U('Index/partner')}" target="_blank">Become a Partner</a></li>
-                <li class="lang_curr_wap">
-                    <if condition="C('DEFAULT_LANG') == 'zh-cn'">
-                        Chinese
-                        <else />
-                        English
-                    </if>
-                    <span style="font-weight: bold"> &or;</span>
-                    <div class="lang_select">
-                        <div class="lang_en">English</div>
-                        <div class="lang_cn">Chinese</div>
-                    </div>
-                </li>
-            </ul>
-        </div>
-        <div class="open_time">
-            <ul>
-                <li class="open_img"></li>
-            </ul>
-        </div>
-        <div>
-            <ul>
-                <li>10:00 am - 1:00 am</li>
-                <li><a href="mailto:info@tutti.app">info@tutti.app</a></li>
-                <li><a href="tel:18883996668">1-888-399-6668</a></li>
-            </ul>
-        </div>
-        <div class="footer_app">
-            <ul>
+                <li class="list_head">{pigcms{:L('7PARTNERSHIP')}</li>
+                <li><a href="{pigcms{$config.site_url}/wap.php?g=Wap&c=Index&a=partner">{pigcms{:L('7MERCHANT')}</a></li>
+                <li><a href="{pigcms{$config.site_url}/wap.php?g=Wap&c=Index&a=courier">{pigcms{:L('7COURIER')}</a></li>
                 <li class="app_icon"></li>
                 <li class="apk_icon"></li>
             </ul>
         </div>
-        <div class="link_icon">
+        <div class="link_icon" style="width: 100%">
             <ul>
                 <li><a href="https://www.facebook.com/tuttidelivery" target="_blank"></a></li>
                 <li><a href="https://www.instagram.com/tuttidelivery/" target="_blank"></a></li>
@@ -66,6 +36,7 @@
             </ul>
         </div>
     </div>
+    <div class="grab_line"></div>
     <div class="copy_div">
         &copy; 2019 Kavl Technology Ltd.All rights reserved
     </div>
@@ -78,7 +49,7 @@
 
         gtag('config', 'UA-123655278-1');
     </script>
-    <script src="{pigcms{$static_public}js/lang.js"></script>
+    <!--script src="{pigcms{$static_public}js/lang.js"></script-->
     <script>
         $('.apk_icon').click(function () {
             // layer.open({
@@ -92,7 +63,7 @@
             window.open(app_url);
         });
 
-        $('.about_div').click(function () {
+        $('.learn_btn').click(function () {
             window.location.href = "{pigcms{$config.site_url}/about";
         });
     </script>
@@ -100,17 +71,17 @@
 <style>
     .footer{
         width: 100%;
-        margin-top: 100px;
+        margin-top: 10px;
         background-color: #232323;
         position: relative;
     }
     .about_div{
-        width: 80%;
+        width: 90%;
         margin: 0px auto;
         color: #ffffff;
         padding: 20px 0px;
         line-height: 22px;
-        font-size: 12px;
+        font-size: 16px;
         cursor: pointer;
     }
     .about_div span{
@@ -119,9 +90,21 @@
         border-radius: 2px;
         font-size: 10px;
     }
+    .learn_btn{
+        width: 130px;
+        background-color: #ffa52d;
+        border-radius: 15px;
+        height: 40px;
+        line-height: 40px;
+        margin: 10px 0;
+        text-align: center;
+        color: white;
+        font-size: 18px;
+        display: block;
+    }
     .grab_line{
         width: 90%;
-        height: 3px;
+        height: 1px;
         margin:10px auto;
         -moz-border-radius: 3px;
         -webkit-border-radius: 3px;
@@ -129,8 +112,8 @@
         background-color: #949494;
     }
     .footer_memo{
-        width: 90%;
-        margin:10px auto;
+        width: 100%;
+        margin:0px auto;
         color: #ffffff;
         overflow: hidden;
     }
@@ -147,21 +130,21 @@
         color: #ffa52d;
     }
     .footer_memo ul{
-        margin: 20px 0px 30px 30px;
+        margin: 20px 0px 30px 20px;
         padding: 10px 0px;
         width: 100%;
     }
     .footer_memo ul li{
         list-style: none;
-        height: 20px;
-        line-height: 20px;
-        font-size: 12px;
+        line-height: 30px;
+        font-size: 14px;
+        font-family: Montserrat-light;
     }
     .footer_memo .list_head{
-        height: 40px;
-        line-height: 40px;
+        line-height: 50px;
         font-size: 16px;
         font-weight: bold;
+        font-family: Montserrat;
     }
     .open_time{
         text-align: center;
@@ -191,10 +174,19 @@
         cursor: pointer;
         float: left;
     }
-    .footer_app .app_icon{
+    .footer_memo .app_icon, .footer_memo .apk_icon {
+        height: 40px;
+        background-size: auto 90%;
+        background-repeat: no-repeat;
+        background-position: center left;
+        cursor: pointer;
+        margin-top: 8px;
+    }
+    .app_icon{
         background-image: url("./tpl/Static/blue/images/new/Apple_app_store_icon.png");
     }
-    .footer_app .apk_icon{
+    .apk_icon{
+        margin-top: 5px;
         background-image: url("./tpl/Static/blue/images/new/AndroidButton.png");
     }
     .copy_div{
@@ -206,16 +198,17 @@
         margin-top: 20px;
     }
     .link_icon ul{
-        margin-top: 32px;
+        margin-bottom: 0;
+        margin-left: 0;
         padding: 0;
-        float: left;
+        text-align: center;
     }
     .link_icon ul li{
         width: 24px;
         height: 24px;
         margin-left: 4px;
         list-style: none;
-        float: left;
+        display: inline-block;
         background-size: 100% 100%;
     }
     .link_icon ul li:nth-child(1){

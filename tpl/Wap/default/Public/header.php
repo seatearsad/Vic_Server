@@ -18,15 +18,20 @@
     }
     #header_logo{
         margin: 2px auto;
-        width: 56px;
-        height: 56px;
-        -moz-border-radius: 28px;
-        -webkit-border-radius: 28px;
-        border-radius: 28px;
-        background-color: #ffa52d;
-        background-image: url("./tpl/Static/blue/images/new/icon.png");
-        background-size: 100% 100%;
+        color: #ffa52d;
+        font-size: 1.6em;
+        font-weight: bold;
+        /*width: 56px;*/
+        /*height: 56px;*/
+        /*-moz-border-radius: 28px;*/
+        /*-webkit-border-radius: 28px;*/
+        /*border-radius: 28px;*/
+        /*background-color: #ffa52d;*/
+        /*background-image: url("./tpl/Static/blue/images/new/icon.png");*/
+        /*background-size: 100% 100%;*/
+        line-height: 56px;
         flex: 0 0 auto;
+        font-family: Montserrat-bold;
     }
     .hamburger{
         height: 50px;
@@ -154,20 +159,16 @@
         border-radius: 3px;
     }
     .sign_btn{
-        width: 80px;
-        height: 28px;
-        border: 3px solid #F5F5F5;
-        -moz-border-radius: 5px;
-        -webkit-border-radius: 5px;
-        border-radius: 5px;
+        width: 30px;
+        height: 30px;
         line-height: 30px;
-        text-align: center;
-        box-sizing: content-box;
         float: right;
         margin-right: 5%;
         margin-top: 11px;
         font-size: 1.125em;
         cursor: pointer;
+        background-image: url("./tpl/Static/blue/images/wap/wap_login.png");
+        background-size: 100% auto;
     }
     .user_div{
         width: 80px;
@@ -217,6 +218,20 @@
         background-repeat: no-repeat;
         background-position: center;
     }
+    .lang_div{
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+        float: right;
+        margin-right: 5%;
+        margin-top: 11px;
+        font-size: 1em;
+        background-image: url("./tpl/Static/blue/images/wap/language.png");
+        background-size: 100% auto;
+        background-repeat: no-repeat;
+        box-sizing: border-box;
+    }
 </style>
 <div class="down_header">
     <div class="down_close">X</div>
@@ -233,16 +248,22 @@
             <span class="line"></span>
             <span class="line"></span>
         </div>
-        <div class="menu_font">{pigcms{:L('_NEW_MENU_')}</div>
+        <!--div class="menu_font">{pigcms{:L('_NEW_MENU_')}</div-->
     </div>
-    <div id="header_logo"></div>
+    <div id="header_logo">TUTTI</div>
     <div id="header_sign">
-        <if condition="empty($user_session)">
-            <div class="sign_btn">{pigcms{:L('_NEW_SIGN_IN_')}</div>
-        <else />
-            <div class="user_div">
-                <a href="{pigcms{:U('My/index')}">{pigcms{$user_session.nickname}</a>
+        <div class="lang_div">
+            <div class="lang_select" style="z-index: 99999;position: relative;background-color: white;border-radius: 5px;margin-top: 35px;padding: 5px;margin-left: -33px">
+                <div class="lang_en" <if condition="C('DEFAULT_LANG') != 'zh-cn'">style="color:#ffa52d"</if>>English</div>
+                <div class="lang_cn" <if condition="C('DEFAULT_LANG') == 'zh-cn'">style="color:#ffa52d"</if>>中文</div>
             </div>
+        </div>
+        <if condition="empty($user_session)">
+            <div class="sign_btn"></div>
+        <else />
+            <!--div class="user_div">
+                <a href="{pigcms{:U('My/index')}">{pigcms{$user_session.nickname}</a>
+            </div-->
         </if>
     </div>
 </div>
@@ -279,6 +300,31 @@
     </ul>
 </div>
 <script>
+    function setCookie(c_name,value,expiredays)
+    {
+        var exdate=new Date();
+        exdate.setDate(exdate.getDate()+expiredays);
+        document.cookie=c_name+ "=" +escape(value)+
+            ((expiredays==null) ? "" : ";expires="+exdate.toGMTString());
+    }
+
+    $('.lang_div').click(function () {
+        //alert($(this).children('.lang_select').css('display'));
+        if($(this).children('.lang_select').css('display') != "none")
+            $(this).children('.lang_select').hide();
+        else
+            $(this).children('.lang_select').css("display","inline-block");
+    });
+    $('.lang_cn').click(function(){
+        setCookie('lang','zh-cn',30);
+        window.location.reload();
+    });
+
+    $('.lang_en').click(function () {
+        setCookie('lang','en-us',30);
+        window.location.reload();
+    });
+
     var is_open_menu = false;
     $('.hamburger').click(function () {
         if(is_open_menu) {
