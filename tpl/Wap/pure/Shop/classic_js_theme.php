@@ -338,9 +338,15 @@
             <div>* Required. Please choose 1.</div>
 			<div class="right fl">
 				<ul>
+                    {{# var ct = 0; for(var j in d[i].list){ }}
+                    {{#  ct++; } }}
+
 					{{# var k = 0; for(var j in d[i].list){ }}
-						<li class="fl {{# if(k == 0){ }}active{{# } }}" data-spec_list_id="{{ d[i].list[j].id }}"  data-spec_id="{{ d[i].list[j].sid}}">{{ d[i].list[j].name }}</li>
-					{{#  k++; } }}
+						<li class="f2 {{# if(k == 0){ }}active{{# } }}" data-spec_list_id="{{ d[i].list[j].id }}"  data-spec_id="{{ d[i].list[j].sid}}">{{ d[i].list[j].name }}</li>
+                        {{# if (ct>(k+1)){ }}
+                        <li class="gray_line" ></li>
+                        {{# } }}
+                    {{#  k++; } }}
 				</ul>
 			</div>
 		</div>
@@ -373,12 +379,15 @@
         <div class="right fl">
             <ul data-dish_name="{{ d[i].name }}">
                 {{# var k = 0; for(var j in d[i].list){ }}
-                <li class="fl" data-min="{{d[i].min}}" data-max="{{d[i].max}}" data-dish_val_id="{{ d[i].list[j].id }}"  data-dish_id="{{ d[i].list[j].dish_id}}" data-dish_price="{{ d[i].list[j].price }}" data-dish_val_name="{{ d[i].list[j].name }}" data-dish_name="{{ d[i].name }}">
+                <li class="f2" data-min="{{d[i].min}}" data-max="{{d[i].max}}" data-dish_val_id="{{ d[i].list[j].id }}"  data-dish_id="{{ d[i].list[j].dish_id}}" data-dish_price="{{ d[i].list[j].price }}" data-dish_val_name="{{ d[i].list[j].name }}" data-dish_name="{{ d[i].name }}">
                     {{ d[i].list[j].name }}
                     {{# if(d[i].list[j].price > 0){ }}
                         +${{ d[i].list[j].price }}
                     {{# } }}
                 </li>
+                    {{# if (d[i].list.length>(k+1)){ }}
+                     <li class="gray_line" ></li>
+                    {{# } }}
                 {{#  k++; } }}
             </ul>
         </div>
@@ -438,8 +447,13 @@
 			<div class="right fl">
 				<ul>
 					{{# var k = 0; for(var j in d[i].val){ }}
-						<li class="fl {{# if(k == 0 && d[i].num == 1){ }}active{{# } }}" data-num="{{ d[i].num }}" data-label_list_id="{{ i }}" data-label_id="{{ j }}">{{ d[i].val[j] }}</li>
-					{{#  k++; } }}
+						<li class="f2 {{# if(k == 0 && d[i].num == 1){ }}active{{# } }}" data-num="{{ d[i].num }}" data-label_list_id="{{ i }}" data-label_id="{{ j }}">{{ d[i].val[j] }}</li>
+
+                        {{# if (d[i].val.length>(k+1)){ }}
+                        <li class="gray_line" ></li>
+                        {{# } }}
+
+                    {{#  k++ } }}
 				</ul>
 			</div>
 		</div>

@@ -314,7 +314,7 @@
                 background-color: #ffa52d;
             }
             #shopProductCart{
-                background-color: #949494;
+                background-color: #443e3e;
                 padding-bottom: env(safe-area-inset-bottom);
                 max-width: 640px;
             }
@@ -325,7 +325,7 @@
             #shopReplyBox ul li.active,#shopDetailPageFormat .row .right li.active,
             #shopDetailPageDish .row .right li.active,
             #shopDetailPageLabel .row .right li.active{
-                border-color: #ffa52d;
+                border-color: none;
                 color: #ffa52d;
             }
             #shopReplyBox .star{
@@ -340,12 +340,16 @@
                 border-right: rgba(255,255,255,0.35) solid 5px;
                 border-left: rgba(255,255,255,0.35) solid 5px;
             }
+            .gray_line{
+                border: 1px solid #e6e6e6;
+                height: 1px;
+            }
             .msg-option{
                 bottom: 0;
             }
             #shopDetailPageBar{
-                margin-bottom: 50px;
-                margin-top: 10px;
+                width: 100%;
+                background: #f4f4f4;
             }
             .closeBtn div:before,.closeBtn div:after{
                 top: 17px;
@@ -432,6 +436,9 @@
                 position: sticky;
                 z-index: 113;
                 top: 101px;
+            }
+            .swiper-container{
+                margin-top: 50px;
             }
         </style>
 	<body>
@@ -622,12 +629,9 @@
 						</div>
 						<div id="shopDetailPageTitle">
 							<div class="title">{pigcms{:L('_PRODUCT_NAME_')}</div>
+                            <div class="content"></div>
 							<div class="desc"></div>
 						</div>
-                        <div id="shopDetailPageContent">
-                            <div class="title">{pigcms{:L('_PRODUCT_DESC_')}</div>
-                            <div class="content"></div>
-                        </div>
 						<div id="shopDetailPageFormat">{pigcms{:L('_PRODUCT_STOCK_')}</div>
 						<div id="shopDetailPageLabel">
 							<!--div class="tip">{pigcms{:L('_WANT_TO_NOT_')}<div class="question"></div></div-->
