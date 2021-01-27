@@ -217,7 +217,11 @@
         </div>
         <div class="menu_font">
             <span><a href="#download" style="color: dimgrey;text-decoration: none;">{pigcms{:L('1DOWNLOADAPP')}</a></span>
-            <span>{pigcms{:L('1INVITE')}</span>
+            <if condition="empty($user_session)">
+                <span><a href="{pigcms{:U('Wap/Login/index')}" style="color: dimgrey;text-decoration: none;">{pigcms{:L('1INVITE')}</a></span>
+            <else />
+                <span><a href="{pigcms{:U('Wap/My/invitation')}" style="color: dimgrey;text-decoration: none;">{pigcms{:L('1INVITE')}</a></span>
+            </if>
         </div>
     </div>
     <div id="header_logo">
@@ -240,7 +244,7 @@
             <div class="sign_btn">{pigcms{:L('_NEW_SIGN_IN_')}</div>
             <else />
             <div class="user_div">
-                <a href="{pigcms{:U('User/Index/shop_list')}">{pigcms{$user_session.nickname}</a>
+                <a href="{pigcms{:U('Wap/My/index')}">{pigcms{$user_session.nickname}</a>
             </div>
         </if>
     </div>
@@ -311,9 +315,13 @@
     });
     
     $('.sign_btn').click(function () {
-        var width = $(window).width()/3;
-        var height = $(window).height()*0.8;
-        art.dialog.open("{pigcms{:U('Wap/Login/index')}",
-           {title: '', width: width, height: height,close:null,background:'black',opacity:'0.4'});
+        // var width = $(window).width()/3;
+        // var height = $(window).height()*0.8;
+        // art.dialog.open("{pigcms{:U('Wap/Login/index')}",
+        //    {title: '', width: width, height: height,close:null,background:'black',opacity:'0.4'});
+        window.location.href = "{pigcms{:U('Wap/Login/index')}";
+    });
+    $('.sign_btn_up').click(function () {
+        window.location.href = "{pigcms{:U('Wap/Login/reg')}";
     });
 </script>

@@ -199,7 +199,7 @@
         .desc_txt{
             width: 35%;
             height: 560px;
-            padding-top: 100px;
+            padding-top: 190px;
             margin-left: 10%;
         }
         .desc_img{
@@ -394,7 +394,7 @@
             color: black;
         }
         .city_list{
-            margin: 15px auto;
+            margin: 45px auto;
             padding: 0px;
         }
         .city_list li{
@@ -685,10 +685,10 @@
             i++;
         });
 
-        timer = setTimeout(function () {
-            curr_num += 1;
-            changeDesc();
-        }, 3000);
+        // timer = setTimeout(function () {
+        //     curr_num += 1;
+        //     changeDesc();
+        // }, 3000);
     }
 
     $('.desc_right').click(function () {
@@ -745,7 +745,7 @@
                         //$("input[name='city_id']").val(result['info']['city_id']);
                         $.cookie('userLocationCity', result['info']['city_id'],{expires:700,path:"/"});
                     }
-                    window.location.href = './app';
+                    window.location.href = "./wap.php";
                 },'JSON');
             }
         }
