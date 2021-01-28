@@ -593,7 +593,7 @@ class MyAction extends BaseAction{
 		$this->display();
 	}
 
-	/*地址操作*/
+	/*-- 地址操作  --*/
 	public function adress(){
 		if(empty($this->user_session)){
 			$this->error_tips(L('_B_MY_LOGINFIRST_'));
@@ -610,6 +610,8 @@ class MyAction extends BaseAction{
 					$select_url = 'Takeout/sureOrder';
 				} elseif ($_GET['buy_type'] == 'shop') {
 					$select_url = 'Shop/confirm_order';
+                } elseif ($_GET['buy_type'] == 'check') {
+                    $select_url = 'Pay/check';
 				} elseif ($_GET['buy_type'] == 'mall') {
 					$select_url = 'Mall/confirm_order';
 				} else {
@@ -628,17 +630,25 @@ class MyAction extends BaseAction{
 			}
 
 			$param = $_GET;
-
 			foreach($adress_list as $key=>$value){
 				$param['adress_id'] = $value['adress_id'];
 				if(!empty($select_url)){
-					$adress_list[$key]['select_url'] = U($select_url,$param);
+				    if ($param['buy_type']=="check"){
+				        $param_x["order_id"]=$param["order_id"];
+				        $param_x["type"]="shop";
+                        $param_x["adress_id"]=$param['adress_id'];
+                        $adress_list[$key]['select_url'] = U($select_url,$param_x);
+                    }else{
+					    $adress_list[$key]['select_url'] = U($select_url,$param);
+                    }
 				}
 				$adress_list[$key]['edit_url'] = U('My/edit_adress',$param);
 				$adress_list[$key]['del_url'] = U('My/del_adress',$param);
 			}
 
 			$this->assign('adress_list',$adress_list);
+
+			//-------------------------------------------------------------------
 
 			$database_area = D('Area');
 			$now_city_area = $database_area->where(array('area_id'=>$this->config['now_city']))->find();
@@ -783,12 +793,15 @@ class MyAction extends BaseAction{
 					$select_url = 'Takeout/sureOrder';
 				} elseif ($_GET['buy_type'] == 'shop') {
 					$select_url = 'Shop/confirm_order';
+                } elseif ($_GET['buy_type'] == 'check') {
+                    $select_url = 'Pay/check';
 				} elseif ($_GET['buy_type'] == 'mall') {
 					$select_url = 'Mall/confirm_order';
 				} else {
 					$select_url = 'Meal/cart';
 				}
 			}
+
 			if($select_url){
 				$this->assign('back_url',U($select_url,$_GET));
 			}else{

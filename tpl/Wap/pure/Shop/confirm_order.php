@@ -226,25 +226,89 @@ a {
 .comm_btn{
     background-color: #ffa52d;
 }
-.menu_wrap{
+.menu_wrap {
+    position: relative;
+    border-radius: 10px;
     margin-top: 90px;
+    bottom: 80px;
+    width: 90%;
+    left: 5%;
+    background: white;
+    padding: 10px 5px 5px 10px;
+}
+.menu_wrap .title{
+    font-size: 18px;
+    color:#000000;
+    margin-bottom: 10px;
+}
+
+.menu_wrap .title_bar{
+    border-bottom: 1px solid #cbcbcb;
+    padding: 6px 5px 2px 0px;
+}
+.menu_list li {
+    border-width: 0 0 0 0;
+    border-bottom: 1px solid #cbcbcb;
 }
 #free_delivery{
-    background-color: white;
     height: 30px;
     line-height: 30px;
     text-align: center;
     color: #ffa52d;
     margin-top: 5px;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
 }
 .reduce_txt{
     color: #ffa52d;
-    text-align: center;
+    text-align: left;
     line-height: 15px;
-    width: 80%;
+    width: 100%;
     margin: 5px auto;
     word-break: break-word;
+    font-size: 12px;
+}
+.fixed, .store_list li, .box, .box li, .side_nav, .side_nav a, .menu_tt h2, .menu_list li, .menu_list .btn, .menu_list .num, .pay_type, .timeBox div, .timeBox a, .txt, .my_order li, .detail_tools, .my_menu_list, .my_menu_list th, .my_menu_list td, .store_info, .ico_menu_wrap, .menu_wrap.skin1 .menu_nav {
+    -webkit-border-image: url(../images/border.gif) 0 stretch;
+}
+.hidden_box{
+    position: relative;
+    background: white;
+    height: 3px;
+    margin-top: -3px;
+}
+    .unit_price{
+        position: absolute;
+        right: 10px;
+        width: 12%;
+        text-align: right;
+        line-height: 1.6;
+        color: black;
+        font-weight: bold;
+        font-size: 16px;
+    }
+.menu_list li h3 {
+    font-weight: bold;
+}
+.fr {
+    float: none;
+}
+.comm_btn{
+    width: 100%;
+    height: 50px;
+    border-radius: 30px;
+    margin-bottom: 10px;
+    line-height: 50px
+}
+.comm_btn span{
+    display: inline-block;
+    width:49%;
+    font-size: 20px;
+}
+    .comm_btn .comm_right{
+        text-align: right;
+    }
+.fixed{
+    background-color:unset;
 }
 </style>
 </head>
@@ -253,18 +317,7 @@ a {
 <include file="Public:header"/>
 <div class="container">
 	<form name="cart_confirm_form" action="{pigcms{:U('Shop/save_order',array('store_id'=> $store['store_id'], 'mer_id' => $store['mer_id'], 'frm' => $_GET['frm'], 'village_id'=>$village_id))}" method="post">
-        <if condition="$store['free_delivery'] eq 1">
-        <div id="free_delivery">
-            <php>
-                if(sprintf("%.2f",$store['event']['use_price']) > floatval($vip_discount_money)){
-                    $cha = sprintf("%.2f",$store['event']['use_price']) - floatval($vip_discount_money);
-            </php>
-                You're ${pigcms{$cha} away from free delivery!
-            <php>}else{</php>
-                You're eligible for free delivery!
-            <php>}</php>
-        </div>
-        </if>
+
         <a href="{pigcms{:U('My/adress',array('buy_type' => 'shop', 'store_id'=>$store['store_id'], 'village_id'=>$village_id, 'mer_id' => $store['mer_id'], 'frm' => $_GET['frm'], 'current_id'=>$user_adress['adress_id'], 'order_id' => $order_id))}">
         <div class="user_address">
             <div>{pigcms{$user_adress['name']} {pigcms{$user_adress['phone']}</div>
@@ -275,48 +328,47 @@ a {
             </div>
         </div>
         </a>
-        <if condition="$merchant_reduce gt 0">
-            <div class="reduce_txt">
-                <img src="./tpl/Static/blue/images/new/off_over_icon.png" height="25">
-                Your ${pigcms{$merchant_reduce} discount will be applied at the checkout page.
-            </div>
-        </if>
+
     <section class="menu_wrap pay_wrap">
 		<if condition="!empty($goods)">
+        <div class="title_bar">
+            <div class="title">{pigcms{$store_name}</div>
+            <if condition="$merchant_reduce gt 0">
+                <div class="reduce_txt">
+<!--                    <img src="./tpl/Static/blue/images/new/off_over_icon.png" height="25">-->
+                    Your ${pigcms{$merchant_reduce} discount will be applied at the checkout page.
+                </div>
+            </if>
+        </div>
 		<ul class="menu_list order_list" id="orderList">
 		<volist name="goods" id="ditem">
 		<li>
-			<div>
-			<if condition="!empty($ditem['image'])">
+            <if condition="!empty($ditem['image'])">
+			<div class="imglogo">
 				<img src="{pigcms{$ditem['image']}" alt="">
-			</if>
 			</div>
+            </if>
 			<div>
-				<h3>{pigcms{$ditem['name']}</h3>
-				<div>
-					<div>
-						<span style="color:#999">{pigcms{$ditem['str']}</span>
-					</div>
-					<span class="count">{pigcms{$ditem['num']}</span>
-					<strong>$<span class="unit_price">{pigcms{$ditem['price']}
-                            <if condition="$ditem.extra_price gt 0 AND $config.open_extra_price eq 1">
-                                +{pigcms{$ditem['extra_price']|floatval}{pigcms{$config.extra_price_alias_name}
-                            </if>
-                        </span>
-                        <span style="color: gray; font-size:10px">({pigcms{$ditem['num']}{pigcms{$ditem['unit']})</span>
-                        <if condition="$ditem.deposit_price gt 0">
-                            <span style="color: gray; font-size:10px">({pigcms{:L('_DEPOSIT_TXT_')}:${pigcms{$ditem['deposit_price']})</span>
-                        </if>
-                    </strong>
-                    <if condition="$ditem.is_time eq 1">
-                    <div style="color: grey;font-size: 11px;">*Available from {pigcms{$ditem['begin_time']} to {pigcms{$ditem['end_time']}</div>
-                    </if>
-				</div>
+                <h3>{pigcms{$ditem['name']}</h3>
+                <div>
+                    <span style="color:#999">{pigcms{$ditem['str']}</span>
+                </div>
+                <div class="unit_price">${pigcms{$ditem['price']}<if condition="$ditem.extra_price gt 0 AND $config.open_extra_price eq 1">+{pigcms{$ditem['extra_price']|floatval}{pigcms{$config.extra_price_alias_name}</if></div>
+
+                <div style="color: gray; font-size:10px;margin: 4px 0 6px 0;">{pigcms{$ditem['num']}{pigcms{$ditem['unit']}</div>
+                <if condition="$ditem.deposit_price gt 0">
+                    <div style="color: gray; font-size:10px;margin: 4px 0 6px 0;">* {pigcms{:L('_DEPOSIT_TXT_')}:${pigcms{$ditem['deposit_price']}</div>
+                </if>
+                <div class="count">{pigcms{$ditem['num']}</div>
+                <if condition="$ditem.is_time eq 1">
+                    <div style="color: grey;font-size: 11px;">* Available from {pigcms{$ditem['begin_time']} to {pigcms{$ditem['end_time']}</div>
+                </if>
+
 			</div>
 		</li>
 		</volist>
 		</ul>
-		<ul class="menu_list box" style="margin-bottom:20px;">
+         <div class="hidden_box"></div>
 			<!--li>
 				<div>
 					<h3><strong style="display: inline;font-size:14px;">${pigcms{:sprintf("%.2f",$vip_discount_money)}<if condition="$extra_price gt 0 AND $config.open_extra_price eq 1">+{pigcms{$extra_price|floatval}{pigcms{$config.extra_price_alias_name}</if></strong></h3>
@@ -335,35 +387,37 @@ a {
                 </div>
             </li-->
 			<if condition="$discount_list">
-			<volist name="discount_list" id="row">
-			<li>
-				<if condition="$row['store_id']">
-					<if condition="$row['type'] eq 0">
-						<div>
-							<h3>商家首单优惠：满${pigcms{$row['full_money']|floatval}元,减<strong style="display: inline;font-size:14px;">${pigcms{$row['reduce_money']|floatval}</strong>元</h3>
-						</div>
-					<elseif condition="$row['type'] eq 1" />
-						<div>
-							<h3>商家满减优惠：满${pigcms{$row['full_money']|floatval}元,减<strong style="display: inline;font-size:14px;">${pigcms{$row['reduce_money']|floatval}</strong>元</h3>
-						</div>
-					<else />
-					</if>
-				<else />
-					<if condition="$row['type'] eq 0">
-						<div>
-							<h3>平台首单优惠：满${pigcms{$row['full_money']|floatval}元,减<strong style="display: inline;font-size:14px;">${pigcms{$row['reduce_money']|floatval}</strong>元</h3>
-						</div>
-					<elseif condition="$row['type'] eq 1" />
-						<div>
-							<h3>平台满减优惠：满${pigcms{$row['full_money']|floatval}元,减<strong style="display: inline;font-size:14px;">${pigcms{$row['reduce_money']|floatval}</strong>元</h3>
-						</div>
-					<else />
-					</if>
-				</if>
-			</li>
-			</volist>
+                <ul class="menu_list box" style="margin-bottom:20px;">
+                    <volist name="discount_list" id="row">
+                    <li>
+                        <if condition="$row['store_id']">
+                            <if condition="$row['type'] eq 0">
+                                <div>
+                                    <h3>商家首单优惠：满${pigcms{$row['full_money']|floatval}元,减<strong style="display: inline;font-size:14px;">${pigcms{$row['reduce_money']|floatval}</strong>元</h3>
+                                </div>
+                            <elseif condition="$row['type'] eq 1" />
+                                <div>
+                                    <h3>商家满减优惠：满${pigcms{$row['full_money']|floatval}元,减<strong style="display: inline;font-size:14px;">${pigcms{$row['reduce_money']|floatval}</strong>元</h3>
+                                </div>
+                            <else />
+                            </if>
+                        <else />
+                            <if condition="$row['type'] eq 0">
+                                <div>
+                                    <h3>平台首单优惠：满${pigcms{$row['full_money']|floatval}元,减<strong style="display: inline;font-size:14px;">${pigcms{$row['reduce_money']|floatval}</strong>元</h3>
+                                </div>
+                            <elseif condition="$row['type'] eq 1" />
+                                <div>
+                                    <h3>平台满减优惠：满${pigcms{$row['full_money']|floatval}元,减<strong style="display: inline;font-size:14px;">${pigcms{$row['reduce_money']|floatval}</strong>元</h3>
+                                </div>
+                            <else />
+                            </if>
+                        </if>
+                    </li>
+                    </volist>
+                </ul>
 			</if>
-		</ul>
+
 		</if>
 	</section>
 	<div style="display:none;">
@@ -421,15 +475,29 @@ a {
     </form>
 </div>
 <div class="fixed" style="min-height:90px;padding:14px;">
+    <if condition="$store['free_delivery'] eq 1">
+        <div id="free_delivery">
+            <php>
+                if(sprintf("%.2f",$store['event']['use_price']) > floatval($vip_discount_money)){
+                $cha = sprintf("%.2f",$store['event']['use_price']) - floatval($vip_discount_money);
+            </php>
+            You're ${pigcms{$cha} away from free delivery!
+            <php>}else{</php>
+            You're eligible for free delivery!
+            <php>}</php>
+        </div>
+    </if>
 	<p>
-		<span class="fr">{pigcms{:L('_TOTAL_RECE_')}：<strong>$<span id="totalPrice_">{pigcms{:sprintf("%.2f",$vip_discount_money)}<if condition="$extra_price gt 0 AND $config.open_extra_price eq 1">+{pigcms{$extra_price|floatval}{pigcms{$config.extra_price_alias_name}</if></span></strong></span>
+
 		<!--p id="show_delivery_fee" <if condition="$delivery_type eq 2 OR $pick_addr_id OR $now_time_value eq 2">style="display:none"</if>>{pigcms{:L('_DELI_PRICE_')}：${pigcms{$delivery_fee}，{pigcms{:L('_TAXATION_TXT_')}: ${pigcms{$tax_price}</p-->
         <if condition="$have_two_time">
 		<p id="show_delivery_fee2" <if condition="$now_time_value eq 1">style="display:none"</if>>{pigcms{:L('_DELI_PRICE_')}：${pigcms{$delivery_fee2}</p>
 		</if>	
 	</p>
-	<span class="fr" style="position: absolute; bottom: 8px; right: 20px;">
-	<a href="javascript:;" class="comm_btn" id="submit_order" >{pigcms{:L('_B_PURE_MY_85_')}</a>
+	<span class="fr" style="bottom: 8px;width: 100%;">
+	<div class="comm_btn" id="submit_order" >
+        <span class="comm_left">{pigcms{:L('_TOTAL_RECE_')}：{pigcms{:sprintf("%.2f",$vip_discount_money)}<if condition="$extra_price gt 0 AND $config.open_extra_price eq 1">+{pigcms{$extra_price|floatval}{pigcms{$config.extra_price_alias_name}</if></span>
+        <span class="comm_right">{pigcms{:L('_B_PURE_MY_85_1')}</span></div>
 	</span>
 </div>
 <if condition="$cue_field">
@@ -736,7 +804,7 @@ $(document).ready(function () {
 	});
 
 	$("#submit_order").click(function(){
-		
+        console.log("submit_order");
 		if($('#deliver_type').val() == 0 && $('#address_id').val() == ''){
 			motify.log('Please Enter Address');
 			return false;

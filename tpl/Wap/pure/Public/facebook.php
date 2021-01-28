@@ -1,4 +1,5 @@
 <!-- Facebook Pixel Code -->
+<!--<div style="position: fixed;top: 00px;left:0px;z-index:100000;font-size: 10px;width:365px;background: #ff2c4c;">public facebook.php已关闭,百度已关闭</div>-->
 <script>
     !function(f,b,e,v,n,t,s)
     {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -16,4 +17,5 @@
          src="https://www.facebook.com/tr?id=308530289818557&ev=PageView
 &noscript=1"/>
 </noscript>
+
 <!-- End Facebook Pixel Code -->

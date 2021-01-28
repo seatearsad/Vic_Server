@@ -1109,7 +1109,7 @@ function showShop(shopId){
 		if(motify.checkIos()){
 			$('#shopProductLeftBar,#shopProductRightBar,#shopProductBottomBar,#shopMerchantBox,#shopReplyBox').css({'-webkit-overflow-scrolling':'touch'});
 		}
-
+		//点击子分类的事件
 		$('#shopMenuBar li').click(function(){
 			if(firstMenuClick == false){
 				$('html,body').animate({scrollTop: $('#shopMenuBar').offset().top-50});
@@ -1584,12 +1584,13 @@ function showShop(shopId){
 		//if(motify.checkIos()){
             //console.log("ios and android");
 
-		$('#container').on('touchmove',function(){
+		$('#pageShop').on('touchmove',function(){
 			scrollProductEvent('ios');
 		});
 
-		$('#container').scroll(function(){
-			$('#container').trigger('touchmove');
+		$('#pageShop').scroll(function(){
+            var top = $(document).scrollTop();
+			$('#pageShop').trigger('touchmove');
 		});
 			// $('#shopProductRightBar2,#shopProductBottomBar').on('touchmove',function(){
 			// 	scrollProductEvent('ios');
@@ -1607,41 +1608,6 @@ function showShop(shopId){
 		// 	// });
 		// }
 
-		function scrollProductEvent(phoneType){
-			//var scrollRightTop = $('#shopMenuBar').css('display') == 'none' ? $('#shopProductBottomBar').scrollTop() :$('#shopProductRightBar2').scrollTop();
-            //$('#pageShop').css('height',document.body.clientHeight+200);
-            //$('#shopProductRightBar2').css('height',document.body.clientHeight-200);
-            var scrollRightTop =document.documentElement.scrollTop;
-            //var shopMenuBarTop=document.getElementById("shopMenuBar").clientY;
-            $('#debug').html(scrollRightTop);
-			//console.log(scrollRightTop);
-
-			if(scrollRightTop >=200){ // 已经折叠
-				console.log(200);
-				//if (scrollRightTop>200) document.documentElement.scrollTop=200;
-                $('#shopProductRightBar2').css("overflow-y","auto");
-                $('#shopBanner').css("opacity","0");
-                $('#shopHeader').css('background','rgba(255,255,255,'+ 1 +')')
-                $('#shopTitle_Header').css("opacity","1");
-                $('#shopTitle_Header').css("margin-top",5)
-				//$(window).scrollTop($('#shopMenuBar').css('display') == 'none' ? $('#shopCatBar').offset().top-50 : $('#shopMenuBar').offset().top-50);
-			}else{		//正在打开
-                console.log(1);
-                $('#shopProductRightBar2').css("overflow-y","hidden");
-                $('#shopBanner').css("opacity",1-(scrollRightTop/200));
-				var start_fade_offset=160;
-                if (scrollRightTop>start_fade_offset){
-                    $('#shopTitle_Header').css("opacity",(scrollRightTop-start_fade_offset)/(200-start_fade_offset));
-                    $('#shopTitle_Header').css("margin-top",5+15*(1-(scrollRightTop-start_fade_offset)/(200-start_fade_offset)));
-
-				}else{
-                    $('#shopTitle_Header').css("opacity","0");
-                    $('#shopTitle_Header').css("margin-top",20)
-				}
-
-                $('#shopHeader').css('background','rgba(255,255,255,'+ scrollRightTop/200 +')')
-			}
-		}
 		isShowShop = true;
 	}
 	
@@ -1735,6 +1701,43 @@ function showShop(shopId){
 	// setTimeout(function(){
 		// pageLoadHides();
 	// },1500);
+}
+function scrollProductEvent(phoneType){
+    //var scrollRightTop = $('#shopMenuBar').css('display') == 'none' ? $('#shopProductBottomBar').scrollTop() :$('#shopProductRightBar2').scrollTop();
+    //$('#pageShop').css('height',document.body.clientHeight+200);
+    //$('#shopProductRightBar2').css('height',document.body.clientHeight-200);
+    var top = $(document).scrollTop();
+    //console.log("top="+top);
+    var scrollRightTop =document.documentElement.scrollTop;
+    //var shopMenuBarTop=document.getElementById("shopMenuBar").clientY;
+    $('#debug').html(scrollRightTop);
+    //console.log(scrollRightTop);
+
+    if(scrollRightTop >=200){ // 已经折叠
+        //console.log(200);
+        //if (scrollRightTop>200) document.documentElement.scrollTop=200;
+        $('#shopProductRightBar2').css("overflow-y","auto");
+        $('#shopBanner').css("opacity","0");
+        $('#shopHeader').css('background','rgba(255,255,255,'+ 1 +')')
+        $('#shopTitle_Header').css("opacity","1");
+        $('#shopTitle_Header').css("margin-top",5)
+        //$(window).scrollTop($('#shopMenuBar').css('display') == 'none' ? $('#shopCatBar').offset().top-50 : $('#shopMenuBar').offset().top-50);
+    }else{		//正在打开
+        //console.log(1);
+        $('#shopProductRightBar2').css("overflow-y","hidden");
+        $('#shopBanner').css("opacity",1-(scrollRightTop/200));
+        var start_fade_offset=160;
+        if (scrollRightTop>start_fade_offset){
+            $('#shopTitle_Header').css("opacity",(scrollRightTop-start_fade_offset)/(200-start_fade_offset));
+            $('#shopTitle_Header').css("margin-top",5+15*(1-(scrollRightTop-start_fade_offset)/(200-start_fade_offset)));
+
+        }else{
+            $('#shopTitle_Header').css("opacity","0");
+            $('#shopTitle_Header').css("margin-top",20)
+        }
+
+        $('#shopHeader').css('background','rgba(255,255,255,'+ scrollRightTop/200 +')')
+    }
 }
 
 function changeProductSpec(){
@@ -2088,26 +2091,31 @@ function parseCoupon(obj,type){
 
 function showShopContent(nav){
 	console.log("showShopContent-->"+nav);
-	if(nav == 'product'){						//商品加载
 
+	if(nav == 'product'){						//商品加载
+        $('#shopMerchantBox').hide();
+        $('#shopReplyBox').hide();
 		if(nowShop.store.tmpl == '0'){
 
 			$('#shopCatBar,#shopProductBottomBar').hide();
 			$('#shopMenuBar').fadeIn('slow')
-			$('#shopProductLeftBar2,#shopProductRightBar2').show();
+			$('#shopProductLeftBar2,#shopProductRightBar2').show();	//商品分类
+
 		}else if(nowShop.store.tmpl == '1'){
 
 			$('#shopMenuBar,#shopProductLeftBar2,#shopProductRightBar2').hide();
 			$('#shopProductBottomBar').show();
 			$('#shopCatBar').fadeIn('slow').find('.title').html('全部分类');
+
 		}
 
 		if($('#shopProductBox').data('isShow') != '1'){
+			console.log("#shopProductBox').data('isShow') != '1'");
 			$('#shopProductLeftBar2 dl,#shopProductRightBar2 dl').empty();
 			storeTheme = nowShop.store.store_theme;
 			if (nowShop.product_list) {
 				if(nowShop.store.tmpl == '0'){
-
+                    console.log("nowShop.store.tmpl == '0'");
 					laytpl($('#shopProductLeftBarTpl').html()).render(nowShop.sort_list, function(html){
 
 						$('#shopProductLeftBar2 dl').html(html);
@@ -2141,6 +2149,7 @@ function showShopContent(nav){
                         $('#shopCatBar .content ul').html(html);
                     });
 				} else if (nowShop.store.tmpl == '1') {
+                    console.log("nowShop.store.tmpl == '1'");
 					laytpl($('#shopProductTopBarTpl').html()).render(nowShop.product_list, function(html){
 						$('#shopCatBar .content ul').html(html);
 					});
@@ -2203,9 +2212,13 @@ function showShopContent(nav){
 			$('#shopProductBox').data('isShow','1');
 		}
 		pageLoadHides();
-	}else if(nav == 'merchant'){
+	}else if(nav == 'merchant'){ //商铺信息
+
+        $('#shopReplyBox').hide();
 		$('#shopCatBar').hide();
 		$('#shopMenuBar').show();
+        $('#shopMerchantBox').show();
+
 		if($('#shopMerchantBox').data('isShow') != '1'){
             $('#shopMerchantDescBox .phone').attr('data-phone',nowShop.store.phone).html(getLangStr('_SHOP_PHONE_')+': '+nowShop.store.phone);
             $('#shopMerchantDescBox .address').attr('data-url','map&param='+nowShop.store.id+'-'+nowShop.store.long+'-'+nowShop.store.lat+'-'+encodeURIComponent(nowShop.store.name)+'-'+encodeURIComponent(nowShop.store.adress)).html('<span></span>'+ getLangStr('_SHOP_ADDRESS_') +'：'+nowShop.store.adress);
@@ -2263,9 +2276,13 @@ function showShopContent(nav){
 			$('#shopMerchantBox').data('isShow','1');
 		}
 		pageLoadHides();
-	}else if(nav == 'reply'){
+	}else if(nav == 'reply'){ //评论
+
+		$('#shopMerchantBox').hide();
 		$('#shopCatBar').hide();
 		$('#shopMenuBar').show();
+        $('#shopReplyBox').show();
+
 		if($('#shopReplyBox').data('isShow') != '1'){
 			$('#showMoreReply').data('page','2');
 			$('#shopReplyBox ul li:eq(0)').addClass('active').siblings().removeClass('active');
@@ -2285,7 +2302,7 @@ function showShopContent(nav){
 					laytpl($('#shopReplyTpl').html()).render(result.list, function(html){
 						$('#shopReplyBox dl').html(html);
 					});
-					
+
 					if(result.total > result.now){
 						$('#showMoreReply').show();
 					}else{
@@ -2293,7 +2310,7 @@ function showShopContent(nav){
 					}
 					$('#noReply').hide();
 				}
-				
+
 				pageLoadHides();
 			});
 		}else{

@@ -7,18 +7,22 @@
         <meta name="keywords" content="{pigcms{$config.seo_keywords}" />
         <meta name="description" content="{pigcms{$config.seo_description}" />
 		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width,viewport-fit=cover"/>
-		<meta name="apple-mobile-web-app-capable" content="yes"/>
+
+<!--        <meta name="viewport" content="initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, width=device-width, user-scalable=no">-->
+
+        <meta name="apple-mobile-web-app-capable" content="yes"/>
 		<meta name='apple-touch-fullscreen' content='yes'/>
 		<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
 		<meta name="format-detection" content="telephone=no"/>
 		<meta name="format-detection" content="address=no"/>
 		<link rel="stylesheet" type="text/css" href="{pigcms{$static_path}shop/css/shopBase.css?v=1.6"/>
-		<script type="text/javascript" src="{pigcms{:C('JQUERY_FILE_190')}" charset="utf-8"></script>
+<!--		<script type="text/javascript" src="{pigcms{:C('JQUERY_FILE_190')}" charset="utf-8"></script>-->
+        <script type="text/javascript" src="{pigcms{$static_path}js/jquery.min.js" charset="utf-8"></script>
 		<script type="text/javascript" src="{pigcms{$static_path}js/iscroll.js?220" charset="utf-8"></script>
 		<script type="text/javascript" src="{pigcms{$static_path}js/idangerous.swiper.min.js" charset="utf-8"></script>
 		<script type="text/javascript" src="{pigcms{$static_path}js/fastclick.js" charset="utf-8"></script>
 		<script type="text/javascript" src="{pigcms{$static_path}layer/layer.m.js" charset="utf-8"></script>
-		<script type="text/javascript" src="http://api.map.baidu.com/api?type=quick&ak=4c1bb2055e24296bbaef36574877b4e2&v=1.0" charset="utf-8"></script>		
+<!--		<script type="text/javascript" src="http://api.map.baidu.com/api?type=quick&ak=4c1bb2055e24296bbaef36574877b4e2&v=1.0" charset="utf-8"></script>		-->
 		<script type="text/javascript" src="{pigcms{$static_path}js/common.js?220" charset="utf-8"></script>
 		<script type="text/javascript">
 			var locationClassicHash = 'shop-{pigcms{$_GET.shop_id}';
@@ -54,6 +58,7 @@
                 max-width:640px;
                 min-width:320px;
                 margin:0 auto;
+
                 /*height: 900px;*/
             }
             #shopHeader{
@@ -61,6 +66,8 @@
                 top: 0px;
                 height: 60px;
                 padding-top: 6px;
+                width: 100%;
+                max-width: 640px;
             }
 
             #shopBanner{
@@ -386,6 +393,7 @@
                 margin-top: 0px;
                 background-color: #f4f4f4;
                 width: 100%;
+                max-width: 640px;
                 height:260px;
                 background-image: url("");
                 background-repeat:no-repeat;
@@ -441,9 +449,9 @@
                 margin-top: 50px;
             }
         </style>
-	<body>
+	<body onscroll="doScroll()">
     <div id="debug" style="position: fixed;color:red;width:auto;height: 40px;left:30px;top:200px;z-index: 1000000;">111</div>
-    <div id="container">
+    <div id="container" >
 		<div id="pageList" class="pageDiv" <if condition="$config['shop_show_footer']">style="padding-bottom:56px;"</if>>
 			<section id="listHeader" class="roundBg">
 				<div id="listBackBtn" class="listBackBtn hide"><div></div></div>
@@ -598,7 +606,7 @@
 						<div id="showMoreReply">{pigcms{:L('_LOAD_MORE_')}</div>
 					</div>
 				</div>
-				<div id="shopMerchantBox">
+				<div id="shopMerchantBox"  style="display:none">
 					<dl id="shopMerchantDescBox">
 						<dd class="phone more">{pigcms{:L('_SHOP_PHONE_')}</dd>
 						<dd class="address more"><span></span>{pigcms{:L('_SHOP_ADDRESS_')}</dd>
@@ -740,31 +748,42 @@
 		<include file="Shop:classic_js_theme"/>
     </div>
 		<script type="text/javascript">
+
+            function doScroll()
+            {
+                scrollProductEvent(1);
+            }
+
+
             $(document).ready(function(){
                 //alert("document.body.clientHeight="+document.body.clientHeight);
                 //alert("window.screen.availHeight="+window.screen.availHeight);
 
+
+
                 var s = "";
+                s += " 屏幕高度："+ window.screen.availHeight+"\n";
+                s += " 屏幕宽度："+ window.screen.availWidth+"\n";
                 s += " 网页可见区域宽："+ document.body.clientWidth+"\n";
                 s += " 网页可见区域高："+ document.body.clientHeight+"\n";
                 s += " 网页可见区域宽："+ document.body.offsetWidth + " (包括边线和滚动条的宽)"+"\n";
                 s += " 网页可见区域高："+ document.body.offsetHeight + " (包括边线的宽)"+"\n";
-                s += " 网页正文全文宽："+ document.body.scrollWidth+"\n";
-                s += " 网页正文全文高："+ document.body.scrollHeight+"\n";
+                s += " 正文全文宽："+ document.body.scrollWidth+"\n";
+                s += " 正文全文高："+ document.body.scrollHeight+"\n";
                 // s += " 网页被卷去的高(ff)："+ document.body.scrollTop+"\n";
                 // s += " 网页被卷去的高(ie)："+ document.documentElement.scrollTop+"\n";
                 // s += " 网页被卷去的左："+ document.body.scrollLeft+"\n";
                 // s += " 网页正文部分上："+ window.screenTop+"\n";
                 // s += " 网页正文部分左："+ window.screenLeft+"\n";
-                s += " 屏幕分辨率的高："+ window.screen.height+"\n";
-                s += " 屏幕分辨率的宽："+ window.screen.width+"\n";
-                s += " 屏幕可用工作区高度："+ window.screen.availHeight+"\n";
-                s += " 屏幕可用工作区宽度："+ window.screen.availWidth+"\n";
+                // s += " 屏幕分辨率的高："+ window.screen.height+"\n";
+                // s += " 屏幕分辨率的宽："+ window.screen.width+"\n";
+
                 s += " 你的屏幕设置是 "+ window.screen.colorDepth +" 位彩色"+"\n";
-                 s += " 你的屏幕设置 "+ window.screen.deviceXDPI +" 像素/英寸"+"\n";
+                 // s += " 你的屏幕设置 "+ window.screen.deviceXDPI +" 像素/英寸"+"\n";
 
                 //alert (s);
                 //$('#container').css('height',document.body.clientHeight+200);
+
                 var clh=document.body.clientHeight;
                 $('#pageShop').css('height',clh+400);
                 $('#shopProductRightBar2').css('height',clh);
@@ -788,7 +807,10 @@
                 move_size = $(this).scrollLeft();
                 setSubMove();
             });
-
+            $('body').everyTime('1s',function(){
+                var top = $(document).scrollTop();
+                console.log("timer=top="+top);
+            });
             function setSubMove() {
                 if(move_size > 0){
                     if($('.sub_left').css('opacity') == 0){

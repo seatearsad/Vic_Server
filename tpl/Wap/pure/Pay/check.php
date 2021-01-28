@@ -798,21 +798,10 @@
         max-width: 640px;
         min-width: 320px;
         margin: 0 auto;
+        padding-left: 10px;
+        padding-right: 10px;
     }
-    .user_address{
-        width: 100%;
-        background-color: white;
-        background-image: url("./tpl/Static/blue/images/wap/address.png");
-        background-repeat: no-repeat;
-        background-size: auto 40px;
-        background-position: 10px center;
-        padding: 10px 0;
-    }
-    .user_address div{
-        line-height: 25px;
-        margin-left: 70px;
-        font-size: 1.1em;
-    }
+
     .order_store{
         line-height: 30px;
         padding-left: 40px;
@@ -998,7 +987,7 @@
         background-size: auto 16px;
         background-position: center;
         position: absolute;
-        right: 20px;
+        right: 8px;
         cursor: pointer;
     }
     #tip_label{
@@ -1055,13 +1044,42 @@
         text-align: center;
         color: #ffa52d;
     }
+    .user_address{
+        width: 100%;
+        background-color: white;
+        /*background-image: url("./tpl/Static/blue/images/wap/address.png");*/
+        /*background-repeat: no-repeat;*/
+        /*background-size: auto 40px;*/
+        /*background-position: 10px center;*/
+        padding: 12px 10px 10px 0px;
+    }
+    .user_address .div_content{
+        line-height: 25px;
+        margin-left: 10px;
+        padding-right: 20px;
+        font-size: 16px;
+        background-image: url(./tpl/Static/blue/images/new/black_arrow.png);
+        background-repeat: no-repeat;
+        background-size: auto 16px;
+        background-position: center right;
+    }
+    .user_address .div_title{
+        border-bottom: 1px solid #f0efed;
+        font-size: 18px;
+        font-weight: bold;
+        color: #ffa52d;
+        margin-left: 10px;
+        padding-bottom: 10px;
+    }
 </style>
 <include file="Public:header"/>
 <div class="wrapper-list">
     <if condition="$order_info['order_type'] != 'recharge'">
     <div class="user_address">
-        <div>{pigcms{$order_info['username']} {pigcms{$order_info['phone']}</div>
-        <div>{pigcms{$order_info['address']}</div>
+        <div class="div_title">{pigcms{:L('_C_DELIVERY_ADDRESS_')}</div>
+        <a href="{pigcms{:U('My/adress',array('buy_type' => 'check', 'store_id'=>$order_info['store_id'], 'village_id'=>$village_id, 'mer_id' => $store['mer_id'], 'frm' => $_GET['frm'], 'current_id'=>$user_adress['adress_id'], 'order_id' => $order_id))}">
+            <div class="div_content">{pigcms{$order_info['username']}({pigcms{$order_info['phone']})<br/>{pigcms{$order_info['address']}</div>
+        </a>
     </div>
     </if>
     <dl class="all_list">
@@ -1685,7 +1703,7 @@
                 update_pay_time()
             }, 1000);
         }
-    }
+    }wrapper-list
     <if condition="$order_info['order_type'] != 'recharge'">
     update_pay_time();
     </if>

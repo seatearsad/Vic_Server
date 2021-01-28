@@ -2425,6 +2425,7 @@ class ShopAction extends BaseAction{
 		$order_id = isset($_GET['order_id']) ? intval($_GET['order_id']) : 0;
 		if ($order_id && ($order = D('Shop_order')->get_order_detail(array('order_id' => $order_id, 'uid' => $this->user_session['uid'])))) {
             $return = D('Shop_goods')->checkCart($store_id, $this->user_session['uid'], $order['info'], 0);
+
             $this->assign('order_id', $order_id);
 		} else {
             $cookieData = $this->getCookieData($store_id);
@@ -2714,6 +2715,7 @@ class ShopAction extends BaseAction{
 		//计算打包费 add garfunkel
         $store_shop = D("Merchant_store_shop")->field(true)->where(array('store_id' => $store_id))->find();
         $this->assign('store_shop',$store_shop);
+        //var_dump($return);
         //
 		$pick_addr_id = isset($_GET['pick_addr_id']) ? $_GET['pick_addr_id'] : '';
 		$pick_list = D('Pick_address')->get_pick_addr_by_merid($return['mer_id'], true);
@@ -2747,7 +2749,9 @@ class ShopAction extends BaseAction{
         $return['price'] = $return['price'] + $return['delivery_fee'] + $store_shop['pack_fee'] + $return['tax_price'] + $return['deposit_price'];
         $return['price'] = sprintf("%.2f",$return['price']);
 		$pick_address['distance'] = $this->wapFriendRange($pick_address['distance']);
-		$this->assign($return);
+        $this->assign('store_name',$return['store']['name']);
+
+        $this->assign($return);
 		$this->assign('pick_addr_id', $pick_addr_id);
 		$this->assign('pick_address', $pick_address);
 

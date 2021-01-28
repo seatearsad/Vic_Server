@@ -327,7 +327,7 @@ class PayAction extends BaseAction{
             $this->assign('merchant_balance', $merchant_balance);
 
         }
-
+        //var_dump($order_info);
         $this->assign('order_info',$order_info);
 
         //使用积分

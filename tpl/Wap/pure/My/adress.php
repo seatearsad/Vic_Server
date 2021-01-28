@@ -12,7 +12,8 @@
     <meta name="format-detection" content="address=no">
     <link href="{pigcms{$static_path}css/eve.7c92a906.peter.css" rel="stylesheet"/>
     <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/common.css?215"/>
-    <script type="text/javascript" src="{pigcms{:C('JQUERY_FILE_190')}" charset="utf-8"></script>
+<!--    <script type="text/javascript" src="{pigcms{:C('JQUERY_FILE_190')}" charset="utf-8"></script>-->
+    <script type="text/javascript" src="{pigcms{$static_path}js/jquery.min.js" charset="utf-8"></script>
     <style>
         .address-container {
             font-size: .3rem;
@@ -156,10 +157,10 @@
         'select_url']">dd-padding</if>">
         <if condition="$vo['select_url']">
             <a class="react" href="{pigcms{$vo.select_url}">
-                <div class="address-select"><input class="mt" type="radio" name="addr"
-                    <if condition="$vo['adress_id'] eq $_GET['current_id']">checked="checked"</if>
-                    />
-                </div>
+<!--                <div class="address-select"><input class="mt" type="radio" name="addr"-->
+<!--                    <if condition="$vo['adress_id'] eq $_GET['current_id']">checked="checked"</if>-->
+<!--                    />-->
+<!--                </div>-->
         </if>
         <div class="address-container">
             <div class="kv-line">

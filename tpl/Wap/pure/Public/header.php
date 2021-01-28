@@ -373,7 +373,7 @@
         -webkit-transform: scaleX(-1);
         -o-transform: scaleX(-1);
         transform: scaleX(-1);
-        background-image: url("./tpl/Static/blue/images/new/black_arrow.png");
+        background-image: url("./tpl/Static/blue/images/new/new_black_arrow.png");
         background-size: auto 20px;
         background-repeat: no-repeat;
         background-position: right center;
@@ -396,10 +396,28 @@
             <div class="local_div" data-url="{pigcms{:U('Home/address')}"></div>
             <div id="header_address_div"></div>
         </if>
-        <if condition="MODULE_NAME == 'Shop' && ACTION_NAME == 'index'">
-            <div class="local_div" data-url="{pigcms{:U('Shop/classic_address')}"></div>
-            <div id="header_address_div"></div>
+        <if condition="MODULE_NAME == 'Shop'">
+            <if condition="ACTION_NAME == 'confirm_order'">
+                <div class="this_header">
+                    <span id="back_button_span"></span>
+                    {pigcms{:L('V2_PAGETITLE_CART')}
+                </div>
+            </if>
+            <if condition="ACTION_NAME == 'index'">
+                <div class="local_div" data-url="{pigcms{:U('Shop/classic_address')}"></div>
+                <div id="header_address_div"></div>
+            </if>
+
         </if>
+        <if condition="MODULE_NAME == 'Pay'">
+            <if condition="ACTION_NAME == 'check'">
+                <div class="this_header">
+                    <span id="back_button_span"></span>
+                    {pigcms{:L('V2_PAGETITLE_CHECKOUT')}
+                </div>
+            </if>
+        </if>
+
         <if condition="MODULE_NAME == 'My'">
             <if condition="ACTION_NAME == 'index'">
                 <div class="this_header">
@@ -488,7 +506,6 @@
                     {pigcms{:L('V2_PAGETITLE_PASSWORD')}
                 </div>
             </if>
-
             <if condition="ACTION_NAME == 'invitation'">
                 <div class="this_header">
                     <span id="back_button_span"></span>
@@ -501,6 +518,7 @@
                     {pigcms{:L('V2_ACCOUNT_MENU_COUPONS')}
                 </div>
             </if>
+
         </if>
     </div>
     <!--div id="header_logo"></div-->
