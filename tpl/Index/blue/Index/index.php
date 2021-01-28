@@ -66,7 +66,7 @@
             -webkit-background-size: cover;
             -moz-background-size: cover;
             -o-background-size: cover;
-            margin: 10px auto;
+            margin: 0px auto;
             position: relative;
             /*border-radius: 20px;*/
             overflow: hidden;
@@ -487,6 +487,12 @@
         .div_video{
             width: 100%;
         }
+        .code_div{
+            border: 1px solid grey;
+            border-radius: 3px;
+            height: 30px;
+            padding: 0 3px;
+        }
     </style>
 	<body>
         <include file="Public:header"/>
@@ -685,10 +691,10 @@
             i++;
         });
 
-        // timer = setTimeout(function () {
-        //     curr_num += 1;
-        //     changeDesc();
-        // }, 3000);
+        timer = setTimeout(function () {
+            curr_num += 1;
+            changeDesc();
+        }, 3000);
     }
 
     $('.desc_right').click(function () {
@@ -749,6 +755,61 @@
                 },'JSON');
             }
         }
+    }
+
+    function checkPhone(phone) {
+        if(!/^\d{10,}$/.test(phone)){
+            return false;
+        }
+        return true;
+    }
+
+    $(".send_btn").click(function () {
+        var phone = $(".download_input").val();
+        if(!checkPhone(phone)){
+            layer.open({
+                type:3,
+                title: [' ', 'border:0px;height:30px'],
+                content: "{pigcms{:L('_B_LOGIN_ENTERGOODNO_')}",
+                time: 2
+            });
+        }else {
+            layer.open({
+                type: 3,
+                title: [' ', 'border:0px;height:30px'],
+                content: '<div style="width: 320px;">Please verify you\'re not a robot.</div>' +
+                '<div style="margin-top: 10px"><input type="text" name="code" placeholder="Enter Code" class="code_div">' +
+                '<img style="vertical-align: top;margin-left: 10px;margin-top: 3px;" src="/admin.php?g=System&c=Login&a=verify" id="verifyImg" onclick="fleshVerify(\'/admin.php?g=System&c=Login&a=verify\')" title="Refresh" alt="Refresh">' +
+                '<img style="vertical-align: top;margin-left: 5px;margin-top: 3px;" src="/tpl/Static/blue/images/new/icon_refresh.png" onclick="fleshVerify(\'/admin.php?g=System&c=Login&a=verify\')" width=25>' +
+                '</div>',
+                btn: ["Submit & Send Message"],
+                yes: function (index) {
+                    var code = $(".code_div").val();
+                    if (code == "") alert("Please Input Code");
+                    else {
+                        $.post("{pigcms{:U('Index/send_message')}", {'code': code,'phone':phone}, function (result) {
+                            if(result.error == 0){
+                                layer.close(index);
+                                layer.open({
+                                    type:2,
+                                    title: [' ', 'border:0px;height:30px'],
+                                    content: result.msg,
+                                    time: 2
+                                });
+                            }else{
+                                fleshVerify('/admin.php?g=System&c=Login&a=verify');
+                                alert(result.msg);
+                            }
+                        },"json");
+                    }
+                }
+            });
+        }
+    });
+
+    function fleshVerify(url){
+        var time = new Date().getTime();
+        $('#verifyImg').attr('src',url+"&time="+time);
     }
 </script>
 </html>

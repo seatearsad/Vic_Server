@@ -299,7 +299,7 @@
         window.location.href = '{pigcms{$config.site_url}';
     });
     $('#menu_shop').click(function () {
-        window.location.href = '{pigcms{$config.site_url}/app';
+        window.location.href = '{pigcms{$config.site_url}/wap.php';
     });
     $('#menu_courier').click(function () {
         window.location.href = '{pigcms{$config.site_url}/courier';

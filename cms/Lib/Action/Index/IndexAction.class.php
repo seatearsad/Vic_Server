@@ -288,4 +288,22 @@ class IndexAction extends BaseAction {
         $this->assign('data',$data);
         $this->display();
     }
+
+    public function send_message(){
+        //var_dump(md5($_POST['code'])."-----".$_SESSION['admin_verify']);
+        $phone = $_POST['phone'];
+        if(md5($_POST['code']) == $_SESSION['admin_verify']){
+            $sms_txt = "You have requested to get the Tutti app download links:
+                        For iOS users: qrco.de/bbILJK ;
+                        For Android users: qrco.de/bbOFZR";
+            Sms::sendTwilioSms($phone,$sms_txt);
+            $return['error'] = 0;
+            $return['msg'] = "Success";
+        }else{
+            $return['error'] = 1;
+            $return['msg'] = "Code Error";
+        }
+
+        exit(json_encode($return));
+    }
 }
