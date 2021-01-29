@@ -245,8 +245,8 @@
             #shopMenuBar{
                 height: 42px;
                 margin-bottom: -1px;
+                width: 100%;
                 position: sticky;
-                position:-webkit-sticky;
                 top:60px;
                 z-index: 98;
             }
@@ -449,8 +449,9 @@
                 margin-top: 50px;
             }
         </style>
-	<body onscroll="doScroll()">
-    <div id="debug" style="position: fixed;color:red;width:auto;height: 40px;left:30px;top:200px;z-index: 1000000;">111</div>
+	<body onscroll="scrollProductEvent(1)">
+    <div id="debug" style="position: fixed;color:red;width:auto;height: 40px;left:30px;top:200px;z-index: 1000000;background: white">Debug</div>
+    <div id="debug2" style="position: fixed;color:red;width:auto;height: 40px;left:30px;top:220px;z-index: 1000000;background: white"></div>
     <div id="container" >
 		<div id="pageList" class="pageDiv" <if condition="$config['shop_show_footer']">style="padding-bottom:56px;"</if>>
 			<section id="listHeader" class="roundBg">
@@ -574,7 +575,7 @@
                         <dl></dl>
                         <div class="sub_right"></div>
                     </div>
-					<div id="shopProductRightBar2"><dl></dl></div>
+					<div id="shopProductRightBar2" onscroll="scrollProduct2Event(1)"><dl></dl></div>
 					<div id="shopProductCartShade"></div>
 					<div id="shopProductCartBox"></div>
 					<div id="shopProductCart">
@@ -749,17 +750,7 @@
     </div>
 		<script type="text/javascript">
 
-            function doScroll()
-            {
-                scrollProductEvent(1);
-            }
-
-
             $(document).ready(function(){
-                //alert("document.body.clientHeight="+document.body.clientHeight);
-                //alert("window.screen.availHeight="+window.screen.availHeight);
-
-
 
                 var s = "";
                 s += " 屏幕高度："+ window.screen.availHeight+"\n";
@@ -781,12 +772,12 @@
                 s += " 你的屏幕设置是 "+ window.screen.colorDepth +" 位彩色"+"\n";
                  // s += " 你的屏幕设置 "+ window.screen.deviceXDPI +" 像素/英寸"+"\n";
 
-                //alert (s);
+                alert (s);
                 //$('#container').css('height',document.body.clientHeight+200);
 
                 var clh=document.body.clientHeight;
-                $('#pageShop').css('height',clh+400);
-                $('#shopProductRightBar2').css('height',clh);
+                $('#pageShop').css('height',clh+900);
+                //$('#shopProductRightBar2').css('height',clh);
                 //alert (document.body.clientHeight);
                 //$('#shopProductRightBar2').css('height',30);
             });
@@ -794,7 +785,7 @@
 			window.shareData = {
 				"moduleName":"Shop",
 				"moduleID":"0",
-				"imgUrl": "<if condition="$config['wechat_share_img']">{pigcms{$config.wechat_share_img}<else/>{pigcms{$config.site_logo}</if>", 
+				"imgUrl": "<if condition="$config['wechat_share_img']">{pigcms{$config.wechat_share_img}<else/>{pigcms{$config.site_logo}</if>",
 				"sendFriendLink": "{pigcms{$config.site_url}{pigcms{:U('Shop/index')}",
 				"tTitle": "{pigcms{$config.shop_alias_name|default="快店"} - {pigcms{$config.site_name}",
 				"tContent": "{pigcms{$config.seo_description}"

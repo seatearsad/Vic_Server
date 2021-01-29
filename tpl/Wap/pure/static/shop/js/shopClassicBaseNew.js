@@ -66,6 +66,7 @@ function hash_handle(){
 	if(locationHashItem != 'shop' && locationHashItem != 'good' && locationHashItem != "search"){
 		changeWechatShare('plat');
 	}
+
 	switch(locationHashItem){
 		case 'shop':
 			if(locationHashParam.length == 1 || isNaN(parseInt(locationHashParam[1])) || parseInt(locationHashParam[1]) == 0){
@@ -86,10 +87,10 @@ function hash_handle(){
 		case 'map':
 			showMap(locationHashParam[1],locationHashParam[2],locationHashParam[3],locationHashParam[4],locationHashParam[5]);
 			break;
-		case 'good':
+		case 'good':	//打开商品详情
 			showGood(locationHashParam[1],locationHashParam[2]);
 			break;
-		case 'search':
+		case 'search':	//店铺搜索
 			showSearch();
 			break;
 		default:
@@ -868,8 +869,8 @@ function showSearch() {
 
     pageLoadTips();
     $('body').css('overflow','hidden');
-    $('#shopSearchPage').height(window_height-100);
-
+    //$('#shopSearchPage').height(window_height);
+    $('#shopSearchPage').css('height','100%');
     $('#shopContentBar').show();
     $('#shopSearchPage').show().scrollTop(0).addClass('sliderLeft');
     $('#shopSearchPage').css("z-index",99);
@@ -889,8 +890,8 @@ function showGood(shop_id,product_id){
 
     pageLoadTips();
     $('body').css('overflow','hidden');
-    $('#shopDetailPage').height(window_height-50);
-
+    //$('#shopDetailPage').height(500);
+    $('#shopDetailPage').css('height','100%');
     if(nowShop.store.store_theme == '0'){
         //$('#shopDetailPageImgbox').css({height:window_width*500/900,width:window_width});
     }else if(nowShop.store.store_theme == '1'){
@@ -1710,12 +1711,14 @@ function scrollProductEvent(phoneType){
     //console.log("top="+top);
     var scrollRightTop =document.documentElement.scrollTop;
     //var shopMenuBarTop=document.getElementById("shopMenuBar").clientY;
-    $('#debug').html(scrollRightTop);
+    $('#debug').html("top--"+scrollRightTop);
     //console.log(scrollRightTop);
 
     if(scrollRightTop >=200){ // 已经折叠
         //console.log(200);
         //if (scrollRightTop>200) document.documentElement.scrollTop=200;
+
+        $('#shopMenuBar').css("position","fixed");
         $('#shopProductRightBar2').css("overflow-y","auto");
         $('#shopBanner').css("opacity","0");
         $('#shopHeader').css('background','rgba(255,255,255,'+ 1 +')')
@@ -1724,6 +1727,7 @@ function scrollProductEvent(phoneType){
         //$(window).scrollTop($('#shopMenuBar').css('display') == 'none' ? $('#shopCatBar').offset().top-50 : $('#shopMenuBar').offset().top-50);
     }else{		//正在打开
         //console.log(1);
+        $('#shopMenuBar').css("position","sticky");
         $('#shopProductRightBar2').css("overflow-y","hidden");
         $('#shopBanner').css("opacity",1-(scrollRightTop/200));
         var start_fade_offset=160;
@@ -1738,6 +1742,44 @@ function scrollProductEvent(phoneType){
 
         $('#shopHeader').css('background','rgba(255,255,255,'+ scrollRightTop/200 +')')
     }
+}
+
+function scrollProduct2Event(phoneType){
+    //var scrollRightTop = $('#shopMenuBar').css('display') == 'none' ? $('#shopProductBottomBar').scrollTop() :$('#shopProductRightBar2').scrollTop();
+    //$('#pageShop').css('height',document.body.clientHeight+200);
+    //$('#shopProductRightBar2').css('height',document.body.clientHeight-200);
+    //var top = $(document).scrollTop();
+    //console.log("top="+top);
+    //var scrollRightTop =document.documentElement.scrollTop;
+    var shopProductRightBar2Top=document.getElementById("shopProductRightBar2").scrollTop;
+    $('#debug2').html("shopProductRightBar2Top--"+shopProductRightBar2Top);
+    //console.log(scrollRightTop);
+    //
+    // if(scrollRightTop >=190){ // 已经折叠
+    //     console.log(200);
+    //     //if (scrollRightTop>200) document.documentElement.scrollTop=200;
+    //     $('#shopProductRightBar2').css("overflow-y","auto");
+    //     $('#shopBanner').css("opacity","0");
+    //     $('#shopHeader').css('background','rgba(255,255,255,'+ 1 +')')
+    //     $('#shopTitle_Header').css("opacity","1");
+    //     $('#shopTitle_Header').css("margin-top",5)
+    //     //$(window).scrollTop($('#shopMenuBar').css('display') == 'none' ? $('#shopCatBar').offset().top-50 : $('#shopMenuBar').offset().top-50);
+    // }else{		//正在打开
+    //     console.log(1);
+    //     $('#shopProductRightBar2').css("overflow-y","hidden");
+    //     $('#shopBanner').css("opacity",1-(scrollRightTop/200));
+    //     var start_fade_offset=160;
+    //     if (scrollRightTop>start_fade_offset){
+    //         $('#shopTitle_Header').css("opacity",(scrollRightTop-start_fade_offset)/(200-start_fade_offset));
+    //         $('#shopTitle_Header').css("margin-top",5+15*(1-(scrollRightTop-start_fade_offset)/(200-start_fade_offset)));
+    //
+    //     }else{
+    //         $('#shopTitle_Header').css("opacity","0");
+    //         $('#shopTitle_Header').css("margin-top",20)
+    //     }
+    //
+    //     $('#shopHeader').css('background','rgba(255,255,255,'+ scrollRightTop/200 +')')
+    // }
 }
 
 function changeProductSpec(){
@@ -2143,7 +2185,7 @@ function showShopContent(nav){
 
 					});
 					laytpl($('#shopProductRightBarTpl').html()).render(nowShop.product_list, function(html){
-						$('#shopProductRightBar2 dl').html(html);
+						$('#shopProductRightBar2 dl').html(html+"<br/><br/><br/>");
 					});
                     laytpl($('#shopProductTopBarTpl').html()).render(nowShop.product_list, function(html){
                         $('#shopCatBar .content ul').html(html);
