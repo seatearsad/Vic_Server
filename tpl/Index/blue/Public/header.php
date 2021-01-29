@@ -324,4 +324,7 @@
     $('.sign_btn_up').click(function () {
         window.location.href = "{pigcms{:U('Wap/Login/reg')}";
     });
+    $('#header_logo').click(function () {
+        window.location.href = "/";
+    });
 </script>

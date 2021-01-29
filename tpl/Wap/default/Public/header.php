@@ -399,4 +399,7 @@
             window.open(app_url);
         }
     });
+    $('#header_logo').click(function () {
+        window.location.href = "/wap";
+    });
 </script>

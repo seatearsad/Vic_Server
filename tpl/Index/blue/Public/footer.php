@@ -36,7 +36,7 @@
     </div>
     <div class="grab_line"></div>
     <div class="copy_div">
-        Copyright © 2020 Kavl Technology Ltd. All rights reserved
+        Copyright © 2021 Kavl Technology Ltd. All rights reserved
     </div>
     <div class="link_icon">
         <ul>
