@@ -1060,6 +1060,27 @@ function cartEventReg(){
 		window.location.href = check_cart_url+'&store_id='+nowShop.store.id;
 	});
 }
+//========获得div相对浏览器的坐标
+function CPos(x, y)
+{
+    this.x = x;
+    this.y = y;
+}
+function GetObjPos(ATarget)
+{
+    var target = ATarget;
+    var pos = new CPos(target.offsetLeft, target.offsetTop);
+
+    var target = target.offsetParent;
+    while (target)
+    {
+        pos.x += target.offsetLeft;
+        pos.y += target.offsetTop;
+
+        target = target.offsetParent
+    }
+    return pos;
+}
 
 var nowShop = {};
 var isShowShop = false;
@@ -1427,7 +1448,8 @@ function showShop(shopId){
 			if(is_no_select){
 				return false;
 			}
-
+            var obj 	= document.getElementById('cartInfo');
+            var left_x = GetObjPos(obj)['x'];
             tmpDomObj = $(this);
             if(!(motify.checkApp() && motify.checkAndroid())){
                 flyer.fly({
@@ -1436,7 +1458,7 @@ function showShop(shopId){
                         top: event.clientY-10
                     },
                     end: {
-                        left: 20,
+                        left: left_x+20,
                         top: window_height-50,
                         width: 20,
                         height: 20
@@ -1467,6 +1489,8 @@ function showShop(shopId){
 				motify.log(getLangStr('_NO_STOCK_'));
 				return false;
 			}
+            var obj 	= document.getElementById('cartInfo');
+            var left_x = GetObjPos(obj)['x'];
 			if(!(motify.checkApp() && motify.checkAndroid())){
 				flyer.fly({
 					start: {
@@ -1474,7 +1498,7 @@ function showShop(shopId){
                         top: event.clientY-10
 					},
 					end: {
-						left: 20,
+						left: left_x+20,
 						top: window_height-50,
 						width: 20,
 						height: 20
@@ -1501,15 +1525,19 @@ function showShop(shopId){
 				motify.log(getLangStr('_NO_STOCK_'));
 				return false;
 			}
+
+            var obj 	= document.getElementById('cartInfo');
+            var left_x = GetObjPos(obj)['x'];
+
 			console.log("event.clientX="+event.clientX+'--- event.clientY='+event.clientY);
 			if(!(motify.checkApp() && motify.checkAndroid())){
 				flyer.fly({
 					start: {
-						left: event.clientX-10,
+						left:event.clientX-10,
 						top: event.clientY-10
 					},
 					end: {
-						left: 20,
+						left: left_x+20,
 						top: window_height-50,
 						width: 20,
 						height: 20
@@ -1719,6 +1747,7 @@ function scrollProductEvent(phoneType){
         //if (scrollRightTop>200) document.documentElement.scrollTop=200;
         $('#shopMenuBar_Space').css("height","40px");
         $('#shopMenuBar').css("position","fixed");
+        $('#shopMenuBar').css("max-width","640px");
         $('#shopProductRightBar2').css("overflow-y","auto");
         $('#shopBanner').css("opacity","0");
         $('#shopHeader').css('background','rgba(255,255,255,'+ 1 +')')
@@ -1729,6 +1758,7 @@ function scrollProductEvent(phoneType){
         //console.log(1);
         $('#shopMenuBar_Space').css("height","0px");
         $('#shopMenuBar').css("position","sticky");
+        $('#shopMenuBar').css("max-width","");
         $('#shopProductRightBar2').css("overflow-y","hidden");
         $('#shopBanner').css("opacity",1-(scrollRightTop/200));
         var start_fade_offset=160;

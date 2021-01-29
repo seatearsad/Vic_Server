@@ -356,6 +356,7 @@
             }
             #shopDetailPageBar{
                 width: 100%;
+                max-width: 650px;
                 background: #f4f4f4;
             }
             .closeBtn div:before,.closeBtn div:after{
