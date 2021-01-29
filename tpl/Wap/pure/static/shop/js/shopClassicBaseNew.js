@@ -1100,7 +1100,7 @@ function showShop(shopId){
         //$('#shopProductRightBar2,#shopProductBottomBar').css('height',window_height);
 
 		$('#shopCatBar .content').css('height',window_height-166-90);
-		$('#shopMerchantBox,#shopReplyBox').css({height:window_height-166,'overflow-y':'auto'});
+		$('#shopMerchantBox,#shopReplyBox').css({height:window_height+50,'overflow-y':'auto'});
 
 		//$('#shopProductRightBar2').width(window_width-100);
 		//$('#shopProductLeftBar2,#shopProductRightBar2').css('height',window_height-166-50);
@@ -1717,7 +1717,7 @@ function scrollProductEvent(phoneType){
     if(scrollRightTop >=200){ // 已经折叠
         //console.log(200);
         //if (scrollRightTop>200) document.documentElement.scrollTop=200;
-
+        $('#shopMenuBar_Space').css("height","40px");
         $('#shopMenuBar').css("position","fixed");
         $('#shopProductRightBar2').css("overflow-y","auto");
         $('#shopBanner').css("opacity","0");
@@ -1727,6 +1727,7 @@ function scrollProductEvent(phoneType){
         //$(window).scrollTop($('#shopMenuBar').css('display') == 'none' ? $('#shopCatBar').offset().top-50 : $('#shopMenuBar').offset().top-50);
     }else{		//正在打开
         //console.log(1);
+        $('#shopMenuBar_Space').css("height","0px");
         $('#shopMenuBar').css("position","sticky");
         $('#shopProductRightBar2').css("overflow-y","hidden");
         $('#shopBanner').css("opacity",1-(scrollRightTop/200));
@@ -2130,13 +2131,19 @@ function parseCoupon(obj,type){
 		return textObj;
 	}
 }
-
+//二级导航
 function showShopContent(nav){
 	console.log("showShopContent-->"+nav);
 
 	if(nav == 'product'){						//商品加载
+
         $('#shopMerchantBox').hide();
         $('#shopReplyBox').hide();
+
+        $('#shopProductBox').show();
+        $('#shopProductBox').show();
+        $(document).scrollTop(200);
+
 		if(nowShop.store.tmpl == '0'){
 
 			$('#shopCatBar,#shopProductBottomBar').hide();
@@ -2259,7 +2266,9 @@ function showShopContent(nav){
         $('#shopReplyBox').hide();
 		$('#shopCatBar').hide();
 		$('#shopMenuBar').show();
+        $('#shopProductBox').hide();
         $('#shopMerchantBox').show();
+        $(document).scrollTop(200);
 
 		if($('#shopMerchantBox').data('isShow') != '1'){
             $('#shopMerchantDescBox .phone').attr('data-phone',nowShop.store.phone).html(getLangStr('_SHOP_PHONE_')+': '+nowShop.store.phone);
@@ -2320,10 +2329,12 @@ function showShopContent(nav){
 		pageLoadHides();
 	}else if(nav == 'reply'){ //评论
 
+        $('#shopProductBox').hide();
 		$('#shopMerchantBox').hide();
 		$('#shopCatBar').hide();
 		$('#shopMenuBar').show();
         $('#shopReplyBox').show();
+        $(document).scrollTop(200);
 
 		if($('#shopReplyBox').data('isShow') != '1'){
 			$('#showMoreReply').data('page','2');

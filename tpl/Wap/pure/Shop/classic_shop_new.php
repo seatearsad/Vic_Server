@@ -427,6 +427,12 @@
                 height: 20px;
                 width:20px;
             }
+            #shopReplyDiv {
+                margin-top: 0px;
+            }
+            #shopMerchantBox dl {
+                margin-top: 0px;
+            }
             /*#div_space::before {  content: ' ';*/
                 /*position: fixed;*/
                 /*z-index: -1;*/
@@ -552,6 +558,7 @@
 					<span id="shopCouponText"></span>
 				</div-->
 			</section>
+            <section id="shopMenuBar_Space" style="height: 0;"></section>
 			<section id="shopMenuBar">
 				<ul>
 					<li class="caret product active" data-nav="product">{pigcms{:L('_PRODUCT_TXT_')}</li>
@@ -772,11 +779,11 @@
                 s += " 你的屏幕设置是 "+ window.screen.colorDepth +" 位彩色"+"\n";
                  // s += " 你的屏幕设置 "+ window.screen.deviceXDPI +" 像素/英寸"+"\n";
 
-                alert (s);
+                //alert (s);
                 //$('#container').css('height',document.body.clientHeight+200);
 
                 var clh=document.body.clientHeight;
-                $('#pageShop').css('height',clh+900);
+                //$('#pageShop').css('height',clh+900);
                 //$('#shopProductRightBar2').css('height',clh);
                 //alert (document.body.clientHeight);
                 //$('#shopProductRightBar2').css('height',30);
