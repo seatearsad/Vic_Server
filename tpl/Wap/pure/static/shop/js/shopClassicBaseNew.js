@@ -1090,6 +1090,7 @@ var nowProduct = {};
 var firstMenuClick = false;
 var productSwiper = null;
 var productPicList = [];
+var isNewLoading=true;
 function showShop(shopId){
 
 	console.log("showShop");
@@ -1141,7 +1142,7 @@ function showShop(shopId){
 			$(this).addClass('active').siblings().removeClass('active');
 			pageLoadTips({showBg:false});
 			$('#shopContentBar').animate({'margin-left':'-'+tmpIndex*window_width+'px'},function(){
-                //console.log("-->showShopContent");
+                console.log("------------->showShopContent");
 				showShopContent(tmpNav);
 			});
 		});
@@ -2172,7 +2173,14 @@ function showShopContent(nav){
 
         $('#shopProductBox').show();
         $('#shopProductBox').show();
-        $(document).scrollTop(200);
+
+        if (isNewLoading){
+            console.log("isNewLoading-->"+isNewLoading);
+            isNewLoading=false;
+		}else{
+            console.log("isNewLoading-->"+isNewLoading);
+            $(document).scrollTop(200);
+        }
 
 		if(nowShop.store.tmpl == '0'){
 
