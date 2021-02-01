@@ -159,10 +159,10 @@
         margin: 0;
     }
     .down_app .app_icon{
-        background-image: url("./tpl/Static/blue/images/new/Apple_app_store_icon.png");
+        background-image: url("./tpl/Static/blue/images/new/Apple_app_store_icon_new.png");
     }
     .down_app .apk_icon{
-        background-image: url("./tpl/Static/blue/images/new/AndroidButton.png");
+        background-image: url("./tpl/Static/blue/images/new/AndroidButton_new.png");
     }
     .app_desc{
         width: 100%;

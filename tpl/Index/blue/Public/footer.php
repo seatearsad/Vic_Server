@@ -161,7 +161,7 @@
     }
     .footer_app .app_icon{
         height: 70px;
-        background-image: url("{pigcms{$config.site_url}/tpl/Static/blue/images/new/Apple_app_store_icon.png");
+        background-image: url("{pigcms{$config.site_url}/tpl/Static/blue/images/new/Apple_app_store_icon_new.png");
         background-size: auto 50px;
         background-repeat: no-repeat;
         background-position: left;
@@ -169,7 +169,7 @@
     }
     .footer_app .apk_icon{
         height: 70px;
-        background-image: url("{pigcms{$config.site_url}/tpl/Static/blue/images/new/AndroidButton.png");
+        background-image: url("{pigcms{$config.site_url}/tpl/Static/blue/images/new/AndroidButton_new.png");
         background-size: auto 50px;
         background-repeat: no-repeat;
         background-position: left;
@@ -201,19 +201,19 @@
         display: block;
     }
     .link_icon li:nth-child(1){
-        background-image: url("{pigcms{$config.site_url}/tpl/Static/blue/images/new/icons/facebook.png");
+        background-image: url("{pigcms{$config.site_url}/tpl/Static/blue/images/new/icons/facebook_new.png");
     }
     .link_icon li:nth-child(2){
-        background-image: url("{pigcms{$config.site_url}/tpl/Static/blue/images/new/icons/instagram.png");
+        background-image: url("{pigcms{$config.site_url}/tpl/Static/blue/images/new/icons/instagram_new.png");
     }
     .link_icon li:nth-child(3){
-        background-image: url("{pigcms{$config.site_url}/tpl/Static/blue/images/new/icons/twitter.png");
+        background-image: url("{pigcms{$config.site_url}/tpl/Static/blue/images/new/icons/twitter_new.png");
     }
     .link_icon li:nth-child(4){
-        background-image: url("{pigcms{$config.site_url}/tpl/Static/blue/images/new/icons/linkedin.png");
+        background-image: url("{pigcms{$config.site_url}/tpl/Static/blue/images/new/icons/linkedin_new.png");
     }
     .link_icon li:nth-child(5){
-        background-image: url("{pigcms{$config.site_url}/tpl/Static/blue/images/new/icons/youtube.png");
+        background-image: url("{pigcms{$config.site_url}/tpl/Static/blue/images/new/icons/youtube_new.png");
     }
 
     .lang_div{

@@ -114,14 +114,14 @@
                 <div id="code_div">
                     <div>
                         <img src="./tpl/Static/blue/images/new/code/app_store.png"/>
-                        <img src="./tpl/Static/blue/images/new/Apple_app_store_icon.png" style="width: 100%" class="app_store"/>
+                        <img src="./tpl/Static/blue/images/new/Apple_app_store_icon_new.png" style="width: 100%" class="app_store"/>
                     </div>
                     <div class="code_icon">
                         <img src="./tpl/Static/blue/images/new/icon.png" style="border-radius: 30px;margin-top: 20%;"/>
                     </div>
                     <div>
                         <img src="./tpl/Static/blue/images/new/code/google_play.png"/>
-                        <img src="./tpl/Static/blue/images/new/AndroidButton.png" style="width: 100%" class="app_store"/>
+                        <img src="./tpl/Static/blue/images/new/AndroidButton_new.png" style="width: 100%" class="app_store"/>
                     </div>
                 </div>
                 <if condition="C('DEFAULT_LANG') eq 'zh-cn'">

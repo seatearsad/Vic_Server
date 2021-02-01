@@ -119,13 +119,13 @@
         }
         .down_app .app_icon{
             margin-left: -240px;
-            background-image: url("./tpl/Static/blue/images/new/Apple_app_store_icon.png");
+            background-image: url("./tpl/Static/blue/images/new/Apple_app_store_icon_new.png");
             background-size: auto 70px;
             background-repeat: no-repeat;
         }
         .down_app .apk_icon{
             margin-left: 35px;
-            background-image: url("./tpl/Static/blue/images/new/AndroidButton.png");
+            background-image: url("./tpl/Static/blue/images/new/AndroidButton_new.png");
             background-size: auto 70px;
             background-repeat: no-repeat;
         }
