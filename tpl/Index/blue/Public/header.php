@@ -3,7 +3,7 @@
 <script type="text/javascript" src="{pigcms{$static_public}js/artdialog/iframeTools.js"></script>
 <style>
     #tutti_header{
-        height: 60px;
+        height: 80px;
         display: flex;
         background-color: #ffffff;
     }
@@ -16,29 +16,27 @@
     }
     #header_logo{
         margin: 2px auto;
-        width: 56px;
-        height: 56px;
-        -moz-border-radius: 28px;
-        -webkit-border-radius: 28px;
-        border-radius: 28px;
-        background-color: #ffa52d;
-        background-image: url("{pigcms{$config.site_url}/tpl/Static/blue/images/new/icon.png");
-        background-size: 100% 100%;
+        height: 76px;
+        color: #ffa52d;
+        line-height: 76px;
+        font-size: 32px;
+        font-weight: bolder;
         flex: 0 0 auto;
+        font-family: Montserrat-bold;
     }
     .hamburger{
-        height: 50px;
+        height: 44px;
         width: 50px;
         cursor: pointer;
         margin-left: 30px;
-        margin-top: 15px;
+        margin-top: 18px;
     }
     .hamburger .line {
-        width: 25px;
-        height: 3px;
+        width: 35px;
+        height: 4px;
         background-color: #3f3f3f;
         display: block;
-        margin: 5px auto;
+        margin: 7px auto;
         -moz-border-radius: 3px;
         -webkit-border-radius: 3px;
         border-radius: 3px;
@@ -50,22 +48,28 @@
         background-color: #ffa64d;
     }
     .menu_font{
-        margin-top: 16px;
+        margin-top: 25px;
         font-size: 20px;
         height: 30px;
         line-height: 30px;
     }
+    .menu_font span{
+        font-size: 16px;
+        color: dimgrey;
+        display: inline-block;
+        padding-left: 25px;
+    }
     #hamburger-1.is-active .line:nth-child(1) {
-        -webkit-transform: translateY(8px) rotate(45deg);
-        -ms-transform: translateY(8px) rotate(45deg);
-        -o-transform: translateY(8px) rotate(45deg);
-        transform: translateY(8px) rotate(45deg);
+        -webkit-transform: translateY(11px) rotate(45deg);
+        -ms-transform: translateY(11px) rotate(45deg);
+        -o-transform: translateY(11px) rotate(45deg);
+        transform: translateY(11px) rotate(45deg);
     }
     #hamburger-1.is-active .line:nth-child(3) {
-        -webkit-transform: translateY(-8px) rotate(-45deg);
-        -ms-transform: translateY(-8px) rotate(-45deg);
-        -o-transform: translateY(-8px) rotate(-45deg);
-        transform: translateY(-8px) rotate(-45deg);
+        -webkit-transform: translateY(-11px) rotate(-45deg);
+        -ms-transform: translateY(-11px) rotate(-45deg);
+        -o-transform: translateY(-11px) rotate(-45deg);
+        transform: translateY(-11px) rotate(-45deg);
     }
     #hamburger-1.is-active .line:nth-child(2) {
         opacity: 0;
@@ -148,10 +152,28 @@
         -webkit-border-radius: 3px;
         border-radius: 3px;
     }
+
+    .sign_btn_up{
+        width: 80px;
+        height: 28px;
+        border: 1px solid #ffa52d;
+        color: #ffa52d;
+        -moz-border-radius: 14px;
+        -webkit-border-radius: 14px;
+        border-radius: 14px;
+        line-height: 30px;
+        text-align: center;
+        box-sizing: content-box;
+        float: right;
+        margin-right: 30px;
+        margin-top: 26px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
     .sign_btn{
         width: 80px;
         height: 28px;
-        border: 3px solid #F5F5F5;
         -moz-border-radius: 5px;
         -webkit-border-radius: 5px;
         border-radius: 5px;
@@ -160,19 +182,26 @@
         box-sizing: content-box;
         float: right;
         margin-right: 30px;
-        margin-top: 11px;
-        font-size: 18px;
+        margin-top: 26px;
+        font-size: 16px;
         cursor: pointer;
     }
-    .user_div{
+    .user_div,.lang_div{
         width: 80px;
-        height: 30px;
-        line-height: 30px;
+        height: 28px;
+        line-height: 28px;
         text-align: center;
         float: right;
         margin-right: 5%;
-        margin-top: 15px;
+        margin-top: 26px;
         font-size: 1em;
+    }
+    .lang_div{
+        padding-left: 33px;
+        background-image: url("./tpl/Static/blue/images/wap/language.png");
+        background-size: 28px auto;
+        background-repeat: no-repeat;
+        box-sizing: border-box;
     }
     .user_div a{
         text-decoration: none;
@@ -186,15 +215,36 @@
             <span class="line"></span>
             <span class="line"></span>
         </div>
-        <div class="menu_font">{pigcms{:L('_NEW_MENU_')}</div>
+        <div class="menu_font">
+            <span><a href="#download" style="color: dimgrey;text-decoration: none;">{pigcms{:L('1DOWNLOADAPP')}</a></span>
+            <if condition="empty($user_session)">
+                <span><a href="{pigcms{:U('Wap/Login/index')}" style="color: dimgrey;text-decoration: none;">{pigcms{:L('1INVITE')}</a></span>
+            <else />
+                <span><a href="{pigcms{:U('Wap/My/invitation')}" style="color: dimgrey;text-decoration: none;">{pigcms{:L('1INVITE')}</a></span>
+            </if>
+        </div>
     </div>
-    <div id="header_logo"></div>
+    <div id="header_logo">
+        TUTTI
+    </div>
     <div id="header_sign">
+        <div class="lang_div">
+            <if condition="C('DEFAULT_LANG') == 'zh-cn'">
+                中文
+                <else />
+                English
+            </if>
+            <div class="lang_select" style="z-index: 99999;position: relative;background-color: white;border-radius: 5px;padding: 5px;margin-left: -5px;">
+                <div class="lang_en">English</div>
+                <div class="lang_cn">中文</div>
+            </div>
+        </div>
         <if condition="empty($user_session)">
+            <div class="sign_btn_up">{pigcms{:L('_B_D_LOGIN_REG2_')}</div>
             <div class="sign_btn">{pigcms{:L('_NEW_SIGN_IN_')}</div>
             <else />
             <div class="user_div">
-                <a href="{pigcms{:U('User/Index/shop_list')}">{pigcms{$user_session.nickname}</a>
+                <a href="{pigcms{:U('Wap/My/index')}">{pigcms{$user_session.nickname}</a>
             </div>
         </if>
     </div>
@@ -249,7 +299,7 @@
         window.location.href = '{pigcms{$config.site_url}';
     });
     $('#menu_shop').click(function () {
-        window.location.href = '{pigcms{$config.site_url}/app';
+        window.location.href = '{pigcms{$config.site_url}/wap.php';
     });
     $('#menu_courier').click(function () {
         window.location.href = '{pigcms{$config.site_url}/courier';
@@ -265,9 +315,16 @@
     });
     
     $('.sign_btn').click(function () {
-        var width = $(window).width()/3;
-        var height = $(window).height()*0.8;
-        art.dialog.open("{pigcms{:U('Wap/Login/index')}",
-           {title: '', width: width, height: height,close:null,background:'black',opacity:'0.4'});
+        // var width = $(window).width()/3;
+        // var height = $(window).height()*0.8;
+        // art.dialog.open("{pigcms{:U('Wap/Login/index')}",
+        //    {title: '', width: width, height: height,close:null,background:'black',opacity:'0.4'});
+        window.location.href = "{pigcms{:U('Wap/Login/index')}";
+    });
+    $('.sign_btn_up').click(function () {
+        window.location.href = "{pigcms{:U('Wap/Login/reg')}";
+    });
+    $('#header_logo').click(function () {
+        window.location.href = "/";
     });
 </script>

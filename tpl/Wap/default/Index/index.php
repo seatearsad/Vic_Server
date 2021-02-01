@@ -54,29 +54,42 @@
     <include file="Public:facebook"/>
 </head>
 <style>
+    @font-face {
+        font-family: 'Montserrat';
+        src: url('/static/font/Montserrat-Regular.ttf');
+    }
+    @font-face {
+        font-family: 'Montserrat-bold';
+        src: url('/static/font/Montserrat-Bold.otf');
+    }
+    @font-face {
+        font-family: 'Montserrat-light';
+        src: url('/static/font/Montserrat-Light.otf');
+    }
     *{
         margin: 0px;
         box-sizing: border-box;
-        font-family: Helvetica;
+        /*font-family: Helvetica;*/
+        font-family: Montserrat;
         -moz-osx-font-smoothing: grayscale;
         font-size: 100%;
     }
     body{
-        background-color: #F5F5F5;
+        /*background-color: #F5F5F5;*/
         color: #3f3f3f;
     }
     .main{
         width: 100%;
-        height: 600px;
-        background-image: url("./tpl/Static/blue/images/wap/main.jpg");
+        height: 680px;
+        background-image: url("./tpl/Static/blue/images/wap/main.png");
         background-size: cover;
         -webkit-background-size: cover;
         -moz-background-size: cover;
         -o-background-size: cover;
     }
     .slogan{
-        color: #ffa52d;
-        font-size: 2.4em;
+        color: white;
+        font-size: 2.2em;
         font-weight: bold;
         text-align: center;
         position: absolute;
@@ -84,11 +97,12 @@
         padding-left: 5%;
         padding-right: 5%;
         margin-top: 200px;
+        font-family: Montserrat-bold;
     }
     .search_box{
         width: 100%;
         position: absolute;
-        margin-top: 330px;
+        margin-top: 300px;
         text-align: center;
     }
     .search_back{
@@ -106,7 +120,7 @@
         padding-left: 50px;
         margin-left: 5px;
         width: 85%;
-        font-size: 1.2em;
+        font-size: 1.0em;
         background-image: url("./tpl/Static/blue/images/new/locating.png");
         background-repeat: no-repeat;
         background-size: auto 35px;
@@ -130,7 +144,8 @@
         text-align: center;
         margin-top: 20px;
         height: 70px;
-        width: 100%;
+        width: 75%;
+        margin: 20px auto;
     }
     .down_app span{
         position: relative;
@@ -138,9 +153,10 @@
         height: 70px;
         cursor: pointer;
         width: 50%;
-        background-size: auto 80%;
+        background-size: 90% auto;
         background-repeat: no-repeat;
         background-position: center;
+        margin: 0;
     }
     .down_app .app_icon{
         background-image: url("./tpl/Static/blue/images/new/Apple_app_store_icon.png");
@@ -150,58 +166,57 @@
     }
     .app_desc{
         width: 100%;
-        background-color: #ffffff;
+        background-color: #FBF0DE;
+        padding-top: 10px;
     }
     .desc_all{
-        margin-top: 30px;
+        /*margin-top: 30px;*/
+        position: relative;
+        padding-bottom: 10px;
     }
     .desc_txt{
         width: 100%;
-        height: 220px;
         margin-top: 20px;
-        background-color: #ffffff;
-        padding-left: 32%;
-        padding-top: 60px;
-        padding-right: 2%;
+        padding: 10px 5%;
+        text-align: center;
+        font-weight: lighter;
     }
     .desc_img{
-        width: 27%;
+        width: 100%;
         height: 215px;
         margin-top: 5px;
-        background-size:100% auto ;
+        background-size:auto 100%;
         background-repeat: no-repeat;
-        position: absolute;
-        margin-left: 2%;
+        background-position: center;
+        position: relative;
     }
     .app_desc .desc_all:nth-child(1) .desc_img{
-        background-image: url("./tpl/Static/blue/images/new/app_1.png");
+        background-image: url("./tpl/Static/blue/images/new/app_new_1.png");
     }
     .app_desc .desc_all:nth-child(2) .desc_img{
-        background-image: url("./tpl/Static/blue/images/new/app_2.png");
+        background-image: url("./tpl/Static/blue/images/new/app_new_2.png");
     }
     .app_desc .desc_all:nth-child(3) .desc_img{
-        background-image: url("./tpl/Static/blue/images/new/app_3.png");
+        background-image: url("./tpl/Static/blue/images/new/app_new_3.png");
     }
     .desc_title{
-        font-size: 1em;
+        font-size: 22px;
         font-weight: bold;
     }
     .desc_memo{
-        font-size: 0.8em;
-        margin-top: 10px;
+        font-size: 16px;
+        margin-top: 15px;
+        font-family: Montserrat-light;
     }
     .white_line{
-        width: 90%;
-        height: 3px;
-        margin:50px auto;
-        -moz-border-radius: 3px;
-        -webkit-border-radius: 3px;
-        border-radius: 3px;
-        background-color: #ffffff;
+        padding: 40px 5%;
     }
     .all_info{
         width: 100%;
-        margin: 0px auto;
+        margin-top: 200px;
+        height: 230px;
+        display: flex;
+        background-color: #FBF0DE;
     }
     .all_info .info_list{
         width: 90%;
@@ -257,7 +272,7 @@
     }
     .ready_order{
         text-align: center;
-        font-size: 2em;
+        font-size: 30px;
         font-weight: bold;
     }
     .down_icon{
@@ -275,6 +290,219 @@
         width: 100%;
         height: 30px;
     }
+    .three_div .three_memo_div{
+        padding: 30px 5%;
+        flex: 1 1 100%;
+    }
+    .three_memo_div div{
+        text-align: center;
+    }
+    .memo_img{
+        width: 200px;
+        height: 200px;
+        margin: 0px auto 20px auto;
+        background-size: 100% auto;
+    }
+    .three_div .three_memo_div:nth-child(1) .memo_img{
+        background-image: url("./tpl/Static/blue/images/new/memo_1.png");
+    }
+    .three_div .three_memo_div:nth-child(2) .memo_img{
+        background-image: url("./tpl/Static/blue/images/new/memo_2.png");
+    }
+    .three_div .three_memo_div:nth-child(3) .memo_img{
+        background-image: url("./tpl/Static/blue/images/new/memo_3.png");
+    }
+    .memo_title{
+        color: black;
+        font-size: 22px;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+    .memo_sub{
+        margin-top: 10px;
+        font-size: 16px;
+        font-family: Montserrat-light;
+    }
+    .desc_white{
+        position: absolute;
+        width: 100%;
+        height: 25px;
+        background-color: white;
+        display: inline-block;
+        bottom: 0px;
+    }
+    .down_img{
+        background-image: url("./tpl/Static/blue/images/new/downloadapp.png");
+        background-size:110% auto;
+        background-repeat: no-repeat;
+        width: 50%;
+        margin-top: -150px;
+    }
+    .down_demo{
+        margin-top: -120px;
+        width: 50%;
+        padding: 0px 3%;
+    }
+    .down_title{
+        font-weight: bold;
+        font-size: 22px;
+        color: black;
+        display: inline-block;
+    }
+    .icon_app{
+        display: block;
+        width: 80px;
+        height: 80px;
+        border-radius: 15px;
+        background-image: url("./tpl/Static/blue/images/new/icon.png");
+        background-size:auto 100%;
+        background-repeat: no-repeat;
+        margin: 40px auto;
+    }
+    .download_input{
+        width: 60%;
+        height: 60px;
+        border-radius: 10px;
+        border: 0px;
+        padding: 5px 10px;
+        font-size: 16px;
+        display: inline-block;
+    }
+    .send_btn{
+        width: 37%;
+        margin-left: 1%;
+        text-align: center;
+        background: #ffa52d;
+        color: white;
+        border-radius: 10px;
+        height: 60px;
+        line-height: 60px;
+        display: inline-block;
+        vertical-align:top;
+        font-weight: bold;
+    }
+    .serving_title{
+        font-size: 24px;
+        font-weight: bold;
+        color: black;
+    }
+    .city_list{
+        margin: 15px auto;
+        padding: 0px;
+    }
+    .city_list li{
+        list-style: none;
+        display: inline-block;
+        width: 45%;
+        height: 60px;
+        line-height: 60px;
+        background-position: center left 10%;
+        background-size: auto 80%;
+        background-repeat: no-repeat;
+        padding-left: 70px;
+        margin: 10px auto;
+        font-size: 16px;
+    }
+    .city_list li:nth-child(1){
+        background-image: url("./tpl/Static/blue/images/new/city/Victoria.png");
+    }
+    .city_list li:nth-child(2){
+        background-image: url("./tpl/Static/blue/images/new/city/Kamloops.png");
+    }
+    .city_list li:nth-child(3){
+        background-image: url("./tpl/Static/blue/images/new/city/Nanaimo.png");
+    }
+    .city_list li:nth-child(4){
+        background-image: url("./tpl/Static/blue/images/new/city/Kelowna.png");
+    }
+    .city_list li:nth-child(5){
+        background-image: url("./tpl/Static/blue/images/new/city/More.png");
+    }
+    .ready_div{
+        width: 100%;
+        padding: 30px 0;
+        background-image: url("./tpl/Static/blue/images/new/ready_background.png");
+        background-size: cover;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+    }
+    .ready_img{
+        background-image: url('./tpl/Wap/pure/static/img/staff_menu/login_img.png');
+        height: 90px;
+        background-size:contain;
+        background-repeat: no-repeat;
+        background-position: center center;
+        width: 90%;
+        margin: -10px auto;
+    }
+    .become_div{
+        width: 90%;
+        margin: 0 auto;
+    }
+    .become_div div{
+        width: 100%;
+        display: inline-block;
+        height: 500px;
+        position: relative;
+    }
+    .become_div .become_img{
+        width: 100%;
+        height: 300px;
+        background-position:center center;
+        background-size: auto 130%;
+        background-repeat: no-repeat;
+    }
+    .become_div div:nth-child(1) .become_img{
+        background-image: url("./tpl/Static/blue/images/new/partner.png");
+    }
+    .become_div div:nth-child(2) .become_img{
+        background-image: url("./tpl/Static/blue/images/new/courier.png");
+    }
+
+    .become_div .become_title{
+        width: 100%;
+        margin: 10px auto;
+        text-align: center;
+        font-size: 24px;
+        font-weight: bold;
+        color: black;
+        height: auto;
+    }
+
+    .become_div .become_desc{
+        width: 100%;
+        margin: 10px auto;
+        text-align: center;
+        font-size: 18px;
+        color: black;
+        height: auto;
+        line-height: 1.5;
+        font-weight: lighter;
+    }
+    .become_div .become_btn{
+        width: 130px;
+        background-color: #ffa52d;
+        border-radius: 15px;
+        height: 40px;
+        line-height: 40px;
+        margin: 10px auto;
+        text-align: center;
+        color: white;
+        font-size: 18px;
+        display: block;
+    }
+    .become_btn a{
+        display: block;
+        color: white;
+        text-decoration: none;
+    }
+    .code_div{
+        border: 1px solid grey;
+        border-radius: 3px;
+        height: 30px;
+        padding: 0 3px;
+    }
 </style>
 <body>
 <script>
@@ -284,96 +512,135 @@
 <include file="Public:header"/>
 <div class="ten"></div>
 <div class="main">
-    <div class="slogan">Your Online Food Community</div>
+    <div class="slogan">BC’S FAVORITE DELIVERY APP</div>
     <div class="search_box">
         <div class="search_back">
-            <input type="text" placeholder="Enter your address" id="address" class="search_input" name="search_word">
+            <input type="text" placeholder="{pigcms{:L('ENTERADDRESS')}" id="address" class="search_input" name="search_word">
             <div class="link_btn"></div>
         </div>
     </div>
 </div>
-<div class="down_div">
+<!--div class="down_div">
     DOWNLOAD THE TUTTI APP
 </div>
 <div class="down_app">
     <span class="app_icon"></span>
     <span class="apk_icon"></span>
+</div-->
+<div class="three_div">
+    <div class="three_memo_div">
+        <div class="memo_img"></div>
+        <div class="memo_title">{pigcms{:L('2LOACALREST')}</div>
+        <div class="memo_sub">{pigcms{:L('2LOACALRESTDES')}</div>
+    </div>
+    <div class="three_memo_div">
+        <div class="memo_img"></div>
+        <div class="memo_title">{pigcms{:L('2LIQUOR')}</div>
+        <div class="memo_sub">{pigcms{:L('2LIQUORDES')}</div>
+    </div>
+    <div class="three_memo_div">
+        <div class="memo_img"></div>
+        <div class="memo_title">{pigcms{:L('2GROCERY')}</div>
+        <div class="memo_sub">{pigcms{:L('2GROCERYDES')}</div>
+    </div>
 </div>
 <div class="app_desc">
     <div class="desc_all">
-        <div class="desc_img"></div>
+        <div class="desc_white"></div>
         <div class="desc_txt">
             <div class="desc_title">
-                {pigcms{:L('_NEW_INDEX_APP_T_1_')}
+                {pigcms{:L('3FAVREST')}
             </div>
             <div class="desc_memo">
-                {pigcms{:L('_NEW_INDEX_APP_D_1_')}
+                {pigcms{:L('3FAVRESTDES')}
             </div>
         </div>
-    </div>
-    <div class="desc_all">
-        <div class="desc_txt" style="width:70%;padding-left:3%;text-align: right">
-            <div class="desc_title">
-                {pigcms{:L('_NEW_INDEX_APP_T_2_')}
-            </div>
-            <div class="desc_memo">
-                {pigcms{:L('_NEW_INDEX_APP_D_2_')}
-            </div>
-        </div>
-        <div class="desc_img" style="margin-left:1%;right: 2%;margin-top: -220px"></div>
-    </div>
-    <div class="desc_all">
         <div class="desc_img"></div>
+    </div>
+    <div class="desc_all">
+        <div class="desc_white"></div>
         <div class="desc_txt">
             <div class="desc_title">
-                {pigcms{:L('_NEW_INDEX_APP_T_3_')}
+                {pigcms{:L('3VIEWMENU')}
             </div>
             <div class="desc_memo">
-                {pigcms{:L('_NEW_INDEX_APP_D_3_')}
+                {pigcms{:L('3VIEWMENUDES')}
             </div>
+        </div>
+        <div class="desc_img"></div>
+    </div>
+    <div class="desc_all">
+        <div class="desc_white"></div>
+        <div class="desc_txt">
+            <div class="desc_title">
+                {pigcms{:L('3TRACK')}
+            </div>
+            <div class="desc_memo">
+                {pigcms{:L('3TRACKDES')}
+            </div>
+        </div>
+        <div class="desc_img"></div>
+    </div>
+</div>
+<div class="all_info" id="download_div">
+    <div class="down_img"></div>
+    <div class="down_demo">
+        <div class="down_title">{pigcms{:L('3DOWNLOADAPP')}</div>
+        <div class="icon_app"></div>
+        <div style="margin-top: 20px;font-size: 14px;line-height: 20px;font-family: Montserrat-light;">
+            {pigcms{:L('3DOWNLOADTEXT')}
         </div>
     </div>
 </div>
-<div class="white_line"></div>
-<div class="all_info">
-    <div class="info_list">
-        <div class="food_comm"></div>
-        <div class="info_txt">
-            {pigcms{:L('_NEW_INDEX_FOOD_')}
-        </div>
-        <div class="info_btn">
-            {pigcms{:L('_NEW_FOOD_COMM_')}
-        </div>
+<div style="background-color: #FBF0DE;padding: 10px 5%">
+    <div style="font-size: 15px;margin-bottom: 15px">
+        Enter your cellphone number to download our app
     </div>
-    <div class="info_list">
-        <div class="info_courier"></div>
-        <div class="info_txt">
-            {pigcms{:L('_NEW_INDEX_COURIER_')}
-        </div>
-        <div class="info_btn">
-            {pigcms{:L('_NEW_BECOME_COURIER_')}
-        </div>
-    </div>
-    <div class="info_list">
-        <div class="info_partner"></div>
-        <div class="info_txt">
-            {pigcms{:L('_NEW_INDEX_PARTNER_')}
-        </div>
-        <div class="info_btn">
-            {pigcms{:L('_NEW_BECOME_PARTNER_')}
-        </div>
+    <input type="text" placeholder="{pigcms{:L('3DOWNLOADAPPDES')}" name="download_input" class="download_input">
+    <span class="send_btn">{pigcms{:L('3GETMESSAGE')}</span>
+    <div class="down_app">
+        <span class="app_icon"></span>
+        <span class="apk_icon"></span>
     </div>
 </div>
-<div class="white_line"></div>
-<div>
+<div class="white_line">
+    <div class="serving_title">{pigcms{:L('4CITIES')}</div>
+    <ul class="city_list">
+        <li>Victoria</li>
+        <li>Kamloops</li>
+        <li>Nanaimo</li>
+        <li>Kelowna</li>
+        <li>{pigcms{:L('4MORE')}</li>
+    </ul>
+</div>
+<div class="ready_div">
     <div class="ready_order">
-        Ready To Order?
+        {pigcms{:L('5READYTOORDER')}
     </div>
-    <div class="search_box" style="margin-top: 30px;margin-bottom: 10px;position: relative">
-        <div class="search_back">
-            <input type="text" placeholder="Enter your address" id="address_bottom" class="search_input" name="search_word">
-            <div class="link_btn"></div>
+    <div class="search_box" style="margin-top: 30px;margin-bottom: 30px;position: relative">
+        <div class="search_back" style="width: 90%">
+            <input type="text" placeholder="{pigcms{:L('ENTERADDRESS')}" id="address_bottom" class="search_input" name="search_word">
+            <span class="link_btn"></span>
         </div>
+    </div>
+    <div class="ready_img"></div>
+</div>
+<div class="become_div">
+    <div>
+        <div class="become_img"></div>
+        <div class="become_title">{pigcms{:L('6PARTNER')}</div>
+        <div class="become_desc">
+            {pigcms{:L('6PARTNERDES')}
+        </div>
+        <div class="become_btn"><a href="{pigcms{$config.site_url}/wap.php?g=Wap&c=Index&a=partner">Learn More</a></div>
+    </div>
+    <div>
+        <div class="become_img"></div>
+        <div class="become_title">{pigcms{:L('6COURIER')}</div>
+        <div class="become_desc">
+            {pigcms{:L('6COURIERDES')}
+        </div>
+        <div class="become_btn"><a href="{pigcms{$config.site_url}/wap.php?g=Wap&c=Index&a=courier">Learn More</a></div>
     </div>
 </div>
 <include file="Public:footer"/>
@@ -502,6 +769,60 @@
                 },'JSON');
             }
         }
+    }
+    function checkPhone(phone) {
+        if(!/^\d{10,}$/.test(phone)){
+            return false;
+        }
+        return true;
+    }
+
+    $(".send_btn").click(function () {
+        var phone = $(".download_input").val();
+        if(!checkPhone(phone)){
+            layer.open({
+                type:3,
+                title: [' ', 'border:0px;height:30px'],
+                content: "{pigcms{:L('_B_LOGIN_ENTERGOODNO_')}",
+                time: 2
+            });
+        }else {
+            layer.open({
+                type: 3,
+                title: [' ', 'border:0px;height:30px'],
+                content: '<div style="width: 320px;">Please verify you\'re not a robot.</div>' +
+                '<div style="margin-top: 10px"><input type="text" name="code" placeholder="Enter Code" class="code_div">' +
+                '<img style="vertical-align: top;margin-left: 10px;margin-top: 3px;" src="/admin.php?g=System&c=Login&a=verify" id="verifyImg" onclick="fleshVerify(\'/admin.php?g=System&c=Login&a=verify\')" title="Refresh" alt="Refresh">' +
+                '<img style="vertical-align: top;margin-left: 5px;margin-top: 3px;" src="/tpl/Static/blue/images/new/icon_refresh.png" onclick="fleshVerify(\'/admin.php?g=System&c=Login&a=verify\')" width=25>' +
+                '</div>',
+                btn: ["Submit & Send Message"],
+                yes: function (index) {
+                    var code = $(".code_div").val();
+                    if (code == "") alert("Please Input Code");
+                    else {
+                        $.post("/index.php?g=Index&c=Index&a=send_message", {'code': code,'phone':phone}, function (result) {
+                            if(result.error == 0){
+                                layer.close(index);
+                                layer.open({
+                                    type:2,
+                                    title: [' ', 'border:0px;height:30px'],
+                                    content: result.msg,
+                                    time: 2
+                                });
+                            }else{
+                                fleshVerify('/admin.php?g=System&c=Login&a=verify');
+                                alert(result.msg);
+                            }
+                        },"json");
+                    }
+                }
+            });
+        }
+    });
+
+    function fleshVerify(url){
+        var time = new Date().getTime();
+        $('#verifyImg').attr('src',url+"&time="+time);
     }
 </script>
 </html>
