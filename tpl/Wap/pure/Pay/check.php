@@ -12,7 +12,8 @@
     <link href="{pigcms{$static_path}css/eve.7c92a906.css" rel="stylesheet"/>
     <link href="{pigcms{$static_path}css/wap_pay_check.css" rel="stylesheet"/>
     <link href="{pigcms{$static_path}css/weixin_pay.css" rel="stylesheet"/>
-    <script src="{pigcms{:C('JQUERY_FILE')}"></script>
+<!--    <script src="{pigcms{:C('JQUERY_FILE')}"></script>-->
+    <script type="text/javascript" src="{pigcms{$static_path}shop/js/jquery1.8.3.js"></script>
     <script src="{pigcms{$static_path}layer/layer.m.js"></script>
     <link href="{pigcms{$static_path}css/check.css" rel="stylesheet"/>
     <link rel="stylesheet" type="text/css" href="{pigcms{$static_public}js/mobiscroll/mobiscroll.custom.min.css" media="all">
@@ -803,27 +804,33 @@
     }
 
     .order_store{
-        line-height: 30px;
-        padding-left: 40px;
-        color: #999;
-        background-image: url("./tpl/Static/blue/images/wap/shop.png");
-        background-repeat: no-repeat;
-        background-size: auto 20px;
-        background-position: 10px center;
+        margin-bottom: 5px;
+        font-size: 18px;
+        color: #ffa52d;
+        margin-left: 10px;
+        padding-bottom: 10px;
+        padding-top: 12px;
     }
     .all_list{
         border: 0;
+        border-radius: 10px;
         background-color: white;
+        margin-top: 10px;
+    }
+    .all_list_nobg{
+        border: 0;
+        border-radius: 10px;
         margin-top: 10px;
     }
     dl.all_list dt, dl.all_list dd{
         border-bottom: 0;
-        border-top: 1px solid #e5e5e5;
+        /*border-bottom: 1px solid #e5e5e5;*/
         display: flex;
-        padding: 20px 0px 20px 40px;
+        padding: 15px 0px 10px 20px;
     }
     .goods_name,.goods_price{
         flex: 1 1 100%;
+        margin-left:20px;
     }
     .goods_price{
         text-align: right;
@@ -843,15 +850,15 @@
         line-height: 1.2em;
     }
     .order_note{
-        line-height: 30px;
-        padding-left: 40px;
-        color: #999;
-        background-image: url("./tpl/Static/blue/images/wap/est_time.png");
-        background-repeat: no-repeat;
-        background-size: auto 20px;
-        background-position: 10px center;
+        padding-left: 10px;
+        padding-top: 10px;
+        padding-bottom: 10px;
         border-bottom: 1px solid #e5e5e5;
-        cursor: pointer;
+        color: #999;
+    }
+    .order_note .left_note{
+        font-size: 18px;
+        color: #ffa52d;
     }
     .est_time{
         color: #ffa52d;
@@ -859,8 +866,9 @@
         margin-right: 20px;
     }
     .coupon_span{
-        color: #ffa52d;
+        color: #4e4d4d;
         float: right;
+        font-size: 16px;
         margin-right: 20px;
     }
     .note_input{
@@ -882,15 +890,19 @@
         background-color: #eee;
         padding-left: 5px;
     }
+    .note_title{
+        padding-top: 9px;
+        padding-bottom: 2px;
+        padding-left: 15px;
+    }
     .note_div{
-        height: 45px;
         padding-top: 7px;
+        padding-bottom: 10px;
     }
     .touch_tip{
         width: 90%;
         margin: 10px auto 0 auto;
-        border: 2px solid #ffa52d;
-        padding: 10px;
+        padding: 10px 0 10px 0;
         box-sizing: border-box;
         font-size: 12px;
     }
@@ -921,33 +933,39 @@
     }
     .av_coupon{
         line-height: 30px;
-        padding-left: 40px;
-        color: #999;
-        background-image: url("./tpl/Static/blue/images/wap/av_coupon.png");
+        padding-left: 10px;
+        font-size: 18px;
+        color: #ffa52d;
+        /* background-image: url(./tpl/Static/blue/images/wap/av_coupon.png); */
+        /* background-repeat: no-repeat; */
+        /* background-size: auto 20px; */
+        /* background-position: 10px center; */
+        background-image: url(./tpl/Static/blue/images/new/black_arrow.png);
         background-repeat: no-repeat;
-        background-size: auto 20px;
-        background-position: 10px center;
+        background-size: auto 16px;
+        background-position: center right;
         border-bottom: 1px solid #e5e5e5;
+        padding: 10px;
+        margin-right: 10px;
     }
     .coupon_desc{
         line-height: 45px;
         padding-left: 40px;
     }
     .coupon_more{
+        color: #ffa52d;
         float: right;
         margin-right: 20px;
-        width:20px;
+        float: right;
+        margin-right: 20px;
         height: 30px;
-        background-image: url("./tpl/Static/blue/images/new/black_arrow.png");
-        background-repeat: no-repeat;
-        background-size: auto 16px;
-        background-position: center;
     }
     .payment{
         line-height: 30px;
-        padding-left: 40px;
-        color: #999;
-        background-image: url("./tpl/Static/blue/images/wap/payment.png");
+        padding-left: 10px;
+        color: #ffa52d;
+        padding: 10px 0 10px 10px;
+        font-size: 18px;
         background-repeat: no-repeat;
         background-size: auto 20px;
         background-position: 10px center;
@@ -955,12 +973,9 @@
     }
     .tip_title{
         line-height: 30px;
-        padding-left: 40px;
-        color: #999;
-        background-image: url("./tpl/Static/blue/images/wap/tip.png");
-        background-repeat: no-repeat;
-        background-size: auto 20px;
-        background-position: 10px center;
+        font-size: 18px;
+        padding-left: 10px;
+        color: #ffa52d;
         display: flex;
     }
     input.mt[type="radio"]:checked, input.mt[type="checkbox"]:checked{
@@ -1013,12 +1028,7 @@
         float: right;
     }
     .price_total{
-        width: 100%;
-        line-height: 40px;
-        border-top: 1px solid #e5e5e5;
-        text-align: right;
-        padding-right: 5%;
-        color: #ffa52d;
+        font-weight: bold;
     }
     #agree_div{
         width: 90%;
@@ -1031,11 +1041,11 @@
         text-decoration: underline;
     }
     .confirm_btn{
-        width: 50%;
+        width: 90%;
         background-color: #ffa52d;
         color: #fff;
         border: none;
-        margin: 20px 25%;
+        margin: 20px 5%;
         font-size: 1.2em;
         line-height: 30px;
         border-radius: 2px;
@@ -1047,6 +1057,7 @@
     .user_address{
         width: 100%;
         background-color: white;
+        border-radius: 10px;
         /*background-image: url("./tpl/Static/blue/images/wap/address.png");*/
         /*background-repeat: no-repeat;*/
         /*background-size: auto 40px;*/
@@ -1055,21 +1066,45 @@
     }
     .user_address .div_content{
         line-height: 25px;
-        margin-left: 10px;
-        padding-right: 20px;
-        font-size: 16px;
-        background-image: url(./tpl/Static/blue/images/new/black_arrow.png);
+        margin-left: 14px;
+        padding-right: 10px;
+        font-size: 14px;
+        /*background-image: url(./tpl/Static/blue/images/new/black_arrow.png);*/
         background-repeat: no-repeat;
         background-size: auto 16px;
         background-position: center right;
     }
-    .user_address .div_title{
+   .user_address .div_title{
+        margin-bottom: 5px;
         border-bottom: 1px solid #f0efed;
         font-size: 18px;
-        font-weight: bold;
         color: #ffa52d;
         margin-left: 10px;
         padding-bottom: 10px;
+    }
+
+    input::-webkit-input-placeholder,textarea::-webkit-input-placeholder  {
+        /* WebKit browsers */
+        color: #858585;
+        font-size: 14px;
+    }
+
+    input:-moz-placeholder ,textarea::-moz-placeholder{
+        /* Mozilla Firefox 4 to 18 */
+        color: #858585;font-size: 14px;
+    }
+
+    input::-moz-placeholder,textarea::-moz-placeholder {
+        /* Mozilla Firefox 19+ */
+        color: #858585;font-size: 14px;
+    }
+
+    input::-ms-input-placeholder,textarea::-ms-input-placeholder {
+        /* Internet Explorer 10+ */
+        color: #858585;font-size: 14px;
+    }
+    .pay-wrapper img{
+        margin-right:5px;
     }
 </style>
 <include file="Public:header"/>
@@ -1077,23 +1112,45 @@
     <if condition="$order_info['order_type'] != 'recharge'">
     <div class="user_address">
         <div class="div_title">{pigcms{:L('_C_DELIVERY_ADDRESS_')}</div>
-        <a href="{pigcms{:U('My/adress',array('buy_type' => 'check', 'store_id'=>$order_info['store_id'], 'village_id'=>$village_id, 'mer_id' => $store['mer_id'], 'frm' => $_GET['frm'], 'current_id'=>$user_adress['adress_id'], 'order_id' => $order_id))}">
+<!--        <a href="{pigcms{:U('My/adress',array('buy_type' => 'check', 'store_id'=>$order_info['store_id'], 'village_id'=>$village_id, 'mer_id' => $store['mer_id'], 'frm' => $_GET['frm'], 'current_id'=>$user_adress['adress_id'], 'order_id' => $order_id))}">-->
             <div class="div_content">{pigcms{$order_info['username']}({pigcms{$order_info['phone']})<br/>{pigcms{$order_info['address']}</div>
-        </a>
+<!--        </a>-->
+        <if condition="$not_touch['status'] eq 1">
+            <div class="touch_tip">
+                <div style="font-weight: bold;"><input type="hidden" name="est_time" id="est_time_input">
+                    <input type="checkbox" class="mt" value="1" name="not_touch" style="border-radius: 0;width: .40rem;height: .40rem;line-height: .40rem;">
+                    {pigcms{$not_touch.title}
+                </div>
+<!--                <div style="margin-top: 8px;color: #999999">{pigcms{$not_touch.content}</div>-->
+            </div>
+        </if>
+<!--        <div class="note_title">{pigcms{:L('V3_DELIVER_NOTES_TITLE')}</div>-->
+<!--        <div class="note_div">-->
+<!--            <textarea type="text" name="deliver_note" class="note_input" placeholder="{pigcms{:L('V3_DELIVER_NOTES')}"></textarea>-->
+<!--        </div>-->
     </div>
     </if>
     <dl class="all_list">
-        <div class="order_store">{pigcms{$order_info['order_name']}</div>
+        <div class="order_note">
+            <span class="left_note">{pigcms{$order_info['order_name']}</span>
+            <!--span class="coupon_more"></span-->
+            <span class="est_time">ASAP</span>
+        </div>
         <volist name="order_info['order_content']" id="vo">
             <dd>
+                <div class="goods_num">{pigcms{$vo['num']}</div>
                 <div class="goods_name">
                     <div>{pigcms{$vo['name']}</div>
                 </div>
-                <div class="goods_num">{pigcms{$vo['num']}</div>
-                <div class="goods_price">${pigcms{$vo['price']}</div>
+
+<!--                <div class="goods_price">${pigcms{$vo['price']}</div>-->
             </dd>
             <div class="goods_spec">{pigcms{$vo['spec']}</div>
         </volist>
+        <div class="note_title">{pigcms{:L('V3_SHOP_NOTES_TITLE')}</div>
+        <div class="note_div">
+            <textarea type="text" name="note" class="note_input" placeholder="{pigcms{:L('V3_SHOP_NOTES')}"></textarea>
+        </div>
     </dl>
 
     <form action="{pigcms{:U('Index/Pay/MonerisPay')}" method="post" id="moneris_form">
@@ -1124,52 +1181,24 @@
         <input type="hidden" name="service_fee" value="{pigcms{$order_info.service_fee}">
         <if condition="$order_info['order_type'] != 'recharge'">
         <div class="all_list">
-            <div class="order_note">
-                Scheduled Delivery
-                <!--span class="coupon_more"></span-->
-                <span class="est_time">ASAP</span>
-                <input type="hidden" name="est_time" id="est_time_input">
-            </div>
-            <if condition="$not_touch['status'] eq 1">
-            <div class="touch_tip">
-                <div style="font-weight: bold;">
-                    <input type="checkbox" class="mt" value="1" name="not_touch" style="border-radius: 0;width: .40rem;height: .40rem;line-height: .40rem;">
-                    {pigcms{$not_touch.title}
-                </div>
-                <div style="margin-top: 8px;color: #999999">{pigcms{$not_touch.content}</div>
-            </div>
-            </if>
-            <div class="note_div">
-                <input type="text" name="note" class="note_input" placeholder="Note">
-            </div>
+
+
         </div>
         <div class="all_list">
             <a class="react" href="{pigcms{:U('My/select_card',($coupon_url?$coupon_url :$_GET))}&coupon_type=system&delivery_type={pigcms{$order_info['is_c']}" >
                 <div class="av_coupon">
-                    Available Coupons
-                    <span class="coupon_more"></span>
+                    {pigcms{:L('V3_USE_COUPON')}
+                    <?php if($system_coupon){ ?>
+                            <span class="coupon_span">-${pigcms{$system_coupon['discount']} off</span>
+                    <?php } ?>
                 </div>
             </a>
-            <?php if($system_coupon){ ?>
-                <div class="coupon_desc">
-                    <php>if(C('DEFAULT_LANG') == 'zh-cn'){</php>
-                    {pigcms{:replace_lang_str(L('_MAN_NUM_REDUCE_'),$system_coupon['order_money'])}{pigcms{:replace_lang_str(L('_MAN_REDUCE_NUM_'),$system_coupon['discount'])}
-                    <php>}else{</php>
-                    {pigcms{:replace_lang_str(L('_MAN_NUM_REDUCE_'),$system_coupon['discount'])}{pigcms{:replace_lang_str(L('_MAN_REDUCE_NUM_'),$system_coupon['order_money'])}
-                    <php>}</php>
-                    <span class="coupon_span">-${pigcms{$system_coupon['discount']}</span>
-                </div>
-            <?php }else{ ?>
-                <div class="apply_div">
-                    <input type="text" name="coupon_code" class="coupon_code" placeholder="{pigcms{:L('_EXCHANGE_COUPON_')}">
-                    <div id="ex_code">{pigcms{:L('_EXCHANGE_TXT_')}</div>
-                </div>
-            <?php } ?>
+
         </div>
         </if>
         <div class="all_list">
         <div class="payment">
-            Payment
+            {pigcms{:L('V3_PAYMENT_METHORD')}
         </div>
         <div class="pay-methods-panel">
             <div class="normal-fieldset">
@@ -1178,8 +1207,8 @@
                         <dd class="dd-padding" id="balance_money" <if condition="$now_user.now_money eq 0 OR $merchant_balance gt $order_info.order_total_money ">style="color: #C1B9B9;"</if>>
                         <label class="mt">
                             <span class="pay-wrapper">
-                                <img src="./tpl/Static/blue/images/wap/dollar.png" style="height: 25px"/>
-                                <font style="color: #ffa52d">${pigcms{$now_user.now_money}</font> &nbsp;&nbsp;Balance Pay
+                                <img src="./tpl/Static/blue/images/wap/ic_logo.png" style="height: 25px"/>
+                                {pigcms{:L('V3_PAYMENT_CREDITS')} ${pigcms{$now_user.now_money}
                                 <input type="checkbox" class="mt"  id="use_balance" name="use_balance"<if condition="$now_user['now_money'] eq 0 OR $merchant_balance gt $order_info['order_total_money'] ">disabled="disabled" value="1"<else /> value="0" checked="checked" </if>>
                             </span>
                         </label>
@@ -1194,7 +1223,10 @@
                                 <!--i class="bank-icon icon-{pigcms{$key}"></i-->
                                 <span class="pay-wrapper">
                                     <img src="{pigcms{$static_public}images/pay/{pigcms{$key}.png" style="height: 25px"/>
-                                    <if condition="$key eq 'offline'">Cash</if>
+                                    <if condition="$key eq 'offline'">{pigcms{:L('V3_PAYMENT_METHORD_CASH')}</if>
+                                    <if condition="$key eq 'moneris'">{pigcms{:L('V3_PAYMENT_METHORD_MONERIS')}</if>
+                                    <if condition="$key eq 'alipay'">{pigcms{:L('V3_PAYMENT_METHORD_ALIPAY')}</if>
+                                    <if condition="$key eq 'weixin'">{pigcms{:L('V3_PAYMENT_METHORD_WEIXIN')}</if>
                                     <input type="radio" class="mt" value="{pigcms{$key}"  <php>if($key == 'moneris'){</php>checked="checked"<php>}</php> name="pay_type">
                                 </span>
                             </label>
@@ -1257,34 +1289,41 @@
                 </dl>
             </div>
         </div>
+
+
+
+        </div>
+
         <if condition="$order_info['order_type'] != 'recharge'">
-            <div id="tip_label" class="normal-fieldset">
-                <dl class="list" style="border-bottom: 0;position: relative;">
-                    <div class="tip_title">
-                        <div>{pigcms{:L('_TIP_TXT_')}</div>
-                        <div id="tip_list">
-                            <span class="tip_s tip_on">
-                                15%
-                            </span>
+            <div class="all_list">
+                <div id="tip_label" class="normal-fieldset">
+                    <dl class="list" style="border-bottom: 0;position: relative;">
+                        <div class="tip_title">
+                            <div>{pigcms{:L('_TIP_TXT_')}</div>
+                            <div id="tip_list">
+                                <span class="tip_s tip_on">
+                                    15%
+                                </span>
                                 <span class="tip_s">
-                                20%
-                            </span>
+                                    20%
+                                </span>
                                 <span class="tip_s">
-                                25%
-                            </span>
+                                    25%
+                                </span>
+                            </div>
+                            <div id="tip_input">
+                                $ <input type="text" id="tip_fee" name="tip_fee" size="20">
+                            </div>
+                            <span class="tip_more"></span>
                         </div>
-                        <div id="tip_input">
-                            $ <input type="text" id="tip_fee" name="tip_fee" size="20">
-                        </div>
-                        <span class="tip_more"></span>
-                    </div>
-                </dl>
+                    </dl>
+                </div>
             </div>
         </if>
         <span id="tip_num" style="display: none;">$0</span>
         <span id="add_tip" style="display: none;">$0</span>
-        </div>
-        <div class="all_list">
+
+        <div class="all_list_nobg">
             <if condition="$order_info['order_type'] != 'recharge'">
             <div class="price_list">
                 <if condition="$order_info['delivery_discount'] neq 0">
@@ -1319,11 +1358,12 @@
                         Save <span>-${pigcms{:sprintf("%.2f",$order_info['delivery_discount']+$order_info['merchant_reduce'])}</span>
                     </div>
                 </if>
+                <div class="price_total">
+                    Total <span></span>
+                </div>
             </div>
             </if>
-            <div class="price_total">
-                Total <span></span>
-            </div>
+
         </div>
         <div id="agree_div">
             <input type="checkbox" name="is_agree" class="form-field" id="is_agree" value="1" checked="checked"/>
@@ -1331,7 +1371,7 @@
             <a href="./intro/5.html" target="_blank">Terms of Use</a> and <a href="./intro/2.html" target="_blank">Privacy Policy</a>
         </div>
         <div style="text-align: center; color: #ffa52d; margin-bottom: -10px" id="count_down"></div>
-        <button type="button" class="confirm_btn">{pigcms{:L('_B_D_LOGIN_CONIERM_')}</button>
+        <button type="button" class="confirm_btn">{pigcms{:L('V3_CHECKOUT_SUBMIT')}</button>
             <!--div style="background-color: #FFFFFF; height: 53px;position: fixed;bottom: 0;left: 0;right: 0;z-index: 900;-webkit-tap-highlight-color: rgba(0, 0, 0, 0);height: 49px;width: 100%;">
                 <div id="need_pay_title" style="    position: absolute;margin-top: 18px;margin-left: 0.3rem;">
                     {pigcms{:L('_ALSO_NEED_PAY_')} <div style="font-weight:bold;color:red;display: inline;">$<div class="need-pay" style="display:inline;">
@@ -1703,7 +1743,7 @@
                 update_pay_time()
             }, 1000);
         }
-    }wrapper-list
+    }
     <if condition="$order_info['order_type'] != 'recharge'">
     update_pay_time();
     </if>

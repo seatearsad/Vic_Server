@@ -11,7 +11,7 @@
 	<meta name="format-detection" content="address=no">
     <link href="{pigcms{$static_path}css/eve.7c92a906.css" rel="stylesheet"/>
     <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/common.css?215"/>
-    <script type="text/javascript" src="{pigcms{:C('JQUERY_FILE_190')}" charset="utf-8"></script>
+    <script type="text/javascript" src="{pigcms{$static_path}js/jquery.min.js" charset="utf-8"></script>
     <style>
 		dl.list dd dl{ padding-left:0;background-color: white;width: 98%;margin: 0px auto;}
 		.dealcard-img{ margin-left:.2rem}
@@ -283,8 +283,7 @@
 		<div style="margin-top:.2rem;">
 		    <dl class="list tabs-content" id="orders">
 				<div tab-id="1" class="tab active">
-
-				<volist name="order_list" id="order">
+				    <volist name="order_list" id="order">
 					<dd id="my_order_{pigcms{$order['order_id']}">
 						<dl>
 							<dd class="order-num"><span id="ord_num">{pigcms{$order.real_orderid}</span>
@@ -378,40 +377,41 @@
 					<div style=" height:10px; background:#f0efed"></div>
 				</volist>
 				</div>
-			<div tab-id="2" class="tab"></div>
-			<div tab-id="3" class="tab"></div>
-			<div tab-id="4" class="tab"></div>
+                <div tab-id="2" class="tab"></div>
+                <div tab-id="3" class="tab"></div>
+                <div tab-id="4" class="tab"></div>
 		    </dl>
 		</div>
 
-		<script src="{pigcms{:C('JQUERY_FILE')}"></script>
 		<script type="text/javascript" src="{pigcms{$static_path}layer/layer.m.js" charset="utf-8"></script>
 		<script type="text/javascript" language="javascript">
-			var activePos = $('.tabs-header .active').position();
-			var url = "{pigcms{:U('ajax_shop_order_list')}"
-			function changePos() {
-				activePos = $('.tabs-header .active').position();
-				$('.border').stop().css({
-					left: activePos.left,
-					width: $('.tabs-header .active').width()
-				});
-			}
-			changePos();
-			var tabHeight = $('.tab.active').height();
-			function animateTabHeight() {
-				tabHeight = $('.tab.active').height();
-				$('.tabs-content').stop().css({ height: tabHeight + 'px' });
-			}
 
+			// var activePos = $('.tabs-header .active').position();
+            //
+			// function changePos() {
+			// 	activePos = $('.tabs-header .active').position();
+			// 	$('.border').stop().css({
+			// 		left: activePos.left,
+			// 		width: $('.tabs-header .active').width()
+			// 	});
+			// }
+			// changePos();
+			// var tabHeight = $('.tab.active').height();
+			// function animateTabHeight() {alert(111);
+			// 	tabHeight = $('.tab.active').height();
+			// 	$('.tabs-content').stop().css({ height: tabHeight + 'px' });
+			// }
+            var url = "{pigcms{:U('ajax_shop_order_list')}"
 			var tabItems = $('.tabs-header ul li');
-			var tabCurrentItem = tabItems.filter('.active');
+			var tabCurrentItem = tabItems.filter('.active');//get currentactive的
+
 			$('.tabs-header a').on('click', function (e) {
 				e.preventDefault();
 				var tabId = $(this).attr('tab-id');
 
 				$('.tabs-header a').stop().parent().removeClass('active');
 				$(this).stop().parent().addClass('active');
-				changePos();
+				//changePos();
 				tabCurrentItem = tabItems.filter('.active');
 				$('.tab').stop().fadeOut(300, function () {
 					$(this).removeClass('active');
@@ -544,8 +544,6 @@
 				if(!order_id){
 					return false;
 				}
-
-
 
 				layer.open({
 				content:"{pigcms{:L('_B_PURE_MY_84_')}",

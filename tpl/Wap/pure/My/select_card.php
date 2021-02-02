@@ -11,6 +11,7 @@
 		<meta name="format-detection" content="address=no">
 		<link href="{pigcms{$static_path}css/eve.7c92a906.css" rel="stylesheet"/>
         <script type="text/javascript" src="{pigcms{:C('JQUERY_FILE_190')}" charset="utf-8"></script>
+        <script src="{pigcms{$static_path}layer/layer.m.js"></script>
 		<style>
 			 dl.list dd.dealcard {
 				overflow: visible;
@@ -226,12 +227,40 @@
                 padding-right: 5px;
                 font-size: 12px;
             }
-		</style>
+
+            .apply_div {
+                height: 45px;
+                padding-top: 7px;
+                display: flex;
+            }
+            .coupon_code {
+                border: 0;
+                width: 70%;
+                margin-left: 5%;
+                height: 25px;
+                line-height: 25px;
+                background-color: #eee;
+                padding-left: 5px;
+            }
+            #ex_code {
+                width: 18%;
+                height: 25px;
+                line-height: 25px;
+                color: white;
+                background-color: #ffa52d;
+                text-align: center;
+                margin-left: 2%;
+                cursor: pointer;
+                border-radius: 2px;
+            }
+
+
+        </style>
         <include file="Public:facebook"/>
 	</head>
 	<body id="index" data-com="pagecommon">
     <include file="Public:header"/>
-    <div class="main">
+    <dd class="main">
 		<div id="tips" class="tips"></div>
         <if condition="$delivery_type eq 0">
         <div id="delivery_desc">
@@ -296,18 +325,25 @@
 			<div id="tips" class="tips"></div>
 			
 			<dl class="list ">
-					<dd class="address-wrapper">
-						<a class="react" href="{pigcms{$unselect}">
-							<div class="address-select"><input class="mt" type="radio" name="addr"></div>
-							<div class="address-container">
-								<div class="kv-line">
-									<h6>{pigcms{:L('_NOT_USE_COUPONE_')}</h6>
-								</div>
-							
-							</div>
-						</a>
-					</dd>
-				</dl>
+                <dd class="address-wrapper">
+                    <a class="react" href="{pigcms{$unselect}">
+                        <div class="address-select"><input class="mt" type="radio" name="addr"></div>
+                        <div class="address-container">
+                            <div class="kv-line">
+                                <h6>{pigcms{:L('_NOT_USE_COUPONE_')}</h6>
+                            </div>
+
+                        </div>
+                    </a>
+                </dd>
+            </dl>
+            <dl class="list ">
+                <dd class="apply_div">
+                    <input type="text" name="coupon_code" class="coupon_code" placeholder="{pigcms{:L('_EXCHANGE_COUPON_')}">
+                    <div id="ex_code">{pigcms{:L('_EXCHANGE_TXT_')}</div>
+                </dd>
+            </dd>
+
 			<volist name="coupon_list" id="vo">
 				<dl class="list <if condition="$vo['id'] eq $_GET['sysc_id']">active</if>">
 					<dd class="address-wrapper">
@@ -355,6 +391,38 @@
 					window.location.href = $(this).closest('a').attr('href');
 				});
 			});
+
+            $("#ex_code").click(function(){
+                var code = $("input[name='coupon_code']").val();
+                if(code == ""){
+                    layer.open({
+                        title:'Message',
+                        content:"{pigcms{:L('_INPUT_EXCHANGE_CODE_')}"
+                    });
+                } else{
+                    exchange_code(code);
+                }
+            })
+
+            function exchange_code(code){
+                $.ajax({url:"{pigcms{:U('My/exchangeCode')}",type:"post",data:"code="+code,dataType:"json",success:function(data){
+                        if(data.error_code == 0){
+                            layer.open({
+                                title:'Message',
+                                time:1,
+                                content:"Success"
+                            });
+                            window.location.reload();
+                        }else{
+                            layer.open({
+                                title:'Message',
+                                time:1,
+                                content:data.msg
+                            });
+                        }
+                    }
+                });
+            }
 		</script>
     </div>
 {pigcms{$hideScript}

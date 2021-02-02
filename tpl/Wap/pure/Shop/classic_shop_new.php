@@ -806,10 +806,7 @@
                 move_size = $(this).scrollLeft();
                 setSubMove();
             });
-            $('body').everyTime('1s',function(){
-                var top = $(document).scrollTop();
-                console.log("timer=top="+top);
-            });
+
             function setSubMove() {
                 if(move_size > 0){
                     if($('.sub_left').css('opacity') == 0){

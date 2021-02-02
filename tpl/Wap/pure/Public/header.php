@@ -419,6 +419,17 @@
         </if>
 
         <if condition="MODULE_NAME == 'My'">
+            <if condition="ACTION_NAME == 'shop_order_list'">
+                <div class="this_header">
+                    {pigcms{:L('V3_ORDER_LIST_TITLE')}
+                </div>
+            </if>
+            <if condition="ACTION_NAME == 'select_card'">
+                <div class="this_header">
+                    <span id="back_button_span"></span>
+                    {pigcms{:L('V2_ACCOUNT_MENU_COUPONS')}
+                </div>
+            </if>
             <if condition="ACTION_NAME == 'index'">
                 <div class="this_header">
                     {pigcms{:L('V2_PAGETITLE_ACCOUNT')}

@@ -204,22 +204,56 @@ a {
 	word-wrap: break-word;
 }
 .container{
-    padding-top: 70px;
+    padding: 70px 10px 40px 10px;
 }
 .user_address{
     width: 100%;
+    border-radius: 10px;
     background-color: white;
-    background-image: url("./tpl/Static/blue/images/wap/address.png");
+    /*background-image: url("./tpl/Static/blue/images/wap/address.png");*/
     background-repeat: no-repeat;
     background-size: auto 40px;
     background-position: 10px center;
-    padding: 10px 0;
+    padding: 10px 0 0 10px;
 }
-.user_address div{
+.user_address .div_title{
+    border-bottom: 1px solid #f0efed;
     line-height: 25px;
-    margin-left: 70px;
-    font-size: 1.1em;
+    padding-right: 20px;
+    font-size: 18px;
+    padding-bottom: 8px;
+    background-repeat: no-repeat;
+    background-size: auto 16px;
+    background-position: center right;
 }
+.user_address .div_content{
+    line-height: 25px;
+    padding-right: 60px;
+    font-size: 16px;
+    padding-left: 5px;
+    width: 98%;
+    margin: 10px 0 10px 0;
+    background-image: url(./tpl/Static/blue/images/new/black_arrow.png);
+    background-repeat: no-repeat;
+    background-size: auto 16px;
+    background-position: center right;
+    padding-bottom: 10px;
+
+}
+.user_address .div_content div{
+    line-height: 20px;
+    padding-right: 20px;
+    font-size: 14px;
+}
+.user_address .div_content .div_select{
+    padding: 16px 0 0;
+    margin-bottom: 10px;
+    font-size: 14px;
+    vertical-align: middle;
+}
+
+
+
 .menu_list li strong{
     color: #ffa52d;
 }
@@ -231,8 +265,7 @@ a {
     border-radius: 10px;
     margin-top: 90px;
     bottom: 80px;
-    width: 90%;
-    left: 5%;
+    width: 100%;
     background: white;
     padding: 10px 5px 5px 10px;
 }
@@ -310,6 +343,7 @@ a {
 .fixed{
     background-color:unset;
 }
+
 </style>
 </head>
 <script type="text/javascript" src="{pigcms{$static_path}shop/js/scroller.js"></script>
@@ -320,10 +354,13 @@ a {
 
         <a href="{pigcms{:U('My/adress',array('buy_type' => 'shop', 'store_id'=>$store['store_id'], 'village_id'=>$village_id, 'mer_id' => $store['mer_id'], 'frm' => $_GET['frm'], 'current_id'=>$user_adress['adress_id'], 'order_id' => $order_id))}">
         <div class="user_address">
-            <div>{pigcms{$user_adress['name']} {pigcms{$user_adress['phone']}</div>
-            <div><if condition="$user_adress['adress_id']">{pigcms{$user_adress['adress']} {pigcms{$user_adress['detail']}
-                    <else/>
-                    <span style="color: #ffa52d">{pigcms{:L('_CLICK_ADD_NEW_A_')}</span>
+            <div class="div_title">{pigcms{:L('_C_DELIVERY_ADDRESS_')}</div>
+            <div class="div_content">
+                <if condition="$user_adress['adress_id']">
+                    <div>{pigcms{$user_adress['name']} {pigcms{$user_adress['phone']}</div>
+                    <div>{pigcms{$user_adress['adress']} {pigcms{$user_adress['detail']}</div>
+                <else/>
+                    <div class="div_select">{pigcms{:L('_CLICK_ADD_NEW_A_')}</div>
                 </if>
             </div>
         </div>
@@ -474,7 +511,7 @@ a {
 	</if>
     </form>
 </div>
-<div class="fixed" style="min-height:90px;padding:14px;">
+<div class="fixed" style="min-height:90px;padding:14px;background:#f8f8f8">
     <if condition="$store['free_delivery'] eq 1">
         <div id="free_delivery">
             <php>
@@ -899,7 +936,7 @@ $(document).ready(function () {
 	}
 });
 
-function callbackUserAddress(address){
+function callbackUserAddress(address){ alert("callbackUserAddress");
 	var addressArr = address.split('<>');
 	// $('#remarkTxt').html(addressArr[0]);
 	$('#address_id').val(addressArr[0]);
