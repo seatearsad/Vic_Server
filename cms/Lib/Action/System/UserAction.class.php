@@ -957,7 +957,7 @@ class UserAction extends BaseAction {
         $uList = explode(',',$uid);
 
         if (count($uList) == 1){
-            $result = D('System_coupon')->had_pull($coupon_id,$uid);
+            $result = D('System_coupon')->had_pull($coupon_id,$uid,0,$this->system_session['account']);
             if($result['error_code'] == 0){
                 $sms_data['uid'] = $uid;
                 $userInfo = D('User')->get_user($uid);
@@ -968,13 +968,13 @@ class UserAction extends BaseAction {
                 //Sms::sendSms2($sms_data);
                 $sms_txt = "Tutti has added a new coupon to your account! Please log in to your account and check available coupons for details.";
                 //Sms::telesign_send_sms($userInfo['phone'],$sms_txt,1);
-                Sms::sendTwilioSms($userInfo['phone'],$sms_txt);
+                //Sms::sendTwilioSms($userInfo['phone'],$sms_txt);
 
             }
             exit(json_encode($result));
         }else{
             foreach($uList as $v){
-                $result = D('System_coupon')->had_pull($coupon_id,$v);
+                $result = D('System_coupon')->had_pull($coupon_id,$v,0,$this->system_session['account']);
                 if($result['error_code'] == 0){
                     $sms_data['uid'] = $v;
                     $userInfo = D('User')->get_user($v);

@@ -128,11 +128,11 @@
             if(f_tid[0] == 'new'){
                 $('#'+tid).remove();
             }else{
-                $.post("{pigcms{:U('Shop/del_dish_value')}", {'dish_value_id':f_tid[1]}, function (result) {
+                $.post("{pigcms{:U('Shop/del_dish_value')}", {'dish_value_id':f_tid[1],'dish_id':'{pigcms{$dish_id}'}, function (result) {
                     if(result['error'] == 0){
                         $('#'+tid).remove();
                     }else{
-                        alert('删除失败！');
+                        alert(result['message']);
                     }
                 },'json');
             }
@@ -164,9 +164,9 @@
             }
         });
 
-        $('form.form-horizontal').submit(function(){
+        //$('form.form-horizontal').submit(function(){
             //$(this).find('button[type="submit"]').html('保存中...').prop('disabled',true);
-        });
+        //});
         /*分享图片*/
         $('#image-file').ace_file_input({
             no_file:'gif|png|jpg|jpeg格式',
@@ -183,20 +183,44 @@
     
     function checkForm() {
         var is_ok = true;
+        var value_list = {};
         $('form').find('input').each(function () {
             //alert($(this).attr('name') + $(this).val());
             if($(this).val() == ''){
                 is_ok = false;
             }
+
+            if($(this).attr('name').indexOf("value_name") != -1){
+                var index = $(this).attr('name').split("-");
+                value_list[index[1]] = {};
+                value_list[index[1]]['value'] = $(this).val();
+            }
+            if($(this).attr('name').indexOf("value_price") != -1){
+                var index = $(this).attr('name').split("-");
+                //console.log(index[1]);
+                value_list[index[1]]['price'] = $(this).val();
+            }
         });
+
+        var is_value = false;
+        for (var key in value_list) {
+            var value = value_list[key];
+            if(value['value'] != "" && value['price'] != ""){
+                is_value = true;
+            }
+        }
+        if(!is_value){
+            alert("Please add a choice first.");
+            return false;
+        }
 
         if(!is_ok){
             alert("{pigcms{:L('_PLEASE_INPUT_ALL_')}");
+            return false;
         }else{
             $('form.form-horizontal').find('button[type="submit"]').html('保存中...').prop('disabled',true);
+            return true;
         }
-
-        return is_ok;
     }
 
     function previewimage(input){

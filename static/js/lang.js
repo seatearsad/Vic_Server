@@ -13,7 +13,7 @@ function setCookie(c_name,value,expiredays)
 }
 
 $('.lang_div').hover(function () {
-    $(this).children('.lang_select').show();
+    $(this).children('.lang_select').css("display","inline-block");
 },function () {
     $(this).children('.lang_select').hide();
 })

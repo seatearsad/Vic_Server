@@ -37,7 +37,7 @@
             </tr>
             <tr>
                 <th width="80">
-                    <if condition="$event_type eq 3 or $event_type eq 4">
+                    <if condition="$event_type eq 3 or $event_type eq 4 or $event_type eq 5">
                         可否使用优惠券
                         <else />
                         优惠券类型
@@ -46,14 +46,14 @@
                 <td>
                     <select name="type">
                         <option value="0" <if condition="$coupon.type eq 0">selected</if>>
-                        <if condition="$event_type eq 3 or $event_type eq 4">
+                        <if condition="$event_type eq 3 or $event_type eq 4 or $event_type eq 5">
                             不可
                             <else />
                             本人
                         </if>
                         </option>
                         <option value="1" <if condition="$coupon.type eq 1">selected</if>>
-                        <if condition="$event_type eq 3 or $event_type eq 4">
+                        <if condition="$event_type eq 3 or $event_type eq 4 or $event_type eq 5">
                             可用
                             <else />
                             邀请人

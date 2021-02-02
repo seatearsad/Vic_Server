@@ -265,6 +265,46 @@ class IndexAction extends BaseAction {
     }
 
     public function map(){
+        $order_id = $_GET['order_id'];
+        $data['store_lat'] = 0;
+        $data['store_lng'] = 0;
+        $data['user_lat'] = 0;
+        $data['user_lng'] = 0;
+        $data['deliver_lat'] = 0;
+        $data['deliver_lng'] = 0;
+        if($order_id){
+            $supply = D('Deliver_supply')->where(array('order_id'=>$order_id))->find();
+            if($supply){
+                $deliver_id = $supply['uid'];
+                $deliver = D('Deliver_user')->where(array('uid'=>$deliver_id))->find();
+                $data['store_lat'] = $supply['from_lat'];
+                $data['store_lng'] = $supply['from_lnt'];
+                $data['user_lat'] = $supply['aim_lat'];
+                $data['user_lng'] = $supply['aim_lnt'];
+                $data['deliver_lat'] = $deliver['lat'];
+                $data['deliver_lng'] = $deliver['lng'];
+            }
+        }
+
+        $this->assign('data',$data);
         $this->display();
+    }
+
+    public function send_message(){
+        //var_dump(md5($_POST['code'])."-----".$_SESSION['admin_verify']);
+        $phone = $_POST['phone'];
+        if(md5($_POST['code']) == $_SESSION['admin_verify']){
+            $sms_txt = "You have requested to get the Tutti app download links:
+                        For iOS users: qrco.de/bbILJK ;
+                        For Android users: qrco.de/bbOFZR";
+            Sms::sendTwilioSms($phone,$sms_txt);
+            $return['error'] = 0;
+            $return['msg'] = "Success";
+        }else{
+            $return['error'] = 1;
+            $return['msg'] = "Code Error";
+        }
+
+        exit(json_encode($return));
     }
 }

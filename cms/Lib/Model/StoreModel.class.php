@@ -47,12 +47,39 @@ class StoreModel extends Model
         $store['shop_remind'] = $row['shop_remind'];
         $store['pay_method'] = $row['pay_method'];
 
+        if($row['background'] && $row['background'] != '') {
+            $image_tmp = explode(',', $row['background']);
+            $store['background'] = C('config.site_url') . '/upload/background/' . $image_tmp[0] . '/' . $image_tmp['1'];
+        }else{
+            $store['background'] = '';
+        }
+
         $store['is_close'] = 1;
         $now_time = date('H:i:s');
 
         if($row['store_is_close'] != 0){
             $row = checkAutoOpen($row);
         }
+
+        $time_list = array();
+        for ($i = 0;$i < 21;++$i){
+            $this_num = $i + 1;
+            if ($row['open_'.$this_num] != '00:00:00' || $row['close_'.$this_num] != '00:00:00'){
+                $open_time[$i] = substr($row['open_'.$this_num], 0, -3) . '-' . substr($row['close_'.$this_num], 0, -3);
+            }else{
+                $open_time[$i] = "";
+            }
+
+            $day_num = $i/3;
+            if($time_list[$day_num] == ""){
+                $time_list[$day_num] = $open_time[$i];
+            }else{
+                if($open_time[$i] != "")
+                    $time_list[$day_num] .= ", ".$open_time[$i];
+            }
+        }
+
+        $store['open_list'] = $time_list;
         //@wangchuanyuan 周一到周天
         $date = date("w");//今天是星期几 @ydhl-wangchuanyuan 20171106
         switch ($date){
@@ -281,13 +308,7 @@ class StoreModel extends Model
         }
 
         //garfunkel获取减免配送费的活动
-        $eventList = D('New_event')->getEventList(1,3,$store['city_id']);
-        $delivery_coupon = "";
-        if(count($eventList) > 0) {
-            foreach ($eventList as $event) {
-                $delivery_coupon = D('New_event_coupon')->where(array('event_id' => $event['id']))->find();
-            }
-        }
+        $delivery_coupon = D('New_event')->getFreeDeliverCoupon($store_id,$store['city_id']);
 
         //garfunkel店铺满减活动
         $eventList = D('New_event')->getEventList(1,4);
@@ -318,12 +339,13 @@ class StoreModel extends Model
             //$distance = getDistance($row['lat'], $row['long'], $lat, $lng);
             $store['free_delivery'] = 0;
             $store['event'] = array("use_price"=>"0","discount"=>"0","miles"=>0);
-            if($delivery_coupon != "" && $delivery_coupon['limit_day']*1000 >= $distance){
+            if($delivery_coupon != "" && $delivery_coupon['limit_day']*1000 >= $distance*1000){
                 $store['free_delivery'] = 1;
                 $t_event['use_price'] = $delivery_coupon['use_price'];
                 $t_event['discount'] = $delivery_coupon['discount'];
                 $t_event['miles'] = $delivery_coupon['limit_day']*1000;
                 $t_event['desc'] = $delivery_coupon['desc'];
+                $t_event['event_type'] = $delivery_coupon['event_type'];
 
                 $store['event'] = $t_event;
 
@@ -399,6 +421,8 @@ class StoreModel extends Model
                 }
             }
         }
+
+        if($now_store['status'] == 0) $store['is_close'] = "1";
         $store['shopstatus'] = $store['is_close'] == 0 ? "1" : "0";
 
         return $store;
@@ -577,7 +601,7 @@ class StoreModel extends Model
                 $spec_list = explode("_",$returnList[$k]['spec']);
                 foreach($spec_list as $vv){
                     $spec = D('Shop_goods_spec_value')->field(true)->where(array('id'=>$vv))->find();
-                    $spec_desc = $spec_desc == '' ? lang_substr($spec['name'],C('DEFAULT_LANG')) : $spec_desc.','.lang_substr($spec['name'],C('DEFAULT_LANG'));
+                    $spec_desc = $spec_desc == '' ? lang_substr($spec['name'],C('DEFAULT_LANG')) : $spec_desc.';'.lang_substr($spec['name'],C('DEFAULT_LANG'));
                 }
             }
             $returnList[$k]['spec_desc'] = $spec_desc;
@@ -594,10 +618,21 @@ class StoreModel extends Model
                     $nameList = explode(',',$pro['val']);
                     $name = lang_substr($nameList[$sId],C('DEFAULT_LANG'));
 
-                    $proper_desc = $proper_desc == '' ? $name : $proper_desc.','.$name;
+                    $proper_desc = $proper_desc == '' ? $name : $proper_desc.';'.$name;
                 }
             }
+
             $returnList[$k]['proper_desc'] = $proper_desc;
+            $returnList[$k]['attr'] = $spec_desc;
+            $returnList[$k]['attr'].= $returnList[$k]['attr'] == "" ? $proper_desc : ";".$proper_desc;
+            $returnList[$k]['attr'].= $returnList[$k]['attr'] == "" ? $dish_desc : ";".$dish_desc;
+
+            if($returnList[$k]['attr'] == ""){
+                $returnList[$k]['attr_num'] = 0;
+            }else {
+                $attr_arr = explode(";", $returnList[$k]['attr']);
+                $returnList[$k]['attr_num'] = count($attr_arr);
+            }
 
             $returnList[$k]['deposit'] = $v['deposit_price'];
             $returnList[$k]['tax_num'] = $v['tax_num'];
@@ -752,8 +787,8 @@ class StoreModel extends Model
         $addressModle = D('User_adress');
 
         $address = $addressModle->field(true)->where(array('uid'=>$uid,'default'=>1))->find();
-        if ($address == null)
-            $address = $addressModle->field(true)->where(array('uid'=>$uid))->find();
+        //if ($address == null)
+        //    $address = $addressModle->field(true)->where(array('uid'=>$uid))->find();
 
         if($address != null)
             $result = $this->arrange_address($address);
@@ -764,7 +799,7 @@ class StoreModel extends Model
     public function getUserAdr($uid){
         $addressModle = D('User_adress');
 
-        $adr = $addressModle->field(true)->where(array('uid'=>$uid))->order('`default` DESC')->select();
+        $adr = $addressModle->field(true)->where(array('uid'=>$uid))->order('adress_id desc')->select();//'`default` DESC'
 
         foreach ($adr as $v){
             $result[] = $this->arrange_address($v);
@@ -841,33 +876,18 @@ class StoreModel extends Model
     public function CalculationDeliveryFee($uid,$sid){
         $address = $this->getDefaultAdr($uid);
         $store = $this->get_store_by_id($sid);
-        
+
         //$distance = getDistance($address['mapLat'], $address['mapLng'], $store['lat'], $store['lng']);
         //$distance = $distance / 1000;
-        $from = $store['lat'].','.$store['lng'];
-        $aim = $address['mapLat'].','.$address['mapLng'];
-        $distance = getDistanceByGoogle($from,$aim);
+        if($address) {
+            $from = $store['lat'] . ',' . $store['lng'];
+            $aim = $address['mapLat'] . ',' . $address['mapLng'];
+            $distance = getDistanceByGoogle($from, $aim);
 
-//        $deliveryCfg = [];
-//        $deliverys = D("Config")->get_gid_config(20);
-//        foreach($deliverys as $r){
-//            $deliveryCfg[$r['name']] = $r['value'];
-//        }
-//
-//        if($distance < 5) {
-//            $delivery_fee = round($deliveryCfg['delivery_distance_1'], 2);
-//        }elseif($distance > 5 && $distance <= 8) {
-//            $delivery_fee = round($deliveryCfg['delivery_distance_2'], 2);
-//        }elseif($distance > 8 && $distance <= 10) {
-//            $delivery_fee = round($deliveryCfg['delivery_distance_3'], 2);
-//        }elseif($distance > 10 && $distance <= 15) {
-//            $delivery_fee = round($deliveryCfg['delivery_distance_4'], 2);
-//        }elseif($distance > 15 && $distance <= 20) {
-//            $delivery_fee = round($deliveryCfg['delivery_distance_5'], 2);
-//        }else{
-//            $delivery_fee = round($deliveryCfg['delivery_distance_more'], 2);
-//        }
-        $delivery_fee = calculateDeliveryFee($distance,$store['city_id']);
+            $delivery_fee = calculateDeliveryFee($distance, $store['city_id']);
+        }else{
+            $delivery_fee = 0;
+        }
 
         return $delivery_fee;
     }
@@ -916,6 +936,72 @@ class StoreModel extends Model
             33 => L('_ORDER_STATUS_33_'));
 
         return $status_list[$status];
+    }
+
+    public function getOrderStatusLogName($status){
+        $status_list = array(
+            L('V3_CONFIRMING'),
+            L('V3_CONFIRMING'),
+            L('V3_PREPARING'),
+            L('V3_PREPARING'),
+            L('V3_PICKEDUP'),
+            L('V3_HEADINGTOYOU'),
+            L('V3_COMPLETE'),
+            L('V3_COMPLETE'),//并评论完成
+            L('V3_COMPLETE'),//评论完成
+            L('_ORDER_STATUS_9_'),
+            L('_ORDER_STATUS_10_'),
+            L('_ORDER_STATUS_11_'),
+            L('_ORDER_STATUS_12_'),
+            L('_ORDER_STATUS_13_'),
+            L('_ORDER_STATUS_14_'),
+            L('_ORDER_STATUS_15_'),
+            30 => L('_ORDER_STATUS_30_'),
+            33 => L('_ORDER_STATUS_33_'));
+
+        return $status_list[$status];
+    }
+
+    public function getOrderStatusDesc($status,$order,$log,$storeName,$add_time=0){
+        $desc = "";
+        if($status == 0 || $status == 1){
+            $desc = replace_lang_str(L('V3_CONFIRMINGSUB'),$storeName);
+        }
+
+        if($status == 2 || $status == 3){
+            $delivery = D('Deliver_supply')->where(array('order_id'=>$order['order_id']))->find();
+            $now_time = time();
+            $check_time = $delivery['create_time'] + $delivery['dining_time']*60;
+            if($add_time > 0) {
+                $add_log = D('Shop_order_log')->field(true)->where(array('order_id' => $order['order_id'], 'status' => 33))->order('id DESC')->select();
+                $add_time = 0;
+                foreach ($add_log as $v) {
+                    $add_time += $v['note'];
+                }
+            }
+
+            if($now_time < $check_time){
+                if ($add_time == 0)
+                    $desc = replace_lang_str(L('V3_PREPARINGSUB1'),date("H:i", $check_time));
+                else {
+                    $desc = replace_lang_str(L('V3_PREPARINGSUB2_1'), $add_time);
+                    $desc .= replace_lang_str(L('V3_PREPARINGSUB2_2'), date("H:i", $check_time));
+                }
+            }else {
+                $desc = L('V3_PREPARINGSUB3');
+            }
+        }
+
+        if($status == 4)
+            $desc = L('V3_PICKEDUPSUB');
+
+        if($status == 5)
+            $desc = L('V3_HEADINGTOYOUSUB');
+
+        if($status == 6 || $status == 7 || $status == 8)
+            $desc = L('V3_COMPLETESUB');
+
+        return $desc;
     }
 
     public function getOrderStatusMark($status,$order_id,$log){

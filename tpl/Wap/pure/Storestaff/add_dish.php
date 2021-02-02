@@ -201,6 +201,35 @@
             return false;
         }
 
+        var value_list = {};
+        $('#add_choice_div').find('input').each(function () {
+            //console.log($(this).attr('name') + $(this).val()+$(this).parent().data('id'));
+            if($(this).attr('name').indexOf("dish_val_name") != -1){
+                var index = $(this).parent().data('id');
+                index = index.split("_");
+                value_list[index[1]] = {};
+                value_list[index[1]]['value'] = $(this).val();
+            }
+            if($(this).attr('name').indexOf("dish_val_price") != -1){
+                var index = $(this).parent().data('id');
+                index = index.split("_");
+                value_list[index[1]]['price'] = $(this).val();
+            }
+        });
+        //console.log(value_list);
+
+        var is_value = false;
+        for (var key in value_list) {
+            var value = value_list[key];
+            if(value['value'] != "" && value['price'] != ""){
+                is_value = true;
+            }
+        }
+        if(!is_value){
+            alert("Please add a choice first.");
+            return false;
+        }
+
         layer.open({
             type:2,
             content:'Loading...'
@@ -259,14 +288,14 @@
                     dish_val_div.remove();
                 else{
                     var str = dish_val_id.split('_');
-                    $.post("{pigcms{:U('Storestaff/del_dish_val')}",{val_id:str[1]},function(result) {
+                    $.post("{pigcms{:U('Storestaff/del_dish_val')}",{val_id:str[1],'dish_id':$('input[name="dish_id"]').val()},function(result) {
                         if(result.error == 0)
                             dish_val_div.remove();
                         else
                             layer.open({
-                                content: "Fail",
+                                content: result.message,
                                 type: 2,
-                                time: 1
+                                time: 5
                             });
                     },'JSON');
                 }

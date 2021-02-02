@@ -265,7 +265,7 @@ class IndexAction extends BaseAction {
         }
 
         $tmp_array=array();
-        $condition_merchant_request['paid'] = 1;
+        $condition_merchant_request['o.paid'] = 1;
         $condition_merchant_request['o.status']=array('lt',3);
         //garfunkel 判断城市管理员
         if($this->system_session['area_id'] != 0){
@@ -276,9 +276,12 @@ class IndexAction extends BaseAction {
         $res_meal    = M('Meal_order')->field('total_price as money,payment_money,pay_type ,pay_time')->join(' as o left join '.C('DB_PREFIX').'merchant m ON m.mer_id = o.mer_id')->where($condition_merchant_request)->select();
 
         $condition_merchant_request['o.status']=array('lt',4);
-        $res_shop    = M('Shop_order')->field('total_price as money,payment_money ,pay_type,pay_time')->join(' as o left join '.C('DB_PREFIX').'merchant m ON m.mer_id = o.mer_id')->where($condition_merchant_request)->select();
+        $condition_merchant_request['o.is_del']=0;
+        //$res_shop    = M('Shop_order')->field('total_price as money,payment_money ,pay_type,pay_time')->join(' as o left join '.C('DB_PREFIX').'merchant m ON m.mer_id = o.mer_id')->where($condition_merchant_request)->select();
+        $res_shop    = M('Shop_order')->field('total_price+tip_charge-coupon_price-delivery_discount-merchant_reduce as money,payment_money ,pay_type,pay_time')->join(' as o left join '.C('DB_PREFIX').'merchant m ON m.mer_id = o.mer_id')->where($condition_merchant_request)->select();
 
         unset($condition_merchant_request['o.status']);
+        unset($condition_merchant_request['o.is_del']);
         $res_appoint = M('Appoint_order')->field('payment_money as money ,pay_money as payment_money,pay_type,pay_time,product_id,product_payment_price')->join(' as o left join '.C('DB_PREFIX').'merchant m ON m.mer_id = o.mer_id')->where($condition_merchant_request)->select();
         $res_wxapp   = M('Wxapp_order')->field('o.money,payment_money,pay_type ,pay_time')->where($condition_merchant_request)->join(' as o left join '.C('DB_PREFIX').'merchant m ON m.mer_id = o.mer_id')->select();
         $res_weidian = M('Weidian_order')->field('o.money as money,payment_money,pay_type ,pay_time')->where($condition_merchant_request)->join(' as o left join '.C('DB_PREFIX').'merchant m ON m.mer_id = o.mer_id')->select();

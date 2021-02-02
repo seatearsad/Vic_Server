@@ -403,8 +403,8 @@ class DeliverAction extends BaseAction {
 			$etime = strtotime($time_array[1]);
 		}
 
-		$sql = "SELECT s.`supply_id`, s.order_id, s.item, s.name as username, s.phone as userphone, m.name as storename, s.money, u.name, u.phone, s.start_time, s.end_time, s.aim_site, s.pay_type, s.paid, s.status, s.deliver_cash, s.distance, s.from_lat, s.aim_lat, s.from_lnt, s.aim_lnt FROM " . C('DB_PREFIX') . "merchant_store AS m INNER JOIN " . C('DB_PREFIX') . "deliver_supply AS s ON m.store_id=s.store_id LEFT JOIN " . C('DB_PREFIX') . "deliver_user AS u ON s.uid=u.uid";
-		$sql_count = "SELECT count(1) AS count FROM " . C('DB_PREFIX') . "merchant_store AS m INNER JOIN " . C('DB_PREFIX') . "deliver_supply AS s ON m.store_id=s.store_id LEFT JOIN " . C('DB_PREFIX') . "deliver_user AS u ON s.uid=u.uid";
+		$sql = "SELECT s.`supply_id`, s.order_id, s.item, s.name as username, s.phone as userphone, m.name as storename, s.money, u.name, u.phone, s.start_time, s.end_time, s.aim_site, s.pay_type, s.paid, s.status, s.deliver_cash, s.distance, s.from_lat, s.aim_lat, s.from_lnt, s.aim_lnt FROM " . C('DB_PREFIX') . "deliver_supply AS s INNER JOIN " . C('DB_PREFIX') . "merchant_store AS m ON m.store_id=s.store_id LEFT JOIN " . C('DB_PREFIX') . "deliver_user AS u ON s.uid=u.uid";
+		$sql_count = "SELECT count(1) AS count FROM " . C('DB_PREFIX') . "deliver_supply AS s INNER JOIN " . C('DB_PREFIX') . "merchant_store AS m ON m.store_id=s.store_id LEFT JOIN " . C('DB_PREFIX') . "deliver_user AS u ON s.uid=u.uid";
 
 		$sql .= ' WHERE s.type=0';
 		$sql_count .= ' WHERE s.type=0';
@@ -885,7 +885,7 @@ class DeliverAction extends BaseAction {
         $b_time = strtotime($b_date);
         $e_time = strtotime($e_date);
 
-        $sql = "SELECT s.order_id, s.create_time,s.uid,s.freight_charge, u.name,u.family_name,u.city_id as user_city_id, u.phone,u.remark,o.tip_charge,o.price,o.pay_type,o.coupon_price,o.delivery_discount,o.merchant_reduce FROM " . C('DB_PREFIX') . "merchant_store AS m INNER JOIN " . C('DB_PREFIX') . "deliver_supply AS s ON m.store_id=s.store_id LEFT JOIN " . C('DB_PREFIX') . "deliver_user AS u ON s.uid=u.uid LEFT JOIN " . C('DB_PREFIX') . "shop_order AS o ON s.order_id=o.order_id";
+        $sql = "SELECT s.order_id, s.create_time,s.uid,s.freight_charge, u.name,u.family_name,u.city_id as user_city_id, u.phone,u.remark,o.tip_charge,o.price,o.pay_type,o.coupon_price,o.delivery_discount,o.merchant_reduce FROM " . C('DB_PREFIX') . "deliver_supply AS s INNER JOIN " . C('DB_PREFIX') . "merchant_store AS m ON m.store_id=s.store_id LEFT JOIN " . C('DB_PREFIX') . "deliver_user AS u ON s.uid=u.uid LEFT JOIN " . C('DB_PREFIX') . "shop_order AS o ON s.order_id=o.order_id";
 
         $sql .= ' where s.status = 5 and s.create_time >='.$b_time.' and s.create_time <='.$e_time.' and o.is_del = 0';
         $sql .= ' order by s.uid';
@@ -897,6 +897,7 @@ class DeliverAction extends BaseAction {
         foreach ($list as $k=>$v){
             $area = D('Area')->where(array('area_id'=>$v['user_city_id']))->find();
             //$show_list[$v['uid']] = array();
+            $show_list[$v['uid']]['id'] = $v['uid'];
             $show_list[$v['uid']]['name'] = $v['name'];
             $show_list[$v['uid']]['family_name'] = $v['family_name'];
             $show_list[$v['uid']]['city_name'] = $area['area_name'];
@@ -929,30 +930,32 @@ class DeliverAction extends BaseAction {
         $objExcel->getActiveSheet()->setTitle($title);
         $objActSheet = $objExcel->getActiveSheet();
 
-        $objActSheet->setCellValue('A1', '配送员 First Name');
-        $objActSheet->setCellValue('B1', '配送员 Last Name');
-        $objActSheet->setCellValue('C1', '配送员手机号');
-        $objActSheet->setCellValue('D1', '配送员城市');
-        $objActSheet->setCellValue('E1', '送单数量');
-        $objActSheet->setCellValue('F1', '小费总计');
-        $objActSheet->setCellValue('G1', '送餐费总计');
-        $objActSheet->setCellValue('H1', '收入现金');
-        $objActSheet->setCellValue('I1', '总计');
-        $objActSheet->setCellValue('J1', '配送员备注');
+        $objActSheet->setCellValue('A1', 'ID');
+        $objActSheet->setCellValue('B1', '配送员 First Name');
+        $objActSheet->setCellValue('C1', '配送员 Last Name');
+        $objActSheet->setCellValue('D1', '配送员手机号');
+        $objActSheet->setCellValue('E1', '配送员城市');
+        $objActSheet->setCellValue('F1', '送单数量');
+        $objActSheet->setCellValue('G1', '小费总计');
+        $objActSheet->setCellValue('H1', '送餐费总计');
+        $objActSheet->setCellValue('I1', '收入现金');
+        $objActSheet->setCellValue('J1', '总计');
+        $objActSheet->setCellValue('K1', '配送员备注');
 
         $index = 2;
         foreach ($show_list as $k=>$v){
 //            $show_list[$k]['total'] = $v['tip'] + $v['freight'] - $v['cash'];
-            $objActSheet->setCellValueExplicit('A'.$index,$v['name']);
-            $objActSheet->setCellValueExplicit('B'.$index,$v['family_name']);
-            $objActSheet->setCellValueExplicit('C'.$index,$v['phone']);
-            $objActSheet->setCellValueExplicit('D'.$index,$v['city_name']);
-            $objActSheet->setCellValueExplicit('E'.$index,$v['order_num']);
-            $objActSheet->setCellValueExplicit('F'.$index,sprintf("%.2f", $v['tip']));
-            $objActSheet->setCellValueExplicit('G'.$index,sprintf("%.2f", $v['freight']));
-            $objActSheet->setCellValueExplicit('H'.$index,sprintf("%.2f", $v['cash']));
-            $objActSheet->setCellValueExplicit('I'.$index,sprintf("%.2f",$v['tip'] + $v['freight'] - $v['cash']));
-            $objActSheet->setCellValueExplicit('J'.$index,$v['remark']);
+            $objActSheet->setCellValueExplicit('A'.$index,$v['id']);
+            $objActSheet->setCellValueExplicit('B'.$index,$v['name']);
+            $objActSheet->setCellValueExplicit('C'.$index,$v['family_name']);
+            $objActSheet->setCellValueExplicit('D'.$index,$v['phone']);
+            $objActSheet->setCellValueExplicit('E'.$index,$v['city_name']);
+            $objActSheet->setCellValueExplicit('F'.$index,$v['order_num']);
+            $objActSheet->setCellValueExplicit('G'.$index,sprintf("%.2f", $v['tip']));
+            $objActSheet->setCellValueExplicit('H'.$index,sprintf("%.2f", $v['freight']));
+            $objActSheet->setCellValueExplicit('I'.$index,sprintf("%.2f", $v['cash']));
+            $objActSheet->setCellValueExplicit('J'.$index,sprintf("%.2f",$v['tip'] + $v['freight'] - $v['cash']));
+            $objActSheet->setCellValueExplicit('K'.$index,$v['remark']);
             $index++;
         }
 

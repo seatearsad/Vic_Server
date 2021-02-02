@@ -562,6 +562,23 @@ class IndexAction extends BaseAction
         $this->returnCode(0,'info',array(),'Success');
     }
 
+    public function userForgotPwd(){
+        $uid = $_POST['uid'];
+        $vcode = $_POST['vcode'];
+        $pwd = $_POST['new_pwd'];
+
+        $user = D('User')->where(array('uid'=>$uid))->find();
+
+        if(D('User_modifypwd')->where(array('vfcode'=>$vcode,'telphone'=>$user['phone']))->find()){
+            $data['pwd'] = md5($pwd);
+            D('User')->where(array('uid'=>$uid))->save($data);
+
+            $this->returnCode(0,'info',array(),'Success');
+        }else{
+            $this->returnCode(1,'info',array(),L('_SMS_CODE_ERROR_'));
+        }
+    }
+
     public function oldToPassword(){
         $uid = $_POST['uid'];
         $old_pwd = $_POST['old_pwd'];
@@ -569,7 +586,8 @@ class IndexAction extends BaseAction
 
         $user = D('User')->where(array('uid'=>$uid))->find();
         if(md5($old_pwd) != $user['pwd']){
-            $this->returnCode(1,'info',array(),L('_B_MY_WRONGKEY_'));
+            //$this->returnCode(1,'info',array(),L('_B_MY_WRONGKEY_'));
+            $this->returnCode(1,'info',array(),"Your old password is incorrect.");
         }else{
             $data['pwd'] = md5($new_pwd);
             D('User')->where(array('uid'=>$uid))->save($data);
@@ -669,6 +687,15 @@ class IndexAction extends BaseAction
         $this->returnCode(0,'',$result,'success');
     }
 
+    public function delCart(){
+        $uid = $_POST['uid'];
+        $storeId = $_POST['storeId'] ? $_POST['storeId'] : 0;
+
+        $result = D('Cart')->del_cart($uid,$storeId);
+
+        $this->returnCode(0,'info',$result,'success');
+    }
+
     public function getUserDefaultAddress(){
         $uid = $_POST['uid'];
 
@@ -735,6 +762,47 @@ class IndexAction extends BaseAction
         $this->returnCode(0,'info',array(),'success');
     }
 
+    public function checkCart()
+    {
+        $uid = $_POST['uid'];
+        $cartList = $_POST['cart_list'];
+
+        $cart_array = json_decode(html_entity_decode($cartList), true);
+
+        $week = date('w');
+        $currTime = date('H:i:s');
+
+        $del_list = array();
+        foreach ($cart_array as $c_good){
+            $goods = D('Shop_goods')->where(array('goods_id'=>$c_good['fid']))->find();
+            $goods_sort = D('Shop_goods_sort')->where(array('sort_id'=>$goods['sort_id']))->find();
+
+            $is_continue = true;
+            if($goods_sort['is_weekshow'] == 1){
+                $weekList = explode(',',$goods_sort['week']);
+                if(!in_array($week,$weekList)){
+                    $del_list[] = lang_substr($goods['name'],C('DEFAULT_LANG'));
+                    $is_continue = false;
+                    D('Cart')->where(array('uid'=>$uid,'fid'=>$c_good['fid']))->delete();
+                }
+            }
+
+            if($is_continue && $goods_sort['is_time'] == 1){
+                $showTime = explode(',',$goods_sort['show_time']);
+                if(!($currTime >= $showTime[0] && $currTime < $showTime[1])){
+                    $del_list[] = lang_substr($goods['name'],C('DEFAULT_LANG'));
+                    D('Cart')->where(array('uid'=>$uid,'fid'=>$c_good['fid']))->delete();
+                }
+            }
+        }
+
+        if(count($del_list) == 0){
+            $this->returnCode(0, 'info', array(), 'success');
+        }else{
+            $this->returnCode(1,'info',$del_list,'checkcarterror');
+        }
+    }
+
     public function confirmCart(){
         $uid = $_POST['uid'];
         $cartList = $_POST['cart_list'];
@@ -743,26 +811,37 @@ class IndexAction extends BaseAction
 
         $result = D('Cart')->getCartList($uid,$cart_array);
 
-        //平台优惠劵
-        $_POST['amount'] = $result['food_total_price'];
+        if($result['store_name']) {
+            //平台优惠劵
+            $_POST['amount'] = $result['food_total_price'];
 
-        $coupon = $this->getCanCoupon();
-        $result['coupon'] = $coupon;
+            $coupon = $this->getCanCoupon();
+            $result['coupon'] = $coupon;
 
-        //账户余额
-        $userInfo = D('User')->get_user($uid);
-        $result['is_bind_phone'] = $userInfo['phone'] == '' ? 0 : 1;
-        $result['now_money'] = round($userInfo['now_money'],2);
+            //账户余额
+            $userInfo = D('User')->get_user($uid);
+            $result['is_bind_phone'] = $userInfo['phone'] == '' ? 0 : 1;
+            $result['now_money'] = round($userInfo['now_money'], 2);
 
-        $this->returnCode(0,'',$result,'success');
+            $this->returnCode(0, '', $result, 'success');
+        }else{
+            $this->returnCode(1,'info',array(),'Cart is Empty');
+        }
     }
 
     public function saveOrder(){
         $uid = $_POST['uid'];
         $cartList = $_POST['cart_list'];
         $note = $_POST['order_mark'];
+        //New UI
+        $address_mark = $_POST['address_mark'];
 
         $adr_id = $_POST['addr_item_id'];
+
+        $address = D('User_adress')->where(array('adress_id'=>$adr_id))->find();
+        if($address_mark != $address['detail']){
+            D('User_adress')->where(array('adress_id'=>$adr_id))->save(array('detail'=>$address_mark));
+        }
 
         $cart_array = json_decode(html_entity_decode($cartList),true);
         $tax_price = 0;
@@ -978,10 +1057,22 @@ class IndexAction extends BaseAction
                 }
             }
         }
-        //garfunkel 判断来源 2or3 Apple app | 4 Android
-        $order_data['is_mobile_pay'] = $_POST['cer_type'];;
 
-        $order_data['delivery_discount'] = $_POST['delivery_discount'] ? $_POST['delivery_discount'] : 0;
+        if($_POST['delivery_discount']) {
+            $order_data['delivery_discount'] = $_POST['delivery_discount'];
+            $delivery_coupon = D('New_event')->getFreeDeliverCoupon($return['store_id'], $store['city_id']);
+            $distance = getDistance($store['lat'], $store['long'], $address['latitude'], $address['longitude']);
+            if ($delivery_coupon != "" && $delivery_coupon['limit_day'] * 1000 >= $distance) {
+                $order_data['delivery_discount_event'] = $delivery_coupon['event_type'];
+            }
+        }else{
+            $order_data['delivery_discount'] = 0;
+        }
+
+        //garfunkel 判断来源 2or3 Apple app | 4 Android
+        $order_data['is_mobile_pay'] = $_POST['cer_type'];
+
+        //$order_data['delivery_discount'] = $_POST['delivery_discount'] ? $_POST['delivery_discount'] : 0;
         $order_data['merchant_reduce'] = $_POST['merchant_reduce'] ? $_POST['merchant_reduce'] : 0;
         $order_data['not_touch'] = $_POST['not_touch'] ? $_POST['not_touch'] : 0;
 
@@ -992,6 +1083,7 @@ class IndexAction extends BaseAction
         }
 
         $order_id = D('Shop_order')->saveOrder($order_data, $return);
+        $order = D('Shop_order')->where(array('order_id'=>$order_id))->find();
         //清除购物车中的内容
         D('Cart')->delCart($uid,$cart_array);
         //die($order_id);
@@ -1012,6 +1104,7 @@ class IndexAction extends BaseAction
             $now_money = round($userInfo['now_money'],2);
 
             $data['balance_pay'] = $order_data['price'] + $order_data['tip_charge'] - $order_data['coupon_price'] - $order_data['delivery_discount'] - $order_data['merchant_reduce'];
+            $data['balance_pay'] = round($data['balance_pay'],2);
             if($now_money >= $data['balance_pay']){
                 D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->save($data);
 
@@ -1038,6 +1131,8 @@ class IndexAction extends BaseAction
             $price = $order_data['price'] + $order_data['tip_charge'] - $order_data['coupon_price'] - $order_data['delivery_discount'] - $order_data['merchant_reduce'];
             $result = $this->loadModel()->WeixinAndAli($_POST['pay_type'],$order_id,$price,$_POST['ip'],$_POST['cer_type']);
             if($result['resCode'] == 'SUCCESS'){
+                $result['main_id'] = $order_id;
+                $result['orderNo'] = $order['real_orderid'];
                 $this->returnCode(0,'result',$result,'success');
             }else{
                 $this->returnCode(1,'info',$result,$result['retMsg']);
@@ -1046,15 +1141,19 @@ class IndexAction extends BaseAction
             $price = $order_data['price'] + $order_data['tip_charge'] - $order_data['coupon_price'] - $order_data['delivery_discount'] - $order_data['merchant_reduce'];
             $result = $this->loadModel()->WeixinAndAli($_POST['pay_type'],$order_id,$price,$_POST['ip'],$_POST['cer_type']);
             if($result['resCode'] == 'SUCCESS'){
+                $result['main_id'] = $order_id;
+                $result['orderNo'] = $order['real_orderid'];
                 $this->returnCode(0,'result',$result,'success');
             }else{
                 $this->returnCode(1,'info',array(),'fail');
             }
         }
 
-        if($order_id != 0)
-            $this->returnCode(0,'main_id',$order_id,'success');
-        else
+        if($order_id != 0) {
+            $returnData['main_id'] = $order_id;
+            $returnData['orderNo'] = $order['real_orderid'];
+            $this->returnCode(0, '', $returnData, 'success');
+        }else
             $this->returnCode(1,'info',array(),'fail');
     }
 
@@ -1095,6 +1194,9 @@ class IndexAction extends BaseAction
             case 5:
                 $where .= " AND status=3";
                 break;
+            case 6:
+                $where .= " AND paid=1 AND (status=2 OR status=3 OR status=4 OR status=5)";
+                break;
             default://付款超时，待删除
                 $where .= " AND status<>6";
                 break;
@@ -1113,7 +1215,7 @@ class IndexAction extends BaseAction
         $m = array();
         if ($store_ids) {
             $store_image_class = new store_image();
-            $merchant_list = D("Merchant_store")->where(array('store_id' => array('in', $store_ids)))->select();
+            $merchant_list = D("Merchant_store")->field('s.*,sh.background')->join('as s left join '.C('DB_PREFIX').'merchant_store_shop sh ON sh.store_id = s.store_id ')->where(array('s.store_id' => array('in', $store_ids)))->select();
             foreach ($merchant_list as $li) {
                 $images = $store_image_class->get_allImage_by_path($li['pic_info']);
                 $li['image'] = $images ? array_shift($images) : array();
@@ -1139,13 +1241,18 @@ class IndexAction extends BaseAction
             $t['payTypeName'] = D('Store')->getPayTypeName($val['pay_type']);
             $t['storeID'] = $val['store_id'];
             $t['storeName'] = lang_substr($val['name'],C('DEFAULT_LANG'));
-            $t['createDate'] = date('Y-m-d',$val['create_time']);
+            $t['createDate'] = date('Y-m-d H:i',$val['create_time']);
             $t['create_time'] = $val['create_time'];
             $t['goodsCount'] = $val['num'];
             $t['goodsPrice'] = $val['goods_price'];
             $t['status'] = $val['status'];
-            $t['isComment'] = "1";
             $t['statusName'] = D('Store')->getOrderStatusName($val['status']);
+            $t['isComment'] = "1";
+            //$t['statusName'] = D('Store')->getOrderStatusName($val['status']);
+            $status = D('Shop_order_log')->field(true)->where(array('order_id' => $val['order_id']))->order('id DESC')->find();
+            $status['status'] = $status['status'] == 33 ? 2 : $status['status'];
+            $t['statusLog'] = $status['status'];
+            $t['statusLogName'] = D('Store')->getOrderStatusLogName($status['status']);
             $t['goodsImage'] = $val['image'];
             $t['orderType'] = "0";
             $t['tip_fee'] = $val['tip_charge'];
@@ -1156,12 +1263,26 @@ class IndexAction extends BaseAction
             $t['delivery_discount'] = $val['delivery_discount'];
             $t['merchant_reduce'] = $val['merchant_reduce'];
             $t['pay_method'] = $val['pay_method'];
+            if($val['background'] && $val['background'] != '') {
+                $image_tmp = explode(',', $val['background']);
+                $t['background'] = C('config.site_url') . '/upload/background/' . $image_tmp[0] . '/' . $image_tmp['1'];
+            }else{
+                $t['background'] = '';
+            }
+
+            if($val['status'] == 3){
+                $reply = D('Reply')->where(array('order_id'=>$val['order_id']))->find();
+                $t['score'] = $reply['score'];
+            }else{
+                $t['score'] = 0;
+            }
 
             $delivery = D('Deliver_supply')->field(true)->where(array('order_id'=>$val['order_id']))->find();
             if($delivery) {
-                if($delivery['status'] > 1 && $delivery['status'] < 5){
+                if($delivery['status'] > 1 && $delivery['status'] <= 5){
                     $deliver = D('Deliver_user')->field(true)->where(array('uid'=>$delivery['uid']))->find();
-                    $t['deliver_name'] = $deliver['name'].'('.$deliver['phone'].')';
+                    $t['deliver_name'] = $deliver['name'];
+                    $t['deliver_phone'] = $deliver['phone'];
                     $t['deliver_lng'] = $deliver['lng'];
                     $t['deliver_lat'] = $deliver['lat'];
                 }
@@ -1219,21 +1340,28 @@ class IndexAction extends BaseAction
     }
 
     public function getOrderDetail(){
-        $order_id = $_POST['order_id'];
-        $order = D('Shop_order')->field(true)->where(array('real_orderid'=>$order_id))->find();
+        $order_id = $_POST['order_id'];//长id
+        $orderId = $_POST['orderId'];//短id
+
+        if($orderId && $orderId != '') {
+            $order = D('Shop_order')->field(true)->where(array('order_id' => $orderId))->find();
+            $order_id = $order['real_orderid'];
+        }else
+            $order = D('Shop_order')->field(true)->where(array('real_orderid'=>$order_id))->find();
 
         if($order['paid'] == 0){
             $order_detail['statusname'] = L('_UNPAID_TXT_');
             $order_detail['payname'] = L('_UNPAID_TXT_');
+            $order_detail['score'] = 0;
         }else{
             $order_detail['statusname'] = D('Store')->getOrderStatusName($order['status']);
             $order_detail['status'] = $order['status'];
-            $order_detail['pay_type'] = $order['pay_type'];
+
             //$order_detail['payname'] = $order['pay_type'] == 'moneris' ? 'Paid Online' : 'Cash';
             if($order['pay_type'] == 'moneris'){
-                $order_detail['payname'] = 'Paid Online';
+                $order_detail['payname'] = 'Credit Card';
             }elseif ($order['pay_type'] == ''){
-                $order_detail['payname'] = 'Pay by balance';
+                $order_detail['payname'] = 'Balance';
             }elseif ($order['pay_type'] == 'weixin'){
                 $order_detail['payname'] = 'WeiXin';
             }elseif ($order['pay_type'] == 'alipay'){
@@ -1241,8 +1369,16 @@ class IndexAction extends BaseAction
             }else{
                 $order_detail['payname'] = 'Cash';
             }
+
+            if($order['status'] == 3){
+                $reply = D('Reply')->where(array('order_id'=>$order['order_id']))->find();
+                $order_detail['score'] = $reply['score'];
+            }else{
+                $order_detail['score'] = 0;
+            }
         }
 
+        $order_detail['pay_type'] = $order['pay_type'];
         $order_detail['orderId'] = $order['order_id'];
         $order_detail['paid'] = $order['paid'];
         $order_detail['add_time'] = date('Y-m-d H:i:s',$order['create_time']);
@@ -1251,19 +1387,27 @@ class IndexAction extends BaseAction
         $order_detail['ship_fee'] = $order['freight_charge'];
         $order_detail['tip_fee'] = $order['tip_charge'];
         $order_detail['food_amount'] = $order['goods_price'];
+        $order_detail['goods_count'] = $order['num'];
         $order_detail['order_id'] = $order_id;
         $order_detail['expect_time'] = date('Y-m-d H:i:s',$order['expect_use_time']);
         $order_detail['site_id'] = $order['store_id'];
         $order_detail['uname'] = $order['username'];
         $order_detail['phone'] = $order['userphone'];
         $order_detail['address2'] = $order['address'];
-        $order_detail['address1'] = "";
+        $order_detail['address1'] = $order['desc'];
         $order_detail['service_fee'] = $order['service_fee'];
         $order_detail['promotion_discount'] = "0";
         $order_detail['discount'] = $order['coupon_price'] + $order['delivery_discount'] + $order['merchant_reduce'];
         $order_detail['create_time'] = $order['create_time'];
+        $order_detail['delivery_discount'] = $order['delivery_discount'];
+        $order_detail['merchant_reduce'] = $order['merchant_reduce'];
+        $order_detail['coupon_discount'] = $order['coupon_price'];
 
-
+        $address = D('User_adress')->where(array('adress_id'=>$order['address_id']))->find();
+        $order_detail['user_lat'] = $address['latitude'];
+        $order_detail['user_lng'] = $address['longitude'];
+        if($address && $address['detail'] != '')
+            $order_detail['address2'] = $address['adress'].' ('.$address['detail'].')';
 
         $order_detail['jetlag'] = 0;
         if($order['paid'] == 0) {
@@ -1277,6 +1421,32 @@ class IndexAction extends BaseAction
         $order_detail['site_name'] = $store['site_name'];
         $order_detail['tel'] = $store['phone'];
         $order_detail['store_service_fee'] = $store['service_fee'];
+        $order_detail['background'] = $store['background'];
+        $order_detail['pay_method'] = $store['pay_method'];
+        $order_detail['store_lat'] = $store['lat'];
+        $order_detail['store_lng'] = $store['lng'];
+
+        $status = D('Shop_order_log')->field(true)->where(array('order_id' => $order['order_id']))->order('id DESC')->find();
+        $add_time = 0;
+        if($status['status'] == 33){
+            if(D('Shop_order_log')->field(true)->where(array('order_id' => $order['order_id'], 'status' => 3))->order('id DESC')->find())
+                $status['status'] = 3;
+            else
+                $status['status'] = 2;
+            $add_time = $status['note'];
+        }else {
+            if ($add_time_log = D('Shop_order_log')->field(true)->where(array('order_id' => $order['order_id'], 'status' => 33))->order('id DESC')->find()) {
+                $add_time = $add_time_log['note'];
+            }
+        }
+        $order_detail['status_log'] = $status['status'];
+        $order_detail['statusName'] = D('Store')->getOrderStatusLogName($status['status']);
+        $order_detail['statusDesc'] = D('Store')->getOrderStatusDesc($status['status'],$order,$status,$store['site_name'],$add_time);
+
+        if($order['paid'] == 0) {
+            $order_detail['statusName'] = "Unpaid";
+            $order_detail['statusDesc'] = "This order will be expired and removed in 5 minutes. Please make a payment to get it delivered to you.";
+        }
 
         $result['order'] = $order_detail;
 
@@ -1293,7 +1463,7 @@ class IndexAction extends BaseAction
             $spec_ids = explode('_',$v['spec_id']);
             foreach ($spec_ids as $vv){
                 $spec = D('Shop_goods_spec_value')->field(true)->where(array('id'=>$vv))->find();
-                $spec_desc = $spec_desc == '' ? lang_substr($spec['name'],C('DEFAULT_LANG')) : $spec_desc.','.lang_substr($spec['name'],C('DEFAULT_LANG'));
+                $spec_desc = $spec_desc == '' ? lang_substr($spec['name'],C('DEFAULT_LANG')) : $spec_desc.';'.lang_substr($spec['name'],C('DEFAULT_LANG'));
             }
 
             $goods['spec_desc'] = $spec_desc;
@@ -1313,7 +1483,7 @@ class IndexAction extends BaseAction
                 $nameList = explode(',',$pro['val']);
                 $name = lang_substr($nameList[$sId],C('DEFAULT_LANG'));
 
-                $spec_desc = $spec_desc == '' ? $name : $spec_desc.','.$name;
+                $spec_desc = $spec_desc == '' ? $name : $spec_desc.';'.$name;
             }
             $goods['spec_desc'] = $goods['spec_desc'] == '' ? $spec_desc : $goods['spec_desc'].";".$spec_desc;
 
@@ -1355,7 +1525,10 @@ class IndexAction extends BaseAction
             else
                 $result['order']['empname'] = '';
 
-            if($delivery['status'] > 1 && $delivery['status'] < 5){
+            $result['order']['deliver_name'] = $deliver['name'];
+            $result['order']['deliver_phone'] = $deliver['phone'];
+
+            if($delivery['status'] > 1 && $delivery['status'] <= 5){
                 $result['order']['deliver_lng'] = $deliver['lng'];
                 $result['order']['deliver_lat'] = $deliver['lat'];
             }
@@ -1414,6 +1587,48 @@ class IndexAction extends BaseAction
         $this->returnCode(0,'',$result,'success');
     }
 
+    public function reorderById(){
+        $uid = $_POST['uid'];
+        $order_id = $_POST['order_id'];
+
+        $order = D('Shop_order')->where(array('order_id'=>$order_id))->find();
+        if($order) {
+            $store = $this->loadModel()->get_store_by_id($order['store_id'],0,0);
+            if($store['is_close'] == 1){
+                $this->returnCode(1, 'info', array(), 'Sorry, this store is currently unavailable.');
+            }else {
+                if ($uid && $order_id) {
+                    $order_list = D('Shop_order_detail')->where(array('order_id' => $order_id))->select();
+                    if ($order_list) {
+                        $add_list = array();
+                        foreach ($order_list as $detail) {
+                            $data = array();
+                            $data['uid'] = $uid;
+                            $data['fid'] = $detail['goods_id'];
+                            $data['num'] = $detail['num'];
+                            $data['sid'] = $detail['store_id'];
+                            $data['status'] = 0;
+                            $data['spec'] = $detail['spec_id'];
+                            $data['proper'] = $detail['pro_id'];
+                            $data['dish_id'] = $detail['dish_id'];
+                            $data['time'] = date("Y-m-d H:i:s");
+
+                            $add_list[] = $data;
+                        }
+
+                        D('Cart')->addAll($add_list);
+                    }
+
+                    $this->returnCode(0, '', array(), 'success');
+                } else {
+                    $this->returnCode(1, 'info', array(), 'Fail');
+                }
+            }
+        }else{
+            $this->returnCode(1, 'info', array(), 'Fail');
+        }
+    }
+
     public function credit_pay(){
         import('@.ORG.pay.MonerisPay');
         $moneris_pay = new MonerisPay();
@@ -1443,6 +1658,35 @@ class IndexAction extends BaseAction
         }
     }
 
+    public function credit_pay_android(){
+        import('@.ORG.pay.MonerisPay');
+        $moneris_pay = new MonerisPay();
+        //app 支付标识
+        $_POST['rvarwap'] = 2;
+        $resp = $moneris_pay->payment($_POST,$_POST['uid'],3);
+        if($resp['requestMode'] && $resp['requestMode'] == "mpi"){
+            if($resp['mpiSuccess'] == "true"){
+                $result = array('error_code' => false,'mode'=>$resp['requestMode'],'PaReq'=>urlencode($resp['MpiPaReq']),'TermUrl' => urlencode($resp['MpiTermUrl']),'MD' => urlencode($resp['MpiMD']),'ACSUrl' => urlencode($resp['MpiACSUrl']),'site_url'=>$resp['MpiTermUrl']);
+                //$this->ajaxReturn($result);
+                $this->returnCode(0,'info',$result,'success');
+            }else{
+                $this->returnCode(1,'info',array(),$resp['message']);
+            }
+        }
+
+        if($resp['responseCode'] != 'null' && $resp['responseCode'] < 50){
+            //$order = explode("_",$_POST['order_id']);
+            //$order_id = $order[1];
+            //$url =U("Wap/Shop/status",array('order_id'=>$order_id));
+            $result = array('error_code' => false,'mode'=>'','PaReq'=>'','TermUrl' => '','MD' => '','ACSUrl' => '','site_url'=>'');
+            $this->returnCode(0,'info',$result,'success');
+            //$this->success(L('_PAYMENT_SUCCESS_'),$url,true);
+        }else{
+            $this->returnCode(1,'info',array(),$resp['message']);
+//            $this->error($resp['message'],'',true);
+        }
+    }
+
     public function ToPay(){
         $uid = $_POST['uid'];
         $order_id = $_POST['order_id'];
@@ -1452,7 +1696,7 @@ class IndexAction extends BaseAction
         $merchant_reduce = $_POST['merchant_reduce'] ? $_POST['merchant_reduce'] : 0;
 
         $_POST['cer_type'] = $_POST['cer_type'] ? $_POST['cer_type'] : 3;
-
+        $order = D('Shop_order')->where(array('order_id'=>$order_id))->find();
         if($_POST['pay_type'] == 0){//线下支付 直接进入支付流程
             D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->save(array('tip_charge'=>$tip));
             $order_param['order_id'] = $order_id;
@@ -1495,6 +1739,8 @@ class IndexAction extends BaseAction
             $price = $price + $tip - $delivery_discount - $merchant_reduce;
             $result = $this->loadModel()->WeixinAndAli($_POST['pay_type'],$order_id,$price,$_POST['ip'],$_POST['cer_type']);
             if($result['resCode'] == 'SUCCESS'){
+                $result['main_id'] = $order_id;
+                $result['orderNo'] = $order['real_orderid'];
                 $this->returnCode(0,'result',$result,'success');
             }else{
                 $this->returnCode(1,'info',array(),'fail');
@@ -1503,6 +1749,8 @@ class IndexAction extends BaseAction
             $price = $price + $tip - $delivery_discount - $merchant_reduce;
             $result = $this->loadModel()->WeixinAndAli($_POST['pay_type'],$order_id,$price,$_POST['ip'],$_POST['cer_type']);
             if($result['resCode'] == 'SUCCESS'){
+                $result['main_id'] = $order_id;
+                $result['orderNo'] = $order['real_orderid'];
                 $this->returnCode(0,'result',$result,'success');
             }else{
                 $this->returnCode(1,'info',array(),'fail');
@@ -1517,9 +1765,14 @@ class IndexAction extends BaseAction
         $card = D('User_card')->getCardListByUid($uid);
 
         $save_price = 251;
-
+        $send_card = $card[0];
+        foreach ($card as $v){
+            if($v['is_default'] == 1){
+                $send_card = $v;
+            }
+        }
         if($card) {
-            $send_card = $card[0];
+            //$send_card = $card[0];
             $send_card['save_price'] = $save_price;
             $this->returnCode(0, 'info', $send_card, 'success');
         }else {
@@ -1550,6 +1803,9 @@ class IndexAction extends BaseAction
         D('User_card')->field(true)->where(array('id'=>$card_id))->save(array('is_default'=>1));
 
         $card_list = D('User_card')->getCardListByUid($uid);
+        foreach ($card_list as $k=>$v){
+            $card_list[$k]['expiry'] = transYM($v['expiry']);
+        }
 
         $this->returnCode(0,'info',$card_list,'success');
     }
@@ -1686,7 +1942,7 @@ class IndexAction extends BaseAction
     public function getCanCoupon(){
         $uid = $_POST['uid'];
         //订单金额
-        $amount = $_POST['amount'];
+        $amount = $_POST['amount'] ? $_POST['amount'] : -1;
 //        $today = time();
 
 //        $sql = 'select c.coupon_id,h.id,c.discount,c.order_money from '.C('DB_PREFIX').'system_coupon_hadpull as h left join '.C('DB_PREFIX').'system_coupon as c on h.coupon_id = c.coupon_id';
@@ -1715,9 +1971,16 @@ class IndexAction extends BaseAction
 
         $tmp = array();
         foreach ($coupon_list as $key => $v) {
-            if (!$v['is_use'] && $v['order_money']<=$amount) {
-                $coupon = $this->arrange_coupon($v);
-                $tmp[] = $coupon;
+            if($amount < 0){
+                if (!$v['is_use']) {
+                    $coupon = $this->arrange_coupon($v);
+                    $tmp[] = $coupon;
+                }
+            }else{
+                if (!$v['is_use'] && $v['order_money']<=$amount) {
+                    $coupon = $this->arrange_coupon($v);
+                    $tmp[] = $coupon;
+                }
             }
         }
         return $tmp;
@@ -2134,6 +2397,8 @@ class IndexAction extends BaseAction
         $score_deliver = $_POST['score2'];
         $is_late = $_POST['righttime'] == 1 ? 0 : 1;
 
+        $comment_deliver = $_POST['comment_deliver'] ? $_POST['comment_deliver'] : "";
+
         $now_order = D('Shop_order')->get_order_detail(array('uid' => $uid, 'order_id' => $order_id));
 
         if (empty($now_order)) {
@@ -2179,6 +2444,7 @@ class IndexAction extends BaseAction
         $data_reply['score_store'] = $score_store;
         $data_reply['score_deliver'] = $score_deliver;
         $data_reply['is_late'] = $is_late;
+        $data_reply['comment_deliver'] = $comment_deliver;
 
         $data_reply['merchant_reply_content'] = "";
         $data_reply['merchant_reply_time'] = 0;
@@ -2187,6 +2453,12 @@ class IndexAction extends BaseAction
             $data_reply['comment_en'] = translationCnToEn($comment);
         }else{
             $data_reply['comment_en'] = '';
+        }
+
+        if(!checkEnglish($comment_deliver) && trim($comment_deliver) != ''){
+            $data_reply['comment_deliver_en'] = translationCnToEn($comment_deliver);
+        }else{
+            $data_reply['comment_deliver_en'] = '';
         }
 
 // 		echo "<pre/>";
@@ -2222,6 +2494,10 @@ class IndexAction extends BaseAction
         $info['now_money'] = round($userInfo['now_money'],2);
         $info['phone'] = $userInfo['phone'];
         $info['email'] = $userInfo['email'];
+        $coupon = $this->getCanCoupon();
+        $info['coupon_num'] = count($coupon);
+        $user_code = D('User')->getUserInvitationCode($uid);
+        $info['invi_code'] = strtoupper($user_code);
 
         if(isset($_POST['order_id'])){
             $order_id = $_POST['order_id'];
@@ -2432,6 +2708,7 @@ class IndexAction extends BaseAction
 
     public function updateAssign(){
         $id = D('Deliver_assign')->check_assign();
+
         //garfunkel add 暂时关掉自动紧急呼叫
         //$this->deliver_e_call();
         //var_dump($id);
@@ -2672,6 +2949,15 @@ class IndexAction extends BaseAction
         //var_dump($work_delver_list);
     }
 
+    public function updateSql(){
+        $sql = "show full processlist";
+        $model = new Model();
+        $list = $model->query($sql);
+        foreach ($list as $v){
+            echo $v['Info'];
+        }
+    }
+
     public function test_pdf(){
         import('@.ORG.mpdf.mpdf');
         $mpdf = new mPDF();
@@ -2902,7 +3188,7 @@ class IndexAction extends BaseAction
             }
         }
     }
-
+    /**
     public function get_goods_desc(){
         $list = D('Shop_goods')->where(array('des'=>array('neq','')))->order('goods_id desc')->select();
 
@@ -2929,5 +3215,18 @@ class IndexAction extends BaseAction
             }
         }
     }
+
+    public function del_no_value_dish(){
+        $page = $_GET['page'];
+        $list = D('Side_dish')->order('id asc')->limit(($page*1000+1).','.($page*1000+1000))->select();
+
+        foreach ($list as $v){
+            $value_count = D('Side_dish_value')->where(array('dish_id'=>$v['id']))->count();
+            if($value_count == 0){
+                D('Side_dish')->where(array('id'=>$v['id']))->delete();
+            }
+        }
+    }
+     */
 }
 

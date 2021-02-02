@@ -642,6 +642,9 @@ class ShopAction extends BaseAction
                 $order['good_tax_price'] = $order['discount_price'];
                 $order['packing_charge'] = 0;
                 $order['tax_price'] = $order['good_tax_price'] + ($order['freight_charge'] + $order['packing_charge']) * $store['tax_num']/100;
+
+                $address = D('User_adress')->where(array('adress_id'=>$order['address_id']))->find();
+                $order['deliver_note'] = $address['detail'];
             }else {
                 foreach ($order['info'] as $k => $v) {
                     $g_id = $v['goods_id'];
@@ -1224,6 +1227,7 @@ class ShopAction extends BaseAction
             $objActSheet->setCellValue('Z1', 'User Name客户姓名');
             $objActSheet->setCellValue('AA1', 'User Phone Number客户电话');
             $objActSheet->setCellValue('AB1', 'Address客户地址');
+            $objActSheet->setCellValue('AC1', '配送费优惠类型');
 
 
             $sql = "SELECT o.*, d.name as good_name,d.price as good_price ,d.unit,d.cost_price, d.num as good_num,d.tax_num,d.deposit_price, s.tax_num as store_tax,s.name AS store_name FROM (select * from pigcms_shop_order ".$condition_where." LIMIT ". $i*1000 .",1000)o LEFT JOIN pigcms_merchant_store AS s ON s.store_id=o.store_id LEFT JOIN pigcms_shop_order_detail AS d ON `d`.`order_id`=`o`.`order_id` ORDER BY o.order_id DESC";
@@ -1302,6 +1306,7 @@ class ShopAction extends BaseAction
                         $objActSheet->setCellValueExplicit('Z' . $index, '');
                         $objActSheet->setCellValueExplicit('AA' . $index, '');
                         $objActSheet->setCellValueExplicit('AB' . $index, '');
+                        $objActSheet->setCellValueExplicit('AC' . $index, '');
                         $index++;
                     }else{
                         $index++;
@@ -1333,6 +1338,7 @@ class ShopAction extends BaseAction
                         $objActSheet->setCellValueExplicit('Z' . $index, $value['username']);//客户姓名
                         $objActSheet->setCellValueExplicit('AA' . $index, $value['userphone'] . ' ');//客户电话
                         $objActSheet->setCellValueExplicit('AB' . $index, $value['address'] . ' ');//客户地址
+                        $objActSheet->setCellValueExplicit('AC' . $index, $value['delivery_discount_event']);
 
 
                         $index++;
