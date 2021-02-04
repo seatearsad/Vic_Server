@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <meta name="keywords" content="{pigcms{$config.seo_keywords}">
 <meta name="description" content="{pigcms{$config.seo_description}">
-<script src="{pigcms{:C('JQUERY_FILE')}"></script>
+<script type="text/javascript" src="{pigcms{$static_path}js/jquery.min.js" charset="utf-8"></script>
 <script src="{pigcms{$static_path}js/index.js"></script>
 <script src="{pigcms{$static_path}js/shop_reply.js"></script>
 <script src="{pigcms{$static_path}layer/layer.m.js"></script>
@@ -102,6 +102,7 @@
 </body>
 <script type="text/javascript">
 $(document).ready(function(){
+
 	$('.comment-btn').click(function(){
 // 		var mass = $(".mass").children(".level_solid").length;
 // 		var send = $(".send").children(".level_solid").length;
@@ -110,6 +111,7 @@ $(document).ready(function(){
 		var oid = $(this).attr("order_id");
 // 		var sid = $(this).prop("shop_id");
 		var goods_ids = new Array();
+
 		$('.select').each(function(i){
 			goods_ids[i] = $(this).attr('data-goods-id');
 		});

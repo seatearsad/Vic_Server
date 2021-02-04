@@ -3179,143 +3179,106 @@ class MyAction extends BaseAction{
 		}
 	}
 
-	/*全部订餐订单列表*/
+	/*网页加载---订餐订单列表 默认显示 upcoming的列表*/
 	public function shop_order_list(){
-		if(empty($this->user_session)){
-			$this->error_tips(L('_B_MY_LOGINFIRST_'));
-		}
-		$status = isset($_GET['status']) ? intval($_GET['status']) : 0;
-		$where = "is_del=0 AND uid={$this->user_session['uid']}";//array('uid' => $this->user_session['uid'], 'status' => array('lt', 3));
-		
-		if(!empty($_GET['store_id'])){
-			$where .= " AND store_id=".intval($_GET['store_id']);
-		}
-		
-		if ($status == -1) {
-			$where .= " AND paid=0";
-		} elseif ($status == 1) {
-			$where .= " AND paid=1 AND status<2";
-		} elseif ($status == 2) {
-			$where .= " AND paid=1 AND status=2";
-		}else{//付款超时，待删除
-            $where .= " AND status<>6";
-        }
-// 		$status == -1 && $where['paid'] = 0;
-// 		$status == 1 && $where['status'] = 0;
-// 		$status == 2 && $where['status'] = 1;
-
- 		$where .= " AND is_del = 0";
-		$order_list = D("Shop_order")->get_order_list($where, 'order_id DESC', 11);//field(true)->where($where)->order('order_id DESC')->select();
-		$order_list = $order_list['order_list'];
-// 		echo "<pre/>";
-// 		print_r($order_list);die;
-		//$temp = $store_ids = array();
-		foreach ($order_list as $st) {
-			$store_ids[] = $st['store_id'];
-		}
-		$m = array();
-		if ($store_ids) {
-			$store_image_class = new store_image();
-			$merchant_list = D("Merchant_store")->where(array('store_id' => array('in', $store_ids)))->select();
-			foreach ($merchant_list as $li) {
-				$images = $store_image_class->get_allImage_by_path($li['pic_info']);
-				$li['image'] = $images ? array_shift($images) : array();
-				unset($li['status']);
-                $city = D('Area')->where(array('area_id'=>$li['city_id']))->find();
-                $li['jetlag'] = $city['jetlag'];
-				$m[$li['store_id']] = $li;
-			}
-		}
-		$list = array();
-		foreach ($order_list as $ol) {
-			if (isset($m[$ol['store_id']]) && $m[$ol['store_id']]) {
-				$list[] = array_merge($ol, $m[$ol['store_id']]);
-			} else {
-				$list[] = $ol;
-			}
-		}
-
-		foreach($list as $key=>$val){
-			$list[$key]['order_url'] = U('Shop/status', array('order_id' => $val['order_id']));
-			//modify garfunkel
-            $list[$key]['name'] = lang_substr($val['name'],C('DEFAULT_LANG'));
-            $supply = D('Deliver_supply')->where(array('order_id'=>$val['order_id']))->find();
-            if($supply['status'] > 1 && $supply['status'] < 5){
-                $t_deliver = D('Deliver_user')->field(true)->where(array('uid'=>$supply['uid']))->find();
-                $this->assign('deliver',$t_deliver);
-            }
-		}
-		$this->assign('order_list', $list);
+//        $list = array();
+//        $list = $this->SHARE_shop_order_list();
+//		$this->assign('order_list', $list);
 
 		$this->display();
 	}
-
-
-
+    /*Ajax加载——订餐订单列表 默认显示 upcoming的列表*/
 	public function ajax_shop_order_list(){
-		if(empty($this->user_session)){
-			$this->error_tips(L('_B_MY_LOGINFIRST_'));
-		}
-		$status = isset($_GET['status']) ? intval($_GET['status']) : 0;
-		$where = "is_del=0 AND uid={$this->user_session['uid']}";//array('uid' => $this->user_session['uid'], 'status' => array('lt', 3));
-		if(!empty($_GET['store_id'])){
-			$where .= " AND store_id=".intval($_GET['store_id']);
-		}
-		if ($status == -1) {
-			$where .= " AND paid=0 AND status < 4";
-		} elseif ($status == 1) {
-			//$where .= " AND paid=1 AND status<2";
-            $where .= " AND paid=1 AND status < 4";
-		} elseif ($status == 2) {
-			$where .= " AND (status=4 OR status=5)";
-		}else{//付款超时，待删除
-		    $where .= " AND status<>6";
-        }
-
-		$order_list = D("Shop_order")->field(true)->where($where)->order('order_id DESC')->select();
-		foreach ($order_list as $st) {
-			$store_ids[] = $st['store_id'];
-		}
-		$m = array();
-		if ($store_ids) {
-			$store_image_class = new store_image();
-			$merchant_list = D("Merchant_store")->where(array('store_id' => array('in', $store_ids)))->select();
-			foreach ($merchant_list as $li) {
-				$images = $store_image_class->get_allImage_by_path($li['pic_info']);
-				$li['image'] = $images ? array_shift($images) : array();
-				unset($li['status']);
-                $city = D('Area')->where(array('area_id'=>$li['city_id']))->find();
-                $li['jetlag'] = $city['jetlag'];
-				$m[$li['store_id']] = $li;
-			}
-		}
-		$list = array();
-		foreach ($order_list as $ol) {
-			if (isset($m[$ol['store_id']]) && $m[$ol['store_id']]) {
-				$list[] = array_merge($ol, $m[$ol['store_id']]);
-			} else {
-				$list[] = $ol;
-			}
-		}
-
-		foreach($list as $key=>$val){
-            $list[$key]['name'] = lang_substr($val['name'],C('DEFAULT_LANG'));
-			$list[$key]['order_url'] = U('Shop/status', array('order_id' => $val['order_id']));
-			$list[$key]['create_time_show'] = date('Y-m-d',$val['create_time']);
-            $list[$key]['statusName'] = D('Store')->getOrderStatusName($val['status']);
-            $supply = D('Deliver_supply')->where(array('order_id'=>$val['order_id']))->find();
-            if($supply['status'] > 1 && $supply['status'] < 5){
-                $t_deliver = D('Deliver_user')->field(true)->where(array('uid'=>$supply['uid']))->find();
-                $list[$key]['deliver'] = $t_deliver;
-            }
-		}
-
+        $list = array();
+        $list = $this->SHARE_shop_order_list();
 		if(!empty($list)){
 			exit(json_encode(array('status'=>1,'order_list'=>$list)));
 		}else{
 			exit(json_encode(array('status'=>0,'order_list'=>$list)));
 		}
 	}
+    //peter
+    //网页和Ajax使用通用的订单列表加载程序
+	public function SHARE_shop_order_list(){
+
+        if(empty($this->user_session)){
+            $this->error_tips(L('_B_MY_LOGINFIRST_'));
+        }
+        $status = isset($_GET['status']) ? intval($_GET['status']) : 3;
+        $where = "is_del=0 AND uid={$this->user_session['uid']}";//array('uid' => $this->user_session['uid'], 'status' => array('lt', 3));
+        if(!empty($_GET['store_id'])){
+            $where .= " AND store_id=".intval($_GET['store_id']);
+        }
+        switch ($status){
+            case 0:
+                $where .= " AND paid=0 AND status<4";
+                break;
+            case 1:
+                $where .= " AND paid=1 AND status=2";
+                break;
+            case 2:
+                $where .= " AND paid=1 AND (status=4 OR status=5)";
+                break;
+            case 3:
+                $where .= " AND status<2";
+                break;
+            case 4:
+                $where .= " AND status=2";
+                break;
+            case 5:
+                $where .= " AND status=3";
+                break;
+            case 6:
+                $where .= " AND paid=1 AND (status=2 OR status=3 OR status=4 OR status=5)";
+                break;
+            default://付款超时，待删除
+                $where .= " AND status<>6";
+                break;
+        }
+
+        $order_list = D("Shop_order")->field(true)->where($where)->order('order_id DESC')->select();
+        foreach ($order_list as $st) {
+            $store_ids[] = $st['store_id'];
+        }
+        $m = array();
+        if ($store_ids) {
+            $store_image_class = new store_image();
+            $merchant_list = D("Merchant_store")->where(array('store_id' => array('in', $store_ids)))->select();
+            foreach ($merchant_list as $li) {
+                $images = $store_image_class->get_allImage_by_path($li['pic_info']);
+                $li['image'] = $images ? array_shift($images) : array();
+                unset($li['status']);
+                $city = D('Area')->where(array('area_id'=>$li['city_id']))->find();
+                $li['jetlag'] = $city['jetlag'];
+                $m[$li['store_id']] = $li;
+            }
+        }
+        $list = array();
+        foreach ($order_list as $ol) {
+            if (isset($m[$ol['store_id']]) && $m[$ol['store_id']]) {
+                $list[] = array_merge($ol, $m[$ol['store_id']]);
+            } else {
+                $list[] = $ol;
+            }
+        }
+        foreach($list as $key=>$val){
+            $list[$key]['name'] = lang_substr($val['name'],C('DEFAULT_LANG'));
+            $list[$key]['order_url'] = U('Shop/status', array('order_id' => $val['order_id']));
+            $list[$key]['create_time_show'] = date('Y-m-d h:m',$val['create_time']);
+
+            $status = D('Shop_order_log')->field(true)->where(array('order_id' => $val['order_id']))->order('id DESC')->find();
+            $status['status'] = $status['status'] == 33 ? 2 : $status['status'];
+            $list[$key]['statusLog'] = $status['status'];
+            $list[$key]['statusLogName'] = D('Store')->getOrderStatusLogName($status['status']);
+
+            $supply = D('Deliver_supply')->where(array('order_id'=>$val['order_id']))->find();
+            if($supply['status'] > 1 && $supply['status'] < 5){
+                $t_deliver = D('Deliver_user')->field(true)->where(array('uid'=>$supply['uid']))->find();
+                $list[$key]['deliver'] = $t_deliver;
+            }
+        }
+        return $list;
+    }
 
     public function coupon(){
         $coupon_list = D('System_coupon')->get_user_coupon_list($this->user_session['uid'], $this->user_session['phone']);
@@ -3351,13 +3314,10 @@ class MyAction extends BaseAction{
                 }
                 $tmp[$v['is_use']][$v['coupon_id']]['url'] = $url;
             }
-
         }
-
         if($tmp[0]){
             $this->assign('coupon', array_shift($tmp[0]));
         }
-
         //$this->card_list();
         $this->display();
     }

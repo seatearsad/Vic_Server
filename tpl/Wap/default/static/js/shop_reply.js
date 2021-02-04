@@ -1,10 +1,12 @@
 //star
 $(document).ready(function(){
+	console.log("document).ready");
     var stepW = 18;
     var description = new Array("非常差，很难吃","真的是差，都不忍心说你了","一般，还过得去吧","很好，是我想要的东西","太完美了，此物只得天上有，人间哪得几回闻!");
     var stars = $("#star > li");
     var descriptionTemp;
     $("#showb").css("width",0);
+
     stars.each(function(i){
         $(stars[i]).click(function(e){
             var n = i+1;
@@ -15,6 +17,7 @@ $(document).ready(function(){
             return descriptionTemp;
         });
     });
+
     stars.each(function(i){
         $(stars[i]).hover(
             function(){
@@ -62,6 +65,7 @@ $(function(){
 	})
 	//点击星星
 	$("i[cjmark]").click(function(){
+		console.log(cjmark);
 		var num = $(this).index();
 		var pmark = $(this).parents('.revinp');
 		var mark = pmark.prevAll('input');
