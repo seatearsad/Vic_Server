@@ -224,23 +224,28 @@
     </div>
     <!--    <iframe class="mapframe" src="http://54.190.29.18/index.php?g=Index&c=Index&a=map&type=2&order_id=12649&lang=--><?php //$_COOKIE['lang']?><!--"></iframe>-->
 <!--    STORE-->
+
     <div class="infor_head"></div>
+
     <if condition="$order_details['paid'] eq 0 ">
-    <div class="infor">
-        <div class="div_button">Finish Payment</div>
-    </div>
+        <div class="infor">
+            <div class="div_button">Finish Payment</div>
+        </div>
+        <div class="gray_line"></div>
     </if>
+
     <if condition="$order_details['deliver_info']">
-    <div class="infor" style="margin-bottom: 0px;">
-        <a href="tel:{pigcms{$order_details['deliver_info']['phone']}">
-            <div class="div_deli">
-                <div style="font-size: 18px;font-weight: bold">{pigcms{$order_details['deliver_info']['name']}</div>
-                <div style="margin-top: 5px;">will deliver your order to you</div>
-            </div>
-        </a>
-    </div>
+        <div class="infor" style="margin-bottom: 0px;">
+            <a href="tel:{pigcms{$order_details['deliver_info']['phone']}">
+                <div class="div_deli">
+                    <div style="font-size: 18px;font-weight: bold">{pigcms{$order_details['deliver_info']['name']}</div>
+                    <div style="margin-top: 5px;">will deliver your order to you</div>
+                </div>
+            </a>
+        </div>
+        <div class="gray_line"></div>
     </if>
-    <div class="gray_line"></div>
+
     <div class="infor">
         <ul>
             <li class="first storext">
