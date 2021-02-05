@@ -18,7 +18,7 @@
 <style>
     .main{
         width: 100%;
-        padding-top: 60px;
+        padding-top: 48px;
         max-width: 640px;
         min-width: 320px;
         margin: 0 auto;
@@ -72,7 +72,11 @@
         border-bottom: 1px solid #ffa52d;
     }
     .g_details{
-        margin-top: 10px;
+        margin-top: 0px;
+        padding-top: 5px;
+    }
+    .infor .answer {
+        padding: 0px 10px 10px 0;
     }
     .infor .answer .fr,.infor li .e2c{
         color: #ffa52d;
@@ -80,27 +84,168 @@
     .infor .kd_dd .right .del{
         text-decoration: none;
     }
+
+    .map_infor{
+        width: 100%;
+        height: 400px;
+    }
+    .msg_infor{
+        width: 94%;
+        background: #fff;
+        border-radius: 5px;
+        border 1px solid #e3e3e3;
+        opacity: 0.95;
+        position: absolute;
+        top: 120px;
+        left: 3%;
+        padding: 10px 10px 10px 10px;
+    }
+    .info_common{
+
+    }
+    .msg_title{
+        font-size: 16px;
+        margin: 0px 5px 5px;
+        font-weight: bold
+    }
+    .msg_desc{
+        font-size: 14px;
+        margin: 5px 5px;
+        color: #686868;
+    }
+    .bg_infor{
+        width: 100%;
+    }
+    .bg_infor img{
+        width: 100%;
+    }
+    .info_norad{
+        border-radius: 0px;
+    }
+    .infor_head {
+        background: #fff;
+        margin: 0px;
+        border-radius: 10px 10px 0 0;
+        position: relative;
+        top: -8px;
+        height: 8px;
+    }
+    .infor {
+        background: #fff;
+        margin-bottom: 10px;
+    }
+    .infor li {
+        border-bottom: #f1f1f1 0px solid;
+    }
+    .infor li.storext .tit {
+        padding-left: 0px;
+    }
+    .infor li.storext a {
+        display: block;
+        padding: 10px 0px;
+        font-weight: bold;
+    }
+    .infor li.storext {
+        margin-left: 10px;
+        position: relative;
+        padding: 0px;
+    }
+    .order_num{
+        display: inline-block;
+        width:30px;
+    }
+    .infor .kd_dd .right div {
+        width: 50%;
+    }
+    .infor .kd_dd {
+        border-bottom: #f1f1f1 0px solid;
+    }
+    .infor .mealfee dd {
+        padding: 5px 10px 10px 0;
+
+    }
+    .infor .mealfee{
+        border-bottom: #f1f1f1 0px solid;
+    }
+    .infor .kd_dd dd h2{
+        color: black;
+    }
+    .infor li.first {
+        font-weight: bold;
+    }
+    .infor li.storext {
+        border-bottom: #f1f1f1 0px solid;
+    }
+    .gray_line{
+        border-bottom: 1px solid #e3e3e3;
+        height: 1px;
+        width: 100%;
+    }
+    .div_button{
+        color: white;
+        background: #ffa52d;
+        font-size: 18px;
+        width: 90%;
+        border-radius: 10px;
+        margin: 0px 20px 10px 20px;
+        padding: 10px 10px 10px 10px;
+        text-align: center;
+    }
+    .div_deli{
+        margin: 0px 20px 0px 10px;
+        background-image: url("./tpl/Static/blue/images/new/icon_call.png");
+        background-size: auto 40px;
+        background-repeat: no-repeat;
+        background-position: right center;
+    }
 </style>
-<body>
+<body style="max-width: 640px;background-color: white;">
 <include file="Public:header"/>
 <div class="main">
-    <div class="this_nav">
-        <span id="back_span"></span>
-        {pigcms{:L('_ORDER_DETAIL_')}
-    </div>
-    <div class="gray_line"></div>
-    <div class="detail_header">
-        <div><a href="{pigcms{:U('status',array('order_id'=>$order_details['order_id']))}">{pigcms{:L('_ORDER_STATUS_')}</a></div>
-        <div class="header_active">{pigcms{:L('_ORDER_INFO_TXT_')}</div>
-    </div>
+<!--    <div class="this_nav">-->
+<!--        <span id="back_span"></span>-->
+<!--        {pigcms{:L('_ORDER_DETAIL_')}-->
+<!--    </div>-->
+<!--    <div class="gray_line"></div>-->
+<!--    <div class="detail_header">-->
+<!--        <div><a href="{pigcms{:U('status',array('order_id'=>$order_details['order_id']))}">{pigcms{:L('_ORDER_STATUS_')}</a></div>-->
+<!--        <div class="header_active">{pigcms{:L('_ORDER_INFO_TXT_')}</div>-->
+<!--    </div>-->
 <section class="g_details">
+    <if condition="$order.status eq 1 AND $order.deliver_lng neq null AND $order.deliver_lat neq null">
+        <div class="map_infor" id="web_map"></div>
+    <else />
+        <div class="bg_infor"><img src="{pigcms{$store['image']}"> </div>
+    </if>
+    <div class="msg_infor">
+        <div class="msg_title info_common">{pigcms{$order.statusLogName}</div>
+        <div class="msg_desc info_common">{pigcms{$order.statusDesc}</div>
+        <div class=""></div>
+    </div>
+    <!--    <iframe class="mapframe" src="http://54.190.29.18/index.php?g=Index&c=Index&a=map&type=2&order_id=12649&lang=--><?php //$_COOKIE['lang']?><!--"></iframe>-->
+<!--    STORE-->
+    <div class="infor_head"></div>
+    <if condition="$order_details['paid'] eq 0 ">
+    <div class="infor">
+        <div class="div_button">Finish Payment</div>
+    </div>
+    </if>
+    <if condition="$order_details['deliver_info']">
+    <div class="infor" style="margin-bottom: 0px;">
+        <a href="tel:{pigcms{$order_details['deliver_info']['phone']}">
+            <div class="div_deli">
+                <div style="font-size: 18px;font-weight: bold">{pigcms{$order_details['deliver_info']['name']}</div>
+                <div style="margin-top: 5px;">will deliver your order to you</div>
+            </div>
+        </a>
+    </div>
+    </if>
+    <div class="gray_line"></div>
     <div class="infor">
         <ul>
             <li class="first storext">
                 <a href="{pigcms{:U('Shop/classic_shop')}&shop_id={pigcms{$store['store_id']}">
-                    <div class="img">
-                        <img src="{pigcms{$store['image']}">
-                    </div>
+
                     <div class="tit">{pigcms{$store['name']}</div>
                 </a>
             </li>
@@ -110,6 +255,7 @@
                 <dd class="clr">
                     <div class="fl left">
                         <h2>
+                            <span class="order_num">{pigcms{$goods['num']}</span>
                             <if condition="in_array($goods['discount_type'], array(1, 3, 4))">
                                 <em class="dd1">折</em>
                                 <elseif condition="in_array($goods['discount_type'], array(2, 5))" />
@@ -118,13 +264,12 @@
                             {pigcms{$goods['name']}</h2>
                     </div>
                     <div class="clr fr right">
-                        <div class="fl ride">x{pigcms{$goods['num']}</div>
                         <div class="fl del"> &nbsp;</div>
                         <div class="fl price">${pigcms{$goods['discount_total']}</div>
                     </div>
                 </dd>
                 <if condition="!empty($goods['spec'])">
-                    <p style="font-size: 12px;color: #808080;margin-right: 5px">{pigcms{$goods['spec']}</p>
+                    <p style="font-size: 12px;color: #808080;margin-right: 5px;padding-left: 33px">{pigcms{$goods['spec']}</p>
                 </if>
             </volist>
         </dl>
@@ -144,90 +289,81 @@
                         <div class="fr">${pigcms{$order_details['tip_charge']}</div>
                     </dd>
                 </if>
+                <dd class="clr">
+                    <div class="fl"><span style="line-height: 20px;display: inline-block;color: #ffa52d">{pigcms{:L('V3_ORDER_DETAIL_DISCOUNT')}</span> </div>
+                    <div class="fr" style="color: #ffa52d">-${pigcms{$order.discount_price}</div>
+                </dd>
+                <dd class="clr">
+                    <div class="fl" style="font-weight: bold">{pigcms{:L('_TOTAL_RECE_')}</div>
+                    <div class="fr">${pigcms{$order_details['price'] + $order_details['tip_charge']|floatval}</div>
+                </dd>
             </dl>
         </div>
 
-        <div class="reduce">
-            <dl>
-                <volist name="discount_detail" id="discount">
-                    <if condition="$discount['discount_type'] eq 1">
-                        <dd class="clr">
-                            <div  class="fl clr">
-                                <em class="fl e0c">首</em>
-                                <div class="p20">平台首单满{pigcms{$discount['money']|floatval}元减{pigcms{$discount['minus']|floatval}元</div>
-                            </div>
-                            <div class="fr ff3">-${pigcms{$discount['minus']|floatval}</div>
-                        </dd>
-                        <elseif condition="$discount['discount_type'] eq 2" />
-                        <dd class="clr">
-                            <div class="fl clr">
-                                <em class="fl d52">减</em>
-                                <div class="p20">平台优惠满{pigcms{$discount['money']|floatval}元减{pigcms{$discount['minus']|floatval}元</div>
-                            </div>
-                            <div class="fr ff3">-${pigcms{$discount['minus']|floatval}</div>
-                        </dd>
-                        <elseif condition="$discount['discount_type'] eq 3" />
-                        <dd class="clr">
-                            <div class="fl clr">
-                                <em class="fl ffa">首</em>
-                                <div class="p20">店铺首单满{pigcms{$discount['money']|floatval}元减{pigcms{$discount['minus']|floatval}元</div>
-                            </div>
-                            <div class="fr ff3">-${pigcms{$discount['minus']|floatval}</div>
-                        </dd>
-                        <elseif condition="$discount['discount_type'] eq 4" />
-                        <dd class="clr">
-                            <div class="fl clr">
-                                <em class="fl ff6">减</em>
-                                <div class="p20">店铺优惠满{pigcms{$discount['money']|floatval}元减{pigcms{$discount['minus']|floatval}元</div>
-                            </div>
-                            <div class="fr ff3">-${pigcms{$discount['minus']|floatval}</div>
-                        </dd>
-                        <elseif condition="$discount['discount_type'] eq 5" />
-                        <dd class="clr">
-                            <div class="fl clr">
-                                <em class="fl ff0">惠</em>
-                                <div class="p20">商品满{pigcms{$discount['money']|floatval}元配送费减{pigcms{$discount['minus']|floatval}元</div>
-                            </div>
-                            <div class="fr ff3">-${pigcms{$discount['minus']|floatval}</div>
-                        </dd>
-                    </if>
-                </volist>
-            </dl>
-        </div>
-        <div class="answer clr">
-            <!--div class="fl">{pigcms{:L('_ORDER_TXT_')} ${pigcms{$order_details['discount_price']|floatval} {pigcms{:L('_DISCOUNT_TXT_')}-${pigcms{$order_details['minus_price']|floatval}</div-->
-            <div class="fr">{pigcms{:L('_TOTAL_RECE_')}: ${pigcms{$order_details['price'] + $order_details['tip_charge']|floatval}</div>
-        </div>
+<!--        <div class="reduce">-->
+<!--            <dl>-->
+<!--                <volist name="discount_detail" id="discount">-->
+<!--                    <if condition="$discount['discount_type'] eq 1">-->
+<!--                        <dd class="clr">-->
+<!--                            <div  class="fl clr">-->
+<!--                                <em class="fl e0c">首</em>-->
+<!--                                <div class="p20">平台首单满{pigcms{$discount['money']|floatval}元减{pigcms{$discount['minus']|floatval}元</div>-->
+<!--                            </div>-->
+<!--                            <div class="fr ff3">-${pigcms{$discount['minus']|floatval}</div>-->
+<!--                        </dd>-->
+<!--                        <elseif condition="$discount['discount_type'] eq 2" />-->
+<!--                        <dd class="clr">-->
+<!--                            <div class="fl clr">-->
+<!--                                <em class="fl d52">减</em>-->
+<!--                                <div class="p20">平台优惠满{pigcms{$discount['money']|floatval}元减{pigcms{$discount['minus']|floatval}元</div>-->
+<!--                            </div>-->
+<!--                            <div class="fr ff3">-${pigcms{$discount['minus']|floatval}</div>-->
+<!--                        </dd>-->
+<!--                        <elseif condition="$discount['discount_type'] eq 3" />-->
+<!--                        <dd class="clr">-->
+<!--                            <div class="fl clr">-->
+<!--                                <em class="fl ffa">首</em>-->
+<!--                                <div class="p20">店铺首单满{pigcms{$discount['money']|floatval}元减{pigcms{$discount['minus']|floatval}元</div>-->
+<!--                            </div>-->
+<!--                            <div class="fr ff3">-${pigcms{$discount['minus']|floatval}</div>-->
+<!--                        </dd>-->
+<!--                        <elseif condition="$discount['discount_type'] eq 4" />-->
+<!--                        <dd class="clr">-->
+<!--                            <div class="fl clr">-->
+<!--                                <em class="fl ff6">减</em>-->
+<!--                                <div class="p20">店铺优惠满{pigcms{$discount['money']|floatval}元减{pigcms{$discount['minus']|floatval}元</div>-->
+<!--                            </div>-->
+<!--                            <div class="fr ff3">-${pigcms{$discount['minus']|floatval}</div>-->
+<!--                        </dd>-->
+<!--                        <elseif condition="$discount['discount_type'] eq 5" />-->
+<!--                        <dd class="clr">-->
+<!--                            <div class="fl clr">-->
+<!--                                <em class="fl ff0">惠</em>-->
+<!--                                <div class="p20">商品满{pigcms{$discount['money']|floatval}元配送费减{pigcms{$discount['minus']|floatval}元</div>-->
+<!--                            </div>-->
+<!--                            <div class="fr ff3">-${pigcms{$discount['minus']|floatval}</div>-->
+<!--                        </dd>-->
+<!--                    </if>-->
+<!--                </volist>-->
+<!--            </dl>-->
+<!--        </div>-->
+
 
     </div>
-
+    <div class="gray_line"></div>
+<!--    ORDER-->
     <div class="infor">
         <ul>
-            <if condition="$order_details['is_pick_in_store'] eq 2">
                 <li class="clr first">
-                    <div class="fl match">{pigcms{:L('_SELF_LIFT_')}</div>
+                    <div class="fl match">{pigcms{:L('_ORDER_INFO_')}</div>
                 </li>
                 <li class="clr">
-                    <div class="fl">{pigcms{:L('_DIST_MODE_')}</div>
-                    <div class="fr">{pigcms{:L('_SELF_DIST_')}</div>
+                    <div class="fl">{pigcms{:L('V3_ORDER_DETAIL_ORDERNUMBER')}</div>
+                    <div class="fr">{pigcms{$order_details['real_orderid']}</div>
                 </li>
                 <li class="clr">
-                    <div class="fl">{pigcms{:L('_SELF_LIFT_ADDRESS_')}</div>
-                    <div class="p90">
-                        <p>{pigcms{$order_details['address']}</p>
-                    </div>
-                </li>
-                <else />
-                <li class="clr first">
-                    <div class="fl match">{pigcms{:L('_DIST_INFO_')}</div>
-                </li>
-                <!--li class="clr">
-                    <div class="fl">{pigcms{:L('_DIST_MODE_')}</div>
-                    <div class="fr">{pigcms{:L('_PLAT_DIST_')}</div>
-                </li-->
-                <li class="clr">
-                    <div class="fl">{pigcms{:L('_EXPECTED_TIME_')}</div>
-                    <div class="fr">{pigcms{$order_details['expect_use_time']}</div>
+                    <div class="fl">{pigcms{:L('_PAYMENT_MODE_')}</div>
+                    <div class="fr">{pigcms{$order_details['pay_type_str']}</div>
                 </li>
                 <li class="clr">
                     <div class="fl">{pigcms{:L('_RECE_INFO_')}</div>
@@ -236,135 +372,46 @@
                         <p>{pigcms{$order_details['username']} {pigcms{$order_details['userphone']}</p>
                     </div>
                 </li>
-                <if condition="$order_details['deliver_info']">
-                    <li class="clr">
-                        <div class="fl">{pigcms{:L('_DIST_DETAIL_')}</div>
-                        <dl class="p90">
-                            <dd>
-                                <h2 class="endt">{pigcms{$order_details['deliver_info']['name']} <a href="tel:{pigcms{$order_details['deliver_info']['phone']}">{pigcms{$order_details['deliver_info']['phone']}</a></h2>
-                            </dd>
-                        </dl>
-                    </li>
-                </if>
-            </if>
+                <!--li class="clr">
+                    <div class="fl">{pigcms{:L('_DIST_MODE_')}</div>
+                    <div class="fr">{pigcms{:L('_PLAT_DIST_')}</div>
+                </li-->
+<!--                <li class="clr">-->
+<!--                    <div class="fl">{pigcms{:L('_EXPECTED_TIME_')}</div>-->
+<!--                    <div class="fr">{pigcms{$order_details['expect_use_time']}</div>-->
+<!--                </li>-->
+
+
+
         </ul>
     </div>
-
+    <div class="gray_line"></div>
+<!--    STORE NOTES-->
     <div class="infor">
         <ul>
             <li class="clr first">
-                <div class="fl book">{pigcms{:L('_ORDER_INFO_')}</div>
+                <div class="fl book">{pigcms{:L('V3_ORDER_DETAIL_NOTES')}</div>
             </li>
+<!--            <li class="clr">-->
+<!--                <div class="fl">{pigcms{:L('_B_PURE_MY_68_')}</div>-->
+<!--                <div class="fr">{pigcms{$order_details['real_orderid']}</div>-->
+<!--            </li>-->
+<!--            <li class="clr">-->
+<!--                <div class="fl">{pigcms{:L('_ORDER_TIME_')}</div>-->
+<!--                <div class="fr">{pigcms{$order_details['create_time']}</div>-->
+<!--            </li>-->
             <li class="clr">
-                <div class="fl">{pigcms{:L('_B_PURE_MY_68_')}</div>
-                <div class="fr">{pigcms{$order_details['real_orderid']}</div>
-            </li>
-            <li class="clr">
-                <div class="fl">{pigcms{:L('_ORDER_TIME_')}</div>
-                <div class="fr">{pigcms{$order_details['create_time']}</div>
-            </li>
-            <li class="clr">
-                <div class="fl">{pigcms{:L('_NOTE_INFO_')}</div>
-                <div class="fr">{pigcms{$order_details['note']}</div>
+                <if condition="$order_details['note'] eq ''">
+                    N/A
+                    <else/>
+                    {pigcms{$order_details['note']}
+                </if>
+
             </li>
         </ul>
     </div>
-    <if condition="$order_details['paid'] eq 1">
-        <div class="infor">
-            <ul>
-                <li class="clr first">
-                    <div class="fl branch">{pigcms{:L('_PAYMENT_INFO_')}</div>
-                </li>
-                <li class="clr">
-                    <div class="fl">{pigcms{:L('_PAYMENT_TIME_')}</div>
-                    <div class="fr">{pigcms{$order_details['pay_time']}</div>
-                </li>
-                <li class="clr">
-                    <div class="fl">{pigcms{:L('_PAYMENT_MODE_')}</div>
-                    <div class="fr">{pigcms{$order_details['pay_type_str']}</div>
-                </li>
-                <li class="clr">
-                    <div class="fl">{pigcms{:L('_TOTAL_RECE_')}</div>
-                    <div class="p90">
-                        <if condition="$order_details['change_price'] gt 0">
-                            <p class="e2c">${pigcms{$order_details['total_price']+$order_details['tip_charge']-$order_details['coupon_price']-$order_details['delivery_discount']-$order_details['merchant_reduce']|floatval}</p>
-                            <p class="kdsize">{pigcms{:L('_BEFORE_MODIFY_')}：${pigcms{$order_details['change_price']|floatval}</p>
-                            <else />
-                            <p class="e2c">${pigcms{$order_details['total_price']+$order_details['tip_charge']-$order_details['coupon_price']-$order_details['delivery_discount']-$order_details['merchant_reduce']|floatval}</p>
-                        </if>
-                    </div>
-                </li>
-                <!--if condition="$order_details['card_discount'] eq 0 OR $order_details['card_discount'] eq 10">
-                    <li class="clr">
-                        <div class="fl">{pigcms{:L('_BUSINESS_CARD_DIS_')}</div>
-                        <div class="p90">
-                            <php>
-                                if(C('DEFAULT_LANG') == 'en-us'){
-                                $order_details['card_discount'] = 10*(10 - $order_details['card_discount']);
-                                }
-                            </php>
-                            <p class="e2c">-${pigcms{$order_details['minus_card_discount']}（{pigcms{:replace_lang_str(L('_NUM_DISCOUNT_'),$order_details['card_discount'])}）</p>
-                            <p class="kdsize">（{pigcms{:L('_NOTE_NOT_TAKE_DIS_')}）</p>
-                        </div>
-                    </li>
-                </if-->
-                <if condition="$order_details['coupon_price'] gt 0">
-                    <li class="clr">
-                        <div class="fl">{pigcms{:L('_PLATFORM_COUP_')}</div>
-                        <div class="fr e2c">-${pigcms{$order_details['coupon_price']|floatval}</div>
-                    </li>
-                </if>
-                <if condition="$order_details['card_price'] gt 0">
-                    <li class="clr">
-                        <div class="fl">{pigcms{:L('_SHOP_COUP_')}</div>
-                        <div class="fr e2c">-${pigcms{$order_details['card_price']|floatval}</div>
-                    </li>
-                </if>
-                <if condition="$order_details['delivery_discount'] neq 0">
-                    <li class="clr" style="color: #ffa52d">
-                        <div class="fl">Save</div>
-                        <div class="fr e2c">-${pigcms{$order_details['delivery_discount']}</div>
-                    </li>
-                </if>
-                <if condition="$order_details['merchant_reduce'] gt 0">
-                    <li class="clr">
-                        <div class="fl">Save</div>
-                        <div class="fr e2c">-${pigcms{$order_details['merchant_reduce']|floatval}</div>
-                    </li>
-                </if>
-                <if condition="$order_details['score_deducte'] gt 0">
-                    <li class="clr">
-                        <div class="fl">{pigcms{:L('_INTEGRAL_DED_')}</div>
-                        <div class="fr e2c">-${pigcms{$order_details['score_deducte']|floatval}（{pigcms{:replace_lang_str(L('_USED_POINTS_'),$order_details['score_used_count'])}）</div>
-                    </li>
-                </if>
-                <if condition="$order_details['card_give_money'] gt 0">
-                    <li class="clr">
-                        <div class="fl">{pigcms{:L('_PAYMENT_OF_BALANCE_')}</div>
-                        <div class="fr e2c">-${pigcms{$order_details['card_give_money']|floatval}</div>
-                    </li>
-                </if>
-                <if condition="$order_details['merchant_balance'] gt 0">
-                    <li class="clr">
-                        <div class="fl">{pigcms{:L('_SHOP_BALANCE_PAY_')}</div>
-                        <div class="fr e2c">-${pigcms{$order_details['merchant_balance']|floatval}</div>
-                    </li>
-                </if>
-                <if condition="$order_details['balance_pay'] gt 0">
-                    <li class="clr">
-                        <div class="fl">{pigcms{:L('_PLATFORM_BALANCE_PAY_')}</div>
-                        <div class="fr e2c">-${pigcms{$order_details['balance_pay']|floatval}</div>
-                    </li>
-                </if>
-                <if condition="$order_details['payment_money'] gt 0">
-                    <li class="clr">
-                        <div class="fl">{pigcms{$order_details['pay_type_str']}</div>
-                        <div class="fr e2c">-${pigcms{$order_details['payment_money']|floatval}</div>
-                    </li>
-                </if>
-            </ul>
-        </div>
-    </if>
+
+<!--    BOTTOM BUTTON-->
     <div class="consume consumes">
         <ul class="clr">
             <if condition="$order_details['status'] lt 3 OR ($order_details['paid'] eq 1 AND $order_details['status'] eq 5) OR ($order_details['paid'] eq 0 AND $order_details['status'] eq 7)">
@@ -392,6 +439,7 @@
             </if>
         </ul>
     </div>
+
 </section>
 </div>
 </body>
@@ -405,6 +453,78 @@
         font-size: 16px;
     }
 </style>
+<script>
+
+    <if condition="$order.status eq 1 AND $order.deliver_lng neq null AND $order.deliver_lat neq null">
+
+    var store_lat = "{pigcms{$order.store_lat}";
+    var store_lng = "{pigcms{$order.store_lat}";
+    var user_lat = "{pigcms{$order.user_lat}";
+    var user_lng = "{pigcms{$order.user_lng}";
+    var deliver_lat ="{pigcms{$order.deliver_lat}";
+    var deliver_lng = "{pigcms{$order.deliver_lng}";
+
+    var deliver_icon = "{pigcms{$static_public}images/deliver/icon_deliver_map.png";
+    var store_icon = "{pigcms{$static_public}images/deliver/icon_store_map.png";
+
+    //获取get传值的方法
+    function getQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return decodeURI(r[2]);
+        return null;
+    }
+    var map;
+    function initMap() {
+        // The location of Uluru
+        var lng= Number(getQueryString("lng"));
+        var lat=Number(getQueryString("lat"));
+        var label=getQueryString("label");
+        var uluru = {lat: parseFloat(deliver_lat), lng: parseFloat(deliver_lng)};
+        var store_pos = {lat:parseFloat(store_lat), lng:parseFloat(store_lng)};
+        var user_pos = {lat:parseFloat(user_lat), lng:parseFloat(user_lng)};
+        // The map, centered at Uluru
+        var map = new google.maps.Map(
+            document.getElementById('web_map'), {zoom: 18, center: uluru});
+
+        var deliver = {
+            url:deliver_icon,
+            scaledSize: new google.maps.Size(35,35),
+            size: new google.maps.Size(35,35)
+        };
+
+        var store =  {
+            url:store_icon,
+            scaledSize: new google.maps.Size(35,35),
+            size: new google.maps.Size(35,35)
+        };
+
+        // The marker, positioned at Uluru
+        var marker_deliver = new google.maps.Marker({position: uluru, map: map,icon:deliver});
+        var marker_store = new google.maps.Marker({position: store_pos, map: map,icon:store});
+        var marker_user = new google.maps.Marker({position: user_pos, map: map});
+
+        var bounds = new google.maps.LatLngBounds();
+        bounds.extend(new   google.maps.LatLng(marker_deliver.getPosition().lat()
+            ,marker_deliver.getPosition().lng()));
+        bounds.extend(new   google.maps.LatLng(marker_store.getPosition().lat()
+            ,marker_store.getPosition().lng()));
+        bounds.extend(new   google.maps.LatLng(marker_user.getPosition().lat()
+            ,marker_user.getPosition().lng()));
+
+        map.fitBounds(bounds);
+        //地图缩放时触发，当地图的缩放比例大于默认比例时，恢复为默认比例
+        // google.maps.event.addListener(map, 'zoom_changed', function () {
+        //     if (map.getZoom() > defaultZoom){
+        //         map.setZoom(defaultZoom);
+        //     }
+        // });
+    }
+</script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKlguA2QFIUVwWTo3danbOqSKv3nYbBCg&callback=initMap"
+        async defer></script>
+</if>
 <script>
     $(document).ready(function(){
         $('.consumes ul li').click(function(){

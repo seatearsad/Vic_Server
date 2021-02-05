@@ -48,7 +48,7 @@
                                  url += '&type=shop&order_id='+d[i].order_id;
                             }}
                             <div class="button_block">
-                                <div class="round_button count_down" onclick="location.href='{{ url }}'" data-time="{{d[i].create_time }}" data-id="{{d[i].order_id }}" data-jet="{{d[i].jetlag }}">Continue Payment</div>
+                                <div class="round_button count_down" style="right: 20px;position: absolute;" onclick="location.href='{{ url }}'" data-time="{{d[i].create_time }}" data-id="{{d[i].order_id }}" data-jet="{{d[i].jetlag }}">Continue Payment</div>
                             </div>
                         {{# }else{ }}
                             <div class="button_block">

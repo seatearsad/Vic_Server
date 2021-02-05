@@ -3476,9 +3476,29 @@ class ShopAction extends BaseAction{
 	 */
     public function order_detail()
     {
+
         $order_id = isset($_GET['order_id']) ? intval($_GET['order_id']) : 0;
         $order = D("Shop_order")->get_order_detail(array('order_id' => $order_id, 'uid' => $this->user_session['uid']));
+        //
         if ($order) {
+
+            //-------------------------------  获取地图位置 --------------------------------------peter
+
+            $supply = D('Deliver_supply')->where(array('order_id'=>$order_id))->find();
+            if($supply){
+                $deliver_id = $supply['uid'];
+                $deliver = D('Deliver_user')->where(array('uid'=>$deliver_id))->find();
+                $order['store_lat'] = $supply['from_lat'];
+                $order['store_lng'] = $supply['from_lnt'];
+                $order['user_lat'] = $supply['aim_lat'];
+                $order['user_lng'] = $supply['aim_lnt'];
+                $order['deliver_lat'] = $deliver['lat'];
+                $order['deliver_lng'] = $deliver['lng'];
+            }
+            //------------------------------------------------------------------------------------
+
+
+
             $store = D('Merchant_store')->field(true)->where(array('store_id' => $order['store_id']))->find();
             $store_image_class = new store_image();
             //modify garfunkel
@@ -3493,6 +3513,28 @@ class ShopAction extends BaseAction{
                     break;
                 }
             }
+
+            //------------------------------ 更新status等信息 ------------------------------------peter
+
+            $n_status = D('Shop_order_log')->field(true)->where(array('order_id' => $order['order_id']))->order('id DESC')->find();
+            $add_time = 0;
+            if($n_status['status'] == 33){
+                if(D('Shop_order_log')->field(true)->where(array('order_id' => $order['order_id'], 'status' => 3))->order('id DESC')->find())
+                    $status['status'] = 3;
+                else
+                    $status['status'] = 2;
+                $add_time = $status['note'];
+            }else {
+                if ($add_time_log = D('Shop_order_log')->field(true)->where(array('order_id' => $order['order_id'], 'status' => 33))->order('id DESC')->find()) {
+                    $add_time = $add_time_log['note'];
+                }
+            }
+            $order['statusLog'] = $n_status['status'];
+            $order['statusLogName'] = D('Store')->getOrderStatusLogName($n_status['status']);
+            $order['statusDesc'] = D('Store')->getOrderStatusDesc($status['status'],$order,$status,$store['site_name'],$add_time);
+
+            //-------------------------------------------------------------------------------------
+
             if($order['pay_type'] == 'offline' && empty($order['third_id'])){
                 $payment = rtrim(rtrim(number_format($order['price']-$order['card_price']-$order['merchant_balance']-$order['card_give_money']-$order['balance_pay']-$order['payment_money']-$order['score_deducte']-floatval($order['coupon_price']),2,'.',''),'0'),'.');
             }
@@ -3580,10 +3622,15 @@ class ShopAction extends BaseAction{
             $arr['order_details']['tax_price'] = $tax_price;
             $arr['order_details']['deposit_price'] = $deposit_price;
             $arr['discount_detail'] = $order['discount_detail'] ?: '';
+
+            $order['discount_price'] = $order['coupon_price'] + $order['merchant_reduce'] + $order['delivery_discount'];
+            $this->assign("order",$order);
 //             echo '<pre/>';
 //             print_r($arr);die;
             $this->assign($arr);
             $this->assign('store', $store);
+            //var_dump($order);
+
             $this->display();
         } else {
             $this->error_tips('订单信息错误！');

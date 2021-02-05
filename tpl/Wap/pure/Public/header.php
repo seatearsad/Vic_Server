@@ -50,18 +50,21 @@
     }
 
     .header_search {
-        width: 50px;
+        width: 40px;
         height: 50px;
         margin-top: 5px;
         margin-right: 10px;
         float: right;
         background-image: url("./tpl/Static/blue/images/new/search.png");
         background-repeat: no-repeat;
-        background-size: auto 70%;
-        background-position: center;
+        background-size: auto 55%;
         cursor: pointer;
     }
-
+    .home_style {
+        position: absolute;
+        right: 1px;
+        top: 10px;
+    }
     #header_logo {
         margin: 2px auto;
         width: 56px;
@@ -392,11 +395,20 @@
 </div>
 <div id="tutti_header">
     <div id="header_menu">
+
         <if condition="MODULE_NAME == 'Home'">
             <div class="local_div" data-url="{pigcms{:U('Home/address')}"></div>
+            <div class="header_search home_style"></div>
             <div id="header_address_div"></div>
         </if>
+
         <if condition="MODULE_NAME == 'Shop'">
+            <if condition="ACTION_NAME == 'order_detail'">
+                <div class="this_header">
+                    <span id="back_button_span"></span>
+                    {pigcms{:L('_ORDER_DETAIL_')}
+                </div>
+            </if>
             <if condition="ACTION_NAME == 'confirm_order'">
                 <div class="this_header">
                     <span id="back_button_span"></span>
@@ -409,6 +421,7 @@
             </if>
 
         </if>
+
         <if condition="MODULE_NAME == 'Pay'">
             <if condition="ACTION_NAME == 'check'">
                 <div class="this_header">
@@ -422,6 +435,7 @@
             <if condition="ACTION_NAME == 'shop_order_list'">
                 <div class="this_header">
                     {pigcms{:L('V3_ORDER_LIST_TITLE')}
+                    <div class="header_search"></div>
                 </div>
             </if>
             <if condition="ACTION_NAME == 'select_card'">
@@ -433,6 +447,7 @@
             <if condition="ACTION_NAME == 'index'">
                 <div class="this_header">
                     {pigcms{:L('V2_PAGETITLE_ACCOUNT')}
+                    <div class="header_search"></div>
                 </div>
             </if>
             <if condition="ACTION_NAME == 'myinfo'">
@@ -529,13 +544,10 @@
                     {pigcms{:L('V2_ACCOUNT_MENU_COUPONS')}
                 </div>
             </if>
-
         </if>
     </div>
     <!--div id="header_logo"></div-->
-    <div id="header_sign">
-        <div class="header_search"></div>
-    </div>
+
 </div>
 <div id="search_label">
     <input type="text" id="search_key" name="search_key" placeholder="{pigcms{:L('_SEARCH_STORE_GOODS_')}"/>

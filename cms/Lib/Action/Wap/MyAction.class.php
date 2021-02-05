@@ -3184,7 +3184,6 @@ class MyAction extends BaseAction{
 //        $list = array();
 //        $list = $this->SHARE_shop_order_list();
 //		$this->assign('order_list', $list);
-
 		$this->display();
 	}
     /*Ajax加载——订餐订单列表 默认显示 upcoming的列表*/
@@ -3263,13 +3262,17 @@ class MyAction extends BaseAction{
         }
         foreach($list as $key=>$val){
             $list[$key]['name'] = lang_substr($val['name'],C('DEFAULT_LANG'));
-            $list[$key]['order_url'] = U('Shop/status', array('order_id' => $val['order_id']));
+            $list[$key]['order_url'] = U('Shop/order_detail', array('order_id' => $val['order_id']));
             $list[$key]['create_time_show'] = date('Y-m-d h:m',$val['create_time']);
+
+            //------------------------------ 更新status等信息 ------------------------------------peter
 
             $status = D('Shop_order_log')->field(true)->where(array('order_id' => $val['order_id']))->order('id DESC')->find();
             $status['status'] = $status['status'] == 33 ? 2 : $status['status'];
             $list[$key]['statusLog'] = $status['status'];
             $list[$key]['statusLogName'] = D('Store')->getOrderStatusLogName($status['status']);
+
+            //-------------------------------------------------------------------------------------
 
             $supply = D('Deliver_supply')->where(array('order_id'=>$val['order_id']))->find();
             if($supply['status'] > 1 && $supply['status'] < 5){

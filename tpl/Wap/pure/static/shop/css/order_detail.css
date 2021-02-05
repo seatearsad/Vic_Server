@@ -907,15 +907,15 @@ select{appearance:none;  -moz-appearance:none;  -webkit-appearance:none; font-si
 .amend .button div.recovery{ background: #2ecc71; }
 .amend .button div.ensure{ background: #ef584e;  }
 .infor{ background: #fff; margin-bottom: 10px; }
-.infor li{ line-height: 20px; margin-left: 15px; padding: 10px 10px 10px 0;  font-size: 14px; color: #666666; border-bottom: #f1f1f1 1px solid; }
+.infor li{ line-height: 20px; margin-left: 10px; padding: 10px 10px 10px 0;  font-size: 14px; color: #666666; border-bottom: #f1f1f1 1px solid; }
 .infor li:last-child{ border-bottom: none; }
 .infor li.first{  font-size: 16px; color: #333333; padding: 10px; margin-left: 0px; }
-.infor li.first .fl{ padding-left: 20px; }
+.infor li.first .fl{ padding-left: 0px; }
 .infor li .fr{  font-size: 13px; text-align: right; }
-.infor li.first .book{ background: url(../images/kd-img1.png) left center no-repeat; background-size: 14px; }
+.infor li.first .book{ }
 .infor li.first .payoff{ color: #e93e14; font-size: 14px; }
 .infor li.first .payoff span{ font-size: 12px; }
-.infor li.first .match{ background: url(../images/kd-img3.png) left center no-repeat; background-size: 14px; }
+.infor li.first .match{ }
 .infor li .p90{ padding-left: 90px; font-size: 13px; text-align: right; }
 .infor li.first .modity{  background: url(../images/kd-img2.png) left center no-repeat; background-size: 14px;}
 .infor .kd_dd{ padding: 5px 0;border-bottom: #f1f1f1 1px solid; margin-left: 10px;  }
@@ -952,7 +952,7 @@ select{appearance:none;  -moz-appearance:none;  -webkit-appearance:none; font-si
 
 .kdcancel{margin: 30px 30px; background: #ec5252; color: #f1f1f1; text-align: center; line-height:40px;border-radius: 5px; }
 
-.infor li.first .branch{ background: url(../images/kd-img4.png) left center no-repeat; background-size: 14px; }
+.infor li.first .branch{ }
 
 .infor li .kdsize{ font-size: 10px; }
 .infor li .e2c{  color: #2ecc71; }
