@@ -228,8 +228,9 @@
     <div class="infor_head"></div>
 
     <if condition="$order_details['paid'] eq 0 ">
-        <div class="infor">
-            <div class="div_button">Finish Payment</div>
+        <div id="payment_box" class="infor">
+<!--            data-time="'+order_list[i]['create_time']+'" data-id="'+order_list[i]['order_id']+'"data-jet="'+order_list[i]['jetlag']+'"-->
+            <a href="{pigcms{:U('Pay/check',array('order_id' => $order_details['order_id'], 'type'=>'shop'))}"><div class="div_button count_down" data-time="{pigcms{$order['create_time']}" data-id="{pigcms{$order_details['order_id']}" data-jet="{pigcms{$order['jetlag']}">Finish Payment</div></a>
         </div>
         <div class="gray_line"></div>
     </if>
@@ -300,7 +301,7 @@
                 </dd>
                 <dd class="clr">
                     <div class="fl" style="font-weight: bold">{pigcms{:L('_TOTAL_RECE_')}</div>
-                    <div class="fr">${pigcms{$order_details['price'] + $order_details['tip_charge']|floatval}</div>
+                    <div class="fr" style="font-weight: bold">${pigcms{$order_details['price'] + $order_details['tip_charge']|floatval}</div>
                 </dd>
             </dl>
         </div>
@@ -420,9 +421,9 @@
     <div class="consume consumes">
         <ul class="clr">
             <if condition="$order_details['status'] lt 3 OR ($order_details['paid'] eq 1 AND $order_details['status'] eq 5) OR ($order_details['paid'] eq 0 AND $order_details['status'] eq 7)">
-                <if condition="$order_details['paid'] eq 0">
-                    <li class="fl firmly" data-url="{pigcms{:U('Pay/check',array('order_id' => $order_details['order_id'], 'type'=>'shop'))}">{pigcms{:L('_PAYMENT_ORDER_')}</li>
-                </if>
+<!--                <if condition="$order_details['paid'] eq 0">-->
+<!--                    <li class="fl firmly" data-url="{pigcms{:U('Pay/check',array('order_id' => $order_details['order_id'], 'type'=>'shop'))}">{pigcms{:L('_PAYMENT_ORDER_')}</li>-->
+<!--                </if>-->
                 <php> if($config['open_sub_mchid'] && $now_merchant['open_sub_mchid'] && $now_merchant['sub_mch_id'] > 0 && $now_merchant['sub_mch_refund'] == 0 && $order['is_own'] == 2 && $order['pay_type'] == 'weixin'){</php>
                 <li class="fr zlyd">{pigcms{:L('_CANNT_REFUND_C_S_')} 【{pigcms{$now_merchant.name}】</li>
                 <php>}else{</php>
@@ -458,10 +459,10 @@
         font-size: 16px;
     }
 </style>
-<script>
 
-    <if condition="$order.status eq 1 AND $order.deliver_lng neq null AND $order.deliver_lat neq null">
 
+<if condition="$order.status eq 1 AND $order.deliver_lng neq null AND $order.deliver_lat neq null">
+ <script>
     var store_lat = "{pigcms{$order.store_lat}";
     var store_lng = "{pigcms{$order.store_lat}";
     var user_lat = "{pigcms{$order.user_lat}";
@@ -530,8 +531,15 @@
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKlguA2QFIUVwWTo3danbOqSKv3nYbBCg&callback=initMap"
         async defer></script>
 </if>
+
 <script>
+
+    var num = 0;
+    var curr_time = parseInt("{pigcms{:time()}");
+
     $(document).ready(function(){
+        update_pay_time();
+
         $('.consumes ul li').click(function(){
             location.href = $(this).data('url');
         });
@@ -578,4 +586,41 @@
             style: 'border:none; background-color:#fff; color:#999;'
         });
     });
+
+    function update_pay_time() {
+        $('#payment_box').find('.count_down').each(function () {
+
+            var create_time = $(this).data('time');
+            var jetlag = parseInt($(this).data('jet'))*3600;
+            var cha_time = 300 - (curr_time + jetlag - create_time + num);
+            console.log(cha_time+"--"+curr_time+"-"+jetlag+"-"+create_time+"-"+num);
+
+            var h = parseInt(cha_time / 3600);
+            var i = parseInt((cha_time - 3600 * h) / 60);
+            var s = (cha_time - 3600 * h) % 60;
+            if (i < 10) i = '0' + i;
+            if (s < 10) s = '0' + s;
+
+            //var time_str = h + ':' + i + ':' + s;
+            var time_str = "{pigcms{:L('_B_PURE_MY_81_')} " + i + ':' + s;
+
+            $(this).html(time_str);
+
+            var cid = $(this).data('id');
+            var allStr = "my_order_"+cid;
+            if(cha_time < 0){
+                layer.open({content:'Payment over-time. You will be directed back to the menu.',shadeClose:false,btn:['OK'],yes:function(){
+                        window.location.href = "{pigcms{:U('My/shop_order_list')}&shop_id={pigcms{$order_info.store_id}";
+                 }});
+            }else{
+                window.setTimeout(function () {
+                    num++;
+                    update_pay_time()
+                }, 1000);
+            }
+        });
+
+
+    }
+
 </script>

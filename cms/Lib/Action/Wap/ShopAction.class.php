@@ -3513,6 +3513,8 @@ class ShopAction extends BaseAction{
                     break;
                 }
             }
+            $city = D('Area')->where(array('area_id'=>$store['city_id']))->find();
+            $order['jetlag'] = $city['jetlag'];
 
             //------------------------------ 更新status等信息 ------------------------------------peter
 
