@@ -87,6 +87,7 @@ class User_adressModel extends Model{
 		if($adress_id){
 			$condition_user_adress['adress_id'] = $adress_id;
 		}
+        $condition_user_adress['default'] = 1;
 		$user_adress = $this->field(true)->where($condition_user_adress)->order('`default` DESC,`adress_id` ASC')->find();
 
 		

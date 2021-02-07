@@ -2612,6 +2612,12 @@ class ShopAction extends BaseAction{
 
 		if ($return['store']['basic_price'] <= $basic_price) {
 			$address_id = isset($_GET['adress_id']) ? intval($_GET['adress_id']) : cookie('userLocationId');
+			if($address_id){
+                D('User_adress')->where(array('adress_id'=>$address_id))->save(array('default'=>1));
+                if($_GET['current_id']){
+                    D('User_adress')->where(array('adress_id'=>$_GET['current_id']))->save(array('default'=>0));
+                }
+            }
 			$user_adress = D('User_adress')->get_one_adress($this->user_session['uid'], intval($address_id));
 			$this->assign('user_adress', $user_adress);
 		} else {
@@ -2640,30 +2646,33 @@ class ShopAction extends BaseAction{
 //            }
 
 		//计算配送费
+        $is_jump_address = 0;
 		if ($user_adress) {
 			//$distance = getDistance($user_adress['latitude'], $user_adress['longitude'], $return['store']['lat'], $return['store']['long']);
             $from = $return['store']['lat'].','.$return['store']['long'];
             $aim = $user_adress['latitude'].','.$user_adress['longitude'];
 
             $distance = getDistance($return['store']['lat'],$return['store']['long'],$user_adress['latitude'],$user_adress['longitude']);
-            $return['store']['free_delivery'] = 0;
-            $return['store']['event'] = "";
-            if($delivery_coupon != "" && $delivery_coupon['limit_day']*1000 >= $distance){
-                $return['store']['free_delivery'] = 1;
-                $t_event['use_price'] = $delivery_coupon['use_price'];
-                $t_event['discount'] = $delivery_coupon['discount'];
-                $t_event['miles'] = $delivery_coupon['limit_day']*1000;
-                $t_event['desc'] = $delivery_coupon['desc'];
-                $t_event['event_type'] = $delivery_coupon['event_type'];
 
-                $return['store']['event'] = $t_event;
-            }else {
-                $distance = getDistanceByGoogle($from, $aim);
-            }
-			//$distance = $distance / 1000;
-			//var_dump($distance);die();
+            if($distance <= $return['store']['delivery_radius'] * 1000) {
+                $return['store']['free_delivery'] = 0;
+                $return['store']['event'] = "";
+                if ($delivery_coupon != "" && $delivery_coupon['limit_day'] * 1000 >= $distance) {
+                    $return['store']['free_delivery'] = 1;
+                    $t_event['use_price'] = $delivery_coupon['use_price'];
+                    $t_event['discount'] = $delivery_coupon['discount'];
+                    $t_event['miles'] = $delivery_coupon['limit_day'] * 1000;
+                    $t_event['desc'] = $delivery_coupon['desc'];
+                    $t_event['event_type'] = $delivery_coupon['event_type'];
 
-			//获取配送费用
+                    $return['store']['event'] = $t_event;
+                } else {
+                    $distance = getDistanceByGoogle($from, $aim);
+                }
+                //$distance = $distance / 1000;
+                //var_dump($distance);die();
+
+                //获取配送费用
 //			$deliveryCfg = [];
 //			$deliverys = D("Config")->get_gid_config(20);
 //			foreach($deliverys as $r){
@@ -2683,19 +2692,28 @@ class ShopAction extends BaseAction{
 //			}elseif($distance > 20) {
 //				$return['delivery_fee'] = round($deliveryCfg['delivery_distance_more'], 2);
 //			}
-            $return['delivery_fee'] = calculateDeliveryFee($distance,$return['store']['city_id']);
-			$return['delivery_fee2'] = $return['delivery_fee'];
+                $return['delivery_fee'] = calculateDeliveryFee($distance, $return['store']['city_id']);
+                $return['delivery_fee2'] = $return['delivery_fee'];
 
-			/*$pass_distance = $distance > $return['basic_distance'] ? floatval($distance - $return['basic_distance']) : 0;
-			$return['delivery_fee'] += round($pass_distance * $return['per_km_price'], 2);
-			$return['delivery_fee'] = $return['delivery_fee'] - $return['delivery_fee_reduce'];
-			$return['delivery_fee'] = $return['delivery_fee'] > 0 ? $return['delivery_fee'] : 0;
+                /*$pass_distance = $distance > $return['basic_distance'] ? floatval($distance - $return['basic_distance']) : 0;
+                $return['delivery_fee'] += round($pass_distance * $return['per_km_price'], 2);
+                $return['delivery_fee'] = $return['delivery_fee'] - $return['delivery_fee_reduce'];
+                $return['delivery_fee'] = $return['delivery_fee'] > 0 ? $return['delivery_fee'] : 0;
 
-			$pass_distance = $distance > $return['basic_distance2'] ? floatval($distance - $return['basic_distance2']) : 0;
-			$return['delivery_fee2'] += round($pass_distance * $return['per_km_price2'], 2);
-			$return['delivery_fee2'] = $return['delivery_fee2'] - $return['delivery_fee_reduce'];
-			$return['delivery_fee2'] = $return['delivery_fee2'] > 0 ? $return['delivery_fee2'] : 0;*/
-		}
+                $pass_distance = $distance > $return['basic_distance2'] ? floatval($distance - $return['basic_distance2']) : 0;
+                $return['delivery_fee2'] += round($pass_distance * $return['per_km_price2'], 2);
+                $return['delivery_fee2'] = $return['delivery_fee2'] - $return['delivery_fee_reduce'];
+                $return['delivery_fee2'] = $return['delivery_fee2'] > 0 ? $return['delivery_fee2'] : 0;*/
+            }else{
+                $is_jump_address = 1;
+            }
+		}else{
+            $is_jump_address = 1;
+        }
+        if($is_jump_address == 1){
+            $store = $return['store'];
+            redirect(U('My/adress',array('buy_type' => 'shop', 'store_id'=>$store['store_id'], 'village_id'=>$village_id, 'mer_id' => $store['mer_id'], 'frm' => $_GET['frm'], 'current_id'=>$user_adress['adress_id'], 'order_id' => $order_id)));
+        }
 		//计算打包费 add garfunkel
         $store_shop = D("Merchant_store_shop")->field(true)->where(array('store_id' => $store_id))->find();
         $this->assign('store_shop',$store_shop);
