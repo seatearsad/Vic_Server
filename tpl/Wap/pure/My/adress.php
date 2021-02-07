@@ -151,11 +151,9 @@
         <a class="address-add btn btn-larger btn-warning btn-block" href="{pigcms{:U('My/edit_adress',$_GET)}">{pigcms{:L('_ADD_NEW_ADDRESS_')}</a>
     </div>
     <volist name="adress_list" id="vo">
-        <dl class="list <if condition=" $vo[
-        'default']">active</if>">
-        <dd class="address-wrapper <if condition=" !$vo[
-        'select_url']">dd-padding</if>">
-        <if condition="$vo['select_url']">
+        <dl class="list <if condition=" $vo['default']">active</if>" <if condition=" $vo['is_allow'] eq 0">style="background-color:#eee" data-type="{pigcms{$vo['is_allow']}"</if>>
+        <dd class="address-wrapper <if condition=" !$vo['select_url']">dd-padding</if>">
+        <if condition="$vo['select_url'] and $vo['is_allow'] eq 1">
             <a class="react" href="{pigcms{$vo.select_url}">
 <!--                <div class="address-select"><input class="mt" type="radio" name="addr"-->
 <!--                    <if condition="$vo['adress_id'] eq $_GET['current_id']">checked="checked"</if>-->
@@ -181,7 +179,7 @@
             <!--								</div>-->
             <!--							</if>-->
         </div>
-        <if condition="$vo['select_url']">
+        <if condition="$vo['select_url'] and $vo['is_allow'] eq 1">
             </a>
         </if>
         </dd>

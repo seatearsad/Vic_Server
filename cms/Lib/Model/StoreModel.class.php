@@ -46,6 +46,7 @@ class StoreModel extends Model
         $store['address'] = $row['adress'];
         $store['shop_remind'] = $row['shop_remind'];
         $store['pay_method'] = $row['pay_method'];
+        $store['delivery_radius'] = $row['delivery_radius'];
 
         if($row['background'] && $row['background'] != '') {
             $image_tmp = explode(',', $row['background']);

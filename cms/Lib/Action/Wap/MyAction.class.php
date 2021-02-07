@@ -598,8 +598,17 @@ class MyAction extends BaseAction{
 		if(empty($this->user_session)){
 			$this->error_tips(L('_B_MY_LOGINFIRST_'));
 		}
-		$adress_list = D('User_adress')->get_adress_list($this->user_session['uid']);
 
+
+		$adress_list = D('User_adress')->get_adress_list($this->user_session['uid']);
+        $sid = $_GET['store_id'] ? $_GET['store_id'] : 0;
+        if($sid != 0){
+            $store = D('Store')->get_store_by_id($sid);
+        }else{
+            $store = null;
+        }
+
+        //var_dump($adress_list);die();
 		if(empty($adress_list)){
 			redirect(U('My/edit_adress',$_GET));
 		}else{
@@ -630,7 +639,7 @@ class MyAction extends BaseAction{
 			}
 
 			$param = $_GET;
-			foreach($adress_list as $key=>$value){
+			foreach($adress_list as $key=>&$value){
 				$param['adress_id'] = $value['adress_id'];
 				if(!empty($select_url)){
 				    if ($param['buy_type']=="check"){
@@ -644,7 +653,22 @@ class MyAction extends BaseAction{
 				}
 				$adress_list[$key]['edit_url'] = U('My/edit_adress',$param);
 				$adress_list[$key]['del_url'] = U('My/del_adress',$param);
+
+                $value['distance'] = 0;
+                if($store) {
+                    $distance = getDistance($store['lat'], $store['lng'], $value['latitude'], $value['longitude']);
+                    $value['distance'] = $distance;
+                    if ($distance <= $store['delivery_radius'] * 1000) {
+                        $value['is_allow'] = 1;
+                    }else{
+                        $value['is_allow'] = 0;
+                    }
+                }
 			}
+            if($store) {
+                $cmf_arr = array_column($adress_list, 'distance');
+                array_multisort($cmf_arr, SORT_ASC, $adress_list);
+            }
 
 			$this->assign('adress_list',$adress_list);
 
