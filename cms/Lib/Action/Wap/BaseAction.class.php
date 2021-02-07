@@ -304,6 +304,7 @@ class BaseAction extends CommonAction{
 			$this->config['scenic_city'] = $now_scenic_city['area_id'];
 		}
 	}
+	//错误信息提示
 	public function error_tips($msg,$url='javascript:history.back(-1);'){
 		if(IS_AJAX){
 			$this->error($msg,$url);die;

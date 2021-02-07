@@ -22,7 +22,7 @@
     <div class="orders_list">
         <ul>
             <volist name="status" id="vo">
-            <li>
+            <li>11111
                 <div class="time">{pigcms{$vo.dateline|date="Y-m-d H:i",###}</div>
                 <div class="p18">
                     <div class="con">

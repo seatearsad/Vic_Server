@@ -3279,7 +3279,10 @@ class ShopAction extends BaseAction{
 	 */
 	public function status()
 	{
+
+
 		$order_id = isset($_GET['order_id']) ? intval($_GET['order_id']) : 0;
+
 		if ($order = D('Shop_order')->get_order_detail(array('order_id' => $order_id, 'uid' => $this->user_session['uid']))) {
         //if ($order = D('Shop_order')->get_order_detail(array('order_id' => $order_id))) {
 			$storeName = D("Merchant_store")->field('`name`, `phone`')->where(array('store_id' => $order['store_id']))->find();
@@ -3321,6 +3324,7 @@ class ShopAction extends BaseAction{
 			$this->assign('status', $status);
 			$this->assign('order_id', $order_id);
 			$this->assign('order', $order);
+            $this->assign('redirect_url',"./wap.php?g=Wap&c=Shop&a=order_detail&order_id="+$order_id);
 			$this->display();
 		} else {
 			//$this->error_tips('错误的订单信息！');

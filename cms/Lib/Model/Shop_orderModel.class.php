@@ -898,7 +898,9 @@ class Shop_orderModel extends Model
 					}
                     $txt = "Hi there, Tutti got a new order for you, can you please confirm online now!";
                     try {
-                        Sms::send_voice_message($sms_data['mobile'], $txt);
+                    	//todo peter 拨打电话，暂时注销
+
+                        //Sms::send_voice_message($sms_data['mobile'], $txt);
                     }catch (Exception $e){
 
                     }

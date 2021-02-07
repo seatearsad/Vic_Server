@@ -532,14 +532,14 @@
                 if(typeof(wxSdkLoad) != "undefined"){
                     wx.invoke('getSupportSoter', {}, function (res) {
                         if(res.support_mode=='0x01'){
-                            wx.invoke('requireSoterBiometricAuthentication', {
+                            wx.invoke('requireSoterBiometricAuthentic=Shop&a=order_detail&order_id=11626cation', {
                                 auth_mode: '0x01',
                                 challenge: 'test',
                                 auth_content: '请将指纹验证'  //指纹弹窗提示
                             }, function (res) {
                                 if(res.err_code==0&&pay_type=='weixin'){
                                     callpay();
-                                }else if(res.err_code==0){
+                                }else if(res.err_code==0){alert("3333333");
                                     layer.closeAll();
                                     $('#pay-form').submit();
                                 }else if (res.err_code==90009){
@@ -565,7 +565,8 @@
                     $('#pwd_verify').css('display','block');
                 }
 
-            }else{//garfunkel add
+            }else{//garfunkel add   信用卡支付---》1/2
+
                 if(pay_type == 'moneris'){
                     var card_type = $('input[name="pay_card_type"]:checked').val();
                     if(card_type == 1){
@@ -616,6 +617,9 @@
                             $("html,body").animate({"scrollTop":$('#credit').offset().top},900);
                         }
                     }else{
+
+                        //信用卡支付---》2/2
+
                         if($('input[name="credit_id"]').val()){
                             var re_data = {
                                 'credit_id':$('input[name="credit_id"]').val(),
@@ -653,7 +657,9 @@
                                     //     content:data.html
                                     // });
                                     $('body').append(data.html);
+                                    alert("信用卡返回状态1");
                                 }else {
+                                    //信用卡支付返回结果，如果错误就会走这里，data.status=0
                                     layer.closeAll();
                                     layer.open({title: ['Message'], content: data.info});
                                     if (data.status == 1) {
@@ -683,6 +689,9 @@
                     //     }
                     // });
                 }else if(pay_type == 'weixin' || pay_type == 'alipay'){
+
+                    //微信、支付宝支付的分支
+
                     var re_data = {
                         'charge_total':$('#add_tip').text().replace('$', ""),
                         'order_id':"vicisland{pigcms{$order_info.order_type}_{pigcms{$order_info.order_id}",
@@ -712,7 +721,7 @@
                         }
 
                     },'json');
-                }else{
+                }else{  // 余额和现金支付
                     layer.closeAll();
                     var res = callpay();
                     if(res){
