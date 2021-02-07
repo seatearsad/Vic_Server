@@ -141,9 +141,12 @@
             <li class="act"></li><li class="act"></li><li class="act"></li><li></li>
         </ul>
     </div>
-    <div id="memo">
+    <div id="memo" style="font-weight: bold;font-size: 11px">
         <img src="{pigcms{$static_public}images/deliver_box.png" width="120px">
-        <br/>$55.00
+        <br/>
+        <br/>Delivery Bag* + Pizza Bag (*Returnable for Tutti credits)
+        <br/>$65 + GST
+        <br/>&nbsp;
     </div>
     <div id="reg_list">
         <ul>

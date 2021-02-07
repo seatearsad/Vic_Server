@@ -2029,6 +2029,10 @@ class DeliverAction extends BaseAction
         }
 
         $result['order_count'] = count($list);
+        $base_one_money = 10;
+        $guara_money = $base_one_money*$result['order_count'];
+        $result['one_money'] = $base_one_money;
+        $result['guara_money'] = $guara_money;
 
         $this->assign($result);
         $this->assign('list',$list);
@@ -2559,7 +2563,7 @@ class DeliverAction extends BaseAction
             $txnArray['expdate'] = transYM($_POST['e_date']);
             $txnArray['order_id'] = 'TuttiDeliver_'.$this->deliver_session['uid'].'_'.time();
             $txnArray['cust_id'] = $this->deliver_session['uid'];
-            $txnArray['amount'] = '57.75';
+            $txnArray['amount'] = '68.25';
 
             /**************************** Transaction Object *****************************/
 
