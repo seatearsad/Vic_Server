@@ -176,7 +176,13 @@
             </div>
             <div style="font-size: 0px">
                 <span class="su_left y_c">{pigcms{:L('_ND_AMOUNTPAYABLE_')}</span>
-                <span class="su_right y_c">${pigcms{$freight_charge+$tip-$offline_money|floatval}</span>
+                <span class="su_right y_c">
+                    <if condition="$guara_money gt $freight_charge+$tip">
+                        ${pigcms{$guara_money-$offline_money|floatval}
+                    <else />
+                        ${pigcms{$freight_charge+$tip-$offline_money|floatval}
+                    </if>
+                </span>
             </div>
             <div class="order_history">
                 {pigcms{:L('_ND_VIEWORDERHIS_')}
