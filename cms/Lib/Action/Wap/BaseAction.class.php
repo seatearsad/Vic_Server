@@ -321,6 +321,7 @@ class BaseAction extends CommonAction{
 		$this->display('Home/success');
 		exit;
 	}
+
 	public function authorize_openid(){
 		if(empty($_GET['code']) || empty($_SESSION['weixin']['state'])){
 			$_SESSION['weixin']['state']   = md5(uniqid());

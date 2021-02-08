@@ -565,11 +565,12 @@
                     $('#pwd_verify').css('display','block');
                 }
 
-            }else{//garfunkel add   信用卡支付---》1/2
+            }else{//garfunkel add   信用卡支付/Weixin/Alipay
 
-                if(pay_type == 'moneris'){
+                if(pay_type == 'moneris'){ //信用卡
+
                     var card_type = $('input[name="pay_card_type"]:checked').val();
-                    if(card_type == 1){
+                    if(card_type == 1){  //使用新卡支付
                         if(check_card()){
                             // alert($('input[name="save"]:checked').val());
                             var re_data = {
@@ -596,20 +597,20 @@
 
                             //alert(re_data['order_type']);
                             $.post($('#moneris_form').attr('action'),re_data,function(data){
-                                if(typeof (data.mode) != 'undefined' && data.mode == 'mpi'){
-                                    // layer.open({
-                                    //     title:'',
-                                    //     content:data.html
-                                    // });
-                                    $('body').append(data.html);
-                                    //window.open(data.html,"_blank");
-                                }else {
-                                    layer.closeAll();
-                                    layer.open({title: ['Message'], content: data.info});
-                                    if (data.status == 1) {
-                                        setTimeout("window.location.href = '" + data.url + "'", 200);
+                                    if(typeof (data.mode) != 'undefined' && data.mode == 'mpi'){
+                                        // layer.open({
+                                        //     title:'',
+                                        //     content:data.html
+                                        // });
+                                        $('body').append(data.html);
+                                        //window.open(data.html,"_blank");
+                                    }else {
+                                        layer.closeAll();
+
+                                        if (data.status == 1) {
+                                            layer.open({title: ['Message'], content: data.info,btn:["Confirm"],end:function(){window.location.href=data.url;}});
+                                        }
                                     }
-                                }
                             });
                         }else{
                             alert("{pigcms{:L('_PLEASE_RIGHT_CARD_')}");
@@ -618,7 +619,7 @@
                         }
                     }else{
 
-                        //信用卡支付---》2/2
+                        //使用已经有的信用卡支付
 
                         if($('input[name="credit_id"]').val()){
                             var re_data = {
@@ -661,11 +662,12 @@
                                 }else {
                                     //信用卡支付返回结果，如果错误就会走这里，data.status=0
                                     layer.closeAll();
-                                    layer.open({title: ['Message'], content: data.info});
-                                    if (data.status == 1) {
-                                        setTimeout("window.location.href = '" + data.url + "'", 200);
-                                    } else {
-
+                                    //layer.open({title: ['Message'], content: data.info,btn:["Confirm"],end:function(){alert("123");}});
+                                    if (data.status == 1) { //没错误
+                                        layer.open({title: ['Message'], content: data.info,btn:["Confirm"],end:function(){window.location.href=data.url;}});
+                                        //setTimeout("window.location.href = '" + data.url + "'", 200);
+                                    } else { //有错误
+                                        layer.open({title: ['Message'], content: data.info,btn:["Confirm"],end:function(){window.location.href=data.url;}});
                                     }
                                 }
                             });

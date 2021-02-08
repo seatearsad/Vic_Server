@@ -602,6 +602,7 @@ class PayAction extends BaseAction{
         $this->assign('order_id',$_GET['order_id']);
         $this->display();
     }
+
     protected function getPayName($label){
         $payName = array(
             'weixin' => '微信支付',
@@ -617,6 +618,7 @@ class PayAction extends BaseAction{
     //余额 和 现金支付
     public function go_pay(){
         //换参数
+        $result_url=$this->get_result_url($_POST['order_id']);//1 成功  0 失败
 
         if($_POST['ticket']!=''){
             $_POST['use_merchant_balance'] = $_POST['use_merchant_money'];
@@ -687,6 +689,9 @@ class PayAction extends BaseAction{
         }
 
         $order_info = $now_order['order_info'];
+
+        $result_url=$this->get_result_url($_POST['order_id']);
+
         $now_merchant = D('Merchant')->get_info($order_info['mer_id']);
         if($now_merchant['status']==3){
             $this->error_tips('该商家状态异常，无法支付');
@@ -842,7 +847,6 @@ class PayAction extends BaseAction{
         if($_POST['est_time'] && $_POST['est_time'] != ''){
             $order_info['expect_use_time'] = strtotime($_POST['est_time']);
         }
-        //
 
         if($order_info['order_type'] == 'group'){
             //判断有没有使用微信，如果是微信，则检测此团购有没有微信优惠！
@@ -884,15 +888,18 @@ class PayAction extends BaseAction{
             $save_result['url'] = str_replace('wap.php', C('INDEP_HOUSE_URL'), $save_result['url']);
         }
 
-        if ($save_result['error_code']) {
 
-            $this->error_tips($save_result['msg']);
 
-        } else if ($save_result['url']) {//--------------------------------------------------余额支付 正确结果
+        if ($save_result['error_code']) {                       // 现金支付的错误 TRUE  or FALSE
 
-            $this->success_tips($save_result['msg'], $save_result['url']);
+            $this->error_tips($save_result['msg'],$result_url."0");             // -------------------------------------------------- 错误>>>>>>>>>>>>>>>>>>
 
-        } else {
+        } else if ($save_result['url']) { //如果返回对象中有url（AND error_code=false)，就代表
+
+            //$this->success_tips($save_result['msg'], $save_result['url']);
+            $this->success_tips($save_result['msg'], $result_url."1"); // -------------------------------------------------- 余额支付 正确结果>>>>>>>
+
+        } else {       //现金支付结果
 
             //需要支付的钱
             $pay_money = round($save_result['pay_money'] * 100) / 100;
@@ -948,92 +955,99 @@ class PayAction extends BaseAction{
             }
 
             if (empty($pay_method)) {
-                $this->error_tips(L('_SYSTEM_NOT_PAY_MODE_'));
-            }
-            if (empty($pay_method[$_POST['pay_type']])) {
-                $this->error_tips('您选择的支付方式不存在，请更新支付方式！');
-            }
 
-            $pay_class_name = ucfirst($_POST['pay_type']);
-            echo($pay_class_name);
-            $import_result = import('@.ORG.pay.' . $pay_class_name);
-            if (empty($import_result)) {
-                $this->error_tips('系统管理员暂未开启该支付方式，请更换其他的支付方式');
-            }
+                $this->error_tips(L('_SYSTEM_NOT_PAY_MODE_'),$result_url."0");                     //-------------------------->>>>>>>>>>>>>>>>>>>>
 
-            $order_id = $order_info['order_id'];
-            if ($_POST['order_type'] == 'takeout' || $_POST['order_type'] == 'food' || $_POST['order_type'] == 'foodPad') {
-                $order_table = 'Meal_order';
-            } else if ($_POST['order_type'] == 'recharge') {
-                $order_table = 'User_recharge_order';
-            } else if ($_POST['order_type'] == 'balance-appoint') {
-                $order_table = 'Appoint_order';
-                //$order_info['order_type']='appoint';
-            } else {
-                $order_table = ucfirst($_POST['order_type']) . '_order';
-            }
+            }else{
 
-            //更新长id
-            $nowtime = date("ymdHis");
-            if ($_POST['order_type'] == 'balance-appoint') {
-                $nowtime = date("mdHis");
-                $orderid = $nowtime . sprintf("%06d", $this->user_session['uid']);;
-            } else {
-                $orderid = $nowtime . rand(10, 99) . sprintf("%08d", $this->user_session['uid']);
-            }
-
-            $data_tmp['pay_type'] = $_POST['pay_type'];
-            $data_tmp['order_type'] = $_POST['order_type'];
-            $data_tmp['order_id'] = $order_id;
-            $data_tmp['orderid'] = $orderid;
-            $data_tmp['addtime'] = $nowtime;
-            if (!D('Tmp_orderid')->add($data_tmp)) {
-                $this->error_tips(L('_UPDATE_FAIL_ADMIN_'));
-            }
-
-            $save_pay_id = D($order_table)->where(array("order_id" => $order_id))->setField('orderid', $orderid);
-            if (!$save_pay_id) {
-                $this->error_tips(L('_UPDATE_FAIL_ADMIN_'));
-            } else {
-                $order_info['order_id'] = $orderid;
-            }
-
-            $pay_class = new $pay_class_name($order_info, $pay_money, $_POST['pay_type'], $pay_method[$_POST['pay_type']]['config'], $this->user_session, 1);
-
-            $go_pay_param = $pay_class->pay();
-
-            //---------------------------------------------------------现金支付后，在Pay里就结束了，不会再往下运行了。
-
-
-            if (empty($go_pay_param['error'])) {
-
-                if (!empty($go_pay_param['url'])) {
-                    $this->assign('url', $go_pay_param['url']);
-                    $this->display();
-                } else if (!empty($go_pay_param['form'])) {
-                    $this->assign('form', $go_pay_param['form']);
-                    $this->display();
-                } else if (!empty($go_pay_param['weixin_param'])) {
-                    if ($pay_method['weixin']['config']['is_own']) {
-                        C('open_authorize_wxpay', true);
-                        $share = new WechatShare($this->config, $_SESSION['openid']);
-                        $this->hideScript = $share->gethideOptionMenu($mer_id);
-                        $arr['hidScript'] = $this->hideScript;
-                        $redirctUrl = C('config.site_url') . '/' . $this->indep_house . '?g=Wap&c=Pay&a=weixin_back&order_type=' . $order_info['order_type'] . '&order_id=' . $order_info['order_id'] . '&own_mer_id=' . $order_info['mer_id'];
-                    } else {
-                        $redirctUrl = C('config.site_url') . '/' . $this->indep_house . '?g=Wap&c=Pay&a=weixin_back&order_type=' . $order_info['order_type'] . '&order_id=' . $order_info['order_id'];
-                    }
-                    $arr['redirctUrl'] = $redirctUrl;
-                    $arr['pay_money'] = $pay_money;
-                    $arr['weixin_param'] = json_decode($go_pay_param['weixin_param']);
-                    $arr['error'] = 0;
-                    echo json_encode($arr);
-                    die;
-                } else {
-                    $this->error_tips(L('_ERROR_PAYMENT_'));
+                if (empty($pay_method[$_POST['pay_type']])) {
+                    $this->error_tips('您选择的支付方式不存在或余额不足，请更换支付方式！',$result_url."0");  //-------------------------->>>>>>>>>>>>>>>>>>>>余额不足错误
                 }
-            } else {
-                $this->error_tips($go_pay_param['msg']);
+
+                $pay_class_name = ucfirst($_POST['pay_type']);
+
+                //echo($pay_class_name); offline
+                $import_result = import('@.ORG.pay.' . $pay_class_name);
+
+                if (empty($import_result)) {
+                    $this->error_tips('系统管理员暂未开启该支付方式，请更换其他的支付方式',$result_url."0");//----------------->>>>>>>>>>>>>>>>>>>>
+                }
+
+                $order_id = $order_info['order_id'];
+                if ($_POST['order_type'] == 'takeout' || $_POST['order_type'] == 'food' || $_POST['order_type'] == 'foodPad') {
+                    $order_table = 'Meal_order';
+                } else if ($_POST['order_type'] == 'recharge') {
+                    $order_table = 'User_recharge_order';
+                } else if ($_POST['order_type'] == 'balance-appoint') {
+                    $order_table = 'Appoint_order';
+                    //$order_info['order_type']='appoint';
+                } else {
+                    $order_table = ucfirst($_POST['order_type']) . '_order';
+                }
+
+                //更新长id
+                $nowtime = date("ymdHis");
+                if ($_POST['order_type'] == 'balance-appoint') {
+                    $nowtime = date("mdHis");
+                    $orderid = $nowtime . sprintf("%06d", $this->user_session['uid']);;
+                } else {
+                    $orderid = $nowtime . rand(10, 99) . sprintf("%08d", $this->user_session['uid']);
+                }
+
+                $data_tmp['pay_type'] = $_POST['pay_type'];
+                $data_tmp['order_type'] = $_POST['order_type'];
+                $data_tmp['order_id'] = $order_id;
+                $data_tmp['orderid'] = $orderid;
+                $data_tmp['addtime'] = $nowtime;
+                if (!D('Tmp_orderid')->add($data_tmp)) {
+                    $this->error_tips(L('_UPDATE_FAIL_ADMIN_'),$result_url."0");//-------------------------->>>>>>>>>>>>>>>>>>>>
+                }else {
+
+                    $save_pay_id = D($order_table)->where(array("order_id" => $order_id))->setField('orderid', $orderid);
+                    if (!$save_pay_id) {
+                        $this->error_tips(L('_UPDATE_FAIL_ADMIN_'),$result_url."0");
+                    } else {
+                        $order_info['old_order_id'] = $order_info['order_id'];
+                        $order_info['order_id'] = $orderid;
+                    }
+
+                    $pay_class = new $pay_class_name($order_info, $pay_money, $_POST['pay_type'], $pay_method[$_POST['pay_type']]['config'], $this->user_session, 1);
+
+                    $go_pay_param = $pay_class->pay();                         //--------------------------------------->>>>>>>>>>
+
+                    //---------------------------------------------------------现金支付后，在Pay里就结束了，不会再往下运行了。
+
+                    if (empty($go_pay_param['error'])) {
+
+                        if (!empty($go_pay_param['url'])) {
+                            $this->assign('url', $go_pay_param['url']);
+                            $this->display();
+                        } else if (!empty($go_pay_param['form'])) {
+                            $this->assign('form', $go_pay_param['form']);
+                            $this->display();
+                        } else if (!empty($go_pay_param['weixin_param'])) {
+                            if ($pay_method['weixin']['config']['is_own']) {
+                                C('open_authorize_wxpay', true);
+                                $share = new WechatShare($this->config, $_SESSION['openid']);
+                                $this->hideScript = $share->gethideOptionMenu($mer_id);
+                                $arr['hidScript'] = $this->hideScript;
+                                $redirctUrl = C('config.site_url') . '/' . $this->indep_house . '?g=Wap&c=Pay&a=weixin_back&order_type=' . $order_info['order_type'] . '&order_id=' . $order_info['order_id'] . '&own_mer_id=' . $order_info['mer_id'];
+                            } else {
+                                $redirctUrl = C('config.site_url') . '/' . $this->indep_house . '?g=Wap&c=Pay&a=weixin_back&order_type=' . $order_info['order_type'] . '&order_id=' . $order_info['order_id'];
+                            }
+                            $arr['redirctUrl'] = $redirctUrl;
+                            $arr['pay_money'] = $pay_money;
+                            $arr['weixin_param'] = json_decode($go_pay_param['weixin_param']);
+                            $arr['error'] = 0;
+                            echo json_encode($arr);
+                            die;
+                        } else {
+                            $this->error_tips(L('_ERROR_PAYMENT_'));
+                        }
+                    } else {
+                        $this->error_tips($go_pay_param['msg']);
+                    }
+                }
             }
         }
     }
@@ -1676,6 +1690,7 @@ class PayAction extends BaseAction{
 
     //跳转通知
     public function return_url(){
+
         $pay_type = isset($_GET['paytype']) ? $_GET['paytype'] : $_GET['pay_type'];
         if($pay_type == 'weixin'){
             $array_data = json_decode(json_encode(simplexml_load_string($GLOBALS['HTTP_RAW_POST_DATA'], 'SimpleXMLElement', LIBXML_NOCDATA)), true);
@@ -1745,25 +1760,25 @@ class PayAction extends BaseAction{
 				$pay_method['weixin']['config']['is_own'] = 1 ;
             }
         }
+        $result_url=$this->get_result_url($_GET['order_id']);
+
         if(empty($pay_method)){
-            $this->error_tips(L('_SYSTEM_NOT_PAY_MODE_'));
+            $this->error_tips(L('_SYSTEM_NOT_PAY_MODE_'),$result_url.'0');
         }
         if(empty($pay_method[$pay_type])){
-            $this->error_tips('您选择的支付方式不存在，请更新支付方式！');
+            $this->error_tips('您选择的支付方式不存在，请更新支付方式！',$result_url.'0');
         }
 
         $pay_class_name = ucfirst($pay_type);
         $import_result = import('@.ORG.pay.'.$pay_class_name);
         if(empty($import_result)){
-            $this->error_tips('系统管理员暂未开启该支付方式，请更换其他的支付方式');
+            $this->error_tips('系统管理员暂未开启该支付方式，请更换其他的支付方式',$result_url.'0');
         }
 		$fileContent = file_get_contents("php://input");
 		
         $pay_class = new $pay_class_name('','',$pay_type,$pay_method[$pay_type]['config'],$this->user_session,1);
         $get_pay_param = $pay_class->return_url();
 
-		
-		
         $get_pay_param['order_param']['return']=1;
         $offline = $pay_type!='offline'?false:true;
 
@@ -1822,7 +1837,7 @@ class PayAction extends BaseAction{
             }else{
                 $this->error_tips(L('_ILLEGAL_ORDER_'));
             }
-	
+
             $urltype = isset($_GET['urltype']) ? $_GET['urltype'] : '';
             if(empty($pay_info['error'])){
                 if($get_pay_param['order_param']['pay_type'] == 'weixin'){
@@ -1834,16 +1849,17 @@ class PayAction extends BaseAction{
                 } elseif ('weifutong' == $get_pay_param['order_param']['pay_type'] && $urltype == 'back') {
                     exit("success");
                 }
-                $pay_info['msg'] = L('_PAY_SUCCESS_JUMP_');
+                $pay_info['msg'] = L('_PAY_SUCCESS_JUMP_').'---------------';
             }
 
             if(empty($pay_info['url'])){
-                $this->error_tips($pay_info['msg']);
+                $this->error_tips($pay_info['msg'],$result_url.'0');
             }else{
                 if(cookie('is_house')){
                     $pay_info['url'] = str_replace('wap.php',C('INDEP_HOUSE_URL'),$pay_info['url']);
                 }else{
                     $pay_info['url'] = preg_replace('#/source/(\w+).php#','/wap.php',$pay_info['url']);
+                    $pay_info['url'] =$pay_info['url']."&status=1";
                 }
                 if ($pay_info['error'] && $urltype == 'front') {
                     $this->redirect($pay_info['url']);
@@ -1858,6 +1874,16 @@ class PayAction extends BaseAction{
         }else{
             $this->error_tips($get_pay_param['msg']);
         }
+    }
+
+    //获得返回地址
+    public function get_result_url($order_id){
+
+        $now2_order = D('Shop_order')->get_pay_order($this->user_session['uid'], $order_id);
+        $order_info =$now2_order['order_info'];
+        $result_url=C('config.site_url') . "/wap.php?g=Wap&c=Shop&a=pay_result&order_id=" . $order_info['order_id'] . '&mer_id=' . $order_info['mer_id'] . '&store_id=' . $order_info['store_id']."&status=";//1 成功  0 失败
+
+        return $result_url;
     }
 
     //支付宝支付同步回调
@@ -2542,16 +2568,22 @@ class PayAction extends BaseAction{
     }
 
     public function MonerisPay(){
+
         import('@.ORG.pay.MonerisPay');
+        //-------
+        $order = explode("_",$_POST['order_id']);
+        $order_id = $order[1];
+        $result_url=$this->get_result_url($order_id);
+        //---------
         $moneris_pay = new MonerisPay();
         $resp = $moneris_pay->payment($_POST,$this->user_session['uid'],2);
-        //var_dump($resp);die();
+        //var_dump($_POST);die();
         if($resp['requestMode'] && $resp['requestMode'] == "mpi"){
             if($resp['mpiSuccess'] == "true"){
                 $result = array('error_code' => false,'mode'=>$resp['requestMode'],'html'=>$resp['mpiInLineForm'], 'msg' => $resp['message']);
                 $this->ajaxReturn($result);
             }else{
-                $this->error($resp['message'],'',true);
+                $this->error($resp['message'],$resp['url'],true);
             }
         }
 
@@ -2586,12 +2618,12 @@ class PayAction extends BaseAction{
             }else{
                 $order = explode("_",$_POST['order_id']);
                 $order_id = $order[1];
-                $url = U("Wap/Shop/status",array('order_id'=>$order_id));
+                $url = U("Wap/Shop/pay_result",array('order_id'=>$order_id));
+                $url=$result_url.'1';
             }
-
             $this->success(L('_PAYMENT_SUCCESS_'),$url,true);
         }else{
-            $this->error($resp['message'],'',true);
+            $this->error($resp['message'],$result_url.'0',true);
         }
     }
 

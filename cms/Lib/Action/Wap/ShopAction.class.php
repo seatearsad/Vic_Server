@@ -3350,6 +3350,67 @@ class ShopAction extends BaseAction{
 		}
 	}
 
+    /**
+     * 支付结果页
+     */
+    public function pay_result()
+    {
+
+        $order_id = isset($_GET['order_id']) ? intval($_GET['order_id']) : 0;
+        $mer_id =isset($_GET['mer_id']) ? intval($_GET['mer_id']) : 0;
+        $store_id=isset($_GET['store_id']) ? intval($_GET['store_id']) : 0;
+        if ($order = D('Shop_order')->get_order_detail(array('order_id' => $order_id, 'uid' => $this->user_session['uid']))) {
+            //if ($order = D('Shop_order')->get_order_detail(array('order_id' => $order_id))) {
+            //$storeName = D("Merchant_store")->field('`name`, `phone`')->where(array('store_id' => $order['store_id']))->find();
+            $store = D("Merchant_store")->where(array('store_id' => $order['store_id']))->find();
+            //modify garfunkel
+            $store['name'] = lang_substr($store['name'],C('DEFAULT_LANG'));
+            $this->assign('store', $store);
+
+            cookie('shop_cart_' . $order['store_id'], null);
+            for($i=0;$i<20;$i++){
+                if(cookie('shop_cart_' . $order['store_id'].'_'.$i)){
+                    cookie('shop_cart_' . $order['store_id'].'_'.$i,null);
+                }else{
+                    break;
+                }
+            }
+//            $status = D('Shop_order_log')->field(true)->where(array('order_id' => $order_id))->order('id DESC')->select();
+//            $statusCount = D("Shop_order_log")->where(array('order_id' => $order_id))->count();
+//            $this->assign('statusCount', $statusCount);
+//            //配送员轨迹
+//            if (in_array($order['order_status'], array(1, 5))) {
+//                $supply = D("Deliver_supply")->where(array('order_id'=>$_GET['order_id']))->find();
+//                $start_time = $supply['start_time'];
+//                $end_time = $supply['end_time']? $supply['end_time']: time();
+//                $where = array();
+//                $where['uid'] = $supply['uid'];
+//                $where['create_time'] = array(array('gt', $start_time), array('lt', $end_time));
+//                $lines = D("Deliver_user_location_log")->where($where)->order("`create_time` ASC")->select();
+//                $points = array();
+//                $points['from_site'] = array('lng'=>$supply['from_lnt'], 'lat'=>$supply['from_lat']);
+//                $points['aim_site'] = array('lng'=>$supply['aim_lnt'], 'lat'=>$supply['aim_lat']);
+//                $this->assign('supply', $supply);
+//                $this->assign('lines', $lines);
+//                if ($lines) {
+//                    $this->assign('center', array_pop($lines));
+//                } else {
+//                    $this->assign('center', array('lng'=>$supply['from_lnt'], 'lat'=>$supply['from_lat']));
+//                }
+//                $this->assign('point', $points);
+//            }
+            var_dump($store);
+            echo "<hr>";
+            var_dump($order);
+            $this->assign('order_id', $order_id);
+            $this->assign('order', $order);
+            $this->display();
+        } else {
+            //$this->error_tips('错误的订单信息！');
+            echo "错误的订单信息！";
+        }
+    }
+
 	public function map()
 	{
 		$order_id = I("order_id", 0, 'intval');

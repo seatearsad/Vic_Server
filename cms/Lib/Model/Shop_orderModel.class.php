@@ -78,7 +78,7 @@ class Shop_orderModel extends Model
 				if ($now_order['order_from'] == 1) {
 					return array('error' => 1, 'msg' => '您已经支付过此订单！', 'url' => U('Wap/Mall/status', array('order_id' => $now_order['order_id'], 'mer_id' => $now_order['mer_id'], 'store_id' => $now_order['store_id'])));
 				} else {
-					return array('error' => 1, 'msg' => '您已经支付过此订单！', 'url' => U('Wap/Shop/status', array('order_id' => $now_order['order_id'], 'mer_id' => $now_order['mer_id'], 'store_id' => $now_order['store_id'])));
+					return array('error' => 1, 'msg' => '您已经支付过此订单！', 'url' => U('Wap/Shop/pay_result', array('order_id' => $now_order['order_id'], 'mer_id' => $now_order['mer_id'], 'store_id' => $now_order['store_id'], 'status' => '0')));
 				}
 			} else {
 				return array('error' => 1, 'msg' => '您已经支付过此订单！', 'url' => U('User/Index/shop_order_view', array('order_id' => $now_order['order_id'])));
@@ -90,7 +90,7 @@ class Shop_orderModel extends Model
 				if ($now_order['order_from'] == 1) {
 					return array('error' => 1, 'msg' => '您的订单已取消，不能付款了！', 'url' => U('Wap/Mall/status', array('order_id' => $now_order['order_id'], 'mer_id' => $now_order['mer_id'], 'store_id' => $now_order['store_id'])));
 				} else {
-					return array('error' => 1, 'msg' => '您的订单已取消，不能付款了！', 'url' => U('Wap/Shop/status', array('order_id' => $now_order['order_id'], 'mer_id' => $now_order['mer_id'], 'store_id' => $now_order['store_id'])));
+					return array('error' => 1, 'msg' => '您的订单已取消，不能付款了！', 'url' => U('Wap/Shop/pay_result', array('order_id' => $now_order['order_id'], 'mer_id' => $now_order['mer_id'], 'store_id' => $now_order['store_id'], 'status' => '0')));
 				}
 			} else {
 				return array('error' => 1, 'msg' => '您的订单已取消，不能付款了！', 'url' => U('User/Index/shop_order_view', array('order_id' => $now_order['order_id'])));
@@ -250,12 +250,12 @@ class Shop_orderModel extends Model
 			$data_shop_order['last_time'] = $_SERVER['REQUEST_TIME'];
 			$condition_shop_order['order_id'] = $order_info['order_id'];
 			if(!$this->where($condition_shop_order)->data($data_shop_order)->save()){
-				return array('error_code'=>true,'msg'=>'保存订单失败！请重试或联系管理员。');
+				return array('error_code'=>true,'msg'=>'保存订单失败！请重试或联系管理员。'); //------------------>>>>>>>
 			}
 		}
 
 		if($online_pay){
-			return array('error_code' => false, 'pay_money' => $order_info['order_total_money'] - $now_user['now_money']-(float)$order_info['score_deducte']);
+			return array('error_code' => false, 'pay_money' => $order_info['order_total_money'] - $now_user['now_money']-(float)$order_info['score_deducte']);//-->>>>
 		}else{
 			$order_param = array(
 					'order_id' => $order_info['order_id'],
@@ -268,8 +268,9 @@ class Shop_orderModel extends Model
 			$result_after_pay = $this->after_pay($order_param);
 			if($result_after_pay['error']){
 				return array('error_code'=>true,'msg'=>$result_after_pay['msg']);
-			}
-			return array('error_code'=>false,'msg'=>L('_PAYMENT_SUCCESS_'),'url'=>U('User/Index/shop_order_view',array('order_id'=>$order_info['order_id'])));
+			}else{
+				return array('error_code'=>false,'msg'=>L('_PAYMENT_SUCCESS_'),'url'=>U('User/Index/shop_order_view',array('order_id'=>$order_info['order_id'])));
+            }
 		}
 	}
 
@@ -438,37 +439,38 @@ class Shop_orderModel extends Model
 		}
 	}
 
-
 	//如果无需调用在线支付，使用此方法即可。
 	public function wap_after_pay_before($order_info)
 	{
 		if(!$order_info['is_own'] || $order_info['is_own'] == 'NULL')
 			$order_info['is_own'] = 0;
-		$order_param = array(
-				'order_id' => $order_info['order_id'],
-				'orderid' => $order_info['orderid'],
-				'pay_type' => '',
-				'third_id' => '',
-				'is_mobile' => 1,
-				'pay_money' => 0,
-				'order_total_money' => $order_info['order_total_money'],
-				'balance_pay' => $order_info['balance_pay'],
-				'merchant_balance' => $order_info['merchant_balance'],
-				'is_own'	=> $order_info['is_own'] ? $order_info['is_own'] : 0,
-			);
+			$order_param = array(
+					'order_id' => $order_info['order_id'],
+					'orderid' => $order_info['orderid'],
+					'pay_type' => '',
+					'third_id' => '',
+					'is_mobile' => 1,
+					'pay_money' => 0,
+					'order_total_money' => $order_info['order_total_money'],
+					'balance_pay' => $order_info['balance_pay'],
+					'merchant_balance' => $order_info['merchant_balance'],
+					'is_own'	=> $order_info['is_own'] ? $order_info['is_own'] : 0,
+				);
 
 			if($order_info['desc']) $order_param['desc'] = $order_info['desc'];
         	if($order_info['expect_use_time']) $order_param['expect_use_time'] = $order_info['expect_use_time'];
 
 			$result_after_pay = $this->after_pay($order_param);
-			if($result_after_pay['error']){
+			if($result_after_pay['error']){  // 错误
 				return array('error_code' => true,'msg'=>$result_after_pay['msg']);
-			}
-			if ($order_info['order_from'] == 1) {
-				return array('error_code'=>false,'msg'=>L('_PAYMENT_SUCCESS_'),'url' => C('config.site_url') . "/wap.php?g=Wap&c=Mall&a=status&order_id=" . $order_info['order_id'] . '&mer_id=' . $order_info['mer_id'] . '&store_id=' . $order_info['store_id']);
-			} else {
-				return array('error_code'=>false,'msg'=>L('_PAYMENT_SUCCESS_'),'url' => C('config.site_url') . "/wap.php?g=Wap&c=Shop&a=status&order_id=" . $order_info['order_id'] . '&mer_id=' . $order_info['mer_id'] . '&store_id=' . $order_info['store_id']);
-			}
+			}else{							 // 正确
+				if ($order_info['order_from'] == 1) {
+					return array('error_code'=>false,'msg'=>L('_PAYMENT_SUCCESS_'),'url' => C('config.site_url') . "/wap.php?g=Wap&c=Mall&a=status&order_id=" . $order_info['order_id'] . '&mer_id=' . $order_info['mer_id'] . '&store_id=' . $order_info['store_id']);
+				} else {
+					//return array('error_code'=>false,'msg'=>L('_PAYMENT_SUCCESS_'),'url' => C('config.site_url') . "/wap.php?g=Wap&c=Shop&a=status&order_id=" . $order_info['order_id'] . '&mer_id=' . $order_info['mer_id'] . '&store_id=' . $order_info['store_id']);
+					return array('error_code'=>false,'msg'=>L('_PAYMENT_SUCCESS_'),'url' => C('config.site_url') . "/wap.php?g=Wap&c=Shop&a=pay_result&order_id=" . $order_info['order_id'] . '&mer_id=' . $order_info['mer_id'] . '&store_id=' . $order_info['store_id'].'&status=1');
+				}
+            }
 	}
 
 
@@ -493,7 +495,7 @@ class Shop_orderModel extends Model
 				if ($order_param['order_from'] == 1) {
 					return array('error' => 1, 'msg' => '该订单已付款！', 'url' => U('Wap/Mall/status', array('order_id' => $now_order['order_id'], 'mer_id' => $now_order['mer_id'], 'store_id' => $now_order['store_id'])));
 				} else {
-					return array('error' => 1, 'msg' => '该订单已付款！', 'url' => U('Wap/Shop/status', array('order_id' => $now_order['order_id'], 'mer_id' => $now_order['mer_id'], 'store_id' => $now_order['store_id'])));
+					return array('error' => 1, 'msg' => '该订单已付款！', 'url' => U('Wap/Shop/pay_result', array('order_id' => $now_order['order_id'], 'mer_id' => $now_order['mer_id'], 'store_id' => $now_order['store_id'], 'status' => "0")));
 				}
 			} else {
 				return array('error' => 1, 'msg' => '该订单已付款！', 'url' => U('User/Index/shop_order_view', array('order_id' => $now_order['order_id'])));
@@ -975,8 +977,10 @@ class Shop_orderModel extends Model
 					if ($now_order['order_from'] == 1) {
 						return array('error' => 0, 'url' => U('Wap/Mall/status', array('mer_id' => $now_order['mer_id'], 'store_id' => $now_order['store_id'], 'order_id' => $now_order['order_id'])));
 					} else {
-						return array('error' => 0, 'url' => U('Wap/Shop/status', array('mer_id' => $now_order['mer_id'], 'store_id' => $now_order['store_id'], 'order_id' => $now_order['order_id'])));
-					}
+						//return array('error' => 0, 'url' => U('Wap/Shop/status', array('mer_id' => $now_order['mer_id'], 'store_id' => $now_order['store_id'], 'order_id' => $now_order['order_id'])));
+                        //peter 2021-2-7
+						return array('error' => 0, 'url' => U('Wap/Shop/pay_result', array('mer_id' => $now_order['mer_id'], 'store_id' => $now_order['store_id'], 'order_id' => $now_order['order_id'], 'status' => "1")));
+                    }
 				} else {
 					return array('error' => 0, 'url' => U('User/Index/shop_order_view', array('order_id'=>$now_order['order_id'])));
 				}
