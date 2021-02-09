@@ -360,7 +360,7 @@
     .this_header {
         width: 100%;
         text-align: center;
-        font-size: 1.6em;
+        font-size: 18px;
         height: 30px;
         line-height: 30px;
         margin-top: 15px;
@@ -395,14 +395,18 @@
 </div>
 <div id="tutti_header">
     <div id="header_menu">
-
         <if condition="MODULE_NAME == 'Home'">
             <div class="local_div" data-url="{pigcms{:U('Home/address')}"></div>
             <div class="header_search home_style"></div>
             <div id="header_address_div"></div>
         </if>
-
         <if condition="MODULE_NAME == 'Shop'">
+            <if condition="ACTION_NAME == 'pay_result'">
+                <div class="this_header">
+                    <span id="back_button_span"></span>
+                    {pigcms{:L('V3_ORDER_RESULT')}
+                </div>
+            </if>
             <if condition="ACTION_NAME == 'order_detail'">
                 <div class="this_header">
                     <span id="back_button_span"></span>
@@ -419,7 +423,6 @@
                 <div class="local_div" data-url="{pigcms{:U('Shop/classic_address')}"></div>
                 <div id="header_address_div"></div>
             </if>
-
         </if>
 
         <if condition="MODULE_NAME == 'Pay'">
@@ -432,6 +435,12 @@
         </if>
 
         <if condition="MODULE_NAME == 'My'">
+            <if condition="ACTION_NAME == 'shop_feedback'">
+                <div class="this_header">
+                    {pigcms{:L('V3_ORDER_REVIEW_TITLE')}
+                    <div class="header_search"></div>
+                </div>
+            </if>
             <if condition="ACTION_NAME == 'shop_order_list'">
                 <div class="this_header">
                     {pigcms{:L('V3_ORDER_LIST_TITLE')}
@@ -656,7 +665,11 @@
     });
 
     $('#back_button_span').click(function () {
-        window.history.go(-1);
+        <if  condition="$back_url eq ''">
+            window.history.go(-1);
+        <else />
+            window.location.href="{pigcms{$back_url}";
+        </if>
     });
 
     $('#header_address_div').html($.cookie('userLocationName'));

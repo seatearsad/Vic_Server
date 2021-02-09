@@ -5462,14 +5462,20 @@ class MyAction extends BaseAction{
 
 	public function add_comment()
 	{
+
 		if(empty($this->user_session)){
 			exit(json_encode(array('status' => 0, 'msg' => L('_B_MY_LOGINFIRST_'))));
 			$this->error_tips(L('_B_MY_LOGINFIRST_'));
 		}
+
 		$order_id = isset($_POST['order_id']) ? intval($_POST['order_id']) : 0;
-		$goods_ids = isset($_POST['goods_ids']) ? $_POST['goods_ids'] : 0;
-		$score = isset($_POST['whole']) ? $_POST['whole'] : 5;
-		$comment = isset($_POST['textAre']) ? htmlspecialchars($_POST['textAre']) : 0;
+		//$goods_ids = isset($_POST['goods_ids']) ? $_POST['goods_ids'] : 0;
+
+		$score_send = isset($_POST['send']) ? $_POST['send'] : 5;       //快递星级
+        $score_whole = isset($_POST['whole']) ? $_POST['whole'] : 5;    //商铺星级
+
+		$comment_send = isset($_POST['send_textArea']) ? htmlspecialchars($_POST['send_textArea']) : 0;
+        $comment_whole = isset($_POST['whole_textArea']) ? htmlspecialchars($_POST['whole_textArea']) : 0;
 
 		$now_order = D('Shop_order')->get_order_detail(array('uid' => $this->user_session['uid'], 'order_id' => $order_id));
 
@@ -5486,10 +5492,8 @@ class MyAction extends BaseAction{
 			exit(json_encode(array('status' => 0, 'msg' => L('_B_MY_HAVECOMMENTD_'))));
 		}
 
-
 		$goodsids = array();
-
-		$goods = '';
+		$goods = 'a';
 		$pre = '';
 		if (isset($now_order['info'])) {
 			foreach ($now_order['info'] as $row) {
@@ -5506,26 +5510,44 @@ class MyAction extends BaseAction{
 		$data_reply['parent_id'] = $now_order['store_id'];
 		$data_reply['store_id'] = $now_order['store_id'];
 		$data_reply['mer_id'] = $now_order['mer_id'];
-		$data_reply['score'] = $score;
-		$data_reply['order_type'] = 3;
+
+        $data_reply['order_type'] = 3;
 		$data_reply['order_id'] = intval($now_order['order_id']);
 		$data_reply['anonymous'] = 1;
-		$data_reply['comment'] = $comment;
-		$data_reply['uid'] = $this->user_session['uid'];
+
+        $data_reply['uid'] = $this->user_session['uid'];
 		$data_reply['pic'] = '';
 		$data_reply['add_time'] = $_SERVER['REQUEST_TIME'];
 		$data_reply['add_ip'] = get_client_ip(1);
 		$data_reply['goods'] = $goods;
 
-        if(!checkEnglish($comment) && trim($comment) != ''){
-            $data_reply['comment_en'] = translationCnToEn($comment);
+		//商铺星级
+        $data_reply['score'] = $score_whole;
+        $data_reply['score_store'] = $score_whole;
+        //快递星级
+        $data_reply['score_deliver'] = $score_send;
+        //评论内容
+        $data_reply['comment'] = $comment_whole;
+        $data_reply['comment_deliver'] = $comment_send;
+
+		//只把英文翻译成中文
+        if(!checkEnglish($comment_whole) && trim($comment_whole) != ''){
+            $data_reply['comment_en'] = translationCnToEn($comment_whole);
         }else{
             $data_reply['comment_en'] = '';
         }
+        if(!checkEnglish($comment_send) && trim($comment_send) != ''){
+            $data_reply['comment_deliver_en'] = translationCnToEn($comment_send);
+        }else{
+            $data_reply['comment_deliver_en'] = '';
+        }
+
 // 		echo "<pre/>";
-// 		print_r($data_reply);die;
+ 		//print_r($data_reply);die;
+
 		if ($database_reply->data($data_reply)->add()) {
-			D('Merchant_store')->setInc_shop_reply($now_order['store_id'], $score);
+
+			D('Merchant_store')->setInc_shop_reply($now_order['store_id'], $score_whole);
 			D('Shop_order')->change_status($now_order['order_id'], 3);
 			D('Shop_order_log')->add_log(array('order_id' => $now_order['order_id'], 'status' => 8));
 			foreach ($goods_ids as $goods_id) {
@@ -5560,13 +5582,16 @@ class MyAction extends BaseAction{
 // 				$data_store_score['reply_count'] = $now_store_score['reply_count']+1;
 // 				$database_merchant_score->where(array('pigcms_id'=>$now_store_score['pigcms_id']))->data($data_store_score)->save();
 // 			}
+
 			if($this->config['feedback_score_add']>0){
 			  	D('User')->add_extra_score($this->user_session['uid'],$this->config['feedback_score_add'],$this->config['shop_alias_name'].L('_B_MY_COMMENTGET_').$this->config['feedback_score_add'].$this->config['score_name']);
 			  	D('Scroll_msg')->add_msg('feedback',$this->user_session['uid'],L('_B_MY_USER_').$this->user_session['nickname'].date('Y-m-d H:i',$_SERVER['REQUEST_TIME']).L('_B_MY_COMMENT_').$this->config['shop_alias_name'].L('_B_MY_GET_').$this->config['feedback_score_add'].$this->config['score_name']);
 			}
-			exit(json_encode(array('status' => 1, 'msg' => L('_B_MY_COMMENTACCESS_'),  'url' => U('Shop/status', array('order_id' => $now_order['order_id'], 'mer_id' => $now_order['mer_id'], 'store_id' => $now_order['store_id'])))));
-			$this->success_tips(L('_B_MY_COMMENTACCESS_'), U('Shop/status', array('order_id' => $now_order['order_id'], 'mer_id' => $now_order['mer_id'], 'store_id' => $now_order['store_id'])));
-		}
+			exit(json_encode(array('status' => 1, 'msg' => L('_B_MY_COMMENTACCESS_'),  'url' => U('My/shop_order_list'))));
+			//$this->success_tips(L('_B_MY_COMMENTACCESS_'), U('My/shop_order_list'));
+		}else{
+            //die("111");
+        }
 	}
 
 	public function refund_back()

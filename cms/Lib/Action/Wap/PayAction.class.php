@@ -2567,6 +2567,7 @@ class PayAction extends BaseAction{
         echo json_encode($data);
     }
 
+    //信用卡支付使用的是 Wap 下的PayAction.class.php！！！！！！！！！！！！！！！！！！！！！！！就是这里
     public function MonerisPay(){
 
         import('@.ORG.pay.MonerisPay');

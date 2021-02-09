@@ -1066,12 +1066,13 @@ class PayAction extends BaseAction{
         }
     }
 
+    //信用卡支付使用的是 Index 下的PayAction.class.php
     public function MonerisPay(){
 
         import('@.ORG.pay.MonerisPay');
         $moneris_pay = new MonerisPay();
         $resp = $moneris_pay->payment($_POST,$this->user_session['uid'],1);
-        var_dump($resp);
+
         if($resp['requestMode'] && $resp['requestMode'] == "mpi"){
             if($resp['mpiSuccess'] == "true"){
                 $result = array('error_code' => false,'mode'=>$resp['requestMode'],'html'=>$resp['mpiInLineForm'], 'msg' => $resp['message']);

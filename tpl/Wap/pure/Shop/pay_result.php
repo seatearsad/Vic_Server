@@ -26,99 +26,75 @@
         margin-top: 15px;
         background-color: #cccccc;
     }
-    .this_nav{
+    .g_details{
+        padding:10px 10px;
+    }
+    .div_box{
+        background: white;
+        border-radius: 10px;
+        padding: 15px 20px;
+        margin-bottom: 20px;
+    }
+    .div_small_title{
+        text-align: center;
+        font-size: 16px;
+        font-weight: bold;
+        margin-bottom: 20px;
+        margin-top:20px;
+    }
+    .div_title{
+        text-align: center;
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+    .div_content{
+
+    }
+    .div_button{
         width: 100%;
-        text-align: center;
-        font-size: 1.8em;
-        height: 30px;
-        line-height: 30px;
-        margin-top: 15px;
-        position: relative;
-    }
-    .this_nav span{
-        width: 50px;
-        height: 30px;
-        display:-moz-inline-box;
-        display:inline-block;
-        -moz-transform:scaleX(-1);
-        -webkit-transform:scaleX(-1);
-        -o-transform:scaleX(-1);
-        transform:scaleX(-1);
-        background-image: url("./tpl/Static/blue/images/new/black_arrow.png");
-        background-size: auto 20px;
-        background-repeat: no-repeat;
-        background-position: right center;
-        position: absolute;
-        left: 8%;
-        cursor: pointer;
-    }
-    .detail_header{
-        display: flex;
-        background-color: white;
-        height: 40px;
-        line-height: 40px;
-        font-size: 1.2em;
-    }
-    .detail_header div{
-        box-sizing: border-box;
-        flex: 1 1 100%;
-        text-align: center;
-        color: #ffa52d;
-    }
-    .header_active{
-        border-bottom: 1px solid #ffa52d;
-    }
-    .orders_list li{
-        margin-top: 0px;
-    }
-    .orders_list li .p18::after{
         background: #ffa52d;
+        margin: 20px 0px 10px 0;
+        padding: 10px 20px;
+        border-radius: 20px;
+        text-align: center;
+        color: white;
+        font-size: 16px;
     }
-    .orders_list li .p18::before{
-        content: none;
-    }
-    .orders_list li .p18 {
-        padding: 10px 0px 10px 22px;
-    }
-    .orders_list li .p18 .con h2{
-        color: #232323;
-        font-size: 1.2em;
-        font-weight: normal;
-    }
-    .orders_list li .p18 .con p{
-        display: none;
-    }
-    .order_time{
-        position: absolute;
-        right: 10px;
-        top:45px;
-        color: silver;
-    }
+
 </style>
 <body>
 <include file="Public:header"/>
 <div class="main">
-    <div class="this_nav">
-        <span id="back_span"></span>
-        {pigcms{:L('_ORDER_DETAIL_')}
-    </div>
-    <div class="gray_line"></div>
-<div class="detail_header">
-    <div class="header_active">{pigcms{:L('_ORDER_STATUS_')}</div>
-    <div><a href="{pigcms{:U('order_detail',array('order_id'=>$order_id))}">{pigcms{:L('_ORDER_INFO_TXT_')}</a></div>
-</div>
 <section class="g_details">
-    <div class="orders_list">
-        <ul>{pigcms{$order['real_orderid']}---{pigcms{$store['name']}
-            <a href="http://www.vicisland.ca:8087/wap.php?g=Wap&c=Shop&a=order_detail&order_id={pigcms{$order_id}">订单</a>
-        </ul>
+    <div class="div_box">
+        <if condition="$status eq '3'">
+            <div class="div_small_title">loading...</div>
+            <script>
+                window.location.href="./wap.php?g=Wap&c=My&a=shop_order_list";
+            </script>
+        <else/>
+
+                <div class="div_title">
+                    <if condition="$status eq '1'">{pigcms{:L('V3_ORDER_RESULT_PAYMENT_SUCC')}<else/>{pigcms{:L('V3_ORDER_RESULT_PAYMENT_FAIL')}</if>
+                </div>
+                <div class="div_content">
+                    <if condition="$status eq '1'">
+                        Order #{pigcms{$order['real_orderid']} from {pigcms{$store['name']}
+                    <else/>
+                    {pigcms{:L('V3_ORDER_RESULT_PAYMENT_FAIL_DESC')}
+                    </if>
+                </div>
+
+                <if condition="$status eq '1'">
+                    <a href=".//wap.php?g=Wap&c=Shop&a=order_detail&order_id={pigcms{$order_id}"><div class="div_button">{pigcms{:L('V3_ORDER_RESULT_PAYMENT_VIEW_ORDER')}</div></a>
+                    <else/>
+                    <a href=".//wap.php?g=Wap&c=Pay&a=check&order_id={pigcms{$order_id}&type=shop"><div class="div_button">{pigcms{:L('V3_ORDER_RESULT_PAYMENT_CONTINUE')}</div></a>
+                </if>
+
+        </if>
     </div>
 </section>
 </div>
 </body>
-<script>
-    $('#back_span').click(function () {
-        window.location.href = "{pigcms{:U('My/shop_order_list')}";
-    });
-</script>
 </html>

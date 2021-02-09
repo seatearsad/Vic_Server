@@ -3297,8 +3297,10 @@ class ShopAction extends BaseAction{
 	 */
 	public function status()
 	{
+	    redirect(U("Shop/order_detail",array("order_id"=>$_GET['order_id'])));
 
-
+        //header('Location: http://' . $this->config['many_city_main_domain'] . '.' .);
+            die();
 		$order_id = isset($_GET['order_id']) ? intval($_GET['order_id']) : 0;
 
 		if ($order = D('Shop_order')->get_order_detail(array('order_id' => $order_id, 'uid' => $this->user_session['uid']))) {
@@ -3355,10 +3357,12 @@ class ShopAction extends BaseAction{
      */
     public function pay_result()
     {
-
+        $status=isset($_GET['status']) ? intval($_GET['status']) : -1;  //未获得支付状态信息
         $order_id = isset($_GET['order_id']) ? intval($_GET['order_id']) : 0;
         $mer_id =isset($_GET['mer_id']) ? intval($_GET['mer_id']) : 0;
         $store_id=isset($_GET['store_id']) ? intval($_GET['store_id']) : 0;
+
+
         if ($order = D('Shop_order')->get_order_detail(array('order_id' => $order_id, 'uid' => $this->user_session['uid']))) {
             //if ($order = D('Shop_order')->get_order_detail(array('order_id' => $order_id))) {
             //$storeName = D("Merchant_store")->field('`name`, `phone`')->where(array('store_id' => $order['store_id']))->find();
@@ -3367,6 +3371,7 @@ class ShopAction extends BaseAction{
             $store['name'] = lang_substr($store['name'],C('DEFAULT_LANG'));
             $this->assign('store', $store);
 
+            //清空购物车
             cookie('shop_cart_' . $order['store_id'], null);
             for($i=0;$i<20;$i++){
                 if(cookie('shop_cart_' . $order['store_id'].'_'.$i)){
@@ -3399,11 +3404,15 @@ class ShopAction extends BaseAction{
 //                }
 //                $this->assign('point', $points);
 //            }
-            var_dump($store);
-            echo "<hr>";
-            var_dump($order);
+            $city = D('Area')->where(array('area_id'=>$store['city_id']))->find();
+            $order['jetlag'] = $city['jetlag'];
+            //var_dump($store);
+            //echo "<hr>";
+            //var_dump($order);
+            $this->assign('back_url','./wap.php?g=Wap&c=My&a=shop_order_list');
             $this->assign('order_id', $order_id);
             $this->assign('order', $order);
+            $this->assign('status', $status);
             $this->display();
         } else {
             //$this->error_tips('错误的订单信息！');

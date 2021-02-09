@@ -78,7 +78,7 @@ class Shop_orderModel extends Model
 				if ($now_order['order_from'] == 1) {
 					return array('error' => 1, 'msg' => '您已经支付过此订单！', 'url' => U('Wap/Mall/status', array('order_id' => $now_order['order_id'], 'mer_id' => $now_order['mer_id'], 'store_id' => $now_order['store_id'])));
 				} else {
-					return array('error' => 1, 'msg' => '您已经支付过此订单！', 'url' => U('Wap/Shop/pay_result', array('order_id' => $now_order['order_id'], 'mer_id' => $now_order['mer_id'], 'store_id' => $now_order['store_id'], 'status' => '0')));
+					return array('error' => 1, 'msg' => '您已经支付过此订单！', 'url' => U('Wap/Shop/pay_result', array('order_id' => $now_order['order_id'], 'mer_id' => $now_order['mer_id'], 'store_id' => $now_order['store_id'], 'status' => '3')));
 				}
 			} else {
 				return array('error' => 1, 'msg' => '您已经支付过此订单！', 'url' => U('User/Index/shop_order_view', array('order_id' => $now_order['order_id'])));
@@ -90,7 +90,7 @@ class Shop_orderModel extends Model
 				if ($now_order['order_from'] == 1) {
 					return array('error' => 1, 'msg' => '您的订单已取消，不能付款了！', 'url' => U('Wap/Mall/status', array('order_id' => $now_order['order_id'], 'mer_id' => $now_order['mer_id'], 'store_id' => $now_order['store_id'])));
 				} else {
-					return array('error' => 1, 'msg' => '您的订单已取消，不能付款了！', 'url' => U('Wap/Shop/pay_result', array('order_id' => $now_order['order_id'], 'mer_id' => $now_order['mer_id'], 'store_id' => $now_order['store_id'], 'status' => '0')));
+					return array('error' => 1, 'msg' => '您的订单已取消，不能付款了！', 'url' => U('Wap/Shop/pay_result', array('order_id' => $now_order['order_id'], 'mer_id' => $now_order['mer_id'], 'store_id' => $now_order['store_id'], 'status' => '3')));
 				}
 			} else {
 				return array('error' => 1, 'msg' => '您的订单已取消，不能付款了！', 'url' => U('User/Index/shop_order_view', array('order_id' => $now_order['order_id'])));
@@ -495,7 +495,7 @@ class Shop_orderModel extends Model
 				if ($order_param['order_from'] == 1) {
 					return array('error' => 1, 'msg' => '该订单已付款！', 'url' => U('Wap/Mall/status', array('order_id' => $now_order['order_id'], 'mer_id' => $now_order['mer_id'], 'store_id' => $now_order['store_id'])));
 				} else {
-					return array('error' => 1, 'msg' => '该订单已付款！', 'url' => U('Wap/Shop/pay_result', array('order_id' => $now_order['order_id'], 'mer_id' => $now_order['mer_id'], 'store_id' => $now_order['store_id'], 'status' => "0")));
+					return array('error' => 1, 'msg' => '该订单已付款！', 'url' => U('Wap/Shop/pay_result', array('order_id' => $now_order['order_id'], 'mer_id' => $now_order['mer_id'], 'store_id' => $now_order['store_id'], 'status' => "3")));
 				}
 			} else {
 				return array('error' => 1, 'msg' => '该订单已付款！', 'url' => U('User/Index/shop_order_view', array('order_id' => $now_order['order_id'])));
