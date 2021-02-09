@@ -92,7 +92,7 @@
                                 		<i class="level_solid" cjmark=""></i> 
                                 		<i class="level_solid" cjmark=""></i> 
                                 		<i class="level_solid" cjmark=""></i>
-                                        <input type="hidden" id="score_send" value="0"/>
+                                        <input type="hidden" id="score_send" value="5"/>
                                 	</span> 
                                 	<span class="revgrade"></span>
                                 </div>
@@ -111,7 +111,7 @@
                                 		<i class="level_solid" cjmark=""></i>
                                 		<i class="level_solid" cjmark=""></i>
                                 		<i class="level_solid" cjmark=""></i>
-                                        <input type="hidden" id="score_whole" value="0"/>
+                                        <input type="hidden" id="score_whole" value="5"/>
                                 	</span>
                                     <span class="revgrade"></span>
                                 </div>
