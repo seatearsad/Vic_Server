@@ -13,8 +13,14 @@ class IndexAction extends BaseAction
             $lat = $_POST['lat'];
             $long = $_POST['long'];
         }
+        $city_id = $_POST['city_id'] ? $_POST['city_id'] : -1;
+
         //顶部广告
-        $_COOKIE['userLocationCity'] = $this->loadModel()->geocoderGoogle($lat,$long);
+        if($city_id == -1) {
+            $city_id = $this->loadModel()->geocoderGoogle($lat, $long);
+        }
+
+        $_COOKIE['userLocationCity'] = $city_id;
 
         $head_adver = D('Adver')->get_adver_by_key('app_index_top',5);
         if(empty($head_adver)){
@@ -57,7 +63,7 @@ class IndexAction extends BaseAction
         $where = array('deliver_type' => $deliver_type, 'order' => $order, 'lat' => $lat, 'long' => $long, 'cat_id' => $cat_id, 'cat_fid' => $cat_fid, 'page' => $page,'limit'=>$limit);
         $key && $where['key'] = $key;
 
-        $shop_list = D('Merchant_store_shop')->get_list_arrange($where,3,1,$limit,$page,$lat,$long);
+        $shop_list = D('Merchant_store_shop')->get_list_arrange($where,3,1,$limit,$page,$lat,$long,$city_id);
 //
 //        foreach ($shop_list as $k => $v) {
 //            $product_list = D('Shop_goods')->get_list_by_storeid($v['site_id']);
@@ -73,7 +79,7 @@ class IndexAction extends BaseAction
         $arr['best']['info'] = $shop_list['list'];
         $arr['best']['count'] = $shop_list['count'];
         //获取顶级分类
-        $city_id = $_COOKIE['userLocationCity'] ? $_COOKIE['userLocationCity'] : 0;
+        //$city_id = $_COOKIE['userLocationCity'] ? $_COOKIE['userLocationCity'] : 0;
         //$city_id = 105;
         $category = D('Shop_category')->field(true)->where(array('cat_fid'=>0,'cat_type'=>0,'city_id'=>$city_id))->order('cat_sort desc')->select();
         if(count($category) == 0){
@@ -291,6 +297,7 @@ class IndexAction extends BaseAction
             }
         }
         $arr['recommend'] = $recommend_list;
+        $arr['city_id'] = $city_id;
 
         $this->returnCode(0,'data',$arr);
     }
@@ -309,6 +316,7 @@ class IndexAction extends BaseAction
         $cat_id = intval($_POST['cate_id']);
         $cat_fid = intval($_POST['category']);
 
+        $city_id = $_POST['city_id'] ? $_POST['city_id'] : -1;
 
         if($cat_id == 0)
             $cat_where['cat_id'] = $cat_fid;
@@ -321,15 +329,15 @@ class IndexAction extends BaseAction
         $where = array('deliver_type' => $deliver_type, 'order' => $order, 'lat' => $lat, 'long' => $long, 'cat_id' => $cat_id, 'cat_fid' => $cat_fid, 'page' => $page, 'limit' => $limit);
         if($category['cat_type'] == 1){
             if($page == 1)
-                $shop_list = D('Merchant_store_shop')->get_list_arrange($where,1,2,$limit,$page,$lat,$long);
+                $shop_list = D('Merchant_store_shop')->get_list_arrange($where,1,2,$limit,$page,$lat,$long,$city_id);
         }else {
             $key = '';
             if ($_POST['keyword']) {
                 $key = $_POST['keyword'];
                 $key && $where['key'] = $key;
-                $shop_list = D('Merchant_store_shop')->get_list_arrange($where, 1, 1, $limit, $page, $lat, $long);
+                $shop_list = D('Merchant_store_shop')->get_list_arrange($where, 1, 1, $limit, $page, $lat, $long,$city_id);
             } else {
-                $shop_list = D('Merchant_store_shop')->get_list_arrange($where, 3, 1, $limit, $page, $lat, $long);
+                $shop_list = D('Merchant_store_shop')->get_list_arrange($where, 3, 1, $limit, $page, $lat, $long,$city_id);
             }
 
         }
@@ -711,8 +719,9 @@ class IndexAction extends BaseAction
 
     public function getUserAddress(){
         $uid = $_POST['uid'];
+        $sid = $_POST['store_id'];
 
-        $result = $this->loadModel()->getUserAdr($uid);
+        $result = $this->loadModel()->getUserAdr($uid,$sid);
 
         $this->returnCode(0,'info',$result,'success');
     }
@@ -736,12 +745,24 @@ class IndexAction extends BaseAction
                 $data['area'] = 0;
                 $data['city'] = $area['area_id'];
                 $data['province'] = $area['area_pid'];
+            }else{
+                $data['area'] = 0;
+                $data['city'] = 0;
+                $data['province'] = 0;
             }
+        }else{
+            $_POST['city_name'] = "";
+            $city_id = $this->loadModel()->geocoderGoogle($_POST['lat'], $_POST['lng']);
+            $data['city'] = $city_id ? $city_id : 0;
         }
 
         $result = $this->loadModel()->addUserAddress($data);
 
-        $this->returnCode(0,'info',array(),'success');
+        $data['areaID'] = $data['city'];
+        $data['address'] = $data['adress'];
+        $data['city_name'] = $_POST['city_name'];
+
+        $this->returnCode(0,'info',$data,'success');
     }
 
     public function delUserAddress(){

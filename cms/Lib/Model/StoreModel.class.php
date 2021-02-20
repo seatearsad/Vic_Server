@@ -46,6 +46,7 @@ class StoreModel extends Model
         $store['address'] = $row['adress'];
         $store['shop_remind'] = $row['shop_remind'];
         $store['pay_method'] = $row['pay_method'];
+        $store['delivery_radius'] = $row['delivery_radius'];
 
         if($row['background'] && $row['background'] != '') {
             $image_tmp = explode(',', $row['background']);
@@ -796,13 +797,22 @@ class StoreModel extends Model
         return $result;
     }
 
-    public function getUserAdr($uid){
+    public function getUserAdr($uid,$sid = 0){
         $addressModle = D('User_adress');
 
         $adr = $addressModle->field(true)->where(array('uid'=>$uid))->order('adress_id desc')->select();//'`default` DESC'
 
+        $store = null;
+        if($sid != 0){
+            $store = $this->get_store_by_id($sid);
+        }
+
         foreach ($adr as $v){
-            $result[] = $this->arrange_address($v);
+            $result[] = $this->arrange_address($v,$store);
+        }
+        if($store) {
+            $cmf_arr = array_column($result, 'distance');
+            array_multisort($cmf_arr, SORT_ASC, $result);
         }
 
         return $result;
@@ -850,7 +860,7 @@ class StoreModel extends Model
         return $addressModle->delete_adress($uid,$aid);
     }
 
-    public function arrange_address($address){
+    public function arrange_address($address,$store = null){
         $data['rowID'] = $address['adress_id'];
         $data['zoneID'] = $address['city'];
         if($address['city'] != 0){
@@ -869,6 +879,17 @@ class StoreModel extends Model
         $data['mapLat'] = $address['latitude'];
         $data['mapLng'] = $address['longitude'];
         $data['mapLocation'] = $address['detail'];
+        $data['areaID'] = $address['city'];
+        $data['distance'] = 0;
+        if($store) {
+            $distance = getDistance($store['lat'], $store['lng'], $data['mapLat'], $data['mapLng']);
+            $data['distance'] = $distance;
+            if ($distance <= $store['delivery_radius'] * 1000) {
+                $data['is_allow'] = 1;
+            }else{
+                $data['is_allow'] = 0;
+            }
+        }
 
         return $data;
     }
