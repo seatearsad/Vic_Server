@@ -1500,6 +1500,14 @@ class DeliverAction extends BaseAction {
                 if($deliver['reg_status'] == 5){
                     $data['reg_status'] = 0;
                 }
+
+                if($deliver['email'] != "") {
+                    $email = array(array("address"=>$deliver['email'],"userName"=>$deliver['name']));
+                    $title = "Congratulations! Your Tutti courier account is now active!";
+                    $body = $this->getMailBody($deliver['name']);
+                    $mail = getMail($title, $body, $email);
+                    $mail->send();
+                }
             } else {//未通过
                 //$data['reg_status'] = 1;
                 if($_POST['review_desc'] && $_POST['review_desc'] != '') {
@@ -1793,5 +1801,21 @@ class DeliverAction extends BaseAction {
         } else {
             exit(json_encode(array('error' => 1,'message' =>'没有选择图片')));
         }
+    }
+
+    public function getMailBody($name)
+    {
+        $body = "<p>Hi " . $name . ",</p>";
+        $body .= "<p>&nbsp;</p>";
+        $body .= "<p>Congratulations! Your Tutti courier account is now active!</p>";
+        $body .= "<p>&nbsp;</p>";
+        $body .= "<p>Here is a link to our delivery instructions on how to use our courier app and complete delivery orders: <a href='https://qrco.de/bbyGle' target='_blank'>https://qrco.de/bbyGle</a>. Please go through this file before starting your first delivery.</p>";
+        $body .= "<p>&nbsp;</p>";
+        $body .= "<p>For any questions, please contact us at 1-888-399-6668 or email <a href='mailto:hr@tutti.app'>hr@tutti.app</a>.</p>";
+        $body .= "<p>&nbsp;</p>";
+        $body .= "<p>Best regards,</p>";
+        $body .= "<p>Tutti Courier Team</p>";
+
+        return $body;
     }
 }
