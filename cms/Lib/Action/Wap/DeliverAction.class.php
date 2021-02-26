@@ -2623,7 +2623,7 @@ class DeliverAction extends BaseAction
         if($now_user['email'] != "") {
             $email = array(array("address"=>$now_user['email'],"userName"=>$now_user['name']));
             if($now_user['city_id'] == 105) {
-                $title = "Thank you for signing up as a Tutti courier!";
+                $title = "Picking Up Your Tutti Delivery Bags";
                 $body = $this->getVicMailBody($now_user['name']);
                 $mail = getMail($title, $body, $email);
                 $mail->send();

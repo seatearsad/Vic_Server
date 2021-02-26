@@ -1503,7 +1503,7 @@ class DeliverAction extends BaseAction {
 
                 if($deliver['email'] != "") {
                     $email = array(array("address"=>$deliver['email'],"userName"=>$deliver['name']));
-                    $title = "Congratulations! Your Tutti courier account is now active!";
+                    $title = "Tutti Courier Instructions";
                     $body = $this->getMailBody($deliver['name']);
                     $mail = getMail($title, $body, $email);
                     $mail->send();
