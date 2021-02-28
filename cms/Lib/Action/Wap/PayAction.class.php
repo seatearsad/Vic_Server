@@ -69,8 +69,8 @@ class PayAction extends BaseAction{
                 $this->error_tips($now_order['msg']);
             }
         }
+
         $order_info = $now_order['order_info'];
-        //var_dump($order_info);die();
 
         //ADD garfunkel
         $order_info['order_name'] = lang_substr($order_info['order_name'],C('DEFAULT_LANG'));
@@ -318,7 +318,6 @@ class PayAction extends BaseAction{
 
             // $card_info = D('Card_new')->get_card_by_uid_and_mer_id($this->user_session['uid'],$order_info['mer_id']);
 
-
             if (isset($order_info['discount_status']) && !$order_info['discount_status']) {
                 $card_info['discount'] = 10;
             }
@@ -327,7 +326,7 @@ class PayAction extends BaseAction{
             $this->assign('merchant_balance', $merchant_balance);
 
         }
-        //var_dump($order_info);
+        //var_dump($order_info);die();
         $this->assign('order_info',$order_info);
 
         //使用积分
@@ -775,6 +774,11 @@ class PayAction extends BaseAction{
         if($_POST['not_touch'] != null && $_POST['not_touch'] == 1){
             D('Shop_order')->field(true)->where(array('order_id'=>$order_info['order_id']))->save(array('not_touch'=>1));
         }
+
+        $this->Save_order_desc($_POST['note'],$order_info['order_id']);
+
+        //保存地址备注
+        $this->Save_user_address_detail($_POST['address_detail'],$_POST['address_id']);
 
         if(empty($now_user)){
             $this->error_tips(L('_NO_GET_INFO_'));
@@ -2574,6 +2578,18 @@ class PayAction extends BaseAction{
         //-------
         $order = explode("_",$_POST['order_id']);
         $order_id = $order[1];
+        $address_id=$_POST['address_id'];
+
+        //---------------------------------------------------------------------------
+        //无接触配送
+        if($_POST['not_touch'] != null && $_POST['not_touch'] == 1){
+            D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->save(array('not_touch'=>1));
+        }
+
+        $this->Save_order_desc($_POST['note'],$order_id);
+        $this->Save_user_address_detail($_POST['address_detail'],$address_id);
+        //----------------------------------------------------------------------------
+
         $result_url=$this->get_result_url($order_id);
         //---------
         $moneris_pay = new MonerisPay();
@@ -2600,17 +2616,13 @@ class PayAction extends BaseAction{
                         D('New_event')->addEventCouponByType(3,$this->user_session['uid']);
                 }
             }
+
             //店铺满减
             if($_POST['merchant_reduce'] != null){
                 $order_info['merchant_reduce'] = $_POST['merchant_reduce'];
                 if($_POST['order_type'] == 'shop' || $_POST['order_type'] == 'mall'){
                     D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->save(array('merchant_reduce'=>$order_info['merchant_reduce']));
                 }
-            }
-
-            //无接触配送
-            if($_POST['not_touch'] != null && $_POST['not_touch'] == 1){
-                D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->save(array('not_touch'=>1));
             }
 
             if(!$_POST['order_type']) $_POST['order_type'] = "shop";
@@ -2627,7 +2639,24 @@ class PayAction extends BaseAction{
             $this->error($resp['message'],$result_url.'0',true);
         }
     }
-
+    //保存地址备注信息的逻辑  by Peter 2021-2-26
+    public function Save_user_address_detail($detail,$address_id){
+        if($detail != null) {
+            if(!checkEnglish($detail) && trim($detail) != ''){
+                $detail_en= translationCnToEn($detail);
+            }else{
+                $detail_en= '';
+            }
+            D('User_adress')->field(true)->where(array('adress_id'=>$address_id))->save(array('detail'=>$detail,'detail_en'=>$detail_en));
+        }
+    }
+    //保存地址备注信息的逻辑  by Peter 2021-2-26
+    public function Save_order_desc($desc,$order_id){
+        //echo ("desc=".$desc.",order_id=".$order_id);die();
+        if($desc != null) {
+            D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->save(array('desc'=>$desc));
+        }
+    }
     //微信、支付宝请求支付!!!
     public function WeixinAndAli(){
 
@@ -2647,6 +2676,8 @@ class PayAction extends BaseAction{
         //支付类型 weixin alipay
         $channelId = '';
         $pay_type = $_POST['pay_type'];
+        $address_id=$_POST['address_id'];
+
         //微信公众号 选择微信支付
         if($this->is_wexin_browser && $pay_type == 'weixin') {
             $channelId = 'WX_JSAPI';
@@ -2743,6 +2774,9 @@ class PayAction extends BaseAction{
                 if($_POST['not_touch'] != null && $_POST['not_touch'] == 1){
                     $order_data['not_touch'] = 1;
                 }
+                $this->Save_order_desc($_POST['note'],$order_id);
+                //保存地址备注
+                $this->Save_user_address_detail($_POST['address_detail'],$_POST['address_id']);
 
                 D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->save($order_data);
                 $this->success('', $result['url']);
@@ -2800,6 +2834,9 @@ class PayAction extends BaseAction{
                     if($_POST['not_touch'] != null && $_POST['not_touch'] == 1){
                         $order_data['not_touch'] = 1;
                     }
+                    $this->Save_order_desc($_POST['note'],$order_id);
+                    //保存地址备注
+                    $this->Save_user_address_detail($_POST['address_detail'],$_POST['address_id']);
 
                     D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->save($order_data);
 

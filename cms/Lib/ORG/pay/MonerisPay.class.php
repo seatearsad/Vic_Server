@@ -98,7 +98,6 @@ class MonerisPay
                 $mpgTxn->setCvdInfo($mpgCvdInfo);
             }
 
-
             $mpgRequest = new mpgRequest($mpgTxn);
             $mpgRequest->setProcCountryCode($this->countryCode); //"US" for sending transaction to US environment
             $mpgRequest->setTestMode($this->testMode);
@@ -174,7 +173,6 @@ class MonerisPay
             } else {
 
             }
-
 
             return $resp;
         }

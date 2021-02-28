@@ -462,7 +462,7 @@ class MyAction extends BaseAction{
 		$this->display();
 	}
 
-	/*选择优惠券*/
+	/*checkout 选择优惠券*/
 	public function select_card(){
 		if(empty($this->user_session)){
 			$this->error_tips(L('_B_MY_LOGINFIRST_'));
@@ -519,20 +519,20 @@ class MyAction extends BaseAction{
 		$now_order['uid'] = $this->user_session['uid'];
 		$this->assign('back_url',U('Pay/check',$_GET));
 		if($this->is_app_browser){
-			$platform = 'app';
-		}else if($this->is_wexin_browser){
-			$platform = 'weixin';
-		}else{
-			$platform = 'wap';
-		}
+            $platform = 'app';
+        }else if($this->is_wexin_browser){
+            $platform = 'weixin';
+        }else{
+            $platform = 'wap';
+        }
 		if($_GET['coupon_type']=='mer') {
-			//$card_list = D('Member_card_coupon')->get_coupon($now_order['mer_id'], $this->user_session['uid']);
-			if(!empty($now_order['business_type'])){
-				$coupon_list = D('Card_new_coupon')->get_noworder_coupon_list($now_order,$_GET['type'],$platform,$now_order['business_type']);
-			}else{
-				$coupon_list = D('Card_new_coupon')->get_noworder_coupon_list($now_order, $_GET['type'],$platform);
-			}
-		}else if($_GET['coupon_type']=='system') {
+            //$card_list = D('Member_card_coupon')->get_coupon($now_order['mer_id'], $this->user_session['uid']);
+            if(!empty($now_order['business_type'])){
+                $coupon_list = D('Card_new_coupon')->get_noworder_coupon_list($now_order,$_GET['type'],$platform,$now_order['business_type']);
+            }else{
+                $coupon_list = D('Card_new_coupon')->get_noworder_coupon_list($now_order, $_GET['type'],$platform);
+            }
+        }else if($_GET['coupon_type']=='system') {  //目前使用
 
 			if($_SESSION['card_discount']>0){
 				$now_order['total_money'] -= $_SESSION['card_discount'];
@@ -567,6 +567,7 @@ class MyAction extends BaseAction{
 				$value['select_url'] = U('Pay/check',$param);
 			}
 			$this->assign('coupon_list',$coupon_list);
+			//var_dump($coupon_list);
 		}
 
 		$param = $_GET;
@@ -599,7 +600,6 @@ class MyAction extends BaseAction{
 			$this->error_tips(L('_B_MY_LOGINFIRST_'));
 		}
 
-
 		$adress_list = D('User_adress')->get_adress_list($this->user_session['uid']);
         $sid = $_GET['store_id'] ? $_GET['store_id'] : 0;
         if($sid != 0){
@@ -608,7 +608,7 @@ class MyAction extends BaseAction{
             $store = null;
         }
 
-        //var_dump($adress_list);die();
+       //var_dump($adress_list);die();
 		if(empty($adress_list)){
 			redirect(U('My/edit_adress',$_GET));
 		}else{
@@ -639,6 +639,12 @@ class MyAction extends BaseAction{
 			}
 
 			$param = $_GET;
+			if ($_GET['buy_type']=='shop'){
+			    $page_title=L('V2_PAGETITLE_ADDRESS_SHOP');
+            }else{
+			    $page_title=L('V2_PAGETITLE_ADDRESS');
+            }
+            $this->assign('page_title',$page_title);
 			foreach($adress_list as $key=>&$value){
 				$param['adress_id'] = $value['adress_id'];
 				if(!empty($select_url)){
@@ -655,6 +661,7 @@ class MyAction extends BaseAction{
 				$adress_list[$key]['del_url'] = U('My/del_adress',$param);
 
                 $value['distance'] = 0;
+
                 if($store) {
                     $distance = getDistance($store['lat'], $store['lng'], $value['latitude'], $value['longitude']);
                     $value['distance'] = $distance;
@@ -663,6 +670,8 @@ class MyAction extends BaseAction{
                     }else{
                         $value['is_allow'] = 0;
                     }
+                }else{
+                    $value['is_allow'] = 1;
                 }
 			}
             if($store) {
@@ -670,7 +679,22 @@ class MyAction extends BaseAction{
                 array_multisort($cmf_arr, SORT_ASC, $adress_list);
             }
 
+            foreach($adress_list as $key=>$value){
+
+			    if ($adress_list[$key]['is_allow']=="1"){
+			        $address_list_allow[]=$adress_list[$key];
+                }
+            }
+            foreach($adress_list as $key=>$value){
+
+                if ($adress_list[$key]['is_allow']=="0"){
+                    $address_list_not_allow[]=$adress_list[$key];
+                }
+            }
+
 			$this->assign('adress_list',$adress_list);
+            $this->assign('adress_list_allow',$address_list_allow);
+            $this->assign('adress_list_not_allow',$address_list_not_allow);
 
 			//-------------------------------------------------------------------
 
@@ -3306,13 +3330,13 @@ class MyAction extends BaseAction{
         }
         return $list;
     }
-
+    //个人中心-优惠券
     public function coupon(){
         $coupon_list = D('System_coupon')->get_user_coupon_list($this->user_session['uid'], $this->user_session['phone']);
         $this->assign('cate_platform', D('System_coupon')->cate_platform());
 
         $tmp = array();
-        foreach ($coupon_list as $key => $v) {
+        foreach ($coupon_list as $key => &$v) {
             $v['name'] = lang_substr($v['name'],C('DEFAULT_LANG'));
             $v['des'] = lang_substr($v['des'],C('DEFAULT_LANG'));
             if (!empty($tmp[$v['is_use']][$v['coupon_id']])) {
@@ -3342,9 +3366,10 @@ class MyAction extends BaseAction{
                 $tmp[$v['is_use']][$v['coupon_id']]['url'] = $url;
             }
         }
-        if($tmp[0]){
-            $this->assign('coupon', array_shift($tmp[0]));
-        }
+//        if($tmp[0]){
+//            $this->assign('coupon', array_shift($tmp[0]));
+//        }
+        $this->assign('coupon_list', $coupon_list);
         //$this->card_list();
         $this->display();
     }
@@ -5428,7 +5453,6 @@ class MyAction extends BaseAction{
 		}
 		$now_order = D('Shop_order')->get_order_detail(array('uid' => $this->user_session['uid'], 'order_id' => intval($_GET['order_id'])));
 
-
 		if (empty($now_order)) {
 			$this->error_tips(L('_B_MY_NOORDER_！'));
 		}
@@ -5455,8 +5479,10 @@ class MyAction extends BaseAction{
 		}
 
 		$this->assign('now_order', $now_order);
-
-
+        $c_title = replace_lang_str(L('V3_ORDER_REVIEW_DELIVERY'), $now_order['deliver_user_info']['name']);
+        $s_title = replace_lang_str(L('V3_ORDER_REVIEW_STORE'), $now_order['site_name']);
+        $this->assign('c_title', $c_title);
+        $this->assign('s_title', $s_title);
 		$this->display();
 	}
 

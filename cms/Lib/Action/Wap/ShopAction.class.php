@@ -2389,7 +2389,7 @@ class ShopAction extends BaseAction{
         $is_error = false;
         if(count($productCart) > count($newCart)){
             $is_error = true;
-            $msg = "Please note that you have one or more items in your cart that are currently unavailable. They have been removed from your order. We are sorry for any inconvenience!";
+            $msg = "Please note that you have one or more item become unavailable at this time and will be removed from your cart. Do you confirm to continue checkout?";
         }else{
             $msg = "";
         }
@@ -2413,9 +2413,10 @@ class ShopAction extends BaseAction{
 	    $store_id = isset($_GET['store_id']) ? intval($_GET['store_id']) : 0;
 		$order_id = isset($_GET['order_id']) ? intval($_GET['order_id']) : 0;
 		if ($order_id && ($order = D('Shop_order')->get_order_detail(array('order_id' => $order_id, 'uid' => $this->user_session['uid'])))) {
-            $return = D('Shop_goods')->checkCart($store_id, $this->user_session['uid'], $order['info'], 0);
 
+		    $return = D('Shop_goods')->checkCart($store_id, $this->user_session['uid'], $order['info'], 0);
             $this->assign('order_id', $order_id);
+            //die("++++");
 		} else {
             $cookieData = $this->getCookieData($store_id);
             if(empty($cookieData)) {
@@ -2423,6 +2424,7 @@ class ShopAction extends BaseAction{
                 exit;
             }
             $return = D('Shop_goods')->checkCart($store_id, $this->user_session['uid'], $cookieData);
+            //var_dump($return);die("----");
 		}
 
 		if ($return['error_code']) $this->error_tips($return['msg']);
@@ -2754,6 +2756,7 @@ class ShopAction extends BaseAction{
         $this->assign('store_name',$return['store']['name']);
 
         $this->assign($return);
+        //var_dump($return);
 		$this->assign('pick_addr_id', $pick_addr_id);
 		$this->assign('pick_address', $pick_address);
 
@@ -3589,12 +3592,12 @@ class ShopAction extends BaseAction{
             }
             //------------------------------------------------------------------------------------
 
-
-
             $store = D('Merchant_store')->field(true)->where(array('store_id' => $order['store_id']))->find();
+
             $store_image_class = new store_image();
             //modify garfunkel
             $store['name'] = lang_substr($store['name'],C('DEFAULT_LANG'));
+            //var_dump($store);die();
             $images = $store_image_class->get_allImage_by_path($store['pic_info']);
             $store['image'] = isset($images[0]) ? $images[0] : '';
             cookie('shop_cart_' . $store['store_id'], null);
@@ -3611,6 +3614,7 @@ class ShopAction extends BaseAction{
             //------------------------------ 更新status等信息 ------------------------------------peter
 
             $n_status = D('Shop_order_log')->field(true)->where(array('order_id' => $order['order_id']))->order('id DESC')->find();
+            //var_dump($n_status);die();
             $add_time = 0;
             if($n_status['status'] == 33){
                 if(D('Shop_order_log')->field(true)->where(array('order_id' => $order['order_id'], 'status' => 3))->order('id DESC')->find())
@@ -3625,7 +3629,7 @@ class ShopAction extends BaseAction{
             }
             $order['statusLog'] = $n_status['status'];
             $order['statusLogName'] = D('Store')->getOrderStatusLogName($n_status['status']);
-            $order['statusDesc'] = D('Store')->getOrderStatusDesc($status['status'],$order,$status,$store['site_name'],$add_time);
+            $order['statusDesc'] = D('Store')->getOrderStatusDesc($n_status['status'],$order,$status,$store['name'],$add_time);
 
             //-------------------------------------------------------------------------------------
 
@@ -3723,6 +3727,8 @@ class ShopAction extends BaseAction{
 //             print_r($arr);die;
             $this->assign($arr);
             $this->assign('store', $store);
+            $this->assign('back_url', "../wap.php?g=Wap&c=My&a=shop_order_list");
+
             //var_dump($order);
 
             $this->display();

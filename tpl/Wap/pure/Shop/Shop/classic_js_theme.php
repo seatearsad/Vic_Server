@@ -229,7 +229,7 @@
 <script id="productFormatTpl" type="text/html">
 	{{# for(var i in d){ }}
 		<div class="row clearfix">
-			<div class="left">{{ d[i].name }}</div>
+			<div class="left">{{ d[i].name }}-SPEC</div>
 			<div class="right fl">
 				<ul>
 					{{# var k = 0; for(var j in d[i].list){ }}
@@ -243,7 +243,7 @@
 <script id="productPropertiesTpl" type="text/html">
 	{{# for(var i in d){ }}
 		<div class="row clearfix productProperties_{{ d[i].id }}" data-label_name="{{ d[i].name }}" data-num="{{ d[i].num }}">
-			<div class="left">{{ d[i].name }}</div>
+			<div class="left">{{ d[i].name }}-Propertie</div>
 			<div class="right fl">
 				<ul>
 					{{# var k = 0; for(var j in d[i].val){ }}

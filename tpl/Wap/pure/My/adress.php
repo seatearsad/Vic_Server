@@ -30,7 +30,7 @@
         }
 
         .address-wrapper {
-            border-bottom: 2px solid #e5e5e5;
+            border-bottom: 1px solid #ccc;
         }
 
         .address-wrapper a {
@@ -139,6 +139,13 @@
         input.mt[type="radio"]:checked, input.mt[type="checkbox"]:checked {
             background-color: #ffa52d;
         }
+        .space_one{
+            margin: 20px;
+            font-size: 16px;
+        }
+        dl.list_not_allow{
+            background: #e1e1e1;
+        }
     </style>
     <include file="Public:facebook"/>
 </head>
@@ -150,8 +157,8 @@
     <div class="wrapper btn-wrapper">
         <a class="address-add btn btn-larger btn-warning btn-block" href="{pigcms{:U('My/edit_adress',$_GET)}">{pigcms{:L('_ADD_NEW_ADDRESS_')}</a>
     </div>
-    <volist name="adress_list" id="vo">
-        <dl class="list <if condition=" $vo['default']">active</if>" <if condition=" $vo['is_allow'] eq 0">style="background-color:#eee" data-type="{pigcms{$vo['is_allow']}"</if>>
+    <volist name="adress_list_allow" id="vo">
+        <dl class="list"  data-type="{pigcms{$vo['is_allow']}">
         <dd class="address-wrapper <if condition=" !$vo['select_url']">dd-padding</if>">
         <if condition="$vo['select_url'] and $vo['is_allow'] eq 1">
             <a class="react" href="{pigcms{$vo.select_url}">
@@ -191,6 +198,48 @@
         </dd>
         </dl>
     </volist>
+
+    <if condition="$adress_list_not_allow">
+    <div class="space_one"> {pigcms{:L('V2_PAGETITLE_ADDRESS_ALLOW')}</div>
+    </if>
+    <volist name="adress_list_not_allow" id="vo">
+        <dl class="list list_not_allow" <if condition=" $vo['is_allow'] eq 0">style="background-color:#eee" data-type="{pigcms{$vo['is_allow']}"</if>>
+        <dd class="address-wrapper <if condition=" !$vo['select_url']">dd-padding</if>">
+        <if condition="$vo['select_url'] and $vo['is_allow'] eq '1'">
+
+                <!--                <div class="address-select"><input class="mt" type="radio" name="addr"-->
+                <!--                    <if condition="$vo['adress_id'] eq $_GET['current_id']">checked="checked"</if>-->
+                <!--                    />-->
+                <!--                </div>-->
+        </if>
+        <div class="address-container" style="margin-left:10px;">
+            <div class="kv-line">
+                <p>{pigcms{$vo.name}({pigcms{$vo.phone})</p>
+            </div>
+            <!--			                <div class="kv-line">-->
+            <!--			                    <h6>{pigcms{:L('_B_D_LOGIN_TEL_')}：</h6><p></p>-->
+            <!--			                </div>-->
+            <!--			                <div class="kv-line">-->
+            <!--			                    <h6>Unit：</h6><p>{pigcms{$vo.detail} {pigcms{$vo.city_txt}</p>-->
+            <!--			                </div>-->
+            <div class="kv-line">
+                <p>{pigcms{$vo.adress}</p>
+            </div>
+            <!--							<if condition="$vo['zipcode']">-->
+            <!--								<div class="kv-line">-->
+            <!--									<h6>{pigcms{:L('_B_PURE_MY_22_')}：</h6><p>{pigcms{$vo.zipcode}</p>-->
+            <!--								</div>-->
+            <!--							</if>-->
+        </div>
+        </dd>
+        <dd>
+            <ul class="confirmlist">
+                <li><a class="blacktext react mj-del" href="{pigcms{$vo.del_url}">{pigcms{:L('_B_PURE_MY_27_')}</a></li>
+                <li><a class="orangetext react" href="{pigcms{$vo.edit_url}">{pigcms{:L('_EDIT_TXT_')}</a></li>
+            </ul>
+        </dd>
+        </dl>
+    </volist>
     <script src="{pigcms{:C('JQUERY_FILE')}"></script>
     <script src="{pigcms{$static_path}js/jquery.cookie.js"></script>
     <script src="{pigcms{$static_path}js/common_wap.js"></script>
@@ -209,7 +258,12 @@
                 }
                 return false;
             });
+            $('.list_not_allow').click(function () {
+                alert("{pigcms{:L('V2_PAGETITLE_ADDRESS_CLICK')}");
+            });
+
             $('.address-wrapper input.mt').click(function () {
+
                 window.location.href = $(this).closest('a').attr('href');
             });
             $.cookie("user_address", '');

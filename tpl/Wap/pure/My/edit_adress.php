@@ -80,6 +80,15 @@
         input.mt[type="checkbox"]:checked{
             background-color: #ffa52d;
         }
+        .address_text{
+            display: block;
+            font-size: 16px;
+            color: #555555;
+            width: 100%;
+            background: white;
+            padding: 10px 5px 10px 8px;
+            border-radius: 5px;
+        }
     </style>
     <include file="Public:facebook"/>
 </head>
@@ -133,7 +142,15 @@
                         </label>
                     </dd-->
                     <dd class="dd-padding kv-line" id="color-gray">
-                        <i class="icon-location" data-node="icon"></i><span class="color-gray" data-node="addAddress" style="margin-left: .1rem;margin-top: -.2em;display: block;"><?php if(!empty($now_adress['adress'])): ?><?php echo $now_adress['adress']; ?><?php else : ?><img src="{pigcms{$static_path}images/location.png" style=" width:25px; height:25px"/><?php endif; ?></span> <i class="right_arrow"></i>
+                        <i class="icon-location" data-node="icon"></i>
+                        <span  class="color-gray address_text" data-node="addAddress">
+                            <?php if(!empty($now_adress['adress'])): ?>
+                                <?php echo $now_adress['adress']; ?>
+                            <?php else : ?>
+                                <span style="color:#999;"> {pigcms{:L('_B_PURE_MY_101_')}</span>
+<!--                                <img src="{pigcms{$static_path}images/location.png" style=" width:25px; height:25px"/>-->
+                            <?php endif; ?>
+                        </span> <i class="right_arrow"></i>
                         <!--div class="weaksuggestion"> {pigcms{:L('_B_PURE_MY_16_')}<i class="toptriangle"></i> </div-->
                         <!--textarea name="adress" class="input-weak kv-v" placeholder="{pigcms{:L('_B_PURE_MY_17_')}" pattern="^.{5,60}$" data-err="{pigcms{:L('_B_PURE_MY_18_')}">{pigcms{$now_adress.adress}</textarea-->
                     </dd>

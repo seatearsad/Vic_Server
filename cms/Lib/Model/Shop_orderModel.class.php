@@ -6,8 +6,8 @@ class Shop_orderModel extends Model
 
     public function __construct(){
         parent::__construct();
-
         $allList = $this->where(array('paid'=>0))->order('create_time asc')->select();
+
         $delList = array();
         $overtimeList = array();
         foreach ($allList as $order){
@@ -24,7 +24,6 @@ class Shop_orderModel extends Model
 			}
 		}
         $this->where(array('order_id'=>array('in',$overtimeList)))->save(array('status'=>6));
-
 		$this->where(array('order_id'=>array('in',$delList)))->delete();
 		D('Shop_order_detail')->where(array('order_id'=>array('in',$delList)))->delete();
     }
@@ -70,6 +69,16 @@ class Shop_orderModel extends Model
 	public function get_pay_order($uid, $order_id, $is_web = false,$is_app = false)
 	{
 		$now_order = $this->get_order_by_id($uid, $order_id);
+		$user_adress= D('User_adress')->where(array('adress_id'=>$now_order['address_id']))->find();
+        $now_order['detail']=$user_adress['detail'];
+        $now_order['detail_en']=$user_adress['detail_en'];
+
+        $shop_order= D('Shop_order')->where(array('order_id'=>$order_id))->find();
+        $now_order['desc']=$shop_order['desc'];
+        $now_order['not_touch']=$shop_order['not_touch'];
+        //var_dump($now_order);die();echo"----------";
+		//var_dump($detail);die();
+
 		if(empty($now_order)){
 			return array('error'=>1,'msg'=>'当前订单不存在！');
 		}
@@ -130,6 +139,12 @@ class Shop_orderModel extends Model
 			}
 			break;
 		}
+		if ($now_order['not_touch']==1) {
+			$not_touch_checked="checked";
+		}else{
+            $not_touch_checked="";
+		}
+
 		if ($is_web) {
 			$order_info = array(
 					'order_id'			=>	$now_order['order_id'],
@@ -160,6 +175,12 @@ class Shop_orderModel extends Model
 					'username'          =>  $now_order['username'],
 					'phone'             =>  $now_order['userphone'],
 					'address'           =>  $now_order['address'],
+                	'address_id'		=>  $now_order['address_id'],
+					'address_detail'    =>  $now_order['detail'],
+				    'address_detail_en' =>  $now_order['detail_en'],
+                	'desc' 				=>  $now_order['desc'],
+					'not_touch'			=>  $now_order['not_touch'],
+                    'not_touch_checked' =>  $not_touch_checked,
 					'delivery_discount'	=>	$now_order['delivery_discount'],
                 	'delivery_discount_type'	=>	$now_order['delivery_discount_type'],
 					'create_time'		=>	$now_order['create_time'],
@@ -199,7 +220,13 @@ class Shop_orderModel extends Model
                 'deposit_price'		=>	$deposit_price,
                 'username'          =>  $now_order['username'],
                 'phone'             =>  $now_order['userphone'],
+                'address_id'		=>  $now_order['address_id'],
                 'address'           =>  $now_order['address'],
+                'address_detail'    =>  $now_order['detail'],
+                'address_detail_en' =>  $now_order['detail_en'],
+                'desc' 				=>  $now_order['desc'],
+                'not_touch'			=>  $now_order['not_touch'],
+                'not_touch_checked' =>  $not_touch_checked,
 				'delivery_discount'	=>	$now_order['delivery_discount'],
                 'delivery_discount_type'	=>	$now_order['delivery_discount_type'],
                 'create_time'		=>	$now_order['create_time'],
@@ -209,6 +236,7 @@ class Shop_orderModel extends Model
                 'store_service_fee' =>	$merchant_store['service_fee']
 			);
 		}
+        //var_dump($order_info);
 		return array('error' => 0, 'order_info' => $order_info);
 	}
 
@@ -1213,6 +1241,8 @@ class Shop_orderModel extends Model
 		$order = $this->field(true)->where($where)->find();
 		if (empty($order)) return false;
 		$order['info'] = D('Shop_order_detail')->field(true)->where(array('order_id' => $order['order_id']))->select();
+		$rs=D('Merchant_store')->field(true)->where(array('store_id' => $order['store_id']))->find();
+		$order['site_name']=lang_substr($rs['name'],C('DEFAULT_LANG'));
 		$order['cue_field'] = isset($order['cue_field']) && $order['cue_field'] ? unserialize($order['cue_field']) : '';
 		if ($order['discount_detail'] && @unserialize($order['discount_detail'])) {
 		    $order['discount_detail'] = unserialize($order['discount_detail']);

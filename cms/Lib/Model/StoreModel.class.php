@@ -965,7 +965,12 @@ class StoreModel extends Model
 
     public function getOrderStatusDesc($status,$order,$log,$storeName,$add_time=0){
         $desc = "";
+//        echo $status;
+//        echo "--------------";
+//        echo $storeName;
+//        die();
         if($status == 0 || $status == 1){
+
             $desc = replace_lang_str(L('V3_CONFIRMINGSUB'),$storeName);
         }
 

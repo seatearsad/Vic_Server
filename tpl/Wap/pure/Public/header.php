@@ -468,7 +468,7 @@
             <if condition="ACTION_NAME == 'adress'">
                 <div class="this_header">
                     <span id="back_button_span"></span>
-                    {pigcms{:L('V2_PAGETITLE_ADDRESS')}
+                    {pigcms{$page_title}
                 </div>
             </if>
             <if condition="ACTION_NAME == 'edit_adress' && $address_id==''">

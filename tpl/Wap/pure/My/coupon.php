@@ -39,8 +39,11 @@
             background-color: #f4f4f4;
             margin: -2px auto 0 auto;
         }
+        .Coupon_sm {
+            z-index: 99;
+        }
         .main ul{
-            margin: 0px 0 0;
+            margin: 0px 0 60px;
             width: 100%;
         }
         .main ul li{
@@ -142,7 +145,7 @@
             <div>Available Coupon</div>
         </div>
         <ul class="end_ul">
-            <if condition="$coupon">
+                <volist name="coupon_list" id="coupon">
                 <dl class="Muse">
                     <dd>
                         <div class="Coupon_top clr">
@@ -167,19 +170,16 @@
                         <div class="Coupon_end">
                             <div class="Coupon_x">
                                 <i>{pigcms{$coupon.start_time|date='Y.m.d',###}--{pigcms{$coupon.end_time|date='Y.m.d',###}</i>
-                                <a href="{pigcms{$coupon.url}"><em>{pigcms{:L('_IMMEDIATE_USE_')}</em></a>
+<!--                                <a href="{pigcms{$coupon.url}"><em>{pigcms{:L('_IMMEDIATE_USE_')}</em></a>-->
                             </div>
                             <div class="Coupon_sm">
                                 <span class="on">{pigcms{:L('_INSTRUCTIONS_TXT_')}</span>
                                 <div class="Coupon_text overflow">{pigcms{$coupon.des}</div>
                             </div>
                         </div>
-                        <span class="several">{pigcms{$coupon.get_num}</span>
-                        <i class="bj"></i>
                     </dd>
                 </dl>
-            </if>
-
+                </volist>
         </ul>
     </div>
     <include file="Public:footer"/>

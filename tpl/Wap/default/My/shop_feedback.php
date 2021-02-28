@@ -14,7 +14,7 @@
 <script src="{pigcms{$static_path}layer/layer.m.js"></script>
 <title>{pigcms{:L('_B_MY_COMMENT_')}</title>
 </head>
-<body class=" hPC" style="padding-bottom: initial; background:#f4f4f4;">
+<body class=" hPC" style="max-width:640px;padding-bottom: initial; background:#f4f4f4;">
 <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/lib_5e96991.css">
 <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/style_dd39d16.css">
 <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/lib_3a812b5.css">
@@ -24,6 +24,7 @@
     .comment-btn,
     #widget-shopcomment-add .add-list .add-list-span .select{
         background: #ffa52d;
+        max-width:640px;
     }
     .clearfix {
         display: inline-table;
@@ -84,7 +85,7 @@
                 <div id="widget-shopcomment-add">
                     <div class="gradecon" id="Addnewskill_119">
                         <ul class="rev_pro clearfix">
-                            <li class="clearfix"> <div class="review_title">{pigcms{:L('V3_ORDER_REVIEW_DELIVERY')}</div>
+                            <li class="clearfix"> <div class="review_title">{pigcms{$c_title}</div>
                                 <div class="revinp">
                                 	<span class="level send" id="star_send">
                                 		<i class="level_solid" cjmark=""></i> 
@@ -103,7 +104,7 @@
                         </ul>
                         <div style="height: 15px"></div>
                         <ul class="rev_pro clearfix">
-                            <li class="clearfix"> <div class="review_title">{pigcms{:L('V3_ORDER_REVIEW_STORE')}</div>
+                            <li class="clearfix"> <div class="review_title">{pigcms{$s_title}</div>
                                 <div class="revinp">
                                 	<span class="level whole" id="star_whole">
                                 		<i class="level_solid" cjmark=""></i>

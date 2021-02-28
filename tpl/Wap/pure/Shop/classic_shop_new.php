@@ -15,7 +15,7 @@
 		<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
 		<meta name="format-detection" content="telephone=no"/>
 		<meta name="format-detection" content="address=no"/>
-		<link rel="stylesheet" type="text/css" href="{pigcms{$static_path}shop/css/shopBase.css?v=1.6"/>
+		<link rel="stylesheet" type="text/css" href="{pigcms{$static_path}shop/css/shopBase.css?v=1.7"/>
 <!--		<script type="text/javascript" src="{pigcms{:C('JQUERY_FILE_190')}" charset="utf-8"></script>-->
         <script type="text/javascript" src="{pigcms{$static_path}js/jquery.min.js" charset="utf-8"></script>
 		<script type="text/javascript" src="{pigcms{$static_path}js/iscroll.js?220" charset="utf-8"></script>
@@ -86,6 +86,7 @@
                 margin-left: 0px;
                 margin-top: 3px;
                 margin-bottom:0px;
+                margin-right: 50px;
                 font-size: 24px;
                 color: #000000;
                 overflow:hidden;
@@ -94,10 +95,15 @@
                 flex:1 1 100%
             }
             #shopTitle_Header{
-                opacity: 0;
+                opacity: 1;
                 margin-left: 60px;
                 margin-top: 5px;
                 font-size: 22px;
+                padding-right: 50px;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+                width: -moz-available;
             }
             #deliveryText{
                 margin-bottom: 5px;
@@ -311,7 +317,6 @@
                 color: #000;
             }
 
-
             #shopProductCart #cartNumber,
             #shopProductCart #cartInfo .cart,
             #shopProductCart #checkCart,
@@ -335,6 +340,7 @@
                 border-color: none;
                 color: #ffa52d;
             }
+
             #shopReplyBox .star{
                 float: right;
             }
@@ -454,6 +460,16 @@
             }
             .swiper-container{
                 margin-top: 50px;
+            }
+            .add_bold{
+                font-weight: bold;
+                line-height: 15px;
+                margin-top: 8px;
+                font-size: 16px;
+            }
+            .add_grey{
+                color: #8A8A8A;
+                font-size: 14px;
             }
         </style>
 	<body onscroll="scrollProductEvent(1)">
@@ -588,7 +604,7 @@
 					<div id="shopProductCartBox"></div>
 					<div id="shopProductCart">
 						<div id="cartInfo" class="cartLeft" style="display:none;">
-							<div class="cart">
+							<div id="cartBox" class="cart">
 								<div id="cartNumber">0</div>
 							</div>
 							<div class="price">

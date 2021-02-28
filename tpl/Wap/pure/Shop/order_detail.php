@@ -212,7 +212,7 @@
 <!--        <div class="header_active">{pigcms{:L('_ORDER_INFO_TXT_')}</div>-->
 <!--    </div>-->
 <section class="g_details">
-    <if condition="$order.status eq 1 AND $order.deliver_lng neq null AND $order.deliver_lat neq null">
+    <if condition="$order.status eq 2 AND $order.deliver_lng neq null AND $order.deliver_lat neq null">
         <div class="map_infor" id="web_map"></div>
     <else />
         <div class="bg_infor"><img src="{pigcms{$store['image']}"> </div>

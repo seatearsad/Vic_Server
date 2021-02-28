@@ -47,7 +47,7 @@
     <else/>
         <script type="text/javascript">
             var location_url = '{pigcms{$url}', wxscan='{pigcms{$_GET["wxscan"]}', is_wexin_browser = '{pigcms{$is_wexin_browser}';
-            layer.open({content:'{pigcms{$msg}',btn: ['Okey'],end:function(){
+            layer.open({content:'{pigcms{$msg}',btn: ['Okay'],end:function(){
                 if (wxscan == 1 && is_wexin_browser) {
                 	wx.closeWindow();
                 } else {

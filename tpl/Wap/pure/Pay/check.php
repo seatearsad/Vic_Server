@@ -586,7 +586,9 @@
                                 'coupon_id':$('input[name="coupon_id"]').val(),
                                 'tip':$('#tip_num').text().replace('$', ""),
                                 'order_type':"{pigcms{$order_info.order_type}",
-                                'note':$('input[name="note"]').val(),
+                                'note':$('textarea[name="note"]').val(),
+                                'address_detail':$('textarea[name="address_detail"]').val(),
+                                'address_id':$('input[name="address_id"]').val(),
                                 'est_time':$('#est_time_input').val(),
                                 'cvd':$('#cvd').val(),
                                 'delivery_discount':delivery_discount,
@@ -632,13 +634,16 @@
                                 'coupon_id':$('input[name="coupon_id"]').val(),
                                 'tip':$('#tip_num').text().replace('$', ""),
                                 'order_type':"{pigcms{$order_info.order_type}",
-                                'note':$('input[name="note"]').val(),
+                                'note':$('textarea[name="note"]').val(),
+                                'address_detail':$('textarea[name="address_detail"]').val(),
+                                'address_id':$('input[name="address_id"]').val(),
                                 'est_time':$('#est_time_input').val(),
                                 'delivery_discount':delivery_discount,
                                 'not_touch':$('input[name="not_touch"]:checked').val(),
                                 'merchant_reduce':merchant_reduce,
                                 'service_fee':service_fee
                             };
+                            //alert($('input[name="not_touch"]:checked').val());
                             var card_stauts = "{pigcms{$card['status']}";
                             if(card_stauts == 0){
                                 var old_cvd = $('input[name="old_cvd"]').val();
@@ -703,13 +708,16 @@
                         'tip':$('#tip_num').text().replace('$', ""),
                         'order_type':"{pigcms{$order_info.order_type}",
                         'pay_type':pay_type,
-                        'note':$('input[name="note"]').val(),
+                        'note':$('textarea[name="note"]').val(),
+                        'address_detail':$('textarea[name="address_detail"]').val(),
+                        'address_id':$('input[name="address_id"]').val(),
                         'est_time':$('#est_time_input').val(),
                         'delivery_discount':delivery_discount,
                         'not_touch':$('input[name="not_touch"]:checked').val(),
                         'merchant_reduce':merchant_reduce,
                         'service_fee':service_fee
                     };
+
                     $.post('{pigcms{:U("Pay/WeixinAndAli")}',re_data,function(data){
                         layer.closeAll();
                         //success
@@ -1121,18 +1129,48 @@
 <include file="Public:header"/>
 <div class="wrapper-list">
     <if condition="$order_info['order_type'] != 'recharge'">
+    <form action="{pigcms{:U('Index/Pay/MonerisPay')}" method="post" id="moneris_form">
+        <INPUT TYPE="HIDDEN" NAME="ps_store_id" VALUE="">
+        <INPUT TYPE="HIDDEN" NAME="hpp_key" VALUE="">
+        <INPUT TYPE="HIDDEN" NAME="charge_total" VALUE="">
+        <input type="hidden" name="cust_id" value="{pigcms{:md5($order_info.uid)}">
+        <input type="hidden" name="order_id" value="vicisland_{pigcms{$order_info.order_id}">
+        <input type="hidden" name="rvarwap" value="1">
+        <input type="hidden" name="credit_id" value="{pigcms{$card['id']}">
+    </form>
+    <form action="/source{pigcms{:U('Pay/go_pay',array('showwxpaytitle1'=>1))}" method="POST" id="pay-form" class="pay-form" >
+        <input type="hidden" name="order_id" value="{pigcms{$order_info.order_id}"/>
+        <input type="hidden" name="order_type" value="{pigcms{$order_info.order_type}"/>
+        <input type="hidden" name="card_id" value="{pigcms{$card_coupon.id}"/>
+        <input type="hidden" name="coupon_id" value="{pigcms{$system_coupon.id}"/>
+        <input type="hidden" name="use_score" value="0"/>
+        <input type="hidden" id="address_id" name="address_id" value="{pigcms{$order_info['address_id']}" >
+        <input type="hidden" name="use_balance" <if condition="$order_info['order_type'] eq 'recharge' OR $now_user['now_money'] eq 0 OR  ($order_info['order_type'] eq 'plat' && !$order_info['pay_system_balance'])">value="1"<else /> value="0" </if>/>
+        <input type="hidden" name="score_used_count" value="{pigcms{$score_can_use_count}">
+        <input type="hidden" name="score_deducte" value="{pigcms{$score_deducte}">
+        <input type="hidden" name="score_count" value="{pigcms{$score_count}">
+        <input type="hidden" name="use_merchant_balance" <if condition="$order_info['order_type'] eq 'recharge' OR $merchant_blance eq 0 OR ($order_info['order_type'] eq 'plat' && !$order_info['pay_merchant_balance'])">value="1"<else /> value="0" </if>>
+        <input type="hidden" name="merchant_balance" value="{pigcms{$merchant_balance}">
+        <input type="hidden" name="balance_money" value="{pigcms{$now_user.now_money}">
+        <input type="hidden" name="tip" value="">
+        <input type="hidden" name="delivery_discount" value="{pigcms{$order_info.delivery_discount}">
+        <input type="hidden" name="merchant_reduce" value="{pigcms{$order_info.merchant_reduce}">
+        <input type="hidden" name="service_fee" value="{pigcms{$order_info.service_fee}">
     <div class="user_address">
         <div class="div_title">{pigcms{:L('_C_DELIVERY_ADDRESS_')}</div>
 <!--        <a href="{pigcms{:U('My/adress',array('buy_type' => 'check', 'store_id'=>$order_info['store_id'], 'village_id'=>$village_id, 'mer_id' => $store['mer_id'], 'frm' => $_GET['frm'], 'current_id'=>$user_adress['adress_id'], 'order_id' => $order_id))}">-->
-            <div class="div_content">{pigcms{$order_info['username']}({pigcms{$order_info['phone']})<br/>{pigcms{$order_info['address']}</div>
+            <div class="div_content">{pigcms{$order_info['username']}&nbsp;({pigcms{$order_info['phone']})<br/>{pigcms{$order_info['address']}</div>
 <!--        </a>-->
         <if condition="$not_touch['status'] eq 1">
             <div class="touch_tip">
                 <div style="font-weight: bold;"><input type="hidden" name="est_time" id="est_time_input">
-                    <input type="checkbox" class="mt" value="1" name="not_touch" style="border-radius: 0;width: .40rem;height: .40rem;line-height: .40rem;">
+                    <input type="checkbox" class="mt" value="1" name="not_touch"  style="border-radius: 0;width: .40rem;height: .40rem;line-height: .40rem;"  {pigcms{$order_info['not_touch_checked']}>
                     {pigcms{$not_touch.title}
                 </div>
 <!--                <div style="margin-top: 8px;color: #999999">{pigcms{$not_touch.content}</div>-->
+            </div>
+            <div class="note_div">
+                <textarea type="text" name="address_detail" class="note_input" placeholder="{pigcms{:L('V3_DELIVER_NOTES')}">{pigcms{$order_info['address_detail']}</textarea>
             </div>
         </if>
 <!--        <div class="note_title">{pigcms{:L('V3_DELIVER_NOTES_TITLE')}</div>-->
@@ -1160,39 +1198,11 @@
         </volist>
         <div class="note_title">{pigcms{:L('V3_SHOP_NOTES_TITLE')}</div>
         <div class="note_div">
-            <textarea type="text" name="note" class="note_input" placeholder="{pigcms{:L('V3_SHOP_NOTES')}"></textarea>
+            <textarea type="text" name="note" class="note_input" placeholder="{pigcms{:L('V3_SHOP_NOTES')}">{pigcms{$order_info['desc']}</textarea>
         </div>
     </dl>
-
-    <form action="{pigcms{:U('Index/Pay/MonerisPay')}" method="post" id="moneris_form">
-        <INPUT TYPE="HIDDEN" NAME="ps_store_id" VALUE="">
-        <INPUT TYPE="HIDDEN" NAME="hpp_key" VALUE="">
-        <INPUT TYPE="HIDDEN" NAME="charge_total" VALUE="">
-        <input type="hidden" name="cust_id" value="{pigcms{:md5($order_info.uid)}">
-        <input type="hidden" name="order_id" value="vicisland_{pigcms{$order_info.order_id}">
-        <input type="hidden" name="rvarwap" value="1">
-        <input type="hidden" name="credit_id" value="{pigcms{$card['id']}">
-    </form>
-    <form action="/source{pigcms{:U('Pay/go_pay',array('showwxpaytitle1'=>1))}" method="POST" id="pay-form" class="pay-form" >
-        <input type="hidden" name="order_id" value="{pigcms{$order_info.order_id}"/>
-        <input type="hidden" name="order_type" value="{pigcms{$order_info.order_type}"/>
-        <input type="hidden" name="card_id" value="{pigcms{$card_coupon.id}"/>
-        <input type="hidden" name="coupon_id" value="{pigcms{$system_coupon.id}"/>
-        <input type="hidden" name="use_score" value="0"/>
-        <input type="hidden" name="use_balance" <if condition="$order_info['order_type'] eq 'recharge' OR $now_user['now_money'] eq 0 OR  ($order_info['order_type'] eq 'plat' && !$order_info['pay_system_balance'])">value="1"<else /> value="0" </if>/>
-        <input type="hidden" name="score_used_count" value="{pigcms{$score_can_use_count}">
-        <input type="hidden" name="score_deducte" value="{pigcms{$score_deducte}">
-        <input type="hidden" name="score_count" value="{pigcms{$score_count}">
-        <input type="hidden" name="use_merchant_balance" <if condition="$order_info['order_type'] eq 'recharge' OR $merchant_blance eq 0 OR ($order_info['order_type'] eq 'plat' && !$order_info['pay_merchant_balance'])">value="1"<else /> value="0" </if>>
-        <input type="hidden" name="merchant_balance" value="{pigcms{$merchant_balance}">
-        <input type="hidden" name="balance_money" value="{pigcms{$now_user.now_money}">
-        <input type="hidden" name="tip" value="">
-        <input type="hidden" name="delivery_discount" value="{pigcms{$order_info.delivery_discount}">
-        <input type="hidden" name="merchant_reduce" value="{pigcms{$order_info.merchant_reduce}">
-        <input type="hidden" name="service_fee" value="{pigcms{$order_info.service_fee}">
         <if condition="$order_info['order_type'] != 'recharge'">
         <div class="all_list">
-
 
         </div>
         <div class="all_list">
@@ -1323,7 +1333,7 @@
                                 </span>
                             </div>
                             <div id="tip_input">
-                                $ <input type="text" id="tip_fee" name="tip_fee" size="20">
+                                $ <input type="text" id="tip_fee" name="tip_fee" size="20" value="{pigcms{$order_info['tip_charge']}">
                             </div>
                             <span class="tip_more"></span>
                         </div>
@@ -1378,7 +1388,7 @@
         </div>
         <div id="agree_div">
             <input type="checkbox" name="is_agree" class="form-field" id="is_agree" value="1" checked="checked"/>
-            By clicking the box,you are agree with
+            By clicking this checkbox, you agree to our
             <a href="./intro/5.html" target="_blank">Terms of Use</a> and <a href="./intro/2.html" target="_blank">Privacy Policy</a>
         </div>
         <div style="text-align: center; color: #ffa52d; margin-bottom: -10px" id="count_down"></div>
@@ -1429,6 +1439,10 @@
             $('.confirm_btn').css('background-color', '#666666');
             $('.confirm_btn').unbind();
         }
+        <if condition="$order_info['tip_charge'] neq 0">
+            $('#tip_list').hide();
+        $('#tip_input').show();
+            </if>
     });
 
     $('input[name="is_agree"]').click(function () {

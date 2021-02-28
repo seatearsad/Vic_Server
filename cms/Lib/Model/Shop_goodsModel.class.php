@@ -1575,7 +1575,7 @@ class Shop_goodsModel extends Model
 
 
         if ($is_open == 0) {
-            return array('error_code' => true, 'msg' => '店铺休息中');
+            return array('error_code' => true, 'msg' => L('_STORE_IS_CLOSE_'));
         }
         
         $store_shop = D("Merchant_store_shop")->field(true)->where(array('store_id' => $store_id))->find();
@@ -1702,7 +1702,7 @@ class Shop_goodsModel extends Model
                     'extra_price' => $row['extra_price']
                 );
             }
-        } elseif ($isCookie == 1) {
+        } elseif ($isCookie == 1) { //wap走的这里
             
             if ($address_id) {
                 $user_adress = D('User_adress')->get_one_adress($uid, $address_id);
@@ -1864,7 +1864,8 @@ class Shop_goodsModel extends Model
                 $str_s && $str = implode(',', $str_s);
                 $str_p && $str = $str ? $str . ';' . implode(',', $str_p) : implode(',', $str_p);
                 $str_d && $str = $str ? $str . ';' . implode(',',$str_d) : implode(',',$str_d);
-
+                //echo $str."----------";
+                $str=str_replace(",","<br/>",$str);
                 $goods[] = array(
                     'name' => $row['productName'],
                     'is_seckill_price' => $t_return['is_seckill_price'],//是否是秒杀价(0:否，1：是)

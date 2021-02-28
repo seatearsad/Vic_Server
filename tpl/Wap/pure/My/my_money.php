@@ -104,6 +104,27 @@
             width: 90%;
             margin-left: 5%;
         }
+        blance_title {
+            line-height: 22px;
+            font-weight: bold;
+        }
+        .blance_line{
+            line-height: 20px;
+        }
+        a {
+            color: #ffa52d;
+        }
+        input.input-radius {
+            flex: 1 1 100%;
+            border: 0;
+            word-wrap: break-word;
+            height: .9rem;
+            margin: 0rem 0;
+            text-indent: 0.2rem;
+            line-height: 1;
+            font-size: 16px;
+            border-radius: 10px 0px 0px 10px;
+        }
 	</style>
         <include file="Public:facebook"/>
 </head>
@@ -130,11 +151,11 @@
         <div class="div_outer">
 <!--            <p class="btn-wrapper">{pigcms{:L('_AMOUNT_TWO_DEC_')}</p>-->
             <div class="btn-wrapper">
-                <div>{pigcms{:L('Balance_pro')}：</div>
+                <div class="blance_title">{pigcms{:L('Balance_pro')}：</div>
                 <php>
                     foreach($recharge_list as $k=>$v){
                 </php>
-                <div>
+                <div class="blance_line">
                     <php>
                         echo L('Deposit_txt')." $".$k.' '.L('Earn_txt')." $".$v;
                     </php>

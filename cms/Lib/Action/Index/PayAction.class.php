@@ -1066,7 +1066,7 @@ class PayAction extends BaseAction{
         }
     }
 
-    //信用卡支付使用的是 Index 下的PayAction.class.php
+    //信用卡支付使用的是 Index 下的 PayAction.class.php
     public function MonerisPay(){
 
         import('@.ORG.pay.MonerisPay');
