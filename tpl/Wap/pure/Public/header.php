@@ -396,6 +396,7 @@
 <div id="tutti_header">
     <div id="header_menu">
         <if condition="MODULE_NAME == 'Home'">
+            <php>setcookie("path_from_home",1);</php>
             <div class="local_div" data-url="{pigcms{:U('Home/address')}"></div>
             <div class="header_search home_style"></div>
             <div id="header_address_div"></div>
@@ -408,6 +409,7 @@
                 </div>
             </if>
             <if condition="ACTION_NAME == 'order_detail'">
+                <php>setcookie("path_from_home",0);</php>
                 <div class="this_header">
                     <span id="back_button_span"></span>
                     {pigcms{:L('_ORDER_DETAIL_')}
@@ -442,6 +444,7 @@
                 </div>
             </if>
             <if condition="ACTION_NAME == 'shop_order_list'">
+                <php>setcookie("path_from_home",0);</php>
                 <div class="this_header">
                     {pigcms{:L('V3_ORDER_LIST_TITLE')}
                     <div class="header_search"></div>

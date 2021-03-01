@@ -1333,7 +1333,12 @@
                                 </span>
                             </div>
                             <div id="tip_input">
-                                $ <input type="text" id="tip_fee" name="tip_fee" size="20" value="{pigcms{$order_info['tip_charge']}">
+                                <if condition="$order_info['tip_charge'] gt 0">
+                                    $ <input type="text" id="tip_fee" name="tip_fee" size="20" value="{pigcms{$order_info['tip_charge']}">
+                                <else/>
+                                    $ <input type="text" id="tip_fee" name="tip_fee" size="20" value="">
+                                </if>
+
                             </div>
                             <span class="tip_more"></span>
                         </div>
@@ -1441,8 +1446,8 @@
         }
         <if condition="$order_info['tip_charge'] neq 0">
             $('#tip_list').hide();
-        $('#tip_input').show();
-            </if>
+            $('#tip_input').show();
+        </if>
     });
 
     $('input[name="is_agree"]').click(function () {
@@ -1560,7 +1565,7 @@
     //计算小费
     function CalTip(){
         var tipNum = 0;
-
+        console.log("=======================CalTip");
         var num = $('#tip_fee').val();
         if(/^\d+(\.\d{1,2})?$/.test(num) && num != ""){
             tipNum = parseFloat(num);

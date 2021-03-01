@@ -2585,6 +2585,9 @@ class PayAction extends BaseAction{
         if($_POST['not_touch'] != null && $_POST['not_touch'] == 1){
             D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->save(array('not_touch'=>1));
         }
+        if($_POST['tip'] != null) {
+            D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->save(array('tip_charge'=>$_POST['tip']));
+        }
 
         $this->Save_order_desc($_POST['note'],$order_id);
         $this->Save_user_address_detail($_POST['address_detail'],$address_id);

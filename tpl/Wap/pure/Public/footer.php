@@ -45,15 +45,15 @@
 			</li>
 		</ul>
     </if>
-    <div style="position: fixed;top: 500px;left:0px;z-index:100000;font-size: 8px;background: #ff2c4c;">googletagmanager已关闭</div>
-<!--    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-123655278-1"></script>-->
-<!--    <script>-->
-<!--        window.dataLayer = window.dataLayer || [];-->
-<!--        function gtag(){dataLayer.push(arguments);}-->
-<!--        gtag('js', new Date());-->
-<!---->
-<!--        gtag('config', 'UA-123655278-1');-->
-<!--    </script>-->
+<!--    <div style="position: fixed;top: 500px;left:0px;z-index:100000;font-size: 8px;background: #ff2c4c;">googletagmanager已关闭</div>-->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-123655278-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-123655278-1');
+    </script>
 	</footer>
 <elseif condition="!$is_app_browser && empty($no_small_footer) && $merchant_link_showOther"/>
 	<div class="wx_aside more_active" id="quckArea">

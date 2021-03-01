@@ -13,7 +13,7 @@
                 <div class="dealcard-block-right">
                     <div class="">{{d[i].num}} Items(s)</div>
                     <div>{{d[i].create_time_show}}</div>
-                    <div class="total_price">${{d[i].price}}</div>
+                    <div class="total_price">${{d[i].real_total_price}}</div>
                 </div>
                 <div class="go_btn">
                 </div>
@@ -29,7 +29,7 @@
                         {{# if (d[i].statusLog>6) { }}
                             <div class="button_block">
             <!--                    <div class="round_button">Reorder</div>-->
-                                <div class="img_ratings" style="width:{{ d[i].num*16 }}px;"></div>
+                                <div class="img_ratings" style="width:{{ d[i].rate_score*16 }}px;"></div>
                                 <div class="status_str">{{ d[i].statusLogName }}</div>
                             </div>
                         {{# }else{ }}

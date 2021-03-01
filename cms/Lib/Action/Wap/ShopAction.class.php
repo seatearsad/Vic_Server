@@ -1079,6 +1079,26 @@ class ShopAction extends BaseAction{
         if($row['store_is_close'] != 0){
             $row = checkAutoOpen($row);
         }
+        //获得配送时间列表
+        $time_list = array();
+        for ($i = 0;$i < 21;++$i){
+            $this_num = $i + 1;
+            if ($row['open_'.$this_num] != '00:00:00' || $row['close_'.$this_num] != '00:00:00'){
+                $open_time[$i] = substr($row['open_'.$this_num], 0, -3) . '-' . substr($row['close_'.$this_num], 0, -3);
+            }else{
+                $open_time[$i] = "";
+            }
+
+            $day_num = $i/3;
+            if($time_list[$day_num] == ""){
+                $time_list[$day_num] = $open_time[$i];
+            }else{
+                if($open_time[$i] != "")
+                    $time_list[$day_num] .= ", ".$open_time[$i];
+            }
+        }
+
+        $store['open_list'] = $time_list;
         //@wangchuanyuan 周一到周天
         $date = date("w");//今天是星期几 @ydhl-wangchuanyuan 20171106
         switch ($date){
@@ -3618,10 +3638,10 @@ class ShopAction extends BaseAction{
             $add_time = 0;
             if($n_status['status'] == 33){
                 if(D('Shop_order_log')->field(true)->where(array('order_id' => $order['order_id'], 'status' => 3))->order('id DESC')->find())
-                    $status['status'] = 3;
+                    $n_status['status'] = 3;
                 else
-                    $status['status'] = 2;
-                $add_time = $status['note'];
+                    $n_status['status'] = 2;
+                $add_time = $n_status['note'];
             }else {
                 if ($add_time_log = D('Shop_order_log')->field(true)->where(array('order_id' => $order['order_id'], 'status' => 33))->order('id DESC')->find()) {
                     $add_time = $add_time_log['note'];
@@ -3629,8 +3649,8 @@ class ShopAction extends BaseAction{
             }
             $order['statusLog'] = $n_status['status'];
             $order['statusLogName'] = D('Store')->getOrderStatusLogName($n_status['status']);
-            $order['statusDesc'] = D('Store')->getOrderStatusDesc($n_status['status'],$order,$status,$store['name'],$add_time);
-
+            $order['statusDesc'] = D('Store')->getOrderStatusDesc($n_status['status'],$order,0,$store['name'],$add_time);
+            //var_dump($order['statusDesc']);die();
             //-------------------------------------------------------------------------------------
 
             if($order['pay_type'] == 'offline' && empty($order['third_id'])){

@@ -15,7 +15,7 @@
 		<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
 		<meta name="format-detection" content="telephone=no"/>
 		<meta name="format-detection" content="address=no"/>
-		<link rel="stylesheet" type="text/css" href="{pigcms{$static_path}shop/css/shopBase.css?v=1.7"/>
+		<link rel="stylesheet" type="text/css" href="{pigcms{$static_path}shop/css/shopBase.css?v=1.92"/>
 <!--		<script type="text/javascript" src="{pigcms{:C('JQUERY_FILE_190')}" charset="utf-8"></script>-->
         <script type="text/javascript" src="{pigcms{$static_path}js/jquery.min.js" charset="utf-8"></script>
 		<script type="text/javascript" src="{pigcms{$static_path}js/iscroll.js?220" charset="utf-8"></script>
@@ -439,6 +439,7 @@
             }
             #shopMerchantBox dl {
                 margin-top: 0px;
+                background: unset;
             }
             /*#div_space::before {  content: ' ';*/
                 /*position: fixed;*/
@@ -471,11 +472,42 @@
                 color: #8A8A8A;
                 font-size: 14px;
             }
+            .caret{
+                font-weight: bold;
+                font-size: 16px;
+            }
+            .div_block{
+                margin: 20px 5px;
+                padding: 5px 10px;
+                background: white;
+                border-radius: 10px;
+            }
+            .box_title{
+                font-weight: bold;
+            }
+            .box_left_title{
+                width: 80px;
+                font-size: 14px;
+                display: inline-block;
+                text-align: right;
+            }
+            .box_right_content{
+                display: inline;
+                font-size: 14px;
+                max-width: 190px;
+            }
+            #shopMerchantBox dd {
+                padding: 12px 20px 12px 5px;
+                border-bottom: 1px solid #f1f1f1;
+                color: #333;
+                position: relative;
+                display: flex;
+            }
         </style>
 	<body onscroll="scrollProductEvent(1)">
-    <div id="debug" style="position: fixed;color:red;width:auto;height: 40px;left:30px;top:200px;z-index: 1000000;background: white">Debug</div>
+<!--    <div id="debug" style="position: fixed;color:red;width:auto;height: 40px;left:30px;top:200px;z-index: 1000000;background: white">Debug</div>-->
     <div id="debug2" style="position: fixed;color:red;width:auto;height: 40px;left:30px;top:220px;z-index: 1000000;background: white"></div>
-    <div id="container" >
+    <div id="container">
 		<div id="pageList" class="pageDiv" <if condition="$config['shop_show_footer']">style="padding-bottom:56px;"</if>>
 			<section id="listHeader" class="roundBg">
 				<div id="listBackBtn" class="listBackBtn hide"><div></div></div>
@@ -631,24 +663,36 @@
 						<div id="showMoreReply">{pigcms{:L('_LOAD_MORE_')}</div>
 					</div>
 				</div>
-				<div id="shopMerchantBox"  style="display:none">
+				<div id="shopMerchantBox"  style="display:none;background: unset">
 					<dl id="shopMerchantDescBox">
-						<dd class="phone more">{pigcms{:L('_SHOP_PHONE_')}</dd>
-						<dd class="address more"><span></span>{pigcms{:L('_SHOP_ADDRESS_')}</dd>
-						<dd class="openTime">{pigcms{:L('_BUSINESS_TIME_')}</dd>
+                        <div class="div_block">
+                            <dd class="box_title">{pigcms{:L('_SHOP_BOX_TITLE_')}</dd>
+                            <dd class="more"><span class="box_left_title">{pigcms{:L('_SHOP_PHONE_')}:&nbsp;</span><span class="phone box_right_content"></span></dd>
+						    <dd class="more"><span class="box_left_title">{pigcms{:L('_SHOP_ADDRESS_')}:&nbsp; </span><span class="address box_right_content"></span></dd>
+                        </div>
+                        <div class="div_block">
+                        <dd class="box_title">{pigcms{:L('_TIME_BOX_TITLE_')}</dd>
+						    <dd class=""><span class="box_left_title">{pigcms{:L('_STORE_MONDAY_')}: &nbsp;</span><span class="w1 box_right_content"></span></dd>
+                            <dd class=""><span class="box_left_title">{pigcms{:L('_STORE_TUESDAY_')}: &nbsp;</span><span class="w2 box_right_content"></span></dd>
+                            <dd class=""><span class="box_left_title">{pigcms{:L('_STORE_WEDNESDAY_')}: &nbsp;</span><span class="w3 box_right_content"></span></dd>
+                            <dd class=""><span class="box_left_title">{pigcms{:L('_STORE_THURSDAY_')}: &nbsp;</span><span class="w4 box_right_content"></span></dd>
+                            <dd class=""><span class="box_left_title">{pigcms{:L('_STORE_FRIDAY_')}: &nbsp;</span><span class="w5 box_right_content"></span></dd>
+                            <dd class=""><span class="box_left_title">{pigcms{:L('_STORE_SATURDAY_')}: &nbsp;</span><span class="w6 box_right_content"></span></dd>
+                            <dd class=""><span class="box_left_title">{pigcms{:L('_STORE_SUNDAY_')}: &nbsp;</span><span class="w7 box_right_content"></span></dd>
 						<!--dd class="deliveryType">{pigcms{:L('_DIST_SERVICE_')}</dd-->
-						<dd class="merchantNotice">{pigcms{:L('_SHOP_NOTICE_')}</dd>
-                        <dd class="merchantReduce"></dd>
+<!--						<dd class="merchantNotice">{pigcms{:L('_SHOP_NOTICE_')}</dd>-->
+<!--                        <dd class="merchantReduce"></dd>-->
+                        </div>
 					</dl>
-					<if condition="!$merchant_link_showOther">
-						<dl id="shopMerchantLinkBox">
-							<dd class="more link-url" data-url="{pigcms{:U('My/shop_order_list')}"><span></span>{pigcms{:L('_MY_OUT_ORDER_')}</dd>
-						</dl>
-					</if>
-					<dl id="shopMerchantCouponBox">
-						<dd>{pigcms{:L('_DIST_SERVICE_')}</dd>
-						<dd>{pigcms{:L('_DIST_TIME_')}</dd>
-					</dl>
+<!--					<if condition="!$merchant_link_showOther">-->
+<!--						<dl id="shopMerchantLinkBox">-->
+<!--							<dd class="more link-url" data-url="{pigcms{:U('My/shop_order_list')}"><span></span>{pigcms{:L('_MY_OUT_ORDER_')}</dd>-->
+<!--						</dl>-->
+<!--					</if>-->
+<!--					<dl id="shopMerchantCouponBox">-->
+<!--						<dd>{pigcms{:L('_DIST_SERVICE_')}</dd>-->
+<!--						<dd>{pigcms{:L('_DIST_TIME_')}</dd>-->
+<!--					</dl>-->
 				</div>
 				<div id="shopPageShade" style="display:none;"></div>
 				<div id="shopPageCatShade"></div>
@@ -775,7 +819,6 @@
 		<script type="text/javascript">
 
             $(document).ready(function(){
-
                 var s = "";
                 s += " 屏幕高度："+ window.screen.availHeight+"\n";
                 s += " 屏幕宽度："+ window.screen.availWidth+"\n";

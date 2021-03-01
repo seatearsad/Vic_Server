@@ -3284,9 +3284,17 @@ class MyAction extends BaseAction{
         }
 
         $order_list = D("Shop_order")->field(true)->where($where)->order('order_id DESC')->select();
-        foreach ($order_list as $st) {
+        foreach ($order_list as &$st) {
+            $st['real_total_price']=$st['price']+$st['tip_charge']-$st['merchant_reduce ']-$st['delivery_discount']-$st['coupon_price'];
+            $score=D('Reply')->field("score")->where(array('order_id'=>$st['order_id']))->find();
+            if ($score['score']==null) {
+                $st['rate_score'] = 0;
+            }else{
+                $st['rate_score'] = $score['score'];
+            }
             $store_ids[] = $st['store_id'];
         }
+        //var_dump($order_list);die();
         $m = array();
         if ($store_ids) {
             $store_image_class = new store_image();
@@ -3311,7 +3319,9 @@ class MyAction extends BaseAction{
         foreach($list as $key=>$val){
             $list[$key]['name'] = lang_substr($val['name'],C('DEFAULT_LANG'));
             $list[$key]['order_url'] = U('Shop/order_detail', array('order_id' => $val['order_id']));
-            $list[$key]['create_time_show'] = date('Y-m-d h:m',$val['create_time']);
+            $list[$key]['create_time_show'] = date('Y-m-d h:i',$val['create_time']);
+           ///$list[$key]['create_time_show'] = date('Y-m-d h:i:s',time());
+            ///$list[$key]['create_time_show'] = date_default_timezone_get();
 
             //------------------------------ 更新status等信息 ------------------------------------peter
 

@@ -14,7 +14,6 @@
 <script src="{pigcms{$static_path}layer/layer.m.js"></script>
 <title>{pigcms{:L('_B_MY_COMMENT_')}</title>
 </head>
-<body class=" hPC" style="max-width:640px;padding-bottom: initial; background:#f4f4f4;">
 <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/lib_5e96991.css">
 <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/style_dd39d16.css">
 <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/lib_3a812b5.css">
@@ -70,94 +69,104 @@
         height: 30px;
         margin: 4px;
     }
+    .container{
+        max-width:640px;
+        margin: auto;
+    }
+    .comment-btn {
+        left: auto;
+    }
 </style>
-<div id="pager"> <img src="{pigcms{$static_path}images/hm.gif" width="0" height="0" style="display:block">
-    <div id="wrapper" style="background:#f4f4f4">
-        <div id="fis_elm__2">
-            <div id="common-widget-nav" class="common-widget-nav " style="background: white;">
-                <div class="left-slogan"> <a class="left-arrow icon-arrow-left2" data-node="navBack" id="goBackUrl" href="javascript:history.go(-1);"></a> </div>
-                <div class="center-title"> <a href="javascript:void(0)">{pigcms{:L('_B_MY_COMMENT_')}</a> </div>
-                <div class="right-slogan "> </div>
-            </div>
-        </div>
-        <div id="fis_elm__3">
-            <div id="shopcomment-add-wrapper">
-                <div id="widget-shopcomment-add">
-                    <div class="gradecon" id="Addnewskill_119">
-                        <ul class="rev_pro clearfix">
-                            <li class="clearfix"> <div class="review_title">{pigcms{$c_title}</div>
-                                <div class="revinp">
-                                	<span class="level send" id="star_send">
-                                		<i class="level_solid" cjmark=""></i> 
-                                		<i class="level_solid" cjmark=""></i> 
-                                		<i class="level_solid" cjmark=""></i> 
-                                		<i class="level_solid" cjmark=""></i> 
-                                		<i class="level_solid" cjmark=""></i>
-                                        <input type="hidden" id="score_send" value="5"/>
-                                	</span> 
-                                	<span class="revgrade"></span>
-                                </div>
-                                <div class="add-list">
-                                    <textarea class="text-area comment_send"></textarea>
-                                </div>
-                            </li>
-                        </ul>
-                        <div style="height: 15px"></div>
-                        <ul class="rev_pro clearfix">
-                            <li class="clearfix"> <div class="review_title">{pigcms{$s_title}</div>
-                                <div class="revinp">
-                                	<span class="level whole" id="star_whole">
-                                		<i class="level_solid" cjmark=""></i>
-                                		<i class="level_solid" cjmark=""></i>
-                                		<i class="level_solid" cjmark=""></i>
-                                		<i class="level_solid" cjmark=""></i>
-                                		<i class="level_solid" cjmark=""></i>
-                                        <input type="hidden" id="score_whole" value="5"/>
-                                	</span>
-                                    <span class="revgrade"></span>
-                                </div>
-                                <div class="add-list">
-                                    <textarea class="text-area comment_whole"></textarea>
-                                </div>
-                            </li>
-                        </ul>
-                            <!--li class="clearfix"> <span class="revtit">高品质量</span>
-                                <div class="revinp"> 
-                                	<span class="level mass"> 
-                                		<i class="level_solid" cjmark=""></i> 
-                                		<i class="level_solid" cjmark=""></i> 
-                                		<i class="level_solid" cjmark=""></i> 
-                                		<i class="level_solid" cjmark=""></i> 
-                                		<i class="level_solid" cjmark=""></i> 
-                                		</span> 
-                                	<span class="revgrade">优</span> 
-                                </div>
-                            </li>
-                            <li class="clearfix"> <span class="revtit">配送服务</span>
-                                <div class="revinp"> 
-	                                <span class="level send"> 
-		                                <i class="level_solid" cjmark=""></i> 
-		                                <i class="level_solid" cjmark=""></i>
-		                                <i class="level_solid" cjmark=""></i> 
-		                                <i class="level_solid" cjmark=""></i> 
-		                                <i class="level_solid" cjmark=""></i> 
-	                                </span> 
-	                           		<span class="revgrade">优</span>
-	                           </div>
-                            </li-->
-
-                    </div>
-
-<!--                    <div class="add-list">-->
-<!--                        <div class="add-list-title">{pigcms{:L('_THOMB_YOUR_FAV_')}</div>-->
-<!--                        <div class="add-list-span recommend-list">-->
-<!--                        <volist name="now_order['info']" id="vo">-->
-<!--                        	<span data-goods-id="{pigcms{$vo.goods_id}">{pigcms{$vo.name}</span>-->
-<!--                        </volist>-->
-<!--                        </div>-->
-<!--                    </div>-->
+<body class=" hPC" style="padding-bottom: initial; background:#f4f4f4;">
+<div class="container">
+    <div id="pager"> <img src="{pigcms{$static_path}images/hm.gif" width="0" height="0" style="display:block">
+        <div id="wrapper" style="background:#f4f4f4">
+            <div id="fis_elm__2">
+                <div id="common-widget-nav" class="common-widget-nav " style="background: white;">
+                    <div class="left-slogan"> <a class="left-arrow icon-arrow-left2" data-node="navBack" id="goBackUrl" href="javascript:history.go(-1);"></a> </div>
+                    <div class="center-title"> <a href="javascript:void(0)">{pigcms{:L('_B_MY_COMMENT_')}</a> </div>
+                    <div class="right-slogan "> </div>
                 </div>
-                <div class="comment-btn" shop_id="{pigcms{$now_order.store_id}" order_id="{pigcms{$now_order.order_id}" data-node="comment-btn">{pigcms{:L('_B_D_LOGIN_SUB_')}</div>
+            </div>
+            <div id="fis_elm__3">
+                <div id="shopcomment-add-wrapper">
+                    <div id="widget-shopcomment-add">
+                        <div class="gradecon" id="Addnewskill_119">
+                            <ul class="rev_pro clearfix">
+                                <li class="clearfix"> <div class="review_title">{pigcms{$c_title}</div>
+                                    <div class="revinp">
+                                        <span class="level send" id="star_send">
+                                            <i class="level_solid" cjmark=""></i>
+                                            <i class="level_solid" cjmark=""></i>
+                                            <i class="level_solid" cjmark=""></i>
+                                            <i class="level_solid" cjmark=""></i>
+                                            <i class="level_solid" cjmark=""></i>
+                                            <input type="hidden" id="score_send" value="5"/>
+                                        </span>
+                                        <span class="revgrade"></span>
+                                    </div>
+                                    <div class="add-list">
+                                        <textarea class="text-area comment_send"></textarea>
+                                    </div>
+                                </li>
+                            </ul>
+                            <div style="height: 15px"></div>
+                            <ul class="rev_pro clearfix">
+                                <li class="clearfix"> <div class="review_title">{pigcms{$s_title}</div>
+                                    <div class="revinp">
+                                        <span class="level whole" id="star_whole">
+                                            <i class="level_solid" cjmark=""></i>
+                                            <i class="level_solid" cjmark=""></i>
+                                            <i class="level_solid" cjmark=""></i>
+                                            <i class="level_solid" cjmark=""></i>
+                                            <i class="level_solid" cjmark=""></i>
+                                            <input type="hidden" id="score_whole" value="5"/>
+                                        </span>
+                                        <span class="revgrade"></span>
+                                    </div>
+                                    <div class="add-list">
+                                        <textarea class="text-area comment_whole"></textarea>
+                                    </div>
+                                </li>
+                            </ul>
+                                <!--li class="clearfix"> <span class="revtit">高品质量</span>
+                                    <div class="revinp">
+                                        <span class="level mass">
+                                            <i class="level_solid" cjmark=""></i>
+                                            <i class="level_solid" cjmark=""></i>
+                                            <i class="level_solid" cjmark=""></i>
+                                            <i class="level_solid" cjmark=""></i>
+                                            <i class="level_solid" cjmark=""></i>
+                                            </span>
+                                        <span class="revgrade">优</span>
+                                    </div>
+                                </li>
+                                <li class="clearfix"> <span class="revtit">配送服务</span>
+                                    <div class="revinp">
+                                        <span class="level send">
+                                            <i class="level_solid" cjmark=""></i>
+                                            <i class="level_solid" cjmark=""></i>
+                                            <i class="level_solid" cjmark=""></i>
+                                            <i class="level_solid" cjmark=""></i>
+                                            <i class="level_solid" cjmark=""></i>
+                                        </span>
+                                        <span class="revgrade">优</span>
+                                   </div>
+                                </li-->
+
+                        </div>
+
+    <!--                    <div class="add-list">-->
+    <!--                        <div class="add-list-title">{pigcms{:L('_THOMB_YOUR_FAV_')}</div>-->
+    <!--                        <div class="add-list-span recommend-list">-->
+    <!--                        <volist name="now_order['info']" id="vo">-->
+    <!--                        	<span data-goods-id="{pigcms{$vo.goods_id}">{pigcms{$vo.name}</span>-->
+    <!--                        </volist>-->
+    <!--                        </div>-->
+    <!--                    </div>-->
+                    </div>
+                    <div class="comment-btn" shop_id="{pigcms{$now_order.store_id}" order_id="{pigcms{$now_order.order_id}" data-node="comment-btn">{pigcms{:L('_B_D_LOGIN_SUB_')}</div>
+                </div>
             </div>
         </div>
     </div>

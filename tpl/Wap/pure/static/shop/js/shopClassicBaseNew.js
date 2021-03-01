@@ -2354,20 +2354,30 @@ function showShopContent(nav){
         $(document).scrollTop(200);
 
 		if($('#shopMerchantBox').data('isShow') != '1'){
-            $('#shopMerchantDescBox .phone').attr('data-phone',nowShop.store.phone).html(getLangStr('_SHOP_PHONE_')+': '+nowShop.store.phone);
-            $('#shopMerchantDescBox .address').attr('data-url','map&param='+nowShop.store.id+'-'+nowShop.store.long+'-'+nowShop.store.lat+'-'+encodeURIComponent(nowShop.store.name)+'-'+encodeURIComponent(nowShop.store.adress)).html('<span></span>'+ getLangStr('_SHOP_ADDRESS_') +'：'+nowShop.store.adress);
-            $('#shopMerchantDescBox .openTime').html(getLangStr('_BUSINESS_TIME_')+'：'+nowShop.store.time);
-            $('#shopMerchantDescBox .merchantNotice').html(getLangStr('_SHOP_NOTICE_') + '：'+nowShop.store.store_notice);
-            var reduce_html = '';
-            if(nowShop.store.reduce) {
-                for (var i = 0; i < nowShop.store.reduce.length; ++i) {
-                	if(i == 0)
-                    	reduce_html += '<span>' + nowShop.store.reduce[i] + '</span>';
-                	else
-                        reduce_html += '<span>&nbsp;;&nbsp;' + nowShop.store.reduce[i] + '</span>';
-                }
-                $('#shopMerchantDescBox .merchantReduce').html(reduce_html);
-            }
+            // $('#shopMerchantDescBox .phone').attr('data-phone',nowShop.store.phone).html(getLangStr('_SHOP_PHONE_')+': '+nowShop.store.phone);
+            // $('#shopMerchantDescBox .address').attr('data-url','map&param='+nowShop.store.id+'-'+nowShop.store.long+'-'+nowShop.store.lat+'-'+encodeURIComponent(nowShop.store.name)+'-'+encodeURIComponent(nowShop.store.adress)).html('<span></span>'+ getLangStr('_SHOP_ADDRESS_') +'：'+nowShop.store.adress);
+            // $('#shopMerchantDescBox .openTime').html(getLangStr('_BUSINESS_TIME_')+'：'+nowShop.store.time);
+            // $('#shopMerchantDescBox .merchantNotice').html(getLangStr('_SHOP_NOTICE_') + '：'+nowShop.store.store_notice);
+            $('#shopMerchantDescBox .phone').attr('data-phone',nowShop.store.phone).html(nowShop.store.phone);
+            $('#shopMerchantDescBox .address').attr('data-url','map&param='+nowShop.store.id+'-'+nowShop.store.long+'-'+nowShop.store.lat+'-'+encodeURIComponent(nowShop.store.name)+'-'+encodeURIComponent(nowShop.store.adress)).html('<span></span>'+ nowShop.store.adress);
+            $('#shopMerchantDescBox .w1').html(nowShop.store.open_list[0]);
+            $('#shopMerchantDescBox .w2').html(nowShop.store.open_list[1]);
+            $('#shopMerchantDescBox .w3').html(nowShop.store.open_list[2]);
+            $('#shopMerchantDescBox .w4').html(nowShop.store.open_list[3]);
+            $('#shopMerchantDescBox .w5').html(nowShop.store.open_list[4]);
+            $('#shopMerchantDescBox .w6').html(nowShop.store.open_list[5]);
+            $('#shopMerchantDescBox .w7').html(nowShop.store.open_list[6]);
+            //$('#shopMerchantDescBox .merchantNotice').html(getLangStr('_SHOP_NOTICE_') + '：'+nowShop.store.store_notice);
+            //var reduce_html = '';
+            // if(nowShop.store.reduce) {
+            //     for (var i = 0; i < nowShop.store.reduce.length; ++i) {
+            //     	if(i == 0)
+            //         	reduce_html += '<span>' + nowShop.store.reduce[i] + '</span>';
+            //     	else
+            //             reduce_html += '<span>&nbsp;;&nbsp;' + nowShop.store.reduce[i] + '</span>';
+            //     }
+            //     $('#shopMerchantDescBox .merchantReduce').html(reduce_html);
+            // }
             // if(nowShop.store.isverify==1){
             //     $('#shopMerchantDescBox').append('<dd class="merchantVerify">'+ getLangStr('_SHOP_CERTIFICATION_') + getLangStr('_CERTIFIED_') +'</dd>');
             // }
@@ -2947,19 +2957,24 @@ function showCatShopList(newPage){
 }
 
 function goBackPage(){
-	if(motify.checkLifeApp() && motify.getLifeAppVersion() >= 50){
-		if(motify.checkIos()){
-			$('body').append('<iframe src="pigcmso2o://webViewGoBack" style="display:none;"></iframe>');
-			window.history.go(-1);
-		}else{
-			window.lifepasslogin.webViewGoBack();
-		}
+	if ($.cookie('path_from_home')==1){
+        window.location.href = "../wap.php";
 	}else{
-		if(document.referrer == ""){
-			window.location.href = storeUrl;
-		}else{
-			window.history.go(-1);
-		}
+
+        if(motify.checkLifeApp() && motify.getLifeAppVersion() >= 50){
+            if(motify.checkIos()){
+                $('body').append('<iframe src="pigcmso2o://webViewGoBack" style="display:none;"></iframe>');
+                window.history.go(-1);
+            }else{
+                window.lifepasslogin.webViewGoBack();
+            }
+        }else{
+            if(document.referrer == ""){
+                window.location.href = storeUrl;
+            }else{
+                window.history.go(-1);
+            }
+        }
 	}
 }
 
