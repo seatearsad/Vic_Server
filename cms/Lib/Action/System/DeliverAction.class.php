@@ -1500,14 +1500,6 @@ class DeliverAction extends BaseAction {
                 if($deliver['reg_status'] == 5){
                     $data['reg_status'] = 0;
                 }
-
-                if($deliver['email'] != "") {
-                    $email = array(array("address"=>$deliver['email'],"userName"=>$deliver['name']));
-                    $title = "Tutti Courier Instructions";
-                    $body = $this->getMailBody($deliver['name']);
-                    $mail = getMail($title, $body, $email);
-                    $mail->send();
-                }
             } else {//未通过
                 //$data['reg_status'] = 1;
                 if($_POST['review_desc'] && $_POST['review_desc'] != '') {
@@ -1534,6 +1526,14 @@ class DeliverAction extends BaseAction {
                     }
                     $data['status'] = 1;
                     D('deliver_user')->where(array('uid' => $uid))->save($data);
+
+                    if($deliver['email'] != "") {
+                        $email = array(array("address"=>$deliver['email'],"userName"=>$deliver['name']));
+                        $title = "Tutti Courier Instructions";
+                        $body = $this->getMailBody($deliver['name']);
+                        $mail = getMail($title, $body, $email);
+                        $mail->send();
+                    }
                 }
                 $this->user_edit();
             }else{
