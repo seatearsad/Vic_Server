@@ -87,7 +87,7 @@
                 margin-top: 3px;
                 margin-bottom:0px;
                 margin-right: 50px;
-                font-size: 24px;
+                font-size: 21px;
                 color: #000000;
                 overflow:hidden;
                 text-overflow:ellipsis;
@@ -98,12 +98,12 @@
                 opacity: 1;
                 margin-left: 60px;
                 margin-top: 5px;
-                font-size: 22px;
+                font-size: 20px;
                 padding-right: 50px;
                 text-overflow: ellipsis;
                 overflow: hidden;
                 white-space: nowrap;
-                width: -moz-available;
+                display: table-caption;
             }
             #deliveryText{
                 margin-bottom: 5px;
@@ -615,23 +615,31 @@
 					<li class="caret merchant" data-nav="merchant">{pigcms{:L('_SHOP_TXT_')}</li>
 				</ul>
 			</section>
-			<section id="shopCatBar" style="display:none;">	
-				<div class="title">
-                    {pigcms{:L('_ALL_CLASSIF_')}
-				</div>
-				<div class="content">
-					<ul></ul>
-				</div>
-			</section>
+<!--			<section id="shopCatBar" style="display:none;">	-->
+<!--				<div class="title">-->
+<!--                    {pigcms{:L('_ALL_CLASSIF_')}-->
+<!--				</div>-->
+<!--				<div class="content">-->
+<!--					<ul></ul>-->
+<!--				</div>-->
+<!--			</section>-->
 			<section id="shopContentBar">
 				<div id="shopProductBox">
 					<div id="shopProductBottomBar"><ul class="clearfix"></ul><div id="shopProductBottomLine"></div></div>
-					<div id="shopProductLeftBar2">
+                    <div id="shopCatBar" style="display:none;">
+                        <div class="title">
+                            {pigcms{:L('_ALL_CLASSIF_')}
+                        </div>
+                        <div class="content">
+                            <ul></ul>
+                        </div>
+                    </div>
+                    <div id="shopProductLeftBar2">
                         <div class="sub_left"></div>
                         <dl></dl>
                         <div class="sub_right"></div>
                     </div>
-					<div id="shopProductRightBar2" onscroll="scrollProduct2Event(1)"><dl></dl></div>
+					<div id="shopProductRightBar2"><dl></dl></div>
 					<div id="shopProductCartShade"></div>
 					<div id="shopProductCartBox"></div>
 					<div id="shopProductCart">

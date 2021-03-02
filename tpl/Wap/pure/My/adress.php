@@ -204,7 +204,7 @@
     </if>
     <volist name="adress_list_not_allow" id="vo">
         <dl class="list list_not_allow" <if condition=" $vo['is_allow'] eq 0">style="background-color:#eee" data-type="{pigcms{$vo['is_allow']}"</if>>
-        <dd class="address-wrapper <if condition=" !$vo['select_url']">dd-padding</if>">
+        <dd class="address-wrapper not_allow <if condition=" !$vo['select_url']">dd-padding</if>">
         <if condition="$vo['select_url'] and $vo['is_allow'] eq '1'">
 
                 <!--                <div class="address-select"><input class="mt" type="radio" name="addr"-->
@@ -258,7 +258,7 @@
                 }
                 return false;
             });
-            $('.list_not_allow').click(function () {
+            $('.not_allow').click(function () {
                 alert("{pigcms{:L('V2_PAGETITLE_ADDRESS_CLICK')}");
             });
 

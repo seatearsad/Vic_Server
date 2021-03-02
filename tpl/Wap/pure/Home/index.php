@@ -33,7 +33,7 @@
         var address_url = "{pigcms{:U('Home/address')}";
         var static_url = "{pigcms{$static_public}";
     </script>
-    <script type="text/javascript" src="{pigcms{$static_path}js/index.js?v=1.2" charset="utf-8"></script>
+    <script type="text/javascript" src="{pigcms{$static_path}js/index.js?v=1.7" charset="utf-8"></script>
     <script type="text/javascript" src="{pigcms{$static_public}js/lang/{pigcms{:C('DEFAULT_LANG')}.js" charset="utf-8"></script>
     <script type="text/javascript" src="{pigcms{$static_path}js/common.js" charset="utf-8"></script>
     <script type="text/javascript" src="{pigcms{$static_public}js/mobileSelect/mobileSelect.js"></script>
@@ -723,13 +723,13 @@
         </script>
     </div>
 </div>
-<!--div id="pageLoadTipShade" class="pageLoadTipBg">
+<div id="pageLoadTipShade" class="pageLoadTipBg">
     <div id="pageLoadTipBox" class="pageLoadTipBox">
         <div class="pageLoadTipLoader">
             <div style="background-image:url({pigcms{$config.shop_load_bg});"></div>
         </div>
     </div>
-</div-->
+</div>
 <include file="Public:footer"/>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKlguA2QFIUVwWTo3danbOqSKv3nYbBCg&libraries=places&language=en"></script>
 <script type="text/javascript">

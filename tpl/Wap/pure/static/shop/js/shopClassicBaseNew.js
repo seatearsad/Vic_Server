@@ -1062,6 +1062,7 @@ function cartEventReg(){
 	
 	
 	$('#checkCart').click(function(){
+        pageLoadTips({showBg:false});
 		window.location.href = check_cart_url+'&store_id='+nowShop.store.id;
 	});
 }
@@ -1180,7 +1181,14 @@ function showShop(shopId){
 				$('#shopProductBottomBar li').hide();
 				$('#shopProductBottomBar li.product_cat_'+$(this).data('cat_id')).show();
                 $('#shopProductLeftBar2 dl').scrollLeft($('#shopProductLeftBar2-'+$(this).data('cat_id')).offset().left - $('#shopProductLeftBar2 dl').offset().left+$('#shopProductLeftBar2 dl').scrollLeft());
-                $('#shopProductRightBar2').scrollTop($('#shopProductRightBar2-'+$(this).data('cat_id')).offset().top-$('#shopProductRightBar2').offset().top+$('#shopProductRightBar2').scrollTop());
+
+                var top1=$('#shopProductRightBar2-'+$(this).data('cat_id')).offset().top;
+                var h1=$('#shopHeader').height();
+                var h2=$('#shopMenuBar').height();
+                var h3=$('#shopProductLeftBar2').height();
+                var hall=h1+h2+h3+15;
+                $('html,body').animate({scrollTop: top1-hall});
+                //$('#shopProductRightBar2').scrollTop($('#shopProductRightBar2-'+$(this).data('cat_id')).offset().top-$('#shopProductRightBar2').offset().top+$('#shopProductRightBar2').scrollTop());
 
             }
 			$('#shopProductLeftBar2').css("top","101px");
@@ -1201,18 +1209,22 @@ function showShop(shopId){
         });
 		
 		$(document).on('click','#shopProductLeftBar2 dd',function(){
-			$(this).addClass('active').siblings().removeClass('active');
-            $('#shopProductRightBar2').scrollTop($('#shopProductRightBar2-'+$(this).data('cat_id')).offset().top-$('#shopProductRightBar2').offset().top+$('#shopProductRightBar2').scrollTop());
-
+            $(this).addClass('active').siblings().removeClass('active');
+            // $('#shopProductRightBar2').scrollTop($('#shopProductRightBar2-'+$(this).data('cat_id')).offset().top-$('#shopProductRightBar2').offset().top+$('#shopProductRightBar2').scrollTop());
+			//console.log($('#shopProductRightBar2').scrollTop());
 			// //alert($(this).data('cat_id'));
-			// var top1=$('#shopProductRightBar2-'+$(this).data('cat_id')).offset().top;
+			var top1=$('#shopProductRightBar2-'+$(this).data('cat_id')).offset().top;
 			// var top2=$('#shopProductRightBar2').offset().top;
 			// var top3=$('#shopProductRightBar2').scrollTop();
-			// var top4=top1-top2+top3;
+			var h1=$('#shopHeader').height();
+            var h2=$('#shopMenuBar').height();
+            var h3=$('#shopProductLeftBar2').height();
+            var hall=h1+h2+h3+15;
+            //top4=1000;
 			// //alert(top4);
             // //$('html,body').animate({scrollTop: $('#shopProductRightBar2').offset().top-50});
-            // //$('html,body').animate({scrollTop: top4});
-			// $('#shopProductRightBar2').scrollTop(top4);
+            $('html,body').animate({scrollTop: top1-hall});
+			//$('body').scrollTop(top4);
 		});
 		
 		$(document).on('click','#shopProductRightBar2 li,#shopProductBottomBar li',function(event){
@@ -1675,9 +1687,10 @@ function showShop(shopId){
 	}
 	
 	if(nowShop.store && shopId == nowShop.store.id){
-
+        //$('#shopHeader').css('background','rgba(255,255,255,0)');
 		$('#shopTitle').html(nowShop.store.name);
         $('#shopTitle_Header').html(nowShop.store.name);
+
 		firstMenuClick = true;
 		// $('#shopMenuBar .product').trigger('click');
 		// showShopContent('product');
@@ -1696,8 +1709,9 @@ function showShop(shopId){
 		$('#shopProductBottomBar ul,#shopCatBar .content ul').empty();
 
 		$.getJSON(ajax_url_root+'ajaxShop',{store_id:shopId},function(result){
-			//console.log(result)
+			//console.log(result);
 			$('#shopTitle').html(result.store.name);
+            $('#shopTitle_Header').css("opacity","0");
             $('#shopTitle_Header').html(result.store.name);
 
             $('#stars_text').html(result.store.star);
@@ -1740,7 +1754,8 @@ function showShop(shopId){
 			//--------------------------------------------------------------------------------------
 
 			changeWechatShare('shop',{title:nowShop.store.name,desc:nowShop.store.txt_info,imgUrl:nowShop.store.image,link:shopShareUrl+nowShop.store.id});
-            if(nowShop.store.is_close == '`1'){
+            //如果店铺关闭，要提示
+			if(nowShop.store.is_close == '1'){
                 shop_remind = "This store is currently closed, and delivery is unavailable at the moment.";
 			}else{
                 if(nowShop.store.shop_remind != '') {
@@ -1827,6 +1842,7 @@ function scrollProduct2Event(phoneType){
     //var top = $(document).scrollTop();
     //console.log("top="+top);
     //var scrollRightTop =document.documentElement.scrollTop;
+
     var shopProductRightBar2Top=document.getElementById("shopProductRightBar2").scrollTop;
     $('#debug2').html("shopProductRightBar2Top--"+shopProductRightBar2Top);
     //console.log(scrollRightTop);

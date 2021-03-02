@@ -17,6 +17,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}shop/css/main.css" media="all">
+    <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/pageloader.css?217"/>
 <style>
 #dingcai_adress_info{
 border-top: 1px solid #ddd8ce;
@@ -538,6 +539,13 @@ a {
         <span class="comm_right">{pigcms{:L('_B_PURE_MY_85_1')}</span></div>
 	</span>
 </div>
+<div id="pageLoadTipShade" class="pageLoadTipBg">
+    <div id="pageLoadTipBox" class="pageLoadTipBox">
+        <div class="pageLoadTipLoader">
+            <div style="background-image:url({pigcms{$config.shop_load_bg});"><!--img src="{pigcms{$static_path}shop/images/pageTipImg.png"/--></div>
+        </div>
+    </div>
+</div>
 <if condition="$cue_field">
 	<volist name="cue_field" id="vo">
 		<script type="text/javascript">
@@ -593,7 +601,15 @@ var motify = {
 		}
 	}
 };
+function checkAutoSubmit(){
+
+    if ($.cookie('auto_location')==1){
+        $.cookie('auto_location',0);
+        document.cart_confirm_form.submit();
+    }
+}
 $(document).ready(function () {
+    checkAutoSubmit();
 	$(window).scrollTop(1);
 	setTimeout(function(){
 		$('div.fixed').css({'bottom':'0px','left':'0px','right':'0px','max-width':'640px','margin':'0 auto'});
@@ -842,7 +858,7 @@ $(document).ready(function () {
 	});
 
 	$("#submit_order").click(function(){
-        console.log("submit_order");
+        //console.log("submit_order");
 		if($('#deliver_type').val() == 0 && $('#address_id').val() == ''){
 			motify.log('Please Enter Address');
 			return false;
@@ -888,21 +904,31 @@ $(document).ready(function () {
 				}
 			});
 			return false;*/
+            pageLoadTips({showBg:false});
 			$.post("{pigcms{:U('Shop/checkGoodsTime')}",{'store_id':"{pigcms{$store['store_id']}"},function(data){
                 if(data.error){
                     //motify.log(data.msg);
                     $.cookie('shop_cart_'+"{pigcms{$store['store_id']}",JSON.stringify(data.cartList),{expires:700,path:'/'});
                     var remindTipLayer = layer.open({
                         content: "<label style='word-break: break-word;'>" + data.msg + "</label>",
-                        btn: ['Confirm'],
-                        end: function(){
+                        btn: ['Yes','No'],
+                        yes:function(){
+                            $.cookie('auto_location',1); //reload后自动submit
+                            layer.close(remindTipLayer);
+                            window.location.reload();
+                        },
+                        no: function(){
+                            $.cookie('auto_location',0);
                             layer.close(remindTipLayer);
                             window.location.reload();
                         }
+
                     });
+                    pageLoadHides();
                 }else{
                     document.cart_confirm_form.submit();
                 }
+
             },"json");
 
 
@@ -951,6 +977,7 @@ function callbackUserAddress(address){ alert("callbackUserAddress");
 	window.location.href = "{pigcms{:U('confirm_order',$tmpGet)}&adress_id="+addressArr[0];
 }
 </script>
+<script src="{pigcms{$static_path}js/pageloader.js?215"></script>
 </body>
 {pigcms{$hideScript}
 </html>

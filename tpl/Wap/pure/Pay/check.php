@@ -18,6 +18,7 @@
     <link href="{pigcms{$static_path}css/check.css" rel="stylesheet"/>
     <link rel="stylesheet" type="text/css" href="{pigcms{$static_public}js/mobiscroll/mobiscroll.custom.min.css" media="all">
     <script type="text/javascript" src="{pigcms{$static_public}js/mobiscroll/mobiscroll.custom.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/pageloader.css?217"/>
     <include file="Public:facebook"/>
 </head>
 <body>
@@ -521,6 +522,7 @@
     </script>
     <script language="javascript">
         function bio_verify(){
+
             layer.open({type:2,content:"{pigcms{:L('_LOADING_TXT_')}",shadeClose:false});
             var pay_type = $('input[name="pay_type"]:checked').val();
             $("button.mj-submit").attr("disabled", "disabled");
@@ -598,7 +600,9 @@
                             };
 
                             //alert(re_data['order_type']);
+
                             $.post($('#moneris_form').attr('action'),re_data,function(data){
+
                                     if(typeof (data.mode) != 'undefined' && data.mode == 'mpi'){
                                         // layer.open({
                                         //     title:'',
@@ -656,7 +660,9 @@
                                 }
                             }
                             //alert(re_data['order_type']);
+
                             $.post($('#moneris_form').attr('action'),re_data,function(data){
+
                                 if(typeof (data.mode) != 'undefined' && data.mode == 'mpi'){
                                     // layer.open({
                                     //     title:'',
@@ -718,7 +724,9 @@
                         'service_fee':service_fee
                     };
 
+
                     $.post('{pigcms{:U("Pay/WeixinAndAli")}',re_data,function(data){
+
                         layer.closeAll();
                         //success
                         if(data.status == 1){
@@ -1067,7 +1075,8 @@
         margin: 20px 5%;
         font-size: 1.2em;
         line-height: 30px;
-        border-radius: 2px;
+        border-radius: 10px;
+        padding: 10px;
     }
     #free_delivery{
         text-align: center;
@@ -1407,9 +1416,16 @@
                 <button type="button" onclick="bio_verify()" style="float: right;height: 100%;width: 50%;background-color: #06c1ae;color: #fff;border: none;">{pigcms{:L('_CONFIRM_PAY_')}</button>
             </div-->
         </div>
+
     </form>
 </div>
-
+    <div id="pageLoadTipShade" class="pageLoadTipBg">
+        <div id="pageLoadTipBox" class="pageLoadTipBox">
+            <div class="pageLoadTipLoader">
+                <div style="background-image:url({pigcms{$config.shop_load_bg});"><!--img src="{pigcms{$static_path}shop/images/pageTipImg.png"/--></div>
+            </div>
+        </div>
+    </div>
 <link href="{pigcms{$static_path}css/check.css" rel="stylesheet"/>
 
 <!-- 加 -->
@@ -1815,5 +1831,6 @@
 {pigcms{$hideScript}
 
 <?php } ?>
+<script src="{pigcms{$static_path}js/pageloader.js?215"></script>
 </body>
 </html>

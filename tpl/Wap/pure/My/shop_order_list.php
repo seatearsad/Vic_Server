@@ -11,6 +11,7 @@
 	<meta name="format-detection" content="address=no">
     <link href="{pigcms{$static_path}css/eve.7c92a906.css" rel="stylesheet"/>
     <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/common.css?215"/>
+    <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/pageloader.css?217"/>
     <script type="text/javascript" src="{pigcms{$static_path}js/jquery.min.js" charset="utf-8"></script>
     <script src="{pigcms{$static_public}js/laytpl.js"></script>
 
@@ -338,6 +339,7 @@
             padding: .18rem .2rem;
             padding-left: 0.2rem;
         }
+
 	</style>
     <include file="Public:facebook"/>
 </head>
@@ -374,7 +376,13 @@
                 </div>
 		    </dl>
 		</div>
-
+        <div id="pageLoadTipShade" class="pageLoadTipBg">
+            <div id="pageLoadTipBox" class="pageLoadTipBox">
+                <div class="pageLoadTipLoader">
+                    <div style="background-image:url({pigcms{$config.shop_load_bg});"><!--img src="{pigcms{$static_path}shop/images/pageTipImg.png"/--></div>
+                </div>
+            </div>
+        </div>
 		<script type="text/javascript" src="{pigcms{$static_path}layer/layer.m.js" charset="utf-8"></script>
         <include file="My:shop_order_list_js_theme"/>
 		<script type="text/javascript" language="javascript">
@@ -403,6 +411,9 @@
 
 			$('.tabs-header a').on('click', function (e) {
 				e.preventDefault();
+
+				pageLoadTips({showBg:false});
+
 				var tabId = $(this).attr('tab-id');
 
 				$('.tabs-header a').stop().parent().removeClass('active');
@@ -424,6 +435,7 @@
 							var shtml ='<dd><dd class="dealcard dd-padding" style=" text-align:center; background:#fff; width:100%">{pigcms{:L('_B_PURE_MY_83_')}</dd></dd>';
                             $('.tab[tab-id="' + tabId + '"]').html(shtml);
 						}
+                        pageLoadHides();
 					},'json')
 				});
 			});
@@ -612,8 +624,12 @@
                     update_pay_time()
                 }, 1000);
             }
+
             update_pay_time();
+            //转转-------------------------------
+
 		</script>
+    <script src="{pigcms{$static_path}js/pageloader.js?215"></script>
 </div>
 <include file="Public:footer"/>
 </body>
