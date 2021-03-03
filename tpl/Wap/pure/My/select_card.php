@@ -67,6 +67,10 @@
             .Coupon .Coupon_top{
                 background-color: #ffa52d;
             }
+            .Coupon .Coupon_top_not_user{
+                background-color: #a3a3a3;
+            }
+           
             .Coupon .Coupon_end em{
                 border: 1px solid #ffa52d;
                 color: #ffa52d;
@@ -451,7 +455,7 @@
                     <volist name="coupon_list" id="coupon">
                         <dl class="Muse">
                             <dd>
-                                <div class="Coupon_top clr">
+                                <div <if condition="$coupon['is_use'] eq 1">class="Coupon_top clr"<else/>  class="Coupon_top Coupon_top_not_user clr" </if> >
                                     <div class="fl">
                                         <div class="fltop">
                                             <i>$</i><em>{pigcms{$coupon.discount}</em>
@@ -473,7 +477,9 @@
                                 <div class="Coupon_end">
                                     <div class="Coupon_x">
                                         <i>{pigcms{$coupon.start_time|date='Y.m.d',###}--{pigcms{$coupon.end_time|date='Y.m.d',###}</i>
-                                        <a href="{pigcms{$coupon.select_url}"><em>{pigcms{:L('_IMMEDIATE_USE_')}</em></a>
+                                        <if condition="$coupon['is_use'] eq 1">
+                                            <a href="{pigcms{$coupon.select_url}"><em>{pigcms{:L('_IMMEDIATE_USE_')}</em></a>
+                                        </if>
                                     </div>
                                     <div class="Coupon_sm">
                                         <span class="on">{pigcms{:L('_INSTRUCTIONS_TXT_')}</span>
@@ -528,29 +534,48 @@
 
             $("#ex_code").click(function(){
                 var code = $("input[name='coupon_code']").val();
+                var order_id = "{pigcms{$_GET['order_id']}";
                 if(code == ""){
                     layer.open({
                         title:'Message',
                         content:"{pigcms{:L('_INPUT_EXCHANGE_CODE_')}"
                     });
                 } else{
-                    exchange_code(code);
+                    exchange_code(code,order_id);
                 }
             })
 
-            function exchange_code(code){
-                $.ajax({url:"{pigcms{:U('My/exchangeCode')}",type:"post",data:"code="+code,dataType:"json",success:function(data){
+            function exchange_code(code,order_id){
+                $.ajax({
+                    url:"{pigcms{:U('My/exchangeCode')}",
+                    type:"post",
+                    data:{"code":code,"order_id":order_id},
+                    dataType:"json",
+                    success:function(data){
                         if(data.error_code == 0){
                             layer.open({
                                 title:'Message',
-                                time:1,
-                                content:"Success"
+                                time:3,
+                                content:"Success",
+                                end:function () {
+                                    window.location.reload();
+                                }
                             });
-                            window.location.reload();
+
+                        }else if (data.error_code == 2) {
+                            layer.open({
+                                title:'Message',
+                                time:3,
+                                content:data.msg,
+                                end:function () {
+                                    window.location.reload();
+                                }
+                            });
+
                         }else{
                             layer.open({
                                 title:'Message',
-                                time:1,
+                                time:3,
                                 content:data.msg
                             });
                         }

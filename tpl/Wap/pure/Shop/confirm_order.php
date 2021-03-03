@@ -390,17 +390,17 @@ a {
 			<div>
                 <h3>{pigcms{$ditem['name']}</h3>
                 <div>
-                    <span style="color:#999">{pigcms{$ditem['str']}</span>
+                    <span style="color:#999;font-size: 12px;line-height: 18px">{pigcms{$ditem['str']}</span>
                 </div>
                 <div class="unit_price">${pigcms{$ditem['price']}<if condition="$ditem.extra_price gt 0 AND $config.open_extra_price eq 1">+{pigcms{$ditem['extra_price']|floatval}{pigcms{$config.extra_price_alias_name}</if></div>
 
-                <div style="color: #333; font-size:10px;margin: 4px 0 6px 0;">{pigcms{:L('_CART_QUANTITY_')}{pigcms{$ditem['num']}</div>
+                <div style="color: #333; font-size:12px;margin: 4px 0 6px 0;">{pigcms{:L('_CART_QUANTITY_')}{pigcms{$ditem['num']}</div>
                 <if condition="$ditem.deposit_price gt 0">
-                    <div style="color: #333; font-size:10px;margin: 4px 0 6px 0;">* {pigcms{:L('_DEPOSIT_TXT_')}:${pigcms{$ditem['deposit_price']}</div>
+                    <div style="color: #333; font-size:12px;margin: 4px 0 6px 0;">* {pigcms{:L('_DEPOSIT_TXT_')}:${pigcms{$ditem['deposit_price']}</div>
                 </if>
                 <div class="count">{pigcms{$ditem['num']}</div>
                 <if condition="$ditem.is_time eq 1">
-                    <div style=" color: #333;font-size: 11px;">* Available from {pigcms{$ditem['begin_time']} to {pigcms{$ditem['end_time']}</div>
+                    <div style=" color: #333;font-size: 12px;">* Available from {pigcms{$ditem['begin_time']} to {pigcms{$ditem['end_time']}</div>
                 </if>
 
 			</div>

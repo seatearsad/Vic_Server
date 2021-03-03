@@ -183,7 +183,7 @@
     }
     //google结果列表点击事件
     function fillInAddress() {
-        alert(11);
+
         var place = autocomplete.getPlace();
 
         //以下为给 添加地址提供的代码

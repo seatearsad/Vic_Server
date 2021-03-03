@@ -389,6 +389,7 @@
                 border: 1px solid #ffa52d;
                 border-radius: 2px;
                 padding: 0px 2px;
+                font-size: 12px;
                 color: #ffa52d;
                 margin-right: 5px;
             }
@@ -456,7 +457,7 @@
             }
             #shopCatBar {
                 position: sticky;
-                z-index: 113;
+                z-index: 99;
                 top: 101px;
             }
             .swiper-container{
@@ -486,7 +487,7 @@
                 font-weight: bold;
             }
             .box_left_title{
-                width: 80px;
+                width: 95px;
                 font-size: 14px;
                 display: inline-block;
                 text-align: right;
@@ -652,10 +653,10 @@
                                 <div id="free_delivery"></div>
                             </div>
 						</div>
+                        <div id="checkCart" style="display:none;">{pigcms{:L('_GOOD_CHOICE_')}</div>
 						<div id="emptyCart">
 							<div class="cart"></div>{pigcms{:L('_CART_EMPTY_')}
 						</div>
-						<div id="checkCart" style="display:none;">{pigcms{:L('_GOOD_CHOICE_')}</div>
 						<div id="checkCartEmpty"></div>
 					</div>
 				</div>
@@ -675,8 +676,8 @@
 					<dl id="shopMerchantDescBox">
                         <div class="div_block">
                             <dd class="box_title">{pigcms{:L('_SHOP_BOX_TITLE_')}</dd>
-                            <dd class="more"><span class="box_left_title">{pigcms{:L('_SHOP_PHONE_')}:&nbsp;</span><span class="phone box_right_content"></span></dd>
-						    <dd class="more"><span class="box_left_title">{pigcms{:L('_SHOP_ADDRESS_')}:&nbsp; </span><span class="address box_right_content"></span></dd>
+                            <dd class=""><span class="box_left_title">{pigcms{:L('_SHOP_PHONE_')}:&nbsp;</span><span class="phone box_right_content"></span></dd>
+						    <dd class=""><span class="box_left_title">{pigcms{:L('_SHOP_ADDRESS_')}:&nbsp; </span><span class="address box_right_content"></span></dd>
                         </div>
                         <div class="div_block">
                         <dd class="box_title">{pigcms{:L('_TIME_BOX_TITLE_')}</dd>

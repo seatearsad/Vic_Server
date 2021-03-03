@@ -52,6 +52,7 @@ lang['_IS_CONFIRM_BIND_'] = 'Are you sure you want to bind exsited account?';
 lang['_LOADING_TXT_'] = 'Loading...';
 lang['_SMS_CODE_ERROR_'] = 'The Verification Code Entered Is Incorrect.';
 lang['_B_D_LOGIN_FILLMESSAGE_'] = 'Enter your SMS code';
+lang['_STORE_STATUS_CLOSED'] = 'Closed';
 
 function getLangStr(key,replace=''){
     var str = lang[key];

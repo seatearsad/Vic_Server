@@ -146,6 +146,12 @@
         dl.list_not_allow{
             background: #e1e1e1;
         }
+        .bod{
+            font-weight: bold;
+        }
+        .kv-line {
+            margin: 5px 0;
+        }
     </style>
     <include file="Public:facebook"/>
 </head>
@@ -168,8 +174,8 @@
 <!--                </div>-->
         </if>
         <div class="address-container">
-            <div class="kv-line">
-                <p>{pigcms{$vo.name}({pigcms{$vo.phone})</p>
+            <div class="kv-line bod">
+               {pigcms{$vo.name}({pigcms{$vo.phone})
             </div>
             <!--			                <div class="kv-line">-->
             <!--			                    <h6>{pigcms{:L('_B_D_LOGIN_TEL_')}：</h6><p></p>-->
@@ -177,8 +183,11 @@
             <!--			                <div class="kv-line">-->
             <!--			                    <h6>Unit：</h6><p>{pigcms{$vo.detail} {pigcms{$vo.city_txt}</p>-->
             <!--			                </div>-->
+            <div class="kv-line bod">
+               {pigcms{$vo.adress}
+            </div>
             <div class="kv-line">
-                <p>{pigcms{$vo.adress}</p>
+                {pigcms{$vo.detail}
             </div>
             <!--							<if condition="$vo['zipcode']">-->
             <!--								<div class="kv-line">-->
@@ -203,7 +212,7 @@
     <div class="space_one"> {pigcms{:L('V2_PAGETITLE_ADDRESS_ALLOW')}</div>
     </if>
     <volist name="adress_list_not_allow" id="vo">
-        <dl class="list list_not_allow" <if condition=" $vo['is_allow'] eq 0">style="background-color:#eee" data-type="{pigcms{$vo['is_allow']}"</if>>
+        <dl class="list list_not_allow" <if condition=" $vo['is_allow'] eq 0">style="background-color:#fee" data-type="{pigcms{$vo['is_allow']}"</if>>
         <dd class="address-wrapper not_allow <if condition=" !$vo['select_url']">dd-padding</if>">
         <if condition="$vo['select_url'] and $vo['is_allow'] eq '1'">
 
@@ -213,8 +222,8 @@
                 <!--                </div>-->
         </if>
         <div class="address-container" style="margin-left:10px;">
-            <div class="kv-line">
-                <p>{pigcms{$vo.name}({pigcms{$vo.phone})</p>
+            <div class="kv-line bod">
+                {pigcms{$vo.name}({pigcms{$vo.phone})
             </div>
             <!--			                <div class="kv-line">-->
             <!--			                    <h6>{pigcms{:L('_B_D_LOGIN_TEL_')}：</h6><p></p>-->
@@ -222,14 +231,12 @@
             <!--			                <div class="kv-line">-->
             <!--			                    <h6>Unit：</h6><p>{pigcms{$vo.detail} {pigcms{$vo.city_txt}</p>-->
             <!--			                </div>-->
-            <div class="kv-line">
-                <p>{pigcms{$vo.adress}</p>
+            <div class="kv-line bod">
+                {pigcms{$vo.adress}
             </div>
-            <!--							<if condition="$vo['zipcode']">-->
-            <!--								<div class="kv-line">-->
-            <!--									<h6>{pigcms{:L('_B_PURE_MY_22_')}：</h6><p>{pigcms{$vo.zipcode}</p>-->
-            <!--								</div>-->
-            <!--							</if>-->
+            <div class="kv-line">
+                {pigcms{$vo.detail}
+            </div>
         </div>
         </dd>
         <dd>

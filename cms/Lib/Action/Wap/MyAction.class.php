@@ -693,6 +693,7 @@ class MyAction extends BaseAction{
             }
 
 			$this->assign('adress_list',$adress_list);
+			//var_dump($address_list_allow);
             $this->assign('adress_list_allow',$address_list_allow);
             $this->assign('adress_list_not_allow',$address_list_not_allow);
 
@@ -3343,8 +3344,10 @@ class MyAction extends BaseAction{
     //个人中心-优惠券
     public function coupon(){
         $coupon_list = D('System_coupon')->get_user_coupon_list($this->user_session['uid'], $this->user_session['phone']);
+        //var_dump($coupon_list);die();
         $this->assign('cate_platform', D('System_coupon')->cate_platform());
 
+       // var_dump(D('System_coupon')->cate_platform());die();
         $tmp = array();
         foreach ($coupon_list as $key => &$v) {
             $v['name'] = lang_substr($v['name'],C('DEFAULT_LANG'));
@@ -3376,10 +3379,11 @@ class MyAction extends BaseAction{
                 $tmp[$v['is_use']][$v['coupon_id']]['url'] = $url;
             }
         }
-//        if($tmp[0]){
-//            $this->assign('coupon', array_shift($tmp[0]));
-//        }
-        $this->assign('coupon_list', $coupon_list);
+        if($tmp[0]){
+            //$this->assign('coupon_list', array_shift($tmp[0]));
+            $this->assign('coupon_list', $tmp[0]);
+        }
+        //$this->assign('coupon_list', $coupon_list);
         //$this->card_list();
         $this->display();
     }
@@ -6060,15 +6064,22 @@ class MyAction extends BaseAction{
 	    if($_POST) {
             $code = $_POST['code'];
             $uid = $this->user_session['uid'];
-
+            $order_id=$_POST['order_id'];
+            $order=D('Shop_order')->field("price")->where(array('order_id' => $order_id))->find();
+            $order_price=$order['price'];
+            //die($order);
             $coupon = D('System_coupon')->field(true)->where(array('notice' => $code))->find();
             $cid = $coupon['coupon_id'];
-
+            $order_money=$coupon['order_money'];
+            //die($order_price."----------".$order_money);
             if ($cid) {
                 $l_id = D('System_coupon_hadpull')->field(true)->where(array('uid' => $uid, 'coupon_id' => $cid))->find();
 
-                if ($l_id == null) {
+                if ($l_id == null) {    //之前没有领用过
                     $result = D('System_coupon')->had_pull($cid, $uid);
+                    if ($order_price<$order_money){ //新加的优惠券当前订单不可用
+                        exit(json_encode(array('error_code' => 2, 'msg' => L('_AL_EXCHANGE_CANTUSER_CODE_'))));
+                    }
                 }else
                     exit(json_encode(array('error_code' => 1, 'msg' => L('_AL_EXCHANGE_CODE_'))));
             } else {

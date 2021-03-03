@@ -1044,6 +1044,7 @@ class ShopAction extends BaseAction{
         $store['adress'] = $row['adress'];
         $store['is_close'] = 1;
         $store['isverify'] = $now_mer['isverify'];
+        $store['store_status'] = $now_store['status'];
         $store['shop_remind'] = $row['shop_remind'];
         $now_time = date('H:i:s');
         $keywords = D('Keywords')->where(array('third_type' => 'Merchant_store', 'third_id' => $row['store_id']))->select();

@@ -52,6 +52,7 @@ lang['_IS_CONFIRM_BIND_'] = '你确定要绑定已存在的账号吗？';
 lang['_LOADING_TXT_'] = '正在加载中...';
 lang['_SMS_CODE_ERROR_'] = '输入的短信验证码有误。';
 lang['_B_D_LOGIN_FILLMESSAGE_'] = '填写短信验证码';
+lang['_STORE_STATUS_CLOSED'] = '休息';
 
 function getLangStr(key,replace=''){
     var str = lang[key];
