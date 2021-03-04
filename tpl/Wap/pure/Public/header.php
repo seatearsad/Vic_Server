@@ -39,6 +39,11 @@
         <if condition = "MODULE_NAME == 'Home'">
         display: flex;
         </if>
+        <if condition = "MODULE_NAME == 'Shop'">
+            <if condition="ACTION_NAME == 'index'">
+            display: flex;
+            </if>
+        </if>
         flex: 1 1 100%;
     }
 
@@ -597,7 +602,7 @@
 
     var init_top = $('#tutti_header').offset().top;
     var init_margin = parseFloat($('#menu_memo').css('margin-top'));
-    console.log(navigator.userAgent.toLowerCase());
+    //console.log(navigator.userAgent.toLowerCase());
 
     $('.down_close').click(function () {
         $('.down_header').hide();

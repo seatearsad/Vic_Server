@@ -70,7 +70,7 @@
             .Coupon .Coupon_top_not_user{
                 background-color: #a3a3a3;
             }
-           
+
             .Coupon .Coupon_end em{
                 border: 1px solid #ffa52d;
                 color: #ffa52d;

@@ -113,11 +113,13 @@ class Shop_orderModel extends Model
 		}
 
 		$order_content = D('Shop_order_detail')->field(true)->where(array('order_id' => $order_id))->select();
+        //var_dump($order_content);die();
 		$tax_price = 0;
 		$deposit_price = 0;
 		foreach ($order_content as &$trow) {
 			//$trow['name'] = $trow['spec'] ? $trow['name'] . ' (' . $trow['spec'] . ')' : $trow['name'];
 			$trow['money'] = floatval($trow['price'] * $trow['num']);
+            $trow['spec'] = str_replace(";","<br/>",$trow['spec']);
 			$goods = D('Shop_goods')->field(true)->where(array('goods_id'=>$trow['goods_id']))->find();
 			$trow['tax_num'] = $goods['tax_num'];
 			$trow['deposit_price'] = $goods['deposit_price'];

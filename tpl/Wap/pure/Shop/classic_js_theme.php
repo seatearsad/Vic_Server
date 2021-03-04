@@ -481,7 +481,7 @@
 							var tmpParam = [];
 							for(var j in d[i].productParam){
 								if(d[i].productParam[j].type == 'spec'){
-									tmpParam.push(d[i].productParam[j].name+);
+									tmpParam.push(d[i].productParam[j].name);
 								}else if(d[i].productParam[j].type == 'side_dish'){
                                     tmpParam.push(d[i].productParam[j].dish_name);
                                 }else{

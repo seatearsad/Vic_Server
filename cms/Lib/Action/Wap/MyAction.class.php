@@ -608,8 +608,8 @@ class MyAction extends BaseAction{
             $store = null;
         }
 
-       //var_dump($adress_list);die();
-		if(empty($adress_list)){
+
+		if(empty($adress_list)){ //如果没有地址数据，就自动跳转到
 			redirect(U('My/edit_adress',$_GET));
 		}else{
 			if($_GET['group_id']){
@@ -634,15 +634,18 @@ class MyAction extends BaseAction{
 
 			if($select_url){
 				$this->assign('back_url',U($select_url,$_GET));
+                //$this->assign('back_url',"");
 			}else{
 				$this->assign('back_url',U('My/myinfo'));
 			}
 
 			$param = $_GET;
-			if ($_GET['buy_type']=='shop'){
+			if ($_GET['buy_type']=='shop'){ //从购物车选择配送地址
 			    $page_title=L('V2_PAGETITLE_ADDRESS_SHOP');
-            }else{
+
+            }else{                          //从个人中心进入收货地址
 			    $page_title=L('V2_PAGETITLE_ADDRESS');
+                $this->assign('back_url',U('My/myinfo'));
             }
             $this->assign('page_title',$page_title);
 			foreach($adress_list as $key=>&$value){
@@ -679,22 +682,25 @@ class MyAction extends BaseAction{
                 array_multisort($cmf_arr, SORT_ASC, $adress_list);
             }
 
-            foreach($adress_list as $key=>$value){
+            $address_list_allow = array();
 
-			    if ($adress_list[$key]['is_allow']=="1"){
-			        $address_list_allow[]=$adress_list[$key];
+            foreach($adress_list as $v){
+			    if ($v['is_allow']==1){
+			        $address_list_allow[]=$v;
                 }
             }
-            foreach($adress_list as $key=>$value){
-
-                if ($adress_list[$key]['is_allow']=="0"){
-                    $address_list_not_allow[]=$adress_list[$key];
+            //var_dump($address_list_allow);die();
+            foreach($adress_list as $v){
+                if ($v['is_allow']==0){
+                    $address_list_not_allow[]=$v;;
                 }
             }
-
+            //var_dump($address_list_allow);
+            //die();
 			$this->assign('adress_list',$adress_list);
-			//var_dump($address_list_allow);
-            $this->assign('adress_list_allow',$address_list_allow);
+            $this->assign('adress_list_count',count($adress_list));
+
+			$this->assign('adress_list_allow',$address_list_allow);
             $this->assign('adress_list_not_allow',$address_list_not_allow);
 
 			//-------------------------------------------------------------------

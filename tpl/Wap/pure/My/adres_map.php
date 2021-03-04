@@ -68,7 +68,7 @@
     function fillInAddress() {
 
         var place = autocomplete.getPlace();
-
+        console.log(place);
         info = JSON.parse($.cookie('user_address'));
 
         info.adress = place.formatted_address;

@@ -15,7 +15,7 @@
 		<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
 		<meta name="format-detection" content="telephone=no"/>
 		<meta name="format-detection" content="address=no"/>
-		<link rel="stylesheet" type="text/css" href="{pigcms{$static_path}shop/css/shopBase.css?v=1.92"/>
+		<link rel="stylesheet" type="text/css" href="{pigcms{$static_path}shop/css/shopBase.css?v=1.93"/>
 <!--		<script type="text/javascript" src="{pigcms{:C('JQUERY_FILE_190')}" charset="utf-8"></script>-->
         <script type="text/javascript" src="{pigcms{$static_path}js/jquery.min.js" charset="utf-8"></script>
 		<script type="text/javascript" src="{pigcms{$static_path}js/iscroll.js?220" charset="utf-8"></script>
@@ -23,7 +23,7 @@
 		<script type="text/javascript" src="{pigcms{$static_path}js/fastclick.js" charset="utf-8"></script>
 		<script type="text/javascript" src="{pigcms{$static_path}layer/layer.m.js" charset="utf-8"></script>
 <!--		<script type="text/javascript" src="http://api.map.baidu.com/api?type=quick&ak=4c1bb2055e24296bbaef36574877b4e2&v=1.0" charset="utf-8"></script>		-->
-		<script type="text/javascript" src="{pigcms{$static_path}js/common.js?220" charset="utf-8"></script>
+		<script type="text/javascript" src="{pigcms{$static_path}js/common.js?221" charset="utf-8"></script>
 		<script type="text/javascript">
 			var locationClassicHash = 'shop-{pigcms{$_GET.shop_id}';
 			var storeUrl = "{pigcms{:U('Shop/classic_shop')}&shop_id={pigcms{$_GET.shop_id}";
@@ -41,7 +41,7 @@
 			var shopShareUrl = "{pigcms{$config.site_url}{pigcms{:U('Shop/index',array('openid'=>$_SESSION['openid']))}&shop-id=";
 			var shopReplyUrl = "{pigcms{$config.site_url}/index.php?g=Index&c=Reply&a=ajax_get_list&order_type=3&parent_id=";
 		</script>
-        <script type="text/javascript" src="{pigcms{$static_public}js/lang/{pigcms{:C('DEFAULT_LANG')}.js" charset="utf-8"></script>
+        <script type="text/javascript" src="{pigcms{$static_public}js/lang/{pigcms{:C('DEFAULT_LANG')}.js?v=20" charset="utf-8"></script>
 		<script type="text/javascript" src="{pigcms{$static_path}shop/js/shopClassicBaseNew.js?t={pigcms{$_SERVER.REQUEST_TIME}" charset="utf-8"></script>
         <include file="Public:facebook"/>
 	</head>
@@ -704,7 +704,7 @@
 <!--					</dl>-->
 				</div>
 				<div id="shopPageShade" style="display:none;"></div>
-				<div id="shopPageCatShade"></div>
+				<div id="shopPageCatShade" style="z-index: 80"></div>
 <!--                可选规格对话框-->
 				<div id="shopDetailPage" style="display:none;">
 					<div class-s="scrollerBox">

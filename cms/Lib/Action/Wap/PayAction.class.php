@@ -596,7 +596,7 @@ class PayAction extends BaseAction{
             }
         }
         $this->assign('not_touch',$not_touch);
-
+        $this->assign('back_url',U("My/shop_order_list"));
         $this->assign('type',$_GET['type']);
         $this->assign('order_id',$_GET['order_id']);
         $this->display();

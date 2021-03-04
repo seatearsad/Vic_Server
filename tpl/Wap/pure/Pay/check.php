@@ -651,7 +651,7 @@
                             var card_stauts = "{pigcms{$card['status']}";
                             if(card_stauts == 0){
                                 var old_cvd = $('input[name="old_cvd"]').val();
-                                if(!/^\d{3}$/.test(old_cvd)){
+                                if(!/^\d{3,4}$/.test(old_cvd)){
                                     alert('Please input CVD');
                                     layer.closeAll();
                                     return false;
@@ -868,10 +868,10 @@
         flex: 0 0 auto;
     }
     .goods_spec{
-        font-size: .8em;
+        font-size: 14px;
         color: #999;
-        margin-top: -10px;
-        margin-left: 40px;
+        margin-top: 2px;
+        margin-left: 47px;
         padding-bottom: 10px;
         margin-right: 10px;
         line-height: 1.2em;
@@ -1279,7 +1279,7 @@
                                         <if condition="$card['status'] eq 0">
                                             <div style="line-height: 20px;float:left;width: 100%;margin-left:.2rem;margin-top: 5px;margin-bottom: 5px;">
                                                 <span style="float: left;width:50px;">CVD：</span>
-                                                <input type="text" maxlength="3" size="20" name="old_cvd" class="form-field" id="old_cvd" placeholder="3 digites on the back of your card" value="" style="float: left"/>
+                                                <input type="text" maxlength="4" size="30" name="old_cvd" class="form-field" id="old_cvd" placeholder="3-4 digites on the back of your card" value="" style="float: left"/>
                                             </div>
                                         </if>
                                     </if>
@@ -1305,7 +1305,7 @@
                                         </div>
                                         <div style="line-height: 20px;float:left;width: 100%;margin-bottom: 5px;">
                                             <span style="float: left;width:150px;">CVD：</span>
-                                            <input type="text" maxlength="3" size="20" name="cvd" class="form-field" placeholder="3 digites on the back of your card" id="cvd" value="" style="float: left"/>
+                                            <input type="text" maxlength="4" size="20" name="cvd" class="form-field" placeholder="3-4 digites on the back of your card" id="cvd" value="" style="float: left"/>
                                         </div>
                                     </dd>
                                 </dl>
@@ -1748,7 +1748,7 @@
         }else{
             $(this).val($.trim($(this).val()));
             var cvd = $(this).val();
-            if(!/^\d{3}$/.test(cvd)){
+            if(!/^\d{3,4}$/.test(cvd)){
                 $(this).after("<span class='inline-tip'><i class='tip-status tip-status--opinfo'></i></span>").closest('.form-field').addClass('form-field--error');
             }
         }
@@ -1756,7 +1756,7 @@
 
     function check_card(){
         var isT = true;
-        if($('#card_name').val().length < 2 || !/^\d{13,}$/.test($('#card_num').val()) || $('#expiry').val().length != 4 || !/^\d{3}$/.test($('#cvd').val())){
+        if($('#card_name').val().length < 2 || !/^\d{13,}$/.test($('#card_num').val()) || $('#expiry').val().length != 4 || !/^\d{3,4}$/.test($('#cvd').val())){
             isT = false;
         }
         return isT;
