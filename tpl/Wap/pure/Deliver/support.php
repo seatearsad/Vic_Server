@@ -54,13 +54,13 @@
 <body>
     <include file="header" />
     <div style="height: 60px"></div>
-    <a href="tel:1-888-3999-6668">
+    <a href="tel:1-888-399-6668">
     <div id="phone">
         <div>
             Order and Delivery Questions
         </div>
         <div style="font-size: 10px;margin-top: 2px;">
-            Please contact our customer support if you have any questions about your order or delivery at 1-888-3999-6668.
+            Please contact our customer support if you have any questions about your order or delivery at 1-888-399-6668.
         </div>
     </div>
     </a>
