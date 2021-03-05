@@ -1386,6 +1386,7 @@ function showShop(shopId){
             }
             changeProductSpec();
         });
+
 		//Dish + 选择
         $(document).on('click','#shopDetailPageDish .product_btn.plus',function () {
         	var max = parseInt($(this).parent().data('max'));

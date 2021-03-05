@@ -3597,6 +3597,7 @@ class ShopAction extends BaseAction{
         $order_id = isset($_GET['order_id']) ? intval($_GET['order_id']) : 0;
         $order = D("Shop_order")->get_order_detail(array('order_id' => $order_id, 'uid' => $this->user_session['uid']));
         //
+       //var_dump($order);die();
         if ($order) {
 
             //-------------------------------  获取地图位置 --------------------------------------peter

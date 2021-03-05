@@ -342,9 +342,9 @@
                     {{#  ct++; } }}
 
 					{{# var k = 0; for(var j in d[i].list){ }}
-						<li class="f2 {{# if(k == 0){ }}active{{# } }}" data-spec_list_id="{{ d[i].list[j].id }}"  data-spec_id="{{ d[i].list[j].sid}}">{{ d[i].list[j].name }}</li>
+						<li class="f2{{# if(k == 0){ }} active{{# } }}" data-spec_list_id="{{ d[i].list[j].id }}"  data-spec_id="{{ d[i].list[j].sid}}">{{ d[i].list[j].name }}</li>
                         {{# if (ct>(k+1)){ }}
-                        <li class="gray_line" ></li>
+                        <div class="gray_line" ></div>
                         {{# } }}
                     {{#  k++; } }}
 				</ul>
@@ -386,7 +386,7 @@
                     {{# } }}
                 </li>
                     {{# if (d[i].list.length>(k+1)){ }}
-                     <li class="gray_line" ></li>
+                     <div class="gray_line" ></div>
                     {{# } }}
                 {{#  k++; } }}
             </ul>
@@ -447,10 +447,10 @@
 			<div class="right fl">
 				<ul>
 					{{# var k = 0; for(var j in d[i].val){ }}
-						<li class="f2 {{# if(k == 0 && d[i].num == 1){ }}active{{# } }}" data-num="{{ d[i].num }}" data-label_list_id="{{ i }}" data-label_id="{{ j }}">{{ d[i].val[j] }}</li>
+						<li class="f2{{# if(k == 0 && d[i].num == 1){ }} active{{# } }}" data-num="{{ d[i].num }}" data-label_list_id="{{ i }}" data-label_id="{{ j }}">{{ d[i].val[j] }}</li>
 
                         {{# if (d[i].val.length>(k+1)){ }}
-                        <li class="gray_line" ></li>
+                        <div class="gray_line" ></div>
                         {{# } }}
 
                     {{#  k++ } }}

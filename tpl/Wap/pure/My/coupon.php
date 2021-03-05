@@ -25,6 +25,7 @@
             max-width: 640px;
             min-width: 320px;
             margin: 0 auto;
+            padding-bottom: 60px;
         }
 
         .gray_line{

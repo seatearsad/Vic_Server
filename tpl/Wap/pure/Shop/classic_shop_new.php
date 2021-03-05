@@ -356,6 +356,7 @@
             .gray_line{
                 border: 1px solid #e6e6e6;
                 height: 1px;
+                margin-bottom: 10px;
             }
             .msg-option{
                 bottom: 0;

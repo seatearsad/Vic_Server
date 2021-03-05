@@ -237,12 +237,12 @@
 
     <if condition="$order_details['deliver_info']">
         <div class="infor" style="margin-bottom: 0px;">
-            <a href="tel:{pigcms{$order_details['deliver_info']['phone']}">
+<!--            <a href="tel:{pigcms{$order_details['deliver_info']['phone']}">-->
                 <div class="div_deli">
                     <div style="font-size: 18px;font-weight: bold">{pigcms{$order_details['deliver_info']['name']}</div>
                     <div style="margin-top: 5px;">will deliver your order to you</div>
                 </div>
-            </a>
+<!--            </a>-->
         </div>
         <div class="gray_line"></div>
     </if>
@@ -301,7 +301,8 @@
                 </dd>
                 <dd class="clr">
                     <div class="fl" style="font-weight: bold">{pigcms{:L('_TOTAL_RECE_')}</div>
-                    <div class="fr" style="font-weight: bold">${pigcms{$order_details['price'] + $order_details['tip_charge']|floatval}</div>
+                    <div class="fr" style="font-weight: bold">${pigcms{$order_details['price'] + $order_details['tip_charge']-$order_details['merchant_reduce ']-$order_details['delivery_discount']-$order_details['coupon_price']|floatval}</div>
+
                 </dd>
             </dl>
         </div>
@@ -369,7 +370,7 @@
                 </li>
                 <li class="clr">
                     <div class="fl">{pigcms{:L('_PAYMENT_MODE_')}</div>
-                    <div class="fr">{pigcms{$order_details['pay_type_str']}</div>
+                    <div class="fr">{pigcms{$order_details['pay_type']}</div>
                 </li>
                 <li class="clr">
                     <div class="fl">{pigcms{:L('_RECE_INFO_')}</div>
@@ -459,7 +460,6 @@
         font-size: 16px;
     }
 </style>
-
 
 <if condition="$order.status eq 1 AND $order.deliver_lng neq null AND $order.deliver_lat neq null">
  <script>

@@ -3333,10 +3333,15 @@ class MyAction extends BaseAction{
                 $list[] = $ol;
             }
         }
+        //var_dump($list);die("-----");
         foreach($list as $key=>$val){
             $list[$key]['name'] = lang_substr($val['name'],C('DEFAULT_LANG'));
             $list[$key]['order_url'] = U('Shop/order_detail', array('order_id' => $val['order_id']));
-            $list[$key]['create_time_show'] = date('Y-m-d h:i',$val['create_time']);
+            if($val['pay_time']==0) {
+                $list[$key]['create_time_show'] = date('Y-m-d h:i', $val['create_time']);
+            }else{
+                $list[$key]['create_time_show'] = date('Y-m-d h:i', $val['pay_time']);
+            }
            ///$list[$key]['create_time_show'] = date('Y-m-d h:i:s',time());
             ///$list[$key]['create_time_show'] = date_default_timezone_get();
 

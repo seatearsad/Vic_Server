@@ -1278,8 +1278,8 @@
                                         </a>
                                         <if condition="$card['status'] eq 0">
                                             <div style="line-height: 20px;float:left;width: 100%;margin-left:.2rem;margin-top: 5px;margin-bottom: 5px;">
-                                                <span style="float: left;width:50px;">CVD：</span>
-                                                <input type="text" maxlength="4" size="30" name="old_cvd" class="form-field" id="old_cvd" placeholder="3-4 digites on the back of your card" value="" style="float: left"/>
+                                                <span style="width:50px;">CVD/CVV：</span>
+                                                <input type="text" maxlength="4" size="26" name="old_cvd" class="form-field" id="old_cvd" placeholder="3-4 digites on the back of your card" value="" style=""/>
                                             </div>
                                         </if>
                                     </if>
@@ -1304,7 +1304,7 @@
                                             <input type="checkbox" name="save" class="form-field" id="save" value="1" style="float: left;width:20px;height: 20px;"/>
                                         </div>
                                         <div style="line-height: 20px;float:left;width: 100%;margin-bottom: 5px;">
-                                            <span style="float: left;width:150px;">CVD：</span>
+                                            <span style="float: left;width:150px;">CVD/CVV：</span>
                                             <input type="text" maxlength="4" size="20" name="cvd" class="form-field" placeholder="3-4 digites on the back of your card" id="cvd" value="" style="float: left"/>
                                         </div>
                                     </dd>

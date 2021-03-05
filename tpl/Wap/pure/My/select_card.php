@@ -539,6 +539,7 @@
                 if(code == ""){
                     layer.open({
                         title:'Message',
+                        btn: ['OK'],
                         content:"{pigcms{:L('_INPUT_EXCHANGE_CODE_')}"
                     });
                 } else{
@@ -546,10 +547,10 @@
                 }
             })
 
-            $('#Coupon_top_not_user').click(function () {
-                alert("{pigcms{:L('_COUPON_ERROR_NOT_FOR_CURR_ORDER_')}");
+            $('.Coupon_top_not_user').click(function () {
                 layer.open({
                     title:'Message',
+                    btn: ['OK'],
                     content:"{pigcms{:L('_COUPON_ERROR_NOT_FOR_CURR_ORDER_')}"
                 });
             });
@@ -565,6 +566,7 @@
                             layer.open({
                                 title:'Message',
                                 content:"Success",
+                                btn: ['OK'],
                                 end:function () {
                                     window.location.reload();
                                 }
@@ -573,6 +575,7 @@
                         }else if (data.error_code == 2) {
                             layer.open({
                                 title:'Message',
+                                btn: ['OK'],
                                 content:data.msg,
                                 end:function () {
                                     window.location.reload();
@@ -582,6 +585,7 @@
                         }else{
                             layer.open({
                                 title:'Message',
+                                btn: ['OK'],
                                 content:data.msg
                             });
                         }
