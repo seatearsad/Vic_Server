@@ -226,6 +226,8 @@ a {
     background-repeat: no-repeat;
     background-size: auto 16px;
     background-position: center right;
+    font-weight: bold;
+    color: #747474;
 }
 .user_address .div_content{
     line-height: 25px;
@@ -272,7 +274,7 @@ a {
 }
 .menu_wrap .title{
     font-size: 18px;
-    color:#000000;
+    color: #000000;
     margin-bottom: 10px;
 }
 

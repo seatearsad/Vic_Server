@@ -1573,7 +1573,6 @@ class Shop_goodsModel extends Model
         //end  @wangchuanyuan
 
 
-
         if ($is_open == 0) {
             return array('error_code' => true, 'msg' => L('_STORE_IS_CLOSE_'));
         }

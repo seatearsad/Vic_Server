@@ -2427,14 +2427,12 @@ class ShopAction extends BaseAction{
 // 		} else {
 // 			$return = $this->check_cart();
 // 		}
-
 // 		if ($return['error_code']) $this->error_tips($return['msg']);
 
 		//delivery_type 0:平台配送，1：商家配送，2：自提，3:平台配送或自提，4：商家配送或自提
 	    $store_id = isset($_GET['store_id']) ? intval($_GET['store_id']) : 0;
 		$order_id = isset($_GET['order_id']) ? intval($_GET['order_id']) : 0;
 		if ($order_id && ($order = D('Shop_order')->get_order_detail(array('order_id' => $order_id, 'uid' => $this->user_session['uid'])))) {
-
 		    $return = D('Shop_goods')->checkCart($store_id, $this->user_session['uid'], $order['info'], 0);
             $this->assign('order_id', $order_id);
             //die("++++");
@@ -2642,6 +2640,7 @@ class ShopAction extends BaseAction{
                 }
             }
 			$user_adress = D('User_adress')->get_one_adress($this->user_session['uid'], intval($address_id));
+			//var_dump($user_adress);die("------");
 			$this->assign('user_adress', $user_adress);
 		} else {
 			if (in_array($return['delivery_type'], array(2, 3, 4))) {
@@ -2671,12 +2670,13 @@ class ShopAction extends BaseAction{
 		//计算配送费
         $is_jump_address = 0;
 		if ($user_adress) {
+
 			//$distance = getDistance($user_adress['latitude'], $user_adress['longitude'], $return['store']['lat'], $return['store']['long']);
             $from = $return['store']['lat'].','.$return['store']['long'];
             $aim = $user_adress['latitude'].','.$user_adress['longitude'];
 
             $distance = getDistance($return['store']['lat'],$return['store']['long'],$user_adress['latitude'],$user_adress['longitude']);
-
+            //var_dump($distance);die("++++++++++++++==".$return['store']['delivery_radius'] * 1000);
             if($distance <= $return['store']['delivery_radius'] * 1000) {
                 $return['store']['free_delivery'] = 0;
                 $return['store']['event'] = "";
@@ -2733,9 +2733,10 @@ class ShopAction extends BaseAction{
 		}else{
             $is_jump_address = 1;
         }
+        //如果没有找到合适的配送地址
         if($is_jump_address == 1){
             $store = $return['store'];
-            redirect(U('My/adress',array('buy_type' => 'shop', 'store_id'=>$store['store_id'], 'village_id'=>$village_id, 'mer_id' => $store['mer_id'], 'frm' => $_GET['frm'], 'current_id'=>$user_adress['adress_id'], 'order_id' => $order_id)));
+            redirect(U('My/adress',array('buy_type' => 'shop', 'store_id'=>$store['store_id'], 'village_id'=>$village_id, 'mer_id' => $store['mer_id'], 'frm' => $_GET['frm'], 'adress_id'=>$user_adress['adress_id'], 'order_id' => $order_id)));
         }
 		//计算打包费 add garfunkel
         $store_shop = D("Merchant_store_shop")->field(true)->where(array('store_id' => $store_id))->find();

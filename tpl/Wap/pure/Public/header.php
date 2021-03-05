@@ -442,6 +442,13 @@
         </if>
 
         <if condition="MODULE_NAME == 'My'">
+
+            <if condition="ACTION_NAME == 'language'">
+                <div class="this_header">
+                    <span id="back_button_span"></span>
+                    {pigcms{:L('_LANG_TXT_')}
+                </div>
+            </if>
             <if condition="ACTION_NAME == 'shop_feedback'">
                 <div class="this_header">
                     {pigcms{:L('V3_ORDER_REVIEW_TITLE')}
@@ -452,7 +459,6 @@
                 <php>setcookie("path_from_home",0);</php>
                 <div class="this_header">
                     {pigcms{:L('V3_ORDER_LIST_TITLE')}
-                    <div class="header_search"></div>
                 </div>
             </if>
             <if condition="ACTION_NAME == 'select_card'">
@@ -464,7 +470,6 @@
             <if condition="ACTION_NAME == 'index'">
                 <div class="this_header">
                     {pigcms{:L('V2_PAGETITLE_ACCOUNT')}
-                    <div class="header_search"></div>
                 </div>
             </if>
             <if condition="ACTION_NAME == 'myinfo'">
@@ -674,11 +679,23 @@
 
     $('#back_button_span').click(function () {
         <if  condition="$back_url eq ''">
+            //goback();
             window.history.go(-1);
         <else />
             window.location.href="{pigcms{$back_url}";
         </if>
     });
+
+    function goback(){
+        if (/MSIE (\d+\.\d+);/.test(navigator.userAgent)){
+            var referLink = document.createElement('a');
+            referLink.href = url;
+            document.body.appendChild(referLink);
+            referLink.click();
+        }else {
+            location.href = document.referrer;
+        }
+    }
 
     $('#header_address_div').html($.cookie('userLocationName'));
 </script>

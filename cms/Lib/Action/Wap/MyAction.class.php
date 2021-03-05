@@ -116,6 +116,7 @@ class MyAction extends BaseAction{
 			$merchant_url = $this->config['site_url'] . '/index.php?g=WapMerchant&c=Index&a=merreg&uid=' . $this->user_session['uid'];
 		}
         $invitationcode = D('User')->getUserInvitationCode($this->user_session['uid']);
+        $this->assign('back_url', U("My/index"));
         $this->assign('invitationcode', $invitationcode);
 		$this->assign('merchant_url', $merchant_url);
 		$this->display();
@@ -273,6 +274,7 @@ class MyAction extends BaseAction{
     }
     public function language(){
 	    $this->assign('curr_lang',C('DEFAULT_LANG'));
+        $this->assign('back_url', U("My/index"));
 	    $this->display();
     }
 	public function password(){
@@ -608,9 +610,20 @@ class MyAction extends BaseAction{
             $store = null;
         }
 
+        //$adress_list=null;
+        if ($_GET['buy_type']=='shop'){ //从购物车选择配送地址
+            $page_title=L('V2_PAGETITLE_ADDRESS_SHOP');
 
-		if(empty($adress_list)){ //如果没有地址数据，就自动跳转到
-			redirect(U('My/edit_adress',$_GET));
+        }else{                          //从个人中心进入收货地址
+            $page_title=L('V2_PAGETITLE_ADDRESS');
+            $this->assign('back_url',U('My/myinfo'));
+        }
+        $this->assign('page_title',$page_title);
+		if(empty($adress_list)){ //如果没有地址数据，就自动跳转到----->210305 如果地址数据为空，就停在列表里
+		    //redirect(U('My/edit_adress',$_GET));
+            $select_url = 'Shop/confirm_order';
+            $this->assign('back_url',U($select_url,$_GET));
+            $this->assign('adress_list_count',0);
 		}else{
 			if($_GET['group_id']){
 				$select_url = 'Group/buy';
@@ -640,63 +653,58 @@ class MyAction extends BaseAction{
 			}
 
 			$param = $_GET;
-			if ($_GET['buy_type']=='shop'){ //从购物车选择配送地址
-			    $page_title=L('V2_PAGETITLE_ADDRESS_SHOP');
 
-            }else{                          //从个人中心进入收货地址
-			    $page_title=L('V2_PAGETITLE_ADDRESS');
-                $this->assign('back_url',U('My/myinfo'));
-            }
-            $this->assign('page_title',$page_title);
-			foreach($adress_list as $key=>&$value){
-				$param['adress_id'] = $value['adress_id'];
-				if(!empty($select_url)){
-				    if ($param['buy_type']=="check"){
-				        $param_x["order_id"]=$param["order_id"];
-				        $param_x["type"]="shop";
-                        $param_x["adress_id"]=$param['adress_id'];
-                        $adress_list[$key]['select_url'] = U($select_url,$param_x);
-                    }else{
-					    $adress_list[$key]['select_url'] = U($select_url,$param);
+
+            foreach ($adress_list as $key => &$value) {
+                $param['adress_id'] = $value['adress_id'];
+                if (!empty($select_url)) {
+                    if ($param['buy_type'] == "check") {
+                        $param_x["order_id"] = $param["order_id"];
+                        $param_x["type"] = "shop";
+                        $param_x["adress_id"] = $param['adress_id'];
+                        $adress_list[$key]['select_url'] = U($select_url, $param_x);
+                    } else {
+                        $adress_list[$key]['select_url'] = U($select_url, $param);
                     }
-				}
-				$adress_list[$key]['edit_url'] = U('My/edit_adress',$param);
-				$adress_list[$key]['del_url'] = U('My/del_adress',$param);
+                }
+                $adress_list[$key]['edit_url'] = U('My/edit_adress', $param);
+                $adress_list[$key]['del_url'] = U('My/del_adress', $param);
 
                 $value['distance'] = 0;
 
-                if($store) {
+                if ($store) {
                     $distance = getDistance($store['lat'], $store['lng'], $value['latitude'], $value['longitude']);
                     $value['distance'] = $distance;
                     if ($distance <= $store['delivery_radius'] * 1000) {
                         $value['is_allow'] = 1;
-                    }else{
+                    } else {
                         $value['is_allow'] = 0;
                     }
-                }else{
+                } else {
                     $value['is_allow'] = 1;
                 }
-			}
-            if($store) {
+            }
+            if ($store) {
                 $cmf_arr = array_column($adress_list, 'distance');
                 array_multisort($cmf_arr, SORT_ASC, $adress_list);
             }
 
             $address_list_allow = array();
 
-            foreach($adress_list as $v){
-			    if ($v['is_allow']==1){
-			        $address_list_allow[]=$v;
+            foreach ($adress_list as $v) {
+                if ($v['is_allow'] == 1) {
+                    $address_list_allow[] = $v;
                 }
             }
             //var_dump($address_list_allow);die();
-            foreach($adress_list as $v){
-                if ($v['is_allow']==0){
-                    $address_list_not_allow[]=$v;;
+            foreach ($adress_list as $v) {
+                if ($v['is_allow'] == 0) {
+                    $address_list_not_allow[] = $v;;
                 }
             }
             //var_dump($address_list_allow);
             //die();
+
 			$this->assign('adress_list',$adress_list);
             $this->assign('adress_list_count',count($adress_list));
 
@@ -763,8 +771,8 @@ class MyAction extends BaseAction{
 				unset($params['adress_id']);
 				$this->assign('params',$params);
 			}
-			$this->display();
 		}
+        $this->display();
 	}
 
 	public function credit(){
@@ -882,7 +890,6 @@ class MyAction extends BaseAction{
 	public function edit_adress(){
 		$id=0;
 	    if(IS_POST){
-
 			if(empty($_POST['adress'])){
 				$this->error(L('_B_MY_NOPOSITION_'));
 			}
@@ -893,6 +900,7 @@ class MyAction extends BaseAction{
 				$this->error(L('_B_MY_SAVEPOSITIONLOSE_'));
 			}
 		}else{
+
 			$database_area = D('Area');
 			$id = $_GET['adress_id'];
             $from = $_GET['from'];
@@ -905,6 +913,7 @@ class MyAction extends BaseAction{
 				if ($now_adress) {
                     $city = $database_area->where(array('area_id'=>$now_adress['city']))->find();
                     $now_adress['city_name'] = $city['area_name'];
+
                     $this->assign('now_adress', $now_adress);
 
 					$province_list = $database_area->get_arealist_by_areaPid(0);
@@ -934,6 +943,7 @@ class MyAction extends BaseAction{
 
 				$now_adress['default'] = $now_adress['defaul'];
 				$now_adress['adress_id'] = $now_adress['id'];
+
 				$this->assign('now_adress', $now_adress);
 				$province_list = $database_area->get_arealist_by_areaPid(0);
 				$this->assign('province_list',$province_list);
@@ -3391,6 +3401,7 @@ class MyAction extends BaseAction{
         }
         //$this->assign('coupon_list', $coupon_list);
         //$this->card_list();
+        $this->assign('back_url', U("My/index"));
         $this->display();
     }
 
@@ -6080,10 +6091,9 @@ class MyAction extends BaseAction{
             //die($order_price."----------".$order_money);
             if ($cid) {
                 $l_id = D('System_coupon_hadpull')->field(true)->where(array('uid' => $uid, 'coupon_id' => $cid))->find();
-
                 if ($l_id == null) {    //之前没有领用过
                     $result = D('System_coupon')->had_pull($cid, $uid);
-                    if ($order_price<$order_money){ //新加的优惠券当前订单不可用
+                    if ($order_price!="" && $order_price<$order_money){ //新加的优惠券当前订单不可用
                         exit(json_encode(array('error_code' => 2, 'msg' => L('_AL_EXCHANGE_CANTUSER_CODE_'))));
                     }
                 }else

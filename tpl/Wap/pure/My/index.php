@@ -13,6 +13,9 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
     <meta name="format-detection" content="telephone=no"/>
     <meta name="format-detection" content="address=no"/>
+    <meta HTTP-EQUIV="pragma" CONTENT="no-cache">
+    <meta HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate">
+    <meta HTTP-EQUIV="expires" CONTENT="0">
     <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/common.css?215"/>
     <script type="text/javascript" src="{pigcms{:C('JQUERY_FILE_190')}" charset="utf-8"></script>
     <script type="text/javascript" src="{pigcms{$static_path}js/iscroll.js?444" charset="utf-8"></script>
@@ -332,6 +335,15 @@
         phone: {
             value: "{pigcms{$now_user['phone']}"
         }
+    });
+</script>
+<script type="text/javascript">
+    window.addEventListener('pageshow', function(e) {
+        //如果检测到页面是从“往返缓存”中读取的，刷新页面
+        if (e.persisted) {
+            alert("pageshow");
+            window.location.reload();
+       }
     });
 </script>
 </body>

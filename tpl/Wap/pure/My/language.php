@@ -96,11 +96,6 @@
 <body>
     <include file="Public:header"/>
     <div class="main">
-        <div class="this_nav">
-            <span id="back_span"></span>
-            {pigcms{:L('_LANG_TXT_')}
-        </div>
-        <div class="gray_line"></div>
         <ul>
             <li class="lang_en">
                 <div <if condition="$curr_lang eq 'en-us'">class="lang_c"</if>>

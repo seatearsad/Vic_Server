@@ -174,6 +174,7 @@
         .space_two{
             margin: 20px;
             font-size: 16px;
+            text-align: center;
         }
         dl.list_not_allow{
             background: #e1e1e1;
@@ -250,7 +251,7 @@
     <if condition="$adress_list_not_allow">
     <div class="space_one"> {pigcms{:L('V2_PAGETITLE_ADDRESS_ALLOW')}</div>
     </if>
-    <div class="space_two"></div>
+    <div class="space_two"><if condition="$adress_list_count==0">{pigcms{:L('_B_PURE_MY_843_')}</if></div>
 
     <volist name="adress_list_not_allow" id="vo">
         <dl class="list list_not_allow" <if condition=" $vo['is_allow'] eq 0">style="background-color:#e2e2e2" data-type="{pigcms{$vo['is_allow']}"</if>>
@@ -296,6 +297,7 @@
     <script src="{pigcms{$static_path}js/common_wap.js"></script>
     <script>
         var all_count={pigcms{$adress_list_count};
+
         $(function () {
             $('.mj-del').click(function () {
                 var now_dom = $(this);

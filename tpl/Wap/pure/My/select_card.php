@@ -370,10 +370,10 @@
     <dd class="main Coupon">
 		<div id="tips" class="tips"></div>
         <if condition="$delivery_type eq 0">
-        <div id="delivery_desc">
-            Please note that you cannot use multiple discounts at the same time.
-            To use your coupon,your other discount may be affected.
-        </div>
+            <div id="delivery_desc">
+                Please note that you cannot use multiple discounts at the same time.
+                To use your coupon,your other discount may be affected.
+            </div>
         </if>
 		<dl class="list" style="margin-top:0rem;display:none">
 		    <dd>
@@ -514,6 +514,7 @@
             });
 
 			$(function(){
+
 				$('.mj-del').click(function(){
 					var now_dom = $(this);
 					if(confirm('您确定要删除此地址吗？')){
@@ -545,6 +546,14 @@
                 }
             })
 
+            $('#Coupon_top_not_user').click(function () {
+                alert("{pigcms{:L('_COUPON_ERROR_NOT_FOR_CURR_ORDER_')}");
+                layer.open({
+                    title:'Message',
+                    content:"{pigcms{:L('_COUPON_ERROR_NOT_FOR_CURR_ORDER_')}"
+                });
+            });
+
             function exchange_code(code,order_id){
                 $.ajax({
                     url:"{pigcms{:U('My/exchangeCode')}",
@@ -555,7 +564,6 @@
                         if(data.error_code == 0){
                             layer.open({
                                 title:'Message',
-                                time:3,
                                 content:"Success",
                                 end:function () {
                                     window.location.reload();
@@ -565,7 +573,6 @@
                         }else if (data.error_code == 2) {
                             layer.open({
                                 title:'Message',
-                                time:3,
                                 content:data.msg,
                                 end:function () {
                                     window.location.reload();
@@ -575,7 +582,6 @@
                         }else{
                             layer.open({
                                 title:'Message',
-                                time:3,
                                 content:data.msg
                             });
                         }

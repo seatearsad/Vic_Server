@@ -1063,6 +1063,7 @@ function cartEventReg(){
 	
 	$('#checkCart').click(function(){
         pageLoadTips({showBg:false});
+        //alert(check_cart_url+'&store_id='+nowShop.store.id);
 		window.location.href = check_cart_url+'&store_id='+nowShop.store.id;
 	});
 }
@@ -1757,6 +1758,7 @@ function showShop(shopId){
 
 			changeWechatShare('shop',{title:nowShop.store.name,desc:nowShop.store.txt_info,imgUrl:nowShop.store.image,link:shopShareUrl+nowShop.store.id});
             //如果店铺关闭，要提示
+            var shop_remind = ""
 			if(nowShop.store.is_close == '1' || nowShop.store.store_status=='0'){
                 shop_remind = "This store is currently closed, and delivery is unavailable at the moment.";
 			}else{
@@ -1764,7 +1766,6 @@ function showShop(shopId){
                     // var shop_remind = nowShop.store.shop_remind.replace(/\r\n/g, "<br>");
                     // shop_remind = shop_remind.replace(/\s/g, "&nbsp;");
                     var remind = nowShop.store.shop_remind.split('\n');
-                    var shop_remind = "";
                     for(var str of remind){
                        shop_remind += '<p>'+str+'</p>';
                     }
@@ -1773,13 +1774,15 @@ function showShop(shopId){
 			}
 			pageLoadHides();
 			//console.log("nowShop.store.shop_remind="+nowShop.store.shop_remind);
-			var remindTipLayer = layer.open({
-				content: shop_remind,
-				btn: ['Confirm'],
-				end: function () {
-					layer.close(remindTipLayer);
-				}
-			});
+            if(shop_remind!= '') {
+                var remindTipLayer = layer.open({
+                    content: shop_remind,
+                    btn: ['Confirm'],
+                    end: function () {
+                        layer.close(remindTipLayer);
+                    }
+                });
+            }
 		});
 	}
 

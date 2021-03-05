@@ -155,7 +155,7 @@
                         <!--textarea name="adress" class="input-weak kv-v" placeholder="{pigcms{:L('_B_PURE_MY_17_')}" pattern="^.{5,60}$" data-err="{pigcms{:L('_B_PURE_MY_18_')}">{pigcms{$now_adress.adress}</textarea-->
                     </dd>
                     <dd class="dd-padding kv-line">
-                        <textarea name="detail" type="text" class="multi-line kv-v input-weak" placeholder="{pigcms{:L('_B_PURE_MY_20_')}" data-err="{pigcms{:L('_B_PURE_MY_21_')}" value="{pigcms{$now_adress.detail}" rows="3" ></textarea>
+                        <textarea name="detail" type="text" class="multi-line kv-v input-weak" placeholder="{pigcms{:L('_B_PURE_MY_20_')}" data-err="{pigcms{:L('_B_PURE_MY_21_')}"  rows="3" >{pigcms{$now_adress.detail}</textarea>
                     </dd>
                     <!--		        		<dd class="dd-padding kv-line">-->
                     <!--		        			<input type="text" name="zipcode" class="input-weak kv-v" placeholder="{pigcms{:L('_B_PURE_MY_23_')}"  maxlength="6" value="<if condition="$now_adress['zipcode']">{pigcms{$now_adress.zipcode}</if>"/>-->
