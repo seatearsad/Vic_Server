@@ -8,14 +8,25 @@ class Shop_orderModel extends Model
         parent::__construct();
         $allList = $this->where(array('paid'=>0))->order('create_time asc')->select();
 
+        //获取倒计时时间 web app 时间不同
+        $config = D('Config')->get_config();
+        $web_count_down = $config['pay_count_down_web'];
+        $app_count_down = $config['pay_count_down_app'];
+
         $delList = array();
         $overtimeList = array();
         foreach ($allList as $order){
 			$store = D('Merchant_store')->where(array('store_id'=>$order['store_id']))->find();
 			$jetlag = D('Area')->field('jetlag')->where(array('area_id'=>$store['city_id']))->find()['jetlag'];
 			$cha = time() + $jetlag*3600 - $order['create_time'];
+
+			if($order['is_mobile_pay'] < 2){
+				$count_down = $web_count_down*60;
+			}else{
+				$count_down = $app_count_down*60;
+			}
 			//超过5分钟的放入待删除状态 status=6
-			if($cha > 300 && $order['status'] != 6){
+			if($cha > $count_down && $order['status'] != 6){
 				$overtimeList[] = $order['order_id'];
 			}
 			//超过2小时后删除

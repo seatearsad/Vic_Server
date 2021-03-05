@@ -1765,8 +1765,9 @@
     var create_time = "{pigcms{$order_info.create_time}";
     var jetlag = "{pigcms{$jetlag}";
     var curr_time = parseInt("{pigcms{:time()}") + parseInt(jetlag)*3600;
+    var count_down = parseInt("{pigcms{$count_down}");
 
-    var cha_time = 300 - (curr_time - create_time);
+    var cha_time = count_down - (curr_time - create_time);
     function update_pay_time() {
         var h = parseInt(cha_time / 3600);
         var i = parseInt((cha_time - 3600 * h) / 60);

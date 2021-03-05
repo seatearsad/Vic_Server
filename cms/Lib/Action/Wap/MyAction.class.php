@@ -23,6 +23,12 @@ class MyAction extends BaseAction{
 
 		$this->now_user = $now_user;
 		$this->assign('now_user',$now_user);
+
+        //获取倒计时时间 web app 时间不同
+        $config = D('Config')->get_config();
+        $web_count_down = $config['pay_count_down_web'];
+
+        $this->assign('count_down',$web_count_down*60);
 	}
 
 	//	新的个人中心页面
