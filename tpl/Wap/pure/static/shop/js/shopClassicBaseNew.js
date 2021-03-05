@@ -1735,7 +1735,8 @@ function showShop(shopId){
                 //$('.is_close').addClass('close_s');
 			}else if(result.store.delivery){
                 $('#shopProductCart').attr("data-close","0");
-                $('#checkCartEmpty').html(getLangStr('_NUM_DELI_PRICE_',result.store.delivery_price.toFixed(2)));
+                //$('#checkCartEmpty').html(getLangStr('_NUM_DELI_PRICE_',result.store.delivery_price.toFixed(2)));
+                $('#checkCartEmpty').html("");
                // $('.is_close').html('OPEN');
 			}
 			var reduce_html = '';

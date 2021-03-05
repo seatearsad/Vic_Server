@@ -33,9 +33,16 @@
 
         .btn {
             background: #ffa52d;
+            margin: auto;
         }
         dl.list-in dd {
             border-bottom: 1px dashed #e5e5e5;
+        }
+        dl.list dd dl > .dd-padding, dl.list dd dl dd > .react, dl.list dd dl > dt {
+            padding-left: 1px;
+        }
+        .btn-block {
+            width: 95%;
         }
         .main{
             width: 100%;
@@ -102,10 +109,10 @@
             <dd>
                 <dl>
                     <dd class="dd-padding kv-line">
-                        <input name="name" type="text" class="kv-v input-weak" placeholder="{pigcms{:L('_B_PURE_MY_07_')}" pattern=".{2,}" data-err="{pigcms{:L('_B_PURE_MY_08_')}" value="{pigcms{$now_adress.name}">
+                        <input name="name" type="text" class="kv-v input-weak" placeholder="{pigcms{:L('_B_PURE_MY_07_')}" pattern=".{2,}" oninvalid="setCustomValidity('{pigcms{:L(\'_B_PURE_MY_08_\')}')" data-err="{pigcms{:L('_B_PURE_MY_08_')}" value="{pigcms{$now_adress.name}">
                     </dd>
                     <dd class="dd-padding kv-line">
-                        <input name="phone" type="tel" class="kv-v input-weak" placeholder="{pigcms{:L('_B_PURE_MY_10_')}" pattern="\d{3}[\d\*]{4,}" data-err="{pigcms{:L('_B_PURE_MY_11_')}" value="{pigcms{$now_adress.phone}">
+                        <input name="phone" type="tel" class="kv-v input-weak" placeholder="{pigcms{:L('_B_PURE_MY_10_')}" pattern="\d{3}[\d\*]{4,}" oninvalid="setCustomValidity('{pigcms{:L(\'_B_PURE_MY_11_\')}')" data-err="{pigcms{:L('_B_PURE_MY_11_')}" value="{pigcms{$now_adress.phone}">
                     </dd>
                     <!--dd class="dd-padding kv-line">
                         <h6>{pigcms{:L('_B_PURE_MY_12_')}:</h6>

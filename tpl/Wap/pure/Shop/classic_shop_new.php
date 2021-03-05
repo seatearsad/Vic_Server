@@ -62,7 +62,7 @@
                 /*height: 900px;*/
             }
             #shopHeader{
-                position: fixed;
+                display: flex;
                 top: 0px;
                 height: 60px;
                 padding-top: 6px;
@@ -96,14 +96,13 @@
             }
             #shopTitle_Header{
                 opacity: 1;
-                margin-left: 60px;
-                margin-top: 5px;
                 font-size: 20px;
-                padding-right: 50px;
+                padding: 6px 10px;
                 text-overflow: ellipsis;
                 overflow: hidden;
                 white-space: nowrap;
-                display: table-caption;
+                position: relative;
+                flex: 1 1 100%;
             }
             #deliveryText{
                 margin-bottom: 5px;
@@ -116,13 +115,14 @@
                 white-space: nowrap;
             }
             .backBtn {
-                position: absolute;
+                position: relative;
                 width: 40px;
                 height: 40px;
-                top: 8px;
-                left:15px;
+                top: 6px;
+                left: 15px;
                 background: #fff;
                 border-radius: 20px;
+                flex: 0 0 auto;
             }
             .backBtn::after{
                 border-top: 2px solid #999;
@@ -131,6 +131,20 @@
             }
             .searchBtn{
                 background-image: url(/tpl/Static/blue/images/new/icon_shop_search.png);
+                position: relative;
+                width: 50px;
+                height: 50px;
+                line-height: 30px;
+                top: 0px;
+                right: 10px;
+                text-align: center;
+                color: white;
+                padding: 0px;
+                background-repeat: no-repeat;
+                background-size: auto 80%;
+                background-position: center;
+                cursor: pointer;
+                flex: 0 0 auto;
             }
             #shopBanner .leftIco{
                 left:30px;
