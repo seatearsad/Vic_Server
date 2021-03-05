@@ -588,11 +588,13 @@
     });
 
     function update_pay_time() {
+        var count_down = parseInt("{pigcms{$count_down}");
+
         $('#payment_box').find('.count_down').each(function () {
 
             var create_time = $(this).data('time');
             var jetlag = parseInt($(this).data('jet'))*3600;
-            var cha_time = 300 - (curr_time + jetlag - create_time + num);
+            var cha_time = count_down - (curr_time + jetlag - create_time + num);
             console.log(cha_time+"--"+curr_time+"-"+jetlag+"-"+create_time+"-"+num);
 
             var h = parseInt(cha_time / 3600);
