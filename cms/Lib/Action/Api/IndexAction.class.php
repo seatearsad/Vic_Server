@@ -762,7 +762,10 @@ class IndexAction extends BaseAction
         $data['address'] = $data['adress'];
         $data['city_name'] = $_POST['city_name'];
 
-        $this->returnCode(0,'info',$data,'success');
+        if($this->app_version > 260)//当版本号大于260时 添加数据
+            $this->returnCode(0,'info',$data,'success');
+        else
+            $this->returnCode(0,'info',array(),'success');
     }
 
     public function delUserAddress(){
