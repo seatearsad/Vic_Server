@@ -1450,7 +1450,7 @@ function showShop(shopId){
                 motify.log(getLangStr('_NO_STOCK_'));
                 return false;
             }
-            //验证属性是否选择  另一类
+            //验证属性是否选择  另一类 proper
 			var is_no_select = false;
 			$('#shopDetailPageLabelBox').find('.row').each(function () {
 				var num = 0;
@@ -1461,18 +1461,19 @@ function showShop(shopId){
                     }
                 });
 				if(num == 0){
-                    motify.log('Please choose option(s) for(s) '+ s_name);
+                    motify.log('Please choose option(s) for '+ s_name);
                     is_no_select = true;
 				}
             });
 
 			//验证配送是否选择/// dish spec商品选项
             $.each($('#shopDetailPageDish .row'),function(i,item){
+            	//alert("shopDetailPageDish");
             	var num = 0;
             	var min_num = $(item).data('min');
                 var max_num = $(item).data('max');
-                var dish_name = $(item).data('dish_name');
-                var dish_val_name = $(item).data('dish_val_name');
+                var dish_name = $(item).data('name');
+                //var dish_val_name = $(item).data('dish_val_name');
 
                 $.each($(item).find('li.active'),function(j,jtem){
                     num += 1;
@@ -1484,9 +1485,9 @@ function showShop(shopId){
                 if(num < min_num){
                     //motify.log(dish_name + ' selection(s) '+min_num+' required');
                     if(min_num==max_num){
-                        motify.log('Please choose exactly '+min_num+' option(s) for '+dish_name);
+                        motify.log('Please choose exactly '+min_num+' option(s) for '+ dish_name);
                     }else{
-                        motify.log('Please choose minimum '+min_num+' option(s) for '+dish_name);
+                        motify.log('Please choose minimum '+min_num+' option(s) for '+ dish_name);
 					}
                     is_no_select = true;
                 }
@@ -2386,7 +2387,7 @@ function showShopContent(nav){
             // $('#shopMerchantDescBox .address').attr('data-url','map&param='+nowShop.store.id+'-'+nowShop.store.long+'-'+nowShop.store.lat+'-'+encodeURIComponent(nowShop.store.name)+'-'+encodeURIComponent(nowShop.store.adress)).html('<span></span>'+ getLangStr('_SHOP_ADDRESS_') +'：'+nowShop.store.adress);
             // $('#shopMerchantDescBox .openTime').html(getLangStr('_BUSINESS_TIME_')+'：'+nowShop.store.time);
             // $('#shopMerchantDescBox .merchantNotice').html(getLangStr('_SHOP_NOTICE_') + '：'+nowShop.store.store_notice);
-            $('#shopMerchantDescBox .phone').attr('data-phone',nowShop.store.phone).html(nowShop.store.phone);
+            $('#shopMerchantDescBox .phone').html(nowShop.store.phone);
             $('#shopMerchantDescBox .address').attr('data-url','map&param='+nowShop.store.id+'-'+nowShop.store.long+'-'+nowShop.store.lat+'-'+encodeURIComponent(nowShop.store.name)+'-'+encodeURIComponent(nowShop.store.adress)).html('<span></span>'+ nowShop.store.adress);
             $('#shopMerchantDescBox .w1').html(nowShop.store.open_list[0]!="" ? nowShop.store.open_list[0]:getLangStr('_STORE_STATUS_CLOSED'));
             $('#shopMerchantDescBox .w2').html(nowShop.store.open_list[1]!="" ? nowShop.store.open_list[1]:getLangStr('_STORE_STATUS_CLOSED'));

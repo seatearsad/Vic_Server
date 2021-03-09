@@ -55,7 +55,7 @@ class PayAction extends BaseAction{
             //$this->assign('notCard',true);
         }else if($_GET['type'] == 'shop' || $_GET['type'] == 'mall'){
             $now_order = D('Shop_order')->get_pay_order($this->user_session['uid'], intval($_GET['order_id']));
-
+            //var_dump($now_order);die();
         }else if($_GET['type'] == 'plat'){
             $now_order = D('Plat_order')->get_pay_order($this->user_session['uid'], intval($_GET['order_id']));
             $now_order['order_info']['extra_price'] =  $now_order['order_info']['order_info']['extra_price'];
@@ -181,7 +181,8 @@ class PayAction extends BaseAction{
         }
         $this->assign('now_user',$now_user);
 
-        if($_GET['type'] != 'recharge' && $_GET['type'] != 'weidian' && ($order_info['business_type']==''||$order_info['business_type']!='card_new_recharge')) {
+        if($_GET['type'] != 'recharge' && $_GET['type'] != 'weidian' && ($order_info['business_type']=='' || $order_info['business_type']!='card_new_recharge') ) {
+
             //商家优惠券
             if ($this->is_app_browser) {
                 $platform = 'app';
@@ -239,6 +240,7 @@ class PayAction extends BaseAction{
             $order_info['is_c'] = $is_chi ? 0 : 1;
             //平台优惠券
             if (($tmp_order['total_money'] > $mer_coupon['discount'] || empty($mer_coupon))&&$_GET['unsys_coupon']!=1&&($order_info['discount_status']||!isset($order_info['discount_status']))) {
+
                 $tmp_order['total_money'] -= empty($mer_coupon['discount']) ? 0 : $mer_coupon['discount'];
                 if (empty($_GET['sysc_id'])) {
                     if (!empty($order_info['business_type'])) {
@@ -256,7 +258,9 @@ class PayAction extends BaseAction{
                             //var_dump($system_coupon);die();
                         }
                     }
+
                 } else {
+
                     $sysc_id = $_GET['sysc_id'];
                     //如果选择的为活动优惠券
                     if(strpos($sysc_id,'event')!== false){
@@ -274,6 +278,7 @@ class PayAction extends BaseAction{
                     if($order_info['merchant_reduce_type'] == 0)
                         $order_info['merchant_reduce'] = 0;
                 }
+
             }
 
             //子商户设置不允许使用平台优惠抵扣
@@ -291,6 +296,8 @@ class PayAction extends BaseAction{
             } else {
                 $mer_coupon['coupon_url_param'] = array();
             }
+            //peter 手动清空
+            $system_coupon = null;
 
             if(!($order_info['delivery_discount_type'] == 0 && $order_info['delivery_discount'] != 0) && !($order_info['merchant_reduce_type'] == 0 && $order_info['merchant_reduce'] != 0) && !empty($system_coupon)){
             //if (($order_info['merchant_reduce_type'] == 1 && $order_info['delivery_discount_type'] == 1 && !empty($system_coupon)) || ($order_info['merchant_reduce'] == 0 && $order_info['delivery_discount'] == 0 && !empty($system_coupon))) {
@@ -353,8 +360,6 @@ class PayAction extends BaseAction{
                     $type_ = 'shop';
                 }
 
-
-
                 $user_score_use_condition = $this->config['user_score_use_condition'];
                 $user_score_max_use = D('Percent_rate')->get_max_core_use($order_info['mer_id'], $type_);//不同业务不同积分
                 // $user_score_max_use=$score_config['user_score_max_use'];
@@ -397,7 +402,6 @@ class PayAction extends BaseAction{
                 if ($_GET['type'] == 'balance-appoint') {
                     $type_ = 'appoint';
                 }
-
 
                 $user_score_use_condition = $this->config['user_score_use_condition'];
                 $user_score_max_use = D('Percent_rate')->get_max_core_use($order_info['mer_id'], $type_);//不同业务不同积分
@@ -520,7 +524,6 @@ class PayAction extends BaseAction{
                 break;
         }
 
-		
         if ($this->config['open_sub_mchid'] && $now_merchant['open_sub_mchid'] && $now_merchant['sub_mch_id'] > 0) {
             $pay_method['weixin']['config']['pay_weixin_mchid'] = $this->config['pay_weixin_sp_mchid'];
             $pay_method['weixin']['config']['pay_weixin_key'] = $this->config['pay_weixin_sp_key'];
@@ -2597,12 +2600,15 @@ class PayAction extends BaseAction{
         $this->Save_order_desc($_POST['note'],$order_id);
         $this->Save_user_address_detail($_POST['address_detail'],$address_id);
         //----------------------------------------------------------------------------
-
-        $result_url=$this->get_result_url($order_id);
+        if ($_POST['order_type']=='recharge'){
+            $result_url=U("Wap/My/my_money");
+        }else{
+            $result_url=$this->get_result_url($order_id);
+        }
         //---------
         $moneris_pay = new MonerisPay();
         $resp = $moneris_pay->payment($_POST,$this->user_session['uid'],2);
-        //var_dump($_POST);die();
+        //var_dump($resp);die();
         if($resp['requestMode'] && $resp['requestMode'] == "mpi"){
             if($resp['mpiSuccess'] == "true"){
                 $result = array('error_code' => false,'mode'=>$resp['requestMode'],'html'=>$resp['mpiInLineForm'], 'msg' => $resp['message']);
@@ -2644,7 +2650,13 @@ class PayAction extends BaseAction{
             }
             $this->success(L('_PAYMENT_SUCCESS_'),$url,true);
         }else{
-            $this->error($resp['message'],$result_url.'0',true);
+            //var_dump($result_url);die();
+            if ($_POST['order_type']=='recharge'){
+                $this->error($resp['message'],$result_url,true);
+            }else{
+                $this->error($resp['message'],$result_url.'0',true);
+            }
+
         }
     }
     //保存地址备注信息的逻辑  by Peter 2021-2-26

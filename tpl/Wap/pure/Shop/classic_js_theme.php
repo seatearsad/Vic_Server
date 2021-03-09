@@ -355,8 +355,8 @@
 <script id="productDishTpl" type="text/html">
     {{# for(var i in d){ }}
     {{# if(d[i].type == 0){ }}
-    <div class="row clearfix" id="shopDetailPageDish_{{ d[i].id}}" data-min="{{d[i].min}}" data-name="{{ d[i].name }}">
-        <div class="left add_bold">{{ d[i].name }}</div>
+    <div class="row clearfix" id="shopDetailPageDish_{{ d[i].id}}" data-min="{{d[i].min}}" data-max="{{d[i].max}}" data-name="{{ d[i].name }}">
+        <div class="left add_bold">{{ d[i].name }}-D</div>
         <div class="add_grey">
             {{# if(d[i].min == d[i].max){ }}
             * Required. Please choose exactly {{ d[i].min }}
@@ -393,8 +393,8 @@
         </div>
     </div>
     {{# }else{ }}
-    <div class="row clearfix" id="shopDetailPageDish_{{ d[i].id}}" data-min="{{d[i].min}}" data-name="{{ d[i].name }}">
-        <div class="left">{{ d[i].name }}</div>
+    <div class="row clearfix" id="shopDetailPageDish_{{ d[i].id}}" data-min="{{d[i].min}}" data-max="{{d[i].max}}" data-name="{{ d[i].name }}">
+        <div class="left">{{ d[i].name }}-D</div>
         <div>
             {{# if(d[i].min == d[i].max){ }}
             * Required. Please choose exactly {{ d[i].min }}

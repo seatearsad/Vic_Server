@@ -3255,6 +3255,7 @@ class MyAction extends BaseAction{
 //        $list = array();
 //        $list = $this->SHARE_shop_order_list();
 //		$this->assign('order_list', $list);
+        $this->assign('param', $_GET);
 		$this->display();
 	}
     /*Ajax加载——订餐订单列表 默认显示 upcoming的列表*/
@@ -5122,7 +5123,7 @@ class MyAction extends BaseAction{
 			$this->error_tips(L('_B_MY_NOPAGE_'));
 		}
 	}
-
+    //取消订单
 	public function shop_order_refund()
 	{
 		if (empty($this->user_session)) {
@@ -5164,6 +5165,7 @@ class MyAction extends BaseAction{
 		}
 		$store_id = $now_order['store_id'];
 		$this->mer_id = $now_order['mer_id'];
+
 		if (!($now_order['paid'] == 1 && ($now_order['status'] == 0 || $now_order['status'] == 5))) {
 			$this->error_tips(L('_B_MY_ORDERDEALING_'));
 		}
@@ -5175,22 +5177,26 @@ class MyAction extends BaseAction{
 		} elseif ($now_order['status'] > 3 && !($now_order['paid'] == 1 && $now_order['status'] == 5)) {
 			$this->redirect(U('Shop/status',array('order_id' => $now_order['order_id'])));
 		}
+
 		$mer_store = D('Merchant_store')->where(array('mer_id' => $now_order['mer_id'], 'store_id' => $now_order['store_id']))->find();
 		$my_user = D('User')->field(true)->where(array('uid' => $now_order['uid']))->find();
 
 		//线下支付退款
 		$data_shop_order['cancel_type'] = 5;//取消类型（0:pc店员，1:wap店员，2:andriod店员,3:ios店员，4：打包app店员，5：用户，6：配送员, 7:超时取消）
 		if ($now_order['pay_type'] == 'offline' || $now_order['pay_type'] == 'Cash') {
+
 			$data_shop_order['order_id'] = $now_order['order_id'];
 			$data_shop_order['refund_detail'] = serialize(array('refund_time' => time()));
 			$data_shop_order['status'] = 4;
+
 			if (D('Shop_order')->data($data_shop_order)->save()) {
 				$return = $this->shop_refund_detail($now_order, $store_id);
 				if ($return['error_code']) {
-					$this->error_tips($result['msg']);
+					$this->error_tips($return['msg']);
 				} else {
                     //add garfunkel 取消订单成功 发送消息
                     if (C('config.sms_shop_cancel_order') == 1 || C('config.sms_shop_cancel_order') == 3) {
+
                         $userInfo = D('User')->field(true)->where(array('uid'=>$now_order['uid']))->find();
                         if($userInfo['device_id'] != ""){
                             $message = 'Your order ('.$order_id.') has been successfully canceled at '.date('Y-m-d H:i:s').' at '.lang_substr($mer_store['name'], 'en-us').' store, we are looking forward to seeing you again.';
@@ -5213,6 +5219,7 @@ class MyAction extends BaseAction{
                         }
                     }
                     if (C('config.sms_shop_cancel_order') == 2 || C('config.sms_shop_cancel_order') == 3) {
+
                         $sms_data['uid'] = 0;
                         $sms_data['mobile'] = $mer_store['phone'];
                         $sms_data['sendto'] = 'merchant';
@@ -5229,8 +5236,11 @@ class MyAction extends BaseAction{
                         $txt = "This is a important message from island life , the customer has canceled the last order.";
                         Sms::send_voice_message($sms_data['mobile'],$txt);
                     }
-                    $this->success_tips(L('_B_MY_USEOFFLINECHANGEREFUND_'),U('Shop/status',array('order_id' => $now_order['order_id'], 'store_id' => $store_id, 'mer_id' => $this->mer_id)));
-				}
+                    //$this->success_tips(L('_B_MY_USEOFFLINECHANGEREFUND_'),U('Shop/status',array('order_id' => $now_order['order_id'], 'store_id' => $store_id, 'mer_id' => $this->mer_id)));
+                    //peter 21-03-09 Wap&c=My&a=shop_order_list&select=history
+                    $this->success_tips(L('_B_MY_USEOFFLINECHANGEREFUND_'),U('Wap/My/shop_order_list',array('select' => "history")));
+
+                }
 			} else {
 				$this->error_tips(L('_B_MY_CANCELLLOSE_'));
 			}
@@ -5328,7 +5338,6 @@ class MyAction extends BaseAction{
 //				}
 //			}
 
-
 			$return = $this->shop_refund_detail($now_order, $store_id);
 			if ($return['error_code']) {
 				$this->error_tips($return['msg']);
@@ -5341,13 +5350,16 @@ class MyAction extends BaseAction{
 				$data_shop_order['status'] = 4;
 				$data_shop_order['last_time'] = time();
 				D('Shop_order')->data($data_shop_order)->save();
-				$go_refund_param['msg'] .= L('_B_MY_ORDERCANCELLEDACCESS_');
+				$go_refund_param['msg'] = L('_B_MY_ORDERCANCELLEDACCESS_');
 			}
 			if(empty($go_refund_param['msg'])){
-				$go_refund_param['msg'] .= L('_B_MY_ORDERCANCELLEDACCESS_');
+                //die("empty2");
+				$go_refund_param['msg'] = L('_B_MY_ORDERCANCELLEDACCESS_');
 			}
 			D('Shop_order_log')->add_log(array('order_id' => $order_id, 'status' => 9));
-			$this->success_tips($go_refund_param['msg'], U('Shop/status',array('order_id' => $order_id, 'store_id' => $store_id, 'mer_id' => $this->mer_id)));
+			//$this->success_tips($go_refund_param['msg'], U('Shop/status',array('order_id' => $order_id, 'store_id' => $store_id, 'mer_id' => $this->mer_id)));
+            $this->success_tips($go_refund_param['msg'], U('Wap/My/shop_order_list',array('select' => "history")));
+
 		}
 	}
 
@@ -5417,7 +5429,7 @@ class MyAction extends BaseAction{
 				return $result;
 				$this->error_tips($result['msg']);
 			}
-			$go_refund_param['msg'] .= ' 平台余额退款成功';
+			$go_refund_param['msg'] .= L('_B_MY_USEOFFLINECHANGEREFUND_');
 		}
 		//商家会员卡余额退款
 		if ($now_order['merchant_balance'] != '0.00'||$now_order['card_give_money']!='0.00') {
@@ -5476,14 +5488,13 @@ class MyAction extends BaseAction{
 			}
 			D('Shop_order')->where(array('order_id' => $now_order['order_id']))->save(array('is_rollback' => 1));
 		}
+
 		D("Merchant_store_shop")->where(array('store_id' => $now_order['store_id'], 'sale_count' => array('gt', 0)))->setDec('sale_count', 1);
 		//退款时销量回滚
 
 		$go_refund_param['error_code'] = false;
 		return $go_refund_param;
 	}
-
-
 
 	/**
 	 * 快店评论

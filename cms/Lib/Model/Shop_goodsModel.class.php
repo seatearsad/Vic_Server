@@ -1572,7 +1572,6 @@ class Shop_goodsModel extends Model
         }
         //end  @wangchuanyuan
 
-
         if ($is_open == 0) {
             return array('error_code' => true, 'msg' => L('_STORE_IS_CLOSE_'));
         }
@@ -1612,8 +1611,7 @@ class Shop_goodsModel extends Model
                 }
             }
         }
-        
-        
+
         $goods = array();
         $price = 0;//原始总价
         $total = 0;//商品总数
@@ -1865,6 +1863,7 @@ class Shop_goodsModel extends Model
                 $str_d && $str = $str ? $str . ';' . implode(',',$str_d) : implode(',',$str_d);
                 //echo $str."----------";
                 $str=str_replace(",","<br/>",$str);
+                $str=str_replace(";","; ",$str);
                 $goods[] = array(
                     'name' => $row['productName'],
                     'is_seckill_price' => $t_return['is_seckill_price'],//是否是秒杀价(0:否，1：是)

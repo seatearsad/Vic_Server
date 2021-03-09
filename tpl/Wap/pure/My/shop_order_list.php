@@ -353,7 +353,7 @@
 			<div class="tabs-header">
                 <ul class="orderindex">
                     <li data-status='6'>
-                        <a href="javascript:void(0)" tab-id="6" class="react">
+                        <a id="secondclick" href="javascript:void(0)" tab-id="6" class="react">
                             <span>{pigcms{:L('_B_PURE_MY_96_')}</span>
                         </a>
                     </li>
@@ -386,8 +386,14 @@
 		<script type="text/javascript" src="{pigcms{$static_path}layer/layer.m.js" charset="utf-8"></script>
         <include file="My:shop_order_list_js_theme"/>
 		<script type="text/javascript" language="javascript">
+
             $(document).ready(function() {
                 $('#firstclick').trigger('click');
+                <if condition="$param['select'] eq 'history'">
+                    $('#secondclick').trigger('click');
+                        <else/>
+                    $('#firstclick').trigger('click');
+                </if>
             });
 
 			// var activePos = $('.tabs-header .active').position();

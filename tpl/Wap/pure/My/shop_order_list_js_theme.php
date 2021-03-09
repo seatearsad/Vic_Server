@@ -22,7 +22,7 @@
                 {{# if ((d[i].status>3) &&(d[i].status<7)) { }}
                     <div class="button_block">
     <!--                    <div class="round_button">Reorder</div>-->
-                        <div class="status_str">Canceled</div>
+                        <div class="status_str">Cancelled</div>
                     </div>
                 {{# }else{ }}
                     {{# if (d[i].statusLog>=6) { }}

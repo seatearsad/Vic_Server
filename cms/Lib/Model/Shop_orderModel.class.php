@@ -130,7 +130,7 @@ class Shop_orderModel extends Model
 		foreach ($order_content as &$trow) {
 			//$trow['name'] = $trow['spec'] ? $trow['name'] . ' (' . $trow['spec'] . ')' : $trow['name'];
 			$trow['money'] = floatval($trow['price'] * $trow['num']);
-            $trow['spec'] = str_replace(";","<br/>",$trow['spec']);
+            $trow['spec'] = str_replace(";","; ",$trow['spec']);
 			$goods = D('Shop_goods')->field(true)->where(array('goods_id'=>$trow['goods_id']))->find();
 			$trow['tax_num'] = $goods['tax_num'];
 			$trow['deposit_price'] = $goods['deposit_price'];

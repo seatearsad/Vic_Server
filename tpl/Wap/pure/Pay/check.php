@@ -572,6 +572,7 @@
                 if(pay_type == 'moneris'){ //信用卡
 
                     var card_type = $('input[name="pay_card_type"]:checked').val();
+
                     if(card_type == 1){  //使用新卡支付
                         if(check_card()){
                             // alert($('input[name="save"]:checked').val());
@@ -1137,7 +1138,6 @@
 </style>
 <include file="Public:header"/>
 <div class="wrapper-list">
-    <if condition="$order_info['order_type'] != 'recharge'">
     <form action="{pigcms{:U('Index/Pay/MonerisPay')}" method="post" id="moneris_form">
         <INPUT TYPE="HIDDEN" NAME="ps_store_id" VALUE="">
         <INPUT TYPE="HIDDEN" NAME="hpp_key" VALUE="">
@@ -1165,6 +1165,9 @@
         <input type="hidden" name="delivery_discount" value="{pigcms{$order_info.delivery_discount}">
         <input type="hidden" name="merchant_reduce" value="{pigcms{$order_info.merchant_reduce}">
         <input type="hidden" name="service_fee" value="{pigcms{$order_info.service_fee}">
+
+        <if condition="$order_info['order_type'] != 'recharge'">
+
     <div class="user_address">
         <div class="div_title">{pigcms{:L('_C_DELIVERY_ADDRESS_')}</div>
 <!--        <a href="{pigcms{:U('My/adress',array('buy_type' => 'check', 'store_id'=>$order_info['store_id'], 'village_id'=>$village_id, 'mer_id' => $store['mer_id'], 'frm' => $_GET['frm'], 'current_id'=>$user_adress['adress_id'], 'order_id' => $order_id))}">-->
@@ -1205,10 +1208,12 @@
             </dd>
             <div class="goods_spec">{pigcms{$vo['spec']}</div>
         </volist>
-        <div class="note_title">{pigcms{:L('V3_SHOP_NOTES_TITLE')}</div>
-        <div class="note_div">
-            <textarea type="text" name="note" class="note_input" placeholder="{pigcms{:L('V3_SHOP_NOTES')}">{pigcms{$order_info['desc']}</textarea>
-        </div>
+        <if condition="$type neq 'recharge'">
+            <div class="note_title">{pigcms{:L('V3_SHOP_NOTES_TITLE')}</div>
+            <div class="note_div">
+                <textarea type="text" name="note" class="note_input" placeholder="{pigcms{:L('V3_SHOP_NOTES')}">{pigcms{$order_info['desc']}</textarea>
+            </div>
+        </if>
     </dl>
         <if condition="$order_info['order_type'] != 'recharge'">
         <div class="all_list">

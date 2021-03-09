@@ -2440,6 +2440,7 @@ class ShopAction extends BaseAction{
 		//delivery_type 0:平台配送，1：商家配送，2：自提，3:平台配送或自提，4：商家配送或自提
 	    $store_id = isset($_GET['store_id']) ? intval($_GET['store_id']) : 0;
 		$order_id = isset($_GET['order_id']) ? intval($_GET['order_id']) : 0;
+
 		if ($order_id && ($order = D('Shop_order')->get_order_detail(array('order_id' => $order_id, 'uid' => $this->user_session['uid'])))) {
 		    $return = D('Shop_goods')->checkCart($store_id, $this->user_session['uid'], $order['info'], 0);
             $this->assign('order_id', $order_id);
@@ -3643,28 +3644,46 @@ class ShopAction extends BaseAction{
             $order['jetlag'] = $city['jetlag'];
 
             //------------------------------ 更新status等信息 ------------------------------------peter
-
-            $n_status = D('Shop_order_log')->field(true)->where(array('order_id' => $order['order_id']))->order('id DESC')->find();
-            //var_dump($n_status);die();
-            $add_time = 0;
-            if($n_status['status'] == 33){
-                if(D('Shop_order_log')->field(true)->where(array('order_id' => $order['order_id'], 'status' => 3))->order('id DESC')->find())
-                    $n_status['status'] = 3;
-                else
-                    $n_status['status'] = 2;
-                $add_time = $n_status['note'];
-            }else {
-                if ($add_time_log = D('Shop_order_log')->field(true)->where(array('order_id' => $order['order_id'], 'status' => 33))->order('id DESC')->find()) {
-                    $add_time = $add_time_log['note'];
+            if ($order['status']==4||$order['status']==5){  //取消订单
+                $n_status=$order['status'];
+                $order['statusLog'] = $n_status['status'];
+                $order['statusLogName'] =L('_B_MY_ORDERCANCELLEDACCESS_');
+                $order['statusDesc'] =L('_CANCELLATION_ORDER_');
+            }else{
+                $n_status = D('Shop_order_log')->field(true)->where(array('order_id' => $order['order_id']))->order('id DESC')->find();
+                //var_dump($n_status);die();
+                $add_time = 0;
+                if($n_status['status'] == 33){
+                    if(D('Shop_order_log')->field(true)->where(array('order_id' => $order['order_id'], 'status' => 3))->order('id DESC')->find())
+                        $n_status['status'] = 3;
+                    else
+                        $n_status['status'] = 2;
+                    $add_time = $n_status['note'];
+                }else {
+                    if ($add_time_log = D('Shop_order_log')->field(true)->where(array('order_id' => $order['order_id'], 'status' => 33))->order('id DESC')->find()) {
+                        $add_time = $add_time_log['note'];
+                    }
                 }
+                $order['statusLog'] = $n_status['status'];
+                $order['statusLogName'] = D('Store')->getOrderStatusLogName($n_status['status']);
+                $order['statusDesc'] = D('Store')->getOrderStatusDesc($n_status['status'],$order,0,$store['name'],$add_time);
             }
-            $order['statusLog'] = $n_status['status'];
-            $order['statusLogName'] = D('Store')->getOrderStatusLogName($n_status['status']);
-            $order['statusDesc'] = D('Store')->getOrderStatusDesc($n_status['status'],$order,0,$store['name'],$add_time);
+
             //var_dump($order['statusDesc']);die();
             //-------------------------------------------------------------------------------------
-
-            if($order['pay_type'] == 'offline' && empty($order['third_id'])){
+            //var_dump($order);die();
+            if($order['paid'] == 0){
+                $order['pay_type'] = 'Not Paid';
+            }else{
+                if($order['pay_type'] == ''){
+                    $order['pay_type'] = 'Tutti Credits';
+                }else{
+                    if($order['pay_type'] == 'offline' || $order['pay_type'] == 'Cash'){
+                        $order['pay_type'] = 'Cash';
+                    }
+                }
+            }
+            if($order['pay_type'] == 'Cash' && empty($order['third_id'])){
                 $payment = rtrim(rtrim(number_format($order['price']-$order['card_price']-$order['merchant_balance']-$order['card_give_money']-$order['balance_pay']-$order['payment_money']-$order['score_deducte']-floatval($order['coupon_price']),2,'.',''),'0'),'.');
             }
             $discount_price = floatval(round($order['discount_price'] + $order['freight_charge'] + $order['packing_charge'], 2));

@@ -1964,7 +1964,7 @@ class IndexAction extends BaseAction
         //}
 
         //$event_coupon = D('New_event')->getUserCoupon($uid,0,$amount);
-        if(!$coupon_list) $coupon_list = array();
+        if(!$coupon_list) $coupon_lisuserLogint = array();
         if(count($event_coupon) > 0){
             $coupon_list = array_merge($coupon_list,$event_coupon);
         }
