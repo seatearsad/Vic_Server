@@ -1759,25 +1759,25 @@ class ShopAction extends BaseAction
                         $status_txt = "";
                         switch ($v['status']) {
                             case 1:
-                                $status_txt = "<div>顾客下单：";
+                                $status_txt = "<div>".L('Back_Deliver_Show_1')."：";
                                 break;
                             case 2:
-                                $status_txt = "<div style='color: #ffa52d'>商家接单：";
+                                $status_txt = "<div style='color: #ffa52d'>".L('Back_Deliver_Show_2')."：";
                                 break;
                             case 3:
-                                $status_txt = "<div>送餐员接单：";
+                                $status_txt = "<div>".L('Back_Deliver_Show_4')."：";
                                 break;
                             case 4:
-                                $status_txt = "<div style='color: #008037'>已取货：";
+                                $status_txt = "<div style='color: #008037'>".L('Back_Deliver_Show_5')."：";
                                 break;
                             case 5:
-                                $status_txt = "<div style='color: #004aad'>开始配送：";
+                                $status_txt = "<div style='color: #004aad'>".L('Back_Deliver_Show_6')."：";
                                 break;
                             case 6:
-                                $status_txt = "<div>送达时间：";
+                                $status_txt = "<div>".L('Back_Deliver_Show_7')."：";
                                 break;
                             case 33:
-                                $status_txt = "<div style='color: #ff5757'>增加出餐时间：".$v['note'].'分钟</div>';
+                                $status_txt = "<div style='color: #ff5757'>".L('Back_Deliver_Show_8')."：".$v['note'].L('Back_Deliver_Show_min').'</div>';
                                 break;
 
                         }
@@ -1787,9 +1787,9 @@ class ShopAction extends BaseAction
                             $show_list[] = $status_txt;
                         if($v['status'] == 2){
                             $supply = D('Deliver_supply')->where(array("order_id"=>$order_id))->find();
-                            $show_list[] = "<div style='color: #ff5757'>预计出餐：" . ' ' . date('H:i', $v['dateline']+$supply['dining_time']*60).'</div>';
+                            $show_list[] = "<div style='color: #ff5757'>".L('Back_Deliver_Show_3')."：" . ' ' . date('H:i', $v['dateline']+$supply['dining_time']*60).'</div>';
                             if(!$supply['uid'])
-                                array_unshift($show_list,'<div>顾客下单： ' . date('H:i', $v['dateline']).'</div>');
+                                array_unshift($show_list,'<div>'.L('Back_Deliver_Show_1').'： ' . date('H:i', $v['dateline']).'</div>');
                         }
                     }
                 }
