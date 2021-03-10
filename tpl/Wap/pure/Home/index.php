@@ -33,7 +33,7 @@
         var address_url = "{pigcms{:U('Home/address')}";
         var static_url = "{pigcms{$static_public}";
     </script>
-    <script type="text/javascript" src="{pigcms{$static_path}js/index.js?v=1.7" charset="utf-8"></script>
+    <script type="text/javascript" src="{pigcms{$static_path}js/index.js?v=1.8" charset="utf-8"></script>
     <script type="text/javascript" src="{pigcms{$static_public}js/lang/{pigcms{:C('DEFAULT_LANG')}.js" charset="utf-8"></script>
     <script type="text/javascript" src="{pigcms{$static_path}js/common.js" charset="utf-8"></script>
     <script type="text/javascript" src="{pigcms{$static_public}js/mobileSelect/mobileSelect.js"></script>
@@ -475,7 +475,10 @@
                         <div class="brand">{{# if(d[i].tuan_type != 2){ }} {{ d[i].merchant_name }}</div>
                         <div class="title">{{ d[i].group_name }}</div>
                         <div class="price">
-                            <strong>{{ d[i].price }}</strong><span class="strong-color">元{{# if(d[i].extra_pay_price!=''){ }}{{ d[i].extra_pay_price }}{{# } }}</span>{{# if(d[i].wx_cheap){ }}<span class="tag">微信再减{{ d[i].wx_cheap }}元</span>{{# }else{ }}<del>{{ d[i].old_price }}</del>{{# } }} <span class="line-right"> {{ d[i].sale_txt }}</span>
+                            <strong>{{ d[i].price }}</strong>
+                            <span class="strong-color">元{{# if(d[i].extra_pay_price!=''){ }}{{ d[i].extra_pay_price }}{{# } }}</span>{{# if(d[i].wx_cheap){ }}
+                            <span class="tag">微信再减{{ d[i].wx_cheap }}元</span>{{# }else{ }}<del>{{ d[i].old_price }}</del>{{# } }}
+                            <span class="line-right"> {{ d[i].sale_txt }}</span>
                         </div>
                     </div>
                 </dd>
@@ -531,7 +534,7 @@
                         {{# if(d[i].delivery){ }}
                         <div class="price">
                             <!--span>{pigcms{:L('_MIN_DELI_PRICE_')} ${{ d[i].delivery_price }}</span-->
-                            <span class="delivery">{pigcms{:L('_DELI_PRICE_')} ${{ d[i].delivery_money }}</span>
+                            <span class="delivery">{pigcms{:L('_DELI_PRICE_')} ${{ d[i].delivery_money }}+</span>
                             <!--span class="delivery">{pigcms{:L('_PACK_PRICE_')} ${{ d[i].pack_fee }}</span-->
                             {{# if(d[i].delivery_system){ }}
                             <!--em class="location-right">{pigcms{:L('_PLAT_DIST_')}</em-->

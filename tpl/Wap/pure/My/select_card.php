@@ -455,7 +455,7 @@
                     <volist name="coupon_list" id="coupon">
                         <dl class="Muse">
                             <dd>
-                                <div <if condition="$coupon['is_use'] eq 1">class="Coupon_top clr"<else/>  class="Coupon_top Coupon_top_not_user clr" </if> >
+                                <div <if condition="$coupon['is_use'] eq 1">class="Coupon_top clr" <else/>  class="Coupon_top Coupon_top_not_user clr" </if> >
                                     <div class="fl">
                                         <div class="fltop">
                                             <i>$</i><em>{pigcms{$coupon.discount}</em>
@@ -478,7 +478,7 @@
                                     <div class="Coupon_x">
                                         <i>{pigcms{$coupon.start_time|date='Y.m.d',###}--{pigcms{$coupon.end_time|date='Y.m.d',###}</i>
                                         <if condition="$coupon['is_use'] eq 1">
-                                            <a href="{pigcms{$coupon.select_url}"><em>{pigcms{:L('_IMMEDIATE_USE_')}</em></a>
+                                            <div class="apply_button" data-link="{pigcms{$coupon.select_url}" data-msg="{pigcms{$coupon.delivery_discount}"><em>{pigcms{:L('_IMMEDIATE_USE_')}</em></div>
                                         </if>
                                     </div>
                                     <div class="Coupon_sm">
@@ -514,6 +514,24 @@
             });
 
 			$(function(){
+
+                $('.apply_button').click(function(){
+                    var now_dom = $(this);
+                    if ($(now_dom).data("msg")=="1") { //优惠券和其他优惠互斥
+                        layer.open({
+                            title: 'Message',
+                            btn: ['No', 'Yes'],
+                            content: "{pigcms{:L('QW_SEL_COUPON')}",
+                            no: function () {
+                                window.location.href = $(now_dom).data("link");
+                            },
+                            yes: function (index) {
+                                layer.close(index);
+                            }
+                        });
+                    }
+                    return false;
+                });
 
 				$('.mj-del').click(function(){
 					var now_dom = $(this);

@@ -568,41 +568,106 @@
                 }
 
             }else{//garfunkel add   信用卡支付/Weixin/Alipay
+                //alert("提交yanzheng ");
+                if (checkTipFee(false)==false){
+                    //alert("不能提交");
+                    layer.closeAll();
+                }else{
 
-                if(pay_type == 'moneris'){ //信用卡
+                    if(pay_type == 'moneris'){ //信用卡
 
-                    var card_type = $('input[name="pay_card_type"]:checked').val();
+                        var card_type = $('input[name="pay_card_type"]:checked').val();
 
-                    if(card_type == 1){  //使用新卡支付
-                        if(check_card()){
-                            // alert($('input[name="save"]:checked').val());
-                            var re_data = {
-                                'name':$('#card_name').val(),
-                                'card_num':$('#card_num').val(),
-                                'expiry':$('#expiry').val(),
-                                'save':$('input[name="save"]:checked').val(),
-                                // 'charge_total':$('input[name="charge_total"]').val(),
-                                'charge_total':$('#add_tip').text().replace('$', ""),
-                                'order_id':"Tutti{pigcms{$order_info.order_type}_{pigcms{$order_info.order_id}",
-                                'cust_id':'{pigcms{:md5($order_info.uid)}',
-                                'rvarwap':$('input[name="rvarwap"]').val(),
-                                'coupon_id':$('input[name="coupon_id"]').val(),
-                                'tip':$('#tip_num').text().replace('$', ""),
-                                'order_type':"{pigcms{$order_info.order_type}",
-                                'note':$('textarea[name="note"]').val(),
-                                'address_detail':$('textarea[name="address_detail"]').val(),
-                                'address_id':$('input[name="address_id"]').val(),
-                                'est_time':$('#est_time_input').val(),
-                                'cvd':$('#cvd').val(),
-                                'delivery_discount':delivery_discount,
-                                'not_touch':$('input[name="not_touch"]:checked').val(),
-                                'merchant_reduce':merchant_reduce,
-                                'service_fee':service_fee
-                            };
+                        if(card_type == 1){  //使用新卡支付
+                            if(check_card()){
+                                // alert($('input[name="save"]:checked').val());
+                                var re_data = {
+                                    'name':$('#card_name').val(),
+                                    'card_num':$('#card_num').val(),
+                                    'expiry':$('#expiry').val(),
+                                    'save':$('input[name="save"]:checked').val(),
+                                    // 'charge_total':$('input[name="charge_total"]').val(),
+                                    'charge_total':$('#add_tip').text().replace('$', ""),
+                                    'order_id':"Tutti{pigcms{$order_info.order_type}_{pigcms{$order_info.order_id}",
+                                    'cust_id':'{pigcms{:md5($order_info.uid)}',
+                                    'rvarwap':$('input[name="rvarwap"]').val(),
+                                    'coupon_id':$('input[name="coupon_id"]').val(),
+                                    'tip':$('#tip_num').text().replace('$', ""),
+                                    'order_type':"{pigcms{$order_info.order_type}",
+                                    'note':$('textarea[name="note"]').val(),
+                                    'address_detail':$('textarea[name="address_detail"]').val(),
+                                    'address_id':$('input[name="address_id"]').val(),
+                                    'est_time':$('#est_time_input').val(),
+                                    'cvd':$('#cvd').val(),
+                                    'delivery_discount':delivery_discount,
+                                    'not_touch':$('input[name="not_touch"]:checked').val(),
+                                    'merchant_reduce':merchant_reduce,
+                                    'service_fee':service_fee
+                                };
 
-                            //alert(re_data['order_type']);
+                                //alert(re_data['order_type']);
 
-                            $.post($('#moneris_form').attr('action'),re_data,function(data){
+                                $.post($('#moneris_form').attr('action'),re_data,function(data){
+
+                                        if(typeof (data.mode) != 'undefined' && data.mode == 'mpi'){
+                                            // layer.open({
+                                            //     title:'',
+                                            //     content:data.html
+                                            // });
+                                            $('body').append(data.html);
+                                            //window.open(data.html,"_blank");
+                                        }else {
+                                            layer.closeAll();
+
+                                            if (data.status == 1) {
+                                                layer.open({title: ['Message'], content: data.info,btn:["Confirm"],end:function(){window.location.href=data.url;}});
+                                            }
+                                        }
+                                });
+                            }else{
+                                alert("{pigcms{:L('_PLEASE_RIGHT_CARD_')}");
+                                layer.closeAll();
+                                $("html,body").animate({"scrollTop":$('#credit').offset().top},900);
+                            }
+                        }else{
+
+                            //使用已经有的信用卡支付
+
+                            if($('input[name="credit_id"]').val()){
+                                var re_data = {
+                                    'credit_id':$('input[name="credit_id"]').val(),
+                                    // 'charge_total':$('input[name="charge_total"]').val(),
+                                    'charge_total':$('#add_tip').text().replace('$', ""),
+                                    'order_id':"vicisland{pigcms{$order_info.order_type}_{pigcms{$order_info.order_id}",
+                                    'cust_id':'{pigcms{:md5($order_info.uid)}',
+                                    'rvarwap':$('input[name="rvarwap"]').val(),
+                                    'coupon_id':$('input[name="coupon_id"]').val(),
+                                    'tip':$('#tip_num').text().replace('$', ""),
+                                    'order_type':"{pigcms{$order_info.order_type}",
+                                    'note':$('textarea[name="note"]').val(),
+                                    'address_detail':$('textarea[name="address_detail"]').val(),
+                                    'address_id':$('input[name="address_id"]').val(),
+                                    'est_time':$('#est_time_input').val(),
+                                    'delivery_discount':delivery_discount,
+                                    'not_touch':$('input[name="not_touch"]:checked').val(),
+                                    'merchant_reduce':merchant_reduce,
+                                    'service_fee':service_fee
+                                };
+                                //alert($('input[name="not_touch"]:checked').val());
+                                var card_stauts = "{pigcms{$card['status']}";
+                                if(card_stauts == 0){
+                                    var old_cvd = $('input[name="old_cvd"]').val();
+                                    if(!/^\d{3,4}$/.test(old_cvd)){
+                                        alert('Please input CVD');
+                                        layer.closeAll();
+                                        return false;
+                                    }else{
+                                        re_data['cvd'] = old_cvd;
+                                    }
+                                }
+                                //alert(re_data['order_type']);
+
+                                $.post($('#moneris_form').attr('action'),re_data,function(data){
 
                                     if(typeof (data.mode) != 'undefined' && data.mode == 'mpi'){
                                         // layer.open({
@@ -610,141 +675,82 @@
                                         //     content:data.html
                                         // });
                                         $('body').append(data.html);
-                                        //window.open(data.html,"_blank");
+                                        alert("信用卡返回状态1");
                                     }else {
+                                        //信用卡支付返回结果，如果错误就会走这里，data.status=0
                                         layer.closeAll();
-
-                                        if (data.status == 1) {
+                                        //layer.open({title: ['Message'], content: data.info,btn:["Confirm"],end:function(){alert("123");}});
+                                        if (data.status == 1) { //没错误
+                                            layer.open({title: ['Message'], content: data.info,btn:["Confirm"],end:function(){window.location.href=data.url;}});
+                                            //setTimeout("window.location.href = '" + data.url + "'", 200);
+                                        } else { //有错误
                                             layer.open({title: ['Message'], content: data.info,btn:["Confirm"],end:function(){window.location.href=data.url;}});
                                         }
                                     }
-                            });
-                        }else{
-                            alert("{pigcms{:L('_PLEASE_RIGHT_CARD_')}");
-                            layer.closeAll();
-                            $("html,body").animate({"scrollTop":$('#credit').offset().top},900);
-                        }
-                    }else{
-
-                        //使用已经有的信用卡支付
-
-                        if($('input[name="credit_id"]').val()){
-                            var re_data = {
-                                'credit_id':$('input[name="credit_id"]').val(),
-                                // 'charge_total':$('input[name="charge_total"]').val(),
-                                'charge_total':$('#add_tip').text().replace('$', ""),
-                                'order_id':"vicisland{pigcms{$order_info.order_type}_{pigcms{$order_info.order_id}",
-                                'cust_id':'{pigcms{:md5($order_info.uid)}',
-                                'rvarwap':$('input[name="rvarwap"]').val(),
-                                'coupon_id':$('input[name="coupon_id"]').val(),
-                                'tip':$('#tip_num').text().replace('$', ""),
-                                'order_type':"{pigcms{$order_info.order_type}",
-                                'note':$('textarea[name="note"]').val(),
-                                'address_detail':$('textarea[name="address_detail"]').val(),
-                                'address_id':$('input[name="address_id"]').val(),
-                                'est_time':$('#est_time_input').val(),
-                                'delivery_discount':delivery_discount,
-                                'not_touch':$('input[name="not_touch"]:checked').val(),
-                                'merchant_reduce':merchant_reduce,
-                                'service_fee':service_fee
-                            };
-                            //alert($('input[name="not_touch"]:checked').val());
-                            var card_stauts = "{pigcms{$card['status']}";
-                            if(card_stauts == 0){
-                                var old_cvd = $('input[name="old_cvd"]').val();
-                                if(!/^\d{3,4}$/.test(old_cvd)){
-                                    alert('Please input CVD');
-                                    layer.closeAll();
-                                    return false;
-                                }else{
-                                    re_data['cvd'] = old_cvd;
-                                }
+                                });
+                            }else{
+                                alert("{pigcms{:L('_PLEASE_ADD_CARD_')}");
+                                layer.closeAll();
+                                $("html,body").animate({"scrollTop":$('#credit').offset().top},900);
                             }
-                            //alert(re_data['order_type']);
+                        }
 
-                            $.post($('#moneris_form').attr('action'),re_data,function(data){
+                        // $.ajax({
+                        //     url:"{pigcms{:U('Pay/getPayMessage')}",
+                        //     type:'post',
+                        //     data:{pay_type:pay_type,key_list:"ps_store_id|hpp_key"},
+                        //     dataType:"json",
+                        //     success:function(data){
+                        //         $('input[name="ps_store_id"]').val(data['ps_store_id']);
+                        //         $('input[name="hpp_key"]').val(data['hpp_key']);
+                        //
+                        //         $('#moneris_form').submit();
+                        //     }
+                        // });
+                    }else if(pay_type == 'weixin' || pay_type == 'alipay'){
 
-                                if(typeof (data.mode) != 'undefined' && data.mode == 'mpi'){
-                                    // layer.open({
-                                    //     title:'',
-                                    //     content:data.html
-                                    // });
-                                    $('body').append(data.html);
-                                    alert("信用卡返回状态1");
-                                }else {
-                                    //信用卡支付返回结果，如果错误就会走这里，data.status=0
-                                    layer.closeAll();
-                                    //layer.open({title: ['Message'], content: data.info,btn:["Confirm"],end:function(){alert("123");}});
-                                    if (data.status == 1) { //没错误
-                                        layer.open({title: ['Message'], content: data.info,btn:["Confirm"],end:function(){window.location.href=data.url;}});
-                                        //setTimeout("window.location.href = '" + data.url + "'", 200);
-                                    } else { //有错误
-                                        layer.open({title: ['Message'], content: data.info,btn:["Confirm"],end:function(){window.location.href=data.url;}});
-                                    }
-                                }
-                            });
-                        }else{
-                            alert("{pigcms{:L('_PLEASE_ADD_CARD_')}");
+                        //微信、支付宝支付的分支
+
+                        var re_data = {
+                            'charge_total':$('#add_tip').text().replace('$', ""),
+                            'order_id':"vicisland{pigcms{$order_info.order_type}_{pigcms{$order_info.order_id}",
+                            'cust_id':'{pigcms{:md5($order_info.uid)}',
+                            'rvarwap':$('input[name="rvarwap"]').val(),
+                            'coupon_id':$('input[name="coupon_id"]').val(),
+                            'tip':$('#tip_num').text().replace('$', ""),
+                            'order_type':"{pigcms{$order_info.order_type}",
+                            'pay_type':pay_type,
+                            'note':$('textarea[name="note"]').val(),
+                            'address_detail':$('textarea[name="address_detail"]').val(),
+                            'address_id':$('input[name="address_id"]').val(),
+                            'est_time':$('#est_time_input').val(),
+                            'delivery_discount':delivery_discount,
+                            'not_touch':$('input[name="not_touch"]:checked').val(),
+                            'merchant_reduce':merchant_reduce,
+                            'service_fee':service_fee
+                        };
+
+
+                        $.post('{pigcms{:U("Pay/WeixinAndAli")}',re_data,function(data){
+
                             layer.closeAll();
-                            $("html,body").animate({"scrollTop":$('#credit').offset().top},900);
-                        }
-                    }
+                            //success
+                            if(data.status == 1){
+                                if(pay_type == 'alipay')
+                                    $('body').html(data.url);
+                                else
+                                    window.location.href = data.url;
+                            }else{
+                                layer.open({title:['Message'],content:data.info});
+                            }
 
-                    // $.ajax({
-                    //     url:"{pigcms{:U('Pay/getPayMessage')}",
-                    //     type:'post',
-                    //     data:{pay_type:pay_type,key_list:"ps_store_id|hpp_key"},
-                    //     dataType:"json",
-                    //     success:function(data){
-                    //         $('input[name="ps_store_id"]').val(data['ps_store_id']);
-                    //         $('input[name="hpp_key"]').val(data['hpp_key']);
-                    //
-                    //         $('#moneris_form').submit();
-                    //     }
-                    // });
-                }else if(pay_type == 'weixin' || pay_type == 'alipay'){
-
-                    //微信、支付宝支付的分支
-
-                    var re_data = {
-                        'charge_total':$('#add_tip').text().replace('$', ""),
-                        'order_id':"vicisland{pigcms{$order_info.order_type}_{pigcms{$order_info.order_id}",
-                        'cust_id':'{pigcms{:md5($order_info.uid)}',
-                        'rvarwap':$('input[name="rvarwap"]').val(),
-                        'coupon_id':$('input[name="coupon_id"]').val(),
-                        'tip':$('#tip_num').text().replace('$', ""),
-                        'order_type':"{pigcms{$order_info.order_type}",
-                        'pay_type':pay_type,
-                        'note':$('textarea[name="note"]').val(),
-                        'address_detail':$('textarea[name="address_detail"]').val(),
-                        'address_id':$('input[name="address_id"]').val(),
-                        'est_time':$('#est_time_input').val(),
-                        'delivery_discount':delivery_discount,
-                        'not_touch':$('input[name="not_touch"]:checked').val(),
-                        'merchant_reduce':merchant_reduce,
-                        'service_fee':service_fee
-                    };
-
-
-                    $.post('{pigcms{:U("Pay/WeixinAndAli")}',re_data,function(data){
-
+                        },'json');
+                    }else{  // 余额和现金支付
                         layer.closeAll();
-                        //success
-                        if(data.status == 1){
-                            if(pay_type == 'alipay')
-                                $('body').html(data.url);
-                            else
-                                window.location.href = data.url;
-                        }else{
-                            layer.open({title:['Message'],content:data.info});
+                        var res = callpay();
+                        if(res){
+                            $('#pay-form').submit();
                         }
-
-                    },'json');
-                }else{  // 余额和现金支付
-                    layer.closeAll();
-                    var res = callpay();
-                    if(res){
-                        $('#pay-form').submit();
                     }
                 }
             }
@@ -1049,7 +1055,7 @@
     .price_list{
         width: 90%;
         margin: 0 auto;
-        padding: 20px 0;
+        padding: 10px 0;
         line-height: 20px;
     }
     .price_list span{
@@ -1061,7 +1067,7 @@
     #agree_div{
         width: 90%;
         margin: 0 auto;
-        padding: 20px 0;
+        padding: 10px 0;
         line-height: 20px;
         font-size: 1.1em;
     }
@@ -1348,11 +1354,10 @@
                             </div>
                             <div id="tip_input">
                                 <if condition="$order_info['tip_charge'] gt 0">
-                                    $ <input type="text" id="tip_fee" name="tip_fee" size="20" value="{pigcms{$order_info['tip_charge']}">
+                                    $ <input type="text" id="tip_fee" name="tip_fee" size="20" pattern="\d{0,}" oninvalid="setCustomValidity('{pigcms{:L(\'_B_PURE_MY_111_\')}---')" data-err="{pigcms{:L('_B_PURE_MY_111_')}===" value="{pigcms{$order_info['tip_charge']}">
                                 <else/>
-                                    $ <input type="text" id="tip_fee" name="tip_fee" size="20" value="">
+                                    $ <input type="text" id="tip_fee" name="tip_fee" size="20" pattern="\d{0,}" oninvalid="setCustomValidity('{pigcms{:L(\'_B_PURE_MY_111_\')}----')" data-err="{pigcms{:L('_B_PURE_MY_111_')}===" value="">
                                 </if>
-
                             </div>
                             <span class="tip_more"></span>
                         </div>
@@ -1364,29 +1369,30 @@
         <span id="add_tip" style="display: none;">$0</span>
 
         <div class="all_list_nobg">
-            <if condition="$order_info['order_type'] != 'recharge'">
+
+
             <div class="price_list">
                 <if condition="$order_info['delivery_discount'] neq 0">
-                <div id="free_delivery">
+                <div id="free_delivery" <if condition="$order_info['order_type'] == 'recharge'"> style="display: none" </if>>
                     You're eligible for free delivery!
                 </div>
                 </if>
-                <div>
+                <div <if condition="$order_info['order_type'] == 'recharge'"> style="display: none" </if>>
                     Subtotal <span>${pigcms{$order_info['goods_price']}</span>
                 </div>
-                <div>
+                <div <if condition="$order_info['order_type'] == 'recharge'"> style="display: none" </if>>
                     {pigcms{:L('_DELI_PRICE_')} <span>${pigcms{$order_info['freight_charge']}</span>
                 </div>
-                <div>
+                <div <if condition="$order_info['order_type'] == 'recharge'"> style="display: none" </if>>
                     {pigcms{:L('V2_SERVICEFEE')} <img src="{pigcms{$static_path}img/index/tax_fee.png" id="tax_fee_img" width="20" style="vertical-align: middle;margin-left: 5px;" />
                     <span>${pigcms{:number_format($order_info['packing_charge'] + $order_info['deposit_price'] + $order_info['tax_price'] + $order_info['service_fee'],2)}</span>
                 </div>
 
-                <div>
+                <div <if condition="$order_info['order_type'] == 'recharge'"> style="display: none" </if>>
                     {pigcms{:L('_TIP_TXT_')} <span class="tip_show"></span>
                 </div>
                 <?php if($system_coupon){ ?>
-                <div>
+                <div <if condition="$order_info['order_type'] == 'recharge'"> style="display: none" </if>>
                     Coupon
                     <span>
                         -${pigcms{:sprintf("%.2f",$system_coupon['discount'])}
@@ -1394,7 +1400,7 @@
                 </div>
                 <?php } ?>
                 <if condition="$order_info['delivery_discount']+$order_info['merchant_reduce'] neq 0">
-                    <div style="color: #ffa52d">
+                    <div  <if condition="$order_info['order_type'] == 'recharge'"> style="display: none;"<else/> style="color: #ffa52d" </if>>
                         Save <span>-${pigcms{:sprintf("%.2f",$order_info['delivery_discount']+$order_info['merchant_reduce'])}</span>
                     </div>
                 </if>
@@ -1402,8 +1408,6 @@
                     Total <span></span>
                 </div>
             </div>
-            </if>
-
         </div>
         <div id="agree_div">
             <input type="checkbox" name="is_agree" class="form-field" id="is_agree" value="1" checked="checked"/>
@@ -1645,7 +1649,50 @@
 
         isShowCredit();
     }
+    function checkTipFee(needAlert){
 
+        var rt=true;
+
+        var tf_obj=$('#tip_fee');
+        tf_obj.val($.trim(tf_obj.val()));
+
+        var num = tf_obj.val();
+
+        if(num != ''){
+            if(!/^\d+(\.\d{1,2})?$/.test(num)){
+                if (needAlert) alert("{pigcms{:L('_PLEASE_RIGHT_PRICE_')}");
+                //tf_obj.focus();
+                tf_obj.after("<span class='inline-tip'><i class='tip-status tip-status--opinfo'></i></span>").addClass('form-field--error');
+                rt=false;
+            }else{
+                $('#tip_list').children('span').each(function(){
+                    $(this).removeClass('tip_on');
+                });
+                rt=true;
+            }
+        }else{
+            var isC = false;
+            rt=true;
+            $('#tip_list').children('span').each(function(){
+                if($(this).hasClass('tip_on')){
+                    isC = true;
+                }
+            });
+            if(!isC){
+                var i=0;
+                $('#tip_list').children('span').each(function(){
+                    if(i == 1){
+                        $(this).addClass('tip_on');
+                    }
+                    i++;
+                });
+            }
+            
+        }
+        if (rt) CalTip();
+        //alert("checkTipFee==>"+rt);
+        return rt;
+    }
     function isShowCredit(){
         if($("#use_balance").is(':checked')==true){
             $('input[name="pay_type"]').removeAttr('checked');
@@ -1679,36 +1726,7 @@
         if(event.type == 'focusin'){
             $(this).siblings('.inline-tip').remove();$(this).removeClass('form-field--error');
         }else{
-            $(this).val($.trim($(this).val()));
-            var num = $(this).val();
-            if(num != ''){
-                if(!/^\d+(\.\d{1,2})?$/.test(num)){
-                    alert("{pigcms{:L('_PLEASE_RIGHT_PRICE_')}");
-                    $(this).focus();
-                    $(this).after("<span class='inline-tip'><i class='tip-status tip-status--opinfo'></i></span>").addClass('form-field--error');
-                }else{
-                    $('#tip_list').children('span').each(function(){
-                        $(this).removeClass('tip_on');
-                    });
-                }
-            }else{
-                var isC = false;
-                $('#tip_list').children('span').each(function(){
-                    if($(this).hasClass('tip_on')){
-                        isC = true;
-                    }
-                });
-                if(!isC){
-                    var i=0;
-                    $('#tip_list').children('span').each(function(){
-                        if(i == 1){
-                            $(this).addClass('tip_on');
-                        }
-                        i++;
-                    });
-                }
-            }
-            CalTip();
+            checkTipFee(true);
         }
     });
 

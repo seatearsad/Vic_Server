@@ -562,9 +562,16 @@ class MyAction extends BaseAction{
                 $coupon_list = array_merge($coupon_list,$event_coupon_list);
             }
 		}
+
 		if(!empty($coupon_list)){
 			$param = $_GET;
 			foreach($coupon_list as &$value){
+
+			    if ((float)$now_order['delivery_discount']>0 && $value['is_use']==1){
+                    $value['delivery_discount'] = "1";
+                }else{
+                    $value['delivery_discount'] = "0";
+                }
 				if($_GET['coupon_type']=='mer'){
 					$param['merc_id'] =$value['id'];
 					unset($param['unmer_coupon']);
@@ -3309,7 +3316,7 @@ class MyAction extends BaseAction{
 
         $order_list = D("Shop_order")->field(true)->where($where)->order('order_id DESC')->select();
         foreach ($order_list as &$st) {
-            $st['real_total_price']=$st['price']+$st['tip_charge']-$st['merchant_reduce ']-$st['delivery_discount']-$st['coupon_price'];
+            $st['real_total_price']=$st['price']+$st['tip_charge']-$st['merchant_reduce']-$st['delivery_discount']-$st['coupon_price'];
             $score=D('Reply')->field("score")->where(array('order_id'=>$st['order_id']))->find();
             if ($score['score']==null) {
                 $st['rate_score'] = 0;

@@ -184,14 +184,24 @@
                 $('#tips').html("{pigcms{:L('_ENTER_LEGAL_AMOUNT_')}").addClass('tips-err').show();
                 e.preventDefault();
                 return false;
-            }else if(money > 10000){
-                $('#tips').html("{pigcms{:L('_RECHARGE_TEN_TH_')}").addClass('tips-err').show();
-                e.preventDefault();
-                return false;
-            }else if(money < 0.1){
-                $('#tips').html("{pigcms{:L('_RECHARGE_POINTONE_')}").addClass('tips-err').show();
-                e.preventDefault();
-                return false;
+            }else{
+                var dian=money.toString().split(".")[1].length;
+                if(dian>2){
+                    $('#tips').html("{pigcms{:L('_ENTER_LEGAL_AMOUNT_')}").addClass('tips-err').show();
+                    e.preventDefault();
+                    return false;
+                }else{
+                    if(money > 10000){
+                        $('#tips').html("{pigcms{:L('_RECHARGE_TEN_TH_')}").addClass('tips-err').show();
+                        e.preventDefault();
+                        return false;
+                    }else if(money < 0.1){
+                        $('#tips').html("{pigcms{:L('_RECHARGE_POINTONE_')}").addClass('tips-err').show();
+                        e.preventDefault();
+                        return false;
+                    }
+                }
+
             }
         });
     <if condition="$_GET['label'] && $_GET['money']">

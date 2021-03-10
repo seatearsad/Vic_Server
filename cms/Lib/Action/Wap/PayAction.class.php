@@ -238,26 +238,31 @@ class PayAction extends BaseAction{
                 $is_chi = true;
             }
             $order_info['is_c'] = $is_chi ? 0 : 1;
+
             //平台优惠券
-            if (($tmp_order['total_money'] > $mer_coupon['discount'] || empty($mer_coupon))&&$_GET['unsys_coupon']!=1&&($order_info['discount_status']||!isset($order_info['discount_status']))) {
+            if (($tmp_order['total_money'] > $mer_coupon['discount'] || empty($mer_coupon)) && $_GET['unsys_coupon']!=1 && ($order_info['discount_status'] || !isset($order_info['discount_status']))) {
 
                 $tmp_order['total_money'] -= empty($mer_coupon['discount']) ? 0 : $mer_coupon['discount'];
-                if (empty($_GET['sysc_id'])) {
-                    if (!empty($order_info['business_type'])) {
-                        $now_coupon = D('System_coupon')->get_noworder_coupon_list($tmp_order, $_GET['type'], $this->user_session['phone'], $this->user_session['uid'], $platform, $order_info['business_type']);
-                    } else {
-                        $now_coupon = D('System_coupon')->get_noworder_coupon_list($tmp_order, $_GET['type'], $this->user_session['phone'], $this->user_session['uid'], $platform);
-                    }
-                    $system_coupon = reset($now_coupon);
 
-                    if(empty($system_coupon)){
-                        $event_coupon = D('New_event')->getUserCoupon($this->user_session['uid'],0,$tmp_order['total_money']);
-                        if($event_coupon) {
-                            $system_coupon = reset($event_coupon);
-                            $system_coupon['id'] = $system_coupon['coupon_id'] . '_' . $system_coupon['id'];
-                            //var_dump($system_coupon);die();
-                        }
-                    }
+                if (empty($_GET['sysc_id'])) {  //没有选择优惠券
+
+//                    if (!empty($order_info['business_type'])) {
+//                        $now_coupon = D('System_coupon')->get_noworder_coupon_list($tmp_order, $_GET['type'], $this->user_session['phone'], $this->user_session['uid'], $platform, $order_info['business_type']);
+//                    } else {
+//                        $now_coupon = D('System_coupon')->get_noworder_coupon_list($tmp_order, $_GET['type'], $this->user_session['phone'], $this->user_session['uid'], $platform);
+//                    }
+//                    var_dump($system_coupon);die();
+//                    $system_coupon = reset($now_coupon);
+//
+//                    if(empty($system_coupon)){
+//
+//                        $event_coupon = D('New_event')->getUserCoupon($this->user_session['uid'],0,$tmp_order['total_money']);
+//                        if($event_coupon) {
+//                            $system_coupon = reset($event_coupon);
+//                            $system_coupon['id'] = $system_coupon['coupon_id'] . '_' . $system_coupon['id'];
+//                            //var_dump($system_coupon);die();
+//                        }
+//                    }
 
                 } else {
 
@@ -287,23 +292,25 @@ class PayAction extends BaseAction{
             }
 
             if (!empty($mer_coupon)) {
+
                 $mer_coupon['coupon_url_param'] = array('merc_id' => $mer_coupon['id'], 'order_id' => $order_info['order_id'], 'type' => $_GET['type']);
                 if($system_coupon['discount']<$tmp_order['total_money']){
+
                     $this->assign('card_coupon', $mer_coupon);
                     $_SESSION['merc_id'] = $mer_coupon['id'];
                     $_SESSION['card_discount'] = $mer_coupon['discount'];
                 }
             } else {
+
                 $mer_coupon['coupon_url_param'] = array();
             }
-            //peter 手动清空
-            $system_coupon = null;
 
             if(!($order_info['delivery_discount_type'] == 0 && $order_info['delivery_discount'] != 0) && !($order_info['merchant_reduce_type'] == 0 && $order_info['merchant_reduce'] != 0) && !empty($system_coupon)){
-            //if (($order_info['merchant_reduce_type'] == 1 && $order_info['delivery_discount_type'] == 1 && !empty($system_coupon)) || ($order_info['merchant_reduce'] == 0 && $order_info['delivery_discount'] == 0 && !empty($system_coupon))) {
+
+                //if (($order_info['merchant_reduce_type'] == 1 && $order_info['delivery_discount_type'] == 1 && !empty($system_coupon)) || ($order_info['merchant_reduce'] == 0 && $order_info['delivery_discount'] == 0 && !empty($system_coupon))) {
                 //$system_coupon['coupon_url_param'] = array('sysc_id' => $system_coupon['id'], 'order_id' => $order_info['order_id'], 'type' => $_GET['type']);
                 $system_coupon['coupon_url_param'] = array('sysc_id' => $system_coupon['id'], 'order_id' => $order_info['order_id'], 'type' => $_GET['type']);
-                if($system_coupon['discount']>=$tmp_order['total_money']){
+                if($system_coupon['discount'] >= $tmp_order['total_money']){
                     $ban_mer_coupon=1;
                 }else{
                     $ban_mer_coupon=0;
@@ -314,6 +321,7 @@ class PayAction extends BaseAction{
                 $this->assign('system_coupon', $system_coupon);
                 // }
             } else {
+
                 $system_coupon['coupon_url_param'] = array();
             }
 
@@ -345,8 +353,10 @@ class PayAction extends BaseAction{
         $score_can_use_count=0;
         $score_deducte=0;
         $user_score_use_percent = (float)$this->config['user_score_use_percent'];
+
         //定制元宝判断条件
 		 if($this->config['open_extra_price']==1&&$order_info['extra_price']>0) {
+
             if ($_GET['type'] == 'group' || $_GET['type'] == 'store' || $_GET['type'] == 'meal' ||$_GET['type'] == 'mall' || $_GET['type'] == 'takeout' || $_GET['type'] == 'food' || $_GET['type'] == 'foodPad' || $_GET['type'] == 'appoint' || $_GET['type'] == 'mall' || $_GET['type'] == 'shop' || $_GET['type'] == 'balance-appoint' || ($order_info['order_type'] == 'plat' && $order_info['pay_system_score'])) {           //business_type
                 $type_ = $_GET['type'];
                 if ($order_info['business_type'] == 'foodshop') {

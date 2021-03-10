@@ -212,13 +212,13 @@
 <!--        <div class="header_active">{pigcms{:L('_ORDER_INFO_TXT_')}</div>-->
 <!--    </div>-->
 <section class="g_details">
-    <if condition="$order.status eq 1 AND $order.deliver_lng neq null AND $order.deliver_lat neq null">
+    <if condition="$order.statusLog gt 3 AND 6 gt $order.statusLog AND $order.deliver_lng neq null AND $order.deliver_lat neq null">
         <div class="map_infor" id="web_map"></div>
     <else />
         <div class="bg_infor"><img src="{pigcms{$store['image']}"> </div>
     </if>
     <div class="msg_infor">
-        <div class="msg_title info_common">{pigcms{$order.statusLogName}</div>
+        <div class="msg_title info_common">{pigcms{$order.statusLogName}({pigcms{$order['statusLog']})</div>
         <div class="msg_desc info_common">{pigcms{$order.statusDesc}</div>
         <div class=""></div>
     </div>
@@ -235,7 +235,7 @@
         <div class="gray_line"></div>
     </if>
 
-    <if condition="$order_details['deliver_info']">
+    <if condition="$order.statusLog gt 3 AND 6 gt $order.statusLog AND $order.deliver_lng neq null AND $order.deliver_lat neq null">
         <div class="infor" style="margin-bottom: 0px;">
 <!--            <a href="tel:{pigcms{$order_details['deliver_info']['phone']}">-->
                 <div class="div_deli">
@@ -301,7 +301,7 @@
                 </dd>
                 <dd class="clr">
                     <div class="fl" style="font-weight: bold">{pigcms{:L('_TOTAL_RECE_')}</div>
-                    <div class="fr" style="font-weight: bold">${pigcms{$order_details['price'] + $order_details['tip_charge']-$order_details['merchant_reduce ']-$order_details['delivery_discount']-$order_details['coupon_price']|floatval}</div>
+                    <div class="fr" style="font-weight: bold">${pigcms{$order_details['price'] + $order_details['tip_charge']-$order_details['merchant_reduce']-$order_details['delivery_discount']-$order_details['coupon_price']|floatval}</div>
 
                 </dd>
             </dl>
@@ -461,7 +461,7 @@
     }
 </style>
 
-<if condition="$order.status eq 1 AND $order.deliver_lng neq null AND $order.deliver_lat neq null">
+<if condition="$order.statusLog gt 3 AND 6 gt $order.statusLog AND $order.deliver_lng neq null AND $order.deliver_lat neq null">
  <script>
     var store_lat = "{pigcms{$order.store_lat}";
     var store_lng = "{pigcms{$order.store_lat}";

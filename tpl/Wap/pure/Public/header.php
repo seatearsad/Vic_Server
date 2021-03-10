@@ -428,6 +428,7 @@
             </if>
             <if condition="ACTION_NAME == 'index'">
                 <div class="local_div" data-url="{pigcms{:U('Shop/classic_address')}"></div>
+                <div class="header_search home_style"></div>
                 <div id="header_address_div"></div>
             </if>
         </if>
