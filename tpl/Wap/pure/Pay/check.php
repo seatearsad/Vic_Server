@@ -618,7 +618,6 @@
                                             //window.open(data.html,"_blank");
                                         }else {
                                             layer.closeAll();
-
                                             if (data.status == 1) {
                                                 layer.open({title: ['Message'], content: data.info,btn:["Confirm"],end:function(){window.location.href=data.url;}});
                                             }
@@ -746,7 +745,6 @@
 
                         },'json');
                     }else{  // 余额和现金支付
-                        layer.closeAll();
                         var res = callpay();
                         if(res){
                             $('#pay-form').submit();
@@ -809,7 +807,7 @@
 
 
     </script>
-    <script>layer.open({type:2,content:'页面加载中',shadeClose:false});</script>
+    <script>layer.open({type:2,content:'Loading',shadeClose:false});</script>
 <style>
     input::-webkit-input-placeholder { /* WebKit browsers */
         color:    #999;

@@ -218,7 +218,7 @@
         <div class="bg_infor"><img src="{pigcms{$store['image']}"> </div>
     </if>
     <div class="msg_infor">
-        <div class="msg_title info_common">{pigcms{$order.statusLogName}({pigcms{$order['statusLog']})</div>
+        <div class="msg_title info_common">{pigcms{$order.statusLogName}<span style="display: none">{pigcms{$order['statusLog']}</span> </div>
         <div class="msg_desc info_common">{pigcms{$order.statusDesc}</div>
         <div class=""></div>
     </div>
@@ -227,7 +227,7 @@
 
     <div class="infor_head"></div>
 
-    <if condition="$order_details['paid'] eq 0 ">
+    <if condition="$order_details['paid'] eq 0 AND $order.statusLog eq 0">
         <div id="payment_box" class="infor">
 <!--            data-time="'+order_list[i]['create_time']+'" data-id="'+order_list[i]['order_id']+'"data-jet="'+order_list[i]['jetlag']+'"-->
             <a href="{pigcms{:U('Pay/check',array('order_id' => $order_details['order_id'], 'type'=>'shop'))}"><div class="div_button count_down" data-time="{pigcms{$order['create_time']}" data-id="{pigcms{$order_details['order_id']}" data-jet="{pigcms{$order['jetlag']}">Finish Payment</div></a>
@@ -235,7 +235,7 @@
         <div class="gray_line"></div>
     </if>
 
-    <if condition="$order.statusLog gt 3 AND 6 gt $order.statusLog AND $order.deliver_lng neq null AND $order.deliver_lat neq null">
+    <if condition="$order.statusLog gt 2 AND 6 gt $order.statusLog AND $order.deliver_lng neq null AND $order.deliver_lat neq null">
         <div class="infor" style="margin-bottom: 0px;">
 <!--            <a href="tel:{pigcms{$order_details['deliver_info']['phone']}">-->
                 <div class="div_deli">
@@ -464,7 +464,7 @@
 <if condition="$order.statusLog gt 3 AND 6 gt $order.statusLog AND $order.deliver_lng neq null AND $order.deliver_lat neq null">
  <script>
     var store_lat = "{pigcms{$order.store_lat}";
-    var store_lng = "{pigcms{$order.store_lat}";
+    var store_lng = "{pigcms{$order.store_lng}";
     var user_lat = "{pigcms{$order.user_lat}";
     var user_lng = "{pigcms{$order.user_lng}";
     var deliver_lat ="{pigcms{$order.deliver_lat}";

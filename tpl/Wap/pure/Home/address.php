@@ -376,7 +376,7 @@
             data-city="{{ d[i].city_id}}">
             <div class="select_radio">
                 <input type="radio" id="radio-2-{{i}}" name="radio-2-set" class="regular-radio"
-                                             {{# if(d[i].default=="1") { }} checked {{# } }}/><label for="radio-2-1"></label><br/>
+                                             {{# if(d[i].checked=="1") { }} checked {{# } }}/><label for="radio-2-1"></label><br/>
             </div>
             <div class="select_value">
                 <div class="name">{{ d[i].street }} {{ d[i].house }}</div>

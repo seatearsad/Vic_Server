@@ -520,13 +520,10 @@
                     if ($(now_dom).data("msg")=="1") { //优惠券和其他优惠互斥
                         layer.open({
                             title: 'Message',
-                            btn: ['No', 'Yes'],
+                            btn: ['OK'],
                             content: "{pigcms{:L('QW_SEL_COUPON')}",
-                            no: function () {
+                            end: function () {
                                 window.location.href = $(now_dom).data("link");
-                            },
-                            yes: function (index) {
-                                layer.close(index);
                             }
                         });
                     }

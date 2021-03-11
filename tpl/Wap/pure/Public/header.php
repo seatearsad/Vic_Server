@@ -389,6 +389,23 @@
         left: 8%;
         cursor: pointer;
     }
+    #close_button_span{
+        width: 50px;
+        height: 30px;
+        display: -moz-inline-box;
+        display: inline-block;
+        -moz-transform: scaleX(-1);
+        -webkit-transform: scaleX(-1);
+        -o-transform: scaleX(-1);
+        transform: scaleX(-1);
+        background-image: url("./tpl/Static/blue/images/icon_close.png");
+        background-size: auto 20px;
+        background-repeat: no-repeat;
+        background-position: right center;
+        position: absolute;
+        left: 8%;
+        cursor: pointer;
+    }
 </style>
 <div class="down_header">
     <div class="down_close">X</div>
@@ -401,7 +418,7 @@
 <div id="tutti_header">
     <div id="header_menu">
         <if condition="MODULE_NAME == 'Home'">
-            <php>setcookie("path_from_home",1);</php>
+            <php>setcookie("path_by_what",1);</php>
             <div class="local_div" data-url="{pigcms{:U('Home/address')}"></div>
             <div class="header_search home_style"></div>
             <div id="header_address_div"></div>
@@ -414,19 +431,21 @@
                 </div>
             </if>
             <if condition="ACTION_NAME == 'order_detail'">
-                <php>setcookie("path_from_home",0);</php>
+                <php>setcookie("path_by_what",4);</php>
                 <div class="this_header">
                     <span id="back_button_span"></span>
                     {pigcms{:L('_ORDER_DETAIL_')}
                 </div>
             </if>
             <if condition="ACTION_NAME == 'confirm_order'">
+                <php>setcookie("path_by_what",5);</php>
                 <div class="this_header">
                     <span id="back_button_span"></span>
                     {pigcms{:L('V2_PAGETITLE_CART')}
                 </div>
             </if>
             <if condition="ACTION_NAME == 'index'">
+                <php>setcookie("path_by_what",2);</php>
                 <div class="local_div" data-url="{pigcms{:U('Shop/classic_address')}"></div>
                 <div class="header_search home_style"></div>
                 <div id="header_address_div"></div>
@@ -436,7 +455,7 @@
         <if condition="MODULE_NAME == 'Pay'">
             <if condition="ACTION_NAME == 'check'">
                 <div class="this_header">
-                    <span id="back_button_span"></span>
+                    <div id="close_button_span"></div>
                     {pigcms{:L('V2_PAGETITLE_CHECKOUT')}
                 </div>
             </if>
@@ -457,7 +476,7 @@
                 </div>
             </if>
             <if condition="ACTION_NAME == 'shop_order_list'">
-                <php>setcookie("path_from_home",0);</php>
+                <php>setcookie("path_by_what",3);</php>
                 <div class="this_header">
                     {pigcms{:L('V3_ORDER_LIST_TITLE')}
                 </div>
@@ -480,6 +499,7 @@
                 </div>
             </if>
             <if condition="ACTION_NAME == 'adress'">
+                <php>setcookie("path_by_what",6);</php>
                 <div class="this_header">
                     <span id="back_button_span"></span>
                     {pigcms{$page_title}
@@ -685,6 +705,9 @@
         <else />
             window.location.href="{pigcms{$back_url}";
         </if>
+    });
+    $('#close_button_span').click(function () {
+        window.location.href="{pigcms{$back_url}";
     });
 
     function goback(){

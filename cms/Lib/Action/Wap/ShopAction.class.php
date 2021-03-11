@@ -1768,10 +1768,11 @@ class ShopAction extends BaseAction{
 		$return = array();
 		if ($this->user_session['uid']) {
 		    $lastid=$_GET['lastid'];
+		    if ($lastid=="null"){}
             $adress_list = D('User_adress')->get_adress_list($this->user_session['uid'],$lastid);
 
 			foreach ($adress_list as $row) {
-				$return[] = array('id'=>$row['adress_id'],'default'=>$row['default'],'street' => $row['adress'], 'house' => $row['detail'], 'name' => $row['name'], 'phone' => $row['phone'], 'long' => $row['longitude'], 'lat' => $row['latitude'],'city_id' => $row['city']);
+				$return[] = array('id'=>$row['adress_id'],'checked'=>$row['checked'],'default'=>$row['default'],'street' => $row['adress'], 'house' => $row['detail'], 'name' => $row['name'], 'phone' => $row['phone'], 'long' => $row['longitude'], 'lat' => $row['latitude'],'city_id' => $row['city']);
 			}
 		}
 		echo json_encode($return);
@@ -1786,7 +1787,7 @@ class ShopAction extends BaseAction{
 		if ($store['have_shop'] == 0 || $store['status'] != 1) {
 			return array('error_code' => true, 'msg' => L('_STORE_IS_CLOSE_'));
 		}
-		if ($this->config['store_shop_auth'] == 1 && $now_store['auth'] < 3) {
+		if ($this->config['store_shop_auth'] == 1 && $store['auth'] < 3) {
 			return array('error_code' => true, 'msg' => '您查看的'.$this->config['shop_alias_name'].'没有通过资质审核！');
 			exit;
 		}
@@ -2455,7 +2456,7 @@ class ShopAction extends BaseAction{
             //var_dump($return);die("----");
 		}
 
-		if ($return['error_code']) $this->error_tips($return['msg']);
+		if ($return['error_code']) $this->error_tips($return['msg'],U("Shop/classic_shop",array("shop_id"=>$store_id)));
         //add garfunkel
 		if(isset($return['store']['name'])){
 		    $return['store']['name'] = lang_substr($return['store']['name'],C('DEFAULT_LANG'));
@@ -2508,7 +2509,6 @@ class ShopAction extends BaseAction{
 			$delivery_times2 = explode('-', $this->config['delivery_time2']);
 			$start_time2 = $delivery_times2[0] . ':00';
 			$stop_time2 = $delivery_times2[1] . ':00';
-
 		} else {
 			$start_time = $return['store']['delivertime_start'];
 			$stop_time = $return['store']['delivertime_stop'];
@@ -2640,17 +2640,19 @@ class ShopAction extends BaseAction{
 		$date['is_cross_day_2'] = $is_cross_day_2;
 		$this->assign($date);
 
+		//是否达到起送价
 		if ($return['store']['basic_price'] <= $basic_price) {
 			$address_id = isset($_GET['adress_id']) ? intval($_GET['adress_id']) : cookie('userLocationId');
 			if($address_id){
                 D('User_adress')->where(array('adress_id'=>$address_id))->save(array('default'=>1));
-                if($_GET['current_id']){
-                    D('User_adress')->where(array('adress_id'=>$_GET['current_id']))->save(array('default'=>0));
-                }
+                D('User_adress')->where(array('uid'=>$this->user_session['uid'],'adress_id'=>array('neq',$address_id)))->save(array('default'=>0));
+//                if($_GET['current_id']){
+//                    D('User_adress')->where(array('adress_id'=>$_GET['current_id']))->save(array('default'=>0));
+//                }
             }
+            //var_dump($this->user_session['uid']);die("------");
 			$user_adress = D('User_adress')->get_one_adress($this->user_session['uid'], intval($address_id));
 			//var_dump($user_adress);die("------");
-			$this->assign('user_adress', $user_adress);
 		} else {
 			if (in_array($return['delivery_type'], array(2, 3, 4))) {
 				$return['delivery_type'] = 2;
@@ -2737,16 +2739,21 @@ class ShopAction extends BaseAction{
                 $return['delivery_fee2'] = $return['delivery_fee2'] - $return['delivery_fee_reduce'];
                 $return['delivery_fee2'] = $return['delivery_fee2'] > 0 ? $return['delivery_fee2'] : 0;*/
             }else{
+                //超出了配送范围
                 $is_jump_address = 1;
+                $user_adress=null;
             }
 		}else{
+		    //没有获得默认地址
             $is_jump_address = 1;
         }
+        $this->assign('user_adress', $user_adress);
         //如果没有找到合适的配送地址
-        if($is_jump_address == 1){
+        if($is_jump_address == 1 && $_GET['from']=='shop'){
             $store = $return['store'];
-            redirect(U('My/adress',array('buy_type' => 'shop', 'store_id'=>$store['store_id'], 'village_id'=>$village_id, 'mer_id' => $store['mer_id'], 'frm' => $_GET['frm'], 'adress_id'=>$user_adress['adress_id'], 'order_id' => $order_id)));
-        }
+            //redirect(U('My/adress',array('buy_type' => 'shop', 'store_id'=>$store['store_id'], 'village_id'=>$village_id, 'mer_id' => $store['mer_id'], 'frm' => $_GET['frm'], 'adress_id'=>$user_adress['adress_id'], 'order_id' => $order_id)));
+            redirect(U('My/adress',array('buy_type' => 'shop', 'store_id'=>$store['store_id'], 'village_id'=>$village_id, 'mer_id' => $store['mer_id'], 'frm' => $_GET['frm'], 'adress_id'=>0, 'order_id' => $order_id, 'from' => "shop")));
+		}
 		//计算打包费 add garfunkel
         $store_shop = D("Merchant_store_shop")->field(true)->where(array('store_id' => $store_id))->find();
         $this->assign('store_shop',$store_shop);
@@ -2796,7 +2803,11 @@ class ShopAction extends BaseAction{
 		if($now_store_category['cue_field']){
 			$this->assign('cue_field',unserialize($now_store_category['cue_field']));
 		}
-
+        if ($_GET['buy_type']=='shop'){
+            $this->assign('back_url',U("Shop/classic_shop",array("shop_id"=>$_GET['store_id'])));
+        }else{
+            $this->assign('back_url',U("Shop/classic_shop",array("shop_id"=>$_GET['store_id'])));
+        }
 		$this->display();
 	}
 

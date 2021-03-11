@@ -16,6 +16,7 @@ class User_adressModel extends Model{
             }else{
                 $user_adress_list[$key]['checked']=0;
             }
+
 			$province = D('Area')->get_area_by_areaId($value['province'],false);
 			$user_adress_list[$key]['province_txt'] = $province['area_name'];
 			

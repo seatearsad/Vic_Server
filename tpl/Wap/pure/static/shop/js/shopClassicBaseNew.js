@@ -1064,7 +1064,7 @@ function cartEventReg(){
 	$('#checkCart').click(function(){
         pageLoadTips({showBg:false});
         //alert(check_cart_url+'&store_id='+nowShop.store.id);
-		window.location.href = check_cart_url+'&store_id='+nowShop.store.id;
+		window.location.href = check_cart_url+'&store_id='+nowShop.store.id+"&from=shop";
 	});
 }
 
@@ -1390,13 +1390,12 @@ function showShop(shopId){
 		//Dish + 选择
         $(document).on('click','#shopDetailPageDish .product_btn.plus',function () {
         	var max = parseInt($(this).parent().data('max'));
-
+            var min = parseInt($(this).parent().data('min'));
             var dish_id = $(this).parent().data('dish_id');
 			var curr_all_num = 0;
             $(this).parents('#shopDetailPageDish_'+dish_id).find('.dish_memo').each(function () {
                 curr_all_num += parseInt($(this).children('.number').html());
             });
-
 
             //alert($(this).parent().data('dish_name'));
             var curr_num = parseInt($(this).parent().children('.number').html());
@@ -1405,9 +1404,14 @@ function showShop(shopId){
                 changeProductSpec();
             }else {
                 //motify.log($(this).parent().data('dish_name') + ' Options Maximum ' + max + '');
-                motify.log('Please choose maximum ' + max + ' option(s) for ' + $(this).parent().data('dish_name'));
+                if (max==min){
+                    motify.log('Please choose exactly ' + max + ' option(s) for ' + $(this).parent().data('dish_name'));
+                }else{
+                    motify.log('Please choose maximum ' + max + ' option(s) for ' + $(this).parent().data('dish_name'));
+                }
             }
         });
+
 		//Dish - 选择
         $(document).on('click','#shopDetailPageDish .product_btn.min',function () {
             var curr_num = parseInt($(this).parent().children('.number').html());
@@ -1417,7 +1421,7 @@ function showShop(shopId){
             }
         });
 
-		//Proper  Radio选择
+		//Proper Radio选择
         $(document).on('click','#shopDetailPageLabel li',function(event){
             //var maxSize = $(this).closest('.row').data('num');
             var maxSize = $(this).data('num');
@@ -2986,25 +2990,50 @@ function showCatShopList(newPage){
 }
 
 function goBackPage(){
-	if ($.cookie('path_from_home')==1){
-        window.location.href = "../wap.php";
-	}else{
-
-        if(motify.checkLifeApp() && motify.getLifeAppVersion() >= 50){
-            if(motify.checkIos()){
-                $('body').append('<iframe src="pigcmso2o://webViewGoBack" style="display:none;"></iframe>');
-                window.history.go(-1);
-            }else{
-                window.lifepasslogin.webViewGoBack();
-            }
-        }else{
-            if(document.referrer == ""){
-                window.location.href = storeUrl;
-            }else{
-                window.history.go(-1);
-            }
-        }
+	var ahref="";
+    switch ($.cookie('path_by_what')) {
+		case "1":	//home_index
+           ahref = "../wap.php";
+			break;
+		case "2":   //shop_index
+            ahref = "../Wap&c=Shop&a=index";
+			break;
+		case "3":	//order_list
+            ahref = "../wap.php?g=Wap&c=My&a=shop_order_list";
+			break;
+		case "4":	//order_detail
+            ahref = "../wap.php?g=Wap&c=My&a=shop_order_list";
+			break;
+		case "5":	//confirm_order
+            ahref = "../wap.php";
+			break;
+		case "6":	//confirm_order-> adress
+            ahref = "../wap.php";
+			break;
+        default:
+            ahref = "../wap.php";
 	}
+
+    window.location.href = ahref;
+	// if ($.cookie('path_buy_what')==1){
+     //    window.location.href = "../wap.php";
+	// }else{
+
+     //    if(motify.checkLifeApp() && motify.getLifeAppVersion() >= 50){
+     //        if(motify.checkIos()){
+     //            $('body').append('<iframe src="pigcmso2o://webViewGoBack" style="display:none;"></iframe>');
+     //            window.history.go(-1);
+     //        }else{
+     //            window.lifepasslogin.webViewGoBack();
+     //        }
+     //    }else{
+     //        if(document.referrer == ""){
+     //            window.location.href = storeUrl;
+     //        }else{
+     //            window.history.go(-1);
+     //        }
+     //    }
+	// }
 }
 
 function changeWechatShare(type,param){
