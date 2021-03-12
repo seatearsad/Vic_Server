@@ -2609,13 +2609,15 @@ class PayAction extends BaseAction{
 
         $this->Save_order_desc($_POST['note'],$order_id);
         $this->Save_user_address_detail($_POST['address_detail'],$address_id);
+
         //----------------------------------------------------------------------------
         if ($_POST['order_type']=='recharge'){
             $result_url=U("Wap/My/my_money");
         }else{
             $result_url=$this->get_result_url($order_id);
         }
-        //---------
+        //-----------------------------------------------------------------------------
+
         $moneris_pay = new MonerisPay();
         $resp = $moneris_pay->payment($_POST,$this->user_session['uid'],2);
         //var_dump($resp);die();
@@ -2683,8 +2685,13 @@ class PayAction extends BaseAction{
     //保存地址备注信息的逻辑  by Peter 2021-2-26
     public function Save_order_desc($desc,$order_id){
         //echo ("desc=".$desc.",order_id=".$order_id);die();
-        if($desc != null) {
-            D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->save(array('desc'=>$desc));
+        if($desc != null || trim($desc) != '') {
+            if(!checkEnglish($desc) && trim($desc) != ''){
+                $desc_en= translationCnToEn($desc);
+            }else{
+                $desc_en = '';
+            }
+            D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->save(array('desc'=>$desc,'desc_en'=>$desc_en));
         }
     }
     //微信、支付宝请求支付!!!

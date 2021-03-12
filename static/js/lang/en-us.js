@@ -16,6 +16,7 @@ lang['_NUM_DELI_PRICE_'] = 'Still need %s';
 lang['_SHOP_ERROR_NOTICE_'] = 'The information is not complete, click confirm to return to the last page！';
 lang['_ONLY_SELF_'] = 'This restaurant is pick up only';
 lang['_NO_STOCK_'] = 'Out of stock';
+lang['_NO_STORE_SEARCH_RESULT'] = 'Sorry, no results found.';
 lang['_PRAISE_TXT_'] = '';//本应是图片
 lang['_POOR_DELI_'] = ' ';
 lang['_REMINDER_STRING_'] = 'Note: Picture might be different from the real products, please order in advance during the bad weathers or busy hours';

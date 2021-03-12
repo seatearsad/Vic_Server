@@ -1336,7 +1336,7 @@ function showShop(shopId){
                             cartFunction('count'); //2
                         }
                     } else {
-                        var html = '<dd id="shopProductRightBar2-0" data-cat_id="0"><div class="cat_name">未搜索到结果</div></dd>'
+                        var html = '<dd id="shopProductRightBar2-0" data-cat_id="0"><div class="cat_name">'+ getLangStr('_NO_STORE_SEARCH_RESULT')+'</div></dd>';
                         $('#shopSearchResult dl').html(html);
                     }
                     pageLoadHides();
@@ -1725,7 +1725,7 @@ function showShop(shopId){
 
             $('#background_area').css('background-image','url('+result.store.image+')');
 			if(result.store.delivery){
-                $('#deliveryText').html(getLangStr('_DELI_PRICE_') +' $ '+result.store.delivery_money+' | '+ getLangStr('_PACK_PRICE_') +' '+ result.store.pack_fee);//+ ' | ' + getLangStr('_DEIL_NUM_MIN_',result.store.delivery_time)
+                $('#deliveryText').html(getLangStr('_DELI_PRICE_') +' $'+result.store.delivery_money+' | '+ getLangStr('_PACK_PRICE_') +' $'+ result.store.pack_fee);//+ ' | ' + getLangStr('_DEIL_NUM_MIN_',result.store.delivery_time)
 			}else{
                 $('#deliveryText').html(getLangStr('_ONLY_SELF_'));
 			}
@@ -2453,6 +2453,7 @@ function showShopContent(nav){
 			$('#shopMerchantBox').data('isShow','1');
 		}
 		pageLoadHides();
+
 	}else if(nav == 'reply'){ //评论
 
         $('#shopProductBox').hide();
@@ -2996,7 +2997,7 @@ function goBackPage(){
            ahref = "../wap.php";
 			break;
 		case "2":   //shop_index
-            ahref = "../Wap&c=Shop&a=index";
+            ahref = "../wap.php?g=Wap&c=Shop&a=index";
 			break;
 		case "3":	//order_list
             ahref = "../wap.php?g=Wap&c=My&a=shop_order_list";

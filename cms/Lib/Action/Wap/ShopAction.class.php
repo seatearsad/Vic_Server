@@ -3308,7 +3308,7 @@ class ShopAction extends BaseAction{
 		$id = isset($_GET['order_id']) ? intval($_GET['order_id']) : 0;
 		if ($order = M('Shop_order')->where(array('order_id' => $id, 'uid' => $this->user_session['uid']))->find()) {
 // 			if ($order['status'] != 0 ) $this->error_tips('商家已经处理了此订单，现在不能取消了！');
-			if ($order['paid'] == 1 ) $this->error_tips('改订单已支付，您不能取消！');
+			if ($order['paid'] == 1 ) $this->error_tips('该订单已支付，您不能取消！');
 // 			if ($order['paid'] == 1 && date('m', $order['dateline']) == date('m')) {
 // 				foreach (unserialize($order['info']) as $menu) {
 // 					D('Meal')->where(array('meal_id' => $menu['id'], 'sell_count' => array('gt', $menu['num'])))->setDec('sell_count', $menu['num']);
@@ -3330,9 +3330,9 @@ class ShopAction extends BaseAction{
 			}
 
 
-			$this->success_tips('订单取消成功', U('Shop/status', array('mer_id' => $order['mer_id'], 'store_id' => $order['store_id'], 'order_id' => $order['order_id'])));
+			$this->success_tips(L('_B_MY_ORDERCANCELLEDACCESS_'), U('Shop/status', array('mer_id' => $order['mer_id'], 'store_id' => $order['store_id'], 'order_id' => $order['order_id'])));
 		} else {
-			$this->error_tips('订单取消失败！');
+			$this->error_tips(L('_B_MY_ORDERCANCELLEDACCESS_FAIL'));
 		}
 
 	}

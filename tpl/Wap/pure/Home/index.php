@@ -715,7 +715,7 @@
                                 <div class="close_txt" style="font-size: 16px">Currently Closed</div>
                                 {{# } }}
                             </div>
-                            <div>{{ d[i].info[j].name }}</div>
+                            <div style="overflow: hidden;text-overflow: ellipsis;">{{ d[i].info[j].name }}</div>
                             <div style="color: grey;overflow: hidden;text-overflow: ellipsis;">{{ d[i].info[j].txt_info }}</div>
                         </li>
                         </a>

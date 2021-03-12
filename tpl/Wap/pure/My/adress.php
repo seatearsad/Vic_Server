@@ -198,7 +198,7 @@
 
     <div id="tips" class="tips"></div>
     <div class="wrapper btn-wrapper">
-        <a class="address-add btn btn-larger btn-warning btn-block" href="{pigcms{:U('My/edit_adress',$_GET)}">{pigcms{:L('_ADD_NEW_ADDRESS_')}</a>
+        <a class="address-add btn btn-larger btn-warning btn-block" href="{pigcms{$new_url}">{pigcms{:L('_ADD_NEW_ADDRESS_')}</a>
     </div>
 
     <volist name="adress_list_allow" id="vo">

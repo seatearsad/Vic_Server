@@ -628,14 +628,21 @@ class MyAction extends BaseAction{
             $store = null;
         }
 
+        $param = $_GET;
+
         //$adress_list=null;
         if ($_GET['buy_type']=='shop'){ //从购物车选择配送地址
             $page_title=L('V2_PAGETITLE_ADDRESS_SHOP');
+            $param['adress_id']=0;
+            $this->assign('new_url',U('My/edit_adress',$param));
 
         }else{                          //从个人中心进入收货地址
             $page_title=L('V2_PAGETITLE_ADDRESS');
             $this->assign('back_url',U('My/myinfo'));
+            $this->assign('new_url',U('My/edit_adress'));
         }
+
+
         $this->assign('page_title',$page_title);
 		if(empty($adress_list)){ //如果没有地址数据，就自动跳转到----->210305 如果地址数据为空，就停在列表里
 		    //redirect(U('My/edit_adress',$_GET));
@@ -670,8 +677,7 @@ class MyAction extends BaseAction{
 				$this->assign('back_url',U('My/myinfo'));
 			}
 
-			$param = $_GET;
-
+            $param = $_GET;
 
             foreach ($adress_list as $key => &$value) {
                 $param['adress_id'] = $value['adress_id'];
@@ -790,6 +796,7 @@ class MyAction extends BaseAction{
 				$this->assign('params',$params);
 			}
 		}
+
         $this->display();
 	}
 
@@ -5424,7 +5431,8 @@ class MyAction extends BaseAction{
 
 		//平台余额退款
 		if ($now_order['balance_pay'] != '0.00') {
-			$add_result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],'订单退款 (订单号:'.$now_order['order_name'].')',0,0,0,'Order Cancellation (Order #'.$now_order['order_name'].')');
+            //var_dump($now_order);die('---------------');
+			$add_result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],'订单退款 (订单号:'.$now_order['order_name'].')',0,0,0,'Order Cancellation (Order #'.$now_order['order_id'].')');
 
 			$param = array('refund_time' => time());
 			if($result['error_code']){
