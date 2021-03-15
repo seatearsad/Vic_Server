@@ -356,7 +356,7 @@
     {{# for(var i in d){ }}
     {{# if(d[i].type == 0){ }}
     <div class="row clearfix" id="shopDetailPageDish_{{ d[i].id}}" data-min="{{d[i].min}}" data-max="{{d[i].max}}" data-name="{{ d[i].name }}">
-        <div class="left add_bold">{{ d[i].name }}-D</div>
+        <div class="left add_bold">{{ d[i].name }}</div>
         <div class="add_grey">
             {{# if(d[i].min == d[i].max){ }}
             * Required. Please choose exactly {{ d[i].min }}
@@ -394,7 +394,7 @@
     </div>
     {{# }else{ }}
     <div class="row clearfix" id="shopDetailPageDish_{{ d[i].id}}" data-min="{{d[i].min}}" data-max="{{d[i].max}}" data-name="{{ d[i].name }}">
-        <div class="left">{{ d[i].name }}-D</div>
+        <div class="left">{{ d[i].name }}</div>
         <div>
             {{# if(d[i].min == d[i].max){ }}
             * Required. Please choose exactly {{ d[i].min }}
@@ -495,10 +495,16 @@
 						}}
 						<div class="spec" style="font-size: 12px" data-product_id="{{ i }}">{{ n_tmpParamStr }}</div>
 					{{# } }}
+                    {{#
+                        var iii=i+"";
+                        iii=iii.replace(/[\|]/g,"_XOXO_");
+                        iii=iii.replace(/,/g,"_FOFO_");
+                        iii=iii.replace(/[\.]/g,"_DODO_");
+                    }}
 				</div>
 				<div class="cartRight">
 					<div class="product_btn plus cart"></div>
-					<div class="product_btn number cart productNum-{{ i }}">{{ d[i].count }}</div>
+					<div class="product_btn number cart productNum-{{ iii }}">{{ d[i].count }}</div>
 					<div class="product_btn min cart"></div>
 					<div class="price">${{ t_price }}</div>
 				</div>

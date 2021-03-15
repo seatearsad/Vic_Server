@@ -193,7 +193,7 @@
     }
     .div_deli{
         margin: 0px 20px 0px 10px;
-        /*background-image: url("./tpl/Static/blue/images/new/icon_call.png");*/
+        background-image: url("./tpl/Static/blue/images/new/icon_call.png");
         background-size: auto 40px;
         background-repeat: no-repeat;
         background-position: right center;
@@ -237,12 +237,12 @@
 
     <if condition="$order.statusLog gt 2 AND 6 gt $order.statusLog AND $order.deliver_lng neq null AND $order.deliver_lat neq null">
         <div class="infor" style="margin-bottom: 0px;">
-<!--            <a href="tel:{pigcms{$order_details['deliver_info']['phone']}">-->
+            <a href="tel:{pigcms{$order_details['deliver_info']['phone']}">
                 <div class="div_deli">
                     <div style="font-size: 18px;font-weight: bold">{pigcms{$order_details['deliver_info']['name']}</div>
                     <div style="margin-top: 5px;">will deliver your order to you</div>
                 </div>
-<!--            </a>-->
+            </a>
         </div>
         <div class="gray_line"></div>
     </if>

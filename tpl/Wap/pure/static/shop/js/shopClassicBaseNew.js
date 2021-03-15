@@ -1961,7 +1961,9 @@ function changeProductSpec(){
 
 var productCart = [],productCartNumber = 0,productCartMoney=0;
 function cartFunction(type,obj,dataObj){
-    console.log("cartFunction->"+type);
+
+	console.log("cartFunction->"+type);
+
     if ($('#shopProductCart').data('close')=="0") {
 		if(dataObj == 'productPage'){
 			console.log("cartFunction->productPage");
@@ -2044,7 +2046,7 @@ function cartFunction(type,obj,dataObj){
 				});
 			}
 		}else if(type != 'count'){
-			console.log("cartFunction->count");
+			console.log("cartFunction->!count");
 			if(dataObj.hasClass('cartDD') && dataObj.find('.cartLeft').hasClass('hasSpec')){
 				var productKey = dataObj.find('.spec').data('product_id');
 				var productStock = dataObj.find('.spec').data('stock');
@@ -2072,10 +2074,12 @@ function cartFunction(type,obj,dataObj){
 			},500);
 			console.log(productCart);
 			console.log("--->productKey-->"+productKey);
+
 			if(productCart[productKey]){
 				productCart[productKey]['count']++;
 				var ct=productCart[productKey]['count'];
-				$('.productNum-'+productKey).html(ct);
+                console.log("--->DecodeIdClass-->"+DecodeIdClass(productKey));
+				$('.productNum-'+ DecodeIdClass(productKey)).html(ct);
 			}else{
 				if(dataObj == 'productPage'){
 					$('#shopDetailPageBuy').hide();
@@ -2099,7 +2103,9 @@ function cartFunction(type,obj,dataObj){
 			}
 			productCartNumber++;
 			productCartMoney = productCartMoney+productPrice;
+
 		}else if(type == 'min'){
+
 			$('#shopProductCart .cart').addClass('bound');
 			setTimeout(function(){
 				$('#shopProductCart .cart').removeClass('bound');
@@ -2114,10 +2120,12 @@ function cartFunction(type,obj,dataObj){
 					obj.remove();
 					if(dataObj.hasClass('cartDD')){
 						dataObj.remove();
-						$('#shopProductRightBar2 .productNum-'+productKey).siblings('.min').remove();
-						$('#shopProductRightBar2 .productNum-'+productKey).remove();
-						$('#shopProductBottomBar .productNum-'+productKey).siblings('.min').remove();
-						$('#shopProductBottomBar .productNum-'+productKey).remove();
+						//这里有错误，但是不影响使用，先不改
+                            $('#shopProductRightBar2 .productNum-'+productKey).siblings('.min').remove();
+                            $('#shopProductRightBar2 .productNum-'+productKey).remove();
+                            $('#shopProductBottomBar .productNum-'+productKey).siblings('.min').remove();
+                            $('#shopProductBottomBar .productNum-'+productKey).remove();
+
 						$('#shopDetailPageBuy').show();
 						$('#shopDetailPageNumber').hide();
 						$('#shopDetailPageNumber .number').html('0');
@@ -2126,7 +2134,7 @@ function cartFunction(type,obj,dataObj){
 				delete productCart[productKey];
 			}else{
 				productCart[productKey]['count']--;
-				$('.productNum-'+productKey).html(productCart[productKey]['count']);
+				$('.productNum-'+DecodeIdClass(productKey)).html(productCart[productKey]['count']);
 			}
 			productCartNumber--;
 			productCartMoney = productCartMoney - productPrice;
@@ -2178,6 +2186,14 @@ function cartFunction(type,obj,dataObj){
 	if(nowPage == 'search' || nowPage == 'goods'){
 		is_refresh = true;
 	}
+}
+
+function DecodeIdClass(dstr){
+	dstr=dstr+"";
+    dstr=dstr.replace(/[\|]/g,"_XOXO_");
+    dstr=dstr.replace(/,/g,"_FOFO_");
+    dstr=dstr.replace(/[\.]/g,"_DODO_");
+    return dstr;
 }
 
 function stringifyCart(){

@@ -524,6 +524,7 @@
 <!--    <div id="debug" style="position: fixed;color:red;width:auto;height: 40px;left:30px;top:200px;z-index: 1000000;background: white">Debug</div>-->
     <div id="debug2" style="position: fixed;color:red;width:auto;height: 40px;left:30px;top:220px;z-index: 1000000;background: white"></div>
     <div id="container">
+<!--        <div class="productNum-4630_2_FOFO_8_FOFO_1_FOFO_0.01_4_FOFO_33_FOFO_1_FOFO_1.05_XOXO_4_FOFO_34_FOFO_1_FOFO_0.65_XOXO_4_FOFO_52_FOFO_1_FOFO_0.32">abcde</div>-->
 		<div id="pageList" class="pageDiv" <if condition="$config['shop_show_footer']">style="padding-bottom:56px;"</if>>
 			<section id="listHeader" class="roundBg">
 				<div id="listBackBtn" class="listBackBtn hide"><div></div></div>
@@ -867,7 +868,7 @@
                 //$('#container').css('height',document.body.clientHeight+200);
 
                 var clh=document.body.clientHeight;
-                //$(".productNum-4628_2846_2849_728_0_728_1_728_22").html("1234");
+                //$(".productNum-4630_2_FOFO_8_FOFO_1_FOFO_0_DODO_01_4_FOFO_33_FOFO_1_FOFO_1_DODO_05_XOXO_4_FOFO_34_FOFO_1_FOFO_0_DODO_65_XOXO_4_FOFO_52_FOFO_1_FOFO_0_DODO_32").html("1234");
                 //$('#pageShop').css('height',clh+900);
                 //$('#shopProductRightBar2').css('height',clh);
                 //alert (document.body.clientHeight);
