@@ -553,17 +553,27 @@ class MyAction extends BaseAction{
 			}
 
             //获取活动优惠券
-            $event_coupon_list = D('New_event')->getUserCoupon($this->user_session['uid'],0,$now_order['total_money']);
+            $event_coupon_list = D('New_event')->getUserCoupon($this->user_session['uid'],0);
             if(!$coupon_list) $coupon_list = array();
             if(count($event_coupon_list) > 0){
                 foreach ($event_coupon_list as &$v){
                     $v['id'] = $v['coupon_id'].'_'.$v['id'];
+                    //当前页面is_use的值为是否可以使用
+                    if($v['order_money'] <= $now_order['total_money'])
+                        $v['is_use'] = 1;
+                    else
+                        $v['is_use'] = 0;
                 }
                 $coupon_list = array_merge($coupon_list,$event_coupon_list);
             }
 		}
 
 		if(!empty($coupon_list)){
+            $cmf_arr = array_column($coupon_list, 'discount');
+            array_multisort($cmf_arr, SORT_DESC, $coupon_list);
+            $cmf_arr = array_column($coupon_list, 'is_use');
+            array_multisort($cmf_arr, SORT_DESC, $coupon_list);
+
 			$param = $_GET;
 			foreach($coupon_list as &$value){
 
@@ -582,7 +592,7 @@ class MyAction extends BaseAction{
 				$value['select_url'] = U('Pay/check',$param);
 			}
 			$this->assign('coupon_list',$coupon_list);
-			//var_dump($coupon_list);
+			//var_dump($coupon_list);die();
 		}
 
 		$param = $_GET;
@@ -3394,7 +3404,15 @@ class MyAction extends BaseAction{
         //var_dump($coupon_list);die();
         $this->assign('cate_platform', D('System_coupon')->cate_platform());
 
-       // var_dump(D('System_coupon')->cate_platform());die();
+        // var_dump(D('System_coupon')->cate_platform());die();
+
+        //获取活动优惠券
+        $event_coupon_list = D('New_event')->getUserCoupon($this->user_session['uid']);
+        if(!$coupon_list) $coupon_list = array();
+        if(count($event_coupon_list) > 0){
+            $coupon_list = array_merge($coupon_list,$event_coupon_list);
+        }
+
         $tmp = array();
         foreach ($coupon_list as $key => &$v) {
             $v['name'] = lang_substr($v['name'],C('DEFAULT_LANG'));
