@@ -454,7 +454,7 @@
                 <ul class="end_ul">
                     <volist name="coupon_list" id="coupon">
                         <dl class="Muse">
-                            <dd>
+                            <dd <if condition="$coupon['is_use'] eq 1">data-link="{pigcms{$coupon.select_url}" data-msg="{pigcms{$coupon.delivery_discount}"</if> style="cursor: pointer;">
                                 <div <if condition="$coupon['is_use'] eq 1">class="Coupon_top clr" <else/>  class="Coupon_top Coupon_top_not_user clr" </if> >
                                     <div class="fl">
                                         <div class="fltop">
@@ -515,7 +515,7 @@
 
 			$(function(){
 
-                $('.apply_button').click(function(){
+                $('.Muse dd').click(function(){
                     var now_dom = $(this);
                     if ($(now_dom).data("msg")=="1") { //优惠券和其他优惠互斥
                         layer.open({
@@ -526,7 +526,11 @@
                                 window.location.href = $(now_dom).data("link");
                             }
                         });
+                    }else{
+                        if(typeof($(now_dom).data("link")) != 'undefined')
+                            window.location.href = $(now_dom).data("link");
                     }
+
                     return false;
                 });
 

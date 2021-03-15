@@ -284,6 +284,7 @@ class New_eventModel extends Model
             }else{
                 $v['discount_desc'] = replace_lang_str(L('_MAN_NUM_REDUCE_'),$v['discount']).replace_lang_str(L('_MAN_REDUCE_NUM_'),$v['order_money']);
             }
+
             $list[] = $v;
         }
 

@@ -223,7 +223,7 @@ class System_couponModel extends Model{
             if($v['end_time']<$_SERVER['REQUEST_TIME']&&$v['is_use']!=1){
                 $v['is_use'] = 2;
             }
-            if($v['order_money'] < $now_order['goods_price']){
+            if($v['order_money'] <= $now_order['goods_price']){
                 $v['is_use'] = 1;
             }
         }//var_dump($res);die();
