@@ -1030,7 +1030,7 @@ function cartEventReg(){
 			$('#shopProductCartShade').show();
 			$('#shopProductCartBox').css('max-height',(window_height-50)/3*2+'px');
 			laytpl($('#productCartBoxTpl').html()).render(productCart, function(html){
-				//console.log(productCart);
+				console.log(productCart);
 				$('#shopProductCartBox').html(html);
 				$('body').css('overflow-y','hidden');
 			});
@@ -2070,9 +2070,12 @@ function cartFunction(type,obj,dataObj){
 			setTimeout(function(){
 				$('#shopProductCart .cart').removeClass('bound');
 			},500);
+			console.log(productCart);
+			console.log("--->productKey-->"+productKey);
 			if(productCart[productKey]){
 				productCart[productKey]['count']++;
-				$('.productNum-'+productKey).html(productCart[productKey]['count']);
+				var ct=productCart[productKey]['count'];
+				$('.productNum-'+productKey).html(ct);
 			}else{
 				if(dataObj == 'productPage'){
 					$('#shopDetailPageBuy').hide();

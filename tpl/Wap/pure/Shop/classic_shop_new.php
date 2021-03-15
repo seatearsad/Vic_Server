@@ -867,6 +867,7 @@
                 //$('#container').css('height',document.body.clientHeight+200);
 
                 var clh=document.body.clientHeight;
+                //$(".productNum-4628_2846_2849_728_0_728_1_728_22").html("1234");
                 //$('#pageShop').css('height',clh+900);
                 //$('#shopProductRightBar2').css('height',clh);
                 //alert (document.body.clientHeight);
