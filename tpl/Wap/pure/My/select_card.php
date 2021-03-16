@@ -85,7 +85,12 @@
                 width: 90%;
                 margin-left: 5%;
             }
-
+            .cursor_point{
+                cursor:pointer;
+            }
+            .cursor_default{
+                cursor:default;
+            }
         </style>
 		<style>
 			 dl.list dd.dealcard {
@@ -454,7 +459,7 @@
                 <ul class="end_ul">
                     <volist name="coupon_list" id="coupon">
                         <dl class="Muse">
-                            <dd <if condition="$coupon['is_use'] eq 1">data-link="{pigcms{$coupon.select_url}" data-msg="{pigcms{$coupon.delivery_discount}"</if> style="cursor: pointer;">
+                            <dd <if condition="$coupon['is_use'] eq 1">data-link="{pigcms{$coupon.select_url}" data-msg="{pigcms{$coupon.delivery_discount}"</if> >
                                 <div <if condition="$coupon['is_use'] eq 1">class="Coupon_top clr" <else/>  class="Coupon_top Coupon_top_not_user clr" </if> >
                                     <div class="fl">
                                         <div class="fltop">
@@ -478,7 +483,7 @@
                                     <div class="Coupon_x">
                                         <i>{pigcms{$coupon.start_time|date='Y.m.d',###}--{pigcms{$coupon.end_time|date='Y.m.d',###}</i>
                                         <if condition="$coupon['is_use'] eq 1">
-                                            <div class="apply_button" data-link="{pigcms{$coupon.select_url}" data-msg="{pigcms{$coupon.delivery_discount}"><em>{pigcms{:L('_IMMEDIATE_USE_')}</em></div>
+                                            <div class="apply_button cursor_point" data-link="{pigcms{$coupon.select_url}" data-msg="{pigcms{$coupon.delivery_discount}"><em>{pigcms{:L('_IMMEDIATE_USE_')}</em></div>
                                         </if>
                                     </div>
                                     <div class="Coupon_sm">

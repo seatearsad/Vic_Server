@@ -109,10 +109,10 @@
             <dd>
                 <dl>
                     <dd class="dd-padding kv-line">
-                        <input name="name" type="text" class="kv-v input-weak" placeholder="{pigcms{:L('_B_PURE_MY_07_')}" pattern=".{2,}" oninvalid="setCustomValidity('{pigcms{:L(\'_B_PURE_MY_08_\')}')" data-err="{pigcms{:L('_B_PURE_MY_08_')}" value="{pigcms{$now_adress.name}">
+                        <input name="name" type="text" class="kv-v input-weak" placeholder="{pigcms{:L('_B_PURE_MY_07_')}" pattern=".{2,}" oninput="vali(this)" data-err="{pigcms{:L('_B_PURE_MY_08_')}" value="{pigcms{$now_adress.name}">
                     </dd>
                     <dd class="dd-padding kv-line">
-                        <input name="phone" type="tel" class="kv-v input-weak" placeholder="{pigcms{:L('_B_PURE_MY_10_')}" pattern="\d{3}[\d\*]{4,}" oninvalid="setCustomValidity('{pigcms{:L(\'_B_PURE_MY_11_\')}')" data-err="{pigcms{:L('_B_PURE_MY_11_')}" value="{pigcms{$now_adress.phone}">
+                        <input name="phone" type="tel" class="kv-v input-weak" placeholder="{pigcms{:L('_B_PURE_MY_10_')}" pattern="\d{3}[\d\*]{7,}" oninput="vali(this)" data-err="{pigcms{:L('_B_PURE_MY_11_')}" value="{pigcms{$now_adress.phone}">
                     </dd>
                     <!--dd class="dd-padding kv-line">
                         <h6>{pigcms{:L('_B_PURE_MY_12_')}:</h6>
@@ -198,6 +198,15 @@
     <script src="{pigcms{$static_path}js/common_wap.js"></script>
     <script src="{pigcms{$static_path}layer/layer.m.js"></script>
     <script>
+        function vali(obj) {
+            if (obj.validity.patternMismatch === true) {
+                obj.setCustomValidity($(obj).attr('data-err'));
+            } else {
+                obj.setCustomValidity('');
+
+            }
+        }
+
         $(function(){
             // $("select[name='province']").change(function(){
             // 	show_city($(this).find('option:selected').attr('value'));
@@ -234,7 +243,7 @@
                     if($(item).attr('pattern')){
                         var re = new RegExp($(item).attr('pattern'));
                         if($(item).val().length == 0 || !re.test($(item).val())){
-                            $('#tips').addClass('tips-err').html($(item).attr('data-err'));
+                            $('#tips').addClass('tips-err').html($(item).attr('data-err')+"..");
                             return false;
                         }
                     }
