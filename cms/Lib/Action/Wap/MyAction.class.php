@@ -33,12 +33,15 @@ class MyAction extends BaseAction{
 
 	//	新的个人中心页面
 	public function index(){
+
 		if($this->config['now_scenic'] == 2){
 			redirect(U('Scenic_user/index'));
 		}
 		$uid	=	$this->user_session['uid'];
+
 		//	商家优惠券
 //		$mer_list = D('Member_card_coupon')->get_all_coupon($uid);
+
 		$mer_list = D('Card_new_coupon')->get_user_all_coupon_list($uid,1);
 		if($mer_list){
 			$mer_number	=	count($mer_list);
@@ -46,10 +49,16 @@ class MyAction extends BaseAction{
 			$mer_number = 0;
 		}
 		$this->assign('mer_number',$mer_number);
+
 		//	平台优惠券
 		$coupon_list = D('System_coupon')->get_user_coupon_list($uid,$this->user_session['phone'],1);
-		$coupon_number	=	count($coupon_list);
+        $event_coupon_list = D('New_event')->getUserCoupon($uid,0);
+        $c_list = array_merge($coupon_list,$event_coupon_list);
+		$coupon_number	=	count($c_list);
+
 		$this->assign('coupon_number',$coupon_number);
+
+
 		//	统计我参与的活动
 		$sql	=	"SELECT COUNT(*) AS tp_count FROM `pigcms_extension_activity_record` `ear`,`pigcms_extension_activity_list` `eal`,`pigcms_merchant` `m` WHERE(`ear`.`activity_list_id` = `eal`.`pigcms_id` AND `eal`.`mer_id` = `m`.`mer_id`AND `ear`.`uid` = '$uid') GROUP BY `eal`.`pigcms_id` ";
 		$mod = new Model();

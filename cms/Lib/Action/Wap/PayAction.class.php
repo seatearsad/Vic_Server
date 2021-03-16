@@ -195,40 +195,42 @@ class PayAction extends BaseAction{
             $tmp_order = $order_info;
 
             $card_info = D('Card_new')->get_card_by_uid_and_mer_id($this->user_session['uid'], $order_info['mer_id']);
-            if($card_info['status']) {
-                $merchant_balance = $card_info['card_money'] + $card_info['card_money_give'];
-                if (isset($order_info['discount_status']) && !$order_info['discount_status'] || empty($card_info)||empty($card_info['discount'])) {
-                    $card_info['discount'] = 10;
-                }
-                $_SESSION['discount'] = $card_info['discount'];
-                $tmp_order['uid'] = $this->user_session['uid'];
-                $tmp_order['total_money'] = $order_info['total_money'] * $card_info['discount'] / 10 - $cheap_info['wx_cheap'];
-
-                if ((!isset($order_info['discount_status']) || $order_info['discount_status'])&&$_GET['unmer_coupon']!=1) {
-                    if (!empty($_GET['card_id'])) {
-                        $now_coupon = D('Member_card_coupon')->get_coupon_by_recordid($_GET['card_id'], $this->user_session['uid']);
-                        $now_coupon['type'] = 'mer';
-                        $this->assign('now_coupon', $now_coupon);
-                    } else {
-                        if (empty($_GET['merc_id'])) {
-                            if (!empty($order_info['business_type'])) {
-                                $card_coupon_list = D('Card_new_coupon')->get_noworder_coupon_list($tmp_order, $_GET['type'], $platform, $order_info['business_type']);
-                            } else {
-                                $card_coupon_list = D('Card_new_coupon')->get_noworder_coupon_list($tmp_order, $_GET['type'], $platform);
-                            }
-                            $mer_coupon = reset($card_coupon_list);
-
-                        } else {
-                            $mer_coupon = D('Card_new_coupon')->get_coupon_info($_GET['merc_id']);
-                        }
-
-                    }
-                }
-            }else{
+//            if($card_info['status']) {
+//
+//                $merchant_balance = $card_info['card_money'] + $card_info['card_money_give'];
+//                if (isset($order_info['discount_status']) && !$order_info['discount_status'] || empty($card_info)||empty($card_info['discount'])) {
+//                    $card_info['discount'] = 10;
+//                }
+//                $_SESSION['discount'] = $card_info['discount'];
+//                $tmp_order['uid'] = $this->user_session['uid'];
+//                $tmp_order['total_money'] = $order_info['total_money'] * $card_info['discount'] / 10 - $cheap_info['wx_cheap'];
+//
+//                if ((!isset($order_info['discount_status']) || $order_info['discount_status'])&&$_GET['unmer_coupon']!=1) {
+//                    if (!empty($_GET['card_id'])) {
+//                        $now_coupon = D('Member_card_coupon')->get_coupon_by_recordid($_GET['card_id'], $this->user_session['uid']);
+//                        $now_coupon['type'] = 'mer';
+//                        $this->assign('now_coupon', $now_coupon);
+//                    } else {
+//                        if (empty($_GET['merc_id'])) {
+//                            if (!empty($order_info['business_type'])) {
+//                                $card_coupon_list = D('Card_new_coupon')->get_noworder_coupon_list($tmp_order, $_GET['type'], $platform, $order_info['business_type']);
+//                            } else {
+//                                $card_coupon_list = D('Card_new_coupon')->get_noworder_coupon_list($tmp_order, $_GET['type'], $platform);
+//                            }
+//                            $mer_coupon = reset($card_coupon_list);
+//
+//                        } else {
+//                            $mer_coupon = D('Card_new_coupon')->get_coupon_info($_GET['merc_id']);
+//                        }
+//
+//                    }
+//                }
+//            }else{
                 if ($cheap_info['can_cheap']) {
                     $tmp_order['total_money']-=$cheap_info['wx_cheap'];
                 }
-            }
+//            }
+
             //是否与其他优惠互斥
             $is_chi = false;
             if($order_info['delivery_discount'] > 0 && $order_info['delivery_discount_type'] == 0){

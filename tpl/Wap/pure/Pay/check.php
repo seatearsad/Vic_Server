@@ -887,15 +887,22 @@
         padding-bottom: 10px;
         border-bottom: 1px solid #e5e5e5;
         color: #999;
+        display: flex;
     }
     .order_note .left_note{
         font-size: 18px;
         color: #ffa52d;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: 80%;
+        white-space: nowrap;
     }
     .est_time{
         color: #ffa52d;
-        float: right;
         margin-right: 20px;
+        position: absolute;
+        right: 1px;
+        line-height: 18px;
     }
     .coupon_span{
         color: #4e4d4d;
@@ -1146,6 +1153,7 @@
         <INPUT TYPE="HIDDEN" NAME="ps_store_id" VALUE="">
         <INPUT TYPE="HIDDEN" NAME="hpp_key" VALUE="">
         <INPUT TYPE="HIDDEN" NAME="charge_total" VALUE="">
+        <input type="hidden" name="total_before_discount" value="{pigcms{: $order_info['goods_price']+ $order_info['freight_charge']+ number_format($order_info['packing_charge'] + $order_info['deposit_price'] + $order_info['tax_price'] + $order_info['service_fee'],2)}">
         <input type="hidden" name="cust_id" value="{pigcms{:md5($order_info.uid)}">
         <input type="hidden" name="order_id" value="vicisland_{pigcms{$order_info.order_id}">
         <input type="hidden" name="rvarwap" value="1">
@@ -1169,7 +1177,6 @@
         <input type="hidden" name="delivery_discount" value="{pigcms{$order_info.delivery_discount}">
         <input type="hidden" name="merchant_reduce" value="{pigcms{$order_info.merchant_reduce}">
         <input type="hidden" name="service_fee" value="{pigcms{$order_info.service_fee}">
-
         <if condition="$order_info['order_type'] != 'recharge'">
 
     <div class="user_address">
@@ -1243,12 +1250,12 @@
             <div class="normal-fieldset">
                 <dl class="list">
                     <?php if(($order_info['order_type'] != 'plat' && $order_info['order_type'] != 'recharge') || $order_info['pay_system_balance']){ ?>
-                        <dd class="dd-padding" id="balance_money" <if condition="$now_user.now_money eq 0 OR $merchant_balance gt $order_info.order_total_money ">style="color: #C1B9B9;"</if>>
+                        <dd class="dd-padding" id="balance_money" <if condition="$now_user.now_money lt $order_info.order_total_money "> style="color: #C1B9B9;"</if>>
                         <label class="mt">
                             <span class="pay-wrapper">
                                 <img src="./tpl/Static/blue/images/wap/ic_logo.png" style="height: 25px"/>
                                 {pigcms{:L('V3_PAYMENT_CREDITS')} ${pigcms{$now_user.now_money}
-                                <input type="checkbox" class="mt"  id="use_balance" name="use_balance"<if condition="$now_user['now_money'] eq 0 OR $merchant_balance gt $order_info['order_total_money'] ">disabled="disabled" value="1"<else /> value="0" checked="checked" </if>>
+                                <input type="checkbox" class="mt"  id="use_balance" name="use_balance"<if condition="$now_user.now_money lt $order_info.order_total_money ">disabled="disabled" value="1"<else /> value="0" checked="checked" </if>>
                             </span>
                         </label>
                         </dd>
@@ -1570,7 +1577,7 @@
     var isb = false;
 
     $(function(){
-        if(parseFloat($('input[name="charge_total"]').val()) <= 20){
+        if(parseFloat($('input[name="total_before_discount"]').val()) <= 20){
             isb = true;
         }
         var tipxn = new Array(3,4,5);
@@ -1598,7 +1605,7 @@
                     if(isb)
                         tipNum = parseFloat($(this).text().replace('$', ""));
                     else
-                        tipNum = $('input[name="charge_total"]').val() *  ($(this).text().replace(/%/, "")/100);
+                        tipNum = $('input[name="total_before_discount"]').val() *  ($(this).text().replace(/%/, "")/100);
                 }
             });
         }
