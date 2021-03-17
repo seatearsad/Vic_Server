@@ -179,6 +179,7 @@ class PayAction extends BaseAction{
         if($now_merchant['open_sub_mchid'] && $now_merchant['sub_mch_id']>0 && $now_merchant['sub_mch_sys_pay']!=1){
             $now_user['now_money'] = 0;
         }
+        //$now_user['now_money']="55.5";
         $this->assign('now_user',$now_user);
 
         if($_GET['type'] != 'recharge' && $_GET['type'] != 'weidian' && ($order_info['business_type']=='' || $order_info['business_type']!='card_new_recharge') ) {

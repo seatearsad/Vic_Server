@@ -894,15 +894,17 @@
         color: #ffa52d;
         overflow: hidden;
         text-overflow: ellipsis;
-        width: 80%;
+        width: 100%;
         white-space: nowrap;
     }
     .est_time{
         color: #ffa52d;
         margin-right: 20px;
-        position: absolute;
+        /*position: absolute;*/
         right: 1px;
         line-height: 18px;
+        width: auto;
+        text-align: right;
     }
     .coupon_span{
         color: #4e4d4d;
@@ -1255,7 +1257,7 @@
                             <span class="pay-wrapper">
                                 <img src="./tpl/Static/blue/images/wap/ic_logo.png" style="height: 25px"/>
                                 {pigcms{:L('V3_PAYMENT_CREDITS')} ${pigcms{$now_user.now_money}
-                                <input type="checkbox" class="mt"  id="use_balance" name="use_balance"<if condition="$now_user.now_money lt $order_info.order_total_money ">disabled="disabled" value="1"<else /> value="0" checked="checked" </if>>
+                                <input type="checkbox" class="mt"  id="use_balance" name="use_balance" disabled="disabled" value="1">
                             </span>
                         </label>
                         </dd>
@@ -1592,6 +1594,7 @@
         CalTip();
         isShowCredit();
     });
+
     //计算小费
     function CalTip(){
         var tipNum = 0;
