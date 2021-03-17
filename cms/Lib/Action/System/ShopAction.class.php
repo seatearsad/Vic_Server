@@ -1158,10 +1158,18 @@ class ShopAction extends BaseAction
             //$condition_where .=  " AND (o.create_time BETWEEN ".$period[0].' AND '.$period[1].")";
             $condition_where .=  " AND (create_time BETWEEN ".$period[0].' AND '.$period[1].")";
         }
+
+        if($_GET['city_id']){
+            $store_where = " where s.city_id=".$_GET['city_id'];
+            $where['s.city_id'] = $_GET['city_id'];
+        }else{
+            $store_where = "";
+        }
         //$condition_where.=" AND o.is_del=0";
         $condition_where.=" AND is_del=0";
         $where['is_del'] = 0;
-        $count = D('Shop_order')->where($where)->count();
+        //$coupon_list = M('New_event_user')->join('as u left join '.C('DB_PREFIX').'new_event_coupon as c ON u.event_coupon_id=c.id')->field('u.*')->where($where)->select();
+        $count = D('Shop_order')->join('as o left join '.C('DB_PREFIX').'merchant_store as s ON o.store_id=s.store_id')->where($where)->count();
 
         $length = ceil($count / 1000);
         for ($i = 0; $i < $length; $i++) {
@@ -1230,7 +1238,7 @@ class ShopAction extends BaseAction
             $objActSheet->setCellValue('AC1', '配送费优惠类型');
 
 
-            $sql = "SELECT o.*, d.name as good_name,d.price as good_price ,d.unit,d.cost_price, d.num as good_num,d.tax_num,d.deposit_price, s.tax_num as store_tax,s.name AS store_name FROM (select * from pigcms_shop_order ".$condition_where." LIMIT ". $i*1000 .",1000)o LEFT JOIN pigcms_merchant_store AS s ON s.store_id=o.store_id LEFT JOIN pigcms_shop_order_detail AS d ON `d`.`order_id`=`o`.`order_id` ORDER BY o.order_id DESC";
+            $sql = "SELECT o.*, d.name as good_name,d.price as good_price ,d.unit,d.cost_price, d.num as good_num,d.tax_num,d.deposit_price, s.tax_num as store_tax,s.name AS store_name FROM (select * from pigcms_shop_order ".$condition_where." LIMIT ". $i*1000 .",1000)o LEFT JOIN pigcms_merchant_store AS s ON s.store_id=o.store_id LEFT JOIN pigcms_shop_order_detail AS d ON `d`.`order_id`=`o`.`order_id`".$store_where." ORDER BY o.order_id DESC";
             //$sql = "SELECT o.*, m.name AS merchant_name,d.name as good_name,d.price as good_price ,d.unit,d.cost_price, d.num as good_num,g.tax_num,g.deposit_price, s.default_tax,ds.dining_time,s.name AS store_name FROM (select * from pigcms_shop_order ".$condition_where." LIMIT ". $i*1000 .",1000)o LEFT JOIN pigcms_merchant_store AS s ON s.store_id=o.store_id LEFT JOIN pigcms_merchant AS m ON `s`.`mer_id`=`m`.`mer_id` LEFT JOIN pigcms_shop_order_detail AS d ON `d`.`order_id`=`o`.`order_id` LEFT JOIN pigcms_shop_goods AS g ON `g`.`goods_id`=`d`.`goods_id` LEFT JOIN pigcms_deliver_supply AS ds ON `ds`.`order_id`=`o`.`order_id` ORDER BY o.order_id DESC";
             //$sql = "SELECT  o.*, m.name AS merchant_name,d.name as good_name,d.price as good_price ,d.unit,d.cost_price, d.num as good_num, s.name AS store_name FROM " . C('DB_PREFIX') . "shop_order AS o LEFT JOIN " . C('DB_PREFIX') . "merchant_store AS s ON s.store_id=o.store_id LEFT JOIN " . C('DB_PREFIX') . "merchant AS m ON `s`.`mer_id`=`m`.`mer_id` LEFT JOIN " . C('DB_PREFIX') . "shop_order_detail AS d ON `d`.`order_id`=`o`.`order_id` ".$condition_where." ORDER BY o.order_id DESC LIMIT " . $i * 1000 . ",1000";
             //
