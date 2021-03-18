@@ -23,10 +23,10 @@ class MonerisPay
             elseif ($v['info'] == 'token')
                 $this->api_token = $v['value'];
         }
-
+        //die($this->store_id."----------".$this->api_token);
         $this->countryCode = 'CA';
-//        $this->testMode = true;
-        $this->testMode = false;
+        $this->testMode = true;
+//        $this->testMode = false;
     }
 
     /**

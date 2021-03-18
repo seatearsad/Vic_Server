@@ -6,7 +6,7 @@
 
 class IndexAction extends BaseAction{
     public function index(){
-		
+
 		//商家公告
 		$database_merchant_news = D('Merchant_news');
 		$news_list = $database_merchant_news->field(true)->order('`is_top` DESC,`add_time` DESC')->limit(10)->select();
@@ -26,7 +26,7 @@ class IndexAction extends BaseAction{
 		$pigcms_data['store_count'] = M('Merchant_store')->where(array('mer_id'=>$mer_id,'status'=>array('neq',4)))->count();
 
 		$this->assign($pigcms_data);
-		
+
 		$this->display();
     }
 	public function news($id){

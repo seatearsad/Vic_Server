@@ -5182,10 +5182,10 @@ class MyAction extends BaseAction{
 			$this->error_tips(L('_B_MY_NOORDER_'));
 		}
 		if (!($now_order['paid'] == 1 && ($now_order['status'] == 0 || $now_order['status'] == 5))) {
-			$this->error_tips(L('_B_MY_ORDERDEALING_'));
+			$this->error_tips(L('_B_MY_ORDERDEALING_'),U("Shop/order_detail",array('order_id'=>$order_id)));
 		}
 		if (empty($now_order['paid'])) {
-			$this->error_tips(L('_B_MY_ORDERNOPAY_'));
+			$this->error_tips(L('_B_MY_ORDERNOPAY_'),U("Shop/order_detail",array('order_id'=>$order_id)));
 		}
 
 		if (!($now_order['paid'] == 1 && ($now_order['status'] == 0 || $now_order['status'] == 5))) {

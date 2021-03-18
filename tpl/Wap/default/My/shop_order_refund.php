@@ -138,120 +138,15 @@
 <body>
         <div id="tips" class="tips"></div>
         <div class="wrapper-list">
-			<h4>{pigcms{$now_order.s_name}</h4>
-			<dl class="list">
-			    <dd>
-			        <dl>
-			            <dd class="kv-line-r dd-padding">
-			                <h6>{pigcms{:L('_B_PURE_MY_68_')}：</h6><p><strong class="highlight-price">{pigcms{$now_order.order_id}</strong></p>
-			            </dd>
-						<dd class="kv-line-r dd-padding">
-							<h6>{pigcms{:L('_B_PURE_MY_69_')}：</h6><p>{pigcms{$now_order.num}</p>
-						</dd>
-						<dd class="kv-line-r dd-padding">
-							<h6>{pigcms{:L('_TOTAL_COMM_PRICE_')}：</h6><p>${pigcms{$now_order.goods_price|floatval}</p>
-						</dd>
-						<dd class="kv-line-r dd-padding">
-							<h6>{pigcms{:L('_DELI_PRICE_')}：</h6><p>${pigcms{$now_order.freight_charge|floatval}</p>
-						</dd>
-						<dd class="kv-line-r dd-padding">
-							<h6>{pigcms{:L('_B_PURE_MY_70_')}：</h6><p>${pigcms{$now_order.total_price|floatval}</p>
-						</dd>
-						<dd class="kv-line-r dd-padding">
-							<h6>{pigcms{:L('_PLATFORM_DIS_')}：</h6><p>${pigcms{$now_order.balance_reduce|floatval}</p>
-						</dd>
-						<dd class="kv-line-r dd-padding">
-							<h6>{pigcms{:L('_STORE_DIS_')}：</h6><p>${pigcms{$now_order.merchant_reduce|floatval}</p>
-						</dd>
-						<dd class="kv-line-r dd-padding">
-							<h6>{pigcms{:L('_TOTAL_RECE_')}：</h6><p>${pigcms{$now_order.price|floatval}</p>
-						</dd>
-						
-			        </dl>
-			    </dd>
-			</dl>
-			<dl class="list">
-			    <dd>
-			        <dl>
-						<if condition="$now_order['coupon_id']">
-							<dd>
-								<a class="react" href="javascript:;">
-									<div class="more more-weak">
-										<h6>{pigcms{:L('_PLATFORM_COUP_')}：</h6>
-										<span class="more-after">${pigcms{$now_order.coupon_price|floatval}</span>
-									</div>
-								</a>
-							</dd>
-						</if>
-						<if condition="$now_order['card_id']">
-							<dd>
-								<a class="react" href="javascript:;">
-									<div class="more more-weak">
-										<h6>{pigcms{:L('_SHOP_COUP_')}：</h6>
-										<span class="more-after">${pigcms{$now_order.card_price|floatval}</span>
-									</div>
-								</a>
-							</dd>
-						</if>
-						<if condition="$now_order['balance_pay'] neq '0.00'">
-							<dd class="kv-line-r dd-padding">
-								<h6>{pigcms{:L('_PLATFORM_BALANCE_PAY_')}：</h6><p>${pigcms{$now_order.balance_pay|floatval}</p>
-							</dd>
-						</if>
-						<if condition="$now_order['merchant_balance'] neq '0.00' OR $now_order.card_give_money neq '0.00'">
-							<dd class="kv-line-r dd-padding">
-								<h6>{pigcms{:L('_SHOP_BALANCE_PAY_')}：</h6><p>${pigcms{$now_order['merchant_balance']+$now_order['card_give_money']|floatval}</p>
-							</dd>
-						</if>
-                        <if condition="$now_order['score_used_count'] neq '0'">
-                            <dd class="kv-line-r dd-padding">
-                                <h6>{pigcms{:L('_USE_TICKET_DED_')}：</h6><p>{pigcms{$now_order.score_used_count}</p>
-                            </dd>
-                        </if>
-                        <if condition="$now_order['score_deducte'] neq '0.00'">
-                            <dd class="kv-line-r dd-padding">
-                                <h6>{pigcms{:L('_MEAL_TICKET_DED_CASH_')}：</h6><p>${pigcms{$now_order.score_deducte|floatval}</p>
-                            </dd>
-                        </if>
-						<if condition="$now_order['payment_money'] neq '0.00'">
-							<dd class="kv-line-r dd-padding">
-								<h6>{pigcms{:L('_AMOUNT_PAYMENT_')}：</h6>
-								<p>
-									<strong class="highlight-price">
-										<span class="need-pay">${pigcms{$now_order.payment_money}</span>
-									</strong>
-								</p>
-							</dd>
-							<dd class="kv-line-r dd-padding">
-								<h6>{pigcms{:L('_ONLINE_PAY_')}：</h6>
-								<p>{pigcms{$now_order.pay_type_txt}</p>
-							</dd>
-						</if>
-			        </dl>
-			    </dd>
-			</dl>
-			<!--div class="btn-wrapper" style="line-height:1.5;color:#666;">在线支付金额将通过您使用的支付方式返回到您的银行卡上，其他将返回到您的帐户上！</div-->
-			<div class="btn-wrapper">
-				<span id="cancel" class="btn btn-larger btn-block btn-strong" style="margin-bottom:15px;">{pigcms{:L('_B_D_LOGIN_CONIERM_')}</span>
-			</div>
 		</div>
     	<script src="{pigcms{:C('JQUERY_FILE')}"></script>
 		<script src="{pigcms{$static_path}js/common_wap.js"></script>	
 		<script>
-			$(function(){
-				
-				$('#cancel').click(function(){
-					var cancel_ = true;
-					if(cancel_){
-						$(this).css('background-color','#ccc')
-						window.location.href='{pigcms{:U('My/shop_order_check_refund',array('mer_id' => $mer_id, 'order_id' => $now_order['order_id'], 'store_id' => $now_order['store_id']))}';
-						cancel_ = false;
-					}
-				});
-				
-			})
+            $(document).ready(function(){
+                window.location.href='{pigcms{:U('My/shop_order_check_refund',array('mer_id' => $mer_id, 'order_id' => $now_order['order_id'], 'store_id' => $now_order['store_id']))}';
+            });
 		</script>
-		<include file="Public:footer"/>
+
 {pigcms{$hideScript}
 </body>
 </html>

@@ -521,15 +521,18 @@
         <if condition="$_SESSION['user']['verify_end_time']">var verify_end_time = {pigcms{$_SESSION['user']['verify_end_time']};</if>
     </script>
     <script language="javascript">
+
         function bio_verify(){
 
             layer.open({type:2,content:"{pigcms{:L('_LOADING_TXT_')}",shadeClose:false});
+
             var pay_type = $('input[name="pay_type"]:checked').val();
             $("button.mj-submit").attr("disabled", "disabled");
             $("button.mj-submit").html("正在处理...");
             var use_score= $("input[name='use_score']").val();
             var use_balance= $("input[name='use_balance']").val();
             //var  merchant_money = Number("{pigcms{$merchant_balance}");
+            console.log(twice_verify + '---'+merchant_money+'---'+use_balance+'---'+use_score);
             if(twice_verify&&(merchant_money!=0||use_balance==1||use_score==1)){
                 if(typeof(wxSdkLoad) != "undefined"){
                     wx.invoke('getSupportSoter', {}, function (res) {
@@ -568,8 +571,9 @@
                 }
 
             }else{//garfunkel add   信用卡支付/Weixin/Alipay
-                //alert("提交yanzheng ");
-                if (checkTipFee(false)==false){
+                //alert(card_type);
+                ;
+                if ($('#tip_label').css('display')=="block"&& checkTipFee(false)==false){
                     //alert("不能提交");
                     layer.closeAll();
                 }else{
@@ -618,9 +622,9 @@
                                             //window.open(data.html,"_blank");
                                         }else {
                                             layer.closeAll();
-                                            if (data.status == 1) {
+                                            //if (data.status == 1) {
                                                 layer.open({title: ['Message'], content: data.info,btn:["Confirm"],end:function(){window.location.href=data.url;}});
-                                            }
+                                            //}
                                         }
                                 });
                             }else{
@@ -1344,7 +1348,7 @@
 
         <if condition="$order_info['order_type'] != 'recharge'">
             <div class="all_list">
-                <div id="tip_label" class="normal-fieldset">
+                <div id="tip_label" class="normal-fieldset" style="display: none;">
                     <dl class="list" style="border-bottom: 0;position: relative;">
                         <div class="tip_title">
                             <div>{pigcms{:L('_TIP_TXT_')}</div>
