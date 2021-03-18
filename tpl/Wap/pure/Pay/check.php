@@ -1598,7 +1598,6 @@
     //计算小费
     function CalTip(){
         var tipNum = 0;
-        console.log("=======================CalTip");
         var num = $('#tip_fee').val();
         if(/^\d+(\.\d{1,2})?$/.test(num) && num != ""){
             tipNum = parseFloat(num);
@@ -1612,7 +1611,8 @@
                 }
             });
         }
-        var totalNum = parseFloat($('input[name="charge_total"]').val()) + parseFloat(tipNum);
+        //console.log("=======================CalTip"+tipNum);
+        var totalNum = parseFloat($('input[name="charge_total"]').val()) + parseFloat(tipNum.toFixed(2));
 
         $('input[name="tip"]').val(tipNum.toFixed(2));
 

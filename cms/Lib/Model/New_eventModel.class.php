@@ -261,11 +261,11 @@ class New_eventModel extends Model
 
         //$coupon_list = D('New_event_user')->where($where)->select();
         $coupon_list = M('New_event_user')->join('as u left join '.C('DB_PREFIX').'new_event_coupon as c ON u.event_coupon_id=c.id')->field('u.*')->where($where)->select();
-        //var_dump($coupon_list);die();
+
         $list = array();
         foreach ($coupon_list as &$v){
             if(time() > $v['expiry_time']) {
-                $v['is_user'] = 2;
+                $v['is_use'] = 2;
                 D('New_event_user')->where(array('id'=>$v['id']))->save($v);
                 continue;
             }
@@ -287,7 +287,6 @@ class New_eventModel extends Model
 
             $list[] = $v;
         }
-
         return $list;
     }
 
