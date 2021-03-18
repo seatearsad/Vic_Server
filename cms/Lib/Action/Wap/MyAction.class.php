@@ -53,8 +53,7 @@ class MyAction extends BaseAction{
 		//	平台优惠券
 		$coupon_list = D('System_coupon')->get_user_coupon_list($uid,$this->user_session['phone'],1);
         $event_coupon_list = D('New_event')->getUserCoupon($uid,0);
-        $c_list = array_merge($coupon_list,$event_coupon_list);
-		$coupon_number	=	count($c_list);
+		$coupon_number	=	count($coupon_list) + count($event_coupon_list);
 
 		$this->assign('coupon_number',$coupon_number);
 
