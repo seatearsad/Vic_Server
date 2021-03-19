@@ -7,7 +7,7 @@
 				<i class="ace-icon fa fa-gear gear-icon"></i>
 				<a href="{pigcms{:U('Config/store')}">店铺管理</a>
 			</li>
-			<li class="active">【{pigcms{$now_store.name}】 店员列表</li>
+			<li class="active">【{pigcms{$now_store.name}】 {pigcms{:L('STAFF_LISTING_BKADMIN')}</li>
 		</ul>
 	</div>
 	<!-- 内容头部 -->
@@ -24,19 +24,19 @@
 					
 						<div class="tab-content">
 							<div class="tab-pane active">
-								<button class="btn btn-success" onclick="CreateShop()">添加职员</button>　
-								<a href="/store.php?g=Merchant&c=Store&a=login" class="btn btn-success" target="_blank">店员登录</a>
+								<button class="btn btn-success" onclick="CreateShop()">{pigcms{:L('ADD_STAFF_BKADMIN')}</button>　
+								<a href="../wap.php?g=Wap&c=Storestaff&a=login" class="btn btn-success" target="_blank">{pigcms{:L('MERCHANT_LOGIN_BKADMIN')}</a>
 								<div id="shopList" class="grid-view">
 									<table class="table table-striped table-bordered table-hover">
 										<thead>
 											<tr>
-												<th width="100">帐号</th>
-												<th width="100">姓名</th>
-												<th width="100">店员类型</th>
-												<th width="100">电话</th>
-												<th width="100">添加时间</th>
-												<th width="100">能否修改订单价格</th>
-												<th width="80" class="button-column">操作</th>
+												<th width="100">{pigcms{:L('USERNAME_BKADMIN')}</th>
+												<th width="100">{pigcms{:L('NAME_BKADMIN')}</th>
+												<th width="100">{pigcms{:L('STAFF_TYPE_BKADMIN')}</th>
+												<th width="100">{pigcms{:L('PHONE_NUMBER_BKADMIN')}</th>
+												<th width="100">{pigcms{:L('TIME_ADDED_BKADMIN')}</th>
+<!--												<th width="100">能否修改订单价格</th>-->
+												<th width="80" class="button-column">{pigcms{:L('ACTION_BKADMIN')}</th>
 											</tr>
 										</thead>
 										<tbody>
@@ -48,7 +48,7 @@
 														<td>{pigcms{$staff_type[$staff['type']]}</td>
 														<td>{pigcms{$staff.tel}</td>
 														<td>{pigcms{$staff.time|date='Y-m-d H:i:s',###}</td>
-														<td><if condition="$staff['is_change']"><span style="color:green">能</span><else /><span style="color:red">不能</span></if></td>
+<!--														<td><if condition="$staff['is_change']"><span style="color:green">能</span><else /><span style="color:red">不能</span></if></td>-->
 														<td class="button-column">
 															<a class="green" style="padding-right:8px;" href="{pigcms{:U('Config/staffSet', array('itemid'=>$staff['id'],'store_id'=>$now_store['store_id']))}" >
 																<i class="ace-icon fa fa-pencil bigger-130"></i>

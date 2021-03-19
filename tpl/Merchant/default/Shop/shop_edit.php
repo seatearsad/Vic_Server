@@ -36,19 +36,17 @@
 							<!--li>
 								<a data-toggle="tab" href="#delivertime">配送时间</a>
 							</li-->
-							<li>
-								<a data-toggle="tab" href="#promotion">店铺折扣</a>
-							</li>
-							<li>
-								<a data-toggle="tab" href="#stock">库存类型选择</a>
-							</li>
-						  	<if condition="!empty($levelarr)">
-							<li>
-								<a data-toggle="tab" href="#levelcoupon">会员优惠</a>
-							</li>
-							</if>
-							
-							
+<!--							<li>-->
+<!--								<a data-toggle="tab" href="#promotion">店铺折扣</a>-->
+<!--							</li>-->
+<!--							<li>-->
+<!--								<a data-toggle="tab" href="#stock">库存类型选择</a>-->
+<!--							</li>-->
+<!--						  	<if condition="!empty($levelarr)">-->
+<!--							<li>-->
+<!--								<a data-toggle="tab" href="#levelcoupon">会员优惠</a>-->
+<!--							</li>-->
+<!--							</if>-->
 						</ul>
 					</div>
 					<form enctype="multipart/form-data" class="form-horizontal" method="post" id="edit_form">
@@ -56,7 +54,7 @@
 						
 							<div id="basicinfo" class="tab-pane active">
 								<if condition="$close_old_store">
-								<div class="form-group">
+								<div class="form-group hidden_obj">
 									<label class="col-sm-1"><label>关闭老外卖</label></label>
 									<label><span><label><input name="close_old_store" <if condition="$store_shop['close_old_store'] eq 0 ">checked="checked"</if> value="0" type="radio"></label>&nbsp;<span>不关闭</span>&nbsp;</span></label>
 									<label><span><label><input name="close_old_store" <if condition="$store_shop['close_old_store'] eq 1 ">checked="checked"</if> value="1" type="radio" ></label>&nbsp;<span>关闭</span></span></label>
@@ -66,13 +64,13 @@
 								<div class="alert alert-info" style="margin:10px;">
 								<button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>同步数据只能在完善店铺信息的时候同步，以后修改店铺时不允许同步
 								</div>
-								<div class="form-group">
+								<div class="form-group hidden_obj">
 									<label class="col-sm-1"><label>同步原外卖数据</label></label>
 									<label><span><label><input name="sysnc" checked="checked" value="0" type="radio"></label>&nbsp;<span>不同步</span>&nbsp;</span></label>
 									<label><span><label><input name="sysnc" value="1" type="radio" ></label>&nbsp;<span>同步</span></span></label>
 								</div>
 								</if>
-								<div class="form-group">
+								<div class="form-group hidden_obj">
 									<label class="col-sm-1"><label>是否开启商城</label></label>
 									<select name="store_theme">
 									<option value="0" <if condition="$store_shop['store_theme'] eq 0 ">selected</if>>关闭</option>
@@ -82,61 +80,61 @@
 								</div>
                                 <!--if condition="$store_shop['store_theme'] eq 0">style="display:none"</if-->
 								<div class="form-group background">
-									<label class="col-sm-1">商城店铺背景</label>
+									<label class="col-sm-1">{pigcms{:L('BACKGROUND_IMAGE_BKADMIN')}</label>
 									<div style="display:inline-block;" id="J_selectImage">
-										<div class="btn btn-sm btn-success" style="position:relative;width:78px;height:34px;">上传图片</div>
+										<div class="btn btn-sm btn-success" style="position:relative;width:78px;height:34px;">{pigcms{:L('UPLOAD_BKADMIN')}</div>
 									</div>
-									<span class="form_tips red"> 商城店铺背景建议上传尺寸：640*420。</span>
+									<span class="form_tips red"> {pigcms{:L('PROMOTE_RATIO_BKADMIN')}</span>
 								</div>
                                 <!--if condition="$store_shop['store_theme'] eq 0">style="display:none"</if-->
 								<div class="form-group background">
-									<label class="col-sm-1">图片预览</label>
+									<label class="col-sm-1">{pigcms{:L('PREVIEW_BKADMIN')}</label>
 									<div id="upload_pic_box">
 										<ul id="upload_pic_ul">
 											<if condition="$now_store['background']">
-											<li class="upload_pic_li"><img src="{pigcms{$now_store['background_image']}"/><input type="hidden" name="background" value="{pigcms{$now_store['background']}"/><br/><a href="#" onclick="deleteImage('{pigcms{$now_store['background']}',this);return false;">[ 删除 ]</a></li>
+											<li class="upload_pic_li"><img src="{pigcms{$now_store['background_image']}"/><input type="hidden" name="background" value="{pigcms{$now_store['background']}"/><br/><a href="#" onclick="deleteImage('{pigcms{$now_store['background']}',this);return false;">[ {pigcms{:L('DELETE_BKADMIN')} ]</a></li>
 											</if>
 										</ul>
 									</div>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-1"><label>配送自提点</label></label>
-									<label><span><label><input name="is_open_pick" <if condition="$store_shop['is_open_pick'] eq 0 ">checked="checked"</if> value="0" type="radio"></label>&nbsp;<span>关闭</span>&nbsp;</span></label>
-									<label><span><label><input name="is_open_pick" <if condition="$store_shop['is_open_pick'] eq 1 ">checked="checked"</if> value="1" type="radio" ></label>&nbsp;<span>开启</span></span></label>
+									<label class="col-sm-1"><label>{pigcms{:L('PICK-UP_BKADMIN')}</label></label>
+									<label><span><label><input name="is_open_pick" <if condition="$store_shop['is_open_pick'] eq 0 ">checked="checked"</if> value="0" type="radio"></label>&nbsp;<span>{pigcms{:L('DISABLE_BKADMIN')}</span>&nbsp;</span></label>
+									<label><span><label><input name="is_open_pick" <if condition="$store_shop['is_open_pick'] eq 1 ">checked="checked"</if> value="1" type="radio" ></label>&nbsp;<span>{pigcms{:L('ENABLE_BKADMIN')}</span></span></label>
 								</div>
 								
 								<div class="form-group">
-									<label class="col-sm-1"><label for="Config_notice">店铺公告</label></label>
-									<textarea class="col-sm-3" rows="4" name="store_notice" id="Config_notice">{pigcms{$store_shop.store_notice}</textarea>
+									<label class="col-sm-1"><label for="Config_notice">{pigcms{:L('STORE_ANNOUNCEMENT_BKADMIN')}</label></label>
+									<textarea class="col-sm-3" rows="4" name="store_notice" id="Config_notice" placeholder="">{pigcms{$store_shop.store_notice}</textarea>
 								</div>
-								<div class="form-group">
+								<div class="form-group hidden_obj">
 									<label class="col-sm-1"><label>多级分类</label></label>
 									<label><span><label><input name="is_mult_class" <if condition="$store_shop['is_mult_class'] eq 0 ">checked="checked"</if> value="0" type="radio"></label>&nbsp;<span>关闭</span>&nbsp;</span></label>
 									<label><span><label><input name="is_mult_class" <if condition="$store_shop['is_mult_class'] eq 1 ">checked="checked"</if> value="1" type="radio" ></label>&nbsp;<span>开启</span></span></label>
 								    <span class="form_tips red"> 开启多级分类后，快店商品将分三级分类展示，便于您更好的管理多类型商品，注意：开启多级分类后，前台只展示侧重文字模板，侧重图片模板将关闭。</span>
 								</div>
-								<div class="form-group">
+								<div class="form-group hidden_obj">
 									<label class="col-sm-1"><label>自动接单</label></label>
 									<label><span><label><input name="is_auto_order" <if condition="$store_shop['is_auto_order'] eq 0 ">checked="checked"</if> value="0" type="radio"></label>&nbsp;<span>关闭</span>&nbsp;</span></label>
 									<label><span><label><input name="is_auto_order" <if condition="$store_shop['is_auto_order'] eq 1 ">checked="checked"</if> value="1" type="radio" ></label>&nbsp;<span>开启</span></span></label>
 								</div>
 								
-								<div class="form-group">
+								<div class="form-group hidden_obj">
 									<label class="col-sm-1"><label>开发票</label></label>
 									<label><span><label><input name="is_invoice" <if condition="$store_shop['is_invoice'] eq 0 ">checked="checked"</if> value="0" type="radio"></label>&nbsp;<span>不支持</span>&nbsp;</span></label>
 									<label><span><label><input name="is_invoice" <if condition="$store_shop['is_invoice'] eq 1 ">checked="checked"</if> value="1" type="radio" ></label>&nbsp;<span>支持</span></span></label>
 								</div>
-								<div class="form-group">
+								<div class="form-group hidden_obj">
 									<label class="col-sm-1">满足</label>
 									<input class="col-sm-1" size="10" maxlength="10" name="invoice_price" id="Config_invoice_price" type="text" value="{pigcms{$store_shop.invoice_price|floatval}" />
 									<label class="form_tips">元，可开发票</label>
 								</div>
-								<div class="form-group">
+								<div class="form-group hidden_obj">
 									<label class="col-sm-1">可提前</label>
 									<input class="col-sm-1" size="10" maxlength="10" name="advance_day" id="Config_advance_day" type="text" value="{pigcms{$store_shop.advance_day}" />
 									<label class="form_tips">天，进行预订下单</label>
 								</div>
-								<div class="form-group">
+								<div class="form-group hidden_obj">
 									<label class="col-sm-1">人均消费</label>
 									<input class="col-sm-1" size="10" maxlength="10" name="mean_money" id="Config_mean_money" type="text" value="{pigcms{$store_shop.mean_money|floatval}" />
 									<span class="form_tips">元<span class="required red">*</span></span>
@@ -146,21 +144,21 @@
 									<input class="col-sm-1" size="10" maxlength="10" name="pack_alias" type="text" value="{pigcms{$store_shop.pack_alias|default='打包费'}" />
                                     <label class="col-sm-1">{pigcms{$store_shop.pack_alias|default='打包费'}</label>
                                     <input class="col-sm-1" size="10" maxlength="10" name="pack_fee" type="text" value="{pigcms{$store_shop.pack_fee}" />
-									<span class="form_tips"> 给商品进行包装时所要的耗材产生费用的名称（如：餐盒费,打包费...）。</span>
+									<span class="form_tips"> {pigcms{:L('PACKING_FEE_BKADMIN')}</span>
 								</div>
-								<div class="form-group">
+								<div class="form-group hidden_obj">
 									<label class="col-sm-1">运费别名</label>
 									<input class="col-sm-1" size="10" maxlength="10" name="freight_alias" type="text" value="{pigcms{$store_shop.freight_alias|default='配送费用'}" />
 									<span class="form_tips"> 把商品从商家送到用户手上所产生的运费的费用名称（如：配送费用,运费...）。</span>
 								</div>
-								<div class="form-group">
+								<div class="form-group hidden_obj">
 									<label class="col-sm-1" for="Config_send_time">配单时长</label>
 									<input class="col-sm-1" size="10" maxlength="10" name="send_time" id="Config_send_time" type="text" value="{pigcms{$store_shop.send_time}"/>
 									<span class="form_tips"> 分钟</span>
 								</div>
 								
-								<div class="form-group">
-									<label class="col-sm-1"><label>配送方式</label></label>
+								<div class="form-group hidden_obj">
+									<label class="col-sm-1"><label>配送方式{pigcms{:L('SAVE_BKADMIN')}</label></label>
 									<select name="deliver_type">
 									<option value="0" <if condition="$store_shop['deliver_type'] eq 0 ">selected</if>>平台配送</option>
 									<option value="1" <if condition="$store_shop['deliver_type'] eq 1 ">selected</if>>商家配送</option>
@@ -171,17 +169,17 @@
 									</select>
 									<span class="form_tips red"> 注：如果使用自提功能请及时  <a href="{pigcms{:U('Config/pick_address_add')}" target="_black">添加自提点地址</a>; 如果开启了自有支付，那么平台配送是无效的！平台配送时服务距离由平台来设置！快递配送：没有服务距离的限制，按配送时间段一的设置来计算配送费;</span>
 								</div>
-								<div class="form-group deliver basic_price" <if condition="$store_shop['deliver_type'] eq 2">style="display:none"</if>>
+								<div class="form-group deliver basic_price hidden_obj" <if condition="$store_shop['deliver_type'] eq 2">style="display:none"</if>>
 									<label class="col-sm-1">起送价格</label>
 									<input class="col-sm-1" size="10" maxlength="10" name="basic_price" id="Config_basicprice" type="text" value="{pigcms{$store_shop.basic_price|floatval}" />
 									<span class="form_tips">元</span>
 								</div>
                                 <div class="form-group">
-                                    <label class="col-sm-1"><label for="Config_notice">店铺提示</label></label>
+                                    <label class="col-sm-1"><label for="Config_notice">{pigcms{:L('STORE_REMINDER_BKADMIN')}</label></label>
                                     <textarea class="col-sm-3" rows="4" name="shop_remind" id="Config_notice">{pigcms{$store_shop.shop_remind}</textarea>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-1"><label for="Config_notice">店铺创建时间</label></label>
+                                    <label class="col-sm-1"><label for="Config_notice">{pigcms{:L('DATE_CREATED_BKADMIN')}</label></label>
                                     <input class="col-sm-1" size="20" maxlength="20" name="create_time" type="text" value="{pigcms{$store_shop.create_time|date='Y-m-d',###}" onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd',lang:'en'})" />
                                 </div>
 								<div class="form-group deliver" <if condition="in_array($store_shop['deliver_type'], array(0,2,3,5))">style="display:none"</if>>
@@ -349,7 +347,7 @@
                                         <div class="radio">
                                             <label>
                                                 <input class="paycheck " type="checkbox" name="paymethod_{pigcms{$k}" value="1" id="Config_openpaythree" onclick="check(this);" <php>if(in_array($k,$pay_list)){</php>checked="checked"<php>}</php>/>
-                                                <span class="lbl"><label for="Config_openpaythree">{pigcms{$v.name}</label></span>
+                                                <span class="lbl"><label for="Config_openpaythree">{pigcms{$v.name}-{pigcms{$v.id}</label></span>
                                             </label>
                                         </div>
                                     </div>
@@ -455,7 +453,7 @@
 								<div class="col-md-offset-3 col-md-9">
 									<button class="btn btn-info" type="submit">
 										<i class="ace-icon fa fa-check bigger-110"></i>
-										保存
+                                        {pigcms{:L('SAVE_BKADMIN')}
 									</button>
 								</div>
 							</div>

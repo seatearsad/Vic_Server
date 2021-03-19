@@ -186,17 +186,17 @@
         });
 
         $('.store_info_more').click(function(){
-            var content = '<p>店铺名称：'+$(this).data('store_name')+'</p>';
-            content+= '<p>联系电话：'+$(this).data('phone')+'</p>';
-            content+= '<p>店铺地址：'+$(this).data('address')+'</p>';
-            content+= '<p>餐饮：'+$(this).data('hasmeal')+'</p>';
-            content+= '<p>团购：'+$(this).data('hasgroup')+'</p>';
-            content+= '<p>快店：'+$(this).data('hasshop')+'</p>';
-            if($(this).data('store_status') != '2'){
-                content+= '<p>店铺二维码：<a href="'+$(this).data('store_qrcode_url')+'" class="see_qrcode">查看二维码</a></p>';
-            }
+            var content = '<p>{pigcms{:L(\'STORE_NAME_BKADMIN\')}：'+$(this).data('store_name')+'</p>';
+            content+= '<p>{pigcms{:L(\'STORE_PHONE_NUMBER_BKADMIN\')}：'+$(this).data('phone')+'</p>';
+            content+= '<p>{pigcms{:L(\'STORE_ADDRESS_BKADMIN\')}：'+$(this).data('address')+'</p>';
+            // content+= '<p>{pigcms{:L(\'DELETE_BKADMIN\')}餐饮：'+$(this).data('hasmeal')+'</p>';
+            // content+= '<p>{pigcms{:L(\'DELETE_BKADMIN\')}团购：'+$(this).data('hasgroup')+'</p>';
+            // content+= '<p>{pigcms{:L(\'DELETE_BKADMIN\')}快店：'+$(this).data('hasshop')+'</p>';
+            // if($(this).data('store_status') != '2'){
+            //     content+= '<p>店铺二维码：<a href="'+$(this).data('store_qrcode_url')+'" class="see_qrcode">查看二维码</a></p>';
+            // }
             art.dialog({
-                title: '店铺基本信息',
+                title: '{pigcms{:L(\'STORE_BASIC_INFO_BKADMIN\')}',
                 content: content,
                 lock: true
             });

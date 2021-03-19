@@ -52,6 +52,7 @@ class ConfigModel extends Model{
 		$tmp_config_list = $this->get_gid_config(7);
 
 		foreach($tmp_config_list as $key=>$value){
+            $config_list[$value['tab_id']]['id'] = $value['name'];
 			$config_list[$value['tab_id']]['name'] = $value['tab_name'];
 			$config_list[$value['tab_id']]['config'][$value['name']] = $value['value'];
 		}	

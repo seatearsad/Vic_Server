@@ -1311,9 +1311,9 @@ class IndexAction extends BaseAction {
             if (empty($_POST['permoney'])) {
                 $this->error_tips('人均消费必填！');
             }
-            if (empty($_POST['feature'])) {
-                $this->error_tips('店铺特色必填！');
-            }
+//            if (empty($_POST['feature'])) {
+//                $this->error_tips('店铺特色必填！');
+//            }
 //             if (empty($_POST['trafficroute'])) {
 //                 $this->error_tips('交通路线必填！');
 //             }
