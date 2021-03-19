@@ -11,7 +11,7 @@
                     <img src="{{d[i].image}}" style="width:100%;height:100%;">
                 </div>
                 <div class="dealcard-block-right">
-                    <div class="">{{d[i].num}} Items(s)</div>
+                    <div class="">{{d[i].num}} Item(s)</div>
                     <div>{{d[i].create_time_show}}</div>
                     <div class="total_price">${{d[i].real_total_price}}</div>
                 </div>
