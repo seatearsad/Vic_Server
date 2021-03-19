@@ -73,6 +73,10 @@
 	text-align: left;
 }
 
+.hidden_obj{
+    display: none;
+}
+
 .statusSwitch, .orderValidSwitch, .unitShowSwitch, .authTypeSwitch {
 	display: none;
 }

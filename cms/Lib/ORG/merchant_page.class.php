@@ -35,7 +35,7 @@ class Page{
         }
 		$url .= '&page=';
 		
-		$str = '<div class="summary">'.$this->totalRows.' 条记录 '.$now.'/'.$total.'页</div>';
+		$str = '<div class="summary">'.replace_lang_strlist(L('STORES_PAGE_BKADMIN'),array($this->totalRows,$now,$total)).'</div>';
 		$str.= '<div class="pager">';
 		$str.= '<ul class="pagination" id="yw1">';
 		if($now > 1){
