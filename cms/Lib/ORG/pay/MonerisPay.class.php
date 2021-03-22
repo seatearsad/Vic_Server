@@ -108,18 +108,19 @@ class MonerisPay
             $mpgResponse = $mpgHttpPost->getMpgResponse();
             //echo("----3-----");
             $resp = $this->arrageResp($mpgResponse, $txnArray['pan'], $txnArray['expdate'], 0, $order_id, $card_cvd);
-            var_dump($resp);die("---------");
+
             if ($resp['responseCode'] != "null" && $resp['responseCode'] < 50 && $data['save'] == 1) {//如果需要存储
 
                 $isC = D('User_card')->getCardByUserAndNum($uid, $data['card_num']);
                 if (!$isC) {
+
                     D('User_card')->clearIsDefaultByUid($uid);
                     $data['is_default'] = 1;
                     $data['uid'] = $uid;
                     $data['create_time'] = date("Y-m-d H:i:s");
                     //存储的时候为YYMM
                     $data['expiry'] = transYM($data['expiry']);
-
+                    var_dump($data);die();
                     $data['credit_id'] = D('User_card')->field(true)->add($data);
                 }
             }
