@@ -1613,7 +1613,7 @@ class MyAction extends BaseAction{
 
 				//平台余额退款
 				if($now_order['balance_pay'] != '0.00'){
-					$add_result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],'订单退款 (订单号:'.$now_order['order_name'].')',0,0,0,'Order Cancellation (Order #'.$now_order['order_name'].')');
+					$add_result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],'订单退款 (订单号:'.$now_order['order_name'].')-1',0,0,0,'Order Cancellation (Order #'.$now_order['order_name'].')');
 
 					$param = array('refund_time' => time());
 					if($result['error_code']){
@@ -1780,7 +1780,7 @@ class MyAction extends BaseAction{
 
 		//平台余额退款
 		if($now_order['balance_pay'] != '0.00'){
-			$add_result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],'订单退款 (订单号:'.$now_order['order_name'].')',0,0,0,'Order Cancellation (Order #'.$now_order['order_name'].')');
+			$add_result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],'订单退款 (订单号:'.$now_order['order_name'].')-2',0,0,0,'Order Cancellation (Order #'.$now_order['order_name'].')');
 
 			$param = array('refund_time' => time());
 			if($result['error_code']){
@@ -2013,7 +2013,7 @@ class MyAction extends BaseAction{
 
 				//平台余额退款
 				if($now_order['balance_pay'] != '0.00'){
-					$result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],'订单退款 (订单号:'.$now_order['order_name'].')',0,0,0,'Order Cancellation (Order #'.$now_order['order_name'].')');
+					$result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],'订单退款 (订单号:'.$now_order['order_name'].')-3',0,0,0,'Order Cancellation (Order #'.$now_order['order_name'].')');
 
 					$param = array('refund_time' => time());
 					if($result['error_code']){
@@ -2188,7 +2188,7 @@ class MyAction extends BaseAction{
 			}
 			if($now_order['balance_pay']>0){
 
-				$result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],'订单退款 (订单号:'.$now_order['order_name'].')',0,0,0,'Order Cancellation (Order #'.$now_order['order_name'].')');
+				$result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],'订单退款 (订单号:'.$now_order['order_name'].')-4',0,0,0,'Order Cancellation (Order #'.$now_order['order_name'].')');
 				$param = array('refund_time' => time());
 				if($result['error_code']){
 					$param['err_msg'] = $result['msg'];
@@ -2589,7 +2589,7 @@ class MyAction extends BaseAction{
 
 		//平台余额退款
 		if($now_order['system_balance'] != '0.00'){
-			$result = D('User')->add_money($now_order['uid'],$now_order['system_balance'],'订单退款 (订单号:'.$now_order['order_name'].')',0,0,0,'Order Cancellation (Order #'.$now_order['order_name'].')');
+			$result = D('User')->add_money($now_order['uid'],$now_order['system_balance'],'订单退款 (订单号:'.$now_order['order_name'].')-5',0,0,0,'Order Cancellation (Order #'.$now_order['order_name'].')');
 			$param = array('refund_time' => time());
 			if($result['error_code']){
 				$param['err_msg'] = $result['msg'];
@@ -4587,7 +4587,7 @@ class MyAction extends BaseAction{
 
 		//平台余额退款
 		if($now_order['balance_pay'] != '0.00'){
-			$add_result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],'订单退款 (订单号:'.$now_order['order_name'].')',0,0,0,'Order Cancellation (Order #'.$now_order['order_name'].')');
+			$add_result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],'订单退款 (订单号:'.$now_order['order_name'].')-6',0,0,0,'Order Cancellation (Order #'.$now_order['order_name'].')');
 
 			$param = array('refund_time' => time());
 			if($result['error_code']){
@@ -5408,7 +5408,6 @@ class MyAction extends BaseAction{
 		}
 	}
 
-
 	private function shop_refund_detail($now_order, $store_id)
 	{
 		$order_id  = $now_order['order_id'];
@@ -5458,7 +5457,7 @@ class MyAction extends BaseAction{
 		//平台余额退款
 		if ($now_order['balance_pay'] != '0.00') {
             //var_dump($now_order);die('---------------');
-			$add_result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],'订单退款 (订单号:'.$now_order['order_name'].')',0,0,0,'Order Cancellation (Order #'.$now_order['order_id'].')');
+			$add_result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],'订单退款 (订单号:'.$now_order['order_id'].').',0,0,0,'Order Cancellation (Order #'.$now_order['order_id'].')');
 
 			$param = array('refund_time' => time());
 			if($result['error_code']){
