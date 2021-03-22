@@ -120,8 +120,8 @@ class MonerisPay
                     $data['create_time'] = date("Y-m-d H:i:s");
                     //存储的时候为YYMM
                     $data['expiry'] = transYM($data['expiry']);
-                    var_dump($data);die();
                     $data['credit_id'] = D('User_card')->field(true)->add($data);
+                    var_dump($data['credit_id']);die();
                 }
             }
 
