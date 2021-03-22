@@ -2641,18 +2641,21 @@ class PayAction extends BaseAction{
         $moneris_pay = new MonerisPay();
         $resp = $moneris_pay->payment($_POST,$this->user_session['uid'],2);
 
-        var_dump($resp);die("----Debug----");
+        var_dump($resp);echo($result_url);
 
         if($resp['requestMode'] && $resp['requestMode'] == "mpi"){
             if($resp['mpiSuccess'] == "true"){
+                die("11111111");
                 $result = array('error_code' => false,'mode'=>$resp['requestMode'],'html'=>$resp['mpiInLineForm'], 'msg' => $resp['message']);
                 $this->ajaxReturn($result);
             }else{
+                die("2222222222222222222");
                 $this->error($resp['message'],$resp['url'],true);
             }
         }
 
         if($resp['responseCode'] != 'null' && $resp['responseCode'] < 50){
+            die("333333");
             $order = explode("_",$_POST['order_id']);
             $order_id = $order[1];
             //判断是否有减免配送费活动
@@ -2667,6 +2670,7 @@ class PayAction extends BaseAction{
 
             //店铺满减
             if($_POST['merchant_reduce'] != null){
+                die("444444");
                 $order_info['merchant_reduce'] = $_POST['merchant_reduce'];
                 if($_POST['order_type'] == 'shop' || $_POST['order_type'] == 'mall'){
                     D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->save(array('merchant_reduce'=>$order_info['merchant_reduce']));
@@ -2677,20 +2681,21 @@ class PayAction extends BaseAction{
             if($_POST['order_type'] == "recharge"){
                 $url = U("Wap/My/my_money");
             }else{
+                die("5555555555");
                 $order = explode("_",$_POST['order_id']);
                 $order_id = $order[1];
                 $url = U("Wap/Shop/pay_result",array('order_id'=>$order_id));
-                $url=$result_url.'1';
+                $url = $result_url.'1';
             }
             $this->success(L('_PAYMENT_SUCCESS_'),$url,true);
         }else{
+            die("66666666");
             //var_dump($result_url);die();
             if ($_POST['order_type']=='recharge'){
                 $this->error($resp['message'],$result_url,true);
             }else{
                 $this->error($resp['message'],$result_url.'0',true);
             }
-
         }
     }
     //保存地址备注信息的逻辑  by Peter 2021-2-26
