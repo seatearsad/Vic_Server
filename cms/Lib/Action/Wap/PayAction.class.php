@@ -249,8 +249,8 @@ class PayAction extends BaseAction{
                 if (empty($_GET['sysc_id'])) {  //没有选择优惠券
 
                     //如果是二次支付
-                    //var_dump($order_info);die();
-                    if ($order_info['coupon_id']!=null){
+
+                    if ($order_info['coupon_id']>0){
                         $sysc_id=$order_info['coupon_id'];
                         //如果选择的为活动优惠券
                         if(strpos($sysc_id,'event')!== false){
