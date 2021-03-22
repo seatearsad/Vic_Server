@@ -431,7 +431,7 @@
 
                 <if condition="$order_details['paid'] eq 0">
                     <li class="fr replace refund_button" data-url="{pigcms{:U('Shop/orderdel', array('order_id' => $order_details['order_id']))}">{pigcms{:L('_CANCEL_ORDER_')}</li>
-                    <elseif condition="$order_details['paid'] eq 1 AND $order_details['status'] lt 2" />
+                    <elseif condition="$order_details['paid'] eq 1 AND $order_details['status'] lt 1" />
                     <li class="fr replace refund_button" data-url="{pigcms{:U('My/shop_order_refund', array('order_id' => $order_details['order_id']))}">{pigcms{:L('_CANCEL_ORDER_')}</li>
                     <elseif condition="$order_details['paid'] eq 1 AND $order_details['status'] eq 5" />
                     <li class="fr replace refund_button" data-url="{pigcms{:U('My/shop_order_refund', array('order_id' => $order_details['order_id']))}">{pigcms{:L('_REFUND_TXT_')}</li>
