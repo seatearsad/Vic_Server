@@ -799,7 +799,7 @@ class MonerisPay
             $orderInfo['expiry'] = $card['expiry'];
         }
 
-        //1Web(PC) 2Wap 3App
+        //1vWeb(PC) 2 Wap 3 App
         if($orderInfo['order_from'] == 1){
             if($orderInfo['order_type'] == 'recharge')
                 $url = C('config.config_site_url').'/index.php?g=User&c=Credit&a=index';
@@ -816,9 +816,9 @@ class MonerisPay
                 $url = U("Wap/My/my_money");
             else {
                 if(strpos($_SERVER['HTTP_HOST'],'tutti.app') !== false)
-                    $url = 'https://'.$_SERVER['HTTP_HOST'].'/wap.php?g=Wap&c=Shop&a=pay_result&order_id=' . $orderInfo['order_id'];
+                    $url = 'https://'.$_SERVER['HTTP_HOST'].'/wap.php?g=Wap&c=Shop&a=pay_result&order_id='.$orderInfo['order_id']."&mer_id=".$orderInfo['mer_id']."&store_id=".$orderInfo['store_id']."&status=1";
                 else
-                    $url = U("Wap/Shop/pay_result", array('order_id' => $orderInfo['order_id']));
+                    $url = U("Wap/Shop/pay_result", array('order_id' => $orderInfo['order_id'],"mer_id"=>$orderInfo['mer_id'],"store_id"=>$orderInfo['store_id'],"status"=>"1"));
             }
 
             $orderInfo['url'] = $url;
