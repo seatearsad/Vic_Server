@@ -115,6 +115,7 @@ class MonerisPay
                 if (!$isC) {
 
                     D('User_card')->clearIsDefaultByUid($uid);
+                    $card_data['name'] = $data['name'];
                     $card_data['is_default'] = 1;
                     $card_data['card_num'] = $data['card_num'];
                     $card_data['uid'] = $uid;
