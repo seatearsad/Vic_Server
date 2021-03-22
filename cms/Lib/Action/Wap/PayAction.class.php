@@ -95,7 +95,8 @@ class PayAction extends BaseAction{
             D('User_card')->field(true)->where(array('id'=>$_GET['card_id']))->save(array('is_default'=>1));
         }
 
-        $card_list = D('User_card')->getCardListByUid($this->user_session['uid']);
+        $card_list = D('User_card')->getCardListByUidForCheck($this->user_session['uid']);
+        //var_dump($card_list);die();
         if(count($card_list) > 0)
             $this->assign('card',$card_list[0]);
 
