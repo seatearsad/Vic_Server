@@ -113,7 +113,7 @@ class MonerisPay
 
                 $isC = D('User_card')->getCardByUserAndNum($uid, $data['card_num']);
                 if (!$isC) {
-
+                    //garfunkel
                     D('User_card')->clearIsDefaultByUid($uid);
                     $card_data['name'] = $data['name'];
                     $card_data['is_default'] = 1;
