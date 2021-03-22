@@ -44,12 +44,12 @@ class MonerisPay
 
         //判断金额还需在api user_card_default 方法中修改
         if($data['order_type'] == 'recharge' || $data['charge_total'] >= 251 || $store['pay_secret'] == 1){
-
+            //echo("-------1---------");
             //跳转到第三方支付
             return $this->mpi_transaction($data,$uid,$from_type);
 
         }else {
-
+            //echo("-------2---------");
             //直接支付
             $txnArray['type'] = 'purchase';
             $txnArray['crypt_type'] = '7';
@@ -106,6 +106,7 @@ class MonerisPay
             $mpgHttpPost = new mpgHttpsPost($this->store_id, $this->api_token, $mpgRequest);
 
             $mpgResponse = $mpgHttpPost->getMpgResponse();
+            //echo("----3-----");
             $resp = $this->arrageResp($mpgResponse, $txnArray['pan'], $txnArray['expdate'], 0, $order_id, $card_cvd);
 
             if ($resp['responseCode'] != "null" && $resp['responseCode'] < 50 && $data['save'] == 1) {//如果需要存储
