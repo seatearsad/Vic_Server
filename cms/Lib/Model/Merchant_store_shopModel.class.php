@@ -882,10 +882,12 @@ class Merchant_store_shopModel extends Model
      * @param int $page_count
      * @return array
      */
-    public function get_list_arrange($where = array(), $is_wap = 1,$type = 1,$limit,$page = 1,$lat=0,$long=0)
+    public function get_list_arrange($where = array(), $is_wap = 1,$type = 1,$limit,$page = 1,$lat=0,$long=0,$city_id = -1)
     {
-        //$city_id = D('Store')->geocoderGoogle($lat,$long);
-        $city_id = $city_id ? $city_id : 105;
+        if($city_id == -1){
+            $city_id = D('Store')->geocoderGoogle($lat,$long);
+            $city_id = $city_id ? $city_id : 0;
+        }
 
         switch ($type){
             case 1:

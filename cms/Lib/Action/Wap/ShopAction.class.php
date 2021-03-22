@@ -22,8 +22,13 @@ class ShopAction extends BaseAction{
         $lat = isset($user_long_lat['lat']) ? $user_long_lat['lat'] : 0;
         $long = isset($user_long_lat['long']) ? $user_long_lat['long'] : 0;
 
-        //$city_id = D('Store')->geocoderGoogle($lat,$long);
-        $city_id = $city_id ? $city_id : 105;
+        if($_COOKIE['userLocationCity']){
+            $city_id = $_COOKIE['userLocationCity'];
+        }else{
+            $city_id = D('Store')->geocoderGoogle($lat,$long);
+            $city_id = $city_id ? $city_id : 0;
+            $_COOKIE['userLocationCity'] = $city_id;
+        }
 
         //$category = D('Shop_category')->field(true)->where(array('cat_fid'=>0,'cat_type'=>0))->select();
         $category = D('Shop_category')->field(true)->where(array('cat_fid'=>0,'cat_type'=>0,'city_id'=>$city_id))->order('cat_sort desc')->select();
@@ -254,8 +259,13 @@ class ShopAction extends BaseAction{
 			}
 		}
 
-        //$city_id = D('Store')->geocoderGoogle($lat,$long);
-        $city_id = $city_id ? $city_id : 105;
+        if($_COOKIE['userLocationCity']){
+            $city_id = $_COOKIE['userLocationCity'];
+        }else{
+            $city_id = D('Store')->geocoderGoogle($lat,$long);
+            $city_id = $city_id ? $city_id : 0;
+            $_COOKIE['userLocationCity'] = $city_id;
+        }
 
         if($cat_id == 0)
             $now_category = D('Shop_category')->where(array('cat_id'=>$cat_fid))->find();
