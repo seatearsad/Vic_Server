@@ -559,7 +559,7 @@ class MyAction extends BaseAction{
 			}else{
 				$coupon_list = D('System_coupon')->get_noworder_coupon_list($now_order, $_GET['type'], $this->user_session['phone'], $this->user_session['uid'], $platform);
 			}
-
+            //var_dump($coupon_list);die();
             //获取活动优惠券
             $event_coupon_list = D('New_event')->getUserCoupon($this->user_session['uid'],0);
             if(!$coupon_list) $coupon_list = array();
@@ -567,7 +567,7 @@ class MyAction extends BaseAction{
                 foreach ($event_coupon_list as &$v){
                     $v['id'] = $v['coupon_id'].'_'.$v['id'];
                     //当前页面is_use的值为是否可以使用
-                    if($v['order_money'] <= $now_order['total_money'])
+                    if($v['order_money'] <= $now_order['goods_price'])
                         $v['is_use'] = 1;
                     else
                         $v['is_use'] = 0;

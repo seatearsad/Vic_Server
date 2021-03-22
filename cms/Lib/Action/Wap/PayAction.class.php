@@ -76,6 +76,7 @@ class PayAction extends BaseAction{
         }
 
         $order_info = $now_order['order_info'];
+//var_dump($order_info);die();
 
         //ADD garfunkel
         $order_info['order_name'] = lang_substr($order_info['order_name'],C('DEFAULT_LANG'));
@@ -2623,7 +2624,8 @@ class PayAction extends BaseAction{
 
         $moneris_pay = new MonerisPay();
         $resp = $moneris_pay->payment($_POST,$this->user_session['uid'],2);
-        //var_dump($resp);die();
+        var_dump($resp);die();
+
         if($resp['requestMode'] && $resp['requestMode'] == "mpi"){
             if($resp['mpiSuccess'] == "true"){
                 $result = array('error_code' => false,'mode'=>$resp['requestMode'],'html'=>$resp['mpiInLineForm'], 'msg' => $resp['message']);
