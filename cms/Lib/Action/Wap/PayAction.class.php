@@ -2645,6 +2645,7 @@ class PayAction extends BaseAction{
 
         if($resp['requestMode'] && $resp['requestMode'] == "mpi"){
             if($resp['mpiSuccess'] == "true"){
+                die("1111111111111111111111111");
                 $result = array('error_code' => false,'mode'=>$resp['requestMode'],'html'=>$resp['mpiInLineForm'], 'msg' => $resp['message']);
                 $this->ajaxReturn($result);
             }else{
@@ -2683,7 +2684,9 @@ class PayAction extends BaseAction{
                 $url = $result_url.'1';
             }
             $this->success(L('_PAYMENT_SUCCESS_'),$url,true);
+
         }else{
+
             //var_dump($result_url);die();
             if ($_POST['order_type']=='recharge'){
                 $this->error($resp['message'],$result_url,true);
