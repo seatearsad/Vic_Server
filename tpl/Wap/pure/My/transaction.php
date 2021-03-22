@@ -119,11 +119,6 @@
 		</if>
         <include file="Public:header"/>
         <div class="main">
-            <div class="this_nav">
-                <span id="back_span"></span>
-                History
-            </div>
-            <div class="gray_line"></div>
 	<dl id="newList" style="padding:0 10px;background-color:#fff;margin:10px auto;width: 98%"></dl>
 		<script src="{pigcms{:C('JQUERY_FILE')}"></script>
 		<script>

@@ -46,6 +46,73 @@
     .searchTxt{
         width: 90%;
     }
+    .list_outer{
+        width: 95%;
+        margin-bottom: 0;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .list_header{
+        height: 10px;
+        background-color: #ffffff;
+        border-radius: 10px 10px 0px 0px;
+    }
+    .dd_line{
+        display: flex;
+    }
+    .select_radio{
+        padding: 5px;
+    }
+    .select_value{
+        padding-left: 10px;
+    }
+    .list_footer{
+        height: 10px;
+        background-color: #ffffff;
+        border-radius: 0px 0px 10px 10px;
+    }
+
+    .regular-radio {
+        display: none;
+    }
+
+    .regular-radio + label {
+        -webkit-appearance: none;
+        background-color: #eeeeee;
+        border: 1px solid #eeeeee;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.00), inset 0px -15px 10px -12px rgba(0,0,0,0.05);
+        padding: 9px;
+        border-radius: 50px;
+        display: inline-block;
+        position: relative;
+        padding: 14px;
+    }
+
+    .regular-radio:checked + label:after {
+        content: ' ';
+        border-radius: 50px;
+        position: absolute;
+        background: #ffa52d;
+        box-shadow: inset 0px 0px 10px rgba(0,0,0,0.3);
+        text-shadow: 0px;
+        font-size: 32px;
+        width: 20px;
+        height: 20px;
+        left: 4px;
+        top: 4px;
+    }
+
+    .regular-radio:checked + label {
+        background-color: #ffffff;
+        color: #ffa52d;
+        border: 2px solid #ffa52d;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0px -15px 10px -12px rgba(0,0,0,0.05), inset 15px 10px -12px rgba(255,255,255,0.1), inset 0px 0px 10px rgba(0,0,0,0.1);
+    }
+
+    .regular-radio + label:active, .regular-radio:checked + label:active {
+        box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0px 1px 3px rgba(0,0,0,0.1);
+    }
+
 </style>
 <body>
 <div id="pageLoadTipShade" class="pageLoadTipBg">
@@ -114,10 +181,18 @@
             }
         }
     }
-
+    //google结果列表点击事件
     function fillInAddress() {
+
         var place = autocomplete.getPlace();
 
+        //以下为给 添加地址提供的代码
+        //info = JSON.parse($.cookie('user_address'));
+        var info = new Object();
+        info.adress = place.formatted_address;
+        info.longitude = place.geometry.location.lng();
+        info.latitude = place.geometry.location.lat();
+        //
         $.cookie('shop_select_address', place.formatted_address,{expires:700,path:"/"});
         $.cookie('shop_select_lng', place.geometry.location.lng(),{expires:700,path:"/"});
         $.cookie('shop_select_lat', place.geometry.location.lat(),{expires:700,path:"/"});
@@ -135,12 +210,20 @@
                 $.post("{pigcms{:U('Index/ajax_city_name')}",{city_name:city_name},function(result){
                     if (result.error == 1){
                         //$("input[name='city_id']").val(0);
+                        info.city = 0;
+                        info.province = 0;
+                        info.city_name = 'N/A';
                         $.cookie('userLocationCity', 0,{expires:700,path:"/"});
                     }else{
+                        info.city = result['info']['city_id']
+                        info.province = result['info']['province_id'];
+                        info.city_name = city_name;
                         //$("input[name='city_id']").val(result['info']['city_id']);
                         $.cookie('userLocationCity', result['info']['city_id'],{expires:700,path:"/"});
                     }
-                    window.location.href = './wap.php';
+                    $.cookie('user_address', JSON.stringify(info));
+                    //window.location.href = './wap.php';
+                    window.location.href = './wap.php?g=Wap&c=My&a=edit_adress&from=map';
                 },'JSON');
             }
         }
@@ -197,12 +280,17 @@
                 /* $('#pageAddressSearchDel').hide(); */
             });
 
+            var data_id=0;
+
             $(document).on('click','.searchAddressList dd',function(){
+                //从地址列表里选择
                 $('#pageAddressSearchDel').trigger('click');
+
+                data_id=$(this).data('id');
                 user_long = $(this).data('long');
                 user_lat = $(this).data('lat');
-
                 city_id = $(this).data('city');
+
                 if(typeof(city_id) != 'undefined')
                     $.cookie('userLocationCity', city_id,{expires:700,path:"/"});
 
@@ -216,13 +304,22 @@
                     $.cookie('userLocationId',$(this).data('id'),{expires:700,path:'/'});
                 }
 
-                window.location.href = "wap.php";
-                mustShowShopList = true;
-                location.hash = 'list';
+                $.getJSON(ajax_url_root+"ajax_set_address_default&aid="+$.cookie('userLocationId') ,function(result){
+                    if(result.length > 0){
+
+                    }else{
+                       alert("Network error, please retry later.");
+                    }
+                    window.location.href = "wap.php";
+                    mustShowShopList = true;
+                    location.hash = 'list';
+                });
+
+
                 return false;
             });
 
-            $.getJSON(ajax_url_root+'ajax_address',function(result){
+            $.getJSON(ajax_url_root+"ajax_address&lastid="+$.cookie('userLocationId') ,function(result){
                 if(result.length > 0){
                     laytpl($('#listAddressListTpl').html()).render(result, function(html){
                         $('#pageAddressUserList .content').html(html);
@@ -268,12 +365,29 @@
 </script>
 
 <script id="listAddressListTpl" type="text/html">
+    <div class="list_outer">
+    <div class="list_header"></div>
     {{# for(var i = 0, len = d.length; i < len; i++){ }}
-    <dd data-long="{{ d[i].long }}" data-lat="{{ d[i].lat }}" data-name="{{ d[i].street }}" data-id="{{ d[i].id }}" data-city="{{ d[i].city_id}}">
-        <div class="name">{{ d[i].street }} {{ d[i].house }}</div>
-        <div class="desc">{{ d[i].name }} {{ d[i].phone }}</div>
-    </dd>
+        <dd class="dd_line"
+            data-long="{{ d[i].long }}"
+            data-lat="{{ d[i].lat }}"
+            data-name="{{ d[i].street }}"
+            data-id="{{ d[i].id }}"
+            data-city="{{ d[i].city_id}}">
+            <div class="select_radio">
+                <input type="radio" id="radio-2-{{i}}" name="radio-2-set" class="regular-radio"
+                                             {{# if(d[i].checked=="1") { }} checked {{# } }}/><label for="radio-2-1"></label><br/>
+            </div>
+            <div class="select_value">
+                <div class="name">{{ d[i].street }} {{ d[i].house }}</div>
+                <div class="desc">{{ d[i].name }} {{ d[i].phone }}</div>
+            </div>
+
+        </dd>
     {{# } }}
+    <div class="list_footer"></div>
+    </div>
 </script>
+
 </body>
 </html>

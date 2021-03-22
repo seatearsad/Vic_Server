@@ -97,6 +97,6 @@
 </head>
 
 <body class="no-skin">
-	<include file="Public:nav"/>
-	<div class="main-container" id="main-container">
-	<include file="Public:left"/>
+<include file="Public:nav"/>
+<div class="main-container" id="main-container">
+<include file="Public:left"/>

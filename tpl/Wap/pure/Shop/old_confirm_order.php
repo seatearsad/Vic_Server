@@ -756,7 +756,7 @@ $(document).ready(function () {
 	$("#submit_order").click(function(){
 		
 		if($('#deliver_type').val() == 0 && $('#address_id').val() == ''){
-			motify.log('Please Enter Address');
+			motify.log('Please choose an address');
 			return false;
 		}
 		if(!$(this).hasClass('disabled')){

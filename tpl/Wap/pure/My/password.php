@@ -9,8 +9,9 @@
 	<meta name="apple-mobile-web-app-status-bar-style" content="black">
 	<meta name="format-detection" content="telephone=no">
 	<meta name="format-detection" content="address=no">
-    <link href="{pigcms{$static_path}css/eve.7c92a906.css" rel="stylesheet"/>
+    <link href="{pigcms{$static_path}css/eve.7c92a906.peter.css" rel="stylesheet"/>
     <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/common.css?215"/>
+    <script type="text/javascript" src="{pigcms{:C('JQUERY_FILE_190')}" charset="utf-8"></script>
     <include file="Public:facebook"/>
 </head>
 <style>
@@ -59,21 +60,23 @@
         width: 50%;
         margin: 0 auto;
     }
+    .div_outer{
+        display: -webkit-flex;
+        display: flex;
+        width: 90%;
+        margin-left: 5%;
+    }
 </style>
 <body id="index">
 <include file="Public:header"/>
     <div class="main">
-        <div class="this_nav">
-            <span id="back_span"></span>
-            {pigcms{:L('_B_D_LOGIN_KEY1_')}
-        </div>
-        <div class="gray_line"></div>
+
         <if condition="$error">
         	<div id="tips" class="tips tips-err" style="display:block;">{pigcms{$error}</div>
         <else/>
         	<div id="tips" class="tips"></div>
         </if>
-        <form method="post" action="{pigcms{:U('My/password')}" id="form">
+        <form method="post" action="{pigcms{:U('My/password')}" id="form" class="detail_block">
 		    <dl class="list">
 		    	<dd>
 		    		<dl>
@@ -85,8 +88,10 @@
 				    </dl>
 		    	</dd>
 		    </dl>
-		    <div class="btn-wrapper">
-				<button type="submit" class="btn btn-block btn-larger">{pigcms{:L('_B_D_LOGIN_CONIERM_')}</button>
+            <div class="div-space"></div>
+            <div class="div-space"></div>
+		    <div class="div_outer">
+				<button type="submit" class="btn-whole-h btn-block btn-larger">{pigcms{:L('_B_D_LOGIN_CONIERM_')}</button>
 		    </div>
 		</form>
     	<script src="{pigcms{:C('JQUERY_FILE')}"></script>

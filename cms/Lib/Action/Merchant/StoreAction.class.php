@@ -5199,9 +5199,9 @@ class StoreAction extends BaseAction{
 	
 		$store = D("Merchant_store")->field(true)->where(array('store_id' => $store_id))->find();
 		if ($store['have_shop'] == 0 || $store['status'] != 1) {
-			return array('error_code' => true, 'msg' => '商家已经关闭了该业务,不能下单了!');
+			return array('error_code' => true, 'msg' => L('_STORE_IS_CLOSE_'));
 		}
-		if ($this->config['store_shop_auth'] == 1 && $now_store['auth'] < 3) {
+		if ($this->config['store_shop_auth'] == 1 && $store['auth'] < 3) {
 			return array('error_code' => true, 'msg' => '您查看的'.$this->config['shop_alias_name'].'没有通过资质审核！');
 			exit;
 		}

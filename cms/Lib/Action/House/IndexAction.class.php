@@ -9,7 +9,7 @@ class IndexAction extends BaseAction{
 	
 	public function _initialize(){
 		parent::_initialize();
-	
+
 		$this->village_id = $this->house_session['village_id'];
 		$this->village = D('House_village')->field(true)->where(array('village_id'=>$this->village_id))->find();
 		if(empty($this->village)){

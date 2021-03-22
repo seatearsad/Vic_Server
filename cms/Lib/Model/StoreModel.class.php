@@ -46,6 +46,7 @@ class StoreModel extends Model
         $store['address'] = $row['adress'];
         $store['shop_remind'] = $row['shop_remind'];
         $store['pay_method'] = $row['pay_method'];
+        $store['delivery_radius'] = $row['delivery_radius'];
 
         if($row['background'] && $row['background'] != '') {
             $image_tmp = explode(',', $row['background']);
@@ -964,7 +965,12 @@ class StoreModel extends Model
 
     public function getOrderStatusDesc($status,$order,$log,$storeName,$add_time=0){
         $desc = "";
+//        echo $status;
+//        echo "--------------";
+//        echo $storeName;
+//        die();
         if($status == 0 || $status == 1){
+
             $desc = replace_lang_str(L('V3_CONFIRMINGSUB'),$storeName);
         }
 

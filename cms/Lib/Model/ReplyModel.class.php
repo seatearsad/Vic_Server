@@ -111,6 +111,8 @@ class ReplyModel extends Model{
                         $reply_list[$key]['comment'] = $value['comment_en'];
                     }
                 }
+                //$reply_list[$key]['comment']=$reply_list[$key]['comment']."&".$reply_list[$key]['comment'];
+                $reply_list[$key]['comment']=str_replace("&amp;","&",$reply_list[$key]['comment']);
 			}
 			if ($order_type == 0) {
 				$pic_filepath = 'group';

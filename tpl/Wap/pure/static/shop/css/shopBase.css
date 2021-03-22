@@ -30,6 +30,21 @@ table {
 }
 em{font-style:normal;}
 .fl{float:left;}
+.f2{
+    width:100%;
+    background-image: url(/tpl/Static/blue/images/new/radiobutton_uncheck.png);
+    background-repeat: no-repeat;
+    background-size: 25px 25px;
+    background-position: 98% 0;
+}
+.f2.active{
+    width:100%;
+    background-image: url(/tpl/Static/blue/images/new/radiobutton_check.png);
+    background-repeat: no-repeat;
+    background-size: 25px 25px;
+    background-position: 98% 0;
+}
+
 .fr{float:right;}
 .clearfix:after{
 	content:'';
@@ -924,8 +939,8 @@ em.merchant_invoice:before{
 #shopHeader {
     height:36px;
 	/* background:-webkit-gradient(linear, 0% 0%, 100% 0%,from(#06c1ae), color-stop(0.6, #2BF9E3), to(#06c1ae)); */
-	background:-webkit-gradient(linear, 0% 0%, 100% 0%,from(#06c1ae), color-stop(0.6, orange), to(#06c1ae));
-	/* background:-webkit-gradient(linear, 0% 0%, 100% 0%,from(#06c1ae), color-stop(0.55, #D09831), to(#06c1ae)); */
+    /* background:-webkit-gradient(linear, 0% 0%, 100% 0%,from(#06c1ae), color-stop(0.6, orange), to(#06c1ae));*/
+    /* background:-webkit-gradient(linear, 0% 0%, 100% 0%,from(#06c1ae), color-stop(0.55, #D09831), to(#06c1ae)); */
     display: -webkit-box;
     position: fixed;
     width: 100%;
@@ -964,7 +979,7 @@ em.merchant_invoice:before{
 	margin-top:36px;
 	background:-webkit-gradient(linear, 0% 0%, 100% 0%,from(#06c1ae), color-stop(0.6, orange), to(#06c1ae));
 	position:relative;
-	padding-top: 0px;
+	padding-top: 5px;
 	overflow: hidden;
 }
 #shopBanner:after{
@@ -1001,14 +1016,14 @@ em.merchant_invoice:before{
 	margin-bottom:5px;
 }
 #shopBanner .text div{
-	font-size:12px;
-	color:white;
-	line-height:26px;
-	height:26px;
-    overflow: hidden;
-    word-break: keep-all;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+    /*font-size:12px;*/
+    /*color:white;*/
+    /*line-height:26px;*/
+    /*height:26px;*/
+    /*overflow: hidden;*/
+    /*word-break: keep-all;*/
+    /*white-space: nowrap;*/
+    /*text-overflow: ellipsis;*/
 }
 #shopBanner .discount{
 	line-height:30px;
@@ -1280,6 +1295,7 @@ em.merchant_invoice:before{
     text-align: left;
     text-align: center;
     color: #333;
+    background-color: #f4f4f4;
     position: relative;
     height: 40px;
     line-height: 40px;
@@ -1693,7 +1709,7 @@ em.merchant_invoice:before{
 }
 #shopProductRightBar2 li,#shopSearchResult li{
     position:relative;
-    padding: 8px 0;
+    padding: 20px 5px;
     border-bottom: 1px solid #f1f1f1;
 }
 #shopProductRightBar2 li:last-child,#shopSearchResult li:last-child{
@@ -1713,21 +1729,39 @@ em.merchant_invoice:before{
 }
 #shopProductRightBar2 li .mall img,#shopSearchResult li .mall img{
     margin-left: 0px;
+    width: auto;
 }
 #shopProductRightBar2 li .product_text,#shopSearchResult li .product_text{
     margin-left: 70px;
 }
 #shopProductRightBar2 li .product_text .title,#shopSearchResult li .product_text .title{
-    height: 42px;
+    height: 20px;
+    color: #000;
+    font-size: 16px;
+    margin-bottom: 8px;
+    line-height: 1.2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    /*height: 42px;*/
+}
+#shopProductRightBar2 li .product_text .desc,#shopSearchResult li .product_text .desc{
+    height: 38px;
+    color: #868585;
+    font-size: 14px;
+    margin-bottom: 5px;
+    overflow: hidden;
+    height: 39px;
+    line-height: 1.3;
 }
 #shopProductRightBar2 li .product_text .sale,#shopSearchResult li .product_text .sale{
     font-size: 11px;
-    color:#bbb; 
+    color:#bbb;
     margin: 2px 0;
 }
 #shopProductRightBar2 li .product_text .price,#shopSearchResult li .product_text .price{
-    color:red;
-    font-size:12px;
+    color:black;
+    font-size:14px;
 }
 #shopProductRightBar2 li .product_text .price span,#shopSearchResult li .product_text .price span{
     color: #bbb;
@@ -1756,7 +1790,7 @@ em.merchant_invoice:before{
     padding:2px 5px;
     color: #666;
     z-index: 1;
-    top: 66px;
+    top: 88px;
 }
 #shopProductRightBar2 li .product_btn.plus,#shopProductRightBar2 li .product_btn.min,#shopSearchResult li .product_btn.plus,#shopSearchResult li .product_btn.min{
     width:28px;
@@ -1764,7 +1798,7 @@ em.merchant_invoice:before{
     border-radius:100%;
     padding:0px;
     background: white;
-    top: 60px;
+    top: 85px;
 }
 #shopProductRightBar2 li .product_btn.plus:before, #shopProductRightBar2 li .product_btn.plus:after,#shopSearchResult li .product_btn.plus:before, #shopSearchResult li .product_btn.plus:after {
     content: '';
@@ -1793,7 +1827,7 @@ em.merchant_invoice:before{
     width: 24px;
     text-align: center;
     line-height: 30px;
-	top: 60px;
+	top: 84px;
 }
 #shopProductRightBar2 li .product_btn.min,#shopSearchResult li .product_btn.min{
     right:60px;
@@ -1836,7 +1870,7 @@ em.merchant_invoice:before{
     background-color: #393634;
     width: 100%;
     bottom: 0;
-    z-index: 126;
+    z-index: 99;
 }
 #shopProductCart #cartInfo .cart{
 	height: 50px;
@@ -1891,12 +1925,14 @@ em.merchant_invoice:before{
 #shopProductCart #checkCart{
     position: absolute;
     background: #06c1ae;
-	color:white;
+    color: white;
+    border-radius: 5px;
     right: 0;
     top: 0;
-    height: 50px;
-	padding: 0 30px;
-    line-height: 50px;
+    height: 38px;
+    margin: 5px;
+    padding: 0 30px;
+    line-height: 38px;
     text-align: center;
 }
 #shopProductCart #checkCartEmpty{
@@ -2019,12 +2055,12 @@ em.merchant_invoice:before{
 	position:fixed;
 	z-index:122;
     overflow-y: scroll;
-	background-color:white;
+	background-color:#f4f4f4;
 	padding-bottom: 50px;
 }
 .sliderLeft{
-	-webkit-animation-name: slideLeft;
-    -webkit-animation-duration: 0.6s;
+	-webkit-animation-name: slideup;
+    -webkit-animation-duration: 0.5s;
 	display:block!important;
 }
 .closeBtn{
@@ -2072,26 +2108,29 @@ em.merchant_invoice:before{
     -ms-transform: rotate(45deg);
 }
 #shopDetailPageImgbox img{
-	width: 50%;
+	width: 70%;
     height: auto;
-    margin-left: 25%;
+    margin-left: 15%;
     margin-top: 10px;
+    border-radius: 10px;
 }
 #shopDetailPageTitle,#shopDetailPageFormat,#shopDetailPageDish,#shopDetailPageLabel,#shopDetailPageContent{
-	padding:70px 15px 10px 15px;
+	padding:20px 15px 0px 15px;
 }
 #shopDetailPageTitle .title{
-	font-size: 16px;
+	font-size: 18px;
+    font-weight: bold;
 }
 #shopDetailPageTitle .desc{
 	font-size: 12px;
 	color:#bbb;
 }
 #shopDetailPageFormat .row,#shopDetailPageDish .row,#shopDetailPageLabel .row{
-	line-height: 30px;
-    /**
-    padding-left:64px;
-    */
+    line-height: 30px;
+    border-radius: 10px;
+    background: white;
+    padding: 10px 10px 10px 10px;
+    margin-bottom: 20px;
 }
 #shopDetailPageFormat .row:last-child,#shopDetailPageDish .row:last-child,#shopDetailPageLabel .row:last-child{
 	margin-bottom:0px;
@@ -2107,14 +2146,15 @@ em.merchant_invoice:before{
 }
 #shopDetailPageFormat .row .right,#shopDetailPageDish .row .right,#shopDetailPageLabel .row .right{
 	margin-bottom: 6px;
+    width: 100%;
 }
 #shopDetailPageFormat .row:last-child .right,#shopDetailPageDish .row:last-child .right{
 	margin-bottom:0px;
 }
 #shopDetailPageFormat .row .right li,#shopDetailPageDish .row .right li,#shopDetailPageLabel .row .right li {
-    padding: 0 12px;
-    border: 1px solid #ccc;
-    border-radius: 12px;
+    padding: 0 42px 0 10px;
+    /*border: 1px solid #ccc;*/
+    /*border-radius: 12px;*/
     margin-right: 10px;
 	margin-bottom: 6px;
 }
@@ -2135,12 +2175,13 @@ em.merchant_invoice:before{
 	margin-left:-2px;
 }
 #shopDetailPageBar{
-	margin-bottom: 10px;
     padding: 0 12px;
-	position:relative;
-	line-height:36px;
-	border-bottom: 1px solid #f1f1f1;
-    padding-bottom: 20px;
+    position: fixed;
+    bottom: 0px;
+    line-height: 36px;
+    /* border-bottom: 1px solid #f1f1f1; */
+    padding-bottom: 10px;
+    padding-top: 10px;
 }
 #shopDetailPageBar .fl{
 	font-size:20px;
@@ -2518,7 +2559,7 @@ em.merchant_invoice:before{
 	padding-right:8px;
 }
 #shopMerchantBox dd{
-	padding: 12px 8px 12px 30px;
+    padding: 12px 20px 12px 5px;
 	border-bottom: 1px solid #f1f1f1;
     color: #333;
 	position:relative;
@@ -2538,42 +2579,42 @@ em.merchant_invoice:before{
     margin-top: -3px;
 }
 #shopMerchantBox dd.phone{
-	background:url(../images/merchant_phone.png) no-repeat;
+
 	background-size: 14px;
     background-position: 6px 14px;
 }
 #shopMerchantBox dd.openTime{
-	background:url(../images/merchant_time.png) no-repeat;
+
 	background-size: 14px;
     background-position: 6px 14px;
 }
 #shopMerchantBox dd.deliveryType{
-	background:url(../images/merchant_ride.png) no-repeat;
+
 	background-size: 14px;
     background-position: 6px 14px;
 }
 #shopMerchantBox dd.merchantNotice{
-	background:url(../images/merchant_notice.png) no-repeat;
+
 	background-size: 14px;
     background-position: 6px 14px;
 }
 #shopMerchantBox dd.merchantVerify {
-    background: url(../images/rec.png) no-repeat;
+
     background-size: 20px;
     background-position: 3px 12px;
 }
 #shopMerchantBox dd.merchant{
-	background:url(../images/merchant_home.png) no-repeat;
+
 	background-size: 14px;
     background-position: 6px 14px;
 }
 #shopMerchantBox dd.address span{
     height: 12px;
     width: 12px;
-    border: 1px #b2b2b2 solid;
-    border-radius: 100%;
-    -webkit-border-radius: 100%;
-    -moz-border-radius: 100%;
+    /*border: 1px #b2b2b2 solid;*/
+    /*border-radius: 100%;*/
+    /*-webkit-border-radius: 100%;*/
+    /*-moz-border-radius: 100%;*/
     position: absolute;
 	top: 13px;
     left: 6px;
@@ -2653,7 +2694,8 @@ em.merchant_invoice:before{
     height: 50px;
     line-height: 50px;
 }
-@-webkit-keyframes slideup{0%{-webkit-transform:translateY(100%)}40%{-webkit-transform:translateY(-10%)}100%{-webkit-transform:translateY(0)}}
+@-webkit-keyframes slideup{ 0%{-webkit-transform:translateY(100%)}
+                            100%{-webkit-transform:translateY(0)}}
 @-webkit-keyframes slideLeft{0%{-webkit-transform:translateX(100%)}100%{-webkit-transform:translateX(0)}}
 
 #shopDetailMapBar {
@@ -2967,7 +3009,7 @@ em.merchant_invoice:before{
 }
 
 #search_input{
-    width: 75%;
+    width: 70%;
     background: #ccc;
     border: 0;
     height: 30px;
@@ -2978,7 +3020,7 @@ em.merchant_invoice:before{
 #search_btn{
     position: relative;
     display: inline-block;
-    width: 15%;
+    width: 58px;
     background: #ffa52d;
     border-radius: 5px;
     color: white;

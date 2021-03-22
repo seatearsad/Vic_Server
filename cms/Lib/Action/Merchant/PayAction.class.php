@@ -50,6 +50,7 @@ class PayAction extends BaseAction{
         return $payName[$label];
     }
     public function go_pay(){
+
         if(empty($this->merchant_session)){
             $this->error_tips('请先进行登录！',U('Login/index'));
         }

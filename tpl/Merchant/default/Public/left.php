@@ -87,7 +87,7 @@
 			<li <if condition="$vo['is_active']">class="open"</if>>
 				<a <if condition="$vo['menu_list']">href="#" class="dropdown-toggle"<elseif condition='$vo["id"] eq 1' />href="{pigcms{$vo.url}"</if>>
 					<i class="menu-icon fa {pigcms{$vo.icon}"></i>
-					<span class="menu-text">{pigcms{$vo.name} </span>
+					<span class="menu-text">{pigcms{$vo.name}</span>
 					<if condition="$vo['menu_list']">
 						<b class="arrow fa fa-angle-down"></b>
 					</if>

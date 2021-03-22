@@ -885,6 +885,7 @@ class PayAction extends BaseAction{
         }
     }
 	public function go_pay(){
+
 		$ticket = I('ticket', false);
 		if ($ticket) {
 			$info = ticket::get($ticket, $this->DEVICE_ID, true);

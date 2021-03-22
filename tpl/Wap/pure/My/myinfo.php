@@ -31,6 +31,10 @@
             margin-top: 15px;
             background-color: #cccccc;
         }
+        .gray_space_v{
+            width: 100%;
+            margin-top: 25px;
+        }
         .gray_k{
             width: 10%;
             height: 2px;
@@ -42,20 +46,25 @@
             width: 100%;
         }
         .main ul li{
+            position: relative;
             width: 90%;
             height: 50px;
             margin-left: 5%;
+            margin-bottom: 15px;
             background-color: white;
             list-style: none;
-            margin-bottom: 10px;
-            background-image: url("./tpl/Static/blue/images/new/black_arrow.png");
+            -moz-border-radius: 10px;
+            -webkit-border-radius: 10px;
+            border-radius: 10px;
+            background-image: url("./tpl/Static/blue/images/new/icon_right_arrow.png");
             background-size: auto 16px;
             background-repeat: no-repeat;
             background-position:right 10px center;
         }
         .main ul li div{
             line-height: 50px;
-            font-size: 1.4em;
+            font-size: 1.1em;
+            display:inline;
             padding-left: 20px;
             background-size: auto 70%;
             background-repeat: no-repeat;
@@ -90,21 +99,24 @@
         #logout{
             width: 50%;
             height: 40px;
-            background-color: #ffa52d;
+            background-color: rgba(156, 148, 153, 0.37);
             -moz-border-radius: 5px;
             -webkit-border-radius: 5px;
             border-radius: 5px;
             margin: 20px auto 0 auto;
-            background-image: url("./tpl/Static/blue/images/wap/logout.png");
             background-size: auto 30px;
-            background-repeat: no-repeat;
-            background-position: 10px center;
             text-align: center;
-            color: white;
+            color: #4e4d4d;
             font-size: 1.4em;
-            font-weight: bold;
             line-height: 40px;
             cursor: pointer;
+            margin-bottom: 20px;
+        }
+        .main ul li .right_align{
+            position: absolute;
+            font-size: 12px;
+            color: #a3a3a3;
+            right:30px;
         }
 	</style>
         <include file="Public:facebook"/>
@@ -112,50 +124,53 @@
 <body>
     <include file="Public:header"/>
     <div class="main">
-        <div class="this_nav">
-            <span id="back_span"></span>
-            Profile
-        </div>
-        <div class="gray_line"></div>
         <ul>
-            <a href="{pigcms{:U('username')}">
+            <a href="{pigcms{:U('adress')}">
                 <li>
-                    <div>{pigcms{:L('_B_PURE_MY_54_')}</div>
+                    <div>{pigcms{:L('_B_PURE_MY_87_')}</div>
                 </li>
             </a>
-            <a href="{pigcms{:U('password')}">
-            <li>
-                <div>Password</div>
-            </li>
+            <a href="{pigcms{:U('credit')}">
+                <li>
+                    <div>{pigcms{:L('_B_PURE_MY_88_')}</div>
+                </li>
             </a>
+            <div class="gray_space_v"></div>
+            <a href="{pigcms{:U('username')}">
+                <li>
+                    <div>{pigcms{:L('_B_PURE_MY_89_')}</div>
+                    <div class="right_align">{pigcms{$now_user.nickname}</div>
+                </li>
+            </a>
+
             <a href="{pigcms{:U('bind_user')}">
             <li>
-                <div>Phone Number</div>
+                <div>{pigcms{:L('_B_PURE_MY_90_')}</div>
+                <div class="right_align">{pigcms{$now_user.phone}</div>
             </li>
             </a>
             <a href="{pigcms{:U('email')}">
             <li>
-                <div>Email</div>
+                <div>{pigcms{:L('_B_PURE_MY_91_')}</div>
+                <div class="right_align">{pigcms{$now_user.email}</div>
             </li>
             </a>
-            <a href="{pigcms{:U('adress')}">
-            <li>
-                <div>Address</div>
-            </li>
+            <a href="{pigcms{:U('password')}">
+                <li>
+                    <div>{pigcms{:L('_B_PURE_MY_92_')}</div>
+                </li>
             </a>
-            <a href="{pigcms{:U('credit')}">
-            <li>
-                <div>Wallet</div>
-            </li>
-            </a>
+
             <a href="{pigcms{:U('invitation')}">
                 <li>
-                    <div>Invitation Code</div>
+                    <div>{pigcms{:L('_B_PURE_MY_93_')}</div>
+                    <div class="right_align">{pigcms{$invitationcode}</div>
+
                 </li>
             </a>
         </ul>
 
-        <div id="logout">Log out</div>
+        <div id="logout">{pigcms{:L('_B_PURE_MY_94_')}</div>
     </div>
     <include file="Public:footer"/>
 <script>

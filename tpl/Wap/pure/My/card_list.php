@@ -10,6 +10,7 @@
     <link type="text/css" rel="stylesheet" href="{pigcms{$static_path}my_card/css/swiper-3.3.1.min.css"/>
     <link type="text/css" rel="stylesheet" href="{pigcms{$static_path}my_card/css/card_new.css"/>
     <script src="{pigcms{:C('JQUERY_FILE')}"></script>
+    <link href="{pigcms{$static_path}css/eve.7c92a906.peter.css" rel="stylesheet"/>
     <script src="{pigcms{$static_path}my_card/js/TouchSlide.1.1.js"></script>
     <script type="text/javascript" src="{pigcms{$static_path}js/swiper-3.3.1.jquery.min.js" charset="utf-8"></script>
     <!--[if lte IE 9]>
@@ -76,16 +77,34 @@
         width: 89%;
         margin: 10px auto;
     }
+    .div_outer{
+        display: -webkit-flex;
+        display: flex;
+        width: 90%;
+        margin-left: 5%;
+    }
 </style>
 <body>
 <include file="Public:header"/>
 <div class="main">
-    <div class="this_nav">
-        <span id="back_span"></span>
-        {pigcms{$title}
+    <if condition="$error">
+        <div id="tips" class="tips tips-err" style="display:block;">{pigcms{$error}</div>
+        <else/>
+        <div id="tips" class="tips"></div>
+    </if>
+    <div class="div-space"></div>
+    <div class="div_outer" style="margin-bottom: 5px">
+        <div>Redeem a Coupon Code</div>
     </div>
-    <div class="gray_line"></div>
-<section class="Coupon">
+    <div class="div_outer">
+        <input placeholder="{pigcms{:L('_INPUT_EXCHANGE_CODE_')}" class="input-radius" type="text" name="code" value="" maxlength="20">
+        <button type="submit" id="exchange" class="btn btn-inline btn-larger2">{pigcms{:L('_EXCHANGE_TXT_')}</button>
+    </div>
+    <div class="div-space"></div>
+    <div class="div_outer" style="margin-bottom: 5px">
+        <div>Available Coupon</div>
+    </div>
+    <section class="Coupon">
     <div class="swiper-slide">
         <ul class="end_ul">
             <li>
@@ -135,9 +154,28 @@
     </div>
 </section>
     <script type="text/javascript">
-        $('#back_span').click(function () {
-            window.history.go(-1);
-        });
+        //garfunkel add
+        $("#exchange").click(function(){
+            var code = $("input[name='code']").val();
+            if(code == ""){
+                alert("{pigcms{:L('_INPUT_EXCHANGE_CODE_')}");
+            } else{
+                exchange_code(code);
+            }
+        })
+
+        function exchange_code(code){
+            $.ajax({url:"{pigcms{:U('My/exchangeCode')}",type:"post",data:"code="+code,dataType:"json",success:function(data){
+                    if(data.error_code == 0){
+                        alert('success');
+                        window.location.reload();
+                    }else{
+                        alert(data.msg);
+                    }
+                }
+            });
+        }
+
     </script>
 </div>
 </body>

@@ -214,7 +214,8 @@
 								<div class="title">{{ d[i].product_list[j].product_name }}</div>
                                 <!--div class="sale">{{ getLangStr('_MONTH_SALE_NUM_',d[i].product_list[j].product_sale) }} {{ getLangStr('_PRAISE_TXT_') }} {{ d[i].product_list[j].product_reply }}</div-->
                                 <!--div class="sale">{{ getLangStr('_PRAISE_TXT_') }} {{ d[i].product_list[j].product_reply }}</div-->
-								{{# if(d[i].product_list[j].has_format){ }}
+                                <div class="desc">{{ d[i].product_list[j].product_desc }}</div>
+                                {{# if(d[i].product_list[j].has_format){ }}
 									<div class="price">${{ d[i].product_list[j].product_price }}
                                         {{# if(d[i].product_list[j].deposit_price > 0){ }}
                                         <span class="sale" style="text-decoration: none;">({pigcms{:L('_DEPOSIT_TXT_')}:${{ d[i].product_list[j].deposit_price }})</span>
@@ -229,16 +230,16 @@
                                     </div>
 								{{# } }}
 
-                                {{# if(d[i].is_time == 1){ }}
-                                <div style="color: grey;font-size: 11px;margin-top: 5px;">*Available from {{ d[i].begin_time }} to {{ d[i].end_time }}</div>
-                                {{# } }}
+<!--                                {{# if(d[i].is_time == 1){ }}-->
+<!--                                <div style="color: grey;font-size: 11px;margin-top: 5px;">*Available from {{ d[i].begin_time }} to {{ d[i].end_time }}</div>-->
+<!--                                {{# } }}-->
 
                                 {{# if(d[i].product_list[j].is_seckill_price){ }}
 									<div class="skill_discount" style="margin-top: 5px;">{pigcms{:L('_LIMIT_TIME_DISCOUNT_')}</div>
 								{{# } }}
 							</div>
 							{{# if(d[i].product_list[j].has_format || d[i].product_list[j].has_dish){ }}
-								<div class="product_btn">
+								<div class="product_btn" style="color:#ffa52d;">
                                     {pigcms{:L('_OPTIONAL_SPEC_')}
 								</div>
 							{{# }else{ }}
@@ -253,9 +254,6 @@
 		{{# } }}
 	{{# } }}
 </script>
-
-
-
 
 
 <script id="shopProductTopBarTpl" type="text/html">
@@ -336,13 +334,19 @@
 <script id="productFormatTpl" type="text/html">
 	{{# for(var i in d){ }}
 		<div class="row clearfix">
-			<div class="left">{{ d[i].name }}</div>
-            <div>* Required. Please choose 1.</div>
+			<div class="left add_bold">{{ d[i].name }}</div>
+            <div class="add_grey">* Required. Please choose 1.</div>
 			<div class="right fl">
 				<ul>
+                    {{# var ct = 0; for(var j in d[i].list){ }}
+                    {{#  ct++; } }}
+
 					{{# var k = 0; for(var j in d[i].list){ }}
-						<li class="fl {{# if(k == 0){ }}active{{# } }}" data-spec_list_id="{{ d[i].list[j].id }}"  data-spec_id="{{ d[i].list[j].sid}}">{{ d[i].list[j].name }}</li>
-					{{#  k++; } }}
+						<li class="f2{{# if(k == 0){ }} active{{# } }}" data-spec_list_id="{{ d[i].list[j].id }}"  data-spec_id="{{ d[i].list[j].sid}}">{{ d[i].list[j].name }}</li>
+                        {{# if (ct>(k+1)){ }}
+                        <div class="gray_line" ></div>
+                        {{# } }}
+                    {{#  k++; } }}
 				</ul>
 			</div>
 		</div>
@@ -351,9 +355,9 @@
 <script id="productDishTpl" type="text/html">
     {{# for(var i in d){ }}
     {{# if(d[i].type == 0){ }}
-    <div class="row clearfix" id="shopDetailPageDish_{{ d[i].id}}" data-min="{{d[i].min}}" data-name="{{ d[i].name }}">
-        <div class="left">{{ d[i].name }}</div>
-        <div>
+    <div class="row clearfix" id="shopDetailPageDish_{{ d[i].id}}" data-min="{{d[i].min}}" data-max="{{d[i].max}}" data-name="{{ d[i].name }}">
+        <div class="left add_bold">{{ d[i].name }}</div>
+        <div class="add_grey">
             {{# if(d[i].min == d[i].max){ }}
             * Required. Please choose exactly {{ d[i].min }}
             {{# }else if(d[i].min == 0){
@@ -375,18 +379,21 @@
         <div class="right fl">
             <ul data-dish_name="{{ d[i].name }}">
                 {{# var k = 0; for(var j in d[i].list){ }}
-                <li class="fl" data-min="{{d[i].min}}" data-max="{{d[i].max}}" data-dish_val_id="{{ d[i].list[j].id }}"  data-dish_id="{{ d[i].list[j].dish_id}}" data-dish_price="{{ d[i].list[j].price }}" data-dish_val_name="{{ d[i].list[j].name }}" data-dish_name="{{ d[i].name }}">
+                <li class="f2" data-min="{{d[i].min}}" data-max="{{d[i].max}}" data-dish_val_id="{{ d[i].list[j].id }}"  data-dish_id="{{ d[i].list[j].dish_id}}" data-dish_price="{{ d[i].list[j].price }}" data-dish_val_name="{{ d[i].list[j].name }}" data-dish_name="{{ d[i].name }}">
                     {{ d[i].list[j].name }}
                     {{# if(d[i].list[j].price > 0){ }}
                         +${{ d[i].list[j].price }}
                     {{# } }}
                 </li>
+                    {{# if (d[i].list.length>(k+1)){ }}
+                     <div class="gray_line" ></div>
+                    {{# } }}
                 {{#  k++; } }}
             </ul>
         </div>
     </div>
     {{# }else{ }}
-    <div class="row clearfix" id="shopDetailPageDish_{{ d[i].id}}" data-min="{{d[i].min}}" data-name="{{ d[i].name }}">
+    <div class="row clearfix" id="shopDetailPageDish_{{ d[i].id}}" data-min="{{d[i].min}}" data-max="{{d[i].max}}" data-name="{{ d[i].name }}">
         <div class="left">{{ d[i].name }}</div>
         <div>
             {{# if(d[i].min == d[i].max){ }}
@@ -429,8 +436,8 @@
 <script id="productPropertiesTpl" type="text/html">
 	{{# for(var i in d){ }}
 		<div class="row clearfix productProperties_{{ d[i].id }}" data-label_name="{{ d[i].name }}" data-num="{{ d[i].num }}">
-			<div class="left">{{ d[i].name }}</div>
-            <div>
+			<div class="left add_bold">{{ d[i].name }}</div>
+            <div class="add_grey">
                 {{# if(d[i].num == 1){ }}
                 * Required. Please choose 1.
                 {{# }else{ }}
@@ -440,8 +447,13 @@
 			<div class="right fl">
 				<ul>
 					{{# var k = 0; for(var j in d[i].val){ }}
-						<li class="fl {{# if(k == 0 && d[i].num == 1){ }}active{{# } }}" data-num="{{ d[i].num }}" data-label_list_id="{{ i }}" data-label_id="{{ j }}">{{ d[i].val[j] }}</li>
-					{{#  k++; } }}
+						<li class="f2{{# if(k == 0 && d[i].num == 1){ }} active{{# } }}" data-num="{{ d[i].num }}" data-label_list_id="{{ i }}" data-label_id="{{ j }}">{{ d[i].val[j] }}</li>
+
+                        {{# if (d[i].val.length>(k+1)){ }}
+                        <div class="gray_line" ></div>
+                        {{# } }}
+
+                    {{#  k++ } }}
 				</ul>
 			</div>
 		</div>
@@ -478,14 +490,21 @@
 									}
 								}
 							}
-							var tmpParamStr = tmpParam.join(' ');
+							var tmpParamStr = tmpParam.join(', ');
+                            var n_tmpParamStr = tmpParamStr.replace(/;/g,", ");
 						}}
-						<div class="spec" data-product_id="{{ i }}">{{ tmpParamStr }}</div>
+						<div class="spec" style="font-size: 12px" data-product_id="{{ i }}">{{ n_tmpParamStr }}</div>
 					{{# } }}
+                    {{#
+                        var iii=i+"";
+                        iii=iii.replace(/[\|]/g,"_XOXO_");
+                        iii=iii.replace(/,/g,"_FOFO_");
+                        iii=iii.replace(/[\.]/g,"_DODO_");
+                    }}
 				</div>
 				<div class="cartRight">
 					<div class="product_btn plus cart"></div>
-					<div class="product_btn number cart productNum-{{ i }}">{{ d[i].count }}</div>
+					<div class="product_btn number cart productNum-{{ iii }}">{{ d[i].count }}</div>
 					<div class="product_btn min cart"></div>
 					<div class="price">${{ t_price }}</div>
 				</div>
@@ -507,14 +526,14 @@
                 </div>
                 <div class="time">{{ d[i].add_time_hi }}</div>
 				<div class="content">{{ d[i].comment }}</div>
-				{{# if(d[i].goods){ }}
-					{{# var tmpGoods = d[i].goods; }}
-					<div class="recommend clearfix">
-						{{# for(var k in tmpGoods){ }}
-							<div>{{ tmpGoods[k] }}</div>
-						{{# } }}
-					</div>
-				{{# } }}
+<!--				{{# if(d[i].goods){ }}-->
+<!--					{{# var tmpGoods = d[i].goods; }}-->
+<!--					<div class="recommend clearfix">-->
+<!--						{{# for(var k in tmpGoods){ }}-->
+<!--							<div>{{ tmpGoods[k] }}</div>-->
+<!--						{{# } }}-->
+<!--					</div>-->
+<!--				{{# } }}-->
 				{{# if(d[i].merchant_reply_time != '0'){ }}
 					<div class="reply">
 						<div class="title">{pigcms{:L('_SHOP_RETURN_')}:<div class="time">{{ d[i].merchant_reply_time_hi }}</div></div>

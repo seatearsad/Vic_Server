@@ -16,6 +16,7 @@ lang['_NUM_DELI_PRICE_'] = '%s元起送';
 lang['_SHOP_ERROR_NOTICE_'] = '店铺未完善信息，点击确定将返回到上一页！';
 lang['_ONLY_SELF_'] = '本店铺仅支持门店自提';
 lang['_NO_STOCK_'] = '没有库存了';
+lang['_NO_STORE_SEARCH_RESULT'] = '未搜索到结果';
 lang['_PRAISE_TXT_'] = '好评';
 lang['_POOR_DELI_'] = '还差';
 lang['_REMINDER_STRING_'] = '温馨提示：图片仅供参考，请以实物为准；高峰时段及恶劣天气，请提前下单。';
@@ -52,6 +53,7 @@ lang['_IS_CONFIRM_BIND_'] = '你确定要绑定已存在的账号吗？';
 lang['_LOADING_TXT_'] = '正在加载中...';
 lang['_SMS_CODE_ERROR_'] = '输入的短信验证码有误。';
 lang['_B_D_LOGIN_FILLMESSAGE_'] = '填写短信验证码';
+lang['_STORE_STATUS_CLOSED'] = '休息';
 
 function getLangStr(key,replace=''){
     var str = lang[key];

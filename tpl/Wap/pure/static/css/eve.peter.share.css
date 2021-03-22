@@ -1,0 +1,64 @@
+@charset "UTF-8";
+
+.confirmlist li a.blacktext {
+    color: #000;
+}
+
+.confirmlist li a.orangetext {
+    color: #ffa52d;
+}
+.list_form dl.list{
+    border-top: 0px solid #ddd8ce;
+    border-bottom: 0px solid #ddd8ce;
+    /*-moz-border-radius: 10px;*/
+    /*-webkit-border-radius: 10px;*/
+    /*border-radius: 10px;*/
+    margin-top: .2rem;
+    width: 95%;
+    margin-bottom: 0;
+    margin-left: auto;
+    margin-right: auto;
+    background-color:#f4f4f4;
+}
+
+.list_form dl.list-in{
+    border-top: 0
+}
+/*-------------------------------*/
+.list_form dl.list-in dd {
+    border-bottom: 0px dashed #e5e5e5;
+}
+.list_form dl.list dd {
+    margin: 0;
+    /* border-bottom: 1px solid #e5e5e5; */
+    overflow: hidden;
+    font-size: inherit;
+    font-weight: 400;
+    position: relative;
+}
+
+
+.list_form dl.list dt,.list_form dl.list dd {
+    margin: 0;
+    /*border-bottom: 1px solid #e5e5e5;*/
+    overflow: hidden;
+    font-size: inherit;
+    font-weight: 400;
+    position: relative;
+}
+
+/*.list_form dl.list .list_form .dd-padding, dl.list dt, dl.list dd > .react {*/
+    /*!*padding: .28rem .2rem;*!*/
+/*}*/
+/*.list_form dd.dd-padding{*/
+    /*padding:0rem;*/
+/*}*/
+
+/*.list_form dl.list dd{*/
+     /*margin: 0;*/
+     /*!*border-bottom: 1px solid #e5e5e5;*!*/
+     /*!*overflow: hidden;*!*/
+     /*font-size: inherit;*/
+     /*font-weight: 400;*/
+     /*position: relative;*/
+ /*}*/

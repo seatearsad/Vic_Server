@@ -6,16 +6,27 @@ class Shop_orderModel extends Model
 
     public function __construct(){
         parent::__construct();
-
         $allList = $this->where(array('paid'=>0))->order('create_time asc')->select();
+
+        //获取倒计时时间 web app 时间不同
+        $config = D('Config')->get_config();
+        $web_count_down = $config['pay_count_down_web'];
+        $app_count_down = $config['pay_count_down_app'];
+
         $delList = array();
         $overtimeList = array();
         foreach ($allList as $order){
 			$store = D('Merchant_store')->where(array('store_id'=>$order['store_id']))->find();
 			$jetlag = D('Area')->field('jetlag')->where(array('area_id'=>$store['city_id']))->find()['jetlag'];
 			$cha = time() + $jetlag*3600 - $order['create_time'];
+
+			if($order['is_mobile_pay'] < 2){
+				$count_down = $web_count_down*60;
+			}else{
+				$count_down = $app_count_down*60;
+			}
 			//超过5分钟的放入待删除状态 status=6
-			if($cha > 300 && $order['status'] != 6){
+			if($cha > $count_down && $order['status'] != 6){
 				$overtimeList[] = $order['order_id'];
 			}
 			//超过2小时后删除
@@ -24,7 +35,6 @@ class Shop_orderModel extends Model
 			}
 		}
         $this->where(array('order_id'=>array('in',$overtimeList)))->save(array('status'=>6));
-
 		$this->where(array('order_id'=>array('in',$delList)))->delete();
 		D('Shop_order_detail')->where(array('order_id'=>array('in',$delList)))->delete();
     }
@@ -70,6 +80,16 @@ class Shop_orderModel extends Model
 	public function get_pay_order($uid, $order_id, $is_web = false,$is_app = false)
 	{
 		$now_order = $this->get_order_by_id($uid, $order_id);
+		$user_adress= D('User_adress')->where(array('adress_id'=>$now_order['address_id']))->find();
+        $now_order['detail']=$user_adress['detail'];
+        $now_order['detail_en']=$user_adress['detail_en'];
+
+        $shop_order= D('Shop_order')->where(array('order_id'=>$order_id))->find();
+        $now_order['desc']=$shop_order['desc'];
+        $now_order['not_touch']=$shop_order['not_touch'];
+        //var_dump($now_order);die();echo"----------";
+		//var_dump($detail);die();
+
 		if(empty($now_order)){
 			return array('error'=>1,'msg'=>'当前订单不存在！');
 		}
@@ -78,7 +98,7 @@ class Shop_orderModel extends Model
 				if ($now_order['order_from'] == 1) {
 					return array('error' => 1, 'msg' => '您已经支付过此订单！', 'url' => U('Wap/Mall/status', array('order_id' => $now_order['order_id'], 'mer_id' => $now_order['mer_id'], 'store_id' => $now_order['store_id'])));
 				} else {
-					return array('error' => 1, 'msg' => '您已经支付过此订单！', 'url' => U('Wap/Shop/status', array('order_id' => $now_order['order_id'], 'mer_id' => $now_order['mer_id'], 'store_id' => $now_order['store_id'])));
+					return array('error' => 1, 'msg' => '您已经支付过此订单！', 'url' => U('Wap/Shop/pay_result', array('order_id' => $now_order['order_id'], 'mer_id' => $now_order['mer_id'], 'store_id' => $now_order['store_id'], 'status' => '3')));
 				}
 			} else {
 				return array('error' => 1, 'msg' => '您已经支付过此订单！', 'url' => U('User/Index/shop_order_view', array('order_id' => $now_order['order_id'])));
@@ -90,7 +110,7 @@ class Shop_orderModel extends Model
 				if ($now_order['order_from'] == 1) {
 					return array('error' => 1, 'msg' => '您的订单已取消，不能付款了！', 'url' => U('Wap/Mall/status', array('order_id' => $now_order['order_id'], 'mer_id' => $now_order['mer_id'], 'store_id' => $now_order['store_id'])));
 				} else {
-					return array('error' => 1, 'msg' => '您的订单已取消，不能付款了！', 'url' => U('Wap/Shop/status', array('order_id' => $now_order['order_id'], 'mer_id' => $now_order['mer_id'], 'store_id' => $now_order['store_id'])));
+					return array('error' => 1, 'msg' => '您的订单已取消，不能付款了！', 'url' => U('Wap/Shop/pay_result', array('order_id' => $now_order['order_id'], 'mer_id' => $now_order['mer_id'], 'store_id' => $now_order['store_id'], 'status' => '3')));
 				}
 			} else {
 				return array('error' => 1, 'msg' => '您的订单已取消，不能付款了！', 'url' => U('User/Index/shop_order_view', array('order_id' => $now_order['order_id'])));
@@ -104,11 +124,13 @@ class Shop_orderModel extends Model
 		}
 
 		$order_content = D('Shop_order_detail')->field(true)->where(array('order_id' => $order_id))->select();
+        //var_dump($order_content);die();
 		$tax_price = 0;
 		$deposit_price = 0;
 		foreach ($order_content as &$trow) {
 			//$trow['name'] = $trow['spec'] ? $trow['name'] . ' (' . $trow['spec'] . ')' : $trow['name'];
 			$trow['money'] = floatval($trow['price'] * $trow['num']);
+            $trow['spec'] = str_replace(";","; ",$trow['spec']);
 			$goods = D('Shop_goods')->field(true)->where(array('goods_id'=>$trow['goods_id']))->find();
 			$trow['tax_num'] = $goods['tax_num'];
 			$trow['deposit_price'] = $goods['deposit_price'];
@@ -130,6 +152,12 @@ class Shop_orderModel extends Model
 			}
 			break;
 		}
+		if ($now_order['not_touch']==1) {
+			$not_touch_checked="checked";
+		}else{
+            $not_touch_checked="";
+		}
+
 		if ($is_web) {
 			$order_info = array(
 					'order_id'			=>	$now_order['order_id'],
@@ -160,6 +188,12 @@ class Shop_orderModel extends Model
 					'username'          =>  $now_order['username'],
 					'phone'             =>  $now_order['userphone'],
 					'address'           =>  $now_order['address'],
+                	'address_id'		=>  $now_order['address_id'],
+					'address_detail'    =>  $now_order['detail'],
+				    'address_detail_en' =>  $now_order['detail_en'],
+                	'desc' 				=>  $now_order['desc'],
+					'not_touch'			=>  $now_order['not_touch'],
+                    'not_touch_checked' =>  $not_touch_checked,
 					'delivery_discount'	=>	$now_order['delivery_discount'],
                 	'delivery_discount_type'	=>	$now_order['delivery_discount_type'],
 					'create_time'		=>	$now_order['create_time'],
@@ -199,7 +233,13 @@ class Shop_orderModel extends Model
                 'deposit_price'		=>	$deposit_price,
                 'username'          =>  $now_order['username'],
                 'phone'             =>  $now_order['userphone'],
+                'address_id'		=>  $now_order['address_id'],
                 'address'           =>  $now_order['address'],
+                'address_detail'    =>  $now_order['detail'],
+                'address_detail_en' =>  $now_order['detail_en'],
+                'desc' 				=>  $now_order['desc'],
+                'not_touch'			=>  $now_order['not_touch'],
+                'not_touch_checked' =>  $not_touch_checked,
 				'delivery_discount'	=>	$now_order['delivery_discount'],
                 'delivery_discount_type'	=>	$now_order['delivery_discount_type'],
                 'create_time'		=>	$now_order['create_time'],
@@ -209,6 +249,7 @@ class Shop_orderModel extends Model
                 'store_service_fee' =>	$merchant_store['service_fee']
 			);
 		}
+        //var_dump($order_info);
 		return array('error' => 0, 'order_info' => $order_info);
 	}
 
@@ -250,12 +291,12 @@ class Shop_orderModel extends Model
 			$data_shop_order['last_time'] = $_SERVER['REQUEST_TIME'];
 			$condition_shop_order['order_id'] = $order_info['order_id'];
 			if(!$this->where($condition_shop_order)->data($data_shop_order)->save()){
-				return array('error_code'=>true,'msg'=>'保存订单失败！请重试或联系管理员。');
+				return array('error_code'=>true,'msg'=>'保存订单失败！请重试或联系管理员。'); //------------------>>>>>>>
 			}
 		}
 
 		if($online_pay){
-			return array('error_code' => false, 'pay_money' => $order_info['order_total_money'] - $now_user['now_money']-(float)$order_info['score_deducte']);
+			return array('error_code' => false, 'pay_money' => $order_info['order_total_money'] - $now_user['now_money']-(float)$order_info['score_deducte']);//-->>>>
 		}else{
 			$order_param = array(
 					'order_id' => $order_info['order_id'],
@@ -268,8 +309,9 @@ class Shop_orderModel extends Model
 			$result_after_pay = $this->after_pay($order_param);
 			if($result_after_pay['error']){
 				return array('error_code'=>true,'msg'=>$result_after_pay['msg']);
-			}
-			return array('error_code'=>false,'msg'=>L('_PAYMENT_SUCCESS_'),'url'=>U('User/Index/shop_order_view',array('order_id'=>$order_info['order_id'])));
+			}else{
+				return array('error_code'=>false,'msg'=>L('_PAYMENT_SUCCESS_'),'url'=>U('User/Index/shop_order_view',array('order_id'=>$order_info['order_id'])));
+            }
 		}
 	}
 
@@ -438,37 +480,38 @@ class Shop_orderModel extends Model
 		}
 	}
 
-
 	//如果无需调用在线支付，使用此方法即可。
 	public function wap_after_pay_before($order_info)
 	{
 		if(!$order_info['is_own'] || $order_info['is_own'] == 'NULL')
 			$order_info['is_own'] = 0;
-		$order_param = array(
-				'order_id' => $order_info['order_id'],
-				'orderid' => $order_info['orderid'],
-				'pay_type' => '',
-				'third_id' => '',
-				'is_mobile' => 1,
-				'pay_money' => 0,
-				'order_total_money' => $order_info['order_total_money'],
-				'balance_pay' => $order_info['balance_pay'],
-				'merchant_balance' => $order_info['merchant_balance'],
-				'is_own'	=> $order_info['is_own'] ? $order_info['is_own'] : 0,
-			);
+			$order_param = array(
+					'order_id' => $order_info['order_id'],
+					'orderid' => $order_info['orderid'],
+					'pay_type' => '',
+					'third_id' => '',
+					'is_mobile' => 1,
+					'pay_money' => 0,
+					'order_total_money' => $order_info['order_total_money'],
+					'balance_pay' => $order_info['balance_pay'],
+					'merchant_balance' => $order_info['merchant_balance'],
+					'is_own'	=> $order_info['is_own'] ? $order_info['is_own'] : 0,
+				);
 
 			if($order_info['desc']) $order_param['desc'] = $order_info['desc'];
         	if($order_info['expect_use_time']) $order_param['expect_use_time'] = $order_info['expect_use_time'];
 
 			$result_after_pay = $this->after_pay($order_param);
-			if($result_after_pay['error']){
+			if($result_after_pay['error']){  // 错误
 				return array('error_code' => true,'msg'=>$result_after_pay['msg']);
-			}
-			if ($order_info['order_from'] == 1) {
-				return array('error_code'=>false,'msg'=>L('_PAYMENT_SUCCESS_'),'url' => C('config.site_url') . "/wap.php?g=Wap&c=Mall&a=status&order_id=" . $order_info['order_id'] . '&mer_id=' . $order_info['mer_id'] . '&store_id=' . $order_info['store_id']);
-			} else {
-				return array('error_code'=>false,'msg'=>L('_PAYMENT_SUCCESS_'),'url' => C('config.site_url') . "/wap.php?g=Wap&c=Shop&a=status&order_id=" . $order_info['order_id'] . '&mer_id=' . $order_info['mer_id'] . '&store_id=' . $order_info['store_id']);
-			}
+			}else{							 // 正确
+				if ($order_info['order_from'] == 1) {
+					return array('error_code'=>false,'msg'=>L('_PAYMENT_SUCCESS_'),'url' => C('config.site_url') . "/wap.php?g=Wap&c=Mall&a=status&order_id=" . $order_info['order_id'] . '&mer_id=' . $order_info['mer_id'] . '&store_id=' . $order_info['store_id']);
+				} else {
+					//return array('error_code'=>false,'msg'=>L('_PAYMENT_SUCCESS_'),'url' => C('config.site_url') . "/wap.php?g=Wap&c=Shop&a=status&order_id=" . $order_info['order_id'] . '&mer_id=' . $order_info['mer_id'] . '&store_id=' . $order_info['store_id']);
+					return array('error_code'=>false,'msg'=>L('_PAYMENT_SUCCESS_'),'url' => C('config.site_url') . "/wap.php?g=Wap&c=Shop&a=pay_result&order_id=" . $order_info['order_id'] . '&mer_id=' . $order_info['mer_id'] . '&store_id=' . $order_info['store_id'].'&status=1');
+				}
+            }
 	}
 
 
@@ -493,7 +536,7 @@ class Shop_orderModel extends Model
 				if ($order_param['order_from'] == 1) {
 					return array('error' => 1, 'msg' => '该订单已付款！', 'url' => U('Wap/Mall/status', array('order_id' => $now_order['order_id'], 'mer_id' => $now_order['mer_id'], 'store_id' => $now_order['store_id'])));
 				} else {
-					return array('error' => 1, 'msg' => '该订单已付款！', 'url' => U('Wap/Shop/status', array('order_id' => $now_order['order_id'], 'mer_id' => $now_order['mer_id'], 'store_id' => $now_order['store_id'])));
+					return array('error' => 1, 'msg' => '该订单已付款！', 'url' => U('Wap/Shop/pay_result', array('order_id' => $now_order['order_id'], 'mer_id' => $now_order['mer_id'], 'store_id' => $now_order['store_id'], 'status' => "3")));
 				}
 			} else {
 				return array('error' => 1, 'msg' => '该订单已付款！', 'url' => U('User/Index/shop_order_view', array('order_id' => $now_order['order_id'])));
@@ -898,7 +941,9 @@ class Shop_orderModel extends Model
 					}
                     $txt = "Hi there, Tutti got a new order for you, can you please confirm online now!";
                     try {
-                        Sms::send_voice_message($sms_data['mobile'], $txt);
+                    	//todo peter 拨打电话，暂时注销
+
+                        //Sms::send_voice_message($sms_data['mobile'], $txt);
                     }catch (Exception $e){
 
                     }
@@ -973,8 +1018,10 @@ class Shop_orderModel extends Model
 					if ($now_order['order_from'] == 1) {
 						return array('error' => 0, 'url' => U('Wap/Mall/status', array('mer_id' => $now_order['mer_id'], 'store_id' => $now_order['store_id'], 'order_id' => $now_order['order_id'])));
 					} else {
-						return array('error' => 0, 'url' => U('Wap/Shop/status', array('mer_id' => $now_order['mer_id'], 'store_id' => $now_order['store_id'], 'order_id' => $now_order['order_id'])));
-					}
+						//return array('error' => 0, 'url' => U('Wap/Shop/status', array('mer_id' => $now_order['mer_id'], 'store_id' => $now_order['store_id'], 'order_id' => $now_order['order_id'])));
+                        //peter 2021-2-7
+						return array('error' => 0, 'url' => U('Wap/Shop/pay_result', array('mer_id' => $now_order['mer_id'], 'store_id' => $now_order['store_id'], 'order_id' => $now_order['order_id'], 'status' => "1")));
+                    }
 				} else {
 					return array('error' => 0, 'url' => U('User/Index/shop_order_view', array('order_id'=>$now_order['order_id'])));
 				}
@@ -1207,6 +1254,8 @@ class Shop_orderModel extends Model
 		$order = $this->field(true)->where($where)->find();
 		if (empty($order)) return false;
 		$order['info'] = D('Shop_order_detail')->field(true)->where(array('order_id' => $order['order_id']))->select();
+		$rs=D('Merchant_store')->field(true)->where(array('store_id' => $order['store_id']))->find();
+		$order['site_name']=lang_substr($rs['name'],C('DEFAULT_LANG'));
 		$order['cue_field'] = isset($order['cue_field']) && $order['cue_field'] ? unserialize($order['cue_field']) : '';
 		if ($order['discount_detail'] && @unserialize($order['discount_detail'])) {
 		    $order['discount_detail'] = unserialize($order['discount_detail']);

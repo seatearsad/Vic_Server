@@ -120,7 +120,7 @@
                     }
                 </php>
             </div>
-		    <div class="btn-wrapper"><button type="submit" class="btn btn-block btn-larger">{pigcms{:L('_RECHARGE_TXT_')}</button></div>
+		    <div class="btn-wrapper"><button type="submit" class="btn btn-block btn-larger">{pigcms{:L('V2_PAGETITLE_ADDUP')}</button></div>
 		</form>
     	<script src="{pigcms{:C('JQUERY_FILE')}"></script>
 		<script src="{pigcms{$static_path}js/common_wap.js"></script>

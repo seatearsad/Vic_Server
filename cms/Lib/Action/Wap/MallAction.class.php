@@ -1197,7 +1197,7 @@ class MallAction extends BaseAction
 		
 		$store = D("Merchant_store")->field(true)->where(array('store_id' => $store_id))->find();
 		if ($store['have_shop'] == 0 || $store['status'] != 1) {
-			return array('error_code' => true, 'msg' => '商家已经关闭了该业务,不能下单了!');
+			return array('error_code' => true, 'msg' => L('_STORE_IS_CLOSE_'));
 		}
 		$now_time = date('H:i:s');
 		$is_open = 0;

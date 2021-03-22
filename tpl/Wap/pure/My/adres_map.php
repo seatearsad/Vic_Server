@@ -53,7 +53,6 @@
 <div class="global-mask layout"></div>
 <div id="fis_elm__6"></div>
 <div id="fis_elm__7"></div>
-
 </body>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKlguA2QFIUVwWTo3danbOqSKv3nYbBCg&libraries=places&language=en" async defer></script>
 <script type="text/javascript">
@@ -67,9 +66,11 @@
         autocomplete.addListener('place_changed', fillInAddress);
     }
     function fillInAddress() {
-        var place = autocomplete.getPlace();
 
+        var place = autocomplete.getPlace();
+        console.log(place);
         info = JSON.parse($.cookie('user_address'));
+
         info.adress = place.formatted_address;
         info.longitude = place.geometry.location.lng();
         info.latitude = place.geometry.location.lat();
@@ -115,7 +116,8 @@ $(document).ready(function(){
 	// 	}
 	// });
 
-	$('#addressShow').delegate("li","click",function(){ 
+	$('#addressShow').delegate("li","click",function(){
+	    console.log("addressShow");
 		info = JSON.parse($.cookie('user_address'));
 		info.adress = $(this).attr("sname");
 		info.longitude = $(this).attr("lng");

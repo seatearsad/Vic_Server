@@ -9,7 +9,7 @@
 	<meta name="apple-mobile-web-app-status-bar-style" content="black">
 	<meta name="format-detection" content="telephone=no">
 	<meta name="format-detection" content="address=no">
-    <link href="{pigcms{$static_path}css/eve.7c92a906.css" rel="stylesheet"/>
+    <link href="{pigcms{$static_path}css/eve.7c92a906.peter.css" rel="stylesheet"/>
     <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/common.css?215"/>
     <script type="text/javascript" src="{pigcms{:C('JQUERY_FILE_190')}" charset="utf-8"></script>
     <style>
@@ -24,7 +24,9 @@
 	        margin: .2rem .2rem;
 	        padding: 0;
 	    }
-	
+        .address-wrapper {
+            border-bottom: 2px solid #e5e5e5;
+        }
 	    .address-wrapper a {
 	        display: -webkit-box;
 	        display: -moz-box;
@@ -71,12 +73,14 @@
 	    .confirmlist li:last-child {
 	        border-right: none;
 	    }
+
         .main{
             width: 100%;
             padding-top: 60px;
             max-width: 640px;
             min-width: 320px;
             margin: 0 auto;
+            padding-bottom: 40px;
         }
         .gray_line{
             width: 100%;
@@ -117,29 +121,20 @@
         .btn-warning:visited{
             color: white;
         }
-        dl.list{
-            width: 98%;
-            margin-left: auto;
-            margin-right: auto;
-            border: 1px solid #ddd8ce;
-        }
+
         .address-wrapper{
             padding-left: 10px;
         }
         input.mt[type="radio"]:checked, input.mt[type="checkbox"]:checked{
             background-color: #ffa52d;
         }
+
     </style>
     <include file="Public:facebook"/>
 </head>
 <body id="index">
 <include file="Public:header"/>
 <div class="main">
-    <div class="this_nav">
-        <span id="back_span"></span>
-        Wallet
-    </div>
-    <div class="gray_line"></div>
         <div id="tips" class="tips"></div>
         <div class="wrapper btn-wrapper">
             <if condition="$order_id">
@@ -149,6 +144,7 @@
             </if>
 		</div>
 		<volist name="card_list" id="vo">
+
 			<dl class="list <if condition="$vo['is_default']">active</if>">
                 <dd class="address-wrapper <if condition="$order_id">dd-padding</if>">
                     <if condition="$order_id">
@@ -172,12 +168,13 @@
 		        </dd>
 		        <dd>
 	                <ul class="confirmlist">
-	                    <li><a class="react" href="{pigcms{:U('edit_card',array('id'=>$vo['id'],'order_id'=>$order_id))}">{pigcms{:L('_EDIT_TXT_')}</a></li>
-                        <li><a class="react mj-del" href="{pigcms{:U('del_card',array('id'=>$vo['id']))}">{pigcms{:L('_B_PURE_MY_27_')}</a></li>
+                        <li><a class="blacktext react mj-del" href="{pigcms{:U('del_card',array('id'=>$vo['id']))}">{pigcms{:L('_B_PURE_MY_27_')}</a></li>
+	                    <li><a class="orangetext react" href="{pigcms{:U('edit_card',array('id'=>$vo['id'],'order_id'=>$order_id))}">{pigcms{:L('_EDIT_TXT_')}</a></li>
 	                </ul>
 		        </dd>
 		    </dl>
 	    </volist>
+</div>
     	<script src="{pigcms{:C('JQUERY_FILE')}"></script>
 		<script src="{pigcms{$static_path}js/jquery.cookie.js"></script> 
 		<script src="{pigcms{$static_path}js/common_wap.js"></script>

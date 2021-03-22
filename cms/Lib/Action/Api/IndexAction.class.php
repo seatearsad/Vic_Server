@@ -875,7 +875,7 @@ class IndexAction extends BaseAction
         }
 
         if($is_cut){
-            $this->returnCode(1,'',array(),"Please note that you have one or more items in your cart that are currently unavailable. They have been removed from your order. We are sorry for any inconvenience!");
+            $this->returnCode(1,'',array(),"Please note that you have one or more item become unavailable at this time and will be removed from your cart. Do you confirm to continue checkout?");
         }
 
         if($is_error){
@@ -1445,7 +1445,7 @@ class IndexAction extends BaseAction
 
         if($order['paid'] == 0) {
             $order_detail['statusName'] = "Unpaid";
-            $order_detail['statusDesc'] = "This order will be expired and removed in 5 minutes. Please make a payment to get it delivered to you.";
+            $order_detail['statusDesc'] = "This order will be expired and removed in 10 minutes. Please make a payment to get it delivered to you.";
         }
 
         $result['order'] = $order_detail;

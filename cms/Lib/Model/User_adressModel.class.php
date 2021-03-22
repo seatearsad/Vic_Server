@@ -1,14 +1,22 @@
 <?php
 class User_adressModel extends Model{
 	/*得到所有地址*/
-	public function get_adress_list($uid , $flag = true){
+	public function get_adress_list($uid , $lastid="",$flag = true){
 		$condition_user_adress['uid'] = $uid;
 		$user_adress_list = $this->field(true)->where($condition_user_adress)->order('`default` DESC,`adress_id` ASC')->select();
+
 		foreach($user_adress_list as $key=>$value){
 			if ((($value['latitude'] == 0 &&  $value['longitude'] == 0))&& $flag) {
 				unset($user_adress_list[$key]);
 				continue;
 			}
+
+			if($value['adress_id']==$lastid){
+                $user_adress_list[$key]['checked']=1;
+            }else{
+                $user_adress_list[$key]['checked']=0;
+            }
+
 			$province = D('Area')->get_area_by_areaId($value['province'],false);
 			$user_adress_list[$key]['province_txt'] = $province['area_name'];
 			
@@ -18,6 +26,7 @@ class User_adressModel extends Model{
 			$area = D('Area')->get_area_by_areaId($value['area'],false);
 			$user_adress_list[$key]['area_txt'] = $area['area_name'];
 		}
+
 		return $user_adress_list;
 	}
 	/*设置默认地址*/
@@ -79,6 +88,7 @@ class User_adressModel extends Model{
 		if($adress_id){
 			$condition_user_adress['adress_id'] = $adress_id;
 		}
+        $condition_user_adress['default'] = 1;
 		$user_adress = $this->field(true)->where($condition_user_adress)->order('`default` DESC,`adress_id` ASC')->find();
 
 		

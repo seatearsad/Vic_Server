@@ -118,7 +118,7 @@ class System_couponModel extends Model{
         }
         $n = 1;
         $cate_platform = $this->cate_platform();
-        $res = M('System_coupon_hadpull')->join('as h left join '.C('DB_PREFIX').'system_coupon c ON h.coupon_id=c.coupon_id')->field('h.id,c.cate_name as type,c.coupon_id,c.name,c.discount,h.phone,h.receive_time,c.platform,c.cate_name,c.cate_id,c.start_time,c.end_time,h.is_use,c.status,c.qrcode_id,c.des,c.des_detial,c.img,c.allow_new,c.order_money')->order('h.is_use ASC ,c.add_time DESC')->where($where)->select();
+        $res = M('System_coupon_hadpull')->join('as h left join '.C('DB_PREFIX').'system_coupon c ON h.coupon_id=c.coupon_id')->field('h.id,h.use_time,c.cate_name as type,c.coupon_id,c.name,c.discount,h.phone,h.receive_time,c.platform,c.cate_name,c.cate_id,c.start_time,c.end_time,h.is_use,c.status,c.qrcode_id,c.des,c.des_detial,c.img,c.allow_new,c.order_money')->order('h.is_use ASC ,c.add_time DESC')->where($where)->select();
 
         foreach($res as &$v){
             if(empty($v['uid'])){
@@ -174,7 +174,7 @@ class System_couponModel extends Model{
         }
         //$where['order_money'] = array('ELT',$now_order['total_money']);
         //garfunkel 修改优惠券选择金额
-        $where['order_money'] = array('ELT',$now_order['goods_price']);
+        //$where['order_money'] = array('ELT',$now_order['goods_price']);
         //$order_cate = D(ucfirst($table).'_order')->get_order_cate($now_order['order_id']);
         if($order_type!='store'){
             $order_cate = D(ucfirst($table).'_order')->get_order_cate($now_order['order_id']);
@@ -189,7 +189,7 @@ class System_couponModel extends Model{
 
         $where['uid'] = $uid;
         $where['_string'] = "(c.cate_name='".$table."') OR (c.cate_name ='all')";
-        $res = M('System_coupon_hadpull')->join('as h left join '.C('DB_PREFIX').'system_coupon c ON h.coupon_id=c.coupon_id')->field('h.id,c.coupon_id,c.name,c.order_money,c.discount,h.phone,h.receive_time,c.platform,c.cate_name,c.cate_id,c.start_time,c.end_time,h.is_use ,c.status,c.qrcode_id,c.des,c.des_detial,c.img,c.allow_new')->order('h.is_use ASC ,c.discount DESC,c.add_time DESC')->where($where)->select();
+        $res = M('System_coupon_hadpull')->join('as h left join '.C('DB_PREFIX').'system_coupon c ON h.coupon_id=c.coupon_id')->field('h.id,c.coupon_id,c.name,c.order_money,c.discount,h.phone,h.receive_time,c.platform,c.cate_name,c.cate_id,c.start_time,c.end_time,h.is_use ,c.status,c.qrcode_id,c.des,c.des_detial,c.img,c.allow_new')->order('c.order_money Asc, h.is_use ASC ,c.discount DESC,c.add_time DESC')->where($where)->select();
 
         foreach($res as $key=>&$v){
             $flag = false;
@@ -223,7 +223,10 @@ class System_couponModel extends Model{
             if($v['end_time']<$_SERVER['REQUEST_TIME']&&$v['is_use']!=1){
                 $v['is_use'] = 2;
             }
-        }
+            if($v['order_money'] <= $now_order['goods_price']){
+                $v['is_use'] = 1;
+            }
+        }//var_dump($res);die();
         return $res;
     }
 

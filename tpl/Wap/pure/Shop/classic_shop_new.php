@@ -7,19 +7,23 @@
         <meta name="keywords" content="{pigcms{$config.seo_keywords}" />
         <meta name="description" content="{pigcms{$config.seo_description}" />
 		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width,viewport-fit=cover"/>
-		<meta name="apple-mobile-web-app-capable" content="yes"/>
+
+<!--        <meta name="viewport" content="initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, width=device-width, user-scalable=no">-->
+
+        <meta name="apple-mobile-web-app-capable" content="yes"/>
 		<meta name='apple-touch-fullscreen' content='yes'/>
 		<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
 		<meta name="format-detection" content="telephone=no"/>
 		<meta name="format-detection" content="address=no"/>
-		<link rel="stylesheet" type="text/css" href="{pigcms{$static_path}shop/css/shopBase.css?v=1.6"/>
-		<script type="text/javascript" src="{pigcms{:C('JQUERY_FILE_190')}" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="{pigcms{$static_path}shop/css/shopBase.css?v=1.93"/>
+<!--		<script type="text/javascript" src="{pigcms{:C('JQUERY_FILE_190')}" charset="utf-8"></script>-->
+        <script type="text/javascript" src="{pigcms{$static_path}js/jquery.min.js" charset="utf-8"></script>
 		<script type="text/javascript" src="{pigcms{$static_path}js/iscroll.js?220" charset="utf-8"></script>
 		<script type="text/javascript" src="{pigcms{$static_path}js/idangerous.swiper.min.js" charset="utf-8"></script>
 		<script type="text/javascript" src="{pigcms{$static_path}js/fastclick.js" charset="utf-8"></script>
 		<script type="text/javascript" src="{pigcms{$static_path}layer/layer.m.js" charset="utf-8"></script>
-		<script type="text/javascript" src="http://api.map.baidu.com/api?type=quick&ak=4c1bb2055e24296bbaef36574877b4e2&v=1.0" charset="utf-8"></script>		
-		<script type="text/javascript" src="{pigcms{$static_path}js/common.js?220" charset="utf-8"></script>
+<!--		<script type="text/javascript" src="http://api.map.baidu.com/api?type=quick&ak=4c1bb2055e24296bbaef36574877b4e2&v=1.0" charset="utf-8"></script>		-->
+		<script type="text/javascript" src="{pigcms{$static_path}js/common.js?221" charset="utf-8"></script>
 		<script type="text/javascript">
 			var locationClassicHash = 'shop-{pigcms{$_GET.shop_id}';
 			var storeUrl = "{pigcms{:U('Shop/classic_shop')}&shop_id={pigcms{$_GET.shop_id}";
@@ -37,7 +41,7 @@
 			var shopShareUrl = "{pigcms{$config.site_url}{pigcms{:U('Shop/index',array('openid'=>$_SESSION['openid']))}&shop-id=";
 			var shopReplyUrl = "{pigcms{$config.site_url}/index.php?g=Index&c=Reply&a=ajax_get_list&order_type=3&parent_id=";
 		</script>
-        <script type="text/javascript" src="{pigcms{$static_public}js/lang/{pigcms{:C('DEFAULT_LANG')}.js" charset="utf-8"></script>
+        <script type="text/javascript" src="{pigcms{$static_public}js/lang/{pigcms{:C('DEFAULT_LANG')}.js?v=20" charset="utf-8"></script>
 		<script type="text/javascript" src="{pigcms{$static_path}shop/js/shopClassicBaseNew.js?t={pigcms{$_SERVER.REQUEST_TIME}" charset="utf-8"></script>
         <include file="Public:facebook"/>
 	</head>
@@ -54,27 +58,93 @@
                 max-width:640px;
                 min-width:320px;
                 margin:0 auto;
+
+                /*height: 900px;*/
             }
             #shopHeader{
-                position: relative;
-                background: none;
                 display: flex;
-                margin-top: 10px;
+                top: 0px;
+                height: 60px;
+                padding-top: 6px;
+                width: 100%;
+                max-width: 640px;
             }
+
             #shopBanner{
-                background: none;
+                width: 90%;
+                height: 130px;
+                left:5%;
+                border-radius: 10px;
+                border:2px solid #eeeeee;
+                right:auto;
+                background: #fff;
                 margin-top: 0;
+                margin-bottom: 10px;
+                padding-top:0px;
             }
             #shopTitle{
-                color: #333;
+                margin-left: 0px;
+                margin-top: 3px;
+                margin-bottom:0px;
+                margin-right: 50px;
+                font-size: 21px;
+                color: #000000;
                 overflow:hidden;
                 text-overflow:ellipsis;
                 white-space:nowrap;
                 flex:1 1 100%
             }
+            #shopTitle_Header{
+                opacity: 1;
+                font-size: 20px;
+                padding: 6px 10px;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+                position: relative;
+                flex: 1 1 100%;
+            }
+            #deliveryText{
+                margin-bottom: 5px;
+            }
+            #shopNoticeText{
+                margin-bottom: 5px;
+                height: 22px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+            .backBtn {
+                position: relative;
+                width: 40px;
+                height: 40px;
+                top: 6px;
+                left: 15px;
+                background: #fff;
+                border-radius: 20px;
+                flex: 0 0 auto;
+            }
             .backBtn::after{
                 border-top: 2px solid #999;
                 border-left: 2px solid #999;
+                left:16px;
+            }
+            .searchBtn{
+                background-image: url(/tpl/Static/blue/images/new/icon_shop_search.png);
+                position: relative;
+                width: 50px;
+                height: 50px;
+                line-height: 30px;
+                top: 0px;
+                right: 10px;
+                text-align: center;
+                color: white;
+                padding: 0px;
+                background-repeat: no-repeat;
+                background-size: auto 80%;
+                background-position: center;
+                cursor: pointer;
+                flex: 0 0 auto;
             }
             #shopBanner .leftIco{
                 left:30px;
@@ -85,13 +155,11 @@
             }
             #shopBanner .text{
                 height: 70px;
-                padding-left: 120px;
+                padding-left: 10px;
                 padding-top: 0px;
             }
             #shopBanner .text div{
-                color:#999;
-                height: 20px;
-                line-height: 20px;
+                /*line-height: 1.5;*/
             }
             #shopBanner .text .star{
                 height: 25px;
@@ -127,10 +195,15 @@
                 content: none;
             }
             #shopProductLeftBar2{
+                height: 51px;
                 width: 100%;
                 display: flex;
-                background: none;
+                background: #f4f4f4;
                 border-bottom: 1px solid silver;
+                position: sticky;
+                position: -webkit-sticky;
+                top: 101px;
+                z-index: 98;
             }
             .sub_left,.sub_right{
                 width: 6%;
@@ -147,6 +220,9 @@
                 -webkit-transform: scaleX(-1);
                 -o-transform: scaleX(-1);
                 transform: scaleX(-1);
+            }
+            #shopContentBar{
+                background: #f4f4f4;
             }
             #shopProductLeftBar2 dd span{
                 background: none;
@@ -180,33 +256,52 @@
                 color: #ffa52d;
             }
             #shopProductRightBar2,#shopSearchResult{
-                width: 96%;
+                width: 100%;
                 float: none;
-                margin: 0 auto;
+                background: #f4f4f4;
+                margin: 20px auto;
+                padding: 5px 8px 5px 5px;
+            }
+            #shopMenuBar{
+                height: 42px;
+                margin-bottom: -1px;
+                width: 100%;
+                position: sticky;
+                top:60px;
+                z-index: 98;
             }
             #shopMenuBar li.active{
                 color: #ffa52d;
+                background-color: #f4f4f4;
             }
             #shopMenuBar li.active::after{
                 background-color: #ffa52d;
             }
             #shopProductRightBar2 .cat_name,#shopSearchResult .cat_name{
-                padding-left: 0;
-                text-align: center;
-                color: silver;
+                padding-left: 10px;
+                text-align: left;
+                color: black;
                 font-size: 1.2em;
+                border-radius: 10px 10px 0px 0px;
+                background: white;
+                margin-top: 10px;
+                font-weight: bold;
             }
             #shopProductRightBar2 dl,#shopSearchResult dl{
                 background: none;
+                padding-bottom: 30px;
             }
             #shopProductRightBar2 ul,#shopSearchResult ul{
                 background-color: white;
+                border-radius: 0px 0px 10px 10px;
+                margin-top: -1px;
             }
             #shopProductRightBar2 li .position_img,#shopSearchResult li .position_img{
                 width: 80px;
+                border-radius: 5px;
             }
             #shopProductRightBar2 li .product_text,#shopSearchResult li .product_text{
-                margin-left: 100px;
+                margin-left: 90px;
                 height: 80px;
             }
             #shopProductRightBar2 li .product_btn,#shopProductCartBox .product_btn.plus,#shopProductCartBox .product_btn.min,#shopSearchResult li .product_btn{
@@ -221,14 +316,21 @@
                 background-color: #ffa52d;
             }
             #shopProductCartBox dd .cartRight .price,
-            #shopProductRightBar2 li .product_btn,
             #shopProductRightBar2 li .product_text .price,
-            #shopSearchResult li .product_btn,
             #shopSearchResult li .product_text .price,
+
             #shopDetailPageBar .fl,
             .msg-option .btn{
                 color: #ffa52d;
             }
+            #shopSearchResult li .product_btn.number,
+            #shopProductRightBar2 li .product_text .price,
+            #shopProductRightBar2 li .product_btn,
+            #shopSearchResult li .product_text .price,
+            .msg-option .btn{
+                color: #000;
+            }
+
             #shopProductCart #cartNumber,
             #shopProductCart #cartInfo .cart,
             #shopProductCart #checkCart,
@@ -238,7 +340,7 @@
                 background-color: #ffa52d;
             }
             #shopProductCart{
-                background-color: #949494;
+                background-color: #443e3e;
                 padding-bottom: env(safe-area-inset-bottom);
                 max-width: 640px;
             }
@@ -249,9 +351,10 @@
             #shopReplyBox ul li.active,#shopDetailPageFormat .row .right li.active,
             #shopDetailPageDish .row .right li.active,
             #shopDetailPageLabel .row .right li.active{
-                border-color: #ffa52d;
+                border-color: none;
                 color: #ffa52d;
             }
+
             #shopReplyBox .star{
                 float: right;
             }
@@ -264,12 +367,18 @@
                 border-right: rgba(255,255,255,0.35) solid 5px;
                 border-left: rgba(255,255,255,0.35) solid 5px;
             }
+            .gray_line{
+                border: 1px solid #e6e6e6;
+                height: 1px;
+                margin-bottom: 10px;
+            }
             .msg-option{
                 bottom: 0;
             }
             #shopDetailPageBar{
-                margin-bottom: 50px;
-                margin-top: 10px;
+                width: 100%;
+                max-width: 650px;
+                background: #f4f4f4;
             }
             .closeBtn div:before,.closeBtn div:after{
                 top: 17px;
@@ -295,15 +404,127 @@
                 border: 1px solid #ffa52d;
                 border-radius: 2px;
                 padding: 0px 2px;
+                font-size: 12px;
                 color: #ffa52d;
                 margin-right: 5px;
             }
             #shopMerchantBox .merchantReduce{
                 color: #ffa52d;
             }
+            #background_area{
+                position:fixed;
+                margin-top: 0px;
+                background-color: #f4f4f4;
+                width: 100%;
+                max-width: 640px;
+                height:260px;
+                background-image: url("");
+                background-repeat:no-repeat;
+                background-size:100% ;
+                -moz-background-size:100%
+                z-index: 0;
+            }
+            #shopBanner .text {
+                padding-top: 0px;
+                padding-left: 10px;
+                padding-right: 5px;
+                margin-bottom: 5px;
+            }
+            #stars{
+                position: absolute;
+                background-image:url("/tpl/Static/blue/images/new/ic_rating_one.png");
+                background-size:20px 20px;
+                background-repeat: no-repeat;
+                background-position: 25px 0px ;
+                right: 10px;
+                top: 10px;
+                width: 45px;
+            }
+            #stars span{
+                font-size: 16px;
+            }
+            #stars div{
+                display: inline;
+                background-image:url("/tpl/Static/blue/images/new/ic_rating_one.png");
+                background-size:20px 20px;
+                height: 20px;
+                width:20px;
+            }
+            #shopReplyDiv {
+                margin-top: 0px;
+            }
+            #shopMerchantBox dl {
+                margin-top: 0px;
+                background: unset;
+            }
+            /*#div_space::before {  content: ' ';*/
+                /*position: fixed;*/
+                /*z-index: -1;*/
+                /*top: 0;*/
+                /*right: 0;*/
+                /*bottom: 0;*/
+                /*left: 0;*/
+                /*background: url(http://www.vicisland.ca:8087/upload/goods/000/000/056/s_5cd0f9372c58d367.png) no-repeat 0 top #f2f8fa;*/
+                /*background-size: 100% auto;*/
+            /*}*/
+            #pageShop {
+                overflow:initial;
+            }
+            #shopCatBar {
+                position: sticky;
+                z-index: 99;
+                top: 101px;
+            }
+            .swiper-container{
+                margin-top: 50px;
+            }
+            .add_bold{
+                font-weight: bold;
+                line-height: 15px;
+                margin-top: 8px;
+                font-size: 16px;
+            }
+            .add_grey{
+                color: #8A8A8A;
+                font-size: 14px;
+            }
+            .caret{
+                font-weight: bold;
+                font-size: 16px;
+            }
+            .div_block{
+                margin: 20px 5px;
+                padding: 5px 10px;
+                background: white;
+                border-radius: 10px;
+            }
+            .box_title{
+                font-weight: bold;
+            }
+            .box_left_title{
+                width: 95px;
+                font-size: 14px;
+                display: inline-block;
+                text-align: right;
+            }
+            .box_right_content{
+                display: inline;
+                font-size: 14px;
+                max-width: 190px;
+            }
+            #shopMerchantBox dd {
+                padding: 12px 20px 12px 5px;
+                border-bottom: 1px solid #f1f1f1;
+                color: #333;
+                position: relative;
+                display: flex;
+            }
         </style>
-	<body>
+	<body onscroll="scrollProductEvent(1)">
+<!--    <div id="debug" style="position: fixed;color:red;width:auto;height: 40px;left:30px;top:200px;z-index: 1000000;background: white">Debug</div>-->
+    <div id="debug2" style="position: fixed;color:red;width:auto;height: 40px;left:30px;top:220px;z-index: 1000000;background: white"></div>
     <div id="container">
+<!--        <div class="productNum-4630_2_FOFO_8_FOFO_1_FOFO_0.01_4_FOFO_33_FOFO_1_FOFO_1.05_XOXO_4_FOFO_34_FOFO_1_FOFO_0.65_XOXO_4_FOFO_52_FOFO_1_FOFO_0.32">abcde</div>-->
 		<div id="pageList" class="pageDiv" <if condition="$config['shop_show_footer']">style="padding-bottom:56px;"</if>>
 			<section id="listHeader" class="roundBg">
 				<div id="listBackBtn" class="listBackBtn hide"><div></div></div>
@@ -375,21 +596,23 @@
 		<div id="pageShop" class="pageDiv">
 			<section id="shopHeader">
 				<div id="backBtn" class="backBtn"></div>
-				<div id="shopTitle"></div>
+                <div id="shopTitle_Header"></div>
                 <!--div class="shop_info" data-nav="merchant"></div-->
 				<div id="searchBtn" class="searchBtn"><div></div></div>
 			</section>
+            <div id="background_area">
+            </div>
+            <div id="div_space" style="width: 100%;height:120px">
+            </div>
 			<section id="shopBanner">
-				<div class="leftIco">
-					<div id="shopIcon"></div>
-				</div>
-                <div class="is_close">Open</div>
 				<div class="text">
+                    <div id="stars"><span id="stars_text">.</span><div id="rating"></div></div>
+                    <div id="shopTitle"></div>
+					<div id="deliveryText"></div>
+					<div id="shopNoticeText"></div>
                     <div class="star">
                         <i class="full"></i><i></i>
                     </div>
-					<div id="deliveryText"></div>
-					<div id="shopNoticeText"></div>
 				</div>
                 <if condition="$_GET['shop_id'] eq 292">
                     <a href="./wap.php?c=Event&a=index">
@@ -401,6 +624,7 @@
 					<span id="shopCouponText"></span>
 				</div-->
 			</section>
+            <section id="shopMenuBar_Space" style="height: 0;"></section>
 			<section id="shopMenuBar">
 				<ul>
 					<li class="caret product active" data-nav="product">{pigcms{:L('_PRODUCT_TXT_')}</li>
@@ -408,18 +632,26 @@
 					<li class="caret merchant" data-nav="merchant">{pigcms{:L('_SHOP_TXT_')}</li>
 				</ul>
 			</section>
-			<section id="shopCatBar" style="display:none;">	
-				<div class="title">
-                    {pigcms{:L('_ALL_CLASSIF_')}
-				</div>
-				<div class="content">
-					<ul></ul>
-				</div>
-			</section>
+<!--			<section id="shopCatBar" style="display:none;">	-->
+<!--				<div class="title">-->
+<!--                    {pigcms{:L('_ALL_CLASSIF_')}-->
+<!--				</div>-->
+<!--				<div class="content">-->
+<!--					<ul></ul>-->
+<!--				</div>-->
+<!--			</section>-->
 			<section id="shopContentBar">
 				<div id="shopProductBox">
 					<div id="shopProductBottomBar"><ul class="clearfix"></ul><div id="shopProductBottomLine"></div></div>
-					<div id="shopProductLeftBar2">
+                    <div id="shopCatBar" style="display:none;">
+                        <div class="title">
+                            {pigcms{:L('_ALL_CLASSIF_')}
+                        </div>
+                        <div class="content">
+                            <ul></ul>
+                        </div>
+                    </div>
+                    <div id="shopProductLeftBar2">
                         <div class="sub_left"></div>
                         <dl></dl>
                         <div class="sub_right"></div>
@@ -429,7 +661,7 @@
 					<div id="shopProductCartBox"></div>
 					<div id="shopProductCart">
 						<div id="cartInfo" class="cartLeft" style="display:none;">
-							<div class="cart">
+							<div id="cartBox" class="cart">
 								<div id="cartNumber">0</div>
 							</div>
 							<div class="price">
@@ -437,10 +669,10 @@
                                 <div id="free_delivery"></div>
                             </div>
 						</div>
+                        <div id="checkCart" style="display:none;">{pigcms{:L('_GOOD_CHOICE_')}</div>
 						<div id="emptyCart">
 							<div class="cart"></div>{pigcms{:L('_CART_EMPTY_')}
 						</div>
-						<div id="checkCart" style="display:none;">{pigcms{:L('_GOOD_CHOICE_')}</div>
 						<div id="checkCartEmpty"></div>
 					</div>
 				</div>
@@ -456,27 +688,40 @@
 						<div id="showMoreReply">{pigcms{:L('_LOAD_MORE_')}</div>
 					</div>
 				</div>
-				<div id="shopMerchantBox">
+				<div id="shopMerchantBox"  style="display:none;background: unset">
 					<dl id="shopMerchantDescBox">
-						<dd class="phone more">{pigcms{:L('_SHOP_PHONE_')}</dd>
-						<dd class="address more"><span></span>{pigcms{:L('_SHOP_ADDRESS_')}</dd>
-						<dd class="openTime">{pigcms{:L('_BUSINESS_TIME_')}</dd>
+                        <div class="div_block">
+                            <dd class="box_title">{pigcms{:L('_SHOP_BOX_TITLE_')}</dd>
+                            <dd class=""><span class="box_left_title">{pigcms{:L('_SHOP_PHONE_')}:&nbsp;</span><span class="phone box_right_content"></span></dd>
+						    <dd class=""><span class="box_left_title">{pigcms{:L('_SHOP_ADDRESS_')}:&nbsp; </span><span class="address box_right_content"></span></dd>
+                        </div>
+                        <div class="div_block">
+                        <dd class="box_title">{pigcms{:L('_TIME_BOX_TITLE_')}</dd>
+						    <dd class=""><span class="box_left_title">{pigcms{:L('_STORE_MONDAY_')}: &nbsp;</span><span class="w1 box_right_content"></span></dd>
+                            <dd class=""><span class="box_left_title">{pigcms{:L('_STORE_TUESDAY_')}: &nbsp;</span><span class="w2 box_right_content"></span></dd>
+                            <dd class=""><span class="box_left_title">{pigcms{:L('_STORE_WEDNESDAY_')}: &nbsp;</span><span class="w3 box_right_content"></span></dd>
+                            <dd class=""><span class="box_left_title">{pigcms{:L('_STORE_THURSDAY_')}: &nbsp;</span><span class="w4 box_right_content"></span></dd>
+                            <dd class=""><span class="box_left_title">{pigcms{:L('_STORE_FRIDAY_')}: &nbsp;</span><span class="w5 box_right_content"></span></dd>
+                            <dd class=""><span class="box_left_title">{pigcms{:L('_STORE_SATURDAY_')}: &nbsp;</span><span class="w6 box_right_content"></span></dd>
+                            <dd class=""><span class="box_left_title">{pigcms{:L('_STORE_SUNDAY_')}: &nbsp;</span><span class="w7 box_right_content"></span></dd>
 						<!--dd class="deliveryType">{pigcms{:L('_DIST_SERVICE_')}</dd-->
-						<dd class="merchantNotice">{pigcms{:L('_SHOP_NOTICE_')}</dd>
-                        <dd class="merchantReduce"></dd>
+<!--						<dd class="merchantNotice">{pigcms{:L('_SHOP_NOTICE_')}</dd>-->
+<!--                        <dd class="merchantReduce"></dd>-->
+                        </div>
 					</dl>
-					<if condition="!$merchant_link_showOther">
-						<dl id="shopMerchantLinkBox">
-							<dd class="more link-url" data-url="{pigcms{:U('My/shop_order_list')}"><span></span>{pigcms{:L('_MY_OUT_ORDER_')}</dd>
-						</dl>
-					</if>
-					<dl id="shopMerchantCouponBox">
-						<dd>{pigcms{:L('_DIST_SERVICE_')}</dd>
-						<dd>{pigcms{:L('_DIST_TIME_')}</dd>
-					</dl>
+<!--					<if condition="!$merchant_link_showOther">-->
+<!--						<dl id="shopMerchantLinkBox">-->
+<!--							<dd class="more link-url" data-url="{pigcms{:U('My/shop_order_list')}"><span></span>{pigcms{:L('_MY_OUT_ORDER_')}</dd>-->
+<!--						</dl>-->
+<!--					</if>-->
+<!--					<dl id="shopMerchantCouponBox">-->
+<!--						<dd>{pigcms{:L('_DIST_SERVICE_')}</dd>-->
+<!--						<dd>{pigcms{:L('_DIST_TIME_')}</dd>-->
+<!--					</dl>-->
 				</div>
 				<div id="shopPageShade" style="display:none;"></div>
-				<div id="shopPageCatShade"></div>
+				<div id="shopPageCatShade" style="z-index: 80"></div>
+<!--                可选规格对话框-->
 				<div id="shopDetailPage" style="display:none;">
 					<div class-s="scrollerBox">
 						<div id="shopDetailpageClose" class="closeBtn"><div></div></div>
@@ -486,12 +731,9 @@
 						</div>
 						<div id="shopDetailPageTitle">
 							<div class="title">{pigcms{:L('_PRODUCT_NAME_')}</div>
+                            <div class="content"></div>
 							<div class="desc"></div>
 						</div>
-                        <div id="shopDetailPageContent">
-                            <div class="title">{pigcms{:L('_PRODUCT_DESC_')}</div>
-                            <div class="content"></div>
-                        </div>
 						<div id="shopDetailPageFormat">{pigcms{:L('_PRODUCT_STOCK_')}</div>
 						<div id="shopDetailPageLabel">
 							<!--div class="tip">{pigcms{:L('_WANT_TO_NOT_')}<div class="question"></div></div-->
@@ -511,6 +753,7 @@
                         </div>
 					</div>
 				</div>
+
                 <div id="shopSearchPage" style="display:none;">
                     <div class-s="scrollerBox">
                         <div id="shopSearchpageClose" class="closeBtn"><div></div></div>
@@ -599,10 +842,43 @@
 		<include file="Shop:classic_js_theme"/>
     </div>
 		<script type="text/javascript">
+
+            $(document).ready(function(){
+                var s = "";
+                s += " 屏幕高度："+ window.screen.availHeight+"\n";
+                s += " 屏幕宽度："+ window.screen.availWidth+"\n";
+                s += " 网页可见区域宽："+ document.body.clientWidth+"\n";
+                s += " 网页可见区域高："+ document.body.clientHeight+"\n";
+                s += " 网页可见区域宽："+ document.body.offsetWidth + " (包括边线和滚动条的宽)"+"\n";
+                s += " 网页可见区域高："+ document.body.offsetHeight + " (包括边线的宽)"+"\n";
+                s += " 正文全文宽："+ document.body.scrollWidth+"\n";
+                s += " 正文全文高："+ document.body.scrollHeight+"\n";
+                // s += " 网页被卷去的高(ff)："+ document.body.scrollTop+"\n";
+                // s += " 网页被卷去的高(ie)："+ document.documentElement.scrollTop+"\n";
+                // s += " 网页被卷去的左："+ document.body.scrollLeft+"\n";
+                // s += " 网页正文部分上："+ window.screenTop+"\n";
+                // s += " 网页正文部分左："+ window.screenLeft+"\n";
+                // s += " 屏幕分辨率的高："+ window.screen.height+"\n";
+                // s += " 屏幕分辨率的宽："+ window.screen.width+"\n";
+
+                s += " 你的屏幕设置是 "+ window.screen.colorDepth +" 位彩色"+"\n";
+                 // s += " 你的屏幕设置 "+ window.screen.deviceXDPI +" 像素/英寸"+"\n";
+
+                //alert (s);
+                //$('#container').css('height',document.body.clientHeight+200);
+
+                var clh=document.body.clientHeight;
+                //$(".productNum-4630_2_FOFO_8_FOFO_1_FOFO_0_DODO_01_4_FOFO_33_FOFO_1_FOFO_1_DODO_05_XOXO_4_FOFO_34_FOFO_1_FOFO_0_DODO_65_XOXO_4_FOFO_52_FOFO_1_FOFO_0_DODO_32").html("1234");
+                //$('#pageShop').css('height',clh+900);
+                //$('#shopProductRightBar2').css('height',clh);
+                //alert (document.body.clientHeight);
+                //$('#shopProductRightBar2').css('height',30);
+            });
+
 			window.shareData = {
 				"moduleName":"Shop",
 				"moduleID":"0",
-				"imgUrl": "<if condition="$config['wechat_share_img']">{pigcms{$config.wechat_share_img}<else/>{pigcms{$config.site_logo}</if>", 
+				"imgUrl": "<if condition="$config['wechat_share_img']">{pigcms{$config.wechat_share_img}<else/>{pigcms{$config.site_logo}</if>",
 				"sendFriendLink": "{pigcms{$config.site_url}{pigcms{:U('Shop/index')}",
 				"tTitle": "{pigcms{$config.shop_alias_name|default="快店"} - {pigcms{$config.site_name}",
 				"tContent": "{pigcms{$config.seo_description}"

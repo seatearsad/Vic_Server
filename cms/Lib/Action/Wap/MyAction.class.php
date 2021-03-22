@@ -13,6 +13,7 @@ class MyAction extends BaseAction{
 			}
 		}
 		$now_user = D('User')->get_user($this->user_session['uid']);
+
 		if(empty($now_user)){
 			session('user',null);
 			$this->error_tips(L('_B_MY_NOACCOUNT_'),U('Login/index'));
@@ -22,16 +23,25 @@ class MyAction extends BaseAction{
 
 		$this->now_user = $now_user;
 		$this->assign('now_user',$now_user);
+
+        //获取倒计时时间 web app 时间不同
+        $config = D('Config')->get_config();
+        $web_count_down = $config['pay_count_down_web'];
+
+        $this->assign('count_down',$web_count_down*60);
 	}
 
 	//	新的个人中心页面
 	public function index(){
+
 		if($this->config['now_scenic'] == 2){
 			redirect(U('Scenic_user/index'));
 		}
 		$uid	=	$this->user_session['uid'];
+
 		//	商家优惠券
 //		$mer_list = D('Member_card_coupon')->get_all_coupon($uid);
+
 		$mer_list = D('Card_new_coupon')->get_user_all_coupon_list($uid,1);
 		if($mer_list){
 			$mer_number	=	count($mer_list);
@@ -39,10 +49,15 @@ class MyAction extends BaseAction{
 			$mer_number = 0;
 		}
 		$this->assign('mer_number',$mer_number);
+
 		//	平台优惠券
 		$coupon_list = D('System_coupon')->get_user_coupon_list($uid,$this->user_session['phone'],1);
-		$coupon_number	=	count($coupon_list);
+        $event_coupon_list = D('New_event')->getUserCoupon($uid,0);
+		$coupon_number	=	count($coupon_list) + count($event_coupon_list);
+
 		$this->assign('coupon_number',$coupon_number);
+
+
 		//	统计我参与的活动
 		$sql	=	"SELECT COUNT(*) AS tp_count FROM `pigcms_extension_activity_record` `ear`,`pigcms_extension_activity_list` `eal`,`pigcms_merchant` `m` WHERE(`ear`.`activity_list_id` = `eal`.`pigcms_id` AND `eal`.`mer_id` = `m`.`mer_id`AND `ear`.`uid` = '$uid') GROUP BY `eal`.`pigcms_id` ";
 		$mod = new Model();
@@ -114,6 +129,9 @@ class MyAction extends BaseAction{
 		} else {
 			$merchant_url = $this->config['site_url'] . '/index.php?g=WapMerchant&c=Index&a=merreg&uid=' . $this->user_session['uid'];
 		}
+        $invitationcode = D('User')->getUserInvitationCode($this->user_session['uid']);
+        $this->assign('back_url', U("My/index"));
+        $this->assign('invitationcode', $invitationcode);
 		$this->assign('merchant_url', $merchant_url);
 		$this->display();
 	}
@@ -124,7 +142,44 @@ class MyAction extends BaseAction{
 		}else{
 			$_SESSION['source']	=	2;
 		}
-		$this->display();
+        if($_POST['money']){
+            if(IS_POST){
+                $data_user_recharge_order['uid'] = $this->now_user['uid'];
+                $money = floatval($_POST['money']);
+                if(empty($money) || $money > 10000){
+                    $this->error('请输入有效的金额！最高不能超过1万元。');
+                }
+                if($_POST['label']){
+                    $data_user_recharge_order['label'] = $_POST['label'];
+                }
+                $data_user_recharge_order['money'] = $money;
+                // $data_user_recharge_order['order_name'] = '帐户余额在线充值';
+                $data_user_recharge_order['add_time'] = $_SERVER['REQUEST_TIME'];
+                $data_user_recharge_order['is_mobile_pay'] = 1;
+
+                if($order_id = D('User_recharge_order')->data($data_user_recharge_order)->add()){
+                    if($_GET['type']=='gift'){
+                        redirect(U('Pay/check',array('order_id'=>$order_id,'type'=>'gift')));
+                    }elseif($_GET['type']=='classify') {
+                        redirect(U('Pay/check',array('order_id'=>$order_id,'type'=>'classify')));
+                    }else{
+                        redirect(U('Pay/check',array('order_id'=>$order_id,'type'=>'recharge')));
+                    }
+                }
+            }
+        }else{
+            $config = D('Config')->get_config();
+            $recharge_txt = $config['recharge_discount'];
+            $recharge = explode(",",$recharge_txt);
+            $recharge_list = array();
+            foreach ($recharge as $v){
+                $v_a = explode("|",$v);
+                $recharge_list[$v_a[0]] = $v_a[1];
+            }
+            //krsort($recharge_list);
+            $this->assign('recharge_list',$recharge_list);
+            $this->display();
+        }
 	}
 	//	完善资料页面
 	public function inputinfo(){
@@ -233,6 +288,7 @@ class MyAction extends BaseAction{
     }
     public function language(){
 	    $this->assign('curr_lang',C('DEFAULT_LANG'));
+        $this->assign('back_url', U("My/index"));
 	    $this->display();
     }
 	public function password(){
@@ -422,7 +478,7 @@ class MyAction extends BaseAction{
 		$this->display();
 	}
 
-	/*选择优惠券*/
+	/*checkout 选择优惠券*/
 	public function select_card(){
 		if(empty($this->user_session)){
 			$this->error_tips(L('_B_MY_LOGINFIRST_'));
@@ -479,20 +535,20 @@ class MyAction extends BaseAction{
 		$now_order['uid'] = $this->user_session['uid'];
 		$this->assign('back_url',U('Pay/check',$_GET));
 		if($this->is_app_browser){
-			$platform = 'app';
-		}else if($this->is_wexin_browser){
-			$platform = 'weixin';
-		}else{
-			$platform = 'wap';
-		}
+            $platform = 'app';
+        }else if($this->is_wexin_browser){
+            $platform = 'weixin';
+        }else{
+            $platform = 'wap';
+        }
 		if($_GET['coupon_type']=='mer') {
-			//$card_list = D('Member_card_coupon')->get_coupon($now_order['mer_id'], $this->user_session['uid']);
-			if(!empty($now_order['business_type'])){
-				$coupon_list = D('Card_new_coupon')->get_noworder_coupon_list($now_order,$_GET['type'],$platform,$now_order['business_type']);
-			}else{
-				$coupon_list = D('Card_new_coupon')->get_noworder_coupon_list($now_order, $_GET['type'],$platform);
-			}
-		}else if($_GET['coupon_type']=='system') {
+            //$card_list = D('Member_card_coupon')->get_coupon($now_order['mer_id'], $this->user_session['uid']);
+            if(!empty($now_order['business_type'])){
+                $coupon_list = D('Card_new_coupon')->get_noworder_coupon_list($now_order,$_GET['type'],$platform,$now_order['business_type']);
+            }else{
+                $coupon_list = D('Card_new_coupon')->get_noworder_coupon_list($now_order, $_GET['type'],$platform);
+            }
+        }else if($_GET['coupon_type']=='system') {  //目前使用
 
 			if($_SESSION['card_discount']>0){
 				$now_order['total_money'] -= $_SESSION['card_discount'];
@@ -505,18 +561,35 @@ class MyAction extends BaseAction{
 			}
 
             //获取活动优惠券
-            $event_coupon_list = D('New_event')->getUserCoupon($this->user_session['uid'],0,$now_order['total_money']);
+            $event_coupon_list = D('New_event')->getUserCoupon($this->user_session['uid'],0);
             if(!$coupon_list) $coupon_list = array();
             if(count($event_coupon_list) > 0){
                 foreach ($event_coupon_list as &$v){
                     $v['id'] = $v['coupon_id'].'_'.$v['id'];
+                    //当前页面is_use的值为是否可以使用
+                    if($v['order_money'] <= $now_order['total_money'])
+                        $v['is_use'] = 1;
+                    else
+                        $v['is_use'] = 0;
                 }
                 $coupon_list = array_merge($coupon_list,$event_coupon_list);
             }
 		}
+
 		if(!empty($coupon_list)){
+            $cmf_arr = array_column($coupon_list, 'discount');
+            array_multisort($cmf_arr, SORT_DESC, $coupon_list);
+            $cmf_arr = array_column($coupon_list, 'is_use');
+            array_multisort($cmf_arr, SORT_DESC, $coupon_list);
+
 			$param = $_GET;
 			foreach($coupon_list as &$value){
+
+			    if ((float)$now_order['delivery_discount']>0 && $value['is_use']==1){
+                    $value['delivery_discount'] = "1";
+                }else{
+                    $value['delivery_discount'] = "0";
+                }
 				if($_GET['coupon_type']=='mer'){
 					$param['merc_id'] =$value['id'];
 					unset($param['unmer_coupon']);
@@ -527,6 +600,7 @@ class MyAction extends BaseAction{
 				$value['select_url'] = U('Pay/check',$param);
 			}
 			$this->assign('coupon_list',$coupon_list);
+			//var_dump($coupon_list);die();
 		}
 
 		$param = $_GET;
@@ -553,15 +627,46 @@ class MyAction extends BaseAction{
 		$this->display();
 	}
 
-	/*地址操作*/
+	/*-- 地址操作  --*/
 	public function adress(){
 		if(empty($this->user_session)){
 			$this->error_tips(L('_B_MY_LOGINFIRST_'));
 		}
-		$adress_list = D('User_adress')->get_adress_list($this->user_session['uid']);
 
-		if(empty($adress_list)){
-			redirect(U('My/edit_adress',$_GET));
+		$adress_list = D('User_adress')->get_adress_list($this->user_session['uid']);
+        $sid = $_GET['store_id'] ? $_GET['store_id'] : 0;
+
+        if ($_GET["from"]=="shop"){
+            $_GET["from"]="address";
+        }
+
+        if($sid != 0){
+            $store = D('Store')->get_store_by_id($sid);
+        }else{
+            $store = null;
+        }
+
+        $param = $_GET;
+
+        //$adress_list=null;
+        if ($_GET['buy_type']=='shop'){ //从购物车选择配送地址
+            $page_title=L('V2_PAGETITLE_ADDRESS_SHOP');
+            $param['adress_id']=0;
+            $this->assign('new_url',U('My/edit_adress',$param));
+
+        }else{                          //从个人中心进入收货地址
+            $page_title=L('V2_PAGETITLE_ADDRESS');
+            $this->assign('back_url',U('My/myinfo'));
+            $this->assign('new_url',U('My/edit_adress'));
+        }
+
+
+        $this->assign('page_title',$page_title);
+		if(empty($adress_list)){ //如果没有地址数据，就自动跳转到----->210305 如果地址数据为空，就停在列表里
+		    //redirect(U('My/edit_adress',$_GET));
+            $select_url = 'Shop/confirm_order';
+            $this->assign('back_url',U($select_url,$_GET));
+            $this->assign('adress_list_count',0);
 		}else{
 			if($_GET['group_id']){
 				$select_url = 'Group/buy';
@@ -570,6 +675,8 @@ class MyAction extends BaseAction{
 					$select_url = 'Takeout/sureOrder';
 				} elseif ($_GET['buy_type'] == 'shop') {
 					$select_url = 'Shop/confirm_order';
+                } elseif ($_GET['buy_type'] == 'check') {
+                    $select_url = 'Pay/check';
 				} elseif ($_GET['buy_type'] == 'mall') {
 					$select_url = 'Mall/confirm_order';
 				} else {
@@ -583,24 +690,70 @@ class MyAction extends BaseAction{
 
 			if($select_url){
 				$this->assign('back_url',U($select_url,$_GET));
+                //$this->assign('back_url',"");
 			}else{
 				$this->assign('back_url',U('My/myinfo'));
 			}
 
-			$param = $_GET;
+            $param = $_GET;
 
-			foreach($adress_list as $key=>$value){
-				$param['adress_id'] = $value['adress_id'];
-				if(!empty($select_url)){
-					$adress_list[$key]['select_url'] = U($select_url,$param);
-				}
-				$adress_list[$key]['edit_url'] = U('My/edit_adress',$param);
-				$adress_list[$key]['del_url'] = U('My/del_adress',$param);
-			}
+            foreach ($adress_list as $key => &$value) {
+                $param['adress_id'] = $value['adress_id'];
+                if (!empty($select_url)) {
+                    if ($param['buy_type'] == "check") {
+                        $param_x["order_id"] = $param["order_id"];
+                        $param_x["type"] = "shop";
+                        $param_x["adress_id"] = $param['adress_id'];
+                        $adress_list[$key]['select_url'] = U($select_url, $param_x);
+                    } else {
+                        $adress_list[$key]['select_url'] = U($select_url, $param);
+                    }
+                }
+                $adress_list[$key]['edit_url'] = U('My/edit_adress', $param);
+                $adress_list[$key]['del_url'] = U('My/del_adress', $param);
 
+                $value['distance'] = 0;
+
+                if ($store) {
+                    $distance = getDistance($store['lat'], $store['lng'], $value['latitude'], $value['longitude']);
+                    $value['distance'] = $distance;
+                    if ($distance <= $store['delivery_radius'] * 1000) {
+                        $value['is_allow'] = 1;
+                    } else {
+                        $value['is_allow'] = 0;
+                    }
+                } else {
+                    $value['is_allow'] = 1;
+                }
+            }
+            if ($store) {
+                $cmf_arr = array_column($adress_list, 'distance');
+                array_multisort($cmf_arr, SORT_ASC, $adress_list);
+            }
+
+            $address_list_allow = array();
+
+            foreach ($adress_list as $v) {
+                if ($v['is_allow'] == 1) {
+                    $address_list_allow[] = $v;
+                }
+            }
+            //var_dump($address_list_allow);die();
+            foreach ($adress_list as $v) {
+                if ($v['is_allow'] == 0) {
+                    $address_list_not_allow[] = $v;;
+                }
+            }
+            //var_dump($address_list_allow);
+            //die();
 
 			$this->assign('adress_list',$adress_list);
+            $this->assign('adress_list_count',count($adress_list));
 
+			$this->assign('adress_list_allow',$address_list_allow);
+            $this->assign('adress_list_not_allow',$address_list_not_allow);
+
+			//-------------------------------------------------------------------
 
 			$database_area = D('Area');
 			$now_city_area = $database_area->where(array('area_id'=>$this->config['now_city']))->find();
@@ -660,8 +813,9 @@ class MyAction extends BaseAction{
 				unset($params['adress_id']);
 				$this->assign('params',$params);
 			}
-			$this->display();
 		}
+
+        $this->display();
 	}
 
 	public function credit(){
@@ -724,8 +878,8 @@ class MyAction extends BaseAction{
         }else if($_GET['id']){
 	        $card = D('User_card')->field(true)->where(array('id'=>$_GET['id']))->find();
             $this->assign('card',$card);
+            $this->assign('card_id',$_GET['id']);
         }
-
 	    $this->display();
     }
 
@@ -745,12 +899,15 @@ class MyAction extends BaseAction{
 					$select_url = 'Takeout/sureOrder';
 				} elseif ($_GET['buy_type'] == 'shop') {
 					$select_url = 'Shop/confirm_order';
+                } elseif ($_GET['buy_type'] == 'check') {
+                    $select_url = 'Pay/check';
 				} elseif ($_GET['buy_type'] == 'mall') {
 					$select_url = 'Mall/confirm_order';
 				} else {
 					$select_url = 'Meal/cart';
 				}
 			}
+
 			if($select_url){
 				$this->assign('back_url',U($select_url,$_GET));
 			}else{
@@ -774,7 +931,8 @@ class MyAction extends BaseAction{
 	}
 	/*添加编辑地址*/
 	public function edit_adress(){
-		if(IS_POST){
+		$id=0;
+	    if(IS_POST){
 			if(empty($_POST['adress'])){
 				$this->error(L('_B_MY_NOPOSITION_'));
 			}
@@ -785,8 +943,12 @@ class MyAction extends BaseAction{
 				$this->error(L('_B_MY_SAVEPOSITIONLOSE_'));
 			}
 		}else{
+
 			$database_area = D('Area');
 			$id = $_GET['adress_id'];
+            $from = $_GET['from'];
+            $this->assign('from',$from);
+            $this->assign('address_id',$id);
 			if(cookie('user_address') === '0' || cookie("user_address") == "") {
 // 				$where['address_id'] = $id;
 // 				$where['uid'] = $this->_uid;
@@ -794,6 +956,7 @@ class MyAction extends BaseAction{
 				if ($now_adress) {
                     $city = $database_area->where(array('area_id'=>$now_adress['city']))->find();
                     $now_adress['city_name'] = $city['area_name'];
+
                     $this->assign('now_adress', $now_adress);
 
 					$province_list = $database_area->get_arealist_by_areaPid(0);
@@ -823,6 +986,7 @@ class MyAction extends BaseAction{
 
 				$now_adress['default'] = $now_adress['defaul'];
 				$now_adress['adress_id'] = $now_adress['id'];
+
 				$this->assign('now_adress', $now_adress);
 				$province_list = $database_area->get_arealist_by_areaPid(0);
 				$this->assign('province_list',$province_list);
@@ -868,6 +1032,7 @@ class MyAction extends BaseAction{
 			unset($params['adress_id']);
 			$this->assign('params',$params);
 		}
+
 
 		$this->display();
 	}
@@ -3122,149 +3287,142 @@ class MyAction extends BaseAction{
 		}
 	}
 
-	/*全部订餐订单列表*/
+	/*网页加载---订餐订单列表 默认显示 upcoming的列表*/
 	public function shop_order_list(){
-		if(empty($this->user_session)){
-			$this->error_tips(L('_B_MY_LOGINFIRST_'));
-		}
-		$status = isset($_GET['status']) ? intval($_GET['status']) : 0;
-		$where = "is_del=0 AND uid={$this->user_session['uid']}";//array('uid' => $this->user_session['uid'], 'status' => array('lt', 3));
-		
-		if(!empty($_GET['store_id'])){
-			$where .= " AND store_id=".intval($_GET['store_id']);
-		}
-		
-		if ($status == -1) {
-			$where .= " AND paid=0";
-		} elseif ($status == 1) {
-			$where .= " AND paid=1 AND status<2";
-		} elseif ($status == 2) {
-			$where .= " AND paid=1 AND status=2";
-		}else{//付款超时，待删除
-            $where .= " AND status<>6";
-        }
-// 		$status == -1 && $where['paid'] = 0;
-// 		$status == 1 && $where['status'] = 0;
-// 		$status == 2 && $where['status'] = 1;
-
- 		$where .= " AND is_del = 0";
-		$order_list = D("Shop_order")->get_order_list($where, 'order_id DESC', 11);//field(true)->where($where)->order('order_id DESC')->select();
-		$order_list = $order_list['order_list'];
-// 		echo "<pre/>";
-// 		print_r($order_list);die;
-		//$temp = $store_ids = array();
-		foreach ($order_list as $st) {
-			$store_ids[] = $st['store_id'];
-		}
-		$m = array();
-		if ($store_ids) {
-			$store_image_class = new store_image();
-			$merchant_list = D("Merchant_store")->where(array('store_id' => array('in', $store_ids)))->select();
-			foreach ($merchant_list as $li) {
-				$images = $store_image_class->get_allImage_by_path($li['pic_info']);
-				$li['image'] = $images ? array_shift($images) : array();
-				unset($li['status']);
-                $city = D('Area')->where(array('area_id'=>$li['city_id']))->find();
-                $li['jetlag'] = $city['jetlag'];
-				$m[$li['store_id']] = $li;
-			}
-		}
-		$list = array();
-		foreach ($order_list as $ol) {
-			if (isset($m[$ol['store_id']]) && $m[$ol['store_id']]) {
-				$list[] = array_merge($ol, $m[$ol['store_id']]);
-			} else {
-				$list[] = $ol;
-			}
-		}
-
-		foreach($list as $key=>$val){
-			$list[$key]['order_url'] = U('Shop/status', array('order_id' => $val['order_id']));
-			//modify garfunkel
-            $list[$key]['name'] = lang_substr($val['name'],C('DEFAULT_LANG'));
-            $supply = D('Deliver_supply')->where(array('order_id'=>$val['order_id']))->find();
-            if($supply['status'] > 1 && $supply['status'] < 5){
-                $t_deliver = D('Deliver_user')->field(true)->where(array('uid'=>$supply['uid']))->find();
-                $this->assign('deliver',$t_deliver);
-            }
-		}
-		$this->assign('order_list', $list);
-
+//        $list = array();
+//        $list = $this->SHARE_shop_order_list();
+//		$this->assign('order_list', $list);
+        $this->assign('param', $_GET);
 		$this->display();
 	}
-
-
-
+    /*Ajax加载——订餐订单列表 默认显示 upcoming的列表*/
 	public function ajax_shop_order_list(){
-		if(empty($this->user_session)){
-			$this->error_tips(L('_B_MY_LOGINFIRST_'));
-		}
-		$status = isset($_GET['status']) ? intval($_GET['status']) : 0;
-		$where = "is_del=0 AND uid={$this->user_session['uid']}";//array('uid' => $this->user_session['uid'], 'status' => array('lt', 3));
-		if(!empty($_GET['store_id'])){
-			$where .= " AND store_id=".intval($_GET['store_id']);
-		}
-		if ($status == -1) {
-			$where .= " AND paid=0 AND status < 4";
-		} elseif ($status == 1) {
-			//$where .= " AND paid=1 AND status<2";
-            $where .= " AND paid=1 AND status < 4";
-		} elseif ($status == 2) {
-			$where .= " AND (status=4 OR status=5)";
-		}else{//付款超时，待删除
-		    $where .= " AND status<>6";
-        }
-
-		$order_list = D("Shop_order")->field(true)->where($where)->order('order_id DESC')->select();
-		foreach ($order_list as $st) {
-			$store_ids[] = $st['store_id'];
-		}
-		$m = array();
-		if ($store_ids) {
-			$store_image_class = new store_image();
-			$merchant_list = D("Merchant_store")->where(array('store_id' => array('in', $store_ids)))->select();
-			foreach ($merchant_list as $li) {
-				$images = $store_image_class->get_allImage_by_path($li['pic_info']);
-				$li['image'] = $images ? array_shift($images) : array();
-				unset($li['status']);
-                $city = D('Area')->where(array('area_id'=>$li['city_id']))->find();
-                $li['jetlag'] = $city['jetlag'];
-				$m[$li['store_id']] = $li;
-			}
-		}
-		$list = array();
-		foreach ($order_list as $ol) {
-			if (isset($m[$ol['store_id']]) && $m[$ol['store_id']]) {
-				$list[] = array_merge($ol, $m[$ol['store_id']]);
-			} else {
-				$list[] = $ol;
-			}
-		}
-
-		foreach($list as $key=>$val){
-            $list[$key]['name'] = lang_substr($val['name'],C('DEFAULT_LANG'));
-			$list[$key]['order_url'] = U('Shop/status', array('order_id' => $val['order_id']));
-			$list[$key]['create_time_show'] = date('Y-m-d',$val['create_time']);
-            $supply = D('Deliver_supply')->where(array('order_id'=>$val['order_id']))->find();
-            if($supply['status'] > 1 && $supply['status'] < 5){
-                $t_deliver = D('Deliver_user')->field(true)->where(array('uid'=>$supply['uid']))->find();
-                $list[$key]['deliver'] = $t_deliver;
-            }
-		}
-
+        $list = array();
+        $list = $this->SHARE_shop_order_list();
 		if(!empty($list)){
 			exit(json_encode(array('status'=>1,'order_list'=>$list)));
 		}else{
 			exit(json_encode(array('status'=>0,'order_list'=>$list)));
 		}
 	}
+    //peter
+    //网页和Ajax使用通用的订单列表加载程序
+	public function SHARE_shop_order_list(){
 
+        if(empty($this->user_session)){
+            $this->error_tips(L('_B_MY_LOGINFIRST_'));
+        }
+        $status = isset($_GET['status']) ? intval($_GET['status']) : 3;
+        $where = "is_del=0 AND uid={$this->user_session['uid']}";//array('uid' => $this->user_session['uid'], 'status' => array('lt', 3));
+        if(!empty($_GET['store_id'])){
+            $where .= " AND store_id=".intval($_GET['store_id']);
+        }
+        switch ($status){
+            case 0:
+                $where .= " AND paid=0 AND status<4";
+                break;
+            case 1:
+                $where .= " AND paid=1 AND status=2";
+                break;
+            case 2:
+                $where .= " AND paid=1 AND (status=4 OR status=5)";
+                break;
+            case 3:
+                $where .= " AND status<2";
+                break;
+            case 4:
+                $where .= " AND status=2";
+                break;
+            case 5:
+                $where .= " AND status=3";
+                break;
+            case 6:
+                $where .= " AND paid=1 AND (status=2 OR status=3 OR status=4 OR status=5)";
+                break;
+            default://付款超时，待删除
+                $where .= " AND status<>6";
+                break;
+        }
+
+        $order_list = D("Shop_order")->field(true)->where($where)->order('order_id DESC')->select();
+        foreach ($order_list as &$st) {
+            $st['real_total_price']=$st['price']+$st['tip_charge']-$st['merchant_reduce']-$st['delivery_discount']-$st['coupon_price'];
+            $score=D('Reply')->field("score")->where(array('order_id'=>$st['order_id']))->find();
+            if ($score['score']==null) {
+                $st['rate_score'] = 0;
+            }else{
+                $st['rate_score'] = $score['score'];
+            }
+            $store_ids[] = $st['store_id'];
+        }
+        //var_dump($order_list);die();
+        $m = array();
+        if ($store_ids) {
+            $store_image_class = new store_image();
+            $merchant_list = D("Merchant_store")->where(array('store_id' => array('in', $store_ids)))->select();
+            foreach ($merchant_list as $li) {
+                $images = $store_image_class->get_allImage_by_path($li['pic_info']);
+                $li['image'] = $images ? array_shift($images) : array();
+                unset($li['status']);
+                $city = D('Area')->where(array('area_id'=>$li['city_id']))->find();
+                $li['jetlag'] = $city['jetlag'];
+                $m[$li['store_id']] = $li;
+            }
+        }
+        $list = array();
+        foreach ($order_list as $ol) {
+            if (isset($m[$ol['store_id']]) && $m[$ol['store_id']]) {
+                $list[] = array_merge($ol, $m[$ol['store_id']]);
+            } else {
+                $list[] = $ol;
+            }
+        }
+        //var_dump($list);die("-----");
+        foreach($list as $key=>$val){
+            $list[$key]['name'] = lang_substr($val['name'],C('DEFAULT_LANG'));
+            $list[$key]['order_url'] = U('Shop/order_detail', array('order_id' => $val['order_id']));
+            if($val['pay_time']==0) {
+                $list[$key]['create_time_show'] = date('Y-m-d h:i', $val['create_time']);
+            }else{
+                $list[$key]['create_time_show'] = date('Y-m-d h:i', $val['pay_time']);
+            }
+           ///$list[$key]['create_time_show'] = date('Y-m-d h:i:s',time());
+            ///$list[$key]['create_time_show'] = date_default_timezone_get();
+
+            //------------------------------ 更新status等信息 ------------------------------------peter
+
+            $status = D('Shop_order_log')->field(true)->where(array('order_id' => $val['order_id']))->order('id DESC')->find();
+            $status['status'] = $status['status'] == 33 ? 2 : $status['status'];
+            $list[$key]['statusLog'] = $status['status'];
+            $list[$key]['statusLogName'] = D('Store')->getOrderStatusLogName($status['status']);
+
+            //-------------------------------------------------------------------------------------
+
+            $supply = D('Deliver_supply')->where(array('order_id'=>$val['order_id']))->find();
+            if($supply['status'] > 1 && $supply['status'] < 5){
+                $t_deliver = D('Deliver_user')->field(true)->where(array('uid'=>$supply['uid']))->find();
+                $list[$key]['deliver'] = $t_deliver;
+            }
+        }
+        return $list;
+    }
+    //个人中心-优惠券
     public function coupon(){
         $coupon_list = D('System_coupon')->get_user_coupon_list($this->user_session['uid'], $this->user_session['phone']);
+        //var_dump($coupon_list);die();
         $this->assign('cate_platform', D('System_coupon')->cate_platform());
 
+        // var_dump(D('System_coupon')->cate_platform());die();
+
+        //获取活动优惠券
+        $event_coupon_list = D('New_event')->getUserCoupon($this->user_session['uid']);
+        if(!$coupon_list) $coupon_list = array();
+        if(count($event_coupon_list) > 0){
+            $coupon_list = array_merge($coupon_list,$event_coupon_list);
+        }
+
         $tmp = array();
-        foreach ($coupon_list as $key => $v) {
+        foreach ($coupon_list as $key => &$v) {
             $v['name'] = lang_substr($v['name'],C('DEFAULT_LANG'));
             $v['des'] = lang_substr($v['des'],C('DEFAULT_LANG'));
             if (!empty($tmp[$v['is_use']][$v['coupon_id']])) {
@@ -3293,13 +3451,14 @@ class MyAction extends BaseAction{
                 }
                 $tmp[$v['is_use']][$v['coupon_id']]['url'] = $url;
             }
-
         }
-
         if($tmp[0]){
-            $this->assign('coupon', array_shift($tmp[0]));
+            //$this->assign('coupon_list', array_shift($tmp[0]));
+            $this->assign('coupon_list', $tmp[0]);
         }
-
+        //$this->assign('coupon_list', $coupon_list);
+        //$this->card_list();
+        $this->assign('back_url', U("My/index"));
         $this->display();
     }
 
@@ -3309,6 +3468,7 @@ class MyAction extends BaseAction{
 		// $this->error_tips('请使用微信浏览优惠券！');
 		// }
 		$use = empty($_GET['use']) ? '0' : $_GET['use'];
+        $use = 0;
 		if($use == 0){
 		    $title = 'Available';
 		    $class_name = 'Muse';
@@ -3338,7 +3498,6 @@ class MyAction extends BaseAction{
             }
             //var_dump($coupon_list);die();
 		}
-
 
 		$tmp = array();
 		foreach ($coupon_list as $key => $v) {
@@ -3372,12 +3531,86 @@ class MyAction extends BaseAction{
 			}
 
 		}
+		//var_dump($tmp);
 		if($use == 0)
 		    $this->assign('coupon_list', $tmp[0]);
 		else
             $this->assign('coupon_list', array_merge($tmp[1],$tmp[2]));
 		$this->display();
 	}
+
+    public function card_list_with_use(){
+        // if(!$this->is_wexin_browser){
+        // $this->error_tips('请使用微信浏览优惠券！');
+        // }
+        $use = 0;
+        if($use == 0){
+            $title = 'Available';
+            $class_name = 'Muse';
+        }else{
+            $title = 'History';
+            $class_name = 'Expired';
+        }
+
+        if($_GET['coupon_type']=='mer') {
+            $coupon_list = D('Card_new_coupon')->get_user_all_coupon_list($this->user_session['uid']);
+            $this->assign('cate_platform', D('Card_new_coupon')->cate_platform());
+        }else{
+            $coupon_list=array();
+
+            $coupon_list = D('System_coupon')->get_user_coupon_list($this->user_session['uid'], $this->user_session['phone']);
+
+            $this->assign('cate_platform', D('System_coupon')->cate_platform());
+
+            //获取活动优惠券
+            $event_coupon_list = D('New_event')->getUserCoupon($this->user_session['uid']);
+            if(!$coupon_list) $coupon_list = array();
+            if(count($event_coupon_list) > 0){
+                $coupon_list = array_merge($coupon_list,$event_coupon_list);
+            }
+            //var_dump($coupon_list);die();
+        }
+
+
+        $tmp = array();
+        foreach ($coupon_list as $key => $v) {
+            $v['name'] = lang_substr($v['name'],C('DEFAULT_LANG'));
+            $v['des'] = lang_substr($v['des'],C('DEFAULT_LANG'));
+            if (!empty($tmp[$v['is_use']][$v['coupon_id']])) {
+                $tmp[$v['is_use']][$v['coupon_id']]['get_num']++;
+            } else {
+                $tmp[$v['is_use']][$v['coupon_id']] = $v;
+                $mer = M('Merchant')->where(array('mer_id'=>$v['mer_id']))->find();
+                $tmp[$v['is_use']][$v['coupon_id']]['merchant']=$mer['name'];
+                $tmp[$v['is_use']][$v['coupon_id']]['get_num'] = 1;
+                switch($v['type']){
+                    case 'all':
+                        $url = $this->config['site_url'].'/wap.php';
+                        break;
+                    case 'group':
+                        $url = $this->config['site_url'].'/wap.php?g=Wap&c=Group&a=index';
+                        break;
+                    case 'meal':
+                        $url = $this->config['site_url'].'/wap.php?g=Wap&c=Meal_list&a=index';
+                        break;
+                    case 'appoint':
+                        $url = $this->config['site_url'].'/wap.php?g=Wap&c=Appoint&a=index';
+                        break;
+                    case 'shop':
+                        $url = $this->config['site_url'].'/wap.php?g=Wap&c=Shop&a=index';
+                        break;
+                }
+                $tmp[$v['is_use']][$v['coupon_id']]['url'] = $url;
+            }
+
+        }
+        //var_dump($tmp);
+        if($use == 0)
+            $this->assign('coupon_list', $tmp[0]);
+        else
+            $this->assign('coupon_list', array_merge($tmp[1],$tmp[2]));
+
+    }
 
 
 	public function cards()
@@ -4935,7 +5168,7 @@ class MyAction extends BaseAction{
 			$this->error_tips(L('_B_MY_NOPAGE_'));
 		}
 	}
-
+    //取消订单
 	public function shop_order_refund()
 	{
 		if (empty($this->user_session)) {
@@ -4948,10 +5181,10 @@ class MyAction extends BaseAction{
 			$this->error_tips(L('_B_MY_NOORDER_'));
 		}
 		if (!($now_order['paid'] == 1 && ($now_order['status'] == 0 || $now_order['status'] == 5))) {
-			$this->error_tips(L('_B_MY_ORDERDEALING_'));
+			$this->error_tips(L('_B_MY_ORDERDEALING_'),U("Shop/order_detail",array('order_id'=>$order_id)));
 		}
 		if (empty($now_order['paid'])) {
-			$this->error_tips(L('_B_MY_ORDERNOPAY_'));
+			$this->error_tips(L('_B_MY_ORDERNOPAY_'),U("Shop/order_detail",array('order_id'=>$order_id)));
 		}
 
 		if (!($now_order['paid'] == 1 && ($now_order['status'] == 0 || $now_order['status'] == 5))) {
@@ -4977,6 +5210,7 @@ class MyAction extends BaseAction{
 		}
 		$store_id = $now_order['store_id'];
 		$this->mer_id = $now_order['mer_id'];
+
 		if (!($now_order['paid'] == 1 && ($now_order['status'] == 0 || $now_order['status'] == 5))) {
 			$this->error_tips(L('_B_MY_ORDERDEALING_'));
 		}
@@ -4988,22 +5222,26 @@ class MyAction extends BaseAction{
 		} elseif ($now_order['status'] > 3 && !($now_order['paid'] == 1 && $now_order['status'] == 5)) {
 			$this->redirect(U('Shop/status',array('order_id' => $now_order['order_id'])));
 		}
+
 		$mer_store = D('Merchant_store')->where(array('mer_id' => $now_order['mer_id'], 'store_id' => $now_order['store_id']))->find();
 		$my_user = D('User')->field(true)->where(array('uid' => $now_order['uid']))->find();
 
 		//线下支付退款
 		$data_shop_order['cancel_type'] = 5;//取消类型（0:pc店员，1:wap店员，2:andriod店员,3:ios店员，4：打包app店员，5：用户，6：配送员, 7:超时取消）
 		if ($now_order['pay_type'] == 'offline' || $now_order['pay_type'] == 'Cash') {
+
 			$data_shop_order['order_id'] = $now_order['order_id'];
 			$data_shop_order['refund_detail'] = serialize(array('refund_time' => time()));
 			$data_shop_order['status'] = 4;
+
 			if (D('Shop_order')->data($data_shop_order)->save()) {
 				$return = $this->shop_refund_detail($now_order, $store_id);
 				if ($return['error_code']) {
-					$this->error_tips($result['msg']);
+					$this->error_tips($return['msg']);
 				} else {
                     //add garfunkel 取消订单成功 发送消息
                     if (C('config.sms_shop_cancel_order') == 1 || C('config.sms_shop_cancel_order') == 3) {
+
                         $userInfo = D('User')->field(true)->where(array('uid'=>$now_order['uid']))->find();
                         if($userInfo['device_id'] != ""){
                             $message = 'Your order ('.$order_id.') has been successfully canceled at '.date('Y-m-d H:i:s').' at '.lang_substr($mer_store['name'], 'en-us').' store, we are looking forward to seeing you again.';
@@ -5026,6 +5264,7 @@ class MyAction extends BaseAction{
                         }
                     }
                     if (C('config.sms_shop_cancel_order') == 2 || C('config.sms_shop_cancel_order') == 3) {
+
                         $sms_data['uid'] = 0;
                         $sms_data['mobile'] = $mer_store['phone'];
                         $sms_data['sendto'] = 'merchant';
@@ -5042,8 +5281,11 @@ class MyAction extends BaseAction{
                         $txt = "This is a important message from island life , the customer has canceled the last order.";
                         Sms::send_voice_message($sms_data['mobile'],$txt);
                     }
-                    $this->success_tips(L('_B_MY_USEOFFLINECHANGEREFUND_'),U('Shop/status',array('order_id' => $now_order['order_id'], 'store_id' => $store_id, 'mer_id' => $this->mer_id)));
-				}
+                    //$this->success_tips(L('_B_MY_USEOFFLINECHANGEREFUND_'),U('Shop/status',array('order_id' => $now_order['order_id'], 'store_id' => $store_id, 'mer_id' => $this->mer_id)));
+                    //peter 21-03-09 Wap&c=My&a=shop_order_list&select=history
+                    $this->success_tips(L('_B_MY_USEOFFLINECHANGEREFUND_'),U('Wap/My/shop_order_list',array('select' => "history")));
+
+                }
 			} else {
 				$this->error_tips(L('_B_MY_CANCELLLOSE_'));
 			}
@@ -5141,7 +5383,6 @@ class MyAction extends BaseAction{
 //				}
 //			}
 
-
 			$return = $this->shop_refund_detail($now_order, $store_id);
 			if ($return['error_code']) {
 				$this->error_tips($return['msg']);
@@ -5154,13 +5395,16 @@ class MyAction extends BaseAction{
 				$data_shop_order['status'] = 4;
 				$data_shop_order['last_time'] = time();
 				D('Shop_order')->data($data_shop_order)->save();
-				$go_refund_param['msg'] .= L('_B_MY_ORDERCANCELLEDACCESS_');
+				$go_refund_param['msg'] = L('_B_MY_ORDERCANCELLEDACCESS_');
 			}
 			if(empty($go_refund_param['msg'])){
-				$go_refund_param['msg'] .= L('_B_MY_ORDERCANCELLEDACCESS_');
+                //die("empty2");
+				$go_refund_param['msg'] = L('_B_MY_ORDERCANCELLEDACCESS_');
 			}
 			D('Shop_order_log')->add_log(array('order_id' => $order_id, 'status' => 9));
-			$this->success_tips($go_refund_param['msg'], U('Shop/status',array('order_id' => $order_id, 'store_id' => $store_id, 'mer_id' => $this->mer_id)));
+			//$this->success_tips($go_refund_param['msg'], U('Shop/status',array('order_id' => $order_id, 'store_id' => $store_id, 'mer_id' => $this->mer_id)));
+            $this->success_tips($go_refund_param['msg'], U('Wap/My/shop_order_list',array('select' => "history")));
+
 		}
 	}
 
@@ -5213,7 +5457,8 @@ class MyAction extends BaseAction{
 
 		//平台余额退款
 		if ($now_order['balance_pay'] != '0.00') {
-			$add_result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],'订单退款 (订单号:'.$now_order['order_name'].')',0,0,0,'Order Cancellation (Order #'.$now_order['order_name'].')');
+            //var_dump($now_order);die('---------------');
+			$add_result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],'订单退款 (订单号:'.$now_order['order_name'].')',0,0,0,'Order Cancellation (Order #'.$now_order['order_id'].')');
 
 			$param = array('refund_time' => time());
 			if($result['error_code']){
@@ -5230,7 +5475,7 @@ class MyAction extends BaseAction{
 				return $result;
 				$this->error_tips($result['msg']);
 			}
-			$go_refund_param['msg'] .= ' 平台余额退款成功';
+			$go_refund_param['msg'] .= L('_B_MY_USEOFFLINECHANGEREFUND_');
 		}
 		//商家会员卡余额退款
 		if ($now_order['merchant_balance'] != '0.00'||$now_order['card_give_money']!='0.00') {
@@ -5289,14 +5534,13 @@ class MyAction extends BaseAction{
 			}
 			D('Shop_order')->where(array('order_id' => $now_order['order_id']))->save(array('is_rollback' => 1));
 		}
+
 		D("Merchant_store_shop")->where(array('store_id' => $now_order['store_id'], 'sale_count' => array('gt', 0)))->setDec('sale_count', 1);
 		//退款时销量回滚
 
 		$go_refund_param['error_code'] = false;
 		return $go_refund_param;
 	}
-
-
 
 	/**
 	 * 快店评论
@@ -5307,7 +5551,6 @@ class MyAction extends BaseAction{
 			$this->error_tips(L('_B_MY_LOGINFIRST_'));
 		}
 		$now_order = D('Shop_order')->get_order_detail(array('uid' => $this->user_session['uid'], 'order_id' => intval($_GET['order_id'])));
-
 
 		if (empty($now_order)) {
 			$this->error_tips(L('_B_MY_NOORDER_！'));
@@ -5335,21 +5578,29 @@ class MyAction extends BaseAction{
 		}
 
 		$this->assign('now_order', $now_order);
-
-
+        $c_title = replace_lang_str(L('V3_ORDER_REVIEW_DELIVERY'), $now_order['deliver_user_info']['name']);
+        $s_title = replace_lang_str(L('V3_ORDER_REVIEW_STORE'), $now_order['site_name']);
+        $this->assign('c_title', $c_title);
+        $this->assign('s_title', $s_title);
 		$this->display();
 	}
 
 	public function add_comment()
 	{
+
 		if(empty($this->user_session)){
 			exit(json_encode(array('status' => 0, 'msg' => L('_B_MY_LOGINFIRST_'))));
 			$this->error_tips(L('_B_MY_LOGINFIRST_'));
 		}
+
 		$order_id = isset($_POST['order_id']) ? intval($_POST['order_id']) : 0;
-		$goods_ids = isset($_POST['goods_ids']) ? $_POST['goods_ids'] : 0;
-		$score = isset($_POST['whole']) ? $_POST['whole'] : 5;
-		$comment = isset($_POST['textAre']) ? htmlspecialchars($_POST['textAre']) : 0;
+		//$goods_ids = isset($_POST['goods_ids']) ? $_POST['goods_ids'] : 0;
+
+		$score_send = isset($_POST['send']) ? $_POST['send'] : 5;       //快递星级
+        $score_whole = isset($_POST['whole']) ? $_POST['whole'] : 5;    //商铺星级
+
+		$comment_send = isset($_POST['send_textArea']) ? htmlspecialchars($_POST['send_textArea']) : 0;
+        $comment_whole = isset($_POST['whole_textArea']) ? htmlspecialchars($_POST['whole_textArea']) : 0;
 
 		$now_order = D('Shop_order')->get_order_detail(array('uid' => $this->user_session['uid'], 'order_id' => $order_id));
 
@@ -5366,10 +5617,8 @@ class MyAction extends BaseAction{
 			exit(json_encode(array('status' => 0, 'msg' => L('_B_MY_HAVECOMMENTD_'))));
 		}
 
-
 		$goodsids = array();
-
-		$goods = '';
+		$goods = 'a';
 		$pre = '';
 		if (isset($now_order['info'])) {
 			foreach ($now_order['info'] as $row) {
@@ -5386,26 +5635,44 @@ class MyAction extends BaseAction{
 		$data_reply['parent_id'] = $now_order['store_id'];
 		$data_reply['store_id'] = $now_order['store_id'];
 		$data_reply['mer_id'] = $now_order['mer_id'];
-		$data_reply['score'] = $score;
-		$data_reply['order_type'] = 3;
+
+        $data_reply['order_type'] = 3;
 		$data_reply['order_id'] = intval($now_order['order_id']);
 		$data_reply['anonymous'] = 1;
-		$data_reply['comment'] = $comment;
-		$data_reply['uid'] = $this->user_session['uid'];
+
+        $data_reply['uid'] = $this->user_session['uid'];
 		$data_reply['pic'] = '';
 		$data_reply['add_time'] = $_SERVER['REQUEST_TIME'];
 		$data_reply['add_ip'] = get_client_ip(1);
 		$data_reply['goods'] = $goods;
 
-        if(!checkEnglish($comment) && trim($comment) != ''){
-            $data_reply['comment_en'] = translationCnToEn($comment);
+		//商铺星级
+        $data_reply['score'] = $score_whole;
+        $data_reply['score_store'] = $score_whole;
+        //快递星级
+        $data_reply['score_deliver'] = $score_send;
+        //评论内容
+        $data_reply['comment'] = $comment_whole;
+        $data_reply['comment_deliver'] = $comment_send;
+
+		//只把英文翻译成中文
+        if(!checkEnglish($comment_whole) && trim($comment_whole) != ''){
+            $data_reply['comment_en'] = translationCnToEn($comment_whole);
         }else{
             $data_reply['comment_en'] = '';
         }
+        if(!checkEnglish($comment_send) && trim($comment_send) != ''){
+            $data_reply['comment_deliver_en'] = translationCnToEn($comment_send);
+        }else{
+            $data_reply['comment_deliver_en'] = '';
+        }
+
 // 		echo "<pre/>";
-// 		print_r($data_reply);die;
+ 		//print_r($data_reply);die;
+
 		if ($database_reply->data($data_reply)->add()) {
-			D('Merchant_store')->setInc_shop_reply($now_order['store_id'], $score);
+
+			D('Merchant_store')->setInc_shop_reply($now_order['store_id'], $score_whole);
 			D('Shop_order')->change_status($now_order['order_id'], 3);
 			D('Shop_order_log')->add_log(array('order_id' => $now_order['order_id'], 'status' => 8));
 			foreach ($goods_ids as $goods_id) {
@@ -5440,13 +5707,16 @@ class MyAction extends BaseAction{
 // 				$data_store_score['reply_count'] = $now_store_score['reply_count']+1;
 // 				$database_merchant_score->where(array('pigcms_id'=>$now_store_score['pigcms_id']))->data($data_store_score)->save();
 // 			}
+
 			if($this->config['feedback_score_add']>0){
 			  	D('User')->add_extra_score($this->user_session['uid'],$this->config['feedback_score_add'],$this->config['shop_alias_name'].L('_B_MY_COMMENTGET_').$this->config['feedback_score_add'].$this->config['score_name']);
 			  	D('Scroll_msg')->add_msg('feedback',$this->user_session['uid'],L('_B_MY_USER_').$this->user_session['nickname'].date('Y-m-d H:i',$_SERVER['REQUEST_TIME']).L('_B_MY_COMMENT_').$this->config['shop_alias_name'].L('_B_MY_GET_').$this->config['feedback_score_add'].$this->config['score_name']);
 			}
-			exit(json_encode(array('status' => 1, 'msg' => L('_B_MY_COMMENTACCESS_'),  'url' => U('Shop/status', array('order_id' => $now_order['order_id'], 'mer_id' => $now_order['mer_id'], 'store_id' => $now_order['store_id'])))));
-			$this->success_tips(L('_B_MY_COMMENTACCESS_'), U('Shop/status', array('order_id' => $now_order['order_id'], 'mer_id' => $now_order['mer_id'], 'store_id' => $now_order['store_id'])));
-		}
+			exit(json_encode(array('status' => 1, 'msg' => L('_B_MY_COMMENTACCESS_'),  'url' => U('My/shop_order_list'))));
+			//$this->success_tips(L('_B_MY_COMMENTACCESS_'), U('My/shop_order_list'));
+		}else{
+            //die("111");
+        }
 	}
 
 	public function refund_back()
@@ -5879,15 +6149,21 @@ class MyAction extends BaseAction{
 	    if($_POST) {
             $code = $_POST['code'];
             $uid = $this->user_session['uid'];
-
+            $order_id=$_POST['order_id'];
+            $order=D('Shop_order')->field("price")->where(array('order_id' => $order_id))->find();
+            $order_price=$order['price'];
+            //die($order);
             $coupon = D('System_coupon')->field(true)->where(array('notice' => $code))->find();
             $cid = $coupon['coupon_id'];
-
+            $order_money=$coupon['order_money'];
+            //die($order_price."----------".$order_money);
             if ($cid) {
                 $l_id = D('System_coupon_hadpull')->field(true)->where(array('uid' => $uid, 'coupon_id' => $cid))->find();
-
-                if ($l_id == null) {
+                if ($l_id == null) {    //之前没有领用过
                     $result = D('System_coupon')->had_pull($cid, $uid);
+                    if ($order_price!="" && $order_price<$order_money){ //新加的优惠券当前订单不可用
+                        exit(json_encode(array('error_code' => 2, 'msg' => L('_AL_EXCHANGE_CANTUSER_CODE_'))));
+                    }
                 }else
                     exit(json_encode(array('error_code' => 1, 'msg' => L('_AL_EXCHANGE_CODE_'))));
             } else {

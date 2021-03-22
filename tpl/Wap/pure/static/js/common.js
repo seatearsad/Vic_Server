@@ -401,6 +401,7 @@ function pageLoadTipHide(){
  *
 */
 function getUserLocation(options){
+
 	this.options = {
 		'useHistory':true,				//boolean 是否使用历史数据
 		'historyTime':120,				//number  使用历史数据的时效，也是保存数据的有效期

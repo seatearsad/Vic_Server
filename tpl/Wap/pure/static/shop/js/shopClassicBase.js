@@ -1161,7 +1161,8 @@ function showShop(shopId){
 			if(result.store.is_close == 1){
 				$('#checkCartEmpty').html(getLangStr('_SHOP_AT_REST_'));
 			}else if(result.store.delivery){
-				$('#checkCartEmpty').html(getLangStr('_NUM_DELI_PRICE_',result.store.delivery_price.toFixed(2)));
+				//$('#checkCartEmpty').html(getLangStr('_NUM_DELI_PRICE_',result.store.delivery_price.toFixed(2)));
+                $('#checkCartEmpty').html("");
 			}
 			
 			nowShop = result;
@@ -1351,7 +1352,8 @@ function cartFunction(type,obj,dataObj){
 	$('#shopProductCart #cartMoney').html(productCartMoney.toFixed(2));
 	
 	if(productCartNumber == 0){
-		$('#checkCartEmpty').removeClass('noEmpty').show().html(getLangStr('_NUM_DELI_PRICE_',(nowShop.store.delivery_price).toFixed(2)));
+		//$('#checkCartEmpty').removeClass('noEmpty').show().html(getLangStr('_NUM_DELI_PRICE_',(nowShop.store.delivery_price).toFixed(2)));
+        $('#checkCartEmpty').html("");
 		$('#checkCart').removeClass('noEmpty').hide();	
 		
 	}else if(nowShop.store.delivery == true && parseFloat(productCartMoney.toFixed(2)) < nowShop.store.delivery_price){

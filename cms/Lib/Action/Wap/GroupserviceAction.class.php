@@ -77,8 +77,8 @@ class GroupserviceAction extends BaseAction{
 				$long = $_GET['long'];
 			}
 
-            $city_id = D('Store')->geocoderGoogle($lat,$long);
-            $city_id = $city_id ? $city_id : 0;
+            //$city_id = D('Store')->geocoderGoogle($lat,$long);
+            $city_id = $city_id ? $city_id : 105;
 
             $where = array('deliver_type' => $deliver_type, 'order' => $order, 'lat' => $lat, 'long' => $long, 'cat_id' => $cat_id, 'cat_fid' => $cat_fid, 'page' => $page);
 			$key && $where['key'] = $key;

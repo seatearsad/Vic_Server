@@ -16,9 +16,10 @@ class Offline{
 		$this->user_info  = $user_info;
 	}
 	public function pay(){
-		if($this->is_mobile){
+		if($this->is_mobile){   //wap端的现金支付
 			return $this->mobile_pay();
 		}else{
+            die("!!!mobile_pay");
 			return $this->web_pay();
 		}
 	}
@@ -27,7 +28,9 @@ class Offline{
 		if($this->pay_config['is_own'] && $this->order_info['mer_id']){
 			$_SESSION['own_mer_id'] = $this->order_info['mer_id'];
 		}
-		header('Location:' . C('config.site_url') . '/wap.php?c=Pay&a=return_url&pay_type=offline&is_mobile=1&param=' . $param);
+
+        header('Location:' . C('config.site_url') . '/wap.php?c=Pay&a=return_url&pay_type=offline&is_mobile=1&order_id='.$this->order_info['old_order_id'].'&param=' . $param);
+
 		exit();
 	}
 	public function web_pay(){
