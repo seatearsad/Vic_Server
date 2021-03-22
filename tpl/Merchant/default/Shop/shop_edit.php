@@ -22,16 +22,16 @@
 					<div class="tabbable">
 						<ul class="nav nav-tabs" id="myTab">
 							<li class="active">
-								<a data-toggle="tab" href="#basicinfo">基本信息</a>
+								<a data-toggle="tab" href="#basicinfo">{pigcms{:L('BASIC_SETTING_BKADMIN')}</a>
 							</li>
 							<li>
-								<a data-toggle="tab" href="#category">选择分类</a>
+								<a data-toggle="tab" href="#category">{pigcms{:L('CATEGORIES_BKADMIN')}</a>
 							</li>
 							<!--li>
 								<a data-toggle="tab" href="#label">选择标签</a>
 							</li-->
 							<li>
-								<a data-toggle="tab" href="#pay">支付方式</a>
+								<a data-toggle="tab" href="#pay">{pigcms{:L('PAYMENT_OPTIONS_BKADMIN')}</a>
 							</li>
 							<!--li>
 								<a data-toggle="tab" href="#delivertime">配送时间</a>
@@ -158,7 +158,7 @@
 								</div>
 								
 								<div class="form-group hidden_obj">
-									<label class="col-sm-1"><label>配送方式{pigcms{:L('SAVE_BKADMIN')}</label></label>
+									<label class="col-sm-1"><label>配送方式</label></label>
 									<select name="deliver_type">
 									<option value="0" <if condition="$store_shop['deliver_type'] eq 0 ">selected</if>>平台配送</option>
 									<option value="1" <if condition="$store_shop['deliver_type'] eq 1 ">selected</if>>商家配送</option>
@@ -347,7 +347,7 @@
                                         <div class="radio">
                                             <label>
                                                 <input class="paycheck " type="checkbox" name="paymethod_{pigcms{$k}" value="1" id="Config_openpaythree" onclick="check(this);" <php>if(in_array($k,$pay_list)){</php>checked="checked"<php>}</php>/>
-                                                <span class="lbl"><label for="Config_openpaythree">{pigcms{$v.name}-{pigcms{$v.id}</label></span>
+                                                <span class="lbl"><label for="Config_openpaythree">{pigcms{$v.name}</label></span>
                                             </label>
                                         </div>
                                     </div>

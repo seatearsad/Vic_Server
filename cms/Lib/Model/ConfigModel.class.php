@@ -53,6 +53,7 @@ class ConfigModel extends Model{
 
 		foreach($tmp_config_list as $key=>$value){
             $config_list[$value['tab_id']]['id'] = $value['name'];
+            lang_substr_with_default_lang($value['tab_name']);
 			$config_list[$value['tab_id']]['name'] = $value['tab_name'];
 			$config_list[$value['tab_id']]['config'][$value['name']] = $value['value'];
 		}	

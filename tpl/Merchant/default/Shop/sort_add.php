@@ -8,7 +8,7 @@
 				<a href="{pigcms{:U('Shop/index')}">{pigcms{$config.shop_alias_name}管理</a>
 			</li>
 			<li class="active"><a href="{pigcms{:U('Shop/goods_sort',array('store_id'=>$now_store['store_id']))}">{pigcms{$now_store.name}</a></li>
-			<li class="active">添加分类</li>
+			<li class="active">{pigcms{:L('CREATE_CATEGORY_BKADMIN')}</li>
 		</ul>
 	</div>
 	<!-- 内容头部 -->
@@ -22,7 +22,7 @@
 					<div class="tabbable">
 						<ul class="nav nav-tabs" id="myTab">				
 							<li class="active">
-								<a href="{pigcms{:U('Shop/sort_add',array('store_id'=>$now_store['store_id']))}">添加分类</a>
+								<a href="{pigcms{:U('Shop/sort_add',array('store_id'=>$now_store['store_id']))}">{pigcms{:L('CREATE_CATEGORY_BKADMIN')}</a>
 							</li>
 						</ul>
 					</div>
@@ -37,62 +37,62 @@
 								</div>
 								</if>
 								<div class="form-group">
-									<label class="col-sm-1"><label for="sort_name">分类名称</label></label>
+									<label class="col-sm-1"><label for="sort_name">{pigcms{:L('CATEGORY_NAME_BKADMIN')}</label></label>
 									<input name="fid" type="hidden" value="{pigcms{$fid}"/>
 									<input class="col-sm-2" size="20" name="sort_name" id="sort_name" type="text" value="{pigcms{$now_sort.sort_name}"/>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-1"><label for="sort">分类排序</label></label>
+									<label class="col-sm-1"><label for="sort">{pigcms{:L('CATEGORY_ORDER_BKADMIN')}</label></label>
 									<input class="col-sm-1" size="10" name="sort" id="sort" type="text" value="{pigcms{$now_sort.sort|default='0'}"/>
-									<span class="form_tips">默认添加顺序排序！手动调值，数值越大，排序越前</span>
+									<span class="form_tips">默认添加顺序排序！手动调值，数值越大，排序越前{pigcms{:L('BASIC_SETTING_BKADMIN')}</span>
 								</div>
                                 <div class="form-group">
-                                    <label class="col-sm-1" for="is_weekshow">开启星期几显示</label>
+                                    <label class="col-sm-1" for="is_weekshow">{pigcms{:L('SETTING_AVAILABILITY(DAY)_BKADMIN')}</label>
                                     <div style="float: left">
                                         <select name="is_weekshow" id="is_weekshow">
-                                            <option value="0" <if condition="$now_sort['is_weekshow'] eq 0">selected="selected"</if>>关闭</option>
-                                            <option value="1" <if condition="$now_sort['is_weekshow'] eq 1">selected="selected"</if>>开启</option>
+                                            <option value="0" <if condition="$now_sort['is_weekshow'] eq 0">selected="selected"</if>>{pigcms{:L('OFF_BKADMIN')}</option>
+                                            <option value="1" <if condition="$now_sort['is_weekshow'] eq 1">selected="selected"</if>>{pigcms{:L('ON_BKADMIN')}</option>
                                         </select>
                                     </div>
                                     <div class="col-sm-10" style="margin-top:5px;">
                                         <div style="width:80px;float:left;font-size:16px;">
-                                            <label><input type="checkbox" value="1" name="week[]" <if condition="in_array('1',$now_sort['week'])">checked="checked"</if>/>星期一</label>&nbsp;&nbsp;
+                                            <label><input type="checkbox" value="1" name="week[]" <if condition="in_array('1',$now_sort['week'])">checked="checked"</if>/> {pigcms{:L('MON_BKADMIN')}</label>&nbsp;&nbsp;
                                         </div>
                                         <div style="width:80px;float:left;font-size:16px;">
-                                            <label><input type="checkbox" value="2" name="week[]" <if condition="in_array('2',$now_sort['week'])">checked="checked"</if>/>星期二</label>&nbsp;&nbsp;
+                                            <label><input type="checkbox" value="2" name="week[]" <if condition="in_array('2',$now_sort['week'])">checked="checked"</if>/> {pigcms{:L('TUE_BKADMIN')}</label>&nbsp;&nbsp;
                                         </div>
                                         <div style="width:80px;float:left;font-size:16px;">
-                                            <label><input type="checkbox" value="3" name="week[]" <if condition="in_array('3',$now_sort['week'])">checked="checked"</if>/>星期三</label>&nbsp;&nbsp;
+                                            <label><input type="checkbox" value="3" name="week[]" <if condition="in_array('3',$now_sort['week'])">checked="checked"</if>/> {pigcms{:L('WED_BKADMIN')}</label>&nbsp;&nbsp;
                                         </div>
                                         <div style="width:80px;float:left;font-size:16px;">
-                                            <label><input type="checkbox" value="4" name="week[]" <if condition="in_array('4',$now_sort['week'])">checked="checked"</if>/>星期四</label>&nbsp;&nbsp;
+                                            <label><input type="checkbox" value="4" name="week[]" <if condition="in_array('4',$now_sort['week'])">checked="checked"</if>/> {pigcms{:L('THUR_BKADMIN')}</label>&nbsp;&nbsp;
                                         </div>
                                         <div style="width:80px;float:left;font-size:16px;">
-                                            <label><input type="checkbox" value="5" name="week[]" <if condition="in_array('5',$now_sort['week'])">checked="checked"</if>/>星期五</label>&nbsp;&nbsp;
+                                            <label><input type="checkbox" value="5" name="week[]" <if condition="in_array('5',$now_sort['week'])">checked="checked"</if>/> {pigcms{:L('FRI_BKADMIN')}</label>&nbsp;&nbsp;
                                         </div>
                                         <div style="width:80px;float:left;font-size:16px;">
-                                            <label><input type="checkbox" value="6" name="week[]" <if condition="in_array('6',$now_sort['week'])">checked="checked"</if>/>星期六</label>&nbsp;&nbsp;
+                                            <label><input type="checkbox" value="6" name="week[]" <if condition="in_array('6',$now_sort['week'])">checked="checked"</if>/> {pigcms{:L('SAT_BKADMIN')}</label>&nbsp;&nbsp;
                                         </div>
                                         <div style="width:80px;float:left;font-size:16px;">
-                                            <label><input type="checkbox" value="0" name="week[]" <if condition="in_array('0',$now_sort['week'])">checked="checked"</if>/>星期日</label>&nbsp;&nbsp;
+                                            <label><input type="checkbox" value="0" name="week[]" <if condition="in_array('0',$now_sort['week'])">checked="checked"</if>/> {pigcms{:L('SUN_BKADMIN')}</label>&nbsp;&nbsp;
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-1" for="FoodType_time">开启时间段显示</label>
+                                    <label class="col-sm-1" for="FoodType_time">{pigcms{:L('SETTING_AVAILABILITY(TIME)_BKADMIN')}</label>
                                     <div style="float: left">
                                         <select name="is_time" id="is_time">
-                                            <option value="0" <if condition="$now_sort['is_time'] eq 0">selected="selected"</if>>关闭</option>
-                                            <option value="1" <if condition="$now_sort['is_time'] eq 1">selected="selected"</if>>开启</option>
+                                            <option value="0" <if condition="$now_sort['is_time'] eq 0">selected="selected"</if>>{pigcms{:L('OFF_BKADMIN')}</option>
+                                            <option value="1" <if condition="$now_sort['is_time'] eq 1">selected="selected"</if>>{pigcms{:L('ON_BKADMIN')}</option>
                                         </select>
                                     </div>
                                     <div class="col-sm-10">
                                         <input class="col-sm-1" size="10" name="begin_time" id="begin_time" type="text" placeholder="00:00" value="{pigcms{$now_sort.begin_time}" onfocus="WdatePicker({readOnly:true,dateFmt:'HH:mm',lang:'en'})"/>
-                                        <label style="float: left;margin-top: 5px;">&nbsp; 至 &nbsp;</label>
+                                        <label style="float: left;margin-top: 5px;">&nbsp; {pigcms{:L('TO_BKADMIN')} &nbsp;</label>
                                         <input class="col-sm-1" size="10" name="end_time" id="end_time" type="text" placeholder="00:00" value="{pigcms{$now_sort.end_time}" onfocus="WdatePicker({readOnly:true,dateFmt:'HH:mm',lang:'en'})"/>
                                     </div>
                                 </div>
-								<div class="form-group">
+								<div class="form-group hidden_obj">
 									<label class="col-sm-1"><label for="sort">分类下产品折扣率</label></label>
 									<input class="col-sm-1" size="10" name="sort_discount" id="sort_discount" type="text" value="{pigcms{$now_sort.sort_discount|default='0'}"/>
 									<span class="form_tips" style="color:red">0~10之间的数字，支持一位小数！8代表8折，8.5代表85折，0与10代表无折扣</span>

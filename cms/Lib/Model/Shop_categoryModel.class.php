@@ -5,10 +5,14 @@ class Shop_categoryModel extends Model
 	public function lists($is_add_all = false)
 	{
 		$items = $this->field(true)->order('cat_sort DESC')->select();
+        foreach ($items as &$item) {
+            $item['cat_name']= lang_substr($item['cat_name'] ,C('DEFAULT_LANG'));
+        }
+		//var_dump($items);die();
 		$tmpMap = array();
 		foreach ($items as $item) {
 			$tmpMap[$item['cat_id']] = $item;
-		}
+        }
 		$list = array();
 		if ($is_add_all) {
 			$list[] = array('cat_id' => '0', 'cat_name' => L('_ALL_TXT_'), 'cat_url' => 'all');
@@ -16,6 +20,7 @@ class Shop_categoryModel extends Model
 		
 		$tlist = array();
 		foreach ($items as $item) {
+
 			if (isset($tmpMap[$item['cat_fid']])) {
 				$tmpMap[$item['cat_fid']]['son_list'][] = &$tmpMap[$item['cat_id']];
 			} else {

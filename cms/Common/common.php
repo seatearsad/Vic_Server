@@ -667,6 +667,7 @@ function lang_substr_with_default_lang(&$str){
     }else{
         $re_str = $arr[0];
     }
+
     $str=$re_str;
 }
 //Garfunkel Add
