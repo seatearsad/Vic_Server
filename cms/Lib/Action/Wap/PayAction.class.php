@@ -76,6 +76,7 @@ class PayAction extends BaseAction{
         }
 
         $order_info = $now_order['order_info'];
+//var_dump($order_info);die();
 
         //ADD garfunkel
         $order_info['order_name'] = lang_substr($order_info['order_name'],C('DEFAULT_LANG'));
@@ -244,11 +245,29 @@ class PayAction extends BaseAction{
 
             //平台优惠券
             if (($tmp_order['total_money'] > $mer_coupon['discount'] || empty($mer_coupon)) && $_GET['unsys_coupon']!=1 && ($order_info['discount_status'] || !isset($order_info['discount_status']))) {
-
                 $tmp_order['total_money'] -= empty($mer_coupon['discount']) ? 0 : $mer_coupon['discount'];
-
                 if (empty($_GET['sysc_id'])) {  //没有选择优惠券
 
+                    //如果是二次支付
+                    //var_dump($order_info);die();
+                    if ($order_info['coupon_id']!=null){
+                        $sysc_id=$order_info['coupon_id'];
+                        //如果选择的为活动优惠券
+                        if(strpos($sysc_id,'event')!== false){
+                            $event = explode('_',$sysc_id);
+                            $event_coupon_id = $event[2];
+                            $list = D('New_event')->getUserCoupon($this->user_session['uid'],0,$tmp_order['total_money'],$event_coupon_id);
+                            $system_coupon = reset($list);
+                            if($system_coupon)
+                                $system_coupon['id'] = $system_coupon['coupon_id'].'_'.$system_coupon['id'];
+                        }else {
+                            $system_coupon = D('System_coupon')->get_coupon_info($sysc_id);
+                        }
+                        if($order_info['delivery_discount_type'] == 0)
+                            $order_info['delivery_discount'] = 0;
+                        if($order_info['merchant_reduce_type'] == 0)
+                            $order_info['merchant_reduce'] = 0;
+                    }
 //                    if (!empty($order_info['business_type'])) {
 //                        $now_coupon = D('System_coupon')->get_noworder_coupon_list($tmp_order, $_GET['type'], $this->user_session['phone'], $this->user_session['uid'], $platform, $order_info['business_type']);
 //                    } else {
@@ -795,9 +814,8 @@ class PayAction extends BaseAction{
         if($_POST['not_touch'] != null && $_POST['not_touch'] == 1){
             D('Shop_order')->field(true)->where(array('order_id'=>$order_info['order_id']))->save(array('not_touch'=>1));
         }
-
+        $this->Save_coupon_info($_POST['order_id'],$_POST['coupon_id']);
         $this->Save_order_desc($_POST['note'],$order_info['order_id']);
-
         //保存地址备注
         $this->Save_user_address_detail($_POST['address_detail'],$_POST['address_id']);
 
@@ -912,8 +930,6 @@ class PayAction extends BaseAction{
         if(cookie('is_house')){
             $save_result['url'] = str_replace('wap.php', C('INDEP_HOUSE_URL'), $save_result['url']);
         }
-
-
 
         if ($save_result['error_code']) {                       // 现金支付的错误 TRUE  or FALSE
 
@@ -2610,20 +2626,23 @@ class PayAction extends BaseAction{
             D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->save(array('tip_charge'=>$_POST['tip']));
         }
 
+        $this->Save_coupon_info($order_id,$_POST['coupon_id']);
         $this->Save_order_desc($_POST['note'],$order_id);
         $this->Save_user_address_detail($_POST['address_detail'],$address_id);
-
         //----------------------------------------------------------------------------
         if ($_POST['order_type']=='recharge'){
             $result_url=U("Wap/My/my_money");
         }else{
             $result_url=$this->get_result_url($order_id);
         }
+
         //-----------------------------------------------------------------------------
 
         $moneris_pay = new MonerisPay();
         $resp = $moneris_pay->payment($_POST,$this->user_session['uid'],2);
-        //var_dump($resp);die();
+
+        var_dump($resp);die("----Debug----");
+
         if($resp['requestMode'] && $resp['requestMode'] == "mpi"){
             if($resp['mpiSuccess'] == "true"){
                 $result = array('error_code' => false,'mode'=>$resp['requestMode'],'html'=>$resp['mpiInLineForm'], 'msg' => $resp['message']);
@@ -2683,6 +2702,32 @@ class PayAction extends BaseAction{
                 $detail_en= '';
             }
             D('User_adress')->field(true)->where(array('adress_id'=>$address_id))->save(array('detail'=>$detail,'detail_en'=>$detail_en));
+        }
+    }
+    //保存优惠券  by Peter 2021-3-22
+    public function Save_coupon_info($order_id,$coupon_id){
+        //echo ("desc=".$desc.",order_id=".$order_id);die();
+        if($coupon_id != null && trim($coupon_id) != ''){
+
+            //如果选择的为活动优惠券
+            if(strpos($coupon_id,'event')!== false) {
+                $event = explode('_',$coupon_id);
+                $t_coupon_id = $event[1];
+                if($t_coupon_id){
+                    $coupon = D('New_event_coupon')->where(array('id'=>$t_coupon_id))->find();
+                    $in_coupon = array('coupon_id' => $coupon_id, 'coupon_price' => $coupon['discount']);
+                }
+            }else {
+                $now_coupon = D('System_coupon')->get_coupon_by_id($coupon_id);
+                if (!empty($now_coupon)) {
+                    $coupon_data = D('System_coupon_hadpull')->field(true)->where(array('id' => $coupon_id))->find();
+                    $coupon_real_id = $coupon_data['coupon_id'];
+                    $coupon = D('System_coupon')->get_coupon($coupon_real_id);
+
+                    $in_coupon = array('coupon_id' => $coupon_id, 'coupon_price' => $coupon['discount']);
+                }
+            }
+            D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->save($in_coupon);
         }
     }
     //保存地址备注信息的逻辑  by Peter 2021-2-26
@@ -2777,6 +2822,7 @@ class PayAction extends BaseAction{
                     $order_data['expect_use_time'] = strtotime($_POST['est_time']);
                 }
                 //处理优惠券
+                //$this->Save_coupon_info($_POST['coupon_id']);
                 if($_POST['coupon_id']){
                     //如果选择的为活动优惠券
                     if(strpos($_POST['coupon_id'],'event')!== false) {
@@ -2814,6 +2860,7 @@ class PayAction extends BaseAction{
                 if($_POST['not_touch'] != null && $_POST['not_touch'] == 1){
                     $order_data['not_touch'] = 1;
                 }
+
                 $this->Save_order_desc($_POST['note'],$order_id);
                 //保存地址备注
                 $this->Save_user_address_detail($_POST['address_detail'],$_POST['address_id']);

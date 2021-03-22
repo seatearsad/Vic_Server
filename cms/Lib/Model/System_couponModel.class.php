@@ -173,7 +173,7 @@ class System_couponModel extends Model{
             return array();
         }
         //$where['order_money'] = array('ELT',$now_order['total_money']);
-        //garfunkel 修改优惠券选择金额
+        //garfunkel 修改优惠券选择金额fget_noworder_coupon_list
         //$where['order_money'] = array('ELT',$now_order['goods_price']);
         //$order_cate = D(ucfirst($table).'_order')->get_order_cate($now_order['order_id']);
         if($order_type!='store'){
@@ -226,7 +226,8 @@ class System_couponModel extends Model{
             if($v['order_money'] <= $now_order['goods_price']){
                 $v['is_use'] = 1;
             }
-        }//var_dump($res);die();
+        }
+        //var_dump($res);die($v['order_money'].'-'.$now_order['goods_price']);
         return $res;
     }
 
