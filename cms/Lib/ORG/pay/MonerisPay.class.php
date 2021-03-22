@@ -115,13 +115,15 @@ class MonerisPay
                 if (!$isC) {
 
                     D('User_card')->clearIsDefaultByUid($uid);
-                    $data['is_default'] = 1;
+                    $card_data['name'] = $data['name'];
+                    $card_data['is_default'] = 1;
+                    $card_data['card_num'] = $data['card_num'];
+                    $card_data['uid'] = $uid;
                     $data['uid'] = $uid;
-                    $data['create_time'] = date("Y-m-d H:i:s");
+                    $card_data['create_time'] = date("Y-m-d H:i:s");
                     //存储的时候为YYMM
-                    $data['expiry'] = transYM($data['expiry']);
-                    $data['credit_id'] = D('User_card')->field(true)->add($data);
-                    var_dump($data['credit_id']);die();
+                    $card_data['expiry'] = transYM($data['expiry']);
+                    $data['credit_id'] = D('User_card')->field(true)->add($card_data);
                 }
             }
 
