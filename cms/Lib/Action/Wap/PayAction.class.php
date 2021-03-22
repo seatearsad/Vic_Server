@@ -250,24 +250,24 @@ class PayAction extends BaseAction{
 
                     //如果是二次支付
                     //var_dump($order_info);die();
-                    if ($order_info['coupon_id']!=null){
-                        $sysc_id=$order_info['coupon_id'];
-                        //如果选择的为活动优惠券
-                        if(strpos($sysc_id,'event')!== false){
-                            $event = explode('_',$sysc_id);
-                            $event_coupon_id = $event[2];
-                            $list = D('New_event')->getUserCoupon($this->user_session['uid'],0,$tmp_order['total_money'],$event_coupon_id);
-                            $system_coupon = reset($list);
-                            if($system_coupon)
-                                $system_coupon['id'] = $system_coupon['coupon_id'].'_'.$system_coupon['id'];
-                        }else {
-                            $system_coupon = D('System_coupon')->get_coupon_info($sysc_id);
-                        }
-                        if($order_info['delivery_discount_type'] == 0)
-                            $order_info['delivery_discount'] = 0;
-                        if($order_info['merchant_reduce_type'] == 0)
-                            $order_info['merchant_reduce'] = 0;
-                    }
+//                    if ($order_info['coupon_id']!=null){
+//                        $sysc_id=$order_info['coupon_id'];
+//                        //如果选择的为活动优惠券
+//                        if(strpos($sysc_id,'event')!== false){
+//                            $event = explode('_',$sysc_id);
+//                            $event_coupon_id = $event[2];
+//                            $list = D('New_event')->getUserCoupon($this->user_session['uid'],0,$tmp_order['total_money'],$event_coupon_id);
+//                            $system_coupon = reset($list);
+//                            if($system_coupon)
+//                                $system_coupon['id'] = $system_coupon['coupon_id'].'_'.$system_coupon['id'];
+//                        }else {
+//                            $system_coupon = D('System_coupon')->get_coupon_info($sysc_id);
+//                        }
+//                        if($order_info['delivery_discount_type'] == 0)
+//                            $order_info['delivery_discount'] = 0;
+//                        if($order_info['merchant_reduce_type'] == 0)
+//                            $order_info['merchant_reduce'] = 0;
+//                    }
 //                    if (!empty($order_info['business_type'])) {
 //                        $now_coupon = D('System_coupon')->get_noworder_coupon_list($tmp_order, $_GET['type'], $this->user_session['phone'], $this->user_session['uid'], $platform, $order_info['business_type']);
 //                    } else {
