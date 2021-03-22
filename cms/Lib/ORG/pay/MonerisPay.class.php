@@ -289,7 +289,6 @@ class MonerisPay
 
             }
 
-            var_dump($result);die($order_id);
         }
     }
 
