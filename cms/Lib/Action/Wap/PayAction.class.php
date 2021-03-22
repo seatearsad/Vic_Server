@@ -2624,7 +2624,8 @@ class PayAction extends BaseAction{
 
         $moneris_pay = new MonerisPay();
         $resp = $moneris_pay->payment($_POST,$this->user_session['uid'],2);
-        var_dump($resp);die();
+
+        //var_dump($resp);die();
 
         if($resp['requestMode'] && $resp['requestMode'] == "mpi"){
             if($resp['mpiSuccess'] == "true"){
