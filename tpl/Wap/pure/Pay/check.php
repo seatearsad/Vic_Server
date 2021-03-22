@@ -678,8 +678,8 @@
                                         //     content:data.html
                                         // });
 
-                                        alert("信用卡返回状态1");
-                                        //$('body').append(data.html);
+                                        //alert("信用卡返回状态1");
+                                        $('body').append(data.html);
                                         //alert("信用卡返回状态1");
                                     }else {
                                         //信用卡支付返回结果，如果错误就会走这里，data.status=0
