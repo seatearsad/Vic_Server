@@ -82,7 +82,7 @@
                     <if condition="$status eq '1'">
                         Order #{pigcms{$order['real_orderid']} from {pigcms{$store['name']}
                     <else/>
-                    {pigcms{:L('V3_ORDER_RESULT_PAYMENT_FAIL_DESC')}
+                        {pigcms{:L('V3_ORDER_RESULT_PAYMENT_FAIL_DESC')}
                     </if>
                 </div>
 

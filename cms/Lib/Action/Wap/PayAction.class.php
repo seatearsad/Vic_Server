@@ -2645,7 +2645,6 @@ class PayAction extends BaseAction{
 
         if($resp['requestMode'] && $resp['requestMode'] == "mpi"){
             if($resp['mpiSuccess'] == "true"){
-                die("1111111111111111111111111");
                 $result = array('error_code' => false,'mode'=>$resp['requestMode'],'html'=>$resp['mpiInLineForm'], 'msg' => $resp['message']);
                 $this->ajaxReturn($result);
             }else{
