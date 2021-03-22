@@ -89,7 +89,7 @@
                 <if condition="$status eq '1'">
                     <a href=".//wap.php?g=Wap&c=Shop&a=order_detail&order_id={pigcms{$order_id}"><div class="div_button">{pigcms{:L('V3_ORDER_RESULT_PAYMENT_VIEW_ORDER')}</div></a>
                     <else/>
-                    <a href=".//wap.php?g=Wap&c=Pay&a=check&order_id={pigcms{$order_id}&type=shop"><div class="div_button">{pigcms{:L('V3_ORDER_RESULT_PAYMENT_CONTINUE')}</div></a>
+                    <a href=".//wap.php?g=Wap&c=Pay&a=check&order_id={pigcms{$order_id}&type=shop&times=2"><div class="div_button">{pigcms{:L('V3_ORDER_RESULT_PAYMENT_CONTINUE')}</div></a>
                 </if>
 
         </if>

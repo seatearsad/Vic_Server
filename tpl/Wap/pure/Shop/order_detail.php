@@ -230,7 +230,7 @@
     <if condition="$order_details['paid'] eq 0 AND $order.statusLog eq 0">
         <div id="payment_box" class="infor">
 <!--            data-time="'+order_list[i]['create_time']+'" data-id="'+order_list[i]['order_id']+'"data-jet="'+order_list[i]['jetlag']+'"-->
-            <a href="{pigcms{:U('Pay/check',array('order_id' => $order_details['order_id'], 'type'=>'shop'))}"><div class="div_button count_down" data-time="{pigcms{$order['create_time']}" data-id="{pigcms{$order_details['order_id']}" data-jet="{pigcms{$order['jetlag']}">Finish Payment</div></a>
+            <a href="{pigcms{:U('Pay/check',array('order_id' => $order_details['order_id'], 'type'=>'shop','times'=>'2'))}"><div class="div_button count_down" data-time="{pigcms{$order['create_time']}" data-id="{pigcms{$order_details['order_id']}" data-jet="{pigcms{$order['jetlag']}">Finish Payment</div></a>
         </div>
         <div class="gray_line"></div>
     </if>
