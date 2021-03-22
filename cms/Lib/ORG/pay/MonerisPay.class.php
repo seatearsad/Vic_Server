@@ -25,8 +25,8 @@ class MonerisPay
         }
         //die($this->store_id."----------".$this->api_token);
         $this->countryCode = 'CA';
-        //$this->testMode = true;
-        $this->testMode = false;
+        $this->testMode = true;
+        //$this->testMode = false;
     }
 
     /**
@@ -54,7 +54,7 @@ class MonerisPay
             $txnArray['type'] = 'purchase';
             $txnArray['crypt_type'] = '7';
 
-            if ($data['credit_id']) {//存储卡的
+            if ($data['credit_id']) {//使用老卡存储卡的
                 $card_id = $data['credit_id'];
                 $card = D('User_card')->field(true)->where(array('id' => $card_id))->find();
                 $txnArray['pan'] = $card['card_num'];
@@ -108,8 +108,9 @@ class MonerisPay
             $mpgResponse = $mpgHttpPost->getMpgResponse();
             //echo("----3-----");
             $resp = $this->arrageResp($mpgResponse, $txnArray['pan'], $txnArray['expdate'], 0, $order_id, $card_cvd);
-
+            var_dump($resp);die("---------");
             if ($resp['responseCode'] != "null" && $resp['responseCode'] < 50 && $data['save'] == 1) {//如果需要存储
+
                 $isC = D('User_card')->getCardByUserAndNum($uid, $data['card_num']);
                 if (!$isC) {
                     D('User_card')->clearIsDefaultByUid($uid);
@@ -118,6 +119,7 @@ class MonerisPay
                     $data['create_time'] = date("Y-m-d H:i:s");
                     //存储的时候为YYMM
                     $data['expiry'] = transYM($data['expiry']);
+
                     $data['credit_id'] = D('User_card')->field(true)->add($data);
                 }
             }
