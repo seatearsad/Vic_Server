@@ -438,7 +438,7 @@
                 </if>
                 <php>}</php>
                 <if condition="$order_details['status'] eq 2">
-                    <li class="fl replace" data-url="{pigcms{:U('My/shop_feedback',array('order_id' => $order_details['order_id']))}">{pigcms{:L('_B_PURE_MY_73_')}</li>
+                    <li class="fl replace" data-url="{pigcms{:U('My/shop_feedback',array('order_id' => $order_details['order_id']))}">{pigcms{:L('_B_PURE_MY_73_')}4</li>
                     <!--li class="fr zlyd" data-url="{pigcms{:U('Shop/confirm_order', array('order_id' => $order_details['order_id'], 'store_id' => $store['store_id']))}">{pigcms{:L('_ONE_MORE_LIST_')}</li-->
                 </if>
                 <else/>
@@ -541,7 +541,16 @@
         update_pay_time();
 
         $('.consumes ul li').click(function(){
-            location.href = $(this).data('url');
+            var link_url=$(this).data('url');
+            layer.open({
+                content: "{pigcms{:L(\'REFUND_ALERT_\')}",
+                btn: ['Yes', 'No'],
+                shadeClose: false,
+                yes: function(){
+                    window.location.href =link_url;
+                }, no: function(){}
+            });
+
         });
         $(document).on('click','.phone',function(event){
             if($(this).attr('data-phone')){

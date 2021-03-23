@@ -1158,10 +1158,18 @@ class ShopAction extends BaseAction
             //$condition_where .=  " AND (o.create_time BETWEEN ".$period[0].' AND '.$period[1].")";
             $condition_where .=  " AND (create_time BETWEEN ".$period[0].' AND '.$period[1].")";
         }
+
+        if($_GET['city_id']){
+            $store_where = " where s.city_id=".$_GET['city_id'];
+            $where['s.city_id'] = $_GET['city_id'];
+        }else{
+            $store_where = "";
+        }
         //$condition_where.=" AND o.is_del=0";
         $condition_where.=" AND is_del=0";
         $where['is_del'] = 0;
-        $count = D('Shop_order')->where($where)->count();
+        //$coupon_list = M('New_event_user')->join('as u left join '.C('DB_PREFIX').'new_event_coupon as c ON u.event_coupon_id=c.id')->field('u.*')->where($where)->select();
+        $count = D('Shop_order')->join('as o left join '.C('DB_PREFIX').'merchant_store as s ON o.store_id=s.store_id')->where($where)->count();
 
         $length = ceil($count / 1000);
         for ($i = 0; $i < $length; $i++) {
@@ -1230,7 +1238,7 @@ class ShopAction extends BaseAction
             $objActSheet->setCellValue('AC1', '配送费优惠类型');
 
 
-            $sql = "SELECT o.*, d.name as good_name,d.price as good_price ,d.unit,d.cost_price, d.num as good_num,d.tax_num,d.deposit_price, s.tax_num as store_tax,s.name AS store_name FROM (select * from pigcms_shop_order ".$condition_where." LIMIT ". $i*1000 .",1000)o LEFT JOIN pigcms_merchant_store AS s ON s.store_id=o.store_id LEFT JOIN pigcms_shop_order_detail AS d ON `d`.`order_id`=`o`.`order_id` ORDER BY o.order_id DESC";
+            $sql = "SELECT o.*, d.name as good_name,d.price as good_price ,d.unit,d.cost_price, d.num as good_num,d.tax_num,d.deposit_price, s.tax_num as store_tax,s.name AS store_name FROM (select * from pigcms_shop_order ".$condition_where." LIMIT ". $i*1000 .",1000)o LEFT JOIN pigcms_merchant_store AS s ON s.store_id=o.store_id LEFT JOIN pigcms_shop_order_detail AS d ON `d`.`order_id`=`o`.`order_id`".$store_where." ORDER BY o.order_id DESC";
             //$sql = "SELECT o.*, m.name AS merchant_name,d.name as good_name,d.price as good_price ,d.unit,d.cost_price, d.num as good_num,g.tax_num,g.deposit_price, s.default_tax,ds.dining_time,s.name AS store_name FROM (select * from pigcms_shop_order ".$condition_where." LIMIT ". $i*1000 .",1000)o LEFT JOIN pigcms_merchant_store AS s ON s.store_id=o.store_id LEFT JOIN pigcms_merchant AS m ON `s`.`mer_id`=`m`.`mer_id` LEFT JOIN pigcms_shop_order_detail AS d ON `d`.`order_id`=`o`.`order_id` LEFT JOIN pigcms_shop_goods AS g ON `g`.`goods_id`=`d`.`goods_id` LEFT JOIN pigcms_deliver_supply AS ds ON `ds`.`order_id`=`o`.`order_id` ORDER BY o.order_id DESC";
             //$sql = "SELECT  o.*, m.name AS merchant_name,d.name as good_name,d.price as good_price ,d.unit,d.cost_price, d.num as good_num, s.name AS store_name FROM " . C('DB_PREFIX') . "shop_order AS o LEFT JOIN " . C('DB_PREFIX') . "merchant_store AS s ON s.store_id=o.store_id LEFT JOIN " . C('DB_PREFIX') . "merchant AS m ON `s`.`mer_id`=`m`.`mer_id` LEFT JOIN " . C('DB_PREFIX') . "shop_order_detail AS d ON `d`.`order_id`=`o`.`order_id` ".$condition_where." ORDER BY o.order_id DESC LIMIT " . $i * 1000 . ",1000";
             //
@@ -1759,25 +1767,25 @@ class ShopAction extends BaseAction
                         $status_txt = "";
                         switch ($v['status']) {
                             case 1:
-                                $status_txt = "<div>顾客下单：";
+                                $status_txt = "<div>".L('Back_Deliver_Show_1')."：";
                                 break;
                             case 2:
-                                $status_txt = "<div style='color: #ffa52d'>商家接单：";
+                                $status_txt = "<div style='color: #ffa52d'>".L('Back_Deliver_Show_2')."：";
                                 break;
                             case 3:
-                                $status_txt = "<div>送餐员接单：";
+                                $status_txt = "<div>".L('Back_Deliver_Show_4')."：";
                                 break;
                             case 4:
-                                $status_txt = "<div style='color: #008037'>已取货：";
+                                $status_txt = "<div style='color: #008037'>".L('Back_Deliver_Show_5')."：";
                                 break;
                             case 5:
-                                $status_txt = "<div style='color: #004aad'>开始配送：";
+                                $status_txt = "<div style='color: #004aad'>".L('Back_Deliver_Show_6')."：";
                                 break;
                             case 6:
-                                $status_txt = "<div>送达时间：";
+                                $status_txt = "<div>".L('Back_Deliver_Show_7')."：";
                                 break;
                             case 33:
-                                $status_txt = "<div style='color: #ff5757'>增加出餐时间：".$v['note'].'分钟</div>';
+                                $status_txt = "<div style='color: #ff5757'>".L('Back_Deliver_Show_8')."：".$v['note'].L('Back_Deliver_Show_min').'</div>';
                                 break;
 
                         }
@@ -1787,9 +1795,9 @@ class ShopAction extends BaseAction
                             $show_list[] = $status_txt;
                         if($v['status'] == 2){
                             $supply = D('Deliver_supply')->where(array("order_id"=>$order_id))->find();
-                            $show_list[] = "<div style='color: #ff5757'>预计出餐：" . ' ' . date('H:i', $v['dateline']+$supply['dining_time']*60).'</div>';
+                            $show_list[] = "<div style='color: #ff5757'>".L('Back_Deliver_Show_3')."：" . ' ' . date('H:i', $v['dateline']+$supply['dining_time']*60).'</div>';
                             if(!$supply['uid'])
-                                array_unshift($show_list,'<div>顾客下单： ' . date('H:i', $v['dateline']).'</div>');
+                                array_unshift($show_list,'<div>'.L('Back_Deliver_Show_1').'： ' . date('H:i', $v['dateline']).'</div>');
                         }
                     }
                 }

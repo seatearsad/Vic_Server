@@ -84,6 +84,22 @@
         padding: 5px 5px;
         border-radius: 3px;
     }
+    #memo_up{
+        width:80%;
+        font-size: 12px;
+        line-height: 1.3;
+        margin: 20px auto 5px auto;
+    }
+    #memo_up a{
+        text-decoration: underline;
+        color: #666666;
+    }
+    .y_c{
+        color: #ffa52d;
+    }
+    .text_b{
+        font-weight: bold;
+    }
 </style>
 <body style="background:url('{pigcms{$static_path}img/login_bg.png');">
 <section>
@@ -98,10 +114,10 @@
         <li class="act"></li><li class="act"></li><li class="act"></li><li class="act"></li>
         </ul>
     </div>
-    <div id="memo">
-        {pigcms{:L('_ND_PICKUPNOTICE0_')}
+    <div id="memo_up">
+        {pigcms{:L('NEW_DELIVER_GET_BAG')}
     </div>
-    <div id="address">
+    <!--div id="address">
         <div>
             #218-852 Fort St
         </div>
@@ -121,8 +137,8 @@
     </div>
     <div id="memo">
         {pigcms{:L('_ND_PICKUPNOTICE1_')}
-    </div>
-    <div style="border-bottom: 1px dashed #666666;margin: 20px auto;width: 80%;">
+    </div-->
+    <div style="border-bottom: 1px dashed #666666;margin: 0px auto;width: 80%;">
 
     </div>
     <div id="memo">

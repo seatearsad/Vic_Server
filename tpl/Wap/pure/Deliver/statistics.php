@@ -26,19 +26,27 @@
         border-radius: 2px;
         font-size: 12px;
         color: #777777;
-        padding: 0 5%;
+        padding: 10px 5%;
         text-align: center;
+    }
+    .summary_txt{
+        width: 80%;
+        margin: 10px auto;
+        font-size: 12px;
+        color: #777777;
+        padding: 5px;
+        line-height: 1.5;
     }
     .su_left{
         display: inline-block;
-        width: 50%;
+        width: 70%;
         text-align: left;
         font-size: 12px;
         line-height: 25px;
     }
     .su_right{
         display: inline-block;
-        width: 50%;
+        width: 30%;
         text-align: right;
         font-size: 12px;
         line-height: 25px;
@@ -130,7 +138,7 @@
             </a>
         </div>
         <section class="summary">
-            <div style="margin: 5px auto;">{pigcms{:L('_ND_SUMMARY_')}</div>
+            <div style="margin: 5px auto 15px auto;font-weight: bold;">{pigcms{:L('_ND_SUMMARY_')}</div>
             <div style="font-size: 0px">
                 <span class="su_left y_c">{pigcms{:L('_ND_TOTALORDER_')}</span>
                 <span class="su_right y_c">{pigcms{$order_count|default=0}</span>
@@ -144,23 +152,46 @@
                 <span class="su_right">${pigcms{$tip|default=0}+</span>
             </div>
             <div style="font-size: 0px">
-                <span class="su_left y_c">{pigcms{:L('_ND_ACTUALEARN_')}</span>
-                <span class="su_right y_c">{pigcms{$freight_charge+$tip}+</span>
+                <span class="su_left" style="font-weight: bold;">Earning by Delivery Fees + Tips, or</span>
+                <span class="su_right" style="font-weight: bold;">${pigcms{$freight_charge+$tip}+</span>
+            </div>
+            <div style="font-size: 0px">
+                <span class="su_left" style="font-weight: bold;">Guaranteed Earning ($10/order)*</span>
+                <span class="su_right" style="font-weight: bold;">${pigcms{$guara_money|floatval}</span>
+            </div>
+            <div style="border-bottom: 1px solid lightgray;margin: 15px auto;"></div>
+            <div style="font-size: 0px">
+                <span class="su_left" style="font-weight: bold;">{pigcms{:L('_ND_ACTUALEARN_')}</span>
+                <span class="su_right" style="font-weight: bold;">
+                    <if condition="$guara_money gt $freight_charge+$tip">
+                        ${pigcms{$guara_money|floatval}
+                    <else />
+                        ${pigcms{$freight_charge+$tip}+
+                    </if>
+                </span>
             </div>
             <div style="font-size: 0px">
                 <span class="su_left">{pigcms{:L('_ND_CASHREC_')}</span>
                 <span class="su_right">(${pigcms{$offline_money|floatval})</span>
             </div>
             <div style="font-size: 0px">
-                <span class="su_left">{pigcms{:L('_ND_AMOUNTPAYABLE_')}</span>
-                <span class="su_right">${pigcms{$freight_charge+$tip-$offline_money|floatval}</span>
+                <span class="su_left y_c">{pigcms{:L('_ND_AMOUNTPAYABLE_')}</span>
+                <span class="su_right y_c">
+                    <if condition="$guara_money gt $freight_charge+$tip">
+                        ${pigcms{$guara_money-$offline_money|floatval}
+                    <else />
+                        ${pigcms{$freight_charge+$tip-$offline_money|floatval}
+                    </if>
+                </span>
             </div>
             <div class="order_history">
                 {pigcms{:L('_ND_VIEWORDERHIS_')}
             </div>
         </section>
-
-        <section class="my_earning">
+        <div class="summary_txt">
+            * Effective on February 16th, 2021, you're guaranteed a ${pigcms{$one_money} average earning per order. If the total of delivery fees + tips is lower than the guaranteed earning for the pay period, you will be paid based on the guaranteed earning calculation. Please note that this only applies to your pay period, which is the 1st-15th and 16th-31st of every month. If you select a different date range, the number given will not be accurate.
+        </div>
+        <!--section class="my_earning">
             <span>{pigcms{:L('_ND_MYEARNING_')}</span>
             <span class="btn act" data-type="0">{pigcms{:L('_ND_TODAY_')}</span>
             <span class="btn" data-type="1">{pigcms{:L('_ND_MONTH_')}</span>
@@ -178,7 +209,7 @@
         <div class="earn_show">
             <div class="earn_num" id="all_ave">${pigcms{$today_data['money']/$today_data['num']|floatval}</div>
             <div class="earn_title">Average Earning per Order</div>
-        </div>
+        </div-->
     </section>
 <script type="text/javascript">
 var DetailUrl = "{pigcms{:U('Wap/Deliver/detail', array('supply_id'=>'d%'))}";

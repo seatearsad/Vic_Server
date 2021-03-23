@@ -5,7 +5,7 @@
 	</style>
 	<table cellpadding="0" cellspacing="0" class="frame_form" width="100%">
 		<tr>
-			<th width="15%">订单编号</th>
+			<th width="15%">{pigcms{:L('F_ORDER_ID')}</th>
 			<td colspan="3" width="85%">{pigcms{$now_order.order_id}</td>
 		</tr>
 		<if condition="$now_order.orderid neq 0">
@@ -17,15 +17,15 @@
 		
 		
 		<tr>
-			<td colspan="4" style="padding-left:5px;color:black;"><b>订单信息</b></td>
+			<td colspan="4" style="padding-left:5px;color:black;"><b>{pigcms{:L('_ORDER_INFO_')}</b></td>
 		</tr>
 		<tr>
-			<th width="15%">订单类型</th>
-			<td width="35%">充值</td>
-			<th width="15%">订单状态</th>
+			<th width="15%">{pigcms{:L('F_ORDER_DETAILS')}</th>
+			<td width="35%">{pigcms{:L('F_TOP_UP')}</td>
+			<th width="15%">{pigcms{:L('F_ORDER_STATUS')}</th>
 			<td width="35%">
 				<if condition="$now_order['paid']">
-					<font color="green">已付款</font>
+					<font color="green">{pigcms{:L('F_PAID')}</font>
 				<else/>
 					<font color="red">未付款</font>
 				</if>
@@ -34,10 +34,10 @@
 		</tr>
 		
 		<tr>
-			<th width="15%">下单时间</th>
+			<th width="15%">{pigcms{:L('F_ORDERING_TIME')}</th>
 			<td width="35%">{pigcms{$now_order.add_time|date='Y-m-d H:i:s',###}</td>
 			<if condition="$now_order['paid']">
-				<th width="15%">付款时间</th>
+				<th width="15%">{pigcms{:L('F_PAYMENT_TIME')}</th>
 				<td width="35%">{pigcms{$now_order.pay_time|date='Y-m-d H:i:s',###}</td>
 			<else/>
 				<th width="15%"></th>
@@ -47,16 +47,16 @@
 		
 		
 		<tr>
-			<td colspan="4" style="padding-left:5px;color:black;"><b>用户信息：</b></td>
+			<td colspan="4" style="padding-left:5px;color:black;"><b>{pigcms{:L('F_USER_INFO1')}：</b></td>
 		</tr>
 		<tr>
-			<th width="15%">用户ID</th>
+			<th width="15%">{pigcms{:L('F_USER_ID')}</th>
 			<td width="35%">{pigcms{$now_order.uid}</td>
-			<th width="15%">用户昵称</th>
+			<th width="15%">{pigcms{:L('F_USER_NICKNAME')}</th>
 			<td width="35%">{pigcms{$now_order.nickname}</td>
 		</tr>
 		<tr>
-			<th width="15%">用户手机号</th>
+			<th width="15%">{pigcms{:L('F_USER_NUMBER1')}</th>
 			<td width="35%">{pigcms{$now_order.phone}</td>
 	
 		</tr>
