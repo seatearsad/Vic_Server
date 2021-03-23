@@ -125,11 +125,11 @@ class EventAction extends BaseAction
     }
 
     public function getTypeSetName($event){
-        $type_name = '限制天数';
+        $type_name = L('G_EFFECTIVE_DAYS');
         if($event['type'] == 3){
-            $type_name = '限制公里数';
+            $type_name = L('G_DISTANCE_LIMIT');
         }else if($event['type'] == 4 || $event['type'] == 5){
-            $type_name = '店铺ID';
+            $type_name = L('G_STORE_ID');
         }
 
         return $type_name;

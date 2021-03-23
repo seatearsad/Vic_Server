@@ -75,7 +75,7 @@
 				<td width="35%"><div style="height:24px;line-height:24px;">{pigcms{$now_user.last_ip|long2ip=###}</div></td>
 			</tr>
             <tr id="code_tr">
-            <th width="15%">用户码</th>
+            <th width="15%">{pigcms{:L('F_ADMIN_CODE')}</th>
             <td width="85%" colspan="3">
                 <input type="text" class="input fl" name="user_rechange_code" id="user_rechange_code" value="" style="width: 30%" />
                 <button id="send_code" type="button" style="margin-left: 10px;height: 30px;">Send</button>
@@ -136,7 +136,7 @@
                         if(data.status == 1){
                             var html = '<tr>' +
                                        '<th width="15%">'+balance_show+'</th>' +
-                                       '<td width="85%" colspan="3"><div style="height:30px;line-height:24px;">现在余额：$'+now_money+' &nbsp;&nbsp;&nbsp;&nbsp;<select name="set_money_type"><option value="1">增加</option><option value="2">减少</option></select>&nbsp;&nbsp;<input type="text" class="input" name="set_money" size="10" validate="number:true" tips="此处填写增加或减少的额度，不是将余额变为此处填写的值"/></div></td>' +
+                                       '<td width="85%" colspan="3"><div style="height:30px;line-height:24px;">{pigcms{:L('F_CURRENT_BALANCE')}：$'+now_money+' &nbsp;&nbsp;&nbsp;&nbsp;<select name="set_money_type"><option value="1">增加</option><option value="2">减少</option></select>&nbsp;&nbsp;<input type="text" class="input" name="set_money" size="10" validate="number:true" tips="此处填写增加或减少的额度，不是将余额变为此处填写的值"/></div></td>' +
                                        '<input type="hidden" name="user_code_curr" value="'+$('#user_rechange_code').val()+'">'
                                        '</tr>'
 

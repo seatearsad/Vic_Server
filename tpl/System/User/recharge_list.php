@@ -2,8 +2,8 @@
 		<div class="mainbox">
 			<div id="nav" class="mainnav_title">
 				<ul>
-					<a href="{pigcms{:U('User/recharge_list')}" class="on">订单列表</a>
-					<a href="{pigcms{:U('User/admin_recharge_list')}" >管理员充值列表</a>
+					<a href="{pigcms{:U('User/recharge_list')}" class="on">{pigcms{:L('F_TOP_UP_LIST')}</a>
+					<a href="{pigcms{:U('User/admin_recharge_list')}" >{pigcms{:L('F_CREDITS_ADDED')}</a>
 				</ul>
 			</div>
 			<table class="search_table" width="100%">
@@ -12,14 +12,14 @@
 						<form action="{pigcms{:U('recharge_list')}" method="get">
 							<input type="hidden" name="c" value="User"/>
 							<input type="hidden" name="a" value="recharge_list"/>
-							筛选: <input type="text" name="keyword" class="input-text" value="{pigcms{$_GET['keyword']}"/>
+							{pigcms{:L('F_FILTER')}: <input type="text" name="keyword" class="input-text" value="{pigcms{$_GET['keyword']}"/>
 							<select name="searchtype">
-								<option value="order_id" <if condition="$_GET['searchtype'] eq 'order_id'">selected="selected"</if>>订单编号</option>
-								<option value="orderid" <if condition="$_GET['searchtype'] eq 'orderid'">selected="selected"</if>>支付流水号</option>
-								<option value="name" <if condition="$_GET['searchtype'] eq 'name'">selected="selected"</if>>客户名称</option>
-								<option value="phone" <if condition="$_GET['searchtype'] eq 'phone'">selected="selected"</if>>客户电话</option>
+								<option value="order_id" <if condition="$_GET['searchtype'] eq 'order_id'">selected="selected"</if>>{pigcms{:L('F_ORDER_ID')}</option>
+								<!--option value="orderid" <if condition="$_GET['searchtype'] eq 'orderid'">selected="selected"</if>>支付流水号</option-->
+								<option value="name" <if condition="$_GET['searchtype'] eq 'name'">selected="selected"</if>>{pigcms{:L('F_USER_NAME')}</option>
+								<option value="phone" <if condition="$_GET['searchtype'] eq 'phone'">selected="selected"</if>>{pigcms{:L('F_USER_PHONE')}</option>
 							</select>
-							<input type="submit" value="查询" class="button"/>　　
+							<input type="submit" value="{pigcms{:L('F_SEARCH')}" class="button"/>　　
 
 							<!--支付状态：
 							<select name="status" id="status">
@@ -40,12 +40,12 @@
 					<table width="100%" cellspacing="0">
 						<thead>
 							<tr>
-								<th>订单编号</th>
-								<th>订单信息</th>
-								<th>订单用户</th>
-								<th>查看用户信息</th>
-								<th>时间</th>
-								<th class="textcenter">操作</th>
+								<th>{pigcms{:L('F_ORDER_ID')}</th>
+								<th>{pigcms{:L('F_AMOUNT')}</th>
+								<th>{pigcms{:L('F_USER')}</th>
+								<th>{pigcms{:L('F_USER_INFO')}</th>
+								<th>{pigcms{:L('F_TIME')}</th>
+								<th class="textcenter">{pigcms{:L('F_ACTION')}</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -53,25 +53,25 @@
 								<volist name="order_list" id="vo">
 									<tr>
 										<td>{pigcms{$vo.order_id}</td>
-										<td>充值：${pigcms{$vo.money}</td>
+										<td>${pigcms{$vo.money}</td>
 
-										<td>用户名：{pigcms{$vo.nickname}</td>
+										<td>{pigcms{$vo.nickname}</td>
 										<td>
-											<a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('User/edit',array('uid'=>$vo['uid']))}','编辑用户信息',680,560,true,false,false,editbtn,'edit',true);">查看用户信息</a>
+											<a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('User/edit',array('uid'=>$vo['uid']))}','{pigcms{:L(\'F_EDIT_INFO\')}',680,560,true,false,false,editbtn,'edit',true);">{pigcms{:L('F_USER_INFO')}</a>
 										</td>
 										<td>
-											下单时间：{pigcms{$vo['add_time']|date='Y-m-d H:i:s',###}<br/>
-											<if condition="$vo['paid']">付款时间：{pigcms{$vo['pay_time']|date='Y-m-d H:i:s',###}</if>
+											{pigcms{:L('F_ORDERING_TIME')}：{pigcms{$vo['add_time']|date='Y-m-d H:i:s',###}<br/>
+											<if condition="$vo['paid']">{pigcms{:L('F_PAYMENT_TIME')}：{pigcms{$vo['pay_time']|date='Y-m-d H:i:s',###}</if>
 										</td>
 										<td class="textcenter">
-                                            <a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('User/order_detail',array('order_id'=>$vo['order_id']))}','查看充值订单详情',800,560,true,false,false,false,'order_edit',true);">查看详情</a>
+                                            <a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('User/order_detail',array('order_id'=>$vo['order_id']))}','{pigcms{:L(\'F_TOPUP_DETAILS\')}',800,560,true,false,false,false,'order_edit',true);">{pigcms{:L('F_DETAILS')}</a>
                                             <!--a href="javascript:void(0);" onclick="recharge_refund('{pigcms{$vo.order_id}','{pigcms{$vo.uid}')">退款</a-->
                                         </td>
 									</tr>
 								</volist>
 								<tr><td class="textcenter pagebar" colspan="6">{pigcms{$pagebar}</td></tr>
 							<else/>
-								<tr><td class="textcenter red" colspan="6">列表为空！</td></tr>
+								<tr><td class="textcenter red" colspan="6">{pigcms{:L('_BACK_EMPTY_')}</td></tr>
 							</if>
 						</tbody>
 					</table>
