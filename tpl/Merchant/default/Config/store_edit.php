@@ -21,16 +21,16 @@
 					<div class="tabbable">
 						<ul class="nav nav-tabs" id="myTab">
 							<li class="active">
-								<a data-toggle="tab" href="#basicinfo">基本设置</a>
+								<a data-toggle="tab" href="#basicinfo">{pigcms{:L('BASIC_SETTING_BKADMIN')}</a>
 							</li>
 							<li>
-								<a data-toggle="tab" href="#txtstore">店铺描述</a>
+								<a data-toggle="tab" href="#txtstore">{pigcms{:L('STORE_DESCRIPTION_BKADMIN')}</a>
 							</li>
-							{pigcms{/***[if >=3]***/}
-							<li>
-								<a data-toggle="tab" href="#discount">{pigcms{$config.cash_alias_name}</a>
-							</li>
-							{pigcms{/***[/if]***/}
+<!--							{pigcms{/***[if >=3]***/}-->
+<!--							<li>-->
+<!--								<a data-toggle="tab" href="#discount">{pigcms{$config.cash_alias_name}</a>-->
+<!--							</li>-->
+<!--							{pigcms{/***[/if]***/}-->
 						</ul>
 					</div>
 					<form enctype="multipart/form-data" class="form-horizontal" method="post" id="edit_form">
@@ -38,52 +38,52 @@
 							<div id="basicinfo" class="tab-pane active">
 								<input type="hidden" name="store_id" value="{pigcms{$now_store.store_id}"/>
 								<div class="form-group">
-									<label class="col-sm-1"><label for="name">店铺名称</label></label>
+									<label class="col-sm-1"><label for="name">{pigcms{:L('STORE_NAME_BKADMIN')}</label></label>
 									<input class="col-sm-2" size="20" name="name" id="name" value="{pigcms{$now_store.name}" type="text"/>
 								</div>
-								<div class="form-group"><label class="col-sm-1">是否设置成主店</label><label><input type="radio" name="ismain" value="1" <if condition="$now_store['ismain'] eq 1">checked="checked"</if>>&nbsp;&nbsp;是</label>
+								<div class="form-group hidden_obj"><label class="col-sm-1">是否设置成主店</label><label><input type="radio" name="ismain" value="1" <if condition="$now_store['ismain'] eq 1">checked="checked"</if>>&nbsp;&nbsp;是</label>
 									&nbsp;&nbsp;&nbsp;
 									<label><input type="radio" name="ismain" value="0" <if condition="$now_store['ismain'] neq 1">checked="checked"</if>>&nbsp;&nbsp;否</label>
 								 &nbsp;&nbsp;&nbsp;<span class="form_tips">如果将此店铺设置成主店，系统将自动取消其他已设置的主店</span>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-1"><label for="phone">联系电话</label></label>
+									<label class="col-sm-1"><label for="phone">{pigcms{:L('STORE_PHONE_NUMBER_BKADMIN')}</label></label>
 									<input class="col-sm-2" size="20" name="phone" id="phone" value="{pigcms{$now_store.phone}" type="text"/>
-									<span class="form_tips">多个电话号码以空格分开</span>
+									<span class="form_tips">{pigcms{:L('PHONE_ASSOCIATE_BKADMIN')}</span>
 								</div>
-							   <div class="form-group">
+							   <div class="form-group hidden_obj">
 									<label class="col-sm-1"><label for="weixin">联系微信</label></label>
 									<input class="col-sm-2" size="20" name="weixin" id="weixin" type="text" value="{pigcms{$now_store.weixin}"/>
 								</div>
-								<div class="form-group">
+								<div class="form-group hidden_obj">
 									<label class="col-sm-1"><label for="qq">联系Q Q</label></label>
 									<input class="col-sm-2" size="20" name="qq" id="qq" type="text" value="{pigcms{$now_store.qq}"/>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-1">关键词：</label>
-									<input class="col-sm-3" maxlength="100" name="keywords" type="text" value="{pigcms{$now_store.keywords}" id="keywords"/><span class="form_tips">选填。<font color="red">（用 | 分隔不同的关键词，最多5个）</font>，用户在微信将按此值搜索！</span> <a href="javascript:;" id="get_key_btn">按店铺名称获取</a>
+									<label class="col-sm-1">{pigcms{:L('SHORT_DESCRIPTION_BKADMIN')}</label>
+									<input class="col-sm-3" maxlength="100" name="keywords" type="text" value="{pigcms{$now_store.keywords}" id="keywords"/><span class="form_tips">{pigcms{:L('REQUIRED_INFO_BKADMIN')}</span> <a href="javascript:;" id="get_key_btn">按店铺名称获取</a>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-1"><label for="long_lat">店铺经纬度</label></label>
+									<label class="col-sm-1"><label for="long_lat">{pigcms{:L('ADDRESS_COORDINATES_BKADMIN')}</label></label>
 									<input class="col-sm-2" size="10" name="long_lat" id="long_lat" value="{pigcms{$now_store.long},{pigcms{$now_store.lat}" type="text" readonly="readonly"/>
-									&nbsp;&nbsp;&nbsp;&nbsp;<a href="#modal-table" class="btn btn-sm btn-success" id="show_map_frame" data-toggle="modal">点击选取经纬度</a>
+									&nbsp;&nbsp;&nbsp;&nbsp;<a href="#modal-table" class="btn btn-sm btn-success" id="show_map_frame" data-toggle="modal">{pigcms{:L('SET_COORDINATES_BKADMIN')}</a>
 								</div>
-								<div class="form-group">
+								<div class="form-group hidden_obj">
 									<label class="col-sm-1"><label for="permoney">人均消费</label></label>
 									<input class="col-sm-2" size="20" name="permoney" id="permoney" type="text" value="{pigcms{$now_store.permoney}" onkeyup="value=value.replace(/[^1234567890]+/g,'')"/>
 									<span class="form_tips"> 元（必填）</span>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-1"><label for="feature">店铺特色</label></label>
+									<label class="col-sm-1"><label for="feature">{pigcms{:L('SEARCH_KEYWORDS_BKADMIN')}</label></label>
 									<input class="col-sm-2" style="width:600px" name="feature" id="feature" type="text" value="{pigcms{$now_store.feature}" />
-									<span class="form_tips">简单描述本店特色之处80字以内（必填）</span>
+									<span class="form_tips">{pigcms{:L('OPTIONAL_SEARCH_BKADMIN')}</span>
 								</div>
-								<div class="form-group" id="choose_category_s">
+								<div class="form-group hidden_obj" id="choose_category_s">
 									<label class="col-sm-1"><label>店铺所属分类</label></label>
 									<fieldset id="choose_category" cat_fid="{pigcms{$now_store.cat_fid}" cat_id="{pigcms{$now_store.cat_id}"></fieldset>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-1"><label>店铺所在地</label></label>
+									<label class="col-sm-1"><label>{pigcms{:L('CITY_BKADMIN')}</label></label>
 									<!--fieldset id="choose_cityarea" province_id="{pigcms{$now_store.province_id}" city_id="{pigcms{$now_store.city_id}" area_id="{pigcms{$now_store.area_id}" circle_id="{pigcms{$now_store.circle_id}" market_id="{pigcms{$now_store.market_id}"></fieldset-->
                                     <fieldse id="city_area" style="padding-top: 6px;float: left">{pigcms{$now_store.city_name}</fieldse>
                                     <input type="hidden" name="area_id" id="area_id" value="{pigcms{$now_store.area_id}">
@@ -91,24 +91,24 @@
                                     <input type="hidden" name="province_id" id="province_id" value="{pigcms{$now_store.province_id}">
 								</div>
 								<div class="form-group">
-									<label class="col-sm-1"><label for="adress">店铺地址</label></label>
+									<label class="col-sm-1"><label for="adress">{pigcms{:L('STORE_ADDRESS_BKADMIN')}</label></label>
 									<input class="col-sm-2" size="20" name="adress" id="adress" value="{pigcms{$now_store.adress}" type="text"/>
 								</div>
-								<div class="form-group">
+								<div class="form-group hidden_obj">
 									<label class="col-sm-1"><label for="trafficroute">交通路线</label></label>
 									<input class="col-sm-2" name="trafficroute" id="trafficroute" type="text" value="{pigcms{$now_store.trafficroute}" style="width:600px"/>
 									<span class="form_tips">简单描述本店交通路线80字以内</span>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-1"><label for="sort">店铺排序</label></label>
+									<label class="col-sm-1"><label for="sort">{pigcms{:L('STORE_LIST_ORDER_BKADMIN')}</label></label>
 									<input class="col-sm-1" size="10" name="sort" id="sort" type="text" value="{pigcms{$now_store.sort}" />
-									<span class="form_tips">默认添加顺序排序！手动调值，数值越大，排序越前</span>
+									<span class="form_tips">{pigcms{:L('DEFAULT_SORT_BKADMIN')}</span>
 								</div>
-								<div class="form-group">
+								<div class="form-group hidden_obj">
 									<label class="col-sm-1">WiFi名称</label>
 									<input class="col-sm-1" name="wifi_account" type="text" value="{pigcms{$now_store.wifi_account}" />
 								</div>
-								<div class="form-group">
+								<div class="form-group hidden_obj">
 									<label class="col-sm-1">WiFi密码</label>
 									<input class="col-sm-1" name="wifi_password" type="text" value="{pigcms{$now_store.wifi_password}" />
 								</div>
@@ -122,7 +122,7 @@
 									</div>
 								</if>
 								<if condition="$config['store_open_meal'] && false">
-									<div class="form-group">
+									<div class="form-group hidden_obj">
 										<label class="col-sm-1" for="store_type">{pigcms{$config.meal_alias_name}类型</label>
 										<select name="store_type" id="store_type">
 											<option value="0" <if condition="$now_store['store_type'] eq 0">selected="selected"</if>>订餐和外卖</option>
@@ -133,7 +133,7 @@
 									</div>
 								</if>
 								<if condition="$config['store_open_meal'] && false">
-									<div class="form-group">
+									<div class="form-group hidden_obj">
 										<label class="col-sm-1" for="store_type">{pigcms{$config.meal_alias_name}类型</label>
 										<select name="store_type" id="store_type">
 											<option value="0" <if condition="$now_store['store_type'] eq 0">selected="selected"</if> disabled>订餐和外卖</option>
@@ -145,7 +145,7 @@
 									</div>
 								</if>
 								<if condition="$config['store_open_group']">
-									<div class="form-group">
+									<div class="form-group hidden_obj">
 										<label class="col-sm-1" for="have_group">{pigcms{$config.group_alias_name}</label>
 										<select name="have_group" id="have_group">
 											<option value="0" <if condition="$now_store['have_group'] eq 0">selected="selected"</if>>关闭</option>
@@ -154,7 +154,7 @@
 									</div>
 								</if>
 								<if condition="$config['store_open_shop']">
-									<div class="form-group">
+									<div class="form-group hidden_obj">
 										<label class="col-sm-1" for="have_group">{pigcms{$config.shop_alias_name}</label>
 										<select name="have_shop" id="have_shop">
 											<option value="0" <if condition="$now_store['have_shop'] eq 0">selected="selected"</if>>关闭</option>
@@ -163,7 +163,7 @@
 									</div>
 								</if>
 								<if condition="$config['store_open_waimai'] && false">
-									<div class="form-group">
+									<div class="form-group hidden_obj">
 										<label class="col-sm-1" for="have_waimai">{pigcms{$config.waimai_alias_name}</label>
 										<select name="have_waimai" id="have_waimai">
 											<option value="1" selected="selected">开启</option>
@@ -175,168 +175,168 @@
 									<button type="button" class="close" data-dismiss="alert">
 										<i class="ace-icon fa fa-times"></i>
 									</button>
-									假设您的营业时间为晚上20:00-凌晨02:00，请填写两个时间段，第一个为“20:00-23:59”，第二个为“00:00-02:00”
+                                    {pigcms{:L('SUPPOSE_HOURS_BKADMIN')}
 								</div>
                                 <div class="table-responsive">
                                     <table class="table table-striped table-hover">
                                         <thead>
                                         <tr>
-                                            <th class="text-center">周数</th>
-                                            <th class="text-center"> 营业时间段1 </th>
-                                            <th class="text-center"> 营业时间段2 </th>
-                                            <th class="text-center"> 营业时间段3 </th>
+                                            <th class="text-center">{pigcms{:L('WEEKLY_BKADMIN')}</th>
+                                            <th class="text-center">{pigcms{:L('TIME_FRAME_1_BKADMIN')} </th>
+                                            <th class="text-center">{pigcms{:L('TIME_FRAME_2_BKADMIN')}</th>
+                                            <th class="text-center">{pigcms{:L('TIME_FRAME_3_BKADMIN')}</th>
                                         </tr>
                                         </thead>
                                         <tbody>
                                         <tr>
-                                            <td class="text-center">周一</td>
+                                            <td class="text-center">{pigcms{:L('MON_BKADMIN')}</td>
                                             <td class="text-center">
-                                                <input id="Config_shop_start_time" class="Config_shop_open_stop_time" type="text" value="{pigcms{$now_store.open_1|default='00:00:00'}" name="open_1" readonly/>	至
+                                                <input id="Config_shop_start_time" class="Config_shop_open_stop_time" type="text" value="{pigcms{$now_store.open_1|default='00:00:00'}" name="open_1" readonly/>	{pigcms{:L('TO_BKADMIN')}
                                                 <input id="Config_shop_stop_time" class="Config_shop_open_stop_time" type="text" value="{pigcms{$now_store.close_1|default='00:00:00'}" name="close_1" readonly/>
                                                 <div class="errorMessage" id="Config_shop_start_time_em_" style="display:none"></div>
                                                 <div class="errorMessage" id="Config_shop_stop_time_em_" style="display:none"></div>
                                             </td>
                                             <td class="text-center">
-                                                <input id="Config_shop_start_time_2" class="Config_shop_open_stop_time" type="text" value="{pigcms{$now_store.open_2|default='00:00:00'}" name="open_2" readonly/>	至
+                                                <input id="Config_shop_start_time_2" class="Config_shop_open_stop_time" type="text" value="{pigcms{$now_store.open_2|default='00:00:00'}" name="open_2" readonly/>	{pigcms{:L('TO_BKADMIN')}
                                                 <input id="Config_shop_stop_time_2" class="Config_shop_open_stop_time" type="text" value="{pigcms{$now_store.close_2|default='00:00:00'}" name="close_2" readonly/>
                                                 <div class="errorMessage" id="Config_shop_start_time_2_em_" style="display:none"></div>
                                                 <div class="errorMessage" id="Config_shop_stop_time_2_em_" style="display:none"></div>
 
                                             </td>
                                             <td class="text-center">
-                                                <input id="Config_shop_start_time_3" class="Config_shop_open_stop_time" type="text" value="{pigcms{$now_store.open_3|default='00:00:00'}" name="open_3" readonly/>	至
+                                                <input id="Config_shop_start_time_3" class="Config_shop_open_stop_time" type="text" value="{pigcms{$now_store.open_3|default='00:00:00'}" name="open_3" readonly/>  {pigcms{:L('TO_BKADMIN')}
                                                 <input id="Config_shop_stop_time_3" class="Config_shop_open_stop_time" type="text" value="{pigcms{$now_store.close_3|default='00:00:00'}" name="close_3" readonly/>
                                                 <div class="errorMessage" id="Config_shop_start_time_3_em_" style="display:none"></div>
                                                 <div class="errorMessage" id="Config_shop_stop_time_3_em_" style="display:none"></div>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td class="text-center">周二</td>
+                                            <td class="text-center">{pigcms{:L('TUE_BKADMIN')}</td>
                                             <td class="text-center">
-                                                <input id="Config_shop_start_time_4" class="Config_shop_open_stop_time" type="text" value="{pigcms{$now_store.open_4|default='00:00:00'}" name="open_4" readonly/>	至
+                                                <input id="Config_shop_start_time_4" class="Config_shop_open_stop_time" type="text" value="{pigcms{$now_store.open_4|default='00:00:00'}" name="open_4" readonly/>	{pigcms{:L('TO_BKADMIN')}
                                                 <input id="Config_shop_stop_time_4" class="Config_shop_open_stop_time" type="text" value="{pigcms{$now_store.close_4|default='00:00:00'}" name="close_4" readonly/>
                                                 <div class="errorMessage" id="Config_shop_start_time_4_em_" style="display:none"></div>
                                                 <div class="errorMessage" id="Config_shop_stop_time_4_em_" style="display:none"></div>
                                             </td>
                                             <td class="text-center">
-                                                <input id="Config_shop_start_time_5" class="Config_shop_open_stop_time" type="text" value="{pigcms{$now_store.open_5|default='00:00:00'}" name="open_5" readonly/>	至
+                                                <input id="Config_shop_start_time_5" class="Config_shop_open_stop_time" type="text" value="{pigcms{$now_store.open_5|default='00:00:00'}" name="open_5" readonly/>	{pigcms{:L('TO_BKADMIN')}
                                                 <input id="Config_shop_stop_time_5" class="Config_shop_open_stop_time" type="text" value="{pigcms{$now_store.close_5|default='00:00:00'}" name="close_5" readonly/>
                                                 <div class="errorMessage" id="Config_shop_start_time_5_em_" style="display:none"></div>
                                                 <div class="errorMessage" id="Config_shop_stop_time_5_em_" style="display:none"></div>
 
                                             </td>
                                             <td class="text-center">
-                                                <input id="Config_shop_start_time_6" class="Config_shop_open_stop_time" type="text" value="{pigcms{$now_store.open_6|default='00:00:00'}" name="open_6" readonly/>	至
+                                                <input id="Config_shop_start_time_6" class="Config_shop_open_stop_time" type="text" value="{pigcms{$now_store.open_6|default='00:00:00'}" name="open_6" readonly/>	{pigcms{:L('TO_BKADMIN')}
                                                 <input id="Config_shop_stop_time_6" class="Config_shop_open_stop_time" type="text" value="{pigcms{$now_store.close_6|default='00:00:00'}" name="close_6" readonly/>
                                                 <div class="errorMessage" id="Config_shop_start_time_6_em_" style="display:none"></div>
                                                 <div class="errorMessage" id="Config_shop_stop_time_6_em_" style="display:none"></div>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td class="text-center">周三</td>
+                                            <td class="text-center">{pigcms{:L('WED_BKADMIN')}</td>
                                             <td class="text-center">
-                                                <input id="Config_shop_start_time_7" class="Config_shop_open_stop_time" type="text" value="{pigcms{$now_store.open_7|default='00:00:00'}" name="open_7" readonly/>	至
+                                                <input id="Config_shop_start_time_7" class="Config_shop_open_stop_time" type="text" value="{pigcms{$now_store.open_7|default='00:00:00'}" name="open_7" readonly/>	{pigcms{:L('TO_BKADMIN')}
                                                 <input id="Config_shop_stop_time_7" class="Config_shop_open_stop_time" type="text" value="{pigcms{$now_store.close_7|default='00:00:00'}" name="close_7" readonly/>
                                                 <div class="errorMessage" id="Config_shop_start_time_7_em_" style="display:none"></div>
                                                 <div class="errorMessage" id="Config_shop_stop_time_7_em_" style="display:none"></div>
                                             </td>
                                             <td class="text-center">
-                                                <input id="Config_shop_start_time_8" class="Config_shop_open_stop_time" type="text" value="{pigcms{$now_store.open_8|default='00:00:00'}" name="open_8" readonly/>	至
+                                                <input id="Config_shop_start_time_8" class="Config_shop_open_stop_time" type="text" value="{pigcms{$now_store.open_8|default='00:00:00'}" name="open_8" readonly/>	{pigcms{:L('TO_BKADMIN')}
                                                 <input id="Config_shop_stop_time_8" class="Config_shop_open_stop_time" type="text" value="{pigcms{$now_store.close_8|default='00:00:00'}" name="close_8" readonly/>
                                                 <div class="errorMessage" id="Config_shop_start_time_8_em_" style="display:none"></div>
                                                 <div class="errorMessage" id="Config_shop_stop_time_8_em_" style="display:none"></div>
 
                                             </td>
                                             <td class="text-center">
-                                                <input id="Config_shop_start_time_9" class="Config_shop_open_stop_time" type="text" value="{pigcms{$now_store.open_9|default='00:00:00'}" name="open_9" readonly/>	至
+                                                <input id="Config_shop_start_time_9" class="Config_shop_open_stop_time" type="text" value="{pigcms{$now_store.open_9|default='00:00:00'}" name="open_9" readonly/>	{pigcms{:L('TO_BKADMIN')}
                                                 <input id="Config_shop_stop_time_9" class="Config_shop_open_stop_time" type="text" value="{pigcms{$now_store.close_9|default='00:00:00'}" name="close_9" readonly/>
                                                 <div class="errorMessage" id="Config_shop_start_time_9_em_" style="display:none"></div>
                                                 <div class="errorMessage" id="Config_shop_stop_time_9_em_" style="display:none"></div>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td class="text-center">周四</td>
+                                            <td class="text-center">{pigcms{:L('THUR_BKADMIN')}</td>
                                             <td class="text-center">
-                                                <input id="Config_shop_start_time_10" class="Config_shop_open_stop_time" type="text" value="{pigcms{$now_store.open_10|default='00:00:00'}" name="open_10" readonly/>	至
+                                                <input id="Config_shop_start_time_10" class="Config_shop_open_stop_time" type="text" value="{pigcms{$now_store.open_10|default='00:00:00'}" name="open_10" readonly/>	{pigcms{:L('TO_BKADMIN')}
                                                 <input id="Config_shop_stop_time_10" class="Config_shop_open_stop_time" type="text" value="{pigcms{$now_store.close_10|default='00:00:00'}" name="close_10" readonly/>
                                                 <div class="errorMessage" id="Config_shop_start_time_10_em_" style="display:none"></div>
                                                 <div class="errorMessage" id="Config_shop_stop_time_10_em_" style="display:none"></div>
                                             </td>
                                             <td class="text-center">
-                                                <input id="Config_shop_start_time_11" class="Config_shop_open_stop_time" type="text" value="{pigcms{$now_store.open_11|default='00:00:00'}" name="open_11" readonly/>	至
+                                                <input id="Config_shop_start_time_11" class="Config_shop_open_stop_time" type="text" value="{pigcms{$now_store.open_11|default='00:00:00'}" name="open_11" readonly/>	{pigcms{:L('TO_BKADMIN')}
                                                 <input id="Config_shop_stop_time_11" class="Config_shop_open_stop_time" type="text" value="{pigcms{$now_store.close_11|default='00:00:00'}" name="close_11" readonly/>
                                                 <div class="errorMessage" id="Config_shop_start_time_11_em_" style="display:none"></div>
                                                 <div class="errorMessage" id="Config_shop_stop_time_11_em_" style="display:none"></div>
 
                                             </td>
                                             <td class="text-center">
-                                                <input id="Config_shop_start_time_12" class="Config_shop_open_stop_time" type="text" value="{pigcms{$now_store.open_12|default='00:00:00'}" name="open_12" readonly/>	至
+                                                <input id="Config_shop_start_time_12" class="Config_shop_open_stop_time" type="text" value="{pigcms{$now_store.open_12|default='00:00:00'}" name="open_12" readonly/>	{pigcms{:L('TO_BKADMIN')}
                                                 <input id="Config_shop_stop_time_12" class="Config_shop_open_stop_time" type="text" value="{pigcms{$now_store.close_12|default='00:00:00'}" name="close_12" readonly/>
                                                 <div class="errorMessage" id="Config_shop_start_time_12_em_" style="display:none"></div>
                                                 <div class="errorMessage" id="Config_shop_stop_time_12_em_" style="display:none"></div>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td class="text-center">周五</td>
+                                            <td class="text-center">{pigcms{:L('FRI_BKADMIN')}</td>
                                             <td class="text-center">
-                                                <input id="Config_shop_start_time_13" class="Config_shop_open_stop_time" type="text" value="{pigcms{$now_store.open_13|default='00:00:00'}" name="open_13" readonly/>	至
+                                                <input id="Config_shop_start_time_13" class="Config_shop_open_stop_time" type="text" value="{pigcms{$now_store.open_13|default='00:00:00'}" name="open_13" readonly/>	{pigcms{:L('TO_BKADMIN')}
                                                 <input id="Config_shop_stop_time_13" class="Config_shop_open_stop_time" type="text" value="{pigcms{$now_store.close_13|default='00:00:00'}" name="close_13" readonly/>
                                                 <div class="errorMessage" id="Config_shop_start_time_13_em_" style="display:none"></div>
                                                 <div class="errorMessage" id="Config_shop_stop_time_13_em_" style="display:none"></div>
                                             </td>
                                             <td class="text-center">
-                                                <input id="Config_shop_start_time_14" class="Config_shop_open_stop_time" type="text" value="{pigcms{$now_store.open_14|default='00:00:00'}" name="open_14" readonly/>	至
+                                                <input id="Config_shop_start_time_14" class="Config_shop_open_stop_time" type="text" value="{pigcms{$now_store.open_14|default='00:00:00'}" name="open_14" readonly/>	{pigcms{:L('TO_BKADMIN')}
                                                 <input id="Config_shop_stop_time_14" class="Config_shop_open_stop_time" type="text" value="{pigcms{$now_store.close_14|default='00:00:00'}" name="close_14" readonly/>
                                                 <div class="errorMessage" id="Config_shop_start_time_14_em_" style="display:none"></div>
                                                 <div class="errorMessage" id="Config_shop_stop_time_14_em_" style="display:none"></div>
 
                                             </td>
                                             <td class="text-center">
-                                                <input id="Config_shop_start_time_15" class="Config_shop_open_stop_time" type="text" value="{pigcms{$now_store.open_15|default='00:00:00'}" name="open_15" readonly/>	至
+                                                <input id="Config_shop_start_time_15" class="Config_shop_open_stop_time" type="text" value="{pigcms{$now_store.open_15|default='00:00:00'}" name="open_15" readonly/>	{pigcms{:L('TO_BKADMIN')}
                                                 <input id="Config_shop_stop_time_15" class="Config_shop_open_stop_time" type="text" value="{pigcms{$now_store.close_15|default='00:00:00'}" name="close_15" readonly/>
                                                 <div class="errorMessage" id="Config_shop_start_time_15_em_" style="display:none"></div>
                                                 <div class="errorMessage" id="Config_shop_stop_time_15_em_" style="display:none"></div>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td class="text-center">周六</td>
+                                            <td class="text-center">{pigcms{:L('SAT_BKADMIN')}</td>
                                             <td class="text-center">
-                                                <input id="Config_shop_start_time_16" class="Config_shop_open_stop_time" type="text" value="{pigcms{$now_store.open_16|default='00:00:00'}" name="open_16" readonly/>	至
+                                                <input id="Config_shop_start_time_16" class="Config_shop_open_stop_time" type="text" value="{pigcms{$now_store.open_16|default='00:00:00'}" name="open_16" readonly/>	{pigcms{:L('TO_BKADMIN')}
                                                 <input id="Config_shop_stop_time_16" class="Config_shop_open_stop_time" type="text" value="{pigcms{$now_store.close_16|default='00:00:00'}" name="close_16" readonly/>
                                                 <div class="errorMessage" id="Config_shop_start_time_16_em_" style="display:none"></div>
                                                 <div class="errorMessage" id="Config_shop_stop_time_16_em_" style="display:none"></div>
                                             </td>
                                             <td class="text-center">
-                                                <input id="Config_shop_start_time_17" class="Config_shop_open_stop_time" type="text" value="{pigcms{$now_store.open_17|default='00:00:00'}" name="open_17" readonly/>	至
+                                                <input id="Config_shop_start_time_17" class="Config_shop_open_stop_time" type="text" value="{pigcms{$now_store.open_17|default='00:00:00'}" name="open_17" readonly/>	{pigcms{:L('TO_BKADMIN')}
                                                 <input id="Config_shop_stop_time_17" class="Config_shop_open_stop_time" type="text" value="{pigcms{$now_store.close_17|default='00:00:00'}" name="close_17" readonly/>
                                                 <div class="errorMessage" id="Config_shop_start_time_17_em_" style="display:none"></div>
                                                 <div class="errorMessage" id="Config_shop_stop_time_17_em_" style="display:none"></div>
 
                                             </td>
                                             <td class="text-center">
-                                                <input id="Config_shop_start_time_18" class="Config_shop_open_stop_time" type="text" value="{pigcms{$now_store.open_18|default='00:00:00'}" name="open_18" readonly/>	至
+                                                <input id="Config_shop_start_time_18" class="Config_shop_open_stop_time" type="text" value="{pigcms{$now_store.open_18|default='00:00:00'}" name="open_18" readonly/>	{pigcms{:L('TO_BKADMIN')}
                                                 <input id="Config_shop_stop_time_18" class="Config_shop_open_stop_time" type="text" value="{pigcms{$now_store.close_18|default='00:00:00'}" name="close_18" readonly/>
                                                 <div class="errorMessage" id="Config_shop_start_time_18_em_" style="display:none"></div>
                                                 <div class="errorMessage" id="Config_shop_stop_time_18_em_" style="display:none"></div>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td class="text-center">周日</td>
+                                            <td class="text-center">{pigcms{:L('SUN_BKADMIN')}</td>
                                             <td class="text-center">
-                                                <input id="Config_shop_start_time_19" class="Config_shop_open_stop_time" type="text" value="{pigcms{$now_store.open_19|default='00:00:00'}" name="open_19" readonly/>	至
+                                                <input id="Config_shop_start_time_19" class="Config_shop_open_stop_time" type="text" value="{pigcms{$now_store.open_19|default='00:00:00'}" name="open_19" readonly/>	{pigcms{:L('TO_BKADMIN')}
                                                 <input id="Config_shop_stop_time_19" class="Config_shop_open_stop_time" type="text" value="{pigcms{$now_store.close_19|default='00:00:00'}" name="close_19" readonly/>
                                                 <div class="errorMessage" id="Config_shop_start_time_19_em_" style="display:none"></div>
                                                 <div class="errorMessage" id="Config_shop_stop_time_19_em_" style="display:none"></div>
                                             </td>
                                             <td class="text-center">
-                                                <input id="Config_shop_start_time_20" class="Config_shop_open_stop_time" type="text" value="{pigcms{$now_store.open_20|default='00:00:00'}" name="open_20" readonly/>	至
+                                                <input id="Config_shop_start_time_20" class="Config_shop_open_stop_time" type="text" value="{pigcms{$now_store.open_20|default='00:00:00'}" name="open_20" readonly/>	{pigcms{:L('TO_BKADMIN')}
                                                 <input id="Config_shop_stop_time_20" class="Config_shop_open_stop_time" type="text" value="{pigcms{$now_store.close_20|default='00:00:00'}" name="close_20" readonly/>
                                                 <div class="errorMessage" id="Config_shop_start_time_20_em_" style="display:none"></div>
                                                 <div class="errorMessage" id="Config_shop_stop_time_20_em_" style="display:none"></div>
 
                                             </td>
                                             <td class="text-center">
-                                                <input id="Config_shop_start_time_21" class="Config_shop_open_stop_time" type="text" value="{pigcms{$now_store.open_21|default='00:00:00'}" name="open_21" readonly/>	至
+                                                <input id="Config_shop_start_time_21" class="Config_shop_open_stop_time" type="text" value="{pigcms{$now_store.open_21|default='00:00:00'}" name="open_21" readonly/>	{pigcms{:L('TO_BKADMIN')}
                                                 <input id="Config_shop_stop_time_21" class="Config_shop_open_stop_time" type="text" value="{pigcms{$now_store.close_21|default='00:00:00'}" name="close_21" readonly/>
                                                 <div class="errorMessage" id="Config_shop_start_time_21_em_" style="display:none"></div>
                                                 <div class="errorMessage" id="Config_shop_stop_time_21_em_" style="display:none"></div>
@@ -395,23 +395,23 @@
 							</div>
 							<div id="txtstore" class="tab-pane">
 								<div class="form-group">
-									<label class="col-sm-1">商家描述</label>
+									<label class="col-sm-1">{pigcms{:L('STORE_DESCRIPTION_BKADMIN')}</label>
 									<textarea class="col-sm-5" rows="5" name="txt_info">{pigcms{$now_store.txt_info}</textarea>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-1">商家图片</label>
+									<label class="col-sm-1">{pigcms{:L('STOREFRONT_IMAGE_BKADMIN')}</label>
                                     <div style="display:inline-block;position:relative;width:78px;height:34px;" id="J_selectImage">
-                                        <div class="btn btn-sm btn-success">上传图片</div>
+                                        <div class="btn btn-sm btn-success">{pigcms{:L('UPLOAD_BKADMIN')}</div>
                                     </div>
 									<!--a href="javascript:void(0)" class="btn btn-sm btn-success" id="J_selectImage">上传图片</a-->
-									<span class="form_tips">第一张将作为主图片！最多上传10个图片！图片宽度建议为700px，高度建议为420px。</span>
+									<span class="form_tips" style="display: inline-flex;">{pigcms{:L('RATIO_BKADMIN')}</span>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-1">图片预览</label>
+									<label class="col-sm-1"> {pigcms{:L('PREVIEW_BKADMIN')}</label>
 									<div id="upload_pic_box">
 										<ul id="upload_pic_ul">
 											<volist name="now_store['pic']" id="vo">
-												<li class="upload_pic_li"><img src="{pigcms{$vo.url}"/><input type="hidden" name="pic[]" value="{pigcms{$vo.title}"/><br/><a href="#" onclick="deleteImage('{pigcms{$vo.title}',this);return false;">[ 删除 ]</a></li>
+												<li class="upload_pic_li"><img src="{pigcms{$vo.url}"/><input type="hidden" name="pic[]" value="{pigcms{$vo.title}"/><br/><a href="#" onclick="deleteImage('{pigcms{$vo.title}',this);return false;">[ {pigcms{:L('DELETE_BKADMIN')} ]</a></li>
 											</volist>
 										</ul>
 									</div>
@@ -460,7 +460,7 @@
 								<div class="col-md-offset-3 col-md-9">
 									<button class="btn btn-info" type="submit">
 										<i class="ace-icon fa fa-check bigger-110"></i>
-										保存
+										{pigcms{:L('SAVE_BKADMIN')}
 									</button>
 								</div>
 							</div>
@@ -479,13 +479,13 @@
 					<button id="close_button" type="button" class="close" data-dismiss="modal" aria-hidden="true">
 						<span class="white">&times;</span>
 					</button>
-					(用鼠标滚轮可以缩放地图)    拖动红色图标，经纬度框内将自动填充经纬度。
+                    {pigcms{:L('SEARCH_ZOOM_BKADMIN')}
 				</div>
 			</div>
 			<div class="modal-body no-padding" style="width:100%;">
 				<form id="map-search" style="margin:10px;">
-					<input id="map-keyword" type="textbox" style="width:500px;" placeholder="尽量填写城市、区域、街道名"/>
-					<input type="submit" value="搜索"/>
+					<input id="map-keyword" type="textbox" style="width:500px;" placeholder="{pigcms{:L('SEARCH_INPUT_PLACEHOLDER_BKADMIN')}"/>
+					<input type="submit" value="Search"/>
 				</form>
 				<div style="width:100%;height:600px;min-height:600px;" id="cmmap"></div>
 			</div>
@@ -493,7 +493,7 @@
 			<div class="modal-footer no-margin-top">
 				<button class="btn btn-sm btn-success pull-right" data-dismiss="modal">
 					<i class="ace-icon fa fa-times"></i>
-					关闭
+					{pigcms{:L('CLOSE_BKADMIN')}
 				</button>
 			</div>
 		</div><!-- /.modal-content -->

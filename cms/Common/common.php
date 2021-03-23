@@ -655,7 +655,21 @@ function getAttachmentUrl($fileUrl, $is_remote = true){
         return $url . $fileUrl;
     }
 }
+//peter ADD 2021-3-18
+function lang_substr_with_default_lang(&$str){
+    $arr = explode("|",$str);
+    if(count($arr) > 1){
+        if(C('DEFAULT_LANG') == 'zh-cn'){//中文
+            $re_str = $arr[1];
+        }else{
+            $re_str = $arr[0];
+        }
+    }else{
+        $re_str = $arr[0];
+    }
 
+    $str=$re_str;
+}
 //Garfunkel Add
 //根据语言对显示字符进行分割
 //$str为需要被分割的字符，$lang为语言 zh-cn,en-us
@@ -681,7 +695,16 @@ function replace_lang_str($str,$replace){
 
     return $n_str;
 }
+function replace_lang_strlist($str,$replace){
+    //$str_list = explode("%s",$str);
+    foreach ($replace as $k=>$t )
+    {
+        $str = str_replace("%s".$k,$t,$str);
+    }
+    //$n_str = str_replace("%s",$replace,$str);
 
+    return $str;
+}
 //换位信用卡年月
 function transYM($str){
     $m = substr($str,0,2);

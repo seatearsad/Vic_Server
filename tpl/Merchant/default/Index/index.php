@@ -4,7 +4,7 @@
 	<div class="breadcrumbs" id="breadcrumbs">
 		<ul class="breadcrumb">
 			<i class="ace-icon fa fa-home home-icon"></i>
-			<li class="active">首页</li>
+			<li class="active">{pigcms{:L('HOME_BKADMIN')}</li>
 		</ul>
 	</div>
 	<!-- 内容头部 -->

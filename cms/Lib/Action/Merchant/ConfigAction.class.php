@@ -222,9 +222,9 @@ class ConfigAction extends BaseAction{
 			if(empty($_POST['permoney'])){
 				$this->error('人均消费必填！');
 			}
-			if(empty($_POST['feature'])){
-				$this->error('店铺特色必填！');
-			}
+//			if(empty($_POST['feature'])){
+//				$this->error('店铺特色必填！');
+//			}
 // 			if(empty($_POST['trafficroute'])){
 // 				$this->error('交通路线必填！');
 // 			}
@@ -445,6 +445,7 @@ class ConfigAction extends BaseAction{
 	}
 	/* 编辑店铺 */
 	public function store_edit(){
+
 		$database_merchant_store = D('Merchant_store');
 
 		if(IS_POST){
@@ -463,12 +464,13 @@ class ConfigAction extends BaseAction{
 			if(empty($_POST['permoney'])){
 				$this->error('人均消费必填！');
 			}
-			if(empty($_POST['feature'])){
-				$this->error('店铺特色必填！');
-			}
+//			if(empty($_POST['feature'])){
+//				$this->error('店铺特色必填！');
+//			}
 // 			if(empty($_POST['trafficroute'])){
 // 				$this->error('交通路线必填！');
 // 			}
+
 			if(empty($_POST['pic'])){
 				$this->error('请至少上传一张图片');
 			}
@@ -477,6 +479,7 @@ class ConfigAction extends BaseAction{
 			if(empty($_POST['txt_info'])){
 				$this->error('请输入店铺描述信息');
 			}
+
 			//判断关键词
 			$keywords = trim($_POST['keywords']);
 			if(!empty($keywords)){
@@ -492,6 +495,7 @@ class ConfigAction extends BaseAction{
 					$this->error('关键词最多5个。');
 				}
 			}
+
             //营业时间
             if ($_POST['close_1'] != '00:00:00'){
                 if ($_POST['close_1']<$_POST['open_1']){

@@ -22,11 +22,11 @@
 						<div class="grid-view">
 							<form enctype="multipart/form-data" class="form-horizontal" method="post" action="">
 								<div class="form-group">
-									<label class="col-sm-1"><label for="name">姓名</label></label>
+									<label class="col-sm-1"><label for="name">{pigcms{:L('NAME_BKADMIN')}</label></label>
 									<input type="text" class="col-sm-2" name="name" id="name" value="{pigcms{$item.name}" />
 								</div>
 								<div class="form-group">
-									<label class="col-sm-1"><label for="name">店员类型</label></label>
+									<label class="col-sm-1"><label for="name">{pigcms{:L('STAFF_TYPE_BKADMIN')}</label></label>
 									<select name="type">
 										<volist name="staff_type" id="vo">
 											<option value="{pigcms{$key}" <if condition="$key eq $item['type']">selected="selected"</if> >{pigcms{$vo}</option>
@@ -34,19 +34,20 @@
 									</select>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-1"><label for="username">帐号</label></label>
+									<label class="col-sm-1"><label for="username">{pigcms{:L('USERNAME_BKADMIN')}</label></label>
 									<input type="text" class="col-sm-2" name="username" id="username" value="{pigcms{$item.username}" />
 								</div>
 								<div class="form-group">
-									<label class="col-sm-1"><label for="password">密码</label></label>
+									<label class="col-sm-1"><label for="password">{pigcms{:L('PASSWORD_BKADMIN')}</label></label>
 									<input type="password" class="col-sm-2" name="password" id="password" />
 									<if condition="$item['password']"><span class="form_tips">(如果不修改密码请留空)</span></if>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-1"><label for="contact_name">电话</label></label>
+									<label class="col-sm-1"><label for="contact_name">{pigcms{:L('PHONE_NUMBER_BKADMIN')}</label></label>
 									<input type="text" class="col-sm-2" name="tel" id="tel" value="{pigcms{$item.tel}" />
+                                    <span class="form_tips">{pigcms{:L('OPTIONAL_BKADMIN')}</span>
 								</div>
-								<div class="form-group">
+								<div class="form-group hidden_obj">
 									<label class="col-sm-1">能否修改订单价格</label>
 									<label><span><label><input name="is_change" <if condition="$item['is_change'] eq 0 ">checked="checked"</if> value="0" type="radio"></label>&nbsp;<span>不能</span>&nbsp;</span></label>
 									<label><span><label><input name="is_change" <if condition="$item['is_change'] eq 1 ">checked="checked"</if> value="1" type="radio" ></label>&nbsp;<span>能</span></span></label>
@@ -55,7 +56,7 @@
 									<div class="col-md-9">
 										<button class="btn btn-info" type="submit">
 											<i class="ace-icon fa fa-check bigger-110"></i>
-											保存
+                                            {pigcms{:L('SAVE_BKADMIN')}
 										</button>
 									</div>
 								</div>

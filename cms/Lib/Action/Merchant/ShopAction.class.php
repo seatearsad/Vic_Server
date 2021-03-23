@@ -325,6 +325,7 @@ class ShopAction extends BaseAction
         $where['fid'] = $fid;
 
         $sort_list = $shopGoodsSortDB->field(true)->where($where)->order('`sort` DESC,`sort_id` ASC')->select();
+
         foreach ($sort_list as &$value) {
             if ($now_store['is_mult_class'] == 0 && $value['operation_type'] == 2) {
                 $value['operation_type'] = 0;
@@ -351,19 +352,19 @@ class ShopAction extends BaseAction
     {
         switch($num){
             case 1:
-                return '星期一';
+                return L('MON_BKADMIN');
             case 2:
-                return '星期二';
+                return L('TUE_BKADMIN');
             case 3:
-                return '星期三';
+                return L('WED_BKADMIN');
             case 4:
-                return '星期四';
+                return L('THUR_BKADMIN');
             case 5:
-                return '星期五';
+                return L('FRI_BKADMIN');
             case 6:
-                return '星期六';
+                return L('SAT_BKADMIN');
             case 0:
-                return '星期日';
+                return L('SUN_BKADMIN');
             default:
                 return '';
         }
