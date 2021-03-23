@@ -24,19 +24,19 @@
 					<div class="tabbable">
 						<ul class="nav nav-tabs" id="myTab">
 							<li class="active">
-								<a data-toggle="tab" href="#basicinfo">基本信息</a>
+								<a data-toggle="tab" href="#basicinfo">{pigcms{:L('BASEINFO_BKADMIN')}</a>
 							</li>
 							<li>
-								<a data-toggle="tab" href="#txtintro">商品详情</a>
+								<a data-toggle="tab" href="#txtintro">{pigcms{:L('ITEM_DESCRIPTION_BKADMIN')}</a>
 							</li>
 							<li>
-								<a data-toggle="tab" href="#txtimage">商品图片</a>
+								<a data-toggle="tab" href="#txtimage">{pigcms{:L('ITEM_PHOTO_BKADMIN')}</a>
 							</li>
 							<li>
-								<a data-toggle="tab" href="#txtattr">商品规格</a>
+								<a data-toggle="tab" href="#txtattr">{pigcms{:L('GOODS_SPEC_BKADMIN')}</a>
 							</li>
 							<li>
-								<a data-toggle="tab" href="#seckill">限时优惠</a>
+								<a data-toggle="tab" href="#seckill">{pigcms{:L('LIMIT_TIME_DISCOUNT_BKADMIN')}</a>
 							</li>
 							<if condition="$now_store['store_theme'] AND $category_list">
 							<li>
@@ -61,22 +61,22 @@
 									</div>
 								</if>
 								<div class="form-group">
-									<label class="col-sm-1"><label for="name">商品名称</label></label>
+									<label class="col-sm-1"><label for="name">{pigcms{:L('ITEM_NAME_BKADMIN')}</label></label>
 									<input class="col-sm-1" size="20" name="name" id="name" type="text" value="{pigcms{$now_goods.name}"/>
-									<span class="form_tips">必填。</span>
+									<span class="form_tips">{pigcms{:L('REQUIRED_UNIT_BKADMIN')}</span>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-1"><label for="name">商品编码</label></label>
+									<label class="col-sm-1"><label for="name">{pigcms{:L('SERIAL_NUMBER_BKADMIN')}</label></label>
 									<input class="col-sm-1" size="20" name="number" id="number" type="text" value="{pigcms{$now_goods.number}"/>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-1"><label for="unit">商品单位</label></label>
+									<label class="col-sm-1"><label for="unit">{pigcms{:L('GOOD_UNIT_BKADMIN')}</label></label>
 									<input class="col-sm-1" size="20" name="unit" id="unit" type="text" value="{pigcms{$now_goods.unit}"/>
-									<span class="form_tips">必填。如个、斤、份</span>
+									<span class="form_tips">{pigcms{:L('REQUIRED_UNIT_BKADMIN')}</span>
 								</div>
 								
 								<div class="form-group">
-									<label class="col-sm-1" for="Food_status">商品分类</label>
+									<label class="col-sm-1" for="Food_status">{pigcms{:L('VIEW_CATEGORIES_BKADMIN')}</label>
 									<fieldset id="choose_sort"></fieldset>
 								</div>
 								<!--div class="form-group">
@@ -96,7 +96,7 @@
 										元 + <input class="col-sm-1" maxlength="30" name="extra_pay_price" type="text" value="{pigcms{$now_goods.extra_pay_price}" style="float:none"/>{pigcms{$config.extra_price_alias_name}
 										<span class="form_tips">如果填写{pigcms{$config.extra_price_alias_name}字段，商品价格将变为：金额+{pigcms{$config.extra_price_alias_name}数</span>
 									</if>
-									<span class="form_tips">必填。</span>
+									<span class="form_tips">{pigcms{:L('REQUIRED_BKADMIN')}</span>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-1"><label for="price">{pigcms{$now_store['pack_alias']|default='打包费'}</label></label>
@@ -109,28 +109,28 @@
 									<span class="form_tips">-1表示无限量。数量小于10时，商品详细页面会显示库存。</span>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-1"><label for="sort">商品排序</label></label>
+									<label class="col-sm-1"><label for="sort">{pigcms{:L('ITEM_LISTING_ODER_BKADMIN')}</label></label>
 									<input class="col-sm-1" size="10" name="sort" id="sort" type="text" value="{pigcms{$now_goods.sort|default='0'}"/>
 									<span class="form_tips">默认添加顺序排序！手动调值，数值越大，排序越前</span>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-1" for="Food_status">商品状态</label>
+									<label class="col-sm-1" for="Food_status">{pigcms{:L('ITEM_STATUS_BKADMIN')}</label>
 									<select name="status" id="Food_status">
-										<option value="1" <if condition="$now_goods['status'] eq 1"> selected</if>>正常</option>
-										<option value="0" <if condition="$now_goods['status'] eq 0"> selected</if>>停售</option>
+										<option value="1" <if condition="$now_goods['status'] eq 1"> selected</if>>{pigcms{:L('ACTIVE_BKADMIN')}</option>
+										<option value="0" <if condition="$now_goods['status'] eq 0"> selected</if>>{pigcms{:L('SOLD_OUT_BKADMIN')}</option>
 									</select>
 								</div>
                                 <div class="form-group">
-                                    <label class="col-sm-1"><label for="sort">商品税率</label></label>
+                                    <label class="col-sm-1"><label for="sort">{pigcms{:L('GOOD_TAX_RATE_BKADMIN')}</label></label>
                                     <input class="col-sm-1" size="10" name="tax_num" id="tax_num" type="text" value="{pigcms{$now_goods.tax_num|default='0'}"/> %
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-1"><label for="sort">Bottle Deposit</label></label>
+                                    <label class="col-sm-1"><label for="sort">{pigcms{:L('GOOD_BOTTLE_DEPOSIT_BKADMIN')}</label></label>
                                     <input class="col-sm-1" size="10" name="deposit_price" id="deposit_price" type="text" value="{pigcms{$now_goods.deposit_price|default='0.00'}"/>
                                 </div>
 								<if condition="$print_list">
 								<div class="form-group">
-									<label class="col-sm-1" for="Food_status">归属打印机</label>
+									<label class="col-sm-1" for="Food_status">{pigcms{:L('PRINTER_BKADMIN')}</label>
 									<select name="print_id" id="print_id">
 										<option value="0">选择打印机</option>
 										<volist name="print_list" id="print">
@@ -143,16 +143,16 @@
 							</div>
 							<div id="txtintro" class="tab-pane">
 								<div class="form-group" >
-									<label class="col-sm-1">商品描述：</label>
+									<label class="col-sm-1">{pigcms{:L('ITEM_DESCRIPTION_2_BKADMIN')}</label>
 									<!--textarea name="des" id="content" style="width:702px;">{pigcms{$now_goods.des}</textarea-->
                                     <textarea name="des" style="width:702px;height: 200px">{pigcms{$now_goods.des}</textarea>
 								</div>
 							</div>
 							<div id="txtimage" class="tab-pane">
 								<div class="form-group">
-									<label class="col-sm-1">上传图片</label>
+									<label class="col-sm-1">{pigcms{:L('UPLOAD_BKADMIN')}</label>
 									<div style="display:inline-block;" id="J_selectImage">
-										<div class="btn btn-sm btn-success" style="position:relative;width:78px;height:34px;">上传图片</div>
+										<div class="btn btn-sm btn-success" style="position:relative;width:78px;height:34px;">{pigcms{:L('UPLOAD_BKADMIN')}</div>
 									</div>
 									<span class="form_tips">第一张将作为列表页图片展示！最多上传5个图片！同一张图片不能选择【侧重文字模板图片宽度建议为：900px，高度建议为：500px】【侧重图片图片尺寸建议为：大于等于600*600px的正方形】</span>
 								</div>
@@ -161,7 +161,7 @@
 									<a href="#modal-table" class="btn btn-sm btn-success" onclick="selectImg('upload_pic_ul','goods')">选择图片</a>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-1">图片预览</label>
+									<label class="col-sm-1">{pigcms{:L('PREVIEW_BKADMIN')}</label>
 									<div id="upload_pic_box">
 										<ul id="upload_pic_ul">
 											<volist name="now_goods['pic_arr']" id="vo">
@@ -341,7 +341,7 @@
 								<div class="col-md-offset-3 col-md-9">
 									<button class="btn btn-info" type="submit">
 										<i class="ace-icon fa fa-check bigger-110"></i>
-										保存
+                                        {pigcms{:L('SAVE_BKADMIN')}
 									</button>
 								</div>
 							</div>

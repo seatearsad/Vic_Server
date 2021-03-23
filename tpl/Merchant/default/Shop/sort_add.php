@@ -113,7 +113,7 @@
 
 								<if condition="$print_list AND empty($sort)">
 								<div class="form-group">
-									<label class="col-sm-1" for="Food_status">归属打印机</label>
+									<label class="col-sm-1" for="Food_status">{pigcms{:L('PRINTER_BKADMIN')}</label>
 									<select name="print_id" id="print_id">
 										<option value="0" selected>选择打印机</option>
 										<volist name="print_list" id="print">
