@@ -325,6 +325,7 @@ class ShopAction extends BaseAction
         $where['fid'] = $fid;
 
         $sort_list = $shopGoodsSortDB->field(true)->where($where)->order('`sort` DESC,`sort_id` ASC')->select();
+
         foreach ($sort_list as &$value) {
             if ($now_store['is_mult_class'] == 0 && $value['operation_type'] == 2) {
                 $value['operation_type'] = 0;
@@ -351,19 +352,19 @@ class ShopAction extends BaseAction
     {
         switch($num){
             case 1:
-                return '星期一';
+                return L('MON_BKADMIN');
             case 2:
-                return '星期二';
+                return L('TUE_BKADMIN');
             case 3:
-                return '星期三';
+                return L('WED_BKADMIN');
             case 4:
-                return '星期四';
+                return L('THUR_BKADMIN');
             case 5:
-                return '星期五';
+                return L('FRI_BKADMIN');
             case 6:
-                return '星期六';
+                return L('SAT_BKADMIN');
             case 0:
-                return '星期日';
+                return L('SUN_BKADMIN');
             default:
                 return '';
         }
@@ -1805,7 +1806,7 @@ class ShopAction extends BaseAction
                                 }
                             }
                         }
-                        
+
                         $pro_map = $spec_map = $spec_value_map = array();
                         if ($goods['is_properties']) {
                             $properties = M('Shop_goods_properties')->field(true)->where(array('goods_id' => $source_goods_id))->select();
@@ -2400,6 +2401,8 @@ class ShopAction extends BaseAction
 
         //计算订单税费及押金
         $all_tax = 0;
+        $all_gst_tax = 0;
+        $all_pst_tax = 0;
         $all_deposit = 0;
         $all_record = array();
         $record_id = '';
@@ -2410,6 +2413,8 @@ class ShopAction extends BaseAction
         //subtotal
         $total_goods_price = 0;
         $total_goods_tax = 0;
+        $total_goods_gst_tax = 0;
+        $total_goods_pst_tax = 0;
         $total_freight_price = 0;
         $total_freight_tax = 0;
         $total_packing_price = 0;
@@ -2453,10 +2458,14 @@ class ShopAction extends BaseAction
                     //记录上一张订单的税费和押金
                     if($record_id != '') {
                         $all_record[$record_id]['all_tax'] = $all_tax;
+                        $all_record[$record_id]['all_gst_tax'] = $all_gst_tax;
+                        $all_record[$record_id]['all_pst_tax'] = $all_pst_tax;
                         $all_record[$record_id]['all_deposit'] = $all_deposit;
                         $all_record[$record_id]['total_tax'] = $all_tax + $all_record[$record_id]['freight_tax'] + $all_record[$record_id]['packing_tax'];
 
                         $total_goods_tax += $all_tax;
+                        $total_goods_gst_tax += $all_gst_tax;
+                        $total_goods_pst_tax += $all_pst_tax;
                         $total_deposit += $all_deposit;
                         $total_all_tax += $all_record[$record_id]['total_tax'];
                     }
@@ -2483,6 +2492,13 @@ class ShopAction extends BaseAction
                 }
 
                 $all_tax += $val['good_price'] * $val['good_tax']/100*$val['good_num'];
+                if($val['good_tax'] <= 0){
+                    $all_gst_tax += $val['good_price'] * $val['good_tax']/100*$val['good_num'];
+                    $all_pst_tax += 0;
+                }else{
+                    $all_gst_tax += $val['good_price'] * 5/100*$val['good_num'];
+                    $all_pst_tax += $val['good_price'] * ($val['good_tax']-5)/100*$val['good_num'];
+                }
                 $all_deposit += $val['deposit_price']*$val['good_num'];
                 $total_tax = $all_tax + ($val['freight_charge']+$val['packing_charge'])*$val['store_tax']/100;
 
@@ -2493,10 +2509,14 @@ class ShopAction extends BaseAction
         //记录最后一张订单
         if ($is_last){
             $all_record[$record_id]['all_tax'] = $all_tax;
+            $all_record[$record_id]['all_gst_tax'] = $all_gst_tax;
+            $all_record[$record_id]['all_pst_tax'] = $all_pst_tax;
             $all_record[$record_id]['all_deposit'] = $all_deposit;
             $all_record[$record_id]['total_tax'] = $total_tax;
 
             $total_goods_tax += $all_tax;
+            $total_goods_gst_tax += $all_gst_tax;
+            $total_goods_pst_tax += $all_pst_tax;
             $total_deposit += $all_deposit;
             $total_all_tax += $total_tax;
         }
@@ -2506,14 +2526,14 @@ class ShopAction extends BaseAction
 
         import('@.ORG.mpdf.mpdf');
         $mpdf = new mPDF();
-        $html = $this->get_html($store,$begin_time,$end_time,$total_goods_price,$total_goods_tax,$total_packing_price,$total_deposit,$total_reduce);
+        $html = $this->get_html($store,$begin_time,$end_time,$total_goods_price,$total_goods_tax,$total_packing_price,$total_deposit,$total_reduce,$total_goods_gst_tax,$total_goods_pst_tax);
 
         $mpdf->WriteHTML($html);
         $fileName = $store['name'].'('.$begin_time.' - '.$end_time.').pdf';
         $mpdf->Output($fileName,'I');
     }
 
-    public function get_html($store,$begin_time,$end_time,$good_price,$good_tax,$packing,$deposit,$reduce){
+    public function get_html($store,$begin_time,$end_time,$good_price,$good_tax,$packing,$deposit,$reduce,$gst_tax,$pst_tax){
         $good_pro = ($good_price - $reduce) * $store['proportion'] / 100;
         $tax_pro = $good_tax * $store['proportion'] / 100;
 
@@ -2598,10 +2618,21 @@ class ShopAction extends BaseAction
                                 <table style="border-bottom: 1px solid #999;">
                                     <tr>
                                         <td style="color:#333;font-size: 16px;width: 755px;height: 30px;" align="left">
-                                            &nbsp;Tax received from sales
+                                            &nbsp;GST received from sales
                                         </td>
                                         <td align="right" style="color:#666;font-size: 16px;width: 120px;">
-                                            '.floatval(sprintf("%.2f", $good_tax)).'
+                                            '.floatval(sprintf("%.2f", $gst_tax)).'
+                                            &nbsp;&nbsp;
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table style="border-bottom: 1px solid #999;">
+                                    <tr>
+                                        <td style="color:#333;font-size: 16px;width: 755px;height: 30px;" align="left">
+                                            &nbsp;PST received from sales
+                                        </td>
+                                        <td align="right" style="color:#666;font-size: 16px;width: 120px;">
+                                            '.floatval(sprintf("%.2f", $pst_tax)).'
                                             &nbsp;&nbsp;
                                         </td>
                                     </tr>
@@ -2653,7 +2684,7 @@ class ShopAction extends BaseAction
                                 <table style="border-bottom: 1px solid #999;">
                                     <tr>
                                         <td style="color:#333;font-size: 16px;width: 755px;height: 30px;" align="left">
-                                            &nbsp;GST (GST #721938728RT0001) (service charge on tax)
+                                            &nbsp;Service charge on tax (GST #721938728RT0001)
                                         </td>
                                         <td align="right" style="color:#666;font-size: 16px;width: 120px;">
                                             -'.floatval(sprintf("%.2f", $tax_pro)).'
@@ -2675,7 +2706,7 @@ class ShopAction extends BaseAction
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="2" style="height: 530px"></td>
+                            <td colspan="2" style="height: 500px"></td>
                         </tr>
                         <tr>
                             <td colspan="2" style="font-size: 14px;font-family: Arial" align="center">
