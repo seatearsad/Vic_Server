@@ -3075,8 +3075,8 @@ class PayAction extends BaseAction{
                         session('user',$user);
                         $this->user_session = session('user');
                     }
-                    
-                    $this->success($resp['message'], $resp['url']);
+                    //$this->success($resp['message'], $resp['url']);
+                    redirect(U('My/my_money'));
                 }
             } else {
                 if(strpos($resp['url'],'#')!== false) {

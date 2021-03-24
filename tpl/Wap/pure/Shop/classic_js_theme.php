@@ -175,8 +175,10 @@
     {{# var loop_num = 0; }}
 	{{# for(var i in d){ }}
 		<dd id="shopProductLeftBar2-{{ d[i].cat_id }}" data-cat_id="{{ d[i].cat_id }}" {{# if(loop_num == 0){ }}class="active"{{# } }}>
-			<span data-sort_id="{{d[i].cat_id}}">{{ d[i].cat_name }}</span>
-			{{# if (d[i].son_list != undefined) { }}
+			<span data-sort_id="{{d[i].cat_id}}">{{ d[i].cat_name }}<span style="font-size: 12px">10:00-12:00</span></span>
+
+
+            {{# if (d[i].son_list != undefined) { }}
 			<ul>
                 {{# for (var ii in d[i].son_list) { }}
 				<li>

@@ -519,6 +519,13 @@
                 position: relative;
                 display: flex;
             }
+            #shopProductLeftBar2 dd span {
+                padding: 2px 10px;
+                line-height: 20px;
+                display: block;
+                background-color: #ededed;
+                border-bottom: 1px solid #e1e0e0;
+            }
         </style>
 	<body onscroll="scrollProductEvent(1)">
 <!--    <div id="debug" style="position: fixed;color:red;width:auto;height: 40px;left:30px;top:200px;z-index: 1000000;background: white">Debug</div>-->
