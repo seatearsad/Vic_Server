@@ -605,7 +605,16 @@
                                     window.location.reload();
                                 }
                             });
-
+                        }else if (data.error_code == 3) {
+                            layer.open({
+                                title:'Message',
+                                btn: ['OK'],
+                                content:data.msg,
+                                end:function () {
+                                    var a_link="/wap.php?g=Wap&c=Pay&a=check&order_id=1"+order_id+"&type=shop&coupon_type=system&delivery_type=0&sysc_id="+data.sysc_id;
+                                    window.location.href=a_link;
+                                }
+                            })
                         }else{
                             layer.open({
                                 title:'Message',

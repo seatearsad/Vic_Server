@@ -6150,25 +6150,31 @@ class MyAction extends BaseAction{
             $uid = $this->user_session['uid'];
             $order_id=$_POST['order_id'];
             $order=D('Shop_order')->field("price")->where(array('order_id' => $order_id))->find();
-            $order_price=$order['price'];
+            $order_price=$order['price']; // order 的价格
             //die($order);
             $coupon = D('System_coupon')->field(true)->where(array('notice' => $code))->find();
+            //var_dump($coupon);die();
             $cid = $coupon['coupon_id'];
             $order_money=$coupon['order_money'];
             //die($order_price."----------".$order_money);
             if ($cid) {
                 $l_id = D('System_coupon_hadpull')->field(true)->where(array('uid' => $uid, 'coupon_id' => $cid))->find();
+
                 if ($l_id == null) {    //之前没有领用过
+                    //echo"-----1------".$order_money."------".$order_price."------";
                     $result = D('System_coupon')->had_pull($cid, $uid);
+                    //var_dump($result);die();
                     if ($order_price!="" && $order_price<$order_money){ //新加的优惠券当前订单不可用
                         exit(json_encode(array('error_code' => 2, 'msg' => L('_AL_EXCHANGE_CANTUSER_CODE_'))));
+                    }else{
+                        exit(json_encode(array('error_code' => 3,'sysc_id'=>$result['coupon']['id'], 'msg' => L('_AL_EXCHANGE_CANUSER_CODE_'))));
                     }
                 }else
                     exit(json_encode(array('error_code' => 1, 'msg' => L('_AL_EXCHANGE_CODE_'))));
             } else {
                 exit(json_encode(array('error_code' => 1, 'msg' => L('_NOT_EXCHANGE_CODE_'))));
             }
-
+            //echo"#########";
             echo json_encode($result);
         }else{
 	        $this->display();

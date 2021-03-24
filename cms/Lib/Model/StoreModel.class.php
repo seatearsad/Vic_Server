@@ -970,7 +970,6 @@ class StoreModel extends Model
 //        echo $storeName;
 //        die();
         if($status == 0 || $status == 1){
-
             $desc = replace_lang_str(L('V3_CONFIRMINGSUB'),$storeName);
         }
 

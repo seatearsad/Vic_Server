@@ -184,6 +184,7 @@
         }
         .kv-line {
             margin: 5px 0;
+            word-wrap: break-word;
         }
         .address-add{
             margin: 10px 0px;

@@ -175,8 +175,10 @@
     {{# var loop_num = 0; }}
 	{{# for(var i in d){ }}
 		<dd id="shopProductLeftBar2-{{ d[i].cat_id }}" data-cat_id="{{ d[i].cat_id }}" {{# if(loop_num == 0){ }}class="active"{{# } }}>
-			<span data-sort_id="{{d[i].cat_id}}">{{ d[i].cat_name }}<span style="font-size: 12px">10:00-12:00</span></span>
-
+			<span data-sort_id="{{d[i].cat_id}}">{{ d[i].cat_name }}
+                {{# if (d[i].show_time != "") { }}
+                <div style="font-size: 12px">10:00-12:00</div></span>
+            {{# } }}
 
             {{# if (d[i].son_list != undefined) { }}
 			<ul>
@@ -213,7 +215,7 @@
 							</div>
 							{{# }}}
 							<div class="product_text" {{# if(d[i].product_list[j].product_image == null ){ }} style="margin-left:0px" {{# } }}>
-								<div class="title">{{ d[i].product_list[j].product_name }}</div>
+								<div class="title">{{ d[i].product_list[j].product_name }}{{# if(d[i].limited_offers=='1'){ }}*{{# }}}</div>
                                 <!--div class="sale">{{ getLangStr('_MONTH_SALE_NUM_',d[i].product_list[j].product_sale) }} {{ getLangStr('_PRAISE_TXT_') }} {{ d[i].product_list[j].product_reply }}</div-->
                                 <!--div class="sale">{{ getLangStr('_PRAISE_TXT_') }} {{ d[i].product_list[j].product_reply }}</div-->
                                 <div class="desc">{{ d[i].product_list[j].product_desc }}</div>

@@ -587,7 +587,7 @@ class IndexAction extends BaseAction
         $user = D('User')->where(array('uid'=>$uid))->find();
         if(md5($old_pwd) != $user['pwd']){
             //$this->returnCode(1,'info',array(),L('_B_MY_WRONGKEY_'));
-            $this->returnCode(1,'info',array(),"Your old password is incorrect.");
+            $this->returnCode(1,'info',array(),L('_B_MY_WRONGKEY_'));
         }else{
             $data['pwd'] = md5($new_pwd);
             D('User')->where(array('uid'=>$uid))->save($data);

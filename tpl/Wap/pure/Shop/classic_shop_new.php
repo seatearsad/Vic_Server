@@ -224,9 +224,6 @@
             #shopContentBar{
                 background: #f4f4f4;
             }
-            #shopProductLeftBar2 dd span{
-                background: none;
-            }
             #shopProductLeftBar2 dl{
                 margin: 0;
                 padding: 0;
@@ -520,11 +517,11 @@
                 display: flex;
             }
             #shopProductLeftBar2 dd span {
-                padding: 2px 10px;
-                line-height: 20px;
+                padding: 8px 10px;
+                line-height: 17px;
+                background: none;
                 display: block;
-                background-color: #ededed;
-                border-bottom: 1px solid #e1e0e0;
+                border-bottom: none;
             }
         </style>
 	<body onscroll="scrollProductEvent(1)">
