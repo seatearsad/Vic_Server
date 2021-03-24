@@ -2710,7 +2710,7 @@ class PayAction extends BaseAction{
     public function Save_coupon_info($order_id,$coupon_id){
         //echo ("desc=".$desc.",order_id=".$order_id);die();
         if($coupon_id != null && trim($coupon_id) != ''){
-
+            $order = D('Shop_order')->where(array('order_id'=>$order_id))->find();
             //如果选择的为活动优惠券
             if(strpos($coupon_id,'event')!== false) {
                 $event = explode('_',$coupon_id);
@@ -2725,9 +2725,11 @@ class PayAction extends BaseAction{
                     $coupon_data = D('System_coupon_hadpull')->field(true)->where(array('id' => $coupon_id))->find();
                     $coupon_real_id = $coupon_data['coupon_id'];
                     $coupon = D('System_coupon')->get_coupon($coupon_real_id);
-
                     $in_coupon = array('coupon_id' => $coupon_id, 'coupon_price' => $coupon['discount']);
                 }
+            }
+            if($order['delivery_discount_type'] == 0){
+                $in_coupon['delivery_discount'] = 0;
             }
             D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->save($in_coupon);
         }
