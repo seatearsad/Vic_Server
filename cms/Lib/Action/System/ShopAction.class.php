@@ -1096,29 +1096,29 @@ class ShopAction extends BaseAction
             if ($store_ids) {
                 $where['store_id'] = array('in', $store_ids);
                 //                 $condition_where .= ' AND o.store_id IN ('.explode(',',$store_ids).')';
-                $condition_where .= ' AND o.store_id IN ('.implode(',',$store_ids).')';//implode,explode
+                $condition_where .= ' AND oo.store_id IN ('.implode(',',$store_ids).')';//implode,explode
             }
         }
 
         if(!empty($_GET['keyword'])){
             if ($_GET['searchtype'] == 'real_orderid') {
                 $where['real_orderid'] = htmlspecialchars($_GET['keyword']);
-                $condition_where .= ' AND o.real_orderid = "'. htmlspecialchars($_GET['keyword']).'"';
+                $condition_where .= ' AND oo.real_orderid = "'. htmlspecialchars($_GET['keyword']).'"';
             } elseif ($_GET['searchtype'] == 'orderid') {
                 $where['orderid'] = htmlspecialchars($_GET['keyword']);
                 $tmp_result = M('Tmp_orderid')->where(array('orderid'=>$where['orderid']))->find();
                 unset($where['orderid']);
                 $where['order_id'] = $tmp_result['order_id'];
-                $condition_where .= ' AND o.order_id = '. $tmp_result['order_id'];
+                $condition_where .= ' AND oo.order_id = '. $tmp_result['order_id'];
             } elseif ($_GET['searchtype'] == 'name') {
                 $where['username'] = htmlspecialchars($_GET['keyword']);
-                $condition_where .=  ' AND o.username = "'.  htmlspecialchars($_GET['keyword']).'"';
+                $condition_where .=  ' AND oo.username = "'.  htmlspecialchars($_GET['keyword']).'"';
             } elseif ($_GET['searchtype'] == 'phone') {
                 $where['userphone'] = htmlspecialchars($_GET['keyword']);
-                $condition_where .= ' AND o.userphone = "'.  htmlspecialchars($_GET['keyword']).'"';
+                $condition_where .= ' AND oo.userphone = "'.  htmlspecialchars($_GET['keyword']).'"';
             }elseif ($_GET['searchtype'] == 'third_id') {
                 $where['third_id'] =$_GET['keyword'];
-                $condition_where .= ' AND o.third_id = "'.  $_GET['keyword'].'"';
+                $condition_where .= ' AND oo.third_id = "'.  $_GET['keyword'].'"';
             }
 
         }
@@ -1131,22 +1131,22 @@ class ShopAction extends BaseAction
 
         if($status == 100){
             $where['paid'] = 0;
-            //$condition_where .= ' AND o.paid=0';
-            $condition_where .= ' AND paid=0';
+            $condition_where .= ' AND oo.paid=0';
+            //$condition_where .= ' AND paid=0';
         }else if ($status != -1) {
             $where['status'] = $status;
-            //$condition_where .= ' AND o.status='.$status;
-            $condition_where .= ' AND status='.$status;
+            $condition_where .= ' AND oo.status='.$status;
+            //$condition_where .= ' AND status='.$status;
         }
 
         if($pay_type&&$pay_type!='balance'){
             $where['pay_type'] = $pay_type;
-            //$condition_where .= ' AND o.pay_type="'.$pay_type.'"';
-            $condition_where .= ' AND pay_type="'.$pay_type.'"';
+            $condition_where .= ' AND oo.pay_type="'.$pay_type.'"';
+            //$condition_where .= ' AND pay_type="'.$pay_type.'"';
         }else if($pay_type=='balance'){
             $where['_string'] = "(`balance_pay`<>0 OR `merchant_balance` <> 0 )";
-            //$condition_where .= ' AND (`o`.`balance_pay`<>0 OR `o`.`merchant_balance` <> 0 )';
-            $condition_where .= ' AND (`balance_pay`<>0 OR `merchant_balance` <> 0 )';
+            $condition_where .= ' AND (`oo`.`balance_pay`<>0 OR `oo`.`merchant_balance` <> 0 )';
+            //$condition_where .= ' AND (`balance_pay`<>0 OR `merchant_balance` <> 0 )';
         }
 
         if(!empty($_GET['begin_time'])&&!empty($_GET['end_time'])){
@@ -1155,18 +1155,18 @@ class ShopAction extends BaseAction
             }
             $period = array(strtotime($_GET['begin_time']." 00:00:00"),strtotime($_GET['end_time']." 23:59:59"));
             $where['_string'] =( $where['_string']?' AND ':''). " (create_time BETWEEN ".$period[0].' AND '.$period[1].")";
-            //$condition_where .=  " AND (o.create_time BETWEEN ".$period[0].' AND '.$period[1].")";
-            $condition_where .=  " AND (create_time BETWEEN ".$period[0].' AND '.$period[1].")";
+            $condition_where .=  " AND (oo.create_time BETWEEN ".$period[0].' AND '.$period[1].")";
+            //$condition_where .=  " AND (create_time BETWEEN ".$period[0].' AND '.$period[1].")";
         }
 
         if($_GET['city_id']){
-            $store_where = " where s.city_id=".$_GET['city_id'];
+            $condition_where .= " AND ss.city_id=".$_GET['city_id'];
             $where['s.city_id'] = $_GET['city_id'];
         }else{
-            $store_where = "";
+            //$store_where = "";
         }
-        //$condition_where.=" AND o.is_del=0";
-        $condition_where.=" AND is_del=0";
+        $condition_where.=" AND oo.is_del=0";
+        //$condition_where.=" AND is_del=0";
         $where['is_del'] = 0;
         //$coupon_list = M('New_event_user')->join('as u left join '.C('DB_PREFIX').'new_event_coupon as c ON u.event_coupon_id=c.id')->field('u.*')->where($where)->select();
         $count = D('Shop_order')->join('as o left join '.C('DB_PREFIX').'merchant_store as s ON o.store_id=s.store_id')->where($where)->count();
@@ -1237,8 +1237,8 @@ class ShopAction extends BaseAction
             $objActSheet->setCellValue('AB1', 'Address客户地址');
             $objActSheet->setCellValue('AC1', '配送费优惠类型');
 
-
-            $sql = "SELECT o.*, d.name as good_name,d.price as good_price ,d.unit,d.cost_price, d.num as good_num,d.tax_num,d.deposit_price, s.tax_num as store_tax,s.name AS store_name FROM (select * from pigcms_shop_order ".$condition_where." LIMIT ". $i*1000 .",1000)o LEFT JOIN pigcms_merchant_store AS s ON s.store_id=o.store_id LEFT JOIN pigcms_shop_order_detail AS d ON `d`.`order_id`=`o`.`order_id`".$store_where." ORDER BY o.order_id DESC";
+            $sql = "SELECT o.*, d.name as good_name,d.price as good_price ,d.unit,d.cost_price, d.num as good_num,d.tax_num,d.deposit_price FROM (select oo.*,ss.tax_num as store_tax,ss.name AS store_name from pigcms_shop_order as oo left join pigcms_merchant_store as ss on ss.store_id=oo.store_id ".$condition_where." LIMIT ". $i*1000 .",1000)o LEFT JOIN pigcms_shop_order_detail AS d ON `d`.`order_id`=`o`.`order_id` ORDER BY o.order_id DESC";
+            //$sql = "SELECT o.*, d.name as good_name,d.price as good_price ,d.unit,d.cost_price, d.num as good_num,d.tax_num,d.deposit_price, s.tax_num as store_tax,s.name AS store_name FROM (select * from pigcms_shop_order ".$condition_where." LIMIT ". $i*1000 .",1000)o LEFT JOIN pigcms_merchant_store AS s ON s.store_id=o.store_id LEFT JOIN pigcms_shop_order_detail AS d ON `d`.`order_id`=`o`.`order_id`".$store_where." ORDER BY o.order_id DESC";
             //$sql = "SELECT o.*, m.name AS merchant_name,d.name as good_name,d.price as good_price ,d.unit,d.cost_price, d.num as good_num,g.tax_num,g.deposit_price, s.default_tax,ds.dining_time,s.name AS store_name FROM (select * from pigcms_shop_order ".$condition_where." LIMIT ". $i*1000 .",1000)o LEFT JOIN pigcms_merchant_store AS s ON s.store_id=o.store_id LEFT JOIN pigcms_merchant AS m ON `s`.`mer_id`=`m`.`mer_id` LEFT JOIN pigcms_shop_order_detail AS d ON `d`.`order_id`=`o`.`order_id` LEFT JOIN pigcms_shop_goods AS g ON `g`.`goods_id`=`d`.`goods_id` LEFT JOIN pigcms_deliver_supply AS ds ON `ds`.`order_id`=`o`.`order_id` ORDER BY o.order_id DESC";
             //$sql = "SELECT  o.*, m.name AS merchant_name,d.name as good_name,d.price as good_price ,d.unit,d.cost_price, d.num as good_num, s.name AS store_name FROM " . C('DB_PREFIX') . "shop_order AS o LEFT JOIN " . C('DB_PREFIX') . "merchant_store AS s ON s.store_id=o.store_id LEFT JOIN " . C('DB_PREFIX') . "merchant AS m ON `s`.`mer_id`=`m`.`mer_id` LEFT JOIN " . C('DB_PREFIX') . "shop_order_detail AS d ON `d`.`order_id`=`o`.`order_id` ".$condition_where." ORDER BY o.order_id DESC LIMIT " . $i * 1000 . ",1000";
             //
