@@ -2769,7 +2769,7 @@ em.merchant_invoice:before{
 }
 #shopProductCartBox dd .cartLeft{
 	float:left;
-	line-height:40px;
+	line-height:20px;
 }
 #shopProductCartBox dd .cartLeft.hasSpec{
 	line-height:inherit;

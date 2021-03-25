@@ -102,8 +102,11 @@
             function show_msg(msg) {
                 layer.open({
                     title: "{pigcms{:L('_STORE_REMIND_')}",
-                    time: 2,
-                    content: msg
+                    content: msg,
+                    btn: ['OK'],
+                    end: function () {
+                        //
+                    }
                 });
             }
             function checkPhone(phone) {

@@ -324,6 +324,7 @@ a {
     }
 .menu_list li h3 {
     font-weight: bold;
+    line-height: 1.2;
 }
 .fr {
     float: none;

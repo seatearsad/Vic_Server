@@ -152,10 +152,17 @@
     }
     .order_num{
         display: inline-block;
-        width:30px;
+        width:20px;
+    }
+    .infor .kd_dd .left {
+        width: 80%;
+    }
+    .infor .kd_dd .right {
+        width: 20%;
     }
     .infor .kd_dd .right div {
-        width: 50%;
+        width: 100%;
+        float: right;
     }
     .infor .kd_dd {
         border-bottom: #f1f1f1 0px solid;
@@ -270,7 +277,7 @@
                             {pigcms{$goods['name']}</h2>
                     </div>
                     <div class="clr fr right">
-                        <div class="fl del"> &nbsp;</div>
+<!--                        <div class="fl del"> &nbsp;</div>-->
                         <div class="fl price">${pigcms{$goods['discount_total']}</div>
                     </div>
                 </dd>

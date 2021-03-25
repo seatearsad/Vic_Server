@@ -1532,16 +1532,16 @@ class ShopAction extends BaseAction{
                     //modify garfunkel 判断语言
                     $temp['cat_name'] = lang_substr($row['sort_name'], C('DEFAULT_LANG'));
                     $temp['sort_discount'] = $row['sort_discount'] / 10;
+
+                    //是否是限时供应
+                    if( ($sortListById[$row['sort_id']]['show_time']=="") && ($sortListById[$row['sort_id']]['week']=="")){
+                        $temp['limited_offers']="0";
+                    }else{
+                        $temp['limited_offers']="1";
+                    }
+
                     $temp['is_time'] = $sortListById[$row['sort_id']]['is_time'];
 
-                    if( ($order['paid'] == 0) && ($n_status['status']=="1" || $n_status['status']=="0")){
-                        $order['statusLogName']=L('V3_UNPAID');
-                        $order['statusDesc'] = L('V3_UNPAID_DESC');
-                    }else{
-                        $order['statusLogName'] = D('Store')->getOrderStatusLogName($n_status['status']);
-                        $order['statusDesc'] = D('Store')->getOrderStatusDesc($n_status['status'],$order,0,$store['name'],$add_time);
-                    }
-                    $order['statusLog'] = $n_status['status'];
                     if($sortListById[$row['sort_id']]['is_time'] == 1) {
                         $show_time = explode(',',$sortListById[$row['sort_id']]['show_time']);
                         $temp['begin_time'] = $show_time[0];
@@ -2846,6 +2846,7 @@ class ShopAction extends BaseAction{
             }
             $return = D('Shop_goods')->checkCart($store_id, $this->user_session['uid'], $cookieData);
         }
+
 // 		$order_id = isset($_POST['order_id']) ? intval($_POST['order_id']) : 0;
 // 		if ($order_id && ($order = D('Shop_order')->get_order_detail(array('order_id' => $order_id, 'uid' => $this->user_session['uid'])))) {
 // 			$return = $this->check_cart($order['info']);
@@ -3702,7 +3703,7 @@ class ShopAction extends BaseAction{
                     $order['statusLogName'] = D('Store')->getOrderStatusLogName($n_status['status']);
                     $order['statusDesc'] = D('Store')->getOrderStatusDesc($n_status['status'],$order,0,$store['name'],$add_time);
                 }
-                
+
             }
 
             //var_dump($order['statusDesc']);die();

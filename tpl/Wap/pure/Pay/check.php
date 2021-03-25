@@ -864,11 +864,12 @@
         border-bottom: 0;
         /*border-bottom: 1px solid #e5e5e5;*/
         display: flex;
-        padding: 15px 0px 10px 20px;
+        padding: 10px 0px 2px 20px;
     }
     .goods_name,.goods_price{
         flex: 1 1 100%;
         margin-left:20px;
+        margin-right: 20px;
     }
     .goods_price{
         text-align: right;
@@ -883,7 +884,7 @@
         color: #999;
         margin-top: 2px;
         margin-left: 47px;
-        padding-bottom: 10px;
+        padding-bottom: 5px;
         margin-right: 10px;
         line-height: 1.2em;
     }

@@ -1255,7 +1255,8 @@ function showShop(shopId){
             	//alert(is_refresh+"---nowPage="+nowPage);
             	history.replaceState(null,'',location.pathname+location.search);
             	if(is_refresh){
-                    window.location.href = storeUrl;
+                    // alert('storeUrl');
+                    // window.location.href = storeUrl;
 				}
             }
             nowPage="shop";	// by peter
@@ -1269,7 +1270,8 @@ function showShop(shopId){
             //location.hash = '';
             history.replaceState(null,'',location.pathname+location.search);
             if(is_refresh){
-                window.location.href = storeUrl;
+            	//alert("2 storeUrl");
+                //window.location.href = storeUrl;
             }
             nowPage="shop";  // by peter
         });
@@ -2078,10 +2080,11 @@ function cartFunction(type,obj,dataObj){
 			if(productCart[productKey]){
 				productCart[productKey]['count']++;
 				var ct=productCart[productKey]['count'];
-                console.log("--->DecodeIdClass-->"+DecodeIdClass(productKey));
+                //console.log("--->DecodeIdClass-->"+DecodeIdClass(productKey));
 				$('.productNum-'+ DecodeIdClass(productKey)).html(ct);
 			}else{
 				if(dataObj == 'productPage'){
+					//console.log("----------productPage");
 					$('#shopDetailPageBuy').hide();
 					$('#shopDetailPageNumber').show();
 					$('#shopDetailPageNumber .number').html('1');
@@ -2089,6 +2092,7 @@ function cartFunction(type,obj,dataObj){
 					$('.product_'+productId+' .plus').after('<div class="product_btn number productNum-'+productId+'">1</div>').after('<div class="product_btn min"></div>');
 
 				}else{
+                    //console.log("----------NOT productPage");
 					obj.after('<div class="product_btn number productNum-'+productId+'">1</div>');
 					obj.after('<div class="product_btn min"></div>');
 				}
@@ -2140,10 +2144,8 @@ function cartFunction(type,obj,dataObj){
 			productCartMoney = productCartMoney - productPrice;
 		}
 
-
 		$('#shopProductCart #cartNumber').html(productCartNumber);
 		$('#shopProductCart #cartMoney').html(productCartMoney.toFixed(2));
-
 
 		if(productCartNumber == 0){
 			//$('#checkCartEmpty').removeClass('noEmpty').show().html(getLangStr('_NUM_DELI_PRICE_',(nowShop.store.delivery_price).toFixed(2)));
