@@ -2487,12 +2487,14 @@ class ShopAction extends BaseAction
 
                     //清空商品税费
                     $all_tax = 0;//($val['freight_charge'] + $val['packing_charge'])*$val['store_tax']/100;
+                    $all_gst_tax = 0;
+                    $all_pst_tax = 0;
                     //清空押金
                     $all_deposit = 0;
                 }
 
                 $all_tax += $val['good_price'] * $val['good_tax']/100*$val['good_num'];
-                if($val['good_tax'] <= 0){
+                if($val['good_tax'] <= 5){
                     $all_gst_tax += $val['good_price'] * $val['good_tax']/100*$val['good_num'];
                     $all_pst_tax += 0;
                 }else{
