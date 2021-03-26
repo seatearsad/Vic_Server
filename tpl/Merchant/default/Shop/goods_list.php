@@ -9,7 +9,7 @@
 			</li>
 			<li class="active"><a href="{pigcms{:U('Shop/goods_sort',array('store_id'=>$now_store['store_id']))}">分类列表</a></li>
 			<li class="active">{pigcms{$now_sort.sort_name}</li>
-			<li class="active">商品列表</li>
+			<li class="active">{pigcms{:L('ITEM_LIST_BKADMIN')}</li>
 		</ul>
 	</div>
 	<!-- 内容头部 -->
@@ -20,17 +20,17 @@
 			</style>
 			<div class="row">
 				<div class="col-xs-12">
-					<button class="btn btn-success" onclick="CreateShop()">添加商品</button>
+					<button class="btn btn-success" onclick="CreateShop()">{pigcms{:L('ADD_ITEM_BKADMIN')}</button>
                     | <input type="text" id="tax_num" name="tax_num" value="">%
-                    <button class="btn btn-success" onclick="Modify_tax({pigcms{$now_sort.store_id},{pigcms{$now_sort.sort_id})">修改全部税率</button>
-                    <button style="float: right" class="btn btn-success" onclick="ImportExcel()">导入Excel</button>
+                    <button class="btn btn-success" onclick="Modify_tax({pigcms{$now_sort.store_id},{pigcms{$now_sort.sort_id})">{pigcms{:L('EDIT_TAX_RATE_BKADMIN')}</button>
+                    <button style="float: right" class="btn btn-success" onclick="ImportExcel()">{pigcms{:L('IMPORT_DATA_BKADMIN')}</button>
                     <input type="file" id="inputExcel" style="display:none;">
                     <div style="float: right;margin-top: 20px;margin-right: 20px">
                         <label style="float: left">
                             <if condition="$is_hide eq 1">
-                                不显示被隐藏菜单
+                                {pigcms{:L('HIDE_DELETED_BKADMIN')}
                             <else/>
-                                显示被隐藏菜单
+                                {pigcms{:L('SHOW_DELETED_BKADMIN')}
                             </if>
                         </label>
                         <input name="switch-field-1" id="hide_btn" class="ace ace-switch ace-switch-6" type="checkbox" <if condition="$is_hide eq 0">checked="checked"</if>/>
@@ -40,21 +40,21 @@
 						<table class="table table-striped table-bordered table-hover">
 							<thead>
 								<tr>
-									<th width="50">编号</th>
-									<th width="50">排序</th>
-									<th class="button-column">商品名称</th>
-									<th width="80">价格</th>
-									<th class="button-column" style="width:60px;">单位</th>
-									<th width="80">原始库存</th>
-									<th width="80">实际库存</th>
-                                    <th width="50">税率</th>
-                                    <th width="50">押金</th>
-									<th width="80">今日销量</th>
-									<th width="80">总销量</th>
-									<th class="button-column" style="width:180px;">最后操作时间</th>
-									<th class="button-column" style="width:100px;">归属打印机</th>
-									<th width="100" class="button-column">状态</th>
-									<th width="100" class="button-column">操作</th>
+									<th width="50">{pigcms{:L('ID_BKADMIN')}</th>
+									<th width="50">{pigcms{:L('LISTING_ORDER_BKADMIN')}</th>
+									<th class="button-column">{pigcms{:L('ITEM_NAME_BKADMIN')}</th>
+									<th width="80">{pigcms{:L('LISTING_PRICE_BKADMIN')}</th>
+									<th class="button-column" style="width:60px;">{pigcms{:L('UNIT_BKADMIN')}</th>
+									<th width="80">{pigcms{:L('ORIGINAL_INSTOCK_BKADMIN')}</th>
+									<th width="80">{pigcms{:L('CURRENTLY_INSTOCK_BKADMIN')}</th>
+                                    <th width="50">{pigcms{:L('TAX_RATE_BKADMIN')}</th>
+                                    <th width="50">{pigcms{:L('BOTTLE_DEPOSIT_BKADMIN')}</th>
+									<th width="80">{pigcms{:L('DAILY_SALES_BKADMIN')}</th>
+									<th width="80">{pigcms{:L('TOTAL_SALES_BKADMIN')}</th>
+									<th class="button-column" style="width:180px;">{pigcms{:L('LAST_MODIFIED_BKADMIN')}</th>
+									<th class="button-column" style="width:100px;">{pigcms{:L('PRINTER_BKADMIN')}</th>
+									<th width="100" class="button-column">{pigcms{:L('STATUS_BKADMIN')}</th>
+									<th width="100" class="button-column">{pigcms{:L('ACTION_BKADMIN')}</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -67,7 +67,7 @@
 											<td>{pigcms{$vo.price|floatval}</td>
 											<td class="button-column">{pigcms{$vo.unit}</td>
 											<if condition="$vo['stock_num'] eq -1">
-											<td>无限</td>
+											<td>无限{pigcms{:L('ITEM_LIST_BKADMIN')}</td>
 											<else />
 											<td>{pigcms{$vo.stock_num}</td>
 											</if>
