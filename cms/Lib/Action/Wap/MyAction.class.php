@@ -6191,7 +6191,7 @@ class MyAction extends BaseAction{
                             $now_order=D('Shop_order')->field(true)->where(array('order_id' => $order_id))->find();
 
                             //if ((float)$now_order['delivery_discount']>0 && $now_order['delivery_discount_type']==0){
-                            if (true){
+                            if ((float)$now_order['delivery_discount']>0 && $now_order['delivery_discount_type']==0){
                                 //那么就要提示用户，互斥提示
                                 exit(json_encode(array('error_code' => 98,'sysc_id'=>$result['coupon']['id'], 'msg' => L('_AL_EXCHANGE_CANUSER_CODE_'))));
                             }else{
