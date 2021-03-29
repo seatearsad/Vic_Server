@@ -1368,7 +1368,7 @@
                             </div>
                             <div id="tip_input">
                                 <?php
-                                if ($_GET[times]=="2"){
+                                if (($_GET[times]=="2") && ($order_info['paid_times']>0)){
                                 ?>
                                     $ <input type="text" id="tip_fee" name="tip_fee" size="20" pattern="\d{0,}" oninvalid="setCustomValidity('{pigcms{:L(\'_B_PURE_MY_111_\')}---')" data-err="{pigcms{:L('_B_PURE_MY_111_')}===" value="{pigcms{$order_info['tip_charge']}">
                                 <?php }else{ ?>
@@ -1486,7 +1486,7 @@
             $('.confirm_btn').unbind();
         }
         <?php
-            if ($_GET[times]=="2"){
+         if (($_GET[times]=="2") && ($order_info['paid_times']>0)){
         ?>
             $('#tip_list').hide();
             $('#tip_input').show();

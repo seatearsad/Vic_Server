@@ -80,13 +80,14 @@ class Shop_orderModel extends Model
 	public function get_pay_order($uid, $order_id, $is_web = false,$is_app = false)
 	{
 		$now_order = $this->get_order_by_id($uid, $order_id);
+		//var_dump($now_order);die();
 		$user_adress= D('User_adress')->where(array('adress_id'=>$now_order['address_id']))->find();
         $now_order['detail']=$user_adress['detail'];
         $now_order['detail_en']=$user_adress['detail_en'];
 
-        $shop_order= D('Shop_order')->where(array('order_id'=>$order_id))->find();
-        $now_order['desc']=$shop_order['desc'];
-        $now_order['not_touch']=$shop_order['not_touch'];
+//        $shop_order= D('Shop_order')->where(array('order_id'=>$order_id))->find();
+//        $now_order['desc']=$shop_order['desc'];
+//        $now_order['not_touch']=$shop_order['not_touch'];
         //var_dump($now_order);die();echo"----------";
 		//var_dump($detail);die();
 
@@ -165,6 +166,7 @@ class Shop_orderModel extends Model
 					'mer_id'			=>	$now_order['mer_id'],
 					'store_id'			=>	$now_order['store_id'],
 					'paid'				=>	$now_order['paid'],
+					'paid_times'		=>	$now_order['paid_times'],
 					'uid'				=>	$now_order['uid'],
 					'balance_pay'		=>	$now_order['balance_pay'],//平台余额支付的金额
 					'merchant_balance'	=>	$now_order['merchant_balance'],//商家余额支付的金额
@@ -195,7 +197,7 @@ class Shop_orderModel extends Model
 					'not_touch'			=>  $now_order['not_touch'],
                     'not_touch_checked' =>  $not_touch_checked,
 					'delivery_discount'	=>	$now_order['delivery_discount'],
-                	'delivery_discount_type'	=>	$now_order['delivery_discount_type'],
+                	'delivery_discount_type' =>	$now_order['delivery_discount_type'],
 					'create_time'		=>	$now_order['create_time'],
                 	'merchant_reduce'	=>	$now_order['merchant_reduce'],
                 	'merchant_reduce_type'	=>	$now_order['merchant_reduce_type'],
@@ -211,6 +213,7 @@ class Shop_orderModel extends Model
 				'mer_id'			=>	$now_order['mer_id'],
 				'store_id'			=>	$now_order['store_id'],
 				'paid'				=>	$now_order['paid'],
+                'paid_times'		=>	$now_order['paid_times'],
 				'uid'				=>	$now_order['uid'],
 				'balance_pay'		=>	$now_order['balance_pay'],//平台余额支付的金额
 				'merchant_balance'	=>	$now_order['merchant_balance'],//商家余额支付的金额

@@ -14,14 +14,13 @@ class PayAction extends BaseAction{
         $this->assign('count_down',$web_count_down*60);
         //var_dump($_POST);die();
     }
+
     public function check(){
-        if(count($_POST) > 0) {
-            var_dump($_POST);
-            die();
-        }
-        if(empty($this->user_session)){
-            $this->error_tips(L('_B_MY_LOGINFIRST_'),U('Login/index'));
-        }
+
+        if(count($_POST) > 0) {var_dump($_POST);die();}
+
+        if(empty($this->user_session)){$this->error_tips(L('_B_MY_LOGINFIRST_'),U('Login/index'));}
+
         if($this->config['open_extra_price']==0 && empty($this->user_session['phone'])){
             $this->error_tips(L('_BIND_PHONE_BEFORECON_'),U('My/bind_user',array('referer'=>urlencode(U('Pay/check',$_GET)))));
         }
@@ -29,7 +28,9 @@ class PayAction extends BaseAction{
         if(!in_array($_GET['type'],array('group','meal','weidian','takeout', 'food', 'foodPad','recharge','appoint','wxapp', 'store', 'shop', 'mall', 'plat','balance-appoint'))){
             $this->error_tips(L('_ORDER_CANNT_IDEN_'));
         }
+
         $group_pay_offline = true;
+
         if($_GET['type'] == 'group'){
             $now_order = D('Group_order')->get_pay_order($this->user_session['uid'],intval($_GET['order_id']));
             if($now_order['order_info']['group_share_num']>0||$now_order['order_info']['pin_num']>0)$group_pay_offline=false;
@@ -76,7 +77,7 @@ class PayAction extends BaseAction{
         }
 
         $order_info = $now_order['order_info'];
-//var_dump($order_info);die();
+//    var_dump($now_order);die();
 
         //ADD garfunkel
         $order_info['order_name'] = lang_substr($order_info['order_name'],C('DEFAULT_LANG'));
@@ -100,9 +101,7 @@ class PayAction extends BaseAction{
         if(count($card_list) > 0)
             $this->assign('card',$card_list[0]);
 
-        if($this->is_app_browser){
-            $this->display();die;
-        }
+        if($this->is_app_browser){ $this->display();die; }
 
         if($order_info['mer_id']){
             $now_merchant = D('Merchant')->get_info($order_info['mer_id']);
@@ -167,6 +166,7 @@ class PayAction extends BaseAction{
                 $_SESSION['wx_cheap'] = $cheap_info['wx_cheap'];
             }
         }
+
         $this->assign('cheap_info',$cheap_info);
 
         //用户信息
@@ -479,7 +479,6 @@ class PayAction extends BaseAction{
         $this->assign('score_deducte', $score_deducte);
         $this->assign('score_count', $now_user['score_count']);
 
-
         //需要支付的钱
         // $this->assign('pay_money',number_format($pay_money,2));
 
@@ -499,7 +498,6 @@ class PayAction extends BaseAction{
             if ($t_order['price'] < $true_price) $notOffline = 1;
         }
         //********************预定金不允许线下支付*************************//
-
 
 		if($this->config['open_extra_price']==1){
 			$now_mer = M('Merchant')->where(array('mer_id'=>$order_info['mer_id']))->find();
@@ -573,7 +571,7 @@ class PayAction extends BaseAction{
         if(empty($_SESSION['openid']) || $_GET['type'] == 'foodPad'){
             unset($pay_method['weixin'],$pay_method['weifutong']);
         }
-        //dump($_SESSION);die;
+
         if($pay_method['weixin']['config']['is_own']){
             $merchant_bind = D('Weixin_bind')->field('authorizer_appid')->where(array('mer_id' => $now_merchant['mer_id']))->find();
             if(empty($merchant_bind)){
@@ -589,6 +587,7 @@ class PayAction extends BaseAction{
                 }
             }
         }
+
         //add garfunkel
         if($_GET['type'] != 'recharge') {
             $store = D('Merchant_store')->field(true)->where(array('store_id' => $now_order['order_info']['store_id']))->find();
@@ -621,13 +620,13 @@ class PayAction extends BaseAction{
 
         $config = D('Config')->get_gid_config(43);
         $not_touch = array();
+
         foreach ($config as $v){
             if($v['name'] == 'not_touch'){
                 $txt = explode('|',$v['value']);
                 $not_touch['title'] = $txt[0];
                 $not_touch['content'] = $txt[1];
             }
-
             if($v['name'] == 'not_touch_enable'){
                 if($v['value'] == '1'){
                     $not_touch['status'] = 1;
@@ -657,6 +656,9 @@ class PayAction extends BaseAction{
 
     //余额 和 现金支付
     public function go_pay(){
+
+        $this->Update_paid_times($_POST);
+
         //换参数
         $result_url=$this->get_result_url($_POST['order_id']);//1 成功  0 失败
 
@@ -813,6 +815,7 @@ class PayAction extends BaseAction{
 
         //----------------------------------------------------------------------------
         $this->Save_data_pre_pay($_POST);
+
 //        if($_POST['not_touch'] != null && $_POST['not_touch'] == 1){
 ////            D('Shop_order')->field(true)->where(array('order_id'=>$order_info['order_id']))->save(array('not_touch'=>1));
 ////        }
@@ -1101,7 +1104,6 @@ class PayAction extends BaseAction{
 
     public function alipay()
     {
-
         if($_GET['ticket']!=''){
             $_GET['use_merchant_balance'] = $_GET['use_merchant_money'];
             $_GET['use_balance'] = $_GET['use_balance_money'];
@@ -1199,7 +1201,6 @@ class PayAction extends BaseAction{
 
         //用户信息
         $now_user = D('User')->get_user($this->user_session['uid']);
-
 
         if ($_GET['use_score']) {
             if($now_user['score_count']<$_GET['score_used_count']){
@@ -2617,6 +2618,8 @@ class PayAction extends BaseAction{
     //信用卡支付使用的是 Wap 下的PayAction.class.php！！！！！！！！！！！！！！！！！！！！！！！就是这里
     public function MonerisPay(){
 
+        $this->Update_paid_times($_POST);
+
         import('@.ORG.pay.MonerisPay');
         //-------
         $order = explode("_",$_POST['order_id']);
@@ -2750,6 +2753,14 @@ class PayAction extends BaseAction{
 //            D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->save(array('desc'=>$desc,'desc_en'=>$desc_en));
 //        }
 //    }
+    //更新订单的总支付次数（包含失败和成功）
+    //本阶段只实现 0 和 1 的区别，暂时不记录总次数
+    public function Update_paid_times(&$post)
+    {
+        $order_id = explode('_',$post['order_id'])[1];
+        D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->setInc("paid_times");
+    }
+
     //集中保存函数，支付前需要记录这些数据
     //not touch、地址信息、tip、优惠券
     public function Save_data_pre_pay(&$post){
@@ -2794,6 +2805,7 @@ class PayAction extends BaseAction{
                     $in_coupon = array('coupon_id' => $coupon_id, 'coupon_price' => $coupon['discount']);
                 }
             }
+            //如果使用了优惠券，而且delivery_descount_type==0，那么 免配送费 就取消了
             if($order['delivery_discount_type'] == 0){
                 $in_coupon['delivery_discount'] = 0;
             }
@@ -2828,6 +2840,8 @@ class PayAction extends BaseAction{
 
     //微信、支付宝请求支付!!!
     public function WeixinAndAli(){
+
+        $this->Update_paid_times($_POST);
 
         //获取支付的相关配置数据
         $where = array('tab_id'=>'alipay','gid'=>7);
