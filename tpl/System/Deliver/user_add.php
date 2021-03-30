@@ -59,7 +59,7 @@
                 </td>
             </tr>
             <tr>
-                <th width="15%">备注</th>
+                <th width="15%">{pigcms{:L('D_COURIER_NOTES')}</th>
                 <td colspan=3>
                     <textarea name="remark">{pigcms{$now_user.remark}</textarea>
                 </td>

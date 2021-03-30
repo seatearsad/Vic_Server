@@ -2,12 +2,12 @@
 		<div class="mainbox">
 			<div id="nav" class="mainnav_title">
 				<ul>
-					<a href="{pigcms{:U('Deliver/user')}">配送员管理</a>
+					<a href="{pigcms{:U('Deliver/user')}">{pigcms{:L('_BACK_COURIER_MANA_')}</a>
                     <if condition="$system_session['level'] neq 3">
-					<a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Deliver/user_add')}','添加配送员',680,560,true,false,false,editbtn,'edit',true);">添加配送员</a>
-                    <a href="{pigcms{:U('Deliver/rule')}" class="on">配送配置</a>
+					<a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Deliver/user_add')}','{pigcms{:L(\'_BACK_ADD_COURIER_\')}',680,560,true,false,false,editbtn,'edit',true);">{pigcms{:L('_BACK_ADD_COURIER_')}</a>
+                    <a href="{pigcms{:U('Deliver/rule')}" class="on">{pigcms{:L('D_DELIVERYFEE_SETTING')}</a>
                     </if>
-                    <a href="{pigcms{:U('Deliver/map')}">配送员监控</a>
+                    <a href="{pigcms{:U('Deliver/map')}">{pigcms{:L('_BACK_COURIER_MONI_')}</a>
                     <a href="{pigcms{:U('Deliver/schedule')}">{pigcms{:L('_DELIVER_SCHEDULE_')}</a>
 				</ul>
 			</div>
@@ -18,7 +18,7 @@
                     <if condition="$system_session['level'] neq 3 and $parentid eq 0">
                         City:
                         <select name="searchtype" id="city_select">
-                            <option value="0" <if condition="$city_id eq '' or $city_id eq 0">selected="selected"</if>>通用</option>
+                            <option value="0" <if condition="$city_id eq '' or $city_id eq 0">selected="selected"</if>>{pigcms{:L('G_UNIVERSAL')}</option>
                             <volist name="city" id="vo">
                                 <option value="{pigcms{$vo.area_id}" <if condition="$city_id eq $vo['area_id']">selected="selected"</if>>{pigcms{$vo.area_name}</option>
                             </volist>
@@ -29,25 +29,25 @@
         </table>
         <div class="table-list">
             <div>
-                基本配置：
+                {pigcms{:L('D_BASIC_SETUP')}：
                 <div>
-                    起步公里：<input type="text" name="base_rule_mile" value="{pigcms{$base_rule.end}">
+                    {pigcms{:L('D_STARTING_MILEAGE')}：<input type="text" name="base_rule_mile" value="{pigcms{$base_rule.end}">
                 </div>
                 <div>
-                    起步金额：$<input type="text" name="base_rule_fee" value="{pigcms{$base_rule.fee}">
+                    {pigcms{:L('D_STARTING_AMOUNT')}：$<input type="text" name="base_rule_fee" value="{pigcms{$base_rule.fee}">
                 </div>
             </div>
             <div style="margin-top: 20px">
-                梯度配置：
+                {pigcms{:L('D_TERRITORIAL_LAYOUT')}：
                 <div id="add_set">
-                    添加梯度
+                    {pigcms{:L('D_AdDDINC')}
                 </div>
                 <table width="100%" cellspacing="0">
                     <thead>
                     <tr>
-                        <th class="textcenter">起始公里</th>
-                        <th class="textcenter">结束公里</th>
-                        <th class="textcenter">金额</th>
+                        <th class="textcenter">{pigcms{:L('D_INITIAL_MILEAGE')}</th>
+                        <th class="textcenter">{pigcms{:L('D_COMPLETION_MILEAGE')}</th>
+                        <th class="textcenter">{pigcms{:L('D_AMOUNT')}</th>
                     </tr>
                     </thead>
                     <tbody id="fee_list">
@@ -67,7 +67,7 @@
                     </tbody>
                 </table>
             </div>
-            <div id="submit">提交</div>
+            <div id="submit">{pigcms{:L('D_SUBMIT')}</div>
         </div>
 <include file="Public:footer"/>
 <style>

@@ -390,7 +390,7 @@ $(function(){
 	});
 	if($('#myform').length>0){
 		if(document.getElementById('choose_map')){
-			$('#choose_map').html('<input type="text" class="input fl" name="long_lat" id="long_lat" size="20" placeholder="经度,纬度" value="'+(typeof($('#choose_map').attr('default_long_lat'))!='undefined' ? $('#choose_map').attr('default_long_lat') : '')+'" validate="required:true" readonly="readonly"/><a href="javascript:void(0);" style="margin-left:10px;" id="show_map_frame">Click to pin location</a>');
+			$('#choose_map').html('<input type="text" class="input fl" name="long_lat" id="long_lat" size="20" placeholder="Coordinate of Location" value="'+(typeof($('#choose_map').attr('default_long_lat'))!='undefined' ? $('#choose_map').attr('default_long_lat') : '')+'" validate="required:true" readonly="readonly"/><a href="javascript:void(0);" style="margin-left:10px;" id="show_map_frame">Click to pin location</a>');
 			$('#show_map_frame').click(function(){
 				window.top.change_frame_position_left('store_add');
 				window.top.artiframe(choose_map+'&long_lat='+$('#long_lat').val(),"Pin the store location",655,520,true,false,false,false,"choose_map",true,function(){window.top.art.dialog.list["store_add"].position("50%","38.2%");},window.top.get_frame_position_left("store_add",655));
@@ -487,7 +487,7 @@ $(function(){
 				$(item).find("input[type='file']").closest('tr').remove();
 				if(typeof($(item).find("input[type='text']").val()) != 'undefined'){
 					if($(item).find("input[type='text']").val().length == 0){
-						$(item).html('<div class="show">空</div>');
+						$(item).html('<div class="show">None</div>');
 					}else{
 						$(item).html('<div class="show">'+$(item).find("input[type='text']").val()+'</div>');
 					}

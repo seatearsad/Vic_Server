@@ -10,8 +10,8 @@
 			<tr>
 				<th width="90">{pigcms{:L('BASE_ENCRYPTION')}</th>
 				<td style="line-height: 28px;">
-                    <span class="cb-enable"><label class="cb-enable selected"><span>3DS Payment</span><input type="radio" name="pay_secret" value="1" checked="checked" /></label></span>
-                    <span class="cb-disable"><label class="cb-disable"><span>No 3DS Payment</span><input type="radio" name="pay_secret" value="0" /></label></span>
+                    <span class="cb-enable"><label class="cb-enable selected"><span>{pigcms{:L('C_ENCRYPTION1')}</span><input type="radio" name="pay_secret" value="1" checked="checked" /></label></span>
+                    <span class="cb-disable"><label class="cb-disable"><span>{pigcms{:L('C_ENCRYPTION2')}</span><input type="radio" name="pay_secret" value="0" /></label></span>
                 </td>
 			</tr>
             <input type="hidden" name="cat_id" value="{pigcms{$now_category['cat_id']}" />

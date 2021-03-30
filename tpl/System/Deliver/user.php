@@ -7,7 +7,7 @@
                     <a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Deliver/user_add')}','{pigcms{:L(\'_BACK_ADD_COURIER_\')}',680,560,true,false,false,editbtn,'edit',true);">{pigcms{:L('_BACK_ADD_COURIER_')}</a>
 					<!--a href="{pigcms{:U('Config/index',array('galias'=>'deliver','header'=>'Deliver/header'))}">配送配置</a-->
                     <if condition="$system_session['level'] neq 3">
-                    <a href="{pigcms{:U('Deliver/rule')}">配送配置</a>
+                    <a href="{pigcms{:U('Deliver/rule')}">{pigcms{:L('D_DELIVERYFEE_SETTING')}</a>
                     </if>
                     <a href="{pigcms{:U('Deliver/map')}">{pigcms{:L('_BACK_COURIER_MONI_')}</a>
                     <a href="{pigcms{:U('Deliver/schedule')}">{pigcms{:L('_DELIVER_SCHEDULE_')}</a>
@@ -37,7 +37,7 @@
                         </select>
                         </if>
                         <a href="{pigcms{:U('Deliver/export_deliver')}" class="button" style="float:right;margin-right: 10px;">
-                            导出送餐员
+                            {pigcms{:L('D_EXPORT_COURIERLIST')}
                         </a>
 					</td>
 				</tr>
