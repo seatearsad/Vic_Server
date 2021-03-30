@@ -1808,6 +1808,7 @@ class ShopAction extends BaseAction
                 $data['error'] = 1;
                 exit(json_encode($data));
             }
+            
         }
     }
 }
