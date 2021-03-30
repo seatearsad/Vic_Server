@@ -461,7 +461,7 @@ $(function(){
 			}else{
 				var no_check_tips = false;
 			}
-			var check_tr = '<tr id="check_tr"><th>Password Strength</th><td><table width="'+check_width+'" border="0" cellspacing="0" cellpadding="1" style="display:inline-block;_display:inline;"><tbody><tr class="noboder" align="center" style="background:none; border:none;"><td width="33%" id="pwd_lower" style="border-bottom:2px solid #DADADA">Weak</td><td width="33%" id="pwd_middle" style="border-bottom:2px solid #DADADA">Fair</td><td width="33%" id="pwd_high" style="border-bottom:2px solid #DADADA">Good</td></tr></tbody></table>'+( no_check_tips ? '<img src="'+static_path+'images/help.gif" class="tips_img" title="密码强度建议至少为一般！（字母*2）（数字*2）（特殊字符*2），满足任意两项为一般，满足三项为强"/>' : '')+'</td></tr>';
+			var check_tr = '<tr id="check_tr"><th>Password Strength</th><td><table width="'+check_width+'" border="0" cellspacing="0" cellpadding="1" style="display:inline-block;_display:inline;"><tbody><tr class="noboder" align="center" style="background:none; border:none;"><td width="33%" id="pwd_lower" style="border-bottom:2px solid #DADADA">Weak</td><td width="33%" id="pwd_middle" style="border-bottom:2px solid #DADADA">Fair</td><td width="33%" id="pwd_high" style="border-bottom:2px solid #DADADA">Good</td></tr></tbody></table>'+( no_check_tips ? '<img src="'+static_path+'images/help.gif" class="tips_img" title=""/>' : '')+'</td></tr>';
 			var check_event = check_pwd.attr('check_event');
 			if(!check_event){
 				check_pwd.closest('tr').after(check_tr);

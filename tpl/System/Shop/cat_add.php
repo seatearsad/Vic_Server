@@ -8,11 +8,11 @@
 			</tr>
 			<tr>
 				<th width="90">{pigcms{:L('C_CATEGORYURL')}</th>
-				<td><input type="text" class="input fl" name="cat_url" id="cat_url" size="25" placeholder="" validate="maxlength:20,required:true,en_num:true" tips="只能使用英文或数字，用于网址（url）中的标记！建议使用分类的拼音"/></td>
+				<td><input type="text" class="input fl" name="cat_url" id="cat_url" size="25" placeholder="" validate="maxlength:20,required:true,en_num:true" tips=""/></td>
 			</tr>
 			<tr>
 				<th width="90">{pigcms{:L('C_LISTORDER')}</th>
-				<td><input type="text" class="input fl" name="cat_sort" value="0" size="10" placeholder="" validate="maxlength:6,required:true,number:true" tips="默认添加时间排序！手动排序数值越大，排序越前。"/></td>
+				<td><input type="text" class="input fl" name="cat_sort" value="0" size="10" placeholder="" validate="maxlength:6,required:true,number:true" tips=""/></td>
 			</tr>
 			<tr>
 				<th width="90">{pigcms{:L('C_CATESTAT')}</th>
