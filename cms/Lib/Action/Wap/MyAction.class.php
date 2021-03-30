@@ -591,7 +591,9 @@ class MyAction extends BaseAction{
 			foreach($coupon_list as &$value){
 
                 //如果存在平台优惠 而且 delivery_discount_type=0，优惠券 也是可用的
-                if ((float)$now_order['delivery_discount']>0 && $now_order['delivery_discount_type']==0){
+                //if ((float)$now_order['delivery_discount']>0 && $now_order['delivery_discount_type']==0){
+                if (((float)$now_order['delivery_discount']>0 && $now_order['delivery_discount_type']==0)||
+                    ((float)$now_order['merchant_reduce']>0 && $now_order['merchant_reduce_type']==0)){
                     //那么就要提示用户，互斥提示
                     $value['need_notify_delivery_discount'] = "1";
                 }else{
@@ -953,11 +955,12 @@ class MyAction extends BaseAction{
 			if(empty($_POST['adress'])){
 				$this->error(L('_B_MY_NOPOSITION_'));
 			}
+
 			if(D('User_adress')->post_form_save($this->user_session['uid']) !== false){
 				cookie('user_address', 0);
 				$this->success(L('_B_MY_SAVEACCESS_'));
 			}else{
-				$this->error(L('_B_MY_SAVEPOSITIONLOSE_'));
+				$this->error(L('_B_MY_SAVEPOSITIONLOSE_').'----');
 			}
 		}else{
 
@@ -3472,6 +3475,7 @@ class MyAction extends BaseAction{
         if($tmp[0]){
             //$this->assign('coupon_list', array_shift($tmp[0]));
             $this->assign('coupon_list', $tmp[0]);
+
         }
         //$this->assign('coupon_list', $coupon_list);
         //$this->card_list();
@@ -6163,35 +6167,34 @@ class MyAction extends BaseAction{
 
     public function exchangeCode(){
 	    if($_POST) {
+
             $code = $_POST['code'];
             $uid = $this->user_session['uid'];
             $order_id=$_POST['order_id'];
-            $order=D('Shop_order')->field("price")->where(array('order_id' => $order_id))->find();
-            $order_price=$order['price']; // order 的价格
+            $order=D('Shop_order')->field("good_price")->where(array('order_id' => $order_id))->find();
+            $order_price=$order['good_price']; // order  subtotal
             //die($order);
             $coupon = D('System_coupon')->field(true)->where(array('notice' => $code))->find();
             //var_dump($coupon);die();
             $cid = $coupon['coupon_id'];
             $order_money=$coupon['order_money'];
+
             //die($order_price."----------".$order_money);
             if ($cid) {
-
                 $l_id = D('System_coupon_hadpull')->field(true)->where(array('uid' => $uid, 'coupon_id' => $cid))->find();
-
                 if ($l_id == null) {    //之前没有领用过
-                    //echo"-----1------".$order_money."------".$order_price."------";
                     $result = D('System_coupon')->had_pull($cid, $uid);
                     //var_dump($result);die();
                     if ($result['error_code']==0){ //兑换成功
-                        if ($order_price!="" && $order_price<$order_money){ //新加的优惠券当前订单不可用
+                        if ($order_price!="" && $order_price<$order_money){         //新加的优惠券当前订单不可用
                             exit(json_encode(array('error_code' => 2, 'msg' => L('_AL_EXCHANGE_CANTUSER_CODE_'))));   //当前订单不可用
                         }else{
-
-                            //echo json_encode($result);                      //当前订单可用
+                            //echo json_encode($result);                            //当前订单可用
                             $now_order=D('Shop_order')->field(true)->where(array('order_id' => $order_id))->find();
 
                             //if ((float)$now_order['delivery_discount']>0 && $now_order['delivery_discount_type']==0){
-                            if ((float)$now_order['delivery_discount']>0 && $now_order['delivery_discount_type']==0){
+                            if (((float)$now_order['delivery_discount']>0 && $now_order['delivery_discount_type']==0)||
+                                ((float)$now_order['merchant_reduce']>0 && $now_order['merchant_reduce_type']==0)){
                                 //那么就要提示用户，互斥提示
                                 exit(json_encode(array('error_code' => 98,'sysc_id'=>$result['coupon']['id'], 'msg' => L('_AL_EXCHANGE_CANUSER_CODE_'))));
                             }else{

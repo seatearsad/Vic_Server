@@ -77,7 +77,7 @@ class PayAction extends BaseAction{
         }
 
         $order_info = $now_order['order_info'];
-//    var_dump($now_order);die();
+    //var_dump($order_info);die();
 
         //ADD garfunkel
         $order_info['order_name'] = lang_substr($order_info['order_name'],C('DEFAULT_LANG'));
@@ -245,13 +245,24 @@ class PayAction extends BaseAction{
             $order_info['is_c'] = $is_chi ? 0 : 1;
 
             //平台优惠券
-            if (($tmp_order['total_money'] > $mer_coupon['discount'] || empty($mer_coupon)) && $_GET['unsys_coupon']!=1 && ($order_info['discount_status'] || !isset($order_info['discount_status']))) {
+            //die(($_GET['unsys_coupon']!=1) && ($order_info['discount_status'] || !isset($order_info['discount_status'])));
+            //die($tmp_order['total_money']."-----".$mer_coupon['discount']);
+            //if (($tmp_order['total_money'] > $mer_coupon['discount'] || empty($mer_coupon)) && $_GET['unsys_coupon']!=1 && ($order_info['discount_status'] || !isset($order_info['discount_status']))) {
+            //if (($_GET['unsys_coupon']!=1) && ($order_info['discount_status'] || !isset($order_info['discount_status']))) {
+
+
+            if (isset($_GET['unsys_coupon']) && $_GET['unsys_coupon']==1) {
+
+                $order_info['merchant_reduce'] = $order_info['merchant_reduce_save'];
+                $order_info['delivery_discount'] = $order_info['delivery_discount_save'];
+                //die($order_info['merchant_reduce']."----".$order_info['delivery_discount']);
+            }else{
+
                 $tmp_order['total_money'] -= empty($mer_coupon['discount']) ? 0 : $mer_coupon['discount'];
+
                 if (empty($_GET['sysc_id'])) {  //没有选择优惠券
 
-                    //如果是二次支付
-
-                    if ($order_info['coupon_id']>0){
+                    if ($order_info['coupon_id']>0){  //如果是二次支付，
                         $sysc_id=$order_info['coupon_id'];
                         //如果选择的为活动优惠券
                         if(strpos($sysc_id,'event')!== false){
@@ -264,11 +275,12 @@ class PayAction extends BaseAction{
                         }else {
                             $system_coupon = D('System_coupon')->get_coupon_info($sysc_id);
                         }
-                        if($order_info['delivery_discount_type'] == 0)
-                            $order_info['delivery_discount'] = 0;
-                        if($order_info['merchant_reduce_type'] == 0)
-                            $order_info['merchant_reduce'] = 0;
+
+                        if($order_info['delivery_discount_type'] == 0)  $order_info['delivery_discount'] = 0;
+                        if($order_info['merchant_reduce_type'] == 0)  $order_info['merchant_reduce'] = 0;
                     }
+
+
 //                    if (!empty($order_info['business_type'])) {
 //                        $now_coupon = D('System_coupon')->get_noworder_coupon_list($tmp_order, $_GET['type'], $this->user_session['phone'], $this->user_session['uid'], $platform, $order_info['business_type']);
 //                    } else {
@@ -290,6 +302,7 @@ class PayAction extends BaseAction{
                 } else {
 
                     $sysc_id = $_GET['sysc_id'];
+
                     //如果选择的为活动优惠券
                     if(strpos($sysc_id,'event')!== false){
                         $event = explode('_',$sysc_id);
@@ -324,7 +337,6 @@ class PayAction extends BaseAction{
                     $_SESSION['card_discount'] = $mer_coupon['discount'];
                 }
             } else {
-
                 $mer_coupon['coupon_url_param'] = array();
             }
 
@@ -2664,6 +2676,7 @@ class PayAction extends BaseAction{
             $order = explode("_",$_POST['order_id']);
             $order_id = $order[1];
             //判断是否有减免配送费活动
+
             if($_POST['delivery_discount'] != null){
                 $order_info['delivery_discount'] = $_POST['delivery_discount'];
                 if($_POST['order_type'] == 'shop' || $_POST['order_type'] == 'mall'){
@@ -2786,8 +2799,9 @@ class PayAction extends BaseAction{
             $save_list['tip_charge']=$tip;
         }
         //----------------------------------------------------
+        $order = D('Shop_order')->where(array('order_id'=>$order_id))->find();
         if($coupon_id != null && trim($coupon_id) != ''){
-            $order = D('Shop_order')->where(array('order_id'=>$order_id))->find();
+
             //如果选择的为活动优惠券
             if(strpos($coupon_id,'event')!== false) {
                 $event = explode('_',$coupon_id);
@@ -2809,7 +2823,15 @@ class PayAction extends BaseAction{
             if($order['delivery_discount_type'] == 0){
                 $in_coupon['delivery_discount'] = 0;
             }
+            if($order['merchant_reduce_type'] == 0){
+                $in_coupon['merchant_reduce'] = 0;
+            }
             $save_list=array_merge($save_list,$in_coupon);
+
+        }else{
+
+
+
         }
         //----------------------------------------------------
         if($desc != null || trim($desc) != '') {

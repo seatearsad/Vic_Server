@@ -1408,7 +1408,7 @@
                     {pigcms{:L('_TIP_TXT_')} <span class="tip_show"></span>
                 </div>
                 <?php if($system_coupon){ ?>
-                <div <if condition="$order_info['order_type'] == 'recharge'"> style="display: none" </if>>
+                <div <if condition="$order_info['order_type'] == 'recharge'"> style="display: none" <else/> style="color: #ffa52d" </if>>
                     Coupon
                     <span>
                         -${pigcms{:sprintf("%.2f",$system_coupon['discount'])}

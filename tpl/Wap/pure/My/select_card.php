@@ -605,15 +605,17 @@
                                 }
                             })
                         }else if (data.error_code == 99) { //兑换成功，且可以直接用
-                            layer.open({
-                                title:'Message',
-                                btn: ['OK'],
-                                content:data.msg,
-                                end:function () {
-                                    var a_link="/wap.php?g=Wap&c=Pay&a=check&order_id="+order_id+"&type=shop&delivery_type=0&sysc_id="+data.sysc_id;
-                                    window.location.href=a_link;
-                                }
-                            })
+                            var a_link="/wap.php?g=Wap&c=Pay&a=check&order_id="+order_id+"&type=shop&delivery_type=0&sysc_id="+data.sysc_id;
+                            window.location.href=a_link;
+                            // layer.open({
+                            //     title:'Message',
+                            //     btn: ['OK'],
+                            //     content:data.msg,
+                            //     end:function () {
+                            //         var a_link="/wap.php?g=Wap&c=Pay&a=check&order_id="+order_id+"&type=shop&delivery_type=0&sysc_id="+data.sysc_id;
+                            //         window.location.href=a_link;
+                            //     }
+                            // })
                         }else if (data.error_code == 2) {
                             layer.open({
                                 title:'Message',

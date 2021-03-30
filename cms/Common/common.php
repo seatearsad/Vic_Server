@@ -979,6 +979,9 @@ function translationCnToEn($str_cn){
     $result = $http->curlGet($url);
     //var_dump($result);die();
     $result = json_decode($result,true);
-    return $result['data']['translations'][0]['translatedText'];
+    if ($result['data']['translations'][0]['translatedText']==null)
+        return "";
+    else
+        return $result['data']['translations'][0]['translatedText'];
 }
 ?>

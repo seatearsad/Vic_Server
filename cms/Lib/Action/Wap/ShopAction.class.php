@@ -2770,7 +2770,8 @@ class ShopAction extends BaseAction{
         if($is_jump_address == 1 && $_GET['from']=='shop'){
             $store = $return['store'];
             //redirect(U('My/adress',array('buy_type' => 'shop', 'store_id'=>$store['store_id'], 'village_id'=>$village_id, 'mer_id' => $store['mer_id'], 'frm' => $_GET['frm'], 'adress_id'=>$user_adress['adress_id'], 'order_id' => $order_id)));
-            redirect(U('My/adress',array('buy_type' => 'shop', 'store_id'=>$store['store_id'], 'village_id'=>$village_id, 'mer_id' => $store['mer_id'], 'frm' => $_GET['frm'], 'adress_id'=>0, 'order_id' => $order_id, 'from' => "shop")));
+            die("redirect");
+            //redirect(U('My/adress',array('buy_type' => 'shop', 'store_id'=>$store['store_id'], 'village_id'=>$village_id, 'mer_id' => $store['mer_id'], 'frm' => $_GET['frm'], 'adress_id'=>0, 'order_id' => $order_id, 'from' => "shop")));
         }
         //计算打包费 add garfunkel
         $store_shop = D("Merchant_store_shop")->field(true)->where(array('store_id' => $store_id))->find();
@@ -2877,13 +2878,14 @@ class ShopAction extends BaseAction{
                 }
             }
 
-            //garfunkel获取减免配送费的活动
+            //garfunkel获取减 平台 和 店铺 免配送费的活动(只能选一个）
             $delivery_coupon = D('New_event')->getFreeDeliverCoupon($store_id,$return['store']['city_id']);
 
-            //garfunkel店铺满减活动
+            //garfunkel 店铺满减 活动
             $eventList = D('New_event')->getEventList(1,4);
+
             $store_coupon = "";
-            if(count($eventList) > 0) {
+            if(count($eventList) > 0) {                                                                      //limit_day 就是 store_id
                 $store_coupon = D('New_event_coupon')->where(array('event_id' => $eventList[0]['id'],'limit_day'=>$store_id))->order('use_price asc')->select();
             }
             /////
@@ -2958,6 +2960,7 @@ class ShopAction extends BaseAction{
 
             $order_data['merchant_reduce'] = $return['sto_first_reduce'] + $return['sto_full_reduce'];//店铺优惠
             $order_data['balance_reduce'] = $return['sys_first_reduce'] + $return['sys_full_reduce'];//平台优惠
+
             $orderid  = date('ymdhis').substr(microtime(),2,8-strlen($this->user_session['uid'])).$this->user_session['uid'];
             $order_data['real_orderid'] = $orderid;
             $order_data['no_bill_money'] = 0;//无需跟平台对账的金额
@@ -3105,7 +3108,9 @@ class ShopAction extends BaseAction{
                         }
                     }
                 }
-
+                // 缓存
+                $order_data['merchant_reduce_save']=$order_data['merchant_reduce'];
+                $order_data['delivery_discount_save']=$order_data['delivery_discount'];
                 /*
                 if ($return['delivery_type'] == 5) {//快递配送
                     $pass_distance = $distance > $return['basic_distance'] ? floatval($distance - $return['basic_distance']) : 0;
