@@ -276,6 +276,7 @@ a {
     font-size: 18px;
     color: #000000;
     margin-bottom: 10px;
+    word-break: break-word;
 }
 
 .menu_wrap .title_bar{

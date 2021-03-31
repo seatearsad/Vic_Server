@@ -765,7 +765,8 @@ function showShop(shopId){
 		// showShopContent('product');
 		pageLoadHides();
 		changeWechatShare('shop',{title:nowShop.store.name,desc:nowShop.store.txt_info,imgUrl:nowShop.store.image,link:shopShareUrl+nowShop.store.id});
-	}else{
+
+	}else{  //一般情况下走这里
 
 		productCart=[];
 		productCartNumber = 0;
@@ -776,7 +777,7 @@ function showShop(shopId){
 		$('#shopProductCart #emptyCart').show();
 		$('#shopProductLeftBar2 dl,#shopProductRightBar2 dl').empty();
 		//$('#shopProductBottomBar ul,#shopCatBar .content ul').empty();
-
+        //加载主数据！！！！
 		$.getJSON(ajax_url_root+'ajaxShop',{store_id:shopId},function(result){
 			//console.log(result);
 			$('#shopTitle').html(result.store.name);
@@ -786,6 +787,7 @@ function showShop(shopId){
             $('#stars_text').html(result.store.star);
 
             $('#background_area').css('background-image','url('+result.store.background+')');
+
 			if(result.store.delivery){
                 $('#deliveryText').html(getLangStr('_DELI_PRICE_') +' $'+result.store.delivery_money+' | '+ getLangStr('_PACK_PRICE_') +' $'+ result.store.pack_fee);//+ ' | ' + getLangStr('_DEIL_NUM_MIN_',result.store.delivery_time)
 			}else{
@@ -818,7 +820,7 @@ function showShop(shopId){
 			
 			$('#shopProductBox,#shopMerchantBox,#shopReplyBox').data('isShow','0');
 			$('#shopReplyBox').hide();
-			// showShopContent('product');
+
 			firstMenuClick = true;
 
 			//------------------------------------ SHIT --------------------------------------------
@@ -826,7 +828,8 @@ function showShop(shopId){
 			//--------------------------------------------------------------------------------------
 
 			changeWechatShare('shop',{title:nowShop.store.name,desc:nowShop.store.txt_info,imgUrl:nowShop.store.image,link:shopShareUrl+nowShop.store.id});
-            //如果店铺关闭，要提示
+
+			//如果店铺关闭，要提示
             var shop_remind = ""
 			if(nowShop.store.is_close == '1' || nowShop.store.store_status=='0'){
                 shop_remind = "This store is currently closed, and delivery is unavailable at the moment.";
