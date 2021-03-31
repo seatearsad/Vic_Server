@@ -652,9 +652,14 @@ class MyAction extends BaseAction{
 			$this->error_tips(L('_B_MY_LOGINFIRST_'));
 		}
 
-		$adress_list = D('User_adress')->get_adress_list($this->user_session['uid']);
+        $adress_list = D('User_adress')->get_adress_list($this->user_session['uid']);
         $sid = $_GET['store_id'] ? $_GET['store_id'] : 0;
-
+        if($sid != 0){
+            $store = D('Store')->get_store_by_id($sid);
+        }else{
+            $store = null;
+        }
+        
         if ($_GET["from"]=="shop"){
             $_GET["from"]="address";
         }
