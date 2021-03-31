@@ -117,7 +117,23 @@
             width: 90%;
             margin-left: 5%;
         }
-
+        .Coupon span.several {
+            display: block;
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 28px;
+            height: 28px;
+            transform: rotate(0deg);
+            line-height: 25px;
+            text-align: center;
+            font-size: 16px;
+            color: #fff;
+            z-index: 99;
+            border-radius: 30%;
+            border: 2px solid #fff;
+            background:none;
+        }
 	</style>
         <include file="Public:facebook"/>
 </head>
@@ -178,6 +194,7 @@
                                 <div class="Coupon_text overflow">{pigcms{$coupon.des}</div>
                             </div>
                         </div>
+                        <span class="several">{pigcms{$coupon.get_num}</span>
                     </dd>
                 </dl>
 
@@ -198,7 +215,7 @@
 
     function exchange_code(code){
         $.ajax({url:"{pigcms{:U('My/exchangeCode')}",type:"post",data:"code="+code,dataType:"json",success:function(data){
-                if(data.error_code == 0){
+                if(data.error_code == 0||data.error_code == 99||data.error_code == 98){
                     alert('success');
                     window.location.reload();
                 }else{

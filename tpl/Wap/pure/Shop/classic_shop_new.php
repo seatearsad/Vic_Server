@@ -16,8 +16,8 @@
 		<meta name="format-detection" content="telephone=no"/>
 		<meta name="format-detection" content="address=no"/>
 		<link rel="stylesheet" type="text/css" href="{pigcms{$static_path}shop/css/shopBase.css?v=1.93"/>
-<!--		<script type="text/javascript" src="{pigcms{:C('JQUERY_FILE_190')}" charset="utf-8"></script>-->
-        <script type="text/javascript" src="{pigcms{$static_path}js/jquery.min.js" charset="utf-8"></script>
+		<script type="text/javascript" src="{pigcms{:C('JQUERY_FILE_190')}" charset="utf-8"></script>
+<!--        <script type="text/javascript" src="{pigcms{$static_path}js/jquery.min.js" charset="utf-8"></script>-->
 		<script type="text/javascript" src="{pigcms{$static_path}js/iscroll.js?220" charset="utf-8"></script>
 		<script type="text/javascript" src="{pigcms{$static_path}js/idangerous.swiper.min.js" charset="utf-8"></script>
 		<script type="text/javascript" src="{pigcms{$static_path}js/fastclick.js" charset="utf-8"></script>
@@ -223,9 +223,6 @@
             }
             #shopContentBar{
                 background: #f4f4f4;
-            }
-            #shopProductLeftBar2 dd span{
-                background: none;
             }
             #shopProductLeftBar2 dl{
                 margin: 0;
@@ -476,7 +473,7 @@
                 top: 101px;
             }
             .swiper-container{
-                margin-top: 50px;
+                /*margin-top: 50px;*/
             }
             .add_bold{
                 font-weight: bold;
@@ -498,6 +495,10 @@
                 background: white;
                 border-radius: 10px;
             }
+            .closeBtn div {
+                left: 10px;
+                top: 10px;
+            }
             .box_title{
                 font-weight: bold;
             }
@@ -518,6 +519,13 @@
                 color: #333;
                 position: relative;
                 display: flex;
+            }
+            #shopProductLeftBar2 dd span {
+                padding: 8px 10px;
+                line-height: 17px;
+                background: none;
+                display: block;
+                border-bottom: none;
             }
         </style>
 	<body onscroll="scrollProductEvent(1)">
@@ -642,7 +650,7 @@
 <!--			</section>-->
 			<section id="shopContentBar">
 				<div id="shopProductBox">
-					<div id="shopProductBottomBar"><ul class="clearfix"></ul><div id="shopProductBottomLine"></div></div>
+<!--					<div id="shopProductBottomBar"><ul class="clearfix"></ul><div id="shopProductBottomLine"></div></div>-->
                     <div id="shopCatBar" style="display:none;">
                         <div class="title">
                             {pigcms{:L('_ALL_CLASSIF_')}
@@ -723,8 +731,9 @@
 				<div id="shopPageCatShade" style="z-index: 80"></div>
 <!--                可选规格对话框-->
 				<div id="shopDetailPage" style="display:none;">
-					<div class-s="scrollerBox">
-						<div id="shopDetailpageClose" class="closeBtn"><div></div></div>
+                    <div id="shopDetailpageClose" class="closeBtn"><div></div></div>
+					<div class="scrollerBoxShit" style="padding-bottom: 60px;padding-top: 35px;">
+
 						<div id="shopDetailPageImgbox" class="swiper-container swiper-container-productImg">
 							<div class="swiper-wrapper"></div>
 							<div class="swiper-pagination swiper-pagination-productImg"></div>

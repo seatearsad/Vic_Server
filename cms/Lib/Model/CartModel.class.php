@@ -257,11 +257,6 @@ class CartModel extends Model
         $address = D('Store')->getDefaultAdr($uid);
 
         $distance = getDistance($store['lat'], $store['lng'], $address['mapLat'], $address['mapLng']);
-        if ($distance <= $store['delivery_radius'] * 1000) {
-            $result['is_allow'] = 1;
-        }else{
-            $result['is_allow'] = 0;
-        }
         $store['free_delivery'] = 0;
         $store['event'] = "";
 
@@ -319,7 +314,6 @@ class CartModel extends Model
         $tax_price = $tax_price + ($store['pack_fee'] + $delivey_fee)*$store['tax_num']/100;
         $total_pay_price = $total_pay_price + $tax_price + $deposit_price;
 
-        $result['store_id'] = $store['site_id'];
         $result['store_name'] = $store['site_name'];
         $result['expect_time'] = date('Y-m-d H:i',$delivery_time);
         $result['hongbao'] = array();

@@ -184,10 +184,6 @@
     function checkForm() {
         var is_ok = true;
         var value_list = {};
-        if($("#max").val() == '0'){
-            alert("上限数量不能为0！");
-            return false;
-        }
         $('form').find('input').each(function () {
             //alert($(this).attr('name') + $(this).val());
             if($(this).val() == ''){

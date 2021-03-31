@@ -152,10 +152,17 @@
     }
     .order_num{
         display: inline-block;
-        width:30px;
+        width:20px;
+    }
+    .infor .kd_dd .left {
+        width: 80%;
+    }
+    .infor .kd_dd .right {
+        width: 20%;
     }
     .infor .kd_dd .right div {
-        width: 50%;
+        width: 100%;
+        float: right;
     }
     .infor .kd_dd {
         border-bottom: #f1f1f1 0px solid;
@@ -270,7 +277,7 @@
                             {pigcms{$goods['name']}</h2>
                     </div>
                     <div class="clr fr right">
-                        <div class="fl del"> &nbsp;</div>
+<!--                        <div class="fl del"> &nbsp;</div>-->
                         <div class="fl price">${pigcms{$goods['discount_total']}</div>
                     </div>
                 </dd>
@@ -431,7 +438,7 @@
 
                 <if condition="$order_details['paid'] eq 0">
                     <li class="fr replace refund_button" data-url="{pigcms{:U('Shop/orderdel', array('order_id' => $order_details['order_id']))}">{pigcms{:L('_CANCEL_ORDER_')}</li>
-                    <elseif condition="$order_details['paid'] eq 1 AND $order_details['status'] lt 1" />
+                    <elseif condition="$order_details['paid'] eq 1 AND $order_details['status'] lt 2" />
                     <li class="fr replace refund_button" data-url="{pigcms{:U('My/shop_order_refund', array('order_id' => $order_details['order_id']))}">{pigcms{:L('_CANCEL_ORDER_')}</li>
                     <elseif condition="$order_details['paid'] eq 1 AND $order_details['status'] eq 5" />
                     <li class="fr replace refund_button" data-url="{pigcms{:U('My/shop_order_refund', array('order_id' => $order_details['order_id']))}">{pigcms{:L('_REFUND_TXT_')}</li>

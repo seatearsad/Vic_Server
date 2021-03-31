@@ -2029,10 +2029,6 @@ class DeliverAction extends BaseAction
         }
 
         $result['order_count'] = count($list);
-        $base_one_money = 10;
-        $guara_money = $base_one_money*$result['order_count'];
-        $result['one_money'] = $base_one_money;
-        $result['guara_money'] = $guara_money;
 
         $this->assign($result);
         $this->assign('list',$list);
@@ -2546,8 +2542,6 @@ class DeliverAction extends BaseAction
     }
 
     public function step_3(){
-        $database_deliver_user = D('Deliver_user');
-        $now_user = $database_deliver_user->field(true)->where(array('uid' => $this->deliver_session['uid']))->find();
         if($_POST){
             import('@.ORG.pay.MonerisPay.mpgClasses');
             $where = array('tab_id'=>'moneris','gid'=>7);
@@ -2565,7 +2559,7 @@ class DeliverAction extends BaseAction
             $txnArray['expdate'] = transYM($_POST['e_date']);
             $txnArray['order_id'] = 'TuttiDeliver_'.$this->deliver_session['uid'].'_'.time();
             $txnArray['cust_id'] = $this->deliver_session['uid'];
-            $txnArray['amount'] = '68.25';
+            $txnArray['amount'] = '57.75';
 
             /**************************** Transaction Object *****************************/
 
@@ -2592,13 +2586,14 @@ class DeliverAction extends BaseAction
 
                 D('Deliver_user')->where(array('uid'=>$this->deliver_session['uid']))->save(array('reg_status'=>4,'last_time'=>time()));
 
-                $this->sendMail($now_user);
                 $result = array('error_code' => false, 'msg' => L('_PAYMENT_SUCCESS_'));
             }else{
                 $result = array('error_code' => true, 'msg' => $mpgResponse->getMessage());
             }
             $this->ajaxReturn($result);
         }else {
+            $database_deliver_user = D('Deliver_user');
+            $now_user = $database_deliver_user->field(true)->where(array('uid' => $this->deliver_session['uid']))->find();
             if ($now_user['reg_status'] != 3)
                 header('Location:' . U('Deliver/step_' . $now_user['reg_status']));
             $this->display();
@@ -2611,24 +2606,11 @@ class DeliverAction extends BaseAction
         if($now_user['reg_status'] != 4) {
             if($_GET['type'] == 'jump'){
                 D('Deliver_user')->where(array('uid'=>$this->deliver_session['uid']))->save(array('reg_status'=>4));
-                $this->sendMail($now_user);
             }else {
                 header('Location:' . U('Deliver/step_' . $now_user['reg_status']));
             }
         }
         $this->display();
-    }
-
-    public function sendMail($now_user){
-        if($now_user['email'] != "") {
-            $email = array(array("address"=>$now_user['email'],"userName"=>$now_user['name']));
-            if($now_user['city_id'] == 105) {
-                $title = "Picking Up Your Tutti Delivery Bags";
-                $body = $this->getVicMailBody($now_user['name']);
-                $mail = getMail($title, $body, $email);
-                $mail->send();
-            }
-        }
     }
 
     public function schedule(){
@@ -3010,29 +2992,5 @@ class DeliverAction extends BaseAction
 
             $this->display();
         }
-    }
-
-    public function getVicMailBody($name){
-	    $body = "<p>Hi ".$name.",</p>";
-        $body .= "<p>&nbsp;</p>";
-        $body .= "<p>Thank you for signing up as a Tutti courier!</p>";
-        $body .= "<p>&nbsp;</p>";
-        $body .= "<p>To pick up your delivery bag, you will need to schedule an appointment with us. Please choose an available time slot at <a href='https://calendly.com/calvin-tutti/15min' target='_blank'>https://calendly.com/calvin-tutti/15min.</a></p>";
-        $body .= "<p>&nbsp;</p>";
-        $body .= "<p>The pick-up location for Victoria couriers is:</p>";
-        $body .= "<b>852 Fort Street, Unit 218</b>";
-        $body .= "<p>Victoria BC, V8W 1H8</p>";
-        $body .= "<p>&nbsp;</p>";
-        $body .= "<p>Please note that <b>wearing a mask is mandatory</b> during your pick-up!</p>";
-        $body .= "<p>&nbsp;</p>";
-        $body .= "<p>If you haven't uploaded the required documents, we recommend you finish uploading them in order to get started quickly. You can do so by logging into your courier account and clicking on the \"Completing My Application\" button. If you have any difficulties uploading documents, you can also bring in the original copy when picking up your delivery bag.</p>";
-        $body .= "<p>After being approved and getting your delivery bag, we will activate your account. You will then receive another email with a link to instructions on how to use our courier app.</p>";
-        $body .= "<p>&nbsp;</p>";
-        $body .= "<p>For any questions or concerns, please contact us at 1-888-399-6668 or email <a href='mailto:hr@tutti.app'>hr@tutti.app</a>. We look forward to working with you!</p>";
-        $body .= "<p>&nbsp;</p>";
-        $body .= "<p>Best regards,</p>";
-        $body .= "<p>Tutti Courier Team</p>";
-
-        return $body;
     }
 }

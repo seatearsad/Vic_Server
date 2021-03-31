@@ -77,13 +77,13 @@ class GroupserviceAction extends BaseAction{
 				$long = $_GET['long'];
 			}
 
-			if($_COOKIE['userLocationCity']){
-				$city_id = $_COOKIE['userLocationCity'];
-			}else{
+            if($_COOKIE['userLocationCity']){
+                $city_id = $_COOKIE['userLocationCity'];
+            }else{
                 $city_id = D('Store')->geocoderGoogle($lat,$long);
                 $city_id = $city_id ? $city_id : 0;
                 $_COOKIE['userLocationCity'] = $city_id;
-			}
+            }
 
             $where = array('deliver_type' => $deliver_type, 'order' => $order, 'lat' => $lat, 'long' => $long, 'cat_id' => $cat_id, 'cat_fid' => $cat_fid, 'page' => $page);
 			$key && $where['key'] = $key;

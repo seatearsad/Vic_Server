@@ -864,11 +864,12 @@
         border-bottom: 0;
         /*border-bottom: 1px solid #e5e5e5;*/
         display: flex;
-        padding: 15px 0px 10px 20px;
+        padding: 10px 0px 2px 20px;
     }
     .goods_name,.goods_price{
         flex: 1 1 100%;
         margin-left:20px;
+        margin-right: 20px;
     }
     .goods_price{
         text-align: right;
@@ -883,7 +884,7 @@
         color: #999;
         margin-top: 2px;
         margin-left: 47px;
-        padding-bottom: 10px;
+        padding-bottom: 5px;
         margin-right: 10px;
         line-height: 1.2em;
     }
@@ -1367,7 +1368,7 @@
                             </div>
                             <div id="tip_input">
                                 <?php
-                                if ($_GET[times]=="2"){
+                                if (($_GET[times]=="2") && ($order_info['paid_times']>0)){
                                 ?>
                                     $ <input type="text" id="tip_fee" name="tip_fee" size="20" pattern="\d{0,}" oninvalid="setCustomValidity('{pigcms{:L(\'_B_PURE_MY_111_\')}---')" data-err="{pigcms{:L('_B_PURE_MY_111_')}===" value="{pigcms{$order_info['tip_charge']}">
                                 <?php }else{ ?>
@@ -1407,7 +1408,7 @@
                     {pigcms{:L('_TIP_TXT_')} <span class="tip_show"></span>
                 </div>
                 <?php if($system_coupon){ ?>
-                <div <if condition="$order_info['order_type'] == 'recharge'"> style="display: none" </if>>
+                <div <if condition="$order_info['order_type'] == 'recharge'"> style="display: none" <else/> style="color: #ffa52d" </if>>
                     Coupon
                     <span>
                         -${pigcms{:sprintf("%.2f",$system_coupon['discount'])}
@@ -1485,7 +1486,7 @@
             $('.confirm_btn').unbind();
         }
         <?php
-            if ($_GET[times]=="2"){
+         if (($_GET[times]=="2") && ($order_info['paid_times']>0)){
         ?>
             $('#tip_list').hide();
             $('#tip_input').show();

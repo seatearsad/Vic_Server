@@ -113,7 +113,7 @@ class MonerisPay
 
                 $isC = D('User_card')->getCardByUserAndNum($uid, $data['card_num']);
                 if (!$isC) {
-                    //garfunkel
+
                     D('User_card')->clearIsDefaultByUid($uid);
                     $card_data['name'] = $data['name'];
                     $card_data['is_default'] = 1;
@@ -157,7 +157,7 @@ class MonerisPay
                         if (!empty($now_coupon)) {
                             $coupon = D('New_event_coupon')->where(array('id' => $now_coupon['event_coupon_id']))->find();
                             $in_coupon = array('coupon_id' => $data['coupon_id'], 'coupon_price' => $coupon['discount']);
-                            if($order['delivery_discount_type'] == 0){
+                            if ($order['delivery_discount_type'] == 0) {
                                 $in_coupon['delivery_discount'] = 0;
                             }
                             D('Shop_order')->field(true)->where(array('order_id' => $order_id))->save($in_coupon);
@@ -170,7 +170,7 @@ class MonerisPay
                             $coupon = D('System_coupon')->get_coupon($coupon_real_id);
 
                             $in_coupon = array('coupon_id' => $data['coupon_id'], 'coupon_price' => $coupon['discount']);
-                            if($order['delivery_discount_type'] == 0){
+                            if ($order['delivery_discount_type'] == 0) {
                                 $in_coupon['delivery_discount'] = 0;
                             }
 
@@ -185,7 +185,6 @@ class MonerisPay
             } else {
 
             }
-
             return $resp;
         }
     }

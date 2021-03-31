@@ -33,18 +33,7 @@ KindEditor.ready(function(K) {
 	});
 
 	$('form.form-horizontal').submit(function(){
-		var is_return = true;
-		$("#prop_div").find(".properties_num").each(function () {
-			if($(this).val() == 0){
-				is_return = false;
-				alert("属性的可选数量不得为0！");
-			}
-        });
-		if(is_return) {
-            $(this).find('button[type="submit"]').html('保存中...').prop('disabled', true);
-        }else{
-			return is_return;
-		}
+		$(this).find('button[type="submit"]').html('保存中...').prop('disabled',true);
 	});
 	/*分享图片*/
 	$('#image-file').ace_file_input({

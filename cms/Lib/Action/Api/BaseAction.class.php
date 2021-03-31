@@ -44,7 +44,6 @@ class BaseAction extends Action
     public function checkSign(){
         $secret_key = $this->config['api_secret_key'];
         $version = (int)str_replace(".","",$_POST['version']);
-        $this->app_version = $version;
         if($version >= 260){
             $data = $_POST;
             $sign = strtolower($data['sign']);
