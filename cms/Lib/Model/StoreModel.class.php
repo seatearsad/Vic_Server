@@ -860,6 +860,7 @@ class StoreModel extends Model
         }else {
             $data['zoneName'] = '';
         }
+        $data['areaID'] = $data['zoneID'];
         $data['areaName'] = $address['area'];
         $data['userName'] = $address['name'];
         $data['phoneNum'] = $address['phone'];
