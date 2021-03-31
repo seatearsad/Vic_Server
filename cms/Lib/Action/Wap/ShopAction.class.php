@@ -1266,12 +1266,12 @@ class ShopAction extends BaseAction{
                 $store['is_close'] = 1;
                 $store['time']= '营业时间未知';
         }
+
         //garfunkel add
         if($row['store_is_close'] != 0){
             $store['is_close'] = 1;
         }
         //end  @wangchuanyuan
-
 
         $store['home_url'] = U('Index/index', array('token' => $row['mer_id']));
         //modify garfunkel 判断语言
@@ -1453,6 +1453,7 @@ class ShopAction extends BaseAction{
                 }
             }
         }
+
         if ($store['tmpl']) {
             $today = date('Ymd');
             $product_list = D('Shop_goods')->get_list_by_storeid($store_id);
@@ -1488,7 +1489,6 @@ class ShopAction extends BaseAction{
                         $glist['extra_pay_price']=$r['extra_pay_price'];
                         $glist['extra_pay_price_name']=$this->config['extra_price_alias_name'];
                     }
-
                     $r['sell_day'] = $now_shop['stock_type'] ? $today : $r['sell_day'];
                     if ($today == $r['sell_day']) {
                         $glist['stock'] = $r['stock_num'] == -1 ? $r['stock_num'] : (intval($r['stock_num'] - $r['today_sell_count']) > 0 ? intval($r['stock_num'] - $r['today_sell_count']) : 0);
@@ -1511,7 +1511,9 @@ class ShopAction extends BaseAction{
             }*/
 
             echo json_encode(array('store' => $store, 'product_list' => $list));
+
         } else {
+
             $sortList = D('Shop_goods_sort')->lists($store_id, true);
             $sortIdList = array();
             $sortListById = array();
@@ -1520,6 +1522,8 @@ class ShopAction extends BaseAction{
                 $sortList[$k]['cat_name'] = lang_substr($sl['sort_name'],C('DEFAULT_LANG'));
                 $sortIdList[] = $sl['sort_id'];
                 $sortListById[$sl['sort_id']] = $sl;
+                $show_time_str = explode(',',$sortList[$k]['show_time']);
+                $sortList[$k]['show_time_str']=$show_time_str[0]." - ".$show_time_str[1];
             }
             $firstSort = reset($sortList);
             //$sortId = isset($firstSort['sort_id']) ? $firstSort['sort_id'] : 0;
@@ -1534,7 +1538,7 @@ class ShopAction extends BaseAction{
                     $temp['sort_discount'] = $row['sort_discount'] / 10;
 
                     //是否是限时供应
-                    if( ($sortListById[$row['sort_id']]['show_time']=="") && ($sortListById[$row['sort_id']]['week']=="")){
+                    if( ($sortListById[$row['sort_id']]['is_weekshow']=="0") && ($sortListById[$row['sort_id']]['is_time']=="0")){
                         $temp['limited_offers']="0";
                     }else{
                         $temp['limited_offers']="1";
@@ -1544,6 +1548,7 @@ class ShopAction extends BaseAction{
 
                     if($sortListById[$row['sort_id']]['is_time'] == 1) {
                         $show_time = explode(',',$sortListById[$row['sort_id']]['show_time']);
+                        //$sortListById[$row['sort_id']]['show_time'] = $show_time[0]."-".$show_time[1];
                         $temp['begin_time'] = $show_time[0];
                         $temp['end_time'] = $show_time[1];
                     }
