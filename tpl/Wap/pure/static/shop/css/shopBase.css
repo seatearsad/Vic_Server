@@ -1751,7 +1751,7 @@ em.merchant_invoice:before{
     margin-bottom: 5px;
     overflow: hidden;
     height: 37px;
-    line-height: 1.2;
+    line-height: 1.3;
 }
 #shopProductRightBar2 li .product_text .sale,#shopSearchResult li .product_text .sale{
     font-size: 11px;

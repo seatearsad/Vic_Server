@@ -2770,8 +2770,8 @@ class ShopAction extends BaseAction{
         if($is_jump_address == 1 && $_GET['from']=='shop'){
             $store = $return['store'];
             //redirect(U('My/adress',array('buy_type' => 'shop', 'store_id'=>$store['store_id'], 'village_id'=>$village_id, 'mer_id' => $store['mer_id'], 'frm' => $_GET['frm'], 'adress_id'=>$user_adress['adress_id'], 'order_id' => $order_id)));
-            die("redirect");
-            //redirect(U('My/adress',array('buy_type' => 'shop', 'store_id'=>$store['store_id'], 'village_id'=>$village_id, 'mer_id' => $store['mer_id'], 'frm' => $_GET['frm'], 'adress_id'=>0, 'order_id' => $order_id, 'from' => "shop")));
+            //die("redirect");
+            redirect(U('My/adress',array('buy_type' => 'shop', 'store_id'=>$store['store_id'], 'village_id'=>$village_id, 'mer_id' => $store['mer_id'], 'frm' => $_GET['frm'], 'adress_id'=>0, 'order_id' => $order_id, 'from' => "shop")));
         }
         //计算打包费 add garfunkel
         $store_shop = D("Merchant_store_shop")->field(true)->where(array('store_id' => $store_id))->find();
