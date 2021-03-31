@@ -225,7 +225,7 @@
         <div class="bg_infor"><img src="{pigcms{$store['image']}"> </div>
     </if>
     <div class="msg_infor">
-        <div class="msg_title info_common">{pigcms{$order.statusLogName}<span style="display: none">{pigcms{$order['statusLog']}</span> </div>
+        <div class="msg_title info_common">{pigcms{$order.statusLogName}<span style="display: ">{pigcms{$order['statusLog']}-{pigcms{$order_details['status']}</span> </div>
         <div class="msg_desc info_common">{pigcms{$order.statusDesc}</div>
         <div class=""></div>
     </div>
@@ -433,19 +433,19 @@
 <!--                    <li class="fl firmly" data-url="{pigcms{:U('Pay/check',array('order_id' => $order_details['order_id'], 'type'=>'shop'))}">{pigcms{:L('_PAYMENT_ORDER_')}</li>-->
 <!--                </if>-->
                 <php> if($config['open_sub_mchid'] && $now_merchant['open_sub_mchid'] && $now_merchant['sub_mch_id'] > 0 && $now_merchant['sub_mch_refund'] == 0 && $order['is_own'] == 2 && $order['pay_type'] == 'weixin'){</php>
-                <li class="fr zlyd refund_button">{pigcms{:L('_CANNT_REFUND_C_S_')} 【{pigcms{$now_merchant.name}】</li>
+                <li class="fr zlyd refund_button">{pigcms{:L('_CANNT_REFUND_C_S_')} 【{pigcms{$now_merchant.name}】1</li>
                 <php>}else{</php>
 
                 <if condition="$order_details['paid'] eq 0">
-                    <li class="fr replace refund_button" data-url="{pigcms{:U('Shop/orderdel', array('order_id' => $order_details['order_id']))}">{pigcms{:L('_CANCEL_ORDER_')}</li>
-                    <elseif condition="$order_details['paid'] eq 1 AND $order_details['status'] lt 2" />
-                    <li class="fr replace refund_button" data-url="{pigcms{:U('My/shop_order_refund', array('order_id' => $order_details['order_id']))}">{pigcms{:L('_CANCEL_ORDER_')}</li>
+                    <li class="fr replace refund_button" data-url="{pigcms{:U('Shop/orderdel', array('order_id' => $order_details['order_id']))}">{pigcms{:L('_CANCEL_ORDER_')}2</li>
+                    <elseif condition="$order_details['paid'] eq 1 AND $order_details['status'] lt 1" />
+                    <li class="fr replace refund_button" data-url="{pigcms{:U('My/shop_order_refund', array('order_id' => $order_details['order_id']))}">{pigcms{:L('_CANCEL_ORDER_')}3</li>
                     <elseif condition="$order_details['paid'] eq 1 AND $order_details['status'] eq 5" />
-                    <li class="fr replace refund_button" data-url="{pigcms{:U('My/shop_order_refund', array('order_id' => $order_details['order_id']))}">{pigcms{:L('_REFUND_TXT_')}</li>
+                    <li class="fr replace refund_button" data-url="{pigcms{:U('My/shop_order_refund', array('order_id' => $order_details['order_id']))}">{pigcms{:L('_REFUND_TXT_')}4</li>
                 </if>
                 <php>}</php>
                 <if condition="$order_details['status'] eq 2">
-                    <li class="fl replace reorder" data-url="{pigcms{:U('My/shop_feedback',array('order_id' => $order_details['order_id']))}">{pigcms{:L('_B_PURE_MY_73_')}</li>
+                    <li class="fl replace reorder" data-url="{pigcms{:U('My/shop_feedback',array('order_id' => $order_details['order_id']))}">{pigcms{:L('_B_PURE_MY_73_')}5</li>
                     <!--li class="fr zlyd" data-url="{pigcms{:U('Shop/confirm_order', array('order_id' => $order_details['order_id'], 'store_id' => $store['store_id']))}">{pigcms{:L('_ONE_MORE_LIST_')}</li-->
                 </if>
                 <else/>

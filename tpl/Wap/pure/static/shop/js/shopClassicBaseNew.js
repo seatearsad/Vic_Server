@@ -225,6 +225,7 @@ var firstMenuClick = false;
 var productSwiper = null;
 var productPicList = [];
 var isNewLoading=true;
+
 function showShop(shopId){
 
 	pageLoadTips({showBg:false});
@@ -326,7 +327,8 @@ function showShop(shopId){
 
         //设置可以切换到商家Tab的事件
 		$('#shopBanner,.shop_info').click(function(){$('#shopMenuBar li.merchant').trigger('click');});
-		
+
+		//内容Tab切换 商品 、 评价 、 店铺信息
 		$(document).on('click','#shopProductLeftBar2 dd',function(){
             $(this).addClass('active').siblings().removeClass('active');
 			var top1=$('#shopProductRightBar2-'+$(this).data('cat_id')).offset().top;
@@ -610,6 +612,7 @@ function showShop(shopId){
 			if(is_no_select){
 				return false;
 			}
+			//购物车添加动画
             var obj 	= document.getElementById('cartInfo');
             var left_x = GetObjPos(obj)['x'];
             tmpDomObj = $(this);
@@ -635,6 +638,7 @@ function showShop(shopId){
             }
             return false;
         });
+
         //点击了Spec单页底部的  - 按钮
         $(document).on('click','#shopDetailPageNumber .product_btn.min',function(event){
             tmpDomObj = $(this);
@@ -643,7 +647,8 @@ function showShop(shopId){
         });
 
 		//$(document).on('click','#shopProductRightBar2 .product_btn.plus,#shopProductBottomBar .product_btn.plus,#shopSearchResult .product_btn.plus',function(event){
-        $(document).on('click','#shopProductRightBar2 .product_btn.plus,#shopSearchResult .product_btn.plus',function(event){
+        //店铺商品列表中 或搜索结果列表中，单个商品 点 + 到购物车
+        $(document).on('click','#shopProductRightBar2 .product_btn.plus, #shopSearchResult .product_btn.plus,#shopProductRightBar2 .bgPlusBack, #shopSearchResult .bgPlusBack',function(event){
 			if(nowShop.store.is_close == 1 || nowShop.store.store_status=='0'){
 				motify.log(getLangStr('_SHOP_AT_REST_'));
 				return false;
@@ -678,57 +683,15 @@ function showShop(shopId){
 			}
 			return false;
 		});
-		$(document).on('click','#shopProductRightBar2 .bgPlusBack,#shopSearchResult .bgPlusBack',function(event){
-			if(nowShop.store.is_close == 1 || nowShop.store.store_status=='0'){
-				motify.log(getLangStr('_SHOP_AT_REST_'));
-				return false;
-			}
-			tmpDomObj = $(this);
 
-			var intStock = parseInt(tmpDomObj.closest('li').data('stock'));
-			if(intStock != -1 && (intStock == 0 || intStock - parseInt(tmpDomObj.siblings('.number').html()) <= 0)){
-				motify.log(getLangStr('_NO_STOCK_'));
-				return false;
-			}
-
-            var obj 	= document.getElementById('cartInfo');
-            var left_x = GetObjPos(obj)['x'];
-
-			console.log("event.clientX="+event.clientX+'--- event.clientY='+event.clientY);
-			if(!(motify.checkApp() && motify.checkAndroid())){
-				flyer.fly({
-					start: {
-						left:event.clientX-10,
-						top: event.clientY-10
-					},
-					end: {
-						left: left_x+20,
-						top: window_height-50,
-						width: 20,
-						height: 20
-					},
-					onEnd:function(){
-						// alert(111122);
-						cartFunction('plus',tmpDomObj,tmpDomObj.closest('li'));
-						flyer.remove();
-					}
-				});
-			}else{
-				cartFunction('plus',tmpDomObj,tmpDomObj.closest('li'));
-			}
-			return false;
-		});
-		$(document).on('click','#shopProductRightBar2 .bgMinBack,#shopSearchResult .bgMinBack',function(event){
+        //店铺商品列表中 或搜索结果列表中，单个商品 点 - 去购物车
+		$(document).on('click','#shopProductRightBar2 .bgMinBack, #shopSearchResult .bgMinBack,#shopProductRightBar2 .product_btn.min,#shopSearchResult .product_btn.min',function(event){
 			tmpDomObj = $(this).siblings('.product_btn.min');
 			cartFunction('min',tmpDomObj,tmpDomObj.hasClass('cart') ? tmpDomObj.closest('dd') : tmpDomObj.closest('li'));
 			return false;
 		});
-		$(document).on('click','#shopProductRightBar2 .product_btn.min,#shopSearchResult .product_btn.min',function(event){
-			tmpDomObj = $(this);
-			cartFunction('min',tmpDomObj,tmpDomObj.hasClass('cart') ? tmpDomObj.closest('dd') : tmpDomObj.closest('li'));
-			return false;
-		});
-		
+
+		//在店铺评论Tab中，点击不同类型的评价（good、bad...)
 		$('#shopReplyBox ul li').click(function(){
 			if($(this).hasClass('active')){
 				return false;
@@ -752,7 +715,8 @@ function showShop(shopId){
 				pageLoadHides();
 			});
 		});
-		
+
+		//在店铺评论Tab中，点击加载更多评论
 		$('#showMoreReply').click(function(){
 			pageLoadTips({showBg:false});
 			var nowPage = parseInt($(this).data('page'));
@@ -786,26 +750,12 @@ function showShop(shopId){
             var top = $(document).scrollTop();
 			$('#pageShop').trigger('touchmove');
 		});
-			// $('#shopProductRightBar2,#shopProductBottomBar').on('touchmove',function(){
-			// 	scrollProductEvent('ios');
-			// });
-			// $('#shopProductRightBar2,#shopProductBottomBar').scroll(function(){
-			// 	$('#shopProductRightBar2').trigger('touchmove');
-			// });
-		// }else{
-         //    console.log("android");
-         //    $('#container').scroll(function(){
-         //        scrollProductEvent('android');
-         //    });
-		// 	// $('#shopProductRightBar2,#shopProductBottomBar').scroll(function(){
-		// 	// 	scrollProductEvent('android');
-		// 	// });
-		// }
 
 		isShowShop = true;
 	}
 	
 	if(nowShop.store && shopId == nowShop.store.id){
+
         //$('#shopHeader').css('background','rgba(255,255,255,0)');
 		$('#shopTitle').html(nowShop.store.name);
         $('#shopTitle_Header').html(nowShop.store.name);
