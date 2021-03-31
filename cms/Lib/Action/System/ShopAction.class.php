@@ -1794,9 +1794,9 @@ class ShopAction extends BaseAction
                             $show_list[] = $status_txt;
                         if($v['status'] == 2){
                             $supply = D('Deliver_supply')->where(array("order_id"=>$order_id))->find();
-                            $show_list[] = "<div style='color: #ff5757'>预计出餐：" . ' ' . date('H:i', $v['dateline']+$supply['dining_time']*60).'</div>';
+                            $show_list[] = "<div style='color: #ff5757'>".L('Back_Deliver_Show_3')."：" . ' ' . date('H:i', $v['dateline']+$supply['dining_time']*60).'</div>';
                             if(!$supply['uid'])
-                                array_unshift($show_list,'<div>顾客下单： ' . date('H:i', $v['dateline']).'</div>');
+                                array_unshift($show_list,'<div>'.L('Back_Deliver_Show_1').'： ' . date('H:i', $v['dateline']).'</div>');
                         }
                     }
                 }
