@@ -176,8 +176,8 @@
 	{{# for(var i in d){ }}
 		<dd id="shopProductLeftBar2-{{ d[i].cat_id }}" data-cat_id="{{ d[i].cat_id }}" {{# if(loop_num == 0){ }}class="active"{{# } }}>
 			<span data-sort_id="{{d[i].cat_id}}">{{ d[i].cat_name }}
-                {{# if (d[i].show_time != "") { }}
-                <div style="font-size: 12px">10:00-12:00</div></span>
+                {{# if (d[i].is_time == "1") { }}
+                <div style="font-size: 12px">{{ d[i].show_time_str }}</div></span>
             {{# } }}
 
             {{# if (d[i].son_list != undefined) { }}

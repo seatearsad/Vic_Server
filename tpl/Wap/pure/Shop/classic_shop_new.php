@@ -567,7 +567,7 @@
 					<li class="dropdown-toggle caret type subway" data-nav="type">
 						<span class="nav-head-name">{pigcms{:L('_TYPE_TXT_')}</span>
 					</li>
-				</ul>
+				</ul>·
 				<div class="dropdown-wrapper category">
 					<div class="dropdown-module">
 						<div class="scroller-wrapper">
