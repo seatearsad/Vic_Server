@@ -835,7 +835,7 @@ function showShop(shopId){
 
             $('#stars_text').html(result.store.star);
 
-            $('#background_area').css('background-image','url('+result.store.image+')');
+            $('#background_area').css('background-image','url('+result.store.background+')');
 			if(result.store.delivery){
                 $('#deliveryText').html(getLangStr('_DELI_PRICE_') +' $'+result.store.delivery_money+' | '+ getLangStr('_PACK_PRICE_') +' $'+ result.store.pack_fee);//+ ' | ' + getLangStr('_DEIL_NUM_MIN_',result.store.delivery_time)
 			}else{

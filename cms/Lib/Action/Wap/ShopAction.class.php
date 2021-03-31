@@ -1029,7 +1029,7 @@ class ShopAction extends BaseAction{
             exit;
         }
         $now_shop = D('Merchant_store_shop')->field(true)->where($where)->find();
-
+        //var_dump($now_shop);die();
         $now_mer = M('Merchant')->field('isverify')->where(array('mer_id'=>$now_store['mer_id']))->find();
         if (empty($now_shop) || empty($now_store)) {
             echo json_encode(array());
@@ -1053,6 +1053,9 @@ class ShopAction extends BaseAction{
         $images = $store_image_class->get_allImage_by_path($row['pic_info']);
 
         $store['id'] = $row['store_id'];
+
+        $image_tmp = explode(',', $row['background']);
+        $store['background'] = C('config.site_url') . '/upload/background/' . $image_tmp[0] . '/' . $image_tmp['1'];
 
         $store['phone'] = $row['phone'];
         $store['long'] = $row['long'];
