@@ -6171,22 +6171,24 @@ class MyAction extends BaseAction{
             $code = $_POST['code'];
             $uid = $this->user_session['uid'];
             $order_id=$_POST['order_id'];
-            $order=D('Shop_order')->field("good_price")->where(array('order_id' => $order_id))->find();
-            $order_price=$order['good_price']; // order  subtotal
-            //die($order);
+            $order=D('Shop_order')->field("goods_price")->where(array('order_id' => $order_id))->find();
+            $order_price=$order['goods_price']; // order  subtotal
+           // die($order);
             $coupon = D('System_coupon')->field(true)->where(array('notice' => $code))->find();
             //var_dump($coupon);die();
             $cid = $coupon['coupon_id'];
-            $order_money=$coupon['order_money'];
+            $order_money =$coupon['order_money'];
 
-            //die($order_price."----------".$order_money);
+            //die($order_price." >>>>>>>> ".$order_money);
+
             if ($cid) {
+
                 $l_id = D('System_coupon_hadpull')->field(true)->where(array('uid' => $uid, 'coupon_id' => $cid))->find();
                 if ($l_id == null) {    //之前没有领用过
                     $result = D('System_coupon')->had_pull($cid, $uid);
                     //var_dump($result);die();
                     if ($result['error_code']==0){ //兑换成功
-                        if ($order_price!="" && $order_price<$order_money){         //新加的优惠券当前订单不可用
+                        if ($order_price!="" && ($order_price<$order_money)){         //新加的优惠券当前订单不可用
                             exit(json_encode(array('error_code' => 2, 'msg' => L('_AL_EXCHANGE_CANTUSER_CODE_'))));   //当前订单不可用
                         }else{
                             //echo json_encode($result);                            //当前订单可用
