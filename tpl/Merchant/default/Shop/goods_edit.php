@@ -201,8 +201,8 @@
 									</volist>
 									<p class="add_spec"><a href="javascript:;" title="添加" class="btn btn-sm btn-success" <if condition="count($now_goods['spec_list']) egt 3">style="display:none"</if>>添加规格</a></p>
 								</div>
-							
-								<div class="topic_box">
+
+                                <div class="topic_box" id="prop_div">
 									<volist name="now_goods['properties_list']" id="ro" key="ik">
 									<div class="question_box properties">
 										<p class="question_info">

@@ -84,6 +84,22 @@
         padding: 5px 5px;
         border-radius: 3px;
     }
+    #memo_up{
+        width:80%;
+        font-size: 12px;
+        line-height: 1.3;
+        margin: 20px auto 5px auto;
+    }
+    #memo_up a{
+        text-decoration: underline;
+        color: #666666;
+    }
+    .y_c{
+        color: #ffa52d;
+    }
+    .text_b{
+        font-weight: bold;
+    }
 </style>
 <body style="background:url('{pigcms{$static_path}img/login_bg.png');">
 <section>
@@ -98,10 +114,25 @@
         <li class="act"></li><li class="act"></li><li class="act"></li><li class="act"></li>
         </ul>
     </div>
-    <div id="memo">
-        {pigcms{:L('_ND_PICKUPNOTICE0_')}
+    <div id="memo_up">
+        <p class="y_c text_b" style="font-size: 13px;">Getting Your Delivery Bag</p>
+        <p>&nbsp;</p>
+        <p>
+            <label class="text_b">For Victoria couriers</label>, you will receive an email which includes:
+        </p>
+        <p> - A link to <a href="https://calendly.com/calvin-tutti/15min" target="_blank">book a time slot</a> for pick up,</p>
+        <p> - The address of the pick-up location (in downtown Victoria).</p>
+        <p>&nbsp;</p>
+        <p> Please make sure you’ve booked a time slot before coming to pick up your bag!</p>
+        <p>&nbsp;</p>
+        <label class="text_b">For couriers in all other cities</label>, your bag will be shipped to you once you complete the payment process. One of our agents will call you to confirm your address before shipping the bag.
+        <p>&nbsp;</p>
+        After you get your delivery bag and your account has been activated, you will receive another email with a link to our delivery instructions on how to use the courier app.
+        <p>&nbsp;</p>
+        If you have any questions about your delivery bag and registration process, please email <a href="mailto:hr@tutti.app">hr@tutti.app</div>!
+    <p>&nbsp;</p>
     </div>
-    <div id="address">
+    <!--div id="address">
         <div>
             #218-852 Fort St
         </div>
@@ -121,8 +152,8 @@
     </div>
     <div id="memo">
         {pigcms{:L('_ND_PICKUPNOTICE1_')}
-    </div>
-    <div style="border-bottom: 1px dashed #666666;margin: 20px auto;width: 80%;">
+    </div-->
+    <div style="border-bottom: 1px dashed #666666;margin: 0px auto;width: 80%;">
 
     </div>
     <div id="memo">

@@ -14,9 +14,14 @@ class IndexAction extends BaseAction
             $long = $_POST['long'];
         }
         $city_id = $_POST['city_id'] ? $_POST['city_id'] : -1;
+        //v2.6.1添加
+        $userId = $_POST['uid'] ? $_POST['uid'] : 0;
 
         //顶部广告
         if($city_id == -1) {
+            if($userId != 0) {
+                D('User_adress')->where(array('uid'=>$userId))->save(array('default'=>0));
+            }
             $city_id = $this->loadModel()->geocoderGoogle($lat, $long);
         }
 
@@ -762,7 +767,10 @@ class IndexAction extends BaseAction
         $data['address'] = $data['adress'];
         $data['city_name'] = $_POST['city_name'];
 
-        $this->returnCode(0,'info',$data,'success');
+        if($this->app_version > 260)//当版本号大于260时 添加数据
+            $this->returnCode(0,'info',$data,'success');
+        else
+            $this->returnCode(0,'info',array(),'success');
     }
 
     public function delUserAddress(){

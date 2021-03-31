@@ -570,8 +570,8 @@ class MyAction extends BaseAction{
                 foreach ($event_coupon_list as &$v){
                     $v['id'] = $v['coupon_id'].'_'.$v['id'];
                     //当前页面is_use的值为是否可以使用
-                    if($v['order_money'] <= $now_order['goods_price'])
-                        $v['is_use'] = 1;                               //可以用
+                    if($v['order_money'] <= $now_order['total_money'])
+                        $v['is_use'] = 1;
                     else
                         $v['is_use'] = 0;
                 }
