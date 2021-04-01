@@ -1678,6 +1678,7 @@ class StorestaffAction extends BaseAction
         $database = D('Shop_order');
         $order_id = $condition['order_id'] = intval($_POST['order_id']);
         $condition['store_id'] = $this->store['store_id'];
+        $condition['is_del'] = 0;
         $order = $database->field(true)->where($condition)->find();
 
         $shop = D('Merchant_store')->field(true)->where(array('store_id' => $this->store['store_id']))->find();
@@ -1688,9 +1689,9 @@ class StorestaffAction extends BaseAction
         if($shop['busy_mode'] == 1 && $_POST['dining_time'] < $shop['min_time']){
             $this->error_tips(replace_lang_str(L('D_F_TIP_3'),$shop['min_time']));
         }
-die();
+
         if (empty($order)) {
-            $this->error('订单不存在！');
+            $this->error(L('_B_MY_NOTHISORDER_'));
             exit;
         }
         if ($order['status'] == 4 || $order['status'] == 5) {
