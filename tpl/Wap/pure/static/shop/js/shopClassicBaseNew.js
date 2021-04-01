@@ -1213,7 +1213,7 @@ function cartFunction(type,obj,dataObj){
 				});
 			}
 
-			if(nowProduct.side_dish){
+        if(nowProduct.side_dish){
 
 				var tmpProductDish = [];
 				$.each($('#shopDetailPageDish .row'),function(i,item){
@@ -1360,11 +1360,11 @@ function cartFunction(type,obj,dataObj){
 					obj.remove();
 					if(dataObj.hasClass('cartDD')){
 						dataObj.remove();
-						//这里有错误，但是不影响使用，先不改
-                            $('#shopProductRightBar2 .productNum-'+ DecodeIdClass(productKey)).siblings('.min').remove();
-                            $('#shopProductRightBar2 .productNum-'+ DecodeIdClass(productKey)).remove();
-                            //$('#shopProductBottomBar .productNum-'+productKey).siblings('.min').remove();
-                            //$('#shopProductBottomBar .productNum-'+productKey).remove();
+                        //这里有错误，但是不影响使用，先不改
+                        $('#shopProductRightBar2 .productNum-'+ DecodeIdClass(productKey)).siblings('.min').remove();
+                        $('#shopProductRightBar2 .productNum-'+ DecodeIdClass(productKey)).remove();
+                        //$('#shopProductBottomBar .productNum-'+productKey).siblings('.min').remove();
+                        //$('#shopProductBottomBar .productNum-'+productKey).remove();
 
 						$('#shopDetailPageBuy').show();
 						$('#shopDetailPageNumber').hide();
