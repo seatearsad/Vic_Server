@@ -24,7 +24,7 @@ class DeliverAction extends BaseAction {
     {
         parent::__construct();
         $now = time();
-        //garfunke add 更新城市紧急呼叫状态
+        //garfunke add 更新城市紧急呼叫状态 以及 忙碌模式
         $city = D('Area')->where(array('area_type'=>2))->select();
         foreach ($city as $v){
             if($v['urgent_time'] != 0 && $v['urgent_time']+7200 <= time()){
