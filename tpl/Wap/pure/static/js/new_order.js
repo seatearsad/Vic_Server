@@ -100,12 +100,27 @@ function getOrderDetail(order_id) {
                 this_order = result.order_data;
                 order_info = result.info_str;
 
+                var busy_mode = this_order.busy_mode;
+                if(busy_mode == 1){
+                    $("#tip_layer").html(this_order.tip_msg);
+                    $("#tip_layer").show();
+                }else{
+                    $("#tip_layer").hide();
+                }
+
                 this_order.is_app = is_app;
                 laytpl($('#OrderDetailTpl').html()).render(this_order, function(html){
                     $('#detail_div').html(html);
 
                     if(this_order.status == 0) {
                         $('.con_layer').show();
+                        if(busy_mode == 1) {
+                            $('.con_layer').find(".confirm_time").find('option').each(function () {
+                                if($(this).val() < this_order.min_time){
+                                    $(this).remove();
+                                }
+                            });
+                        }
                         $('.con_layer_confirm').hide();
                         $('#item_all_num').html(this_order.num);
                     }else {

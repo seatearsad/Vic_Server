@@ -2741,6 +2741,14 @@ class IndexAction extends BaseAction
         //garfunkel add 暂时关掉自动紧急呼叫
         //$this->deliver_e_call();
         //var_dump($id);
+
+        $city = D('Area')->where(array('area_type' => 2, 'is_open' => 1,'busy_mode'=>1))->select();
+        $now = time();
+        foreach ($city as $v){
+            if($now > $v['open_busy_time']+7200){
+                D('Area')->where(array('area_id'=>$v['area_id']))->save(array('busy_mode'=>0,'min_time'=>0,'open_busy_time'=>0));
+            }
+        }
     }
     //监控配送员 是否发送 紧急召唤 所有送餐员的预计路程时间超过60分钟
     public function deliver_e_call(){

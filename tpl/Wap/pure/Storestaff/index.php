@@ -27,6 +27,7 @@
         <div class="order_detail">
             <div class="show_list"></div>
             <div id="detail_div"></div>
+            <div id="tip_layer">{pigcms{:replace_lang_str(L('D_F_TIP_2'),$store['min_time'])}</div>
             <div class="con_layer">
                 <span class="confirm_txt">
                     Food Preparation

@@ -3,6 +3,7 @@
 			<div id="nav" class="mainnav_title">
 				<ul>
 					<a href="{pigcms{:U('Deliver/deliverList')}" class="on">{pigcms{:L('_BACK_DELIVERY_LIST_')}</a>|
+                    <a href="{pigcms{:U('Deliver/prep_mode')}">{pigcms{:L('D_F_PREP_MODE')}</a>
 				</ul>
 			</div>
 			<table class="search_table" width="100%">

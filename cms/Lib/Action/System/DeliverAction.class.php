@@ -1818,4 +1818,31 @@ class DeliverAction extends BaseAction {
 
         return $body;
     }
+
+    public function prep_mode(){
+        if($_POST){
+            $data = $_POST['data'];
+            foreach ($_POST['data'] as $v){
+                $data['area_id'] = $v['id'];
+                $data['busy_mode'] = $v['mode'];
+
+                if($v['mode'] == 1) {
+                    $data['min_time'] = $v['min_time'];
+                    $data['open_busy_time'] = time();
+                }else {
+                    $data['min_time'] = 0;
+                    $data['open_busy_time'] = 0;
+                }
+
+                D('Area')->where(array("area_id"=>$v['id']))->save($data);
+             }
+
+            exit(json_encode(array('error' => 0,'message' =>'Success')));
+        }else {
+            $city = D('Area')->where(array('area_type' => 2, 'is_open' => 1))->select();
+            $this->assign('city', $city);
+            //var_dump($city);die();
+            $this->display();
+        }
+    }
 }
