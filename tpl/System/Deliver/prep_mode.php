@@ -53,6 +53,9 @@
                                         </td>
 									</tr>
 								</volist>
+                                <tr>
+                                    <td class="" colspan="4">*{pigcms{:L('D_F_TIP_1')}</td>
+                                </tr>
 								<tr>
                                     <td class="textcenter pagebar" colspan="3">{pigcms{$pagebar}</td>
                                     <td class="textcenter pagebar">

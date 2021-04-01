@@ -23,12 +23,17 @@ class DeliverAction extends BaseAction {
     public function __construct()
     {
         parent::__construct();
+        $now = time();
         //garfunke add 更新城市紧急呼叫状态
         $city = D('Area')->where(array('area_type'=>2))->select();
         foreach ($city as $v){
             if($v['urgent_time'] != 0 && $v['urgent_time']+7200 <= time()){
                 D('Area')->where(array('area_id'=>$v['area_id']))->save(array('urgent_time'=>0));
                 $this->updateDeliverWorkStatus($v);
+            }
+
+            if($v['busy_mode'] == 1 && $now > $v['open_busy_time']+7200){
+                D('Area')->where(array('area_id'=>$v['area_id']))->save(array('busy_mode'=>0,'min_time'=>0,'open_busy_time'=>0));
             }
         }
     }
