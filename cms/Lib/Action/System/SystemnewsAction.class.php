@@ -6,10 +6,10 @@
             parent::__construct();
 
             $this->all_type = array(
-                '0'=>'平台新闻',
-                '1'=>'常见问题',
-                '2'=>'送餐员规则',
-                '3'=>'送餐员活动'
+                '0'=>L('I_ANNOUNCEMENT'),
+                '1'=>L('I_FAQ'),
+                '2'=>L('I_COURIER_REGULATIONS'),
+                '3'=>L('I_COURIER_ACTIVITIES')
             );
 
             $this->assign('all_type',$this->all_type);
