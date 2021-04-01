@@ -153,16 +153,14 @@
 
                 $(this).html(time_str);
 
-                if (cha_time < 0) {
-
+                if (cha_time <= 0) {
+                    window.location.reload();
                 } else {
                     window.setTimeout(function () {
                         num++;
                         update_pay_time();
                     }, 1000);
                 }
-            }else{
-                window.location.reload();
             }
         });
     }
