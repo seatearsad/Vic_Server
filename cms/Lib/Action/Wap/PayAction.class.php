@@ -2655,6 +2655,7 @@ class PayAction extends BaseAction{
         }else{
             $result_url=$this->get_result_url($order_id);
         }
+
         //-----------------------------------------------------------------------------
 
         $moneris_pay = new MonerisPay();

@@ -23,7 +23,7 @@
 		<script type="text/javascript" src="{pigcms{$static_path}js/fastclick.js" charset="utf-8"></script>
 		<script type="text/javascript" src="{pigcms{$static_path}layer/layer.m.js" charset="utf-8"></script>
 <!--		<script type="text/javascript" src="http://api.map.baidu.com/api?type=quick&ak=4c1bb2055e24296bbaef36574877b4e2&v=1.0" charset="utf-8"></script>		-->
-		<script type="text/javascript" src="{pigcms{$static_path}js/common.js?221" charset="utf-8"></script>
+		<script type="text/javascript" src="{pigcms{$static_path}js/common.js?2221" charset="utf-8"></script>
 		<script type="text/javascript">
 			var locationClassicHash = 'shop-{pigcms{$_GET.shop_id}';
 			var storeUrl = "{pigcms{:U('Shop/classic_shop')}&shop_id={pigcms{$_GET.shop_id}";
