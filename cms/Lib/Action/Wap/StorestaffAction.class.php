@@ -1691,7 +1691,7 @@ class StorestaffAction extends BaseAction
         }
 
         if (empty($order)) {
-            $this->error(L('_B_MY_NOTHISORDER_'));
+            $this->error("Sorry, this order has been cancelled or removed.");
             exit;
         }
         if ($order['status'] == 4 || $order['status'] == 5) {
