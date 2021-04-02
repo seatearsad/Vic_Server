@@ -2,11 +2,11 @@
 	<form id="myform" method="post" action="{pigcms{:U('Appintro/add')}" frame="true" refresh="true">
 		<table cellpadding="0" cellspacing="0" class="frame_form" width="100%">
 			<tr>
-				<th width="80">标题</th>
-				<td><input type="text" class="input fl" name="title" size="75" placeholder="公告标题" validate="maxlength:50,required:true"/></td>
+				<th width="80">{pigcms{:L('I_TITLE')}</th>
+				<td><input type="text" class="input fl" name="title" size="75" placeholder="{pigcms{:L('I_ANNOUNCEMENT_TITLE')}" validate="maxlength:50,required:true"/></td>
 			</tr>
 			<tr>
-				<th width="80">内容</th>
+				<th width="80">{pigcms{:L('I_CONTENT')}</th>
 				<td>
 					<textarea name="content" id="content"></textarea>
 				</td>

@@ -541,25 +541,27 @@ $(function(){
 						kind_editor.sync();
 					}
 					if($(form).attr('frame') == 'true' || $(form).attr('refresh') == 'true'){
-						window.top.msg(2,'Submitting, please wait a moment.',true,360);
+						//window.top.msg(2,'Submitting, please wait a moment.',true,360);
 						$.post($(form).attr('action'),$(form).serialize(),function(result){
 							if(result.status == 1){
 								if($(form).data('call_fun')){
 									submitCallBack(result.info);
 								}else{
-									window.top.msg(1,result.info,true);
+									//window.top.msg(1,result.info,true);
+									alert(result.info);
 									if($(form).attr('refresh') == 'true'){
 										window.top.main_refresh();
 									}
-									window.top.closeiframe();
+									//window.top.closeiframe();
 								}
 							}else{
-								window.top.msg(0,result.info,true);
+								//window.top.msg(0,result.info,true);
+                                alert(result.info);
 							}
 						});
 						return false;
 					}else{
-						window.top.msg(2,'Submitting, please wait a moment.',true,360);
+						//window.top.msg(2,'Submitting, please wait a moment.',true,360);
 						form.submit();
 					}
 				}
