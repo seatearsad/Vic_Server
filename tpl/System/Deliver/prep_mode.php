@@ -30,8 +30,8 @@
 									<tr class="<if condition='$i%2 eq 0'>odd<else/>even</if> order_line city_tr" data-id="{pigcms{$vo.area_id}">
 										<td width="50">{pigcms{$vo.area_name}</td>
 										<td width="50">
-                                            <span class="cb-enable"><label class="cb-enable <if condition="$vo['busy_mode'] eq 1">selected</if>"><span>{pigcms{:L('_BACK_ON_')}</span><input type="radio" name="have_meal" data-id="{pigcms{$vo.area_id}" value="1" <if condition="$vo['busy_mode'] eq 1">checked="checked"</if> /></label></span>
-                                            <span class="cb-disable"><label class="cb-disable <if condition="$vo['busy_mode'] eq 0">selected</if>"><span>{pigcms{:L('_BACK_OFF_')}</span><input type="radio" data-id="{pigcms{$vo.area_id}" name="have_meal" value="0" <if condition="$vo['busy_mode'] eq 0">checked="checked"</if> /></label></span>
+                                            <span class="cb-enable"><label class="cb-enable <if condition="$vo['busy_mode'] eq 1">selected</if>"><span>{pigcms{:L('_BACK_ON_')}</span><input type="radio" name="have_meal_{pigcms{$vo.area_id}" data-id="{pigcms{$vo.area_id}" value="1" <if condition="$vo['busy_mode'] eq 1">checked="checked"</if> /></label></span>
+                                            <span class="cb-disable"><label class="cb-disable <if condition="$vo['busy_mode'] eq 0">selected</if>"><span>{pigcms{:L('_BACK_OFF_')}</span><input type="radio" data-id="{pigcms{$vo.area_id}" name="have_meal_{pigcms{$vo.area_id}" value="0" <if condition="$vo['busy_mode'] eq 0">checked="checked"</if> /></label></span>
                                         </td>
 										<td width="50">
                                             <select disabled="disabled" class="confirm_time" name="dining_time" autocomplete="off" data-time="{pigcms{$vo.min_time}" style="margin-top:5px;height: 30px;width: 200px;">
@@ -67,15 +67,15 @@
 
 </div>
 <script>
-    $('input[name=have_meal]:checked').each(function () {
+    $('body').find('input[type="radio"]:checked').each(function () {
         setlayer(this);
     });
-    $('input[name=have_meal]').click(function(){
+    $('.city_tr').find('input[type="radio"]').click(function(){
         setlayer(this);
     });
 
     function setlayer(layer) {
-        var val = $(layer).val();
+        var val = $(layer).val();console.log("+++++"+val);
         var curr_id = $(layer).data('id');
         if(val == 1){
             //$(".confirm_time").removeAttr("disabled");
@@ -111,7 +111,7 @@
         $('.city_tr').each(function () {
             var curr_data = {};
             curr_data['id'] = $(this).data('id');
-            curr_data['mode'] = $(this).find('input[name=have_meal]:checked').val();
+            curr_data['mode'] = $(this).find('input[type=radio]:checked').val();
             curr_data['min_time'] = $(this).find('.confirm_time').val();
 
             data.push(curr_data);
@@ -137,7 +137,7 @@
             if(create_time > 0) {
                 var jetlag = 0;//parseInt($(this).data('jet')) * 3600;
                 var cha_time = count_down - (curr_time + jetlag - create_time + num);
-                console.log(cha_time + "--" + curr_time + "-" + jetlag + "-" + create_time + "-" + num);
+                //console.log(cha_time + "--" + curr_time + "-" + jetlag + "-" + create_time + "-" + num);
 
                 var h = parseInt(cha_time / 3600);
                 var i = parseInt((cha_time - 3600 * h) / 60);
