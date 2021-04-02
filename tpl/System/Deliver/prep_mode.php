@@ -36,16 +36,9 @@
 										<td width="50">
                                             <select disabled="disabled" class="confirm_time" name="dining_time" autocomplete="off" data-time="{pigcms{$vo.min_time}" style="margin-top:5px;height: 30px;width: 200px;">
                                                 <option value="0">---</option>
-                                                <option value="10">10 min</option>
                                                 <option value="20">20 min</option>
                                                 <option value="30">30 min</option>
                                                 <option value="40">40 min</option>
-                                                <option value="50">50 min</option>
-                                                <option value="60">60 min</option>
-                                                <option value="70">70 min</option>
-                                                <option value="80">80 min</option>
-                                                <option value="90">90 min</option>
-                                                <option value="100">100 min</option>
                                             </select>
                                         </td>
 										<td width="50" class="count_down" data-time="{pigcms{$vo.open_busy_time}" data-jet="{pigcms{$vo.jetlag}">
