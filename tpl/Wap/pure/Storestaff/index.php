@@ -10,7 +10,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="format-detection" content="address=no">
     <link href="{pigcms{$static_path}css/eve.7c92a906.css" rel="stylesheet"/>
-    <link href="{pigcms{$static_path}css/staff.css" rel="stylesheet"/>
+    <link href="{pigcms{$static_path}css/staff.css?v=1.0" rel="stylesheet"/>
     <script src="{pigcms{:C('JQUERY_FILE')}"></script>
     <script src="{pigcms{$static_public}js/laytpl.js"></script>
     <script src="{pigcms{$static_path}layer/layer.m.js"></script>
@@ -82,7 +82,7 @@
         var sound_url = "{pigcms{$static_public}sound/soft-bells.mp3";
         var detail_url = "{pigcms{:U('Storestaff/getOrderDetail')}";
     </script>
-    <script type="text/javascript" src="{pigcms{$static_path}js/new_order.js?v=2.5"></script>
+    <script type="text/javascript" src="{pigcms{$static_path}js/new_order.js?v=2.6"></script>
     <script>
         //更新app 设备token
         function pushDeviceToken(token) {
