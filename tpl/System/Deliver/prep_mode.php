@@ -114,7 +114,7 @@
             curr_data['id'] = $(this).data('id');
             curr_data['mode'] = $(this).find('input[type=radio]:checked').val();
             curr_data['min_time'] = $(this).find('.confirm_time').val();
-            if (curr_data['min_time'] <= 0) is_send = false;
+            if (curr_data['mode'] == 1 && curr_data['min_time'] <= 0) is_send = false;
             data.push(curr_data);
         });
 
