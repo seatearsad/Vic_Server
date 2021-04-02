@@ -108,20 +108,25 @@
     
     $('#save_setting').click(function () {
         var data = [];
+        var is_send = true;
         $('.city_tr').each(function () {
             var curr_data = {};
             curr_data['id'] = $(this).data('id');
             curr_data['mode'] = $(this).find('input[type=radio]:checked').val();
             curr_data['min_time'] = $(this).find('.confirm_time').val();
-
+            if (curr_data['min_time'] <= 0) is_send = false;
             data.push(curr_data);
         });
 
-        $.post("{pigcms{:U('prep_mode')}",{"data":data},function(result) {
-            if (result.error == 0){
-                window.location.reload();
-            }
-        },'JSON');
+        if (!is_send) {
+            alert("When enabled, the minimum food prep time allowed cannot be empty (---).");
+        }else{
+            $.post("{pigcms{:U('prep_mode')}", {"data": data}, function (result) {
+                if (result.error == 0) {
+                    window.location.reload();
+                }
+            }, 'JSON');
+        }
     });
 
     var num = 0;

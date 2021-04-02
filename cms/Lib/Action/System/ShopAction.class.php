@@ -1158,6 +1158,7 @@ class ShopAction extends BaseAction
             $condition_where .=  " AND (oo.create_time BETWEEN ".$period[0].' AND '.$period[1].")";
             //$condition_where .=  " AND (create_time BETWEEN ".$period[0].' AND '.$period[1].")";
         }
+
         if($_GET['city_id']){
             $condition_where .= " AND ss.city_id=".$_GET['city_id'];
             $where['s.city_id'] = $_GET['city_id'];
@@ -1166,9 +1167,9 @@ class ShopAction extends BaseAction
         }
         $condition_where.=" AND oo.is_del=0";
         //$condition_where.=" AND is_del=0";
-
         $where['is_del'] = 0;
-        $count = D('Shop_order')->where($where)->count();
+        //$coupon_list = M('New_event_user')->join('as u left join '.C('DB_PREFIX').'new_event_coupon as c ON u.event_coupon_id=c.id')->field('u.*')->where($where)->select();
+        $count = D('Shop_order')->join('as o left join '.C('DB_PREFIX').'merchant_store as s ON o.store_id=s.store_id')->where($where)->count();
 
         $length = ceil($count / 1000);
         for ($i = 0; $i < $length; $i++) {
