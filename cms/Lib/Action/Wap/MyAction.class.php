@@ -137,6 +137,12 @@ class MyAction extends BaseAction{
 	}
 	//	我的钱包页面
 	public function my_money(){
+
+	    if(isset($_GET['status'])){
+            $this->assign('status',$_GET['status']);
+        }else{
+            $this->assign('status',"-1");
+        }
 		if($_GET['source'] == 1){
 			$_SESSION['source']	=	1;
 		}else{
@@ -861,6 +867,7 @@ class MyAction extends BaseAction{
 
     public function edit_card(){
 	    if($_POST){
+
 	        $data['name'] = $_POST['name'];
 	        $data['card_num'] = $_POST['card_num'];
 	        $data['expiry'] = transYM($_POST['expiry']);
@@ -3317,6 +3324,7 @@ class MyAction extends BaseAction{
 	}
     /*Ajax加载——订餐订单列表 默认显示 upcoming的列表*/
 	public function ajax_shop_order_list(){
+
         $list = array();
         $list = $this->SHARE_shop_order_list();
 		if(!empty($list)){
@@ -3337,6 +3345,7 @@ class MyAction extends BaseAction{
         if(!empty($_GET['store_id'])){
             $where .= " AND store_id=".intval($_GET['store_id']);
         }
+
         switch ($status){
             case 0:
                 $where .= " AND paid=0 AND status<4";
@@ -3375,20 +3384,25 @@ class MyAction extends BaseAction{
             }
             $store_ids[] = $st['store_id'];
         }
-        //var_dump($order_list);die();
+
         $m = array();
         if ($store_ids) {
             $store_image_class = new store_image();
-            $merchant_list = D("Merchant_store")->where(array('store_id' => array('in', $store_ids)))->select();
+            $merchant_list = M('Merchant_store_shop')->join('as store_shop left join '.C('DB_PREFIX').'merchant_store store ON store_shop.store_id = store.store_id')->where(array('store_shop.store_id'=>array('in', $store_ids)))->select();
+            //$merchant_list = D("Merchant_store")->where(array('store_id' => array('in', $store_ids)))->select();
+            //$merchant_shop_list = D("Merchant_store_shop")->where(array('store_id' => array('in', $store_ids)))->select();
             foreach ($merchant_list as $li) {
-                $images = $store_image_class->get_allImage_by_path($li['pic_info']);
-                $li['image'] = $images ? array_shift($images) : array();
+                //$images = $store_image_class->get_allImage_by_path($li['background_']);
+                $image_tmp = explode(',', $li['background']);
+                $li['image'] = C('config.site_url') . '/upload/background/' . $image_tmp[0] . '/' . $image_tmp['1'];
+                //$li['image'] = $images ? array_shift($images) : array();
                 unset($li['status']);
                 $city = D('Area')->where(array('area_id'=>$li['city_id']))->find();
                 $li['jetlag'] = $city['jetlag'];
                 $m[$li['store_id']] = $li;
             }
         }
+
         $list = array();
         foreach ($order_list as $ol) {
             if (isset($m[$ol['store_id']]) && $m[$ol['store_id']]) {
@@ -3397,8 +3411,9 @@ class MyAction extends BaseAction{
                 $list[] = $ol;
             }
         }
-        //var_dump($list);die("-----");
+
         foreach($list as $key=>$val){
+
             $list[$key]['name'] = lang_substr($val['name'],C('DEFAULT_LANG'));
             $list[$key]['order_url'] = U('Shop/order_detail', array('order_id' => $val['order_id']));
             if($val['pay_time']==0) {
@@ -3406,9 +3421,9 @@ class MyAction extends BaseAction{
             }else{
                 $list[$key]['create_time_show'] = date('Y-m-d h:i', $val['pay_time']);
             }
-           ///$list[$key]['create_time_show'] = date('Y-m-d h:i:s',time());
-            ///$list[$key]['create_time_show'] = date_default_timezone_get();
 
+            ///$list[$key]['create_time_show'] = date('Y-m-d h:i:s',time());
+            ///$list[$key]['create_time_show'] = date_default_timezone_get();
             //------------------------------ 更新status等信息 ------------------------------------peter
 
             $status = D('Shop_order_log')->field(true)->where(array('order_id' => $val['order_id']))->order('id DESC')->find();

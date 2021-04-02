@@ -1064,6 +1064,7 @@ class ShopAction extends BaseAction{
         $store['store_theme'] = $row['store_theme'];
         $store['adress'] = $row['adress'];
         $store['is_close'] = 1;
+        $store['store_notice'] = lang_substr($row['adress'],C('DEFAULT_LANG'));
         $store['isverify'] = $now_mer['isverify'];
         $store['store_status'] = $now_store['status'];
         $store['shop_remind'] = $row['shop_remind'];
@@ -1075,29 +1076,6 @@ class ShopAction extends BaseAction{
         }
         $store['keywords'] = $str;
 
-
-
-//        if ($row['open_1'] == '00:00:00' && $row['close_1'] == '00:00:00') {
-//            $store['time'] = '24小时营业';
-//            $store['is_close'] = 0;
-//        } else {
-//            $store['time'] = substr($row['open_1'], 0, -3) . '~' . substr($row['close_1'], 0, -3);
-//            if ($row['open_1'] < $now_time && $now_time < $row['close_1']) {
-//                $store['is_close'] = 0;
-//            }
-//            if ($row['open_2'] != '00:00:00' || $row['close_2'] != '00:00:00') {
-//                $store['time'] .= ',' . substr($row['open_2'], 0, -3) . '~' . substr($row['close_2'], 0, -3);
-//                if ($row['open_2'] < $now_time && $now_time < $row['close_2']) {
-//                    $store['is_close'] = 0;
-//                }
-//            }
-//            if ($row['open_3'] != '00:00:00' || $row['close_3'] != '00:00:00') {
-//                $store['time'] .= ',' . substr($row['open_3'], 0, -3) . '~' . substr($row['close_3'], 0, -3);
-//                if ($row['open_3'] < $now_time && $now_time < $row['close_3']) {
-//                    $store['is_close'] = 0;
-//                }
-//            }
-//        }
         if($row['store_is_close'] != 0){
             $row = checkAutoOpen($row);
         }
@@ -3436,11 +3414,10 @@ class ShopAction extends BaseAction{
      */
     public function pay_result()
     {
-        $status=isset($_GET['status']) ? intval($_GET['status']) : -1;  //未获得支付状态信息
+        $status=isset($_GET['status']) ? intval($_GET['status']) : -1;  //未获得支付状态信息     1 0  支付成功，失败   10 充值成功  9 充值失败
         $order_id = isset($_GET['order_id']) ? intval($_GET['order_id']) : 0;
         $mer_id =isset($_GET['mer_id']) ? intval($_GET['mer_id']) : 0;
         $store_id=isset($_GET['store_id']) ? intval($_GET['store_id']) : 0;
-
 
         if ($order = D('Shop_order')->get_order_detail(array('order_id' => $order_id, 'uid' => $this->user_session['uid']))) {
             //if ($order = D('Shop_order')->get_order_detail(array('order_id' => $order_id))) {

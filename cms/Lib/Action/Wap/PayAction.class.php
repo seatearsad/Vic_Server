@@ -1941,9 +1941,10 @@ class PayAction extends BaseAction{
 
         $now2_order = D('Shop_order')->get_pay_order($this->user_session['uid'], $order_id);
         $order_info =$now2_order['order_info'];
-        $result_url=C('config.site_url') . "/wap.php?g=Wap&c=Shop&a=pay_result&order_id=" . $order_info['order_id'] . '&mer_id=' . $order_info['mer_id'] . '&store_id=' . $order_info['store_id']."&status=";//1 成功  0 失败
+        $result_url=C('config.site_url') . "/wap.php?g=Wap&c=Shop&a= &order_id=" . $order_info['order_id'] . '&mer_id=' . $order_info['mer_id'] . '&store_id=' . $order_info['store_id']."&status=";//1 成功  0 失败
 
         return $result_url;
+
     }
 
     //支付宝支付同步回调
@@ -2661,7 +2662,7 @@ class PayAction extends BaseAction{
         $moneris_pay = new MonerisPay();
         $resp = $moneris_pay->payment($_POST,$this->user_session['uid'],2);
 
-        //var_dump($resp);echo($result_url);
+        //var_dump($resp);die();
 
         if($resp['requestMode'] && $resp['requestMode'] == "mpi"){
             if($resp['mpiSuccess'] == "true"){
@@ -2695,8 +2696,9 @@ class PayAction extends BaseAction{
             }
 
             if(!$_POST['order_type']) $_POST['order_type'] = "shop";
+
             if($_POST['order_type'] == "recharge"){
-                $url = U("Wap/My/my_money");
+                $url = U("Wap/My/my_money",array('status'=>1));
             }else{
                 $order = explode("_",$_POST['order_id']);
                 $order_id = $order[1];
@@ -2706,10 +2708,9 @@ class PayAction extends BaseAction{
             $this->success(L('_PAYMENT_SUCCESS_'),$url,true);
 
         }else{
-
             //var_dump($result_url);die();
             if ($_POST['order_type']=='recharge'){
-                $this->error($resp['message'],$result_url,true);
+                $this->error($resp['message'],U("Wap/My/my_money",array('status'=>0)),true);
             }else{
                 $this->error($resp['message'],$result_url.'0',true);
             }
@@ -3128,6 +3129,8 @@ class PayAction extends BaseAction{
     }
 
     public function secure3d(){
+
+        //第1次
         if($_GET['PaReq'] && $_GET['TermUrl'] && $_GET['MD'] && $_GET['ACSUrl']){
             $inLineForm ='<html><head><title>Title for Page</title></head><SCRIPT LANGUAGE="Javascript" >' .
                 "<!--
@@ -3166,7 +3169,9 @@ class PayAction extends BaseAction{
             exit();
         }
 
+        //第2次
         if($_POST['PaRes'] && $_POST['MD']) {
+
             $PaRes = $_POST['PaRes'];
             $MD = $_POST['MD'];
             import('@.ORG.pay.MonerisPay');
@@ -3174,7 +3179,8 @@ class PayAction extends BaseAction{
 
             $resp = $moneris_pay->MPI_Acs($PaRes, $MD);
 
-            if ($resp['responseCode'] != 'null' && $resp['responseCode'] < 50) {
+            if ($resp['responseCode'] != 'null' && $resp['responseCode'] < 50) {                //可能是支付成功
+
                 if(strpos($resp['url'],'#')!== false) {
                     $script = '<SCRIPT LANGUAGE="Javascript" >var ua = navigator.userAgent;
                             if(ua.match(/TuttiiOS/i)){
@@ -3195,9 +3201,14 @@ class PayAction extends BaseAction{
                         $this->user_session = session('user');
                     }
                     //$this->success($resp['message'], $resp['url']);
-                    redirect(U('My/my_money'));
+                    //redirect(U('My/my_money'));
+                    redirect($resp['url']."&status=1");
+                    //如果是recharge支付成功，那么弹到充值首页，弹出提示框
+                    //如果不是recharge，那么应该谈到 pay_result 页面
                 }
-            } else {
+
+            } else {                                                                            //可能是支付失败
+
                 if(strpos($resp['url'],'#')!== false) {
                     //echo $resp['message'];
                     $script = '<SCRIPT LANGUAGE="Javascript" >var ua = navigator.userAgent;
@@ -3213,13 +3224,13 @@ class PayAction extends BaseAction{
                     echo $script;
                     exit();
                 }else{
-                    $this->error($resp['message'], $resp['url']);
+                    redirect($resp['url']."&status=0");
+                    //$this->error($resp['message'], $resp['url']);
                 }
             }
         }else{
             $this->error();
         }
-
         //$this->success($result['message'], $result['url']);
     }
 }

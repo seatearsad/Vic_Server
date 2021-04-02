@@ -247,6 +247,7 @@ a {
     line-height: 20px;
     padding-right: 20px;
     font-size: 14px;
+    word-break: break-word;
 }
 .user_address .div_content .div_select{
     padding: 16px 0 0;

@@ -49,6 +49,7 @@ class MonerisPay
             return $this->mpi_transaction($data,$uid,$from_type);
 
         }else {
+
             //echo("-------2---------");
             //直接支付
             $txnArray['type'] = 'purchase';
@@ -772,6 +773,8 @@ class MonerisPay
 
     public function getOrderInfoFromMD($MD){
         //$orderInfo = '-'.$data['order_type'].'-'.$data['order_id'].'-'.$from_type.'-'.$save.'-'.$tip.'-'.$coupon_id.'-'.$card_user_name.'-'.$data_key.'-';
+//        var_dump($MD);
+//        die();
         $arr = explode('-',$MD);
         $orderInfo['order_type'] = $arr[1];
         $orderInfo['orderId'] = $arr[2];
@@ -804,6 +807,7 @@ class MonerisPay
         }
 
         //1vWeb(PC) 2 Wap 3 App
+
         if($orderInfo['order_from'] == 1){
             if($orderInfo['order_type'] == 'recharge')
                 $url = C('config.config_site_url').'/index.php?g=User&c=Credit&a=index';
@@ -815,14 +819,18 @@ class MonerisPay
             }
 
             $orderInfo['url'] = $url;
-        }elseif($orderInfo['order_from'] == 2){
+
+        }elseif($orderInfo['order_from'] == 2){ /// WAP 应该用的是这里，设置支付成功或
+
             if($orderInfo['order_type'] == 'recharge')
                 $url = U("Wap/My/my_money");
             else {
                 if(strpos($_SERVER['HTTP_HOST'],'tutti.app') !== false)
-                    $url = 'https://'.$_SERVER['HTTP_HOST'].'/wap.php?g=Wap&c=Shop&a=pay_result&order_id='.$orderInfo['order_id']."&mer_id=".$orderInfo['mer_id']."&store_id=".$orderInfo['store_id']."&status=1";
-                else
-                    $url = U("Wap/Shop/pay_result", array('order_id' => $orderInfo['order_id'],"mer_id"=>$orderInfo['mer_id'],"store_id"=>$orderInfo['store_id'],"status"=>"1"));
+                    $url = 'https://'.$_SERVER['HTTP_HOST'].'/wap.php?g=Wap&c=Shop&a=pay_result&order_id='.$orderInfo['order_id']."&mer_id=".$orderInfo['mer_id']."&store_id=".$orderInfo['store_id'];
+                    //$url = 'https://'.$_SERVER['HTTP_HOST'].'/wap.php?g=Wap&c=Shop&a=pay_result&order_id='.$orderInfo['order_id']."&mer_id=".$orderInfo['mer_id']."&store_id=".$orderInfo['store_id']."&status=1";
+            else
+                    $url = U("Wap/Shop/pay_result", array('order_id' => $orderInfo['order_id'],"mer_id"=>$orderInfo['mer_id'],"store_id"=>$orderInfo['store_id']));
+                    //$url = U("Wap/Shop/pay_result", array('order_id' => $orderInfo['order_id'],"mer_id"=>$orderInfo['mer_id'],"store_id"=>$orderInfo['store_id'],"status"=>"1"));
             }
 
             $orderInfo['url'] = $url;

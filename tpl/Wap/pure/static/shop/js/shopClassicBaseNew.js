@@ -201,7 +201,7 @@ function showGood(shop_id,product_id){
 					$('#shopDetailPageDish').html(html);
 				});
             }
-            $('#shopDetailPageNumber .number').addClass('productNum-'+result.goods_id);
+            $('#shopDetailPageNumber .number').addClass('productNum-' + DecodeIdClass(result.goods_id));
 
             changeProductSpec();
 
@@ -815,7 +815,7 @@ function showShop(shopId){
 			}else{
                 $('#deliveryText').html(getLangStr('_ONLY_SELF_'));
 			}
-			$('#shopNoticeText').html(result.store.keywords);
+			$('#shopNoticeText').html(result.store.store_notice);
 			// $('#shopCouponText').html(parseCoupon(result.store.coupon_list,'text')+';'+result.store.store_notice);
 			$('#shopCouponText').html(parseCoupon(result.store.coupon_list,'text'));
 			if(result.store.is_close == 1 || result.store.store_status=='0'){
@@ -1067,7 +1067,7 @@ function changeProductSpec(){
         $('#shopDetailPagePrice').html('$'+curr_price+'<span class="unit"><em>/ </em>'+nowProduct.unit+'</span>'+(nowProduct.stock_num != -1 ? '<span class=\'stock_span\' data-stock="'+nowProduct.stock_num+'">Stock:'+nowProduct.stock_num+'</span>' : '<span data-stock="-1"></span>') + (nowProduct.deposit_price > 0 ? '<span>(Deposit:$'+ nowProduct.deposit_price +')</span>' : ''));
 
 	$('#shopDetailPageNumber .number').attr('class','product_btn number');
-	$('#shopDetailPageNumber .number').addClass('productNum-'+nowProductCartLabel);
+	$('#shopDetailPageNumber .number').addClass('productNum-'+ DecodeIdClass(nowProductCartLabel));
 
 	//console.log("------------------------");
     mcslo(nowProductCartLabel,"changeProductSpec","选中ProductKey是什么？")
@@ -1078,6 +1078,7 @@ function changeProductSpec(){
 		$('#shopDetailPageNumber').show();
 		$('#shopDetailPageNumber .number').html(productCart[nowProductCartLabel].count);
 		$('#shopDetailPageBuy').hide();
+
 	}else{
         mcslo("没有找到匹配的Key ("+ nowProductCartLabel +" )","changeProductSpec");
 		$('#shopDetailPageNumber').hide();
