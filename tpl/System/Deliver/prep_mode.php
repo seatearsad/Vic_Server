@@ -137,6 +137,8 @@
     function update_pay_time() {
         var count_down = 120*60;
 
+        var is_update = false;
+
         $('.city_tr').find('.count_down').each(function () {
             var create_time = parseInt($(this).data('time'));
             if(create_time > 0) {
@@ -154,16 +156,21 @@
 
                 $(this).html(time_str);
 
+
                 if (cha_time <= 0) {
                     window.location.reload();
                 } else {
-                    window.setTimeout(function () {
-                        num++;
-                        update_pay_time();
-                    }, 1000);
+                    is_update = true;
                 }
             }
         });
+
+        if(is_update){
+            window.setTimeout(function () {
+                num++;
+                update_pay_time();
+            }, 1000);
+        }
     }
 </script>
 <style>
