@@ -10,7 +10,7 @@ class ShopAction extends BaseAction
     public function index()
     {
         $parentid = isset($_GET['parentid']) ? intval($_GET['parentid']) : 0;
-        $city_name = "通用";
+        $city_name = L('G_UNIVERSAL');
         if($_GET['city_id']){
             $this->assign('city_id',$_GET['city_id']);
             if($_GET['city_id'] != 0){
@@ -30,7 +30,7 @@ class ShopAction extends BaseAction
         $category_list = $database_shop_category->field(true)->where($where_list)->order('`cat_sort` DESC,`cat_id` ASC')->select();
         foreach ($category_list as &$v){
             if($v['city_id'] == 0)
-                $v['city_name'] = "通用";
+                $v['city_name'] = L('G_UNIVERSAL');
             else {
                 $c = D('Area')->where(array('area_type' => 2, 'is_open' => 1, 'area_id' => $v['city_id']))->find();
                 $v['city_name'] = $c['area_name'];
@@ -69,7 +69,7 @@ class ShopAction extends BaseAction
                 $c = D('Area')->where(array('area_type' => 2, 'is_open' => 1, 'area_id' => $now_category['city_id']))->find();
                 $now_category['city_name'] = $c['area_name'];
             }else{
-                $now_category['city_name'] = "通用";
+                $now_category['city_name'] = L('G_UNIVERSAL');
             }
             $this->assign('category',$now_category);
         }

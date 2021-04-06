@@ -4,11 +4,11 @@
 		<input type="hidden" name="cat_fid" value="{pigcms{$parentid}"/>
 		<table cellpadding="0" cellspacing="0" class="frame_form" width="100%">
 			<tr>
-				<th width="90">分类名称</th>
+				<th width="90">{pigcms{:L('C_CATEGORYNAME')}</th>
 				<td>{pigcms{$now_category.cat_name}</td>
 			</tr>
 			<tr>
-				<th width="90">服务费比例</th>
+				<th width="90">{pigcms{:L('C_SFRATE')}</th>
 				<td style="line-height: 28px;">
                     <input type="text" class="input fl" name="service_fee" id="service_fee" validate="maxlength:2,required:true,number:true" size="25"/> %</td>
 			</tr>

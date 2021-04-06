@@ -2,11 +2,11 @@
 		<div class="mainbox">
 			<div id="nav" class="mainnav_title">
 				<ul>
-					<a href="{pigcms{:U('Systemnews/index')}" class="on">平台文章</a>|
-					<a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Systemnews/add_category')}','添加文章分类',800,460,true,false,false,addbtn,'add',true);">添加文章分类</a>
+					<a href="{pigcms{:U('Systemnews/index')}" class="on">{pigcms{:L('I_ARTICLES')}</a>|
+					<a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Systemnews/add_category')}','{pigcms{:L(\'I_ADD_ARTCAT\')}',800,460,true,false,false,addbtn,'add',true);">{pigcms{:L('I_ADD_ARTCAT')}</a>
 				</ul>
 			</div>
-			总分类：
+			{pigcms{:L('I_GENERAL_CATEGORY')}：
 			<select name="all_type" id="select_type" style="margin-bottom: 10px">
                 <option value="-1">All</option>
                 <volist name="all_type" id="type">
@@ -28,13 +28,13 @@
 						</colgroup>
 						<thead>
 							<tr>
-								<th>编号</th>
-                                <th>总分类</th>
-								<th>分类名称</th>
-								<th>内容列表</th>
-								<th>排序</th>
-								<th>状态</th>
-								<th class="textcenter">操作</th>
+								<th>{pigcms{:L('G_ID')}</th>
+                                <th>{pigcms{:L('I_GENERAL_CATEGORY')}</th>
+								<th>{pigcms{:L('C_CATEGORYNAME')}</th>
+								<th>{pigcms{:L('I_CONTENT_LIST')}</th>
+								<th>{pigcms{:L('I_LISTING_ORDER')}</th>
+								<th>{pigcms{:L('G_STATUS')}</th>
+								<th class="textcenter">{pigcms{:L('E_ACTION')}</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -44,15 +44,15 @@
 										<td>{pigcms{$vo.id}</td>
                                         <td>{pigcms{$all_type[$vo['type']]}</td>
 										<td>{pigcms{$vo.name}</td>
-										<td><a href="{pigcms{:U('Systemnews/news',array('category_id'=>$vo['id']))}">查看内容({pigcms{$vo.count})</a></td>
+										<td><a href="{pigcms{:U('Systemnews/news',array('category_id'=>$vo['id']))}">{pigcms{:L('I_VIEW_CONTENT')}({pigcms{$vo.count})</a></td>
 										<td>{pigcms{$vo.sort}</td>
-										<td><if condition="$vo['status'] eq 1"><font color="green">启用</font><else/><font color="red">禁止</font></if></td>
-										<td class="textcenter"><a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Systemnews/edit_category',array('id'=>$vo['id']))}','编辑快报',800,460,true,false,false,editbtn,'edit',true);">编辑</a> | <a href="javascript:void(0);" class="delete_row" parameter="category_id={pigcms{$vo.id}" url="{pigcms{:U('Systemnews/del',array('category_id'=>$vo['id']))}">删除</a></td>
+										<td><if condition="$vo['status'] eq 1"><font color="green">{pigcms{:L('I_ENABLE1')}</font><else/><font color="red">{pigcms{:L('I_DISABLE3')}</font></if></td>
+										<td class="textcenter"><a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Systemnews/edit_category',array('id'=>$vo['id']))}','{pigcms{:L(\'BASE_EDIT\')}',800,460,true,false,false,editbtn,'edit',true);">{pigcms{:L('BASE_EDIT')}</a> | <a href="javascript:void(0);" class="delete_row" parameter="category_id={pigcms{$vo.id}" url="{pigcms{:U('Systemnews/del',array('category_id'=>$vo['id']))}">{pigcms{:L('BASE_DELETE')}</a></td>
 									</tr>
 								</volist>
 								<tr><td class="textcenter pagebar" colspan="9">{pigcms{$pagebar}</td></tr>
 							<else/>
-								<tr><td class="textcenter red" colspan="9">列表为空！</td></tr>
+								<tr><td class="textcenter red" colspan="9">{pigcms{:L('_BACK_EMPTY_')}</td></tr>
 							</if>
 						</tbody>
 					</table>

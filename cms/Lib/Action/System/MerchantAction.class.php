@@ -106,7 +106,7 @@ class MerchantAction extends BaseAction{
     }
 	public function add(){
 		$this->assign('bg_color','#F3F3F3');
-		$city_list = D('Area')->where(array('area_type'=>2))->order('`area_sort` asc')->select();
+		$city_list = D('Area')->where(array('area_type'=>2,'is_open'=>1))->order('`area_sort` asc')->select();
 		$this->assign('city',$city_list);
 		$this->display();
 	}
@@ -1209,7 +1209,7 @@ class MerchantAction extends BaseAction{
 			$pic_filepath = 'appoint';
 			$reply['type_name'] = $this->config['appoint_alias_name'];
 		} elseif ($reply['order_type'] == 3) {
-			$reply['type_name'] = $this->config['shop_alias_name'];
+			$reply['type_name'] = L('E_RWTYPE_DELIVERY');//$this->config['shop_alias_name'];
 		}
 
 		if($reply['pic']){
@@ -1474,7 +1474,7 @@ class MerchantAction extends BaseAction{
         //搜索
         if(!empty($_GET['keyword'])){
             if($_GET['searchtype'] == 'mer_id'){
-                $where['s.mer_id'] = $_GET['keyword'];
+                $where['s.store_id'] = $_GET['keyword'];
             }else if($_GET['searchtype'] == 'account'){
                 $where['s.account'] = array('like','%'.$_GET['keyword'].'%');
             }else if($_GET['searchtype'] == 'name'){
