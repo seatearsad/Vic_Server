@@ -827,15 +827,7 @@ class PayAction extends BaseAction{
 
         //----------------------------------------------------------------------------
         $this->Save_data_pre_pay($_POST);
-
-//        if($_POST['not_touch'] != null && $_POST['not_touch'] == 1){
-////            D('Shop_order')->field(true)->where(array('order_id'=>$order_info['order_id']))->save(array('not_touch'=>1));
-////        }
-////        $this->Save_coupon_info($_POST['order_id'],$_POST['coupon_id']);
-////        $this->Save_order_desc($_POST['note'],$order_info['order_id']);
-////        //保存地址备注
-////        $this->Save_user_address_detail($_POST['address_detail'],$_POST['address_id']);
-        //------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------
 
         if(empty($now_user)){
             $this->error_tips(L('_NO_GET_INFO_'));
@@ -863,6 +855,7 @@ class PayAction extends BaseAction{
             $order_info['score_used_count']=0;
             $order_info['score_deducte']=0;
         }
+
         $order_info['use_score'] = $_POST['use_score'];
         //这里为了解决app支付
         if($_POST['use_balance']==1){
@@ -959,7 +952,8 @@ class PayAction extends BaseAction{
         } else if ($save_result['url']) { //如果返回对象中有url（AND error_code=false)，就代表
 
             //$this->success_tips($save_result['msg'], $save_result['url']);
-            $this->success_tips($save_result['msg'], $result_url."1"); // -------------------------------------------------- 余额支付 正确结果>>>>>>>
+            //die($result_url);
+            $this->success_tips($save_result['msg'], $result_url."1");          // -------------------------------------------------- 余额支付 正确结果>>>>>>>
 
         } else {       //现金支付结果
 
@@ -1941,7 +1935,7 @@ class PayAction extends BaseAction{
 
         $now2_order = D('Shop_order')->get_pay_order($this->user_session['uid'], $order_id);
         $order_info =$now2_order['order_info'];
-        $result_url=C('config.site_url') . "/wap.php?g=Wap&c=Shop&a= &order_id=" . $order_info['order_id'] . '&mer_id=' . $order_info['mer_id'] . '&store_id=' . $order_info['store_id']."&status=";//1 成功  0 失败
+        $result_url=C('config.site_url') . "/wap.php?g=Wap&c=Shop&a=pay_result&order_id=" . $order_info['order_id'] . '&mer_id=' . $order_info['mer_id'] . '&store_id=' . $order_info['store_id']."&status=";//1 成功  0 失败
 
         return $result_url;
 
@@ -2651,6 +2645,7 @@ class PayAction extends BaseAction{
 //        $this->Save_order_desc($_POST['note'],$order_id);
 //        $this->Save_user_address_detail($_POST['address_detail'],$address_id);
         //----------------------------------------------------------------------------
+
         if ($_POST['order_type']=='recharge'){
             $result_url=U("Wap/My/my_money");
         }else{
@@ -2662,57 +2657,65 @@ class PayAction extends BaseAction{
         $moneris_pay = new MonerisPay();
         $resp = $moneris_pay->payment($_POST,$this->user_session['uid'],2);
 
-        //var_dump($resp);die();
-
         if($resp['requestMode'] && $resp['requestMode'] == "mpi"){
+
             if($resp['mpiSuccess'] == "true"){
                 $result = array('error_code' => false,'mode'=>$resp['requestMode'],'html'=>$resp['mpiInLineForm'], 'msg' => $resp['message']);
                 $this->ajaxReturn($result);
             }else{
-                $this->error($resp['message'],$resp['url'],true);
-            }
-        }
-
-        if($resp['responseCode'] != 'null' && $resp['responseCode'] < 50){
-            $order = explode("_",$_POST['order_id']);
-            $order_id = $order[1];
-            //判断是否有减免配送费活动
-
-            if($_POST['delivery_discount'] != null){
-                $order_info['delivery_discount'] = $_POST['delivery_discount'];
-                if($_POST['order_type'] == 'shop' || $_POST['order_type'] == 'mall'){
-                    D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->save(array('delivery_discount'=>$order_info['delivery_discount']));
-                    if($order_info['delivery_discount'] > 0)
-                        D('New_event')->addEventCouponByType(3,$this->user_session['uid']);
+                if ($_POST['order_type']=='recharge'){
+                    $this->error($resp['message'],$result_url,true);
+                }else{
+                    $this->error($resp['message'],$result_url."0",true);
                 }
             }
-
-            //店铺满减
-            if($_POST['merchant_reduce'] != null){
-                $order_info['merchant_reduce'] = $_POST['merchant_reduce'];
-                if($_POST['order_type'] == 'shop' || $_POST['order_type'] == 'mall'){
-                    D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->save(array('merchant_reduce'=>$order_info['merchant_reduce']));
-                }
-            }
-
-            if(!$_POST['order_type']) $_POST['order_type'] = "shop";
-
-            if($_POST['order_type'] == "recharge"){
-                $url = U("Wap/My/my_money",array('status'=>1));
-            }else{
-                $order = explode("_",$_POST['order_id']);
-                $order_id = $order[1];
-                $url = U("Wap/Shop/pay_result",array('order_id'=>$order_id));
-                $url = $result_url.'1';
-            }
-            $this->success(L('_PAYMENT_SUCCESS_'),$url,true);
 
         }else{
-            //var_dump($result_url);die();
-            if ($_POST['order_type']=='recharge'){
-                $this->error($resp['message'],U("Wap/My/my_money",array('status'=>0)),true);
+
+            //如果不使用3D支付，就会走到下面来！
+
+            if($resp['responseCode'] != 'null' && $resp['responseCode'] < 50){
+
+                $order = explode("_",$_POST['order_id']);
+                $order_id = $order[1];
+                //判断是否有减免配送费活动
+
+                if($_POST['delivery_discount'] != null){
+                    $order_info['delivery_discount'] = $_POST['delivery_discount'];
+                    if($_POST['order_type'] == 'shop' || $_POST['order_type'] == 'mall'){
+                        D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->save(array('delivery_discount'=>$order_info['delivery_discount']));
+                        if($order_info['delivery_discount'] > 0)
+                            D('New_event')->addEventCouponByType(3,$this->user_session['uid']);
+                    }
+                }
+
+                //店铺满减
+                if($_POST['merchant_reduce'] != null){
+                    $order_info['merchant_reduce'] = $_POST['merchant_reduce'];
+                    if($_POST['order_type'] == 'shop' || $_POST['order_type'] == 'mall'){
+                        D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->save(array('merchant_reduce'=>$order_info['merchant_reduce']));
+                    }
+                }
+
+                if(!$_POST['order_type']) $_POST['order_type'] = "shop";
+
+                if($_POST['order_type'] == "recharge"){
+                    $url = U("Wap/My/my_money",array('status'=>1));
+                }else{
+                    $order = explode("_",$_POST['order_id']);
+                    $order_id = $order[1];
+                    $url = U("Wap/Shop/pay_result",array('order_id'=>$order_id));
+                    $url = $result_url.'1';
+                }
+                $this->success(L('_PAYMENT_SUCCESS_'),$url,true);
+
             }else{
-                $this->error($resp['message'],$result_url.'0',true);
+                //var_dump($result_url);die();
+                if ($_POST['order_type']=='recharge'){
+                    $this->error($resp['message'],U("Wap/My/my_money",array('status'=>0)),true);
+                }else{
+                    $this->error($resp['message'],$result_url.'0',true);
+                }
             }
         }
     }
