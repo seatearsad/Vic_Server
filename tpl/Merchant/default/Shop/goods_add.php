@@ -153,11 +153,11 @@
 									<div style="display:inline-block;" id="J_selectImage">
 										<div class="btn btn-sm btn-success" style="position:relative;width:78px;height:34px;">{pigcms{:L('UPLOAD_BKADMIN')}</div>
 									</div>
-									<span class="form_tips">第一张将作为列表页图片展示！最多上传5个图片！同一张图片不能选择【侧重文字模板图片宽度建议为：900px，高度建议为：500px】【侧重图片图片尺寸建议为：大于等于600*600px的正方形】</span>
+									<span class="form_tips">{pigcms{:L('IMAGE_RATIO_BKADMIN')}</span>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-1">选择图片</label>
-									<a href="#modal-table" class="btn btn-sm btn-success" onclick="selectImg('upload_pic_ul','goods')">选择图片</a>
+									<label class="col-sm-1">{pigcms{:L('IMAGE_SELECT_BKADMIN')}</label>
+									<a href="#modal-table" class="btn btn-sm btn-success" onclick="selectImg('upload_pic_ul','goods')">{pigcms{:L('IMAGE_SELECT_BKADMIN')}</a>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-1">{pigcms{:L('PREVIEW_BKADMIN')}</label>
@@ -169,14 +169,12 @@
 							<div id="txtattr" class="tab-pane">
 								<div class="alert alert-info" style="margin:10px 0;">
 									<button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>
-									规格，即大家熟悉的商品可选择类别。例如菜品有大份、中份、小份，衣服有颜色、尺码等，规格可以单独设置价格库存等信息。
-									<br/><br/>
-									属性，可以理解为用户下单时选择的标签。例如菜品中的过桥米线可以选2个荤菜和选5个素菜，一份菜品可选辣不辣，但是这些不涉及价格，需要标注的。
+                                    {pigcms{:L('ATTRI_SPECIFICA_BKADMIN')}
 								</div>
 								<div class="topic_box">
 									<volist name="now_goods['spec_list']" id="row" key="ii">
 									<div class="question_box spec">
-										<p class="question_info"><span>规格名称：</span>
+										<p class="question_info"><span>{pigcms{:L('SPECIFICATION_BKADMIN')}：</span>
 											<input type="text" class="txt spec_name" value="{pigcms{$row['name']}" name="specs[]"/>
 											<input type="hidden" name="spec_id[]" value="{pigcms{$row['id']}"/>
 											<a href="javascript:;" class="box_del">{pigcms{:L('DELETE_BKADMIN')}</a>
@@ -184,46 +182,46 @@
 										<ul id="1" class="optionul">
 											<volist name="row['list']" id="r">
 											<li>
-												<u>规格属性值：</u>
+												<u>{pigcms{:L('SPECIFICATION_VALUE_BKADMIN')}：</u>
 												<input type="hidden" class="hide_txt spec_val_id" name="spec_val_id[{pigcms{$ii-1}][]" value="{pigcms{$r['id']}">
 												<input type="text" class="txt spec_val" name="spec_val[{pigcms{$ii-1}][]" value="{pigcms{$r['name']}"/>
-												<a class="list_del" href="javascript:;" title="删除这个选项">×</a>
+												<a class="list_del" href="javascript:;" title="{pigcms{:L('DELETE_BKADMIN')}">×</a>
 											</li>
 											</volist>
 										</ul>
-										<p class="bot_add"><a href="javascript:;" class="btn btn-sm btn-success">  添加规格的属性值</a></p>
+										<p class="bot_add"><a href="javascript:;" class="btn btn-sm btn-success">  {pigcms{:L('ADD_VALVE_BKADMIN')}</a></p>
 									</div>
 									</volist>
-									<p class="add_spec"><a href="javascript:;" title="添加" class="btn btn-sm btn-success" <if condition="count($now_goods['spec_list']) egt 3">style="display:none"</if>>添加规格</a></p>
+									<p class="add_spec"><a href="javascript:;" title="添加" class="btn btn-sm btn-success" <if condition="count($now_goods['spec_list']) egt 3">style="display:none"</if>>{pigcms{:L('ADD_SPECIFICATION_BKADMIN')}</a></p>
 								</div>
 
 								<div class="topic_box">
 									<volist name="now_goods['properties_list']" id="ro" key="ik">
 									<div class="question_box properties">
 										<p class="question_info">
-											<span>属性名称：</span>
+											<span>{pigcms{:L('ATTRIBUTE_NAME_BKADMIN')}：</span>
 											<input type="text" class="txt properties_name" value="{pigcms{$ro['name']}" name="properties[]"/>
-											<span>可选个数：</span><input type="text" class="txt properties_num" value="{pigcms{$ro['num']}" name="properties_num[]" style="width:50px"/>
+											<span>{pigcms{:L('QUANTITY_ALLOWED_BKADMIN')}：</span><input type="text" class="txt properties_num" value="{pigcms{$ro['num']}" name="properties_num[]" style="width:50px"/>
 											<input type="hidden" name="properties_id[]" value="{pigcms{$ro['id']}">
 											<a href="javascript:;" class="box_del">{pigcms{:L('DELETE_BKADMIN')}</a>
 										</p>
 										<ul id="1" class="optionul">
 											<volist name="ro['val']" id="ra">
 											<li>
-												<u>属性的属性值：</u>
+												<u>{pigcms{:L('ATTRIBUTE_VALUE_BKADMIN')}：</u>
 												<input type="text" class="txt properties_val" name="properties_val[{pigcms{$ik-1}][]" value="{pigcms{$ra}"/>
-												<a class="list_del" href="javascript:;" title="删除这个选项">×</a>
+												<a class="list_del" href="javascript:;" title="{pigcms{:L('DELETE_BKADMIN')}">×</a>
 											</li>
 											</volist>
 										</ul>
-										<p class="bot_add"><a href="javascript:;" class="btn btn-sm btn-success">  添加属性的属性值</a></p>
+										<p class="bot_add"><a href="javascript:;" class="btn btn-sm btn-success">  {pigcms{:L('ADD_VALUE_BKADMIN')}</a></p>
 									</div>
 									</volist>
-									<p class="add_properties"><a href="javascript:;" title="添加" class="btn btn-sm btn-success">添加属性</a></p>
+									<p class="add_properties"><a href="javascript:;" title="" class="btn btn-sm btn-success">{pigcms{:L('ADD_ATTRIBUTE_BKADMIN')}</a></p>
 								</div>
 
 								<div class="topic_box">
-									<p class="add_table" <if condition="!$now_goods['spec_list']">style="display:none"</if>><a href="javascript:;" title="添加" class="btn btn-sm btn-success" >生成规格关系</a></p>
+									<p class="add_table" <if condition="!$now_goods['spec_list']">style="display:none"</if>><a href="javascript:;" title="{pigcms{:L('BASE_ADD')}" class="btn btn-sm btn-success" >{pigcms{:L('GENERATE_CHART_BKADMIN')}</a></p>
 									<table class="table table-striped table-bordered table-hover" id="table_list">
 									<if condition="$now_goods['spec_list']">
 									<tbody>
@@ -231,9 +229,13 @@
 											<volist name="now_goods['spec_list']" id="gs">
 											<th>{pigcms{$gs['name']}</th>
 											</volist>
-											<th style="display:none">原价</th><th>进价</th><th>现价</th><th>限时价</th><th>库存</th>
+<!--											<th style="display:none">{pigcms{:L('ORIGINAL_PRICE_BKADMIN')}</th>-->
+<!--                                            <th>进价</th>-->
+                                            <th>{pigcms{:L('CURR_PRICE_BKADMIN')}</th>
+<!--                                            <th>{pigcms{:L('LIMIT_TIME_DISCOUNT_BKADMIN')}</th>-->
+                                            <th>{pigcms{:L('STOCK_BKADMIN')}</th>
 											<volist name="now_goods['properties_list']" id="gp">
-											<th>{pigcms{$gp['name']}(可选个数)</th>
+											<th>{pigcms{$gp['name']}({pigcms{:L('QUANTITY_ALLOWED_BKADMIN')})</th>
 											</volist>
 										</tr>
 
@@ -243,10 +245,10 @@
 												<td>{pigcms{$g['spec_val_name']}</td>
 												</volist>
 
-												<td  style="display:none"><input type="text" class="txt" name="old_prices[]" value="{pigcms{$gl['old_price']}" style="width:80px;"></td>
-												<td><input type="text" class="txt" name="cost_prices[]" value="{pigcms{$gl['cost_prices']}" style="width:80px;"></td>
+<!--												<td  style="display:none"><input type="text" class="txt" name="old_prices[]" value="{pigcms{$gl['old_price']}" style="width:80px;"></td>-->
+<!--												<td><input type="text" class="txt" name="cost_prices[]" value="{pigcms{$gl['cost_prices']}" style="width:80px;"></td>-->
 												<td><input type="text" class="txt" name="prices[]" value="{pigcms{$gl['price']}" style="width:80px;"></td>
-												<td><input type="text" class="txt" name="seckill_prices[]" value="{pigcms{$gl['seckill_price']}" style="width:80px;"></td>
+<!--												<td><input type="text" class="txt" name="seckill_prices[]" value="{pigcms{$gl['seckill_price']}" style="width:80px;"></td>-->
 												<td><input type="text" class="txt" name="stock_nums[]" value="{pigcms{$gl['stock_num']}" style="width:80px;"></td>
 
 												<volist name="gl['properties']" id="gpp" key="num">
@@ -421,7 +423,7 @@ $('#myTab li a').click(function(){
 			});
 			uploader.on('uploadSuccess',function(file,response){
 				if(response.error == 0){
-					$('#upload_pic_ul').append('<li class="upload_pic_li"><img src="'+response.url+'"/><input type="hidden" name="pic[]" value="'+response.title+'"/><br/><a href="#" onclick="deleteImage(\''+response.title+'\',this);return false;">[ 删除 ]</a></li>');
+					$('#upload_pic_ul').append('<li class="upload_pic_li"><img src="'+response.url+'"/><input type="hidden" name="pic[]" value="'+response.title+'"/><br/><a href="#" onclick="deleteImage(\''+response.title+'\',this);return false;">[ {pigcms{:L('DELETE_BKADMIN')} ]</a></li>');
 				}else{
 					alert(response.info);
 				}

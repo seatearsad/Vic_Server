@@ -58,7 +58,7 @@
 					<div class="infobox" style="background:#92bf77;">
 						<div class="infobox-data" style="padding-left:0px;width:100%;text-align:center;">
 							<span class="infobox-data-number">{pigcms{$store_count}</span>
-							<div class="infobox-content">店铺数</div>
+							<div class="infobox-content">{pigcms{:L('STORES_BKADMIN')}</div>
 						</div>
 					</div>
 					<div class="space-18"></div>

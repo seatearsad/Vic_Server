@@ -7,6 +7,7 @@
 <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/styles.css">
 <script type="text/javascript" src="{pigcms{$static_path}js/jquery.min.js"></script>
 <script type="text/javascript" src="{pigcms{$static_path}js/jquery.ba-bbq.min.js"></script>
+<script type="text/javascript" src="{pigcms{$static_public}js/lang/{pigcms{:C('DEFAULT_LANG')}.js?v=21" charset="utf-8"></script>
 <if condition="$config['site_favicon']">
 	<link rel="shortcut icon" href="{pigcms{$config.site_favicon}"/>
 </if>

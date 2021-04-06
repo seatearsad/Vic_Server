@@ -55,6 +55,22 @@ lang['_SMS_CODE_ERROR_'] = 'The Verification Code Entered Is Incorrect.';
 lang['_B_D_LOGIN_FILLMESSAGE_'] = 'Enter your SMS code';
 lang['_STORE_STATUS_CLOSED'] = 'Closed';
 
+lang['SPECIFICATION_NAME_BKADMIN'] = "Specification Name";
+lang['SPECIFICATION_VALUE_BKADMIN'] = "Specification Value";
+lang['ADD_VALVE_BKADMIN'] = "Add Value";
+lang['ADD_SPECIFICATION_BKADMIN'] = "Add Specification";
+lang['ATTRI_SPECIFICA_BKADMIN'] = "Attributes and specifications are for the old system. Please use the new Option function when uploading new items from now on. Specifications are price related (e.g. Large/small), attributes are not price related (e.g. Spiciness/Ice)";
+lang['ATTRIBUTE_NAME_BKADMIN'] = "Attribute Name";
+lang['QUANTITY_ALLOWED_BKADMIN'] = "Quantity Allowed";
+lang['ATTRIBUTE_VALUE_BKADMIN'] = "Attribute Value";
+lang['ADD_VALUE_BKADMIN'] = "Add Value";
+lang['ADD_ATTRIBUTE_BKADMIN'] = "Add Attribute";
+lang['GENERATE_CHART_BKADMIN'] = "Generate Price Chart";
+lang['ORIGINAL_PRICE_BKADMIN'] = "Original Price";
+lang['CURR_PRICE_BKADMIN'] = "Price";
+lang['STOCK_BKADMIN'] = "Stock";
+lang['DELETE_BKADMIN'] = "Delete";
+
 function getLangStr(key,replace=''){
     var str = lang[key];
     str = str.replace('%s',replace);

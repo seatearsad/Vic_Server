@@ -55,6 +55,23 @@ lang['_SMS_CODE_ERROR_'] = '输入的短信验证码有误。';
 lang['_B_D_LOGIN_FILLMESSAGE_'] = '填写短信验证码';
 lang['_STORE_STATUS_CLOSED'] = '休息';
 
+lang['SPECIFICATION_NAME_BKADMIN'] = "规格名称";
+lang['SPECIFICATION_VALUE_BKADMIN'] = "规格属性值";
+lang['ADD_VALVE_BKADMIN'] = "添加规格的属性值";
+lang['ADD_SPECIFICATION_BKADMIN'] = "添加规格";
+lang['ATTRI_SPECIFICA_BKADMIN'] = "属性与规格为旧系统,请用配菜上菜单。规格与价格有关(例如:大份/小份),属性与价格无关(例如:辣度/冰度)";
+lang['ATTRIBUTE_NAME_BKADMIN'] = "属性名称";
+lang['QUANTITY_ALLOWED_BKADMIN'] = "可选个数";
+lang['ATTRIBUTE_VALUE_BKADMIN'] = "属性的属性值";
+lang['ADD_VALUE_BKADMIN'] = "添加属性的属性值";
+lang['ADD_ATTRIBUTE_BKADMIN'] = "添加属性";
+lang['GENERATE_CHART_BKADMIN'] = "生成规格关系";
+lang['ORIGINAL_PRICE_BKADMIN'] = "原价";
+lang['CURR_PRICE_BKADMIN'] = "现价";
+lang['STOCK_BKADMIN'] = "库存";
+lang['DELETE_BKADMIN'] = "删除";
+
+
 function getLangStr(key,replace=''){
     var str = lang[key];
     str = str.replace('%s',replace);
