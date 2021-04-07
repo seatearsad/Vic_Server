@@ -685,7 +685,6 @@ class MyAction extends BaseAction{
             $this->assign('new_url',U('My/edit_adress'));
         }
 
-
         $this->assign('page_title',$page_title);
 		if(empty($adress_list)){ //如果没有地址数据，就自动跳转到----->210305 如果地址数据为空，就停在列表里
 		    //redirect(U('My/edit_adress',$_GET));
@@ -3388,8 +3387,11 @@ class MyAction extends BaseAction{
         $m = array();
         if ($store_ids) {
             $store_image_class = new store_image();
-            $merchant_list = M('Merchant_store_shop')->join('as store_shop left join '.C('DB_PREFIX').'merchant_store store ON store_shop.store_id = store.store_id')->where(array('store_shop.store_id'=>array('in', $store_ids)))->select();
+
+            $merchant_list = D('Merchant_store_shop')->field('store_shop.background,store.*')->join('as store_shop left join '.C('DB_PREFIX').'merchant_store store ON store_shop.store_id = store.store_id')->where(array('store_shop.store_id'=>array('in', $store_ids)))->select();
+            //$merchant_list = M('Merchant_store_shop')->join('as store_shop left join '.C('DB_PREFIX').'merchant_store store ON store_shop.store_id = store.store_id')->where(array('store_shop.store_id'=>array('in', $store_ids)))->select();
             //$merchant_list = D("Merchant_store")->where(array('store_id' => array('in', $store_ids)))->select();
+            //var_dump($merchant_list);die();
             //$merchant_shop_list = D("Merchant_store_shop")->where(array('store_id' => array('in', $store_ids)))->select();
             foreach ($merchant_list as $li) {
                 //$images = $store_image_class->get_allImage_by_path($li['background_']);

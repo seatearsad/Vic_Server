@@ -19,6 +19,7 @@
                 </div>
             </dd>
             <dd class="dealbutton">
+
                 {{# if ((d[i].status>3) &&(d[i].status<7)) { }}
                     <div class="button_block">
     <!--                    <div class="round_button">Reorder</div>-->
@@ -27,6 +28,7 @@
                 {{# }else{ }}
                     {{# if (d[i].statusLog>=6) { }}
                         {{# if (d[i].statusLog>6) { }}
+
                             <div class="button_block">
             <!--                    <div class="round_button">Reorder</div>-->
                                 <div class="img_ratings" style="width:{{ d[i].rate_score*16 }}px;"></div>
