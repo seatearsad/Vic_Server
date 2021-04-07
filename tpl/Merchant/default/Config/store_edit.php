@@ -5,9 +5,9 @@
 		<ul class="breadcrumb">
 			<li>
 				<i class="ace-icon fa fa-gear gear-icon"></i>
-				<a href="{pigcms{:U('Config/store')}">店铺管理</a>
+				<a href="{pigcms{:U('Config/store')}">{pigcms{:L('STORE_MANAGEMENT_BKADMIN')}</a>
 			</li>
-			<li class="active">编辑店铺</li>
+			<li class="active">{pigcms{:L('EDIT_STORE_BKADMIN')}</li>
 		</ul>
 	</div>
 	<!-- 内容头部 -->
@@ -92,7 +92,7 @@
 								</div>
 								<div class="form-group">
 									<label class="col-sm-1"><label for="adress">{pigcms{:L('STORE_ADDRESS_BKADMIN')}</label></label>
-									<input class="col-sm-2" size="20" name="adress" id="adress" value="{pigcms{$now_store.adress}" type="text"/>
+									<input class="col-sm-2" size="30" name="adress" id="adress" value="{pigcms{$now_store.adress}" type="text"/>
 								</div>
 								<div class="form-group hidden_obj">
 									<label class="col-sm-1"><label for="trafficroute">交通路线</label></label>
@@ -114,10 +114,10 @@
 								</div>
 								<if condition="$config['store_open_meal']">
 									<div class="form-group">
-										<label class="col-sm-1" for="have_meal">{pigcms{$config.meal_alias_name}</label>
+										<label class="col-sm-1" for="have_meal">{pigcms{:L('_BACK_DINE_')}</label>
 										<select name="have_meal" id="have_meal">
-											<option value="0" <if condition="$now_store['have_meal'] eq 0">selected="selected"</if>>关闭</option>
-											<option value="1" <if condition="$now_store['have_meal'] eq 1">selected="selected"</if>>开启</option>
+											<option value="0" <if condition="$now_store['have_meal'] eq 0">selected="selected"</if>>{pigcms{:L('DISABLE_BKADMIN')}</option>
+											<option value="1" <if condition="$now_store['have_meal'] eq 1">selected="selected"</if>>{pigcms{:L('ENABLE_BKADMIN')}</option>
 										</select>
 									</div>
 								</if>
@@ -166,8 +166,8 @@
 									<div class="form-group hidden_obj">
 										<label class="col-sm-1" for="have_waimai">{pigcms{$config.waimai_alias_name}</label>
 										<select name="have_waimai" id="have_waimai">
-											<option value="1" selected="selected">开启</option>
-											<option value="0">关闭</option>
+											<option value="1" selected="selected">{pigcms{:L('ENABLE_BKADMIN')}</option>
+											<option value="0">{pigcms{:L('DISABLE_BKADMIN')}</option>
 										</select>
 									</div>
 								</if>

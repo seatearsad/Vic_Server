@@ -5,9 +5,9 @@
 		<ul class="breadcrumb">
 			<li>
 				<i class="ace-icon fa fa-cubes"></i>
-				<a href="{pigcms{:U('Shop/index')}">{pigcms{$config.shop_alias_name}管理</a>
+				<a href="{pigcms{:U('Shop/index')}">{pigcms{:L('DELIVERY_MANAGEMENT_BKADMIN')}</a>
 			</li>
-			<li class="active">编辑{pigcms{$config.shop_alias_name}信息</li>
+			<li class="active">{pigcms{:L('EDIT_BKADMIN')}</li>
 		</ul>
 	</div>
 	<!-- 内容头部 -->

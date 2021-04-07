@@ -5,7 +5,7 @@
 		<ul class="breadcrumb">
 			<li>
 				<i class="ace-icon fa fa-gear gear-icon"></i>
-				<a href="{pigcms{:U('Config/store')}">店铺管理</a>
+				<a href="{pigcms{:U('Config/store')}">{pigcms{:L('STORE_MANAGEMENT_BKADMIN')}</a>
 			</li>
 			<li class="active">【{pigcms{$now_store.name}】 {pigcms{:L('STAFF_LISTING_BKADMIN')}</li>
 		</ul>
@@ -18,7 +18,7 @@
 					<div class="tabbable">
 						<ul class="nav nav-tabs" id="myTab">	
 							<li class="active">
-								<a>店员管理</a>
+								<a>{pigcms{:L('USER_MANAGEMENT_BKADMIN')}</a>
 							</li>
 						</ul>
 					

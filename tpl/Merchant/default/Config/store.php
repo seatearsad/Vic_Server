@@ -5,9 +5,9 @@
         <ul class="breadcrumb">
             <li>
                 <i class="ace-icon fa fa-gear gear-icon"></i>
-                <a href="{pigcms{:U('Config/store')}">店铺管理</a>
+                <a href="{pigcms{:U('Config/store')}">{pigcms{:L('STORE_MANAGEMENT_BKADMIN')}</a>
             </li>
-            <li class="active">店铺列表</li>
+            <li class="active">{pigcms{:L('STORE_MANAGEMENT_BKADMIN')}</li>
         </ul>
     </div>
     <!-- 内容头部 -->
@@ -40,13 +40,13 @@
                                         <td>{pigcms{$vo.store_id}</td>
                                         <td>{pigcms{$vo.sort}</td>
                                         <td>{pigcms{$vo.name}</td>
-                                        <td><a href="javascript:;" class="store_info_more" data-store_name="{pigcms{$vo.name}" data-phone="{pigcms{$vo.phone}" data-address="{pigcms{$vo.area_name} - {pigcms{$vo.adress}" data-hasmeal="<if condition="$vo['have_meal']">有<else/>无</if>" data-hasgroup="<if condition="$vo['have_group']">有<else/>无</if>" data-hasshop="<if condition="$vo['have_shop']">有<else/>无</if>" data-store_qrcode_url="{pigcms{$config.site_url}/index.php?g=Index&c=Recognition&a=see_qrcode&type=merchantstore&id={pigcms{$vo['store_id']}&img=1" data-store_status="{pigcms{$vo['status']}">查看</a></td>
+                                        <td><a href="javascript:;" class="store_info_more" data-store_name="{pigcms{$vo.name}" data-phone="{pigcms{$vo.phone}" data-address="{pigcms{$vo.area_name} - {pigcms{$vo.adress}" data-hasmeal="<if condition="$vo['have_meal']">有<else/>无</if>" data-hasgroup="<if condition="$vo['have_group']">有<else/>无</if>" data-hasshop="<if condition="$vo['have_shop']">有<else/>无</if>" data-store_qrcode_url="{pigcms{$config.site_url}/index.php?g=Index&c=Recognition&a=see_qrcode&type=merchantstore&id={pigcms{$vo['store_id']}&img=1" data-store_status="{pigcms{$vo['status']}">{pigcms{:L('VIEW_BKADMIN')}</a></td>
 
                                         <td>
                                             <switch name="vo['status']">
-                                                <case value="0">关闭</case>
-                                                <case value="1">正常</case>
-                                                <case value="2">审核中</case>
+                                                <case value="0">{pigcms{:L('_BACK_OFF_')}</case>
+                                                <case value="1">{pigcms{:L('ACTIVE_BKADMIN')}</case>
+                                                <case value="2">{pigcms{:L('_BACK_PENDING_')}</case>
                                             </switch>
                                         </td>
 

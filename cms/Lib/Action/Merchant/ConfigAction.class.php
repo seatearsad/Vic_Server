@@ -8,7 +8,17 @@
  */
 
 class ConfigAction extends BaseAction{
-	public $staff_type=array(0=>'店小二',1=>'核销',2=>'店长');
+
+	public $staff_type;
+
+    protected function _initialize(){
+        parent::_initialize();
+        $this->staff_type=array(
+            0=>L('STORE_ASSISTANT_BKADMIN'),
+            1=>L('VERIFICATION_BKADMIN'),
+            2=> L('STORE_MANAGER_BKADMIN'));
+    }
+
 	/* 商家设置 */
     public function merchant(){
 		$database_merchant = D('Merchant');
@@ -210,18 +220,18 @@ class ConfigAction extends BaseAction{
 			if(empty($_POST['name'])){
 				$this->error('店铺名称必填！');
 			}
-			if(empty($_POST['phone'])){
-				$this->error('联系电话必填！');
-			}
+//			if(empty($_POST['phone'])){
+//				$this->error('联系电话必填！');
+//			}
 			if(empty($_POST['long_lat'])){
 				$this->error('店铺经纬度必填！');
 			}
 			if(empty($_POST['adress'])){
 				$this->error('店铺地址必填！');
 			}
-			if(empty($_POST['permoney'])){
-				$this->error('人均消费必填！');
-			}
+//			if(empty($_POST['permoney'])){
+//				$this->error('人均消费必填！');
+//			}
 //			if(empty($_POST['feature'])){
 //				$this->error('店铺特色必填！');
 //			}

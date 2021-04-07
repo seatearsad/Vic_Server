@@ -38,7 +38,7 @@
 							<li>
 								<a data-toggle="tab" href="#seckill">{pigcms{:L('LIMIT_TIME_DISCOUNT_BKADMIN')}</a>
 							</li>
-							<if condition="$now_store['store_theme'] AND $category_list">
+							<if condition="$now_store['store_theme'] AND $category_list AND 0">
 							<li>
 								<a data-toggle="tab" href="#category">商城属性设置</a>
 							</li>
@@ -84,12 +84,12 @@
 									<span class="form_tips">原价可不填，不填和现价一样</span>
 								</div-->
 								<div class="form-group">
-									<label class="col-sm-1"><label for="price">商品进价{pigcms{:L('REQUIRED_BKADMIN')}</label></label>
+									<label class="col-sm-1"><label for="price">商品进价</label></label>
 									<input class="col-sm-1" size="20" name="cost_price" id="cost_price" type="text" value="{pigcms{$now_goods.cost_price|floatval}"/>
 									<span class="form_tips">进货价用户是看不到{pigcms{:L('REQUIRED_BKADMIN')}</span>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-1"><label for="price">商品现价{pigcms{:L('REQUIRED_BKADMIN')}</label></label>
+									<label class="col-sm-1"><label for="price">{pigcms{:L('LISTING_PRICE_NOW_BKADMIN')}</label></label>
 									<input class="col-sm-1" size="20" name="price" id="price" type="text" value="{pigcms{$now_goods.price|floatval}"/>
 									<if condition="$config.open_extra_price eq 1">
 										元 + <input class="col-sm-1" maxlength="30" name="extra_pay_price" type="text" value="" style="float:none"/>{pigcms{$config.extra_price_alias_name}

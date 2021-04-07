@@ -684,7 +684,7 @@ class ShopAction extends BaseAction
                 $rl['today_sell_count'] = 0;
             }
             if ($rl['stock_num'] == -1) {
-                $rl['stock_num_t'] = '无限';
+                $rl['stock_num_t'] = L("ULN_BKADMIN");
             } else {
                 $rl['stock_num_t'] = max(0, $rl['stock_num'] - $rl['today_sell_count']);
             }

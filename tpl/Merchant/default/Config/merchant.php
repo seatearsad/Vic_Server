@@ -5,9 +5,9 @@
 		<ul class="breadcrumb">
 			<li>
 				<i class="ace-icon fa fa-gear gear-icon"></i>
-				<a href="{pigcms{:U('Config/merchant')}">商家设置</a>
+				<a href="{pigcms{:U('Config/merchant')}">{pigcms{:L('ACCOUNT_SETTINGS_BKADMIN')}</a>
 			</li>
-			<li class="active">商家设置</li>
+			<li class="active">{pigcms{:L('ACCOUNT_SETTINGS_BKADMIN')}</li>
 		</ul>
 	</div>
 	<!-- 内容头部 -->

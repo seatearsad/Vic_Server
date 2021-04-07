@@ -38,7 +38,7 @@
 							<li>
 								<a data-toggle="tab" href="#seckill">{pigcms{:L('LIMIT_TIME_DISCOUNT_BKADMIN')}</a>
 							</li>
-							<if condition="$now_store['store_theme'] AND $category_list">
+							<if condition="$now_store['store_theme'] AND $category_list AND 0">
 							<li>
 								<a data-toggle="tab" href="#category">商城属性设置</a>
 							</li>
@@ -197,7 +197,7 @@
 										<p class="bot_add"><a href="javascript:;" class="btn btn-sm btn-success">  {pigcms{:L('ADD_VALVE_BKADMIN')}</a></p>
 									</div>
 									</volist>
-									<p class="add_spec"><a href="javascript:;" title="添加" class="btn btn-sm btn-success" <if condition="count($now_goods['spec_list']) egt 3">style="display:none"</if>>{pigcms{:L('ADD_SPECIFICATION_BKADMIN')}</a></p>
+									<p class="add_spec"><a href="javascript:;" title="Add" class="btn btn-sm btn-success" <if condition="count($now_goods['spec_list']) egt 3">style="display:none"</if>>{pigcms{:L('ADD_SPECIFICATION_BKADMIN')}</a></p>
 								</div>
 							
 								<div class="topic_box">

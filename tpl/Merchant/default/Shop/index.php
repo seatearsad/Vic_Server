@@ -5,9 +5,9 @@
 		<ul class="breadcrumb">
 			<li>
 				<i class="ace-icon fa fa-cubes"></i>
-				<a href="{pigcms{:U('Shop/index')}">{pigcms{$config.shop_alias_name}管理</a>
+				<a href="{pigcms{:U('Shop/index')}">{pigcms{:L('DELIVERY_MANAGEMENT_BKADMIN')}</a>
 			</li>
-			<li class="active">店铺列表</li>
+			<li class="active">{pigcms{:L('E_STORE_STAT_LIST')}</li>
 		</ul>
 	</div>
 	<!-- 内容头部 -->
@@ -130,7 +130,7 @@
 					window.top.art.dialog.data('iframe_handle',iframe);
 				},
 				id: 'handle',
-				title:'克隆店铺商品至其他店铺',
+				title:'{pigcms{:L('CLONE_STORE_BKADMIN')}',
 				padding: 0,
 				width: 720,
 				height: 520,

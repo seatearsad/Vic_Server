@@ -67,7 +67,7 @@
 											<td>{pigcms{$vo.price|floatval}</td>
 											<td class="button-column">{pigcms{$vo.unit}</td>
 											<if condition="$vo['stock_num'] eq -1">
-											<td>无限{pigcms{:L('ITEM_LIST_BKADMIN')}</td>
+											<td>{pigcms{:L('ULN_BKADMIN')}</td>
 											<else />
 											<td>{pigcms{$vo.stock_num}</td>
 											</if>
@@ -89,22 +89,22 @@
                                                 </if>
 											</td>
 											<td class="button-column">
-												<a title="修改" class="green" style="padding-right:8px;" href="{pigcms{:U('Shop/goods_edit',array('goods_id'=>$vo['goods_id'],'page'=>$_GET['page']))}">
+												<a title="{pigcms{:L('EDIT_BKADMIN')}" class="green" style="padding-right:8px;" href="{pigcms{:U('Shop/goods_edit',array('goods_id'=>$vo['goods_id'],'page'=>$_GET['page']))}">
 													<i class="ace-icon fa fa-pencil bigger-130"></i>
 												</a>
                                                 <if condition="$vo['status'] eq 2">
-                                                    <a title="还原" class="orange" style="padding-right:8px;" href="javascript:hiddenGoods({pigcms{$vo['goods_id']},0);">
+                                                    <a title="{pigcms{:L('RESTORE_BKADMIN')}" class="orange" style="padding-right:8px;" href="javascript:hiddenGoods({pigcms{$vo['goods_id']},0);">
                                                         <i class="ace-icon fa fa-refresh bigger-130"></i>
                                                     </a>
                                                 <else/>
-                                                    <a title="删除" class="red" style="padding-right:8px;" href="javascript:hiddenGoods({pigcms{$vo['goods_id']},1);">
+                                                    <a title="{pigcms{:L('DELETE_BKADMIN')}" class="red" style="padding-right:8px;" href="javascript:hiddenGoods({pigcms{$vo['goods_id']},1);">
                                                         <i class="ace-icon fa fa-trash-o bigger-130"></i>
                                                     </a>
                                                 </if>
-                                                <a title="复制" class="blue" style="padding-right:8px;" href="{pigcms{:U('Shop/goods_copy',array('goods_id'=>$vo['goods_id']))}">
+                                                <a title="{pigcms{:L('COPY_BKADMIN')}" class="blue" style="padding-right:8px;" href="{pigcms{:U('Shop/goods_copy',array('goods_id'=>$vo['goods_id']))}">
                                                     <i class="ace-icon fa fa-file-o bigger-130"></i>
                                                 </a>
-                                                <a title="配菜" class="pink" style="padding-right:8px;" href="{pigcms{:U('Shop/side_dish',array('goods_id'=>$vo['goods_id']))}">
+                                                <a title="{pigcms{:L('OPTIONS_BKADMIN')}" class="pink" style="padding-right:8px;" href="{pigcms{:U('Shop/side_dish',array('goods_id'=>$vo['goods_id']))}">
                                                     <i class="ace-icon fa fa-inbox bigger-130"></i>
                                                 </a>
 											</td>

@@ -5,12 +5,12 @@
 		<ul class="breadcrumb">
 			<li>
 				<i class="ace-icon fa fa-gear gear-icon"></i>
-				<a href="{pigcms{:U('Config/store')}">店铺管理</a>
+				<a href="{pigcms{:U('Config/store')}">{pigcms{:L('STORE_MANAGEMENT_BKADMIN')}</a>
 			</li>
 			<li>
-				<a href="{pigcms{:U('Config/staff', array('store_id' => $now_store['store_id']))}">【{pigcms{$now_store.name}】 店员列表</a>
+				<a href="{pigcms{:U('Config/staff', array('store_id' => $now_store['store_id']))}">【{pigcms{$now_store.name}】 {pigcms{:L('STAFF_LISTING_BKADMIN')}</a>
 			</li>
-			<li class="active"><if condition="$item">修改<else/>添加</if>店员</li>
+			<li class="active"><if condition="$item">{pigcms{:L('EDIT_STAFF_BKADMIN')}<else/>{pigcms{:L('ADD_STAFF_BKADMIN')}</if></li>
 		</ul>
 	</div>
 	<!-- 内容头部 -->

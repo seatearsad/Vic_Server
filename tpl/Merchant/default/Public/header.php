@@ -11,7 +11,7 @@
 <if condition="$config['site_favicon']">
 	<link rel="shortcut icon" href="{pigcms{$config.site_favicon}"/>
 </if>
-<title>{pigcms{$config.site_name} - 商家中心</title>
+<title>{pigcms{$config.site_name} - {pigcms{:L('MERCHANT_BACKEND_BKADMIN')}</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <link rel="stylesheet" href="{pigcms{$static_path}css/bootstrap.min.css">
 <link rel="stylesheet" href="{pigcms{$static_path}css/font-awesome.min.css">
