@@ -1,11 +1,41 @@
 <?php
 class Shop_orderModel extends Model
 {
-	public $status_list = array('-1' => '全部' ,'0' => '未接单', 1 => '已确认', 2 => '已消费', 3 => '已评价', 4 => '已退款', 5 => '已取消',6=>'付款超时，待删除', 7 => '分配到自提点', 8 => '发货到自提点', 9 => '自提点接货', 10 => '自提点发货');
-	public $status_list_admin = array('-1' => '全部', '100'=>'未支付' ,'0' => '未接单', 1 => '已确认', 2 => '已消费', 3 => '已评价', 4 => '已退款', 5 => '已取消', 7 => '分配到自提点', 8 => '发货到自提点', 9 => '自提点接货', 10 => '自提点发货');
+	public $status_list;
+	public $status_list_admin;
 
     public function __construct(){
+
         parent::__construct();
+
+        $this->status_list = array(
+        	'-1' => L('_B_PURE_MY_64_') ,
+			'0' =>  L('_STATUS_LIST_0_'),		//未接单
+			1 =>  L('_B_PURE_MY_72_'),		//'已确认',
+			2 => L('_STATUS_LIST_0_'),		// '已消费',
+			3 => L('_B_PURE_MY_74_'),		//'已评价',
+			4 => L('_B_PURE_MY_75_'),		//'已退款',
+			5 =>L('_B_PURE_MY_76_'),		    // '已取消',
+			6=> L('_STATUS_LIST_0_'),		//'付款超时，待删除',
+			7 =>L('_B_PURE_MY_77_'),		// '分配到自提点',
+			8 =>L('_B_PURE_MY_78_'),		// '发货到自提点',
+			9 => L('_B_PURE_MY_79_'),		//'自提点接货',
+			10 => L('_B_PURE_MY_80_'),		//'自提点发货');
+		);
+        $this->status_list_admin = array(
+        	'-1' => '全部',
+			'100'=>'未支付' ,
+			'0' => '未接单',
+			1 => '已确认',
+			2 => '已消费',
+			3 => '已评价',
+			4 => '已退款',
+			5 => '已取消',
+			7 => '分配到自提点',
+			8 => '发货到自提点',
+			9 => '自提点接货',
+			10 => '自提点发货');
+
         $allList = $this->where(array('paid'=>0))->order('create_time asc')->select();
 
         //获取倒计时时间 web app 时间不同
@@ -1162,16 +1192,16 @@ class Shop_orderModel extends Model
 			}
 
 			if ($order['paid'] == 0) {
-				$order['pay_status'] = '未支付';
+				$order['pay_status'] =L("_ND_UNPAID_");
 			} elseif ($order['paid'] == 1) {
 				if ($order['pay_type'] == 'offline') {
 					if ($order['third_id']) {
-						$order['pay_status'] = '<b style="color:green">已支付</b>';
+						$order['pay_status'] = '<b style="color:green">'.L("_ND_PAID_").'</b>';
 					} else {
-						$order['pay_status'] = '<b style="color:red">未支付</b>';
+						$order['pay_status'] = '<b style="color:red">'.L("_ND_UNPAID_").'</b>';
 					}
 				} else {
-					$order['pay_status'] = '<b style="color:green">已支付</b>';
+					$order['pay_status'] = '<b style="color:green">'.L("_ND_PAID_").'</b>';
 				}
 			}
 			if ($order['is_pick_in_store'] == 0) {
@@ -1208,31 +1238,31 @@ class Shop_orderModel extends Model
 			switch ($order['order_status']) {
 				case 0:
 					if ($order['is_pick_in_store'] == 2) {
-						$order['deliver_status_str'] = '待提货';
+						$order['deliver_status_str'] = L("_ORDER_STATUS_0_");  //'待提货'
 					} else {
-						$order['deliver_status_str'] = '待发货';
+						$order['deliver_status_str'] = L("_ORDER_STATUS_1_");  //'待发货';
 					}
 					break;
 				case 1:
-					$order['deliver_status_str'] = '店铺已接单';
+					$order['deliver_status_str'] = L("_ORDER_STATUS_2_");  //'店铺已接单';
 					break;
 				case 2:
-					$order['deliver_status_str'] = '配送员接单';
+					$order['deliver_status_str'] = L("_ORDER_STATUS_3_");  //配送员接单';
 					break;
 				case 3:
-					$order['deliver_status_str'] = '配送员取货';
+					$order['deliver_status_str'] = L("_ORDER_STATUS_4_");  //'配送员取货';
 					break;
 				case 4:
-					$order['deliver_status_str'] = '配送中';
+					$order['deliver_status_str'] =L("_ORDER_STATUS_5_");  // '配送中';
 					break;
 				case 5:
-					$order['deliver_status_str'] = '确认收货';
+					$order['deliver_status_str'] =L("_ORDER_STATUS_6_");  // '确认收货';
 					break;
 				case 6:
 					if ($order['is_pick_in_store'] == 2) {
-						$order['deliver_status_str'] = '已提货';
+						$order['deliver_status_str'] =L("_ORDER_STATUS_7_");  // '已提货';
 					} else {
-						$order['deliver_status_str'] = '配送完成';
+						$order['deliver_status_str'] =L("_ORDER_STATUS_6_");  // '配送完成';
 					}
 					break;
 
