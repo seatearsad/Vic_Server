@@ -176,6 +176,22 @@
     </div>
     <include file="Public:footer"/>
 <script>
+
+    $(document).ready(function() {
+        <if condition="$_GET['status'] eq '1' " >
+            layer.open({
+            title:['Message'],
+            content: 'Payment Success',
+                btn: ['Confirm']})
+        </if>
+        <if condition="$_GET['status'] eq '0' " >
+            layer.open({
+                title:['Message'],
+                content: 'Payment Declined',
+                btn: ['Confirm']})
+        </if>
+    });
+
     $(function(){
         $('#form').on('submit', function(e){
             $('#tips').removeClass('tips-err').hide();
