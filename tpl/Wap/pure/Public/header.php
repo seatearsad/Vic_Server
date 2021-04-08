@@ -700,7 +700,6 @@
 
     $('#back_button_span').click(function () {
         <if  condition="$back_url eq ''">
-            //goback();
             window.history.go(-1);
         <else />
             window.location.href="{pigcms{$back_url}";
