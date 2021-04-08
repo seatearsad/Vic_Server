@@ -671,21 +671,20 @@
                                 //alert(re_data['order_type']);
 
                                 $.post($('#moneris_form').attr('action'),re_data,function(data){
-
+                                    alert(data.mode);
                                     if(typeof (data.mode) != 'undefined' && data.mode == 'mpi'){
                                         // layer.open({
                                         //     title:'',
                                         //     content:data.html
                                         // });
 
-                                        //alert("信用卡返回状态1");
+
                                         $('body').append(data.html);
                                         //alert("信用卡返回状态1");
                                     }else {
                                         //信用卡支付返回结果，如果错误就会走这里，data.status=0
                                         layer.closeAll();
                                         //layer.open({title: ['Message'], content: data.info,btn:["Confirm"],end:function(){alert("123");}});
-                                        //layer.open({title: ['Message'], content: data.info,btn:["Confirm"],end:function(){window.location.href=data.url;}});
                                         if (data.status == 1) { //没错误
                                             layer.open({title: ['Message'], content: data.info,btn:["Confirm"],end:function(){window.location.href=data.url;}});
                                             //setTimeout("window.location.href = '" + data.url + "'", 200);
