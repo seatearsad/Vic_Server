@@ -183,6 +183,8 @@ class MyAction extends BaseAction{
                 $recharge_list[$v_a[0]] = $v_a[1];
             }
             //krsort($recharge_list);
+
+            $this->assign('back_url',U("My/index"));
             $this->assign('recharge_list',$recharge_list);
             $this->display();
         }
