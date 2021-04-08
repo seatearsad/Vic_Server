@@ -685,6 +685,7 @@
                                         //信用卡支付返回结果，如果错误就会走这里，data.status=0
                                         layer.closeAll();
                                         //layer.open({title: ['Message'], content: data.info,btn:["Confirm"],end:function(){alert("123");}});
+                                        //layer.open({title: ['Message'], content: data.info,btn:["Confirm"],end:function(){window.location.href=data.url;}});
                                         if (data.status == 1) { //没错误
                                             layer.open({title: ['Message'], content: data.info,btn:["Confirm"],end:function(){window.location.href=data.url;}});
                                             //setTimeout("window.location.href = '" + data.url + "'", 200);
