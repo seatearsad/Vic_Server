@@ -858,8 +858,10 @@ class PayAction extends BaseAction{
 
         //garfunkel add 添加小费记录
         $order_info['tip'] = $_POST['tip'];
-        if($_POST['pay_type'] == 'Cash' || $_POST['pay_type'] == 'offline')
+
+        if($_POST['pay_type'] == 'Cash' || $_POST['pay_type'] == 'offline') //现金支付没有小费
             $order_info['tip'] = 0;
+
         if($order_info['tip'] > 0){
             $order_info['order_total_money'] = $order_info['order_total_money'] + $order_info['tip'];
             $data['tip_charge'] = $order_info['tip'];
@@ -867,6 +869,7 @@ class PayAction extends BaseAction{
                 D('Shop_order')->field(true)->where(array('order_id'=>$order_info['order_id']))->save($data);
             }
         }
+
         if($_POST['note'] && $_POST['note'] != '')
             $order_info['desc'] = $_POST['note'];
         if($_POST['est_time'] && $_POST['est_time'] != ''){
@@ -912,8 +915,6 @@ class PayAction extends BaseAction{
         if(cookie('is_house')){
             $save_result['url'] = str_replace('wap.php', C('INDEP_HOUSE_URL'), $save_result['url']);
         }
-
-
 
         if ($save_result['error_code']) {                       // 现金支付的错误 TRUE  or FALSE
 
