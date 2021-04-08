@@ -743,7 +743,7 @@ class PayAction extends BaseAction{
         }
 
         $order_info = $now_order['order_info'];
-
+        //var_dump($order_info);
         $result_url=$this->get_result_url($_POST['order_id']);
 
         $now_merchant = D('Merchant')->get_info($order_info['mer_id']);
@@ -2788,7 +2788,13 @@ class PayAction extends BaseAction{
     //not touch、地址信息、tip、优惠券
     public function Save_data_pre_pay(&$post){
 
-        $order_id = explode('_',$post['order_id'])[1];
+        $pos=strpos($post['order_id'], "_");
+        if($pos === false){
+            $order_id = $post['order_id'];
+        }else{
+            $order_id = explode('_',$post['order_id'])[1];
+        }
+
         $save_list=array();
         $not_touch=$post['not_touch'];
         $coupon_id=$post['coupon_id'];
@@ -2858,15 +2864,14 @@ class PayAction extends BaseAction{
             $desc_list=array('desc'=>$desc,'desc_en'=>$desc_en);
             $save_list=array_merge($save_list,$desc_list);
         }
-
         //----------------------------------------------------
-
-        ///echo "<br><br>save_list<br>";
+        //echo "<br><br>save_list<br>";
         //var_dump($save_list);
 
         if(count($save_list)>0){
             //echo  "save______";
             D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->save($save_list);
+            //var_dump($aa);
         }
         //----------------------------------------------------
         if($detail != null) {
