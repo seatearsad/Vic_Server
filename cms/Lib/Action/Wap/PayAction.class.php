@@ -3196,7 +3196,7 @@ class PayAction extends BaseAction{
 
         //第2次
         if($_POST['PaRes'] && $_POST['MD']) {
-            echo"---------->0";
+            //echo"---------->0";
 
             $PaRes = $_POST['PaRes'];
             $MD = $_POST['MD'];
@@ -3204,12 +3204,13 @@ class PayAction extends BaseAction{
             $moneris_pay = new MonerisPay();
 
             $resp = $moneris_pay->MPI_Acs($PaRes, $MD);
-            echo"---------->1";
+
+            //echo"---------->1";
 
             if ($resp['responseCode'] != 'null' && $resp['responseCode'] < 50) {                //可能是支付成功
-                echo"---------->2";
+                //echo"---------->2";
                 if(strpos($resp['url'],'#')!== false) {
-                    echo"---------->3";
+                    //echo"---------->3";
                     $script = '<SCRIPT LANGUAGE="Javascript" >var ua = navigator.userAgent;
                             if(ua.match(/TuttiiOS/i)){
                                   window.webkit.messageHandlers.payComplate.postMessage(["'.$resp['url'].'"]);
@@ -3223,9 +3224,9 @@ class PayAction extends BaseAction{
                     echo $script;
                     exit();
                 }else{
-                    echo"---------->4";
+                    //echo"---------->4";
                     if(empty($this->user_session)){
-                        echo"---------->41";
+                        //echo"---------->41";
                         $user = D('User')->field(true)->where(array('uid'=>$resp['uid']))->find();
                         session('user',$user);
                         $this->user_session = session('user');
@@ -3238,9 +3239,9 @@ class PayAction extends BaseAction{
                 }
 
             } else {                                                                            //可能是支付失败
-                echo"---------->5";
+                //echo"---------->5";
                 if(strpos($resp['url'],'#')!== false) {
-                    echo"---------->6";
+                    //echo"---------->6";
                     //echo $resp['message'];
                     $script = '<SCRIPT LANGUAGE="Javascript" >var ua = navigator.userAgent;
                             if(ua.match(/TuttiiOS/i)){
@@ -3255,13 +3256,13 @@ class PayAction extends BaseAction{
                     echo $script;
                     exit();
                 }else{
-                    echo"---------->7";
+                    //echo"---------->7";
                     redirect($resp['url']."&status=0");
                     //$this->error($resp['message'], $resp['url']);
                 }
             }
         }else{
-            echo"---------->8";
+            //echo"---------->8";
             $this->error();
         }
         //$this->success($result['message'], $result['url']);

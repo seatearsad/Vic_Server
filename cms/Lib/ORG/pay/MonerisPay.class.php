@@ -776,7 +776,7 @@ class MonerisPay
 
     public function getOrderInfoFromMD($MD){
         //$orderInfo = '-'.$data['order_type'].'-'.$data['order_id'].'-'.$from_type.'-'.$save.'-'.$tip.'-'.$coupon_id.'-'.$card_user_name.'-'.$data_key.'-';
-       var_dump($MD);die();
+       //var_dump($MD);die();
         $arr = explode('-',$MD);
         $orderInfo['order_type'] = $arr[1];
         $orderInfo['orderId'] = $arr[2];
