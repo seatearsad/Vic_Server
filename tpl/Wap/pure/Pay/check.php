@@ -671,14 +671,12 @@
                                 //alert(re_data['order_type']);
 
                                 $.post($('#moneris_form').attr('action'),re_data,function(data){
-                                    alert(data.mode);
+
                                     if(typeof (data.mode) != 'undefined' && data.mode == 'mpi'){
                                         // layer.open({
                                         //     title:'',
                                         //     content:data.html
                                         // });
-
-
                                         $('body').append(data.html);
                                         //alert("信用卡返回状态1");
                                     }else {
