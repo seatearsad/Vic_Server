@@ -832,6 +832,7 @@ class PayAction extends BaseAction{
         if(empty($now_user)){
             $this->error_tips(L('_NO_GET_INFO_'));
         }
+
         //判断积分是否够用 防止支付同时积分被改动
 
         if ($_POST['use_score']) {
@@ -857,6 +858,7 @@ class PayAction extends BaseAction{
         }
 
         $order_info['use_score'] = $_POST['use_score'];
+
         //这里为了解决app支付
         if($_POST['use_balance']==1){
             $order_info['use_balance'] = 1;
@@ -953,9 +955,13 @@ class PayAction extends BaseAction{
 
             //$this->success_tips($save_result['msg'], $save_result['url']);
             //die($result_url);
+            //echo ("---- 余额支付成功！！");
+
             $this->success_tips($save_result['msg'], $result_url."1");          // -------------------------------------------------- 余额支付 正确结果>>>>>>>
 
         } else {       //现金支付结果
+
+            //echo ("---- 现金支付结果！！");
 
             //需要支付的钱
             $pay_money = round($save_result['pay_money'] * 100) / 100;
@@ -2791,10 +2797,13 @@ class PayAction extends BaseAction{
         $detail=$post['address_detail'];
 
         //----------------------------------------------------
+
         if($not_touch != null && $not_touch == 1){
             $save_list['not_touch']=1;
         }
+
         //----------------------------------------------------
+
         if($tip != null) {
             if($post['pay_type'] == 'Cash' || $post['pay_type'] == 'offline'){
                 //现金支付没有小费
@@ -2802,8 +2811,11 @@ class PayAction extends BaseAction{
             }
             $save_list['tip_charge']=$tip;
         }
+
         //----------------------------------------------------
+
         $order = D('Shop_order')->where(array('order_id'=>$order_id))->find();
+
         if($coupon_id != null && trim($coupon_id) != ''){
 
             //如果选择的为活动优惠券
@@ -2834,9 +2846,8 @@ class PayAction extends BaseAction{
 
         }else{
 
-
-
         }
+
         //----------------------------------------------------
         if($desc != null || trim($desc) != '') {
             if(!checkEnglish($desc) && trim($desc) != ''){
@@ -2847,8 +2858,14 @@ class PayAction extends BaseAction{
             $desc_list=array('desc'=>$desc,'desc_en'=>$desc_en);
             $save_list=array_merge($save_list,$desc_list);
         }
+
         //----------------------------------------------------
+
+        ///echo "<br><br>save_list<br>";
+        //var_dump($save_list);
+
         if(count($save_list)>0){
+            //echo  "save______";
             D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->save($save_list);
         }
         //----------------------------------------------------
