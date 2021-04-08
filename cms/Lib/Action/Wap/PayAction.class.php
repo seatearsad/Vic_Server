@@ -2666,13 +2666,13 @@ class PayAction extends BaseAction{
         if($resp['requestMode'] && $resp['requestMode'] == "mpi"){
 
             if($resp['mpiSuccess'] == "true"){
-                $result = array('error_code' => false,'mode'=>$resp['requestMode'],'html'=>$resp['mpiInLineForm'], 'msg' => $resp['message']);
+                $result = array('error_code' => false,'mode'=>$resp['requestMode']."+++++",'html'=>$resp['mpiInLineForm'], 'msg' => $resp['message']);
                 $this->ajaxReturn($result);
             }else{
                 if ($_POST['order_type']=='recharge'){
-                    $this->error($resp['message'],$result_url,true);
+                    $this->error(L("V3_ORDER_RESULT_PAYMENT_FAIL")."<br>(".$resp['message'].")",$result_url,true);  //这里已经弹出对话框，所以就不用在myinfo里弹了
                 }else{
-                    $this->error($resp['message'],$result_url."0",true);
+                    $this->error(L("V3_ORDER_RESULT_PAYMENT_FAIL")."<br>(".$resp['message'].")",$result_url."0",true);
                 }
             }
 
