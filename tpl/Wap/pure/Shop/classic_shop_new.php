@@ -83,16 +83,17 @@
                 padding-top:0px;
             }
             #shopTitle{
+                line-height: 20px;
                 margin-left: 0px;
-                margin-top: 3px;
-                margin-bottom:0px;
+                margin-top: 10px;
+                margin-bottom: 4px;
                 margin-right: 50px;
                 font-size: 21px;
                 color: #000000;
-                overflow:hidden;
-                text-overflow:ellipsis;
-                white-space:nowrap;
-                flex:1 1 100%
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                flex: 1 1 100%;
             }
             #shopTitle_Header{
                 opacity: 1;
@@ -108,11 +109,13 @@
                 margin-bottom: 5px;
             }
             #shopNoticeText{
-                margin-bottom: 5px;
-                height: 22px;
+                margin-bottom: 3px;
                 overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
+                margin-right: 5px;
+                line-height: 1.3;
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 2;
             }
             .backBtn {
                 position: relative;
