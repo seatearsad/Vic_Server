@@ -9,6 +9,7 @@ class CommonAction extends Action
 	protected $user_level;
 	protected function _initialize() 
 	{
+
 		$serverHost = '';
 		if (function_exists('getallheaders')) 
 		{

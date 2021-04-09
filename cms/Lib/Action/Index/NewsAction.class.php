@@ -6,12 +6,14 @@
  class NewsAction extends BaseAction{
      protected $type = 0;
 	 public function index(){
+         echo"----NewsAction---";
             $cate = D('System_news_category');
             $news_cat = $cate->where(array('status'=>1,'type'=>$this->type))->order('sort DESC')->select();
             $this->assign('news_cat',$news_cat);
             $cat_id = $_GET['category_id'];
 
             if(isset($cat_id)){
+
                 if($cat_id != 0){
                     $now_cat = $cate->where(array('id'=>$cat_id))->find();
                 }else{
@@ -27,6 +29,7 @@
 
                 $this->display('category');
             }else if(!empty($_GET['id'])){
+
                 $news = D('System_news')->where(array('id'=>$_GET['id']))->find();
                 $now_cat = $cate->where(array('id'=>$news['category_id']))->find();
                 $this->assign('now_cat',$now_cat);
@@ -39,6 +42,7 @@
 
                 $this->display('news');
             }else{
+
                 $news = $this->getCateList(3,0,false);
                 $this->assign('news_all',$news['list']);
 
@@ -62,8 +66,10 @@
                 $commend = $this->getCateList(5,0,false,true);
                 $this->assign('commend',$commend['list']);
                 $this->assign('commend_num',count($commend['list']));
+
                 $this->display();
             }
+
 
 	 }
 

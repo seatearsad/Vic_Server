@@ -11,6 +11,8 @@ class CommonAction extends Action{
 	protected $static_public;
 	protected $user_level;
     protected function _initialize(){
+        //Index 里包含的 CommonAction 是这个
+        echo"----CommonAction---";
 		if(empty($_SERVER['REQUEST_SCHEME'])){
 			if($_SERVER['SERVER_PORT'] == '443'){
 				$_SERVER['REQUEST_SCHEME'] = 'https';
