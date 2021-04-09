@@ -211,13 +211,13 @@ class AreaAction extends BaseAction{
 						$tmp = substr($tmp, 0,-1);
 						$where['group_id'] = array('in',$tmp);
 						if(!D('group')->where($where)->save(array('prefix_title'=>$_POST['area_name']))){
-							$this->error('修改失败！请重试~~');
+							$this->error(L('J_MODIFICATION_FAILED'));
 						}
                     }
                 }
 				$this->success('Success');
 			}else{
-				$this->error('修改失败！请重试~');
+				$this->error(L('J_MODIFICATION_FAILED'));
 			}
 		}else{
 			$this->error('非法提交,请重新提交~');

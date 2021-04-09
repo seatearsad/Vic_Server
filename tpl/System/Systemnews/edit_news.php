@@ -33,15 +33,15 @@
 			</tr>
             <tr>
                 <th width="80">{pigcms{:L('I_SUBTITLE')}</th>
-                <td><input type="text" class="input fl" name="sub_title" value="{pigcms{$news.sub_title}" size="75" placeholder="{pigcms{:L('I_SUBTITLE')}" validate="maxlength:50,required:true"/></td>
+                <td><input type="text" class="input fl" name="sub_title" value="{pigcms{$news.sub_title|default=L('J_NO_CONTENT')}" size="75" placeholder="{pigcms{:L('I_SUBTITLE')}" validate="maxlength:50,required:true"/></td>
             </tr>
             <tr>
                 <th width="80">{pigcms{:L('I_KEYWORDS')}</th>
-                <td><input type="text" class="input fl" name="keyword" size="75" value="{pigcms{$news.keyword}" placeholder="{pigcms{:L('I_KEYWORDS')}" validate="maxlength:100,required:true"/></td>
+                <td><input type="text" class="input fl" name="keyword" size="75" value="{pigcms{$news.keyword|default=L('J_NO_CONTENT')}" placeholder="{pigcms{:L('I_KEYWORDS')}" validate="maxlength:100,required:true"/></td>
             </tr>
             <tr>
                 <th width="80">{pigcms{:L('I_BRIEF_INTRODUCTION')}</th>
-                <td><input type="text" class="input fl" name="desc" size="75" value="{pigcms{$news.desc}" placeholder="{pigcms{:L('I_BRIEF_INTRODUCTION')}" validate="maxlength:150,required:true"/></td>
+                <td><input type="text" class="input fl" name="desc" size="75" value="{pigcms{$news.desc|default=L('J_NO_CONTENT')}" placeholder="{pigcms{:L('I_BRIEF_INTRODUCTION')}" validate="maxlength:150,required:true"/></td>
             </tr>
 			<tr>
 				<th width="80">{pigcms{:L('QW_CATEGORY')}</th>

@@ -230,7 +230,7 @@ class UserAction extends BaseAction {
 
     public function export() {
         if(!$_GET['begin_time'] || !$_GET['end_time']){
-            $this->error("请选择时间段");
+            $this->error(L('J_SPECIFY_TIME'));
         }else {
             set_time_limit(0);
             require_once APP_PATH . 'Lib/ORG/phpexcel/PHPExcel.php';

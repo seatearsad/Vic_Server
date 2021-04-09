@@ -727,9 +727,10 @@ class IndexAction extends BaseAction {
         $admin['menus'] = explode(',', $admin['menus']);
         $this->assign('admin', $admin);
 
-        $menus = D('System_menu')->where(array( 'status' => 1))->select();
+        $menus = D('System_menu')->where(array( 'status' => 1,'show'=>1))->select();
         $list = array();
         foreach ($menus as $menu) {
+            $menu['name'] = lang_substr($menu['name'],C('DEFAULT_LANG'));
             if (empty($menu['fid'])) {
                 if (isset($list[$menu['id']])) {
                     $list[$menu['id']] = array_merge($list[$menu['id']], $menu);
@@ -806,7 +807,7 @@ class IndexAction extends BaseAction {
             $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
             $account = htmlspecialchars($_POST['account']);
             if ($database_area->where("`id`<>'{$id}' AND `account`='{$account}'")->find()) {
-                $this->error('数据库中已存在相同的账号，请更换。');
+                $this->error(L('J_ACCOUNT_EXISTS'));
             }
             if($_POST['level'] != 3)$_POST['area_id'] = 0;
             unset($_POST['id']);
@@ -825,7 +826,7 @@ class IndexAction extends BaseAction {
                 }
                 $_POST['pwd'] = md5($_POST['pwd']);
                 if ($database_area->data($_POST)->add()) {
-                    $this->success('添加成功！');
+                    $this->success(L('J_SUCCEED1'));
                 } else {
                     $this->error('添加失败！请重试~');
                 }

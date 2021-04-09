@@ -57,7 +57,7 @@
             </tr>
             <tr>
                 <th width="80">{pigcms{:L('I_URL')}</th>
-                <td><input type="text" class="input fl" name="link_url" size="75" placeholder="链接地址" validate="maxlength:50"/></td>
+                <td><input type="text" class="input fl" name="link_url" size="75" placeholder="{pigcms{:L('I_URL')}" validate="maxlength:50"/></td>
             </tr>
 			<tr>
 				<th width="80">{pigcms{:L('G_STATUS')}</th>

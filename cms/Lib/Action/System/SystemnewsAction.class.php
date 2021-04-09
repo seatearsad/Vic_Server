@@ -133,9 +133,9 @@
                 $data['is_commend'] = $_POST['is_commend'];
 
 				if(D('System_news')->where('id='.$_POST['id'])->save($data)){
-					$this->success('保存成功！');
+                    $this->success(L('J_SUCCEED3'));
 				}else{
-					$this->error('保存失败！');
+					$this->error(L('J_FAILED_SAVE'));
 				}
 			}else {
 				$news = D('System_news')->where(array('id'=>$_GET['id']))->find();
@@ -182,7 +182,7 @@
 				if(D('System_news_category')->where(array('id'=>$_POST['id']))->save($data)){
 					$this->success('更新成功！');
 				}else{
-					$this->error('更新失败！');
+					$this->error(L('J_FAILED_UPDATE'));
 				}
 			}else {
 				$category = D('System_news_category')->where(array('id'=>$_GET['id']))->find();
@@ -196,7 +196,7 @@
 
 				if(!empty($_POST['id'])){
 					if(D('System_news')->where(array('id'=>$_POST['id']))->delete()){
-						$this->success('删除成功');
+						$this->success(L('J_DELETION_SUCCESS'));
 					}else{
 						$this->error('删除失败！');
 					}
@@ -206,7 +206,7 @@
 						$this->error('删除失败！');
 					}else{
 						D('System_news')->where(array('category_id'=>$_POST['category_id']))->delete();
-						$this->success('删除成功');
+                        $this->success(L('J_DELETION_SUCCESS'));
 					}
 				}
 			}
