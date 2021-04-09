@@ -30,7 +30,7 @@ class ShopAction extends BaseAction
         $category_list = $database_shop_category->field(true)->where($where_list)->order('`cat_sort` DESC,`cat_id` ASC')->select();
         foreach ($category_list as &$v){
             if($v['city_id'] == 0)
-                $v['city_name'] = L('G_UNIVERSAL');
+                $v['city_name'] = L('G_UNIVERSAL') ;
             else {
                 $c = D('Area')->where(array('area_type' => 2, 'is_open' => 1, 'area_id' => $v['city_id']))->find();
                 $v['city_name'] = $c['area_name'];
