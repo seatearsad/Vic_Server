@@ -60,7 +60,7 @@
 								</div>
 								<div class="form-group">
 									<label class="col-sm-1">{pigcms{:L('SHORT_DESCRIPTION_BKADMIN')}</label>
-									<input class="col-sm-3" maxlength="30" name="keywords" type="text" value="" id="keywords"/><span class="form_tips">{pigcms{:L('REQUIRED_INFO_BKADMIN')}</span> <a href="javascript:;" id="get_key_btn">按店铺名称获取</a>
+									<input class="col-sm-3" maxlength="30" name="keywords" type="text" value="" id="keywords"/><span class="form_tips">{pigcms{:L('REQUIRED_INFO_BKADMIN')}</span>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-1"><label for="long_lat">{pigcms{:L('ADDRESS_COORDINATES_BKADMIN')}</label></label>

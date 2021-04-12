@@ -33,26 +33,26 @@
 						<div class="infobox" style="background:#81d2cf;">
 							<div class="infobox-data" style="padding-left:0px;width:100%;text-align:center;">
 								<span class="infobox-data-number" style="color: white;">${pigcms{$all_money}</span>
-								<div class="infobox-content" style="color: white;">商家余额</div>
+								<div class="infobox-content" style="color: white;">{pigcms{:L('MERCHANT_ACCTBALANCE')}</div>
 							</div>
 						</div>
 					</a>
 					<div class="infobox" style="background:#7cbae5;">
 						<div class="infobox-data" style="padding-left:0px;width:100%;text-align:center;">
 							<span class="infobox-data-number">{pigcms{$fans_count}</span>
-							<div class="infobox-content">粉丝</div>
+							<div class="infobox-content">{pigcms{:L('FOLLOWERS_BKADMIN')}</div>
 						</div>
 					</div>
 					<div class="infobox" style="background:#cec0f4;">
 						<div class="infobox-data" style="padding-left:0px;width:100%;text-align:center;">
 							<span class="infobox-data-number">{pigcms{$card_count}</span>
-							<div class="infobox-content">会员卡</div>
+							<div class="infobox-content">{pigcms{:L('MEMBERSHIP_CARD_BKADMIN')}</div>
 						</div>
 					</div>
 					<div class="infobox" style="background:#81d2cf;">
 						<div class="infobox-data" style="padding-left:0px;width:100%;text-align:center;">
 							<span class="infobox-data-number">{pigcms{$lottery_count}</span>
-							<div class="infobox-content">微活动</div>
+							<div class="infobox-content">{pigcms{:L('EVENTS_BKADMIN')}</div>
 						</div>
 					</div>
 					<div class="infobox" style="background:#92bf77;">
@@ -129,7 +129,7 @@
 						<div class="widget-header widget-header-flat">
 							<h4 class="lighter smaller">
 								<i class="ace-icon fa fa-star blue"></i>
-								最新动态
+                                {pigcms{:L('LATEST_NEWS_BKADMIN')}
 							</h4>
 						</div>
 
@@ -162,9 +162,9 @@
 						<button type="button" class="close" data-dismiss="alert">
 							<i class="ace-icon fa fa-times"></i>
 						</button>
-						<p>欢迎大家联系系统管理员咨询或反馈。</p>
+						<p>{pigcms{:L('INQUIRIES_WELCOMED_BKADMIN')}</p>
 						<p>
-							<a class="btn btn-sm btn-success" href="http://wpa.qq.com/msgrd?v=3&uin={pigcms{$config.site_qq}&site=qq&menu=yes" target="_blank">联系管理员QQ</a>
+							<a class="btn btn-sm btn-success" href="http://wpa.qq.com/msgrd?v=3&uin={pigcms{$config.site_qq}&site=qq&menu=yes" target="_blank">{pigcms{:L('VIA_QQ_BKADMIN')}</a>
 						</p>
 					</div>
 				</div>
