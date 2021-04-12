@@ -57,6 +57,10 @@ class StorestaffAction extends BaseAction
         $shop_status = getClose($shop);
         $shop['is_close'] = $shop_status['is_close'] ? 1 : 0;
 
+        $area = D('Area')->where(array('area_id'=>$shop['city_id']))->find();
+        $shop['busy_mode'] = $area['busy_mode'];
+        $shop['min_time'] = $area['min_time'];
+
         $this->assign('store',$shop);
     }
 
@@ -1674,10 +1678,20 @@ class StorestaffAction extends BaseAction
         $database = D('Shop_order');
         $order_id = $condition['order_id'] = intval($_POST['order_id']);
         $condition['store_id'] = $this->store['store_id'];
+        $condition['is_del'] = 0;
         $order = $database->field(true)->where($condition)->find();
 
+        $shop = D('Merchant_store')->field(true)->where(array('store_id' => $this->store['store_id']))->find();
+        $area = D('Area')->where(array('area_id'=>$shop['city_id']))->find();
+        $shop['busy_mode'] = $area['busy_mode'];
+        $shop['min_time'] = $area['min_time'];
+
+        if($shop['busy_mode'] == 1 && $_POST['dining_time'] < $shop['min_time']){
+            $this->error_tips(replace_lang_str(L('D_F_TIP_3'),$shop['min_time']));
+        }
+
         if (empty($order)) {
-            $this->error('订单不存在！');
+            $this->error("Sorry, this order has been cancelled or removed.");
             exit;
         }
         if ($order['status'] == 4 || $order['status'] == 5) {
@@ -3499,9 +3513,16 @@ class StorestaffAction extends BaseAction
 
         $order_data['time_cha'] = $hour.":".$fen;
 
+        $area = D('Area')->where(array('area_id'=>$shop['city_id']))->find();
+        $order_data['busy_mode'] = $area['busy_mode'];
+        $order_data['min_time'] = $area['min_time'];
+        $order_data['tip_msg'] = replace_lang_str(L('D_F_TIP_2'),$order_data['min_time']);
+
         $data['order_data'] = $order_data;
 
         $data['info_str'] = $info_str;
+
+
 
         $this->ajaxReturn($data);
     }

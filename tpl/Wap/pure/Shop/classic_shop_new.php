@@ -16,14 +16,14 @@
 		<meta name="format-detection" content="telephone=no"/>
 		<meta name="format-detection" content="address=no"/>
 		<link rel="stylesheet" type="text/css" href="{pigcms{$static_path}shop/css/shopBase.css?v=1.93"/>
-<!--		<script type="text/javascript" src="{pigcms{:C('JQUERY_FILE_190')}" charset="utf-8"></script>-->
-        <script type="text/javascript" src="{pigcms{$static_path}js/jquery.min.js" charset="utf-8"></script>
+		<script type="text/javascript" src="{pigcms{:C('JQUERY_FILE_190')}" charset="utf-8"></script>
+<!--        <script type="text/javascript" src="{pigcms{$static_path}js/jquery.min.js" charset="utf-8"></script>-->
 		<script type="text/javascript" src="{pigcms{$static_path}js/iscroll.js?220" charset="utf-8"></script>
 		<script type="text/javascript" src="{pigcms{$static_path}js/idangerous.swiper.min.js" charset="utf-8"></script>
 		<script type="text/javascript" src="{pigcms{$static_path}js/fastclick.js" charset="utf-8"></script>
 		<script type="text/javascript" src="{pigcms{$static_path}layer/layer.m.js" charset="utf-8"></script>
 <!--		<script type="text/javascript" src="http://api.map.baidu.com/api?type=quick&ak=4c1bb2055e24296bbaef36574877b4e2&v=1.0" charset="utf-8"></script>		-->
-		<script type="text/javascript" src="{pigcms{$static_path}js/common.js?221" charset="utf-8"></script>
+		<script type="text/javascript" src="{pigcms{$static_path}js/common.js?2221" charset="utf-8"></script>
 		<script type="text/javascript">
 			var locationClassicHash = 'shop-{pigcms{$_GET.shop_id}';
 			var storeUrl = "{pigcms{:U('Shop/classic_shop')}&shop_id={pigcms{$_GET.shop_id}";
@@ -83,16 +83,17 @@
                 padding-top:0px;
             }
             #shopTitle{
+                line-height: 20px;
                 margin-left: 0px;
-                margin-top: 3px;
-                margin-bottom:0px;
+                margin-top: 10px;
+                margin-bottom: 4px;
                 margin-right: 50px;
                 font-size: 21px;
                 color: #000000;
-                overflow:hidden;
-                text-overflow:ellipsis;
-                white-space:nowrap;
-                flex:1 1 100%
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                flex: 1 1 100%;
             }
             #shopTitle_Header{
                 opacity: 1;
@@ -108,11 +109,13 @@
                 margin-bottom: 5px;
             }
             #shopNoticeText{
-                margin-bottom: 5px;
-                height: 22px;
+                margin-bottom: 3px;
                 overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
+                margin-right: 5px;
+                line-height: 1.3;
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 2;
             }
             .backBtn {
                 position: relative;
@@ -223,9 +226,6 @@
             }
             #shopContentBar{
                 background: #f4f4f4;
-            }
-            #shopProductLeftBar2 dd span{
-                background: none;
             }
             #shopProductLeftBar2 dl{
                 margin: 0;
@@ -476,7 +476,7 @@
                 top: 101px;
             }
             .swiper-container{
-                margin-top: 50px;
+                /*margin-top: 50px;*/
             }
             .add_bold{
                 font-weight: bold;
@@ -498,6 +498,10 @@
                 background: white;
                 border-radius: 10px;
             }
+            .closeBtn div {
+                left: 10px;
+                top: 10px;
+            }
             .box_title{
                 font-weight: bold;
             }
@@ -518,6 +522,13 @@
                 color: #333;
                 position: relative;
                 display: flex;
+            }
+            #shopProductLeftBar2 dd span {
+                padding: 8px 10px;
+                line-height: 17px;
+                background: none;
+                display: block;
+                border-bottom: none;
             }
         </style>
 	<body onscroll="scrollProductEvent(1)">
@@ -559,7 +570,7 @@
 					<li class="dropdown-toggle caret type subway" data-nav="type">
 						<span class="nav-head-name">{pigcms{:L('_TYPE_TXT_')}</span>
 					</li>
-				</ul>
+				</ul>·
 				<div class="dropdown-wrapper category">
 					<div class="dropdown-module">
 						<div class="scroller-wrapper">
@@ -642,7 +653,7 @@
 <!--			</section>-->
 			<section id="shopContentBar">
 				<div id="shopProductBox">
-					<div id="shopProductBottomBar"><ul class="clearfix"></ul><div id="shopProductBottomLine"></div></div>
+<!--					<div id="shopProductBottomBar"><ul class="clearfix"></ul><div id="shopProductBottomLine"></div></div>-->
                     <div id="shopCatBar" style="display:none;">
                         <div class="title">
                             {pigcms{:L('_ALL_CLASSIF_')}
@@ -723,8 +734,9 @@
 				<div id="shopPageCatShade" style="z-index: 80"></div>
 <!--                可选规格对话框-->
 				<div id="shopDetailPage" style="display:none;">
-					<div class-s="scrollerBox">
-						<div id="shopDetailpageClose" class="closeBtn"><div></div></div>
+                    <div id="shopDetailpageClose" class="closeBtn"><div></div></div>
+					<div class="scrollerBoxShit" style="padding-bottom: 60px;padding-top: 35px;">
+
 						<div id="shopDetailPageImgbox" class="swiper-container swiper-container-productImg">
 							<div class="swiper-wrapper"></div>
 							<div class="swiper-pagination swiper-pagination-productImg"></div>

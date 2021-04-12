@@ -714,3 +714,17 @@ body{
     padding-left: 10px;
     box-sizing: border-box;
 }
+
+#tip_layer{
+    width: 100%;
+    position: absolute;
+    bottom: 70px;
+    left: 0;
+    background: yellow;
+    color: red;
+    text-align: center;
+    line-height: 30px;
+    display: none;
+    padding: 0 10px;
+    box-sizing: border-box;
+}

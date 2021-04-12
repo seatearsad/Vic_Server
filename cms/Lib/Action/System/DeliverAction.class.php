@@ -23,12 +23,17 @@ class DeliverAction extends BaseAction {
     public function __construct()
     {
         parent::__construct();
-        //garfunke add 更新城市紧急呼叫状态
+        $now = time();
+        //garfunke add 更新城市紧急呼叫状态 以及 忙碌模式
         $city = D('Area')->where(array('area_type'=>2))->select();
         foreach ($city as $v){
             if($v['urgent_time'] != 0 && $v['urgent_time']+7200 <= time()){
                 D('Area')->where(array('area_id'=>$v['area_id']))->save(array('urgent_time'=>0));
                 $this->updateDeliverWorkStatus($v);
+            }
+
+            if($v['busy_mode'] == 1 && $now > $v['open_busy_time']+7200){
+                D('Area')->where(array('area_id'=>$v['area_id']))->save(array('busy_mode'=>0,'min_time'=>0,'open_busy_time'=>0));
             }
         }
     }
@@ -1500,6 +1505,14 @@ class DeliverAction extends BaseAction {
                 if($deliver['reg_status'] == 5){
                     $data['reg_status'] = 0;
                 }
+
+                if($deliver['email'] != "") {
+                    $email = array(array("address"=>$deliver['email'],"userName"=>$deliver['name']));
+                    $title = $title = "Tutti Courier Instructions";
+                    $body = $this->getMailBody($deliver['name']);
+                    $mail = getMail($title, $body, $email);
+                    $mail->send();
+                }
             } else {//未通过
                 //$data['reg_status'] = 1;
                 if($_POST['review_desc'] && $_POST['review_desc'] != '') {
@@ -1526,14 +1539,6 @@ class DeliverAction extends BaseAction {
                     }
                     $data['status'] = 1;
                     D('deliver_user')->where(array('uid' => $uid))->save($data);
-
-                    if($deliver['email'] != "") {
-                        $email = array(array("address"=>$deliver['email'],"userName"=>$deliver['name']));
-                        $title = "Tutti Courier Instructions";
-                        $body = $this->getMailBody($deliver['name']);
-                        $mail = getMail($title, $body, $email);
-                        $mail->send();
-                    }
                 }
                 $this->user_edit();
             }else{
@@ -1817,5 +1822,32 @@ class DeliverAction extends BaseAction {
         $body .= "<p>Tutti Courier Team</p>";
 
         return $body;
+    }
+
+    public function prep_mode(){
+        if($_POST){
+            $data = $_POST['data'];
+            foreach ($_POST['data'] as $v){
+                $data['area_id'] = $v['id'];
+                $data['busy_mode'] = $v['mode'];
+
+                if($v['mode'] == 1) {
+                    $data['min_time'] = $v['min_time'];
+                    $data['open_busy_time'] = time();
+                }else {
+                    $data['min_time'] = 0;
+                    $data['open_busy_time'] = 0;
+                }
+
+                D('Area')->where(array("area_id"=>$v['id']))->save($data);
+             }
+
+            exit(json_encode(array('error' => 0,'message' =>'Success')));
+        }else {
+            $city = D('Area')->where(array('area_type' => 2, 'is_open' => 1))->select();
+            $this->assign('city', $city);
+            //var_dump($city);die();
+            $this->display();
+        }
     }
 }

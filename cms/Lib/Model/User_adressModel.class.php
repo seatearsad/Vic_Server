@@ -47,6 +47,7 @@ class User_adressModel extends Model{
         }else{
             $_POST['detail_en'] = '';
         }
+
         //
 		if($_POST['adress_id']){
 			$condition_user_adress['adress_id'] = $_POST['adress_id'];

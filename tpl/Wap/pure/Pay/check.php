@@ -678,7 +678,7 @@
                                         //     content:data.html
                                         // });
                                         $('body').append(data.html);
-                                        alert("信用卡返回状态1");
+                                        //alert("信用卡返回状态1");
                                     }else {
                                         //信用卡支付返回结果，如果错误就会走这里，data.status=0
                                         layer.closeAll();
@@ -862,11 +862,12 @@
         border-bottom: 0;
         /*border-bottom: 1px solid #e5e5e5;*/
         display: flex;
-        padding: 15px 0px 10px 20px;
+        padding: 10px 0px 2px 20px;
     }
     .goods_name,.goods_price{
         flex: 1 1 100%;
         margin-left:20px;
+        margin-right: 20px;
     }
     .goods_price{
         text-align: right;
@@ -881,7 +882,7 @@
         color: #999;
         margin-top: 2px;
         margin-left: 47px;
-        padding-bottom: 10px;
+        padding-bottom: 5px;
         margin-right: 10px;
         line-height: 1.2em;
     }
@@ -1364,11 +1365,13 @@
                                 </span>
                             </div>
                             <div id="tip_input">
-                                <if condition="$order_info['tip_charge'] gt 0">
+                                <?php
+                                if (($_GET[times]=="2") && ($order_info['paid_times']>0)){
+                                ?>
                                     $ <input type="text" id="tip_fee" name="tip_fee" size="20" pattern="\d{0,}" oninvalid="setCustomValidity('{pigcms{:L(\'_B_PURE_MY_111_\')}---')" data-err="{pigcms{:L('_B_PURE_MY_111_')}===" value="{pigcms{$order_info['tip_charge']}">
-                                <else/>
+                                <?php }else{ ?>
                                     $ <input type="text" id="tip_fee" name="tip_fee" size="20" pattern="\d{0,}" oninvalid="setCustomValidity('{pigcms{:L(\'_B_PURE_MY_111_\')}----')" data-err="{pigcms{:L('_B_PURE_MY_111_')}===" value="">
-                                </if>
+                                <?php }  ?>
                             </div>
                             <span class="tip_more"></span>
                         </div>
@@ -1403,7 +1406,7 @@
                     {pigcms{:L('_TIP_TXT_')} <span class="tip_show"></span>
                 </div>
                 <?php if($system_coupon){ ?>
-                <div <if condition="$order_info['order_type'] == 'recharge'"> style="display: none" </if>>
+                <div <if condition="$order_info['order_type'] == 'recharge'"> style="display: none" <else/> style="color: #ffa52d" </if>>
                     Coupon
                     <span>
                         -${pigcms{:sprintf("%.2f",$system_coupon['discount'])}
@@ -1480,388 +1483,390 @@
             $('.confirm_btn').css('background-color', '#666666');
             $('.confirm_btn').unbind();
         }
-        <if condition="$order_info['tip_charge'] neq 0">
+        <?php
+         if (($_GET[times]=="2") && ($order_info['paid_times']>0)){
+        ?>
             $('#tip_list').hide();
             $('#tip_input').show();
-        </if>
-    });
+        <?php  }  ?>
+   });
 
-    $('input[name="is_agree"]').click(function () {
-        if($('input[name="is_agree"]').is(':checked')){
-            $('.confirm_btn').css('background-color', '#ffa52d');
-            $('.confirm_btn').bind('click',bio_verify);
-        }else{
-            $('.confirm_btn').css('background-color', '#666666');
-            $('.confirm_btn').unbind();
-        }
-    });
+   $('input[name="is_agree"]').click(function () {
+       if($('input[name="is_agree"]').is(':checked')){
+           $('.confirm_btn').css('background-color', '#ffa52d');
+           $('.confirm_btn').bind('click',bio_verify);
+       }else{
+           $('.confirm_btn').css('background-color', '#666666');
+           $('.confirm_btn').unbind();
+       }
+   });
 
-    $('.confirm_btn').click(function () {
-        bio_verify();
-    });
+   $('.confirm_btn').click(function () {
+       bio_verify();
+   });
 
-    $("#ex_code").click(function(){
-        var code = $("input[name='coupon_code']").val();
-        if(code == ""){
-            layer.open({
-                title:'Message',
-                content:"{pigcms{:L('_INPUT_EXCHANGE_CODE_')}"
-            });
-        } else{
-            exchange_code(code);
-        }
-    })
+   $("#ex_code").click(function(){
+       var code = $("input[name='coupon_code']").val();
+       if(code == ""){
+           layer.open({
+               title:'Message',
+               content:"{pigcms{:L('_INPUT_EXCHANGE_CODE_')}"
+           });
+       } else{
+           exchange_code(code);
+       }
+   })
 
-    function exchange_code(code){
-        $.ajax({url:"{pigcms{:U('My/exchangeCode')}",type:"post",data:"code="+code,dataType:"json",success:function(data){
-                if(data.error_code == 0){
-                    layer.open({
-                        title:'Message',
-                        time:1,
-                        content:"Success"
-                    });
-                    window.location.reload();
-                }else{
-                    layer.open({
-                        title:'Message',
-                        time:1,
-                        content:data.msg
-                    });
-                }
-            }
-        });
-    }
-    
-    $('.order_note').click(function () {
-        //$('#est_time_input').trigger('click');
-    });
+   function exchange_code(code){
+       $.ajax({url:"{pigcms{:U('My/exchangeCode')}",type:"post",data:"code="+code,dataType:"json",success:function(data){
+               if(data.error_code == 0){
+                   layer.open({
+                       title:'Message',
+                       time:1,
+                       content:"Success"
+                   });
+                   window.location.reload();
+               }else{
+                   layer.open({
+                       title:'Message',
+                       time:1,
+                       content:data.msg
+                   });
+               }
+           }
+       });
+   }
 
-    var theme = "ios";
-    var mode = "scroller";
-    var display = "bottom";
-    var lang="en";
+   $('.order_note').click(function () {
+       //$('#est_time_input').trigger('click');
+   });
 
-    var myDate = new Date();
-    //获取当前年
-    var year=myDate.getFullYear();
-    //获取当前月
-    var month=myDate.getMonth();
-    //获取当前日
-    var date=myDate.getDate();
-    var h=myDate.getHours() + 1;       //获取当前小时数(0-23)
-    var m=myDate.getMinutes() + 30;
+   var theme = "ios";
+   var mode = "scroller";
+   var display = "bottom";
+   var lang="en";
 
-    $('#est_time_input').mobiscroll().datetime({
-        theme: theme,
-        mode: mode,
-        display: display,
-        dateFormat: 'yyyy-mm-dd',
-        dateOrder:'yyMdd',
-        timeFormat: 'HH:ii',
-        timeWheels: 'HHii',
-        minDate: new Date(year,month,date,h,m),
-        maxDate: new Date(year,month+1,date+1),
-        lang: lang,
-        stepMinute: 1
-    });
-    $('#est_time_input').change(function () {
-        if($(this).val() == '')
-            $('.est_time').html('ASAP');
-        else
-            $('.est_time').html($(this).val());
-    });
+   var myDate = new Date();
+   //获取当前年
+   var year=myDate.getFullYear();
+   //获取当前月
+   var month=myDate.getMonth();
+   //获取当前日
+   var date=myDate.getDate();
+   var h=myDate.getHours() + 1;       //获取当前小时数(0-23)
+   var m=myDate.getMinutes() + 30;
 
-    if($('#balanceBox dd dl dd').size() == 0){
-        $('#balanceBox').hide();
-    }
-    layer.closeAll();
-    var showBuyBtn = true;
+   $('#est_time_input').mobiscroll().datetime({
+       theme: theme,
+       mode: mode,
+       display: display,
+       dateFormat: 'yyyy-mm-dd',
+       dateOrder:'yyMdd',
+       timeFormat: 'HH:ii',
+       timeWheels: 'HHii',
+       minDate: new Date(year,month,date,h,m),
+       maxDate: new Date(year,month+1,date+1),
+       lang: lang,
+       stepMinute: 1
+   });
+   $('#est_time_input').change(function () {
+       if($(this).val() == '')
+           $('.est_time').html('ASAP');
+       else
+           $('.est_time').html($(this).val());
+   });
 
-    //garfunkel add
-    $('input[name="pay_type"]').click(changePay);
+   if($('#balanceBox dd dl dd').size() == 0){
+       $('#balanceBox').hide();
+   }
+   layer.closeAll();
+   var showBuyBtn = true;
 
-    var isb = false;
+   //garfunkel add
+   $('input[name="pay_type"]').click(changePay);
 
-    $(function(){
-        if(parseFloat($('input[name="total_before_discount"]').val()) <= 20){
-            isb = true;
-        }
-        var tipxn = new Array(3,4,5);
-        var i = 0;
-        $('#tip_list').children('span').each(function(){
-            $(this).click(tip_select);
-            if(isb){
-                $(this).text('$' + tipxn[i]);
-            }
-            i++;
-        });
-        CalTip();
-        isShowCredit();
-    });
+   var isb = false;
 
-    //计算小费
-    function CalTip(){
-        var tipNum = 0;
-        var num = $('#tip_fee').val();
-        if(/^\d+(\.\d{1,2})?$/.test(num) && num != ""){
-            tipNum = parseFloat(num);
-        }else{
-            $('#tip_list').children('span').each(function(){
-                if($(this).hasClass('tip_on')){
-                    if(isb)
-                        tipNum = parseFloat($(this).text().replace('$', ""));
-                    else
-                        tipNum = $('input[name="total_before_discount"]').val() *  ($(this).text().replace(/%/, "")/100);
-                }
-            });
-        }
-        //console.log("=======================CalTip"+tipNum);
-        var totalNum = parseFloat($('input[name="charge_total"]').val()) + parseFloat(tipNum.toFixed(2));
+   $(function(){
+       if(parseFloat($('input[name="total_before_discount"]').val()) <= 20){
+           isb = true;
+       }
+       var tipxn = new Array(3,4,5);
+       var i = 0;
+       $('#tip_list').children('span').each(function(){
+           $(this).click(tip_select);
+           if(isb){
+               $(this).text('$' + tipxn[i]);
+           }
+           i++;
+       });
+       CalTip();
+       isShowCredit();
+   });
 
-        $('input[name="tip"]').val(tipNum.toFixed(2));
+   //计算小费
+   function CalTip(){
+       var tipNum = 0;
+       var num = $('#tip_fee').val();
+       if(/^\d+(\.\d{1,2})?$/.test(num) && num != ""){
+           tipNum = parseFloat(num);
+       }else{
+           $('#tip_list').children('span').each(function(){
+               if($(this).hasClass('tip_on')){
+                   if(isb)
+                       tipNum = parseFloat($(this).text().replace('$', ""));
+                   else
+                       tipNum = $('input[name="total_before_discount"]').val() *  ($(this).text().replace(/%/, "")/100);
+               }
+           });
+       }
+       //console.log("=======================CalTip"+tipNum);
+       var totalNum = parseFloat($('input[name="charge_total"]').val()) + parseFloat(tipNum.toFixed(2));
 
-        $('#tip_num').text('$' + tipNum.toFixed(2));
-        $('#add_tip').text('$' + totalNum.toFixed(2));
+       $('input[name="tip"]').val(tipNum.toFixed(2));
 
-        var pay_type = $('input[name="pay_type"]:checked').val();
+       $('#tip_num').text('$' + tipNum.toFixed(2));
+       $('#add_tip').text('$' + totalNum.toFixed(2));
 
-        if(pay_type != 'offline') {
-            $('.tip_show').text('$' + tipNum.toFixed(2));
-            $('.price_total').find('span').text('$' + totalNum.toFixed(2));
-        }
+       var pay_type = $('input[name="pay_type"]:checked').val();
+
+       if(pay_type != 'offline') {
+           $('.tip_show').text('$' + tipNum.toFixed(2));
+           $('.price_total').find('span').text('$' + totalNum.toFixed(2));
+       }
 
 
-        var user_money = {pigcms{$now_user.now_money};
-        if(totalNum > user_money){
-            $('#balance_money').css('color','#C1B9B9');
-            $('#use_balance').removeAttr('checked');
-            $('#use_balance').attr('disabled','disabled');
+       var user_money = {pigcms{$now_user.now_money};
+       if(totalNum > user_money){
+           $('#balance_money').css('color','#C1B9B9');
+           $('#use_balance').removeAttr('checked');
+           $('#use_balance').attr('disabled','disabled');
 
-            $('#normal-fieldset').css('display','block');
-        }else{
-            $('#balance_money').css('color','#666666');
-            $('#use_balance').removeAttr('disabled');
-        }
-        // alert($('#add_tip').text().replace('$', ""));
-    }
+           $('#normal-fieldset').css('display','block');
+       }else{
+           $('#balance_money').css('color','#666666');
+           $('#use_balance').removeAttr('disabled');
+       }
+       // alert($('#add_tip').text().replace('$', ""));
+   }
 
-    function tip_select(){
-        $('#tip_list').children('span').each(function(){
-            $(this).removeClass('tip_on');
-        });
-        $(this).addClass('tip_on');
-        $('#tip_fee').val("");
-        $('#tip_fee').after("<span class='inline-tip'><i class='tip-status tip-status--opinfo'></i></span>").removeClass('form-field--error');
-        CalTip();
-    }
+   function tip_select(){
+       $('#tip_list').children('span').each(function(){
+           $(this).removeClass('tip_on');
+       });
+       $(this).addClass('tip_on');
+       $('#tip_fee').val("");
+       $('#tip_fee').after("<span class='inline-tip'><i class='tip-status tip-status--opinfo'></i></span>").removeClass('form-field--error');
+       CalTip();
+   }
 
-    function changePay() {
-        $("input[name='use_balance']").attr('value',0);
-        $("#use_balance").removeAttr('checked');
+   function changePay() {
+       $("input[name='use_balance']").attr('value',0);
+       $("#use_balance").removeAttr('checked');
 
-        isShowCredit();
-    }
-    function checkTipFee(needAlert){
+       isShowCredit();
+   }
+   function checkTipFee(needAlert){
 
-        var rt=true;
+       var rt=true;
 
-        var tf_obj=$('#tip_fee');
-        tf_obj.val($.trim(tf_obj.val()));
+       var tf_obj=$('#tip_fee');
+       tf_obj.val($.trim(tf_obj.val()));
 
-        var num = tf_obj.val();
+       var num = tf_obj.val();
 
-        if(num != ''){
-            if(!/^\d+(\.\d{1,2})?$/.test(num)){
-                if (needAlert) alert("{pigcms{:L('_PLEASE_RIGHT_PRICE_')}");
-                //tf_obj.focus();
-                tf_obj.after("<span class='inline-tip'><i class='tip-status tip-status--opinfo'></i></span>").addClass('form-field--error');
-                rt=false;
-            }else{
-                $('#tip_list').children('span').each(function(){
-                    $(this).removeClass('tip_on');
-                });
-                rt=true;
-            }
-        }else{
-            var isC = false;
-            rt=true;
-            $('#tip_list').children('span').each(function(){
-                if($(this).hasClass('tip_on')){
-                    isC = true;
-                }
-            });
-            if(!isC){
-                var i=0;
-                $('#tip_list').children('span').each(function(){
-                    if(i == 1){
-                        $(this).addClass('tip_on');
-                    }
-                    i++;
-                });
-            }
-            
-        }
-        if (rt) CalTip();
-        //alert("checkTipFee==>"+rt);
-        return rt;
-    }
-    function isShowCredit(){
-        if($("#use_balance").is(':checked')==true){
-            $('input[name="pay_type"]').removeAttr('checked');
-            $('#tip_label').show();
-            $('#credit').hide();
-            CalTip();
-        }else{
-            var pay_type = $('input[name="pay_type"]:checked').val();
-            if(pay_type == 'moneris'){
-                $('#credit').show();
-                $('#tip_label').show();
-                $('.tip_show').text($('#tip_num').text());
-                $('.price_total').find('span').text($('#add_tip').text());
-            }else if(pay_type == 'weixin' || pay_type == 'alipay'){
-                $('#tip_label').show();
-                $('#credit').hide();
-                $('.tip_show').text($('#tip_num').text());
-                $('.price_total').find('span').text($('#add_tip').text());
-            }else{
-                $('#credit').hide();
-                $('#tip_label').hide();
-                $('.tip_show').text('$0.00');
-                $('.price_total').find('span').text('$' + $('input[name="charge_total"]').val());
-            }
-            check_money(total_money,sysc_price,merchant_money);
-            CalTip();
-        }
-    }
+       if(num != ''){
+           if(!/^\d+(\.\d{1,2})?$/.test(num)){
+               if (needAlert) alert("{pigcms{:L('_PLEASE_RIGHT_PRICE_')}");
+               //tf_obj.focus();
+               tf_obj.after("<span class='inline-tip'><i class='tip-status tip-status--opinfo'></i></span>").addClass('form-field--error');
+               rt=false;
+           }else{
+               $('#tip_list').children('span').each(function(){
+                   $(this).removeClass('tip_on');
+               });
+               rt=true;
+           }
+       }else{
+           var isC = false;
+           rt=true;
+           $('#tip_list').children('span').each(function(){
+               if($(this).hasClass('tip_on')){
+                   isC = true;
+               }
+           });
+           if(!isC){
+               var i=0;
+               $('#tip_list').children('span').each(function(){
+                   if(i == 1){
+                       $(this).addClass('tip_on');
+                   }
+                   i++;
+               });
+           }
 
-    $('#tip_fee').live('focusin focusout',function(event){
-        if(event.type == 'focusin'){
-            $(this).siblings('.inline-tip').remove();$(this).removeClass('form-field--error');
-        }else{
-            checkTipFee(true);
-        }
-    });
+       }
+       if (rt) CalTip();
+       //alert("checkTipFee==>"+rt);
+       return rt;
+   }
+   function isShowCredit(){
+       if($("#use_balance").is(':checked')==true){
+           $('input[name="pay_type"]').removeAttr('checked');
+           $('#tip_label').show();
+           $('#credit').hide();
+           CalTip();
+       }else{
+           var pay_type = $('input[name="pay_type"]:checked').val();
+           if(pay_type == 'moneris'){
+               $('#credit').show();
+               $('#tip_label').show();
+               $('.tip_show').text($('#tip_num').text());
+               $('.price_total').find('span').text($('#add_tip').text());
+           }else if(pay_type == 'weixin' || pay_type == 'alipay'){
+               $('#tip_label').show();
+               $('#credit').hide();
+               $('.tip_show').text($('#tip_num').text());
+               $('.price_total').find('span').text($('#add_tip').text());
+           }else{
+               $('#credit').hide();
+               $('#tip_label').hide();
+               $('.tip_show').text('$0.00');
+               $('.price_total').find('span').text('$' + $('input[name="charge_total"]').val());
+           }
+           check_money(total_money,sysc_price,merchant_money);
+           CalTip();
+       }
+   }
 
-    $('#card_name').live('focusin focusout',function(event){
-        if(event.type == 'focusin'){
-            $(this).siblings('.inline-tip').remove();$(this).closest('.form-field').removeClass('form-field--error');
-        }else{
-            $(this).val($.trim($(this).val()));
-            var name = $(this).val();
-            if(name.length < 2){
-                $(this).after("<span class='inline-tip'><i class='tip-status tip-status--opinfo'></i></span>").closest('.form-field').addClass('form-field--error');
-            }
-        }
-    });
-    $('#card_num').live('focusin focusout',function(event){
-        if(event.type == 'focusin'){
-            $(this).siblings('.inline-tip').remove();$(this).closest('.form-field').removeClass('form-field--error');
-        }else{
-            $(this).val($.trim($(this).val()));
-            var num = $(this).val();
-            if(!/^\d{13,}$/.test(num)){
-                $(this).after("<span class='inline-tip'><i class='tip-status tip-status--opinfo'></i></span>").closest('.form-field').addClass('form-field--error');
-            }
-        }
-    });
+   $('#tip_fee').live('focusin focusout',function(event){
+       if(event.type == 'focusin'){
+           $(this).siblings('.inline-tip').remove();$(this).removeClass('form-field--error');
+       }else{
+           checkTipFee(true);
+       }
+   });
 
-    $('#expiry').live('focusin focusout',function(event){
-        if(event.type == 'focusin'){
-            $(this).siblings('.inline-tip').remove();$(this).closest('.form-field').removeClass('form-field--error');
-        }else{
-            $(this).val($.trim($(this).val()));
-            var expiry = $(this).val();
-            if(expiry.length < 4 || expiry.length > 4){
-                $(this).after("<span class='inline-tip'><i class='tip-status tip-status--opinfo'></i></span>").closest('.form-field').addClass('form-field--error');
-            }
-        }
-    });
+   $('#card_name').live('focusin focusout',function(event){
+       if(event.type == 'focusin'){
+           $(this).siblings('.inline-tip').remove();$(this).closest('.form-field').removeClass('form-field--error');
+       }else{
+           $(this).val($.trim($(this).val()));
+           var name = $(this).val();
+           if(name.length < 2){
+               $(this).after("<span class='inline-tip'><i class='tip-status tip-status--opinfo'></i></span>").closest('.form-field').addClass('form-field--error');
+           }
+       }
+   });
+   $('#card_num').live('focusin focusout',function(event){
+       if(event.type == 'focusin'){
+           $(this).siblings('.inline-tip').remove();$(this).closest('.form-field').removeClass('form-field--error');
+       }else{
+           $(this).val($.trim($(this).val()));
+           var num = $(this).val();
+           if(!/^\d{13,}$/.test(num)){
+               $(this).after("<span class='inline-tip'><i class='tip-status tip-status--opinfo'></i></span>").closest('.form-field').addClass('form-field--error');
+           }
+       }
+   });
 
-    $('#cvd').live('focusin focusout',function(event){
-        if(event.type == 'focusin'){
-            $(this).siblings('.inline-tip').remove();$(this).closest('.form-field').removeClass('form-field--error');
-        }else{
-            $(this).val($.trim($(this).val()));
-            var cvd = $(this).val();
-            if(!/^\d{3,4}$/.test(cvd)){
-                $(this).after("<span class='inline-tip'><i class='tip-status tip-status--opinfo'></i></span>").closest('.form-field').addClass('form-field--error');
-            }
-        }
-    });
+   $('#expiry').live('focusin focusout',function(event){
+       if(event.type == 'focusin'){
+           $(this).siblings('.inline-tip').remove();$(this).closest('.form-field').removeClass('form-field--error');
+       }else{
+           $(this).val($.trim($(this).val()));
+           var expiry = $(this).val();
+           if(expiry.length < 4 || expiry.length > 4){
+               $(this).after("<span class='inline-tip'><i class='tip-status tip-status--opinfo'></i></span>").closest('.form-field').addClass('form-field--error');
+           }
+       }
+   });
 
-    function check_card(){
-        var isT = true;
-        if($('#card_name').val().length < 2 || !/^\d{13,}$/.test($('#card_num').val()) || $('#expiry').val().length != 4 || !/^\d{3,4}$/.test($('#cvd').val())){
-            isT = false;
-        }
-        return isT;
-    }
+   $('#cvd').live('focusin focusout',function(event){
+       if(event.type == 'focusin'){
+           $(this).siblings('.inline-tip').remove();$(this).closest('.form-field').removeClass('form-field--error');
+       }else{
+           $(this).val($.trim($(this).val()));
+           var cvd = $(this).val();
+           if(!/^\d{3,4}$/.test(cvd)){
+               $(this).after("<span class='inline-tip'><i class='tip-status tip-status--opinfo'></i></span>").closest('.form-field').addClass('form-field--error');
+           }
+       }
+   });
 
-    var create_time = "{pigcms{$order_info.create_time}";
-    var jetlag = "{pigcms{$jetlag}";
-    var curr_time = parseInt("{pigcms{:time()}") + parseInt(jetlag)*3600;
-    var count_down = parseInt("{pigcms{$count_down}");
+   function check_card(){
+       var isT = true;
+       if($('#card_name').val().length < 2 || !/^\d{13,}$/.test($('#card_num').val()) || $('#expiry').val().length != 4 || !/^\d{3,4}$/.test($('#cvd').val())){
+           isT = false;
+       }
+       return isT;
+   }
 
-    var cha_time = count_down - (curr_time - create_time);
-    function update_pay_time() {
-        var h = parseInt(cha_time / 3600);
-        var i = parseInt((cha_time - 3600 * h) / 60);
-        var s = (cha_time - 3600 * h) % 60;
-        if (i < 10) i = '0' + i;
-        if (s < 10) s = '0' + s;
+   var create_time = "{pigcms{$order_info.create_time}";
+   var jetlag = "{pigcms{$jetlag}";
+   var curr_time = parseInt("{pigcms{:time()}") + parseInt(jetlag)*3600;
+   var count_down = parseInt("{pigcms{$count_down}");
 
-        //var time_str = h + ':' + i + ':' + s;
-        var time_str = i + ':' + s;
+   var cha_time = count_down - (curr_time - create_time);
+   function update_pay_time() {
+       var h = parseInt(cha_time / 3600);
+       var i = parseInt((cha_time - 3600 * h) / 60);
+       var s = (cha_time - 3600 * h) % 60;
+       if (i < 10) i = '0' + i;
+       if (s < 10) s = '0' + s;
 
-        $('#count_down').html(time_str);
+       //var time_str = h + ':' + i + ':' + s;
+       var time_str = i + ':' + s;
 
-        if(cha_time < 0){
-            layer.open({content:'Payment over-time. You will be directed back to the menu.',shadeClose:false,btn:['OK'],yes:function(){
-                window.location.href = "{pigcms{:U('Shop/classic_shop')}&shop_id={pigcms{$order_info.store_id}";
-            }});
-        }else {
-            window.setTimeout(function () {
-                cha_time--;
-                update_pay_time()
-            }, 1000);
-        }
-    }
-    <if condition="$order_info['order_type'] != 'recharge'">
-    update_pay_time();
-    </if>
-    var width = $(window).width()*2/3;
+       $('#count_down').html(time_str);
 
-    var msg = "<div class='b_font' style='width: "+width+"px;text-align: center;'>{pigcms{:L('V2_SERVICEFEE')}</div>" +
-        "<div class='b_font' style='width: "+width+"px;margin-top: 10px'>{pigcms{:L('V2_TAX')}:${pigcms{:number_format($order_info['tax_price'],2)}</div>" +
-        "<div style='width: "+width+"px;'>{pigcms{:L('V2_TAXDES')}</div>" +
-        "<div class='b_font' style='width: "+width+"px;margin-top: 10px'>{pigcms{:L('V2_PACKINGFEE')}:${pigcms{:number_format($order_info['packing_charge'],2)}</div>" +
-        "<div style='width: "+width+"px;'>{pigcms{:L('V2_PACKINGFEEDES')}</div>" +
-        "<div class='b_font' style='width: "+width+"px;margin-top: 10px'>{pigcms{:L('V2_BOTTLEDEPOSIT')}:${pigcms{:number_format($order_info['deposit_price'],2)}</div>" +
-        "<div style='width: "+width+"px;'>{pigcms{:L('V2_BOTTLEDEPOSITDES')}</div>" +
-        "<div class='b_font' style='width: "+width+"px;margin-top: 10px'>{pigcms{:L('V2_SERVICEFEEDES')}:${pigcms{:number_format($order_info['service_fee'],2)}</div>" +
-        "<div style='width: "+width+"px;'>{pigcms{:replace_lang_str(L('V2_TOTALTAXNFEES'),$order_info['store_service_fee'])}</div>" +
-        "<div class='b_font' style='width: "+width+"px;text-align: right;margin-top: 15px;margin-bottom: 10px;'>{pigcms{:L('V2_SERVICEFEE')}:{pigcms{:number_format($order_info['packing_charge'] + $order_info['tax_price'] + $order_info['deposit_price'] + $order_info['service_fee'],2)}</div>";
+       if(cha_time < 0){
+           layer.open({content:'Payment over-time. You will be directed back to the menu.',shadeClose:false,btn:['OK'],yes:function(){
+               window.location.href = "{pigcms{:U('Shop/classic_shop')}&shop_id={pigcms{$order_info.store_id}";
+           }});
+       }else {
+           window.setTimeout(function () {
+               cha_time--;
+               update_pay_time()
+           }, 1000);
+       }
+   }
+   <if condition="$order_info['order_type'] != 'recharge'">
+   update_pay_time();
+   </if>
+   var width = $(window).width()*2/3;
 
-    $('#tax_fee_img').click(function () {
-        layer.open({
-            title:["",'border:none'],
-            content:msg,
-            style: 'border:none; background-color:#fff; color:#999;'
-        });
-    });
+   var msg = "<div class='b_font' style='width: "+width+"px;text-align: center;'>{pigcms{:L('V2_SERVICEFEE')}</div>" +
+       "<div class='b_font' style='width: "+width+"px;margin-top: 10px'>{pigcms{:L('V2_TAX')}:${pigcms{:number_format($order_info['tax_price'],2)}</div>" +
+       "<div style='width: "+width+"px;'>{pigcms{:L('V2_TAXDES')}</div>" +
+       "<div class='b_font' style='width: "+width+"px;margin-top: 10px'>{pigcms{:L('V2_PACKINGFEE')}:${pigcms{:number_format($order_info['packing_charge'],2)}</div>" +
+       "<div style='width: "+width+"px;'>{pigcms{:L('V2_PACKINGFEEDES')}</div>" +
+       "<div class='b_font' style='width: "+width+"px;margin-top: 10px'>{pigcms{:L('V2_BOTTLEDEPOSIT')}:${pigcms{:number_format($order_info['deposit_price'],2)}</div>" +
+       "<div style='width: "+width+"px;'>{pigcms{:L('V2_BOTTLEDEPOSITDES')}</div>" +
+       "<div class='b_font' style='width: "+width+"px;margin-top: 10px'>{pigcms{:L('V2_SERVICEFEEDES')}:${pigcms{:number_format($order_info['service_fee'],2)}</div>" +
+       "<div style='width: "+width+"px;'>{pigcms{:replace_lang_str(L('V2_TOTALTAXNFEES'),$order_info['store_service_fee'])}</div>" +
+       "<div class='b_font' style='width: "+width+"px;text-align: right;margin-top: 15px;margin-bottom: 10px;'>{pigcms{:L('V2_SERVICEFEE')}:{pigcms{:number_format($order_info['packing_charge'] + $order_info['tax_price'] + $order_info['deposit_price'] + $order_info['service_fee'],2)}</div>";
+
+   $('#tax_fee_img').click(function () {
+       layer.open({
+           title:["",'border:none'],
+           content:msg,
+           style: 'border:none; background-color:#fff; color:#999;'
+       });
+   });
 </script>
 <style>
-    .form-field--error{
-        border:1px #FF0000 solid;
-    }
-    .b_font{
-        color: #555;
-        font-weight: bold;
-        font-size: 16px;
-    }
+   .form-field--error{
+       border:1px #FF0000 solid;
+   }
+   .b_font{
+       color: #555;
+       font-weight: bold;
+       font-size: 16px;
+   }
 </style>
 <if condition="$cheap_info['can_buy'] heq false">
-    <script>layer.open({title:['提示：','background-color:#FF658E;color:#fff;'],content:'您必须关注公众号后才能购买本单！<br/>长按图片识别二维码关注：<br/><img src="{pigcms{$config.site_url}/index.php?c=Recognition&a=get_tmp_qrcode&qrcode_id={pigcms{$order_info['order_id']+2000000000}" style="width:230px;height:230px;"/>',shadeClose:false});$('button.mj-submit').remove();var showBuyBtn = false;</script>
+   <script>layer.open({title:['提示：','background-color:#FF658E;color:#fff;'],content:'您必须关注公众号后才能购买本单！<br/>长按图片识别二维码关注：<br/><img src="{pigcms{$config.site_url}/index.php?c=Recognition&a=get_tmp_qrcode&qrcode_id={pigcms{$order_info['order_id']+2000000000}" style="width:230px;height:230px;"/>',shadeClose:false});$('button.mj-submit').remove();var showBuyBtn = false;</script>
 </if>
 <script>if(showBuyBtn){$('button.mj-submit').show();}</script>
 {pigcms{$hideScript}

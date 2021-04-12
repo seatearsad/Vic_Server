@@ -115,7 +115,22 @@
         </ul>
     </div>
     <div id="memo_up">
-        {pigcms{:L('NEW_DELIVER_GET_BAG')}
+        <p class="y_c text_b" style="font-size: 13px;">Getting Your Delivery Bag</p>
+        <p>&nbsp;</p>
+        <p>
+            <label class="text_b">For Victoria couriers</label>, you will receive an email which includes:
+        </p>
+        <p> - A link to <a href="https://calendly.com/calvin-tutti/15min" target="_blank">book a time slot</a> for pick up,</p>
+        <p> - The address of the pick-up location (in downtown Victoria).</p>
+        <p>&nbsp;</p>
+        <p> Please make sure you’ve booked a time slot before coming to pick up your bag!</p>
+        <p>&nbsp;</p>
+        <label class="text_b">For couriers in all other cities</label>, your bag will be shipped to you once you complete the payment process. One of our agents will call you to confirm your address before shipping the bag.
+        <p>&nbsp;</p>
+        After you get your delivery bag and your account has been activated, you will receive another email with a link to our delivery instructions on how to use the courier app.
+        <p>&nbsp;</p>
+        If you have any questions about your delivery bag and registration process, please email <a href="mailto:hr@tutti.app">hr@tutti.app</div>!
+    <p>&nbsp;</p>
     </div>
     <!--div id="address">
         <div>

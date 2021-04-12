@@ -137,6 +137,12 @@ class MyAction extends BaseAction{
 	}
 	//	我的钱包页面
 	public function my_money(){
+
+	    if(isset($_GET['status'])){
+            $this->assign('status',$_GET['status']);
+        }else{
+            $this->assign('status',"-1");
+        }
 		if($_GET['source'] == 1){
 			$_SESSION['source']	=	1;
 		}else{
@@ -177,6 +183,8 @@ class MyAction extends BaseAction{
                 $recharge_list[$v_a[0]] = $v_a[1];
             }
             //krsort($recharge_list);
+
+            $this->assign('back_url',U("My/index"));
             $this->assign('recharge_list',$recharge_list);
             $this->display();
         }
@@ -480,6 +488,7 @@ class MyAction extends BaseAction{
 
 	/*checkout 选择优惠券*/
 	public function select_card(){
+
 		if(empty($this->user_session)){
 			$this->error_tips(L('_B_MY_LOGINFIRST_'));
 		}
@@ -516,6 +525,7 @@ class MyAction extends BaseAction{
 		}else{
 			$this->error_tips('非法的订单');
 		}
+
 		$now_order = $now_order['order_info'];
 		$now_order['total_money'] = $now_order['order_total_money'];
 
@@ -554,6 +564,7 @@ class MyAction extends BaseAction{
 				$now_order['total_money'] -= $_SESSION['card_discount'];
 				unset($_SESSION['card_discount']);
 			}
+
 			if(!empty($now_order['business_type'])) {
 				$coupon_list = D('System_coupon')->get_noworder_coupon_list($now_order, $_GET['type'], $this->user_session['phone'], $this->user_session['uid'], $platform,$now_order['business_type']);
 			}else{
@@ -577,19 +588,35 @@ class MyAction extends BaseAction{
 		}
 
 		if(!empty($coupon_list)){
+
             $cmf_arr = array_column($coupon_list, 'discount');
             array_multisort($cmf_arr, SORT_DESC, $coupon_list);
             $cmf_arr = array_column($coupon_list, 'is_use');
             array_multisort($cmf_arr, SORT_DESC, $coupon_list);
 
 			$param = $_GET;
+
 			foreach($coupon_list as &$value){
 
-			    if ((float)$now_order['delivery_discount']>0 && $value['is_use']==1){
-                    $value['delivery_discount'] = "1";
+                //如果存在平台优惠 而且 delivery_discount_type=0，优惠券 也是可用的
+                //if ((float)$now_order['delivery_discount']>0 && $now_order['delivery_discount_type']==0){
+                if (((float)$now_order['delivery_discount']>0 && $now_order['delivery_discount_type']==0)||
+                    ((float)$now_order['merchant_reduce']>0 && $now_order['merchant_reduce_type']==0)){
+                    //那么就要提示用户，互斥提示
+                    $value['need_notify_delivery_discount'] = "1";
                 }else{
-                    $value['delivery_discount'] = "0";
+                    //否则，随便用户使用优惠券
+                    $value['need_notify_delivery_discount'] = "0";
                 }
+//                //如果存在平台优惠 而且 delivery_discount_type=0，优惠券 也是可用的
+//			    if ((float)$now_order['delivery_discount']>0 && $now_order['delivery_discount_type']==0 && $value['is_use']==1){
+//                    //那么就要提示用户，互斥提示
+//                    $value['delivery_discount'] = "1";
+//			    }else{
+//			        //否则，随便用户使用优惠券
+//                    $value['delivery_discount'] = "0";
+//                }
+
 				if($_GET['coupon_type']=='mer'){
 					$param['merc_id'] =$value['id'];
 					unset($param['unmer_coupon']);
@@ -633,9 +660,14 @@ class MyAction extends BaseAction{
 			$this->error_tips(L('_B_MY_LOGINFIRST_'));
 		}
 
-		$adress_list = D('User_adress')->get_adress_list($this->user_session['uid']);
+        $adress_list = D('User_adress')->get_adress_list($this->user_session['uid']);
         $sid = $_GET['store_id'] ? $_GET['store_id'] : 0;
-
+        if($sid != 0){
+            $store = D('Store')->get_store_by_id($sid);
+        }else{
+            $store = null;
+        }
+        
         if ($_GET["from"]=="shop"){
             $_GET["from"]="address";
         }
@@ -659,7 +691,6 @@ class MyAction extends BaseAction{
             $this->assign('back_url',U('My/myinfo'));
             $this->assign('new_url',U('My/edit_adress'));
         }
-
 
         $this->assign('page_title',$page_title);
 		if(empty($adress_list)){ //如果没有地址数据，就自动跳转到----->210305 如果地址数据为空，就停在列表里
@@ -842,6 +873,7 @@ class MyAction extends BaseAction{
 
     public function edit_card(){
 	    if($_POST){
+
 	        $data['name'] = $_POST['name'];
 	        $data['card_num'] = $_POST['card_num'];
 	        $data['expiry'] = transYM($_POST['expiry']);
@@ -936,11 +968,12 @@ class MyAction extends BaseAction{
 			if(empty($_POST['adress'])){
 				$this->error(L('_B_MY_NOPOSITION_'));
 			}
+
 			if(D('User_adress')->post_form_save($this->user_session['uid']) !== false){
 				cookie('user_address', 0);
 				$this->success(L('_B_MY_SAVEACCESS_'));
 			}else{
-				$this->error(L('_B_MY_SAVEPOSITIONLOSE_'));
+				$this->error(L('_B_MY_SAVEPOSITIONLOSE_').'----');
 			}
 		}else{
 
@@ -1613,7 +1646,7 @@ class MyAction extends BaseAction{
 
 				//平台余额退款
 				if($now_order['balance_pay'] != '0.00'){
-					$add_result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],'订单退款 (订单号:'.$now_order['order_name'].')',0,0,0,'Order Cancellation (Order #'.$now_order['order_name'].')');
+					$add_result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],'订单退款 (订单号:'.$now_order['order_name'].')-1',0,0,0,'Order Cancellation (Order #'.$now_order['order_name'].')');
 
 					$param = array('refund_time' => time());
 					if($result['error_code']){
@@ -1780,7 +1813,7 @@ class MyAction extends BaseAction{
 
 		//平台余额退款
 		if($now_order['balance_pay'] != '0.00'){
-			$add_result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],'订单退款 (订单号:'.$now_order['order_name'].')',0,0,0,'Order Cancellation (Order #'.$now_order['order_name'].')');
+			$add_result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],'订单退款 (订单号:'.$now_order['order_name'].')-2',0,0,0,'Order Cancellation (Order #'.$now_order['order_name'].')');
 
 			$param = array('refund_time' => time());
 			if($result['error_code']){
@@ -2013,7 +2046,7 @@ class MyAction extends BaseAction{
 
 				//平台余额退款
 				if($now_order['balance_pay'] != '0.00'){
-					$result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],'订单退款 (订单号:'.$now_order['order_name'].')',0,0,0,'Order Cancellation (Order #'.$now_order['order_name'].')');
+					$result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],'订单退款 (订单号:'.$now_order['order_name'].')-3',0,0,0,'Order Cancellation (Order #'.$now_order['order_name'].')');
 
 					$param = array('refund_time' => time());
 					if($result['error_code']){
@@ -2188,7 +2221,7 @@ class MyAction extends BaseAction{
 			}
 			if($now_order['balance_pay']>0){
 
-				$result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],'订单退款 (订单号:'.$now_order['order_name'].')',0,0,0,'Order Cancellation (Order #'.$now_order['order_name'].')');
+				$result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],'订单退款 (订单号:'.$now_order['order_name'].')-4',0,0,0,'Order Cancellation (Order #'.$now_order['order_name'].')');
 				$param = array('refund_time' => time());
 				if($result['error_code']){
 					$param['err_msg'] = $result['msg'];
@@ -2589,7 +2622,7 @@ class MyAction extends BaseAction{
 
 		//平台余额退款
 		if($now_order['system_balance'] != '0.00'){
-			$result = D('User')->add_money($now_order['uid'],$now_order['system_balance'],'订单退款 (订单号:'.$now_order['order_name'].')',0,0,0,'Order Cancellation (Order #'.$now_order['order_name'].')');
+			$result = D('User')->add_money($now_order['uid'],$now_order['system_balance'],'订单退款 (订单号:'.$now_order['order_name'].')-5',0,0,0,'Order Cancellation (Order #'.$now_order['order_name'].')');
 			$param = array('refund_time' => time());
 			if($result['error_code']){
 				$param['err_msg'] = $result['msg'];
@@ -3297,6 +3330,7 @@ class MyAction extends BaseAction{
 	}
     /*Ajax加载——订餐订单列表 默认显示 upcoming的列表*/
 	public function ajax_shop_order_list(){
+
         $list = array();
         $list = $this->SHARE_shop_order_list();
 		if(!empty($list)){
@@ -3317,6 +3351,7 @@ class MyAction extends BaseAction{
         if(!empty($_GET['store_id'])){
             $where .= " AND store_id=".intval($_GET['store_id']);
         }
+
         switch ($status){
             case 0:
                 $where .= " AND paid=0 AND status<4";
@@ -3355,20 +3390,28 @@ class MyAction extends BaseAction{
             }
             $store_ids[] = $st['store_id'];
         }
-        //var_dump($order_list);die();
+
         $m = array();
         if ($store_ids) {
             $store_image_class = new store_image();
-            $merchant_list = D("Merchant_store")->where(array('store_id' => array('in', $store_ids)))->select();
+
+            $merchant_list = D('Merchant_store_shop')->field('store_shop.background,store.*')->join('as store_shop left join '.C('DB_PREFIX').'merchant_store store ON store_shop.store_id = store.store_id')->where(array('store_shop.store_id'=>array('in', $store_ids)))->select();
+            //$merchant_list = M('Merchant_store_shop')->join('as store_shop left join '.C('DB_PREFIX').'merchant_store store ON store_shop.store_id = store.store_id')->where(array('store_shop.store_id'=>array('in', $store_ids)))->select();
+            //$merchant_list = D("Merchant_store")->where(array('store_id' => array('in', $store_ids)))->select();
+            //var_dump($merchant_list);die();
+            //$merchant_shop_list = D("Merchant_store_shop")->where(array('store_id' => array('in', $store_ids)))->select();
             foreach ($merchant_list as $li) {
-                $images = $store_image_class->get_allImage_by_path($li['pic_info']);
-                $li['image'] = $images ? array_shift($images) : array();
+                //$images = $store_image_class->get_allImage_by_path($li['background_']);
+                $image_tmp = explode(',', $li['background']);
+                $li['image'] = C('config.site_url') . '/upload/background/' . $image_tmp[0] . '/' . $image_tmp['1'];
+                //$li['image'] = $images ? array_shift($images) : array();
                 unset($li['status']);
                 $city = D('Area')->where(array('area_id'=>$li['city_id']))->find();
                 $li['jetlag'] = $city['jetlag'];
                 $m[$li['store_id']] = $li;
             }
         }
+
         $list = array();
         foreach ($order_list as $ol) {
             if (isset($m[$ol['store_id']]) && $m[$ol['store_id']]) {
@@ -3377,8 +3420,9 @@ class MyAction extends BaseAction{
                 $list[] = $ol;
             }
         }
-        //var_dump($list);die("-----");
+
         foreach($list as $key=>$val){
+
             $list[$key]['name'] = lang_substr($val['name'],C('DEFAULT_LANG'));
             $list[$key]['order_url'] = U('Shop/order_detail', array('order_id' => $val['order_id']));
             if($val['pay_time']==0) {
@@ -3386,9 +3430,9 @@ class MyAction extends BaseAction{
             }else{
                 $list[$key]['create_time_show'] = date('Y-m-d h:i', $val['pay_time']);
             }
-           ///$list[$key]['create_time_show'] = date('Y-m-d h:i:s',time());
-            ///$list[$key]['create_time_show'] = date_default_timezone_get();
 
+            ///$list[$key]['create_time_show'] = date('Y-m-d h:i:s',time());
+            ///$list[$key]['create_time_show'] = date_default_timezone_get();
             //------------------------------ 更新status等信息 ------------------------------------peter
 
             $status = D('Shop_order_log')->field(true)->where(array('order_id' => $val['order_id']))->order('id DESC')->find();
@@ -3455,6 +3499,7 @@ class MyAction extends BaseAction{
         if($tmp[0]){
             //$this->assign('coupon_list', array_shift($tmp[0]));
             $this->assign('coupon_list', $tmp[0]);
+
         }
         //$this->assign('coupon_list', $coupon_list);
         //$this->card_list();
@@ -4587,7 +4632,7 @@ class MyAction extends BaseAction{
 
 		//平台余额退款
 		if($now_order['balance_pay'] != '0.00'){
-			$add_result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],'订单退款 (订单号:'.$now_order['order_name'].')',0,0,0,'Order Cancellation (Order #'.$now_order['order_name'].')');
+			$add_result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],'订单退款 (订单号:'.$now_order['order_name'].')-6',0,0,0,'Order Cancellation (Order #'.$now_order['order_name'].')');
 
 			$param = array('refund_time' => time());
 			if($result['error_code']){
@@ -5408,7 +5453,6 @@ class MyAction extends BaseAction{
 		}
 	}
 
-
 	private function shop_refund_detail($now_order, $store_id)
 	{
 		$order_id  = $now_order['order_id'];
@@ -5458,7 +5502,7 @@ class MyAction extends BaseAction{
 		//平台余额退款
 		if ($now_order['balance_pay'] != '0.00') {
             //var_dump($now_order);die('---------------');
-			$add_result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],'订单退款 (订单号:'.$now_order['order_name'].')',0,0,0,'Order Cancellation (Order #'.$now_order['order_id'].')');
+			$add_result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],'订单退款 (订单号:'.$now_order['order_id'].').',0,0,0,'Order Cancellation (Order #'.$now_order['order_id'].')');
 
 			$param = array('refund_time' => time());
 			if($result['error_code']){
@@ -6147,30 +6191,52 @@ class MyAction extends BaseAction{
 
     public function exchangeCode(){
 	    if($_POST) {
+
             $code = $_POST['code'];
             $uid = $this->user_session['uid'];
             $order_id=$_POST['order_id'];
-            $order=D('Shop_order')->field("price")->where(array('order_id' => $order_id))->find();
-            $order_price=$order['price'];
-            //die($order);
+            $order=D('Shop_order')->field("goods_price")->where(array('order_id' => $order_id))->find();
+            $order_price=$order['goods_price']; // order  subtotal
+           // die($order);
             $coupon = D('System_coupon')->field(true)->where(array('notice' => $code))->find();
+            //var_dump($coupon);die();
             $cid = $coupon['coupon_id'];
-            $order_money=$coupon['order_money'];
-            //die($order_price."----------".$order_money);
+            $order_money =$coupon['order_money'];
+
+            //die($order_price." >>>>>>>> ".$order_money);
+
             if ($cid) {
+
                 $l_id = D('System_coupon_hadpull')->field(true)->where(array('uid' => $uid, 'coupon_id' => $cid))->find();
                 if ($l_id == null) {    //之前没有领用过
                     $result = D('System_coupon')->had_pull($cid, $uid);
-                    if ($order_price!="" && $order_price<$order_money){ //新加的优惠券当前订单不可用
-                        exit(json_encode(array('error_code' => 2, 'msg' => L('_AL_EXCHANGE_CANTUSER_CODE_'))));
+                    //var_dump($result);die();
+                    if ($result['error_code']==0){ //兑换成功
+                        if ($order_price!="" && ($order_price<$order_money)){         //新加的优惠券当前订单不可用
+                            exit(json_encode(array('error_code' => 2, 'msg' => L('_AL_EXCHANGE_CANTUSER_CODE_'))));   //当前订单不可用
+                        }else{
+                            //echo json_encode($result);                            //当前订单可用
+                            $now_order=D('Shop_order')->field(true)->where(array('order_id' => $order_id))->find();
+
+                            //if ((float)$now_order['delivery_discount']>0 && $now_order['delivery_discount_type']==0){
+                            if (((float)$now_order['delivery_discount']>0 && $now_order['delivery_discount_type']==0)||
+                                ((float)$now_order['merchant_reduce']>0 && $now_order['merchant_reduce_type']==0)){
+                                //那么就要提示用户，互斥提示
+                                exit(json_encode(array('error_code' => 98,'sysc_id'=>$result['coupon']['id'], 'msg' => L('_AL_EXCHANGE_CANUSER_CODE_'))));
+                            }else{
+                                //否则，随便用户使用优惠券
+                                exit(json_encode(array('error_code' => 99,'sysc_id'=>$result['coupon']['id'], 'msg' => L('_AL_EXCHANGE_CANUSER_CODE_'))));
+                            }
+
+                        }
+                    }else{
+                        echo json_encode($result);
                     }
                 }else
                     exit(json_encode(array('error_code' => 1, 'msg' => L('_AL_EXCHANGE_CODE_'))));
             } else {
                 exit(json_encode(array('error_code' => 1, 'msg' => L('_NOT_EXCHANGE_CODE_'))));
             }
-
-            echo json_encode($result);
         }else{
 	        $this->display();
         }

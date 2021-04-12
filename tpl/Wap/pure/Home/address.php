@@ -285,6 +285,7 @@
             $(document).on('click','.searchAddressList dd',function(){
                 //从地址列表里选择
                 $('#pageAddressSearchDel').trigger('click');
+                //alert($(this).index()+" "+$(this).data('name'));
 
                 data_id=$(this).data('id');
                 user_long = $(this).data('long');
@@ -300,21 +301,24 @@
                 $.cookie('userLocationLong',user_long,{expires:700,path:'/'});
                 $.cookie('userLocationLat',user_lat,{expires:700,path:'/'});
                 $.cookie('userLocationName',$(this).data('name'),{expires:700,path:'/'});
+
                 if($(this).data('id')){
                     $.cookie('userLocationId',$(this).data('id'),{expires:700,path:'/'});
                 }
 
+                //alert($.cookie('userLocationId'));
+                // alert($.cookie('userLocationName'));
                 $.getJSON(ajax_url_root+"ajax_set_address_default&aid="+$.cookie('userLocationId') ,function(result){
                     if(result.length > 0){
 
                     }else{
                        alert("Network error, please retry later.");
                     }
+                    //alert('123');
                     window.location.href = "wap.php";
                     mustShowShopList = true;
                     location.hash = 'list';
                 });
-
 
                 return false;
             });
@@ -376,7 +380,7 @@
             data-city="{{ d[i].city_id}}">
             <div class="select_radio">
                 <input type="radio" id="radio-2-{{i}}" name="radio-2-set" class="regular-radio"
-                                             {{# if(d[i].checked=="1") { }} checked {{# } }}/><label for="radio-2-1"></label><br/>
+                {{# if(d[i].checked=="1") { }} checked {{# } }}/><label for="radio-2-{{i}}"></label><br/>
             </div>
             <div class="select_value">
                 <div class="name">{{ d[i].street }} {{ d[i].house }}</div>

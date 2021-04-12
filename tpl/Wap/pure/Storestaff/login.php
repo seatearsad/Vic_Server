@@ -171,7 +171,7 @@ $(function(){
 						  layer.open({
 							title:['提示：','background-color:#FF658E;color:#fff;'],
 							content:'系统检测到您是在微信中访问的，是否需要绑定微信号，下次访问可以免登录！',
-							btn: ['是', '否'],
+							btn: ['Yes', 'No'],
 							shadeClose: false,
 							yes: function(){
 								$.post("/wap.php?g=Wap&c=Deliver&a=freeLogin",function(ret){

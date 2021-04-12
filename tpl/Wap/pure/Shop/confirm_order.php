@@ -247,6 +247,7 @@ a {
     line-height: 20px;
     padding-right: 20px;
     font-size: 14px;
+    word-break: break-word;
 }
 .user_address .div_content .div_select{
     padding: 16px 0 0;
@@ -276,6 +277,7 @@ a {
     font-size: 18px;
     color: #000000;
     margin-bottom: 10px;
+    word-break: break-word;
 }
 
 .menu_wrap .title_bar{
@@ -324,6 +326,7 @@ a {
     }
 .menu_list li h3 {
     font-weight: bold;
+    line-height: 1.2;
 }
 .fr {
     float: none;
