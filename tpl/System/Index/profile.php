@@ -1,7 +1,7 @@
 <include file="Public:header"/>
 	<div class="mainbox">
 		<div id="nav" class="mainnav_title">
-			<a href="{pigcms{:U('Index/profile')}" class="on">修改资料</a>
+			<a href="{pigcms{:U('Index/profile')}" class="on">{pigcms{:L('J_CUSTOMIZED_MENU')}</a>
 		</div>
 		<form method="post" id="myform" action="{pigcms{:U('amend_profile')}" refresh="true" onclick='javascript:return submitcheck();'>
 			<input type="hidden" class="input-text" name="system_menu" value=""/>

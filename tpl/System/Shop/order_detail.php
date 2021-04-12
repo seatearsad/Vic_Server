@@ -120,11 +120,14 @@
         <th colspan="6">{pigcms{:L('_STORE_PRODUCT_DEPOSIT_')}：${pigcms{$order['deposit_price']|floatval} </th>
     </tr>
 	<tr>
-		<th colspan="6">{pigcms{:L('_ORDER_TOTAL_')}：${pigcms{$order['total_price']|floatval} <if condition="$config.open_extra_price eq 1 AND $now_order.extra_price gt 0">+{pigcms{$now_order.extra_price}{pigcms{$config.extra_price_alias_name}</if></th>
+		<th colspan="6">
+            {pigcms{:L('_ORDER_TOTAL_AMOUNT_')}：${pigcms{$order['total_price']|floatval} <if condition="$config.open_extra_price eq 1 AND $now_order.extra_price gt 0">+{pigcms{$now_order.extra_price}{pigcms{$config.extra_price_alias_name}</if>
+            (Order amount does NOT include any discounts or tips)
+        </th>
 	</tr>
 	<if condition="$order['merchant_reduce'] gt 0">
 	<tr>
-		<th colspan="6">店铺优惠：${pigcms{$order['merchant_reduce']|floatval} </th>
+		<th colspan="6">{pigcms{:L('_STORE_DIS_')}：${pigcms{$order['merchant_reduce']|floatval} </th>
 	</tr>
 	</if>
 	<if condition="$order['balance_reduce'] gt 0">
@@ -196,7 +199,7 @@
 	</tr>
 	
 	<tr>
-		<th colspan="6">{pigcms{:L('_NOTE_TXT_')}:{pigcms{$order['desc']|default="N/A"}</th>
+		<th colspan="6">{pigcms{:L('_NOTE_MERCHANT_')}: {pigcms{$order['desc']|default="N/A"}</th>
 	</tr>
 	<if condition="$order['invoice_head']">
 		<tr>

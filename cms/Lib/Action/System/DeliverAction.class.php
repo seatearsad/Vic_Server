@@ -175,7 +175,7 @@ class DeliverAction extends BaseAction {
                 $data['uid'] = $id;
                 D('Deliver_img')->add($data);
             }
-    		$this->success('保存成功');
+    		$this->success(L('J_SUCCEED3'));
     	}
     	//garfunkel 判断城市管理员
         //if($this->system_session['level'] == 3){
@@ -485,7 +485,7 @@ class DeliverAction extends BaseAction {
                         }
                         //$value['order_status'] = "等待接单" . count($record_assign);
                         if ($is_refect == 0) {
-                            $value['order_status'] = '<font color="red">等待接单(全部送餐员拒单)</font>';
+                            $value['order_status'] = '<font color="red">'.L('J_AWAITING_ACCEPTANC').'</font>';
                         }
                     }
 					break;

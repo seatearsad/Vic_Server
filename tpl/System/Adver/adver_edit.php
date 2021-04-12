@@ -33,7 +33,7 @@
 			</tr>
 			<tr>
 				<th width="80">{pigcms{:L('I_BACKGROUND_COLOR')}</th>
-				<td><input type="text" class="input fl" name="bg_color" value="{pigcms{$now_adver.bg_color}" id="choose_color" style="width:120px;" placeholder="" tips=""/>&nbsp;&nbsp;<a href="javascript:void(0);" id="choose_color_box" style="line-height:28px;">{pigcms{:L('I_CHOOSE_COLOR')}</a></td>
+				<td><input type="text" class="input fl" name="bg_color" value="{pigcms{$now_adver.bg_color|default=L('J_NO_CONTENT')}" id="choose_color" style="width:120px;" placeholder="" tips=""/>&nbsp;&nbsp;<a href="javascript:void(0);" id="choose_color_box" style="line-height:28px;">{pigcms{:L('I_CHOOSE_COLOR')}</a></td>
 			</tr>
 			<tr>
 				<th width="80">{pigcms{:L('I_URL')}</th>

@@ -5,7 +5,7 @@
 				<th width="90">Name</th>
 				<th width="90">Phone</th>
 <!-- 				<th width="90">常驻地址距离</th> -->
-				<th width="90">Courier Assignment Distance</th>
+				<th width="90">Distance</th>
 				<th width="90">Click</th>
 			</tr>
 			<volist name="users" id="row">

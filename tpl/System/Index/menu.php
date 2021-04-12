@@ -4,7 +4,7 @@
 		<input type="hidden" name="admin_id" value="{pigcms{$admin.id}"/>
 		<volist name="menus" id="rowset">
 			<tr>
-				<th width="100px">
+				<th width="150px">
 					<label><input type="checkbox" class="menu_{pigcms{$rowset['id']} father_menu" value="{pigcms{$rowset['id']}" name="menus[]" <if condition="in_array($rowset['id'], $admin['menus'])">checked</if>/>　{pigcms{$rowset['name']}</label>
 				</th>
 				<td>
@@ -14,7 +14,7 @@
 				</td>
 			</tr>
 		</volist>
-		<tr><td colspan="2"><label><input type="checkbox" id="all"/> 全选</label></td></tr>
+		<tr><td colspan="2"><label><input type="checkbox" id="all"/> {pigcms{:L('J_SELECT_ALL')}</label></td></tr>
 		</table>
 		<div class="btn hidden">
 			<input type="submit" name="dosubmit" id="dosubmit" value="提交" class="button" />

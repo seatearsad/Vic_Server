@@ -70,9 +70,10 @@
         <th colspan="6">{pigcms{:L('_STORE_PRODUCT_DEPOSIT_')}：$<span id="deposit_price">{pigcms{$order['deposit_price']|floatval}</span></th>
     </tr>
 	<tr>
-		<th colspan="6">{pigcms{:L('_ORDER_TOTAL_')}：
+		<th colspan="6">{pigcms{:L('_ORDER_TOTAL_AMOUNT_')}：
             $<span id="total_price">{pigcms{$order['price']|floatval}</span>
             <if condition="$config.open_extra_price eq 1 AND $now_order.extra_price gt 0">+{pigcms{$now_order.extra_price}{pigcms{$config.extra_price_alias_name}</if>
+            (Order amount does NOT include any discounts or tips)
         </th>
 	</tr>
 	<if condition="$order['card_id']">
@@ -101,7 +102,7 @@
 	</tr>
 	
 	<tr>
-		<th colspan="6">{pigcms{:L('_NOTE_TXT_')}:{pigcms{$order['desc']|default="N/A"}</th>
+		<th colspan="6">{pigcms{:L('_NOTE_MERCHANT_')}: {pigcms{$order['desc']|default="N/A"}</th>
 	</tr>
 </table>
     <input type="hidden" name="goods_price" value="{pigcms{$order['goods_price']|floatval}">

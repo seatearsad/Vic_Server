@@ -22,7 +22,7 @@ class FooterAction extends BaseAction{
 		$_POST['content'] = fulltext_filter($_POST['content']);
 		$_POST['add_time'] = $_SERVER['REQUEST_TIME'];
 		if($database_footer_link->data($_POST)->add()){
-			$this->success('添加成功！');
+			$this->success(L('J_SUCCEED1'));
 		}else{
 			$this->error('添加失败！');
 		}
@@ -45,7 +45,7 @@ class FooterAction extends BaseAction{
 		$_POST['content'] = fulltext_filter($_POST['content']);
 		$_POST['add_time'] = $_SERVER['REQUEST_TIME'];
 		if($database_footer_link->data($_POST)->save()){
-			$this->success('编辑成功！');
+			$this->success(L('J_SUCCEED2'));
 		}else{
 			$this->error('编辑失败！');
 		}

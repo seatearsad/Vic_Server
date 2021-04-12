@@ -27,7 +27,7 @@
 			    <input type="hidden" name="delivery_range_polygon" id="delivery_range_polygon" />
 				<td colspan="2"><div id="allmap" style="height:350px;"></div></td>
 			</tr-->
-			<tr>
+			<!--tr>
 				<th width="90">{pigcms{:L('_BACK_DELIVER_SET_')}</th>
 				<td>
 					<select name="s_is_open_own" class="valid">
@@ -35,7 +35,8 @@
 					<option value="1" <if condition="$now_shop['s_is_open_own'] eq 1">selected</if>>{pigcms{:L('_BACK_ON_')}</option>
 					</select>
 				</td>
-			</tr>
+			</tr-->
+            <input type="hidden" name="s_is_open_own" value="0" />
             <!--
 			<tr class="open_own" >
 				<th colspan="2" style="color:red">配送时间段一的设置</th>

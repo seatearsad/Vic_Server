@@ -30,7 +30,7 @@ class ShopAction extends BaseAction
         $category_list = $database_shop_category->field(true)->where($where_list)->order('`cat_sort` DESC,`cat_id` ASC')->select();
         foreach ($category_list as &$v){
             if($v['city_id'] == 0)
-                $v['city_name'] = L('G_UNIVERSAL');
+                $v['city_name'] = L('G_UNIVERSAL') ;
             else {
                 $c = D('Area')->where(array('area_type' => 2, 'is_open' => 1, 'area_id' => $v['city_id']))->find();
                 $v['city_name'] = $c['area_name'];
@@ -80,7 +80,7 @@ class ShopAction extends BaseAction
         if(IS_POST){
             $database_shop_category = D('Shop_category');
             if($database_shop_category->data($_POST)->add()){
-                $this->success('添加成功！');
+                $this->success(L('J_SUCCEED1'));
             }else{
                 $this->error('添加失败！请重试~');
             }
@@ -115,7 +115,7 @@ class ShopAction extends BaseAction
                 $c = D('Area')->where(array('area_type' => 2, 'is_open' => 1, 'area_id' => $now_category['city_id']))->find();
                 $now_category['city_name'] = $c['area_name'];
             }else{
-                $now_category['city_name'] = "通用";
+                $now_category['city_name'] = L('G_UNIVERSAL');
             }
 
             $this->assign('category',$now_category);
@@ -142,7 +142,7 @@ class ShopAction extends BaseAction
                 }
                 //var_dump($all_list);die();
                 D('Merchant_store')->where(array('store_id'=>array('in',$all_list)))->save(array('service_fee'=>$_POST['service_fee']));
-                $this->success('编辑成功！');
+                $this->success(L('J_SUCCEED2'));
             }else{
                 $this->error('分类不存在！');
             }
@@ -178,7 +178,7 @@ class ShopAction extends BaseAction
                 }
                 //var_dump($all_list);die();
                 D('Merchant_store')->where(array('store_id'=>array('in',$all_list)))->save(array('pay_secret'=>$_POST['pay_secret']));
-                $this->success('编辑成功！');
+                $this->success(L('J_SUCCEED2'));
             }else{
                 $this->error('分类不存在！');
             }
@@ -203,9 +203,9 @@ class ShopAction extends BaseAction
             $where = array('cat_id' => $_POST['cat_id']);
             unset($_POST['cat_id']);
             if ($database_shop_category->where($where)->save($_POST)) {
-                $this->success('编辑成功！');
+                $this->success(L('J_SUCCEED2'));
             } else {
-                $this->error('编辑失败！请重试~');
+                $this->error(L('J_MODIFICATION_FAILED2'));
             }
         } else {
             $this->error('非法提交,请重新提交~');
@@ -227,7 +227,7 @@ class ShopAction extends BaseAction
                 $database_shop_category_relation = D('Shop_category_relation');
                 $condition_shop_category_relation['cat_id'] = intval($_POST['cat_id']);
                 $database_shop_category_relation->where($condition_shop_category_relation)->delete();
-                $this->success('删除成功！');
+                $this->success(L('J_DELETION_SUCCESS'));
             } else {
                 $this->error('删除失败！请重试~');
             }
@@ -267,7 +267,7 @@ class ShopAction extends BaseAction
                     D('Shop_category_relation')->where($where)->save($data);
                 }
             }
-            $this->success('编辑成功！');
+            $this->success(L('J_SUCCEED2'));
         }else {
             $cat_id = $_GET['cat_id'];
             $cat_fid = $_GET['parentid'];
@@ -360,7 +360,7 @@ class ShopAction extends BaseAction
             $data_group_category['cue_field'] = serialize($cue_field);
             $data_group_category['cat_id'] = $now_category['cat_id'];
             if($database_appoint_category->data($data_group_category)->save()){
-                $this->success('添加成功！');
+                $this->success(L('J_SUCCEED1'));
             }else{
                 $this->error('添加失败！请重试~');
             }
@@ -390,7 +390,7 @@ class ShopAction extends BaseAction
             $data_group_category['cue_field'] = serialize($new_cue_field);
             $data_group_category['cat_id'] = $now_category['cat_id'];
             if($database_group_category->data($data_group_category)->save()){
-                $this->success('删除成功！');
+                $this->success(L('J_DELETION_SUCCESS'));
             }else{
                 $this->error('删除失败！请重试~');
             }
@@ -429,7 +429,7 @@ class ShopAction extends BaseAction
             $database_shop_category = D('Shop_discount');
             $_POST['source'] = 0;
             if ($database_shop_category->data($_POST)->add()) {
-                $this->success('添加成功！');
+                $this->success(L('J_SUCCEED1'));
             } else {
                 $this->error('添加失败！请重试~');
             }
@@ -445,9 +445,9 @@ class ShopAction extends BaseAction
             $where = array('id' => $_POST['id']);
             unset($_POST['id']);
             if ($database_shop_discount->where($where)->save($_POST)) {
-                $this->success('编辑成功！');
+                $this->success(L('J_SUCCEED2'));
             } else {
-                $this->error('编辑失败！请重试~');
+                $this->error(L('J_MODIFICATION_FAILED2'));
             }
         } else {
             $this->error('非法提交,请重新提交~');
@@ -1017,9 +1017,9 @@ class ShopAction extends BaseAction
                 unset($_POST['delivery_range_polygon']);
             }
             if (D('Merchant_store_shop')->where($where)->save($_POST)) {
-                $this->success('编辑成功！');
+                $this->success(L('J_SUCCEED2'));
             } else {
-                $this->error('编辑失败！请重试~');
+                $this->error(L('J_MODIFICATION_FAILED2'));
             }
         } else {
             $this->error('非法提交,请重新提交~');
