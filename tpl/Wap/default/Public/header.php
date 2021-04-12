@@ -7,6 +7,7 @@
         display: flex;
         background-color: #ffffff;
         position: fixed;
+        top:0px;
         z-index: 999;
     }
     #header_menu{
@@ -291,7 +292,7 @@
         <li id="menu_about" style="background-image: none">
             <span>{pigcms{:L('_B_PURE_MY_ABOUTUS_')}</span>
         </li>
-        <li style="background-image: none">
+        <li id="menu_blog" style="background-image: none">
             <span>{pigcms{:L('_NEW_BLOGS_')}</span>
         </li>
         <li style="background-image: none">
@@ -339,16 +340,19 @@
         is_open_menu = !is_open_menu;
     });
     $('#menu_home').click(function () {
-        window.location.href = './wap';
+        window.location.href = '../wap';
     });
     $('#menu_shop').click(function () {
-        window.location.href = './wap.php';
+        window.location.href = '../wap.php';
     });
     $('#menu_courier').click(function () {
         window.location.href = "{pigcms{:U('Index/courier')}";
     });
     $('#menu_partner').click(function () {
         window.location.href = "{pigcms{:U('Index/partner')}";
+    });
+    $('#menu_blog').click(function () {
+        window.location.href = '../news';
     });
     $('#menu_about').click(function () {
         window.location.href = '{pigcms{$config.site_url}/about';

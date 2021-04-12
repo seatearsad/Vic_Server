@@ -21,14 +21,13 @@
 			<script>
 				if(/(iphone|ipod|android|windows phone)/.test(navigator.userAgent.toLowerCase())){
 					<if condition="$config['wap_redirect'] eq 1">
-						window.location.href = './wap';
+						window.location.href = '../wapnews';
 					<else/>
 						if(confirm('系统检测到您可能正在使用手机访问，是否要跳转到手机版网站？')){
-							window.location.href = './wap';
+							window.location.href = './wapnews';
 						}
 					</if>
 				}
-
 			</script>
 		</if>
         <include file="Public:facebook"/>

@@ -12,7 +12,9 @@ class CommonAction extends Action{
 	protected $user_level;
     protected function _initialize(){
         //Index 里包含的 CommonAction 是这个
-        echo"----CommonAction---";
+
+        //die ("----------");
+        //var_dump("============".GROUP_NAME);
 		if(empty($_SERVER['REQUEST_SCHEME'])){
 			if($_SERVER['SERVER_PORT'] == '443'){
 				$_SERVER['REQUEST_SCHEME'] = 'https';
@@ -26,6 +28,7 @@ class CommonAction extends Action{
 			$allheaders = getallheaders();
 			$serverHost = $allheaders['Host'];
 		}
+
 		if(empty($serverHost)){
 			$serverHost = $_SERVER['HTTP_HOST'];
 		}
@@ -218,7 +221,7 @@ class CommonAction extends Action{
 				throw_exception(L('_CLASS_NOT_EXIST_').': ' . $class);
 			}
 		}
-		
+
 		session_start();
 		$this->user_session = session('user');
 		$this->assign('user_session',$this->user_session);
@@ -275,6 +278,7 @@ class CommonAction extends Action{
 				}
 			}
 		}
+
 		include('./source/plan/index.php');
 	}
 
