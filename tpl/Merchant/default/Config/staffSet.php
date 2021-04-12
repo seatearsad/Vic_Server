@@ -40,7 +40,7 @@
 								<div class="form-group">
 									<label class="col-sm-1"><label for="password">{pigcms{:L('PASSWORD_BKADMIN')}</label></label>
 									<input type="password" class="col-sm-2" name="password" id="password" />
-									<if condition="$item['password']"><span class="form_tips">(如果不修改密码请留空)</span></if>
+									<if condition="$item['password']"><span class="form_tips">{pigcms{:L('BLANK_IF_NOCHANGE_BKADMIN')}</span></if>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-1"><label for="contact_name">{pigcms{:L('PHONE_NUMBER_BKADMIN')}</label></label>

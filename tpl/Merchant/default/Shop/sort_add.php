@@ -112,7 +112,7 @@
 								<div id="image_preview_box"></div>
 
 								<if condition="$print_list AND empty($sort)">
-								<div class="form-group">
+								<div class="form-group hidden_obj">
 									<label class="col-sm-1" for="Food_status">{pigcms{:L('PRINTER_BKADMIN')}</label>
 									<select name="print_id" id="print_id">
 										<option value="0" selected>选择打印机</option>
@@ -166,7 +166,7 @@ $(function(){
 	});
 
 	$('form.form-horizontal').submit(function(){
-		$(this).find('button[type="submit"]').html('保存中...').prop('disabled',true);
+		$(this).find('button[type="submit"]').html('Save....').prop('disabled',true);
 	});
 	/*分享图片*/
 	$('#image-file').ace_file_input({

@@ -2190,7 +2190,7 @@ class IndexAction extends BaseAction {
         $company_staff_db = M('Merchant_store_staff');
         if (IS_POST) {
             if (!trim($_POST['name']) || !trim($_POST['username'])) {
-                $this->error_tips('姓名、帐号都不能为空');
+                $this->error_tips(L('REQUIRED3_BKADMIN'));
             }
             $data['name'] = trim($_POST['name']);
             $data['username'] = trim($_POST['username']);

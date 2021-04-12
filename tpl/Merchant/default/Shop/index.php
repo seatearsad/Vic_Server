@@ -48,7 +48,7 @@
 											<if condition="empty($vo['sid'])">
 <!--											<td></td>-->
 											<td class="button-column">
-												<a style="width:80px;" class="label label-sm label-pink" title="完善店铺信息" href="{pigcms{:U('Shop/shop_edit',array('store_id'=>$vo['store_id']))}">完善店铺信息{pigcms{:L('STORE_STATUS_BKADMIN')}</a>
+												<a style="width:80px;" class="label label-sm label-pink" title="{pigcms{:L('COMPLETE_STORE_BKADMIN')}" href="{pigcms{:U('Shop/shop_edit',array('store_id'=>$vo['store_id']))}">{pigcms{:L('COMPLETE_STORE_BKADMIN')}</a>
 											</td>
 											<td></td>
 											<td></td>

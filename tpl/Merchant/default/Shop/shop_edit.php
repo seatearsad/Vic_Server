@@ -62,7 +62,7 @@
 								</if>
 								<if condition="$sysnc">
 								<div class="alert alert-info" style="margin:10px;">
-								<button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>同步数据只能在完善店铺信息的时候同步，以后修改店铺时不允许同步
+								<button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>{pigcms{:L('SYNCHRONIZED_BKADMIN')}
 								</div>
 								<div class="form-group hidden_obj">
 									<label class="col-sm-1"><label>同步原外卖数据</label></label>

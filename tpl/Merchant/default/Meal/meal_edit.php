@@ -147,7 +147,7 @@
 <script>
 $(function(){
 	$('form.form-horizontal').submit(function(){
-		$(this).find('button[type="submit"]').html('保存中...').prop('disabled',true);
+		$(this).find('button[type="submit"]').html('Save....').prop('disabled',true);
 	});
 	
 	/*调整保存按钮的位置*/

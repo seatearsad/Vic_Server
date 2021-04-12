@@ -1232,7 +1232,7 @@ class FoodshopAction extends BaseAction
 					}
 				}
 			}
-			$this->success('克隆完成');
+			$this->success(L('CLONING_COMPLETED_BKADMIN'));
 		}
 	}
 	

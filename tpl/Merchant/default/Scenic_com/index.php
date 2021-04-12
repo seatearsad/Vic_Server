@@ -65,7 +65,7 @@
 										</tr>
 									</volist>
 								<else/>
-									<tr class="odd"><td class="button-column" colspan="11" >无内容</td></tr>
+									<tr class="odd"><td class="button-column" colspan="11" >{pigcms{:L('NO_CONTENT_BKADMIN')}</td></tr>
 								</if>
 							</tbody>
 						</table>

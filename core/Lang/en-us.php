@@ -2041,6 +2041,9 @@ return array(
     "MODIFY_PRODUCT_BKADMIN"=>"Modify Product",
     "PRODUCT_INVENTORY_BKADMIN"=>"Product Inventory",
     "NEG1_MEANS_BKADMIN"=>"-1 means unlimited quantity. If the quantity is less than 10, the inventory will be displayed on the product details page.",
+    "BLANK_IF_NOCHANGE_BKADMIN"=>"(Please leave it blank if there is no change)",
+    "CLONING_COMPLETED_BKADMIN"=>"Cloning Completed",
+    "COMPLETE_STORE_BKADMIN"=>"Complete Store Information",
 
     "F_REGISTRATION_INVITED"=>"Registration Invited",
     "F_ORDERS_INVITED"=>"Orders Invited",

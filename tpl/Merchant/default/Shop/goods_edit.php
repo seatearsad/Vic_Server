@@ -156,7 +156,7 @@
 									</div>
 									<span class="form_tips">{pigcms{:L('IMAGE_RATIO_BKADMIN')}</span>
 								</div>
-								<div class="form-group">
+								<div class="form-group hidden_obj">
 									<label class="col-sm-1">{pigcms{:L('IMAGE_SELECT_BKADMIN')}</label>
 									<a href="#modal-table" class="btn btn-sm btn-success" onclick="selectImg('upload_pic_ul','goods')">{pigcms{:L('IMAGE_SELECT_BKADMIN')}</a>
 								</div>
@@ -415,7 +415,7 @@ $('#myTab li a').click(function(){
 			});
 			uploader.on('uploadSuccess',function(file,response){
 				if(response.error == 0){
-					$('#upload_pic_ul').append('<li class="upload_pic_li"><img src="'+response.url+'"/><input type="hidden" name="pic[]" value="'+response.title+'"/><br/><a href="#" onclick="deleteImage(\''+response.title+'\',this);return false;">[ 删除 ]</a></li>');
+					$('#upload_pic_ul').append('<li class="upload_pic_li"><img src="'+response.url+'"/><input type="hidden" name="pic[]" value="'+response.title+'"/><br/><a href="#" onclick="deleteImage(\''+response.title+'\',this);return false;">[ {pigcms{:L('DELETE_BKADMIN')} ]</a></li>');
 				}else{
 					alert(response.info);
 				}

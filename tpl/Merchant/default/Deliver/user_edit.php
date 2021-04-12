@@ -93,7 +93,7 @@
 </div>
 <script type="text/javascript">
 	$('#edit_form').submit(function(){
-		$('#edit_form button[type="submit"]').prop('disabled',true).html('保存中...');
+		$('#edit_form button[type="submit"]').prop('disabled',true).html('Save....');
 		$.post("{pigcms{:U('Deliver/user_edit')}",$('#edit_form').serialize(),function(result){
 			if(result.status == 1){
 				alert(result.info);

@@ -788,7 +788,7 @@ class ConfigAction extends BaseAction{
 					$this->error('帐号已经存在！请换一个。');
 				}
 				if(!trim($_POST['password'])){
-					$this->error('密码不能为空');
+					$this->error('密码不能为空33');
 				}
 				$_POST['password'] = md5($_POST['password']);
 

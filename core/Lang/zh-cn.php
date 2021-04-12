@@ -2041,6 +2041,9 @@ return array(
     "MODIFY_PRODUCT_BKADMIN"=>"修改商品",
     "PRODUCT_INVENTORY_BKADMIN"=>"商品库存",
     "NEG1_MEANS_BKADMIN"=>"-1表示无限量。数量小于10时，商品详情页面会显示库存。",
+    "BLANK_IF_NOCHANGE_BKADMIN"=>"(如果不修改密码请留空)",
+    "CLONING_COMPLETED_BKADMIN"=>"克隆完成",
+    "COMPLETE_STORE_BKADMIN"=>"完善店铺信息",
 
     "F_REGISTRATION_INVITED"=>"邀请注册数",
     "F_ORDERS_INVITED"=>"邀请下单数",

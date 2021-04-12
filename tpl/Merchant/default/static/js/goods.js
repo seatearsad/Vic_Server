@@ -41,7 +41,7 @@ KindEditor.ready(function(K) {
             }
         });
         if(is_return) {
-            $(this).find('button[type="submit"]').html('保存中...').prop('disabled', true);
+            $(this).find('button[type="submit"]').html('Save...').prop('disabled', true);
         }else{
             return is_return;
         }

@@ -458,11 +458,11 @@ class ShopAction extends BaseAction
                     if ($sort && $sort['operation_type'] == 2) {
                         $database_goods_sort->where(array('sort_id' => $sort['sort_id']))->save(array('operation_type' => 1));
                     }
-                    $this->success('添加成功！！', U('Shop/goods_sort',array('store_id' => $now_store['store_id'], 'fid' => $fid)));
+                    $this->success(L('ADDED_SUCC_BKADMIN'), U('Shop/goods_sort',array('store_id' => $now_store['store_id'], 'fid' => $fid)));
                     die;
                 } else {
                     echo $database_goods_sort->_sql();
-                    $this->error('添加失败！！请重试。', U('Shop/goods_sort',array('store_id' => $now_store['store_id'], 'fid' => $fid)));
+                    $this->error(L('J_MODIFICATION_FAILED2'), U('Shop/goods_sort',array('store_id' => $now_store['store_id'], 'fid' => $fid)));
                     die;
                 }
             }
@@ -806,13 +806,13 @@ class ShopAction extends BaseAction
 
                 if ($goods_id = D('Shop_goods')->save_post_form($_POST, $now_store['store_id'])) {
                     D('Image')->update_table_id($_POST['image'], $goods_id, 'goods');
-                    $this->success('添加成功！', U('Shop/goods_list', array('sort_id' => $now_sort['sort_id'])));
+                    $this->success(L('ADDED_SUCC_BKADMIN'), U('Shop/goods_list', array('sort_id' => $now_sort['sort_id'])));
                     die;
-                    $ok_tips = '添加成功！';
+                    $ok_tips = L('ADDED_SUCC_BKADMIN');
                 } else {
-                    $this->error('添加失败！请重试！', U('Shop/goods_list', array('sort_id' => $now_sort['sort_id'])));
+                    $this->error(L('J_MODIFICATION_FAILED2'), U('Shop/goods_list', array('sort_id' => $now_sort['sort_id'])));
                     die;
-                    $error_tips = '添加失败！请重试。';
+                    $error_tips =L('J_MODIFICATION_FAILED2');
                 }
             } else {
                 $return = $this->format_data($_POST);
@@ -1098,6 +1098,7 @@ class ShopAction extends BaseAction
      * 添加配菜
      */
     public function dish_add(){
+
         if($_POST){
             $now_goods = $this->check_goods($_POST['goods_id']);
             $dish_id = $_POST['dish_id'];
@@ -1146,7 +1147,7 @@ class ShopAction extends BaseAction
                 $dish_value_db->where(array('id'=>$k))->save($v);
             }
 
-            $this->success('Success！', U('Shop/dish_add', array('goods_id' => $now_goods['goods_id'],'dish_id'=>$dish_id)));
+            $this->success(L('SUCCESS_BKADMIN'), U('Shop/dish_add', array('goods_id' => $now_goods['goods_id'],'dish_id'=>$dish_id)));
         }else {
             $now_goods = $this->check_goods($_GET['goods_id']);
             $now_sort = $this->check_sort($now_goods['sort_id']);
@@ -1585,11 +1586,11 @@ class ShopAction extends BaseAction
             $data_discount['status'] = intval($_POST['status']);
             $data_discount['source'] = 1;
             if ($database_discount->data($data_discount)->add()) {
-                $this->success('添加成功！！', U('Shop/discount',array('store_id' => $now_store['store_id'])));
+                $this->success(L('ADDED_SUCC_BKADMIN'), U('Shop/discount',array('store_id' => $now_store['store_id'])));
                 die;
-                $ok_tips = '添加成功！！';
+                $ok_tips = L('ADDED_SUCC_BKADMIN');
             }else{
-                $this->error('添加失败！！请重试。', U('Shop/discount',array('store_id' => $now_store['store_id'])));
+                $this->error(L('J_MODIFICATION_FAILED2'), U('Shop/discount',array('store_id' => $now_store['store_id'])));
                 die;
                 $error_tips = '添加失败！！请重试。';
             }
@@ -1621,11 +1622,11 @@ class ShopAction extends BaseAction
             $data_discount['status'] = intval($_POST['status']);
             $data_discount['source'] = 1;
             if ($database_discount->data($data_discount)->save()) {
-                $this->success('添加成功！！', U('Shop/discount',array('store_id' => $now_store['store_id'])));
+                $this->success(L('ADDED_SUCC_BKADMIN'), U('Shop/discount',array('store_id' => $now_store['store_id'])));
                 die;
-                $ok_tips = '添加成功！！';
+                $ok_tips =L('ADDED_SUCC_BKADMIN');
             }else{
-                $this->error('添加失败！！请重试。', U('Shop/discount',array('store_id' => $now_store['store_id'])));
+                $this->error(L('J_MODIFICATION_FAILED2'), U('Shop/discount',array('store_id' => $now_store['store_id'])));
                 die;
                 $error_tips = '添加失败！！请重试。';
             }
@@ -1869,7 +1870,7 @@ class ShopAction extends BaseAction
                     }
                 }
             }
-            $this->success('克隆完成');
+            $this->success(L('CLONING_COMPLETED_BKADMIN'));
         }
     }
 

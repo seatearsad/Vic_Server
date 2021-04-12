@@ -90,7 +90,7 @@
         updateStatus(".statusSwitch .ace-switch", ".statusSwitch", "OPEN", "CLOSED", "shopstatus");
 
         jQuery(document).on('click','#shopList a.red',function(){
-            if(!confirm('确定要删除这条数据吗?不可恢复。')) return false;
+            if(!confirm("{pigcms{:L('SURE_RECOVERABLE_BKADMIN')}")) return false;
         });
     });
     function CreateShop(){
