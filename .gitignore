@@ -1,7 +1,12 @@
 loader-wizard.php
 MP_verify_MGXvD5lC6QBdCJqb.txt
 conf/
-core/
+core/Common
+core/Conf
+core/Extend
+core/Lib
+core/Tpl
+core/pigcms.php
 runtime/
 upload/
 .idea/
