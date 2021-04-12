@@ -2036,6 +2036,11 @@ return array(
     "INQUIRIES_WELCOMED_BKADMIN"=>"欢迎大家联系系统管理员咨询或反馈。",
     "VIA_QQ_BKADMIN"=>"联系管理员QQ",
     'STORE_NOT_EXIST_BKADMIN'=>  '店铺不存在',
+    "ENTER_TAX_BKADMIN"=>"请输入税率！",
+    "CATEGORY_NAME_REQUIRED_BKADMIN"=>"分类名称必填！",
+    "MODIFY_PRODUCT_BKADMIN"=>"修改商品",
+    "PRODUCT_INVENTORY_BKADMIN"=>"商品库存",
+    "NEG1_MEANS_BKADMIN"=>"-1表示无限量。数量小于10时，商品详情页面会显示库存。",
 
     "F_REGISTRATION_INVITED"=>"邀请注册数",
     "F_ORDERS_INVITED"=>"邀请下单数",

@@ -5,7 +5,7 @@
 		<ul class="breadcrumb">
 			<li>
 				<i class="ace-icon fa fa-cubes"></i>
-				<a href="{pigcms{:U('Shop/index')}">{pigcms{$config.shop_alias_name}管理</a>
+				<a href="{pigcms{:U('Shop/index')}">{pigcms{:L('DELIVERY_MANAGEMENT_BKADMIN')}</a>
 			</li>
 			<li class="active"><a href="{pigcms{:U('Shop/goods_sort',array('store_id'=>$now_store['store_id']))}">{pigcms{$now_store.name}</a></li>
 			<li class="active">{pigcms{:L('CREATE_CATEGORY_BKADMIN')}</li>
@@ -44,7 +44,7 @@
 								<div class="form-group">
 									<label class="col-sm-1"><label for="sort">{pigcms{:L('CATEGORY_ORDER_BKADMIN')}</label></label>
 									<input class="col-sm-1" size="10" name="sort" id="sort" type="text" value="{pigcms{$now_sort.sort|default='0'}"/>
-									<span class="form_tips">默认添加顺序排序！手动调值，数值越大，排序越前{pigcms{:L('BASIC_SETTING_BKADMIN')}</span>
+									<span class="form_tips">{pigcms{:L('C_LISTORDERDES')}</span>
 								</div>
                                 <div class="form-group">
                                     <label class="col-sm-1" for="is_weekshow">{pigcms{:L('SETTING_AVAILABILITY(DAY)_BKADMIN')}</label>
@@ -138,7 +138,7 @@
 									<div class="col-md-offset-3 col-md-9">
 										<button class="btn btn-info" type="submit">
 											<i class="ace-icon fa fa-check bigger-110"></i>
-											保存
+											{pigcms{:L('SAVE_BKADMIN')}
 										</button>
 									</div>
 								</div>

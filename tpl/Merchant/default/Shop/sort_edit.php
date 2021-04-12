@@ -5,7 +5,7 @@
 		<ul class="breadcrumb">
 			<li>
 				<i class="ace-icon fa fa-cubes"></i>
-				<a href="{pigcms{:U('Shop/index')}">{pigcms{$config.shop_alias_name}管理</a>
+				<a href="{pigcms{:U('Shop/index')}">{pigcms{:L('DELIVERY_MANAGEMENT_BKADMIN')}</a>
 			</li>
 			<li class="active"><a href="{pigcms{:U('Shop/goods_sort',array('store_id'=>$now_store['store_id']))}">{pigcms{$now_store.name}</a></li>
 			<li class="active">{pigcms{:L('EDIT_CATEGORY_BKADMIN')}</li>
@@ -43,7 +43,7 @@
 								<div class="form-group">
 									<label class="col-sm-1"><label for="sort">{pigcms{:L('CATEGORY_ORDER_BKADMIN')}</label></label>
 									<input class="col-sm-1" size="10" name="sort" id="sort" type="text" value="{pigcms{$now_sort.sort|default='0'}"/>
-									<span class="form_tips">默认添加顺序排序！手动调值，数值越大，排序越前</span>
+									<span class="form_tips">{pigcms{:L('C_LISTORDERDES')}</span>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-1" for="is_weekshow">{pigcms{:L('SETTING_AVAILABILITY(DAY)_BKADMIN')}</label>
@@ -55,25 +55,25 @@
                                     </div>
                                     <div class="col-sm-10" style="margin-top:5px;">
                                         <div style="width:80px;float:left;font-size:16px;">
-                                            <label><input type="checkbox" value="1" name="week[]" <if condition="in_array('1',$now_sort['week'])">checked="checked"</if>/>{pigcms{:L('MON_BKADMIN')}</label>&nbsp;&nbsp;
+                                            <label><input type="checkbox" value="1" name="week[]" <if condition="in_array('1',$now_sort['week'])">checked="checked"</if>/> {pigcms{:L('MON_BKADMIN')}</label>&nbsp;&nbsp;
                                         </div>
                                         <div style="width:80px;float:left;font-size:16px;">
-                                            <label><input type="checkbox" value="2" name="week[]" <if condition="in_array('2',$now_sort['week'])">checked="checked"</if>/>{pigcms{:L('TUE_BKADMIN')}</label>&nbsp;&nbsp;
+                                            <label><input type="checkbox" value="2" name="week[]" <if condition="in_array('2',$now_sort['week'])">checked="checked"</if>/> {pigcms{:L('TUE_BKADMIN')}</label>&nbsp;&nbsp;
                                         </div>
                                         <div style="width:80px;float:left;font-size:16px;">
-                                            <label><input type="checkbox" value="3" name="week[]" <if condition="in_array('3',$now_sort['week'])">checked="checked"</if>/>{pigcms{:L('WED_BKADMIN')}</label>&nbsp;&nbsp;
+                                            <label><input type="checkbox" value="3" name="week[]" <if condition="in_array('3',$now_sort['week'])">checked="checked"</if>/> {pigcms{:L('WED_BKADMIN')}</label>&nbsp;&nbsp;
                                         </div>
                                         <div style="width:80px;float:left;font-size:16px;">
-                                            <label><input type="checkbox" value="4" name="week[]" <if condition="in_array('4',$now_sort['week'])">checked="checked"</if>/>{pigcms{:L('THUR_BKADMIN')}</label>&nbsp;&nbsp;
+                                            <label><input type="checkbox" value="4" name="week[]" <if condition="in_array('4',$now_sort['week'])">checked="checked"</if>/> {pigcms{:L('THUR_BKADMIN')}</label>&nbsp;&nbsp;
                                         </div>
                                         <div style="width:80px;float:left;font-size:16px;">
                                             <label><input type="checkbox" value="5" name="week[]" <if condition="in_array('5',$now_sort['week'])">checked="checked"</if>/> {pigcms{:L('FRI_BKADMIN')}</label>&nbsp;&nbsp;
                                         </div>
                                         <div style="width:80px;float:left;font-size:16px;">
-                                            <label><input type="checkbox" value="6" name="week[]" <if condition="in_array('6',$now_sort['week'])">checked="checked"</if>/>{pigcms{:L('SAT_BKADMIN')}</label>&nbsp;&nbsp;
+                                            <label><input type="checkbox" value="6" name="week[]" <if condition="in_array('6',$now_sort['week'])">checked="checked"</if>/> {pigcms{:L('SAT_BKADMIN')}</label>&nbsp;&nbsp;
                                         </div>
                                         <div style="width:80px;float:left;font-size:16px;">
-                                            <label><input type="checkbox" value="0" name="week[]" <if condition="in_array('0',$now_sort['week'])">checked="checked"</if>/>{pigcms{:L('SUN_BKADMIN')}</label>&nbsp;&nbsp;
+                                            <label><input type="checkbox" value="0" name="week[]" <if condition="in_array('0',$now_sort['week'])">checked="checked"</if>/> {pigcms{:L('SUN_BKADMIN')}</label>&nbsp;&nbsp;
                                         </div>
                                     </div>
 								</div>
@@ -143,7 +143,7 @@
 									<div class="col-md-offset-3 col-md-9">
 										<button class="btn btn-info" type="submit">
 											<i class="ace-icon fa fa-check bigger-110"></i>
-											保存
+                                            {pigcms{:L('SAVE_BKADMIN')}
 										</button>
 									</div>
 								</div>

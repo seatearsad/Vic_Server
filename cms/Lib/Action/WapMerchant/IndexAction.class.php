@@ -1152,7 +1152,7 @@ class IndexAction extends BaseAction {
         $this->assign('now_store', $now_store);
         if (IS_POST) {
             if (empty($_POST['sort_name'])) {
-                $error_tips = '分类名称必填！' . '<br/>';
+                $error_tips = L('CATEGORY_NAME_REQUIRED_BKADMIN') . '<br/>';
             } else {
                 $database_Foodshop_goods_sort = D('Foodshop_goods_sort');
                 $data['store_id'] = $now_store['store_id'];

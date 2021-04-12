@@ -71,7 +71,7 @@ class ShopAction extends BaseAction
                 $_POST['store_notice'] = trim($_POST['store_notice']);
             }
             if(empty($_POST['store_category'])){
-                $this->error('请至少选一个分类！');
+                $this->error(L('LEAST_CATEGORY_BKADMIN'));
             }
             $cat_ids = array();
             foreach ($_POST['store_category'] as $cat_a) {
@@ -222,7 +222,7 @@ class ShopAction extends BaseAction
             $store_data['pay_method'] = $pay_method;
             D('Merchant_store')->where(array('store_id'=>$store_id))->save($store_data);
 
-            $this->success('编辑成功！');
+            $this->success(L('EDITING_SUCCESS_BKADMIN'));
             // 			}else{
             // 				$this->error('编辑失败！请重试。');
             // 			}
@@ -254,6 +254,7 @@ class ShopAction extends BaseAction
             //所有分类
             $database_shop_category = D('Shop_category');
             $category_list = $database_shop_category->lists();//field(true)->where(array('cat_status' => 1))->order('`cat_sort` DESC,`cat_id` ASC')->select();
+            //var_dump($category_list);die();
             $this->assign('category_list', $category_list);
 
             //此店铺有的分类
@@ -394,7 +395,7 @@ class ShopAction extends BaseAction
 
         if (IS_POST) {
             if (empty($_POST['sort_name'])) {
-                $error_tips = '分类名称必填！'.'<br/>';
+                $error_tips = L('CATEGORY_NAME_REQUIRED_BKADMIN').'<br/>';
             } else {
                 $database_goods_sort = D('Shop_goods_sort');
                 $data_goods_sort['store_id'] = $now_store['store_id'];
@@ -509,7 +510,7 @@ class ShopAction extends BaseAction
         $ok_tips = '';
         if (IS_POST) {
             if (empty($_POST['sort_name'])) {
-                $error_tips = '分类名称必填！'.'<br/>';
+                $error_tips = L('CATEGORY_NAME_REQUIRED_BKADMIN') . '<br/>';
             } else {
                 $database_goods_sort = D('Shop_goods_sort');
                 $data_goods_sort['sort_id'] = $now_sort['sort_id'];
@@ -706,16 +707,16 @@ class ShopAction extends BaseAction
             //  			die;
 
             if (empty($_POST['name'])) {
-                $error_tips .= '商品名称必填！'.'<br/>';
+                $error_tips .= L('NAME_REQUIRED2_BKADMIN').'<br/>';
             }
             if (empty($_POST['unit'])) {
-                $error_tips .= '商品单位必填！'.'<br/>';
+                $error_tips .= L('UNIT_REQUIRED_BKADMIN').'<br/>';
             }
             if (empty($_POST['price'])&&!$this->config['open_extra_price']) {
-                $error_tips .= '商品价格必填！'.'<br/>';
+                $error_tips .=L('PRICE_REQUIRED_BKADMIN').'<br/>';
             }
             if (empty($_POST['pic'])) {
-                //$error_tips .= '请至少上传一张照片！'.'<br/>';
+                $error_tips .=L('LEAST_ONE_BKADMIN').'<br/>';
             }
 
             $_POST['name'] = fulltext_filter($_POST['name']);
@@ -933,18 +934,19 @@ class ShopAction extends BaseAction
         $now_goods = $this->check_goods($_GET['goods_id']);
         $now_sort = $this->check_sort($now_goods['sort_id']);
         $now_store = $this->check_store($now_sort['store_id']);
+        //var_dump($now_store);die();
         if (IS_POST) {
             if (empty($_POST['name'])) {
-                $error_tips .= '商品名称必填！'.'<br/>';
+                $error_tips .= L('NAME_REQUIRED2_BKADMIN').'<br/>';
             }
             if (empty($_POST['unit'])) {
-                $error_tips .= '商品单位必填！'.'<br/>';
+                $error_tips .= L('UNIT_REQUIRED_BKADMIN').'<br/>';
             }
             if (empty($_POST['price'])&&!$this->config['open_extra_price']) {
-                $error_tips .= '商品价格必填！'.'<br/>';
+                $error_tips .=L('PRICE_REQUIRED_BKADMIN').'<br/>';
             }
             if (empty($_POST['pic'])) {
-                //$error_tips .= '请至少上传一张照片！'.'<br/>';
+                $error_tips .=L('LEAST_ONE_BKADMIN').'<br/>';
             }
 
             $_POST['name'] = fulltext_filter($_POST['name']);
@@ -1144,7 +1146,7 @@ class ShopAction extends BaseAction
                 $dish_value_db->where(array('id'=>$k))->save($v);
             }
 
-            $this->success('成功！', U('Shop/dish_add', array('goods_id' => $now_goods['goods_id'],'dish_id'=>$dish_id)));
+            $this->success('Success！', U('Shop/dish_add', array('goods_id' => $now_goods['goods_id'],'dish_id'=>$dish_id)));
         }else {
             $now_goods = $this->check_goods($_GET['goods_id']);
             $now_sort = $this->check_sort($now_goods['sort_id']);
@@ -1335,11 +1337,13 @@ class ShopAction extends BaseAction
         $condition_merchant_store['store_id'] = $store_id;
         $condition_merchant_store['mer_id'] = $this->merchant_session['mer_id'];
         $now_store = $database_merchant_store->field(true)->where($condition_merchant_store)->find();
+
         if (empty($now_store)) {
             $this->error('店铺不存在！');
         } else {
             //return $now_store;
             if ($now_shop = D('Merchant_store_shop')->field(true)->where($condition_merchant_store)->find()) {
+                lang_substr_with_default_lang($now_shop['pack_alias']);
                 if (!empty($now_shop['background'])) {
                     $image_tmp = explode(',', $now_shop['background']);
                     $now_shop['background_image'] = C('config.site_url') . '/upload/background/' . $image_tmp[0] . '/' . $image_tmp['1'];

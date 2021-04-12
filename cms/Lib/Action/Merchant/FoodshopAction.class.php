@@ -216,7 +216,7 @@ class FoodshopAction extends BaseAction
 		
 		if (IS_POST) {
 			if (empty($_POST['sort_name'])) {
-				$error_tips = '分类名称必填！'.'<br/>';
+                $error_tips = L('CATEGORY_NAME_REQUIRED_BKADMIN') . '<br/>';
 			} else {
 				$database_goods_sort = D('Foodshop_goods_sort');
 				$data_goods_sort['store_id'] = $now_store['store_id'];
@@ -283,7 +283,7 @@ class FoodshopAction extends BaseAction
 		$this->assign('now_store', $now_store);
 		if (IS_POST) {
 			if (empty($_POST['sort_name'])) {
-				$error_tips = '分类名称必填！'.'<br/>';
+                $error_tips = L('CATEGORY_NAME_REQUIRED_BKADMIN') . '<br/>';
 			} else {
 				$database_goods_sort = D('Foodshop_goods_sort');
 				$data_goods_sort['sort_id'] = $now_sort['sort_id'];

@@ -2036,6 +2036,11 @@ return array(
     "INQUIRIES_WELCOMED_BKADMIN"=>"Any inquiries or feedback about the system are welcomed by contacting the system administrator.",
     "VIA_QQ_BKADMIN"=>"Contact administrator via QQ",
     'STORE_NOT_EXIST_BKADMIN'=>  'This Store does not exist',
+    "ENTER_TAX_BKADMIN"=>"Please enter tax rate!",
+    "CATEGORY_NAME_REQUIRED_BKADMIN"=>"Category Name Required!",
+    "MODIFY_PRODUCT_BKADMIN"=>"Modify Product",
+    "PRODUCT_INVENTORY_BKADMIN"=>"Product Inventory",
+    "NEG1_MEANS_BKADMIN"=>"-1 means unlimited quantity. If the quantity is less than 10, the inventory will be displayed on the product details page.",
 
     "F_REGISTRATION_INVITED"=>"Registration Invited",
     "F_ORDERS_INVITED"=>"Orders Invited",

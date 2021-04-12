@@ -615,7 +615,7 @@ var uploader = WebUploader.create({
 uploader.on('fileQueued',function(file){
 	if($('.upload_pic_li').size() >= 1){
 		uploader.cancelFile(file);
-		alert('最多上传一张图片！');
+		alert({pigcms{:L('LEAST_ONE_BKADMIN')}});
 		return false;
 	}
 });
@@ -642,7 +642,7 @@ function check(obj){
 	var length = $('.paycheck:checked').length;
 	if(length == 0){
 		$(obj).attr('checked','checked');
-		bootbox.alert('最少要选择一种支付方式');
+		bootbox.alert(L('LEAST_PAYMENT_BKADMIN'));
 	}			
 }
 $(function($){

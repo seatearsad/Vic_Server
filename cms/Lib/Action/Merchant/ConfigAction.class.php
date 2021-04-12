@@ -52,6 +52,7 @@ class ConfigAction extends BaseAction{
 			if(empty($_POST['pic'])){
 				$this->error(L('LEAST_ONE_BKADMIN'));
 			}
+
 			$data_merchant['pic_info'] = implode(';',$_POST['pic']);
 
 			$data_merchant['txt_info'] = $_POST['txt_info'];
@@ -776,7 +777,7 @@ class ConfigAction extends BaseAction{
 		$company_staff_db = M('Merchant_store_staff');
 		if(IS_POST){
 			if (!trim($_POST['name']) || !trim($_POST['username'])){
-				$this->error('姓名、帐号都不能为空');
+				$this->error(L('REQUIRED3_BKADMIN'));
 			}
 			$_POST['token'] = $this->token;
 			$_POST['time'] = time();

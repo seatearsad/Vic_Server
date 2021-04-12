@@ -5,7 +5,7 @@
 		<ul class="breadcrumb">
 			<li>
 				<i class="ace-icon fa fa-cubes"></i>
-				<a href="{pigcms{:U('Shop/index')}">{pigcms{$config.shop_alias_name}管理</a>
+				<a href="{pigcms{:U('Shop/index')}">{pigcms{:L('DELIVERY_MANAGEMENT_BKADMIN')}</a>
 			</li>
 			<li class="active"><a href="{pigcms{:U('Shop/index')}">{pigcms{$now_store.name}</a></li>
 			<if condition="$sortList">
@@ -119,7 +119,7 @@ function Modify_tax(store_id,sort_id) {
             }
         });
     }else {
-        alert('请输入税率!');
+        alert("{pigcms{:L('ENTER_TAX_BKADMIN')}");
     }
 }
 function updateStatus(dom1, dom2, status1, status2, attribute){
