@@ -1852,6 +1852,7 @@ return array(
     "VIEW_ORDERS_BKADMIN"=>"查看店铺订单",
     "MENU_BKADMIN"=>"商品分类管理",
     "VIEW_CATEGORIES_BKADMIN"=>"商品分类",
+    "VIEW_CATEGORIES_NOT_EXSITS_BKADMIN"=>"商品分类不存在",
     "PROMOTIONS_BKADMIN"=>"店铺优惠",
     "NO_CONTENT_BKADMIN"=>"无内容",
     "CLONE_STORE_BKADMIN"=>"克隆商品至其他店铺",
@@ -2044,6 +2045,7 @@ return array(
     "BLANK_IF_NOCHANGE_BKADMIN"=>"(如果不修改密码请留空)",
     "CLONING_COMPLETED_BKADMIN"=>"克隆完成",
     "COMPLETE_STORE_BKADMIN"=>"完善店铺信息",
+    'MERCHANT_USER_EXISTS_BKADMIN'   =>  '帐号已经存在，请换一个。',
 
     "F_REGISTRATION_INVITED"=>"邀请注册数",
     "F_ORDERS_INVITED"=>"邀请下单数",
@@ -2435,7 +2437,9 @@ return array(
     "J_SUCCEED2"=>"编辑成功！",
     "J_FAILED_UPDATE"=>"更新失败！",
     "J_FAILED_SAVE"=>"保存失败！",
+    "J_FAILED_SAVE_RETRY"=>"保存失败！请重试~",
     "J_MODIFICATION_FAILED2"=>"编辑失败！请重试~",
     "J_DELETION_SUCCESS"=>"删除成功！",
+    "J_DELETION_FAILED_RETRY"=>"删除失败！请重试~",
     "J_SUCCEED3"=>"保存成功！",
 );

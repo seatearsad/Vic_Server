@@ -669,6 +669,7 @@ function lang_substr_with_default_lang(&$str){
     }
 
     $str=$re_str;
+    return $re_str;
 }
 //Garfunkel Add
 //根据语言对显示字符进行分割

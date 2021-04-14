@@ -1852,6 +1852,7 @@ return array(
     "VIEW_ORDERS_BKADMIN"=>"View Orders",
     "MENU_BKADMIN"=>"Menu",
     "VIEW_CATEGORIES_BKADMIN"=>"View Categories",
+    "VIEW_CATEGORIES_NOT_EXSITS_BKADMIN"=>"View Categories does exsits",
     "PROMOTIONS_BKADMIN"=>"Promotions",
     "NO_CONTENT_BKADMIN"=>"No Content",
     "CLONE_STORE_BKADMIN"=>"Clone to Another Store",
@@ -2044,6 +2045,7 @@ return array(
     "BLANK_IF_NOCHANGE_BKADMIN"=>"(Please leave it blank if there is no change)",
     "CLONING_COMPLETED_BKADMIN"=>"Cloning Completed",
     "COMPLETE_STORE_BKADMIN"=>"Complete Store Information",
+    'MERCHANT_USER_EXISTS_BKADMIN'   =>  'Username exists, Please change another one and try again.',
 
     "F_REGISTRATION_INVITED"=>"Registration Invited",
     "F_ORDERS_INVITED"=>"Orders Invited",
@@ -2435,7 +2437,9 @@ return array(
     "J_SUCCEED2"=>"Succeed!",
     "J_FAILED_UPDATE"=>"Failed to Update!",
     "J_FAILED_SAVE"=>"Failed to Save!",
+    "J_FAILED_SAVE_RETRY"=>"Failed to Save, Please try again！",
     "J_MODIFICATION_FAILED2"=>"Modification failed! Please try again.",
     "J_DELETION_SUCCESS"=>"Deletion Success!",
+    "J_DELETION_FAILED_RETRY"=>"Failed delete, Please try again!",
     "J_SUCCEED3"=>"Succeed!",
 );

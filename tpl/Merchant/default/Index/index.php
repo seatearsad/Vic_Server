@@ -29,14 +29,14 @@
 						</div>
 					</div>
 					
-					<a href="{pigcms{:U('Merchant_money/index')}">
+<!--					<a href="{pigcms{:U('Merchant_money/index')}">-->
 						<div class="infobox" style="background:#81d2cf;">
 							<div class="infobox-data" style="padding-left:0px;width:100%;text-align:center;">
 								<span class="infobox-data-number" style="color: white;">${pigcms{$all_money}</span>
 								<div class="infobox-content" style="color: white;">{pigcms{:L('MERCHANT_ACCTBALANCE')}</div>
 							</div>
 						</div>
-					</a>
+<!--					</a>-->
 					<div class="infobox" style="background:#7cbae5;">
 						<div class="infobox-data" style="padding-left:0px;width:100%;text-align:center;">
 							<span class="infobox-data-number">{pigcms{$fans_count}</span>

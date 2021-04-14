@@ -140,9 +140,9 @@
 									<span class="form_tips">元<span class="required red">*</span></span>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-1">包装费别名</label>
-									<input class="col-sm-1" size="10" maxlength="10" name="pack_alias" type="text" value="{pigcms{$store_shop.pack_alias|default='打包费'}" />
-                                    <label class="col-sm-1">{pigcms{$store_shop.pack_alias|default='打包费'}</label>
+									<label class="col-sm-1"> {pigcms{:L('QW_PACKAGEFEE')}</label>
+									<input class="col-sm-1 hidden_obj" size="10" maxlength="10" name="pack_alias" type="text" value="{pigcms{$store_shop.pack_alias|default='打包费'}" />
+                                    <label class="col-sm-1  hidden_obj">{pigcms{$store_shop.pack_alias|default='打包费'}</label>
                                     <input class="col-sm-1" size="10" maxlength="10" name="pack_fee" type="text" value="{pigcms{$store_shop.pack_fee}" />
 									<span class="form_tips"> {pigcms{:L('PACKING_FEE_BKADMIN')}</span>
 								</div>

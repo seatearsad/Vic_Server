@@ -70,7 +70,7 @@
 								</div>
 								<div class="form-group hidden_obj">
 									<label class="col-sm-1"><label for="permoney">人均消费</label></label>
-									<input class="col-sm-2" size="20" name="permoney" id="permoney" type="text" value="{pigcms{$now_store.permoney}" onkeyup="value=value.replace(/[^1234567890]+/g,'')"/>
+									<input class="col-sm-2" size="20" name="permoney" id="permoney" type="text" value="10" data_db="{pigcms{$now_store.permoney}" onkeyup="value=value.replace(/[^1234567890]+/g,'')"/>
 									<span class="form_tips"> 元（必填）</span>
 								</div>
 								<div class="form-group">
@@ -678,7 +678,7 @@ uploader.on('uploadSuccess',function(file,response){
 
 uploader.on('uploadError', function(file,reason){
     $('.loading'+file.id).remove();
-    alert('上传失败！请重试。');
+    alert('Upload failed! Please try again.');
 });
 
 function deleteImage(path,obj){

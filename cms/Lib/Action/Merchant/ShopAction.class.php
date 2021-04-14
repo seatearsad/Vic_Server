@@ -574,10 +574,10 @@ class ShopAction extends BaseAction
                     if ($sort && $sort['operation_type'] == 2) {
                         $database_goods_sort->where(array('sort_id' => $sort['sort_id']))->save(array('operation_type' => 1));
                     }
-                    $this->success('保存成功！！', U('Shop/goods_sort',array('store_id' => $now_store['store_id'], 'fid' => $fid)));
+                    $this->success(L('J_SUCCEED3'), U('Shop/goods_sort',array('store_id' => $now_store['store_id'], 'fid' => $fid)));
                     die;
                 } else {
-                    $this->error('保存失败！！您是不是没做过修改？请重试。', U('Shop/goods_sort',array('store_id' => $now_store['store_id'], 'fid' => $fid)));
+                    $this->error(L('FAILED_SAVE_BKADMIN'), U('Shop/goods_sort',array('store_id' => $now_store['store_id'], 'fid' => $fid)));
                     die;
                 }
             }
@@ -705,7 +705,6 @@ class ShopAction extends BaseAction
             //  			echo "<pre/>";
             //  			print_r($_POST);
             //  			die;
-
             if (empty($_POST['name'])) {
                 $error_tips .= L('NAME_REQUIRED2_BKADMIN').'<br/>';
             }
@@ -716,9 +715,8 @@ class ShopAction extends BaseAction
                 $error_tips .=L('PRICE_REQUIRED_BKADMIN').'<br/>';
             }
             if (empty($_POST['pic'])) {
-                $error_tips .=L('LEAST_ONE_BKADMIN').'<br/>';
+                //$error_tips .=L('LEAST_ONE_BKADMIN').'<br/>';
             }
-
             $_POST['name'] = fulltext_filter($_POST['name']);
             $_POST['des'] = fulltext_filter($_POST['des']);
             $_POST['des'] = preg_replace('/<[^>]*>/', "", $_POST['des']);
@@ -890,7 +888,7 @@ class ShopAction extends BaseAction
             }
             exit(json_encode(array('error_code' => false, 'data' => $data)));
         } else {
-            exit(json_encode(array('error_code' => true, 'msg' => '没有数据')));
+            exit(json_encode(array('error_code' => true, 'msg' => L('NO_CONTENT_BKADMIN'))));
         }
     }
 
@@ -946,7 +944,7 @@ class ShopAction extends BaseAction
                 $error_tips .=L('PRICE_REQUIRED_BKADMIN').'<br/>';
             }
             if (empty($_POST['pic'])) {
-                $error_tips .=L('LEAST_ONE_BKADMIN').'<br/>';
+                //$error_tips .=L('LEAST_ONE_BKADMIN').'<br/>';
             }
 
             $_POST['name'] = fulltext_filter($_POST['name']);
@@ -1013,7 +1011,7 @@ class ShopAction extends BaseAction
                     $shopGoodsSortDB->where(array('sort_id' => $sort_id, 'store_id' => $now_store['store_id']))->save(array('operation_type' => 0));
                 }
             } else {
-                $error_tips .= '商品分类不存在'.'<br/>';
+                $error_tips .= L('VIEW_CATEGORIES_NOT_EXSITS_BKADMIN').'<br/>';
             }
 
             $_POST['seckill_open_time'] = strtotime($_POST['seckill_open_time'] . ":00");
@@ -1027,13 +1025,13 @@ class ShopAction extends BaseAction
 
                 if ($goods_id = D('Shop_goods')->save_post_form($_POST, $now_store['store_id'])) {
                     D('Image')->update_table_id($_POST['image'], $goods_id, 'goods');
-                    $this->success('保存成功！', U('Shop/goods_list', array('sort_id' => $now_sort['sort_id'],'page'=>$_GET['page'])));
+                    $this->success(L('SAVED_SUCCE_BKADMIN'), U('Shop/goods_list', array('sort_id' => $now_sort['sort_id'],'page'=>$_GET['page'])));
                     die;
-                    $ok_tips = '保存成功！';
+                    $ok_tips =L('SAVED_SUCCE_BKADMIN');
                 } else {
-                    $this->error('保存失败！请重试！', U('Shop/goods_list', array('sort_id' => $now_sort['sort_id'])));
+                    $this->error(L('J_FAILED_SAVE_RETRY'), U('Shop/goods_list', array('sort_id' => $now_sort['sort_id'])));
                     die;
-                    $error_tips = '保存失败！请重试。';
+                    $error_tips =L('J_FAILED_SAVE_RETRY');
                 }
             } else {
                 $return = $this->format_data($_POST);
@@ -1117,7 +1115,7 @@ class ShopAction extends BaseAction
             }else{//新配菜
                 $dish_id = $dish_db->add($side_dish);
                 if(!$dish_id){
-                    $this->error('保存失败！请重试！', U('Shop/side_dish', array('goods_id' => $now_goods['goods_id'])));
+                    $this->error(L('J_FAILED_SAVE_RETRY'), U('Shop/side_dish', array('goods_id' => $now_goods['goods_id'])));
                 }
             }
 
@@ -1216,9 +1214,9 @@ class ShopAction extends BaseAction
                 $old_spec_val = M('Shop_goods_spec_value')->where(array('sid' => array('in', $delete_spec_ids)))->delete();
             }
             M('Shop_goods_properties')->where(array('goods_id' => $now_goods['goods_id']))->delete();
-            $this->success('删除成功！');
+            $this->success(L('J_DELETION_SUCCESS'));
         }else{
-            $this->error('删除失败！请检查后重试。');
+            $this->error(L('J_DELETION_FAILED_RETRY'));
         }
     }
     /* 商品复制 */
@@ -1344,7 +1342,9 @@ class ShopAction extends BaseAction
         } else {
             //return $now_store;
             if ($now_shop = D('Merchant_store_shop')->field(true)->where($condition_merchant_store)->find()) {
-                lang_substr_with_default_lang($now_shop['pack_alias']);
+                //var_dump($now_shop);
+                $now_shop['pack_alias']=lang_substr_with_default_lang($now_shop['pack_alias']);
+
                 if (!empty($now_shop['background'])) {
                     $image_tmp = explode(',', $now_shop['background']);
                     $now_shop['background_image'] = C('config.site_url') . '/upload/background/' . $image_tmp[0] . '/' . $image_tmp['1'];
