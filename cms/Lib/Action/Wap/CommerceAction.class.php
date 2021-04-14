@@ -195,7 +195,7 @@ class CommerceAction extends BaseAction {
         $company_staff_db = M('Merchant_store_staff');
         if (IS_POST) {
             if (!trim($_POST['name']) || !trim($_POST['username'])) {
-                $this->error('姓名、帐号都不能为空');
+                $this->error(L('REQUIRED3_BKADMIN'));
             }
             $data['name'] = trim($_POST['name']);
             $data['username'] = trim($_POST['username']);
@@ -208,7 +208,7 @@ class CommerceAction extends BaseAction {
                     $this->error('帐号已经存在！请换一个。');
                 }
                 if (!trim($_POST['password'])) {
-                    $this->error('密码不能为空');
+                    $this->error(L('PASSWORD_EMPTY_BKADMIN'));
                 }
                 $data['store_id'] = intval($_POST['store_id']);
                 $data['password'] = md5(trim($_POST['password']));
@@ -231,7 +231,7 @@ class CommerceAction extends BaseAction {
                 if (!$company_staff_db->where(array('id' => $itemid))->save($data)) {
                     $this->error('修改失败，请重试。');
                 } else {
-                    $this->success('操作成功', U('Commerce/mClerk'));
+                    $this->success(L('_OPERATION_SUCCESS_'), U('Commerce/mClerk'));
                 }
             }
         } else {

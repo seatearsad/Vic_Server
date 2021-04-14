@@ -5,7 +5,7 @@
 		<ul class="breadcrumb">
 			<li>
 				<i class="ace-icon fa fa-cubes"></i>
-				<a href="{pigcms{:U('Shop/index')}">{pigcms{$config.shop_alias_name}管理</a>
+				<a href="{pigcms{:U('Shop/index')}">{pigcms{:L('DELIVERY_MANAGEMENT_BKADMIN')}</a>
 			</li>
 			<li class="active"><a href="{pigcms{:U('Shop/index')}">{pigcms{$now_store.name}</a></li>
 			<if condition="$sortList">
@@ -87,7 +87,7 @@
 										</tr>
 									</volist>
 								<else/>
-									<tr class="odd"><td class="button-column" colspan="8" >无内容</td></tr>
+									<tr class="odd"><td class="button-column" colspan="8" >{pigcms{:L('NO_CONTENT_BKADMIN')}</td></tr>
 								</if>
 							</tbody>
 						</table>
@@ -103,7 +103,7 @@ $(function(){
 	/*店铺状态*/
 	updateStatus(".statusSwitch .ace-switch", ".statusSwitch", "OPEN", "CLOSED", "shopstatus");
 	jQuery(document).on('click','#shopList a.red',function(){
-		if(!confirm('确定要删除这条数据吗?不可恢复。')) return false;
+        if(!confirm("{pigcms{:L('SURE_RECOVERABLE_BKADMIN')}")) return false;
 	});
 });
 function Modify_tax(store_id,sort_id) {
@@ -119,7 +119,7 @@ function Modify_tax(store_id,sort_id) {
             }
         });
     }else {
-        alert('请输入税率!');
+        alert("{pigcms{:L('ENTER_TAX_BKADMIN')}");
     }
 }
 function updateStatus(dom1, dom2, status1, status2, attribute){

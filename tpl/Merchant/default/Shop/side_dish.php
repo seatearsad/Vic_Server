@@ -5,7 +5,7 @@
         <ul class="breadcrumb">
             <li>
                 <i class="ace-icon fa fa-cubes"></i>
-                <a href="{pigcms{:U('Shop/index')}">{pigcms{$config.shop_alias_name}管理</a>
+                <a href="{pigcms{:U('Shop/index')}">{pigcms{:L('DELIVERY_MANAGEMENT_BKADMIN')}</a>
             </li>
             <li class="active"><a href="{pigcms{:U('Shop/goods_sort',array('store_id'=>$now_store['store_id']))}">{pigcms{:L('CATEGORY_LIST_BKADMIN')}</a></li>
             <li class="active"><a href="{pigcms{:U('Shop/goods_list',array('sort_id'=>$now_sort['sort_id']))}">{pigcms{$now_sort.sort_name}</a></li>
@@ -74,7 +74,7 @@
 <script type="text/javascript">
     $(function(){
         jQuery(document).on('click','#shopList a.red',function(){
-            if(!confirm('确定要删除这条数据吗?不可恢复。')) return false;
+            if(!confirm("{pigcms{:L('SURE_RECOVERABLE_BKADMIN')}")) return false;
         });
     });
     function CreateDish(){

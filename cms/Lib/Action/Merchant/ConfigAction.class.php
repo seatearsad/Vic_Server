@@ -25,7 +25,7 @@ class ConfigAction extends BaseAction{
 		if(IS_POST){
 			$data_merchant['phone'] = $_POST['phone'];
 			if(empty($data_merchant['phone'])){
-				$this->error('请输入联系人电话');
+				$this->error(L('ENTER_NUMBER_BKADMIN'));
 			}
 
 			$data_merchant['email'] = $_POST['email'];
@@ -39,19 +39,20 @@ class ConfigAction extends BaseAction{
 				$condition_merchant['mer_id'] = $this->merchant_session['mer_id'];
 				$now_merchant = $database_merchant->field('`pwd`')->where($condition_merchant)->find();
 				if(md5($_POST['old_pass']) != $now_merchant['pwd']){
-					$this->error('原密码输入错误');
+					$this->error(L('ORIPASS_INCORRECT_BKADMIN'));
 				}else if(strlen($_POST['new_pass']) < 6){
-					$this->error('新密码最少6个字符');
+					$this->error(L('MINIMUM_OF_6_BKADMIN'));
 				}else if($_POST['new_pass'] != $_POST['re_pass']){
-					$this->error('两次新密码输入不一致，请重新输入');
+					$this->error(L('_BKADMIN'));
 				}else{
 					$data_merchant['pwd'] = md5($_POST['new_pass']);
 				}
 			}
 
 			if(empty($_POST['pic'])){
-				$this->error('请至少上传一张图片');
+				//$this->error(L('LEAST_ONE_BKADMIN'));
 			}
+
 			$data_merchant['pic_info'] = implode(';',$_POST['pic']);
 
 			$data_merchant['txt_info'] = $_POST['txt_info'];
@@ -61,14 +62,14 @@ class ConfigAction extends BaseAction{
 			}
 
 			if(empty($data_merchant['txt_info'])){
-				$this->error('请输入商家描述信息');
+				$this->error(L('MERCHANT_DESC_BKADMIN'));
 			}
 			$data_merchant['adverimg']=isset($_POST['adverimg']) ? trim($_POST['adverimg']) : '';
 			$data_merchant['mer_id'] = $this->merchant_session['mer_id'];
 			if($database_merchant->data($data_merchant)->save()){
-				$this->success('保存成功！');
+				$this->success(L('SAVED_SUCCE_BKADMIN'));
 			}else{
-				$this->error('保存失败！请检查是否有修改过内容后重试');
+				$this->error(L('FAILED_SAVE_BKADMIN'));
 			}
 		}else{
 			$condition_merchant['mer_id'] = $this->merchant_session['mer_id'];
@@ -438,12 +439,12 @@ class ConfigAction extends BaseAction{
 				//外卖
 				$have_waimai = I('have_waimai', 0);
 				if ($have_waimai) {
-					$this->success('添加成功！', U("Merchant/Waimai/store", array('store_id'=>$merchant_store_id)));
+					$this->success(L('J_SUCCEED1'), U("Merchant/Waimai/store", array('store_id'=>$merchant_store_id)));
 				}
 
-				$this->success('添加成功！');
+				$this->success(L('J_SUCCEED1'));
 			}else{
-				$this->error('添加失败！请重试~');
+				$this->error(L('J_MODIFICATION_FAILED'));
 			}
 		}else{
 		   $merchant_mstore = $database_merchant_store->where(array('mer_id' => $this->merchant_session['mer_id'], 'ismain' => 1))->find();
@@ -460,19 +461,19 @@ class ConfigAction extends BaseAction{
 
 		if(IS_POST){
 			if(empty($_POST['name'])){
-				$this->error('店铺名称必填！');
+				$this->error(L('NAME_REQUIRED_BKADMIN'));
 			}
 			if(empty($_POST['phone'])){
-				$this->error('联系电话必填！');
+				$this->error(L('NUMBER_REQUIRED_BKADMIN'));
 			}
 			if(empty($_POST['long_lat'])){
-				$this->error('店铺经纬度必填！');
+				$this->error(L('COORDINATES_REQUIRED_BKADMIN'));
 			}
 			if(empty($_POST['adress'])){
-				$this->error('店铺地址必填！');
+				$this->error(L('ADDRESS_REQUIRED_BKADMIN'));
 			}
 			if(empty($_POST['permoney'])){
-				$this->error('人均消费必填！');
+				$this->error(L('AVERAGE_REQUIRED_BKADMIN'));
 			}
 //			if(empty($_POST['feature'])){
 //				$this->error('店铺特色必填！');
@@ -482,12 +483,12 @@ class ConfigAction extends BaseAction{
 // 			}
 
 			if(empty($_POST['pic'])){
-				$this->error('请至少上传一张图片');
+				$this->error(L('LEAST_ONE_BKADMIN'));
 			}
 			$_POST['pic_info'] = implode(';',$_POST['pic']);
 
 			if(empty($_POST['txt_info'])){
-				$this->error('请输入店铺描述信息');
+				$this->error(L('DESCRIPTION_BKADMIN'));
 			}
 
 			//判断关键词
@@ -502,7 +503,7 @@ class ConfigAction extends BaseAction{
 					}
 				}
 				if(count($key_arr)>5){
-					$this->error('关键词最多5个。');
+					$this->error(L('MAX_KEYWORDS_BKADMIN'));
 				}
 			}
 
@@ -677,9 +678,9 @@ class ConfigAction extends BaseAction{
 					}
 				}
 
-				$this->success('保存成功！');
+				$this->success(L('SAVED_SUCCE_BKADMIN'));
 			}else{
-				$this->error('保存失败！！您是不是没做过修改？请重试~');
+				$this->error(L('FAILED_SAVE_BKADMIN'));
 			}
 		}else{
 			$condition_merchant_store['store_id'] = $_GET['id'];
@@ -687,7 +688,7 @@ class ConfigAction extends BaseAction{
 			$now_store = $database_merchant_store->where($condition_merchant_store)->find();
 
 			if(empty($now_store)){
-				$this->error('店铺不存在！');
+				$this->error(L('STORE_NOT_EXIST_BKADMIN'));
 			}
 
 			$area = D('Area')->where(array('area_id'=>$now_store['city_id']))->find();
@@ -738,9 +739,9 @@ class ConfigAction extends BaseAction{
 		$condition_merchant_store['mer_id'] = $this->merchant_session['mer_id'];
 		/***$database_merchant_store->where($condition_merchant_store)->delete()**改软删除*4禁用***/
 		if($database_merchant_store->where($condition_merchant_store)->save(array('status'=>4))){
-			$this->success('删除成功！');
+			$this->success(L('_B_MY_DELACCESS_'));
 		}else{
-			$this->error('删除失败！');
+			$this->error(L('_B_MY_DELLOSE_'));
 		}
 	}
 
@@ -750,10 +751,9 @@ class ConfigAction extends BaseAction{
 		$condition_merchant_store['mer_id'] = $this->merchant_session['mer_id'];
 		$now_store = $database_merchant_store->where($condition_merchant_store)->find();
 		if(empty($now_store)){
-			$this->error('店铺不存在！');
+			$this->error(L('STORE_NOT_EXIST_BKADMIN'));
 		}
 		$this->assign('now_store',$now_store);
-
 
 		$condition_store_staff['token'] = $this->token;
 		$condition_store_staff['store_id'] = $_GET['store_id'];
@@ -768,7 +768,7 @@ class ConfigAction extends BaseAction{
 		$condition_merchant_store['mer_id'] = $this->merchant_session['mer_id'];
 		$now_store = $database_merchant_store->where($condition_merchant_store)->find();
 		if(empty($now_store)){
-			$this->error('店铺不存在！');
+            $this->error(L('STORE_NOT_EXIST_BKADMIN'));
 		}
 		$this->assign('staff_type', $this->staff_type);
 		$this->assign('now_store',$now_store);
@@ -777,7 +777,7 @@ class ConfigAction extends BaseAction{
 		$company_staff_db = M('Merchant_store_staff');
 		if(IS_POST){
 			if (!trim($_POST['name']) || !trim($_POST['username'])){
-				$this->error('姓名、帐号都不能为空');
+				$this->error(L('REQUIRED3_BKADMIN'));
 			}
 			$_POST['token'] = $this->token;
 			$_POST['time'] = time();
@@ -785,22 +785,22 @@ class ConfigAction extends BaseAction{
 			if (!isset($_GET['itemid'])){
 				$condition_store_staff_username['username'] = $_POST['username'];
 				if($company_staff_db->field('`id`')->where($condition_store_staff_username)->find()){
-					$this->error('帐号已经存在！请换一个。');
+					$this->error(L('MERCHANT_USER_EXISTS_BKADMIN'));
 				}
 				if(!trim($_POST['password'])){
-					$this->error('密码不能为空');
+					$this->error(L('PASSWORD_EMPTY_BKADMIN'));
 				}
 				$_POST['password'] = md5($_POST['password']);
 
 				if(!$company_staff_db->add($_POST)){
-					$this->error('添加失败，请重试。');
+					$this->error(L('J_MODIFICATION_FAILED'));
 				}
 			}else{
 				/* 检测帐号 */
 				$condition_store_staff_username['username'] = $_POST['username'];
 				$username_staff = $company_staff_db->field('`id`')->where($condition_store_staff_username)->find();
 				if($username_staff['id'] != $_GET['itemid']){
-					$this->error('帐号已经存在！请换一个。');
+                    $this->error(L('MERCHANT_USER_EXISTS_BKADMIN'));
 				}
 
 				if(!trim($_POST['password'])){
@@ -809,11 +809,11 @@ class ConfigAction extends BaseAction{
 					$_POST['password'] = md5($_POST['password']);
 				}
 				if(!$company_staff_db->where(array('id'=>intval($_GET['itemid'])))->save($_POST)){
-					$this->error('修改失败，请重试。');
+					$this->error(L('J_MODIFICATION_FAILED'));
 				}
 
 			}
-			$this->success('操作成功',U('Config/staff',array('store_id'=>$now_store['store_id'])));
+			$this->success(L('OPER_SUCCESS_BKADMIN'),U('Config/staff',array('store_id'=>$now_store['store_id'])));
 		}else{
 			if (isset($_GET['itemid'])) {
 				$thisItem = $company_staff_db->where(array('id'=>intval($_GET['itemid'])))->find();
@@ -830,7 +830,7 @@ class ConfigAction extends BaseAction{
 		$condition_merchant_store['mer_id'] = $this->merchant_session['mer_id'];
 		$now_store = $database_merchant_store->where($condition_merchant_store)->find();
 		if(empty($now_store)){
-			$this->error('店铺不存在！');
+			$this->error(L('STORE_NOT_EXIST_BKADMIN'));
 		}
 		$this->assign('now_store',$now_store);
 
@@ -839,9 +839,9 @@ class ConfigAction extends BaseAction{
 		$condition_store_staff['token'] = $this->token;
 		$condition_store_staff['id'] = $_GET['itemid'];
 		if($company_staff_db->where($condition_store_staff)->delete()){
-			$this->success('操作成功',U('Config/staff',array('store_id'=>$now_store['store_id'])));
+			$this->success(L('OPER_SUCCESS_BKADMIN'),U('Config/staff',array('store_id'=>$now_store['store_id'])));
 		}else{
-			$this->error('操作失败，请重试。');
+			$this->error(L('J_MODIFICATION_FAILED'));
 		}
 
 	}
@@ -857,7 +857,7 @@ class ConfigAction extends BaseAction{
     {
         if (IS_POST) {
 			if (empty($_POST['long_lat'])) {
-				$this->error('店铺经纬度必填！');
+				$this->error(L('COORDINATES_REQUIRED_BKADMIN'));
 			}
             if (empty($_POST['pick_addr'])||empty($_POST['phone'])) {
                 $this->error("信息不全，请检查！");
@@ -868,9 +868,9 @@ class ConfigAction extends BaseAction{
 			
             $_POST['mer_id'] = $this->merchant_session['mer_id'];
             if(M('Pick_address')->add($_POST)){
-                $this->success("保存成功！");
+                $this->success(L('SAVED_SUCCE_BKADMIN'));
             }else{
-                $this->error("保存失败！");
+                $this->error(L('J_FAILED_SAVE'));
             }
 
         }else{
@@ -881,7 +881,7 @@ class ConfigAction extends BaseAction{
     public function pick_address_edit(){
         if(IS_POST){
 			if(empty($_POST['long_lat'])){
-				$this->error('店铺经纬度必填！');
+				$this->error(L('COORDINATES_REQUIRED_BKADMIN'));
 			}
             if(empty($_POST['pick_addr'])||empty($_POST['phone'])){
                 $this->error("信息不全，请检查！");
@@ -890,9 +890,9 @@ class ConfigAction extends BaseAction{
         	$_POST['long'] = $long_lat[0];
         	$_POST['lat'] = $long_lat[1];
             if(M('Pick_address')->where(array('id'=>$_POST['id']))->save($_POST)){
-                $this->success("保存成功！");
+                $this->success(L('SAVED_SUCCE_BKADMIN'));
             }else{
-                $this->error("保存失败！");
+                $this->error(L('J_FAILED_SAVE'));
             }
 
         }else{
@@ -1077,23 +1077,23 @@ class ConfigAction extends BaseAction{
 				if ($result) {
 					$store_data = array('auth_files' => $data['auth_files'], 'auth' => 1, 'auth_time' => time());
 					$database_merchant_store->where($where)->save($store_data);
-					$this->success('保存成功！');
+					$this->success(L('J_SUCCEED3'));
 				} else {
-					$this->error('保存失败！！您是不是没做过修改？请重试~');
+					$this->error(L('FAILED_SAVE_BKADMIN'));
 				}
 			} else {
 				$data['dateline'] = time();
 				if ($database_store_authfile->where($where)->save($data)) {
 					$store_data = array('auth' => 4, 'auth_time' => time());
 					$database_merchant_store->where($where)->save($store_data);
-					$this->success('保存成功！');
+					$this->success(L('J_SUCCEED3'));
 				} else {
-					$this->error('保存失败！！您是不是没做过修改？请重试~');
+					$this->error(L('FAILED_SAVE_BKADMIN'));
 				}
 			}
 		} else {
 			if (empty($now_store)) {
-				$this->error('店铺不存在！');
+				$this->error(L('STORE_NOT_EXIST_BKADMIN'));
 			}
 			$now_store['reason'] = '';
 			$auth_files = array();

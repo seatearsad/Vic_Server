@@ -247,6 +247,7 @@ class New_eventModel extends Model
      * 获取用户在活动中获取的优惠券
      */
     public function getUserCoupon($uid,$status=-1,$order_money=-1,$coupon_id=-1){
+
         $where['u.uid'] = $uid;
         if($order_money != -1)
             $where['c.use_price'] = array('ELT',$order_money);
@@ -259,12 +260,12 @@ class New_eventModel extends Model
             $where['u.id'] = $coupon_id;
         }
 
-        //$coupon_list = D('New_event_user')->where($where)->select();
         $coupon_list = M('New_event_user')->join('as u left join '.C('DB_PREFIX').'new_event_coupon as c ON u.event_coupon_id=c.id')->field('u.*')->where($where)->select();
 
         $list = array();
         foreach ($coupon_list as &$v){
             if(time() > $v['expiry_time']) {
+                //更新已经过期的优惠券
                 $v['is_use'] = 2;
                 D('New_event_user')->where(array('id'=>$v['id']))->save($v);
                 continue;

@@ -2599,6 +2599,8 @@ class DeliverAction extends BaseAction
             }
             $this->ajaxReturn($result);
         }else {
+            $database_deliver_user = D('Deliver_user');
+            $now_user = $database_deliver_user->field(true)->where(array('uid' => $this->deliver_session['uid']))->find();
             if ($now_user['reg_status'] != 3)
                 header('Location:' . U('Deliver/step_' . $now_user['reg_status']));
             $this->display();
@@ -2611,7 +2613,6 @@ class DeliverAction extends BaseAction
         if($now_user['reg_status'] != 4) {
             if($_GET['type'] == 'jump'){
                 D('Deliver_user')->where(array('uid'=>$this->deliver_session['uid']))->save(array('reg_status'=>4));
-                $this->sendMail($now_user);
             }else {
                 header('Location:' . U('Deliver/step_' . $now_user['reg_status']));
             }
@@ -3013,7 +3014,7 @@ class DeliverAction extends BaseAction
     }
 
     public function getVicMailBody($name){
-	    $body = "<p>Hi ".$name.",</p>";
+        $body = "<p>Hi ".$name.",</p>";
         $body .= "<p>&nbsp;</p>";
         $body .= "<p>Thank you for signing up as a Tutti courier!</p>";
         $body .= "<p>&nbsp;</p>";

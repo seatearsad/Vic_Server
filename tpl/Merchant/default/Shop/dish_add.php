@@ -5,16 +5,17 @@
         <ul class="breadcrumb">
             <li>
                 <i class="ace-icon fa fa-cubes"></i>
-                <a href="{pigcms{:U('Shop/index')}">{pigcms{$config.shop_alias_name}管理</a>
+                <a href="{pigcms{:U('Shop/index')}">{pigcms{:L('DELIVERY_MANAGEMENT_BKADMIN')}</a>
             </li>
             <li class="active"><a href="{pigcms{:U('Shop/goods_sort',array('store_id'=>$now_store['store_id']))}">{pigcms{:L('CATEGORY_LIST_BKADMIN')}</a></li>
             <li class="active"><a href="{pigcms{:U('Shop/goods_list',array('sort_id'=>$now_sort['sort_id']))}">{pigcms{$now_sort.sort_name}</a></li>
             <li class="active"><a href="{pigcms{:U('Shop/side_dish',array('goods_id'=>$now_goods['goods_id']))}">{pigcms{$now_goods.name} 配菜列表</a></li>
-            <if condition="dish_id">
-                <li class="active">{pigcms{:L('EDIT_OPTIONS_BKADMIN')}</li>
-            <else />
+            <if condition=" $dish_id eq ''">
                 <li class="active">{pigcms{:L('ADD_OPTION_BKADMIN')}</li>
+            <else />
+                <li class="active">{pigcms{:L('EDIT_OPTIONS_BKADMIN')}</li>
             </if>
+
         </ul>
     </div>
     <!-- 内容头部 -->
@@ -28,10 +29,10 @@
                     <div class="tabbable">
                         <ul class="nav nav-tabs" id="myTab">
                             <li class="active">
-                                <if condition="dish_id">
-                                    <a href="javascript:void()">{pigcms{:L('EDIT_OPTIONS_BKADMIN')}</a>
-                                <else />
+                                <if condition=" $dish_id eq ''">
                                     <a href="javascript:void()">{pigcms{:L('ADD_OPTION_BKADMIN')}</a>
+                                <else />
+                                    <a href="javascript:void()">{pigcms{:L('EDIT_OPTIONS_BKADMIN')}</a>
                                 </if>
                             </li>
                         </ul>
@@ -113,7 +114,7 @@
         $('.single_del').unbind("click");
         $('.single_del').bind('click',function () {
             var tid = $(this).data('id');
-            if(confirm('确定要删除此单品吗？')){
+            if(confirm("{pigcms{:L('SURE_REMOV_BKADMIN')}}")){
                 $('#'+tid).remove();
             }else{
                 return false;
@@ -123,7 +124,7 @@
 
     $('.single_del').bind('click',function () {
         var tid = $(this).data('id');
-        if(confirm('确定要删除此单品吗？')){
+        if(confirm("{pigcms{:L('SURE_REMOV_BKADMIN')}}")){
             var f_tid = tid.split("_");
             if(f_tid[0] == 'new'){
                 $('#'+tid).remove();
@@ -165,7 +166,7 @@
         });
 
         //$('form.form-horizontal').submit(function(){
-            //$(this).find('button[type="submit"]').html('保存中...').prop('disabled',true);
+            //$(this).find('button[type="submit"]').html('Save....').prop('disabled',true);
         //});
         /*分享图片*/
         $('#image-file').ace_file_input({
@@ -184,6 +185,10 @@
     function checkForm() {
         var is_ok = true;
         var value_list = {};
+        if($("#max").val() == '0'){
+            alert("{pigcms{:L('MAXIMUM_0_BKADMIN')}");
+            return false;
+        }
         $('form').find('input').each(function () {
             //alert($(this).attr('name') + $(this).val());
             if($(this).val() == ''){
@@ -218,7 +223,7 @@
             alert("{pigcms{:L('_PLEASE_INPUT_ALL_')}");
             return false;
         }else{
-            $('form.form-horizontal').find('button[type="submit"]').html('保存中...').prop('disabled',true);
+            $('form.form-horizontal').find('button[type="submit"]').html('Save....').prop('disabled',true);
             return true;
         }
     }

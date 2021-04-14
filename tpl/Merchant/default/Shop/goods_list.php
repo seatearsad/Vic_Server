@@ -5,9 +5,9 @@
 		<ul class="breadcrumb">
 			<li>
 				<i class="ace-icon fa fa-cubes"></i>
-				<a href="{pigcms{:U('Shop/index')}">{pigcms{$config.shop_alias_name}管理</a>
+				<a href="{pigcms{:U('Shop/index')}">{pigcms{:L('DELIVERY_MANAGEMENT_BKADMIN')}<</a>
 			</li>
-			<li class="active"><a href="{pigcms{:U('Shop/goods_sort',array('store_id'=>$now_store['store_id']))}">分类列表</a></li>
+			<li class="active"><a href="{pigcms{:U('Shop/goods_sort',array('store_id'=>$now_store['store_id']))}">{pigcms{:L('C_CATEGORYLIST')}</a></li>
 			<li class="active">{pigcms{$now_sort.sort_name}</li>
 			<li class="active">{pigcms{:L('ITEM_LIST_BKADMIN')}</li>
 		</ul>
@@ -111,7 +111,7 @@
 										</tr>
 									</volist>
 								<else/>
-									<tr class="odd"><td class="button-column" colspan="13" >无内容</td></tr>
+									<tr class="odd"><td class="button-column" colspan="13" >{pigcms{:L('NO_CONTENT_BKADMIN')}</td></tr>
 								</if>
 							</tbody>
 						</table>
@@ -127,13 +127,13 @@
 $(function(){
 	/*店铺状态*/
 	updateStatus(".statusSwitch .ace-switch", ".statusSwitch", "OPEN", "CLOSED", "shopstatus");
-	
+
 	jQuery(document).on('click','#shopList a.red',function(){
-		if(!confirm('是否确定隐藏此菜品？（此菜品只会被隐藏，隐藏后用户和商家将看不到。此菜品不会被彻底删除，可被复原）')) return false;
+		if(!confirm("{pigcms{:L('YOU_HIDE_BKADMIN')}}")) return false;
 	});
 
     jQuery(document).on('click','#shopList a.orange',function(){
-        if(!confirm('是否确认还原被隐藏菜品？还原后此菜品商家可见')) return false;
+        if(!confirm("{pigcms{:L('SURE_RESTOR_BKADMIN')}}")) return false;
     });
 
     jQuery(document).on('click','#shopList a.blue',function(){
@@ -168,7 +168,7 @@ function Modify_tax(store_id,sort_id) {
             }
         });
     }else {
-        alert('请输入税率!');
+        alert("{pigcms{:L('ENTER_TAX_BKADMIN')}");
     }
 }
 function updateStatus(dom1, dom2, status1, status2, attribute){

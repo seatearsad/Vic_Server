@@ -88,7 +88,7 @@ $(function(){
 			alert('请选择就餐桌台');
 			return false;
 		}
-		$('#submit_btn').html('保存中...').prop('disabled',true);
+		$('#submit_btn').html('Save....').prop('disabled',true);
 		$.post("{pigcms{:U('foodshop_edit_order_save')}",$('#form_add').serialize(),function(result){
 			alert(result.info);
 			$('#submit_btn').html('保存订单').prop('disabled',false);

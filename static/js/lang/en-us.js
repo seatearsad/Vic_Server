@@ -51,7 +51,7 @@ lang['_NO_BROWSE_RECORD_'] = 'No browsing history';
 lang['_PLEASE_INPUT_KET_'] = 'Please enter a key word';
 lang['_IS_CONFIRM_BIND_'] = 'Are you sure you want to bind exsited account?';
 lang['_LOADING_TXT_'] = 'Loading...';
-lang['_SMS_CODE_ERROR_'] = 'The Verification Code Entered Is Incorrect.';
+lang['_SMS_CODE_ERROR_'] = 'Invalid verification code.';
 lang['_B_D_LOGIN_FILLMESSAGE_'] = 'Enter your SMS code';
 lang['_STORE_STATUS_CLOSED'] = 'Closed';
 

@@ -53,14 +53,14 @@
 															<a class="green" style="padding-right:8px;" href="{pigcms{:U('Config/staffSet', array('itemid'=>$staff['id'],'store_id'=>$now_store['store_id']))}" >
 																<i class="ace-icon fa fa-pencil bigger-130"></i>
 															</a>
-															<a title="删除" class="red" style="padding-right:8px;" href="{pigcms{:U('Config/staffDelete',array('itemid'=>$staff['id'],'store_id'=>$now_store['store_id']))}">
+															<a title="Delete" class="red" style="padding-right:8px;" href="{pigcms{:U('Config/staffDelete',array('itemid'=>$staff['id'],'store_id'=>$now_store['store_id']))}">
 																<i class="ace-icon fa fa-trash-o bigger-130"></i>
 															</a>
 														</td>
 													</tr>
 												</volist>
 											<else/>
-												<tr class="odd"><td class="button-column" colspan="5" >无内容</td></tr>
+												<tr class="odd"><td class="button-column" colspan="5" >{pigcms{:L('NO_CONTENT_BKADMIN')}</td></tr>
 											</if>
 										</tbody>
 									</table>
@@ -76,7 +76,7 @@
 <script type="text/javascript">
 $(function(){
 	jQuery(document).on('click','#shopList a.red',function(){
-		if(!confirm('确定要删除这条数据吗?不可恢复。')) return false;
+        if(!confirm("{pigcms{:L('SURE_RECOVERABLE_BKADMIN')}")) return false;
 	});
 });
 function CreateShop(){

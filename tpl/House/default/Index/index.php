@@ -305,7 +305,7 @@ zoom: 1;
 var lock = 0, test;
 KindEditor.ready(function(K){
 	$('#edit_form').submit(function(){
-		$('#edit_form button[type="submit"]').prop('disabled',true).html('保存中...');
+		$('#edit_form button[type="submit"]').prop('disabled',true).html('Save....');
 		if (lock = 1) {
 			return;
 		}

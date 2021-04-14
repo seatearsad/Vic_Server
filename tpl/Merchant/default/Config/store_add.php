@@ -60,7 +60,7 @@
 								</div>
 								<div class="form-group">
 									<label class="col-sm-1">{pigcms{:L('SHORT_DESCRIPTION_BKADMIN')}</label>
-									<input class="col-sm-3" maxlength="30" name="keywords" type="text" value="" id="keywords"/><span class="form_tips">{pigcms{:L('REQUIRED_INFO_BKADMIN')}</span> <a href="javascript:;" id="get_key_btn">按店铺名称获取</a>
+									<input class="col-sm-3" maxlength="30" name="keywords" type="text" value="" id="keywords"/><span class="form_tips">{pigcms{:L('REQUIRED_INFO_BKADMIN')}</span>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-1"><label for="long_lat">{pigcms{:L('ADDRESS_COORDINATES_BKADMIN')}</label></label>
@@ -70,7 +70,7 @@
 
 								<div class="form-group hidden_obj">
 									<label class="col-sm-1"><label for="permoney">人均消费</label></label>
-									<input class="col-sm-2" size="20" name="permoney" id="permoney" type="text" onkeyup="value=value.replace(/[^1234567890]+/g,'')"/>
+									<input class="col-sm-2" size="20" name="permoney" id="permoney" type="text" value="10" onkeyup="value=value.replace(/[^1234567890]+/g,'')"/>
 									<span class="form_tips"> 元（必填）</span>
 								</div>
 								<div class="form-group">
@@ -583,7 +583,7 @@ zoom: 1;
 // 	});
 //
 // 	$('#edit_form').submit(function(){
-// 		$('#edit_form button[type="submit"]').prop('disabled',true).html('保存中...');
+// 		$('#edit_form button[type="submit"]').prop('disabled',true).html('Save....');
 // 		$.post("{pigcms{:U('Config/store_add')}",$('#edit_form').serialize(),function(result){
 // 			if(result.status == 1){
 // 				alert(result.info);
@@ -648,7 +648,7 @@ uploader.on('uploadSuccess',function(file,response){
 
 uploader.on('uploadError', function(file,reason){
     $('.loading'+file.id).remove();
-    alert('上传失败！请重试。');
+    alert('Upload failed! Please try again.');
 });
 
 function deleteImage(path,obj){

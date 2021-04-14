@@ -5,7 +5,7 @@
 		<ul class="breadcrumb">
 			<li>
 				<i class="ace-icon fa fa-cubes"></i>
-				<a href="{pigcms{:U('Shop/index')}">{pigcms{$config.shop_alias_name}管理</a>
+				<a href="{pigcms{:U('Shop/index')}">{pigcms{:L('DELIVERY_MANAGEMENT_BKADMIN')}</a>
 			</li>
 			<li class="active"><a href="{pigcms{:U('Shop/goods_sort',array('store_id'=>$now_store['store_id']))}">{pigcms{$now_store.name}</a></li>
 			<li class="active">{pigcms{:L('CREATE_CATEGORY_BKADMIN')}</li>
@@ -44,7 +44,7 @@
 								<div class="form-group">
 									<label class="col-sm-1"><label for="sort">{pigcms{:L('CATEGORY_ORDER_BKADMIN')}</label></label>
 									<input class="col-sm-1" size="10" name="sort" id="sort" type="text" value="{pigcms{$now_sort.sort|default='0'}"/>
-									<span class="form_tips">默认添加顺序排序！手动调值，数值越大，排序越前{pigcms{:L('BASIC_SETTING_BKADMIN')}</span>
+									<span class="form_tips">{pigcms{:L('C_LISTORDERDES')}</span>
 								</div>
                                 <div class="form-group">
                                     <label class="col-sm-1" for="is_weekshow">{pigcms{:L('SETTING_AVAILABILITY(DAY)_BKADMIN')}</label>
@@ -112,7 +112,7 @@
 								<div id="image_preview_box"></div>
 
 								<if condition="$print_list AND empty($sort)">
-								<div class="form-group">
+								<div class="form-group hidden_obj">
 									<label class="col-sm-1" for="Food_status">{pigcms{:L('PRINTER_BKADMIN')}</label>
 									<select name="print_id" id="print_id">
 										<option value="0" selected>选择打印机</option>
@@ -138,7 +138,7 @@
 									<div class="col-md-offset-3 col-md-9">
 										<button class="btn btn-info" type="submit">
 											<i class="ace-icon fa fa-check bigger-110"></i>
-											保存
+											{pigcms{:L('SAVE_BKADMIN')}
 										</button>
 									</div>
 								</div>
@@ -166,7 +166,7 @@ $(function(){
 	});
 
 	$('form.form-horizontal').submit(function(){
-		$(this).find('button[type="submit"]').html('保存中...').prop('disabled',true);
+		$(this).find('button[type="submit"]').html('Save....').prop('disabled',true);
 	});
 	/*分享图片*/
 	$('#image-file').ace_file_input({

@@ -3,10 +3,10 @@
     {{# for(var i = 0, len = d.length; i < len; i++){ }}
     <dd id="my_order_{{d[i].order_id }}">
         <dl>
-            <dd class="order-num" onclick="window.location.href='/wap.php?c=Shop&a=classic_shop&shop_id={{d[i].store_id}}'"><span id="ord_num">{{d[i].name}}</span>
+            <dd class="order-num" onclick="window.location.href='/wap.php?c=Shop&a=classic_shop&&shop_id={{d[i].store_id}}'"><span id="ord_num">{{d[i].name}}</span>
                 <!---->
             </dd>
-            <dd class="dealcard dd-padding" onclick="window.location.href = '{{d[i].order_url}}';">
+            <dd class="dealcard dd-padding" onclick="window.location.href = '{{d[i].order_url}}&times=2';">
                 <div class="dealcard-img imgbox" >
                     <img src="{{d[i].image}}" style="width:100%;height:100%;">
                 </div>
@@ -19,6 +19,7 @@
                 </div>
             </dd>
             <dd class="dealbutton">
+
                 {{# if ((d[i].status>3) &&(d[i].status<7)) { }}
                     <div class="button_block">
     <!--                    <div class="round_button">Reorder</div>-->
@@ -27,6 +28,7 @@
                 {{# }else{ }}
                     {{# if (d[i].statusLog>=6) { }}
                         {{# if (d[i].statusLog>6) { }}
+
                             <div class="button_block">
             <!--                    <div class="round_button">Reorder</div>-->
                                 <div class="img_ratings" style="width:{{ d[i].rate_score*16 }}px;"></div>
@@ -46,6 +48,7 @@
                         {{# if (d[i].paid=="0") { }}
                             {{# var url = "wap.php?g=Wap&c=Pay&a=check";
                                  url += '&type=shop&order_id='+d[i].order_id;
+                                 url += '&times=2';
                             }}
                             <div class="button_block">
                                 <div class="round_button count_down" style="right: 20px;position: absolute;" onclick="location.href='{{ url }}'" data-time="{{d[i].create_time }}" data-id="{{d[i].order_id }}" data-jet="{{d[i].jetlag }}">Continue Payment</div>

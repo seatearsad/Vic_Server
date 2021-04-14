@@ -459,7 +459,7 @@
                 <ul class="end_ul">
                     <volist name="coupon_list" id="coupon">
                         <dl class="Muse">
-                            <dd <if condition="$coupon['is_use'] eq 1">data-link="{pigcms{$coupon.select_url}" data-msg="{pigcms{$coupon.delivery_discount}"</if> >
+                            <dd <if condition="$coupon['is_use'] eq 1">data-link="{pigcms{$coupon.select_url}" data-msg="{pigcms{$coupon.need_notify_delivery_discount}"</if> >
                                 <div <if condition="$coupon['is_use'] eq 1">class="Coupon_top clr" <else/>  class="Coupon_top Coupon_top_not_user clr" </if> >
                                     <div class="fl">
                                         <div class="fltop">
@@ -483,7 +483,7 @@
                                     <div class="Coupon_x">
                                         <i>{pigcms{$coupon.start_time|date='Y.m.d',###}--{pigcms{$coupon.end_time|date='Y.m.d',###}</i>
                                         <if condition="$coupon['is_use'] eq 1">
-                                            <div class="apply_button cursor_point" data-link="{pigcms{$coupon.select_url}" data-msg="{pigcms{$coupon.delivery_discount}"><em>{pigcms{:L('_IMMEDIATE_USE_')}</em></div>
+                                            <div class="apply_button cursor_point" data-link="{pigcms{$coupon.select_url}" data-msg="{pigcms{$coupon.need_notify_delivery_discount}"><em>{pigcms{:L('_IMMEDIATE_USE_')}</em></div>
                                         </if>
                                     </div>
                                     <div class="Coupon_sm">
@@ -535,7 +535,6 @@
                         if(typeof($(now_dom).data("link")) != 'undefined')
                             window.location.href = $(now_dom).data("link");
                     }
-
                     return false;
                 });
 
@@ -586,7 +585,7 @@
                     data:{"code":code,"order_id":order_id},
                     dataType:"json",
                     success:function(data){
-                        if(data.error_code == 0){
+                        if(data.error_code == 0){   //兑换成功，但是不能直接使用
                             layer.open({
                                 title:'Message',
                                 content:"Success",
@@ -595,7 +594,28 @@
                                     window.location.reload();
                                 }
                             });
-
+                        }else if (data.error_code == 98) { //兑换成功，但是，与免配送费 互斥，需要提示用户，但是可以直接用
+                            layer.open({
+                                title:'Message',
+                                btn: ['OK'],
+                                content: "{pigcms{:L('QW_SEL_COUPON')}",
+                                end:function () {
+                                    var a_link="/wap.php?g=Wap&c=Pay&a=check&order_id="+order_id+"&type=shop&delivery_type=0&sysc_id="+data.sysc_id;
+                                    window.location.href=a_link;
+                                }
+                            })
+                        }else if (data.error_code == 99) { //兑换成功，且可以直接用
+                            var a_link="/wap.php?g=Wap&c=Pay&a=check&order_id="+order_id+"&type=shop&delivery_type=0&sysc_id="+data.sysc_id;
+                            window.location.href=a_link;
+                            // layer.open({
+                            //     title:'Message',
+                            //     btn: ['OK'],
+                            //     content:data.msg,
+                            //     end:function () {
+                            //         var a_link="/wap.php?g=Wap&c=Pay&a=check&order_id="+order_id+"&type=shop&delivery_type=0&sysc_id="+data.sysc_id;
+                            //         window.location.href=a_link;
+                            //     }
+                            // })
                         }else if (data.error_code == 2) {
                             layer.open({
                                 title:'Message',
@@ -605,8 +625,7 @@
                                     window.location.reload();
                                 }
                             });
-
-                        }else{
+                        }else{ //通用消息，
                             layer.open({
                                 title:'Message',
                                 btn: ['OK'],

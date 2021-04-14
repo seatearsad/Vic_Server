@@ -669,6 +669,7 @@ function lang_substr_with_default_lang(&$str){
     }
 
     $str=$re_str;
+    return $re_str;
 }
 //Garfunkel Add
 //根据语言对显示字符进行分割
@@ -1002,7 +1003,10 @@ function translationCnToEn($str_cn){
     $result = $http->curlGet($url);
     //var_dump($result);die();
     $result = json_decode($result,true);
-    return $result['data']['translations'][0]['translatedText'];
+    if ($result['data']['translations'][0]['translatedText']==null)
+        return "";
+    else
+        return $result['data']['translations'][0]['translatedText'];
 }
 
 function getMail($title,$body,$addressee){

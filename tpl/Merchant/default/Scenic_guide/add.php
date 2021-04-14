@@ -133,7 +133,7 @@ KindEditor.ready(function(K){
 		});
 	});
 	$('#edit_form').submit(function(){
-		$('#edit_form button[type="submit"]').prop('disabled',true).html('保存中...');
+		$('#edit_form button[type="submit"]').prop('disabled',true).html('Save....');
 		$.post("{pigcms{:U('add')}",$('#edit_form').serialize(),function(result){
 			if(result.status == 1){
 				alert(result.info);

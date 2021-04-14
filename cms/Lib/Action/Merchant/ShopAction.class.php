@@ -71,7 +71,7 @@ class ShopAction extends BaseAction
                 $_POST['store_notice'] = trim($_POST['store_notice']);
             }
             if(empty($_POST['store_category'])){
-                $this->error('请至少选一个分类！');
+                $this->error(L('LEAST_CATEGORY_BKADMIN'));
             }
             $cat_ids = array();
             foreach ($_POST['store_category'] as $cat_a) {
@@ -222,7 +222,7 @@ class ShopAction extends BaseAction
             $store_data['pay_method'] = $pay_method;
             D('Merchant_store')->where(array('store_id'=>$store_id))->save($store_data);
 
-            $this->success('编辑成功！');
+            $this->success(L('EDITING_SUCCESS_BKADMIN'));
             // 			}else{
             // 				$this->error('编辑失败！请重试。');
             // 			}
@@ -254,6 +254,7 @@ class ShopAction extends BaseAction
             //所有分类
             $database_shop_category = D('Shop_category');
             $category_list = $database_shop_category->lists();//field(true)->where(array('cat_status' => 1))->order('`cat_sort` DESC,`cat_id` ASC')->select();
+            //var_dump($category_list);die();
             $this->assign('category_list', $category_list);
 
             //此店铺有的分类
@@ -394,7 +395,7 @@ class ShopAction extends BaseAction
 
         if (IS_POST) {
             if (empty($_POST['sort_name'])) {
-                $error_tips = '分类名称必填！'.'<br/>';
+                $error_tips = L('CATEGORY_NAME_REQUIRED_BKADMIN').'<br/>';
             } else {
                 $database_goods_sort = D('Shop_goods_sort');
                 $data_goods_sort['store_id'] = $now_store['store_id'];
@@ -457,11 +458,11 @@ class ShopAction extends BaseAction
                     if ($sort && $sort['operation_type'] == 2) {
                         $database_goods_sort->where(array('sort_id' => $sort['sort_id']))->save(array('operation_type' => 1));
                     }
-                    $this->success('添加成功！！', U('Shop/goods_sort',array('store_id' => $now_store['store_id'], 'fid' => $fid)));
+                    $this->success(L('ADDED_SUCC_BKADMIN'), U('Shop/goods_sort',array('store_id' => $now_store['store_id'], 'fid' => $fid)));
                     die;
                 } else {
                     echo $database_goods_sort->_sql();
-                    $this->error('添加失败！！请重试。', U('Shop/goods_sort',array('store_id' => $now_store['store_id'], 'fid' => $fid)));
+                    $this->error(L('J_MODIFICATION_FAILED2'), U('Shop/goods_sort',array('store_id' => $now_store['store_id'], 'fid' => $fid)));
                     die;
                 }
             }
@@ -509,7 +510,7 @@ class ShopAction extends BaseAction
         $ok_tips = '';
         if (IS_POST) {
             if (empty($_POST['sort_name'])) {
-                $error_tips = '分类名称必填！'.'<br/>';
+                $error_tips = L('CATEGORY_NAME_REQUIRED_BKADMIN') . '<br/>';
             } else {
                 $database_goods_sort = D('Shop_goods_sort');
                 $data_goods_sort['sort_id'] = $now_sort['sort_id'];
@@ -573,10 +574,10 @@ class ShopAction extends BaseAction
                     if ($sort && $sort['operation_type'] == 2) {
                         $database_goods_sort->where(array('sort_id' => $sort['sort_id']))->save(array('operation_type' => 1));
                     }
-                    $this->success('保存成功！！', U('Shop/goods_sort',array('store_id' => $now_store['store_id'], 'fid' => $fid)));
+                    $this->success(L('J_SUCCEED3'), U('Shop/goods_sort',array('store_id' => $now_store['store_id'], 'fid' => $fid)));
                     die;
                 } else {
-                    $this->error('保存失败！！您是不是没做过修改？请重试。', U('Shop/goods_sort',array('store_id' => $now_store['store_id'], 'fid' => $fid)));
+                    $this->error(L('FAILED_SAVE_BKADMIN'), U('Shop/goods_sort',array('store_id' => $now_store['store_id'], 'fid' => $fid)));
                     die;
                 }
             }
@@ -704,20 +705,18 @@ class ShopAction extends BaseAction
             //  			echo "<pre/>";
             //  			print_r($_POST);
             //  			die;
-
             if (empty($_POST['name'])) {
-                $error_tips .= '商品名称必填！'.'<br/>';
+                $error_tips .= L('NAME_REQUIRED2_BKADMIN').'<br/>';
             }
             if (empty($_POST['unit'])) {
-                $error_tips .= '商品单位必填！'.'<br/>';
+                $error_tips .= L('UNIT_REQUIRED_BKADMIN').'<br/>';
             }
             if (empty($_POST['price'])&&!$this->config['open_extra_price']) {
-                $error_tips .= '商品价格必填！'.'<br/>';
+                $error_tips .=L('PRICE_REQUIRED_BKADMIN').'<br/>';
             }
             if (empty($_POST['pic'])) {
-                //$error_tips .= '请至少上传一张照片！'.'<br/>';
+                //$error_tips .=L('LEAST_ONE_BKADMIN').'<br/>';
             }
-
             $_POST['name'] = fulltext_filter($_POST['name']);
             $_POST['des'] = fulltext_filter($_POST['des']);
             $_POST['des'] = preg_replace('/<[^>]*>/', "", $_POST['des']);
@@ -805,13 +804,13 @@ class ShopAction extends BaseAction
 
                 if ($goods_id = D('Shop_goods')->save_post_form($_POST, $now_store['store_id'])) {
                     D('Image')->update_table_id($_POST['image'], $goods_id, 'goods');
-                    $this->success('添加成功！', U('Shop/goods_list', array('sort_id' => $now_sort['sort_id'])));
+                    $this->success(L('ADDED_SUCC_BKADMIN'), U('Shop/goods_list', array('sort_id' => $now_sort['sort_id'])));
                     die;
-                    $ok_tips = '添加成功！';
+                    $ok_tips = L('ADDED_SUCC_BKADMIN');
                 } else {
-                    $this->error('添加失败！请重试！', U('Shop/goods_list', array('sort_id' => $now_sort['sort_id'])));
+                    $this->error(L('J_MODIFICATION_FAILED2'), U('Shop/goods_list', array('sort_id' => $now_sort['sort_id'])));
                     die;
-                    $error_tips = '添加失败！请重试。';
+                    $error_tips =L('J_MODIFICATION_FAILED2');
                 }
             } else {
                 $return = $this->format_data($_POST);
@@ -889,7 +888,7 @@ class ShopAction extends BaseAction
             }
             exit(json_encode(array('error_code' => false, 'data' => $data)));
         } else {
-            exit(json_encode(array('error_code' => true, 'msg' => '没有数据')));
+            exit(json_encode(array('error_code' => true, 'msg' => L('NO_CONTENT_BKADMIN'))));
         }
     }
 
@@ -933,18 +932,19 @@ class ShopAction extends BaseAction
         $now_goods = $this->check_goods($_GET['goods_id']);
         $now_sort = $this->check_sort($now_goods['sort_id']);
         $now_store = $this->check_store($now_sort['store_id']);
+        //var_dump($now_store);die();
         if (IS_POST) {
             if (empty($_POST['name'])) {
-                $error_tips .= '商品名称必填！'.'<br/>';
+                $error_tips .= L('NAME_REQUIRED2_BKADMIN').'<br/>';
             }
             if (empty($_POST['unit'])) {
-                $error_tips .= '商品单位必填！'.'<br/>';
+                $error_tips .= L('UNIT_REQUIRED_BKADMIN').'<br/>';
             }
             if (empty($_POST['price'])&&!$this->config['open_extra_price']) {
-                $error_tips .= '商品价格必填！'.'<br/>';
+                $error_tips .=L('PRICE_REQUIRED_BKADMIN').'<br/>';
             }
             if (empty($_POST['pic'])) {
-                //$error_tips .= '请至少上传一张照片！'.'<br/>';
+                //$error_tips .=L('LEAST_ONE_BKADMIN').'<br/>';
             }
 
             $_POST['name'] = fulltext_filter($_POST['name']);
@@ -1011,7 +1011,7 @@ class ShopAction extends BaseAction
                     $shopGoodsSortDB->where(array('sort_id' => $sort_id, 'store_id' => $now_store['store_id']))->save(array('operation_type' => 0));
                 }
             } else {
-                $error_tips .= '商品分类不存在'.'<br/>';
+                $error_tips .= L('VIEW_CATEGORIES_NOT_EXSITS_BKADMIN').'<br/>';
             }
 
             $_POST['seckill_open_time'] = strtotime($_POST['seckill_open_time'] . ":00");
@@ -1025,13 +1025,13 @@ class ShopAction extends BaseAction
 
                 if ($goods_id = D('Shop_goods')->save_post_form($_POST, $now_store['store_id'])) {
                     D('Image')->update_table_id($_POST['image'], $goods_id, 'goods');
-                    $this->success('保存成功！', U('Shop/goods_list', array('sort_id' => $now_sort['sort_id'],'page'=>$_GET['page'])));
+                    $this->success(L('SAVED_SUCCE_BKADMIN'), U('Shop/goods_list', array('sort_id' => $now_sort['sort_id'],'page'=>$_GET['page'])));
                     die;
-                    $ok_tips = '保存成功！';
+                    $ok_tips =L('SAVED_SUCCE_BKADMIN');
                 } else {
-                    $this->error('保存失败！请重试！', U('Shop/goods_list', array('sort_id' => $now_sort['sort_id'])));
+                    $this->error(L('J_FAILED_SAVE_RETRY'), U('Shop/goods_list', array('sort_id' => $now_sort['sort_id'])));
                     die;
-                    $error_tips = '保存失败！请重试。';
+                    $error_tips =L('J_FAILED_SAVE_RETRY');
                 }
             } else {
                 $return = $this->format_data($_POST);
@@ -1096,6 +1096,7 @@ class ShopAction extends BaseAction
      * 添加配菜
      */
     public function dish_add(){
+
         if($_POST){
             $now_goods = $this->check_goods($_POST['goods_id']);
             $dish_id = $_POST['dish_id'];
@@ -1114,7 +1115,7 @@ class ShopAction extends BaseAction
             }else{//新配菜
                 $dish_id = $dish_db->add($side_dish);
                 if(!$dish_id){
-                    $this->error('保存失败！请重试！', U('Shop/side_dish', array('goods_id' => $now_goods['goods_id'])));
+                    $this->error(L('J_FAILED_SAVE_RETRY'), U('Shop/side_dish', array('goods_id' => $now_goods['goods_id'])));
                 }
             }
 
@@ -1144,7 +1145,7 @@ class ShopAction extends BaseAction
                 $dish_value_db->where(array('id'=>$k))->save($v);
             }
 
-            $this->success('成功！', U('Shop/dish_add', array('goods_id' => $now_goods['goods_id'],'dish_id'=>$dish_id)));
+            $this->success(L('SUCCESS_BKADMIN'), U('Shop/dish_add', array('goods_id' => $now_goods['goods_id'],'dish_id'=>$dish_id)));
         }else {
             $now_goods = $this->check_goods($_GET['goods_id']);
             $now_sort = $this->check_sort($now_goods['sort_id']);
@@ -1213,9 +1214,9 @@ class ShopAction extends BaseAction
                 $old_spec_val = M('Shop_goods_spec_value')->where(array('sid' => array('in', $delete_spec_ids)))->delete();
             }
             M('Shop_goods_properties')->where(array('goods_id' => $now_goods['goods_id']))->delete();
-            $this->success('删除成功！');
+            $this->success(L('J_DELETION_SUCCESS'));
         }else{
-            $this->error('删除失败！请检查后重试。');
+            $this->error(L('J_DELETION_FAILED_RETRY'));
         }
     }
     /* 商品复制 */
@@ -1335,11 +1336,15 @@ class ShopAction extends BaseAction
         $condition_merchant_store['store_id'] = $store_id;
         $condition_merchant_store['mer_id'] = $this->merchant_session['mer_id'];
         $now_store = $database_merchant_store->field(true)->where($condition_merchant_store)->find();
+
         if (empty($now_store)) {
             $this->error('店铺不存在！');
         } else {
             //return $now_store;
             if ($now_shop = D('Merchant_store_shop')->field(true)->where($condition_merchant_store)->find()) {
+                //var_dump($now_shop);
+                $now_shop['pack_alias']=lang_substr_with_default_lang($now_shop['pack_alias']);
+
                 if (!empty($now_shop['background'])) {
                     $image_tmp = explode(',', $now_shop['background']);
                     $now_shop['background_image'] = C('config.site_url') . '/upload/background/' . $image_tmp[0] . '/' . $image_tmp['1'];
@@ -1581,11 +1586,11 @@ class ShopAction extends BaseAction
             $data_discount['status'] = intval($_POST['status']);
             $data_discount['source'] = 1;
             if ($database_discount->data($data_discount)->add()) {
-                $this->success('添加成功！！', U('Shop/discount',array('store_id' => $now_store['store_id'])));
+                $this->success(L('ADDED_SUCC_BKADMIN'), U('Shop/discount',array('store_id' => $now_store['store_id'])));
                 die;
-                $ok_tips = '添加成功！！';
+                $ok_tips = L('ADDED_SUCC_BKADMIN');
             }else{
-                $this->error('添加失败！！请重试。', U('Shop/discount',array('store_id' => $now_store['store_id'])));
+                $this->error(L('J_MODIFICATION_FAILED2'), U('Shop/discount',array('store_id' => $now_store['store_id'])));
                 die;
                 $error_tips = '添加失败！！请重试。';
             }
@@ -1617,11 +1622,11 @@ class ShopAction extends BaseAction
             $data_discount['status'] = intval($_POST['status']);
             $data_discount['source'] = 1;
             if ($database_discount->data($data_discount)->save()) {
-                $this->success('添加成功！！', U('Shop/discount',array('store_id' => $now_store['store_id'])));
+                $this->success(L('ADDED_SUCC_BKADMIN'), U('Shop/discount',array('store_id' => $now_store['store_id'])));
                 die;
-                $ok_tips = '添加成功！！';
+                $ok_tips =L('ADDED_SUCC_BKADMIN');
             }else{
-                $this->error('添加失败！！请重试。', U('Shop/discount',array('store_id' => $now_store['store_id'])));
+                $this->error(L('J_MODIFICATION_FAILED2'), U('Shop/discount',array('store_id' => $now_store['store_id'])));
                 die;
                 $error_tips = '添加失败！！请重试。';
             }
@@ -1806,7 +1811,7 @@ class ShopAction extends BaseAction
                                 }
                             }
                         }
-                        
+
                         $pro_map = $spec_map = $spec_value_map = array();
                         if ($goods['is_properties']) {
                             $properties = M('Shop_goods_properties')->field(true)->where(array('goods_id' => $source_goods_id))->select();
@@ -1865,7 +1870,7 @@ class ShopAction extends BaseAction
                     }
                 }
             }
-            $this->success('克隆完成');
+            $this->success(L('CLONING_COMPLETED_BKADMIN'));
         }
     }
 
@@ -2395,12 +2400,14 @@ class ShopAction extends BaseAction
         $condition_where.=" AND o.is_del=0";
         $where['is_del'] = 0;
 
-        $sql = "SELECT  o.*, m.name AS merchant_name,g.name as good_name,g.tax_num as good_tax,g.deposit_price,s.tax_num as store_tax,d.price as good_price ,d.unit,d.cost_price, d.num as good_num, s.name AS store_name FROM " . C('DB_PREFIX') . "shop_order AS o LEFT JOIN " . C('DB_PREFIX') . "merchant_store AS s ON s.store_id=o.store_id LEFT JOIN " . C('DB_PREFIX') . "merchant AS m ON `s`.`mer_id`=`m`.`mer_id` LEFT JOIN " . C('DB_PREFIX') . "shop_order_detail AS d ON `d`.`order_id`=`o`.`order_id`  LEFT JOIN " . C('DB_PREFIX') . "shop_goods AS g ON `g`.`goods_id`=`d`.`goods_id` ".$condition_where." ORDER BY o.order_id DESC";
+        $sql = "SELECT  o.*, m.name AS merchant_name,g.name as good_name,d.tax_num as good_tax,g.deposit_price,s.tax_num as store_tax,d.price as good_price ,d.unit,d.cost_price, d.num as good_num, s.name AS store_name FROM " . C('DB_PREFIX') . "shop_order AS o LEFT JOIN " . C('DB_PREFIX') . "merchant_store AS s ON s.store_id=o.store_id LEFT JOIN " . C('DB_PREFIX') . "merchant AS m ON `s`.`mer_id`=`m`.`mer_id` LEFT JOIN " . C('DB_PREFIX') . "shop_order_detail AS d ON `d`.`order_id`=`o`.`order_id`  LEFT JOIN " . C('DB_PREFIX') . "shop_goods AS g ON `g`.`goods_id`=`d`.`goods_id` ".$condition_where." ORDER BY o.order_id DESC";
 
         $result_list = D()->query($sql);
 
         //计算订单税费及押金
         $all_tax = 0;
+        $all_gst_tax = 0;
+        $all_pst_tax = 0;
         $all_deposit = 0;
         $all_record = array();
         $record_id = '';
@@ -2411,6 +2418,8 @@ class ShopAction extends BaseAction
         //subtotal
         $total_goods_price = 0;
         $total_goods_tax = 0;
+        $total_goods_gst_tax = 0;
+        $total_goods_pst_tax = 0;
         $total_freight_price = 0;
         $total_freight_tax = 0;
         $total_packing_price = 0;
@@ -2454,10 +2463,14 @@ class ShopAction extends BaseAction
                     //记录上一张订单的税费和押金
                     if($record_id != '') {
                         $all_record[$record_id]['all_tax'] = $all_tax;
+                        $all_record[$record_id]['all_gst_tax'] = $all_gst_tax;
+                        $all_record[$record_id]['all_pst_tax'] = $all_pst_tax;
                         $all_record[$record_id]['all_deposit'] = $all_deposit;
                         $all_record[$record_id]['total_tax'] = $all_tax + $all_record[$record_id]['freight_tax'] + $all_record[$record_id]['packing_tax'];
 
                         $total_goods_tax += $all_tax;
+                        $total_goods_gst_tax += $all_gst_tax;
+                        $total_goods_pst_tax += $all_pst_tax;
                         $total_deposit += $all_deposit;
                         $total_all_tax += $all_record[$record_id]['total_tax'];
                     }
@@ -2479,11 +2492,20 @@ class ShopAction extends BaseAction
 
                     //清空商品税费
                     $all_tax = 0;//($val['freight_charge'] + $val['packing_charge'])*$val['store_tax']/100;
+                    $all_gst_tax = 0;
+                    $all_pst_tax = 0;
                     //清空押金
                     $all_deposit = 0;
                 }
 
                 $all_tax += $val['good_price'] * $val['good_tax']/100*$val['good_num'];
+                if($val['good_tax'] <= 5){
+                    $all_gst_tax += $val['good_price'] * $val['good_tax']/100*$val['good_num'];
+                    $all_pst_tax += 0;
+                }else{
+                    $all_gst_tax += $val['good_price'] * 5/100*$val['good_num'];
+                    $all_pst_tax += $val['good_price'] * ($val['good_tax']-5)/100*$val['good_num'];
+                }
                 $all_deposit += $val['deposit_price']*$val['good_num'];
                 $total_tax = $all_tax + ($val['freight_charge']+$val['packing_charge'])*$val['store_tax']/100;
 
@@ -2494,10 +2516,14 @@ class ShopAction extends BaseAction
         //记录最后一张订单
         if ($is_last){
             $all_record[$record_id]['all_tax'] = $all_tax;
+            $all_record[$record_id]['all_gst_tax'] = $all_gst_tax;
+            $all_record[$record_id]['all_pst_tax'] = $all_pst_tax;
             $all_record[$record_id]['all_deposit'] = $all_deposit;
             $all_record[$record_id]['total_tax'] = $total_tax;
 
             $total_goods_tax += $all_tax;
+            $total_goods_gst_tax += $all_gst_tax;
+            $total_goods_pst_tax += $all_pst_tax;
             $total_deposit += $all_deposit;
             $total_all_tax += $total_tax;
         }
@@ -2507,14 +2533,14 @@ class ShopAction extends BaseAction
 
         import('@.ORG.mpdf.mpdf');
         $mpdf = new mPDF();
-        $html = $this->get_html($store,$begin_time,$end_time,$total_goods_price,$total_goods_tax,$total_packing_price,$total_deposit,$total_reduce);
+        $html = $this->get_html($store,$begin_time,$end_time,$total_goods_price,$total_goods_tax,$total_packing_price,$total_deposit,$total_reduce,$total_goods_gst_tax,$total_goods_pst_tax);
 
         $mpdf->WriteHTML($html);
         $fileName = $store['name'].'('.$begin_time.' - '.$end_time.').pdf';
         $mpdf->Output($fileName,'I');
     }
 
-    public function get_html($store,$begin_time,$end_time,$good_price,$good_tax,$packing,$deposit,$reduce){
+    public function get_html($store,$begin_time,$end_time,$good_price,$good_tax,$packing,$deposit,$reduce,$gst_tax,$pst_tax){
         $good_pro = ($good_price - $reduce) * $store['proportion'] / 100;
         $tax_pro = $good_tax * $store['proportion'] / 100;
 
@@ -2599,10 +2625,21 @@ class ShopAction extends BaseAction
                                 <table style="border-bottom: 1px solid #999;">
                                     <tr>
                                         <td style="color:#333;font-size: 16px;width: 755px;height: 30px;" align="left">
-                                            &nbsp;Tax received from sales
+                                            &nbsp;GST received from sales
                                         </td>
                                         <td align="right" style="color:#666;font-size: 16px;width: 120px;">
-                                            '.floatval(sprintf("%.2f", $good_tax)).'
+                                            '.floatval(sprintf("%.2f", $gst_tax)).'
+                                            &nbsp;&nbsp;
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table style="border-bottom: 1px solid #999;">
+                                    <tr>
+                                        <td style="color:#333;font-size: 16px;width: 755px;height: 30px;" align="left">
+                                            &nbsp;PST received from sales
+                                        </td>
+                                        <td align="right" style="color:#666;font-size: 16px;width: 120px;">
+                                            '.floatval(sprintf("%.2f", $pst_tax)).'
                                             &nbsp;&nbsp;
                                         </td>
                                     </tr>
@@ -2654,7 +2691,7 @@ class ShopAction extends BaseAction
                                 <table style="border-bottom: 1px solid #999;">
                                     <tr>
                                         <td style="color:#333;font-size: 16px;width: 755px;height: 30px;" align="left">
-                                            &nbsp;GST (GST #721938728RT0001) (service charge on tax)
+                                            &nbsp;Service charge on tax (GST #721938728RT0001)
                                         </td>
                                         <td align="right" style="color:#666;font-size: 16px;width: 120px;">
                                             -'.floatval(sprintf("%.2f", $tax_pro)).'
@@ -2676,7 +2713,7 @@ class ShopAction extends BaseAction
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="2" style="height: 530px"></td>
+                            <td colspan="2" style="height: 500px"></td>
                         </tr>
                         <tr>
                             <td colspan="2" style="font-size: 14px;font-family: Arial" align="center">

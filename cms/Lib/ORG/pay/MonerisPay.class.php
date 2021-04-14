@@ -44,17 +44,19 @@ class MonerisPay
 
         //判断金额还需在api user_card_default 方法中修改
         if($data['order_type'] == 'recharge' || $data['charge_total'] >= 251 || $store['pay_secret'] == 1){
-
+            //echo("-------1---------");
+            //die("33333333333");
             //跳转到第三方支付
             return $this->mpi_transaction($data,$uid,$from_type);
 
         }else {
 
+            //echo("-------2---------");
             //直接支付
             $txnArray['type'] = 'purchase';
             $txnArray['crypt_type'] = '7';
 
-            if ($data['credit_id']) {//存储卡的
+            if ($data['credit_id']) {//使用老卡存储卡的
                 $card_id = $data['credit_id'];
                 $card = D('User_card')->field(true)->where(array('id' => $card_id))->find();
                 $txnArray['pan'] = $card['card_num'];
@@ -106,18 +108,23 @@ class MonerisPay
             $mpgHttpPost = new mpgHttpsPost($this->store_id, $this->api_token, $mpgRequest);
 
             $mpgResponse = $mpgHttpPost->getMpgResponse();
+            //echo("----3-----");
             $resp = $this->arrageResp($mpgResponse, $txnArray['pan'], $txnArray['expdate'], 0, $order_id, $card_cvd);
 
             if ($resp['responseCode'] != "null" && $resp['responseCode'] < 50 && $data['save'] == 1) {//如果需要存储
+
                 $isC = D('User_card')->getCardByUserAndNum($uid, $data['card_num']);
                 if (!$isC) {
                     D('User_card')->clearIsDefaultByUid($uid);
-                    $data['is_default'] = 1;
+                    $card_data['name'] = $data['name'];
+                    $card_data['is_default'] = 1;
+                    $card_data['card_num'] = $data['card_num'];
+                    $card_data['uid'] = $uid;
                     $data['uid'] = $uid;
-                    $data['create_time'] = date("Y-m-d H:i:s");
+                    $card_data['create_time'] = date("Y-m-d H:i:s");
                     //存储的时候为YYMM
-                    $data['expiry'] = transYM($data['expiry']);
-                    $data['credit_id'] = D('User_card')->field(true)->add($data);
+                    $card_data['expiry'] = transYM($data['expiry']);
+                    $data['credit_id'] = D('User_card')->field(true)->add($card_data);
                 }
             }
 
@@ -151,6 +158,9 @@ class MonerisPay
                         if (!empty($now_coupon)) {
                             $coupon = D('New_event_coupon')->where(array('id' => $now_coupon['event_coupon_id']))->find();
                             $in_coupon = array('coupon_id' => $data['coupon_id'], 'coupon_price' => $coupon['discount']);
+                            if ($order['delivery_discount_type'] == 0) {
+                                $in_coupon['delivery_discount'] = 0;
+                            }
                             D('Shop_order')->field(true)->where(array('order_id' => $order_id))->save($in_coupon);
                         }
                     } else {
@@ -161,6 +171,9 @@ class MonerisPay
                             $coupon = D('System_coupon')->get_coupon($coupon_real_id);
 
                             $in_coupon = array('coupon_id' => $data['coupon_id'], 'coupon_price' => $coupon['discount']);
+                            if ($order['delivery_discount_type'] == 0) {
+                                $in_coupon['delivery_discount'] = 0;
+                            }
 
                             D('Shop_order')->field(true)->where(array('order_id' => $order_id))->save($in_coupon);
                         }
@@ -173,7 +186,6 @@ class MonerisPay
             } else {
 
             }
-
             return $resp;
         }
     }
@@ -288,7 +300,6 @@ class MonerisPay
 
             }
 
-            var_dump($result);die($order_id);
         }
     }
 
@@ -454,7 +465,9 @@ class MonerisPay
      * @return mixed
      */
     public function mpi_transaction($data,$uid,$from_type){
+
         if($data['credit_id']){//存储卡的
+
             $vault_card = D('Vault_card')->where(array('user_card_id'=>$data['credit_id']))->find();
             if($vault_card){
                 $data_key = $vault_card['data_key'];
@@ -494,7 +507,6 @@ class MonerisPay
         if(count($order_param) > 0)
             D('Shop_order')->field(true)->where(array('order_id'=>$order_id))->save($order_param);
 
-
         if(!$data['order_type']) $data['order_type'] = "shop";
 
         $save = $data['save'] ? $data['save'] : 0;
@@ -528,9 +540,10 @@ class MonerisPay
             'accept'=>$accept,
             'userAgent'=>$userAgent
         );
-        //var_dump($txnArray);//die();
 
         $mpgTxn = new mpgTransaction($txnArray);
+        //var_dump($mpgTxn);die();
+
         /************************ Request Object **********************************/
         $mpgRequest = new mpgRequest($mpgTxn);
         $mpgRequest->setProcCountryCode($this->countryCode); //"US" for sending transaction to US environment
@@ -544,6 +557,7 @@ class MonerisPay
         $resp['requestMode'] = "mpi";
         $resp['mpiSuccess'] = $mpgResponse->getMpiSuccess();
         $resp['message'] = $mpgResponse->getMpiMessage();
+
         if($mpgResponse->getMpiSuccess() == "true")
         {
             //print($mpgResponse->getMpiInLineForm());
@@ -762,6 +776,7 @@ class MonerisPay
 
     public function getOrderInfoFromMD($MD){
         //$orderInfo = '-'.$data['order_type'].'-'.$data['order_id'].'-'.$from_type.'-'.$save.'-'.$tip.'-'.$coupon_id.'-'.$card_user_name.'-'.$data_key.'-';
+       //var_dump($MD);die();
         $arr = explode('-',$MD);
         $orderInfo['order_type'] = $arr[1];
         $orderInfo['orderId'] = $arr[2];
@@ -793,7 +808,8 @@ class MonerisPay
             $orderInfo['expiry'] = $card['expiry'];
         }
 
-        //1Web(PC) 2Wap 3App
+        //1vWeb(PC) 2 Wap 3 App
+
         if($orderInfo['order_from'] == 1){
             if($orderInfo['order_type'] == 'recharge')
                 $url = C('config.config_site_url').'/index.php?g=User&c=Credit&a=index';
@@ -805,14 +821,18 @@ class MonerisPay
             }
 
             $orderInfo['url'] = $url;
-        }elseif($orderInfo['order_from'] == 2){
+
+        }elseif($orderInfo['order_from'] == 2){ /// WAP 应该用的是这里，设置支付成功或
+
             if($orderInfo['order_type'] == 'recharge')
                 $url = U("Wap/My/my_money");
             else {
                 if(strpos($_SERVER['HTTP_HOST'],'tutti.app') !== false)
-                    $url = 'https://'.$_SERVER['HTTP_HOST'].'/wap.php?g=Wap&c=Shop&a=pay_result&order_id=' . $orderInfo['order_id'];
-                else
-                    $url = U("Wap/Shop/pay_result", array('order_id' => $orderInfo['order_id']));
+                    $url = 'https://'.$_SERVER['HTTP_HOST'].'/wap.php?g=Wap&c=Shop&a=pay_result&order_id='.$orderInfo['order_id']."&mer_id=".$orderInfo['mer_id']."&store_id=".$orderInfo['store_id'];
+                    //$url = 'https://'.$_SERVER['HTTP_HOST'].'/wap.php?g=Wap&c=Shop&a=pay_result&order_id='.$orderInfo['order_id']."&mer_id=".$orderInfo['mer_id']."&store_id=".$orderInfo['store_id']."&status=1";
+            else
+                    $url = U("Wap/Shop/pay_result", array('order_id' => $orderInfo['order_id'],"mer_id"=>$orderInfo['mer_id'],"store_id"=>$orderInfo['store_id']));
+                    //$url = U("Wap/Shop/pay_result", array('order_id' => $orderInfo['order_id'],"mer_id"=>$orderInfo['mer_id'],"store_id"=>$orderInfo['store_id'],"status"=>"1"));
             }
 
             $orderInfo['url'] = $url;

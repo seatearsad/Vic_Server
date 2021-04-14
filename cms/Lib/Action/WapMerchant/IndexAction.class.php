@@ -1152,7 +1152,7 @@ class IndexAction extends BaseAction {
         $this->assign('now_store', $now_store);
         if (IS_POST) {
             if (empty($_POST['sort_name'])) {
-                $error_tips = '分类名称必填！' . '<br/>';
+                $error_tips = L('CATEGORY_NAME_REQUIRED_BKADMIN') . '<br/>';
             } else {
                 $database_Foodshop_goods_sort = D('Foodshop_goods_sort');
                 $data['store_id'] = $now_store['store_id'];
@@ -2190,7 +2190,7 @@ class IndexAction extends BaseAction {
         $company_staff_db = M('Merchant_store_staff');
         if (IS_POST) {
             if (!trim($_POST['name']) || !trim($_POST['username'])) {
-                $this->error_tips('姓名、帐号都不能为空');
+                $this->error_tips(L('REQUIRED3_BKADMIN'));
             }
             $data['name'] = trim($_POST['name']);
             $data['username'] = trim($_POST['username']);

@@ -62,7 +62,7 @@
 								</if>
 								<if condition="$sysnc">
 								<div class="alert alert-info" style="margin:10px;">
-								<button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>同步数据只能在完善店铺信息的时候同步，以后修改店铺时不允许同步
+								<button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>{pigcms{:L('SYNCHRONIZED_BKADMIN')}
 								</div>
 								<div class="form-group hidden_obj">
 									<label class="col-sm-1"><label>同步原外卖数据</label></label>
@@ -140,9 +140,9 @@
 									<span class="form_tips">元<span class="required red">*</span></span>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-1">包装费别名</label>
-									<input class="col-sm-1" size="10" maxlength="10" name="pack_alias" type="text" value="{pigcms{$store_shop.pack_alias|default='打包费'}" />
-                                    <label class="col-sm-1">{pigcms{$store_shop.pack_alias|default='打包费'}</label>
+									<label class="col-sm-1"> {pigcms{:L('QW_PACKAGEFEE')}</label>
+									<input class="col-sm-1 hidden_obj" size="10" maxlength="10" name="pack_alias" type="text" value="{pigcms{$store_shop.pack_alias|default='打包费'}" />
+                                    <label class="col-sm-1  hidden_obj">{pigcms{$store_shop.pack_alias|default='打包费'}</label>
                                     <input class="col-sm-1" size="10" maxlength="10" name="pack_fee" type="text" value="{pigcms{$store_shop.pack_fee}" />
 									<span class="form_tips"> {pigcms{:L('PACKING_FEE_BKADMIN')}</span>
 								</div>
@@ -615,7 +615,7 @@ var uploader = WebUploader.create({
 uploader.on('fileQueued',function(file){
 	if($('.upload_pic_li').size() >= 1){
 		uploader.cancelFile(file);
-		alert('最多上传一张图片！');
+		alert({pigcms{:L('LEAST_ONE_BKADMIN')}});
 		return false;
 	}
 });
@@ -642,7 +642,7 @@ function check(obj){
 	var length = $('.paycheck:checked').length;
 	if(length == 0){
 		$(obj).attr('checked','checked');
-		bootbox.alert('最少要选择一种支付方式');
+		bootbox.alert(L('LEAST_PAYMENT_BKADMIN'));
 	}			
 }
 $(function($){

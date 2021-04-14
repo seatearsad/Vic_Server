@@ -10,7 +10,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="format-detection" content="address=no">
     <link href="{pigcms{$static_path}css/eve.7c92a906.css" rel="stylesheet"/>
-    <link href="{pigcms{$static_path}css/staff.css" rel="stylesheet"/>
+    <link href="{pigcms{$static_path}css/staff.css?v=1.1" rel="stylesheet"/>
     <script src="{pigcms{:C('JQUERY_FILE')}"></script>
     <script src="{pigcms{$static_public}js/laytpl.js"></script>
     <script src="{pigcms{$static_path}layer/layer.m.js"></script>
@@ -27,6 +27,7 @@
         <div class="order_detail">
             <div class="show_list"></div>
             <div id="detail_div"></div>
+            <div id="tip_layer">{pigcms{:replace_lang_str(L('D_F_TIP_2'),$store['min_time'])}</div>
             <div class="con_layer">
                 <span class="confirm_txt">
                     Food Preparation
@@ -81,7 +82,7 @@
         var sound_url = "{pigcms{$static_public}sound/soft-bells.mp3";
         var detail_url = "{pigcms{:U('Storestaff/getOrderDetail')}";
     </script>
-    <script type="text/javascript" src="{pigcms{$static_path}js/new_order.js?v=2.5"></script>
+    <script type="text/javascript" src="{pigcms{$static_path}js/new_order.js?v=2.6"></script>
     <script>
         //更新app 设备token
         function pushDeviceToken(token) {
@@ -186,8 +187,13 @@
                         getOrderDetail(click_id);
                     },1000);
                 }else{
-                    alert(result.info);
-                    window.location.reload();
+                    layer.open({
+                        content:result.info,
+                        btn: ['OK'],
+                        end:function(){
+                            window.location.reload();
+                        }
+                    });
                 }
             },'json');
             return false;
