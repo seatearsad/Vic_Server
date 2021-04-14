@@ -59,14 +59,14 @@
 					<span class="cb-disable"><label class="cb-disable <if condition="$now_adver['status'] eq 0">selected</if>"><span>{pigcms{:L('C_CATEGORYDIS')}</span><input type="radio" name="status" value="0" <if condition="$now_adver['status'] eq 0">checked="checked"</if>/></label></span>
 				</td>
 			</tr>
-			<tr>
+			<!--tr>
 				<th width="80">{pigcms{:L('I_FILL_UNIVERSAL')}</th>
 				<td>
 					<span class="cb-enable"><label class="cb-enable <if condition="$now_adver['complete'] eq 1">selected</if>"><span>Yes</span><input type="radio" name="complete" value="1" <if condition="$now_adver['complete'] eq 1">checked="checked"</if>/></label></span>
 					<span class="cb-disable"><label class="cb-disable <if condition="$now_adver['complete'] eq 0">selected</if>"><span>No</span><input type="radio" name="complete" value="0" <if condition="$now_adver['complete'] eq 0">checked="checked"</if>/></label></span>
 					<em tips="当设置过城市广告时，城市广告数量不够总数量，是否使用通用广告来补全城市广告位的数量。" class="notice_tips"></em>
 				</td>
-			</tr>
+			</tr-->
 		</table>
 		<div class="btn hidden">
 			<input type="submit" name="dosubmit" id="dosubmit" value="提交" class="button" />

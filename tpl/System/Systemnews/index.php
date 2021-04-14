@@ -46,7 +46,7 @@
 										<td>{pigcms{$vo.name}</td>
 										<td><a href="{pigcms{:U('Systemnews/news',array('category_id'=>$vo['id']))}">{pigcms{:L('I_VIEW_CONTENT')}({pigcms{$vo.count})</a></td>
 										<td>{pigcms{$vo.sort}</td>
-										<td><if condition="$vo['status'] eq 1"><font color="green">{pigcms{:L('I_ENABLE1')}</font><else/><font color="red">{pigcms{:L('I_DISABLE3')}</font></if></td>
+										<td><if condition="$vo['status'] eq 1"><font color="green">{pigcms{:L('I_ACTIVE')}</font><else/><font color="red">{pigcms{:L('_BACK_FORBID_')}</font></if></td>
 										<td class="textcenter"><a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Systemnews/edit_category',array('id'=>$vo['id']))}','{pigcms{:L(\'BASE_EDIT\')}',800,460,true,false,false,editbtn,'edit',true);">{pigcms{:L('BASE_EDIT')}</a> | <a href="javascript:void(0);" class="delete_row" parameter="category_id={pigcms{$vo.id}" url="{pigcms{:U('Systemnews/del',array('category_id'=>$vo['id']))}">{pigcms{:L('BASE_DELETE')}</a></td>
 									</tr>
 								</volist>

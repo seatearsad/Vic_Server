@@ -35,7 +35,7 @@
             </tr-->
 			<if condition="$_GET['type'] gt 1">
 				<tr>
-					<th width="80">{pigcms{:L('I_POPULARITY')}</th>
+					<th width="100">{pigcms{:L('I_POPULARITY')}</th>
 					<td>
 						<span class="cb-enable"><label class="cb-enable"><span>Yes</span><input type="radio" name="is_hot" value="1" /></label></span>
 						<span class="cb-disable"><label class="cb-disable selected"><span>No</span><input type="radio" name="is_hot" value="0" checked="checked"/></label></span>
@@ -46,7 +46,7 @@
 				<th width="80">{pigcms{:L('G_STATUS')}</th>
 				<td>
 					<span class="cb-enable"><label class="cb-enable selected"><span>{pigcms{:L('I_ACTIVE')}</span><input type="radio" name="is_open" value="1" checked="checked" /></label></span>
-					<span class="cb-disable"><label class="cb-disable"><span>{pigcms{:L('I_HIDE')}</span><input type="radio" name="is_open" value="0" /></label></span>
+					<span class="cb-disable"><label class="cb-disable"><span>{pigcms{:L('_BACK_FORBID_')}</span><input type="radio" name="is_open" value="0" /></label></span>
 				</td>
 			</tr>
 		</table>

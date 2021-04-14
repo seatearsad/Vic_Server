@@ -109,8 +109,8 @@
             <tr>
                 <th width="80">{pigcms{:L('I_RECOMMENDED')}</th>
                 <td>
-                    <span class="cb-enable"><label class="cb-enable selected"><span>{pigcms{:L('I_RECOMMENDED')}</span><input type="radio" name="is_commend" value="1" checked="checked"/></label></span>
-                    <span class="cb-disable"><label class="cb-disable "><span>{pigcms{:L('C_CATEGORYDIS')}</span><input type="radio" name="is_commend" value="0" /></label></span>
+                    <span class="cb-enable"><label class="cb-enable selected"><span>{pigcms{:L('I_RECOMMENDED_TOP')}</span><input type="radio" name="is_commend" value="1" checked="checked"/></label></span>
+                    <span class="cb-disable"><label class="cb-disable "><span>{pigcms{:L('I_RECOMMENDED_NORMAL')}</span><input type="radio" name="is_commend" value="0" /></label></span>
                 </td>
             </tr>
 		</table>

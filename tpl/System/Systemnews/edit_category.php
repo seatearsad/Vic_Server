@@ -60,13 +60,13 @@
             </tr>
             <tr>
                 <th width="80">{pigcms{:L('I_URL')}</th>
-                <td><input type="text" class="input fl" name="link_url" size="75" value="{pigcms{$category.link_url}" placeholder="链接地址" validate="maxlength:50"/></td>
+                <td><input type="text" class="input fl" name="link_url" size="75" value="{pigcms{$category.link_url}" placeholder="{pigcms{:L('I_URL')}" validate="maxlength:50"/></td>
             </tr>
 			<tr>
 				<th width="80">{pigcms{:L('G_STATUS')}</th>
 				<td>
-					<span class="cb-enable"><label class="cb-enable <if condition="$category['status'] eq 1">selected</if>"><span>{pigcms{:L('I_ENABLE1')}</span><input type="radio" name="status" value="1" <if condition="$category['status'] eq 1">checked="checked"</if> /></label></span>
-					<span class="cb-disable"><label class="cb-disable <if condition="$category['status'] eq 0">selected</if>"><span>{pigcms{:L('I_DISABLE3')}</span><input type="radio" name="status" value="0" <if condition="$category['status'] eq 0">checked="checked"</if> /></label></span>
+					<span class="cb-enable"><label class="cb-enable <if condition="$category['status'] eq 1">selected</if>"><span>{pigcms{:L('I_ACTIVE')}</span><input type="radio" name="status" value="1" <if condition="$category['status'] eq 1">checked="checked"</if> /></label></span>
+					<span class="cb-disable"><label class="cb-disable <if condition="$category['status'] eq 0">selected</if>"><span>{pigcms{:L('_BACK_FORBID_')}</span><input type="radio" name="status" value="0" <if condition="$category['status'] eq 0">checked="checked"</if> /></label></span>
 				</td>
 			</tr>
 		</table>

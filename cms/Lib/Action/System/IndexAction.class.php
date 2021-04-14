@@ -693,9 +693,9 @@ class IndexAction extends BaseAction {
         $data_admin['phone'] = $this->_post('phone');
         $data_admin['sort_menus'] = $this->_post('system_menu');
         if ($database_admin->data($data_admin)->save()) {
-            $this->success('资料修改成功！');
+            $this->success(L('K_PROFILE_SUCC'));
         } else {
-            $this->error('资料修改失败！请检查是否有修改内容后再重试。');
+            $this->error(L('K_PROFILE_FAIL'));
         }
     }
 
@@ -757,7 +757,7 @@ class IndexAction extends BaseAction {
             $menus = implode(',', $menus);
             $database = D('Admin');
             $database->where(array('id' => $admin_id))->save(array('menus' => $menus));
-            $this->success('全选设置成功！');
+            $this->success(L('K_ALL_SUCC'));
         } else {
             $this->error('非法提交,请重新提交~');
         }
@@ -822,7 +822,7 @@ class IndexAction extends BaseAction {
             } else {
             	//$_POST['level'] = 0;
                 if (empty($_POST['pwd'])) {
-                    $this->error('密码不能为空~');
+                    $this->error(L('K_PASS_EMPTY'));
                 }
                 $_POST['pwd'] = md5($_POST['pwd']);
                 if ($database_area->data($_POST)->add()) {

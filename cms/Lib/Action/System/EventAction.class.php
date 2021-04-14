@@ -58,13 +58,13 @@ class EventAction extends BaseAction
                     D('New_event')->where($where)->save($data);
                     $this->frame_submit_tips(1, 'Success！');
                 }
-                $this->frame_submit_tips(0,'此活动类型已存在！');
+                $this->frame_submit_tips(0,L('K_ACTIVIT_EXISTS'));
             }else{
                 if(D('New_event')->checkEventType($data['type'],0,$data['city_id'])){
                     D('New_event')->add($data);
                     $this->frame_submit_tips(1, 'Success！');
                 }else{
-                    $this->frame_submit_tips(0,'此活动类型已存在！');
+                    $this->frame_submit_tips(0,L('K_ACTIVIT_EXISTS'));
                 }
             }
         }

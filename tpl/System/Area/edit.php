@@ -34,7 +34,7 @@
             </tr-->
 			<if condition="$now_area['area_type'] gt 1">
 				<tr>
-					<th width="80">{pigcms{:L('I_POPULARITY')}</th>
+					<th width="100">{pigcms{:L('I_POPULARITY')}</th>
 					<td>
 						<span class="cb-enable"><label class="cb-enable <if condition="$now_area['is_hot'] eq 1">selected</if>"><span>Yes</span><input type="radio" name="is_hot" value="1" <if condition="$now_area['is_hot'] eq 1">checked="checked"</if> /></label></span>
 						<span class="cb-disable"><label class="cb-disable <if condition="$now_area['is_hot'] eq 0">selected</if>"><span>No</span><input type="radio" name="is_hot" value="0" <if condition="$now_area['is_hot'] eq 0">checked="checked"</if>/></label></span>
@@ -45,7 +45,7 @@
 				<th width="80">{pigcms{:L('G_STATUS')}</th>
 				<td>
 					<span class="cb-enable"><label class="cb-enable <if condition="$now_area['is_open'] eq 1">selected</if>"><span>{pigcms{:L('I_ACTIVE')}</span><input type="radio" name="is_open" value="1" <if condition="$now_area['is_open'] eq 1">checked="checked"</if> /></label></span>
-					<span class="cb-disable"><label class="cb-disable <if condition="$now_area['is_open'] eq 0">selected</if>"><span>{pigcms{:L('I_HIDE')}</span><input type="radio" name="is_open" value="0" <if condition="$now_area['is_open'] eq 0">checked="checked"</if>/></label></span>
+					<span class="cb-disable"><label class="cb-disable <if condition="$now_area['is_open'] eq 0">selected</if>"><span>{pigcms{:L('_BACK_FORBID_')}</span><input type="radio" name="is_open" value="0" <if condition="$now_area['is_open'] eq 0">checked="checked"</if>/></label></span>
 				</td>
 			</tr>
 		</table>
