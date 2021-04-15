@@ -615,7 +615,7 @@ var uploader = WebUploader.create({
 uploader.on('fileQueued',function(file){
 	if($('.upload_pic_li').size() >= 1){
 		uploader.cancelFile(file);
-		alert({pigcms{:L('LEAST_ONE_BKADMIN')}});
+		alert("{pigcms{:L('LEAST_ONE_BKADMIN')}}");
 		return false;
 	}
 });
@@ -642,7 +642,7 @@ function check(obj){
 	var length = $('.paycheck:checked').length;
 	if(length == 0){
 		$(obj).attr('checked','checked');
-		bootbox.alert(L('LEAST_PAYMENT_BKADMIN'));
+		bootbox.alert("L('LEAST_PAYMENT_BKADMIN')");
 	}			
 }
 $(function($){
