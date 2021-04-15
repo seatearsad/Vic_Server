@@ -454,7 +454,7 @@ class UserAction extends BaseAction {
                 }
                 $this->success('Success');
             } else {
-                $this->error('修改失败！请重试。');
+                $this->error(L('K_MODI_FAILED!'));
             }
         } else {
             $this->error('非法访问！');
@@ -648,9 +648,9 @@ class UserAction extends BaseAction {
                 $inser_id = $levelDb->add($newdata);
             }
             if ($inser_id) {
-                $this->success('保存成功！');
+                $this->success(L('J_SUCCEED3'));
             } else {
-                $this->error('保存失败！');
+                $this->error(L('J_FAILED_SAVE'));
             }
         } else {
             $lid = intval($_GET['lid']);
@@ -669,7 +669,7 @@ class UserAction extends BaseAction {
         $idx = (int) trim($_POST['id']);
         $user_importDb = D('User_import');
         if ($user_importDb->where(array('id' => $idx))->delete()) {
-        	$this->success('删除成功');
+        	$this->success(L('J_DELETION_SUCCESS'));
         } else {
         	$this->error('删除失败' . $this->_get('id'));
         }

@@ -27,7 +27,13 @@
             <th width="15%">{pigcms{$vo.num}</th>
             <th width="15%">{pigcms{$vo.had_pull}</th>
             <th width="15%">{pigcms{$vo.start_time|date='Y-m-d',###} - {pigcms{$vo.end_time|date='Y-m-d',###}</th>
-            <th width="15%">{pigcms{:replace_lang_str(L('_MAN_NUM_REDUCE_'),$vo['order_money'])}{pigcms{:replace_lang_str(L('_MAN_REDUCE_NUM_'),$vo['discount'])}</th>
+            <th width="15%">
+                <php>if(C('DEFAULT_LANG') == 'zh-cn'){</php>
+                {pigcms{:replace_lang_str(L('_MAN_NUM_REDUCE_'),$vo['order_money'])}{pigcms{:replace_lang_str(L('_MAN_REDUCE_NUM_'),$vo['discount'])}
+                <php>}else{</php>
+                {pigcms{:replace_lang_str(L('_MAN_NUM_REDUCE_'),$vo['discount'])}{pigcms{:replace_lang_str(L('_MAN_REDUCE_NUM_'),$vo['order_money'])}
+                <php>}</php>
+            </th>
             <th width="15%"><if condition="$vo.is_l eq 1"> <span style="color:red">Assigned</span> <else /> <a href="javascript:send_user({pigcms{$vo.coupon_id});" style="color: #0b6041">Assign</a> </if></th>
         <tr/>
     </volist>
