@@ -3176,14 +3176,14 @@ class StorestaffAction extends BaseAction
 
     public function manage_info(){
         if($_POST){
-            $data['name'] = $_POST['en_name'];
+            $data['name'] = fulltext_filter($_POST['en_name']);
             if($_POST['cn_name'] && $_POST['cn_name'] != ''){
-                $data['name'] = $data['name'].'|'.$_POST['cn_name'];
+                $data['name'] = $data['name'].'|'.fulltext_filter($_POST['cn_name']);
             }
             $data['phone'] = $_POST['phone'];
             $data['pic_info'] = $_POST['pic_info'];
-            $data['txt_info'] = $_POST['txt_info'] ? $_POST['txt_info'] : '';
-            $data['feature'] = $_POST['feature'] ? $_POST['feature'] : '';
+            $data['txt_info'] = $_POST['txt_info'] ? fulltext_filter($_POST['txt_info']) : '';
+            $data['feature'] = $_POST['feature'] ? fulltext_filter($_POST['feature']) : '';
 
             D('Merchant_store')->where(array('store_id' => $this->store['store_id']))->save($data);
 
@@ -3577,8 +3577,8 @@ class StorestaffAction extends BaseAction
     public function category_setting(){
         if($_POST){
             $sort_id = $_POST['sort_id'];
-            $data['sort_name'] = trim($_POST['en_name']);
-            $data['sort_name'] = trim($_POST['cn_name']) != '' ? $data['sort_name'].'|'.trim($_POST['cn_name']) : $data['sort_name'];
+            $data['sort_name'] = fulltext_filter($_POST['en_name']);
+            $data['sort_name'] = fulltext_filter($_POST['cn_name']) != '' ? $data['sort_name'].'|'.fulltext_filter($_POST['cn_name']) : $data['sort_name'];
             $data['sort'] = $_POST['sort'];
             $data['is_weekshow'] = $_POST['is_weekshow'];
             if($data['is_weekshow'] == 1)
@@ -3614,15 +3614,15 @@ class StorestaffAction extends BaseAction
             $goods_data['sort_id'] = $sort_id;
             $goods_data['store_id'] = $this->store['store_id'];
             if($_POST['cn_name'] && $_POST['cn_name'] != '')
-                $name = $_POST['en_name'].'|'.$_POST['cn_name'];
+                $name = fulltext_filter($_POST['en_name']).'|'.fulltext_filter($_POST['cn_name']);
             else
-                $name = $_POST['en_name'];
+                $name = fulltext_filter($_POST['en_name']);
 
             $goods_data['name'] = $name;
             $goods_data['unit'] = "order|份";
             $goods_data['price'] = $_POST['price'];
             $goods_data['image'] = $_POST['product_image'] ? $_POST['product_image'] : '';
-            $goods_data['des'] = $_POST['desc'] ? $_POST['desc'] : '';
+            $goods_data['des'] = $_POST['desc'] ? fulltext_filter($_POST['desc']) : '';
             $goods_data['sort'] = $_POST['sort'] ? $_POST['sort'] : 0;
             $goods_data['last_time'] = time();
             $goods_data['status'] = 1;
@@ -3767,7 +3767,7 @@ class StorestaffAction extends BaseAction
 
     public function add_dish(){
         if($_POST){
-            $data['name'] = $_POST['name'];
+            $data['name'] = fulltext_filter($_POST['name']);
             $data['min'] = $_POST['min'];
             $data['max'] = $_POST['max'];
             $data['type'] = $_POST['type'];
@@ -3788,13 +3788,13 @@ class StorestaffAction extends BaseAction
                     if($val_key[2] == 'new'){
                         $add_val[$val_key[3]]['dish_id'] = $dish_id;
                         if($val_key[1] == 'name')
-                            $add_val[$val_key[3]]['name'] = $v;
+                            $add_val[$val_key[3]]['name'] = fulltext_filter($v);
                         if($val_key[1] == 'price')
                             $add_val[$val_key[3]]['price'] = $v;
                     }
                     if($val_key[2] == 'dish'){
                         if($val_key[1] == 'name')
-                            $edit_val[$val_key[3]]['name'] = $v;
+                            $edit_val[$val_key[3]]['name'] = fulltext_filter($v);
                         if($val_key[1] == 'price')
                             $edit_val[$val_key[3]]['price'] = $v;
                     }
