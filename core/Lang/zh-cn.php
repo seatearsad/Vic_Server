@@ -2048,6 +2048,11 @@ return array(
     "CLONING_COMPLETED_BKADMIN"=>"克隆完成",
     "COMPLETE_STORE_BKADMIN"=>"完善店铺信息",
     'MERCHANT_USER_EXISTS_BKADMIN'   =>  '帐号已经存在，请换一个。',
+    'STORE_ANNOUNCEMENT_PLACEHOLDER'   =>  'If you have a food allergy or intolerance, please call the restaurant before placing the order.',
+    "THIS_OPTIONS_NOT_EXSITS_BKADMIN"=>"此配菜不存在",
+    "CAT_DELFAIL_BKADMIN"=>"该分类下有商品，先删除商品后再来删除分类",
+    "DUPLICATE_SU_BKADMIN"=>"复制成功！",
+    "SURE_COPY_BKADMIN"=>"确定要复制此产品吗？",
 
     "F_REGISTRATION_INVITED"=>"邀请注册数",
     "F_ORDERS_INVITED"=>"邀请下单数",

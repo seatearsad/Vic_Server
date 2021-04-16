@@ -35,9 +35,9 @@
 							<li>
 								<a data-toggle="tab" href="#txtattr">{pigcms{:L('GOODS_SPEC_BKADMIN')}</a>
 							</li>
-							<li>
-								<a data-toggle="tab" href="#seckill">{pigcms{:L('LIMIT_TIME_DISCOUNT_BKADMIN')}</a>
-							</li>
+<!--							<li>-->
+<!--								<a data-toggle="tab" href="#seckill">{pigcms{:L('LIMIT_TIME_DISCOUNT_BKADMIN')}</a>-->
+<!--							</li>-->
 							<if condition="$now_store['store_theme'] AND $category_list AND 0">
 							<li>
 								<a data-toggle="tab" href="#category">商城属性设置</a>
@@ -268,7 +268,7 @@
 									</table>
 								</div>
 							</div>
-							<div id="seckill" class="tab-pane">
+							<div id="seckill" class="tab-pane hidden_obj">
 								<div class="form-group">
 									<label class="col-sm-1"><label for="price">商品限时价</label></label>
 									<input class="col-sm-1" size="20" name="seckill_price" id="seckill_price" type="text" value="{pigcms{$now_goods.seckill_price|default=0}"/>

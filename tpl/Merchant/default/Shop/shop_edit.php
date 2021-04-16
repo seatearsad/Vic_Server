@@ -54,21 +54,21 @@
 						
 							<div id="basicinfo" class="tab-pane active">
 								<if condition="$close_old_store">
-								<div class="form-group hidden_obj">
-									<label class="col-sm-1"><label>关闭老外卖</label></label>
-									<label><span><label><input name="close_old_store" <if condition="$store_shop['close_old_store'] eq 0 ">checked="checked"</if> value="0" type="radio"></label>&nbsp;<span>不关闭</span>&nbsp;</span></label>
-									<label><span><label><input name="close_old_store" <if condition="$store_shop['close_old_store'] eq 1 ">checked="checked"</if> value="1" type="radio" ></label>&nbsp;<span>关闭</span></span></label>
-								</div>
+                                    <div class="form-group hidden_obj">
+                                        <label class="col-sm-1"><label>关闭老外卖</label></label>
+                                        <label><span><label><input name="close_old_store" <if condition="$store_shop['close_old_store'] eq 0 ">checked="checked"</if> value="0" type="radio"></label>&nbsp;<span>不关闭</span>&nbsp;</span></label>
+                                        <label><span><label><input name="close_old_store" <if condition="$store_shop['close_old_store'] eq 1 ">checked="checked"</if> value="1" type="radio" ></label>&nbsp;<span>关闭</span></span></label>
+                                    </div>
 								</if>
 								<if condition="$sysnc">
-								<div class="alert alert-info" style="margin:10px;">
-								<button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>{pigcms{:L('SYNCHRONIZED_BKADMIN')}
-								</div>
-								<div class="form-group hidden_obj">
-									<label class="col-sm-1"><label>同步原外卖数据</label></label>
-									<label><span><label><input name="sysnc" checked="checked" value="0" type="radio"></label>&nbsp;<span>不同步</span>&nbsp;</span></label>
-									<label><span><label><input name="sysnc" value="1" type="radio" ></label>&nbsp;<span>同步</span></span></label>
-								</div>
+                                    <div class="alert alert-info hidden_obj" style="margin:10px;">
+                                    <button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>{pigcms{:L('SYNCHRONIZED_BKADMIN')}
+                                    </div>
+                                    <div class="form-group hidden_obj">
+                                        <label class="col-sm-1"><label>同步原外卖数据</label></label>
+                                        <label><span><label><input name="sysnc" checked="checked" value="0" type="radio"></label>&nbsp;<span>不同步</span>&nbsp;</span></label>
+                                        <label><span><label><input name="sysnc" value="1" type="radio" ></label>&nbsp;<span>同步</span></span></label>
+                                    </div>
 								</if>
 								<div class="form-group hidden_obj">
 									<label class="col-sm-1"><label>是否开启商城</label></label>
@@ -105,7 +105,7 @@
 								
 								<div class="form-group">
 									<label class="col-sm-1"><label for="Config_notice">{pigcms{:L('STORE_ANNOUNCEMENT_BKADMIN')}</label></label>
-									<textarea class="col-sm-3" rows="4" name="store_notice" id="Config_notice" placeholder="">{pigcms{$store_shop.store_notice}</textarea>
+									<textarea class="col-sm-3" rows="4" name="store_notice" id="Config_notice" placeholder="{pigcms{:L('STORE_ANNOUNCEMENT_PLACEHOLDER')}">{pigcms{$store_shop.store_notice}</textarea>
 								</div>
 								<div class="form-group hidden_obj">
 									<label class="col-sm-1"><label>多级分类</label></label>
@@ -615,7 +615,7 @@ var uploader = WebUploader.create({
 uploader.on('fileQueued',function(file){
 	if($('.upload_pic_li').size() >= 1){
 		uploader.cancelFile(file);
-		alert({pigcms{:L('LEAST_ONE_BKADMIN')}});
+		alert("{pigcms{:L('LEAST_ONE_BKADMIN')}}");
 		return false;
 	}
 });
@@ -642,7 +642,7 @@ function check(obj){
 	var length = $('.paycheck:checked').length;
 	if(length == 0){
 		$(obj).attr('checked','checked');
-		bootbox.alert(L('LEAST_PAYMENT_BKADMIN'));
+		bootbox.alert("L('LEAST_PAYMENT_BKADMIN')");
 	}			
 }
 $(function($){

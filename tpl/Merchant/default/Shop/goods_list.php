@@ -137,7 +137,7 @@ $(function(){
     });
 
     jQuery(document).on('click','#shopList a.blue',function(){
-        if(!confirm('确定要复制此产品吗？')) return false;
+        if(!confirm("{pigcms{:L('SURE_RESTOR_BKADMIN')}}")) return false;
     });
 });
 

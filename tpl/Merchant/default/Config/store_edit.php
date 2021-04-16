@@ -664,7 +664,7 @@ var uploader = WebUploader.create({
 uploader.on('fileQueued',function(file){
     if($('.upload_pic_li').size() >= 10){
         uploader.cancelFile(file);
-        alert({pigcms{:L('10_IMAGES_BKADMIN')}});
+        alert("{pigcms{:L('10_IMAGES_BKADMIN')}}");
         return false;
     }
 });
