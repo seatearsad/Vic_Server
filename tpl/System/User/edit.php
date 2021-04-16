@@ -16,7 +16,7 @@
 			</tr>
 			<tr>
 				<th width="15%">{pigcms{:L('_B_D_LOGIN_KEY1_')}</th>
-				<td width="35%"><input type="password" class="input fl" name="pwd" size="20" value="" tips="不修改则不填写" autocomplete="off"/></td>
+				<td width="35%"><input type="password" class="input fl" name="pwd" size="20" value="" tips="{pigcms{:L('K_DNFIINM')}" autocomplete="off"/></td>
 				<th width="15%">{pigcms{:L('_BACK_GENDER_')}</th>
 				<td width="35%" class="radio_box">
 					<span class="cb-enable"><label class="cb-enable <if condition="$now_user['sex'] eq 1">selected</if>"><span>{pigcms{:L('_BACK_MALE_')}</span><input type="radio" name="sex" value="1"  <if condition="$now_user['sex'] eq 1">checked="checked"</if>/></label></span>

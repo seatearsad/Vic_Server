@@ -657,14 +657,14 @@ class IndexAction extends BaseAction {
         $condition_admin['id'] = $this->system_session['id'];
         $admin = $database_admin->field('`id`,`pwd`')->where($condition_admin)->find();
         if ($admin['pwd'] != md5($old_pass)) {
-            $this->error('旧密码错误！');
+            $this->error(L('B_OPWRONG'));
         } else {
             $data_admin['id'] = $admin['id'];
             $data_admin['pwd'] = md5($new_pass);
             if ($database_admin->data($data_admin)->save()) {
-                $this->success('密码修改成功！');
+                $this->success(L('_B_LOGIN_CHANGEKEYSUCESS_'));
             } else {
-                $this->error('密码修改失败！请重试。');
+                $this->error(L('_B_LOGIN_CHANGEKEYLOSE_'));
             }
         }
     }
@@ -784,9 +784,9 @@ class IndexAction extends BaseAction {
 		$where['id']	=	$_POST['id'];
 		$delete	=	D('Admin')->where($where)->delete();
 		if($delete){
-            $this->success('删除成功！');
+            $this->success(L('J_DELETION_SUCCESS'));
         }else{
-            $this->error('删除失败！请重试~');
+            $this->error(L('K_FAILED_DELETE'));
         }
     }
     public function admin() {

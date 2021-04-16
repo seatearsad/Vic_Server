@@ -131,9 +131,9 @@ class BaseAction extends Action{
 									$this->assign('config',$this->config);
 							}
 							if($this->config['buy_merchant_auth']){
-								$this->error('您还没有这个使用权限，联系管理员开通！',U('Merchant_money/buy_merchant_service'));
+								$this->error(L('K_NACSCA'),U('Merchant_money/buy_merchant_service'));
 							}else{
-								$this->error('您还没有这个使用权限，联系管理员开通！');
+								$this->error(L('K_NACSCA'));
 
 							}
 					}
@@ -157,7 +157,7 @@ class BaseAction extends Action{
 			}
 
 			$merchant_menu = arrayPidProcess($merchant_menu);
-			if ($flag && MODULE_NAME == 'Weidian') $this->error('您还没有这个使用权限，联系管理员开通！');
+			if ($flag && MODULE_NAME == 'Weidian') $this->error(L('K_NACSCA'));
 
 			foreach($merchant_menu as $menu){
 				if(!empty($menu['menu_list'])){

@@ -269,7 +269,7 @@ $.extend($.validator, {
 		number: "Please enter valid numbers",
 		digits: "Please enter only numbers",
 		creditcard: "请输入有效的信用卡号码",
-		equalTo: "请再次输入相同的值.",
+		equalTo: "Passwords do not match. Please enter the same value again.",
 		accept: "请输入合法的扩展名.",
 		maxlength: $.validator.format("Please enter no more than {0} characters."),
 		minlength: $.validator.format("Please enter at least {0} characters."),
