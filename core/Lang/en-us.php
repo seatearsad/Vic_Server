@@ -2046,6 +2046,11 @@ return array(
     "CLONING_COMPLETED_BKADMIN"=>"Cloning Completed",
     "COMPLETE_STORE_BKADMIN"=>"Complete Store Information",
     'MERCHANT_USER_EXISTS_BKADMIN'   =>  'Username exists, Please change another one and try again.',
+    'STORE_ANNOUNCEMENT_PLACEHOLDER'   =>  'If you have a food allergy or intolerance, please call the restaurant before placing the order.',
+    "THIS_OPTIONS_NOT_EXSITS_BKADMIN"=>"This option not exsits",
+    "CAT_DELFAIL_BKADMIN"=>"Remove the items under this category before deleting it.",
+    "DUPLICATE_SU_BKADMIN"=>"Duplication success！",
+    "SURE_COPY_BKADMIN"=>"Sure you want to copy this product?",
 
     "F_REGISTRATION_INVITED"=>"Registration Invited",
     "F_ORDERS_INVITED"=>"Orders Invited",

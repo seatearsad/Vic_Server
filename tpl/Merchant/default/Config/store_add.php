@@ -45,10 +45,10 @@
 									<label><input type="radio" name="ismain" value="0"  <if condition="!$ismainno">checked="checked"</if>>&nbsp;&nbsp;否</label>
 								 &nbsp;&nbsp;&nbsp;<span class="form_tips">必须设置一个店铺为主店铺，前端才会显示商家中心</span>
 								</div>
-								<div class="form-group hidden_obj">
-									<label class="col-sm-1"><label for="phone">联系电话</label></label>
+								<div class="form-group">
+									<label class="col-sm-1"><label for="phone">{pigcms{:L('STORE_PHONE_NUMBER_BKADMIN')}</label></label>
 									<input class="col-sm-2" size="20" name="phone" id="phone" type="text"/>
-									<span class="form_tips">多个电话号码以空格分开</span>
+									<span class="form_tips">{pigcms{:L('PHONE_ASSOCIATE_BKADMIN')}</span>
 								</div>
 								<div class="form-group hidden_obj">
 									<label class="col-sm-1"><label for="weixin">联系微信</label></label>

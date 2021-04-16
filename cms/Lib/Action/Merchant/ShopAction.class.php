@@ -632,7 +632,7 @@ class ShopAction extends BaseAction
         $now_store = $this->check_store($now_sort['store_id']);
 
         $count = D('Shop_goods')->where(array('sort_id' => $now_sort['sort_id'], 'store_id' => $now_sort['store_id']))->count();
-        if ($count) $this->error('该分类下有商品，先删除商品后再来删除该分类');
+        if ($count) $this->error(L('CAT_DELFAIL_BKADMIN'));
 
         $sortCount = D('Shop_goods_sort')->where(array('fid' => $now_sort['sort_id'], 'store_id' => $now_sort['store_id']))->count();
         if ($sortCount) $this->error('该分类下有子分类，先删除子分类后再来删除该分类');
@@ -640,9 +640,9 @@ class ShopAction extends BaseAction
         $database_goods_sort = D('Shop_goods_sort');
         $condition_goods_sort['sort_id'] = $now_sort['sort_id'];
         if ($database_goods_sort->where($condition_goods_sort)->delete()) {
-            $this->success('删除成功！');
+            $this->success(L('J_DELETION_SUCCESS'));
         } else {
-            $this->error('删除失败！');
+            $this->error(L('_B_MY_DELLOSE_'));
         }
     }
 
@@ -1174,9 +1174,9 @@ class ShopAction extends BaseAction
             D('Side_dish')->where(array('id'=>$dish_id))->delete();
             D('Side_dish_value')->where(array('dish_id'=>$dish_id))->delete();
 
-            $this->success('删除成功！', U('Shop/side_dish', array('goods_id' => $now_goods['goods_id'])));
+            $this->success(L('J_DELETION_SUCCESS'), U('Shop/side_dish', array('goods_id' => $now_goods['goods_id'])));
         }else{
-            $this->error('此配菜不存在', U('Shop/side_dish', array('goods_id' => $now_goods['goods_id'])));
+            $this->error(L('THIS_OPTIONS_NOT_EXSITS_BKADMIN'), U('Shop/side_dish', array('goods_id' => $now_goods['goods_id'])));
         }
     }
 
@@ -1301,7 +1301,7 @@ class ShopAction extends BaseAction
                 D('Side_dish_value')->addAll($new_dish_v_list);
             }
         }
-        $this->success('复制成功！');
+        $this->success(L('DUPLICATE_SU_BKADMIN'));
     }
     /* 商品状态 */
     public function goods_status()
