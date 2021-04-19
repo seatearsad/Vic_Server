@@ -8,7 +8,7 @@
 			</tr>
 			<tr>
 				<th width="80">商户密码</th>
-				<td><input type="password" id="check_pwd" check_width="180" check_event="keyup" class="input fl" name="pwd" value="" size="25" placeholder="不修改则不填写！" validate="minlength:6" tips="不修改则不填写！"/></td>
+				<td><input type="password" id="check_pwd" check_width="180" check_event="keyup" class="input fl" name="pwd" value="" size="25" placeholder="{pigcms{:L('K_DNFIINM')}" validate="minlength:6" tips="{pigcms{:L('K_DNFIINM')}"/></td>
 			</tr>
 			<tr>
 				<th width="80">商户名称</th>
