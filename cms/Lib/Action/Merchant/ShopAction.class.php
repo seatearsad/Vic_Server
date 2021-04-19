@@ -734,7 +734,7 @@ class ShopAction extends BaseAction
             if ($_POST['specs']) {
                 foreach ($_POST['specs'] as $val) {
                     if (empty($val)) {
-                        $error_tips .= '请给规格取名，若不需要的请删除后重新生成'.'<br/>';
+                        $error_tips .= L('NAME_SPEC_BKADMIN').'<br/>';
                     }
                 }
             }
@@ -743,7 +743,7 @@ class ShopAction extends BaseAction
                 foreach ($_POST['spec_val'] as $rowset) {
                     foreach ($rowset as $val) {
                         if (empty($val)) {
-                            $error_tips .= '请给规格的属性值取名，若不需要的请删除后重新生成'.'<br/>';
+                            $error_tips .= L('NAME_ATTRIBUTE_BKADMIN').'<br/>';
                         }
                     }
                 }
@@ -753,7 +753,7 @@ class ShopAction extends BaseAction
             if ($_POST['properties']) {
                 foreach ($_POST['properties'] as $val) {
                     if (empty($val)) {
-                        $error_tips .= '请给属性取名，若不需要的请删除后重新生成'.'<br/>';
+                        $error_tips .= L('NAME_ATTRIBUTE2_BKADMIN').'<br/>';
                     }
                 }
             }
@@ -762,7 +762,7 @@ class ShopAction extends BaseAction
                 foreach ($_POST['properties_val'] as $rowset) {
                     foreach ($rowset as $val) {
                         if (empty($val)) {
-                            $error_tips .= '请给属性的属性值取名，若不需要的请删除后重新生成'.'<br/>';
+                            $error_tips .= L('NAMEVALUEE_ATTRIBUTE_BKADMIN').'<br/>';
                         }
                     }
                 }
@@ -824,9 +824,11 @@ class ShopAction extends BaseAction
 
             $this->assign('ok_tips', $ok_tips);
             $this->assign('error_tips', $error_tips);
+
         } else {
-            $this->assign('now_goods', array('seckill_open_time' => strtotime(date('Y-m-d') . ' 08:00:00'), 'seckill_close_time' => strtotime(date('Y-m-d') . ' 10:00:00')));
+            $this->assign('now_goods', array('unit'=>"order|份",'seckill_open_time' => strtotime(date('Y-m-d') . ' 08:00:00'), 'seckill_close_time' => strtotime(date('Y-m-d') . ' 10:00:00')));
         }
+
         $print_list = D('Orderprinter')->where(array('mer_id' => $now_store['mer_id'], 'store_id' => $now_store['store_id']))->select();
         foreach ($print_list as &$l) {
             if ($l['is_main']) {
@@ -963,7 +965,7 @@ class ShopAction extends BaseAction
             if ($_POST['specs']) {
                 foreach ($_POST['specs'] as $val) {
                     if (empty($val)) {
-                        $error_tips .= '请给规格取名，若不需要的请删除后重新生成'.'<br/>';
+                        $error_tips .= L('NAME_SPEC_BKADMIN').'<br/>';
                     }
                 }
             }
@@ -972,7 +974,7 @@ class ShopAction extends BaseAction
                 foreach ($_POST['spec_val'] as $rowset) {
                     foreach ($rowset as $val) {
                         if (empty($val)) {
-                            $error_tips .= '请给规格的属性值取名，若不需要的请删除后重新生成'.'<br/>';
+                            $error_tips .= L('NAME_ATTRIBUTE_BKADMIN').'<br/>';
                         }
                     }
                 }
@@ -981,7 +983,7 @@ class ShopAction extends BaseAction
             if ($_POST['properties']) {
                 foreach ($_POST['properties'] as $val) {
                     if (empty($val)) {
-                        $error_tips .= '请给属性取名，若不需要的请删除后重新生成'.'<br/>';
+                        $error_tips .= L('NAME_ATTRIBUTE2_BKADMIN').'<br/>';
                     }
                 }
             }
@@ -990,7 +992,7 @@ class ShopAction extends BaseAction
                 foreach ($_POST['properties_val'] as $rowset) {
                     foreach ($rowset as $val) {
                         if (empty($val)) {
-                            $error_tips .= '请给属性的属性值取名，若不需要的请删除后重新生成'.'<br/>';
+                            $error_tips .= L('NAMEVALUEE_ATTRIBUTE_BKADMIN').'<br/>';
                         }
                     }
                 }

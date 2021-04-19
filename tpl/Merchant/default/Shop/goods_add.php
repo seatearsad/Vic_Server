@@ -155,7 +155,7 @@
 									</div>
 									<span class="form_tips">{pigcms{:L('IMAGE_RATIO_BKADMIN')}</span>
 								</div>
-								<div class="form-group">
+								<div class="form-group hidden_obj">
 									<label class="col-sm-1">{pigcms{:L('IMAGE_SELECT_BKADMIN')}</label>
 									<a href="#modal-table" class="btn btn-sm btn-success" onclick="selectImg('upload_pic_ul','goods')">{pigcms{:L('IMAGE_SELECT_BKADMIN')}</a>
 								</div>
