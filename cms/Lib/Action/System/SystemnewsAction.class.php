@@ -77,7 +77,7 @@
 
 				$data['title'] = $_POST['title'];
 				if(empty($_POST['content'])){
-					$this->error('内容不能为空！');
+					$this->error(L('CCBE'));
 				}
 				$data['content'] = htmlspecialchars_decode($_POST['content']);
 				$data['sort'] = $_POST['sort'];
@@ -95,9 +95,9 @@
                 $data['is_commend'] = $_POST['is_commend'];
 
 				if(D('System_news')->add($data)){
-					$this->success('添加公告成功！');
+					$this->success(L('J_SUCCEED1'));
 				}else{
-					$this->error('添加失败！');
+					$this->error(L('J_MODIFICATION_FAILED2'));
 				}
 			}else {
 				$category = D('System_news_category')->select();
@@ -162,9 +162,9 @@
                 $data['link_img'] = $_POST['link_img'];
                 $data['link_url'] = $_POST['link_url'];
 				if(D('System_news_category')->add($data)){
-					$this->success('添加分类成功！');
+					$this->success(L('J_SUCCEED1'));
 				}else{
-					$this->error('添加分类失败！');
+					$this->error(L('J_MODIFICATION_FAILED2'));
 				}
 			}else {
 				$this->display();
@@ -180,7 +180,7 @@
                 $data['link_img'] = $_POST['link_img'];
                 $data['link_url'] = $_POST['link_url'];
 				if(D('System_news_category')->where(array('id'=>$_POST['id']))->save($data)){
-					$this->success('更新成功！');
+					$this->success(L('SUCCESS_BKADMIN'));
 				}else{
 					$this->error(L('J_FAILED_UPDATE'));
 				}
@@ -198,12 +198,12 @@
 					if(D('System_news')->where(array('id'=>$_POST['id']))->delete()){
 						$this->success(L('J_DELETION_SUCCESS'));
 					}else{
-						$this->error('删除失败！');
+						$this->error(L('J_DELETION_FAILED_RETRY'));
 					}
 				}
 				if(!empty($_POST['category_id'])){
 					if(!D('System_news_category')->where(array('id'=>$_POST['category_id']))->delete()){
-						$this->error('删除失败！');
+						$this->error(L('J_DELETION_FAILED_RETRY'));
 					}else{
 						D('System_news')->where(array('category_id'=>$_POST['category_id']))->delete();
                         $this->success(L('J_DELETION_SUCCESS'));

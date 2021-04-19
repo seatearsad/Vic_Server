@@ -213,7 +213,7 @@
 				</td>
 			</tr>
 			
-			<tr>
+			<!--tr>
 				<td width="100">{pigcms{:L('_BACK_PICK_NUM_LIM_')}：</td>
 				<td>
 				{pigcms{$coupon.limit}
@@ -224,7 +224,7 @@
 				<td>
 				{pigcms{$coupon.use_limit}
 				</td>
-			</tr>
+			</tr-->
 			<tr>
 				<td width="100">{pigcms{:L('_BACK_DIS_PRICE_')}：</td>
 				<td>

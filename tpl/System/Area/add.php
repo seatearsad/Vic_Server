@@ -16,18 +16,18 @@
 			<if condition="$_GET['type'] gt 1">
 				<tr>
 					<th width="80">{pigcms{:L('I_NETWOEK_SYMBOL')}</th>
-					<td><input type="text" class="input fl" name="area_url" id="area_url" size="20" placeholder="" validate="maxlength:20,required:true" tips="一般为地区名称的小写首字母！输入名称后，若此字段为空，会自动填写（仅作为示例）"/></td>
+					<td><input type="text" class="input fl" name="area_url" id="area_url" size="20" placeholder="" validate="maxlength:20,required:true" tips="{pigcms{:L('GITLIOT')}"/></td>
 				</tr>
 			</if>
 			<if condition="$_GET['type'] gt 1 && $_GET['type'] lt 4">
 				<tr>
 					<th width="80">{pigcms{:L('I_IP_SYMPOL')}</th>
-					<td><input type="text" class="input fl" name="area_ip_desc" size="20" placeholder="" validate="maxlength:30,required:true" tips="一般格式为 XX省XX市XX区(县)"/></td>
+					<td><input type="text" class="input fl" name="area_ip_desc" size="20" placeholder="" validate="maxlength:30,required:true" tips="{pigcms{:L('TGFIXC')}"/></td>
 				</tr>
 			</if>
 			<tr>
 				<th width="80">{pigcms{:L('I_LISTING_ORDER')}</th>
-				<td><input type="text" class="input fl" name="area_sort" size="10" value="0" validate="required:true,number:true,maxlength:6" tips="数值越大，排序越前"/></td>
+				<td><input type="text" class="input fl" name="area_sort" size="10" value="0" validate="required:true,number:true,maxlength:6" tips="{pigcms{:L('HIGHVAL')}"/></td>
 			</tr>
             <!--tr>
                 <th width="80">Place ID</th>

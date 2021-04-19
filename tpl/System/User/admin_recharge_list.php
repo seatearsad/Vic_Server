@@ -57,7 +57,7 @@
 								<volist name="recharge_list" id="vo">
 									<tr>
 										<td>{pigcms{$vo.pigcms_id}</td>
-										<td><if condition="$vo.type eq 1"><else />{pigcms{:L('F_LESS')}:</if>${pigcms{$vo.money}</td>
+										<td><if condition="$vo.type eq 1">{pigcms{:L('F_ADD')}: <else />{pigcms{:L('F_LESS')}: </if>${pigcms{$vo.money}</td>
 
 										<td><if condition="$vo.nickname">{pigcms{$vo.nickname}<else />{pigcms{$vo.phone}</if></td>
 										<td>{pigcms{$vo.realname}</td>

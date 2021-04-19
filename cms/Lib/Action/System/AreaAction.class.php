@@ -93,9 +93,9 @@ class AreaAction extends BaseAction{
 			unset($_POST['long_lat']);
 			$add	=	M('Area_market')->add($_POST);
 			if($add){
-				$this->frame_submit_tips(1,'添加成功！');
+				$this->frame_submit_tips(1,L('J_SUCCEED1'));
 			}else{
-				$this->frame_submit_tips(0,'添加失败！请重试~');
+				$this->frame_submit_tips(0,L('J_MODIFICATION_FAILED2'));
 			}
 		}else{
 			$this->assign('bg_color','#F3F3F3');
@@ -115,9 +115,9 @@ class AreaAction extends BaseAction{
 			unset($_POST['long_lat']);
 			$save	=	M('Area_market')->where(array('market_id'=>$_GET['market_id']))->data($_POST)->save();
 			if($save){
-				$this->frame_submit_tips(1,'添加成功！');
+				$this->frame_submit_tips(1,L('J_SUCCEED1'));
 			}else{
-				$this->frame_submit_tips(0,'添加失败！请重试~');
+				$this->frame_submit_tips(0,L('J_MODIFICATION_FAILED2'));
 			}
 		}else{
 			$market		=	M('Area_market')->where(array('market_id'=>$_GET['market_id']))->find();
@@ -130,9 +130,9 @@ class AreaAction extends BaseAction{
     public function del_market(){
     	$del	=	M('Area_market')->where(array('market_id'=>$_POST['market_id']))->delete();
     	if($del){
-			$this->success('删除成功！');
+			$this->success(L('J_DELETION_SUCCESS'));
     	}else{
-			$this->error('删除失败！请重试~');
+			$this->error(L('J_DELETION_FAILED_RETRY'));
     	}
     }
     //	介绍类型列表
@@ -168,14 +168,14 @@ class AreaAction extends BaseAction{
 			$database_area = D('Area');
 			$condition_area['area_url'] = $_POST['area_url'];
 			if($database_area->where($condition_area)->find()){
-				$this->error('数据库中已存在相同的网址标识，请更换。');
+				$this->error(L('TSUTA'));
 			}
 			if($database_area->data($_POST)->add()){
 				import('ORG.Util.Dir');
 				Dir::delDirnotself('./runtime');
-				$this->success('添加成功！');
+				$this->success(L('J_SUCCEED1'));
 			}else{
-				$this->error('添加失败！请重试~');
+				$this->error(L('J_MODIFICATION_FAILED2'));
 			}
 		}else{
 			$this->error('非法提交,请重新提交~');
@@ -228,7 +228,7 @@ class AreaAction extends BaseAction{
 			$return = $this->recursive_del($_POST['area_id']);
 			import('ORG.Util.Dir');
 			Dir::delDirnotself('./runtime');
-			$this->success('删除成功！');
+			$this->success(L('J_DELETION_SUCCESS'));
 		}else{
 			$this->error('非法提交,请重新提交~');
 		}
@@ -402,13 +402,13 @@ class AreaAction extends BaseAction{
 				$this->success('Success');
 			} else {
 				if (empty($_POST['pwd'])) {
-					$this->error('密码不能为空~');
+					$this->error(L('K_PASS_EMPTY'));
 				}
 				$_POST['pwd'] = md5($_POST['pwd']);
 				if($database_area->data($_POST)->add()){
-					$this->success('添加成功！');
+					$this->success(L('J_SUCCEED1'));
 				}else{
-					$this->error('添加失败！请重试~');
+					$this->error(L('J_MODIFICATION_FAILED2'));
 				}
 			}
 		}else{

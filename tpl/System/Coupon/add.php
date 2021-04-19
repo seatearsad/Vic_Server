@@ -208,7 +208,7 @@
 				<input type="text" class="input fl" name="num" value=""  autocomplete="off" validate="required:true,digits:true,min:1">
 				</td>
 			</tr>
-			<tr>
+			<!--tr>
 				<td width="100">{pigcms{:L('_BACK_PICK_NUM_LIM_')}：</td>
 				<td colspan="2">
 				<input type="text" class="input fl" name="limit" value="1"  autocomplete="off" validate="required:true,digits:true,min:1">
@@ -219,7 +219,9 @@
 				<td colspan="2">
 				<input type="text" class="input fl" name="use_limit" value=""  autocomplete="off" validate="required:true,digits:true,min:1">
 				</td>
-			</tr>
+			</tr-->
+            <input type="hidden" class="input fl" name="limit" value="1"  autocomplete="off" validate="required:true,digits:true,min:1">
+            <input type="hidden" class="input fl" name="use_limit" value="1"  autocomplete="off" validate="required:true,digits:true,min:1">
 			<tr>
 				<td width="100">{pigcms{:L('_BACK_DIS_PRICE_')}：</td>
 				<td colspan="2">
