@@ -3,6 +3,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
 		<if condition="$config['site_favicon']">
 			<link rel="shortcut icon" href="{pigcms{$config.site_favicon}"/>
 		</if>
@@ -41,7 +42,6 @@
             -moz-osx-font-smoothing: grayscale;
         }
         body{
-            min-width: 1024px;
             color: #3f3f3f;
         }
         a{
@@ -59,17 +59,18 @@
             background-color: #ffffff;
         }
         .main{
-            width: 90%;
+            width: 100%;
             margin: 10px auto;
         }
         .main_left{
             display: inline-block;
-            width: 59%;
+            width: 100%;
         }
         .main_right{
             display: inline-block;
-            width: 36%;
-            margin-left: 4%;
+            width: 100%;
+            margin-left: 10px;
+            padding-right: 20px
             vertical-align: top;
         }
         .cate_list{
@@ -94,12 +95,14 @@
             border-bottom: 3px solid #ffa52d;
             font-weight: bold;
             padding-right: 10px;
+            width: 100%;
             display: inherit;
+            color:#ffa52d;
         }
         .left_list,.right_list{
             width: 100%;
             padding: 0;
-            margin-top: 30px;
+            margin-top: 20px;
         }
         .left_list li{
             background-color: #F5F5F5;
@@ -155,18 +158,27 @@
         .from{
             margin: 10px auto;
             color:#999999;
+            font-size: 12px;
         }
         .detail_title{
             font-weight: bold;
             font-size: 20px;
         }
         .detail_time{
-            margin: 10px auto;
+            margin: 5px auto;
             color:#999999;
-            font-size: 14px;
+            font-size: 10px;
         }
         .sub_title{
             font-size: 12px;
+            margin-top:10px;
+        }
+        .news_content{
+            padding: 0px 10px 0 10px;
+        }
+        .content{
+            margin:10px 0 20px 0;
+            font-size: 14px;
         }
     </style>
 	<body>
@@ -175,9 +187,10 @@
         var app_url = 'https://itunes.apple.com/us/app/tutti/id1439900347?ls=1&mt=8';
     </script>
         <include file="Public:header"/>
-        <div class="main" style="margin-top: 20px">
+        <div class="main">
             <div class="main_left">
-                <img src="{pigcms{$news.top_img}" style="width: 100%">
+                <div class="news_image"><img src="{pigcms{$news.top_img}" style="width: 100%"></div>
+                <div class="news_content">
                 <div class="from">
                     <a href="/wapnews/cat-0">All Posts</a> > <a href="/news/cat-{pigcms{$now_cat.id}">{pigcms{$now_cat.name}</a> > {pigcms{$news.title}
                 </div>
@@ -188,14 +201,15 @@
                     - {pigcms{$news.sub_title}
                 </div>
                 <div class="detail_time">
-                    Update on {pigcms{$news.last_time|date='M d Y',###}
+                    Posted on {pigcms{$news.last_time|date='M d Y',###}
                 </div>
-                <div>
+                <div class="content">
                     {pigcms{$news.content}
+                </div>
                 </div>
             </div>
             <div class="main_right">
-                <div class="right_title">RELATED POSTS</div>
+                <div class="right_title">Popular Posts</div>
                 <ul class="right_list">
                     <volist name="cate_list" id="vo">
                     <li>

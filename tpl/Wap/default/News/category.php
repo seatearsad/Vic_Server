@@ -3,6 +3,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
 		<if condition="$config['site_favicon']">
 			<link rel="shortcut icon" href="{pigcms{$config.site_favicon}"/>
 		</if>
@@ -41,7 +42,6 @@
             -moz-osx-font-smoothing: grayscale;
         }
         body{
-            min-width: 1024px;
             color: #3f3f3f;
         }
         a{
@@ -59,12 +59,12 @@
             background-color: #ffffff;
         }
         .main{
-            width: 90%;
+            width: 95%;
             margin: 10px auto;
         }
         .main_left{
             display: inline-block;
-            width: 59%;
+            width: 100%;
         }
         .main_right{
             display: inline-block;
@@ -75,9 +75,11 @@
         .cate_list{
             width: 100%;
             border-bottom: 3px solid #ffa52d;
+            display: flex;
+            font-size: 13px;
         }
         .cate_list span{
-            margin-left: 20px;
+            margin-left: 15px;
             font-weight: bold;
             cursor: pointer;
         }
@@ -90,6 +92,10 @@
             font-weight: normal;
             margin-right: 5px;
         }
+        .cate_list_item{
+            white-space: nowrap;
+            overflow-x: scroll;
+        }
         .right_title{
             border-bottom: 3px solid #ffa52d;
             font-weight: bold;
@@ -99,14 +105,15 @@
         .left_list,.right_list{
             width: 100%;
             padding: 0;
-            margin-top: 30px;
+            margin-top: 15px;
         }
         .left_list li{
             background-color: #F5F5F5;
-            height: 90px;
+            /*height: 90px;*/
             list-style: none;
             display: flex;
             margin-bottom: 20px;
+            border-radius: 10px;
         }
         .right_list li{
             list-style: none;
@@ -135,12 +142,16 @@
             vertical-align: top;
         }
         .left_img{
-            width: 135px;
+            width: 115px;
+            margin: 10px;
             flex: 0 0 auto;
+        }
+        .left_img img{
+            border-radius: 5px;
         }
         .left_title{
             height: 90px;
-            padding: 10px 15px;
+            padding: 10px 15px 10px 5px;
             box-sizing: border-box;
             flex: 1 1 100%;
         }
@@ -178,8 +189,19 @@
         <include file="Public:header"/>
         <div class="main" style="margin-top: 20px">
             <div class="main_left">
+<!--                <div class="cate_list">-->
+<!--                    <span class="curr_cate" style="margin-left: 0;" data-id="0">{pigcms{$now_cat.name}</span>-->
+<!--                </div>-->
                 <div class="cate_list">
-                    <span class="curr_cate" style="margin-left: 0;" data-id="0">{pigcms{$now_cat.name}</span>
+                    <span class="curr_cate" style="margin-left: 0;width: 100px;white-space: nowrap;" data-id="0">{pigcms{$now_cat.name}</span>
+                    <div class="cate_list_item">
+                        <volist name="news_cat" id="vo">
+                            <a href="/wapnews/cat-{pigcms{$vo.id}">
+                            <span data-id="{pigcms{$vo.id}">{pigcms{$vo.name}</span>
+                            </a>
+                        </volist>
+                    </div>
+                    <span class="cate_more"> > </span>
                 </div>
                 <ul class="left_list" id="list_0">
                     <volist name="news_title" id="vo">
@@ -204,30 +226,31 @@
                     </volist>
                 </ul>
                 {pigcms{$pagebar}
+                <br/>
             </div>
-            <div class="main_right">
-                <div class="right_title">CATEGORIES</div>
-                <ul class="right_list">
-                    <volist name="news_cat" id="vo">
-                    <li>
-                        <a href="/wapnews/cat-{pigcms{$vo.id}">
-                        <label></label>
-                        <span>
-                            {pigcms{$vo.name}
-                        </span>
-                        </a>
-                    </li>
-                    </volist>
-                </ul>
-
-                <if condition="$now_cat.link_img">
-                    <div>
-                        <a href="{pigcms{$now_cat.link_url}">
-                            <img src="{pigcms{$now_cat.link_img}" style="width: 100%">
-                        </a>
-                    </div>
-                </if>
-            </div>
+<!--            <div class="main_right">-->
+<!--                <div class="right_title">CATEGORIES</div>-->
+<!--                <ul class="right_list">-->
+<!--                    <volist name="news_cat" id="vo">-->
+<!--                    <li>-->
+<!--                        <a href="/wapnews/cat-{pigcms{$vo.id}">-->
+<!--                        <label></label>-->
+<!--                        <span>-->
+<!--                            {pigcms{$vo.name}-->
+<!--                        </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    </volist>-->
+<!--                </ul>-->
+<!---->
+<!--                <if condition="$now_cat.link_img">-->
+<!--                    <div>-->
+<!--                        <a href="{pigcms{$now_cat.link_url}">-->
+<!--                            <img src="{pigcms{$now_cat.link_img}" style="width: 100%">-->
+<!--                        </a>-->
+<!--                    </div>-->
+<!--                </if>-->
+<!--            </div>-->
         </div>
         <include file="Public:footer"/>
 	</body>

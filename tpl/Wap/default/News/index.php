@@ -41,7 +41,6 @@
             -moz-osx-font-smoothing: grayscale;
         }
         body{
-            min-width: 1024px;
             color: #3f3f3f;
         }
         a{
@@ -59,12 +58,12 @@
             background-color: #ffffff;
         }
         .reg_desc{
-            height: 330px;
+            /*height: 330px;*/
         }
         .reg_show{
             width: 100%;
-            height: 200px;
-            margin: 10px auto 10px auto;
+            /*height: 200px;*/
+            margin: 0px auto 1px auto;
             display: flex;
         }
         .desc_left{
@@ -101,7 +100,7 @@
             transition: all 0.5s ease-in-out;
             text-align: center;
             background-color: #F5F5F5;
-            display: flex;
+            /*display: flex;*/
         }
         .desc_pro{
             transform: translate3d(-100%, 0, 0);
@@ -115,15 +114,16 @@
         .reg_title{
             font-size: 28px;
             font-weight: bold;
-            width: 50%;
-            flex: 1 1 100%;
+            width: 100%;
+            /*flex: 1 1 100%;*/
         }
         .reg_title img{
             width: 100%;
+            border-radius: 10px;
         }
         .reg_txt{
             font-size: 14px;
-            width: 50%;
+            width: 100%;
             flex: 1 1 100%;
             padding: 3%;
             text-align: left;
@@ -131,7 +131,6 @@
         }
         .desc_point{
             position: absolute;
-            bottom: 0px;
             width: 100%;
             height: 20px;
             text-align: center;
@@ -145,7 +144,7 @@
         .desc_point ul li{
             width: 30px;
             height: 5px;
-            background-color: #CCCCCC;
+            background-color: #fff;
             display: inline-block;
             margin-left: 5px;
             list-style: none;
@@ -154,15 +153,16 @@
             background-color: #ffa52d;
         }
         .doc_sub{
-            font-size: 16px;
+            font-size: 15px;
             font-weight: bold;
             color: #666666;
+            margin: 5px 0 5px 0;
         }
         .doc_title{
             font-weight: bold;
-            font-size: 40px;
+            font-size: 20px;
             color: #ffa52d;
-            margin: 10px 0;
+            margin:  0px 0 5px 0;
         }
         .doc_time{
             font-size: 12px;
@@ -173,25 +173,32 @@
         }
 
         .main{
-            width: 90%;
+            width: 95%;
             margin: 10px auto;
         }
         .main_left{
             display: inline-block;
-            width: 59%;
+            width: 100%;
         }
         .main_right{
-            display: inline-block;
-            width: 36%;
-            margin-left: 4%;
+            /*display: inline-block;*/
+            width: 100%;
+            /*margin-left: 4%;*/
             vertical-align: top;
+            margin-top: 25px;
+        }
+        .view_more{
+            text-align: right;
+            font-size: 14px;
         }
         .cate_list{
             width: 100%;
             border-bottom: 3px solid #ffa52d;
+            display: flex;
+            font-size: 14px;
         }
         .cate_list span{
-            margin-left: 20px;
+            margin-left: 15px;
             font-weight: bold;
             cursor: pointer;
         }
@@ -204,23 +211,31 @@
             font-weight: normal;
             margin-right: 5px;
         }
+        .cate_list_item{
+            white-space: nowrap;
+            overflow-x: scroll;
+        }
         .right_title{
             border-bottom: 3px solid #ffa52d;
             font-weight: bold;
+            font-size: 14px;
             padding-right: 10px;
             display: inherit;
+            color: #ffa52d;
+            padding-bottom: 3px;
         }
         .left_list,.right_list{
             width: 100%;
             padding: 0;
-            margin-top: 30px;
+            margin-top: 16px;
         }
         .left_list li{
             background-color: #F5F5F5;
-            height: 90px;
+            /*height: 90px;*/
             list-style: none;
             display: flex;
             margin-bottom: 20px;
+            border-radius: 10px;
         }
         .right_list li{
             list-style: none;
@@ -249,12 +264,16 @@
             vertical-align: top;
         }
         .left_img{
-            width: 135px;
+            width: 115px;
+            margin: 10px;
             flex: 0 0 auto;
+        }
+        .left_img img{
+            border-radius: 5px;
         }
         .left_title{
             height: 90px;
-            padding: 10px 15px;
+            padding: 10px 15px 10px 5px;
             box-sizing: border-box;
             flex: 1 1 100%;
         }
@@ -266,6 +285,7 @@
             margin: 7px 0;
             color: #666666;
         }
+
     </style>
 	<body>
     <script>
@@ -284,18 +304,18 @@
                                 <img src="{pigcms{$vo.cover}" />
                             </div>
                             <div class="reg_txt">
+                                <div class="doc_title">
+                                    {pigcms{$vo.title} {pigcms{$vo.title} {pigcms{$vo.title} {pigcms{$vo.title}
+                                </div>
                                 <div class="doc_sub">
                                     {pigcms{$vo.sub_title}
-                                </div>
-                                <div class="doc_title">
-                                    {pigcms{$vo.title}
                                 </div>
                                 <div class="doc_time">
                                     Posted on {pigcms{$vo.last_time|date='M d Y',###}
                                 </div>
-                                <div class="doc_content">
-                                    {pigcms{$vo.desc}
-                                </div>
+<!--                                <div class="doc_content">-->
+<!--                                    {pigcms{$vo.desc}-->
+<!--                                </div>-->
                             </div>
                         </div>
                         </a>
@@ -311,14 +331,16 @@
 <!--                <div class="desc_right"></div>-->
             </div>
         </div>
-        <div class="main" style="margin-top: 50px">
+        <div class="main">
             <div class="main_left">
                 <div class="cate_list">
-                    <span class="curr_cate" style="margin-left: 0;" data-id="0">ALL POST</span>
+                    <span class="curr_cate" style="margin-left: 0;width: 95px;white-space: nowrap;" data-id="0">ALL POST</span>
+                    <div class="cate_list_item">
                     <volist name="cate_list['cate']" id="vo">
                         <span data-id="{pigcms{$vo.id}">{pigcms{$vo.name}</span>
                     </volist>
-                    <span class="cate_more">MORE >></span>
+                     </div>
+                    <span class="cate_more"> > </span>
                 </div>
                 <ul class="left_list" id="list_0">
                     <volist name="news_all" id="vo">
@@ -442,7 +464,7 @@
 
         timeoutId = setTimeout(function(){
             curr_num += 1;
-            changeDesc();
+            if (curr_num < 4) changeDesc();
         },5000);
     }
 
@@ -470,13 +492,21 @@
     });
 
     var width = $('.desc_center').width();
-    var height = width / 3;
-    var t_height = height + 20;
-    $('.desc_all').height(height);
-    $('.reg_desc').height(t_height);
+    //var width = window.screen.availWidth;
+    var img_height= width/1.59;
+    $('.desc_point').css('top',img_height);
+    var height = width *1;
+    var t_height = height;
+    $('.reg_desc').height(t_height);    //最外层高度
     $('.reg_show').height(t_height);
-    $('.desc_left').height(t_height);
-    $('.desc_right').height(t_height);
+
+    $('.desc_center').width(width)      //内层高度
+
+    $('.desc_all').height(height);      //循环内高度
+
+
+    // $('.desc_left').height(t_height);
+    // $('.desc_right').height(t_height);
 
     $('.cate_list').find('span').each(function () {
         $(this).click(function () {

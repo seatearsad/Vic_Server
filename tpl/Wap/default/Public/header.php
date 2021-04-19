@@ -105,7 +105,7 @@
         height: 30px;
         line-height: 30px;
         cursor: pointer;
-        background-image: url("./tpl/Static/blue/images/new/black_arrow.png");
+        background-image: url("../tpl/Static/blue/images/new/black_arrow.png");
         background-size: auto 16px;
         background-repeat: no-repeat;
         background-position: right;
@@ -115,32 +115,32 @@
     }
     #menu_memo ul li:hover{
         color: #ffa52d;
-        background-image: url("./tpl/Static/blue/images/new/or_arrow.png");
+        background-image: url("../tpl/Static/blue/images/new/or_arrow.png");
     }
 
     #menu_memo li:nth-child(1) .m_img{
-        background-image: url("./tpl/Static/blue/images/new/home.png");
+        background-image: url("../tpl/Static/blue/images/new/home.png");
     }
     #menu_memo li:nth-child(2) .m_img{
-        background-image: url("./tpl/Static/blue/images/new/food.png");
+        background-image: url("../tpl/Static/blue/images/new/food.png");
     }
     #menu_memo li:nth-child(3) .m_img{
-        background-image: url("./tpl/Static/blue/images/new/car.png");
+        background-image: url("../tpl/Static/blue/images/new/car.png");
     }
     #menu_memo li:nth-child(4) .m_img{
-        background-image: url("./tpl/Static/blue/images/new/store.png");
+        background-image: url("../tpl/Static/blue/images/new/store.png");
     }
     #menu_memo li:hover:nth-child(1) .m_img{
-        background-image: url("./tpl/Static/blue/images/new/h_home.png");
+        background-image: url("../tpl/Static/blue/images/new/h_home.png");
     }
     #menu_memo li:hover:nth-child(2) .m_img{
-        background-image: url("./tpl/Static/blue/images/new/h_food.png");
+        background-image: url("../tpl/Static/blue/images/new/h_food.png");
     }
     #menu_memo li:hover:nth-child(3) .m_img{
-        background-image: url("./tpl/Static/blue/images/new/h_car.png");
+        background-image: url("../tpl/Static/blue/images/new/h_car.png");
     }
     #menu_memo li:hover:nth-child(4) .m_img{
-        background-image: url("./tpl/Static/blue/images/new/h_store.png");
+        background-image: url("../tpl/Static/blue/images/new/h_store.png");
     }
     #menu_memo li .m_img{
         background-size: 22px 22px;
@@ -168,7 +168,7 @@
         margin-top: 11px;
         font-size: 1.125em;
         cursor: pointer;
-        background-image: url("./tpl/Static/blue/images/wap/wap_login.png");
+        background-image: url("../tpl/Static/blue/images/wap/wap_login.png");
         background-size: 100% auto;
     }
     .user_div{
@@ -214,7 +214,7 @@
         text-align: center;
         flex: 0 0 auto;
         cursor: pointer;
-        background-image: url("./tpl/Static/blue/images/wap/download.png");
+        background-image: url("../tpl/Static/blue/images/wap/download.png");
         background-size: auto 24px;
         background-repeat: no-repeat;
         background-position: center;
@@ -228,7 +228,7 @@
         margin-right: 5%;
         margin-top: 11px;
         font-size: 1em;
-        background-image: url("./tpl/Static/blue/images/wap/language.png");
+        background-image: url("../tpl/Static/blue/images/wap/language.png");
         background-size: 100% auto;
         background-repeat: no-repeat;
         box-sizing: border-box;
