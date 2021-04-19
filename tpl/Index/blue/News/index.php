@@ -33,10 +33,22 @@
         <include file="Public:facebook"/>
 	</head>
     <style>
+        @font-face {
+            font-family: 'Montserrat';
+            src: url('/static/font/Montserrat-Regular.ttf');
+        }
+        @font-face {
+            font-family: 'Montserrat-bold';
+            src: url('/static/font/Montserrat-Bold.otf');
+        }
+        @font-face {
+            font-family: 'Montserrat-light';
+            src: url('/static/font/Montserrat-Light.otf');
+        }
         *{
             margin: 0px;
             box-sizing: border-box;
-            font-family: Helvetica;
+            font-family: Montserrat;
             -moz-osx-font-smoothing: grayscale;
         }
         body{
@@ -116,6 +128,7 @@
             font-weight: bold;
             width: 50%;
             flex: 1 1 100%;
+            overflow-y: hidden;
         }
         .reg_title img{
             width: 100%;
@@ -261,13 +274,14 @@
             font-weight: bold;
         }
         .list_sub{
-            font-size: 12px;
-            margin: 7px 0;
+            font-size: 14px;
+            margin:8px 0 2px 0;
             color: #666666;
         }
     </style>
 	<body>
         <include file="Public:header"/>
+        <div style="">
         <div class="reg_desc">
             <div class="reg_show">
                 <div class="desc_left"></div>
@@ -383,6 +397,7 @@
                 </ul>
             </div>
         </div>
+        </div>
         <include file="Public:footer"/>
 	</body>
 <script>
@@ -392,6 +407,10 @@
     var timeoutId;
     changeDesc();
 
+    $(window).resize(function(){
+
+        rsz();
+    });
     function changeDesc() {
         var i = 1;
         curr_num = curr_num == 0 ? desc_num : curr_num;
@@ -462,15 +481,17 @@
         window.location.href = courier_link;
     });
 
-    var width = $('.desc_center').width();
-    var height = width / 3;
-    var t_height = height + 20;
-    $('.desc_all').height(height);
-    $('.reg_desc').height(t_height);
-    $('.reg_show').height(t_height);
-    $('.desc_left').height(t_height);
-    $('.desc_right').height(t_height);
-
+    function rsz(){
+        var width = $('.desc_center').width();
+        var height = width / 3.2;
+        var t_height = height;
+        $('.desc_all').height(height);
+        $('.reg_desc').height(t_height);
+        $('.reg_show').height(t_height);
+        $('.desc_left').height(t_height);
+        $('.desc_right').height(t_height);
+    }
+    rsz();
     $('.cate_list').find('span').each(function () {
         $(this).click(function () {
             var class_name = $(this).attr('class');

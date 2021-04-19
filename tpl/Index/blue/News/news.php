@@ -33,10 +33,22 @@
         <include file="Public:facebook"/>
 	</head>
     <style>
+        @font-face {
+            font-family: 'Montserrat';
+            src: url('/static/font/Montserrat-Regular.ttf');
+        }
+        @font-face {
+            font-family: 'Montserrat-bold';
+            src: url('/static/font/Montserrat-Bold.otf');
+        }
+        @font-face {
+            font-family: 'Montserrat-light';
+            src: url('/static/font/Montserrat-Light.otf');
+        }
         *{
             margin: 0px;
             box-sizing: border-box;
-            font-family: Helvetica;
+            font-family: Montserrat;
             -moz-osx-font-smoothing: grayscale;
         }
         body{
@@ -160,12 +172,16 @@
             font-size: 20px;
         }
         .detail_time{
-            margin: 10px auto;
+            margin: 2px auto;
             color:#999999;
             font-size: 14px;
         }
         .sub_title{
-            font-size: 12px;
+            font-size: 16px;
+            margin-top:10px;
+        }
+        .content{
+            margin-top:10px;
         }
     </style>
 	<body>
@@ -180,12 +196,12 @@
                     {pigcms{$news.title}
                 </div>
                 <div class="sub_title">
-                    - {pigcms{$news.sub_title}
+                    {pigcms{$news.sub_title}
                 </div>
                 <div class="detail_time">
                     Update on {pigcms{$news.last_time|date='M d Y',###}
                 </div>
-                <div>
+                <div class="content">
                     {pigcms{$news.content}
                 </div>
             </div>

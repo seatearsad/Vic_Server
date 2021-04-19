@@ -198,7 +198,7 @@
                     {pigcms{$news.title}
                 </div>
                 <div class="sub_title">
-                    - {pigcms{$news.sub_title}
+                    {pigcms{$news.sub_title}
                 </div>
                 <div class="detail_time">
                     Posted on {pigcms{$news.last_time|date='M d Y',###}
