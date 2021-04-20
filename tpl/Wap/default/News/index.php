@@ -317,7 +317,7 @@
                             </div>
                             <div class="reg_txt">
                                 <div class="doc_title">
-                                    {pigcms{$vo.title} 
+                                    {pigcms{$vo.title}
                                 </div>
                                 <div class="doc_sub">
                                     {pigcms{$vo.sub_title}
