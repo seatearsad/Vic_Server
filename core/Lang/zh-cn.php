@@ -2057,6 +2057,8 @@ return array(
     "NAME_ATTRIBUTE_BKADMIN"=>"请给规格的属性值取名，若不需要的请删除后重新生成",
     "NAME_ATTRIBUTE2_BKADMIN"=>"请给属性取名，若不需要的请删除后重新生成",
     "NAMEVALUEE_ATTRIBUTE_BKADMIN"=>"请给属性的属性值取名，若不需要的请删除后重新生成",
+    "SIDE_DISH_LIST_BKADMIN"=>"配菜列表",
+    "MNG_LIST_NOTHING_BKADMIN"=>"您没有添加店铺，或店铺没开启外卖功能，或店铺正在审核中。",
 
     "F_REGISTRATION_INVITED"=>"邀请注册数",
     "F_ORDERS_INVITED"=>"邀请下单数",

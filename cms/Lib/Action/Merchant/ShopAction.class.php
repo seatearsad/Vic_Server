@@ -696,6 +696,7 @@ class ShopAction extends BaseAction
 
         $this->display();
     }
+
     /* 添加店铺 */
     public function goods_add()
     {
@@ -717,19 +718,27 @@ class ShopAction extends BaseAction
             if (empty($_POST['pic'])) {
                 //$error_tips .=L('LEAST_ONE_BKADMIN').'<br/>';
             }
+            //echo "PIC1=";
+           //var_dump($_POST['pic']);
             $_POST['name'] = fulltext_filter($_POST['name']);
             $_POST['des'] = fulltext_filter($_POST['des']);
             $_POST['des'] = preg_replace('/<[^>]*>/', "", $_POST['des']);
 
             $img_mer_id = sprintf("%09d", $this->merchant_session['mer_id']);
             $rand_num = substr($img_mer_id, 0, 3) . '/' . substr($img_mer_id, 3, 3) . '/' . substr($img_mer_id, 6, 3);
+
             foreach($_POST['pic'] as $kp => $vp){
                 $tmp_vp = explode(',', $vp);
                 $_POST['pic'][$kp] = $rand_num . ',' . $tmp_vp[1];
             }
-            $_POST['pic'] = implode(';', $_POST['pic']);
-            $_POST['print_id'] = isset($_POST['print_id']) ? intval($_POST['print_id']) : 0;
+            //echo "PIC2=";
+            //var_dump($_POST['pic']);
 
+            $_POST['pic'] = implode(';', $_POST['pic']);
+
+            //echo "PIC3=";
+            //var_dump($_POST['pic']);
+            $_POST['print_id'] = isset($_POST['print_id']) ? intval($_POST['print_id']) : 0;
 
             if ($_POST['specs']) {
                 foreach ($_POST['specs'] as $val) {
@@ -748,7 +757,6 @@ class ShopAction extends BaseAction
                     }
                 }
             }
-
 
             if ($_POST['properties']) {
                 foreach ($_POST['properties'] as $val) {
@@ -801,7 +809,7 @@ class ShopAction extends BaseAction
                 $_POST['sort_id'] = $sort_id;
                 $_POST['store_id'] = $now_store['store_id'];
                 $_POST['last_time'] = $_SERVER['REQUEST_TIME'];
-
+                //var_dump($_POST);die("add");
                 if ($goods_id = D('Shop_goods')->save_post_form($_POST, $now_store['store_id'])) {
                     D('Image')->update_table_id($_POST['image'], $goods_id, 'goods');
                     $this->success(L('ADDED_SUCC_BKADMIN'), U('Shop/goods_list', array('sort_id' => $now_sort['sort_id'])));
@@ -853,88 +861,13 @@ class ShopAction extends BaseAction
         $this->display();
     }
 
-    public function ajax_goods_properties()
-    {
-        $cat_id = isset($_POST['cat_id']) ? intval($_POST['cat_id']) : 0;
-        $goods_id = isset($_POST['goods_id']) ? intval($_POST['goods_id']) : 0;
-        $properties = D('Goods_properties')->field(true)->where(array('status' => 1, 'cat_id' => $cat_id))->select();
-        if ($properties) {
-            $value_ids = array();
-            $relations = D('Goods_properties_relation')->field(true)->where(array('gid' => $goods_id))->select();
-            foreach ($relations as $r) {
-                $value_ids[] = $r['pid'];
-            }
-            $pids = array();
-            $list = array();
-            foreach ($properties as $row) {
-                $pids[] = $row['id'];
-                $row['value_list'] = null;
-                $list[$row['id']] = $row;
-            }
-            $value_list = D('Goods_properties_value')->field(true)->where(array('pid' => array('in', $pids)))->select();
-            foreach ($value_list as $v) {
-                if (isset($list[$v['pid']])) {
-                    if (in_array($v['id'], $value_ids)) {
-                        $v['checked'] = 1;
-                    } else {
-                        $v['checked'] = 0;
-                    }
-                    $list[$v['pid']]['value_list'][] = $v;
-                }
-            }
-            $data = array();
-            foreach ($list as $row) {
-                if (isset($row['value_list']) && $row['value_list']) {
-                    $data[] = $row;
-                }
-            }
-            exit(json_encode(array('error_code' => false, 'data' => $data)));
-        } else {
-            exit(json_encode(array('error_code' => true, 'msg' => L('NO_CONTENT_BKADMIN'))));
-        }
-    }
-
-    public function ajax_upload_pic()
-    {
-        if ($_FILES['file']['error'] != 4) {
-            $store_id = isset($_GET['store_id']) ? intval($_GET['store_id']) : 0;
-            $shop = D('Merchant_store_shop')->field('store_theme')->where(array('store_id' => $store_id))->find();
-            $store_theme = isset($shop['store_theme']) ? intval($shop['store_theme']) : 0;
-            if ($store_theme) {
-                $width = '900,450';
-                $height = '900,450';
-            } else {
-                $width = '900,450';
-                $height = '500,250';
-            }
-            $param = array('size' => $this->config['group_pic_size']);
-            $param['thumb'] = true;
-            $param['imageClassPath'] = 'ORG.Util.Image';
-            $param['thumbPrefix'] = 'm_,s_';
-            $param['thumbMaxWidth'] = $width;
-            $param['thumbMaxHeight'] = $height;
-            $param['thumbRemoveOrigin'] = false;
-            $image = D('Image')->handle($this->merchant_session['mer_id'], 'goods', 1, $param);
-            if ($image['error']) {
-                exit(json_encode(array('error' => 1,'message' =>$image['msg'])));
-            } else {
-                $title = $image['title']['file'];
-                $goods_image_class = new goods_image();
-                $url = $goods_image_class->get_image_by_path($title, 's');
-                exit(json_encode(array('error' => 0, 'url' => $url, 'title' => $title)));
-            }
-        } else {
-            exit(json_encode(array('error' => 1,'message' =>'没有选择图片')));
-        }
-    }
-
     /* 编辑商品 */
     public function goods_edit()
     {
         $now_goods = $this->check_goods($_GET['goods_id']);
         $now_sort = $this->check_sort($now_goods['sort_id']);
         $now_store = $this->check_store($now_sort['store_id']);
-        //var_dump($now_store);die();
+        //var_dump($now_goods);die();
         if (IS_POST) {
             if (empty($_POST['name'])) {
                 $error_tips .= L('NAME_REQUIRED2_BKADMIN').'<br/>';
@@ -1024,7 +957,7 @@ class ShopAction extends BaseAction
                 $_POST['sort_id'] = $sort_id;
                 $_POST['store_id'] = $now_store['store_id'];
                 $_POST['last_time'] = $_SERVER['REQUEST_TIME'];
-
+                //var_dump($_POST);die("edit");
                 if ($goods_id = D('Shop_goods')->save_post_form($_POST, $now_store['store_id'])) {
                     D('Image')->update_table_id($_POST['image'], $goods_id, 'goods');
                     $this->success(L('SAVED_SUCCE_BKADMIN'), U('Shop/goods_list', array('sort_id' => $now_sort['sort_id'],'page'=>$_GET['page'])));
@@ -1072,6 +1005,82 @@ class ShopAction extends BaseAction
         $this->assign('express_template', D('Express_template')->field(true)->where(array('mer_id' => $this->merchant_session['mer_id']))->select());
         $this->display();
     }
+
+    public function ajax_goods_properties()
+    {
+        $cat_id = isset($_POST['cat_id']) ? intval($_POST['cat_id']) : 0;
+        $goods_id = isset($_POST['goods_id']) ? intval($_POST['goods_id']) : 0;
+        $properties = D('Goods_properties')->field(true)->where(array('status' => 1, 'cat_id' => $cat_id))->select();
+        if ($properties) {
+            $value_ids = array();
+            $relations = D('Goods_properties_relation')->field(true)->where(array('gid' => $goods_id))->select();
+            foreach ($relations as $r) {
+                $value_ids[] = $r['pid'];
+            }
+            $pids = array();
+            $list = array();
+            foreach ($properties as $row) {
+                $pids[] = $row['id'];
+                $row['value_list'] = null;
+                $list[$row['id']] = $row;
+            }
+            $value_list = D('Goods_properties_value')->field(true)->where(array('pid' => array('in', $pids)))->select();
+            foreach ($value_list as $v) {
+                if (isset($list[$v['pid']])) {
+                    if (in_array($v['id'], $value_ids)) {
+                        $v['checked'] = 1;
+                    } else {
+                        $v['checked'] = 0;
+                    }
+                    $list[$v['pid']]['value_list'][] = $v;
+                }
+            }
+            $data = array();
+            foreach ($list as $row) {
+                if (isset($row['value_list']) && $row['value_list']) {
+                    $data[] = $row;
+                }
+            }
+            exit(json_encode(array('error_code' => false, 'data' => $data)));
+        } else {
+            exit(json_encode(array('error_code' => true, 'msg' => L('NO_CONTENT_BKADMIN'))));
+        }
+    }
+
+    public function ajax_upload_pic()
+    {
+        if ($_FILES['file']['error'] != 4) {
+            $store_id = isset($_GET['store_id']) ? intval($_GET['store_id']) : 0;
+            $shop = D('Merchant_store_shop')->field('store_theme')->where(array('store_id' => $store_id))->find();
+            $store_theme = isset($shop['store_theme']) ? intval($shop['store_theme']) : 0;
+            if ($store_theme) {
+                $width = '900,450';
+                $height = '900,450';
+            } else {
+                $width = '900,450';
+                $height = '500,250';
+            }
+            $param = array('size' => $this->config['group_pic_size']);
+            $param['thumb'] = true;
+            $param['imageClassPath'] = 'ORG.Util.Image';
+            $param['thumbPrefix'] = 'm_,s_';
+            $param['thumbMaxWidth'] = $width;
+            $param['thumbMaxHeight'] = $height;
+            $param['thumbRemoveOrigin'] = false;
+            $image = D('Image')->handle($this->merchant_session['mer_id'], 'goods', 1, $param);
+            if ($image['error']) {
+                exit(json_encode(array('error' => 1,'message' =>$image['msg'])));
+            } else {
+                $title = $image['title']['file'];
+                $goods_image_class = new goods_image();
+                $url = $goods_image_class->get_image_by_path($title, 's');
+                exit(json_encode(array('error' => 0, 'url' => $url, 'title' => $title)));
+            }
+        } else {
+            exit(json_encode(array('error' => 1,'message' =>'没有选择图片')));
+        }
+    }
+
 
     /**
      * 商品配菜管理

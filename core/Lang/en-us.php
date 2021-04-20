@@ -1805,7 +1805,7 @@ return array(
     "STORES_PAGE_BKADMIN"=>"%s0 Item(s) %s1/%s2 Page(s)",
     "ADD_STORE_BKADMIN"=>"Add Store",
     "STORE_DESCRIPTION_BKADMIN"=>"Store Description",
-    "PHONE_ASSOCIATE_BKADMIN"=>"This phone number is associated with the merchant's automated incoming calls",
+    "PHONE_ASSOCIATE_BKADMIN"=>"Required. This phone number is associated with the merchant's automated incoming calls",
     "SHORT_DESCRIPTION_BKADMIN"=>"Short Description",
     "REQUIRED_INFO_BKADMIN"=>"Required. This information will be displayed with the store information on the homepage of the client terminal",
     "ADDRESS_COORDINATES_BKADMIN"=>"Address Coordinates",
@@ -2057,6 +2057,8 @@ return array(
     "NAME_ATTRIBUTE_BKADMIN"=>"Please name the attribute value of the specification. If you do not need it, please delete it and regenerate it.",
     "NAME_ATTRIBUTE2_BKADMIN"=>"Please name the attributes. If you do not need it please delete it and regenerate it.",
     "NAMEVALUEE_ATTRIBUTE_BKADMIN"=>"Please name the value of the attribute. Delete it and regenerate it if you don't need it.",
+    "SIDE_DISH_LIST_BKADMIN"=>"Side Dish List",
+    "MNG_LIST_NOTHING_BKADMIN"=>"There is no store created yet",
 
     "F_REGISTRATION_INVITED"=>"Registration Invited",
     "F_ORDERS_INVITED"=>"Orders Invited",
