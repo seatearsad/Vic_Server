@@ -395,6 +395,7 @@
 								<div class="form-group">
 									<label class="col-sm-1">{pigcms{:L('STORE_DESCRIPTION_BKADMIN')}</label>
 									<textarea class="col-sm-5" rows="5" name="txt_info"></textarea>
+                                    <span class="form_tips">This will be shown to users as a pop-up window when they open a store on the app</span>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-1">{pigcms{:L('STOREFRONT_IMAGE_BKADMIN')}</label>
@@ -477,7 +478,7 @@
 					<button id="close_button" type="button" class="close" data-dismiss="modal" aria-hidden="true">
 						<span class="white">&times;</span>
 					</button>
-                    {pigcms{: L('SEARCH_ZOOM_BKADMIN') }}
+                    {pigcms{: L('SEARCH_ZOOM_BKADMIN')}
 				</div>
 			</div>
 			<div class="modal-body no-padding" style="width:100%;">

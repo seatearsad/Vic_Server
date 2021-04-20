@@ -62,7 +62,7 @@ class ConfigAction extends BaseAction{
 			}
 
 			if(empty($data_merchant['txt_info'])){
-				$this->error(L('MERCHANT_DESC_BKADMIN'));
+				//$this->error(L('MERCHANT_DESC_BKADMIN'));
 			}
 			$data_merchant['adverimg']=isset($_POST['adverimg']) ? trim($_POST['adverimg']) : '';
 			$data_merchant['mer_id'] = $this->merchant_session['mer_id'];
@@ -219,16 +219,16 @@ class ConfigAction extends BaseAction{
 		$database_merchant_store = D('Merchant_store');
 		if(IS_POST){
 			if(empty($_POST['name'])){
-				$this->error('店铺名称必填！');
+				$this->error(L('NAME_REQUIRED_BKADMIN'));
 			}
-//			if(empty($_POST['phone'])){
-//				$this->error('联系电话必填！');
-//			}
+			if(empty($_POST['phone'])){
+				$this->error('NUMBER_REQUIRED_BKADMIN！');
+			}
 			if(empty($_POST['long_lat'])){
-				$this->error('店铺经纬度必填！');
+				$this->error(L('COORDINATES_REQUIRED_BKADMIN'));
 			}
 			if(empty($_POST['adress'])){
-				$this->error('店铺地址必填！');
+				$this->error(L('ADDRESS_REQUIRED_BKADMIN'));
 			}
 //			if(empty($_POST['permoney'])){
 //				$this->error('人均消费必填！');
@@ -240,12 +240,12 @@ class ConfigAction extends BaseAction{
 // 				$this->error('交通路线必填！');
 // 			}
 			if(empty($_POST['pic'])){
-				$this->error('请至少上传一张图片');
+				$this->error(L('LEAST_ONE_BKADMIN'));
 			}
 			$_POST['pic_info'] = implode(';',$_POST['pic']);
 
 			if(empty($_POST['txt_info'])){
-				$this->error('请输入店铺描述信息');
+				$this->error(L('DESCRIPTION_BKADMIN'));
 			}
 			//判断关键词
 			$keywords = trim($_POST['keywords']);
@@ -258,7 +258,7 @@ class ConfigAction extends BaseAction{
 					}
 				}
 				if(count($key_arr)>5){
-					$this->error('关键词最多5个。');
+					$this->error(L('MAX_KEYWORDS_BKADMIN'));
 				}
 			}
             //营业时间
@@ -442,7 +442,7 @@ class ConfigAction extends BaseAction{
 					$this->success(L('J_SUCCEED1'), U("Merchant/Waimai/store", array('store_id'=>$merchant_store_id)));
 				}
 
-				$this->success(L('J_SUCCEED1'));
+				$this->success(L('J_SUCCEED1'),"/merchant.php?g=Merchant&c=Config&a=store");
 			}else{
 				$this->error(L('J_MODIFICATION_FAILED'));
 			}
@@ -678,7 +678,7 @@ class ConfigAction extends BaseAction{
 					}
 				}
 
-				$this->success(L('SAVED_SUCCE_BKADMIN'));
+				$this->success(L('SAVED_SUCCE_BKADMIN'),"/merchant.php?g=Merchant&c=Config&a=store");
 			}else{
 				$this->error(L('FAILED_SAVE_BKADMIN'));
 			}
