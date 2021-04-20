@@ -26,9 +26,9 @@ class AppintroAction extends BaseAction{
 			$data['title'] = $_POST['title'];
 			$data['content'] = htmlspecialchars_decode($_POST['content']);
 			if(D('Appintro')->where('id='.$_POST['id'])->save($data)){
-				$this->success('保存成功！');
+				$this->success(L('J_SUCCEED3'));
 			}else{
-				$this->error('保存失败！');
+				$this->error(L('J_FAILED_SAVE'));
 			}
 		}else {
 			$intro = D('Appintro')->where('id='.$_GET['id'])->select();
