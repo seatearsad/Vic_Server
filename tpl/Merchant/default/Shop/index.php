@@ -85,7 +85,7 @@
 										</tr>
 									</volist>
 								<else/>
-									<tr class="odd"><td class="button-column" colspan="9" >您没有添加店铺，或店铺没开启外卖功能，或店铺正在审核中。</td></tr>
+									<tr class="odd"><td class="button-column" colspan="9" >{pigcms{:L('MNG_LIST_NOTHING_BKADMIN')}</td></tr>
 								</if>
 							</tbody>
 						</table>
