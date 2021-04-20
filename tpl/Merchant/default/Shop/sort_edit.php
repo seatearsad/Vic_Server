@@ -86,9 +86,9 @@
                                         </select>
                                     </div>
                                     <div class="col-sm-10">
-                                        <input class="col-sm-1" size="10" name="begin_time" id="begin_time" type="text" placeholder="00:00" value="{pigcms{$now_sort.begin_time}" onfocus="WdatePicker({readOnly:true,dateFmt:'HH:mm',lang:'en'})"/>
+                                        <input class="col-sm-1" size="10" name="begin_time" id="begin_time" type="text" placeholder="00:00" value="<if condition="$now_sort['begin_time'] eq ''">00:00<else/>{pigcms{$now_sort.begin_time}</if>" onfocus="WdatePicker({readOnly:true,dateFmt:'HH:mm',lang:'en'})"/>
                                         <label style="float: left;margin-top: 5px;">&nbsp; {pigcms{:L('TO_BKADMIN')} &nbsp;</label>
-                                        <input class="col-sm-1" size="10" name="end_time" id="end_time" type="text" placeholder="00:00" value="{pigcms{$now_sort.end_time}" onfocus="WdatePicker({readOnly:true,dateFmt:'HH:mm',lang:'en'})"/>
+                                        <input class="col-sm-1" size="10" name="end_time" id="end_time" type="text" placeholder="00:00" value="<if condition="$now_sort['end_time'] eq ''">23:59<else/>{pigcms{$now_sort.end_time}</if>" onfocus="WdatePicker({readOnly:true,dateFmt:'HH:mm',lang:'en'})"/>
 									</div>
 								</div>
 								<div class="form-group hidden_obj">
