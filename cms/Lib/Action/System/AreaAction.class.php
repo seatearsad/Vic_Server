@@ -378,7 +378,7 @@ class AreaAction extends BaseAction{
 			$id = isset($_POST['id']) ? intval($_POST['id']) : 0;
 			$account = htmlspecialchars($_POST['account']);
 			if($database_area->where("`id`<>'{$id}' AND `account`='{$account}'")->find()){
-				$this->error('此账号已存在，请更换。');
+				$this->error(L('SIAEPRI'));
 			}
 			unset($_POST['id']);
 

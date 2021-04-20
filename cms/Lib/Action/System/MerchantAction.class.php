@@ -139,7 +139,7 @@ class MerchantAction extends BaseAction{
 				M('Merchant_percent_rate')->add(array('mer_id'=>$insert_id));
 				$this->success(L('J_SUCCEED1'));
 			}else{
-				$this->error('添加失败！请重试~');
+				$this->error(L('J_MODIFICATION_FAILED2'));
 			}
 		}else{
 			$this->error('非法提交,请重新提交~');
@@ -244,7 +244,7 @@ class MerchantAction extends BaseAction{
 			if($database_merchant->where($condition_merchant)->delete()){
                 $this->success(L('J_DELETION_SUCCESS'));
 			}else{
-				$this->error('删除失败！请重试~');
+				$this->error(L('J_DELETION_FAILED_RETRY'));
 			}
 		}else{
 			$this->error('非法提交,请重新提交~');
@@ -359,7 +359,7 @@ class MerchantAction extends BaseAction{
 				M('Merchant_score')->add(array('parent_id'=>$insert_id,'type'=>2));
                 $this->success(L('J_SUCCEED1'));
 			}else{
-				$this->error('添加失败！请重试~');
+				$this->error(L('J_MODIFICATION_FAILED2'));
 			}
 		}else{
 			$this->error('非法提交,请重新提交~');
@@ -401,7 +401,7 @@ class MerchantAction extends BaseAction{
 			if($database_merchant_store->data($_POST)->save()){
 				$this->success('Success');
 			}else{
-				$this->error('修改失败！请检查内容是否有过修改（必须修改）后重试~');
+				$this->error(L('J_MODIFICATION_FAILED2'));
 			}
 		}else{
 			$this->error('非法提交,请重新提交~');
@@ -421,7 +421,7 @@ class MerchantAction extends BaseAction{
 			if($database_merchant_store->where($condition_merchant_store)->save(array('status'=>4))){
                 $this->success(L('J_DELETION_SUCCESS'));
 			}else{
-				$this->error('删除失败！请重试~');
+				$this->error(L('J_DELETION_FAILED_RETRY'));
 			}
 		}else{
 			$this->error('非法提交,请重新提交~');
@@ -448,7 +448,7 @@ class MerchantAction extends BaseAction{
 		if($database_merchant_news->data($_POST)->add()){
             $this->success(L('J_SUCCEED1'));
 		}else{
-			$this->error('添加失败！');
+			$this->error(L('J_MODIFICATION_FAILED2'));
 		}
 	}
 	public function news_edit(){
@@ -471,7 +471,7 @@ class MerchantAction extends BaseAction{
 		if($database_merchant_news->data($_POST)->save()){
             $this->success(L('J_SUCCEED2'));
 		}else{
-			$this->error('编辑失败！');
+			$this->error(L('J_MODIFICATION_FAILED2'));
 		}
 	}
 	public function news_del(){
@@ -481,7 +481,7 @@ class MerchantAction extends BaseAction{
 			if($database_merchant_news->where($condition_merchant_news)->delete()){
                 $this->success(L('J_DELETION_SUCCESS'));
 			}else{
-				$this->error('删除失败！请重试~');
+				$this->error(L('J_DELETION_FAILED_RETRY'));
 			}
 		}else{
 			$this->error('非法提交,请重新提交~');
@@ -986,7 +986,7 @@ class MerchantAction extends BaseAction{
 			if($database_group_category->data($_POST)->add()){
                 $this->success(L('J_SUCCEED1'));
 			}else{
-				$this->error('添加失败！请重试~');
+				$this->error(L('J_MODIFICATION_FAILED2'));
 			}
 		}else{
 			$this->error('非法提交,请重新提交~');
@@ -1017,7 +1017,7 @@ class MerchantAction extends BaseAction{
 				D('Image')->update_table_id('/upload/system/merchant/' . $_POST['cat_pic'], $_POST['cat_id'], 'merchant_category');
 				$this->frame_submit_tips(1,L('J_SUCCEED2'));
 			}else{
-				$this->frame_submit_tips(0,'编辑失败！请重试~');
+				$this->frame_submit_tips(0,L('J_MODIFICATION_FAILED2'));
 			}
 		}else{
 			$this->frame_submit_tips(0,'非法提交,请重新提交~');
@@ -1040,7 +1040,7 @@ class MerchantAction extends BaseAction{
 //				D('Group')->where($condition_group)->delete();
                 $this->success(L('J_DELETION_SUCCESS'));
 			}else{
-				$this->error('删除失败！请重试~');
+				$this->error(L('J_DELETION_FAILED_RETRY'));
 			}
 		}else{
 			$this->error('非法提交,请重新提交~');
@@ -1112,9 +1112,9 @@ class MerchantAction extends BaseAction{
 			$data_group_category['cat_field'] = serialize($cat_field);
 			$data_group_category['cat_id'] = $now_category['cat_id'];
 			if($database_group_category->data($data_group_category)->save()){
-				$this->success('添加字段成功！');
+				$this->success(L('J_SUCCEED1'));
 			}else{
-				$this->error('添加失败！请重试~');
+				$this->error(L('J_MODIFICATION_FAILED2'));
 			}
 		}else{
 			$this->error('非法提交,请重新提交~');
@@ -1175,7 +1175,7 @@ class MerchantAction extends BaseAction{
 					}
                     $this->success(L('J_DELETION_SUCCESS'));
 				} else {
-					$this->error('删除失败！请重试~');
+					$this->error(L('J_DELETION_FAILED_RETRY'));
 				}
 			}
 		}
@@ -1252,9 +1252,9 @@ class MerchantAction extends BaseAction{
 					}
 				} else {
 					if (M('Merchant_percent_rate')->add($_POST)) {
-						$this->success('添加字段成功！');
+						$this->success(L('J_SUCCEED1'));
 					} else {
-						$this->error('添加失败！请重试~');
+						$this->error(L('J_MODIFICATION_FAILED2'));
 					}
 				}
 			}else{
@@ -1332,9 +1332,9 @@ class MerchantAction extends BaseAction{
 				}
 			}else{
 				if(M('Merchant_percent_rate')->add($_POST)){
-					$this->success('添加字段成功！');
+					$this->success(L('J_SUCCEED1'));
 				}else{
-					$this->error('添加失败！请重试~');
+					$this->error(L('J_MODIFICATION_FAILED2'));
 				}
 			}
 		}else{

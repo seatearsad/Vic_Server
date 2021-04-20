@@ -2490,4 +2490,6 @@ return array(
     "GITLIOT"=>"General is the lowercase initials of the region name. After entering the name, if this field is empty, it will be filled in automatically (as an example only)",
     "TGFIXC"=>"The general format is XX city XX region of XX province",
     "CCBE"=>"Content cannot be empty!",
+    "FLLC"=>"Use the lower case initials of the first character of the name! If this field is empty this will be filled in automatically after the name is entered (as an example only)",
+    "SIAEPRI"=>"Such ID already exists, please replace it.",
 );

@@ -9,7 +9,7 @@
 			<if condition="$now_area['area_type'] eq 2 || $now_area['area_type'] eq 4">
 				<tr>
 					<th width="80">{pigcms{:L('I_INITIAL_LETTER')}</th>
-					<td><input type="text" class="input fl" name="first_pinyin" value="{pigcms{$now_area.first_pinyin}" size="20" placeholder="" validate="maxlength:20,required:true" tips="名称第一个字符的首字母！输入名称后，若此字段为空，会自动填写（仅作为示例）"/></td>
+					<td><input type="text" class="input fl" name="first_pinyin" value="{pigcms{$now_area.first_pinyin}" size="20" placeholder="" validate="maxlength:20,required:true" tips="{pigcms{:L('FLLC')}"/></td>
 				</tr>
 			</if>
 			<if condition="$now_area['area_type'] gt 1">

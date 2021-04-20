@@ -10,7 +10,7 @@
 			<if condition="$_GET['type'] eq 2 || $_GET['type'] eq 4">
 				<tr>
 					<th width="80">{pigcms{:L('I_INITIAL_LETTER')}</th>
-					<td><input type="text" class="input fl" name="first_pinyin" id="first_pinyin" size="20" placeholder="" validate="maxlength:20,required:true" tips="名称第一个字符的小写首字母！输入名称后，若此字段为空，会自动填写（仅作为示例）"/></td>
+					<td><input type="text" class="input fl" name="first_pinyin" id="first_pinyin" size="20" placeholder="" validate="maxlength:20,required:true" tips="{pigcms{:L('FLLC')}"/></td>
 				</tr>
 			</if>
 			<if condition="$_GET['type'] gt 1">
