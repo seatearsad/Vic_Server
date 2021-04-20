@@ -98,7 +98,7 @@
 									<span class="form_tips">{pigcms{:L('REQUIRED_BKADMIN')}</span>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-1"><label for="price">{pigcms{$now_store['pack_alias']|default='打包费'}</label></label>
+									<label class="col-sm-1"><label for="price">{pigcms{:L('QW_PACKAGEFEE')}</label></label>
 									<input class="col-sm-1" size="20" name="packing_charge" id="packing_charge" type="text" value="{pigcms{$now_goods.packing_charge|floatval}"/>
 								</div>
 

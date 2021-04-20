@@ -9,7 +9,7 @@
             </li>
             <li class="active"><a href="{pigcms{:U('Shop/goods_sort',array('store_id'=>$now_store['store_id']))}">{pigcms{:L('CATEGORY_LIST_BKADMIN')}</a></li>
             <li class="active"><a href="{pigcms{:U('Shop/goods_list',array('sort_id'=>$now_sort['sort_id']))}">{pigcms{$now_sort.sort_name}</a></li>
-            <li class="active"><a href="{pigcms{:U('Shop/side_dish',array('goods_id'=>$now_goods['goods_id']))}">{pigcms{$now_goods.name} 配菜列表</a></li>
+            <li class="active"><a href="{pigcms{:U('Shop/side_dish',array('goods_id'=>$now_goods['goods_id']))}">{pigcms{$now_goods.name} {pigcms{:L('SIDE_DISH_LIST_BKADMIN')}</a></li>
             <if condition=" $dish_id eq ''">
                 <li class="active">{pigcms{:L('ADD_OPTION_BKADMIN')}</li>
             <else />

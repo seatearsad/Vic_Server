@@ -397,6 +397,7 @@
 								<div class="form-group">
 									<label class="col-sm-1">{pigcms{:L('STORE_DESCRIPTION_BKADMIN')}</label>
 									<textarea class="col-sm-5" rows="5" name="txt_info">{pigcms{$now_store.txt_info}</textarea>
+                                    <span class="form_tips">This will be shown to users as a pop-up window when they open a store on the app</span>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-1">{pigcms{:L('STOREFRONT_IMAGE_BKADMIN')}</label>

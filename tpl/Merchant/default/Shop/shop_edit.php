@@ -177,6 +177,7 @@
                                 <div class="form-group">
                                     <label class="col-sm-1"><label for="Config_notice">{pigcms{:L('STORE_REMINDER_BKADMIN')}</label></label>
                                     <textarea class="col-sm-3" rows="4" name="shop_remind" id="Config_notice">{pigcms{$store_shop.shop_remind}</textarea>
+                                    <span class="form_tips">{pigcms{:L('POP_WINDOW_BKADMIN')}</span>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-sm-1"><label for="Config_notice">{pigcms{:L('DATE_CREATED_BKADMIN')}</label></label>
