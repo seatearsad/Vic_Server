@@ -222,7 +222,7 @@ class ConfigAction extends BaseAction{
 				$this->error(L('NAME_REQUIRED_BKADMIN'));
 			}
 			if(empty($_POST['phone'])){
-				$this->error('NUMBER_REQUIRED_BKADMIN！');
+				$this->error(L('NUMBER_REQUIRED_BKADMIN'));
 			}
 			if(empty($_POST['long_lat'])){
 				$this->error(L('COORDINATES_REQUIRED_BKADMIN'));
