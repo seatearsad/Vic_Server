@@ -148,7 +148,7 @@
         str += '<label class="col-sm-1"><label for="sort">{pigcms{:L('ITEM_NAME1_BKADMIN')}</label></label>';
         str += '<input class="col-sm-2" size="20" name="value_name_new-'+new_num+'" id="value_name_new-'+new_num+'" data-id="new_'+new_num+'" type="text" value=""/>';
         str += '<label class="col-sm-1"><label for="sort">{pigcms{:L('ITEM_PRICE_BKADMIN')}</label></label>';
-        str += '<input class="col-sm-1" size="10" name="value_price_new-'+new_num+'" id="value_price_new-'+new_num+'" placeholder="0.00" data-id="new_'+new_num+'" type="text" value=""/>';
+        str += '<input class="col-sm-1" size="10" name="value_price_new-'+new_num+'" id="value_price_new-'+new_num+'" placeholder="0.00" data-id="new_'+new_num+'" type="text" value="0.00"/>';
         str += '<label class="col-sm-1" style="float: right;"><label class="single_del" data-id="new_'+new_num+'" for="sort">{pigcms{:L('DELETE_BKADMIN')}</label></label>';
 
         return str;
