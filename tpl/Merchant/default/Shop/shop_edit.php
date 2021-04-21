@@ -105,7 +105,7 @@
 								
 								<div class="form-group">
 									<label class="col-sm-1"><label for="Config_notice">{pigcms{:L('STORE_ANNOUNCEMENT_BKADMIN')}</label></label>
-									<textarea class="col-sm-3" rows="4" name="store_notice" id="Config_notice" placeholder="{pigcms{:L('STORE_ANNOUNCEMENT_PLACEHOLDER')}">{pigcms{$store_shop.store_notice}</textarea>
+									<textarea class="col-sm-3" rows="4" name="store_notice" id="Config_notice" placeholder="{pigcms{:L('STORE_ANNOUNCEMENT_PLACEHOLDER')}">{pigcms{$store_shop.store_notice|default=L('STORE_ANNOUNCEMENT_PLACEHOLDER')}</textarea>
 								</div>
 								<div class="form-group hidden_obj">
 									<label class="col-sm-1"><label>多级分类</label></label>

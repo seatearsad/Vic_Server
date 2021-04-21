@@ -2052,7 +2052,6 @@ return array(
     "THIS_OPTIONS_NOT_EXSITS_BKADMIN"=>"此配菜不存在",
     "CAT_DELFAIL_BKADMIN"=>"该分类下有商品，先删除商品后再来删除分类",
     "DUPLICATE_SU_BKADMIN"=>"复制成功！",
-    "SURE_COPY_BKADMIN"=>"确定要复制此产品吗？",
     "NAME_SPEC_BKADMIN"=>"请给规格取名，若不需要的请删除后重新生成",
     "NAME_ATTRIBUTE_BKADMIN"=>"请给规格的属性值取名，若不需要的请删除后重新生成",
     "NAME_ATTRIBUTE2_BKADMIN"=>"请给属性取名，若不需要的请删除后重新生成",

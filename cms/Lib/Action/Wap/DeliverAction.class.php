@@ -2613,6 +2613,7 @@ class DeliverAction extends BaseAction
         if($now_user['reg_status'] != 4) {
             if($_GET['type'] == 'jump'){
                 D('Deliver_user')->where(array('uid'=>$this->deliver_session['uid']))->save(array('reg_status'=>4));
+                $this->sendMail($now_user);
             }else {
                 header('Location:' . U('Deliver/step_' . $now_user['reg_status']));
             }

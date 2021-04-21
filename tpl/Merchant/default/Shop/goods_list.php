@@ -129,15 +129,15 @@ $(function(){
 	updateStatus(".statusSwitch .ace-switch", ".statusSwitch", "OPEN", "CLOSED", "shopstatus");
 
 	jQuery(document).on('click','#shopList a.red',function(){
-		if(!confirm("{pigcms{:L('YOU_HIDE_BKADMIN')}}")) return false;
+		if(!confirm("{pigcms{:L('YOU_HIDE_BKADMIN')}")) return false;
 	});
 
     jQuery(document).on('click','#shopList a.orange',function(){
-        if(!confirm("{pigcms{:L('SURE_RESTOR_BKADMIN')}}")) return false;
+        if(!confirm("{pigcms{:L('SURE_RESTOR_BKADMIN')}")) return false;
     });
 
     jQuery(document).on('click','#shopList a.blue',function(){
-        if(!confirm("{pigcms{:L('SURE_RESTOR_BKADMIN')}}")) return false;
+        if(!confirm("{pigcms{:L('SURE_COPY_BKADMIN')}")) return false;
     });
 });
 
