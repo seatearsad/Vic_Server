@@ -196,12 +196,12 @@
                 <div class="from">
                     <a href="/news/cat-0">All Posts</a> > <a href="/news/cat-{pigcms{$now_cat.id}">{pigcms{$now_cat.name}</a> > {pigcms{$news.title}
                 </div>
-                <div class="detail_title">
+                <h1 class="detail_title">
                     {pigcms{$news.title}
-                </div>
-                <div class="sub_title">
+                </h1>
+                <h2 class="sub_title">
                     {pigcms{$news.sub_title}
-                </div>
+                </h2>
                 <div class="detail_time">
                     Update on {pigcms{$news.last_time|date='M d Y',###}
                 </div>
