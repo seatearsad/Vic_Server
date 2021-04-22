@@ -35,14 +35,29 @@
         <include file="Public:facebook"/>
 	</head>
     <style>
+        @font-face {
+            font-family: 'Montserrat';
+            src: url('/static/font/Montserrat-Regular.ttf');
+        }
+        @font-face {
+            font-family: 'Montserrat-bold';
+            src: url('/static/font/Montserrat-Bold.otf');
+        }
+        @font-face {
+            font-family: 'Montserrat-light';
+            src: url('/static/font/Montserrat-Light.otf');
+        }
         *{
             margin: 0px;
             box-sizing: border-box;
-            font-family: Helvetica;
+            font-family: Montserrat;
             -moz-osx-font-smoothing: grayscale;
         }
         body{
             color: #3f3f3f;
+        }
+        div{
+            letter-spacing: -0.5px;
         }
         a{
             display: contents;
@@ -165,7 +180,7 @@
             font-size: 20px;
         }
         .detail_time{
-            margin: 5px auto;
+            margin: 2px auto;
             color:#999999;
             font-size: 10px;
         }
@@ -197,9 +212,9 @@
                 <div class="detail_title">
                     {pigcms{$news.title}
                 </div>
-                <div class="sub_title">
-                    {pigcms{$news.sub_title}
-                </div>
+<!--                <div class="sub_title">-->
+<!--                    {pigcms{$news.sub_title}-->
+<!--                </div>-->
                 <div class="detail_time">
                     Posted on {pigcms{$news.last_time|date='M d Y',###}
                 </div>
@@ -226,7 +241,7 @@
                 <if condition="$now_cat.link_img">
                     <div>
                         <a href="{pigcms{$now_cat.link_url}">
-                            <img src="{pigcms{$now_cat.link_img}" style="width: 100%">
+                            <img src="{pigcms{$now_cat.link_img}" style="width: 95%;margin-top:10px;margin-bottom:20px">
                         </a>
                     </div>
                 </if>

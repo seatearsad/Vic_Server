@@ -56,6 +56,9 @@
         body{
             color: #3f3f3f;
         }
+        div{
+            letter-spacing: -0.5px;
+        }
         a{
             display: contents;
             color:#3f3f3f;
@@ -88,7 +91,7 @@
             width: 100%;
             border-bottom: 3px solid #ffa52d;
             display: flex;
-            font-size: 13px;
+            font-size: 15px;
         }
         .cate_list span{
             margin-left: 15px;
@@ -107,6 +110,7 @@
         .cate_list_item{
             white-space: nowrap;
             overflow-x: scroll;
+            line-height: 1;
         }
         .right_title{
             border-bottom: 3px solid #ffa52d;
@@ -117,7 +121,7 @@
         .left_list,.right_list{
             width: 100%;
             padding: 0;
-            margin-top: 15px;
+            margin-top: 20px;
         }
         .left_list li{
             background-color: #F5F5F5;
@@ -166,6 +170,7 @@
             padding: 10px 15px 10px 5px;
             box-sizing: border-box;
             flex: 1 1 100%;
+            position: relative;
         }
         .list_title{
             font-weight: bold;
@@ -223,14 +228,16 @@
                                     <img src="{pigcms{$vo.cover}" alt="" style="width: 100%"/>
                                 </div>
                                 <div class="left_title">
+                                    <div style="position: absolute;transform: translateY(-50%);top: 50%;">
                                     <div class="list_title">
                                         {pigcms{$vo.title}
                                     </div>
-                                    <div class="list_sub">
-                                        {pigcms{$vo.sub_title}
-                                    </div>
+<!--                                    <div class="list_sub">-->
+<!--                                        {pigcms{$vo.sub_title}-->
+<!--                                    </div>-->
                                     <div class="doc_time">
-                                        Posted on {pigcms{$vo.last_time|date='M d Y',###}
+                                        {pigcms{$vo.last_time|date='M d Y',###}
+                                    </div>
                                     </div>
                                 </div>
                             </a>

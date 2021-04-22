@@ -110,7 +110,7 @@
         .left_list,.right_list{
             width: 100%;
             padding: 0;
-            margin-top: 30px;
+            margin-top: 20px;
         }
         .left_list li{
             background-color: #F5F5F5;
@@ -121,7 +121,7 @@
         }
         .right_list li{
             list-style: none;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
             display: flex;
         }
         .right_list li label{
@@ -164,24 +164,26 @@
             color: #666666;
         }
         .from{
-            margin: 10px auto;
-            color:#999999;
-        }
-        .detail_title{
-            font-weight: bold;
-            font-size: 20px;
-        }
-        .detail_time{
-            margin: 2px auto;
+            margin: 8px 0 5px 0;
             color:#999999;
             font-size: 14px;
         }
+        .detail_title{
+            font-weight: bold;
+            font-size: 22px;
+        }
+        .detail_time{
+            margin: 4px 0 15px 0;
+            color:#999999;
+            font-size: 12px;
+        }
         .sub_title{
-            font-size: 16px;
-            margin-top:10px;
+            font-size: 15px;
+            margin-top:5px;
         }
         .content{
             margin-top:10px;
+            font-size: 14px;
         }
     </style>
 	<body>

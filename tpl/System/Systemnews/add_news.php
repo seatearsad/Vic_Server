@@ -27,11 +27,11 @@
 		<table cellpadding="0" cellspacing="0" class="frame_form" width="100%">
 			<tr>
 				<th width="80">标题</th>
-				<td><input type="text" class="input fl" name="title" size="75" placeholder="标题" validate="maxlength:50,required:true"/></td>
+				<td><input type="text" class="input fl" name="title" size="75" placeholder="标题" validate="maxlength:100,required:true"/></td>
 			</tr>
             <tr>
                 <th width="80">副标题</th>
-                <td><input type="text" class="input fl" name="sub_title" size="75" placeholder="副标题" validate="maxlength:50,required:true"/></td>
+                <td><input type="text" class="input fl" name="sub_title" size="75" placeholder="副标题" validate="maxlength:100,required:true"/></td>
             </tr>
             <tr>
                 <th width="80">关键词</th>
@@ -39,7 +39,7 @@
             </tr>
             <tr>
                 <th width="80">简述</th>
-                <td><input type="text" class="input fl" name="desc" size="75" placeholder="简述" validate="maxlength:150,required:true"/></td>
+                <td><input type="text" class="input fl" name="desc" size="75" placeholder="简述" validate="maxlength:200,required:true"/></td>
             </tr>
 			<tr>
 				<th width="80">分类</th>

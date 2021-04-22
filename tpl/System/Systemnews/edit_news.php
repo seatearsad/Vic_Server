@@ -29,11 +29,11 @@
 			<tr>
 				<th width="80">标题</th>
 				<input type="hidden" name="id" value="{pigcms{$news.id}" />
-				<td><input type="text" class="input fl" name="title" value="{pigcms{$news.title}" size="75" placeholder="标题" validate="maxlength:50,required:true"/></td>
+				<td><input type="text" class="input fl" name="title" value="{pigcms{$news.title}" size="75" placeholder="标题" validate="maxlength:100,required:true"/></td>
 			</tr>
             <tr>
                 <th width="80">副标题</th>
-                <td><input type="text" class="input fl" name="sub_title" value="{pigcms{$news.sub_title}" size="75" placeholder="副标题" validate="maxlength:50,required:true"/></td>
+                <td><input type="text" class="input fl" name="sub_title" value="{pigcms{$news.sub_title}" size="75" placeholder="副标题" validate="maxlength:100,required:true"/></td>
             </tr>
             <tr>
                 <th width="80">关键词</th>
@@ -41,7 +41,7 @@
             </tr>
             <tr>
                 <th width="80">简述</th>
-                <td><input type="text" class="input fl" name="desc" size="75" value="{pigcms{$news.desc}" placeholder="简述" validate="maxlength:150,required:true"/></td>
+                <td><input type="text" class="input fl" name="desc" size="75" value="{pigcms{$news.desc}" placeholder="简述" validate="maxlength:200,required:true"/></td>
             </tr>
 			<tr>
 				<th width="80">分类</th>
