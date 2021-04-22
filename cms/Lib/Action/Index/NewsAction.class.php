@@ -31,7 +31,7 @@
 
                 $this->display('category');
 
-                 $this->display('news');
+                //$this->display('news');
 
             }else if(!empty($_GET['id'])){
 

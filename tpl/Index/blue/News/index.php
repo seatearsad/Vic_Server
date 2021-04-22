@@ -3,8 +3,8 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=Edge">
-        <meta name="keywords" content="tutti delivery, delivery, food delivery, liquor delivery, beer, wine, victoria delivery, fast delivery, gofer, on-demand delivery, yyj, delivery app" />
-        <meta name="description" content="Order food delivery from restaurants, liquor stores, retails shops, and grocers in Greater Victoria now! Over 100 local cuisines, including Italian, Chinese, Mexican, Japanese, and much more delivered to your doorstep 7 days a week from 10 am to 1 am." />
+<!--        <meta name="keywords" content="tutti delivery, delivery, food delivery, liquor delivery, beer, wine, victoria delivery, fast delivery, gofer, on-demand delivery, yyj, delivery app" />-->
+<!--        <meta name="description" content="Order food delivery from restaurants, liquor stores, retails shops, and grocers in Greater Victoria now! Over 100 local cuisines, including Italian, Chinese, Mexican, Japanese, and much more delivered to your doorstep 7 days a week from 10 am to 1 am." />-->
 
         <if condition="$config['site_favicon']">
 			<link rel="shortcut icon" href="{pigcms{$config.site_favicon}"/>

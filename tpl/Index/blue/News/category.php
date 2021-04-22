@@ -1,18 +1,17 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
+        <title>{pigcms{:L('_VIC_NAME_')} - Blog - {pigcms{$now_cat.name}</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=Edge">
-        <meta name="keywords" content="tutti delivery, delivery, food delivery, liquor delivery, beer, wine, victoria delivery, fast delivery, gofer, on-demand delivery, yyj, delivery app" />
-        <meta name="description" content="Order food delivery from restaurants, liquor stores, retails shops, and grocers in Greater Victoria now! Over 100 local cuisines, including Italian, Chinese, Mexican, Japanese, and much more delivered to your doorstep 7 days a week from 10 am to 1 am." />
-
+        <meta name="keywords" content="{pigcms{$config.seo_keywords}" />
+        <meta name="description" content="{pigcms{$config.seo_description}" />
         <if condition="$config['site_favicon']">
 			<link rel="shortcut icon" href="{pigcms{$config.site_favicon}"/>
 		</if>
 		<!--title>{pigcms{$config.seo_title}</title-->
-        <title>{pigcms{:L('_VIC_NAME_')} - Blog - {pigcms{$now_cat.name}</title>
-		<meta name="keywords" content="{pigcms{$config.seo_keywords}" />
-		<meta name="description" content="{pigcms{$config.seo_description}" />
+<!--		<meta name="keywords" content="{pigcms{$config.seo_keywords}" />-->
+<!--		<meta name="description" content="{pigcms{$config.seo_description}" />-->
 		<script src="{pigcms{$static_path}js/jquery-1.7.2.js"></script>
 		<script src="{pigcms{$static_public}js/jquery.lazyload.js"></script>
 		<script src="{pigcms{$static_path}js/jquery.nav.js"></script>
