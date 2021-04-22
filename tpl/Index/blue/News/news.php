@@ -173,6 +173,7 @@
         .detail_title{
             font-weight: bold;
             font-size: 22px;
+            margin:10px 0;
         }
         .detail_time{
             margin: 4px 0 15px 0;
