@@ -3,8 +3,8 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=Edge">
-        <META NAME ="keywords" CONTENT="Tutti Delivery Food ">
-        <META NAME="description" CONTENT="Founded in 2017 in Victoria, British Columbia, TUTTI started as a small food and beverage delivery company with the goal of building a delivery service that brings communities togethe">
+        <META NAME ="keywords" CONTENT="{pigcms{$news.title}">
+        <META NAME="description" CONTENT="{pigcms{$news.desc}">
 		<if condition="$config['site_favicon']">
 			<link rel="shortcut icon" href="{pigcms{$config.site_favicon}"/>
 		</if>

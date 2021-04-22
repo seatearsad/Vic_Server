@@ -36,6 +36,7 @@
             }else if(!empty($_GET['id'])){
 
                 $news = D('System_news')->where(array('id'=>$_GET['id']))->find();
+
                 $now_cat = $cate->where(array('id'=>$news['category_id']))->find();
                 $this->assign('now_cat',$now_cat);
                 $this->assign('news',$news);
