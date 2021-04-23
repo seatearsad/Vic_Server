@@ -34,10 +34,22 @@
         <include file="Public:facebook"/>
 	</head>
     <style>
+        @font-face {
+            font-family: 'Montserrat';
+            src: url('/static/font/Montserrat-Regular.ttf');
+        }
+        @font-face {
+            font-family: 'Montserrat-bold';
+            src: url('/static/font/Montserrat-Bold.otf');
+        }
+        @font-face {
+            font-family: 'Montserrat-light';
+            src: url('/static/font/Montserrat-Light.otf');
+        }
         *{
             margin: 0px;
             box-sizing: border-box;
-            font-family: Helvetica;
+            font-family: Montserrat;
             -moz-osx-font-smoothing: grayscale;
         }
         body{
