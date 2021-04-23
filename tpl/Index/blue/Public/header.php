@@ -311,7 +311,7 @@
         window.location.href = '{pigcms{$config.site_url}/about';
     });
     $('#menu_blog').click(function () {
-        //window.location.href = '{pigcms{$config.site_url}/news';
+        window.location.href = '{pigcms{$config.site_url}/news';
     });
     
     $('.sign_btn').click(function () {

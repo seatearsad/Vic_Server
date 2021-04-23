@@ -125,7 +125,7 @@
             font-size: 28px;
             font-weight: bold;
             margin-bottom: 30px;
-            height: 30px;
+            height: 45px;
         }
         .desc_txt{
             line-height: 20px;

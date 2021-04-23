@@ -111,7 +111,7 @@
         .courier_desc{
             height: 180px;
             display: flex;
-            margin-top: 80px;
+            margin-top: 60px;
         }
         .courier_desc .desc_box{
             flex: 1 1 100%;
@@ -123,7 +123,7 @@
             font-size: 28px;
             font-weight: bold;
             margin-bottom: 30px;
-            height: 30px;
+            height: 45px;
         }
         .desc_txt{
             line-height: 20px;

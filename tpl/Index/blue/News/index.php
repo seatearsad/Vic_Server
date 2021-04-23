@@ -228,7 +228,7 @@
         .left_list,.right_list{
             width: 100%;
             padding: 0;
-            margin-top: 30px;
+            margin-top: 40px;
         }
         .left_list li{
             background-color: #F5F5F5;
