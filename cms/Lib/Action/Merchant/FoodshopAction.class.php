@@ -216,7 +216,7 @@ class FoodshopAction extends BaseAction
 		
 		if (IS_POST) {
 			if (empty($_POST['sort_name'])) {
-				$error_tips = '分类名称必填！'.'<br/>';
+                $error_tips = L('CATEGORY_NAME_REQUIRED_BKADMIN') . '<br/>';
 			} else {
 				$database_goods_sort = D('Foodshop_goods_sort');
 				$data_goods_sort['store_id'] = $now_store['store_id'];
@@ -283,7 +283,7 @@ class FoodshopAction extends BaseAction
 		$this->assign('now_store', $now_store);
 		if (IS_POST) {
 			if (empty($_POST['sort_name'])) {
-				$error_tips = '分类名称必填！'.'<br/>';
+                $error_tips = L('CATEGORY_NAME_REQUIRED_BKADMIN') . '<br/>';
 			} else {
 				$database_goods_sort = D('Foodshop_goods_sort');
 				$data_goods_sort['sort_id'] = $now_sort['sort_id'];
@@ -440,7 +440,7 @@ class FoodshopAction extends BaseAction
 			if ($_POST['specs']) {
 				foreach ($_POST['specs'] as $val) {
 					if (empty($val)) {
-						$error_tips .= '请给规格取名，若不需要的请删除后重新生成'.'<br/>';
+						$error_tips .=L('NAME_SPEC_BKADMIN').'<br/>';
 					}
 				}
 			}
@@ -449,7 +449,7 @@ class FoodshopAction extends BaseAction
 				foreach ($_POST['spec_val'] as $rowset) {
 					foreach ($rowset as $val) {
 						if (empty($val)) {
-							$error_tips .= '请给规格的属性值取名，若不需要的请删除后重新生成'.'<br/>';
+							$error_tips .= L('NAME_ATTRIBUTE_BKADMIN').'<br/>';
 						}
 					}
 				}
@@ -459,7 +459,7 @@ class FoodshopAction extends BaseAction
 			if ($_POST['properties']) {
 				foreach ($_POST['properties'] as $val) {
 					if (empty($val)) {
-						$error_tips .= '请给属性取名，若不需要的请删除后重新生成'.'<br/>';
+						$error_tips .= L('NAME_ATTRIBUTE2_BKADMIN').'<br/>';
 					}
 				}
 			}
@@ -468,7 +468,7 @@ class FoodshopAction extends BaseAction
 				foreach ($_POST['properties_val'] as $rowset) {
 					foreach ($rowset as $val) {
 						if (empty($val)) {
-							$error_tips .= '请给属性的属性值取名，若不需要的请删除后重新生成'.'<br/>';
+							$error_tips .=L('NAMEVALUEE_ATTRIBUTE_BKADMIN').'<br/>';
 						}
 					}
 				}
@@ -602,7 +602,7 @@ class FoodshopAction extends BaseAction
 			if ($_POST['specs']) {
 				foreach ($_POST['specs'] as $val) {
 					if (empty($val)) {
-						$error_tips .= '请给规格取名，若不需要的请删除后重新生成'.'<br/>';
+						$error_tips .= L('NAME_SPEC_BKADMIN').'<br/>';
 					}
 				}
 			}
@@ -611,7 +611,7 @@ class FoodshopAction extends BaseAction
 				foreach ($_POST['spec_val'] as $rowset) {
 					foreach ($rowset as $val) {
 						if (empty($val)) {
-							$error_tips .= '请给规格的属性值取名，若不需要的请删除后重新生成'.'<br/>';
+							$error_tips .= L('NAME_ATTRIBUTE_BKADMIN').'<br/>';
 						}
 					}
 				}
@@ -621,7 +621,7 @@ class FoodshopAction extends BaseAction
 			if ($_POST['properties']) {
 				foreach ($_POST['properties'] as $val) {
 					if (empty($val)) {
-						$error_tips .= '请给属性取名，若不需要的请删除后重新生成'.'<br/>';
+						$error_tips .=L('NAME_ATTRIBUTE2_BKADMIN').'<br/>';
 					}
 				}
 			}
@@ -630,7 +630,7 @@ class FoodshopAction extends BaseAction
 				foreach ($_POST['properties_val'] as $rowset) {
 					foreach ($rowset as $val) {
 						if (empty($val)) {
-							$error_tips .= '请给属性的属性值取名，若不需要的请删除后重新生成'.'<br/>';
+							$error_tips .= L('NAMEVALUEE_ATTRIBUTE_BKADMIN').'<br/>';
 						}
 					}
 				}
@@ -1232,7 +1232,7 @@ class FoodshopAction extends BaseAction
 					}
 				}
 			}
-			$this->success('克隆完成');
+			$this->success(L('CLONING_COMPLETED_BKADMIN'));
 		}
 	}
 	

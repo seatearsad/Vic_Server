@@ -5,7 +5,7 @@
 		<ul class="breadcrumb">
 			<li>
 				<i class="ace-icon fa fa-cubes"></i>
-				<a href="{pigcms{:U('Shop/index')}">{pigcms{$config.shop_alias_name}管理</a>
+				<a href="{pigcms{:U('Shop/index')}">{pigcms{:L('DELIVERY_MANAGEMENT_BKADMIN')}</a>
 			</li>
 			<li class="active"><a href="{pigcms{:U('Shop/index')}">{pigcms{$now_store.name}</a></li>
 			<if condition="$sortList">
@@ -13,7 +13,7 @@
                     <li class="active"><a href="{pigcms{:U('Shop/goods_sort', array('fid' => $sl['fid'], 'store_id' => $now_store['store_id']))}">{pigcms{$sl['sort_name']}</a></li>
                 </volist>
 			</if>
-			<li class="active">分类列表</li>
+			<li class="active">{pigcms{:L('CATEGORY_LIST_BKADMIN')}</li>
 		</ul>
 	</div>
 	<!-- 内容头部 -->
@@ -24,20 +24,20 @@
 			</style>
 			<div class="row">
 				<div class="col-xs-12">
-				    <a class="btn btn-success" href="{pigcms{:U('Shop/sort_add',array('store_id' => $now_store['store_id'], 'fid' => $fid))}">新建分类</a>
+				    <a class="btn btn-success" href="{pigcms{:U('Shop/sort_add',array('store_id' => $now_store['store_id'], 'fid' => $fid))}">{pigcms{:L('ADD_CATEGORY_BKADMIN')}</a>
                     | <input type="text" id="tax_num" name="tax_num" value="">%
-                    <button class="btn btn-success" onclick="Modify_tax({pigcms{$now_store['store_id']},0)">修改全部税率</button>
+                    <button class="btn btn-success" onclick="Modify_tax({pigcms{$now_store['store_id']},0)">{pigcms{:L('EDIT_TAX_RATE_BKADMIN')}</button>
 					<div id="shopList" class="grid-view">
 						<table class="table table-striped table-bordered table-hover">
 							<thead>
 								<tr>
-									<th>编号</th>
-									<th>排序</th>
-									<th>分类名称</th>
-									<th>星期几显示</th>
-									<th>显示时间段</th>
-									<th>商品管理</th>
-									<th>操作</th>
+									<th>{pigcms{:L('ID_BKADMIN')}</th>
+									<th>{pigcms{:L('LISTING_ORDER_BKADMIN')}</th>
+									<th>{pigcms{:L('CATEGORY_NAME_BKADMIN')}</th>
+									<th>{pigcms{:L('CATEGORY_AVAILABILITY(DAY)_BKADMIN')}</th>
+									<th>{pigcms{:L('CATEGORY_AVAILABILITY(TIME)_BKADMIN')}</th>
+									<th>{pigcms{:L('ITEM_MANAGEMENT_BKADMIN')}</th>
+									<th>{pigcms{:L('ACTION_BKADMIN')}</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -60,34 +60,34 @@
                                                     <span class="lbl"></span>
                                                 </label>
                                                 <if condition="$vo['begin_time']">
-                                                <div>{pigcms{$vo.begin_time} - {pigcms{$vo.end_time}</div>
+                                                    <div>{pigcms{$vo.begin_time} - {pigcms{$vo.end_time}</div>
                                                 </if>
                                             </td>
 											<td>
 											     <if condition="$vo['operation_type'] eq 2">
-											         <a style="width: 60px;" class="label label-sm label-purple" href="{pigcms{:U('Shop/goods_sort',array('fid' => $vo['sort_id'], 'store_id' => $vo['store_id']))}">子分类</a>
-											         <a style="width: 60px;" class="label label-sm label-info handle_btn" href="{pigcms{:U('Shop/goods_list',array('sort_id'=>$vo['sort_id']))}">商品管理</a>
+											         <a class="label label-sm label-purple" href="{pigcms{:U('Shop/goods_sort',array('fid' => $vo['sort_id'], 'store_id' => $vo['store_id']))}">子分类</a>
+											         <a  class="label label-sm label-info handle_btn" href="{pigcms{:U('Shop/goods_list',array('sort_id'=>$vo['sort_id']))}">{pigcms{:L('ITEM_MANAGEMENT_BKADMIN')}</a>
 											     <elseif condition="$vo['operation_type'] eq 1" />
-											         <a style="width: 60px;" class="label label-sm label-purple" href="{pigcms{:U('Shop/goods_sort',array('fid' => $vo['sort_id'], 'store_id' => $vo['store_id']))}">子分类</a>
+											         <a  class="label label-sm label-purple" href="{pigcms{:U('Shop/goods_sort',array('fid' => $vo['sort_id'], 'store_id' => $vo['store_id']))}">子分类</a>
 											     <else />
-											         <a style="width: 60px;" class="label label-sm label-info handle_btn" href="{pigcms{:U('Shop/goods_list',array('sort_id'=>$vo['sort_id']))}">商品管理</a>
+											         <a  class="label label-sm label-info handle_btn" href="{pigcms{:U('Shop/goods_list',array('sort_id'=>$vo['sort_id']))}">{pigcms{:L('ITEM_MANAGEMENT_BKADMIN')}</a>
 											     </if>
 											</td>
 											<td>
-												<a title="修改" class="green" style="padding-right:8px;" href="{pigcms{:U('Shop/sort_edit',array('sort_id'=>$vo['sort_id'], 'fid' => $vo['fid']))}">
+												<a title="{pigcms{:L('EDIT_BKADMIN')}" class="green" style="padding-right:8px;" href="{pigcms{:U('Shop/sort_edit',array('sort_id'=>$vo['sort_id'], 'fid' => $vo['fid']))}">
 													<i class="ace-icon fa fa-pencil bigger-130"></i>
 												</a>　　
-												<a title="删除" class="red" style="padding-right:8px;" href="{pigcms{:U('Shop/sort_del',array('sort_id'=>$vo['sort_id']))}">
+												<a title="{pigcms{:L('DELETE_BKADMIN')}" class="red" style="padding-right:8px;" href="{pigcms{:U('Shop/sort_del',array('sort_id'=>$vo['sort_id']))}">
 													<i class="ace-icon fa fa-trash-o bigger-130"></i>
 												</a>　　
 												<if condition="empty($fid)">
-												<a style="width: 60px;" class="label label-sm label-info handle_btn" href="{pigcms{:U('Shop/sort_order',array('sort_id' => $vo['sort_id'], 'store_id' => $vo['store_id']))}">销量详情</a>
+												<a  class="label label-sm label-info handle_btn" href="{pigcms{:U('Shop/sort_order',array('sort_id' => $vo['sort_id'], 'store_id' => $vo['store_id']))}">{pigcms{:L('SALES_VOLUME_BKADMIN')}</a>
 											    </if>
 											</td>
 										</tr>
 									</volist>
 								<else/>
-									<tr class="odd"><td class="button-column" colspan="8" >无内容</td></tr>
+									<tr class="odd"><td class="button-column" colspan="8" >{pigcms{:L('NO_CONTENT_BKADMIN')}</td></tr>
 								</if>
 							</tbody>
 						</table>
@@ -103,7 +103,7 @@ $(function(){
 	/*店铺状态*/
 	updateStatus(".statusSwitch .ace-switch", ".statusSwitch", "OPEN", "CLOSED", "shopstatus");
 	jQuery(document).on('click','#shopList a.red',function(){
-		if(!confirm('确定要删除这条数据吗?不可恢复。')) return false;
+        if(!confirm("{pigcms{:L('SURE_RECOVERABLE_BKADMIN')}")) return false;
 	});
 });
 function Modify_tax(store_id,sort_id) {
@@ -119,7 +119,7 @@ function Modify_tax(store_id,sort_id) {
             }
         });
     }else {
-        alert('请输入税率!');
+        alert("{pigcms{:L('ENTER_TAX_BKADMIN')}");
     }
 }
 function updateStatus(dom1, dom2, status1, status2, attribute){

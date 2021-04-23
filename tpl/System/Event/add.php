@@ -3,19 +3,19 @@
 		<input name="event_id" value="{pigcms{$event.id|default='0'}" type="hidden">
         <table cellpadding="0" cellspacing="0" class="frame_form" width="100%">
 			<tr>
-				<th width="80">活动名称</th>
+				<th width="80">{pigcms{:L('G_EVENT_NAME')}</th>
 				<td>
                     <input type="text" class="input fl" name="name" size="20" validate="maxlength:200,required:true" value="{pigcms{$event.name|default=''}" />
                 </td>
 			</tr>
             <tr>
-                <th width="80">活动描述</th>
+                <th width="80">{pigcms{:L('G_DESCRIPTION')}</th>
                 <td>
                     <textarea name="desc" validate="required:true">{pigcms{$event.desc|default=''}</textarea>
                 </td>
             </tr>
 			<tr>
-				<th width="80">活动类型</th>
+				<th width="80">{pigcms{:L('G_TYPE')}</th>
 				<td>
                     <select name="type" id="select_type">
                         <volist name="type" id="vo">
@@ -27,24 +27,24 @@
                 </td>
 			</tr>
 			<tr>
-				<th width="80">开始时间</th>
+				<th width="80">{pigcms{:L('G_START_TIME')}</th>
 				<td>
                     <input type="text" class="input fl" name="begin_time" style="width:120px;" id="d4311" onfocus="WdatePicker({isShowClear:false,readOnly:true,dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'d4312\')}'})" <if condition="$event['begin_time'] neq 0">value="{pigcms{$event.begin_time|date='Y-m-d',###}"</if>/>
-                    <span id="clear_begin">清空</span>
+                    <span id="clear_begin">{pigcms{:L('G_CLEAR')}</span>
                 </td>
 			</tr>
 			<tr>
-				<th width="80">结束时间</th>
+				<th width="80">{pigcms{:L('G_END_TIME')}</th>
 				<td>
                     <input type="text" class="input fl" name="end_time" style="width:120px;" id="d4312" onfocus="WdatePicker({isShowClear:false,readOnly:true,dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'d4311\')}'})" <if condition="$event['end_time'] neq 0">value="{pigcms{$event.end_time|date='Y-m-d',###}"</if>/>
-                    <span id="clear_end">清空</span>
+                    <span id="clear_end">{pigcms{:L('G_CLEAR')}</span>
                 </td>
 			</tr>
             <tr id="city_tr" <if condition="$event['type'] neq 3">style="display: none;"</if>>
-                <th width="80">城市</th>
+                <th width="80">{pigcms{:L('G_CITY')}</th>
                 <td>
                     <select name="city_id">
-                        <option value="0" <if condition="$event and $event['city_id'] eq 0">selected="selected"</if>>通用</option>
+                        <option value="0" <if condition="$event and $event['city_id'] eq 0">selected="selected"</if>>{pigcms{:L('G_UNIVERSAL')}</option>
                         <volist name="city" id="vo">
                             <option value="{pigcms{$vo.area_id}" <if condition="$event and $event['city_id'] eq $vo['area_id']">selected="selected"</if>>{pigcms{$vo.area_name}</option>
                         </volist>

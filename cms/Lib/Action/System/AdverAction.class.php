@@ -27,9 +27,9 @@ class AdverAction extends BaseAction{
 		if(IS_POST){
 			$database_adver_category  = D('Adver_category');
 			if($database_adver_category->data($_POST)->add()){
-				$this->success('添加成功！');
+				$this->success(L('J_SUCCEED1'));
 			}else{
-				$this->error('添加失败！请重试~');
+				$this->error(L('J_MODIFICATION_FAILED2'));
 			}
 		}else{
 			$this->error('非法提交,请重新提交~');
@@ -46,9 +46,9 @@ class AdverAction extends BaseAction{
 		if(IS_POST){
 			$database_adver_category  = D('Adver_category');
 			if($database_adver_category->data($_POST)->save()){
-				$this->success('编辑成功！');
+				$this->success(L('J_SUCCEED2'));
 			}else{
-				$this->error('编辑失败！请重试~');
+				$this->error(L('J_MODIFICATION_FAILED2'));
 			}
 		}else{
 			$this->error('非法提交,请重新提交~');
@@ -69,7 +69,7 @@ class AdverAction extends BaseAction{
 				$database_adver->where($condition_adver)->delete();
 
 				S('adver_list_'.$_POST['cat_id'],NULL);
-				$this->success('删除成功！');
+				$this->success(L('J_DELETION_SUCCESS'));
 			}else{
 				$this->error('删除失败！请重试~');
 			}
@@ -134,9 +134,9 @@ class AdverAction extends BaseAction{
 		if($id = $database_adver->data($_POST)->add()){
 			D('Image')->update_table_id('/upload/adver/' . $_POST['pic'], $id, 'adver');
 			S('adver_list_'.$_POST['cat_id'],NULL);
-			$this->frame_submit_tips(1,'添加成功！');
+			$this->frame_submit_tips(1,L('J_SUCCEED1'));
 		}else{
-			$this->frame_submit_tips(0,'添加失败！请重试~');
+			$this->frame_submit_tips(0,L('J_MODIFICATION_FAILED2'));
 		}
 	}
 	public function adver_edit(){
@@ -189,9 +189,9 @@ class AdverAction extends BaseAction{
 			if($_POST['pic']){
 				unlink('./upload/adver/'.$now_adver['pic']);
 			}
-			$this->frame_submit_tips(1,'编辑成功！');
+			$this->frame_submit_tips(1,L('J_SUCCEED2'));
 		}else{
-			$this->frame_submit_tips(0,'编辑失败！请重试~');
+			$this->frame_submit_tips(0,L('J_MODIFICATION_FAILED2'));
 		}
 	}
 
@@ -202,7 +202,7 @@ class AdverAction extends BaseAction{
 		if($database_adver->where($condition_adver)->delete()){
 			unlink('./upload/adver/'.$now_adver['pic']);
 			S('adver_list_'.$now_adver['cat_id'],NULL);
-			$this->success('删除成功');
+			$this->success(L('J_DELETION_SUCCESS'));
 		}else{
 			$this->error('删除失败！请重试~');
 		}
@@ -272,9 +272,9 @@ class AdverAction extends BaseAction{
 			}
 			$_POST['add_time'] = $_SERVER['REQUEST_TIME'];
 			if(M('App_fullscreen_adver')->add($_POST)){
-				$this->frame_submit_tips(1,'添加成功');
+				$this->frame_submit_tips(1,L('J_SUCCEED1'));
 			}else{
-				$this->frame_submit_tips(0,'添加失败');
+				$this->frame_submit_tips(0,L('J_MODIFICATION_FAILED2'));
 			}
 		}else{
 			$this->display();
@@ -293,10 +293,10 @@ class AdverAction extends BaseAction{
 			$_POST['end_time'] = strtotime($_POST['end_time']);
 			$_POST['add_time'] = $_SERVER['REQUEST_TIME'];
 			if(M('App_fullscreen_adver')->where(array('id'=>$_POST['id']))->save($_POST)){
-				$this->frame_submit_tips(1,'编辑成功');
+				$this->frame_submit_tips(1,L('J_SUCCEED2'));
 			}else{
 
-				$this->frame_submit_tips(0,'编辑失败');
+				$this->frame_submit_tips(0,L('J_MODIFICATION_FAILED2'));
 			}
 		}else{
 			$now_adver  =M('App_fullscreen_adver')->where(array('id'=>$_GET['id']))->find();
@@ -310,7 +310,7 @@ class AdverAction extends BaseAction{
 			$database_adver_category  = D('App_fullscreen_adver');
 			$condition_adver_category['id'] = $_POST['id'];
 			if($database_adver_category->where($condition_adver_category)->delete()){
-				$this->success('删除成功');
+				$this->success(L('J_DELETION_SUCCESS'));
 			}else{
 				$this->frame_submit_tips(0,'删除失败！请重试~');
 			}

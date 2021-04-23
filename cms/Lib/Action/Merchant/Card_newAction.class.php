@@ -281,7 +281,7 @@ class Card_newAction extends BaseAction
         if (IS_POST) {
             $now_card = M('Card_new')->where(array('mer_id'=>$this->merchant_session['mer_id']))->find();
             if (strtotime($_POST['end_time']) < strtotime($_POST['start_time']) || strtotime($_POST['end_time']) < time() || strtotime($_POST['start_time']) < strtotime(date('Y-m-d'))) {
-                $this->error('起始时间设置有误！');
+                $this->error(L('STRT_WRONG'));
             }
             if ($_POST['limit'] > $_POST['num']) {
                 $this->error('领取限制不能大于数量！');
@@ -417,7 +417,7 @@ class Card_newAction extends BaseAction
             if ((int)$_POST['num'] < (int)$_POST['had_pull']) {
                 $this->error('更新优惠券数量有误，不能小于已领取的数量！');
             } else if (strtotime($_POST['end_time']) < strtotime($_POST['start_time'])) {
-                $this->error('起始时间设置有误！');
+                $this->error(L('STRT_WRONG'));
             }
 
             if ($_POST['num'] > $_POST['had_pull'] && $_POST['status'] == 3) {

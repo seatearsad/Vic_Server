@@ -390,7 +390,7 @@ $(function(){
 	});
 	if($('#myform').length>0){
 		if(document.getElementById('choose_map')){
-			$('#choose_map').html('<input type="text" class="input fl" name="long_lat" id="long_lat" size="20" placeholder="经度,纬度" value="'+(typeof($('#choose_map').attr('default_long_lat'))!='undefined' ? $('#choose_map').attr('default_long_lat') : '')+'" validate="required:true" readonly="readonly"/><a href="javascript:void(0);" style="margin-left:10px;" id="show_map_frame">Click to pin location</a>');
+			$('#choose_map').html('<input type="text" class="input fl" name="long_lat" id="long_lat" size="20" placeholder="Coordinate of Location" value="'+(typeof($('#choose_map').attr('default_long_lat'))!='undefined' ? $('#choose_map').attr('default_long_lat') : '')+'" validate="required:true" readonly="readonly"/><a href="javascript:void(0);" style="margin-left:10px;" id="show_map_frame">Click to pin location</a>');
 			$('#show_map_frame').click(function(){
 				window.top.change_frame_position_left('store_add');
 				window.top.artiframe(choose_map+'&long_lat='+$('#long_lat').val(),"Pin the store location",655,520,true,false,false,false,"choose_map",true,function(){window.top.art.dialog.list["store_add"].position("50%","38.2%");},window.top.get_frame_position_left("store_add",655));
@@ -415,7 +415,7 @@ $(function(){
 			}else{
 				var no_check_tips = false;
 			}
-			var check_tr = '<tr id="check_tr"><th>密码强度</th><td><table width="'+check_width+'" border="0" cellspacing="0" cellpadding="1" style="display:inline-block;_display:inline;"><tbody><tr class="noboder" align="center" style="background:none; border:none;"><td width="33%" id="pwd_lower" style="border-bottom:2px solid #DADADA">弱</td><td width="33%" id="pwd_middle" style="border-bottom:2px solid #DADADA">一般</td><td width="33%" id="pwd_high" style="border-bottom:2px solid #DADADA">强</td></tr></tbody></table>'+( no_check_tips ? '<img src="'+static_path+'images/help.gif" class="tips_img" title="密码强度建议至少为一般！（字母*2）（数字*2）（特殊字符*2），满足任意两项为一般，满足三项为强"/>' : '')+'</td></tr>';
+			var check_tr = '<tr id="check_tr"><th>Password Strength</th><td><table width="'+check_width+'" border="0" cellspacing="0" cellpadding="1" style="display:inline-block;_display:inline;"><tbody><tr class="noboder" align="center" style="background:none; border:none;"><td width="33%" id="pwd_lower" style="border-bottom:2px solid #DADADA">Weak</td><td width="33%" id="pwd_middle" style="border-bottom:2px solid #DADADA">Fair</td><td width="33%" id="pwd_high" style="border-bottom:2px solid #DADADA">Good</td></tr></tbody></table>'+( no_check_tips ? '' : '')+'</td></tr>';
 			var check_event = check_pwd.attr('check_event');
 			if(!check_event){
 				check_pwd.closest('tr').after(check_tr);
@@ -487,7 +487,7 @@ $(function(){
 				$(item).find("input[type='file']").closest('tr').remove();
 				if(typeof($(item).find("input[type='text']").val()) != 'undefined'){
 					if($(item).find("input[type='text']").val().length == 0){
-						$(item).html('<div class="show">空</div>');
+						$(item).html('<div class="show">None</div>');
 					}else{
 						$(item).html('<div class="show">'+$(item).find("input[type='text']").val()+'</div>');
 					}

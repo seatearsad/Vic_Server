@@ -69,7 +69,7 @@ class CouponAction extends BaseAction {
 		public function add(){
 			if(IS_POST){
 				if(strtotime($_POST['end_time'])<strtotime($_POST['start_time'])||strtotime($_POST['end_time'])<time()||strtotime($_POST['start_time'])<strtotime(date('Y-m-d'))){
-					$this->error('起始时间设置有误！');
+					$this->error(L('STRT_WRONG'));
 				}
 //				if($_POST['discount']>$_POST['order_money']){
 //					$this->error('优惠金额不能大于最小订单金额！');

@@ -5,9 +5,9 @@
 		<ul class="breadcrumb">
 			<li>
 				<i class="ace-icon fa fa-gear gear-icon"></i>
-				<a href="{pigcms{:U('Config/merchant')}">商家设置</a>
+				<a href="{pigcms{:U('Config/merchant')}">{pigcms{:L('ACCOUNT_SETTINGS_BKADMIN')}</a>
 			</li>
-			<li class="active">商家设置</li>
+			<li class="active">{pigcms{:L('ACCOUNT_SETTINGS_BKADMIN')}</li>
 		</ul>
 	</div>
 	<!-- 内容头部 -->
@@ -21,51 +21,51 @@
 					<div class="tabbable">
 						<ul class="nav nav-tabs" id="myTab">
 							<li class="active">
-								<a data-toggle="tab" href="#basicinfo">基本设置</a>
+								<a data-toggle="tab" href="#basicinfo">{pigcms{:L('BASIC_SETTING_BKADMIN')}</a>
 							</li>
+<!--							<li>-->
+<!--								<a data-toggle="tab" href="#txtstore">商家描述</a>-->
+<!--							</li>-->
 							<li>
-								<a data-toggle="tab" href="#txtstore">商家描述</a>
+								<a data-toggle="tab" href="#txtpwd">{pigcms{:L('CHANGE_PASSWORD_BKADMIN')}</a>
 							</li>
-							<li>
-								<a data-toggle="tab" href="#txtpwd">修改密码</a>
-							</li>
-							<li>
-								<a data-toggle="tab" href="#bindUser">管理账号</a>
-							</li>
+<!--							<li>-->
+<!--								<a data-toggle="tab" href="#bindUser">管理账号</a>-->
+<!--							</li>-->
 						</ul>
 					</div>
 					<form enctype="multipart/form-data" class="form-horizontal" method="post" id="edit_form">
 						<div class="tab-content">
 							<div id="basicinfo" class="tab-pane active">
 								<div class="form-group">
-									<label class="col-sm-1"><label>商户帐号</label></label>
+									<label class="col-sm-1"><label>{pigcms{:L('MERCHANT_USERNAME_BKADMIN')}</label></label>
 									<input class="col-sm-2" size="20" value="{pigcms{$now_merchant.account}" type="text" style="border:none;background:white!important;" readonly="readonly"/>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-1"><label>商户名称</label></label>
+									<label class="col-sm-1"><label>{pigcms{:L('MERCHANT_NAME_BKADMIN')}</label></label>
 									<input class="col-sm-2" size="20" value="{pigcms{$now_merchant.name}" type="text" style="border:none;background:white!important;" readonly="readonly"/>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-1"><label for="phone">联系电话</label></label>
+									<label class="col-sm-1"><label for="phone">{pigcms{:L('STORE_PHONE_NUMBER_BKADMIN')}</label></label>
 									<input class="col-sm-2" size="20" name="phone" value="{pigcms{$now_merchant.phone}" id="phone" type="text"/>
-									<span class="form_tips">多个电话号码以空格分开</span>
+									<span class="form_tips">{pigcms{:L('SPLIT_BKADMIN')}</span>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-1"><label for="email">商家邮箱</label></label>
+									<label class="col-sm-1"><label for="email">{pigcms{:L('STORE_EMAIL_BKADMIN')}</label></label>
 									<input class="col-sm-2" size="20" name="email" value="{pigcms{$now_merchant.email}" id="email" type="text"/>
-									<span class="form_tips">可选，建议填写</span>
+									<span class="form_tips"></span>
 								</div>
-								<div class="form-group">
+								<div class="form-group hidden_obj">
 									<label class="col-sm-1"><label>{pigcms{$config.group_alias_name}快递收货超时时间</label></label>
 									<input class="col-sm-2" size="20" name="group_express_outtime" value="{pigcms{$now_merchant.group_express_outtime}" type="text"/><span class="form_tips">0为永不超时，1为一天后超时并确认消费。（店员发货后开始计时）</span>
 								</div>
 								<if condition="$pay_offline_open eq 0 AND $now_merchant.is_close_offline eq 1">
-									<div class="form-group">
+									<div class="form-group hidden_obj">
 										<label class="col-sm-1">线下支付的权限</label>
 										<label class="col-sm-2" style="color: red;">系统禁止您使用线下支付的权限</label>
 									</div>
 								<elseif condition="$pay_offline_open eq 1" />
-									<div class="form-group">
+									<div class="form-group hidden_obj">
 										<label class="col-sm-1" for="is_offline">线下支付的权限</label>
 										<select name="is_offline" id="is_offline">
 											<option value="0" <if condition="$now_merchant.is_offline eq 0">selected="selected"</if>>关闭</option>
@@ -73,7 +73,7 @@
 										</select>
 									</div>
 								</if>
-								<div class="form-group">
+								<div class="form-group hidden_obj">
 									<label class="col-sm-1"><label>微官网点击量</label></label>
 									<input class="col-sm-2" size="20" value="{pigcms{$now_merchant.hits}" type="text" style="border:none;background:white!important;" readonly="readonly"/>
 								</div>
@@ -105,19 +105,19 @@
 							</div>
 							<div id="txtpwd" class="tab-pane">
 								<div class="form-group">
-									<label class="col-sm-1"><label for="email">原密码</label></label>
+									<label class="col-sm-1"><label for="email">{pigcms{:L('ORIGINAL_PASSWORD_BKADMIN')}</label></label>
 									<input class="col-sm-2" size="20" name="old_pass" type="password"/>
-									<span class="form_tips">不修改密码可不填写</span>
+									<span class="form_tips">{pigcms{:L('OPTIONAL1_BKADMIN')}</span>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-1"><label for="email">新密码</label></label>
+									<label class="col-sm-1"><label for="email">{pigcms{:L('NEW_PASSWORD_BKADMIN')}</label></label>
 									<input class="col-sm-2" size="20" name="new_pass" type="password"/>
-									<span class="form_tips">不修改密码请留空，最少6个字符</span>
+									<span class="form_tips">{pigcms{:L('6_CHARACTERS_BKADMIN')}</span>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-1"><label for="email">确认密码</label></label>
+									<label class="col-sm-1"><label for="email">{pigcms{:L('COMFIRM_NEW_BKADMIN')}</label></label>
 									<input class="col-sm-2" size="20" name="re_pass" type="password"/>
-									<span class="form_tips">请再输入一次上面的新密码，以便确保输对了</span>
+									<span class="form_tips">{pigcms{:L('PASSWORD_ENSURE_BKADMIN')}</span>
 								</div>
 							</div>
 							<div id="bindUser" class="tab-pane">
@@ -142,7 +142,7 @@
 								<div class="col-md-offset-3 col-md-9">
 									<button class="btn btn-info" type="submit">
 										<i class="ace-icon fa fa-check bigger-110"></i>
-										保存
+										{pigcms{:L('SAVE_BKADMIN')}
 									</button>
 								</div>
 							</div>

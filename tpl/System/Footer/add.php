@@ -2,20 +2,20 @@
 	<form id="myform" method="post" action="{pigcms{:U('Footer/modify')}" frame="true" refresh="true">
 		<table cellpadding="0" cellspacing="0" class="frame_form" width="100%">
 			<tr>
-				<th width="80">名称</th>
+				<th width="80">{pigcms{:L('G_NAME')}</th>
 				<td><input type="text" class="input fl" name="name" size="30" validate="maxlength:50,required:true" tips="网站底部显示的名称"/></td>
 			</tr>
 			<tr>
-				<th width="80">标题</th>
+				<th width="80">{pigcms{:L('I_TITLE')}</th>
 				<td><input type="text" class="input fl" name="title" size="50" validate="maxlength:50" tips="介绍页的内容标题，不填写则以名称显示"/></td>
 			</tr>
 			<tr>
-				<th width="80">自定义链接</th>
-				<td><input type="text" class="input fl" id="url" name="url" size="60" validate="maxlength:200" tips="若设置了此项，点击导航将会跳转到设定的链接"/>
-				<a href="#modal-table" class="btn btn-sm btn-success" onclick="addLink('url', 0, 1)" data-toggle="modal">从功能库选择</a></td>
+				<th width="80">{pigcms{:L('I_CUSTOM_URL')}</th>
+				<td><input type="text" class="input fl" id="url" name="url" size="60" validate="maxlength:200" tips=""/>
+				<a href="#modal-table" class="btn btn-sm btn-success" onclick="addLink('url', 0, 1)" data-toggle="modal"> </a></td>
 			</tr>
 			<tr>
-				<th width="80">内容</th>
+				<th width="80">{pigcms{:L('I_CONTENT')}</th>
 				<td>
 					<textarea name="content" id="content"></textarea>
 				</td>

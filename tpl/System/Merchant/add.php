@@ -7,16 +7,16 @@
 	<form id="myform" method="post" action="{pigcms{:U('Merchant/modify')}" frame="true" refresh="true">
 		<table cellpadding="0" cellspacing="0" class="frame_form" width="100%">
 			<tr>
-				<th width="160">商户帐号</th>
-				<td><input type="text" class="input fl" name="account" size="25" placeholder="商户平台的帐号" validate="maxlength:20,required:true" tips="设定之后，以后不能再修改！"/></td>
+				<th width="160">{pigcms{:L('E_MERCHANT_ACCOUNT')}</th>
+				<td><input type="text" class="input fl" name="account" size="25" placeholder="{pigcms{:L('E_MERCHANT_ACCOUNT1')}" validate="maxlength:20,required:true" tips="{pigcms{:L('E_MERCHANT_ACCOUNTDESC')}"/></td>
 			</tr>
 			<tr>
-				<th width="160">商户密码</th>
-				<td><input type="password" id="check_pwd" check_width="180" class="input fl" name="pwd" size="25" placeholder="商户平台的密码" validate="required:true,minlength:6" tips="商户的密码很重要，填写难度较强的密码有效保护商户的信息，也可以保护网站的数据安全。"/></td>
+				<th width="160">{pigcms{:L('E_MERCHANT_PASSWORD')}</th>
+				<td><input type="password" id="check_pwd" check_width="180" class="input fl" name="pwd" size="25" placeholder="{pigcms{:L('E_MERCHANT_PASSWORD1')}" validate="required:true,minlength:6" tips="{pigcms{:L('PHONE_ASSOCIATE_BKADMIN')}"/></td>
 			</tr>
 			<tr>
-				<th width="160">商户名称</th>
-				<td><input type="text" class="input fl" name="name" size="25" placeholder="商户的公司名或..." validate="maxlength:20,required:true"/></td>
+				<th width="160">{pigcms{:L('E_MERCHANT_NAME')}</th>
+				<td><input type="text" class="input fl" name="name" size="25" placeholder="" validate="maxlength:20,required:true"/></td>
 			</tr>
 			<if condition="C('config.open_sub_mchid') eq 1">
 			<tr>
@@ -86,12 +86,12 @@
 			</tr>
 			</if>
 			<tr>
-				<th width="160">联系电话</th>
-				<td><input type="text" class="input fl" name="phone" size="25" placeholder="联系人的电话" validate="required:true" tips="多个电话号码以空格分开"/></td>
+				<th width="160">{pigcms{:L('E_CONTACT_NUMBER1')}</th>
+				<td><input type="text" class="input fl" name="phone" size="25" placeholder="{pigcms{:L('E_CONTACT_NUMBER1')}" validate="required:true" tips="{pigcms{:L('E_MERCHANT_NUMBER1DESC')}"/></td>
 			</tr>
 			<tr>
-				<th width="160">联系邮箱</th>
-				<td><input type="text" class="input fl" name="email" size="25" placeholder="可不填写" validate="email:true" tips="只供管理员后台记录，前台不显示"/></td>
+				<th width="160">{pigcms{:L('E_CONTACT_EMAIL')}</th>
+				<td><input type="text" class="input fl" name="email" size="25" placeholder="" validate="email:true" tips="{pigcms{:L('E_CONTACT_EMAILDESC')}"/></td>
 			</tr>
 			<tr style="display:none;">
 				<th width="160">对账周期</th>
@@ -99,7 +99,7 @@
 			</tr>
 			
 			<tr>
-				<th width="160">所在区域</th>
+				<th width="160">{pigcms{:L('E_CITY_OF_LOCATION')}</th>
 				<!--td id="choose_cityarea"></td-->
                 <td>
                     <select name="city_id">
@@ -109,18 +109,18 @@
                     </select>
                 </td>
 			</tr>
-			<tr>
+			<!--tr>
 				<th width="160">到期时间</th>
 				<td><input type="text" class="input fl" name="merchant_end_time" size="25" onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm'})" tips="商户到期时间，到期之后不允许进入商户平台并关闭该商户！清空为永不过期"/></td>
-			</tr>
+			</tr-->
 			<tr>
-				<th width="160">商户状态</th>
+				<th width="160">{pigcms{:L('_BACK_MER_STATUS_')}</th>
 				<td>
-					<span class="cb-enable"><label class="cb-enable selected"><span>启用</span><input type="radio" name="status" value="1" checked="checked" /></label></span>
-					<span class="cb-disable"><label class="cb-disable"><span>关闭</span><input type="radio" name="status" value="0" /></label></span>
+					<span class="cb-enable"><label class="cb-enable selected"><span>{pigcms{:L('C_CATEGORYSEN')}</span><input type="radio" name="status" value="1" checked="checked" /></label></span>
+					<span class="cb-disable"><label class="cb-disable"><span>{pigcms{:L('C_CATEGORYDIS')}</span><input type="radio" name="status" value="0" /></label></span>
 				</td>
 			</tr>
-			<tr>
+			<!--tr>
 				<th width="160">签约商家</th>
 				<td>
 					<span class="cb-enable"><label class="cb-enable"><span>是</span><input type="radio" name="issign" value="1"/></label></span>
@@ -133,7 +133,7 @@
 					<span class="cb-enable"><label class="cb-enable"><span>是</span><input type="radio" name="isverify" value="1" /></label></span>
 					<span class="cb-disable"><label class="cb-disable  selected"><span>否</span><input type="radio" name="isverify" value="0"  checked="checked"/></label></span>
 				</td>
-			</tr>
+			</tr-->
 			<if condition="$config['wx_token']">
 			<tr>
 				<th width="160">使用公众号</th>

@@ -29,7 +29,7 @@
 										</tr>
 									</volist>
 								<else/>
-									<tr><td class="button-column" colspan="4" >无内容</td></tr>
+									<tr><td class="button-column" colspan="4" >{pigcms{:L('NO_CONTENT_BKADMIN')}</td></tr>
 								</if>
 						</tbody>
 					</table>

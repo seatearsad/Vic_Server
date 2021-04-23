@@ -36,7 +36,7 @@ class New_eventModel extends Model
             $v['status_name'] = $this->getStausName($v['status']);
             $v['coupon_amount'] = $this->getEventCouponAmount($v['id']);
             if($v['city_id'] == 0){
-                $v['city_name'] = '通用';
+                $v['city_name'] = L('G_UNIVERSAL');
             }else{
                 $c = D('Area')->where(array('area_type' => 2, 'is_open' => 1, 'area_id' => $v['city_id']))->find();
                 $v['city_name'] = $c['area_name'];
@@ -84,7 +84,7 @@ class New_eventModel extends Model
      * 5 店铺减免配送费
      */
     public function getTypeName($type){
-        $typeName = ['无效活动','新用户注册','新用户邀请','规定范围内免配送费','店铺满减活动','店铺减免配送费'];
+        $typeName = ['无效活动',L('G_NEW_USER_REGISTRATION'),L('G_FRIEND_REFERRAL'),L('G_FREE_DISTANCE'),L('G_MERCHANT_DISCOUNT'),L('G_FREE_SELECTED')];
         if($type == -1)
             return $typeName;
         else
@@ -92,7 +92,7 @@ class New_eventModel extends Model
     }
 
     public function getStausName($status){
-        $statusName = ['禁用','正常','过期'];
+        $statusName = [L('_BACK_BANNED_'),L('G_ACTIVE'),L('G_EXPIRED')];
         return $statusName[$status];
     }
 

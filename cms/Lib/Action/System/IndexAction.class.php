@@ -657,14 +657,14 @@ class IndexAction extends BaseAction {
         $condition_admin['id'] = $this->system_session['id'];
         $admin = $database_admin->field('`id`,`pwd`')->where($condition_admin)->find();
         if ($admin['pwd'] != md5($old_pass)) {
-            $this->error('旧密码错误！');
+            $this->error(L('B_OPWRONG'));
         } else {
             $data_admin['id'] = $admin['id'];
             $data_admin['pwd'] = md5($new_pass);
             if ($database_admin->data($data_admin)->save()) {
-                $this->success('密码修改成功！');
+                $this->success(L('_B_LOGIN_CHANGEKEYSUCESS_'));
             } else {
-                $this->error('密码修改失败！请重试。');
+                $this->error(L('_B_LOGIN_CHANGEKEYLOSE_'));
             }
         }
     }
@@ -693,9 +693,9 @@ class IndexAction extends BaseAction {
         $data_admin['phone'] = $this->_post('phone');
         $data_admin['sort_menus'] = $this->_post('system_menu');
         if ($database_admin->data($data_admin)->save()) {
-            $this->success('资料修改成功！');
+            $this->success(L('K_PROFILE_SUCC'));
         } else {
-            $this->error('资料修改失败！请检查是否有修改内容后再重试。');
+            $this->error(L('K_PROFILE_FAIL'));
         }
     }
 
@@ -727,9 +727,10 @@ class IndexAction extends BaseAction {
         $admin['menus'] = explode(',', $admin['menus']);
         $this->assign('admin', $admin);
 
-        $menus = D('System_menu')->where(array( 'status' => 1))->select();
+        $menus = D('System_menu')->where(array( 'status' => 1,'show'=>1))->select();
         $list = array();
         foreach ($menus as $menu) {
+            $menu['name'] = lang_substr($menu['name'],C('DEFAULT_LANG'));
             if (empty($menu['fid'])) {
                 if (isset($list[$menu['id']])) {
                     $list[$menu['id']] = array_merge($list[$menu['id']], $menu);
@@ -756,7 +757,7 @@ class IndexAction extends BaseAction {
             $menus = implode(',', $menus);
             $database = D('Admin');
             $database->where(array('id' => $admin_id))->save(array('menus' => $menus));
-            $this->success('全选设置成功！');
+            $this->success(L('K_ALL_SUCC'));
         } else {
             $this->error('非法提交,请重新提交~');
         }
@@ -783,9 +784,9 @@ class IndexAction extends BaseAction {
 		$where['id']	=	$_POST['id'];
 		$delete	=	D('Admin')->where($where)->delete();
 		if($delete){
-            $this->success('删除成功！');
+            $this->success(L('J_DELETION_SUCCESS'));
         }else{
-            $this->error('删除失败！请重试~');
+            $this->error(L('K_FAILED_DELETE'));
         }
     }
     public function admin() {
@@ -806,7 +807,7 @@ class IndexAction extends BaseAction {
             $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
             $account = htmlspecialchars($_POST['account']);
             if ($database_area->where("`id`<>'{$id}' AND `account`='{$account}'")->find()) {
-                $this->error('数据库中已存在相同的账号，请更换。');
+                $this->error(L('J_ACCOUNT_EXISTS'));
             }
             if($_POST['level'] != 3)$_POST['area_id'] = 0;
             unset($_POST['id']);
@@ -821,11 +822,11 @@ class IndexAction extends BaseAction {
             } else {
             	//$_POST['level'] = 0;
                 if (empty($_POST['pwd'])) {
-                    $this->error('密码不能为空~');
+                    $this->error(L('K_PASS_EMPTY'));
                 }
                 $_POST['pwd'] = md5($_POST['pwd']);
                 if ($database_area->data($_POST)->add()) {
-                    $this->success('添加成功！');
+                    $this->success(L('J_SUCCEED1'));
                 } else {
                     $this->error('添加失败！请重试~');
                 }

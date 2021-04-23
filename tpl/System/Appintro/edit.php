@@ -3,13 +3,13 @@
 		
 		<table cellpadding="0" cellspacing="0" class="frame_form" width="100%">
 			<tr>
-				<th width="80">标题</th>
+				<th width="80">{pigcms{:L('I_TITLE')}</th>
 				<input type="hidden" name="id" value="{pigcms{$intro.id}" />
-				<td><input type="text" class="input fl" name="title" value="{pigcms{$intro.title}" size="75" placeholder="公告标题" validate="maxlength:50,required:true"/></td>
+				<td><input type="text" class="input fl" name="title" value="{pigcms{$intro.title}" size="75" placeholder="{pigcms{:L('I_ANNOUNCEMENT_TITLE')}" validate="maxlength:50,required:true"/></td>
 			</tr>
 			
 			<tr>
-				<th width="80">内容</th>
+				<th width="80">{pigcms{:L('I_CONTENT')}</th>
 				<td>
 					<textarea name="content" id="content" >{pigcms{$intro.content}</textarea>
 				</td>

@@ -5,11 +5,11 @@
 		<ul class="breadcrumb">
 			<li>
 				<i class="ace-icon fa fa-cubes"></i>
-				<a href="{pigcms{:U('Shop/index')}">{pigcms{$config.shop_alias_name}管理</a>
+				<a href="{pigcms{:U('Shop/index')}">{pigcms{:L('DELIVERY_MANAGEMENT_BKADMIN')}<</a>
 			</li>
-			<li class="active"><a href="{pigcms{:U('Shop/goods_sort',array('store_id'=>$now_store['store_id']))}">分类列表</a></li>
+			<li class="active"><a href="{pigcms{:U('Shop/goods_sort',array('store_id'=>$now_store['store_id']))}">{pigcms{:L('C_CATEGORYLIST')}</a></li>
 			<li class="active">{pigcms{$now_sort.sort_name}</li>
-			<li class="active">商品列表</li>
+			<li class="active">{pigcms{:L('ITEM_LIST_BKADMIN')}</li>
 		</ul>
 	</div>
 	<!-- 内容头部 -->
@@ -20,17 +20,17 @@
 			</style>
 			<div class="row">
 				<div class="col-xs-12">
-					<button class="btn btn-success" onclick="CreateShop()">添加商品</button>
+					<button class="btn btn-success" onclick="CreateShop()">{pigcms{:L('ADD_ITEM_BKADMIN')}</button>
                     | <input type="text" id="tax_num" name="tax_num" value="">%
-                    <button class="btn btn-success" onclick="Modify_tax({pigcms{$now_sort.store_id},{pigcms{$now_sort.sort_id})">修改全部税率</button>
-                    <button style="float: right" class="btn btn-success" onclick="ImportExcel()">导入Excel</button>
+                    <button class="btn btn-success" onclick="Modify_tax({pigcms{$now_sort.store_id},{pigcms{$now_sort.sort_id})">{pigcms{:L('EDIT_TAX_RATE_BKADMIN')}</button>
+                    <button style="float: right" class="btn btn-success" onclick="ImportExcel()">{pigcms{:L('IMPORT_DATA_BKADMIN')}</button>
                     <input type="file" id="inputExcel" style="display:none;">
                     <div style="float: right;margin-top: 20px;margin-right: 20px">
                         <label style="float: left">
                             <if condition="$is_hide eq 1">
-                                不显示被隐藏菜单
+                                {pigcms{:L('HIDE_DELETED_BKADMIN')}
                             <else/>
-                                显示被隐藏菜单
+                                {pigcms{:L('SHOW_DELETED_BKADMIN')}
                             </if>
                         </label>
                         <input name="switch-field-1" id="hide_btn" class="ace ace-switch ace-switch-6" type="checkbox" <if condition="$is_hide eq 0">checked="checked"</if>/>
@@ -40,21 +40,21 @@
 						<table class="table table-striped table-bordered table-hover">
 							<thead>
 								<tr>
-									<th width="50">编号</th>
-									<th width="50">排序</th>
-									<th class="button-column">商品名称</th>
-									<th width="80">价格</th>
-									<th class="button-column" style="width:60px;">单位</th>
-									<th width="80">原始库存</th>
-									<th width="80">实际库存</th>
-                                    <th width="50">税率</th>
-                                    <th width="50">押金</th>
-									<th width="80">今日销量</th>
-									<th width="80">总销量</th>
-									<th class="button-column" style="width:180px;">最后操作时间</th>
-									<th class="button-column" style="width:100px;">归属打印机</th>
-									<th width="100" class="button-column">状态</th>
-									<th width="100" class="button-column">操作</th>
+									<th width="50">{pigcms{:L('ID_BKADMIN')}</th>
+									<th width="50">{pigcms{:L('LISTING_ORDER_BKADMIN')}</th>
+									<th class="button-column">{pigcms{:L('ITEM_NAME_BKADMIN')}</th>
+									<th width="80">{pigcms{:L('LISTING_PRICE_BKADMIN')}</th>
+									<th class="button-column" style="width:60px;">{pigcms{:L('UNIT_BKADMIN')}</th>
+									<th width="80">{pigcms{:L('ORIGINAL_INSTOCK_BKADMIN')}</th>
+									<th width="80">{pigcms{:L('CURRENTLY_INSTOCK_BKADMIN')}</th>
+                                    <th width="50">{pigcms{:L('TAX_RATE_BKADMIN')}</th>
+                                    <th width="50">{pigcms{:L('BOTTLE_DEPOSIT_BKADMIN')}</th>
+									<th width="80">{pigcms{:L('DAILY_SALES_BKADMIN')}</th>
+									<th width="80">{pigcms{:L('TOTAL_SALES_BKADMIN')}</th>
+									<th class="button-column" style="width:180px;">{pigcms{:L('LAST_MODIFIED_BKADMIN')}</th>
+									<th class="button-column" style="width:100px;">{pigcms{:L('PRINTER_BKADMIN')}</th>
+									<th width="100" class="button-column">{pigcms{:L('STATUS_BKADMIN')}</th>
+									<th width="100" class="button-column">{pigcms{:L('ACTION_BKADMIN')}</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -67,7 +67,7 @@
 											<td>{pigcms{$vo.price|floatval}</td>
 											<td class="button-column">{pigcms{$vo.unit}</td>
 											<if condition="$vo['stock_num'] eq -1">
-											<td>无限</td>
+											<td>{pigcms{:L('ULN_BKADMIN')}</td>
 											<else />
 											<td>{pigcms{$vo.stock_num}</td>
 											</if>
@@ -89,29 +89,29 @@
                                                 </if>
 											</td>
 											<td class="button-column">
-												<a title="修改" class="green" style="padding-right:8px;" href="{pigcms{:U('Shop/goods_edit',array('goods_id'=>$vo['goods_id'],'page'=>$_GET['page']))}">
+												<a title="{pigcms{:L('EDIT_BKADMIN')}" class="green" style="padding-right:8px;" href="{pigcms{:U('Shop/goods_edit',array('goods_id'=>$vo['goods_id'],'page'=>$_GET['page']))}">
 													<i class="ace-icon fa fa-pencil bigger-130"></i>
 												</a>
                                                 <if condition="$vo['status'] eq 2">
-                                                    <a title="还原" class="orange" style="padding-right:8px;" href="javascript:hiddenGoods({pigcms{$vo['goods_id']},0);">
+                                                    <a title="{pigcms{:L('RESTORE_BKADMIN')}" class="orange" style="padding-right:8px;" href="javascript:hiddenGoods({pigcms{$vo['goods_id']},0);">
                                                         <i class="ace-icon fa fa-refresh bigger-130"></i>
                                                     </a>
                                                 <else/>
-                                                    <a title="删除" class="red" style="padding-right:8px;" href="javascript:hiddenGoods({pigcms{$vo['goods_id']},1);">
+                                                    <a title="{pigcms{:L('DELETE_BKADMIN')}" class="red" style="padding-right:8px;" href="javascript:hiddenGoods({pigcms{$vo['goods_id']},1);">
                                                         <i class="ace-icon fa fa-trash-o bigger-130"></i>
                                                     </a>
                                                 </if>
-                                                <a title="复制" class="blue" style="padding-right:8px;" href="{pigcms{:U('Shop/goods_copy',array('goods_id'=>$vo['goods_id']))}">
+                                                <a title="{pigcms{:L('COPY_BKADMIN')}" class="blue" style="padding-right:8px;" href="{pigcms{:U('Shop/goods_copy',array('goods_id'=>$vo['goods_id']))}">
                                                     <i class="ace-icon fa fa-file-o bigger-130"></i>
                                                 </a>
-                                                <a title="配菜" class="pink" style="padding-right:8px;" href="{pigcms{:U('Shop/side_dish',array('goods_id'=>$vo['goods_id']))}">
+                                                <a title="{pigcms{:L('OPTIONS_BKADMIN')}" class="pink" style="padding-right:8px;" href="{pigcms{:U('Shop/side_dish',array('goods_id'=>$vo['goods_id']))}">
                                                     <i class="ace-icon fa fa-inbox bigger-130"></i>
                                                 </a>
 											</td>
 										</tr>
 									</volist>
 								<else/>
-									<tr class="odd"><td class="button-column" colspan="13" >无内容</td></tr>
+									<tr class="odd"><td class="button-column" colspan="13" >{pigcms{:L('NO_CONTENT_BKADMIN')}</td></tr>
 								</if>
 							</tbody>
 						</table>
@@ -127,17 +127,17 @@
 $(function(){
 	/*店铺状态*/
 	updateStatus(".statusSwitch .ace-switch", ".statusSwitch", "OPEN", "CLOSED", "shopstatus");
-	
+
 	jQuery(document).on('click','#shopList a.red',function(){
-		if(!confirm('是否确定隐藏此菜品？（此菜品只会被隐藏，隐藏后用户和商家将看不到。此菜品不会被彻底删除，可被复原）')) return false;
+		if(!confirm("{pigcms{:L('YOU_HIDE_BKADMIN')}}")) return false;
 	});
 
     jQuery(document).on('click','#shopList a.orange',function(){
-        if(!confirm('是否确认还原被隐藏菜品？还原后此菜品商家可见')) return false;
+        if(!confirm("{pigcms{:L('SURE_RESTOR_BKADMIN')}}")) return false;
     });
 
     jQuery(document).on('click','#shopList a.blue',function(){
-        if(!confirm('确定要复制此产品吗？')) return false;
+        if(!confirm("{pigcms{:L('SURE_RESTOR_BKADMIN')}}")) return false;
     });
 });
 
@@ -168,7 +168,7 @@ function Modify_tax(store_id,sort_id) {
             }
         });
     }else {
-        alert('请输入税率!');
+        alert("{pigcms{:L('ENTER_TAX_BKADMIN')}");
     }
 }
 function updateStatus(dom1, dom2, status1, status2, attribute){

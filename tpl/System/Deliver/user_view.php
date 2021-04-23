@@ -50,7 +50,7 @@
             </tr>
 			<tr>
 				<th width="15%">{pigcms{:L('_B_D_LOGIN_KEY1_')}</th>
-				<td width="35%"><input type="text" class="input fl" name="pwd" size="20" value="" tips="不修改则不填写" /></td>
+				<td width="35%"><input type="text" class="input fl" name="pwd" size="20" value="" tips="{pigcms{:L('K_DNFIINM')}" /></td>
 				<th width="15%">{pigcms{:L('_BACK_STATUS_')}</th>
 				<td width="35%" class="radio_box">
 					<span class="cb-enable"><label class="cb-enable <if condition="$now_user['status'] eq 1">selected</if>"><span>{pigcms{:L('_BACK_NORMAL_')}</span><input type="radio" name="status" value="1"  <if condition="$now_user['status'] eq 1">checked="checked"</if>/></label></span>
