@@ -35,35 +35,7 @@
         <include file="Public:facebook"/>
 	</head>
     <style>
-        @font-face {
-            font-family: 'Montserrat';
-            src: url('/static/font/Montserrat-Regular.ttf');
-        }
-        @font-face {
-            font-family: 'Montserrat-bold';
-            src: url('/static/font/Montserrat-Bold.otf');
-        }
-        @font-face {
-            font-family: 'Montserrat-light';
-            src: url('/static/font/Montserrat-Light.otf');
-        }
-        *{
-            margin: 0px;
-            box-sizing: border-box;
-            font-family: Montserrat;
-            -moz-osx-font-smoothing: grayscale;
-        }
-        body{
-            color: #3f3f3f;
-        }
-        div{
-            letter-spacing: -0.5px;
-        }
-        a{
-            display: contents;
-            color:#3f3f3f;
-            text-decoration: none;
-        }
+
         .white_line{
             width: 96%;
             height: 3px;
@@ -73,10 +45,7 @@
             border-radius: 3px;
             background-color: #ffffff;
         }
-        .main{
-            width: 95%;
-            margin: 10px auto;
-        }
+
         .main_left{
             display: inline-block;
             width: 100%;
@@ -203,7 +172,7 @@
         var app_name = 'TUTTI - Online Food Community';
         var app_url = 'https://itunes.apple.com/us/app/tutti/id1439900347?ls=1&mt=8';
     </script>
-        <include file="Public:header"/>
+        <include file="Public:wapnews_header"/>
         <div class="main" style="margin-top: 20px">
             <div class="main_left">
 <!--                <div class="cate_list">-->
@@ -229,7 +198,7 @@
                                 </div>
                                 <div class="left_title">
                                     <div style="position: absolute;transform: translateY(-50%);top: 50%;">
-                                    <div class="list_title">
+                                    <div class="list_title only_3_lines">
                                         {pigcms{$vo.title}
                                     </div>
 <!--                                    <div class="list_sub">-->
@@ -271,6 +240,6 @@
 <!--                </if>-->
 <!--            </div>-->
         </div>
-        <include file="Public:footer"/>
+        <include file="Public:wapnews_footer"/>
 	</body>
 </html>

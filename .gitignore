@@ -12,3 +12,10 @@ runtime/
 upload/
 .idea/
 test_log.txt
+/tpl/System/_Newface/Merchant/index--.php
+/tpl/System/_Newface/Index/main--.php
+/sample/style2.css
+/sample/index.html
+/nginx.htaccess
+/ioncube/README.txt
+/favicon.ico

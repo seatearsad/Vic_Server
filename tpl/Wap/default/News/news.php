@@ -35,35 +35,6 @@
         <include file="Public:facebook"/>
 	</head>
     <style>
-        @font-face {
-            font-family: 'Montserrat';
-            src: url('/static/font/Montserrat-Regular.ttf');
-        }
-        @font-face {
-            font-family: 'Montserrat-bold';
-            src: url('/static/font/Montserrat-Bold.otf');
-        }
-        @font-face {
-            font-family: 'Montserrat-light';
-            src: url('/static/font/Montserrat-Light.otf');
-        }
-        *{
-            margin: 0px;
-            box-sizing: border-box;
-            font-family: Montserrat;
-            -moz-osx-font-smoothing: grayscale;
-        }
-        body{
-            color: #3f3f3f;
-        }
-        div{
-            letter-spacing: -0.5px;
-        }
-        a{
-            display: contents;
-            color:#3f3f3f;
-            text-decoration: none;
-        }
         .white_line{
             width: 96%;
             height: 3px;
@@ -73,10 +44,7 @@
             border-radius: 3px;
             background-color: #ffffff;
         }
-        .main{
-            width: 100%;
-            margin: 10px auto;
-        }
+
         .main_left{
             display: inline-block;
             width: 100%;
@@ -201,7 +169,7 @@
         var app_name = 'TUTTI - Online Food Community';
         var app_url = 'https://itunes.apple.com/us/app/tutti/id1439900347?ls=1&mt=8';
     </script>
-        <include file="Public:header"/>
+        <include file="Public:wapnews_header"/>
         <div class="main">
             <div class="main_left">
                 <div class="news_image"><img src="{pigcms{$news.top_img}" style="width: 100%"></div>
@@ -247,6 +215,6 @@
                 </if>
             </div>
         </div>
-        <include file="Public:footer"/>
+        <include file="Public:wapnews_footer"/>
 	</body>
 </html>

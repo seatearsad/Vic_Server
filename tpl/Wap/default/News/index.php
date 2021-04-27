@@ -34,35 +34,7 @@
         <include file="Public:facebook"/>
 	</head>
     <style>
-        @font-face {
-            font-family: 'Montserrat';
-            src: url('/static/font/Montserrat-Regular.ttf');
-        }
-        @font-face {
-            font-family: 'Montserrat-bold';
-            src: url('/static/font/Montserrat-Bold.otf');
-        }
-        @font-face {
-            font-family: 'Montserrat-light';
-            src: url('/static/font/Montserrat-Light.otf');
-        }
-        *{
-            margin: 0px;
-            box-sizing: border-box;
-            font-family: Montserrat;
-            -moz-osx-font-smoothing: grayscale;
-        }
-        body{
-            color: #3f3f3f;
-        }
-        div{
-            letter-spacing: -0.5px;
-        }
-        a{
-            display: contents;
-            color:#3f3f3f;
-            text-decoration: none;
-        }
+
         .white_line{
             width: 96%;
             height: 3px;
@@ -167,6 +139,7 @@
         .desc_point ul li.curr_li{
             background-color: #ffa52d;
         }
+
         .doc_sub{
             font-size: 15px;
             font-weight: bold;
@@ -179,6 +152,7 @@
             color: #ffa52d;
             margin:  0px 0 5px 0;
         }
+
         .doc_time{
             font-size: 12px;
             color: #999999;
@@ -188,10 +162,6 @@
             margin: 20px 0;
         }
 
-        .main{
-            width: 95%;
-            margin: 10px auto;
-        }
         .main_left{
             display: inline-block;
             width: 100%;
@@ -306,11 +276,13 @@
 
     </style>
 	<body>
-    <script>
-        var app_name = 'TUTTI - Online Food Community';
-        var app_url = 'https://itunes.apple.com/us/app/tutti/id1439900347?ls=1&mt=8';
-    </script>
-        <include file="Public:header"/>
+        <script>
+            var app_name = 'TUTTI - Online Food Community';
+            var app_url = 'https://itunes.apple.com/us/app/tutti/id1439900347?ls=1&mt=8';
+        </script>
+
+        <include file="Public:wapnews_header"/>
+
         <div class="reg_desc">
             <div class="reg_show">
 <!--                <div class="desc_left"></div>-->
@@ -322,10 +294,10 @@
                                 <img src="{pigcms{$vo.cover}" />
                             </div>
                             <div class="reg_txt">
-                                <div class="doc_title">
+                                <div class="doc_title only_2_lines">
                                     {pigcms{$vo.title}
                                 </div>
-                                <div class="doc_sub">
+                                <div class="doc_sub only_1_lines">
                                     {pigcms{$vo.sub_title}
                                 </div>
                                 <div class="doc_time">
@@ -370,7 +342,7 @@
                         </div>
                         <div class="left_title">
                             <div style="position: absolute;transform: translateY(-50%);top: 50%;">
-                                <div class="list_title">
+                                <div class="list_title only_2_lines">
                                     {pigcms{$vo.title}
                                 </div>
     <!--                            <div class="list_sub">-->
@@ -424,9 +396,9 @@
                     <li>
                         <a href="/wapnews/{pigcms{$vo.id}">
                         <label></label>
-                        <span>
+                        <div class="only_3_lines" style="margin-left:10px">
                             {pigcms{$vo.title}
-                        </span>
+                        </div>
                         </a>
                     </li>
                     </volist>
@@ -434,7 +406,7 @@
             </div>
         </div>
 
-        <include file="Public:footer"/>
+        <include file="Public:wapnews_footer"/>
 	</body>
 <script>
     var desc_num = '{pigcms{$commend_num}';
