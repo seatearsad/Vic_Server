@@ -27,19 +27,19 @@
 		<table cellpadding="0" cellspacing="0" class="frame_form" width="100%">
 			<tr>
 				<th width="80">{pigcms{:L('I_TITLE')}</th>
-				<td><input type="text" class="input fl" name="title" size="75" placeholder="{pigcms{:L('I_TITLE')}" validate="maxlength:100,required:true"/></td>
+				<td><input type="text" class="input fl" name="title" size="95" placeholder="{pigcms{:L('I_TITLE')}" validate="maxlength:95,required:true"/></td>
 			</tr>
             <tr>
                 <th width="80">{pigcms{:L('I_SUBTITLE')}</th>
-                <td><input type="text" class="input fl" name="sub_title" size="75" placeholder="{pigcms{:L('I_SUBTITLE')}" validate="maxlength:100,required:true"/></td>
+                <td><input type="text" class="input fl" name="sub_title" size="95" placeholder="{pigcms{:L('I_SUBTITLE')}" validate="maxlength:95,required:true"/></td>
             </tr>
             <tr>
                 <th width="80">{pigcms{:L('I_KEYWORDS')}</th>
-                <td><input type="text" class="input fl" name="keyword" size="75" placeholder="{pigcms{:L('I_KEYWORDS')}" validate="maxlength:100,required:true"/></td>
+                <td><input type="text" class="input fl" name="keyword" size="100" placeholder="{pigcms{:L('I_KEYWORDS')}" validate="maxlength:100,required:true"/></td>
             </tr>
             <tr>
                 <th width="80">{pigcms{:L('I_BRIEF_INTRODUCTION')}</th>
-                <td><input type="text" class="input fl" name="desc" size="75" placeholder="" validate="maxlength:200,required:false"/></td>
+                <td><input type="text" class="input fl" name="desc" size="200" placeholder="" validate="maxlength:200,required:false"/></td>
             </tr>
 			<tr>
 				<th width="80">{pigcms{:L('QW_CATEGORY')}</th>

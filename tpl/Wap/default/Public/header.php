@@ -6,7 +6,7 @@
         height: 60px;
         display: flex;
         background-color: #ffffff;
-        position: fixed;
+        position: sticky;
         top:0px;
         z-index: 999;
     }
@@ -334,7 +334,7 @@
         }else {
             $(this).addClass('is-active');
             $('#menu_memo').addClass('is_open');
-            $('#menu_memo').height($(window).height() - 60);
+            $('#menu_memo').height($(window).height() - 0);
         }
 
         is_open_menu = !is_open_menu;

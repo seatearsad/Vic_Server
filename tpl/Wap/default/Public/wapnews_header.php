@@ -67,7 +67,7 @@
         height: 0.6rem;
         display: flex;
         background-color: #ffffff;
-        position: fixed;
+        position: sticky;
         top:0px;
         z-index: 999;
     }
@@ -141,9 +141,8 @@
         opacity: 0;
     }
     #menu_memo{
-        margin-top: 60px;
         max-width: 100%;
-        width: 99%;
+        width: 100%;
         position: absolute;
         background-color: #f5f5f5;
         transition: transform .4s ease;
@@ -395,7 +394,7 @@
         }else {
             $(this).addClass('is-active');
             $('#menu_memo').addClass('is_open');
-            $('#menu_memo').height($(window).height() - 60);
+            $('#menu_memo').height($(window).height() - 0);
         }
 
         is_open_menu = !is_open_menu;

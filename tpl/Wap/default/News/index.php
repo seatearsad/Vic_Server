@@ -34,7 +34,6 @@
         <include file="Public:facebook"/>
 	</head>
     <style>
-
         .white_line{
             width: 96%;
             height: 3px;
@@ -46,6 +45,7 @@
         }
         .reg_desc{
             /*height: 330px;*/
+            margin-bottom: 18px;
         }
         .reg_show{
             width: 100%;
@@ -294,7 +294,7 @@
                                 <img src="{pigcms{$vo.cover}" />
                             </div>
                             <div class="reg_txt">
-                                <div class="doc_title only_2_lines">
+                                <div class="doc_title only_3_lines">
                                     {pigcms{$vo.title}
                                 </div>
                                 <div class="doc_sub only_1_lines">
@@ -342,7 +342,7 @@
                         </div>
                         <div class="left_title">
                             <div style="position: absolute;transform: translateY(-50%);top: 50%;">
-                                <div class="list_title only_2_lines">
+                                <div class="list_title only_3_lines">
                                     {pigcms{$vo.title}
                                 </div>
     <!--                            <div class="list_sub">-->
@@ -460,7 +460,7 @@
 
         timeoutId = setTimeout(function(){
             curr_num += 1;
-            changeDesc();
+            //changeDesc();
         },5000);
     }
 
@@ -491,7 +491,7 @@
     //var width = window.screen.availWidth;
     var img_height= width/1.59;
     $('.desc_point').css('top',img_height);
-    var height = width *1;
+    var height = width *1.03;
     var t_height = height;
     $('.reg_desc').height(t_height);    //最外层高度
     $('.reg_show').height(t_height);
