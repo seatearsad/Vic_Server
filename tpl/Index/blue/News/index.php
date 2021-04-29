@@ -55,7 +55,7 @@
             -moz-osx-font-smoothing: grayscale;
         }
         body{
-            min-width: 1024px;
+            min-width: 1124px;
             color: #3f3f3f;
         }
         a{
@@ -189,7 +189,7 @@
 
         .main{
             width: 90%;
-            margin: 10px auto;
+            margin: 40px auto;
         }
         .main_left{
             display: inline-block;
@@ -323,7 +323,7 @@
                 <div class="desc_right"></div>
             </div>
         </div>
-        <div class="main" style="margin-top: 50px">
+        <div class="main">
             <div class="main_left">
                 <div class="cate_list">
                     <span class="curr_cate" style="margin-left: 0;" data-id="0">ALL POSTS</span>

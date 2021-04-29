@@ -54,7 +54,7 @@
             -moz-osx-font-smoothing: grayscale;
         }
         body{
-            min-width: 1024px;
+            min-width: 1124px;
             color: #3f3f3f;
         }
         a{

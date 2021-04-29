@@ -36,7 +36,7 @@
     }
     .main{
         width: 93%;
-        margin: 10px auto;
+        margin: 20px auto;
     }
     .only_1_lines{
          text-overflow: -o-ellipsis-lastline;
@@ -292,6 +292,17 @@
         background-size: 100% auto;
         background-repeat: no-repeat;
         box-sizing: border-box;
+    }
+    .down_icon {
+        width: 46px;
+        height: 46px;
+        margin-top: 7px;
+        -moz-border-radius: 5px;
+        -webkit-border-radius: 5px;
+        border-radius: 5px;
+        background-image: url(../tpl/Static/blue/images/new/icon.png);
+        background-size: 100% 100%;
+        flex: 0 0 auto;
     }
 </style>
 <div class="down_header">

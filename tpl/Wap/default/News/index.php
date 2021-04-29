@@ -184,7 +184,7 @@
             font-size: 15px;
         }
         .cate_list span{
-            margin-left: 15px;
+            margin-left: 16px;
             font-weight: bold;
             cursor: pointer;
         }
@@ -460,7 +460,7 @@
 
         timeoutId = setTimeout(function(){
             curr_num += 1;
-            //changeDesc();
+            changeDesc();
         },5000);
     }
 

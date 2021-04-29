@@ -233,6 +233,7 @@
         background-repeat: no-repeat;
         box-sizing: border-box;
     }
+
 </style>
 <div class="down_header">
     <div class="down_close">X</div>
