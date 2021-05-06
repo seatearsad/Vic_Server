@@ -17,6 +17,23 @@ class BaseAction extends Action{
 		}
 
 
+        if (!file_exists(TMPL_PATH . GROUP_NAME.'/_Newface/' . MODULE_NAME . '/' . ACTION_NAME . C('TMPL_TEMPLATE_SUFFIX')))
+        {
+            C('DEFAULT_THEME', '');
+            $this->static_path   = './tpl/System/Static/';
+        }
+        else
+        {
+            C('DEFAULT_THEME', '_Newface');
+            $this->static_path   = './tpl/System/_Newface/Static/';
+        }
+
+
+        $this->static_public = './static/';
+        $this->assign('static_path',$this->static_path);
+        $this->assign('static_public',$this->static_public);
+        $this->assign('module_name',MODULE_NAME);
+        $this->assign('action_name',ACTION_NAME);
 		$serverHost = '';
 		if(function_exists('getallheaders')){
 			$allheaders = getallheaders();
@@ -100,10 +117,7 @@ class BaseAction extends Action{
 		}
 
 
-		$this->static_path   = './tpl/System/Static/';
-		$this->static_public = './static/';
-		$this->assign('static_path',$this->static_path);
-		$this->assign('static_public',$this->static_public);
+
 
 
 		/****实时查找账号的权限****/
@@ -257,6 +271,7 @@ class BaseAction extends Action{
 			$this->assign('bg_color', '#F3F3F3');
 		}
 	}
+
 	protected function menu_sort($array,$sort){
 		$mune	=	array();	//菜单
 		$arrsa	=	array();	//排序

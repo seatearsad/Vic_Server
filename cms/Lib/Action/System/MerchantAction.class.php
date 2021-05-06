@@ -9,6 +9,7 @@
 
 class MerchantAction extends BaseAction{
     public function index(){
+
 		$database_merchant = D('Merchant');
 		//搜索
 		if(!empty($_GET['keyword'])){
@@ -69,7 +70,7 @@ class MerchantAction extends BaseAction{
 		$p = new Page($count_merchant,15);
 		$merchant_list = $database_merchant->field(true)->where($condition_merchant)->order($order)->limit($p->firstRow.','.$p->listRows)->select();
 		$this->assign('merchant_list',$merchant_list);
-		$pagebar = $p->show();
+		$pagebar = $p->show2();
 		$this->assign('pagebar',$pagebar);
 
 		$this->display();

@@ -82,6 +82,7 @@ class Page{
 			$str .= '<a href="'.$url.($now+1).'" class="next pn_page">'.($type==1 ? '':'下一页').'</a>';
 		}
 		$str.='</div>';
+
 		return $this->totalRows > $this->listRows ?  "<div id='commonpage'>".$str."</div>" : '';
     }
 }

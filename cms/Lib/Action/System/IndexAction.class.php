@@ -47,10 +47,10 @@ class IndexAction extends BaseAction {
 //		$lastver = $this->http($updatehost,$param,'GET', array("Content-type: text/html; charset=utf-8"));
 
 		$this->assign('updateinfo',$updateinfo);
-        $this -> assign('ver', $ver);
-        $this -> assign('domain_time', $domain_time);
+        $this->assign('ver', $ver);
+        $this->assign('domain_time', $domain_time);
 
-        $this->display();
+        $this->display("","","","","","public");
     }
 
     public function main() {
@@ -70,7 +70,6 @@ class IndexAction extends BaseAction {
             '磁盘剩余空间 ' => round((@disk_free_space(".") / (1024 * 1024)), 2) . 'M',
         );
         $this->assign('server_info', $server_info);
-
 
         //网站统计
         if($area_id){
