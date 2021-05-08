@@ -860,8 +860,8 @@ class MonerisPay
 
     public function getNotificationUrl(){
         if($this->testMode){
-            $site_url = C('config.config_site_url') == '' ? 'http://www.vicisland.ca' : C('config.config_site_url');
-            //$site_url = C('config.config_site_url') == '' ? 'http://54.190.29.18' : C('config.config_site_url');
+            //$site_url = C('config.config_site_url') == '' ? 'http://www.vicisland.ca' : C('config.config_site_url');
+            $site_url = C('config.config_site_url') == '' ? 'http://54.190.29.18' : C('config.config_site_url');
         }else{
             if(strpos($_SERVER['HTTP_HOST'],'tutti.app') !== false)
                 $site_url = 'https://'.$_SERVER['HTTP_HOST'];
