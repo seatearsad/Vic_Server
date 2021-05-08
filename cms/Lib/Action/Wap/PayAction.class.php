@@ -3159,20 +3159,21 @@ class PayAction extends BaseAction{
     }
 
     public function secure3d(){
-
         //第1次
+
         if($_GET['PaReq'] && $_GET['TermUrl'] && $_GET['MD'] && $_GET['ACSUrl']){
-            $inLineForm ='<html><head><title>Title for Page</title></head><SCRIPT LANGUAGE="Javascript" >' .
-                "<!--
+            if($_GET['MD'] != '') {//3D V1
+                $inLineForm = '<html><head><title>Title for Page</title></head><SCRIPT LANGUAGE="Javascript" >' .
+                    "<!--
 				function OnLoadEvent()
 				{
 					document.downloadForm.submit();
 				}
 				-->
 				</SCRIPT>" .
-                '<body onload="OnLoadEvent()">
+                    '<body onload="OnLoadEvent()">
 					<form name="downloadForm" action="' . urldecode($_GET['ACSUrl']) .
-                '" method="POST">
+                    '" method="POST">
 					<noscript>
 					<br>
 					<br>
@@ -3187,36 +3188,60 @@ class PayAction extends BaseAction{
 					<input type="submit" value="Submit">
 					</center>
 					</noscript>
-					<input type="hidden" name="PaReq" value="' . str_replace(' ','+',urldecode($_GET['PaReq'])) . '">
+					<input type="hidden" name="PaReq" value="' . str_replace(' ', '+', urldecode($_GET['PaReq'])) . '">
 					<input type="hidden" name="MD" value="' . urldecode($_GET['MD']) . '">
-					<input type="hidden" name="TermUrl" value="' . urldecode($_GET['TermUrl']) .'">
+					<input type="hidden" name="TermUrl" value="' . urldecode($_GET['TermUrl']) . '">
 				</form>
 				</body>
 				</html>';
-            //$inLineForm = urldecode($_GET['ACSUrl']).'-'.urldecode($_GET['PaReq']).'-'.urldecode($_GET['MD']).'-'.urldecode($_GET['TermUrl']);
-            //$inLineForm = str_replace(' ','',urldecode($_GET['PaReq']));
-            echo $inLineForm;
-            exit();
+                //$inLineForm = urldecode($_GET['ACSUrl']).'-'.urldecode($_GET['PaReq']).'-'.urldecode($_GET['MD']).'-'.urldecode($_GET['TermUrl']);
+                //$inLineForm = str_replace(' ','',urldecode($_GET['PaReq']));
+                echo $inLineForm;
+                exit();
+            }else{//3D V2
+                $inLineForm = '<form name="downloadForm" method="POST" action="'.urldecode($_GET['TermUrl']).'"><input type="hidden" name="creq" value="'.$_GET['site_url'].'"></form>';
+
+                $inLineForm .= '<SCRIPT LANGUAGE="Javascript">
+                                            function OnLoadEvent()
+                                                    {
+                                                        document.downloadForm.submit();
+                                                    }
+                                              OnLoadEvent();
+                                        </SCRIPT>';
+
+                echo $inLineForm;
+                exit();
+            }
         }
 
+        import('@.ORG.pay.MonerisPay');
+        $moneris_pay = new MonerisPay();
         //第2次
-        if($_POST['PaRes'] && $_POST['MD']) {
-            //echo"---------->0";
-
+        if($_POST['PaRes'] && $_POST['MD']) {////3D V1
             $PaRes = $_POST['PaRes'];
             $MD = $_POST['MD'];
-            import('@.ORG.pay.MonerisPay');
-            $moneris_pay = new MonerisPay();
 
             $resp = $moneris_pay->MPI_Acs($PaRes, $MD);
+            $this->threePayResult($resp);
+        }else if($_POST['cres']){////3D V2
+            $cres = $_POST['cres'];
 
-            //echo"---------->1";
+            $resp = $moneris_pay->cavvLookup($cres);
+            $this->threePayResult($resp);
+        }
+        else
+        {
+            $this->error();
+        }
+        //$this->success($result['message'], $result['url']);
+    }
 
-            if ($resp['responseCode'] != 'null' && $resp['responseCode'] < 50) {                //可能是支付成功
-                //echo"---------->2";
-                if(strpos($resp['url'],'#')!== false) {
-                    //echo"---------->3";
-                    $script = '<SCRIPT LANGUAGE="Javascript" >var ua = navigator.userAgent;
+    public function threePayResult($resp){
+        if ($resp['responseCode'] != 'null' && $resp['responseCode'] < 50) {                //可能是支付成功
+            //echo"---------->2";
+            if(strpos($resp['url'],'#')!== false) {
+                //echo"---------->3";
+                $script = '<SCRIPT LANGUAGE="Javascript" >var ua = navigator.userAgent;
                             if(ua.match(/TuttiiOS/i)){
                                   window.webkit.messageHandlers.payComplate.postMessage(["'.$resp['url'].'"]);
                             }
@@ -3226,29 +3251,29 @@ class PayAction extends BaseAction{
                                 }
                             }
                             </SCRIPT>';
-                    echo $script;
-                    exit();
-                }else{
-                    //echo"---------->4";
-                    if(empty($this->user_session)){
-                        //echo"---------->41";
-                        $user = D('User')->field(true)->where(array('uid'=>$resp['uid']))->find();
-                        session('user',$user);
-                        $this->user_session = session('user');
-                    }
-                    //$this->success($resp['message'], $resp['url']);
-                    //redirect(U('My/my_money'));
-                    redirect($resp['url']."&status=1");
-                    //如果是recharge支付成功，那么弹到充值首页，弹出提示框
-                    //如果不是recharge，那么应该谈到 pay_result 页面
+                echo $script;
+                exit();
+            }else{
+                //echo"---------->4";
+                if(empty($this->user_session)){
+                    //echo"---------->41";
+                    $user = D('User')->field(true)->where(array('uid'=>$resp['uid']))->find();
+                    session('user',$user);
+                    $this->user_session = session('user');
                 }
+                //$this->success($resp['message'], $resp['url']);
+                //redirect(U('My/my_money'));
+                redirect($resp['url']."&status=1");
+                //如果是recharge支付成功，那么弹到充值首页，弹出提示框
+                //如果不是recharge，那么应该谈到 pay_result 页面
+            }
 
-            } else {                                                                            //可能是支付失败
-                //echo"---------->5";
-                if(strpos($resp['url'],'#')!== false) {
-                    //echo"---------->6";
-                    //echo $resp['message'];
-                    $script = '<SCRIPT LANGUAGE="Javascript" >var ua = navigator.userAgent;
+        } else {                                                                            //可能是支付失败
+            //echo"---------->5";
+            if(strpos($resp['url'],'#')!== false) {
+                //echo"---------->6";
+                //echo $resp['message'];
+                $script = '<SCRIPT LANGUAGE="Javascript" >var ua = navigator.userAgent;
                             if(ua.match(/TuttiiOS/i)){
                                   window.webkit.messageHandlers.payFail.postMessage(["'.$resp['url'].'"]);
                             }
@@ -3258,19 +3283,14 @@ class PayAction extends BaseAction{
                                 }
                             }
                             </SCRIPT>';
-                    echo $script;
-                    exit();
-                }else{
-                    //echo"---------->7";
-                    redirect($resp['url']."&status=0");
-                    //$this->error($resp['message'], $resp['url']);
-                }
+                echo $script;
+                exit();
+            }else{
+                //echo"---------->7";
+                redirect($resp['url']."&status=0");
+                //$this->error($resp['message'], $resp['url']);
             }
-        }else{
-            //echo"---------->8";
-            $this->error();
         }
-        //$this->success($result['message'], $result['url']);
     }
 }
 ?>

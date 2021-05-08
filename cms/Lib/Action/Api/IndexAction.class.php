@@ -1666,7 +1666,10 @@ class IndexAction extends BaseAction
         $resp = $moneris_pay->payment($_POST,$_POST['uid'],3);
         if($resp['requestMode'] && $resp['requestMode'] == "mpi"){
             if($resp['mpiSuccess'] == "true"){
-                $result = array('error_code' => false,'mode'=>$resp['requestMode'],'PaReq'=>urlencode($resp['MpiPaReq']),'TermUrl' => urlencode($resp['MpiTermUrl']),'MD' => urlencode($resp['MpiMD']),'ACSUrl' => urlencode($resp['MpiACSUrl']),'site_url'=>$resp['MpiTermUrl']);
+                if($resp['version'] == 1)
+                    $result = array('error_code' => false,'mode'=>$resp['requestMode'],'PaReq'=>urlencode($resp['MpiPaReq']),'TermUrl' => urlencode($resp['MpiTermUrl']),'MD' => urlencode($resp['MpiMD']),'ACSUrl' => urlencode($resp['MpiACSUrl']),'site_url'=>$resp['MpiTermUrl']);
+                if($resp['version'] == 2)
+                    $result = array('error_code' => false,'mode'=>$resp['requestMode'],'PaReq'=>'','TermUrl'=>$resp['challengeURL'],'MD' => '','ACSUrl'=>$resp['challengeData'],'site_url'=>$resp['site_url']);
                 //$this->ajaxReturn($result);
                 $this->returnCode(0,'info',$result,'success');
             }else{
@@ -1695,7 +1698,10 @@ class IndexAction extends BaseAction
         $resp = $moneris_pay->payment($_POST,$_POST['uid'],3);
         if($resp['requestMode'] && $resp['requestMode'] == "mpi"){
             if($resp['mpiSuccess'] == "true"){
-                $result = array('error_code' => false,'mode'=>$resp['requestMode'],'PaReq'=>urlencode($resp['MpiPaReq']),'TermUrl' => urlencode($resp['MpiTermUrl']),'MD' => urlencode($resp['MpiMD']),'ACSUrl' => urlencode($resp['MpiACSUrl']),'site_url'=>$resp['MpiTermUrl']);
+                if($resp['version'] == 1)
+                    $result = array('error_code' => false,'mode'=>$resp['requestMode'],'PaReq'=>urlencode($resp['MpiPaReq']),'TermUrl' => urlencode($resp['MpiTermUrl']),'MD' => urlencode($resp['MpiMD']),'ACSUrl' => urlencode($resp['MpiACSUrl']),'site_url'=>$resp['MpiTermUrl']);
+                if($resp['version'] == 2)
+                    $result = array('error_code' => false,'mode'=>$resp['requestMode'],'PaReq'=>'','TermUrl'=>$resp['challengeURL'],'MD' => '','ACSUrl'=>$resp['challengeData'],'site_url'=>'');
                 //$this->ajaxReturn($result);
                 $this->returnCode(0,'info',$result,'success');
             }else{
