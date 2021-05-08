@@ -1034,7 +1034,7 @@ class MonerisPay
         $resp['challengeURL'] = $mpgResponse->getMpiChallengeURL();
         $resp['challengeData'] = $mpgResponse->getMpiChallengeData();
         $resp['threeDSServerTransId'] = $mpgResponse->getMpiThreeDSServerTransId();
-        $resp['site_url'] = $site_url;
+        $resp['site_url'] = $merchantUrl;
         //var_dump($resp);die();
         if($resp['transStatus'] == "C")
         {
