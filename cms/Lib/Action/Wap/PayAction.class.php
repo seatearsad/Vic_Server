@@ -3160,8 +3160,7 @@ class PayAction extends BaseAction{
 
     public function secure3d(){
         //第1次
-
-        if($_GET['PaReq'] && $_GET['TermUrl'] && $_GET['MD'] && $_GET['ACSUrl']){
+        if($_GET['TermUrl'] && $_GET['ACSUrl']){
             if($_GET['MD'] != '') {//3D V1
                 $inLineForm = '<html><head><title>Title for Page</title></head><SCRIPT LANGUAGE="Javascript" >' .
                     "<!--
