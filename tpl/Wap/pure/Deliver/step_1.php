@@ -149,7 +149,9 @@
                 <span>{pigcms{:L('_ND_DELIVERYCITY_')}:</span>
                 <select name="city_id" id="city_id">
                     <volist name="city_list" id="city">
+                    <if condition="$city['area_id'] neq 105">
                     <option value="{pigcms{$city['area_id']}">{pigcms{$city['area_name']}</option>
+                    </if>
                     </volist>
                 </select>
             </li>
