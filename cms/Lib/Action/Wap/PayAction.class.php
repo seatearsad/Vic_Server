@@ -3198,7 +3198,7 @@ class PayAction extends BaseAction{
                 echo $inLineForm;
                 exit();
             }else{//3D V2
-                $inLineForm = '<form name="downloadForm" method="POST" action="'.urldecode($_GET['TermUrl']).'"><input type="hidden" name="creq" value="'.urldecode($_GET['site_url']).'"></form>';
+                $inLineForm = '<form name="downloadForm" method="POST" action="'.urldecode($_GET['TermUrl']).'"><input type="hidden" name="creq" value="'.urldecode($_GET['challengeData']).'"></form>';
 
                 $inLineForm .= '<SCRIPT LANGUAGE="Javascript">
                                             function OnLoadEvent()
