@@ -3203,7 +3203,7 @@ class PayAction extends BaseAction{
                 $inLineForm .= '<SCRIPT LANGUAGE="Javascript">
                                             function OnLoadEvent()
                                                     {
-                                                        document.downloadForm.submit();
+                                                        //document.downloadForm.submit();
                                                     }
                                               OnLoadEvent();
                                         </SCRIPT>';
