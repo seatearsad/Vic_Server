@@ -1,12 +1,11 @@
-<div class="footer">
-<!--    <div class="float-right">-->
-<!--        10GB of <strong>250GB</strong> Free.-->
-<!--    </div>-->
-    <div>
-        <strong>Copyright</strong> &copy; 2021 Kavl Technology Ltd. All rights reserved
-    </div>
-</div></div></div>
+        <div class="footer">
+        <!--    <div class="float-right">-->
+        <!--        10GB of <strong>250GB</strong> Free.-->
+        <!--    </div>-->
 
+        </div>
+    </div>
+</div>
 <include file="Public:toast_inc"/>
 
 <!-- Mainly scripts -->
@@ -25,9 +24,6 @@
 <script src="{pigcms{$static_path}js/plugins/peity/jquery.peity.min.js"></script>
 <script src="{pigcms{$static_path}js/demo/peity-demo.js"></script>
 
-<!-- FooTable -->
-<script src="{pigcms{$static_path}js/plugins/footable/footable.all.min.js?v=2"></script>
-
 <!-- Custom and plugin javascript -->
 <script src="{pigcms{$static_path}js/inspinia.js"></script>
 <script src="{pigcms{$static_path}js/plugins/pace/pace.min.js"></script>
@@ -44,9 +40,8 @@
 <!-- Sparkline demo data  -->
 <script src="{pigcms{$static_path}js/demo/sparkline-demo.js"></script>
 
-<!-- FooTable -->
-<script src="{pigcms{$static_path}js/plugins/footable/footable.all.min.js"></script>
-
+<script src="{pigcms{$static_path}js/plugins/dataTables/datatables.min.js"></script>
+<script src="{pigcms{$static_path}js/plugins/dataTables/dataTables.bootstrap4.min.js"></script>
 
 <script language="JavaScript">
     function changeLange(lang) {
@@ -54,6 +49,5 @@
         window.location.reload();
     }
 </script>
-
 </body>
 </html>

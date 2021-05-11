@@ -4570,6 +4570,14 @@ video {
   display: -webkit-flex;
   display: flex;
 }
+#wrapper-singlepage {
+  width: 100%;
+  height:100%;
+  overflow-x: hidden;
+  display: -ms-flex;
+  display: -webkit-flex;
+  display: flex;
+}
 .wrapper {
   padding: 0 20px;
 }
@@ -4581,6 +4589,12 @@ video {
   position: relative !important;
   flex-shrink: 1;
   width: calc(100% - 220px);
+}
+#page-wrapper-singlepage {
+  padding: 0 15px;
+  position: relative !important;
+  flex-shrink: 1;
+  width: calc(100%);
 }
 @media (min-width: 768px) {
   #page-wrapper {
@@ -9823,4 +9837,8 @@ body.md-skin {
 .tutti_toolbar {
   height:50px;
   margin: 5px 0 5px 0;
+}
+
+.tutti_hidden_obj{
+  display: none;
 }

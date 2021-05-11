@@ -71,6 +71,7 @@ class MerchantAction extends BaseAction{
 		$merchant_list = $database_merchant->field(true)->where($condition_merchant)->order($order)->limit($p->firstRow.','.$p->listRows)->select();
 		$this->assign('merchant_list',$merchant_list);
 		$pagebar = $p->show2();
+
 		$this->assign('pagebar',$pagebar);
 
 		$this->display();
@@ -181,6 +182,7 @@ class MerchantAction extends BaseAction{
 
 	public function amend(){
 		if(IS_POST){
+
 			if($_POST['pwd']){
 				$_POST['pwd'] = md5($_POST['pwd']);
 			}else{
@@ -202,6 +204,15 @@ class MerchantAction extends BaseAction{
             $_POST['area_id'] = 0;
 
 			$database_merchant = D('Merchant');
+            //var_dump($_POST['status']);die();
+			if ($_POST['status']) {
+                if ($_POST['status'] == 'on') {
+                    $_POST['status'] = 1;
+                }
+            }else{
+                $_POST['status'] = 0;
+            }
+
 			$database_merchant->data($_POST)->save();
 // 			if(){
 			$home_share = D('Home_share')->where(array('mer_id' => $_POST['mer_id']))->find();

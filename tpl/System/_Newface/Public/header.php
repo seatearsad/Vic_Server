@@ -12,6 +12,7 @@
         <link href="{pigcms{$static_path}css/style.css?t={pigcms{$_SERVER.REQUEST_TIME}" rel="stylesheet">
 
         <script src="{pigcms{$static_path}js/jquery-3.1.1.min.js"></script>
+<!--        <script type="text/javascript" src="{pigcms{:C('JQUERY_FILE')}"></script>-->
         <script src="{pigcms{$static_path}js/jquery.timer.min.js"></script>
         <script src="{pigcms{$static_path}js/bootstrap.js"></script>
 
@@ -22,8 +23,9 @@
         <!--        <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/style.css" />-->
         <!-- Gritter -->
 
-        <link href="{pigcms{$static_path}js/plugins/gritter/jquery.gritter.css" rel="stylesheet">
-        <link href="{pigcms{$static_path}css/plugins/dataTables/datatables.min.css" rel="stylesheet">
+<!--        <link href="{pigcms{$static_path}js/plugins/gritter/jquery.gritter.css" rel="stylesheet">-->
+
+        <link href="{pigcms{$static_path}css/plugins/footable/footable.core.css" rel="stylesheet">
 
         <!--------------------------------  Pre Release  -------------------------------------->
 
@@ -45,6 +47,9 @@
                 parentShowIndex = false,
                 choose_provincess="{pigcms{:U('Adver/ajax_province')}",
                 choose_cityss="{pigcms{:U('Adver/ajax_city')}";
+            var selected_module = "{pigcms{:strval($_GET['module'])}",
+                selected_action = "{pigcms{:strval($_GET['action'])}",
+                selected_url = "{pigcms{:urldecode(strval(htmlspecialchars_decode($_GET['url'])))}";
         </script>
 
         <!--		<script type="text/javascript" src="{pigcms{:C('JQUERY_FILE')}"></script>-->
@@ -52,11 +57,15 @@
 		<script type="text/javascript" src="{pigcms{$static_public}js/jquery.cookie.js"></script>
 		<script type="text/javascript" src="{pigcms{$static_public}js/jquery.validate.js"></script>
 		<script type="text/javascript" src="{pigcms{$static_public}js/jquery.colorpicker.js"></script>
-        <script type="text/javascript" src="{pigcms{$static_public}js/artdialog/jquery.artDialog.js"></script>
+        <script type="text/javascript" src="{pigcms{$static_public}js/artdialog/jquery.artDialog.js?v=21"></script>
         <script type="text/javascript" src="{pigcms{$static_public}js/artdialog/iframeTools.js"></script>
         <script type="text/javascript" src="{pigcms{$static_public}js/jquery.colorpicker.js"></script>
         <script type="text/javascript" src="{pigcms{$static_public}js/screenfull.min.js"></script>
+        <script type="text/javascript" src="{pigcms{$static_public}js/date/WdatePicker.js"></script>
         <script type="text/javascript" src="{pigcms{$static_public}js/lang.js"></script>
+        <script type="text/javascript" src="{pigcms{$static_path}js/common.js?v=21"></script>
+        <script type="text/javascript" src="{pigcms{$static_path}js/index.js?v=21"></script>
+
 	</head>
 
 
