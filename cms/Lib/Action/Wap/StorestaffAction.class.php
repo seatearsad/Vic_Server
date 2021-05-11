@@ -3926,8 +3926,10 @@ class StorestaffAction extends BaseAction
 
         $mail->setFrom('donotreply.tutti@gmail.com', 'Tutti');
         //$mail->addAddress('mchen@tutti.app', 'Milly');
-        $mail->addAddress('garfunkel@126.com', 'Garfunkel');
+        //$mail->addAddress('garfunkel@126.com', 'Garfunkel');
         $mail->addAddress('sales@tutti.app', 'Sales');
+        $mail->addAddress('shrini@tutti.app', 'Shrini');
+        $mail->addAddress('adam@tutti.app', 'Adam');
 
         $mail->isHTML(true);
         $mail->Subject = $title;
