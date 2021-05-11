@@ -2972,7 +2972,8 @@ class DeliverAction extends BaseAction
                     $body = "Driver (".$this->deliver_session['uid'].") has changed his/her banking information. Please take a look.";
                     $email = array(array("address"=>"hr@tutti.app","userName"=>"HR"));
 
-                    getMail($title,$body,$email);
+                    $mail = getMail($title,$body,$email);
+                    $mail->send();
                 }
                 exit(json_encode(array('error' => 0,'message' =>'Success')));
             }
