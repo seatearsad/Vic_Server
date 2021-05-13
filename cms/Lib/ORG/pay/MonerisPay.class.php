@@ -63,6 +63,7 @@ class MonerisPay
 
             //3D 2.0
             $resp = $this->threeDSAuthentication($data,$uid,$from_type);
+            var_dump($resp);die();
             if($resp['transStatus'] == "Y"){
                 return $this->purchase($data,$uid,$from_type,$order);
             }else{
