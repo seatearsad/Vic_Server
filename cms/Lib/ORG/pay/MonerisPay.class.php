@@ -42,8 +42,22 @@ class MonerisPay
         $order = D('Shop_order')->where(array('order_id'=>$order_id))->find();
         $store = D('Merchant_store')->where(array('store_id'=>$order['store_id']))->find();
 
+        if($data['credit_id']){//存储卡的】
+            $card_id = $data['credit_id'];
+            $card = D('User_card')->field(true)->where(array('id' => $card_id))->find();
+            $pan = $card['card_num'];
+        }else {//直接输入卡号的
+            $pan = $data['card_num'];
+        }
+        //是否为可验证的卡 Visa 首数字4； Master 首数字5；AmEx 34或37
+        $is_check = false;
+        if(substr($pan,0,1) == 4 || substr($pan,0,1) == 5)
+            $is_check = true;
+        else if(substr($pan,0,2) == 34 || substr($pan,0,2) == 37)
+            $is_check = true;
+
         //判断金额还需在api user_card_default 方法中修改
-        if($data['order_type'] == 'recharge' || $data['charge_total'] >= 251 || $store['pay_secret'] == 1){
+        if($is_check && ($data['order_type'] == 'recharge' || $data['charge_total'] >= 251 || $store['pay_secret'] == 1)){
             //跳转到第三方支付 3D 1.1
             //return $this->mpi_transaction($data,$uid,$from_type);
 
@@ -1122,7 +1136,7 @@ class MonerisPay
 
                 return $this->MPI_Cavv($MD,$cavv,$eci,$threeTransId);
             }else{
-                $result['message'] = $mpgResponse->getMessage();
+                $result['message'] = L("V3_ORDER_RESULT_PAYMENT_FAIL");//$mpgResponse->getMessage();
                 $orderInfo = $this->getOrderInfoFromMD($MD);
                 $result['url'] = $orderInfo['url'];
                 $result['uid'] = $orderInfo['uid'];

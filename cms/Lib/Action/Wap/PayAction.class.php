@@ -3236,7 +3236,7 @@ class PayAction extends BaseAction{
     }
 
     public function threePayResult($resp){
-        if ($resp['responseCode'] != 'null' && $resp['responseCode'] < 50) {                //可能是支付成功
+        if ($resp['responseCode'] && $resp['responseCode'] != 'null' && $resp['responseCode'] < 50) {                //可能是支付成功
             //echo"---------->2";
             if(strpos($resp['url'],'#')!== false) {
                 //echo"---------->3";
