@@ -580,7 +580,7 @@ class MonerisPay
         {
             //print("\nMpiMessage = " . $mpgResponse->getMpiMessage());
             if(!$resp['message'] || $resp['message'] == '')
-                $resp['message'] = $mpgResponse->getMessage();
+                $resp['message'] = $mpgResponse->getMpiMessage();
         }
         //var_dump($mpgResponse);die();
         return $resp;
@@ -1070,8 +1070,10 @@ class MonerisPay
         else
         {
             //print("\nMpiMessage = " . $mpgResponse->getMpiMessage());
-            if(!$resp['message'] || $resp['message'] == '')
-                $resp['message'] = $mpgResponse->getMessage();
+            $resp['mpiSuccess'] = "false";
+            $resp['message'] = L("V3_ORDER_RESULT_PAYMENT_FAIL");
+            //if(!$resp['message'] || $resp['message'] == '')
+            //    $resp['message'] = $mpgResponse->getMessage();
         }
 
         return $resp;
