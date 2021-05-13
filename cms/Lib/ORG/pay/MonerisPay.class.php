@@ -49,6 +49,7 @@ class MonerisPay
         }else {//直接输入卡号的
             $pan = $data['card_num'];
         }
+        var_dump($pan);
         //是否为可验证的卡 Visa 首数字4； Master 首数字5；AmEx 34或37
         $is_check = false;
         if(substr($pan,0,1) == 4 || substr($pan,0,1) == 5)
