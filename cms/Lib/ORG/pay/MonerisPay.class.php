@@ -1128,7 +1128,7 @@ class MonerisPay
         //需要从订单信息中重新组装MD中的信息
         $order_md = D('Pay_moneris_md')->where(array('moneris_order_id'=>$receiptId))->find();
         $MD = $order_md['order_md'];
-
+var_dump($mpgResponse);
         if($order){
             if ($mpgResponse->getMessage() == "SUCCESS")// && $mpgResponse->getMpiEci() == 5
             {
