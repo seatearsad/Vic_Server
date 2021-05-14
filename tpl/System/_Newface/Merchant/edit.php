@@ -7,12 +7,12 @@
         <!----------------------------------------    以上不要写代码     ------------------------------------------------>
         <div class="row wrapper wrapper-content animated fadeInRight">
 
-
                     <div class="col-lg-12">
                         <div class="ibox">
                             <div class="ibox-content">
                         <form id="myform" method="post" action="{pigcms{:U('Merchant/amend')}" frame="true"
                               refresh="true">
+
                             <input type="hidden" name="mer_id" value="{pigcms{$merchant.mer_id}"/>
                             <input type="hidden" class="input fl" name="bill_period"
                                    value="{pigcms{$merchant.bill_period}"/>
@@ -21,6 +21,7 @@
                                 <label class="col-sm-3 col-form-label">{pigcms{:L('_BACK_MER_ACC_')}</label>
                                 <label class="col-sm-9 col-form-label">{pigcms{$merchant.account}</label>
                             </div>
+
                             <div class="hr-line-dashed"></div>
 
                             <div class="form-group  row">
@@ -56,13 +57,6 @@
                             </div>
                             <div class="hr-line-dashed"></div>
 
-                            <div class="form-group  row">
-                                <label class="col-sm-3 col-form-label">{pigcms{:L('_BACK_EMAIL_')}</label>
-                                <div class="col-sm-9"><input class="form-control" type="text" class="form-control"
-                                                             name="email" value="{pigcms{$merchant.email}" size="25"
-                                                             validate="email:true"/></div>
-                            </div>
-                            <div class="hr-line-dashed"></div>
 
                             <div class="form-group  row">
                                 <label class="col-sm-3 col-form-label">{pigcms{:L('_BACK_STORE_AREA_')}</label>

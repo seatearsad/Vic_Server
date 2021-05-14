@@ -124,6 +124,14 @@ class MerchantAction extends BaseAction{
 	}
 	public function modify(){
 		if(IS_POST){
+            if ($_POST['status']) {
+                if ($_POST['status'] == 'on') {
+                    $_POST['status'] = 1;
+                }
+            }else{
+                $_POST['status'] = 0;
+            }
+
 			$_POST['account'] = trim($_POST['account']);
 			$_POST['pwd'] = md5($_POST['pwd']);
 			$_POST['reg_time'] = $_SERVER['REQUEST_TIME'];
@@ -191,6 +199,7 @@ class MerchantAction extends BaseAction{
 	}
 
 	public function amend(){
+
 		if(IS_POST){
 
 			if($_POST['pwd']){
