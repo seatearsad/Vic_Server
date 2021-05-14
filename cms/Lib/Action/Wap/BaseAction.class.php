@@ -205,6 +205,12 @@ class BaseAction extends CommonAction{
 				$_SESSION['user']['verify_end_time']=$times['end_time'];
 			}
 
+            //监测被禁用账号
+            $user = D('User')->where(array('uid'=>$this->user_session['uid']))->find();
+            if($user['status'] == 0){
+                session('user','');
+                $this->user_session = array();
+            }
 		}
 
 
