@@ -11,6 +11,7 @@
   src: url('../fonts/glyphicons-halflings-regular.eot');
   src: url('../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('../fonts/glyphicons-halflings-regular.woff2') format('woff2'), url('../fonts/glyphicons-halflings-regular.woff') format('woff'), url('../fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('../fonts/glyphicons-halflings-regular.svg') format('svg');
 }
+
 .glyphicon {
   position: relative;
   top: 1px;
@@ -1790,6 +1791,7 @@ fieldset[disabled] .btn-link:active,
 fieldset[disabled] .btn-link.active {
   color: #cacaca;
 }
+
 .btn-white {
   color: inherit;
   background: white;
@@ -5191,6 +5193,12 @@ table.table-mail tr td {
 }
 .text-muted {
   color: #888888 !important;
+}
+.text-black {
+   color:#000 !important;
+ }
+.text-grey {
+  color: #515151 !important;
 }
 .text-white {
   color: #ffffff;

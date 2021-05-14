@@ -69,7 +69,17 @@ class MerchantAction extends BaseAction{
 		import('@.ORG.system_page');
 		$p = new Page($count_merchant,15);
 		$merchant_list = $database_merchant->field(true)->where($condition_merchant)->order($order)->limit($p->firstRow.','.$p->listRows)->select();
+        //echo "+++";
+        $database_merchant_store = D('Merchant_store');
+		foreach ($merchant_list as &$row) {
+            $condition_merchant_store['mer_id'] = $row['mer_id'];
+            $row["store_list"]=$database_merchant_store->field(true)->where($condition_merchant_store)->order('`sort` DESC,`store_id` ASC')->select();
+            //echo $row["store_list"]['account']."-------------";
+        }
+//        var_dump($merchant_list);
+//        die();
 		$this->assign('merchant_list',$merchant_list);
+
 		$pagebar = $p->show2();
 
 		$this->assign('pagebar',$pagebar);
@@ -288,11 +298,24 @@ class MerchantAction extends BaseAction{
 			redirect($this->config['site_url'].'/merchant.php');
 		}
 	}
+    /*店铺管理*/
+    public function get_merchant_list($mer_id){
+        $database_merchant = D('Merchant');
+        $condition_merchant['mer_id'] = $mer_id;
+        $merchant = $database_merchant->field(true)->where($condition_merchant)->find();
+        if(empty($merchant)){
+            return null;
+        }else{
+            return $merchant;
+        }
+    }
+
 	/*店铺管理*/
 	public function store(){
-		$database_merchant = D('Merchant');
-		$condition_merchant['mer_id'] = intval($_GET['mer_id']);
-		$merchant = $database_merchant->field(true)->where($condition_merchant)->find();
+	    $merchant=$this->get_merchant_list(intval($_GET['mer_id']));
+//		$database_merchant = D('Merchant');
+//		$condition_merchant['mer_id'] = intval($_GET['mer_id']);
+//		$merchant = $database_merchant->field(true)->where($condition_merchant)->find();
 		if(empty($merchant)){
 			$this->error_tips('数据库中没有查询到该商户的信息！',5,U('Merchant/index'));
 		}

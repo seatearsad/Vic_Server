@@ -4,27 +4,25 @@
 		<title>TUTTI Backend Management System</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
         <!--------------------------------  Bootstrap  -------------------------------------->
 
+        <!--CSS-->
         <link href="{pigcms{$static_path}css/bootstrap.min.css?t={pigcms{$_SERVER.REQUEST_TIME}" rel="stylesheet">
         <link href="{pigcms{$static_path}/font-awesome/css/font-awesome.css" rel="stylesheet">
         <link href="{pigcms{$static_path}css/animate.css" rel="stylesheet">
         <link href="{pigcms{$static_path}css/style.css?t={pigcms{$_SERVER.REQUEST_TIME}" rel="stylesheet">
-
+        <!--JS-->
         <script src="{pigcms{$static_path}js/jquery-3.1.1.min.js"></script>
-<!--        <script type="text/javascript" src="{pigcms{:C('JQUERY_FILE')}"></script>-->
         <script src="{pigcms{$static_path}js/jquery.timer.min.js"></script>
         <script src="{pigcms{$static_path}js/bootstrap.js"></script>
 
         <!--------------------------------  Toastr style  ----------------------------------->
 
         <link href="{pigcms{$static_path}css/plugins/toastr/toastr.min.css" rel="stylesheet">
-
         <!--        <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/style.css" />-->
         <!-- Gritter -->
-
 <!--        <link href="{pigcms{$static_path}js/plugins/gritter/jquery.gritter.css" rel="stylesheet">-->
-
         <link href="{pigcms{$static_path}css/plugins/footable/footable.core.css" rel="stylesheet">
 
         <!--------------------------------  Pre Release  -------------------------------------->
@@ -61,6 +59,7 @@
         <script type="text/javascript" src="{pigcms{$static_public}js/artdialog/iframeTools.js"></script>
         <script type="text/javascript" src="{pigcms{$static_public}js/jquery.colorpicker.js"></script>
         <script type="text/javascript" src="{pigcms{$static_public}js/screenfull.min.js"></script>
+
         <script type="text/javascript" src="{pigcms{$static_public}js/date/WdatePicker.js"></script>
         <script type="text/javascript" src="{pigcms{$static_public}js/lang.js"></script>
         <script type="text/javascript" src="{pigcms{$static_path}js/common.js?v=21"></script>

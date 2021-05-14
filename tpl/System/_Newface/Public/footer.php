@@ -25,12 +25,8 @@
 <script src="{pigcms{$static_path}js/plugins/peity/jquery.peity.min.js"></script>
 <script src="{pigcms{$static_path}js/demo/peity-demo.js"></script>
 
-<!-- FooTable -->
+<!-- FooTable 动态列表表格-->
 <script src="{pigcms{$static_path}js/plugins/footable/footable.all.min.js?v=2"></script>
-
-<!-- Custom and plugin javascript -->
-<script src="{pigcms{$static_path}js/inspinia.js"></script>
-<script src="{pigcms{$static_path}js/plugins/pace/pace.min.js"></script>
 
 <!-- jQuery UI -->
 <script src="{pigcms{$static_path}js/plugins/jquery-ui/jquery-ui.min.js"></script>
@@ -44,8 +40,11 @@
 <!-- Sparkline demo data  -->
 <script src="{pigcms{$static_path}js/demo/sparkline-demo.js"></script>
 
-<!-- FooTable -->
-<script src="{pigcms{$static_path}js/plugins/footable/footable.all.min.js"></script>
+
+
+<!-- Custom and plugin javascript -->
+<script src="{pigcms{$static_path}js/inspinia.js"></script>
+<script src="{pigcms{$static_path}js/plugins/pace/pace.min.js"></script>
 
 
 <script language="JavaScript">
