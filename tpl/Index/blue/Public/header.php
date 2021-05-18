@@ -230,9 +230,9 @@
     <div id="header_sign">
         <div class="lang_div">
             <if condition="C('DEFAULT_LANG') == 'zh-cn'">
-                中文
-                <else />
                 English
+             <else />
+                中文
             </if>
             <div class="lang_select" style="z-index: 99999;position: relative;background-color: white;border-radius: 5px;padding: 5px;margin-left: -5px;">
                 <div class="lang_en">English</div>
