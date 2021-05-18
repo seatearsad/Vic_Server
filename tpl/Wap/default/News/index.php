@@ -325,7 +325,7 @@
         <div class="main">
             <div class="main_left">
                 <div class="cate_list">
-                    <span class="curr_cate" style="margin-left: 0;width: 95px;white-space: nowrap;" data-id="0">ALL POST</span>
+                    <span class="curr_cate" style="margin-left: 0;width: 115px;white-space: nowrap;line-height: 1;" data-id="0">ALL POST</span>
                     <div class="cate_list_item">
                     <volist name="cate_list['cate']" id="vo">
                         <span data-id="{pigcms{$vo.id}">{pigcms{$vo.name}</span>
