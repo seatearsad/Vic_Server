@@ -164,13 +164,14 @@ class MonerisPay
                         $data_card['verification_time'] = time();
                         D('User_card')->field(true)->where(array('id' => $data['credit_id']))->save($data_card);
                     }
-                } else {
-                    //验证CVD 为通过 将responseCode修改后存储一次error记录并退款
-                    $resp['responseCode'] = 7513;
-                    $resp['message'] = 'CVD Error';
-                    D('Pay_moneris_record_error')->add($resp);
-                    $this->refund($uid, $order_id);
                 }
+//                } else {
+//                    //验证CVD 为通过 将responseCode修改后存储一次error记录并退款
+//                    $resp['responseCode'] = 7513;
+//                    $resp['message'] = 'CVD Error';
+//                    D('Pay_moneris_record_error')->add($resp);
+//                    $this->refund($uid, $order_id);
+//                }
             }
 
             //处理优惠券
