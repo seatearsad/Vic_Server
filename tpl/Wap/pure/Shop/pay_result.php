@@ -96,5 +96,16 @@
     </div>
 </section>
 </div>
+<script src="{pigcms{$static_path}layer/layer.m.js"></script>
+<script>
+    var error = "{pigcms{$error}";
+    $(function () {
+        if(error == "1"){
+            layer.open({content:'Payment declined! Please log in and try again.',shadeClose:false,btn:['OK'],yes:function(){
+                    window.location.href = "{pigcms{:U('Login/index')}";
+                }});
+        }
+    });
+</script>
 </body>
 </html>
