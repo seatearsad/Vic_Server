@@ -34,10 +34,22 @@
         <include file="Public:facebook"/>
 	</head>
     <style>
+        @font-face {
+            font-family: 'Montserrat';
+            src: url('/static/font/Montserrat-Regular.ttf');
+        }
+        @font-face {
+            font-family: 'Montserrat-bold';
+            src: url('/static/font/Montserrat-Bold.otf');
+        }
+        @font-face {
+            font-family: 'Montserrat-light';
+            src: url('/static/font/Montserrat-Light.otf');
+        }
         *{
             margin: 0px;
             box-sizing: border-box;
-            font-family: Helvetica;
+            font-family: Montserrat;
             -moz-osx-font-smoothing: grayscale;
         }
         body{
@@ -99,7 +111,7 @@
         .courier_desc{
             height: 180px;
             display: flex;
-            margin-top: 80px;
+            margin-top: 60px;
         }
         .courier_desc .desc_box{
             flex: 1 1 100%;
@@ -111,7 +123,7 @@
             font-size: 28px;
             font-weight: bold;
             margin-bottom: 30px;
-            height: 30px;
+            height: 45px;
         }
         .desc_txt{
             line-height: 20px;
