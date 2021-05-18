@@ -179,7 +179,7 @@
 <!--                    <span class="curr_cate" style="margin-left: 0;" data-id="0">{pigcms{$now_cat.name}</span>-->
 <!--                </div>-->
                 <div class="cate_list">
-                    <span class="curr_cate" style="margin-left: 0;width: 100px;white-space: nowrap;" data-id="0">{pigcms{$now_cat.name}</span>
+                    <span class="curr_cate" style="margin-left: 0;white-space: nowrap;line-height:1;" data-id="0">{pigcms{$now_cat.name}</span>
                     <div class="cate_list_item">
                         <volist name="news_cat" id="vo">
                             <a href="/wapnews/cat-{pigcms{$vo.id}">
