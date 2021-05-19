@@ -54,6 +54,7 @@
 		<script type="text/javascript" src="{pigcms{$static_public}js/jquery.form.js"></script>
 		<script type="text/javascript" src="{pigcms{$static_public}js/jquery.cookie.js"></script>
 		<script type="text/javascript" src="{pigcms{$static_public}js/jquery.colorpicker.js"></script>
+        <script type="text/javascript" src="{pigcms{$static_public}js/jquery.validate.js"></script>
         <script type="text/javascript" src="{pigcms{$static_public}js/artdialog/jquery.artDialog.js?v=21"></script>
         <script type="text/javascript" src="{pigcms{$static_public}js/artdialog/iframeTools.js"></script>
         <script type="text/javascript" src="{pigcms{$static_public}js/jquery.colorpicker.js"></script>

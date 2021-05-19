@@ -48,6 +48,7 @@
                                 </span>
                             </if>
                         </div>
+
                         <div class="ibox-content">
                             <!-------------------------------- 工具条 -------------------------------------->
                             <div style="height: 50px;">
@@ -95,75 +96,68 @@
                             <table class="footable table table-stripped toggle-arrow-tiny" data-sorting="false">
                                 <thead>
                                 <tr>
-                                    <th >{pigcms{:L('_BACK_CODE_')}</th>
-                                    <th data-sortable="false">{pigcms{:L('_BACK_MER_NAME_')}</th>
-                                    <th data-sortable="false">{pigcms{:L('_BACK_MER_PHONE_')}</th>
-                                    <th data-sortable="false">{pigcms{:L('_BACK_LAST_TIME_')}</th>
-                                    <th data-sortable="false">{pigcms{:L('_BACK_VISIT_')}</th>
-                                    <th data-sortable="false">{pigcms{:L('_BACK_ACC_BALANCE_')}</th>
-                                    <th data-sortable="false">{pigcms{:L('_BACK_STATUS_')}</th>
-                                    <if condition="C('config.open_extra_price') eq 1">
-                                        <th data-sortable="false">{pigcms{:C('config.extra_price_alias_name')}</th>
-                                    </if>
-                                    <if condition="$system_session['level'] neq 3">
-                                        <th data-sortable="false">{pigcms{:L('_BACK_MER_INVOICE_')}</th>
-                                    </if>
-                                    <th data-hide="all">包含店铺</th>
+                                    <th >Order ID</th>
+                                    <th data-sortable="false">{pigcms{:L('_BACK_STORE_NAME_')}</th>
+                                    <th data-sortable="false">{pigcms{:L('_BACK_STORE_PHONE_')}</th>
+                                    <th data-sortable="false">{pigcms{:L('_BACK_USER_NAME_')}</th>
+                                    <th data-sortable="false">{pigcms{:L('_BACK_USER_PHONE_')}</th>
+                                    <th data-sortable="false">{pigcms{:L('_BACK_INIT_TOTAL_')}</th>
+                                    <th data-sortable="false">{pigcms{:L('_BACK_TOTAL_')}</th>
+                                    <th data-sortable="false">{pigcms{:L('_BACK_TIPS_')}</th>
+                                    <th data-sortable="false">{pigcms{:L('_BACK_TUTTI_DIS_')}</th>
+                                    <th data-sortable="false">{pigcms{:L('_BACK_MER_DIS_')}</th>
+                                    <th data-sortable="false">{pigcms{:L('_BACK_AM_RECE_')}</th>
+                                    <th data-sortable="false">{pigcms{:L('_BACK_PAY_TIME_')}</th>
+                                    <th data-sortable="false">{pigcms{:L('_BACK_PREP_TIME_')}</th>
+                                    <th data-sortable="false">{pigcms{:L('_BACK_ARR_TIME_')}</th>
+                                    <th data-sortable="false">{pigcms{:L('_BACK_ORDER_STATUS_')}</th>
+                                    <th data-hide="all">客户注册手机号</th>
+                                    <th data-hide="all">客户地址</th>
+                                    <th data-hide="all">配送状态</th>
+                                    <th data-hide="all">送餐员+电话</th>
+                                    <th data-hide="all">支付情况</th>
                                     <th data-sortable="false">{pigcms{:L('_BACK_CZ_')}</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <if condition="is_array($merchant_list)">
-                                    <volist name="merchant_list" id="vo">
+                                <if condition="is_array($order_list)">
+                                    <volist name="order_list" id="vo">
                                         <tr>
-                                            <td>{pigcms{$vo.mer_id}</td>
-                                            <td>{pigcms{$vo.name}</td>
-                                            <td>{pigcms{$vo.phone}</td>
-                                            <td>
-                                                <if condition="$vo['last_time']">{pigcms{$vo.last_time|date='Y-m-d
-                                                    H:i:s',###}
-                                                    <else/>
-                                                    N/A
-                                                </if>
+                                            <td>{pigcms{$vo.order_id}</td>
+                                            <td>{pigcms{$vo.store_name}</td>
+                                            <td>{pigcms{$vo.store_phone}</td>
+                                            <td>{pigcms{$vo.username}</td>
+                                            <td>{pigcms{$vo.userphone}</td>
+                                            <td > <php>if($vo['is_refund'] == 1){</php>
+                                                ${pigcms{$vo['change_price'] + $vo['tip_charge']|floatval}
+                                                <php>}</php>
                                             </td>
-                                            <td class="textcenter">
-                                                <if condition="$vo['status'] eq 1 OR $vo['status'] eq 3"><a
-                                                            href="{pigcms{:U('Merchant/merchant_login',array('mer_id'=>$vo['mer_id']))}"
-                                                            class="__full_screen_link" target="_blank">{pigcms{:L('_BACK_VISIT_')}</a>
-                                                    <else/>
-                                                    <a href="javascript:alert('{pigcms{:L(\'K_SUSPENDED\')}');"
-                                                       class="__full_screen_link">访问</a></if>
-                                            </td>
-                                            <!--td class="textcenter">{pigcms{$vo.hits}</td>
-                                            <td class="textcenter">{pigcms{$vo.fans_count}</td-->
-                                            <td class="textcenter">{pigcms{$vo.money}</td>
-                                            <td>
-                                                <if condition="$vo['status'] eq 1">
-                                                    <span class="label label-primary">{pigcms{:L('_BACK_ACTIVE_')}</span>
-                                                    <elseif condition="$vo['status'] eq 2"/>
-                                                    <span class="label label-warning"> {pigcms{:L('_BACK_PENDING_')}</span>
-                                                    <elseif condition="$vo['status'] eq 3"/>
-                                                    <span class="label label-danger">欠款</span>
-                                                    <else/>
-                                                    <span class="label label-default">Closed</span>
-                                                </if>
-                                            </td>
-                                            <if condition="C('config.open_extra_price') eq 1">
-                                                <td>
-                                                    商家欠平台{pigcms{$vo.extra_price_pay_for_system}个{pigcms{:C('config.extra_price_alias_name')},即{pigcms{:sprintf("%.2f",$vo['extra_price_pay_for_system']*$vo['extra_price_percent']/100)}元
-                                                </td>
-                                            </if>
+                                            <td>${pigcms{$vo['price'] + $vo['tip_charge']- $vo['coupon_price'] - $vo['delivery_discount'] - $vo['merchant_reduce']|floatval}</td>
+                                            <td>${pigcms{$vo['tip_charge']|floatval}</td>
+                                            <td>${pigcms{$vo['coupon_price'] + $vo['delivery_discount']|floatval}</td>
+                                            <td>${pigcms{$vo.merchant_reduce|floatval}</td>
+                                            <td>${pigcms{$vo['duty_price']|floatval}</td>
+                                            <td><if condition="$vo['pay_time']"> {pigcms{$vo['pay_time']|date="Y-m-d H:i:s",###}</if></td>
+                                            <td>{pigcms{$vo.dining_time}</td>
+                                            <td><if condition="$vo['use_time']">{pigcms{$vo['use_time']|date="Y-m-d H:i:s",###}</if></td>
+                                            <td>{pigcms{$vo.status_str}</td>
+
                                             <if condition="$system_session['level'] neq 3">
-                                                <td class="textcenter"><a target="_blank"
-                                                                          href="{pigcms{:U('Bill/merchant_money_list',array('mer_id'=>$vo['mer_id']))}">{pigcms{:L('_BACK_INVOICE_')}</a>
+                                                <td><a target="_blank" href="{pigcms{:U('Bill/merchant_money_list',array('mer_id'=>$vo['mer_id']))}">{pigcms{:L('_BACK_INVOICE_')}</a>
                                                 </td>
                                             </if>
                                             <!--td class="textcenter"><a href="{pigcms{:U('Merchant/weidian_order',array('mer_id'=>$vo['mer_id']))}">微店账单</a></td-->
                                             <td>
-                                                <volist name="vo['store_list']" id="ao">
-                                                    <div><span>{pigcms{$ao.store_id} - </span><span>{pigcms{$ao.name}</span><span>{pigcms{$ao.name}</span><span>&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Merchant/store_edit',array('store_id'=>$ao['store_id'],'frame_show'=>true))}','{pigcms{:L(\'_BACK_VIEW_\')}',620,480,true,false,false,false,'detail',true);">{pigcms{:L('_BACK_VIEW_')}</a> | <a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Merchant/store_edit',array('store_id'=>$ao['store_id']))}','{pigcms{:L(\'_BACK_EDIT_STORE_INFO_\')}',620,480,true,false,false,editbtn,'store_add',true);">{pigcms{:L('_BACK_EDIT_')}</a> | <a href="javascript:void(0);" class="delete_row" parameter="store_id={pigcms{$ao.store_id}" url="{pigcms{:U('Merchant/store_del')}">{pigcms{:L('_BACK_DEL_')}</a></span></div>
-                                                </volist>
+                                                {pigcms{$vo.real_orderid}
                                             </td>
+                                            <td>
+                                                139100960898
+                                            </td>
+                                            <td>
+                                                北京市海淀区XXXX
+                                            </td>
+                                            <td><!-- {pigcms{$vo.pay_status} --><span style="color: green">{pigcms{$vo.pay_type_str}<br>({pigcms{$vo.pay_type})</span></td>
+
                                             <td >
                                                 <div class="btn-group">
                                                     <!--                                                <a target="_blank" href="{pigcms{:U('Merchant/store',array('mer_id'=>$vo['mer_id']))}"><button class="btn btn-white text-grey" type="button">{pigcms{:L('_BACK_STORE_LIST_')}</button></a>-->
@@ -180,25 +174,18 @@
                                     </volist>
                                     <else/>
                                     <tr>
-                                        <td
-                                        <if condition="$system_session['level'] neq 3">colspan="9"
-                                            <else/>
-                                            colspan="22"
-                                        </if>
-                                        >{pigcms{:L('_BACK_EMPTY_')}</td></tr>
-                                </if>
+                                        <td <if condition="$system_session['level'] neq 3">colspan="9"  <else/> colspan="22"</if> >{pigcms{:L('_BACK_EMPTY_')}</td>
+                                    </tr>
+                                    </if>
                                 </tbody>
                                 <tfoot>
                                 <tr>
-
                                 </tr>
                                 </tfoot>
                             </table>
                             <div style="height: 30px;">
                                 {pigcms{$pagebar}
                             </div>
-                            <!--                            </form>-->
-
 
                         </div>
                     </div>
@@ -209,83 +196,9 @@
 
 	<div class="mainbox">
 
-		<table class="search_table" width="100%">
-			<tr>
-				<td>
-				<form action="{pigcms{:U('Shop/order')}" method="get">
-						<input type="hidden" name="c" value="Shop"/>
-						<input type="hidden" name="a" value="order"/>
-						{pigcms{:L('_BACK_SEARCH_')}: <input type="text" name="keyword" class="input-text" value="{pigcms{$_GET['keyword']}"/>
-						<select name="searchtype">
-							<option value="real_orderid" <if condition="$_GET['searchtype'] eq 'real_orderid'">selected="selected"</if>>{pigcms{:L('_BACK_ORDER_NUM_')}</option>
-							<!--option value="orderid" <if condition="$_GET['searchtype'] eq 'orderid'">selected="selected"</if>>订单流水号</option>
-							<option value="third_id" <if condition="$_GET['searchtype'] eq 'third_id'">selected="selected"</if>>第三方支付流水号</option-->
-							<option value="s_name" <if condition="$_GET['searchtype'] eq 's_name'">selected="selected"</if>>{pigcms{:L('_BACK_STORE_NAME_')}</option>
-							<option value="name" <if condition="$_GET['searchtype'] eq 'name'">selected="selected"</if>>{pigcms{:L('_BACK_USER_NAME_')}</option>
-							<option value="phone" <if condition="$_GET['searchtype'] eq 'phone'">selected="selected"</if>>{pigcms{:L('_BACK_USER_PHONE_')}</option>
-                            <option value="id" <if condition="$_GET['searchtype'] eq 'id'">selected="selected"</if>>User ID</option>
-						</select>
-						<font color="#000">{pigcms{:L('_BACK_DATE_SELECT_')}：</font>
-						<input type="text" class="input-text" name="begin_time" style="width:120px;" id="d4311"  value="{pigcms{$_GET.begin_time}" onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd',lang:'en'})"/>
-						<input type="text" class="input-text" name="end_time" style="width:120px;" id="d4311" value="{pigcms{$_GET.end_time}" onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd',lang:'en'})"/>
-						{pigcms{:L('_BACK_ORDER_STATUS_')}:
-						<select id="status" name="status">
-							<volist name="status_list" id="vo">
-								<option value="{pigcms{$key}" <if condition="$key eq $status">selected="selected"</if>>{pigcms{$vo}</option>
-							</volist>
-						</select>
-						{pigcms{:L('_BACK_PAYMENT_METHOD_')}:
-						<select id="pay_type" name="pay_type">
-								<option value="" <if condition="'' eq $pay_type">selected="selected"</if>>{pigcms{:L('_BACK_ALL_')}</option>
-							<volist name="pay_method" id="vo">
-								<option value="{pigcms{$key}" <if condition="$key eq $pay_type">selected="selected"</if>>{pigcms{$vo.name}</option>
-							</volist>
-								<option value="balance" <if condition="'balance' eq $pay_type">selected="selected"</if>>{pigcms{:L('_BACK_BALANCE_')}</option>
-						</select>
-						<input type="submit" value="{pigcms{:L('_BACK_SEARCH_')}" class="button"/>　
-					</form>
-                    <if condition="$system_session['level'] neq 3">
-                        City:
-                        <select name="searchtype" id="city_select">
-                            <option value="0" <if condition="$city_id eq '' or $city_id eq 0">selected="selected"</if>>All</option>
-                            <volist name="city" id="vo">
-                                <option value="{pigcms{$vo.area_id}" <if condition="$city_id eq $vo['area_id']">selected="selected"</if>>{pigcms{$vo.area_name}</option>
-                            </volist>
-                        </select>
-                    </if>
-				</td>
-                <if condition="$system_session['level'] neq 3">
-				<td>
-					<b>{pigcms{:L('_BACK_A_RECE_')}：{pigcms{$total_price|floatval}</b>　
-					<b>{pigcms{:L('_BACK_A_PAID_ON_')}：{pigcms{$online_price|floatval}</b>　
-					<b>{pigcms{:L('_BACK_A_PAID_CASH_')}：{pigcms{$offline_price|floatval}</b>
-				</td>
-                </if>
-				<td>
-				<a href="{pigcms{:U('Shop/export',$_GET)}" class="button" style="float:right;margin-right: 10px;">{pigcms{:L('_BACK_DOWN_ORDER_')}</a>
-                    <if condition="$system_session['level'] eq 2">
-                        <a href="{pigcms{:U('Shop/export_total',$_GET)}" class="button" style="float:right;margin-right: 10px;">{pigcms{:L('C_OMZB')}</a>
-                        <a href="{pigcms{:U('Shop/export_store',$_GET)}" class="button" style="float:right;margin-right: 10px;">{pigcms{:L('C_OMRESTRANK')}</a>
-                        <a href="{pigcms{:U('Shop/export_user',$_GET)}" class="button" style="float:right;margin-right: 10px;">{pigcms{:L('C_OMUSERRANK')}</a>
-                    </if>
-				</td>
-			</tr>
-
-		</table>
-		<form name="myform" id="myform" action="" method="post">
-			<div class="table-list">
-				<table width="100%" cellspacing="0">
-					<colgroup>
-						<col/>
-						<col/>
-						<col/>
-						<col/>
-						<col/>
-						<col/>
-					</colgroup>
 					<thead>
 						<tr>
-							<th>{pigcms{:L('_BACK_ORDER_NUM_')}</th>
+							<th>Order ID</th>
 							<!--th>商家名称</th-->
 							<th>{pigcms{:L('_BACK_STORE_NAME_')}</th>
 							<th>{pigcms{:L('_BACK_STORE_PHONE_')}</th>
@@ -334,7 +247,7 @@
 						<if condition="is_array($order_list)">
 							<volist name="order_list" id="vo">
 								<tr class="order_line" data-id="{pigcms{$vo.order_id}">
-									<td>{pigcms{$vo.real_orderid}</td>
+									<td>{pigcms{$vo.order_id}</td>
 									<!--td>{pigcms{$vo.merchant_name}</td-->
 									<td>{pigcms{$vo.store_name}</td>
 									<td>{pigcms{$vo.store_phone}</td>
