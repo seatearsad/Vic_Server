@@ -1,82 +1,102 @@
 <include file="Public:header"/>
-	<form id="myform" method="post" action="{pigcms{:U('Index/saveAdmin')}" frame="true" refresh="true">
-		<input type="hidden" name="id" value="{pigcms{$_GET['id']}"/>
-		<table cellpadding="0" cellspacing="0" class="frame_form" width="100%">
-			<tr>
-				<th width="80">{pigcms{:L('B_USERNAME')}</th>
-				<td><input type="text" class="input fl" name="account" id="account" size="20" placeholder="" validate="maxlength:30,required:true" value="{pigcms{$admin['account']}"/></td>
-			</tr>
-			<tr>
-				<th width="80">{pigcms{:L('B_INPUTPASS')}</th>
-				<td><input type="password" class="input fl" name="pwd" id="pwd" size="20" placeholder=""  tips="{pigcms{:L('B_PASSDES')}"/></td>
-			</tr>
-			<tr>
-				<th width="80">{pigcms{:L('B_FULLNAME')}</th>
-				<td><input type="text" class="input fl" name="realname" id="realname" size="20" placeholder="" tips="{pigcms{:L('B_NAMEDESC')}" value="{pigcms{$admin['realname']}"/></td>
-			</tr>
-			<tr>
-				<th width="80">{pigcms{:L('B_USERPHONE')}</th>
-				<td><input type="text" class="input fl" name="phone" size="20" placeholder=""  value="{pigcms{$admin['phone']}"/></td>
-			</tr>
-			<tr>
-				<th width="80">{pigcms{:L('B_USERPEMAIL')}</th>
-				<td><input type="text" class="input fl" name="email" size="20" value="{pigcms{$admin['email']}"/></td>
-			</tr>
-			<!--tr>
-				<th width="80">QQ</th>
-				<td><input type="text" class="input fl" name="qq" size="20" value="{pigcms{$admin['qq']}"/></td>
-			</tr-->
-			<if condition="$config.open_extra_price  eq 1">
-			<tr>
-				<th width="80">区域管理员{pigcms{$config.score_name}结算比例</th>
-				<td><input type="text" class="input fl" name="score_percent" size="20"  validate="required:true,min:0,max:100" value="{pigcms{$admin['score_percent']|floatval}"/></td>
-			</tr>
-			</if>
-            <if condition="$admin['level'] eq 3">
-            <tr>
-                <th width="80">{pigcms{:L('BASE_CITY')}</th>
-                <td>
-                    <select name="area_id">
-                        <option value="0" <if condition="$admin['area_id'] eq 0">selected="selected"</if>>None</option>
-                    <volist name="city" id="vo">
-                        <option value="{pigcms{$vo.area_id}" <if condition="$admin['area_id'] eq $vo['area_id']">selected="selected"</if>>{pigcms{$vo.area_name}</option>
-                    </volist>
-                    </select>
-                    <select name="level">
-                        <option value="0">{pigcms{:L('B_NADMIN')}</option>
-                        <option value="3" selected="selected">{pigcms{:L('B_CADMIN')}</option>
-                    </select>
-                </td>
-            </tr>
-                <else />
-                <tr>
-                    <th width="80">{pigcms{:L('BASE_TYPE')}</th>
-                    <td>
-                        <if condition="$admin['level'] eq 2">
-                            Super Admin
+<body style="background-color: #fff;">
+<div id="wrapper-singlepage">
+
+    <div id="page-wrapper-singlepage" class="white-bg">
+
+        <!----------------------------------------    以上不要写代码     ------------------------------------------------>
+        <div class="row wrapper wrapper-content animated fadeInRight">
+
+            <div class="col-lg-12">
+                <div class="ibox">
+                    <div class="ibox-content">
+                        <form id="myform" method="post" action="{pigcms{:U('Index/saveAdmin')}" frame="true" refresh="true">
+                            <input type="hidden" name="id" value="{pigcms{$_GET['id']}"/>
+                            <div class="form-group  row">
+                                <label class="col-sm-3 col-form-label">{pigcms{:L('B_USERNAME')}</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name="account" id="account" size="20" placeholder="" validate="maxlength:30,required:true" value="{pigcms{$admin['account']}"/>
+                                </div>
+                            </div>
+                            <div class="form-group  row">
+                                <label class="col-sm-3 col-form-label">{pigcms{:L('B_INPUTPASS')}</label>
+                                <div class="col-sm-9">
+                                    <input type="password" class="form-control" name="pwd" id="pwd" size="20" placeholder=""  tips="{pigcms{:L('B_PASSDES')}"/>
+                                </div>
+                            </div>
+                            <div class="form-group  row">
+                                <label class="col-sm-3 col-form-label">{pigcms{:L('B_FULLNAME')}</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name="realname" id="realname" size="20" placeholder="" tips="{pigcms{:L('B_NAMEDESC')}" value="{pigcms{$admin['realname']}"/>
+                                </div>
+                            </div>
+                            <div class="form-group  row">
+                                <label class="col-sm-3 col-form-label">{pigcms{:L('B_USERPHONE')}</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name="phone" size="20" placeholder=""  value="{pigcms{$admin['phone']}"/>
+                                </div>
+                            </div>
+                            <div class="form-group  row">
+                                <label class="col-sm-3 col-form-label">{pigcms{:L('B_USERPEMAIL')}</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name="email" size="20" value="{pigcms{$admin['email']}"/>
+                                </div>
+                            </div>
+                            <if condition="$admin['level'] eq 3">
+                            <div class="form-group  row">
+                                <label class="col-sm-3 col-form-label">{pigcms{:L('BASE_CITY')}</label>
+                                <div class="col-sm-9">
+                                    <select name="area_id" class="form-control m-b">
+                                        <option value="0" <if condition="$admin['area_id'] eq 0">selected="selected"</if>>None</option>
+                                        <volist name="city" id="vo">
+                                            <option value="{pigcms{$vo.area_id}" <if condition="$admin['area_id'] eq $vo['area_id']">selected="selected"</if>>{pigcms{$vo.area_name}</option>
+                                        </volist>
+                                    </select>
+                                    <select name="level" class="form-control m-b">
+                                        <option value="0">{pigcms{:L('B_NADMIN')}</option>
+                                        <option value="3" selected="selected">{pigcms{:L('B_CADMIN')}</option>
+                                    </select>
+                                </div>
+                            </div>
                             <else />
-                            <select name="level">
-                                <option value="0" selected="selected">{pigcms{:L('B_NADMIN')}</option>
-                                <option value="3">{pigcms{:L('B_CADMIN')}</option>
-                            </select>
-                        </if>
-                    </td>
-                </tr>
-            </if>
-			<tr>
-				<th width="80">{pigcms{:L('B_USERSTAT')}</th>
-				<td>
-					<span class="cb-enable"><label class="cb-enable <if condition="$admin['status'] eq 1">selected</if>"><span>{pigcms{:L('B_USERSTATAC')}</span><input type="radio" name="status" value="1" <if condition="$admin['status'] eq 1">checked="checked"</if> /></label></span>
-					<span class="cb-disable"><label class="cb-disable  <if condition="$admin['status'] eq 0">selected</if>"><span>{pigcms{:L('B_USERSTATC')}</span><input type="radio" name="status" value="0" <if condition="$admin['status'] eq 0">checked="checked"</if> /></label></span>
-				</td>
-			</tr>
-		</table>
-		<div class="btn hidden">
-			<input type="submit" name="dosubmit" id="dosubmit" value="{pigcms{:L('BASE_SUBMIT')}" class="button" />
-			<input type="reset" value="{pigcms{:L('BASE_CANCEL')}" class="button" />
-		</div>
-	</form>
+                            <div class="form-group  row">
+                                <label class="col-sm-3 col-form-label">{pigcms{:L('BASE_TYPE')}</label>
+                                <div class="col-sm-9">
+                                    <if condition="$admin['level'] eq 2">
+                                        Super Admin
+                                        <else />
+                                        <select name="level" class="form-control m-b">
+                                            <option value="0" selected="selected">{pigcms{:L('B_NADMIN')}</option>
+                                            <option value="3">{pigcms{:L('B_CADMIN')}</option>
+                                        </select>
+                                    </if>
+                                </div>
+                            </div>
+                            </if>
+                            <div class="form-group  row">
+                                <label class="col-sm-3 col-form-label">{pigcms{:L('B_USERSTAT')}</label>
+                                <div class="col-sm-9">
+                                    <div class="switch">
+                                        <div class="onoffswitch">
+                                            <input name="status" type="checkbox" class="onoffswitch-checkbox" id="status_input" <if condition="$admin['status'] eq 1">checked="checked"</if>>
+                                            <label class="onoffswitch-label" for="status_input">
+                                                <span class="onoffswitch-inner"></span>
+                                                <span class="onoffswitch-switch"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="btn tutti_hidden_obj">
+                                <input type="submit" name="dosubmit" id="dosubmit" value="{pigcms{:L('BASE_SUBMIT')}" class="button" />
+                                <input type="reset" value="{pigcms{:L('BASE_CANCEL')}" class="button" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
 	<script type="text/javascript">
 		get_first_word('area_name','area_url','first_pinyin');
 	</script>
-<include file="Public:footer"/>
+<include file="Public:footer_inc"/>
