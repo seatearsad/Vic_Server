@@ -7,9 +7,9 @@
         <!----------------------------------------    以上不要写代码     ------------------------------------------------>
         <div class="row wrapper wrapper-content animated fadeInRight">
 
-                    <div class="col-lg-12">
-                        <div class="ibox">
-                            <div class="ibox-content">
+            <div class="col-lg-12">
+                <div class="ibox">
+                    <div class="ibox-content">
                         <form id="myform" method="post" action="{pigcms{:U('Merchant/amend')}" frame="true"
                               refresh="true">
 
@@ -68,7 +68,7 @@
 
                             <div class="form-group  row">
                                 <label class="col-sm-3 col-form-label">{pigcms{:L('_BACK_STORE_AREA_')}</label>
-                                <div class="col-sm-9"> <select name="city_id" class="form-control m-b">
+                                <div class="col-sm-9"><select name="city_id" class="form-control m-b">
                                         <volist name="city" id="vo">
                                             <option value="{pigcms{$vo.area_id}"
                                             <if condition="$merchant['city_id'] eq $vo['area_id']">
@@ -90,8 +90,10 @@
                             <div class="form-group  row">
                                 <label class="col-sm-3 col-form-label">{pigcms{:L('_BACK_EXPIRE_DATE_')}</label>
                                 <div class="col-sm-3"><input class="form-control" type="text" class="form-control"
-                                                             name="merchant_end_time" value="{pigcms{$merchant.merchant_end_time}" size="25"
-                                                             onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm',lang:'en'})"/></div>
+                                                             name="merchant_end_time"
+                                                             value="{pigcms{$merchant.merchant_end_time}" size="25"
+                                                             onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm',lang:'en'})"/>
+                                </div>
                             </div>
                             <div class="hr-line-dashed"></div>
                             <div class="form-group  row">
@@ -99,44 +101,44 @@
                                 <div class="col-sm-3">
                                     <div class="switch">
                                         <div class="onoffswitch">
-                                            <input name="status" type="checkbox" <if condition="$merchant['status'] eq 1">checked="checked"</if> class="onoffswitch-checkbox" id="status_input">
+                                            <input name="status" type="checkbox"
+                                            <if condition="$merchant['status'] eq 1">checked="checked"</if>
+                                            class="onoffswitch-checkbox" id="status_input">
                                             <label class="onoffswitch-label" for="status_input">
                                                 <span class="onoffswitch-inner"></span>
                                                 <span class="onoffswitch-switch"></span>
                                             </label>
                                         </div>
                                     </div>
-                            </div>
+                                </div>
 
-                            <div class="btn tutti_hidden_obj">
-                                <input type="submit" name="dosubmit" id="dosubmit" value="提交" class="button"/>
-                                <input type="reset" value="取消" class="button"/>
-                            </div>
+                                <div class="btn tutti_hidden_obj">
+                                    <input type="submit" name="dosubmit" id="dosubmit" value="提交" class="button"/>
+                                    <input type="reset" value="取消" class="button"/>
+                                </div>
                         </form>
-                            </div>
                     </div>
                 </div>
-
-
             </div>
+        </div>
 
-            <script>
-                $(function () {
-                    if ($('input[name="open_sub_mchid"]:checked').val() == 1) {
+        <script>
+            $(function () {
+                if ($('input[name="open_sub_mchid"]:checked').val() == 1) {
+                    $('.sub_mch').show();
+                } else {
+                    $('.sub_mch').hide();
+                }
+                $('input[name="open_sub_mchid"]').click(function () {
+                    var sub = $(this);
+                    if (sub.val() == 1) {
                         $('.sub_mch').show();
                     } else {
                         $('.sub_mch').hide();
                     }
-                    $('input[name="open_sub_mchid"]').click(function () {
-                        var sub = $(this);
-                        if (sub.val() == 1) {
-                            $('.sub_mch').show();
-                        } else {
-                            $('.sub_mch').hide();
-                        }
-                    });
                 });
-            </script>
+            });
+        </script>
 
-            <!----------------------------------------    以下不要写代码     ------------------------------------------------>
-            <include file="Public:footer_inc"/>
+        <!----------------------------------------    以下不要写代码     ------------------------------------------------>
+        <include file="Public:footer_inc"/>

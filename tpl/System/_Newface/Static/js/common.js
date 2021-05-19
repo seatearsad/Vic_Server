@@ -544,6 +544,7 @@ $(function(){
 						window.top.msg(2,'Submitting, please wait a moment.',true,360);
 						$.post($(form).attr('action'),$(form).serialize(),function(result){
 							if(result.status == 1){
+
 								if($(form).data('call_fun')){
 									submitCallBack(result.info);
 								}else{
