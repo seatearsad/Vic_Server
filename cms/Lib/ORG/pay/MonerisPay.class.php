@@ -1058,7 +1058,7 @@ class MonerisPay
         $resp['challengeData'] = $mpgResponse->getMpiChallengeData();
         $resp['threeDSServerTransId'] = $mpgResponse->getMpiThreeDSServerTransId();
         $resp['site_url'] = $merchantUrl;
-        //var_dump($resp);die();
+        var_dump($resp);die();
         if($resp['transStatus'] == "C")
         {
             $order_md = D('Pay_moneris_md')->where(array('moneris_order_id'=>$data['order_id']))->find();
