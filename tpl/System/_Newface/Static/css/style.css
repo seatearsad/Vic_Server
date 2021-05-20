@@ -9850,3 +9850,42 @@ body.md-skin {
 .tutti_hidden_obj{
   display: none;
 }
+
+.cb-enable, .cb-disable, .cb-enable span, .cb-disable span {
+  background: url(img/form_onoff.png) repeat-x;
+  display: block;
+  float: left;
+  cursor: pointer;
+  margin-bottom: 0;
+}
+.cb-enable .selected {
+  background-position: 0 -48px;
+}
+.cb-enable span, .cb-disable span {
+  font-weight: bold;
+  line-height: 24px;
+  background-repeat: no-repeat;
+  display: block;
+}
+.cb-enable span {
+  background-position: left -72px;
+  padding: 0 10px;
+}
+.cb-enable .selected span {
+  background-position: left -120px;
+  color: #fff;
+}
+.cb-enable input, .cb-disable input {
+  display: none;
+}
+.cb-disable span {
+  background-position: right -144px;
+  padding: 0 10px;
+}
+.cb-disable .selected {
+  background-position: 0 -24px;
+}
+.cb-disable .selected span {
+  background-position: right -168px;
+  color: #fff;
+}

@@ -512,7 +512,7 @@ class DeliverAction extends BaseAction {
 			}
 		}
 
-		$pagebar = $p->show();
+		$pagebar = $p->show2();
 		$this->assign(array('status' => $status, 'day' => $day, 'period' => $period, 'phone' => $phone));
 		$this->assign('selectStoreId', $selectStoreId);
 		$this->assign('orderNum', $orderNum);
@@ -1480,7 +1480,7 @@ class DeliverAction extends BaseAction {
             $v['is_upload'] = $is_upload;
         }
         $this->assign('user_list', $user_list);
-        $pagebar = $p->show();
+        $pagebar = $p->show2();
         $this->assign('pagebar', $pagebar);
         $this->display();
     }

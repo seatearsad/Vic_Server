@@ -809,6 +809,8 @@ class IndexAction extends BaseAction {
                 $this->error(L('J_ACCOUNT_EXISTS'));
             }
             if($_POST['level'] != 3)$_POST['area_id'] = 0;
+            if($_POST['status'] == 'on') $_POST['status'] = 1;
+            else $_POST['status'] = 0;
             unset($_POST['id']);
             if ($id) {
                 if ($_POST['pwd']) {
