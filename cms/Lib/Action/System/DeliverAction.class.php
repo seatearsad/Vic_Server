@@ -1438,6 +1438,8 @@ class DeliverAction extends BaseAction {
                 $condition_user['name'] = array('like', '%' . $_GET['keyword'] . '%');
             } else if ($_GET['searchtype'] == 'phone') {
                 $condition_user['phone'] = array('like', '%' . $_GET['keyword'] . '%');
+            }else if($_GET['searchtype'] == 'email'){
+                $condition_user['email'] = array('like', '%' . $_GET['keyword'] . '%');
             }
         }
 
