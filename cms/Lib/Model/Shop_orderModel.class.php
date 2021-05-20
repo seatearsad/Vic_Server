@@ -1274,14 +1274,12 @@ class Shop_orderModel extends Model
 						$order['deliver_status_str'] =L("_ORDER_STATUS_6_");  // '配送完成';
 					}
 					break;
-
 			}
 			$order['pay_type_str'] = D('Pay')->get_pay_name($order['pay_type'], $order['is_mobile_pay'], $order['paid']);
-
-
 		}
+
 		if($is_wap != 10){
-			return array('order_list' => $list, 'pagebar' => $p->show());
+			return array('order_list' => $list, 'pagebar' => $p->show2());
 		}else{
 			return array('order_list' => $list, 'page' => ceil($count/10),'count'=>$count);
 		}

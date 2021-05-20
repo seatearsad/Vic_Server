@@ -77,6 +77,7 @@ class Page{
 
     //nba的分页样式
     public function show2(){
+
         if($this->totalRows == 0) return false;
         $now = $this->nowPage;
         $total = $this->totalPage;

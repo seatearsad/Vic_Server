@@ -36,7 +36,7 @@ class PayModel extends Model{
 				$pay_type_txt = L('_CASH_ON_DELI_');
 				break;
             case 'moneris':
-                $pay_type_txt = "Online";
+                $pay_type_txt = "Credit/Debit";
                 break;
 			default:
 				if ($paid) {
@@ -50,7 +50,7 @@ class PayModel extends Model{
 		if($is_mobile_pay == 1){
 			$pay_type_txt .= '('.L('_WEICHAT_END_').')';
 		} elseif ($is_mobile_pay == 2 || $is_mobile_pay == 3) {
-			$pay_type_txt .= '(App)';
+			$pay_type_txt .= '(iOS)';
 		} elseif($is_mobile_pay == 4){
             $pay_type_txt .= '(Android)';
         }
