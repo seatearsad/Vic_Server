@@ -1509,7 +1509,7 @@ class MerchantAction extends BaseAction{
         $p = new Page($count_merchant, 15);
         $store_list = $database_merchant_store->field(true)->where($condition_merchant)->order('id DESC')->limit($p->firstRow.','.$p->listRows)->select();
         $this->assign('store_list', $store_list);
-        $pagebar = $p->show();
+        $pagebar = $p->show2();
         $this->assign('pagebar', $pagebar);
 	    $this->display();
     }
@@ -1569,7 +1569,7 @@ class MerchantAction extends BaseAction{
         }
         $this->assign('store_list',$store_list);
 
-        $pagebar = $p->show();
+        $pagebar = $p->show2();
         $this->assign('pagebar', $pagebar);
 
         $this->display();
