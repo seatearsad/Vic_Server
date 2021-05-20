@@ -947,7 +947,7 @@ class ShopAction extends BaseAction
         $order_list = $mode->query($sql);
 
         $this->assign('order_list', $order_list);
-        $this->assign('pagebar', $p->show());
+        $this->assign('pagebar', $p->show2());
         $this->display();
     }
 
