@@ -456,6 +456,7 @@ class ShopAction extends BaseAction
 
     public function order()
     {
+
         $where_store = null;
         if(!empty($_GET['keyword']) && $_GET['searchtype'] == 's_name'){
             $where_store['name'] = array('like', '%'.$_GET['keyword'].'%');
@@ -479,18 +480,22 @@ class ShopAction extends BaseAction
 
         $store_ids = array();
         $where = array();
+
         if ($where_store) {
+
             $stores = D('Merchant_store')->field('store_id')->where($where_store)->select();
             foreach ($stores as $row) {
                 $store_ids[] = $row['store_id'];
             }
+
             if ($store_ids) {
                 $where['store_id'] = array('in', $store_ids);
             } else {
                 import('@.ORG.system_page');
                 $p = new Page(0, 20);
                 $this->assign('order_list', null);
-                $this->assign('pagebar', $p->show());
+
+                $this->assign('pagebar', $p->show2());
                 $this->display();
                 exit;
             }
@@ -514,6 +519,7 @@ class ShopAction extends BaseAction
                 $where['uid'] =$_GET['keyword'];
             }
         }
+
         $status = isset($_GET['status']) ? intval($_GET['status']) : -1;
         $type = isset($_GET['type']) && $_GET['type'] ? $_GET['type'] : '';
         $sort = isset($_GET['sort']) && $_GET['sort'] ? $_GET['sort'] : '';
@@ -947,7 +953,7 @@ class ShopAction extends BaseAction
         $order_list = $mode->query($sql);
 
         $this->assign('order_list', $order_list);
-        $this->assign('pagebar', $p->show());
+        $this->assign('pagebar', $p->show2());
         $this->display();
     }
 

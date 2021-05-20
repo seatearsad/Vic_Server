@@ -1281,7 +1281,7 @@ class Shop_orderModel extends Model
 
 		}
 		if($is_wap != 10){
-			return array('order_list' => $list, 'pagebar' => $p->show());
+			return array('order_list' => $list, 'pagebar' => $p->show2());
 		}else{
 			return array('order_list' => $list, 'page' => ceil($count/10),'count'=>$count);
 		}
