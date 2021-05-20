@@ -204,8 +204,8 @@
                                         <td>
                                             Milly-13910096089
                                         </td>
-<!--                                        {pigcms{$vo.pay_status}--->
-                                        <td><span style="color: green">{pigcms{$vo.pay_type_str}-({pigcms{$vo.pay_type})</span>
+<!--                                        {pigcms{$vo.pay_status} -({pigcms{$vo.pay_type})--->
+                                        <td><span style="color: green">{pigcms{$vo.pay_type_str}</span>
                                         </td>
 
                                         <td>

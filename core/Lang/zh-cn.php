@@ -559,7 +559,7 @@ return array(
     '_CASH_ON_DELI_'        =>  '货到付款',
     '_BALANCE_PAYMENT_'     =>  '余额支付',
     '_UNPAID_TXT_'          =>  '未支付',
-    '_WEICHAT_END_'         =>  '微信端',
+    '_WEICHAT_END_'         =>  'Wap',
     '_NUM_DISCOUNT_'        =>  '%s折',
     '_BUSINESS_CARD_DIS_'   =>  '商家会员卡折扣',
     '_NOTE_NOT_TAKE_DIS_'   =>  '备注：配送费不参加折扣',
