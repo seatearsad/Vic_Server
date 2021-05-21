@@ -25,8 +25,8 @@ class MonerisPay
         }
         //die($this->store_id."----------".$this->api_token);
         $this->countryCode = 'CA';
-        //$this->testMode = true;
-        $this->testMode = false;
+        $this->testMode = true;
+        //$this->testMode = false;
     }
 
     /**
@@ -1058,7 +1058,7 @@ class MonerisPay
         $resp['challengeData'] = $mpgResponse->getMpiChallengeData();
         $resp['threeDSServerTransId'] = $mpgResponse->getMpiThreeDSServerTransId();
         $resp['site_url'] = $merchantUrl;
-        //var_dump($resp);die();
+        var_dump($mpgResponse);die();
         if($resp['transStatus'] == "C")
         {
             $order_md = D('Pay_moneris_md')->where(array('moneris_order_id'=>$data['order_id']))->find();
