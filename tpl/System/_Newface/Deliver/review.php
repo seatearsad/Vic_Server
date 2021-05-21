@@ -47,6 +47,7 @@
                                         <option value="uid" <if condition="$_GET['searchtype'] eq 'uid'">selected="selected"</if>>{pigcms{:L('_BACK_USER_ID_')}</option>
                                         <option value="nickname" <if condition="$_GET['searchtype'] eq 'nickname'">selected="selected"</if>>{pigcms{:L('_BACK_NICKNAME_')}</option>
                                         <option value="phone" <if condition="$_GET['searchtype'] eq 'phone'">selected="selected"</if>>{pigcms{:L('_BACK_PHONE_NUM_')}</option>
+                                        <option value="email" <if condition="$_GET['searchtype'] eq 'email'">selected="selected"</if>>{pigcms{:L('_BACK_EMAIL_')}</option>
                                     </select>
                                     <if condition="$system_session['level'] neq 3">
                                         &nbsp;City : &nbsp;

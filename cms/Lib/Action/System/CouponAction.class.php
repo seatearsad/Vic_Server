@@ -11,8 +11,19 @@ class CouponAction extends BaseAction {
 					$condition_coupon['id'] = $_GET['keyword'];
 				} else if ($_GET['searchtype'] == 'name') {
 					$condition_coupon['name'] = array('like', '%' . $_GET['keyword'] . '%');
-				}
+				}else if($_GET['searchtype'] == 'code'){
+                    $condition_coupon['notice'] = $_GET['keyword'];
+                }
 			}
+
+            if($_GET['city_id']){
+                $this->assign('city_id',$_GET['city_id']);
+                if($_GET['city_id'] != 0){
+                    $condition_coupon['city_id'] = $_GET['city_id'];
+                }
+            }else{
+                $this->assign('city_id',0);
+            }
 			$condition_coupon['delete'] = 0;
 			if($this->system_session['level'] == 3)
                 $condition_coupon['city_id'] = $this->system_session['area_id'];
@@ -61,8 +72,11 @@ class CouponAction extends BaseAction {
 			$this->assign("category",$return['category']);
 			$this->assign("platform",$return['platform']);
 			$this->assign('coupon_list',$coupon_list);
-			$pagebar = $p->show();
+			$pagebar = $p->show2();
 			$this->assign('pagebar', $pagebar);
+
+            $city = D('Area')->where(array('area_type'=>2,'is_open'=>1))->select();
+            $this->assign('city',$city);
 			$this->display();
 		}
 
@@ -304,7 +318,11 @@ class CouponAction extends BaseAction {
 					$where['c.name'] =  array('like', "%".$_GET['keyword']."%");
 				} elseif ($_GET['searchtype'] == 'nickname') {
 					$where['u.nickname'] =array('like', "%".$_GET['keyword']."%");
-				}
+				}elseif ($_GET['searchtype'] == 'uid'){
+                    $where['h.uid'] = $_GET['keyword'];
+                }elseif ($_GET['searchtype'] == 'code'){
+                    $where['c.notice'] = $_GET['keyword'];
+                }
 			}
             if($this->system_session['level'] == 3) {
                 $where['c.city_id'] = $this->system_session['area_id'];
@@ -313,10 +331,10 @@ class CouponAction extends BaseAction {
 			$count_count = $coupon->join('as h left join '.C('DB_PREFIX').'system_coupon c ON h.coupon_id = c.coupon_id')->join(C('DB_PREFIX').'user u ON h.uid = u.uid')->field('h.id,c.name,u.nickname,h.num,h.receive_time,h.is_use,h.phone,h.admin_name')->where($where)->count();
 			import('@.ORG.system_page');
 			$p = new Page($count_count, 15);
-			$coupon_list = $coupon->join('as h left join '.C('DB_PREFIX').'system_coupon c ON h.coupon_id = c.coupon_id')->join(C('DB_PREFIX').'user u ON h.uid = u.uid')->field('h.id,c.name,u.nickname,h.num,h.receive_time,h.is_use,h.phone,h.admin_name')->where($where)->order($order_string)->limit($p->firstRow . ',' . $p->listRows)->select();
+			$coupon_list = $coupon->join('as h left join '.C('DB_PREFIX').'system_coupon c ON h.coupon_id = c.coupon_id')->join(C('DB_PREFIX').'user u ON h.uid = u.uid')->field('h.id,c.coupon_id,h.uid,c.name,u.nickname,h.num,h.receive_time,h.is_use,h.phone,h.admin_name')->where($where)->order($order_string)->limit($p->firstRow . ',' . $p->listRows)->select();
 
 			$this->assign('coupon_list',$coupon_list);
-			$pagebar = $p->show();
+			$pagebar = $p->show2();
 			$this->assign('pagebar', $pagebar);
 
 			$this->display();

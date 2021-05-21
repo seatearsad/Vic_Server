@@ -40,6 +40,8 @@ class UserAction extends BaseAction {
                         $where .= " and u.nickname like '%".$_GET['keyword']. "%'";
                     } else if ($_GET['searchtype'] == 'phone') {
                         $where .= " and u.phone like '%".$_GET['keyword']. "%'";
+                    }else if($_GET['searchtype'] == 'email'){
+                        $where .= " and u.email like '%".$_GET['keyword']. "%'";
                     }
                 }
                 if ($_GET['status'] != '') {
@@ -86,7 +88,7 @@ class UserAction extends BaseAction {
                     $limit = " LIMIT {$p->firstRow}, {$p->listRows}";
                     $user_list = D()->query($sql.$where.$order_string.$limit);
 
-                    $pagebar = $p->show();
+                    $pagebar = $p->show2();
                     $this->assign('pagebar', $pagebar);
                 }
 
@@ -827,6 +829,8 @@ class UserAction extends BaseAction {
                 $condition_where .= " AND `u`.`phone` like '%" . htmlspecialchars($_GET['keyword']) ."%'";
             } elseif ($_GET['searchtype'] == 'order_id') {
                 $condition_where .= " AND `o`.`order_id`='" . htmlspecialchars($_GET['keyword']) . "'";
+            }elseif($_GET['searchtype'] == 'uid'){
+                $condition_where .= " AND `u`.`uid` like '%" . htmlspecialchars($_GET['keyword']) . "%'";
             }
 
         }
@@ -854,7 +858,7 @@ class UserAction extends BaseAction {
         $p = new Page($order_count,30);
         $order_list = D('')->field('`o`.*,`u`.`uid`,`u`.`nickname`,`u`.`phone`')->where($condition_where)->table($condition_table)->order($order_sort)->limit($p->firstRow.','.$p->listRows)->select();
         $this->assign('order_list',$order_list);
-        $pagebar = $p->show();
+        $pagebar = $p->show2();
         $this->assign('pagebar',$pagebar);
 //        $this->assign(array('type' => $type, 'sort' => $sort, 'status' => $status));
         $this->assign(array('type' => $type, 'sort' => $sort));
@@ -918,6 +922,11 @@ class UserAction extends BaseAction {
             $period = array(strtotime($_GET['begin_time']." 00:00:00"),strtotime($_GET['end_time']." 23:59:59"));
             $where['_string'] =" (l.time BETWEEN ".$period[0].' AND '.$period[1].")";
 
+        }
+        if (!empty($_GET['keyword'])) {
+            if ($_GET['searchtype'] == 'uid') {
+                $where['l.uid'] = $_GET['keyword'];
+            }
         }
         $recharge_list =  D('User_money_list')->get_admin_recharge_list($where,1);
 
