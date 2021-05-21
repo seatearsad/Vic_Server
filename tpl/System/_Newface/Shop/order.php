@@ -17,20 +17,16 @@
                 </li>
             </ol>
         </div>
-        <div class="col-lg-3" style="height 90px;margin-top:40px;">
-            <!--            <div class="btn-group">-->
-            <!--                <button class="btn btn-white active">Today</button>-->
-            <!--                <button class="btn btn-white  ">Monthly</button>-->
-            <!--                <button class="btn btn-white">Annual</button>-->
-            <!--            </div>-->
-            <if condition="$system_session['level'] neq 3">
-                <a href="javascript:void(0);"
-                   onclick="window.top.artiframe('{pigcms{:U('Merchant/add')}','{pigcms{:L(\'E_CREATE_MERCHANT\')}',800,560,true,false,false,addbtn,'add',true);">
-                    <button type="button" class="btn btn-primary btn-sm float-right">{pigcms{:L('E_CREATE_MERCHANT')}
-                    </button>
-                </a>
-            </if>
 
+        <div class="col-lg-3 float-right" style="height 90px;margin-top:40px;">
+                        <div class="btn-group">
+                            <a href="{pigcms{:U('Shop/export',$_GET)}" class="button" style="float:right;margin-right: 10px;"><button class="btn btn-white">{pigcms{:L('_BACK_DOWN_ORDER_')}</button></a>
+                            <if condition="$system_session['level'] eq 2">
+                            <a href="{pigcms{:U('Shop/export_total',$_GET)}" class="button" style="float:right;margin-right: 10px;"><button class="btn btn-white  ">{pigcms{:L('C_OMZB')}</button></a>
+                            <a href="{pigcms{:U('Shop/export_store',$_GET)}" class="button" style="float:right;margin-right: 10px;"><button class="btn btn-white">{pigcms{:L('C_OMRESTRANK')}</button></a>
+                            <a href="{pigcms{:U('Shop/export_user',$_GET)}" class="button" style="float:right;margin-right: 10px;"><button class="btn btn-white">{pigcms{:L('C_OMUSERRANK')}</button></a>
+                            </if>
+                        </div>
         </div>
     </div>
 
@@ -193,16 +189,16 @@
                                             {pigcms{$vo.real_orderid}
                                         </td>
                                         <td>
-                                            139100960898
+                                            {pigcms{$vo.reg_user_phone}
                                         </td>
                                         <td>
-                                            北京市海淀区XXXX
+                                            {pigcms{$vo.address}
                                         </td>
                                         <td>
-                                            已配送
+                                            {pigcms{$vo.deliver_status_str}
                                         </td>
                                         <td>
-                                            Milly-13910096089
+                                            {pigcms{$vo.deliverinfo}
                                         </td>
 <!--                                        {pigcms{$vo.pay_status} -({pigcms{$vo.pay_type})--->
                                         <td><span style="color: green">{pigcms{$vo.pay_type_str}</span>

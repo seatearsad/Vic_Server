@@ -590,15 +590,24 @@ class ShopAction extends BaseAction
                 $tax_price = $order['packing_charge'];
                 $li['packing_charge'] = 0;
             }
+
+            $userinfo= D('user')->field(true)->where(array('uid'=>$li['uid']))->find();
+            $li['reg_user_name']=$userinfo['nickname'];
+            $li['reg_user_phone']=$userinfo['phone'];
             $li['duty_price'] = $tax_price + ($li['packing_charge'] + $li['freight_charge'])*$temp[$li['store_id']]['tax_num']/100;
             $li['duty_price'] = round($li['duty_price'],2);
             if($li['status'] > 0){
+
                 $deliver = D('Deliver_supply')->field(true)->where(array('order_id'=>$li['order_id']))->find();
                 if($deliver){
+
                     $li['dining_time'] = $deliver['dining_time'];
+                    //$li["deliver_status"]= $this->get_delivery_status_by_id($deliver['status'],$deliver['supply_id']);
+
                 }
             }
         }
+        //var_dump($result);
         $this->assign(array('type' => $type, 'sort' => $sort, 'status' => $status,'pay_type'=>$pay_type));
         $this->assign('status_list', D('Shop_order')->getStatusList());
         $this->assign($result);
@@ -626,6 +635,50 @@ class ShopAction extends BaseAction
         }
         $this->assign('pay_method',$pay_method);
         $this->display();
+    }
+
+    protected function get_delivery_status_by_id($deliver_status_int,$supply_id){
+        $ret="";
+        switch ($deliver_status_int) {
+            case 1:
+                //garfunkel 判断拒单
+                $assign = D('deliver_assign')->field(true)->where(array('supply_id'=>$supply_id))->find();
+                if ($assign) {
+                    $record_assign = explode(',', $assign['record']);
+                    //获取全部上班的送餐员
+                    $user_list = D('Deliver_user')->field(true)->where(array('status' => 1, 'work_status' => 0))->order('uid asc')->select();
+                    //是否有未拒单的 1 有 0 无
+                    $is_refect = 0;
+                    foreach ($user_list as $deliver) {
+                        if (!in_array($deliver['uid'], $record_assign)) {
+                            $is_refect = 1;
+                        }
+                    }
+                    //$value['order_status'] = "等待接单" . count($record_assign);
+                    if ($is_refect == 0) {
+                        $ret = '<font color="red">'.L('J_AWAITING_ACCEPTANC').'</font>';
+                    }
+                }else{
+                    $ret= '<font color="red">'.L('_BACK_AWAIT_').'</font>';
+                }
+                break;
+            case 2:
+                $ret = L('_BACK_CONFIRMED_');
+                break;
+            case 3:
+                $ret = L('_BACK_PICKED_');
+                break;
+            case 4:
+                $ret = L('_BACK_IN_TRANSIT_');
+                break;
+            case 5:
+                $ret = L('_BACK_COMPLETED_');
+                break;
+            default:
+                $ret = L('_BACK_ORDER_FILED_');
+                break;
+        }
+        return $ret;
     }
 
     public function order_detail()
