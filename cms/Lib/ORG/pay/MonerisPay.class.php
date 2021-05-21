@@ -1064,7 +1064,7 @@ class MonerisPay
         $resp['eci'] = $mpgResponse->getMpiEci();
         $resp['cavv'] = $mpgResponse->getMpiCavv();
         $resp['site_url'] = $merchantUrl;
-        var_dump($resp);die();
+        //var_dump($resp);die();
         if($resp['transStatus'] == "C" || $resp['transStatus'] == "Y" || $resp['transStatus'] == "A"){
             $order_md = D('Pay_moneris_md')->where(array('moneris_order_id'=>$data['order_id']))->find();
             $md['order_md'] = $MD;
