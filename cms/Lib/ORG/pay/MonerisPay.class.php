@@ -66,7 +66,11 @@ class MonerisPay
             $resp = $this->threeDSAuthentication($data,$uid,$from_type);
             //var_dump($resp);die();
             if($resp['transStatus'] == "Y" || $resp['transStatus'] == "A"){
-                return $this->purchase($data,$uid,$from_type,$order);
+                //return $this->purchase($data,$uid,$from_type,$order);
+                $order_md = D('Pay_moneris_md')->where(array('moneris_order_id'=>$resp['receiptId']))->find();
+                $MD = $order_md['order_md'];
+
+                return $this->MPI_Cavv($MD,$resp['cavv'],$resp['eci'],$resp['threeDSServerTransId']);
             }else{
                 return $resp;
             }
@@ -1057,10 +1061,11 @@ class MonerisPay
         $resp['challengeURL'] = $mpgResponse->getMpiChallengeURL();
         $resp['challengeData'] = $mpgResponse->getMpiChallengeData();
         $resp['threeDSServerTransId'] = $mpgResponse->getMpiThreeDSServerTransId();
+        $resp['eci'] = $mpgResponse->getMpiEci();
+        $resp['cavv'] = $mpgResponse->getMpiCavv();
         $resp['site_url'] = $merchantUrl;
-        var_dump($mpgResponse);die();
-        if($resp['transStatus'] == "C")
-        {
+        var_dump($resp);die();
+        if($resp['transStatus'] == "C" || $resp['transStatus'] == "Y" || $resp['transStatus'] == "A"){
             $order_md = D('Pay_moneris_md')->where(array('moneris_order_id'=>$data['order_id']))->find();
             $md['order_md'] = $MD;
             $md['create_time'] = time();
@@ -1070,7 +1075,10 @@ class MonerisPay
                 $md['moneris_order_id'] = $data['order_id'];
                 D('Pay_moneris_md')->add($md);
             }
+        }
 
+        if($resp['transStatus'] == "C")
+        {
             $resp['mpiSuccess'] = "true";
             $resp['version'] = 2;
             $resp['mpiInLineForm'] = '<form name="downloadForm" method="POST" action="'.$resp['challengeURL'].'">
