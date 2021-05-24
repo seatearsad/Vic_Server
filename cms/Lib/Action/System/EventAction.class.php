@@ -15,12 +15,24 @@ class EventAction extends BaseAction
     }
 
     public function add(){
-        $type_list = D('New_event')->getTypeName(-1);
+        if($_GET['id']){
+            $type_list = D('New_event')->getTypeName(-1);
+            $this->assign('type',$type_list);
 
-        $this->assign('type',$type_list);
-        $city = D('Area')->where(array('area_type'=>2,'is_open'=>1))->select();
-        $this->assign('city',$city);
-        $this->display();
+            $event = D('New_event')->where(array('id'=>$_GET['id']))->find();
+            $event['type_name'] = D('New_event')->getTypeName($event['type']);
+            $this->assign('event',$event);
+            $city = D('Area')->where(array('area_type'=>2,'is_open'=>1))->select();
+            $this->assign('city',$city);
+            $this->display();
+        }else {
+            $type_list = D('New_event')->getTypeName(-1);
+
+            $this->assign('type', $type_list);
+            $city = D('Area')->where(array('area_type' => 2, 'is_open' => 1))->select();
+            $this->assign('city', $city);
+            $this->display();
+        }
     }
 
     public function edit(){
@@ -98,7 +110,15 @@ class EventAction extends BaseAction
 
 
     public function add_coupon(){
-        if($_GET['event_id']){
+        if($_GET['id']) {
+            $coupon = D('New_event_coupon')->where(array('id'=>$_GET['id']))->find();
+            $this->assign('coupon',$coupon);
+            $this->assign('event_id',$coupon['event_id']);
+            $event = D('New_event')->where(array('id'=>$coupon['event_id']))->find();
+            $this->assign('event_type',$event['type']);
+            $this->assign('type_name',$this->getTypeSetName($event));
+            $this->display();
+        }else if($_GET['event_id']){
             $event_id = $_GET['event_id'];
             $this->assign('event_id',$event_id);
             $event = D('New_event')->where(array('id'=>$event_id))->find();

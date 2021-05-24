@@ -65,7 +65,7 @@
 			$p = new Page($count_news, 15);
 			$news_list = $news->field('id,title,add_time,last_time,sort,status')->where($condition_news)->order($order_string)->limit($p->firstRow . ',' . $p->listRows)->select();
 			$this->assign('news_list',$news_list);
-			$pagebar = $p->show();
+			$pagebar = $p->show2();
 			$category_name = D('System_news_category')->where('id='.$_GET['category_id'])->getField('name');
 			$this->assign('category_name',$category_name);
 			$this->assign('pagebar', $pagebar);
