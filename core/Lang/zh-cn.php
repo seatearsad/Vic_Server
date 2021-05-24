@@ -2314,6 +2314,8 @@ return array(
     "E_REVIEWTYPE"=>"评论类型",
     "E_RWTYPE_DELIVERY"=>"外卖",
     "E_REVIEW_TRANSLATE"=>"翻译评论内容",
+    "E_RESTAURANT_REVIEW_TRANSLATE"=>"翻译店铺评论",
+    "E_COURIER_REVIEW_TRANSLATE"=>"翻译送餐员评论",
     "E_STORE_NUMB"=>"店铺电话",
     "E_LASTUP"=>"最后访问时间",
     "E_STORETIME0"=>"(店铺时间全为0)",

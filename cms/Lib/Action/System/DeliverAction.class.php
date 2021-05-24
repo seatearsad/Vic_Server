@@ -82,36 +82,36 @@ class DeliverAction extends BaseAction {
         //搜索
         if (!empty($_GET['keyword'])) {
             if ($_GET['searchtype'] == 'uid') {
-                $condition_user['uid'] = $_GET['keyword'];
+                $condition_user['u.uid'] = $_GET['keyword'];
             } else if ($_GET['searchtype'] == 'nickname') {
-                $condition_user['name'] = array('like', '%' . $_GET['keyword'] . '%');
+                $condition_user['u.name'] = array('like', '%' . $_GET['keyword'] . '%');
             } else if ($_GET['searchtype'] == 'phone') {
-                $condition_user['phone'] = array('like', '%' . $_GET['keyword'] . '%');
+                $condition_user['u.phone'] = array('like', '%' . $_GET['keyword'] . '%');
             }
         }
 
         if($_GET['city_id']){
             $this->assign('city_id',$_GET['city_id']);
             if($_GET['city_id'] != 0)
-                $condition_user['city_id'] = $_GET['city_id'];
+                $condition_user['u.city_id'] = $_GET['city_id'];
         }else{
             $this->assign('city_id',0);
         }
         //garfunkel 判断城市管理员
         if($this->system_session['level'] == 3){
-            $condition_user['city_id'] = $this->system_session['area_id'];
+            $condition_user['u.city_id'] = $this->system_session['area_id'];
         }
 
         $city = D('Area')->where(array('area_type'=>2,'is_open'=>1))->select();
 
-        $condition_user['group'] = 1;
-        $count_user = $this->deliver_user->where($condition_user)->count();
+        $condition_user['u.group'] = 1;
+        $count_user = $this->deliver_user->join('as u left join '.C('DB_PREFIX').'area as a ON u.city_id=a.area_id')->where($condition_user)->count();
         import('@.ORG.system_page');
         $p = new Page($count_user, 15);
-        $user_list = $this->deliver_user->field(true)->where($condition_user)->order('`uid` DESC')->limit($p->firstRow . ',' . $p->listRows)->select();
-        
+        $user_list = $this->deliver_user->field('u.*,a.area_name')->join('as u left join '.C('DB_PREFIX').'area as a ON u.city_id=a.area_id')->where($condition_user)->order('`uid` DESC')->limit($p->firstRow . ',' . $p->listRows)->select();
+        //var_dump($user_list);die();
         $this->assign('user_list', $user_list);
-        $pagebar = $p->show();
+        $pagebar = $p->show2();
         $this->assign('pagebar', $pagebar);
         $this->assign('city',$city);
         $this->display();

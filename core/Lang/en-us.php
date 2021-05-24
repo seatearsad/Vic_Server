@@ -2314,6 +2314,8 @@ return array(
     "E_REVIEWTYPE"=>"Review Type",
     "E_RWTYPE_DELIVERY"=>"Delivery",
     "E_REVIEW_TRANSLATE"=>"Translated Review Content",
+    "E_RESTAURANT_REVIEW_TRANSLATE"=>"Translated Restaurant Review Content",
+    "E_COURIER_REVIEW_TRANSLATE"=>"Translated Courier Review Content",
     "E_STORE_NUMB"=>"Store Phone Number",
     "E_LASTUP"=>"Last Visit",
     "E_STORETIME0"=>"(Closed every day)",

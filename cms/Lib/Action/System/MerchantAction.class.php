@@ -1188,6 +1188,7 @@ class MerchantAction extends BaseAction{
 
 		$sql = "SELECT r.*, m.name AS m_name, s.name AS s_name, u.nickname, u.phone FROM " . C('DB_PREFIX') . "merchant AS m INNER JOIN " . C('DB_PREFIX') . "reply AS r ON r.mer_id = m.mer_id INNER JOIN " . C('DB_PREFIX') . "user AS u ON r.uid=u.uid LEFT JOIN " . C('DB_PREFIX') . "merchant_store AS s ON s.store_id=r.store_id {$where} ORDER BY r.pigcms_id DESC LIMIT {$p->firstRow},{$p->listRows}";
 		$reply_list = D()->query($sql);
+//		var_dump($reply_list);die();
 //		foreach($reply_list as &$reply){
 //            if($reply['comment'] != '' && $reply['comment_en'] == '') {
 //                if (!checkEnglish($reply['comment'])) {
@@ -1198,7 +1199,7 @@ class MerchantAction extends BaseAction{
 //            }
 //        }
 		$this->assign('reply_list', $reply_list);
-		$this->assign('pagebar', $p->show());
+		$this->assign('pagebar', $p->show2());
 		$this->display();
 	}
 
