@@ -34,7 +34,7 @@
             </li>
 
             <volist name="system_menu" id="vo">
-                <li <if condition="$module_name eq $vo['module']">class="active"</if>>
+                <li <if condition="$module_name eq 'Index' and $action_name eq 'index'"><else/><if condition="$module_name eq $vo['module']">class="active"</if></if>>
                     <a href="#"><i class="fa fa-{pigcms{$vo.icon}"></i> <span
                             class="nav-label">{pigcms{$vo.name}</span><span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level collapse">
