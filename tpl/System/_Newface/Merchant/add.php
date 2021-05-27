@@ -1,9 +1,7 @@
 <include file="Public:header"/>
 <body style="background-color: #fff;">
 <div id="wrapper-singlepage">
-
     <div id="page-wrapper-singlepage" class="white-bg">
-
         <!----------------------------------------    以上不要写代码     ------------------------------------------------>
         <div class="row wrapper wrapper-content animated fadeInRight">
             <div class="col-lg-12">
