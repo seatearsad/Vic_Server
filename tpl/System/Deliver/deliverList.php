@@ -84,7 +84,6 @@
 								<th>{pigcms{:L('_BACK_ASS_COURIER_')}</th>
 								<th>{pigcms{:L('B_ACTION')}</th>
 								<!--th>创建时间</th-->
-								
 							</tr>
 						</thead>
 						<tbody>

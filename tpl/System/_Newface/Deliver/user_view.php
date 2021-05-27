@@ -381,4 +381,4 @@
         }
     }
 </script>
-<include file="Public:footer"/>
+<include file="Public:footer_inc"/>

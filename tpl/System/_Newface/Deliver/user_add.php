@@ -94,24 +94,7 @@
 			<input type="reset" value="{pigcms{:L('_BACK_CANCEL_')}" class="button" />
 		</div>
 	</form>
-	<div id="modal-table" class="modal fade" tabindex="-1" style="display:block;">
-		<div class="modal-dialog" style="width:80%;">
-			<div class="modal-content" style="width:100%;">
-				<div class="modal-header no-padding" style="width:100%;">
-					<div class="table-header">
-                        {pigcms{:L('_BACK_DRAG_RED_PIN_')}
-					</div>
-				</div>
-				<div class="modal-body no-padding" style="width:100%;">
-					<form id="map-search" style="margin:10px;">
-						<input id="map-keyword" type="textbox" style="width:300px;" placeholder="Enter your address"/>
-						<input type="submit" value="{pigcms{:L('_BACK_SEARCH_')}"/>
-					</form>
-					<div style="width: 650px; height: 250px; min-height: 250px;" id="cmmap"></div>
-				</div>
-			</div>
-		</div>
-	</div>
+
 <script type="text/javascript" src="{pigcms{$static_public}js/mobiscroll/mobiscroll.custom.min.js"></script>
 <link rel="stylesheet" type="text/css" href="{pigcms{$static_public}js/mobiscroll/mobiscroll.custom.min.css" media="all">
 	<script type="text/javascript">
