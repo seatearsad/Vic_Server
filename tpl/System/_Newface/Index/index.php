@@ -1,9 +1,11 @@
-<include file="Public:header"/><div id="wrapper"><include file="Public:left_menu"/>
+<include file="Public:header"/>
+<div id="wrapper">
+    <include file="Public:left_menu"/>
 <!----------------------------------------    以上不要写代码     ------------------------------------------------>
 
     <div class="row wrapper border-bottom white-bg page-heading">
         <div class="col-lg-10">
-            <h2>Buttons</h2>
+            <h2>{pigcms{:L('_BACK_OVERVIEW_')}</h2>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
                     <a href="{pigcms{:U('Index/index')}">Home</a>
@@ -12,7 +14,7 @@
 <!--                    <a>UI Elements</a>-->
 <!--                </li>-->
                 <li class="breadcrumb-item active">
-                    <strong>Buttons</strong>
+                    <strong>{pigcms{:L('_BACK_OVERVIEW_')}</strong>
                 </li>
             </ol>
         </div>
@@ -21,136 +23,40 @@
         </div>
     </div>
     <div class="row wrapper wrapper-content animated fadeInRight">
-        <div class="col-lg-4">
+        <div class="col-lg-12">
             <div class="ibox ">
-                <div class="ibox-title">
-                    <h5>Colors buttons</h5>
-                    <div class="ibox-tools">
-                        <a class="collapse-link">
-                            <i class="fa fa-chevron-up"></i>
-                        </a>
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                            <i class="fa fa-wrench"></i>
-                        </a>
-                        <ul class="dropdown-menu dropdown-user">
-                            <li><a href="#" class="dropdown-item">Config option 1</a>
-                            </li>
-                            <li><a href="#" class="dropdown-item">Config option 2</a>
-                            </li>
-                        </ul>
-                        <a class="close-link">
-                            <i class="fa fa-times"></i>
-                        </a>
+                <div class="ibox-content">
+                    <div>
+                        <span class="float-right text-right">
+                        <small>Average value of sales in the past month in: <strong>United states</strong></small>
+                            <br/>
+                            All sales: 162,862
+                        </span>
+                        <h1 class="m-b-xs">$ 50,992</h1>
+                        <h3 class="font-bold no-margins">
+                            Half-year revenue margin
+                        </h3>
+                        <small>Sales marketing.</small>
                     </div>
-                </div>
-                <div class="ibox-content float-e-margins">
-                    <p>
-                        Use any of the available button classes to quickly create a styled button.
-                    </p>
 
-                    <h3 class="font-bold">
-                        Normal buttons
-                    </h3>
-                    <p>
-                        <button type="button" class="btn btn-w-m btn-default">Default</button>
-                        <button type="button" class="btn btn-w-m btn-primary">Primary</button>
-                        <button type="button" class="btn btn-w-m btn-success">Success</button>
-                        <button type="button" class="btn btn-w-m btn-info">Info</button>
-                        <button type="button" class="btn btn-w-m btn-warning">Warning</button>
-                        <button type="button" class="btn btn-w-m btn-danger">Danger</button>
-                        <button type="button" class="btn btn-w-m btn-link">Link</button>
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-4">
-            <div class="ibox ">
-                <div class="ibox-title">
-                    <h5>Diferent size</h5>
-                    <div class="ibox-tools">
-                        <a class="collapse-link">
-                            <i class="fa fa-chevron-up"></i>
-                        </a>
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                            <i class="fa fa-wrench"></i>
-                        </a>
-                        <ul class="dropdown-menu dropdown-user">
-                            <li><a href="#" class="dropdown-item">Config option 1</a>
-                            </li>
-                            <li><a href="#" class="dropdown-item">Config option 2</a>
-                            </li>
-                        </ul>
-                        <a class="close-link">
-                            <i class="fa fa-times"></i>
-                        </a>
+                    <div>
+                        <canvas id="lineChart" height="70"></canvas>
                     </div>
-                </div>
-                <div class="ibox-content float-e-margins">
-                    <p>
-                        If You want larger or smaller buttons You can add <code>.btn-lg</code>, <code>.btn-sm</code>,
-                        or <code>.btn-xs</code> class.
-                    </p>
-                    <h3 class="font-bold">Button Sizes</h3>
-                    <p>
-                        <button type="button" class="btn btn-primary btn-lg">Large button</button>
-                        <button type="button" class="btn btn-default btn-lg">Large button</button>
-                        <br/>
-                        <button type="button" class="btn btn-primary">Default button</button>
-                        <button type="button" class="btn btn-default">Default button</button>
-                        <br/>
-                        <button type="button" class="btn btn-primary btn-sm">Small button</button>
-                        <button type="button" class="btn btn-default btn-sm">Small button</button>
-                        <br/>
-                        <button type="button" class="btn btn-primary btn-xs">Mini button</button>
-                        <button type="button" class="btn btn-default btn-xs">Mini button</button>
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-4">
-            <div class="ibox ">
-                <div class="ibox-title">
-                    <h5>Outline and Block Buttons</h5>
-                    <div class="ibox-tools">
-                        <a class="collapse-link">
-                            <i class="fa fa-chevron-up"></i>
-                        </a>
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                            <i class="fa fa-wrench"></i>
-                        </a>
-                        <ul class="dropdown-menu dropdown-user">
-                            <li><a href="#" class="dropdown-item">Config option 1</a>
-                            </li>
-                            <li><a href="#" class="dropdown-item">Config option 2</a>
-                            </li>
-                        </ul>
-                        <a class="close-link">
-                            <i class="fa fa-times"></i>
-                        </a>
-                    </div>
-                </div>
-                <div class="ibox-content float-e-margins">
-                    <p>
-                        Create block level buttons or outline buttons, by adding <code>.btn-block</code> or <code>.btn-outline</code>.
-                    </p>
 
-                    <h3 class="font-bold">Outline buttons</h3>
-                    <p>
-                        <button type="button" class="btn btn-outline btn-default">Default</button>
-                        <button type="button" class="btn btn-outline btn-primary">Primary</button>
-                        <button type="button" class="btn btn-outline btn-success">Success</button>
-                        <button type="button" class="btn btn-outline btn-info">Info</button>
-                        <button type="button" class="btn btn-outline btn-warning">Warning</button>
-                        <button type="button" class="btn btn-outline btn-danger">Danger</button>
-                        <button type="button" class="btn btn-outline btn-link">Link</button>
-                    </p>
-                    <h3 class="font-bold">Block buttons</h3>
-                    <p>
-                        <button type="button" class="btn btn-block btn-outline btn-primary">Primary</button>
-                    </p>
+                    <div class="m-t-md">
+                        <small class="float-right">
+                            <i class="fa fa-clock-o"> </i>
+                            Update on 16.07.2015
+                        </small>
+                        <small>
+                            <strong>Analysis of sales:</strong> The value has been changed over time, and last month reached a level over $50,000.
+                        </small>
+                    </div>
+
                 </div>
             </div>
         </div>
+
         <div class="col-lg-12">
             <div class="ibox ">
                 <div class="ibox-title">
@@ -616,6 +522,41 @@
             </div>
         </div>
     </div>
+    <script src="{pigcms{$static_path}js/plugins/chartJs/Chart.min.js"></script>
+    <script>
+        $(document).ready(function() {
 
+            var lineData = {
+                labels: ["January", "February", "March", "April", "May", "June", "July"],
+                datasets: [
+                    {
+                        label: "Example dataset",
+                        backgroundColor: "rgba(26,179,148,0.5)",
+                        borderColor: "rgba(26,179,148,0.7)",
+                        pointBackgroundColor: "rgba(26,179,148,1)",
+                        pointBorderColor: "#fff",
+                        data: [28, 48, 40, 19, 86, 27, 90]
+                    },
+                    {
+                        label: "Example dataset",
+                        backgroundColor: "rgba(220,220,220,0.5)",
+                        borderColor: "rgba(220,220,220,1)",
+                        pointBackgroundColor: "rgba(220,220,220,1)",
+                        pointBorderColor: "#fff",
+                        data: [65, 59, 80, 81, 56, 55, 40]
+                    }
+                ]
+            };
+
+            var lineOptions = {
+                responsive: true
+            };
+
+
+            var ctx = document.getElementById("lineChart").getContext("2d");
+            new Chart(ctx, {type: 'line', data: lineData, options:lineOptions});
+
+        });
+    </script>
 <!----------------------------------------    以下不要写代码     ------------------------------------------------>
 <include file="Public:footer"/>
