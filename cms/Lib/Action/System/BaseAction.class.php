@@ -254,6 +254,9 @@ class BaseAction extends Action{
 				case 204:
 					$system_menu[$key]['icon'] = 'wechat';
 					break;
+                case 216:
+                    $system_menu[$key]['icon'] = 'table';
+                    break;
 			}
 			if($this->system_session['sort_menus']){
 				if($this->system_session['sort_menus'][$key]){

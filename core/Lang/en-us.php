@@ -2495,4 +2495,17 @@ return array(
     "CCBE"=>"Content cannot be empty!",
     "FLLC"=>"Use the lower case initials of the first character of the name! If this field is empty this will be filled in automatically after the name is entered (as an example only)",
     "SIAEPRI"=>"Such ID already exists, please replace it.",
+
+    "DATA_EXPORT"=>"Data Export",
+    "ORDER_EXPORT"=>"Order Export",
+    "SALES_EXPORT"=>"Sales Summary",
+    "STORE_EXPORT"=>"Store Invoice",
+    "ORDER_STORE_EXPORT"=>"Orders by Store",
+    "STORE_RANKING_EXPORT"=>"Store Ranking",
+    "STORE_INFO_EXPORT"=>"Store Info",
+    "COURIER_PAY_EXPORT"=>"Courier Payroll",
+    "COURIER_INFO_EXPORT"=>"Courier Info",
+    "ORDER_COURIER_EXPORT"=>"Orders by Courier",
+    "USER_EXPORT"=>"User Info",
+    "USER_RANKING_EXPORT"=>"User Ranking",
 );
