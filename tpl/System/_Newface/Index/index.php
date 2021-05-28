@@ -23,20 +23,22 @@
         </div>
     </div>
     <div class="row wrapper wrapper-content animated fadeInRight">
-        <div class="col-lg-12">
+        <div class="col-lg-9">
             <div class="ibox ">
                 <div class="ibox-content">
                     <div>
                         <span class="float-right text-right">
-                        <small>Average value of sales in the past month in: <strong>United states</strong></small>
-                            <br/>
-                            All sales: 162,862
+                            <div class="btn-group" id="main_select">
+                                <button class="btn btn-white " data-type="day">Today</button>
+                                <button class="btn btn-white active" data-type="week">7-Day</button>
+                                <button class="btn btn-white" data-type="month">30-Day</button>
+                            </div>
                         </span>
-                        <h1 class="m-b-xs">$ 50,992</h1>
+                        <h1 class="m-b-xs" id="cash_total">$ 0</h1>
                         <h3 class="font-bold no-margins">
-                            Half-year revenue margin
+                            Total Cash Flow
                         </h3>
-                        <small>Sales marketing.</small>
+                        <!--small>Sales marketing.</small-->
                     </div>
 
                     <div>
@@ -44,506 +46,179 @@
                     </div>
 
                     <div class="m-t-md">
-                        <small class="float-right">
+                        <!--small class="float-right">
                             <i class="fa fa-clock-o"> </i>
                             Update on 16.07.2015
                         </small>
                         <small>
                             <strong>Analysis of sales:</strong> The value has been changed over time, and last month reached a level over $50,000.
-                        </small>
+                        </small-->
                     </div>
 
                 </div>
             </div>
         </div>
 
-        <div class="col-lg-12">
+        <div class="col-lg-3">
             <div class="ibox ">
                 <div class="ibox-title">
-                    <h5>3D Buttons</h5>
                     <div class="ibox-tools">
-                        <a class="collapse-link">
-                            <i class="fa fa-chevron-up"></i>
-                        </a>
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                            <i class="fa fa-wrench"></i>
-                        </a>
-                        <ul class="dropdown-menu dropdown-user">
-                            <li><a href="#" class="dropdown-item">Config option 1</a>
-                            </li>
-                            <li><a href="#" class="dropdown-item">Config option 2</a>
-                            </li>
-                        </ul>
-                        <a class="close-link">
-                            <i class="fa fa-times"></i>
-                        </a>
+                        <span class="label label-primary float-right">Today</span>
                     </div>
+                    <h5>Cash Flow</h5>
                 </div>
                 <div class="ibox-content">
-                    <p>
-                        To add three diminsion to buttons You can add <code>.dim</code> class to button.
-                    </p>
-                    <h3 class="font-bold">Three diminsion button</h3>
-
-                    <button class="btn btn-primary dim btn-large-dim" type="button"><i class="fa fa-money"></i>
-                    </button>
-                    <button class="btn btn-warning dim btn-large-dim" type="button"><i class="fa fa-warning"></i>
-                    </button>
-                    <button class="btn btn-danger  dim btn-large-dim" type="button"><i class="fa fa-heart"></i>
-                    </button>
-                    <button class="btn btn-primary  dim btn-large-dim" type="button"><i class="fa fa-dollar"></i>6
-                    </button>
-                    <button class="btn btn-info  dim btn-large-dim btn-outline" type="button"><i
-                                class="fa fa-ruble"></i></button>
-                    <button class="btn btn-primary dim" type="button"><i class="fa fa-money"></i></button>
-                    <button class="btn btn-warning dim" type="button"><i class="fa fa-warning"></i></button>
-                    <button class="btn btn-primary dim" type="button"><i class="fa fa-check"></i></button>
-                    <button class="btn btn-success  dim" type="button"><i class="fa fa-upload"></i></button>
-                    <button class="btn btn-info  dim" type="button"><i class="fa fa-paste"></i></button>
-                    <button class="btn btn-warning  dim" type="button"><i class="fa fa-warning"></i></button>
-                    <button class="btn btn-default  dim " type="button"><i class="fa fa-star"></i></button>
-                    <button class="btn btn-danger  dim " type="button"><i class="fa fa-heart"></i></button>
-
-                    <button class="btn btn-outline btn-primary dim" type="button"><i class="fa fa-money"></i>
-                    </button>
-                    <button class="btn btn-outline btn-warning dim" type="button"><i class="fa fa-warning"></i>
-                    </button>
-                    <button class="btn btn-outline btn-primary dim" type="button"><i class="fa fa-check"></i>
-                    </button>
-                    <button class="btn btn-outline btn-success  dim" type="button"><i class="fa fa-upload"></i>
-                    </button>
-                    <button class="btn btn-outline btn-info  dim" type="button"><i class="fa fa-paste"></i></button>
-                    <button class="btn btn-outline btn-warning  dim" type="button"><i class="fa fa-warning"></i>
-                    </button>
-                    <button class="btn btn-outline btn-danger  dim " type="button"><i class="fa fa-heart"></i>
-                    </button>
-
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-12">
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="ibox ">
-                        <div class="ibox-title">
-                            <h5>Button dropdowns</h5>
-                            <div class="ibox-tools">
-                                <a class="collapse-link">
-                                    <i class="fa fa-chevron-up"></i>
-                                </a>
-                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                    <i class="fa fa-wrench"></i>
-                                </a>
-                                <ul class="dropdown-menu dropdown-user">
-                                    <li><a href="#" class="dropdown-item">Config option 1</a>
-                                    </li>
-                                    <li><a href="#" class="dropdown-item">Config option 2</a>
-                                    </li>
-                                </ul>
-                                <a class="close-link">
-                                    <i class="fa fa-times"></i>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="ibox-content float-e-margins">
-                            <p>
-                                Droppdowns buttons are avalible with any color and any size.
-                            </p>
-
-                            <h3 class="font-bold">Dropdowns</h3>
-
-
-                            <div class="btn-group">
-                                <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle">Action
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="#">Action</a></li>
-                                    <li><a class="dropdown-item" href="#" class="font-bold">Another action</a></li>
-                                    <li><a class="dropdown-item" href="#">Something else here</a></li>
-                                    <li class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="#">Separated link</a></li>
-                                </ul>
-                            </div>
-                            <div class="btn-group">
-                                <button data-toggle="dropdown" class="btn btn-warning dropdown-toggle">Action
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="#">Action</a></li>
-                                    <li><a class="dropdown-item" href="#">Another action</a></li>
-                                    <li><a class="dropdown-item" href="#">Something else here</a></li>
-                                    <li class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="#">Separated link</a></li>
-                                </ul>
-                            </div>
-                            <div class="btn-group">
-                                <button data-toggle="dropdown" class="btn btn-default dropdown-toggle">Action
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="#">Action</a></li>
-                                    <li><a class="dropdown-item" href="#">Another action</a></li>
-                                    <li><a class="dropdown-item" href="#">Something else here</a></li>
-                                    <li class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="#">Separated link</a></li>
-                                </ul>
-                            </div>
-
-                            <br/>
-                            <div class="btn-group">
-                                <button data-toggle="dropdown" class="btn btn-primary btn-sm dropdown-toggle">
-                                    Action
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="#">Action</a></li>
-                                    <li><a class="dropdown-item" href="#">Another action</a></li>
-                                    <li><a class="dropdown-item" href="#">Something else here</a></li>
-                                    <li class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="#">Separated link</a></li>
-                                </ul>
-                            </div>
-                            <div class="btn-group">
-                                <button data-toggle="dropdown" class="btn btn-warning btn-sm dropdown-toggle">
-                                    Action
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="#">Action</a></li>
-                                    <li><a class="dropdown-item" href="#">Another action</a></li>
-                                    <li><a class="dropdown-item" href="#">Something else here</a></li>
-                                    <li class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="#">Separated link</a></li>
-                                </ul>
-                            </div>
-                            <div class="btn-group">
-                                <button data-toggle="dropdown" class="btn btn-default btn-sm dropdown-toggle">
-                                    Action
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="#">Action</a></li>
-                                    <li><a class="dropdown-item" href="#">Another action</a></li>
-                                    <li><a class="dropdown-item" href="#">Something else here</a></li>
-                                    <li class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="#">Separated link</a></li>
-                                </ul>
-                            </div>
-                            <br/>
-                            <div class="btn-group">
-                                <button data-toggle="dropdown" class="btn btn-primary btn-xs dropdown-toggle">
-                                    Action
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="#">Action</a></li>
-                                    <li><a class="dropdown-item" href="#">Another action</a></li>
-                                    <li><a class="dropdown-item" href="#">Something else here</a></li>
-                                    <li class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="#">Separated link</a></li>
-                                </ul>
-                            </div>
-                            <div class="btn-group">
-                                <button data-toggle="dropdown" class="btn btn-warning btn-xs dropdown-toggle">
-                                    Action
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="#">Action</a></li>
-                                    <li><a class="dropdown-item" href="#">Another action</a></li>
-                                    <li><a class="dropdown-item" href="#">Something else here</a></li>
-                                    <li class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="#">Separated link</a></li>
-                                </ul>
-                            </div>
-                            <div class="btn-group">
-                                <button data-toggle="dropdown" class="btn btn-default btn-xs dropdown-toggle">
-                                    Action
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="#">Action</a></li>
-                                    <li><a class="dropdown-item" href="#">Another action</a></li>
-                                    <li><a class="dropdown-item" href="#">Something else here</a></li>
-                                    <li class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="#">Separated link</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="ibox ">
-                        <div class="ibox-title">
-                            <h5>Grouped Buttons</h5>
-                            <div class="ibox-tools">
-                                <a class="collapse-link">
-                                    <i class="fa fa-chevron-up"></i>
-                                </a>
-                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                    <i class="fa fa-wrench"></i>
-                                </a>
-                                <ul class="dropdown-menu dropdown-user">
-                                    <li><a href="#" class="dropdown-item">Config option 1</a>
-                                    </li>
-                                    <li><a href="#" class="dropdown-item">Config option 2</a>
-                                    </li>
-                                </ul>
-                                <a class="close-link">
-                                    <i class="fa fa-times"></i>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="ibox-content">
-                            <p>
-                                This is a group of buttons, ideal for sytuation where many actions are related to
-                                same element.
-                            </p>
-
-                            <h3 class="font-bold">Button Group</h3>
-                            <div class="btn-group">
-                                <button class="btn btn-white" type="button">Left</button>
-                                <button class="btn btn-primary" type="button">Middle</button>
-                                <button class="btn btn-white" type="button">Right</button>
-                            </div>
-                            <br/>
-                            <br/>
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-white"><i class="fa fa-chevron-left"></i>
-                                </button>
-                                <button class="btn btn-white">1</button>
-                                <button class="btn btn-white  active">2</button>
-                                <button class="btn btn-white">3</button>
-                                <button class="btn btn-white">4</button>
-                                <button type="button" class="btn btn-white"><i class="fa fa-chevron-right"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                    <h1 class="no-margins" id="today_cash">0</h1>
+                    <!--div class="stat-percent font-bold text-navy">20% <i class="fa fa-level-up"></i></div-->
+                    <small>Cash Flow</small>
                 </div>
             </div>
             <div class="ibox ">
                 <div class="ibox-title">
-                    <h5>Icon Buttons</h5>
                     <div class="ibox-tools">
-                        <a class="collapse-link">
-                            <i class="fa fa-chevron-up"></i>
-                        </a>
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                            <i class="fa fa-wrench"></i>
-                        </a>
-                        <ul class="dropdown-menu dropdown-user">
-                            <li><a href="#" class="dropdown-item">Config option 1</a>
-                            </li>
-                            <li><a href="#" class="dropdown-item">Config option 2</a>
-                            </li>
-                        </ul>
-                        <a class="close-link">
-                            <i class="fa fa-times"></i>
-                        </a>
+                        <span class="label label-primary float-right" id="user_title">Today</span>
                     </div>
+                    <h5>Total Registration</h5>
                 </div>
-                <div class="ibox-content float-e-margins">
-                    <p>
-                        To buttons with any color or any size you can add extra icon on the left or the right side.
-                    </p>
-
-                    <h3 class="font-bold">Commom Icon Buttons</h3>
-                    <p>
-                        <button class="btn btn-primary " type="button"><i class="fa fa-check"></i>&nbsp;Submit
-                        </button>
-                        <button class="btn btn-success " type="button"><i class="fa fa-upload"></i>&nbsp;&nbsp;<span
-                                    class="bold">Upload</span></button>
-                        <button class="btn btn-info " type="button"><i class="fa fa-paste"></i> Edit</button>
-                        <button class="btn btn-warning " type="button"><i class="fa fa-warning"></i> <span
-                                    class="bold">Warning</span></button>
-                        <button class="btn btn-default " type="button"><i class="fa fa-map-marker"></i>&nbsp;&nbsp;Map
-                        </button>
-
-                        <a href="" class="btn btn-success btn-facebook">
-                            <i class="fa fa-facebook"> </i> Sign in with Facebook
-                        </a>
-                        <a class="btn btn-success btn-facebook btn-outline">
-                            <i class="fa fa-facebook"> </i> Sign in with Facebook
-                        </a>
-                        <a class="btn btn-white btn-bitbucket">
-                            <i class="fa fa-user-md"></i>
-                        </a>
-                        <a class="btn btn-white btn-bitbucket">
-                            <i class="fa fa-group"></i>
-                        </a>
-                        <a class="btn btn-white btn-bitbucket">
-                            <i class="fa fa-wrench"></i>
-                        </a>
-                        <a class="btn btn-white btn-bitbucket">
-                            <i class="fa fa-exchange"></i>
-                        </a>
-                        <a class="btn btn-white btn-bitbucket">
-                            <i class="fa fa-check-circle-o"></i>
-                        </a>
-                        <a class="btn btn-white btn-bitbucket">
-                            <i class="fa fa-road"></i>
-                        </a>
-                        <a class="btn btn-white btn-bitbucket">
-                            <i class="fa fa-ambulance"></i>
-                        </a>
-                        <a class="btn btn-white btn-bitbucket">
-                            <i class="fa fa-star"></i> Stared
-                        </a>
-                    </p>
-
-                    <h3 class="font-bold">Toggle buttons Variations</h3>
-                    <p>Button groups can act as a radio or a switch or even a single toggle. Below are some examples
-                        click to see what happens</p>
-                    <button data-toggle="button" class="btn btn-primary btn-outline" type="button">Single Toggle
-                    </button>
-                    <button data-toggle="button" class="btn btn-primary" type="button">Single Toggle</button>
-                    <div data-toggle="buttons-checkbox" class="btn-group">
-                        <button class="btn btn-primary active" type="button"><i class="fa fa-bold"></i> Bold
-                        </button>
-                        <button class="btn btn-primary" type="button"><i class="fa fa-underline"></i> Underline
-                        </button>
-                        <button class="btn btn-primary active" type="button"><i class="fa fa-italic"></i> Italic
-                        </button>
-                    </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins" id="all_user"></h1>
+                    <!--div class="stat-percent font-bold text-navy">20% <i class="fa fa-level-up"></i></div-->
+                    <small>New Users</small>
                 </div>
             </div>
         </div>
-        <div class="col-lg-12">
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="ibox ">
-                        <div class="ibox-title">
-                            <h5>Circle Icon Buttons</h5>
-                            <div class="ibox-tools">
-                                <a class="collapse-link">
-                                    <i class="fa fa-chevron-up"></i>
-                                </a>
-                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                    <i class="fa fa-wrench"></i>
-                                </a>
-                                <ul class="dropdown-menu dropdown-user">
-                                    <li><a href="#" class="dropdown-item">Config option 1</a>
-                                    </li>
-                                    <li><a href="#" class="dropdown-item">Config option 2</a>
-                                    </li>
-                                </ul>
-                                <a class="close-link">
-                                    <i class="fa fa-times"></i>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="ibox-content">
-                            <p>
-                                For buttons you can add <code>.btn-circle</code> to rounded buttons and make it
-                                circle.
-                            </p>
 
-                            <h3 class="font-bold">Circle buttons</h3>
-                            <br/>
-                            <button class="btn btn-default btn-circle" type="button"><i class="fa fa-check"></i>
-                            </button>
-                            <button class="btn btn-primary btn-circle" type="button"><i class="fa fa-list"></i>
-                            </button>
-                            <button class="btn btn-success btn-circle" type="button"><i class="fa fa-link"></i>
-                            </button>
-                            <button class="btn btn-info btn-circle" type="button"><i class="fa fa-check"></i>
-                            </button>
-                            <button class="btn btn-warning btn-circle" type="button"><i class="fa fa-times"></i>
-                            </button>
-                            <button class="btn btn-danger btn-circle" type="button"><i class="fa fa-heart"></i>
-                            </button>
-                            <button class="btn btn-danger btn-circle btn-outline" type="button"><i
-                                        class="fa fa-heart"></i>
-                            </button>
-                            <br/>
-                            <br/>
-                            <button class="btn btn-default btn-circle btn-lg" type="button"><i
-                                        class="fa fa-check"></i>
-                            </button>
-                            <button class="btn btn-primary btn-circle btn-lg" type="button"><i
-                                        class="fa fa-list"></i>
-                            </button>
-                            <button class="btn btn-success btn-circle btn-lg" type="button"><i
-                                        class="fa fa-link"></i>
-                            </button>
-                            <button class="btn btn-info btn-circle btn-lg" type="button"><i class="fa fa-check"></i>
-                            </button>
-                            <button class="btn btn-warning btn-circle btn-lg" type="button"><i
-                                        class="fa fa-times"></i>
-                            </button>
-                            <button class="btn btn-danger btn-circle btn-lg" type="button"><i
-                                        class="fa fa-heart"></i>
-                            </button>
-                            <button class="btn btn-danger btn-circle btn-lg btn-outline" type="button"><i
-                                        class="fa fa-heart"></i>
-                            </button>
-
-                        </div>
+        <div class="col-lg-9">
+            <div class="ibox ">
+                <div class="ibox-content">
+                    <div>
+                        <span class="float-right text-right">
+                            <select name="city_select" id="city_select" class="form-control">
+                                <option value="0">Select a state</option>
+                                <volist name="city" id="vo">
+                                    <option value="{pigcms{$vo.area_id}">{pigcms{$vo.area_name}</option>
+                                </volist>
+                            </select>
+                        </span>
+                        <h1 class="m-b-xs" id="city_total">$ 0</h1>
+                        <h3 class="font-bold no-margins">
+                            Total Cash Flow
+                        </h3>
+                        <!--small>Sales marketing.</small-->
                     </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="ibox ">
-                        <div class="ibox-title">
-                            <h5>Rounded Buttons</h5>
-                            <div class="ibox-tools">
-                                <a class="collapse-link">
-                                    <i class="fa fa-chevron-up"></i>
-                                </a>
-                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                    <i class="fa fa-wrench"></i>
-                                </a>
-                                <ul class="dropdown-menu dropdown-user">
-                                    <li><a href="#" class="dropdown-item">Config option 1</a>
-                                    </li>
-                                    <li><a href="#" class="dropdown-item">Config option 2</a>
-                                    </li>
-                                </ul>
-                                <a class="close-link">
-                                    <i class="fa fa-times"></i>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="ibox-content float-e-margins">
-                            <p>
-                                You can also add <code>.btn-rounded</code> class to round buttons.
-                            </p>
 
-                            <h3 class="font-bold">Button Group</h3>
-                            <p>
-                                <a class="btn btn-default btn-rounded" href="#">Default</a>
-                                <a class="btn btn-primary btn-rounded" href="#">Primary</a>
-                                <a class="btn btn-success btn-rounded" href="#">Success</a>
-                                <a class="btn btn-info btn-rounded" href="#">Info</a>
-                                <a class="btn btn-warning btn-rounded" href="#">Warning</a>
-                                <a class="btn btn-danger btn-rounded" href="#">Danger</a>
-                                <a class="btn btn-danger btn-rounded btn-outline" href="#">Danger</a>
-                                <br/>
-                                <br/>
-                                <a class="btn btn-primary btn-rounded btn-block" href="#"><i
-                                            class="fa fa-info-circle"></i> Block rounded with icon button</a>
-                            </p>
-                        </div>
+                    <div>
+                        <canvas id="lineCityChart" height="70"></canvas>
                     </div>
-                </div>
 
+                    <div class="m-t-md">
+                        <!--small class="float-right">
+                            <i class="fa fa-clock-o"> </i>
+                            Update on 16.07.2015
+                        </small>
+                        <small>
+                            <strong>Analysis of sales:</strong> The value has been changed over time, and last month reached a level over $50,000.
+                        </small-->
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3">
+            <div class="ibox ">
+                <div class="ibox-title">
+                    <div class="ibox-tools">
+                        <span class="label label-primary float-right">Today</span>
+                    </div>
+                    <h5>Cash Flow by City</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins" id="city_total_label">0</h1>
+                    <div class="stat-percent font-bold text-navy">20% <i class="fa fa-level-up"></i></div>
+                    <small>Cash Flow</small>
+                </div>
+            </div>
+            <div class="ibox ">
+                <div class="ibox-title">
+                    <div class="ibox-tools">
+                        <span class="label label-primary float-right">Today</span>
+                    </div>
+                    <h5>New Users by City</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins" id="city_user">0</h1>
+                    <div class="stat-percent font-bold text-navy">20% <i class="fa fa-level-up"></i></div>
+                    <small>New Users</small>
+                </div>
             </div>
         </div>
     </div>
     <script src="{pigcms{$static_path}js/plugins/chartJs/Chart.min.js"></script>
     <script>
         $(document).ready(function() {
+            var select_day = $('#main_select').children('button.active').data('type');
+            var user_title = $('#main_select').children('button.active').html();
+            var city_id = $('#city_select').val();
+
+            getData(select_day,city_id,user_title);
+        });
+
+        function getData(select_day,city_id,user_title){
+            var re_data = {'day':select_day,'city_id':city_id};
+            $("#user_title").html(user_title);
+            $.post("{pigcms{:U('Index/ajax_new_data')}",re_data,function(data){
+                createChart(data.data_array,'lineChart');
+
+                createChart(data.city_array,'lineCityChart');
+
+                $('#cash_total').html('$ '+data.total);
+                $('#today_cash').html(data.today_cash);
+
+                $('#city_total').html('$ '+data.city_total);
+                $('#city_total_label').html(data.city_total);
+
+                $('#city_select').val(data.city_id);
+
+                $('#all_user').html(data.all_user);
+                $('#city_user').html(data.city_user)
+            });
+        }
+
+        function createChart(data,id){
+            var time_arr = [];
+            var cash_arr = [];
+            var sales_arr = [];
+            for(var key in data) {
+                time_arr.push(key);
+                cash_arr.push(data[key]['cash_flow']);
+                sales_arr.push(data[key]['sales']);
+            }
+
+            var all_data = {
+                'time':time_arr,
+                'cash':cash_arr,
+                'sales':sales_arr
+            };
 
             var lineData = {
-                labels: ["January", "February", "March", "April", "May", "June", "July"],
+                labels:all_data['time'],
                 datasets: [
                     {
-                        label: "Example dataset",
+                        label: "Cash Flow",
                         backgroundColor: "rgba(26,179,148,0.5)",
                         borderColor: "rgba(26,179,148,0.7)",
                         pointBackgroundColor: "rgba(26,179,148,1)",
                         pointBorderColor: "#fff",
-                        data: [28, 48, 40, 19, 86, 27, 90]
+                        data: all_data['cash']
                     },
                     {
-                        label: "Example dataset",
+                        label: "Sales",
                         backgroundColor: "rgba(220,220,220,0.5)",
                         borderColor: "rgba(220,220,220,1)",
                         pointBackgroundColor: "rgba(220,220,220,1)",
                         pointBorderColor: "#fff",
-                        data: [65, 59, 80, 81, 56, 55, 40]
+                        data: all_data['sales']
                     }
                 ]
             };
@@ -552,10 +227,25 @@
                 responsive: true
             };
 
-
-            var ctx = document.getElementById("lineChart").getContext("2d");
+            var ctx = document.getElementById(id).getContext("2d");
             new Chart(ctx, {type: 'line', data: lineData, options:lineOptions});
+        }
 
+        $('#main_select').children('button').each(function () {
+            $(this).click(function () {
+                var select_day = $(this).data('type');
+                var city_id = $('#city_select').val();
+                var user_title = $(this).html();
+                getData(select_day,city_id,user_title);
+                $(this).addClass('active').siblings().removeClass('active');;
+            });
+        });
+
+        $('#city_select').change(function () {
+            var select_day = $('#main_select').children('button.active').data('type');
+            var user_title = $('#main_select').children('button.active').html();
+            var city_id = $(this).val();
+            getData(select_day,city_id,user_title);
         });
     </script>
 <!----------------------------------------    以下不要写代码     ------------------------------------------------>
