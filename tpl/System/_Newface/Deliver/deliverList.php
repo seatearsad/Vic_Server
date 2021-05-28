@@ -18,9 +18,9 @@
                 </li>
             </ol>
         </div>
-        <div class="col-lg-3" style="height 90px;margin-top:40px;">
-            <div class="btn-group">
-                <button class="btn btn-white active">
+        <div class="col-lg-3 " style="height 90px;margin-top:40px;">
+            <div class="btn-group float-right">
+                <button class="btn btn-white ">
                     <a href="{pigcms{:U('Deliver/prep_mode')}" style="color: inherit">{pigcms{:L('D_F_PREP_MODE')}</a>
                 </button>
             </div>
@@ -39,7 +39,7 @@
                     <div class="ibox-content">
                         <div class="table-responsive">
                             <!-------------------------------- 工具条 -------------------------------------->
-                            <div style="height: 50px;">
+                            <div style="height: 55px;">
                                 <div id="tool_bar" class="form-inline tutti_toolbar">
                                     {pigcms{:L('_BACK_DELIVERY_STATUS_')} ：
                                     <select id="status" name="deliver" class="form-control">

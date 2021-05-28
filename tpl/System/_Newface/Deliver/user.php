@@ -4,7 +4,7 @@
     <include file="Public:left_menu"/>
     <!----------------------------------------    以上不要写代码     ------------------------------------------------>
     <div class="row wrapper border-bottom white-bg page-heading">
-        <div class="col-lg-8">
+        <div class="col-lg-6">
             <h2>{pigcms{:L('_BACK_COURIER_MANA_')}</h2>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
@@ -18,8 +18,8 @@
                 </li>
             </ol>
         </div>
-        <div class="col-lg-4 float-right" style="height 90px;margin-top:40px;">
-            <div class="btn-group">
+        <div class="col-lg-6 float-right" style="height 90px;margin-top:40px;">
+            <div class="btn-group float-right">
 
                 <if condition="$system_session['level'] eq 2">
                     <a href="{pigcms{:U('Deliver/user')}" style="float:right;"><button class="btn btn-white active text-grey">{pigcms{:L('_BACK_COURIER_MANA_')}</button></a>
@@ -142,8 +142,7 @@
                             </tr>
                             </tfoot>
                         </table>
-                        <div style="height: 30px;">
-                            {pigcms{$pagebar}
+                        <div id="table_pagebar" style="height: 30px;">
                         </div>
                     </div>
                 </div>
@@ -157,6 +156,8 @@
         city_id = $(this).val();
         window.location.href = "{pigcms{:U('Deliver/user')}" + "&city_id="+city_id;
     });
+    var pagestr='{pigcms{$pagebar}';
+    let pagediv= $('#table_pagebar');
     $(document).ready(function () {
 
         $('.footable').footable({
@@ -173,6 +174,8 @@
         //         ...
         //     }
         // });
+        var pagestr='{pigcms{$pagebar}';
+        let pagediv= $('#table_pagebar');
     });
 </script>
 <include file="Public:footer"/>

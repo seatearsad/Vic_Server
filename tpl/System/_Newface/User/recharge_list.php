@@ -19,7 +19,7 @@
             </ol>
         </div>
         <div class="col-lg-3" style="height 90px;margin-top:40px;">
-            <button class="btn btn-white active">
+            <button class="btn btn-white float-right">
                 <a href="{pigcms{:U('User/admin_recharge_list')}" style="color: inherit">{pigcms{:L('F_CREDITS_ADDED')}</a>
             </button>
 
@@ -38,7 +38,7 @@
                     <div class="ibox-content">
                         <div class="table-responsive">
                             <!-------------------------------- 工具条 -------------------------------------->
-                            <div style="height: 50px;">
+                            <div style="height: 55px;">
                                 <div id="tool_bar" class="form-inline tutti_toolbar">
                                     <form action="{pigcms{:U('recharge_list')}" method="get">
                                         <input type="hidden" name="c" value="User"/>

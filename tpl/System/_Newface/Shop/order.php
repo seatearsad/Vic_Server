@@ -3,7 +3,7 @@
     <include file="Public:left_menu"/>
     <!----------------------------------------    以上不要写代码     ------------------------------------------------>
     <div class="row wrapper border-bottom white-bg page-heading">
-        <div class="col-lg-9">
+        <div class="col-lg-6">
             <h2>{pigcms{:L('_BACK_ORDER_LIST_')}</h2>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
@@ -18,18 +18,18 @@
             </ol>
         </div>
 
-        <div class="col-lg-3 float-right" style="height 90px;margin-top:40px;">
+        <div class="col-lg-6 float-right" style="height 90px;margin-top:40px;">
 <!--            <div class="btn-group">-->
 <!--                <button class="btn btn-white" type="button">Left</button>-->
 <!--                <button class="btn btn-primary" type="button">Middle</button>-->
 <!--                <button class="btn btn-white" type="button">Right</button>-->
 <!--            </div>-->
-                <div class="btn-group">
-                    <a href="{pigcms{:U('Shop/export',$_GET)}" class="button" style="float:right;margin-right: 10px;"><button class="btn btn-white">{pigcms{:L('_BACK_DOWN_ORDER_')}</button></a>
+                <div class="btn-group float-right">
+                    <a href="{pigcms{:U('Shop/export',$_GET)}" class="button" style="float:right;margin-right: 10px;"><button class="btn btn-white text-grey">{pigcms{:L('_BACK_DOWN_ORDER_')}</button></a>
                     <if condition="$system_session['level'] eq 2">
-                    <a href="{pigcms{:U('Shop/export_total',$_GET)}" class="button" style="float:right;margin-right: 10px;"><button class="btn btn-white  ">{pigcms{:L('C_OMZB')}</button></a>
-                    <a href="{pigcms{:U('Shop/export_store',$_GET)}" class="button" style="float:right;margin-right: 10px;"><button class="btn btn-white">{pigcms{:L('C_OMRESTRANK')}</button></a>
-                    <a href="{pigcms{:U('Shop/export_user',$_GET)}" class="button" style="float:right;margin-right: 10px;"><button class="btn btn-white">{pigcms{:L('C_OMUSERRANK')}</button></a>
+                    <a href="{pigcms{:U('Shop/export_total',$_GET)}" class="button" style="float:right;margin-right: 10px;"><button class="btn btn-white text-grey ">{pigcms{:L('C_OMZB')}</button></a>
+                    <a href="{pigcms{:U('Shop/export_store',$_GET)}" class="button" style="float:right;margin-right: 10px;"><button class="btn btn-white text-grey">{pigcms{:L('C_OMRESTRANK')}</button></a>
+                    <a href="{pigcms{:U('Shop/export_user',$_GET)}" class="button" style="float:right;margin-right: 10px;"><button class="btn btn-white text-grey">{pigcms{:L('C_OMUSERRANK')}</button></a>
                     </if>
                 </div>
         </div>
@@ -63,9 +63,9 @@
                                     <form action="{pigcms{:U('Shop/order')}" method="get" class="form-inline">
                                         <input type="hidden" name="c" value="Shop"/>
                                         <input type="hidden" name="a" value="order"/>
-                                        {pigcms{:L('_BACK_SEARCH_')}: <input type="text" name="keyword"
+                                        {pigcms{:L('_BACK_SEARCH_')}:&nbsp; <input type="text" name="keyword"
                                                                              class="form-control"
-                                                                             value="{pigcms{$_GET['keyword']}"/>
+                                                                             value="{pigcms{$_GET['keyword']}"/>&nbsp;
                                         <select name="searchtype" class="form-control">
                                             <option value="real_orderid"
                                             <if condition="$_GET['searchtype'] eq 'real_orderid'">selected="selected"
@@ -85,23 +85,23 @@
                                             <option value="id"
                                             <if condition="$_GET['searchtype'] eq 'id'">selected="selected"</if>
                                             >User ID</option>
-                                        </select>
-                                        <font color="#000">{pigcms{:L('_BACK_DATE_SELECT_')}：</font>
+                                        </select>&nbsp;
+                                        <font color="#000">{pigcms{:L('_BACK_DATE_SELECT_')}：</font>&nbsp;
                                         <input type="text" class="form-control" name="begin_time" style="width:120px;"
                                                id="d4311" value="{pigcms{$_GET.begin_time}"
-                                               onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd',lang:'en'})"/>
+                                               onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd',lang:'en'})"/>&nbsp;
                                         <input type="text" class="form-control" name="end_time" style="width:120px;"
                                                id="d4311" value="{pigcms{$_GET.end_time}"
-                                               onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd',lang:'en'})"/>
-                                        {pigcms{:L('_BACK_ORDER_STATUS_')}:
+                                               onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd',lang:'en'})"/>&nbsp;
+                                        {pigcms{:L('_BACK_ORDER_STATUS_')}:&nbsp;
                                         <select id="status" name="status" class="form-control">
                                             <volist name="status_list" id="vo">
                                                 <option value="{pigcms{$key}"
                                                 <if condition="$key eq $status">selected="selected"</if>
                                                 >{pigcms{$vo}</option>
                                             </volist>
-                                        </select>
-                                        {pigcms{:L('_BACK_PAYMENT_METHOD_')}:
+                                        </select>&nbsp;
+                                        {pigcms{:L('_BACK_PAYMENT_METHOD_')}:&nbsp;
                                         <select id="pay_type" name="pay_type" class="form-control">
                                             <option value=""
                                             <if condition="'' eq $pay_type">selected="selected"</if>
@@ -114,7 +114,7 @@
                                             <option value="balance"
                                             <if condition="'balance' eq $pay_type">selected="selected"</if>
                                             >{pigcms{:L('_BACK_BALANCE_')}</option>
-                                        </select>
+                                        </select>&nbsp;
                                         <input type="submit" value="{pigcms{:L('_BACK_SEARCH_')}" class="form-control"/>　
                                     </form>
                                 </div>
@@ -240,8 +240,8 @@
                             </tr>
                             </tfoot>
                         </table>
-                        <div style="height: 30px;">
-                            {pigcms{$pagebar}
+                        <div id="table_pagebar" style="height: 30px;">
+
                         </div>
 
                     </div>
@@ -253,6 +253,8 @@
 
 <!-- Page-Level Scripts -->
 <script>
+    var pagestr='{pigcms{$pagebar}';
+    let pagediv= $('#table_pagebar');
     $(document).ready(function () {
 
         $('.footable').footable({
@@ -269,6 +271,7 @@
         //         ...
         //     }
         // });
+        pagediv.html(pagestr);
     });
 </script>
 

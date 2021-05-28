@@ -94,14 +94,13 @@ class Page{
         }else{
             $url .= '&page=';
         }
-        $str="<div class='dataTables_paginate paging_simple_numbers ' id='DataTables_Table_0_paginate'>";
+        $str='<div class="dataTables_paginate paging_simple_numbers " id="DataTables_Table_0_paginate"">';
         $str = '<span class="total float-left"><span id="row_count">'.$this->totalRows.'</span> '.L('_BACK_PAGE_ORDERS_').' '.$now.' / '.$total.' '.L('_BACK_PAGE_NUM_').'   </span>';
-        $str .="<div class='dataTables_paginate paging_simple_numbers' id='DataTables_Table_0_paginate'><ul class='pagination float-right'>
-                ";
+        $str .='<div class="dataTables_paginate paging_simple_numbers" id="DataTables_Table_0_paginate"><ul class="pagination float-right"> ';
 
         if($now > 1){
-            $str.="<li class='page-item previous' id='DataTables_Table_0_previous'>
-                        <a href='".$url.($now-1)."' aria-controls='DataTables_Table_0' data-dt-idx='0' tabindex='0' class='page-link'>".L('_BACK_PREVIOUS_')."</a></li>";
+            $str.='<li class="page-item previous" id="DataTables_Table_0_previous">
+                        <a href="'.$url.($now-1).'" aria-controls="DataTables_Table_0" data-dt-idx="0" tabindex="0" class="page-link">'.L('_BACK_PREVIOUS_').'</a></li>';
         }
         //后面的页可以方便的回首页
         if($now!=1 && $now>4 && $total>6){
@@ -145,8 +144,10 @@ class Page{
                                                     ';
 //            $str .= '<a href="'.$url.($now+1).'" class="next">'.L('_BACK_NEXT_').'</a>';
         }
-
+        //die($str);
+        $str = str_replace(array("\r\n", "\r", "\n"), "", $str);
         return $str;
     }
 }
 ?>
+

@@ -21,14 +21,14 @@
                 </td>
             </tr>
 			<tr>
-				<th width="15%">{pigcms{:L('_B_D_LOGIN_KEY1_')}</th>
-				<td width="35%"><input type="text" class="input fl" name="pwd" size="20" value="123456" validate="required:true"/></td>
-				<th width="15%">{pigcms{:L('_BACK_STATUS_')}</th>
-				<td width="35%" class="radio_box">
-					<span class="cb-enable"><label class="cb-enable <if condition="$now_user['status'] eq 1">selected</if>"><span>{pigcms{:L('_BACK_NORMAL_')}</span><input type="radio" name="status" value="1"  <if condition="$now_user['status'] eq 1">checked="checked"</if>/></label></span>
-					<span class="cb-disable"><label class="cb-disable <if condition="$now_user['status'] eq 0">selected</if>"><span>{pigcms{:L('_BACK_FORBID_')}</span><input type="radio" name="status" value="0"  <if condition="$now_user['status'] eq 0">checked="checked"</if>/></label></span>
-				</td>
-			</tr>
+                <th width="15%">{pigcms{:L('_B_D_LOGIN_KEY1_')}</th>
+                <td width="35%"><input type="text" class="input fl" name="pwd" size="20" value="123456" validate="required:true"/></td>
+                <th width="15%">{pigcms{:L('_BACK_STATUS_')}</th>
+                <td width="35%" class="radio_box">
+                    <span class="cb-enable"><label class="cb-enable <if condition="$now_user['status'] eq 1">selected</if>"><span>{pigcms{:L('_BACK_NORMAL_')}</span><input type="radio" name="status" value="1"  <if condition="$now_user['status'] eq 1">checked="checked"</if>/></label></span>
+                    <span class="cb-disable"><label class="cb-disable <if condition="$now_user['status'] eq 0">selected</if>"><span>{pigcms{:L('_BACK_FORBID_')}</span><input type="radio" name="status" value="0"  <if condition="$now_user['status'] eq 0">checked="checked"</if>/></label></span>
+                </td>
+            </tr>
 			<tr>
 			 	<th width="15%">{pigcms{:L('_BACK_DELIVER_AREA_')}</th>
 				<!--td id="choose_cityarea" colspan=3></td-->
