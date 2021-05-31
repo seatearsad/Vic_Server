@@ -245,9 +245,14 @@ class UserAction extends BaseAction {
             $objProps->setSubject($title);
             $objProps->setDescription($title);
 
+
             // 设置当前的sheet
-            $begin_time = strtotime($_GET['begin_time']);
-            $end_time = strtotime($_GET['end_time']);
+            $begin_time = strtotime($_GET['begin_time']." 00:00:00");
+            $end_time = strtotime($_GET['end_time']." 23:59:59");
+
+            if($_GET['status'] != -1){
+                $where['status'] = $_GET['status'];
+            }
 
             $where['add_time'] = array('between',array($begin_time,$end_time));
 
