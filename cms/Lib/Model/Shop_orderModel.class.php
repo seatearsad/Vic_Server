@@ -86,6 +86,17 @@ class Shop_orderModel extends Model
 		);
 	}
 
+    public function getStatusListForMilly(){
+        return array(
+            '-1' => L('_BACK_ALL_'),
+            '100'=> L('_STATUS_LIST_100_'),
+            '0' => L('_STATUS_LIST_0_'),
+            1 => L('_B_PURE_MY_72_'),
+            5 => L('_B_PURE_MY_76_'),
+            2 => L('_IS_COMPLETE_')
+        );
+    }
+
     public function getStatusNewList(){
         return array(
             '-1' => L('_BACK_ALL_'),

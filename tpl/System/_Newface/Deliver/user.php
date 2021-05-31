@@ -39,7 +39,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="ibox ">
-                    <div class="ibox-title">
+                    <div class="ibox-title tutti_hidden_obj">
                         <h5>{pigcms{:L('_BACK_ORDER_LIST_')}</h5>
                         <div class="ibox-tools">
                             <if condition="$system_session['level'] neq 3">
@@ -63,10 +63,11 @@
                                             <option value="uid" <if condition="$_GET['searchtype'] eq 'uid'">selected="selected"</if>>{pigcms{:L('_BACK_USER_ID_')}</option>
                                             <option value="nickname" <if condition="$_GET['searchtype'] eq 'nickname'">selected="selected"</if>>{pigcms{:L('_BACK_NICKNAME_')}</option>
                                             <option value="phone" <if condition="$_GET['searchtype'] eq 'phone'">selected="selected"</if>>{pigcms{:L('_BACK_PHONE_NUM_')}</option>
+                                            <option value="mail" <if condition="$_GET['searchtype'] eq 'mail'">selected="selected"</if>>{pigcms{:L('_EMAIL_TXT_')}</option>
                                         </select>
                                         <if condition="$system_session['level'] neq 3">
                                             &nbsp;&nbsp;City:&nbsp;&nbsp;
-                                            <select name="searchtype" id="city_select" class="form-control" >
+                                            <select name="city_select" id="city_select" class="form-control" >
                                                 <option value="0" <if condition="$city_id eq '' or $city_id eq 0">selected="selected"</if>>All</option>
                                                 <volist name="city" id="vo">
                                                     <option value="{pigcms{$vo.area_id}" <if condition="$city_id eq $vo['area_id']">selected="selected"</if>>{pigcms{$vo.area_name}</option>
@@ -87,7 +88,7 @@
                                 <!--                                ID，姓名（名+姓），电话，邮箱，配送城市，配送范围，配送总量，状态，历史记录统计，配送记录，编辑-->
                                 <!--                                展开信息：地址，备注，最后修改时间-->
                                 <th>ID</th>
-                                <th  data-sortable="false">{pigcms{:L('_BACK_NICKNAME_')}</th>
+                                <th  data-sortable="false">{pigcms{:L('NAME_BKADMIN')}</th>
                                 <th data-sortable="false">{pigcms{:L('_BACK_PHONE_NUM_')}</th>
                                 <th data-sortable="false">Email</th>
                                 <th data-sortable="false">City</th>
@@ -105,7 +106,7 @@
                                 <volist name="user_list" id="vo">
                                     <tr>
                                         <td>{pigcms{$vo.uid}</td>
-                                        <td>{pigcms{$vo.name}</td>
+                                        <td>{pigcms{$vo.name}&nbsp;{pigcms{$vo.family_name}</td>
                                         <td>{pigcms{$vo.phone}</td>
                                         <td>{pigcms{$vo.email}</td>
                                         <td>{pigcms{$vo.area_name}</td>
