@@ -81,12 +81,15 @@ class DeliverAction extends BaseAction {
     public function user() {
         //搜索
         if (!empty($_GET['keyword'])) {
+
             if ($_GET['searchtype'] == 'uid') {
                 $condition_user['u.uid'] = $_GET['keyword'];
             } else if ($_GET['searchtype'] == 'nickname') {
                 $condition_user['u.name'] = array('like', '%' . $_GET['keyword'] . '%');
             } else if ($_GET['searchtype'] == 'phone') {
                 $condition_user['u.phone'] = array('like', '%' . $_GET['keyword'] . '%');
+            } else if ($_GET['searchtype'] == 'mail') {
+                $condition_user['u.email'] = array('like', '%' . $_GET['keyword'] . '%');
             }
         }
 

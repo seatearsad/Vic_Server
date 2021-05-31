@@ -1169,6 +1169,23 @@ class MerchantAction extends BaseAction{
 	public function reply()
 	{
 		$where = ' WHERE r.status<2';
+
+        if($_GET['city_id']){
+            $this->assign('city_id',$_GET['city_id']);
+            if($_GET['city_id'] != 0) {
+                $where .= " AND m.city_id =" . $_GET['city_id'];
+            }
+        }else{
+            $this->assign('city_id',0);
+        }
+        //garfunkel 判断城市管理员
+//        if($this->system_session['level'] == 3){
+//            $where .=
+//            $condition_user['u.city_id'] = $this->system_session['area_id'];
+//        }
+
+        $city = D('Area')->where(array('area_type'=>2,'is_open'=>1))->select();
+        $this->assign('city',$city);
 		if(!empty($_GET['keyword'])){
 			if($_GET['searchtype'] == 'm_name'){
 				$where .= " AND m.name LIKE '%" . htmlspecialchars($_GET['keyword']) . "%'";
@@ -1177,6 +1194,10 @@ class MerchantAction extends BaseAction{
 				$where .= " AND s.name LIKE '%" . htmlspecialchars($_GET['keyword']) . "%'";
 			}else if($_GET['searchtype'] == 'nickname'){
 				$where .= " AND u.nickname LIKE '%" . htmlspecialchars($_GET['keyword']) . "%'";
+            }else if($_GET['searchtype'] == 'userid'){
+                $where .= " AND u.uid =" . htmlspecialchars($_GET['keyword']);
+            }else if($_GET['searchtype'] == 'replyid'){
+                $where .= " AND r.pigcms_id =". htmlspecialchars($_GET['keyword']);
 			}else if($_GET['searchtype'] == 'phone'){
 				$where .= " AND u.phone LIKE '%" . htmlspecialchars($_GET['keyword']) . "%'";
 			}
@@ -1187,7 +1208,7 @@ class MerchantAction extends BaseAction{
 		import('@.ORG.system_page');
 		$p = new Page($count, 50);
 
-		$sql = "SELECT r.*, m.name AS m_name, s.name AS s_name, u.nickname, u.phone FROM " . C('DB_PREFIX') . "merchant AS m INNER JOIN " . C('DB_PREFIX') . "reply AS r ON r.mer_id = m.mer_id INNER JOIN " . C('DB_PREFIX') . "user AS u ON r.uid=u.uid LEFT JOIN " . C('DB_PREFIX') . "merchant_store AS s ON s.store_id=r.store_id {$where} ORDER BY r.pigcms_id DESC LIMIT {$p->firstRow},{$p->listRows}";
+		$sql = "SELECT r.*,u.*,m.*,a.area_name AS area_name,s.city_id AS mcity_id,m.name AS m_name, s.name AS s_name,u.uid as userid,u.nickname, u.phone FROM " . C('DB_PREFIX') . "merchant AS m INNER JOIN " . C('DB_PREFIX') . "reply AS r ON r.mer_id = m.mer_id INNER JOIN " . C('DB_PREFIX') . "user AS u ON r.uid=u.uid LEFT JOIN " . C('DB_PREFIX') . "merchant_store AS s ON s.store_id=r.store_id  LEFT JOIN " . C('DB_PREFIX') . "area AS a ON s.city_id=a.area_id {$where} ORDER BY r.pigcms_id DESC LIMIT {$p->firstRow},{$p->listRows}";
 		$reply_list = D()->query($sql);
 //		var_dump($reply_list);die();
 //		foreach($reply_list as &$reply){

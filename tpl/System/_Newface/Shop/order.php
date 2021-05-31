@@ -69,29 +69,17 @@
                                     <form action="{pigcms{:U('Shop/order')}" method="get" class="form-inline">
                                         <input type="hidden" name="c" value="Shop"/>
                                         <input type="hidden" name="a" value="order"/>
-                                        {pigcms{:L('_BACK_SEARCH_')}:&nbsp; <input type="text" name="keyword"
-                                                                             class="form-control"
-                                                                             value="{pigcms{$_GET['keyword']}"/>&nbsp;
+                                        {pigcms{:L('_BACK_SEARCH_')}:&nbsp; <input type="text" name="keyword" class="form-control" value="{pigcms{$_GET['keyword']}"/>&nbsp;
                                         <select name="searchtype" class="form-control">
-                                            <option value="real_orderid"
-                                            <if condition="$_GET['searchtype'] eq 'real_orderid'">selected="selected"
-                                            </if>
-                                            >{pigcms{:L('_BACK_ORDER_NUM_')}</option>
+                                            <option value="real_orderid" <if condition="$_GET['searchtype'] eq 'real_orderid'">selected="selected" </if> >{pigcms{:L('_BACK_ORDER_NUM_')}</option>
                                             <!--option value="orderid" <if condition="$_GET['searchtype'] eq 'orderid'">selected="selected"</if>>订单流水号</option>
                                             <option value="third_id" <if condition="$_GET['searchtype'] eq 'third_id'">selected="selected"</if>>第三方支付流水号</option-->
-                                            <option value="s_name"
-                                            <if condition="$_GET['searchtype'] eq 's_name'">selected="selected"</if>
-                                            >{pigcms{:L('_BACK_STORE_NAME_')}</option>
-                                            <option value="name"
-                                            <if condition="$_GET['searchtype'] eq 'name'">selected="selected"</if>
-                                            >{pigcms{:L('_BACK_USER_NAME_')}</option>
-                                            <option value="phone"
-                                            <if condition="$_GET['searchtype'] eq 'phone'">selected="selected"</if>
-                                            >{pigcms{:L('_BACK_USER_PHONE_')}</option>
-                                            <option value="id"
-                                            <if condition="$_GET['searchtype'] eq 'id'">selected="selected"</if>
-                                            >User ID</option>
-                                        </select>&nbsp;
+                                            <option value="s_name" <if condition="$_GET['searchtype'] eq 's_name'">selected="selected"</if>>{pigcms{:L('_BACK_STORE_NAME_')}</option>
+                                            <option value="name" <if condition="$_GET['searchtype'] eq 'name'">selected="selected"</if>>{pigcms{:L('_BACK_USER_NAME_')}</option>
+                                            <option value="phone" <if condition="$_GET['searchtype'] eq 'phone'">selected="selected"</if>>{pigcms{:L('_BACK_USER_PHONE_')}</option>
+                                            <option value="id" <if condition="$_GET['searchtype'] eq 'id'">selected="selected"</if>>User ID</option>
+                                            <option value="orderid"<if condition="$_GET['searchtype'] eq 'orderid'">selected="selected"</if>>Order ID</option>
+                                        </select>
                                         <font color="#000">{pigcms{:L('_BACK_DATE_SELECT_')}：</font>&nbsp;
                                         <input type="text" class="form-control" name="begin_time" style="width:120px;"
                                                id="d4311" value="{pigcms{$_GET.begin_time}"
@@ -102,9 +90,9 @@
                                         {pigcms{:L('_BACK_ORDER_STATUS_')}:&nbsp;
                                         <select id="status" name="status" class="form-control">
                                             <volist name="status_list" id="vo">
-                                                <option value="{pigcms{$key}"
-                                                <if condition="$key eq $status">selected="selected"</if>
-                                                >{pigcms{$vo}</option>
+                                                <option value="{pigcms{$key}" <if condition="$key eq $status">selected="selected"</if> >
+                                                {pigcms{$vo}
+                                                </option>
                                             </volist>
                                         </select>&nbsp;
                                         {pigcms{:L('_BACK_PAYMENT_METHOD_')}:&nbsp;
@@ -187,7 +175,7 @@
                                                 H:i:s",###}
                                             </if>
                                         </td>
-                                        <td>{pigcms{$vo.status_str}111</td>
+                                        <td>{pigcms{$vo.status_str}</td>
 
                                         <!--                                            <if condition="$system_session['level'] neq 3">-->
                                         <!--                                                <td><a target="_blank" href="{pigcms{:U('Bill/merchant_money_list',array('mer_id'=>$vo['mer_id']))}">{pigcms{:L('_BACK_INVOICE_')}</a>-->
@@ -224,7 +212,6 @@
                                                      <a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Shop/edit_order',array('order_id'=>$vo['order_id']))}','{pigcms{:L(\'_BACK_EDIT_\')}',920,520,true,false,false,editbtn,'edit',true);"><button class="btn btn-white text-grey" type="button">{pigcms{:L('_BACK_EDIT_')}</button></a>
                                                      <php>}</php>
                                                      <a href="{pigcms{:U('Shop/del',array('id'=>$vo['order_id']))}" onclick="return confirm('{pigcms{:L(\'_B_PURE_MY_84_\')}')" style="color: red"><button class="btn btn-white text-grey" type="button">{pigcms{:L('_BACK_DEL_')}</button></a>
-
                                                 </div>
                                             </div>
                                         </td>

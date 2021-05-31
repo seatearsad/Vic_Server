@@ -456,7 +456,6 @@ class ShopAction extends BaseAction
 
     public function order()
     {
-
         $where_store = null;
         if(!empty($_GET['keyword']) && $_GET['searchtype'] == 's_name'){
             $where_store['name'] = array('like', '%'.$_GET['keyword'].'%');
@@ -505,10 +504,12 @@ class ShopAction extends BaseAction
             if ($_GET['searchtype'] == 'real_orderid') {
                 $where['real_orderid'] = htmlspecialchars($_GET['keyword']);
             } elseif ($_GET['searchtype'] == 'orderid') {
-                $where['orderid'] = htmlspecialchars($_GET['keyword']);
-                $tmp_result = M('Tmp_orderid')->where(array('orderid'=>$where['orderid']))->find();
-                unset($where['orderid']);
-                $where['order_id'] = $tmp_result['order_id'];
+                // $where['orderid'] = htmlspecialchars($_GET['keyword']);
+                //var_dump($where);die();
+                //$tmp_result = M('Tmp_orderid')->where(array('orderid'=>$where['orderid']))->find();
+                //unset($where['orderid']);
+                //$where['order_id'] = $tmp_result['order_id'];
+                $where['order_id'] =$_GET['keyword'];
             } elseif ($_GET['searchtype'] == 'name') {
                 $where['username'] = htmlspecialchars($_GET['keyword']);
             } elseif ($_GET['searchtype'] == 'phone') {
@@ -609,7 +610,7 @@ class ShopAction extends BaseAction
         }
         //var_dump($result);
         $this->assign(array('type' => $type, 'sort' => $sort, 'status' => $status,'pay_type'=>$pay_type));
-        $this->assign('status_list', D('Shop_order')->getStatusList());
+        $this->assign('status_list', D('Shop_order')->getStatusListForMilly());
         $this->assign($result);
 
         $field = 'sum(price) AS total_price, sum(price - card_price - merchant_balance - balance_pay - payment_money - score_deducte - coupon_price - card_give_money - merchant_reduce) AS offline_price, sum(card_price + merchant_balance + balance_pay + payment_money + score_deducte + coupon_price + card_give_money) AS online_price';
