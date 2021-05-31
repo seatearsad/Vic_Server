@@ -51,7 +51,7 @@
             </volist>
 
             <li>
-                <a href="#"><i class="fa fa-fw fa-angle-right text"></i><span class="nav-label">{pigcms{:L('_LANG_TXT_')}</span><span
+                <a href="#"><i class="fa fa-language fa-angle-right text"></i> <span class="nav-label">{pigcms{:L('_LANG_TXT_')}</span><span
                         class="fa arrow"></span>
                 </a>
                 <ul class="nav nav-second-level collapse"">

@@ -85,6 +85,17 @@ class Shop_orderModel extends Model
 			10 => L('_B_PURE_MY_80_')
 		);
 	}
+
+    public function getStatusNewList(){
+        return array(
+            '-1' => L('_BACK_ALL_'),
+            '100'=> L('_STATUS_LIST_100_'),
+            '0' => L('_STATUS_LIST_0_'),
+            1 => L('_B_PURE_MY_72_'),
+            2 => L('_STATUS_LIST_2_'),
+            3 => L('_B_PURE_MY_74_')
+        );
+    }
 	/**获取订单分类**/
 	public function get_order_cate($order_id){
 		$store_id = $this->field('store_id')->where(array('order_id'=>$order_id))->find();

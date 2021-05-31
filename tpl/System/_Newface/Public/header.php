@@ -15,6 +15,7 @@
         <!--JS-->
         <script src="{pigcms{$static_path}js/jquery-3.1.1.min.js"></script>
         <script src="{pigcms{$static_path}js/jquery.timer.min.js"></script>
+        <script src="{pigcms{$static_path}js/popper.min.js"></script>
         <script src="{pigcms{$static_path}js/bootstrap.js"></script>
 
         <!--------------------------------  Toastr style  ----------------------------------->

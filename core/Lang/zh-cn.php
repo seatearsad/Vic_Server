@@ -2495,4 +2495,17 @@ return array(
     "CCBE"=>"内容不能为空！",
     "FLLC"=>"名称第一个字符的小写首字母！输入名称后，若此字段为空，会自动填写（仅作为示例）",
     "SIAEPRI"=>"此账号已存在，请更换。",
+
+    "DATA_EXPORT"=>"数据导出",
+    "ORDER_EXPORT"=>"导出订单",
+    "SALES_EXPORT"=>"总表",
+    "STORE_EXPORT"=>"商家账单",
+    "ORDER_STORE_EXPORT"=>"商家订单明细",
+    "STORE_RANKING_EXPORT"=>"店铺排行",
+    "STORE_INFO_EXPORT"=>"店铺信息",
+    "COURIER_PAY_EXPORT"=>"送餐员工资",
+    "COURIER_INFO_EXPORT"=>"送餐员信息",
+    "ORDER_COURIER_EXPORT"=>"送餐员配送信息",
+    "USER_EXPORT"=>"用户信息",
+    "USER_RANKING_EXPORT"=>"用户排行",
 );

@@ -237,7 +237,7 @@
                 var city_id = $('#city_select').val();
                 var user_title = $(this).html();
                 getData(select_day,city_id,user_title);
-                $(this).addClass('active').siblings().removeClass('active');;
+                $(this).addClass('active').siblings().removeClass('active');
             });
         });
 
