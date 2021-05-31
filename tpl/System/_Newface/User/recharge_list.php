@@ -29,7 +29,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="ibox ">
-                    <div class="ibox-title">
+                    <div class="ibox-title tutti_hidden_obj">
                         <h5>{pigcms{:L('F_TOP_UP_LIST')}</h5>
                         <div class="ibox-tools">
 

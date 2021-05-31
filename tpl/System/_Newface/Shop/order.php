@@ -39,9 +39,15 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="ibox ">
-                    <div class="ibox-title">
-                        <h5>{pigcms{:L('_BACK_ORDER_LIST_')}</h5>
-                        <div class="ibox-tools">
+                    <div class="ibox-title ">
+                        <h5><if condition="$system_session['level'] neq 3">
+                                <b>{pigcms{:L('_BACK_A_RECE_')}：{pigcms{$total_price|floatval} &nbsp;&nbsp;
+                                    {pigcms{:L('_BACK_A_PAID_ON_')}：{pigcms{$online_price|floatval} &nbsp;&nbsp;
+                                    {pigcms{:L('_BACK_A_PAID_CASH_')}：{pigcms{$offline_price|floatval}
+                                </b>
+                            </if>
+                        </h5>
+                        <div class="ibox-tools tutti_hidden_obj">
                             <if condition="$system_session['level'] neq 3">
                                 <span style="margin-left:40px">
                                     <if condition="$system_session['level'] neq 3">
@@ -181,7 +187,7 @@
                                                 H:i:s",###}
                                             </if>
                                         </td>
-                                        <td>{pigcms{$vo.status_str}</td>
+                                        <td>{pigcms{$vo.status_str}111</td>
 
                                         <!--                                            <if condition="$system_session['level'] neq 3">-->
                                         <!--                                                <td><a target="_blank" href="{pigcms{:U('Bill/merchant_money_list',array('mer_id'=>$vo['mer_id']))}">{pigcms{:L('_BACK_INVOICE_')}</a>-->

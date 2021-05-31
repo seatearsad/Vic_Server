@@ -14,42 +14,42 @@ class MerchantAction extends BaseAction{
 		//搜索
 		if(!empty($_GET['keyword'])){
 			if($_GET['searchtype'] == 'mer_id'){
-				$condition_merchant['mer_id'] = $_GET['keyword'];
+				$condition_merchant['m.mer_id'] = $_GET['keyword'];
 			}else if($_GET['searchtype'] == 'account'){
-				$condition_merchant['account'] = array('like','%'.$_GET['keyword'].'%');
+				$condition_merchant['m.account'] = array('like','%'.$_GET['keyword'].'%');
 			}else if($_GET['searchtype'] == 'name'){
-				$condition_merchant['name'] = array('like','%'.$_GET['keyword'].'%');
+				$condition_merchant['m.name'] = array('like','%'.$_GET['keyword'].'%');
 			}else if($_GET['searchtype'] == 'phone'){
-				$condition_merchant['phone'] = array('like','%'.$_GET['keyword'].'%');
+				$condition_merchant['m.phone'] = array('like','%'.$_GET['keyword'].'%');
 			}
 		}
 		$searchstatus = intval($_GET['searchstatus']);
 		switch($searchstatus){
 			case 0:
 				//3 是欠款状态 该状态下商户业务暂停，不能支付，但是可以管理，充值
-				$condition_merchant['_string'] = 'status = 1 OR status = 3';
+				$condition_merchant['_string'] = 'm.status = 1 OR m.status = 3';
 				break;
 			case 1:
-				$condition_merchant['status'] = 2;
+				$condition_merchant['m.status'] = 2;
 				break;
 			case 2:
-				$condition_merchant['status'] = 0;
+				$condition_merchant['m.status'] = 0;
 				break;
 		}
 
 		switch($_GET['searchorder']){
 			case 0:
-				$order = 'mer_id DESC';
+				$order = 'm.mer_id DESC';
 				break;
 			case 1:
-				$order = 'money DESC,mer_id DESC';
+				$order = 'm.money DESC,m.mer_id DESC';
 				break;
 
 		}
         if($_GET['city_id']){
             $this->assign('city_id',$_GET['city_id']);
             if($_GET['city_id'] != 0){
-                $condition_merchant['city_id'] = $_GET['city_id'];
+                $condition_merchant['m.city_id'] = $_GET['city_id'];
             }
         }else{
             $this->assign('city_id',0);
@@ -59,29 +59,30 @@ class MerchantAction extends BaseAction{
 
 		if ($this->system_session['area_id']) {
 			$area_index = $this->system_session['level'] == 1 ? 'area_id' : 'city_id';
-			$condition_merchant[$area_index] = $this->system_session['area_id'];
+			$condition_merchant['m.'.$area_index] = $this->system_session['area_id'];
 		}
 		$mer_withdraw_list = D('Merchant_money_list');
 		$all_money = $mer_withdraw_list->get_all_mer_money();
 		$this->assign('all_money',$all_money);
 
-		$count_merchant = $database_merchant->where($condition_merchant)->count();
+		$count_merchant = $database_merchant->join('as m left join '.C('DB_PREFIX').'area as a ON m.city_id=a.area_id')->where($condition_merchant)->count();
 		import('@.ORG.system_page');
 		$p = new Page($count_merchant,15);
-		$merchant_list = $database_merchant->field(true)->where($condition_merchant)->order($order)->limit($p->firstRow.','.$p->listRows)->select();
-        //echo "+++";
+		$merchant_list = $database_merchant->field("m.*,a.area_name")->join('as m left join '.C('DB_PREFIX').'area as a ON m.city_id=a.area_id')->where($condition_merchant)->order($order)->limit($p->firstRow.','.$p->listRows)->select();
+
+		//echo "+++";
+        //var_dump($merchant_list);
         $database_merchant_store = D('Merchant_store');
 		foreach ($merchant_list as &$row) {
             $condition_merchant_store['mer_id'] = $row['mer_id'];
             $row["store_list"]=$database_merchant_store->field(true)->where($condition_merchant_store)->order('`sort` DESC,`store_id` ASC')->select();
             //echo $row["store_list"]['account']."-------------";
+            $row["store_count"]=count($row["store_list"]);
         }
-//        var_dump($merchant_list);
-//        die();
+        //var_dump($merchant_list);die();
+
 		$this->assign('merchant_list',$merchant_list);
-
 		$pagebar = $p->show2();
-
 		$this->assign('pagebar',$pagebar);
 
 		$this->display();

@@ -26,7 +26,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="ibox ">
-                    <div class="ibox-title">
+                    <div class="ibox-title tutti_hidden_obj">
                         <h5>{pigcms{:L('_BACK_USER_LIST_')}</h5>
                         <div class="ibox-tools">
                             {pigcms{:L('_BACK_USER_BALANCE_')}：$<if condition="$user_balance['count']">{pigcms{$user_balance['count']}<else/>0</if>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
