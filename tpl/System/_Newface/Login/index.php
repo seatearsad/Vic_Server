@@ -5,7 +5,7 @@
 
 <div id="login" class="middle-box text-center loginscreen animated fadeInDown">
     <div>
-        <h1 class="logo-name">{pigcms{$config.site_name}</h1>
+        <h1 class="logo-name">TUTTI</h1>
     </div>
     <h3>Welcome to TUTTI</h3>
     <p>Login in. </p>

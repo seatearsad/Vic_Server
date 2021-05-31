@@ -78,18 +78,19 @@ class AdverAction extends BaseAction{
 		}
 	}
 	public function adver_list(){
+
 		$now_category = $this->check_get_category($_GET['cat_id']);
 		$this->assign('now_category',$now_category);
 		$many_city	=	$this->config['many_city'];
 		$database_adver = D('Adver');
-		$condition_adver['cat_id'] = $now_category['cat_id'];
+		$condition_adver['b.cat_id'] = $now_category['cat_id'];
 
 		//garfunkel add
         if($_GET['search_city'] && $_GET['search_city'] != 0){
-            $condition_adver['city_id'] = $_GET['search_city'];
+            $condition_adver['b.city_id'] = $_GET['search_city'];
         }
 
-		$adver_list = $database_adver->field(true)->where($condition_adver)->order('`id` DESC')->select();
+		$adver_list = $database_adver->field("b.*,a.*")->join('as b left join '.C('DB_PREFIX').'area as a ON b.city_id=a.area_id')->where($condition_adver)->order('`id` DESC')->select();
 		if($many_city == 1 && $adver_list){
 			foreach($adver_list as &$v){
 				$city	=	M('Area')->field('area_name')->where(array('area_id'=>$v['city_id']))->find();
