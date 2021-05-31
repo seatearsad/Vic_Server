@@ -12,7 +12,7 @@ class Shop_orderModel extends Model
         	'-1' => L('_B_PURE_MY_64_') ,
 			'0' =>  L('_STATUS_LIST_0_'),		//未接单
 			1 =>  L('_B_PURE_MY_72_'),		//'已确认',
-			2 => L('_STATUS_LIST_0_'),		// '已消费',
+			2 => L('_STATUS_LIST_2_'),		// '已消费',
 			3 => L('_B_PURE_MY_74_'),		//'已评价',
 			4 => L('_B_PURE_MY_75_'),		//'已退款',
 			5 =>L('_B_PURE_MY_76_'),		    // '已取消',
