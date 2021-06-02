@@ -691,7 +691,9 @@ class ShopAction extends BaseAction
         }
 
         $order = D('Shop_order')->get_order_detail(array('order_id' => intval($_GET['order_id'])));
+
         $store = D('Merchant_store')->field(true)->where(array('store_id' => $order['store_id']))->find();
+
         if (empty($order)) {
             $this->frame_error_tips('没有找到该订单的信息！');
         }else{//garfunkel 重新获取商品名称
@@ -990,7 +992,7 @@ class ShopAction extends BaseAction
         $where = "s.status=1 AND s.have_shop=1 AND sh.deliver_type IN (0, 3)";//array('status' => 1);
 
         if(!empty($_GET['keyword'])){
-            $where .= " AND m.name LIKE '%{$_GET['keyword']}%'";
+            $where .= " AND s.name LIKE '%{$_GET['keyword']}%'";
         }
         if ($this->system_session['area_id']) {
             $area_index = $this->system_session['level'] == 1 ? 'area_id' : 'city_id';

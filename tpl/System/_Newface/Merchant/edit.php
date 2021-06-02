@@ -58,13 +58,13 @@
                             <div class="hr-line-dashed"></div>
 
 
-                            <div class="form-group  row">
-                                <label class="col-sm-3 col-form-label">{pigcms{:L('_BACK_STORE_AREA_')}</label>
-                                <div class="col-sm-9"><input class="form-control" type="text" class="form-control"
-                                                             name="email" value="{pigcms{$merchant.email}" size="25"
-                                                             validate="email:true"/></div>
-                            </div>
-                            <div class="hr-line-dashed"></div>
+<!--                            <div class="form-group  row">-->
+<!--                                <label class="col-sm-3 col-form-label">{pigcms{:L('_BACK_STORE_AREA_')}</label>-->
+<!--                                <div class="col-sm-9"><input class="form-control" type="text" class="form-control"-->
+<!--                                                             name="email" value="{pigcms{$merchant.email}" size="25"-->
+<!--                                                             validate="email:true"/></div>-->
+<!--                            </div>-->
+<!--                            <div class="hr-line-dashed"></div>-->
 
                             <div class="form-group  row">
                                 <label class="col-sm-3 col-form-label">{pigcms{:L('_BACK_STORE_AREA_')}</label>
@@ -80,13 +80,13 @@
                             </div>
                             <div class="hr-line-dashed"></div>
 
-                            <div class="form-group  row">
-                                <label class="col-sm-3 col-form-label">{pigcms{:L('_BACK_STORE_AREA_')}</label>
-                                <div class="col-sm-9"><input class="form-control" type="text" class="form-control"
-                                                             name="email" value="{pigcms{$merchant.email}" size="25"
-                                                             validate="email:true"/></div>
-                            </div>
-                            <div class="hr-line-dashed"></div>
+<!--                            <div class="form-group  row">-->
+<!--                                <label class="col-sm-3 col-form-label">{pigcms{:L('_BACK_STORE_AREA_')}</label>-->
+<!--                                <div class="col-sm-9"><input class="form-control" type="text" class="form-control"-->
+<!--                                                             name="email" value="{pigcms{$merchant.email}" size="25"-->
+<!--                                                             validate="email:true"/></div>-->
+<!--                            </div>-->
+<!--                            <div class="hr-line-dashed"></div>-->
                             <div class="form-group  row">
                                 <label class="col-sm-3 col-form-label">{pigcms{:L('_BACK_EXPIRE_DATE_')}</label>
                                 <div class="col-sm-3"><input class="form-control" type="text" class="form-control"
@@ -120,7 +120,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+
 
         <script>
             $(function () {

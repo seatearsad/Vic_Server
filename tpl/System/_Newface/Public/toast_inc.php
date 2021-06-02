@@ -1,5 +1,5 @@
 <!-- Toast notifications -->
-<div style="position: absolute; top: 100px; right: 400px;">
+<div style="position: absolute; top: 0px; right: 400px;">
     <div class="toast toast1 toast-bootstrap" role="alert" aria-live="assertive" aria-atomic="true">
         <div class="toast-header">
             <i class="fa fa-newspaper-o"> </i>

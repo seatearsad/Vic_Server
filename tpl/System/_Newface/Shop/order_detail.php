@@ -23,8 +23,8 @@
                             </if>
                             <if condition="$order['shop_pass']">
                                 <tr>
-                                    <th colspan="1">{pigcms{:L('_BACK_PURCHASING_CODE_')}</th>
-                                    <th colspan="5">{pigcms{$order['shop_pass']}</th>
+                                    <th colspan="1">Order ID</th>
+                                    <th colspan="5">{pigcms{$order['order_id']}</th>
                                 </tr>
                             </if>
                             <tr>
@@ -161,6 +161,12 @@
                             </tr>
                             <tr>
                                 <th colspan="6">
+                                    Service Fee：${pigcms{$order['service_fee']|floatval}
+                                </th>
+                            </tr>
+
+                            <tr>
+                                <th colspan="6">
                                     {pigcms{:L('_ORDER_TOTAL_AMOUNT_')}：${pigcms{$order['total_price']|floatval}
                                     <if condition="$config.open_extra_price eq 1 AND $now_order.extra_price gt 0">
                                         +{pigcms{$now_order.extra_price}{pigcms{$config.extra_price_alias_name}
@@ -185,11 +191,7 @@
                                     <th colspan="6">会员卡：{pigcms{$order['card_discount']|floatval} 折优惠</th>
                                 </tr>
                             </if>
-                            <tr>
-                                <th colspan="6">
-                                    {pigcms{:L('_BACK_ACT_AM_PAID_')}：${pigcms{$order['price']+$order['tip_charge']-$order['coupon_price']-$order['merchant_reduce']-$order['delivery_discount']|floatval}
-                                </th>
-                            </tr>
+
                             <if condition="$order['score_used_count']">
                                 <tr>
                                     <th colspan="6">使用{pigcms{$config.score_name}：{pigcms{$order['score_used_count']}
@@ -231,10 +233,17 @@
                             <if condition="$order['coupon_id']">
                                 <tr>
                                     <th colspan="6">
-                                        {pigcms{:L('_BACK_SYS_CON_PRICE_')}：${pigcms{$order['coupon_price']}
+                                        {pigcms{:L('_BACK_SYS_CON_PRICE_')}：${pigcms{$order['coupon_price']} (ID &nbsp;{pigcms{$order['coupon_id']})
                                     </th>
                                 </tr>
                             </if>
+
+                            <tr>
+                                <th colspan="6">
+                                     <span style="color: black">{pigcms{:L('_BACK_ACT_AM_PAID_')}：${pigcms{$order['price']+$order['tip_charge']-$order['coupon_price']-$order['merchant_reduce']-$order['delivery_discount']|floatval}</span>
+                                </th>
+                            </tr>
+
                             <!--if condition="$order['pay_type'] eq 'offline' AND empty($order['third_id'])">
                             <tr>
                                 <th colspan="6">{pigcms{:L('_BACK_PAY_OFFLINE_')}：${pigcms{$order['price']-$order['card_price']-$order['merchant_balance']-$order['balance_pay']-$order['payment_money']-$order['score_deducte']-$order['coupon_price']|floatval}元</th>

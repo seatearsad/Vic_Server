@@ -39,7 +39,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="ibox ">
-                    <div class="ibox-title ">
+                    <div class="ibox-title tutti_hidden_obj">
                         <h5><if condition="$system_session['level'] neq 3">
                                 <b>{pigcms{:L('_BACK_A_RECE_')}：{pigcms{$total_price|floatval} &nbsp;&nbsp;
                                     {pigcms{:L('_BACK_A_PAID_ON_')}：{pigcms{$online_price|floatval} &nbsp;&nbsp;
@@ -66,7 +66,7 @@
 
                                 <div id="tool_bar" style="form-group tutti_toolbar" style="height: 80px;">
 
-                                    <form action="{pigcms{:U('Shop/order')}" method="get" class="form-inline">
+                                    <form action="{pigcms{:U('Shop/order')}" method="get" class="form-inline ">
                                         <input type="hidden" name="c" value="Shop"/>
                                         <input type="hidden" name="a" value="order"/>
                                         {pigcms{:L('_BACK_SEARCH_')}:&nbsp; <input type="text" name="keyword" class="form-control" value="{pigcms{$_GET['keyword']}"/>&nbsp;
@@ -80,7 +80,7 @@
                                             <option value="id" <if condition="$_GET['searchtype'] eq 'id'">selected="selected"</if>>User ID</option>
                                             <option value="orderid"<if condition="$_GET['searchtype'] eq 'orderid'">selected="selected"</if>>Order ID</option>
                                         </select>
-                                        <font color="#000">{pigcms{:L('_BACK_DATE_SELECT_')}：</font>&nbsp;
+                                        &nbsp;{pigcms{:L('_BACK_DATE_SELECT_')}：
                                         <input type="text" class="form-control" name="begin_time" style="width:120px;"
                                                id="d4311" value="{pigcms{$_GET.begin_time}"
                                                onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd',lang:'en'})"/>&nbsp;
@@ -205,13 +205,14 @@
                                             <div class="btn-group">
                                                  <div class="float-right">
                                                      <if condition="$vo.status eq 0 AND $vo.paid eq 1">&nbsp;&nbsp;&nbsp;&nbsp;
-                                                         <a data-href="{pigcms{:U('Shop/refund_update',array('order_id'=>$vo['order_id']))}" class="refund"><button class="btn btn-white text-grey" type="button">{pigcms{:L('_BACK_MANUAL_REFUND_')}</button></a>
+                                                         <a data-href="{pigcms{:U('Shop/refund_update',array('order_id'=>$vo['order_id']))}" class="refund"><button class="btn btn-white text-grey btn-xs" type="button">{pigcms{:L('_BACK_MANUAL_REFUND_')}</button></a>
                                                      </if>
-                                                     <a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Shop/order_detail',array('order_id'=>$vo['order_id'],'frame_show'=>true))}','{pigcms{:L(\'_BACK_ORDER_DETAIL_\')}',920,520,true,false,false,false,'detail',true);"><button class="btn btn-white text-grey" type="button">{pigcms{:L('_BACK_VIEW_')}</button></a>
-                                                     <php>if($vo['is_refund'] == 0){</php>
-                                                     <a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Shop/edit_order',array('order_id'=>$vo['order_id']))}','{pigcms{:L(\'_BACK_EDIT_\')}',920,520,true,false,false,editbtn,'edit',true);"><button class="btn btn-white text-grey" type="button">{pigcms{:L('_BACK_EDIT_')}</button></a>
+                                                     <a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Shop/order_detail',array('order_id'=>$vo['order_id'],'frame_show'=>true))}','{pigcms{:L(\'_BACK_ORDER_DETAIL_\')}',920,520,true,false,false,false,'detail',true);"><button class="btn btn-white text-grey btn-xs" type="button">{pigcms{:L('_BACK_VIEW_')}</button></a>
+
+                                                     <php>if($vo['status'] > 0){</php>
+                                                     <a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Shop/edit_order',array('order_id'=>$vo['order_id']))}','{pigcms{:L(\'_BACK_EDIT_\')}',920,520,true,false,false,editbtn,'edit',true);"><button class="btn btn-white text-grey btn-xs" type="button">{pigcms{:L('_BACK_EDIT_')}</button></a>
                                                      <php>}</php>
-                                                     <a href="{pigcms{:U('Shop/del',array('id'=>$vo['order_id']))}" onclick="return confirm('{pigcms{:L(\'_B_PURE_MY_84_\')}')" style="color: red"><button class="btn btn-white text-grey" type="button">{pigcms{:L('_BACK_DEL_')}</button></a>
+                                                     <a href="{pigcms{:U('Shop/del',array('id'=>$vo['order_id']))}" onclick="return confirm('{pigcms{:L(\'_B_PURE_MY_84_\')}')" style="color: red"><button class="btn btn-white text-grey btn-xs" type="button">{pigcms{:L('_BACK_DEL_')}</button></a>
                                                 </div>
                                             </div>
                                         </td>
@@ -272,17 +273,17 @@
 
     var city_id = $('#city_select').val();
     $('#city_select').change(function () {
-        city_id = $(this).val();
-        window.location.href = "{pigcms{:U('Shop/order', $_GET)}" + "&city_id=" + city_id;
+        // city_id = $(this).val();
+        // window.location.href = "{pigcms{:U('Shop/order', $_GET)}" + "&city_id=" + city_id;
     });
 
     $(function () {
         $('#status').change(function () {
-            location.href = "{pigcms{:U('Shop/order', array('type' => $type, 'sort' => $sort,'pay_type'=>$pay_type,'city_id'=>$city_id))}&status=" + $(this).val();
+            // location.href = "{pigcms{:U('Shop/order', array('type' => $type, 'sort' => $sort,'pay_type'=>$pay_type,'city_id'=>$city_id))}&status=" + $(this).val();
         });
 
         $('#pay_type').change(function () {
-            location.href = "{pigcms{:U('Shop/order', array('type' => $type, 'sort' => $sort,'status'=>$status,'city_id'=>$city_id))}&pay_type=" + $(this).val();
+            // location.href = "{pigcms{:U('Shop/order', array('type' => $type, 'sort' => $sort,'status'=>$status,'city_id'=>$city_id))}&pay_type=" + $(this).val();
         });
 
         $('.refund').click(function () {

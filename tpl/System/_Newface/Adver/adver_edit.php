@@ -46,7 +46,7 @@
                             <div class="form-group  row">
                                 <label class="col-sm-3 col-form-label">{pigcms{:L('I_UPLOAD_IMAGE')}</label>
                                 <div class="col-sm-9">
-                                    <input type="file" class="form-control" name="pic" style="width:200px;" placeholder="" validate="required:true"/>
+                                    <input type="file" class="form-control" name="pic" style="width:200px;" placeholder="" validate="required:false"/>
                                 </div>
                             </div>
                             <div class="form-group  row">

@@ -5,7 +5,7 @@
         </div>
     </div>
 </div>
-<include file="Public:toast_inc"/>
+
 
 <!-- Mainly scripts -->
 <script src="{pigcms{$static_path}js/popper.min.js"></script>

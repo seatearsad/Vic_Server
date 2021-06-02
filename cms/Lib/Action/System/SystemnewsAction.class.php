@@ -63,7 +63,7 @@
 			$count_news = $news->where($condition_news)->count();
 			import('@.ORG.system_page');
 			$p = new Page($count_news, 15);
-			$news_list = $news->field('id,title,add_time,last_time,sort,status')->where($condition_news)->order($order_string)->limit($p->firstRow . ',' . $p->listRows)->select();
+			$news_list = $news->field('id,title,add_time,last_time,sort,status,is_commend')->where($condition_news)->order($order_string)->limit($p->firstRow . ',' . $p->listRows)->select();
 			$this->assign('news_list',$news_list);
 			$pagebar = $p->show2();
 			$category_name = D('System_news_category')->where('id='.$_GET['category_id'])->getField('name');

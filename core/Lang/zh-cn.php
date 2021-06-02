@@ -2349,7 +2349,7 @@ return array(
     "I_EMAIL_ADDRESS"=>"邮箱",
     "I_PASSWORD"=>"密码",
     "I_ADCATEGORY_LIST"=>"广告分类列表",
-    "I_ADD_CATEGORY"=>"添加广告分类",
+    "I_ADD_CATEGORY"=>"添加文章分类",
     "I_SYMBOL"=>"标识",
     "I_TYPE"=>"类别",
     "I_AD_LIST"=>"广告列表",

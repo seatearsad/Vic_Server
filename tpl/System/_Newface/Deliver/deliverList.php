@@ -221,7 +221,8 @@
         var curr_id = $(this).data('id');
         if(hover_id != curr_id){
             hover_id = curr_id;
-            var this_y = $(this).position().top+40;
+            var this_y = $(this).position().top+20;
+            var this_x = $(this).position().left+10;
             time_out = setTimeout(function () {
                 $.post("{pigcms{:U('Shop/get_order_status')}",{"order_id":hover_id},function(result){
                     if(result.error == 0){
@@ -232,6 +233,7 @@
                         if(html != '') {
                             $('.order_status_show').html(html);
                             $('.order_status_show').css('top', this_y);
+                            $('.order_status_show').css('left', this_x);
                             $('.order_status_show').show();
                         }
                     }
@@ -258,10 +260,11 @@
 .order_status_show{
     position: absolute;
     width: 300px;
-    height: 180px;
+    height: 160px;
     background-color: #EEEEEE;
     left: 20px;
     display: none;
+    border: 1px solid #ff9c25;
     padding: 10px;
     line-height: 1.8;
 }

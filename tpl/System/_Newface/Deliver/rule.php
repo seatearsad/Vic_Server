@@ -4,7 +4,7 @@
     <include file="Public:left_menu"/>
     <!----------------------------------------    以上不要写代码     ------------------------------------------------>
     <div class="row wrapper border-bottom white-bg page-heading">
-        <div class="col-lg-8">
+        <div class="col-lg-6">
             <h2>{pigcms{:L('D_DELIVERYFEE_SETTING')}</h2>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
@@ -18,8 +18,8 @@
                 </li>
             </ol>
         </div>
-        <div class="col-lg-4 float-right" style="height 90px;margin-top:40px;">
-            <div class="btn-group">
+        <div class="col-lg-6 float-right" style="height 90px;margin-top:40px;">
+            <div class="btn-group float-right">
 
                 <if condition="$system_session['level'] eq 2">
                     <a href="{pigcms{:U('Deliver/user')}" style="float:right;">
@@ -51,7 +51,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="ibox ">
-                    <div class="ibox-title">
+                    <div class="ibox-title tutti_hidden_obj">
                         <h5>{pigcms{:L('_BACK_ORDER_LIST_')}</h5>
                         <div class="ibox-tools">
                             <if condition="$system_session['level'] neq 3">

@@ -124,7 +124,7 @@
         }
     });
     uploader.on('fileQueued',function(file){
-        if($('.upload_pic_li').size() >= 1){
+        if($('.upload_pic_li').length >= 1){
             uploader.cancelFile(file);
             alert('最多上传1张图片！');
             return false;

@@ -1,4 +1,5 @@
 $(function(){
+
 	var pyrmont = {lat: 48.430168, lng: -123.343033};
 	var map = null;
 	if ($('#long_lat').val() != '') {
