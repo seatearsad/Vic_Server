@@ -2,6 +2,7 @@
 class Shop_orderModel extends Model
 {
 	public $status_list;
+    public $new_status_list;
 	public $status_list_admin;
 
     public function __construct(){
@@ -15,13 +16,29 @@ class Shop_orderModel extends Model
 			2 => L('_STATUS_LIST_2_'),		// '已消费',
 			3 => L('_B_PURE_MY_74_'),		//'已评价',
 			4 => L('_B_PURE_MY_75_'),		//'已退款',
-			5 =>L('_B_PURE_MY_76_'),		    // '已取消',
-			6=> L('_STATUS_LIST_0_'),		//'付款超时，待删除',
-			7 =>L('_B_PURE_MY_77_'),		// '分配到自提点',
-			8 =>L('_B_PURE_MY_78_'),		// '发货到自提点',
+			5 => L('_B_PURE_MY_76_'),		    // '已取消',
+			6 => L('_STATUS_LIST_0_'),		//'付款超时，待删除',
+			7 => L('_B_PURE_MY_77_'),		// '分配到自提点',
+			8 => L('_B_PURE_MY_78_'),		// '发货到自提点',
 			9 => L('_B_PURE_MY_79_'),		//'自提点接货',
 			10 => L('_B_PURE_MY_80_'),		//'自提点发货');
 		);
+
+        $this->new_status_list = array(
+            '-1' => L('_B_PURE_MY_64_') ,
+            '0' =>  "Unconfirmed",		//未接单
+            1 =>  "Confirmed",		//'已确认',
+            2 => "Complete",		// '已消费',
+            3 => "Reviewed",		//'已评价',
+            4 => "Cancelled",		//'已退款',
+            5 => "Cancelled",		    // '已取消',
+            6 => L('_STATUS_LIST_0_'),		//'付款超时，待删除',
+            7 => L('_B_PURE_MY_77_'),		// '分配到自提点',
+            8 => L('_B_PURE_MY_78_'),		// '发货到自提点',
+            9 => L('_B_PURE_MY_79_'),		//'自提点接货',
+            10 => L('_B_PURE_MY_80_'),		//'自提点发货');
+        );
+
         $this->status_list_admin = array(
         	'-1' => '全部',
 			'100'=>'未支付' ,
@@ -1301,7 +1318,10 @@ class Shop_orderModel extends Model
 		}
 
 		if($is_wap != 10){
-			return array('order_list' => $list, 'pagebar' => $p->show2());
+			if($is_wap != 3)
+                return array('order_list' => $list, 'pagebar' => $p->show());
+			else
+				return array('order_list' => $list, 'pagebar' => $p->show2());
 		}else{
 			return array('order_list' => $list, 'page' => ceil($count/10),'count'=>$count);
 		}
