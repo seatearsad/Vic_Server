@@ -595,7 +595,7 @@ class ShopAction extends BaseAction
             $userinfo= D('user')->field(true)->where(array('uid'=>$li['uid']))->find();
             $li['reg_user_name']=$userinfo['nickname'];
             $li['reg_user_phone']=$userinfo['phone'];
-            $li['duty_price'] = $tax_price + ($li['packing_charge'] + $li['freight_charge'])*$temp[$li['store_id']]['tax_num']/100;
+            $li['duty_price'] = $tax_price + ($li['packing_charge'] + $li['freight_charge'])*$temp[$li['store_id']]['tax_num']/100; //税费
             $li['duty_price'] = round($li['duty_price'],2);
             if($li['status'] > 0){
 
