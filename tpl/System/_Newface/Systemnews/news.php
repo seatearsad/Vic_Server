@@ -26,16 +26,15 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="ibox ">
-                    <div class="ibox-title">
+                    <div class="ibox-title tutti_hidden_obj">
                         <h5>{pigcms{:L('I_ARTICLES')}</h5>
                         <div class="ibox-tools">
-
                         </div>
                     </div>
                     <div class="ibox-content">
                         <div class="table-responsive">
                             <!-------------------------------- 工具条 -------------------------------------->
-                            <div style="height: 50px;">
+                            <div style="height: 60px;">
                                 <div id="tool_bar" class="form-inline tutti_toolbar">
                                     <form action="{pigcms{:U('Systemnews/news')}" method="get">
                                         <input type="hidden" name="c" value="Systemnews"/>

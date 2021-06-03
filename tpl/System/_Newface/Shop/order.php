@@ -115,7 +115,7 @@
                         </div>
                         <!------------------------------------------------------------------------------>
                         <!-- <form name="myform" id="myform" action="" method="post">-->
-                        <table class="footable table table-stripped toggle-arrow-tiny" data-sorting="false">
+                        <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="20" data-sorting="false">
                             <thead>
                             <tr>
                                 <th>Order ID</th>
@@ -163,7 +163,7 @@
                                         <td>${pigcms{$vo['tip_charge']|floatval}</td>
                                         <td>${pigcms{$vo['coupon_price'] + $vo['delivery_discount']|floatval}</td>
                                         <td>${pigcms{$vo.merchant_reduce|floatval}</td>
-                                        <td>${pigcms{$vo['duty_price']|floatval}</td>
+                                        <td>${pigcms{$vo.offline_price|floatval}</td>
                                         <td>
                                             <if condition="$vo['pay_time']"> {pigcms{$vo['pay_time']|date="Y-m-d
                                                 H:i:s",###}
