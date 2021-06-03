@@ -39,6 +39,13 @@ class BaseAction extends Action
         C('config',$this->config);
 
         $this->checkSign();
+        //监测被禁用账号
+        if($_POST['uid']){
+            $user = D('User')->where(array('uid'=>$_POST['uid']))->find();
+            if($user['status'] == 0){
+                $this->returnCode(1,'info',array(),'Account has been disabled!');
+            }
+        }
     }
 
     public function checkSign(){

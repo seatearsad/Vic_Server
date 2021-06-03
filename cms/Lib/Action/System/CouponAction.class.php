@@ -77,6 +77,7 @@ class CouponAction extends BaseAction {
 
             $city = D('Area')->where(array('area_type'=>2,'is_open'=>1))->select();
             $this->assign('city',$city);
+            $this->assign('module_name','Market');
 			$this->display();
 		}
 
@@ -337,6 +338,7 @@ class CouponAction extends BaseAction {
 			$pagebar = $p->show2();
 			$this->assign('pagebar', $pagebar);
 
+            $this->assign('module_name','Market');
 			$this->display();
 		}
 

@@ -11,6 +11,7 @@ class BaseAction extends CommonAction{
 	protected $user_level;
 	public function __construct(){
 		parent::__construct();
+
 		if(!function_exists('wapfjdslakfHDFfjlsaf')){
 			exit('wow-5');
 		}
@@ -74,6 +75,7 @@ class BaseAction extends CommonAction{
             $this->assign('no_footer',true);
             $this->is_app_browser =   true;
             $this->assign('is_app_browser',$this->is_app_browser);
+
             if(strpos(strtolower($_SERVER['HTTP_USER_AGENT']),'android') !== false){
                $this->assign('app_browser_type','android');
             }else{
@@ -205,6 +207,12 @@ class BaseAction extends CommonAction{
 				$_SESSION['user']['verify_end_time']=$times['end_time'];
 			}
 
+            //监测被禁用账号
+            $user = D('User')->where(array('uid'=>$this->user_session['uid']))->find();
+            if($user['status'] == 0){
+                session('user','');
+                $this->user_session = array();
+            }
 		}
 
 

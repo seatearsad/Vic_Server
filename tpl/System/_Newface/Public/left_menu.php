@@ -39,7 +39,7 @@
                             class="nav-label">{pigcms{$vo.name}</span><span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level collapse">
                         <volist name="vo['menu_list']" id="voo">
-                            <li <if condition="$module_name eq ucfirst($voo['module']) and $action_name eq $voo['action']">class="active"</if>>
+                            <li <if condition="MODULE_NAME eq ucfirst($voo['module']) and $action_name eq $voo['action']">class="active"</if>>
                                 <a href="{pigcms{:U(ucfirst($voo['module']).'/'.$voo['action'])}"
                                    id="leftmenu_{pigcms{:ucfirst($voo['module'])}_{pigcms{$voo['action']}">
                                     {pigcms{$voo.name}

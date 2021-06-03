@@ -19,7 +19,7 @@
                 <li class="list_head">{pigcms{:L('7NAV')}</li>
                 <li><a href="#download">{pigcms{:L('7DOWNLOADAPP')}</a></li>
                 <li><a href="{pigcms{$config.site_url}/wap.php">{pigcms{:L('7ORDERNOW')}</a></li>
-                <li><a href="javascript:void(0);">{pigcms{:L('7BLOG')}</a></li>
+                <li><a href="{pigcms{$config.site_url}/news">{pigcms{:L('7BLOG')}</a></li>
                 <li><a href="{pigcms{$config.site_url}/intro/5.html" target="_blank">{pigcms{:L('7TERMSOFUSE')}</a></li>
                 <li><a href="{pigcms{$config.site_url}/intro/2.html" target="_blank">{pigcms{:L('7PRIVACY')}</a></li>
             </ul>

@@ -3469,10 +3469,13 @@ class ShopAction extends BaseAction{
             $this->assign('order_id', $order_id);
             $this->assign('order', $order);
             $this->assign('status', $status);
+            $this->assign('error', 0);
             $this->display();
         } else {
             //$this->error_tips('错误的订单信息！');
-            echo "错误的订单信息！";
+            //echo "错误的订单信息！";
+            $this->assign('error', 1);
+            $this->display();
         }
     }
 

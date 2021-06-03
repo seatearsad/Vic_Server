@@ -17,6 +17,7 @@ class AdverAction extends BaseAction{
 		$database_adver_category  = D('Adver_category');
 		$category_list = $database_adver_category->field(true)->order('`cat_id` ASC')->select();
 		$this->assign('category_list',$category_list);
+        $this->assign('module_name','System');
 		$this->display();
 	}
 	public function cat_add(){

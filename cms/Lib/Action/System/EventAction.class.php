@@ -11,6 +11,7 @@ class EventAction extends BaseAction
     public function index(){
         $event_list = D('New_event')->getEventList(-1);
         $this->assign('event_list',$event_list);
+        $this->assign('module_name','Market');
         $this->display();
     }
 

@@ -9,7 +9,8 @@ class FooterAction extends BaseAction{
 		$database_footer_link = D('Footer_link');
 		$link_list = $database_footer_link->order('`id` ASC')->select();
 		$this->assign('link_list',$link_list);
-		
+
+        $this->assign('module_name','System');
 		$this->display();
 	}
 	public function add(){

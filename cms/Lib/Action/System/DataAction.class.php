@@ -14,7 +14,7 @@ class DataAction extends BaseAction
         $this->export_menu = array(
             "order"=>L('ORDER_EXPORT'),
             "sales"=>L('SALES_EXPORT'),
-            "store"=>L('STORE_EXPORT'),
+            //"store"=>L('STORE_EXPORT'),
             "order_store"=>L('ORDER_STORE_EXPORT'),
             "store_ranking"=>L('STORE_RANKING_EXPORT'),
             "store_info"=>L('STORE_INFO_EXPORT'),
@@ -160,7 +160,7 @@ class DataAction extends BaseAction
 
         if(!empty($_GET['begin_time'])&&!empty($_GET['end_time'])){
             if ($_GET['begin_time']>$_GET['end_time']) {
-                $this->error_tips("结束时间应大于开始时间");
+                $this->error("结束时间应大于开始时间");
             }
             $period = array(strtotime($_GET['begin_time']." 00:00:00"),strtotime($_GET['end_time']." 23:59:59"));
             $where['_string'] .=( $where['_string']?' AND ':''). " (create_time BETWEEN ".$period[0].' AND '.$period[1].")";
@@ -383,10 +383,10 @@ class DataAction extends BaseAction
         $title = 'Order Total';
 
         if(!$_GET['begin_time'] || !$_GET['end_time']){
-            $this->error('请选择时间！');
+            $this->error(L('J_SPECIFY_TIME'));
         }else{
             if ($_GET['begin_time']>$_GET['end_time']) {
-                $this->error_tips("结束时间应大于开始时间");
+                $this->error("结束时间应大于开始时间");
             }
 
             $condition_where ="where o.is_del=0  AND (o.status=2 or o.status=3) and paid=1";
@@ -600,10 +600,10 @@ class DataAction extends BaseAction
         $title = 'Store Ranking';
 
         if(!$_GET['begin_time'] || !$_GET['end_time']){
-            $this->error('请选择时间！');
+            $this->error(L('J_SPECIFY_TIME'));
         }else{
             if (strtotime($_GET['begin_time']." 00:00:00")>strtotime($_GET['end_time']." 23:59:59")) {
-                $this->error_tips("结束时间应大于开始时间");
+                $this->error("结束时间应大于开始时间");
             }
 
             $condition_where ="where o.is_del=0  AND (o.status=2 or o.status=3) and o.paid=1";
@@ -699,10 +699,10 @@ class DataAction extends BaseAction
         $title = 'User Ranking';
 
         if(!$_GET['begin_time'] || !$_GET['end_time']){
-            $this->error('请选择时间！');
+            $this->error(L('J_SPECIFY_TIME'));
         }else{
             if (strtotime($_GET['begin_time']." 00:00:00")>strtotime($_GET['end_time']." 23:59:59")) {
-                $this->error_tips("结束时间应大于开始时间");
+                $this->error("结束时间应大于开始时间");
             }
 
             $condition_where ="where o.is_del=0  AND (o.status=2 or o.status=3) and o.paid=1";
@@ -914,7 +914,7 @@ class DataAction extends BaseAction
                 $condition_where = 'WHERE o.store_id = "'. htmlspecialchars($_GET['keyword']).'"';
             }
         }else{
-            $this->error_tips("Please Input Store ID");
+            $this->error("Please Input Store ID");
         }
 
 //        $status = isset($_GET['status']) ? intval($_GET['status']) : -1;
@@ -945,7 +945,7 @@ class DataAction extends BaseAction
 
         if(!empty($_GET['begin_time'])&&!empty($_GET['end_time'])){
             if (strtotime($_GET['begin_time']." 00:00:00")>strtotime($_GET['end_time']." 23:59:59")) {
-                $this->error_tips("结束时间应大于开始时间");
+                $this->error("结束时间应大于开始时间");
             }
             $period = array(strtotime($_GET['begin_time']." 00:00:00"),strtotime($_GET['end_time']." 23:59:59"));
             $where['_string'] =( $where['_string']?' AND ':''). " (create_time BETWEEN ".$period[0].' AND '.$period[1].")";
@@ -1451,5 +1451,176 @@ class DataAction extends BaseAction
         header("Content-Transfer-Encoding:binary");
         $objWriter->save('php://output');
         exit();
+    }
+
+    public function order_courier()
+    {
+        set_time_limit(0);
+
+        if(!empty($_GET['keyword'])){
+            if ($_GET['searchtype'] == 'uid') {
+                $uid = $_GET['keyword'];
+            }
+        }else{
+            $this->error("Please Input Store ID");
+        }
+
+        //$uid = isset($_GET['uid']) ? intval($_GET['uid']) : 0;
+        $begin_time = isset($_GET['begin_time']) ? htmlspecialchars($_GET['begin_time']) : '';
+        $end_time = isset($_GET['end_time']) ? htmlspecialchars($_GET['end_time']) : '';
+        $condition_user = array('mer_id' => 0, 'uid' => $uid);
+        $user = D('Deliver_user')->field(true)->where($condition_user)->find();
+        if (empty($user)) $this->error('不存在的配送员');
+
+
+        require_once APP_PATH . 'Lib/ORG/phpexcel/PHPExcel.php';
+
+        if ($begin_time && $end_time) {
+            //$title = '【' . $user['name'] . '】在' . $begin_time . '至' . $end_time . '时间段的配送记录列表';
+            $title = $user['name'] . '\'s Delivery Summary(' . $begin_time . '-' . $end_time . ')';
+        } else {
+            $title = $user['name'] . '\'s Delivery Summary';
+        }
+        $objExcel = new PHPExcel();
+        $objProps = $objExcel->getProperties();
+        // 设置文档基本属性
+        $objProps->setCreator($title);
+        $objProps->setTitle($title);
+        $objProps->setSubject($title);
+        $objProps->setDescription($title);
+
+        // 设置当前的sheet
+        $sql_count = "SELECT count(1) AS count FROM " . C('DB_PREFIX') . "merchant_store AS m INNER JOIN " . C('DB_PREFIX') . "deliver_supply AS s ON m.store_id=s.store_id";
+        $sql_count .= ' WHERE s.type=0 AND s.uid=' . $uid;
+        if ($begin_time && $end_time) {
+            $sql_count .= ' AND s.start_time>' . strtotime($begin_time." 00:00:00") . ' AND s.start_time<' . strtotime($end_time." 23:59:59");
+        }
+
+        $res_count = D()->query($sql_count);
+        $count_order = isset($res_count[0]['count']) ? $res_count[0]['count'] : 0;
+
+        $length = ceil($count_order / 1000);
+        for ($i = 0; $i < $length; $i++) {
+            $i && $objExcel->createSheet();
+            $objExcel->setActiveSheetIndex($i);
+
+            $objExcel->getActiveSheet()->setTitle('第' . ($i+1) . '个一千配送订单');
+            $objActSheet = $objExcel->getActiveSheet();
+
+            $objActSheet->setCellValue('A1', 'Order ID');
+            $objActSheet->setCellValue('B1', 'Type');
+            $objActSheet->setCellValue('C1', 'Store');
+            $objActSheet->setCellValue('D1', 'Customer');
+            $objActSheet->setCellValue('E1', 'Phone');
+            $objActSheet->setCellValue('F1', 'Address');
+            $objActSheet->setCellValue('G1', 'Payment');
+            $objActSheet->setCellValue('H1', 'Order Amount');
+            $objActSheet->setCellValue('I1', 'Delivery Fee');
+            $objActSheet->setCellValue('J1', 'Tips');
+            $objActSheet->setCellValue('K1', 'Cash Due');
+            $objActSheet->setCellValue('L1', 'Total');
+            $objActSheet->setCellValue('M1', 'Status');
+            $objActSheet->setCellValue('N1', 'Acceptance Time');
+            $objActSheet->setCellValue('O1', 'Complete Time');
+
+
+            $sql = "SELECT s.`supply_id`, s.order_id, s.item, s.name as username, s.phone as userphone, m.name as storename, s.money, s.start_time, s.end_time, s.aim_site, s.pay_type, s.paid, s.status, s.deliver_cash,s.freight_charge,o.tip_charge as tips FROM " . C('DB_PREFIX') . "deliver_supply AS s left JOIN " . C('DB_PREFIX') . "merchant_store AS m ON m.store_id=s.store_id left join ". C('DB_PREFIX') ."shop_order as o on s.order_id=o.order_id";
+            $sql .= ' WHERE s.type=0 AND s.uid=' . $uid;
+            if ($begin_time && $end_time) {
+                $sql .= ' AND s.start_time>' . strtotime($begin_time) . ' AND s.start_time<' . strtotime($end_time);
+            }
+
+            $sql .= ' ORDER BY s.`supply_id` DESC LIMIT ' . $i * 1000 . ', 1000';
+
+            $supply_list = D()->query($sql);
+
+            if (!empty($supply_list)) {
+                import('ORG.Net.IpLocation');
+                $IpLocation = new IpLocation();
+                $index = 2;
+                foreach ($supply_list as $value) {
+
+                    $objActSheet->setCellValueExplicit('A' . $index, $value['order_id']);
+                    if ($value['item'] == 0) {
+                        $objActSheet->setCellValueExplicit('B' . $index, $this->config['meal_alias_name']);
+                    } elseif ($value['item'] == 1) {
+                        $objActSheet->setCellValueExplicit('B' . $index, $this->config['waimai_alias_name']);
+                    } elseif ($value['item'] == 2) {
+                        $objActSheet->setCellValueExplicit('B' . $index, 'Delivery');//$this->config['shop_alias_name']
+                    }
+                    $objActSheet->setCellValueExplicit('C' . $index, $value['storename']);
+                    $objActSheet->setCellValueExplicit('D' . $index, $value['username']);
+                    $objActSheet->setCellValueExplicit('E' . $index, $value['userphone'] . ' ');
+                    $objActSheet->setCellValueExplicit('F' . $index, $value['aim_site']);
+                    if ($value['paid'] == 1) {
+                        $objActSheet->setCellValueExplicit('G' . $index, 'Paid');
+                    } else {
+                        $objActSheet->setCellValueExplicit('G' . $index, 'Unpaid');
+                    }
+
+                    $objActSheet->setCellValueExplicit('H' . $index, floatval($value['money']));
+                    $objActSheet->setCellValueExplicit('I' . $index, floatval($value['freight_charge']));
+                    $objActSheet->setCellValueExplicit('J' . $index, floatval($value['tips']));
+                    $objActSheet->setCellValueExplicit('K' . $index, floatval($value['deliver_cash']));
+                    $objActSheet->setCellValueExplicit('L' . $index, floatval($value['freight_charge']-$value['tips']+$value['deliver_cash']));
+                    switch ($value['status']) {
+                        case 1:
+                            $value['order_status'] = '<font color="red">等待接单</font>';
+                            break;
+                        case 2:
+                            $value['order_status'] = "接单";
+                            break;
+                        case 3:
+                            $value['order_status'] = "取货";
+                            break;
+                        case 4:
+                            $value['order_status'] = "开始配送";
+                            break;
+                        case 5:
+                            $value['order_status'] = "Complete";
+                            break;
+                        default:
+                            $value['order_status'] = "订单失效";
+                            break;
+                    }
+                    $objActSheet->setCellValueExplicit('M' . $index, $value['order_status']);
+                    $objActSheet->setCellValueExplicit('N' . $index, $value['start_time'] ? date('Y-m-d H:i:s', $value['start_time']) : '--');
+                    $objActSheet->setCellValueExplicit('O' . $index, $value['end_time'] ? date('Y-m-d H:i:s', $value['end_time']) : '--');
+
+                    $index++;
+                }
+            }
+            sleep(2);
+        }
+        //输出
+        $objWriter = new PHPExcel_Writer_Excel5($objExcel);
+        ob_end_clean();
+        header("Pragma: public");
+        header("Expires: 0");
+        header("Cache-Control:must-revalidate, post-check=0, pre-check=0");
+        header("Content-Type:application/force-download");
+        header("Content-Type:application/vnd.ms-execl");
+        header("Content-Type:application/octet-stream");
+        header("Content-Type:application/download");
+        header('Content-Disposition:attachment;filename="' . $title . '.xls"');
+        header("Content-Transfer-Encoding:binary");
+        $objWriter->save('php://output');
+        exit();
+    }
+
+    public function getStoreList(){
+        if($_GET['begin_time'] && $_GET['end_time']) {
+            $b_date = $_GET['begin_time'] . ' 00:00:00';
+            $e_date = $_GET['end_time'] . ' 24:00:00';
+
+            $b_time = strtotime($b_date);
+            $e_time = strtotime($e_date);
+        }else{
+            $this->error(L('J_SPECIFY_TIME'));
+        }
+
+        $list = D('Shop_order')->field('o.store_id,m.name as store_name')->join(' as o left join '.C('DB_PREFIX').'merchant_store as m on m.store_id=o.store_id')->group('store_id')->select();
+
+        $this->ajaxReturn($list);
     }
 }

@@ -56,6 +56,7 @@ class AreaAction extends BaseAction{
 		}
 		$this->assign('now_type_str',$now_type_str);
 
+        $this->assign('module_name','System');
 		$this->display();
     }
     //	商场列表

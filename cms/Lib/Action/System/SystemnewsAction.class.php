@@ -30,6 +30,8 @@
 			    $v['count'] = $count;
             }
 			$this->assign("category",$category);
+
+            $this->assign('module_name','System');
 			$this->display();
 		}
 		public function news(){
@@ -69,6 +71,8 @@
 			$category_name = D('System_news_category')->where('id='.$_GET['category_id'])->getField('name');
 			$this->assign('category_name',$category_name);
 			$this->assign('pagebar', $pagebar);
+
+            $this->assign('module_name','System');
 			$this->display();
 		}
 
