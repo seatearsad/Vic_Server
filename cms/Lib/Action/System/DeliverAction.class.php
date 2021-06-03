@@ -100,6 +100,7 @@ class DeliverAction extends BaseAction {
         }else{
             $this->assign('city_id',0);
         }
+        //var_dump($condition_user);die();
         //garfunkel 判断城市管理员
         if($this->system_session['level'] == 3){
             $condition_user['u.city_id'] = $this->system_session['area_id'];
@@ -110,7 +111,7 @@ class DeliverAction extends BaseAction {
         $condition_user['u.group'] = 1;
         $count_user = $this->deliver_user->join('as u left join '.C('DB_PREFIX').'area as a ON u.city_id=a.area_id')->where($condition_user)->count();
         import('@.ORG.system_page');
-        $p = new Page($count_user, 15);
+        $p = new Page($count_user, 20);
         $user_list = $this->deliver_user->field('u.*,a.area_name')->join('as u left join '.C('DB_PREFIX').'area as a ON u.city_id=a.area_id')->where($condition_user)->order('`uid` DESC')->limit($p->firstRow . ',' . $p->listRows)->select();
         //var_dump($user_list);die();
         $this->assign('user_list', $user_list);

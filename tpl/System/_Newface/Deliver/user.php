@@ -67,7 +67,7 @@
                                         </select>
                                         <if condition="$system_session['level'] neq 3">
                                             &nbsp;&nbsp;City:&nbsp;&nbsp;
-                                            <select name="city_select" id="city_select" class="form-control" >
+                                            <select name="city_id" id="city_id" class="form-control" >
                                                 <option value="0" <if condition="$city_id eq '' or $city_id eq 0">selected="selected"</if>>All</option>
                                                 <volist name="city" id="vo">
                                                     <option value="{pigcms{$vo.area_id}" <if condition="$city_id eq $vo['area_id']">selected="selected"</if>>{pigcms{$vo.area_name}</option>
@@ -82,7 +82,7 @@
                         </div>
                         <!------------------------------------------------------------------------------>
                         <!-- <form name="myform" id="myform" action="" method="post">-->
-                        <table class="footable table table-stripped toggle-arrow-tiny" data-sorting="false">
+                        <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="20" data-sorting="false">
                             <thead>
                             <tr>
                                 <!--                                ID，姓名（名+姓），电话，邮箱，配送城市，配送范围，配送总量，状态，历史记录统计，配送记录，编辑-->

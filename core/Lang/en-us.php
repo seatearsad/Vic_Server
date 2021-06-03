@@ -1220,7 +1220,7 @@ return array(
 
     '_BACK_MANUAL_REFUND_'  =>  'Refund',
     '_BACK_DELIVER_BOX_'    =>  'Waiting For Delivery Bag',
-    '_BACK_SYS_CON_PRICE_'  =>  '平台优惠券金额',
+    '_BACK_SYS_CON_PRICE_'  =>  'Coupon Used',
     '_BACK_PAY_OFFLINE_'    =>  '线下需支付',
     '_BACK_DELIVER_SET_'    =>  'Open for delivery',
     '_BACK_EDIT_MER_INFO_'  =>  'Edit Merchant Info',
