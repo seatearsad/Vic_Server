@@ -78,7 +78,7 @@
     <script>
         var new_img = "{pigcms{$static_path}images/new_order.png";
         var new_url = "{pigcms{:U('Storestaff/getNewOrder')}";
-        var link_url = "javascript:layer.closeAll();"//"{pigcms{:U('Storestaff/shop_list')}";
+        var link_url = "javascript:hasNewOrder();"//"{pigcms{:U('Storestaff/shop_list')}";
         var sound_url = "{pigcms{$static_public}sound/soft-bells.mp3";
         var detail_url = "{pigcms{:U('Storestaff/getOrderDetail')}";
     </script>
@@ -117,6 +117,8 @@
         var all_height = $(window).height();
         var all_width = $(window).width();
         var is_detail_hide = false;
+        var tip_layer_show = false;
+        var con_layer_confirm_show = false;
 
         $(function () {
             $(".order_list").height(all_height - header_height);
@@ -131,6 +133,11 @@
                 is_detail_hide = true;
             }
         });
+
+        function hasNewOrder(){
+            layer.closeAll();
+            $('.show_list').trigger('click');
+        }
         $('.list_top').click(function () {
             isHide();
             $('.order_list').children().hide();
@@ -139,6 +146,8 @@
             if(is_detail_hide) {
                 $('.order_detail').show();
                 $('.order_detail').children().show();
+                if(!tip_layer_show) $("#tip_layer").hide();
+                if(!con_layer_confirm_show) $('.con_layer_confirm').hide();
                 if(click_id == 0){
                     $('.con_layer').hide();
                     $('.con_layer_confirm').hide();
@@ -151,6 +160,18 @@
             setTimeout(function (){
                 $('.order_list').children().show()
             },200);
+            //记录detail中的元素是否显示
+            if ($("#tip_layer").is(':hidden')) {
+                tip_layer_show = false;
+            }else{
+                tip_layer_show = true;
+            }
+            if ($('.con_layer_confirm').is(':hidden')) {
+                con_layer_confirm_show = false;
+            }else{
+                con_layer_confirm_show = true;
+            }
+
             $('.show_list').hide();
             if(is_detail_hide){
                 $('.order_detail').hide();

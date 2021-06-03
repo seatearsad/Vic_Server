@@ -6,6 +6,7 @@
 class BaseAction extends CommonAction{
     protected function _initialize(){
 		parent::_initialize();
+
 		if(!function_exists('indexfdksajflkjsadmbvlknasdfa')){
 			redirect('http://www.pigcms.com');
 		}

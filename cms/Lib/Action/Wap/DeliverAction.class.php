@@ -2955,16 +2955,26 @@ class DeliverAction extends BaseAction
                     $this->assign('deliver_card',$deliver_card);
                 }
             }else{
+                $old_data = D('Deliver_card')->where(array('deliver_id'=>$this->deliver_session['uid']))->find();
+
                 $card_data['ahname'] = $_POST['ahname'];
                 $card_data['transit'] = $_POST['transit'];
                 $card_data['institution'] = $_POST['institution'];
                 $card_data['account'] = $_POST['account'];
 
-                D('Deliver_card')->where(array('deliver_id'=>$this->deliver_session['uid']))->save($card_data);
+                if($old_data['ahname'] != $card_data['ahname'] || $old_data['transit'] != $card_data['transit'] || $old_data['institution'] != $card_data['institution'] || $old_data['account'] != $card_data['account']) {
+                    D('Deliver_card')->where(array('deliver_id' => $this->deliver_session['uid']))->save($card_data);
 
-                $userdata['last_time'] = time();
-                D('Deliver_user')->where(array('uid' => $this->deliver_session['uid']))->save($userdata);
+                    $userdata['last_time'] = time();
+                    D('Deliver_user')->where(array('uid' => $this->deliver_session['uid']))->save($userdata);
 
+                    $title = "Courier banking info change";
+                    $body = "Driver (".$this->deliver_session['uid'].") has changed his/her banking information. Please take a look.";
+                    $email = array(array("address"=>"hr@tutti.app","userName"=>"HR"));
+
+                    $mail = getMail($title,$body,$email);
+                    $mail->send();
+                }
                 exit(json_encode(array('error' => 0,'message' =>'Success')));
             }
         }

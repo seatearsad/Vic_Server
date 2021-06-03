@@ -6,12 +6,16 @@
  class NewsAction extends BaseAction{
      protected $type = 0;
 	 public function index(){
+
             $cate = D('System_news_category');
             $news_cat = $cate->where(array('status'=>1,'type'=>$this->type))->order('sort DESC')->select();
             $this->assign('news_cat',$news_cat);
             $cat_id = $_GET['category_id'];
 
+            //echo GROUP_NAME."---------".MODULE_NAME."---------".ACTION_NAME;
+
             if(isset($cat_id)){
+
                 if($cat_id != 0){
                     $now_cat = $cate->where(array('id'=>$cat_id))->find();
                 }else{
@@ -26,8 +30,13 @@
                 $this->assign('pagebar', $news['page']);
 
                 $this->display('category');
+
+                //$this->display('news');
+
             }else if(!empty($_GET['id'])){
+
                 $news = D('System_news')->where(array('id'=>$_GET['id']))->find();
+
                 $now_cat = $cate->where(array('id'=>$news['category_id']))->find();
                 $this->assign('now_cat',$now_cat);
                 $this->assign('news',$news);
@@ -37,8 +46,13 @@
 
                 D('System_news')->where(array('id'=>$_GET['id']))->save(array('view_num'=>$news['view_num']+1));
 
+
                 $this->display('news');
+
+
+
             }else{
+
                 $news = $this->getCateList(3,0,false);
                 $this->assign('news_all',$news['list']);
 
@@ -48,7 +62,6 @@
                     //首页显示三个栏目
                     if($i<3) {
                         $cate_show['cate'][] = $cate;
-
                         $news_cate = $this->getCateList(3, $cate['id'], false);
                         $cate_show['news'][$cate['id']] = $news_cate['list'];
                     }else{
@@ -62,9 +75,10 @@
                 $commend = $this->getCateList(5,0,false,true);
                 $this->assign('commend',$commend['list']);
                 $this->assign('commend_num',count($commend['list']));
-                $this->display();
-            }
 
+                $this->display("");
+
+            }
 	 }
 
 	 public function getCateList($num=3,$cate_id=0,$is_page=false,$is_commend=false){

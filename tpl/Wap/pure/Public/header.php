@@ -175,39 +175,39 @@
 
     #menu_memo ul li:hover {
         color: #ffa52d;
-        background-image: url("./tpl/Static/blue/images/new/or_arrow.png");
+        background-image: url("../tpl/Static/blue/images/new/or_arrow.png");
     }
 
     #menu_memo li:nth-child(1) .m_img {
-        background-image: url("./tpl/Static/blue/images/new/home.png");
+        background-image: url("../tpl/Static/blue/images/new/home.png");
     }
 
     #menu_memo li:nth-child(2) .m_img {
-        background-image: url("./tpl/Static/blue/images/new/food.png");
+        background-image: url("../tpl/Static/blue/images/new/food.png");
     }
 
     #menu_memo li:nth-child(3) .m_img {
-        background-image: url("./tpl/Static/blue/images/new/car.png");
+        background-image: url("../tpl/Static/blue/images/new/car.png");
     }
 
     #menu_memo li:nth-child(4) .m_img {
-        background-image: url("./tpl/Static/blue/images/new/store.png");
+        background-image: url("../tpl/Static/blue/images/new/store.png");
     }
 
     #menu_memo li:hover:nth-child(1) .m_img {
-        background-image: url("./tpl/Static/blue/images/new/h_home.png");
+        background-image: url("../tpl/Static/blue/images/new/h_home.png");
     }
 
     #menu_memo li:hover:nth-child(2) .m_img {
-        background-image: url("./tpl/Static/blue/images/new/h_food.png");
+        background-image: url("../tpl/Static/blue/images/new/h_food.png");
     }
 
     #menu_memo li:hover:nth-child(3) .m_img {
-        background-image: url("./tpl/Static/blue/images/new/h_car.png");
+        background-image: url("../tpl/Static/blue/images/new/h_car.png");
     }
 
     #menu_memo li:hover:nth-child(4) .m_img {
-        background-image: url("./tpl/Static/blue/images/new/h_store.png");
+        background-image: url("../tpl/Static/blue/images/new/h_store.png");
     }
 
     #menu_memo li .m_img {

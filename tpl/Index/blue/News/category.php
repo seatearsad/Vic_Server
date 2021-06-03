@@ -1,15 +1,17 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
+        <title>{pigcms{:L('_VIC_NAME_')} - Blog - {pigcms{$now_cat.name}</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=Edge">
-		<if condition="$config['site_favicon']">
+        <meta name="keywords" content="{pigcms{$config.seo_keywords}" />
+        <meta name="description" content="{pigcms{$config.seo_description}" />
+        <if condition="$config['site_favicon']">
 			<link rel="shortcut icon" href="{pigcms{$config.site_favicon}"/>
 		</if>
 		<!--title>{pigcms{$config.seo_title}</title-->
-        <title>{pigcms{:L('_VIC_NAME_')} - Blog - {pigcms{$now_cat.name}</title>
-		<meta name="keywords" content="{pigcms{$config.seo_keywords}" />
-		<meta name="description" content="{pigcms{$config.seo_description}" />
+<!--		<meta name="keywords" content="{pigcms{$config.seo_keywords}" />-->
+<!--		<meta name="description" content="{pigcms{$config.seo_description}" />-->
 		<script src="{pigcms{$static_path}js/jquery-1.7.2.js"></script>
 		<script src="{pigcms{$static_public}js/jquery.lazyload.js"></script>
 		<script src="{pigcms{$static_path}js/jquery.nav.js"></script>
@@ -17,31 +19,42 @@
         <script type="text/javascript" src="{pigcms{$static_public}js/lang/{pigcms{:C('DEFAULT_LANG')}.js" charset="utf-8"></script>
 		<script src="{pigcms{$static_path}js/common.js"></script>
 		<script src="{pigcms{$static_path}js/index.activity.js"></script>
-		<if condition="$config['wap_redirect']">
-			<script>
-				if(/(iphone|ipod|android|windows phone)/.test(navigator.userAgent.toLowerCase())){
-					<if condition="$config['wap_redirect'] eq 1">
-						window.location.href = './wap';
-					<else/>
-						if(confirm('系统检测到您可能正在使用手机访问，是否要跳转到手机版网站？')){
-							window.location.href = './wap';
-						}
-					</if>
-				}
-
-			</script>
-		</if>
+        <if condition="$config['wap_redirect']">
+            <script>
+                if(/(iphone|ipod|android|windows phone)/.test(navigator.userAgent.toLowerCase())){
+                <if condition="$config['wap_redirect'] eq 1">
+                    window.location.href = '../wapnews';
+                <else/>
+                    if(confirm('系统检测到您可能正在使用手机访问，是否要跳转到手机版网站？')){
+                        window.location.href = './wapnews';
+                    }
+                </if>
+                }
+            </script>
+        </if>
         <include file="Public:facebook"/>
 	</head>
     <style>
+        @font-face {
+            font-family: 'Montserrat';
+            src: url('/static/font/Montserrat-Regular.ttf');
+        }
+        @font-face {
+            font-family: 'Montserrat-bold';
+            src: url('/static/font/Montserrat-Bold.otf');
+        }
+        @font-face {
+            font-family: 'Montserrat-light';
+            src: url('/static/font/Montserrat-Light.otf');
+        }
         *{
             margin: 0px;
             box-sizing: border-box;
-            font-family: Helvetica;
+            font-family: Montserrat;
             -moz-osx-font-smoothing: grayscale;
         }
         body{
-            min-width: 1024px;
+            min-width: 1124px;
             color: #3f3f3f;
         }
         a{
