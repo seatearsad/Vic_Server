@@ -50,6 +50,8 @@ class ConfigAction extends BaseAction {
 			import('ORG.Util.Dir');
 			Dir::delDirnotself('./runtime/Cache/System/');
 		}
+
+        $this->assign('module_name','System');
 		$this->display();
 	}
 	public function amend(){
