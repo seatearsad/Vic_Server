@@ -759,6 +759,7 @@ class IndexAction extends BaseAction {
     }
 
     public function profile() {
+
         $database_admin = D('Admin');
         $condition_admin['id'] = $this->system_session['id'];
         $admin = $database_admin->where($condition_admin)->find();
@@ -768,6 +769,7 @@ class IndexAction extends BaseAction {
         	$exp	=	explode(',',$v);
 			$sort_menus_son[$exp[0]]	=	$exp[1];
         }
+        //var_dump($sort_menus_son);
         $this->assign('sort_menus_son', $sort_menus_son);
         $this->assign('admin', $admin);
         $this->display();
@@ -781,6 +783,7 @@ class IndexAction extends BaseAction {
         $data_admin['qq'] = $this->_post('qq');
         $data_admin['phone'] = $this->_post('phone');
         $data_admin['sort_menus'] = $this->_post('system_menu');
+
         if ($database_admin->data($data_admin)->save()) {
             $this->success(L('K_PROFILE_SUCC'));
         } else {

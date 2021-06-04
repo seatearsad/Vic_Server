@@ -9,6 +9,7 @@ class UserAction extends BaseAction {
     public function index() {
         //if($this->system_session['level'] == 3){
             //if($this->system_session['area_id'] != 0){
+
                 $sql_count = "SELECT count(*) FROM ". C('DB_PREFIX') . "user as u ";
                 $sql = "SELECT u.* FROM ". C('DB_PREFIX') . "user as u ";
 
@@ -26,6 +27,7 @@ class UserAction extends BaseAction {
                         $sql_count .= " LEFT JOIN ". C('DB_PREFIX') . "user_adress as a on a.uid = u.uid ";
                         $sql = "SELECT u.* , a.city as city_id FROM ". C('DB_PREFIX') . "user as u LEFT JOIN ". C('DB_PREFIX') . "user_adress as a on a.uid = u.uid ";
                         $where .= " and a.default=1 and a.city=".$_GET['city_id'];
+                        $this->assign('city_id',$_GET['city_id']);
                     }
                 }else{
                     $this->assign('city_id',0);

@@ -61,7 +61,7 @@
                                         </select>
                                         <if condition="$system_session['level'] neq 3">
                                             City:
-                                            <select name="city_select" id="city_select" class="form-control">
+                                            <select name="city_id" id="city_id" class="form-control">
                                                 <option value="0" <if condition="$city_id eq '' or $city_id eq 0">selected="selected"</if>>All</option>
                                                 <volist name="city" id="vo">
                                                     <option value="{pigcms{$vo.area_id}" <if condition="$city_id eq $vo['area_id']">selected="selected"</if>>{pigcms{$vo.area_name}</option>
@@ -144,8 +144,8 @@
 <script type="text/javascript">
     var city_id = $('#city_select').val();
     $('#city_select').change(function () {
-        city_id = $(this).val();
-        window.location.href = "{pigcms{:U('User/index')}" + "&city_id="+city_id;
+        // city_id = $(this).val();
+        // window.location.href = "{pigcms{:U('User/index')}" + "&city_id="+city_id;
     });
 
     $("#select_all").click(function(){
