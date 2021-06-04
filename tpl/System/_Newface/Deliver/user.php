@@ -1,6 +1,5 @@
 <include file="Public:header"/>
 <div id="wrapper">
-
     <include file="Public:left_menu"/>
     <!----------------------------------------    以上不要写代码     ------------------------------------------------>
     <div class="row wrapper border-bottom white-bg page-heading">
@@ -19,7 +18,7 @@
             </ol>
         </div>
         <div class="col-lg-6 float-right" style="height 90px;margin-top:40px;">
-            <div class="btn-group float-right">
+            <div class="btn-group">
 
                 <if condition="$system_session['level'] eq 2">
                     <a href="{pigcms{:U('Deliver/user')}" style="float:right;"><button class="btn btn-white active text-grey">{pigcms{:L('_BACK_COURIER_MANA_')}</button></a>

@@ -2350,6 +2350,7 @@ return array(
     "I_PASSWORD"=>"Password",
     "I_ADCATEGORY_LIST"=>"Advertising Category List",
     "I_ADD_CATEGORY"=>"Add a Category",
+    "I_ADD_ADV_CATEGORY"=>"Add a Category",
     "I_SYMBOL"=>"Symbol",
     "I_TYPE"=>"Type",
     "I_AD_LIST"=>"Ad List",
