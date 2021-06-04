@@ -60,7 +60,7 @@
                                         {pigcms{:L('_BACK_SEARCH_')}:&nbsp;&nbsp; <input type="text" name="keyword" class="form-control" value="{pigcms{$_GET['keyword']}"/>&nbsp;&nbsp;
                                         <select name="searchtype" class="form-control">
                                             <option value="uid" <if condition="$_GET['searchtype'] eq 'uid'">selected="selected"</if>>{pigcms{:L('_BACK_USER_ID_')}</option>
-                                            <option value="nickname" <if condition="$_GET['searchtype'] eq 'nickname'">selected="selected"</if>>{pigcms{:L('_BACK_NICKNAME_')}</option>
+                                            <option value="nickname" <if condition="$_GET['searchtype'] eq 'nickname'">selected="selected"</if>>{pigcms{:L('NAME_BKADMIN')}</option>
                                             <option value="phone" <if condition="$_GET['searchtype'] eq 'phone'">selected="selected"</if>>{pigcms{:L('_BACK_PHONE_NUM_')}</option>
                                             <option value="mail" <if condition="$_GET['searchtype'] eq 'mail'">selected="selected"</if>>{pigcms{:L('_EMAIL_TXT_')}</option>
                                         </select>
