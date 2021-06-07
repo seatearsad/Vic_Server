@@ -19,7 +19,7 @@
             </ol>
         </div>
         <div class="col-lg-3" style="height 90px;margin-top:40px;">
-            <a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Appintro/add')}','{pigcms{:L(\'I_ADD_INFORMATION\')}',800,460,true,false,false,addbtn,'add',true);"><button type="button" class="btn btn-primary btn-sm float-right">{pigcms{:L('I_ADD_INFORMATION')}</button></a>
+            <a href="javascript:void(0);" onclick="winCourier Monitoringdow.top.artiframe('{pigcms{:U('Appintro/add')}','{pigcms{:L(\'I_ADD_INFORMATION\')}',800,460,true,false,false,addbtn,'add',true);"><button type="button" class="btn btn-primary btn-sm float-right">{pigcms{:L('I_ADD_INFORMATION')}</button></a>
         </div>
     </div>
     <div class="row wrapper wrapper-content animated fadeInRight">

@@ -20,7 +20,9 @@
         </div>
         <div class="col-lg-6" style="height 90px;margin-top:40px;">
             <div class="btn-group float-right">
-                <if condition="$system_session['level'] eq 2">
+                <a href="{pigcms{:U('Shop/order')}" class="button" style="float:right;margin-right: 10px;"><button class="btn btn-white text-grey">{pigcms{:L('_BACK_ORDER_LIST_')}</button></a>
+                <a href="{pigcms{:U('Deliver/deliverList')}" class="button" style="float:right;margin-right: 10px;"><button class="btn btn-white text-grey">{pigcms{:L('_BACK_DELIVERY_LIST_')}</button></a>
+                <!--if condition="$system_session['level'] eq 2">
                     <a href="{pigcms{:U('Deliver/user')}" style="float:right;">
                         <button class="btn btn-white  text-grey">{pigcms{:L('_BACK_COURIER_MANA_')}</button>
                     </a>
@@ -40,7 +42,7 @@
                    onclick="window.top.artiframe('{pigcms{:U('Deliver/user_add')}','{pigcms{:L(\'_BACK_ADD_COURIER_\')}',680,560,true,false,false,editbtn,'edit',true);"
                    style="float:right;margin-left: 10px;">
                     <button class="btn btn-primary">{pigcms{:L('_BACK_ADD_COURIER_')}</button>
-                </a>
+                </a-->
 
             </div>
         </div>

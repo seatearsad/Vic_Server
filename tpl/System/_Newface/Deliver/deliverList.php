@@ -4,7 +4,7 @@
     <!----------------------------------------    以上不要写代码     ------------------------------------------------>
 
     <div class="row wrapper border-bottom white-bg page-heading">
-        <div class="col-lg-9">
+        <div class="col-lg-7">
             <h2>{pigcms{:L('_BACK_DELIVERY_LIST_')}</h2>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
@@ -18,8 +18,10 @@
                 </li>
             </ol>
         </div>
-        <div class="col-lg-3 " style="height 90px;margin-top:40px;">
+        <div class="col-lg-5 " style="height 90px;margin-top:40px;">
             <div class="btn-group float-right">
+                <a href="{pigcms{:U('Shop/order')}" class="button" style="float:right;margin-right: 10px;"><button class="btn btn-white text-grey">{pigcms{:L('_BACK_ORDER_LIST_')}</button></a>
+                <a href="{pigcms{:U('Deliver/map')}" class="button" style="float:right;margin-right: 10px;"><button class="btn btn-white text-grey">{pigcms{:L('_BACK_COURIER_MONI_')}</button></a>
                 <button class="btn btn-white ">
                     <a href="{pigcms{:U('Deliver/prep_mode')}" style="color: inherit">{pigcms{:L('D_F_PREP_MODE')}</a>
                 </button>
