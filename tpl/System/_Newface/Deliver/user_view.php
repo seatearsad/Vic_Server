@@ -200,7 +200,7 @@
         <input type="hidden" name="driver_license" id="filename_0" value="{pigcms{$img['driver_license']}">
         <input type="hidden" name="insurance" id="filename_1" value="{pigcms{$img['insurance']}">
         <input type="hidden" name="certificate" id="filename_2" value="{pigcms{$img['certificate']}">
-		<div class="btn hidden">
+		<div class="btn tutti_hidden_obj">
 			<input type="submit" name="dosubmit" id="dosubmit" value="{pigcms{:L('_BACK_SUBMIT_')}" class="button" />
 			<input type="reset" value="{pigcms{:L('_BACK_CANCEL_')}" class="button" />
 		</div>
@@ -257,7 +257,7 @@
         multiple:false
     });
     uploader.on('fileQueued',function(file){
-        if($('.upload_pic_li').size() >= 5){
+        if($('.upload_pic_li').length >= 5){
             uploader.cancelFile(file);
             alert('最多上传5个图片！');
             return false;
@@ -332,7 +332,7 @@
                 required:false
             });
         });
-        $("#myform").validate().resetForm();
+        //$("#myform").validate().resetForm();
     }
 
     function set_req(){
@@ -343,7 +343,7 @@
                 });
             }
         });
-        $("#myform").validate().resetForm();
+        //$("#myform").validate().resetForm();
     }
 
     $('#adress').focus(function () {

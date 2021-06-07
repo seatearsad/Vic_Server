@@ -17,8 +17,8 @@
                 </li>
             </ol>
         </div>
-        <div class="col-lg-6 float-right" style="height 90px;margin-top:40px;">
-            <div class="btn-group">
+        <div class="col-lg-6 " style="height 90px;margin-top:40px;">
+            <div class="btn-group float-right">
 
                 <if condition="$system_session['level'] eq 2">
                     <a href="{pigcms{:U('Deliver/user')}" style="float:right;"><button class="btn btn-white active text-grey">{pigcms{:L('_BACK_COURIER_MANA_')}</button></a>

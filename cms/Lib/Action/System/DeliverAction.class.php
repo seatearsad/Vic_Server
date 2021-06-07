@@ -1438,13 +1438,18 @@ class DeliverAction extends BaseAction {
         if (!empty($_GET['keyword'])) {
             if ($_GET['searchtype'] == 'uid') {
                 $condition_user['uid'] = $_GET['keyword'];
-            } else if ($_GET['searchtype'] == 'nickname') {
+            } else if ($_GET['searchtype'] == 'firstname') {
                 $condition_user['name'] = array('like', '%' . $_GET['keyword'] . '%');
+            } else if ($_GET['searchtype'] == 'lastname') {
+                $condition_user['family_name'] = array('like', '%' . $_GET['keyword'] . '%');
             } else if ($_GET['searchtype'] == 'phone') {
                 $condition_user['phone'] = array('like', '%' . $_GET['keyword'] . '%');
             }else if($_GET['searchtype'] == 'email'){
                 $condition_user['email'] = array('like', '%' . $_GET['keyword'] . '%');
             }
+            $this->assign('searchtype',$_GET['searchtype']);
+        }else{
+            $this->assign('searchtype',"");
         }
 
         if($_GET['city_id']){

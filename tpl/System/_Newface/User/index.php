@@ -96,7 +96,7 @@
                                 <volist name="user_list" id="vo">
                                     <tr>
                                         <td>
-                                            <input type="checkbox" name="check" value="{pigcms{$vo.uid}" class="form-control" />
+                                            <input type="checkbox" name="check" value="{pigcms{$vo.uid}" class="form-control tutti_fix_size" />
                                         </td>
                                         <td>{pigcms{$vo.uid}</td>
                                         <td>{pigcms{$vo.nickname}</td>
