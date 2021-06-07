@@ -30,7 +30,7 @@
                         <div id="nav" class="mainnav_title">
                             <ul>
                                 <volist name="group_list" id="vo">
-                                    <a href="{pigcms{:U('Config/index',array('gid'=>$vo['gid']))}" <if condition="$gid eq $vo['gid']">class="on"</if>>{pigcms{$vo.gname}</a>|
+                                    <a href="{pigcms{:U('Config/index',array('gid'=>$vo['gid']))}" <if condition="$gid eq $vo['gid']">class="btn btn-primary"<else/>class="btn btn-default"</if> style="margin:5px;">{pigcms{$vo.gname}</a>
                                 </volist>
                             </ul>
                         </div>
@@ -44,12 +44,12 @@
                         {pigcms{$config_tab_html}
                         {pigcms{$config_html}
                         <div class="btn" style="margin-top:20px;">
-                            <input TYPE="submit"  name="dosubmit" value="提交" class="button" />
-                            <input type="reset"  value="取消" class="button" />
+                            <input TYPE="submit"  name="dosubmit" value="提交" class="btn btn-w-m btn-primary" />
+                            <input type="reset"  value="取消" class="btn btn-w-m btn-primary" />
                             <if condition="empty($_GET['galias'])">
-                                <input type="button"  value="获取及时聊天的key" class="button" id="im_key"/>
-                                <input type="button"  value="微信API接口填写信息" class="button" onclick="window.top.artiframe('{pigcms{:U('Config/show',array('id'=>$vo['id']))}','API接口信息',560,100,true,false,false,'','add',true);"/>
-                                <input type="button"  value="获取生活服务充值的key" class="button" id="live_service_key"/>
+                                <input type="button"  value="获取及时聊天的key" class="btn btn-w-m btn-primary" id="im_key"/>
+                                <input type="button"  value="微信API接口填写信息" class="btn btn-w-m btn-primary" onclick="window.top.artiframe('{pigcms{:U('Config/show',array('id'=>$vo['id']))}','API接口信息',560,100,true,false,false,'','add',true);"/>
+                                <input type="button"  value="获取生活服务充值的key" class="btn btn-w-m btn-primary" id="live_service_key"/>
                             </if>
                         </div>
                     </form>

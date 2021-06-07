@@ -250,8 +250,8 @@
                         var html_td = '<td class="textcenter">';
                         html += '<tr>';
                         html += html_td + format_time(work_list[i]['start_time']) + ' -- ' + format_time(work_list[i]['end_time']) + '</td>';
-                        html += html_td + '<input type="text" name="min" data-id="' + i + '" data-num="' + init_num + '" value="' + work_list[i]['min'] + '"></td>';
-                        html += html_td + '<input type="text" name="max" data-id="' + i + '" data-num="' + init_num + '" value="' + work_list[i]['max'] + '"></td>';
+                        html += html_td + '<input type="text" class="form-control" name="min" data-id="' + i + '" data-num="' + init_num + '" value="' + work_list[i]['min'] + '"></td>';
+                        html += html_td + '<input type="text" class="form-control" name="max" data-id="' + i + '" data-num="' + init_num + '" value="' + work_list[i]['max'] + '"></td>';
                         html += html_td + work_list[i]['curr_num'] + '</td>';
 
                         if (level != '3')
