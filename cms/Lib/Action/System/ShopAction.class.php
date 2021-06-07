@@ -737,6 +737,7 @@ class ShopAction extends BaseAction
                         $dish_desc = "";
                         $dish_list = explode("|", $v['dish_id']);
                         foreach ($dish_list as $vv) {
+                            unset($one_dish);
                             $one_dish = explode(",", $vv);
                             //0 dish_id 1 id 2 num 3 price
 
@@ -745,7 +746,7 @@ class ShopAction extends BaseAction
 
                             $add_str = $one_dish[2] > 1 ? $dish_vale['name'] . "*" . $one_dish[2] : $dish_vale['name'];
 
-                            $dish_desc = $dish_desc == "" ? $add_str : $dish_desc . ";" . $add_str;
+                            $dish_desc  == "" ? $add_str : $dish_desc . ";" . $add_str;
                         }
 
                         $order['info'][$k]['spec'] = $order['info'][$k]['spec'] == "" ? $dish_desc : $order['info'][$k]['spec'] . " " . $dish_desc;
@@ -798,7 +799,7 @@ class ShopAction extends BaseAction
 
                             $add_str = $one_dish[2] > 1 ? $dish_vale['name'] . "*" . $one_dish[2] : $dish_vale['name'];
 
-                            $dish_desc = $dish_desc == "" ? $add_str : $dish_desc . ";" . $add_str;
+                            $dish_desc == "" ? $add_str : $dish_desc . ";" . $add_str;
                         }
 
                         $order['info'][$k]['spec'] = $order['info'][$k]['spec'] == "" ? $dish_desc : $order['info'][$k]['spec'] . " " . $dish_desc;
