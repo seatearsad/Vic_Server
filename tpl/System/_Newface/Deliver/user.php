@@ -1,6 +1,5 @@
 <include file="Public:header"/>
 <div id="wrapper">
-
     <include file="Public:left_menu"/>
     <!----------------------------------------    以上不要写代码     ------------------------------------------------>
     <div class="row wrapper border-bottom white-bg page-heading">
@@ -18,7 +17,7 @@
                 </li>
             </ol>
         </div>
-        <div class="col-lg-6 float-right" style="height 90px;margin-top:40px;">
+        <div class="col-lg-6 " style="height 90px;margin-top:40px;">
             <div class="btn-group float-right">
 
                 <if condition="$system_session['level'] eq 2">
@@ -61,13 +60,13 @@
                                         {pigcms{:L('_BACK_SEARCH_')}:&nbsp;&nbsp; <input type="text" name="keyword" class="form-control" value="{pigcms{$_GET['keyword']}"/>&nbsp;&nbsp;
                                         <select name="searchtype" class="form-control">
                                             <option value="uid" <if condition="$_GET['searchtype'] eq 'uid'">selected="selected"</if>>{pigcms{:L('_BACK_USER_ID_')}</option>
-                                            <option value="nickname" <if condition="$_GET['searchtype'] eq 'nickname'">selected="selected"</if>>{pigcms{:L('_BACK_NICKNAME_')}</option>
+                                            <option value="nickname" <if condition="$_GET['searchtype'] eq 'nickname'">selected="selected"</if>>{pigcms{:L('NAME_BKADMIN')}</option>
                                             <option value="phone" <if condition="$_GET['searchtype'] eq 'phone'">selected="selected"</if>>{pigcms{:L('_BACK_PHONE_NUM_')}</option>
                                             <option value="mail" <if condition="$_GET['searchtype'] eq 'mail'">selected="selected"</if>>{pigcms{:L('_EMAIL_TXT_')}</option>
                                         </select>
                                         <if condition="$system_session['level'] neq 3">
                                             &nbsp;&nbsp;City:&nbsp;&nbsp;
-                                            <select name="city_select" id="city_select" class="form-control" >
+                                            <select name="city_id" id="city_id" class="form-control" >
                                                 <option value="0" <if condition="$city_id eq '' or $city_id eq 0">selected="selected"</if>>All</option>
                                                 <volist name="city" id="vo">
                                                     <option value="{pigcms{$vo.area_id}" <if condition="$city_id eq $vo['area_id']">selected="selected"</if>>{pigcms{$vo.area_name}</option>
@@ -82,7 +81,7 @@
                         </div>
                         <!------------------------------------------------------------------------------>
                         <!-- <form name="myform" id="myform" action="" method="post">-->
-                        <table class="footable table table-stripped toggle-arrow-tiny" data-sorting="false">
+                        <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="20" data-sorting="false">
                             <thead>
                             <tr>
                                 <!--                                ID，姓名（名+姓），电话，邮箱，配送城市，配送范围，配送总量，状态，历史记录统计，配送记录，编辑-->

@@ -104,7 +104,7 @@ class Page{
         }
         //后面的页可以方便的回首页
         if($now!=1 && $now>4 && $total>6){
-            $str.='<li class=" page-item active">
+            $str.='<li class=" page-item">
                         <a href="'.$url.'1" aria-controls="DataTables_Table_0" data-dt-idx="1" tabindex="0" class="page-link">1</a></li>';
             $str.='<li class=" page-item disabled" id="DataTables_Table_0_ellipsis">
                         <a href="#" aria-controls="DataTables_Table_0" data-dt-idx="6" tabindex="0" class="page-link">…</a></li>';

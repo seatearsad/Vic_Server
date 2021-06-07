@@ -2,9 +2,8 @@
 <div id="wrapper">
     <include file="Public:left_menu"/>
     <!----------------------------------------    以上不要写代码     ------------------------------------------------>
-
     <div class="row wrapper border-bottom white-bg page-heading">
-        <div class="col-lg-9">
+        <div class="col-lg-6">
             <h2>{pigcms{:L('F_CREDITS_ADDED')}</h2>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
@@ -18,12 +17,15 @@
                 </li>
             </ol>
         </div>
-        <div class="col-lg-3" style="height 90px;margin-top:40px;">
-            <button class="btn btn-white active">
-                <a href="{pigcms{:U('User/recharge_list')}" style="color: inherit">{pigcms{:L('F_TOP_UP_LIST')}</a>
-            </button>
+        <div class="col-lg-6" style="height 90px;margin-top:40px;">
+            <div class="btn-group float-right">
+                <button class="btn btn-white active">
+                    <a href="{pigcms{:U('User/recharge_list')}" style="color: inherit">{pigcms{:L('F_TOP_UP_LIST')}</a>
+                </button>
+            </div>
         </div>
     </div>
+
     <div class="wrapper wrapper-content animated fadeInRight">
         <div class="row">
             <div class="col-lg-12">
@@ -37,7 +39,7 @@
                     <div class="ibox-content">
                         <div class="table-responsive">
                             <!-------------------------------- 工具条 -------------------------------------->
-                            <div style="height: 50px;">
+                            <div style="height: 55px;">
                                 <div id="tool_bar" class="form-inline tutti_toolbar">
                                     <form action="{pigcms{:U('admin_recharge_list')}" method="get">
                                         <input type="hidden" name="c" value="User"/>
@@ -88,7 +90,6 @@
                                         </td>
                                         <td>
                                             {pigcms{$vo['time']|date='Y-m-d H:i:s',###}<br/>
-
                                         </td>
                                         <td class="textcenter">{pigcms{:str_replace("管理员后台操作","Backend Operated by ",$vo['desc'])}</td>
                                     </tr>
@@ -110,7 +111,7 @@
 <script>
 $(function(){
 	$('#status').change(function(){
-		location.href = "{pigcms{:U('User/recharge_list')}&status=" + $(this).val();
+		//location.href = "{pigcms{:U('User/recharge_list')}&status=" + $(this).val();
 	});
 });
 

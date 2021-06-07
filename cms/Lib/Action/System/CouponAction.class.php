@@ -7,8 +7,8 @@ class CouponAction extends BaseAction {
 		
 		public function index(){
 			if (!empty($_GET['keyword'])) {
-				if ($_GET['searchtype'] == 'id') {
-					$condition_coupon['id'] = $_GET['keyword'];
+				if ($_GET['searchtype'] == 'coupon_id') {
+					$condition_coupon['coupon_id'] = $_GET['keyword'];
 				} else if ($_GET['searchtype'] == 'name') {
 					$condition_coupon['name'] = array('like', '%' . $_GET['keyword'] . '%');
 				}else if($_GET['searchtype'] == 'code'){

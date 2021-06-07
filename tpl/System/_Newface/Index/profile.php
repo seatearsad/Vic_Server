@@ -27,7 +27,7 @@
             <div class="ibox ">
                 <div class="ibox-content">
                     <form method="post" id="myform" action="{pigcms{:U('amend_profile')}" refresh="true" onclick='javascript:return submitcheck();'>
-                        <input type="hidden" class="input-text" name="system_menu" value=""/>
+                        <input type="hidden" class="input-text" id="system_menu" name="system_menu" value=""/>
                         <table cellpadding="0" cellspacing="0" class="table_form" width="100%">
                             <tr>
                                 <th  width="120">{pigcms{:L('B_USERNAME')}：</td>
@@ -79,7 +79,7 @@
 				}
 		    });
 		    system_menu=system_menu.substring(0,system_menu.length-1);
-			$("input:[name$='system_menu']").val(system_menu);
+			$("#system_menu").val(system_menu);
 		}
 	</script>
 <include file="Public:footer"/>

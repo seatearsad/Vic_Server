@@ -9,6 +9,7 @@ class UserAction extends BaseAction {
     public function index() {
         //if($this->system_session['level'] == 3){
             //if($this->system_session['area_id'] != 0){
+
                 $sql_count = "SELECT count(*) FROM ". C('DB_PREFIX') . "user as u ";
                 $sql = "SELECT u.* FROM ". C('DB_PREFIX') . "user as u ";
 
@@ -26,6 +27,7 @@ class UserAction extends BaseAction {
                         $sql_count .= " LEFT JOIN ". C('DB_PREFIX') . "user_adress as a on a.uid = u.uid ";
                         $sql = "SELECT u.* , a.city as city_id FROM ". C('DB_PREFIX') . "user as u LEFT JOIN ". C('DB_PREFIX') . "user_adress as a on a.uid = u.uid ";
                         $where .= " and a.default=1 and a.city=".$_GET['city_id'];
+                        $this->assign('city_id',$_GET['city_id']);
                     }
                 }else{
                     $this->assign('city_id',0);
@@ -909,36 +911,44 @@ class UserAction extends BaseAction {
      * @return  管理员充值列表
      */
     public function admin_recharge_list(){
-        $recharge_list = M('User_money_list')->where(array('admin_id'=>array('neq','')))->select();
+
+        //$recharge_list = M('User_money_list')->where(array('admin_id'=>array('neq','')))->select();
+        //获得所有管理员列表
         $admin_list = M('Admin')->where(array('status'=>1))->select();
         $this->assign('admin_list',$admin_list);
-        $where['l.admin_id'] = array('neq', 0);
+
+        //根据条件获得充值记录列表
         if(!empty($_GET['admin_id'])) {
             if ($_GET['admin_id'] == '0') {
                 $where['l.admin_id'] = array('neq', 0);
             } else{
                 $where['l.admin_id'] = $_GET['admin_id'];
             }
+        }else{
+            $where['l.admin_id'] = array('neq', 0);
         }
+
         if(!empty($_GET['begin_time'])&&!empty($_GET['end_time'])){
             if ($_GET['begin_time']>$_GET['end_time']) {
                 $this->error_tips("结束时间应大于开始时间");
             }
             $period = array(strtotime($_GET['begin_time']." 00:00:00"),strtotime($_GET['end_time']." 23:59:59"));
             $where['_string'] =" (l.time BETWEEN ".$period[0].' AND '.$period[1].")";
-
         }
+
         if (!empty($_GET['keyword'])) {
             if ($_GET['searchtype'] == 'uid') {
                 $where['l.uid'] = $_GET['keyword'];
             }
         }
+
         $recharge_list =  D('User_money_list')->get_admin_recharge_list($where,1);
 
         $this->assign('recharge_list',$recharge_list['list']);
         $this->assign('pagebar',$recharge_list['pagebar']);
         $this->display();
     }
+
     //garfunkel add
     public function send_coupon(){
         $uid = $_GET['uid'];

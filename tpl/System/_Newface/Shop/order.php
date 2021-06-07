@@ -82,14 +82,14 @@
                                             <option value="id" <if condition="$_GET['searchtype'] eq 'id'">selected="selected"</if>>User ID</option>
                                             <option value="orderid"<if condition="$_GET['searchtype'] eq 'orderid'">selected="selected"</if>>Order ID</option>
                                         </select>
-                                        &nbsp;{pigcms{:L('_BACK_DATE_SELECT_')}：
+                                        &nbsp;&nbsp;{pigcms{:L('_BACK_DATE_SELECT_')}：
                                         <input type="text" class="form-control" name="begin_time" style="width:120px;"
                                                id="d4311" value="{pigcms{$_GET.begin_time}"
                                                onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd',lang:'en'})"/>&nbsp;
                                         <input type="text" class="form-control" name="end_time" style="width:120px;"
                                                id="d4311" value="{pigcms{$_GET.end_time}"
                                                onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd',lang:'en'})"/>&nbsp;
-                                        {pigcms{:L('_BACK_ORDER_STATUS_')}:&nbsp;
+                                        &nbsp;{pigcms{:L('_BACK_ORDER_STATUS_')}:&nbsp;
                                         <select id="status" name="status" class="form-control">
                                             <volist name="status_list" id="vo">
                                                 <option value="{pigcms{$key}" <if condition="$key eq $status">selected="selected"</if> >
@@ -97,7 +97,7 @@
                                                 </option>
                                             </volist>
                                         </select>&nbsp;
-                                        {pigcms{:L('_BACK_PAYMENT_METHOD_')}:&nbsp;
+                                        &nbsp;{pigcms{:L('_BACK_PAYMENT_METHOD_')}:&nbsp;
                                         <select id="pay_type" name="pay_type" class="form-control">
                                             <option value=""
                                             <if condition="'' eq $pay_type">selected="selected"</if>
@@ -111,6 +111,15 @@
                                             <if condition="'balance' eq $pay_type">selected="selected"</if>
                                             >{pigcms{:L('_BACK_BALANCE_')}</option>
                                         </select>&nbsp;
+                                        <if condition="$system_session['level'] neq 3">
+                                            &nbsp;&nbsp;City:&nbsp;&nbsp;
+                                            <select name="city_id" id="city_id" class="form-control" >
+                                                <option value="0" <if condition="$city_id eq '' or $city_id eq 0">selected="selected"</if>>All</option>
+                                                <volist name="city" id="vo">
+                                                    <option value="{pigcms{$vo.area_id}" <if condition="$city_id eq $vo['area_id']">selected="selected"</if>>{pigcms{$vo.area_name}</option>
+                                                </volist>
+                                            </select>
+                                        </if>&nbsp;&nbsp;
                                         <input type="submit" value="{pigcms{:L('_BACK_SEARCH_')}" class="form-control"/>　
                                     </form>
                                 </div>
@@ -206,7 +215,7 @@
                                         <td>
                                             <div class="btn-group">
                                                  <div class="float-right">
-                                                     <if condition="$vo.status eq 0 AND $vo.paid eq 1">&nbsp;&nbsp;&nbsp;&nbsp;
+                                                     <if condition="$vo.status eq 0 AND $vo.paid eq 1">
                                                          <a data-href="{pigcms{:U('Shop/refund_update',array('order_id'=>$vo['order_id']))}" class="refund"><button class="btn btn-white text-grey btn-xs" type="button">{pigcms{:L('_BACK_MANUAL_REFUND_')}</button></a>
                                                      </if>
                                                      <a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Shop/order_detail',array('order_id'=>$vo['order_id'],'frame_show'=>true))}','{pigcms{:L(\'_BACK_ORDER_DETAIL_\')}',920,520,true,false,false,false,'detail',true);"><button class="btn btn-white text-grey btn-xs" type="button">{pigcms{:L('_BACK_VIEW_')}</button></a>
