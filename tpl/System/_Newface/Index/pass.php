@@ -27,23 +27,28 @@
             <div class="ibox ">
                 <div class="ibox-content">
                     <form id="myform" method="post" action="{pigcms{:U('Index/amend_pass')}" refresh="true">
-                        <table cellpadding="0" cellspacing="0" class="table_form" width="100%">
-                            <tr>
-                                <th width="100">{pigcms{:L('_BACK_OLD_PASS_')}：</th>
-                                <td><input type="password" class="input-text" name="old_pass"/></td>
-                            </tr>
-                            <tr>
-                                <th>{pigcms{:L('_BACK_NEW_PASS_')}：</th>
-                                <td><input type="password" class="input-text"  name="new_pass" id="password" validate="required:true,minlength:8,maxlength:20"/></td>
-                            </tr>
-                            <tr>
-                                <th>{pigcms{:L('_BACK_CONFIRM_PASS_')}：</th>
-                                <td><input type="password" class="input-text"  name="re_pass" validate="required:true,equalTo:'#password'"/></td>
-                            </tr>
-                        </table>
-                        <div class="btn">
-                            <input type="button"  name="dosubmit" value="{pigcms{:L('_BACK_SUBMIT_')}" class="button" onclick="checkSubmit()" />
-                            <input type="reset"  value="{pigcms{:L('_BACK_CANCEL_')}" class="button" />
+                        <div class="form-group  row">
+                            <label class="col-sm-2 col-form-label">{pigcms{:L('_BACK_OLD_PASS_')}</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" type="password" name="old_pass"/>
+                            </div>
+                        </div>
+                        <div class="form-group  row">
+                            <label class="col-sm-2 col-form-label">{pigcms{:L('_BACK_NEW_PASS_')}</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" type="password" name="new_pass" id="password" validate="required:true,minlength:8,maxlength:20"/>
+                            </div>
+                        </div>
+                        <div class="form-group  row">
+                            <label class="col-sm-2 col-form-label">{pigcms{:L('_BACK_CONFIRM_PASS_')}</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" type="password" name="re_pass" validate="required:true,equalTo:'#password'"/>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <input type="button"  name="dosubmit" value="{pigcms{:L('_BACK_SUBMIT_')}" class="btn btn-w-m btn-primary" onclick="checkSubmit()" />
+                            &nbsp;
+                            <input type="reset"  value="{pigcms{:L('_BACK_CANCEL_')}" class="btn btn-w-m btn-primary" />
                         </div>
                     </form>
                 </div>
