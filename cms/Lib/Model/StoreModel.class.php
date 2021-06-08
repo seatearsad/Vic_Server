@@ -671,6 +671,12 @@ class StoreModel extends Model
             return $result;
         }
 
+        $result = Sms::checkPhoneTwilio($_POST['phone']);
+
+        if($result){
+            return $result;
+        }
+
         $user_modifypwdDb = M('User_modifypwd');
         $chars = '0123456789';
         mt_srand((double)microtime() * 1000000 * getmypid());
