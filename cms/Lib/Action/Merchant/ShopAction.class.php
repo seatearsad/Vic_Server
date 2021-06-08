@@ -2544,18 +2544,18 @@ class ShopAction extends BaseAction
 
         import('@.ORG.mpdf.mpdf');
         $mpdf = new mPDF();
-        $html = $this->get_html($store,$begin_time,$end_time,$total_goods_price,$total_goods_tax,$total_packing_price,$total_deposit,$total_reduce,$total_goods_gst_tax,$total_goods_pst_tax);
+        $html = $this->get_html($store,$begin_time,$end_time,$total_goods_price,$total_goods_tax,$total_packing_price,$total_deposit,$total_reduce,$total_goods_gst_tax,$total_goods_pst_tax,$total_packing_tax);
 
         $mpdf->WriteHTML($html);
         $fileName = $store['name'].'('.$begin_time.' - '.$end_time.').pdf';
         $mpdf->Output($fileName,'I');
     }
 
-    public function get_html($store,$begin_time,$end_time,$good_price,$good_tax,$packing,$deposit,$reduce,$gst_tax,$pst_tax){
+    public function get_html($store,$begin_time,$end_time,$good_price,$good_tax,$packing,$deposit,$reduce,$gst_tax,$pst_tax,$packing_tax){
         $good_pro = ($good_price - $reduce) * $store['proportion'] / 100;
         $tax_pro = $good_tax * $store['proportion'] / 100;
 
-        $all_price = $good_price + $good_tax + $packing + $deposit - $good_pro - $tax_pro - $reduce;
+        $all_price = $good_price + $good_tax + $packing + $deposit + $packing_tax - $good_pro - $tax_pro - $reduce;
 
         $html = '<table style="font-family:Roboto;border-collapse: collapse; width: 900px; position: relative;">
                     <tbody>
@@ -2680,6 +2680,17 @@ class ShopAction extends BaseAction
                                 <table style="border-bottom: 1px solid #999;">
                                     <tr>
                                         <td style="color:#333;font-size: 16px;width: 755px;height: 30px;" align="left">
+                                            &nbsp;Tax on Packing Fee
+                                        </td>
+                                        <td align="right" style="color:#666;font-size: 16px;width: 120px;">
+                                            '.floatval(sprintf("%.2f", $packing_tax)).'
+                                            &nbsp;&nbsp;
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table style="border-bottom: 1px solid #999;">
+                                    <tr>
+                                        <td style="color:#333;font-size: 16px;width: 755px;height: 30px;" align="left">
                                             &nbsp;Bottle Deposit
                                         </td>
                                         <td align="right" style="color:#666;font-size: 16px;width: 120px;">
@@ -2724,7 +2735,7 @@ class ShopAction extends BaseAction
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="2" style="height: 500px"></td>
+                            <td colspan="2" style="height: 460px"></td>
                         </tr>
                         <tr>
                             <td colspan="2" style="font-size: 14px;font-family: Arial" align="center">

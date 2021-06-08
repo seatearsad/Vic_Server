@@ -77,7 +77,7 @@ class BaseAction extends Action{
 		$this->merchant_session = session('merchant');
 
 		if(MODULE_NAME != 'Login' && MODULE_NAME != 'Area'){
-			if(empty($this->merchant_session) && MODULE_NAME != 'Store' && MODULE_NAME != 'Pick'){
+			if(empty($this->merchant_session) && MODULE_NAME != 'Store' && MODULE_NAME != 'Pick' && MODULE_NAME != 'Shop'){
 				redirect(U('Login/index'));exit;
 			}
 			/****实时查找商家的权限****/
