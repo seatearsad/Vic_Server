@@ -27,12 +27,6 @@
                 <div class="btn-group float-right">
                     <a href="{pigcms{:U('Deliver/deliverList')}" class="button" style="float:right;margin-right: 10px;"><button class="btn btn-white text-grey">{pigcms{:L('_BACK_DELIVERY_LIST_')}</button></a>
                     <a href="{pigcms{:U('Deliver/map')}" class="button" style="float:right;margin-right: 10px;"><button class="btn btn-white text-grey">{pigcms{:L('_BACK_COURIER_MONI_')}</button></a>
-                    <!--a href="{pigcms{:U('Shop/export',$_GET)}" class="button" style="float:right;margin-right: 10px;"><button class="btn btn-white text-grey">{pigcms{:L('_BACK_DOWN_ORDER_')}</button></a>
-                    <if condition="$system_session['level'] eq 2">
-                    <a href="{pigcms{:U('Shop/export_total',$_GET)}" class="button" style="float:right;margin-right: 10px;"><button class="btn btn-white text-grey ">{pigcms{:L('C_OMZB')}</button></a>
-                    <a href="{pigcms{:U('Shop/export_store',$_GET)}" class="button" style="float:right;margin-right: 10px;"><button class="btn btn-white text-grey">{pigcms{:L('C_OMRESTRANK')}</button></a>
-                    <a href="{pigcms{:U('Shop/export_user',$_GET)}" class="button" style="float:right;margin-right: 10px;"><button class="btn btn-white text-grey">{pigcms{:L('C_OMUSERRANK')}</button></a>
-                    </if-->
                 </div>
         </div>
     </div>
@@ -231,12 +225,7 @@
                                 </volist>
                                 <else/>
                                 <tr>
-                                    <td
-                                    <if condition="$system_session['level'] neq 3">colspan="9"
-                                        <else/>
-                                        colspan="22"
-                                    </if>
-                                    >{pigcms{:L('_BACK_EMPTY_')}</td>
+                                    <td colspan="22">{pigcms{:L('_BACK_EMPTY_')}</td>
                                 </tr>
                             </if>
                             </tbody>

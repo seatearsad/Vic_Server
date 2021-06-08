@@ -134,7 +134,7 @@
                         tutti_notification(
                             message_title,
                             message_content,
-                            3000,
+                            1000,
                             function () {
                             window.parent.location = system_index;
                             });

@@ -16,9 +16,9 @@
                             <volist name="menus" id="rowset">
                                 <tr>
                                     <th width="150px">
-                                        <label><input type="checkbox" class="menu_{pigcms{$rowset['id']} father_menu" value="{pigcms{$rowset['id']}" name="menus[]" <if condition="in_array($rowset['id'], $admin['menus'])">checked</if>/>　{pigcms{$rowset['name']}</label>
+                                        <label><input type="checkbox" class="menu_{pigcms{$rowset['id']} father_menu" data-id="{pigcms{$rowset['id']}" value="{pigcms{$rowset['id']}" name="menus[]" <if condition="in_array($rowset['id'], $admin['menus'])">checked</if>/>　{pigcms{$rowset['name']}</label>
                                     </th>
-                                    <td>
+                                    <td  class="">
                                         <volist name="rowset['lists']" id="row">
                                         <label><input type="checkbox" class="child_menu_{pigcms{$row['fid']} child_menu" value="{pigcms{$row['id']}"  name="menus[]" data-fid="{pigcms{$row['fid']}"  <if condition="in_array($row['id'], $admin['menus'])">checked</if> />　{pigcms{$row['name']}</label>　
                                         </volist>
@@ -36,8 +36,10 @@
                 </div>
             </div>
         </div>
+
 <script type="text/javascript">
 $(document).ready(function(){
+
 	$('#all').click(function(){
 		if ($(this).attr('checked')) {
 			$('.father_menu, .child_menu').attr('checked', true);
@@ -45,28 +47,61 @@ $(document).ready(function(){
 			$('.father_menu, .child_menu').attr('checked', false);
 		}
 	});
-	$('.father_menu').click(function(){
-		var fid = $(this).val();
-		if ($(this).attr('checked')) {
-			$('.child_menu_' + fid).attr('checked', true);
-		} else {
-			$('.child_menu_' + fid).attr('checked', false);
-		}
-	});
-	$('.child_menu').click(function(){
-		var fid = $(this).attr('data-fid');
-		if ($(this).attr('checked')) {
-			$('.menu_' + fid).attr('checked', true);
-		} else {
-			var flag = false;
-			$('.child_menu_' + fid).each(function(){
-				if ($(this).attr('checked')) {
-					flag = true;
-				}
-			});
-			$('.menu_' + fid).attr('checked', flag);
-		}
-	});
+
+    $('.father_menu').each(function () {
+        console.log("father_menu");
+        //alert($(this).find('input').data('for'));
+        //var input = $(this).find('input');
+        $(this).bind('input porpertychange', father_changed);
+        //$(this).find('input').on('click', checkNum);
+    });
+
+    $('table').find('.child_menu').each(function () {
+        console.log("child_menu");
+        $(this).bind('input porpertychange', child_changed);
+        //alert($(this).find('input').data('for'));
+        //var input = $(this).find('input');
+        //$(this).find('input').bind('input porpertychange', changeGoodNum);
+        //$(this).find('input').on('focusout', checkNum);
+    });
+
+    function father_changed(){
+        var fid = $(this).data(id');
+        console.log("father_changed data-id=".fid);
+        // $('.child_menu_' + fid).each(function(){
+        //     if ($(this).attr('checked')) {
+        //         flag = true;
+        //     }
+        // });
+    }
+    function child_changed(){
+        console.log("child_changed");
+    }
+
+	// $('.father_menu').click(function(){
+	// 	var fid = $(this).val();
+	// 	if ($(this).attr('checked')) {
+     //        $('.child_menu_' + fid).attr('checked', true);
+    //
+	// 	} else {
+     //        $('.child_menu_' + fid).attr('checked', false);
+	// 	}
+	// });
+	// $('.child_menu').click(function(){
+	// 	var fid = $(this).attr('data-fid');
+	// 	if ($(this).attr('checked')) {
+	// 		$('.menu_' + fid).attr('checked', true);
+	// 	} else {
+	// 		var flag = false;
+	// 		$('.child_menu_' + fid).each(function(){
+	// 			if ($(this).attr('checked')) {
+	// 				flag = true;
+	// 			}
+	// 		});
+	// 		$('.menu_' + fid).attr('checked', flag);
+	// 	}
+	// });
 });
 </script>
-<include file="Public:header"/>
+        --------------------
+<include file="Public:footer_inner"/>
