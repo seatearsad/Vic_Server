@@ -194,7 +194,7 @@
                                                     </tr>
                                                     <tr>
                                                         <th class="text-nowrap" scope="row">Service Fee</th>
-                                                        <td colspan="5">${pigcms{$order['service_fee']|floatval}</td>
+                                                        <td colspan="5">$<span id="service_fee">{pigcms{$order['service_fee']|floatval}</span></td>
                                                     </tr>
 
                                                     <tr>
@@ -209,7 +209,7 @@
                                                     <if condition="$order['merchant_reduce'] gt 0">
                                                         <tr>
                                                             <th class="text-nowrap" scope="row">{pigcms{:L('_STORE_DIS_')}</th>
-                                                            <td colspan="5">${pigcms{:L('_STORE_DIS_')}：${pigcms{$order['merchant_reduce']|floatval}</td>
+                                                            <td colspan="5">${pigcms{$order['merchant_reduce']|floatval}</td>
                                                         </tr>
                                                     </if>
                                                     <if condition="$order['balance_reduce'] gt 0">
@@ -274,7 +274,7 @@
 
                                                     <tr style="color: black">
                                                         <th class="text-nowrap" scope="row">{pigcms{:L('_BACK_ACT_AM_PAID_')}</th>
-                                                        <td colspan="5">${pigcms{$order['price']+$order['tip_charge']-$order['coupon_price']-$order['merchant_reduce']-$order['delivery_discount']|floatval}</td>
+                                                        <td colspan="5">$<span id="am_paid">{pigcms{$order['price']+$order['tip_charge']-$order['coupon_price']-$order['merchant_reduce']-$order['delivery_discount']|floatval}</span></td>
                                                     </tr>
 
                                                     <!--if condition="$order['pay_type'] eq 'offline' AND empty($order['third_id'])">
@@ -347,6 +347,9 @@
         </div>
         <script>
             var good_num = parseFloat('{pigcms{$order.num}');
+            var tip_charge = parseFloat('{pigcms{$order.tip_charge}');
+            var all_discount = parseFloat("{pigcms{$order['coupon_price']+$order['merchant_reduce']+$order['delivery_discount']}");
+
             $(function () {
                 $('table').find('.good_list').each(function () {
                     //alert($(this).find('input').data('for'));
@@ -382,7 +385,7 @@
 
             function getTotalPrice(good_price, tax_price, deposit_price) {
                 var total = good_price + tax_price + deposit_price;
-                total += parseFloat($('#packing_charge').html()) + parseFloat($('#freight_charge').val());
+                total += parseFloat($('#packing_charge').html()) + parseFloat($('#freight_charge').val()) + parseFloat($('#service_fee').html());
                 return total;
             }
 
@@ -413,6 +416,7 @@
                 $('#tax_price').html(tax_price.toFixed(2));
                 $('#deposit_price').html(deposit_price.toFixed(2));
                 $('#total_price').html(total_prcie.toFixed(2));
+                $("#am_paid").html((total_prcie+tip_charge-all_discount).toFixed(2));
 
                 $('input[name="goods_price"]').val(good_price.toFixed(2));
                 $('input[name="price"]').val(total_prcie.toFixed(2));

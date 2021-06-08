@@ -37,6 +37,7 @@ class Shop_orderModel extends Model
             8 => L('_B_PURE_MY_78_'),		// '发货到自提点',
             9 => L('_B_PURE_MY_79_'),		//'自提点接货',
             10 => L('_B_PURE_MY_80_'),		//'自提点发货');
+			100 => L('_UNPAID_TXT_'), //未支付
         );
 
         $this->status_list_admin = array(

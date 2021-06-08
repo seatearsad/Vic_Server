@@ -261,7 +261,7 @@ class DataAction extends BaseAction
                 $curr_deposit = 0;
 
                 $curr_num = 0;
-                foreach ($result_list as $v){
+                foreach ($result_list as $k=>$v){
                     if($curr_order != $v['order_id']){
                         if($curr_order == ''){
                             $curr_order = $v['order_id'];
@@ -284,6 +284,10 @@ class DataAction extends BaseAction
                     if($curr_num == count($result_list)) {
                         $record_list[$curr_order]['goods_tax'] = $curr_tax;
                         $record_list[$curr_order]['deposit_price'] = $curr_deposit;
+                    }
+                    //如果订单未支付，暂修改订单状态为100
+                    if($v['paid'] == 0){
+                        $result_list[$k]['status'] = 100;
                     }
                 }
 
@@ -573,7 +577,7 @@ class DataAction extends BaseAction
         $objActSheet->setCellValueExplicit('E' . $index, floatval(sprintf("%.2f", $total_freight_tax)),PHPExcel_Cell_DataType::TYPE_NUMERIC);
         $objActSheet->setCellValueExplicit('F' . $index, floatval(sprintf("%.2f", $total_goods_price_pro)),PHPExcel_Cell_DataType::TYPE_NUMERIC);
         $objActSheet->setCellValueExplicit('G' . $index, floatval(sprintf("%.2f", $total_goods_tax_pro)),PHPExcel_Cell_DataType::TYPE_NUMERIC);
-        $objActSheet->setCellValueExplicit('H' . $index, floatval(sprintf("%.2f", ($total_all_price - $total_reduce))),PHPExcel_Cell_DataType::TYPE_NUMERIC);
+        $objActSheet->setCellValueExplicit('H' . $index, floatval(sprintf("%.2f", $total_all_price)),PHPExcel_Cell_DataType::TYPE_NUMERIC);
         $objActSheet->setCellValueExplicit('I' . $index, floatval(sprintf("%.2f", $total_tip)),PHPExcel_Cell_DataType::TYPE_NUMERIC);
         $objActSheet->setCellValueExplicit('J' . $index, floatval(sprintf("%.2f", $total_coupon_discount)),PHPExcel_Cell_DataType::TYPE_NUMERIC);
         $objActSheet->setCellValueExplicit('K' . $index, floatval(sprintf("%.2f", $total_delivery_discount)),PHPExcel_Cell_DataType::TYPE_NUMERIC);
@@ -793,6 +797,10 @@ class DataAction extends BaseAction
 
             $where['add_time'] = array('between',array($begin_time,$end_time));
 
+            if($_GET['status'] != -1){
+                $where['status'] = $_GET['status'];
+            }
+
             $database_user = D('User');
             $count_user = $database_user->where($where)->count();
 
@@ -807,13 +815,13 @@ class DataAction extends BaseAction
 
                 $objActSheet->setCellValue('A1', 'User ID');
                 $objActSheet->setCellValue('B1', 'Name');
-                $objActSheet->setCellValue('C1', ' ');
-                $objActSheet->setCellValue('D1', 'Phone');
-                $objActSheet->setCellValue('E1', 'Email');
+                //$objActSheet->setCellValue('C1', ' ');
+                $objActSheet->setCellValue('C1', 'Phone');
+                $objActSheet->setCellValue('D1', 'Email');
 //                $objActSheet->setCellValue('F1', '省份');
 //                $objActSheet->setCellValue('G1', '城市');
 //                $objActSheet->setCellValue('H1', 'QQ');
-                $objActSheet->setCellValue('F1', 'Registration Time');
+                $objActSheet->setCellValue('E1', 'Registration Time');
 //                $objActSheet->setCellValue('J1', '注册IP');
 //                $objActSheet->setCellValue('K1', '最后登录时间');
 //                $objActSheet->setCellValue('L1', '最后登录IP');
@@ -834,16 +842,16 @@ class DataAction extends BaseAction
 
                         $objActSheet->setCellValueExplicit('A' . $index, $value['uid']);
                         $objActSheet->setCellValueExplicit('B' . $index, $value['nickname']);
-                        $objActSheet->setCellValueExplicit('C' . $index, $value['truename']);
-                        $objActSheet->setCellValueExplicit('D' . $index, $value['phone'] . ' ');
-                        $objActSheet->setCellValueExplicit('E' . $index, $value['email']);
+                        //$objActSheet->setCellValueExplicit('C' . $index, $value['truename']);
+                        $objActSheet->setCellValueExplicit('C' . $index, $value['phone'] . ' ');
+                        $objActSheet->setCellValueExplicit('D' . $index, $value['email']);
                         //$sex = $value['sex'] == 0 ? '未知' : ($value['sex'] == 1 ? '男' : '女');
                         //$objActSheet->setCellValueExplicit('E' . $index, $sex);
 
 //                        $objActSheet->setCellValueExplicit('F' . $index, $value['province']);
 //                        $objActSheet->setCellValueExplicit('G' . $index, $value['city']);
 //                        $objActSheet->setCellValueExplicit('H' . $index, $value['qq'] . ' ');
-                        $objActSheet->setCellValueExplicit('F' . $index, date('Y-m-d H:i:s', $value['add_time']));
+                        $objActSheet->setCellValueExplicit('E' . $index, date('Y-m-d H:i:s', $value['add_time']));
 
 //                        $last_location = $IpLocation->getlocation(long2ip($value['add_ip']));
 //                        $add_ip = iconv('GBK', 'UTF-8', $last_location['country']);
@@ -1396,6 +1404,8 @@ class DataAction extends BaseAction
             $where['s.city_id'] = $_GET['city_id'];
         }
 
+        $where['m.status'] = 1;
+
         $list = D('Merchant_store')->field('s.*,m.name as m_name,m.email as m_email,c.area_name as city_name')->join(' as s left join '.C('DB_PREFIX').'merchant as m on m.mer_id=s.mer_id left join '.C('DB_PREFIX').'area as c on c.area_id=s.city_id')->where($where)->select();
         //var_dump($list);die();
         require_once APP_PATH . 'Lib/ORG/phpexcel/PHPExcel.php';
@@ -1527,7 +1537,7 @@ class DataAction extends BaseAction
             $sql = "SELECT s.`supply_id`, s.order_id, s.item, s.name as username, s.phone as userphone, m.name as storename, s.money, s.start_time, s.end_time, s.aim_site, s.pay_type, s.paid, s.status, s.deliver_cash,s.freight_charge,o.tip_charge as tips FROM " . C('DB_PREFIX') . "deliver_supply AS s left JOIN " . C('DB_PREFIX') . "merchant_store AS m ON m.store_id=s.store_id left join ". C('DB_PREFIX') ."shop_order as o on s.order_id=o.order_id";
             $sql .= ' WHERE s.type=0 AND s.uid=' . $uid;
             if ($begin_time && $end_time) {
-                $sql .= ' AND s.start_time>' . strtotime($begin_time) . ' AND s.start_time<' . strtotime($end_time);
+                $sql .= ' AND s.start_time>' . strtotime($begin_time." 00:00:00") . ' AND s.start_time<' . strtotime($end_time." 23:59:59");
             }
 
             $sql .= ' ORDER BY s.`supply_id` DESC LIMIT ' . $i * 1000 . ', 1000';
@@ -1562,7 +1572,7 @@ class DataAction extends BaseAction
                     $objActSheet->setCellValueExplicit('I' . $index, floatval($value['freight_charge']));
                     $objActSheet->setCellValueExplicit('J' . $index, floatval($value['tips']));
                     $objActSheet->setCellValueExplicit('K' . $index, floatval($value['deliver_cash']));
-                    $objActSheet->setCellValueExplicit('L' . $index, floatval($value['freight_charge']-$value['tips']+$value['deliver_cash']));
+                    $objActSheet->setCellValueExplicit('L' . $index, floatval($value['freight_charge']+$value['tips']-$value['deliver_cash']));
                     switch ($value['status']) {
                         case 1:
                             $value['order_status'] = '<font color="red">等待接单</font>';
@@ -1615,11 +1625,15 @@ class DataAction extends BaseAction
 
             $b_time = strtotime($b_date);
             $e_time = strtotime($e_date);
+
+            $where['o.create_time'] = array('between',array($b_time,$e_time));
         }else{
             $this->error(L('J_SPECIFY_TIME'));
         }
 
-        $list = D('Shop_order')->field('o.store_id,m.name as store_name')->join(' as o left join '.C('DB_PREFIX').'merchant_store as m on m.store_id=o.store_id')->group('store_id')->select();
+        $where['o.status'] = array('egt',2);
+
+        $list = D('Shop_order')->field('o.store_id,m.name as store_name')->join(' as o left join '.C('DB_PREFIX').'merchant_store as m on m.store_id=o.store_id')->where($where)->group('store_id')->select();
 
         $this->ajaxReturn($list);
     }
