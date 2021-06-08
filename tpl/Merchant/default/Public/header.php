@@ -7,10 +7,11 @@
 <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/styles.css">
 <script type="text/javascript" src="{pigcms{$static_path}js/jquery.min.js"></script>
 <script type="text/javascript" src="{pigcms{$static_path}js/jquery.ba-bbq.min.js"></script>
+<script type="text/javascript" src="{pigcms{$static_public}js/lang/{pigcms{:C('DEFAULT_LANG')}.js?v=21" charset="utf-8"></script>
 <if condition="$config['site_favicon']">
 	<link rel="shortcut icon" href="{pigcms{$config.site_favicon}"/>
 </if>
-<title>{pigcms{$config.site_name} - 商家中心</title>
+<title>{pigcms{$config.site_name} - {pigcms{:L('MERCHANT_BACKEND_BKADMIN')}</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <link rel="stylesheet" href="{pigcms{$static_path}css/bootstrap.min.css">
 <link rel="stylesheet" href="{pigcms{$static_path}css/font-awesome.min.css">
@@ -73,6 +74,10 @@
 	text-align: left;
 }
 
+.hidden_obj{
+    display: none;
+}
+
 .statusSwitch, .orderValidSwitch, .unitShowSwitch, .authTypeSwitch {
 	display: none;
 }
@@ -97,6 +102,6 @@
 </head>
 
 <body class="no-skin">
-	<include file="Public:nav"/>
-	<div class="main-container" id="main-container">
-	<include file="Public:left"/>
+<include file="Public:nav"/>
+<div class="main-container" id="main-container">
+<include file="Public:left"/>

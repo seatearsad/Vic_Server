@@ -13,6 +13,7 @@ class Store_orderModel extends Model
 	public function get_pay_order($uid, $order_id, $is_web=false)
 	{
 		$now_order = $this->get_order_by_id($uid, $order_id);
+
 		if(empty($now_order)){
 			return array('error'=>1,'msg'=>'当前订单不存在！');
 		}
@@ -38,7 +39,9 @@ class Store_orderModel extends Model
 					'extra_price'	=>	floatval($now_order['extra_price']),
 					'img'				=> C('config.site_url').'/upload/store/'.$imgs[0],
 			);
-		return array('error' => 0,'order_info' => $order_info);
+        var_dump($order_info);
+
+        return array('error' => 0,'order_info' => $order_info);
 	}
 	
 	//手机端支付前订单处理

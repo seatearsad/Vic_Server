@@ -124,6 +124,7 @@ var motify = {
 		}
 	}
 };
+
 /*修复Iscroll高版本安卓无法点击*/
 function iScrollClick(){
 	if (/iPhone|iPad|iPod|Macintosh/i.test(navigator.userAgent)) return false;
@@ -306,8 +307,7 @@ function endVoice(){
 		}
 	});
 }
- 
- 
+
 /*
  * 跳转页面
  * （默认页面往左滑动，即 openRightWindow）
@@ -389,6 +389,7 @@ function pageLoadTip(options){
     $('#pageLoadTipBox').css({'top':options.top+'px','left':options.left+'px'});
     $('#pageLoadTipShade').css({'height':$(window).height(),'width':$(window).width()}).show();
 }
+
 function pageLoadTipHide(){
     $('#pageLoadTipShade').hide();
 }
@@ -401,6 +402,7 @@ function pageLoadTipHide(){
  *
 */
 function getUserLocation(options){
+
 	this.options = {
 		'useHistory':true,				//boolean 是否使用历史数据
 		'historyTime':120,				//number  使用历史数据的时效，也是保存数据的有效期
@@ -712,4 +714,29 @@ function parseCoupon(obj,type){
 	}else{
 		return textObj;
 	}
+}
+
+//一个比较好用的调试信息输出函数
+//Peter 2021-4-1
+function mcslo(obj,title="",subtitle="") {
+	if (0){
+    var tt=""
+	var temp_obj=obj;
+
+    if (title!="") {
+        tt="< "+title+" >";
+    }
+    if (subtitle!=""){
+        if (title!="") {
+            tt=tt + " "+ subtitle;
+        }else{
+            tt="* subtitle * ="+ subtitle;
+        }
+    }
+    if (tt!=""){
+        tt="-------------------------------------------- "+ tt +"";
+        console.log(tt);
+    }
+    console.log(temp_obj);
+    }
 }

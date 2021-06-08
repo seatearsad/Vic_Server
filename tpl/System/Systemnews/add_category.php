@@ -26,7 +26,7 @@
 	<form id="myform" method="post" action="{pigcms{:U('Systemnews/add_category')}" frame="true" refresh="true">
 		<table cellpadding="0" cellspacing="0" class="frame_form" width="100%">
             <tr>
-                <th width="80">总分类</th>
+                <th width="80">{pigcms{:L('I_GENERAL_CATEGORY')}</th>
                 <input type="hidden" name="type" value="0" />
                 <td>
                     <select name="all_type" id="select_type">
@@ -37,15 +37,15 @@
                 </td>
             </tr>
 			<tr>
-				<th width="80">标题</th>
-				<td><input type="text" class="input fl" name="name" size="75" placeholder="文章分类" validate="maxlength:50,required:true"/></td>
+				<th width="80">{pigcms{:L('I_TITLE')}</th>
+				<td><input type="text" class="input fl" name="name" size="75" placeholder="{pigcms{:L('I_ARTICLE_CATEGORY')}" validate="maxlength:50,required:true"/></td>
 			</tr>
 			<tr>
-				<th width="80">排序</th>
-				<td><input type="text" class="input fl" name="sort" value="0" size="10" placeholder="排序" validate="maxlength:20,required:true,digits:true" /></td>
+				<th width="80">{pigcms{:L('I_LISTING_ORDER')}</th>
+				<td><input type="text" class="input fl" name="sort" value="0" size="10" placeholder="{pigcms{:L('I_LISTING_ORDER')}" validate="maxlength:20,required:true,digits:true" /></td>
 			</tr>
             <tr>
-                <th width="80">链接图片</th>
+                <th width="80">{pigcms{:L('I_ATTACH_IMAGE')}</th>
                 <td>
                     <div style="display:inline-block;" id="J_selectImage_0">
                         <div class="btn btn-sm btn-success" style="position:relative;text-align: left;border:1px solid #ffa52d;">
@@ -56,14 +56,14 @@
                 </td>
             </tr>
             <tr>
-                <th width="80">链接地址</th>
-                <td><input type="text" class="input fl" name="link_url" size="75" placeholder="链接地址" validate="maxlength:50"/></td>
+                <th width="80">{pigcms{:L('I_URL')}</th>
+                <td><input type="text" class="input fl" name="link_url" size="75" placeholder="{pigcms{:L('I_URL')}" validate="maxlength:50"/></td>
             </tr>
 			<tr>
-				<th width="80">状态</th>
+				<th width="80">{pigcms{:L('G_STATUS')}</th>
 				<td>
-					<span class="cb-enable"><label class="cb-enable selected"><span>启用</span><input type="radio" name="status" value="1"  checked="checked"/></label></span>
-					<span class="cb-disable"><label class="cb-disable" ><span>禁止</span><input type="radio" name="status" value="0"  /></label></span>
+					<span class="cb-enable"><label class="cb-enable selected"><span>{pigcms{:L('I_ACTIVE')}</span><input type="radio" name="status" value="1"  checked="checked"/></label></span>
+					<span class="cb-disable"><label class="cb-disable" ><span>{pigcms{:L('_BACK_FORBID_')}</span><input type="radio" name="status" value="0"  /></label></span>
 				</td>
 			</tr>
 		</table>

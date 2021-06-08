@@ -23,12 +23,17 @@ class DeliverAction extends BaseAction {
     public function __construct()
     {
         parent::__construct();
-        //garfunke add 更新城市紧急呼叫状态
+        $now = time();
+        //garfunke add 更新城市紧急呼叫状态 以及 忙碌模式
         $city = D('Area')->where(array('area_type'=>2))->select();
         foreach ($city as $v){
             if($v['urgent_time'] != 0 && $v['urgent_time']+7200 <= time()){
                 D('Area')->where(array('area_id'=>$v['area_id']))->save(array('urgent_time'=>0));
                 $this->updateDeliverWorkStatus($v);
+            }
+
+            if($v['busy_mode'] == 1 && $now > $v['open_busy_time']+7200){
+                D('Area')->where(array('area_id'=>$v['area_id']))->save(array('busy_mode'=>0,'min_time'=>0,'open_busy_time'=>0));
             }
         }
     }
@@ -175,7 +180,7 @@ class DeliverAction extends BaseAction {
                 $data['uid'] = $id;
                 D('Deliver_img')->add($data);
             }
-    		$this->success('保存成功');
+    		$this->success(L('J_SUCCEED3'));
     	}
     	//garfunkel 判断城市管理员
         //if($this->system_session['level'] == 3){
@@ -485,7 +490,7 @@ class DeliverAction extends BaseAction {
                         }
                         //$value['order_status'] = "等待接单" . count($record_assign);
                         if ($is_refect == 0) {
-                            $value['order_status'] = '<font color="red">等待接单(全部送餐员拒单)</font>';
+                            $value['order_status'] = '<font color="red">'.L('J_AWAITING_ACCEPTANC').'</font>';
                         }
                     }
 					break;
@@ -1503,7 +1508,7 @@ class DeliverAction extends BaseAction {
 
                 if($deliver['email'] != "") {
                     $email = array(array("address"=>$deliver['email'],"userName"=>$deliver['name']));
-                    $title = "Tutti Courier Instructions";
+                    $title = $title = "Tutti Courier Instructions";
                     $body = $this->getMailBody($deliver['name']);
                     $mail = getMail($title, $body, $email);
                     $mail->send();
@@ -1817,5 +1822,32 @@ class DeliverAction extends BaseAction {
         $body .= "<p>Tutti Courier Team</p>";
 
         return $body;
+    }
+
+    public function prep_mode(){
+        if($_POST){
+            $data = $_POST['data'];
+            foreach ($_POST['data'] as $v){
+                $data['area_id'] = $v['id'];
+                $data['busy_mode'] = $v['mode'];
+
+                if($v['mode'] == 1) {
+                    $data['min_time'] = $v['min_time'];
+                    $data['open_busy_time'] = time();
+                }else {
+                    $data['min_time'] = 0;
+                    $data['open_busy_time'] = 0;
+                }
+
+                D('Area')->where(array("area_id"=>$v['id']))->save($data);
+             }
+
+            exit(json_encode(array('error' => 0,'message' =>'Success')));
+        }else {
+            $city = D('Area')->where(array('area_type' => 2, 'is_open' => 1))->select();
+            $this->assign('city', $city);
+            //var_dump($city);die();
+            $this->display();
+        }
     }
 }

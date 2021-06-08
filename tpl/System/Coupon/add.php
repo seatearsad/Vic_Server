@@ -208,7 +208,7 @@
 				<input type="text" class="input fl" name="num" value=""  autocomplete="off" validate="required:true,digits:true,min:1">
 				</td>
 			</tr>
-			<tr>
+			<!--tr>
 				<td width="100">{pigcms{:L('_BACK_PICK_NUM_LIM_')}：</td>
 				<td colspan="2">
 				<input type="text" class="input fl" name="limit" value="1"  autocomplete="off" validate="required:true,digits:true,min:1">
@@ -219,7 +219,9 @@
 				<td colspan="2">
 				<input type="text" class="input fl" name="use_limit" value=""  autocomplete="off" validate="required:true,digits:true,min:1">
 				</td>
-			</tr>
+			</tr-->
+            <input type="hidden" class="input fl" name="limit" value="1"  autocomplete="off" validate="required:true,digits:true,min:1">
+            <input type="hidden" class="input fl" name="use_limit" value="1"  autocomplete="off" validate="required:true,digits:true,min:1">
 			<tr>
 				<td width="100">{pigcms{:L('_BACK_DIS_PRICE_')}：</td>
 				<td colspan="2">
@@ -241,10 +243,10 @@
 			</tr>
             <if condition="$system_session['level'] neq 3">
             <tr>
-                <td width="100">通用</td>
+                <td width="100">{pigcms{:L('G_UNIVERSAL')}</td>
                 <td colspan="2">
-                    <span class="cb-enable"><label class="cb-enable selected"><span>通用</span><input id="yes" type="radio" name="currency" value="1" checked="checked" /></label></span>
-                    <span class="cb-disable"><label class="cb-disable"><span>不通用</span><input id="no" type="radio" name="currency" value="2" /></label></span>
+                    <span class="cb-enable"><label class="cb-enable selected"><span>{pigcms{:L('G_UNIVERSAL')}</span><input id="yes" type="radio" name="currency" value="1" checked="checked" /></label></span>
+                    <span class="cb-disable"><label class="cb-disable"><span>{pigcms{:L('G_CITY_SPECIFIC')}</span><input id="no" type="radio" name="currency" value="2" /></label></span>
                 </td>
             </tr>
             <tr id="adver_region" style="display:none;">

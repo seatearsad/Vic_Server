@@ -213,7 +213,7 @@
 				</td>
 			</tr>
 			
-			<tr>
+			<!--tr>
 				<td width="100">{pigcms{:L('_BACK_PICK_NUM_LIM_')}：</td>
 				<td>
 				{pigcms{$coupon.limit}
@@ -224,7 +224,7 @@
 				<td>
 				{pigcms{$coupon.use_limit}
 				</td>
-			</tr>
+			</tr-->
 			<tr>
 				<td width="100">{pigcms{:L('_BACK_DIS_PRICE_')}：</td>
 				<td>
@@ -245,10 +245,10 @@
 			</tr>
             <if condition="$system_session['level'] neq 3">
                 <tr>
-                    <td width="100">通用</td>
+                    <td width="100">{pigcms{:L('G_UNIVERSAL')}</td>
                     <td colspan="2">
-                        <span class="cb-enable"><label <if condition="$coupon['city_id'] eq 0">class="cb-enable selected"<else />class="cb-enable"</if>><span>通用</span><input id="yes" type="radio" name="currency" value="1" <if condition="$coupon['city_id'] eq 0">checked="checked"</if> /></label></span>
-                        <span class="cb-disable"><label <if condition="$coupon['city_id'] eq 0">class="cb-disable"<else />class="cb-disable selected"</if> ><span>不通用</span><input id="no" type="radio" name="currency" value="2" <if condition="$coupon['city_id'] neq 0">checked="checked"</if> /></label></span>
+                        <span class="cb-enable"><label <if condition="$coupon['city_id'] eq 0">class="cb-enable selected"<else />class="cb-enable"</if>><span>{pigcms{:L('G_UNIVERSAL')}</span><input id="yes" type="radio" name="currency" value="1" <if condition="$coupon['city_id'] eq 0">checked="checked"</if> /></label></span>
+                        <span class="cb-disable"><label <if condition="$coupon['city_id'] eq 0">class="cb-disable"<else />class="cb-disable selected"</if> ><span>{pigcms{:L('G_CITY_SPECIFIC')}</span><input id="no" type="radio" name="currency" value="2" <if condition="$coupon['city_id'] neq 0">checked="checked"</if> /></label></span>
                     </td>
                 </tr>
                 <tr id="adver_region" <if condition="$coupon['city_id'] eq 0">style="display:none;"</if>>

@@ -655,7 +655,22 @@ function getAttachmentUrl($fileUrl, $is_remote = true){
         return $url . $fileUrl;
     }
 }
+//peter ADD 2021-3-18
+function lang_substr_with_default_lang(&$str){
+    $arr = explode("|",$str);
+    if(count($arr) > 1){
+        if(C('DEFAULT_LANG') == 'zh-cn'){//中文
+            $re_str = $arr[1];
+        }else{
+            $re_str = $arr[0];
+        }
+    }else{
+        $re_str = $arr[0];
+    }
 
+    $str=$re_str;
+    return $re_str;
+}
 //Garfunkel Add
 //根据语言对显示字符进行分割
 //$str为需要被分割的字符，$lang为语言 zh-cn,en-us
@@ -681,7 +696,16 @@ function replace_lang_str($str,$replace){
 
     return $n_str;
 }
+function replace_lang_strlist($str,$replace){
+    //$str_list = explode("%s",$str);
+    foreach ($replace as $k=>$t )
+    {
+        $str = str_replace("%s".$k,$t,$str);
+    }
+    //$n_str = str_replace("%s",$replace,$str);
 
+    return $str;
+}
 //换位信用卡年月
 function transYM($str){
     $m = substr($str,0,2);
@@ -979,7 +1003,10 @@ function translationCnToEn($str_cn){
     $result = $http->curlGet($url);
     //var_dump($result);die();
     $result = json_decode($result,true);
-    return $result['data']['translations'][0]['translatedText'];
+    if ($result['data']['translations'][0]['translatedText']==null)
+        return "";
+    else
+        return $result['data']['translations'][0]['translatedText'];
 }
 
 function getMail($title,$body,$addressee){
@@ -1011,5 +1038,44 @@ function getMail($title,$body,$addressee){
     $mail->AltBody = '';
 
     return $mail;
+}
+//判断浏览器访问请求是否来自手机
+function is_mobile_request(){
+    $_SERVER['ALL_HTTP'] = isset($_SERVER['ALL_HTTP']) ? $_SERVER['ALL_HTTP'] : '';
+    $mobile_browser = '0';
+    if(preg_match('/(up.browser|up.link|mmp|symbian|smartphone|midp|wap|phone|iphone|ipad|ipod|android|xoom)/i', strtolower($_SERVER['HTTP_USER_AGENT'])))
+        $mobile_browser++;
+    if((isset($_SERVER['HTTP_ACCEPT'])) and (strpos(strtolower($_SERVER['HTTP_ACCEPT']),'application/vnd.wap.xhtml+xml') !== false))
+        $mobile_browser++;
+    if(isset($_SERVER['HTTP_X_WAP_PROFILE']))
+        $mobile_browser++;
+    if(isset($_SERVER['HTTP_PROFILE']))
+        $mobile_browser++;
+    $mobile_ua = strtolower(substr($_SERVER['HTTP_USER_AGENT'],0,4));
+    $mobile_agents = array(
+        'w3c ','acs-','alav','alca','amoi','audi','avan','benq','bird','blac',
+        'blaz','brew','cell','cldc','cmd-','dang','doco','eric','hipt','inno',
+        'ipaq','java','jigs','kddi','keji','leno','lg-c','lg-d','lg-g','lge-',
+        'maui','maxo','midp','mits','mmef','mobi','mot-','moto','mwbp','nec-',
+        'newt','noki','oper','palm','pana','pant','phil','play','port','prox',
+        'qwap','sage','sams','sany','sch-','sec-','send','seri','sgh-','shar',
+        'sie-','siem','smal','smar','sony','sph-','symb','t-mo','teli','tim-',
+        'tosh','tsm-','upg1','upsi','vk-v','voda','wap-','wapa','wapi','wapp',
+        'wapr','webc','winw','winw','xda','xda-'
+    );
+    if(in_array($mobile_ua, $mobile_agents))
+        $mobile_browser++;
+    if(strpos(strtolower($_SERVER['ALL_HTTP']), 'operamini') !== false)
+        $mobile_browser++;
+    // Pre-final check to reset everything if the user is on Windows
+    if(strpos(strtolower($_SERVER['HTTP_USER_AGENT']), 'windows') !== false)
+        $mobile_browser=0;
+    // But WP7 is also Windows, with a slightly different characteristic
+    if(strpos(strtolower($_SERVER['HTTP_USER_AGENT']), 'windows phone') !== false)
+        $mobile_browser++;
+    if($mobile_browser>0)
+        return true;
+    else
+        return false;
 }
 ?>

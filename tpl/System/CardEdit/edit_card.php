@@ -11,13 +11,13 @@
 			<tr>
 				<td width="80">绑定用户ID：</td>
 				<td>
-				<if condition="$physical_card['uid'] gt 0"> {pigcms{$physical_card['uid']}<else /> <input type="text" class="input fl" name="uid" value="{pigcms{$physical_card['uid']}" tips="不修改则不填写" autocomplete="off" validate="digits:true" ></if>
+				<if condition="$physical_card['uid'] gt 0"> {pigcms{$physical_card['uid']}<else /> <input type="text" class="input fl" name="uid" value="{pigcms{$physical_card['uid']}" tips="{pigcms{:L('K_DNFIINM')}" autocomplete="off" validate="digits:true" ></if>
 				</td>
 			</tr>
 			<tr>
 				<td width="80">绑定商户ID：</td>
 				<td>
-				<if condition="$physical_card['merid'] gt 0"> {pigcms{$physical_card['merid']}<else /><input type="text" class="input fl" name="merid" value="{pigcms{$physical_card['merid']}" tips="不修改则不填写" autocomplete="off" validate="digits:true" ></if>
+				<if condition="$physical_card['merid'] gt 0"> {pigcms{$physical_card['merid']}<else /><input type="text" class="input fl" name="merid" value="{pigcms{$physical_card['merid']}" tips="{pigcms{:L('K_DNFIINM')}" autocomplete="off" validate="digits:true" ></if>
 				</td>
 			</tr>
 			<tr>

@@ -5,9 +5,9 @@
 		<ul class="breadcrumb">
 			<li>
 				<i class="ace-icon fa fa-cubes"></i>
-				<a href="{pigcms{:U('Shop/index')}">{pigcms{$config.shop_alias_name}管理</a>
+				<a href="{pigcms{:U('Shop/index')}">{pigcms{:L('DELIVERY_MANAGEMENT_BKADMIN')}</a>
 			</li>
-			<li class="active">店铺列表</li>
+			<li class="active">{pigcms{:L('E_STORE_STAT_LIST')}</li>
 		</ul>
 	</div>
 	<!-- 内容头部 -->
@@ -22,17 +22,17 @@
 						<table class="table table-striped table-bordered table-hover">
 							<thead>
 								<tr>
-									<th width="50">编号</th>
-									<th width="50">排序</th>
-									<th width="100">店铺名称</th>
-									<th width="150">店铺电话</th>
-									<th class="button-column" width="140">查看二维码</th>
-									<th class="button-column" width="140">完善店铺信息</th>
-									<th class="button-column" width="140">订单查看</th>
-									<th class="button-column" width="140">商品分类管理</th>
-									<th class="button-column" width="140">店铺优惠</th>
-									<th width="160">克隆商品至其他店铺</th>
-									<th width="160">店铺状态</th>
+									<th width="50">{pigcms{:L('ID_BKADMIN')}</th>
+									<th width="50">{pigcms{:L('LISTING_ORDER_BKADMIN')}</th>
+									<th width="100">{pigcms{:L('STORE_NAME_BKADMIN')}</th>
+									<th width="150">{pigcms{:L('PHONE_NUMBER_BKADMIN')}</th>
+<!--									<th class="button-column" width="140">查看二维码</th>-->
+									<th class="button-column" width="140">{pigcms{:L('COMPLETE_INFO_BKADMIN')}</th>
+									<th class="button-column" width="140">{pigcms{:L('ORDERS_BKADMIN')}</th>
+									<th class="button-column" width="140">{pigcms{:L('MENU_BKADMIN')}</th>
+									<th class="button-column" width="140">{pigcms{:L('PROMOTIONS_BKADMIN')}</th>
+									<th width="160">{pigcms{:L('CLONE_STORE_BKADMIN')}</th>
+									<th width="160">{pigcms{:L('STORE_STATUS_BKADMIN')}</th>
                                     <!--th width="160">是否开通商城</th-->
 								</tr>
 							</thead>
@@ -46,9 +46,9 @@
 											<td>{pigcms{$vo.phone}</td>
 											
 											<if condition="empty($vo['sid'])">
-											<td></td>
+<!--											<td></td>-->
 											<td class="button-column">
-												<a style="width:80px;" class="label label-sm label-pink" title="完善店铺信息" href="{pigcms{:U('Shop/shop_edit',array('store_id'=>$vo['store_id']))}">完善店铺信息</a>
+												<a style="width:80px;" class="label label-sm label-pink" title="{pigcms{:L('COMPLETE_STORE_BKADMIN')}" href="{pigcms{:U('Shop/shop_edit',array('store_id'=>$vo['store_id']))}">{pigcms{:L('COMPLETE_STORE_BKADMIN')}</a>
 											</td>
 											<td></td>
 											<td></td>
@@ -56,23 +56,23 @@
 											<td></td>
 											<td></td>
 											<else />
+<!--											<td class="button-column">-->
+<!--												<a href="{pigcms{$config.site_url}/index.php?g=Index&c=Recognition&a=see_qrcode&type=shop&id={pigcms{$vo['store_id']}" class="see_qrcode">查看二维码</a>-->
+<!--											</td>-->
 											<td class="button-column">
-												<a href="{pigcms{$config.site_url}/index.php?g=Index&c=Recognition&a=see_qrcode&type=shop&id={pigcms{$vo['store_id']}" class="see_qrcode">查看二维码</a>
+												<a  class="label label-sm label-success" href="{pigcms{:U('Shop/shop_edit',array('store_id'=>$vo['store_id']))}">{pigcms{:L('EDIT_INFO_BKADMIN')}</a>
 											</td>
 											<td class="button-column">
-												<a style="width:80px;" class="label label-sm label-success" title="修改" href="{pigcms{:U('Shop/shop_edit',array('store_id'=>$vo['store_id']))}">修改店铺信息</a>
+												<a class="label label-sm label-warning" href="{pigcms{:U('Shop/order',array('store_id'=>$vo['store_id']))}">{pigcms{:L('VIEW_ORDERS_BKADMIN')}</a>
 											</td>
 											<td class="button-column">
-												<a style="width:80px;" class="label label-sm label-warning" title="查看店铺订单" href="{pigcms{:U('Shop/order',array('store_id'=>$vo['store_id']))}">查看店铺订单</a>
+												<a  class="label label-sm label-purple"  href="{pigcms{:U('Shop/goods_sort',array('store_id'=>$vo['store_id']))}">{pigcms{:L('VIEW_CATEGORIES_BKADMIN')}</a>
 											</td>
 											<td class="button-column">
-												<a style="width: 60px;" class="label label-sm label-purple" title="商品分类" href="{pigcms{:U('Shop/goods_sort',array('store_id'=>$vo['store_id']))}">商品分类</a>
+												<a  class="label label-sm label-info" href="{pigcms{:U('Shop/discount',array('store_id'=>$vo['store_id']))}">{pigcms{:L('PROMOTIONS_BKADMIN')}</a>
 											</td>
 											<td class="button-column">
-												<a style="width: 60px;" class="label label-sm label-info" title="商品分类" href="{pigcms{:U('Shop/discount',array('store_id'=>$vo['store_id']))}">店铺优惠</a>
-											</td>
-											<td class="button-column">
-												<a style="width: 60px;" class="label label-sm label-info handle_btn" title="商品分类" href="{pigcms{:U('Shop/store',array('store_id'=>$vo['store_id']))}">克隆商品</a>
+												<a  class="label label-sm label-info handle_btn" href="{pigcms{:U('Shop/store',array('store_id'=>$vo['store_id']))}">{pigcms{:L('CLONE_ITEMS_BKADMIN')}</a>
 											</td>
 											<td>
 												<label class="statusSwitch" style="display:inline-block;">
@@ -85,7 +85,7 @@
 										</tr>
 									</volist>
 								<else/>
-									<tr class="odd"><td class="button-column" colspan="9" >您没有添加店铺，或店铺没开启{pigcms{$config.shop_alias_name}功能，或店铺正在审核中。</td></tr>
+									<tr class="odd"><td class="button-column" colspan="9" >{pigcms{:L('MNG_LIST_NOTHING_BKADMIN')}</td></tr>
 								</if>
 							</tbody>
 						</table>
@@ -130,7 +130,7 @@
 					window.top.art.dialog.data('iframe_handle',iframe);
 				},
 				id: 'handle',
-				title:'克隆店铺商品至其他店铺',
+				title:'{pigcms{:L('CLONE_STORE_BKADMIN')}',
 				padding: 0,
 				width: 720,
 				height: 520,

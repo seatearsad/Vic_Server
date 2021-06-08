@@ -3,6 +3,7 @@
 			<div id="nav" class="mainnav_title">
 				<ul>
 					<a href="{pigcms{:U('Deliver/deliverList')}" class="on">{pigcms{:L('_BACK_DELIVERY_LIST_')}</a>|
+                    <a href="{pigcms{:U('Deliver/prep_mode')}">{pigcms{:L('D_F_PREP_MODE')}</a>
 				</ul>
 			</div>
 			<table class="search_table" width="100%">
@@ -43,7 +44,7 @@
 							<span class="mar_l_10"><button id="search" class="btn btn-success">{pigcms{:L('_BACK_SEARCH_')}</button></span>
 							<!--a href="{pigcms{:U('Deliver/export', array('status' => $status, 'day' => $day, 'phone'=> $phone, 'period' => $period))}" class="button" style="float:right;margin-right: 10px;">导出订单</a-->
                             <a href="javascript:void(0);" class="button" style="float:right;margin-right: 10px;" onclick="window.top.artiframe('{pigcms{:U('Deliver/export')}','Download Courier Statistics',920,520,true,false,false,false,'detail',true);">
-                                Download Courier Statistics
+                                Download Payment Summary
                             </a>
 						</div>
                         <if condition="$system_session['level'] neq 3">
@@ -81,7 +82,7 @@
 								<th>{pigcms{:L('_BACK_START_AT_')}</th>
 								<th>{pigcms{:L('_BACK_FINISH_AT_')}</th>
 								<th>{pigcms{:L('_BACK_ASS_COURIER_')}</th>
-								<th>{pigcms{:L('_BACK_CZ_')}</th>
+								<th>{pigcms{:L('B_ACTION')}</th>
 								<!--th>创建时间</th-->
 								
 							</tr>

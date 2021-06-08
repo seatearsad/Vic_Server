@@ -49,9 +49,12 @@ class ConfigModel extends Model{
 		}
 	}
 	public function get_pay_method($notOnline=0,$notOffline=0,$is_wap=false){
-		$tmp_config_list = $this->get_gid_config(7);
 
+		$tmp_config_list = $this->get_gid_config(7);
+        //var_dump($tmp_config_list);
 		foreach($tmp_config_list as $key=>$value){
+            $config_list[$value['tab_id']]['id'] = $value['name'];
+            lang_substr_with_default_lang($value['tab_name']);
 			$config_list[$value['tab_id']]['name'] = $value['tab_name'];
 			$config_list[$value['tab_id']]['config'][$value['name']] = $value['value'];
 		}	

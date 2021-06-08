@@ -39,20 +39,20 @@
 </if>
 <div id="sidebar" class="sidebar responsive" <if condition="C('butt_open') || $no_sidebar">style="display:none;"</if>>
 	<div class="sidebar-shortcuts" id="sidebar-shortcuts">
-		<div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
-			<a class="btn btn-success" href="{pigcms{:U('Config/merchant')}" title="商家设置">
-				<i class="ace-icon fa fa-gear"></i>
-			</a>&nbsp;
-			<a class="btn btn-info" href="{pigcms{:U('Meal/index')}" title="{pigcms{$config.meal_alias_name}管理"> 
-				<i class="ace-icon fa fa-cubes"></i>
-			</a>&nbsp;
-			<a class="btn btn-warning" href="{pigcms{:U('Group/index')}" title="{pigcms{$config.group_alias_name}管理"> 
-				<i class="ace-icon fa fa-desktop"></i>
-			</a>&nbsp;
-			<a class="btn btn-danger" href="{pigcms{:U('Customer/fans_list')}" title="粉丝管理"> 
-				<i class="ace-icon fa fa-group"></i>
-			</a>
-		</div>
+<!--		<div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">-->
+<!--			<a class="btn btn-success" href="{pigcms{:U('Config/merchant')}" title="{pigcms{:L('BASIC_INFO_BKADMIN')}">-->
+<!--				<i class="ace-icon fa fa-gear"></i>-->
+<!--			</a>&nbsp;-->
+<!--			<a class="btn btn-info" href="{pigcms{:U('Meal/index')}" title="{pigcms{$config.meal_alias_name}管理"> -->
+<!--				<i class="ace-icon fa fa-cubes"></i>-->
+<!--			</a>&nbsp;-->
+<!--			<a class="btn btn-warning" href="{pigcms{:U('Group/index')}" title="{pigcms{$config.group_alias_name}管理"> -->
+<!--				<i class="ace-icon fa fa-desktop"></i>-->
+<!--			</a>&nbsp;-->
+<!--			<a class="btn btn-danger" href="{pigcms{:U('Customer/fans_list')}" title="粉丝管理"> -->
+<!--				<i class="ace-icon fa fa-group"></i>-->
+<!--			</a>-->
+<!--		</div>-->
 		<div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
 			<span class="btn btn-success"></span> <span class="btn btn-info"></span>
 			<span class="btn btn-warning"></span> <span class="btn btn-danger"></span>
@@ -87,7 +87,7 @@
 			<li <if condition="$vo['is_active']">class="open"</if>>
 				<a <if condition="$vo['menu_list']">href="#" class="dropdown-toggle"<elseif condition='$vo["id"] eq 1' />href="{pigcms{$vo.url}"</if>>
 					<i class="menu-icon fa {pigcms{$vo.icon}"></i>
-					<span class="menu-text">{pigcms{$vo.name} </span>
+					<span class="menu-text">{pigcms{$vo.name}</span>
 					<if condition="$vo['menu_list']">
 						<b class="arrow fa fa-angle-down"></b>
 					</if>

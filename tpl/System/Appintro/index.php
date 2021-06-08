@@ -2,8 +2,8 @@
 		<div class="mainbox">
 			<div id="nav" class="mainnav_title">
 				<ul>
-					<a href="javascript:void(0);" class="on">关于我们信息列表</a>
-					<a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Appintro/add')}','添加关于信息',800,460,true,false,false,addbtn,'add',true);">添加关于信息</a>
+					<a href="javascript:void(0);" class="on">{pigcms{:L('I_LIST_INFORMATION')}</a>
+					<a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Appintro/add')}','{pigcms{:L(\'I_ADD_INFORMATION\')}',800,460,true,false,false,addbtn,'add',true);">{pigcms{:L('I_ADD_INFORMATION')}</a>
 				</ul>
 			</div>
 			<div class="table-list">
@@ -16,10 +16,10 @@
 					</colgroup>
 					<thead>
 						<tr>
-							<th>编号</th>
-							<th>名称</th>
+							<th>{pigcms{:L('G_ID')}</th>
+							<th>{pigcms{:L('G_NAME')}</th>
 						
-							<th class="textcenter">操作</th>
+							<th class="textcenter">{pigcms{:L('E_ACTION')}</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -29,12 +29,12 @@
 									<td>{pigcms{$vo.id}</td>
 									<td>{pigcms{$vo.title}</td>
 								
-									<td class="textcenter"><a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Appintro/edit',array('id'=>$vo['id']))}','编辑导航',800,460,true,false,false,editbtn,'edit',true);">编辑</a> | <a href="javascript:void(0);" class="delete_row" parameter="id={pigcms{$vo.id}" url="{pigcms{:U('Appintro/del')}">删除</a></td>
+									<td class="textcenter"><a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Appintro/edit',array('id'=>$vo['id']))}','{pigcms{:L(\'BASE_EDIT\')}',800,460,true,false,false,editbtn,'edit',true);">{pigcms{:L('BASE_EDIT')}</a> | <a href="javascript:void(0);" class="delete_row" parameter="id={pigcms{$vo.id}" url="{pigcms{:U('Appintro/del')}">{pigcms{:L('BASE_DELETE')}</a></td>
 								</tr>
 							</volist>
 							<tr><td class="textcenter pagebar" colspan="4">{pigcms{$pagebar}</td></tr>
 						<else/>
-							<tr><td class="textcenter red" colspan="4">列表为空！</td></tr>
+							<tr><td class="textcenter red" colspan="4">{pigcms{:L('_BACK_EMPTY_')}</td></tr>
 						</if>
 					</tbody>
 				</table>

@@ -1416,7 +1416,7 @@ class Shop_goodsModel extends Model
     {
         $store = D("Merchant_store")->field(true)->where(array('store_id' => $store_id))->find();
         if ($store['have_shop'] == 0 || $store['status'] != 1) {
-            return array('error_code' => true, 'msg' => '商家已经关闭了该业务,不能下单了!');
+            return array('error_code' => true, 'msg' => L('_STORE_IS_CLOSE_'));
         }
         if (C('config.store_shop_auth') == 1 && $store['auth'] < 3) {
             return array('error_code' => true, 'msg' => '您查看的' . C('config.shop_alias_name') . '没有通过资质审核！');
@@ -1572,10 +1572,8 @@ class Shop_goodsModel extends Model
         }
         //end  @wangchuanyuan
 
-
-
         if ($is_open == 0) {
-            return array('error_code' => true, 'msg' => '店铺休息中');
+            return array('error_code' => true, 'msg' => L('_STORE_IS_CLOSE_'));
         }
         
         $store_shop = D("Merchant_store_shop")->field(true)->where(array('store_id' => $store_id))->find();
@@ -1613,8 +1611,7 @@ class Shop_goodsModel extends Model
                 }
             }
         }
-        
-        
+
         $goods = array();
         $price = 0;//原始总价
         $total = 0;//商品总数
@@ -1702,7 +1699,7 @@ class Shop_goodsModel extends Model
                     'extra_price' => $row['extra_price']
                 );
             }
-        } elseif ($isCookie == 1) {
+        } elseif ($isCookie == 1) { //wap走的这里
             
             if ($address_id) {
                 $user_adress = D('User_adress')->get_one_adress($uid, $address_id);
@@ -1864,7 +1861,9 @@ class Shop_goodsModel extends Model
                 $str_s && $str = implode(',', $str_s);
                 $str_p && $str = $str ? $str . ';' . implode(',', $str_p) : implode(',', $str_p);
                 $str_d && $str = $str ? $str . ';' . implode(',',$str_d) : implode(',',$str_d);
-
+                //echo $str."----------";
+                $str=str_replace(",","<br/>",$str);
+                $str=str_replace(";","; ",$str);
                 $goods[] = array(
                     'name' => $row['productName'],
                     'is_seckill_price' => $t_return['is_seckill_price'],//是否是秒杀价(0:否，1：是)

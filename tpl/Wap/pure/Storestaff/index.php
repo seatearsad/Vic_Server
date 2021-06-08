@@ -10,7 +10,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="format-detection" content="address=no">
     <link href="{pigcms{$static_path}css/eve.7c92a906.css" rel="stylesheet"/>
-    <link href="{pigcms{$static_path}css/staff.css" rel="stylesheet"/>
+    <link href="{pigcms{$static_path}css/staff.css?v=1.1" rel="stylesheet"/>
     <script src="{pigcms{:C('JQUERY_FILE')}"></script>
     <script src="{pigcms{$static_public}js/laytpl.js"></script>
     <script src="{pigcms{$static_path}layer/layer.m.js"></script>
@@ -27,6 +27,7 @@
         <div class="order_detail">
             <div class="show_list"></div>
             <div id="detail_div"></div>
+            <div id="tip_layer">{pigcms{:replace_lang_str(L('D_F_TIP_2'),$store['min_time'])}</div>
             <div class="con_layer">
                 <span class="confirm_txt">
                     Food Preparation
@@ -77,11 +78,11 @@
     <script>
         var new_img = "{pigcms{$static_path}images/new_order.png";
         var new_url = "{pigcms{:U('Storestaff/getNewOrder')}";
-        var link_url = "javascript:layer.closeAll();"//"{pigcms{:U('Storestaff/shop_list')}";
+        var link_url = "javascript:hasNewOrder();"//"{pigcms{:U('Storestaff/shop_list')}";
         var sound_url = "{pigcms{$static_public}sound/soft-bells.mp3";
         var detail_url = "{pigcms{:U('Storestaff/getOrderDetail')}";
     </script>
-    <script type="text/javascript" src="{pigcms{$static_path}js/new_order.js?v=2.5"></script>
+    <script type="text/javascript" src="{pigcms{$static_path}js/new_order.js?v=2.6"></script>
     <script>
         //更新app 设备token
         function pushDeviceToken(token) {
@@ -116,6 +117,8 @@
         var all_height = $(window).height();
         var all_width = $(window).width();
         var is_detail_hide = false;
+        var tip_layer_show = false;
+        var con_layer_confirm_show = false;
 
         $(function () {
             $(".order_list").height(all_height - header_height);
@@ -130,6 +133,11 @@
                 is_detail_hide = true;
             }
         });
+
+        function hasNewOrder(){
+            layer.closeAll();
+            $('.show_list').trigger('click');
+        }
         $('.list_top').click(function () {
             isHide();
             $('.order_list').children().hide();
@@ -138,6 +146,8 @@
             if(is_detail_hide) {
                 $('.order_detail').show();
                 $('.order_detail').children().show();
+                if(!tip_layer_show) $("#tip_layer").hide();
+                if(!con_layer_confirm_show) $('.con_layer_confirm').hide();
                 if(click_id == 0){
                     $('.con_layer').hide();
                     $('.con_layer_confirm').hide();
@@ -150,6 +160,18 @@
             setTimeout(function (){
                 $('.order_list').children().show()
             },200);
+            //记录detail中的元素是否显示
+            if ($("#tip_layer").is(':hidden')) {
+                tip_layer_show = false;
+            }else{
+                tip_layer_show = true;
+            }
+            if ($('.con_layer_confirm').is(':hidden')) {
+                con_layer_confirm_show = false;
+            }else{
+                con_layer_confirm_show = true;
+            }
+
             $('.show_list').hide();
             if(is_detail_hide){
                 $('.order_detail').hide();
@@ -186,8 +208,13 @@
                         getOrderDetail(click_id);
                     },1000);
                 }else{
-                    alert(result.info);
-                    window.location.reload();
+                    layer.open({
+                        content:result.info,
+                        btn: ['OK'],
+                        end:function(){
+                            window.location.reload();
+                        }
+                    });
                 }
             },'json');
             return false;

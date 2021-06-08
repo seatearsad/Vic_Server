@@ -3,7 +3,10 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=Edge">
-		<if condition="$config['site_favicon']">
+<!--        <meta name="keywords" content="tutti delivery, delivery, food delivery, liquor delivery, beer, wine, victoria delivery, fast delivery, gofer, on-demand delivery, yyj, delivery app" />-->
+<!--        <meta name="description" content="Order food delivery from restaurants, liquor stores, retails shops, and grocers in Greater Victoria now! Over 100 local cuisines, including Italian, Chinese, Mexican, Japanese, and much more delivered to your doorstep 7 days a week from 10 am to 1 am." />-->
+
+        <if condition="$config['site_favicon']">
 			<link rel="shortcut icon" href="{pigcms{$config.site_favicon}"/>
 		</if>
 		<!--title>{pigcms{$config.seo_title}</title-->
@@ -21,27 +24,38 @@
 			<script>
 				if(/(iphone|ipod|android|windows phone)/.test(navigator.userAgent.toLowerCase())){
 					<if condition="$config['wap_redirect'] eq 1">
-						window.location.href = './wap';
+						window.location.href = '../wapnews';
 					<else/>
 						if(confirm('系统检测到您可能正在使用手机访问，是否要跳转到手机版网站？')){
-							window.location.href = './wap';
+							window.location.href = './wapnews';
 						}
 					</if>
 				}
-
 			</script>
 		</if>
         <include file="Public:facebook"/>
 	</head>
     <style>
+        @font-face {
+            font-family: 'Montserrat';
+            src: url('/static/font/Montserrat-Regular.ttf');
+        }
+        @font-face {
+            font-family: 'Montserrat-bold';
+            src: url('/static/font/Montserrat-Bold.otf');
+        }
+        @font-face {
+            font-family: 'Montserrat-light';
+            src: url('/static/font/Montserrat-Light.otf');
+        }
         *{
             margin: 0px;
             box-sizing: border-box;
-            font-family: Helvetica;
+            font-family: Montserrat;
             -moz-osx-font-smoothing: grayscale;
         }
         body{
-            min-width: 1024px;
+            min-width: 1124px;
             color: #3f3f3f;
         }
         a{
@@ -117,6 +131,7 @@
             font-weight: bold;
             width: 50%;
             flex: 1 1 100%;
+            overflow-y: hidden;
         }
         .reg_title img{
             width: 100%;
@@ -174,7 +189,7 @@
 
         .main{
             width: 90%;
-            margin: 10px auto;
+            margin: 40px auto;
         }
         .main_left{
             display: inline-block;
@@ -213,7 +228,7 @@
         .left_list,.right_list{
             width: 100%;
             padding: 0;
-            margin-top: 30px;
+            margin-top: 40px;
         }
         .left_list li{
             background-color: #F5F5F5;
@@ -262,13 +277,14 @@
             font-weight: bold;
         }
         .list_sub{
-            font-size: 12px;
-            margin: 7px 0;
+            font-size: 14px;
+            margin:8px 0 2px 0;
             color: #666666;
         }
     </style>
 	<body>
         <include file="Public:header"/>
+        <div style="">
         <div class="reg_desc">
             <div class="reg_show">
                 <div class="desc_left"></div>
@@ -307,7 +323,7 @@
                 <div class="desc_right"></div>
             </div>
         </div>
-        <div class="main" style="margin-top: 50px">
+        <div class="main">
             <div class="main_left">
                 <div class="cate_list">
                     <span class="curr_cate" style="margin-left: 0;" data-id="0">ALL POSTS</span>
@@ -384,6 +400,7 @@
                 </ul>
             </div>
         </div>
+        </div>
         <include file="Public:footer"/>
 	</body>
 <script>
@@ -393,6 +410,10 @@
     var timeoutId;
     changeDesc();
 
+    $(window).resize(function(){
+
+        rsz();
+    });
     function changeDesc() {
         var i = 1;
         curr_num = curr_num == 0 ? desc_num : curr_num;
@@ -463,15 +484,17 @@
         window.location.href = courier_link;
     });
 
-    var width = $('.desc_center').width();
-    var height = width / 3;
-    var t_height = height + 20;
-    $('.desc_all').height(height);
-    $('.reg_desc').height(t_height);
-    $('.reg_show').height(t_height);
-    $('.desc_left').height(t_height);
-    $('.desc_right').height(t_height);
-
+    function rsz(){
+        var width = $('.desc_center').width();
+        var height = width / 3.2;
+        var t_height = height;
+        $('.desc_all').height(height);
+        $('.reg_desc').height(t_height);
+        $('.reg_show').height(t_height);
+        $('.desc_left').height(t_height);
+        $('.desc_right').height(t_height);
+    }
+    rsz();
     $('.cate_list').find('span').each(function () {
         $(this).click(function () {
             var class_name = $(this).attr('class');

@@ -39,7 +39,7 @@
 										</tr>
 									</volist>
 								<else/>
-									<tr class="odd"><td class="button-column" colspan="8" >无内容</td></tr>
+									<tr class="odd"><td class="button-column" colspan="8" >{pigcms{:L('NO_CONTENT_BKADMIN')}</td></tr>
 								</if>
 							</tbody>
 						</table>
@@ -54,7 +54,7 @@
 <script type="text/javascript">
 $(function(){
 	jQuery(document).on('click','#shopList a.red',function(){
-		if(!confirm('确定要删除这条数据吗?不可恢复。')) return false;
+        if(!confirm("{pigcms{:L('SURE_RECOVERABLE_BKADMIN')}")) return false;
 	});
 	$("#check_box").click(function(){
 		if ($(this).attr('checked')){

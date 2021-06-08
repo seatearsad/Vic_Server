@@ -70,8 +70,8 @@
 								<th class="textcenter"><a href="{pigcms{:U('User/index',array('sort'=>'money'))}" style="color:blue;">{pigcms{:L('_BACK_BALANCE_SHOW_')}</a></th>
 								<!--th class="textcenter"><a href="{pigcms{:U('User/index',array('sort'=>'score'))}" style="color:blue;">{pigcms{:L('_BACK_POINTS_')}</a></th-->
 								<th class="textcenter">{pigcms{:L('_BACK_FROM_')}</th>
-                                <th class="textcenter"><a href="{pigcms{:U('User/index',array('sort'=>'invi_reg'))}" style="color:blue;">邀请注册数</a></th>
-                                <th class="textcenter"><a href="{pigcms{:U('User/index',array('sort'=>'invi_order'))}" style="color:blue;">邀请下单数</a></th>
+                                <th class="textcenter"><a href="{pigcms{:U('User/index',array('sort'=>'invi_reg'))}" style="color:blue;">{pigcms{:L('F_REGISTRATION_INVITED')}</a></th>
+                                <th class="textcenter"><a href="{pigcms{:U('User/index',array('sort'=>'invi_order'))}" style="color:blue;">{pigcms{:L('F_ORDERS_INVITED')}</a></th>
 								<th class="textcenter">{pigcms{:L('_BACK_STATUS_')}</th>
 								<th class="textcenter">{pigcms{:L('_BACK_CZ_')}</th>
 							</tr>

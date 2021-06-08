@@ -45,6 +45,7 @@
 			</li>
 		</ul>
     </if>
+<!--    <div style="position: fixed;top: 500px;left:0px;z-index:100000;font-size: 8px;background: #ff2c4c;">googletagmanager已关闭</div>-->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-123655278-1"></script>
     <script>
         window.dataLayer = window.dataLayer || [];

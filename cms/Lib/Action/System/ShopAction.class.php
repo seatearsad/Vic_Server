@@ -10,7 +10,7 @@ class ShopAction extends BaseAction
     public function index()
     {
         $parentid = isset($_GET['parentid']) ? intval($_GET['parentid']) : 0;
-        $city_name = "通用";
+        $city_name = L('G_UNIVERSAL');
         if($_GET['city_id']){
             $this->assign('city_id',$_GET['city_id']);
             if($_GET['city_id'] != 0){
@@ -30,7 +30,7 @@ class ShopAction extends BaseAction
         $category_list = $database_shop_category->field(true)->where($where_list)->order('`cat_sort` DESC,`cat_id` ASC')->select();
         foreach ($category_list as &$v){
             if($v['city_id'] == 0)
-                $v['city_name'] = "通用";
+                $v['city_name'] = L('G_UNIVERSAL') ;
             else {
                 $c = D('Area')->where(array('area_type' => 2, 'is_open' => 1, 'area_id' => $v['city_id']))->find();
                 $v['city_name'] = $c['area_name'];
@@ -69,7 +69,7 @@ class ShopAction extends BaseAction
                 $c = D('Area')->where(array('area_type' => 2, 'is_open' => 1, 'area_id' => $now_category['city_id']))->find();
                 $now_category['city_name'] = $c['area_name'];
             }else{
-                $now_category['city_name'] = "通用";
+                $now_category['city_name'] = L('G_UNIVERSAL');
             }
             $this->assign('category',$now_category);
         }
@@ -80,7 +80,7 @@ class ShopAction extends BaseAction
         if(IS_POST){
             $database_shop_category = D('Shop_category');
             if($database_shop_category->data($_POST)->add()){
-                $this->success('添加成功！');
+                $this->success(L('J_SUCCEED1'));
             }else{
                 $this->error('添加失败！请重试~');
             }
@@ -115,7 +115,7 @@ class ShopAction extends BaseAction
                 $c = D('Area')->where(array('area_type' => 2, 'is_open' => 1, 'area_id' => $now_category['city_id']))->find();
                 $now_category['city_name'] = $c['area_name'];
             }else{
-                $now_category['city_name'] = "通用";
+                $now_category['city_name'] = L('G_UNIVERSAL');
             }
 
             $this->assign('category',$now_category);
@@ -142,7 +142,7 @@ class ShopAction extends BaseAction
                 }
                 //var_dump($all_list);die();
                 D('Merchant_store')->where(array('store_id'=>array('in',$all_list)))->save(array('service_fee'=>$_POST['service_fee']));
-                $this->success('编辑成功！');
+                $this->success(L('J_SUCCEED2'));
             }else{
                 $this->error('分类不存在！');
             }
@@ -178,7 +178,7 @@ class ShopAction extends BaseAction
                 }
                 //var_dump($all_list);die();
                 D('Merchant_store')->where(array('store_id'=>array('in',$all_list)))->save(array('pay_secret'=>$_POST['pay_secret']));
-                $this->success('编辑成功！');
+                $this->success(L('J_SUCCEED2'));
             }else{
                 $this->error('分类不存在！');
             }
@@ -203,9 +203,9 @@ class ShopAction extends BaseAction
             $where = array('cat_id' => $_POST['cat_id']);
             unset($_POST['cat_id']);
             if ($database_shop_category->where($where)->save($_POST)) {
-                $this->success('编辑成功！');
+                $this->success(L('J_SUCCEED2'));
             } else {
-                $this->error('编辑失败！请重试~');
+                $this->error(L('J_MODIFICATION_FAILED2'));
             }
         } else {
             $this->error('非法提交,请重新提交~');
@@ -227,7 +227,7 @@ class ShopAction extends BaseAction
                 $database_shop_category_relation = D('Shop_category_relation');
                 $condition_shop_category_relation['cat_id'] = intval($_POST['cat_id']);
                 $database_shop_category_relation->where($condition_shop_category_relation)->delete();
-                $this->success('删除成功！');
+                $this->success(L('J_DELETION_SUCCESS'));
             } else {
                 $this->error('删除失败！请重试~');
             }
@@ -267,7 +267,7 @@ class ShopAction extends BaseAction
                     D('Shop_category_relation')->where($where)->save($data);
                 }
             }
-            $this->success('编辑成功！');
+            $this->success(L('J_SUCCEED2'));
         }else {
             $cat_id = $_GET['cat_id'];
             $cat_fid = $_GET['parentid'];
@@ -360,7 +360,7 @@ class ShopAction extends BaseAction
             $data_group_category['cue_field'] = serialize($cue_field);
             $data_group_category['cat_id'] = $now_category['cat_id'];
             if($database_appoint_category->data($data_group_category)->save()){
-                $this->success('添加成功！');
+                $this->success(L('J_SUCCEED1'));
             }else{
                 $this->error('添加失败！请重试~');
             }
@@ -390,7 +390,7 @@ class ShopAction extends BaseAction
             $data_group_category['cue_field'] = serialize($new_cue_field);
             $data_group_category['cat_id'] = $now_category['cat_id'];
             if($database_group_category->data($data_group_category)->save()){
-                $this->success('删除成功！');
+                $this->success(L('J_DELETION_SUCCESS'));
             }else{
                 $this->error('删除失败！请重试~');
             }
@@ -429,7 +429,7 @@ class ShopAction extends BaseAction
             $database_shop_category = D('Shop_discount');
             $_POST['source'] = 0;
             if ($database_shop_category->data($_POST)->add()) {
-                $this->success('添加成功！');
+                $this->success(L('J_SUCCEED1'));
             } else {
                 $this->error('添加失败！请重试~');
             }
@@ -445,9 +445,9 @@ class ShopAction extends BaseAction
             $where = array('id' => $_POST['id']);
             unset($_POST['id']);
             if ($database_shop_discount->where($where)->save($_POST)) {
-                $this->success('编辑成功！');
+                $this->success(L('J_SUCCEED2'));
             } else {
-                $this->error('编辑失败！请重试~');
+                $this->error(L('J_MODIFICATION_FAILED2'));
             }
         } else {
             $this->error('非法提交,请重新提交~');
@@ -1017,9 +1017,9 @@ class ShopAction extends BaseAction
                 unset($_POST['delivery_range_polygon']);
             }
             if (D('Merchant_store_shop')->where($where)->save($_POST)) {
-                $this->success('编辑成功！');
+                $this->success(L('J_SUCCEED2'));
             } else {
-                $this->error('编辑失败！请重试~');
+                $this->error(L('J_MODIFICATION_FAILED2'));
             }
         } else {
             $this->error('非法提交,请重新提交~');
@@ -1096,29 +1096,29 @@ class ShopAction extends BaseAction
             if ($store_ids) {
                 $where['store_id'] = array('in', $store_ids);
                 //                 $condition_where .= ' AND o.store_id IN ('.explode(',',$store_ids).')';
-                $condition_where .= ' AND o.store_id IN ('.implode(',',$store_ids).')';//implode,explode
+                $condition_where .= ' AND oo.store_id IN ('.implode(',',$store_ids).')';//implode,explode
             }
         }
 
         if(!empty($_GET['keyword'])){
             if ($_GET['searchtype'] == 'real_orderid') {
                 $where['real_orderid'] = htmlspecialchars($_GET['keyword']);
-                $condition_where .= ' AND o.real_orderid = "'. htmlspecialchars($_GET['keyword']).'"';
+                $condition_where .= ' AND oo.real_orderid = "'. htmlspecialchars($_GET['keyword']).'"';
             } elseif ($_GET['searchtype'] == 'orderid') {
                 $where['orderid'] = htmlspecialchars($_GET['keyword']);
                 $tmp_result = M('Tmp_orderid')->where(array('orderid'=>$where['orderid']))->find();
                 unset($where['orderid']);
                 $where['order_id'] = $tmp_result['order_id'];
-                $condition_where .= ' AND o.order_id = '. $tmp_result['order_id'];
+                $condition_where .= ' AND oo.order_id = '. $tmp_result['order_id'];
             } elseif ($_GET['searchtype'] == 'name') {
                 $where['username'] = htmlspecialchars($_GET['keyword']);
-                $condition_where .=  ' AND o.username = "'.  htmlspecialchars($_GET['keyword']).'"';
+                $condition_where .=  ' AND oo.username = "'.  htmlspecialchars($_GET['keyword']).'"';
             } elseif ($_GET['searchtype'] == 'phone') {
                 $where['userphone'] = htmlspecialchars($_GET['keyword']);
-                $condition_where .= ' AND o.userphone = "'.  htmlspecialchars($_GET['keyword']).'"';
+                $condition_where .= ' AND oo.userphone = "'.  htmlspecialchars($_GET['keyword']).'"';
             }elseif ($_GET['searchtype'] == 'third_id') {
                 $where['third_id'] =$_GET['keyword'];
-                $condition_where .= ' AND o.third_id = "'.  $_GET['keyword'].'"';
+                $condition_where .= ' AND oo.third_id = "'.  $_GET['keyword'].'"';
             }
 
         }
@@ -1131,22 +1131,22 @@ class ShopAction extends BaseAction
 
         if($status == 100){
             $where['paid'] = 0;
-            //$condition_where .= ' AND o.paid=0';
-            $condition_where .= ' AND paid=0';
+            $condition_where .= ' AND oo.paid=0';
+            //$condition_where .= ' AND paid=0';
         }else if ($status != -1) {
             $where['status'] = $status;
-            //$condition_where .= ' AND o.status='.$status;
-            $condition_where .= ' AND status='.$status;
+            $condition_where .= ' AND oo.status='.$status;
+            //$condition_where .= ' AND status='.$status;
         }
 
         if($pay_type&&$pay_type!='balance'){
             $where['pay_type'] = $pay_type;
-            //$condition_where .= ' AND o.pay_type="'.$pay_type.'"';
-            $condition_where .= ' AND pay_type="'.$pay_type.'"';
+            $condition_where .= ' AND oo.pay_type="'.$pay_type.'"';
+            //$condition_where .= ' AND pay_type="'.$pay_type.'"';
         }else if($pay_type=='balance'){
             $where['_string'] = "(`balance_pay`<>0 OR `merchant_balance` <> 0 )";
-            //$condition_where .= ' AND (`o`.`balance_pay`<>0 OR `o`.`merchant_balance` <> 0 )';
-            $condition_where .= ' AND (`balance_pay`<>0 OR `merchant_balance` <> 0 )';
+            $condition_where .= ' AND (`oo`.`balance_pay`<>0 OR `oo`.`merchant_balance` <> 0 )';
+            //$condition_where .= ' AND (`balance_pay`<>0 OR `merchant_balance` <> 0 )';
         }
 
         if(!empty($_GET['begin_time'])&&!empty($_GET['end_time'])){
@@ -1155,13 +1155,21 @@ class ShopAction extends BaseAction
             }
             $period = array(strtotime($_GET['begin_time']." 00:00:00"),strtotime($_GET['end_time']." 23:59:59"));
             $where['_string'] =( $where['_string']?' AND ':''). " (create_time BETWEEN ".$period[0].' AND '.$period[1].")";
-            //$condition_where .=  " AND (o.create_time BETWEEN ".$period[0].' AND '.$period[1].")";
-            $condition_where .=  " AND (create_time BETWEEN ".$period[0].' AND '.$period[1].")";
+            $condition_where .=  " AND (oo.create_time BETWEEN ".$period[0].' AND '.$period[1].")";
+            //$condition_where .=  " AND (create_time BETWEEN ".$period[0].' AND '.$period[1].")";
         }
-        //$condition_where.=" AND o.is_del=0";
-        $condition_where.=" AND is_del=0";
+
+        if($_GET['city_id']){
+            $condition_where .= " AND ss.city_id=".$_GET['city_id'];
+            $where['s.city_id'] = $_GET['city_id'];
+        }else{
+            //$store_where = "";
+        }
+        $condition_where.=" AND oo.is_del=0";
+        //$condition_where.=" AND is_del=0";
         $where['is_del'] = 0;
-        $count = D('Shop_order')->where($where)->count();
+        //$coupon_list = M('New_event_user')->join('as u left join '.C('DB_PREFIX').'new_event_coupon as c ON u.event_coupon_id=c.id')->field('u.*')->where($where)->select();
+        $count = D('Shop_order')->join('as o left join '.C('DB_PREFIX').'merchant_store as s ON o.store_id=s.store_id')->where($where)->count();
 
         $length = ceil($count / 1000);
         for ($i = 0; $i < $length; $i++) {
@@ -1229,8 +1237,8 @@ class ShopAction extends BaseAction
             $objActSheet->setCellValue('AB1', 'Address客户地址');
             $objActSheet->setCellValue('AC1', '配送费优惠类型');
 
-
-            $sql = "SELECT o.*, d.name as good_name,d.price as good_price ,d.unit,d.cost_price, d.num as good_num,d.tax_num,d.deposit_price, s.tax_num as store_tax,s.name AS store_name FROM (select * from pigcms_shop_order ".$condition_where." LIMIT ". $i*1000 .",1000)o LEFT JOIN pigcms_merchant_store AS s ON s.store_id=o.store_id LEFT JOIN pigcms_shop_order_detail AS d ON `d`.`order_id`=`o`.`order_id` ORDER BY o.order_id DESC";
+            $sql = "SELECT o.*, d.name as good_name,d.price as good_price ,d.unit,d.cost_price, d.num as good_num,d.tax_num,d.deposit_price FROM (select oo.*,ss.tax_num as store_tax,ss.name AS store_name from pigcms_shop_order as oo left join pigcms_merchant_store as ss on ss.store_id=oo.store_id ".$condition_where." LIMIT ". $i*1000 .",1000)o LEFT JOIN pigcms_shop_order_detail AS d ON `d`.`order_id`=`o`.`order_id` ORDER BY o.order_id DESC";
+            //$sql = "SELECT o.*, d.name as good_name,d.price as good_price ,d.unit,d.cost_price, d.num as good_num,d.tax_num,d.deposit_price, s.tax_num as store_tax,s.name AS store_name FROM (select * from pigcms_shop_order ".$condition_where." LIMIT ". $i*1000 .",1000)o LEFT JOIN pigcms_merchant_store AS s ON s.store_id=o.store_id LEFT JOIN pigcms_shop_order_detail AS d ON `d`.`order_id`=`o`.`order_id`".$store_where." ORDER BY o.order_id DESC";
             //$sql = "SELECT o.*, m.name AS merchant_name,d.name as good_name,d.price as good_price ,d.unit,d.cost_price, d.num as good_num,g.tax_num,g.deposit_price, s.default_tax,ds.dining_time,s.name AS store_name FROM (select * from pigcms_shop_order ".$condition_where." LIMIT ". $i*1000 .",1000)o LEFT JOIN pigcms_merchant_store AS s ON s.store_id=o.store_id LEFT JOIN pigcms_merchant AS m ON `s`.`mer_id`=`m`.`mer_id` LEFT JOIN pigcms_shop_order_detail AS d ON `d`.`order_id`=`o`.`order_id` LEFT JOIN pigcms_shop_goods AS g ON `g`.`goods_id`=`d`.`goods_id` LEFT JOIN pigcms_deliver_supply AS ds ON `ds`.`order_id`=`o`.`order_id` ORDER BY o.order_id DESC";
             //$sql = "SELECT  o.*, m.name AS merchant_name,d.name as good_name,d.price as good_price ,d.unit,d.cost_price, d.num as good_num, s.name AS store_name FROM " . C('DB_PREFIX') . "shop_order AS o LEFT JOIN " . C('DB_PREFIX') . "merchant_store AS s ON s.store_id=o.store_id LEFT JOIN " . C('DB_PREFIX') . "merchant AS m ON `s`.`mer_id`=`m`.`mer_id` LEFT JOIN " . C('DB_PREFIX') . "shop_order_detail AS d ON `d`.`order_id`=`o`.`order_id` ".$condition_where." ORDER BY o.order_id DESC LIMIT " . $i * 1000 . ",1000";
             //
@@ -1759,25 +1767,25 @@ class ShopAction extends BaseAction
                         $status_txt = "";
                         switch ($v['status']) {
                             case 1:
-                                $status_txt = "<div>顾客下单：";
+                                $status_txt = "<div>".L('Back_Deliver_Show_1')."：";
                                 break;
                             case 2:
-                                $status_txt = "<div style='color: #ffa52d'>商家接单：";
+                                $status_txt = "<div style='color: #ffa52d'>".L('Back_Deliver_Show_2')."：";
                                 break;
                             case 3:
-                                $status_txt = "<div>送餐员接单：";
+                                $status_txt = "<div>".L('Back_Deliver_Show_4')."：";
                                 break;
                             case 4:
-                                $status_txt = "<div style='color: #008037'>已取货：";
+                                $status_txt = "<div style='color: #008037'>".L('Back_Deliver_Show_5')."：";
                                 break;
                             case 5:
-                                $status_txt = "<div style='color: #004aad'>开始配送：";
+                                $status_txt = "<div style='color: #004aad'>".L('Back_Deliver_Show_6')."：";
                                 break;
                             case 6:
-                                $status_txt = "<div>送达时间：";
+                                $status_txt = "<div>".L('Back_Deliver_Show_7')."：";
                                 break;
                             case 33:
-                                $status_txt = "<div style='color: #ff5757'>增加出餐时间：".$v['note'].'分钟</div>';
+                                $status_txt = "<div style='color: #ff5757'>".L('Back_Deliver_Show_8')."：".$v['note'].L('Back_Deliver_Show_min').'</div>';
                                 break;
 
                         }
@@ -1787,9 +1795,9 @@ class ShopAction extends BaseAction
                             $show_list[] = $status_txt;
                         if($v['status'] == 2){
                             $supply = D('Deliver_supply')->where(array("order_id"=>$order_id))->find();
-                            $show_list[] = "<div style='color: #ff5757'>预计出餐：" . ' ' . date('H:i', $v['dateline']+$supply['dining_time']*60).'</div>';
+                            $show_list[] = "<div style='color: #ff5757'>".L('Back_Deliver_Show_3')."：" . ' ' . date('H:i', $v['dateline']+$supply['dining_time']*60).'</div>';
                             if(!$supply['uid'])
-                                array_unshift($show_list,'<div>顾客下单： ' . date('H:i', $v['dateline']).'</div>');
+                                array_unshift($show_list,'<div>'.L('Back_Deliver_Show_1').'： ' . date('H:i', $v['dateline']).'</div>');
                         }
                     }
                 }
@@ -1800,6 +1808,7 @@ class ShopAction extends BaseAction
                 $data['error'] = 1;
                 exit(json_encode($data));
             }
+            
         }
     }
 }

@@ -149,7 +149,9 @@
                 <span>{pigcms{:L('_ND_DELIVERYCITY_')}:</span>
                 <select name="city_id" id="city_id">
                     <volist name="city_list" id="city">
+                    <if condition="$city['area_id'] neq 105">
                     <option value="{pigcms{$city['area_id']}">{pigcms{$city['area_name']}</option>
+                    </if>
                     </volist>
                 </select>
             </li>
@@ -163,7 +165,7 @@
             </li>
             <li style="text-align: left;width: 91%;margin:10px auto">
                 <div style="font-size: 14px">
-                    {pigcms{:L('_ND_BANKINGINFO_')}
+                    {pigcms{:L('_ND_BANKINGINFO_')} (Optional)
                 </div>
                 <div>
                     {pigcms{:L('_ND_BANKINGINFONOTICE_')}
@@ -184,6 +186,11 @@
             <li>
                 <span>Account Number:</span>
                 <input type="text" placeholder="7 to 12 digits" id="account">
+            </li>
+            <li style="text-align: left;width: 91%;margin:30px auto 10px auto">
+                <div style="font-size: 16px;color: #333;">
+                    Your banking information is optional here. You can click “Save & Continue” to skip and submit it later.
+                </div>
             </li>
             <li class="Landd">
                 <input type="button" value="Save & Continue" id="reg_form" style="background-color: #ffa52d;width: 50%;">

@@ -9,13 +9,13 @@ class AppintroAction extends BaseAction{
 		if(IS_POST){
 			$data['title'] = $_POST['title'];
 			if(empty($_POST['content'])){
-				$this->error('内容不能为空！');
+				$this->error(L('CCBE'));
 			}
 			$data['content'] = htmlspecialchars_decode($_POST['content']);
 			if(D('Appintro')->add($data)){
-				$this->success('添加公告成功！');
+				$this->success(L('J_SUCCEED1'));
 			}else{
-				$this->error('添加失败！');
+				$this->error(L('J_MODIFICATION_FAILED2'));
 			}
 		}else {
 			$this->display();
@@ -26,9 +26,9 @@ class AppintroAction extends BaseAction{
 			$data['title'] = $_POST['title'];
 			$data['content'] = htmlspecialchars_decode($_POST['content']);
 			if(D('Appintro')->where('id='.$_POST['id'])->save($data)){
-				$this->success('保存成功！');
+				$this->success(L('J_SUCCEED3'));
 			}else{
-				$this->error('保存失败！');
+				$this->error(L('J_FAILED_SAVE'));
 			}
 		}else {
 			$intro = D('Appintro')->where('id='.$_GET['id'])->select();
@@ -40,9 +40,9 @@ class AppintroAction extends BaseAction{
 	public function del(){
 		if(!empty($_POST['id'])){
 			if(D('Appintro')->where('id='.$_POST['id'])->delete()){
-				$this->success('删除成功');
+				$this->success(L('J_DELETION_SUCCESS'));
 			}else{
-				$this->error('删除失败！');
+				$this->error(L('J_DELETION_FAILED_RETRY'));
 			}
 		}
 	}

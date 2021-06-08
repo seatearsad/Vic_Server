@@ -36,7 +36,7 @@ a,input,button{outline:none; -webkit-highlight-color:rgba(0,0,0,0);}
 .hot{color:#c00;}
 .prompt_hot{ margin-left:10px}
 
-label{ margin:0 5px 0 3px; vertical-align:middle; cursor:pointer}
+label{ margin:0 5px 0 0px; vertical-align:middle; cursor:pointer}
 
 /********** 其它 **********/
 .clearfix:after{height:0;display:block;visibility:hidden;content:".";clear:both;}

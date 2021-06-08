@@ -797,7 +797,7 @@ class MealAction extends BaseAction{
 		if (IS_POST) {
 			$name = htmlspecialchars($_POST['name']);
 			if(empty($name)){
-				$error_tips .= '分类名称必填！'.'<br/>';
+                $error_tips = L('CATEGORY_NAME_REQUIRED_BKADMIN') . '<br/>';
 			}
 
 			$num = intval($_POST['num']);

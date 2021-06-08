@@ -37,7 +37,7 @@ class BaseAction extends Action{
 		}
 
 		$this->check_merchant_file();
-		
+		lang_substr_with_default_lang($this->config['site_name']);
 		$this->config = D('Config')->get_config();
 		if($this->config['open_extra_price']==1){
 			$this->config['score_name']=$this->config['extra_price_alias_name'];
@@ -48,7 +48,7 @@ class BaseAction extends Action{
 		}else{
 			$this->config['score_get'] =  $this->config['user_score_get'];
 		}
-		
+
 		$this->assign('config',$this->config);
 		C('config',$this->config);
 
@@ -101,10 +101,13 @@ class BaseAction extends Action{
 				$merchant_menu_list = $database_merchant_menu->field(true)->where($condition_merchant_menu)->order('`sort` desc,`fid` ASC,`id` ASC')->select();
 				S('merchant_menu_list',$merchant_menu_list);
 			}
-
+            //var_dump($merchant_menu_list);
 			$flag = false;
-
+            //lang_substr(,C('Language'))
+            //$name = lang_substr($nameList[$sId],C('DEFAULT_LANG'));
 			foreach($merchant_menu_list as $key=>$value){
+                //echo $key."<br>";
+			    $merchant_menu_list[$key]['name']=lang_substr($value['name'],C('DEFAULT_LANG'));
 				if(empty($this->config['wxapp_url']) && strtolower($value['module']) == 'wxapp'){
 						unset($merchant_menu_list[$key]);
 				}
@@ -128,9 +131,9 @@ class BaseAction extends Action{
 									$this->assign('config',$this->config);
 							}
 							if($this->config['buy_merchant_auth']){
-								$this->error('您还没有这个使用权限，联系管理员开通！',U('Merchant_money/buy_merchant_service'));
+								$this->error(L('K_NACSCA'),U('Merchant_money/buy_merchant_service'));
 							}else{
-								$this->error('您还没有这个使用权限，联系管理员开通！');
+								$this->error(L('K_NACSCA'));
 
 							}
 					}
@@ -154,7 +157,7 @@ class BaseAction extends Action{
 			}
 
 			$merchant_menu = arrayPidProcess($merchant_menu);
-			if ($flag && MODULE_NAME == 'Weidian') $this->error('您还没有这个使用权限，联系管理员开通！');
+			if ($flag && MODULE_NAME == 'Weidian') $this->error(L('K_NACSCA'));
 
 			foreach($merchant_menu as $menu){
 				if(!empty($menu['menu_list'])){

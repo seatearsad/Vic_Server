@@ -84,7 +84,7 @@
 					<button id="close_button" type="button" class="close" data-dismiss="modal" aria-hidden="true">
 						<span class="white">&times;</span>
 					</button>
-					(用鼠标滚轮可以缩放地图)    拖动红色图标，经纬度框内将自动填充经纬度。
+                    {pigcms{: L('SEARCH_ZOOM_BKADMIN') }
 				</div>
 			</div>
 			<div class="modal-body no-padding" style="width:100%;">

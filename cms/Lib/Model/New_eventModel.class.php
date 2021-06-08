@@ -36,7 +36,7 @@ class New_eventModel extends Model
             $v['status_name'] = $this->getStausName($v['status']);
             $v['coupon_amount'] = $this->getEventCouponAmount($v['id']);
             if($v['city_id'] == 0){
-                $v['city_name'] = '通用';
+                $v['city_name'] = L('G_UNIVERSAL');
             }else{
                 $c = D('Area')->where(array('area_type' => 2, 'is_open' => 1, 'area_id' => $v['city_id']))->find();
                 $v['city_name'] = $c['area_name'];
@@ -84,7 +84,7 @@ class New_eventModel extends Model
      * 5 店铺减免配送费
      */
     public function getTypeName($type){
-        $typeName = ['无效活动','新用户注册','新用户邀请','规定范围内免配送费','店铺满减活动','店铺减免配送费'];
+        $typeName = ['无效活动',L('G_NEW_USER_REGISTRATION'),L('G_FRIEND_REFERRAL'),L('G_FREE_DISTANCE'),L('G_MERCHANT_DISCOUNT'),L('G_FREE_SELECTED')];
         if($type == -1)
             return $typeName;
         else
@@ -92,7 +92,7 @@ class New_eventModel extends Model
     }
 
     public function getStausName($status){
-        $statusName = ['禁用','正常','过期'];
+        $statusName = [L('_BACK_BANNED_'),L('G_ACTIVE'),L('G_EXPIRED')];
         return $statusName[$status];
     }
 
@@ -247,6 +247,7 @@ class New_eventModel extends Model
      * 获取用户在活动中获取的优惠券
      */
     public function getUserCoupon($uid,$status=-1,$order_money=-1,$coupon_id=-1){
+
         $where['u.uid'] = $uid;
         if($order_money != -1)
             $where['c.use_price'] = array('ELT',$order_money);
@@ -259,13 +260,13 @@ class New_eventModel extends Model
             $where['u.id'] = $coupon_id;
         }
 
-        //$coupon_list = D('New_event_user')->where($where)->select();
         $coupon_list = M('New_event_user')->join('as u left join '.C('DB_PREFIX').'new_event_coupon as c ON u.event_coupon_id=c.id')->field('u.*')->where($where)->select();
-        //var_dump($coupon_list);die();
+
         $list = array();
         foreach ($coupon_list as &$v){
             if(time() > $v['expiry_time']) {
-                $v['is_user'] = 2;
+                //更新已经过期的优惠券
+                $v['is_use'] = 2;
                 D('New_event_user')->where(array('id'=>$v['id']))->save($v);
                 continue;
             }
@@ -284,9 +285,9 @@ class New_eventModel extends Model
             }else{
                 $v['discount_desc'] = replace_lang_str(L('_MAN_NUM_REDUCE_'),$v['discount']).replace_lang_str(L('_MAN_REDUCE_NUM_'),$v['order_money']);
             }
+
             $list[] = $v;
         }
-
         return $list;
     }
 

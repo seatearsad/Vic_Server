@@ -3,6 +3,8 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <META NAME ="keywords" CONTENT="{pigcms{$news.title}">
+        <META NAME="description" CONTENT="{pigcms{$news.desc}">
 		<if condition="$config['site_favicon']">
 			<link rel="shortcut icon" href="{pigcms{$config.site_favicon}"/>
 		</if>
@@ -17,31 +19,50 @@
         <script type="text/javascript" src="{pigcms{$static_public}js/lang/{pigcms{:C('DEFAULT_LANG')}.js" charset="utf-8"></script>
 		<script src="{pigcms{$static_path}js/common.js"></script>
 		<script src="{pigcms{$static_path}js/index.activity.js"></script>
-		<if condition="$config['wap_redirect']">
-			<script>
-				if(/(iphone|ipod|android|windows phone)/.test(navigator.userAgent.toLowerCase())){
-					<if condition="$config['wap_redirect'] eq 1">
-						window.location.href = './wap';
-					<else/>
-						if(confirm('系统检测到您可能正在使用手机访问，是否要跳转到手机版网站？')){
-							window.location.href = './wap';
-						}
-					</if>
-				}
+        <if condition="$config['wap_redirect']">
+            <script>
 
-			</script>
-		</if>
+                if(/(iphone|ipod|android|windows phone)/.test(navigator.userAgent.toLowerCase())){
+                <if condition="$config['wap_redirect'] eq 1">
+                    var pth=location.pathname;
+                    var ptlist=pth.split('/');
+                    if (!isNaN(ptlist[2])){
+                        window.location.href = '../wapnews/'+ptlist[2];
+                    }else{
+                        window.location.href = '../wapnews/';
+                    }
+
+                <else/>
+                    if(confirm('系统检测到您可能正在使用手机访问，是否要跳转到手机版网站？')){
+                        window.location.href = './wapnews';
+                    }
+                </if>
+                }
+            </script>
+        </if>
         <include file="Public:facebook"/>
 	</head>
     <style>
+        @font-face {
+            font-family: 'Montserrat';
+            src: url('/static/font/Montserrat-Regular.ttf');
+        }
+        @font-face {
+            font-family: 'Montserrat-bold';
+            src: url('/static/font/Montserrat-Bold.otf');
+        }
+        @font-face {
+            font-family: 'Montserrat-light';
+            src: url('/static/font/Montserrat-Light.otf');
+        }
         *{
             margin: 0px;
             box-sizing: border-box;
-            font-family: Helvetica;
+            font-family: Montserrat;
             -moz-osx-font-smoothing: grayscale;
         }
         body{
-            min-width: 1024px;
+            min-width: 1124px;
             color: #3f3f3f;
         }
         a{
@@ -60,7 +81,7 @@
         }
         .main{
             width: 90%;
-            margin: 10px auto;
+            margin: 25px auto;
         }
         .main_left{
             display: inline-block;
@@ -99,7 +120,7 @@
         .left_list,.right_list{
             width: 100%;
             padding: 0;
-            margin-top: 30px;
+            margin-top: 20px;
         }
         .left_list li{
             background-color: #F5F5F5;
@@ -110,7 +131,7 @@
         }
         .right_list li{
             list-style: none;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
             display: flex;
         }
         .right_list li label{
@@ -153,20 +174,27 @@
             color: #666666;
         }
         .from{
-            margin: 10px auto;
-            color:#999999;
-        }
-        .detail_title{
-            font-weight: bold;
-            font-size: 20px;
-        }
-        .detail_time{
-            margin: 10px auto;
+            margin: 8px 0 5px 0;
             color:#999999;
             font-size: 14px;
         }
-        .sub_title{
+        .detail_title{
+            font-weight: bold;
+            font-size: 26px;
+            margin:15px 0;
+        }
+        .detail_time{
+            margin: 4px 0 5px 0;
+            color:#999999;
             font-size: 12px;
+        }
+        .sub_title{
+            font-size: 15px;
+            margin-top:5px;
+        }
+        .content{
+            margin-top:20px;
+            font-size: 16px;
         }
     </style>
 	<body>
@@ -177,16 +205,16 @@
                 <div class="from">
                     <a href="/news/cat-0">All Posts</a> > <a href="/news/cat-{pigcms{$now_cat.id}">{pigcms{$now_cat.name}</a> > {pigcms{$news.title}
                 </div>
-                <div class="detail_title">
+                <h1 class="detail_title">
                     {pigcms{$news.title}
-                </div>
-                <div class="sub_title">
-                    - {pigcms{$news.sub_title}
-                </div>
+                </h1>
+                <h2 class="sub_title">
+                    {pigcms{$news.sub_title}
+                </h2>
                 <div class="detail_time">
                     Update on {pigcms{$news.last_time|date='M d Y',###}
                 </div>
-                <div>
+                <div class="content">
                     {pigcms{$news.content}
                 </div>
             </div>

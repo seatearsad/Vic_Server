@@ -2,7 +2,7 @@
 / Written by Will Lu */
 (function($) {
 	$.timepicker.regional['zh-CN'] = {
-		timeOnlyTitle: '选择时间',
+		timeOnlyTitle: 'Select Time',
 		timeText: '时间',
 		hourText: '小时',
 		minuteText: '分钟',

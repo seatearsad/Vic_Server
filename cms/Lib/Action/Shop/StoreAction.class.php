@@ -430,7 +430,8 @@ class StoreAction extends BaseAction
 	{
 // 		$this->select_address();
 		$store_id = isset($_GET['store_id']) ? intval($_GET['store_id']) : 0;
-
+        //暂时跳转到WAP
+        redirect("/wap.php?c=Shop&a=classic_shop&shop_id=".$store_id);
 		$sort = isset($_GET['sort']) && $_GET['sort'] ? intval($_GET['sort']) : 0;
 		$keyword = isset($_GET['keyword']) && $_GET['keyword'] ? trim(htmlspecialchars(($_GET['keyword']))) : '';
 		$store = $this->now_store($store_id);

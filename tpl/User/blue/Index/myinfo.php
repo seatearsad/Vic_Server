@@ -135,7 +135,7 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
 					alert('邮箱格式不对！');
 					return false;
 		       }
-		 $('#formsubmit').val('保存中...').prop('disabled',true);
+		 $('#formsubmit').val('Save....').prop('disabled',true);
 		 	$.post("{pigcms{:U('User/Index/savemyinfo')}",$('#address-form').serialize(),function(result){
 				result.error=parseInt(result.error);
 			if(!result.error){

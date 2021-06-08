@@ -9,7 +9,7 @@
 		<div class="navbar-header pull-left">
 			<a href="{pigcms{:U('Index/index')}" class="navbar-brand" style="padding: 5px 0 0 0;"> 
 				<small> 
-					<img src="{pigcms{$config.site_merchant_logo}" style="height:38px;width:38px;"/> {pigcms{$config.site_name} - 商家中心
+					<img src="{pigcms{$config.site_merchant_logo}" style="height:38px;width:38px;"/> {pigcms{$config.site_name} - {pigcms{:L('MERCHANT_BACKEND_BKADMIN')}
 				</small>
 			</a>
 		</div>
@@ -57,13 +57,13 @@
 				<li class="light-blue">
 					<a data-toggle="dropdown" href="#" class="dropdown-toggle"> 
 						<img class="nav-user-photo" src="{pigcms{$static_public}images/user.jpg" alt="Jason&#39;s Photo" /> 
-						<span class="user-info"> <small>欢迎您，</small> {pigcms{$merchant_session.name}</span> 
+						<span class="user-info"> <small>{pigcms{:L('WELCOME_BKADMIN')}</small> {pigcms{$merchant_session.name}</span>
 						<i class="ace-icon fa fa-caret-down"></i>
 					</a>
 					<ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
 						<li>
 							<a href="{pigcms{$config.site_url}" target="_blank">
-								<i class="ace-icon fa fa-link"></i> 网站首页
+								<i class="ace-icon fa fa-link"></i> {pigcms{:L('HOME_BKADMIN')}
 							</a>
 						</li>
 						<!--li>
@@ -73,7 +73,7 @@
 						</li-->
 						<li>
 							<a href="{pigcms{:U('Config/merchant')}">
-								<i class="ace-icon fa fa-user"></i> 商家设置
+								<i class="ace-icon fa fa-user"></i> {pigcms{:L('BASIC_INFO_BKADMIN')}
 							</a>
 						</li>
 						<!--li>
@@ -84,7 +84,7 @@
 						<li class="divider"></li>
 						<li>
 							<a href="{pigcms{:U('Login/logout')}"> 
-								<i class="ace-icon fa fa-power-off"></i> 退出
+								<i class="ace-icon fa fa-power-off"></i> {pigcms{:L('EXIT_BKADMIN')}
 							</a>
 						</li>
 					</ul>

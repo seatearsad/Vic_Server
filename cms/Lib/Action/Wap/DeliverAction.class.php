@@ -2599,6 +2599,8 @@ class DeliverAction extends BaseAction
             }
             $this->ajaxReturn($result);
         }else {
+            $database_deliver_user = D('Deliver_user');
+            $now_user = $database_deliver_user->field(true)->where(array('uid' => $this->deliver_session['uid']))->find();
             if ($now_user['reg_status'] != 3)
                 header('Location:' . U('Deliver/step_' . $now_user['reg_status']));
             $this->display();
@@ -2953,16 +2955,26 @@ class DeliverAction extends BaseAction
                     $this->assign('deliver_card',$deliver_card);
                 }
             }else{
+                $old_data = D('Deliver_card')->where(array('deliver_id'=>$this->deliver_session['uid']))->find();
+
                 $card_data['ahname'] = $_POST['ahname'];
                 $card_data['transit'] = $_POST['transit'];
                 $card_data['institution'] = $_POST['institution'];
                 $card_data['account'] = $_POST['account'];
 
-                D('Deliver_card')->where(array('deliver_id'=>$this->deliver_session['uid']))->save($card_data);
+                if($old_data['ahname'] != $card_data['ahname'] || $old_data['transit'] != $card_data['transit'] || $old_data['institution'] != $card_data['institution'] || $old_data['account'] != $card_data['account']) {
+                    D('Deliver_card')->where(array('deliver_id' => $this->deliver_session['uid']))->save($card_data);
 
-                $userdata['last_time'] = time();
-                D('Deliver_user')->where(array('uid' => $this->deliver_session['uid']))->save($userdata);
+                    $userdata['last_time'] = time();
+                    D('Deliver_user')->where(array('uid' => $this->deliver_session['uid']))->save($userdata);
 
+                    $title = "Courier banking info change";
+                    $body = "Driver (".$this->deliver_session['uid'].") has changed his/her banking information. Please take a look.";
+                    $email = array(array("address"=>"hr@tutti.app","userName"=>"HR"));
+
+                    $mail = getMail($title,$body,$email);
+                    $mail->send();
+                }
                 exit(json_encode(array('error' => 0,'message' =>'Success')));
             }
         }
@@ -3013,7 +3025,7 @@ class DeliverAction extends BaseAction
     }
 
     public function getVicMailBody($name){
-	    $body = "<p>Hi ".$name.",</p>";
+        $body = "<p>Hi ".$name.",</p>";
         $body .= "<p>&nbsp;</p>";
         $body .= "<p>Thank you for signing up as a Tutti courier!</p>";
         $body .= "<p>&nbsp;</p>";
@@ -3025,7 +3037,7 @@ class DeliverAction extends BaseAction
         $body .= "<p>&nbsp;</p>";
         $body .= "<p>Please note that <b>wearing a mask is mandatory</b> during your pick-up!</p>";
         $body .= "<p>&nbsp;</p>";
-        $body .= "<p>If you haven’t uploaded the required documents, we recommend you finish uploading them in order to get started quickly. You can do so by logging into your courier account and clicking on the“Completing My Application” button. If you have any difficulties uploading documents, you can also bring in the original copy when picking up your delivery bag.</p>";
+        $body .= "<p>If you haven't uploaded the required documents, we recommend you finish uploading them in order to get started quickly. You can do so by logging into your courier account and clicking on the \"Completing My Application\" button. If you have any difficulties uploading documents, you can also bring in the original copy when picking up your delivery bag.</p>";
         $body .= "<p>After being approved and getting your delivery bag, we will activate your account. You will then receive another email with a link to instructions on how to use our courier app.</p>";
         $body .= "<p>&nbsp;</p>";
         $body .= "<p>For any questions or concerns, please contact us at 1-888-399-6668 or email <a href='mailto:hr@tutti.app'>hr@tutti.app</a>. We look forward to working with you!</p>";

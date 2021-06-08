@@ -5,16 +5,17 @@
         <ul class="breadcrumb">
             <li>
                 <i class="ace-icon fa fa-cubes"></i>
-                <a href="{pigcms{:U('Shop/index')}">{pigcms{$config.shop_alias_name}管理</a>
+                <a href="{pigcms{:U('Shop/index')}">{pigcms{:L('DELIVERY_MANAGEMENT_BKADMIN')}</a>
             </li>
-            <li class="active"><a href="{pigcms{:U('Shop/goods_sort',array('store_id'=>$now_store['store_id']))}">分类列表</a></li>
+            <li class="active"><a href="{pigcms{:U('Shop/goods_sort',array('store_id'=>$now_store['store_id']))}">{pigcms{:L('CATEGORY_LIST_BKADMIN')}</a></li>
             <li class="active"><a href="{pigcms{:U('Shop/goods_list',array('sort_id'=>$now_sort['sort_id']))}">{pigcms{$now_sort.sort_name}</a></li>
-            <li class="active"><a href="{pigcms{:U('Shop/side_dish',array('goods_id'=>$now_goods['goods_id']))}">{pigcms{$now_goods.name} 配菜列表</a></li>
-            <if condition="dish_id">
-                <li class="active">修改配菜</li>
+            <li class="active"><a href="{pigcms{:U('Shop/side_dish',array('goods_id'=>$now_goods['goods_id']))}">{pigcms{$now_goods.name} {pigcms{:L('SIDE_DISH_LIST_BKADMIN')}</a></li>
+            <if condition=" $dish_id eq ''">
+                <li class="active">{pigcms{:L('ADD_OPTION_BKADMIN')}</li>
             <else />
-                <li class="active">添加配菜</li>
+                <li class="active">{pigcms{:L('EDIT_OPTIONS_BKADMIN')}</li>
             </if>
+
         </ul>
     </div>
     <!-- 内容头部 -->
@@ -28,10 +29,10 @@
                     <div class="tabbable">
                         <ul class="nav nav-tabs" id="myTab">
                             <li class="active">
-                                <if condition="dish_id">
-                                    <a href="javascript:void()">修改配菜</a>
+                                <if condition=" $dish_id eq ''">
+                                    <a href="javascript:void()">{pigcms{:L('ADD_OPTION_BKADMIN')}</a>
                                 <else />
-                                    <a href="javascript:void()">添加配菜</a>
+                                    <a href="javascript:void()">{pigcms{:L('EDIT_OPTIONS_BKADMIN')}</a>
                                 </if>
                             </li>
                         </ul>
@@ -40,42 +41,42 @@
                         <div class="grid-view">
                             <form enctype="multipart/form-data" class="form-horizontal" method="post" onsubmit="return checkForm();">
                                 <div class="form-group">
-                                    <label class="col-sm-1"><label for="sort_name">商品名称</label></label>
+                                    <label class="col-sm-1"><label for="sort_name">{pigcms{:L('GOOD_NAME_BKADMIN')}</label></label>
                                     <div style="padding-top: 4px;">{pigcms{$now_goods.name}</div>
                                     <input name="goods_id" type="hidden" value="{pigcms{$now_goods.goods_id}"/>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-1"><label for="sort_name">名称</label></label>
+                                    <label class="col-sm-1"><label for="sort_name">{pigcms{:L('OPTION_BKADMIN')}</label></label>
                                     <input name="dish_id" type="hidden" value="{pigcms{$dish_id|default='0'}"/>
                                     <input class="col-sm-2" size="20" name="dish_name" id="dish_name" type="text" value="{pigcms{$side_dish.name}"/>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-1"><label for="sort">下限</label></label>
+                                    <label class="col-sm-1"><label for="sort">{pigcms{:L('MIN_BKADMIN')}</label></label>
                                     <input class="col-sm-1" size="10" name="min" id="min" type="text" value="{pigcms{$side_dish.min|default='0'}"/>
                                     <span class="form_tips"></span>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-1"><label for="sort">上限</label></label>
+                                    <label class="col-sm-1"><label for="sort">{pigcms{:L('MAX_BKADMIN')}</label></label>
                                     <input class="col-sm-1" size="10" name="max" id="max" type="text" value="{pigcms{$side_dish.max|default='-1'}"/>
-                                    <span class="form_tips">填写-1 为不限</span>
+                                    <span class="form_tips">{pigcms{:L('UNLIMITED_BKADMIN')}</span>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-1" for="dish_type">可否多选</label>
+                                    <label class="col-sm-1" for="dish_type">{pigcms{:L('MULTI_CAP_BKADMIN')}</label>
                                     <select name="dish_type" id="dish_type">
-                                        <option value="0" <if condition="$side_dish['type'] eq 0">selected="selected"</if>>单选</option>
-                                        <option value="1" <if condition="$side_dish['type'] eq 1">selected="selected"</if>>多选</option>
+                                        <option value="0" <if condition="$side_dish['type'] eq 0">selected="selected"</if>>{pigcms{:L('SINGLE_SELECTION_BKADMIN')}</option>
+                                        <option value="1" <if condition="$side_dish['type'] eq 1">selected="selected"</if>>{pigcms{:L('MULTIPLE_SELECTION_BKADMIN')}</option>
                                     </select>
                                 </div>
                                 <div class="clearfix form-actions" id="single_list">
-                                    <button class="btn btn-success" type="button" onclick="addValue()">添加单品</button>
+                                    <button class="btn btn-success" type="button" onclick="addValue()">{pigcms{:L('ADD_ITEM2_BKADMIN')}</button>
                                     <div style="border-bottom: 1px solid #CCCCCC;height: 10px;margin-bottom: 10px"> </div>
                                     <volist name="dish_value" id="vo">
                                         <div class="form-group" id="old_{pigcms{$vo.id}">
-                                            <label class="col-sm-1"><label for="sort">单品名称</label></label>
+                                            <label class="col-sm-1"><label for="sort">{pigcms{:L('ITEM_NAME1_BKADMIN')}</label></label>
                                             <input class="col-sm-2" size="20" name="value_name-{pigcms{$vo.id}" id="value_name-{pigcms{$vo.id}" data-id="old_{pigcms{$vo.id}" type="text" value="{pigcms{$vo.name}"/>
-                                            <label class="col-sm-1"><label for="sort">单品价格</label></label>
+                                            <label class="col-sm-1"><label for="sort">{pigcms{:L('ITEM_PRICE_BKADMIN')}</label></label>
                                             <input class="col-sm-1" size="10" name="value_price-{pigcms{$vo.id}" id="value_price-{pigcms{$vo.id}" placeholder="0.00" data-id="old_{pigcms{$vo.id}" type="text" value="{pigcms{$vo.price}"/>
-                                            <label class="col-sm-1" style="float: right;"><label class="single_del" data-id="old_{pigcms{$vo.id}" for="sort">删除</label></label>
+                                            <label class="col-sm-1" style="float: right;"><label class="single_del" data-id="old_{pigcms{$vo.id}" for="sort">{pigcms{:L('DELETE_BKADMIN')}</label></label>
                                         </div>
                                     </volist>
                                 </div>
@@ -83,7 +84,7 @@
                                     <div class="col-md-offset-3 col-md-9">
                                         <button class="btn btn-info" type="submit">
                                             <i class="ace-icon fa fa-check bigger-110"></i>
-                                            保存
+                                            {pigcms{:L('SAVE_BKADMIN')}
                                         </button>
                                     </div>
                                 </div>
@@ -113,7 +114,7 @@
         $('.single_del').unbind("click");
         $('.single_del').bind('click',function () {
             var tid = $(this).data('id');
-            if(confirm('确定要删除此单品吗？')){
+            if(confirm("{pigcms{:L('SURE_REMOV_BKADMIN')}}")){
                 $('#'+tid).remove();
             }else{
                 return false;
@@ -123,7 +124,7 @@
 
     $('.single_del').bind('click',function () {
         var tid = $(this).data('id');
-        if(confirm('确定要删除此单品吗？')){
+        if(confirm("{pigcms{:L('SURE_REMOV_BKADMIN')}}")){
             var f_tid = tid.split("_");
             if(f_tid[0] == 'new'){
                 $('#'+tid).remove();
@@ -144,11 +145,11 @@
     function z_html(){
         var str = '<div class="form-group" id="new_'+new_num+'">';
 
-        str += '<label class="col-sm-1"><label for="sort">单品名称</label></label>';
+        str += '<label class="col-sm-1"><label for="sort">{pigcms{:L('ITEM_NAME1_BKADMIN')}</label></label>';
         str += '<input class="col-sm-2" size="20" name="value_name_new-'+new_num+'" id="value_name_new-'+new_num+'" data-id="new_'+new_num+'" type="text" value=""/>';
-        str += '<label class="col-sm-1"><label for="sort">单品价格</label></label>';
+        str += '<label class="col-sm-1"><label for="sort">{pigcms{:L('ITEM_PRICE_BKADMIN')}</label></label>';
         str += '<input class="col-sm-1" size="10" name="value_price_new-'+new_num+'" id="value_price_new-'+new_num+'" placeholder="0.00" data-id="new_'+new_num+'" type="text" value=""/>';
-        str += '<label class="col-sm-1" style="float: right;"><label class="single_del" data-id="new_'+new_num+'" for="sort">删除</label></label>';
+        str += '<label class="col-sm-1" style="float: right;"><label class="single_del" data-id="new_'+new_num+'" for="sort">{pigcms{:L('DELETE_BKADMIN')}</label></label>';
 
         return str;
     }
@@ -165,11 +166,11 @@
         });
 
         //$('form.form-horizontal').submit(function(){
-            //$(this).find('button[type="submit"]').html('保存中...').prop('disabled',true);
+            //$(this).find('button[type="submit"]').html('Save....').prop('disabled',true);
         //});
         /*分享图片*/
         $('#image-file').ace_file_input({
-            no_file:'gif|png|jpg|jpeg格式',
+            no_file:'gif|png|jpg|jpeg format',
             btn_choose:'选择',
             btn_change:'重新选择',
             no_icon:'fa fa-upload',
@@ -184,6 +185,10 @@
     function checkForm() {
         var is_ok = true;
         var value_list = {};
+        if($("#max").val() == '0'){
+            alert("{pigcms{:L('MAXIMUM_0_BKADMIN')}");
+            return false;
+        }
         $('form').find('input').each(function () {
             //alert($(this).attr('name') + $(this).val());
             if($(this).val() == ''){
@@ -218,7 +223,7 @@
             alert("{pigcms{:L('_PLEASE_INPUT_ALL_')}");
             return false;
         }else{
-            $('form.form-horizontal').find('button[type="submit"]').html('保存中...').prop('disabled',true);
+            $('form.form-horizontal').find('button[type="submit"]').html('Save....').prop('disabled',true);
             return true;
         }
     }

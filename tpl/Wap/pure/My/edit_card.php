@@ -9,8 +9,9 @@
 	<meta name="apple-mobile-web-app-status-bar-style" content="black">
 	<meta name="format-detection" content="telephone=no">
 	<meta name="format-detection" content="address=no">
-    <link href="{pigcms{$static_path}css/eve.7c92a906.css" rel="stylesheet"/>
+    <link href="{pigcms{$static_path}css/eve.7c92a906.peter.css" rel="stylesheet"/>
     <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/common.css?215"/>
+    <script type="text/javascript" src="{pigcms{:C('JQUERY_FILE_190')}" charset="utf-8"></script>
     <style>
 	    .btn-wrapper {
 	        margin: .2rem .2rem;
@@ -80,28 +81,20 @@
 <body id="index" data-com="pagecommon">
 <include file="Public:header"/>
 <div class="main">
-    <div class="this_nav">
-        <span id="back_span"></span>
-        Wallet
-    </div>
-    <div class="gray_line"></div>
+
         <div id="tips" class="tips"></div>
-        <form id="form" method="post" action="{pigcms{:U('My/edit_card')}">
-        
+        <form id="form" method="post" action="{pigcms{:U('My/edit_card')}" class="detail_block">
 		    <dl class="list list-in">
 		    	<dd>
 		    		<dl>
 		        		<dd class="dd-padding kv-line">
-		        			<h6>{pigcms{:L('_CREDITHOLDER_NAME_')}:</h6>
-		        			<input name="name" type="text" class="kv-v input-weak" pattern=".{2,}" data-err="{pigcms{:L('_B_PURE_MY_08_')}" value="{pigcms{$card.name}">
+		        			<input name="name" type="text" class="kv-v input-weak" placeholder="{pigcms{:L('_CREDITHOLDER_NAME_')}" pattern=".{2,}" data-err="{pigcms{:L('_B_PURE_MY_08_')}" value="{pigcms{$card.name}">
 		        		</dd>
 		        		<dd class="dd-padding kv-line">
-		        			<h6>{pigcms{:L('_CREDIT_CARD_NUM_')}:</h6>
-		        			<input name="card_num" type="tel" class="kv-v input-weak" pattern="\d{3}[\d\*]{10,}" data-err="{pigcms{:L('_CREDIT_CARD_NUM_')}" value="{pigcms{$card.card_num}">
+		        			<input name="card_num" type="tel" class="kv-v input-weak" placeholder="{pigcms{:L('_CREDIT_CARD_NUM_')}" pattern="\d{3}[\d\*]{10,}" data-err="{pigcms{:L('_CREDIT_CARD_NUM_')}" value="{pigcms{$card.card_num}">
 		        		</dd>
 		        		<dd class="dd-padding kv-line">
-		        			<h6>{pigcms{:L('_EXPRIRY_DATE_')}:</h6>
-		        			<input name="expiry" type="text" class="kv-v input-weak" pattern=".{4,}" data-err="{pigcms{:L('_EXPRIRY_DATE_')}" value="{pigcms{:transYM($card['expiry'])}">
+		        			<input name="expiry" type="text" class="kv-v input-weak" placeholder="{pigcms{:L('_EXPRIRY_DATE_')}" pattern=".{4,}" data-err="{pigcms{:L('_EXPRIRY_DATE_')}" value="{pigcms{:transYM($card['expiry'])}">
 		        		</dd>
 		        		<dd>
 			            	<label class="react">

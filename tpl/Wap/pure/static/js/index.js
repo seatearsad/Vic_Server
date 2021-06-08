@@ -119,7 +119,7 @@ $(function(){
 		centeredSlides: true*/
 	});
 
-	// motify.log('正在加载内容',0,{show:true});
+    //motify.log('正在加载333内容',0,{show:true});
 	if(user_long == '0'){
 		getUserLocation({errorAction:1,okFunction:'getRecommendList',errorFunction:'getRecommendList'});
 	}else{
@@ -179,6 +179,7 @@ var like_page	=	1;
 var page_count	=	10;
 var has_more = true;
 function getRecommendList(){
+	//alert("getRecommendList");
 	pageLoadTip({showBg: false});
 	has_more = false;
 	$.post(window.location.pathname + '?c=Groupservice&a=indexRecommendList&page=' + like_page + '&long=' + $.cookie('userLocationLong') + '&lat=' + $.cookie('userLocationLat') + '&sort=' + sortType, function (result) {

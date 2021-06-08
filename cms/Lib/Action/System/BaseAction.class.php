@@ -171,7 +171,7 @@ class BaseAction extends Action{
 			if ('index' == strtolower(MODULE_NAME) && 'main' == strtolower(ACTION_NAME)) {
 				$this->redirect(U("$module/$action"));
 			} else {
-				$this->error('您还没有这个使用权限，联系管理员开通！', U("$module/$action"));
+				$this->error(L('K_NACSCA'), U("$module/$action"));
 			}
 		}
 		$tmp	=	array();

@@ -435,8 +435,8 @@ final class Sms {
     }
 
     public function sendTwilioSms($phone,$ttxt){
-        require_once('cms/Lib/ORG/Twilio/Twilio.php');
-
+        //require_once('cms/Lib/ORG/Twilio/Twilio.php');
+        import('@.ORG.Twilio.Twilio');
         $where = array('tab_id'=>'twilio','gid'=>46);
         $result = D('Config')->field(true)->where($where)->select();
 

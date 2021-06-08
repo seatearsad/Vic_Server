@@ -22,9 +22,13 @@ $_GET['g'] = 'Wap';
 $runtime = '~Wap_runtime.php';
 define('RUNTIME_FILE',RUNTIME_PATH.$runtime);
 if(!APP_DEBUG && is_file(RUNTIME_FILE)){
+
     require RUNTIME_FILE;
 }else{
+
     define('THINK_PATH', dirname(__FILE__).'/core/');
+
     require THINK_PATH.'Common/runtime.php';
+
 }
 ?>
