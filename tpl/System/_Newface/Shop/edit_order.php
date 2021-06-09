@@ -357,7 +357,6 @@
                     $(this).find('input').bind('input porpertychange', changeGoodNum);
                     $(this).find('input').on('focusout', checkNum);
                 });
-
                 $('#freight_charge').bind('input porpertychange', changeGoodNum);
                 $('#freight_charge').on('focusout', checkNum);
             });

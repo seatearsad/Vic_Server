@@ -9915,3 +9915,19 @@ body.md-skin {
 .tutti_obj_height_small{
   height:20px;
 }
+.tutti_icon_ok{
+  font-size: 20px;
+  color:#16987e;
+}
+.tutti_icon_danger{
+  font-size: 20px;
+  color:#ea394c;
+}
+.tutti_icon_default{
+  font-size: 20px;
+  color:#b3b3b3;
+}
+.tutti_icon_dark{
+  font-size: 20px;
+  color: #525252;
+}

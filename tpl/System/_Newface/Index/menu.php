@@ -22,11 +22,11 @@
                                     </td>
                                 </tr>
                             <volist name="menus" id="rowset">
-                                <tr>
+                                <tr class="menu_list">
                                     <th width="150px">
                                         <label><input type="checkbox" class="menu_{pigcms{$rowset['id']} father_menu" data-id="{pigcms{$rowset['id']}" value="{pigcms{$rowset['id']}" name="menus[]" <if condition="in_array($rowset['id'], $admin['menus'])">checked</if>/>　{pigcms{$rowset['name']}</label>
                                     </th>
-                                    <td  class="">
+                                    <td >
                                         <volist name="rowset['lists']" id="row">
                                         <label><input type="checkbox" class="child_menu_{pigcms{$row['fid']} child_menu" value="{pigcms{$row['id']}"  name="menus[]" data-fid="{pigcms{$row['fid']}"  <if condition="in_array($row['id'], $admin['menus'])">checked</if> />　{pigcms{$row['name']}</label>　
                                         </volist>
@@ -46,44 +46,73 @@
         </div>
 
 <script type="text/javascript">
+
 $(document).ready(function(){
 
 	$('#all').click(function(){
-		if ($(this).attr('checked')) {
-			$('.father_menu, .child_menu').attr('checked', true);
+        if($(this).is(':checked')){
+			$('.father_menu, .child_menu').prop('checked',true);
 		} else {
-			$('.father_menu, .child_menu').attr('checked', false);
+			$('.father_menu, .child_menu').prop('checked', false);
 		}
 	});
 
-    $('.father_menu').each(function () {
-        console.log("father_menu");
+    $('table').find('.menu_list').each(function () {
+        //console.log("father_menu");
         //alert($(this).find('input').data('for'));
         //var input = $(this).find('input');
-        $(this).bind('input porpertychange', father_changed);
-        //$(this).find('input').on('click', checkNum);
+        //$(this).find("father_menu").bind('input porpertychange', father_changed(this));
+        //$(this).find(".father_menu").on('click',father_changed(this));
+        $(this).find(".father_menu").click(function () {
+            father_changed(this);
+        });
+
+        $(this).find(".child_menu").click(function () {
+            child_changed(this);
+        });
     });
 
     $('table').find('.child_menu').each(function () {
-        console.log("child_menu");
-        $(this).bind('input porpertychange', child_changed);
+        $(this).find("input").bind('input porpertychange', child_changed);
         //alert($(this).find('input').data('for'));
         //var input = $(this).find('input');
         //$(this).find('input').bind('input porpertychange', changeGoodNum);
         //$(this).find('input').on('focusout', checkNum);
     });
 
-    function father_changed(){
-        var fid = $(this).data(id');
-        console.log("father_changed data-id=".fid);
-        // $('.child_menu_' + fid).each(function(){
-        //     if ($(this).attr('checked')) {
-        //         flag = true;
-        //     }
-        // });
+    function father_changed(obj){
+        var fid = $(obj).data('id');
+        //console.log("father_changed="+fid);
+
+        $(obj).parents('.menu_list').find('.child_menu_' + fid).each(function(){
+            if($(obj).is(':checked')){
+            }else{
+                $(this).prop('checked',false);
+            }
+
+            // if ($(this).attr('checked')) {
+            //     flag = true;
+            // }
+        });
     }
-    function child_changed(){
-        console.log("child_changed");
+    function child_changed(obj){
+        var fid = $(obj).data('fid');
+        //console.log("child_changed="+fid);
+        if($(obj).is(':checked')){
+            console.log($(".menu_"+fid).attr('class'));
+            $(".menu_"+fid).prop('checked',true);
+        }
+
+        // $(obj).parents('.menu_list').find('.child_menu_' + fid).each(function(){
+        //     if($(obj).is(':checked')){
+        //     }else{
+        //         $(this).attr('checked',$(obj).is(':checked'));
+        //     }
+        //
+        //     // if ($(this).attr('checked')) {
+        //     //     flag = true;
+        //     // }
+        // });
     }
 
 	// $('.father_menu').click(function(){
@@ -111,4 +140,9 @@ $(document).ready(function(){
 	// });
 });
 </script>
+<<<<<<< HEAD
 <!--include file="Public:footer_inner"/-->
+=======
+
+<include file="Public:footer_inner"/>
+>>>>>>> 36ca397c9297e257b084bd3dd6ef32ffbc5688fb

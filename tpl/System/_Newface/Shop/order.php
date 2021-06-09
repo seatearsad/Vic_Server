@@ -145,6 +145,7 @@
                                 <th data-hide="all">{pigcms{:L('_BACK_DELIVERY_STATUS_')}</th>
                                 <th data-hide="all">送餐员+电话</th>
                                 <th data-hide="all">{pigcms{:L('_BACK_PAY_STATUS_')}</th>
+                                <th data-hide="all">（调试信息—订单状态）</th>
                                 <th data-sortable="false">{pigcms{:L('_BACK_CZ_')}</th>
                             </tr>
                             </thead>
@@ -180,7 +181,18 @@
                                                 H:i:s",###}
                                             </if>
                                         </td>
-                                        <td>{pigcms{$vo.status_str}</td>
+                                        <td>
+
+                                            <if condition="$vo.status eq 2 or $vo.status eq 3 or $vo.status eq 1">
+                                                <li class="fa fa-check-circle tutti_icon_ok"></li>
+                                            </if>
+                                            <if condition="$vo.status eq 4">
+                                                <li class="fa fa-ban tutti_icon_default"></li>
+                                            </if>
+                                            <if condition="$vo.status eq 0">
+                                                <li class="fa fa-circle tutti_icon_danger"></li>
+                                            </if>
+                                        </td>
 
                                         <!--                                            <if condition="$system_session['level'] neq 3">-->
                                         <!--                                                <td><a target="_blank" href="{pigcms{:U('Bill/merchant_money_list',array('mer_id'=>$vo['mer_id']))}">{pigcms{:L('_BACK_INVOICE_')}</a>-->
@@ -204,20 +216,21 @@
                                         </td>
 <!--                                        {pigcms{$vo.pay_status} -({pigcms{$vo.pay_type})--->
                                         <td><span style="color: green">{pigcms{$vo.pay_type_str}</span>
+                                        <td>{pigcms{$vo.status_str}({pigcms{$vo.status})
                                         </td>
 
                                         <td>
                                             <div class="btn-group">
                                                  <div class="float-right">
                                                      <if condition="$vo.status eq 0 AND $vo.paid eq 1">
-                                                         <a data-href="{pigcms{:U('Shop/refund_update',array('order_id'=>$vo['order_id']))}" class="refund"><button class="btn btn-white text-grey btn-xs" type="button">{pigcms{:L('_BACK_MANUAL_REFUND_')}</button></a>
+                                                         <a data-href="{pigcms{:U('Shop/refund_update',array('order_id'=>$vo['order_id']))}" class="refund"><li class="fa fa-times-rectangle tutti_icon_dark" title="{pigcms{:L('_BACK_MANUAL_REFUND_')}"></li></a>
                                                      </if>
-                                                     <a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Shop/order_detail',array('order_id'=>$vo['order_id'],'frame_show'=>true))}','{pigcms{:L(\'_BACK_ORDER_DETAIL_\')}',920,520,true,false,false,false,'detail',true);"><button class="btn btn-white text-grey btn-xs" type="button">{pigcms{:L('_BACK_VIEW_')}</button></a>
+                                                     &nbsp;<a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Shop/order_detail',array('order_id'=>$vo['order_id'],'frame_show'=>true))}','{pigcms{:L(\'_BACK_ORDER_DETAIL_\')}',920,520,true,false,false,false,'detail',true);"><li class="fa fa-list-ul tutti_icon_dark" title="{pigcms{:L('_BACK_VIEW_')}"></li></a>
 
                                                      <php>if($vo['status'] > 0){</php>
-                                                     <a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Shop/edit_order',array('order_id'=>$vo['order_id']))}','{pigcms{:L(\'_BACK_EDIT_\')}',920,520,true,false,false,editbtn,'edit',true);"><button class="btn btn-white text-grey btn-xs" type="button">{pigcms{:L('_BACK_EDIT_')}</button></a>
+                                                     &nbsp;<a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Shop/edit_order',array('order_id'=>$vo['order_id']))}','{pigcms{:L(\'_BACK_EDIT_\')}',920,520,true,false,false,editbtn,'edit',true);"><li class="fa fa-pencil-square tutti_icon_dark" title="{pigcms{:L('_BACK_EDIT_')}"></li></a>
                                                      <php>}</php>
-                                                     <a href="{pigcms{:U('Shop/del',array('id'=>$vo['order_id']))}" onclick="return confirm('{pigcms{:L(\'_B_PURE_MY_84_\')}')" style="color: red"><button class="btn btn-white text-grey btn-xs" type="button">{pigcms{:L('_BACK_DEL_')}</button></a>
+                                                     &nbsp;<a href="{pigcms{:U('Shop/del',array('id'=>$vo['order_id']))}" onclick="return confirm('{pigcms{:L(\'_B_PURE_MY_84_\')}')" style="color: red"><li class="fa fa-trash-o tutti_icon_dark" title="{pigcms{:L('_BACK_DEL_')}"></li></a>
                                                 </div>
                                             </div>
                                         </td>
