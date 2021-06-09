@@ -28,11 +28,11 @@
             </li>
 
             <!---------------------------   栏目导航信息  --------------------->
-
+            <if condition="$over_view eq 1">
             <li <if condition="$module_name eq 'Index' and $action_name eq 'index'">class="active"</if>>
                 <a href="{pigcms{:U('Index/index')}"><i class="fa fa-diamond"></i> <span class="nav-label">{pigcms{:L('_BACK_OVERVIEW_')}</span></a>
             </li>
-
+            </if>
             <volist name="system_menu" id="vo">
                 <li <if condition="$module_name eq 'Index' and $action_name eq 'index'"><else/><if condition="$module_name eq $vo['module']">class="active"</if></if>>
                     <a href="#"><i class="fa fa-{pigcms{$vo.icon}"></i> <span

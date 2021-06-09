@@ -22,7 +22,7 @@
 
         </div>
     </div>
-    <div class="row wrapper wrapper-content animated fadeInRight">
+    <div class="row wrapper wrapper-content animated fadeInRight" id="main_chart">
         <div class="col-lg-9">
             <div class="ibox ">
                 <div class="ibox-content">
@@ -168,20 +168,26 @@
             var re_data = {'day':select_day,'city_id':city_id};
             $("#user_title").html(user_title);
             $.post("{pigcms{:U('Index/ajax_new_data')}",re_data,function(data){
-                createChart(data.data_array,'lineChart');
+                if(data == ""){
+                    $("#main_chart").hide();
+                }else {
+                    $("#main_chart").show();
 
-                createChart(data.city_array,'lineCityChart');
+                    createChart(data.data_array, 'lineChart');
 
-                $('#cash_total').html('$ '+data.total);
-                $('#today_cash').html(data.today_cash);
+                    createChart(data.city_array, 'lineCityChart');
 
-                $('#city_total').html('$ '+data.city_total);
-                $('#city_total_label').html(data.city_total);
+                    $('#cash_total').html('$ ' + data.total);
+                    $('#today_cash').html(data.today_cash);
 
-                $('#city_select').val(data.city_id);
+                    $('#city_total').html('$ ' + data.city_total);
+                    $('#city_total_label').html(data.city_total);
 
-                $('#all_user').html(data.all_user);
-                $('#city_user').html(data.city_user)
+                    $('#city_select').val(data.city_id);
+
+                    $('#all_user').html(data.all_user);
+                    $('#city_user').html(data.city_user);
+                }
             });
         }
 
