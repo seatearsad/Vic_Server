@@ -140,9 +140,6 @@ $(document).ready(function(){
 	// });
 });
 </script>
-<<<<<<< HEAD
-<!--include file="Public:footer_inner"/-->
-=======
 
-<include file="Public:footer_inner"/>
->>>>>>> 36ca397c9297e257b084bd3dd6ef32ffbc5688fb
+<!--include file="Public:footer_inner"/-->
+
