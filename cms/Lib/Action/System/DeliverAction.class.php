@@ -79,40 +79,50 @@ class DeliverAction extends BaseAction {
 	 * 配送员列表
 	 */
     public function user() {
+
+        $where=" 1 ";
         //搜索
         if (!empty($_GET['keyword'])) {
 
             if ($_GET['searchtype'] == 'uid') {
-                $condition_user['u.uid'] = $_GET['keyword'];
+                $where.=" AND u.uid='".$_GET['keyword']."' ";
+                //$condition_user['u.uid'] = $_GET['keyword'];
             } else if ($_GET['searchtype'] == 'nickname') {
-                $condition_user['u.name'] = array('like', '%' . $_GET['keyword'] . '%');
+                $where.=" AND (u.name like '%".$_GET['keyword']."%' OR u.family_name like '%".$_GET['keyword']. "%')";
+                //$condition_user['u.name'] = array('like', '%' . $_GET['keyword'] . '%');
             } else if ($_GET['searchtype'] == 'phone') {
-                $condition_user['u.phone'] = array('like', '%' . $_GET['keyword'] . '%');
+                $where.=" AND u.phone like '%".$_GET['keyword']."%' ";
+                //$condition_user['u.phone'] = array('like', '%' . $_GET['keyword'] . '%');
             } else if ($_GET['searchtype'] == 'mail') {
-                $condition_user['u.email'] = array('like', '%' . $_GET['keyword'] . '%');
+                $where.=" AND u.email like '%".$_GET['keyword']."%' ";
+//                $condition_user['u.email'] = array('like', '%' . $_GET['keyword'] . '%');
             }
         }
 
         if($_GET['city_id']){
             $this->assign('city_id',$_GET['city_id']);
             if($_GET['city_id'] != 0)
-                $condition_user['u.city_id'] = $_GET['city_id'];
+                $where .=" AND u.city_id=".$_GET['city_id']." ";
+//                $condition_user['u.city_id'] = $_GET['city_id'];
         }else{
             $this->assign('city_id',0);
         }
         //var_dump($condition_user);die();
         //garfunkel 判断城市管理员
         if($this->system_session['level'] == 3){
-            $condition_user['u.city_id'] = $this->system_session['area_id'];
+            $where .=" AND u.city_id=".$this->system_session['area_id']." ";
+            //$condition_user['u.city_id'] = $this->system_session['area_id'];
         }
-
+        //echo($where);
         $city = D('Area')->where(array('area_type'=>2,'is_open'=>1))->select();
 
         $condition_user['u.group'] = 1;
-        $count_user = $this->deliver_user->join('as u left join '.C('DB_PREFIX').'area as a ON u.city_id=a.area_id')->where($condition_user)->count();
+        //$count_user = $this->deliver_user->join('as u left join '.C('DB_PREFIX').'area as a ON u.city_id=a.area_id')->where($condition_user)->count();
+        $count_user = $this->deliver_user->join('as u left join '.C('DB_PREFIX').'area as a ON u.city_id=a.area_id')->where($where)->count();
         import('@.ORG.system_page');
         $p = new Page($count_user, 20);
-        $user_list = $this->deliver_user->field('u.*,a.area_name')->join('as u left join '.C('DB_PREFIX').'area as a ON u.city_id=a.area_id')->where($condition_user)->order('`uid` DESC')->limit($p->firstRow . ',' . $p->listRows)->select();
+        //$user_list = $this->deliver_user->field('u.*,a.area_name')->join('as u left join '.C('DB_PREFIX').'area as a ON u.city_id=a.area_id')->where($condition_user)->order('`uid` DESC')->limit($p->firstRow . ',' . $p->listRows)->select();
+        $user_list = $this->deliver_user->field('u.*,a.area_name')->join('as u left join '.C('DB_PREFIX').'area as a ON u.city_id=a.area_id')->where($where)->order('`uid` DESC')->limit($p->firstRow . ',' . $p->listRows)->select();
         //var_dump($user_list);die();
         $this->assign('user_list', $user_list);
         $pagebar = $p->show2();
