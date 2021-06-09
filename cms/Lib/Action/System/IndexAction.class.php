@@ -467,92 +467,96 @@ class IndexAction extends BaseAction {
     }
 
     public function ajax_new_data(){
-        $day = $_POST['day'];
-        switch ($day){
-            case 'day':
-                $days = 1;
-                break;
-            case 'week':
-                $days = 7;
-                break;
-            case 'month':
-                $days = 30;
-                break;
-        }
+        if($this->overView == 1) {
+            $day = $_POST['day'];
+            switch ($day) {
+                case 'day':
+                    $days = 1;
+                    break;
+                case 'week':
+                    $days = 7;
+                    break;
+                case 'month':
+                    $days = 30;
+                    break;
+            }
 
-        $city_id = $_POST['city_id'] == 0 ? 105 : $_POST['city_id'];
+            $city_id = $_POST['city_id'] == 0 ? 105 : $_POST['city_id'];
 
-        //$today_zero_time = mktime(0,0,0,date('m',$_SERVER['REQUEST_TIME']),date('d',$_SERVER['REQUEST_TIME']), date('Y',$_SERVER['REQUEST_TIME']));
-        $today_zero_time = mktime(0,0,0,1,5, 2018);
-        $begin_time = $today_zero_time-($days-1)*3600*24;
-        //$end_time = time();
-        $end_time = $today_zero_time + 3600*24;
-        $condition_merchant_request['pay_time'] = array(array('egt',$begin_time),array('elt',$end_time));
+            //$today_zero_time = mktime(0,0,0,date('m',$_SERVER['REQUEST_TIME']),date('d',$_SERVER['REQUEST_TIME']), date('Y',$_SERVER['REQUEST_TIME']));
+            $today_zero_time = mktime(0, 0, 0, 1, 5, 2018);
+            $begin_time = $today_zero_time - ($days - 1) * 3600 * 24;
+            //$end_time = time();
+            $end_time = $today_zero_time + 3600 * 24;
+            $condition_merchant_request['pay_time'] = array(array('egt', $begin_time), array('elt', $end_time));
 
-        $condition_merchant_request['status']=array('lt',4);
-        $condition_merchant_request['is_del']=0;
-        $condition_merchant_request['paid'] = 1;
+            $condition_merchant_request['status'] = array('lt', 4);
+            $condition_merchant_request['is_del'] = 0;
+            $condition_merchant_request['paid'] = 1;
 
-        $condition_today_request['pay_time'] = array(array('egt',$today_zero_time),array('elt',$end_time));
-        $condition_today_request['status']=array('lt',4);
-        $condition_today_request['is_del']=0;
-        $condition_today_request['paid'] = 1;
+            $condition_today_request['pay_time'] = array(array('egt', $today_zero_time), array('elt', $end_time));
+            $condition_today_request['status'] = array('lt', 4);
+            $condition_today_request['is_del'] = 0;
+            $condition_today_request['paid'] = 1;
 
-        $today = M('Shop_order')->field('sum(total_price+tip_charge-coupon_price-delivery_discount-merchant_reduce) as total_cash')->where($condition_today_request)->select();
-        $today_cash = $today[0]['total_cash'];
+            $today = M('Shop_order')->field('sum(total_price+tip_charge-coupon_price-delivery_discount-merchant_reduce) as total_cash')->where($condition_today_request)->select();
+            $today_cash = $today[0]['total_cash'];
 
-        $res_shop = M('Shop_order')->field('total_price+tip_charge-coupon_price-delivery_discount-merchant_reduce as cash_flow,total_price+tip_charge as sales,payment_money ,pay_type,pay_time')->where($condition_merchant_request)->order('pay_time asc')->select();
+            $res_shop = M('Shop_order')->field('total_price+tip_charge-coupon_price-delivery_discount-merchant_reduce as cash_flow,total_price+tip_charge as sales,payment_money ,pay_type,pay_time')->where($condition_merchant_request)->order('pay_time asc')->select();
 
-        $condition_city_request['o.pay_time'] = array(array('egt',$today_zero_time),array('elt',$end_time));
-        $condition_city_request['o.status']=array('lt',4);
-        $condition_city_request['o.is_del']=0;
-        $condition_city_request['o.paid'] = 1;
-        $condition_city_request['m.city_id'] = $city_id;
-        $res_city = M('Shop_order')->field('total_price+tip_charge-coupon_price-delivery_discount-merchant_reduce as cash_flow,total_price+tip_charge as sales,payment_money ,pay_type,pay_time')->join(' as o left join '.C('DB_PREFIX').'merchant_store m ON m.store_id=o.store_id')->where($condition_city_request)->order('o.pay_time asc')->select();
+            $condition_city_request['o.pay_time'] = array(array('egt', $today_zero_time), array('elt', $end_time));
+            $condition_city_request['o.status'] = array('lt', 4);
+            $condition_city_request['o.is_del'] = 0;
+            $condition_city_request['o.paid'] = 1;
+            $condition_city_request['m.city_id'] = $city_id;
+            $res_city = M('Shop_order')->field('total_price+tip_charge-coupon_price-delivery_discount-merchant_reduce as cash_flow,total_price+tip_charge as sales,payment_money ,pay_type,pay_time')->join(' as o left join ' . C('DB_PREFIX') . 'merchant_store m ON m.store_id=o.store_id')->where($condition_city_request)->order('o.pay_time asc')->select();
 
-        $data_array = array();
-        $total = 0;
-        foreach ($res_shop as $v){
-            if($days == 1)
-                $show_time = date('H',$v['pay_time']);
-            else
-                $show_time = date('m-d',$v['pay_time']);
+            $data_array = array();
+            $total = 0;
+            foreach ($res_shop as $v) {
+                if ($days == 1)
+                    $show_time = date('H', $v['pay_time']);
+                else
+                    $show_time = date('m-d', $v['pay_time']);
 
-            $data_array[$show_time]['cash_flow'] += $v['cash_flow'];
-            $data_array[$show_time]['sales'] += $v['sales'];
-            $total += $v['cash_flow'];
-        }
-        //ksort($data_array);
-        //user
-        $condition_user['add_time'] = array(array('egt',$begin_time),array('elt',$end_time));
-        $condition_user['status'] = 1;
-        $all_user = D('User')->field('count(uid) as total')->where($condition_user)->select();
-        $all_user = $all_user[0]['total'];
+                $data_array[$show_time]['cash_flow'] += $v['cash_flow'];
+                $data_array[$show_time]['sales'] += $v['sales'];
+                $total += $v['cash_flow'];
+            }
+            //ksort($data_array);
+            //user
+            $condition_user['add_time'] = array(array('egt', $begin_time), array('elt', $end_time));
+            $condition_user['status'] = 1;
+            $all_user = D('User')->field('count(uid) as total')->where($condition_user)->select();
+            $all_user = $all_user[0]['total'];
 
-        $condition_city_user['u.add_time'] = array(array('egt',$today_zero_time),array('elt',$end_time));
-        $condition_city_user['u.status'] = 1;
-        $condition_city_user['a.city'] = $city_id;
-        $condition_city_user['a.default'] = 1;
-        $city_user = D('User')->field('count(u.uid) as total')->join(' as u left join '.C('DB_PREFIX').'user_adress a ON a.uid=u.uid')->where($condition_city_user)->select();
-        $city_user = $city_user[0]['total'];
+            $condition_city_user['u.add_time'] = array(array('egt', $today_zero_time), array('elt', $end_time));
+            $condition_city_user['u.status'] = 1;
+            $condition_city_user['a.city'] = $city_id;
+            $condition_city_user['a.default'] = 1;
+            $city_user = D('User')->field('count(u.uid) as total')->join(' as u left join ' . C('DB_PREFIX') . 'user_adress a ON a.uid=u.uid')->where($condition_city_user)->select();
+            $city_user = $city_user[0]['total'];
 
-        ///city////
-        $city_array = array();
-        $city_total = 0;
-        foreach ($res_city as $v){
-            $show_time = date('H',$v['pay_time']);
+            ///city////
+            $city_array = array();
+            $city_total = 0;
+            foreach ($res_city as $v) {
+                $show_time = date('H', $v['pay_time']);
 
-            $city_array[$show_time]['cash_flow'] += $v['cash_flow'];
-            $city_array[$show_time]['sales'] += $v['sales'];
-            $city_total += $v['cash_flow'];
-        }
+                $city_array[$show_time]['cash_flow'] += $v['cash_flow'];
+                $city_array[$show_time]['sales'] += $v['sales'];
+                $city_total += $v['cash_flow'];
+            }
 
-        $r_data = array('total'=>$total,'data_array'=>$data_array,'today_cash'=>$today_cash,
-            'city_total'=>$city_total,'city_array'=>$city_array,'city_id'=>$city_id,
-            'all_user'=>$all_user,'city_user'=>$city_user
+            $r_data = array('total' => $total, 'data_array' => $data_array, 'today_cash' => $today_cash,
+                'city_total' => $city_total, 'city_array' => $city_array, 'city_id' => $city_id,
+                'all_user' => $all_user, 'city_user' => $city_user
             );
 
-        $this->ajaxReturn($r_data);
+            $this->ajaxReturn($r_data);
+        }else{
+            $this->ajaxReturn(array());
+        }
     }
 
     public function export($result,$type_name,$day,$peroid){
@@ -913,14 +917,17 @@ class IndexAction extends BaseAction {
                 }
                 $database_area->where(array('id' => $id))->data($_POST)->save();
                 $this->success('Success');
+                //$this->success($id);
+                //echo "<script>window.top.artiframe('/admin.php?g=System&c=Index&a=menu&admin_id=14','{pigcms{:L(\'B_PERMISSIONS\')}',800,500,true,false,false,editbtn,'edit',true);</script>";
             } else {
             	//$_POST['level'] = 0;
                 if (empty($_POST['pwd'])) {
                     $this->error(L('K_PASS_EMPTY'));
                 }
                 $_POST['pwd'] = md5($_POST['pwd']);
-                if ($database_area->data($_POST)->add()) {
-                    $this->success(L('J_SUCCEED1'));
+                if ($new_id = $database_area->data($_POST)->add()) {
+                    $this->success($new_id);
+                    //redirect(U('Index/menu',array('admin_id'=>$new_id)));
                 } else {
                     $this->error('添加失败！请重试~');
                 }

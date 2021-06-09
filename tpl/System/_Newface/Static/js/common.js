@@ -541,12 +541,16 @@ $(function(){
 						kind_editor.sync();
 					}
 					if($(form).attr('frame') == 'true' || $(form).attr('refresh') == 'true'){
-						window.top.msg(2,'Submitting, please wait a moment.',true,360);
+                        if(!$(form).data('call_fun')) {
+                            window.top.msg(2, 'Submitting, please wait a moment.', true, 360);
+                        }
 						$.post($(form).attr('action'),$(form).serialize(),function(result){
 							if(result.status == 1){
 
 								if($(form).data('call_fun')){
-									submitCallBack(result.info);
+									//submitCallBack(result.info);
+                                    //window.top.artiframe('/admin.php?c=Index&a=menu&admin_id=14','Permissions',800,500,true,false,false,editbtn,'edit',true);
+                                    window.location.href = '/admin.php?c=Index&a=menu&admin_id='+result.info;
 								}else{
 									window.top.msg(1,result.info,true);
 									if($(form).attr('refresh') == 'true'){

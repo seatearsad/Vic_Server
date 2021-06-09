@@ -7,6 +7,7 @@ class BaseAction extends Action{
 	protected $system_session;
 	protected $static_path;
 	protected $static_public;
+	protected $overView;
     protected function _initialize(){
 		if(empty($_SERVER['REQUEST_SCHEME'])){
 			if($_SERVER['SERVER_PORT'] == '443'){
@@ -270,6 +271,13 @@ class BaseAction extends Action{
 			$system_menu	=	$this->menu_sort($system_menu,'sort_menu');
 		}
 		$this->assign('system_menu',$system_menu);
+		if($this->system_session['level'] == 2 || in_array(0,$this->system_session['menus'])){
+            $this->overView = 1;
+        }else{
+            $this->overView = 0;
+        }
+
+        $this->assign('over_view',$this->overView);
 		if($_GET['frame']){
 			$this->assign('bg_color', '#F3F3F3');
 		}

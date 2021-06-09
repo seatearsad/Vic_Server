@@ -13,6 +13,14 @@
                         <form method="post" id="myform" action="{pigcms{:U('Index/savemenu')}" frame="true" refresh="true">
                             <table cellpadding="0" cellspacing="0" class="table_form" width="100%">
                             <input type="hidden" name="admin_id" value="{pigcms{$admin.id}"/>
+                                <tr>
+                                    <th width="150px">
+                                        <label><input type="checkbox" class="menu_0 father_menu" data-id="0" value="0" name="menus[]" <if condition="in_array('0', $admin['menus'])">checked</if>/>　{pigcms{:L('_BACK_OVERVIEW_')}</label>
+                                    </th>
+                                    <td  class="">
+
+                                    </td>
+                                </tr>
                             <volist name="menus" id="rowset">
                                 <tr>
                                     <th width="150px">
@@ -103,5 +111,4 @@ $(document).ready(function(){
 	// });
 });
 </script>
-        --------------------
-<include file="Public:footer_inner"/>
+<!--include file="Public:footer_inner"/-->

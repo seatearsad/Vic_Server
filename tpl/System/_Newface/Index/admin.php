@@ -10,7 +10,7 @@
             <div class="col-lg-12">
                 <div class="ibox">
                     <div class="ibox-content">
-                        <form id="myform" method="post" action="{pigcms{:U('Index/saveAdmin')}" frame="true" refresh="true">
+                        <form id="myform" method="post" action="{pigcms{:U('Index/saveAdmin')}" frame="true" refresh="true" <if condition="$_GET['id'] eq ''">data-call_fun="true"</if>>
                             <input type="hidden" name="id" value="{pigcms{$_GET['id']}"/>
                             <div class="form-group  row">
                                 <label class="col-sm-3 col-form-label">{pigcms{:L('B_USERNAME')}</label>
