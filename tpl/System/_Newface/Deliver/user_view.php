@@ -111,89 +111,93 @@
                     <input type="text" placeholder="Account" class="input fl" name="account" size="30" validate="maxlength:50,required:true" value="{pigcms{$card.account}" />
                 </td>
             </tr>
+
             <if condition="$now_user['reg_status'] gt 1">
-            <tr>
-                <th width="15%">{pigcms{:L('_BACK_DRIVER_LIC_')}</th>
-                <td colspan=3>
-                    <div style="display:inline-block;" id="J_selectImage_0">
-                        <div class="btn btn-sm btn-success" style="position:relative;height:50px;line-height: 50px;text-align: left;">
-                            {pigcms{:L('_ND_UPLOAD1_')}
+                <tr>
+                    <th width="15%">{pigcms{:L('_BACK_DRIVER_LIC_')}</th>
+                    <td colspan=3>
+                        <div style="display:inline-block;" id="J_selectImage_0">
+                            <div class="btn btn-sm btn-success" style="position:relative;height:50px;line-height: 50px;text-align: left;">
+                                {pigcms{:L('_ND_UPLOAD1_')}
+                            </div>
                         </div>
-                    </div>
-                    <if condition="$img['driver_license'] eq ''">
-                        <div class="img_0">
+                        <if condition="$img['driver_license'] eq ''">
+                            <div class="img_0">
 
-                        </div>
-                    <else />
-                        <div class="img_0" style="height: 100px">
-                            <img src="{pigcms{:C('config.site_url')}{pigcms{$img['driver_license']}" height="100"/>
-                        </div>
-                    </if>
-                </td>
-            </tr>
-            <tr>
-                <th width="15%">{pigcms{:L('_BACK_VEHICLE_INSU_')}</th>
-                <td colspan=3>
-                    <div style="display:inline-block;" id="J_selectImage_1">
-                        <div class="btn btn-sm btn-success" style="position:relative;height:50px;line-height: 50px;text-align: left;">
-                            {pigcms{:L('_ND_UPLOAD2_')}
-                        </div>
-                    </div>
-                    <if condition="$img['insurance'] eq ''">
-                        <div class="img_1">
-
-                        </div>
+                            </div>
                         <else />
-                        <div class="img_1" style="height: 100px">
-                            <img src="{pigcms{:C('config.site_url')}{pigcms{$img['insurance']}" height="100"/>
+                            <div class="img_0" style="height: 100px">
+                                <img src="{pigcms{:C('config.site_url')}{pigcms{$img['driver_license']}" height="100"/>
+                            </div>
+                        </if>
+                    </td>
+                </tr>
+                <tr>
+                    <th width="15%">{pigcms{:L('_BACK_VEHICLE_INSU_')}1111</th>
+                    <td colspan=3>
+                        <div style="display:inline-block;" id="J_selectImage_1">
+                            <div class="btn btn-sm btn-success" style="position:relative;height:50px;line-height: 50px;text-align: left;">
+                                {pigcms{:L('_ND_UPLOAD2_')}
+                            </div>
                         </div>
-                    </if>
-                </td>
-            </tr>
-            <tr>
-                <th width="15%">{pigcms{:L('_BACK_PROOF_WORK_')}</th>
-                <td colspan=3>
-                    <div style="display:inline-block;" id="J_selectImage_2">
-                        <div class="btn btn-sm btn-success" style="position:relative;height:50px;line-height: 50px;text-align: left;">
-                            {pigcms{:L('_ND_UPLOAD3_')}
-                        </div>
-                    </div>
-                    <if condition="$img['certificate'] eq ''">
-                        <div class="img_2">
+                        <if condition="$img['insurance'] eq ''">
+                            <div class="img_1">
 
+                            </div>
+                            <else />
+                            <div class="img_1" style="height: 100px">
+                                <img src="{pigcms{:C('config.site_url')}{pigcms{$img['insurance']}" height="100"/>
+                            </div>
+                        </if>
+                    </td>
+                </tr>
+                <tr>
+                    <th width="15%">{pigcms{:L('_BACK_PROOF_WORK_')}</th>
+                    <td colspan=3>
+                        <div style="display:inline-block;" id="J_selectImage_2">
+                            <div class="btn btn-sm btn-success" style="position:relative;height:50px;line-height: 50px;text-align: left;">
+                                {pigcms{:L('_ND_UPLOAD3_')}
+                            </div>
                         </div>
-                        <else />
-                        <div class="img_2" style="height: 100px">
-                            <img src="{pigcms{:C('config.site_url')}{pigcms{$img['certificate']}" height="100"/>
-                        </div>
-                    </if>
-                </td>
-            </tr>
+                        <if condition="$img['certificate'] eq ''">
+                            <div class="img_2">
+
+                            </div>
+                            <else />
+                            <div class="img_2" style="height: 100px">
+                                <img src="{pigcms{:C('config.site_url')}{pigcms{$img['certificate']}" height="100"/>
+                            </div>
+                        </if>
+                    </td>
+                </tr>
             </if>
+
             <if condition="$now_user['group'] neq 1">
-            <tr>
-                <th width="15%">{pigcms{:L('_BACK_WHETHER_PASS_')}</th>
-                <td colspan=3>
-                    <span class="cb-enable"><label class="cb-enable selected"><span>{pigcms{:L('_BACK_PASS_REVIEW_')}</span><input type="radio" name="review" value="1" checked="checked" /></label></span>
-                    <span class="cb-disable"><label class="cb-disable"><span>{pigcms{:L('_BACK_NO_PASS_REVIEW_')}</span><input type="radio" name="review" value="0" /></label></span>
-                </td>
-            </tr>
-                <tr id="review_desc" <if condition="$img['review_desc'] eq ''">style="display: none"</if>>
-                <th width="15%">{pigcms{:L('_BACK_REVIEW_DESC_')}</th>
-                <td colspan=3>
-                    <input type="text" class="input fl" name="review_desc" value="{pigcms{$img['review_desc']}">
-                </td>
-            </tr>
+                <tr>
+                    <th width="15%">{pigcms{:L('_BACK_WHETHER_PASS_')}2222</th>
+                    <td colspan=3>
+                        <span class="cb-enable"><label class="cb-enable selected"><span>{pigcms{:L('_BACK_PASS_REVIEW_')}</span><input type="radio" name="review" value="1" checked="checked" /></label></span>
+                        <span class="cb-disable"><label class="cb-disable"><span>{pigcms{:L('_BACK_NO_PASS_REVIEW_')}</span><input type="radio" name="review" value="0" /></label></span>
+                    </td>
+                </tr>
+                    <tr id="review_desc" <if condition="$img['review_desc'] eq ''">style="display: none"</if>>
+                    <th width="15%">{pigcms{:L('_BACK_REVIEW_DESC_')}</th>
+                    <td colspan=3>
+                        <input type="text" class="input fl" name="review_desc" value="{pigcms{$img['review_desc']}">
+                    </td>
+                </tr>
             </if>
+
             <if condition="$now_user['reg_status'] eq 4">
                 <tr>
-                    <th width="15%">{pigcms{:L('_BACK_WHETHER_RECE_')}</th>
+                    <th width="15%">{pigcms{:L('_BACK_WHETHER_RECE_')}3333</th>
                     <td colspan=3>
                         <span class="cb-enable"><label class="cb-enable"><span>Yes</span><input type="radio" name="receive" value="1"  /></label></span>
                         <span class="cb-disable"><label class="cb-disable selected"><span>No</span><input type="radio" name="receive" value="0" checked="checked" /></label></span>
                     </td>
                 </tr>
             </if>
+
 		</table>
         <input type="hidden" name="city_id" id="city_id" value="{pigcms{$now_user['city_id']}">
         <input type="hidden" name="province_id" id="province_id" value="{pigcms{$now_user['province_id']}">

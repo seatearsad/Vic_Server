@@ -58,7 +58,7 @@
                             <div class="col-sm-10">
                                 {pigcms{:L('B_MODES')}<br/>
                                 <volist name="system_menu" id="vv" key="k">
-                                    <div style="margin-top:10px;width:30%;float:left;">{pigcms{$vv['name']} <input type="number" min="0" class="form-control input-text input1" name="{pigcms{$vv.id}" value="{pigcms{$sort_menus_son[$vv['id']]}" /></div>
+                                    <div style="margin-top:10px;width:30%;float:left;">{pigcms{$vv['name']} <input type="text" min="0" class="form-control input-text input1" name="{pigcms{$vv.id}" value="{pigcms{$sort_menus_son[$vv['id']]}" /></div>
                                     <if condition="$k%3 eq 0"><br /></if>
                                 </volist>
                             </div>

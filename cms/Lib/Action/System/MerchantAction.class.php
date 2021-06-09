@@ -438,6 +438,7 @@ class MerchantAction extends BaseAction{
 			$_POST['long'] = $long_lat[0];
 			$_POST['lat'] = $long_lat[1];
 			$_POST['last_time'] = $_SERVER['REQUEST_TIME'];
+            $_POST['name']=fulltext_filter($_POST['name']);
             //garfunkel add
             $area = D('Area')->where(array('area_id'=>$_POST['city_id']))->find();
             $_POST['province_id'] = $area ? $area['area_pid'] : 0;

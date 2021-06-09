@@ -472,7 +472,7 @@ class ShopAction extends BaseAction
         $where_store = null;
 
         if (!empty($_GET['keyword']) && $_GET['searchtype'] == 's_name') {
-            $where_store['name'] = array('like', '%' . $_GET['keyword'] . '%');
+            $where_store['name'] = array('like', '%' . fulltext_filter($_GET['keyword']) . '%');
         }
 
         if ($this->system_session['area_id']) {
