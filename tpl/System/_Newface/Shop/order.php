@@ -156,21 +156,21 @@
                                data-sorting="false">
                             <thead>
                             <tr>
-                                <th data-breakpoints="xs">Order ID</th>
-                                <th data-sortable="false">{pigcms{:L('_BACK_STORE_NAME_')}</th>
-                                <th data-sortable="false">{pigcms{:L('_BACK_STORE_PHONE_')}</th>
-                                <th data-sortable="false">{pigcms{:L('_BACK_USER_NAME_')}</th>
-                                <th data-sortable="false">{pigcms{:L('_BACK_USER_PHONE_')}</th>
-                                <th data-sortable="false">{pigcms{:L('_BACK_INIT_TOTAL_')}</th>
-                                <th data-sortable="false">{pigcms{:L('_BACK_TOTAL_')}</th>
-                                <th data-sortable="false">{pigcms{:L('_BACK_TIPS_')}</th>
-                                <th data-sortable="false">{pigcms{:L('_BACK_TUTTI_DIS_')}</th>
-                                <th data-sortable="false">{pigcms{:L('_BACK_MER_DIS_')}</th>
-                                <th data-sortable="false">{pigcms{:L('_BACK_AM_RECE_')}</th>
-                                <th data-sortable="false">{pigcms{:L('_BACK_PAY_TIME_')}</th>
-                                <th data-sortable="false">{pigcms{:L('_BACK_PREP_TIME_')}</th>
-                                <th data-sortable="false">{pigcms{:L('_BACK_ARR_TIME_')}</th>
-                                <th data-sortable="false">{pigcms{:L('_BACK_ORDER_STATUS_')}</th>
+                                <th data-sort-ignore="true">Order ID</th>
+                                <th data-sort-ignore="true">{pigcms{:L('_BACK_STORE_NAME_')}</th>
+                                <th  data-sort-ignore="true">{pigcms{:L('_BACK_STORE_PHONE_')}</th>
+                                <th  data-sort-ignore="true">{pigcms{:L('_BACK_USER_NAME_')}</th>
+                                <th  data-sort-ignore="true">{pigcms{:L('_BACK_USER_PHONE_')}</th>
+                                <th  data-sort-ignore="true">{pigcms{:L('_BACK_INIT_TOTAL_')}</th>
+                                <th  data-sort-ignore="true">{pigcms{:L('_BACK_TOTAL_')}</th>
+                                <th data-sort-ignore="true">{pigcms{:L('_BACK_TIPS_')}</th>
+                                <th data-sort-ignore="true">{pigcms{:L('_BACK_TUTTI_DIS_')}</th>
+                                <th data-sort-ignore="true">{pigcms{:L('_BACK_MER_DIS_')}</th>
+                                <th data-sort-ignore="true">{pigcms{:L('_BACK_AM_RECE_')}</th>
+                                <th data-sort-ignore="true">{pigcms{:L('_BACK_PAY_TIME_')}</th>
+                                <th data-sort-ignore="true">{pigcms{:L('_BACK_PREP_TIME_')}</th>
+                                <th data-sort-ignore="true">{pigcms{:L('_BACK_ARR_TIME_')}</th>
+                                <th data-sort-ignore="true">{pigcms{:L('_BACK_ORDER_STATUS_')}</th>
                                 <!--                                    <th data-hide="all">查看支票</th>-->
                                 <th data-hide="all">{pigcms{:L('_BACK_ORDER_NUM_')}</th>
                                 <th data-hide="all">{pigcms{:L('_BACK_REG_NUM_')}</th>
@@ -179,7 +179,7 @@
                                 <th data-hide="all">送餐员+电话</th>
                                 <th data-hide="all">{pigcms{:L('_BACK_PAY_STATUS_')}</th>
                                 <th data-hide="all">（调试信息—订单状态）</th>
-                                <th data-sortable="false">{pigcms{:L('_BACK_CZ_')}</th>
+                                <th data-sort-ignore="true">{pigcms{:L('_BACK_CZ_')}</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -214,17 +214,21 @@
                                                 H:i:s",###}
                                             </if>
                                         </td>
-                                        <td>
-
-                                            <if condition="$vo.status eq 2 or $vo.status eq 3 or $vo.status eq 1">
-                                                <li class="fa fa-check-circle tutti_icon_ok"></li>
+                                        <td> <a href="#" title='{pigcms{$vo.status_str}'>
+                                            <if condition="$vo.paid eq 0">
+                                                <li class="fa fa-circle-o tutti_icon_default"></li>
+                                                <else/>
+                                                <if condition="$vo.status eq 2 or $vo.status eq 3 or $vo.status eq 1">
+                                                    <li class="fa fa-check-circle tutti_icon_ok"></li>
+                                                </if>
+                                                <if condition="$vo.status eq 4 or $vo.status eq 5">
+                                                    <li class="fa fa-ban tutti_icon_default"></li>
+                                                </if>
+                                                <if condition="$vo.status eq 0">
+                                                    <li class="fa fa-circle tutti_icon_danger"></li>
+                                                </if>
                                             </if>
-                                            <if condition="$vo.status eq 4">
-                                                <li class="fa fa-ban tutti_icon_default"></li>
-                                            </if>
-                                            <if condition="$vo.status eq 0">
-                                                <li class="fa fa-circle tutti_icon_danger"></li>
-                                            </if>
+                                            </a>
                                         </td>
 
                                         <!--                                            <if condition="$system_session['level'] neq 3">-->
@@ -258,6 +262,7 @@
                                                     <if condition="$vo.status eq 0 AND $vo.paid eq 1">
                                                         <a data-href="{pigcms{:U('Shop/refund_update',array('order_id'=>$vo['order_id']))}"
                                                            class="refund">
+
                                                             <li class="fa fa-times-rectangle tutti_icon_dark"
                                                                 title="{pigcms{:L('_BACK_MANUAL_REFUND_')}"></li>
                                                         </a>

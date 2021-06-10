@@ -41,10 +41,14 @@
                     <div class="ibox-content">
                         <div class="table-responsive">
                             <!-------------------------------- 工具条 -------------------------------------->
-                            <div style="height: 55px;">
+                            <div style="height: 60px;">
+<!--                                location.href = "{pigcms{:U('Merchant/Deliver/deliverList')}"+"&period="+period+"&phone="+phone+"&day="+day+"&status="+status;-->
+                                <form action="{pigcms{:U('System/Deliver/deliverList')}" method="get" class="form-inline ">
+                                    <input type="hidden" name="c" value="Deliver"/>
+                                    <input type="hidden" name="a" value="deliverList"/>
                                 <div id="tool_bar" class="form-inline tutti_toolbar">
                                     {pigcms{:L('_BACK_DELIVERY_STATUS_')} ：
-                                    <select id="status" name="deliver" class="form-control">
+                                    <select id="status" name="status" class="form-control">
                                         <option value="0" <if condition="$status eq 0">selected</if> >{pigcms{:L('_BACK_ALL_')}</option>
                                         <option value="1" <if condition="$status eq 1">selected</if> >{pigcms{:L('_BACK_AWAIT_')}</option>
                                         <option value="2" <if condition="$status eq 2">selected</if> >{pigcms{:L('_BACK_CONFIRMED_')}</option>
@@ -52,19 +56,26 @@
                                         <option value="4" <if condition="$status eq 4">selected</if> >{pigcms{:L('_BACK_IN_TRANSIT_')}</option>
                                         <option value="5" <if condition="$status eq 5">selected</if> >{pigcms{:L('_BACK_COMPLETED_')}</option>
                                     </select>
-                                    &nbsp;{pigcms{:L('_BACK_USER_PHONE_')} :&nbsp;<input type="text" class="form-control" id="phone" name="phone" <if condition="$phone">value="{pigcms{$phone}"</if>>
-                                    &nbsp;{pigcms{:L('_START_TIME_')} :&nbsp;
-                                    <select class='form-control' id="time_value" name='select'>
-                                        <option value='1' <if condition="$day eq 1">selected</if>>{pigcms{:L('_BACK_TODAY_')}</option>
-                                        <option value='7' <if condition="$day eq 7">selected</if>>7 {pigcms{:L('_BACK_DAYS_')}</option>
-                                        <option value='30' <if condition="$day eq 30">selected</if>>30 {pigcms{:L('_BACK_DAYS_')}</option>
-                                        <option value='180' <if condition="$day eq 180">selected</if>>180 {pigcms{:L('_BACK_DAYS_')}</option>
-                                        <option value='365' <if condition="$day eq 365">selected</if>>365 {pigcms{:L('_BACK_DAYS_')}</option>
-                                        <option value='custom' <if condition="$period">selected</if>>{pigcms{:L('_BACK_CUSTOMIZE_')}</option>
-                                    </select>
+                                    &nbsp;{pigcms{:L('_BACK_USER_PHONE_')} :&nbsp;
+                                    <input type="text" class="form-control" id="phone" name="phone" <if condition="$phone">value="{pigcms{$phone}"</if>>
+                                    &nbsp;&nbsp;&nbsp;{pigcms{:L('_BACK_DATE_SELECT_')}：
+                                    <input type="text" class="form-control" name="begin_time" style="width:120px;"
+                                           id="d4311" value="{pigcms{$_GET.begin_time}"
+                                           onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd',lang:'en'})"/>&nbsp;
+                                    <input type="text" class="form-control" name="end_time" style="width:120px;"
+                                           id="d4311" value="{pigcms{$_GET.end_time}"
+                                           onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd',lang:'en'})"/>&nbsp;
+<!--                                    <select class='form-control' id="time_value" name='select'>-->
+<!--                                        <option value='1' <if condition="$day eq 1">selected</if>>{pigcms{:L('_BACK_TODAY_')}</option>-->
+<!--                                        <option value='7' <if condition="$day eq 7">selected</if>>7 {pigcms{:L('_BACK_DAYS_')}</option>-->
+<!--                                        <option value='30' <if condition="$day eq 30">selected</if>>30 {pigcms{:L('_BACK_DAYS_')}</option>-->
+<!--                                        <option value='180' <if condition="$day eq 180">selected</if>>180 {pigcms{:L('_BACK_DAYS_')}</option>-->
+<!--                                        <option value='365' <if condition="$day eq 365">selected</if>>365 {pigcms{:L('_BACK_DAYS_')}</option>-->
+<!--                                        <option value='custom' <if condition="$period">selected</if>>{pigcms{:L('_BACK_CUSTOMIZE_')}</option>-->
+<!--                                    </select>-->
                                     <if condition="$system_session['level'] neq 3">
                                     &nbsp;City : &nbsp;
-                                    <select name="city_select" id="city_select" class="form-control">
+                                    <select name="city_id" id="city_id" class="form-control">
                                         <option value="0" <if condition="$city_id eq '' or $city_id eq 0">selected="selected"</if>>All</option>
                                         <volist name="city" id="vo">
                                             <option value="{pigcms{$vo.area_id}" <if condition="$city_id eq $vo['area_id']">selected="selected"</if>>{pigcms{$vo.area_name}</option>
@@ -72,8 +83,9 @@
                                     </select>
                                     </if>
                                     &nbsp;&nbsp;
-                                    <button id="search" class="btn form-control">{pigcms{:L('_BACK_SEARCH_')}</button>
+                                    <button id="search" class="btn form-control" type="submit">{pigcms{:L('_BACK_SEARCH_')}</button>
                                 </div>
+                                </form>
                             </div>
                         </div>
                         <table class="table table-striped table-bordered table-hover dataTables-example">
@@ -154,66 +166,13 @@
     fff
 </div>
 <script>
-    var city_id = $('#city_select').val();
-    $('#city_select').change(function () {
-        city_id = $(this).val();
-        window.location.href = "{pigcms{:U('Deliver/deliverList')}" + "&city_id="+city_id;
-    });
+    //var city_id = $('#city_select').val();
+    // $('#city_select').change(function () {
+    //     city_id = $(this).val();
+    //     window.location.href = "{pigcms{:U('Deliver/deliverList')}" + "&city_id="+city_id;
+    // });
 
-	var selectStoreId = {pigcms{:$selectStoreId? $selectStoreId: 0};
-	var selectUserId = {pigcms{:$selectUserId? $selectUserId: 0};
-	$(function(){
-		$("#store").change(function(){
-			selectStoreId = $("#store").val();
-			selectUserId = 0;
-			search();
-		});
-		$("#deliver").change(function(){
-			selectStoreId = 0;
-			selectUserId = $("#deliver").val();
-			search();
-		});
-		$("#order_number").focus(function(){
-			$("#phone").val("");
-		});
-		$("#phone").focus(function(){
-			$("#order_number").val("");
-		});
-		$("#search").click(function(){
-			search();
-		});
-		function search(orderNum, phone) {
-			var phone = $("#phone").val(), status = $('#status').val();
-			var day = '', period = '';
-			if($('#time_value option:selected').attr('value')=='custom'){
-				period = $('#time_value option:selected').html();
-			}else{
-				day = $('#time_value option:selected').attr('value');
-			}
-			location.href = "{pigcms{:U('Merchant/Deliver/deliverList')}"+"&period="+period+"&phone="+phone+"&day="+day+"&status="+status;
-		}
-		$('.change').click(function(){
-			var supply_id = $(this).attr('data-supply'), obj = $(this);
-			window.top.art.dialog({
-				lock: true,
-                title:'Reminder',
-				content: "{pigcms{:L('_BACK_SURE_CHANGE_')}",
-                okVal:'Yes',
-				ok: function(){
-					$.get("{pigcms{:U('Deliver/change')}", {supply_id:supply_id}, function(response){
-						if (response.error_code) {
-							window.top.msg(0, response.msg);
-						} else {
-							window.top.msg(1, response.msg,true);
-							obj.remove();
-						}
-					}, 'json');
-				},
-                cancelVal:'Cancel',
-				cancel: true
-			});
-		});
-	});
+
 
     var hover_id = 0;
     var time_out;

@@ -1147,6 +1147,7 @@ class Shop_orderModel extends Model
 	{
 		if (isset($where['status']) && $where['status'] === 0) $where['paid'] = 1;
 		if (is_array($where)) $where['is_del'] = 0;
+
 		if($is_wap != 10){
 			$count = $this->where($where)->count();
 		}
@@ -1174,6 +1175,7 @@ class Shop_orderModel extends Model
 		}
 		if($is_wap != 11 && $is_wap != 10){
 			$list = $this->where($where)->order($order)->limit($p->firstRow . ',' . $p->listRows)->select();
+
 		}
 		$notOffline = 1;
 		$pay_offline_open = C('config.pay_offline_open');
@@ -1191,52 +1193,52 @@ class Shop_orderModel extends Model
 				case 0:
 // 					$order['css'] = 'inhand';
 // 					$order['show_status'] = '处理中';
-					$order['status_str'] = '<b style="color:red">'.L('_B_PURE_MY_71_').'</b>';
+					$order['status_str'] = ''.L('_B_PURE_MY_71_').'';
 					break;
 				case 1:
 // 					$order['css'] = 'confirm';
 // 					$order['show_status'] = '已确认';
-					$order['status_str'] = '<b style="color:green">'.L('_B_PURE_MY_72_').'</b>';
+					$order['status_str'] = ''.L('_B_PURE_MY_72_').'';
 					break;
 				case 2:
 // 					$order['css'] = 'confirm';
 // 					$order['show_status'] = '已消费';
-					$order['status_str'] = '<b style="color:green">'.L('_STATUS_LIST_2_').'</b>';
+					$order['status_str'] = ''.L('_STATUS_LIST_2_').'';
 					break;
 				case 3:
 // 					$order['css'] = 'complete';
 // 					$order['show_status'] = '已评价';
-					$order['status_str'] = '<b style="color:green">'.L('_B_PURE_MY_74_').'</b>';
+					$order['status_str'] = ''.L('_B_PURE_MY_74_').'';
 					break;
 				case 4:
 // 					$order['css'] = 'cancle';
 // 					$order['show_status'] = '已退款';
-					$order['status_str'] = '<del style="color:gray">'.L('_B_PURE_MY_75_').'</del>';
+					$order['status_str'] = ''.L('_B_PURE_MY_75_').'';
 					break;
 				case 5:
 // 					$order['css'] = 'cancle';
 // 					$order['show_status'] = '已取消';
-					$order['status_str'] = '<del style="color:gray">'.L('_B_PURE_MY_76_').'</del>';
+					$order['status_str'] = ''.L('_B_PURE_MY_76_').'';
 					break;
 				case 7:
 // 					$order['css'] = 'cancle';
 // 					$order['show_status'] = '已取消';
-					$order['status_str'] = '<b style="color:green">'.L('_B_PURE_MY_77_').'</b>';
+					$order['status_str'] = ''.L('_B_PURE_MY_77_').'';
 					break;
 				case 8:
 // 					$order['css'] = 'cancle';
 // 					$order['show_status'] = '已取消';
-					$order['status_str'] = '<b style="color:green">'.L('_B_PURE_MY_78_').'</b>';
+					$order['status_str'] = ''.L('_B_PURE_MY_78_').'';
 					break;
 				case 9:
 // 					$order['css'] = 'cancle';
 // 					$order['show_status'] = '已取消';
-					$order['status_str'] = '<b style="color:green">'.L('_B_PURE_MY_79_').'</b>';
+					$order['status_str'] = ''.L('_B_PURE_MY_79_').'';
 					break;
 				case 10:
 // 					$order['css'] = 'cancle';
 // 					$order['show_status'] = '已取消';
-					$order['status_str'] = '<del style="color:green">'.L('_B_PURE_MY_80_').'</del>';
+					$order['status_str'] = ''.L('_B_PURE_MY_80_').'';
 					break;
 			}
 
