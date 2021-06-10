@@ -1355,12 +1355,12 @@ class DataAction extends BaseAction
         $objActSheet->setCellValue('C1', 'Last Name');
         $objActSheet->setCellValue('D1', 'Phone');
         $objActSheet->setCellValue('E1', 'City');
-        $objActSheet->setCellValue('F1', 'Order Amount');
-        $objActSheet->setCellValue('G1', 'Tips');
-        $objActSheet->setCellValue('H1', 'Delivery Fee');
-        $objActSheet->setCellValue('I1', 'Cash Due');
+        $objActSheet->setCellValue('F1', '#of orders');
+        $objActSheet->setCellValue('G1', 'Total Tip');
+        $objActSheet->setCellValue('H1', 'Total Delivery Fee');
+        $objActSheet->setCellValue('I1', 'Total Cash');
         $objActSheet->setCellValue('J1', 'Total');
-        $objActSheet->setCellValue('K1', 'Note');
+        $objActSheet->setCellValue('K1', 'Notes');
 
         $index = 2;
         foreach ($show_list as $k=>$v){
