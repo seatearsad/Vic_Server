@@ -303,11 +303,6 @@ class DeliverAction extends BaseAction {
 		$selectUserId = I("selectUserId", 0, 'intval');
 		$phone = I("phone", 0);
 		$orderNum = I("orderNum", 0);
-		
-
-
-		
-		
 
 		//获取商家的所有配送员
 		$delivers = D("Deliver_user")->field(true)->where(array('mer_id'=>$mer_id))->order('status DESC')->select();
@@ -403,24 +398,25 @@ class DeliverAction extends BaseAction {
 	
 	public function deliverList() 
 	{
+        //var_dump($_GET);die();
 		$selectStoreId = I("selectStoreId", 0, "intval");
 		$selectUserId = I("selectUserId", 0, "intval");
 		$phone = I("phone", 0);
 		$orderNum = I("orderNum", 0);
 
 		$status = I('status', 0, 'intval');
-		$day = I('day', 0, 'intval');
-		$period = I('period', '', 'htmlspecialchars');
-		$stime = $etime = 0;
-		if ($day) {
-			$stime = strtotime("-{$day} day");
-			$etime = time();
-		}
-		if ($period) {
-			$time_array = explode('-', $period);
-			$stime = strtotime($time_array[0]);
-			$etime = strtotime($time_array[1]);
-		}
+
+        //筛选时间
+        $stime = $etime = 0;
+        if (!empty($_GET['begin_time']) && !empty($_GET['end_time'])) {
+
+            if ($_GET['begin_time'] > $_GET['end_time']) {
+                $this->error("Please enter the date ranges correctly");
+            } else {
+                $stime = strtotime($_GET['begin_time']." 00:00:00");
+                $etime = strtotime($_GET['end_time'] . " 23:59:59");
+            }
+        }
 
 		$sql = "SELECT s.`supply_id`, s.order_id, s.item, s.name as username, s.phone as userphone, m.name as storename, s.money, u.name, u.phone, s.start_time, s.end_time, s.aim_site, s.pay_type, s.paid, s.status, s.deliver_cash, s.distance, s.from_lat, s.aim_lat, s.from_lnt, s.aim_lnt FROM " . C('DB_PREFIX') . "deliver_supply AS s INNER JOIN " . C('DB_PREFIX') . "merchant_store AS m ON m.store_id=s.store_id LEFT JOIN " . C('DB_PREFIX') . "deliver_user AS u ON s.uid=u.uid";
 		$sql_count = "SELECT count(1) AS count FROM " . C('DB_PREFIX') . "deliver_supply AS s INNER JOIN " . C('DB_PREFIX') . "merchant_store AS m ON m.store_id=s.store_id LEFT JOIN " . C('DB_PREFIX') . "deliver_user AS u ON s.uid=u.uid";

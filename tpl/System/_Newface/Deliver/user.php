@@ -76,18 +76,18 @@
                             <tr>
                                 <!--                                ID，姓名（名+姓），电话，邮箱，配送城市，配送范围，配送总量，状态，历史记录统计，配送记录，编辑-->
                                 <!--                                展开信息：地址，备注，最后修改时间-->
-                                <th>ID</th>
-                                <th  data-sortable="false">{pigcms{:L('NAME_BKADMIN')}</th>
-                                <th data-sortable="false">{pigcms{:L('_BACK_PHONE_NUM_')}</th>
-                                <th data-sortable="false">Email</th>
-                                <th data-sortable="false">City</th>
-                                <th data-sortable="false">{pigcms{:L('_BACK_DELIVERY_AREA_')}</th>
-                                <th data-sortable="false">{pigcms{:L('_BACK_TOTAL_DELIVERY_')}</th>
-                                <th data-sortable="false">{pigcms{:L('_BACK_STATUS_')}</th>
+                                <th data-sort-ignore="true">ID</th>
+                                <th data-sort-ignore="true">{pigcms{:L('NAME_BKADMIN')}</th>
+                                <th data-sort-ignore="true">{pigcms{:L('_BACK_PHONE_NUM_')}</th>
+                                <th data-sort-ignore="true">Email</th>
+                                <th data-sort-ignore="true">City</th>
+                                <th data-sort-ignore="true">{pigcms{:L('_BACK_DELIVERY_AREA_')}</th>
+                                <th data-sort-ignore="true">{pigcms{:L('_BACK_TOTAL_DELIVERY_')}</th>
+                                <th data-sort-ignore="true">{pigcms{:L('_BACK_STATUS_')}</th>
                                 <th data-hide="all">{pigcms{:L('_BACK_DEFAULT_ADD_')}</th>
                                 <th data-hide="all">{pigcms{:L('_NOTE_TXT_')}</th>
                                 <th data-hide="all">{pigcms{:L('_BACK_LAST_EDIT_TIME_')}</th>
-                                <th data-sortable="false">{pigcms{:L('_BACK_OVERVIEW_')}</th>
+                                <th data-sort-ignore="true">{pigcms{:L('_BACK_OVERVIEW_')}</th>
                             </tr>
                             </thead>
                             <tbody>

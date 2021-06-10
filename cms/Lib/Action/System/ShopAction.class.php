@@ -469,17 +469,24 @@ class ShopAction extends BaseAction
     public function order()
     {
 
+        //加载城市字典
+        $city = D('Area')->where(array('area_type' => 2, 'is_open' => 1))->select();
+        $this->assign('city', $city);
+
         $where_store = null;
 
+        //筛选 店铺名称
         if (!empty($_GET['keyword']) && $_GET['searchtype'] == 's_name') {
             $where_store['name'] = array('like', '%' . fulltext_filter($_GET['keyword']) . '%');
         }
+        //筛选 所属地区
 
         if ($this->system_session['area_id']) {
+
             $area_index = $this->system_session['level'] == 1 ? 'area_id' : 'city_id';
             $where_store[$area_index] = $this->system_session['area_id'];
         }
-
+        //筛选 城市
         if ($_GET['city_id']) {
             $this->assign('city_id', $_GET['city_id']);
             if ($_GET['city_id'] != 0) {
@@ -488,14 +495,11 @@ class ShopAction extends BaseAction
         } else {
             $this->assign('city_id', 0);
         }
-        $city = D('Area')->where(array('area_type' => 2, 'is_open' => 1))->select();
-        $this->assign('city', $city);
 
         $store_ids = array();
         $where = array();
 
         if ($where_store) {
-
             $stores = D('Merchant_store')->field('store_id')->where($where_store)->select();
             foreach ($stores as $row) {
                 $store_ids[] = $row['store_id'];
@@ -507,7 +511,6 @@ class ShopAction extends BaseAction
                 import('@.ORG.system_page');
                 $p = new Page(0, 20);
                 $this->assign('order_list', null);
-
                 $this->assign('pagebar', $p->show2());
                 $this->display();
                 exit;
@@ -539,6 +542,7 @@ class ShopAction extends BaseAction
         $type = isset($_GET['type']) && $_GET['type'] ? $_GET['type'] : '';
         $sort = isset($_GET['sort']) && $_GET['sort'] ? $_GET['sort'] : '';
         $pay_type = isset($_GET['pay_type']) && $_GET['pay_type'] ? $_GET['pay_type'] : '';
+
         if ($sort != 'DESC' && $sort != 'ASC') $sort = '';
         if ($type != 'price' && $type != 'pay_time') $type = '';
         $order_sort = '';
@@ -562,7 +566,7 @@ class ShopAction extends BaseAction
         } else if ($pay_type == 'balance') {
             $where['_string'] = $where['_string'] == "" ? "`pay_type`<>'Cash' and (`balance_pay`<>0 OR `merchant_balance` <> 0 )" : $where['_string'] . " and `pay_type`<>'Cash' and (`balance_pay`<>0 OR `merchant_balance` <> 0 )";
         }
-
+        //筛选时间
         if (!empty($_GET['begin_time']) && !empty($_GET['end_time'])) {
 
             if ($_GET['begin_time'] > $_GET['end_time']) {
