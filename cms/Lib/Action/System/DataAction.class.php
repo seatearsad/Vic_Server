@@ -60,7 +60,7 @@ class DataAction extends BaseAction
     public function order(){
         set_time_limit(0);
         require_once APP_PATH . 'Lib/ORG/phpexcel/PHPExcel.php';
-        $title = 'Order Summary';
+        $title = 'Order Export';
         $objExcel = new PHPExcel();
         $objProps = $objExcel->getProperties();
         // 设置文档基本属性
@@ -384,7 +384,7 @@ class DataAction extends BaseAction
     public function sales(){
         set_time_limit(0);
         require_once APP_PATH . 'Lib/ORG/phpexcel/PHPExcel.php';
-        $title = 'Order Total';
+        $title = 'Sales Summary';
 
         if(!$_GET['begin_time'] || !$_GET['end_time']){
             $this->error(L('J_SPECIFY_TIME'));
@@ -571,7 +571,7 @@ class DataAction extends BaseAction
         $objActSheet->setCellValue('K1', 'Free Delivery');
         $index = 2;
         $objActSheet->setCellValueExplicit('A' . $index, $order_count,PHPExcel_Cell_DataType::TYPE_NUMERIC);
-        $objActSheet->setCellValueExplicit('B' . $index, floatval(sprintf("%.2f", ($total_goods_price - $total_reduce))),PHPExcel_Cell_DataType::TYPE_NUMERIC);
+        $objActSheet->setCellValueExplicit('B' . $index, floatval(sprintf("%.2f", $total_goods_price)),PHPExcel_Cell_DataType::TYPE_NUMERIC);
         $objActSheet->setCellValueExplicit('C' . $index, floatval(sprintf("%.2f", $total_goods_tax)),PHPExcel_Cell_DataType::TYPE_NUMERIC);
         $objActSheet->setCellValueExplicit('D' . $index, floatval(sprintf("%.2f", $total_freight_price)),PHPExcel_Cell_DataType::TYPE_NUMERIC);
         $objActSheet->setCellValueExplicit('E' . $index, floatval(sprintf("%.2f", $total_freight_tax)),PHPExcel_Cell_DataType::TYPE_NUMERIC);
@@ -782,7 +782,7 @@ class DataAction extends BaseAction
         }else {
             set_time_limit(0);
             require_once APP_PATH . 'Lib/ORG/phpexcel/PHPExcel.php';
-            $title = 'Customer Summary';
+            $title = 'User Info';
             $objExcel = new PHPExcel();
             $objProps = $objExcel->getProperties();
             // 设置文档基本属性
@@ -1240,7 +1240,7 @@ class DataAction extends BaseAction
         }
 
         require_once APP_PATH . 'Lib/ORG/phpexcel/PHPExcel.php';
-        $title = 'Deliver List';
+        $title = 'Courier Info';
         $objExcel = new PHPExcel();
         $objProps = $objExcel->getProperties();
         // 设置文档基本属性
@@ -1335,7 +1335,7 @@ class DataAction extends BaseAction
         }
 
         require_once APP_PATH . 'Lib/ORG/phpexcel/PHPExcel.php';
-        $title = 'Delivery Summary';
+        $title = 'Courier Payroll';
         $objExcel = new PHPExcel();
         $objProps = $objExcel->getProperties();
         // 设置文档基本属性
@@ -1351,16 +1351,16 @@ class DataAction extends BaseAction
         $objActSheet = $objExcel->getActiveSheet();
 
         $objActSheet->setCellValue('A1', 'ID');
-        $objActSheet->setCellValue('B1', '配送员 First Name');
-        $objActSheet->setCellValue('C1', '配送员 Last Name');
-        $objActSheet->setCellValue('D1', '配送员手机号');
-        $objActSheet->setCellValue('E1', '配送员城市');
-        $objActSheet->setCellValue('F1', '送单数量');
-        $objActSheet->setCellValue('G1', '小费总计');
-        $objActSheet->setCellValue('H1', '送餐费总计');
-        $objActSheet->setCellValue('I1', '收入现金');
-        $objActSheet->setCellValue('J1', '总计');
-        $objActSheet->setCellValue('K1', '配送员备注');
+        $objActSheet->setCellValue('B1', 'First Name');
+        $objActSheet->setCellValue('C1', 'Last Name');
+        $objActSheet->setCellValue('D1', 'Phone');
+        $objActSheet->setCellValue('E1', 'City');
+        $objActSheet->setCellValue('F1', '#of orders');
+        $objActSheet->setCellValue('G1', 'Total Tip');
+        $objActSheet->setCellValue('H1', 'Total Delivery Fee');
+        $objActSheet->setCellValue('I1', 'Total Cash');
+        $objActSheet->setCellValue('J1', 'Total');
+        $objActSheet->setCellValue('K1', 'Notes');
 
         $index = 2;
         foreach ($show_list as $k=>$v){
@@ -1409,7 +1409,7 @@ class DataAction extends BaseAction
         $list = D('Merchant_store')->field('s.*,m.name as m_name,m.email as m_email,c.area_name as city_name')->join(' as s left join '.C('DB_PREFIX').'merchant as m on m.mer_id=s.mer_id left join '.C('DB_PREFIX').'area as c on c.area_id=s.city_id')->where($where)->select();
         //var_dump($list);die();
         require_once APP_PATH . 'Lib/ORG/phpexcel/PHPExcel.php';
-        $title = 'Deliver List';
+        $title = 'Store Info';
         $objExcel = new PHPExcel();
         $objProps = $objExcel->getProperties();
         // 设置文档基本属性
@@ -1487,9 +1487,9 @@ class DataAction extends BaseAction
 
         if ($begin_time && $end_time) {
             //$title = '【' . $user['name'] . '】在' . $begin_time . '至' . $end_time . '时间段的配送记录列表';
-            $title = $user['name'] . '\'s Delivery Summary(' . $begin_time . '-' . $end_time . ')';
+            $title = $user['name'] . '\'s Orders by Courier(' . $begin_time . '-' . $end_time . ')';
         } else {
-            $title = $user['name'] . '\'s Delivery Summary';
+            $title = $user['name'] . '\'s Orders by Courier';
         }
         $objExcel = new PHPExcel();
         $objProps = $objExcel->getProperties();
