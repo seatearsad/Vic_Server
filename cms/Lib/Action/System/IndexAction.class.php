@@ -925,6 +925,7 @@ class IndexAction extends BaseAction {
                     $this->error(L('K_PASS_EMPTY'));
                 }
                 $_POST['pwd'] = md5($_POST['pwd']);
+                $_POST['menus'] = '1,8';
                 if ($new_id = $database_area->data($_POST)->add()) {
                     $this->success($new_id);
                     //redirect(U('Index/menu',array('admin_id'=>$new_id)));

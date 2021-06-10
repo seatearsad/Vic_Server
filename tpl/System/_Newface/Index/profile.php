@@ -50,7 +50,7 @@
                         <div class="form-group  row">
                             <label class="col-sm-2 col-form-label">{pigcms{:L('B_PHONE')}</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control"  name="phone" value="{pigcms{$admin.phone}"  validate="required:true,mobile:true" />
+                                <input type="text" class="form-control"  name="phone" value="{pigcms{$admin.phone}"  validate="required:true,minlength:10,maxlength:10" />
                             </div>
                         </div>
                         <div class="form-group  row">

@@ -223,7 +223,7 @@
         var curr_id = $(this).data('id');
         if(hover_id != curr_id){
             hover_id = curr_id;
-            var this_y = $(this).position().top+20;
+            var this_y = $(this).position().top-30;
             var this_x = $(this).position().left+10;
             time_out = setTimeout(function () {
                 $.post("{pigcms{:U('Shop/get_order_status')}",{"order_id":hover_id},function(result){
@@ -262,7 +262,7 @@
 .order_status_show{
     position: absolute;
     width: 300px;
-    height: 160px;
+    height: 210px;
     background-color: #EEEEEE;
     left: 20px;
     display: none;

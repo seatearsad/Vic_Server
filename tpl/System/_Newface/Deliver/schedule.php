@@ -20,27 +20,6 @@
         </div>
         <div class="col-lg-6 " style="height 90px;margin-top:40px;">
             <div class="btn-group float-right">
-                <if condition="$system_session['level'] eq 2">
-                    <a href="{pigcms{:U('Deliver/user')}" style="float:right;">
-                        <button class="btn btn-white  text-grey">{pigcms{:L('_BACK_COURIER_MANA_')}</button>
-                    </a>
-                    <if condition="$system_session['level'] neq 3">
-                        <a href="{pigcms{:U('Deliver/rule')}">
-                            <button class="btn btn-white text-grey ">{pigcms{:L('D_DELIVERYFEE_SETTING')}</button>
-                        </a>
-                    </if>
-                    <a href="{pigcms{:U('Deliver/map')}">
-                        <button class="btn btn-white text-grey ">{pigcms{:L('_BACK_COURIER_MONI_')}</button>
-                    </a>
-                    <a href="{pigcms{:U('Deliver/schedule')}">
-                        <button class="btn btn-white text-grey active">{pigcms{:L('_DELIVER_SCHEDULE_')}</button>
-                    </a>
-                </if>
-                <a href="javascript:void(0);"
-                   onclick="window.top.artiframe('{pigcms{:U('Deliver/user_add')}','{pigcms{:L(\'_BACK_ADD_COURIER_\')}',680,560,true,false,false,editbtn,'edit',true);"
-                   style="float:right;margin-left: 10px;">
-                    <button class="btn btn-primary">{pigcms{:L('_BACK_ADD_COURIER_')}</button>
-                </a>
 
             </div>
         </div>
