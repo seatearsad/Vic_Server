@@ -214,7 +214,7 @@
                                                 H:i:s",###}
                                             </if>
                                         </td>
-                                        <td> 
+                                        <td>
                                             <if condition="$vo.paid eq 0">
                                                 <a href="#" title='{pigcms{:L("_UNPAID_TXT_")}'>
                                                 <li class="fa fa-circle-o tutti_icon_default"></li>

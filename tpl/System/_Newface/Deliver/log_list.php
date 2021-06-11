@@ -57,14 +57,14 @@
                                                 <input type="text" class="input-text" name="begin_time" style="width:160px;" value="{pigcms{$begin_time}" onfocus="WdatePicker({isShowClear:false,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})"/>&nbsp;&nbsp;&nbsp;to&nbsp;&nbsp;&nbsp;
                                                 <input type="text" class="input-text" name="end_time" style="width:160px;" value="{pigcms{$end_time}" onfocus="WdatePicker({isShowClear:false,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})"/>&nbsp;&nbsp;&nbsp;
                                                 <input type="submit" value="{pigcms{:L('_BACK_SEARCH_')}" class="button"/>
-                                                <a href="{pigcms{:U('Deliver/export_user', array('begin_time' => $begin_time, 'end_time' => $end_time, 'uid' => $user['uid']))}" class="button" style="float:right;margin-right: 10px;">{pigcms{:L('_BACK_DOWN_ORDER_')}</a>
+<!--                                                <a href="{pigcms{:U('Deliver/export_user', array('begin_time' => $begin_time, 'end_time' => $end_time, 'uid' => $user['uid']))}" class="button" style="float:right;margin-right: 10px;">{pigcms{:L('_BACK_DOWN_ORDER_')}</a>-->
                                             </form>
                                         </td>
                                     </tr>
                                 </table>
                                 <form name="myform" id="myform" action="" method="post">
                                     <div class="table-list">
-                                        <table width="100%" cellspacing="0">
+                                        <table class="table table-striped table-bordered table-hover dataTables-example">
                                             <thead>
                                             <tr>
                                                 <!-- 								<th>订单ID</th> -->
