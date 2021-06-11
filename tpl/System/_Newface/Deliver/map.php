@@ -163,7 +163,9 @@
             left:50px;
             top:130px;
             border-bottom: 0px;
+            padding-left: 0;
             background-color: #ffffff;
+            list-style: none;
         }
         #deliver_list li{
             width: 100%;
