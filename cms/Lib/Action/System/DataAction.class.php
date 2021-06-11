@@ -140,22 +140,25 @@ class DataAction extends BaseAction
         //新版导出
         if ($status != -1) {
             if($status == 1) {
-                $where['_string'] = " (o.status BETWEEN 2 AND 3)";
-                $condition_where .= ' AND (oo.status=2 OR oo.status=3)';
+                $where['o.status'] = array('between',array(2,3));
+                $condition_where .= ' AND (`oo`.`status`=2 OR `oo`.`status`=3)';
             }else if($status == 2){
-                $where['_string'] = " (o.status BETWEEN 4 AND 5)";
-                $condition_where .= ' AND (oo.status=4 OR oo.status=5)';
+                $where['o.status'] = array('between',array(4,5));
+                $condition_where .= ' AND (`oo`.`status`=4 OR `oo`.`status`=5)';
             }
         }
 
         if($pay_type&&$pay_type!='balance'){
-            $where['pay_type'] = $pay_type;
-            $condition_where .= ' AND oo.pay_type="'.$pay_type.'"';
-            //$condition_where .= ' AND pay_type="'.$pay_type.'"';
+            if($pay_type == "offline"){
+                $where['_string'] = "(`pay_type`='offline' OR `pay_type`='Cash')";
+                $condition_where .= ' AND (`oo`.`pay_type`="offline" OR `oo`.`pay_type`="Cash")';
+            }else {
+                $where['pay_type'] = $pay_type;
+                $condition_where .= ' AND oo.pay_type="' . $pay_type . '"';
+            }
         }else if($pay_type=='balance'){
-            $where['_string'] .= "(`balance_pay`<>0 OR `merchant_balance` <> 0 )";
-            $condition_where .= ' AND (`oo`.`balance_pay`<>0 OR `oo`.`merchant_balance` <> 0 )';
-            //$condition_where .= ' AND (`balance_pay`<>0 OR `merchant_balance` <> 0 )';
+            $where['_string'] .= "(`pay_type`<>'Cash' and `pay_type`<>'offline') and (`balance_pay`<>0 OR `merchant_balance` <> 0 )";
+            $condition_where .= ' AND (`oo`.`pay_type`<>"offline" and `oo`.`pay_type`<>"Cash") and (`oo`.`balance_pay`<>0 OR `oo`.`merchant_balance` <> 0 )';
         }
 
         if(!empty($_GET['begin_time'])&&!empty($_GET['end_time'])){
@@ -961,6 +964,8 @@ class DataAction extends BaseAction
         }
         $condition_where.=" AND o.is_del=0";
         $where['is_del'] = 0;
+        $condition_where .= " AND (o.status BETWEEN 2 AND 3)";
+        $where['status'] = array('between',array(2,3));
         $count = D('Shop_order')->where($where)->count();
 
         $length = ceil($count / 1000);
