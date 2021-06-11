@@ -51,7 +51,7 @@ class UserAction extends BaseAction {
                 }
                 if (!empty($_GET['begin_time']) && !empty($_GET['end_time'])) {
                     if ($_GET['begin_time'] > $_GET['end_time']) {
-                        $this->error_tips("结束时间应大于开始时间");
+                        $this->error("Please enter the date ranges correctly");
                     }
                     $period = array(strtotime($_GET['begin_time'] . " 00:00:00"), strtotime($_GET['end_time'] . " 23:59:59"));
                     $where .= " and u.add_time>".$period[0]." and u.add_time<".$period[1];

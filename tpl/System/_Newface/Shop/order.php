@@ -214,10 +214,12 @@
                                                 H:i:s",###}
                                             </if>
                                         </td>
-                                        <td> <a href="#" title='{pigcms{$vo.status_str}'>
+                                        <td> 
                                             <if condition="$vo.paid eq 0">
+                                                <a href="#" title='{pigcms{:L("_UNPAID_TXT_")}'>
                                                 <li class="fa fa-circle-o tutti_icon_default"></li>
-                                                <else/>
+                                            <else/>
+                                                <a href="#" title='{pigcms{$vo.status_str}'>
                                                 <if condition="$vo.status eq 2 or $vo.status eq 3 or $vo.status eq 1">
                                                     <li class="fa fa-check-circle tutti_icon_ok"></li>
                                                 </if>
@@ -262,7 +264,6 @@
                                                     <if condition="$vo.status eq 0 AND $vo.paid eq 1">
                                                         <a data-href="{pigcms{:U('Shop/refund_update',array('order_id'=>$vo['order_id']))}"
                                                            class="refund">
-
                                                             <li class="fa fa-times-rectangle tutti_icon_dark"
                                                                 title="{pigcms{:L('_BACK_MANUAL_REFUND_')}"></li>
                                                         </a>
@@ -305,7 +306,9 @@
                         <div id="table_pagebar" style="height: 30px;">
 
                         </div>
+                        <div id="table_pagebar2" style="height: 30px;">
 
+                        </div>
                     </div>
                 </div>
             </div>
@@ -316,7 +319,7 @@
     <!-- Page-Level Scripts -->
     <script>
         var pagestr = '{pigcms{$pagebar}';
-        let pagediv = $('#table_pagebar');
+        let pagediv = $('#table_pagebar2');
         $(document).ready(function () {
 
             $('.footable').footable();
@@ -328,7 +331,17 @@
             //     }
             // });
             pagediv.html(pagestr);
+            // window.addEventListener('resize', function () {
+            //     pagediv.html(pagestr);
+            //     console.log(pagestr);
+            // })
+
+            $("#ulpage").bind('DOMNodeInserted', function(e) {
+                pagediv.html(pagestr);
+                // alert('element now contains: ' + $(e.target).html());
+            });
         });
+
     </script>
 
     <script>

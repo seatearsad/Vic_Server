@@ -143,6 +143,7 @@
                             </tfoot>
                         </table>
                         <div id="table_pagebar" style="height: 30px;">
+
                         </div>
                     </div>
                 </div>
@@ -174,8 +175,11 @@
         //         ...
         //     }
         // });
-        var pagestr='{pigcms{$pagebar}';
-        let pagediv= $('#table_pagebar');
+        pagediv.html(pagestr);
+        $("#ulpage").bind('DOMNodeInserted', function(e) {
+            pagediv.html(pagestr);
+            // alert('element now contains: ' + $(e.target).html());
+        });
     });
 </script>
 <include file="Public:footer"/>
