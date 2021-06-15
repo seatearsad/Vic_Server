@@ -121,7 +121,7 @@
                                     <label class="col-sm-3 col-form-label">{pigcms{:L('F_ADMIN_CODE')}</label>
                                     <div class="col-sm-6"><input type="text" class="form-control"
                                                                  name="user_rechange_code"
-                                                                 id="user_rechange_code" value="" style="width: 30%"/>
+                                                                 id="user_rechange_code" value=""/>
                                     </div>
                                     <div class="col-sm-3">
                                         <button id="send_code" type="button"
@@ -131,80 +131,36 @@
                                 </div>
 
                                 <div class="form-group  row"
-                                <php>if($can_recharge==0 || $config['open_frozen_money']==0){echo
-                                    'style="display:none"';}
-                                </php>
+                                    <php>if($can_recharge==0 || $config['open_frozen_money']==0){echo
+                                        'style="display:none"';}
+                                    </php>
                                 >
-                                <label class="col-sm-3 col-form-label">冻结时间</label>
-                                <div class="col-sm-9"> 冻结时间：
-                                    <input type="text" class="form-control" name="frozen_time"
-                                           id="d4311" value="<if condition="
-                                           $now_user.frozen_time gt 0">{pigcms{$now_user.frozen_time}</if>"
-                                    onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})"/>
-                                    解冻时间：
-                                    <input type="text" class="form-control" name="free_time"
-                                           id="d4311" value="<if condition=" $now_user.free_time gt 0">{pigcms{$now_user.free_time}</if>
-                                    " onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" tips="冻结时间"/></div>
-
-                                </div>
-
-                                <th width="15%">冻结时间</th>
-                                <td width="85%" colspan="3">
-                                    <div style="height:30px;line-height:24px;">
-                                        冻结时间：
-                                        <input type="text" class="input-text" name="frozen_time"
-                                               style="width:120px;" id="d4311" value="<if condition="
+                                    <label class="col-sm-3 col-form-label">冻结时间</label>
+                                    <div class="col-sm-9"> 冻结时间：
+                                        <input type="text" class="form-control" name="frozen_time"
+                                               id="d4311" value="<if condition="
                                                $now_user.frozen_time gt 0">{pigcms{$now_user.frozen_time}</if>"
                                         onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})"/>
                                         解冻时间：
-                                        <input type="text" class="input-text" name="free_time" style="width:120px;"
+                                        <input type="text" class="form-control" name="free_time"
                                                id="d4311" value="<if condition=" $now_user.free_time gt 0">{pigcms{$now_user.free_time}</if>
-                                        " onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" tips="冻结时间"/>
-                                    </div>
-                                </td>
-                                </tr>
-                                <tr
-                                <php>if($can_recharge==0 || $config['open_frozen_money']==0){echo
-                                    'style="display:none"';}
-                                </php>
-                                >
-                                <th width="15%">冻结理由</th>
-                                <td width="85%" colspan="3">
-                                    <div style="height:30px;line-height:24px;">
-                                        <input type="text" class="input" name="frozen_reason" size="40"
-                                               value="{pigcms{$now_user.frozen_reason}" tips="冻结理由"/>
-                                    </div>
-                                </td>
-                                </tr>
+                                        " onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" tips="冻结时间"/></div>
+                                        冻结理由：
 
-                                <!--tr>
-                                    <th width="15%">实体卡</th>
-                                    <td width="85%" colspan="3"><div style="height:30px;line-height:24px;">实体卡卡号<input type="text" class="input" name="cardid" size="16"  value="{pigcms{$now_user.cardid}" validate="number:true" tips="此处填写实体卡卡号"/>实体卡余额<input type="text" class="input" name="balance_money" size="10" value="{pigcms{$balance_money}" validate="number:true" tips="此处填写实体卡余额"/></div></td>
-                                </tr>
-                                <tr>
-                                    <th width="15%">等级</th>
-                                    <td width="85%" colspan="3">
-                                    <div style="height:30px;line-height:24px;">现在等级：<php>if(isset($levelarr[$now_user['level']])){ echo $levelarr[$now_user['level']]['lname'];}else{echo '暂无等级';}</php> &nbsp;&nbsp;&nbsp;&nbsp;
-                                    <if condition="!empty($levelarr)">
-                                    请设定等级：&nbsp;&nbsp;
-                                    <select name="level" style="width:100px;">
-                                    <option value="0">无</option>
-                                    <volist name="levelarr" id="vo">
-                                    <option value="{pigcms{$vo['level']}" <if condition="$now_user['level'] eq $vo['level']"> selected="selected"</if>>{pigcms{$vo['lname']}</option>
-                                    </volist>
-                                    </select>
-                                    </if>
-                                    &nbsp;&nbsp;</div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th width="15%">记录表</th>
-                                    <td width="85%" colspan="3">
-                                        <div style="height:30px;line-height:24px;">
-                                            <a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('User/money_list',array('uid'=>$now_user['uid']))}','余额记录列表',680,560,true,false,false,null,'money_list',true);">余额记录</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('User/score_list',array('uid'=>$now_user['uid']))}','{pigcms{$config.score_name}记录列表',680,560,true,false,false,null,'score_list',true);">{pigcms{$config.score_name}记录</a>
-                                        </div>
-                                    </td>
-                                </tr-->
+
+                                </div>
+
+                                <div class="form-group  row"
+                                    <php>if($can_recharge==0 || $config['open_frozen_money']==0){echo
+                                        'style="display:none"';}
+                                    </php>
+                                >
+                                            <label class="col-sm-3 col-form-label">冻结理由</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control" name="frozen_reason" size="40"
+                                                       value="{pigcms{$now_user.frozen_reason}" tips="冻结理由"/>
+                                            </div>
+                                </div>
                                 <script>
                                     var balance_show = "{pigcms{:L('_BACK_BALANCE_SHOW_')}";
                                     var now_money = '{pigcms{$now_user.now_money|floatval=###}';
