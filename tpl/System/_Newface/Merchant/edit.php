@@ -10,8 +10,7 @@
             <div class="col-lg-12">
                 <div class="ibox">
                     <div class="ibox-content">
-                        <form id="myform" method="post" action="{pigcms{:U('Merchant/amend')}" frame="true"
-                              refresh="true">
+                        <form id="myform" method="post" action="{pigcms{:U('Merchant/amend')}" frame="true" refresh="true">
 
                             <input type="hidden" name="mer_id" value="{pigcms{$merchant.mer_id}"/>
                             <input type="hidden" class="input fl" name="bill_period"

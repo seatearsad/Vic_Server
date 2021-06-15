@@ -8,26 +8,26 @@
                 <div class="ibox">
                     <div class="ibox-content">
                         <form id="myform" method="post" action="" frame="true" refresh="true">
-                            <table cellpadding="0" cellspacing="0" class="frame_form" width="100%">
+                            <table class="table table-bordered table-striped">
                                 <tr>
-                                    <th width="90">Name</th>
-                                    <th width="90">Phone</th>
-                                    <!-- 				<th width="90">常驻地址距离</th> -->
-                                    <th width="90">Distance</th>
-                                    <th width="90">Click</th>
+                                    <th>Name</th>
+                                    <th>Phone</th>
+                                    <!-- 				<th >常驻地址距离</th> -->
+                                    <th>Distance</th>
+                                    <th>Click</th>
                                 </tr>
                                 <volist name="users" id="row">
                                     <tr>
                                         <if condition="$row['work_status'] eq 0">
-                                            <th width="90">{pigcms{$row['name']}</th>
-                                            <th width="90">{pigcms{$row['phone']}</th>
-                                            <!-- 				<th width="90">{pigcms{$row['range']}</th> -->
-                                            <th width="90">{pigcms{$row['now_range']}</th>
+                                            <th >{pigcms{$row['name']}</th>
+                                            <th >{pigcms{$row['phone']}</th>
+                                            <!-- 				<th >{pigcms{$row['range']}</th> -->
+                                            <th >{pigcms{$row['now_range']}</th>
                                             <else/>
-                                            <td width="90">{pigcms{$row['name']}</td>
-                                            <td width="90">{pigcms{$row['phone']}</td>
-                                            <!-- 				<th width="90">{pigcms{$row['range']}</th> -->
-                                            <td width="90">{pigcms{$row['now_range']}</td>
+                                            <td >{pigcms{$row['name']}</td>
+                                            <td >{pigcms{$row['phone']}</td>
+                                            <!-- 				<th >{pigcms{$row['range']}</th> -->
+                                            <td >{pigcms{$row['now_range']}</td>
                                         </if>
                                         <td><input type="radio" name="uid" value="{pigcms{$row['uid']}"/></td>
                                     </tr>

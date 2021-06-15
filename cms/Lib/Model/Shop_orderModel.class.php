@@ -1258,14 +1258,20 @@ class Shop_orderModel extends Model
 			if ($order['is_pick_in_store'] == 0) {
 				$order['deliver_str'] = '平台配送';
 				$order['deliverinfo'] = '平台配送';
-				if ($order['deliver_info']) {
-					$order['deliverinfo'] .= '<br/>配送员姓名：' . $order['deliver_info']['name'] . '<br/>配送员电话：' . $order['deliver_info']['phone'];
+				if ($order['deliverinfo'] && $order['deliver_info']['name'] && $order['deliver_info']['phone']) {
+                    $order['deliverinfo'] .= '<br/>配送员姓名：' . $order['deliver_info']['name'] . '配送员电话：' . $order['deliver_info']['phone'];
+                    $order['deliverinfo_forbk']= $order['deliver_info']['name'] . ' ( ' . $order['deliver_info']['phone']." )";
+				}else{
+                    $order['deliverinfo_forbk']="-";
 				}
 			} elseif ($order['is_pick_in_store'] == 1) {
 				$order['deliver_str'] = '商家配送';
 				$order['deliverinfo'] = '商家配送';
-				if ($order['deliver_info']) {
+				if ($order['deliverinfo'] && $order['deliver_info']['name'] && $order['deliver_info']['phone']) {
 					$order['deliverinfo'] .= '<br/>配送员姓名：' . $order['deliver_info']['name'] . '<br/>配送员电话：' . $order['deliver_info']['phone'];
+                    $order['deliverinfo_forbk']='' . $order['deliver_info']['name'] . ' ( ' . $order['deliver_info']['phone']." )";
+				}else{
+                    $order['deliverinfo_forbk']="-";
 				}
 			} elseif ($order['is_pick_in_store'] == 2) {
 				$order['deliver_str'] = '自提';
@@ -1364,8 +1370,8 @@ class Shop_orderModel extends Model
 				break;
 			case 3:
 				$order['css'] = 'complete';
-				$order['show_status'] = 'Customer Reviewe';
-				$order['status_str'] = 'Customer Reviewe';
+				$order['show_status'] = 'Customer Reviewed';
+				$order['status_str'] = 'Customer Reviewed';
 				break;
 			case 4:
 				$order['css'] = 'cancle';

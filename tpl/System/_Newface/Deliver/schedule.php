@@ -367,14 +367,21 @@
                 var is_send = true;
                 var re_data = {};
 
-                for (var i = 0; i < work_time_list.length; i++) {
+                for (var i = 0; i < work_time_list.length; i++) {//week 0-6 sun（周日）-（周六）
                     re_data[i] = {};
-                    for (var j = 0; j < work_time_list[i].length; j++) {
+                    for (var j = 0; j < work_time_list[i].length; j++) { //time
                         var time_data = {};
-                        time_data['id'] = work_time_list[i][j]['id'];
-                        time_data['min'] = work_time_list[i][j]['min'];
-                        time_data['max'] = work_time_list[i][j]['max'];
-                        re_data[i][j] = time_data;
+
+                        if(work_time_list[i][j]['min']>work_time_list[i][j]['max']){
+                            alert(week_all[i]+" "+format_time(work_time_list[i][j]["start_time"]) +" - "+ format_time(work_time_list[i][j]["end_time"]) + "" +" error, Please enter the correct number of couriers");
+                            is_send=false;
+                            return;
+                        }else{
+                            time_data['id'] = work_time_list[i][j]['id'];
+                            time_data['min'] = work_time_list[i][j]['min'];
+                            time_data['max'] = work_time_list[i][j]['max'];
+                            re_data[i][j] = time_data;
+                        }
                     }
                 }
 

@@ -26,7 +26,7 @@
                                     <span class="input-group-addon bootstrap-touchspin-postfix input-group-append"><span class="input-group-text">%</span></span>
                                 </div>
                             </div>
-                            <div class="btn hidden">
+                            <div class="btn tutti_hidden_obj">
                                 <input type="submit" name="dosubmit" id="dosubmit" value="提交" class="button" />
                                 <input type="reset" value="取消" class="button" />
                             </div>

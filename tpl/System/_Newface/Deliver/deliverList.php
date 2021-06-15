@@ -172,7 +172,27 @@
     //     window.location.href = "{pigcms{:U('Deliver/deliverList')}" + "&city_id="+city_id;
     // });
 
-
+    $('.change').click(function(){
+        var supply_id = $(this).attr('data-supply'), obj = $(this);
+        window.top.art.dialog({
+            lock: true,
+            title:'Reminder',
+            content: "{pigcms{:L('_BACK_SURE_CHANGE_')}",
+            okVal:'Yes',
+            ok: function(){
+                $.get("{pigcms{:U('Deliver/change')}", {supply_id:supply_id}, function(response){
+                    if (response.error_code) {
+                        window.top.msg(0, response.msg);
+                    } else {
+                        window.top.msg(1, response.msg,true);
+                        obj.remove();
+                    }
+                }, 'json');
+            },
+            cancelVal:'Cancel',
+            cancel: true
+        });
+    });
 
     var hover_id = 0;
     var time_out;

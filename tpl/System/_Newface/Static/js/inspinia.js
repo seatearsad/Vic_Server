@@ -115,10 +115,11 @@ $(document).ready(function () {
 
     // Minimalize menu
     $('.navbar-minimalize').on('click', function (event) {
+        console.log("1");
+        $.cookie("meal_list", '', {expires:365, path:"/"});
         event.preventDefault();
         $("body").toggleClass("mini-navbar");
         SmoothlyMenu();
-
     });
 
     // Tooltips demo
@@ -182,6 +183,8 @@ $(document).ready(function () {
         var boxedlayout = localStorage.getItem("boxedlayout");
         var fixedfooter = localStorage.getItem("fixedfooter");
 
+        if ($.cookie("nav_status")==2){ collapse="on"}
+
         var body = $('body');
 
         if (fixedsidebar == 'on') {
@@ -201,7 +204,6 @@ $(document).ready(function () {
                 if (!body.hasClass('body-small')) {
                     body.addClass('mini-navbar');
                 }
-
             }
         }
 
@@ -236,14 +238,8 @@ function animationHover(element, animation) {
 }
 
 function SmoothlyMenu() {
-    if (!$('body').hasClass('mini-navbar') || $('body').hasClass('body-small')) {
-        // Hide menu in order to smoothly turn on when maximize menu
-        $('#side-menu').hide();
-        // For smoothly turn on menu
-        setTimeout(
-            function () {
-                $('#side-menu').fadeIn(400);
-            }, 200);
+    if (!$('body').hasClass('mini-navbar') || $('body').hasClass('body-small')) {   //Open
+        Menu_Open();
     } else if ($('body').hasClass('fixed-sidebar')) {
         $('#side-menu').hide();
         setTimeout(
@@ -251,9 +247,26 @@ function SmoothlyMenu() {
                 $('#side-menu').fadeIn(400);
             }, 100);
     } else {
-        // Remove all inline style from jquery fadeIn function to reset menu state
-        $('#side-menu').removeAttr('style');
+        Menu_Close();
     }
+}
+
+function Menu_Open(){
+    $.cookie("nav_status", '1', {expires:365, path:"/"});
+    // Hide menu in order to smoothly turn on when maximize menu
+    $('#side-menu').hide();
+    // For smoothly turn on menu
+    setTimeout(
+        function () {
+            $('#side-menu').fadeIn(400);
+        }, 200);
+}
+
+function Menu_Close(){
+    $.cookie("nav_status", '2', {expires:365, path:"/"});//close
+   // console.log('Menu_Close');
+    // Remove all inline style from jquery fadeIn function to reset menu state
+    $('#side-menu').removeAttr('style');
 }
 
 // Dragable panels

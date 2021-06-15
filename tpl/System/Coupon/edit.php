@@ -292,88 +292,88 @@
 	<link rel="stylesheet" href="{pigcms{$static_public}kindeditor/themes/default/default.css">
 	<script src="{pigcms{$static_public}kindeditor/kindeditor.js"></script>
 	<script src="{pigcms{$static_public}kindeditor/lang/zh_CN.js"></script>
-	<script type="text/javascript">
-		KindEditor.ready(function(K){
-				var site_url = "{pigcms{$config.site_url}";
-				var editor = K.editor({
-					allowFileManager : true
-				});
-				$('.J_selectImage').click(function(){
-					var upload_file_btn = $(this);
-					editor.uploadJson = "{pigcms{:U('Config/ajax_upload_pic')}";
-					editor.loadPlugin('image', function(){
-						editor.plugin.imageDialog({
-							showRemote : false,
-							clickFn : function(url, title, width, height, border, align) {
-								upload_file_btn.siblings('.input-image').val(site_url+url);
-								editor.hideDialog();
-							}
-						});
-					});
-				});
+    <script type="text/javascript">
+        KindEditor.ready(function (K) {
+            var site_url = "{pigcms{$config.site_url}";
+            var editor = K.editor({
+                allowFileManager: true
+            });
+            $('.J_selectImage').click(function () {
+                var upload_file_btn = $(this);
+                editor.uploadJson = "{pigcms{:U('Config/ajax_upload_pic')}";
+                editor.loadPlugin('image', function () {
+                    editor.plugin.imageDialog({
+                        showRemote: false,
+                        clickFn: function (url, title, width, height, border, align) {
+                            upload_file_btn.siblings('.input-image').val(site_url + url);
+                            editor.hideDialog();
+                        }
+                    });
+                });
+            });
 
-			});
-			
-			$(document).ready(function() {
-			
-			
-			$('select[name="color"]').css('background-color','#63b359');	
-			$('select[name="color"]').change(function(event) {
-				$('#wx_color').css('background-color',$('select[name="color"]').find('option:selected').html());
-				$(this).css('background-color',$('select[name="color"]').find('option:selected').html());
-			});		
+        });
 
-			$('input:radio[name="sync_wx"]').click(function(i,val){
-				if($(this).val()==1){
-					$('.wx_coupon').show();
-				}else{
-					$('.wx_coupon').hide();
-				}
-			});
-			
-		});
-		
-		function plus(){
-			var item = $('.plus:last');
-			var newitem = $(item).clone(true);
-			var No = parseInt(item.find("label").html())+1;
-			$('.delete').children().show();
-			if(No>4){
-				alert('不能超过4条信息');
-			}else{
-				$(item).after(newitem);
-				newitem.find('input').attr('value','');
-				newitem.find('textarea').attr('value','');
-				newitem.find("#addLink").attr('onclick',"addLink('url"+No+"',0)");
-				newitem.find("label").html(No);
-				newitem.find('input[name="url[]"]').attr('id','url'+No);
-				newitem.find('.delete').children().show();
-			}
-		}
-		function del(obj){
-			if($('.plus').length<=1){
-				$('.delete').children().hide();
-			}else{
-				if($('.plus').length==2){
-					$('.delete').children().hide();
-				}
-				$(obj).parents('.plus').remove();
-				$.each($('.plus'), function(index, val) {
-					var No =index+1;
-					$(val).find('label').html(No);
-					$(val).find('input[name="url[]"]').attr('id','url'+No);
-					$(val).find("#addLink").attr('onclick',"addLink('url"+No+"',0)");
-				});
-			}
-		}
+        $(document).ready(function () {
 
-        $("#yes").click(function(){
+            $('select[name="color"]').css('background-color', '#63b359');
+            $('select[name="color"]').change(function (event) {
+                $('#wx_color').css('background-color', $('select[name="color"]').find('option:selected').html());
+                $(this).css('background-color', $('select[name="color"]').find('option:selected').html());
+            });
+
+            $('input:radio[name="sync_wx"]').click(function (i, val) {
+                if ($(this).val() == 1) {
+                    $('.wx_coupon').show();
+                } else {
+                    $('.wx_coupon').hide();
+                }
+            });
+
+        });
+
+        function plus() {
+            var item = $('.plus:last');
+            var newitem = $(item).clone(true);
+            var No = parseInt(item.find("label").html()) + 1;
+            $('.delete').children().show();
+            if (No > 4) {
+                alert('不能超过4条信息');
+            } else {
+                $(item).after(newitem);
+                newitem.find('input').attr('value', '');
+                newitem.find('textarea').attr('value', '');
+                newitem.find("#addLink").attr('onclick', "addLink('url" + No + "',0)");
+                newitem.find("label").html(No);
+                newitem.find('input[name="url[]"]').attr('id', 'url' + No);
+                newitem.find('.delete').children().show();
+            }
+        }
+
+        function del(obj) {
+            if ($('.plus').length <= 1) {
+                $('.delete').children().hide();
+            } else {
+                if ($('.plus').length == 2) {
+                    $('.delete').children().hide();
+                }
+                $(obj).parents('.plus').remove();
+                $.each($('.plus'), function (index, val) {
+                    var No = index + 1;
+                    $(val).find('label').html(No);
+                    $(val).find('input[name="url[]"]').attr('id', 'url' + No);
+                    $(val).find("#addLink").attr('onclick', "addLink('url" + No + "',0)");
+                });
+            }
+        }
+
+        $("#yes").click(function () {
             $("#adver_region").hide();
         })
-        $("#no").click(function(){
+        $("#no").click(function () {
             $("#adver_region").show();
         })
-	</script>
+    </script>
 
 	
 <include file="Public:footer"/>
