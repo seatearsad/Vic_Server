@@ -9,7 +9,9 @@ class ConfigAction extends BaseAction {
 		if(empty($_GET['galias'])){
 			$condition_config_group['status'] = '1';
 		}
-		
+        //禁止改动项
+		$condition_config_group['gid'] = array('not in',array(45,46,47));
+
 		$group_list = $database_config_group->field(true)->where($condition_config_group)->order('`gsort` DESC,`gid` ASC')->select();
 		foreach($group_list as &$gListValue){
 			$gListValue['gname'] = str_replace('订餐',$this->config['meal_alias_name'],$gListValue['gname']);
