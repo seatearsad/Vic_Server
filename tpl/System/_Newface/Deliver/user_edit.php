@@ -10,14 +10,16 @@
             <div class="col-lg-12">
                 <div class="ibox">
                     <div class="ibox-content">
+
                         <form id="myform" method="post" action="{pigcms{:U('Deliver/user_edit')}" frame="true" refresh="true">
+
                             <input type="hidden" name="uid" value="{pigcms{$now_user.uid}"/>
 
                             <div class="form-group  row">
                                 <label class="col-sm-3 col-form-label">{pigcms{:L('_LAST_NAME_')}</label>
-                                <div class="col-sm-9"><input type="text" size="20" class="form-control"
+                                <div class="col-sm-9"><input type="text" size="50" class="form-control"
                                                              name="family_name"
-                                                             value="{pigcms{$now_user.family_name}" size="25" validate="maxlength:50,required:true"/>
+                                                             value="{pigcms{$now_user.family_name}" size="50" validate="maxlength:50,required:true"/>
                                 </div>
                             </div>
 

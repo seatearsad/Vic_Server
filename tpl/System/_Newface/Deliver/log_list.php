@@ -82,7 +82,6 @@
                                                 <th>{pigcms{:L('_BACK_FINISH_AT_')}</th>
                                                 <th>{pigcms{:L('_BACK_CASH_RECE_')}</th>
                                                 <!--th>创建时间</th-->
-
                                             </tr>
                                             </thead>
                                             <tbody>
