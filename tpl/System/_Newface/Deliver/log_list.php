@@ -107,7 +107,6 @@
                                             <!--td width="50">{pigcms{$vo.create_time}</td-->
                                             </tr>
                                             </volist>
-                                            <tr><td class="textcenter pagebar" colspan="16">{pigcms{$pagebar}</td></tr>
                                             <else/>
                                             <tr><td class="textcenter red" colspan="16">{pigcms{:L('_BACK_EMPTY_')}</td></tr>
                                             </if>

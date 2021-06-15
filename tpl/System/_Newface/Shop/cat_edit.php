@@ -62,45 +62,50 @@
                                     </div>
                                 </div>
                             </div>
-                            <if condition="$parentid eq 0">
-                                <div class="form-group  row">
-                                    <label class="col-sm-3 col-form-label">{pigcms{:L('C_CATETYPE')}</label>
-                                    <div class="col-sm-9 col-form-label">
-                                        <span class="cb-enable"><label class="cb-enable <if condition="$now_category['cat_type'] eq 0">selected</if>"><span>{pigcms{:L('C_CATEGORYNOR')}</span><input type="radio" name="cat_type" value="0" <if condition="$now_category['cat_type'] eq 0">checked="checked"</if> /></label></span>
-                            <span class="cb-disable"><label class="cb-disable <if condition="$now_category['cat_type'] eq 1">selected</if>"><span>{pigcms{:L('C_CATEGORYFT')}</span><input type="radio" name="cat_type" value="1" <if condition="$now_category['cat_type'] eq 1">checked="checked"</if> /></label></span>
-                                    </div>
+
+               <if condition="$parentid eq 0"><!--                           主分类-->
+                            <div class="form-group  row">
+                                <label class="col-sm-3 col-form-label">{pigcms{:L('C_CATETYPE')}</label>
+                                <div class="col-sm-9 col-form-label">
+                                    <span class="cb-enable"><label class="cb-enable <if condition="$now_category['cat_type'] eq 0">selected</if>"><span>{pigcms{:L('C_CATEGORYNOR')}</span>
+                                    <input type="radio" class="cat_type"  id="cat_type_0" name="cat_type" value="0" <if condition="$now_category['cat_type'] eq 0">checked="checked"</if> /></label></span>
+
+                            <span class="cb-disable"><label class="cb-disable <if condition="$now_category['cat_type'] eq 1">selected</if>"><span>{pigcms{:L('C_CATEGORYFT')}</span>
+                                    <input type="radio" class="cat_type"  id="cat_type_1" name="cat_type" value="1" <if condition="$now_category['cat_type'] eq 1">checked="checked"</if> /></label></span>
                                 </div>
-                                <div class="form-group  row">
-                                    <label class="col-sm-3 col-form-label">{pigcms{:L('BASE_CITY')}</label>
-                                    <div class="col-sm-9 col-form-label">
-                                        <select name="city_id" class="form-control m-b">
-                                            <option value="0" <if condition="$now_category['city_id'] eq 0">selected</if>>{pigcms{:L('G_UNIVERSAL')}</option>
-                                            <volist name="city" id="vo">
-                                                <option value="{pigcms{$vo.area_id}" <if condition="$now_category['city_id'] eq $vo['area_id']">selected</if>>{pigcms{$vo.area_name}</option>
-                                            </volist>
-                                        </select>
-                                    </div>
+                            </div>
+                            <div class="form-group  row city_list"  <if condition="$now_category['cat_type'] eq 0">style="display:none;"</if>>
+                                <label class="col-sm-3 col-form-label">{pigcms{:L('BASE_CITY')}</label>
+                                <div class="col-sm-9 col-form-label">
+                                    <select name="city_id" class="form-control m-b">
+                                        <option value="0" <if condition="$now_category['city_id'] eq 0">selected</if>>{pigcms{:L('G_UNIVERSAL')}</option>
+                                        <volist name="city" id="vo">
+                                            <option value="{pigcms{$vo.area_id}" <if condition="$now_category['city_id'] eq $vo['area_id']">selected</if>>{pigcms{$vo.area_name}</option>
+                                        </volist>
+                                    </select>
                                 </div>
-                                <else />
-                                <div class="form-group  row">
-                                    <label class="col-sm-3 col-form-label">{pigcms{:L('C_CATETYPE')}</label>
-                                    <div class="col-sm-9 col-form-label">
-                                        <if condition="$category['cat_type'] eq 0">
-                                            {pigcms{:L('C_CATEGORYNOR')}
-                                            <else />
-                                            {pigcms{:L('C_CATEGORYFT')}
-                                        </if>
-                                        <input type="hidden" name="cat_type" value="{pigcms{$category.cat_type}" >
-                                    </div>
+                            </div>
+                 <else />
+<!--                                子分类-->
+                            <div class="form-group  row">
+                                <label class="col-sm-3 col-form-label">{pigcms{:L('C_CATETYPE')}</label>
+                                <div class="col-sm-9 col-form-label">
+                                    <if condition="$category['cat_type'] eq 0">
+                                        {pigcms{:L('C_CATEGORYNOR')}
+                                        <else />
+                                        {pigcms{:L('C_CATEGORYFT')}
+                                    </if>
+                                    <input type="hidden" name="cat_type" value="{pigcms{$category.cat_type}" >
                                 </div>
-                                <div class="form-group  row">
-                                    <label class="col-sm-3 col-form-label">{pigcms{:L('BASE_CITY')}</label>
-                                    <div class="col-sm-9 col-form-label">
-                                        {pigcms{$category.city_name}
-                                        <input type="hidden" name="city_id" value="{pigcms{$category.city_id}" >
-                                    </div>
+                            </div>
+                            <div class="form-group  row">
+                                <label class="col-sm-3 col-form-label">{pigcms{:L('BASE_CITY')}</label>
+                                <div class="col-sm-9 col-form-label">
+                                    {pigcms{$category.city_name}
+                                    <input type="hidden" name="city_id" value="{pigcms{$category.city_id}" >
                                 </div>
-                            </if>
+                            </div>
+               </if>
                             <div class="btn tutti_hidden_obj">
                                 <input type="submit" name="dosubmit" id="dosubmit" value="{pigcms{:L('BASE_SUBMIT')}" class="button" />
                                 <input type="reset" value="{pigcms{:L('BASE_CANCEL')}" class="button" />
@@ -112,6 +117,16 @@
         </div>
 <script type="text/javascript" src="{pigcms{$static_public}js/webuploader.min.js"></script>
 <script>
+
+    $("#cat_type_0").click(function () {
+        console.log("cat_type_0");
+        $(".city_list").hide();
+    })
+    $("#cat_type_1").click(function () {
+        console.log("cat_type_1");
+        $(".city_list").show();
+    })
+
     var uploader = WebUploader.create({
         auto: true,
         swf: '{pigcms{$static_public}js/Uploader.swf',

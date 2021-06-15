@@ -211,7 +211,7 @@ class DeliverAction extends BaseAction {
     		$uid = intval($_POST['uid']);
     		$column['name'] = isset($_POST['name']) ? htmlspecialchars($_POST['name']) : '';
     		$column['phone'] = isset($_POST['phone']) ? htmlspecialchars($_POST['phone']) : '';
-    		$column['pwd'] = isset($_POST['pwd']) ? htmlspecialchars($_POST['pwd']) : '';
+    		$column['pwd'] = isset($_POST['pwd']) ? htmlspecialchars(trim($_POST['pwd'])) : '';
     		if($column['pwd']){
     			$column['pwd'] = md5($column['pwd']);
     		} else {
@@ -682,7 +682,7 @@ class DeliverAction extends BaseAction {
         }
 
         $this->assign('supply_info', $supply_info);
-        $this->assign('pagebar', $p->show());
+        $this->assign('pagebar', $p->show2());
         $this->assign('user', $user);
 		$this->assign(array('begin_time' => $begin_time, 'end_time' => $end_time));
         $this->display();

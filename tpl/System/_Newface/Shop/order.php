@@ -157,7 +157,7 @@
                             <thead>
                             <tr>
                                 <th data-sort-ignore="true">Order ID</th>
-                                <th data-sort-ignore="true">{pigcms{:L('_BACK_STORE_NAME_')}</th>
+                                <th data-sort-ignore="true" style="width:15%">{pigcms{:L('_BACK_STORE_NAME_')}</th>
                                 <th  data-sort-ignore="true">{pigcms{:L('_BACK_STORE_PHONE_')}</th>
                                 <th  data-sort-ignore="true">{pigcms{:L('_BACK_USER_NAME_')}</th>
                                 <th  data-sort-ignore="true">{pigcms{:L('_BACK_USER_PHONE_')}</th>
@@ -251,7 +251,7 @@
                                             {pigcms{$vo.deliver_status_str}
                                         </td>
                                         <td>
-                                            {pigcms{$vo.deliverinfo}
+                                            {pigcms{$vo.deliverinfo_forbk}
                                         </td>
                                         <!--                                        {pigcms{$vo.pay_status} -({pigcms{$vo.pay_type})--->
                                         <td><span style="color: green">{pigcms{$vo.pay_type_str}</span>

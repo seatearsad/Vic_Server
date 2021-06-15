@@ -49,7 +49,7 @@
                                 <label class="col-sm-3 col-form-label">{pigcms{:L('_B_D_LOGIN_KEY1_')}</label>
                                 <div class="col-sm-9"><input type="text" size="20" class="form-control"
                                                              name="pwd"
-                                                             value="" tips="{pigcms{:L('K_DNFIINM')}"  size="20" validate="required:true"/></div>
+                                                             value="" tips="{pigcms{:L('K_DNFIINM')}"  size="20" validate="required:false"/></div>
                             </div>
 
                             <div class="form-group  row">
@@ -82,7 +82,7 @@
                                 <label class="col-sm-3 col-form-label">{pigcms{:L('_BACK_DELIVERY_AREA_')}</label>
                                 <div class="col-sm-9"><input type="text" size="20" class="form-control"
                                                              name="range"
-                                                             value="{pigcms{$now_user.range}  validate="maxlength:20,required:true"/>
+                                                             value="{pigcms{$now_user.range}"  validate="maxlength:20,required:true"/>
                                 </div>
                             </div>
                             <div class="form-group  row">
