@@ -123,7 +123,7 @@
                                                                  id="user_rechange_code" value=""/>
                                     </div>
                                     <div class="col-sm-3">
-                                        <button id="send_code" type="button"
+                                        <button id="send_code" type="button" class="form-control"
                                                 style="margin-left: 10px;height: 30px;">Send
                                         </button>
                                     </div>

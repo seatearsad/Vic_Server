@@ -243,10 +243,10 @@
                                         <tr>
                                             <th width="15%">{pigcms{:L('_BACK_WHETHER_PASS_')}</th>
                                             <td colspan=3>
-                                                <span class="cb-enable"><label class="cb-enable selected"><span>{pigcms{:L('_BACK_PASS_REVIEW_')}</span><input
-                                                                type="radio" name="review" value="1" checked="checked"/></label></span>
-                                                <span class="cb-disable"><label class="cb-disable"><span>{pigcms{:L('_BACK_NO_PASS_REVIEW_')}</span><input
-                                                                type="radio" name="review" value="0"/></label></span>
+                                                <span class="cb-enable"><label class="cb-enable "><span>{pigcms{:L('_BACK_PASS_REVIEW_')}</span><input
+                                                                type="radio" name="review" value="1"/></label></span>
+                                                <span class="cb-disable"><label class="cb-disable selected"><span>{pigcms{:L('_BACK_NO_PASS_REVIEW_')}</span><input
+                                                                type="radio" name="review" value="0"  checked="checked"/></label></span>
                                             </td>
                                         </tr>
                                         <tr id="review_desc" <if condition="$img['review_desc'] eq ''">style="display: none"</if> >

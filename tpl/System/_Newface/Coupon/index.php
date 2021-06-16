@@ -44,7 +44,7 @@
                     <div class="ibox-content">
                         <div class="table-responsive">
                             <!-------------------------------- 工具条 -------------------------------------->
-                            <div style="height: 50px;">
+                            <div style="height: 60px;">
                                 <div id="tool_bar" class="form-inline tutti_toolbar">
                                     <form action="{pigcms{:U('Coupon/index')}" method="get">
                                         <input type="hidden" name="c" value="Coupon"/>
@@ -134,9 +134,9 @@
                                         </td>
                                         <td class="textcenter">
                                             <a href="javascript:void(0);"
-                                               onclick="window.top.artiframe('{pigcms{:U('Coupon/edit',array('coupon_id'=>$vo['coupon_id']))}','{pigcms{:L(\'_BACK_EDIT_COU_INFO_\')}',800,500,true,false,false,editbtn,'edit',true);">
+                                               onclick="window.top.artiframe('{pigcms{:U('Coupon/edit',array('coupon_id'=>$vo['coupon_id']))}','{pigcms{:L(\'_BACK_EDIT_COU_INFO_\')}',800,500,true,false,false,false,'detail',true);">
                                                 <button class="btn btn-white text-grey" type="button">
-                                                    {pigcms{:L('_BACK_EDIT_')}
+                                                    {pigcms{:L('_BACK_VIEW_')}
                                                 </button>
                                             </a>
                                         </td>

@@ -495,6 +495,25 @@ class ShopAction extends BaseAction
         } else {
             $this->assign('city_id', 0);
         }
+        //var_dump($result);
+        $pay_method = D('Config')->get_pay_method('', '', 0);
+        foreach ($pay_method as $k => &$v) {
+            switch ($k) {
+                case 'offline':
+                    $v['name'] = 'Cash';
+                    break;
+                case 'alipay':
+                    $v['name'] = 'AliPay';
+                    break;
+                case 'weixin':
+                    $v['name'] = 'Wechat Pay';
+                    break;
+                default:
+                    break;
+            }
+        }
+        $this->assign('pay_method', $pay_method);
+        $this->assign('status_list', D('Shop_order')->getStatusListForMilly());
 
         $store_ids = array();
         $where = array();
@@ -627,9 +646,10 @@ class ShopAction extends BaseAction
                 }
             }
         }
-        //var_dump($result);
+
+
         $this->assign(array('type' => $type, 'sort' => $sort, 'status' => $status, 'pay_type' => $pay_type));
-        $this->assign('status_list', D('Shop_order')->getStatusListForMilly());
+
         $this->assign($result);
 
         $field = 'sum(price) AS total_price, sum(price - card_price - merchant_balance - balance_pay - payment_money - score_deducte - coupon_price - card_give_money - merchant_reduce) AS offline_price, sum(card_price + merchant_balance + balance_pay + payment_money + score_deducte + coupon_price + card_give_money) AS online_price';
@@ -637,23 +657,7 @@ class ShopAction extends BaseAction
         $result_total = D('Shop_order')->field($field)->where($count_where)->select();
         $result_total = isset($result_total[0]) ? $result_total[0] : '';
         $this->assign($result_total);
-        $pay_method = D('Config')->get_pay_method('', '', 0);
-        foreach ($pay_method as $k => &$v) {
-            switch ($k) {
-                case 'offline':
-                    $v['name'] = 'Cash';
-                    break;
-                case 'alipay':
-                    $v['name'] = 'AliPay';
-                    break;
-                case 'weixin':
-                    $v['name'] = 'Wechat Pay';
-                    break;
-                default:
-                    break;
-            }
-        }
-        $this->assign('pay_method', $pay_method);
+
         $this->display();
     }
 

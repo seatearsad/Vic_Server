@@ -242,7 +242,7 @@ class CouponAction extends BaseAction {
 					$_POST['status'] = 3;
 				}
 
-				unset($_POST['dosubmit']);
+				unset($_POST[' ']);
 				$data = $_POST;
 				$data['last_time']=time();
                 //garfunkel add

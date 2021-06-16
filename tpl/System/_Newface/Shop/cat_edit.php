@@ -119,11 +119,9 @@
 <script>
 
     $("#cat_type_0").click(function () {
-        console.log("cat_type_0");
         $(".city_list").hide();
     })
     $("#cat_type_1").click(function () {
-        console.log("cat_type_1");
         $(".city_list").show();
     })
 
