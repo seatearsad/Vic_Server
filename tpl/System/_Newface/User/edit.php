@@ -172,7 +172,7 @@
                                                         '<label class="col-sm-3 col-form-label">balance_show</label><div class="col-sm-9">'+
                                                         '{pigcms{:L("F_CURRENT_BALANCE")}：$'+now_money+' &nbsp;&nbsp;&nbsp;&nbsp;<select name="set_money_type" class="form-control"><option value="1">{pigcms{:L("F_ADD")}</option><option value="2">{pigcms{:L("F_LESS")}</option></select>&nbsp;&nbsp;<input type="text" class="form-control" name="set_money" size="10" validate="number:true" tips="此处填写增加或减少的额度，不是将余额变为此处填写的值"/>' +
                                                     '<input type="hidden" class="form-control" name="user_code_curr" value="'+$('#user_rechange_code').val()+'">'
-                                                    '</div>'
+                                                    '</div>';
 
                                                     $('.frame_form').append(html);
                                                     $('#code_tr').hide();
