@@ -45,7 +45,7 @@
                                         <label class="col-sm-3 col-form-label">{pigcms{:L('_STORE_PRO_NAME_')}</label>
                                         <div class="col-sm-9">{pigcms{$coupon.name}</div>
                                     </div>
-                                    
+
                                     <tr style="display: none;">
                                         <td width="100">优惠券图标：</td>
                                         <td><input type="text" style="width:200px;" name="img" class="input input-image"
