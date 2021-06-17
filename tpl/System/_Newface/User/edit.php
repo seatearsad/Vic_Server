@@ -78,23 +78,23 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group  row">
+                                <!--div class="form-group  row">
                                     <label class="col-sm-3 col-form-label">{pigcms{:L('NAME_BKADMIN')}</label>
                                     <div class="col-sm-9"><input type="text" class="form-control" name="truename"
                                                                  value="{pigcms{$now_user.truename}"/></div>
-                                </div>
+                                </div-->
                                 <div class="form-group  row">
                                     <label class="col-sm-3 col-form-label">{pigcms{:L('_BACK_EMAIL_')}</label>
                                     <div class="col-sm-9"><input type="text" class="form-control" name="email"
                                                                  value="{pigcms{$now_user.email}"/></div>
                                 </div>
-                                <div class="form-group  row">
+                                <!--div class="form-group  row">
                                     <label class="col-sm-3 col-form-label">{pigcms{:L('_ND_ADDRESS_')}</label>
                                     <div class="col-sm-9"><input type="text" class="form-control"
                                                                  name="youaddress"
                                                                  value="{pigcms{$now_user.youaddress}"
                                         /></div>
-                                </div>
+                                </div-->
 
                                 <div class="form-group  row">
                                     <label class="col-sm-3 col-form-label">{pigcms{:L('_BACK_REG_TIME_')}</label>
@@ -123,8 +123,8 @@
                                                                  id="user_rechange_code" value=""/>
                                     </div>
                                     <div class="col-sm-3">
-                                        <button id="send_code" type="button"
-                                                style="margin-left: 10px;height: 30px;">Send
+                                        <button id="send_code" class="btn btn-white" type="button">
+                                            Send
                                         </button>
                                     </div>
                                 </div>

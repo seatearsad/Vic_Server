@@ -75,7 +75,7 @@
                                     <div class="switch">
                                         <div class="onoffswitch">
                                             <input name="status" type="checkbox" class="onoffswitch-checkbox"
-                                                   id="status_input">
+                                                   id="status_input" checked="checked">
                                             <label class="onoffswitch-label" for="status_input">
                                                 <span class="onoffswitch-inner"></span>
                                                 <span class="onoffswitch-switch"></span>

@@ -19,10 +19,11 @@
             </ol>
         </div>
         <div class="col-lg-3" style="height 90px;margin-top:40px;">
-            <button class="btn btn-white active">
-                <a href="{pigcms{:U('Coupon/index')}" style="color: inherit">{pigcms{:L('_BACK_COUPON_LIST_')}</a>
-            </button>
-
+            <div class="btn-group float-right">
+                <button class="btn btn-white active">
+                    <a href="{pigcms{:U('Coupon/index')}" style="color: inherit">{pigcms{:L('_BACK_COUPON_LIST_')}</a>
+                </button>
+            </div>
         </div>
     </div>
     <div class="wrapper wrapper-content animated fadeInRight">

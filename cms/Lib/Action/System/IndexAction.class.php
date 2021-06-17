@@ -483,8 +483,8 @@ class IndexAction extends BaseAction {
 
             $city_id = $_POST['city_id'] == 0 ? 105 : $_POST['city_id'];
 
-            //$today_zero_time = mktime(0,0,0,date('m',$_SERVER['REQUEST_TIME']),date('d',$_SERVER['REQUEST_TIME']), date('Y',$_SERVER['REQUEST_TIME']));
-            $today_zero_time = mktime(0, 0, 0, 1, 5, 2018);
+            $today_zero_time = mktime(0,0,0,date('m',$_SERVER['REQUEST_TIME']),date('d',$_SERVER['REQUEST_TIME']), date('Y',$_SERVER['REQUEST_TIME']));
+            //$today_zero_time = mktime(0, 0, 0, 1, 5, 2018);
             $begin_time = $today_zero_time - ($days - 1) * 3600 * 24;
             //$end_time = time();
             $end_time = $today_zero_time + 3600 * 24;
