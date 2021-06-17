@@ -65,7 +65,7 @@
                                         <span class="cb-disable"><label class="cb-disable"><span>{pigcms{:L('C_CATEGORYFT')}</span><input type="radio" name="cat_type" value="1" /></label></span>
                                     </div>
                                 </div>
-                                <div class="form-group  row">
+                                <div class="form-group  row" id="cat_desc" style="display: none">
                                     <label class="col-sm-3 col-form-label">{pigcms{:L('BASE_CITY')}</label>
                                     <div class="col-sm-9 col-form-label">
                                         <select name="city_id" class="form-control m-b">
@@ -107,6 +107,13 @@
         </div>
 <script type="text/javascript" src="{pigcms{$static_public}js/webuploader.min.js"></script>
 <script>
+    $('input:radio[name=cat_type]').click(function () {
+        if ($(this).val() == 1) {//未通过
+            $('#cat_desc').show();
+        } else {
+            $('#cat_desc').hide();
+        }
+    });
     var uploader = WebUploader.create({
         auto: true,
         swf: '{pigcms{$static_public}js/Uploader.swf',

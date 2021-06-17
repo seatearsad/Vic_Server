@@ -72,11 +72,23 @@
                                     <input type="hidden" name="a" value="order"/>
 
                                     <div style="width:100%;">
-                                        {pigcms{:L('_BACK_SEARCH_')}:&nbsp; <input type="text" name="keyword"
+                                        <if condition="$system_session['level'] neq 3">
+                                            City:&nbsp;&nbsp;
+                                            <select name="city_id" id="city_id" class="form-control">
+                                                <option value="0"
+                                                <if condition="$city_id eq '' or $city_id eq 0">selected="selected"</if>
+                                                >All</option>
+                                                <volist name="city" id="vo">
+                                                    <option value="{pigcms{$vo.area_id}"
+                                                    <if condition="$city_id eq $vo['area_id']">selected="selected"</if>
+                                                    >{pigcms{$vo.area_name}</option>
+                                                </volist>
+                                            </select>
+                                        </if>&nbsp;&nbsp;
+                                        &nbsp;&nbsp;{pigcms{:L('_BACK_SEARCH_')}:&nbsp; <input type="text" name="keyword"
                                                                                    class="form-control"
-                                                                                   value="{pigcms{$_GET['keyword']}"
-                                                                                   style="width:120px"/>&nbsp;
-                                        <select name="searchtype" class="form-control">
+                                                                                   value="{pigcms{$_GET['keyword']}"/>&nbsp;
+                                        <select name="searchtype" class="form-control" >
                                             <option value="real_orderid"
                                             <if condition="$_GET['searchtype'] eq 'real_orderid'">selected="selected"
                                             </if>
@@ -99,13 +111,7 @@
                                             <if condition="$_GET['searchtype'] eq 'orderid'">selected="selected"</if>
                                             >Order ID</option>
                                         </select>
-                                        &nbsp;&nbsp;{pigcms{:L('_BACK_DATE_SELECT_')}：
-                                        <input type="text" class="form-control" name="begin_time" style="width:120px;"
-                                               id="d4311" value="{pigcms{$_GET.begin_time}"
-                                               onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd',lang:'en'})"/>&nbsp;
-                                        <input type="text" class="form-control" name="end_time" style="width:120px;"
-                                               id="d4311" value="{pigcms{$_GET.end_time}"
-                                               onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd',lang:'en'})"/>&nbsp;
+
                                     </div>
                                     <div style="margin-top:5px">
                                         {pigcms{:L('_BACK_ORDER_STATUS_')}:&nbsp;
@@ -118,7 +124,7 @@
                                                 </option>
                                             </volist>
                                         </select>&nbsp;
-                                        &nbsp;{pigcms{:L('_BACK_PAYMENT_METHOD_')}:&nbsp;
+                                        &nbsp;&nbsp;{pigcms{:L('_BACK_PAYMENT_METHOD_')}:&nbsp;
                                         <select id="pay_type" name="pay_type" class="form-control">
                                             <option value=""
                                             <if condition="'' eq $pay_type">selected="selected"</if>
@@ -128,23 +134,15 @@
                                                 <if condition="$key eq $pay_type">selected="selected"</if>
                                                 >{pigcms{$vo.name}</option>
                                             </volist>
-                                            <option value="balance"
-                                            <if condition="'balance' eq $pay_type">selected="selected"</if>
-                                            >{pigcms{:L('_BACK_BALANCE_')}</option>
+                                            <option value="balance"  <if condition="'balance' eq $pay_type">selected="selected"</if> >{pigcms{:L('_BACK_BALANCE_')}</option>
                                         </select>&nbsp;
-                                        <if condition="$system_session['level'] neq 3">
-                                            &nbsp;&nbsp;City:&nbsp;&nbsp;
-                                            <select name="city_id" id="city_id" class="form-control">
-                                                <option value="0"
-                                                <if condition="$city_id eq '' or $city_id eq 0">selected="selected"</if>
-                                                >All</option>
-                                                <volist name="city" id="vo">
-                                                    <option value="{pigcms{$vo.area_id}"
-                                                    <if condition="$city_id eq $vo['area_id']">selected="selected"</if>
-                                                    >{pigcms{$vo.area_name}</option>
-                                                </volist>
-                                            </select>
-                                        </if>&nbsp;&nbsp;
+                                        &nbsp;&nbsp;{pigcms{:L('_BACK_DATE_SELECT_')}：
+                                        <input type="text" class="form-control" name="begin_time" style="width:120px;"
+                                               id="d4311" value="{pigcms{$_GET.begin_time}"
+                                               onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd',lang:'en'})"/>&nbsp;
+                                        <input type="text" class="form-control" name="end_time" style="width:120px;"
+                                               id="d4311" value="{pigcms{$_GET.end_time}"
+                                               onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd',lang:'en'})"/>&nbsp;
                                         <input type="submit" value="{pigcms{:L('_BACK_SEARCH_')}" class="form-control"/>　
                                     </div>
                                 </form>
@@ -178,7 +176,6 @@
                                 <th data-hide="all">{pigcms{:L('_BACK_DELIVERY_STATUS_')}</th>
                                 <th data-hide="all">送餐员+电话</th>
                                 <th data-hide="all">{pigcms{:L('_BACK_PAY_STATUS_')}</th>
-                                <th data-hide="all">（调试信息—订单状态）</th>
                                 <th data-sort-ignore="true">{pigcms{:L('_BACK_CZ_')}</th>
                             </tr>
                             </thead>
@@ -255,8 +252,8 @@
                                         </td>
                                         <!--                                        {pigcms{$vo.pay_status} -({pigcms{$vo.pay_type})--->
                                         <td><span style="color: green">{pigcms{$vo.pay_type_str}</span>
-                                        <td>{pigcms{$vo.status_str}({pigcms{$vo.status})
-                                        </td>
+<!--                                        <td>{pigcms{$vo.status_str}({pigcms{$vo.status})-->
+<!--                                        </td>-->
 
                                         <td>
                                             <div class="btn-group">

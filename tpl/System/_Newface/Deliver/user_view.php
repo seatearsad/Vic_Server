@@ -105,11 +105,12 @@
                                         <input type="hidden" id="city_id" name="city_id" value="{pigcms{$now_user.city_id}">
                                     </div>
 
+
                                     <div class="form-group  row">
-                                        <label class="col-sm-3 col-form-label">{pigcms{:L('_BACK_DELIVERY_AREA_')}</label>
-                                        <div class="col-sm-9"><input type="text" size="20" class="form-control"
-                                                                     name="range"
-                                                                     value="{pigcms{$now_user.range}"  validate="maxlength:20,required:true"/>
+                                        <label class="col-sm-3 col-form-label">{pigcms{:L('_BIRTHDAY_TXT_')}</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" name="birthday" size="20" validate="maxlength:50,required:true" value="{pigcms{$now_user.birthday}"/>
+
                                         </div>
                                     </div>
                                     <div class="form-group  row">
@@ -122,13 +123,13 @@
                                     <div class="form-group  row">
                                         <label class="col-sm-3 col-form-label">{pigcms{:L('_BACK_OFEN_ADD_')}</label>
                                         <div class="col-sm-9"><input type="text" size="20" class="form-control"
-                                                                     name="adress" id="adress" readonly="readonly"
+                                                                     name="adress" id="adress"
                                                                      value="{pigcms{$now_user.site}"  validate="required:true"/></div>
                                     </div>
                                     <div class="form-group  row">
                                         <label class="col-sm-3 col-form-label">{pigcms{:L('_BACK_COURIER_LOC_')}</label>
                                         <div class="col-sm-9"><input type="text" size="20" class="form-control"
-                                                                     name="long_lat" id="long_lat"  readonly="readonly"
+                                                                     name="long_lat" id="long_lat"
                                                                      value="{pigcms{$now_user.lng},{pigcms{$now_user.lat}" validate="required:true"/></div>
                                     </div>
                                     <div class="form-group  row">

@@ -20,8 +20,8 @@
                                 <label class="col-sm-3 col-form-label">{pigcms{:L('_BACK_MER_ACC_')}</label>
                                 <label class="col-sm-9 col-form-label">{pigcms{$merchant.account}</label>
                             </div>
-
-                            <div class="hr-line-dashed"></div>
+<!---->
+<!--                            <div class="hr-line-dashed"></div>-->
 
                             <div class="form-group  row">
                                 <label class="col-sm-3 col-form-label">{pigcms{:L('_BACK_MER_PASS_')}</label>
@@ -30,15 +30,15 @@
                                                              name="pwd"
                                                              value="" size="25" validate="minlength:6"/></div>
                             </div>
-                            <div class="hr-line-dashed"></div>
+<!--                            <div class="hr-line-dashed"></div>-->
 
                             <div class="form-group  row">
                                 <label class="col-sm-3 col-form-label">{pigcms{:L('_BACK_MER_NAME_')}</label>
                                 <div class="col-sm-9"><input class="form-control" type="text" class="form-control"
-                                                             name="name" value="{pigcms{$merchant.name}" size="25"
-                                                             validate="maxlength:20,required:true"/></div>
+                                                             name="name" value="{pigcms{$merchant.name}" size="35"
+                                                             validate="maxlength:35,required:true"/></div>
                             </div>
-                            <div class="hr-line-dashed"></div>
+<!--                            <div class="hr-line-dashed"></div>-->
 
                             <div class="form-group  row">
                                 <label class="col-sm-3 col-form-label">{pigcms{:L('_BACK_MER_PHONE_')}</label>
@@ -46,7 +46,7 @@
                                                              name="phone" value="{pigcms{$merchant.phone}" size="25"
                                                              validate="required:true"/></div>
                             </div>
-                            <div class="hr-line-dashed"></div>
+<!--                            <div class="hr-line-dashed"></div>-->
 
                             <div class="form-group  row">
                                 <label class="col-sm-3 col-form-label">{pigcms{:L('_BACK_EMAIL_')}</label>
@@ -54,7 +54,7 @@
                                                              name="email" value="{pigcms{$merchant.email}" size="25"
                                                              validate="email:true"/></div>
                             </div>
-                            <div class="hr-line-dashed"></div>
+<!--                            <div class="hr-line-dashed"></div>-->
 
 
 <!--                            <div class="form-group  row">-->
@@ -77,7 +77,7 @@
                                         </volist>
                                     </select></div>
                             </div>
-                            <div class="hr-line-dashed"></div>
+<!--                            <div class="hr-line-dashed"></div>-->
 
 <!--                            <div class="form-group  row">-->
 <!--                                <label class="col-sm-3 col-form-label">{pigcms{:L('_BACK_STORE_AREA_')}</label>-->
@@ -86,7 +86,7 @@
 <!--                                                             validate="email:true"/></div>-->
 <!--                            </div>-->
 <!--                            <div class="hr-line-dashed"></div>-->
-                            <div class="form-group  row">
+                            <div class="form-group  row tutti_hidden_obj">
                                 <label class="col-sm-3 col-form-label">{pigcms{:L('_BACK_EXPIRE_DATE_')}</label>
                                 <div class="col-sm-3"><input class="form-control" type="text" class="form-control"
                                                              name="merchant_end_time"
@@ -94,6 +94,7 @@
                                                              onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm',lang:'en'})"/>
                                 </div>
                             </div>
+
                             <div class="hr-line-dashed"></div>
                             <div class="form-group  row">
                                 <label class="col-sm-3 col-form-label">{pigcms{:L('_BACK_MER_STATUS_')}</label>

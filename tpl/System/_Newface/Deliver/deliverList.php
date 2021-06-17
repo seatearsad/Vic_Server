@@ -101,8 +101,8 @@
                                 <th>{pigcms{:L('_BACK_DELIVERY_STATUS_')}</th>
                                 <th>{pigcms{:L('COURIER_BKADMIN')}</th>
                                 <th>{pigcms{:L('_BACK_START_AT_')}</th>
-                                <th>{pigcms{:L('_BACK_FINISH_AT_')}</th>
-                                <th>{pigcms{:L('_BACK_ASS_COURIER_')}</th>
+                                <th style="width: 5%">{pigcms{:L('_BACK_FINISH_AT_')}</th>
+                                <th style="width: 5%">{pigcms{:L('_BACK_ASS_COURIER_')}</th>
                                 <th>{pigcms{:L('B_ACTION')}</th>
                             </tr>
                             </thead>
@@ -121,22 +121,24 @@
                                         <td>{pigcms{$vo.name}<br/>{pigcms{$vo.phone}</td>
                                         <td>{pigcms{$vo.start_time}</td>
                                         <td>{pigcms{$vo.end_time}</td>
-                                        <td width="80">
+                                        <td style="text-align: center">
+
                                             <if condition="$vo['status'] eq 0">
-                                                <font color="red">{pigcms{:L('_BACK_ORDER_FILED_')}</font>
+                                                <li class="fa fa-check tutti_icon_ok" title="{pigcms{:L('_BACK_ORDER_FILED_')}">
                                             <elseif condition="$vo['status'] eq 1" />
-                                                <a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Deliver/appoint_deliver',array('supply_id' => $vo['supply_id']))}','Courier Assignment({pigcms{$vo['distance']})',480,380,true,false,false,editbtn,'edit',true);">{pigcms{:L('_BACK_ASS_DIST_')}</a>
+                                                <a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Deliver/appoint_deliver',array('supply_id' => $vo['supply_id']))}','Courier Assignment({pigcms{$vo['distance']})',480,380,true,false,false,editbtn,'edit',true);"><li class="fa fa-plus tutti_icon_succ" title="{pigcms{:L('_BACK_ASS_DIST_')}"></a>
                                             <elseif condition="$vo['status'] lt 5" />
-                                                <a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Deliver/appoint_deliver',array('supply_id' => $vo['supply_id']))}','{pigcms{:L(\'_BACK_CHANGE_COURIER_\')}({pigcms{$vo['distance']})',480,380,true,false,false,editbtn,'edit',true);" style="color:red">{pigcms{:L('_BACK_CHANGE_COURIER_')}</a>
+
+                                                <a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Deliver/appoint_deliver',array('supply_id' => $vo['supply_id']))}','{pigcms{:L(\'_BACK_CHANGE_COURIER_\')}({pigcms{$vo['distance']})',480,380,true,false,false,editbtn,'edit',true);" style="color:red"><li class="fa fa-exchange tutti_icon_danger" title="{pigcms{:L('_BACK_CHANGE_COURIER_')}"></a>
                                             <else />
-                                                <font color="green">{pigcms{:L('_BACK_DELIVERED_')}</font>
+                                                <li class="fa fa-check tutti_icon_ok" title="{pigcms{:L('_BACK_DELIVERED_')}">
                                             </if>
                                         </td>
-                                        <td width="80">
+                                        <td style="text-align: center">
                                             <if condition="$vo['status'] eq 0 OR $vo['status'] eq 5 OR $vo['status'] eq 1">
                                                 -
                                             <else />
-                                                <a href="javascript:void(0);" style="color:green" data-supply="{pigcms{$vo['supply_id']}" class="change">{pigcms{:L('_BACK_SWITCH_COM_')}</a>
+                                                <a href="javascript:void(0);" style="color:green" data-supply="{pigcms{$vo['supply_id']}" class="change"><li class="fa fa-check-square-o tutti_icon_ok" title="{pigcms{:L('_BACK_SWITCH_COM_')}"></a>
                                             </if>
                                         </td>
                                         <!--td width="50">{pigcms{$vo.create_time}</td-->

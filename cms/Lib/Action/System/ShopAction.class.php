@@ -468,10 +468,31 @@ class ShopAction extends BaseAction
 
     public function order()
     {
-
         //加载城市字典
         $city = D('Area')->where(array('area_type' => 2, 'is_open' => 1))->select();
         $this->assign('city', $city);
+        //支付方式字典
+        $pay_method = D('Config')->get_pay_method('', '', 0);
+        foreach ($pay_method as $kk => &$vv) {
+            switch ($kk) {
+                case 'offline':
+                    $vv['name'] = 'Cash';
+                    break;
+                case 'alipay':
+                    $vv['name'] = 'AliPay';
+                    break;
+                case 'weixin':
+                    $vv['name'] = 'Wechat Pay';
+                    break;
+                case 'moneris':
+                    $vv['name'] = 'Credit';
+                    break;
+            }
+        }
+        $this->assign('pay_method', $pay_method);
+        $this->assign('status_list', D('Shop_order')->getStatusListForMilly());
+
+        //筛选条件—-------------------------------------------------—店铺
 
         $where_store = null;
 
@@ -480,9 +501,7 @@ class ShopAction extends BaseAction
             $where_store['name'] = array('like', '%' . fulltext_filter($_GET['keyword']) . '%');
         }
         //筛选 所属地区
-
         if ($this->system_session['area_id']) {
-
             $area_index = $this->system_session['level'] == 1 ? 'area_id' : 'city_id';
             $where_store[$area_index] = $this->system_session['area_id'];
         }
@@ -495,28 +514,11 @@ class ShopAction extends BaseAction
         } else {
             $this->assign('city_id', 0);
         }
-        //var_dump($result);
-        $pay_method = D('Config')->get_pay_method('', '', 0);
-        foreach ($pay_method as $k => &$v) {
-            switch ($k) {
-                case 'offline':
-                    $v['name'] = 'Cash';
-                    break;
-                case 'alipay':
-                    $v['name'] = 'AliPay';
-                    break;
-                case 'weixin':
-                    $v['name'] = 'Wechat Pay';
-                    break;
-                default:
-                    break;
-            }
-        }
-        $this->assign('pay_method', $pay_method);
-        $this->assign('status_list', D('Shop_order')->getStatusListForMilly());
 
         $store_ids = array();
         $where = array();
+
+        //筛选条件—--------------------------------------------------------—订单
 
         if ($where_store) {
             $stores = D('Merchant_store')->field('store_id')->where($where_store)->select();
@@ -553,7 +555,11 @@ class ShopAction extends BaseAction
             } elseif ($_GET['searchtype'] == 'third_id') {
                 $where['third_id'] = $_GET['keyword'];
             } elseif ($_GET['searchtype'] == 'id') {
-                $where['uid'] = $_GET['keyword'];
+                if (is_numeric($_GET['keyword'])){
+                    $where['uid'] = $_GET['keyword'];
+                }else{
+                    $where['uid'] = "-1";
+                }
             }
         }
 

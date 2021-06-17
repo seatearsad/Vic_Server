@@ -284,12 +284,12 @@
                                     <th class="text-nowrap" scope="row">{pigcms{:L('_NOTE_MERCHANT_')}</th>
                                     <td colspan="5">{pigcms{$order['desc']|default="N/A"}</td>
                                 </tr>
-                                <if condition="$order['invoice_head']">
-                                    <tr>
-                                        <th class="text-nowrap" scope="row">{pigcms{:L('_BACK_RECEIPT_')}</th>
-                                        <td colspan="5">{pigcms{$order['invoice_head']}</td>
-                                    </tr>
-                                </if>
+
+                                <tr>
+                                    <th class="text-nowrap" scope="row">{pigcms{:L('_BACK_RECEIPT_')}</th>
+                                    <td colspan="5"> <if condition="$order['invoice_head']">{pigcms{$order['invoice_head']}<else/>N/A</if></td>
+                                </tr>
+
                                 <if condition="$order['cue_field']">
                                     <tr>
                                         <th colspan="6">&nbsp;</th>
