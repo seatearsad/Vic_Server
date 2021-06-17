@@ -93,15 +93,13 @@
                             <tr>
                                 <th>OrderID</th>
                                 <th>{pigcms{:L('_BACK_STORE_NAME_')}</th>
-                                <th>{pigcms{:L('_BACK_USER_NAME_')}</th>
-                                <th>{pigcms{:L('_BACK_USER_PHONE_')}</th>
+                                <th>{pigcms{:L('CUSTOMER_BKADMIN')}</th>
                                 <th>{pigcms{:L('_BACK_CUSTOM_ADD_')}</th>
                                 <th>{pigcms{:L('_BACK_PAYMENT_STATUS_')}</th>
-                                <th>{pigcms{:L('_BACK_ORDER_TOTAL_')}</th>
+<!--                                <th>{pigcms{:L('_BACK_ORDER_TOTAL_')}</th>-->
                                 <th>{pigcms{:L('_BACK_CASH_RECE_')}</th>
                                 <th>{pigcms{:L('_BACK_DELIVERY_STATUS_')}</th>
-                                <th>{pigcms{:L('_BACK_COURIER_NICK_')}</th>
-                                <th>{pigcms{:L('_BACK_COURIER_PHONE_')}</th>
+                                <th>{pigcms{:L('COURIER_BKADMIN')}</th>
                                 <th>{pigcms{:L('_BACK_START_AT_')}</th>
                                 <th>{pigcms{:L('_BACK_FINISH_AT_')}</th>
                                 <th>{pigcms{:L('_BACK_ASS_COURIER_')}</th>
@@ -112,35 +110,32 @@
                             <if condition="is_array($supply_info)">
                                 <volist name="supply_info"  id="vo">
                                     <tr class="<if condition='$i%2 eq 0'>odd<else/>even</if> order_line" data-id="{pigcms{$vo.order_id}">
-                                        <td width="30">{pigcms{$vo.order_id}</td>
-                                        <td width="80">{pigcms{$vo.storename}</td>
-                                        <td width="30">{pigcms{$vo.username}</td>
-                                        <td width="50">{pigcms{$vo.userphone}</td>
-                                        <td width="150">{pigcms{$vo.aim_site}</td>
-                                        <td width="50">{pigcms{$vo.paid}</td>
-                                        <td width="30">{pigcms{$vo.money|floatval}</td>
-                                        <td width="30">{pigcms{$vo.deliver_cash|floatval}</td>
-                                        <td width="50">{pigcms{$vo.order_status}</td>
-                                        <td width="50">{pigcms{$vo.name}</td>
-                                        <td width="80">{pigcms{$vo.phone}</td>
-                                        <td width="80">{pigcms{$vo.start_time}</td>
-                                        <td width="80">{pigcms{$vo.end_time}</td>
-
+                                        <td >{pigcms{$vo.order_id}</td>
+                                        <td>{pigcms{$vo.storename}</td>
+                                        <td>{pigcms{$vo.username}<br/>{pigcms{$vo.userphone}</td>
+                                        <td>{pigcms{$vo.aim_site}</td>
+                                        <td>{pigcms{$vo.paid}</td>
+<!--                                        <td>{pigcms{$vo.money|floatval}</td>-->
+                                        <td>{pigcms{$vo.deliver_cash|floatval}</td>
+                                        <td>{pigcms{$vo.order_status}</td>
+                                        <td>{pigcms{$vo.name}<br/>{pigcms{$vo.phone}</td>
+                                        <td>{pigcms{$vo.start_time}</td>
+                                        <td>{pigcms{$vo.end_time}</td>
                                         <td width="80">
                                             <if condition="$vo['status'] eq 0">
                                                 <font color="red">{pigcms{:L('_BACK_ORDER_FILED_')}</font>
-                                                <elseif condition="$vo['status'] eq 1" />
+                                            <elseif condition="$vo['status'] eq 1" />
                                                 <a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Deliver/appoint_deliver',array('supply_id' => $vo['supply_id']))}','Courier Assignment({pigcms{$vo['distance']})',480,380,true,false,false,editbtn,'edit',true);">{pigcms{:L('_BACK_ASS_DIST_')}</a>
-                                                <elseif condition="$vo['status'] lt 5" />
+                                            <elseif condition="$vo['status'] lt 5" />
                                                 <a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Deliver/appoint_deliver',array('supply_id' => $vo['supply_id']))}','{pigcms{:L(\'_BACK_CHANGE_COURIER_\')}({pigcms{$vo['distance']})',480,380,true,false,false,editbtn,'edit',true);" style="color:red">{pigcms{:L('_BACK_CHANGE_COURIER_')}</a>
-                                                <else />
+                                            <else />
                                                 <font color="green">{pigcms{:L('_BACK_DELIVERED_')}</font>
                                             </if>
                                         </td>
                                         <td width="80">
                                             <if condition="$vo['status'] eq 0 OR $vo['status'] eq 5 OR $vo['status'] eq 1">
-                                                ---
-                                                <else />
+                                                -
+                                            <else />
                                                 <a href="javascript:void(0);" style="color:green" data-supply="{pigcms{$vo['supply_id']}" class="change">{pigcms{:L('_BACK_SWITCH_COM_')}</a>
                                             </if>
                                         </td>

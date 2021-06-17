@@ -2019,12 +2019,8 @@ return array(
     "MAXIMUM_0_BKADMIN"=>"上限数量不能为0！",
     "SURE_COPY_BKADMIN"=>"确定要复制此产品吗？",
     "YOU_HIDE_BKADMIN"=>"是否确定隐藏此菜品？（此菜品只会被隐藏，隐藏后用户和商家将看不到。此菜品不会被彻底删除，可被复原）",
-    "RESTORE_BKADMIN"=>"还原",
     "SURE_RESTOR_BKADMIN"=>"是否确认还原被隐藏菜品？还原后此菜品商家可见",
     "FAILED_SAVE_BKADMIN"=>"保存失败！！您是不是没做过修改？请重试。",
-    "NAME_SPEC_BKADMIN"=>"请给规格取名，若不需要的请删除后重新生成",
-    "NAME_ATTRIBUTE_BKADMIN"=>"请给规格的属性值取名，若不需要的请删除后重新生成",
-    "NAME_ATTRIBUTE2_BKADMIN"=>"请给属性取名，若不需要的请删除后重新生成",
     "SAVED_SUCCE_BKADMIN"=>"保存成功！",
     "OPERATOR_BKADMIN"=>"操作人员",
     "ASAP_BKADMIN"=>"尽快",
@@ -2058,6 +2054,8 @@ return array(
     "NAMEVALUEE_ATTRIBUTE_BKADMIN"=>"请给属性的属性值取名，若不需要的请删除后重新生成",
     "SIDE_DISH_LIST_BKADMIN"=>"配菜列表",
     "MNG_LIST_NOTHING_BKADMIN"=>"您没有添加店铺，或店铺没开启外卖功能，或店铺正在审核中。",
+    "CUSTOMER_BKADMIN"=>"客户",
+    "COURIER_BKADMIN"=>"送餐员",
 
     "F_REGISTRATION_INVITED"=>"邀请注册数",
     "F_ORDERS_INVITED"=>"邀请下单数",
@@ -2509,4 +2507,6 @@ return array(
     "ORDER_COURIER_EXPORT"=>"送餐员配送信息",
     "USER_EXPORT"=>"用户信息",
     "USER_RANKING_EXPORT"=>"用户排行",
+
+    "COUPON_ADD_TIP"=>"优惠金额不能大于最低消费金额，请重试！",
 );

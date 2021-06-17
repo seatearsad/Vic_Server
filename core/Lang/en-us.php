@@ -1800,7 +1800,6 @@ return array(
     "ACTION_BKADMIN"=>"Action",
     "EDIT_BKADMIN"=>"Edit",
     "COPY_BKADMIN"=>"Copy",
-    "RESTORE_BKADMIN"=>"Restore",
     "DELETE_BKADMIN"=>"Delete",
     "STORES_PAGE_BKADMIN"=>"%s0 Item(s) %s1/%s2 Page(s)",
     "ADD_STORE_BKADMIN"=>"Add Store",
@@ -2022,9 +2021,6 @@ return array(
     "RESTORE_BKADMIN"=>"Restore",
     "SURE_RESTOR_BKADMIN"=>"Are you sure to restore the hidden item? This item will be visible to the merchant after restoration",
     "FAILED_SAVE_BKADMIN"=>"Failed to save!!! Have you made no changes? Please try again.",
-    "NAME_SPEC_BKADMIN"=>"Please name the specification, and delete and regenerate it if you don't need it",
-    "NAME_ATTRIBUTE_BKADMIN"=>"Please name the attribute value of the specification. If you do not need it, please delete it and regenerate it.",
-    "NAME_ATTRIBUTE2_BKADMIN"=>"Please name the attributes. If you do not need it please delete it and regenerate it.",
     "SAVED_SUCCE_BKADMIN"=>"Saved successfully!",
     "OPERATOR_BKADMIN"=>"Operator",
     "ASAP_BKADMIN"=>"ASAP",
@@ -2058,6 +2054,8 @@ return array(
     "NAMEVALUEE_ATTRIBUTE_BKADMIN"=>"Please name the value of the attribute. Delete it and regenerate it if you don't need it.",
     "SIDE_DISH_LIST_BKADMIN"=>"Option List",
     "MNG_LIST_NOTHING_BKADMIN"=>"There is no store created yet",
+    "CUSTOMER_BKADMIN"=>"Customer",
+    "COURIER_BKADMIN"=>"Courier",
 
     "F_REGISTRATION_INVITED"=>"Registration Invited",
     "F_ORDERS_INVITED"=>"Orders Invited",
@@ -2509,4 +2507,6 @@ return array(
     "ORDER_COURIER_EXPORT"=>"Orders by Courier",
     "USER_EXPORT"=>"User Info",
     "USER_RANKING_EXPORT"=>"User Ranking",
+
+    "COUPON_ADD_TIP"=>"Your discount amount cannot exceed the minimum order amount! Please try again.",
 );

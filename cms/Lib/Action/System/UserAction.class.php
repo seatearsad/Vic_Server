@@ -992,7 +992,7 @@ class UserAction extends BaseAction {
                 //Sms::sendSms2($sms_data);
                 $sms_txt = "Tutti has added a new coupon to your account! Please log in to your account and check available coupons for details.";
                 //Sms::telesign_send_sms($userInfo['phone'],$sms_txt,1);
-                //Sms::sendTwilioSms($userInfo['phone'],$sms_txt);
+                Sms::sendTwilioSms($userInfo['phone'],$sms_txt);
 
             }
             exit(json_encode($result));

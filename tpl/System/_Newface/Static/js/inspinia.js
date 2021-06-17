@@ -183,6 +183,7 @@ $(document).ready(function () {
         var boxedlayout = localStorage.getItem("boxedlayout");
         var fixedfooter = localStorage.getItem("fixedfooter");
 
+        //Peter
         if ($.cookie("nav_status")==2){ collapse="on"}
 
         var body = $('body');

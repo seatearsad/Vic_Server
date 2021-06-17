@@ -74,7 +74,6 @@
 				<td colspan="2">
 					{pigcms{$coupon.notice}
 				</td>
-					
 			</tr>
 			<tr class="wx_coupon">
 				<td width="100" style="color:red">卡券副标题</td>

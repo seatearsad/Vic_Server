@@ -65,6 +65,7 @@
         <script type="text/javascript" src="{pigcms{$static_public}js/lang.js"></script>
         <script type="text/javascript" src="{pigcms{$static_path}js/common.js?v=21"></script>
         <script type="text/javascript" src="{pigcms{$static_path}js/index.js?v=21"></script>
+        <script type="text/javascript" src="{pigcms{$static_path}js/area_adver.js"></script>
 
 	</head>
 
