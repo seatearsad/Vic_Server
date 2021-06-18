@@ -194,7 +194,7 @@ class MerchantAction extends BaseAction{
 		$home_share = D('Home_share')->where(array('mer_id' => $condition_merchant['mer_id']))->find();
 		$this->assign('home_share', $home_share);
 
-        $city_list = D('Area')->where(array('area_type'=>2))->order('`area_sort` asc')->select();
+        $city_list = D('Area')->where(array('area_type'=>2,'is_open'=>1))->order('`area_sort` asc')->select();
         $this->assign('city',$city_list);
 
 		$this->display();

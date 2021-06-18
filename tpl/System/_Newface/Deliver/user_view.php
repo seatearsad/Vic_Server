@@ -188,7 +188,6 @@
                                             </div>
                                             <if condition="$img['driver_license'] eq ''">
                                                 <div class="img_0">
-
                                                 </div>
                                                 <else/>
                                                 <div class="img_0" style="height: 100px">
@@ -197,12 +196,12 @@
                                                 </div>
                                             </if>
                                         </div>
-<!--                                        车辆保险-->
+<!--车辆保险-->
                                         <div class="form-group  row">
                                             <label class="col-sm-3 col-form-label">{pigcms{:L('_BACK_VEHICLE_INSU_')}</label>
                                             <div class="col-sm-9" id="J_selectImage_1" style="display:inline-block;" >
                                                 <div class="btn btn-sm btn-success" style="position:relative;height:50px;line-height: 50px;text-align: left;">
-                                                    {pigcms{:L('_ND_UPLOAD1_')}
+                                                    {pigcms{:L('_ND_UPLOAD2_')}
                                                 </div>
                                             </div>
                                             <if condition="$img['insurance'] eq ''">
@@ -216,7 +215,7 @@
                                                 </div>
                                             </if>
                                         </div>
- <!--                                        工作证明-->
+ <!--工作证明-->
                                         <div class="form-group  row">
                                             <label class="col-sm-3 col-form-label">{pigcms{:L('_BACK_PROOF_WORK_')}</label>
                                             <div class="col-sm-9" id="J_selectImage_2" style="display:inline-block;" >
@@ -235,12 +234,11 @@
                                                 </div>
                                             </if>
                                         </div>
-<!--                                        工作证明-->
-
+<!--工作证明-->
                                     </if>
 
                                     <if condition="$now_user['group'] neq 1">
-<!--                                        是否通过-->
+<!--是否通过-->
                                         <tr>
                                             <th width="15%">{pigcms{:L('_BACK_WHETHER_PASS_')}</th>
                                             <td colspan=3>
@@ -356,7 +354,6 @@
                             if (typeof($(this).attr('id')) != 'undefined') {
                                 if (is_addcss && i > curr) {
                                     var top = parseInt($(this).css("top"));
-                                    $(this).css("top", top + 100 + "px");
                                 }
                                 var arr = $(this).attr('id').split('_');
                                 if (arr[2] == fid) {

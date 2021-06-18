@@ -150,15 +150,24 @@
                                                              validate="maxlength:50,required:true"/>
                                 </div>
                             </div>
+                            <if condition="$img['driver_license']">
+                                <div class="form-group  row">
+                                    <label class="col-sm-3 col-form-label">{pigcms{:L('_BACK_DRIVER_LIC_')}</label>
+                                    <div class="col-sm-9"><img src="{pigcms{:C('config.site_url')}{pigcms{$img['driver_license']}" height="100"/>
+                                    </div>
+                                </div>
+                                <div class="form-group  row">
+                                    <label class="col-sm-3 col-form-label">{pigcms{:L('_BACK_VEHICLE_INSU_')}</label>
+                                    <div class="col-sm-9"><img src="{pigcms{:C('config.site_url')}{pigcms{$img['insurance']}" height="100"/>
+                                    </div>
+                                </div>
+                                <div class="form-group  row">
+                                    <label class="col-sm-3 col-form-label">{pigcms{:L('_BACK_PROOF_WORK_')}</label>
+                                    <div class="col-sm-9"><img src="{pigcms{:C('config.site_url')}{pigcms{$img['certificate']}" height="100"/>
+                                    </div>
+                                </div>
 
-
-                            <div class="btn tutti_hidden_obj">
-                                <input type="submit" name="dosubmit" id="dosubmit" value="{pigcms{:L('_BACK_SUBMIT_')}"
-                                       class="button tutti_hidden_obj"/>
-                                <input type="reset" value="{pigcms{:L('_BACK_CANCEL_')}"
-                                       class="button tutti_hidden_obj"/>
-                            </div>
-
+                            </if>
                             <div class="btn tutti_hidden_obj">
                                 <input type="submit" name="dosubmit" id="dosubmit" value="{pigcms{:L('_BACK_SUBMIT_')}" class="button tutti_hidden_obj" />
                                 <input type="reset" value="{pigcms{:L('_BACK_CANCEL_')}" class="button tutti_hidden_obj" />

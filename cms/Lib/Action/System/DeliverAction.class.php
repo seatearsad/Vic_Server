@@ -1344,7 +1344,7 @@ class DeliverAction extends BaseAction {
         if($this->system_session['level'] == 3){
             $city[] = D('Area')->where(array('area_id'=>$this->system_session['area_id']))->find();
         }else{
-            $city = D('Area')->where(array('area_type'=>2))->select();
+            $city = D('Area')->where(array('area_type'=>2,'is_open'=>1))->select();
         }
         $this->assign('city',$city);
 
@@ -1654,7 +1654,7 @@ class DeliverAction extends BaseAction {
         if($this->system_session['level'] == 3){
             $city[] = D('Area')->where(array('area_id'=>$this->system_session['area_id']))->find();
         }else{
-            $city = D('Area')->where(array('area_type'=>2))->select();
+            $city = D('Area')->where(array('area_type'=>2,'is_open'=>1))->select();
         }
 
         $week_num = date("w");
