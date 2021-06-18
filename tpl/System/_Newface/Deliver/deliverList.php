@@ -98,7 +98,7 @@
                                 <th>{pigcms{:L('_BACK_PAYMENT_STATUS_')}</th>
 <!--                                <th>{pigcms{:L('_BACK_ORDER_TOTAL_')}</th>-->
                                 <th>{pigcms{:L('_BACK_CASH_RECE_')}</th>
-                                <th>{pigcms{:L('_BACK_DELIVERY_STATUS_')}</th>
+                                <th style="min-width: 60px;">{pigcms{:L('_BACK_DELIVERY_STATUS_')}</th>
                                 <th>{pigcms{:L('COURIER_BKADMIN')}</th>
                                 <th>{pigcms{:L('_BACK_START_AT_')}</th>
                                 <th style="width: 5%">{pigcms{:L('_BACK_FINISH_AT_')}</th>
@@ -122,14 +122,13 @@
                                         <td>{pigcms{$vo.start_time}</td>
                                         <td>{pigcms{$vo.end_time}</td>
                                         <td style="text-align: center">
-
                                             <if condition="$vo['status'] eq 0">
                                                 <li class="fa fa-check tutti_icon_ok" title="{pigcms{:L('_BACK_ORDER_FILED_')}">
                                             <elseif condition="$vo['status'] eq 1" />
-                                                <a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Deliver/appoint_deliver',array('supply_id' => $vo['supply_id']))}','Courier Assignment({pigcms{$vo['distance']})',480,380,true,false,false,editbtn,'edit',true);"><li class="fa fa-plus tutti_icon_succ" title="{pigcms{:L('_BACK_ASS_DIST_')}"></a>
+                                                <li class="fa fa-plus tutti_icon_succ" title="{pigcms{:L('_BACK_ASS_DIST_')}" onclick="window.top.artiframe('{pigcms{:U('Deliver/appoint_deliver',array('supply_id' => $vo['supply_id']))}','Courier Assignment({pigcms{$vo['distance']})',480,380,true,false,false,editbtn,'edit',true);">
                                             <elseif condition="$vo['status'] lt 5" />
 
-                                                <a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Deliver/appoint_deliver',array('supply_id' => $vo['supply_id']))}','{pigcms{:L(\'_BACK_CHANGE_COURIER_\')}({pigcms{$vo['distance']})',480,380,true,false,false,editbtn,'edit',true);" style="color:red"><li class="fa fa-exchange tutti_icon_danger" title="{pigcms{:L('_BACK_CHANGE_COURIER_')}"></a>
+                                                <li class="fa fa-exchange tutti_icon_danger" title="{pigcms{:L('_BACK_CHANGE_COURIER_')}" onclick="window.top.artiframe('{pigcms{:U('Deliver/appoint_deliver',array('supply_id' => $vo['supply_id']))}','{pigcms{:L(\'_BACK_CHANGE_COURIER_\')}({pigcms{$vo['distance']})',480,380,true,false,false,editbtn,'edit',true);" >
                                             <else />
                                                 <li class="fa fa-check tutti_icon_ok" title="{pigcms{:L('_BACK_DELIVERED_')}">
                                             </if>

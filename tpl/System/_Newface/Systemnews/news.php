@@ -88,7 +88,7 @@
                                         </td>
                                         <td class="textcenter">
                                             <!--a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Systemnews/edit_news',array('id'=>$vo['id'],'frame_show'=>true))}','{pigcms{:L(\'BASE_VIEW\')}',1000,640,true,false,false,false,'add',true);">{pigcms{:L('BASE_VIEW')}</a-->
-                                            <a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Systemnews/edit_news',array('id'=>$vo['id']))}','{pigcms{:L(\'BASE_EDIT\')}',800,500,true,false,false,editbtn,'edit',true);"><button class="btn btn-white text-grey" type="button">{pigcms{:L('BASE_EDIT')}</button></a>
+                                            <a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Systemnews/edit_news',array('id'=>$vo['id']))}','{pigcms{:L(\'BASE_EDIT\')}',900,500,true,false,false,editbtn,'edit',true);"><button class="btn btn-white text-grey" type="button">{pigcms{:L('BASE_EDIT')}</button></a>
                                             <a href="javascript:void(0);" class="delete_row" parameter="id={pigcms{$vo.id}" url="{pigcms{:U('Systemnews/del',array('id'=>$vo['id']))}"><button class="btn btn-white text-grey" type="button">{pigcms{:L('BASE_DELETE')}</button></a>
                                         </td>
                                     </tr>

@@ -30,16 +30,11 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="ibox ">
-                    <div class="ibox-title">
-                        <h5>{pigcms{:L('_BACK_PICK_COU_LIST_')}</h5>
-                        <div class="ibox-tools">
 
-                        </div>
-                    </div>
                     <div class="ibox-content">
                         <div class="table-responsive">
                             <!-------------------------------- 工具条 -------------------------------------->
-                            <div style="height: 50px;">
+                            <div style="height: 60px;">
                                 <div id="tool_bar" class="form-inline tutti_toolbar">
                                     <form action="{pigcms{:U('Coupon/had_pull')}" method="get">
                                         <input type="hidden" name="c" value="Coupon"/>
