@@ -412,6 +412,8 @@ class DataAction extends BaseAction
 
         //计算订单税费及押金
         $all_tax = 0;
+        $all_gst_tax = 0;
+        $all_pst_tax = 0;
         $all_deposit = 0;
         $all_record = array();
         $record_id = '';
@@ -422,6 +424,8 @@ class DataAction extends BaseAction
         //subtotal
         $total_goods_price = 0;
         $total_goods_tax = 0;
+        $total_goods_gst_tax = 0;
+        $total_goods_pst_tax = 0;
         $total_freight_price = 0;
         $total_freight_tax = 0;
         $total_packing_price = 0;
@@ -489,6 +493,8 @@ class DataAction extends BaseAction
                         $all_record[$record_id]['total_tax'] = $all_tax + $all_record[$record_id]['freight_tax'] + $all_record[$record_id]['packing_tax'];
 
                         $total_goods_tax += $all_tax;
+                        $total_goods_gst_tax += $all_gst_tax;
+                        $total_goods_pst_tax += $all_pst_tax;
                         $total_goods_tax_pro += $all_tax * $val['store_pro'] / 100;
                         $total_deposit += $all_deposit;
                         $total_all_tax += $all_record[$record_id]['total_tax'];
@@ -515,11 +521,20 @@ class DataAction extends BaseAction
 
                     //清空商品税费
                     $all_tax = 0;//($val['freight_charge'] + $val['packing_charge'])*$val['store_tax']/100;
+                    $all_gst_tax = 0;
+                    $all_pst_tax = 0;
                     //清空押金
                     $all_deposit = 0;
                 }
 
                 $all_tax += $val['good_price'] * $val['good_tax']/100*$val['good_num'];
+                if($val['good_tax'] <= 5){
+                    $all_gst_tax += $val['good_price'] * $val['good_tax']/100*$val['good_num'];
+                    $all_pst_tax += 0;
+                }else{
+                    $all_gst_tax += $val['good_price'] * 5/100*$val['good_num'];
+                    $all_pst_tax += $val['good_price'] * ($val['good_tax']-5)/100*$val['good_num'];
+                }
                 $all_deposit += $val['deposit_price']*$val['good_num'];
                 $total_tax = $all_tax + ($val['freight_charge']+$val['packing_charge'])*$val['store_tax']/100;
 
@@ -535,6 +550,8 @@ class DataAction extends BaseAction
             $all_record[$record_id]['total_tax'] = $total_tax;
 
             $total_goods_tax += $all_tax;
+            $total_goods_gst_tax += $all_gst_tax;
+            $total_goods_pst_tax += $all_pst_tax;
             $total_goods_tax_pro += $all_tax * $last_pro / 100;
             $total_deposit += $all_deposit;
             $total_all_tax += $total_tax;
@@ -560,30 +577,39 @@ class DataAction extends BaseAction
         $objExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
         $objExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
         $objExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
+        $objExcel->getActiveSheet()->getColumnDimension('I')->setAutoSize(true);
+        $objExcel->getActiveSheet()->getColumnDimension('J')->setAutoSize(true);
+        $objExcel->getActiveSheet()->getColumnDimension('K')->setAutoSize(true);
+        $objExcel->getActiveSheet()->getColumnDimension('L')->setAutoSize(true);
+        $objExcel->getActiveSheet()->getColumnDimension('M')->setAutoSize(true);
 
         $objActSheet->setCellValue('A1', '# of Orders');
         $objActSheet->setCellValue('B1', 'Subtotal');
         $objActSheet->setCellValue('C1', 'Tax on Subtotal');
-        $objActSheet->setCellValue('D1', 'Delivery Fee');
-        $objActSheet->setCellValue('E1', 'Tax on Delivery Fee');
-        $objActSheet->setCellValue('F1', 'Commission on Subtotal');
-        $objActSheet->setCellValue('G1', 'Commission on Subtotal Tax');//无
-        $objActSheet->setCellValue('H1', 'Order Amount');
-        $objActSheet->setCellValue('I1', 'Tips');
-        $objActSheet->setCellValue('J1', 'Coupon');
-        $objActSheet->setCellValue('K1', 'Free Delivery');
+        $objActSheet->setCellValue('D1', 'GST');
+        $objActSheet->setCellValue('E1', 'PST');
+        $objActSheet->setCellValue('F1', 'Delivery Fee');
+        $objActSheet->setCellValue('G1', 'Tax on Delivery Fee');
+        $objActSheet->setCellValue('H1', 'Commission on Subtotal');
+        $objActSheet->setCellValue('I1', 'Commission on Subtotal Tax');//无
+        $objActSheet->setCellValue('J1', 'Order Amount');
+        $objActSheet->setCellValue('K1', 'Tips');
+        $objActSheet->setCellValue('L1', 'Coupon');
+        $objActSheet->setCellValue('M1', 'Free Delivery');
         $index = 2;
         $objActSheet->setCellValueExplicit('A' . $index, $order_count,PHPExcel_Cell_DataType::TYPE_NUMERIC);
         $objActSheet->setCellValueExplicit('B' . $index, floatval(sprintf("%.2f", $total_goods_price)),PHPExcel_Cell_DataType::TYPE_NUMERIC);
         $objActSheet->setCellValueExplicit('C' . $index, floatval(sprintf("%.2f", $total_goods_tax)),PHPExcel_Cell_DataType::TYPE_NUMERIC);
-        $objActSheet->setCellValueExplicit('D' . $index, floatval(sprintf("%.2f", $total_freight_price)),PHPExcel_Cell_DataType::TYPE_NUMERIC);
-        $objActSheet->setCellValueExplicit('E' . $index, floatval(sprintf("%.2f", $total_freight_tax)),PHPExcel_Cell_DataType::TYPE_NUMERIC);
-        $objActSheet->setCellValueExplicit('F' . $index, floatval(sprintf("%.2f", $total_goods_price_pro)),PHPExcel_Cell_DataType::TYPE_NUMERIC);
-        $objActSheet->setCellValueExplicit('G' . $index, floatval(sprintf("%.2f", $total_goods_tax_pro)),PHPExcel_Cell_DataType::TYPE_NUMERIC);
-        $objActSheet->setCellValueExplicit('H' . $index, floatval(sprintf("%.2f", $total_all_price)),PHPExcel_Cell_DataType::TYPE_NUMERIC);
-        $objActSheet->setCellValueExplicit('I' . $index, floatval(sprintf("%.2f", $total_tip)),PHPExcel_Cell_DataType::TYPE_NUMERIC);
-        $objActSheet->setCellValueExplicit('J' . $index, floatval(sprintf("%.2f", $total_coupon_discount)),PHPExcel_Cell_DataType::TYPE_NUMERIC);
-        $objActSheet->setCellValueExplicit('K' . $index, floatval(sprintf("%.2f", $total_delivery_discount)),PHPExcel_Cell_DataType::TYPE_NUMERIC);
+        $objActSheet->setCellValueExplicit('D' . $index, floatval(sprintf("%.2f", $total_goods_gst_tax)),PHPExcel_Cell_DataType::TYPE_NUMERIC);
+        $objActSheet->setCellValueExplicit('E' . $index, floatval(sprintf("%.2f", $total_goods_pst_tax)),PHPExcel_Cell_DataType::TYPE_NUMERIC);
+        $objActSheet->setCellValueExplicit('F' . $index, floatval(sprintf("%.2f", $total_freight_price)),PHPExcel_Cell_DataType::TYPE_NUMERIC);
+        $objActSheet->setCellValueExplicit('G' . $index, floatval(sprintf("%.2f", $total_freight_tax)),PHPExcel_Cell_DataType::TYPE_NUMERIC);
+        $objActSheet->setCellValueExplicit('H' . $index, floatval(sprintf("%.2f", $total_goods_price_pro)),PHPExcel_Cell_DataType::TYPE_NUMERIC);
+        $objActSheet->setCellValueExplicit('I' . $index, floatval(sprintf("%.2f", $total_goods_tax_pro)),PHPExcel_Cell_DataType::TYPE_NUMERIC);
+        $objActSheet->setCellValueExplicit('J' . $index, floatval(sprintf("%.2f", $total_all_price)),PHPExcel_Cell_DataType::TYPE_NUMERIC);
+        $objActSheet->setCellValueExplicit('K' . $index, floatval(sprintf("%.2f", $total_tip)),PHPExcel_Cell_DataType::TYPE_NUMERIC);
+        $objActSheet->setCellValueExplicit('L' . $index, floatval(sprintf("%.2f", $total_coupon_discount)),PHPExcel_Cell_DataType::TYPE_NUMERIC);
+        $objActSheet->setCellValueExplicit('M' . $index, floatval(sprintf("%.2f", $total_delivery_discount)),PHPExcel_Cell_DataType::TYPE_NUMERIC);
 
         //输出
         $objWriter = new PHPExcel_Writer_Excel5($objExcel);
