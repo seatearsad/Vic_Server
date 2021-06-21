@@ -1,4 +1,9 @@
 <include file="Public:header"/>
+<style>
+    .fa_action:hover{
+        cursor: pointer;
+    }
+</style>
 <div id="wrapper">
     <include file="Public:left_menu"/>
     <!----------------------------------------    以上不要写代码     ------------------------------------------------>
@@ -125,10 +130,10 @@
                                             <if condition="$vo['status'] eq 0">
                                                 <li class="fa fa-check tutti_icon_ok" title="{pigcms{:L('_BACK_ORDER_FILED_')}">
                                             <elseif condition="$vo['status'] eq 1" />
-                                                <li class="fa fa-plus tutti_icon_succ" title="{pigcms{:L('_BACK_ASS_DIST_')}" onclick="window.top.artiframe('{pigcms{:U('Deliver/appoint_deliver',array('supply_id' => $vo['supply_id']))}','Courier Assignment({pigcms{$vo['distance']})',480,380,true,false,false,editbtn,'edit',true);">
+                                                <li class="fa fa-plus tutti_icon_succ fa_action" title="{pigcms{:L('_BACK_ASS_DIST_')}" onclick="window.top.artiframe('{pigcms{:U('Deliver/appoint_deliver',array('supply_id' => $vo['supply_id']))}','Courier Assignment({pigcms{$vo['distance']})',480,380,true,false,false,editbtn,'edit',true);">
                                             <elseif condition="$vo['status'] lt 5" />
 
-                                                <li class="fa fa-exchange tutti_icon_danger" title="{pigcms{:L('_BACK_CHANGE_COURIER_')}" onclick="window.top.artiframe('{pigcms{:U('Deliver/appoint_deliver',array('supply_id' => $vo['supply_id']))}','{pigcms{:L(\'_BACK_CHANGE_COURIER_\')}({pigcms{$vo['distance']})',480,380,true,false,false,editbtn,'edit',true);" >
+                                                <li class="fa fa-exchange tutti_icon_danger fa_action" title="{pigcms{:L('_BACK_CHANGE_COURIER_')}" onclick="window.top.artiframe('{pigcms{:U('Deliver/appoint_deliver',array('supply_id' => $vo['supply_id']))}','{pigcms{:L(\'_BACK_CHANGE_COURIER_\')}({pigcms{$vo['distance']})',480,380,true,false,false,editbtn,'edit',true);" >
                                             <else />
                                                 <li class="fa fa-check tutti_icon_ok" title="{pigcms{:L('_BACK_DELIVERED_')}">
                                             </if>
@@ -137,7 +142,7 @@
                                             <if condition="$vo['status'] eq 0 OR $vo['status'] eq 5 OR $vo['status'] eq 1">
                                                 -
                                             <else />
-                                                <a href="javascript:void(0);" style="color:green" data-supply="{pigcms{$vo['supply_id']}" class="change"><li class="fa fa-check-square-o tutti_icon_ok" title="{pigcms{:L('_BACK_SWITCH_COM_')}"></a>
+                                                <li class="fa fa-check-square-o tutti_icon_ok fa_action" onclick="set_done({pigcms{$vo['supply_id']})" title="{pigcms{:L('_BACK_SWITCH_COM_')}">
                                             </if>
                                         </td>
                                         <!--td width="50">{pigcms{$vo.create_time}</td-->
@@ -166,29 +171,29 @@
     // $('#city_select').change(function () {
     //     city_id = $(this).val();
     //     window.location.href = "{pigcms{:U('Deliver/deliverList')}" + "&city_id="+city_id;
-    // });
-
-    $('.change').click(function(){
-        var supply_id = $(this).attr('data-supply'), obj = $(this);
+    // }
+    function set_done(sid){
+        var supply_id = sid;
         window.top.art.dialog({
             lock: true,
-            title:'Reminder',
+            title: 'Reminder',
             content: "{pigcms{:L('_BACK_SURE_CHANGE_')}",
-            okVal:'Yes',
-            ok: function(){
-                $.get("{pigcms{:U('Deliver/change')}", {supply_id:supply_id}, function(response){
+            okVal: 'Yes',
+            ok: function () {
+                $.get("{pigcms{:U('Deliver/change')}", {supply_id: supply_id}, function (response) {
                     if (response.error_code) {
                         window.top.msg(0, response.msg);
                     } else {
-                        window.top.msg(1, response.msg,true);
+                        window.top.msg(1, response.msg, true);
                         obj.remove();
                     }
                 }, 'json');
             },
-            cancelVal:'Cancel',
+            cancelVal: 'Cancel',
             cancel: true
         });
-    });
+    }
+
 
     var hover_id = 0;
     var time_out;
@@ -227,6 +232,7 @@
     function getMouse(e) {
         e = e  || window.event;
     }
+
 </script>
 <style>
 .drp-popup{top:90px !important}

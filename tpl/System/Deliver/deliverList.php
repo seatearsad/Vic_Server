@@ -180,7 +180,8 @@
 			location.href = "{pigcms{:U('Merchant/Deliver/deliverList')}"+"&period="+period+"&phone="+phone+"&day="+day+"&status="+status;
 		}
 		$('.change').click(function(){
-			var supply_id = $(this).attr('data-supply'), obj = $(this);
+			console.log("11111111111");
+		    var supply_id = $(this).attr('data-supply'), obj = $(this);
 			window.top.art.dialog({
 				lock: true,
                 title:'Reminder',

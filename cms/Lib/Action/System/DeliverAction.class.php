@@ -181,10 +181,14 @@ class DeliverAction extends BaseAction {
     		if (D('Deliver_user')->field(true)->where(array('phone' => $column['phone']))->find()) {
     			$this->error(L('_BACK_PHONE_ALREADY_'));
     		}
+
     		$id = D('deliver_user')->data($column)->add();
+
     		if(!$id){
     			$this->error('保存失败，请重试');
-    		}
+    		}else{
+
+            }
     		//
     		$card['deliver_id'] = $id;
             D('Deliver_card')->data($card)->add();
@@ -193,6 +197,11 @@ class DeliverAction extends BaseAction {
                 $data['sin_num'] = $_POST['sin_num'];
                 $data['uid'] = $id;
                 D('Deliver_img')->add($data);
+
+                $data_img['driver_license'] = $_POST['driver_license'];
+                $data_img['insurance'] = $_POST['insurance'];
+                $data_img['certificate'] = $_POST['certificate'];
+                D('Deliver_img')->where(array('uid' => $id))->save($data_img);
             }
     		$this->success(L('J_SUCCEED3'));
     	}
@@ -252,7 +261,12 @@ class DeliverAction extends BaseAction {
     		if ($user && $user['uid'] != $uid) {
     			$this->error(L('_BACK_PHONE_ALREADY_'));
     		}
-    		
+
+    		$data_img['driver_license'] = $_POST['driver_license'];
+            $data_img['insurance'] = $_POST['insurance'];
+            $data_img['certificate'] = $_POST['certificate'];
+            D('Deliver_img')->where(array('uid' => $uid))->save($data_img);
+
     		if(D('deliver_user')->where(array('uid'=>$uid))->data($column)->save()){
     		    $card_id = D('Deliver_card')->field('id')->where(array('deliver_id'=>$uid))->find();
     		    if($card_id){

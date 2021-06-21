@@ -10,11 +10,11 @@
                         <form id="myform" method="post" action="{pigcms{:U('Merchant/modify')}" frame="true" refresh="true">
 
                             <div class="form-group  row">
-                                <label class="col-sm-3 col-form-label">{pigcms{:L('E_MERCHANT_ACCOUNT')}</label>
+                                <label class="col-sm-3 col-form-label">{pigcms{:L('E_MERCHANT_ACCOUNT')}22</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" name="account" size="25"
+                                    <input type="text" class="form-control" name="account" size="35"
                                            placeholder="{pigcms{:L('E_MERCHANT_ACCOUNT1')}"
-                                           validate="maxlength:20,required:true"
+                                           validate="maxlength:35,required:true"
                                            tips="{pigcms{:L('E_MERCHANT_ACCOUNTDESC')}"/>
                                 </div>
                             </div>
@@ -34,8 +34,8 @@
                             <div class="form-group  row">
                                 <label class="col-sm-3 col-form-label">{pigcms{:L('E_MERCHANT_NAME')}</label>
                                 <div class="col-sm-9">
-                                    <input type="text" check_width="180" class="form-control" name="name" size="25"
-                                           placeholder="" validate="maxlength:20,required:true"/>
+                                    <input type="text" check_width="180" class="form-control" name="name" size="35"
+                                           placeholder="" validate="maxlength:35,required:true"/>
                                 </div>
                             </div>
                             <div class="hr-line-dashed"></div>
