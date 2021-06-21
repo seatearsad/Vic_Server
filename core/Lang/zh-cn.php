@@ -756,7 +756,7 @@ return array(
     'offline'               =>  '现金',
     'moneris'               =>  '线上支付',
     '_PAY_FROM_MER_'        =>  '代客下单',
-
+    '_PAY_FROM_MER_2'       =>  '代客下单',
     '_COURIER_LOGIN_'       =>  '配送员登录',
     '_COURIER_CENTER_'      =>  '配送员中心',
     '_COURIER_TXT_'         =>  '配送员',

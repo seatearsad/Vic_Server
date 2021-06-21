@@ -1323,7 +1323,13 @@ class Shop_orderModel extends Model
 					}
 					break;
 			}
-			$order['pay_type_str'] = D('Pay')->get_pay_name($order['pay_type'], $order['is_mobile_pay'], $order['paid']);
+
+			if ($order['uid']==0) {
+                $order['pay_type_str']=L("_PAY_FROM_MER_2");
+			}else{
+				$order['pay_type_str'] = D('Pay')->get_pay_name($order['pay_type'], $order['is_mobile_pay'], $order['paid']);
+            }
+
 		}
 
 		if($is_wap != 10){

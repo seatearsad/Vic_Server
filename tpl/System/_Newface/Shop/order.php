@@ -134,7 +134,8 @@
                                                 <if condition="$key eq $pay_type">selected="selected"</if>
                                                 >{pigcms{$vo.name}</option>
                                             </volist>
-                                            <option value="balance"  <if condition="'balance' eq $pay_type">selected="selected"</if> >{pigcms{:L('_BACK_BALANCE_')}</option>
+                                            <option value="balance"  <if condition="$pay_type eq 'balance'">selected="selected"</if> >{pigcms{:L('_BACK_BALANCE_')}</option>
+                                            <option value="merchant_request"  <if condition="$pay_type eq 'merchant_request'">selected="selected"</if> >{pigcms{:L('_PAY_FROM_MER_2')}</option>
                                         </select>&nbsp;
                                         &nbsp;&nbsp;{pigcms{:L('_BACK_DATE_SELECT_')}：
                                         <input type="text" class="form-control" name="begin_time" style="width:120px;"
@@ -190,7 +191,8 @@
                                         <td>{pigcms{$vo.userphone}</td>
                                         <td>
                                             <php>if($vo['is_refund'] == 1){</php>
-                                            ${pigcms{$vo['change_price'] + $vo['tip_charge']|floatval}
+                                            ${pigcms{$vo['change_price'] + $vo['tip_charge']- $vo['coupon_price'] -
+                                            $vo['delivery_discount'] - $vo['merchant_reduce']|floatval}
                                             <php>}</php>
                                         </td>
                                         <td>${pigcms{$vo['price'] + $vo['tip_charge']- $vo['coupon_price'] -

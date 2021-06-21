@@ -756,7 +756,7 @@ return array(
     'offline'               =>  'Cash',
     'moneris'               =>  'Online Payment',
     '_PAY_FROM_MER_'        =>  'Order From Merchant',
-
+    '_PAY_FROM_MER_2'       =>  'Merchant Request',
     '_COURIER_LOGIN_'       =>  'Courier Login',
     '_COURIER_CENTER_'      =>  'Courier Center',
     '_COURIER_TXT_'         =>  'Courier',
