@@ -175,7 +175,7 @@
                                 <th data-hide="all">{pigcms{:L('_BACK_REG_NUM_')}</th>
                                 <th data-hide="all">{pigcms{:L('_BACK_CUSTOM_ADD_')}</th>
                                 <th data-hide="all">{pigcms{:L('_BACK_DELIVERY_STATUS_')}</th>
-                                <th data-hide="all">送餐员+电话</th>
+                                <th data-hide="all">{pigcms{:L('COURIER_BKADMIN')}</th>
                                 <th data-hide="all">{pigcms{:L('_BACK_PAY_STATUS_')}</th>
                                 <th data-sort-ignore="true">{pigcms{:L('_BACK_CZ_')}</th>
                             </tr>

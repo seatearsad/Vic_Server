@@ -2056,6 +2056,7 @@ return array(
     "MNG_LIST_NOTHING_BKADMIN"=>"您没有添加店铺，或店铺没开启外卖功能，或店铺正在审核中。",
     "CUSTOMER_BKADMIN"=>"客户",
     "COURIER_BKADMIN"=>"送餐员",
+    "_BACK_COURIER_INFO_"=>"送餐员",
 
     "F_REGISTRATION_INVITED"=>"邀请注册数",
     "F_ORDERS_INVITED"=>"邀请下单数",

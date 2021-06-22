@@ -1259,7 +1259,7 @@ class Shop_orderModel extends Model
 				$order['deliver_str'] = '平台配送';
 				$order['deliverinfo'] = '平台配送';
 				if ($order['deliverinfo'] && $order['deliver_info']['name'] && $order['deliver_info']['phone']) {
-                    $order['deliverinfo'] .= '<br/>配送员姓名：' . $order['deliver_info']['name'] . '配送员电话：' . $order['deliver_info']['phone'];
+                    $order['deliverinfo'] .= '<br/>Name：' . $order['deliver_info']['name'] . 'Phone：' . $order['deliver_info']['phone'];
                     $order['deliverinfo_forbk']= $order['deliver_info']['name'] . ' ( ' . $order['deliver_info']['phone']." )";
 				}else{
                     $order['deliverinfo_forbk']="-";
@@ -1268,7 +1268,7 @@ class Shop_orderModel extends Model
 				$order['deliver_str'] = '商家配送';
 				$order['deliverinfo'] = '商家配送';
 				if ($order['deliverinfo'] && $order['deliver_info']['name'] && $order['deliver_info']['phone']) {
-					$order['deliverinfo'] .= '<br/>配送员姓名：' . $order['deliver_info']['name'] . '<br/>配送员电话：' . $order['deliver_info']['phone'];
+					$order['deliverinfo'] .= '<br/>Name：' . $order['deliver_info']['name'] . '<br/>Phone：' . $order['deliver_info']['phone'];
                     $order['deliverinfo_forbk']='' . $order['deliver_info']['name'] . ' ( ' . $order['deliver_info']['phone']." )";
 				}else{
                     $order['deliverinfo_forbk']="-";
@@ -1324,11 +1324,8 @@ class Shop_orderModel extends Model
 					break;
 			}
 
-			if ($order['uid']==0) {
-                $order['pay_type_str']=L("_PAY_FROM_MER_2");
-			}else{
-				$order['pay_type_str'] = D('Pay')->get_pay_name($order['pay_type'], $order['is_mobile_pay'], $order['paid']);
-            }
+			$order['pay_type_str'] = D('Pay')->get_pay_name_2($order['pay_type'], $order['is_mobile_pay'], $order['paid'],$order['uid']);
+
 		}
 
 		if($is_wap != 10){
