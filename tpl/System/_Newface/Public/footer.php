@@ -9,6 +9,7 @@
 
 <include file="Public:toast_inc"/>
 
+
 <!-- Mainly scripts -->
 <script src="{pigcms{$static_path}js/plugins/metisMenu/jquery.metisMenu.js"></script>
 <script src="{pigcms{$static_path}js/plugins/slimscroll/jquery.slimscroll.min.js"></script>

@@ -34,7 +34,6 @@
                             <div class="form-group  row" id="adver_region" style="display:none;">
                                 <label class="col-sm-3 col-form-label">{pigcms{:L('E_CITY_OF_LOCATION')}</label>
                                 <div class="col-sm-9" id="choose_cityareass" province_idss="" city_idss="">
-
                                 </div>
                             </div>
                             <div class="form-group  row">
@@ -86,7 +85,6 @@
         </div>
 <script type="text/javascript" src="./static/js/artdialog/jquery.artDialog.js"></script>
 <script type="text/javascript" src="./static/js/artdialog/iframeTools.js"></script>
-<script type="text/javascript" src="{pigcms{$static_path}/js/area_adver.js"></script>
 <script>
 function addLink(domid, iskeyword, type){
 	art.dialog.data('domid', domid);

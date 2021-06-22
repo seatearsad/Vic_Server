@@ -92,7 +92,6 @@
         </div>
 <script type="text/javascript" src="./static/js/artdialog/jquery.artDialog.js"></script>
 <script type="text/javascript" src="./static/js/artdialog/iframeTools.js"></script>
-<script type="text/javascript" src="{pigcms{$static_path}/js/area_adver.js"></script>
 <script>
 function addLink(domid, iskeyword, type){
 	art.dialog.data('domid', domid);

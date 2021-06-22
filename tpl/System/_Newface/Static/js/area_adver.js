@@ -1,9 +1,11 @@
 //显示省份
 function show_provincess(){
+    console.log("show_provincess");
 	$.post(choose_provincess,function(result){
 		result = $.parseJSON(result);
 		console.log(result);
 		if(result.error == 0){
+
 			var area_dom = '<select id="choose_provincess" name="province_idss" class="form-control" style="margin-right:10px;">';
 			$.each(result.list,function(i,item){
 				area_dom+= '<option value="'+item.id+'" '+(item.id==$('#choose_cityareass').attr('province_idss') ? 'selected="selected"' : '')+'>'+item.name+'</option>';
@@ -56,6 +58,7 @@ function show_cityss(id,name,type){
 }
 $(function(){
 	//检测是否需要显示城市
+	console.log("检测是否需要显示城市");
 	if(document.getElementById('choose_cityareass')){
 		show_provincess();
 	}
