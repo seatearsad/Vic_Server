@@ -372,8 +372,8 @@
                     for (var j = 0; j < work_time_list[i].length; j++) { //time
                         var time_data = {};
 
-                        if(work_time_list[i][j]['min']>work_time_list[i][j]['max']){
-                            alert(week_all[i]+" "+format_time(work_time_list[i][j]["start_time"]) +" - "+ format_time(work_time_list[i][j]["end_time"]) + "" +" error, Please enter the correct number of couriers");
+                        if((work_time_list[i][j]['min']*1)>(work_time_list[i][j]['max']*1)){
+                            alert(week_all[i]+" "+format_time(work_time_list[i][j]["start_time"]) +" - "+ format_time(work_time_list[i][j]["end_time"]) + "" +" error, Please enter the correct number of couriers ("+ work_time_list[i][j]['min'] +" - "+work_time_list[i][j]['max']+")");
                             is_send=false;
                             return;
                         }else{

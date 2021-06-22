@@ -94,7 +94,7 @@ class AdverAction extends BaseAction{
 		$adver_list = $database_adver->field("b.*,a.*")->join('as b left join '.C('DB_PREFIX').'area as a ON b.city_id=a.area_id')->where($condition_adver)->order('`id` DESC')->select();
 		if($many_city == 1 && $adver_list){
 			foreach($adver_list as &$v){
-				$city	=	M('Area')->field('area_name')->where(array('area_id'=>$v['city_id']))->find();
+				$city	=	M('Area')->field('area_name')->where(array('area_id'=>$v['city_id'], 'is_open' => '1'))->find();
 				if(empty($city)){
 					$v['city_id']	=	'通用';
 				}else{
@@ -242,8 +242,8 @@ class AdverAction extends BaseAction{
 			$return['error'] = 0;
 			$return['list'] = $city_list;
 		}else{
-			$return['error'] = 1;
-			$return['info'] = '［ <b>'.$_POST['name'] .'</b> ］ 省份下没有已开启的城市！请先开启城市或删除此省份';
+			$return['error'] = 0;
+			//$return['info'] = '［ <b>'.$_POST['name'] .'</b> ］ 省份下没有已开启的城市！！！请先开启城市或删除此省份';
 		}
 		exit(json_encode($return));
 	}

@@ -485,7 +485,7 @@ class ShopAction extends BaseAction
                     $vv['name'] = 'Wechat Pay';
                     break;
                 case 'moneris':
-                    $vv['name'] = 'Credit';
+                    $vv['name'] = 'Credit/Debit';
                     break;
             }
         }

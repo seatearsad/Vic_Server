@@ -1329,7 +1329,6 @@ class Shop_orderModel extends Model
 			}else{
 				$order['pay_type_str'] = D('Pay')->get_pay_name($order['pay_type'], $order['is_mobile_pay'], $order['paid']);
             }
-
 		}
 
 		if($is_wap != 10){

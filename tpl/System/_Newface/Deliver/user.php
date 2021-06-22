@@ -101,9 +101,9 @@
                                         <td>{pigcms{$vo.area_name}</td>
                                         <td>{pigcms{$vo.range}</td>
                                         <td class="textcenter">{pigcms{$vo.num}</td>
-                                        <td class="textcenter"><if condition="$vo['status'] eq 1"><font color="green">{pigcms{:L('_BACK_NORMAL_')}</font><else/><font color="red">{pigcms{:L('_BACK_BANNED_')}</font></if></td>
+                                        <td class="textcenter td_v_middle"><if condition="$vo['status'] eq 1"><font color="green">{pigcms{:L('_BACK_NORMAL_')}</font><else/><font color="red">{pigcms{:L('_BACK_BANNED_')}</font></if></td>
                                         <td>{pigcms{$vo.site}</td>
-                                        <td>{pigcms{$vo.remark}</td>
+                                        <td >{pigcms{$vo.remark}</td>
                                         <td>{pigcms{$vo.last_time|date='Y-m-d H:i:s',###}</td>
                                         <td class="textcenter">
                                             <div class="btn-group">

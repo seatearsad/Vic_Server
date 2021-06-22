@@ -9940,3 +9940,6 @@ body.md-skin {
 .tutti_old_form_control tr{
  height: 30px;
 }
+.td_v_middle{
+  vertical-align: middle !important;
+}

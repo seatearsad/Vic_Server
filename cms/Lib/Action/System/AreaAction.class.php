@@ -280,7 +280,7 @@ class AreaAction extends BaseAction{
 			$return['list'] = $city_list;
 		}else{
 			$return['error'] = 1;
-			$return['info'] = '［ <b>'.$_POST['name'] .'</b> ］ 省份下没有已开启的城市！请先开启城市或删除此省份';
+			$return['info'] = '［ <b>'.$_POST['name'] .'</b> ］ 省份下没有已开启的城市！！！请先开启城市或删除此省份';
 		}
 		exit(json_encode($return));
 	}

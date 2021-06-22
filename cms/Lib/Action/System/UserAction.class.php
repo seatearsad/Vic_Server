@@ -355,11 +355,23 @@ class UserAction extends BaseAction {
 
     public function amend() {
         if (IS_POST) {
+
+
+
+
             $database_user = D('User');
+            $con_pre['_string']=" phone='".$_POST['phone']."' and uid<>".intval($_POST['uid']);
+            //$con_pre['phone']=$_POST['phone'];
+
+            $check_user = $database_user->field(true)->where($con_pre)->find();
+            if (!empty($check_user)) {
+                $this->error(L('_B_LOGIN_PHONENOHAVE_'));
+            }
+
             $condition_user['uid'] = intval($_POST['uid']);
             $now_user = $database_user->field(true)->where($condition_user)->find();
             if (empty($now_user)) {
-                $this->error('没有找到该用户信息！');
+                $this->error(L("_B_MY_NOTHAVEUSER_"));
             }
             $condition_user['uid'] = $now_user['uid'];
             $data_user['nickname'] = $_POST['nickname'];
@@ -426,6 +438,7 @@ class UserAction extends BaseAction {
 			$cardid = $_POST['cardid'];
 			$data_user['cardid'] = $cardid;
 			$card = M('Physical_card');
+
 			if(!empty($cardid)){
 
 				$condition_card['cardid']=$cardid;
@@ -445,7 +458,6 @@ class UserAction extends BaseAction {
 			}else{
 				$card->where(array('uid'=>$now_user['uid']))->save(array('uid'=>NULL,'regtime'=>NULL,'last_time'=>time()));
 			}
-
 
             $data_user['level'] = intval($_POST['level']);
 
