@@ -1230,7 +1230,7 @@ class MerchantAction extends BaseAction{
 		import('@.ORG.system_page');
 		$p = new Page($count, 50);
 
-		$sql = "SELECT r.*,u.*,m.*,a.area_name AS area_name,s.city_id AS mcity_id,m.name AS m_name, s.name AS s_name,u.uid as userid,u.nickname, u.phone FROM " . C('DB_PREFIX') . "merchant AS m INNER JOIN " . C('DB_PREFIX') . "reply AS r ON r.mer_id = m.mer_id INNER JOIN " . C('DB_PREFIX') . "user AS u ON r.uid=u.uid LEFT JOIN " . C('DB_PREFIX') . "merchant_store AS s ON s.store_id=r.store_id  LEFT JOIN " . C('DB_PREFIX') . "area AS a ON s.city_id=a.area_id {$where} ORDER BY r.pigcms_id DESC LIMIT {$p->firstRow},{$p->listRows}";
+		$sql = "SELECT r.*,u.*,m.*,r.add_time AS r_add_time,a.area_name AS area_name,s.city_id AS mcity_id,m.name AS m_name, s.name AS s_name,u.uid as userid,u.nickname, u.phone FROM " . C('DB_PREFIX') . "merchant AS m INNER JOIN " . C('DB_PREFIX') . "reply AS r ON r.mer_id = m.mer_id INNER JOIN " . C('DB_PREFIX') . "user AS u ON r.uid=u.uid LEFT JOIN " . C('DB_PREFIX') . "merchant_store AS s ON s.store_id=r.store_id  LEFT JOIN " . C('DB_PREFIX') . "area AS a ON s.city_id=a.area_id {$where} ORDER BY r.pigcms_id DESC LIMIT {$p->firstRow},{$p->listRows}";
 		$reply_list = D()->query($sql);
 		//die($sql);
 //		var_dump($reply_list);die();
