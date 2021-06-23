@@ -1257,6 +1257,7 @@ return array(
     '_BACK_DATE_'           =>  '日期',
     '_BACK_ORDERS_DELIVER_' =>  '配送量',
     '_BACK_COURIER_OVER_'   =>  '配送记录',
+    '_BACK_DAILY_TOTALS_'   =>  '历史记录',
     '_BACK_START_DATE_'     =>  '配送开始时间',
     '_BACK_TUTTI_CREDIT_'   =>  '平台余额',
     '_BACK_REFUND_TIME_'    =>  '退款时间',

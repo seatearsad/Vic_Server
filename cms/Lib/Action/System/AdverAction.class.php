@@ -10,7 +10,7 @@ class AdverAction extends BaseAction{
     public function _initialize(){
         parent::_initialize();
 
-        $area_list = D('Area')->where(array('area_type'=>2))->select();
+        $area_list = D('Area')->where(array('area_type'=>2,'is_open'=>1))->select();
         $this->assign('city_list',$area_list);
     }
 	public function index(){
@@ -78,6 +78,7 @@ class AdverAction extends BaseAction{
 			$this->error('非法提交,请重新提交~');
 		}
 	}
+
 	public function adver_list(){
 
 		$now_category = $this->check_get_category($_GET['cat_id']);

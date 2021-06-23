@@ -28,7 +28,7 @@
             <div class="col-lg-12">
                 <div class="ibox ">
                     <div class="ibox-title">
-                        <h5>【{pigcms{$user['name']}】{pigcms{:L('_BACK_COURIER_OVER_')}</h5>
+                        <h5>【{pigcms{$user['name']}】{pigcms{:L('_BACK_DAILY_TOTALS_')}</h5>
                         <div class="ibox-tools">
                             <if condition="$system_session['level'] neq 3">
                                 <div style="margin-left:40px;">
@@ -56,9 +56,7 @@
                                             <td>{pigcms{$vo.num}</td>
                                         </tr>
                                     </volist>
-                                    <tr>
-                                        <td class="textcenter pagebar" colspan="2">{pigcms{$pagebar}</td>
-                                    </tr>
+
                                     <else/>
                                     <tr>
                                         <td class="textcenter red" colspan="2">No Data</td>

@@ -278,7 +278,14 @@
     <script type="text/javascript" src="{pigcms{$static_public}js/mobiscroll/mobiscroll.custom.min.js"></script>
     <link rel="stylesheet" type="text/css" href="{pigcms{$static_public}js/mobiscroll/mobiscroll.custom.min.css" media="all">
 	<script type="text/javascript">
-	var static_public="{pigcms{$static_public}",static_path="{pigcms{$static_path}",merchant_index="{pigcms{:U('Index/index')}",choose_province="{pigcms{:U('Area/ajax_province')}",choose_city="{pigcms{:U('Area/ajax_city')}",choose_area="{pigcms{:U('Area/ajax_area')}",choose_circle="{pigcms{:U('Area/ajax_circle')}",choose_city_name="{pigcms{:U('Area/ajax_city_name')}";
+	var static_public="{pigcms{$static_public}",
+        static_path="{pigcms{$static_path}",
+        merchant_index="{pigcms{:U('Index/index')}",
+        choose_province="{pigcms{:U('Area/ajax_province')}",
+        choose_city="{pigcms{:U('Area/ajax_city')}",
+        choose_area="{pigcms{:U('Area/ajax_area')}",
+        choose_circle="{pigcms{:U('Area/ajax_circle')}",
+        choose_city_name="{pigcms{:U('Area/ajax_city_name')}";
 
 	var theme = "ios";
     var mode = "scroller";

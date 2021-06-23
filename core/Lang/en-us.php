@@ -1257,6 +1257,7 @@ return array(
     '_BACK_DATE_'           =>  'Date',
     '_BACK_ORDERS_DELIVER_' =>  'Orders Delivered',
     '_BACK_COURIER_OVER_'   =>  'Courier Overview',
+    '_BACK_DAILY_TOTALS_'   =>  'Daily Totals',
     '_BACK_START_DATE_'     =>  'Starting Date',
     '_BACK_TUTTI_CREDIT_'   =>  'Tutti Credit',
     '_BACK_REFUND_TIME_'    =>  'Refund Time',

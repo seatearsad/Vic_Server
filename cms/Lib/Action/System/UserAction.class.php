@@ -356,17 +356,15 @@ class UserAction extends BaseAction {
     public function amend() {
         if (IS_POST) {
 
-
-
-
             $database_user = D('User');
-            $con_pre['_string']=" phone='".$_POST['phone']."' and uid<>".intval($_POST['uid']);
-            //$con_pre['phone']=$_POST['phone'];
-
-            $check_user = $database_user->field(true)->where($con_pre)->find();
-            if (!empty($check_user)) {
-                $this->error(L('_B_LOGIN_PHONENOHAVE_'));
+            if ($_POST['phone']){
+                $con_pre['_string']=" phone='".$_POST['phone']."' and uid<>".intval($_POST['uid']);
+                $check_user = $database_user->field(true)->where($con_pre)->find();
+                if (!empty($check_user)) {
+                    $this->error(L('_B_LOGIN_PHONENOHAVE_'));
+                }
             }
+            //$con_pre['phone']=$_POST['phone'];
 
             $condition_user['uid'] = intval($_POST['uid']);
             $now_user = $database_user->field(true)->where($condition_user)->find();

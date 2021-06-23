@@ -623,13 +623,13 @@ class DeliverAction extends BaseAction {
         $deliver_count_obj = D('Deliver_count');
         $count = $deliver_count_obj->field(true)->where(array('uid' => $uid))->order('`id` DESC')->count();
         import('@.ORG.system_page');
-        $p = new Page($count, 15);
+        $p = new Page($count, 20);
         $count_list = $deliver_count_obj->field(true)->where(array('uid' => $uid))->order('`id` DESC')->limit($p->firstRow . ',' . $p->listRows)->select();
         foreach ($count_list as &$row) {
         	$row['today'] = date('Y-m-d', strtotime($row['today'] . '000000'));
         }
         $this->assign('count_list', $count_list);
-        $pagebar = $p->show();
+        $pagebar = $p->show2();
         $this->assign('pagebar', $pagebar);
         $this->assign('user', $user);
         $this->display();
