@@ -135,7 +135,7 @@
                 </div>
                 <div class="ibox-content">
                     <h1 class="no-margins" id="city_total_label">0</h1>
-                    <div class="stat-percent font-bold text-navy">20% <i class="fa fa-level-up"></i></div>
+                    <!--div class="stat-percent font-bold text-navy">20% <i class="fa fa-level-up"></i></div-->
                     <small>Cash Flow</small>
                 </div>
             </div>
@@ -148,7 +148,7 @@
                 </div>
                 <div class="ibox-content">
                     <h1 class="no-margins" id="city_user">0</h1>
-                    <div class="stat-percent font-bold text-navy">20% <i class="fa fa-level-up"></i></div>
+                    <!--div class="stat-percent font-bold text-navy">20% <i class="fa fa-level-up"></i></div-->
                     <small>New Users</small>
                 </div>
             </div>
