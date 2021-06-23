@@ -240,7 +240,7 @@ class DeliverAction extends BaseAction {
     		$column['lat'] = $long_lat[1];
     		$column['status'] = intval($_POST['status']);
     		$column['last_time'] = $_SERVER['REQUEST_TIME'];
-    		$column['range'] = intval($_POST['range']);
+    		$column['range'] = intval($_POST['range']) == 0 ? 50 : intval($_POST['range']);
 
             $column['family_name'] = isset($_POST['family_name']) ? htmlspecialchars($_POST['family_name']) : '';
             $column['email'] = $_POST['email'];
