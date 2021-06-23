@@ -2493,4 +2493,5 @@ return array(
     "CCBE"=>"Content cannot be empty!",
     "FLLC"=>"Use the lower case initials of the first character of the name! If this field is empty this will be filled in automatically after the name is entered (as an example only)",
     "SIAEPRI"=>"Such ID already exists, please replace it.",
+    "VOIP_PHONE_TIP"=>"It looks like this phone number is coming from a VoIP carrier. Please use mobile numbers only.",
 );
