@@ -581,6 +581,8 @@ class ShopAction extends BaseAction
             $where['paid'] = 0;
         } elseif ($status == 2) {
             $where['_string'] = "(`status`=2 OR `status`=3)";
+        } elseif ($status == 5) {
+            $where['_string'] = "(`status`=4 OR `status`=5)";
         } else if ($status != -1) {
             $where['status'] = $status;
         }
