@@ -9,6 +9,7 @@ class UserAction extends BaseAction {
     public function index() {
         //if($this->system_session['level'] == 3){
             //if($this->system_session['area_id'] != 0){
+
                 $sql_count = "SELECT count(*) FROM ". C('DB_PREFIX') . "user as u ";
                 $sql = "SELECT u.* FROM ". C('DB_PREFIX') . "user as u ";
 
@@ -26,6 +27,7 @@ class UserAction extends BaseAction {
                         $sql_count .= " LEFT JOIN ". C('DB_PREFIX') . "user_adress as a on a.uid = u.uid ";
                         $sql = "SELECT u.* , a.city as city_id FROM ". C('DB_PREFIX') . "user as u LEFT JOIN ". C('DB_PREFIX') . "user_adress as a on a.uid = u.uid ";
                         $where .= " and a.default=1 and a.city=".$_GET['city_id'];
+                        $this->assign('city_id',$_GET['city_id']);
                     }
                 }else{
                     $this->assign('city_id',0);
@@ -40,6 +42,8 @@ class UserAction extends BaseAction {
                         $where .= " and u.nickname like '%".$_GET['keyword']. "%'";
                     } else if ($_GET['searchtype'] == 'phone') {
                         $where .= " and u.phone like '%".$_GET['keyword']. "%'";
+                    }else if($_GET['searchtype'] == 'email'){
+                        $where .= " and u.email like '%".$_GET['keyword']. "%'";
                     }
                 }
                 if ($_GET['status'] != '') {
@@ -47,7 +51,7 @@ class UserAction extends BaseAction {
                 }
                 if (!empty($_GET['begin_time']) && !empty($_GET['end_time'])) {
                     if ($_GET['begin_time'] > $_GET['end_time']) {
-                        $this->error_tips("结束时间应大于开始时间");
+                        $this->error("Please enter the date ranges correctly");
                     }
                     $period = array(strtotime($_GET['begin_time'] . " 00:00:00"), strtotime($_GET['end_time'] . " 23:59:59"));
                     $where .= " and u.add_time>".$period[0]." and u.add_time<".$period[1];
@@ -86,7 +90,7 @@ class UserAction extends BaseAction {
                     $limit = " LIMIT {$p->firstRow}, {$p->listRows}";
                     $user_list = D()->query($sql.$where.$order_string.$limit);
 
-                    $pagebar = $p->show();
+                    $pagebar = $p->show2();
                     $this->assign('pagebar', $pagebar);
                 }
 
@@ -243,9 +247,14 @@ class UserAction extends BaseAction {
             $objProps->setSubject($title);
             $objProps->setDescription($title);
 
+
             // 设置当前的sheet
-            $begin_time = strtotime($_GET['begin_time']);
-            $end_time = strtotime($_GET['end_time']);
+            $begin_time = strtotime($_GET['begin_time']." 00:00:00");
+            $end_time = strtotime($_GET['end_time']." 23:59:59");
+
+            if($_GET['status'] != -1){
+                $where['status'] = $_GET['status'];
+            }
 
             $where['add_time'] = array('between',array($begin_time,$end_time));
 
@@ -346,11 +355,21 @@ class UserAction extends BaseAction {
 
     public function amend() {
         if (IS_POST) {
+
             $database_user = D('User');
+            if ($_POST['phone']){
+                $con_pre['_string']=" phone='".$_POST['phone']."' and uid<>".intval($_POST['uid']);
+                $check_user = $database_user->field(true)->where($con_pre)->find();
+                if (!empty($check_user)) {
+                    $this->error(L('_B_LOGIN_PHONENOHAVE_'));
+                }
+            }
+            //$con_pre['phone']=$_POST['phone'];
+
             $condition_user['uid'] = intval($_POST['uid']);
             $now_user = $database_user->field(true)->where($condition_user)->find();
             if (empty($now_user)) {
-                $this->error('没有找到该用户信息！');
+                $this->error(L("_B_MY_NOTHAVEUSER_"));
             }
             $condition_user['uid'] = $now_user['uid'];
             $data_user['nickname'] = $_POST['nickname'];
@@ -417,6 +436,7 @@ class UserAction extends BaseAction {
 			$cardid = $_POST['cardid'];
 			$data_user['cardid'] = $cardid;
 			$card = M('Physical_card');
+
 			if(!empty($cardid)){
 
 				$condition_card['cardid']=$cardid;
@@ -436,7 +456,6 @@ class UserAction extends BaseAction {
 			}else{
 				$card->where(array('uid'=>$now_user['uid']))->save(array('uid'=>NULL,'regtime'=>NULL,'last_time'=>time()));
 			}
-
 
             $data_user['level'] = intval($_POST['level']);
 
@@ -827,6 +846,8 @@ class UserAction extends BaseAction {
                 $condition_where .= " AND `u`.`phone` like '%" . htmlspecialchars($_GET['keyword']) ."%'";
             } elseif ($_GET['searchtype'] == 'order_id') {
                 $condition_where .= " AND `o`.`order_id`='" . htmlspecialchars($_GET['keyword']) . "'";
+            }elseif($_GET['searchtype'] == 'uid'){
+                $condition_where .= " AND `u`.`uid` like '%" . htmlspecialchars($_GET['keyword']) . "%'";
             }
 
         }
@@ -854,7 +875,7 @@ class UserAction extends BaseAction {
         $p = new Page($order_count,30);
         $order_list = D('')->field('`o`.*,`u`.`uid`,`u`.`nickname`,`u`.`phone`')->where($condition_where)->table($condition_table)->order($order_sort)->limit($p->firstRow.','.$p->listRows)->select();
         $this->assign('order_list',$order_list);
-        $pagebar = $p->show();
+        $pagebar = $p->show2();
         $this->assign('pagebar',$pagebar);
 //        $this->assign(array('type' => $type, 'sort' => $sort, 'status' => $status));
         $this->assign(array('type' => $type, 'sort' => $sort));
@@ -900,31 +921,44 @@ class UserAction extends BaseAction {
      * @return  管理员充值列表
      */
     public function admin_recharge_list(){
-        $recharge_list = M('User_money_list')->where(array('admin_id'=>array('neq','')))->select();
+
+        //$recharge_list = M('User_money_list')->where(array('admin_id'=>array('neq','')))->select();
+        //获得所有管理员列表
         $admin_list = M('Admin')->where(array('status'=>1))->select();
         $this->assign('admin_list',$admin_list);
-        $where['l.admin_id'] = array('neq', 0);
+
+        //根据条件获得充值记录列表
         if(!empty($_GET['admin_id'])) {
             if ($_GET['admin_id'] == '0') {
                 $where['l.admin_id'] = array('neq', 0);
             } else{
                 $where['l.admin_id'] = $_GET['admin_id'];
             }
+        }else{
+            $where['l.admin_id'] = array('neq', 0);
         }
+
         if(!empty($_GET['begin_time'])&&!empty($_GET['end_time'])){
             if ($_GET['begin_time']>$_GET['end_time']) {
-                $this->error_tips("结束时间应大于开始时间");
+                $this->error("Please enter the date ranges correctly");
             }
             $period = array(strtotime($_GET['begin_time']." 00:00:00"),strtotime($_GET['end_time']." 23:59:59"));
             $where['_string'] =" (l.time BETWEEN ".$period[0].' AND '.$period[1].")";
-
         }
+
+        if (!empty($_GET['keyword'])) {
+            if ($_GET['searchtype'] == 'uid') {
+                $where['l.uid'] = $_GET['keyword'];
+            }
+        }
+
         $recharge_list =  D('User_money_list')->get_admin_recharge_list($where,1);
 
         $this->assign('recharge_list',$recharge_list['list']);
         $this->assign('pagebar',$recharge_list['pagebar']);
         $this->display();
     }
+
     //garfunkel add
     public function send_coupon(){
         $uid = $_GET['uid'];
@@ -968,7 +1002,7 @@ class UserAction extends BaseAction {
                 //Sms::sendSms2($sms_data);
                 $sms_txt = "Tutti has added a new coupon to your account! Please log in to your account and check available coupons for details.";
                 //Sms::telesign_send_sms($userInfo['phone'],$sms_txt,1);
-                //Sms::sendTwilioSms($userInfo['phone'],$sms_txt);
+                Sms::sendTwilioSms($userInfo['phone'],$sms_txt);
 
             }
             exit(json_encode($result));

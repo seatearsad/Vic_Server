@@ -79,39 +79,53 @@ class DeliverAction extends BaseAction {
 	 * 配送员列表
 	 */
     public function user() {
+
+        $where=" 1 ";
         //搜索
         if (!empty($_GET['keyword'])) {
+
             if ($_GET['searchtype'] == 'uid') {
-                $condition_user['uid'] = $_GET['keyword'];
+                $where.=" AND u.uid='".$_GET['keyword']."' ";
+                //$condition_user['u.uid'] = $_GET['keyword'];
             } else if ($_GET['searchtype'] == 'nickname') {
-                $condition_user['name'] = array('like', '%' . $_GET['keyword'] . '%');
+                $where.=" AND (u.name like '%".$_GET['keyword']."%' OR u.family_name like '%".$_GET['keyword']. "%')";
+                //$condition_user['u.name'] = array('like', '%' . $_GET['keyword'] . '%');
             } else if ($_GET['searchtype'] == 'phone') {
-                $condition_user['phone'] = array('like', '%' . $_GET['keyword'] . '%');
+                $where.=" AND u.phone like '%".$_GET['keyword']."%' ";
+                //$condition_user['u.phone'] = array('like', '%' . $_GET['keyword'] . '%');
+            } else if ($_GET['searchtype'] == 'mail') {
+                $where.=" AND u.email like '%".$_GET['keyword']."%' ";
+//                $condition_user['u.email'] = array('like', '%' . $_GET['keyword'] . '%');
             }
         }
 
         if($_GET['city_id']){
             $this->assign('city_id',$_GET['city_id']);
             if($_GET['city_id'] != 0)
-                $condition_user['city_id'] = $_GET['city_id'];
+                $where .=" AND u.city_id=".$_GET['city_id']." ";
+//                $condition_user['u.city_id'] = $_GET['city_id'];
         }else{
             $this->assign('city_id',0);
         }
+        //var_dump($condition_user);die();
         //garfunkel 判断城市管理员
         if($this->system_session['level'] == 3){
-            $condition_user['city_id'] = $this->system_session['area_id'];
+            $where .=" AND u.city_id=".$this->system_session['area_id']." ";
+            //$condition_user['u.city_id'] = $this->system_session['area_id'];
         }
-
+        //echo($where);
         $city = D('Area')->where(array('area_type'=>2,'is_open'=>1))->select();
 
-        $condition_user['group'] = 1;
-        $count_user = $this->deliver_user->where($condition_user)->count();
+        $condition_user['u.group'] = 1;
+        //$count_user = $this->deliver_user->join('as u left join '.C('DB_PREFIX').'area as a ON u.city_id=a.area_id')->where($condition_user)->count();
+        $count_user = $this->deliver_user->join('as u left join '.C('DB_PREFIX').'area as a ON u.city_id=a.area_id')->where($where)->count();
         import('@.ORG.system_page');
-        $p = new Page($count_user, 15);
-        $user_list = $this->deliver_user->field(true)->where($condition_user)->order('`uid` DESC')->limit($p->firstRow . ',' . $p->listRows)->select();
-        
+        $p = new Page($count_user, 20);
+        //$user_list = $this->deliver_user->field('u.*,a.area_name')->join('as u left join '.C('DB_PREFIX').'area as a ON u.city_id=a.area_id')->where($condition_user)->order('`uid` DESC')->limit($p->firstRow . ',' . $p->listRows)->select();
+        $user_list = $this->deliver_user->field('u.*,a.area_name')->join('as u left join '.C('DB_PREFIX').'area as a ON u.city_id=a.area_id')->where($where)->order('`uid` DESC')->limit($p->firstRow . ',' . $p->listRows)->select();
+        //var_dump($user_list);die();
         $this->assign('user_list', $user_list);
-        $pagebar = $p->show();
+        $pagebar = $p->show2();
         $this->assign('pagebar', $pagebar);
         $this->assign('city',$city);
         $this->display();
@@ -167,10 +181,14 @@ class DeliverAction extends BaseAction {
     		if (D('Deliver_user')->field(true)->where(array('phone' => $column['phone']))->find()) {
     			$this->error(L('_BACK_PHONE_ALREADY_'));
     		}
+
     		$id = D('deliver_user')->data($column)->add();
+
     		if(!$id){
     			$this->error('保存失败，请重试');
-    		}
+    		}else{
+
+            }
     		//
     		$card['deliver_id'] = $id;
             D('Deliver_card')->data($card)->add();
@@ -179,6 +197,11 @@ class DeliverAction extends BaseAction {
                 $data['sin_num'] = $_POST['sin_num'];
                 $data['uid'] = $id;
                 D('Deliver_img')->add($data);
+
+                $data_img['driver_license'] = $_POST['driver_license'];
+                $data_img['insurance'] = $_POST['insurance'];
+                $data_img['certificate'] = $_POST['certificate'];
+                D('Deliver_img')->where(array('uid' => $id))->save($data_img);
             }
     		$this->success(L('J_SUCCEED3'));
     	}
@@ -197,7 +220,7 @@ class DeliverAction extends BaseAction {
     		$uid = intval($_POST['uid']);
     		$column['name'] = isset($_POST['name']) ? htmlspecialchars($_POST['name']) : '';
     		$column['phone'] = isset($_POST['phone']) ? htmlspecialchars($_POST['phone']) : '';
-    		$column['pwd'] = isset($_POST['pwd']) ? htmlspecialchars($_POST['pwd']) : '';
+    		$column['pwd'] = isset($_POST['pwd']) ? htmlspecialchars(trim($_POST['pwd'])) : '';
     		if($column['pwd']){
     			$column['pwd'] = md5($column['pwd']);
     		} else {
@@ -238,7 +261,12 @@ class DeliverAction extends BaseAction {
     		if ($user && $user['uid'] != $uid) {
     			$this->error(L('_BACK_PHONE_ALREADY_'));
     		}
-    		
+
+    		$data_img['driver_license'] = $_POST['driver_license'];
+            $data_img['insurance'] = $_POST['insurance'];
+            $data_img['certificate'] = $_POST['certificate'];
+            D('Deliver_img')->where(array('uid' => $uid))->save($data_img);
+
     		if(D('deliver_user')->where(array('uid'=>$uid))->data($column)->save()){
     		    $card_id = D('Deliver_card')->field('id')->where(array('deliver_id'=>$uid))->find();
     		    if($card_id){
@@ -289,11 +317,6 @@ class DeliverAction extends BaseAction {
 		$selectUserId = I("selectUserId", 0, 'intval');
 		$phone = I("phone", 0);
 		$orderNum = I("orderNum", 0);
-		
-
-
-		
-		
 
 		//获取商家的所有配送员
 		$delivers = D("Deliver_user")->field(true)->where(array('mer_id'=>$mer_id))->order('status DESC')->select();
@@ -389,24 +412,25 @@ class DeliverAction extends BaseAction {
 	
 	public function deliverList() 
 	{
+        //var_dump($_GET);die();
 		$selectStoreId = I("selectStoreId", 0, "intval");
 		$selectUserId = I("selectUserId", 0, "intval");
 		$phone = I("phone", 0);
 		$orderNum = I("orderNum", 0);
 
 		$status = I('status', 0, 'intval');
-		$day = I('day', 0, 'intval');
-		$period = I('period', '', 'htmlspecialchars');
-		$stime = $etime = 0;
-		if ($day) {
-			$stime = strtotime("-{$day} day");
-			$etime = time();
-		}
-		if ($period) {
-			$time_array = explode('-', $period);
-			$stime = strtotime($time_array[0]);
-			$etime = strtotime($time_array[1]);
-		}
+
+        //筛选时间
+        $stime = $etime = 0;
+        if (!empty($_GET['begin_time']) && !empty($_GET['end_time'])) {
+
+            if ($_GET['begin_time'] > $_GET['end_time']) {
+                $this->error("Please enter the date ranges correctly");
+            } else {
+                $stime = strtotime($_GET['begin_time']." 00:00:00");
+                $etime = strtotime($_GET['end_time'] . " 23:59:59");
+            }
+        }
 
 		$sql = "SELECT s.`supply_id`, s.order_id, s.item, s.name as username, s.phone as userphone, m.name as storename, s.money, u.name, u.phone, s.start_time, s.end_time, s.aim_site, s.pay_type, s.paid, s.status, s.deliver_cash, s.distance, s.from_lat, s.aim_lat, s.from_lnt, s.aim_lnt FROM " . C('DB_PREFIX') . "deliver_supply AS s INNER JOIN " . C('DB_PREFIX') . "merchant_store AS m ON m.store_id=s.store_id LEFT JOIN " . C('DB_PREFIX') . "deliver_user AS u ON s.uid=u.uid";
 		$sql_count = "SELECT count(1) AS count FROM " . C('DB_PREFIX') . "deliver_supply AS s INNER JOIN " . C('DB_PREFIX') . "merchant_store AS m ON m.store_id=s.store_id LEFT JOIN " . C('DB_PREFIX') . "deliver_user AS u ON s.uid=u.uid";
@@ -512,7 +536,7 @@ class DeliverAction extends BaseAction {
 			}
 		}
 
-		$pagebar = $p->show();
+		$pagebar = $p->show2();
 		$this->assign(array('status' => $status, 'day' => $day, 'period' => $period, 'phone' => $phone));
 		$this->assign('selectStoreId', $selectStoreId);
 		$this->assign('orderNum', $orderNum);
@@ -599,13 +623,13 @@ class DeliverAction extends BaseAction {
         $deliver_count_obj = D('Deliver_count');
         $count = $deliver_count_obj->field(true)->where(array('uid' => $uid))->order('`id` DESC')->count();
         import('@.ORG.system_page');
-        $p = new Page($count, 15);
+        $p = new Page($count, 20);
         $count_list = $deliver_count_obj->field(true)->where(array('uid' => $uid))->order('`id` DESC')->limit($p->firstRow . ',' . $p->listRows)->select();
         foreach ($count_list as &$row) {
         	$row['today'] = date('Y-m-d', strtotime($row['today'] . '000000'));
         }
         $this->assign('count_list', $count_list);
-        $pagebar = $p->show();
+        $pagebar = $p->show2();
         $this->assign('pagebar', $pagebar);
         $this->assign('user', $user);
         $this->display();
@@ -672,7 +696,7 @@ class DeliverAction extends BaseAction {
         }
 
         $this->assign('supply_info', $supply_info);
-        $this->assign('pagebar', $p->show());
+        $this->assign('pagebar', $p->show2());
         $this->assign('user', $user);
 		$this->assign(array('begin_time' => $begin_time, 'end_time' => $end_time));
         $this->display();
@@ -1334,7 +1358,7 @@ class DeliverAction extends BaseAction {
         if($this->system_session['level'] == 3){
             $city[] = D('Area')->where(array('area_id'=>$this->system_session['area_id']))->find();
         }else{
-            $city = D('Area')->where(array('area_type'=>2))->select();
+            $city = D('Area')->where(array('area_type'=>2,'is_open'=>1))->select();
         }
         $this->assign('city',$city);
 
@@ -1434,11 +1458,18 @@ class DeliverAction extends BaseAction {
         if (!empty($_GET['keyword'])) {
             if ($_GET['searchtype'] == 'uid') {
                 $condition_user['uid'] = $_GET['keyword'];
-            } else if ($_GET['searchtype'] == 'nickname') {
+            } else if ($_GET['searchtype'] == 'firstname') {
                 $condition_user['name'] = array('like', '%' . $_GET['keyword'] . '%');
+            } else if ($_GET['searchtype'] == 'lastname') {
+                $condition_user['family_name'] = array('like', '%' . $_GET['keyword'] . '%');
             } else if ($_GET['searchtype'] == 'phone') {
                 $condition_user['phone'] = array('like', '%' . $_GET['keyword'] . '%');
+            }else if($_GET['searchtype'] == 'email'){
+                $condition_user['email'] = array('like', '%' . $_GET['keyword'] . '%');
             }
+            $this->assign('searchtype',$_GET['searchtype']);
+        }else{
+            $this->assign('searchtype',"");
         }
 
         if($_GET['city_id']){
@@ -1480,7 +1511,7 @@ class DeliverAction extends BaseAction {
             $v['is_upload'] = $is_upload;
         }
         $this->assign('user_list', $user_list);
-        $pagebar = $p->show();
+        $pagebar = $p->show2();
         $this->assign('pagebar', $pagebar);
         $this->display();
     }
@@ -1637,7 +1668,7 @@ class DeliverAction extends BaseAction {
         if($this->system_session['level'] == 3){
             $city[] = D('Area')->where(array('area_id'=>$this->system_session['area_id']))->find();
         }else{
-            $city = D('Area')->where(array('area_type'=>2))->select();
+            $city = D('Area')->where(array('area_type'=>2,'is_open'=>1))->select();
         }
 
         $week_num = date("w");

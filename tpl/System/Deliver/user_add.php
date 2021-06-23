@@ -1,7 +1,4 @@
 <include file="Public:header"/>
-<style>
-
-</style>
 	<form id="myform" method="post" action="{pigcms{:U('Deliver/user_add')}" frame="true" refresh="true">
 		<input type="hidden" name="uid" value="{pigcms{$now_user.uid}"/>
 		<table cellpadding="0" cellspacing="0" class="frame_form" width="100%">

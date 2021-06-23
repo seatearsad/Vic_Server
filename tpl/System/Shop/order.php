@@ -65,11 +65,11 @@
                 </if>
 				<td>
 				<a href="{pigcms{:U('Shop/export',$_GET)}" class="button" style="float:right;margin-right: 10px;">{pigcms{:L('_BACK_DOWN_ORDER_')}</a>
-                    <if condition="$system_session['level'] eq 2">
-                        <a href="{pigcms{:U('Shop/export_total',$_GET)}" class="button" style="float:right;margin-right: 10px;">{pigcms{:L('C_OMZB')}</a>
-                        <a href="{pigcms{:U('Shop/export_store',$_GET)}" class="button" style="float:right;margin-right: 10px;">{pigcms{:L('C_OMRESTRANK')}</a>
-                        <a href="{pigcms{:U('Shop/export_user',$_GET)}" class="button" style="float:right;margin-right: 10px;">{pigcms{:L('C_OMUSERRANK')}</a>
-                    </if>
+                <if condition="$system_session['level'] eq 2">
+                    <a href="{pigcms{:U('Shop/export_total',$_GET)}" class="button" style="float:right;margin-right: 10px;">{pigcms{:L('C_OMZB')}</a>
+                    <a href="{pigcms{:U('Shop/export_store',$_GET)}" class="button" style="float:right;margin-right: 10px;">{pigcms{:L('C_OMRESTRANK')}</a>
+                    <a href="{pigcms{:U('Shop/export_user',$_GET)}" class="button" style="float:right;margin-right: 10px;">{pigcms{:L('C_OMUSERRANK')}</a>
+                </if>
 				</td>
 			</tr>
 

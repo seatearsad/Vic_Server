@@ -2,6 +2,7 @@
 class Shop_orderModel extends Model
 {
 	public $status_list;
+    public $new_status_list;
 	public $status_list_admin;
 
     public function __construct(){
@@ -12,16 +13,33 @@ class Shop_orderModel extends Model
         	'-1' => L('_B_PURE_MY_64_') ,
 			'0' =>  L('_STATUS_LIST_0_'),		//未接单
 			1 =>  L('_B_PURE_MY_72_'),		//'已确认',
-			2 => L('_STATUS_LIST_0_'),		// '已消费',
+			2 => L('_STATUS_LIST_2_'),		// '已消费',
 			3 => L('_B_PURE_MY_74_'),		//'已评价',
 			4 => L('_B_PURE_MY_75_'),		//'已退款',
-			5 =>L('_B_PURE_MY_76_'),		    // '已取消',
-			6=> L('_STATUS_LIST_0_'),		//'付款超时，待删除',
-			7 =>L('_B_PURE_MY_77_'),		// '分配到自提点',
-			8 =>L('_B_PURE_MY_78_'),		// '发货到自提点',
+			5 => L('_B_PURE_MY_76_'),		    // '已取消',
+			6 => L('_STATUS_LIST_0_'),		//'付款超时，待删除',
+			7 => L('_B_PURE_MY_77_'),		// '分配到自提点',
+			8 => L('_B_PURE_MY_78_'),		// '发货到自提点',
 			9 => L('_B_PURE_MY_79_'),		//'自提点接货',
 			10 => L('_B_PURE_MY_80_'),		//'自提点发货');
 		);
+
+        $this->new_status_list = array(
+            '-1' => L('_B_PURE_MY_64_') ,
+            '0' =>  "Unconfirmed",		//未接单
+            1 =>  "Confirmed",		//'已确认',
+            2 => "Complete",		// '已消费',
+            3 => "Reviewed",		//'已评价',
+            4 => "Cancelled",		//'已退款',
+            5 => "Cancelled",		    // '已取消',
+            6 => L('_STATUS_LIST_0_'),		//'付款超时，待删除',
+            7 => L('_B_PURE_MY_77_'),		// '分配到自提点',
+            8 => L('_B_PURE_MY_78_'),		// '发货到自提点',
+            9 => L('_B_PURE_MY_79_'),		//'自提点接货',
+            10 => L('_B_PURE_MY_80_'),		//'自提点发货');
+			100 => L('_UNPAID_TXT_'), //未支付
+        );
+
         $this->status_list_admin = array(
         	'-1' => '全部',
 			'100'=>'未支付' ,
@@ -85,6 +103,28 @@ class Shop_orderModel extends Model
 			10 => L('_B_PURE_MY_80_')
 		);
 	}
+
+    public function getStatusListForMilly(){
+        return array(
+            '-1' => L('_BACK_ALL_'),
+            '100'=> L('_STATUS_LIST_100_'),
+            '0' => L('_STATUS_LIST_0_'),
+            1 => L('_B_PURE_MY_72_'),
+            5 => L('_B_PURE_MY_76_'),
+            2 => L('_IS_COMPLETE_')
+        );
+    }
+
+    public function getStatusNewList(){
+        return array(
+            '-1' => L('_BACK_ALL_'),
+            '100'=> L('_STATUS_LIST_100_'),
+            '0' => L('_STATUS_LIST_0_'),
+            1 => L('_B_PURE_MY_72_'),
+            2 => L('_STATUS_LIST_2_'),
+            3 => L('_B_PURE_MY_74_')
+        );
+    }
 	/**获取订单分类**/
 	public function get_order_cate($order_id){
 		$store_id = $this->field('store_id')->where(array('order_id'=>$order_id))->find();
@@ -1107,6 +1147,7 @@ class Shop_orderModel extends Model
 	{
 		if (isset($where['status']) && $where['status'] === 0) $where['paid'] = 1;
 		if (is_array($where)) $where['is_del'] = 0;
+
 		if($is_wap != 10){
 			$count = $this->where($where)->count();
 		}
@@ -1134,6 +1175,7 @@ class Shop_orderModel extends Model
 		}
 		if($is_wap != 11 && $is_wap != 10){
 			$list = $this->where($where)->order($order)->limit($p->firstRow . ',' . $p->listRows)->select();
+
 		}
 		$notOffline = 1;
 		$pay_offline_open = C('config.pay_offline_open');
@@ -1151,52 +1193,52 @@ class Shop_orderModel extends Model
 				case 0:
 // 					$order['css'] = 'inhand';
 // 					$order['show_status'] = '处理中';
-					$order['status_str'] = '<b style="color:red">'.L('_B_PURE_MY_71_').'</b>';
+					$order['status_str'] = ''.L('_B_PURE_MY_71_').'';
 					break;
 				case 1:
 // 					$order['css'] = 'confirm';
 // 					$order['show_status'] = '已确认';
-					$order['status_str'] = '<b style="color:green">'.L('_B_PURE_MY_72_').'</b>';
+					$order['status_str'] = ''.L('_B_PURE_MY_72_').'';
 					break;
 				case 2:
 // 					$order['css'] = 'confirm';
 // 					$order['show_status'] = '已消费';
-					$order['status_str'] = '<b style="color:green">'.L('_STATUS_LIST_2_').'</b>';
+					$order['status_str'] = ''.L('_STATUS_LIST_2_').'';
 					break;
 				case 3:
 // 					$order['css'] = 'complete';
 // 					$order['show_status'] = '已评价';
-					$order['status_str'] = '<b style="color:green">'.L('_B_PURE_MY_74_').'</b>';
+					$order['status_str'] = ''.L('_B_PURE_MY_74_').'';
 					break;
 				case 4:
 // 					$order['css'] = 'cancle';
 // 					$order['show_status'] = '已退款';
-					$order['status_str'] = '<del style="color:gray">'.L('_B_PURE_MY_75_').'</del>';
+					$order['status_str'] = ''.L('_B_PURE_MY_75_').'';
 					break;
 				case 5:
 // 					$order['css'] = 'cancle';
 // 					$order['show_status'] = '已取消';
-					$order['status_str'] = '<del style="color:gray">'.L('_B_PURE_MY_76_').'</del>';
+					$order['status_str'] = ''.L('_B_PURE_MY_76_').'';
 					break;
 				case 7:
 // 					$order['css'] = 'cancle';
 // 					$order['show_status'] = '已取消';
-					$order['status_str'] = '<b style="color:green">'.L('_B_PURE_MY_77_').'</b>';
+					$order['status_str'] = ''.L('_B_PURE_MY_77_').'';
 					break;
 				case 8:
 // 					$order['css'] = 'cancle';
 // 					$order['show_status'] = '已取消';
-					$order['status_str'] = '<b style="color:green">'.L('_B_PURE_MY_78_').'</b>';
+					$order['status_str'] = ''.L('_B_PURE_MY_78_').'';
 					break;
 				case 9:
 // 					$order['css'] = 'cancle';
 // 					$order['show_status'] = '已取消';
-					$order['status_str'] = '<b style="color:green">'.L('_B_PURE_MY_79_').'</b>';
+					$order['status_str'] = ''.L('_B_PURE_MY_79_').'';
 					break;
 				case 10:
 // 					$order['css'] = 'cancle';
 // 					$order['show_status'] = '已取消';
-					$order['status_str'] = '<del style="color:green">'.L('_B_PURE_MY_80_').'</del>';
+					$order['status_str'] = ''.L('_B_PURE_MY_80_').'';
 					break;
 			}
 
@@ -1216,14 +1258,20 @@ class Shop_orderModel extends Model
 			if ($order['is_pick_in_store'] == 0) {
 				$order['deliver_str'] = '平台配送';
 				$order['deliverinfo'] = '平台配送';
-				if ($order['deliver_info']) {
-					$order['deliverinfo'] .= '<br/>配送员姓名：' . $order['deliver_info']['name'] . '<br/>配送员电话：' . $order['deliver_info']['phone'];
+				if ($order['deliverinfo'] && $order['deliver_info']['name'] && $order['deliver_info']['phone']) {
+                    $order['deliverinfo'] .= '<br/>Name：' . $order['deliver_info']['name'] . 'Phone：' . $order['deliver_info']['phone'];
+                    $order['deliverinfo_forbk']= $order['deliver_info']['name'] . ' ( ' . $order['deliver_info']['phone']." )";
+				}else{
+                    $order['deliverinfo_forbk']="-";
 				}
 			} elseif ($order['is_pick_in_store'] == 1) {
 				$order['deliver_str'] = '商家配送';
 				$order['deliverinfo'] = '商家配送';
-				if ($order['deliver_info']) {
-					$order['deliverinfo'] .= '<br/>配送员姓名：' . $order['deliver_info']['name'] . '<br/>配送员电话：' . $order['deliver_info']['phone'];
+				if ($order['deliverinfo'] && $order['deliver_info']['name'] && $order['deliver_info']['phone']) {
+					$order['deliverinfo'] .= '<br/>Name：' . $order['deliver_info']['name'] . '<br/>Phone：' . $order['deliver_info']['phone'];
+                    $order['deliverinfo_forbk']='' . $order['deliver_info']['name'] . ' ( ' . $order['deliver_info']['phone']." )";
+				}else{
+                    $order['deliverinfo_forbk']="-";
 				}
 			} elseif ($order['is_pick_in_store'] == 2) {
 				$order['deliver_str'] = '自提';
@@ -1274,14 +1322,17 @@ class Shop_orderModel extends Model
 						$order['deliver_status_str'] =L("_ORDER_STATUS_6_");  // '配送完成';
 					}
 					break;
-
 			}
-			$order['pay_type_str'] = D('Pay')->get_pay_name($order['pay_type'], $order['is_mobile_pay'], $order['paid']);
 
+			$order['pay_type_str'] = D('Pay')->get_pay_name_2($order['pay_type'], $order['is_mobile_pay'], $order['paid'],$order['uid']);
 
 		}
+
 		if($is_wap != 10){
-			return array('order_list' => $list, 'pagebar' => $p->show());
+			if($is_wap != 3)
+                return array('order_list' => $list, 'pagebar' => $p->show());
+			else
+				return array('order_list' => $list, 'pagebar' => $p->show2());
 		}else{
 			return array('order_list' => $list, 'page' => ceil($count/10),'count'=>$count);
 		}
@@ -1321,8 +1372,8 @@ class Shop_orderModel extends Model
 				break;
 			case 3:
 				$order['css'] = 'complete';
-				$order['show_status'] = 'Customer Reviewe';
-				$order['status_str'] = 'Customer Reviewe';
+				$order['show_status'] = 'Customer Reviewed';
+				$order['status_str'] = 'Customer Reviewed';
 				break;
 			case 4:
 				$order['css'] = 'cancle';

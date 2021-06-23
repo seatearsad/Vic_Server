@@ -52,6 +52,6 @@ $(document).ready(function(){
 			$('.menu_' + fid).attr('checked', flag);
 		}
 	});
-});
+});22222
 </script>
 <include file="Public:header"/>

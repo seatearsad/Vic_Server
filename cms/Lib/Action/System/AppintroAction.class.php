@@ -3,6 +3,8 @@ class AppintroAction extends BaseAction{
 	public function index(){
 		$intro  = D('Appintro')->select();
 		$this->assign('intro',$intro);
+
+        $this->assign('module_name','System');
 		$this->display();
 	}
 	public function add(){

@@ -71,6 +71,8 @@ class PercentAction extends BaseAction
             $percent_detail = M('Percent_detail')->select();
 
             $this->assign('percent_detail', $percent_detail);
+
+            $this->assign('module_name','System');
             $this->display();
         }
 

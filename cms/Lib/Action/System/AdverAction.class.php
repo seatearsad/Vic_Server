@@ -10,13 +10,14 @@ class AdverAction extends BaseAction{
     public function _initialize(){
         parent::_initialize();
 
-        $area_list = D('Area')->where(array('area_type'=>2))->select();
+        $area_list = D('Area')->where(array('area_type'=>2,'is_open'=>1))->select();
         $this->assign('city_list',$area_list);
     }
 	public function index(){
 		$database_adver_category  = D('Adver_category');
 		$category_list = $database_adver_category->field(true)->order('`cat_id` ASC')->select();
 		$this->assign('category_list',$category_list);
+        $this->assign('module_name','System');
 		$this->display();
 	}
 	public function cat_add(){
@@ -77,22 +78,24 @@ class AdverAction extends BaseAction{
 			$this->error('非法提交,请重新提交~');
 		}
 	}
+
 	public function adver_list(){
+
 		$now_category = $this->check_get_category($_GET['cat_id']);
 		$this->assign('now_category',$now_category);
 		$many_city	=	$this->config['many_city'];
 		$database_adver = D('Adver');
-		$condition_adver['cat_id'] = $now_category['cat_id'];
+		$condition_adver['b.cat_id'] = $now_category['cat_id'];
 
 		//garfunkel add
         if($_GET['search_city'] && $_GET['search_city'] != 0){
-            $condition_adver['city_id'] = $_GET['search_city'];
+            $condition_adver['b.city_id'] = $_GET['search_city'];
         }
 
-		$adver_list = $database_adver->field(true)->where($condition_adver)->order('`id` DESC')->select();
+		$adver_list = $database_adver->field("b.*,a.*")->join('as b left join '.C('DB_PREFIX').'area as a ON b.city_id=a.area_id')->where($condition_adver)->order('`id` DESC')->select();
 		if($many_city == 1 && $adver_list){
 			foreach($adver_list as &$v){
-				$city	=	M('Area')->field('area_name')->where(array('area_id'=>$v['city_id']))->find();
+				$city	=	M('Area')->field('area_name')->where(array('area_id'=>$v['city_id'], 'is_open' => '1'))->find();
 				if(empty($city)){
 					$v['city_id']	=	'通用';
 				}else{
@@ -240,8 +243,8 @@ class AdverAction extends BaseAction{
 			$return['error'] = 0;
 			$return['list'] = $city_list;
 		}else{
-			$return['error'] = 1;
-			$return['info'] = '［ <b>'.$_POST['name'] .'</b> ］ 省份下没有已开启的城市！请先开启城市或删除此省份';
+			$return['error'] = 0;
+			//$return['info'] = '［ <b>'.$_POST['name'] .'</b> ］ 省份下没有已开启的城市！！！请先开启城市或删除此省份';
 		}
 		exit(json_encode($return));
 	}

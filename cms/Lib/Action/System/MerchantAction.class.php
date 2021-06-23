@@ -9,67 +9,81 @@
 
 class MerchantAction extends BaseAction{
     public function index(){
+
 		$database_merchant = D('Merchant');
 		//搜索
 		if(!empty($_GET['keyword'])){
 			if($_GET['searchtype'] == 'mer_id'){
-				$condition_merchant['mer_id'] = $_GET['keyword'];
+				$condition_merchant['m.mer_id'] = $_GET['keyword'];
 			}else if($_GET['searchtype'] == 'account'){
-				$condition_merchant['account'] = array('like','%'.$_GET['keyword'].'%');
+				$condition_merchant['m.account'] = array('like','%'.$_GET['keyword'].'%');
 			}else if($_GET['searchtype'] == 'name'){
-				$condition_merchant['name'] = array('like','%'.$_GET['keyword'].'%');
+				$condition_merchant['m.name'] = array('like','%'.$_GET['keyword'].'%');
 			}else if($_GET['searchtype'] == 'phone'){
-				$condition_merchant['phone'] = array('like','%'.$_GET['keyword'].'%');
+				$condition_merchant['m.phone'] = array('like','%'.$_GET['keyword'].'%');
 			}
 		}
 		$searchstatus = intval($_GET['searchstatus']);
 		switch($searchstatus){
 			case 0:
 				//3 是欠款状态 该状态下商户业务暂停，不能支付，但是可以管理，充值
-				$condition_merchant['_string'] = 'status = 1 OR status = 3';
+				$condition_merchant['_string'] = 'm.status = 1 OR m.status = 3';
 				break;
 			case 1:
-				$condition_merchant['status'] = 2;
+				$condition_merchant['m.status'] = 2;
 				break;
 			case 2:
-				$condition_merchant['status'] = 0;
+				$condition_merchant['m.status'] = 0;
 				break;
 		}
 
 		switch($_GET['searchorder']){
 			case 0:
-				$order = 'mer_id DESC';
+				$order = 'm.mer_id DESC';
 				break;
 			case 1:
-				$order = 'money DESC,mer_id DESC';
+				$order = 'm.money DESC,m.mer_id DESC';
 				break;
 
 		}
         if($_GET['city_id']){
             $this->assign('city_id',$_GET['city_id']);
             if($_GET['city_id'] != 0){
-                $condition_merchant['city_id'] = $_GET['city_id'];
+                $condition_merchant['m.city_id'] = $_GET['city_id'];
             }
         }else{
             $this->assign('city_id',0);
         }
+
         $city = D('Area')->where(array('area_type'=>2,'is_open'=>1))->select();
         $this->assign('city',$city);
 
 		if ($this->system_session['area_id']) {
 			$area_index = $this->system_session['level'] == 1 ? 'area_id' : 'city_id';
-			$condition_merchant[$area_index] = $this->system_session['area_id'];
+			$condition_merchant['m.'.$area_index] = $this->system_session['area_id'];
 		}
 		$mer_withdraw_list = D('Merchant_money_list');
 		$all_money = $mer_withdraw_list->get_all_mer_money();
 		$this->assign('all_money',$all_money);
 
-		$count_merchant = $database_merchant->where($condition_merchant)->count();
+		$count_merchant = $database_merchant->join('as m left join '.C('DB_PREFIX').'area as a ON m.city_id=a.area_id')->where($condition_merchant)->count();
 		import('@.ORG.system_page');
 		$p = new Page($count_merchant,15);
-		$merchant_list = $database_merchant->field(true)->where($condition_merchant)->order($order)->limit($p->firstRow.','.$p->listRows)->select();
+		$merchant_list = $database_merchant->field("m.*,a.area_name")->join('as m left join '.C('DB_PREFIX').'area as a ON m.city_id=a.area_id')->where($condition_merchant)->order($order)->limit($p->firstRow.','.$p->listRows)->select();
+
+		//echo "+++";
+        //var_dump($merchant_list);
+        $database_merchant_store = D('Merchant_store');
+		foreach ($merchant_list as &$row) {
+            $condition_merchant_store['mer_id'] = $row['mer_id'];
+            $row["store_list"]=$database_merchant_store->field(true)->where($condition_merchant_store)->order('`sort` DESC,`store_id` ASC')->select();
+            //echo $row["store_list"]['account']."-------------";
+            $row["store_count"]=count($row["store_list"]);
+        }
+        //var_dump($merchant_list);die();
+
 		$this->assign('merchant_list',$merchant_list);
-		$pagebar = $p->show();
+		$pagebar = $p->show2();
 		$this->assign('pagebar',$pagebar);
 
 		$this->display();
@@ -112,6 +126,14 @@ class MerchantAction extends BaseAction{
 	}
 	public function modify(){
 		if(IS_POST){
+            if ($_POST['status']) {
+                if ($_POST['status'] == 'on') {
+                    $_POST['status'] = 1;
+                }
+            }else{
+                $_POST['status'] = 0;
+            }
+
 			$_POST['account'] = trim($_POST['account']);
 			$_POST['pwd'] = md5($_POST['pwd']);
 			$_POST['reg_time'] = $_SERVER['REQUEST_TIME'];
@@ -172,14 +194,16 @@ class MerchantAction extends BaseAction{
 		$home_share = D('Home_share')->where(array('mer_id' => $condition_merchant['mer_id']))->find();
 		$this->assign('home_share', $home_share);
 
-        $city_list = D('Area')->where(array('area_type'=>2))->order('`area_sort` asc')->select();
+        $city_list = D('Area')->where(array('area_type'=>2,'is_open'=>1))->order('`area_sort` asc')->select();
         $this->assign('city',$city_list);
 
 		$this->display();
 	}
 
 	public function amend(){
+
 		if(IS_POST){
+
 			if($_POST['pwd']){
 				$_POST['pwd'] = md5($_POST['pwd']);
 			}else{
@@ -201,6 +225,15 @@ class MerchantAction extends BaseAction{
             $_POST['area_id'] = 0;
 
 			$database_merchant = D('Merchant');
+            //var_dump($_POST['status']);die();
+			if ($_POST['status']) {
+                if ($_POST['status'] == 'on') {
+                    $_POST['status'] = 1;
+                }
+            }else{
+                $_POST['status'] = 0;
+            }
+
 			$database_merchant->data($_POST)->save();
 // 			if(){
 			$home_share = D('Home_share')->where(array('mer_id' => $_POST['mer_id']))->find();
@@ -276,11 +309,24 @@ class MerchantAction extends BaseAction{
 			redirect($this->config['site_url'].'/merchant.php');
 		}
 	}
+    /*店铺管理*/
+    public function get_merchant_list($mer_id){
+        $database_merchant = D('Merchant');
+        $condition_merchant['mer_id'] = $mer_id;
+        $merchant = $database_merchant->field(true)->where($condition_merchant)->find();
+        if(empty($merchant)){
+            return null;
+        }else{
+            return $merchant;
+        }
+    }
+
 	/*店铺管理*/
 	public function store(){
-		$database_merchant = D('Merchant');
-		$condition_merchant['mer_id'] = intval($_GET['mer_id']);
-		$merchant = $database_merchant->field(true)->where($condition_merchant)->find();
+	    $merchant=$this->get_merchant_list(intval($_GET['mer_id']));
+//		$database_merchant = D('Merchant');
+//		$condition_merchant['mer_id'] = intval($_GET['mer_id']);
+//		$merchant = $database_merchant->field(true)->where($condition_merchant)->find();
 		if(empty($merchant)){
 			$this->error_tips('数据库中没有查询到该商户的信息！',5,U('Merchant/index'));
 		}
@@ -294,7 +340,7 @@ class MerchantAction extends BaseAction{
 		$p = new Page($count_store,15);
 		$store_list = $database_merchant_store->field(true)->where($condition_merchant_store)->order('`sort` DESC,`store_id` ASC')->limit($p->firstRow.','.$p->listRows)->select();
 		$this->assign('store_list',$store_list);
-		$pagebar = $p->show();
+		$pagebar = $p->show2();
 		$this->assign('pagebar',$pagebar);
 
 		$this->display();
@@ -393,6 +439,7 @@ class MerchantAction extends BaseAction{
 			$_POST['long'] = $long_lat[0];
 			$_POST['lat'] = $long_lat[1];
 			$_POST['last_time'] = $_SERVER['REQUEST_TIME'];
+            $_POST['name']=fulltext_filter($_POST['name']);
             //garfunkel add
             $area = D('Area')->where(array('area_id'=>$_POST['city_id']))->find();
             $_POST['province_id'] = $area ? $area['area_pid'] : 0;
@@ -1124,6 +1171,43 @@ class MerchantAction extends BaseAction{
 	public function reply()
 	{
 		$where = ' WHERE r.status<2';
+
+        if($_GET['city_id']){
+            $this->assign('city_id',$_GET['city_id']);
+            if($_GET['city_id'] != 0) {
+                $where .= " AND m.city_id =" . $_GET['city_id'];
+            }
+        }else{
+            $this->assign('city_id',0);
+        }
+
+        if($_GET['dianpu_rate']){
+            $this->assign('dianpu_rate',$_GET['dianpu_rate']);
+            if($_GET['dianpu_rate'] != 0) {
+                $where .= " AND r.score =" . $_GET['dianpu_rate'];
+            }
+        }else{
+            $this->assign('dianpu_rate',0);
+        }
+
+        if($_GET['songcanyuan_rate']){
+            $this->assign('songcanyuan_rate',$_GET['songcanyuan_rate']);
+            if($_GET['songcanyuan_rate'] != 0) {
+                $where .= " AND r.score_deliver =" . $_GET['songcanyuan_rate'];
+            }
+        }else{
+            $this->assign('songcanyuan_rate',0);
+        }
+
+        //garfunkel 判断城市管理员
+//        if($this->system_session['level'] == 3){
+//            $where .=
+//            $condition_user['u.city_id'] = $this->system_session['area_id'];
+//        }
+
+        $city = D('Area')->where(array('area_type'=>2,'is_open'=>1))->select();
+        $this->assign('city',$city);
+
 		if(!empty($_GET['keyword'])){
 			if($_GET['searchtype'] == 'm_name'){
 				$where .= " AND m.name LIKE '%" . htmlspecialchars($_GET['keyword']) . "%'";
@@ -1132,6 +1216,10 @@ class MerchantAction extends BaseAction{
 				$where .= " AND s.name LIKE '%" . htmlspecialchars($_GET['keyword']) . "%'";
 			}else if($_GET['searchtype'] == 'nickname'){
 				$where .= " AND u.nickname LIKE '%" . htmlspecialchars($_GET['keyword']) . "%'";
+            }else if($_GET['searchtype'] == 'userid'){
+                $where .= " AND u.uid =" . htmlspecialchars($_GET['keyword']);
+            }else if($_GET['searchtype'] == 'replyid'){
+                $where .= " AND r.pigcms_id =". htmlspecialchars($_GET['keyword']);
 			}else if($_GET['searchtype'] == 'phone'){
 				$where .= " AND u.phone LIKE '%" . htmlspecialchars($_GET['keyword']) . "%'";
 			}
@@ -1142,8 +1230,10 @@ class MerchantAction extends BaseAction{
 		import('@.ORG.system_page');
 		$p = new Page($count, 50);
 
-		$sql = "SELECT r.*, m.name AS m_name, s.name AS s_name, u.nickname, u.phone FROM " . C('DB_PREFIX') . "merchant AS m INNER JOIN " . C('DB_PREFIX') . "reply AS r ON r.mer_id = m.mer_id INNER JOIN " . C('DB_PREFIX') . "user AS u ON r.uid=u.uid LEFT JOIN " . C('DB_PREFIX') . "merchant_store AS s ON s.store_id=r.store_id {$where} ORDER BY r.pigcms_id DESC LIMIT {$p->firstRow},{$p->listRows}";
+		$sql = "SELECT r.*,u.*,m.*,a.area_name AS area_name,s.city_id AS mcity_id,m.name AS m_name, s.name AS s_name,u.uid as userid,u.nickname, u.phone FROM " . C('DB_PREFIX') . "merchant AS m INNER JOIN " . C('DB_PREFIX') . "reply AS r ON r.mer_id = m.mer_id INNER JOIN " . C('DB_PREFIX') . "user AS u ON r.uid=u.uid LEFT JOIN " . C('DB_PREFIX') . "merchant_store AS s ON s.store_id=r.store_id  LEFT JOIN " . C('DB_PREFIX') . "area AS a ON s.city_id=a.area_id {$where} ORDER BY r.pigcms_id DESC LIMIT {$p->firstRow},{$p->listRows}";
 		$reply_list = D()->query($sql);
+		//die($sql);
+//		var_dump($reply_list);die();
 //		foreach($reply_list as &$reply){
 //            if($reply['comment'] != '' && $reply['comment_en'] == '') {
 //                if (!checkEnglish($reply['comment'])) {
@@ -1154,7 +1244,7 @@ class MerchantAction extends BaseAction{
 //            }
 //        }
 		$this->assign('reply_list', $reply_list);
-		$this->assign('pagebar', $p->show());
+		$this->assign('pagebar', $p->show2());
 		$this->display();
 	}
 
@@ -1465,7 +1555,7 @@ class MerchantAction extends BaseAction{
         $p = new Page($count_merchant, 15);
         $store_list = $database_merchant_store->field(true)->where($condition_merchant)->order('id DESC')->limit($p->firstRow.','.$p->listRows)->select();
         $this->assign('store_list', $store_list);
-        $pagebar = $p->show();
+        $pagebar = $p->show2();
         $this->assign('pagebar', $pagebar);
 	    $this->display();
     }
@@ -1525,7 +1615,7 @@ class MerchantAction extends BaseAction{
         }
         $this->assign('store_list',$store_list);
 
-        $pagebar = $p->show();
+        $pagebar = $p->show2();
         $this->assign('pagebar', $pagebar);
 
         $this->display();

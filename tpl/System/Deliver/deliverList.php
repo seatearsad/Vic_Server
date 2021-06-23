@@ -84,7 +84,6 @@
 								<th>{pigcms{:L('_BACK_ASS_COURIER_')}</th>
 								<th>{pigcms{:L('B_ACTION')}</th>
 								<!--th>创建时间</th-->
-								
 							</tr>
 						</thead>
 						<tbody>
@@ -181,7 +180,8 @@
 			location.href = "{pigcms{:U('Merchant/Deliver/deliverList')}"+"&period="+period+"&phone="+phone+"&day="+day+"&status="+status;
 		}
 		$('.change').click(function(){
-			var supply_id = $(this).attr('data-supply'), obj = $(this);
+			console.log("11111111111");
+		    var supply_id = $(this).attr('data-supply'), obj = $(this);
 			window.top.art.dialog({
 				lock: true,
                 title:'Reminder',
