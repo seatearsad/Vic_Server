@@ -118,6 +118,7 @@ class DeliverAction extends BaseAction {
 
         $condition_user['u.group'] = 1;
         $condition_user['u.reg_status'] = 0;
+        $where .= " AND u.group=1 AND u.reg_status=0";
         //$count_user = $this->deliver_user->join('as u left join '.C('DB_PREFIX').'area as a ON u.city_id=a.area_id')->where($condition_user)->count();
         $count_user = $this->deliver_user->join('as u left join '.C('DB_PREFIX').'area as a ON u.city_id=a.area_id')->where($where)->count();
         import('@.ORG.system_page');
