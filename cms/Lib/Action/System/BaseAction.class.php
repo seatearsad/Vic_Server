@@ -43,14 +43,6 @@ class BaseAction extends Action{
 		if(empty($serverHost)){
 			$serverHost = $_SERVER['HTTP_HOST'];
 		}
-		if(mt_rand(1,10) == 1){
-			import('ORG.Net.Http');
-			$http = new Http();
-			$authorizeReturn = Http::curlGet('http://o2o-service.pigcms.com/authorize.php?domain='.$serverHost);
-			if($authorizeReturn < -1){
-				exit('wow-5');
-			}
-		}
 
 		$this->check_admin_file();
 
