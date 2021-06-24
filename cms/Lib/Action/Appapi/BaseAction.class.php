@@ -39,10 +39,10 @@ class BaseAction extends Action
 		if(mt_rand(1,10) == 1){
 			import('ORG.Net.Http');
 			$http = new Http();
-			$authorizeReturn = Http::curlGet('http://o2o-service.pigcms.com/authorize.php?domain='.$serverHost);
-			if($authorizeReturn < -1){
-				exit('wow-5');
-			}
+//			$authorizeReturn = Http::curlGet('http://o2o-service.pigcms.com/authorize.php?domain='.$serverHost);
+//			if($authorizeReturn < -1){
+//				exit('wow-5');
+//			}
 		}
 
         $this->config = D('Config')->get_config();
