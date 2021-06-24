@@ -187,10 +187,10 @@
                         createChart(data.city_array, 'lineCityChart');
 
                         $('#cash_total').html('$ ' + data.total);
-                        $('#today_cash').html(data.today_cash);
+                        $('#today_cash').html('$ ' + data.today_cash);
 
                         $('#city_total').html('$ ' + data.city_total);
-                        $('#city_total_label').html(data.city_total);
+                        $('#city_total_label').html('$ ' + data.city_total);
 
                         $('#city_select').val(data.city_id);
 

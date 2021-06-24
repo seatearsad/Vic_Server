@@ -500,7 +500,7 @@ class IndexAction extends BaseAction {
             $condition_today_request['paid'] = 1;
 
             $today = M('Shop_order')->field('sum(total_price+tip_charge-coupon_price-delivery_discount-merchant_reduce) as total_cash')->where($condition_today_request)->select();
-            $today_cash = $today[0]['total_cash'];
+            $today_cash = $today[0]['total_cash'] > 0 ? $today[0]['total_cash'] : 0;
 
             $res_shop = M('Shop_order')->field('total_price+tip_charge-coupon_price-delivery_discount-merchant_reduce as cash_flow,total_price+tip_charge as sales,payment_money ,pay_type,pay_time')->where($condition_merchant_request)->order('pay_time asc')->select();
 
@@ -547,6 +547,8 @@ class IndexAction extends BaseAction {
                 $city_array[$show_time]['sales'] += $v['sales'];
                 $city_total += $v['cash_flow'];
             }
+
+            $city_total = $city_total > 0 ? $city_total : 0;
 
             $r_data = array('total' => $total, 'data_array' => $data_array, 'today_cash' => $today_cash,
                 'city_total' => $city_total, 'city_array' => $city_array, 'city_id' => $city_id,
