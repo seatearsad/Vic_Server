@@ -362,9 +362,11 @@
 
             $('.refund').click(function () {
                 var get_url = $(this).data('href'), obj = $(this);
+                var plist=get_url.split("=");
+                console.log(plist);
                 window.top.art.dialog({
                     title: 'Reminder',
-                    content: 'Are you sure about refund?',
+                    content: 'Are you sure about delete 【'+ plist[4]+ '】?',
                     lock: true,
                     okVal: 'Yes',
                     ok: function () {

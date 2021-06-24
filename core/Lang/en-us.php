@@ -51,6 +51,7 @@ return array(
     '_PARAM_ERROR_'			=>	'Parameter error or undefined',
     //public
     '_LANG_TXT_'            =>  'Language',
+    '_LANG_TXT2_'            =>  '语言',
     '_CHINESE_TXT_'         =>  'Chinese',
     '_ENGLISH_TXT_'         =>  'English',
     '_HOME_TXT_'            =>  'Home',
@@ -2057,6 +2058,7 @@ return array(
     "MNG_LIST_NOTHING_BKADMIN"=>"There is no store created yet",
     "CUSTOMER_BKADMIN"=>"Customer",
     "COURIER_BKADMIN"=>"Courier",
+    "_BACK_Universial_INFO_"=>"Universial",
 
     "F_REGISTRATION_INVITED"=>"Registration Invited",
     "F_ORDERS_INVITED"=>"Orders Invited",

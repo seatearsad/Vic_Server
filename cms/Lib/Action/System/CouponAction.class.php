@@ -96,8 +96,12 @@ class CouponAction extends BaseAction {
 					$this->error('使用限制设置错误，不能大于领取限制和数量！');
 				}
 				//garfunkel add
-                if(!empty(D('System_coupon')->field()->where(array('notice'=>$_POST['notice']))->find()))
+                if($_POST['notice']) {
                     $this->error('领取口令已经存在，请使用其他口令');
+                }else{
+                    if (!empty(D('System_coupon')->field()->where(array('notice' => $_POST['notice']))->find()))
+                        $this->error('领取口令已经存在，请使用其他口令');
+                }
 				//
 				if($_POST['cate_name']!='all'){
 					if($_POST['cate_id']!=0){

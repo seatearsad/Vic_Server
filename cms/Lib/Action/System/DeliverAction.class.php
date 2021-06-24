@@ -317,6 +317,7 @@ class DeliverAction extends BaseAction {
 	{
 		$selectStoreId = I("selectStoreId", 0, 'intval');
 		$selectUserId = I("selectUserId", 0, 'intval');
+
 		$phone = I("phone", 0);
 		$orderNum = I("orderNum", 0);
 
@@ -327,30 +328,33 @@ class DeliverAction extends BaseAction {
 				$delivers[$key]['name'] = $val['name'] . " (已禁用)";
 			}
 		}
+
 //         $db_arr = array(C('DB_PREFIX').'deliver_supply'=>'s',C('DB_PREFIX').'deliver_user'=>'u',C('DB_PREFIX').'waimai_order'=>'o',C('DB_PREFIX').'merchant_store'=>'m');
 //         $fields = "o.order_id, o.order_number, s.name as username, s.phone as userphone, m.name as storename, o.discount_price, u.name, u.phone, s.start_time, s.end_time, o.create_time, s.aim_site, o.pay_type, o.paid, o.order_status, u.group";
 //         $where = 'm.store_id=s.store_id AND s.uid=u.uid AND o.order_id=s.order_id';
 		
 		$db_arr = array(C('DB_PREFIX').'deliver_supply'=>'s',C('DB_PREFIX').'deliver_user'=>'u',C('DB_PREFIX').'merchant_store'=>'m');//,C('DB_PREFIX').'waimai_order'=>'o'
-		$fields = "s.order_id, s.item, s.name as username, s.phone as userphone, m.name as storename, s.money, u.name, u.phone, s.start_time, s.end_time, s.aim_site, s.pay_type, s.paid, s.status, u.group";
-		$where = 'm.store_id=s.store_id AND s.uid=u.uid';
-		if ($phone) {
-			$where .= " AND s.phone=".$phone;
-		}
-//         if ($orderNum) {
-//             $where .= " AND o.order_number=".$orderNum;
-//         }
-        if ($selectStoreId) {
-            $where .= " AND s.store_id=".$selectStoreId;
-        }
-        if ($selectUserId) {
-            $where .= "  AND s.uid=".$selectUserId;
-        }
+		$fields = "s.order_id,s.item, s.name as username, s.phone as userphone,m.name as storename, s.money, u.name, u.phone, s.start_time, s.end_time, s.aim_site, s.pay_type, s.paid, s.status, u.group";
+		$where = 'm.store_id=s.store_id  AND s.uid=u.uid';
+
+
+
+//
+////         if ($orderNum) {
+////             $where .= " AND o.order_number=".$orderNum;
+////         }
+//        if ($selectStoreId) {
+//            $where .= " AND s.store_id=".$selectStoreId;
+//        }
+//        if ($selectUserId) {
+//            $where .= "  AND s.uid=".$selectUserId;
+//        }
         
         import('@.ORG.system_page');
         $count_order = D()->table($db_arr)->where($where)->count();
         $p = new Page($count_order, 20);
         $supply_info = D()->table($db_arr)->field($fields)->where($where)->order('s.`supply_id` DESC')->limit($p->firstRow.','.$p->listRows)->select();
+
         foreach ($supply_info as $key => $value) {
             $supply_info[$key]['create_time'] = date("Y-m-d H:i:s", $value['create_time']);
             if ($value['start_time']) {
@@ -410,15 +414,14 @@ class DeliverAction extends BaseAction {
 
         $this->display();
 	}
-	
-	
+
 	public function deliverList() 
 	{
         //var_dump($_GET);die();
 		$selectStoreId = I("selectStoreId", 0, "intval");
 		$selectUserId = I("selectUserId", 0, "intval");
-		$phone = I("phone", 0);
-		$orderNum = I("orderNum", 0);
+//		$phone = I("phone", 0);
+//		$orderNum = I("orderNum", 0);
 
 		$status = I('status', 0, 'intval');
 
@@ -434,11 +437,24 @@ class DeliverAction extends BaseAction {
             }
         }
 
-		$sql = "SELECT s.`supply_id`, s.order_id, s.item, s.name as username, s.phone as userphone, m.name as storename, s.money, u.name, u.phone, s.start_time, s.end_time, s.aim_site, s.pay_type, s.paid, s.status, s.deliver_cash, s.distance, s.from_lat, s.aim_lat, s.from_lnt, s.aim_lnt FROM " . C('DB_PREFIX') . "deliver_supply AS s INNER JOIN " . C('DB_PREFIX') . "merchant_store AS m ON m.store_id=s.store_id LEFT JOIN " . C('DB_PREFIX') . "deliver_user AS u ON s.uid=u.uid";
+		$sql = "SELECT s.`supply_id`,s.order_id, s.item, s.real_orderid as real_orderid,s.name as username, s.phone as userphone, m.name as storename, s.money, u.name, u.phone, s.start_time, s.end_time, s.aim_site, s.pay_type, s.paid, s.status, s.deliver_cash, s.distance, s.from_lat, s.aim_lat, s.from_lnt, s.aim_lnt FROM " . C('DB_PREFIX') . "deliver_supply AS s INNER JOIN " . C('DB_PREFIX') . "merchant_store AS m ON m.store_id=s.store_id LEFT JOIN " . C('DB_PREFIX') . "deliver_user AS u ON s.uid=u.uid";
 		$sql_count = "SELECT count(1) AS count FROM " . C('DB_PREFIX') . "deliver_supply AS s INNER JOIN " . C('DB_PREFIX') . "merchant_store AS m ON m.store_id=s.store_id LEFT JOIN " . C('DB_PREFIX') . "deliver_user AS u ON s.uid=u.uid";
 
-		$sql .= ' WHERE s.type=0';
-		$sql_count .= ' WHERE s.type=0';
+		$sql_common="";
+        if (!empty($_GET['keyword'])) {
+            $_GET['keyword'] = htmlspecialchars($_GET['keyword']);
+            if ($_GET['searchtype'] == 'real_orderid') {
+                $sql_common= " AND s.order_id=".$_GET['keyword'];
+            } elseif ($_GET['searchtype'] == 'ordernumber') {
+                $sql_common= " AND s.real_orderid=".$_GET['keyword'];
+            } elseif ($_GET['searchtype'] == 'phone') {
+                $sql_common= " AND s.phone=".$_GET['keyword'];
+            } elseif ($_GET['searchtype'] == 'third_id') {
+            }
+        }
+
+		$sql .= ' WHERE s.type=0 '.$sql_common;
+		$sql_count .= ' WHERE s.type=0'.$sql_common;
 
         //garfunkel 判断城市管理员
         if($this->system_session['level'] == 3){

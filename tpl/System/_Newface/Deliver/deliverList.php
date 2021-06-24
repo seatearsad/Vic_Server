@@ -61,8 +61,25 @@
                                         <option value="4" <if condition="$status eq 4">selected</if> >{pigcms{:L('_BACK_IN_TRANSIT_')}</option>
                                         <option value="5" <if condition="$status eq 5">selected</if> >{pigcms{:L('_BACK_COMPLETED_')}</option>
                                     </select>
-                                    &nbsp;{pigcms{:L('_BACK_USER_PHONE_')} :&nbsp;
-                                    <input type="text" class="form-control" id="phone" name="phone" <if condition="$phone">value="{pigcms{$phone}"</if>>
+                                    &nbsp;&nbsp;{pigcms{:L('_BACK_SEARCH_')}:&nbsp; <input type="text" name="keyword"
+                                                                               class="form-control"
+                                                                               value="{pigcms{$_GET['keyword']}"/>&nbsp;
+                                    <select name="searchtype" class="form-control" >
+                                        <option value="real_orderid"
+                                        <if condition="$_GET['searchtype'] eq 'real_orderid'">selected="selected"
+                                        </if>
+                                        >Order ID</option>
+                                        <option value="ordernumber"
+                                        <if condition="$_GET['searchtype'] eq 'ordernumber'">selected="selected"</if>
+                                        >Order Number</option>
+                                        <!--option value="orderid" <if condition="$_GET['searchtype'] eq 'orderid'">selected="selected"</if>>订单流水号</option>
+                                        <option value="third_id" <if condition="$_GET['searchtype'] eq 'third_id'">selected="selected"</if>>第三方支付流水号</option-->
+
+                                        <option value="phone"
+                                        <if condition="$_GET['searchtype'] eq 'phone'">selected="selected"</if>
+                                        >{pigcms{:L('_BACK_USER_PHONE_')}</option>
+                                    </select>
+
                                     &nbsp;&nbsp;&nbsp;{pigcms{:L('_BACK_DATE_SELECT_')}：
                                     <input type="text" class="form-control" name="begin_time" style="width:120px;"
                                            id="d4311" value="{pigcms{$_GET.begin_time}"

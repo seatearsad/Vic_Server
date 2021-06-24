@@ -11,14 +11,14 @@ class ShopAction extends BaseAction
     {
         $parentid = isset($_GET['parentid']) ? intval($_GET['parentid']) : 0;
         $city_name = L('G_UNIVERSAL');
-        if ($_GET['city_id']) {
+        if (is_numeric($_GET['city_id'])) {
             $this->assign('city_id', $_GET['city_id']);
-            if ($_GET['city_id'] != 0) {
+            if ($_GET['city_id'] >= 0) {
                 $where_cate['city_id'] = $_GET['city_id'];
                 $where_list['city_id'] = $_GET['city_id'];
             }
         } else {
-            $this->assign('city_id', 0);
+            $this->assign('city_id', -1);
         }
         $this->assign('city_name', $city_name);
 

@@ -51,6 +51,7 @@ return array(
     '_PARAM_ERROR_'         =>  '参数错误或者未定义',
     //public
     '_LANG_TXT_'            =>  '语言',
+    '_LANG_TXT2_'            =>  'Language',
     '_CHINESE_TXT_'         =>  '中文',
     '_ENGLISH_TXT_'         =>  '英文',
     '_HOME_TXT_'            =>  '首页',
@@ -2058,6 +2059,8 @@ return array(
     "CUSTOMER_BKADMIN"=>"客户",
     "COURIER_BKADMIN"=>"送餐员",
     "_BACK_COURIER_INFO_"=>"送餐员",
+    "_BACK_Universial_INFO_"=>"通用",
+
 
     "F_REGISTRATION_INVITED"=>"邀请注册数",
     "F_ORDERS_INVITED"=>"邀请下单数",
