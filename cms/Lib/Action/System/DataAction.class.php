@@ -1613,6 +1613,10 @@ class DataAction extends BaseAction
             $this->error(L('J_SPECIFY_TIME'));
         }
 
+        if($_GET['city_id']){
+            $where['m.city_id'] = $_GET['city_id'];
+        }
+
         $where['o.status'] = array('egt',2);
 
         $list = D('Shop_order')->field('o.store_id,m.name as store_name')->join(' as o left join '.C('DB_PREFIX').'merchant_store as m on m.store_id=o.store_id')->where($where)->group('store_id')->select();
