@@ -5,8 +5,15 @@ class SmssendAction extends BaseAction{
 		 if(isset($_POST['phone']) && !empty($_POST['phone'])){
 			 $result = D('User')->check_phone($_POST['phone']);
 			 if(!empty($result)&&$_POST['reg']){
-				 //$this->ajaxReturn($result);
+				 $this->ajaxReturn($result);
 			 }
+
+             $result = Sms::checkPhoneTwilio($_POST['phone']);
+
+			 if($result){
+                 $this->ajaxReturn($result);
+             }
+
 			$chars = '0123456789';
 			mt_srand((double)microtime() * 1000000 * getmypid());
 			$vcode = "";

@@ -473,6 +473,44 @@ final class Sms {
         //echo "Sent message {$message->sid}";
         return true;
     }
+
+    public function checkPhoneTwilio($phone){
+        $data_voip = D('Voip_phone');
+        $c = $data_voip->where(array('phone'=>$phone))->find();
+
+        if($c){
+            return array('error_code' => true, 'msg' => L('VOIP_PHONE_TIP'));
+        }
+
+        require_once './Twilio/autoload.php';
+
+        require './Twilio/Rest/Client.php';
+
+
+        $where = array('tab_id'=>'twilio','gid'=>46);
+        $result = D('Config')->field(true)->where($where)->select();
+
+        foreach($result as $v){
+            if($v['name'] == 'twilio_sid')
+                $AccountSid = $v['value'];
+            elseif ($v['name'] == 'twilio_token')
+                $AuthToken = $v['value'];
+            elseif($v['name'] == 'twilio_phone')
+                $fromPhone = $v['value'];
+        }
+
+        $client = new Twilio\Rest\Client($AccountSid, $AuthToken);
+        //$phone = "6042567032";
+        $phone_number = $client->lookups->v1->phoneNumbers($phone)->fetch(["type" => ["carrier"]]);
+
+        $checkPhone = $phone_number->carrier;
+        if($checkPhone['type'] == 'voip'){
+            $data_voip->add(array('phone'=>$phone));
+            return array('error_code' => true, 'msg' => L('VOIP_PHONE_TIP'));
+        }else{
+            return false;
+        }
+    }
 }
 
 ?>

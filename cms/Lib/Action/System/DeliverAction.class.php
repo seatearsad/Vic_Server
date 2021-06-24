@@ -117,6 +117,8 @@ class DeliverAction extends BaseAction {
         $city = D('Area')->where(array('area_type'=>2,'is_open'=>1))->select();
 
         $condition_user['u.group'] = 1;
+        $condition_user['u.reg_status'] = 0;
+        $where .= " AND u.group=1 AND u.reg_status=0";
         //$count_user = $this->deliver_user->join('as u left join '.C('DB_PREFIX').'area as a ON u.city_id=a.area_id')->where($condition_user)->count();
         $count_user = $this->deliver_user->join('as u left join '.C('DB_PREFIX').'area as a ON u.city_id=a.area_id')->where($where)->count();
         import('@.ORG.system_page');
@@ -238,7 +240,7 @@ class DeliverAction extends BaseAction {
     		$column['lat'] = $long_lat[1];
     		$column['status'] = intval($_POST['status']);
     		$column['last_time'] = $_SERVER['REQUEST_TIME'];
-    		$column['range'] = intval($_POST['range']);
+    		$column['range'] = intval($_POST['range']) == 0 ? 50 : intval($_POST['range']);
 
             $column['family_name'] = isset($_POST['family_name']) ? htmlspecialchars($_POST['family_name']) : '';
             $column['email'] = $_POST['email'];

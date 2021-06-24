@@ -1208,6 +1208,7 @@ class DataAction extends BaseAction
         }
 
         $where['group'] = 1;
+        $where['reg_status'] = 0;
 
         $list = D('Deliver_user')->where($where)->select();
         foreach ($list as &$deliver){

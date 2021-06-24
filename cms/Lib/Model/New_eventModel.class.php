@@ -23,8 +23,8 @@ class New_eventModel extends Model
         if($type != -1){
             $where['type'] = $type;
         }
-        //配送费减免 需要关联城市
-        if($type == 3 && $city_id != 0){
+        //配送费减免 需要关联城市 去掉&& $city_id != 0
+        if($type == 3){
             $where['city_id'] = $city_id;
         }
 

