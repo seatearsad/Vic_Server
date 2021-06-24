@@ -32,15 +32,7 @@ class CommonAction extends Action{
 		if(empty($serverHost)){
 			$serverHost = $_SERVER['HTTP_HOST'];
 		}
-/* 		if(mt_rand(1,10) == 1){
-			import('ORG.Net.Http');
-			$http = new Http();
-			$authorizeReturn = Http::curlGet('http://o2o-service.pigcms.com/authorize.php?domain='.$serverHost);
-			if($authorizeReturn < -1){
-				exit('wow-5');
-			}
-		} */
-			
+
 		$this->config = D('Config')->get_config();
 		if($this->config['open_extra_price']==1){
 			$this->config['score_name']=$this->config['extra_price_alias_name'];
