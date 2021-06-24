@@ -163,7 +163,7 @@
 
             getData(select_day,city_id,user_title);
         });
-
+        var all_times = 0;
         function getData(select_day,city_id,user_title){
             var re_data = {'day':select_day,'city_id':city_id};
             $("#user_title").html(user_title);
@@ -171,22 +171,32 @@
                 if(data == ""){
                     $("#main_chart").hide();
                 }else {
-                    $("#main_chart").show();
+                    if(typeof(data.total) == "undefined"){
+                        all_times++;
+                        if(all_times < 5) {
+                            setTimeout(function () {
+                                getData(select_day, city_id, user_title);
+                            }, 2000);
+                        }
+                    }else {
+                        all_times = 0;
+                        $("#main_chart").show();
 
-                    createChart(data.data_array, 'lineChart');
+                        createChart(data.data_array, 'lineChart');
 
-                    createChart(data.city_array, 'lineCityChart');
+                        createChart(data.city_array, 'lineCityChart');
 
-                    $('#cash_total').html('$ ' + data.total);
-                    $('#today_cash').html(data.today_cash);
+                        $('#cash_total').html('$ ' + data.total);
+                        $('#today_cash').html(data.today_cash);
 
-                    $('#city_total').html('$ ' + data.city_total);
-                    $('#city_total_label').html(data.city_total);
+                        $('#city_total').html('$ ' + data.city_total);
+                        $('#city_total_label').html(data.city_total);
 
-                    $('#city_select').val(data.city_id);
+                        $('#city_select').val(data.city_id);
 
-                    $('#all_user').html(data.all_user);
-                    $('#city_user').html(data.city_user);
+                        $('#all_user').html(data.all_user);
+                        $('#city_user').html(data.city_user);
+                    }
                 }
             });
         }
