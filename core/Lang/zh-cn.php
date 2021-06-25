@@ -1106,6 +1106,7 @@ return array(
     '_BACK_NORMAL_'         =>  '正常',
     '_BACK_PENDING_'        =>  '待审核',
     '_BACK_CLOSED_'         =>  '关闭',
+    '_BACK_CLOSED_EVERYDAY_'         =>  '一直关闭',
     '_BACK_SORT_ORDER_'     =>  '排序',
     '_BACK_MER_BALANCE_'    =>  '商家余额',
     '_BACK_TOTAL_MER_BA_'   =>  '平台商户总余额',

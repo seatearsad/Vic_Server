@@ -281,7 +281,7 @@
                                                     </a>
                                                     <php>}</php>
                                                     &nbsp;<a href="{pigcms{:U('Shop/del',array('id'=>$vo['order_id']))}"
-                                                             onclick="return confirm('{pigcms{:L(\'_B_PURE_MY_84_\')}')"
+                                                             onclick="return confirm('{pigcms{:L(\'_B_PURE_MY_84_\')}[Order Id={pigcms{$vo[\'order_id\']}]')"
                                                              style="color: red">
                                                         <li class="fa fa-trash-o tutti_icon_dark"
                                                             title="{pigcms{:L('_BACK_DEL_')}"></li>
@@ -362,11 +362,10 @@
 
             $('.refund').click(function () {
                 var get_url = $(this).data('href'), obj = $(this);
-                var plist=get_url.split("=");
-                console.log(plist);
+
                 window.top.art.dialog({
                     title: 'Reminder',
-                    content: 'Are you sure about delete 【'+ plist[4]+ '】?',
+                    content: 'Are you sure about refund?',
                     lock: true,
                     okVal: 'Yes',
                     ok: function () {

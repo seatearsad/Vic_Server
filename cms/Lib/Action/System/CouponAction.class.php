@@ -97,10 +97,11 @@ class CouponAction extends BaseAction {
 				}
 				//garfunkel add
                 if($_POST['notice']) {
-                    $this->error('领取口令已经存在，请使用其他口令');
-                }else{
+                    $_POST['notice']=trim($_POST['notice']);
                     if (!empty(D('System_coupon')->field()->where(array('notice' => $_POST['notice']))->find()))
                         $this->error('领取口令已经存在，请使用其他口令');
+                }else{
+                    $this->error('领取口令不能为空！');
                 }
 				//
 				if($_POST['cate_name']!='all'){

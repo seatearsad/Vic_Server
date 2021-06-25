@@ -1106,6 +1106,7 @@ return array(
     '_BACK_NORMAL_'         =>  'Active',
     '_BACK_PENDING_'        =>  'Pending',
     '_BACK_CLOSED_'         =>  'Closed',
+    '_BACK_CLOSED_EVERYDAY_'         =>  'Closed Every Day',
     '_BACK_SORT_ORDER_'     =>  'Order',
     '_BACK_MER_BALANCE_'    =>  'Merchant Balance',
     '_BACK_TOTAL_MER_BA_'   =>  'Total Merchant Balance',

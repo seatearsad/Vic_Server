@@ -159,7 +159,7 @@
         }
         #deliver_list_outer{
             position: absolute;
-            width: 320px;
+            width: 350px;
             left:50px;
             top:130px;
             border-bottom: 0px;
@@ -169,7 +169,7 @@
         }
         #deliver_list{
             position: relative;
-            width: 300px;
+            width: 330px;
             border: 1px #cccccc solid;
             border-bottom: 0px;
             padding-left: 0;

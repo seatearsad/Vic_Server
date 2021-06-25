@@ -448,7 +448,7 @@ class DeliverAction extends BaseAction {
             } elseif ($_GET['searchtype'] == 'ordernumber') {
                 $sql_common= " AND s.real_orderid=".$_GET['keyword'];
             } elseif ($_GET['searchtype'] == 'phone') {
-                $sql_common= " AND s.phone=".$_GET['keyword'];
+                $sql_common= " AND s.phone like '%".$_GET['keyword']."%' ";
             } elseif ($_GET['searchtype'] == 'third_id') {
             }
         }
@@ -1632,6 +1632,7 @@ class DeliverAction extends BaseAction {
     }
 
     public function update_rule(){
+
         if($_POST){
             $base_data['start'] = 0;
             $base_data['end'] = $_POST['base_rule_mile'];
@@ -1650,7 +1651,6 @@ class DeliverAction extends BaseAction {
             $new_data = array();
             foreach ($_POST as $k=>$v){
                 $key = explode('-',$k);
-
                 if(strpos($key[0],'new') !== false){
                     $new_data[$key[1]][$key[0]] = $v;
                 }else{
@@ -1658,6 +1658,11 @@ class DeliverAction extends BaseAction {
                 }
             }
 
+            //peter 先清空之前的阶梯数据
+            $where_delete=" type=1 AND city_id= ".$city_id;
+            D('Deliver_rule')->where($where_delete)->delete();
+
+            //新加数据处理
             foreach ($new_data as $k=>$v){
                 $save_data['start'] = $v['start_mile_new'];
                 $save_data['end'] = $v['end_mile_new'];
@@ -1668,14 +1673,15 @@ class DeliverAction extends BaseAction {
                 D('Deliver_rule')->add($save_data);
             }
 
-            $save_data = array();
-            foreach ($data as $k=>$v){
-                $save_data['start'] = $v['start_mile'];
-                $save_data['end'] = $v['end_mile'];
-                $save_data['fee'] = $v['fee'];
-
-                D('Deliver_rule')->where(array('id'=>$k))->save($save_data);
-            }
+//            //更新老数据
+//            $save_data = array();
+//            foreach ($data as $k=>$v){
+//                $save_data['start'] = $v['start_mile'];
+//                $save_data['end'] = $v['end_mile'];
+//                $save_data['fee'] = $v['fee'];
+//
+//                D('Deliver_rule')->where(array('id'=>$k))->save($save_data);
+//            }
 
             exit(json_encode(array('error' => 0, 'msg' => 'Success！', 'dom_id' => 'account')));
         }

@@ -50,7 +50,7 @@
                                     <span id="clear_end" class="input-group-addon bootstrap-touchspin-postfix input-group-append"><span class="input-group-text">{pigcms{:L('G_CLEAR')}</span></span>
                                 </div>
                             </div>
-                            <div class="form-group  row">
+                            <div class="form-group  row" id="city_tr">
                                 <label class="col-sm-3 col-form-label">{pigcms{:L('G_CITY')}</label>
                                 <div class="col-sm-9">
                                     <select name="city_id" class="form-control">
@@ -80,19 +80,25 @@
 </style>
 
 <script>
-    $('#clear_begin').click(function () {
-        $('input[name=begin_time]').val('');
+    $(function(){
+        $('#clear_begin').click(function () {
+            $('input[name=begin_time]').val('');
+        });
+        $('#clear_end').click(function () {
+            $('input[name=end_time]').val('');
+        });
+
+        $('#select_type').change(function () {
+
+            var type = $(this).val();
+
+            if(type == 3){
+                $('#city_tr').show();
+            }else{
+                $('#city_tr').hide();
+            }
+        });
     });
-    $('#clear_end').click(function () {
-        $('input[name=end_time]').val('');
-    });
-    $('#select_type').change(function () {
-        var type = $(this).val();
-        if(type == 3){
-            $('#city_tr').show();
-        }else{
-            $('#city_tr').hide();
-        }
-    });
+
 </script>
 <include file="Public:footer_inc"/>

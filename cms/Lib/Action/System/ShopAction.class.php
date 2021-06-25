@@ -1028,7 +1028,26 @@ class ShopAction extends BaseAction
 
     public function shop()
     {
-        $where = "s.status=1 AND s.have_shop=1 AND sh.deliver_type IN (0, 3)";//array('status' => 1);
+        //加载城市字典
+        $city = D('Area')->where(array('area_type' => 2, 'is_open' => 1))->select();
+        $this->assign('city', $city);
+        //筛选 所属地区
+        if ($this->system_session['area_id']) {
+            $area_index = $this->system_session['level'] == 1 ? 'area_id' : 'city_id';
+            $where_store[$area_index] = $this->system_session['area_id'];
+        }
+        //筛选 城市
+        $where_city="";
+        if ($_GET['city_id']) {
+            $this->assign('city_id', $_GET['city_id']);
+            if ($_GET['city_id'] != 0) {
+                $where_city = " AND m.city_id=".$_GET['city_id']." ";
+            }
+        } else {
+            $this->assign('city_id', 0);
+        }
+
+        $where = "s.status=1 AND s.have_shop=1 AND sh.deliver_type IN (0, 3)".$where_city;//array('status' => 1);
 
         if (!empty($_GET['keyword'])) {
             $where .= " AND s.name LIKE '%{$_GET['keyword']}%'";

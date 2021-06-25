@@ -19,7 +19,7 @@
             </ol>
         </div>
         <div class="col-lg-3" style="height 90px;margin-top:40px;">
-            <a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Systemnews/add_news',array('category_id'=>$_GET['category_id']))}','Add {pigcms{$category_name}',800,500,true,false,false,addbtn,'add',true);"><button type="button" class="btn btn-primary btn-sm float-right">Add {pigcms{$category_name}</button></a>
+            <a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Systemnews/add_news',array('category_id'=>$_GET['category_id']))}','Add {pigcms{$category_name}',900,500,true,false,false,addbtn,'add',true);"><button type="button" class="btn btn-primary btn-sm float-right">Add {pigcms{$category_name}</button></a>
         </div>
     </div>
     <div class="wrapper wrapper-content animated fadeInRight">
