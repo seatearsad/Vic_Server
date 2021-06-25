@@ -1617,10 +1617,14 @@ class DataAction extends BaseAction
             $where['m.city_id'] = $_GET['city_id'];
         }
 
-        $where['o.status'] = array('egt',2);
+        $where['o.status'] = array('between',array(2,3));
+        $where['o.is_del'] = 0;
 
         $list = D('Shop_order')->field('o.store_id,m.name as store_name')->join(' as o left join '.C('DB_PREFIX').'merchant_store as m on m.store_id=o.store_id')->where($where)->group('store_id')->select();
-        array_multisort(array_column($list, 'store_name'), SORT_ASC, $list);
+        foreach ($list as $k=>$v){
+            $list[$k]['name_str'] = strtolower($v['store_name']);
+        }
+        array_multisort(array_column($list, 'name_str'), SORT_ASC, $list);
         $this->ajaxReturn($list);
     }
 }
