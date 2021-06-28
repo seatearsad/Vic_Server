@@ -372,6 +372,8 @@ class CommonAction extends Action{
 			return round($meter/1000,1).'km';
 		}
 	}
+
+
 }
 function wapmerchantfjdslajlsaf(){
 

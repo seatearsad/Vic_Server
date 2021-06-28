@@ -46,12 +46,12 @@
                     <div class="ibox-content">
                         <div class="table-responsive">
                             <!-------------------------------- 工具条 -------------------------------------->
-                            <div style="height: 60px;">
+                            <div style="margin-bottom: 10px;min-height: 50px">
 <!--                                location.href = "{pigcms{:U('Merchant/Deliver/deliverList')}"+"&period="+period+"&phone="+phone+"&day="+day+"&status="+status;-->
                                 <form action="{pigcms{:U('System/Deliver/deliverList')}" method="get" class="form-inline ">
                                     <input type="hidden" name="c" value="Deliver"/>
                                     <input type="hidden" name="a" value="deliverList"/>
-                                <div id="tool_bar" class="form-inline tutti_toolbar">
+                                <div id="tool_bar" class="form-inline">
                                     {pigcms{:L('_BACK_DELIVERY_STATUS_')} ：
                                     <select id="status" name="status" class="form-control">
                                         <option value="0" <if condition="$status eq 0">selected</if> >{pigcms{:L('_BACK_ALL_')}</option>

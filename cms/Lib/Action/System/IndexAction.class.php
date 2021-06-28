@@ -8,6 +8,7 @@
 class IndexAction extends BaseAction {
 
     public function index() {
+
 		$mysqlVersion = M()->query('select VERSION()');
 		$server_info = array(
             'PHP运行环境' => PHP_OS,
@@ -45,7 +46,11 @@ class IndexAction extends BaseAction {
 		$param['a']='check';
 		$param['v']=$ver;
 //		$lastver = $this->http($updatehost,$param,'GET', array("Content-type: text/html; charset=utf-8"));
-
+        if(isMobile()){
+            $this->assign('height',' ');
+        }else{
+            $this->assign('height',' height="70" ');
+        }
 		$this->assign('updateinfo',$updateinfo);
         $this->assign('ver', $ver);
         $this->assign('domain_time', $domain_time);
@@ -483,8 +488,8 @@ class IndexAction extends BaseAction {
 
             $city_id = $_POST['city_id'] == 0 ? 105 : $_POST['city_id'];
 
-            $today_zero_time = mktime(0,0,0,date('m',$_SERVER['REQUEST_TIME']),date('d',$_SERVER['REQUEST_TIME']), date('Y',$_SERVER['REQUEST_TIME']));
-            //$today_zero_time = mktime(0, 0, 0, 1, 5, 2018);
+            //$today_zero_time = mktime(0,0,0,date('m',$_SERVER['REQUEST_TIME']),date('d',$_SERVER['REQUEST_TIME']), date('Y',$_SERVER['REQUEST_TIME']));
+            $today_zero_time = mktime(0, 0, 0, 1, 5, 2018);
             $begin_time = $today_zero_time - ($days - 1) * 3600 * 24;
             //$end_time = time();
             $end_time = $today_zero_time + 3600 * 24;
@@ -515,7 +520,7 @@ class IndexAction extends BaseAction {
             $total = 0;
             foreach ($res_shop as $v) {
                 if ($days == 1)
-                    $show_time = date('H', $v['pay_time']);
+                    $show_time = date('H', $v['pay_time']).":00";
                 else
                     $show_time = date('m-d', $v['pay_time']);
 
@@ -541,7 +546,7 @@ class IndexAction extends BaseAction {
             $city_array = array();
             $city_total = 0;
             foreach ($res_city as $v) {
-                $show_time = date('H', $v['pay_time']);
+                $show_time = date('H', $v['pay_time']).":00";
 
                 $city_array[$show_time]['cash_flow'] += $v['cash_flow'];
                 $city_array[$show_time]['sales'] += $v['sales'];

@@ -1338,6 +1338,203 @@ class Shop_orderModel extends Model
 		}
 	}
 
+    public function get_order_list_2($where = array(), $order = 'pay_time DESC', $is_wap = false)
+    {
+        if (isset($where['status']) && $where['status'] === 0) $where['paid'] = 1;
+        if (is_array($where)) $where['is_del'] = 0;
+
+        if($is_wap != 10){
+            $count = $this->where($where)->count();
+        }
+        if ($is_wap == 4) {
+            import('@.ORG.wap_group_page');
+            $p = new Page($count, 20, 'p');
+        } elseif ($is_wap == 3) {
+            import('@.ORG.system_page');
+            $p = new Page($count, 20);
+        } elseif ($is_wap == 2) {
+            import('@.ORG.merchant_page');
+            $p = new Page($count, 20);
+        } elseif($is_wap == 10){
+            $list = $this->where($where)->order($order)->page(1,10)->select();
+        }  elseif($is_wap == 11){
+            import('@.ORG.wap_group_page');
+            $p = new Page($count, 20, 'p');
+            $list = $this->where($where)->order($order)->select();
+        } elseif ($is_wap) {
+            import('@.ORG.wap_group_page');
+            $p = new Page($count, 20, 'p');
+        } else {
+            import('@.ORG.user_page');
+            $p = new Page($count, 10);
+        }
+
+        if($is_wap != 11 && $is_wap != 10){
+            $list = $this->field('s.*,m.mer_id,m.name')->join('as s left join '.C('DB_PREFIX').'merchant_store as m ON s.mer_id = m.mer_id ')->where($where)->order($order)->limit($p->firstRow . ',' . $p->listRows)->select();
+            var_dump($where);
+        }
+
+        $notOffline = 1;
+        $pay_offline_open = C('config.pay_offline_open');
+        if ($pay_offline_open == 1) {
+            $now_merchant = D('Merchant')->get_info($mer_id);
+            if ($now_merchant) {
+                $notOffline =($now_merchant['is_close_offline'] == 0 && $now_merchant['is_offline'] == 1) ? 0 : 1;
+            }
+        }
+
+        foreach ($list as &$order) {
+            $order['offline_price'] = round($order['price'] +$order['extra_price'] + $order['tip_charge'] - round($order['card_price'] + $order['merchant_balance'] + $order['card_give_money'] +$order['balance_pay'] + $order['payment_money'] + $order['score_deducte'] + $order['coupon_price'] + $order['delivery_discount'] + $order['merchant_reduce'], 2), 2);
+            $order['deliver_info'] = $order['deliver_info'] ? unserialize($order['deliver_info']) : '';
+            switch ($order['status']) {
+                case 0:
+// 					$order['css'] = 'inhand';
+// 					$order['show_status'] = '处理中';
+                    $order['status_str'] = ''.L('_B_PURE_MY_71_').'';
+                    break;
+                case 1:
+// 					$order['css'] = 'confirm';
+// 					$order['show_status'] = '已确认';
+                    $order['status_str'] = ''.L('_B_PURE_MY_72_').'';
+                    break;
+                case 2:
+// 					$order['css'] = 'confirm';
+// 					$order['show_status'] = '已消费';
+                    $order['status_str'] = ''.L('_STATUS_LIST_2_').'';
+                    break;
+                case 3:
+// 					$order['css'] = 'complete';
+// 					$order['show_status'] = '已评价';
+                    $order['status_str'] = ''.L('_B_PURE_MY_74_').'';
+                    break;
+                case 4:
+// 					$order['css'] = 'cancle';
+// 					$order['show_status'] = '已退款';
+                    $order['status_str'] = ''.L('_B_PURE_MY_75_').'';
+                    break;
+                case 5:
+// 					$order['css'] = 'cancle';
+// 					$order['show_status'] = '已取消';
+                    $order['status_str'] = ''.L('_B_PURE_MY_76_').'';
+                    break;
+                case 7:
+// 					$order['css'] = 'cancle';
+// 					$order['show_status'] = '已取消';
+                    $order['status_str'] = ''.L('_B_PURE_MY_77_').'';
+                    break;
+                case 8:
+// 					$order['css'] = 'cancle';
+// 					$order['show_status'] = '已取消';
+                    $order['status_str'] = ''.L('_B_PURE_MY_78_').'';
+                    break;
+                case 9:
+// 					$order['css'] = 'cancle';
+// 					$order['show_status'] = '已取消';
+                    $order['status_str'] = ''.L('_B_PURE_MY_79_').'';
+                    break;
+                case 10:
+// 					$order['css'] = 'cancle';
+// 					$order['show_status'] = '已取消';
+                    $order['status_str'] = ''.L('_B_PURE_MY_80_').'';
+                    break;
+            }
+
+            if ($order['paid'] == 0) {
+                $order['pay_status'] =L("_ND_UNPAID_");
+            } elseif ($order['paid'] == 1) {
+                if ($order['pay_type'] == 'offline') {
+                    if ($order['third_id']) {
+                        $order['pay_status'] = '<b style="color:green">'.L("_ND_PAID_").'</b>';
+                    } else {
+                        $order['pay_status'] = '<b style="color:red">'.L("_ND_UNPAID_").'</b>';
+                    }
+                } else {
+                    $order['pay_status'] = '<b style="color:green">'.L("_ND_PAID_").'</b>';
+                }
+            }
+            if ($order['is_pick_in_store'] == 0) {
+                $order['deliver_str'] = '平台配送';
+                $order['deliverinfo'] = '平台配送';
+                if ($order['deliverinfo'] && $order['deliver_info']['name'] && $order['deliver_info']['phone']) {
+                    $order['deliverinfo'] .= '<br/>Name：' . $order['deliver_info']['name'] . 'Phone：' . $order['deliver_info']['phone'];
+                    $order['deliverinfo_forbk']= $order['deliver_info']['name'] . ' ( ' . $order['deliver_info']['phone']." )";
+                }else{
+                    $order['deliverinfo_forbk']="-";
+                }
+            } elseif ($order['is_pick_in_store'] == 1) {
+                $order['deliver_str'] = '商家配送';
+                $order['deliverinfo'] = '商家配送';
+                if ($order['deliverinfo'] && $order['deliver_info']['name'] && $order['deliver_info']['phone']) {
+                    $order['deliverinfo'] .= '<br/>Name：' . $order['deliver_info']['name'] . '<br/>Phone：' . $order['deliver_info']['phone'];
+                    $order['deliverinfo_forbk']='' . $order['deliver_info']['name'] . ' ( ' . $order['deliver_info']['phone']." )";
+                }else{
+                    $order['deliverinfo_forbk']="-";
+                }
+            } elseif ($order['is_pick_in_store'] == 2) {
+                $order['deliver_str'] = '自提';
+                $order['deliverinfo'] = '自提';
+            } elseif ($order['is_pick_in_store'] == 3) {
+                $order['deliver_str'] = '快递配送';
+                $order['deliverinfo'] = '快递配送';
+            }
+// 			if ($order['is_pick_in_store'] == 2) {
+// 				$order['deliver_str'] = '自提';
+// 				$order['deliverinfo'] = '自提';
+// 			} else {
+// 				$order['deliver_str'] = '配送';
+// 				$order['deliverinfo'] = '配送';
+// 				if ($order['deliver_info']) {
+// 					$order['deliverinfo'] .= '<br/>配送员：' . $order['deliver_info']['name'] . '<br/>配送员电话：' . $order['deliver_info']['phone'];
+// 				}
+// 			}
+
+            //配送状态（0：订单生产，1:店员接单，2：配送员接单，3：配送员取货，4：送达，5：确认收货，6，配送结束）
+            switch ($order['order_status']) {
+                case 0:
+                    if ($order['is_pick_in_store'] == 2) {
+                        $order['deliver_status_str'] = L("_ORDER_STATUS_0_");  //'待提货'
+                    } else {
+                        $order['deliver_status_str'] = L("_ORDER_STATUS_1_");  //'待发货';
+                    }
+                    break;
+                case 1:
+                    $order['deliver_status_str'] = L("_ORDER_STATUS_2_");  //'店铺已接单';
+                    break;
+                case 2:
+                    $order['deliver_status_str'] = L("_ORDER_STATUS_3_");  //配送员接单';
+                    break;
+                case 3:
+                    $order['deliver_status_str'] = L("_ORDER_STATUS_4_");  //'配送员取货';
+                    break;
+                case 4:
+                    $order['deliver_status_str'] =L("_ORDER_STATUS_5_");  // '配送中';
+                    break;
+                case 5:
+                    $order['deliver_status_str'] =L("_ORDER_STATUS_6_");  // '确认收货';
+                    break;
+                case 6:
+                    if ($order['is_pick_in_store'] == 2) {
+                        $order['deliver_status_str'] =L("_ORDER_STATUS_7_");  // '已提货';
+                    } else {
+                        $order['deliver_status_str'] =L("_ORDER_STATUS_6_");  // '配送完成';
+                    }
+                    break;
+            }
+
+            $order['pay_type_str'] = D('Pay')->get_pay_name_2($order['pay_type'], $order['is_mobile_pay'], $order['paid'],$order['uid']);
+
+        }
+
+        if($is_wap != 10){
+            if($is_wap != 3)
+                return array('order_list' => $list, 'pagebar' => $p->show());
+            else
+                return array('order_list' => $list, 'pagebar' => $p->show2());
+        }else{
+            return array('order_list' => $list, 'page' => ceil($count/10),'count'=>$count);
+        }
+    }
+
 	public function get_order_detail($where)
 	{
 		$where['is_del'] = 0;

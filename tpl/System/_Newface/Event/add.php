@@ -80,18 +80,22 @@
 </style>
 
 <script>
+
     $(function(){
+        var sel_type=$("#select_type").val();
+        if(sel_type == 3){
+            $('#city_tr').show();
+        }else{
+            $('#city_tr').hide();
+        }
         $('#clear_begin').click(function () {
             $('input[name=begin_time]').val('');
         });
         $('#clear_end').click(function () {
             $('input[name=end_time]').val('');
         });
-
         $('#select_type').change(function () {
-
             var type = $(this).val();
-
             if(type == 3){
                 $('#city_tr').show();
             }else{
@@ -99,6 +103,5 @@
             }
         });
     });
-
 </script>
 <include file="Public:footer_inc"/>

@@ -37,8 +37,8 @@
                     <div class="ibox-content">
                         <div class="table-responsive">
                             <!-------------------------------- 工具条 -------------------------------------->
-                            <div style="height: 55px;">
-                                <div id="tool_bar" class="form-inline tutti_toolbar">
+                            <div style="margin-bottom: 10px;min-height: 50px">
+                                <div id="tool_bar" class="form-inline">
                                     <form action="{pigcms{:U('User/index')}" method="get">
                                         <input type="hidden" name="c" value="User"/>
                                         <input type="hidden" name="a" value="index"/>

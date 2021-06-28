@@ -62,10 +62,11 @@
                         </div>
                     </div>
                     <div class="ibox-content">
+                        <div class="table-responsive">
                         <!-------------------------------- 工具条 -------------------------------------->
-                        <div style="height: 100px;">
+                            <div style="margin-bottom: 15px;min-height: 70px">
 
-                            <div id="tool_bar" style="form-group tutti_toolbar" style="height: 100px;">
+                            <div id="tool_bar" style="form-group " >
 
                                 <form action="{pigcms{:U('Shop/order')}" method="get" class="form-inline ">
                                     <input type="hidden" name="c" value="Shop"/>
@@ -86,8 +87,8 @@
                                             </select>
                                         </if>&nbsp;&nbsp;
                                         &nbsp;&nbsp;{pigcms{:L('_BACK_SEARCH_')}:&nbsp; <input type="text" name="keyword"
-                                                                                   class="form-control"
-                                                                                   value="{pigcms{$_GET['keyword']}"/>&nbsp;
+                                                                                               class="form-control"
+                                                                                               value="{pigcms{$_GET['keyword']}"/>&nbsp;
                                         <select name="searchtype" class="form-control" >
                                             <option value="real_orderid"
                                             <if condition="$_GET['searchtype'] eq 'real_orderid'">selected="selected"
@@ -151,7 +152,7 @@
                         </div>
                         <!------------------------------------------------------------------------------>
                         <!-- <form name="myform" id="myform" action="" method="post">-->
-                        <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="20"
+                        <table class=" table table-stripped toggle-arrow-tiny" data-page-size="20"
                                data-sorting="false">
                             <thead>
                             <tr>
@@ -216,18 +217,18 @@
                                         <td>
                                             <if condition="$vo.paid eq 0">
                                                 <a href="#" title='{pigcms{:L("_UNPAID_TXT_")}'>
-                                                <li class="fa fa-circle-o tutti_icon_default"></li>
-                                            <else/>
-                                                <a href="#" title='{pigcms{$vo.status_str}'>
-                                                <if condition="$vo.status eq 2 or $vo.status eq 3 or $vo.status eq 1">
-                                                    <li class="fa fa-check-circle tutti_icon_ok"></li>
-                                                </if>
-                                                <if condition="$vo.status eq 4 or $vo.status eq 5">
-                                                    <li class="fa fa-ban tutti_icon_default"></li>
-                                                </if>
-                                                <if condition="$vo.status eq 0">
-                                                    <li class="fa fa-circle tutti_icon_danger"></li>
-                                                </if>
+                                                    <li class="fa fa-circle-o tutti_icon_default"></li>
+                                                    <else/>
+                                                    <a href="#" title='{pigcms{$vo.status_str}'>
+                                                        <if condition="$vo.status eq 2 or $vo.status eq 3 or $vo.status eq 1">
+                                                            <li class="fa fa-check-circle tutti_icon_ok"></li>
+                                                        </if>
+                                                        <if condition="$vo.status eq 4 or $vo.status eq 5">
+                                                            <li class="fa fa-ban tutti_icon_default"></li>
+                                                        </if>
+                                                        <if condition="$vo.status eq 0">
+                                                            <li class="fa fa-circle tutti_icon_danger"></li>
+                                                        </if>
                                             </if>
                                             </a>
                                         </td>
@@ -254,8 +255,8 @@
                                         </td>
                                         <!--                                        {pigcms{$vo.pay_status} -({pigcms{$vo.pay_type})--->
                                         <td><span style="color: green">{pigcms{$vo.pay_type_str}</span>
-<!--                                        <td>{pigcms{$vo.status_str}({pigcms{$vo.status})-->
-<!--                                        </td>-->
+                                            <!--                                        <td>{pigcms{$vo.status_str}({pigcms{$vo.status})-->
+                                            <!--                                        </td>-->
 
                                         <td>
                                             <div class="btn-group">
@@ -307,6 +308,7 @@
                         </div>
                         <div id="table_pagebar2" style="height: 30px;">
 
+                        </div>
                         </div>
                     </div>
                 </div>

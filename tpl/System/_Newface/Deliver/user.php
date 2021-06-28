@@ -42,8 +42,8 @@
                     </div>
                     <div class="ibox-content">
                         <!-------------------------------- 工具条 -------------------------------------->
-                        <div style="height: 50px;">
-                                <div id="tool_bar" style="form-group tutti_toolbar" style="height: 80px;">
+                        <div style="margin-bottom: 10px;min-height: 50px">
+                                <div id="tool_bar" style="form-group " style="height: 80px;">
                                     <form action="{pigcms{:U('Deliver/user')}" class="form-inline" method="get">
                                         <input type="hidden" name="c" value="Deliver"/>
                                         <input type="hidden" name="a" value="user"/>

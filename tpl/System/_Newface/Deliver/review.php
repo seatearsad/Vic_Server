@@ -35,11 +35,11 @@
                     <div class="ibox-content">
                         <div class="table-responsive">
                             <!-------------------------------- 工具条 -------------------------------------->
-                            <div style="height: 55px;">
+                            <div style="margin-bottom: 10px;min-height: 50px">
                                 <form action="{pigcms{:U('Deliver/review')}" method="get">
                                     <input type="hidden" name="c" value="Deliver"/>
                                     <input type="hidden" name="a" value="review"/>
-                                <div id="tool_bar" class="form-inline tutti_toolbar">
+                                <div id="tool_bar" class="form-inline">
                                     {pigcms{:L('_BACK_SEARCH_')} ：
                                     <input type="text" class="form-control" name="keyword" class="input-text" value="{pigcms{$_GET['keyword']}"/>
                                     &nbsp;

@@ -39,7 +39,7 @@
                     <div class="ibox-content">
                         <div class="table-responsive">
                             <!-------------------------------- 工具条 -------------------------------------->
-                            <div style="height: 55px;">
+                            <div style="margin-bottom: 10px;min-height: 50px">
                                 <div id="tool_bar" class="form-inline tutti_toolbar">
                                     <form action="{pigcms{:U('admin_recharge_list')}" method="get">
                                         <input type="hidden" name="c" value="User"/>

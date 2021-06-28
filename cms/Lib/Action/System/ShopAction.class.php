@@ -531,6 +531,7 @@ class ShopAction extends BaseAction
             } else {
                 import('@.ORG.system_page');
                 $p = new Page(0, 20);
+                $this->assign( 'status', -1);
                 $this->assign('order_list', null);
                 $this->assign('pagebar', $p->show2());
                 $this->display();
@@ -542,14 +543,11 @@ class ShopAction extends BaseAction
             if ($_GET['searchtype'] == 'real_orderid') {
                 $where['real_orderid'] = htmlspecialchars($_GET['keyword']);
             } elseif ($_GET['searchtype'] == 'orderid') {
-                // $where['orderid'] = htmlspecialchars($_GET['keyword']);
-                //var_dump($where);die();
-                //$tmp_result = M('Tmp_orderid')->where(array('orderid'=>$where['orderid']))->find();
-                //unset($where['orderid']);
-                //$where['order_id'] = $tmp_result['order_id'];
                 $where['order_id'] = $_GET['keyword'];
             } elseif ($_GET['searchtype'] == 'name') {
-                $where['username'] = htmlspecialchars($_GET['keyword']);
+//                $where['username'] = htmlspecialchars($_GET['keyword']);
+                $where['_string'] = "  `username` like '%".htmlspecialchars($_GET['keyword'])."%' ";
+                //echo $where['_string'];
             } elseif ($_GET['searchtype'] == 'phone') {
                 $where['userphone'] = htmlspecialchars($_GET['keyword']);
             } elseif ($_GET['searchtype'] == 'third_id') {
@@ -580,9 +578,11 @@ class ShopAction extends BaseAction
         if ($status == 100) {
             $where['paid'] = 0;
         } elseif ($status == 2) {
-            $where['_string'] = "(`status`=2 OR `status`=3)";
+            $where['_string'] = $where['_string'] == "" ? " (`status`=2 OR `status`=3) ": $where['_string'] ." AND (`status`=2 OR `status`=3) ";
+//            $where['_string'] = "(`status`=2 OR `status`=3)";
         } elseif ($status == 5) {
-            $where['_string'] = "(`status`=4 OR `status`=5)";
+            $where['_string'] = $where['_string'] == "" ? " (`status`=4 OR `status`=5) ": $where['_string'] ." AND (`status`=4 OR `status`=5) ";
+//            $where['_string'] = "(`status`=4 OR `status`=5)";
         } else if ($status != -1) {
             $where['status'] = $status;
         }
@@ -650,10 +650,8 @@ class ShopAction extends BaseAction
 
                 $deliver = D('Deliver_supply')->field(true)->where(array('order_id' => $li['order_id']))->find();
                 if ($deliver) {
-
                     $li['dining_time'] = $deliver['dining_time'];
                     //$li["deliver_status"]= $this->get_delivery_status_by_id($deliver['status'],$deliver['supply_id']);
-
                 }
             }
         }

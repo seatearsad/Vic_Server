@@ -26,7 +26,7 @@
         <div class="col-lg-9">
             <div class="ibox ">
                 <div class="ibox-content">
-                    <div>
+                    <div >
                         <span class="float-right text-right">
                             <div class="btn-group" id="main_select">
                                 <button class="btn btn-white " data-type="day">Today</button>
@@ -42,7 +42,7 @@
                     </div>
 
                     <div>
-                        <canvas id="lineChart" height="70"></canvas>
+                        <canvas id="lineChart" {pigcms{$height}></canvas>
                     </div>
 
                     <div class="m-t-md">
@@ -108,7 +108,7 @@
                     </div>
 
                     <div>
-                        <canvas id="lineCityChart" height="70"></canvas>
+                        <canvas id="lineCityChart"></canvas>
                     </div>
 
                     <div class="m-t-md">
@@ -163,7 +163,8 @@
 
             getData(select_day,city_id,user_title);
         });
-
+        var dd=null;
+        var dc=null;
         function getData(select_day,city_id,user_title){
             var re_data = {'day':select_day,'city_id':city_id};
             $("#user_title").html(user_title);
@@ -173,9 +174,11 @@
                 }else {
                     $("#main_chart").show();
 
-                    createChart(data.data_array, 'lineChart');
+                    dd=data.data_array;
+                    dc=data.city_array;
 
-                    createChart(data.city_array, 'lineCityChart');
+                    g_td=createChart(dd, 'lineChart',70);
+                    g_tc=createChart(dc, 'lineCityChart',70);
 
                     $('#cash_total').html('$ ' + data.total);
                     $('#today_cash').html(data.today_cash);
@@ -190,7 +193,54 @@
                 }
             });
         }
-
+        // Minimalize menu when screen is less than 768px
+        var last_mode=0;
+        $(window).bind("resize", function () {
+            // if (window.innerWidth  < 769) {
+            //     if (last_mode!=-1){
+            //         alert("111");
+            //         last_mode=-1;
+            //         if (dd!=null){
+            //             if (g_td!=null) {
+            //                 canvas = document.getElementById("lineChart");
+            //                 canvas.height = 170;
+            //                 //g_td.resize();
+            //                 alert("222");
+            //                 console.log("------------------------");
+            //             }
+            //             if (g_tc!=null) {
+            //
+            //                 canvas = document.getElementById("lineCityChart");
+            //                 canvas.height = 170;
+            //                 //g_tc.resize();
+            //                 console.log("------------------------");
+            //             }
+            //         }
+            //     }
+            //     //$('body').addClass('body-small')
+            // } else {
+            //     if (last_mode!=1){
+            //         last_mode=1;
+            //         if (dd!=null) {
+            //             if (g_td!=null) {
+            //                 canvas = document.getElementById("lineChart");
+            //                 canvas.height = 70;
+            //                 g_td.resize();
+            //                 console.log("+++++++++++++++++++");
+            //             }
+            //             if (g_tc!=null) {
+            //                 canvas = document.getElementById("lineCityChart");
+            //                 canvas.height = 70;
+            //                 g_tc.resize();
+            //                 console.log("+++++++++++++++++++");
+            //             }
+            //         }
+            //     }
+            //    // $('body').removeClass('body-small')
+            // }
+        });
+        var g_td=null;
+        var g_tc=null;
         function createChart(data,id){
             var time_arr = [];
             var cash_arr = [];
@@ -233,8 +283,10 @@
                 responsive: true
             };
 
+            //var canvas=document.getElementById(id);
             var ctx = document.getElementById(id).getContext("2d");
-            new Chart(ctx, {type: 'line', data: lineData, options:lineOptions});
+            td=new Chart(ctx, {type: 'line', data: lineData, options:lineOptions});
+            return td;
         }
 
         $('#main_select').children('button').each(function () {

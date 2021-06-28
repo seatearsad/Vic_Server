@@ -35,8 +35,8 @@
                     <div class="ibox-content">
                         <div class="table-responsive">
                             <!-------------------------------- 工具条 -------------------------------------->
-                            <div style="height: 55px;">
-                                <div id="tool_bar" class="form-inline tutti_toolbar">
+                            <div style="margin-bottom: 15px;min-height: 55px">
+                                <div id="tool_bar" class="form-inline">
                                     {pigcms{:L('I_GENERAL_CATEGORY')}：
                                     <select name="all_type" id="select_type" class="form-control">
                                         <option value="-1">All</option>
