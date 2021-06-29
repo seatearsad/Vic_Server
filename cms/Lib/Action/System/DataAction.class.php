@@ -851,6 +851,8 @@ class DataAction extends BaseAction
 //                $objActSheet->setCellValue('G1', '城市');
 //                $objActSheet->setCellValue('H1', 'QQ');
                 $objActSheet->setCellValue('E1', 'Registration Time');
+                $objActSheet->setCellValue('F1', 'Total Orders');
+                $objActSheet->setCellValue('G1', 'Last Order Time');
 //                $objActSheet->setCellValue('J1', '注册IP');
 //                $objActSheet->setCellValue('K1', '最后登录时间');
 //                $objActSheet->setCellValue('L1', '最后登录IP');
@@ -863,11 +865,24 @@ class DataAction extends BaseAction
 
 
                 $user_list = $database_user->field(true)->where($where)->limit($i * 1000 . ',1000')->order('add_time desc')->select();
+
                 if (!empty($user_list)) {
                     import('ORG.Net.IpLocation');
                     $IpLocation = new IpLocation();
                     $index = 2;
                     foreach ($user_list as $value) {
+                        //第一次 获取订单总数及最后一张的订单时间
+                        $where_order['uid'] = $value['uid'];
+                        $where_order['status'] = array('between',array(2,3));
+                        $where_order['is_del'] = 0;
+                        $orderCount = D('Shop_order')->where($where_order)->count();
+                        $lastTime = D('Shop_order')->where($where_order)->order('use_time desc')->find();
+                        $lastTime['use_time'] = $lastTime['use_time'] ? $lastTime['use_time'] : 0;
+
+                        D('User')->where(array('uid'=>$value['uid']))->save(array('order_num'=>$orderCount,'last_order_time'=>$lastTime['use_time']));
+
+                        $value['order_num'] = $orderCount;
+                        $value['last_order_time'] = $lastTime['use_time'];
 
                         $objActSheet->setCellValueExplicit('A' . $index, $value['uid']);
                         $objActSheet->setCellValueExplicit('B' . $index, $value['nickname']);
@@ -881,7 +896,8 @@ class DataAction extends BaseAction
 //                        $objActSheet->setCellValueExplicit('G' . $index, $value['city']);
 //                        $objActSheet->setCellValueExplicit('H' . $index, $value['qq'] . ' ');
                         $objActSheet->setCellValueExplicit('E' . $index, date('Y-m-d H:i:s', $value['add_time']));
-
+                        $objActSheet->setCellValueExplicit('F' . $index, $value['order_num']);
+                        $objActSheet->setCellValueExplicit('G' . $index, $value['last_order_time'] == 0 ? 0 : date('Y-m-d H:i:s', $value['last_order_time']));
 //                        $last_location = $IpLocation->getlocation(long2ip($value['add_ip']));
 //                        $add_ip = iconv('GBK', 'UTF-8', $last_location['country']);
 //                        $objActSheet->setCellValueExplicit('J' . $index, $add_ip);
