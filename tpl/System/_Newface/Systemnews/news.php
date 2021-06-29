@@ -39,6 +39,7 @@
                                     <form action="{pigcms{:U('Systemnews/news')}" method="get">
                                         <input type="hidden" name="c" value="Systemnews"/>
                                         <input type="hidden" name="a" value="news"/>
+                                        <input type="hidden" name="category_id" value="{pigcms{$category_id}"/>
                                         {pigcms{:L('F_FILTER')}:
                                         <input type="text" name="keyword" class="form-control" value="{pigcms{$_GET['keyword']}"/>
                                         <select name="searchtype" class="form-control">

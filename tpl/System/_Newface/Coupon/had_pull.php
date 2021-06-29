@@ -35,7 +35,7 @@
                         <div class="table-responsive">
                             <!-------------------------------- 工具条 -------------------------------------->
                             <div style="margin-bottom: 10px;min-height: 50px">
-                                <div id="tool_bar" class="form-inline tutti_toolbar">
+                                <div id="tool_bar" class="form-inline ">
                                     <form action="{pigcms{:U('Coupon/had_pull')}" method="get">
                                         <input type="hidden" name="c" value="Coupon"/>
                                         <input type="hidden" name="a" value="had_pull"/>
@@ -51,7 +51,7 @@
                                     </form>
                                 </div>
                             </div>
-                        </div>
+
                         <table class="table table-striped table-bordered table-hover dataTables-example">
                             <thead>
                             <tr>
@@ -91,6 +91,7 @@
                             </tr>
                             </tfoot>
                         </table>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -24,6 +24,7 @@ class CouponAction extends BaseAction {
             }else{
                 $this->assign('city_id',0);
             }
+
 			$condition_coupon['delete'] = 0;
 			if($this->system_session['level'] == 3)
                 $condition_coupon['city_id'] = $this->system_session['area_id'];

@@ -109,7 +109,7 @@
                                 </div>
                                 </form>
                             </div>
-                        </div>
+
                         <table class="table table-striped table-bordered table-hover dataTables-example">
                             <thead>
                             <tr>
@@ -175,6 +175,7 @@
                             </tr>
                             </tfoot>
                         </table>
+                        </div>
                     </div>
                 </div>
             </div>

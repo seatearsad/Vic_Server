@@ -217,18 +217,19 @@
                                         <td>
                                             <if condition="$vo.paid eq 0">
                                                 <a href="#" title='{pigcms{:L("_UNPAID_TXT_")}'>
-                                                    <li class="fa fa-circle-o tutti_icon_default"></li>
-                                                    <else/>
-                                                    <a href="#" title='{pigcms{$vo.status_str}'>
-                                                        <if condition="$vo.status eq 2 or $vo.status eq 3 or $vo.status eq 1">
-                                                            <li class="fa fa-check-circle tutti_icon_ok"></li>
-                                                        </if>
-                                                        <if condition="$vo.status eq 4 or $vo.status eq 5">
-                                                            <li class="fa fa-ban tutti_icon_default"></li>
-                                                        </if>
-                                                        <if condition="$vo.status eq 0">
-                                                            <li class="fa fa-circle tutti_icon_danger"></li>
-                                                        </if>
+                                                   <b>-</b>
+                                             <else/>
+                                                <a href="#" title='{pigcms{$vo.status_str}'>
+                                                    <if condition="$vo.status eq 2 or $vo.status eq 3 or $vo.status eq 1">
+                                                        <li class="fa fa-check-circle tutti_icon_ok"></li>
+                                                    </if>
+                                                    <if condition="$vo.status eq 4 or $vo.status eq 5">
+                                                        <b>-</b>
+<!--                                                        <li class="fa fa-ban tutti_icon_default"></li>-->
+                                                    </if>
+                                                    <if condition="$vo.status eq 0">
+                                                        <li class="fa fa-circle tutti_icon_danger"></li>
+                                                    </if>
                                             </if>
                                             </a>
                                         </td>
