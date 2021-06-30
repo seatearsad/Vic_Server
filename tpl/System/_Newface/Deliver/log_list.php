@@ -5,16 +5,20 @@
     <!----------------------------------------    以上不要写代码     ------------------------------------------------>
     <div class="row wrapper border-bottom white-bg page-heading">
         <div class="col-lg-8">
-            <h2>{pigcms{:L('_BACK_COURIER_MANA_')}</h2>
+            <h2>{pigcms{:L('_BACK_HISTORY_DELI_')}</h2>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                    <a href="{pigcms{:U('Index/index')}">Home</a>
+                    {pigcms{:L('_BACK_DLVMNG_')}
                 </li>
                 <!--                <li class="breadcrumb-item">-->
                 <!--                    <a>UI Elements</a>-->
                 <!--                </li>-->
-                <li class="breadcrumb-item active">
-                    <strong>{pigcms{:L('_BACK_COURIER_MANA_')}</strong>
+
+                <li class="breadcrumb-item">
+                    <a href="{pigcms{:U('Deliver/user')}" style="text-decoration:underline;">{pigcms{:L('_BACK_COURIER_MANA_')}</a>
+                </li>
+                <li class="breadcrumb-item">
+                    【{pigcms{$user['name']}】{pigcms{:L('_BACK_HISTORY_DELI_')}
                 </li>
             </ol>
         </div>
@@ -27,15 +31,15 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="ibox ">
-                    <div class="ibox-title">
-                        <h5>【{pigcms{$user['name']}】{pigcms{:L('_BACK_COURIER_OVER_')}</h5>
-                        <div class="ibox-tools">
-                            <if condition="$system_session['level'] neq 3">
-                                <div style="margin-left:40px;">
-                                </div>
-                            </if>
-                        </div>
-                    </div>
+<!--                    <div class="ibox-title">-->
+<!--                        <h5>{pigcms{:L('_BACK_COURIER_OVER_')}</h5>-->
+<!--                        <div class="ibox-tools">-->
+<!--                            <if condition="$system_session['level'] neq 3">-->
+<!--                                <div style="margin-left:40px;">-->
+<!--                                </div>-->
+<!--                            </if>-->
+<!--                        </div>-->
+<!--                    </div>-->
                     <div class="ibox-content">
                         <!-------------------------------- 工具条 -------------------------------------->
 

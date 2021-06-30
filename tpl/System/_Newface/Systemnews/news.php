@@ -8,13 +8,16 @@
             <h2>{pigcms{:L('I_ARTICLES')}</h2>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                    <a href="{pigcms{:U('Index/index')}">Home</a>
+                    {pigcms{:L('G_SYSTME_SETTINGS')}
                 </li>
                 <!--                <li class="breadcrumb-item">-->
                 <!--                    <a>UI Elements</a>-->
                 <!--                </li>-->
                 <li class="breadcrumb-item active">
-                    <strong>{pigcms{:L('I_ARTICLES')}</strong>
+                    <a href="{pigcms{:U('Systemnews/index')}" style="text-decoration: underline">{pigcms{:L('I_ARTICLES')}</a>
+                </li>
+                <li class="breadcrumb-item active">
+                    <strong>【{pigcms{$category_name}】 - Article List </strong>
                 </li>
             </ol>
         </div>

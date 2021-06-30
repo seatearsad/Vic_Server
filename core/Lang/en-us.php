@@ -2061,6 +2061,15 @@ return array(
     "COURIER_BKADMIN"=>"Courier",
     "_BACK_Universial_INFO_"=>"Universial",
     "_BACK_COUPON_ID_"=>"Coupon ID",
+    "_BACK_USERMNG_"=>"User Management",
+    "_BACK_ORDERMNG_"=>"Orders",
+    "_BACK_DLVASETTING_"=>"Service Area Setting",
+    "_BACK_STORECATE_"=>"Store Categories",
+    "_BACK_DLVMNG_"=>"Delivery Management",
+    "_BACK_NEWCOURIERVERFICATION_"=>"New Courier Verification",
+    "_BACK_MERCHANTMNG_"=>"Merchant Management",
+    "_BACK_MARKETING_"=>"Marketing",
+
 
     "F_REGISTRATION_INVITED"=>"Registration Invited",
     "F_ORDERS_INVITED"=>"Orders Invited",

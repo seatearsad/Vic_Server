@@ -1,14 +1,14 @@
 <include file="Public:header"/>
 <div id="wrapper">
     <include file="Public:left_menu"/>
-    <!----------------------------------------    以上不要写代码     ------------------------------------------------>
 
+    <!----------------------------------------    以上不要写代码     ------------------------------------------------>
     <div class="row wrapper border-bottom white-bg page-heading">
         <div class="col-lg-9">
             <h2>{pigcms{:L('I_ABOUT_US')}</h2>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                    <a href="{pigcms{:U('Index/index')}">Home</a>
+                    {pigcms{:L('G_SYSTME_SETTINGS')}
                 </li>
                 <!--                <li class="breadcrumb-item">-->
                 <!--                    <a>UI Elements</a>-->
@@ -22,6 +22,7 @@
             <a href="javascript:void(0);" onclick="winCourier Monitoringdow.top.artiframe('{pigcms{:U('Appintro/add')}','{pigcms{:L(\'I_ADD_INFORMATION\')}',800,460,true,false,false,addbtn,'add',true);"><button type="button" class="btn btn-primary btn-sm float-right">{pigcms{:L('I_ADD_INFORMATION')}</button></a>
         </div>
     </div>
+
     <div class="row wrapper wrapper-content animated fadeInRight">
         <div class="col-lg-12">
             <div class="ibox ">

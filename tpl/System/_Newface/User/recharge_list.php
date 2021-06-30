@@ -5,16 +5,16 @@
 
     <div class="row wrapper border-bottom white-bg page-heading">
         <div class="col-lg-9">
-            <h2>{pigcms{:L('F_TOP_UP_LIST')}</h2>
+            <h2>{pigcms{:L('F_TOP_HISTORY')}</h2>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                    <a href="{pigcms{:U('Index/index')}">Home</a>
+                    {pigcms{:L('_BACK_USERMNG_')}
                 </li>
                 <!--                <li class="breadcrumb-item">-->
                 <!--                    <a>UI Elements</a>-->
                 <!--                </li>-->
                 <li class="breadcrumb-item active">
-                    <strong>{pigcms{:L('F_TOP_UP_LIST')}</strong>
+                    <strong>{pigcms{:L('F_TOP_HISTORY')}</strong>
                 </li>
             </ol>
         </div>

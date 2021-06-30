@@ -44,6 +44,7 @@ class ShopAction extends BaseAction
             $v['store_num'] = count($allList);
         }
         $this->assign('category', $category);
+        $this->assign('category_name', lang_substr_with_default_lang($category["cat_name"]));
         $this->assign('category_list', $category_list);
         $this->assign('parentid', $parentid);
 

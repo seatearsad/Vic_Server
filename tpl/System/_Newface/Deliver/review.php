@@ -5,16 +5,16 @@
 
     <div class="row wrapper border-bottom white-bg page-heading">
         <div class="col-lg-9">
-            <h2>{pigcms{:L('_BACK_COURIER_APP_')}</h2>
+            <h2>{pigcms{:L('_BACK_NEWCOURIERVERFICATION_')}</h2>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                    <a href="{pigcms{:U('Index/index')}">Home</a>
+                    {pigcms{:L('_BACK_DLVMNG_')}
                 </li>
                 <!--                <li class="breadcrumb-item">-->
                 <!--                    <a>UI Elements</a>-->
                 <!--                </li>-->
                 <li class="breadcrumb-item active">
-                    <strong>{pigcms{:L('_BACK_COURIER_APP_')}</strong>
+                    <strong>{pigcms{:L('_BACK_NEWCOURIERVERFICATION_')}</strong>
                 </li>
             </ol>
         </div>
