@@ -2060,6 +2060,7 @@ return array(
     "CUSTOMER_BKADMIN"=>"Customer",
     "COURIER_BKADMIN"=>"Courier",
     "_BACK_Universial_INFO_"=>"Universial",
+    "_BACK_COUPON_ID_"=>"Coupon ID",
 
     "F_REGISTRATION_INVITED"=>"Registration Invited",
     "F_ORDERS_INVITED"=>"Orders Invited",

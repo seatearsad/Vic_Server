@@ -20,7 +20,7 @@
         </div>
         <div class="col-lg-3" style="height 90px;margin-top:40px;">
             <div class="btn-group float-right">
-                <button class="btn btn-white active">
+                <button class="btn btn-white">
                     <a href="{pigcms{:U('Coupon/index')}" style="color: inherit">{pigcms{:L('_BACK_COUPON_LIST_')}</a>
                 </button>
             </div>
@@ -42,10 +42,9 @@
                                         {pigcms{:L('_BACK_SEARCH_')}:
                                         <input type="text" name="keyword" class="form-control" value="{pigcms{$_GET['keyword']}"/>
                                         <select name="searchtype" class="form-control">
-                                            <option value="name" <if condition="$_GET['searchtype'] eq 'name'">selected="selected"</if>>{pigcms{:L('_BACK_COUPON_NAME_')}</option>
                                             <option value="nickname" <if condition="$_GET['searchtype'] eq 'nickname'">selected="selected"</if>>{pigcms{:L('_BACK_LOGIN_NAME_')}</option>
                                             <option value="uid" <if condition="$_GET['searchtype'] eq 'uid'">selected="selected"</if>>{pigcms{:L('F_USER_ID')}</option>
-                                            <option value="code" <if condition="$_GET['searchtype'] eq 'code'">selected="selected"</if>>{pigcms{:L('_BACK_PICK_KEY_')}</option>
+                                            <option value="cid" <if condition="$_GET['searchtype'] eq 'cid'">selected="selected"</if>>{pigcms{:L('_BACK_COUPON_ID_')}</option>
                                         </select>
                                         <input type="submit" value="{pigcms{:L('_BACK_SEARCH_')}" class="form-control"/>
                                     </form>

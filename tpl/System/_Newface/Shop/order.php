@@ -152,7 +152,7 @@
                         </div>
                         <!------------------------------------------------------------------------------>
                         <!-- <form name="myform" id="myform" action="" method="post">-->
-                        <table class=" table table-stripped toggle-arrow-tiny" data-page-size="20"
+                        <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="20"
                                data-sorting="false">
                             <thead>
                             <tr>

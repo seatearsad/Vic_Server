@@ -24,7 +24,6 @@ class CouponAction extends BaseAction {
             }else{
                 $this->assign('city_id',0);
             }
-
 			$condition_coupon['delete'] = 0;
 			if($this->system_session['level'] == 3)
                 $condition_coupon['city_id'] = $this->system_session['area_id'];
@@ -321,14 +320,13 @@ class CouponAction extends BaseAction {
 			$order_string = 'h.receive_time DESC ,h.id DESC';
 			$where['h.uid']=array('neq','');
 			if(!empty($_GET['keyword'])){
-				if ($_GET['searchtype'] == 'name') {
-					$where['c.name'] =  array('like', "%".$_GET['keyword']."%");
-				} elseif ($_GET['searchtype'] == 'nickname') {
+				if ($_GET['searchtype'] == 'nickname') {
 					$where['u.nickname'] =array('like', "%".$_GET['keyword']."%");
 				}elseif ($_GET['searchtype'] == 'uid'){
                     $where['h.uid'] = $_GET['keyword'];
-                }elseif ($_GET['searchtype'] == 'code'){
-                    $where['c.notice'] = $_GET['keyword'];
+                }elseif ($_GET['searchtype'] == 'cid'){
+                    $where['c.coupon_id'] = $_GET['keyword'];
+                    //$where['c.notice'] = $_GET['keyword'];
                 }
 			}
             if($this->system_session['level'] == 3) {

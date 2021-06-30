@@ -2061,7 +2061,7 @@ return array(
     "COURIER_BKADMIN"=>"送餐员",
     "_BACK_COURIER_INFO_"=>"送餐员",
     "_BACK_Universial_INFO_"=>"通用",
-
+    "_BACK_COUPON_ID_"=>"优惠券ID",
 
     "F_REGISTRATION_INVITED"=>"邀请注册数",
     "F_ORDERS_INVITED"=>"邀请下单数",

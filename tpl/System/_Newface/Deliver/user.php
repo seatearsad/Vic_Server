@@ -41,6 +41,7 @@
                         </div>
                     </div>
                     <div class="ibox-content">
+                        <div class="table-responsive">
                         <!-------------------------------- 工具条 -------------------------------------->
                         <div style="margin-bottom: 10px;min-height: 50px">
                                 <div id="tool_bar" style="form-group " style="height: 80px;">
@@ -134,6 +135,7 @@
                         </table>
                         <div id="table_pagebar" style="height: 30px;">
 
+                        </div>
                         </div>
                     </div>
                 </div>
