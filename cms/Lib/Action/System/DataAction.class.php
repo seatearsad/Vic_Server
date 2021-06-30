@@ -871,7 +871,8 @@ class DataAction extends BaseAction
                     $IpLocation = new IpLocation();
                     $index = 2;
                     foreach ($user_list as $value) {
-                        //第一次 获取订单总数及最后一张的订单时间
+
+                        /** 第一次 获取订单总数及最后一张的订单时间
                         $where_order['uid'] = $value['uid'];
                         $where_order['status'] = array('between',array(2,3));
                         $where_order['is_del'] = 0;
@@ -883,6 +884,7 @@ class DataAction extends BaseAction
 
                         $value['order_num'] = $orderCount;
                         $value['last_order_time'] = $lastTime['use_time'];
+                         */
 
                         $objActSheet->setCellValueExplicit('A' . $index, $value['uid']);
                         $objActSheet->setCellValueExplicit('B' . $index, $value['nickname']);
