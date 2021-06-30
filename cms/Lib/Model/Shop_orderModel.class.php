@@ -1292,38 +1292,41 @@ class Shop_orderModel extends Model
 // 			}
 
 			//配送状态（0：订单生产，1:店员接单，2：配送员接单，3：配送员取货，4：送达，5：确认收货，6，配送结束）
-			switch ($order['order_status']) {
-				case 0:
-					if ($order['is_pick_in_store'] == 2) {
-						$order['deliver_status_str'] = L("_ORDER_STATUS_0_");  //'待提货'
-					} else {
-						$order['deliver_status_str'] = L("_ORDER_STATUS_1_");  //'待发货';
-					}
-					break;
-				case 1:
-					$order['deliver_status_str'] = L("_ORDER_STATUS_2_");  //'店铺已接单';
-					break;
-				case 2:
-					$order['deliver_status_str'] = L("_ORDER_STATUS_3_");  //配送员接单';
-					break;
-				case 3:
-					$order['deliver_status_str'] = L("_ORDER_STATUS_4_");  //'配送员取货';
-					break;
-				case 4:
-					$order['deliver_status_str'] =L("_ORDER_STATUS_5_");  // '配送中';
-					break;
-				case 5:
-					$order['deliver_status_str'] =L("_ORDER_STATUS_6_");  // '确认收货';
-					break;
-				case 6:
-					if ($order['is_pick_in_store'] == 2) {
-						$order['deliver_status_str'] =L("_ORDER_STATUS_7_");  // '已提货';
-					} else {
-						$order['deliver_status_str'] =L("_ORDER_STATUS_6_");  // '配送完成';
-					}
-					break;
-			}
-
+			if($order['status']==4 || $order['status']==5){
+                $order['deliver_status_str'] ="-";  //'待发货';
+			}else{
+				switch ($order['order_status']) {
+					case 0:
+						if ($order['is_pick_in_store'] == 2) {
+							$order['deliver_status_str'] = L("_ORDER_STATUS_0_");  //'待提货'
+						} else {
+							$order['deliver_status_str'] = L("_ORDER_STATUS_1_");  //'待发货';
+						}
+						break;
+					case 1:
+						$order['deliver_status_str'] = L("_ORDER_STATUS_2_");  //'店铺已接单';
+						break;
+					case 2:
+						$order['deliver_status_str'] = L("_ORDER_STATUS_3_");  //配送员接单';
+						break;
+					case 3:
+						$order['deliver_status_str'] = L("_ORDER_STATUS_4_");  //'配送员取货';
+						break;
+					case 4:
+						$order['deliver_status_str'] =L("_ORDER_STATUS_5_");  // '配送中';
+						break;
+					case 5:
+						$order['deliver_status_str'] =L("_ORDER_STATUS_6_");  // '确认收货';
+						break;
+					case 6:
+						if ($order['is_pick_in_store'] == 2) {
+							$order['deliver_status_str'] =L("_ORDER_STATUS_7_");  // '已提货';
+						} else {
+							$order['deliver_status_str'] =L("_ORDER_STATUS_6_");  // '配送完成';
+						}
+						break;
+				}
+            }
 			$order['pay_type_str'] = D('Pay')->get_pay_name_2($order['pay_type'], $order['is_mobile_pay'], $order['paid'],$order['uid']);
 
 		}

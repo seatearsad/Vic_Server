@@ -224,8 +224,7 @@
                                                         <li class="fa fa-check-circle tutti_icon_ok"></li>
                                                     </if>
                                                     <if condition="$vo.status eq 4 or $vo.status eq 5">
-                                                        <b>-</b>
-<!--                                                        <li class="fa fa-ban tutti_icon_default"></li>-->
+                                                       <li class="fa fa-ban tutti_icon_default"></li>
                                                     </if>
                                                     <if condition="$vo.status eq 0">
                                                         <li class="fa fa-circle tutti_icon_danger"></li>
