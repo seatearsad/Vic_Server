@@ -18,7 +18,7 @@
                     <a href="{pigcms{:U('Deliver/user')}" style="text-decoration:underline;">{pigcms{:L('_BACK_COURIER_MANA_')}</a>
                 </li>
                 <li class="breadcrumb-item">
-                    【{pigcms{$user['name']}】{pigcms{:L('_BACK_HISTORY_DELI_')}
+                    <strong>【{pigcms{$user['name']}】{pigcms{:L('_BACK_HISTORY_DELI_')}</strong>
                 </li>
             </ol>
         </div>

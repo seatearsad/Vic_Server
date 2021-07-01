@@ -2071,6 +2071,7 @@ return array(
     "_BACK_MERCHANTMNG_"=>"商户管理",
     "_BACK_MARKETING_"=>"推广营销",
     "_BACK_MARKETING_"=>"推广营销",
+    "_BACK_DATAANALYSIS_"=>"数据分析",
 
     "F_REGISTRATION_INVITED"=>"邀请注册数",
     "F_ORDERS_INVITED"=>"邀请下单数",

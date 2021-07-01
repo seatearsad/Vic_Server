@@ -2069,7 +2069,7 @@ return array(
     "_BACK_NEWCOURIERVERFICATION_"=>"New Courier Verification",
     "_BACK_MERCHANTMNG_"=>"Merchant Management",
     "_BACK_MARKETING_"=>"Marketing",
-
+    "_BACK_DATAANALYSIS_"=>"Data Analysis",
 
     "F_REGISTRATION_INVITED"=>"Registration Invited",
     "F_ORDERS_INVITED"=>"Orders Invited",

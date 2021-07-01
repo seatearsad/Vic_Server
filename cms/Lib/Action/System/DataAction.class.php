@@ -57,6 +57,35 @@ class DataAction extends BaseAction
         $this->display();
     }
 
+    public function sales_ana(){
+        $status_list = array(
+            1=>'Complete',
+            2=>'Cancelled'
+        );
+        $this->assign('status_list', $status_list);
+
+        $city = D('Area')->where(array('area_type'=>2,'is_open'=>1))->select();
+        $this->assign('city',$city);
+
+        $pay_method = D('Config')->get_pay_method('','',0);
+        foreach ($pay_method as $k=>&$v){
+            switch ($k){
+                case 'offline':
+                    $v['name'] = 'Cash';
+                    break;
+                case 'alipay':
+                    $v['name'] = 'AliPay';
+                    break;
+                case 'weixin':
+                    $v['name'] = 'Wechat Pay';
+                    break;
+                default:
+                    break;
+            }
+        }
+        $this->assign('pay_method',$pay_method);
+        $this->display();
+    }
     public function order(){
         set_time_limit(0);
         require_once APP_PATH . 'Lib/ORG/phpexcel/PHPExcel.php';
