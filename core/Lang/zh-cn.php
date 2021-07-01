@@ -2169,7 +2169,7 @@ return array(
     "BASE_UPLOADIMAGE"=>"上传图片",
     "BASE_ADD"=>"添加",
     "BASE_CLOSE"=>"关闭",
-    "A_ANALYSIS"=>"概况",
+    "A_ANALYSIS"=>"数据分析",
     "B_INFO"=>"基本信息",
     "B_PASSWORD"=>"修改密码",
     "B_OLDPASS"=>"旧密码",
