@@ -156,6 +156,7 @@
     </div>
     <script src="{pigcms{$static_path}js/plugins/chartJs/Chart.min.js"></script>
     <script>
+
         $(document).ready(function() {
             var select_day = $('#main_select').children('button.active').data('type');
             var user_title = $('#main_select').children('button.active').html();

@@ -20,16 +20,16 @@
         </div>
         <div class="col-lg-8 float-right " style="">
             <div class="btn-group float-right" style="margin-top: 20px;">
-                <span style="white-space: nowrap">{pigcms{:L('_BACK_DATE_SELECT_')}：</span>
-                <input type="text" class="form-control" name="begin_time" style="width:120px;"
+                <lable style="white-space: nowrap;margin-top: 8px;">{pigcms{:L('_BACK_DATE_SELECT_')}：</lable>
+                <input type="text" class="form-control" id="begin_time" style="width:120px;height: 34px;"
                        id="d4311" value="{pigcms{$begin_time}"
                        onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd',lang:'en'})"/>&nbsp;
-                <input type="text" class="form-control" name="end_time" style="width:120px;"
+                <input type="text" class="form-control" id="end_time" style="width:120px;height: 34px;"
                        id="d4311" value="{pigcms{$end_time}"
                        onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd',lang:'en'})"/>&nbsp;
                 <if condition="$system_session['level'] neq 3">
-                 <span style="white-space: nowrap">    City:&nbsp;&nbsp;</span>
-                    <select name="city_id" id="city_id" class="form-control">
+                 <lable style="white-space: nowrap;margin-top: 8px;">&nbsp;&nbsp;City:&nbsp;&nbsp;</lable>
+                    <select name="city_id" id="city_id" class="form-control" style="height: 34px;">
                         <option value="0"
                         <if condition="$city_id eq '' or $city_id eq 0">selected="selected"</if>
                         >All</option>
@@ -40,7 +40,7 @@
                         </volist>
                     </select>
                 </if>&nbsp;&nbsp;
-                <input type="submit" value="{pigcms{:L('_BACK_SEARCH_')}" class="form-control"/>　
+                <input type="submit" id="search" value="{pigcms{:L('_BACK_SEARCH_')}" class="form-control"/>　
             </div>
         </div>
     </div>
@@ -86,7 +86,7 @@
             <div class="ibox ">
                 <div class="ibox-title">
                     <div class="ibox-tools">
-                        <span class="label label-primary float-right">Today</span>
+<!--                        <span class="label label-primary float-right">Today</span>-->
                     </div>
                     <h5>Cash Flow</h5>
                 </div>
@@ -99,7 +99,7 @@
             <div class="ibox ">
                 <div class="ibox-title">
                     <div class="ibox-tools">
-                        <span class="label label-primary float-right" id="user_title">Today</span>
+<!--                        <span class="label label-primary float-right" id="user_title">Today</span>-->
                     </div>
                     <h5>Total Registration</h5>
                 </div>
@@ -114,16 +114,47 @@
     </div>
     <script src="{pigcms{$static_path}js/plugins/chartJs/Chart.min.js"></script>
     <script>
+        $('#search').click(function () {
+            search_click();
+        });
+        function search_click() {
+            var begin_time = $('#begin_time').val();
+            var end_time = $('#end_time').val();
+            // var user_title = $('#main_select').children('button.active').html();
+            var city_id = $('#city_id').val();
+            //alert(begin_time+"--"+end_time+"--"+city_id);
+            getData(begin_time,end_time,city_id);
+        }
+        function getNowFormatDate(days) {
+            var dateTime = new Date();
+            dateTime=dateTime.setDate(dateTime.getDate()+days);
+            dateTime=new Date(dateTime);
+            var seperator1 = "-";
+            var year = dateTime.getFullYear();
+            var month = dateTime.getMonth() + 1;
+            var strDate = dateTime.getDate();
+            if (month >= 1 && month <= 9) {
+                month = "0" + month;
+            }
+            if (strDate >= 0 && strDate <= 9) {
+                strDate = "0" + strDate;
+            }
+            var currentdate = year + seperator1 + month + seperator1 + strDate;
+            return currentdate;
+        }
+
         $(document).ready(function() {
+            $('#begin_time').val(getNowFormatDate(-7));
+            $('#end_time').val(getNowFormatDate(0));
             // var select_day = $('#main_select').children('button.active').data('type');
             // var user_title = $('#main_select').children('button.active').html();
             // var city_id = $('#city_select').val();
-
+            search_click();
             //getData(select_day,city_id,user_title);
-            getData("2018-1-1","2020-1-1",105);
+            //getData("2018-1-1","2020-1-1",105);
         });
 
-        var dc=null;
+        var dd=null;
         function getData(begin_time,end_time,city_id){
             var re_data = {'begin_time':begin_time,'end_time':end_time,'city_id':city_id};
             //$("#user_title").html(user_title);
