@@ -489,13 +489,12 @@ class IndexAction extends BaseAction {
 
             $city_id = $_POST['city_id'] == 0 ? 105 : $_POST['city_id'];
 
-            //$today_zero_time = mktime(0,0,0,date('m',$_SERVER['REQUEST_TIME']),date('d',$_SERVER['REQUEST_TIME']), date('Y',$_SERVER['REQUEST_TIME']));
-            $today_zero_time = mktime(0, 0, 0, 1, 5, 2018);
+            $today_zero_time = mktime(0,0,0,date('m',$_SERVER['REQUEST_TIME']),date('d',$_SERVER['REQUEST_TIME']), date('Y',$_SERVER['REQUEST_TIME']));
+            //$today_zero_time = mktime(0, 0, 0, 1, 5, 2018);
             $begin_time = $today_zero_time - ($days - 1) * 3600 * 24;
             //$end_time = time();
             $end_time = $today_zero_time + 3600 * 24;
             $condition_merchant_request['pay_time'] = array(array('egt', $begin_time), array('elt', $end_time));
-
             $condition_merchant_request['status'] = array('lt', 4);
             $condition_merchant_request['is_del'] = 0;
             $condition_merchant_request['paid'] = 1;
@@ -593,19 +592,22 @@ class IndexAction extends BaseAction {
             //$end_time = time();
             //$end_time = $today_zero_time + 3600 * 24;
 
+            $today_zero_time = mktime(0,0,0,date('m',$_SERVER['REQUEST_TIME']),date('d',$_SERVER['REQUEST_TIME']), date('Y',$_SERVER['REQUEST_TIME']));
+            //$today_zero_time = mktime(0, 0, 0, 1, 5, 2018);
+            $today_end_time = $today_zero_time + 3600 * 24;
+            $condition_today_request['o.pay_time'] = array(array('egt', $today_zero_time), array('elt', $today_end_time));
+            $condition_today_request['o.status'] = array('lt', 4);
+            $condition_today_request['o.is_del'] = 0;
+            $condition_today_request['o.paid'] = 1;
+            $condition_today_request['m.city_id'] = $city_id;
+            $today = M('Shop_order')->field('sum(o.total_price+o.tip_charge-o.coupon_price-o.delivery_discount-o.merchant_reduce) as total_cash')->join(' as o left join ' . C('DB_PREFIX') . 'merchant_store m ON m.store_id=o.store_id')->where($condition_today_request)->select();
+            $today_cash = $today[0]['total_cash'];
+
             $condition_merchant_request['o.pay_time'] = array(array('egt', $begin_time), array('elt', $end_time));
             $condition_merchant_request['o.status'] = array('lt', 4);
             $condition_merchant_request['o.is_del'] = 0;
             $condition_merchant_request['o.paid'] = 1;
             $condition_merchant_request['m.city_id'] = $city_id;
-            $today = M('Shop_order')->field('sum(o.total_price+o.tip_charge-o.coupon_price-o.delivery_discount-o.merchant_reduce) as total_cash')->join(' as o left join ' . C('DB_PREFIX') . 'merchant_store m ON m.store_id=o.store_id')->where($condition_today_request)->select();
-            $today_cash = $today[0]['total_cash'];
-
-            $condition_today_request['o.pay_time'] = array(array('egt', $begin_time), array('elt', $end_time));
-            $condition_today_request['o.status'] = array('lt', 4);
-            $condition_today_request['o.is_del'] = 0;
-            $condition_today_request['o.paid'] = 1;
-            $condition_today_request['m.city_id'] = $city_id;
             $res_shop = M('Shop_order')->field('o.total_price+o.tip_charge-o.coupon_price-o.delivery_discount-o.merchant_reduce as cash_flow,o.total_price+o.tip_charge as sales,o.payment_money ,o.pay_type,o.pay_time')->join(' as o left join ' . C('DB_PREFIX') . 'merchant_store m ON m.store_id=o.store_id')->where($condition_merchant_request)->order('pay_time asc')->select();
 
 //            $condition_city_request['o.pay_time'] = array(array('egt', $today_zero_time), array('elt', $end_time));
@@ -629,17 +631,17 @@ class IndexAction extends BaseAction {
             }
             //ksort($data_array);
             //user
-            $condition_user['add_time'] = array(array('egt', $begin_time), array('elt', $end_time));
-            $condition_user['status'] = 1;
-            $all_user = D('User')->field('count(uid) as total')->where($condition_user)->select();
-            $all_user = $all_user[0]['total'];
-
-            $condition_city_user['u.add_time'] = array(array('egt', $today_zero_time), array('elt', $end_time));
-            $condition_city_user['u.status'] = 1;
-            $condition_city_user['a.city'] = $city_id;
-            $condition_city_user['a.default'] = 1;
-            $city_user = D('User')->field('count(u.uid) as total')->join(' as u left join ' . C('DB_PREFIX') . 'user_adress a ON a.uid=u.uid')->where($condition_city_user)->select();
-            $city_user = $city_user[0]['total'];
+//            $condition_user['add_time'] = array(array('egt', $begin_time), array('elt', $end_time));
+//            $condition_user['status'] = 1;
+//            $all_user = D('User')->field('count(uid) as total')->where($condition_user)->select();
+//            $all_user = $all_user[0]['total'];
+//
+//            $condition_city_user['u.add_time'] = array(array('egt', $today_zero_time), array('elt', $end_time));
+//            $condition_city_user['u.status'] = 1;
+//            $condition_city_user['a.city'] = $city_id;
+//            $condition_city_user['a.default'] = 1;
+//            $city_user = D('User')->field('count(u.uid) as total')->join(' as u left join ' . C('DB_PREFIX') . 'user_adress a ON a.uid=u.uid')->where($condition_city_user)->select();
+//            $city_user = $city_user[0]['total'];
 
             ///city////
 //            $city_array = array();
