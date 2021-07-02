@@ -46,7 +46,7 @@
     </div>
     <div class="row wrapper wrapper-content animated fadeInRight" id="main_chart">
 
-        <div class="col-lg-9">
+        <div class="col-lg-12">
             <div class="ibox ">
                 <div class="ibox-content">
                     <div >
@@ -82,7 +82,7 @@
             </div>
         </div>
 
-        <div class="col-lg-3">
+        <div class=" tutti_hidden_obj">
             <div class="ibox ">
                 <div class="ibox-title">
                     <div class="ibox-tools">

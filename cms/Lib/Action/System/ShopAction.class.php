@@ -845,6 +845,10 @@ class ShopAction extends BaseAction
                 $this->error('订单不存在或已经删除，请刷新后重试');
             }
 
+            if (($shop_order_data['change_price']*1)>0){
+                $this->error('订单只能修改一次，修改失败！');
+            }
+
             //garfunkel add 记录原始价格
             $data['change_price'] = $shop_order_data['price'];
 

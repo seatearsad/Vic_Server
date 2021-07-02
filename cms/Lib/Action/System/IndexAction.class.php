@@ -49,7 +49,7 @@ class IndexAction extends BaseAction {
         if(isMobile()){
             $this->assign('height',' ');
         }else{
-            $this->assign('height',' height="70" ');
+            $this->assign('height',' height="100" ');
         }
 		$this->assign('updateinfo',$updateinfo);
         $this->assign('ver', $ver);

@@ -108,7 +108,7 @@
                     </div>
 
                     <div>
-                        <canvas id="lineCityChart"></canvas>
+                        <canvas id="lineCityChart" {pigcms{$height}></canvas>
                     </div>
 
                     <div class="m-t-md">

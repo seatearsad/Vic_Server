@@ -656,8 +656,12 @@ class DeliverAction extends BaseAction {
     public function log_list() 
     {
     	$uid = isset($_GET['uid']) ? intval($_GET['uid']) : 0;
-		$begin_time = isset($_GET['begin_time']) ? htmlspecialchars($_GET['begin_time']) : '';
-		$end_time = isset($_GET['end_time']) ? htmlspecialchars($_GET['end_time']) : '';
+
+		$begin_time = isset($_GET['begin_time']) ? strtotime(htmlspecialchars($_GET['begin_time']) ." 00:00:00"): '';
+		$end_time = isset($_GET['end_time']) ? strtotime(htmlspecialchars($_GET['end_time']) ." 23:59:59") : '';
+
+		$this->assign(array('begin_time' => $_GET['begin_time'], 'end_time' =>$_GET['end_time']));
+
     	$condition_user = array('mer_id' => 0, 'uid' => $uid);
         $user = $this->deliver_user->field(true)->where($condition_user)->find();
         if (empty($user)) $this->error('不存在的配送员');
@@ -668,10 +672,10 @@ class DeliverAction extends BaseAction {
         $sql_count .= ' WHERE s.type=0 AND s.uid=' . $uid;
         
 		if ($begin_time && $end_time) {
-			$sql .= ' AND s.start_time>' . strtotime($begin_time) . ' AND s.start_time<' . strtotime($end_time);
-			$sql_count .= ' AND s.start_time>' . strtotime($begin_time) . ' AND s.start_time<' . strtotime($end_time);
+			$sql .= ' AND s.start_time>' . ($begin_time) . ' AND s.start_time<' . ($end_time);
+			$sql_count .= ' AND s.start_time>' . ($begin_time) . ' AND s.start_time<' . ($end_time);
 		}
-		
+		//echo $sql;
         
         import('@.ORG.system_page');
         
@@ -716,7 +720,7 @@ class DeliverAction extends BaseAction {
         $this->assign('supply_info', $supply_info);
         $this->assign('pagebar', $p->show2());
         $this->assign('user', $user);
-		$this->assign(array('begin_time' => $begin_time, 'end_time' => $end_time));
+
         $this->display();
     }
     
