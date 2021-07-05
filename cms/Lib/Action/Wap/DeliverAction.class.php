@@ -1163,6 +1163,10 @@ class DeliverAction extends BaseAction
 						D('Pick_order')->where(array('store_id' => $order['store_id'], 'order_id' => $order['order_id']))->save(array('status' => 4));
 						$this->shop_notice($order);
 						D('Shop_order_log')->add_log(array('order_id' => $order_id, 'status' => 6, 'name' => $this->deliver_session['name'], 'phone' => $this->deliver_session['phone']));
+                        //更新用户订单数量信息
+						$user = D('User')->where(array('uid'=>$order['uid']))->find();
+						$userData = array('order_num'=>($user['order_num']+1),'last_order_time'=>$data['use_time']);
+						D('User')->where(array('uid'=>$order['uid']))->save($userData);
 
                         $store = D('Merchant_store')->where(array('store_id'=>$order['store_id']))->find();
                         $store['name'] = lang_substr($store['name'], 'en-us');

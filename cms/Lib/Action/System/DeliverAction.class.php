@@ -800,6 +800,11 @@ class DeliverAction extends BaseAction {
 	    						//D('User_money_list')->add_row($order['uid'], 2, $supply['deliver_cash'], '用户购买快店产品');
 	    					}
 	    				}
+                        //更新用户订单数量信息
+                        $user = D('User')->where(array('uid'=>$order['uid']))->find();
+                        $userData = array('order_num'=>($user['order_num']+1),'last_order_time'=>$data['use_time']);
+                        D('User')->where(array('uid'=>$order['uid']))->save($userData);
+
 	    				D('Pick_order')->where(array('store_id' => $order['store_id'], 'order_id' => $order['order_id']))->save(array('status' => 4));
 	    				$this->shop_notice($order);
 	    				D('Shop_order_log')->add_log(array('order_id' => $order['order_id'], 'status' => 6, 'name' => '系统管理员：' . $this->system_session['realname'], 'phone' => $this->system_session['phone']));

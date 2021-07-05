@@ -18,16 +18,16 @@ class BaseAction extends Action{
 				$_SERVER['REQUEST_SCHEME'] = 'http';
 			}
 		}
-		
+
 		$serverHost = '';
 		if(function_exists('getallheaders')){
 			$allheaders = getallheaders();
 			$serverHost = $allheaders['Host'];
 		}
-		if(empty($serverHost)){
-			$serverHost = $_SERVER['HTTP_HOST'];
-		}
 
+		if(empty($serverHost)) {
+            $serverHost = $_SERVER['HTTP_HOST'];
+        }
 
 		$this->check_merchant_file();
 		lang_substr_with_default_lang($this->config['site_name']);

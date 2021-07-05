@@ -164,8 +164,12 @@
 
             getData(select_day,city_id,user_title);
         });
+<<<<<<< HEAD
         var dd=null;
         var dc=null;
+=======
+        var all_times = 0;
+>>>>>>> master
         function getData(select_day,city_id,user_title){
             var re_data = {'day':select_day,'city_id':city_id};
             $("#user_title").html(user_title);
@@ -173,24 +177,40 @@
                 if(data == ""){
                     $("#main_chart").hide();
                 }else {
-                    $("#main_chart").show();
+                    if(typeof(data.total) == "undefined"){
+                        all_times++;
+                        if(all_times < 5) {
+                            setTimeout(function () {
+                                getData(select_day, city_id, user_title);
+                            }, 2000);
+                        }
+                    }else {
+                        all_times = 0;
+                        $("#main_chart").show();
 
+<<<<<<< HEAD
                     dd=data.data_array;
                     dc=data.city_array;
 
                     g_td=createChart(dd, 'lineChart',70);
                     g_tc=createChart(dc, 'lineCityChart',70);
+=======
+                        createChart(data.data_array, 'lineChart');
 
-                    $('#cash_total').html('$ ' + data.total);
-                    $('#today_cash').html(data.today_cash);
+                        createChart(data.city_array, 'lineCityChart');
+>>>>>>> master
 
-                    $('#city_total').html('$ ' + data.city_total);
-                    $('#city_total_label').html(data.city_total);
+                        $('#cash_total').html('$ ' + data.total);
+                        $('#today_cash').html('$ ' + data.today_cash);
 
-                    $('#city_select').val(data.city_id);
+                        $('#city_total').html('$ ' + data.city_total);
+                        $('#city_total_label').html('$ ' + data.city_total);
 
-                    $('#all_user').html(data.all_user);
-                    $('#city_user').html(data.city_user);
+                        $('#city_select').val(data.city_id);
+
+                        $('#all_user').html(data.all_user);
+                        $('#city_user').html(data.city_user);
+                    }
                 }
             });
         }
@@ -281,6 +301,30 @@
             };
 
             var lineOptions = {
+                hover: {
+                    animationDuration: 0  // 防止鼠标移上去，数字闪烁
+                },
+                "animation": {
+                    "duration": 1,
+                    "onComplete": function() {
+                        var chartInstance = this.chart,
+                            ctx = chartInstance.ctx;
+
+                        ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'bottom';
+
+                        this.data.datasets.forEach(function(dataset, i) {
+                                var meta = chartInstance.controller.getDatasetMeta(i);
+                                meta.data.forEach(function (bar, index) {
+                                    if( dataset.data.length <= 7 || (dataset.data.length > 7 && index%2 == 1)) {
+                                        var data = dataset.data[index];
+                                        ctx.fillText(data, bar._model.x, bar._model.y - 5);
+                                    }
+                                });
+                        });
+                    }
+                },
                 responsive: true
             };
 

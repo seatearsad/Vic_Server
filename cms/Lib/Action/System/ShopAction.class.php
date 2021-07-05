@@ -1022,6 +1022,23 @@ class ShopAction extends BaseAction
             }
             ///////
             if ($shop_order->where("order_id=$order_id")->data($data)->save()) {
+                //更新用户订单数量信息
+                if($now_order['status'] == 2 || $now_order['status'] == 3){
+                    $user = D('User')->where(array('uid'=>$now_order['uid']))->find();
+
+                    $where_order['uid'] = $now_order['uid'];
+                    $where_order['status'] = array('between',array(2,3));
+                    $where_order['is_del'] = 0;
+                    $lastTime = D('Shop_order')->where($where_order)->order('use_time desc')->find();
+                    $lastTime['use_time'] = $lastTime['use_time'] ? $lastTime['use_time'] : 0;
+
+                    $new_order_num = $user['order_num']-1;
+                    $new_order_num = $new_order_num > 0 ? $new_order_num : 0;
+
+                    $userData = array('order_num'=>$new_order_num,'last_order_time'=>$lastTime['use_time']);
+                    D('User')->where(array('uid'=>$now_order['uid']))->save($userData);
+                }
+                
                 $this->success('Order Deleted!');
             } else {
                 $this->error('删除失败！请重试~');
@@ -1157,6 +1174,7 @@ class ShopAction extends BaseAction
         if (empty($now_order)) {
             $this->error('此订单不存在！');
         }
+
         $data['status'] = 4;
         $data['last_time'] = time();
         if ($now_order['pay_type'] == 'moneris' && $now_order['paid'] == 1) {
