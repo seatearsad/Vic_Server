@@ -103,7 +103,8 @@ class System_couponModel extends Model{
             $list = D('System_coupon')->where(array('allow_new'=>1,'status'=>1))->select();
 
             foreach ($list as $c){
-                D('System_coupon_hadpull')->where(array('uid'=>$uid,'coupon_id'=>$c['coupon_id']))->delete();
+                //D('System_coupon_hadpull')->where(array('uid'=>$uid,'coupon_id'=>$c['coupon_id']))->delete();
+                D('System_coupon_hadpull')->where(array('uid'=>$uid,'coupon_id'=>$c['coupon_id']))->save(array('is_use'=>2));
             }
         }
 
@@ -303,13 +304,15 @@ class System_couponModel extends Model{
 
         $where['coupon_id']=$coupon_id;
         $coupon = $this->get_coupon($coupon_id);
+        //$coupon['cate_name']是订单类型 全部是all 外卖订单是shop
+        $coupon['cate_name'] = $coupon['cate_name'] == 0 ? 'all' : $coupon['cate_name'];
         $is_new = D('User')->check_new($uid,$coupon['cate_name']);
 
         if(empty($coupon)){
 
             return array('error_code'=>1,'coupon'=>$coupon,'msg'=>L('_NOT_EXCHANGE_CODE_'));
 
-        }else if($coupon['allow_new']&&!$is_new){
+        }else if($coupon['allow_new'] && !$is_new){
 
             return array('error_code'=>4,'coupon'=>$coupon,'msg'=>L('_COUPON_ERROR_IS_NEW_'));
 
