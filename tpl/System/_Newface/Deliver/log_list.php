@@ -61,10 +61,10 @@
                                                 <div class="row">
                                                     <div class="form-group col-lg-6" id="data_5">
                                                         <div class="input-daterange input-group" id="datepicker">
-                                                            <input type="text" class="form-control-sm form-control" name="begin_time" value="{pigcms{$begin_time}">
+                                                            <input type="text" class="form-control-sm form-control" name="begin_time" autocomplete="off" value="{pigcms{$begin_time}">
                                                             <!--span class="input-group-addon">to value="{pigcms{:date('m/d/Y')}" </span-->
                                                             &nbsp;to &nbsp;
-                                                            <input type="text" class="form-control-sm form-control" name="end_time" value="{pigcms{$end_time}">
+                                                            <input type="text" class="form-control-sm form-control" name="end_time" autocomplete="off" value="{pigcms{$end_time}">
                                                         </div>
                                                     </div>
                                                     <div class="form-group col-lg-2">

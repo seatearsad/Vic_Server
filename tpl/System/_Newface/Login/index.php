@@ -176,5 +176,5 @@
 <script type="text/javascript" src="{pigcms{$static_path}jsuser/login.js"></script>
 
 <!------------------------------------  END  -------------------------------------->
-
+<include file="Public:toast_inc"/>
 <include file="Public:footer"/>
