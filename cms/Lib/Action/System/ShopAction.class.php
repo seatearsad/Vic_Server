@@ -469,6 +469,7 @@ class ShopAction extends BaseAction
 
     public function order()
     {
+
         //加载城市字典
         $city = D('Area')->where(array('area_type' => 2, 'is_open' => 1))->select();
         $this->assign('city', $city);
@@ -724,7 +725,6 @@ class ShopAction extends BaseAction
         }
 
         $order = D('Shop_order')->get_order_detail(array('order_id' => intval($_GET['order_id'])));
-
         $store = D('Merchant_store')->field(true)->where(array('store_id' => $order['store_id']))->find();
 
         if (empty($order)) {
@@ -776,6 +776,7 @@ class ShopAction extends BaseAction
 
         $this->assign('store', D('Merchant_store_shop')->field(true)->where(array('store_id' => $order['store_id']))->find());
         $this->assign('order', $order);
+
         $this->display();
     }
 

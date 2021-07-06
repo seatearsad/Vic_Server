@@ -175,15 +175,15 @@
                                                             <td colspan="5">$<span id="packing_charge">{pigcms{$order['packing_charge']|floatval}</span></td>
                                                         </tr>
                                                     </if>
-                                                    <if condition="$order['freight_charge'] gt 0">
-                                                        <tr>
-                                                            <th class="text-nowrap" scope="row">{pigcms{:L('_DELI_PRICE_')}</th>
-                                                            <td colspan="5">
-                                                                $<input type="text" name="freight_charge" id="freight_charge" size="5"
-                                                                        value="{pigcms{$order['freight_charge']|floatval}">
-                                                                </td>
-                                                        </tr>
-                                                    </if>
+
+                                                    <tr>
+                                                        <th class="text-nowrap" scope="row">{pigcms{:L('_DELI_PRICE_')}</th>
+                                                        <td colspan="5">
+                                                            $<input type="text" name="freight_charge" id="freight_charge" size="5"
+                                                                    value="{pigcms{$order['freight_charge']|floatval}">
+                                                            </td>
+                                                    </tr>
+
                                                     <tr>
                                                         <th class="text-nowrap" scope="row">{pigcms{:L('_BACK_TAX_')}</th>
                                                         <td colspan="5">$<span id="tax_price">{pigcms{:round($order['tax_price'],2)}</span></td>

@@ -1,4 +1,5 @@
 <include file="Public:header"/>
+
 <div class="main-content">
 	<!-- 内容头部 -->
 	<div class="breadcrumbs" id="breadcrumbs">
@@ -23,13 +24,13 @@
 				<div class="col-xs-12">
 					<div class="tabbable">
 						<ul class="nav nav-tabs" id="myTab">
-							<li class="active">
+							<li>
 								<a data-toggle="tab" href="#basicinfo">{pigcms{:L('BASEINFO_BKADMIN')}</a>
 							</li>
 							<li>
 								<a data-toggle="tab" href="#txtintro">{pigcms{:L('ITEM_DESCRIPTION_BKADMIN')}</a>
 							</li>
-							<li>
+							<li class="active">
 								<a data-toggle="tab" href="#txtimage">{pigcms{:L('ITEM_PHOTO_BKADMIN')}</a>
 							</li>
 							<li>
@@ -48,7 +49,7 @@
 					<form enctype="multipart/form-data" class="form-horizontal" method="post">
 						<input type="hidden" value="{pigcms{$now_goods.goods_id}" id="goods_id" />
 						<div class="tab-content">
-							<div id="basicinfo" class="tab-pane  active">
+							<div id="basicinfo" class="tab-pane">
 								<if condition="$error_tips">
 									<div class="alert alert-danger">
 										<p>{pigcms{:L('CORRECT_BKADMIN')}</p>
@@ -57,7 +58,7 @@
 								</if>
 								<if condition="$ok_tips">
 									<div class="alert alert-info">
-										<p>{pigcms{$ok_tips}</p>				
+										<p>{pigcms{$ok_tips}</p>
 									</div>
 								</if>
 								<div class="form-group">
@@ -74,7 +75,7 @@
 									<input class="col-sm-1" size="20" name="unit" id="unit" type="text" value="{pigcms{$now_goods.unit}"/>
 									<span class="form_tips">{pigcms{:L('REQUIRED_UNIT_BKADMIN')}</span>
 								</div>
-								
+
 								<div class="form-group">
 									<label class="col-sm-1" for="Food_status">{pigcms{:L('VIEW_CATEGORIES_BKADMIN')}</label>
 									<fieldset id="choose_sort"></fieldset>
@@ -102,7 +103,7 @@
 									<label class="col-sm-1"><label for="price">{pigcms{:L('QW_PACKAGEFEE')}</label></label>
 									<input class="col-sm-1" size="20" name="packing_charge" id="packing_charge" type="text" value="{pigcms{$now_goods.packing_charge|floatval}"/>
 								</div>
-										
+
 								<div class="form-group">
 									<label class="col-sm-1"><label for="price">{pigcms{:L('PRODUCT_INVENTORY_BKADMIN')}</label></label>
 									<input class="col-sm-1" size="20" name="stock_num" id="stock_num" type="text" value="{pigcms{$now_goods.stock_num}"/>
@@ -148,7 +149,52 @@
                                     <textarea name="des" style="width:702px;height: 200px">{pigcms{$now_goods.des}</textarea>
 								</div>
 							</div>
-							<div id="txtimage" class="tab-pane">
+							<div id="txtimage" class="tab-pane active">
+<!--                                /////-->
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="ibox ">
+                                            <div class="ibox-title  back-change">
+                                            </div>
+                                            <div class="ibox-content">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="image-crop">
+                                                            <img src="{pigcms{$static_path}images/p3.jpg">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <h4>Preview image</h4>
+                                                        <div class="img-preview img-preview-sm"></div>
+                                                        <h4>Comon method</h4>
+                                                        <p>
+                                                            You can upload new image to crop container and easy download new cropped image.
+                                                        </p>
+                                                        <div>
+                                                            <label title="Upload image file" for="inputImage" class="btn btn-primary">
+                                                                <input type="file" accept="image/*" name="file" id="inputImage" style="display:none">
+                                                                Upload image
+                                                            </label>
+                                                        </div>
+                                                        <a href="" id="download" class="btn btn-primary">Download</a>
+                                                        <h4>Other method</h4>
+                                                        <p>
+                                                            You may set cropper options with <code>$(image}).cropper(options)</code>
+                                                        </p>
+                                                        <div class="btn-group">
+                                                            <button class="btn btn-white" id="zoomIn" type="button">Zoom In</button>
+                                                            <button class="btn btn-white" id="zoomOut" type="button">Zoom Out</button>
+                                                            <button class="btn btn-white" id="rotateLeft" type="button">Rotate Left</button>
+                                                            <button class="btn btn-white" id="rotateRight" type="button">Rotate Right</button>
+                                                            <button class="btn btn-warning" id="setDrag" type="button">New crop</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+<!--                                //---------------------------------->
 								<div class="form-group">
 									<label class="col-sm-1">{pigcms{:L('UPLOAD_BKADMIN')}</label>
 									<div style="display:inline-block;" id="J_selectImage">
@@ -157,7 +203,7 @@
 									<span class="form_tips">{pigcms{:L('IMAGE_RATIO_BKADMIN')}</span>
 								</div>
 								<div class="form-group hidden_obj">
-									<label class="col-sm-1">{pigcms{:L('IMAGE_SELECT_BKADMIN')}</label>
+									<label class="col-sm-1">{pigcms{:L('IMAGE_SELECT_BKADMIN')}qq</label>
 									<a href="#modal-table" class="btn btn-sm btn-success" onclick="selectImg('upload_pic_ul','goods')">{pigcms{:L('IMAGE_SELECT_BKADMIN')}</a>
 								</div>
 								<div class="form-group">
@@ -188,8 +234,8 @@
 											<volist name="row['list']" id="r">
 											<li>
 												<u>{pigcms{:L('SPECIFICATION_VALUE_BKADMIN')}：</u>
-												<input type="hidden" class="hide_txt spec_val_id" name="spec_val_id[{pigcms{$ii-1}][]" value="{pigcms{$r['id']}"> 
-												<input type="text" class="txt spec_val" name="spec_val[{pigcms{$ii-1}][]" value="{pigcms{$r['name']}"/> 
+												<input type="hidden" class="hide_txt spec_val_id" name="spec_val_id[{pigcms{$ii-1}][]" value="{pigcms{$r['id']}">
+												<input type="text" class="txt spec_val" name="spec_val[{pigcms{$ii-1}][]" value="{pigcms{$r['name']}"/>
 												<a class="list_del" href="javascript:;" title="{pigcms{:L('DELETE_BKADMIN')}">×</a>
 											</li>
 											</volist>
@@ -214,7 +260,7 @@
 											<volist name="ro['val']" id="ra">
 											<li>
 												<u>{pigcms{:L('ATTRIBUTE_VALUE_BKADMIN')}：</u>
-												<input type="text" class="txt properties_val" name="properties_val[{pigcms{$ik-1}][]" value="{pigcms{$ra}"/> 
+												<input type="text" class="txt properties_val" name="properties_val[{pigcms{$ik-1}][]" value="{pigcms{$ra}"/>
 												<a class="list_del" href="javascript:;" title="{pigcms{:L('DELETE_BKADMIN')}">×</a>
 											</li>
 											</volist>
@@ -224,7 +270,7 @@
 									</volist>
 									<p class="add_properties"><a href="javascript:;" title="" class="btn btn-sm btn-success">{pigcms{:L('ADD_ATTRIBUTE_BKADMIN')}</a></p>
 								</div>
-								
+
 								<div class="topic_box">
 									<p class="add_table" <if condition="!$now_goods['spec_list']">style="display:none"</if>><a href="javascript:;" title="{pigcms{:L('BASE_ADD')}" class="btn btn-sm btn-success" >{pigcms{:L('GENERATE_CHART_BKADMIN')}</a></p>
 									<table class="table table-striped table-bordered table-hover" id="table_list">
@@ -244,20 +290,20 @@
 											<th>{pigcms{$gp['name']}({pigcms{:L('QUANTITY_ALLOWED_BKADMIN')})</th>
 											</volist>
 										</tr>
-										
+
 										<volist name="now_goods['list']" id="gl" key="num">
 											<tr id="{pigcms{$gl['index']}">
 												<!--td><input type="text" class="txt" name="numbers[]" value="{pigcms{$gl['number']}" style="width:100%;"></td-->
 												<volist name="gl['spec']" id="g">
 												<td>{pigcms{$g['spec_val_name']}</td>
 												</volist>
-												
+
 <!--												<td style="display:none"><input type="text" class="txt" name="old_prices[]" value="{pigcms{$gl['old_price']}" style="width:80px;"></td>-->
 												<!--td><input type="text" class="txt" name="cost_prices[]" value="{pigcms{$gl['cost_price']}" style="width:80px;"></td-->
 												<td><input type="text" class="txt" name="prices[]" value="{pigcms{$gl['price']}" style="width:80px;"></td>
 <!--												<td><input type="text" class="txt" name="seckill_prices[]" value="{pigcms{$gl['seckill_price']}" style="width:80px;"></td>-->
 												<td><input type="text" class="txt" name="stock_nums[]" value="{pigcms{$gl['stock_num']}" style="width:80px;"></td>
-												
+
 												<volist name="gl['properties']" id="gpp" key="num">
 												<td><input type="text" class="txt" name="num{pigcms{$num-1}[]" value="{pigcms{$gpp['num']}" style="width:80px;"></td>
 												</volist>
@@ -284,7 +330,7 @@
 									<span><label><input id='seckill_type0' name="seckill_type" <if condition="$now_goods['seckill_type'] eq 0 ">checked="checked"</if> value="0" type="radio">&nbsp;<span>固定时间段</span>&nbsp;</label></span>
 									<span><label><input id='seckill_type1' name="seckill_type" <if condition="$now_goods['seckill_type'] eq 1 ">checked="checked"</if> value="1" type="radio" >&nbsp;<span>每天的时间段</span></label></span>
 								</div>
-								
+
 								<div class="form-group">
 									<label class="col-sm-1"><label for="price">限时段</label></label>
 									<div>
@@ -329,7 +375,7 @@
 									<span><label><input name="freight_type" <if condition="$now_goods['freight_type'] eq 0 ">checked="checked"</if> value="0" type="radio">&nbsp;<span>按最大值算</span>&nbsp;</label></span>
 									<span><label><input name="freight_type" <if condition="$now_goods['freight_type'] eq 1 ">checked="checked"</if> value="1" type="radio" >&nbsp;<span>单独计算</span></label></span>
 								</div>
-								
+
 								<div class="form-group">
 									<label class="col-sm-1" for="Food_status">商品分类</label>
 									<fieldset id="choose_category" cat_fid="{pigcms{$now_goods.cat_fid}" cat_id="{pigcms{$now_goods.cat_id}"></fieldset>
@@ -388,7 +434,73 @@ input.ke-input-text {
 <script src="{pigcms{$static_public}kindeditor/kindeditor.js"></script>
 <script type="text/javascript" src="{pigcms{$static_public}js/webuploader.min.js"></script>
 <script>
-var uploaderHas = false;
+    $(document).ready(function(){
+
+        var $image = $(".image-crop > img")
+        var $cropped = $($image).cropper({
+            aspectRatio: 1,
+            preview: ".img-preview",
+            done: function(data) {
+                // Output the result data for cropping image.
+            }
+        });
+
+        var $inputImage = $("#inputImage");
+        if (window.FileReader) {
+            $inputImage.change(function() {
+                var fileReader = new FileReader(),
+                    files = this.files,
+                    file;
+
+                if (!files.length) {
+                    return;
+                }
+
+                file = files[0];
+
+                if (/^image\/\w+$/.test(file.type)) {
+                    fileReader.readAsDataURL(file);
+                    fileReader.onload = function () {
+                        $inputImage.val("");
+                        $image.cropper("reset", true).cropper("replace", this.result);
+                    };
+
+                } else {
+                    showMessage("Please choose an image file.");
+                }
+            });
+        } else {
+            $inputImage.addClass("hide");
+        }
+
+        $("#download").click(function (link) {
+            link.target.href = $cropped.cropper('getCroppedCanvas', { width: 620, height: 520 }).toDataURL("image/png").replace("image/png", "application/octet-stream");
+            link.target.download = 'cropped.png';
+        });
+
+        $("#zoomIn").click(function() {
+            $image.cropper("zoom", 0.1);
+        });
+
+        $("#zoomOut").click(function() {
+            $image.cropper("zoom", -0.1);
+        });
+
+        $("#rotateLeft").click(function() {
+            $image.cropper("rotate", 45);
+        });
+
+        $("#rotateRight").click(function() {
+            $image.cropper("rotate", -45);
+        });
+
+        $("#setDrag").click(function() {
+            $image.cropper("setDragMode", "crop");
+        });
+
+    });
+
+    var uploaderHas = false;
 $('#myTab li a').click(function(){
 	if(uploaderHas == false && $(this).attr('href') == '#txtimage'){
 		setTimeout(function(){

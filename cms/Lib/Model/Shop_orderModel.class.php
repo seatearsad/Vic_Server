@@ -1542,6 +1542,10 @@ class Shop_orderModel extends Model
 	{
 		$where['is_del'] = 0;
 		$order = $this->field(true)->where($where)->find();
+        $coupon=D('System_coupon_hadpull')->field(true)->where(array('uid'=>$order['uid'],'id'=>$order['coupon_id']))->find();
+        if (!empty($coupon)){
+        	$order['coupon_id2']=$coupon["coupon_id"];
+		}
 		if (empty($order)) return false;
 		$order['info'] = D('Shop_order_detail')->field(true)->where(array('order_id' => $order['order_id']))->select();
 		$rs=D('Merchant_store')->field(true)->where(array('store_id' => $order['store_id']))->find();
