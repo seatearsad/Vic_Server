@@ -60,7 +60,7 @@
                                                                                            data-id="{pigcms{$vo['tax_num']}"
                                                                                            data-name="{pigcms{$vo['deposit_price']}"
                                                                                            data-for="{pigcms{$vo['price']|floatval}" pattern="[0-9]*" size="3"
-                                                                                           value="{pigcms{$vo['num']}">/{pigcms{$vo['unit']}</th>
+                                                                                           value="{pigcms{$vo['num']}" >/{pigcms{$vo['unit']}</th>
                                                             <th class="text-center">{pigcms{$vo['tax_num']}%</th>
                                                             <th class="text-center">${pigcms{$vo['deposit_price']}</th>
                                                             <th class="text-center">{pigcms{$vo['spec']}</th>
@@ -412,6 +412,17 @@
                 }
 
                 var total_prcie = getTotalPrice(good_price, tax_price, deposit_price);
+                console.log("--------------------------------------");
+                console.log("all_discount="+all_discount);
+                console.log("tip_charge="+tip_charge);
+                console.log("packing_charge="+parseFloat($('#packing_charge').html()));
+                console.log("freight_charge="+parseFloat($('#freight_charge').val()));
+                console.log("service_fee="+parseFloat($('#service_fee').html()));
+                console.log("good_price="+good_price);
+                console.log("tax_price="+tax_price);
+                console.log("deposit_price="+deposit_price);
+                console.log("total_prcie="+total_prcie);
+
                 $('#good_price').html(good_price.toFixed(2));
                 $('#tax_price').html(tax_price.toFixed(2));
                 $('#deposit_price').html(deposit_price.toFixed(2));
