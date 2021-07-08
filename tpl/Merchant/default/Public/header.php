@@ -5,8 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta charset="utf-8">
 <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/styles.css">
-<script src="{pigcms{$static_public}js/jquery-3.1.1.min.js"></script>
-<!--<script type="text/javascript" src="{pigcms{$static_path}js/jquery.min.js"></script>-->
+<script type="text/javascript" src="{pigcms{$static_path}js/jquery.min.js"></script>
 <script type="text/javascript" src="{pigcms{$static_path}js/jquery.ba-bbq.min.js"></script>
 <script type="text/javascript" src="{pigcms{$static_public}js/lang/{pigcms{:C('DEFAULT_LANG')}.js?v=21" charset="utf-8"></script>
 <if condition="$config['site_favicon']">

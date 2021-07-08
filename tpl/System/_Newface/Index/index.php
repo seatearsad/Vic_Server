@@ -164,12 +164,9 @@
 
             getData(select_day,city_id,user_title);
         });
-<<<<<<< HEAD
         var dd=null;
         var dc=null;
-=======
         var all_times = 0;
->>>>>>> master
         function getData(select_day,city_id,user_title){
             var re_data = {'day':select_day,'city_id':city_id};
             $("#user_title").html(user_title);
@@ -188,17 +185,13 @@
                         all_times = 0;
                         $("#main_chart").show();
 
-<<<<<<< HEAD
+
                     dd=data.data_array;
                     dc=data.city_array;
 
                     g_td=createChart(dd, 'lineChart',70);
                     g_tc=createChart(dc, 'lineCityChart',70);
-=======
-                        createChart(data.data_array, 'lineChart');
 
-                        createChart(data.city_array, 'lineCityChart');
->>>>>>> master
 
                         $('#cash_total').html('$ ' + data.total);
                         $('#today_cash').html('$ ' + data.today_cash);

@@ -2070,6 +2070,11 @@ return array(
     "_BACK_MERCHANTMNG_"=>"Merchant Management",
     "_BACK_MARKETING_"=>"Marketing",
     "_BACK_DATAANALYSIS_"=>"Data Analysis",
+    "_BACK_NOTAVA_"=>"Expired",
+    "_BACK_UPLOADMODE_TITLE_"=>"Upload Mode",
+    "_BACK_UPLOADMODE1_"=>"Logo (1.66:1)",
+    "_BACK_UPLOADMODE2_"=>"One Photos (2.8:1)",
+    "_BACK_UPLOADMODE3_"=>"Multiple Photos (1:1）",
 
     "F_REGISTRATION_INVITED"=>"Registration Invited",
     "F_ORDERS_INVITED"=>"Orders Invited",

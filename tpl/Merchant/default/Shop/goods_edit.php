@@ -30,9 +30,7 @@
 							<li>
 								<a data-toggle="tab" href="#txtintro">{pigcms{:L('ITEM_DESCRIPTION_BKADMIN')}</a>
 							</li>
-							<li >
-								<a data-toggle="tab" href="#txtimage">{pigcms{:L('ITEM_PHOTO_BKADMIN')}</a>
-							</li>
+
 							<li>
 								<a data-toggle="tab" href="#txtattr">{pigcms{:L('GOODS_SPEC_BKADMIN')}</a>
 							</li>
@@ -142,7 +140,7 @@
 								</div>
 								</if>
                                 <!--               图片上传                 /////-->
-                                <div class="row" style="margin-bottom: 10px;">
+                                <div id="upload_image_box" class="row" style="margin-bottom: 10px;display: none;">
                                     <div class="col-lg-12">
                                         <div class="ibox ">
                                             <div class="ibox-title  back-change">
@@ -181,10 +179,12 @@
                                     </div>
                                     <span class="form_tips"></span>
                                 </div>
+
                                 <div class="form-group hidden_obj">
-                                    <label class="col-sm-1">{pigcms{:L('IMAGE_SELECT_BKADMIN')}qq</label>
+                                    <label class="col-sm-1">{pigcms{:L('IMAGE_SELECT_BKADMIN')}</label>
                                     <a href="#modal-table" class="btn btn-sm btn-success" onclick="selectImg('upload_pic_ul','goods')">{pigcms{:L('IMAGE_SELECT_BKADMIN')}</a>
                                 </div>
+
                                 <div class="form-group">
                                     <label class="col-sm-1">{pigcms{:L('PREVIEW_BKADMIN')}</label>
                                     <div id="upload_pic_box">
@@ -195,6 +195,7 @@
                                         </ul>
                                     </div>
                                 </div>
+
 							</div>
 							<div id="txtintro" class="tab-pane">
 								<div class="form-group" >
@@ -422,86 +423,73 @@ input.ke-input-text {
 <script type="text/javascript" src="{pigcms{$static_public}js/webuploader.min.js"></script>
 <script>
 
+    //----------------------------------- 以下为Crooper段 --------------------------------------
+    var loaded = false;
+    var $upload_image_box;
+    var $inputImage;var $cropped;
+    function load_cooper() {
+        if (loaded == false) {
+            loaded = true;
 
-    $(document).ready(function(){
+            $upload_image_box = $("#upload_image_box");
 
-        var $image = $(".image-crop > img");
+            $inputImage = $("#inputImage");
 
-        var $cropped = $($image).cropper({
-            aspectRatio: 1,
-            preview: ".img-preview",
-            done: function(data) {
-                // Output the result data for cropping image.
+            if (window.FileReader) {//检测浏览器是否支持FileReader
+                $inputImage.change(function () {
+                    var fileReader = new FileReader(),
+                        files = this.files,
+                        file;
+                    if (!files.length) {
+                        return;
+                    }
+                    var $image = $(".image-crop > img");
+                    $cropped = $($image).cropper({
+                        aspectRatio: 1,
+                        preview: ".img-preview",
+                        done: function (data) {
+                            // Output the result data for cropping image.
+                        }
+                    });
+                    $upload_image_box.show();
+                    file = files[0];
+                    if (/^image\/\w+$/.test(file.type)) {
+                        $upload_image_box.show();
+                        fileReader.readAsDataURL(file);
+                        fileReader.onload = function () {
+                            $inputImage.val("");
+                            $image.cropper("reset", true).cropper("replace", this.result);
+                        };
+                    } else {
+                        showMessage("Please choose an image file.");
+                    }
+                });
+            } else {
+                $inputImage.addClass("hide");
             }
-        });
 
-        var $inputImage = $("#inputImage");
-        if (window.FileReader) {
-            $inputImage.change(function() {
-                var fileReader = new FileReader(),
-                    files = this.files,
-                    file;
+            $("#setDrag").click(function () {
+                $image.cropper("setDragMode", "crop");
+            });
 
-                if (!files.length) {
-                    return;
-                }
-
-                file = files[0];
-                if (/^image\/\w+$/.test(file.type)) {
-                    fileReader.readAsDataURL(file);
-                    fileReader.onload = function () {
-                        $inputImage.val("");
-                        $image.cropper("reset", true).cropper("replace", this.result);
-                    };
+            $("#upld").on("click", function () {
+                //console.log("download");
+                if ($("#ori_image").attr("src") == null) {
+                    return false;
                 } else {
-                    showMessage("Please choose an image file.");
+
+                    var base64 = $cropped.cropper('getCroppedCanvas', {
+                        width: 620,
+                        height: 520
+                    }).toDataURL("image/png");
+
+                    //$("#finalImg").prop("src", base64);// 显示图片
+                    uploadFile(base64)//编码后上传服务器
+                    //closeTailor();// 关闭裁剪框
                 }
             });
-        } else {
-            $inputImage.addClass("hide");
         }
-
-        $("#setDrag").click(function() {
-            $image.cropper("setDragMode", "crop");
-        });
-
-
-
-        $("#upld").on("click", function() {
-            //console.log("download");
-            if ($("#ori_image").attr("src") == null) {
-                return false;
-            } else {
-
-                var base64 = $cropped.cropper('getCroppedCanvas', {
-                    width: 620,
-                    height: 520
-                }).toDataURL("image/png");
-
-                //$("#finalImg").prop("src", base64);// 显示图片
-                uploadFile(base64)//编码后上传服务器
-                //closeTailor();// 关闭裁剪框
-            }
-        });
-
-        // $("#download").click(function (link) {
-        //     link.target.href = $cropped.cropper('getCroppedCanvas', {
-        //         width: 620,
-        //         height: 520
-        //     }).toDataURL("image/png").replace("image/png", "application/octet-stream");
-        //     link.target.download = 'cropped.png';
-        // });
-        //----- 之前的 ------
-
-        $('#freight_value1').change(function(){
-            if ($(this).val() != 0) {
-                $('input[name=freight_type][value=1]').attr("checked",'checked');
-            } else {
-                $('input[name=freight_type][value=0]').attr("checked",'checked');
-            }
-        });
-
-    });
+    }
     function dataURLtoFile(dataURL, fileName, fileType) {
         var arr = dataURL.split(','), mime = arr[0].match(/:(.*?);/)[1],
             bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
@@ -525,19 +513,47 @@ input.ke-input-text {
             contentType: false,
             async : true,
             success : function(data) {
-                console.log(data);
-                if(data.error == 0){
-                        $('#upload_pic_ul').append('<li class="upload_pic_li"><img src="'+data.url+'"/><input type="hidden" name="pic[]" value="'+data.title+'"/><br/><a href="#" onclick="deleteImage(\''+data.title+'\',this);return false;">[ {pigcms{:L('DELETE_BKADMIN')} ]</a></li>');
-                    }else{
-                        alert(data.info+"---");
-                    }
+                if(data.error == 0){$upload_image_box.hide();
+                    $('#upload_pic_ul').append('<li class="upload_pic_li"><img src="'+data.url+'"/><input type="hidden" name="pic[]" value="'+data.title+'"/><br/><a href="#" onclick="deleteImage(\''+data.title+'\',this);return false;">[ {pigcms{:L('DELETE_BKADMIN')} ]</a></li>');
+                }else{
+                    alert(data.info);
+                }
             },
             error:function(data){
                 $('.loading'+file.id).remove();
-                alert('上传失败！请重试。');
+                alert('Upload failed! Please try again.');
             }
         });
     }
+
+    $(document).ready(function(){
+        $("#inputImage").on("click", function () {
+            load_cooper();
+        });
+        // $("#download").click(function (link) {
+        //     link.target.href = $cropped.cropper('getCroppedCanvas', {
+        //         width: 620,
+        //         height: 520
+        //     }).toDataURL("image/png").replace("image/png", "application/octet-stream");
+        //     link.target.download = 'cropped.png';
+        // });
+        //----- 之前的 ------
+    });
+
+    //--------------------------------------  以上为Crooper段  --------------------------------------
+</script>
+
+<script>
+    $(document).ready(function(){
+        $('#freight_value1').change(function(){
+            if ($(this).val() != 0) {
+                $('input[name=freight_type][value=1]').attr("checked",'checked');
+            } else {
+                $('input[name=freight_type][value=0]').attr("checked",'checked');
+            }
+        });
+
+    });
 
     var uploaderHas = false;
 
