@@ -482,6 +482,8 @@ class DataAction extends BaseAction
         $total_coupon_discount = 0;
         //配送费减免总数
         $total_delivery_discount = 0;
+        //服务费总数
+        $total_service_fee = 0;
 
         //结束循环后是否存储最后一张订单，如果最后一张是代客下单为 false;
         $is_last = true;
@@ -516,6 +518,7 @@ class DataAction extends BaseAction
                 $total_reduce += $val['merchant_reduce'];
                 $total_coupon_discount += $val['coupon_price'];
                 $total_delivery_discount += $val['delivery_discount'];
+                $total_service_fee += $val['service_fee'];
 
                 $order_count++;
             }else{
@@ -546,6 +549,7 @@ class DataAction extends BaseAction
                     $total_reduce += $val['merchant_reduce'];
                     $total_coupon_discount += $val['coupon_price'];
                     $total_delivery_discount += $val['delivery_discount'];
+                    $total_service_fee += $val['service_fee'];
 
                     $all_record[$curr_order]['freight_tax'] = $val['freight_charge']*$val['store_tax']/100;
                     $all_record[$curr_order]['packing_tax'] = $val['packing_charge']*$val['store_tax']/100;
@@ -617,6 +621,7 @@ class DataAction extends BaseAction
         $objExcel->getActiveSheet()->getColumnDimension('K')->setAutoSize(true);
         $objExcel->getActiveSheet()->getColumnDimension('L')->setAutoSize(true);
         $objExcel->getActiveSheet()->getColumnDimension('M')->setAutoSize(true);
+        $objExcel->getActiveSheet()->getColumnDimension('N')->setAutoSize(true);
 
         $objActSheet->setCellValue('A1', '# of Orders');
         $objActSheet->setCellValue('B1', 'Subtotal');
@@ -631,6 +636,7 @@ class DataAction extends BaseAction
         $objActSheet->setCellValue('K1', 'Tips');
         $objActSheet->setCellValue('L1', 'Coupon');
         $objActSheet->setCellValue('M1', 'Free Delivery');
+        $objActSheet->setCellValue('N1', 'Service Fee');
         $index = 2;
         $objActSheet->setCellValueExplicit('A' . $index, $order_count,PHPExcel_Cell_DataType::TYPE_NUMERIC);
         $objActSheet->setCellValueExplicit('B' . $index, floatval(sprintf("%.2f", $total_goods_price)),PHPExcel_Cell_DataType::TYPE_NUMERIC);
@@ -645,6 +651,7 @@ class DataAction extends BaseAction
         $objActSheet->setCellValueExplicit('K' . $index, floatval(sprintf("%.2f", $total_tip)),PHPExcel_Cell_DataType::TYPE_NUMERIC);
         $objActSheet->setCellValueExplicit('L' . $index, floatval(sprintf("%.2f", $total_coupon_discount)),PHPExcel_Cell_DataType::TYPE_NUMERIC);
         $objActSheet->setCellValueExplicit('M' . $index, floatval(sprintf("%.2f", $total_delivery_discount)),PHPExcel_Cell_DataType::TYPE_NUMERIC);
+        $objActSheet->setCellValueExplicit('N' . $index, floatval(sprintf("%.2f", $total_service_fee)),PHPExcel_Cell_DataType::TYPE_NUMERIC);
 
         //输出
         $objWriter = new PHPExcel_Writer_Excel5($objExcel);
