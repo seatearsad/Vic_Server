@@ -77,7 +77,17 @@
                                         <td>{pigcms{$vo.num}</td>
                                         <td>{pigcms{$vo.receive_time|date='Y-m-d',###}</td>
                                         <td>{pigcms{$vo.admin_name}</td>
-                                        <td class="textcenter"><if condition="$vo['is_use'] eq 1"><font color="green">Used</font><elseif condition="$vo['is_use'] eq 0" /><font color="red">Not Yet</font><else /><font color="red">{pigcms{:L('_BACK_NOTAVA_')}</font></if></td>
+                                        <td class="textcenter">
+                                            <if condition="$vo['status'] eq 2">
+                                                <font color="red">{pigcms{:L('_BACK_NOTAVA_')}</font>
+                                                <else/>
+                                                    <if condition="$vo['is_use'] eq 1">
+                                                    <font color="green">Used</font>
+                                                    <elseif condition="$vo['is_use'] eq 0"/>
+                                                    <font color="red">Not Yet</font>
+                                                    </if>
+                                            </if>
+                                        </td>
                                     </tr>
                                 </volist>
                                 <tr><td class="textcenter pagebar" colspan="9">{pigcms{$pagebar}</td></tr>

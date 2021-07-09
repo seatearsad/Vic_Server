@@ -563,11 +563,8 @@ input.ke-input-text {
     function load_cooper() {
         if (loaded == false) {
             loaded = true;
-
             $upload_image_box = $("#upload_image_box");
-
             $inputImage = $("#inputImage");
-
             if (window.FileReader) {//检测浏览器是否支持FileReader
                 $inputImage.change(function () {
                     var fileReader = new FileReader(),
@@ -662,8 +659,13 @@ input.ke-input-text {
     $(document).ready(function(){
 
         $("#inputImage").on("click", function () {
-            console.log("is_open_pick="+$('#is_open_pick').val());
-            load_cooper();
+            if($('.upload_pic_li').size() > 0){
+                alert('最多上传1个图片！');
+                return false;
+            }else{
+                load_cooper();
+            }
+
         });
         // $("#download").click(function (link) {
         //     link.target.href = $cropped.cropper('getCroppedCanvas', {

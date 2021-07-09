@@ -20,12 +20,13 @@
 				<div class="col-xs-12">
 					<div class="tabbable">
 						<ul class="nav nav-tabs" id="myTab">
-							<li class="active">
+                            <li class="active">
+                                <a data-toggle="tab" href="#txtstore">{pigcms{:L('STORE_DESCRIPTION_BKADMIN')}</a>
+                            </li>
+							<li >
 								<a data-toggle="tab" href="#basicinfo">{pigcms{:L('BASIC_SETTING_BKADMIN')}</a>
 							</li>
-							<li>
-								<a data-toggle="tab" href="#txtstore">{pigcms{:L('STORE_DESCRIPTION_BKADMIN')}</a>
-							</li>
+
 <!--							{pigcms{/***[if >=3]***/}-->
 <!--							<li>-->
 <!--								<a data-toggle="tab" href="#discount">{pigcms{$config.cash_alias_name}</a>-->
@@ -35,7 +36,7 @@
 					</div>
 					<form enctype="multipart/form-data" class="form-horizontal" method="post" id="edit_form">
 						<div class="tab-content">
-							<div id="basicinfo" class="tab-pane active">
+							<div id="basicinfo" class="tab-pane ">
 								<input type="hidden" name="store_id" value="{pigcms{$now_store.store_id}"/>
 								<div class="form-group">
 									<label class="col-sm-1"><label for="name">{pigcms{:L('STORE_NAME_BKADMIN')}</label></label>
@@ -393,7 +394,7 @@
 <!--									</div>-->
 <!--								</div>-->
 							</div>
-							<div id="txtstore" class="tab-pane">
+							<div id="txtstore" class="tab-pane active">
 
 								<div class="form-group">
 									<label class="col-sm-1">{pigcms{:L('STORE_DESCRIPTION_BKADMIN')}</label>
@@ -470,26 +471,7 @@
                                     </div>
                                 </div>
 
-                            </div>
 
-<!--								<div class="form-group">-->
-<!--									<label class="col-sm-1">{pigcms{:L('STOREFRONT_IMAGE_BKADMIN')}</label>-->
-<!--                                    <div style="display:inline-block;position:relative;width:78px;height:34px;" id="J_selectImage">-->
-<!--                                        <div class="btn btn-sm btn-success">{pigcms{:L('UPLOAD_BKADMIN')}</div>-->
-<!--                                    </div>-->
-<!--									<!--a href="javascript:void(0)" class="btn btn-sm btn-success" id="J_selectImage">上传图片</a-->-->
-<!---->
-<!--								</div>-->
-<!--								<div class="form-group">-->
-<!--									<label class="col-sm-1"> {pigcms{:L('PREVIEW_BKADMIN')}</label>-->
-<!--									<div id="upload_pic_box">-->
-<!--										<ul id="upload_pic_ul">-->
-<!--											<volist name="now_store['pic']" id="vo">-->
-<!--												<li class="upload_pic_li"><img src="{pigcms{$vo.url}"/><input type="hidden" name="pic[]" value="{pigcms{$vo.title}"/><br/><a href="#" onclick="deleteImage('{pigcms{$vo.title}',this);return false;">[ {pigcms{:L('DELETE_BKADMIN')} ]</a></li>-->
-<!--											</volist>-->
-<!--										</ul>-->
-<!--									</div>-->
-<!--								</div>-->
 							</div>
 
                             <!--               图片上传结束              -->
@@ -681,12 +663,11 @@ input.ke-input-text {
             // Output the result data for cropping image.
         }
     };
-    $(document).ready(function(){
 
+    if (loaded == false) {
+        loaded = true;
         $upload_image_box = $("#upload_image_box"); //裁剪工具区域
         $inputImage = $("#inputImage");             //打开裁剪上传区域的按钮
-        $image = $(".image-crop > img");
-
         if (window.FileReader) {                    //检测浏览器是否支持FileReader
 
             $inputImage.change(function () {        //将按钮事件关联事件
@@ -697,8 +678,10 @@ input.ke-input-text {
                 if (!files.length) {
                     return;
                 }
-
+                $image = $(".image-crop > img");
+                $upload_image_box.show();
                 file = files[0];
+
                 if (/^image\/\w+$/.test(file.type)) {
                     $upload_image_box.show();
                     fileReader.readAsDataURL(file);
@@ -720,12 +703,13 @@ input.ke-input-text {
         });
 
         $("#upld").on("click", function () {
+
             //console.log("download");
             if ($("#ori_image").attr("src") == null) {
                 return false;
             } else {
 
-                var base64 = $cropped.cropper('getCroppedCanvas', {
+                var base64 =  $($image).cropper('getCroppedCanvas', {
                     width: 620,
                     height: 520
                 }).toDataURL("image/png");
@@ -735,22 +719,17 @@ input.ke-input-text {
                 //closeTailor();// 关闭裁剪框
             }
         });
+    }
+
+    $(document).ready(function(){
         $("#inputImage").on("click", function () {
-            console.log($("input[name='is_open_pick']:checked").val());
             load_cooper($("input[name='is_open_pick']:checked").val());
         });
-        // $("#download").click(function (link) {
-        //     link.target.href = $cropped.cropper('getCroppedCanvas', {
-        //         width: 620,
-        //         height: 520
-        //     }).toDataURL("image/png").replace("image/png", "application/octet-stream");
-        //     link.target.download = 'cropped.png';
-        // });
-        //----- 之前的 ------
     });
+
     //点击“上传图片”后运行
     function load_cooper(rat) {
-        $upload_image_box.show();
+
         var ar=0;
         if (rat==0){
             ar=1.667;
@@ -761,12 +740,11 @@ input.ke-input-text {
         }else{
             ar=1
         }
-        console.log("ar="+ar);
-        if (loaded == false) {
-            loaded = true;
+        options["aspectRatio"] = ar;
+
+        if (!$cropped) {
+
             $cropped = $($image).cropper(options);
-        }else{
-            options["aspectRatio"] = ar;
         }
     }
     function dataURLtoFile(dataURL, fileName, fileType) {
@@ -804,8 +782,6 @@ input.ke-input-text {
             }
         });
     }
-
-
 
 </script>
 <script type="text/javascript">

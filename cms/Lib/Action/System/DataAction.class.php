@@ -62,6 +62,12 @@ class DataAction extends BaseAction
             1=>'Complete',
             2=>'Cancelled'
         );
+
+        if(isMobile()){
+            $this->assign('height',' ');
+        }else{
+            $this->assign('height',' height="80" ');
+        }
         $this->assign('status_list', $status_list);
 
         $city = D('Area')->where(array('area_type'=>2,'is_open'=>1))->select();
