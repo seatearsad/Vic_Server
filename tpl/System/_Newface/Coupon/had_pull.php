@@ -78,14 +78,12 @@
                                         <td>{pigcms{$vo.receive_time|date='Y-m-d',###}</td>
                                         <td>{pigcms{$vo.admin_name}</td>
                                         <td class="textcenter">
-                                            <if condition="$vo['status'] eq 2">
-                                                <font color="red">{pigcms{:L('_BACK_NOTAVA_')}</font>
-                                                <else/>
-                                                    <if condition="$vo['is_use'] eq 1">
-                                                    <font color="green">Used</font>
-                                                    <elseif condition="$vo['is_use'] eq 0"/>
-                                                    <font color="red">Not Yet</font>
-                                                    </if>
+                                            <if condition="$vo['is_use'] eq 1">
+                                                <font color="green">Used</font>
+                                            <elseif condition="$vo['is_use'] eq 0"/>
+                                                <font color="red">Not Yet</font>
+                                            <elseif condition="$vo['is_use'] eq 2"/>
+                                                <font color="red">Void</font>
                                             </if>
                                         </td>
                                     </tr>

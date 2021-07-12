@@ -197,7 +197,7 @@ class DataAction extends BaseAction
         }
 
         if(!empty($_GET['begin_time'])&&!empty($_GET['end_time'])){
-            if ($_GET['begin_time']>$_GET['end_time']) {
+            if (strtotime($_GET['begin_time']." 00:00:00")>strtotime($_GET['end_time']." 23:59:59")) {
                 $this->error("结束时间应大于开始时间");
             }
             $period = array(strtotime($_GET['begin_time']." 00:00:00"),strtotime($_GET['end_time']." 23:59:59"));
@@ -427,7 +427,7 @@ class DataAction extends BaseAction
         if(!$_GET['begin_time'] || !$_GET['end_time']){
             $this->error(L('J_SPECIFY_TIME'));
         }else{
-            if ($_GET['begin_time']>$_GET['end_time']) {
+            if (strtotime($_GET['begin_time']." 00:00:00")>strtotime($_GET['end_time']." 23:59:59")) {
                 $this->error("结束时间应大于开始时间");
             }
 

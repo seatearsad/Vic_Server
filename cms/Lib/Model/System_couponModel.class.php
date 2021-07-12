@@ -104,7 +104,7 @@ class System_couponModel extends Model{
 
             foreach ($list as $c){
                 //D('System_coupon_hadpull')->where(array('uid'=>$uid,'coupon_id'=>$c['coupon_id']))->delete();
-                D('System_coupon_hadpull')->where(array('uid'=>$uid,'coupon_id'=>$c['coupon_id']))->save(array('is_use'=>2));
+                D('System_coupon_hadpull')->where(array('uid'=>$uid,'coupon_id'=>$c['coupon_id'],'is_use'=>0))->save(array('is_use'=>2));
             }
         }
 
