@@ -608,7 +608,7 @@ zoom: 1;
 .form-group>label{font-size:12px;line-height:24px;}
 #upload_pic_box{margin-top:20px;height:150px;}
 #upload_pic_box .upload_pic_li{width:130px;float:left;list-style:none;}
-#upload_pic_box img{width:100px;height:70px;border:1px solid #ccc;}
+#upload_pic_box img{width:100px;height:100px;}
 
 .webuploader-container{
     position:relative;
@@ -649,7 +649,6 @@ input.ke-input-text {
 <link rel="stylesheet" href="{pigcms{$static_public}kindeditor/themes/default/default.css">
 <script src="{pigcms{$static_public}kindeditor/kindeditor.js"></script>
 <script src="{pigcms{$static_public}kindeditor/lang/zh_CN.js"></script>
-<script type="text/javascript" src="{pigcms{$static_public}js/webuploader.min.js"></script>
 <script>
     var loaded = false;
     var $upload_image_box;
@@ -747,6 +746,7 @@ input.ke-input-text {
             $cropped = $($image).cropper(options);
         }
     }
+
     function dataURLtoFile(dataURL, fileName, fileType) {
         var arr = dataURL.split(','), mime = arr[0].match(/:(.*?);/)[1],
             bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);

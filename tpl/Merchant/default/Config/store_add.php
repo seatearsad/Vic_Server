@@ -20,11 +20,11 @@
 				<div class="col-xs-12">
 					<div class="tabbable">
 						<ul class="nav nav-tabs" id="myTab">
-							<li class="active">
-								<a data-toggle="tab" href="#basicinfo">{pigcms{:L('BASIC_SETTING_BKADMIN')}</a>
-							</li>
+                            <li class="active">
+                                <a data-toggle="tab" href="#txtstore">{pigcms{:L('STORE_DESCRIPTION_BKADMIN')}</a>
+                            </li>
 							<li>
-								<a data-toggle="tab" href="#txtstore">{pigcms{:L('STORE_DESCRIPTION_BKADMIN')}</a>
+								<a data-toggle="tab" href="#basicinfo">{pigcms{:L('BASIC_SETTING_BKADMIN')}</a>
 							</li>
 <!--							{pigcms{/***[if >=3]***/}-->
 <!--							<li>-->
@@ -35,7 +35,7 @@
 					</div>
 					<form enctype="multipart/form-data" class="form-horizontal" method="post" id="edit_form">
 						<div class="tab-content">
-							<div id="basicinfo" class="tab-pane active">
+							<div id="basicinfo" class="tab-pane">
 								<div class="form-group">
 									<label class="col-sm-1"><label for="name">{pigcms{:L('STORE_NAME_BKADMIN')}</label></label>
 									<input class="col-sm-2" size="20" name="name" id="name" type="text"/>
@@ -391,31 +391,85 @@
 <!--									</div>-->
 <!--								</div>-->
 							</div>
-							<div id="txtstore" class="tab-pane">
+							<div id="txtstore" class="tab-pane  active">
 								<div class="form-group">
 									<label class="col-sm-1">{pigcms{:L('STORE_DESCRIPTION_BKADMIN')}</label>
 									<textarea class="col-sm-5" rows="5" name="txt_info"></textarea>
                                     <span class="form_tips">This will be shown to users as a pop-up window when they open a store on the app</span>
 								</div>
-								<div class="form-group">
-									<label class="col-sm-1">{pigcms{:L('STOREFRONT_IMAGE_BKADMIN')}</label>
-                                    <div style="display:inline-block;position:relative;width:78px;height:34px;" id="J_selectImage">
-                                        <div class="btn btn-sm btn-success">{pigcms{:L('UPLOAD_BKADMIN')}</div>
+                                <!--               图片上传             ----->
+
+                                <div class="form-group">
+                                    <label class="col-sm-1">{pigcms{:L('_BACK_UPLOADMODE_TITLE_')}</label>
+                                    <div class="col-sm-10">
+                                        <label><span><label><input id="is_open_pick" name="is_open_pick" <if condition="$store_shop['is_open_pick'] eq 0 ">checked="checked"</if> value="0" type="radio"></label>&nbsp;<span>{pigcms{:L('_BACK_UPLOADMODE1_')}</span>&nbsp;</span></label>
+                                        &nbsp;<label><span><label><input id="is_open_pick" name="is_open_pick" <if condition="$store_shop['is_open_pick'] eq 1 ">checked="checked"</if> value="1" type="radio" ></label>&nbsp;<span>{pigcms{:L('_BACK_UPLOADMODE2_')}</span></span></label>
+                                        &nbsp;<label><span><label><input id="is_open_pick" name="is_open_pick" <if condition="$store_shop['is_open_pick'] eq 2 ">checked="checked"</if> value="2" type="radio" ></label>&nbsp;<span>{pigcms{:L('_BACK_UPLOADMODE3_')}</span></span></label>
+
+                                        <div>{pigcms{:L('RATIO_BKADMIN')}
+                                        </div></div>
+                                </div>
+                                <!--               图片上传                 /////-->
+                                <div id="upload_image_box" class="row" style="margin-bottom: 10px;display: none;">
+                                    <div class="col-lg-12">
+                                        <div class="ibox ">
+                                            <div class="ibox-title  back-change">
+                                                <label style="margin-bottom: 10px">{pigcms{:L('ITEM_PHOTO_BKADMIN')}</label>
+                                            </div>
+                                            <div class="ibox-content">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="image-crop">
+                                                            <img id="ori_image" src="{pigcms{$static_path}images/p3.jpg">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <h4>{pigcms{:L('PREVIEW_BKADMIN')}</h4>
+                                                        <div class="img-preview img-preview-sm"></div>
+                                                        <p>
+                                                            &nbsp;<div  id="upld" class="btn btn-primary">Upload</div>
+                                                        </p>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-									<!--a href="javascript:void(0)" class="btn btn-sm btn-success" id="J_selectImage">上传图片</a-->
-									<span class="form_tips" style="display: inline-flex;">{pigcms{:L('RATIO_BKADMIN')}</span>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-1"> {pigcms{:L('PREVIEW_BKADMIN')}</label>
-									<div id="upload_pic_box">
-										<ul id="upload_pic_ul">
-											<volist name="now_merchant['pic']" id="vo">
-												<li class="upload_pic_li"><img src="{pigcms{$vo.url}"/><input type="hidden" name="pic[]" value="{pigcms{$vo.title}"/><br/><a href="#" onclick="deleteImage('{pigcms{$vo.title}',this);return false;">[ {pigcms{:L('DELETE_BKADMIN')} ]</a></li>
-											</volist>
-										</ul>
-									</div>
-								</div>
-							</div>
+                                </div>
+                                <!--                                //---------------------------------->
+                                <div class="form-group" >
+                                    <label class="col-sm-1">{pigcms{:L('STOREFRONT_IMAGE_BKADMIN')}</label>
+                                    <div style="display:inline-block;" id="J_selectImage">
+                                        <div class="btn btn-sm btn-success" style="position:relative;width:78px;height:34px;">
+                                            <label title="Upload image file" for="inputImage" >
+                                                <input type="file" accept="image/*" name="pic" id="inputImage" style="display:none">
+                                                {pigcms{:L('UPLOAD_BKADMIN')}
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <span class="form_tips"></span>
+                                </div>
+
+                                <div class="form-group hidden_obj">
+                                    <label class="col-sm-1">{pigcms{:L('IMAGE_SELECT_BKADMIN')}</label>
+                                    <a href="#modal-table" class="btn btn-sm btn-success" onclick="selectImg('upload_pic_ul','goods')">{pigcms{:L('IMAGE_SELECT_BKADMIN')}</a>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-1">{pigcms{:L('PREVIEW_BKADMIN')}</label>
+                                    <div id="upload_pic_box">
+                                        <ul id="upload_pic_ul">
+                                            <volist name="now_store['pic']" id="vo">
+                                                <li class="upload_pic_li"><img src="{pigcms{$vo.url}"/><input type="hidden" name="pic[]" value="{pigcms{$vo.title}"/><br/><a href="#" onclick="deleteImage('{pigcms{$vo.title}',this);return false;">[ {pigcms{:L('DELETE_BKADMIN')} ]</a></li>
+                                            </volist>
+                                        </ul>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                            <!--               图片上传结束              -->
 							<div id="discount" class="tab-pane">
 								<div class="alert alert-block alert-success">
 									<button type="button" class="close" data-dismiss="alert">
@@ -542,7 +596,7 @@ zoom: 1;
 .form-group>label{font-size:12px;line-height:24px;}
 #upload_pic_box{margin-top:20px;height:150px;}
 #upload_pic_box .upload_pic_li{width:130px;float:left;list-style:none;}
-#upload_pic_box img{width:100px;height:70px;border:1px solid #ccc;}
+#upload_pic_box img{width:100px;height:100px;}
 .webuploader-container{
     position:relative;
 }
@@ -560,98 +614,142 @@ zoom: 1;
 <script src="{pigcms{$static_public}kindeditor/kindeditor.js"></script>
 <script src="{pigcms{$static_public}kindeditor/lang/zh_CN.js"></script>
 <script type="text/javascript" src="{pigcms{$static_public}js/webuploader.min.js"></script>
+<script>
+    var loaded = false;
+    var $upload_image_box;
+    var $inputImage;
+    var $cropped;
+    var $image;
+    var options = {
+        aspectRatio: 1,
+        preview: ".img-preview",
+        done: function (data) {
+            // Output the result data for cropping image.
+        }
+    };
+
+    if (loaded == false) {
+        loaded = true;
+        $upload_image_box = $("#upload_image_box"); //裁剪工具区域
+        $inputImage = $("#inputImage");             //打开裁剪上传区域的按钮
+        if (window.FileReader) {                    //检测浏览器是否支持FileReader
+
+            $inputImage.change(function () {        //将按钮事件关联事件
+
+                var fileReader = new FileReader(),
+                    files = this.files,
+                    file;
+                if (!files.length) {
+                    return;
+                }
+                $image = $(".image-crop > img");
+                $upload_image_box.show();
+                file = files[0];
+
+                if (/^image\/\w+$/.test(file.type)) {
+                    $upload_image_box.show();
+                    fileReader.readAsDataURL(file);
+                    fileReader.onload = function () {
+                        $inputImage.val("");
+                        $image.cropper('destroy').cropper(options);
+                        $image.cropper("reset", true).cropper("replace", this.result);
+                    };
+                } else {
+                    showMessage("Please choose an image file.");
+                }
+            });
+        } else {
+            $inputImage.addClass("hide");
+        }
+
+        $("#setDrag").click(function () {
+            $image.cropper("setDragMode", "crop");
+        });
+
+        $("#upld").on("click", function () {
+
+            //console.log("download");
+            if ($("#ori_image").attr("src") == null) {
+                return false;
+            } else {
+
+                var base64 =  $($image).cropper('getCroppedCanvas', {
+                    width: 620,
+                    height: 520
+                }).toDataURL("image/png");
+
+                //$("#finalImg").prop("src", base64);// 显示图片
+                uploadFile(base64)//编码后上传服务器
+                //closeTailor();// 关闭裁剪框
+            }
+        });
+    }
+
+    $(document).ready(function(){
+        $("#inputImage").on("click", function () {
+            load_cooper($("input[name='is_open_pick']:checked").val());
+        });
+    });
+
+    //点击“上传图片”后运行
+    function load_cooper(rat) {
+
+        var ar=0;
+        if (rat==0){
+            ar=1.667;
+        }else if (rat==1){
+            ar=2.8
+        }else if (rat==2){
+            ar=1
+        }else{
+            ar=1
+        }
+        options["aspectRatio"] = ar;
+
+        if (!$cropped) {
+
+            $cropped = $($image).cropper(options);
+        }
+    }
+
+    function dataURLtoFile(dataURL, fileName, fileType) {
+        var arr = dataURL.split(','), mime = arr[0].match(/:(.*?);/)[1],
+            bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+        while(n--){
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+        return new File([u8arr], fileName, {type:fileType || 'image/png'});
+    }
+    //ajax请求上传
+    function uploadFile(file) {
+        var oData = new FormData();
+        var nameImg=new Date().getTime()+".png";
+        var ff=dataURLtoFile(file,nameImg);
+        oData.append("file", ff);
+        $.ajax({
+            url : "{pigcms{:U('Config/store_ajax_upload_pic', array('store_id' => $now_store['store_id']))}",
+            type: "post",
+            dataType:"json",
+            data : oData,
+            processData: false,
+            contentType: false,
+            async : true,
+            success : function(data) {
+                if(data.error == 0){$upload_image_box.hide();
+                    $('#upload_pic_ul').append('<li class="upload_pic_li"><img src="'+data.url+'"/><input type="hidden" name="pic[]" value="'+data.title+'"/><br/><a href="#" onclick="deleteImage(\''+data.title+'\',this);return false;">[ 删除 ]</a></li>');
+                }else{
+                    alert(data.info);
+                }
+            },
+            error:function(data){
+                $('.loading'+file.id).remove();
+                alert('Upload failed! Please try again.');
+            }
+        });
+    }
+
+</script>
 <script type="text/javascript">
-// KindEditor.ready(function(K){
-// 	var editor = K.editor({
-// 		allowFileManager : true
-// 	});
-// 	K('#J_selectImage').click(function(){
-// 		if($('.upload_pic_li').size() >= 10){
-// 			alert('最多上传10个图片！');
-// 			return false;
-// 		}
-// 		editor.uploadJson = "{pigcms{:U('Config/store_ajax_upload_pic')}";
-// 		editor.loadPlugin('image', function(){
-// 			editor.plugin.imageDialog({
-// 				showRemote : false,
-// 				imageUrl : K('#course_pic').val(),
-// 				clickFn : function(url, title, width, height, border, align) {
-// 					$('#upload_pic_ul').append('<li class="upload_pic_li"><img src="'+url+'"/><input type="hidden" name="pic[]" value="'+title+'"/><br/><a href="#" onclick="deleteImage(\''+title+'\',this);return false;">[ 删除 ]</a></li>');
-// 					editor.hideDialog();
-// 				}
-// 			});
-// 		});
-// 	});
-//
-// 	$('#edit_form').submit(function(){
-// 		$('#edit_form button[type="submit"]').prop('disabled',true).html('Save....');
-// 		$.post("{pigcms{:U('Config/store_add')}",$('#edit_form').serialize(),function(result){
-// 			if(result.status == 1){
-// 				alert(result.info);
-// 				window.location.href = "{pigcms{:U('Config/store')}";
-// 			}else{
-// 				$('#edit_form button[type="submit"]').prop('disabled',false).html('<i class="ace-icon fa fa-check bigger-110"></i>保存');
-// 				alert(result.info);
-// 			}
-// 		})
-// 		return false;
-// 	});
-//
-// 	$('#get_key_btn').click(function(){
-// 		var s_name = $('input[name="name"]');
-// 		s_name.val($.trim(s_name.val()));
-// 		$('#keywords').val($.trim($('#keywords').val()));
-// 		if(s_name.val().length == 0){
-// 			alert('请先填写店铺名称！');
-// 			s_name.focus();
-// 		}else if($('#keywords').val().length != 0){
-// 			alert('请先删除您填写的关键词！');
-// 			$('#keywords').focus();
-// 		}else{
-// 			$.get("{pigcms{:U('Index/Scws/ajax_getKeywords')}",{title:s_name.val()},function(result){
-// 				result = $.parseJSON(result);
-// 				if(result.num == 0){
-// 					alert('您的店铺名称没有提取到关键词，请手动填写关键词！');
-// 					$('#keywords').focus();
-// 				}else{
-// 					$('#keywords').val(result.list.join(' ')).focus();
-// 				}
-// 			});
-// 		}
-// 	});
-// });
-
-var uploader = WebUploader.create({
-    auto: true,
-    swf: '{pigcms{$static_public}js/Uploader.swf',
-    server: "{pigcms{:U('Config/store_ajax_upload_pic', array('store_id' => $now_store['store_id']))}",
-    pick: '#J_selectImage',
-    accept: {
-        title: 'Images',
-        extensions: 'gif,jpg,jpeg,png',
-        mimeTypes: 'image/gif,image/jpeg,image/jpg,image/png'
-    }
-});
-uploader.on('fileQueued',function(file){
-    if($('.upload_pic_li').size() >= 10){
-        uploader.cancelFile(file);
-        alert('最多上传10张图片！');
-        return false;
-    }
-});
-uploader.on('uploadSuccess',function(file,response){
-    if(response.error == 0){
-        $('#upload_pic_ul').append('<li class="upload_pic_li"><img src="'+response.url+'"/><input type="hidden" name="pic[]" value="'+response.title+'"/><br/><a href="#" onclick="deleteImage(\''+response.title+'\',this);return false;">[ 删除 ]</a></li>');
-    }else{
-        alert(response.info);
-    }
-});
-
-uploader.on('uploadError', function(file,reason){
-    $('.loading'+file.id).remove();
-    alert('Upload failed! Please try again.');
-});
-
 function deleteImage(path,obj){
 	$.post("{pigcms{:U('Config/store_ajax_del_pic')}",{path:path});
 	$(obj).closest('.upload_pic_li').remove();
