@@ -584,7 +584,7 @@ class IndexAction extends BaseAction {
                 }
             }
 
-            $city_id = $_POST['city_id'] == 0 ? 105 : $_POST['city_id'];
+            $city_id = $_POST['city_id'];// == 0 ? 105 : $_POST['city_id'];
 
             //-----------------------------------------------------------
 
@@ -601,7 +601,8 @@ class IndexAction extends BaseAction {
             $condition_today_request['o.status'] = array('lt', 4);
             $condition_today_request['o.is_del'] = 0;
             $condition_today_request['o.paid'] = 1;
-            $condition_today_request['m.city_id'] = $city_id;
+            if($city_id != 0)
+                $condition_today_request['m.city_id'] = $city_id;
             $today = M('Shop_order')->field('sum(o.total_price+o.tip_charge-o.coupon_price-o.delivery_discount-o.merchant_reduce) as total_cash')->join(' as o left join ' . C('DB_PREFIX') . 'merchant_store m ON m.store_id=o.store_id')->where($condition_today_request)->select();
             $today_cash = $today[0]['total_cash'];
 
@@ -609,7 +610,8 @@ class IndexAction extends BaseAction {
             $condition_merchant_request['o.status'] = array('lt', 4);
             $condition_merchant_request['o.is_del'] = 0;
             $condition_merchant_request['o.paid'] = 1;
-            $condition_merchant_request['m.city_id'] = $city_id;
+            if($city_id != 0)
+                $condition_merchant_request['m.city_id'] = $city_id;
             $res_shop = M('Shop_order')->field('o.total_price+o.tip_charge-o.coupon_price-o.delivery_discount-o.merchant_reduce as cash_flow,o.total_price+o.tip_charge as sales,o.payment_money ,o.pay_type,o.pay_time')->join(' as o left join ' . C('DB_PREFIX') . 'merchant_store m ON m.store_id=o.store_id')->where($condition_merchant_request)->order('pay_time asc')->select();
 
 //            $condition_city_request['o.pay_time'] = array(array('egt', $today_zero_time), array('elt', $end_time));
