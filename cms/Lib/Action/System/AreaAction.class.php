@@ -166,6 +166,15 @@ class AreaAction extends BaseAction{
 	}
 	public function modify(){
 		if(IS_POST){
+            if (($_POST['is_pick_up']==1) && ($_POST['is_shipping']==1)){
+                $_POST["bag_type"]=3;
+            }else if ($_POST['is_pick_up']==1){
+                $_POST["bag_type"]=1;
+            }else if ($_POST['is_shipping']==1){
+                $_POST["bag_type"]=2;
+            }else{
+                $_POST["bag_type"]=0;
+            }
 			$database_area = D('Area');
 			$condition_area['area_url'] = $_POST['area_url'];
 			if($database_area->where($condition_area)->find()){
@@ -198,6 +207,15 @@ class AreaAction extends BaseAction{
 		if(IS_POST){
 			$database_area = D('Area');
 			$condition_area['area_url'] = $_POST['area_url'];
+            if (($_POST['is_pick_up']==1) && ($_POST['is_shipping']==1)){
+                $_POST["bag_type"]=3;
+            }else if ($_POST['is_pick_up']==1){
+                $_POST["bag_type"]=1;
+            }else if ($_POST['is_shipping']==1){
+                $_POST["bag_type"]=2;
+            }else{
+                $_POST["bag_type"]=0;
+            }
 			$area_type = $database_area->where(array('area_id'=>$_POST['area_id']))->field('area_type')->select();
 			if($database_area->data($_POST)->save()){
 				import('ORG.Util.Dir');
