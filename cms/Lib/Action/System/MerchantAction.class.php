@@ -1584,6 +1584,12 @@ class MerchantAction extends BaseAction{
             case 2://关闭
                 $where['s.status'] = array('neq',1);
                 break;
+            case 3://一直关闭
+                for($i=1;$i<=21;++$i) {
+                    $where['s.open_'.$i] = array('eq', "00:00:00");
+                    $where['s.close_'.$i] = array('eq', "00:00:00");
+                }
+                break;
         }
 
         if($_GET['city_id']){
@@ -1610,7 +1616,6 @@ class MerchantAction extends BaseAction{
                     $is_all_zero = false;
                 }
             }
-
             $store['all_zero'] = $is_all_zero;
         }
         $this->assign('store_list',$store_list);

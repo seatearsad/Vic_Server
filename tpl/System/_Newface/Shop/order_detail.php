@@ -159,12 +159,12 @@
                                         <td colspan="5">${pigcms{$order['packing_charge']|floatval}</td>
                                     </tr>
                                 </if>
-                                <if condition="$order['freight_charge'] gt 0">
-                                    <tr>
-                                        <th class="text-nowrap" scope="row">{pigcms{:L('_DELI_PRICE_')}</th>
-                                        <td colspan="5">${pigcms{$order['freight_charge']|floatval}</td>
-                                    </tr>
-                                </if>
+
+                                <tr>
+                                    <th class="text-nowrap" scope="row">{pigcms{:L('_DELI_PRICE_')}</th>
+                                    <td colspan="5">${pigcms{$order['freight_charge']|floatval}</td>
+                                </tr>
+
                                 <tr>
                                     <th class="text-nowrap" scope="row">{pigcms{:L('_BACK_TAX_')}</th>
                                     <td colspan="5">${pigcms{$order['tax_price']|floatval}</td>
@@ -249,7 +249,7 @@
                                 <if condition="$order['coupon_id']">
                                     <tr>
                                         <th class="text-nowrap" scope="row">{pigcms{:L('_BACK_SYS_CON_PRICE_')}</th>
-                                        <td colspan="5">${pigcms{$order['coupon_price']} (ID &nbsp;{pigcms{$order['coupon_id']})</td>
+                                        <td colspan="5">${pigcms{$order['coupon_price']} (ID &nbsp;{pigcms{$order['coupon_id2']})</td>
                                     </tr>
                                 </if>
 

@@ -7,7 +7,7 @@
     </div>
 </div></div></div>
 
-<include file="Public:toast_inc"/>
+
 
 
 <!-- Mainly scripts -->

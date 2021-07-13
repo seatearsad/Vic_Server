@@ -5,16 +5,16 @@
 
     <div class="row wrapper border-bottom white-bg page-heading">
         <div class="col-lg-10">
-            <h2>{pigcms{:L('J_CUSTOMIZED_MENU')}</h2>
+            <h2>{pigcms{:L('B_PINF')}</h2>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                    <a href="{pigcms{:U('Index/index')}">Home</a>
+                    {pigcms{:L('B_INFO')}
                 </li>
                 <!--                <li class="breadcrumb-item">-->
                 <!--                    <a>UI Elements</a>-->
                 <!--                </li>-->
                 <li class="breadcrumb-item active">
-                    <strong>{pigcms{:L('J_CUSTOMIZED_MENU')}</strong>
+                    <strong>{pigcms{:L('B_PINF')}</strong>
                 </li>
             </ol>
         </div>

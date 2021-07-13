@@ -149,7 +149,7 @@
                                         <div class="col-sm-9"><input type="text" size="30" class="form-control"
                                                                      name="ahname" placeholder="Account Holder Name"
                                                                      value="{pigcms{$card.ahname}"
-                                                                     validate="maxlength:50,required:true"/>
+                                                                     validate="maxlength:50"/>
                                         </div>
                                     </div>
                                     <div class="form-group  row">
@@ -157,7 +157,7 @@
                                         <div class="col-sm-9"><input type="text" size="30" class="form-control"
                                                                      name="transit" placeholder="Transit(Branch)"
                                                                      value="{pigcms{$card.transit}"
-                                                                     validate="maxlength:50,required:true"/>
+                                                                     validate="maxlength:50"/>
                                         </div>
                                     </div>
                                     <div class="form-group  row">
@@ -165,7 +165,7 @@
                                         <div class="col-sm-9"><input type="text" size="30" class="form-control"
                                                                      name="institution" placeholder="Institution"
                                                                      value="{pigcms{$card.institution}"
-                                                                     validate="maxlength:50,required:true"/>
+                                                                     validate="maxlength:50"/>
                                         </div>
                                     </div>
                                     <div class="form-group  row">
@@ -173,7 +173,7 @@
                                         <div class="col-sm-9"><input type="text" size="30" class="form-control"
                                                                      name="account" placeholder="Account"
                                                                      value="{pigcms{$card.account}"
-                                                                     validate="maxlength:50,required:true"/>
+                                                                     validate="maxlength:50"/>
                                         </div>
                                     </div>
 

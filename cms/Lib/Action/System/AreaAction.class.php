@@ -23,7 +23,7 @@ class AreaAction extends BaseAction{
 				}
 			}
 		}
-
+        $this->assign('type',$_GET['type']);
 		$condition_area['area_pid'] = $_GET['pid'];
 		$condition_area['area_type'] = $_GET['type'];
 		$condition_area['is_open'] = array('neq',2);
@@ -32,7 +32,13 @@ class AreaAction extends BaseAction{
 			$this->assign('is_system',true);
 		}
 		$now_area = $database_area->field(true)->where(array('area_id'=>$_GET['pid']))->find();
+
 		$this->assign('now_area',$now_area);
+		if ($_GET['type']==3){
+            $condition_parent['area_id'] = $now_area["area_pid"];
+            $parent_area = $database_area->field(true)->where($condition_parent)->find();
+            $this->assign('parent_area',$parent_area);
+        }
 		
 		if($_GET['type'] == 4){
 			$order = '`area_sort` DESC,`is_open` DESC,`first_pinyin` ASC';
@@ -46,6 +52,7 @@ class AreaAction extends BaseAction{
 				$now_type_str = '省份';
 				break;
 			case 2:
+
 				$now_type_str = '城市';
 				break;
 			case 3:
@@ -55,7 +62,6 @@ class AreaAction extends BaseAction{
 				$now_type_str = '商圈';
 		}
 		$this->assign('now_type_str',$now_type_str);
-
         $this->assign('module_name','System');
 		$this->display();
     }

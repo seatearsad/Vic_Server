@@ -8,7 +8,7 @@
             <h2>{pigcms{:L('_DELIVER_SCHEDULE_')}</h2>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                    <a href="{pigcms{:U('Index/index')}">Home</a>
+                    {pigcms{:L('_BACK_DLVMNG_')}
                 </li>
                 <!--                <li class="breadcrumb-item">-->
                 <!--                    <a>UI Elements</a>-->
@@ -299,11 +299,23 @@
             var new_num = 0;
             $('#add_set').click(function () {
                 new_num = new_num + 1;
-                var html_td = '<td class="textcenter">';
-                var html = '<tr data-id="' + new_num + '">';
-                html += html_td + '<input type="text" name="start_time" data-id="new_' + new_num + '" data-num="' + init_num + '">' + ' -- ' + '<input type="text" name="end_time" data-id="new_' + new_num + '" data-num="' + init_num + '">' + '</td>';
-                html += html_td + '<input type="text" name="min" data-id="new_' + new_num + '" data-num="' + init_num + '" value="0"></td>';
-                html += html_td + '<input type="text" name="max" data-id="new_' + new_num + '" data-num="' + init_num + '" value="0"></td>';
+                var html_td = '<td class="textleft">';
+                var html="";
+                if(new_num==1){
+                    html = '<tr data-id="' + new_num + '">';
+                    html += html_td + 'Time</td>';
+                    html += html_td + 'Max</td>';
+                    html += html_td + 'Min</td>';
+                    html += html_td + 'Days</td>';
+                    html += '</tr>';
+                }else{
+                    html="";
+                }
+
+                html += '<tr data-id="' + new_num + '">';
+                html += html_td + '<input type="text"  name="start_time" data-id="new_' + new_num + '" data-num="' + init_num + '">' + ' -- ' + '<input type="text" name="end_time" data-id="new_' + new_num + '" data-num="' + init_num + '">' + '</td>';
+                html += html_td + '<input type="text"  name="min" data-id="new_' + new_num + '" data-num="' + init_num + '" value="0"></td>';
+                html += html_td + '<input type="text"  name="max" data-id="new_' + new_num + '" data-num="' + init_num + '" value="0"></td>';
                 html += html_td + '<input type="text" name="week_num" data-id="new_' + new_num + '" value="0,1,2,3,4,5,6"> <a href="javascript:delAdd(' + new_num + ')">X</a></td>';
 
                 html += '</tr>';

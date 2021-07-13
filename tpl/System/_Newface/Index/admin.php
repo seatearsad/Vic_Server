@@ -27,7 +27,7 @@
                             <div class="form-group  row">
                                 <label class="col-sm-3 col-form-label">{pigcms{:L('B_FULLNAME')}</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" name="realname" id="realname" size="20" placeholder="" tips="{pigcms{:L('B_NAMEDESC')}" value="{pigcms{$admin['realname']}"/>
+                                    <input type="text" class="form-control" name="realname" id="realname" size="20" placeholder="" tips="{pigcms{:L('B_NAMEDESC')}" validate="maxlength:30,required:true" value="{pigcms{$admin['realname']}"/>
                                 </div>
                             </div>
                             <div class="form-group  row">

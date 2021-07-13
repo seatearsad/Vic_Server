@@ -186,7 +186,7 @@
                                 <div class="form-group  row">
                                     <label class="col-sm-3 col-form-label">{pigcms{:L('_BACK_PICK_KEY_')}</label>
                                     <div class="col-sm-9">
-                                        <input type="text" class="input fl" style="margin-left:4px;" name="notice" value=""  autocomplete="off">
+                                        <input type="text" class="input fl" style="margin-left:4px;" name="notice" value=""  autocomplete="off" validate="required:true">
                                     </div>
                                 </div>
 

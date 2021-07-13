@@ -8,7 +8,7 @@
             <h2>{pigcms{:L('_BACK_USER_LIST_')}</h2>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                    <a href="{pigcms{:U('Index/index')}">Home</a>
+                    {pigcms{:L('_BACK_USERMNG_')}
                 </li>
                 <!--                <li class="breadcrumb-item">-->
                 <!--                    <a>UI Elements</a>-->
@@ -37,8 +37,8 @@
                     <div class="ibox-content">
                         <div class="table-responsive">
                             <!-------------------------------- 工具条 -------------------------------------->
-                            <div style="height: 55px;">
-                                <div id="tool_bar" class="form-inline tutti_toolbar">
+                            <div style="margin-bottom: 10px;min-height: 50px">
+                                <div id="tool_bar" class="form-inline">
                                     <form action="{pigcms{:U('User/index')}" method="get">
                                         <input type="hidden" name="c" value="User"/>
                                         <input type="hidden" name="a" value="index"/>
@@ -72,7 +72,7 @@
                                     </form>
                                 </div>
                             </div>
-                        </div>
+
                         <table class="table table-striped table-bordered table-hover dataTables-example">
                             <thead>
                             <tr>
@@ -137,6 +137,7 @@
                             </tr>
                             </tfoot>
                         </table>
+                        </div>
                     </div>
                 </div>
             </div>

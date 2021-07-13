@@ -82,6 +82,7 @@ class AdverAction extends BaseAction{
 	public function adver_list(){
 
 		$now_category = $this->check_get_category($_GET['cat_id']);
+
 		$this->assign('now_category',$now_category);
 		$many_city	=	$this->config['many_city'];
 		$database_adver = D('Adver');

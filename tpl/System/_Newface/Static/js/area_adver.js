@@ -58,7 +58,7 @@ function show_cityss(id,name,type){
 }
 $(function(){
 	//检测是否需要显示城市
-	console.log("检测是否需要显示城市");
+	// console.log("检测是否需要显示城市");
 	if(document.getElementById('choose_cityareass')){
 		show_provincess();
 	}

@@ -8,7 +8,7 @@
             <h2>{pigcms{:L('I_ARTICLES')}</h2>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                    <a href="{pigcms{:U('Index/index')}">Home</a>
+                    {pigcms{:L('G_SYSTME_SETTINGS')}
                 </li>
                 <!--                <li class="breadcrumb-item">-->
                 <!--                    <a>UI Elements</a>-->
@@ -35,8 +35,8 @@
                     <div class="ibox-content">
                         <div class="table-responsive">
                             <!-------------------------------- 工具条 -------------------------------------->
-                            <div style="height: 55px;">
-                                <div id="tool_bar" class="form-inline tutti_toolbar">
+                            <div style="margin-bottom: 15px;min-height: 55px">
+                                <div id="tool_bar" class="form-inline">
                                     {pigcms{:L('I_GENERAL_CATEGORY')}：
                                     <select name="all_type" id="select_type" class="form-control">
                                         <option value="-1">All</option>

@@ -92,7 +92,7 @@ function previewimage(input){
 
 /*添加选项*/
 $(document).ready(function(){
-	$(".question_box ul li .list_del").live('click',function(){
+	$(".question_box ul li .list_del").on('click',function(){
 		if ($(this).parents("ul").find('li').size() > 1) {
 			$(this).parents("li").remove();
 		} else {
@@ -105,7 +105,7 @@ $(document).ready(function(){
 		}
 	});
 
-	$(".properties .bot_add a.btn").live('click',function(){
+	$(".properties .bot_add a.btn").on('click',function(){
 		var i = $(this).parents('.properties').index();
 		var t = '<li><u>'+ getLangStr('ATTRIBUTE_VALUE_BKADMIN')+'</u><input type="text" class="txt properties_val" name="properties_val['+i+'][]"/> <a class="list_del" href="javascript:;" title="删除这个选项">×</a></li>';
 		if($(this).parents(".question_box").find("ul li").size() <= 25){
@@ -124,7 +124,7 @@ $(document).ready(function(){
 		$(".add_properties").before(t);
 	});
 
-	$(".spec .bot_add a.btn").live('click',function(){
+	$(".spec .bot_add a.btn").on('click',function(){
 		var i = $(this).parents('.spec').index();
 		var t = '<li><u>'+getLangStr('SPECIFICATION_VALUE_BKADMIN')+'：</u><input type="hidden" class="hide_txt spec_val_id" name="spec_val_id['+i+'][]"> <input type="text" class="txt spec_val" name="spec_val['+i+'][]"/> <a class="list_del" href="javascript:;" title="'+getLangStr('DELETE_BKADMIN')+'">×</a></li>';
 		if ($(this).parents(".question_box").find("ul li").size() <= 25) {
@@ -293,7 +293,7 @@ $(document).ready(function(){
 		//JSON.parse(window.sessionStorage.getItem(session_index));
 		//console.log(values);
 	});
-	$(".box_del").live('click',function(){
+	$(".box_del").on('click',function(){
 		$(this).parents(".question_box").remove();
 		if ($('.spec').size() < 1) {
 			$('.add_table, .add_table_foodshop').css('display', 'none');
@@ -302,7 +302,7 @@ $(document).ready(function(){
 		}
 	});
 
-	$("#table_list input").live('input', function(e){
+	$("#table_list input").on('input', function(e){
 		var values = [];
 		if (window.sessionStorage.getItem(session_index) != '') {
 			values = JSON.parse(window.sessionStorage.getItem(session_index));

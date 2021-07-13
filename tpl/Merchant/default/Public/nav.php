@@ -15,45 +15,7 @@
 		</div>
 		<div class="navbar-buttons navbar-header pull-right" role="navigation">
 			<ul class="nav ace-nav">
-				<!--li class="red">
-					<a data-toggle="dropdown" class="dropdown-toggle" href="#"> 
-						<i class="ace-icon fa fa-bell icon-animated-bell"></i> 
-						<span class="badge badge-important">0</span>
-					</a>
-					<ul class="pull-right dropdown-navbar navbar-pink dropdown-menu dropdown-caret dropdown-close">
-						<li class="dropdown-header">
-							<i class="ace-icon fa fa-exclamation-triangle"></i> 0笔未处理订单
-						</li>
-						<li class="dropdown-footer">
-							<a href="#">查看全部未处理订单 
-								<i class="ace-icon fa fa-arrow-right"></i>
-							</a>
-						</li>
-					</ul>
-				</li>
-				<li class="green">
-					<a data-toggle="dropdown" class="dropdown-toggle" href="#"> 
-						<i class="ace-icon fa fa-envelope icon-animated-vertical"></i> 
-						<span class="badge badge-success">0</span>
-					</a>
-		
-					<ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
-						<li class="dropdown-header">
-							<i class="ace-icon fa fa-envelope-o"></i> 0条未读消息
-						</li>
-						<li>
-							<a href="#">
-								有<span style="color: red;">0</span>条新留言
-							</a>
-						</li>
-						<li>
-							<a href="#">
-								有<span style="color: red;">0</span>条新评论
-							</a>
-						</li>
-						<li></li>
-					</ul>
-				</li-->
+
 				<li class="light-blue">
 					<a data-toggle="dropdown" href="#" class="dropdown-toggle"> 
 						<img class="nav-user-photo" src="{pigcms{$static_public}images/user.jpg" alt="Jason&#39;s Photo" /> 

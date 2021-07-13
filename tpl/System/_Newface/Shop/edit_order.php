@@ -60,7 +60,7 @@
                                                                                            data-id="{pigcms{$vo['tax_num']}"
                                                                                            data-name="{pigcms{$vo['deposit_price']}"
                                                                                            data-for="{pigcms{$vo['price']|floatval}" pattern="[0-9]*" size="3"
-                                                                                           value="{pigcms{$vo['num']}">/{pigcms{$vo['unit']}</th>
+                                                                                           value="{pigcms{$vo['num']}" >/{pigcms{$vo['unit']}</th>
                                                             <th class="text-center">{pigcms{$vo['tax_num']}%</th>
                                                             <th class="text-center">${pigcms{$vo['deposit_price']}</th>
                                                             <th class="text-center">{pigcms{$vo['spec']}</th>
@@ -175,15 +175,15 @@
                                                             <td colspan="5">$<span id="packing_charge">{pigcms{$order['packing_charge']|floatval}</span></td>
                                                         </tr>
                                                     </if>
-                                                    <if condition="$order['freight_charge'] gt 0">
-                                                        <tr>
-                                                            <th class="text-nowrap" scope="row">{pigcms{:L('_DELI_PRICE_')}</th>
-                                                            <td colspan="5">
-                                                                $<input type="text" name="freight_charge" id="freight_charge" size="5"
-                                                                        value="{pigcms{$order['freight_charge']|floatval}">
-                                                                </td>
-                                                        </tr>
-                                                    </if>
+
+                                                    <tr>
+                                                        <th class="text-nowrap" scope="row">{pigcms{:L('_DELI_PRICE_')}</th>
+                                                        <td colspan="5">
+                                                            $<input type="text" name="freight_charge" id="freight_charge" size="5"
+                                                                    value="{pigcms{$order['freight_charge']|floatval}">
+                                                            </td>
+                                                    </tr>
+
                                                     <tr>
                                                         <th class="text-nowrap" scope="row">{pigcms{:L('_BACK_TAX_')}</th>
                                                         <td colspan="5">$<span id="tax_price">{pigcms{:round($order['tax_price'],2)}</span></td>
@@ -349,6 +349,7 @@
             var good_num = parseFloat('{pigcms{$order.num}');
             var tip_charge = parseFloat('{pigcms{$order.tip_charge}');
             var all_discount = parseFloat("{pigcms{$order['coupon_price']+$order['merchant_reduce']+$order['delivery_discount']}");
+            var packing_charge = parseFloat("{pigcms{$order['packing_charge']}");
 
             $(function () {
                 $('table').find('.good_list').each(function () {
@@ -379,13 +380,13 @@
             }
 
             function getOtherTax() {
-                var tax = (parseFloat($('#packing_charge').html()) + parseFloat($('#freight_charge').val())) * $('#store_tax').val() / 100;
+                var tax = packing_charge + parseFloat($('#freight_charge').val()) * $('#store_tax').val() / 100;
                 return tax;
             }
 
             function getTotalPrice(good_price, tax_price, deposit_price) {
                 var total = good_price + tax_price + deposit_price;
-                total += parseFloat($('#packing_charge').html()) + parseFloat($('#freight_charge').val()) + parseFloat($('#service_fee').html());
+                total += packing_charge + parseFloat($('#freight_charge').val()) + parseFloat($('#service_fee').html());
                 return total;
             }
 
@@ -412,6 +413,17 @@
                 }
 
                 var total_prcie = getTotalPrice(good_price, tax_price, deposit_price);
+                console.log("--------------------------------------");
+                console.log("all_discount="+all_discount);
+                console.log("tip_charge="+tip_charge);
+                console.log("packing_charge="+packing_charge);
+                console.log("freight_charge="+parseFloat($('#freight_charge').val()));
+                console.log("service_fee="+parseFloat($('#service_fee').html()));
+                console.log("good_price="+good_price);
+                console.log("tax_price="+tax_price);
+                console.log("deposit_price="+deposit_price);
+                console.log("total_prcie="+total_prcie);
+
                 $('#good_price').html(good_price.toFixed(2));
                 $('#tax_price').html(tax_price.toFixed(2));
                 $('#deposit_price').html(deposit_price.toFixed(2));
