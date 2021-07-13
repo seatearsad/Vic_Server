@@ -847,7 +847,7 @@ class ShopAction extends BaseAction
             }
 
             if (($shop_order_data['change_price']*1)>0){
-                $this->error('订单只能修改一次，修改失败！');
+                $this->error(L('ORDER_EDIT_ONCE'));
             }
 
             //garfunkel add 记录原始价格
