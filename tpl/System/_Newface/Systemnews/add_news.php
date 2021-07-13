@@ -228,7 +228,7 @@
                             if (typeof($(this).attr('id')) != 'undefined') {
                                 if (is_addcss && i > curr) {
                                     var top = parseInt($(this).css("top"));
-                                    $(this).css("top", top + 100 + "px");
+                                    //$(this).css("top", top + 100 + "px");
                                 }
                                 var arr = $(this).attr('id').split('_');
                                 if (arr[2] == fid) {
