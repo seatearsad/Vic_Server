@@ -349,6 +349,7 @@
             var good_num = parseFloat('{pigcms{$order.num}');
             var tip_charge = parseFloat('{pigcms{$order.tip_charge}');
             var all_discount = parseFloat("{pigcms{$order['coupon_price']+$order['merchant_reduce']+$order['delivery_discount']}");
+            var packing_charge = parseFloat("{pigcms{$order['packing_charge']}");
 
             $(function () {
                 $('table').find('.good_list').each(function () {
@@ -379,13 +380,13 @@
             }
 
             function getOtherTax() {
-                var tax = (parseFloat($('#packing_charge').html()) + parseFloat($('#freight_charge').val())) * $('#store_tax').val() / 100;
+                var tax = packing_charge + parseFloat($('#freight_charge').val()) * $('#store_tax').val() / 100;
                 return tax;
             }
 
             function getTotalPrice(good_price, tax_price, deposit_price) {
                 var total = good_price + tax_price + deposit_price;
-                total += parseFloat($('#packing_charge').html()) + parseFloat($('#freight_charge').val()) + parseFloat($('#service_fee').html());
+                total += packing_charge + parseFloat($('#freight_charge').val()) + parseFloat($('#service_fee').html());
                 return total;
             }
 
@@ -415,7 +416,7 @@
                 console.log("--------------------------------------");
                 console.log("all_discount="+all_discount);
                 console.log("tip_charge="+tip_charge);
-                console.log("packing_charge="+parseFloat($('#packing_charge').html()));
+                console.log("packing_charge="+packing_charge);
                 console.log("freight_charge="+parseFloat($('#freight_charge').val()));
                 console.log("service_fee="+parseFloat($('#service_fee').html()));
                 console.log("good_price="+good_price);
