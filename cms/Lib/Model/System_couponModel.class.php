@@ -189,6 +189,10 @@ class System_couponModel extends Model{
         $where['h.is_use'] = array('neq',1);  //状态正常
 
         $where['uid'] = $uid;
+        $is_new = D('User')->check_new($uid,'all');
+        if(!$is_new){
+            $where['c.allow_new'] = 0;
+        }
         $where['_string'] = "(c.cate_name='".$table."') OR (c.cate_name ='all') OR (c.cate_name = '0')";
         $res = M('System_coupon_hadpull')->join('as h left join '.C('DB_PREFIX').'system_coupon c ON h.coupon_id=c.coupon_id')->field('h.id,c.coupon_id,c.name,c.order_money,c.discount,h.phone,h.receive_time,c.platform,c.cate_name,c.cate_id,c.start_time,c.end_time,h.is_use ,c.status,c.qrcode_id,c.des,c.des_detial,c.img,c.allow_new')->order('c.order_money Asc, h.is_use ASC ,c.discount DESC,c.add_time DESC')->where($where)->select();
 
