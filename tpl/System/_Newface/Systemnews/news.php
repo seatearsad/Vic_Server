@@ -8,18 +8,21 @@
             <h2>{pigcms{:L('I_ARTICLES')}</h2>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                    <a href="{pigcms{:U('Index/index')}">Home</a>
+                    {pigcms{:L('G_SYSTME_SETTINGS')}
                 </li>
                 <!--                <li class="breadcrumb-item">-->
                 <!--                    <a>UI Elements</a>-->
                 <!--                </li>-->
                 <li class="breadcrumb-item active">
-                    <strong>{pigcms{:L('I_ARTICLES')}</strong>
+                    <a href="{pigcms{:U('Systemnews/index')}" style="text-decoration: underline">{pigcms{:L('I_ARTICLES')}</a>
+                </li>
+                <li class="breadcrumb-item active">
+                    <strong>【{pigcms{$category_name}】 - Article List </strong>
                 </li>
             </ol>
         </div>
         <div class="col-lg-3" style="height 90px;margin-top:40px;">
-            <a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Systemnews/add_news',array('category_id'=>$_GET['category_id']))}','Add {pigcms{$category_name}',800,500,true,false,false,addbtn,'add',true);"><button type="button" class="btn btn-primary btn-sm float-right">Add {pigcms{$category_name}</button></a>
+            <a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Systemnews/add_news',array('category_id'=>$_GET['category_id']))}','Add {pigcms{$category_name}',900,500,true,false,false,addbtn,'add',true);"><button type="button" class="btn btn-primary btn-sm float-right">Add {pigcms{$category_name}</button></a>
         </div>
     </div>
     <div class="wrapper wrapper-content animated fadeInRight">
@@ -34,11 +37,12 @@
                     <div class="ibox-content">
                         <div class="table-responsive">
                             <!-------------------------------- 工具条 -------------------------------------->
-                            <div style="height: 60px;">
-                                <div id="tool_bar" class="form-inline tutti_toolbar">
+                            <div style="margin-bottom: 5px;min-height: 50px">
+                                <div id="tool_bar" class="form-inline">
                                     <form action="{pigcms{:U('Systemnews/news')}" method="get">
                                         <input type="hidden" name="c" value="Systemnews"/>
                                         <input type="hidden" name="a" value="news"/>
+                                        <input type="hidden" name="category_id" value="{pigcms{$category_id}"/>
                                         {pigcms{:L('F_FILTER')}:
                                         <input type="text" name="keyword" class="form-control" value="{pigcms{$_GET['keyword']}"/>
                                         <select name="searchtype" class="form-control">

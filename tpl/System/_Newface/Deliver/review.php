@@ -5,16 +5,16 @@
 
     <div class="row wrapper border-bottom white-bg page-heading">
         <div class="col-lg-9">
-            <h2>{pigcms{:L('_BACK_COURIER_APP_')}</h2>
+            <h2>{pigcms{:L('_BACK_NEWCOURIERVERFICATION_')}</h2>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                    <a href="{pigcms{:U('Index/index')}">Home</a>
+                    {pigcms{:L('_BACK_DLVMNG_')}
                 </li>
                 <!--                <li class="breadcrumb-item">-->
                 <!--                    <a>UI Elements</a>-->
                 <!--                </li>-->
                 <li class="breadcrumb-item active">
-                    <strong>{pigcms{:L('_BACK_COURIER_APP_')}</strong>
+                    <strong>{pigcms{:L('_BACK_NEWCOURIERVERFICATION_')}</strong>
                 </li>
             </ol>
         </div>
@@ -35,11 +35,11 @@
                     <div class="ibox-content">
                         <div class="table-responsive">
                             <!-------------------------------- 工具条 -------------------------------------->
-                            <div style="height: 55px;">
+                            <div style="margin-bottom: 10px;min-height: 50px">
                                 <form action="{pigcms{:U('Deliver/review')}" method="get">
                                     <input type="hidden" name="c" value="Deliver"/>
                                     <input type="hidden" name="a" value="review"/>
-                                <div id="tool_bar" class="form-inline tutti_toolbar">
+                                <div id="tool_bar" class="form-inline">
                                     {pigcms{:L('_BACK_SEARCH_')} ：
                                     <input type="text" class="form-control" name="keyword" class="input-text" value="{pigcms{$_GET['keyword']}"/>
                                     &nbsp;
@@ -64,7 +64,7 @@
                                 </div>
                                 </form>
                             </div>
-                        </div>
+
                         <table class="table table-striped table-bordered table-hover dataTables-example">
                             <thead>
                             <tr>
@@ -135,6 +135,7 @@
                             </tr>
                             </tfoot>
                         </table>
+                        </div>
                     </div>
                 </div>
             </div>

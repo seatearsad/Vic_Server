@@ -13,7 +13,7 @@
             <h2>{pigcms{:L('_BACK_DELIVERY_LIST_')}</h2>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                    <a href="{pigcms{:U('Index/index')}">Home</a>
+                    {pigcms{:L('_BACK_DLVMNG_')}
                 </li>
                 <!--                <li class="breadcrumb-item">-->
                 <!--                    <a>UI Elements</a>-->
@@ -55,12 +55,12 @@
                     <div class="ibox-content">
                         <div class="table-responsive">
                             <!-------------------------------- 工具条 -------------------------------------->
-                            <div style="height: 60px;">
+                            <div style="margin-bottom: 10px;min-height: 50px">
 <!--                                location.href = "{pigcms{:U('Merchant/Deliver/deliverList')}"+"&period="+period+"&phone="+phone+"&day="+day+"&status="+status;-->
                                 <form action="{pigcms{:U('System/Deliver/deliverList')}" method="get" class="form-inline ">
                                     <input type="hidden" name="c" value="Deliver"/>
                                     <input type="hidden" name="a" value="deliverList"/>
-                                <div id="tool_bar" class="form-inline tutti_toolbar">
+                                <div id="tool_bar" class="form-inline">
                                     {pigcms{:L('_BACK_DELIVERY_STATUS_')} ：
                                     <select id="status" name="status" class="form-control">
                                         <option value="0" <if condition="$status eq 0">selected</if> >{pigcms{:L('_BACK_ALL_')}</option>
@@ -70,8 +70,25 @@
                                         <option value="4" <if condition="$status eq 4">selected</if> >{pigcms{:L('_BACK_IN_TRANSIT_')}</option>
                                         <option value="5" <if condition="$status eq 5">selected</if> >{pigcms{:L('_BACK_COMPLETED_')}</option>
                                     </select>
-                                    &nbsp;{pigcms{:L('_BACK_USER_PHONE_')} :&nbsp;
-                                    <input type="text" class="form-control" id="phone" name="phone" <if condition="$phone">value="{pigcms{$phone}"</if>>
+                                    &nbsp;&nbsp;{pigcms{:L('_BACK_SEARCH_')}:&nbsp; <input type="text" name="keyword"
+                                                                               class="form-control"
+                                                                               value="{pigcms{$_GET['keyword']}"/>&nbsp;
+                                    <select name="searchtype" class="form-control" >
+                                        <option value="real_orderid"
+                                        <if condition="$_GET['searchtype'] eq 'real_orderid'">selected="selected"
+                                        </if>
+                                        >Order ID</option>
+                                        <option value="ordernumber"
+                                        <if condition="$_GET['searchtype'] eq 'ordernumber'">selected="selected"</if>
+                                        >Order Number</option>
+                                        <!--option value="orderid" <if condition="$_GET['searchtype'] eq 'orderid'">selected="selected"</if>>订单流水号</option>
+                                        <option value="third_id" <if condition="$_GET['searchtype'] eq 'third_id'">selected="selected"</if>>第三方支付流水号</option-->
+
+                                        <option value="phone"
+                                        <if condition="$_GET['searchtype'] eq 'phone'">selected="selected"</if>
+                                        >{pigcms{:L('_BACK_USER_PHONE_')}</option>
+                                    </select>
+
                                     &nbsp;&nbsp;&nbsp;{pigcms{:L('_BACK_DATE_SELECT_')}：
                                     <input type="text" class="form-control" name="begin_time" style="width:120px;"
                                            id="d4311" value="{pigcms{$_GET.begin_time}"
@@ -101,7 +118,7 @@
                                 </div>
                                 </form>
                             </div>
-                        </div>
+
                         <table class="table table-striped table-bordered table-hover dataTables-example">
                             <thead>
                             <tr>
@@ -167,6 +184,7 @@
                             </tr>
                             </tfoot>
                         </table>
+                        </div>
                     </div>
                 </div>
             </div>

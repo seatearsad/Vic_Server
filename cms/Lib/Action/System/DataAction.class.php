@@ -57,6 +57,41 @@ class DataAction extends BaseAction
         $this->display();
     }
 
+    public function sales_ana(){
+        $status_list = array(
+            1=>'Complete',
+            2=>'Cancelled'
+        );
+
+        if(isMobile()){
+            $this->assign('height',' ');
+        }else{
+            $this->assign('height',' height="80" ');
+        }
+        $this->assign('status_list', $status_list);
+
+        $city = D('Area')->where(array('area_type'=>2,'is_open'=>1))->select();
+        $this->assign('city',$city);
+
+        $pay_method = D('Config')->get_pay_method('','',0);
+        foreach ($pay_method as $k=>&$v){
+            switch ($k){
+                case 'offline':
+                    $v['name'] = 'Cash';
+                    break;
+                case 'alipay':
+                    $v['name'] = 'AliPay';
+                    break;
+                case 'weixin':
+                    $v['name'] = 'Wechat Pay';
+                    break;
+                default:
+                    break;
+            }
+        }
+        $this->assign('pay_method',$pay_method);
+        $this->display();
+    }
     public function order(){
         set_time_limit(0);
         require_once APP_PATH . 'Lib/ORG/phpexcel/PHPExcel.php';
@@ -162,7 +197,7 @@ class DataAction extends BaseAction
         }
 
         if(!empty($_GET['begin_time'])&&!empty($_GET['end_time'])){
-            if ($_GET['begin_time']>$_GET['end_time']) {
+            if (strtotime($_GET['begin_time']." 00:00:00")>strtotime($_GET['end_time']." 23:59:59")) {
                 $this->error("结束时间应大于开始时间");
             }
             $period = array(strtotime($_GET['begin_time']." 00:00:00"),strtotime($_GET['end_time']." 23:59:59"));
@@ -392,7 +427,7 @@ class DataAction extends BaseAction
         if(!$_GET['begin_time'] || !$_GET['end_time']){
             $this->error(L('J_SPECIFY_TIME'));
         }else{
-            if ($_GET['begin_time']>$_GET['end_time']) {
+            if (strtotime($_GET['begin_time']." 00:00:00")>strtotime($_GET['end_time']." 23:59:59")) {
                 $this->error("结束时间应大于开始时间");
             }
 
@@ -447,6 +482,8 @@ class DataAction extends BaseAction
         $total_coupon_discount = 0;
         //配送费减免总数
         $total_delivery_discount = 0;
+        //服务费总数
+        $total_service_fee = 0;
 
         //结束循环后是否存储最后一张订单，如果最后一张是代客下单为 false;
         $is_last = true;
@@ -481,6 +518,7 @@ class DataAction extends BaseAction
                 $total_reduce += $val['merchant_reduce'];
                 $total_coupon_discount += $val['coupon_price'];
                 $total_delivery_discount += $val['delivery_discount'];
+                $total_service_fee += $val['service_fee'];
 
                 $order_count++;
             }else{
@@ -511,6 +549,7 @@ class DataAction extends BaseAction
                     $total_reduce += $val['merchant_reduce'];
                     $total_coupon_discount += $val['coupon_price'];
                     $total_delivery_discount += $val['delivery_discount'];
+                    $total_service_fee += $val['service_fee'];
 
                     $all_record[$curr_order]['freight_tax'] = $val['freight_charge']*$val['store_tax']/100;
                     $all_record[$curr_order]['packing_tax'] = $val['packing_charge']*$val['store_tax']/100;
@@ -582,6 +621,7 @@ class DataAction extends BaseAction
         $objExcel->getActiveSheet()->getColumnDimension('K')->setAutoSize(true);
         $objExcel->getActiveSheet()->getColumnDimension('L')->setAutoSize(true);
         $objExcel->getActiveSheet()->getColumnDimension('M')->setAutoSize(true);
+        $objExcel->getActiveSheet()->getColumnDimension('N')->setAutoSize(true);
 
         $objActSheet->setCellValue('A1', '# of Orders');
         $objActSheet->setCellValue('B1', 'Subtotal');
@@ -596,6 +636,7 @@ class DataAction extends BaseAction
         $objActSheet->setCellValue('K1', 'Tips');
         $objActSheet->setCellValue('L1', 'Coupon');
         $objActSheet->setCellValue('M1', 'Free Delivery');
+        $objActSheet->setCellValue('N1', 'Service Fee');
         $index = 2;
         $objActSheet->setCellValueExplicit('A' . $index, $order_count,PHPExcel_Cell_DataType::TYPE_NUMERIC);
         $objActSheet->setCellValueExplicit('B' . $index, floatval(sprintf("%.2f", $total_goods_price)),PHPExcel_Cell_DataType::TYPE_NUMERIC);
@@ -610,6 +651,7 @@ class DataAction extends BaseAction
         $objActSheet->setCellValueExplicit('K' . $index, floatval(sprintf("%.2f", $total_tip)),PHPExcel_Cell_DataType::TYPE_NUMERIC);
         $objActSheet->setCellValueExplicit('L' . $index, floatval(sprintf("%.2f", $total_coupon_discount)),PHPExcel_Cell_DataType::TYPE_NUMERIC);
         $objActSheet->setCellValueExplicit('M' . $index, floatval(sprintf("%.2f", $total_delivery_discount)),PHPExcel_Cell_DataType::TYPE_NUMERIC);
+        $objActSheet->setCellValueExplicit('N' . $index, floatval(sprintf("%.2f", $total_service_fee)),PHPExcel_Cell_DataType::TYPE_NUMERIC);
 
         //输出
         $objWriter = new PHPExcel_Writer_Excel5($objExcel);
@@ -851,6 +893,8 @@ class DataAction extends BaseAction
 //                $objActSheet->setCellValue('G1', '城市');
 //                $objActSheet->setCellValue('H1', 'QQ');
                 $objActSheet->setCellValue('E1', 'Registration Time');
+                $objActSheet->setCellValue('F1', 'Total Orders');
+                $objActSheet->setCellValue('G1', 'Last Order Time');
 //                $objActSheet->setCellValue('J1', '注册IP');
 //                $objActSheet->setCellValue('K1', '最后登录时间');
 //                $objActSheet->setCellValue('L1', '最后登录IP');
@@ -863,11 +907,26 @@ class DataAction extends BaseAction
 
 
                 $user_list = $database_user->field(true)->where($where)->limit($i * 1000 . ',1000')->order('add_time desc')->select();
+
                 if (!empty($user_list)) {
                     import('ORG.Net.IpLocation');
                     $IpLocation = new IpLocation();
                     $index = 2;
                     foreach ($user_list as $value) {
+
+                        /** 第一次 获取订单总数及最后一张的订单时间
+                        $where_order['uid'] = $value['uid'];
+                        $where_order['status'] = array('between',array(2,3));
+                        $where_order['is_del'] = 0;
+                        $orderCount = D('Shop_order')->where($where_order)->count();
+                        $lastTime = D('Shop_order')->where($where_order)->order('use_time desc')->find();
+                        $lastTime['use_time'] = $lastTime['use_time'] ? $lastTime['use_time'] : 0;
+
+                        D('User')->where(array('uid'=>$value['uid']))->save(array('order_num'=>$orderCount,'last_order_time'=>$lastTime['use_time']));
+
+                        $value['order_num'] = $orderCount;
+                        $value['last_order_time'] = $lastTime['use_time'];
+                         */
 
                         $objActSheet->setCellValueExplicit('A' . $index, $value['uid']);
                         $objActSheet->setCellValueExplicit('B' . $index, $value['nickname']);
@@ -881,7 +940,8 @@ class DataAction extends BaseAction
 //                        $objActSheet->setCellValueExplicit('G' . $index, $value['city']);
 //                        $objActSheet->setCellValueExplicit('H' . $index, $value['qq'] . ' ');
                         $objActSheet->setCellValueExplicit('E' . $index, date('Y-m-d H:i:s', $value['add_time']));
-
+                        $objActSheet->setCellValueExplicit('F' . $index, $value['order_num']);
+                        $objActSheet->setCellValueExplicit('G' . $index, $value['last_order_time'] == 0 ? 0 : date('Y-m-d H:i:s', $value['last_order_time']));
 //                        $last_location = $IpLocation->getlocation(long2ip($value['add_ip']));
 //                        $add_ip = iconv('GBK', 'UTF-8', $last_location['country']);
 //                        $objActSheet->setCellValueExplicit('J' . $index, $add_ip);

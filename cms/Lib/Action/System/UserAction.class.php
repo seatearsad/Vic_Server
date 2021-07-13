@@ -381,9 +381,11 @@ class UserAction extends BaseAction {
             $data_user['province'] = $_POST['province'];
             $data_user['city'] = $_POST['city'];
             $data_user['qq'] = $_POST['qq'];
+            $data_user['email'] = $_POST['email'];
             $data_user['status'] = $_POST['status'];
             $data_user['frozen_money'] = $_POST['frozen_money'];
             $data_user['frozen_reason'] = trim($_POST['frozen_reason']);
+
             if($_POST['frozen_money']>0){
                 if(empty($_POST['frozen_time'])||empty($_POST['free_time'])){
                     $this->error("设置冻结时间必须设置【冻结时间】");

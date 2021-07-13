@@ -7,7 +7,7 @@
             <h2>{pigcms{:L('_BACK_COURIER_MANA_')}</h2>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                    <a href="{pigcms{:U('Index/index')}">Home</a>
+                    {pigcms{:L('_BACK_DLVMNG_')}
                 </li>
                 <!--                <li class="breadcrumb-item">-->
                 <!--                    <a>UI Elements</a>-->
@@ -41,9 +41,10 @@
                         </div>
                     </div>
                     <div class="ibox-content">
+                        <div class="table-responsive">
                         <!-------------------------------- 工具条 -------------------------------------->
-                        <div style="height: 50px;">
-                                <div id="tool_bar" style="form-group tutti_toolbar" style="height: 80px;">
+                        <div style="margin-bottom: 10px;min-height: 50px">
+                                <div id="tool_bar" style="form-group " style="height: 80px;">
                                     <form action="{pigcms{:U('Deliver/user')}" class="form-inline" method="get">
                                         <input type="hidden" name="c" value="Deliver"/>
                                         <input type="hidden" name="a" value="user"/>
@@ -134,6 +135,7 @@
                         </table>
                         <div id="table_pagebar" style="height: 30px;">
 
+                        </div>
                         </div>
                     </div>
                 </div>

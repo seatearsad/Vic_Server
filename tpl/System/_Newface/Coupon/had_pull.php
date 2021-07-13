@@ -8,7 +8,7 @@
             <h2>{pigcms{:L('_BACK_PICK_COU_LIST_')}</h2>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                    <a href="{pigcms{:U('Index/index')}">Home</a>
+                    {pigcms{:L('_BACK_MARKETING_')}
                 </li>
                 <!--                <li class="breadcrumb-item">-->
                 <!--                    <a>UI Elements</a>-->
@@ -20,7 +20,7 @@
         </div>
         <div class="col-lg-3" style="height 90px;margin-top:40px;">
             <div class="btn-group float-right">
-                <button class="btn btn-white active">
+                <button class="btn btn-white">
                     <a href="{pigcms{:U('Coupon/index')}" style="color: inherit">{pigcms{:L('_BACK_COUPON_LIST_')}</a>
                 </button>
             </div>
@@ -34,24 +34,23 @@
                     <div class="ibox-content">
                         <div class="table-responsive">
                             <!-------------------------------- 工具条 -------------------------------------->
-                            <div style="height: 60px;">
-                                <div id="tool_bar" class="form-inline tutti_toolbar">
+                            <div style="margin-bottom: 10px;min-height: 50px">
+                                <div id="tool_bar" class="form-inline ">
                                     <form action="{pigcms{:U('Coupon/had_pull')}" method="get">
                                         <input type="hidden" name="c" value="Coupon"/>
                                         <input type="hidden" name="a" value="had_pull"/>
                                         {pigcms{:L('_BACK_SEARCH_')}:
                                         <input type="text" name="keyword" class="form-control" value="{pigcms{$_GET['keyword']}"/>
                                         <select name="searchtype" class="form-control">
-                                            <option value="name" <if condition="$_GET['searchtype'] eq 'name'">selected="selected"</if>>{pigcms{:L('_BACK_COUPON_NAME_')}</option>
                                             <option value="nickname" <if condition="$_GET['searchtype'] eq 'nickname'">selected="selected"</if>>{pigcms{:L('_BACK_LOGIN_NAME_')}</option>
                                             <option value="uid" <if condition="$_GET['searchtype'] eq 'uid'">selected="selected"</if>>{pigcms{:L('F_USER_ID')}</option>
-                                            <option value="code" <if condition="$_GET['searchtype'] eq 'code'">selected="selected"</if>>{pigcms{:L('_BACK_PICK_KEY_')}</option>
+                                            <option value="cid" <if condition="$_GET['searchtype'] eq 'cid'">selected="selected"</if>>{pigcms{:L('_BACK_COUPON_ID_')}</option>
                                         </select>
                                         <input type="submit" value="{pigcms{:L('_BACK_SEARCH_')}" class="form-control"/>
                                     </form>
                                 </div>
                             </div>
-                        </div>
+
                         <table class="table table-striped table-bordered table-hover dataTables-example">
                             <thead>
                             <tr>
@@ -78,7 +77,15 @@
                                         <td>{pigcms{$vo.num}</td>
                                         <td>{pigcms{$vo.receive_time|date='Y-m-d',###}</td>
                                         <td>{pigcms{$vo.admin_name}</td>
-                                        <td class="textcenter"><if condition="$vo['is_use'] eq 1"><font color="green">Used</font><elseif condition="$vo['is_use'] eq 0" /><font color="red">Not Yet</font><else /><font color="red">{pigcms{:L('_BACK_PENDING_')}</font></if></td>
+                                        <td class="textcenter">
+                                            <if condition="$vo['is_use'] eq 1">
+                                                <font color="green">Used</font>
+                                            <elseif condition="$vo['is_use'] eq 0"/>
+                                                <font color="red">Not Yet</font>
+                                            <elseif condition="$vo['is_use'] eq 2"/>
+                                                <font color="red">Void</font>
+                                            </if>
+                                        </td>
                                     </tr>
                                 </volist>
                                 <tr><td class="textcenter pagebar" colspan="9">{pigcms{$pagebar}</td></tr>
@@ -91,6 +98,7 @@
                             </tr>
                             </tfoot>
                         </table>
+                        </div>
                     </div>
                 </div>
             </div>

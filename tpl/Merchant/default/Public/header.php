@@ -14,6 +14,7 @@
 <title>{pigcms{$config.site_name} - {pigcms{:L('MERCHANT_BACKEND_BKADMIN')}</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <link rel="stylesheet" href="{pigcms{$static_path}css/bootstrap.min.css">
+
 <link rel="stylesheet" href="{pigcms{$static_path}css/font-awesome.min.css">
 <link rel="stylesheet" href="{pigcms{$static_path}css/jquery-ui.css">
 <link rel="stylesheet" href="{pigcms{$static_path}css/jquery-ui.min.css">
@@ -23,10 +24,13 @@
 <link rel="stylesheet" href="{pigcms{$static_path}css/ace-rtl.min.css">
 <link rel="stylesheet" href="{pigcms{$static_path}css/global.css">
 <link rel="stylesheet" href="{pigcms{$static_path}css/jquery-ui-timepicker-addon.css">
-<script type="text/javascript" src="{pigcms{$static_path}js/jquery.min.js"></script>
 <script type="text/javascript" src="{pigcms{$static_path}js/jquery.ba-bbq.min.js"></script>
 <script type="text/javascript" src="{pigcms{$static_path}js/ace-extra.min.js"></script>
 
+<!--图片切割-->
+<link href="{pigcms{$static_path}css/plugins/cropper/cropper.min.css" rel="stylesheet">
+<!-- Image cropper -->
+<script src="{pigcms{$static_path}js/plugins/cropper/cropper.min.js"></script>
 <!--日历-->
 <link rel="stylesheet" href="{pigcms{$static_path}css/datepicker.css">
 <!--日历-->
@@ -49,7 +53,19 @@
 <script type="text/javascript" src="{pigcms{$static_path}js/jquery.yiigridview.js"></script>
 <script type="text/javascript" src="{pigcms{$static_path}js/jquery-ui-i18n.min.js"></script>
 <script type="text/javascript" src="{pigcms{$static_path}js/jquery-ui-timepicker-addon.min.js"></script>
+
 <style type="text/css">
+
+    .img-preview {
+        overflow: hidden;
+        text-align: center;
+        width: 100%;
+    }
+    .img-preview-sm {
+        height: 130px;
+        width: 200px;
+    }
+
 .jqstooltip {
 	position: absolute;
 	left: 0px;

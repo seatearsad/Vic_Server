@@ -28,8 +28,6 @@ class BaseAction extends Action
             }
         }
 
-
-
         $this->config = D('Config')->get_config();
 
         if($_POST['scenic_now_city']){

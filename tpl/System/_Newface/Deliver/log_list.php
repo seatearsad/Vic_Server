@@ -5,16 +5,20 @@
     <!----------------------------------------    以上不要写代码     ------------------------------------------------>
     <div class="row wrapper border-bottom white-bg page-heading">
         <div class="col-lg-8">
-            <h2>{pigcms{:L('_BACK_COURIER_MANA_')}</h2>
+            <h2>{pigcms{:L('_BACK_HISTORY_DELI_')}</h2>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                    <a href="{pigcms{:U('Index/index')}">Home</a>
+                    {pigcms{:L('_BACK_DLVMNG_')}
                 </li>
                 <!--                <li class="breadcrumb-item">-->
                 <!--                    <a>UI Elements</a>-->
                 <!--                </li>-->
-                <li class="breadcrumb-item active">
-                    <strong>{pigcms{:L('_BACK_COURIER_MANA_')}</strong>
+
+                <li class="breadcrumb-item">
+                    <a href="{pigcms{:U('Deliver/user')}" style="text-decoration:underline;">{pigcms{:L('_BACK_COURIER_MANA_')}</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <strong>【{pigcms{$user['name']}】{pigcms{:L('_BACK_HISTORY_DELI_')}</strong>
                 </li>
             </ol>
         </div>
@@ -27,15 +31,15 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="ibox ">
-                    <div class="ibox-title">
-                        <h5>【{pigcms{$user['name']}】{pigcms{:L('_BACK_COURIER_OVER_')}</h5>
-                        <div class="ibox-tools">
-                            <if condition="$system_session['level'] neq 3">
-                                <div style="margin-left:40px;">
-                                </div>
-                            </if>
-                        </div>
-                    </div>
+<!--                    <div class="ibox-title">-->
+<!--                        <h5>{pigcms{:L('_BACK_COURIER_OVER_')}</h5>-->
+<!--                        <div class="ibox-tools">-->
+<!--                            <if condition="$system_session['level'] neq 3">-->
+<!--                                <div style="margin-left:40px;">-->
+<!--                                </div>-->
+<!--                            </if>-->
+<!--                        </div>-->
+<!--                    </div>-->
                     <div class="ibox-content">
                         <!-------------------------------- 工具条 -------------------------------------->
 
@@ -48,15 +52,27 @@
                                                 <input type="hidden" name="c" value="Deliver"/>
                                                 <input type="hidden" name="a" value="log_list"/>
                                                 <input type="hidden" name="uid" value="{pigcms{$user['uid']}"/>
-                                                {pigcms{:L('_BACK_START_DATE_')}: <!--input type="text" name="keyword" class="input-text" value="{pigcms{$_GET['keyword']}"/>
+                                                <!--input type="text" name="keyword" class="input-text" value="{pigcms{$_GET['keyword']}"/>
 							<select name="searchtype">
 								<option value="uid" <if condition="$_GET['searchtype'] eq 'uid'">selected="selected"</if>>用户ID</option>
 								<option value="nickname" <if condition="$_GET['searchtype'] eq 'nickname'">selected="selected"</if>>昵称</option>
 								<option value="phone" <if condition="$_GET['searchtype'] eq 'phone'">selected="selected"</if>>手机号</option>
 							</select-->
-                                                <input type="text" class="input-text" name="begin_time" style="width:160px;" value="{pigcms{$begin_time}" onfocus="WdatePicker({isShowClear:false,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})"/>&nbsp;&nbsp;&nbsp;to&nbsp;&nbsp;&nbsp;
-                                                <input type="text" class="input-text" name="end_time" style="width:160px;" value="{pigcms{$end_time}" onfocus="WdatePicker({isShowClear:false,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})"/>&nbsp;&nbsp;&nbsp;
-                                                <input type="submit" value="{pigcms{:L('_BACK_SEARCH_')}" class="button"/>
+                                                <div class="row">
+                                                    <div class="form-group col-lg-6" id="data_5">
+                                                        <div class="input-daterange input-group" id="datepicker">
+                                                            <input type="text" class="form-control-sm form-control" name="begin_time" autocomplete="off" value="{pigcms{$begin_time}">
+                                                            <!--span class="input-group-addon">to value="{pigcms{:date('m/d/Y')}" </span-->
+                                                            &nbsp;to &nbsp;
+                                                            <input type="text" class="form-control-sm form-control" name="end_time" autocomplete="off" value="{pigcms{$end_time}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group col-lg-2">
+                                                        <div class="input-daterange input-group" id="datepicker">
+                                                            <input type="submit" value="{pigcms{:L('_BACK_SEARCH_')}" class="form-control form-control-sm" />
+                                                        </div>
+                                                    </div>
+                                                </div>
 <!--                                                <a href="{pigcms{:U('Deliver/export_user', array('begin_time' => $begin_time, 'end_time' => $end_time, 'uid' => $user['uid']))}" class="button" style="float:right;margin-right: 10px;">{pigcms{:L('_BACK_DOWN_ORDER_')}</a>-->
                                             </form>
                                         </td>
@@ -122,8 +138,14 @@
             </div>
         </div>
     </div>
-
+    <link href="{pigcms{$static_path}css/plugins/datapicker/datepicker3.css" rel="stylesheet">
+    <script src="{pigcms{$static_path}js/plugins/datapicker/bootstrap-datepicker.js"></script>
     <script>
+        $('#data_5 .input-daterange,#data_6 .input-daterange').datepicker({
+            keyboardNavigation: false,
+            forceParse: false,
+            autoclose: true
+        });
         var selectStoreId = {pigcms{:$selectStoreId? $selectStoreId: 0};
         var selectUserId = {pigcms{:$selectUserId? $selectUserId: 0};
         $(function(){

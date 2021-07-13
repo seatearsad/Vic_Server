@@ -8,6 +8,7 @@
 class IndexAction extends BaseAction {
 
     public function index() {
+
 		$mysqlVersion = M()->query('select VERSION()');
 		$server_info = array(
             'PHP运行环境' => PHP_OS,
@@ -45,7 +46,11 @@ class IndexAction extends BaseAction {
 		$param['a']='check';
 		$param['v']=$ver;
 //		$lastver = $this->http($updatehost,$param,'GET', array("Content-type: text/html; charset=utf-8"));
-
+        if(isMobile()){
+            $this->assign('height',' ');
+        }else{
+            $this->assign('height',' height="100" ');
+        }
 		$this->assign('updateinfo',$updateinfo);
         $this->assign('ver', $ver);
         $this->assign('domain_time', $domain_time);
@@ -467,6 +472,7 @@ class IndexAction extends BaseAction {
     }
 
     public function ajax_new_data(){
+
         if($this->overView == 1) {
             $day = $_POST['day'];
             switch ($day) {
@@ -489,7 +495,6 @@ class IndexAction extends BaseAction {
             //$end_time = time();
             $end_time = $today_zero_time + 3600 * 24;
             $condition_merchant_request['pay_time'] = array(array('egt', $begin_time), array('elt', $end_time));
-
             $condition_merchant_request['status'] = array('lt', 4);
             $condition_merchant_request['is_del'] = 0;
             $condition_merchant_request['paid'] = 1;
@@ -515,7 +520,7 @@ class IndexAction extends BaseAction {
             $total = 0;
             foreach ($res_shop as $v) {
                 if ($days == 1)
-                    $show_time = date('H', $v['pay_time']);
+                    $show_time = date('H', $v['pay_time']).":00";
                 else
                     $show_time = date('m-d', $v['pay_time']);
 
@@ -541,7 +546,7 @@ class IndexAction extends BaseAction {
             $city_array = array();
             $city_total = 0;
             foreach ($res_city as $v) {
-                $show_time = date('H', $v['pay_time']);
+                $show_time = date('H', $v['pay_time']).":00";
 
                 $city_array[$show_time]['cash_flow'] += $v['cash_flow'];
                 $city_array[$show_time]['sales'] += $v['sales'];
@@ -549,6 +554,109 @@ class IndexAction extends BaseAction {
             }
 
             $city_total = $city_total > 0 ? $city_total : 0;
+
+            $r_data = array('total' => $total, 'data_array' => $data_array, 'today_cash' => $today_cash,
+                'city_total' => $city_total, 'city_array' => $city_array, 'city_id' => $city_id,
+                'all_user' => $all_user, 'city_user' => $city_user
+            );
+
+            $this->ajaxReturn($r_data);
+        }else{
+            $this->ajaxReturn(array());
+        }
+    }
+
+    public function ajax_sales_data(){
+
+        if($this->overView == 1) {
+
+            //筛选时间
+            if (!empty($_POST['begin_time']) && !empty($_POST['end_time'])) {
+
+                if ($_POST['begin_time'] > $_POST['end_time']) {
+                    $this->error("Please enter the date ranges correctly");
+                } else {
+                    $begin_time=strtotime($_POST['begin_time'] . " 00:00:00");
+                    $end_time=strtotime($_POST['end_time'] . " 23:59:59");
+//                    $period = array(strtotime($_GET['begin_time'] . " 00:00:00"), strtotime($_GET['end_time'] . " 23:59:59"));
+//                    $where['_string'] .= ($where['_string'] ? ' AND ' : '') . " (create_time BETWEEN " . $period[0] . ' AND ' . $period[1] . ")";
+                    //$condition_where['_string']=$time_condition;
+                }
+            }
+
+            $city_id = $_POST['city_id'];// == 0 ? 105 : $_POST['city_id'];
+
+            //-----------------------------------------------------------
+
+            //$today_zero_time = mktime(0,0,0,date('m',$_SERVER['REQUEST_TIME']),date('d',$_SERVER['REQUEST_TIME']), date('Y',$_SERVER['REQUEST_TIME']));
+            //$today_zero_time = mktime(0, 0, 0, 1, 5, 2018);
+            //$begin_time = $today_zero_time - ($days - 1) * 3600 * 24;
+            //$end_time = time();
+            //$end_time = $today_zero_time + 3600 * 24;
+
+            $today_zero_time = mktime(0,0,0,date('m',$_SERVER['REQUEST_TIME']),date('d',$_SERVER['REQUEST_TIME']), date('Y',$_SERVER['REQUEST_TIME']));
+            //$today_zero_time = mktime(0, 0, 0, 1, 5, 2018);
+            $today_end_time = $today_zero_time + 3600 * 24;
+            $condition_today_request['o.pay_time'] = array(array('egt', $today_zero_time), array('elt', $today_end_time));
+            $condition_today_request['o.status'] = array('lt', 4);
+            $condition_today_request['o.is_del'] = 0;
+            $condition_today_request['o.paid'] = 1;
+            if($city_id != 0)
+                $condition_today_request['m.city_id'] = $city_id;
+            $today = M('Shop_order')->field('sum(o.total_price+o.tip_charge-o.coupon_price-o.delivery_discount-o.merchant_reduce) as total_cash')->join(' as o left join ' . C('DB_PREFIX') . 'merchant_store m ON m.store_id=o.store_id')->where($condition_today_request)->select();
+            $today_cash = $today[0]['total_cash'];
+
+            $condition_merchant_request['o.pay_time'] = array(array('egt', $begin_time), array('elt', $end_time));
+            $condition_merchant_request['o.status'] = array('lt', 4);
+            $condition_merchant_request['o.is_del'] = 0;
+            $condition_merchant_request['o.paid'] = 1;
+            if($city_id != 0)
+                $condition_merchant_request['m.city_id'] = $city_id;
+            $res_shop = M('Shop_order')->field('o.total_price+o.tip_charge-o.coupon_price-o.delivery_discount-o.merchant_reduce as cash_flow,o.total_price+o.tip_charge as sales,o.payment_money ,o.pay_type,o.pay_time')->join(' as o left join ' . C('DB_PREFIX') . 'merchant_store m ON m.store_id=o.store_id')->where($condition_merchant_request)->order('pay_time asc')->select();
+
+//            $condition_city_request['o.pay_time'] = array(array('egt', $today_zero_time), array('elt', $end_time));
+//            $condition_city_request['o.status'] = array('lt', 4);
+//            $condition_city_request['o.is_del'] = 0;
+//            $condition_city_request['o.paid'] = 1;
+//            $condition_city_request['m.city_id'] = $city_id;
+//            $res_city = M('Shop_order')->field('total_price+tip_charge-coupon_price-delivery_discount-merchant_reduce as cash_flow,total_price+tip_charge as sales,payment_money ,pay_type,pay_time')->join(' as o left join ' . C('DB_PREFIX') . 'merchant_store m ON m.store_id=o.store_id')->where($condition_city_request)->order('o.pay_time asc')->select();
+
+            $data_array = array();
+            $total = 0;
+            foreach ($res_shop as $v) {
+//                if ($days == 1)
+//                    $show_time = date('H', $v['pay_time']).":00";
+//                else
+                $show_time = date('m-d', $v['pay_time']);
+
+                $data_array[$show_time]['cash_flow'] += $v['cash_flow'];
+                $data_array[$show_time]['sales'] += $v['sales'];
+                $total += $v['cash_flow'];
+            }
+            //ksort($data_array);
+            //user
+//            $condition_user['add_time'] = array(array('egt', $begin_time), array('elt', $end_time));
+//            $condition_user['status'] = 1;
+//            $all_user = D('User')->field('count(uid) as total')->where($condition_user)->select();
+//            $all_user = $all_user[0]['total'];
+//
+//            $condition_city_user['u.add_time'] = array(array('egt', $today_zero_time), array('elt', $end_time));
+//            $condition_city_user['u.status'] = 1;
+//            $condition_city_user['a.city'] = $city_id;
+//            $condition_city_user['a.default'] = 1;
+//            $city_user = D('User')->field('count(u.uid) as total')->join(' as u left join ' . C('DB_PREFIX') . 'user_adress a ON a.uid=u.uid')->where($condition_city_user)->select();
+//            $city_user = $city_user[0]['total'];
+
+            ///city////
+//            $city_array = array();
+//            $city_total = 0;
+//            foreach ($res_city as $v) {
+//                $show_time = date('H', $v['pay_time']).":00";
+//
+//                $city_array[$show_time]['cash_flow'] += $v['cash_flow'];
+//                $city_array[$show_time]['sales'] += $v['sales'];
+//                $city_total += $v['cash_flow'];
+//            }
 
             $r_data = array('total' => $total, 'data_array' => $data_array, 'today_cash' => $today_cash,
                 'city_total' => $city_total, 'city_array' => $city_array, 'city_id' => $city_id,

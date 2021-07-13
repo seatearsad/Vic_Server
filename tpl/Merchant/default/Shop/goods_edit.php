@@ -1,4 +1,5 @@
 <include file="Public:header"/>
+
 <div class="main-content">
 	<!-- 内容头部 -->
 	<div class="breadcrumbs" id="breadcrumbs">
@@ -29,9 +30,7 @@
 							<li>
 								<a data-toggle="tab" href="#txtintro">{pigcms{:L('ITEM_DESCRIPTION_BKADMIN')}</a>
 							</li>
-							<li>
-								<a data-toggle="tab" href="#txtimage">{pigcms{:L('ITEM_PHOTO_BKADMIN')}</a>
-							</li>
+
 							<li>
 								<a data-toggle="tab" href="#txtattr">{pigcms{:L('GOODS_SPEC_BKADMIN')}</a>
 							</li>
@@ -48,7 +47,7 @@
 					<form enctype="multipart/form-data" class="form-horizontal" method="post">
 						<input type="hidden" value="{pigcms{$now_goods.goods_id}" id="goods_id" />
 						<div class="tab-content">
-							<div id="basicinfo" class="tab-pane  active">
+							<div id="basicinfo" class="tab-pane active">
 								<if condition="$error_tips">
 									<div class="alert alert-danger">
 										<p>{pigcms{:L('CORRECT_BKADMIN')}</p>
@@ -57,7 +56,7 @@
 								</if>
 								<if condition="$ok_tips">
 									<div class="alert alert-info">
-										<p>{pigcms{$ok_tips}</p>				
+										<p>{pigcms{$ok_tips}</p>
 									</div>
 								</if>
 								<div class="form-group">
@@ -74,7 +73,7 @@
 									<input class="col-sm-1" size="20" name="unit" id="unit" type="text" value="{pigcms{$now_goods.unit}"/>
 									<span class="form_tips">{pigcms{:L('REQUIRED_UNIT_BKADMIN')}</span>
 								</div>
-								
+
 								<div class="form-group">
 									<label class="col-sm-1" for="Food_status">{pigcms{:L('VIEW_CATEGORIES_BKADMIN')}</label>
 									<fieldset id="choose_sort"></fieldset>
@@ -102,7 +101,7 @@
 									<label class="col-sm-1"><label for="price">{pigcms{:L('QW_PACKAGEFEE')}</label></label>
 									<input class="col-sm-1" size="20" name="packing_charge" id="packing_charge" type="text" value="{pigcms{$now_goods.packing_charge|floatval}"/>
 								</div>
-										
+
 								<div class="form-group">
 									<label class="col-sm-1"><label for="price">{pigcms{:L('PRODUCT_INVENTORY_BKADMIN')}</label></label>
 									<input class="col-sm-1" size="20" name="stock_num" id="stock_num" type="text" value="{pigcms{$now_goods.stock_num}"/>
@@ -140,6 +139,63 @@
 									<span class="form_tips" style="color:red;">如果选择了一台非主打印机的话，那么客户在下单的时候选择的打印机和主打印机同时打印，如果不选打印机或是选择了主打印机的话，那么就主打印机打印</span>
 								</div>
 								</if>
+                                <!--               图片上传                 /////-->
+                                <div id="upload_image_box" class="row" style="margin-bottom: 10px;display: none;">
+                                    <div class="col-lg-12">
+                                        <div class="ibox ">
+                                            <div class="ibox-title  back-change">
+                                                <label style="margin-bottom: 10px">{pigcms{:L('ITEM_PHOTO_BKADMIN')}</label>
+                                            </div>
+                                            <div class="ibox-content">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="image-crop">
+                                                            <img id="ori_image" src="{pigcms{$static_path}images/p3.jpg">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <h4>{pigcms{:L('PREVIEW_BKADMIN')}</h4>
+                                                        <div class="img-preview img-preview-sm"></div>
+                                                        <p>
+                                                            &nbsp;<div  id="upld" class="btn btn-primary">Upload</div>
+                                                        </p>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--                                //---------------------------------->
+                                <div class="form-group" >
+                                    <label class="col-sm-1">{pigcms{:L('UPLOAD_BKADMIN')}</label>
+                                    <div style="display:inline-block;" id="J_selectImage">
+                                            <div class="btn btn-sm btn-success" style="position:relative;width:78px;height:34px;">
+                                                <label title="Upload image file" for="inputImage" >
+                                                    <input type="file" accept="image/*" name="pic" id="inputImage" style="display:none">
+                                                    {pigcms{:L('UPLOAD_BKADMIN')}
+                                                </label>
+                                            </div>
+                                    </div>
+                                    <span class="form_tips"></span>
+                                </div>
+
+                                <div class="form-group hidden_obj">
+                                    <label class="col-sm-1">{pigcms{:L('IMAGE_SELECT_BKADMIN')}</label>
+                                    <a href="#modal-table" class="btn btn-sm btn-success" onclick="selectImg('upload_pic_ul','goods')">{pigcms{:L('IMAGE_SELECT_BKADMIN')}</a>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-1">{pigcms{:L('PREVIEW_BKADMIN')}</label>
+                                    <div id="upload_pic_box">
+                                        <ul id="upload_pic_ul">
+                                            <volist name="now_goods['pic_arr']" id="vo">
+                                                <li class="upload_pic_li"><img src="{pigcms{$vo.url}"/><input type="hidden" name="pic[]" value="{pigcms{$vo.title}"/><br/><a href="#" onclick="deleteImage('{pigcms{$vo.title}',this);return false;">[ {pigcms{:L('DELETE_BKADMIN')} ]</a></li>
+                                            </volist>
+                                        </ul>
+                                    </div>
+                                </div>
+
 							</div>
 							<div id="txtintro" class="tab-pane">
 								<div class="form-group" >
@@ -148,29 +204,7 @@
                                     <textarea name="des" style="width:702px;height: 200px">{pigcms{$now_goods.des}</textarea>
 								</div>
 							</div>
-							<div id="txtimage" class="tab-pane">
-								<div class="form-group">
-									<label class="col-sm-1">{pigcms{:L('UPLOAD_BKADMIN')}</label>
-									<div style="display:inline-block;" id="J_selectImage">
-										<div class="btn btn-sm btn-success" style="position:relative;width:78px;height:34px;">{pigcms{:L('UPLOAD_BKADMIN')}</div>
-									</div>
-									<span class="form_tips">{pigcms{:L('IMAGE_RATIO_BKADMIN')}</span>
-								</div>
-								<div class="form-group hidden_obj">
-									<label class="col-sm-1">{pigcms{:L('IMAGE_SELECT_BKADMIN')}</label>
-									<a href="#modal-table" class="btn btn-sm btn-success" onclick="selectImg('upload_pic_ul','goods')">{pigcms{:L('IMAGE_SELECT_BKADMIN')}</a>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-1">{pigcms{:L('PREVIEW_BKADMIN')}</label>
-									<div id="upload_pic_box">
-										<ul id="upload_pic_ul">
-											<volist name="now_goods['pic_arr']" id="vo">
-												<li class="upload_pic_li"><img src="{pigcms{$vo.url}"/><input type="hidden" name="pic[]" value="{pigcms{$vo.title}"/><br/><a href="#" onclick="deleteImage('{pigcms{$vo.title}',this);return false;">[ {pigcms{:L('DELETE_BKADMIN')} ]</a></li>
-											</volist>
-										</ul>
-									</div>
-								</div>
-							</div>
+
 							<div id="txtattr" class="tab-pane">
 								<div class="alert alert-info" style="margin:10px 0;">
 									<button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>
@@ -188,8 +222,8 @@
 											<volist name="row['list']" id="r">
 											<li>
 												<u>{pigcms{:L('SPECIFICATION_VALUE_BKADMIN')}：</u>
-												<input type="hidden" class="hide_txt spec_val_id" name="spec_val_id[{pigcms{$ii-1}][]" value="{pigcms{$r['id']}"> 
-												<input type="text" class="txt spec_val" name="spec_val[{pigcms{$ii-1}][]" value="{pigcms{$r['name']}"/> 
+												<input type="hidden" class="hide_txt spec_val_id" name="spec_val_id[{pigcms{$ii-1}][]" value="{pigcms{$r['id']}">
+												<input type="text" class="txt spec_val" name="spec_val[{pigcms{$ii-1}][]" value="{pigcms{$r['name']}"/>
 												<a class="list_del" href="javascript:;" title="{pigcms{:L('DELETE_BKADMIN')}">×</a>
 											</li>
 											</volist>
@@ -214,7 +248,7 @@
 											<volist name="ro['val']" id="ra">
 											<li>
 												<u>{pigcms{:L('ATTRIBUTE_VALUE_BKADMIN')}：</u>
-												<input type="text" class="txt properties_val" name="properties_val[{pigcms{$ik-1}][]" value="{pigcms{$ra}"/> 
+												<input type="text" class="txt properties_val" name="properties_val[{pigcms{$ik-1}][]" value="{pigcms{$ra}"/>
 												<a class="list_del" href="javascript:;" title="{pigcms{:L('DELETE_BKADMIN')}">×</a>
 											</li>
 											</volist>
@@ -224,7 +258,7 @@
 									</volist>
 									<p class="add_properties"><a href="javascript:;" title="" class="btn btn-sm btn-success">{pigcms{:L('ADD_ATTRIBUTE_BKADMIN')}</a></p>
 								</div>
-								
+
 								<div class="topic_box">
 									<p class="add_table" <if condition="!$now_goods['spec_list']">style="display:none"</if>><a href="javascript:;" title="{pigcms{:L('BASE_ADD')}" class="btn btn-sm btn-success" >{pigcms{:L('GENERATE_CHART_BKADMIN')}</a></p>
 									<table class="table table-striped table-bordered table-hover" id="table_list">
@@ -244,20 +278,20 @@
 											<th>{pigcms{$gp['name']}({pigcms{:L('QUANTITY_ALLOWED_BKADMIN')})</th>
 											</volist>
 										</tr>
-										
+
 										<volist name="now_goods['list']" id="gl" key="num">
 											<tr id="{pigcms{$gl['index']}">
 												<!--td><input type="text" class="txt" name="numbers[]" value="{pigcms{$gl['number']}" style="width:100%;"></td-->
 												<volist name="gl['spec']" id="g">
 												<td>{pigcms{$g['spec_val_name']}</td>
 												</volist>
-												
+
 <!--												<td style="display:none"><input type="text" class="txt" name="old_prices[]" value="{pigcms{$gl['old_price']}" style="width:80px;"></td>-->
 												<!--td><input type="text" class="txt" name="cost_prices[]" value="{pigcms{$gl['cost_price']}" style="width:80px;"></td-->
 												<td><input type="text" class="txt" name="prices[]" value="{pigcms{$gl['price']}" style="width:80px;"></td>
 <!--												<td><input type="text" class="txt" name="seckill_prices[]" value="{pigcms{$gl['seckill_price']}" style="width:80px;"></td>-->
 												<td><input type="text" class="txt" name="stock_nums[]" value="{pigcms{$gl['stock_num']}" style="width:80px;"></td>
-												
+
 												<volist name="gl['properties']" id="gpp" key="num">
 												<td><input type="text" class="txt" name="num{pigcms{$num-1}[]" value="{pigcms{$gpp['num']}" style="width:80px;"></td>
 												</volist>
@@ -284,7 +318,7 @@
 									<span><label><input id='seckill_type0' name="seckill_type" <if condition="$now_goods['seckill_type'] eq 0 ">checked="checked"</if> value="0" type="radio">&nbsp;<span>固定时间段</span>&nbsp;</label></span>
 									<span><label><input id='seckill_type1' name="seckill_type" <if condition="$now_goods['seckill_type'] eq 1 ">checked="checked"</if> value="1" type="radio" >&nbsp;<span>每天的时间段</span></label></span>
 								</div>
-								
+
 								<div class="form-group">
 									<label class="col-sm-1"><label for="price">限时段</label></label>
 									<div>
@@ -329,7 +363,7 @@
 									<span><label><input name="freight_type" <if condition="$now_goods['freight_type'] eq 0 ">checked="checked"</if> value="0" type="radio">&nbsp;<span>按最大值算</span>&nbsp;</label></span>
 									<span><label><input name="freight_type" <if condition="$now_goods['freight_type'] eq 1 ">checked="checked"</if> value="1" type="radio" >&nbsp;<span>单独计算</span></label></span>
 								</div>
-								
+
 								<div class="form-group">
 									<label class="col-sm-1" for="Food_status">商品分类</label>
 									<fieldset id="choose_category" cat_fid="{pigcms{$now_goods.cat_fid}" cat_id="{pigcms{$now_goods.cat_id}"></fieldset>
@@ -370,7 +404,7 @@ input.ke-input-text {
 .form-group>label{font-size:12px;line-height:24px;}
 #upload_pic_box{margin-top:20px;height:150px;}
 #upload_pic_box .upload_pic_li{width:130px;float:left;list-style:none;}
-#upload_pic_box img{width:100px;height:70px;}
+#upload_pic_box img{width:100px;height:100px;}
 .webuploader-element-invisible {
     position: absolute !important;
     clip: rect(1px 1px 1px 1px);
@@ -388,48 +422,182 @@ input.ke-input-text {
 <script src="{pigcms{$static_public}kindeditor/kindeditor.js"></script>
 <script type="text/javascript" src="{pigcms{$static_public}js/webuploader.min.js"></script>
 <script>
-var uploaderHas = false;
-$('#myTab li a').click(function(){
-	if(uploaderHas == false && $(this).attr('href') == '#txtimage'){
-		setTimeout(function(){
-			var  uploader = WebUploader.create({
-					auto: true,
-					swf: '{pigcms{$static_public}js/Uploader.swf',
-					server: "{pigcms{:U('Shop/ajax_upload_pic', array('store_id' => $now_store['store_id']))}",
-					pick: {
-						id:'#J_selectImage',
-						multiple:false
-					},
-					accept: {
-						title: 'Images',
-						extensions: 'gif,jpg,jpeg,png',
-						mimeTypes: 'image/gif,image/jpeg,image/jpg,image/png'
-					}
-				});
-			uploader.on('fileQueued',function(file){
-				if($('.upload_pic_li').size() >= 5){
-					uploader.cancelFile(file);
-					alert('最多上传5个图片！');
-					return false;
-				}
-			});
-			uploader.on('uploadSuccess',function(file,response){
-				if(response.error == 0){
-					$('#upload_pic_ul').append('<li class="upload_pic_li"><img src="'+response.url+'"/><input type="hidden" name="pic[]" value="'+response.title+'"/><br/><a href="#" onclick="deleteImage(\''+response.title+'\',this);return false;">[ {pigcms{:L('DELETE_BKADMIN')} ]</a></li>');
-				}else{
-					alert(response.info);
-				}
-			});
-			
-			uploader.on('uploadError', function(file,reason){
-				$('.loading'+file.id).remove();
-				alert('上传失败！请重试。');
-			});
-			
-		},20);
-		uploaderHas = true; 
-	}
-});
+
+    //----------------------------------- 以下为Crooper段 --------------------------------------
+    var loaded = false;
+    var $upload_image_box;
+    var $inputImage;var $cropped;
+    function load_cooper() {
+        if (loaded == false) {
+            loaded = true;
+
+            $upload_image_box = $("#upload_image_box");
+
+            $inputImage = $("#inputImage");
+
+            if (window.FileReader) {//检测浏览器是否支持FileReader
+                $inputImage.change(function () {
+                    var fileReader = new FileReader(),
+                        files = this.files,
+                        file;
+                    if (!files.length) {
+                        return;
+                    }
+                    var $image = $(".image-crop > img");
+                    $cropped = $($image).cropper({
+                        aspectRatio: 1,
+                        preview: ".img-preview",
+                        done: function (data) {
+                            // Output the result data for cropping image.
+                        }
+                    });
+                    $upload_image_box.show();
+                    file = files[0];
+                    if (/^image\/\w+$/.test(file.type)) {
+                        $upload_image_box.show();
+                        fileReader.readAsDataURL(file);
+                        fileReader.onload = function () {
+                            $inputImage.val("");
+                            $image.cropper("reset", true).cropper("replace", this.result);
+                        };
+                    } else {
+                        showMessage("Please choose an image file.");
+                    }
+                });
+            } else {
+                $inputImage.addClass("hide");
+            }
+
+            $("#setDrag").click(function () {
+                $image.cropper("setDragMode", "crop");
+            });
+
+            $("#upld").on("click", function () {
+                //console.log("download");
+                if ($("#ori_image").attr("src") == null) {
+                    return false;
+                } else {
+
+                    var base64 = $cropped.cropper('getCroppedCanvas', {
+                        width: 620,
+                        height: 520
+                    }).toDataURL("image/png");
+
+                    //$("#finalImg").prop("src", base64);// 显示图片
+                    uploadFile(base64)//编码后上传服务器
+                    //closeTailor();// 关闭裁剪框
+                }
+            });
+        }
+    }
+    function dataURLtoFile(dataURL, fileName, fileType) {
+        var arr = dataURL.split(','), mime = arr[0].match(/:(.*?);/)[1],
+            bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+        while(n--){
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+        return new File([u8arr], fileName, {type:fileType || 'image/png'});
+    }
+    //ajax请求上传
+    function uploadFile(file) {
+        var oData = new FormData();
+        var nameImg=new Date().getTime()+".png";
+        var ff=dataURLtoFile(file,nameImg);
+        oData.append("file", ff);
+        $.ajax({
+            url : "{pigcms{:U('Shop/ajax_upload_pic', array('store_id' => $now_store['store_id']))}",
+            type: "post",
+            dataType:"json",
+            data : oData,
+            processData: false,
+            contentType: false,
+            async : true,
+            success : function(data) {
+                if(data.error == 0){$upload_image_box.hide();
+                    $('#upload_pic_ul').append('<li class="upload_pic_li"><img src="'+data.url+'"/><input type="hidden" name="pic[]" value="'+data.title+'"/><br/><a href="#" onclick="deleteImage(\''+data.title+'\',this);return false;">[ {pigcms{:L('DELETE_BKADMIN')} ]</a></li>');
+                }else{
+                    alert(data.info);
+                }
+            },
+            error:function(data){
+                $('.loading'+file.id).remove();
+                alert('Upload failed! Please try again.');
+            }
+        });
+    }
+
+    $(document).ready(function(){
+        $("#inputImage").on("click", function () {
+            load_cooper();
+        });
+        // $("#download").click(function (link) {
+        //     link.target.href = $cropped.cropper('getCroppedCanvas', {
+        //         width: 620,
+        //         height: 520
+        //     }).toDataURL("image/png").replace("image/png", "application/octet-stream");
+        //     link.target.download = 'cropped.png';
+        // });
+        //----- 之前的 ------
+    });
+
+    //--------------------------------------  以上为Crooper段  --------------------------------------
+</script>
+
+<script>
+    $(document).ready(function(){
+        $('#freight_value1').change(function(){
+            if ($(this).val() != 0) {
+                $('input[name=freight_type][value=1]').attr("checked",'checked');
+            } else {
+                $('input[name=freight_type][value=0]').attr("checked",'checked');
+            }
+        });
+
+    });
+
+    var uploaderHas = false;
+
+    $('#myTab li a').click(function(){
+        if(uploaderHas == false && $(this).attr('href') == '#txtimage'){
+            console.log("uploaderHas == false");
+            setTimeout(function(){
+                var  uploader = WebUploader.create({
+                        auto: true,
+                        swf: '{pigcms{$static_public}js/Uploader.swf',
+                        server: "{pigcms{:U('Shop/ajax_upload_pic', array('store_id' => $now_store['store_id']))}",
+                        pick: {
+                            id:'#J_selectImage',
+                            multiple:false
+                        },
+                        accept: {
+                            title: 'Images',
+                            extensions: 'gif,jpg,jpeg,png',
+                            mimeTypes: 'image/gif,image/jpeg,image/jpg,image/png'
+                        }
+                    });
+                uploader.on('fileQueued',function(file){
+                    if($('.upload_pic_li').size() >= 5){
+                        uploader.cancelFile(file);
+                        alert('最多上传5个图片！');
+                        return false;
+                    }
+                });
+                uploader.on('uploadSuccess',function(file,response){
+                    if(response.error == 0){
+                        $('#upload_pic_ul').append('<li class="upload_pic_li"><img src="'+response.url+'"/><input type="hidden" name="pic[]" value="'+response.title+'"/><br/><a href="#" onclick="deleteImage(\''+response.title+'\',this);return false;">[ {pigcms{:L('DELETE_BKADMIN')} ]</a></li>');
+                    }else{
+                        alert(response.info);
+                    }
+                });
+                uploader.on('uploadError', function(file,reason){
+                    $('.loading'+file.id).remove();
+                    alert('上传失败！请重试。');
+                });
+
+            },20);
+            uploaderHas = true;
+        }
+    });
 var formathtml = new Array();
 var format_value = new Array();
 var json = '{pigcms{$now_goods['json']}', sortList = '{pigcms{$sort_list}', selectIds = '{pigcms{$select_ids}';
@@ -444,15 +612,7 @@ function deleteImage(path,obj){
 	$(obj).closest('.upload_pic_li').remove();
 }
 window.sessionStorage.setItem(session_index, json);
-$(document).ready(function(){
-	$('#freight_value1').change(function(){
-		if ($(this).val() != 0) {
-			$('input[name=freight_type][value=1]').attr("checked",'checked');
-		} else {
-			$('input[name=freight_type][value=0]').attr("checked",'checked');
-		}
-	});
-});
+
 </script>
 <script type="text/javascript" src="{pigcms{$static_path}js/goods.js"></script>
 <include file="Public:footer"/>

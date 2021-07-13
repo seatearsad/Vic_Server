@@ -43,6 +43,9 @@
 				}
 			}
 			$condition_news['category_id'] = $_GET['category_id'];
+			if(!empty($_GET['category_id'])){
+                $this->assign('category_id',$_GET['category_id']);
+            }
 			//排序 /*/
 			$order_string = '`sort` DESC';
 			if($_GET['sort']){
@@ -64,7 +67,7 @@
 			$news = M('System_news');
 			$count_news = $news->where($condition_news)->count();
 			import('@.ORG.system_page');
-			$p = new Page($count_news, 15);
+			$p = new Page($count_news, 20);
 			$news_list = $news->field('id,title,add_time,last_time,sort,status,is_commend')->where($condition_news)->order($order_string)->limit($p->firstRow . ',' . $p->listRows)->select();
 			$this->assign('news_list',$news_list);
 			$pagebar = $p->show2();

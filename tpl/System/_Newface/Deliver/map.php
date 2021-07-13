@@ -8,7 +8,7 @@
             <h2>{pigcms{:L('_BACK_COURIER_MONI_')}</h2>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                    <a href="{pigcms{:U('Index/index')}">Home</a>
+                    {pigcms{:L('_BACK_DLVMNG_')}
                 </li>
                 <!--                <li class="breadcrumb-item">-->
                 <!--                    <a>UI Elements</a>-->
@@ -90,23 +90,25 @@
                         </div>
 
                     </div>
-                    <ul id="deliver_list">
-                        <li style="font-weight: bold;background-color:#ced5e2">
-                            <span class="d_id">ID</span>
-                            <span class="d_name">Name</span>
-                            <span class="d_status">Status</span>
-                        </li>
-                        <volist name="list" id="deliver">
-                            <li class="d_memo" title="Phone:{pigcms{$deliver.phone}">
-                                <span class="d_id">{pigcms{$deliver.uid}</span>
-                                <span class="d_name">{pigcms{$deliver.name}</span>
-                                <span class="d_status">{pigcms{$deliver.order_count}{pigcms{:L('_BACK_ORDER_DELIVERY_')}</span>
-                                <span class="d_lat">{pigcms{$deliver.lat}</span>
-                                <span class="d_lng">{pigcms{$deliver.lng}</span>
-                                <span class="d_phone">{pigcms{$deliver.phone}</span>
+                    <div id="deliver_list_outer">
+                        <ul id="deliver_list">
+                            <li style="font-weight: bold;background-color:#ced5e2;position: sticky;top: 0px;">
+                                <span class="d_id">ID</span>
+                                <span class="d_name">Name</span>
+                                <span class="d_status">Status</span>
                             </li>
-                        </volist>
-                    </ul>
+                            <volist name="list" id="deliver">
+                                <li class="d_memo" title="Phone:{pigcms{$deliver.phone}">
+                                    <span class="d_id">{pigcms{$deliver.uid}</span>
+                                    <span class="d_name">{pigcms{$deliver.name}</span>
+                                    <span class="d_status">{pigcms{$deliver.order_count}{pigcms{:L('_BACK_ORDER_DELIVERY_')}</span>
+                                    <span class="d_lat">{pigcms{$deliver.lat}</span>
+                                    <span class="d_lng">{pigcms{$deliver.lng}</span>
+                                    <span class="d_phone">{pigcms{$deliver.phone}</span>
+                                </li>
+                            </volist>
+                        </ul>
+                    </div>
                     <if condition="$system_session['level'] neq 3">
                         <if condition="$curr_city['urgent_time'] eq 0">
                             <div id="e_call">{pigcms{:L('_BACK_HAND_ALERT_')}</div>
@@ -155,13 +157,20 @@
         #r_e_call{
             background-color: #999999;
         }
-
-        #deliver_list{
+        #deliver_list_outer{
             position: absolute;
-            width: 300px;
-            border: 1px #cccccc solid;
+            width: 350px;
             left:50px;
             top:130px;
+            border-bottom: 0px;
+            overflow-y: auto;
+            height: 400px;
+            padding-left: 0;
+        }
+        #deliver_list{
+            position: relative;
+            width: 330px;
+            border: 1px #cccccc solid;
             border-bottom: 0px;
             padding-left: 0;
             background-color: #ffffff;
