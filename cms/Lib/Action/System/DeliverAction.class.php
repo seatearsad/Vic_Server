@@ -38,6 +38,25 @@ class DeliverAction extends BaseAction {
         }
     }
 
+    public function assign_setting(){
+	    if($_POST){
+            foreach ($_POST as $k=>$v){
+                if(strpos($k,"deliver_assgin") !== false && $v != "")
+                    D('Config')->where(array('name'=>$k))->save(array("value"=>$v));
+            }
+
+            $this->success(L('J_SUCCEED3'));
+        }else {
+            $config = D('Config')->where(array('gid' => 49))->select();
+            $setting = $config;
+            unset($setting[0]);
+
+            $this->assign("setting", $setting);
+
+            $this->display();
+        }
+    }
+
     public function updateDeliverWorkStatus($city){
         $week_num = date("w");
         $hour = date('H');
@@ -414,6 +433,10 @@ class DeliverAction extends BaseAction {
 	
 	public function deliverList() 
 	{
+        $config = D('Config')->get_config();
+        $max_order = $config['deliver_max_order'];
+        $this->assign("max_order",$max_order);
+
         //var_dump($_GET);die();
 		$selectStoreId = I("selectStoreId", 0, "intval");
 		$selectUserId = I("selectUserId", 0, "intval");
@@ -1881,6 +1904,18 @@ class DeliverAction extends BaseAction {
             $this->assign('city', $city);
             //var_dump($city);die();
             $this->display();
+        }
+    }
+
+    public function change_max_order(){
+        $max_order =$_GET['max_order'];
+        if($max_order){
+            if(D('Config')->where(array('name'=>'deliver_max_order'))->save(array("value"=>$max_order)))
+                exit(json_encode(array('error_code' => false, 'msg' => "Successful")));
+            else
+                exit(json_encode(array('error_code' => true, 'msg' => "Error")));
+        }else{
+            exit(json_encode(array('error_code' => true, 'msg' => "Error")));
         }
     }
 }

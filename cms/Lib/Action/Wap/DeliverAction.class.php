@@ -202,7 +202,13 @@ class DeliverAction extends BaseAction
         $city = D('Area')->where(array('area_id'=>$city_id))->find();
         $this->assign('city',$city);
 
-	    //修改上下班状态 只有在紧急状态下才能修改上班状态
+        $config = D('Config')->get_config();
+        $max_order = $config['deliver_max_order'];
+
+        $current_order_num = D('Deliver_supply')->where(array('uid'=>$this->deliver_session['uid'],'status'=>array('lt',5)))->count();
+
+
+        //修改上下班状态 只有在紧急状态下才能修改上班状态
 		if($_GET['action'] == 'changeWorkstatus' && $city['urgent_time'] != 0) {
 			D('Deliver_user')->where(['uid' => $this->deliver_session['uid']])->save(['work_status' => $_GET['type']]);
 			$this->deliver_session['work_status'] = $_GET['type'];
@@ -238,7 +244,7 @@ class DeliverAction extends BaseAction
                     $deliver_assign = D('Deliver_assign')->field(true)->where(array('supply_id' => $supply_id))->find();
                     $record_array = explode(',', $deliver_assign['record']);
                     //派单列表中不存在 || 派单列表中开放 || 指定派单 && 不在转接等候期
-                    if (!$deliver_assign || ($deliver_assign['deliver_id'] == 0 && !in_array($this->deliver_session['uid'], $record_array)) || $deliver_assign['deliver_id'] == $this->deliver_session['uid']) {
+                    if ((!$deliver_assign && $current_order_num < $max_order) || ($deliver_assign['deliver_id'] == 0 && !in_array($this->deliver_session['uid'], $record_array) && $current_order_num < $max_order) || $deliver_assign['deliver_id'] == $this->deliver_session['uid']) {
                         $gray_count += 1;
                     }
                 }
@@ -263,7 +269,12 @@ class DeliverAction extends BaseAction
         $city_id = $this->deliver_session['city_id'];
         $city = D('Area')->where(array('area_id'=>$city_id))->find();
 
-	    if($this->deliver_session['work_status'] == 0 || $city['urgent_time'] != 0) {
+        $config = D('Config')->get_config();
+        $max_order = $config['deliver_max_order'];
+
+        $current_order_num = D('Deliver_supply')->where(array('uid'=>$this->deliver_session['uid'],'status'=>array('lt',5)))->count();
+
+        if($this->deliver_session['work_status'] == 0 || $city['urgent_time'] != 0) {
             $my_distance = $this->deliver_session['range'] * 1000;
             $time = time();
             $where = "`create_time`<$time AND `status`=1 AND ROUND(6378.138 * 2 * ASIN(SQRT(POW(SIN(({$this->deliver_session['lat']}*PI()/180-`from_lat`*PI()/180)/2),2)+COS({$this->deliver_session['lat']}*PI()/180)*COS(`from_lat`*PI()/180)*POW(SIN(({$this->deliver_session['lng']}*PI()/180-`from_lnt`*PI()/180)/2),2)))*1000) < $my_distance ";
@@ -284,7 +295,7 @@ class DeliverAction extends BaseAction
                     $deliver_assign = D('Deliver_assign')->field(true)->where(array('supply_id' => $supply_id))->find();
                     $record_array = explode(',', $deliver_assign['record']);
                     //派单列表中不存在 || 派单列表中开放 || 指定派单 && 不在转接等候期
-                    if (!$deliver_assign || ($deliver_assign['deliver_id'] == 0 && !in_array($this->deliver_session['uid'], $record_array)) || $deliver_assign['deliver_id'] == $this->deliver_session['uid']) {
+                    if ((!$deliver_assign && $current_order_num < $max_order) || ($deliver_assign['deliver_id'] == 0 && !in_array($this->deliver_session['uid'], $record_array) && $current_order_num < $max_order) || $deliver_assign['deliver_id'] == $this->deliver_session['uid']) {
                         $gray_count += 1;
                     }
                 }
@@ -488,6 +499,11 @@ class DeliverAction extends BaseAction
             $city_id = $this->deliver_session['city_id'];
             $city = D('Area')->where(array('area_id'=>$city_id))->find();
 
+            $config = D('Config')->get_config();
+            $max_order = $config['deliver_max_order'];
+
+            $current_order_num = D('Deliver_supply')->where(array('uid'=>$this->deliver_session['uid'],'status'=>array('lt',5)))->count();
+
             if($this->deliver_session['work_status'] == 0 || $city['urgent_time'] != 0) {
                 //garfunkel add 更新送餐员位置信息
 //                $lat = $_GET['lat'] ? $_GET['lat'] : 0;
@@ -526,7 +542,7 @@ class DeliverAction extends BaseAction
                         $deliver_assign = D('Deliver_assign')->field(true)->where(array('supply_id' => $supply_id))->find();
                         $record_array = explode(',', $deliver_assign['record']);
                         //派单列表中不存在 || 派单列表中开放 && 未拒单 || 指定派单 && 不在转接等候期
-                        if (!$deliver_assign || ($deliver_assign['deliver_id'] == 0 && !in_array($this->deliver_session['uid'], $record_array)) || $deliver_assign['deliver_id'] == $this->deliver_session['uid']) {
+                        if ((!$deliver_assign && $current_order_num < $max_order) || ($deliver_assign['deliver_id'] == 0 && !in_array($this->deliver_session['uid'], $record_array) && $current_order_num < $max_order) || $deliver_assign['deliver_id'] == $this->deliver_session['uid']) {
                             $list[] = $v;
                         }
                     }

@@ -2512,4 +2512,5 @@ return array(
 
     "VOIP_PHONE_TIP"=>"此号码为网络号码，请使用真实的移动号码。",
     "COUPON_ADD_TIP"=>"优惠金额不能大于最低消费金额，请重试！",
+    "MAX_ORDER_PER" =>"送餐员接单上限",
 );

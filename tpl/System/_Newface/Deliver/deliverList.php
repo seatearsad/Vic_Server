@@ -9,7 +9,7 @@
     <!----------------------------------------    以上不要写代码     ------------------------------------------------>
 
     <div class="row wrapper border-bottom white-bg page-heading">
-        <div class="col-lg-7">
+        <div class="col-lg-3">
             <h2>{pigcms{:L('_BACK_DELIVERY_LIST_')}</h2>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
@@ -23,13 +23,22 @@
                 </li>
             </ol>
         </div>
-        <div class="col-lg-5 " style="height 90px;margin-top:40px;">
+        <div class="col-lg-9" style="height 90px;margin-top:40px;">
             <div class="btn-group float-right">
+                <label style="margin-top: 5px">{pigcms{:L('MAX_ORDER_PER')} : &nbsp;</label>
+                <select id="max_order" name="max_order" class="form-control col-lg-1" style="margin-right: 10px">
+                    <option value="1" <if condition="$max_order eq 1">selected</if> >1</option>
+                    <option value="2" <if condition="$max_order eq 2">selected</if> >2</option>
+                    <option value="3" <if condition="$max_order eq 3">selected</if> >3</option>
+                    <option value="4" <if condition="$max_order eq 4">selected</if> >4</option>
+                    <option value="5" <if condition="$max_order eq 5">selected</if> >5</option>
+                </select>
                 <a href="{pigcms{:U('Shop/order')}" class="button" style="float:right;margin-right: 10px;"><button class="btn btn-white text-grey">{pigcms{:L('_BACK_ORDER_LIST_')}</button></a>
                 <a href="{pigcms{:U('Deliver/map')}" class="button" style="float:right;margin-right: 10px;"><button class="btn btn-white text-grey">{pigcms{:L('_BACK_COURIER_MONI_')}</button></a>
                 <button class="btn btn-white ">
                     <a href="{pigcms{:U('Deliver/prep_mode')}" style="color: inherit">{pigcms{:L('D_F_PREP_MODE')}</a>
                 </button>
+                <a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Deliver/assign_setting')}','Setting',680,560,true,false,false,editbtn,'edit',true);" style="float:right;margin-left: 10px;"><button class="btn btn-primary">Setting</button></a>
             </div>
         </div>
     </div>
@@ -167,11 +176,34 @@
     fff
 </div>
 <script>
-    //var city_id = $('#city_select').val();
-    // $('#city_select').change(function () {
-    //     city_id = $(this).val();
-    //     window.location.href = "{pigcms{:U('Deliver/deliverList')}" + "&city_id="+city_id;
-    // }
+    var max_order = "{pigcms{$max_order}";
+    $(function () {
+        $('#max_order').val(max_order);
+    });
+
+    $('#max_order').change(function () {
+        var new_max_order = $(this).val();
+        window.top.art.dialog({
+            lock: true,
+            title: 'Reminder',
+            content: "Are you sure about changing Maximum # of orders per courier?",
+            okVal: 'Yes',
+            ok: function () {
+                //alert(new_max_order);
+                $.get("{pigcms{:U('Deliver/change_max_order')}", {'max_order': new_max_order}, function (response) {
+                    if (response.error_code) {
+                        $('#max_order').val(max_order);
+                    } else {
+                        max_order = new_max_order;
+                    }
+                }, 'json');
+            },
+            cancelVal: 'Cancel',
+            cancel: function () {
+                $('#max_order').val(max_order);
+            }
+        });
+    });
     function set_done(sid){
         var supply_id = sid;
         window.top.art.dialog({
