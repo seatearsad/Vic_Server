@@ -655,8 +655,7 @@ class DeliverAction extends BaseAction {
 			$sql .= ' AND s.start_time>' . strtotime($begin_time) . ' AND s.start_time<' . strtotime($end_time);
 			$sql_count .= ' AND s.start_time>' . strtotime($begin_time) . ' AND s.start_time<' . strtotime($end_time);
 		}
-		
-        
+
         import('@.ORG.system_page');
         
         $res_count = D()->query($sql_count);
@@ -1460,6 +1459,69 @@ class DeliverAction extends BaseAction {
         }
     }
 
+    public function bag_list(){
+        //搜索
+        if (!empty($_GET['keyword'])) {
+            if ($_GET['searchtype'] == 'uid') {
+                $condition_user['uid'] = $_GET['keyword'];
+            } else if ($_GET['searchtype'] == 'firstname') {
+                $condition_user['name'] = array('like', '%' . $_GET['keyword'] . '%');
+            } else if ($_GET['searchtype'] == 'lastname') {
+                $condition_user['family_name'] = array('like', '%' . $_GET['keyword'] . '%');
+            } else if ($_GET['searchtype'] == 'phone') {
+                $condition_user['phone'] = array('like', '%' . $_GET['keyword'] . '%');
+            }else if($_GET['searchtype'] == 'email'){
+                $condition_user['email'] = array('like', '%' . $_GET['keyword'] . '%');
+            }
+            $this->assign('searchtype',$_GET['searchtype']);
+        }else{
+            $this->assign('searchtype',"");
+        }
+
+        if($_GET['city_id']){
+            $this->assign('city_id',$_GET['city_id']);
+            if($_GET['city_id'] != 0){
+                $condition_user['city_id'] = $_GET['city_id'];
+            }
+        }else{
+            $this->assign('city_id',0);
+        }
+        $city = D('Area')->where(array('area_type'=>2,'is_open'=>1))->select();
+        $this->assign('city',$city);
+
+        //未审核的
+        //$condition_user['group'] = array('between','-1,0');
+        $condition_user['reg_status'] = array('neq',0);
+        //garfunkel 判断城市管理员
+        if($this->system_session['level'] == 3){
+            $condition_user['city_id'] = $this->system_session['area_id'];
+        }
+        $count_user = $this->deliver_user->where($condition_user)->count();
+        import('@.ORG.system_page');
+        $p = new Page($count_user, 15);
+        $user_list = $this->deliver_user->field(true)->where($condition_user)->order('`last_time` DESC')->limit($p->firstRow . ',' . $p->listRows)->select();
+        foreach ($user_list as &$v){
+            $is_online = 0;
+            $is_upload = 0;
+            if($v['reg_status'] == 4){
+                $deliver_img = D('Deliver_img')->field(true)->where(array('uid' => $v['uid']))->find();
+                if($deliver_img['card_num'] != '' && $deliver_img['txnNumber'] != ''){
+                    $is_online = 1;
+                }
+                if($deliver_img['driver_license'] != '' && $deliver_img['insurance'] != '' && $deliver_img['certificate'] != '' && $deliver_img['sin_num'] != ''){
+                    $is_upload = 1;
+                }
+            }
+
+            $v['is_online_pay'] = $is_online;
+            $v['is_upload'] = $is_upload;
+        }
+        $this->assign('user_list', $user_list);
+        $pagebar = $p->show2();
+        $this->assign('pagebar', $pagebar);
+        $this->display();
+    }
+
     public function review(){
         //搜索
         if (!empty($_GET['keyword'])) {
@@ -1522,6 +1584,7 @@ class DeliverAction extends BaseAction {
         $this->assign('pagebar', $pagebar);
         $this->display();
     }
+
 
     public function user_view(){
         if($_POST) {
