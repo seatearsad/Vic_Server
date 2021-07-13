@@ -195,7 +195,7 @@
                     multiple: false
                 });
                 uploader.on('fileQueued', function (file) {
-                    if ($('.upload_pic_li').size() >= 5) {
+                    if ($('.upload_pic_li').length >= 5) {
                         uploader.cancelFile(file);
                         alert('最多上传5个图片！');
                         return false;
