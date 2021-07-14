@@ -534,6 +534,9 @@ class DeliverAction extends BaseAction
 
                 //$list = D('Deliver_supply')->field(true)->where($where)->order("`create_time` DESC")->select();
                 //garfunkel 添加派单逻辑
+                $first_list = array();
+                $second_list = array();
+                $third_list = array();
                 $grab_list = D('Deliver_supply')->field(true)->where($where)->order("`create_time` DESC")->select();
                 foreach ($grab_list as $k => $v) {
                     $store = D('Merchant_store')->field(true)->where(array('store_id' => $v['store_id']))->find();
@@ -542,12 +545,36 @@ class DeliverAction extends BaseAction
                         $deliver_assign = D('Deliver_assign')->field(true)->where(array('supply_id' => $supply_id))->find();
                         $record_array = explode(',', $deliver_assign['record']);
                         //派单列表中不存在 || 派单列表中开放 && 未拒单 || 指定派单 && 不在转接等候期
-                        if ((!$deliver_assign && $current_order_num < $max_order) || ($deliver_assign['deliver_id'] == 0 && !in_array($this->deliver_session['uid'], $record_array) && $current_order_num < $max_order) || $deliver_assign['deliver_id'] == $this->deliver_session['uid']) {
-                            $list[] = $v;
+                        if($deliver_assign['deliver_id'] == $this->deliver_session['uid']){
+                            $first_list[] = $v;
                         }
+                        if($deliver_assign['deliver_id'] == 0 && !in_array($this->deliver_session['uid'], $record_array) && $current_order_num < $max_order){
+                            $second_list[] = $v;
+                        }
+                        if (!$deliver_assign && $current_order_num < $max_order){
+                            $third_list[] = $v;
+                        }
+                        //if ((!$deliver_assign && $current_order_num < $max_order) || ($deliver_assign['deliver_id'] == 0 && !in_array($this->deliver_session['uid'], $record_array) && $current_order_num < $max_order) || $deliver_assign['deliver_id'] == $this->deliver_session['uid']) {
+                        //    $list[] = $v;
+                        //}
                     }
                 }
+
+                $list = array();
+                //最先显示指派的订单
+                if(count($first_list) > 0){
+                    $list[] = $first_list[0];
+                }
+                //
+                if(count($list) == 0 &&  count($second_list) > 0){
+                    $list[] = $second_list[0];
+                }
+
+                if(count($list) == 0 &&  count($third_list) > 0){
+                    $list[] = $third_list[0];
+                }
             }
+
 			if (empty($list)) {
 				exit(json_encode(array('err_code' => true)));
 			}

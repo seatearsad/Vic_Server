@@ -11,7 +11,7 @@
 <link href="{pigcms{$static_path}css/deliver.css?v=1.0.4" rel="stylesheet"/>
 <script src="{pigcms{:C('JQUERY_FILE')}"></script>
 <script>
-    var location_url = "{pigcms{:U('Deliver/grab')}",lat = "{pigcms{$deliver_session['lat']}", lng = "{pigcms{$deliver_session['lng']}";
+    var location_url = "{pigcms{:U('Deliver/grab')}",lat = "{pigcms{$deliver_session['lat']}", lng = "{pigcms{$deliver_session['lng']}", reject_url = "{pigcms{:U('Deliver/reject')}",update_url = "{pigcms{:U('Deliver/index_count')}";
 	$(function(){
 		$(".startOrder,.stopOrder").click(function(){
 			$.get("/wap.php?g=Wap&c=Deliver&a=index&action=changeWorkstatus&type="+$(this).attr('ref'), function(){
@@ -206,9 +206,22 @@
     }
     .accept_btn{
         float: right;
-        width: 70%;
+        width: 30%;
         text-align: center;
         background-color: limegreen;
+        border-radius: 3px;
+        height: 35px;
+        line-height: 35px;
+        font-size: 14px;
+        color: white;
+        cursor: pointer;
+    }
+    .reject_btn{
+        float: right;
+        margin-right: 5%;
+        width: 30%;
+        text-align: center;
+        background-color: orangered;
         border-radius: 3px;
         height: 35px;
         line-height: 35px;
@@ -345,6 +358,11 @@
                 <a href="javascript:void(0);" class="rob" data-spid="{{ d.list[i].supply_id }}">
                 <span class="accept_btn">
                     {pigcms{:L('_ND_ACCEPT_')}
+                </span>
+                </a>
+                <a href="javascript:void(0);" class="rej" data-spid="{{ d.list[i].supply_id }}">
+                <span class="reject_btn">
+                    {pigcms{:L('_D_REJECT_ORDER_')}
                 </span>
                 </a>
             </div>

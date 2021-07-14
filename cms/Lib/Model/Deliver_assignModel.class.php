@@ -663,7 +663,7 @@ class Deliver_assignModel extends Model
                 $saveData['is_b'] = 0;
                 $saveData['is_c'] = 0;
                 $saveData['is_d'] = 0;
-                $saveData['logic_num'] = 0;
+                $saveData['logic_num'] = 1;
 
                 $this->record_table->add($saveData);
 
@@ -681,11 +681,12 @@ class Deliver_assignModel extends Model
      * @return int 送餐员id 未找到回复0
      */
     public function newStepSecond($deliver_list,$supply){
-        //A 公里数 暂时设为10km
-        $a_km = 10;
-        $b_km = 10;
-        $c_min = 20;//分钟
-        $d_km = 10;
+        $config = D('Config')->get_config();
+        //A 公里数
+        $a_km = $config['deliver_assgin_a'];
+        $b_km = $config['deliver_assgin_b'];
+        $c_min = $config['deliver_assgin_c'];//分钟
+        $d_km = $config['deliver_assgin_d'];
         //已取货的送餐员
         $one_list_pick = array();
         //未取货的送餐员
@@ -703,7 +704,7 @@ class Deliver_assignModel extends Model
             }
         }
 
-        if(count($one_list_pick) == 0){
+        if(count($one_list_pick) > 0){
             $init_dis = 0;
             $uid = 0;
             foreach ($one_list_pick as $kk=>$vv){
@@ -723,15 +724,31 @@ class Deliver_assignModel extends Model
                             $uid = $vv['uid'];
                         }
                     }
-
-                    return $uid;
                 }else{
                     $one_list_pick_gt[] = $vv;
                 }
             }
+
+            if($uid != 0){
+                //记录派单逻辑
+                $saveData['order_id'] = $supply['order_id'];
+                $saveData['deliver_id'] = $uid;
+                $saveData['sand_time'] = time();
+                $saveData['hand_order'] = 1;
+                $saveData['order_is_pick'] = 1;
+                $saveData['is_a'] = 1;
+                $saveData['is_b'] = 0;
+                $saveData['is_c'] = 0;
+                $saveData['is_d'] = 0;
+                $saveData['logic_num'] = 2;
+
+                $this->record_table->add($saveData);
+
+                return $uid;
+            }
         }
 
-        if (count($one_list_no_pick) == 0){
+        if (count($one_list_no_pick) > 0){
             $init_dis = 0;
             $uid = 0;
 
@@ -770,6 +787,20 @@ class Deliver_assignModel extends Model
         }
         //如果未满足以上条件 选择已取餐大于A距离的
         if($uid != 0){
+            //记录派单逻辑
+            $saveData['order_id'] = $supply['order_id'];
+            $saveData['deliver_id'] = $uid;
+            $saveData['sand_time'] = time();
+            $saveData['hand_order'] = 1;
+            $saveData['order_is_pick'] = 0;
+            $saveData['is_a'] = 0;
+            $saveData['is_b'] = 1;
+            $saveData['is_c'] = 1;
+            $saveData['is_d'] = 1;
+            $saveData['logic_num'] = 3;
+
+            $this->record_table->add($saveData);
+
             return $uid;
         }else if(count($one_list_pick_gt) > 0){
             $init_dis = 0;
@@ -791,6 +822,20 @@ class Deliver_assignModel extends Model
                     }
                 }
             }
+
+            //记录派单逻辑
+            $saveData['order_id'] = $supply['order_id'];
+            $saveData['deliver_id'] = $uid;
+            $saveData['sand_time'] = time();
+            $saveData['hand_order'] = 1;
+            $saveData['order_is_pick'] = 1;
+            $saveData['is_a'] = 0;
+            $saveData['is_b'] = 0;
+            $saveData['is_c'] = 0;
+            $saveData['is_d'] = 0;
+            $saveData['logic_num'] = 4;
+
+            $this->record_table->add($saveData);
 
             return $uid;
         }else{
@@ -847,8 +892,36 @@ class Deliver_assignModel extends Model
                 }
             }
 
+            //记录派单逻辑
+            $saveData['order_id'] = $supply['order_id'];
+            $saveData['deliver_id'] = $uid;
+            $saveData['sand_time'] = time();
+            $saveData['hand_order'] = 2;
+            $saveData['order_is_pick'] = 0;
+            $saveData['is_a'] = 0;
+            $saveData['is_b'] = 0;
+            $saveData['is_c'] = 0;
+            $saveData['is_d'] = 0;
+            $saveData['logic_num'] = 5;
+
+            $this->record_table->add($saveData);
+
             return $uid;
         }else{
+            //记录派单逻辑
+            $saveData['order_id'] = $supply['order_id'];
+            $saveData['deliver_id'] = 0;
+            $saveData['sand_time'] = time();
+            $saveData['hand_order'] = 0;
+            $saveData['order_is_pick'] = 0;
+            $saveData['is_a'] = 0;
+            $saveData['is_b'] = 0;
+            $saveData['is_c'] = 0;
+            $saveData['is_d'] = 0;
+            $saveData['logic_num'] = 6;
+
+            $this->record_table->add($saveData);
+
             return 0;
         }
     }
