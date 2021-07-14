@@ -33,7 +33,7 @@ class Deliver_assignModel extends Model
     {
         $data['order_id'] = $supply['order_id'];
         $data['supply_id'] = $supply_id;
-        $data['deliver_id'] = $this->assignLogic($data['supply_id']);
+        $data['deliver_id'] = $this->newAssignLogic($data['supply_id']);
         $data['assign_time'] = time();
         $data['assign_num'] = 1;
         $data['record'] = $data['deliver_id'];
@@ -120,7 +120,7 @@ class Deliver_assignModel extends Model
             } else if ($v['status'] == 99 && $list[$k]['cha'] > self::CHANGE_BUFFER_TIME) {
                 //重新选择派单人选
                 $data['status'] = 0;
-                $data['deliver_id'] = $this->assignLogic($v['supply_id']);
+                $data['deliver_id'] = $this->newAssignLogic($v['supply_id']);
                 $data['assign_time'] = $curr_time;
                 $data['assign_num'] = $v['assign_num'] + 1;
 
