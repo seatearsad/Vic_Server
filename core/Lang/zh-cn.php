@@ -2082,6 +2082,9 @@ return array(
     "_BACK_UPLOADMODE1_"=>"上传Logo (1.66:1)",
     "_BACK_UPLOADMODE2_"=>" 只上传1张 (2.8:1)",
     "_BACK_UPLOADMODE3_"=>" 上传多张 (1:1)",
+    "_BACK_BAG_LIST_TITLE_"=>"送餐箱管理",
+    "_BACK_BAG_LIST_ADD_"=>"添加送餐箱",
+    "_BACK_BAG_NAME_"=>"送餐箱名称",
 
     "F_REGISTRATION_INVITED"=>"邀请注册数",
     "F_ORDERS_INVITED"=>"邀请下单数",

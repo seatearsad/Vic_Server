@@ -2081,7 +2081,9 @@ return array(
     "_BACK_UPLOADMODE1_"=>"Logo (1.66:1)",
     "_BACK_UPLOADMODE2_"=>"One Photos (2.8:1)",
     "_BACK_UPLOADMODE3_"=>"Multiple Photos (1:1）",
-
+    "_BACK_BAG_LIST_TITLE_"=>"Bag Management",
+    "_BACK_BAG_LIST_ADD_"=>"Add Bag",
+    "_BACK_BAG_NAME_"=>"Bag Name",
 
     "F_REGISTRATION_INVITED"=>"Registration Invited",
     "F_ORDERS_INVITED"=>"Orders Invited",

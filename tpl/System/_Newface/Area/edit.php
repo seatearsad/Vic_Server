@@ -92,19 +92,19 @@
                         <label class="col-sm-3 col-form-label">{pigcms{:L('_BACK_CITY_DELI_STATUS_')}</label>
                         <div class="col-sm-9">
                             <span class="cb-enable">
-                                <if condition="$now_area['is_open'] eq 1">
+                                <if condition="$now_area['bag_is_recruit'] eq 1">
                                     <label class="cb-enable selected">
                                     <else/>
                                     <label class="cb-enable">
                                 </if>
-                                <span>YES</span><input type="radio" name="is_open" value="1" <if condition="$now_area['is_open'] eq 1">checked="checked"</if> /></label></span>
+                                <span>YES</span><input type="radio" name="bag_is_recruit" value="1" <if condition="$now_area['bag_is_recruit'] eq 1">checked="checked"</if> /></label></span>
                             <span class="cb-disable">
-                                <if condition="$now_area['is_open'] eq 0">
+                                <if condition="$now_area['bag_is_recruit'] eq 0">
                                     <label class="cb-disable selected">
                                     <else/>
                                     <label class="cb-disable">
                                 </if>
-                                <span>No</span><input type="radio" name="is_open" value="0" <if condition="$now_area['is_open'] eq 0">checked="checked"</if>/></label></span>
+                                <span>No</span><input type="radio" name="bag_is_recruit" value="0" <if condition="$now_area['bag_is_recruit'] eq 0">checked="checked"</if>/></label></span>
                         </div>
                     </div>
                     <div class="form-group  row">

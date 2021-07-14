@@ -9,15 +9,15 @@
  */
 
 class DeliverAction extends BaseAction {
-	protected $deliver_user, $deliver_store, $deliver_location, $deliver_supply;
+	protected $bag,$deliver_user, $deliver_store, $deliver_location, $deliver_supply;
 	
 	protected function _initialize() {
 		parent::_initialize();
+        $this->bag = D("Bag");
 		$this->deliver_user = D("Deliver_user");
 		$this->deliver_store = D("Deliver_store");
 		$this->deliver_location = D("Deliver_location");
 		$this->deliver_supply = D("Deliver_supply");
-
 	}
 
     public function __construct()
@@ -1478,65 +1478,122 @@ class DeliverAction extends BaseAction {
             exit(json_encode(array('error' => 1, 'msg' => 'Fail,City not exist！', 'dom_id' => 'account')));
         }
     }
+    /**
+     * 送货箱添加
+     */
+    public function bag_add() {
+        if($_POST){
+            $column['bag_name'] = isset($_POST['bag_name']) ? htmlspecialchars($_POST['bag_name']) : '';
+            $column['bag_price'] = isset($_POST['bag_price']) ? htmlspecialchars($_POST['bag_price']) : '';
+            $column['bag_tax_rate'] = $_POST['bag_tax_rate'];
+            $column['bag_switch'] = intval($_POST['bag_switch']);
+            $column['bag_description'] = $_POST['bag_description'];
+
+            if (empty($column['bag_name'])) {
+                $this->error('bag_name不能为空');
+            }
+            if (empty($column['bag_price'])) {
+                $this->error('bag_price不能为空');
+            }
+            if (empty($column['bag_tax_rate'])) {
+                $this->error('bag_tax_rate不能为空');
+            }
+
+            $id = D('bag')->data($column)->add();
+
+            if(!$id){
+                $this->error('保存失败，请重试');
+            }else{
+
+            }
+
+            $this->success(L('J_SUCCEED3'));
+        }
+        //garfunkel 判断城市管理员
+        //if($this->system_session['level'] == 3){
+        //$this->error('当前管理员没有此权限');
+        //}
+        $this->display();
+    }
+
+    /**
+     * 送货箱修改
+     */
+    public function bag_edit() {
+        if($_POST){
+            $bag_id  = intval($_POST['bag_id']);
+            $column['bag_name'] = isset($_POST['bag_name']) ? htmlspecialchars($_POST['bag_name']) : '';
+            $column['bag_price'] = isset($_POST['bag_price']) ? htmlspecialchars($_POST['bag_price']) : '';
+            $column['bag_tax_rate'] = isset($_POST['bag_tax_rate']) ? htmlspecialchars($_POST['bag_tax_rate']) : '';
+            $column['bag_description'] = isset($_POST['bag_description']) ? htmlspecialchars($_POST['bag_description']) : '';
+
+            $column['bag_switch'] = intval($_POST['bag_switch']);
+
+            if (empty($column['bag_name'])) {
+                $this->error('bag_name不能为空');
+            }
+            if (empty($column['bag_price'])) {
+                $this->error('bag_price不能为空');
+            }
+            if (empty($column['bag_tax_rate'])) {
+                $this->error('bag_tax_rate不能为空');
+            }
+            $bag = D('bag')->field(true)->where(array('bag_id' => $bag_id))->find();
+            if ($bag) {
+                $this->error(L('未找到匹配数据'));
+            }
+
+            if(D('bag')->where(array('bag_id' => $bag_id))->save($column)){
+                $this->success('Success');
+            }else{
+                $this->error('修改失败！请检查内容是否有过修改（必须修改）后重试~');
+            }
+        }else{
+            $uid = $_GET['uid'];
+            if(!$uid){
+                $this->error('非法操作');
+            }
+            $deliver = D('deliver_user')->where(array('uid'=>$uid))->find();
+            if(!$deliver){
+                $this->error('非法操作');
+            }
+            $city = D('Area')->where(array('area_id'=>$deliver['city_id']))->find();
+            $deliver['city_name'] = $city['area_name'];
+            $this->assign('now_user',$deliver);
+
+            $card = D('Deliver_card')->field(true)->where(array('deliver_id'=>$uid))->find();
+            $this->assign('card',$card);
+
+            $deliver_img = D('Deliver_img')->field(true)->where(array('uid' => $uid))->find();
+            $this->assign('img', $deliver_img);
+        }
+        $this->display();
+    }
 
     public function bag_list(){
-        //搜索
-        if (!empty($_GET['keyword'])) {
-            if ($_GET['searchtype'] == 'uid') {
-                $condition_user['uid'] = $_GET['keyword'];
-            } else if ($_GET['searchtype'] == 'firstname') {
-                $condition_user['name'] = array('like', '%' . $_GET['keyword'] . '%');
-            } else if ($_GET['searchtype'] == 'lastname') {
-                $condition_user['family_name'] = array('like', '%' . $_GET['keyword'] . '%');
-            } else if ($_GET['searchtype'] == 'phone') {
-                $condition_user['phone'] = array('like', '%' . $_GET['keyword'] . '%');
-            }else if($_GET['searchtype'] == 'email'){
-                $condition_user['email'] = array('like', '%' . $_GET['keyword'] . '%');
-            }
-            $this->assign('searchtype',$_GET['searchtype']);
-        }else{
-            $this->assign('searchtype',"");
-        }
 
-        if($_GET['city_id']){
-            $this->assign('city_id',$_GET['city_id']);
-            if($_GET['city_id'] != 0){
-                $condition_user['city_id'] = $_GET['city_id'];
-            }
-        }else{
-            $this->assign('city_id',0);
-        }
-        $city = D('Area')->where(array('area_type'=>2,'is_open'=>1))->select();
-        $this->assign('city',$city);
-
-        //未审核的
-        //$condition_user['group'] = array('between','-1,0');
-        $condition_user['reg_status'] = array('neq',0);
-        //garfunkel 判断城市管理员
-        if($this->system_session['level'] == 3){
-            $condition_user['city_id'] = $this->system_session['area_id'];
-        }
-        $count_user = $this->deliver_user->where($condition_user)->count();
+        $count_bag = $this->bag->count();
         import('@.ORG.system_page');
-        $p = new Page($count_user, 15);
-        $user_list = $this->deliver_user->field(true)->where($condition_user)->order('`last_time` DESC')->limit($p->firstRow . ',' . $p->listRows)->select();
-        foreach ($user_list as &$v){
-            $is_online = 0;
-            $is_upload = 0;
-            if($v['reg_status'] == 4){
-                $deliver_img = D('Deliver_img')->field(true)->where(array('uid' => $v['uid']))->find();
-                if($deliver_img['card_num'] != '' && $deliver_img['txnNumber'] != ''){
-                    $is_online = 1;
-                }
-                if($deliver_img['driver_license'] != '' && $deliver_img['insurance'] != '' && $deliver_img['certificate'] != '' && $deliver_img['sin_num'] != ''){
-                    $is_upload = 1;
-                }
-            }
+        $p = new Page($count_bag, 15);
+        $bag_list = $this->bag->field(true)->order('`bag_id` DESC')->limit($p->firstRow . ',' . $p->listRows)->select();
 
-            $v['is_online_pay'] = $is_online;
-            $v['is_upload'] = $is_upload;
-        }
-        $this->assign('user_list', $user_list);
+//        foreach ($user_list as &$v){
+//            $is_online = 0;
+//            $is_upload = 0;
+//            if($v['reg_status'] == 4){
+//                $deliver_img = D('Deliver_img')->field(true)->where(array('uid' => $v['uid']))->find();
+//                if($deliver_img['card_num'] != '' && $deliver_img['txnNumber'] != ''){
+//                    $is_online = 1;
+//                }
+//                if($deliver_img['driver_license'] != '' && $deliver_img['insurance'] != '' && $deliver_img['certificate'] != '' && $deliver_img['sin_num'] != ''){
+//                    $is_upload = 1;
+//                }
+//            }
+//
+//            $v['is_online_pay'] = $is_online;
+//            $v['is_upload'] = $is_upload;
+//        }
+        $this->assign('bag_list', $bag_list);
         $pagebar = $p->show2();
         $this->assign('pagebar', $pagebar);
         $this->display();
