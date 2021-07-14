@@ -1516,6 +1516,19 @@ class DeliverAction extends BaseAction {
         $this->display();
     }
 
+    //修改送货箱的是否开启的状态
+    public function change_switch(){
+        $bag_switch = $_POST['switch'];
+        $bid=$_POST['bid'];
+        D('bag')->where(array('bag_id'=>$bid))->save(array('bag_switch'=>$bag_switch));
+        exit('1');
+        die();
+//        if(1){
+//            exit('1');
+//        }else{
+//            exit('0');
+//        }
+    }
     /**
      * 送货箱修改
      */

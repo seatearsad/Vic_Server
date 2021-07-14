@@ -106,9 +106,7 @@
             <li>
                 <input type="text" placeholder="{pigcms{:L('_LAST_NAME_')}*" id="l_name">
             </li>
-            <li>
-                <input type="text" placeholder="{pigcms{:L('_BIRTHDAY_TXT_')}*" id="birthday">
-            </li>
+
             <li>
                 <input type="text" placeholder="{pigcms{:L('_EMAIL_TXT_')}*" id="email">
             </li>
@@ -147,13 +145,12 @@ $('#login_btn').click(function () {
     window.location.href = "{pigcms{:U('Deliver/login')}";
 });
 
-
-
 $("#reg_form").click(function () {
     $(this).attr("disabled","disabled");
     if(check_form()){
         var form_data = {
             'first_name':$('#f_name').val(),
+            'birthday':$('#birthday').val(),
             'last_name':$('#l_name').val(),
             'email':$('#email').val(),
             'phone':$('#mobile').val(),
@@ -175,7 +172,6 @@ $("#reg_form").click(function () {
                     }});
                 }
             }
-
         });
     }else{
         $(this).removeAttr("disabled");

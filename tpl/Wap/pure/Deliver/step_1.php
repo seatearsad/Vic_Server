@@ -20,8 +20,8 @@
         padding: 0px;
         margin: 0px auto;
         font-size: 14px;
-        min-width: 320px;
-        max-width: 100%;
+        min-width: 320px
+        max-width: 640px;
         background-color: #f4f4f4;
         color: #333333;
         position: relative;
@@ -72,10 +72,22 @@
     }
     li{
         text-align: center;
-        margin-top: 10px;
+        margin-top: 15px;
     }
     li input {
         width: 55%;
+        height: 15px;
+        padding: 8px 0;
+        text-indent: 10px;
+        color: #333333;
+        background-color: white;
+        border-radius: 5px;
+        margin-left: 1%;
+        margin-top: 2px;
+        font-size: 12px;
+    }
+    li input.sm {
+        width: 27%;
         height: 15px;
         padding: 8px 0;
         text-indent: 10px;
@@ -111,10 +123,10 @@
         padding: 0px;
         height: 30px;
     }
-    li span{
+    li div{
         text-align: left;
         display: inline-block;
-        width: 35%;
+        width: 80%;
         font-size: 12px;
     }
     input#sms_code{
@@ -130,66 +142,53 @@
         <span class="fillet" style="background: url('./tpl/Static/blue/images/new/icon.png') center no-repeat; background-size: contain;"></span>
         <div style="font-size: 14px">{pigcms{:L('_ND_BECOMEACOURIER_')}</div>
         <div style="color: red;font-size: 10px;margin: 10px auto;width: 90%;">
-            {pigcms{:L('_ND_ACCTSUCCESS_')}
+<!--            {pigcms{:L('_ND_ACCTSUCCESS_')}-->
             <!-- Registration is temporarily unavailable at this point due to shortage in delivery bags. We'll inform you by email when registration is back to active. We're sorry for the inconvenience and thank you for your understanding!-->
         </div>
     </div>
-    <div id="step_now">
-        <div>1.{pigcms{:L('_ND_INFORMATIONNEEDED_')}</div>
-        <ul>
-            <li class="act"></li><li></li><li></li><li></li>
-        </ul>
-    </div>
-    <div id="memo">
-        {pigcms{:L('_ND_INFORMATIONSECURE_')}
-    </div>
+<!--    <div id="step_now">-->
+<!--        <div>1.{pigcms{:L('_ND_INFORMATIONNEEDED_')}</div>-->
+<!--        <ul>-->
+<!--            <li class="act"></li><li></li><li></li><li></li>-->
+<!--        </ul>-->
+<!--    </div>-->
+<!--    <div id="memo">-->
+<!--        {pigcms{:L('_ND_INFORMATIONSECURE_')}-->
+<!--    </div>-->
     <div id="reg_list">
         <ul>
             <li>
-                <span>{pigcms{:L('_ND_DELIVERYCITY_')}:</span>
                 <select name="city_id" id="city_id">
+                    <option value="0">------{pigcms{:L('_ND_DELIVERYCITY_')}------</option>
                     <volist name="city_list" id="city">
-                    <option value="{pigcms{$city['area_id']}">{pigcms{$city['area_name']}</option>
+                        <option value="{pigcms{$city['area_id']}">{pigcms{$city['area_name']}</option>
                     </volist>
                 </select>
             </li>
             <li>
-                <span>{pigcms{:L('_ND_ADDRESS_')}:</span>
+                <select name="city_id" id="city_id">
+                    <option value="0">------Vehicle Type------</option>
+                    <option value="1">Car</option>
+                    <option value="2">Bike</option>
+                    <option value="3">Motorcycle/Scooter</option>
+                </select>
+            </li>
+            <li>
+                <input type="text" placeholder="{pigcms{:L('_BIRTHDAY_TXT_')}*" id="birthday">
+            </li>
+            <li>
                 <input type="text" placeholder="{pigcms{:L('_ND_ADDRESS_')}" id="address">
             </li>
             <li>
-                <span>SIN Number:</span>
-                <input type="text" placeholder="SIN Number" id="sin_num">
-            </li>
-            <li style="text-align: left;width: 91%;margin:10px auto">
-                <div style="font-size: 14px">
-                    {pigcms{:L('_ND_BANKINGINFO_')} (Optional)
-                </div>
-                <div>
-                    {pigcms{:L('_ND_BANKINGINFONOTICE_')}
-                </div>
+                <input type="text" placeholder="Apartment,suite,unit,etc." id="apartment">
             </li>
             <li>
-                <span>Full Name:</span>
-                <input type="text" placeholder="Account holder's name" id="ahname">
+                <input type="text" class="sm" placeholder="City*" id="city"><input type="text" class="sm" placeholder="province*" id="province">
             </li>
             <li>
-                <span>Institution Number:</span>
-                <input type="text" placeholder="3 digits" id="institution">
+                <input type="text" placeholder="Postal Code*" id="postalcode">
             </li>
-            <li>
-                <span>Transit Number:</span>
-                <input type="text" placeholder="5 digits" id="transit">
-            </li>
-            <li>
-                <span>Account Number:</span>
-                <input type="text" placeholder="7 to 12 digits" id="account">
-            </li>
-            <li style="text-align: left;width: 91%;margin:30px auto 10px auto">
-                <div style="font-size: 16px;color: #333;">
-                    Your banking information is optional here. You can click “Save & Continue” to skip and submit it later.
-                </div>
-            </li>
+
             <li class="Landd">
                 <input type="button" value="Save & Continue" id="reg_form" style="background-color: #ffa52d;width: 50%;">
             </li>
@@ -313,5 +312,19 @@
             });
         }
     }
+
+    var theme = "ios";
+    var mode = "scroller";
+    var display = "bottom";
+    var lang="en";
+
+    $('#birthday').mobiscroll().date({
+        theme: theme,
+        mode: mode,
+        display: display,
+        dateFormat: 'yyyy-mm-dd',
+        dateOrder:'yymmdd',
+        lang: lang
+    });
 </script>
 </html>

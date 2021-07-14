@@ -150,6 +150,7 @@
 
 	$(function(){
 		/*店铺状态*/
+        //<input name="switch-field-1" class="ace ace-switch ace-switch-6"
 		updateStatus(".statusSwitch .ace-switch", ".statusSwitch", "OPEN", "CLOSED", "store_theme");
 	});
 	function updateStatus(dom1, dom2, status1, status2, attribute){

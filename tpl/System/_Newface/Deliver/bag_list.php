@@ -55,38 +55,15 @@
                                             <td>{pigcms{$vo.bag_id}</td>
                                             <td>{pigcms{$vo.bag_name}</td>
                                             <td>{pigcms{$vo.bag_price}</td>
-                                            <td>{pigcms{$vo.phone}</td>
-                                            <td class="textcenter">
-                                                <if condition="$vo['reg_status'] neq 4 and $vo['reg_status'] neq 5">
-                                                    <font color="red">{pigcms{:L('_BACK_REGISTERED_')}</font>
-                                                </if>
-                                                <if condition="$vo['reg_status'] eq 4">
-                                                    <font color="green">
-                                                        {pigcms{:L('_BACK_DELIVER_BOX_')}
-                                                        <if condition="$vo['is_online_pay'] eq 1">
-                                                            (Paid)
-                                                            <else/>
-                                                            (Unpaid)
-                                                        </if>
-                                                    </font>
-                                                    |
-                                                </if>
+                                            <td>{pigcms{$vo.phone}-{pigcms{$vo.bag_switch}</td>
+                                            <td>
+                                                <div style="width: 120px;" data-id="{pigcms{$vo.bag_id}" >
+                                                        <span class="cb-enable cb-enableex"><label id="cat_type_0" class="cb-enable <if condition="$vo['bag_switch'] eq 1">selected</if>"><span>ON</span>
+                                                        <input type="radio" class="cat_type"  name="cat_type" value="1" <if condition="$vo['bag_switch'] eq 1">checked="checked"</if> /></label></span>
 
-                                                <if condition="$vo['reg_status'] eq 4 or $vo['reg_status'] eq 5">
-                                                    <if condition="$vo['is_upload'] eq 0">
-                                                        <font color="red">{pigcms{:L('D_INCOMPLETE_REGIST')}</font>
-                                                        <else/>
-                                                        <if condition="$vo['group'] eq 0">
-                                                            <font color="red">{pigcms{:L('D_AWAITING_APPROVAL')}</font>
-                                                        </if>
-                                                        <if condition="$vo['group'] eq -1">
-                                                            <font color="red">未通过审核</font>
-                                                        </if>
-                                                        <if condition="$vo['group'] eq 1">
-                                                            <font color="green">{pigcms{:L('D_APPROVED')}</font>
-                                                        </if>
-                                                    </if>
-                                                </if>
+                                                        <span class="cb-disable cb-disableex"><label id="cat_type_1" class="cb-disable <if condition="$vo['bag_switch'] eq 0">selected</if>"><span>OFF</span>
+                                                        <input type="radio" class="cat_type"   name="cat_type" value="0" <if condition="$vo['bag_switch'] eq 0">checked="checked"</if> /></label></span>
+                                                </div>
                                             </td>
                                             <td class="textcenter">　
                                                 <a href="javascript:void(0);"
@@ -118,6 +95,39 @@
             </div>
         </div>
         <script>
+            $(function() {
+                $('.cb-enableex').click(function () {
+                    bid = $(this).parent().attr("data-id");
+                    console.log("data-id==" + bid);
+                    SetBagSwitch(bid, 1);
+                });
+                $('.cb-disableex').click(function () {
+                    bid = $(this).parent().attr("data-id");
+                    console.log("data-id=" + bid);
+                    SetBagSwitch(bid, 0)
+                });
+            });
+            function SetBagSwitch(bid,status){
+                $.ajax({
+                    //url:"{pigcms{:U('Shop/change_mall')}",
+                    url:"{pigcms{:U('Deliver/change_switch')}",
+                    type:"post",
+                    data:{"switch":status,"bid":bid},
+                    dataType:"text",
+                    success:function(d){
+                        if(d != '1'){		//失败
+                            // if(status=='1'){
+                            //     _this.attr("checked",false);
+                            // }else{
+                            //     _this.attr("checked",true);
+                            // }
+                            alert("操作失败");
+                        }
+                        // _this.attr("disabled",false);
+                    }
+                });
+            }
+
             var city_id = $('#city_select').val();
             $('#city_select').change(function () {
                 // city_id = $(this).val();
