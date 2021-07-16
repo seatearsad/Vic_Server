@@ -84,7 +84,8 @@ class Deliver_assignModel extends Model
     public function check_assign()
     {
         $curr_time = time();
-        $where = 'deliver_id <> 0 and (status = 0 or status = 99)';
+        //$where = 'deliver_id <> 0 and (status = 0 or status = 99)';
+        $where = 'status = 0 or status = 99';
         $list = $this->field(true)->where($where)->select();
         //记录一下 已经发送过短信的用户
         $send_list = array();
@@ -110,7 +111,7 @@ class Deliver_assignModel extends Model
                         }
                     }
                     //清除之前的记录 让所有都能抢
-                    $data['record'] = '';
+                    //$data['record'] = '';
                 } else {//准备变换派单人选
                     $data['deliver_id'] = -1;
                     $data['status'] = 99;
@@ -125,7 +126,7 @@ class Deliver_assignModel extends Model
                 $data['assign_num'] = $v['assign_num'] + 1;
 
                 if ($data['deliver_id'] == 0)
-                    $data['record'] = '';
+                    $data['record'] = $v['record'];//'';
                 else
                     $data['record'] = $v['record'] . ',' . $data['deliver_id'];
 
@@ -576,16 +577,25 @@ class Deliver_assignModel extends Model
         //获取店铺信息
         $store = D('Merchant_store')->field(true)->where(array('store_id' => $supply['store_id']))->find();
 
+        //获取之前的派单记录
+        $record = D('Deliver_assign')->field(true)->where(array('supply_id' => $supply_id))->find();
+        $record_list = array();
+        if ($record) {
+            $record_list = explode(',', $record['record']);
+        }
+
         //获取当前所有上班状态的配送员 包含现在手中订单数量及状态 06.02 add 过滤城市
         $user_list = D('Deliver_user')->field(true)->where(array('status' => 1, 'work_status' => 0,'city_id' => $store['city_id']))->order('uid asc')->select();
         $deliver_list = array();
         foreach ($user_list as $k=>$v){
-            $where_supply = array('uid'=>$v['uid'],'status'=>array('between',array(1,4)));
-            $user_supply = D('Deliver_supply')->where($where_supply)->select();
-            if(count($user_supply) < $max_order) {
-                $deliver_list[$v['uid']] = $v;
-                $deliver_list[$v['uid']]['order_num'] = count($user_supply);
-                $deliver_list[$v['uid']]['supply'] = $user_supply;
+            if(!in_array($v['uid'],$record_list)) {
+                $where_supply = array('uid' => $v['uid'], 'status' => array('between', array(1, 4)));
+                $user_supply = D('Deliver_supply')->where($where_supply)->select();
+                if (count($user_supply) < $max_order) {
+                    $deliver_list[$v['uid']] = $v;
+                    $deliver_list[$v['uid']]['order_num'] = count($user_supply);
+                    $deliver_list[$v['uid']]['supply'] = $user_supply;
+                }
             }
         }
 
@@ -631,6 +641,20 @@ class Deliver_assignModel extends Model
 
         if(count($zero_list) > 0){
             if(count($zero_list) == 1){//仅有一个零单送餐员
+                //记录派单逻辑
+                $saveData['order_id'] = $supply['order_id'];
+                $saveData['deliver_id'] = $zero_list[0]['uid'];
+                $saveData['send_time'] = time();
+                $saveData['hand_order'] = 0;
+                $saveData['order_is_pick'] = 0;
+                $saveData['is_a'] = 0;
+                $saveData['is_b'] = 0;
+                $saveData['is_c'] = 0;
+                $saveData['is_d'] = 0;
+                $saveData['logic_num'] = 1;
+
+                $this->record_table->add($saveData);
+
                 return $zero_list[0]['uid'];
             }else{
                 $init_dis = 0;
@@ -656,7 +680,7 @@ class Deliver_assignModel extends Model
                 //记录派单逻辑
                 $saveData['order_id'] = $supply['order_id'];
                 $saveData['deliver_id'] = $uid;
-                $saveData['sand_time'] = time();
+                $saveData['send_time'] = time();
                 $saveData['hand_order'] = 0;
                 $saveData['order_is_pick'] = 0;
                 $saveData['is_a'] = 0;
@@ -696,7 +720,7 @@ class Deliver_assignModel extends Model
 
         foreach ($deliver_list as $k=>$v){
             if($v['order_num'] == 1){
-                if($v['supply'][0]['status'] == 4){
+                if($v['supply'][0]['status'] >= 3){
                     $one_list_pick[] = $v;
                 }else{
                     $one_list_no_pick[] = $v;
@@ -733,7 +757,7 @@ class Deliver_assignModel extends Model
                 //记录派单逻辑
                 $saveData['order_id'] = $supply['order_id'];
                 $saveData['deliver_id'] = $uid;
-                $saveData['sand_time'] = time();
+                $saveData['send_time'] = time();
                 $saveData['hand_order'] = 1;
                 $saveData['order_is_pick'] = 1;
                 $saveData['is_a'] = 1;
@@ -790,7 +814,7 @@ class Deliver_assignModel extends Model
             //记录派单逻辑
             $saveData['order_id'] = $supply['order_id'];
             $saveData['deliver_id'] = $uid;
-            $saveData['sand_time'] = time();
+            $saveData['send_time'] = time();
             $saveData['hand_order'] = 1;
             $saveData['order_is_pick'] = 0;
             $saveData['is_a'] = 0;
@@ -826,7 +850,7 @@ class Deliver_assignModel extends Model
             //记录派单逻辑
             $saveData['order_id'] = $supply['order_id'];
             $saveData['deliver_id'] = $uid;
-            $saveData['sand_time'] = time();
+            $saveData['send_time'] = time();
             $saveData['hand_order'] = 1;
             $saveData['order_is_pick'] = 1;
             $saveData['is_a'] = 0;
@@ -895,7 +919,7 @@ class Deliver_assignModel extends Model
             //记录派单逻辑
             $saveData['order_id'] = $supply['order_id'];
             $saveData['deliver_id'] = $uid;
-            $saveData['sand_time'] = time();
+            $saveData['send_time'] = time();
             $saveData['hand_order'] = 2;
             $saveData['order_is_pick'] = 0;
             $saveData['is_a'] = 0;
@@ -911,7 +935,7 @@ class Deliver_assignModel extends Model
             //记录派单逻辑
             $saveData['order_id'] = $supply['order_id'];
             $saveData['deliver_id'] = 0;
-            $saveData['sand_time'] = time();
+            $saveData['send_time'] = time();
             $saveData['hand_order'] = 0;
             $saveData['order_is_pick'] = 0;
             $saveData['is_a'] = 0;
