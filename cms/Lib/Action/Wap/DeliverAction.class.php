@@ -3033,15 +3033,10 @@ class DeliverAction extends BaseAction
         $body .= "<p>&nbsp;</p>";
         $body .= "<p>Thank you for signing up as a Tutti courier!</p>";
         $body .= "<p>&nbsp;</p>";
-        $body .= "<p>To pick up your delivery bag, you will need to schedule an appointment with us. Please choose an available time slot at <a href='https://calendly.com/calvin-tutti/15min' target='_blank'>https://calendly.com/calvin-tutti/15min.</a></p>";
+        $body .= "<p>Our agent will contact you soon about getting your delivery bag.</p>";
         $body .= "<p>&nbsp;</p>";
-        $body .= "<p>The pick-up location for Victoria couriers is:</p>";
-        $body .= "<b>852 Fort Street, Unit 218</b>";
-        $body .= "<p>Victoria BC, V8W 1H8</p>";
+        $body .= "<p>If you haven’t uploaded the required documents, we recommend you finish uploading them in order to get started quickly. You can do so by logging into your courier account and clicking on the“Completing My Application” button. If you have any difficulties uploading documents, you can also bring in the original copy when picking up your delivery bag.</p>";
         $body .= "<p>&nbsp;</p>";
-        $body .= "<p>Please note that <b>wearing a mask is mandatory</b> during your pick-up!</p>";
-        $body .= "<p>&nbsp;</p>";
-        $body .= "<p>If you haven't uploaded the required documents, we recommend you finish uploading them in order to get started quickly. You can do so by logging into your courier account and clicking on the \"Completing My Application\" button. If you have any difficulties uploading documents, you can also bring in the original copy when picking up your delivery bag.</p>";
         $body .= "<p>After being approved and getting your delivery bag, we will activate your account. You will then receive another email with a link to instructions on how to use our courier app.</p>";
         $body .= "<p>&nbsp;</p>";
         $body .= "<p>For any questions or concerns, please contact us at 1-888-399-6668 or email <a href='mailto:hr@tutti.app'>hr@tutti.app</a>. We look forward to working with you!</p>";
