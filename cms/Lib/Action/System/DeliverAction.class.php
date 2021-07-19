@@ -1949,4 +1949,11 @@ class DeliverAction extends BaseAction {
             exit(json_encode(array('error_code' => true, 'msg' => "Error")));
         }
     }
+
+    public function assignRecord(){
+        $list = D('Deliver_assign_record')->order('id desc')->select();
+        $this->assign('list',$list);
+
+        $this->display();
+    }
 }
