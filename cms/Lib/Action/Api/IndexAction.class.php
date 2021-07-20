@@ -3185,7 +3185,7 @@ class IndexAction extends BaseAction
     }
 
     public function test_assign(){
-        $deliver_id = D('Deliver_assign')->newAssignLogic(9373);
+        $deliver_id = D('Deliver_assign')->getDeliverList(9373);
         var_dump($deliver_id);
     }
 

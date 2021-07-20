@@ -111,7 +111,7 @@ class Deliver_assignModel extends Model
                         }
                     }
                     //清除之前的记录 让所有都能抢
-                    //$data['record'] = '';
+                    $data['record'] = '';
                 } else {//准备变换派单人选
                     $data['deliver_id'] = -1;
                     $data['status'] = 99;
@@ -792,9 +792,10 @@ class Deliver_assignModel extends Model
                 //获取两点之间的距离 返回值为米
                 $distance_d = getDistance($from_lat, $from_lng, $aim_lat, $aim_lng);
 
-                $chu_time = $vvv['supply'][0]['create_time'] + ($vvv['supply'][0]['dining_time'] + self::DINING_ADD_TIME) * 60;
+                //$chu_time = $vvv['supply'][0]['create_time'] + ($vvv['supply'][0]['dining_time'] + self::DINING_ADD_TIME) * 60;
+                $chu_time = ($supply['create_time'] + $supply['dining_time']) - ($vvv['supply'][0]['create_time'] + $vvv['supply'][0]['dining_time']);
                 //T出餐时间差值
-                $t_c_t = ($chu_time - time()) / 60;
+                $t_c_t = $chu_time / 60;
 
                 if($distance_b/1000 < $b_km && $distance_d < $d_km && $t_c_t < $c_min){
                     if($init_dis == 0){
@@ -871,7 +872,9 @@ class Deliver_assignModel extends Model
         $two_list = array();
         foreach ($deliver_list as $k=>$v){
             if($v['order_num'] == 2){
-                $two_list[] = $v;
+                if($v['supply'][0]['status'] >= 3 && $v['supply'][1]['status'] >= 3) {
+                    $two_list[] = $v;
+                }
             }
         }
 
