@@ -584,11 +584,17 @@ class Deliver_assignModel extends Model
             $record_list = explode(',', $record['record']);
         }
 
+        $curr_arr = D('Deliver_assign')->where(array('status'=>0,'deliver_id'=>array('neq',0)))->select();
+        $curr_list = array();
+        foreach ($curr_arr as $c){
+            $curr_list[] = $c['deliver_id'];
+        }
+
         //获取当前所有上班状态的配送员 包含现在手中订单数量及状态 06.02 add 过滤城市
         $user_list = D('Deliver_user')->field(true)->where(array('status' => 1, 'work_status' => 0,'city_id' => $store['city_id']))->order('uid asc')->select();
         $deliver_list = array();
         foreach ($user_list as $k=>$v){
-            if(!in_array($v['uid'],$record_list)) {
+            if(!in_array($v['uid'],$record_list) && !in_array($v['uid'],$curr_list)) {
                 $where_supply = array('uid' => $v['uid'], 'status' => array('between', array(1, 4)));
                 $user_supply = D('Deliver_supply')->where($where_supply)->select();
                 if (count($user_supply) < $max_order) {
@@ -797,7 +803,7 @@ class Deliver_assignModel extends Model
                 //T出餐时间差值
                 $t_c_t = $chu_time / 60;
 
-                if($distance_b/1000 < $b_km && $distance_d < $d_km && $t_c_t < $c_min){
+                if($distance_b/1000 < $b_km && $distance_d/1000 < $d_km && $t_c_t < $c_min){
                     if($init_dis == 0){
                         $init_dis = $distance_d;
                         $uid = $vvv['uid'];
@@ -833,8 +839,8 @@ class Deliver_assignModel extends Model
             foreach ($one_list_pick_gt as $kk => $vv) {
                 $from_lat = $vv['lat'];
                 $from_lng = $vv['lng'];
-                $aim_lat = $supply['from_lat'];
-                $aim_lng = $supply['from_lnt'];
+                $aim_lat = $vv['supply'][0]['aim_lat'];
+                $aim_lng = $vv['supply'][0]['aim_lnt'];
                 //获取两点之间的距离
                 $distance = getDistance($from_lat, $from_lng, $aim_lat, $aim_lng);
                 if ($init_dis == 0) {
