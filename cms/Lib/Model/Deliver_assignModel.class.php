@@ -95,7 +95,7 @@ class Deliver_assignModel extends Model
             //上一个指派超时未抢
             if ($v['status'] == 0 && $list[$k]['cha'] > self::CHANGE_TIME) {
                 //总派单次数已到
-                if ((int)$v['assign_num'] >= self::CHANGE_TOTAL_TIMES) {
+                if ((int)$v['assign_num'] == self::CHANGE_TOTAL_TIMES) {
                     $data['deliver_id'] = 0;
                     //获取当前订单的相关信息
                     $supply = D('Deliver_supply')->field(true)->where(array('supply_id' => $v['supply_id']))->find();

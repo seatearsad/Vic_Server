@@ -611,6 +611,8 @@ class DeliverAction extends BaseAction {
     		} else {
     			$save_data['get_type'] = 1;
     		}
+    		//更新一下派单逻辑表
+    		D('Deliver_assign')->where(array('supply_id'=>$supply_id))->save(array('status'=>1,'grab_deliver_id'=>$uid));
     		$result = D('Deliver_supply')->where(array('supply_id' => $supply_id))->save($save_data);
     		if ($status == 2) {
     			if ($supply['item'] == 0) {
