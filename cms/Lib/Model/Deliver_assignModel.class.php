@@ -115,6 +115,7 @@ class Deliver_assignModel extends Model
                 } else {//准备变换派单人选
                     $data['deliver_id'] = -1;
                     $data['status'] = 99;
+                    $data['record'] = $v['record'];
                 }
                 $data['assign_time'] = $curr_time;
                 $this->field(true)->where($where)->save($data);
@@ -801,7 +802,7 @@ class Deliver_assignModel extends Model
                 //$chu_time = $vvv['supply'][0]['create_time'] + ($vvv['supply'][0]['dining_time'] + self::DINING_ADD_TIME) * 60;
                 $chu_time = ($supply['create_time'] + $supply['dining_time']) - ($vvv['supply'][0]['create_time'] + $vvv['supply'][0]['dining_time']);
                 //T出餐时间差值
-                $t_c_t = $chu_time / 60;
+                $t_c_t = abs($chu_time / 60);
 
                 if($distance_b/1000 < $b_km && $distance_d/1000 < $d_km && $t_c_t < $c_min){
                     if($init_dis == 0){
@@ -930,7 +931,7 @@ class Deliver_assignModel extends Model
             $saveData['deliver_id'] = $uid;
             $saveData['send_time'] = time();
             $saveData['hand_order'] = 2;
-            $saveData['order_is_pick'] = 0;
+            $saveData['order_is_pick'] = 1;
             $saveData['is_a'] = 0;
             $saveData['is_b'] = 0;
             $saveData['is_c'] = 0;

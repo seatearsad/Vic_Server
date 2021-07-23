@@ -358,7 +358,7 @@ class DeliverAction extends BaseAction
 
                 $data['assign_time'] = time();
                 //如果该送餐员没在记录列表中 添加记录该送餐员
-                $record_array = explode(',',$assign);
+                $record_array = explode(',',$assign['record']);
                 if(!in_array($this->deliver_session['uid'],$record_array)){
                     $data['record'] = $assign['record'].','.$this->deliver_session['uid'];
                 }
