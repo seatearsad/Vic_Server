@@ -96,23 +96,25 @@ class Deliver_assignModel extends Model
             if ($v['status'] == 0 && $list[$k]['cha'] > self::CHANGE_TIME) {
                 //总派单次数已到
                 if ((int)$v['assign_num'] == self::CHANGE_TOTAL_TIMES) {
-                    $data['deliver_id'] = 0;
-                    //获取当前订单的相关信息
-                    $supply = D('Deliver_supply')->field(true)->where(array('supply_id' => $v['supply_id']))->find();
-                    //获取店铺信息
-                    $store = D('Merchant_store')->field(true)->where(array('store_id' => $supply['store_id']))->find();
-                    //群发短信 筛选城市
-                    $user_list = D('Deliver_user')->field(true)->where(array('status' => 1, 'work_status' => 0, 'city_id' => $store['city_id']))->order('uid asc')->select();
-                    $record = explode(',', $v['record']);
-                    foreach ($user_list as $deliver) {
-                        if (!in_array($deliver['uid'], $record) && !in_array($deliver['uid'], $send_list)) {
-                            $this->sendMsg($deliver['uid']);
-                            $send_list[] = $deliver['uid'];
+                    if($v['record'] != '') {
+                        $data['deliver_id'] = 0;
+                        //获取当前订单的相关信息
+                        $supply = D('Deliver_supply')->field(true)->where(array('supply_id' => $v['supply_id']))->find();
+                        //获取店铺信息
+                        $store = D('Merchant_store')->field(true)->where(array('store_id' => $supply['store_id']))->find();
+                        //群发短信 筛选城市
+                        $user_list = D('Deliver_user')->field(true)->where(array('status' => 1, 'work_status' => 0, 'city_id' => $store['city_id']))->order('uid asc')->select();
+                        $record = explode(',', $v['record']);
+                        foreach ($user_list as $deliver) {
+                            if (!in_array($deliver['uid'], $record) && !in_array($deliver['uid'], $send_list)) {
+                                $this->sendMsg($deliver['uid']);
+                                $send_list[] = $deliver['uid'];
+                            }
                         }
+                        //清除之前的记录 让所有都能抢
+                        $data['record'] = '';
                     }
-                    //清除之前的记录 让所有都能抢
-                    $data['record'] = '';
-                } else {//准备变换派单人选
+                } else if ((int)$v['assign_num'] < self::CHANGE_TOTAL_TIMES){
                     $data['deliver_id'] = -1;
                     $data['status'] = 99;
                     $data['record'] = $v['record'];
@@ -126,9 +128,9 @@ class Deliver_assignModel extends Model
                 $data['assign_time'] = $curr_time;
                 $data['assign_num'] = $v['assign_num'] + 1;
 
-                if ($data['deliver_id'] == 0)
-                    $data['record'] = $v['record'];//'';
-                else
+                //if ($data['deliver_id'] == 0)
+                //    $data['record'] = $v['record'];//'';
+                //else
                     $data['record'] = $v['record'] . ',' . $data['deliver_id'];
 
                 $this->field(true)->where($where)->save($data);
