@@ -352,16 +352,21 @@ class DeliverAction extends BaseAction
                 D('Deliver_assign')->field(true)->add($data);
             }else{//如果派单记录存在
                 if($assign['deliver_id'] == $this->deliver_session['uid']){
-                    $data['deliver_id'] = -1;
-                    $data['status'] = 99;
+                    if($assign['assign_num'] < 5) {
+                        $data['deliver_id'] = -1;
+                        $data['status'] = 99;
+                        //如果该送餐员没在记录列表中 添加记录该送餐员
+                        $record_array = explode(',',$assign['record']);
+                        if(!in_array($this->deliver_session['uid'],$record_array)){
+                            $data['record'] = $assign['record'].','.$this->deliver_session['uid'];
+                        }
+                    }else{
+                        $data['deliver_id'] = 0;
+                        $data['record'] = '';
+                    }
                 }
 
                 $data['assign_time'] = time();
-                //如果该送餐员没在记录列表中 添加记录该送餐员
-                $record_array = explode(',',$assign['record']);
-                if(!in_array($this->deliver_session['uid'],$record_array)){
-                    $data['record'] = $assign['record'].','.$this->deliver_session['uid'];
-                }
                 D('Deliver_assign')->field(true)->where(array('supply_id'=>$supply_id))->save($data);
             }
 
