@@ -802,7 +802,7 @@ class Deliver_assignModel extends Model
                 $distance_d = getDistance($from_lat, $from_lng, $aim_lat, $aim_lng);
 
                 //$chu_time = $vvv['supply'][0]['create_time'] + ($vvv['supply'][0]['dining_time'] + self::DINING_ADD_TIME) * 60;
-                $chu_time = ($supply['create_time'] + $supply['dining_time']) - ($vvv['supply'][0]['create_time'] + $vvv['supply'][0]['dining_time']);
+                $chu_time = ($supply['create_time'] + $supply['dining_time']*60) - ($vvv['supply'][0]['create_time'] + $vvv['supply'][0]['dining_time']*60);
                 //T出餐时间差值
                 $t_c_t = abs($chu_time / 60);
                 var_dump($vvv['uid'].'::::'.$t_c_t.'----'.$c_min);
