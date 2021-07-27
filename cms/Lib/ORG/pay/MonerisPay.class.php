@@ -64,7 +64,7 @@ class MonerisPay
 
             //3D 2.0
             $resp = $this->threeDSAuthentication($data,$uid,$from_type);
-            var_dump($resp);die();
+            //var_dump($resp);die();
             if($resp['transStatus'] == "Y" || $resp['transStatus'] == "A"){
                 //return $this->purchase($data,$uid,$from_type,$order);
                 $order_md = D('Pay_moneris_md')->where(array('moneris_order_id'=>$resp['receiptId']))->find();
