@@ -805,6 +805,7 @@ class Deliver_assignModel extends Model
                 $chu_time = ($supply['create_time'] + $supply['dining_time']) - ($vvv['supply'][0]['create_time'] + $vvv['supply'][0]['dining_time']);
                 //T出餐时间差值
                 $t_c_t = abs($chu_time / 60);
+                var_dump($t_c_t.'----'.$c_min);
 
                 if($distance_b/1000 < $b_km && $distance_d/1000 < $d_km && $t_c_t < $c_min){
                     if($init_dis == 0){
