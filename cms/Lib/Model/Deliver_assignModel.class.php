@@ -13,7 +13,7 @@ class Deliver_assignModel extends Model
     //更换配送员时间
     const CHANGE_TIME = 30;
     //更换配送员中间的缓冲时间
-    const CHANGE_BUFFER_TIME = 5;
+    const CHANGE_BUFFER_TIME = 3;
     //总共可更换配送员的次数
     const CHANGE_TOTAL_TIMES = 5;
     //出餐需添加时间 分钟
@@ -741,8 +741,8 @@ class Deliver_assignModel extends Model
             $init_dis = 0;
             $uid = 0;
             foreach ($one_list_pick as $kk=>$vv){
-                $from_lat = $vv['lat'];
-                $from_lng = $vv['lng'];
+                $from_lat = $supply['from_lat'];
+                $from_lng = $supply['from_lnt'];
                 $aim_lat = $vv['supply'][0]['aim_lat'];
                 $aim_lng = $vv['supply'][0]['aim_lnt'];
                 //获取两点之间的距离 返回值为米
