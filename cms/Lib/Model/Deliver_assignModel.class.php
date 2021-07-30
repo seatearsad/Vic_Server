@@ -39,8 +39,8 @@ class Deliver_assignModel extends Model
         $data['record'] = $data['deliver_id'];
 
         $this->field(true)->add($data);
-
-        $this->sendMsg($data['deliver_id']);
+        if($data['deliver_id'] != 0)
+            $this->sendMsg($data['deliver_id'],1);
     }
 
     //最简单的逻辑
@@ -96,8 +96,9 @@ class Deliver_assignModel extends Model
             if ($v['status'] == 0 && $list[$k]['cha'] > self::CHANGE_TIME) {
                 //总派单次数已到
                 if ((int)$v['assign_num'] == self::CHANGE_TOTAL_TIMES) {
-                    if($v['record'] != '') {
+                    //if($v['record'] != '') {
                         $data['deliver_id'] = 0;
+                        /**
                         //获取当前订单的相关信息
                         $supply = D('Deliver_supply')->field(true)->where(array('supply_id' => $v['supply_id']))->find();
                         //获取店铺信息
@@ -107,13 +108,14 @@ class Deliver_assignModel extends Model
                         $record = explode(',', $v['record']);
                         foreach ($user_list as $deliver) {
                             if (!in_array($deliver['uid'], $record) && !in_array($deliver['uid'], $send_list)) {
-                                $this->sendMsg($deliver['uid']);
+                                //$this->sendMsg($deliver['uid']);
                                 $send_list[] = $deliver['uid'];
                             }
                         }
                         //清除之前的记录 让所有都能抢
-                        $data['record'] = '';
-                    }
+                        //$data['record'] = '';
+                         * */
+                    //}
                 } else if ((int)$v['assign_num'] < self::CHANGE_TOTAL_TIMES){
                     $data['deliver_id'] = -1;
                     $data['status'] = 99;
@@ -134,8 +136,8 @@ class Deliver_assignModel extends Model
                     $data['record'] = $v['record'] . ',' . $data['deliver_id'];
 
                 $this->field(true)->where($where)->save($data);
-
-                $this->sendMsg($data['deliver_id']);
+                if ($data['deliver_id'] != 0)
+                    $this->sendMsg($data['deliver_id'],1);
             }
         }
         var_dump($list);
@@ -538,12 +540,19 @@ class Deliver_assignModel extends Model
         return $use_time;
     }
 
-    private function sendMsg($uid)
+    //type == 0 发送给所有人； ==1 指定发送给某人
+    private function sendMsg($uid,$type=0)
     {
         $deliver = D('Deliver_user')->field(true)->where(array('uid' => $uid))->find();
         if ($deliver['device_id'] && $deliver['device_id'] != '') {
-            $message = 'There is a new order for you to pick up. Please go to “Pending List” to take the order.';
-            Sms::sendMessageToGoogle($deliver['device_id'], $message, 3);
+            if($type == 0) {
+                $message = 'There is a new order for you to pick up. Please go to “Pending List” to take the order.';
+                Sms::sendMessageToGoogle($deliver['device_id'], $message, 3);
+            }else{
+                $title = "Order just for you!";
+                $message = 'We think you may be the best courier to deliver this order! You\'ll have 30 seconds to view and accept it.';
+                Sms::sendMessageToGoogle($deliver['device_id'], $message, 3,$title);
+            }
         } else {
             $sms_data = [
                 'mobile' => $deliver['phone'],
@@ -600,7 +609,14 @@ class Deliver_assignModel extends Model
             if(!in_array($v['uid'],$record_list) && !in_array($v['uid'],$curr_list)) {
                 $where_supply = array('uid' => $v['uid'], 'status' => array('between', array(1, 4)));
                 $user_supply = D('Deliver_supply')->where($where_supply)->select();
-                if (count($user_supply) < $max_order) {
+
+                $from_lat = $v['lat'];
+                $from_lng = $v['lng'];
+                $aim_lat = $store['lat'];
+                $aim_lng = $store['long'];
+                //获取两点之间的距离  判断是否在配送范围
+                $distance = getDistance($from_lat, $from_lng, $aim_lat, $aim_lng);
+                if (count($user_supply) < $max_order && $distance/1000 <= $v['range']) {
                     $deliver_list[$v['uid']] = $v;
                     $deliver_list[$v['uid']]['order_num'] = count($user_supply);
                     $deliver_list[$v['uid']]['supply'] = $user_supply;

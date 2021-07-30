@@ -362,7 +362,7 @@ class DeliverAction extends BaseAction
                         }
                     }else{
                         $data['deliver_id'] = 0;
-                        $data['record'] = '';
+                        //$data['record'] = '';
                     }
                 }
 

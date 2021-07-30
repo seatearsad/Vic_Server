@@ -27,7 +27,6 @@
             <div class="btn-group float-right">
                 <label style="margin-top: 5px">{pigcms{:L('MAX_ORDER_PER')} : &nbsp;</label>
                 <select id="max_order" name="max_order" class="form-control col-lg-1" style="margin-right: 10px">
-                    <option value="1" <if condition="$max_order eq 1">selected</if> >1</option>
                     <option value="2" <if condition="$max_order eq 2">selected</if> >2</option>
                     <option value="3" <if condition="$max_order eq 3">selected</if> >3</option>
                     <option value="4" <if condition="$max_order eq 4">selected</if> >4</option>

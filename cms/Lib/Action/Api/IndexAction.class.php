@@ -2936,6 +2936,10 @@ class IndexAction extends BaseAction
         $week_num = date("w");
         $hour = date('H');
 
+        //更新送餐员的最大接单数
+        if($hour == 0){
+            D('Config')->where(array('name'=>'deliver_max_order'))->save(array("value"=>2));
+        }
         if($hour >= 0 && $hour < 5) {
             $hour = $hour + 24;
             $week_num = $week_num - 1 < 0 ? 6 : $week_num - 1;

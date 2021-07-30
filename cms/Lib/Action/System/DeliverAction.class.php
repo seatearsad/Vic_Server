@@ -1942,6 +1942,7 @@ class DeliverAction extends BaseAction {
 
     public function change_max_order(){
         $max_order =$_GET['max_order'];
+        $max_order = $max_order < 2 ? 2 : $max_order;
         if($max_order){
             if(D('Config')->where(array('name'=>'deliver_max_order'))->save(array("value"=>$max_order)))
                 exit(json_encode(array('error_code' => false, 'msg' => "Successful")));
