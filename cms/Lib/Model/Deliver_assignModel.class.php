@@ -96,26 +96,29 @@ class Deliver_assignModel extends Model
             if ($v['status'] == 0 && $list[$k]['cha'] > self::CHANGE_TIME) {
                 //总派单次数已到
                 if ((int)$v['assign_num'] == self::CHANGE_TOTAL_TIMES) {
-                    //if($v['record'] != '') {
-                        $data['deliver_id'] = 0;
-                        /**
+                    $data['deliver_id'] = 0;
+                    $data['record'] = $v['reject_record'];
+                    if($v['is_send_all'] == 0) {
                         //获取当前订单的相关信息
                         $supply = D('Deliver_supply')->field(true)->where(array('supply_id' => $v['supply_id']))->find();
                         //获取店铺信息
                         $store = D('Merchant_store')->field(true)->where(array('store_id' => $supply['store_id']))->find();
                         //群发短信 筛选城市
                         $user_list = D('Deliver_user')->field(true)->where(array('status' => 1, 'work_status' => 0, 'city_id' => $store['city_id']))->order('uid asc')->select();
-                        $record = explode(',', $v['record']);
+                        $record = explode(',', $v['reject_record']);
                         foreach ($user_list as $deliver) {
                             if (!in_array($deliver['uid'], $record) && !in_array($deliver['uid'], $send_list)) {
-                                //$this->sendMsg($deliver['uid']);
+                                $this->sendMsg($deliver['uid']);
                                 $send_list[] = $deliver['uid'];
                             }
                         }
                         //清除之前的记录 让所有都能抢
                         //$data['record'] = '';
-                         * */
-                    //}
+                        //将派单逻辑记录替换成拒单记录 --- 仅有拒单的人不可见
+                        $data['is_send_all'] = 1;
+                    }else{
+                        $data['is_send_all'] = $v['is_send_all'];
+                    }
                 } else if ((int)$v['assign_num'] < self::CHANGE_TOTAL_TIMES){
                     $data['deliver_id'] = -1;
                     $data['status'] = 99;

@@ -348,9 +348,15 @@ class DeliverAction extends BaseAction
                 $data['assign_time'] = time();
                 $data['assign_num'] = 0;
                 $data['record'] = $this->deliver_session['uid'];
+                $data['reject_record'] = $this->deliver_session['uid'];
 
                 D('Deliver_assign')->field(true)->add($data);
             }else{//如果派单记录存在
+                $reject_array = explode(',',$assign['reject_record']);
+                if(!in_array($this->deliver_session['uid'],$reject_array)){
+                    $data['reject_record'] = $assign['reject_record'] == '' ? $this->deliver_session['uid'] : $assign['reject_record'].','.$this->deliver_session['uid'];
+                }
+
                 if($assign['deliver_id'] == $this->deliver_session['uid']){
                     if($assign['assign_num'] < 5) {
                         $data['deliver_id'] = -1;
@@ -358,12 +364,36 @@ class DeliverAction extends BaseAction
                         //如果该送餐员没在记录列表中 添加记录该送餐员
                         $record_array = explode(',',$assign['record']);
                         if(!in_array($this->deliver_session['uid'],$record_array)){
-                            $data['record'] = $assign['record'].','.$this->deliver_session['uid'];
+                            $data['record'] = $assign['record'] == '' ? $this->deliver_session['uid'] : $assign['record'].','.$this->deliver_session['uid'];
                         }
                     }else{
+                        if($assign['is_send_all'] == 0) {
+                            $send_list = array();
+                            $data['record'] = $assign['reject_record'];
+                            //获取当前订单的相关信息
+                            //$supply = D('Deliver_supply')->field(true)->where(array('supply_id' => $v['supply_id']))->find();
+                            //获取店铺信息
+                            $store = D('Merchant_store')->field(true)->where(array('store_id' => $supply['store_id']))->find();
+                            //群发短信 筛选城市
+                            $user_list = D('Deliver_user')->field(true)->where(array('status' => 1, 'work_status' => 0, 'city_id' => $store['city_id']))->order('uid asc')->select();
+                            $record = explode(',', $data['record']);
+                            foreach ($user_list as $deliver) {
+                                if (!in_array($deliver['uid'], $record) && !in_array($deliver['uid'], $send_list)) {
+                                    $this->sendMsg($deliver['uid']);
+                                    $send_list[] = $deliver['uid'];
+                                }
+                            }
+                            //清除之前的记录 让所有都能抢
+                            //$data['record'] = '';
+                            //将派单逻辑记录替换成拒单记录 --- 仅有拒单的人不可见
+                            $data['is_send_all'] = 1;
+                        }
                         $data['deliver_id'] = 0;
-                        //$data['record'] = '';
                     }
+                }
+
+                if($assign['assign_num'] == 5) {
+                    $data['record'] = $data['reject_record'];
                 }
 
                 $data['assign_time'] = time();
