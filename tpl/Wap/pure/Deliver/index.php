@@ -235,6 +235,15 @@
     #deliver_count{
         color: #32620e;
     }
+    .just_div{
+        padding: 5px 2%;
+        color: #6a6a6a;
+        font-size: 16px;
+    }
+    .just_div.just{
+        color: #ffa52d;
+        font-weight: bold;
+    }
 </style>
 <body>
     <include file="header" />
@@ -294,6 +303,14 @@
     <script id="replyListBoxTpl" type="text/html">
         {{# for(var i = 0, len = d.list.length; i < len; i++){ }}
         <section class="robbed supply_{{ d.list[i].supply_id }}" data-id="{{ d.list[i].supply_id }}">
+            {{# if(d.list[i].just == 1){ }}
+            <div class="just_div just">
+                Just for you!
+                <span style="float: right">{{ d.list[i].diff_time }}</span>
+            </div>
+            {{# } else { }}
+            <div class="just_div">Also open to others</div>
+            {{# } }}
             <div class="order_title">
                 <span class="store_name">{{ d.list[i].store_name }}</span>
                 {{# if(d.list[i].uid == 0){ }}

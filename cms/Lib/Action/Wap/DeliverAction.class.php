@@ -396,6 +396,14 @@ class DeliverAction extends BaseAction
                     $data['record'] = $data['reject_record'];
                 }
 
+                if($assign['assign_num'] < 5 && $assign['deliver_id'] == 0){
+                    //如果该送餐员没在记录列表中 添加记录该送餐员
+                    $record_array = explode(',',$assign['record']);
+                    if(!in_array($this->deliver_session['uid'],$record_array)){
+                        $data['record'] = $assign['record'] == '' ? $this->deliver_session['uid'] : $assign['record'].','.$this->deliver_session['uid'];
+                    }
+                }
+
                 $data['assign_time'] = time();
                 D('Deliver_assign')->field(true)->where(array('supply_id'=>$supply_id))->save($data);
             }
@@ -579,8 +587,12 @@ class DeliverAction extends BaseAction
                         $supply_id = $v['supply_id'];
                         $deliver_assign = D('Deliver_assign')->field(true)->where(array('supply_id' => $supply_id))->find();
                         $record_array = explode(',', $deliver_assign['record']);
+                        $v['just'] = 0;
                         //派单列表中不存在 || 派单列表中开放 && 未拒单 || 指定派单 && 不在转接等候期
                         if($deliver_assign['deliver_id'] == $this->deliver_session['uid']){
+                            $v['just'] = 1;
+                            $v['diff_time'] = 30 - (time() - $deliver_assign['assign_time']);
+                            $v['diff_time'] = $v['diff_time'] > 0 ? $v['diff_time'] : 0;
                             $first_list[] = $v;
                         }
                         if($deliver_assign['deliver_id'] == 0 && !in_array($this->deliver_session['uid'], $record_array) && $current_order_num < $max_order){
