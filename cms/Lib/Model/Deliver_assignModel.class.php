@@ -859,20 +859,20 @@ class Deliver_assignModel extends Model
         }else if(count($one_list_pick_gt) > 0){
             $init_dis = 0;
             $uid = 0;
-            foreach ($one_list_pick_gt as $kk => $vv) {
-                $from_lat = $vv['lat'];
-                $from_lng = $vv['lng'];
-                $aim_lat = $vv['supply'][0]['aim_lat'];
-                $aim_lng = $vv['supply'][0]['aim_lnt'];
+            foreach ($one_list_pick_gt as $kkkk => $vvvv) {
+                $from_lat = $vvvv['lat'];
+                $from_lng = $vvvv['lng'];
+                $aim_lat = $vvvv['supply'][0]['aim_lat'];
+                $aim_lng = $vvvv['supply'][0]['aim_lnt'];
                 //获取两点之间的距离
-                $distance = getDistance($from_lat, $from_lng, $aim_lat, $aim_lng);
+                $distance_four = getDistance($from_lat, $from_lng, $aim_lat, $aim_lng);
                 if ($init_dis == 0) {
-                    $init_dis = $distance;
-                    $uid = $vv['uid'];
+                    $init_dis = $distance_four;
+                    $uid = $vvvv['uid'];
                 } else {
-                    if ($distance < $init_dis) {
-                        $init_dis = $distance;
-                        $uid = $vv['uid'];
+                    if ($distance_four < $init_dis) {
+                        $init_dis = $distance_four;
+                        $uid = $vvvv['uid'];
                     }
                 }
             }

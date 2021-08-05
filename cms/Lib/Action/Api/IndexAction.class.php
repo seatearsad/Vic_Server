@@ -2933,13 +2933,20 @@ class IndexAction extends BaseAction
     }
 
     public function updateDeliver(){
-        $week_num = date("w");
-        $hour = date('H');
+        //type 0为执行下班操作 0分钟； 1 执行上班提醒操作，50分钟
+        $type = $_GET['type'] ? $_GET['type'] : 0;
 
-        //更新送餐员的最大接单数
-        if($hour == 0){
-            D('Config')->where(array('name'=>'deliver_max_order'))->save(array("value"=>2));
+        $week_num = date("w");
+        if($type == 0) {
+            $hour = date('H');
+            //更新送餐员的最大接单数
+            if($hour == 0){
+                D('Config')->where(array('name'=>'deliver_max_order'))->save(array("value"=>2));
+            }
+        }else{
+            $hour = date('H') + 1;
         }
+
         if($hour >= 0 && $hour < 5) {
             $hour = $hour + 24;
             $week_num = $week_num - 1 < 0 ? 6 : $week_num - 1;
@@ -2955,41 +2962,72 @@ class IndexAction extends BaseAction
         $city = D('Area')->where(array('area_type'=>2))->select();
         foreach ($city as $k=>$c){
             //获取时间id
-            $all_list = D('Deliver_schedule_time')->where(array('city_id'=>$c['area_id']))->select();
-            $time_ids = array();
-            foreach ($all_list as $v){
-                $new_hour = $hour + $c['jetlag'];
-                if($new_hour == $v['start_time']){
-                    $daylist = explode(',', $v['week_num']);
-                    if (in_array($week_num, $daylist)) {
-                        $time_ids[] = $v['id'];
+            $all_list = D('Deliver_schedule_time')->where(array('city_id' => $c['area_id']))->select();
+            if($type == 1) {//上班操作
+                $time_ids = array();
+                foreach ($all_list as $v) {
+                    $new_hour = $hour + $c['jetlag'];
+                    if ($new_hour == $v['start_time']) {
+                        $daylist = explode(',', $v['week_num']);
+                        if (in_array($week_num, $daylist)) {
+                            $time_ids[] = $v['id'];
+                        }
                     }
                 }
-            }
 
-            //获取所有上班送餐员的id
-            $schedule_list = D('Deliver_schedule')->where(array('time_id' => array('in', $time_ids),'week_num'=>$week_num,'whether'=>1,'status'=>1))->select();
-            $work_delver_list = array();
-            foreach ($schedule_list as $v){
-                $work_delver_list[] = $v['uid'];
-
-                $is_del = true;
-                //处在紧急状态
-                if($c['urgent_time'] != 0){
-                    if($c['urgent_time'] + 3600 < time()){
-                        $is_del = false;
+                //获取所有上班送餐员的id
+                $schedule_list = D('Deliver_schedule')->where(array('time_id' => array('in', $time_ids), 'week_num' => $week_num, 'whether' => 1, 'status' => 1))->select();
+                $work_delver_list = array();
+                foreach ($schedule_list as $v) {
+                    $work_delver_list[] = $v['uid'];
+                    //未在上班状态的
+                    $deliver = D('Deliver_user')->field(true)->where(array('uid' => $v['uid'],'work_status'=>1))->find();
+                    if ($deliver['device_id'] && $deliver['device_id'] != '') {
+                            $title = "Your shift will start in 10 min!";
+                            $message = 'Get ready! You\'ve scheduled a delivery shift from '.$hour.':00 today.';
+                            Sms::sendMessageToGoogle($deliver['device_id'], $message, 3,$title);
+                    } else {
+                        //$sms_txt = "There is a new order for you to pick up. Please go to “Pending List” to take the order.";
+                        //Sms::sendTwilioSms($deliver['phone'], $sms_txt);
+                    }
+//                    $is_del = true;
+//                    //处在紧急状态
+//                    if ($c['urgent_time'] != 0) {
+//                        if ($c['urgent_time'] + 3600 < time()) {
+//                            $is_del = false;
+//                        }
+//                    }
+//                    //如果为不repeat的 此时删除
+//                    if ($v['is_repeat'] != 1 && $is_del) {
+//                        D('Deliver_schedule')->where($v)->delete();
+//                    }
+                }
+            } else {//下班操作
+                $time_ids = array();
+                foreach ($all_list as $v) {
+                    $new_hour = $hour + $c['jetlag'];
+                    if ($new_hour == $v['end_time']) {
+                        $daylist = explode(',', $v['week_num']);
+                        if (in_array($week_num, $daylist)) {
+                            $time_ids[] = $v['id'];
+                        }
                     }
                 }
-                //如果为不repeat的 此时删除
-                if($v['is_repeat'] != 1 && $is_del){
-                    D('Deliver_schedule')->where($v)->delete();
+
+                //获取所有上班送餐员的id
+                $schedule_list = D('Deliver_schedule')->where(array('time_id' => array('in', $time_ids), 'week_num' => $week_num, 'whether' => 1, 'status' => 1))->select();
+                foreach ($schedule_list as $v) {
+                    //如果为不repeat的 此时删除
+                    if ($v['is_repeat'] != 1) {
+                        D('Deliver_schedule')->where($v)->delete();
+                    }
                 }
-            }
-            if($c['urgent_time'] == 0) {//非紧急召唤状态时
-                //全部下班
-                D('Deliver_user')->where(array('status' => 1, 'work_status' => 0,'city_id'=>$c['area_id']))->save(array('work_status' => 1));
-                //执行上班
-                D('Deliver_user')->where(array('status' => 1, 'uid' => array('in', $work_delver_list),'city_id'=>$c['area_id']))->save(array('work_status' => 0));
+                if ($c['urgent_time'] == 0) {//非紧急召唤状态时
+                    //全部下班
+                    D('Deliver_user')->where(array('status' => 1, 'work_status' => 0, 'city_id' => $c['area_id']))->save(array('work_status' => 1));
+                    //执行上班 暂时不自动上班
+                    //D('Deliver_user')->where(array('status' => 1, 'uid' => array('in', $work_delver_list),'city_id'=>$c['area_id']))->save(array('work_status' => 0));
+                }
             }
         }
 
