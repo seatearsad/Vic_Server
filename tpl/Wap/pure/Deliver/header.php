@@ -215,7 +215,7 @@
     </div>
 
     <div id="header_sign">
-        <if condition="$city['urgent_time'] neq 0 && (ACTION_NAME eq 'index' OR ACTION_NAME eq 'process')">
+        <if condition="($city['urgent_time'] neq 0 OR $is_change eq 1) && (ACTION_NAME eq 'index' OR ACTION_NAME eq 'process')">
             <if condition="$deliver_session['work_status'] eq '1'">
                 <a href="javascript:void(0)" class="startOrder" ref="0">{pigcms{:L('_CLOCK_IN_')}</a>
                 <else />

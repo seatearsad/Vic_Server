@@ -207,9 +207,37 @@ class DeliverAction extends BaseAction
 
         $current_order_num = D('Deliver_supply')->where(array('uid'=>$this->deliver_session['uid'],'status'=>array('lt',5)))->count();
 
+        $time = time() + 600;
+        $week_num = date("w");
+        $hour = date('H',$time);
+        if($hour >= 0 && $hour < 5) {
+            $hour = $hour + 24;
+            $week_num = $week_num - 1 < 0 ? 6 : $week_num - 1;
+        }
+
+        $all_list = D('Deliver_schedule_time')->where(array('city_id' => $city_id))->select();
+        $time_ids = array();
+        foreach ($all_list as $v) {
+            $new_hour = $hour + $city['jetlag'];
+            if ($new_hour == $v['start_time']) {
+                $daylist = explode(',', $v['week_num']);
+                if (in_array($week_num, $daylist)) {
+                    $time_ids[] = $v['id'];
+                }
+            }
+        }
+
+        $schedule_list = D('Deliver_schedule')->where(array('uid'=>$this->deliver_session['uid'],'time_id' => array('in', $time_ids),'week_num' => $week_num, 'whether' => 1, 'status' => 1))->select();
+        if($schedule_list){
+            $is_change_work_status = 1;
+        }else{
+            $is_change_work_status = 0;
+        }
+
+        $this->assign('is_change',$is_change_work_status);
 
         //修改上下班状态 只有在紧急状态下才能修改上班状态
-		if($_GET['action'] == 'changeWorkstatus' && $city['urgent_time'] != 0) {
+		if($_GET['action'] == 'changeWorkstatus' && ($city['urgent_time'] != 0 || $is_change_work_status == 1)) {
 			D('Deliver_user')->where(['uid' => $this->deliver_session['uid']])->save(['work_status' => $_GET['type']]);
 			$this->deliver_session['work_status'] = $_GET['type'];
 			session('deliver_session', serialize($this->deliver_session));
