@@ -188,9 +188,9 @@
             {pigcms{:L('_ND_VIEWORDERHIS_')}
         </div>
     </section>
-    <div class="summary_txt">
+    <!--div class="summary_txt">
         * Effective on February 16th, 2021, you're guaranteed a ${pigcms{$one_money} average earning per order. If the total of delivery fees + tips is lower than the guaranteed earning for the pay period, you will be paid based on the guaranteed earning calculation. Please note that this only applies to your pay period, which is the 1st-15th and 16th-31st of every month. If you select a different date range, the number given will not be accurate.
-    </div>
+    </div-->
     <!--section class="my_earning">
         <span>{pigcms{:L('_ND_MYEARNING_')}</span>
         <span class="btn act" data-type="0">{pigcms{:L('_ND_TODAY_')}</span>
