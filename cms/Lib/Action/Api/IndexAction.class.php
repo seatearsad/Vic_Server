@@ -2963,25 +2963,27 @@ class IndexAction extends BaseAction
         foreach ($city as $k=>$c){
             //获取时间id
             $all_list = D('Deliver_schedule_time')->where(array('city_id' => $c['area_id']))->select();
-            if($type == 1) {//上班操作
-                $time_ids = array();
-                foreach ($all_list as $v) {
-                    $new_hour = $hour + $c['jetlag'];
-                    if ($new_hour == $v['start_time']) {
-                        $daylist = explode(',', $v['week_num']);
-                        if (in_array($week_num, $daylist)) {
-                            $time_ids[] = $v['id'];
-                        }
+            $time_ids = array();
+            foreach ($all_list as $v) {
+                $new_hour = $hour + $c['jetlag'];
+                if ($new_hour == $v['start_time']) {
+                    $daylist = explode(',', $v['week_num']);
+                    if (in_array($week_num, $daylist)) {
+                        $time_ids[] = $v['id'];
                     }
                 }
+            }
 
-                //获取所有上班送餐员的id
-                $schedule_list = D('Deliver_schedule')->where(array('time_id' => array('in', $time_ids), 'week_num' => $week_num, 'whether' => 1, 'status' => 1))->select();
-                $work_delver_list = array();
-                foreach ($schedule_list as $v) {
-                    $work_delver_list[] = $v['uid'];
-                    //未在上班状态的
-                    $deliver = D('Deliver_user')->field(true)->where(array('uid' => $v['uid'],'work_status'=>1))->find();
+            //获取所有上班送餐员的id
+            $schedule_list = D('Deliver_schedule')->where(array('time_id' => array('in', $time_ids), 'week_num' => $week_num, 'whether' => 1, 'status' => 1))->select();
+            $work_delver_list = array();
+            foreach ($schedule_list as $v) {
+                $work_delver_list[] = $v['uid'];
+            }
+            ////
+            if($type == 1) {//上班操作
+                foreach ($work_delver_list as $deliver_id) {
+                    $deliver = D('Deliver_user')->field(true)->where(array('uid' => $deliver_id,'work_status'=>1))->find();
                     if ($deliver['device_id'] && $deliver['device_id'] != '') {
                             $title = "Your shift will start in 10 min!";
                             $message = 'Get ready! You\'ve scheduled a delivery shift from '.$hour.':00 today.';
@@ -3014,17 +3016,21 @@ class IndexAction extends BaseAction
                     }
                 }
 
-                //获取所有上班送餐员的id
+                //获取所有将下班的id
                 $schedule_list = D('Deliver_schedule')->where(array('time_id' => array('in', $time_ids), 'week_num' => $week_num, 'whether' => 1, 'status' => 1))->select();
+                $go_off_list = array();
                 foreach ($schedule_list as $v) {
+                    if(!in_array($v['uid'],$work_delver_list)){
+                        $go_off_list[] = $v['uid'];
+                    }
                     //如果为不repeat的 此时删除
                     if ($v['is_repeat'] != 1) {
                         D('Deliver_schedule')->where($v)->delete();
                     }
                 }
                 if ($c['urgent_time'] == 0) {//非紧急召唤状态时
-                    //全部下班
-                    D('Deliver_user')->where(array('status' => 1, 'work_status' => 0, 'city_id' => $c['area_id']))->save(array('work_status' => 1));
+                    //将要下班的状态
+                    D('Deliver_user')->where(array('uid' => array('in', $go_off_list),'status' => 1, 'work_status' => 0, 'city_id' => $c['area_id']))->save(array('work_status' => 1));
                     //执行上班 暂时不自动上班
                     //D('Deliver_user')->where(array('status' => 1, 'uid' => array('in', $work_delver_list),'city_id'=>$c['area_id']))->save(array('work_status' => 0));
                 }

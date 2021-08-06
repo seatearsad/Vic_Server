@@ -197,7 +197,6 @@ class DeliverAction extends BaseAction
 	    //$deliver = D('Deliver_user')->field('reg_status')->where(['uid' => $this->deliver_session['uid']])->find();
 	    //if($deliver['reg_status'] != 0)
         //    header('Location:'.U('Deliver/step_'.$deliver['reg_status']));
-
         $city_id = $this->deliver_session['city_id'];
         $city = D('Area')->where(array('area_id'=>$city_id))->find();
         $this->assign('city',$city);
@@ -207,9 +206,12 @@ class DeliverAction extends BaseAction
 
         $current_order_num = D('Deliver_supply')->where(array('uid'=>$this->deliver_session['uid'],'status'=>array('lt',5)))->count();
 
-        $time = time() + 600;
+        $min = date("i");
+
         $week_num = date("w");
-        $hour = date('H',$time);
+        $hour = date('H');
+
+        //if($min >= 50) $hour += 1;
         if($hour >= 0 && $hour < 5) {
             $hour = $hour + 24;
             $week_num = $week_num - 1 < 0 ? 6 : $week_num - 1;
@@ -219,7 +221,7 @@ class DeliverAction extends BaseAction
         $time_ids = array();
         foreach ($all_list as $v) {
             $new_hour = $hour + $city['jetlag'];
-            if ($new_hour == $v['start_time']) {
+            if ($new_hour == $v['start_time'] || ($min >= 50 && $new_hour+1 == $v['start_time'])) {
                 $daylist = explode(',', $v['week_num']);
                 if (in_array($week_num, $daylist)) {
                     $time_ids[] = $v['id'];
@@ -227,14 +229,59 @@ class DeliverAction extends BaseAction
             }
         }
 
+        $work_list = $this->getDeliverWorkList();
+        if(count($work_list) == 0){
+            $show_time = 'No shift scheduled';
+            $is_scheduled = 0;
+        }else {
+            $show_time = '';
+            $is_scheduled = 1;
+        }
+
         $schedule_list = D('Deliver_schedule')->where(array('uid'=>$this->deliver_session['uid'],'time_id' => array('in', $time_ids),'week_num' => $week_num, 'whether' => 1, 'status' => 1))->select();
         if($schedule_list){
             $is_change_work_status = 1;
+            $curr_list = $work_list[$week_num];
+            foreach ($curr_list['ids'] as $ids){
+                $new_hour = $hour + $city['jetlag'];
+                if(($new_hour >= $ids['start_time'] && $new_hour < $ids['end_time']) || ($min >= 50 && $new_hour+1 >= $ids['start_time'] && $new_hour+1 < $ids['end_time'])){
+                    $show_time = "Today, ".$ids['start_time'].':00 - '.$ids['end_time'].':00';
+                }
+
+            }
         }else{
+            for($i = 0;$i < 7;++$i){
+                $new_week = date("w") + $i;
+                if($new_week >= 7) $new_week -= 7;
+                if($work_list[$new_week]){
+                    $curr_list = $work_list[$new_week];
+                    $new_hour = date("H") + $city['jetlag'];
+                    if($i == 0){
+                        foreach ($curr_list['ids'] as $ids){
+                            if($ids['start_time'] > $new_hour){
+                                $show_time = "Today, ".$ids['start_time'].':00 - '.$ids['end_time'].':00';
+                                break;
+                            }
+                        }
+                        if($show_time != '') break;
+                    }else{
+                        $timestr = date('Y-m-d');
+                        $timestr = strtotime($timestr)+$i * (3600*24);
+                        $date = date('M d (D), ',$timestr);
+                        $curr_list = $work_list[date("w",$timestr)];
+                        if($curr_list) {
+                            $show_time = $date . $curr_list['ids'][0]['start_time'] . ':00 - ' . $curr_list['ids'][0]['end_time'] . ':00';
+                            break;
+                        }
+                    }
+                }
+            }
             $is_change_work_status = 0;
         }
 
         $this->assign('is_change',$is_change_work_status);
+        $this->assign('is_scheduled',$is_scheduled);
+        $this->assign('show_time',$show_time);
 
         //修改上下班状态 只有在紧急状态下才能修改上班状态
 		if($_GET['action'] == 'changeWorkstatus' && ($city['urgent_time'] != 0 || $is_change_work_status == 1)) {
@@ -252,7 +299,12 @@ class DeliverAction extends BaseAction
 			$store['image'] = $images ? array_shift($images) : '';
 			$this->assign('store', $store);
 		}
-        if($this->deliver_session['work_status'] == 0 || $city['urgent_time'] != 0) {
+
+        if($this->deliver_session['work_status'] == 1){
+            $gray_count = 0;
+
+            $this->display('checkin');
+        }else {
             $my_distance = $this->deliver_session['range'] * 1000;
             $time = time();
             $where = "`create_time`<$time AND `status`=1 AND ROUND(6378.138 * 2 * ASIN(SQRT(POW(SIN(({$this->deliver_session['lat']}*PI()/180-`from_lat`*PI()/180)/2),2)+COS({$this->deliver_session['lat']}*PI()/180)*COS(`from_lat`*PI()/180)*POW(SIN(({$this->deliver_session['lng']}*PI()/180-`from_lnt`*PI()/180)/2),2)))*1000) < $my_distance ";
@@ -277,20 +329,18 @@ class DeliverAction extends BaseAction
                     }
                 }
             }
-        }else{
-		    $gray_count = 0;
-        }
-		
-		$deliver_count = D('Deliver_supply')->where(array('uid' => $this->deliver_session['uid'], 'status' => array(array('gt', 1), array('lt', 5))))->count();
-		$finish_count = D('Deliver_supply')->where(array('uid' => $this->deliver_session['uid'], 'status' => 5))->count();
 
-		//获取送餐员的当前路线
-        $is_route = 0;
-        $route = D('Deliver_route')->where(array('deliver_id'=>$this->deliver_session['uid']))->find();
-        if($route) $is_route = 1;
-		
-		$this->assign(array('gray_count' => $gray_count, 'deliver_count' => $deliver_count, 'finish_count' => $finish_count,'is_route'=>$is_route,'route'=>$route));
-		$this->display();
+            $deliver_count = D('Deliver_supply')->where(array('uid' => $this->deliver_session['uid'], 'status' => array(array('gt', 1), array('lt', 5))))->count();
+            $finish_count = D('Deliver_supply')->where(array('uid' => $this->deliver_session['uid'], 'status' => 5))->count();
+
+            //获取送餐员的当前路线
+            $is_route = 0;
+            $route = D('Deliver_route')->where(array('deliver_id' => $this->deliver_session['uid']))->find();
+            if ($route) $is_route = 1;
+
+            $this->assign(array('gray_count' => $gray_count, 'deliver_count' => $deliver_count, 'finish_count' => $finish_count, 'is_route' => $is_route, 'route' => $route));
+            $this->display();
+        }
 	}
 	public function index_count()
 	{

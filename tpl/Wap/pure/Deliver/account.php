@@ -25,6 +25,7 @@
 	    return message;
     }
 </script>
+</head>
 <style>
     body{
         background-color: white;
@@ -134,7 +135,6 @@
         height: 1.1rem;
     }
 </style>
-</head>
 <body>
     <include file="header" />
     <div id="all">
