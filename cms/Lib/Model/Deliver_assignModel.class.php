@@ -123,6 +123,21 @@ class Deliver_assignModel extends Model
                     $data['deliver_id'] = -1;
                     $data['status'] = 99;
                     $data['record'] = $v['record'];
+                    //记录送餐员无作为次数 如果本次为第三次 使其下线
+                    if($v['deliver_id'] != 0){
+                        $where_supply = array('uid' => $v['deliver_id'], 'status' => array('between', array(1, 4)));
+                        $user_order_num = D('Deliver_supply')->where($where_supply)->count();
+                        if($user_order_num == 0) {
+                            $curr_deliver = D('Deliver_user')->where(array('uid' => $v['deliver_id']))->find();
+                            if ($curr_deliver['inaction_num'] == 2) {
+                                $curr_deliver_data['inaction_num'] = 0;
+                                $curr_deliver_data['work_status'] = 1;
+                            } else {
+                                $curr_deliver_data['inaction_num'] = $curr_deliver['inaction_num'] + 1;
+                            }
+                            D('Deliver_user')->where(array('uid' => $v['deliver_id']))->save($curr_deliver_data);
+                        }
+                    }
                 }
                 $data['assign_time'] = $curr_time;
                 $this->field(true)->where($where)->save($data);

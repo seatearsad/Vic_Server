@@ -613,6 +613,9 @@ class DeliverAction extends BaseAction {
     		}
     		//更新一下派单逻辑表
     		D('Deliver_assign')->where(array('supply_id'=>$supply_id))->save(array('status'=>1,'grab_deliver_id'=>$uid));
+            //清空送餐员无作为次数
+            D('Deliver_user')->where(array('uid'=>$uid))->save(array('inaction_num'=>0));
+
     		$result = D('Deliver_supply')->where(array('supply_id' => $supply_id))->save($save_data);
     		if ($status == 2) {
     			if ($supply['item'] == 0) {
@@ -1438,9 +1441,41 @@ class DeliverAction extends BaseAction {
         foreach ($user_list as &$deliver){
             $orders = D('Deliver_supply')->field(true)->where(array('uid'=>$deliver['uid'],'status' => array(array('gt', 1), array('lt', 5))))->order('supply_id asc')->select();
             $deliver['order_count'] = count($orders);
+            $sort[] = count($orders);
         }
 
-        $this->assign('list',$user_list);
+        array_multisort($sort,SORT_DESC,$user_list);
+
+        $week_num = date("w");
+        $hour = date('H');
+
+        if($hour >= 0 && $hour < 5) {
+            $hour = $hour + 24;
+            $week_num = $week_num - 1 < 0 ? 6 : $week_num - 1;
+        }
+
+        $all_list = D('Deliver_schedule_time')->where(array('city_id' => $city_id))->select();
+        $time_ids = array();
+        foreach ($all_list as $v) {
+            $new_hour = $hour + $city['jetlag'];
+            if ($new_hour == $v['start_time']) {
+                $daylist = explode(',', $v['week_num']);
+                if (in_array($week_num, $daylist)) {
+                    $time_ids[] = $v['id'];
+                }
+            }
+        }
+
+        $schedule_list = D('Deliver_schedule')->where(array('time_id' => array('in', $time_ids),'week_num' => $week_num, 'whether' => 1, 'status' => 1))->select();
+        $work_delver_list = array();
+        foreach ($schedule_list as $v) {
+            $work_delver_list[] = $v['uid'];
+        }
+        $go_off_list = D('Deliver_user')->where(array('uid' => array('in', $work_delver_list),'work_status'=>1))->select();
+
+        $list = array_merge($user_list, $go_off_list);
+
+        $this->assign('list',$list);
         $this->display();
     }
 

@@ -132,7 +132,7 @@
                 We’ll send you a notification when we’re busy. Remember to schedule your shift so you can work in your preferred time!
             </if>
         </if>
-        <if condition="$city['urgent_time'] neq 0">
+        <if condition="$city['urgent_time'] neq 0 AND $is_change eq 0">
             <b>We’re busy now!</b><br/>
             Press "Clock In" to accept orders.
         </if>

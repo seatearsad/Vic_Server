@@ -98,10 +98,10 @@
                                 <span class="d_status">Status</span>
                             </li>
                             <volist name="list" id="deliver">
-                                <li class="d_memo" title="Phone:{pigcms{$deliver.phone}">
+                                <li class="d_memo" title="Phone:{pigcms{$deliver.phone}" <if condition="$deliver['work_status'] eq 0">style="background-color:#ffe59a"</if>>
                                     <span class="d_id">{pigcms{$deliver.uid}</span>
                                     <span class="d_name">{pigcms{$deliver.name}</span>
-                                    <span class="d_status">{pigcms{$deliver.order_count}{pigcms{:L('_BACK_ORDER_DELIVERY_')}</span>
+                                    <span class="d_status">{pigcms{$deliver.order_count|default=0}{pigcms{:L('_BACK_ORDER_DELIVERY_')}</span>
                                     <span class="d_lat">{pigcms{$deliver.lat}</span>
                                     <span class="d_lng">{pigcms{$deliver.lng}</span>
                                     <span class="d_phone">{pigcms{$deliver.phone}</span>

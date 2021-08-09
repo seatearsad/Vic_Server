@@ -258,7 +258,7 @@ class DeliverAction extends BaseAction
                     $new_hour = date("H") + $city['jetlag'];
                     if($i == 0){
                         foreach ($curr_list['ids'] as $ids){
-                            if($ids['start_time'] > $new_hour){
+                            if($ids['start_time'] >= $new_hour){
                                 $show_time = "Today, ".$ids['start_time'].':00 - '.$ids['end_time'].':00';
                                 break;
                             }
@@ -473,6 +473,8 @@ class DeliverAction extends BaseAction
 
                 D('Deliver_assign')->field(true)->where(array('supply_id'=>$supply_id))->save($data);
             }
+            //清空送餐员无作为次数
+            D('Deliver_user')->where(array('uid'=>$this->deliver_session['uid']))->save(array('inaction_num'=>0));
 
             $this->success("拒单成功");exit;
         }
@@ -522,6 +524,8 @@ class DeliverAction extends BaseAction
             $assign_data['status'] = 1;
 			$assign_data['grab_deliver_id'] = $this->deliver_session['uid'];
 			D('Deliver_assign')->field(true)->where(array('supply_id'=>$supply_id))->save($assign_data);
+            //清空送餐员无作为次数
+            D('Deliver_user')->where(array('uid'=>$this->deliver_session['uid']))->save(array('inaction_num'=>0));
 
             $order_id = $supply['order_id'];
 			
