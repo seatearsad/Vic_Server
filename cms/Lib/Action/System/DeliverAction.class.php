@@ -266,6 +266,7 @@ class DeliverAction extends BaseAction {
             $column['language'] = intval($_POST['language']);
             $column['birthday'] = $_POST['birthday'];
             $column['remark'] = $_POST['remark'];
+            $column['work_status'] = 1;
 
             $card['ahname'] = $_POST['ahname'];
             $card['transit'] = $_POST['transit'];
@@ -1444,6 +1445,7 @@ class DeliverAction extends BaseAction {
             $sort[] = count($orders);
         }
 
+        $user_list = $user_list ? $user_list : array();
         array_multisort($sort,SORT_DESC,$user_list);
 
         $week_num = date("w");
@@ -1471,7 +1473,8 @@ class DeliverAction extends BaseAction {
         foreach ($schedule_list as $v) {
             $work_delver_list[] = $v['uid'];
         }
-        $go_off_list = D('Deliver_user')->where(array('uid' => array('in', $work_delver_list),'work_status'=>1))->select();
+        $go_off_list = D('Deliver_user')->where(array('uid' => array('in', $work_delver_list),'work_status'=>1,'status'=>1,'group'=>1))->select();
+        $go_off_list = $go_off_list ? $go_off_list : array();
 
         $list = array_merge($user_list, $go_off_list);
 
