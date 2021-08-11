@@ -116,9 +116,9 @@ class DeliverAction extends BaseAction
             }
         }
         //全部下班
-        D('Deliver_user')->where(array('status'=>1,'work_status'=>0,'city_id'=>$city['area_id']))->save(array('work_status'=>1));
+        D('Deliver_user')->where(array('status'=>1,'work_status'=>0,'city_id'=>$city['area_id']))->save(array('work_status'=>1,'inaction_num'=>0));
         //执行上班
-        D('Deliver_user')->where(array('status'=>1,'uid'=>array('in',$work_delver_list),'city_id'=>$city['area_id']))->save(array('work_status'=>0));
+        D('Deliver_user')->where(array('status'=>1,'uid'=>array('in',$work_delver_list),'city_id'=>$city['area_id']))->save(array('work_status'=>0,'inaction_num'=>0));
 
     }
 	
@@ -285,7 +285,7 @@ class DeliverAction extends BaseAction
 
         //修改上下班状态 只有在紧急状态下才能修改上班状态
 		if($_GET['action'] == 'changeWorkstatus' && ($city['urgent_time'] != 0 || $is_change_work_status == 1)) {
-			D('Deliver_user')->where(['uid' => $this->deliver_session['uid']])->save(['work_status' => $_GET['type']]);
+			D('Deliver_user')->where(['uid' => $this->deliver_session['uid']])->save(['work_status' => $_GET['type'],'inaction_num'=>0]);
 			$this->deliver_session['work_status'] = $_GET['type'];
 			session('deliver_session', serialize($this->deliver_session));
 			exit;
@@ -385,7 +385,7 @@ class DeliverAction extends BaseAction
 		$deliver_count = D('Deliver_supply')->where(array('uid' => $this->deliver_session['uid'], 'status' => array(array('gt', 0), array('lt', 5))))->count();
 		$finish_count = D('Deliver_supply')->where(array('uid' => $this->deliver_session['uid'], 'status' => 5))->count();
 
-		exit(json_encode(array('err_code' => false, 'gray_count' => $gray_count, 'deliver_count' => $deliver_count, 'finish_count' => $finish_count)));
+		exit(json_encode(array('err_code' => false, 'gray_count' => $gray_count, 'deliver_count' => $deliver_count, 'finish_count' => $finish_count,'work_status'=>$this->deliver_session['work_status'])));
 	}
 	
 	private function rollback($supply_id, $status)

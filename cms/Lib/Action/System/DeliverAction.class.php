@@ -183,6 +183,7 @@ class DeliverAction extends BaseAction {
             $column['language'] = intval($_POST['language']);
             $column['birthday'] = $_POST['birthday'];
             $column['remark'] = $_POST['remark'];
+            $column['work_status'] = 1;
 
             $card['ahname'] = $_POST['ahname'];
             $card['transit'] = $_POST['transit'];
@@ -266,7 +267,8 @@ class DeliverAction extends BaseAction {
             $column['language'] = intval($_POST['language']);
             $column['birthday'] = $_POST['birthday'];
             $column['remark'] = $_POST['remark'];
-            $column['work_status'] = 1;
+            $column['work_status'] = $_POST['work_status'];
+            $column['inaction_num'] = 0;
 
             $card['ahname'] = $_POST['ahname'];
             $card['transit'] = $_POST['transit'];

@@ -295,6 +295,9 @@
                         $('#gray_count').html(response.gray_count);
                         $('#deliver_count').html(response.deliver_count);
                         $('#finish_count').html(response.finish_count);
+                        if(response.work_status == 1){
+                            window.location.reload();
+                        }
                     }
                 }, 'json');
             }, 2000);

@@ -88,12 +88,11 @@
                                                              name="pwd"
                                                              value="" tips="{pigcms{:L('K_DNFIINM')}"  size="20" validate="required:false"/></div>
                             </div>
-
                             <div class="form-group  row">
                                 <label class="col-sm-3 col-form-label">{pigcms{:L('_BACK_STATUS_')}</label>
                                 <div class="col-sm-9">
                                     <span class="cb-enable"><label class="cb-enable <if condition="
-                                                                                     $now_user['status'] eq 1">selected</if>
+                                                                   $now_user['status'] eq 1">selected</if>
                                         "><span>{pigcms{:L('_BACK_NORMAL_')}</span><input type="radio" name="status"
                                                                                           value="1"  <if
                                                 condition="$now_user['status'] eq 1">checked="checked"</if>/></label></span>
@@ -101,6 +100,19 @@
                                         "><span>{pigcms{:L('_BACK_FORBID_')}</span><input type="radio" name="status"
                                                                                           value="0"  <if
                                                 condition="$now_user['status'] eq 0">checked="checked"</if>/></label></span>
+                                </div>
+                            </div>
+                            <div class="form-group  row">
+                                <label class="col-sm-3 col-form-label">Work Status</label>
+                                <div class="col-sm-9">
+                                    <span class="cb-enable"><label class="cb-enable <if condition="$now_user['work_status'] eq 0">selected</if>">
+                                        <span>On-Shift</span>
+                                        <input type="radio" name="work_status" value="0"  <if condition="$now_user['work_status'] eq 1">checked="checked"</if>/></label>
+                                    </span>
+                                    <span class="cb-disable"><label class="cb-disable <if condition=" $now_user['work_status'] eq 1">selected</if>">
+                                        <span>Off-Shift</span>
+                                        <input type="radio" name="work_status" value="1"  <if condition="$now_user['work_status'] eq 1">checked="checked"</if>/></label>
+                                    </span>
                                 </div>
                             </div>
                             <div class="form-group  row">

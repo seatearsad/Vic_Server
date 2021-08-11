@@ -3030,7 +3030,7 @@ class IndexAction extends BaseAction
                 }
                 if ($c['urgent_time'] == 0) {//非紧急召唤状态时
                     //将要下班的状态
-                    D('Deliver_user')->where(array('uid' => array('in', $go_off_list),'status' => 1, 'work_status' => 0, 'city_id' => $c['area_id']))->save(array('work_status' => 1));
+                    D('Deliver_user')->where(array('uid' => array('in', $go_off_list),'status' => 1, 'work_status' => 0, 'city_id' => $c['area_id']))->save(array('work_status' => 1,'inaction_num'=>0));
                     //执行上班 暂时不自动上班
                     //D('Deliver_user')->where(array('status' => 1, 'uid' => array('in', $work_delver_list),'city_id'=>$c['area_id']))->save(array('work_status' => 0));
                 }
