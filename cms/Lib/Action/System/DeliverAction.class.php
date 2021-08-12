@@ -268,6 +268,12 @@ class DeliverAction extends BaseAction {
             $column['birthday'] = $_POST['birthday'];
             $column['remark'] = $_POST['remark'];
             $column['work_status'] = $_POST['work_status'];
+            if($_POST['work_status'] == 1){
+                $current_order_num = D('Deliver_supply')->where(array('uid'=>$uid,'status'=>array('lt',5)))->count();
+                if($current_order_num > 0){
+                    $this->error('All accepted orders must be completed before you clock out.');
+                }
+            }
             $column['inaction_num'] = 0;
 
             $card['ahname'] = $_POST['ahname'];

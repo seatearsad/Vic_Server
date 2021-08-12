@@ -3021,7 +3021,8 @@ class IndexAction extends BaseAction
                 $go_off_list = array();
                 foreach ($schedule_list as $v) {
                     if(!in_array($v['uid'],$work_delver_list)){
-                        $go_off_list[] = $v['uid'];
+                        $current_order_num = D('Deliver_supply')->where(array('uid'=>$v['uid'],'status'=>array('lt',5)))->count();
+                        if($current_order_num == 0) $go_off_list[] = $v['uid'];
                     }
                     //如果为不repeat的 此时删除
                     if ($v['is_repeat'] != 1) {

@@ -14,9 +14,13 @@
     var location_url = "{pigcms{:U('Deliver/grab')}",lat = "{pigcms{$deliver_session['lat']}", lng = "{pigcms{$deliver_session['lng']}", reject_url = "{pigcms{:U('Deliver/reject')}",update_url = "{pigcms{:U('Deliver/index_count')}";
 	$(function(){
 		$(".startOrder,.stopOrder").click(function(){
-			$.get("/wap.php?g=Wap&c=Deliver&a=index&action=changeWorkstatus&type="+$(this).attr('ref'), function(){
-				window.location.reload();
-			});
+			$.get("/wap.php?g=Wap&c=Deliver&a=index&action=changeWorkstatus&type="+$(this).attr('ref'), function(data){
+			    if(data.error == 1){
+                    alert(data.msg);
+			    }else {
+                    window.location.reload();
+                }
+			},'json');
 		});
 	})
     //ios app 更新位置

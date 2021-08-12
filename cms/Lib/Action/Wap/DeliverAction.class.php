@@ -115,6 +115,13 @@ class DeliverAction extends BaseAction
                 D('Deliver_schedule')->where($v)->delete();
             }
         }
+
+        $have_order_list = D('Deliver_supply')->where(array('status' => array(array('gt', 1), array('lt', 5))))->select();
+        foreach($have_order_list as $h){
+            if(!in_array($h['uid'],$work_delver_list)){
+                $work_delver_list[] = $h['uid'];
+            }
+        }
         //全部下班
         D('Deliver_user')->where(array('status'=>1,'work_status'=>0,'city_id'=>$city['area_id']))->save(array('work_status'=>1,'inaction_num'=>0));
         //执行上班
@@ -285,10 +292,17 @@ class DeliverAction extends BaseAction
 
         //修改上下班状态 只有在紧急状态下才能修改上班状态
 		if($_GET['action'] == 'changeWorkstatus' && ($city['urgent_time'] != 0 || $is_change_work_status == 1)) {
-			D('Deliver_user')->where(['uid' => $this->deliver_session['uid']])->save(['work_status' => $_GET['type'],'inaction_num'=>0]);
-			$this->deliver_session['work_status'] = $_GET['type'];
-			session('deliver_session', serialize($this->deliver_session));
-			exit;
+		    if($_GET['type'] == 1){
+                $current_order_num = D('Deliver_supply')->where(array('uid'=>$this->deliver_session['uid'],'status'=>array('lt',5)))->count();
+            }
+            if($_GET['type'] == 0 || ($_GET['type'] == 1 && $current_order_num == 0)) {
+                D('Deliver_user')->where(['uid' => $this->deliver_session['uid']])->save(['work_status' => $_GET['type'], 'inaction_num' => 0]);
+                $this->deliver_session['work_status'] = $_GET['type'];
+                session('deliver_session', serialize($this->deliver_session));
+                exit(json_encode(array('error' => 0, 'msg' => '')));
+            }else{
+                exit(json_encode(array('error' => 1, 'msg' => 'All accepted orders must be completed before you clock out.')));
+            }
 		}
 //		$data = $this->routeAssign($this->deliver_session['uid']);
 //		var_dump($data);die();
@@ -1327,6 +1341,45 @@ class DeliverAction extends BaseAction
 						$user = D('User')->where(array('uid'=>$order['uid']))->find();
 						$userData = array('order_num'=>($user['order_num']+1),'last_order_time'=>$data['use_time']);
 						D('User')->where(array('uid'=>$order['uid']))->save($userData);
+                        //***如果送完此单后送餐员手中已无订单，并未在紧急模式，且未在排版时间内，送餐员自动下线///
+                        $current_order_num = D('Deliver_supply')->where(array('uid'=>$this->deliver_session['uid'],'status'=>array('lt',5)))->count();
+
+                        if($current_order_num == 0){
+                            $city_id = $this->deliver_session['city_id'];
+                            $city = D('Area')->where(array('area_id'=>$city_id))->find();
+                            if($city['urgent_time'] == 0) {
+                                $min = date("i");
+
+                                $week_num = date("w");
+                                $hour = date('H');
+
+                                //if($min >= 50) $hour += 1;
+                                if ($hour >= 0 && $hour < 5) {
+                                    $hour = $hour + 24;
+                                    $week_num = $week_num - 1 < 0 ? 6 : $week_num - 1;
+                                }
+
+                                $all_list = D('Deliver_schedule_time')->where(array('city_id' => $city_id))->select();
+                                $time_ids = array();
+                                foreach ($all_list as $v) {
+                                    $new_hour = $hour + $city['jetlag'];
+                                    if ($new_hour == $v['start_time'] || ($min >= 50 && $new_hour + 1 == $v['start_time'])) {
+                                        $daylist = explode(',', $v['week_num']);
+                                        if (in_array($week_num, $daylist)) {
+                                            $time_ids[] = $v['id'];
+                                        }
+                                    }
+                                }
+
+                                $schedule_list = D('Deliver_schedule')->where(array('uid' => $this->deliver_session['uid'], 'time_id' => array('in', $time_ids), 'week_num' => $week_num, 'whether' => 1, 'status' => 1))->select();
+                                if (!$schedule_list) {
+                                    D('Deliver_user')->where(['uid' => $this->deliver_session['uid']])->save(['work_status' => 1, 'inaction_num' => 0]);
+                                    $this->deliver_session['work_status'] = $_GET['type'];
+                                    session('deliver_session', serialize($this->deliver_session));
+                                }
+                            }
+                        }
+                        ///***////
 
                         $store = D('Merchant_store')->where(array('store_id'=>$order['store_id']))->find();
                         $store['name'] = lang_substr($store['name'], 'en-us');
