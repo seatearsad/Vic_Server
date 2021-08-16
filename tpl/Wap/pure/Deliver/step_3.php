@@ -150,6 +150,8 @@
         line-height: 16px;
         color: white;
         font-weight: bold;
+        cursor: pointer;
+        -moz-user-select: none;-khtml-user-select: none;user-select: none;
     }
     .btn_number{
         display: inline-block;
@@ -181,9 +183,9 @@
                             <div style="font-size: 13px;font-weight: bold;margin-top: 4px;">${pigcms{$vo.bag_price}</div>
                             <div style="font-size: 12px;;margin-top: 4px;">{pigcms{$vo.bag_description}</div>
                             <div style="position: absolute;bottom: 5px;right: 5px">
-                                <div class="btn_circle">-</div>
-                                <div class="btn_number bagid-{pigcms{$vo.bag_id}">1</div>
-                                <div class="btn_circle">+</div>
+                                <div class="btn_circle btn_minus" data-bagid="{pigcms{$vo.bag_id}">-</div>
+                                <div class="btn_number bagid_{pigcms{$vo.bag_id}" data-bagprice="{pigcms{$vo.bag_price}" data-bagtaxrate="{pigcms{$vo.bag_tax_rate}">0</div>
+                                <div class="btn_circle btn_plus" data-bagid="{pigcms{$vo.bag_id}">+</div>
                             </div>
                         </td>
                     </tr>
@@ -200,23 +202,23 @@
             <if condition="$city['bag_type'] eq 2">
                 <input type="hidden"  name="bag_type" value="2">
                 <else />
-                <input type="radio"  name="bag_type" value="1">Shipping <input type="radio" name="bag_type" value="2">Pick up
+                <input type="radio"  name="bag_type" value="1">Shipping(${pigcms{$city.bag_shipping_fee}) &nbsp;&nbsp;&nbsp;<input type="radio" name="bag_type" value="2">Pick up
             </if>
     </if>
     </div>
     <div class="memo-sm" style="text-align: right;font-size: 12px;font-weight: bold">
-        <div>Subtotal:$<span>0</span></div>
-        <div>Shipping:$<span>0</span></div>
+        <div>Subtotal:$<span class="subtotal_box">0</span></div>
+        <div>Shipping:$<span class="shipping_fee_box">0</span></div>
     </div>
 
 
-     <div id="shipping_div" style="display: none">
+     <div id="pickup_div" style="display: none">
         <div class="step_title">You’ll pick up your bag in {pigcms{$city.area_name}!</div>
         <div class="memo">
             You will receive an email with the exact address and a link to book a pick-up time slot.
         </div>
     </div>
-    <div id="pickup_div" style="display: none">
+    <div id="shipping_div" style="display: none">
         <div class="step_title">We’ll ship the bag to you!</div>
         <div class="memo">
             Enter your shipping information below:
@@ -230,7 +232,8 @@
                     <input type="text" class="" placeholder="Apartment,suite,unit,etc." id="apartment" name="apartment" >
                 </li>
                 <li>
-                    <input type="text" class="sm " placeholder="City*" id="city"  name="city" ><input type="text" class="sm" placeholder="Province*" id="province"  name="province">
+                    <input type="text" class="sm " placeholder="City*" id="city"  name="city" >
+                    <input type="text" class="sm" placeholder="Province*" id="province"  name="province">
                 </li>
                 <li>
                     <input type="text" class="" placeholder="Postal Code*" id="postalcode" name="postalcode">
@@ -253,14 +256,13 @@
                 <input type="text" placeholder="{pigcms{:L('_EXPRIRY_DATE_')}" id="e_date">
             </li>
             <li>
-
                 <input type="text" placeholder="3-digit number" id="cvv">
             </li>
             <div class="memo-sm" style="text-align: right;font-size: 12px;font-weight: bold">
-                <div>Subtotal:$<span>0</span></div>
-                <div>Shipping:$<span>0</span></div>
-                <div>Tax:$<span>0</span></div>
-                <div>Total:$<span>0</span></div>
+                <div >Subtotal:$<span class="subtotal_box">0</span></div>
+                <div >Shipping:$<span class="shipping_fee_box">0</span></div>
+                <div>Tax:$<span class="tax_box">0</span></div>
+                <div>Total:$<span class="total_box">0</span></div>
             </div>
             <li class="Landd">
                 <input type="button" value="Pay Online" id="reg_form" style="background-color: #ffa52d;width: 55%;">
@@ -271,7 +273,7 @@
                 </div>
             </li>
             <li class="Landd">
-                <input type="button" value="{pigcms{:L('_ND_PAYINPERSON_')}" id="jump_btn" style="background-color: dodgerblue;font-size:10px;width: 55%;margin-top: 10px;margin-bottom: 30px">
+                <input type="button" value="Save & Pay Later" id="jump_btn" style="background-color: dodgerblue;font-size:10px;width: 55%;margin-top: 10px;margin-bottom: 30px">
             </li>
         </ul>
     </div>
@@ -281,6 +283,8 @@
 <script src="{pigcms{$static_public}js/lang.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKlguA2QFIUVwWTo3danbOqSKv3nYbBCg&libraries=places&language=en" async defer></script>
 <script type="text/javascript">
+
+
     <!--    //bag_type 0:未设置 1:自取 2：邮寄 3：全选-->
     <if condition="$city['bag_type'] eq 1">
        var init_bag_select=1;
@@ -292,34 +296,141 @@
             </if>
         </if>
 
+    var curr_bagid=0;
+    var curr_bag_amount=0;
+    var select_buy_mode=0;
+    var shipping_fee={pigcms{$city.bag_shipping_fee}*1;
+    var show_shipping_fee=0;
+
+    function set_curr_bag_id_number(){
+        if(curr_bagid>0) {
+            var num=$(".bagid_"+curr_bagid).html()*1;
+            curr_bag_amount=num;
+            set_bag_id_number(curr_bagid,num);
+        }
+    }
+    function set_bag_id_number(bag_id,num){
+        var bag_price=0;
+        var bag_tax_rate =0;
+        var sub_total=0;
+        var tax_price=0;
+        var total=0;
+        if(curr_bagid>0) {
+            $(".bagid_" + bag_id).html(num);
+            bag_price = $(".bagid_" + bag_id).data("bagprice")*1;
+            bag_tax_rate = $(".bagid_" + bag_id ).data("bagtaxrate")*1;
+            sub_total = bag_price * num;
+            if (select_buy_mode==2){
+                show_shipping_fee=shipping_fee;
+            }else{
+                show_shipping_fee=0;
+            }
+            tax_price=sub_total*bag_tax_rate;
+            tax_price=tax_price.toFixed(2)*1.0;
+
+            total=bag_price+show_shipping_fee+tax_price;
+            total=total.toFixed(2);
+
+            $(".subtotal_box").html(sub_total);
+            $(".shipping_fee_box").html(show_shipping_fee);
+            $(".tax_box").html(tax_price);
+            $(".total_box").html(total);
+        }
+    }
+
     $(function(){
+
+        $('.btn_minus').click(function(){
+
+            var bagid = $(this).data('bagid');
+
+            if (curr_bagid!=bagid){
+                set_bag_id_number(curr_bagid,0);
+                curr_bagid=bagid;
+            }
+
+            var num=$(".bagid_"+bagid).html()*1;
+
+            console.log("btn_minus-"+num);
+            if (num>0){
+                num=num-1;
+            };
+            set_bag_id_number(bagid,num);
+            // if(firstMenuClick == false){
+            //     $('html,body').animate({scrollTop: $('#shopMenuBar').offset().top-50});
+            // }
+            // var tmpIndex = $(this).index();
+            // var tmpNav = $(this).data('nav');
+            // $(this).addClass('active').siblings().removeClass('active');
+            // pageLoadTips({showBg:false});
+            // $('#shopContentBar').animate({'margin-left':'-'+tmpIndex*window_width+'px'},function(){
+            //     mcslo("-> showShopContent","showShop");
+            //     showShopContent(tmpNav);
+            // });
+        });
+        $('.btn_plus').click(function(){
+            var bagid = $(this).data('bagid');
+            if (curr_bagid!=bagid){
+                set_bag_id_number(curr_bagid,0);
+                curr_bagid=bagid;
+            }
+            var num=$(".bagid_"+bagid).html()*1;
+
+            num=num+1;
+            console.log("btn_plus-"+num);
+            set_bag_id_number(bagid,num);
+            // if(firstMenuClick == false){
+            //     $('html,body').animate({scrollTop: $('#shopMenuBar').offset().top-50});
+            // }
+            // var tmpIndex = $(this).index();
+            // var tmpNav = $(this).data('nav');
+            // $(this).addClass('active').siblings().removeClass('active');
+            // pageLoadTips({showBg:false});
+            // $('#shopContentBar').animate({'margin-left':'-'+tmpIndex*window_width+'px'},function(){
+            //     mcslo("-> showShopContent","showShop");
+            //     showShopContent(tmpNav);
+            // });
+        });
 
         $(":radio").click(function(){
             if($(this).val()==2){
-
-                $("#shipping_div").show();
-                $("#pickup_div").hide();
-            }else{
                 $("#shipping_div").hide();
                 $("#pickup_div").show();
+                select_buy_mode=1;
+            }else{
+                $("#shipping_div").show();
+                $("#pickup_div").hide();
+                select_buy_mode=2;
             }
+            set_curr_bag_id_number();
         });
 
         if (init_bag_select==1){
-            $("#shipping_div").show();
-            $("#pickup_div").hide();
-        }else{
-
             $("#shipping_div").hide();
             $("#pickup_div").show();
+            select_buy_mode=1;
+        }else{
+            $("#shipping_div").show();
+            $("#pickup_div").hide();
+            select_buy_mode=2;
         }
     });
 
     $("body").css({"height":$(window).height()});
+
     $('#reg_form').click(function () {
+
         var is_next = true;
+
         if($('#c_name').val() == '' || $('#c_number').val() == '' || $('#e_date').val() == '' || $('#cvv').val() == ''){
             is_next = false;
+        }
+        if(select_buy_mode==2){
+            if(select_buy_mode==0||curr_bagid==0 || $('#address').val() == '' || $('#apartment').val() == '' || $('#city').val() == '' || $('#postalcode').val() == ''|| $('#province').val() == ''){
+                is_next = false;
+            }else{
+                is_next = true;
+            }
         }
         if(!is_next)
             alert("{pigcms{:L('_PLEASE_INPUT_ALL_')}");
@@ -329,7 +440,16 @@
                 c_name:$('#c_name').val(),
                 c_number:$('#c_number').val(),
                 e_date:$('#e_date').val(),
-                cvv:$('#cvv').val()
+                cvv:$('#cvv').val(),
+                address:$('#address').val(),
+                apartment:$('#apartment').val(),
+                city:$('#city').val(),
+                postalcode:$('#postalcode').val(),
+                province: $('#province').val(),
+                bag_amount: curr_bag_amount,
+                buy_mode:select_buy_mode,
+                bag_id:curr_bagid,
+                total_price:$(".total_box").html()
             };
             layer.open({content:"{pigcms{:L('_DEALING_TXT_')}"});
             $.ajax({
@@ -354,8 +474,64 @@
     });
 
     $('#jump_btn').click(function () {
-        window.parent.location = "{pigcms{:U('Deliver/step_4')}&type=jump";
+
+        var is_next = true;
+
+        // if($('#c_name').val() == '' || $('#c_number').val() == '' || $('#e_date').val() == '' || $('#cvv').val() == ''){
+        //     is_next = false;
+        // }
+        // if(select_buy_mode==2){
+        //     if(select_buy_mode==0||curr_bagid==0 || $('#address').val() == '' || $('#apartment').val() == '' || $('#city').val() == '' || $('#postalcode').val() == ''|| $('#province').val() == ''){
+        //         is_next = false;
+        //     }else{
+        //         is_next = true;
+        //     }
+        // }
+        if(!is_next)
+            alert("{pigcms{:L('_PLEASE_INPUT_ALL_')}");
+        else{
+            $(this).attr("disabled","disabled");
+            var post_data = {
+                c_name:$('#c_name').val(),
+                c_number:$('#c_number').val(),
+                e_date:$('#e_date').val(),
+                cvv:$('#cvv').val(),
+                address:$('#address').val(),
+                apartment:$('#apartment').val(),
+                city:$('#city').val(),
+                postalcode:$('#postalcode').val(),
+                province: $('#province').val(),
+                bag_amount: curr_bag_amount,
+                buy_mode:select_buy_mode,
+                bag_id:curr_bagid,
+                total_price:$(".total_box").html(),
+                just_save:1
+            };
+            layer.open({content:"{pigcms{:L('_DEALING_TXT_')}"});
+            $.ajax({
+                url: "{pigcms{:U('Deliver/step_3')}",
+                type: 'POST',
+                dataType: 'json',
+                data: post_data,
+                success:function(date){
+                    layer.closeAll();
+                    console.log(date);
+                    if(date.error_code){
+                        layer.open({title:"{pigcms{:L('_B_D_LOGIN_TIP2_')}",content:date.msg, btn:["{pigcms{:L('_B_D_LOGIN_CONIERM_')}"]});
+                        $("#jump_btn").removeAttr("disabled");
+                    }else{
+                        layer.open({title:"{pigcms{:L('_B_D_LOGIN_TIP2_')}",content: date.msg,skin: 'msg', time:1,end:function () {
+                                //window.parent.location = "{pigcms{:U('Deliver/step_4')}";
+                                //layer.open({content:"Saved"});
+                            }});
+                    }
+                }
+
+            });
+        }
     });
+
+
 
 </script>
 </html>

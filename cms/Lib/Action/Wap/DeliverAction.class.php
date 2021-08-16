@@ -2559,59 +2559,89 @@ class DeliverAction extends BaseAction
             $this->display();
         }
     }
+    public function pre_save_step3(){
+        if($_POST['buy_mode']==2){   //shipping
+            $user_data["bag_get_type"]=1;
+            $user_data["ship_adress"]=$_POST['address'];
+            $user_data["ship_apartment"]=$_POST['apartment'];
+            $user_data["ship_city_str"]=$_POST['city'];
+            $user_data["ship_province_str"]=$_POST['province'];
+            $user_data["ship_postal_code"]=$_POST['postalcode'];
+            $user_data["bag_amount"]=$_POST['bag_amount'];
+            $user_data["bag_get_id"]=$_POST['bag_id'];
+        }else{      //pickup
+            $user_data["bag_get_type"]=2;
+        }
+        D('Deliver_user')->where(array('uid'=>$this->deliver_session['uid']))->save($user_data);
+    }
 
     public function step_3(){
 
         $database_deliver_user = D('Deliver_user');
         $now_user = $database_deliver_user->field(true)->where(array('uid' => $this->deliver_session['uid']))->find();
         if($_POST){
-            import('@.ORG.pay.MonerisPay.mpgClasses');
-            $where = array('tab_id'=>'moneris','gid'=>7);
-            $result = D('Config')->field(true)->where($where)->select();
-            foreach($result as $v){
-                if($v['info'] == 'store_id')
-                    $store_id = $v['value'];
-                elseif ($v['info'] == 'token')
-                    $api_token = $v['value'];
-            }
 
-            $txnArray['type'] = 'purchase';
-            $txnArray['crypt_type'] = '7';
-            $txnArray['pan'] = $_POST['c_number'];
-            $txnArray['expdate'] = transYM($_POST['e_date']);
-            $txnArray['order_id'] = 'TuttiDeliver_'.$this->deliver_session['uid'].'_'.time();
-            $txnArray['cust_id'] = $this->deliver_session['uid'];
-            $txnArray['amount'] = '68.25';
-
-            /**************************** Transaction Object *****************************/
-
-            $mpgTxn = new mpgTransaction($txnArray);
-
-            /****************************** Request Object *******************************/
-
-            $mpgRequest = new mpgRequest($mpgTxn);
-            $mpgRequest->setProcCountryCode("CA"); //"US" for sending transaction to US environment
-            $mpgRequest->setTestMode(false);
-
-            $mpgHttpPost  =new mpgHttpsPost($store_id,$api_token,$mpgRequest);
-
-            $mpgResponse=$mpgHttpPost->getMpgResponse();
-
-            if($mpgResponse->getResponseCode() != "null" && $mpgResponse->getResponseCode() < 50){//支付成功
-                $data['card_name'] = $_POST['c_name'];
-                $data['card_num'] = $_POST['c_number'];
-                $data['expdate'] = $txnArray['expdate'];
-                $data['order_id'] = $txnArray['order_id'];
-                $data['txnNumber'] = $mpgResponse->getTxnNumber();
-
-                D('Deliver_img')->where(array('uid'=>$this->deliver_session['uid']))->save($data);
-
-                D('Deliver_user')->where(array('uid'=>$this->deliver_session['uid']))->save(array('reg_status'=>4,'last_time'=>time()));
-
-                $this->sendMail($now_user);
-                $result = array('error_code' => false, 'msg' => L('_PAYMENT_SUCCESS_'));
+            $this->pre_save_step3();
+            if($_POST['just_save']=="1"){
+                $result = array('error_code' => true, 'msg' => "Saved");
             }else{
-                $result = array('error_code' => true, 'msg' => $mpgResponse->getMessage());
+                import('@.ORG.pay.MonerisPay.mpgClasses');
+                $where = array('tab_id'=>'moneris','gid'=>7);
+                $result = D('Config')->field(true)->where($where)->select();
+                foreach($result as $v){
+                    if($v['info'] == 'store_id')
+                        $store_id = $v['value'];
+                    elseif ($v['info'] == 'token')
+                        $api_token = $v['value'];
+                }
+
+                $txnArray['type'] = 'purchase';
+                $txnArray['crypt_type'] = '7';
+                $txnArray['pan'] = $_POST['c_number'];
+                $txnArray['expdate'] = transYM($_POST['e_date']);
+                $txnArray['order_id'] = 'TuttiDeliver_'.$this->deliver_session['uid'].'_'.time();
+                $txnArray['cust_id'] = $this->deliver_session['uid'];
+                $txnArray['amount'] = $_POST["total_price"];
+
+                /**************************** Transaction Object *****************************/
+
+                $mpgTxn = new mpgTransaction($txnArray);
+
+                /****************************** Request Object *******************************/
+
+                $mpgRequest = new mpgRequest($mpgTxn);
+                $mpgRequest->setProcCountryCode("CA"); //"US" for sending transaction to US environment
+                $mpgRequest->setTestMode(false);
+
+                $mpgHttpPost  =new mpgHttpsPost($store_id,$api_token,$mpgRequest);
+
+                $mpgResponse=$mpgHttpPost->getMpgResponse();
+
+                if($mpgResponse->getResponseCode() != "null" && $mpgResponse->getResponseCode() < 50){//支付成功
+
+                    $data['card_name'] = $_POST['c_name'];
+                    $data['card_num'] = $_POST['c_number'];
+                    $data['expdate'] = $txnArray['expdate'];
+                    $data['order_id'] = $txnArray['order_id'];
+                    $data['txnNumber'] = $mpgResponse->getTxnNumber();
+
+
+                    D('Deliver_img')->where(array('uid'=>$this->deliver_session['uid']))->save($data);
+
+                    //D('Deliver_user')->where(array('uid'=>$this->deliver_session['uid']))->save(array('reg_status'=>4,'last_time'=>time()));
+                    $user_data["reg_status"]=4;
+                    $user_data["last_time"]=time();
+
+                    D('Deliver_user')->where(array('uid'=>$this->deliver_session['uid']))->save($user_data);
+
+                    $this->sendMail($now_user);
+                    $result = array('error_code' => false, 'msg' => L('_PAYMENT_SUCCESS_'));
+
+                }else{
+
+                    $result = array('error_code' => true, 'msg' => $mpgResponse->getMessage());
+
+                }
             }
             $this->ajaxReturn($result);
 
@@ -2627,6 +2657,7 @@ class DeliverAction extends BaseAction
 
             $city_id=$now_user["city_id"];
             $areas=D('Area')->where(array("area_id"=>$city_id))->find();
+
             $this->assign('city',$areas);
             //bag_type 0:未设置 1:自取 2：邮寄 3：全选
 
@@ -2636,7 +2667,6 @@ class DeliverAction extends BaseAction
             $this->display();
         }
     }
-
     public function step_4(){
         $database_deliver_user = D('Deliver_user');
         $now_user = $database_deliver_user->field(true)->where(array('uid' => $this->deliver_session['uid']))->find();

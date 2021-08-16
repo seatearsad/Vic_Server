@@ -136,7 +136,7 @@
         1. Proof of Work Eligibility
     </div>
     <div style="margin: 10px auto;width: 85%;">
-        <input type="text" placeholder="Enter Social Insurance Number*" id="sin_num" name="sin_num">
+        <input type="text" style="padding-left: 10px;" placeholder="Enter Social Insurance Number*" id="sin_num" name="sin_num">
     </div>
     <div id="memo">
         This is for taxation purpose only
