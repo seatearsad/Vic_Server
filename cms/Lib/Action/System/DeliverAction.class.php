@@ -1616,15 +1616,15 @@ class DeliverAction extends BaseAction {
         //搜索
         if (!empty($_GET['keyword'])) {
             if ($_GET['searchtype'] == 'uid') {
-                $condition_user['uid'] = $_GET['keyword'];
+                $condition_user['d.uid'] = $_GET['keyword'];
             } else if ($_GET['searchtype'] == 'firstname') {
-                $condition_user['name'] = array('like', '%' . $_GET['keyword'] . '%');
+                $condition_user['d.name'] = array('like', '%' . $_GET['keyword'] . '%');
             } else if ($_GET['searchtype'] == 'lastname') {
-                $condition_user['family_name'] = array('like', '%' . $_GET['keyword'] . '%');
+                $condition_user['d.family_name'] = array('like', '%' . $_GET['keyword'] . '%');
             } else if ($_GET['searchtype'] == 'phone') {
-                $condition_user['phone'] = array('like', '%' . $_GET['keyword'] . '%');
+                $condition_user['d.phone'] = array('like', '%' . $_GET['keyword'] . '%');
             }else if($_GET['searchtype'] == 'email'){
-                $condition_user['email'] = array('like', '%' . $_GET['keyword'] . '%');
+                $condition_user['d.email'] = array('like', '%' . $_GET['keyword'] . '%');
             }
             $this->assign('searchtype',$_GET['searchtype']);
         }else{
@@ -1634,7 +1634,7 @@ class DeliverAction extends BaseAction {
         if($_GET['city_id']){
             $this->assign('city_id',$_GET['city_id']);
             if($_GET['city_id'] != 0){
-                $condition_user['city_id'] = $_GET['city_id'];
+                $condition_user['d.city_id'] = $_GET['city_id'];
             }
         }else{
             $this->assign('city_id',0);
@@ -1644,15 +1644,18 @@ class DeliverAction extends BaseAction {
 
         //未审核的
         //$condition_user['group'] = array('between','-1,0');
-        $condition_user['reg_status'] = array('neq',0);
+        $condition_user['d.reg_status'] = array('neq',0);
         //garfunkel 判断城市管理员
         if($this->system_session['level'] == 3){
-            $condition_user['city_id'] = $this->system_session['area_id'];
+            $condition_user['d.city_id'] = $this->system_session['area_id'];
         }
-        $count_user = $this->deliver_user->where($condition_user)->count();
+        //var_dump($condition_user);
+        $count_user = $this->deliver_user->join(' as d LEFT JOIN ' . C('DB_PREFIX') . 'area as a ON d.city_id=a.area_id')->where($condition_user)->count();
+
         import('@.ORG.system_page');
         $p = new Page($count_user, 15);
-        $user_list = $this->deliver_user->field(true)->where($condition_user)->order('`last_time` DESC')->limit($p->firstRow . ',' . $p->listRows)->select();
+        $user_list = $this->deliver_user->field("d.*,a.*")->join(' as d LEFT JOIN ' . C('DB_PREFIX') . 'area as  a ON d.city_id=a.area_id')->where($condition_user)->order(' last_time DESC')->limit($p->firstRow . ',' . $p->listRows)->select();
+
         foreach ($user_list as &$v){
             $is_online = 0;
             $is_upload = 0;
@@ -2004,7 +2007,10 @@ class DeliverAction extends BaseAction {
             exit(json_encode(array('error' => 1,'message' =>'没有选择图片')));
         }
     }
-
+    public function ajax_del_pic(){
+        $store_image_class = new bag_image();
+        $store_image_class->del_image_by_path($_POST['path']);
+    }
     public function getMailBody($name)
     {
         $body = "<p>Hi " . $name . ",</p>";

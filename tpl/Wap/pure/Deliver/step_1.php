@@ -79,8 +79,6 @@
         height: 15px;
         padding: 8px 0;
         text-indent: 10px;
-        color: #333333;
-        background-color: white;
         border-radius: 5px;
         margin-left: 1%;
         margin-top: 2px;
@@ -91,8 +89,6 @@
         height: 15px;
         padding: 8px 0;
         text-indent: 10px;
-        color: #333333;
-        background-color: white;
         border-radius: 5px;
         margin-left: 1%;
         margin-top: 2px;
@@ -106,7 +102,6 @@
     }
     li.Landd input {
         background: #ffa52d;
-        color: #fff;
         text-indent: 0px;
         font-size: 12px;
         margin-top: 30px;
@@ -116,7 +111,6 @@
     }
     #send_code{
         background: #ffa52d;
-        color: #fff;
         text-indent: 0px;
         border-radius: 2px;
         font-size: 10px;
@@ -124,9 +118,9 @@
         height: 30px;
     }
     li div{
-        text-align: left;
+
         display: inline-block;
-        width: 80%;
+        width: 50%;
         font-size: 12px;
     }
     input#sms_code{
@@ -134,6 +128,12 @@
     }
     #send_code{
         width: 30%;
+    }
+    .white_bg{
+        background: #ffffff;
+    }
+    .gray_bg{
+        background: #e6e6e6;
     }
 </style>
 <body style="background:url('{pigcms{$static_path}img/login_bg.png');">
@@ -158,15 +158,16 @@
     <div id="reg_list">
         <ul>
             <li>
-                <select name="city_id" id="city_id">
+                <select name="city_id" id="city_id" class="gray-bg" data-not-online="{pigcms{$not_online}">
                     <option value="0">------{pigcms{:L('_ND_DELIVERYCITY_')}------</option>
                     <volist name="city_list" id="city">
                         <option value="{pigcms{$city['area_id']}">{pigcms{$city['area_name']}</option>
                     </volist>
                 </select>
+                <div id="online_div" style="display: none">Sorry, we’re temporarily not accepting new couriers in this city. We will notify you by email when we start accepting more applicants.</div>
             </li>
             <li>
-                <select name="city_id" id="city_id">
+                <select name="vehicle_type" class="gray-bg" id="vehicle_type" disabled="disabled">
                     <option value="0">------Vehicle Type------</option>
                     <option value="1">Car</option>
                     <option value="2">Bike</option>
@@ -174,23 +175,23 @@
                 </select>
             </li>
             <li>
-                <input type="text" placeholder="{pigcms{:L('_BIRTHDAY_TXT_')}*" id="birthday">
+                <input type="text" class="gray-bg" placeholder="{pigcms{:L('_BIRTHDAY_TXT_')}*" id="birthday" name="birthday" disabled="disabled">
             </li>
             <li>
-                <input type="text" placeholder="{pigcms{:L('_ND_ADDRESS_')}" id="address">
+                <input type="text" class="gray-bg" placeholder="{pigcms{:L('_ND_ADDRESS_')}" id="address" name="address" disabled="disabled">
             </li>
             <li>
-                <input type="text" placeholder="Apartment,suite,unit,etc." id="apartment">
+                <input type="text" class="gray-bg" placeholder="Apartment,suite,unit,etc." id="apartment" name="apartment" disabled="disabled">
             </li>
             <li>
-                <input type="text" class="sm" placeholder="City*" id="city"><input type="text" class="sm" placeholder="province*" id="province">
+                <input type="text" class="sm gray-bg" placeholder="City*" id="city"  name="city" disabled="disabled"><input type="text" class="sm" placeholder="Province*" id="province"  name="province"  disabled="disabled">
             </li>
             <li>
-                <input type="text" placeholder="Postal Code*" id="postalcode">
+                <input type="text" class="gray-bg" placeholder="Postal Code*" id="postalcode" name="postalcode" disabled="disabled">
             </li>
 
             <li class="Landd">
-                <input type="button" value="Save & Continue" id="reg_form" style="background-color: #ffa52d;width: 50%;">
+                <input type="button" value="Continue" id="reg_form" style="background-color: #ffa52d;width: 50%;"  disabled="disabled">
             </li>
         </ul>
         <input type="hidden" name="lng" id="lng">
@@ -202,13 +203,82 @@
 <script src="{pigcms{$static_public}js/lang.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKlguA2QFIUVwWTo3danbOqSKv3nYbBCg&libraries=places&language=en" async defer></script>
 <script type="text/javascript">
+
     $("body").css({"height":$(window).height()});
+
+    $("#city_id").change(function () {
+        set_city_id($(this).val());
+    });
+
+    function close_input(){
+
+        $("#vehicle_type").attr("disabled","disabled");
+        $("#vehicle_type").removeClass("white_bg").addClass("gray_bg");
+        $("#birthday").attr("disabled","disabled");
+        $("#birthday").removeClass("white_bg").addClass("gray_bg");
+        $("#address").attr("disabled","disabled");
+        $("#address").removeClass("white_bg").addClass("gray_bg");
+        $("#apartment").attr("disabled","disabled");
+        $("#apartment").removeClass("white_bg").addClass("gray_bg");
+        $("#city").attr("disabled","disabled");
+        $("#city").removeClass("white_bg").addClass("gray_bg");
+        $("#province").attr("disabled","disabled");
+        $("#province").removeClass("white_bg").addClass("gray_bg");
+        $("#postalcode").attr("disabled","disabled");
+        $("#postalcode").removeClass("white_bg").addClass("gray_bg");
+        $("#reg_form").attr("disabled","disabled");
+
+    }
+    function open_input(){
+
+        $("#vehicle_type").removeAttr("disabled");
+        $("#vehicle_type").removeClass("gray_bg").addClass("white_bg");
+        $("#birthday").removeAttr("disabled");
+        $("#birthday").removeClass("gray_bg").addClass("white_bg");
+        $("#address").removeAttr("disabled");
+        $("#address").removeClass("gray_bg").addClass("white_bg");
+        $("#apartment").removeAttr("disabled");
+        $("#apartment").removeClass("gray_bg").addClass("white_bg");
+        $("#city").removeAttr("disabled");
+        $("#city").removeClass("gray_bg").addClass("white_bg");
+        $("#province").removeAttr("disabled");
+        $("#province").removeClass("gray_bg").addClass("white_bg");
+        $("#postalcode").removeAttr("disabled");
+        $("#postalcode").removeClass("gray_bg").addClass("white_bg");
+        $("#reg_form").removeAttr("disabled");
+    }
 
     $('#login_btn').click(function () {
         window.location.href = "{pigcms{:U('Deliver/login')}";
     });
 
+    function set_city_id(city_id){
+        if (city_id>0){
+        $.ajax({
+            url: "{pigcms{:U('Deliver/ajax_save_city_id_for_deliver_user')}",
+            type: 'POST',
+            dataType: 'json',
+            data:{"city_id":city_id},
+            success:function(data){
+                if (data.error==1){
+                    $("#online_div").hide();
+                    open_input();
+                }else{
+                    $("#online_div").show();
+                    close_input();
+                }
+
+                //window.parent.location = "{pigcms{:U('Deliver/step_3')}";
+            }
+        });
+        }else{
+            $("#online_div").show();
+            close_input();
+        }
+    }
+
     $("#reg_form").click(function () {
+        console.log("reg_form");
         $(this).attr("disabled","disabled");
         if(check_form()){
             var form_data = {
@@ -286,6 +356,8 @@
     $('#address').focus(function () {
         initAutocomplete();
     });
+
+
 
     var autocomplete;
     function initAutocomplete() {

@@ -89,9 +89,15 @@
                                         <td>{pigcms{$vo.email}</td>
                                         <td>{pigcms{$vo.create_time|date='Y-m-d H:i:s',###}</td>
                                         <td class="textcenter">
-                                            <if condition="$vo['reg_status'] neq 4 and $vo['reg_status'] neq 5">
-                                                <font color="red">{pigcms{:L('_BACK_REGISTERED_')}</font>
+                                            <if condition="$vo['allow_reg'] eq 0 and $vo['reg_status'] eq 1">
+                                                <font color="red">On Waitlist</font>
+                                                <else />
+                                                <if condition="$vo['reg_status'] neq 4 and $vo['reg_status'] neq 5 ">
+                                                    <font color="red">{pigcms{:L('_BACK_REGISTERED_')}</font>
+                                                </if>
                                             </if>
+
+
                                             <if condition="$vo['reg_status'] eq 4">
                                                 <font color="green">
                                                     {pigcms{:L('_BACK_DELIVER_BOX_')}
@@ -119,6 +125,7 @@
                                                     </if>
                                                 </if>
                                             </if>
+
                                         </td>
                                         <td class="textcenter">　
                                             <a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Deliver/user_view',array('uid'=>$vo['uid']))}','{pigcms{:L(\'_BACK_EDIT_COURIER_\')}',680,560,true,false,false,editbtn,'edit',true);"><button class="btn btn-white text-grey" type="button">{pigcms{:L('_BACK_EDIT_')}</button></a>

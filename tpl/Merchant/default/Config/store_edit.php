@@ -605,10 +605,6 @@ display: inline-block;
 vertical-align: middle;
 zoom: 1;
 }
-.form-group>label{font-size:12px;line-height:24px;}
-#upload_pic_box{margin-top:20px;height:150px;}
-#upload_pic_box .upload_pic_li{width:130px;float:left;list-style:none;}
-#upload_pic_box img{width:100px;height:100px;}
 
 .webuploader-container{
     position:relative;
@@ -634,6 +630,7 @@ input.ke-input-text {
     zoom: 1;
 }
 .form-group>label{font-size:12px;line-height:24px;}
+#upload_pic_box{margin-top:20px;height:150px;}
 #upload_pic_box .upload_pic_li{width:130px;float:left;list-style:none;}
 #upload_pic_box img{width:100px;height:70px;}
 .webuploader-element-invisible {

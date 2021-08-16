@@ -20,8 +20,8 @@
         padding: 0px;
         margin: 0px auto;
         font-size: 14px;
-        min-width: 320px;
-        max-width: 100%;
+        min-width: 320px
+        max-width: 640px;
         background-color: #f4f4f4;
         color: #333333;
         position: relative;
@@ -30,7 +30,7 @@
     section{
         position: absolute;
         top: 2%;
-        width: 100%;
+        width: 80%;
         font-size: 10px;
         color: #666666;
     }
@@ -101,9 +101,8 @@
         width: 100%;
     }
     input{
-        background-color: #ffa52d;
-        color: white;
-        padding: 10px 15px;
+        width: 100%;
+        padding: 10px 0px;
         border-radius: 3px;
     }
     .img_0,.img_1,.img_2{
@@ -113,6 +112,8 @@
     .img_0 img,.img_1 img,.img_2 img{
         height: 100px;
     }
+
+
 </style>
 <body style="background:url('{pigcms{$static_path}img/login_bg.png');">
 <section>
@@ -120,28 +121,45 @@
         <span class="fillet" style="background: url('./tpl/Static/blue/images/new/icon.png') center no-repeat; background-size: contain;"></span>
         <div style="font-size: 14px">{pigcms{:L('_ND_BECOMEACOURIER_')}</div>
         <div style="color: #999999;font-size: 10px;margin: 10px auto;width: 90%;">
-            {pigcms{:L('_ND_UPLOADNOTICE_')}
         </div>
     </div>
-    <div id="step_now">
-        <div>2.{pigcms{:L('_ND_DOCUPLOAD_')}</div>
-        <ul>
-            <li class="act"></li><li class="act"></li><li></li><li></li>
-        </ul>
-    </div>
+
     <div id="memo" class="android_tip">
         Please use your browser to upload images if the uploading function does not work here. To do so, visit www.tutti.app and click on Menu > Become a Courier > Get Started.
     </div>
+
+    <div id="memo" >
+        The following documents are required to verify that you’re eligible to become a courier. All information are kept securely.
+        Make sure your photos are clear, especially the name and expiration date. Photos that are unclear or invalid may result in verification failure and delay your application.
+    </div>
     <div id="step_title">
-        a.{pigcms{:L('_ND_DRIVERSLICENSE_')}
+        1. Proof of Work Eligibility
+    </div>
+    <div style="margin: 10px auto;width: 85%;">
+        <input type="text" placeholder="Enter Social Insurance Number*" id="sin_num" name="sin_num">
     </div>
     <div id="memo">
-        {pigcms{:L('_ND_UPLOADNOTIC_')}
+        This is for taxation purpose only
     </div>
+    <div id="memo" >
+        Upload one of the following documents to prove you can legally work in Canada as a contract courier:<br/>
+        - Canadian passport<br/>
+        - Citizenship card<br/>
+        - Residency card<br/>
+        - Work permit<br/>
+        - Study permit that allows off-campus work<br/>
+        - Social insurance card<br/>
+    </div>
+<!--    <div id="step_title">-->
+<!--        c.{pigcms{:L('_ND_WORKELIGIBILITY_')}-->
+<!--    </div>-->
+<!--    <div id="memo">-->
+<!--        {pigcms{:L('_ND_ELIGIBILITYNOTICE_')}-->
+<!--    </div>-->
     <div style="margin: 10px auto;width: 85%;">
         <div style="display:inline-block;" id="J_selectImage_0">
             <div class="btn btn-sm btn-success" style="position:relative;height:50px;line-height: 50px;text-align: left;">
-                {pigcms{:L('_ND_UPLOAD1_')}
+               {pigcms{:L('_ND_UPLOAD3_')}
             </div>
         </div>
         <div class="img_0">
@@ -149,31 +167,27 @@
         </div>
     </div>
     <div id="step_title">
-        b.{pigcms{:L('_ND_VEHICLEINSUR_')}
-    </div>
-    <div id="memo">
-        {pigcms{:L('_ND_UPLOADNOTIC_')}
+        2. Driver’s License
     </div>
     <div style="margin: 10px auto;width: 85%;">
         <div style="display:inline-block;" id="J_selectImage_1">
             <div class="btn btn-sm btn-success" style="position:relative;height:50px;line-height: 50px;text-align: left;">
-                {pigcms{:L('_ND_UPLOAD2_')}
+                {pigcms{:L('_ND_UPLOAD1_')}
             </div>
         </div>
         <div class="img_1">
 
         </div>
     </div>
+
     <div id="step_title">
-        c.{pigcms{:L('_ND_WORKELIGIBILITY_')}
+        3. Vehicle Insurance
     </div>
-    <div id="memo">
-        {pigcms{:L('_ND_ELIGIBILITYNOTICE_')}
-    </div>
+
     <div style="margin: 10px auto;width: 85%;">
         <div style="display:inline-block;" id="J_selectImage_2">
             <div class="btn btn-sm btn-success" style="position:relative;height:50px;line-height: 50px;text-align: left;">
-                {pigcms{:L('_ND_UPLOAD3_')}
+                {pigcms{:L('_ND_UPLOAD2_')}
             </div>
         </div>
         <div class="img_2">
@@ -269,13 +283,11 @@
                         }else{
                             is_addcss = false;
                         }
-
                         $('#filename_'+i).html(file);
                     }
                 }
             });
         }
-
         return img;
     }
 
@@ -302,14 +314,16 @@
             var post_data = {
                 img_0:$('#filename_0').html(),
                 img_1:$('#filename_1').html(),
-                img_2:$('#filename_2').html()
+                img_2:$('#filename_2').html(),
+                sin_num:$('#sin_num').val()
             };
             $.ajax({
                 url: "{pigcms{:U('Deliver/step_2')}",
                 type: 'POST',
                 dataType: 'json',
                 data: post_data,
-                success:function(date){
+                success:function(dat){
+                    //console.log(dat);
                     window.parent.location = "{pigcms{:U('Deliver/step_3')}";
                 }
 

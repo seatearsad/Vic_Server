@@ -73,7 +73,7 @@ class DeliverAction extends BaseAction
             }
         }
 
-        $save_address = array('login','reg','ajax_city_name','ajax_upload','forgetpwd','account','change_pwd','bank_info','step_1','step_2','step_3','step_4','step_5','support','ver_info');
+        $save_address = array('login','reg','ajax_city_name',"ajax_save_city_id_for_deliver_user",'ajax_upload','forgetpwd','account','change_pwd','bank_info','step_1','step_2','step_3','step_4','step_5','support','ver_info');
         if(!in_array(ACTION_NAME,$save_address)) {
             $deliver = D('Deliver_user')->field('reg_status')->where(['uid' => $this->deliver_session['uid']])->find();
             if ($deliver['reg_status'] != 0 && !($deliver['reg_status'] == 5 && ACTION_NAME == 'index'))
@@ -2500,6 +2500,7 @@ class DeliverAction extends BaseAction
 //            }
 
             //新修改的注册流程
+            $userdata['birthday'] = $_POST['birthday'];
             $userdata['city_id'] = $_POST['city_id'] ? $_POST['city_id'] : '0';
             $userdata['site'] = $_POST['address'] ? $_POST['address'] : '';
             $userdata['vehicle_type'] = $_POST['vehicle_type'] ? $_POST['vehicle_type'] : '0';
@@ -2526,7 +2527,6 @@ class DeliverAction extends BaseAction
 
             $city_list = D('Area')->where(array('is_open'=>1,'area_type'=>2))->select();
             $this->assign('city_list',$city_list);
-
             $this->display();
         }
     }
@@ -2537,11 +2537,15 @@ class DeliverAction extends BaseAction
 
             $data['uid'] = $this->deliver_session['uid'];
             $data['sin_num'] = $_POST['sin_num'] ? $_POST['sin_num'] : "";
-            $data['driver_license'] = $_POST['img_0'];
-            $data['insurance'] = $_POST['img_1'];
-            $data['certificate'] = $_POST['img_2'];
+            $data['driver_license'] = $_POST['img_1'];
+            $data['insurance'] = $_POST['img_2'];
+            $data['certificate'] = $_POST['img_0'];
 
-            D('Deliver_img')->save($data);
+            $deliver_img = D('Deliver_img')->where(array('uid'=>$this->deliver_session['uid']))->find();
+            if($deliver_img)
+                D('Deliver_img')->save($data);
+            else
+                D('Deliver_img')->add($data);
 
             $database_deliver_user->where(array('uid' => $this->deliver_session['uid']))->save(array('reg_status'=>3,'last_time'=>time()));
 
@@ -2557,6 +2561,7 @@ class DeliverAction extends BaseAction
     }
 
     public function step_3(){
+
         $database_deliver_user = D('Deliver_user');
         $now_user = $database_deliver_user->field(true)->where(array('uid' => $this->deliver_session['uid']))->find();
         if($_POST){
@@ -2609,11 +2614,25 @@ class DeliverAction extends BaseAction
                 $result = array('error_code' => true, 'msg' => $mpgResponse->getMessage());
             }
             $this->ajaxReturn($result);
+
         }else {
+
+            $database_bag = D('Bag');
+            $bag = $database_bag->field(true)->where(array('bag_switch' => "1"))->select();
+
+            $this->assign('bag',$bag);
             $database_deliver_user = D('Deliver_user');
+
             $now_user = $database_deliver_user->field(true)->where(array('uid' => $this->deliver_session['uid']))->find();
+
+            $city_id=$now_user["city_id"];
+            $areas=D('Area')->where(array("area_id"=>$city_id))->find();
+            $this->assign('city',$areas);
+            //bag_type 0:未设置 1:自取 2：邮寄 3：全选
+
             if ($now_user['reg_status'] != 3)
                 header('Location:' . U('Deliver/step_' . $now_user['reg_status']));
+
             $this->display();
         }
     }
@@ -2852,7 +2871,22 @@ class DeliverAction extends BaseAction
             exit(json_encode(array('error' => 1,'message' =>'没有选择图片')));
         }
     }
+    public function ajax_save_city_id_for_deliver_user(){
 
+        $uid = $this->deliver_session['uid'];
+        $city_id = $_POST['city_id'];
+        $where = array('area_id'=>$city_id,"bag_is_recruit"=>1);
+        $area = D('Area')->where($where)->find();
+        $where2 = array('uid'=>$uid);
+        $du=D('Deliver_user')->where($where2)->save(array('city_id' => $city_id));
+        if ($area){
+            $return['error'] = 1;
+        }else{
+            $return['error'] = 0;
+        }
+        exit(json_encode($return));
+        //exit("1111");
+    }
     public function ajax_city_name(){
         $city_name = $_POST['city_name'];
         $where = array('area_name'=>$city_name,'area_type'=>2);

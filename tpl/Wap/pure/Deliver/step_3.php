@@ -20,8 +20,8 @@
         padding: 0px;
         margin: 0px auto;
         font-size: 14px;
-        min-width: 320px;
-        max-width: 100%;
+        min-width: 320px
+        max-width: 640px;
         background-color: #f4f4f4;
         color: #333333;
         position: relative;
@@ -30,15 +30,11 @@
     section{
         position: absolute;
         top: 2%;
-        width: 100%;
+        width: 80%;
         font-size: 10px;
         color: #666666;
     }
-    #step_now{
-        width:80%;
-        margin: 20px auto;
-        font-size: 0;
-    }
+
     #step_now div{
         font-size: 10px;
         text-align: left;
@@ -66,36 +62,53 @@
     #step_now li:nth-child(4).act{
         background-color: #ffa99a;
     }
-    #memo{
+    .memo{
+        width:80%;
+        margin: 5px auto 5px auto;
+        text-align: left;
+    }
+    .memo-sm{
+        width:75%;
+        margin: 5px auto 5px auto;
+        text-align: left;
+    }
+    .step_title{
         width:80%;
         margin: 20px auto 5px auto;
-        text-align: center;
+        font-size: 14px;
+        color: #333333;
+    }
+    #step_now{
+        width:80%;
+        margin: 20px auto;
+        font-size: 0;
     }
     li{
         text-align: center;
-        margin-top: 10px;
+        margin-top: 15px;
     }
     li input {
-        width: 55%;
+        width: 80%;
         height: 15px;
         padding: 8px 0;
         text-indent: 10px;
-        color: #333333;
-        background-color: white;
         border-radius: 5px;
         margin-left: 1%;
         margin-top: 2px;
         font-size: 12px;
     }
-    li select{
-        width: 55%;
-        height: 31px;
-        text-indent: 5px;
+    li input.sm {
+        width: 39%;
+        height: 15px;
+        padding: 8px 0;
+        text-indent: 10px;
         border-radius: 5px;
+        margin-left: 1%;
+        margin-top: 2px;
+        font-size: 12px;
     }
     li.Landd input {
         background: #ffa52d;
-        color: #fff;
         text-indent: 0px;
         font-size: 12px;
         margin-top: 30px;
@@ -124,48 +137,131 @@
     #send_code{
         width: 30%;
     }
+    .btn_circle{
+        display: inline-block;
+        background-color:#ffd117;
+        width:20px;
+        height:20px;
+        padding: 4px;
+        text-align:center;
+        border-radius: 14px;
+        margin: 5px;
+        font-size: 24px;
+        line-height: 16px;
+        color: white;
+        font-weight: bold;
+    }
+    .btn_number{
+        display: inline-block;
+        font-size: 16px;
+        color: black;
+    }
+
 </style>
 <body style="background:url('{pigcms{$static_path}img/login_bg.png');">
 <section>
     <div class="Land_top" style="color:#333333;">
         <span class="fillet" style="background: url('./tpl/Static/blue/images/new/icon.png') center no-repeat; background-size: contain;"></span>
         <div style="font-size: 14px">{pigcms{:L('_ND_BECOMEACOURIER_')}</div>
-        <div style="color: #999999;font-size: 10px;margin: 10px auto;width: 90%;">
-            Please complete the following steps to get started!<br/>
-            All information are kept securely and used for delivery and taxation purpose.
+    </div>
+    <div class="step_title">Delivery Bag</div>
+    <div class="memo">
+        Last step! You’re required to carry a Tutti delivery bag to pick up and drop off orders. Please select at least one of the following:
+    </div>
+
+    <if condition="is_array($bag)">
+        <div class="memo">
+            <volist name="bag" id="vo">
+                <table style="width: 100%;text-align: center;padding: 8px">
+                    <tr>
+                        <td style="background-color: #c0c0c0;;width: 120px;height: 120px;">
+                            <img src="{pigcms{$static_public}images/deliver_box.png" style="width: 100px;height:100px"></td>
+                        <td style="position:relative;background-color: white;vertical-align: top;padding: 10px;text-align: left">
+                            <div style="font-size: 16px;font-weight: bold">{pigcms{$vo.bag_name}</div>
+                            <div style="font-size: 13px;font-weight: bold;margin-top: 4px;">${pigcms{$vo.bag_price}</div>
+                            <div style="font-size: 12px;;margin-top: 4px;">{pigcms{$vo.bag_description}</div>
+                            <div style="position: absolute;bottom: 5px;right: 5px">
+                                <div class="btn_circle">-</div>
+                                <div class="btn_number bagid-{pigcms{$vo.bag_id}">1</div>
+                                <div class="btn_circle">+</div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </volist>
+        </div>
+    </if>
+    </DIV>
+
+    <div class="memo-sm" style="text-align: right;text-align: center;font-size: 12px">
+    <if condition="$city['bag_type'] eq 1">
+        <input type="hidden"  name="bag_type" value="1">
+        <else />
+            <if condition="$city['bag_type'] eq 2">
+                <input type="hidden"  name="bag_type" value="2">
+                <else />
+                <input type="radio"  name="bag_type" value="1">Shipping <input type="radio" name="bag_type" value="2">Pick up
+            </if>
+    </if>
+    </div>
+    <div class="memo-sm" style="text-align: right;font-size: 12px;font-weight: bold">
+        <div>Subtotal:$<span>0</span></div>
+        <div>Shipping:$<span>0</span></div>
+    </div>
+
+
+     <div id="shipping_div" style="display: none">
+        <div class="step_title">You’ll pick up your bag in {pigcms{$city.area_name}!</div>
+        <div class="memo">
+            You will receive an email with the exact address and a link to book a pick-up time slot.
         </div>
     </div>
-    <div id="step_now">
-        <div>3.{pigcms{:L('_ND_DELIVERYBAG_')}</div>
-        <ul>
-            <li class="act"></li><li class="act"></li><li class="act"></li><li></li>
-        </ul>
+    <div id="pickup_div" style="display: none">
+        <div class="step_title">We’ll ship the bag to you!</div>
+        <div class="memo">
+            Enter your shipping information below:
+        </div>
+        <div id="reg_list">
+            <ul>
+                <li>
+                    <input type="text" class="" placeholder="{pigcms{:L('_ND_ADDRESS_')}" id="address" name="address">
+                </li>
+                <li>
+                    <input type="text" class="" placeholder="Apartment,suite,unit,etc." id="apartment" name="apartment" >
+                </li>
+                <li>
+                    <input type="text" class="sm " placeholder="City*" id="city"  name="city" ><input type="text" class="sm" placeholder="Province*" id="province"  name="province">
+                </li>
+                <li>
+                    <input type="text" class="" placeholder="Postal Code*" id="postalcode" name="postalcode">
+                </li>
+            </ul>
+        </div>
     </div>
-    <div id="memo" style="font-weight: bold;font-size: 11px">
-        <img src="{pigcms{$static_public}images/deliver_box.png" width="120px">
-        <br/>
-        <br/>Delivery Bag* + Pizza Bag (*Returnable for Tutti credits)
-        <br/>$65 + GST
-        <br/>&nbsp;
-    </div>
+    <div class="step_title">Payment Information</div>
     <div id="reg_list">
         <ul>
             <li>
-                <span>Name:</span>
                 <input type="text" placeholder="{pigcms{:L('_CREDITHOLDER_NAME_')}" id="c_name">
             </li>
             <li>
-                <span>{pigcms{:L('_CREDIT_CARD_NUM_')}:</span>
+
                 <input type="text" placeholder="{pigcms{:L('_CREDIT_CARD_NUM_')}" id="c_number">
             </li>
             <li>
-                <span>{pigcms{:L('_EXPRIRY_DATE_')}:</span>
+
                 <input type="text" placeholder="{pigcms{:L('_EXPRIRY_DATE_')}" id="e_date">
             </li>
             <li>
-                <span>CVV:</span>
+
                 <input type="text" placeholder="3-digit number" id="cvv">
             </li>
+            <div class="memo-sm" style="text-align: right;font-size: 12px;font-weight: bold">
+                <div>Subtotal:$<span>0</span></div>
+                <div>Shipping:$<span>0</span></div>
+                <div>Tax:$<span>0</span></div>
+                <div>Total:$<span>0</span></div>
+            </div>
             <li class="Landd">
                 <input type="button" value="Pay Online" id="reg_form" style="background-color: #ffa52d;width: 55%;">
             </li>
@@ -179,11 +275,46 @@
             </li>
         </ul>
     </div>
+
 </section>
 </body>
 <script src="{pigcms{$static_public}js/lang.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKlguA2QFIUVwWTo3danbOqSKv3nYbBCg&libraries=places&language=en" async defer></script>
 <script type="text/javascript">
+    <!--    //bag_type 0:未设置 1:自取 2：邮寄 3：全选-->
+    <if condition="$city['bag_type'] eq 1">
+       var init_bag_select=1;
+        <else />
+            <if condition="$city['bag_type'] eq 2">
+                var init_bag_select=2;
+            <else />
+                var init_bag_select=2;
+            </if>
+        </if>
+
+    $(function(){
+
+        $(":radio").click(function(){
+            if($(this).val()==2){
+
+                $("#shipping_div").show();
+                $("#pickup_div").hide();
+            }else{
+                $("#shipping_div").hide();
+                $("#pickup_div").show();
+            }
+        });
+
+        if (init_bag_select==1){
+            $("#shipping_div").show();
+            $("#pickup_div").hide();
+        }else{
+
+            $("#shipping_div").hide();
+            $("#pickup_div").show();
+        }
+    });
+
     $("body").css({"height":$(window).height()});
     $('#reg_form').click(function () {
         var is_next = true;
