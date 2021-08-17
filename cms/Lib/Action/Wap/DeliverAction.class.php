@@ -2580,7 +2580,6 @@ class DeliverAction extends BaseAction
         $database_deliver_user = D('Deliver_user');
         $now_user = $database_deliver_user->field(true)->where(array('uid' => $this->deliver_session['uid']))->find();
         if($_POST){
-
             $this->pre_save_step3();
             if($_POST['just_save']=="1"){
                 $result = array('error_code' => true, 'msg' => "Saved");
@@ -2646,6 +2645,7 @@ class DeliverAction extends BaseAction
             $this->ajaxReturn($result);
 
         }else {
+            $this->assign('user',$now_user);
 
             $database_bag = D('Bag');
             $bag = $database_bag->field(true)->where(array('bag_switch' => "1"))->select();
@@ -2667,6 +2667,7 @@ class DeliverAction extends BaseAction
             $this->display();
         }
     }
+
     public function step_4(){
         $database_deliver_user = D('Deliver_user');
         $now_user = $database_deliver_user->field(true)->where(array('uid' => $this->deliver_session['uid']))->find();

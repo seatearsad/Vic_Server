@@ -150,7 +150,6 @@
                             </div>
 
                     </div>
-
                             <input type="hidden" name="driver_license" id="filename_0"
                                    value="{pigcms{$img['driver_license']}">
                             <input type="hidden" name="insurance" id="filename_1"

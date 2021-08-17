@@ -1482,12 +1482,20 @@ class DeliverAction extends BaseAction {
      * 送货箱添加
      */
     public function bag_add() {
+
         if($_POST){
+
             $column['bag_name'] = isset($_POST['bag_name']) ? htmlspecialchars($_POST['bag_name']) : '';
             $column['bag_price'] = isset($_POST['bag_price']) ? htmlspecialchars($_POST['bag_price']) : '';
             $column['bag_tax_rate'] = $_POST['bag_tax_rate'];
             $column['bag_switch'] = intval($_POST['bag_switch']);
             $column['bag_description'] = $_POST['bag_description'];
+
+            if(empty($_POST['pic'])){
+                $this->error(L('LEAST_ONE_BKADMIN'));
+            }
+
+            $column['bag_photos'] = implode(';',$_POST['pic']);
 
             if (empty($column['bag_name'])) {
                 $this->error('bag_name不能为空');
@@ -1534,13 +1542,19 @@ class DeliverAction extends BaseAction {
      */
     public function bag_edit() {
         if($_POST){
+
             $bag_id  = intval($_POST['bag_id']);
             $column['bag_name'] = isset($_POST['bag_name']) ? htmlspecialchars($_POST['bag_name']) : '';
             $column['bag_price'] = isset($_POST['bag_price']) ? htmlspecialchars($_POST['bag_price']) : '';
-            $column['bag_tax_rate'] = isset($_POST['bag_tax_rate']) ? htmlspecialchars($_POST['bag_tax_rate']) : '';
-            $column['bag_description'] = isset($_POST['bag_description']) ? htmlspecialchars($_POST['bag_description']) : '';
-
+            $column['bag_tax_rate'] = $_POST['bag_tax_rate'];
             $column['bag_switch'] = intval($_POST['bag_switch']);
+            $column['bag_description'] = $_POST['bag_description'];
+
+            if(empty($_POST['pic'])){
+                $this->error(L('LEAST_ONE_BKADMIN'));
+            }
+
+            $column['bag_photos'] = implode(';',$_POST['pic']);
 
             if (empty($column['bag_name'])) {
                 $this->error('bag_name不能为空');
@@ -1552,7 +1566,7 @@ class DeliverAction extends BaseAction {
                 $this->error('bag_tax_rate不能为空');
             }
             $bag = D('bag')->field(true)->where(array('bag_id' => $bag_id))->find();
-            if ($bag) {
+            if (!$bag) {
                 $this->error(L('未找到匹配数据'));
             }
 
@@ -1561,24 +1575,35 @@ class DeliverAction extends BaseAction {
             }else{
                 $this->error('修改失败！请检查内容是否有过修改（必须修改）后重试~');
             }
+
+            $this->success(L('J_SUCCEED3'));
+
         }else{
-            $uid = $_GET['uid'];
-            if(!$uid){
+            $bag_id=$_GET["bag_id"];
+            $now_bag= D('bag')->where(array('bag_id'=>$bag_id))->find();
+            if(!$now_bag){
                 $this->error('非法操作');
             }
-            $deliver = D('deliver_user')->where(array('uid'=>$uid))->find();
-            if(!$deliver){
-                $this->error('非法操作');
+
+            if(!empty($now_bag['bag_photos'])){
+                $bag_image_class = new bag_image();
+                $tmp_pic_arr = explode(';',$now_bag['bag_photos']);
+                foreach($tmp_pic_arr as $key=>$value){
+                    $now_bag['pic'][$key]['title'] = $value;
+                    $now_bag['pic'][$key]['url'] = $bag_image_class->get_image_by_path($value);
+                }
             }
-            $city = D('Area')->where(array('area_id'=>$deliver['city_id']))->find();
-            $deliver['city_name'] = $city['area_name'];
-            $this->assign('now_user',$deliver);
 
-            $card = D('Deliver_card')->field(true)->where(array('deliver_id'=>$uid))->find();
-            $this->assign('card',$card);
-
-            $deliver_img = D('Deliver_img')->field(true)->where(array('uid' => $uid))->find();
-            $this->assign('img', $deliver_img);
+//
+//            $city = D('Area')->where(array('area_id'=>$deliver['city_id']))->find();
+//            $deliver['city_name'] = $city['area_name'];
+//            $this->assign('bag',$deliver);
+//
+//            $card = D('Deliver_card')->field(true)->where(array('deliver_id'=>$uid))->find();
+//            $this->assign('card',$card);
+//
+//            $deliver_img = D('Deliver_img')->field(true)->where(array('uid' => $uid))->find();
+            $this->assign('now_bag', $now_bag);
         }
         $this->display();
     }

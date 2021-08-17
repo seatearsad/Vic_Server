@@ -183,6 +183,7 @@
                             <div style="font-size: 13px;font-weight: bold;margin-top: 4px;">${pigcms{$vo.bag_price}</div>
                             <div style="font-size: 12px;;margin-top: 4px;">{pigcms{$vo.bag_description}</div>
                             <div style="position: absolute;bottom: 5px;right: 5px">
+                                <input type="hidden" id="photos_{pigcms{$vo.bag_id}" value="photos_{pigcms{$vo.bag_id}"/>
                                 <div class="btn_circle btn_minus" data-bagid="{pigcms{$vo.bag_id}">-</div>
                                 <div class="btn_number bagid_{pigcms{$vo.bag_id}" data-bagprice="{pigcms{$vo.bag_price}" data-bagtaxrate="{pigcms{$vo.bag_tax_rate}">0</div>
                                 <div class="btn_circle btn_plus" data-bagid="{pigcms{$vo.bag_id}">+</div>
@@ -202,7 +203,7 @@
             <if condition="$city['bag_type'] eq 2">
                 <input type="hidden"  name="bag_type" value="2">
                 <else />
-                <input type="radio"  name="bag_type" value="1">Shipping(${pigcms{$city.bag_shipping_fee}) &nbsp;&nbsp;&nbsp;<input type="radio" name="bag_type" value="2">Pick up
+                <input type="radio" id="radiotype1"  name="bag_type" value="1">Shipping(${pigcms{$city.bag_shipping_fee}) &nbsp;&nbsp;&nbsp;<input type="radio" id="radiotype2" name="bag_type" value="2">Pick up
             </if>
     </if>
     </div>
@@ -226,17 +227,17 @@
         <div id="reg_list">
             <ul>
                 <li>
-                    <input type="text" class="" placeholder="{pigcms{:L('_ND_ADDRESS_')}" id="address" name="address">
+                    <input type="text" class="" placeholder="{pigcms{:L('_ND_ADDRESS_')}" id="address" name="address" value="{pigcms{$user.ship_adress}">
                 </li>
                 <li>
-                    <input type="text" class="" placeholder="Apartment,suite,unit,etc." id="apartment" name="apartment" >
+                    <input type="text" class="" placeholder="Apartment,suite,unit,etc." id="apartment" name="apartment" value="{pigcms{$user.ship_apartment}">
                 </li>
                 <li>
-                    <input type="text" class="sm " placeholder="City*" id="city"  name="city" >
-                    <input type="text" class="sm" placeholder="Province*" id="province"  name="province">
+                    <input type="text" class="sm " placeholder="City*" id="city"  name="city" value="{pigcms{$user.ship_city_str}">
+                    <input type="text" class="sm" placeholder="Province*" id="province"  name="province" value="{pigcms{$user.ship_province_str}">
                 </li>
                 <li>
-                    <input type="text" class="" placeholder="Postal Code*" id="postalcode" name="postalcode">
+                    <input type="text" class="" placeholder="Postal Code*" id="postalcode" name="postalcode" value="{pigcms{$user.ship_postal_code}">
                 </li>
             </ul>
         </div>
@@ -288,13 +289,17 @@
     <!--    //bag_type 0:未设置 1:自取 2：邮寄 3：全选-->
     <if condition="$city['bag_type'] eq 1">
        var init_bag_select=1;
+    <else />
+        <if condition="$city['bag_type'] eq 2">
+            var init_bag_select=2;
         <else />
-            <if condition="$city['bag_type'] eq 2">
-                var init_bag_select=2;
-            <else />
-                var init_bag_select=2;
-            </if>
+            var init_bag_select=2;
         </if>
+    </if>
+
+    var save_bag_id={pigcms{$user.bag_get_id};
+    var save_bag_amount={pigcms{$user.bag_amount};
+    var save_bag_mode={pigcms{$user.bag_get_type};
 
     var curr_bagid=0;
     var curr_bag_amount=0;
@@ -337,8 +342,23 @@
             $(".total_box").html(total);
         }
     }
+    function init_save_user_data(){
+        if (save_bag_id>0){
+            curr_bagid=save_bag_id;
+            curr_bag_amount=save_bag_amount;
+            select_buy_mode=save_bag_mode;
+            set_bag_id_number(curr_bagid,curr_bag_amount);
+            if (select_buy_mode==2){
+                $("#radiotype2").click();
+            }else{
+                $("#radiotype1").click();
+            }
+        };
+    }
 
     $(function(){
+
+        init_save_user_data();
 
         $('.btn_minus').click(function(){
 
