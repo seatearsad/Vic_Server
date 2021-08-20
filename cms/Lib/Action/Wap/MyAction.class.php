@@ -749,7 +749,21 @@ class MyAction extends BaseAction{
                     $distance = getDistance($store['lat'], $store['lng'], $value['latitude'], $value['longitude']);
                     $value['distance'] = $distance;
                     if ($distance <= $store['delivery_radius'] * 1000) {
-                        $value['is_allow'] = 1;
+                        //获取特殊城市属性
+                        $city = D('Area')->where(array('area_id'=>$store['city_id']))->find();
+                        if($city['range_type'] != 0) {
+                            switch ($city['range_type']){
+                                case 1://按照纬度限制的城市 小于某个纬度
+                                    if($value['latitude'] >= $city['range_para']) $value['is_allow'] = 0;
+                                    else $value['is_allow'] = 1;
+                                    break;
+                                default:
+                                    $value['is_allow'] = 1;
+                                    break;
+                            }
+                        }else{
+                            $value['is_allow'] = 1;
+                        }
                     } else {
                         $value['is_allow'] = 0;
                     }

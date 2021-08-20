@@ -891,7 +891,21 @@ class StoreModel extends Model
             $distance = getDistance($store['lat'], $store['lng'], $data['mapLat'], $data['mapLng']);
             $data['distance'] = $distance;
             if ($distance <= $store['delivery_radius'] * 1000) {
-                $data['is_allow'] = 1;
+                //获取特殊城市属性
+                $city = D('Area')->where(array('area_id'=>$store['city_id']))->find();
+                if($city['range_type'] != 0) {
+                    switch ($city['range_type']){
+                        case 1://按照纬度限制的城市 小于某个纬度
+                            if($data['mapLat'] >= $city['range_para']) $data['is_allow'] = 0;
+                            else $data['is_allow'] = 1;
+                            break;
+                        default:
+                            $data['is_allow'] = 1;
+                            break;
+                    }
+                }else{
+                    $data['is_allow'] = 1;
+                }
             }else{
                 $data['is_allow'] = 0;
             }
