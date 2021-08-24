@@ -845,6 +845,44 @@ class DeliverAction extends BaseAction {
 	    				D('Pick_order')->where(array('store_id' => $order['store_id'], 'order_id' => $order['order_id']))->save(array('status' => 4));
 	    				$this->shop_notice($order);
 	    				D('Shop_order_log')->add_log(array('order_id' => $order['order_id'], 'status' => 6, 'name' => '系统管理员：' . $this->system_session['realname'], 'phone' => $this->system_session['phone']));
+
+                        //***如果送完此单后送餐员手中已无订单，并未在紧急模式，且未在排版时间内，送餐员自动下线///
+                        $current_order_num = D('Deliver_supply')->where(array('uid'=>$supply['uid'],'status'=>array('lt',5)))->count();
+
+                        if($current_order_num == 0){
+                            $city_id = $order['city_id'];
+                            $city = D('Area')->where(array('area_id'=>$city_id))->find();
+                            if($city['urgent_time'] == 0) {
+                                $min = date("i");
+
+                                $week_num = date("w");
+                                $hour = date('H');
+
+                                //if($min >= 50) $hour += 1;
+                                if ($hour >= 0 && $hour < 5) {
+                                    $hour = $hour + 24;
+                                    $week_num = $week_num - 1 < 0 ? 6 : $week_num - 1;
+                                }
+
+                                $all_list = D('Deliver_schedule_time')->where(array('city_id' => $city_id))->select();
+                                $time_ids = array();
+                                foreach ($all_list as $v) {
+                                    $new_hour = $hour + $city['jetlag'];
+                                    if ($new_hour == $v['start_time'] || ($min >= 50 && $new_hour + 1 == $v['start_time'])) {
+                                        $daylist = explode(',', $v['week_num']);
+                                        if (in_array($week_num, $daylist)) {
+                                            $time_ids[] = $v['id'];
+                                        }
+                                    }
+                                }
+
+                                $schedule_list = D('Deliver_schedule')->where(array('uid' => $supply['uid'], 'time_id' => array('in', $time_ids), 'week_num' => $week_num, 'whether' => 1, 'status' => 1))->select();
+                                if (!$schedule_list) {
+                                    D('Deliver_user')->where(['uid' => $supply['uid']])->save(['work_status' => 1, 'inaction_num' => 0]);
+                                }
+                            }
+                        }
+                        ///***////
 	    			} else {
 	    				exit(json_encode(array('error_code' => true, 'msg' => "更新订单信息错误")));
 	    			}
