@@ -490,7 +490,7 @@ class DeliverAction extends BaseAction
             //清空送餐员无作为次数
             D('Deliver_user')->where(array('uid'=>$this->deliver_session['uid']))->save(array('inaction_num'=>0));
 
-            $this->success("拒单成功");exit;
+            $this->success("Rejected");exit;
         }
     }
 	//抢
@@ -522,7 +522,7 @@ class DeliverAction extends BaseAction
 			}
 			
 			if ($supply['status'] != 1) {
-				$this->error("已被抢单，不能再抢了");
+				$this->error("Sorry, this order has already been accepted by others");
 				exit;
 			}
 			
@@ -1629,7 +1629,7 @@ class DeliverAction extends BaseAction
 		}
 
 		if ($supply['uid'] && $supply['uid'] != $this->deliver_session['uid']) {
-			$this->error_tips("该订单不是您配送，您无权查看");
+			$this->error_tips("This order has been removed from you");
 			exit;
 		}
 
