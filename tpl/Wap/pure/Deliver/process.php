@@ -580,6 +580,9 @@
                     $('#gray_count').html(response.gray_count);
                     $('#deliver_count').html(response.deliver_count);
                     $('#finish_count').html(response.finish_count);
+                    if(response.work_status == 1){
+                        window.location.href = "{pigcms{:U('Deliver/index')}";
+                    }
                 }
             }, 'json');
         }, 2000);

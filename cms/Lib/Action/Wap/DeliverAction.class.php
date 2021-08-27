@@ -2046,7 +2046,7 @@ class DeliverAction extends BaseAction
 			$this->deliver_supply->where(array('uid' => $uid, 'supply_id' => $supply_id, 'status' => 5))->save(array('is_hide' => 1));
 			$this->success('ok');
 		} else {
-			$this->error("配送信息错误");
+			$this->error("This order has been removed from you");
 		}
 	}
 	

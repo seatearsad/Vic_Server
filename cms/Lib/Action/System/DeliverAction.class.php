@@ -617,6 +617,31 @@ class DeliverAction extends BaseAction {
     		if ($supply['uid']) {
     			$save_data['get_type'] = 2;
     			$save_data['change_log'] = $supply['change_log'] ? $supply['change_log'] . ',' . $supply['uid'] : $supply['uid'];
+    		} else {
+    			$save_data['get_type'] = 1;
+    		}
+    		//更新一下派单逻辑表
+    		D('Deliver_assign')->where(array('supply_id'=>$supply_id))->save(array('status'=>1,'grab_deliver_id'=>$uid));
+            //清空送餐员无作为次数
+            D('Deliver_user')->where(array('uid'=>$uid))->save(array('inaction_num'=>0));
+
+    		$result = D('Deliver_supply')->where(array('supply_id' => $supply_id))->save($save_data);
+    		if ($status == 2) {
+    			if ($supply['item'] == 0) {
+    				$result = D("Meal_order")->where(array('order_id' => $supply['order_id']))->data(array('order_status' => 8))->save();
+    			} elseif ($supply['item'] == 2) {
+    				$deliver_info = serialize(array('uid' => $user['uid'], 'name' => $user['name'], 'phone' => $user['phone'], 'store_id' => $user['store_id']));
+    				$result = D("Shop_order")->where(array('order_id' => $supply['order_id']))->data(array('order_status' => 2, 'deliver_info' => $deliver_info))->save();
+    				D('Shop_order_log')->add_log(array('order_id' => $supply['order_id'], 'status' => 3, 'name' => $user['name'], 'phone' => $user['phone']));
+    			}
+    		}
+    		if ($user['openid']) {
+				$model = new templateNews(C('config.wechat_appid'), C('config.wechat_appsecret'));
+				$href = C('config.site_url').'/wap.php?c=Deliver&a=pick';
+				$model->sendTempMsg('OPENTM405486394', array('href' => $href, 'wecha_id' => $user['openid'], 'first' => $user['name'] . '您好！', 'keyword1' => '系统分配一个配送订单给您，请注意及时查收。', 'keyword2' => date('Y年m月d日 H:s'), 'keyword3' => '订单号：' . $supply['real_orderid'], 'remark' => '请您及时处理！'));
+    		}
+
+    		if($supply['uid']){
                 //***如果送完此单后送餐员手中已无订单，并未在紧急模式，且未在排版时间内，送餐员自动下线///
                 $current_order_num = D('Deliver_supply')->where(array('uid'=>$supply['uid'],'status'=>array('lt',5)))->count();
 
@@ -654,29 +679,7 @@ class DeliverAction extends BaseAction {
                     }
                 }
                 ///***////
-    		} else {
-    			$save_data['get_type'] = 1;
-    		}
-    		//更新一下派单逻辑表
-    		D('Deliver_assign')->where(array('supply_id'=>$supply_id))->save(array('status'=>1,'grab_deliver_id'=>$uid));
-            //清空送餐员无作为次数
-            D('Deliver_user')->where(array('uid'=>$uid))->save(array('inaction_num'=>0));
-
-    		$result = D('Deliver_supply')->where(array('supply_id' => $supply_id))->save($save_data);
-    		if ($status == 2) {
-    			if ($supply['item'] == 0) {
-    				$result = D("Meal_order")->where(array('order_id' => $supply['order_id']))->data(array('order_status' => 8))->save();
-    			} elseif ($supply['item'] == 2) {
-    				$deliver_info = serialize(array('uid' => $user['uid'], 'name' => $user['name'], 'phone' => $user['phone'], 'store_id' => $user['store_id']));
-    				$result = D("Shop_order")->where(array('order_id' => $supply['order_id']))->data(array('order_status' => 2, 'deliver_info' => $deliver_info))->save();
-    				D('Shop_order_log')->add_log(array('order_id' => $supply['order_id'], 'status' => 3, 'name' => $user['name'], 'phone' => $user['phone']));
-    			}
-    		}
-    		if ($user['openid']) {
-				$model = new templateNews(C('config.wechat_appid'), C('config.wechat_appsecret'));
-				$href = C('config.site_url').'/wap.php?c=Deliver&a=pick';
-				$model->sendTempMsg('OPENTM405486394', array('href' => $href, 'wecha_id' => $user['openid'], 'first' => $user['name'] . '您好！', 'keyword1' => '系统分配一个配送订单给您，请注意及时查收。', 'keyword2' => date('Y年m月d日 H:s'), 'keyword3' => '订单号：' . $supply['real_orderid'], 'remark' => '请您及时处理！'));
-    		}
+            }
     		$this->success('Assignment Success');
     	} else {
     		$store = D('Merchant_store')->field(true)->where(array('store_id' => $supply['store_id']))->find();
