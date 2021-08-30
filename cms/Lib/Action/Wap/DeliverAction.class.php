@@ -2875,7 +2875,9 @@ class DeliverAction extends BaseAction
                 foreach ($v as $kk=>$vv){
                     $save_data = array();
                     $time_id = $vv['id'];
+                    var_dump("ID:".$time_id);
                     if($vv['is_check'] && $vv['is_check'] == 1){
+                        var_dump("Check ID:".$time_id);
                         //$save_list[$week_num][] = $time_id;
                         $save_data['uid'] = $uid;
                         $save_data['week_num'] = $week_num;
