@@ -369,7 +369,7 @@
                         time: 1,
                         content: data.msg,
                         end:function () {
-                            window.location.href = "{pigcms{:U('Deliver/schedule')}";
+                            //window.location.href = "{pigcms{:U('Deliver/schedule')}";
                         }
                     });
                 }
