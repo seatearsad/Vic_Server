@@ -2078,7 +2078,7 @@ class DeliverAction extends BaseAction {
     }
 
     public function assignRecord(){
-        $list = D('Deliver_assign_record')->order('id desc')->select();
+        $list = D('Deliver_assign_record')->order('id desc')->limit('0,100')->select();
         $this->assign('list',$list);
 
         $this->display();

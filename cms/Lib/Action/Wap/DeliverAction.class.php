@@ -2897,6 +2897,7 @@ class DeliverAction extends BaseAction
                     }
                 }
             }
+            var_dump($save_list);die();
             D('Deliver_schedule')->addAll($save_list);
 
             exit(json_encode(array('error'=>0,'msg'=>'Success')));
