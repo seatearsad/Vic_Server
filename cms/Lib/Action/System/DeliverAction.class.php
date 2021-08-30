@@ -890,7 +890,7 @@ class DeliverAction extends BaseAction {
                         $current_order_num = D('Deliver_supply')->where(array('uid'=>$supply['uid'],'status'=>array('lt',5)))->count();
 
                         if($current_order_num == 0){
-                            $city_id = $order['city_id'];
+                            $city_id = $now_deliver_user['city_id'];
                             $city = D('Area')->where(array('area_id'=>$city_id))->find();
                             if($city['urgent_time'] == 0) {
                                 $min = date("i");

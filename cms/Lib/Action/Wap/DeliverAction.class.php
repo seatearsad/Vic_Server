@@ -2867,7 +2867,6 @@ class DeliverAction extends BaseAction
 	        $uid = $this->deliver_session['uid'];
 	        $default_list = $_POST['default_list'];
 	        $data = $_POST['data'];
-	        var_dump($data);
             //每次更新删除之前所有的记录
             D('Deliver_schedule')->where(array('uid'=>$uid))->delete();
             $save_list = array();
@@ -2876,9 +2875,7 @@ class DeliverAction extends BaseAction
                 foreach ($v as $kk=>$vv){
                     $save_data = array();
                     $time_id = $vv['id'];
-                    var_dump("ID:".$time_id);
                     if($vv['is_check'] && $vv['is_check'] == 1){
-                        var_dump("Check ID:".$time_id);
                         //$save_list[$week_num][] = $time_id;
                         $save_data['uid'] = $uid;
                         $save_data['week_num'] = $week_num;
@@ -2902,7 +2899,7 @@ class DeliverAction extends BaseAction
             }
 
             D('Deliver_schedule')->addAll($save_list);
-            var_dump($save_list);die();
+
             exit(json_encode(array('error'=>0,'msg'=>'Success')));
         }else {
             $week_num = date("w");
