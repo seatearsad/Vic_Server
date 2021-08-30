@@ -2529,5 +2529,6 @@ return array(
 
     "VOIP_PHONE_TIP"=>"It looks like this phone number is coming from a VoIP carrier. Please use mobile numbers only.",
     "COUPON_ADD_TIP"=>"Your discount amount cannot exceed the minimum order amount! Please try again.",
+    "MAX_ORDER_PER" =>"Maximum # of orders per courier",
     "ORDER_EDIT_ONCE"=>"Failed! The price can only be adjusted once.",
 );

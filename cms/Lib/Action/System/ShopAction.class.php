@@ -691,7 +691,7 @@ class ShopAction extends BaseAction
                     }
                     //$value['order_status'] = "等待接单" . count($record_assign);
                     if ($is_refect == 0) {
-                        $ret = '<font color="red">' . L('J_AWAITING_ACCEPTANC') . '</font>';
+                        $ret = '';//'<font color="red">' . L('J_AWAITING_ACCEPTANC') . '</font>';
                     }
                 } else {
                     $ret = '<font color="red">' . L('_BACK_AWAIT_') . '</font>';

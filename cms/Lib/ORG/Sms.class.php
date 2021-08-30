@@ -339,7 +339,7 @@ final class Sms {
     }
 
     //type 向那个客户端发送消息 1用户端 2店员端 3配送员端
-    public function sendMessageToGoogle($device_id,$message,$type=1){
+    public function sendMessageToGoogle($device_id,$message,$type=1,$title='Tutti'){
         $server_key = '';
         switch ($type){
             case 1:
@@ -360,7 +360,7 @@ final class Sms {
         //"priority": "high"
         $data['priority'] = 'high';
         $data['data'] = array('message'=>'Message From Tutti');
-        $data['notification'] = array('title'=>'Tutti','body'=>$message,"sound"=>"default");
+        $data['notification'] = array('title'=>$title,'body'=>$message,"sound"=>"default");
 
 
         $ch = curl_init();

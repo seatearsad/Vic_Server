@@ -11,12 +11,16 @@
 <link href="{pigcms{$static_path}css/deliver.css?v=1.0.4" rel="stylesheet"/>
 <script src="{pigcms{:C('JQUERY_FILE')}"></script>
 <script>
-    var location_url = "{pigcms{:U('Deliver/grab')}",lat = "{pigcms{$deliver_session['lat']}", lng = "{pigcms{$deliver_session['lng']}";
+    var location_url = "{pigcms{:U('Deliver/grab')}",lat = "{pigcms{$deliver_session['lat']}", lng = "{pigcms{$deliver_session['lng']}", reject_url = "{pigcms{:U('Deliver/reject')}",update_url = "{pigcms{:U('Deliver/index_count')}";
 	$(function(){
 		$(".startOrder,.stopOrder").click(function(){
-			$.get("/wap.php?g=Wap&c=Deliver&a=index&action=changeWorkstatus&type="+$(this).attr('ref'), function(){
-				window.location.reload();
-			});
+			$.get("/wap.php?g=Wap&c=Deliver&a=index&action=changeWorkstatus&type="+$(this).attr('ref'), function(data){
+			    if(data.error == 1){
+                    alert(data.msg);
+			    }else {
+                    window.location.reload();
+                }
+			},'json');
 		});
 	})
     //ios app 更新位置
@@ -206,9 +210,22 @@
     }
     .accept_btn{
         float: right;
-        width: 70%;
+        width: 30%;
         text-align: center;
         background-color: limegreen;
+        border-radius: 3px;
+        height: 35px;
+        line-height: 35px;
+        font-size: 14px;
+        color: white;
+        cursor: pointer;
+    }
+    .reject_btn{
+        float: right;
+        margin-right: 5%;
+        width: 30%;
+        text-align: center;
+        background-color: orangered;
         border-radius: 3px;
         height: 35px;
         line-height: 35px;
@@ -221,6 +238,15 @@
     }
     #deliver_count{
         color: #32620e;
+    }
+    .just_div{
+        padding: 5px 2%;
+        color: #6a6a6a;
+        font-size: 16px;
+    }
+    .just_div.just{
+        color: #ffa52d;
+        font-weight: bold;
     }
 </style>
 <body>
@@ -273,6 +299,9 @@
                         $('#gray_count').html(response.gray_count);
                         $('#deliver_count').html(response.deliver_count);
                         $('#finish_count').html(response.finish_count);
+                        if(response.work_status == 1){
+                            window.location.reload();
+                        }
                     }
                 }, 'json');
             }, 2000);
@@ -281,6 +310,14 @@
     <script id="replyListBoxTpl" type="text/html">
         {{# for(var i = 0, len = d.list.length; i < len; i++){ }}
         <section class="robbed supply_{{ d.list[i].supply_id }}" data-id="{{ d.list[i].supply_id }}">
+            {{# if(d.list[i].just == 1){ }}
+            <div class="just_div just">
+                Just for you!
+                <span style="float: right">{{ d.list[i].diff_time }}</span>
+            </div>
+            {{# } else { }}
+            <div class="just_div">Also open to others</div>
+            {{# } }}
             <div class="order_title">
                 <span class="store_name">{{ d.list[i].store_name }}</span>
                 {{# if(d.list[i].uid == 0){ }}
@@ -345,6 +382,11 @@
                 <a href="javascript:void(0);" class="rob" data-spid="{{ d.list[i].supply_id }}">
                 <span class="accept_btn">
                     {pigcms{:L('_ND_ACCEPT_')}
+                </span>
+                </a>
+                <a href="javascript:void(0);" class="rej" data-spid="{{ d.list[i].supply_id }}">
+                <span class="reject_btn">
+                    {pigcms{:L('_D_REJECT_ORDER_')}
                 </span>
                 </a>
             </div>

@@ -98,7 +98,19 @@
                                                         condition="$now_user['status'] eq 0">checked="checked"</if>/></label></span>
                                         </div>
                                     </div>
-
+                                    <div class="form-group  row">
+                                        <label class="col-sm-3 col-form-label">Work Status</label>
+                                        <div class="col-sm-9">
+                                    <span class="cb-enable"><label class="cb-enable">
+                                        <span>On-Shift</span>
+                                        <input type="radio" name="work_status" value="0" /></label>
+                                    </span>
+                                            <span class="cb-disable"><label class="cb-disable selected">
+                                        <span>Off-Shift</span>
+                                        <input type="radio" name="work_status" value="1"  checked="checked"/></label>
+                                    </span>
+                                        </div>
+                                    </div>
                                     <div class="form-group  row">
                                         <label class="col-sm-3 col-form-label">{pigcms{:L('_BACK_DELIVER_AREA_')}</label>
                                         <div class="col-sm-9" id="city_area">{pigcms{$now_user.city_name}</div>
