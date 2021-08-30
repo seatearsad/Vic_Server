@@ -428,7 +428,7 @@ class DeliverAction extends BaseAction
             $supply_id = $_POST['supply_id'];
             $supply = $this->deliver_supply->field(true)->where(array('supply_id' => $supply_id))->find();
             if (empty($supply)) {
-                $this->error("配送信息错误");
+                $this->error("This order has been removed from you");
                 exit;
             }
 
@@ -517,7 +517,7 @@ class DeliverAction extends BaseAction
 			
 			$supply = $this->deliver_supply->field(true)->where(array('supply_id' => $supply_id))->find();
 			if (empty($supply)) {
-				$this->error("配送信息错误");
+				$this->error("This order has been removed from you");
 				exit;
 			}
 			
@@ -926,7 +926,7 @@ class DeliverAction extends BaseAction
 			
 			$supply = $this->deliver_supply->field(true)->where(array('supply_id' => $supply_id, 'uid' => $this->deliver_session['uid']))->find();
 			if (empty($supply)) {
-				$this->error("配送信息错误");
+				$this->error("This order has been removed from you");
 				exit;
 			}
 			if ($supply['status'] != 2) {
@@ -1065,7 +1065,7 @@ class DeliverAction extends BaseAction
 			
 			$supply = $this->deliver_supply->field(true)->where(array('supply_id' => $supply_id, 'uid' => $this->deliver_session['uid']))->find();
 			if (empty($supply)) {
-				$this->error("配送信息错误");
+				$this->error("This order has been removed from you");
 				exit;
 			}
 			if ($supply['status'] != 3) {
@@ -1220,7 +1220,7 @@ class DeliverAction extends BaseAction
 			
 			$supply = $this->deliver_supply->field(true)->where(array('supply_id' => $supply_id, 'uid' => $this->deliver_session['uid']))->find();
 			if (empty($supply)) {
-				$this->error("配送信息错误");
+				$this->error("This order has been removed from you");
 				exit;
 			}
 			if ($supply['status'] != 4) {
@@ -2365,7 +2365,7 @@ class DeliverAction extends BaseAction
 
             $supply = $this->deliver_supply->field(true)->where(array('supply_id' => $supply_id, 'uid' => $this->deliver_session['uid']))->find();
             if (empty($supply)) {
-                $this->error("配送信息错误");
+                $this->error("This order has been removed from you");
                 exit;
             }
             if ($supply['status'] != 4) {
