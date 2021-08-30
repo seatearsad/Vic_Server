@@ -2873,6 +2873,7 @@ class DeliverAction extends BaseAction
             foreach ($data as $k=>$v){
                 $week_num = $k;
                 foreach ($v as $kk=>$vv){
+                    $save_data = array();
                     $time_id = $vv['id'];
                     if($vv['is_check'] && $vv['is_check'] == 1){
                         //$save_list[$week_num][] = $time_id;
