@@ -2867,6 +2867,7 @@ class DeliverAction extends BaseAction
 	        $uid = $this->deliver_session['uid'];
 	        $default_list = $_POST['default_list'];
 	        $data = $_POST['data'];
+	        var_dump($data);
             //每次更新删除之前所有的记录
             D('Deliver_schedule')->where(array('uid'=>$uid))->delete();
             $save_list = array();
