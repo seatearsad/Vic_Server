@@ -82,10 +82,18 @@ class DeliverAction extends BaseAction {
         $schedule_list = D('Deliver_schedule')->where(array('time_id' => array('in', $time_ids),'week_num'=>$week_num,'whether'=>1,'status'=>1))->select();
         $work_delver_list = array();
         foreach ($schedule_list as $v){
-            $work_delver_list[] = $v['uid'];
+            $curr_user = D('Deliver_user')->where(array('uid'=>$v['uid']))->find();
+            if($curr_user['work_status'] == 0) $work_delver_list[] = $v['uid'];
             //如果为不repeat的 此时删除
-            if($v['is_repeat'] != 1){
-                D('Deliver_schedule')->where($v)->delete();
+            //if($v['is_repeat'] != 1){
+            //D('Deliver_schedule')->where($v)->delete();
+            //}
+        }
+
+        $have_order_list = D('Deliver_supply')->where(array('status' => array(array('gt', 1), array('lt', 5))))->select();
+        foreach($have_order_list as $h){
+            if(!in_array($h['uid'],$work_delver_list)){
+                $work_delver_list[] = $h['uid'];
             }
         }
         //全部下班

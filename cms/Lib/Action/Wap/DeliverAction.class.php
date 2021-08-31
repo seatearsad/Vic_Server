@@ -109,11 +109,12 @@ class DeliverAction extends BaseAction
         $schedule_list = D('Deliver_schedule')->where(array('time_id' => array('in', $time_ids),'week_num'=>$week_num,'whether'=>1,'status'=>1))->select();
         $work_delver_list = array();
         foreach ($schedule_list as $v){
-            $work_delver_list[] = $v['uid'];
+            $curr_user = D('Deliver_user')->where(array('uid'=>$v['uid']))->find();
+            if($curr_user['work_status'] == 0) $work_delver_list[] = $v['uid'];
             //如果为不repeat的 此时删除
-            if($v['is_repeat'] != 1){
-                D('Deliver_schedule')->where($v)->delete();
-            }
+            //if($v['is_repeat'] != 1){
+                //D('Deliver_schedule')->where($v)->delete();
+            //}
         }
 
         $have_order_list = D('Deliver_supply')->where(array('status' => array(array('gt', 1), array('lt', 5))))->select();
@@ -126,7 +127,6 @@ class DeliverAction extends BaseAction
         D('Deliver_user')->where(array('status'=>1,'work_status'=>0,'city_id'=>$city['area_id']))->save(array('work_status'=>1,'inaction_num'=>0));
         //执行上班
         D('Deliver_user')->where(array('status'=>1,'uid'=>array('in',$work_delver_list),'city_id'=>$city['area_id']))->save(array('work_status'=>0,'inaction_num'=>0));
-
     }
 	
 	/**
