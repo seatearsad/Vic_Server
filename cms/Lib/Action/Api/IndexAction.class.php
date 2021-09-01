@@ -2878,7 +2878,7 @@ class IndexAction extends BaseAction
                 $this->returnCode(0,'info',$return,'success');
             }else{
                 //exit(json_encode(array('status'=>2,'result'=>'没有查找到内容')));
-                $this->returnCode(1,'info',array(),'没有查找到内容');
+                $this->returnCode(1,'info',array(),'No address found! Please enter street address only.');
             }
         }else{
             //exit(json_encode(array('status'=>0,'result'=>'获取失败')));
@@ -2917,7 +2917,7 @@ class IndexAction extends BaseAction
             }
         }
         //exit(json_encode(array('status'=>2,'result'=>'没有查找到内容')));
-        $this->returnCode(1,'info',array(),'没有查找到内容');
+        $this->returnCode(1,'info',array(),'No address found! Please enter street address only.');
     }
 
     public function AlipayTest(){

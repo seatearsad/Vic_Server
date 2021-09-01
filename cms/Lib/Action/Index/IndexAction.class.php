@@ -266,6 +266,7 @@ class IndexAction extends BaseAction {
 
     public function map(){
         $order_id = $_GET['order_id'];
+        $data['order_id'] = $order_id;
         $data['store_lat'] = 0;
         $data['store_lng'] = 0;
         $data['user_lat'] = 0;
