@@ -52,7 +52,7 @@ class IndexAction extends BaseAction
 
         //获取店铺列表
         $page	=	$_POST['page']?$_POST['page']:0;
-        $limit = 5;
+        $limit = 50;
 
         $sort = $_POST['sort'] ? $_POST['sort'] : 0;
 
