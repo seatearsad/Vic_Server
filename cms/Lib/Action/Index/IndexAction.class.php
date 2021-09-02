@@ -265,30 +265,49 @@ class IndexAction extends BaseAction {
     }
 
     public function map(){
-        $order_id = $_GET['order_id'];
-        $data['order_id'] = $order_id;
-        $data['store_lat'] = 0;
-        $data['store_lng'] = 0;
-        $data['user_lat'] = 0;
-        $data['user_lng'] = 0;
-        $data['deliver_lat'] = 0;
-        $data['deliver_lng'] = 0;
-        if($order_id){
-            $supply = D('Deliver_supply')->where(array('order_id'=>$order_id))->find();
-            if($supply){
-                $deliver_id = $supply['uid'];
-                $deliver = D('Deliver_user')->where(array('uid'=>$deliver_id))->find();
-                $data['store_lat'] = $supply['from_lat'];
-                $data['store_lng'] = $supply['from_lnt'];
-                $data['user_lat'] = $supply['aim_lat'];
-                $data['user_lng'] = $supply['aim_lnt'];
-                $data['deliver_lat'] = $deliver['lat'];
-                $data['deliver_lng'] = $deliver['lng'];
+        if($_POST){
+            $order_id = $_POST['order_id'];
+            $data = array();
+            if ($order_id) {
+                $supply = D('Deliver_supply')->where(array('order_id' => $order_id))->find();
+                if ($supply) {
+                    $deliver_id = $supply['uid'];
+                    $deliver = D('Deliver_user')->where(array('uid' => $deliver_id))->find();
+                    $data['deliver_lat'] = $deliver['lat'];
+                    $data['deliver_lng'] = $deliver['lng'];
+                }
+                $data['error'] = 0;
+            }else{
+                $data['error'] = 1;
             }
-        }
 
-        $this->assign('data',$data);
-        $this->display();
+            exit(json_encode($data));
+        }else {
+            $order_id = $_GET['order_id'];
+            $data['order_id'] = $order_id;
+            $data['store_lat'] = 0;
+            $data['store_lng'] = 0;
+            $data['user_lat'] = 0;
+            $data['user_lng'] = 0;
+            $data['deliver_lat'] = 0;
+            $data['deliver_lng'] = 0;
+            if ($order_id) {
+                $supply = D('Deliver_supply')->where(array('order_id' => $order_id))->find();
+                if ($supply) {
+                    $deliver_id = $supply['uid'];
+                    $deliver = D('Deliver_user')->where(array('uid' => $deliver_id))->find();
+                    $data['store_lat'] = $supply['from_lat'];
+                    $data['store_lng'] = $supply['from_lnt'];
+                    $data['user_lat'] = $supply['aim_lat'];
+                    $data['user_lng'] = $supply['aim_lnt'];
+                    $data['deliver_lat'] = $deliver['lat'];
+                    $data['deliver_lng'] = $deliver['lng'];
+                }
+            }
+
+            $this->assign('data', $data);
+            $this->display();
+        }
     }
 
     public function send_message(){

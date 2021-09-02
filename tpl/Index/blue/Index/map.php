@@ -17,9 +17,12 @@
             padding: 0;
         }
     </style>
+    <script src="{pigcms{:C('JQUERY_FILE')}"></script>
 </head>
 <body>
 <div id="map"></div>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKlguA2QFIUVwWTo3danbOqSKv3nYbBCg&callback=initMap"
+        async defer></script>
 <script>
     var store_lat = "{pigcms{$data['store_lat']}";
     var store_lng = "{pigcms{$data['store_lng']}";
@@ -27,6 +30,8 @@
     var user_lng = "{pigcms{$data['user_lng']}";
     var deliver_lat = "{pigcms{$data['deliver_lat']}";
     var deliver_lng = "{pigcms{$data['deliver_lng']}";
+
+    var order_id = "{pigcms{$data['order_id']}";
 
     var deliver_icon = "{pigcms{$static_public}images/deliver/icon_deliver_map.png";
     var store_icon = "{pigcms{$static_public}images/deliver/icon_store_map.png";
@@ -38,37 +43,48 @@
         if (r != null) return decodeURI(r[2]);
         return null;
     }
+
+    var uluru = {lat: parseFloat(deliver_lat), lng: parseFloat(deliver_lng)};
+    var store_pos = {lat:parseFloat(store_lat), lng:parseFloat(store_lng)};
+    var user_pos = {lat:parseFloat(user_lat), lng:parseFloat(user_lng)};
+    // The map, centered at Uluru
     var map;
+
+    var deliver,store,marker_deliver,marker_store,marker_user,bounds;
+
+    setInterval(function (){
+        updatePosition();
+        }, 30000);
+
     function initMap() {
         // The location of Uluru
         var lng= Number(getQueryString("lng"));
         var lat=Number(getQueryString("lat"));
         var label=getQueryString("label");
-        var uluru = {lat: parseFloat(deliver_lat), lng: parseFloat(deliver_lng)};
-        var store_pos = {lat:parseFloat(store_lat), lng:parseFloat(store_lng)};
-        var user_pos = {lat:parseFloat(user_lat), lng:parseFloat(user_lng)};
-        // The map, centered at Uluru
-        var map = new google.maps.Map(
+        console.log('initMap');
+
+        map = new google.maps.Map(
             document.getElementById('map'), {zoom: 18, center: uluru});
 
-        var deliver = {
+        deliver = {
             url:deliver_icon,
             scaledSize: new google.maps.Size(35,35),
             size: new google.maps.Size(35,35)
         };
 
-        var store =  {
+        store =  {
             url:store_icon,
             scaledSize: new google.maps.Size(35,35),
             size: new google.maps.Size(35,35)
         };
 
         // The marker, positioned at Uluru
-        var marker_deliver = new google.maps.Marker({position: uluru, map: map,icon:deliver});
-        var marker_store = new google.maps.Marker({position: store_pos, map: map,icon:store});
-        var marker_user = new google.maps.Marker({position: user_pos, map: map});
+        marker_deliver = new google.maps.Marker({position: uluru, map: map,icon:deliver});
+        marker_store = new google.maps.Marker({position: store_pos, map: map,icon:store});
+        marker_user = new google.maps.Marker({position: user_pos, map: map});
 
-        var bounds = new google.maps.LatLngBounds();
+        bounds = new google.maps.LatLngBounds();
+
         bounds.extend(new   google.maps.LatLng(marker_deliver.getPosition().lat()
             ,marker_deliver.getPosition().lng()));
         bounds.extend(new   google.maps.LatLng(marker_store.getPosition().lat()
@@ -84,8 +100,28 @@
         //     }
         // });
     }
+
+    function updatePosition(){
+        $.post("{pigcms{:U('Index/map')}", {order_id:order_id},function(response){
+            if(response.error == 0){
+                uluru = {lat: parseFloat(response.deliver_lat), lng: parseFloat(response.deliver_lng)};
+
+                //marker_deliver = new google.maps.Marker({position: uluru, map: map,icon:deliver});
+                marker_deliver.setPosition(uluru);
+
+                //bounds = new google.maps.LatLngBounds();
+
+                // bounds.extend(new   google.maps.LatLng(marker_deliver.getPosition().lat()
+                //     ,marker_deliver.getPosition().lng()));
+                // bounds.extend(new   google.maps.LatLng(marker_store.getPosition().lat()
+                //     ,marker_store.getPosition().lng()));
+                // bounds.extend(new   google.maps.LatLng(marker_user.getPosition().lat()
+                //     ,marker_user.getPosition().lng()));
+
+                //map.update();
+            }
+        }, 'json');
+    }
 </script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKlguA2QFIUVwWTo3danbOqSKv3nYbBCg&callback=initMap"
-        async defer></script>
 </body>
 </html>
