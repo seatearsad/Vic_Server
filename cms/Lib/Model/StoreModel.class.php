@@ -819,6 +819,8 @@ class StoreModel extends Model
         if($store) {
             $cmf_arr = array_column($result, 'distance');
             array_multisort($cmf_arr, SORT_ASC, $result);
+            $cmf_arr = array_column($result, 'is_allow');
+            array_multisort($cmf_arr, SORT_DESC, $result);
         }
 
         return $result;
