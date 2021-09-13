@@ -1390,7 +1390,7 @@ class IndexAction extends BaseAction
             if($order['pay_type'] == 'moneris'){
                 $order_detail['payname'] = 'Credit Card';
             }elseif ($order['pay_type'] == ''){
-                $order_detail['payname'] = 'Balance';
+                $order_detail['payname'] = 'Tutti Credits';//'Balance';
             }elseif ($order['pay_type'] == 'weixin'){
                 $order_detail['payname'] = 'WeiXin';
             }elseif ($order['pay_type'] == 'alipay'){
