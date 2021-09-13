@@ -863,7 +863,7 @@ class IndexAction extends BaseAction
         $cartList = $_POST['cart_list'];
         $note = $_POST['order_mark'];
         //New UI
-        $address_mark = $_POST['address_mark'];
+        $address_mark = html_entity_decode($_POST['address_mark']);
 
         $adr_id = $_POST['addr_item_id'];
 
