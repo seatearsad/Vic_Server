@@ -740,7 +740,7 @@ class IndexAction extends BaseAction
         $data['zipcode'] = $_POST['map_number'];
         $data['longitude'] = $_POST['lng'];
         $data['latitude'] = $_POST['lat'];
-        $data['detail'] = $_POST['map_location'];
+        $data['detail'] = html_entity_decode($_POST['map_location']);
         $data['default'] = $_POST['default'];
         if($_POST['city_name']){
             $city_name = $_POST['city_name'];
@@ -1474,7 +1474,7 @@ class IndexAction extends BaseAction
 
         if($order['paid'] == 0) {
             $order_detail['statusName'] = "Unpaid";
-            $order_detail['statusDesc'] = "This order will be expired and removed in 10 minutes. Please make a payment to get it delivered to you.";
+            $order_detail['statusDesc'] = "This order will be expired and removed in 5 minutes. Please make a payment to get it delivered to you.";
         }
 
         $result['order'] = $order_detail;
