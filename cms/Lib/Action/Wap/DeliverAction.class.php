@@ -2809,7 +2809,7 @@ class DeliverAction extends BaseAction
 
                 D('Deliver_user')->where(array('uid'=>$this->deliver_session['uid']))->save(array('reg_status'=>4,'last_time'=>time()));
 
-                $this->sendMail($now_user);
+                //$this->sendMail($now_user);
                 $result = array('error_code' => false, 'msg' => L('_PAYMENT_SUCCESS_'));
             }else{
                 $result = array('error_code' => true, 'msg' => $mpgResponse->getMessage());
@@ -2830,7 +2830,7 @@ class DeliverAction extends BaseAction
         if($now_user['reg_status'] != 4) {
             if($_GET['type'] == 'jump'){
                 D('Deliver_user')->where(array('uid'=>$this->deliver_session['uid']))->save(array('reg_status'=>4));
-                $this->sendMail($now_user);
+                //$this->sendMail($now_user);
             }else {
                 header('Location:' . U('Deliver/step_' . $now_user['reg_status']));
             }

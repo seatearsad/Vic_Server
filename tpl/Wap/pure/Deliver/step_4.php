@@ -118,12 +118,15 @@
         <p class="y_c text_b" style="font-size: 13px;">Getting Your Delivery Bag</p>
         <p>&nbsp;</p>
         <p>
-            <label class="text_b">For Victoria couriers</label>, you will receive an email which includes:
+            <label class="text_b">For Vancouver couriers</label>, please pick up your delivery bag between <label style="text-decoration: underline black;">9:30 am and 4:30 pm Monday to Friday</label> at:
         </p>
-        <p> - A link to <a href="https://calendly.com/calvin-tutti/15min" target="_blank">book a time slot</a> for pick up,</p>
+        <p>
+            <label class="text_b">&nbsp;&nbsp;&nbsp;&nbsp;500-789 West Pender St, Vancouver BC</label>
+        </p>
+        <!--p> - A link to <a href="https://calendly.com/calvin-tutti/15min" target="_blank">book a time slot</a> for pick up,</p>
         <p> - The address of the pick-up location (in downtown Victoria).</p>
         <p>&nbsp;</p>
-        <p> Please make sure you’ve booked a time slot before coming to pick up your bag!</p>
+        <p> Please make sure you’ve booked a time slot before coming to pick up your bag!</p-->
         <p>&nbsp;</p>
         <label class="text_b">For couriers in all other cities</label>, your bag will be shipped to you once you complete the payment process. One of our agents will call you to confirm your address before shipping the bag.
         <p>&nbsp;</p>
