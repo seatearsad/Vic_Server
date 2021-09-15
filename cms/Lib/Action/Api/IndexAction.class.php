@@ -734,7 +734,7 @@ class IndexAction extends BaseAction
     public function addUserAddress(){
         $data['uid'] = $_POST['uid'];
         $data['adress_id'] = $_POST['itemid'];
-        $data['name'] = $_POST['uname'];
+        $data['name'] = html_entity_decode($_POST['uname']);
         $data['phone'] = $_POST['phone'];
         $data['adress'] = $_POST['map_addr'];
         $data['zipcode'] = $_POST['map_number'];
