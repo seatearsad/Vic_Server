@@ -147,7 +147,7 @@
         Your Online Food Community
     </div>
     <div class="desc_txt">
-        Your favorite local restaurants Just a click away
+        Your favourite local restaurants Just a click away
     </div>
     <div class="down_load">
         DOWNLOAD

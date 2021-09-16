@@ -512,7 +512,7 @@
 <include file="Public:header"/>
 <div class="ten"></div>
 <div class="main">
-    <div class="slogan">BC’S FAVORITE DELIVERY APP</div>
+    <div class="slogan">BC’S FAVOURITE DELIVERY APP</div>
     <div class="search_box">
         <div class="search_back">
             <input type="text" placeholder="{pigcms{:L('ENTERADDRESS')}" id="address" class="search_input" name="search_word">
