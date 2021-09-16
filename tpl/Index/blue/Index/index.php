@@ -501,7 +501,7 @@
                 <source src="/tpl/Static/blue/images/vedio/main_vedio.mp4">
             </video>
             <div class="slogan">
-                BC’s Favorite <label style="color: #ffa52d">Local</label> Delivery App
+                BC’s Favourite <label style="color: #ffa52d">Local</label> Delivery App
             </div>
             <div class="search_box">
                 <div class="search_back">
