@@ -3673,6 +3673,7 @@ class StorestaffAction extends BaseAction
                 $now_goods['spec_list'] = isset($return['spec_list']) ? $return['spec_list'] : '';
                 $now_goods['list'] = isset($return['list']) ? $return['list'] : '';
 
+                $now_goods['name'] = str_replace('"','&quot;',$now_goods['name']);
                 $good_name = explode('|', $now_goods['name']);
                 $now_goods['en_name'] = $good_name[0];
                 $now_goods['cn_name'] = $good_name[1];

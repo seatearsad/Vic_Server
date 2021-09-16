@@ -600,6 +600,10 @@
             getList($(obj).data('type'));
         }
 
+        setInterval(function(){
+            getList(curr_status);
+        }, 60000);
+
         getList(curr_status);
         function getList(status) {
             curr_status = status;
