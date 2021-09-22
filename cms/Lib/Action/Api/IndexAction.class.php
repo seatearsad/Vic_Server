@@ -52,7 +52,7 @@ class IndexAction extends BaseAction
 
         //获取店铺列表
         $page	=	$_POST['page']?$_POST['page']:0;
-        $limit = 5;
+        $limit = 60;
 
         $sort = $_POST['sort'] ? $_POST['sort'] : 0;
 
@@ -734,13 +734,13 @@ class IndexAction extends BaseAction
     public function addUserAddress(){
         $data['uid'] = $_POST['uid'];
         $data['adress_id'] = $_POST['itemid'];
-        $data['name'] = $_POST['uname'];
+        $data['name'] = html_entity_decode($_POST['uname']);
         $data['phone'] = $_POST['phone'];
         $data['adress'] = $_POST['map_addr'];
         $data['zipcode'] = $_POST['map_number'];
         $data['longitude'] = $_POST['lng'];
         $data['latitude'] = $_POST['lat'];
-        $data['detail'] = $_POST['map_location'];
+        $data['detail'] = html_entity_decode($_POST['map_location']);
         $data['default'] = $_POST['default'];
         if($_POST['city_name']){
             $city_name = $_POST['city_name'];
@@ -863,7 +863,7 @@ class IndexAction extends BaseAction
         $cartList = $_POST['cart_list'];
         $note = $_POST['order_mark'];
         //New UI
-        $address_mark = $_POST['address_mark'];
+        $address_mark = html_entity_decode($_POST['address_mark']);
 
         $adr_id = $_POST['addr_item_id'];
 
@@ -1390,7 +1390,7 @@ class IndexAction extends BaseAction
             if($order['pay_type'] == 'moneris'){
                 $order_detail['payname'] = 'Credit Card';
             }elseif ($order['pay_type'] == ''){
-                $order_detail['payname'] = 'Balance';
+                $order_detail['payname'] = 'Tutti Credits';//'Balance';
             }elseif ($order['pay_type'] == 'weixin'){
                 $order_detail['payname'] = 'WeiXin';
             }elseif ($order['pay_type'] == 'alipay'){
@@ -1474,7 +1474,7 @@ class IndexAction extends BaseAction
 
         if($order['paid'] == 0) {
             $order_detail['statusName'] = "Unpaid";
-            $order_detail['statusDesc'] = "This order will be expired and removed in 10 minutes. Please make a payment to get it delivered to you.";
+            $order_detail['statusDesc'] = "This order will be expired and removed in 5 minutes. Please make a payment to get it delivered to you.";
         }
 
         $result['order'] = $order_detail;
@@ -2878,7 +2878,7 @@ class IndexAction extends BaseAction
                 $this->returnCode(0,'info',$return,'success');
             }else{
                 //exit(json_encode(array('status'=>2,'result'=>'没有查找到内容')));
-                $this->returnCode(1,'info',array(),'没有查找到内容');
+                $this->returnCode(1,'info',array(),'No address found! Please enter street address only.');
             }
         }else{
             //exit(json_encode(array('status'=>0,'result'=>'获取失败')));
@@ -2917,7 +2917,7 @@ class IndexAction extends BaseAction
             }
         }
         //exit(json_encode(array('status'=>2,'result'=>'没有查找到内容')));
-        $this->returnCode(1,'info',array(),'没有查找到内容');
+        $this->returnCode(1,'info',array(),'No address found! Please enter street address only.');
     }
 
     public function AlipayTest(){

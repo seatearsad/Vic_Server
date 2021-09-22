@@ -99,6 +99,7 @@ class GroupserviceAction extends BaseAction{
 //				$n++;
 				$temp = array();
 				$temp['id'] = $row['store_id'];
+				$temp['city_id'] = $row['city_id'];
 				//modify garfunkel 判断语言
 				$temp['name'] = lang_substr($row['name'],C('DEFAULT_LANG'));
 				$temp['store_theme'] = $row['store_theme'];
@@ -403,7 +404,20 @@ class GroupserviceAction extends BaseAction{
                     }
                 }
 
-				$return[] = $temp;
+                //获取特殊城市属性
+				$is_add = true;
+				$city = D('Area')->where(array('area_id'=>$row['city_id']))->find();
+                if($city['range_type'] != 0){
+                	switch ($city['range_type']){
+						case 1://按照纬度限制的城市 小于某个纬度
+                            if($lat >= $city['range_para']) $is_add = false;
+							break;
+						default:
+							break;
+					}
+				}
+
+				if($is_add) $return[] = $temp;
 			}
 			$new_group_list['store'] =$return;
 

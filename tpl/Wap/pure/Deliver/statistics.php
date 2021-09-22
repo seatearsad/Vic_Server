@@ -151,24 +151,20 @@
             <span class="su_left">{pigcms{:L('_ND_TIPS_')}</span>
             <span class="su_right">${pigcms{$tip|default=0}+</span>
         </div>
-        <div style="font-size: 0px">
+        <!--div style="font-size: 0px">
             <span class="su_left" style="font-weight: bold;">Earning by Delivery Fees + Tips, or</span>
             <span class="su_right" style="font-weight: bold;">${pigcms{$freight_charge+$tip}+</span>
         </div>
         <div style="font-size: 0px">
             <span class="su_left" style="font-weight: bold;">Guaranteed Earning ($10/order)*</span>
             <span class="su_right" style="font-weight: bold;">${pigcms{$guara_money|floatval}</span>
-        </div>
+        </div-->
         <div style="border-bottom: 1px solid lightgray;margin: 15px auto;"></div>
         <div style="font-size: 0px">
             <span class="su_left" style="font-weight: bold;">{pigcms{:L('_ND_ACTUALEARN_')}</span>
             <span class="su_right" style="font-weight: bold;">
-                    <if condition="$guara_money gt $freight_charge+$tip">
-                        ${pigcms{$guara_money|floatval}
-                    <else />
-                        ${pigcms{$freight_charge+$tip}+
-                    </if>
-                </span>
+                    ${pigcms{$freight_charge+$tip}+
+            </span>
         </div>
         <div style="font-size: 0px">
             <span class="su_left">{pigcms{:L('_ND_CASHREC_')}</span>
@@ -177,12 +173,8 @@
         <div style="font-size: 0px">
             <span class="su_left y_c">{pigcms{:L('_ND_AMOUNTPAYABLE_')}</span>
             <span class="su_right y_c">
-                    <if condition="$guara_money gt $freight_charge+$tip">
-                        ${pigcms{$guara_money-$offline_money|floatval}
-                    <else />
-                        ${pigcms{$freight_charge+$tip-$offline_money|floatval}
-                    </if>
-                </span>
+                    ${pigcms{$freight_charge+$tip-$offline_money|floatval}
+            </span>
         </div>
         <div class="order_history">
             {pigcms{:L('_ND_VIEWORDERHIS_')}
