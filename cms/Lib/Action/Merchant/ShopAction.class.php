@@ -1137,10 +1137,14 @@ class ShopAction extends BaseAction
                     $new_value[$k_arr[1]]['price'] = $v;
                 }elseif($k_arr[0] == 'value_name_new') {
                     $new_value[$k_arr[1]]['name'] = fulltext_filter($v);
+                }elseif($k_arr[0] == 'value_status_new') {
+                    $new_value[$k_arr[1]]['status'] = $v;
                 }elseif($k_arr[0] == 'value_price'){
                     $old_value[$k_arr[1]]['price'] = $v;
                 }elseif($k_arr[0] == 'value_name'){
                     $old_value[$k_arr[1]]['name'] = fulltext_filter($v);
+                }elseif($k_arr[0] == 'value_status'){
+                    $old_value[$k_arr[1]]['status'] = $v;
                 }
             }
 
@@ -1149,6 +1153,7 @@ class ShopAction extends BaseAction
                 $add['dish_id'] = $dish_id;
                 $add['name'] = $v['name'];
                 $add['price'] = $v['price'];
+                $add['status'] = $v['status'];
                 $add_arr[] = $add;
             }
             $dish_value_db->addAll($add_arr);
@@ -1334,6 +1339,23 @@ class ShopAction extends BaseAction
         }else {
             $data_goods['status'] = $_POST['type'] == 'open' ? '1' : '0';
         }
+        if($database_goods->where($condition_goods)->data($data_goods)->save()){
+            exit('1');
+        }else{
+            exit;
+        }
+    }
+
+    /* 配菜状态 */
+    public function side_dish_status()
+    {
+        $database_goods = D('Side_dish');
+        $condition_goods['id'] = $_POST['id'];
+
+        $data_goods = array();
+
+        $data_goods['status'] = $_POST['type'] == 'open' ? '1' : '0';
+
         if($database_goods->where($condition_goods)->data($data_goods)->save()){
             exit('1');
         }else{

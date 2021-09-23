@@ -1569,7 +1569,7 @@ class ShopAction extends BaseAction{
                         }
                         //garfunkel add side_dish
                         $glist['has_dish'] = false;
-                        if (D('Side_dish')->where(array('goods_id' => $r['goods_id']))->find()) {
+                        if (D('Side_dish')->where(array('goods_id' => $r['goods_id'],'status'=>1))->find()) {
                             $glist['has_dish'] = true;
                         }
                         //
@@ -1748,10 +1748,10 @@ class ShopAction extends BaseAction{
         }
 
         //garfunkel add side_dish
-        $dish_list = D('Side_dish')->where(array('goods_id'=>$goods_id))->select();
+        $dish_list = D('Side_dish')->where(array('goods_id'=>$goods_id,'status'=>1))->select();
         foreach ($dish_list as &$v){
             $v['name'] = lang_substr($v['name'],C('DEFAULT_LANG'));
-            $values = D('Side_dish_value')->where(array('dish_id'=>$v['id']))->select();
+            $values = D('Side_dish_value')->where(array('dish_id'=>$v['id'],'status'=>1))->select();
             foreach ($values as &$vv){
                 $vv['name'] = lang_substr($vv['name'],C('DEFAULT_LANG'));
             }
