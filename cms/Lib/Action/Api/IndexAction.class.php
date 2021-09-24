@@ -1595,17 +1595,21 @@ class IndexAction extends BaseAction
 
         //garfunkel add side_dish
         $dish_list = D('Side_dish')->where(array('goods_id'=>$fid,'status'=>1))->select();
+        $send_list = array();
         foreach ($dish_list as &$v){
             $v['name'] = lang_substr($v['name'],C('DEFAULT_LANG'));
             $values = D('Side_dish_value')->where(array('dish_id'=>$v['id'],'status'=>1))->select();
             foreach ($values as &$vv){
                 $vv['name'] = lang_substr($vv['name'],C('DEFAULT_LANG'));
             }
-            $v['list'] = $values ? $values : array();
+            if($values) {
+                $v['list'] = $values;
+                $send_list[] = $v;
+            }
         }
 
-        if($dish_list)
-            $result['side_dish'] = $dish_list;
+        if($send_list)
+            $result['side_dish'] = $send_list;
         else
             $result['side_dish'] = "";
 
