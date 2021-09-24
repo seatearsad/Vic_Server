@@ -1594,10 +1594,10 @@ class IndexAction extends BaseAction
         $result['spec_list'] = $now_goods['spec_list'];
 
         //garfunkel add side_dish
-        $dish_list = D('Side_dish')->where(array('goods_id'=>$fid))->select();
+        $dish_list = D('Side_dish')->where(array('goods_id'=>$fid,'status'=>1))->select();
         foreach ($dish_list as &$v){
             $v['name'] = lang_substr($v['name'],C('DEFAULT_LANG'));
-            $values = D('Side_dish_value')->where(array('dish_id'=>$v['id']))->select();
+            $values = D('Side_dish_value')->where(array('dish_id'=>$v['id'],'status'=>1))->select();
             foreach ($values as &$vv){
                 $vv['name'] = lang_substr($vv['name'],C('DEFAULT_LANG'));
             }

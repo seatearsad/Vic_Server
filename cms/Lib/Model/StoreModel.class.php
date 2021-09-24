@@ -571,7 +571,7 @@ class StoreModel extends Model
             //garfunkel add side_dish
             $returnList[$k]['dish_id'] = $v['dish_id'];
             $dish_desc = "";
-            if(D('Side_dish')->where(array('goods_id'=>$v['goods_id']))->find()){
+            if(D('Side_dish')->where(array('goods_id'=>$v['goods_id'],'status'=>1))->find()){
                 $returnList[$k]['has_format'] = true;
                 $add_price = 0;
 
