@@ -1601,7 +1601,7 @@ class IndexAction extends BaseAction
             foreach ($values as &$vv){
                 $vv['name'] = lang_substr($vv['name'],C('DEFAULT_LANG'));
             }
-            $v['list'] = $values;
+            $v['list'] = $values ? $values : array();
         }
 
         if($dish_list)
