@@ -625,6 +625,9 @@ function deleteImage(path,obj){
 window.sessionStorage.setItem(session_index, json);
 
 var allergens_init = "{pigcms{$now_goods['allergens']}";
+$("input[name='allergens']").val(allergens_init);
+
+
 if(allergens_init == '')
     var allergens_str = [];
 else
