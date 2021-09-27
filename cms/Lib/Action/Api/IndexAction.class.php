@@ -3244,17 +3244,17 @@ class IndexAction extends BaseAction
         $deliverect = new Deliverect();
 
         $result = $deliverect->getAllergensTag();
-        //var_dump($result);die();
-        $all_list = array();
-        foreach ($result as $k=>$v){
-            $d = array();
-            $d['name'] = $v['name'];
-            $d['deliverect_id'] = $v['allergenId'];
+        var_dump($result);die();
+//        $all_list = array();
+//        foreach ($result as $k=>$v){
+//            $d = array();
+//            $d['name'] = $v['name'];
+//            $d['deliverect_id'] = $v['allergenId'];
+//
+//            $all_list[] = $d;
+//        }
 
-            $all_list[] = $d;
-        }
-
-        D('Allergens')->addAll($all_list);
+        //D('Allergens')->addAll($all_list);
     }
 
     public function test_wechat(){
