@@ -34,6 +34,9 @@
 							<li>
 								<a data-toggle="tab" href="#txtattr">{pigcms{:L('GOODS_SPEC_BKADMIN')}</a>
 							</li>
+                            <li>
+                                <a data-toggle="tab" href="#allergens">{pigcms{:L('ALLERGENS')}</a>
+                            </li>
 <!--							<li>-->
 <!--								<a data-toggle="tab" href="#seckill">{pigcms{:L('LIMIT_TIME_DISCOUNT_BKADMIN')}</a>-->
 <!--							</li>-->
@@ -302,6 +305,14 @@
 									</table>
 								</div>
 							</div>
+                            <div id="allergens" class="tab-pane">
+                                <div class="allergens_div">
+                                    <volist name="allergens_list" id="v">
+                                        <label data-id="{pigcms{$v['id']}" class="label label-large" style="margin-top: 5px;line-height:25px;height:auto;font-size: 16px;">{pigcms{$v['name']}</label>
+                                    </volist>
+                                    <input type="hidden" name="allergens" value="{pigcms{$now_goods['allergens']}" />
+                                </div>
+                            </div>
 							<div id="seckill" class="tab-pane hidden_obj">
 								<div class="form-group">
 									<label class="col-sm-1"><label for="price">商品限时价</label></label>
@@ -612,6 +623,37 @@ function deleteImage(path,obj){
 	$(obj).closest('.upload_pic_li').remove();
 }
 window.sessionStorage.setItem(session_index, json);
+
+var allergens_str = "{pigcms{$now_goods['allergens']}".split(',');
+
+$('.allergens_div').find('label').each(function () {
+    for (var i = 0; i < allergens_str.length; i++) {
+        if(allergens_str[i] == $(this).data('id')){
+            $(this).addClass('label-primary');
+            $(this).removeClass('label-large');
+        }
+    }
+
+    $(this).click(function () {
+        var c_name = $(this).attr('class');
+        if(c_name.indexOf("label-primary") != -1){
+            $(this).removeClass('label-primary');
+            $(this).addClass('label-large');
+            for (var i = 0; i < allergens_str.length; i++) {
+                if (allergens_str[i] == $(this).data('id')) {
+                    allergens_str.splice(i, 1);
+                    break;
+                }
+            }
+        }else {
+            $(this).addClass('label-primary');
+            $(this).removeClass('label-large');
+            allergens_str.push($(this).data('id'));
+        }
+
+        $("input[name='allergens']").val(allergens_str.toString());
+    });
+});
 
 </script>
 <script type="text/javascript" src="{pigcms{$static_path}js/goods.js"></script>

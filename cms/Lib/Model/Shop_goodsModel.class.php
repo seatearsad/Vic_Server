@@ -30,6 +30,7 @@ class Shop_goodsModel extends Model
 		//garfunkel add
 		$data['tax_num'] = $goods['tax_num'];
 		$data['deposit_price'] = $goods['deposit_price'];
+		$data['allergens'] = $goods['allergens'];
 
 		$data['freight_template'] = intval($goods['freight_template']);
 		$data['freight_type'] = intval($goods['freight_type']);

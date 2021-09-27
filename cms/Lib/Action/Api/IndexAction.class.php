@@ -3238,8 +3238,23 @@ class IndexAction extends BaseAction
     }
 
     public function test_assign(){
-        $deliver_id = D('Deliver_assign')->getDeliverList(9373);
-        var_dump($deliver_id);
+        //$deliver_id = D('Deliver_assign')->getDeliverList(9373);
+        //var_dump($deliver_id);
+        import('@.ORG.Deliverect.Deliverect');
+        $deliverect = new Deliverect();
+
+        $result = $deliverect->getAllergensTag();
+        //var_dump($result);die();
+        $all_list = array();
+        foreach ($result as $k=>$v){
+            $d = array();
+            $d['name'] = $v['name'];
+            $d['deliverect_id'] = $v['allergenId'];
+
+            $all_list[] = $d;
+        }
+
+        D('Allergens')->addAll($all_list);
     }
 
     public function test_wechat(){

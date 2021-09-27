@@ -1560,6 +1560,20 @@ class MerchantAction extends BaseAction{
 	    $this->display();
     }
 
+    public function allergens(){
+        $database_allergent = D('Allergens');
+
+        $condition = array();
+        $count_merchant = $database_allergent->where($condition)->count();
+        import('@.ORG.system_page');
+        $p = new Page($count_merchant, 15);
+        $list = $database_allergent->field(true)->where($condition)->order('id ASC')->limit($p->firstRow.','.$p->listRows)->select();
+        $this->assign('list', $list);
+        $pagebar = $p->show2();
+        $this->assign('pagebar', $pagebar);
+        $this->display();
+    }
+
     public function store_list(){
         //搜索
         if(!empty($_GET['keyword'])){

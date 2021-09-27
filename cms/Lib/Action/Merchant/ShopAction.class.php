@@ -858,6 +858,10 @@ class ShopAction extends BaseAction
         $this->assign('now_store', $now_store);
 
         $this->assign('express_template', D('Express_template')->field(true)->where(array('mer_id' => $this->merchant_session['mer_id']))->select());
+
+        $allergens_list = D('Allergens')->select();
+        $this->assign('allergens_list',$allergens_list);
+
         $this->display();
     }
 
@@ -1004,6 +1008,9 @@ class ShopAction extends BaseAction
         $this->assign('now_sort', $now_sort);
         $this->assign('now_store', $now_store);
         $this->assign('express_template', D('Express_template')->field(true)->where(array('mer_id' => $this->merchant_session['mer_id']))->select());
+
+        $allergens_list = D('Allergens')->select();
+        $this->assign('allergens_list',$allergens_list);
         $this->display();
     }
 
