@@ -624,7 +624,11 @@ function deleteImage(path,obj){
 }
 window.sessionStorage.setItem(session_index, json);
 
-var allergens_str = "{pigcms{$now_goods['allergens']}".split(',');
+var allergens_init = "{pigcms{$now_goods['allergens']}";
+if(allergens_init == '')
+    var allergens_str = [];
+else
+    var allergens_str = "{pigcms{$now_goods['allergens']}".split(',');
 
 $('.allergens_div').find('label').each(function () {
     for (var i = 0; i < allergens_str.length; i++) {
