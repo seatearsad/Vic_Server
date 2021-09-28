@@ -12,6 +12,7 @@ runtime/
 upload/
 .idea/
 test_log.txt
+deliverect_log.log
 /tpl/System/_Newface/Merchant/index--.php
 /tpl/System/_Newface/Index/main--.php
 /sample/style2.css
