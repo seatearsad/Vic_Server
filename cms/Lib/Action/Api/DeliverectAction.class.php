@@ -10,7 +10,7 @@ class DeliverectAction
 {
     public function __construct()
     {
-        file_put_contents("./deliverect_log.log",date("Y/m/d")."   ".date("h:i:sa")."   "."Deliverect" ."   ". $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'--'.json_encode($_SERVER)."\r\n",FILE_APPEND);
+        file_put_contents("./deliverect_log.log",date("Y/m/d")."   ".date("h:i:sa")."   "."Deliverect" ."   ". $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'--'.json_encode($_ENV)."\r\n",FILE_APPEND);
     }
 
     public function channelStatus(){
