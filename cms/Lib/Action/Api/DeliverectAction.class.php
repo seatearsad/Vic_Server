@@ -16,33 +16,33 @@ class DeliverectAction
     public function channelStatus(){
         //echo "channelStatus";
         $link_array = array(
-            "statusUpdateURL"=> "https://integrator.com/statusUpdate",
-            "menuUpdateURL"=> "https://integrator.com/menuUpdate",
-            "snoozeUnsnoozeURL"=> "https://integrator.com/snoozeUnsnooze",
-            "busyModeURL"=> "https://integrator.com/busyMode",
-            "updatePrepTimeURL"=> "https://integrator.com/updatePrepTimeURL"
+            "statusUpdateURL"=> C('config.site_url')."/deliverect/statusUpdate",
+            "menuUpdateURL"=> C('config.site_url')."/deliverect/menuUpdate",
+            "snoozeUnsnoozeURL"=> C('config.site_url')."/deliverect/snoozeUnsnooze",
+            "busyModeURL"=> C('config.site_url')."/deliverect/busyMode",
+            "updatePrepTimeURL"=> C('config.site_url')."/deliverect/updatePrepTimeURL"
         );
 
         echo json_encode($link_array);
     }
 
-    public function snooze(){
-        echo "snooze";
+    public function snoozeUnsnooze(){
+        echo "snoozeUnsnooze";
     }
 
-    public function storeMenu(){
-        echo "storeMenu";
+    public function menuUpdate(){
+        echo "menuUpdate";
     }
 
     public function busyMode(){
         echo "busyMode";
     }
 
-    public function orderStatus(){
-        echo "orderStatus";
+    public function statusUpdate(){
+        echo "statusUpdate";
     }
 
-    public function prepTime(){
-        echo "prepTime";
+    public function updatePrepTimeURL(){
+        echo "updatePrepTimeURL";
     }
 }
