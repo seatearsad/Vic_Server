@@ -80,7 +80,10 @@ class MonerisPay
                 return $resp;
             }
         }else {
-            return $this->purchase($data,$uid,$from_type,$order);
+            if($data['order_type'] != 'recharge')
+                return $this->purchase($data,$uid,$from_type,$order);
+            else
+                return array();
         }
     }
 
