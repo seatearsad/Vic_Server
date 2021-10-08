@@ -10,9 +10,13 @@ class DeliverectAction
 {
     private $site_url;
     private $link_type = 1;
+
+    //获取传递数据
+    private $data;
     public function __construct()
     {
         file_put_contents("./deliverect_log.log",date("Y/m/d")."   ".date("h:i:sa")."   "."Deliverect" ."   ". $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'--'.json_encode(file_get_contents("php://input"))."\r\n",FILE_APPEND);
+        $this->data = json_decode(file_get_contents("php://input"),true);
     }
 
     public function channelStatus(){
@@ -27,10 +31,10 @@ class DeliverectAction
             "updatePrepTimeURL"=> $this->site_url."/deliverect/updatePrepTimeURL"
         );
 
-        $data = json_decode(file_get_contents("php://input"),true);
-        $store_id = $data['channelLocationId'];
-        $link_id = $data['channelLinkId'];
-        $status = $data['status'];
+
+        $store_id = $this->data['channelLocationId'];
+        $link_id = $this->data['channelLinkId'];
+        $status = $this->data['status'];
 
         $link_status = 0;
         switch ($status){
@@ -62,6 +66,7 @@ class DeliverectAction
     }
 
     public function menuUpdate(){
+        print_r($this->data);
         echo "menuUpdate";
     }
 
