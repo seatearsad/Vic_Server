@@ -411,18 +411,30 @@
             font-size: 22px;
         }
         .city_list li:nth-child(1){
-            background-image: url("./tpl/Static/blue/images/new/city/Victoria.png");
+            background-image: url("./tpl/Static/blue/images/new/city/DT_Vancouver.png");
         }
         .city_list li:nth-child(2){
-            background-image: url("./tpl/Static/blue/images/new/city/Kamloops.png");
+            background-image: url("./tpl/Static/blue/images/new/city/Victoria.png");
         }
         .city_list li:nth-child(3){
-            background-image: url("./tpl/Static/blue/images/new/city/Nanaimo.png");
-        }
-        .city_list li:nth-child(4){
             background-image: url("./tpl/Static/blue/images/new/city/Kelowna.png");
         }
+        .city_list li:nth-child(4){
+            background-image: url("./tpl/Static/blue/images/new/city/Kamloops.png");
+        }
         .city_list li:nth-child(5){
+            background-image: url("./tpl/Static/blue/images/new/city/Nanaimo.png");
+        }
+        .city_list li:nth-child(6){
+            background-image: url("./tpl/Static/blue/images/new/city/Chilliwack.png");
+        }
+        .city_list li:nth-child(7){
+            background-image: url("./tpl/Static/blue/images/new/city/Maple_Ridge.png");
+        }
+        .city_list li:nth-child(8){
+            background-image: url("./tpl/Static/blue/images/new/city/Squamish.png");
+        }
+        .city_list li:nth-child(9){
             background-image: url("./tpl/Static/blue/images/new/city/More.png");
         }
         .become_div{
@@ -599,10 +611,14 @@
         <div class="white_line">
             <div class="serving_title">{pigcms{:L('4CITIES')}</div>
             <ul class="city_list">
+                <li>Vancouver DT</li>
                 <li>Victoria</li>
+                <li>Kelowna</li>
                 <li>Kamloops</li>
                 <li>Nanaimo</li>
-                <li>Kelowna</li>
+                <li>Chilliwack</li>
+                <li>Maple Ridge</li>
+                <li>Squamish</li>
                 <li>{pigcms{:L('4MORE')}</li>
             </ul>
         </div>

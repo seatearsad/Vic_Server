@@ -2720,6 +2720,22 @@ class ShopAction extends BaseAction{
                 } else {
                     $distance = getDistanceByGoogle($from, $aim);
                 }
+
+                $city = D('Area')->where(array('area_id'=>$return['store']['city_id']))->find();
+                if($city['range_type'] != 0) {
+                    switch ($city['range_type']){
+                        case 1://按照纬度限制的城市 小于某个纬度
+                            if($user_adress['latitude'] >= $city['range_para']) $is_jump_address = 1;
+                            else $is_jump_address = 0;
+                            break;
+                        default:
+                            $is_jump_address = 0;
+                            break;
+                    }
+                }else{
+                    $is_jump_address = 0;
+                }
+
                 //$distance = $distance / 1000;
                 //var_dump($distance);die();
 
