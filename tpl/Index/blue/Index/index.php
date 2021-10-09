@@ -400,13 +400,13 @@
         .city_list li{
             list-style: none;
             display: inline-block;
-            width: 22%;
+            width: 24%;
             height: 80px;
             line-height: 80px;
             background-position: center left;
             background-size: auto 80px;
             background-repeat: no-repeat;
-            padding-left: 100px;
+            padding-left: 90px;
             margin: 10px auto;
             font-size: 22px;
         }
@@ -611,13 +611,13 @@
         <div class="white_line">
             <div class="serving_title">{pigcms{:L('4CITIES')}</div>
             <ul class="city_list">
-                <li>Vancouver DT</li>
+                <li style="font-size: 18px;">Vancouver&nbsp;DT</li>
                 <li>Victoria</li>
                 <li>Kelowna</li>
                 <li>Kamloops</li>
                 <li>Nanaimo</li>
                 <li>Chilliwack</li>
-                <li>Maple Ridge</li>
+                <li style="font-size: 20px;">Maple&nbsp;Ridge</li>
                 <li>Squamish</li>
                 <li>{pigcms{:L('4MORE')}</li>
             </ul>
