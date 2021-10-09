@@ -13,6 +13,19 @@ class Deliverect
     protected $token;
     protected $expiry;
     protected $token_type;
+    protected $channelName = "tuttidelivery";
+
+    protected $orderType = array(
+        'pickup'=>1,
+        'delivery'=>2,
+        'eatin'=>3,
+        'curbside'=>4
+    );
+
+    protected $paymentType = array(
+        'online' => 0,
+        'cash' => 1
+    );
 
     private $url = "https://api.staging.deliverect.com/";
 
@@ -68,6 +81,12 @@ class Deliverect
         $result = $this->curlGet($url);
 
         return $result;
+    }
+
+    public function createOrder($storeId,$order){
+        $url = $this->url.$this->channelName."/order/".$storeId;
+
+        $data['orderType'] = $this->orderType['delivery'];
     }
 
     public function curlGet($url,$timeout=30){
