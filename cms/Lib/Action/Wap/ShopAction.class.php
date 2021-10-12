@@ -2725,7 +2725,10 @@ class ShopAction extends BaseAction{
                 if($city['range_type'] != 0) {
                     switch ($city['range_type']){
                         case 1://按照纬度限制的城市 小于某个纬度
-                            if($user_adress['latitude'] >= $city['range_para']) $is_jump_address = 1;
+                            if($user_adress['latitude'] >= $city['range_para']) {
+                                $is_jump_address = 1;
+                                $user_adress=null;
+                            }
                             else $is_jump_address = 0;
                             break;
                         default:
@@ -2779,6 +2782,7 @@ class ShopAction extends BaseAction{
         }else{
             //没有获得默认地址
             $is_jump_address = 1;
+            $user_adress=null;
         }
         $this->assign('user_adress', $user_adress);
         //如果没有找到合适的配送地址
