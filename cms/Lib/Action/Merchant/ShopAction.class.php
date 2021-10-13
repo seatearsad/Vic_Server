@@ -25,6 +25,10 @@ class ShopAction extends BaseAction
         $store_list = D()->query($sql);
         // 		echo D()->_sql();
         // 		$store_list = D()->table($db_arr)->field(true)->where("`s`.`mer_id`='$mer_id' AND `s`.`status`='1' AND `s`.`have_shop`='1' AND `s`.`area_id`=`a`.`area_id`")->order('`sort` DESC,`store_id` ASC')->limit($p->firstRow.','.$p->listRows)->select();
+
+        foreach ($store_list as &$store){
+            $store['menuList'] = D('StoreMenuV2')->getStoreMenu($store['store_id']);
+        }
         $this->assign('store_list', $store_list);
 
         $pagebar = $p->show();
@@ -2827,5 +2831,42 @@ class ShopAction extends BaseAction
         }else{
             exit(json_encode(array('error_code' => true, 'msg' => 'Data Error')));
         }
+    }
+
+
+
+    public function menuCategories(){
+        $now_store = $this->check_store(intval($_GET['store_id']));
+        $this->assign('now_store',$now_store);
+
+        $menuId = $_GET['menuId'];
+
+        $categories = D('StoreMenuV2')->getMenuCategories($menuId);
+
+        $this->assign('categories',$categories);
+
+        $this->display();
+    }
+
+    public function menuProduct(){
+        $categoryId = $_GET['categoryId'];
+
+        $category = D('StoreMenuV2')->getMenuCategory($categoryId);
+        $this->assign('category',$category);
+
+        if($_GET['productId']){
+            $productId = $_GET['productId'];
+            $products = D('StoreMenuV2')->getProductRelation($productId);
+
+            $parentProduct = D('StoreMenuV2')->getProduct($productId);
+
+            $this->assign('parentProduct',$parentProduct);
+        }else {
+            $products = D('StoreMenuV2')->getMenuCategoriesProduct($categoryId);
+        }
+
+        $this->assign('products',$products);
+
+        $this->display();
     }
 }

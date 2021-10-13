@@ -13,6 +13,7 @@ class Deliverect
     protected $token;
     protected $expiry;
     protected $token_type;
+
     protected $channelName = "tuttidelivery";
 
     protected $orderType = array(
