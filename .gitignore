@@ -7,7 +7,7 @@ core/Extend
 core/Lib
 core/Tpl
 core/pigcms.php
-core/.DS_Store
+.DS_Store
 runtime/
 upload/
 .idea/
