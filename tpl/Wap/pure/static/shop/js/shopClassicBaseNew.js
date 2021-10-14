@@ -121,7 +121,7 @@ function showGood(shop_id,product_id){
         pageLoadHides();
     }else{                                  //重新加载spec单页
 
-        $.getJSON(ajax_url_root+'ajax_goods',{goods_id:product_id},function(result) {
+        $.getJSON(ajax_url_root+'ajax_goods',{goods_id:product_id,store_id:shop_id},function(result) {
             nowProduct = result;
             productPicList = [];
             for (var i in result.pic_arr) {
@@ -170,6 +170,7 @@ function showGood(shop_id,product_id){
                 $('#shopDetailPageTitle .content').html(result.des).show();
                 //$('#shopDetailPageTitle').show();
             }else if(nowShop.store.delivery){
+                $('#shopDetailPageTitle .content').html('').show();
                 //$('#shopDetailPageContent .content').html(getLangStr('_REMINDER_STRING_')).show();
                 //$('#shopDetailPageContent').show();
                 //$('#shopDetailPageContent').hide();
