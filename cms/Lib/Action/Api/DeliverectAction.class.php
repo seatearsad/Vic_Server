@@ -11,6 +11,8 @@ class DeliverectAction
     private $site_url;
     private $link_type = 1;
 
+    private $menu_version = 2;
+
     private $menumFolder = "./DeliverMenu/";
     //获取传递数据
     private $data;
@@ -56,6 +58,7 @@ class DeliverectAction
         $updateData['link_type'] = $this->link_type;
         $updateData['link_id'] = $link_id;
         $updateData['link_status'] =$link_status;
+        $updateData['menu_version'] =$this->menu_version;
 
         D('Merchant_store')->where(array('store_id'=>$store_id))->save($updateData);
 

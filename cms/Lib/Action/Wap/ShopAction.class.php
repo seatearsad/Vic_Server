@@ -1507,8 +1507,8 @@ class ShopAction extends BaseAction{
             echo json_encode(array('store' => $store, 'product_list' => $list));
 
         } else {
-            if($now_store['link_type'] != 0){
-                $categories = D('StoreMenuV2')->getStoreCategories($store_id);
+            if($now_store['menu_version'] == 2){
+                $categories = D('StoreMenuV2')->getStoreCategories($store_id,true);
                 $sortList = D('StoreMenuV2')->arrangeWap($categories);
                 $list = D('StoreMenuV2')->getStoreProduct($categories);
                 //$list = D('StoreMenuV2')->arrangeProductWap($products);
@@ -1739,7 +1739,7 @@ class ShopAction extends BaseAction{
 
         $goods_id = isset($_GET['goods_id']) ? $_GET['goods_id'] : 1;
 
-        if($now_store['link_type'] != 0){
+        if($now_store['menu_version'] == 2){
             $now_goods = D('StoreMenuV2')->getProduct($goods_id);
             $now_goods = D('StoreMenuV2')->arrangeProductWapShow($now_goods);
 
@@ -2466,18 +2466,37 @@ class ShopAction extends BaseAction{
         if($store_id != 0) {
             $productCart = $this->getCookieData($store_id);
             if(!empty($productCart)) {
-                $sortList = D('Shop_goods_sort')->lists($store_id, true);
-                $sortIdList = array();
-                foreach ($sortList as $k => $sl){
-                    $sortIdList[] = $sl['sort_id'];
-                }
+                $store = D("Merchant_store")->field(true)->where(array('store_id' => $store_id))->find();
+                if($store['menu_version'] == 1) {
+                    $sortList = D('Shop_goods_sort')->lists($store_id, true);
+                    $sortIdList = array();
+                    foreach ($sortList as $k => $sl) {
+                        $sortIdList[] = $sl['sort_id'];
+                    }
 
-                foreach ($productCart as $product) {
-                    $goodsId = $product['productId'];
-                    $goods = D('Shop_goods')->where(array('goods_id' => $goodsId))->find();
+                    foreach ($productCart as $product) {
+                        $goodsId = $product['productId'];
+                        $goods = D('Shop_goods')->where(array('goods_id' => $goodsId))->find();
 
-                    if(in_array($goods['sort_id'],$sortIdList)){
-                        $newCart[] = $product;
+                        if (in_array($goods['sort_id'], $sortIdList)) {
+                            $newCart[] = $product;
+                        }
+                    }
+                }else if($store['menu_version'] == 2){
+                    $categories = D('StoreMenuV2')->getStoreCategories($store_id,true);
+                    $products = D('StoreMenuV2')->getStoreProductAll($categories);
+
+                    $allProduct = array();
+                    foreach ($products as $p){
+                        $allProduct[] = $p['id'];
+                    }
+
+                    foreach ($productCart as $product) {
+                        $goodsId = $product['productId'];
+
+                        if (in_array($goodsId, $allProduct)) {
+                            $newCart[] = $product;
+                        }
                     }
                 }
             }
@@ -3858,9 +3877,20 @@ class ShopAction extends BaseAction{
                     'total' => strval(floatval($v['price'] * $v['num'])),
                     'discount_total' => strval(floatval($discount_price * $v['num'])),
                 );
+                if($store['menu_version'] == 1) {
+                    $goods = D('Shop_goods')->field(true)->where(array('goods_id' => $v['goods_id']))->find();
+                    $tax_price += $v['price'] * $goods['tax_num']/100 * $v['num'];
+                    $deposit_price += $goods['deposit_price'] * $v['num'];
+                }elseif ($store['menu_version'] == 2){
+                    $goods = D('StoreMenuV2')->getProduct($v['goods_id']);
+                    $tax_price += $v['price'] * $goods['tax']/100000 * $v['num'];
+                    $deposit_price += 0;
+                }
+                /**
                 $goods = D('Shop_goods')->field(true)->where(array('goods_id'=>$v['goods_id']))->find();
                 $tax_price += $v['price'] * $goods['tax_num']/100 * $v['num'];
                 $deposit_price += $goods['deposit_price'] * $v['num'];
+                 * */
             }
             $tax_price = $tax_price + ($order['freight_charge'] + $order['packing_charge'])*$store['tax_num']/100;
             $arr['order_details']['tax_price'] = $tax_price;

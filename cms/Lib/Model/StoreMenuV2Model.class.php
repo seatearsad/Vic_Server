@@ -34,14 +34,54 @@ class StoreMenuV2Model extends Model
 
     /**
      * @param $storeId
+     * @param bool $isFilter 是否过滤时间设置
      * @return array
      */
-    public function getStoreCategories($storeId){
+    public function getStoreCategories($storeId,$isFilter = false){
         $menuList = $this->getStoreMenu($storeId);
         $allCategories = array();
         foreach ($menuList as $menu){
             $categories = $this->getMenuCategories($menu['id']);
             $allCategories = array_merge($allCategories,$categories);
+        }
+
+        if($isFilter){
+            $today = date('w');
+            $curr_time = intval(date('Hi',time()));
+
+            foreach ($allCategories as $key => &$row) {
+                $categoryTime = $this->getCategoryTime($row['id']);
+                $categoryTime = $this->arrangeCategoryTime($categoryTime);
+
+                $row['week'] = $categoryTime['week'];
+                $row['week_str'] = $categoryTime['week_str'];
+
+                $is_move = false;
+                $week_arr = $categoryTime['week_arr'];
+
+                if (!in_array($today, $week_arr)) {
+                    $is_move = true;
+                }else{
+                    $time_arr = $categoryTime['time_arr'][$today];
+                    $has_time = false;
+                    foreach ($time_arr as $ct) {
+                        $startTime = str_replace(':', '', $ct['startTime']);
+                        $endTime = str_replace(':', '', $ct['endTime']);
+
+                        if ($curr_time >= $startTime && $curr_time < $endTime) {
+                            $has_time = true;
+                            $row['show_time'] = $ct['startTime'].','.$ct['endTime'];
+                            $row['show_time_str'] = $ct['startTime'].' - '.$ct['endTime'];
+                        }
+                    }
+
+                    if(!$has_time) $is_move = true;
+                }
+
+                if($is_move){
+                    unset($allCategories[$key]);
+                }
+            }
         }
 
         return $allCategories;
@@ -64,10 +104,21 @@ class StoreMenuV2Model extends Model
             $products = $this->getMenuCategoriesProduct($category['id']);
 
             if($from_type == 1){
-                $currCate['product_list'] = $this->arrangeProductWap($products);
+                $currCate['product_list'] = $this->arrangeProductWap($products,$category['id']);
             }
 
             $allList[] = $currCate;
+        }
+
+        return $allList;
+    }
+
+    public function getStoreProductAll($categories){
+        $allList = array();
+        foreach ($categories as $category){
+            $products = $this->getMenuCategoriesProduct($category['id']);
+
+            $allList = array_merge($allList,$products);
         }
 
         return $allList;
@@ -81,19 +132,20 @@ class StoreMenuV2Model extends Model
             $newCate['store_id'] = $category['storeId'];
             $newCate['sort_name'] = $category['name'];
             $newCate['sort'] = 0;//$category['sort'];
-            $newCate['is_weekshow'] = 0;
-            $newCate['week'] = "";
+            $newCate['is_weekshow'] = 1;
+            $newCate['week'] = $category['week'];
+            $newCate['week_str'] = $category['week_str'];
             $newCate['status'] = 0;
             $newCate['sort_discount'] = 0;
             $newCate['image'] = "";
             $newCate['fid'] = 0;
             $newCate['level'] = 1;
             $newCate['print_id'] = 0;
-            $newCate['is_time'] = 0;
-            $newCate['show_time'] = "";
+            $newCate['is_time'] = 1;
+            $newCate['show_time'] = $category['show_time'];
             $newCate['cat_id'] = $category['id'];
             $newCate['cat_name'] = $category['name'];
-            $newCate['show_time_str'] = "";
+            $newCate['show_time_str'] = $category['show_time_str'];
 
             $newCategories[] = $newCate;
         }
@@ -101,11 +153,12 @@ class StoreMenuV2Model extends Model
         return $newCategories;
     }
 
-    public function arrangeProductWap($products){
-        $newPorducts = array();
+    public function arrangeProductWap($products,$categoryId){
+        $newProducts = array();
         foreach ($products as $product){
             $new_product = array();
             $new_product['product_id'] = $product['id'];
+            $new_product['categoryId'] = $categoryId;
             $new_product['product_name'] = $product['name'];
             $new_product['product_desc'] = $product['desc'];
             $new_product['product_price'] = $product['price']/100;
@@ -122,10 +175,10 @@ class StoreMenuV2Model extends Model
             $new_product['stock'] = -1;
             $new_product['version'] = 2;
 
-            $newPorducts[] = $new_product;
+            $newProducts[] = $new_product;
         }
 
-        return $newPorducts;
+        return $newProducts;
     }
 
     public function arrangeProductWapShow($product){
@@ -184,9 +237,30 @@ class StoreMenuV2Model extends Model
     }
 
     public function getCategoryTime($categoryId){
-        $categoryTime = D($this->categoriseTimeTable)->where(array('categoryId'=>$categoryId))->select();
+        $categoryTime = D($this->categoriseTimeTable)->where(array('categoryId'=>$categoryId))->order('weekNum asc')->select();
 
         return $categoryTime;
+    }
+
+    public function arrangeCategoryTime($categoryTime){
+        $weekArr = array();
+        $weekStr = "";
+        $timeArr = array();
+        foreach ($categoryTime as $time){
+            $time['weekNum'] = $time['weekNum'] == 7 ? 0 : $time['weekNum'];
+            if(!in_array($time['weekNum'],$weekArr)){
+                $weekArr[] = $time['weekNum'];
+                $weekStr[] = $this->get_week($time['weekNum']);
+            }
+            $timeArr[$time['weekNum']][] = array('startTime'=>$time['startTime'],'endTime'=>$time['endTime']);
+        }
+
+        $arr['week'] = implode(',',$weekArr);
+        $arr['week_str'] = implode(' ',$weekStr);
+        $arr['week_arr'] = $weekArr;
+        $arr['time_arr'] = $timeArr;
+
+        return $arr;
     }
 
     public function getCategoryTimeWeekStr($categoryTime){
@@ -215,6 +289,7 @@ class StoreMenuV2Model extends Model
             case 6:
                 return L('SAT_BKADMIN');
             case 7:
+            case 0:
                 return L('SUN_BKADMIN');
             default:
                 return '';

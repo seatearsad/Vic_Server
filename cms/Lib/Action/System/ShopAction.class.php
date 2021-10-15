@@ -743,12 +743,29 @@ class ShopAction extends BaseAction
             } else {
                 foreach ($order['info'] as $k => $v) {
                     $g_id = $v['goods_id'];
+                    if($store['menu_version'] == 1) {
+                        $goods = D('Shop_goods')->get_goods_by_id($g_id);
+                        $order['info'][$k]['name'] = $goods['name'];
+                        $order['info'][$k]['tax_num'] = $goods['tax_num'];
+                        $order['info'][$k]['deposit_price'] = $goods['deposit_price'];
+                        $deposit_price += $goods['deposit_price'] * $v['num'];
+                        $tax_price += $v['price'] * $goods['tax_num'] / 100 * $v['num'];
+                    }elseif ($store['menu_version'] == 2){
+                        $goods = D('StoreMenuV2')->getProduct($g_id);
+                        $order['info'][$k]['name'] = $goods['name'];
+                        $order['info'][$k]['tax_num'] = $goods['tax']/1000;
+                        $order['info'][$k]['deposit_price'] = 0;
+                        $deposit_price += 0;
+                        $tax_price += $v['price'] * $goods['tax'] / 100000 * $v['num'];
+                    }
+                    /**
                     $goods = D('Shop_goods')->get_goods_by_id($g_id);
                     $order['info'][$k]['name'] = $goods['name'];
                     $order['info'][$k]['tax_num'] = $goods['tax_num'];
                     $order['info'][$k]['deposit_price'] = $goods['deposit_price'];
                     $deposit_price += $goods['deposit_price'] * $v['num'];
                     $tax_price += $v['price'] * $goods['tax_num'] / 100 * $v['num'];
+                     * */
 
                     if ($v['dish_id'] != "" && $v['dish_id'] != null) {
                         $dish_desc = "";
