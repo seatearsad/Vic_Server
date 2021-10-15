@@ -1745,35 +1745,7 @@ class ShopAction extends BaseAction{
 
             $dish_list = D('StoreMenuV2')->getProductRelation($goods_id);
 
-            $dish_list_new = array();
-            foreach ($dish_list as $dish){
-                $newDish = array();
-                $newDish['id'] = $dish['id'];
-                $newDish['goods_id'] = $goods_id;
-                $newDish['name'] = $dish['name'];
-                $newDish['min'] = $dish['min'];
-                $newDish['max'] = $dish['max'];
-                $newDish['type'] = 0;
-                $newDish['status'] = $dish['status'];
-
-
-                $list = D('StoreMenuV2')->getProductRelation($dish['id']);
-                $newList = array();
-                foreach ($list as $l){
-                    $newSide = array();
-                    $newSide['id'] = $l['id'];
-                    $newSide['dish_id'] = $dish['id'];
-                    $newSide['name'] = $l['name'];
-                    $newSide['price'] = $l['price']/100;
-                    $newSide['status'] = $l['status'];
-
-                    $newList[] = $newSide;
-                }
-
-                $newDish['list'] = $newList;
-
-                $dish_list_new[] = $newDish;
-            }
+            $dish_list_new = D('StoreMenuV2')->arrangeDishWap($dish_list,$goods_id);
 
             $now_goods['side_dish'] = $dish_list_new;
         }else {

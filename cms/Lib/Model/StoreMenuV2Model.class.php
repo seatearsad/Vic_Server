@@ -195,6 +195,43 @@ class StoreMenuV2Model extends Model
         return $newProduct;
     }
 
+    public function arrangeDishWap($dish_list,$productId){
+        $dish_list_new = array();
+        foreach ($dish_list as $dish){
+            $newDish = array();
+            $newDish['id'] = $dish['id'];
+            $newDish['goods_id'] = $productId;
+            $newDish['name'] = $dish['name'];
+            $newDish['min'] = $dish['min'];
+            $newDish['max'] = $dish['max'];
+            if($dish['multiMax'] > 1)
+                $newDish['type'] = 1;
+            else
+                $newDish['type'] = 0;
+            $newDish['status'] = $dish['status'];
+
+
+            $list = $this->getProductRelation($dish['id']);
+            $newList = array();
+            foreach ($list as $l){
+                $newSide = array();
+                $newSide['id'] = $l['id'];
+                $newSide['dish_id'] = $dish['id'];
+                $newSide['name'] = $l['name'];
+                $newSide['price'] = $l['price']/100;
+                $newSide['status'] = $l['status'];
+
+                $newList[] = $newSide;
+            }
+
+            $newDish['list'] = $newList;
+
+            $dish_list_new[] = $newDish;
+        }
+
+        return $dish_list_new;
+    }
+
     public function getMenuCategory($categoryId){
         $category = D($this->categoriseTable)->where(array('id'=>$categoryId))->find();
 
