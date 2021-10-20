@@ -72,6 +72,8 @@ class StoreMenuV2Model extends Model
                             $has_time = true;
                             $row['show_time'] = $ct['startTime'].','.$ct['endTime'];
                             $row['show_time_str'] = $ct['startTime'].' - '.$ct['endTime'];
+                            $row['startTime'] = $ct['startTime'];
+                            $row['endTime'] = $ct['endTime'];
                         }
                     }
 
@@ -108,6 +110,19 @@ class StoreMenuV2Model extends Model
             }
 
             $allList[] = $currCate;
+        }
+
+        return $allList;
+    }
+
+    public function getStoreProductApp($categories,$uid){
+        $allList = array();
+        foreach ($categories as $category){
+            $products = $this->getMenuCategoriesProduct($category['id']);
+            $products = $this->arrangeProductApp($products,$category,$uid);
+
+
+            $allList = array_merge($allList,$products);
         }
 
         return $allList;
@@ -153,6 +168,25 @@ class StoreMenuV2Model extends Model
         return $newCategories;
     }
 
+    public function arrangeApp($categories){
+        $newCategories = array();
+
+        foreach ($categories as $category){
+            $newCate = array();
+            $newCate['id'] = $category['id'];
+            $newCate['sort_id'] = $category['id'];
+            $newCate['sid'] = $category['storeId'];
+            $newCate['title'] = $category['name'];
+            $newCate['is_time'] = "1";
+            $newCate['begin_time'] = $category['startTime'];
+            $newCate['end_time'] = $category['endTime'];
+
+            $newCategories[] = $newCate;
+        }
+
+        return $newCategories;
+    }
+
     public function arrangeProductWap($products,$categoryId){
         $newProducts = array();
         foreach ($products as $product){
@@ -181,6 +215,62 @@ class StoreMenuV2Model extends Model
         return $newProducts;
     }
 
+    public function arrangeProductApp($products,$category,$uid){
+        $newProducts = array();
+
+        foreach ($products as $product){
+            $new_product = $this->arrangeProductAppOne($product,$category);
+
+            $num = 0;
+            if($uid && $uid != 0) {
+                $cart_list = D('Cart')->where(array('uid' => $uid, 'fid' => $product['id']))->select();
+                foreach ($cart_list as $c) {
+                    $num += $c['num'];
+                }
+            }
+            $new_product['quantity'] = strval($num);
+
+
+            $newProducts[] = $new_product;
+        }
+
+        return $newProducts;
+    }
+
+    public function arrangeProductAppOne($product,$category){
+        $new_product['fid'] = $product['id'];
+        $new_product['group_id'] = $category ? $category['id'] : 0;
+        $new_product['sid'] = $product['storeId'];
+        $new_product['name'] = $product['name'];
+        $new_product['desc'] = $product['desc'];
+        $new_product['market_price'] = $product['price']/100;
+        $new_product['price'] = $product['price']/100;
+        $new_product['status'] = $product['status'];
+        $new_product['number'] = "";
+        $new_product['packing_charge'] = 0;
+        $new_product['default_image'] = $product['image'];
+        $new_product['has_format'] = $product['subNum'] > 0 ? true : false;
+        $new_product['stock'] = -1;
+        $new_product['tax_num'] = $product['tax']/1000;
+        $new_product['sales'] = 0;
+        $new_product['deposit'] = 0;
+        $new_product['is_time'] = "1";
+        $new_product['begin_time'] = $category ? $category['startTime'] : "";
+        $new_product['end_time'] = $category ? $category['endTime'] : "";
+        $new_product['is_weekshow'] = "1";
+        $new_product['dish_desc'] = "";
+        $new_product['dish_id'] = "";
+        $new_product['spec'] = "";
+        $new_product['spec_desc'] = "";
+        $new_product['proper_desc'] = "";
+        $new_product['attr_num'] = "0";
+        $new_product['attr'] = "";
+        $new_product['proper'] = "";
+        $new_product['menu_version'] = 2;
+
+        return $new_product;
+    }
+
     public function arrangeProductWapShow($product){
         $newProduct = array();
         $newProduct['goods_id'] = $product['id'];
@@ -205,9 +295,9 @@ class StoreMenuV2Model extends Model
             $newDish['min'] = $dish['min'];
             $newDish['max'] = $dish['max'];
             if($dish['multiMax'] > 1)
-                $newDish['type'] = 1;
+                $newDish['type'] = "1";
             else
-                $newDish['type'] = 0;
+                $newDish['type'] = "0";
             $newDish['status'] = $dish['status'];
 
 
@@ -277,6 +367,50 @@ class StoreMenuV2Model extends Model
         $categoryTime = D($this->categoriseTimeTable)->where(array('categoryId'=>$categoryId))->order('weekNum asc')->select();
 
         return $categoryTime;
+    }
+
+    public function getCategoryByProductId($productId){
+        $category = D($this->categoriseProductTable)->where(array('productId'=>$productId))->find();
+
+        return $category;
+    }
+    public function getCategoryTimeByProductId($productId){
+        $c = D($this->categoriseProductTable)->where(array('productId'=>$productId))->find();
+
+        $categoryTime = $this->getCategoryTime($c['categoryId']);
+
+        $categoryTime = $this->arrangeCategoryTime($categoryTime);
+
+        $row['week'] = $categoryTime['week'];
+        $row['week_str'] = $categoryTime['week_str'];
+
+        $is_move = false;
+        $week_arr = $categoryTime['week_arr'];
+
+        $today = date('w');
+        $curr_time = intval(date('Hi',time()));
+        if (!in_array($today, $week_arr)) {
+            $is_move = true;
+        }else{
+            $time_arr = $categoryTime['time_arr'][$today];
+            $has_time = false;
+            foreach ($time_arr as $ct) {
+                $startTime = str_replace(':', '', $ct['startTime']);
+                $endTime = str_replace(':', '', $ct['endTime']);
+
+                if ($curr_time >= $startTime && $curr_time < $endTime) {
+                    $has_time = true;
+                    $row['show_time'] = $ct['startTime'].','.$ct['endTime'];
+                    $row['show_time_str'] = $ct['startTime'].' - '.$ct['endTime'];
+                    $row['startTime'] = $ct['startTime'];
+                    $row['endTime'] = $ct['endTime'];
+                }
+            }
+
+            if(!$has_time) $is_move = true;
+        }
+
+        return $row;
     }
 
     public function arrangeCategoryTime($categoryTime){

@@ -400,12 +400,20 @@ class IndexAction extends BaseAction
         $store['shopstatus'] = $t_store['is_close'] == 0 ? "1" : "0";
         $store['shopname'] = $t_store['site_name'];
 
-        $group = $this->loadModel()->get_goods_group_by_storeId($sid);
+        if($t_store['menu_version'] == 1) {
+            $group = $this->loadModel()->get_goods_group_by_storeId($sid);
 
-        $goods = $this->loadModel()->get_goods_by_storeId($sid);
+            $goods = $this->loadModel()->get_goods_by_storeId($sid);
 
-        $store['group'] = $this->loadModel()-> arrange_group_for_goods($group);
-        $store['foods'] = $this->loadModel()-> arrange_goods_for_goods($goods);
+            $store['group'] = $this->loadModel()->arrange_group_for_goods($group);
+            $store['foods'] = $this->loadModel()->arrange_goods_for_goods($goods);
+        }else if ($t_store['menu_version'] == 2){
+            $categories = D('StoreMenuV2')->getStoreCategories($sid,true);
+            $store['group'] = D('StoreMenuV2')->arrangeApp($categories);
+
+            $goods = D('StoreMenuV2')->getStoreProductApp($categories,$_POST['uid']);
+            $store['foods'] = $goods;
+        }
         $store['count'] = count($store['foods']);
 
         $this->returnCode(0,'info',$store);
@@ -664,12 +672,16 @@ class IndexAction extends BaseAction
     public function addCart(){
         $uid = $_POST['uid'];
         $fid = $_POST['fid'];
+        $sid = $_POST['storeId'] ? $_POST['storeId'] : "";
+        $categoryId = $_POST['categoryId'] ? $_POST['categoryId'] : 0;
+
+
         $num = !empty($_POST['num']) ? $_POST['num']:1;
         $spec = empty($_POST['spec']) ? "" : $_POST['spec'];
         $proper = empty($_POST['proper']) ? "" : $_POST['proper'];
         $dish_id = empty($_POST['dish_id']) ? "" : $_POST['dish_id'];
 
-        D('Cart')->add_cart($uid,$fid,$num,$spec,$proper,$dish_id);
+        D('Cart')->add_cart($uid,$fid,$num,$spec,$proper,$dish_id,$sid,$categoryId);
 
         $this->returnCode(0,'info',array(),'success');
     }
@@ -677,6 +689,9 @@ class IndexAction extends BaseAction
     public function addCartAndSpec(){
         $uid = $_POST['uid'];
         $fid = $_POST['fid'];
+        $sid = $_POST['storeId'] ? $_POST['storeId'] : "";
+        $categoryId = $_POST['categoryId'] ? $_POST['categoryId'] : 0;
+
         $num = !empty($_POST['num']) ? $_POST['num']:1;
         $spec = $_POST['spec'];
         $proper = $_POST['proper'];
@@ -686,7 +701,7 @@ class IndexAction extends BaseAction
             $dish_id = "";
         }
 
-        D('Cart')->add_cart($uid,$fid,$num,$spec,$proper,$dish_id);
+        D('Cart')->add_cart($uid,$fid,$num,$spec,$proper,$dish_id,$sid,$categoryId);
 
         $this->returnCode(0,'info',array(),'success');
     }
@@ -878,8 +893,15 @@ class IndexAction extends BaseAction
         $orderData = array();
 
         //判断商品是否还在可销售的时间段
-        $store_id = D('Cart')->field(true)->where(array('uid'=>$uid,'fid'=>$cart_array[0]['fid']))->find()['sid'];
-        $sortList = D('Shop_goods_sort')->lists($store_id, true);
+        $sid = D('Cart')->field(true)->where(array('uid'=>$uid,'fid'=>$cart_array[0]['fid']))->find()['sid'];
+        $store = D('Merchant_store')->where(array('store_id'=>$sid))->find();
+
+        if($store['menu_version'] == 2){
+            $categories = D('StoreMenuV2')->getStoreCategories($sid,true);
+            $sortList = D('StoreMenuV2')->arrangeApp($categories);
+        }else {
+            $sortList = D('Shop_goods_sort')->lists($sid, true);
+        }
         $sortIdList = array();
 
         $is_cut = false;
@@ -890,7 +912,18 @@ class IndexAction extends BaseAction
 
         foreach ($cart_array as $product) {
             $goodsId = $product['fid'];
-            $goods = D('Shop_goods')->where(array('goods_id' => $goodsId))->find();
+            if($store['menu_version'] == 2){
+                $product_good = D('StoreMenuV2')->getProduct($goodsId);
+                $goods = D('StoreMenuV2')->arrangeProductAppOne($product_good);
+                if($product['categoryId'] == 0) {
+                    $curr_category = D('StoreMenuV2')->getCategoryByProductId($goodsId);
+                    $goods['sort_id'] = $curr_category['categoryId'];
+                }else {
+                    $goods['sort_id'] = $product['categoryId'];
+                }
+            }else {
+                $goods = D('Shop_goods')->where(array('goods_id' => $goodsId))->find();
+            }
 
             if(!in_array($goods['sort_id'],$sortIdList)){
                 $is_cut = true;
@@ -914,9 +947,20 @@ class IndexAction extends BaseAction
         ///////////
 
         foreach ($cart_array as $v){
-            $good = D('Shop_goods')->field(true)->where(array('goods_id' => $v['fid']))->find();
-            $t_good['productId'] = $v['fid'];
-            $t_good['productName'] = lang_substr($good['name'],C('DEFAULT_LANG'));
+            if($store['menu_version'] == 2){
+                $good = D('StoreMenuV2')->getProduct($v['fid']);
+                $t_good['productId'] = $v['fid'];
+                $t_good['productName'] = $good['name'];
+                $good['price'] = $good['price']/100;
+                $good['tax_num'] = $good['tax']/1000;
+                $good['deposit_price'] = 0;
+                $good['stock_num'] = -1;
+            }else{
+                $good = D('Shop_goods')->field(true)->where(array('goods_id' => $v['fid']))->find();
+                $t_good['productId'] = $v['fid'];
+                $t_good['productName'] = lang_substr($good['name'],C('DEFAULT_LANG'));
+            }
+
             $specData = D('Shop_goods')->format_spec_value($good['spec_value'], $good['goods_id'], $good['is_properties']);
             if($specData['list'] != "" && $v['spec'] != ""){
                 foreach ($specData['list'] as $kk=>$vv){
@@ -983,11 +1027,10 @@ class IndexAction extends BaseAction
             $orderData[] = $t_good;
         }
 
-        $sid = D('Cart')->field(true)->where(array('uid'=>$uid,'fid'=>$cart_array[0]['fid']))->find()['sid'];
+
         $return = D('Shop_goods')->checkCart($sid, $uid, $orderData);
 
         //garfunkel add
-        $store = D('Merchant_store')->where(array('store_id'=>$return['store_id']))->find();
         $area = D('Area')->where(array('area_id'=>$store['city_id']))->find();
 
         $now_time = time()+ $area['jetlag']*3600;
@@ -1438,9 +1481,10 @@ class IndexAction extends BaseAction
         if($address && $address['detail'] != '')
             $order_detail['address2'] = $address['adress'].' ('.$address['detail'].')';
 
+        $store = D('Store')->get_store_by_id($order['store_id']);
         $order_detail['jetlag'] = 0;
         if($order['paid'] == 0) {
-            $store = D('Merchant_store')->where(array('store_id' => $order['store_id']))->find();
+            //$store = D('Merchant_store')->where(array('store_id' => $order['store_id']))->find();
             $area = D('Area')->where(array('area_id'=>$store['city_id']))->find();
             $order_detail['jetlag'] = $area['jetlag'];
         }
@@ -1522,9 +1566,15 @@ class IndexAction extends BaseAction
                 foreach($dish_list as $vv){
                     $one_dish = explode(",",$vv);
                     //0 dish_id 1 id 2 num 3 price
-
-                    $dish_vale = D('Side_dish_value')->where(array('id'=>$one_dish[1]))->find();
-                    $dish_vale['name'] = lang_substr($dish_vale['name'],C('DEFAULT_LANG'));
+                    if($store['menu_version'] == 1) {
+                        $dish_vale = D('Side_dish_value')->where(array('id' => $one_dish[1]))->find();
+                        $dish_vale['name'] = lang_substr($dish_vale['name'], C('DEFAULT_LANG'));
+                    }elseif ($store['menu_version'] == 2){
+                        $product_dish = D('StoreMenuV2')->getProduct($one_dish[1]);
+                        $dish_vale['name'] = $product_dish['name'];
+                    }
+                    //$dish_vale = D('Side_dish_value')->where(array('id'=>$one_dish[1]))->find();
+                    //$dish_vale['name'] = lang_substr($dish_vale['name'],C('DEFAULT_LANG'));
 
                     $add_str = $one_dish[2] > 1 ? $dish_vale['name']."*".$one_dish[2] : $dish_vale['name'];
 
@@ -1533,8 +1583,15 @@ class IndexAction extends BaseAction
                 $goods['spec_desc'] = $goods['spec_desc'] == '' ? $dish_desc : $goods['spec_desc'].";".$dish_desc;
             }
 
-            $good = D('Shop_goods')->field(true)->where(array('goods_id' => $v['goods_id']))->find();
-            $tax_price += $v['price'] * $good['tax_num']/100 * $v['num'];
+            if($store['menu_version'] == 2){
+                //$goods = D('StoreMenuV2')->getProduct($v['fid']);
+                //$goods['price'] = $goods['price']/100;
+                //$goods['tax_num'] = $goods['tax']/1000;
+                $good['deposit_price'] = 0;
+            }else {
+                $good = D('Shop_goods')->field(true)->where(array('goods_id' => $v['goods_id']))->find();
+            }
+            $tax_price += $v['price'] * $v['tax_num']/100 * $v['num'];
             $deposit_price += $good['deposit_price']*$v['num'];
 
             $food[] = $goods;
@@ -1570,50 +1627,67 @@ class IndexAction extends BaseAction
         $uid = $_POST['uid'];
         $fid = $_POST['fid'];
 
-        $database_shop_goods = D('Shop_goods');
-        $now_goods = $database_shop_goods->get_goods_by_id($fid);
-        //modify garfunkel 判断语言
-        $now_goods['name'] = lang_substr($now_goods['name'],C('DEFAULT_LANG'));
-        $now_goods['unit'] = lang_substr($now_goods['unit'],C('DEFAULT_LANG'));
-        foreach ($now_goods['properties_list'] as $k => $v){
-            $now_goods['properties_list'][$k]['name'] = lang_substr($v['name'],C('DEFAULT_LANG'));
-            foreach ($v['val'] as $kk => $vv){
-                $now_goods['properties_list'][$k]['val'][$kk] = lang_substr($vv,C('DEFAULT_LANG'));
+        $storeId = $_POST['storeId'] ? $_POST['storeId'] : 0;
+
+        $store = D('Merchant_store')->where(array('store_id'=>$storeId))->find();
+
+        if($store['menu_version'] == 2){
+            $result['spec_list'] = "";
+            $result['properties_list'] = "";
+
+            //$result['list'] = array();
+
+            $dish_list = D('StoreMenuV2')->getProductRelation($fid);
+            $dish_list_new = D('StoreMenuV2')->arrangeDishWap($dish_list,$fid);
+
+            $result['side_dish'] = $dish_list_new;
+        }else{
+            $database_shop_goods = D('Shop_goods');
+            $now_goods = $database_shop_goods->get_goods_by_id($fid);
+
+            //modify garfunkel 判断语言
+            $now_goods['name'] = lang_substr($now_goods['name'], C('DEFAULT_LANG'));
+            $now_goods['unit'] = lang_substr($now_goods['unit'], C('DEFAULT_LANG'));
+            foreach ($now_goods['properties_list'] as $k => $v) {
+                $now_goods['properties_list'][$k]['name'] = lang_substr($v['name'], C('DEFAULT_LANG'));
+                foreach ($v['val'] as $kk => $vv) {
+                    $now_goods['properties_list'][$k]['val'][$kk] = lang_substr($vv, C('DEFAULT_LANG'));
+                }
+                $result['properties_list'][] = $now_goods['properties_list'][$k];
             }
-            $result['properties_list'][] = $now_goods['properties_list'][$k];
+
+            foreach ($now_goods['spec_list'] as $k => $v) {
+                $now_goods['spec_list'][$k]['name'] = lang_substr($v['name'], C('DEFAULT_LANG'));
+                foreach ($v['list'] as $kk => $vv) {
+                    $now_goods['spec_list'][$k]['list'][$kk]['name'] = lang_substr($vv['name'], C('DEFAULT_LANG'));
+                }
+                //ksort($v['list']);
+                //$now_goods['spec_list'][$k]['list'] = $v['list'];
+            }
+            $result['spec_list'] = $now_goods['spec_list'];
+
+            //garfunkel add side_dish
+            $dish_list = D('Side_dish')->where(array('goods_id' => $fid, 'status' => 1))->select();
+            $send_list = array();
+            foreach ($dish_list as &$v) {
+                $v['name'] = lang_substr($v['name'], C('DEFAULT_LANG'));
+                $values = D('Side_dish_value')->where(array('dish_id' => $v['id'], 'status' => 1))->select();
+                foreach ($values as &$vv) {
+                    $vv['name'] = lang_substr($vv['name'], C('DEFAULT_LANG'));
+                }
+                if ($values) {
+                    $v['list'] = $values;
+                    $send_list[] = $v;
+                }
+            }
+
+            if ($send_list)
+                $result['side_dish'] = $send_list;
+            else
+                $result['side_dish'] = "";
+
+            $result['list'] = $now_goods['list'];
         }
-
-        foreach($now_goods['spec_list'] as $k => $v){
-            $now_goods['spec_list'][$k]['name'] = lang_substr($v['name'],C('DEFAULT_LANG'));
-            foreach($v['list'] as $kk => $vv){
-                $now_goods['spec_list'][$k]['list'][$kk]['name'] = lang_substr($vv['name'],C('DEFAULT_LANG'));
-            }
-            //ksort($v['list']);
-            //$now_goods['spec_list'][$k]['list'] = $v['list'];
-        }
-        $result['spec_list'] = $now_goods['spec_list'];
-
-        //garfunkel add side_dish
-        $dish_list = D('Side_dish')->where(array('goods_id'=>$fid,'status'=>1))->select();
-        $send_list = array();
-        foreach ($dish_list as &$v){
-            $v['name'] = lang_substr($v['name'],C('DEFAULT_LANG'));
-            $values = D('Side_dish_value')->where(array('dish_id'=>$v['id'],'status'=>1))->select();
-            foreach ($values as &$vv){
-                $vv['name'] = lang_substr($vv['name'],C('DEFAULT_LANG'));
-            }
-            if($values) {
-                $v['list'] = $values;
-                $send_list[] = $v;
-            }
-        }
-
-        if($send_list)
-            $result['side_dish'] = $send_list;
-        else
-            $result['side_dish'] = "";
-
-        $result['list'] = $now_goods['list'];
 
         $result['cart'] = D('Cart')->field(true)->where(array("uid"=>$uid,"fid"=>$fid))->order('time desc')->select();
 

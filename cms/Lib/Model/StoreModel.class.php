@@ -47,6 +47,7 @@ class StoreModel extends Model
         $store['shop_remind'] = $row['shop_remind'];
         $store['pay_method'] = $row['pay_method'];
         $store['delivery_radius'] = $row['delivery_radius'];
+        $store['menu_version'] = $row['menu_version'];
 
         if($row['background'] && $row['background'] != '') {
             $image_tmp = explode(',', $row['background']);
@@ -550,16 +551,36 @@ class StoreModel extends Model
             $returnList[$k]['spec'] = empty($v['spec']) ? "" : $v['spec'];
             $returnList[$k]['proper'] = empty($v['proper']) ? "" : $v['proper'];
             //显示时间判断
-            $now_sort = D('Shop_goods_sort')->where(array('sort_id'=>$v['sort_id']))->find();
-            $returnList[$k]['is_time'] = $now_sort['is_time'];
-            if($now_sort['is_time'] == 1){
-                $show_time = explode(',',$now_sort['show_time']);
-                $returnList[$k]['begin_time'] = $show_time[0];
-                $returnList[$k]['end_time'] = $show_time[1];
-            }
-            $returnList[$k]['is_weekshow'] = $now_sort['is_weekshow'];
-            if($now_sort['is_weekshow'] == 1){
-                $returnList[$k]['week'] = $now_sort['week'];
+            if($v['menu_version'] == 1) {
+                $now_sort = D('Shop_goods_sort')->where(array('sort_id' => $v['sort_id']))->find();
+                $returnList[$k]['is_time'] = $now_sort['is_time'];
+                if ($now_sort['is_time'] == 1) {
+                    $show_time = explode(',', $now_sort['show_time']);
+                    $returnList[$k]['begin_time'] = $show_time[0];
+                    $returnList[$k]['end_time'] = $show_time[1];
+                }
+                $returnList[$k]['is_weekshow'] = $now_sort['is_weekshow'];
+                if ($now_sort['is_weekshow'] == 1) {
+                    $returnList[$k]['week'] = $now_sort['week'];
+                }
+            }elseif($v['menu_version'] == 2){
+                if($v['sort_id'] != 0) {
+                    $categoryTime = D('StoreMenuV2')->getCategoryTime($v['sort_id']);
+                    $sort_time = D('StoreMenuV2')->arrangeCategoryTime($categoryTime);
+                }else {
+                    $sort_time = D('StoreMenuV2')->getCategoryTimeByProductId($v['goods_id']);
+                }
+
+                $returnList[$k]['is_weekshow'] = 1;
+                $returnList[$k]['week'] = $sort_time['week'];
+
+                if($sort_time['show_time']) {
+                    $returnList[$k]['is_time'] = "1";
+                    $returnList[$k]['begin_time'] = $sort_time['startTime'];
+                    $returnList[$k]['end_time'] = $sort_time['endTime'];
+                }else{
+                    $returnList[$k]['is_time'] = "0";
+                }
             }
 
             //是否有规格及属性选择
@@ -571,11 +592,12 @@ class StoreModel extends Model
             //garfunkel add side_dish
             $returnList[$k]['dish_id'] = $v['dish_id'];
             $dish_desc = "";
-            if(D('Side_dish')->where(array('goods_id'=>$v['goods_id'],'status'=>1))->find()){
-                $returnList[$k]['has_format'] = true;
+            //if(D('Side_dish')->where(array('goods_id'=>$v['goods_id'],'status'=>1))->find()){
+
                 $add_price = 0;
 
                 if($v['dish_id'] != "" && $v['dish_id'] != null){
+                    $returnList[$k]['has_format'] = true;
                     $dish_list = explode("|",$v['dish_id']);
                     foreach($dish_list as $vv){
                         $one_dish = explode(",",$vv);
@@ -584,8 +606,13 @@ class StoreModel extends Model
                             $add_price += $one_dish[3]*$one_dish[2];
                         }
 
-                        $dish_vale = D('Side_dish_value')->where(array('id'=>$one_dish[1]))->find();
-                        $dish_vale['name'] = lang_substr($dish_vale['name'],C('DEFAULT_LANG'));
+                        if($v['menu_version'] == 1) {
+                            $dish_vale = D('Side_dish_value')->where(array('id' => $one_dish[1]))->find();
+                            $dish_vale['name'] = lang_substr($dish_vale['name'], C('DEFAULT_LANG'));
+                        }elseif ($v['menu_version'] == 2){
+                            $product_dish = D('StoreMenuV2')->getProduct($one_dish[1]);
+                            $dish_vale['name'] = $product_dish['name'];
+                        }
 
                         $add_str = $one_dish[2] > 1 ? $dish_vale['name']."*".$one_dish[2] : $dish_vale['name'];
 
@@ -594,7 +621,7 @@ class StoreModel extends Model
 
                     $returnList[$k]['price'] = $returnList[$k]['price'] + $add_price;
                 }
-            }
+            //}
             $returnList[$k]['dish_desc'] = $dish_desc;
 
             $spec_desc = "";

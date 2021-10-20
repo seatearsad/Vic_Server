@@ -8,12 +8,24 @@
 
 class CartModel extends Model
 {
-    public function add_cart($uid,$fid,$num=1,$spec = "",$proper = "",$dish_id = ""){
+    public function add_cart($uid,$fid,$num=1,$spec = "",$proper = "",$dish_id = "",$storeId,$categoryId){
         $data['uid'] = $uid;
         $data['fid'] = $fid;
 
-        $good = D('Shop_goods')->field(true)->where(array('goods_id' => $fid))->find();
-        $data['sid'] = $good['store_id'];
+        if($storeId == ""){
+            $good = D('Shop_goods')->field(true)->where(array('goods_id' => $fid))->find();
+            if($good)
+                $data['sid'] = $good['store_id'];
+            else{//menu_version = 2
+                $product = D('StoreMenuV2')->getProduct($fid);
+                $data['sid'] = $product['storeId'];
+            }
+        }else{
+            $data['sid'] = $storeId;
+        }
+
+        $data['categoryId'] = $categoryId;
+
 
         $data['num'] = $num;
         $data['spec'] = $spec;
@@ -33,6 +45,8 @@ class CartModel extends Model
         }else{
             $item['num'] += $num;
             $item['time'] = $data['time'];
+            //更新menu_verison = 2 之前未存储 categoryId的
+            if($item['categoryId'] == 0) $item['categoryId'] = $data['categoryId'];
             if ($item['num']<=0)
                 $this->field(true)->where(array('itemId'=>$item['itemId']))->delete();
             else
@@ -64,20 +78,37 @@ class CartModel extends Model
 
         foreach($cartList as $v){
             $allnum += $v['num'];
-            $good = D('Shop_goods')->field(true)->where(array('goods_id' => $v['fid']))->find();
-            //获取规格价格
-            $specData = D('Shop_goods')->format_spec_value($good['spec_value'], $good['goods_id'], $good['is_properties']);
-            if($specData['list'] != "" && $v['spec'] != ""){
-                foreach ($specData['list'] as $kk=>$vv){
-                    if($v['spec'] == $kk){
-                        $good['price'] = $vv['price'];
+
+            $store = D('Store')->get_store_by_id($v['sid']);
+            if($store['menu_version'] == 2){
+                $product = D('StoreMenuV2')->getProduct($v['fid']);
+                $good = D('StoreMenuV2')->arrangeProductAppOne($product);
+                $good['goods_id'] = $product['id'];
+                $good['store_id'] = $product['storeId'];
+                $good['sort_id'] = $v['categoryId'];
+                $good['old_price'] = 0;
+                $good['stock_num'] = -1;
+                $good['deposit_price'] = 0;
+                $good['sell_mouth'] = 0;
+                $good['des'] = $product['desc'];
+                $good['menu_version'] = 2;
+            }else{
+                $good = D('Shop_goods')->field(true)->where(array('goods_id' => $v['fid']))->find();
+                //获取规格价格
+                $specData = D('Shop_goods')->format_spec_value($good['spec_value'], $good['goods_id'], $good['is_properties']);
+                if ($specData['list'] != "" && $v['spec'] != "") {
+                    foreach ($specData['list'] as $kk => $vv) {
+                        if ($v['spec'] == $kk) {
+                            $good['price'] = $vv['price'];
+                        }
                     }
                 }
+                $good['menu_version'] = 1;
             }
 
             //$allmoney += $good['price']*$v['num'];
             if ($resid != $good['store_id']){
-                $store = D('Store')->get_store_by_id($good['store_id']);
+                //$store = D('Store')->get_store_by_id($good['store_id']);
 
                 $resid = $good['store_id'];
 
@@ -110,6 +141,7 @@ class CartModel extends Model
             $good['dish_id'] = $v['dish_id'];
             $goodList[] = $good;
         }
+
         $goodList = D('Store')->arrange_goods_for_goods($goodList);
 
         foreach($goodList as $v){
@@ -150,10 +182,23 @@ class CartModel extends Model
         $tax_price = 0;
         $deposit_price = 0;
 
+        $sid = $this->field(true)->where(array('uid'=>$uid,'fid'=>$cartList[0]['fid']))->find()['sid'];
+        $store = D('Store')->get_store_by_id($sid);
+
         foreach ($cartList as $v){
-            $good = D('Shop_goods')->field(true)->where(array('goods_id' => $v['fid']))->find();
-            $t_good['fname'] = lang_substr($good['name'],C('DEFAULT_LANG'));
+            if($store['menu_version'] == 2){
+                $good = D('StoreMenuV2')->getProduct($v['fid']);
+                $t_good['fname'] = $good['name'];
+                $good['price'] = $good['price']/100;
+                $good['tax_num'] = $good['tax']/1000;
+                $good['deposit_price'] = 0;
+            }else {
+                $good = D('Shop_goods')->field(true)->where(array('goods_id' => $v['fid']))->find();
+                $t_good['fname'] = lang_substr($good['name'], C('DEFAULT_LANG'));
+            }
+
             $t_good['stock'] = $v['stock'];
+            $t_good['categoryId'] = $v['categoryId'];
 
             //处理商品规格
             $t_good['spec'] = $v['spec'];
@@ -206,8 +251,15 @@ class CartModel extends Model
                         $add_price += $one_dish[3]*$one_dish[2];
                     }
 
-                    $dish_vale = D('Side_dish_value')->where(array('id'=>$one_dish[1]))->find();
-                    $dish_vale['name'] = lang_substr($dish_vale['name'],C('DEFAULT_LANG'));
+                    if($store['menu_version'] == 1) {
+                        $dish_vale = D('Side_dish_value')->where(array('id' => $one_dish[1]))->find();
+                        $dish_vale['name'] = lang_substr($dish_vale['name'], C('DEFAULT_LANG'));
+                    }elseif ($store['menu_version'] == 2){
+                        $product_dish = D('StoreMenuV2')->getProduct($one_dish[1]);
+                        $dish_vale['name'] = $product_dish['name'];
+                    }
+                    //$dish_vale = D('Side_dish_value')->where(array('id'=>$one_dish[1]))->find();
+                    //$dish_vale['name'] = lang_substr($dish_vale['name'],C('DEFAULT_LANG'));
 
                     $add_str = $one_dish[2] > 1 ? $dish_vale['name']."*".$one_dish[2] : $dish_vale['name'];
 
@@ -245,8 +297,6 @@ class CartModel extends Model
 
         $result['info'] = $list;
 
-        $sid = $this->field(true)->where(array('uid'=>$uid,'fid'=>$cartList[0]['fid']))->find()['sid'];
-        $store = D('Store')->get_store_by_id($sid);
         $result['packing_fee'] = $store['pack_fee'] ? $store['pack_fee'] :0;
         $total_pay_price += $store['pack_fee'];
         //获取配送费
