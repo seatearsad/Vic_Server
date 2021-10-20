@@ -565,8 +565,7 @@ class StoreModel extends Model
                 }
             }elseif($v['menu_version'] == 2){
                 if($v['sort_id'] != 0) {
-                    $categoryTime = D('StoreMenuV2')->getCategoryTime($v['sort_id']);
-                    $sort_time = D('StoreMenuV2')->arrangeCategoryTime($categoryTime);
+                    $sort_time = D('StoreMenuV2')->getCategoryTimeByCategoryId($v['sort_id']);
                 }else {
                     $sort_time = D('StoreMenuV2')->getCategoryTimeByProductId($v['goods_id']);
                 }

@@ -413,6 +413,43 @@ class StoreMenuV2Model extends Model
         return $row;
     }
 
+    public function getCategoryTimeByCategoryId($categoryId){
+        $categoryTime = $this->getCategoryTime($categoryId);
+
+        $categoryTime = $this->arrangeCategoryTime($categoryTime);
+
+        $row['week'] = $categoryTime['week'];
+        $row['week_str'] = $categoryTime['week_str'];
+
+        $is_move = false;
+        $week_arr = $categoryTime['week_arr'];
+
+        $today = date('w');
+        $curr_time = intval(date('Hi',time()));
+        if (!in_array($today, $week_arr)) {
+            $is_move = true;
+        }else{
+            $time_arr = $categoryTime['time_arr'][$today];
+            $has_time = false;
+            foreach ($time_arr as $ct) {
+                $startTime = str_replace(':', '', $ct['startTime']);
+                $endTime = str_replace(':', '', $ct['endTime']);
+
+                if ($curr_time >= $startTime && $curr_time < $endTime) {
+                    $has_time = true;
+                    $row['show_time'] = $ct['startTime'].','.$ct['endTime'];
+                    $row['show_time_str'] = $ct['startTime'].' - '.$ct['endTime'];
+                    $row['startTime'] = $ct['startTime'];
+                    $row['endTime'] = $ct['endTime'];
+                }
+            }
+
+            if(!$has_time) $is_move = true;
+        }
+
+        return $row;
+    }
+
     public function arrangeCategoryTime($categoryTime){
         $weekArr = array();
         $weekStr = "";
