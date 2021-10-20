@@ -813,6 +813,49 @@ class IndexAction extends BaseAction
 
         $cart_array = json_decode(html_entity_decode($cartList), true);
 
+        $sid = D('Cart')->field(true)->where(array('uid'=>$uid,'fid'=>$cart_array[0]['fid']))->find()['sid'];
+        $store = D('Merchant_store')->where(array('store_id'=>$sid))->find();
+
+        if($store['menu_version'] == 2){
+            $categories = D('StoreMenuV2')->getStoreCategories($sid,true);
+            $sortList = D('StoreMenuV2')->arrangeApp($categories);
+        }else {
+            $sortList = D('Shop_goods_sort')->lists($sid, true);
+        }
+        $sortIdList = array();
+
+        $del_list = array();
+
+        foreach ($sortList as $k => $sl){
+            $sortIdList[] = $sl['sort_id'];
+        }
+
+        foreach ($cart_array as $product) {
+            $goodsId = $product['fid'];
+            if($store['menu_version'] == 2){
+                $product_good = D('StoreMenuV2')->getProduct($goodsId);
+                $goods = D('StoreMenuV2')->arrangeProductAppOne($product_good);
+                if($product['categoryId'] == 0) {
+                    $curr_category = D('StoreMenuV2')->getCategoryByProductId($goodsId);
+                    $goods['sort_id'] = $curr_category['categoryId'];
+                }else {
+                    $goods['sort_id'] = $product['categoryId'];
+                }
+            }else {
+                $goods = D('Shop_goods')->where(array('goods_id' => $goodsId))->find();
+            }
+
+            if(!in_array($goods['sort_id'],$sortIdList)){
+                $del_list[] = lang_substr($goods['name'],C('DEFAULT_LANG'));
+                D('Cart')->where(array('uid'=>$uid,'fid'=>$goodsId))->delete();
+            }
+
+            if($goods['status'] != 1){
+                $del_list[] = lang_substr($goods['name'],C('DEFAULT_LANG'));
+                D('Cart')->where(array('uid'=>$uid,'fid'=>$goodsId))->delete();
+            }
+        }
+        /**
         $week = date('w');
         $currTime = date('H:i:s');
 
@@ -839,6 +882,7 @@ class IndexAction extends BaseAction
                 }
             }
         }
+         * */
 
         if(count($del_list) == 0){
             $this->returnCode(0, 'info', array(), 'success');
@@ -1631,7 +1675,61 @@ class IndexAction extends BaseAction
 
         $store = D('Merchant_store')->where(array('store_id'=>$storeId))->find();
 
+        $is_version = 1;
         if($store['menu_version'] == 2){
+            $is_version = 2;
+        }else{
+            $database_shop_goods = D('Shop_goods');
+            $now_goods = $database_shop_goods->get_goods_by_id($fid);
+            if(!$now_goods){//为兼容老版本使用
+                $is_version = 2;
+            }else {
+                //modify garfunkel 判断语言
+                $now_goods['name'] = lang_substr($now_goods['name'], C('DEFAULT_LANG'));
+                $now_goods['unit'] = lang_substr($now_goods['unit'], C('DEFAULT_LANG'));
+                foreach ($now_goods['properties_list'] as $k => $v) {
+                    $now_goods['properties_list'][$k]['name'] = lang_substr($v['name'], C('DEFAULT_LANG'));
+                    foreach ($v['val'] as $kk => $vv) {
+                        $now_goods['properties_list'][$k]['val'][$kk] = lang_substr($vv, C('DEFAULT_LANG'));
+                    }
+                    $result['properties_list'][] = $now_goods['properties_list'][$k];
+                }
+
+                foreach ($now_goods['spec_list'] as $k => $v) {
+                    $now_goods['spec_list'][$k]['name'] = lang_substr($v['name'], C('DEFAULT_LANG'));
+                    foreach ($v['list'] as $kk => $vv) {
+                        $now_goods['spec_list'][$k]['list'][$kk]['name'] = lang_substr($vv['name'], C('DEFAULT_LANG'));
+                    }
+                    //ksort($v['list']);
+                    //$now_goods['spec_list'][$k]['list'] = $v['list'];
+                }
+                $result['spec_list'] = $now_goods['spec_list'];
+
+                //garfunkel add side_dish
+                $dish_list = D('Side_dish')->where(array('goods_id' => $fid, 'status' => 1))->select();
+                $send_list = array();
+                foreach ($dish_list as &$v) {
+                    $v['name'] = lang_substr($v['name'], C('DEFAULT_LANG'));
+                    $values = D('Side_dish_value')->where(array('dish_id' => $v['id'], 'status' => 1))->select();
+                    foreach ($values as &$vv) {
+                        $vv['name'] = lang_substr($vv['name'], C('DEFAULT_LANG'));
+                    }
+                    if ($values) {
+                        $v['list'] = $values;
+                        $send_list[] = $v;
+                    }
+                }
+
+                if ($send_list)
+                    $result['side_dish'] = $send_list;
+                else
+                    $result['side_dish'] = "";
+
+                $result['list'] = $now_goods['list'];
+            }
+        }
+
+        if($is_version == 2){
             $result['spec_list'] = "";
             $result['properties_list'] = "";
 
@@ -1641,52 +1739,6 @@ class IndexAction extends BaseAction
             $dish_list_new = D('StoreMenuV2')->arrangeDishWap($dish_list,$fid);
 
             $result['side_dish'] = $dish_list_new;
-        }else{
-            $database_shop_goods = D('Shop_goods');
-            $now_goods = $database_shop_goods->get_goods_by_id($fid);
-
-            //modify garfunkel 判断语言
-            $now_goods['name'] = lang_substr($now_goods['name'], C('DEFAULT_LANG'));
-            $now_goods['unit'] = lang_substr($now_goods['unit'], C('DEFAULT_LANG'));
-            foreach ($now_goods['properties_list'] as $k => $v) {
-                $now_goods['properties_list'][$k]['name'] = lang_substr($v['name'], C('DEFAULT_LANG'));
-                foreach ($v['val'] as $kk => $vv) {
-                    $now_goods['properties_list'][$k]['val'][$kk] = lang_substr($vv, C('DEFAULT_LANG'));
-                }
-                $result['properties_list'][] = $now_goods['properties_list'][$k];
-            }
-
-            foreach ($now_goods['spec_list'] as $k => $v) {
-                $now_goods['spec_list'][$k]['name'] = lang_substr($v['name'], C('DEFAULT_LANG'));
-                foreach ($v['list'] as $kk => $vv) {
-                    $now_goods['spec_list'][$k]['list'][$kk]['name'] = lang_substr($vv['name'], C('DEFAULT_LANG'));
-                }
-                //ksort($v['list']);
-                //$now_goods['spec_list'][$k]['list'] = $v['list'];
-            }
-            $result['spec_list'] = $now_goods['spec_list'];
-
-            //garfunkel add side_dish
-            $dish_list = D('Side_dish')->where(array('goods_id' => $fid, 'status' => 1))->select();
-            $send_list = array();
-            foreach ($dish_list as &$v) {
-                $v['name'] = lang_substr($v['name'], C('DEFAULT_LANG'));
-                $values = D('Side_dish_value')->where(array('dish_id' => $v['id'], 'status' => 1))->select();
-                foreach ($values as &$vv) {
-                    $vv['name'] = lang_substr($vv['name'], C('DEFAULT_LANG'));
-                }
-                if ($values) {
-                    $v['list'] = $values;
-                    $send_list[] = $v;
-                }
-            }
-
-            if ($send_list)
-                $result['side_dish'] = $send_list;
-            else
-                $result['side_dish'] = "";
-
-            $result['list'] = $now_goods['list'];
         }
 
         $result['cart'] = D('Cart')->field(true)->where(array("uid"=>$uid,"fid"=>$fid))->order('time desc')->select();
