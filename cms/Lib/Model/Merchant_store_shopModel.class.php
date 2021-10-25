@@ -18,7 +18,7 @@ class Merchant_store_shopModel extends Model
 
 
 //		$condition_where = "s.city_id='".C('config.now_city')."' AND s.have_meal=1 AND s.status=1 AND s.store_id=m.store_id";
-		$condition_where = "s.status=1 AND s.store_id=m.store_id AND s.have_shop=1";
+		$condition_where = "s.status=1 AND s.store_id=m.store_id AND s.have_shop=1 AND (cc.range_type=0 OR (cc.range_type=1 AND {$lat}<cc.range_para))";
 		if (C('config.store_shop_auth') == 1) {
 			$condition_where .= " AND s.auth>2";
 		}
@@ -241,7 +241,7 @@ class Merchant_store_shopModel extends Model
 		}
 
 
-		$sql_count = "SELECT count(1) as count FROM " . C('DB_PREFIX') . "merchant_store AS s INNER JOIN " . C('DB_PREFIX') . "merchant_store_shop as m ON m.store_id=s.store_id LEFT JOIN ".C('DB_PREFIX')."merchant AS mm ON s.mer_id=mm.mer_id  WHERE {$condition_where} AND mm.status = 1";
+		$sql_count = "SELECT count(1) as count FROM " . C('DB_PREFIX') . "merchant_store AS s INNER JOIN " . C('DB_PREFIX') . "merchant_store_shop as m ON m.store_id=s.store_id LEFT JOIN ".C('DB_PREFIX')."merchant AS mm ON s.mer_id=mm.mer_id LEFT JOIN ".C('DB_PREFIX')."area as cc ON cc.area_id=s.city_id WHERE {$condition_where} AND mm.status = 1";
 		$count = $mod->query($sql_count);
 		$total = isset($count[0]['count']) ? $count[0]['count'] : 0;
 		if ($is_wap == 1) {
@@ -271,7 +271,7 @@ class Merchant_store_shopModel extends Model
 		}
 
 
-		$sql = "SELECT {$condition_field} FROM " . C('DB_PREFIX') . "merchant_store AS s INNER JOIN " . C('DB_PREFIX') . "merchant_store_shop as m ON m.store_id=s.store_id LEFT JOIN " . C('DB_PREFIX') . "merchant as mm ON mm.mer_id = s.mer_id  WHERE {$condition_where} AND mm.status = 1 ORDER BY {$order} LIMIT {$star}, {$pagesize}";
+		$sql = "SELECT {$condition_field} FROM " . C('DB_PREFIX') . "merchant_store AS s INNER JOIN " . C('DB_PREFIX') . "merchant_store_shop as m ON m.store_id=s.store_id LEFT JOIN " . C('DB_PREFIX') . "merchant as mm ON mm.mer_id = s.mer_id LEFT JOIN ".C('DB_PREFIX')."area as cc ON cc.area_id=s.city_id  WHERE {$condition_where} AND mm.status = 1 ORDER BY {$order} LIMIT {$star}, {$pagesize}";
 		$res = $mod->query($sql);
 		//fdump($mod->_sql(), 'qqqqqq');
 		//print_r($mod);

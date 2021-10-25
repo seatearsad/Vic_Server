@@ -400,29 +400,41 @@
         .city_list li{
             list-style: none;
             display: inline-block;
-            width: 22%;
+            width: 24%;
             height: 80px;
             line-height: 80px;
             background-position: center left;
             background-size: auto 80px;
             background-repeat: no-repeat;
-            padding-left: 100px;
+            padding-left: 90px;
             margin: 10px auto;
             font-size: 22px;
         }
         .city_list li:nth-child(1){
-            background-image: url("./tpl/Static/blue/images/new/city/Victoria.png");
+            background-image: url("./tpl/Static/blue/images/new/city/DT_Vancouver.png");
         }
         .city_list li:nth-child(2){
-            background-image: url("./tpl/Static/blue/images/new/city/Kamloops.png");
+            background-image: url("./tpl/Static/blue/images/new/city/Victoria.png");
         }
         .city_list li:nth-child(3){
-            background-image: url("./tpl/Static/blue/images/new/city/Nanaimo.png");
-        }
-        .city_list li:nth-child(4){
             background-image: url("./tpl/Static/blue/images/new/city/Kelowna.png");
         }
+        .city_list li:nth-child(4){
+            background-image: url("./tpl/Static/blue/images/new/city/Kamloops.png");
+        }
         .city_list li:nth-child(5){
+            background-image: url("./tpl/Static/blue/images/new/city/Nanaimo.png");
+        }
+        .city_list li:nth-child(6){
+            background-image: url("./tpl/Static/blue/images/new/city/Chilliwack.png");
+        }
+        .city_list li:nth-child(7){
+            background-image: url("./tpl/Static/blue/images/new/city/Maple_Ridge.png");
+        }
+        .city_list li:nth-child(8){
+            background-image: url("./tpl/Static/blue/images/new/city/Squamish.png");
+        }
+        .city_list li:nth-child(9){
             background-image: url("./tpl/Static/blue/images/new/city/More.png");
         }
         .become_div{
@@ -501,7 +513,7 @@
                 <source src="/tpl/Static/blue/images/vedio/main_vedio.mp4">
             </video>
             <div class="slogan">
-                BC’s Favorite <label style="color: #ffa52d">Local</label> Delivery App
+                BC’s Favourite <label style="color: #ffa52d">Local</label> Delivery App
             </div>
             <div class="search_box">
                 <div class="search_back">
@@ -599,10 +611,14 @@
         <div class="white_line">
             <div class="serving_title">{pigcms{:L('4CITIES')}</div>
             <ul class="city_list">
+                <li style="font-size: 18px;">Vancouver&nbsp;DT</li>
                 <li>Victoria</li>
+                <li>Kelowna</li>
                 <li>Kamloops</li>
                 <li>Nanaimo</li>
-                <li>Kelowna</li>
+                <li>Chilliwack</li>
+                <li style="font-size: 20px;">Maple&nbsp;Ridge</li>
+                <li>Squamish</li>
                 <li>{pigcms{:L('4MORE')}</li>
             </ul>
         </div>

@@ -38,6 +38,25 @@ class DeliverAction extends BaseAction {
         }
     }
 
+    public function assign_setting(){
+	    if($_POST){
+            foreach ($_POST as $k=>$v){
+                if(strpos($k,"deliver_assgin") !== false && $v != "")
+                    D('Config')->where(array('name'=>$k))->save(array("value"=>$v));
+            }
+
+            $this->success(L('J_SUCCEED3'));
+        }else {
+            $config = D('Config')->where(array('gid' => 49))->select();
+            $setting = $config;
+            unset($setting[0]);
+
+            $this->assign("setting", $setting);
+
+            $this->display();
+        }
+    }
+
     public function updateDeliverWorkStatus($city){
         $week_num = date("w");
         $hour = date('H');
@@ -63,10 +82,18 @@ class DeliverAction extends BaseAction {
         $schedule_list = D('Deliver_schedule')->where(array('time_id' => array('in', $time_ids),'week_num'=>$week_num,'whether'=>1,'status'=>1))->select();
         $work_delver_list = array();
         foreach ($schedule_list as $v){
-            $work_delver_list[] = $v['uid'];
+            $curr_user = D('Deliver_user')->where(array('uid'=>$v['uid']))->find();
+            if($curr_user['work_status'] == 0) $work_delver_list[] = $v['uid'];
             //如果为不repeat的 此时删除
-            if($v['is_repeat'] != 1){
-                D('Deliver_schedule')->where($v)->delete();
+            //if($v['is_repeat'] != 1){
+            //D('Deliver_schedule')->where($v)->delete();
+            //}
+        }
+
+        $have_order_list = D('Deliver_supply')->where(array('status' => array(array('gt', 1), array('lt', 5))))->select();
+        foreach($have_order_list as $h){
+            if(!in_array($h['uid'],$work_delver_list)){
+                $work_delver_list[] = $h['uid'];
             }
         }
         //全部下班
@@ -164,6 +191,7 @@ class DeliverAction extends BaseAction {
             $column['language'] = intval($_POST['language']);
             $column['birthday'] = $_POST['birthday'];
             $column['remark'] = $_POST['remark'];
+            $column['work_status'] = 1;
 
             $card['ahname'] = $_POST['ahname'];
             $card['transit'] = $_POST['transit'];
@@ -247,6 +275,14 @@ class DeliverAction extends BaseAction {
             $column['language'] = intval($_POST['language']);
             $column['birthday'] = $_POST['birthday'];
             $column['remark'] = $_POST['remark'];
+            $column['work_status'] = $_POST['work_status'];
+            if($_POST['work_status'] == 1){
+                $current_order_num = D('Deliver_supply')->where(array('uid'=>$uid,'status'=>array('lt',5)))->count();
+                if($current_order_num > 0){
+                    $this->error('All accepted orders must be completed before you clock out.');
+                }
+            }
+            $column['inaction_num'] = 0;
 
             $card['ahname'] = $_POST['ahname'];
             $card['transit'] = $_POST['transit'];
@@ -417,6 +453,10 @@ class DeliverAction extends BaseAction {
 
 	public function deliverList() 
 	{
+        $config = D('Config')->get_config();
+        $max_order = $config['deliver_max_order'];
+        $this->assign("max_order",$max_order);
+
         //var_dump($_GET);die();
 		$selectStoreId = I("selectStoreId", 0, "intval");
 		$selectUserId = I("selectUserId", 0, "intval");
@@ -532,7 +572,7 @@ class DeliverAction extends BaseAction {
                         }
                         //$value['order_status'] = "等待接单" . count($record_assign);
                         if ($is_refect == 0) {
-                            $value['order_status'] = '<font color="red">'.L('J_AWAITING_ACCEPTANC').'</font>';
+                            $value['order_status'] = '';//'<font color="red">'.L('J_AWAITING_ACCEPTANC').'</font>';
                         }
                     }
 					break;
@@ -588,6 +628,11 @@ class DeliverAction extends BaseAction {
     		} else {
     			$save_data['get_type'] = 1;
     		}
+    		//更新一下派单逻辑表
+    		D('Deliver_assign')->where(array('supply_id'=>$supply_id))->save(array('status'=>1,'grab_deliver_id'=>$uid));
+            //清空送餐员无作为次数
+            D('Deliver_user')->where(array('uid'=>$uid))->save(array('inaction_num'=>0));
+
     		$result = D('Deliver_supply')->where(array('supply_id' => $supply_id))->save($save_data);
     		if ($status == 2) {
     			if ($supply['item'] == 0) {
@@ -603,6 +648,46 @@ class DeliverAction extends BaseAction {
 				$href = C('config.site_url').'/wap.php?c=Deliver&a=pick';
 				$model->sendTempMsg('OPENTM405486394', array('href' => $href, 'wecha_id' => $user['openid'], 'first' => $user['name'] . '您好！', 'keyword1' => '系统分配一个配送订单给您，请注意及时查收。', 'keyword2' => date('Y年m月d日 H:s'), 'keyword3' => '订单号：' . $supply['real_orderid'], 'remark' => '请您及时处理！'));
     		}
+
+    		if($supply['uid']){
+                //***如果送完此单后送餐员手中已无订单，并未在紧急模式，且未在排版时间内，送餐员自动下线///
+                $current_order_num = D('Deliver_supply')->where(array('uid'=>$supply['uid'],'status'=>array('lt',5)))->count();
+
+                if($current_order_num == 0){
+                    $city_id = $user['city_id'];
+                    $city = D('Area')->where(array('area_id'=>$city_id))->find();
+                    if($city['urgent_time'] == 0) {
+                        $min = date("i");
+
+                        $week_num = date("w");
+                        $hour = date('H');
+
+                        //if($min >= 50) $hour += 1;
+                        if ($hour >= 0 && $hour < 5) {
+                            $hour = $hour + 24;
+                            $week_num = $week_num - 1 < 0 ? 6 : $week_num - 1;
+                        }
+
+                        $all_list = D('Deliver_schedule_time')->where(array('city_id' => $city_id))->select();
+                        $time_ids = array();
+                        foreach ($all_list as $v) {
+                            $new_hour = $hour + $city['jetlag'];
+                            if ($new_hour == $v['start_time'] || ($min >= 50 && $new_hour + 1 == $v['start_time'])) {
+                                $daylist = explode(',', $v['week_num']);
+                                if (in_array($week_num, $daylist)) {
+                                    $time_ids[] = $v['id'];
+                                }
+                            }
+                        }
+
+                        $schedule_list = D('Deliver_schedule')->where(array('uid' => $supply['uid'], 'time_id' => array('in', $time_ids), 'week_num' => $week_num, 'whether' => 1, 'status' => 1))->select();
+                        if (!$schedule_list) {
+                            D('Deliver_user')->where(['uid' => $supply['uid']])->save(['work_status' => 1, 'inaction_num' => 0]);
+                        }
+                    }
+                }
+                ///***////
+            }
     		$this->success('Assignment Success');
     	} else {
     		$store = D('Merchant_store')->field(true)->where(array('store_id' => $supply['store_id']))->find();
@@ -807,6 +892,44 @@ class DeliverAction extends BaseAction {
 	    				D('Pick_order')->where(array('store_id' => $order['store_id'], 'order_id' => $order['order_id']))->save(array('status' => 4));
 	    				$this->shop_notice($order);
 	    				D('Shop_order_log')->add_log(array('order_id' => $order['order_id'], 'status' => 6, 'name' => '系统管理员：' . $this->system_session['realname'], 'phone' => $this->system_session['phone']));
+
+                        //***如果送完此单后送餐员手中已无订单，并未在紧急模式，且未在排版时间内，送餐员自动下线///
+                        $current_order_num = D('Deliver_supply')->where(array('uid'=>$supply['uid'],'status'=>array('lt',5)))->count();
+
+                        if($current_order_num == 0){
+                            $city_id = $now_deliver_user['city_id'];
+                            $city = D('Area')->where(array('area_id'=>$city_id))->find();
+                            if($city['urgent_time'] == 0) {
+                                $min = date("i");
+
+                                $week_num = date("w");
+                                $hour = date('H');
+
+                                //if($min >= 50) $hour += 1;
+                                if ($hour >= 0 && $hour < 5) {
+                                    $hour = $hour + 24;
+                                    $week_num = $week_num - 1 < 0 ? 6 : $week_num - 1;
+                                }
+
+                                $all_list = D('Deliver_schedule_time')->where(array('city_id' => $city_id))->select();
+                                $time_ids = array();
+                                foreach ($all_list as $v) {
+                                    $new_hour = $hour + $city['jetlag'];
+                                    if ($new_hour == $v['start_time'] || ($min >= 50 && $new_hour + 1 == $v['start_time'])) {
+                                        $daylist = explode(',', $v['week_num']);
+                                        if (in_array($week_num, $daylist)) {
+                                            $time_ids[] = $v['id'];
+                                        }
+                                    }
+                                }
+
+                                $schedule_list = D('Deliver_schedule')->where(array('uid' => $supply['uid'], 'time_id' => array('in', $time_ids), 'week_num' => $week_num, 'whether' => 1, 'status' => 1))->select();
+                                if (!$schedule_list) {
+                                    D('Deliver_user')->where(['uid' => $supply['uid']])->save(['work_status' => 1, 'inaction_num' => 0]);
+                                }
+                            }
+                        }
+                        ///***////
 	    			} else {
 	    				exit(json_encode(array('error_code' => true, 'msg' => "更新订单信息错误")));
 	    			}
@@ -1412,9 +1535,43 @@ class DeliverAction extends BaseAction {
         foreach ($user_list as &$deliver){
             $orders = D('Deliver_supply')->field(true)->where(array('uid'=>$deliver['uid'],'status' => array(array('gt', 1), array('lt', 5))))->order('supply_id asc')->select();
             $deliver['order_count'] = count($orders);
+            $sort[] = count($orders);
         }
 
-        $this->assign('list',$user_list);
+        $user_list = $user_list ? $user_list : array();
+        array_multisort($sort,SORT_DESC,$user_list);
+
+        $week_num = date("w");
+        $hour = date('H');
+
+        if($hour >= 0 && $hour < 5) {
+            $hour = $hour + 24;
+            $week_num = $week_num - 1 < 0 ? 6 : $week_num - 1;
+        }
+
+        $all_list = D('Deliver_schedule_time')->where(array('city_id' => $city_id))->select();
+        $time_ids = array();
+        foreach ($all_list as $v) {
+            $new_hour = $hour + $city['jetlag'];
+            if ($new_hour == $v['start_time']) {
+                $daylist = explode(',', $v['week_num']);
+                if (in_array($week_num, $daylist)) {
+                    $time_ids[] = $v['id'];
+                }
+            }
+        }
+
+        $schedule_list = D('Deliver_schedule')->where(array('time_id' => array('in', $time_ids),'week_num' => $week_num, 'whether' => 1, 'status' => 1))->select();
+        $work_delver_list = array();
+        foreach ($schedule_list as $v) {
+            $work_delver_list[] = $v['uid'];
+        }
+        $go_off_list = D('Deliver_user')->where(array('uid' => array('in', $work_delver_list),'work_status'=>1,'status'=>1,'group'=>1))->select();
+        $go_off_list = $go_off_list ? $go_off_list : array();
+
+        $list = array_merge($user_list, $go_off_list);
+
+        $this->assign('list',$list);
         $this->display();
     }
 
@@ -2077,5 +2234,25 @@ class DeliverAction extends BaseAction {
             //var_dump($city);die();
             $this->display();
         }
+    }
+
+    public function change_max_order(){
+        $max_order =$_GET['max_order'];
+        $max_order = $max_order < 2 ? 2 : $max_order;
+        if($max_order){
+            if(D('Config')->where(array('name'=>'deliver_max_order'))->save(array("value"=>$max_order)))
+                exit(json_encode(array('error_code' => false, 'msg' => "Successful")));
+            else
+                exit(json_encode(array('error_code' => true, 'msg' => "Error")));
+        }else{
+            exit(json_encode(array('error_code' => true, 'msg' => "Error")));
+        }
+    }
+
+    public function assignRecord(){
+        $list = D('Deliver_assign_record')->order('id desc')->limit('0,100')->select();
+        $this->assign('list',$list);
+
+        $this->display();
     }
 }

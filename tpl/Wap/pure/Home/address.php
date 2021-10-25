@@ -246,7 +246,7 @@
         addressGeocoder = true;
 
         $('#pageAddressLocationList dl').html('<div style="height:40px;line-height:40px;background:white;padding-left:12px;">'+ getLangStr('_BEING_POSITION_') +'</div>');
-        getUserLocation({'useHistory':false,okFunction:'getListGeocoderbefore',okFunctionParam:[true],errorFunction:'getAddressGeocoderError',errorFunctionParam:[false]});
+        //getUserLocation({'useHistory':false,okFunction:'getListGeocoderbefore',okFunctionParam:[true],errorFunction:'getAddressGeocoderError',errorFunctionParam:[false]});
         if(hasLoadAddress == false){
             $('#pageAddressBackBtn').click(function(){
                 $('#pageAddressSearchDel').trigger('click');

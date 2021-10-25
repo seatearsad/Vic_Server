@@ -65,6 +65,7 @@
                                     <span class="cb-disable"><label class="cb-disable"><span>{pigcms{:L('_BACK_FORBID_')}</span><input type="radio" name="is_open" value="0" /></label></span>
                                 </div>
                             </div>
+<<<<<<< HEAD
                             <div class="form-group  row">
                                 <label class="col-sm-3 col-form-label">{pigcms{:L('_BACK_CITY_DELI_BAG_')}</label>
                                 <div class="col-sm-9">
@@ -84,6 +85,25 @@
                                     <div style="margin-left: 20px;margin-top: 5px;">{pigcms{:L('_BACK_CITY_DELI_SHIPPING_FEE_')}:$<input  name="bag_shipping_fee"  class="form-control" type="text"/> </div>
                                 </div>
                             </div>
+=======
+                            <if condition="$_GET['type'] eq 2">
+                            <div class="form-group  row">
+                                <label class="col-sm-3 col-form-label">范围类型</label>
+                                <div class="col-sm-9">
+                                    <select name="range_type" id="select_type" class="form-control">
+                                        <option value="0" selected>正常城市</option>
+                                        <option value="1">纬度限制</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group  row">
+                                <label class="col-sm-3 col-form-label">范围参数</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="input fl" name="range_para" size="10" validate="number:true,maxlength:10" />
+                                </div>
+                            </div>
+                            </if>
+>>>>>>> master
                             <div class="btn tutti_hidden_obj">
                                 <input type="submit" name="dosubmit" id="dosubmit" value="提交" class="button" />
                                 <input type="reset" value="取消" class="button" />

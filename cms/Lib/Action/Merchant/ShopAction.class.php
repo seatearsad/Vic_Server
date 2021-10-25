@@ -999,6 +999,7 @@ class ShopAction extends BaseAction
         $ids = D('Shop_goods_sort')->getIds($now_sort['sort_id'], $now_store['store_id']);
         $this->assign('select_ids', json_encode($ids));
 
+        $now_goods['name'] = str_replace('"','&quot;',$now_goods['name']);
         $this->assign('now_goods', $now_goods);
         $this->assign('now_sort', $now_sort);
         $this->assign('now_store', $now_store);

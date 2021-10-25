@@ -691,7 +691,7 @@ class ShopAction extends BaseAction
                     }
                     //$value['order_status'] = "等待接单" . count($record_assign);
                     if ($is_refect == 0) {
-                        $ret = '<font color="red">' . L('J_AWAITING_ACCEPTANC') . '</font>';
+                        $ret = '';//'<font color="red">' . L('J_AWAITING_ACCEPTANC') . '</font>';
                     }
                 } else {
                     $ret = '<font color="red">' . L('_BACK_AWAIT_') . '</font>';
@@ -908,6 +908,7 @@ class ShopAction extends BaseAction
 //                    }
 //                }
                 //如果有差价首先删除之前的支付 然后添加一个新的支付
+                /**
                 if ($cha != 0) {
                     $resp = $moneris_pay->refund($shop_order_data['uid'], $order_id);
                     if ($resp['responseCode'] != 'null' && $resp['responseCode'] < 50) {
@@ -922,6 +923,24 @@ class ShopAction extends BaseAction
                         }
                     } else {
                         $this->error($resp['message']);
+                    }
+                }
+                 * */
+                //修改为先支付后退款
+                if($cha != 0){
+                    $cha = $shop_order_data['payment_money'] - $cha;
+                    $cha = $cha < 0 ? 0 : $cha;
+                    $cha = sprintf("%.2f", $cha);
+                    $resp = $moneris_pay->addPay($shop_order_data['uid'], $order_id, $cha);
+                    if ($resp['responseCode'] != 'null' && $resp['responseCode'] < 50) {
+                        $data['payment_money'] = $cha;
+                        $resp = $moneris_pay->refund($shop_order_data['uid'], $order_id);
+                        if (!($resp['responseCode'] != 'null' && $resp['responseCode'] < 50)) {
+                            $this->error($resp['message']);
+                        }
+                    } else {
+                        $this->error("The new payment attempt has been declined. Price adjustment failed!");
+                        //$this->error($resp['message']);
                     }
                 }
             } else if ($shop_order_data['pay_type'] == '' && $shop_order_data['paid'] == 1 && $shop_order_data['balance_pay'] > 0) {

@@ -258,7 +258,22 @@ class CartModel extends Model
 
         $distance = getDistance($store['lat'], $store['lng'], $address['mapLat'], $address['mapLng']);
         if ($distance <= $store['delivery_radius'] * 1000) {
-            $result['is_allow'] = 1;
+            //$result['is_allow'] = 1;
+            //获取特殊城市属性
+            $city = D('Area')->where(array('area_id'=>$store['city_id']))->find();
+            if($city['range_type'] != 0) {
+                switch ($city['range_type']){
+                    case 1://按照纬度限制的城市 小于某个纬度
+                        if($address['mapLat'] >= $city['range_para']) $result['is_allow'] = 0;
+                        else $result['is_allow'] = 1;
+                        break;
+                    default:
+                        $result['is_allow'] = 1;
+                        break;
+                }
+            }else{
+                $result['is_allow'] = 1;
+            }
         }else{
             $result['is_allow'] = 0;
         }

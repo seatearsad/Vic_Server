@@ -181,8 +181,8 @@
         </div>
         <div class="radio_box" style="float: left;margin-left: 5%;margin-top: 30px">
             <span style="font-size:12px;float: left;margin-right: 10px;line-height: 24px">{pigcms{:L('_ND_REPEATWEEKLY_')}</span>
-            <span class="cb-enable"><label class="cb-enable selected"><span>On</span><input type="radio" name="repeat" value="1" checked="checked"/></label></span>
-            <span class="cb-disable"><label class="cb-disable"><span>Off</span><input type="radio" name="repeat" value="0" /></label></span>
+            <span class="cb-enable"><label class="cb-enable"><span>On</span><input type="radio" name="repeat" value="1"/></label></span>
+            <span class="cb-disable"><label class="cb-disable selected"><span>Off</span><input type="radio" name="repeat" value="0"  checked="checked" /></label></span>
         </div>
         <div class="btn_s" style="float: right;margin-top:20px;margin-right:5%;text-align: center;height: 40px;line-height: 40px;width: 60px;background-color: #ffa52d;color: white;cursor: pointer">
             Save
@@ -273,7 +273,7 @@
 
             if(init_num == today_week && h >= time_list[0]['start_time']){
                 is_set = false;
-            }
+            }console.log(time_list);
             for(var i=0;i<time_list.length;i++){
                 if(time_list[i]['is_recomm'] == 1)
                     html += '<div><span class="w_r"></span><span class="w_i">';
@@ -298,11 +298,17 @@
                     $(this).attr('disabled','disabled');
                 });
 
-                if(typeof(default_list[init_num]) == 'undefined' || default_list[init_num] == 1){
-                    $('.cb-enable').trigger('click');
-                }else{
+                if(typeof(default_list[init_num]) == 'undefined' || default_list[init_num] == 0){
                     $('.cb-disable').trigger('click');
+                }else{
+                    $('.cb-enable').trigger('click');
                 }
+
+                // if(typeof(default_list[init_num]) == 'undefined' || default_list[init_num] == 1){
+                //     $('.cb-enable').trigger('click');
+                // }else{
+                //     $('.cb-disable').trigger('click');
+                // }
 
                 $('.cb-enable').unbind('click');
                 $('.cb-disable').unbind('click');
@@ -312,11 +318,17 @@
                 $('.cb-enable').click(repeat_enable);
                 $('.cb-disable').click(repeat_disable);
 
-                if(typeof(default_list[init_num]) == 'undefined' || default_list[init_num] == 1){
-                    $('.cb-enable').trigger('click');
-                }else{
+                if(typeof(default_list[init_num]) == 'undefined' || default_list[init_num] == 0){
                     $('.cb-disable').trigger('click');
+                }else{
+                    $('.cb-enable').trigger('click');
                 }
+
+                // if(typeof(default_list[init_num]) == 'undefined' || default_list[init_num] == 1){
+                //     $('.cb-enable').trigger('click');
+                // }else{
+                //     $('.cb-disable').trigger('click');
+                // }
             }
         }
 

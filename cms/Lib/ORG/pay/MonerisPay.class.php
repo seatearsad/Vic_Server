@@ -71,11 +71,19 @@ class MonerisPay
                 $MD = $order_md['order_md'];
 
                 return $this->MPI_Cavv($MD,$resp['cavv'],$resp['eci'],$resp['threeDSServerTransId']);
-            }else{
+            }elseif ($resp['transStatus'] == "N" || $resp['transStatus'] == "U"){
+                if($data['order_type'] != 'recharge')
+                    return $this->purchase($data,$uid,$from_type,$order);
+                else
+                    return $resp;
+            } else{
                 return $resp;
             }
         }else {
-            return $this->purchase($data,$uid,$from_type,$order);
+            if($data['order_type'] != 'recharge')
+                return $this->purchase($data,$uid,$from_type,$order);
+            else
+                return array();
         }
     }
 

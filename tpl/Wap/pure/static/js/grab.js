@@ -118,7 +118,7 @@ function list_detail(lat, lng)
 }
 
 function updateNum() {
-    $.get("{pigcms{:U('Deliver/index_count')}", function(response){
+    $.get(update_url, function(response){
         if (response.err_code == false) {
             $('#gray_count').html(response.gray_count);
             $('#deliver_count').html(response.deliver_count);

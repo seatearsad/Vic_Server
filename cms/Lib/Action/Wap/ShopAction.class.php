@@ -589,7 +589,20 @@ class ShopAction extends BaseAction{
                 }
             }
 
-            $return[] = $temp;
+            //获取特殊城市属性
+            $is_add = true;
+            $city = D('Area')->where(array('area_id'=>$row['city_id']))->find();
+            if($city['range_type'] != 0){
+                switch ($city['range_type']){
+                    case 1://按照纬度限制的城市 小于某个纬度
+                        if($lat >= $city['range_para']) $is_add = false;
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            if($is_add) $return[] = $temp;
         }
         echo json_encode(array('store_list' => $return, 'has_more' => $lists['has_more'] ? true : false));
     }
@@ -2707,6 +2720,25 @@ class ShopAction extends BaseAction{
                 } else {
                     $distance = getDistanceByGoogle($from, $aim);
                 }
+
+                $city = D('Area')->where(array('area_id'=>$return['store']['city_id']))->find();
+                if($city['range_type'] != 0) {
+                    switch ($city['range_type']){
+                        case 1://按照纬度限制的城市 小于某个纬度
+                            if($user_adress['latitude'] >= $city['range_para']) {
+                                $is_jump_address = 1;
+                                $user_adress=null;
+                            }
+                            else $is_jump_address = 0;
+                            break;
+                        default:
+                            $is_jump_address = 0;
+                            break;
+                    }
+                }else{
+                    $is_jump_address = 0;
+                }
+
                 //$distance = $distance / 1000;
                 //var_dump($distance);die();
 
@@ -2750,6 +2782,7 @@ class ShopAction extends BaseAction{
         }else{
             //没有获得默认地址
             $is_jump_address = 1;
+            $user_adress=null;
         }
         $this->assign('user_adress', $user_adress);
         //如果没有找到合适的配送地址
