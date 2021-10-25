@@ -21,11 +21,11 @@ class StoreMenuV2Model extends Model
         return $menuList;
     }
 
-    public function getMenuCategories($menuId){
-        $categories = D($this->categoriseTable)->where(array('menuId'=>$menuId))->select();
+    public function getMenuCategories($menuId,$storeId){
+        $categories = D($this->categoriseTable)->where(array('menuId'=>$menuId,'storeId'=>$storeId))->select();
         foreach ($categories as &$category){
-            $category['productNum'] = $this->getCategoryProductNum($category['id']);
-            $category['time'] = $this->getCategoryTime($category['id']);
+            $category['productNum'] = $this->getCategoryProductNum($category['id'],$storeId);
+            $category['time'] = $this->getCategoryTime($category['id'],$storeId);
             $category['week'] = $this->getCategoryTimeWeekStr($category['time']);
         }
 
@@ -41,7 +41,7 @@ class StoreMenuV2Model extends Model
         $menuList = $this->getStoreMenu($storeId);
         $allCategories = array();
         foreach ($menuList as $menu){
-            $categories = $this->getMenuCategories($menu['id']);
+            $categories = $this->getMenuCategories($menu['id'],$storeId);
             $allCategories = array_merge($allCategories,$categories);
         }
 
@@ -50,7 +50,7 @@ class StoreMenuV2Model extends Model
             $curr_time = intval(date('Hi',time()));
 
             foreach ($allCategories as $key => &$row) {
-                $categoryTime = $this->getCategoryTime($row['id']);
+                $categoryTime = $this->getCategoryTime($row['id'],$storeId);
                 $categoryTime = $this->arrangeCategoryTime($categoryTime);
 
                 $row['week'] = $categoryTime['week'];
@@ -91,10 +91,11 @@ class StoreMenuV2Model extends Model
 
     /**
      * @param $categories
+     * @param $storeId
      * @param int $from_type 1Wap 2App
      * @return array
      */
-    public function getStoreProduct($categories,$from_type = 1){
+    public function getStoreProduct($categories,$storeId,$from_type = 1){
         $allList = array();
         foreach ($categories as $category){
             $currCate = array();
@@ -103,7 +104,7 @@ class StoreMenuV2Model extends Model
             $currCate['sort_discount'] = 0;
             $currCate['limited_offers'] = 0;
             $currCate['is_time'] = 0;
-            $products = $this->getMenuCategoriesProduct($category['id']);
+            $products = $this->getMenuCategoriesProduct($category['id'],$storeId);
 
             if($from_type == 1){
                 $currCate['product_list'] = $this->arrangeProductWap($products,$category['id']);
@@ -115,10 +116,10 @@ class StoreMenuV2Model extends Model
         return $allList;
     }
 
-    public function getStoreProductApp($categories,$uid){
+    public function getStoreProductApp($categories,$uid,$storeId){
         $allList = array();
         foreach ($categories as $category){
-            $products = $this->getMenuCategoriesProduct($category['id']);
+            $products = $this->getMenuCategoriesProduct($category['id'],$storeId);
             $products = $this->arrangeProductApp($products,$category,$uid);
 
 
@@ -128,10 +129,10 @@ class StoreMenuV2Model extends Model
         return $allList;
     }
 
-    public function getStoreProductAll($categories){
+    public function getStoreProductAll($categories,$storeId){
         $allList = array();
         foreach ($categories as $category){
-            $products = $this->getMenuCategoriesProduct($category['id']);
+            $products = $this->getMenuCategoriesProduct($category['id'],$storeId);
 
             $allList = array_merge($allList,$products);
         }
@@ -285,7 +286,7 @@ class StoreMenuV2Model extends Model
         return $newProduct;
     }
 
-    public function arrangeDishWap($dish_list,$productId){
+    public function arrangeDishWap($dish_list,$productId,$storeId){
         $dish_list_new = array();
         foreach ($dish_list as $dish){
             $newDish = array();
@@ -301,7 +302,7 @@ class StoreMenuV2Model extends Model
             $newDish['status'] = $dish['status'];
 
 
-            $list = $this->getProductRelation($dish['id']);
+            $list = $this->getProductRelation($dish['id'],$storeId);
             $newList = array();
             foreach ($list as $l){
                 $newSide = array();
@@ -322,28 +323,28 @@ class StoreMenuV2Model extends Model
         return $dish_list_new;
     }
 
-    public function getMenuCategory($categoryId){
-        $category = D($this->categoriseTable)->where(array('id'=>$categoryId))->find();
+    public function getMenuCategory($categoryId,$storeId){
+        $category = D($this->categoriseTable)->where(array('id'=>$categoryId,'storeId'=>$storeId))->find();
 
         return $category;
     }
 
     //获取实际展现的产品
-    public function getCategoryProductNum($categoryId){
-        $productNum = D($this->categoriseProductTable)->where(array('categoryId'=>$categoryId))->count();
+    public function getCategoryProductNum($categoryId,$storeId){
+        $productNum = D($this->categoriseProductTable)->where(array('categoryId'=>$categoryId,'storeId'=>$storeId))->count();
 
         return $productNum;
     }
 
-    public function getMenuCategoriesProduct($categoryId){
-        $productLinks = D($this->categoriseProductTable)->where(array('categoryId'=>$categoryId))->select();
+    public function getMenuCategoriesProduct($categoryId,$storeId){
+        $productLinks = D($this->categoriseProductTable)->where(array('categoryId'=>$categoryId,'storeId'=>$storeId))->select();
 
         $productIds = array();
         foreach ($productLinks as &$link){
             $productIds[] = $link['productId'];
         }
 
-        $products = D($this->productTable)->where(array('id'=>array('in',$productIds)))->select();
+        $products = D($this->productTable)->where(array('id'=>array('in',$productIds),'storeId'=>$storeId))->select();
         //foreach ($products as &$product){
             //$product['relation'] = D($this->productRelationTable)->field("r.*,p.*")->join('as r left join '.C('DB_PREFIX').'store_product as p ON r.subProductId=p.id')->where(array('r.productId'=>$product['id']))->select();
         //}
@@ -351,33 +352,33 @@ class StoreMenuV2Model extends Model
         return $products;
     }
 
-    public function getProduct($productId){
-        $product = D($this->productTable)->where(array('id'=>$productId))->find();
+    public function getProduct($productId,$storeId){
+        $product = D($this->productTable)->where(array('id'=>$productId,'storeId'=>$storeId))->find();
 
         return $product;
     }
 
-    public function getProductRelation($productId){
-        $products = D($this->productRelationTable)->field("r.*,p.*")->join('as r left join '.C('DB_PREFIX').'store_product as p ON r.subProductId=p.id')->where(array('r.productId'=>$productId))->select();
+    public function getProductRelation($productId,$storeId){
+        $products = D($this->productRelationTable)->field("r.*,p.*")->join('as r left join '.C('DB_PREFIX').'store_product as p ON r.subProductId=p.id and r.storeId=p.storeId')->where(array('r.productId'=>$productId,'r.storeId'=>$storeId))->select();
 
         return $products;
     }
 
-    public function getCategoryTime($categoryId){
-        $categoryTime = D($this->categoriseTimeTable)->where(array('categoryId'=>$categoryId))->order('weekNum asc')->select();
+    public function getCategoryTime($categoryId,$storeId){
+        $categoryTime = D($this->categoriseTimeTable)->where(array('categoryId'=>$categoryId,'storeId'=>$storeId))->order('weekNum asc')->select();
 
         return $categoryTime;
     }
 
-    public function getCategoryByProductId($productId){
-        $category = D($this->categoriseProductTable)->where(array('productId'=>$productId))->find();
+    public function getCategoryByProductId($productId,$storeId){
+        $category = D($this->categoriseProductTable)->where(array('productId'=>$productId,'storeId'=>$storeId))->find();
 
         return $category;
     }
-    public function getCategoryTimeByProductId($productId){
-        $c = D($this->categoriseProductTable)->where(array('productId'=>$productId))->find();
+    public function getCategoryTimeByProductId($productId,$storeId){
+        $c = D($this->categoriseProductTable)->where(array('productId'=>$productId,'storeId'=>$storeId))->find();
 
-        $categoryTime = $this->getCategoryTime($c['categoryId']);
+        $categoryTime = $this->getCategoryTime($c['categoryId'],$storeId);
 
         $categoryTime = $this->arrangeCategoryTime($categoryTime);
 
@@ -413,8 +414,8 @@ class StoreMenuV2Model extends Model
         return $row;
     }
 
-    public function getCategoryTimeByCategoryId($categoryId){
-        $categoryTime = $this->getCategoryTime($categoryId);
+    public function getCategoryTimeByCategoryId($categoryId,$storeId){
+        $categoryTime = $this->getCategoryTime($categoryId,$storeId);
 
         $categoryTime = $this->arrangeCategoryTime($categoryTime);
 

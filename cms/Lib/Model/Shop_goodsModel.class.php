@@ -790,7 +790,7 @@ class Shop_goodsModel extends Model
             if($menu_version == 1)
 			    $now_goods = $this->field(true)->where(array('goods_id' => $goods_id, 'store_id' => $store_id))->find();
             else if($menu_version == 2)
-                $now_goods = D('StoreMenuV2')->getProduct($goods_id);
+                $now_goods = D('StoreMenuV2')->getProduct($goods_id,$store_id);
 		} else {
 			$now_goods = $this->field(true)->where(array('goods_id' => $goods_id))->find();
 		}
@@ -1754,7 +1754,7 @@ class Shop_goodsModel extends Model
                                     $dish_vale = D('Side_dish_value')->where(array('id' => $one_dish[1]))->find();
                                     $dish_vale['name'] = lang_substr($dish_vale['name'], C('DEFAULT_LANG'));
                                 }else if($store['menu_version'] == 2){
-                                    $dish_vale = D('StoreMenuV2')->getProduct($one_dish[1]);
+                                    $dish_vale = D('StoreMenuV2')->getProduct($one_dish[1],$store_id);
                                 }
 
                                 $add_str = $one_dish[2] > 1 ? $dish_vale['name']."*".$one_dish[2] : $dish_vale['name'];

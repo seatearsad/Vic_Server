@@ -2841,7 +2841,7 @@ class ShopAction extends BaseAction
 
         $menuId = $_GET['menuId'];
 
-        $categories = D('StoreMenuV2')->getMenuCategories($menuId);
+        $categories = D('StoreMenuV2')->getMenuCategories($menuId,$now_store['store_id']);
 
         $this->assign('categories',$categories);
 
@@ -2850,19 +2850,20 @@ class ShopAction extends BaseAction
 
     public function menuProduct(){
         $categoryId = $_GET['categoryId'];
+        $storeId = $_GET['store_id'];
 
-        $category = D('StoreMenuV2')->getMenuCategory($categoryId);
+        $category = D('StoreMenuV2')->getMenuCategory($categoryId,$storeId);
         $this->assign('category',$category);
 
         if($_GET['productId']){
             $productId = $_GET['productId'];
-            $products = D('StoreMenuV2')->getProductRelation($productId);
+            $products = D('StoreMenuV2')->getProductRelation($productId,$storeId);
 
-            $parentProduct = D('StoreMenuV2')->getProduct($productId);
+            $parentProduct = D('StoreMenuV2')->getProduct($productId,$storeId);
 
             $this->assign('parentProduct',$parentProduct);
         }else {
-            $products = D('StoreMenuV2')->getMenuCategoriesProduct($categoryId);
+            $products = D('StoreMenuV2')->getMenuCategoriesProduct($categoryId,$storeId);
         }
 
         $this->assign('products',$products);

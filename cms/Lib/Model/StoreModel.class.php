@@ -565,9 +565,9 @@ class StoreModel extends Model
                 }
             }elseif($v['menu_version'] == 2){
                 if($v['sort_id'] != 0) {
-                    $sort_time = D('StoreMenuV2')->getCategoryTimeByCategoryId($v['sort_id']);
+                    $sort_time = D('StoreMenuV2')->getCategoryTimeByCategoryId($v['sort_id'],$v['store_id']);
                 }else {
-                    $sort_time = D('StoreMenuV2')->getCategoryTimeByProductId($v['goods_id']);
+                    $sort_time = D('StoreMenuV2')->getCategoryTimeByProductId($v['goods_id'],$v['store_id']);
                 }
 
                 $returnList[$k]['is_weekshow'] = 1;
@@ -609,7 +609,7 @@ class StoreModel extends Model
                             $dish_vale = D('Side_dish_value')->where(array('id' => $one_dish[1]))->find();
                             $dish_vale['name'] = lang_substr($dish_vale['name'], C('DEFAULT_LANG'));
                         }elseif ($v['menu_version'] == 2){
-                            $product_dish = D('StoreMenuV2')->getProduct($one_dish[1]);
+                            $product_dish = D('StoreMenuV2')->getProduct($one_dish[1],$v['store_id']);
                             $dish_vale['name'] = $product_dish['name'];
                         }
 

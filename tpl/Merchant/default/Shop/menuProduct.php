@@ -87,7 +87,7 @@
                                             </if>
 											<td>
                                                 <if condition="$vo['subNum'] neq 0">
-                                                <a  class="label label-sm label-info handle_btn" href="{pigcms{:U('Shop/menuProduct',array('productId'=>$vo['id'],'categoryId'=>$_GET['categoryId']))}">
+                                                <a  class="label label-sm label-info handle_btn" href="{pigcms{:U('Shop/menuProduct',array('productId'=>$vo['id'],'categoryId'=>$_GET['categoryId'],'store_id'=>$vo['storeId']))}">
                                                     View SubProducts
                                                 </a>
                                                 </if>

@@ -207,7 +207,7 @@ class Shop_orderModel extends Model
                 $trow['tax_num'] = $goods['tax_num'];
                 $trow['deposit_price'] = $goods['deposit_price'];
             }elseif ($merchant_store['menu_version'] == 2){
-                $goods = D('StoreMenuV2')->getProduct($trow['goods_id']);
+                $goods = D('StoreMenuV2')->getProduct($trow['goods_id'],$now_order['store_id']);
                 $trow['tax_num'] = $goods['tax']/1000;
                 $trow['deposit_price'] = 0;
 			}

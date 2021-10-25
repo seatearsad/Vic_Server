@@ -751,7 +751,7 @@ class ShopAction extends BaseAction
                         $deposit_price += $goods['deposit_price'] * $v['num'];
                         $tax_price += $v['price'] * $goods['tax_num'] / 100 * $v['num'];
                     }elseif ($store['menu_version'] == 2){
-                        $goods = D('StoreMenuV2')->getProduct($g_id);
+                        $goods = D('StoreMenuV2')->getProduct($g_id,$order['store_id']);
                         $order['info'][$k]['name'] = $goods['name'];
                         $order['info'][$k]['tax_num'] = $goods['tax']/1000;
                         $order['info'][$k]['deposit_price'] = 0;

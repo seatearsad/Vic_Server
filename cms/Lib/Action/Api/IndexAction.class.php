@@ -411,7 +411,7 @@ class IndexAction extends BaseAction
             $categories = D('StoreMenuV2')->getStoreCategories($sid,true);
             $store['group'] = D('StoreMenuV2')->arrangeApp($categories);
 
-            $goods = D('StoreMenuV2')->getStoreProductApp($categories,$_POST['uid']);
+            $goods = D('StoreMenuV2')->getStoreProductApp($categories,$_POST['uid'],$sid);
             $store['foods'] = $goods;
         }
         $store['count'] = count($store['foods']);
@@ -813,7 +813,8 @@ class IndexAction extends BaseAction
 
         $cart_array = json_decode(html_entity_decode($cartList), true);
 
-        $sid = D('Cart')->field(true)->where(array('uid'=>$uid,'fid'=>$cart_array[0]['fid']))->find()['sid'];
+        //$sid = D('Cart')->field(true)->where(array('uid'=>$uid,'fid'=>$cart_array[0]['fid']))->find()['sid'];
+        $sid = $cart_array[0]['storeId'];
         $store = D('Merchant_store')->where(array('store_id'=>$sid))->find();
 
         if($store['menu_version'] == 2){
@@ -833,10 +834,10 @@ class IndexAction extends BaseAction
         foreach ($cart_array as $product) {
             $goodsId = $product['fid'];
             if($store['menu_version'] == 2){
-                $product_good = D('StoreMenuV2')->getProduct($goodsId);
+                $product_good = D('StoreMenuV2')->getProduct($goodsId,$sid);
                 $goods = D('StoreMenuV2')->arrangeProductAppOne($product_good);
                 if($product['categoryId'] == 0) {
-                    $curr_category = D('StoreMenuV2')->getCategoryByProductId($goodsId);
+                    $curr_category = D('StoreMenuV2')->getCategoryByProductId($goodsId,$sid);
                     $goods['sort_id'] = $curr_category['categoryId'];
                 }else {
                     $goods['sort_id'] = $product['categoryId'];
@@ -937,7 +938,8 @@ class IndexAction extends BaseAction
         $orderData = array();
 
         //判断商品是否还在可销售的时间段
-        $sid = D('Cart')->field(true)->where(array('uid'=>$uid,'fid'=>$cart_array[0]['fid']))->find()['sid'];
+        //$sid = D('Cart')->field(true)->where(array('uid'=>$uid,'fid'=>$cart_array[0]['fid']))->find()['sid'];
+        $sid = $cart_array[0]['storeId'];
         $store = D('Merchant_store')->where(array('store_id'=>$sid))->find();
 
         if($store['menu_version'] == 2){
@@ -957,10 +959,10 @@ class IndexAction extends BaseAction
         foreach ($cart_array as $product) {
             $goodsId = $product['fid'];
             if($store['menu_version'] == 2){
-                $product_good = D('StoreMenuV2')->getProduct($goodsId);
+                $product_good = D('StoreMenuV2')->getProduct($goodsId,$sid);
                 $goods = D('StoreMenuV2')->arrangeProductAppOne($product_good);
                 if($product['categoryId'] == 0) {
-                    $curr_category = D('StoreMenuV2')->getCategoryByProductId($goodsId);
+                    $curr_category = D('StoreMenuV2')->getCategoryByProductId($goodsId,$sid);
                     $goods['sort_id'] = $curr_category['categoryId'];
                 }else {
                     $goods['sort_id'] = $product['categoryId'];
@@ -992,7 +994,7 @@ class IndexAction extends BaseAction
 
         foreach ($cart_array as $v){
             if($store['menu_version'] == 2){
-                $good = D('StoreMenuV2')->getProduct($v['fid']);
+                $good = D('StoreMenuV2')->getProduct($v['fid'],$sid);
                 $t_good['productId'] = $v['fid'];
                 $t_good['productName'] = $good['name'];
                 $good['price'] = $good['price']/100;
@@ -1614,7 +1616,7 @@ class IndexAction extends BaseAction
                         $dish_vale = D('Side_dish_value')->where(array('id' => $one_dish[1]))->find();
                         $dish_vale['name'] = lang_substr($dish_vale['name'], C('DEFAULT_LANG'));
                     }elseif ($store['menu_version'] == 2){
-                        $product_dish = D('StoreMenuV2')->getProduct($one_dish[1]);
+                        $product_dish = D('StoreMenuV2')->getProduct($one_dish[1],$order['store_id']);
                         $dish_vale['name'] = $product_dish['name'];
                     }
                     //$dish_vale = D('Side_dish_value')->where(array('id'=>$one_dish[1]))->find();
@@ -1735,13 +1737,13 @@ class IndexAction extends BaseAction
 
             //$result['list'] = array();
 
-            $dish_list = D('StoreMenuV2')->getProductRelation($fid);
-            $dish_list_new = D('StoreMenuV2')->arrangeDishWap($dish_list,$fid);
+            $dish_list = D('StoreMenuV2')->getProductRelation($fid,$storeId);
+            $dish_list_new = D('StoreMenuV2')->arrangeDishWap($dish_list,$fid,$storeId);
 
             $result['side_dish'] = $dish_list_new;
         }
 
-        $result['cart'] = D('Cart')->field(true)->where(array("uid"=>$uid,"fid"=>$fid))->order('time desc')->select();
+        $result['cart'] = D('Cart')->field(true)->where(array("uid"=>$uid,"fid"=>$fid,'sid'=>$storeId))->order('time desc')->select();
 
         $this->returnCode(0,'',$result,'success');
     }
@@ -3436,6 +3438,55 @@ class IndexAction extends BaseAction
                     var_dump($code);
                 }
             }
+        }
+    }
+
+    public function checkSendOrderToThird(){
+        $where['paid'] = 1;
+        $where['status'] = 0;
+        $where['is_del'] = 0;
+        $where['send_platform'] = 0;
+
+        $orders = D("Shop_order")->where($where)->select();
+
+        if(count($orders) > 0) {
+            $storeIds = array();
+            foreach ($orders as $order) {
+                $storeId = $order['store_id'];
+                $storeIds[] = $storeId;
+            }
+
+            $stores = D('Merchant_store')->where(array('store_id'=>array('in',$storeIds)))->select();
+
+            $send_arr = array();
+            $no_send_ids = array();
+
+            foreach ($orders as &$order) {
+                foreach ($stores as $store){
+                    if($order['store_id'] == $store['store_id']){
+                        if($store['link_type'] == 1){//Deliverect
+                            $order['link_id'] = $store['link_id'];
+                            $order['store_tax'] = $store['tax_num'];
+                            $send_arr[] = $order;
+                        }else{
+                            $no_send_ids[] = $order['order_id'];
+                        }
+                    }
+                }
+            }
+
+            if(count($no_send_ids) > 0) D("Shop_order")->where(array('order_id'=>array('in',$no_send_ids)))->save(array("send_platform"=>1));
+
+            if(count($send_arr) > 0){
+                import('@.ORG.Deliverect.Deliverect');
+                $deliverect = new Deliverect();
+
+                foreach ($send_arr as $o) {
+                    $result = $deliverect->createOrder($o);
+                    break;
+                }
+            }
+
         }
     }
     /**

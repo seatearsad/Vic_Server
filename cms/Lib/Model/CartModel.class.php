@@ -17,8 +17,8 @@ class CartModel extends Model
             if($good)
                 $data['sid'] = $good['store_id'];
             else{//menu_version = 2
-                $product = D('StoreMenuV2')->getProduct($fid);
-                $data['sid'] = $product['storeId'];
+                //$product = D('StoreMenuV2')->getProduct($fid,0);
+                //$data['sid'] = $product['storeId'];
             }
         }else{
             $data['sid'] = $storeId;
@@ -33,7 +33,7 @@ class CartModel extends Model
         $data['dish_id'] = $dish_id;
         $data['time'] = date("Y-m-d H:i:s");
 
-        $where = array('uid'=>$uid,'fid'=>$fid,'spec'=>$spec,'proper'=>$proper,'dish_id'=>$dish_id);
+        $where = array('uid'=>$uid,'fid'=>$fid,'spec'=>$spec,'proper'=>$proper,'dish_id'=>$dish_id,'sid'=>$storeId,'categoryId'=>$categoryId);
         //if($dish_id != "")
         //    $where['dish_id'] = $dish_id;
 
@@ -81,7 +81,7 @@ class CartModel extends Model
 
             $store = D('Store')->get_store_by_id($v['sid']);
             if($store['menu_version'] == 2){
-                $product = D('StoreMenuV2')->getProduct($v['fid']);
+                $product = D('StoreMenuV2')->getProduct($v['fid'],$v['sid']);
                 $good = D('StoreMenuV2')->arrangeProductAppOne($product);
                 $good['goods_id'] = $product['id'];
                 $good['store_id'] = $product['storeId'];
@@ -182,12 +182,13 @@ class CartModel extends Model
         $tax_price = 0;
         $deposit_price = 0;
 
-        $sid = $this->field(true)->where(array('uid'=>$uid,'fid'=>$cartList[0]['fid']))->find()['sid'];
+        //$sid = $this->field(true)->where(array('uid'=>$uid,'fid'=>$cartList[0]['fid']))->find()['sid'];
+        $sid = $cartList[0]['storeId'];
         $store = D('Store')->get_store_by_id($sid);
 
         foreach ($cartList as $v){
             if($store['menu_version'] == 2){
-                $good = D('StoreMenuV2')->getProduct($v['fid']);
+                $good = D('StoreMenuV2')->getProduct($v['fid'],$sid);
                 $t_good['fname'] = $good['name'];
                 $good['price'] = $good['price']/100;
                 $good['tax_num'] = $good['tax']/1000;
@@ -255,7 +256,7 @@ class CartModel extends Model
                         $dish_vale = D('Side_dish_value')->where(array('id' => $one_dish[1]))->find();
                         $dish_vale['name'] = lang_substr($dish_vale['name'], C('DEFAULT_LANG'));
                     }elseif ($store['menu_version'] == 2){
-                        $product_dish = D('StoreMenuV2')->getProduct($one_dish[1]);
+                        $product_dish = D('StoreMenuV2')->getProduct($one_dish[1],$sid);
                         $dish_vale['name'] = $product_dish['name'];
                     }
                     //$dish_vale = D('Side_dish_value')->where(array('id'=>$one_dish[1]))->find();

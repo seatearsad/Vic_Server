@@ -1510,7 +1510,7 @@ class ShopAction extends BaseAction{
             if($now_store['menu_version'] == 2){
                 $categories = D('StoreMenuV2')->getStoreCategories($store_id,true);
                 $sortList = D('StoreMenuV2')->arrangeWap($categories);
-                $list = D('StoreMenuV2')->getStoreProduct($categories);
+                $list = D('StoreMenuV2')->getStoreProduct($categories,$store_id);
                 //$list = D('StoreMenuV2')->arrangeProductWap($products);
             }else {
                 $sortList = D('Shop_goods_sort')->lists($store_id, true);
@@ -1740,12 +1740,12 @@ class ShopAction extends BaseAction{
         $goods_id = isset($_GET['goods_id']) ? $_GET['goods_id'] : 1;
 
         if($now_store['menu_version'] == 2){
-            $now_goods = D('StoreMenuV2')->getProduct($goods_id);
+            $now_goods = D('StoreMenuV2')->getProduct($goods_id,$store_id);
             $now_goods = D('StoreMenuV2')->arrangeProductWapShow($now_goods);
 
-            $dish_list = D('StoreMenuV2')->getProductRelation($goods_id);
+            $dish_list = D('StoreMenuV2')->getProductRelation($goods_id,$store_id);
 
-            $dish_list_new = D('StoreMenuV2')->arrangeDishWap($dish_list,$goods_id);
+            $dish_list_new = D('StoreMenuV2')->arrangeDishWap($dish_list,$goods_id,$store_id);
 
             $now_goods['side_dish'] = $dish_list_new;
         }else {
@@ -2456,7 +2456,7 @@ class ShopAction extends BaseAction{
                     }
                 }else if($store['menu_version'] == 2){
                     $categories = D('StoreMenuV2')->getStoreCategories($store_id,true);
-                    $products = D('StoreMenuV2')->getStoreProductAll($categories);
+                    $products = D('StoreMenuV2')->getStoreProductAll($categories,$store_id);
 
                     $allProduct = array();
                     foreach ($products as $p){
@@ -3854,7 +3854,7 @@ class ShopAction extends BaseAction{
                     $tax_price += $v['price'] * $goods['tax_num']/100 * $v['num'];
                     $deposit_price += $goods['deposit_price'] * $v['num'];
                 }elseif ($store['menu_version'] == 2){
-                    $goods = D('StoreMenuV2')->getProduct($v['goods_id']);
+                    $goods = D('StoreMenuV2')->getProduct($v['goods_id'],$order['store_id']);
                     $tax_price += $v['price'] * $goods['tax']/100000 * $v['num'];
                     $deposit_price += 0;
                 }
