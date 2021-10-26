@@ -2722,6 +2722,7 @@ class DeliverAction extends BaseAction
             $userdata['province_str'] = $_POST['province'] ? $_POST['province'] : '';
             $userdata['postal_code'] = $_POST['postal_code'] ? $_POST['postal_code'] : '';
             $userdata['lat'] = $_POST['lat'] ? $_POST['lat'] : '0';
+            $userdata['lng'] = $_POST['lng'] ? $_POST['lng'] : '0';
             $userdata['reg_status'] = 2;
             $userdata['last_time'] = time();
 
@@ -2795,7 +2796,8 @@ class DeliverAction extends BaseAction
         if($_POST){
             $this->pre_save_step3();
             if($_POST['just_save']=="1"){
-                $result = array('error_code' => true, 'msg' => "Saved");
+                //$result = array('error_code' => true, 'msg' => "Saved");
+                $result = array('error_code' => false, 'msg' => L('_PAYMENT_SUCCESS_'));
             }else{
                 import('@.ORG.pay.MonerisPay.mpgClasses');
                 $where = array('tab_id'=>'moneris','gid'=>7);
@@ -2860,15 +2862,18 @@ class DeliverAction extends BaseAction
             $bag = $database_bag->field(true)->where(array('bag_switch' => "1"))->select();
 
             $this->assign('bag',$bag);
-            $database_deliver_user = D('Deliver_user');
-
-            $now_user = $database_deliver_user->field(true)->where(array('uid' => $this->deliver_session['uid']))->find();
 
             $city_id=$now_user["city_id"];
             $areas=D('Area')->where(array("area_id"=>$city_id))->find();
 
             $this->assign('city',$areas);
             //bag_type 0:未设置 1:自取 2：邮寄 3：全选
+
+            $bag_list = explode("|",$now_user['bag_get_id']);
+            foreach ($bag_list as &$b){
+                $b = explode(",",$b);
+            }
+            $this->assign('bag_list',$bag_list);
 
             if ($now_user['reg_status'] != 3)
                 header('Location:' . U('Deliver/step_' . $now_user['reg_status']));

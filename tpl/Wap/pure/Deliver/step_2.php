@@ -30,7 +30,7 @@
     section{
         position: absolute;
         top: 2%;
-        width: 80%;
+        width: 100%;
         font-size: 10px;
         color: #666666;
     }
@@ -112,7 +112,10 @@
     .img_0 img,.img_1 img,.img_2 img{
         height: 100px;
     }
-
+    #reg_form{
+        background-color: #ffa52d;
+        color: white;
+    }
 
 </style>
 <body style="background:url('{pigcms{$static_path}img/login_bg.png');">
@@ -127,9 +130,11 @@
     <div id="memo" class="android_tip">
         Please use your browser to upload images if the uploading function does not work here. To do so, visit www.tutti.app and click on Menu > Become a Courier > Get Started.
     </div>
-
+    <div id="step_title">
+        Required Documents
+    </div>
     <div id="memo" >
-        The following documents are required to verify that you’re eligible to become a courier. All information are kept securely.
+        The following documents are required to verify that you’re eligible to become a courier. All information are kept securely.<br/><br/>
         Make sure your photos are clear, especially the name and expiration date. Photos that are unclear or invalid may result in verification failure and delay your application.
     </div>
     <div id="step_title">
@@ -141,7 +146,7 @@
     <div id="memo">
         This is for taxation purpose only
     </div>
-    <div id="memo" >
+    <div id="memo" style="margin-top: 15px">
         Upload one of the following documents to prove you can legally work in Canada as a contract courier:<br/>
         - Canadian passport<br/>
         - Citizenship card<br/>
@@ -150,16 +155,16 @@
         - Study permit that allows off-campus work<br/>
         - Social insurance card<br/>
     </div>
-<!--    <div id="step_title">-->
-<!--        c.{pigcms{:L('_ND_WORKELIGIBILITY_')}-->
-<!--    </div>-->
-<!--    <div id="memo">-->
-<!--        {pigcms{:L('_ND_ELIGIBILITYNOTICE_')}-->
-<!--    </div>-->
+    <!--    <div id="step_title">-->
+    <!--        c.{pigcms{:L('_ND_WORKELIGIBILITY_')}-->
+    <!--    </div>-->
+    <!--    <div id="memo">-->
+    <!--        {pigcms{:L('_ND_ELIGIBILITYNOTICE_')}-->
+    <!--    </div>-->
     <div style="margin: 10px auto;width: 85%;">
         <div style="display:inline-block;" id="J_selectImage_0">
             <div class="btn btn-sm btn-success" style="position:relative;height:50px;line-height: 50px;text-align: left;">
-               {pigcms{:L('_ND_UPLOAD3_')}
+                {pigcms{:L('_ND_UPLOAD3_')}
             </div>
         </div>
         <div class="img_0">
@@ -194,15 +199,16 @@
 
         </div>
     </div>
+    <div id="memo" style="color: silver;margin-bottom: 30px;">
+        {pigcms{:L('_ND_SKIPUPLOAD_')}
+    </div>
     <div id="memo" style="text-align: center;margin-top: 20px">
         <span id="filename_0" style="display: none;"></span>
         <span id="filename_1" style="display: none;"></span>
         <span id="filename_2" style="display: none;"></span>
         <input type="button" value="{pigcms{:L('_ND_SAVENCONTINUE_')}" id="reg_form">
     </div>
-    <div id="memo" style="text-align: center;color: silver;margin-bottom: 30px;">
-        {pigcms{:L('_ND_SKIPUPLOAD_')}
-    </div>
+
 </section>
 
 <script src="{pigcms{$static_public}js/lang.js"></script>

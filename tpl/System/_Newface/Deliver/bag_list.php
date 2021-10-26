@@ -55,7 +55,7 @@
                                             <td>{pigcms{$vo.bag_id}</td>
                                             <td>{pigcms{$vo.bag_name}</td>
                                             <td>{pigcms{$vo.bag_price}</td>
-                                            <td>{pigcms{$vo.phone}-{pigcms{$vo.bag_switch}</td>
+                                            <td>{pigcms{$vo.bag_description}</td>
                                             <td>
                                                 <div style="width: 120px;" data-id="{pigcms{$vo.bag_id}" >
                                                         <span class="cb-enable cb-enableex"><label id="cat_type_0" class="cb-enable <if condition="$vo['bag_switch'] eq 1">selected</if>"><span>ON</span>

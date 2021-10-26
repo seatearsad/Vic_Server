@@ -75,7 +75,7 @@
         margin-top: 15px;
     }
     li input {
-        width: 55%;
+        width: 80%;
         height: 15px;
         padding: 8px 0;
         text-indent: 10px;
@@ -84,8 +84,11 @@
         margin-top: 2px;
         font-size: 12px;
     }
+    li input:disabled{
+        background: #e6e6e6;
+    }
     li input.sm {
-        width: 27%;
+        width: 39%;
         height: 15px;
         padding: 8px 0;
         text-indent: 10px;
@@ -95,7 +98,7 @@
         font-size: 12px;
     }
     li select{
-        width: 55%;
+        width: 80%;
         height: 31px;
         text-indent: 5px;
         border-radius: 5px;
@@ -103,10 +106,11 @@
     li.Landd input {
         background: #ffa52d;
         text-indent: 0px;
-        font-size: 12px;
+        font-size: 14px;
         margin-top: 30px;
         margin-left: 0;
         padding: 0px;
+        color: white;
         height: 30px;
     }
     #send_code{
@@ -140,21 +144,21 @@
 <section>
     <div class="Land_top" style="color:#333333;">
         <span class="fillet" style="background: url('./tpl/Static/blue/images/new/icon.png') center no-repeat; background-size: contain;"></span>
-        <div style="font-size: 14px">{pigcms{:L('_ND_BECOMEACOURIER_')}</div>
-        <div style="color: red;font-size: 10px;margin: 10px auto;width: 90%;">
-<!--            {pigcms{:L('_ND_ACCTSUCCESS_')}-->
+        <div style="font-size: 14px;font-weight: bold;">{pigcms{:L('_ND_BECOMEACOURIER_')}</div>
+        <div style="color: red;font-size: 10px;margin: 20px auto;width: 90%;">
+            <!--            {pigcms{:L('_ND_ACCTSUCCESS_')}-->
             <!-- Registration is temporarily unavailable at this point due to shortage in delivery bags. We'll inform you by email when registration is back to active. We're sorry for the inconvenience and thank you for your understanding!-->
         </div>
     </div>
-<!--    <div id="step_now">-->
-<!--        <div>1.{pigcms{:L('_ND_INFORMATIONNEEDED_')}</div>-->
-<!--        <ul>-->
-<!--            <li class="act"></li><li></li><li></li><li></li>-->
-<!--        </ul>-->
-<!--    </div>-->
-<!--    <div id="memo">-->
-<!--        {pigcms{:L('_ND_INFORMATIONSECURE_')}-->
-<!--    </div>-->
+    <!--    <div id="step_now">-->
+    <!--        <div>1.{pigcms{:L('_ND_INFORMATIONNEEDED_')}</div>-->
+    <!--        <ul>-->
+    <!--            <li class="act"></li><li></li><li></li><li></li>-->
+    <!--        </ul>-->
+    <!--    </div>-->
+    <!--    <div id="memo">-->
+    <!--        {pigcms{:L('_ND_INFORMATIONSECURE_')}-->
+    <!--    </div>-->
     <div id="reg_list">
         <ul>
             <li>
@@ -178,20 +182,21 @@
                 <input type="text" class="gray-bg" placeholder="{pigcms{:L('_BIRTHDAY_TXT_')}*" id="birthday" name="birthday" disabled="disabled">
             </li>
             <li>
-                <input type="text" class="gray-bg" placeholder="{pigcms{:L('_ND_ADDRESS_')}" id="address" name="address" disabled="disabled">
+                <input type="text" class="gray-bg pac-target-input" placeholder="{pigcms{:L('_ND_ADDRESS_')}" id="address" name="address" disabled="disabled">
             </li>
             <li>
                 <input type="text" class="gray-bg" placeholder="Apartment,suite,unit,etc." id="apartment" name="apartment" disabled="disabled">
             </li>
             <li>
-                <input type="text" class="sm gray-bg" placeholder="City*" id="city"  name="city" disabled="disabled"><input type="text" class="sm" placeholder="Province*" id="province"  name="province"  disabled="disabled">
+                <input type="text" class="sm gray-bg" placeholder="City*" id="city"  name="city" disabled="disabled">
+                <input type="text" class="sm" placeholder="Province*" id="province"  name="province"  disabled="disabled">
             </li>
             <li>
                 <input type="text" class="gray-bg" placeholder="Postal Code*" id="postalcode" name="postalcode" disabled="disabled">
             </li>
 
             <li class="Landd">
-                <input type="button" value="Continue" id="reg_form" style="background-color: #ffa52d;width: 50%;"  disabled="disabled">
+                <input type="button" value="Continue" id="reg_form" style="background-color: #ffa52d;width: 80%;"  disabled="disabled">
             </li>
         </ul>
         <input type="hidden" name="lng" id="lng">
@@ -199,6 +204,7 @@
     </div>
     <div style="margin-bottom: 20px"></div>
 </section>
+
 </body>
 <script src="{pigcms{$static_public}js/lang.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKlguA2QFIUVwWTo3danbOqSKv3nYbBCg&libraries=places&language=en" async defer></script>
@@ -209,6 +215,10 @@
     $("#city_id").change(function () {
         set_city_id($(this).val());
     });
+
+    if($("#city_id").val() != 0) {
+        set_city_id($("#city_id").val());
+    }
 
     function close_input(){
 
@@ -254,25 +264,25 @@
 
     function set_city_id(city_id){
         if (city_id>0){
-        $.ajax({
-            url: "{pigcms{:U('Deliver/ajax_save_city_id_for_deliver_user')}",
-            type: 'POST',
-            dataType: 'json',
-            data:{"city_id":city_id},
-            success:function(data){
-                if (data.error==1){
-                    $("#online_div").hide();
-                    open_input();
-                }else{
-                    $("#online_div").show();
-                    close_input();
-                }
+            $.ajax({
+                url: "{pigcms{:U('Deliver/ajax_save_city_id_for_deliver_user')}",
+                type: 'POST',
+                dataType: 'json',
+                data:{"city_id":city_id},
+                success:function(data){
+                    if (data.error==1){
+                        $("#online_div").hide();
+                        open_input();
+                    }else{
+                        $("#online_div").show();
+                        close_input();
+                    }
 
-                //window.parent.location = "{pigcms{:U('Deliver/step_3')}";
-            }
-        });
+                    //window.parent.location = "{pigcms{:U('Deliver/step_3')}";
+                }
+            });
         }else{
-            $("#online_div").show();
+            $("#online_div").hide();
             close_input();
         }
     }
@@ -286,11 +296,17 @@
                 'lng':$('#lng').val(),
                 'lat':$('#lat').val(),
                 'city_id':$('#city_id').val(),
-                'sin_num':$('#sin_num').val(),
-                'ahname':$('#ahname').val(),
-                'transit':$('#transit').val(),
-                'institution':$('#institution').val(),
-                'account':$('#account').val()
+                'birthday':$('#birthday').val(),
+                'vehicle_type':$('#vehicle_type').val(),
+                'apartment':$('#apartment').val(),
+                'city':$('#city').val(),
+                'province':$('#province').val(),
+                'postal_code':$('#postalcode').val()
+                //'sin_num':$('#sin_num').val(),
+                //'ahname':$('#ahname').val(),
+                //'transit':$('#transit').val(),
+                //'institution':$('#institution').val(),
+                //'account':$('#account').val()
             };
             $.ajax({
                 url: "{pigcms{:U('Deliver/step_1')}",
@@ -361,8 +377,13 @@
 
     var autocomplete;
     function initAutocomplete() {
-        autocomplete = new google.maps.places.Autocomplete(document.getElementById('address'), {types: ['geocode'],componentRestrictions: {country: ['ca']}});
-        autocomplete.addListener('place_changed', fillInAddress);
+        if(typeof(autocomplete) == 'undefined') {
+            autocomplete = new google.maps.places.Autocomplete(document.getElementById('address'), {
+                types: ['geocode'],
+                componentRestrictions: {country: ['ca']}
+            });
+            autocomplete.addListener('place_changed', fillInAddress);
+        }
     }
     function fillInAddress() {
         var place = autocomplete.getPlace();
