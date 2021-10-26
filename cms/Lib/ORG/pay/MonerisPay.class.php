@@ -1078,13 +1078,15 @@ class MonerisPay
             $order_md = D('Pay_moneris_md')->where(array('moneris_order_id'=>$data['order_id']))->find();
             $md['order_md'] = $MD;
             $md['create_time'] = time();
-            var_dump($order_md);die();
+
             if($order_md){
                 D('Pay_moneris_md')->where(array('moneris_order_id'=>$data['order_id']))->save($md);
             }else{
                 $md['moneris_order_id'] = $data['order_id'];
                 D('Pay_moneris_md')->add($md);
             }
+            $order_md = D('Pay_moneris_md')->where(array('moneris_order_id'=>$data['order_id']))->find();
+            var_dump($order_md);die();
         }
 
         if($resp['transStatus'] == "C")
