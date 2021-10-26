@@ -65,6 +65,7 @@ class MonerisPay
             //3D 2.0
             $resp = $this->threeDSAuthentication($data,$uid,$from_type);
             //var_dump($resp);die();
+            file_put_contents("./test_log.txt",date("Y/m/d")."   ".date("h:i:sa")."   "."Moneris 3D" ."   ". $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'--'.$resp."\r\n",FILE_APPEND);
             if($resp['transStatus'] == "Y" || $resp['transStatus'] == "A"){
                 //return $this->purchase($data,$uid,$from_type,$order);
                 $order_md = D('Pay_moneris_md')->where(array('moneris_order_id'=>$resp['receiptId']))->find();
