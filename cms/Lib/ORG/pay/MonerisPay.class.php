@@ -70,6 +70,7 @@ class MonerisPay
                 //return $this->purchase($data,$uid,$from_type,$order);
                 $order_md = D('Pay_moneris_md')->where(array('moneris_order_id'=>$resp['receiptId']))->find();
                 $MD = $order_md['order_md'];
+                var_dump($order_md);die();
 
                 return $this->MPI_Cavv($MD,$resp['cavv'],$resp['eci'],$resp['threeDSServerTransId']);
             }elseif ($resp['transStatus'] == "N" || $resp['transStatus'] == "U"){
@@ -1085,8 +1086,6 @@ class MonerisPay
                 $md['moneris_order_id'] = $data['order_id'];
                 D('Pay_moneris_md')->add($md);
             }
-            $order_md = D('Pay_moneris_md')->where(array('moneris_order_id'=>$data['order_id']))->find();
-            var_dump($order_md);die();
         }
 
         if($resp['transStatus'] == "C")
