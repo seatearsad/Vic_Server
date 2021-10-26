@@ -128,14 +128,146 @@ class DeliverectAction
     }
 
     public function busyMode(){
+        $link_id = $this->data['channelLinkId'];
+        $open_close = $this->data['status'] == "PAUSED" ? 0 : 1;
+
+        $store = D('Merchant_store')->field(true)->where(array('link_id' => $link_id))->find();
+        $shop_status = getClose($store);
+        //0 关闭店铺 1打开店铺
+        if($open_close == 0){
+            if(!$shop_status['is_close']){
+                $data['store_is_close'] = $shop_status['open_num'];
+                D('Merchant_store')->where(array('store_id' => $store['store_id']))->save($data);
+            }
+            //$this->success('Success');
+        }else{//1打开店铺
+            if($shop_status['is_close']){
+                if($shop_status['open_num'] == 0){
+                    //$this->error(L('_STORE_NOT_OPEN_TIP_'));
+                }else{
+                    $data['store_is_close'] = 0;
+                    D('Merchant_store')->where(array('store_id' => $store['store_id']))->save($data);
+                }
+            }
+            //$this->success('Success');
+        }
+
         echo "busyMode";
     }
 
     public function statusUpdate(){
+        print_r($this->data);
+
+        $orderId = $this->data['channelOrderId'];
+        $status = $this->data['status'];
+        D("Shop_order")->where(array('order_id'=>$orderId))->save(array('send_platform'=>$status));
+
         echo "statusUpdate";
     }
 
     public function updatePrepTimeURL(){
+        $orderId = $this->data['channelOrderId'];
+        $pickupTime = str_replace("T"," ",$this->data['pickupTime']);
+        $pickupTime = str_replace("Z","",$pickupTime);
+
+        $pickupTime = strtotime($pickupTime);
+
+        $_POST['dining_time'] = intval(($pickupTime - time())/60);
+
+        $database = D('Shop_order');
+        $order_id = $condition['order_id'] = $orderId;
+        $condition['is_del'] = 0;
+        $order = $database->field(true)->where($condition)->find();
+
+        /**
+        $shop = D('Merchant_store')->field(true)->where(array('store_id' => $this->store['store_id']))->find();
+
+        $area = D('Area')->where(array('area_id'=>$shop['city_id']))->find();
+        $shop['busy_mode'] = $area['busy_mode'];
+        $shop['min_time'] = $area['min_time'];
+
+        if($shop['busy_mode'] == 1 && $_POST['dining_time'] < $shop['min_time']){
+            $this->error_tips(replace_lang_str(L('D_F_TIP_3'),$shop['min_time']));
+        }
+        */
+        if (empty($order)) {
+            $this->error("Sorry, this order has been cancelled or removed.");
+            exit;
+        }
+        if ($order['status'] == 4 || $order['status'] == 5) {
+            $this->error('Failed! Order canceled by the customer');
+            exit;
+        }
+        if ($order['status'] > 0) {
+            $this->error('该单已接，不要重复接单');
+            exit;
+        }
+        if ($order['is_refund']) {
+            $this->error('用户正在退款中~！');
+            exit;
+        }
+        if ($order['paid'] == 0) {
+            $this->error('订单未支付，不能接单！');
+            exit;
+        }
+
+
+        $store = D('Merchant_store')->field(true)->where(array('store_id' => $order['store_id']))->find();
+
+        $data['status'] = 1;
+        $data['order_status'] = 1;
+        $data['last_staff'] = "Deliverect";
+        $data['last_time'] = time();
+        $condition['status'] = 0;
+        if ($database->where($condition)->save($data)) {
+            if ($order['is_pick_in_store'] != 2 && $order['is_pick_in_store'] != 3) {
+                $result = D('Deliver_supply')->saveOrder($order_id, $store);
+                if ($result['error_code']) {
+                    D('Shop_order')->where(array('order_id' => $order_id))->save(array('status' => 0, 'order_status' => 0, 'last_time' => time()));
+                    //$this->error_tips($result['msg']);
+                    exit;
+                }
+            }
+
+            D('Shop_order_log')->add_log(array('order_id' => $order_id, 'status' => 2, 'name' => "Deliverect", 'phone' => ""));
+
+            //add garfunkel
+            $userInfo = D('User')->field(true)->where(array('uid'=>$order['uid']))->find();
+            if($userInfo['device_id'] != ""){
+                $message = 'Your order has been accepted by the store, they are preparing it now. Our Courier is on the way, thank you for your patience!';
+                Sms::sendMessageToGoogle($userInfo['device_id'],$message);
+            }else{
+                $sms_data['uid'] = $order['uid'];
+                $sms_data['mobile'] = $order['userphone'];
+                $sms_data['sendto'] = 'user';
+                $sms_data['tplid'] = 172700;
+                $sms_data['params'] = [];
+                //Sms::sendSms2($sms_data);
+                $sms_txt = "Your order has been accepted by the store, they are preparing your order now. Our Courier is on the way, thank you for your patience.";
+                //Sms::telesign_send_sms($order['userphone'],$sms_txt,0);
+                Sms::sendTwilioSms($order['userphone'],$sms_txt);
+            }
+
+            if(isset($_POST['dining_time']) && $_POST['dining_time'] >= 40){
+                $store['name'] = lang_substr($store['name'], 'en-us');
+                $sms_data['uid'] = $order['uid'];
+                $sms_data['mobile'] = $order['userphone'];
+                $sms_data['sendto'] = 'user';
+                $sms_data['tplid'] = 585843;
+                $sms_data['params'] = [
+                    $store['name'],
+                    $_POST['dining_time']
+                ];
+                //Sms::sendSms2($sms_data);
+                $sms_txt = "We’d like to inform you that ".$store['name']." needs ".$_POST['dining_time']." minutes to finish preparing your order. Estimated delivery time may be longer than expected. Thank you for your patience!";
+                //Sms::telesign_send_sms($order['userphone'],$sms_txt,0);
+                Sms::sendTwilioSms($order['userphone'],$sms_txt);
+            }
+
+            //$this->success('已接单');
+        } else {
+            //$this->error('接单失败');
+        }
         echo "updatePrepTimeURL";
     }
 
