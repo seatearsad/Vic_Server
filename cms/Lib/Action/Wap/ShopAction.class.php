@@ -1743,7 +1743,7 @@ class ShopAction extends BaseAction{
             $now_goods = D('StoreMenuV2')->getProduct($goods_id,$store_id);
             $now_goods = D('StoreMenuV2')->arrangeProductWapShow($now_goods);
 
-            $dish_list = D('StoreMenuV2')->getProductRelation($goods_id,$store_id);
+            $dish_list = D('StoreMenuV2')->getProductRelation($goods_id,$store_id,1);
 
             $dish_list_new = D('StoreMenuV2')->arrangeDishWap($dish_list,$goods_id,$store_id);
 

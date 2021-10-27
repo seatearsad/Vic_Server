@@ -66,7 +66,39 @@ class DeliverectAction
     }
 
     public function snoozeUnsnooze(){
-        echo "snoozeUnsnooze";
+        $channelLinkId = $this->data['channelLinkId'];
+        $operations = $this->data['operations'];
+        $locationId = $this->data['locationId'];
+
+        $action = $operations[0]['action'];//snooze|unsnooze
+
+        $updateItems = $operations[0]['data']['items'];
+
+        $store = D('Merchant_store')->where(array('link_id'=>$channelLinkId))->find();
+
+        $response['result'] = array();
+        $responseResult['action'] = $action;
+        $responseResult['data']['locationId'] = $locationId;
+        $responseResult['data']['allSnoozedItems'] = array();
+
+        if($action == "snooze") $updateData['status'] = 0;
+        else $updateData['status'] = 1;
+
+        $where['storeId'] = $store['store_id'];
+
+        foreach ($updateItems as $item){
+            $responseResult['data']['allSnoozedItems'][] = $item['plu'];
+            $where['id'] = $item['_id'];
+
+            if($action == "snooze") $updateData['snoozeTime'] = $item['snoozeEnd'];
+            else $updateData['snoozeTime'] = "";
+
+            D("Store_product")->where($where)->save($updateData);
+        }
+
+        $response['result'][] = $responseResult;
+
+        echo json_encode($response);
     }
 
     public function menuUpdate(){
@@ -161,6 +193,10 @@ class DeliverectAction
         $orderId = $this->data['channelOrderId'];
         $status = $this->data['status'];
         D("Shop_order")->where(array('order_id'=>$orderId))->save(array('send_platform'=>$status));
+
+        if($status == 100){//Cancel Order
+            $this->orderRefund($orderId);
+        }
 
         echo "statusUpdate";
     }
@@ -416,5 +452,106 @@ class DeliverectAction
         //D('Store_product_relation')->where(array('productId'=>array('in',$allProductIds)))->delete();
         D('Store_product_relation')->where(array('storeId'=>$storeId))->delete();
         D('Store_product_relation')->addAll($allRelation);
+    }
+
+    public function orderRefund($orderId){
+        $order_id = $orderId;
+
+        $now_order = D("Shop_order")->get_order_detail(array('order_id' => $order_id));
+
+        if(empty($now_order)){
+            exit();
+        }
+
+        $uid = $now_order['uid'];
+
+        $store_id = $now_order['store_id'];
+        /**
+        if (!($now_order['paid'] == 1 && ($now_order['status'] == 0 || $now_order['status'] == 5))) {
+            $this->returnCode(1,'info',array(),L('_B_MY_ORDERDEALING_'));
+        }
+         * */
+
+        $data_shop_order['cancel_type'] = 8;//取消类型（0:pc店员，1:wap店员，2:andriod店员,3:ios店员，4：打包app店员，5：用户，6：配送员, 7:超时取消,8:Deliverect）
+        if ($now_order['pay_type'] == 'offline' || $now_order['pay_type'] == 'Cash') {
+            $data_shop_order['order_id'] = $now_order['order_id'];
+            $data_shop_order['refund_detail'] = serialize(array('refund_time' => time()));
+            $data_shop_order['status'] = 4;
+            if (D('Shop_order')->data($data_shop_order)->save()) {
+                $return = $this->shop_refund_detail($now_order, $store_id);
+                if ($return['error_code']) {
+                    exit();
+                }
+            } else {
+                exit();
+            }
+        }else{
+            if($now_order['pay_type'] == 'moneris'){
+                import('@.ORG.pay.MonerisPay');
+                $moneris_pay = new MonerisPay();
+                $resp = $moneris_pay->refund($uid,$now_order['order_id']);
+                //var_dump($resp);die();
+                if($resp['responseCode'] != 'null' && $resp['responseCode'] < 50){
+                    $data_shop_order['order_id'] = $now_order['order_id'];
+                    $data_shop_order['status'] = 4;
+                    $data_shop_order['last_time'] = time();
+                    D('Shop_order')->data($data_shop_order)->save();
+                }else{
+                    exit();
+                }
+            }else if($now_order['pay_type'] == 'weixin' || $now_order['pay_type'] == 'alipay'){
+                import('@.ORG.pay.IotPay');
+                $IotPay = new IotPay();
+                $result = $IotPay->refund($uid,$now_order['order_id'],'APP');
+                if ($result['retCode'] == 'SUCCESS' && $result['resCode'] == 'SUCCESS'){
+                    $data_shop_order['order_id'] = $now_order['order_id'];
+                    $data_shop_order['status'] = 4;
+                    $data_shop_order['last_time'] = time();
+                    D('Shop_order')->data($data_shop_order)->save();
+                }else{
+                    exit();
+                }
+            }
+
+            $return = $this->shop_refund_detail($now_order, $store_id);
+            if ($return['error_code']) {
+                exit();
+            }
+
+            D('Shop_order_log')->add_log(array('order_id' => $order_id, 'status' => 9));
+        }
+    }
+
+
+    private function shop_refund_detail($now_order, $store_id)
+    {
+        $order_id  = $now_order['order_id'];
+
+        //平台余额退款
+        if ($now_order['balance_pay'] != '0.00') {
+            $add_result = D('User')->add_money($now_order['uid'],$now_order['balance_pay'],'退款 '.$order_id.' 增加余额',0,0,0,"Order Cancellation (Order # ".$order_id.")");
+
+            $param = array('refund_time' => time());
+            $param['refund_id'] = $now_order['order_id'];
+
+            $data_shop_order['order_id'] = $now_order['order_id'];
+            $data_shop_order['refund_detail'] = serialize($param);
+            $data_shop_order['status'] = 4;
+            D('Shop_order')->data($data_shop_order)->save();
+        }
+
+        //退款时销量回滚
+        if (($now_order['paid'] == 1 || $now_order['reduce_stock_type'] == 1) && $now_order['is_rollback'] == 0) {
+            $goods_obj = D("Shop_goods");
+            foreach ($now_order['info'] as $menu) {
+                $goods_obj->update_stock($menu, 1);//修改库存
+            }
+            D('Shop_order')->where(array('order_id' => $now_order['order_id']))->save(array('is_rollback' => 1));
+        }
+        D("Merchant_store_shop")->where(array('store_id' => $now_order['store_id'], 'sale_count' => array('gt', 0)))->setDec('sale_count', 1);
+        //退款时销量回滚
+
+        $go_refund_param['error_code'] = false;
+        return $go_refund_param;
     }
 }

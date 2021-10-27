@@ -99,7 +99,7 @@
                                                     <img src="{pigcms{$static_path}images/noteye.png" width="30" />
                                                     <else/>
 												<label class="statusSwitch" style="display:inline-block;">
-													<input name="switch-field-1" class="ace ace-switch ace-switch-6" type="checkbox" data-id="{pigcms{$vo.goods_id}" <if condition="$vo['status'] eq 1">checked="checked" data-status="OPEN"<else/>data-status="CLOSED"</if>/>
+													<input name="switch-field-1" class="ace ace-switch ace-switch-6" type="checkbox" data-id="{pigcms{$vo.id}" <if condition="$vo['status'] eq 1">checked="checked" data-status="OPEN"<else/>data-status="CLOSED"</if>/>
 													<span class="lbl"></span>
 												</label>
                                                 </if>

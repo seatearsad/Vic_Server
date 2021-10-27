@@ -1737,7 +1737,7 @@ class IndexAction extends BaseAction
 
             //$result['list'] = array();
 
-            $dish_list = D('StoreMenuV2')->getProductRelation($fid,$storeId);
+            $dish_list = D('StoreMenuV2')->getProductRelation($fid,$storeId,1);
             $dish_list_new = D('StoreMenuV2')->arrangeDishWap($dish_list,$fid,$storeId);
 
             $result['side_dish'] = $dish_list_new;
