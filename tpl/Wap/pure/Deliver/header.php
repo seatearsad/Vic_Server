@@ -1,6 +1,8 @@
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
 <style>
     body{
         max-width: 100%;
+        background-color: #F8F8F8;
     }
     #tutti_header{
         width: 100%;
@@ -36,7 +38,7 @@
     .hamburger .line {
         width: 25px;
         height: 3px;
-        background-color: #ffa52d;
+        background-color: #344267;
         display: block;
         margin: 5px auto;
         -moz-border-radius: 3px;
@@ -47,7 +49,7 @@
         transition: all 0.3s ease-in-out;
     }
     .hamburger:hover .line{
-        background-color: #ffa64d;
+        background-color: #344267;
     }
     .menu_font{
         margin-top: 16px;
@@ -75,7 +77,7 @@
         top:60px;
         max-width: 100%;
         width: 500px;
-        background-color: white;
+        background-color: #344267;
         transition: transform .4s ease;
         transform: translate3d(-150%, 0, 0);
         display: flex;
@@ -88,25 +90,21 @@
     #menu_memo ul{
         width: 92%;
         margin-left: 5%;
-        margin-top: 40px;
+        margin-top: 60px;
         padding: 0;
     }
     #menu_memo ul li{
         list-style-type: none;
-        height: 30px;
+        height: 40px;
         line-height: 30px;
         cursor: pointer;
-        background-image: url("./tpl/Static/blue/images/new/black_arrow.png");
         background-size: auto 16px;
         background-repeat: no-repeat;
         background-position: right;
         display: flex;
         margin-top: 5px;
-        color: #3f3f3f;
-    }
-    #menu_memo ul li:hover{
-        color: #ffa52d;
-        background-image: url("./tpl/Static/blue/images/new/or_arrow.png");
+        color: white;
+        font-weight: bold;
     }
 
     .menu_font span{
@@ -122,9 +120,9 @@
         width: 90%;
         height: 30px;
         margin-left: 5%;
-        padding-top: 5px;
+        padding-top: 15px;
         position: inherit;
-        border-bottom: 2px solid #f5f5f5;
+        color: white;
     }
     .startOrder{color: #fff;float: right;background: green;border: 1px solid #ccc;padding: 5px 10px 5px 10px;}
     .stopOrder{color: #000;float: right;background: #ccc;border: 1px solid #ccc;padding: 5px 10px 5px 10px;}
@@ -146,13 +144,13 @@
         padding-left: 20px;
     }
     #logout{
-        color: #ffa52d;
+        color: white;
         float: right;
         cursor: pointer;
         line-height: 30px;
     }
     #lang_div{
-        color: #666666;
+        color: white;
         line-height: 30px;
         padding-left: 30px;
         float: left;
@@ -167,32 +165,8 @@
     #lang_div span.act{
         color: #ffa52d;
     }
-    .m_img{
+    .material-icons{
         width: 35px;
-        background-repeat: no-repeat;
-        background-position: center left;
-        background-size:auto 70%;
-    }
-    #menu_home .m_img{
-        background-image:url('{pigcms{$static_path}img/deliver_menu/home.png');
-    }
-    #menu_shift .m_img{
-        background-image:url('{pigcms{$static_path}img/deliver_menu/shift.png');
-    }
-    #menu_stat .m_img{
-        background-image:url('{pigcms{$static_path}img/deliver_menu/static.png');
-    }
-    #menu_order .m_img{
-        background-image:url('{pigcms{$static_path}img/deliver_menu/order.png');
-    }
-    #menu_inst .m_img{
-        background-image:url('{pigcms{$static_path}img/deliver_menu/inst.png');
-    }
-    #menu_account .m_img{
-        background-image:url('{pigcms{$static_path}img/deliver_menu/account.png');
-    }
-    #menu_support .m_img{
-        background-image:url('{pigcms{$static_path}img/deliver_menu/support.png');
     }
 </style>
 
@@ -231,31 +205,31 @@
     </div>
     <ul>
         <li id="menu_home">
-            <span class="m_img"> </span>
+            <span class="material-icons">home</span>
             <span>{pigcms{:L('_ND_HOME_')}</span>
         </li>
         <li id="menu_shift">
-            <span class="m_img"> </span>
+            <span class="material-icons">event</span>
             <span>{pigcms{:L('_ND_MYSHIFTS_')}</span>
         </li>
         <li id="menu_stat">
-            <span class="m_img"> </span>
+            <span class="material-icons">account_balance_wallet</span>
             <span>{pigcms{:L('_ND_MYSTATISTICS_')}</span>
         </li>
         <li id="menu_order">
-            <span class="m_img"> </span>
+            <span class="material-icons">watch_later</span>
             <span>{pigcms{:L('_ND_ORDERHISTORY_')}</span>
         </li>
         <li id="menu_inst">
-            <span class="m_img"> </span>
+            <span class="material-icons">error</span>
             <span>{pigcms{:L('_ND_INSANN_')}</span>
         </li>
         <li id="menu_account">
-            <span class="m_img"> </span>
+            <span class="material-icons">account_circle</span>
             <span>{pigcms{:L('_ND_MYACCOUNT_')}</span>
         </li>
         <li id="menu_support">
-            <span class="m_img"> </span>
+            <span class="material-icons">help</span>
             <span>{pigcms{:L('_ND_COURIERSUPPORT_')}</span>
         </li>
     </ul>

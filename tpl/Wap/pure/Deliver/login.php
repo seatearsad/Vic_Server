@@ -14,6 +14,7 @@
 <script src="{pigcms{:C('JQUERY_FILE')}"></script>
 <script src="{pigcms{$static_public}js/laytpl.js"></script>
 <script src="{pigcms{$static_path}layer/layer.m.js"></script>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <script>
     // 检测浏览器是否支持SW
@@ -73,28 +74,25 @@
 	<div class="Land_end">
 		<ul>
 			<li class="number">
+                <i class="material-icons" style="color: #344267;position: absolute;line-height: 40px;margin-left: 10px;">perm_identity</i>
 			  	<input type="text" placeholder="{pigcms{:L('_B_D_LOGIN_TEL_')}" id="login_phone">
 				<a href="javascript:void(0)"></a>
 			</li>
 			<li class="Password">
+                <i class="material-icons" style="color: #344267;position: absolute;line-height: 40px;margin-left: 10px;">lock_outline</i>
 				<input type="password" placeholder="{pigcms{:L('_B_D_LOGIN_KEY1_')}" id="login_pwd">
 				<a href="javascript:void(0)"></a>
 			</li>
-            <li id="findpwd" style="font-size:10px;text-decoration:underline;text-align: right;color: #666666;margin-bottom: 15px;cursor: pointer;">
+			<li class="Landd">
+				<input type="button" value="Log In" id="login_form">
+			</li>
+            <li id="findpwd" style="font-size:10px;text-decoration:underline;text-align: right;color: #666666;margin-bottom: 25px;cursor: pointer;">
                 {pigcms{:L('_ND_FORGOTPASSWORD_')}
             </li>
-			<li class="Landd">
-				<input type="button" value="{pigcms{:L('_B_D_LOGIN_LOGIN1_')}" id="login_form">
-			</li>
-            <li >
-                <div style="border-bottom: 1px dashed #999999;color:#999999;text-align: center;">
-                    OR
-                </div>
-            </li>
-            <li class="Landd" style="color:#666666;text-align: center;margin-top: 20px">
+            <li class="Landd" style="color:#344267;text-align: left;margin-top: 40px">
                 {pigcms{:L('_ND_WANTTOBEACOURIER_')}
-                <div id="reg_form" style="color: royalblue;">
-                    {pigcms{:L('_ND_SIGNUP_')}
+                <div id="reg_form" class="reg_form">
+                    Sign Up
                 </div>
             </li>
 		</ul>

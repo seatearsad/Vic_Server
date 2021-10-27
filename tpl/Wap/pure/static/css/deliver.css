@@ -223,11 +223,10 @@ body{ padding:0px; margin:0px auto; font-size:14px; min-width:320px; max-width:6
 .Ps_bottom div{width:95%;font-size: 10px;margin: 0 auto;}
 
 /*统计*/
-.Statistics .Statistics_top{ background: #ffa52d;}
-.Statistics .Statistics_top a{ display: block; float: left; text-align: center; width: 42%; line-height: 20px; padding: 3px 0;margin:70px 4% 10px 4%;background-color: white}
+.Statistics .Statistics_top a{ display: block; float: left; text-align: center; width: 40%; line-height: 35px; padding: 3px 0;background-color: white;border-radius: 10px;height: 35px;border: 1px solid #D1DEF8;font-weight: bold;color: #334267}
 /*.Statistics .Statistics_top a:nth-child(1){ background: url(../images/tjxhx_03.jpg) right center no-repeat; background-size: 1px 38px; }*/
 .Statistics .Statistics_top a h2 i{ background: url(../images/tjt_03.png) right center no-repeat; background-size: 8px; font-size: 14px; color: #ffa52d;  padding-right: 15px;}
-.Statistics .Statistics_top a input{ font-size: 10px; color: #333333; text-align: center; width: 90%; line-height: 20px; }
+.Statistics .Statistics_top a input{ font-size: 14px; color: #333333; text-align: center; width: 90%; line-height: 20px; }
 .Statistics .Statistics_end{ margin-bottom: 50px; padding: 10px 0; }
 .Statistics .Statistics_end li{ text-align: center; width: 46%; float: left; margin:2%; }
 .Statistics .Statistics_end li a{ display: block;  background: #fff; box-shadow: 0px 0px 10px 2px #e5e6e8; border-radius: 5px; padding: 22px 0;}
@@ -270,17 +269,19 @@ body{ padding:0px; margin:0px auto; font-size:14px; min-width:320px; max-width:6
 
 /*登陆*/
 .Land{ position: absolute; top: 10%; width: 100%; }
-.Land_top{ text-align: center;  color: #ffa52d;  }
-.Land_top h2{ font-size: 16px;  margin-top: 10px;}
+.Land_top{ text-align: center;  color: #344267;}
+.Land_top h2{ font-size: 16px;  margin-top: 10px; font-weight: bold;}
 .Land_top img{ border-radius: 100%; width: 70px; height: 70px; border: #fff 2px solid; }
 .Land_end{ margin-top: 25px; }
 .Land_end li{ padding:0 32px; margin-bottom: 14px; position: relative; }
-.Land_end li input{ width: 100%; height: 15px; padding: 13px 0; border-radius: 5px;  text-indent: 40px; color: #333333; font-size: 14px;}
+.Land_end li input{ width: 100%; height: 15px; padding: 13px 0; border-radius: 5px;  text-indent: 40px; color: #344267; font-size: 14px;}
+/*
 .Land_end li.number input{ background: url(../img/user.png) 20px center no-repeat #fff; background-size: 14px; }
 .Land_end li.Password input{  background: url(../img/Password.png) 20px center no-repeat #fff; background-size: 14px;  }
+*/
 .Land_end li input::-webkit-input-placeholder{ color: #333333;}
 .Land_end li a{ display: block; width: 15px; height: 42px; background: url(../images/dlymt_06.png) center no-repeat; background-size: 15px; position: absolute; top: 0px; right: 55px;  display: none; }
-.Land_end li.Landd input{ background: #ffa52d; color: #fff; text-indent: 0px; font-size: 16px; margin-top: 10px; padding: 0px; height: 40px;}
+.Land_end li.Landd input{ background: #344267; color: #fff; text-indent: 0px; font-size: 16px; margin-top: 10px; padding: 0px; height: 40px;}
 .Land_end li.Landd #lang{ background: #f0a30a; color: #fff; text-indent: 0px; font-size: 16px; margin-top: 10px; padding: 0px; height: 40px;}
 span.fillet{ display: inline-block; width: 85px; height: 85px; border-radius: 100%;}
 
@@ -294,6 +295,25 @@ span.fillet{ display: inline-block; width: 85px; height: 85px; border-radius: 10
 .psnone { background: #f4f4f4; }
 .psnone img {width: 100%;display: block;}
 
+.reg_form{
+	border:2px solid #344267;
+	color: #344267;
+	text-indent: 0px;
+	font-size: 16px;
+	margin-top: 10px;
+	padding: 0px;
+	height: 40px;
+	line-height: 40px;
+	text-align: center;
+	border-radius: 5px;
+}
+
+.page_title{
+	padding: 80px 0 30px 5%;
+	font-weight: bold;
+	font-size: 18px;
+	color: #334267;
+}
 
 /*****************/
 #pullDown{

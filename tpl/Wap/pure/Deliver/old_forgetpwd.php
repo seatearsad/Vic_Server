@@ -26,26 +26,27 @@
         color: #333333;
         position: relative;
         -webkit-tap-highlight-color: rgba(0,0,0,0);
-        background:url('{pigcms{$static_path}img/login_bg.png');
     }
     section{
         position: absolute;
-        top: 15%;
+        top: 5%;
         width: 100%;
     }
     li input {
-        width: 80%;
+        width: 94%;
         height: 15px;
         padding: 10px 0;
         text-indent: 10px;
-        color: #344267;
+        color: #1b9dff;
         font-size: 14px;
-        background-color: white;
-        border-radius: 5px;
-        margin-left: 10%;
+        background-color: transparent;
+        border-bottom: 1px solid;
+        margin-left: 3%;
         margin-top: 10px;
     }
-
+    li input:focus{
+        border-bottom: 1px solid #FF0000;
+    }
     li.Landd input {
         background: #1b9dff;
         background-color: rgb(27, 157, 255);
@@ -57,43 +58,32 @@
         height: 40px;
     }
     #send_code{
-        background: #344267;
+        background: #1b9dff;
+        background-color: rgb(27, 157, 255);
         color: #fff;
         text-indent: 0px;
         font-size: 14px;
         padding: 0px;
-        height: 35px;
-        border-radius: 5px;
+        height: 40px;
     }
     input#f_name,input#l_name,input#sms_code,#send_code{
-        width: 40%;
-    }
-    #login_btn{
-        margin-top: 40px;
-        text-align: right;
-        margin-right: 10%;
-        text-decoration: underline;
+        width: 45%;
     }
 </style>
-<body>
+<body style="background:url({pigcms{$static_path}images/login_02.jpg) left bottom no-repeat #ebf3f8; background-size: 100% 137px;">
 	<section>
 	<div class="Land_top">
+		<h2>{pigcms{:L('_COURIER_CENTER_')}</h2>
         <h2>{pigcms{:L('_B_D_LOGIN_KEYBACK_')}</h2>
 	</div>
-	<div id="reg_list" style="margin-top: 40px">
+	<div id="reg_list">
 		<ul>
-            <li style="margin-left: 11%">
-                Verify your phone number
-            </li>
 			<li>
 			  	<input type="text" placeholder="{pigcms{:L('_B_D_LOGIN_TEL_')}*" id="mobile">
 			</li>
             <li>
                 <input type="text" placeholder="{pigcms{:L('_B_D_LOGIN_FILLMESSAGE_')}*" id="sms_code">
                 <button class="btn" id="send_code">{pigcms{:L('_B_D_LOGIN_RECEIVEMESSAGE_')}</button>
-            </li>
-            <li style="margin-left: 11%;margin-top: 40px;">
-                Reset password
             </li>
 			<li>
 				<input type="password" placeholder="{pigcms{:L('_B_D_LOGIN_KEY1_')}*" id="pwd">
@@ -102,10 +92,10 @@
                 <input type="password" placeholder="{pigcms{:L('_B_D_LOGIN_CONFIRMKEY_')}*" id="c_pwd">
             </li>
             <li class="Landd">
-                <input type="button" value="{pigcms{:L('_BACK_SUBMIT_')}" id="reg_form" style="background-color: #344267;width: 80%;margin-left: 10%;">
+                <input type="button" value="{pigcms{:L('_BACK_SUBMIT_')}" id="reg_form" style="background-color: #FF0000;width: 50%;margin-left: 25%;">
             </li>
-            <li class="Landd" id="login_btn">
-                Go back to log in
+            <li class="Landd">
+                <input type="button" value="{pigcms{:L('_COURIER_LOGIN_')}" id="login_btn" style="background-color: #1b9dff;width: 50%;margin-left: 25%;">
             </li>
 		</ul>
 	</div>
