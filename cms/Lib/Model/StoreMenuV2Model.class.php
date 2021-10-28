@@ -312,6 +312,15 @@ class StoreMenuV2Model extends Model
                 $newSide['price'] = $l['price']/100;
                 $newSide['status'] = $l['status'];
 
+                if($l['subNum'] > 0){
+                    $sub_products = $this->getProductRelation($l['id'],$storeId,1);
+                    $sub_products = $this->arrangeDishWap($sub_products,$l['id'],$storeId);
+
+                    $newSide['list'] = $sub_products;
+                }else{
+                    $newSide['list'] = array();
+                }
+
                 $newList[] = $newSide;
             }
 

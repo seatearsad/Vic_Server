@@ -388,6 +388,15 @@
                     {{# if(d[i].list[j].price > 0){ }}
                         +${{ d[i].list[j].price }}
                     {{# } }}
+
+                    {{# if (d[i].list[j].list.length > 0){ }}
+                        {{#
+                            laytpl($('#productDishTplSecond').html()).render(d[i].list[j].list, function (html) {
+                                d[i].list[j].html = html;
+                            });
+                        }}
+                        {{ d[i].list[j].html }}
+                    {{# } }}
                 </li>
                     {{# if (d[i].list.length>(k+1)){ }}
                      <div class="gray_line" ></div>
@@ -398,8 +407,8 @@
     </div>
     {{# }else{ }}
     <div class="row clearfix" id="shopDetailPageDish_{{ d[i].id}}" data-min="{{d[i].min}}" data-max="{{d[i].max}}" data-name="{{ d[i].name }}">
-        <div class="left">{{ d[i].name }}</div>
-        <div>
+        <div class="left add_bold">{{ d[i].name }}</div>
+        <div class="add_grey">
             {{# if(d[i].min == d[i].max){ }}
             * Required. Please choose exactly {{ d[i].min }}
             {{# }else if(d[i].min == 0){
@@ -437,6 +446,98 @@
     {{# } }}
     {{# } }}
 </script>
+
+<script id="productDishTplSecond" type="text/html">
+    {{# for(var i in d){ }}
+    {{# if(d[i].type == 0){ }}
+    <div class="clearfix dish_second" id="shopDetailPageDish_{{ d[i].id}}" data-min="{{d[i].min}}" data-max="{{d[i].max}}" data-name="{{ d[i].name }}" style="display: none;color: black;border: 1px solid grey;">
+        <div class="left add_bold">{{ d[i].name }}</div>
+        <div class="add_grey">
+            {{# if(d[i].min == d[i].max){ }}
+            * Required. Please choose exactly {{ d[i].min }}
+            {{# }else if(d[i].min == 0){
+            if(d[i].max == -1){
+            }}
+            * Optional. Choose as many as you’d like.
+            {{# }else{ }}
+            *Optional. Choose at most {{ d[i].max }}
+            {{# } }}
+            {{# }else if(d[i].min != 0){
+            if(d[i].max == -1){
+            }}
+            *Required. Please choose at least {{ d[i].min }}.
+            {{# }else{ }}
+            *Required. Please choose between {{ d[i].min }} to {{ d[i].max }}.
+            {{# } }}
+            {{# } }}
+        </div>
+        <div class="right fl">
+            <ul data-dish_name="{{ d[i].name }}">
+                {{# var k = 0; for(var j in d[i].list){ }}
+                <li class="f2" data-min="{{d[i].min}}" data-max="{{d[i].max}}" data-dish_val_id="{{ d[i].list[j].id }}"  data-dish_id="{{ d[i].list[j].dish_id}}" data-dish_price="{{ d[i].list[j].price }}" data-dish_val_name="{{ d[i].list[j].name }}" data-dish_name="{{ d[i].name }}">
+                    {{ d[i].list[j].name }}
+                    {{# if(d[i].list[j].price > 0){ }}
+                    +${{ d[i].list[j].price }}
+                    {{# } }}
+
+                    {{# if (d[i].list[j].list.length > 0){ }}
+                    {{#
+                    laytpl($('#productDishTpl').html()).render(d[i].list[j].list, function (html) {
+                    d[i].list[j].html = html;
+                    });
+                    }}
+                    {{ d[i].list[j].html }}
+                    {{# } }}
+                </li>
+                {{# if (d[i].list.length>(k+1)){ }}
+                <div class="gray_line" ></div>
+                {{# } }}
+                {{#  k++; } }}
+            </ul>
+        </div>
+    </div>
+    {{# }else{ }}
+    <div class="clearfix dish_second" id="shopDetailPageDish_{{ d[i].id}}" data-min="{{d[i].min}}" data-max="{{d[i].max}}" data-name="{{ d[i].name }}" style="display: none;color: black;border: 1px solid grey;">
+        <div class="left add_bold">{{ d[i].name }}</div>
+        <div class="add_grey">
+            {{# if(d[i].min == d[i].max){ }}
+            * Required. Please choose exactly {{ d[i].min }}
+            {{# }else if(d[i].min == 0){
+            if(d[i].max == -1){
+            }}
+            * Optional. Choose as many as you’d like.
+            {{# }else{ }}
+            *Optional. Choose at most {{ d[i].max }}
+            {{# } }}
+            {{# }else if(d[i].min != 0){
+            if(d[i].max == -1){
+            }}
+            *Required. Please choose at least {{ d[i].min }}.
+            {{# }else{ }}
+            *Required. Please choose between {{ d[i].min }} to {{ d[i].max }}.
+            {{# } }}
+            {{# } }}
+        </div>
+        {{# var k = 0; for(var j in d[i].list){ }}
+        <div style="display: flex;padding: 5px 0;{{# if (d[i].list.length>(k+1)){ }}border-bottom: 1px solid silver;{{# } }}">
+            <div class="dish_name" style="display: flex;flex: 1 1 100%;">
+                {{ d[i].list[j].name }}
+                {{# if(d[i].list[j].price > 0){ }}
+                +${{ d[i].list[j].price }}
+                {{# } }}
+            </div>
+            <div style="display: flex;flex: 0 0 auto" class="dish_memo" data-dish_val_name="{{ d[i].list[j].name }}" data-dish_name="{{ d[i].name }}" data-dish_val_id="{{ d[i].list[j].id }}"  data-dish_id="{{ d[i].list[j].dish_id}}" data-min="{{d[i].min}}" data-max="{{d[i].max}}" data-dish_price="{{ d[i].list[j].price }}">
+                <div class="product_btn min"></div>
+                <div class="product_btn number">0</div>
+                <div class="product_btn plus"></div>
+            </div>
+        </div>
+        {{#  k++; } }}
+    </div>
+    {{# } }}
+    {{# } }}
+</script>
+
 <script id="productPropertiesTpl" type="text/html">
 	{{# for(var i in d){ }}
 		<div class="row clearfix productProperties_{{ d[i].id }}" data-label_name="{{ d[i].name }}" data-num="{{ d[i].num }}">
