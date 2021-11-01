@@ -488,6 +488,7 @@ class StoreModel extends Model
             $sortIdList[] = $sort['sort_id'];
         }
 
+        $store = $this->get_store_by_id($storeId);
         $new_list = array();
         foreach ($good_list as $k=>&$v){
             if(in_array($v['sort_id'],$sortIdList)) {
@@ -502,6 +503,8 @@ class StoreModel extends Model
                     }
                     $v['quantity'] = strval($num);
                 }
+                $v['menu_version'] = $store['menu_version'];
+                
                 $new_list[] = $v;
             }
         }
@@ -570,7 +573,7 @@ class StoreModel extends Model
                     $sort_time = D('StoreMenuV2')->getCategoryTimeByProductId($v['goods_id'],$v['store_id']);
                 }
 
-                $returnList[$k]['is_weekshow'] = 1;
+                $returnList[$k]['is_weekshow'] = "1";
                 $returnList[$k]['week'] = $sort_time['week'];
 
                 if($sort_time['show_time']) {
