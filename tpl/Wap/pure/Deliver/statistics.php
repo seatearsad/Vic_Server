@@ -24,7 +24,7 @@
         margin: 50px auto;
         border-radius: 10px;
         font-size: 14px;
-        color: #344267;
+        color: #294068;
         padding: 10px 5%;
         background-color: #E3EAFD;
         text-align: center;
@@ -41,21 +41,21 @@
         display: inline-block;
         width: 70%;
         text-align: left;
-        font-size: 14px;
+        font-size: 16px;
         line-height: 30px;
     }
     .su_right{
         display: inline-block;
         width: 30%;
         text-align: right;
-        font-size: 14px;
+        font-size: 16px;
         line-height: 30px;
     }
     .y_c{
         color: #ffa52d;
     }
     .order_history{
-        color: #344267;
+        color: #294068;
         line-height: 25px;
         margin: 60px auto 20px auto;
         border-radius: 1px;
@@ -145,7 +145,7 @@
         </a>
     </div>
     <section class="summary">
-        <div style="margin: 5px auto 15px auto;font-weight: bold;font-size: 16px;">Summary</div>
+        <div style="margin: 5px auto 15px auto;font-weight: bold;font-size: 18px;">Summary</div>
         <div style="font-size: 0px">
             <span class="su_left">{pigcms{:L('_ND_TOTALORDER_')}</span>
             <span class="su_right">{pigcms{$order_count|default=0}</span>

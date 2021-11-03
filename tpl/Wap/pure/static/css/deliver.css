@@ -269,19 +269,19 @@ body{ padding:0px; margin:0px auto; font-size:14px; min-width:320px; max-width:6
 
 /*登陆*/
 .Land{ position: absolute; top: 10%; width: 100%; }
-.Land_top{ text-align: center;  color: #344267;}
+.Land_top{ text-align: center;  color: #294068;}
 .Land_top h2{ font-size: 16px;  margin-top: 10px; font-weight: bold;}
 .Land_top img{ border-radius: 100%; width: 70px; height: 70px; border: #fff 2px solid; }
 .Land_end{ margin-top: 25px; }
 .Land_end li{ padding:0 32px; margin-bottom: 14px; position: relative; }
-.Land_end li input{ width: 100%; height: 15px; padding: 13px 0; border-radius: 5px;  text-indent: 40px; color: #344267; font-size: 14px;}
+.Land_end li input{ width: 100%; height: 15px; padding: 13px 0; border-radius: 5px;  text-indent: 40px; color: #294068; font-size: 14px;}
 /*
 .Land_end li.number input{ background: url(../img/user.png) 20px center no-repeat #fff; background-size: 14px; }
 .Land_end li.Password input{  background: url(../img/Password.png) 20px center no-repeat #fff; background-size: 14px;  }
 */
 .Land_end li input::-webkit-input-placeholder{ color: #333333;}
 .Land_end li a{ display: block; width: 15px; height: 42px; background: url(../images/dlymt_06.png) center no-repeat; background-size: 15px; position: absolute; top: 0px; right: 55px;  display: none; }
-.Land_end li.Landd input{ background: #344267; color: #fff; text-indent: 0px; font-size: 16px; margin-top: 10px; padding: 0px; height: 40px;}
+.Land_end li.Landd input{ background: #294068; color: #fff; text-indent: 0px; font-size: 16px; margin-top: 10px; padding: 0px; height: 40px;}
 .Land_end li.Landd #lang{ background: #f0a30a; color: #fff; text-indent: 0px; font-size: 16px; margin-top: 10px; padding: 0px; height: 40px;}
 span.fillet{ display: inline-block; width: 85px; height: 85px; border-radius: 100%;}
 
@@ -296,8 +296,8 @@ span.fillet{ display: inline-block; width: 85px; height: 85px; border-radius: 10
 .psnone img {width: 100%;display: block;}
 
 .reg_form{
-	border:2px solid #344267;
-	color: #344267;
+	border:2px solid #294068;
+	color: #294068;
 	text-indent: 0px;
 	font-size: 16px;
 	margin-top: 10px;

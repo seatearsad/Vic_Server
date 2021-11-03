@@ -74,12 +74,12 @@
 	<div class="Land_end">
 		<ul>
 			<li class="number">
-                <i class="material-icons" style="color: #344267;position: absolute;line-height: 40px;margin-left: 10px;">perm_identity</i>
+                <i class="material-icons" style="color: #294068;position: absolute;line-height: 40px;margin-left: 10px;">perm_identity</i>
 			  	<input type="text" placeholder="{pigcms{:L('_B_D_LOGIN_TEL_')}" id="login_phone">
 				<a href="javascript:void(0)"></a>
 			</li>
 			<li class="Password">
-                <i class="material-icons" style="color: #344267;position: absolute;line-height: 40px;margin-left: 10px;">lock_outline</i>
+                <i class="material-icons" style="color: #294068;position: absolute;line-height: 40px;margin-left: 10px;">lock_outline</i>
 				<input type="password" placeholder="{pigcms{:L('_B_D_LOGIN_KEY1_')}" id="login_pwd">
 				<a href="javascript:void(0)"></a>
 			</li>
@@ -89,7 +89,7 @@
             <li id="findpwd" style="font-size:10px;text-decoration:underline;text-align: right;color: #666666;margin-bottom: 25px;cursor: pointer;">
                 {pigcms{:L('_ND_FORGOTPASSWORD_')}
             </li>
-            <li class="Landd" style="color:#344267;text-align: left;margin-top: 40px">
+            <li class="Landd" style="color:#294068;text-align: left;margin-top: 40px">
                 {pigcms{:L('_ND_WANTTOBEACOURIER_')}
                 <div id="reg_form" class="reg_form">
                     Sign Up

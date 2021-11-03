@@ -38,7 +38,7 @@
     .hamburger .line {
         width: 25px;
         height: 3px;
-        background-color: #344267;
+        background-color: #294068;
         display: block;
         margin: 5px auto;
         -moz-border-radius: 3px;
@@ -49,7 +49,7 @@
         transition: all 0.3s ease-in-out;
     }
     .hamburger:hover .line{
-        background-color: #344267;
+        background-color: #294068;
     }
     .menu_font{
         margin-top: 16px;
@@ -77,7 +77,7 @@
         top:60px;
         max-width: 100%;
         width: 500px;
-        background-color: #344267;
+        background-color: #294068;
         transition: transform .4s ease;
         transform: translate3d(-150%, 0, 0);
         display: flex;

@@ -38,7 +38,7 @@
         height: 15px;
         padding: 10px 0;
         text-indent: 10px;
-        color: #344267;
+        color: #294068;
         font-size: 14px;
         background-color: white;
         border-radius: 5px;
@@ -57,7 +57,7 @@
         height: 40px;
     }
     #send_code{
-        background: #344267;
+        background: #294068;
         color: #fff;
         text-indent: 0px;
         font-size: 14px;
@@ -102,7 +102,7 @@
                 <input type="password" placeholder="{pigcms{:L('_B_D_LOGIN_CONFIRMKEY_')}*" id="c_pwd">
             </li>
             <li class="Landd">
-                <input type="button" value="{pigcms{:L('_BACK_SUBMIT_')}" id="reg_form" style="background-color: #344267;width: 80%;margin-left: 10%;">
+                <input type="button" value="{pigcms{:L('_BACK_SUBMIT_')}" id="reg_form" style="background-color: #294068;width: 80%;margin-left: 10%;">
             </li>
             <li class="Landd" id="login_btn">
                 Go back to log in

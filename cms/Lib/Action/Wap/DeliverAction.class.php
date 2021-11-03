@@ -1644,6 +1644,21 @@ class DeliverAction extends BaseAction
 		$supply['real_orderid'] = $supply['real_orderid'] ? $supply['real_orderid'] : $supply['order_id'];
 // 		$supply['store_distance'] = getRange(getDistance($supply['from_lat'], $supply['from_lnt'], $lat, $lng));
 		$supply['map_url'] = U('Deliver/map', array('supply_id' => $supply['supply_id']));
+
+        if($supply['status'] == 0){
+            $supply['statusStr'] = L('QW_PLEASECONFIRM');
+        }else if($supply['status'] == 1){
+            $supply['statusStr'] = L('QW_WAITING');
+        }else if($supply['status'] == 2){
+            $supply['statusStr'] = L('QW_Accepted');
+        }else if($supply['status'] == 3){
+            $supply['statusStr'] = L('QW_PICKED');
+        }else if($supply['status'] == 4){
+            $supply['statusStr'] = L('QW_ARRIVING');
+        }else if($supply['status'] == 5){
+            $supply['statusStr'] = L('QW_COMPLETED');
+        }
+
 		if ($supply['change_log']) {
 			$changes = explode(',', $supply['change_log']);
 			$uid = array_pop($changes);
@@ -2097,11 +2112,13 @@ class DeliverAction extends BaseAction
 
         $sql = "SELECT s.*, u.name, u.phone,o.tip_charge,o.price,o.pay_type as payType,o.coupon_price FROM " . C('DB_PREFIX') . "deliver_supply AS s INNER JOIN " . C('DB_PREFIX') . "deliver_user AS u ON s.uid=u.uid LEFT JOIN " . C('DB_PREFIX') . "shop_order AS o ON s.order_id=o.order_id";
 
-        $sql .= ' where s.uid = '.$this->deliver_session['uid'].' and s.status = 5 and o.is_del = 0';
+        $sql .= ' where s.uid = '.$this->deliver_session['uid'].' and s.status = 5 and o.is_del = 0 and s.end_time > 0';
         if ($begin_time && $end_time)
             $sql .= ' and s.create_time >='.$b_time.' and s.create_time <='.$e_time;
         $sql .= " order by s.create_time DESC";
         $list = D()->query($sql);
+
+        $month_list = array();
         foreach ($list as $k=>&$val){
             $result['tip'] = $result['tip'] ? $result['tip'] + $val['tip_charge'] : $val['tip_charge'];
             if($val['coupon_price'] > 0) $val['price'] = $val['price'] - $val['coupon_price'];
@@ -2136,7 +2153,8 @@ class DeliverAction extends BaseAction
             $val['create_time'] = date('Y-m-d H:i', $val['create_time']);
             $val['appoint_time'] = date('Y-m-d H:i', $val['appoint_time']);
             $val['order_time'] = $val['order_time'] ? date('Y-m-d H:i', $val['order_time']) : '--';
-            $val['end_time'] = $val['end_time'] ? date('Y-m-d H:i', $val['end_time']) : '未送达';
+            $val['month_key'] = date('F Y', $val['end_time']);
+            $val['end_time'] = $val['end_time'] ? date('m-d', $val['end_time']) : '未送达';
             $val['real_orderid'] = $val['real_orderid'] ? $val['real_orderid'] : $val['order_id'];
 // 			$val['store_distance'] = getRange(getDistance($val['from_lat'], $val['from_lnt'], $lat, $lng));
             $val['map_url'] = U('Deliver/map', array('supply_id' => $val['supply_id']));
@@ -2150,12 +2168,16 @@ class DeliverAction extends BaseAction
             $val['uid'] = $order['uid'];
             $store = D('Merchant_store')->field(true)->where(array('store_id'=>$val['store_id']))->find();
             $val['store_name'] = lang_substr($store['name'],C('DEFAULT_LANG'));
+            $val['summary'] = floatval($val['freight_charge'])+floatval($order['tip_charge']);
+
+            $month_list[$val['month_key']]['list'][] = $val;
+            $month_list[$val['month_key']]['summary'] += floatval($val['freight_charge'])+floatval($order['tip_charge']);
         }
 
         $result['order_count'] = count($list);
 
 		$this->assign($result);
-		$this->assign('list',$list);
+		$this->assign('list',$month_list);
 		$this->display();
 	}
 
