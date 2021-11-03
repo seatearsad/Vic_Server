@@ -84,6 +84,18 @@ class Deliverect
         return $result;
     }
 
+    public function createDelOrder($order){
+        $url = $this->url.$this->channelName."/order/".$order['link_id'];
+
+        $data['channelOrderId'] = $order['order_id'];
+        $data['channelOrderDisplayId'] = "TuttiCancel-".$order['order_id'];
+        $data['channelLinkId'] = $order['link_id'];
+        $data['status'] = 100;
+        $data['cancellationReason'] = "Customer requests order cancellation";
+
+        $result = $this->curlPost($url,$data);
+    }
+
     public function createOrder($order){
         $url = $this->url.$this->channelName."/order/".$order['link_id'];
         //var_dump($url.'---'.time());
@@ -176,7 +188,7 @@ class Deliverect
 
         var_dump($result);
 
-        if($result == NULL){
+        if($result == NULL || $result == "NULL"){
             D("Shop_order")->where(array('order_id'=>$order['order_id']))->save(array('send_platform'=>1));
         }
     }

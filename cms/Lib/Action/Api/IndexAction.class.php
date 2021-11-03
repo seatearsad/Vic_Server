@@ -2226,6 +2226,16 @@ class IndexAction extends BaseAction
 //            }
             D('Shop_order_log')->add_log(array('order_id' => $order_id, 'status' => 9));
         }
+
+        $store = D('Merchant_store')->where(array('store_id'=>$store_id))->find();
+        if($store['link_type'] == 1) {
+            $now_order['link_id'] = $store['link_id'];
+
+            import('@.ORG.Deliverect.Deliverect');
+            $deliverect = new Deliverect();
+            $result = $deliverect->createDelOrder($now_order);
+        }
+
         $this->returnCode(0,'info',array(),'success');
     }
 
