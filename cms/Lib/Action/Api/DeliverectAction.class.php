@@ -88,7 +88,7 @@ class DeliverectAction
 
         foreach ($updateItems as $item){
             $responseResult['data']['allSnoozedItems'][] = $item['plu'];
-            $where['id'] = $item['_id'];
+            $where['plu'] = $item['_id'];
 
             if($action == "snooze") $updateData['snoozeTime'] = $item['snoozeEnd'];
             else $updateData['snoozeTime'] = "";
