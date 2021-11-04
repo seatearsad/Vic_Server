@@ -197,18 +197,23 @@ class DeliverectAction
         if($status == 100){//Cancel Order
             $this->orderRefund($orderId);
         }
+        if($status == 20){
+            $this->updatePrepTimeURL();
+        }
 
         echo "statusUpdate";
     }
 
     public function updatePrepTimeURL(){
         $orderId = $this->data['channelOrderId'];
+        /**
         $pickupTime = str_replace("T"," ",$this->data['pickupTime']);
         $pickupTime = str_replace("Z","",$pickupTime);
 
         $pickupTime = strtotime($pickupTime);
+         * */
 
-        $_POST['dining_time'] = intval(($pickupTime - time())/60);
+        $_POST['dining_time'] = 20;
 
         $database = D('Shop_order');
         $order_id = $condition['order_id'] = $orderId;
