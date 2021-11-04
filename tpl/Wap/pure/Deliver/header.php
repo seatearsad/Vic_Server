@@ -96,7 +96,7 @@
     #menu_memo ul li{
         list-style-type: none;
         height: 40px;
-        line-height: 30px;
+        line-height: 25px;
         cursor: pointer;
         background-size: auto 16px;
         background-repeat: no-repeat;

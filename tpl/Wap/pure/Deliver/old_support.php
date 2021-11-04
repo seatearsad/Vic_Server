@@ -28,51 +28,47 @@
 </script>
 <style>
     body{
-        background-color: #F8F8F8;
+        background-color: white;
     }
     #phone,#mail{
         width: 85%;
         margin: 20px auto;
-        border-radius: 10px;
+        border-radius: 5px;
+        border: 2px solid #ffa52d;
         padding: 20px 20px 20px 50px;
         box-sizing: border-box;
-        font-size: 14px;
-        background: #E3EAFD;
-        color: #294068;
+        font-size: 12px;
+        background-repeat: no-repeat;
+        background-position: center left 9px;
+        background-size:32px auto;
     }
-    .div_title{
-        font-weight: bolder;
-        font-size: 16px;
-        margin-bottom: 10px;
+    #phone{
+        background-image:url('{pigcms{$static_path}img/phone_or.png');
     }
-
-    .title_icon{
-        margin-left: -35px;
-        position: absolute;
-        display: table-cell;
+    #mail{
+        background-image:url('{pigcms{$static_path}img/mail_or.png');
+        cursor: pointer;
     }
 </style>
 </head>
 <body>
     <include file="header" />
-    <div class="page_title" style="padding-bottom: 10px;">{pigcms{:L('_ND_COURIERSUPPORT_')}</div>
+    <div style="height: 60px"></div>
     <a href="tel:1-888-399-6668">
     <div id="phone">
-        <div class="div_title">
-            <span class="material-icons title_icon">phone</span>
-            Order & Delivery Questions
+        <div>
+            Order and Delivery Questions
         </div>
-        <div style="margin-top: 2px;">
+        <div style="font-size: 10px;margin-top: 2px;">
             Please contact our customer support if you have any questions about your order or delivery at 1-888-399-6668.
         </div>
     </div>
     </a>
     <div id="mail">
-        <div class="div_title">
-            <span class="material-icons title_icon">markunread</span>
-            Account & Payment Questions
+        <div>
+            Account and Payment Questions
         </div>
-        <div style="margin-top: 2px;">
+        <div style="font-size: 10px;margin-top: 2px;">
             For inquiries about your account info, payment status, and other questions, please email our human resource department at hr@tutti.app.
         </div>
     </div>

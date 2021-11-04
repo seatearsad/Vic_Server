@@ -28,37 +28,42 @@
 </script>
 <style>
     body{
-        background-color: white;
+        background-color: #F8F8F8;
     }
     #all{
-        width: 90%;
+        width: 85%;
         margin: 60px auto 20px auto;
         font-size: 12px;
-        color: #333333;
+        color: #294068;
     }
     #title{
-        font-size: 16px;
+        font-size: 18px;
         line-height: 40px;
         margin-bottom: 10px;
+        margin-top: 100px;
+        font-weight: bold;
+        text-align: center;
     }
     input{
         width: 100%;
-        border-radius: 5px;
-        background-color: #EEEEEE;
-        height: 30px;
+        border-radius: 12px;
+        border: 1px solid #EEEEEE;
+        background-color: white;
+        height: 40px;
         text-indent: 10px;
-        margin-top: 10px;
+        margin-top: 20px;
         color: #666666;
     }
     #save{
-        width: 50%;
-        height: 30px;
-        line-height: 30px;
+        width: 100%;
+        height: 40px;
+        line-height: 40px;
         color: white;
         text-align: center;
-        margin: 20px auto;
+        font-size: 16px;
+        margin: 40px auto;
         background-color: #ffa52d;
-        border-radius: 5px;
+        border-radius: 12px;
         cursor: pointer;
     }
 </style>

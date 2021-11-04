@@ -28,175 +28,110 @@
 </head>
 <style>
     body{
-        background-color: white;
+        background-color: #F8F8F8;
     }
-    #all{
+    .div_line{
         width: 90%;
-        margin: 60px auto 20px auto;
-        font-size: 12px;
-        color: #333333;
-    }
-    #title{
-        text-align: center;
-        font-size: 16px;
-        line-height: 40px;
-        margin-bottom: 10px;
-    }
-    .f_t{
+        margin: 20px auto;
+        border-radius: 10px;
+        padding: 20px 20px 20px 50px;
+        box-sizing: border-box;
         font-size: 14px;
+        background: white;
+        color: #294068;
     }
-    .tip{
-        color: silver;
-        font-size: 10px;
+    .div_line_profile{
+        width: 90%;
+        margin: 20px auto;
+        border-radius: 10px;
+        padding: 20px;
+        box-sizing: border-box;
+        font-size: 14px;
+        background: white;
+        color: #294068;
     }
-    .list{
-        font-size: 0;
-        border-bottom: 1px solid silver;
+    .div_title{
+        font-size: 16px;
+        margin-bottom: 10px;
+        line-height: 24px;
     }
-    .list span{
-        display: inline-block;
-        font-size: 11px;
-        color: #666666;
-        line-height: 30px;
-    }
-    .l_span{
-        width: 40%;
-        text-align: left;
-    }
-    .r_span{
-        width: 60%;
-        text-align: right;
-    }
-    #change_pwd,#info,#bank{
-        font-size: 0;
-        line-height: 35px;
-        cursor: pointer;
-        border-bottom: 1px solid silver;
-    }
-    #change_pwd span,#info span,#bank span{
-        display: inline-block;
+    .div_desc{
+        margin-top: 2px;
         font-size: 12px;
+        color: #555555;
     }
-    #change_pwd .r_span{
-        background-image: url("./tpl/Static/blue/images/new/black_arrow.png");
-        background-size: auto 16px;
-        background-repeat: no-repeat;
-        background-position: right;
-        padding-right: 20px;
-        box-sizing: border-box;
-    }
-    #info,#bank{
-        border: 0;
-    }
-    #info .l_span,#bank .l_span{
-        width: 50%;
-    }
-    #info .r_span,#bank .r_span{
-        width: 50%;
-        background-image: url("./tpl/Static/blue/images/new/or_arrow.png");
-        background-size: auto 16px;
-        background-repeat: no-repeat;
-        background-position: right;
-        padding-right: 20px;
-        box-sizing: border-box;
-        color: #ffa52d;
-    }
-    @font-face {
-        font-family:base_icon;
-        src:url("./tpl/Wap/default/static/css/fonts/base.woff") format("woff"),url("./tpl/Wap/default/static/css/fonts/base.otf")
-    }
-    .ver::before,.nver::before{
-        display: inline-block;
-        -webkit-appearance: none;
-        width: 1.1rem;
-        height: 1.1rem;
+    .name_div{
+        font-size: 16px;
+        font-weight: bolder;
+        color: #294068;
         text-align: center;
-        border-radius: 100%;
-        vertical-align: middle;
-        line-height: 1.1rem;
-        outline: 0;
-        content: "✓";
-        font-size: 1.1rem;
-        font-family: base_icon;
+    }
+    .title_icon{
+        margin-left: -35px;
+        position: absolute;
+        display: table-cell;
+    }
+    .title_label{
+        width: 90%;
+        height: 50px;
+        margin: 0 auto;
+        border-radius: 25px;
+        background: lightgray;
+        line-height: 50px;
+        display: flex;
+        font-size: 16px;
+    }
+    .title_label span{
+        flex: 1 1 50%;
+        text-align: center;
+        border-radius: 25px;
+    }
+    .title_label span.active{
+        background-color: #294068;
         color: white;
     }
-    .nver::before{
-        background-color: #999999;
-    }
-    .ver::before{
-        background-color: #ffa52d;
-    }
-    .error_ver{
-        display: inline-block;
-        vertical-align: middle;
-        background-image:url('{pigcms{$static_path}img/error_ver.png');
-        background-size: 100%;
-        width: 1.1rem;
-        height: 1.1rem;
-    }
 </style>
+</head>
 <body>
-    <include file="header" />
-    <div id="all">
-        <div id="title">
-            Courier Information
+<include file="header" />
+<div class="page_title" style="padding-left: 0">
+    <div class="title_label">
+        <span class="active" data-id="account">Account</span>
+        <span data-id="profile">Profile</span>
+    </div>
+</div>
+<div class="show_div" id="account">
+    <div class="name_div">
+        {pigcms{$deliver_session.name} {pigcms{$deliver_session.family_name}
+    </div>
+    <div class="div_line" id="bank">
+        <div class="div_title">
+            <span class="material-icons title_icon">account_balance</span>
+            Banking Info
+            <span class="material-icons title_icon" style="right: 20px;">arrow_forward</span>
         </div>
-        <div class="f_t">
-            Basic Information
+        <div class="div_desc">
+            Your banking information is used to deposit your earnings directly to your bank account.
         </div>
-        <div class="tip">
-            If you wish to change the info below, please contact our courier support.
+    </div>
+    <div class="div_line">
+        <div class="div_title">
+            <span class="material-icons title_icon">location_city</span>
+            Delivery City
+            <span style="float: right;">{pigcms{$city.area_name}</span>
         </div>
-        <div class="list">
-            <span class="l_span">First Name:</span>
-            <span class="r_span">{pigcms{$deliver_session.name}</span>
-
-            <span class="l_span">Last Name:</span>
-            <span class="r_span">{pigcms{$deliver_session.family_name}</span>
-
-            <span class="l_span">Phone Number:</span>
-            <span class="r_span">{pigcms{$deliver_session.phone}</span>
-
-            <span class="l_span">Email:</span>
-            <span class="r_span">{pigcms{$deliver_session.email}</span>
-
-            <span class="l_span">Date of Birth:</span>
-            <span class="r_span">{pigcms{$deliver_session.birthday}</span>
+        <div class="div_title" style="margin-top: 20px;">
+            <span class="material-icons title_icon">drive_eta</span>
+            Vehicle Type
+            <span style="float: right;">Car</span>
         </div>
-        <div id="change_pwd">
-            <span class="l_span">Password</span>
-            <span class="r_span">Change Password</span>
-        </div>
-        <div id="info">
-            <span class="l_span">Courier Verification Info</span>
-            <if condition="$deliver_session['group'] eq 1">
-                <span class="r_span"><lable class="ver"></lable> View</span>
-            <else />
-                <span class="r_span"><lable class="error_ver"></lable> Update</span>
-            </if>
-        </div>
-        <div class="list">
-            <span class="l_span">City:</span>
-            <span class="r_span">{pigcms{$city.area_name}</span>
-
-            <span class="l_span">Address:</span>
-            <span class="r_span">{pigcms{$deliver_session.site}</span>
-
-            <span class="l_span">SIN Number:</span>
-            <span class="r_span">
-                <if condition="$deliver_session['group'] eq 1">
-                    Approved
-                <else />
-                    <if condition="$deliver_img['sin_num'] eq ''">
-                        Please Update
-                    <else />
-                        Waiting for Approval
-                    </if>
-                </if>
-            </span>
-
-            <span class="l_span">Driver's License:</span>
-            <span class="r_span">
+    </div>
+    <div class="div_line">
+        <div style="margin-left: -35px;margin-bottom: 10px;color: #555555;">CAR</div>
+        <div class="div_title">
+            <span class="material-icons title_icon">recent_actors</span>
+            Driver's License
+            <span style="float: right;">
                 <if condition="$deliver_session['group'] eq 1">
                     Approved
                 <else />
@@ -207,22 +142,11 @@
                     </if>
                 </if>
             </span>
-
-            <span class="l_span">Vehicle Insurance:</span>
-            <span class="r_span">
-                <if condition="$deliver_session['group'] eq 1">
-                    Approved
-                <else />
-                    <if condition="$deliver_img['insurance'] eq ''">
-                        Please Update
-                    <else />
-                        Waiting for Approval
-                    </if>
-                </if>
-            </span>
-
-            <span class="l_span">Work Eligibility:</span>
-            <span class="r_span">
+        </div>
+        <div class="div_title" style="margin-top: 20px;">
+            <span class="material-icons title_icon">featured_play_list</span>
+            Work Eligibility
+            <span style="float: right;">
                 <if condition="$deliver_session['group'] eq 1">
                     Approved
                 <else />
@@ -233,25 +157,107 @@
                     </if>
                 </if>
             </span>
+            <div class="div_desc">
+                Expires on 2022-03-01
+            </div>
         </div>
-        <div id="bank">
-            <span class="l_span">Banking Info</span>
-            <span class="r_span">Update</span>
-        </div>
-        <div class="tip">
-            This information is used to deposit your earnings to your account directly.
+        <div class="div_title" style="margin-top: 20px;">
+            <span class="material-icons title_icon">featured_play_list</span>
+            Vehicle Insurance
+            <span style="float: right;">
+                <if condition="$deliver_session['group'] eq 1">
+                    Approved
+                <else />
+                    <if condition="$deliver_img['insurance'] eq ''">
+                        Please Update
+                    <else />
+                        Waiting for Approval
+                    </if>
+                </if>
+            </span>
+            <div class="div_desc">
+                Expires on 2022-03-01
+            </div>
         </div>
     </div>
-	<script type="text/javascript">
-        $('#change_pwd').click(function () {
-            location.href = "{pigcms{:U('Deliver/change_pwd')}";
+    <div class="div_line" id="change_pwd" style="padding-bottom: 10px;">
+        <div class="div_title">
+            <span class="material-icons title_icon">lock</span>
+            Password
+            <span class="material-icons title_icon" style="right: 20px;">arrow_forward</span>
+        </div>
+    </div>
+</div>
+<div class="show_div" id="profile">
+    <div class="div_line_profile">
+        <div style="color: #555555;margin-bottom: 5px;">Full Name</div>
+        <div class="div_title">
+            {pigcms{$deliver_session.name} {pigcms{$deliver_session.family_name}
+        </div>
+
+        <div style="color: #555555;margin-bottom: 5px;margin-top: 20px;">Phone</div>
+        <div class="div_title">
+            {pigcms{$deliver_session.phone}
+        </div>
+
+        <div style="color: #555555;margin-bottom: 5px;margin-top: 20px;">E-mail</div>
+        <div class="div_title">
+            {pigcms{$deliver_session.email}
+        </div>
+
+        <div style="color: #555555;margin-bottom: 5px;margin-top: 20px;">Date of birth</div>
+        <div class="div_title">
+            {pigcms{$deliver_session.birthday}
+        </div>
+
+        <div style="color: #555555;margin-bottom: 5px;margin-top: 20px;">Address</div>
+        <div class="div_title">
+            {pigcms{$deliver_session.site}
+        </div>
+    </div>
+
+    <div style="margin: 150px auto 0 auto;width: 85%;color: #555555;">
+        Please contact support if you would like to change the above information
+    </div>
+</div>
+<script>
+    $('#bank').click(function () {
+        location.href = "{pigcms{:U('Deliver/bank_info')}";
+    });
+    $('#change_pwd').click(function () {
+        location.href = "{pigcms{:U('Deliver/change_pwd')}";
+    });
+
+    var ua = navigator.userAgent;
+    $('#mail').click(function () {
+        if(!ua.match(/TuttiDeliver/i)) {
+            location.href = "mailto:hr@tutti.app";
+        }else{
+            alert("Please send email to hr@tutti.app");
+        }
+    });
+
+    $('.title_label').find('span').each(function () {
+        $(this).click(function () {
+            var showId = $(this).data('id');
+            $(this).addClass('active').siblings('span').removeClass('active');
+            show_div(showId);
         });
-        $('#info').click(function () {
-            location.href = "{pigcms{:U('Deliver/ver_info')}";
+    });
+
+    show_div('account');
+
+    function show_div(id) {
+        $('body').find('.show_div').each(function () {
+            var currId = $(this).attr('id');
+
+            if(id == currId){
+                $(this).show();
+            }else{
+                $(this).hide();
+            }
         });
-        $('#bank').click(function () {
-            location.href = "{pigcms{:U('Deliver/bank_info')}";
-        });
-    </script>
+    }
+</script>
 </body>
 </html>
