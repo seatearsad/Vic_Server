@@ -91,6 +91,7 @@ class CartModel extends Model
                 $good['deposit_price'] = 0;
                 $good['sell_mouth'] = 0;
                 $good['des'] = $product['desc'];
+                $good['subNum'] = $product['subNum'];
                 $good['menu_version'] = 2;
             }else{
                 $good = D('Shop_goods')->field(true)->where(array('goods_id' => $v['fid']))->find();

@@ -533,11 +533,11 @@ class StoreModel extends Model
     public function arrange_goods_for_goods($goodList){
         $goods_image_class = new goods_image();
         $returnList = array();
-        foreach($goodList as $k=>$v){
+        foreach($goodList as $k=>$v) {
             $returnList[$k]['fid'] = $v['goods_id'];
             $returnList[$k]['group_id'] = $v['sort_id'];
             $returnList[$k]['sid'] = $v['store_id'];
-            $returnList[$k]['name'] = lang_substr($v['name'],C('DEFAULT_LANG'));
+            $returnList[$k]['name'] = lang_substr($v['name'], C('DEFAULT_LANG'));
             $returnList[$k]['price'] = $v['price'];
             $returnList[$k]['market_price'] = $v['old_price'];
             $returnList[$k]['desc'] = $v['des'];
@@ -550,11 +550,11 @@ class StoreModel extends Model
             //$returnList[$k]['default_image'] = $v['image'];
             $returnList[$k]['sales'] = $v['sell_mouth'];
             //购物车使用
-            $returnList[$k]['quantity'] = empty($v['quantity'])? "0" : $v['quantity'];
+            $returnList[$k]['quantity'] = empty($v['quantity']) ? "0" : $v['quantity'];
             $returnList[$k]['spec'] = empty($v['spec']) ? "" : $v['spec'];
             $returnList[$k]['proper'] = empty($v['proper']) ? "" : $v['proper'];
             //显示时间判断
-            if($v['menu_version'] == 1) {
+            if ($v['menu_version'] == 1) {
                 $now_sort = D('Shop_goods_sort')->where(array('sort_id' => $v['sort_id']))->find();
                 $returnList[$k]['is_time'] = $now_sort['is_time'];
                 if ($now_sort['is_time'] == 1) {
@@ -566,27 +566,27 @@ class StoreModel extends Model
                 if ($now_sort['is_weekshow'] == 1) {
                     $returnList[$k]['week'] = $now_sort['week'];
                 }
-            }elseif($v['menu_version'] == 2){
-                if($v['sort_id'] != 0) {
-                    $sort_time = D('StoreMenuV2')->getCategoryTimeByCategoryId($v['sort_id'],$v['store_id']);
-                }else {
-                    $sort_time = D('StoreMenuV2')->getCategoryTimeByProductId($v['goods_id'],$v['store_id']);
+            } elseif ($v['menu_version'] == 2) {
+                if ($v['sort_id'] != 0) {
+                    $sort_time = D('StoreMenuV2')->getCategoryTimeByCategoryId($v['sort_id'], $v['store_id']);
+                } else {
+                    $sort_time = D('StoreMenuV2')->getCategoryTimeByProductId($v['goods_id'], $v['store_id']);
                 }
 
                 $returnList[$k]['is_weekshow'] = "1";
                 $returnList[$k]['week'] = $sort_time['week'];
 
-                if($sort_time['show_time']) {
+                if ($sort_time['show_time']) {
                     $returnList[$k]['is_time'] = "1";
                     $returnList[$k]['begin_time'] = $sort_time['startTime'];
                     $returnList[$k]['end_time'] = $sort_time['endTime'];
-                }else{
+                } else {
                     $returnList[$k]['is_time'] = "0";
                 }
             }
 
             //是否有规格及属性选择
-            if($v['spec_value'] || $v['is_properties'])
+            if ($v['spec_value'] || $v['is_properties'])
                 $returnList[$k]['has_format'] = true;
             else
                 $returnList[$k]['has_format'] = false;
@@ -594,73 +594,79 @@ class StoreModel extends Model
             //garfunkel add side_dish
             $returnList[$k]['dish_id'] = $v['dish_id'];
             $dish_desc = "";
-            if(D('Side_dish')->where(array('goods_id'=>$v['goods_id'],'status'=>1))->find()){
-                $returnList[$k]['has_format'] = true;
-                $add_price = 0;
+            if ($v['menu_version'] == 1) {
+                if (D('Side_dish')->where(array('goods_id' => $v['goods_id'], 'status' => 1))->find()) {
+                    $returnList[$k]['has_format'] = true;
+                }
+            }
 
-                if($v['dish_id'] != "" && $v['dish_id'] != null){
-                    $dish_list = explode("|",$v['dish_id']);
-                    foreach($dish_list as $vv){
-                        $one_dish = explode(",",$vv);
-                        //0 dish_id 1 id 2 num 3 price
-                        if($one_dish[3] > 0){
-                            $add_price += $one_dish[3]*$one_dish[2];
-                        }
+            if ($v['menu_version'] == 2) {
+                if($v['subNum'] > 0) {
+                    $returnList[$k]['has_format'] = true;
+                }
+            }
+            $add_price = 0;
 
-                        if($v['menu_version'] == 1) {
-                            $dish_vale = D('Side_dish_value')->where(array('id' => $one_dish[1]))->find();
-                            $dish_vale['name'] = lang_substr($dish_vale['name'], C('DEFAULT_LANG'));
-                        }
-                        /**
-                        elseif ($v['menu_version'] == 2){
-                            $product_dish = D('StoreMenuV2')->getProduct($one_dish[1],$v['store_id']);
-                            $dish_vale['name'] = $product_dish['name'];
-                        }
-                        */
-                        $add_str = $one_dish[2] > 1 ? $dish_vale['name']."*".$one_dish[2] : $dish_vale['name'];
-
-                        $dish_desc = $dish_desc == "" ? $add_str : $dish_desc.";".$add_str;
+            if ($v['dish_id'] != "" && $v['dish_id'] != null) {
+                $dish_list = explode("|", $v['dish_id']);
+                foreach ($dish_list as $vv) {
+                    $one_dish = explode(",", $vv);
+                    //0 dish_id 1 id 2 num 3 price
+                    if ($one_dish[3] > 0) {
+                        $add_price += $one_dish[3] * $one_dish[2];
                     }
 
-                    $returnList[$k]['price'] = $returnList[$k]['price'] + $add_price;
+                    if ($v['menu_version'] == 1) {
+                        $dish_vale = D('Side_dish_value')->where(array('id' => $one_dish[1]))->find();
+                        $dish_vale['name'] = lang_substr($dish_vale['name'], C('DEFAULT_LANG'));
+                    } elseif ($v['menu_version'] == 2) {
+                        $product_dish = D('StoreMenuV2')->getProduct($one_dish[1], $v['store_id']);
+                        $dish_vale['name'] = $product_dish['name'];
+                    }
+
+                    $add_str = $one_dish[2] > 1 ? $dish_vale['name'] . "*" . $one_dish[2] : $dish_vale['name'];
+
+                    $dish_desc = $dish_desc == "" ? $add_str : $dish_desc . ";" . $add_str;
                 }
+
+                $returnList[$k]['price'] = $returnList[$k]['price'] + $add_price;
             }
             $returnList[$k]['dish_desc'] = $dish_desc;
 
             $spec_desc = "";
-            if($returnList[$k]['spec'] != ""){
-                $spec_list = explode("_",$returnList[$k]['spec']);
-                foreach($spec_list as $vv){
-                    $spec = D('Shop_goods_spec_value')->field(true)->where(array('id'=>$vv))->find();
-                    $spec_desc = $spec_desc == '' ? lang_substr($spec['name'],C('DEFAULT_LANG')) : $spec_desc.';'.lang_substr($spec['name'],C('DEFAULT_LANG'));
+            if ($returnList[$k]['spec'] != "") {
+                $spec_list = explode("_", $returnList[$k]['spec']);
+                foreach ($spec_list as $vv) {
+                    $spec = D('Shop_goods_spec_value')->field(true)->where(array('id' => $vv))->find();
+                    $spec_desc = $spec_desc == '' ? lang_substr($spec['name'], C('DEFAULT_LANG')) : $spec_desc . ';' . lang_substr($spec['name'], C('DEFAULT_LANG'));
                 }
             }
             $returnList[$k]['spec_desc'] = $spec_desc;
 
             $proper_desc = "";
-            if($returnList[$k]['proper'] != ""){
-                $pro_list = explode("_",$returnList[$k]['proper']);
-                foreach ($pro_list as $vv){
-                    $ids = explode(',',$vv);
+            if ($returnList[$k]['proper'] != "") {
+                $pro_list = explode("_", $returnList[$k]['proper']);
+                foreach ($pro_list as $vv) {
+                    $ids = explode(',', $vv);
                     $proId = $ids[0];
                     $sId = $ids[1];
 
-                    $pro = D('Shop_goods_properties')->field(true)->where(array('id'=>$proId))->find();
-                    $nameList = explode(',',$pro['val']);
-                    $name = lang_substr($nameList[$sId],C('DEFAULT_LANG'));
+                    $pro = D('Shop_goods_properties')->field(true)->where(array('id' => $proId))->find();
+                    $nameList = explode(',', $pro['val']);
+                    $name = lang_substr($nameList[$sId], C('DEFAULT_LANG'));
 
-                    $proper_desc = $proper_desc == '' ? $name : $proper_desc.';'.$name;
+                    $proper_desc = $proper_desc == '' ? $name : $proper_desc . ';' . $name;
                 }
             }
 
             $returnList[$k]['proper_desc'] = $proper_desc;
             $returnList[$k]['attr'] = $spec_desc;
-            $returnList[$k]['attr'].= $returnList[$k]['attr'] == "" ? $proper_desc : ";".$proper_desc;
-            $returnList[$k]['attr'].= $returnList[$k]['attr'] == "" ? $dish_desc : ";".$dish_desc;
+            $returnList[$k]['attr'] .= $returnList[$k]['attr'] == "" ? $proper_desc : ";" . $proper_desc;
+            $returnList[$k]['attr'] .= $returnList[$k]['attr'] == "" ? $dish_desc : ";" . $dish_desc;
 
-            if($returnList[$k]['attr'] == ""){
+            if ($returnList[$k]['attr'] == "") {
                 $returnList[$k]['attr_num'] = 0;
-            }else {
+            } else {
                 $attr_arr = explode(";", $returnList[$k]['attr']);
                 $returnList[$k]['attr_num'] = count($attr_arr);
             }
