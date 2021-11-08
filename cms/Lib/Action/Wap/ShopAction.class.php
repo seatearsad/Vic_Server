@@ -1775,6 +1775,7 @@ class ShopAction extends BaseAction{
                 $values = D('Side_dish_value')->where(array('dish_id' => $v['id'], 'status' => 1))->select();
                 foreach ($values as &$vv) {
                     $vv['name'] = lang_substr($vv['name'], C('DEFAULT_LANG'));
+                    $vv['list'] = array();
                 }
                 $v['list'] = $values;
             }
