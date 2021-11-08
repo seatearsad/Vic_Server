@@ -2984,7 +2984,8 @@ class DeliverAction extends BaseAction
         }else {
             $week_num = date("w");
             $link_num = isset($_GET['num']) ? $_GET['num'] : $week_num;
-            $today = date('Y-m-d');
+            //$today = date('Y-m-d');
+            $today = time();
             $this->assign('week_num', $week_num);
             $this->assign('link_num',$link_num);
             $this->assign('today', $today);
@@ -3031,6 +3032,7 @@ class DeliverAction extends BaseAction
                 }
             }
 
+            $this->assign('work_list',json_encode($work_list));
             $this->assign('work_time_list', json_encode($work_time_list));
             $this->assign('default_list',json_encode($default_list));
             $this->display();

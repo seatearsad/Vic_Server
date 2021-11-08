@@ -1413,7 +1413,7 @@ return array(
     "_ND_MYSHIFT_"=>"My Shift",
     "_ND_MYSHIFT1_"=>"You have not scheduled any shifts on this day. Please click \"Add a Shift\" to add or modify your shifts.",
     "_ND_MYSHIFT2_"=>"You can click on \"Add a Shift\" to modify your schedule.",
-    "_ND_RECOM_"=>"Recommended Hours",
+    "_ND_RECOM_"=>"Recommended",
     "_ND_REPEATWEEKLY_"=>"Repeat Weekly",
     "_ND_STARTDATE_"=>"Choose Date",
     "_ND_ENDDATE_"=>"Choose Date",
