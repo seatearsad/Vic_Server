@@ -106,7 +106,7 @@ class Deliverect
         $data['by'] = "Tutti";
         $data['orderType'] = $this->orderType['delivery'];
         $data['channel'] = 0;
-        $data['pickupTime'] = "";//date("Y-m-d H:i:s");//date("Y-m-d")."T".date("H:i:s")."Z";
+        $data['pickupTime'] = date("Y-m-d H:i:s");//date("Y-m-d")."T".date("H:i:s")."Z";
         $data['estimatedPickupTime'] = date("Y-m-d");//date("Y-m-d")."T".date("H:i:s")."Z";
         $data['deliveryTime'] = date("Y-m-d");
         $data['deliveryIsAsap'] = true;
@@ -166,7 +166,7 @@ class Deliverect
 
                 $item['subItems'] = $subItems;
             }
-            
+
             $items[] = $item;
         }
         $data['items'] = $items;
