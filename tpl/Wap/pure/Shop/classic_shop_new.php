@@ -299,6 +299,9 @@
             #shopProductRightBar2 li .position_img,#shopSearchResult li .position_img{
                 width: 80px;
                 border-radius: 5px;
+                background-position: center;
+                background-size: 100% auto;
+                background-repeat: no-repeat;
             }
             #shopProductRightBar2 li .product_text,#shopSearchResult li .product_text{
                 margin-left: 90px;

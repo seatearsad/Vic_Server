@@ -787,28 +787,42 @@ class Shop_goodsModel extends Model
 	public function check_stock($goods_id, $num, $spec_ids = '', $stock_type = 0, $store_id = 0,$menu_version = 1)
 	{
 		if ($store_id) {
-            if($menu_version == 1)
-			    $now_goods = $this->field(true)->where(array('goods_id' => $goods_id, 'store_id' => $store_id))->find();
-            else if($menu_version == 2)
-                $now_goods = D('StoreMenuV2')->getProduct($goods_id,$store_id);
+            if($menu_version == 1) {
+                $now_goods = $this->field(true)->where(array('goods_id' => $goods_id, 'store_id' => $store_id))->find();
+                $image = '';
+                if(!empty($now_goods['image'])){
+                    $goods_image_class = new goods_image();
+                    $tmp_pic_arr = explode(';', $now_goods['image']);
+                    foreach ($tmp_pic_arr as $key => $value) {
+                        if (empty($image)) {
+                            $image = $goods_image_class->get_image_by_path($value, 's');
+                            break;
+                        }
+                    }
+                }
+            }else if($menu_version == 2) {
+                $now_goods = D('StoreMenuV2')->getProduct($goods_id, $store_id);
+                $image = $now_goods['image'];
+            }
 		} else {
 			$now_goods = $this->field(true)->where(array('goods_id' => $goods_id))->find();
+            $image = '';
+            if(!empty($now_goods['image'])){
+                $goods_image_class = new goods_image();
+                $tmp_pic_arr = explode(';', $now_goods['image']);
+                foreach ($tmp_pic_arr as $key => $value) {
+                    if (empty($image)) {
+                        $image = $goods_image_class->get_image_by_path($value, 's');
+                        break;
+                    }
+                }
+            }
 		}
 		if (empty($now_goods)) return array('status' => 0, 'msg' => '商品不存在');
 
         if ($now_goods['status'] != 1) return array('status' => 0, 'msg' => $now_goods['name'] . '商品已下架');
 
-        $image = '';
-        if(!empty($now_goods['image'])){
-            $goods_image_class = new goods_image();
-            $tmp_pic_arr = explode(';', $now_goods['image']);
-            foreach ($tmp_pic_arr as $key => $value) {
-                if (empty($image)) {
-                    $image = $goods_image_class->get_image_by_path($value, 's');
-                    break;
-                }
-            }
-        }
+
 
         if($menu_version == 2){
             return array('status' => 1, 'num' => $num, 'is_seckill_price' => false, 'old_price' => 0, 'cost_price' => 0, 'price' => $now_goods['price']/100, 'image' => $image, 'packing_charge' => 0, 'freight_type' => 0, 'freight_value' => 0.00, 'freight_template' => 0, 'unit' => "", 'number' => 0, 'sort_id' => 0, 'name' => $now_goods['name'],'tax_num'=>$now_goods['tax']/1000,'deposit_price'=>0);

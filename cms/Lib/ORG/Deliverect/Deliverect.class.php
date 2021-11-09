@@ -85,15 +85,17 @@ class Deliverect
     }
 
     public function createDelOrder($order){
-        $url = $this->url.$this->channelName."/order/".$order['link_id'];
+        if($order['send_platform'] != 0) {
+            $url = $this->url . $this->channelName . "/order/" . $order['link_id'];
 
-        $data['channelOrderId'] = $order['order_id'];
-        $data['channelOrderDisplayId'] = "TuttiCancel-".$order['order_id'];
-        $data['channelLinkId'] = $order['link_id'];
-        $data['status'] = 100;
-        $data['cancellationReason'] = "Customer requests order cancellation";
+            $data['channelOrderId'] = $order['order_id'];
+            $data['channelOrderDisplayId'] = "TuttiCancel-" . $order['order_id'];
+            $data['channelLinkId'] = $order['link_id'];
+            $data['status'] = 100;
+            $data['cancellationReason'] = "Customer requests order cancellation";
 
-        $result = $this->curlPost($url,$data);
+            $result = $this->curlPost($url, $data);
+        }
     }
 
     public function createOrder($order){

@@ -95,7 +95,7 @@ class StoreMenuV2Model extends Model
      * @param int $from_type 1Wap 2App
      * @return array
      */
-    public function getStoreProduct($categories,$storeId,$from_type = 1){
+    public function getStoreProduct($categories,$storeId,$from_type = 1,$keyword = ''){
         $allList = array();
         foreach ($categories as $category){
             $currCate = array();
@@ -104,7 +104,7 @@ class StoreMenuV2Model extends Model
             $currCate['sort_discount'] = 0;
             $currCate['limited_offers'] = 0;
             $currCate['is_time'] = 0;
-            $products = $this->getMenuCategoriesProduct($category['id'],$storeId,1);
+            $products = $this->getMenuCategoriesProduct($category['id'],$storeId,1,$keyword);
 
             if($from_type == 1){
                 $currCate['product_list'] = $this->arrangeProductWap($products,$category['id']);
@@ -280,6 +280,7 @@ class StoreMenuV2Model extends Model
         $newProduct['des'] = $product['desc'];
         $newProduct['price'] = $product['price']/100;
         $newProduct['image'] = $product['image'];
+        $newProduct['pic_arr'] = array(array('title'=>'','url'=>$product['image']));
         $newProduct['unit'] = "";
         $newProduct['stock_num'] = -1;
 
@@ -313,6 +314,8 @@ class StoreMenuV2Model extends Model
                 $newSide['status'] = $l['status'];
 
                 if($l['subNum'] > 0){
+                    $newSide['name'] = $l['name']." >>";
+
                     $sub_products = $this->getProductRelation($l['id'],$storeId,1);
                     $sub_products = $this->arrangeDishWap($sub_products,$l['id'],$storeId);
 
@@ -345,7 +348,7 @@ class StoreMenuV2Model extends Model
         return $productNum;
     }
 
-    public function getMenuCategoriesProduct($categoryId,$storeId,$status = -1){
+    public function getMenuCategoriesProduct($categoryId,$storeId,$status = -1,$keyword = ''){
         $productLinks = D($this->categoriseProductTable)->where(array('categoryId'=>$categoryId,'storeId'=>$storeId))->select();
 
         $productIds = array();
@@ -355,6 +358,7 @@ class StoreMenuV2Model extends Model
 
         $where = array('id'=>array('in',$productIds),'storeId'=>$storeId);
         if($status != -1) $where['status'] = $status;
+        if($keyword != '') $where['name'] = array('like', '%' . $keyword . '%');
         $products = D($this->productTable)->where($where)->select();
         //foreach ($products as &$product){
             //$product['relation'] = D($this->productRelationTable)->field("r.*,p.*")->join('as r left join '.C('DB_PREFIX').'store_product as p ON r.subProductId=p.id')->where(array('r.productId'=>$product['id']))->select();

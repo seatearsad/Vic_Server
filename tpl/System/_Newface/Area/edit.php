@@ -104,6 +104,13 @@
                                 <input type="text" class="input fl" value="{pigcms{$now_area['range_para']}" name="range_para" size="10" validate="number:true,maxlength:10" />
                             </div>
                         </div>
+                        <div class="form-group  row">
+                            <label class="col-sm-3 col-form-label">营业时间</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="input fl area_time" placeholder="00:00:00" value="{pigcms{$now_area['begin_time']}" name="begin_time" validate="" />
+                                - <input type="text" class="input fl area_time" placeholder="00:00:00" value="{pigcms{$now_area['end_time']}" name="end_time" validate="" />
+                            </div>
+                        </div>
                     </if>
                     <div class="btn tutti_hidden_obj">
                         <input type="submit" name="dosubmit" id="dosubmit" value="提交" class="button" />
@@ -115,7 +122,18 @@
             </div>
         </div>
     </div>
+<script type="text/javascript" src="{pigcms{$static_path}js/jquery-ui.custom.min.js"></script>
+<script type="text/javascript" src="{pigcms{$static_path}js/jquery-ui.min.js"></script>
+<script type="text/javascript" src="{pigcms{$static_path}js/jquery.ui.touch-punch.min.js"></script>
+
+<script type="text/javascript" src="{pigcms{$static_public}js/date/WdatePicker.js"></script>
+<script type="text/javascript" src="{pigcms{$static_path}js/jquery-ui-i18n.min.js"></script>
+<script type="text/javascript" src="{pigcms{$static_path}js/jquery-ui-timepicker-addon.min.js"></script>
+<link rel="stylesheet" href="{pigcms{$static_path}css/jquery-ui.css">
+<link rel="stylesheet" href="{pigcms{$static_path}css/jquery-ui-timepicker-addon.css">
 	<script type="text/javascript">
 		get_first_word('area_name','area_url','first_pinyin');
+
+        $('.area_time').timepicker($.extend($.datepicker.regional['zh-cn'], {timeFormat: 'hh:mm:ss',showSecond: true}));
 	</script>
 <include file="Public:footer_inc"/>

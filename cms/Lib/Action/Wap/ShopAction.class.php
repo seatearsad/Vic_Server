@@ -1680,52 +1680,59 @@ class ShopAction extends BaseAction{
 
         $is_result = 1;
 
-        $product_list = D('Shop_goods')->get_list_by_storeid($store_id,0,$keyword);
-        foreach ($product_list as $row) {
-            $temp = array();
-            $temp['cat_id'] = 0;
-            $temp['cat_name'] = "";
-            $temp['sort_discount'] = 0;
+        $store = D('Merchant_store')->where(array('store_id'=>$store_id))->find();
 
-            foreach ($row['goods_list'] as $r) {
-                $glist = array();
-                $glist['product_id'] = $r['goods_id'];
-                //modify garfunkel 判断语言
-                $glist['product_name'] = lang_substr($r['name'], C('DEFAULT_LANG'));
-                $glist['product_price'] = $r['price'];
-                $glist['product_desc'] = $r['des'];
-                $glist['is_seckill_price'] = $r['is_seckill_price'];
-                $glist['o_price'] = $r['o_price'];
-                $glist['number'] = $r['number'];
-                $glist['packing_charge'] = floatval($r['packing_charge']);
-                $glist['unit'] = $r['unit'];
-                if (isset($r['pic_arr'][0])) {
-                    $glist['product_image'] = $r['pic_arr'][0]['url']['s_image'];
-                }
-                $glist['product_sale'] = $r['sell_count'];
-                $glist['product_reply'] = $r['reply_count'];
-                $glist['has_format'] = false;
-                if ($r['spec_value'] || $r['is_properties']) {
-                    $glist['has_format'] = true;
-                }
-                //garfunkel add side_dish
-                $glist['has_dish'] = false;
-                if (D('Side_dish')->where(array('goods_id' => $r['goods_id']))->find()) {
-                    $glist['has_dish'] = true;
-                }
-                //
-                if ($r['extra_pay_price'] > 0) {
-                    $glist['extra_pay_price'] = $r['extra_pay_price'];
-                    $glist['extra_pay_price_name'] = $this->config['extra_price_alias_name'];
-                }
+        if($store['menu_version'] == 2){
+            $categories = D('StoreMenuV2')->getStoreCategories($store_id,true);
+            $list = D('StoreMenuV2')->getStoreProduct($categories,$store_id,1,$keyword);
+        }else {
+            $product_list = D('Shop_goods')->get_list_by_storeid($store_id, 0, $keyword);
+            foreach ($product_list as $row) {
+                $temp = array();
+                $temp['cat_id'] = 0;
+                $temp['cat_name'] = "";
+                $temp['sort_discount'] = 0;
 
-                $temp['product_list'][] = $glist;
+                foreach ($row['goods_list'] as $r) {
+                    $glist = array();
+                    $glist['product_id'] = $r['goods_id'];
+                    //modify garfunkel 判断语言
+                    $glist['product_name'] = lang_substr($r['name'], C('DEFAULT_LANG'));
+                    $glist['product_price'] = $r['price'];
+                    $glist['product_desc'] = $r['des'];
+                    $glist['is_seckill_price'] = $r['is_seckill_price'];
+                    $glist['o_price'] = $r['o_price'];
+                    $glist['number'] = $r['number'];
+                    $glist['packing_charge'] = floatval($r['packing_charge']);
+                    $glist['unit'] = $r['unit'];
+                    if (isset($r['pic_arr'][0])) {
+                        $glist['product_image'] = $r['pic_arr'][0]['url']['s_image'];
+                    }
+                    $glist['product_sale'] = $r['sell_count'];
+                    $glist['product_reply'] = $r['reply_count'];
+                    $glist['has_format'] = false;
+                    if ($r['spec_value'] || $r['is_properties']) {
+                        $glist['has_format'] = true;
+                    }
+                    //garfunkel add side_dish
+                    $glist['has_dish'] = false;
+                    if (D('Side_dish')->where(array('goods_id' => $r['goods_id']))->find()) {
+                        $glist['has_dish'] = true;
+                    }
+                    //
+                    if ($r['extra_pay_price'] > 0) {
+                        $glist['extra_pay_price'] = $r['extra_pay_price'];
+                        $glist['extra_pay_price_name'] = $this->config['extra_price_alias_name'];
+                    }
+
+                    $temp['product_list'][] = $glist;
+                }
+                if (!$temp['product_list']) {
+                    $temp['product_list'] = array();
+                    $is_result = 0;
+                }
+                $list[] = $temp;
             }
-            if (!$temp['product_list']) {
-                $temp['product_list'] = array();
-                $is_result = 0;
-            }
-            $list[] = $temp;
         }
         //echo json_encode(array('store' => $store, 'product_list' => $this->getGoodsBySortId($sortId, $store_id), 'sort_list' => array_values($sortList)));
         echo json_encode(array('product_list' => $list,'is_result'=>$is_result));

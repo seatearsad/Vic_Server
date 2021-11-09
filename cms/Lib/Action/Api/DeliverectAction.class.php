@@ -43,12 +43,15 @@ class DeliverectAction
         switch ($status){
             case 'register':
                 $link_status = 1;
+                $status = 0;
                 break;
             case 'active':
                 $link_status = 2;
+                $status = 1;
                 break;
             case 'inactive':
                 $link_status = 3;
+                $status = 0;
                 break;
 
             default:
@@ -59,6 +62,7 @@ class DeliverectAction
         $updateData['link_id'] = $link_id;
         $updateData['link_status'] =$link_status;
         $updateData['menu_version'] =$this->menu_version;
+        $updateData['status'] = $status;
 
         D('Merchant_store')->where(array('store_id'=>$store_id))->save($updateData);
 
@@ -112,49 +116,52 @@ class DeliverectAction
 
         $store = D('Merchant_store')->where(array('link_id'=>$storeThirdId))->find();
 
-        $storeId = $store['store_id'];
+        if($store) {
+            $storeId = $store['store_id'];
 
-        //存储文件备份
-        if(!is_dir($this->menumFolder)) {
-            mkdir($this->menumFolder);
-        }elseif(!is_writeable($this->menumFolder)) {
-            header('Content-Type:text/html; charset=utf-8');
-            exit('目录 [ '.$this->menumFolder.' ] 不可写！');
-        }
+            //存储文件备份
+            if (!is_dir($this->menumFolder)) {
+                mkdir($this->menumFolder);
+            } elseif (!is_writeable($this->menumFolder)) {
+                header('Content-Type:text/html; charset=utf-8');
+                exit('目录 [ ' . $this->menumFolder . ' ] 不可写！');
+            }
 
-        mkdir($this->menumFolder.$storeId);
+            mkdir($this->menumFolder . $storeId);
 
-        $docName = date('Y-m-d H_i_s').".json";
+            $docName = date('Y-m-d H_i_s') . ".json";
 
-        file_put_contents($this->menumFolder.$storeId."/".$docName,json_encode($this->data),FILE_APPEND);
-        ////
-        foreach ($this->data as $k=>$menu){
+            file_put_contents($this->menumFolder . $storeId . "/" . $docName, json_encode($this->data), FILE_APPEND);
+            ////
 
-            $menuId = $menu['menuId'];
-            $menuName = $menu['menu'];
-            $menuType = $menu['menuType'];
-            //时间表
-            $menuTime = $menu['availabilities'];
+            D('Store_menu')->where(array('storeId' => $storeId))->delete();
+            D('Cart')->where(array('sid' => $storeId))->delete();
 
-            D('Store_menu')->where(array('storeId'=>$storeId))->delete();
+            foreach ($this->data as $k => $menu) {
+                $menuId = $menu['menuId'];
+                $menuName = $menu['menu'];
+                $menuType = $menu['menuType'];
+                //时间表
+                $menuTime = $menu['availabilities'];
 
-            $menuData['id'] = $menuId;
-            $menuData['storeId'] = $storeId;
-            $menuData['name'] = $menuName;
-            $menuData['type'] = $menuType;
-            $menuData['createType'] = $this->link_type;
-            $menuData['createTime'] = time();
+                $menuData['id'] = $menuId;
+                $menuData['storeId'] = $storeId;
+                $menuData['name'] = $menuName;
+                $menuData['type'] = $menuType;
+                $menuData['createType'] = $this->link_type;
+                $menuData['createTime'] = time();
 
-            D('Store_menu')->add($menuData);
+                D('Store_menu')->add($menuData);
 
-            $categories = $menu['categories'];
+                $categories = $menu['categories'];
 
-            $this->intoCategories($categories,$menuData['id'],$storeId,$menuTime);
+                $this->intoCategories($categories, $menuData['id'], $storeId, $menuTime);
 
-            //print_r($menuData);
-            $products = array_merge($menu['products'],$menu['modifierGroups'],$menu['modifiers'],$menu['bundles']);
-            $this->intoProducts($products,$storeId);
+                //print_r($menuData);
+                $products = array_merge($menu['products'], $menu['modifierGroups'], $menu['modifiers'], $menu['bundles']);
+                $this->intoProducts($products, $storeId);
 
+            }
         }
         echo "menuUpdate";
     }

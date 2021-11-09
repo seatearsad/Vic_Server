@@ -210,8 +210,8 @@
 					{{# for(var j = 0, jlen = d[i].product_list.length; j < jlen; j++){ }}
 						<li class="product_{{ d[i].product_list[j].product_id }}" data-product_id="{{ d[i].product_list[j].product_id }}" data-product_price="{{ d[i].product_list[j].product_price }}" data-product_name="{{ d[i].product_list[j].product_name }}" data-stock="{{ d[i].product_list[j].stock }}">
 							{{# if(d[i].product_list[j].product_image){ }}
-							<div class="position_img {{# if(storeTheme == 1) { }}mall{{# } }}">
-								<img src="{{ d[i].product_list[j].product_image }}"/>
+							<div class="position_img {{# if(storeTheme == 1) { }}mall{{# } }}" style='background-image: url("{{ d[i].product_list[j].product_image }}")'>
+
 							</div>
 							{{# }}}
 							<div class="product_text" {{# if(d[i].product_list[j].product_image == null ){ }} style="margin-left:0px" {{# } }}>

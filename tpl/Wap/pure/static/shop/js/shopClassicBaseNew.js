@@ -483,9 +483,9 @@ function showShop(shopId){
                 if(max != -1 && tmpActiveSize >= max){
                 	if(max == 1 && tmpActiveSize==1){
                         $(this).parent('ul').find('.active').each(function () {
-                            //if ($(this).hasClass('active')) {
-                                $(this).removeClass('active');
-                            //}
+                            $(this).find('.dish_second').each(function () {
+                                $(this).hide();
+                            });
                         });
                         $(this).addClass('active').siblings('li').removeClass('active');
                      }else {
@@ -637,6 +637,33 @@ function showShop(shopId){
                         motify.log('Please choose minimum '+min_num+' option(s) for '+ dish_name);
 					}
                     is_no_select = true;
+                }
+            });
+
+            $.each($('#shopDetailPageDish .dish_second'),function(i,item){
+                if(!$(this).is(":hidden")) {
+                    var num = 0;
+                    var min_num = $(item).data('min');
+                    var max_num = $(item).data('max');
+                    var dish_name = $(item).data('name');
+                    //var dish_val_name = $(item).data('dish_val_name');
+
+                    $.each($(item).find('li.active'), function (j, jtem) {
+                        num += 1;
+                    });
+                    $.each($(item).find('div.dish_memo'), function (j, jtem) {
+                        var this_num = parseInt($(jtem).children('.number').html());
+                        num += this_num;
+                    });
+                    if (num < min_num) {
+                        //motify.log(dish_name + ' selection(s) '+min_num+' required');
+                        if (min_num == max_num) {
+                            motify.log('Please choose exactly ' + min_num + ' option(s) for ' + dish_name);
+                        } else {
+                            motify.log('Please choose minimum ' + min_num + ' option(s) for ' + dish_name);
+                        }
+                        is_no_select = true;
+                    }
                 }
             });
 
