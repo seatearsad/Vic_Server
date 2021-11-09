@@ -3458,7 +3458,7 @@ class IndexAction extends BaseAction
         $where['is_del'] = 0;
         $where['send_platform'] = 0;
 
-        $orders = D("Shop_order")->where($where)->select();
+        $orders = D("Shop_order")->where($where)->order('order_id desc')->select();
 
         if(count($orders) > 0) {
             $storeIds = array();
