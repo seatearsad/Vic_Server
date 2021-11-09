@@ -148,23 +148,25 @@ class Deliverect
             $productAllPrice += $item['price'];
 
             $subItems = array();
-            $dish_list = explode("|",$detail['dish_id']);
-            foreach ($dish_list as $dish){
-                $subItem = array();
-                $sub_dish = explode(',',$dish);
-                $sub_product = D("StoreMenuV2")->getProduct($sub_dish[1],$order['store_id']);
-                $subItem['plu'] = $sub_product['plu'];
-                $subItem['name'] = $sub_product['name'];
-                $subItem['price'] = intval($sub_product['price']);
-                $subItem['quantity'] = intval($sub_dish[2]);
+            if($detail['dish_id'] != "") {
+                $dish_list = explode("|", $detail['dish_id']);
+                foreach ($dish_list as $dish) {
+                    $subItem = array();
+                    $sub_dish = explode(',', $dish);
+                    $sub_product = D("StoreMenuV2")->getProduct($sub_dish[1], $order['store_id']);
+                    $subItem['plu'] = $sub_product['plu'];
+                    $subItem['name'] = $sub_product['name'];
+                    $subItem['price'] = intval($sub_product['price']);
+                    $subItem['quantity'] = intval($sub_dish[2]);
 
-                $productAllPrice += $subItem['price'];
+                    $productAllPrice += $subItem['price'];
 
-                $subItems[] = $subItem;
+                    $subItems[] = $subItem;
+                }
+
+                $item['subItems'] = $subItems;
             }
-
-            $item['subItems'] = $subItems;
-
+            
             $items[] = $item;
         }
         $data['items'] = $items;
