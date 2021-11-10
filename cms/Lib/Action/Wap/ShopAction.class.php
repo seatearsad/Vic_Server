@@ -2437,6 +2437,7 @@ class ShopAction extends BaseAction{
                 }
             }
         }
+
         return $productCart;
     }
 
@@ -2514,9 +2515,40 @@ class ShopAction extends BaseAction{
             //die("++++");
         } else {
             $cookieData = $this->getCookieData($store_id);
+
             if(empty($cookieData)) {
                 redirect(U('Shop/index') . '#shop-' . $store_id);
                 exit;
+            }else{
+                $store = D('Merchant_store')->where(array('store_id'=>$store_id))->find();
+                //查看所有的cookie商品是否存在 如果不存在删除cookie
+                if($store['menu_version'] == 2){
+                    $all_id = array();
+                    foreach ($cookieData as $pp){
+                        if(!in_array($pp['productId'],$all_id)){
+                            $all_id[] = $pp['productId'];
+                        }
+
+                        if(count($pp['productParam']) > 0){
+                            foreach ($pp['productParam'] as $ppp){
+                                $dish_id_list = explode(',',$ppp['dish_id']);
+                                if($dish_id_list[0] != '' && !in_array($dish_id_list[0],$all_id)){
+                                    $all_id[] = $dish_id_list[0];
+                                }
+                                if($dish_id_list[1] != '' && !in_array($dish_id_list[1],$all_id)){
+                                    $all_id[] = $dish_id_list[1];
+                                }
+                            }
+                        }
+                    }
+
+                    $all_product = D('Store_product')->where(array('id'=>array('in',$all_id),'storeId'=>$store_id))->group('id')->select();
+                    //var_dump($all_id);
+                    //var_dump(count($all_id).' ---- '.count($all_product));die();
+                    if(count($all_id) != count($all_product)){
+                        cookie('shop_cart_' . $store['store_id'], null);
+                    }
+                }
             }
             $return = D('Shop_goods')->checkCart($store_id, $this->user_session['uid'], $cookieData);
             //var_dump($return);die("----");

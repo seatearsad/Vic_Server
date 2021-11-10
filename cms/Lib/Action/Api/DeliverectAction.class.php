@@ -66,6 +66,11 @@ class DeliverectAction
 
         D('Merchant_store')->where(array('store_id'=>$store_id))->save($updateData);
 
+        $store = D('Merchant_store')->where(array('store_id'=>$store_id))->find();
+        if($store['status'] == 1){
+            $this->syncStoreTime($store);
+        }
+
         echo json_encode($link_array);
     }
 
@@ -162,6 +167,10 @@ class DeliverectAction
                 $this->intoProducts($products, $storeId);
 
             }
+        }
+
+        if($store['status'] == 1){
+            $this->syncStoreTime($store);
         }
         echo "menuUpdate";
     }
@@ -565,5 +574,77 @@ class DeliverectAction
 
         $go_refund_param['error_code'] = false;
         return $go_refund_param;
+    }
+
+    public function syncStoreTime($store){
+        $area = D('Area')->where(array('area_id'=>$store['city_id']))->find();
+
+        $checkCity = false;
+        if($area['begin_time'] != $area['end_time']){
+            $checkCity = true;
+            $area['begin_time'] = substr($area['begin_time'],0,-3);
+            $area['end_time'] = substr($area['end_time'],0,-3);
+        }
+
+        $categories_time_list = D('Store_categories_time')->where(array('storeId'=>$store['store_id']))->select();
+        //var_dump($categories_time_list);die();
+
+        $check_list = array(1=>2,2=>2,3=>2,4=>2,5=>2,6=>2,7=>2);
+
+        $all_list = array();
+        foreach ($categories_time_list as $t){
+            if($check_list[$t['weekNum']] > 0) {
+                $openName = 'open_' . (3*$t['weekNum'] - $check_list[$t['weekNum']]);
+                $closeName = 'close_' . (3*$t['weekNum'] - $check_list[$t['weekNum']]);
+                $check_list[$t['weekNum']] = $check_list[$t['weekNum']]-1;
+            }else{
+                $openName = 'open_' . (3*$t['weekNum']);
+                $closeName = 'close_' . (3*$t['weekNum']);
+
+                if($all_list[$openName]){
+                    if(str_replace(':','',$t['startTime']) > str_replace(':','',$all_list[$openName])){
+                        $t['startTime'] = $all_list[$openName];
+                    }
+                }
+
+                if($all_list[$closeName]){
+                    if(str_replace(':','',$t['endTime']) < str_replace(':','',$all_list[$closeName])){
+                        $t['endTime'] = $all_list[$closeName];
+                    }
+                }
+            }
+
+            if($checkCity){
+                if(str_replace(':','',$area['begin_time']) > str_replace(':','',$t['startTime'])){
+                    $all_list[$openName] = $area['begin_time'];
+                }else{
+                    $all_list[$openName] = $t['startTime'];
+                }
+
+                if(str_replace(':','',$area['end_time']) < str_replace(':','',$t['endTime'])){
+                    $all_list[$closeName] = $area['end_time'];
+                }else{
+                    $all_list[$closeName] = $t['endTime'];
+                }
+            }else {
+                $all_list[$openName] = $t['startTime'];
+                $all_list[$closeName] = $t['endTime'];
+            }
+        }
+
+        for($i=1;$i<=21;++$i){
+            if(!$all_list['open_'.$i]) {
+                $all_list['open_'.$i] = "00:00:00";
+            }else{
+                $all_list['open_'.$i] = $all_list['open_'.$i].":00";
+            }
+            if(!$all_list['close_'.$i]){
+                $all_list['close_'.$i] = "00:00:00";
+            }else{
+                $all_list['close_'.$i] = $all_list['close_'.$i].":00";
+            }
+        }
+        //var_dump($all_list);die();
+        D('Merchant_store')->where(array('store_id'=>$store['store_id']))->save($all_list);
     }
 }

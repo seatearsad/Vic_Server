@@ -388,7 +388,7 @@ a {
 		<volist name="goods" id="ditem">
 		<li>
             <if condition="!empty($ditem['image'])">
-			<div class="imglogo" style="background-image: url('{pigcms{$ditem["image"]}');background-position: center; background-size: 100% auto; background-repeat: no-repeat;">
+			<div class="imglogo" style="background-image: url('{pigcms{$ditem["image"]}');background-position: center; background-size: cover; background-repeat: no-repeat;display: inline-block; height: 58px; margin-top: 5px;">
 
 			</div>
             </if>

@@ -300,7 +300,7 @@
                 width: 80px;
                 border-radius: 5px;
                 background-position: center;
-                background-size: 100% auto;
+                background-size: cover;
                 background-repeat: no-repeat;
             }
             #shopProductRightBar2 li .product_text,#shopSearchResult li .product_text{
