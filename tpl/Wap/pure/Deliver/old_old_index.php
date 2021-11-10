@@ -10,7 +10,6 @@
 <meta name="description" content="{pigcms{$config.seo_description}"/>
 <link href="{pigcms{$static_path}css/deliver.css?v=1.0.4" rel="stylesheet"/>
 <script src="{pigcms{:C('JQUERY_FILE')}"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKlguA2QFIUVwWTo3danbOqSKv3nYbBCg&callback=initMap&language=en" async defer></script>
 <script>
     var location_url = "{pigcms{:U('Deliver/grab')}",lat = "{pigcms{$deliver_session['lat']}", lng = "{pigcms{$deliver_session['lng']}", reject_url = "{pigcms{:U('Deliver/reject')}",update_url = "{pigcms{:U('Deliver/index_count')}";
 	$(function(){
@@ -74,214 +73,238 @@
     }
 </script>
     <include file="Public:facebook"/>
-    <style>
-        body{
-            position: unset;
-        }
-        #all_map{
-            position: absolute;
-            width: 100%;
-            height: 55%;
-            background-color: #EEEEEE;
-        }
-        #bottom_nav{
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            height: 50px;
-            background-color: #EEEEEE;
-            border-top: 1px solid #999999;
-            display: flex;
-            padding-top: 5px;
-        }
-        #bottom_nav span{
-            flex: 1 1 50%;
-            height: 40px;
-            line-height: 40px;
-            font-size: 16px;
-            font-weight: bold;
-            text-align: center;
-            color: #294068;
-            box-sizing: border-box;
-        }
-        #bottom_nav span.active{
-            color: #ffa52d;
-        }
-        #deliver_count{
-            border-left: 1px solid #999999;;
-        }
-        #gray_middle_div,#deliver_middle_div{
-            position: absolute;
-            width: 94%;
-            margin-left: 3%;
-            bottom: 80px;
-            top:50%;
-            background-color: #FFF5E8;
-            border-radius: 15px;
-        }
-        #deliver_middle_div{
-            background-color: #294068;
-            display: none;
-        }
-        #reject_div{
-            height: 30px;
-            line-height: 30px;
-            border-radius: 18px;
-            border: 2px solid #294068;
-            background-color: white;
-            color: #294068;
-            font-size: 18px;
-            font-weight: bold;
-            padding: 5px 22px;
-            float: right;
-            margin-top: -50px;
-        }
-        #top_label{
-            width: auto;
-            background-color: #ffa52d;
-            color: white;
-            padding: 5px 20px;
-            font-size: 16px;
-            border-radius: 10px;
-            border-bottom-left-radius: 0px;
-            position: absolute;
-            top: -10px;
-        }
-        #order_div{
-            padding: 20px 5% 10px 5%;
-            text-align: center;
-            font-size: 16px;
-        }
-        .order_detail{
-            display: flex;
-            padding: 0px 5%;
-            color: #294068;
-            line-height: 50px;
-        }
-        .order_detail span{
-            flex: 1 1 25%;
-        }
-        .order_detail .amount{
-            flex: 1 1 50%;
-            font-size: 32px;
-            font-weight: bold;
-        }
-        .order_detail .payment label{
-            padding: 5px 10px;
-            border-radius: 10px;
-            border: 2px solid #294068;
-            font-size: 16px;
-        }
-        .store_name{
-            padding: 10px 5%;
-            font-size: 18px;
-            font-weight: bold;
-            color: #294068;
-        }
-        .order_time{
-            color: #555555;
-            padding: 5px 5% 15px 5%;
-            border-bottom: 1px solid #CCCCCC;
-        }
-        #position_div{
-            padding: 0px 10%;
-            font-size: 18px;
-            line-height: 35px;
-            color: #555555;
-        }
-        .title_icon{
-            color: #ffa52d;
-            vertical-align: text-top;
-            font-size: 26px !important;
-        }
-        .send_btn{
-            width: 92%;
-            margin-top: 20px;
-            margin-left: 4%;
-            background-color: #ffa52d;
-            color: white;
-            font-size: 18px;
-            line-height: 45px;
-            border-radius: 10px;
-            text-align: center;
-        }
-    </style>
 </head>
-
+<style>
+    .clerk{
+        position: fixed;
+        top: 60px;
+        left: 0;
+        width: 100%;
+        z-index: 9999;
+    }
+    .clerk .clerk_end .clr li{
+        width: 50%;
+        border-right: 2px solid #F4F4F4;
+        border-left: 2px solid #F4F4F4;
+        box-sizing: border-box;
+    }
+    .grab i{
+        background-color: #fd6254;
+    }
+    #container{
+        width: 98%;
+        margin: 145px auto 0 auto;
+    }
+    #grab_list{
+        color: #333333;
+        font-size: 12px;
+    }
+    .order_title{
+        margin-top: 3px;
+        padding: 5px 2%;
+        border-bottom: 1px dashed silver;
+    }
+    .order_title .store_name{
+        font-size: 14px;
+        color: #333333;
+    }
+    .order_title .pay_status{
+        float: right;
+        border: 1px solid cornflowerblue;
+        border-radius: 2px;
+        padding: 1px 4px;
+        color: cornflowerblue;
+        font-size: 12px;
+    }
+    .order_title .pay_status_red{
+        float: right;
+        border: 1px solid indianred;
+        border-radius: 2px;
+        padding: 1px 4px;
+        color: indianred;
+        font-size: 12px;
+    }
+    .order_title .pay_status_red_d{
+        float: right;
+        border: 1px solid red;
+        border-radius: 2px;
+        padding: 1px 4px;
+        color: red;
+        font-size: 12px;
+    }
+    .order_time{
+        font-size: 9px;
+        height: 30px;
+        line-height: 30px;
+    }
+    .order_time label{
+        margin: 0 3px;
+    }
+    .order_time span{
+        color: #666666;
+    }
+    .order_time .time_show{
+        color: red;
+    }
+    .order_address{
+        padding: 5px 2%;
+    }
+    .order_address div{
+        width: 100%;
+        padding: 5px 0;
+    }
+    .from_label{
+        float: left;
+        border-radius: 2px;
+        padding: 1px 4px;
+        border: 1px solid #5271ff;
+        color: #5271ff;
+        font-size: 10px;
+    }
+    .order_address .address{
+        float: right;
+        width: 86%;
+        font-size: 13px;
+        color: #333333;
+    }
+    .to_label{
+        float: left;
+        border-radius: 2px;
+        padding: 1px 4px;
+        border: 1px solid #59a422;
+        color: #59a422;
+        font-size: 10px;
+    }
+    .order_address div{
+        width: 100%;
+        height: 45px;
+    }
+    .order_address .address_bottom{
+        font-size: 9px;
+        float: right;
+        color: #AAAAAA;
+        margin-top: 2px;
+    }
+    .order_btn{
+        padding: 2px 2%;
+        height: 40px;
+    }
+    .location_btn{
+        float: left;
+        width: 50px;
+        border: 1px solid #ffa52d;
+        border-radius: 2px;
+        color: #ffa52d;
+        font-size: 10px;
+        padding-top: 2px;
+        padding-bottom: 2px;
+        padding-left: 29px;
+        padding-right: 0px;
+        margin-bottom: 10px;
+        box-sizing: padding-box;
+        background-image: url("{pigcms{$static_path}img/location_icon.png");
+        background-size: auto 90%;
+        background-repeat: no-repeat;
+        background-position: left;
+        cursor: pointer;
+    }
+    .accept_btn{
+        float: right;
+        width: 30%;
+        text-align: center;
+        background-color: limegreen;
+        border-radius: 3px;
+        height: 35px;
+        line-height: 35px;
+        font-size: 14px;
+        color: white;
+        cursor: pointer;
+    }
+    .reject_btn{
+        float: right;
+        margin-right: 5%;
+        width: 30%;
+        text-align: center;
+        background-color: orangered;
+        border-radius: 3px;
+        height: 35px;
+        line-height: 35px;
+        font-size: 14px;
+        color: white;
+        cursor: pointer;
+    }
+    #gray_count{
+        color: #fd6254;
+    }
+    #deliver_count{
+        color: #32620e;
+    }
+    .just_div{
+        padding: 5px 2%;
+        color: #6a6a6a;
+        font-size: 16px;
+    }
+    .just_div.just{
+        color: #ffa52d;
+        font-weight: bold;
+    }
+</style>
 <body>
     <include file="header" />
-	<div id="all_map"></div>
-    <div id="gray_middle_div">
-        <div id="reject_div">Reject</div>
-        <div id="top_label">Just for you</div>
-        <div id="order_div">
-            <div class="order_detail">
-                <span class="payment">
-                    <label>Cash</label>
-                </span>
-                <span class="amount">$117.89</span>
-                <span></span>
-            </div>
-            <div class="store_name">
-                Rook and Rose Flower Shop
-            </div>
-            <div class="order_time">
-                0.5 km from you · Ready in 9 min
+	<section class="clerk">
+        <div style="background-color: #F4F4F4;height: 10px;width: 100%"></div>
+		<div class="clerk_end">
+			<ul class="clr">
+				<li class="grab fl">
+					<a href="{pigcms{:U('Deliver/index')}">
+						<i></i>
+						<h2 id="gray_count">0</h2>
+						<p>{pigcms{:L('_ND_PENDINGORDERS_')}</p>
+					</a>
+				</li>
+				<li class="deliver fl">
+					<a href="{pigcms{:U('Deliver/process')}">
+						<i></i>
+						<h2 id="deliver_count">{pigcms{$deliver_count}</h2>
+						<p>{pigcms{:L('_ND_MYORDERS_')}</p>
+					</a>
+				</li>
+			</ul>
+		</div>
+        <div style="background-color: #F4F4F4;height: 15px;width: 100%"></div>
+	</section>
+    <div id="container">
+        <div class="scroller" id="scroller">
+            <div id="grab_list">
+                <div style="width: 80%;margin: 10px auto;font-size: 12px;color: #666666;text-align: center;">
+                    Please go to "My Account" to complete all required information and documents in order to accept orders.
+                    <a href="{pigcms{:U('Deliver/account')}">
+                    <div style="background-color: #ffa52d;color: white;line-height: 30px;width: 80%;margin: 10px auto;border-radius: 5px;">
+                        {pigcms{:L('_ND_MYACCOUNT_')}
+                    </div>
+                    </a>
+                </div>
             </div>
         </div>
-        <div id="position_div">
-            <div>
-                <span class="material-icons title_icon">restaurant</span>
-                852 Fort St, Victoria, BC
-            </div>
-            <div>
-                <span class="material-icons title_icon">pin_drop</span>
-                852 Fort St, Victoria, BC
-            </div>
-        </div>
-        <div class="send_btn">
-            Accept
-        </div>
     </div>
-    <div id="deliver_middle_div">
-
-    </div>
-    <div id="bottom_nav">
-        <span id="gray_count" class="active" data-show="gray_middle_div" data-hide="deliver_middle_div"></span>
-        <span id="deliver_count" data-show="deliver_middle_div" data-hide="gray_middle_div"></span>
-    </div>
-
     <script src="{pigcms{$static_public}js/laytpl.js"></script>
     <if condition="$deliver_session['reg_status'] eq 0 and $deliver_session['group'] eq 1">
         <script type="text/javascript" src="{pigcms{$static_path}js/grab.js?211" charset="utf-8"></script>
         <script>
             $('#grab_list').html('');
-
-            $('#gray_count').html("0 Pending");
-            $('#deliver_count').html("0 in Progress");
-
-            // setInterval(function(){
-            //     $.get("{pigcms{:U('Deliver/index_count')}", function(response){
-            //         if (response.err_code == false) {
-            //             $('#gray_count').html(response.gray_count + " Pending");
-            //             $('#deliver_count').html(response.deliver_count + " in Progress");
-            //             $('#finish_count').html(response.finish_count);
-            //             if(response.work_status == 1){
-            //                 window.location.reload();
-            //             }
-            //         }
-            //     }, 'json');
-            // }, 2000);
-
-            $('#bottom_nav').find('span').each(function () {
-                $(this).click(function () {
-                    var show_id = $(this).data('show');
-                    $('#'+show_id).show();
-                    var hide_id = $(this).data('hide');
-                    $('#'+hide_id).hide();
-                    $(this).addClass('active').siblings().removeClass('active');
-                });
-            });
+            $('#gray_count').html('{pigcms{$gray_count}');
+            setInterval(function(){
+                $.get("{pigcms{:U('Deliver/index_count')}", function(response){
+                    if (response.err_code == false) {
+                        $('#gray_count').html(response.gray_count);
+                        $('#deliver_count').html(response.deliver_count);
+                        $('#finish_count').html(response.finish_count);
+                        if(response.work_status == 1){
+                            window.location.reload();
+                        }
+                    }
+                }, 'json');
+            }, 2000);
         </script>
     </if>
     <script id="replyListBoxTpl" type="text/html">
@@ -377,22 +400,22 @@
         var marker;
         var ua = navigator.userAgent;
         //if(!ua.match(/TuttiDeliver/i)) {
-        //     if(navigator.geolocation) {
-        //         //alert('geolocation:start');
-        //         navigator.geolocation.getCurrentPosition(function (position) {
-        //             //alert("geolocation_lat:" + position.coords.latitude);
-        //             map.setCenter({lat: position.coords.latitude, lng: position.coords.longitude});
-        //             updatePosition(position.coords.latitude, position.coords.longitude);
-        //             run_update_location();
-        //         }, function (error) {
-        //             console.log("geolocation:" + error.code);
-        //             //location_error = true;
-        //             //run_Amap();
-        //             //run_update_location();
-        //         },{enableHighAccuracy:true,timeout:50000});
-        //     }else{
-        //         //alert('geolocation:error');
-        //     }
+            if(navigator.geolocation) {
+                //alert('geolocation:start');
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    //alert("geolocation_lat:" + position.coords.latitude);
+                    map.setCenter({lat: position.coords.latitude, lng: position.coords.longitude});
+                    updatePosition(position.coords.latitude, position.coords.longitude);
+                    run_update_location();
+                }, function (error) {
+                    console.log("geolocation:" + error.code);
+                    //location_error = true;
+                    //run_Amap();
+                    //run_update_location();
+                },{enableHighAccuracy:true,timeout:50000});
+            }else{
+                //alert('geolocation:error');
+            }
         //}
 
 
@@ -408,6 +431,13 @@
             console.log(error.info + '||' + error.message);
         }
 
+        var is_route = {pigcms{$is_route};
+        var self_position = new google.maps.LatLng({pigcms{$deliver_session['lat']}, {pigcms{$deliver_session['lng']});
+        var mapOptions = {
+            zoom: 16,
+            center: self_position
+        }
+
         function loadPosition(){
             marker = new google.maps.Marker({
                 position: self_position,
@@ -416,24 +446,14 @@
             });
         }
 
-        var self_position,is_route,map;
 
-        function initMap() {
-            is_route = {pigcms{$is_route};
-            self_position = new google.maps.LatLng({pigcms{$deliver_session['lat']}, {pigcms{$deliver_session['lng']});
-            var mapOptions = {
-                zoom: 16,
-                center: self_position
-            }
-
-            map = new google.maps.Map(document.getElementById('all_map'),mapOptions);
-
+        $(function () {
             if(is_route == 1){//如果已有路线规划 显示路线图
                 loadRoute();
             }else{
                 loadPosition();
             }
-        }
+        });
 
         function run_update_location() {
             if(location_error){
@@ -462,29 +482,6 @@
 
             directionsDisplay.setMap(map);
 
-            // var polyline = new google.maps.Polyline({
-            //     strokeColor: '#C00',
-            //     strokeOpacity: 0.7,
-            //     strokeWeight: 5
-            // });
-
-            var lineSymbol = {
-                path: "M 0,-1 0,1",
-                strokeOpacity: 1,
-                scale: 3,
-            };
-
-            var line = new google.maps.Polyline({
-                strokeOpacity:0,
-                strokeColor:"#FFAC1C",
-                icons:[{
-                    icon: lineSymbol,
-                    offset:"0",
-                    repeat:"25px",
-                }]
-            });
-
-            directionsDisplay.setOptions({polylineOptions: line});
 
             //var selectedMode = document.getElementById('biz-map').value;
             var request = {
@@ -492,7 +489,6 @@
                 destination: oceanBeach,
                 travelMode: 'DRIVING'
             };
-
             directionsService.route(request, function (response, status) {
                 if (status == 'OK') {
                     directionsDisplay.setDirections(response);

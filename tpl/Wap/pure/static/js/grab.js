@@ -41,8 +41,8 @@ $(function(){
             updateNum();
         });
     });
-	getList();
-	var timer = setInterval(getList, 2000);
+	//getList();
+	//var timer = setInterval(getList, 2000);
 	
 	$(document).on("click", '.go_detail', function(e){
 		//e.stopPropagation();
