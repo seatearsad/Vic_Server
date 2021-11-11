@@ -541,6 +541,10 @@ class DeliverectAction
 
             D('Shop_order_log')->add_log(array('order_id' => $order_id, 'status' => 9));
         }
+
+        import('@.ORG.Deliverect.Deliverect');
+        $deliverect = new Deliverect();
+        $result = $deliverect->createDelOrder($now_order);
     }
 
 
