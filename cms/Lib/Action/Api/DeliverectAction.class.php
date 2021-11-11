@@ -43,7 +43,7 @@ class DeliverectAction
         switch ($status){
             case 'register':
                 $link_status = 1;
-                $status = 0;
+                $status = 1;
                 break;
             case 'active':
                 $link_status = 2;
@@ -67,7 +67,7 @@ class DeliverectAction
         D('Merchant_store')->where(array('store_id'=>$store_id))->save($updateData);
 
         $store = D('Merchant_store')->where(array('store_id'=>$store_id))->find();
-        if($store['status'] == 1){
+        if($store['link_status'] == 2){
             $this->syncStoreTime($store);
         }
 
@@ -169,7 +169,7 @@ class DeliverectAction
             }
         }
 
-        if($store['status'] == 1){
+        if($store['link_status'] == 2){
             $this->syncStoreTime($store);
         }
         echo "menuUpdate";

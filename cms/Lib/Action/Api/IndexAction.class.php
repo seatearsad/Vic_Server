@@ -1067,7 +1067,13 @@ class IndexAction extends BaseAction
             $t_good['tax_num'] = $good['tax_num'];
             $t_good['deposit_price'] = $good['deposit_price'];
 
-            $tax_price += $good['price'] * $good['tax_num']/100 * $v['stock'];
+            if($store['menu_version'] == 1) {
+                $tax_price += $good['price'] * $good['tax_num']/100 * $v['stock'];
+            }else{
+                $orderDetail = array('goods_id'=>$t_good['productId'],'num'=>$v['stock'],'store_id'=>$sid,'dish_id'=>$v['dish_id']);
+                $tax_price += D('StoreMenuV2')->calculationTaxFromOrder($orderDetail);
+            }
+
             $deposit_price += $good['deposit_price']*$v['stock'];
 
             $orderData[] = $t_good;
@@ -1633,11 +1639,12 @@ class IndexAction extends BaseAction
                 //$goods = D('StoreMenuV2')->getProduct($v['fid']);
                 //$goods['price'] = $goods['price']/100;
                 //$goods['tax_num'] = $goods['tax']/1000;
+                $tax_price += D('StoreMenuV2')->calculationTaxFromOrder($v);
                 $good['deposit_price'] = 0;
             }else {
                 $good = D('Shop_goods')->field(true)->where(array('goods_id' => $v['goods_id']))->find();
+                $tax_price += $v['price'] * $v['tax_num']/100 * $v['num'];
             }
-            $tax_price += $v['price'] * $v['tax_num']/100 * $v['num'];
             $deposit_price += $good['deposit_price']*$v['num'];
 
             $food[] = $goods;

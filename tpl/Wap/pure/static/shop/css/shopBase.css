@@ -420,7 +420,13 @@ em{font-style:normal;}
     z-index: 1;
 }
 .swiper-slide {
-    float: left;
+    width: 400px;
+    height: 400px;
+    margin: 0 auto;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    border-radius: 20px;
 }
 #pageList .banner img {
     height: 100%;

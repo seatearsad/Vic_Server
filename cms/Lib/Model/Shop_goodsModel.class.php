@@ -1809,7 +1809,12 @@ class Shop_goodsModel extends Model
                 $extra_price += $row['productExtraPrice'] * $num;
                 $packing_charge += $t_return['packing_charge'] * $num;
                 $deposit_price += $t_return['deposit_price'] * $num;
-                $tax_price += ($t_return['price'] * $t_return['tax_num']/100)*$num;
+                if($store['menu_version'] == 1) {
+                    $tax_price += ($t_return['price'] * $t_return['tax_num'] / 100) * $num;
+                }else{
+                    $orderDetail = array('goods_id'=>$goods_id,'num'=>$num,'store_id'=>$store_id,'dish_id'=>$dish_str);
+                    $tax_price += D('StoreMenuV2')->calculationTaxFromOrder($orderDetail);
+                }
         
                 if ($address_id) {
                     //-----计算运费--------  freight_type ==> 0:最大，1：单独

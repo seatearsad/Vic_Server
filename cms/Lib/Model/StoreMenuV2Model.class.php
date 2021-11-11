@@ -490,6 +490,24 @@ class StoreMenuV2Model extends Model
         return $arr;
     }
 
+    public function calculationTaxFromOrder($orderDetail){
+        $tax = 0;
+        $product = D('StoreMenuV2')->getProduct($orderDetail['goods_id'],$orderDetail['store_id']);
+        $productTax = floatval(($product['price']/100) * ($product['tax']/100000)) * $orderDetail['num'];
+
+        $tax += $productTax;
+        $dishList = explode("|",$orderDetail['dish_id']);
+        foreach ($dishList as $dishStr){
+            $dish = explode(',',$dishStr);
+
+            $dishProduct = D('StoreMenuV2')->getProduct($dish[1],$orderDetail['store_id']);
+            $dishProductTax = floatval(($dishProduct['price']/100) * ($dishProduct['tax']/100000))*$dish[2];
+            $tax += $dishProductTax;
+        }
+
+        return $tax;
+    }
+
     public function getCategoryTimeWeekStr($categoryTime){
         $weekArr = array();
         foreach ($categoryTime as $time){

@@ -566,8 +566,8 @@
 </script>
 <script id="productSwiperTpl" type="text/html">
 	{{# for(var i = 0, len = d.length; i < len; i++){ }}
-		<div class="swiper-slide">
-			<img src="{{ d[i].url }}"/>
+		<div class="swiper-slide" style='background-image: url("{{ d[i].url }}")'>
+
 		</div>
 	{{# } }}
 </script>
