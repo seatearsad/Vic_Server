@@ -41,7 +41,7 @@ $(function(){
             updateNum();
         });
     });
-	//getList();
+	getList();
 	//var timer = setInterval(getList, 2000);
 	
 	$(document).on("click", '.go_detail', function(e){
@@ -105,11 +105,11 @@ function list_detail(lat, lng)
 	$.get(location_url, {'lat':lat, 'lng':lng}, function(result){
 		if (result.err_code) {
 			//$('#container').html('<div class="psnone" ><img src="' + static_path + 'images/qdz_02.jpg"></div>');
-            $('#container').html('<p style="text-align: center;width: 90%;margin: auto;">No pending orders. Please wait for the next available order.</p>');
+            //$('#container').html('<p style="text-align: center;width: 90%;margin: auto;">No pending orders. Please wait for the next available order.</p>');
 			return false;
 		}
 		laytpl($('#replyListBoxTpl').html()).render(result, function(html){
-			$('#container').html(html);
+			$('#gray_middle_div').html(html);
 		    $(".delivery p em").each(function(){
 		        $(this).width($(window).width() - $(this).siblings("i").width() -55) 
 	    	});
