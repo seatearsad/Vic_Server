@@ -411,7 +411,12 @@ class IndexAction extends BaseAction
             $categories = D('StoreMenuV2')->getStoreCategories($sid,true);
             $store['group'] = D('StoreMenuV2')->arrangeApp($categories);
 
-            $goods = D('StoreMenuV2')->getStoreProductApp($categories,$_POST['uid'],$sid);
+            if($_POST['keyword'] && trim($_POST['keyword']) != "")
+                $keyword = $_POST['keyword'];
+            else
+                $keyword = '';
+
+            $goods = D('StoreMenuV2')->getStoreProductApp($categories,$_POST['uid'],$sid,$keyword);
             $store['foods'] = $goods;
         }
         $store['count'] = count($store['foods']);

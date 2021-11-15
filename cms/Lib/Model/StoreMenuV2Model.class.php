@@ -116,10 +116,10 @@ class StoreMenuV2Model extends Model
         return $allList;
     }
 
-    public function getStoreProductApp($categories,$uid,$storeId){
+    public function getStoreProductApp($categories,$uid,$storeId,$keyword = ''){
         $allList = array();
         foreach ($categories as $category){
-            $products = $this->getMenuCategoriesProduct($category['id'],$storeId,1);
+            $products = $this->getMenuCategoriesProduct($category['id'],$storeId,1,$keyword);
             $products = $this->arrangeProductApp($products,$category,$uid);
 
 
@@ -251,7 +251,7 @@ class StoreMenuV2Model extends Model
         $new_product['packing_charge'] = 0;
         $new_product['default_image'] = $product['image'];
         $new_product['has_format'] = $product['subNum'] > 0 ? true : false;
-        $new_product['stock'] = -1;
+        $new_product['stock'] = 10000;
         $new_product['tax_num'] = $product['tax']/1000;
         $new_product['sales'] = 0;
         $new_product['deposit'] = 0;

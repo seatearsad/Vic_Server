@@ -295,7 +295,7 @@ class CartModel extends Model
             if($store['menu_version'] == 1) {
                 $tax_price += $good['price']*$good['tax_num']/100*$v['stock'];
             }else{
-                $orderDetail = array('goods_id'=>$t_good['productId'],'num'=>$v['stock'],'store_id'=>$sid,'dish_id'=>$v['dish_id']);
+                $orderDetail = array('goods_id'=>$v['fid'],'num'=>$v['stock'],'store_id'=>$sid,'dish_id'=>$v['dish_id']);
                 $tax_price += D('StoreMenuV2')->calculationTaxFromOrder($orderDetail);
             }
             $deposit_price += $good['deposit_price'] * $v['stock'];
