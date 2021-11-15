@@ -591,6 +591,17 @@ class DeliverectAction
         }
 
         $categories_time_list = D('Store_categories_time')->where(array('storeId'=>$store['store_id']))->select();
+
+        $clearList = array();
+        foreach ($categories_time_list as $k=>$c){
+            $checkStr = $c['weekNum'].'-'.$c['startTime'].'-'.$c['endTime'];
+            if(in_array($checkStr,$clearList)){
+                unset($categories_time_list[$k]);
+            }else{
+                $clearList[] = $checkStr;
+            }
+        }
+
         //var_dump($categories_time_list);die();
 
         $check_list = array(1=>2,2=>2,3=>2,4=>2,5=>2,6=>2,7=>2);

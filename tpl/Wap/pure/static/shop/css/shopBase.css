@@ -420,8 +420,8 @@ em{font-style:normal;}
     z-index: 1;
 }
 .swiper-slide {
-    width: 400px;
-    height: 400px;
+    width: 300px;
+    height: 300px;
     margin: 0 auto;
     background-repeat: no-repeat;
     background-position: center;
