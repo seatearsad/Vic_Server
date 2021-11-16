@@ -68,7 +68,11 @@ class IndexAction extends BaseAction
         $where = array('deliver_type' => $deliver_type, 'order' => $order, 'lat' => $lat, 'long' => $long, 'cat_id' => $cat_id, 'cat_fid' => $cat_fid, 'page' => $page,'limit'=>$limit);
         $key && $where['key'] = $key;
 
-        $shop_list = D('Merchant_store_shop')->get_list_arrange($where,3,1,$limit,$page,$lat,$long,$city_id);
+        $getMenuVersion = -1;//-1 全部 1只有version=1的 2
+        if($this->app_version < 266)
+            $getMenuVersion = 1;
+
+        $shop_list = D('Merchant_store_shop')->get_list_arrange($where,3,1,$limit,$page,$lat,$long,$city_id,$getMenuVersion);
 //
 //        foreach ($shop_list as $k => $v) {
 //            $product_list = D('Shop_goods')->get_list_by_storeid($v['site_id']);
@@ -130,6 +134,7 @@ class IndexAction extends BaseAction
         $sub_where['cat_status'] = 1;
         $subCategory = D('Shop_category')->where($sub_where)->order('cat_sort desc')->select();
         $recommend_list = array();
+
         foreach ($subCategory as $v){
             $sub_recommend['title'] = lang_substr($v['cat_name'],C('DEFAULT_LANG'));
             $sub_recommend['id'] = $v['cat_id'];
@@ -140,157 +145,162 @@ class IndexAction extends BaseAction
             $storeList = D('Shop_category_relation')->where(array('cat_id'=>$v['cat_id']))->order('store_sort desc')->select();
             $allClose = true;
             foreach ($storeList as $store){
-                $storeRow = D('Merchant_store')->field('st.*,sh.background,sh.delivery_radius')->join('as st left join ' . C('DB_PREFIX') . 'merchant_store_shop sh on st.store_id = sh.store_id ')->where(array('st.store_id' => $store['store_id']))->find();
-                $storeMemo['store_id'] = $storeRow['store_id'];
-                $storeMemo['name'] = lang_substr($storeRow['name'], C('DEFAULT_LANG'));
-                if($storeRow['background'] && $storeRow['background'] != '') {
-                    $image_tmp = explode(',', $storeRow['background']);
-                    $storeMemo['background'] = C('config.site_url') . '/upload/background/' . $image_tmp[0] . '/' . $image_tmp['1'];
-                }else{
-                    $storeMemo['background'] = '';
-                }
-                $storeMemo['txt_info'] = $storeRow['txt_info'];
-                $storeMemo['is_close'] = 1;
+                $store_where = array('st.store_id' => $store['store_id']);
+                if($this->app_version < 266) $store_where['st.menu_version'] = 1;
 
-                //@wangchuanyuan 周一到周天
-                $date = date("w");//今天是星期几 @ydhl-wangchuanyuan 20171106
-                $now_time = date('H:i:s');
-                switch ($date){
-                    case 1 :
-                        if ($storeRow['open_1'] != '00:00:00' || $storeRow['close_1'] != '00:00:00'){
-                            if ($storeRow['open_1'] < $now_time && $now_time < $storeRow['close_1']) {
-                                $storeMemo['is_close'] = 0;
-                            }
-                        }
-                        if($storeRow['open_2'] != '00:00:00' || $storeRow['close_2'] != '00:00:00'){
-                            if($storeRow['open_2'] < $now_time && $now_time < $storeRow['close_2']) {
-                                $storeMemo['is_close'] = 0;
-                            }
-                        }
-                        if($storeRow['open_3'] != '00:00:00' || $storeRow['close_3'] != '00:00:00'){
-                            if ($storeRow['open_3'] < $now_time && $now_time < $storeRow['close_3']) {
-                                $storeMemo['is_close'] = 0;
-                            }
-                        }
-                        break;
-                    case 2 ://周二
-                        if ($storeRow['open_4'] != '00:00:00' || $storeRow['close_4'] != '00:00:00') {
-                            if ($storeRow['open_4'] < $now_time && $now_time < $storeRow['close_4']){
-                                $storeMemo['is_close'] = 0;
-                            }
-                        }
-                        if ($storeRow['open_5'] != '00:00:00' || $storeRow['close_5'] != '00:00:00') {
-                            if ($storeRow['open_5'] < $now_time && $now_time < $storeRow['close_5']){
-                                $storeMemo['is_close'] = 0;
-                            }
-                        }
-                        if ($storeRow['open_6'] != '00:00:00' || $storeRow['close_6'] != '00:00:00') {
-                            if ($storeRow['open_6'] < $now_time && $now_time < $storeRow['close_6']){
-                                $storeMemo['is_close'] = 0;
-                            }
-                        }
-                        break;
-                    case 3 ://周三
-                        if ($storeRow['open_7'] != '00:00:00' || $storeRow['close_7'] != '00:00:00') {
-                            if ($storeRow['open_7'] < $now_time && $now_time < $storeRow['close_7']){
-                                $storeMemo['is_close'] = 0;
-                            }
-                        }
-                        if ($storeRow['open_8'] != '00:00:00' || $storeRow['close_8'] != '00:00:00') {
-                            if ($storeRow['open_8'] < $now_time && $now_time < $storeRow['close_8']){
-                                $storeMemo['is_close'] = 0;
-                            }
-                        }
-                        if ($storeRow['open_9'] != '00:00:00' || $storeRow['close_9'] != '00:00:00') {
-                            if ($storeRow['open_9'] < $now_time && $now_time < $storeRow['close_9']){
-                                $storeMemo['is_close'] = 0;
-                            }
-                        }
-                        break;
-                    case 4 :
-                        if ($storeRow['open_10'] != '00:00:00' || $storeRow['close_10'] != '00:00:00') {
-                            if ($storeRow['open_10'] < $now_time && $now_time < $storeRow['close_10']){
-                                $storeMemo['is_close'] = 0;
-                            }
-                        }
-                        if ($storeRow['open_11'] != '00:00:00' || $storeRow['close_11'] != '00:00:00') {
-                            if ($storeRow['open_11'] < $now_time && $now_time < $storeRow['close_11']){
-                                $storeMemo['is_close'] = 0;
-                            }
-                        }
-                        if ($storeRow['open_12'] != '00:00:00' || $storeRow['close_12'] != '00:00:00') {
-                            if ($storeRow['open_12'] < $now_time && $now_time < $storeRow['close_12']){
-                                $storeMemo['is_close'] = 0;
-                            }
-                        }
-                        break;
-                    case 5 :
-                        if ($storeRow['open_13'] != '00:00:00' || $storeRow['close_13'] != '00:00:00') {
-                            if ($storeRow['open_13'] < $now_time && $now_time < $storeRow['close_13']){
-                                $storeMemo['is_close'] = 0;
-                            }
-                        }
-                        if ($storeRow['open_14'] != '00:00:00' || $storeRow['close_14'] != '00:00:00') {
-                            if ($storeRow['open_14'] < $now_time && $now_time < $storeRow['close_14']){
-                                $storeMemo['is_close'] = 0;
-                            }
-                        }
-                        if ($storeRow['open_15'] != '00:00:00' || $storeRow['close_15'] != '00:00:00') {
-                            if ($storeRow['open_15'] < $now_time && $now_time < $storeRow['close_15']){
-                                $storeMemo['is_close'] = 0;
-                            }
-                        }
-                        break;
-                    case 6 :
-                        if ($storeRow['open_16'] != '00:00:00' || $storeRow['close_16'] != '00:00:00') {
-                            if ($storeRow['open_16'] < $now_time && $now_time < $storeRow['close_16']){
-                                $storeMemo['is_close'] = 0;
-                            }
-                        }
-                        if ($storeRow['open_17'] != '00:00:00' || $storeRow['close_17'] != '00:00:00') {
-                            if ($storeRow['open_17'] < $now_time && $now_time < $storeRow['close_17']){
-                                $storeMemo['is_close'] = 0;
-                            }
-                        }
-                        if ($storeRow['open_18'] != '00:00:00' || $storeRow['close_18'] != '00:00:00') {
-                            if ($storeRow['open_18'] < $now_time && $now_time < $storeRow['close_18']){
-                                $storeMemo['is_close'] = 0;
-                            }
-                        }
-                        break;
-                    case 0 :
-                        if ($storeRow['open_19'] != '00:00:00' || $storeRow['close_19'] != '00:00:00') {
-                            if ($storeRow['open_19'] < $now_time && $now_time < $storeRow['close_19']){
-                                $storeMemo['is_close'] = 0;
-                            }
-                        }
-                        if ($storeRow['open_20'] != '00:00:00' || $storeRow['close_20'] != '00:00:00') {
-                            if ($storeRow['open_20'] < $now_time && $now_time < $storeRow['close_20']){
-                                $storeMemo['is_close'] = 0;
-                            }
-                        }
-                        if ($storeRow['open_21'] != '00:00:00' || $storeRow['close_21'] != '00:00:00') {
-                            if ($storeRow['open_21'] < $now_time && $now_time < $storeRow['close_21']){
-                                $storeMemo['is_close'] = 0;
-                            }
-                        }
-                        break;
-                    default :
-                        $storeMemo['is_close'] = 1;
-                }
-                //garfunkel add
-                if($storeRow['store_is_close'] != 0){
+                $storeRow = D('Merchant_store')->field('st.*,sh.background,sh.delivery_radius')->join('as st left join ' . C('DB_PREFIX') . 'merchant_store_shop sh on st.store_id = sh.store_id ')->where($store_where)->find();
+                if($storeRow) {
+                    $storeMemo['store_id'] = $storeRow['store_id'];
+                    $storeMemo['name'] = lang_substr($storeRow['name'], C('DEFAULT_LANG'));
+                    if ($storeRow['background'] && $storeRow['background'] != '') {
+                        $image_tmp = explode(',', $storeRow['background']);
+                        $storeMemo['background'] = C('config.site_url') . '/upload/background/' . $image_tmp[0] . '/' . $image_tmp['1'];
+                    } else {
+                        $storeMemo['background'] = '';
+                    }
+                    $storeMemo['txt_info'] = $storeRow['txt_info'];
                     $storeMemo['is_close'] = 1;
-                }
 
-                if($storeRow['status'] == 1) {
-                    $distance = getDistance($lat, $long, $storeRow['lat'], $storeRow['long']);
-                    if ($distance < $storeRow['delivery_radius'] * 1000) {
-                        if ($storeMemo['is_close'] == 0) {
-                            $allClose = false;
-                            $openArr[] = $storeMemo;
-                        } else {
-                            $closeArr[] = $storeMemo;
+                    //@wangchuanyuan 周一到周天
+                    $date = date("w");//今天是星期几 @ydhl-wangchuanyuan 20171106
+                    $now_time = date('H:i:s');
+                    switch ($date) {
+                        case 1 :
+                            if ($storeRow['open_1'] != '00:00:00' || $storeRow['close_1'] != '00:00:00') {
+                                if ($storeRow['open_1'] < $now_time && $now_time < $storeRow['close_1']) {
+                                    $storeMemo['is_close'] = 0;
+                                }
+                            }
+                            if ($storeRow['open_2'] != '00:00:00' || $storeRow['close_2'] != '00:00:00') {
+                                if ($storeRow['open_2'] < $now_time && $now_time < $storeRow['close_2']) {
+                                    $storeMemo['is_close'] = 0;
+                                }
+                            }
+                            if ($storeRow['open_3'] != '00:00:00' || $storeRow['close_3'] != '00:00:00') {
+                                if ($storeRow['open_3'] < $now_time && $now_time < $storeRow['close_3']) {
+                                    $storeMemo['is_close'] = 0;
+                                }
+                            }
+                            break;
+                        case 2 ://周二
+                            if ($storeRow['open_4'] != '00:00:00' || $storeRow['close_4'] != '00:00:00') {
+                                if ($storeRow['open_4'] < $now_time && $now_time < $storeRow['close_4']) {
+                                    $storeMemo['is_close'] = 0;
+                                }
+                            }
+                            if ($storeRow['open_5'] != '00:00:00' || $storeRow['close_5'] != '00:00:00') {
+                                if ($storeRow['open_5'] < $now_time && $now_time < $storeRow['close_5']) {
+                                    $storeMemo['is_close'] = 0;
+                                }
+                            }
+                            if ($storeRow['open_6'] != '00:00:00' || $storeRow['close_6'] != '00:00:00') {
+                                if ($storeRow['open_6'] < $now_time && $now_time < $storeRow['close_6']) {
+                                    $storeMemo['is_close'] = 0;
+                                }
+                            }
+                            break;
+                        case 3 ://周三
+                            if ($storeRow['open_7'] != '00:00:00' || $storeRow['close_7'] != '00:00:00') {
+                                if ($storeRow['open_7'] < $now_time && $now_time < $storeRow['close_7']) {
+                                    $storeMemo['is_close'] = 0;
+                                }
+                            }
+                            if ($storeRow['open_8'] != '00:00:00' || $storeRow['close_8'] != '00:00:00') {
+                                if ($storeRow['open_8'] < $now_time && $now_time < $storeRow['close_8']) {
+                                    $storeMemo['is_close'] = 0;
+                                }
+                            }
+                            if ($storeRow['open_9'] != '00:00:00' || $storeRow['close_9'] != '00:00:00') {
+                                if ($storeRow['open_9'] < $now_time && $now_time < $storeRow['close_9']) {
+                                    $storeMemo['is_close'] = 0;
+                                }
+                            }
+                            break;
+                        case 4 :
+                            if ($storeRow['open_10'] != '00:00:00' || $storeRow['close_10'] != '00:00:00') {
+                                if ($storeRow['open_10'] < $now_time && $now_time < $storeRow['close_10']) {
+                                    $storeMemo['is_close'] = 0;
+                                }
+                            }
+                            if ($storeRow['open_11'] != '00:00:00' || $storeRow['close_11'] != '00:00:00') {
+                                if ($storeRow['open_11'] < $now_time && $now_time < $storeRow['close_11']) {
+                                    $storeMemo['is_close'] = 0;
+                                }
+                            }
+                            if ($storeRow['open_12'] != '00:00:00' || $storeRow['close_12'] != '00:00:00') {
+                                if ($storeRow['open_12'] < $now_time && $now_time < $storeRow['close_12']) {
+                                    $storeMemo['is_close'] = 0;
+                                }
+                            }
+                            break;
+                        case 5 :
+                            if ($storeRow['open_13'] != '00:00:00' || $storeRow['close_13'] != '00:00:00') {
+                                if ($storeRow['open_13'] < $now_time && $now_time < $storeRow['close_13']) {
+                                    $storeMemo['is_close'] = 0;
+                                }
+                            }
+                            if ($storeRow['open_14'] != '00:00:00' || $storeRow['close_14'] != '00:00:00') {
+                                if ($storeRow['open_14'] < $now_time && $now_time < $storeRow['close_14']) {
+                                    $storeMemo['is_close'] = 0;
+                                }
+                            }
+                            if ($storeRow['open_15'] != '00:00:00' || $storeRow['close_15'] != '00:00:00') {
+                                if ($storeRow['open_15'] < $now_time && $now_time < $storeRow['close_15']) {
+                                    $storeMemo['is_close'] = 0;
+                                }
+                            }
+                            break;
+                        case 6 :
+                            if ($storeRow['open_16'] != '00:00:00' || $storeRow['close_16'] != '00:00:00') {
+                                if ($storeRow['open_16'] < $now_time && $now_time < $storeRow['close_16']) {
+                                    $storeMemo['is_close'] = 0;
+                                }
+                            }
+                            if ($storeRow['open_17'] != '00:00:00' || $storeRow['close_17'] != '00:00:00') {
+                                if ($storeRow['open_17'] < $now_time && $now_time < $storeRow['close_17']) {
+                                    $storeMemo['is_close'] = 0;
+                                }
+                            }
+                            if ($storeRow['open_18'] != '00:00:00' || $storeRow['close_18'] != '00:00:00') {
+                                if ($storeRow['open_18'] < $now_time && $now_time < $storeRow['close_18']) {
+                                    $storeMemo['is_close'] = 0;
+                                }
+                            }
+                            break;
+                        case 0 :
+                            if ($storeRow['open_19'] != '00:00:00' || $storeRow['close_19'] != '00:00:00') {
+                                if ($storeRow['open_19'] < $now_time && $now_time < $storeRow['close_19']) {
+                                    $storeMemo['is_close'] = 0;
+                                }
+                            }
+                            if ($storeRow['open_20'] != '00:00:00' || $storeRow['close_20'] != '00:00:00') {
+                                if ($storeRow['open_20'] < $now_time && $now_time < $storeRow['close_20']) {
+                                    $storeMemo['is_close'] = 0;
+                                }
+                            }
+                            if ($storeRow['open_21'] != '00:00:00' || $storeRow['close_21'] != '00:00:00') {
+                                if ($storeRow['open_21'] < $now_time && $now_time < $storeRow['close_21']) {
+                                    $storeMemo['is_close'] = 0;
+                                }
+                            }
+                            break;
+                        default :
+                            $storeMemo['is_close'] = 1;
+                    }
+                    //garfunkel add
+                    if ($storeRow['store_is_close'] != 0) {
+                        $storeMemo['is_close'] = 1;
+                    }
+
+                    if ($storeRow['status'] == 1) {
+                        $distance = getDistance($lat, $long, $storeRow['lat'], $storeRow['long']);
+                        if ($distance < $storeRow['delivery_radius'] * 1000) {
+                            if ($storeMemo['is_close'] == 0) {
+                                $allClose = false;
+                                $openArr[] = $storeMemo;
+                            } else {
+                                $closeArr[] = $storeMemo;
+                            }
                         }
                     }
                 }
@@ -331,18 +341,22 @@ class IndexAction extends BaseAction
         $category = D('Shop_category')->field(true)->where(array('cat_id'=>$cat_fid))->find();
         $result['cat_name'] = lang_substr($category['cat_name'], C('DEFAULT_LANG'));
 
+        $getMenuVersion = -1;//-1 全部 1只有version=1的 2
+        if($this->app_version < 266)
+            $getMenuVersion = 1;
+
         $where = array('deliver_type' => $deliver_type, 'order' => $order, 'lat' => $lat, 'long' => $long, 'cat_id' => $cat_id, 'cat_fid' => $cat_fid, 'page' => $page, 'limit' => $limit);
         if($category['cat_type'] == 1){
             if($page == 1)
-                $shop_list = D('Merchant_store_shop')->get_list_arrange($where,1,2,$limit,$page,$lat,$long,$city_id);
+                $shop_list = D('Merchant_store_shop')->get_list_arrange($where,1,2,$limit,$page,$lat,$long,$city_id,$getMenuVersion);
         }else {
             $key = '';
             if ($_POST['keyword']) {
                 $key = $_POST['keyword'];
                 $key && $where['key'] = $key;
-                $shop_list = D('Merchant_store_shop')->get_list_arrange($where, 1, 1, $limit, $page, $lat, $long,$city_id);
+                $shop_list = D('Merchant_store_shop')->get_list_arrange($where, 1, 1, $limit, $page, $lat, $long,$city_id,$getMenuVersion);
             } else {
-                $shop_list = D('Merchant_store_shop')->get_list_arrange($where, 3, 1, $limit, $page, $lat, $long,$city_id);
+                $shop_list = D('Merchant_store_shop')->get_list_arrange($where, 3, 1, $limit, $page, $lat, $long,$city_id,$getMenuVersion);
             }
 
         }
@@ -1547,7 +1561,6 @@ class IndexAction extends BaseAction
         }
         $order_detail['now_time'] = time();
 
-        $store = D('Store')->get_store_by_id($order['store_id']);
         $order_detail['site_name'] = $store['site_name'];
         $order_detail['tel'] = $store['phone'];
         $order_detail['store_service_fee'] = $store['service_fee'];
@@ -1637,7 +1650,8 @@ class IndexAction extends BaseAction
 
                     $dish_desc = $dish_desc == "" ? $add_str : $dish_desc.";".$add_str;
                 }
-                $goods['spec_desc'] = $goods['spec_desc'] == '' ? $dish_desc : $goods['spec_desc'].";".$dish_desc;
+                //$goods['spec_desc'] = $goods['spec_desc'] == '' ? $dish_desc : $goods['spec_desc'].";".$dish_desc;
+                $goods['spec_desc'] = str_replace('<br/>','',$v['spec']);
             }
 
             if($store['menu_version'] == 2){

@@ -7,7 +7,7 @@ class Merchant_store_shopModel extends Model
 	 * @param array $where
 	 * @param number $limit
 	 */
-	public function get_list_by_option($where = array(), $is_wap = 1)
+	public function get_list_by_option($where = array(), $is_wap = 1,$menu_version = -1)
 	{
 		$deliver_type = isset($where['deliver_type']) ? $where['deliver_type'] : 'all';
 		$order_str = isset($where['order']) ? $where['order'] : 'juli';
@@ -19,6 +19,9 @@ class Merchant_store_shopModel extends Model
 
 //		$condition_where = "s.city_id='".C('config.now_city')."' AND s.have_meal=1 AND s.status=1 AND s.store_id=m.store_id";
 		$condition_where = "s.status=1 AND s.store_id=m.store_id AND s.have_shop=1 AND (cc.range_type=0 OR (cc.range_type=1 AND {$lat}<cc.range_para))";
+
+		if($menu_version != -1) $condition_where .= " AND s.menu_version=".$menu_version;
+
 		if (C('config.store_shop_auth') == 1) {
 			$condition_where .= " AND s.auth>2";
 		}
@@ -882,7 +885,7 @@ class Merchant_store_shopModel extends Model
      * @param int $page_count
      * @return array
      */
-    public function get_list_arrange($where = array(), $is_wap = 1,$type = 1,$limit,$page = 1,$lat=0,$long=0,$city_id = -1)
+    public function get_list_arrange($where = array(), $is_wap = 1,$type = 1,$limit,$page = 1,$lat=0,$long=0,$city_id = -1,$menu_version = -1)
     {
         if($city_id == -1){
             $city_id = D('Store')->geocoderGoogle($lat,$long);
@@ -891,7 +894,7 @@ class Merchant_store_shopModel extends Model
 
         switch ($type){
             case 1:
-                $t_list = $this->get_list_by_option($where,$is_wap);
+                $t_list = $this->get_list_by_option($where,$is_wap,$menu_version);
                 break;
 
             case 2:

@@ -229,9 +229,21 @@ class MerchantAction extends BaseAction{
 			if ($_POST['status']) {
                 if ($_POST['status'] == 'on') {
                     $_POST['status'] = 1;
+                }else{
+                    $_POST['status'] = 0;
                 }
             }else{
                 $_POST['status'] = 0;
+            }
+
+            if($_POST['status'] == 0){
+                $storeList = D('Merchant_store')->where(array('mer_id'=>$_POST['mer_id']))->select();
+
+                $storeIds = array();
+                foreach ($storeList as $store){
+                    $storeIds[] = $store['store_id'];
+                }
+                D('Cart')->where(array('sid'=>array('in',$storeIds)))->delete();
             }
 
 			$database_merchant->data($_POST)->save();
