@@ -30,7 +30,7 @@ class CartModel extends Model
         $data['num'] = $num;
         $data['spec'] = $spec;
         $data['proper'] = $proper;
-        $data['dish_id'] = $dish_id;
+        $data['dish_id'] = $this->arrage_dish_id($dish_id,$fid);
         $data['time'] = date("Y-m-d H:i:s");
 
         $where = array('uid'=>$uid,'fid'=>$fid,'spec'=>$spec,'proper'=>$proper,'dish_id'=>$dish_id,'sid'=>$storeId,'categoryId'=>$categoryId);
@@ -54,6 +54,29 @@ class CartModel extends Model
         }
 
         return true;
+    }
+
+    public function arrage_dish_id($dish_id,$productId){
+        $allList = explode('|',$dish_id);
+
+        $afterList = array();
+        foreach ($allList as $dish){
+            $dishValue = explode(',',$dish);
+            if($dishValue[4] == $productId){
+                $afterList[$dishValue[1]][] = $dish;
+            }else{
+                $afterList[$dishValue[4]][] = $dish;
+            }
+        }
+
+        $newList = array();
+        foreach ($afterList as $v){
+            foreach ($v as $vv){
+                $newList[] = $vv;
+            }
+        }
+
+        return implode('|',$newList);
     }
 
     public function get_cart($uid,$storeId = 0){
