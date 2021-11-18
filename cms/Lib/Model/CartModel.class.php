@@ -64,9 +64,9 @@ class CartModel extends Model
         foreach ($allList as $dish){
             $dishValue = explode(',',$dish);
             if($dishValue[4] == $productId){
-                $afterList[$dishValue[1]][] = $dish;
+                $afterList[$dishValue[0].$dishValue[1]][] = $dish;
             }else{
-                $afterList[$dishValue[4]][] = $dish;
+                $afterList[$dishValue[5].$dishValue[4]][] = $dish;
             }
         }
 
