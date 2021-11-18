@@ -186,9 +186,9 @@
         }
         #position_div{
             padding: 0px 10%;
-            font-size: 18px;
+            font-size: 16px;
             line-height: 35px;
-            color: #555555;
+            color: #333333;
         }
         #position_div div{
             white-space: nowrap;
@@ -198,8 +198,17 @@
         }
         .title_icon{
             color: #ffa52d;
-            vertical-align: text-top;
+            vertical-align: middle;
             font-size: 26px !important;
+        }
+        .color_2 .title_icon{
+            color: #864648;
+        }
+        .color_3 .title_icon{
+            color: #7094E6;
+        }
+        .color_0 .title_icon{
+            color: #5D9CBA;
         }
         .send_btn{
             width: 92%;
@@ -237,100 +246,7 @@
 
     </div>
     <div id="deliver_middle_div">
-        <div class="deliver_order">
-            <div class="deliver_top">
-                #123456 - Accepted
-                <span class="material-icons" style="float: right;">arrow_forward</span>
-            </div>
-            <div class="store_name" style="text-align: center">
-                Jans fds fdsa fdsa fdsa
-            </div>
-            <div class="order_time" style="text-align: center;border-bottom: 0px;">
-                0.5 from you
-                ·
-                Order is ready
-            </div>
-            <div id="position_div">
-                <div>
-                    <span class="material-icons title_icon">restaurant</span>
-                    852 Fort St, Victoria, BC
-                </div>
-                <div>
-                    <span class="material-icons title_icon">pin_drop</span>
-                    852 Fort St, Victoria, BC
-                </div>
-            </div>
-        </div>
-        <div class="deliver_order">
-            <div class="deliver_top">
-                #123456 - Accepted
-                <span class="material-icons" style="float: right;">arrow_forward</span>
-            </div>
-            <div class="store_name" style="text-align: center">
-                Jans fds fdsa fdsa fdsa
-            </div>
-            <div class="order_time" style="text-align: center;border-bottom: 0px;">
-                0.5 from you
-                ·
-                Order is ready
-            </div>
-            <div id="position_div">
-                <div>
-                    <span class="material-icons title_icon">restaurant</span>
-                    852 Fort St, Victoria, BC
-                </div>
-                <div>
-                    <span class="material-icons title_icon">pin_drop</span>
-                    852 Fort St, Victoria, BC
-                </div>
-            </div>
-        </div><div class="deliver_order">
-            <div class="deliver_top">
-                #123456 - Accepted
-                <span class="material-icons" style="float: right;">arrow_forward</span>
-            </div>
-            <div class="store_name" style="text-align: center">
-                Jans fds fdsa fdsa fdsa
-            </div>
-            <div class="order_time" style="text-align: center;border-bottom: 0px;">
-                0.5 from you
-                ·
-                Order is ready
-            </div>
-            <div id="position_div">
-                <div>
-                    <span class="material-icons title_icon">restaurant</span>
-                    852 Fort St, Victoria, BC
-                </div>
-                <div>
-                    <span class="material-icons title_icon">pin_drop</span>
-                    852 Fort St, Victoria, BC
-                </div>
-            </div>
-        </div><div class="deliver_order">
-            <div class="deliver_top">
-                #123456 - Accepted
-                <span class="material-icons" style="float: right;">arrow_forward</span>
-            </div>
-            <div class="store_name" style="text-align: center">
-                Jans fds fdsa fdsa fdsa
-            </div>
-            <div class="order_time" style="text-align: center;border-bottom: 0px;">
-                0.5 from you
-                ·
-                Order is ready
-            </div>
-            <div id="position_div">
-                <div>
-                    <span class="material-icons title_icon">restaurant</span>
-                    852 Fort St, Victoria, BC
-                </div>
-                <div>
-                    <span class="material-icons title_icon">pin_drop</span>
-                    852 Fort St, Victoria, BC
-                </div>
-            </div>
-        </div>
+
     </div>
     <div id="bottom_nav">
         <span id="gray_count" class="active" data-show="gray_middle_div" data-hide="deliver_middle_div"></span>
@@ -366,8 +282,25 @@
                     var hide_id = $(this).data('hide');
                     $('#'+hide_id).hide();
                     $(this).addClass('active').siblings().removeClass('active');
+
+                    if(show_id == 'deliver_middle_div') loadProcess();
                 });
             });
+
+            function loadProcess(){
+                $.post("{pigcms{:U('Deliver/get_process')}",{"status":0,'lat':lat, 'lng':lng},function(result){
+                    if(!result.error_code) {
+                        laytpl($('#processListBoxTpl').html()).render(result, function (html) {
+                            $('#deliver_middle_div').html(html);
+                        });
+
+                        $('.deliver_order').bind('click',function () {
+                            var order_id = $(this).data('id');
+                            location.href = "{pigcms{:U('Wap/Deliver/detail', array('supply_id'=>'"+order_id+"'))}";
+                        });
+                    }
+                },'json');
+            }
         </script>
     </if>
     <script id="replyListBoxTpl" type="text/html">
@@ -426,6 +359,52 @@
                 Accept
             </div>
             </a>
+        {{# } }}
+    </script>
+    <script id="processListBoxTpl" type="text/html">
+        {{# for(var i = 0, len = d.list.length; i < len; i++){ }}
+        <div class="deliver_order" data-id="{{ d.list[i].supply_id }}">
+            <div class="deliver_top">
+                #{{ d.list[i].order_id }} -
+                {{# if(d.list[i].status == 2){ }}
+                {pigcms{:L('_ND_WAITING_')}
+                {{# } else if(d.list[i].status == 3) { }}
+                {pigcms{:L('_ND_INHAND_')}
+                {{# } else { }}
+                {pigcms{:L('_ND_ARRIVING_')}
+                {{# } }}
+                <span class="material-icons" style="float: right;">arrow_forward</span>
+            </div>
+            <div class="store_name" style="text-align: center">
+                {{ d.list[i].store_name }}
+            </div>
+            <div class="order_time" style="text-align: center;border-bottom: 0px;">
+                0.5 from you
+                ·
+                {{# if(d.list[i].is_dinning == 1){ }}
+                Order is ready
+                {{# } else { }}
+                Order will be ready in
+                {{# } }}
+                {{ d.list[i].show_dining_time }}
+            </div>
+            {{# if(d.list[i].status == 2){ }}
+                <div id="position_div" class="color_2">
+            {{# } else if(d.list[i].status == 3) { }}
+                <div id="position_div" class="color_3">
+            {{# } else { }}
+                <div id="position_div" class="color_0">
+            {{# } }}
+                <div>
+                    <span class="material-icons title_icon">restaurant</span>
+                    {{ d.list[i].from_site }}
+                </div>
+                <div>
+                    <span class="material-icons title_icon">pin_drop</span>
+                    {{ d.list[i].user_address.adress }}
+                </div>
+            </div>
+        </div>
         {{# } }}
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKlguA2QFIUVwWTo3danbOqSKv3nYbBCg&callback=initMap&language=en" async defer></script>

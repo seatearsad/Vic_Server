@@ -15,7 +15,7 @@
 <script type="text/javascript" src="{pigcms{$static_path}js/mobiscroll.2.13.2.js"></script>
 </head>
 <style>
-    body{background-color: #F8F8F8;}
+    body{background-color: #F8F8F8;position: unset}
     .list_head{
         width: 90%;
         margin: 5px auto;
@@ -94,6 +94,25 @@
         line-height: 20px;
         color: #294068;
     }
+    #sub_btn{
+        position: absolute;
+        bottom: 30px;
+        width: 90%;
+        height: 40px;
+        line-height: 40px;
+        left: 5%;
+        background-color: #ffa52d;
+        color: white;
+        font-size: 18px;
+        font-weight: bold;
+        text-align: center;
+        border-radius: 10px;
+        cursor: pointer;
+    }
+    #sub_btn a{
+        color: white;
+        display: block;
+    }
 </style>
 <body>
     <include file="header" />
@@ -110,7 +129,14 @@
         <if condition="$supply['pay_method'] neq 1">
             <span class="span_right">
                 <label style="border: 1px solid #294068; border-radius: 5px;font-size: 14px;padding: 5px 10px;">
-                    {pigcms{:L('_ND_CASH_')}
+                    <if condition="$supply['uid'] eq 0">
+                        {pigcms{:L('_ND_UNPAID_')}
+                    </if>
+                    <if condition="$supply['uid'] neq 0 and $supply['pay_method'] eq 1">
+                        {pigcms{:L('_ND_PAID_')}
+                        <else />
+                        {pigcms{:L('_ND_CASH_')}
+                    </if>
                 </label>
             </span>
         </if>
@@ -119,6 +145,63 @@
         <span class="material-icons" style="vertical-align: text-top;">restaurant</span>
         <span style="margin-left: -10px;">{pigcms{:lang_substr($store['name'],C('DEFAULT_LANG'))}</span>
     </div>
+    <if condition="$supply['status'] eq 2">
+        <div class="order_time">
+            <div style="color: #333333;font-weight: bold;margin-left: 35px;margin-top: -15px;">
+                {pigcms{$supply['from_site']}
+            </div>
+            <div style="margin-left: 35px;margin-top: 10px;">
+                Please call and wait in front of the door to pick up the order
+            </div>
+            <div style="margin-left: 35px;margin-top: 20px;font-size: 18px">
+                <span style="line-height: 40px;background-color: #294068;padding:10px 20px;color: white;border-radius: 20px;">
+                    <label class="material-icons" style="vertical-align: middle;width: 30px;">open_in_new</label>
+                    Get Direction
+                </span>
+                <span style="width: 40px;height:40px;border-radius: 20px;background-color: #294068;float: right">
+                    <label class="material-icons" style="color: white;font-size: 26px;margin-top: 7px;margin-left: 7px;">phone</label>
+                </span>
+            </div>
+        </div>
+    </if>
+    <if condition="$supply['status'] eq 3">
+        <div class="order_num" style="margin-top:-25px;">
+            <span class="material-icons" style="vertical-align: text-top;">person</span>
+            <span style="margin-left: -10px;">{pigcms{$order['username']}</span>
+        </div>
+        <div class="order_time">
+            <div style="color: #333333;font-weight: bold;margin-left: 30px;margin-top: -15px;">
+                {pigcms{$supply['aim_site']}
+            </div>
+            <div style="margin-left: 30px;margin-top: 20px;font-size: 18px">
+                <span style="line-height: 40px;background-color: #294068;padding:10px 20px;color: white;border-radius: 20px;">
+                    <label class="material-icons" style="vertical-align: middle;width: 30px;">open_in_new</label>
+                    Get Direction
+                </span>
+                <span style="width: 40px;height:40px;border-radius: 20px;background-color: #294068;float: right">
+                    <label class="material-icons" style="color: white;font-size: 26px;margin-top: 7px;margin-left: 7px;">phone</label>
+                </span>
+            </div>
+        </div>
+        <if condition="$order['not_touch'] eq 1 or $user_address['detail'] neq ''">
+        <div class="amount_div">
+            <div class="order_time" style="color: #294068;font-size: 16px;">
+                <span class="material-icons" style="vertical-align: middle">assignment</span>
+                <span style="margin-left: -10px;font-weight: bold;">
+                    <if condition="$order['not_touch'] eq 1">
+                        No Contact Delivery
+                        <else />
+                        Delivery Instruction
+                    </if>
+                </span>
+                <div style="margin-left: 30px;font-size: 14px;color: #333333">
+                    {pigcms{$user_address.detail}
+                </div>
+            </div>
+        </div>
+        </if>
+    </if>
+    <if condition="$supply['status'] eq 5">
     <div class="order_time">
         <div class="time_sub">
             <span>{pigcms{:L('_ND_ORDERTYPE_')}</span>
@@ -181,9 +264,17 @@
             </span>
         </div>
     </div>
+    </if>
+
     <div class="order_num">
-        <span class="material-icons" style="vertical-align: text-top;">subject</span>
-        <span style="margin-left: -10px;">Order Detail</span>
+        <if condition="$supply['status'] eq 5">
+            <span class="material-icons" style="vertical-align: text-top;">subject</span>
+            <span style="margin-left: -10px;">Order Detail</span>
+        </if>
+        <if condition="$supply['status'] eq 2">
+            <span class="material-icons" style="vertical-align: text-top;">person</span>
+            <span style="margin-left: -10px;">{pigcms{$order['username']}</span>
+        </if>
     </div>
     <div class="goods_detail">
         <ul>
@@ -218,6 +309,24 @@
             </volist>
         </ul>
     </div>
+
+    <if condition="$supply['status'] neq 5">
+    <div id="sub_btn">
+        <if condition="$supply['status'] eq 2">
+            <a href="javascript:void(0);" data-id="{pigcms{$supply['supply_id']}" data-status="{pigcms{$supply['status']}" data-url="{pigcms{:U('Deliver/pick')}">
+                I got the order!
+            </a>
+            <elseif condition="$supply['status'] eq 3" />
+            <a href="javascript:void(0);" data-id="{pigcms{$supply['supply_id']}" data-status="{pigcms{$supply['status']}" data-url="{pigcms{:U('Deliver/send')}">
+                I'm heading to the customer!
+            </a>
+            <elseif condition="$supply['status'] eq 4" />
+            <a href="javascript:void(0);" data-id="{pigcms{$supply['supply_id']}" data-status="{pigcms{$supply['status']}" data-url="{pigcms{:U('Deliver/my')}">
+                Delivered!
+            </a>
+        </if>
+    </div>
+    </if>
 <script>
 var ua = navigator.userAgent;
 if(!ua.match(/TuttiDeliver/i)) {
@@ -238,6 +347,70 @@ function updatePosition(lat,lng){
 
     return message;
 }
+
+$(document).ready(function(){
+    var mark = 0;
+    $(document).on('click', '#sub_btn a', function(e){
+        e.stopPropagation();
+        if (mark == 1) return false;
+        mark = 1;
+        var supply_id = $(this).attr("data-id"), post_url = $(this).data('url'), status = $(this).data('status');
+
+        if (status == 5) {
+            layer.open({
+                content: '删除后就不再显示了，但是不影响您的接单统计!',
+                btn: ['确认', '取消'],
+                shadeClose: false,
+                yes: function(){
+                    layer.closeAll();
+                    $.post(post_url, {supply_id:supply_id}, function(json){
+                        if (json.status) {
+                            location.href = "{pigcms{:U('Deliver/finish')}";
+                            $('.supply_' + supply_id).hide();
+                        } else {
+                            layer.open({title:['提示：','background-color:#FF658E;color:#fff;'], content:json.info, btn: ['确定'],end:function(){}});
+                        }
+                    }, 'json');
+                }, no: function(){
+                    layer.open({content: '你选择了取消', time: 1});
+                }
+            });
+        } else {
+            $.post(post_url, {'supply_id':supply_id}, function(json){
+                mark = 0;
+                if (json.status) {
+                    if(status == 4) {
+                        var pay_method = "{pigcms{$order['pay_method']}";
+                        var content = "{pigcms{:L('_ND_CASHORDERNOTICE_')}";
+                        if(pay_method == 1){
+                            content = "Order Completed! Delivery Fee: ${pigcms{$order.freight_charge}. Tips: ${pigcms{$order.tip_charge}. Thank you for your delivery!"
+                        }
+                        layer.open({
+                            title: ['{pigcms{:L("_ND_TISHI_")}', 'background-color:#ffa52d;color:#fff;'],
+                            content: content,
+                            btn: ['{pigcms{:L("_ND_CONFIRM1_")}'],
+                            end: function () {
+                                location.reload();
+                            }
+                        });
+                    }else {
+                        layer.open({
+                            title: ['{pigcms{:L("_ND_TISHI_")}', 'background-color:#ffa52d;color:#fff;'],
+                            time: 2,
+                            content: json.info,
+                            end: function () {
+                                location.reload();
+                            }
+                        });
+                    }
+                } else {
+                    layer.open({title:['{pigcms{:L("_ND_TISHI_")}','background-color:#FF658E;color:#fff;'], content:json.info, btn: ['{pigcms{:L("_ND_CONFIRM1_")}'], end:function(){}});
+                }
+                $(".supply_"+supply_id).remove();
+            });
+        }
+    });
+});
 </script>
 </body>
 </html>
