@@ -113,6 +113,16 @@
         color: white;
         display: block;
     }
+    #pay_online{
+        float: right;
+        padding: 5px 10px;
+        background-color: white;
+        border: 1px solid #294068;
+        border-radius: 10px;
+        font-size: 14px;
+        line-height: 25px;
+        font-weight: bold;
+    }
 </style>
 <body>
     <include file="header" />
@@ -164,7 +174,7 @@
             </div>
         </div>
     </if>
-    <if condition="$supply['status'] eq 3">
+    <if condition="$supply['status'] eq 3 or $supply['status'] eq 4">
         <div class="order_num" style="margin-top:-25px;">
             <span class="material-icons" style="vertical-align: text-top;">person</span>
             <span style="margin-left: -10px;">{pigcms{$order['username']}</span>
@@ -183,16 +193,12 @@
                 </span>
             </div>
         </div>
-        <if condition="$order['not_touch'] eq 1 or $user_address['detail'] neq ''">
+        <if condition="$order['not_touch'] eq 1">
         <div class="amount_div">
             <div class="order_time" style="color: #294068;font-size: 16px;">
                 <span class="material-icons" style="vertical-align: middle">assignment</span>
                 <span style="margin-left: -10px;font-weight: bold;">
-                    <if condition="$order['not_touch'] eq 1">
                         No Contact Delivery
-                        <else />
-                        Delivery Instruction
-                    </if>
                 </span>
                 <div style="margin-left: 30px;font-size: 14px;color: #333333">
                     {pigcms{$user_address.detail}
@@ -200,6 +206,42 @@
             </div>
         </div>
         </if>
+        <if condition="$user_address['detail'] neq ''">
+            <div class="amount_div">
+                <div class="order_time" style="color: #294068;font-size: 16px;">
+                    <span class="material-icons" style="vertical-align: middle">assignment</span>
+                    <span style="margin-left: -10px;font-weight: bold;">
+                        Delivery Instruction
+                </span>
+                    <div style="margin-left: 30px;font-size: 14px;color: #333333">
+                        {pigcms{$user_address.detail}
+                    </div>
+                </div>
+            </div>
+        </if>
+    </if>
+    <if condition="$supply['status'] eq 4">
+        <div class="amount_div" style="margin-top: 10px;">
+            <div class="order_time" style="color: #294068;font-size: 16px;padding-bottom: 0px;">
+                <span style="padding-right:15px; padding-left: 10px; font-size: 18px;"> $ </span>
+                <span style="margin-left: -10px;font-weight: bold;">
+                    {pigcms{:L('_ND_DUEONDELIVERY_')}: ${pigcms{$order['deliver_cash']|floatval}
+                </span>
+                <div style="margin-left: 30px;font-size: 14px;color: #333333;margin-top: 10px;">
+                    <if condition="$supply['uid'] eq 0">
+                        Collect payment from the customer by cash or online
+                    </if>
+                    <if condition="$supply['pay_method'] neq 1">
+                        Please collect cash when you arrive. You can keep them and we’ll deduct the order price from your earnings
+                    </if>
+                </div>
+                <div style="height: 20px;padding-top: 10px;">
+                    <span id="pay_online">
+                        Pay Online
+                    </span>
+                </div>
+            </div>
+        </div>
     </if>
     <if condition="$supply['status'] eq 5">
     <div class="order_time">
@@ -275,6 +317,13 @@
             <span class="material-icons" style="vertical-align: text-top;">person</span>
             <span style="margin-left: -10px;">{pigcms{$order['username']}</span>
         </if>
+        <if condition="$supply['status'] eq 3">
+            <if condition="$supply['uid'] eq 0 or $supply['pay_method'] neq 1">
+            <div style="margin-left: 30px;font-size: 15px;margin-bottom: 10px;">
+                Amount Due on Delivery: ${pigcms{$order['deliver_cash']|floatval}
+            </div>
+            </if>
+        </if>
     </div>
     <div class="goods_detail">
         <ul>
@@ -347,6 +396,10 @@ function updatePosition(lat,lng){
 
     return message;
 }
+
+$('#pay_online').click(function () {
+    location.href = "{pigcms{:U('Wap/Deliver/online', array('supply_id'=>$supply['supply_id'],'lang'=>'en'))}";
+});
 
 $(document).ready(function(){
     var mark = 0;

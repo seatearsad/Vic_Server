@@ -2446,43 +2446,54 @@ class DeliverAction extends BaseAction
             if ($this->deliver_session['group'] == 2 && $this->deliver_session['store_id']) {
                 $where['store_id'] = $this->deliver_session['store_id'];
             }
-            $list = $this->deliver_supply->field(true)->where($where)->order("`create_time` DESC")->select();
-            if (false === $list) {
+            $supply = $this->deliver_supply->field(true)->where($where)->order("`create_time` DESC")->find();
+            if (false === $supply) {
                 $this->error("系统错误");exit;
             }
 
-            foreach ($list as &$val) {
-                switch ($val['pay_type']) {
-                    case 'offline':
-                    case 'Cash':
-                        $val['pay_method'] = 0;
-                        break;
-                    default:
-                        if ($val['paid']) {
-                            $val['pay_method'] = 1;
-                        } else {
-                            $val['pay_method'] = 0;
-                        }
-                        break;
-                }
-                $val['deliver_cash'] = floatval($val['deliver_cash']);
-                $val['distance'] = floatval($val['distance']);
-                $val['freight_charge'] = floatval($val['freight_charge']);
-                $val['create_time'] = date('Y-m-d H:i', $val['create_time']);
-                $val['appoint_time'] = date('Y-m-d H:i', $val['appoint_time']);
-                $val['order_time'] = $val['order_time'] ? date('Y-m-d H:i', $val['order_time']) : '--';
-                $val['real_orderid'] = $val['real_orderid'] ? $val['real_orderid'] : $val['order_id'];
-                $val['map_url'] = U('Deliver/map', array('supply_id' => $val['supply_id']));
-                if ($val['change_log']) {
-                    $changes = explode(',', $val['change_log']);
-                    $uid = array_pop($changes);
-                    $val['change_name'] = $this->getDeliverUser($uid);
-                }
-                $order = D('Shop_order')->get_order_by_orderid($val['order_id']);
-                $val['tip_charge'] = $order['tip_charge'];
-                $val['uid'] = $order['uid'];
+
+            switch ($supply['pay_type']) {
+                case 'offline':
+                case 'Cash':
+                    $val['pay_method'] = 0;
+                    break;
+                default:
+                    if ($supply['paid']) {
+                        $supply['pay_method'] = 1;
+                    } else {
+                        $supply['pay_method'] = 0;
+                    }
+                    break;
             }
-            $this->assign('list', $list);
+            $supply['deliver_cash'] = floatval($supply['deliver_cash']);
+            $supply['distance'] = floatval($supply['distance']);
+            $supply['freight_charge'] = floatval($supply['freight_charge']);
+            $supply['create_time'] = date('Y-m-d H:i', $supply['create_time']);
+            $supply['appoint_time'] = date('Y-m-d H:i', $supply['appoint_time']);
+            $supply['order_time'] = $supply['order_time'] ? date('Y-m-d H:i', $supply['order_time']) : '--';
+            $supply['real_orderid'] = $supply['real_orderid'] ? $supply['real_orderid'] : $supply['order_id'];
+            $supply['map_url'] = U('Deliver/map', array('supply_id' => $supply['supply_id']));
+            if ($supply['change_log']) {
+                $changes = explode(',', $supply['change_log']);
+                $uid = array_pop($changes);
+                $supply['change_name'] = $this->getDeliverUser($uid);
+            }
+            $order = D('Shop_order')->get_order_by_orderid($supply['order_id']);
+            $supply['tip_charge'] = $order['tip_charge'];
+            $supply['uid'] = $order['uid'];
+            $supply['username'] = $order['username'];
+            $supply['goods_price'] = $order['goods_price'];
+
+            $deposit_price = 0;
+
+            $order_goods = D('Shop_order_detail')->where(array('order_id'=>$order['order_id']))->select();
+            foreach ($order_goods as $good){
+                $deposit_price += $good['deposit_price']*$good['num'];
+            }
+            $supply['deposit_price'] = $deposit_price;
+            $supply['tax_price'] = $order['total_price'] - $supply['goods_price'] - $supply['freight_charge'] - $supply['deposit_price'];
+
+            $this->assign('supply', $supply);
             $this->display();
         }
     }

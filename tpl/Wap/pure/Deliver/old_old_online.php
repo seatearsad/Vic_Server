@@ -19,8 +19,8 @@
         input{border: 1px #999999 solid;width: 50%;}
         .robbed{
             padding: 5px 10px;
-            background:none;
-            font-size: 15px;
+            background:#fff;
+            font-size: 14px;
             color:#333333;
             width: 100%;
             border: 0;
@@ -30,89 +30,42 @@
             border-bottom: #e7e7e7 1px dashed;
             position: relative;
         }
-        .sign_bottom{
-            background: none;
-        }
-        .sign_bottom a{
-            padding: 10px 0;
-            width: 90%;
-        }
         .sign_bottom a.service{
             background-color: #ffa52d;
             box-shadow: none;
             border-radius: 5px;
         }
-        .order_title{
-            padding: 70px 5% 10px 5%;
-            font-size: 16px;
-            color: white;
-        }
-        .span_right{
-            float: right;
-        }
-        .order_num{
-            width: 90%;
-            margin: 5px auto;
-            padding: 10px 0 20px 0;
-            font-weight: bold;
-            font-size: 18px;
-            color: #294068;
-        }
     </style>
 </head>
 <body>
-<include file="header" />
-    <div class="order_title" style="background: #294068;">
-            <span>
-                Arriving
-            </span>
-            <span class="span_right"></span>
-    </div>
-    <div class="order_num" style="border-bottom: 1px solid #999999;">
-            <span>
-                Order {pigcms{$supply['order_id']}
-            </span>
-        <if condition="$supply['pay_method'] neq 1">
-                <span class="span_right">
-                    <label style="border: 1px solid #294068; border-radius: 5px;font-size: 14px;padding: 5px 10px;">
-                        {pigcms{:L('_ND_UNPAID_')}
-                    </label>
-                </span>
-        </if>
-    </div>
-    <section class="nav_end clr">
-    <section class="robbed supply_{pigcms{$supply['supply_id']}" data-id="{pigcms{$supply.supply_id}">
-        <div class="Title m10" data-id="{pigcms{$supply.supply_id}" style="border: 0;">
-            <h2 class="f18 c3" style="color: #294068;font-weight: bold;">{pigcms{:lang_substr($supply['store_name'],C('DEFAULT_LANG'))}</h2>
-            <if condition="$supply['get_type'] eq 1">
-            <div class="leaflets">{pigcms{:L('_C_SYS_ASS_ORDER_')}</div>
-            </if>
-        </div>
-        <div style="margin-left: 20px;">
-            <div class="p10" style="line-height: 20px;">
-                <div style="font-weight: bold;">{pigcms{$supply['username']}</div>
-                <div style="margin-top: 5px;">
-                    <span>Subtotal:</span><span style="float: right;">${pigcms{$supply['goods_price']}</span>
-                </div>
-                <div>
-                    <span>Delivery Fee:</span><span style="float: right;">${pigcms{$supply['freight_charge']}</span>
-                </div>
-                <div>
-                    <span>Tax:</span><span style="float: right;">${pigcms{$supply['tax_price']}</span>
-                </div>
-                <div>
-                    <span>Bottle Deposit:</span><span style="float: right;">${pigcms{$supply['deposit_price']}</span>
-                </div>
-                <div>
-                    <span>Driver Tip:</span><span id="tip_num" style="float: right;">$0</span>
+<section class="nav_end clr">
+		<if condition="$list">
+		<volist name="list" id="row">
+        <section class="details p10">
+            <div class="details_top">
+                <h2 class="f16 c3">
+                    Order #{pigcms{$row['order_id']}
+                </h2>
+                <div style="color: #ffa52d">
+                    {pigcms{$row['note']}
                 </div>
             </div>
-            <div class="Namelist p10">
-                <p style="height: 20px;color: #666666">
-                    <INPUT TYPE="HIDDEN" NAME="charge_total" VALUE="{pigcms{$supply['deliver_cash']}">
+        </section>
+		<section class="robbed supply_{pigcms{$row['supply_id']}" data-id="{pigcms{$row.supply_id}">
+			<div class="Title m10" data-id="{pigcms{$row.supply_id}" style="border: 0;">
+				<h2 class="f16 c3">{pigcms{:lang_substr($row['store_name'],C('DEFAULT_LANG'))}</h2>
+				<if condition="$row['get_type'] eq 1">
+				<div class="leaflets">{pigcms{:L('_C_SYS_ASS_ORDER_')}</div>
+				</if>
+			</div>
+			<div class="Namelist p10 f14">
+				<p style="height: 20px;font-size: 12px;color: #666666">
+                    {pigcms{:L('_TOTAL_RECE_')}：<i>${pigcms{$row['deliver_cash']}</i>
+                    <INPUT TYPE="HIDDEN" NAME="charge_total" VALUE="{pigcms{$row['deliver_cash']}">
                 </p>
-            </div>
+			</div>
             <div id="tip_label" class="normal-fieldset" style="height: 100%;margin-bottom: 20px;">
+                <h4 style="margin: .8rem .2rem;">1. {pigcms{:L('_ND_TIP_')}</h4>
                 <dl class="list">
                     <dd class="dd-padding">
                         <div id="tip_list" style="margin: auto;width: 98%">
@@ -127,21 +80,23 @@
                             </span>
                         </div>
                         <div style="margin: 20px auto 5px;width: 98%">
-                            Or input tip amount: $ <input type="text" id="tip_fee" name="tip_fee" size="20" style="height: 25px;">
+                            Input: $ <input type="text" id="tip_fee" name="tip_fee" size="20" style="height: 25px;">
                         </div>
-                        <div style="margin: 20px auto 5px;width: 98%;font-weight: bold;">
-                            <span>Total:</span><span id="add_tip" style="float: right;">$0</span>
+                        <div style="margin: 20px auto 5px;width: 98%;">
+                            <div style="margin-bottom: 5px;"><span>{pigcms{:L('_ND_TIP_')}:</span><span id="tip_num">$0</span></div>
+                            <span>{pigcms{:L('_B_PURE_MY_70_')}:</span><span id="add_tip">$0</span>
                         </div>
                     </dd>
                 </dl>
             </div>
-        </div>
-        <div id="credit" class="normal-fieldset" style="margin-bottom:50px;margin-left: 10px;border-top: 1px #999999 dashed;" >
-            <div style="margin-left: 15px;">
+            <div id="credit" class="normal-fieldset" style="margin-bottom:120px;margin-left: 10px;border-top: 1px #333333 dashed;" >
                 <h4 style="margin: .8rem 0;">
-                    Payment
+                    2. Payment
                 </h4>
-                <dl class="list" style="display: inline-block">
+                <div style="margin-bottom: 10px">
+                    Thank you for using Tutti! Your payment information are processed securely.
+                </div>
+                <dl class="list">
                     <dd class="dd-padding">
                         <div style="line-height: 20px;float:left;width: 100%;margin-bottom: 5px;">
                             <span style="float: left;width:150px;">{pigcms{:L('_CREDITHOLDER_NAME_')}：</span>
@@ -157,16 +112,19 @@
                         </div>
                     </dd>
                 </dl>
-                <div style="margin-top: 20px;font-size: 14px;">
-                    Thank you for using Tutti! Your payment information is processed securely.
-                </div>
             </div>
-        </div>
-
-        <div class="sign_bottom">
-            <a href="javascript:;" class="service" data-id="{pigcms{$supply['supply_id']}">Pay</a>
-        </div>
-    </section>
+			<div class="sign_bottom">
+				<a href="javascript:;" class="service" data-id="{pigcms{$row['supply_id']}">{pigcms{:L('_PAYMENT_ORDER_')}</a>
+			</div>
+		</section>
+		</volist>
+		<else />
+		<!-- 空白图 -->
+			<div class="psnone">
+				<img src="{pigcms{$static_path}images/qdz_02.jpg">
+			</div>
+		<!-- 空白图 -->
+		</if>
 </section>
 <script type="text/javascript">
 $(function(){
