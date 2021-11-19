@@ -108,7 +108,7 @@ class Deliverect
         $data['by'] = "Tutti";
         $data['orderType'] = $this->orderType['delivery'];
         $data['channel'] = 0;
-        $data['pickupTime'] = date("Y-m-d H:i:s");//date("Y-m-d")."T".date("H:i:s")."Z";
+        $data['pickupTime'] = gmdate("Y-m-d\TH:i:s\Z");//date("Y-m-d H:i:s");//date("Y-m-d")."T".date("H:i:s")."Z";
         $data['estimatedPickupTime'] = date("Y-m-d");//date("Y-m-d")."T".date("H:i:s")."Z";
         $data['deliveryTime'] = date("Y-m-d");
         $data['deliveryIsAsap'] = true;
@@ -116,7 +116,7 @@ class Deliverect
 
         $customer = D("User_adress")->where(array('adress_id'=>$order['address_id']))->find();
         $data['customer']['name'] = $customer['name'];
-        $data['customer']['companyName'] = "Tutti";
+        $data['customer']['companyName'] = "";
         $data['customer']['phoneNumber'] = $customer['phone'];
         $data['customer']['email'] = "";
         $data['customer']['note'] = $order['desc'];
@@ -130,8 +130,8 @@ class Deliverect
         $data['deliveryAddress']['extraAddressInfo'] = $customer['detail'];
 
         $data['orderIsAlreadyPaid'] = true;
-        $data['payment']['amount'] = intval($order['price']*100);
-        $data['payment']['type'] = ($order['pay_type'] == "offline" || $order['pay_type'] == "Cash") ? 0 : 1;
+        $data['payment']['amount'] = intval(($order['price']+$order['tip_charge']-$order['merchant_reduce']-$order['delivery_discount']-$order['coupon_price'])*100);
+        $data['payment']['type'] = ($order['pay_type'] == "offline" || $order['pay_type'] == "Cash") ? 1 : 0;
 
         $data['note'] = $order['desc'];
 
@@ -177,8 +177,7 @@ class Deliverect
         $data['numberOfCustomers'] = 1;
         $data['deliveryCost'] = intval($order['freight_charge']*100);
         $data['serviceCharge'] = intval($order['service_fee']*100);
-        $data['discountTotal'] = intval(-($order['coupon_price'] + $order['merchant_reduce'] + $order['delivery_discount']));
-
+        $data['discountTotal'] = intval($order['merchant_reduce']*100)*-1;
 
         $data['taxes'][0]['taxes'] = $order['store_tax'];
         $data['taxes'][0]['name'] = "deliveryCostTax";
@@ -186,7 +185,7 @@ class Deliverect
 
         $data['taxes'][1]['taxes'] = $order['store_tax'];
         $data['taxes'][1]['name'] = "productTax";
-        $data['taxes'][1]['total'] = intval($order['price']*100 - $productAllPrice - $order['freight_charge']*100 - intval($order['freight_charge']*$order['store_tax']) - $order['service_fee']*100);
+        $data['taxes'][1]['total'] = intval(($order['price'] - $productAllPrice - $order['freight_charge'] - floatval($order['freight_charge']*($order['store_tax']/100)) - $order['service_fee'] - $order['merchant_reduce'] - $order['delivery_discount'] - $order['coupon_price'])*100);
         //var_dump($data);die();
         $result = $this->curlPost($url,$data);
 
