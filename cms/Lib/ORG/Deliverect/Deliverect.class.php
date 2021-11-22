@@ -138,6 +138,8 @@ class Deliverect
         $order_detail = D("Shop_order_detail")->where(array('order_id'=>$order['order_id']))->select();
         $productAllPrice = 0;
         $items = array();
+
+        $tax_price = 0;
         foreach ($order_detail as $detail){
             $item = array();
             $product = D("StoreMenuV2")->getProduct($detail['goods_id'],$order['store_id']);
@@ -169,6 +171,9 @@ class Deliverect
                 $item['subItems'] = $subItems;
             }
 
+            $orderDetail = array('goods_id'=>$detail['goods_id'],'num'=>$detail['num'],'store_id'=>$order['store_id'],'dish_id'=>$detail['dish_id']);
+            $tax_price += D('StoreMenuV2')->calculationTaxFromOrder($orderDetail);
+
             $items[] = $item;
         }
         $data['items'] = $items;
@@ -185,7 +190,7 @@ class Deliverect
 
         $data['taxes'][1]['taxes'] = $order['store_tax'];
         $data['taxes'][1]['name'] = "productTax";
-        $data['taxes'][1]['total'] = intval(($order['price'] - $productAllPrice - $order['freight_charge'] - floatval($order['freight_charge']*($order['store_tax']/100)) - $order['service_fee'] - $order['merchant_reduce'] - $order['delivery_discount'] - $order['coupon_price'])*100);
+        $data['taxes'][1]['total'] = $tax_price*100;
         //var_dump($data);die();
         $result = $this->curlPost($url,$data);
 

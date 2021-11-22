@@ -502,7 +502,7 @@ class StoreMenuV2Model extends Model
 
             $dishProduct = $this->getProduct($dish[1],$orderDetail['store_id']);
             $dishProductTax = floatval(($dishProduct['price']/100) * ($dishProduct['tax']/100000))*$dish[2];
-            $tax += $dishProductTax;
+            $tax += $dishProductTax * $orderDetail['num'];
         }
 
         return $tax;
