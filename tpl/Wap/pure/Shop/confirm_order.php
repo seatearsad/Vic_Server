@@ -16,7 +16,7 @@
 <meta content="telephone=no, address=no" name="format-detection">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<link rel="stylesheet" type="text/css" href="{pigcms{$static_path}shop/css/main.css" media="all">
+<link rel="stylesheet" type="text/css" href="{pigcms{$static_path}shop/css/main.css?v=2.6.6" media="all">
     <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/pageloader.css?217"/>
 <style>
 #dingcai_adress_info{
