@@ -342,6 +342,7 @@ class DeliverectAction
         $all_subproduct = array();
 
         D('Store_categories')->where(array('storeId'=>$storeId))->delete();
+        $sort = 0;
         foreach ($categories as $c => $category){
             $cateData = array();
             $cateData['id'] = $category['_id'];
@@ -351,6 +352,7 @@ class DeliverectAction
             $cateData['menuId'] = $menuId;
             $cateData['createType'] = 1;
             $cateData['createTime'] = time();
+            $cateData['sort'] = $sort;
 
             $category_list[] = $cateData;
 
@@ -372,15 +374,19 @@ class DeliverectAction
             }
 
             $cateProduct = $category['subProducts'];
-
+            $productSort = 0;
             foreach ($cateProduct as $p=>$productId){
                 $subProduct = array();
                 $subProduct['categoryId'] = $cateData['id'];
                 $subProduct['productId'] = $productId;
                 $subProduct['storeId'] = $storeId;
+                $subProduct['sort'] = $productSort;
 
                 $all_subproduct[] = $subProduct;
+                $productSort++;
             }
+
+            $sort++;
         }
 
         D('Store_categories')->addAll($category_list);
@@ -456,6 +462,7 @@ class DeliverectAction
 
             $subProducts = $product['subProducts'];
 
+            $sort = 0;
             foreach ($subProducts as $s=>$subId){
                 $relationData = array();
                 $relationData['productId'] = $thirdId;
@@ -464,8 +471,11 @@ class DeliverectAction
                 if($productData['isModifiers'] == 1) $relationData['relationType'] = 2;
                 $relationData['subProductId'] = $subId;
                 $relationData['storeId'] = $storeId;
+                $relationData['sort'] = $sort;
 
                 $allRelation[] = $relationData;
+
+                $sort++;
             }
         }
 

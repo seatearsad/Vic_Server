@@ -22,7 +22,7 @@ class StoreMenuV2Model extends Model
     }
 
     public function getMenuCategories($menuId,$storeId){
-        $categories = D($this->categoriseTable)->where(array('menuId'=>$menuId,'storeId'=>$storeId))->select();
+        $categories = D($this->categoriseTable)->where(array('menuId'=>$menuId,'storeId'=>$storeId))->order('sort asc')->select();
         foreach ($categories as &$category){
             $category['productNum'] = $this->getCategoryProductNum($category['id'],$storeId);
             $category['time'] = $this->getCategoryTime($category['id'],$storeId);
@@ -349,17 +349,17 @@ class StoreMenuV2Model extends Model
     }
 
     public function getMenuCategoriesProduct($categoryId,$storeId,$status = -1,$keyword = ''){
-        $productLinks = D($this->categoriseProductTable)->where(array('categoryId'=>$categoryId,'storeId'=>$storeId))->select();
+        $productLinks = D($this->categoriseProductTable)->where(array('categoryId'=>$categoryId,'storeId'=>$storeId))->order('sort asc')->select();
 
         $productIds = array();
         foreach ($productLinks as &$link){
             $productIds[] = $link['productId'];
         }
 
-        $where = array('id'=>array('in',$productIds),'storeId'=>$storeId);
-        if($status != -1) $where['status'] = $status;
-        if($keyword != '') $where['name'] = array('like', '%' . $keyword . '%');
-        $products = D($this->productTable)->where($where)->select();
+        $where = array('p.id'=>array('in',$productIds),'p.storeId'=>$storeId);
+        if($status != -1) $where['p.status'] = $status;
+        if($keyword != '') $where['p.name'] = array('like', '%' . $keyword . '%');
+        $products = D($this->productTable)->field("p.*")->join('as p left join '.C('DB_PREFIX').'store_categories_product as c ON c.productId=p.id and c.storeId=p.storeId')->where($where)->order('c.sort asc')->select();
         //foreach ($products as &$product){
             //$product['relation'] = D($this->productRelationTable)->field("r.*,p.*")->join('as r left join '.C('DB_PREFIX').'store_product as p ON r.subProductId=p.id')->where(array('r.productId'=>$product['id']))->select();
         //}
@@ -377,7 +377,7 @@ class StoreMenuV2Model extends Model
         $where = array('r.productId'=>$productId,'r.storeId'=>$storeId);
         if($status != -1) $where['p.status'] = $status;
 
-        $products = D($this->productRelationTable)->field("r.*,p.*")->join('as r left join '.C('DB_PREFIX').'store_product as p ON r.subProductId=p.id and r.storeId=p.storeId')->where($where)->select();
+        $products = D($this->productRelationTable)->field("r.*,p.*")->join('as r left join '.C('DB_PREFIX').'store_product as p ON r.subProductId=p.id and r.storeId=p.storeId')->where($where)->order('r.sort asc')->select();
 
         return $products;
     }
@@ -492,7 +492,7 @@ class StoreMenuV2Model extends Model
 
     public function calculationTaxFromOrder($orderDetail){
         $tax = 0;
-        $product = D('StoreMenuV2')->getProduct($orderDetail['goods_id'],$orderDetail['store_id']);
+        $product = $this->getProduct($orderDetail['goods_id'],$orderDetail['store_id']);
         $productTax = floatval(($product['price']/100) * ($product['tax']/100000)) * $orderDetail['num'];
 
         $tax += $productTax;
@@ -500,7 +500,7 @@ class StoreMenuV2Model extends Model
         foreach ($dishList as $dishStr){
             $dish = explode(',',$dishStr);
 
-            $dishProduct = D('StoreMenuV2')->getProduct($dish[1],$orderDetail['store_id']);
+            $dishProduct = $this->getProduct($dish[1],$orderDetail['store_id']);
             $dishProductTax = floatval(($dishProduct['price']/100) * ($dishProduct['tax']/100000))*$dish[2];
             $tax += $dishProductTax;
         }
