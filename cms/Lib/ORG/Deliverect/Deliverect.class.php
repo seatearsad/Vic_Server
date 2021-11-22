@@ -190,7 +190,7 @@ class Deliverect
 
         $data['taxes'][1]['taxes'] = $order['store_tax'];
         $data['taxes'][1]['name'] = "productTax";
-        $data['taxes'][1]['total'] = $tax_price*100;
+        $data['taxes'][1]['total'] = intval($tax_price*100);
         //var_dump($data);die();
         $result = $this->curlPost($url,$data);
 
