@@ -1752,7 +1752,7 @@ class ShopAction extends BaseAction{
 
             $dish_list = D('StoreMenuV2')->getProductRelation($goods_id,$store_id,1);
 
-            $dish_list_new = D('StoreMenuV2')->arrangeDishWap($dish_list,$goods_id,$store_id);
+            $dish_list_new = D('StoreMenuV2')->arrangeDishWap($dish_list,$goods_id,$store_id,1);
 
             $now_goods['side_dish'] = $dish_list_new;
         }else {

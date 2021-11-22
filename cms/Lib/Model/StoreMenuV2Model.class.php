@@ -287,7 +287,14 @@ class StoreMenuV2Model extends Model
         return $newProduct;
     }
 
-    public function arrangeDishWap($dish_list,$productId,$storeId){
+    /**
+     * @param $dish_list
+     * @param $productId
+     * @param $storeId
+     * @param $from 1wap 0app
+     * @return array
+     */
+    public function arrangeDishWap($dish_list,$productId,$storeId,$from){
         $dish_list_new = array();
         foreach ($dish_list as $dish){
             $newDish = array();
@@ -314,7 +321,11 @@ class StoreMenuV2Model extends Model
                 $newSide['status'] = $l['status'];
 
                 if($l['subNum'] > 0){
-                    $newSide['name'] = $l['name']." >>";
+                    //如果有第二级 将此选项变成单选
+                    $newDish['type'] = "0";
+
+                    if($from == 1) $newSide['name'] = $l['name']." >>";
+                    else $newSide['name'] = $l['name'];
 
                     $sub_products = $this->getProductRelation($l['id'],$storeId,1);
                     $sub_products = $this->arrangeDishWap($sub_products,$l['id'],$storeId);
