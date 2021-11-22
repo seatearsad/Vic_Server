@@ -125,7 +125,7 @@ html, body{height: 100%;}
 .menu_list{background-color: #fff;}
 .menu_list li{display: table; width: 100%; padding: 0 6px; border-width: 0 0 1px; -webkit-box-sizing: border-box;}
 .menu_list li > div{display: inline-block; padding: 10px 4px; vertical-align: middle;}
-.menu_list li > div:first-child{width: 58px;}
+.menu_list li > .imglogo{width: 58px;}
 .menu_list li > div:first-child img{width: 100%; border-radius: 5px;}
 .menu_list li > div:nth-of-type(3){text-align: right; width: 88px;}
 .menu_list .nopic{height: 58px; background-size: 37px auto; border-color: #e4e4e4;}
