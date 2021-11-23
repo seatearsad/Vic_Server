@@ -34,10 +34,9 @@ class CartModel extends Model
         $data['dish_id'] = $dish_id;
         $data['time'] = date("Y-m-d H:i:s");
 
-        $where = array('uid'=>$uid,'fid'=>$fid,'spec'=>$spec,'proper'=>$proper,'dish_id'=>$dish_id,'sid'=>$storeId,'categoryId'=>$categoryId);
+        $where = array('uid'=>$uid,'fid'=>$fid,'spec'=>$spec,'proper'=>$proper,'dish_id'=>$dish_id,'sid'=>$data['sid'],'categoryId'=>$categoryId);
         //if($dish_id != "")
         //    $where['dish_id'] = $dish_id;
-
 
         $item = $this->field(true)->where($where)->find();
 
@@ -104,23 +103,47 @@ class CartModel extends Model
         //获取用户默认地址
         $address = D('Store')->getDefaultAdr($uid);
 
-        foreach($cartList as $v){
+        $del_arr = array();
+        foreach($cartList as $k=>$v){
             $allnum += $v['num'];
 
             $store = D('Store')->get_store_by_id($v['sid']);
             if($store['menu_version'] == 2){
+                $is_del = false;
                 $product = D('StoreMenuV2')->getProduct($v['fid'],$v['sid']);
-                $good = D('StoreMenuV2')->arrangeProductAppOne($product);
-                $good['goods_id'] = $product['id'];
-                $good['store_id'] = $product['storeId'];
-                $good['sort_id'] = $v['categoryId'];
-                $good['old_price'] = 0;
-                $good['stock_num'] = -1;
-                $good['deposit_price'] = 0;
-                $good['sell_mouth'] = 0;
-                $good['des'] = $product['desc'];
-                $good['subNum'] = $product['subNum'];
-                $good['menu_version'] = 2;
+                if($product['status'] == 0) $is_del = true;
+                $dish_list = explode('|',$v['dish_id']);
+                $all_dish_id = array();
+                foreach ($dish_list as $dish){
+                    $dish_arr = explode(',',$dish);
+                    if(!in_array($dish_arr[0],$all_dish_id)) $all_dish_id[] = $dish_arr[0];
+                    if(!in_array($dish_arr[1],$all_dish_id)) $all_dish_id[] = $dish_arr[1];
+                }
+
+                $all_list = D('Store_product')->where(array('id'=>array('in',$all_dish_id),'storeId'=>$v['sid'],'status'=>1))->select();
+
+                if(count($all_dish_id) != count($all_list)){
+                    $is_del = true;
+                }
+
+                if($is_del){
+                    unset($cartList[$k]);
+                    $del_arr[] = $v['itemId'];
+
+                    continue;
+                }else {
+                    $good = D('StoreMenuV2')->arrangeProductAppOne($product);
+                    $good['goods_id'] = $product['id'];
+                    $good['store_id'] = $product['storeId'];
+                    $good['sort_id'] = $v['categoryId'];
+                    $good['old_price'] = 0;
+                    $good['stock_num'] = -1;
+                    $good['deposit_price'] = 0;
+                    $good['sell_mouth'] = 0;
+                    $good['des'] = $product['desc'];
+                    $good['subNum'] = $product['subNum'];
+                    $good['menu_version'] = 2;
+                }
             }else{
                 $good = D('Shop_goods')->field(true)->where(array('goods_id' => $v['fid']))->find();
                 //获取规格价格
@@ -170,6 +193,8 @@ class CartModel extends Model
             $good['dish_id'] = $v['dish_id'];
             $goodList[] = $good;
         }
+        //删除已关闭的商品
+        $this->where(array('itemId'=>array('in',$del_arr)))->delete();
 
         $goodList = D('Store')->arrange_goods_for_goods($goodList);
 
@@ -203,7 +228,7 @@ class CartModel extends Model
         return array();
     }
 
-    public function getCartList($uid,$cartList){
+    public function getCartList($uid,$cartList,$version){
         $list = array();
         $total_price = 0;
         $total_market_price = 0;
@@ -211,8 +236,11 @@ class CartModel extends Model
         $tax_price = 0;
         $deposit_price = 0;
 
-        //$sid = $this->field(true)->where(array('uid'=>$uid,'fid'=>$cartList[0]['fid']))->find()['sid'];
-        $sid = $cartList[0]['storeId'];
+        if($version == 1)
+            $sid = $this->field(true)->where(array('uid'=>$uid,'fid'=>$cartList[0]['fid']))->find()['sid'];
+        else
+            $sid = $cartList[0]['storeId'];
+
         $store = D('Store')->get_store_by_id($sid);
 
         foreach ($cartList as $v){

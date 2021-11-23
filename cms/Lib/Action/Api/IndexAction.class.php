@@ -832,9 +832,17 @@ class IndexAction extends BaseAction
 
         $cart_array = json_decode(html_entity_decode($cartList), true);
 
-        //$sid = D('Cart')->field(true)->where(array('uid'=>$uid,'fid'=>$cart_array[0]['fid']))->find()['sid'];
-        $sid = $cart_array[0]['storeId'];
-        $store = D('Merchant_store')->where(array('store_id'=>$sid))->find();
+        $getMenuVersion = -1;//-1 全部 1只有version=1的 2
+        if($this->app_version < 266)
+            $getMenuVersion = 1;
+
+        if($getMenuVersion == 1)
+            $sid = D('Cart')->field(true)->where(array('uid'=>$uid,'fid'=>$cart_array[0]['fid']))->find()['sid'];
+        else
+            $sid = $cart_array[0]['storeId'];
+
+        $store = D('Store')->get_store_by_id($sid);
+        if($store['is_close'] == 1) $this->returnCode(1,'info',array(),"storeClose");
 
         if($store['menu_version'] == 2){
             $categories = D('StoreMenuV2')->getStoreCategories($sid,true);
@@ -917,7 +925,11 @@ class IndexAction extends BaseAction
 
         $cart_array = json_decode(html_entity_decode($cartList),true);
 
-        $result = D('Cart')->getCartList($uid,$cart_array);
+        $getMenuVersion = -1;//-1 全部 1只有version=1的 2
+        if($this->app_version < 266)
+            $getMenuVersion = 1;
+
+        $result = D('Cart')->getCartList($uid,$cart_array,$getMenuVersion);
 
         if($result['store_name']) {
             //平台优惠劵
