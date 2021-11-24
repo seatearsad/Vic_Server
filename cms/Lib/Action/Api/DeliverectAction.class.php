@@ -254,8 +254,9 @@ class DeliverectAction
             $dining_time = intval(($preparationTime - strtotime(gmdate('Y-m-d\TH:i:s\Z'))) / 60);
 
             $database->where(array('order_id' => $order['order_id']))->save(array('dining_time' => $dining_time));
+            D('Deliver_supply')->where(array('order_id' => $order['order_id']))->save(array('dining_time' => $dining_time));
         }
-        
+
         if (empty($order)) {
             $this->error("Sorry, this order has been cancelled or removed.");
             exit;
