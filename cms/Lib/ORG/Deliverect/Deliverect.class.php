@@ -129,8 +129,8 @@ class Deliverect
         $data['deliveryAddress']['city'] = $area['area_name'];
         $data['deliveryAddress']['extraAddressInfo'] = $customer['detail'];
 
-        $data['orderIsAlreadyPaid'] = true;
-        $data['payment']['amount'] = intval(($order['price']+$order['tip_charge']-$order['merchant_reduce']-$order['delivery_discount']-$order['coupon_price'])*100);
+        $data['orderIsAlreadyPaid'] = ($order['pay_type'] == "offline" || $order['pay_type'] == "Cash") ? false : true;
+        $data['payment']['amount'] = intval(($order['price'] - $order['merchant_reduce'])*100);
         $data['payment']['type'] = ($order['pay_type'] == "offline" || $order['pay_type'] == "Cash") ? 1 : 0;
 
         $data['note'] = $order['desc'];
@@ -181,12 +181,16 @@ class Deliverect
         $data['decimalDigits'] = 2;
         $data['numberOfCustomers'] = 1;
         $data['deliveryCost'] = intval($order['freight_charge']*100);
+        $data['deliveryCostTax'] = intval($order['freight_charge']*$order['store_tax']);
         $data['serviceCharge'] = intval($order['service_fee']*100);
+        $data['serviceChargeTax'] = 0;
         $data['discountTotal'] = intval($order['merchant_reduce']*100)*-1;
 
+        /**
         $data['taxes'][0]['taxes'] = $order['store_tax'];
         $data['taxes'][0]['name'] = "deliveryCostTax";
         $data['taxes'][0]['total'] = intval($order['freight_charge']*$order['store_tax']);
+         * */
 
         $data['taxes'][1]['taxes'] = $order['store_tax'];
         $data['taxes'][1]['name'] = "productTax";

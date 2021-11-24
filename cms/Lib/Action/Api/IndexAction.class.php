@@ -969,8 +969,15 @@ class IndexAction extends BaseAction
         $orderData = array();
 
         //判断商品是否还在可销售的时间段
-        //$sid = D('Cart')->field(true)->where(array('uid'=>$uid,'fid'=>$cart_array[0]['fid']))->find()['sid'];
-        $sid = $cart_array[0]['storeId'];
+        $getMenuVersion = -1;//-1 全部 1只有version=1的 2
+        if($this->app_version < 266)
+            $getMenuVersion = 1;
+
+        if($getMenuVersion == 1)
+            $sid = D('Cart')->field(true)->where(array('uid'=>$uid,'fid'=>$cart_array[0]['fid']))->find()['sid'];
+        else
+            $sid = $cart_array[0]['storeId'];
+
         $store = D('Merchant_store')->where(array('store_id'=>$sid))->find();
 
         if($store['menu_version'] == 2){
