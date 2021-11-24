@@ -274,12 +274,10 @@ class DeliverectAction
             $dining_time = intval(($preparationTime - strtotime(gmdate('Y-m-d\TH:i:s\Z'))) / 60);
 
             $database->where(array('order_id' => $order['order_id']))->save(array('dining_time' => $dining_time));
-        }else{
-            $dining_time = 20;
         }
 
         if($acceepted) {
-            $_POST['dining_time'] = $dining_time;
+            //$_POST['dining_time'] = $dining_time ? $dining_time : 0;
 
             $store = D('Merchant_store')->field(true)->where(array('store_id' => $order['store_id']))->find();
 
