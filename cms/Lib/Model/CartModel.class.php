@@ -112,18 +112,20 @@ class CartModel extends Model
                 $is_del = false;
                 $product = D('StoreMenuV2')->getProduct($v['fid'],$v['sid']);
                 if($product['status'] == 0) $is_del = true;
-                $dish_list = explode('|',$v['dish_id']);
-                $all_dish_id = array();
-                foreach ($dish_list as $dish){
-                    $dish_arr = explode(',',$dish);
-                    if(!in_array($dish_arr[0],$all_dish_id)) $all_dish_id[] = $dish_arr[0];
-                    if(!in_array($dish_arr[1],$all_dish_id)) $all_dish_id[] = $dish_arr[1];
-                }
+                if($v['dish_id'] != '') {
+                    $dish_list = explode('|', $v['dish_id']);
+                    $all_dish_id = array();
+                    foreach ($dish_list as $dish) {
+                        $dish_arr = explode(',', $dish);
+                        if (!in_array($dish_arr[0], $all_dish_id)) $all_dish_id[] = $dish_arr[0];
+                        if (!in_array($dish_arr[1], $all_dish_id)) $all_dish_id[] = $dish_arr[1];
+                    }
 
-                $all_list = D('Store_product')->where(array('id'=>array('in',$all_dish_id),'storeId'=>$v['sid'],'status'=>1))->select();
+                    $all_list = D('Store_product')->where(array('id' => array('in', $all_dish_id), 'storeId' => $v['sid'], 'status' => 1))->select();
 
-                if(count($all_dish_id) != count($all_list)){
-                    $is_del = true;
+                    if (count($all_dish_id) != count($all_list)) {
+                        $is_del = true;
+                    }
                 }
 
                 if($is_del){
