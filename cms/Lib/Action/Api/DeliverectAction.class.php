@@ -268,7 +268,15 @@ class DeliverectAction
             exit;
         }
 
+        $preparationTime = $this->data['pickupTime'];
 
+        $preparationTime = strtotime($preparationTime);
+
+        $dining_time = intval(($preparationTime - strtotime(gmdate('Y-m-d\TH:i:s\Z')))/60);
+
+        $database->where(array('order_id'=>$order['order_id']))->save(array('dining_time'=>$dining_time));
+
+        /**
         $store = D('Merchant_store')->field(true)->where(array('store_id' => $order['store_id']))->find();
 
         $data['status'] = 1;
@@ -325,6 +333,7 @@ class DeliverectAction
         } else {
             //$this->error('接单失败');
         }
+         * */
         echo "updatePrepTimeURL";
     }
 
