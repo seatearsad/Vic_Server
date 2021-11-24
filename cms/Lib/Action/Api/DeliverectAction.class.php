@@ -245,6 +245,17 @@ class DeliverectAction
             $this->error_tips(replace_lang_str(L('D_F_TIP_3'),$shop['min_time']));
         }
         */
+
+        if($this->data['pickupTime'] != '') {
+            $preparationTime = $this->data['pickupTime'];
+
+            $preparationTime = strtotime($preparationTime);
+
+            $dining_time = intval(($preparationTime - strtotime(gmdate('Y-m-d\TH:i:s\Z'))) / 60);
+
+            $database->where(array('order_id' => $order['order_id']))->save(array('dining_time' => $dining_time));
+        }
+        
         if (empty($order)) {
             $this->error("Sorry, this order has been cancelled or removed.");
             exit;
@@ -264,16 +275,6 @@ class DeliverectAction
         if ($order['paid'] == 0) {
             $this->error('订单未支付，不能接单！');
             exit;
-        }
-
-        if($this->data['pickupTime'] != '') {
-            $preparationTime = $this->data['pickupTime'];
-
-            $preparationTime = strtotime($preparationTime);
-
-            $dining_time = intval(($preparationTime - strtotime(gmdate('Y-m-d\TH:i:s\Z'))) / 60);
-
-            $database->where(array('order_id' => $order['order_id']))->save(array('dining_time' => $dining_time));
         }
 
         if($acceepted) {
