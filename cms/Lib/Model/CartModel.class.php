@@ -103,14 +103,16 @@ class CartModel extends Model
         //获取用户默认地址
         $address = D('Store')->getDefaultAdr($uid);
 
-        $del_arr = array();
+        //$del_arr = array();
         foreach($cartList as $k=>$v){
             $allnum += $v['num'];
 
             $store = D('Store')->get_store_by_id($v['sid']);
             if($store['menu_version'] == 2){
-                $is_del = false;
                 $product = D('StoreMenuV2')->getProduct($v['fid'],$v['sid']);
+                /**
+                $is_del = false;
+
                 if($product['status'] == 0) $is_del = true;
                 if($v['dish_id'] != '') {
                     $dish_list = explode('|', $v['dish_id']);
@@ -134,6 +136,7 @@ class CartModel extends Model
 
                     continue;
                 }else {
+                 * */
                     $good = D('StoreMenuV2')->arrangeProductAppOne($product);
                     $good['goods_id'] = $product['id'];
                     $good['store_id'] = $product['storeId'];
@@ -145,7 +148,7 @@ class CartModel extends Model
                     $good['des'] = $product['desc'];
                     $good['subNum'] = $product['subNum'];
                     $good['menu_version'] = 2;
-                }
+                //}
             }else{
                 $good = D('Shop_goods')->field(true)->where(array('goods_id' => $v['fid']))->find();
                 //获取规格价格
@@ -196,7 +199,7 @@ class CartModel extends Model
             $goodList[] = $good;
         }
         //删除已关闭的商品
-        $this->where(array('itemId'=>array('in',$del_arr)))->delete();
+        //$this->where(array('itemId'=>array('in',$del_arr)))->delete();
 
         $goodList = D('Store')->arrange_goods_for_goods($goodList);
 
