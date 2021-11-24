@@ -1090,6 +1090,41 @@ function changeProductSpec(){
                     //productDish.push($(jtem).data('dish_id')+'_'+$(jtem).data('dish_val_id'));
                     curr_price += parseFloat($(jtem).data('dish_price'));
                     //nowProductCartLabel = nowProductCartLabel+'_'+$(jtem).data('dish_id')+'_'+$(jtem).data('dish_val_id')+'_1';
+
+                    $.each($(jtem).children('.dish_second'),function(k,ktem){
+                        $.each($(ktem).children('div.fl').children('ul').children('li.active'),function(l,ltem){
+                            if(!$(this).is(":hidden")) {
+                                var new_dish = $(ltem).data('dish_id') + "," + $(ltem).data('dish_val_id') + ",1," + $(ltem).data('dish_price');
+                                if (dish_id == "")
+                                    dish_id = new_dish;
+                                else
+                                    dish_id += "|" + new_dish;
+                                //productDish.push($(jtem).data('dish_id')+'_'+$(jtem).data('dish_val_id'));
+                                curr_price += parseFloat($(ltem).data('dish_price'));
+                                //nowProductCartLabel = nowProductCartLabel+'_'+$(jtem).data('dish_id')+'_'+$(jtem).data('dish_val_id')+'_1';
+                            }
+                        });
+                        $.each($(ktem).children('div').children('div.dish_memo'),function (l,ltem) {
+                            if(!$(this).is(":hidden")) {
+                                var this_num = parseInt($(ltem).children('.number').html());
+                                var name_div = $(this).parent('div').find('.dish_name');
+                                if (this_num > 0) {
+                                    var new_dish = $(ltem).data('dish_id') + "," + $(ltem).data('dish_val_id') + "," + this_num + "," + $(ltem).data('dish_price');
+                                    if (dish_id == "")
+                                        dish_id = new_dish;
+                                    else
+                                        dish_id += "|" + new_dish;
+
+                                    //productDish.push($(jtem).data('dish_id') + '_' + $(jtem).data('dish_val_id') + '_' + this_num);
+                                    curr_price += parseFloat($(ltem).data('dish_price')) * this_num;
+                                    $(name_div).css("color", "#ffa52d");
+                                    //nowProductCartLabel = nowProductCartLabel+'_'+$(jtem).data('dish_id')+'_'+$(jtem).data('dish_val_id')+ '_' + this_num;
+                                } else {
+                                    $(name_div).css("color", "#000000");
+                                }
+                            }
+                        });
+                    });
                 }
             });
             /**
@@ -1106,7 +1141,7 @@ function changeProductSpec(){
                 }
             });
             */
-            $.each($(item).find('div.dish_memo'),function (j,jtem) {
+            $.each($(item).children('div').children('div.dish_memo'),function (j,jtem) {
                 if(!$(this).is(":hidden")) {
                     var this_num = parseInt($(jtem).children('.number').html());
                     var name_div = $(this).parent('div').find('.dish_name');

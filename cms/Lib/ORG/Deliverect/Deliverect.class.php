@@ -181,7 +181,7 @@ class Deliverect
         $data['decimalDigits'] = 2;
         $data['numberOfCustomers'] = 1;
         $data['deliveryCost'] = intval($order['freight_charge']*100);
-        $data['deliveryCostTax'] = intval($order['freight_charge']*$order['store_tax']);
+        $data['deliveryCostTax'] = intval(round($order['freight_charge']*$order['store_tax'],0));
         $data['serviceCharge'] = intval($order['service_fee']*100);
         $data['serviceChargeTax'] = 0;
         $data['discountTotal'] = intval($order['merchant_reduce']*100)*-1;
@@ -194,7 +194,7 @@ class Deliverect
 
         $data['taxes'][0]['taxes'] = $order['store_tax'];
         $data['taxes'][0]['name'] = "productTax";
-        $data['taxes'][0]['total'] = intval($tax_price*100);
+        $data['taxes'][0]['total'] = intval(round($tax_price,2)*100);
         //var_dump($data);die();
         $result = $this->curlPost($url,$data);
 
