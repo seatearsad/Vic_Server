@@ -1078,6 +1078,21 @@ function changeProductSpec(){
 		$.each($('#shopDetailPageDish .row'),function(i,item){
             var dish_id = "";
             var dish_name = "";
+
+
+            $.each($(item).children('div.fl').children('ul').children('li.active'),function(j,jtem){
+                if(!$(this).is(":hidden")) {
+                    var new_dish = $(jtem).data('dish_id') + "," + $(jtem).data('dish_val_id') + ",1," + $(jtem).data('dish_price');
+                    if (dish_id == "")
+                        dish_id = new_dish;
+                    else
+                        dish_id += "|" + new_dish;
+                    //productDish.push($(jtem).data('dish_id')+'_'+$(jtem).data('dish_val_id'));
+                    curr_price += parseFloat($(jtem).data('dish_price'));
+                    //nowProductCartLabel = nowProductCartLabel+'_'+$(jtem).data('dish_id')+'_'+$(jtem).data('dish_val_id')+'_1';
+                }
+            });
+            /**
             $.each($(item).find('li.active'),function(j,jtem){
                 if(!$(this).is(":hidden")) {
                     var new_dish = $(jtem).data('dish_id') + "," + $(jtem).data('dish_val_id') + ",1," + $(jtem).data('dish_price');
@@ -1090,7 +1105,7 @@ function changeProductSpec(){
                     //nowProductCartLabel = nowProductCartLabel+'_'+$(jtem).data('dish_id')+'_'+$(jtem).data('dish_val_id')+'_1';
                 }
             });
-
+            */
             $.each($(item).find('div.dish_memo'),function (j,jtem) {
                 if(!$(this).is(":hidden")) {
                     var this_num = parseInt($(jtem).children('.number').html());
@@ -1110,7 +1125,7 @@ function changeProductSpec(){
                         $(name_div).css("color", "#000000");
                     }
                 }
-            })
+            });
             nowProductCartLabel = nowProductCartLabel+'|'+dish_id;
 
         });

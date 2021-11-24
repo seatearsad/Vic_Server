@@ -192,9 +192,9 @@ class Deliverect
         $data['taxes'][0]['total'] = intval($order['freight_charge']*$order['store_tax']);
          * */
 
-        $data['taxes'][1]['taxes'] = $order['store_tax'];
-        $data['taxes'][1]['name'] = "productTax";
-        $data['taxes'][1]['total'] = intval($tax_price*100);
+        $data['taxes'][0]['taxes'] = $order['store_tax'];
+        $data['taxes'][0]['name'] = "productTax";
+        $data['taxes'][0]['total'] = intval($tax_price*100);
         //var_dump($data);die();
         $result = $this->curlPost($url,$data);
 
