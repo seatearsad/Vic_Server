@@ -214,13 +214,13 @@ class DeliverectAction
             $this->orderRefund($orderId);
         }
         if($status == 20){
-            $this->updatePrepTimeURL();
+            $this->updatePrepTimeURL(true);
         }
 
         echo "statusUpdate";
     }
 
-    public function updatePrepTimeURL(){
+    public function updatePrepTimeURL($acceepted = false){
         $orderId = $this->data['channelOrderId'];
         /**
         $pickupTime = str_replace("T"," ",$this->data['pickupTime']);
@@ -228,8 +228,6 @@ class DeliverectAction
 
         $pickupTime = strtotime($pickupTime);
          * */
-
-        $_POST['dining_time'] = 20;
 
         $database = D('Shop_order');
         $order_id = $condition['order_id'] = $orderId;
@@ -268,72 +266,78 @@ class DeliverectAction
             exit;
         }
 
-        $preparationTime = $this->data['pickupTime'];
+        if($this->data['pickupTime']) {
+            $preparationTime = $this->data['pickupTime'];
 
-        $preparationTime = strtotime($preparationTime);
+            $preparationTime = strtotime($preparationTime);
 
-        $dining_time = intval(($preparationTime - strtotime(gmdate('Y-m-d\TH:i:s\Z')))/60);
+            $dining_time = intval(($preparationTime - strtotime(gmdate('Y-m-d\TH:i:s\Z'))) / 60);
 
-        $database->where(array('order_id'=>$order['order_id']))->save(array('dining_time'=>$dining_time));
-
-        /**
-        $store = D('Merchant_store')->field(true)->where(array('store_id' => $order['store_id']))->find();
-
-        $data['status'] = 1;
-        $data['order_status'] = 1;
-        $data['last_staff'] = "Deliverect";
-        $data['last_time'] = time();
-        $condition['status'] = 0;
-        if ($database->where($condition)->save($data)) {
-            if ($order['is_pick_in_store'] != 2 && $order['is_pick_in_store'] != 3) {
-                $result = D('Deliver_supply')->saveOrder($order_id, $store);
-                if ($result['error_code']) {
-                    D('Shop_order')->where(array('order_id' => $order_id))->save(array('status' => 0, 'order_status' => 0, 'last_time' => time()));
-                    //$this->error_tips($result['msg']);
-                    exit;
-                }
-            }
-
-            D('Shop_order_log')->add_log(array('order_id' => $order_id, 'status' => 2, 'name' => "Deliverect", 'phone' => ""));
-
-            //add garfunkel
-            $userInfo = D('User')->field(true)->where(array('uid'=>$order['uid']))->find();
-            if($userInfo['device_id'] != ""){
-                $message = 'Your order has been accepted by the store, they are preparing it now. Our Courier is on the way, thank you for your patience!';
-                Sms::sendMessageToGoogle($userInfo['device_id'],$message);
-            }else{
-                $sms_data['uid'] = $order['uid'];
-                $sms_data['mobile'] = $order['userphone'];
-                $sms_data['sendto'] = 'user';
-                $sms_data['tplid'] = 172700;
-                $sms_data['params'] = [];
-                //Sms::sendSms2($sms_data);
-                $sms_txt = "Your order has been accepted by the store, they are preparing your order now. Our Courier is on the way, thank you for your patience.";
-                //Sms::telesign_send_sms($order['userphone'],$sms_txt,0);
-                Sms::sendTwilioSms($order['userphone'],$sms_txt);
-            }
-
-            if(isset($_POST['dining_time']) && $_POST['dining_time'] >= 40){
-                $store['name'] = lang_substr($store['name'], 'en-us');
-                $sms_data['uid'] = $order['uid'];
-                $sms_data['mobile'] = $order['userphone'];
-                $sms_data['sendto'] = 'user';
-                $sms_data['tplid'] = 585843;
-                $sms_data['params'] = [
-                    $store['name'],
-                    $_POST['dining_time']
-                ];
-                //Sms::sendSms2($sms_data);
-                $sms_txt = "We’d like to inform you that ".$store['name']." needs ".$_POST['dining_time']." minutes to finish preparing your order. Estimated delivery time may be longer than expected. Thank you for your patience!";
-                //Sms::telesign_send_sms($order['userphone'],$sms_txt,0);
-                Sms::sendTwilioSms($order['userphone'],$sms_txt);
-            }
-
-            //$this->success('已接单');
-        } else {
-            //$this->error('接单失败');
+            $database->where(array('order_id' => $order['order_id']))->save(array('dining_time' => $dining_time));
+        }else{
+            $dining_time = 20;
         }
-         * */
+
+        if($acceepted) {
+            $_POST['dining_time'] = $dining_time;
+
+            $store = D('Merchant_store')->field(true)->where(array('store_id' => $order['store_id']))->find();
+
+            $data['status'] = 1;
+            $data['order_status'] = 1;
+            $data['last_staff'] = "Deliverect";
+            $data['last_time'] = time();
+            $condition['status'] = 0;
+            if ($database->where($condition)->save($data)) {
+                if ($order['is_pick_in_store'] != 2 && $order['is_pick_in_store'] != 3) {
+                    $result = D('Deliver_supply')->saveOrder($order_id, $store);
+                    if ($result['error_code']) {
+                        D('Shop_order')->where(array('order_id' => $order_id))->save(array('status' => 0, 'order_status' => 0, 'last_time' => time()));
+                        //$this->error_tips($result['msg']);
+                        exit;
+                    }
+                }
+
+                D('Shop_order_log')->add_log(array('order_id' => $order_id, 'status' => 2, 'name' => "Deliverect", 'phone' => ""));
+
+                //add garfunkel
+                $userInfo = D('User')->field(true)->where(array('uid' => $order['uid']))->find();
+                if ($userInfo['device_id'] != "") {
+                    $message = 'Your order has been accepted by the store, they are preparing it now. Our Courier is on the way, thank you for your patience!';
+                    Sms::sendMessageToGoogle($userInfo['device_id'], $message);
+                } else {
+                    $sms_data['uid'] = $order['uid'];
+                    $sms_data['mobile'] = $order['userphone'];
+                    $sms_data['sendto'] = 'user';
+                    $sms_data['tplid'] = 172700;
+                    $sms_data['params'] = [];
+                    //Sms::sendSms2($sms_data);
+                    $sms_txt = "Your order has been accepted by the store, they are preparing your order now. Our Courier is on the way, thank you for your patience.";
+                    //Sms::telesign_send_sms($order['userphone'],$sms_txt,0);
+                    Sms::sendTwilioSms($order['userphone'], $sms_txt);
+                }
+
+                if (isset($_POST['dining_time']) && $_POST['dining_time'] >= 40) {
+                    $store['name'] = lang_substr($store['name'], 'en-us');
+                    $sms_data['uid'] = $order['uid'];
+                    $sms_data['mobile'] = $order['userphone'];
+                    $sms_data['sendto'] = 'user';
+                    $sms_data['tplid'] = 585843;
+                    $sms_data['params'] = [
+                        $store['name'],
+                        $_POST['dining_time']
+                    ];
+                    //Sms::sendSms2($sms_data);
+                    $sms_txt = "We’d like to inform you that " . $store['name'] . " needs " . $_POST['dining_time'] . " minutes to finish preparing your order. Estimated delivery time may be longer than expected. Thank you for your patience!";
+                    //Sms::telesign_send_sms($order['userphone'],$sms_txt,0);
+                    Sms::sendTwilioSms($order['userphone'], $sms_txt);
+                }
+
+                //$this->success('已接单');
+            } else {
+                //$this->error('接单失败');
+            }
+        }
         echo "updatePrepTimeURL";
     }
 
