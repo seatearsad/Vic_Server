@@ -266,7 +266,7 @@ class DeliverectAction
             exit;
         }
 
-        if($this->data['pickupTime']) {
+        if($this->data['pickupTime'] != '') {
             $preparationTime = $this->data['pickupTime'];
 
             $preparationTime = strtotime($preparationTime);
