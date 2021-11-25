@@ -903,7 +903,7 @@ class IndexAction extends BaseAction
                         $goods['status'] = 0;
                     }
 
-                    $all_value_list = D('Side_dish')->where(array('id' => array('in', $all_dish_value_id), 'status' => 1))->select();
+                    $all_value_list = D('Side_dish_value')->where(array('id' => array('in', $all_dish_value_id), 'status' => 1))->select();
                     if (count($all_dish_value_id) != count($all_value_list)) {
                         $goods['status'] = 0;
                     }
