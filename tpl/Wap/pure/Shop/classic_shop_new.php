@@ -3,6 +3,9 @@
 <html>
 	<head>
 		<meta charset="utf-8" />
+        <if condition="$config['site_favicon']">
+            <link rel="shortcut icon" href="{pigcms{$config.site_favicon}"/>
+        </if>
 		<title>{pigcms{:L('_VIC_NAME_')} - {pigcms{:L('_OUT_TXT_')}</title>
         <meta name="keywords" content="{pigcms{$config.seo_keywords}" />
         <meta name="description" content="{pigcms{$config.seo_description}" />
