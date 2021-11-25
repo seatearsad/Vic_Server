@@ -2459,7 +2459,31 @@ class ShopAction extends BaseAction{
                         $goodsId = $product['productId'];
                         $goods = D('Shop_goods')->where(array('goods_id' => $goodsId))->find();
 
-                        if (in_array($goods['sort_id'], $sortIdList)) {
+                        $allow_add = true;
+                        if(count($product['productParam']) > 0) {
+                            $all_dish_id = array();
+                            $all_dish_value_id = array();
+                            foreach ($product['productParam'] as $dish) {
+                                if($dish['type'] == 'side_dish') {
+                                    $dish_arr = explode(',', $dish['dish_id']);
+                                    if (!in_array($dish_arr[0], $all_dish_id)) $all_dish_id[] = $dish_arr[0];
+                                    if (!in_array($dish_arr[1], $all_dish_value_id)) $all_dish_value_id[] = $dish_arr[1];
+                                }
+                            }
+
+                            $all_list = D('Side_dish')->where(array('id' => array('in', $all_dish_id), 'status' => 1))->select();
+
+                            if (count($all_dish_id) != count($all_list)) {
+                                $allow_add = false;
+                            }
+
+                            $all_value_list = D('Side_dish_value')->where(array('id' => array('in', $all_dish_value_id), 'status' => 1))->select();
+                            if (count($all_dish_value_id) != count($all_value_list)) {
+                                $allow_add = false;
+                            }
+                        }
+
+                        if (in_array($goods['sort_id'], $sortIdList) && $allow_add) {
                             $newCart[] = $product;
                         }
                     }
@@ -2475,7 +2499,23 @@ class ShopAction extends BaseAction{
                     foreach ($productCart as $product) {
                         $goodsId = $product['productId'];
 
-                        if (in_array($goodsId, $allProduct)) {
+                        $allow_add = true;
+                        if(count($product['productParam']) > 0) {
+                            $all_dish_id = array();
+                            foreach ($product['productParam'] as $dish) {
+                                $dish_arr = explode(',', $dish['dish_id']);
+                                if (!in_array($dish_arr[0], $all_dish_id)) $all_dish_id[] = $dish_arr[0];
+                                if (!in_array($dish_arr[1], $all_dish_id)) $all_dish_id[] = $dish_arr[1];
+                            }
+
+                            $all_list = D('Store_product')->where(array('id' => array('in', $all_dish_id), 'storeId' => $store_id, 'status' => 1))->select();
+
+                            if (count($all_dish_id) != count($all_list)) {
+                                $allow_add = false;
+                            }
+                        }
+
+                        if (in_array($goodsId, $allProduct) && $allow_add) {
                             $newCart[] = $product;
                         }
                     }
@@ -2484,14 +2524,22 @@ class ShopAction extends BaseAction{
         }
 
         $is_error = false;
-        if(count($productCart) > count($newCart)){
+
+        $store = D('Store')->get_store_by_id($store_id);
+        if($store['is_close'] == 1) {
             $is_error = true;
+            $type = "store";
+            $msg = "Sorry, this store is currently unavailable!";
+        }else if(count($productCart) > count($newCart)){
+            $is_error = true;
+            $type = "produce";
             $msg = "Please note that you have one or more item become unavailable at this time and will be removed from your cart. Do you confirm to continue checkout?";
         }else{
             $msg = "";
+            $type = "";
         }
 
-        echo json_encode(array('error'=>$is_error,'msg'=>$msg,'cartList'=>$newCart));
+        echo json_encode(array('error'=>$is_error,'type'=>$type,'msg'=>$msg,'cartList'=>$newCart));
     }
 
     public function confirm_order()

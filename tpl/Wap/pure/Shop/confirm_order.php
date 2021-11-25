@@ -912,23 +912,35 @@ $(document).ready(function () {
             pageLoadTips({showBg:false});
 			$.post("{pigcms{:U('Shop/checkGoodsTime')}",{'store_id':"{pigcms{$store['store_id']}"},function(data){
                 if(data.error){
-                    //motify.log(data.msg);
-                    $.cookie('shop_cart_'+"{pigcms{$store['store_id']}",JSON.stringify(data.cartList),{expires:700,path:'/'});
-                    var remindTipLayer = layer.open({
-                        content: "<label style='word-break: break-word;'>" + data.msg + "</label>",
-                        btn: ['Yes','No'],
-                        yes:function(){
-                            $.cookie('auto_location',1); //reload后自动submit
-                            layer.close(remindTipLayer);
-                            window.location.reload();
-                        },
-                        no: function(){
-                            $.cookie('auto_location',0);
-                            layer.close(remindTipLayer);
-                            window.location.reload();
-                        }
+                    if(data.type == 'store') {
+                        var remindTipLayer = layer.open({
+                            content: "<label style='word-break: break-word;'>" + data.msg + "</label>",
+                            btn: ['Confirm'],
+                            end:function(){
+                                window.history.back();
+                            }
+                        });
+                    }else{
+                        $.cookie('shop_cart_' + "{pigcms{$store['store_id']}", JSON.stringify(data.cartList), {
+                            expires: 700,
+                            path: '/'
+                        });
+                        var remindTipLayer = layer.open({
+                            content: "<label style='word-break: break-word;'>" + data.msg + "</label>",
+                            btn: ['Yes', 'No'],
+                            yes: function () {
+                                $.cookie('auto_location', 1); //reload后自动submit
+                                layer.close(remindTipLayer);
+                                window.location.reload();
+                            },
+                            no: function () {
+                                $.cookie('auto_location', 0);
+                                layer.close(remindTipLayer);
+                                window.location.reload();
+                            }
 
-                    });
+                        });
+                    }
                     pageLoadHides();
                 }else{
                     document.cart_confirm_form.submit();

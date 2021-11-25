@@ -844,6 +844,8 @@ class IndexAction extends BaseAction
         $store = D('Store')->get_store_by_id($sid);
         if($store['is_close'] == 1) $this->returnCode(1,'info',array(),"storeClose");
 
+        if(!D('Cart')->where(array('sid'=>$sid,'uid'=>$uid))->find()) $this->returnCode(1,'info',array(),'checkcarterror');
+
         if($store['menu_version'] == 2){
             $categories = D('StoreMenuV2')->getStoreCategories($sid,true);
             $sortList = D('StoreMenuV2')->arrangeApp($categories);
