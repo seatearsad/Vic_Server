@@ -66,10 +66,10 @@ class CartModel extends Model
                 $afterList[$dishValue[0].$dishValue[1]][] = $dish;
             }
         }
-        foreach ($allList as $dish){
-            $dishValue = explode(',',$dish);
+        foreach ($allList as $dish_second){
+            $dishValue = explode(',',$dish_second);
             if($dishValue[4] != $productId){
-                $afterList[$dishValue[5].$dishValue[4]][] = $dish;
+                $afterList[$dishValue[5].$dishValue[4]][] = $dish_second;
             }
         }
 
