@@ -841,9 +841,10 @@ class IndexAction extends BaseAction
         else
             $sid = $cart_array[0]['storeId'];
 
-        $store = D('Store')->get_store_by_id($sid);
-        if($store['is_close'] == 1) $this->returnCode(1,'info',array(),"storeClose");
-
+        if($getMenuVersion == 1) {
+            $store = D('Store')->get_store_by_id($sid);
+            if ($store['is_close'] == 1) $this->returnCode(1, 'info', array(), "storeClose");
+        }
         if(!D('Cart')->where(array('sid'=>$sid,'uid'=>$uid))->find()) $this->returnCode(1,'info',array(),'checkcarterror');
 
         if($store['menu_version'] == 2){
@@ -999,7 +1000,13 @@ class IndexAction extends BaseAction
 
         $address = D('User_adress')->where(array('adress_id'=>$adr_id))->find();
         if($address_mark != $address['detail']){
-            D('User_adress')->where(array('adress_id'=>$adr_id))->save(array('detail'=>$address_mark));
+            $addressData['detail'] = $address_mark;
+            if(!checkEnglish($address_mark) && trim($address_mark) != ''){
+                $addressData['detail_en'] = translationCnToEn($address_mark);
+            }else{
+                $addressData['detail_en'] = '';
+            }
+            D('User_adress')->where(array('adress_id'=>$adr_id))->save($addressData);
         }
 
         $cart_array = json_decode(html_entity_decode($cartList),true);

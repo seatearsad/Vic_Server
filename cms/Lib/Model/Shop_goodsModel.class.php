@@ -820,7 +820,7 @@ class Shop_goodsModel extends Model
 		}
 		if (empty($now_goods)) return array('status' => 0, 'msg' => '商品不存在');
 
-        if ($now_goods['status'] != 1) return array('status' => 0, 'msg' => $now_goods['name'] . '商品已下架');
+        if ($now_goods['status'] != 1) return array('status' => 0, 'msg' => 'Sorry, '.$now_goods['name'] . ' is currently unavailable');
 
 
 

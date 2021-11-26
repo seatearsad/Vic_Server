@@ -2565,7 +2565,7 @@ class ShopAction extends BaseAction{
             $cookieData = $this->getCookieData($store_id);
 
             if(empty($cookieData)) {
-                redirect(U('Shop/index') . '#shop-' . $store_id);
+                redirect(U("Shop/classic_shop",array('shop_id'=>$store_id)));
                 exit;
             }else{
                 $store = D('Merchant_store')->where(array('store_id'=>$store_id))->find();
