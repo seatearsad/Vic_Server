@@ -106,6 +106,7 @@ function list_detail(lat, lng)
 		if (result.err_code) {
 			//$('#container').html('<div class="psnone" ><img src="' + static_path + 'images/qdz_02.jpg"></div>');
             //$('#container').html('<p style="text-align: center;width: 90%;margin: auto;">No pending orders. Please wait for the next available order.</p>');
+            $('#gray_middle_div').html('<div class="wait_div"><img src="' + static_path + 'img/deliver_menu/wait_order.gif"></div><div class="wait_div">Waiting for the next available order</div>');
 			return false;
 		}
 		laytpl($('#replyListBoxTpl').html()).render(result, function(html){

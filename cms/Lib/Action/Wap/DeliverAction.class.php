@@ -254,7 +254,6 @@ class DeliverAction extends BaseAction
                 if(($new_hour >= $ids['start_time'] && $new_hour < $ids['end_time']) || ($min >= 50 && $new_hour+1 >= $ids['start_time'] && $new_hour+1 < $ids['end_time'])){
                     $show_time = "Today, ".$ids['start_time'].':00 - '.$ids['end_time'].':00';
                 }
-
             }
         }else{
             for($i = 0;$i < 7;++$i){
@@ -291,7 +290,7 @@ class DeliverAction extends BaseAction
         $this->assign('show_time',$show_time);
 
         //修改上下班状态 只有在紧急状态下才能修改上班状态
-		if($_GET['action'] == 'changeWorkstatus' && ($city['urgent_time'] != 0 || $is_change_work_status == 1)) {
+		if($_GET['action'] == 'changeWorkstatus') {// && ($city['urgent_time'] != 0 || $is_change_work_status == 1)
 		    if($_GET['type'] == 1){
                 $current_order_num = D('Deliver_supply')->where(array('uid'=>$this->deliver_session['uid'],'status'=>array('lt',5)))->count();
             }

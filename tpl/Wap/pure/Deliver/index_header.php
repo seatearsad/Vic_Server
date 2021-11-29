@@ -137,7 +137,7 @@
         color: white;
     }
     .startOrder{color: #fff;float: right;background: green;border: 1px solid #ccc;padding: 5px 10px 5px 10px;}
-    .stopOrder{color: #000;float: right;background: #ccc;border: 1px solid #ccc;padding: 5px 10px 5px 10px;}
+    .stopOrder{display: block;}
 
     #menu_bottom{
         width: 90%;
@@ -180,6 +180,24 @@
     .material-icons{
         width: 35px;
     }
+    #more_list{
+        position: absolute;
+        right: 10px;
+        top:65px;
+        width: 150px;
+        color: #294068;
+        line-height: 40px;
+        background: #f8f8f8;
+        padding: 5px 10px;
+        border-radius: 2px;
+        border: 1px solid #294068;
+        display: none;
+    }
+    #more_list div .material-icons{
+        vertical-align: middle;
+        font-size: 18px;
+        width: 20px;
+    }
 </style>
 
 <div id="tutti_header">
@@ -204,9 +222,23 @@
         <div class="refresh" id="refresh_btn">
             <span class="material-icons title_icon" style="color: #294068">restart_alt</span>
         </div>
-        <div class="refresh">
+        <div class="refresh" id="index_more">
             <span class="material-icons title_icon" style="color: #294068">more_vert</span>
         </div>
+    </div>
+    <div id="more_list">
+        <div>
+            <span class="material-icons">phone</span>
+            Contact Support
+        </div>
+        <if condition="(ACTION_NAME eq 'index' OR ACTION_NAME eq 'process') && $deliver_session['work_status'] eq 0">
+            <a href="javascript:void(0)" class="stopOrder" ref="1">
+                <div>
+                    <span class="material-icons">highlight_off</span>
+                    {pigcms{:L('_CLOCK_OUT_')}
+                </div>
+            </a>
+        </if>
     </div>
 </div>
 <div id="menu_memo">
@@ -352,5 +384,12 @@
 
     $('#refresh_btn').click(function () {
         window.location.reload();
+    });
+
+    $('#index_more').click(function () {
+        if($("#more_list").is(":hidden"))
+            $("#more_list").show();
+        else
+            $("#more_list").hide();
     });
 </script>

@@ -12,6 +12,7 @@
 <script src="{pigcms{:C('JQUERY_FILE')}"></script>
 <script>
     var location_url = "{pigcms{:U('Deliver/grab')}",lat = "{pigcms{$deliver_session['lat']}", lng = "{pigcms{$deliver_session['lng']}", reject_url = "{pigcms{:U('Deliver/reject')}",update_url = "{pigcms{:U('Deliver/index_count')}";
+    var static_path = "{pigcms{$static_path}";
 	$(function(){
 		$(".startOrder,.stopOrder").click(function(){
 			$.get("/wap.php?g=Wap&c=Deliver&a=index&action=changeWorkstatus&type="+$(this).attr('ref'), function(data){
@@ -163,7 +164,7 @@
             flex: 1 1 25%;
         }
         .order_detail .amount{
-            flex: 1 1 50%;
+            flex: 1 1 75%;
             font-size: 32px;
             font-weight: bold;
         }
@@ -235,6 +236,20 @@
             border-top-left-radius: 15px;
             border-top-right-radius: 15px;
             padding: 10px 10px 10px 20px;
+        }
+        .wait_div{
+            text-align: center;
+            font-size: 17px;
+            color: #294068;
+        }
+        .diff_time{
+            border-radius: 100%;
+            border: 2px solid #294068;
+            width: 35px;
+            height: 35px;
+            flex: none !important;
+            line-height: 35px;
+            margin-top: 5px;
         }
     </style>
 </head>
@@ -329,7 +344,7 @@
                     </label>
                 </span>
                     <span class="amount">${{ d.list[i].total_price }}</span>
-                    <span></span>
+                    <span class="diff_time">{{ d.list[i].diff_time }}</span>
                 </div>
                 <div class="store_name">
                     {{ d.list[i].store_name }}
