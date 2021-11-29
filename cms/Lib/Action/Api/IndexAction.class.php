@@ -841,8 +841,9 @@ class IndexAction extends BaseAction
         else
             $sid = $cart_array[0]['storeId'];
 
-        if($getMenuVersion == 1) {
-            $store = D('Store')->get_store_by_id($sid);
+        $store = D('Store')->get_store_by_id($sid);
+        
+        if($getMenuVersion != 1) {
             if ($store['is_close'] == 1) $this->returnCode(1, 'info', array(), "storeClose");
         }
         if(!D('Cart')->where(array('sid'=>$sid,'uid'=>$uid))->find()) $this->returnCode(1,'info',array(),'checkcarterror');
