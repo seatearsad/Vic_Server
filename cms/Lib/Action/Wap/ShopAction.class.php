@@ -2444,8 +2444,8 @@ class ShopAction extends BaseAction{
     public function checkGoodsTime(){
         $store_id = isset($_POST['store_id']) ? intval($_POST['store_id']) : 0;
         $newCart = array();
+        $productCart = $this->getCookieData($store_id);
         if($store_id != 0) {
-            $productCart = $this->getCookieData($store_id);
             if(!empty($productCart)) {
                 $store = D("Merchant_store")->field(true)->where(array('store_id' => $store_id))->find();
                 if($store['menu_version'] == 1) {
@@ -2503,9 +2503,11 @@ class ShopAction extends BaseAction{
                         if(count($product['productParam']) > 0) {
                             $all_dish_id = array();
                             foreach ($product['productParam'] as $dish) {
-                                $dish_arr = explode(',', $dish['dish_id']);
-                                if (!in_array($dish_arr[0], $all_dish_id)) $all_dish_id[] = $dish_arr[0];
-                                if (!in_array($dish_arr[1], $all_dish_id)) $all_dish_id[] = $dish_arr[1];
+                                if($dish['dish_id'] != "") {
+                                    $dish_arr = explode(',', $dish['dish_id']);
+                                    if (!in_array($dish_arr[0], $all_dish_id)) $all_dish_id[] = $dish_arr[0];
+                                    if (!in_array($dish_arr[1], $all_dish_id)) $all_dish_id[] = $dish_arr[1];
+                                }
                             }
 
                             $all_list = D('Store_product')->where(array('id' => array('in', $all_dish_id), 'storeId' => $store_id, 'status' => 1))->select();
@@ -2532,7 +2534,7 @@ class ShopAction extends BaseAction{
             $msg = "Sorry, this store is currently unavailable!";
         }else if(count($productCart) > count($newCart)){
             $is_error = true;
-            $type = "produce";
+            $type = "product";
             $msg = "Please note that you have one or more item become unavailable at this time and will be removed from your cart. Do you confirm to continue checkout?";
         }else{
             $msg = "";
