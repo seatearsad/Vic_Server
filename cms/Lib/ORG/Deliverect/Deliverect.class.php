@@ -198,8 +198,8 @@ class Deliverect
         //var_dump($data);die();
         $result = $this->curlPost($url,$data);
 
-        var_dump($result.'----'.$order['order_id']);
-
+        var_dump($result);
+        var_dump($order['order_id']);
         if($result == NULL || $result == "NULL"){
             D("Shop_order")->where(array('order_id'=>$order['order_id']))->save(array('send_platform'=>1));
         }
