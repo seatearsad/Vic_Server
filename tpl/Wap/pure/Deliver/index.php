@@ -491,7 +491,7 @@
             marker = new google.maps.Marker({
                 position: self_position,
                 map: map,
-                icon:"{pigcms{$static_path}images/map/my_pos.png"
+                icon:"{pigcms{$static_path}img/deliver_menu/customer_pin_3.png"
             });
         }
 
@@ -544,13 +544,26 @@
                 }]
             });
 
-            directionsDisplay.setOptions({polylineOptions: line});
+            marker = new google.maps.Marker({
+                position: haight,
+                map: map,
+                scaledSize: new google.maps.Size(10, 10),
+                icon:{url:"{pigcms{$static_path}img/deliver_menu/customer_pin_5.png",scaledSize: new google.maps.Size(35, 35)}
+            });
+
+            var marker_store = new google.maps.Marker({
+                position: oceanBeach,
+                map: map,
+                icon:{url:"{pigcms{$static_path}img/deliver_menu/restaurant_pin_5.png",scaledSize: new google.maps.Size(35, 35)},
+            });
+
+            directionsDisplay.setOptions({polylineOptions: line,suppressMarkers:[marker,marker_store]});
 
             //var selectedMode = document.getElementById('biz-map').value;
             var request = {
                 origin: haight,
                 destination: oceanBeach,
-                travelMode: 'DRIVING'
+                travelMode: 'DRIVING',
             };
 
             directionsService.route(request, function (response, status) {

@@ -125,7 +125,7 @@
     }
 </style>
 <body>
-    <include file="header" />
+    <include file="index_header" />
     <div class="order_title" style="background: #294068;">
         <span>
             {pigcms{$supply['statusStr']}

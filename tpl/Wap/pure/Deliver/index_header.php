@@ -200,13 +200,19 @@
     }
 </style>
 
-<div id="tutti_header">
+<div id="tutti_header" <if condition="ACTION_NAME eq 'detail'">style="background-color:white;"</if>>
     <div id="header_menu">
-        <div id="hamburger-1" class="hamburger">
-            <span class="line"></span>
-            <span class="line"></span>
-            <span class="line"></span>
-        </div>
+        <if condition="ACTION_NAME eq 'detail'">
+            <div class="refresh" id="back_btn">
+                <span class="material-icons title_icon" style="color: #294068;font-size: 30px;">keyboard_arrow_left</span>
+            </div>
+            <else />
+            <div id="hamburger-1" class="hamburger">
+                <span class="line"></span>
+                <span class="line"></span>
+                <span class="line"></span>
+            </div>
+        </if>
         <if condition="ACTION_NAME eq 'index' OR ACTION_NAME eq 'process'">
         <div class="menu_font">Status:
             <if condition="$deliver_session['work_status'] eq '1'">
@@ -220,10 +226,10 @@
 
     <div id="header_sign">
         <div class="refresh" id="refresh_btn">
-            <span class="material-icons title_icon" style="color: #294068">restart_alt</span>
+            <span class="material-icons title_icon" style="color: #294068;font-size: 26px;">restart_alt</span>
         </div>
         <div class="refresh" id="index_more">
-            <span class="material-icons title_icon" style="color: #294068">more_vert</span>
+            <span class="material-icons title_icon" style="color: #294068;font-size: 26px;">more_vert</span>
         </div>
     </div>
     <div id="more_list">
@@ -391,5 +397,9 @@
             $("#more_list").show();
         else
             $("#more_list").hide();
+    });
+
+    $('#back_btn').click(function () {
+        window.history.back();
     });
 </script>
