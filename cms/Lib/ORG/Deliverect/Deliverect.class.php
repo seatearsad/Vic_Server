@@ -65,7 +65,8 @@ class Deliverect
         $data['grant_type'] = "client_credentials";
 
         $result = $this->curlPost($url,$data,false);
-        var_dump($result);die();
+        file_put_contents("./deliverect_log.log",date("Y/m/d")."   ".date("h:i:sa")."   "."Deliverect" ."   ". $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'--'.json_encode($result)."\r\n",FILE_APPEND);
+
         if(!$result['_error']){
             $this->token = $result['access_token'];
             $this->expiry = $result['expires_at'];
@@ -197,6 +198,8 @@ class Deliverect
         $data['taxes'][0]['total'] = intval(round($tax_price,2)*100);
         //var_dump($data);die();
         $result = $this->curlPost($url,$data);
+
+        file_put_contents("./deliverect_log.log",date("Y/m/d")."   ".date("h:i:sa")."   "."Deliverect" ."   ". $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'--'.json_encode($result)."\r\n",FILE_APPEND);
 
         var_dump($result);
         var_dump($order['order_id']);
