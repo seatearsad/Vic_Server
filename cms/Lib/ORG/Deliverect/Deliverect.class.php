@@ -65,7 +65,7 @@ class Deliverect
         $data['grant_type'] = "client_credentials";
 
         $result = $this->curlPost($url,$data,false);
-
+        var_dump($result);die();
         if(!$result['_error']){
             $this->token = $result['access_token'];
             $this->expiry = $result['expires_at'];
