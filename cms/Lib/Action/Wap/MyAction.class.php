@@ -5461,6 +5461,14 @@ class MyAction extends BaseAction{
 				$go_refund_param['msg'] = L('_B_MY_ORDERCANCELLEDACCESS_');
 			}
 			D('Shop_order_log')->add_log(array('order_id' => $order_id, 'status' => 9));
+
+            if($mer_store['link_type'] == 1) {
+                $now_order['link_id'] = $mer_store['link_id'];
+
+                import('@.ORG.Deliverect.Deliverect');
+                $deliverect = new Deliverect();
+                $result = $deliverect->createDelOrder($now_order);
+            }
 			//$this->success_tips($go_refund_param['msg'], U('Shop/status',array('order_id' => $order_id, 'store_id' => $store_id, 'mer_id' => $this->mer_id)));
             $this->success_tips($go_refund_param['msg'], U('Wap/My/shop_order_list',array('select' => "history")));
 

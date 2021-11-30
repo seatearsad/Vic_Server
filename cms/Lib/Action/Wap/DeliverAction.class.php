@@ -1781,10 +1781,17 @@ class DeliverAction extends BaseAction
 
 			$this->assign('order', $order);
 
+            //店铺信息
+            $store = D()->field(true)->table(array(C('DB_PREFIX').'merchant_store'=>'ms', C('DB_PREFIX').'merchant_store_shop'=>'ml'))->where("ms.store_id=".$order['store_id']." AND ms.store_id=ml.store_id")->find();
+
 			$goods = D('Shop_order_detail')->field(true)->where(array('order_id' => $supply['order_id']))->select();
 			foreach ($goods as $k=>&$g) {
                 $g_id = $g['goods_id'];
-                $t_goods = D('Shop_goods')->get_goods_by_id($g_id);
+                if($store['menu_version'] == 2){
+                    $t_goods = D('StoreMenuV2')->getProduct($g_id,$order['store_id']);
+                }else {
+                    $t_goods = D('Shop_goods')->get_goods_by_id($g_id);
+                }
                 $g['name'] = $t_goods['name'];
 //				if ($g['spec']) {
 //					$g['name'] = $g['name'] . '(' . $g['spec'] . ')';
@@ -1826,11 +1833,17 @@ class DeliverAction extends BaseAction
                     foreach($dish_list as $vv){
                         $one_dish = explode(",",$vv);
                         //0 dish_id 1 id 2 num 3 price
-                        $dish = D('Side_dish')->where(array('id'=>$one_dish[0]))->find();
-                        $dish_name = lang_substr($dish['name'],C('DEFAULT_LANG'));
-                        $dish_vale = D('Side_dish_value')->where(array('id'=>$one_dish[1]))->find();
-                        $dish_vale['name'] = lang_substr($dish_vale['name'],C('DEFAULT_LANG'));
-
+                        if($store['menu_version'] == 1) {
+                            $dish = D('Side_dish')->where(array('id'=>$one_dish[0]))->find();
+                            $dish_name = lang_substr($dish['name'],C('DEFAULT_LANG'));
+                            $dish_vale = D('Side_dish_value')->where(array('id' => $one_dish[1]))->find();
+                            $dish_vale['name'] = lang_substr($dish_vale['name'], C('DEFAULT_LANG'));
+                        }elseif ($store['menu_version'] == 2){
+                            //$dish = D('StoreMenuV2')->getProduct($one_dish[0],$order['store_id']);
+                            //$dish_name = $dish['name'];
+                            $product_dish = D('StoreMenuV2')->getProduct($one_dish[1],$order['store_id']);
+                            $dish_vale['name'] = $product_dish['name'];
+                        }
                         $add_str = $one_dish[2] > 1 ? $dish_vale['name']."*".$one_dish[2] : $dish_vale['name'];
 
                         $dish_desc[$dish['id']]['name'] = $dish_name;
@@ -1842,8 +1855,7 @@ class DeliverAction extends BaseAction
 			}
             $this->assign('supply', $supply);
 			$this->assign('goods', $goods);
-			//店铺信息
-			$store = D()->field(true)->table(array(C('DB_PREFIX').'merchant_store'=>'ms', C('DB_PREFIX').'merchant_store_shop'=>'ml'))->where("ms.store_id=".$order['store_id']." AND ms.store_id=ml.store_id")->find();
+
 			if (!$store) {
 				$this->error_tips("店铺信息有误");
 			}

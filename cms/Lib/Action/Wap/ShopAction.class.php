@@ -1507,86 +1507,92 @@ class ShopAction extends BaseAction{
             echo json_encode(array('store' => $store, 'product_list' => $list));
 
         } else {
+            if($now_store['menu_version'] == 2){
+                $categories = D('StoreMenuV2')->getStoreCategories($store_id,true);
+                $sortList = D('StoreMenuV2')->arrangeWap($categories);
+                $list = D('StoreMenuV2')->getStoreProduct($categories,$store_id);
+                //$list = D('StoreMenuV2')->arrangeProductWap($products);
+            }else {
+                $sortList = D('Shop_goods_sort')->lists($store_id, true);
+                $sortIdList = array();
+                $sortListById = array();
+                //Add Garfunkel 判断语言
+                foreach ($sortList as $k => $sl) {
+                    $sortList[$k]['cat_name'] = lang_substr($sl['sort_name'], C('DEFAULT_LANG'));
+                    $sortIdList[] = $sl['sort_id'];
+                    $sortListById[$sl['sort_id']] = $sl;
+                    $show_time_str = explode(',', $sortList[$k]['show_time']);
+                    $sortList[$k]['show_time_str'] = $show_time_str[0] . " - " . $show_time_str[1];
+                }
+                $firstSort = reset($sortList);
+                //$sortId = isset($firstSort['sort_id']) ? $firstSort['sort_id'] : 0;
+                $product_list = D('Shop_goods')->get_list_by_storeid($store_id);
 
-            $sortList = D('Shop_goods_sort')->lists($store_id, true);
-            $sortIdList = array();
-            $sortListById = array();
-            //Add Garfunkel 判断语言
-            foreach ($sortList as $k => $sl){
-                $sortList[$k]['cat_name'] = lang_substr($sl['sort_name'],C('DEFAULT_LANG'));
-                $sortIdList[] = $sl['sort_id'];
-                $sortListById[$sl['sort_id']] = $sl;
-                $show_time_str = explode(',',$sortList[$k]['show_time']);
-                $sortList[$k]['show_time_str']=$show_time_str[0]." - ".$show_time_str[1];
-            }
-            $firstSort = reset($sortList);
-            //$sortId = isset($firstSort['sort_id']) ? $firstSort['sort_id'] : 0;
-            $product_list = D('Shop_goods')->get_list_by_storeid($store_id);
-
-            foreach ($product_list as $row) {
-                if(in_array($row['sort_id'],$sortIdList)) {
-                    $temp = array();
-                    $temp['cat_id'] = $row['sort_id'];
-                    //modify garfunkel 判断语言
-                    $temp['cat_name'] = lang_substr($row['sort_name'], C('DEFAULT_LANG'));
-                    $temp['sort_discount'] = $row['sort_discount'] / 10;
-
-                    //是否是限时供应
-                    if( ($sortListById[$row['sort_id']]['is_weekshow']=="0") && ($sortListById[$row['sort_id']]['is_time']=="0")){
-                        $temp['limited_offers']="0";
-                    }else{
-                        $temp['limited_offers']="1";
-                    }
-
-                    $temp['is_time'] = $sortListById[$row['sort_id']]['is_time'];
-
-                    if($sortListById[$row['sort_id']]['is_time'] == 1) {
-                        $show_time = explode(',',$sortListById[$row['sort_id']]['show_time']);
-                        //$sortListById[$row['sort_id']]['show_time'] = $show_time[0]."-".$show_time[1];
-                        $temp['begin_time'] = $show_time[0];
-                        $temp['end_time'] = $show_time[1];
-                    }
-                    foreach ($row['goods_list'] as $r) {
-                        $glist = array();
-                        $glist['product_id'] = $r['goods_id'];
-                        $glist['product_desc'] = $r['des'];
+                foreach ($product_list as $row) {
+                    if (in_array($row['sort_id'], $sortIdList)) {
+                        $temp = array();
+                        $temp['cat_id'] = $row['sort_id'];
                         //modify garfunkel 判断语言
-                        $glist['product_name'] = lang_substr($r['name'], C('DEFAULT_LANG'));
-                        $glist['product_price'] = $r['price'];
-                        $glist['is_seckill_price'] = $r['is_seckill_price'];
-                        $glist['o_price'] = $r['o_price'];
-                        $glist['number'] = $r['number'];
-                        $glist['packing_charge'] = floatval($r['packing_charge']);
-                        $glist['unit'] = $r['unit'];
-                        if (isset($r['pic_arr'][0])) {
-                            $glist['product_image'] = $r['pic_arr'][0]['url']['s_image'];
-                        }
-                        $glist['product_sale'] = $r['sell_count'];
-                        $glist['product_reply'] = $r['reply_count'];
-                        $glist['has_format'] = false;
-                        if ($r['spec_value'] || $r['is_properties']) {
-                            $glist['has_format'] = true;
-                        }
-                        //garfunkel add side_dish
-                        $glist['has_dish'] = false;
-                        if (D('Side_dish')->where(array('goods_id' => $r['goods_id']))->find()) {
-                            $glist['has_dish'] = true;
-                        }
-                        //
-                        if ($r['extra_pay_price'] > 0) {
-                            $glist['extra_pay_price'] = $r['extra_pay_price'];
-                            $glist['extra_pay_price_name'] = $this->config['extra_price_alias_name'];
+                        $temp['cat_name'] = lang_substr($row['sort_name'], C('DEFAULT_LANG'));
+                        $temp['sort_discount'] = $row['sort_discount'] / 10;
+
+                        //是否是限时供应
+                        if (($sortListById[$row['sort_id']]['is_weekshow'] == "0") && ($sortListById[$row['sort_id']]['is_time'] == "0")) {
+                            $temp['limited_offers'] = "0";
+                        } else {
+                            $temp['limited_offers'] = "1";
                         }
 
-                        $r['sell_day'] = $now_shop['stock_type'] ? $today : $r['sell_day'];
-                        if ($today == $r['sell_day']) {
-                            $glist['stock'] = $r['stock_num'] == -1 ? $r['stock_num'] : (intval($r['stock_num'] - $r['today_sell_count']) > 0 ? intval($r['stock_num'] - $r['today_sell_count']) : 0);
-                        } else {
-                            $glist['stock'] = $r['stock_num'];
+                        $temp['is_time'] = $sortListById[$row['sort_id']]['is_time'];
+
+                        if ($sortListById[$row['sort_id']]['is_time'] == 1) {
+                            $show_time = explode(',', $sortListById[$row['sort_id']]['show_time']);
+                            //$sortListById[$row['sort_id']]['show_time'] = $show_time[0]."-".$show_time[1];
+                            $temp['begin_time'] = $show_time[0];
+                            $temp['end_time'] = $show_time[1];
                         }
-                        $temp['product_list'][] = $glist;
+                        foreach ($row['goods_list'] as $r) {
+                            $glist = array();
+                            $glist['product_id'] = $r['goods_id'];
+                            $glist['product_desc'] = $r['des'];
+                            //modify garfunkel 判断语言
+                            $glist['product_name'] = lang_substr($r['name'], C('DEFAULT_LANG'));
+                            $glist['product_price'] = $r['price'];
+                            $glist['is_seckill_price'] = $r['is_seckill_price'];
+                            $glist['o_price'] = $r['o_price'];
+                            $glist['number'] = $r['number'];
+                            $glist['packing_charge'] = floatval($r['packing_charge']);
+                            $glist['unit'] = $r['unit'];
+                            if (isset($r['pic_arr'][0])) {
+                                $glist['product_image'] = $r['pic_arr'][0]['url']['s_image'];
+                            }
+                            $glist['product_sale'] = $r['sell_count'];
+                            $glist['product_reply'] = $r['reply_count'];
+                            $glist['has_format'] = false;
+                            if ($r['spec_value'] || $r['is_properties']) {
+                                $glist['has_format'] = true;
+                            }
+                            //garfunkel add side_dish
+                            $glist['has_dish'] = false;
+                            if (D('Side_dish')->where(array('goods_id' => $r['goods_id'], 'status' => 1))->find()) {
+                                $glist['has_dish'] = true;
+                            }
+                            //
+                            if ($r['extra_pay_price'] > 0) {
+                                $glist['extra_pay_price'] = $r['extra_pay_price'];
+                                $glist['extra_pay_price_name'] = $this->config['extra_price_alias_name'];
+                            }
+
+                            $r['sell_day'] = $now_shop['stock_type'] ? $today : $r['sell_day'];
+                            if ($today == $r['sell_day']) {
+                                $glist['stock'] = $r['stock_num'] == -1 ? $r['stock_num'] : (intval($r['stock_num'] - $r['today_sell_count']) > 0 ? intval($r['stock_num'] - $r['today_sell_count']) : 0);
+                            } else {
+                                $glist['stock'] = $r['stock_num'];
+                            }
+                            $temp['product_list'][] = $glist;
+                        }
+                        $list[] = $temp;
                     }
-                    $list[] = $temp;
                 }
             }
             //echo json_encode(array('store' => $store, 'product_list' => $this->getGoodsBySortId($sortId, $store_id), 'sort_list' => array_values($sortList)));
@@ -1674,52 +1680,59 @@ class ShopAction extends BaseAction{
 
         $is_result = 1;
 
-        $product_list = D('Shop_goods')->get_list_by_storeid($store_id,0,$keyword);
-        foreach ($product_list as $row) {
-            $temp = array();
-            $temp['cat_id'] = 0;
-            $temp['cat_name'] = "";
-            $temp['sort_discount'] = 0;
+        $store = D('Merchant_store')->where(array('store_id'=>$store_id))->find();
 
-            foreach ($row['goods_list'] as $r) {
-                $glist = array();
-                $glist['product_id'] = $r['goods_id'];
-                //modify garfunkel 判断语言
-                $glist['product_name'] = lang_substr($r['name'], C('DEFAULT_LANG'));
-                $glist['product_price'] = $r['price'];
-                $glist['product_desc'] = $r['des'];
-                $glist['is_seckill_price'] = $r['is_seckill_price'];
-                $glist['o_price'] = $r['o_price'];
-                $glist['number'] = $r['number'];
-                $glist['packing_charge'] = floatval($r['packing_charge']);
-                $glist['unit'] = $r['unit'];
-                if (isset($r['pic_arr'][0])) {
-                    $glist['product_image'] = $r['pic_arr'][0]['url']['s_image'];
-                }
-                $glist['product_sale'] = $r['sell_count'];
-                $glist['product_reply'] = $r['reply_count'];
-                $glist['has_format'] = false;
-                if ($r['spec_value'] || $r['is_properties']) {
-                    $glist['has_format'] = true;
-                }
-                //garfunkel add side_dish
-                $glist['has_dish'] = false;
-                if (D('Side_dish')->where(array('goods_id' => $r['goods_id']))->find()) {
-                    $glist['has_dish'] = true;
-                }
-                //
-                if ($r['extra_pay_price'] > 0) {
-                    $glist['extra_pay_price'] = $r['extra_pay_price'];
-                    $glist['extra_pay_price_name'] = $this->config['extra_price_alias_name'];
-                }
+        if($store['menu_version'] == 2){
+            $categories = D('StoreMenuV2')->getStoreCategories($store_id,true);
+            $list = D('StoreMenuV2')->getStoreProduct($categories,$store_id,1,$keyword);
+        }else {
+            $product_list = D('Shop_goods')->get_list_by_storeid($store_id, 0, $keyword);
+            foreach ($product_list as $row) {
+                $temp = array();
+                $temp['cat_id'] = 0;
+                $temp['cat_name'] = "";
+                $temp['sort_discount'] = 0;
 
-                $temp['product_list'][] = $glist;
+                foreach ($row['goods_list'] as $r) {
+                    $glist = array();
+                    $glist['product_id'] = $r['goods_id'];
+                    //modify garfunkel 判断语言
+                    $glist['product_name'] = lang_substr($r['name'], C('DEFAULT_LANG'));
+                    $glist['product_price'] = $r['price'];
+                    $glist['product_desc'] = $r['des'];
+                    $glist['is_seckill_price'] = $r['is_seckill_price'];
+                    $glist['o_price'] = $r['o_price'];
+                    $glist['number'] = $r['number'];
+                    $glist['packing_charge'] = floatval($r['packing_charge']);
+                    $glist['unit'] = $r['unit'];
+                    if (isset($r['pic_arr'][0])) {
+                        $glist['product_image'] = $r['pic_arr'][0]['url']['s_image'];
+                    }
+                    $glist['product_sale'] = $r['sell_count'];
+                    $glist['product_reply'] = $r['reply_count'];
+                    $glist['has_format'] = false;
+                    if ($r['spec_value'] || $r['is_properties']) {
+                        $glist['has_format'] = true;
+                    }
+                    //garfunkel add side_dish
+                    $glist['has_dish'] = false;
+                    if (D('Side_dish')->where(array('goods_id' => $r['goods_id']))->find()) {
+                        $glist['has_dish'] = true;
+                    }
+                    //
+                    if ($r['extra_pay_price'] > 0) {
+                        $glist['extra_pay_price'] = $r['extra_pay_price'];
+                        $glist['extra_pay_price_name'] = $this->config['extra_price_alias_name'];
+                    }
+
+                    $temp['product_list'][] = $glist;
+                }
+                if (!$temp['product_list']) {
+                    $temp['product_list'] = array();
+                    $is_result = 0;
+                }
+                $list[] = $temp;
             }
-            if (!$temp['product_list']) {
-                $temp['product_list'] = array();
-                $is_result = 0;
-            }
-            $list[] = $temp;
         }
         //echo json_encode(array('store' => $store, 'product_list' => $this->getGoodsBySortId($sortId, $store_id), 'sort_list' => array_values($sortList)));
         echo json_encode(array('product_list' => $list,'is_result'=>$is_result));
@@ -1727,41 +1740,58 @@ class ShopAction extends BaseAction{
 
     public function ajax_goods()
     {
-        $goods_id = isset($_GET['goods_id']) ? intval($_GET['goods_id']) : 1;
-        $database_shop_goods = D('Shop_goods');
-        $now_goods = $database_shop_goods->get_goods_by_id($goods_id);
-        //modify garfunkel 判断语言
-        $now_goods['name'] = lang_substr($now_goods['name'],C('DEFAULT_LANG'));
-        $now_goods['unit'] = lang_substr($now_goods['unit'],C('DEFAULT_LANG'));
-        foreach ($now_goods['properties_list'] as $k => $v){
-            $now_goods['properties_list'][$k]['name'] = lang_substr($v['name'],C('DEFAULT_LANG'));
-            foreach ($v['val'] as $kk => $vv){
-                $now_goods['properties_list'][$k]['val'][$kk] = lang_substr($vv,C('DEFAULT_LANG'));
-            }
-        }
+        $store_id = isset($_GET['store_id']) ? intval($_GET['store_id']) : 2;
+        $where = array('store_id' => $store_id);
+        $now_store = D('Merchant_store')->field(true)->where($where)->find();
 
-        foreach($now_goods['spec_list'] as $k => $v){
-            $now_goods['spec_list'][$k]['name'] = lang_substr($v['name'],C('DEFAULT_LANG'));
-            foreach($v['list'] as $kk => $vv){
-                $now_goods['spec_list'][$k]['list'][$kk]['name'] = lang_substr($vv['name'],C('DEFAULT_LANG'));
-            }
-        }
+        $goods_id = isset($_GET['goods_id']) ? $_GET['goods_id'] : 1;
 
-        //garfunkel add side_dish
-        $dish_list = D('Side_dish')->where(array('goods_id'=>$goods_id))->select();
-        foreach ($dish_list as &$v){
-            $v['name'] = lang_substr($v['name'],C('DEFAULT_LANG'));
-            $values = D('Side_dish_value')->where(array('dish_id'=>$v['id']))->select();
-            foreach ($values as &$vv){
-                $vv['name'] = lang_substr($vv['name'],C('DEFAULT_LANG'));
-            }
-            $v['list'] = $values;
-        }
-        $now_goods['side_dish'] = $dish_list;
+        if($now_store['menu_version'] == 2){
+            $now_goods = D('StoreMenuV2')->getProduct($goods_id,$store_id);
+            $now_goods = D('StoreMenuV2')->arrangeProductWapShow($now_goods);
 
-        ///
-        if(empty($now_goods)){
-            $this->error_tips('商品不存在！');
+            $dish_list = D('StoreMenuV2')->getProductRelation($goods_id,$store_id,1);
+
+            $dish_list_new = D('StoreMenuV2')->arrangeDishWap($dish_list,$goods_id,$store_id,1);
+
+            $now_goods['side_dish'] = $dish_list_new;
+        }else {
+            $database_shop_goods = D('Shop_goods');
+            $now_goods = $database_shop_goods->get_goods_by_id($goods_id);
+            //modify garfunkel 判断语言
+            $now_goods['name'] = lang_substr($now_goods['name'], C('DEFAULT_LANG'));
+            $now_goods['unit'] = lang_substr($now_goods['unit'], C('DEFAULT_LANG'));
+            foreach ($now_goods['properties_list'] as $k => $v) {
+                $now_goods['properties_list'][$k]['name'] = lang_substr($v['name'], C('DEFAULT_LANG'));
+                foreach ($v['val'] as $kk => $vv) {
+                    $now_goods['properties_list'][$k]['val'][$kk] = lang_substr($vv, C('DEFAULT_LANG'));
+                }
+            }
+
+            foreach ($now_goods['spec_list'] as $k => $v) {
+                $now_goods['spec_list'][$k]['name'] = lang_substr($v['name'], C('DEFAULT_LANG'));
+                foreach ($v['list'] as $kk => $vv) {
+                    $now_goods['spec_list'][$k]['list'][$kk]['name'] = lang_substr($vv['name'], C('DEFAULT_LANG'));
+                }
+            }
+
+            //garfunkel add side_dish
+            $dish_list = D('Side_dish')->where(array('goods_id' => $goods_id, 'status' => 1))->select();
+            foreach ($dish_list as &$v) {
+                $v['name'] = lang_substr($v['name'], C('DEFAULT_LANG'));
+                $values = D('Side_dish_value')->where(array('dish_id' => $v['id'], 'status' => 1))->select();
+                foreach ($values as &$vv) {
+                    $vv['name'] = lang_substr($vv['name'], C('DEFAULT_LANG'));
+                    $vv['list'] = array();
+                }
+                $v['list'] = $values;
+            }
+            $now_goods['side_dish'] = $dish_list;
+
+            ///
+            if (empty($now_goods)) {
+                $this->error_tips('商品不存在！');
+            }
         }
         echo json_encode($now_goods);
     }
@@ -2407,6 +2437,7 @@ class ShopAction extends BaseAction{
                 }
             }
         }
+
         return $productCart;
     }
 
@@ -2416,32 +2447,99 @@ class ShopAction extends BaseAction{
         if($store_id != 0) {
             $productCart = $this->getCookieData($store_id);
             if(!empty($productCart)) {
-                $sortList = D('Shop_goods_sort')->lists($store_id, true);
-                $sortIdList = array();
-                foreach ($sortList as $k => $sl){
-                    $sortIdList[] = $sl['sort_id'];
-                }
+                $store = D("Merchant_store")->field(true)->where(array('store_id' => $store_id))->find();
+                if($store['menu_version'] == 1) {
+                    $sortList = D('Shop_goods_sort')->lists($store_id, true);
+                    $sortIdList = array();
+                    foreach ($sortList as $k => $sl) {
+                        $sortIdList[] = $sl['sort_id'];
+                    }
 
-                foreach ($productCart as $product) {
-                    $goodsId = $product['productId'];
-                    $goods = D('Shop_goods')->where(array('goods_id' => $goodsId))->find();
+                    foreach ($productCart as $product) {
+                        $goodsId = $product['productId'];
+                        $goods = D('Shop_goods')->where(array('goods_id' => $goodsId))->find();
 
-                    if(in_array($goods['sort_id'],$sortIdList)){
-                        $newCart[] = $product;
+                        $allow_add = true;
+                        if(count($product['productParam']) > 0) {
+                            $all_dish_id = array();
+                            $all_dish_value_id = array();
+                            foreach ($product['productParam'] as $dish) {
+                                if($dish['type'] == 'side_dish') {
+                                    $dish_arr = explode(',', $dish['dish_id']);
+                                    if (!in_array($dish_arr[0], $all_dish_id)) $all_dish_id[] = $dish_arr[0];
+                                    if (!in_array($dish_arr[1], $all_dish_value_id)) $all_dish_value_id[] = $dish_arr[1];
+                                }
+                            }
+
+                            $all_list = D('Side_dish')->where(array('id' => array('in', $all_dish_id), 'status' => 1))->select();
+
+                            if (count($all_dish_id) != count($all_list)) {
+                                $allow_add = false;
+                            }
+
+                            $all_value_list = D('Side_dish_value')->where(array('id' => array('in', $all_dish_value_id), 'status' => 1))->select();
+                            if (count($all_dish_value_id) != count($all_value_list)) {
+                                $allow_add = false;
+                            }
+                        }
+
+                        if (in_array($goods['sort_id'], $sortIdList) && $allow_add) {
+                            $newCart[] = $product;
+                        }
+                    }
+                }else if($store['menu_version'] == 2){
+                    $categories = D('StoreMenuV2')->getStoreCategories($store_id,true);
+                    $products = D('StoreMenuV2')->getStoreProductAll($categories,$store_id);
+
+                    $allProduct = array();
+                    foreach ($products as $p){
+                        $allProduct[] = $p['id'];
+                    }
+
+                    foreach ($productCart as $product) {
+                        $goodsId = $product['productId'];
+
+                        $allow_add = true;
+                        if(count($product['productParam']) > 0) {
+                            $all_dish_id = array();
+                            foreach ($product['productParam'] as $dish) {
+                                $dish_arr = explode(',', $dish['dish_id']);
+                                if (!in_array($dish_arr[0], $all_dish_id)) $all_dish_id[] = $dish_arr[0];
+                                if (!in_array($dish_arr[1], $all_dish_id)) $all_dish_id[] = $dish_arr[1];
+                            }
+
+                            $all_list = D('Store_product')->where(array('id' => array('in', $all_dish_id), 'storeId' => $store_id, 'status' => 1))->select();
+
+                            if (count($all_dish_id) != count($all_list)) {
+                                $allow_add = false;
+                            }
+                        }
+
+                        if (in_array($goodsId, $allProduct) && $allow_add) {
+                            $newCart[] = $product;
+                        }
                     }
                 }
             }
         }
 
         $is_error = false;
-        if(count($productCart) > count($newCart)){
+
+        $store = D('Store')->get_store_by_id($store_id);
+        if($store['is_close'] == 1) {
             $is_error = true;
+            $type = "store";
+            $msg = "Sorry, this store is currently unavailable!";
+        }else if(count($productCart) > count($newCart)){
+            $is_error = true;
+            $type = "produce";
             $msg = "Please note that you have one or more item become unavailable at this time and will be removed from your cart. Do you confirm to continue checkout?";
         }else{
             $msg = "";
+            $type = "";
         }
 
-        echo json_encode(array('error'=>$is_error,'msg'=>$msg,'cartList'=>$newCart));
+        echo json_encode(array('error'=>$is_error,'type'=>$type,'msg'=>$msg,'cartList'=>$newCart));
     }
 
     public function confirm_order()
@@ -2465,9 +2563,40 @@ class ShopAction extends BaseAction{
             //die("++++");
         } else {
             $cookieData = $this->getCookieData($store_id);
+
             if(empty($cookieData)) {
-                redirect(U('Shop/index') . '#shop-' . $store_id);
+                redirect(U("Shop/classic_shop",array('shop_id'=>$store_id)));
                 exit;
+            }else{
+                $store = D('Merchant_store')->where(array('store_id'=>$store_id))->find();
+                //查看所有的cookie商品是否存在 如果不存在删除cookie
+                if($store['menu_version'] == 2){
+                    $all_id = array();
+                    foreach ($cookieData as $pp){
+                        if(!in_array($pp['productId'],$all_id)){
+                            $all_id[] = $pp['productId'];
+                        }
+
+                        if(count($pp['productParam']) > 0){
+                            foreach ($pp['productParam'] as $ppp){
+                                $dish_id_list = explode(',',$ppp['dish_id']);
+                                if($dish_id_list[0] != '' && !in_array($dish_id_list[0],$all_id)){
+                                    $all_id[] = $dish_id_list[0];
+                                }
+                                if($dish_id_list[1] != '' && !in_array($dish_id_list[1],$all_id)){
+                                    $all_id[] = $dish_id_list[1];
+                                }
+                            }
+                        }
+                    }
+
+                    $all_product = D('Store_product')->where(array('id'=>array('in',$all_id),'storeId'=>$store_id))->group('id')->select();
+                    //var_dump($all_id);
+                    //var_dump(count($all_id).' ---- '.count($all_product));die();
+                    if(count($all_id) != count($all_product)){
+                        cookie('shop_cart_' . $store['store_id'], null);
+                    }
+                }
             }
             $return = D('Shop_goods')->checkCart($store_id, $this->user_session['uid'], $cookieData);
             //var_dump($return);die("----");
@@ -3828,9 +3957,21 @@ class ShopAction extends BaseAction{
                     'total' => strval(floatval($v['price'] * $v['num'])),
                     'discount_total' => strval(floatval($discount_price * $v['num'])),
                 );
+                if($store['menu_version'] == 1) {
+                    $goods = D('Shop_goods')->field(true)->where(array('goods_id' => $v['goods_id']))->find();
+                    $tax_price += $v['price'] * $goods['tax_num']/100 * $v['num'];
+                    $deposit_price += $goods['deposit_price'] * $v['num'];
+                }elseif ($store['menu_version'] == 2){
+                    $goods = D('StoreMenuV2')->getProduct($v['goods_id'],$order['store_id']);
+                    //$tax_price += $v['price'] * $goods['tax']/100000 * $v['num'];
+                    $tax_price += D('StoreMenuV2')->calculationTaxFromOrder($v);
+                    $deposit_price += 0;
+                }
+                /**
                 $goods = D('Shop_goods')->field(true)->where(array('goods_id'=>$v['goods_id']))->find();
                 $tax_price += $v['price'] * $goods['tax_num']/100 * $v['num'];
                 $deposit_price += $goods['deposit_price'] * $v['num'];
+                 * */
             }
             $tax_price = $tax_price + ($order['freight_charge'] + $order['packing_charge'])*$store['tax_num']/100;
             $arr['order_details']['tax_price'] = $tax_price;

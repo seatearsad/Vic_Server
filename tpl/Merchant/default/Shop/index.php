@@ -67,6 +67,11 @@
 											</td>
 											<td class="button-column">
 												<a  class="label label-sm label-purple"  href="{pigcms{:U('Shop/goods_sort',array('store_id'=>$vo['store_id']))}">{pigcms{:L('VIEW_CATEGORIES_BKADMIN')}</a>
+                                                <volist name="vo['menuList']" id="menu">
+                                                    <a class="label label-sm label-purple" href="{pigcms{:U('Shop/menuCategories',array('menuId'=>$menu['id'],'store_id'=>$vo['store_id']))}">
+                                                        {pigcms{$menu['name']} (V2)
+                                                    </a>
+                                                </volist>
 											</td>
 											<td class="button-column">
 												<a  class="label label-sm label-info" href="{pigcms{:U('Shop/discount',array('store_id'=>$vo['store_id']))}">{pigcms{:L('PROMOTIONS_BKADMIN')}</a>

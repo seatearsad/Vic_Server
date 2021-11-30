@@ -229,9 +229,21 @@ class MerchantAction extends BaseAction{
 			if ($_POST['status']) {
                 if ($_POST['status'] == 'on') {
                     $_POST['status'] = 1;
+                }else{
+                    $_POST['status'] = 0;
                 }
             }else{
                 $_POST['status'] = 0;
+            }
+
+            if($_POST['status'] == 0){
+                $storeList = D('Merchant_store')->where(array('mer_id'=>$_POST['mer_id']))->select();
+
+                $storeIds = array();
+                foreach ($storeList as $store){
+                    $storeIds[] = $store['store_id'];
+                }
+                D('Cart')->where(array('sid'=>array('in',$storeIds)))->delete();
             }
 
 			$database_merchant->data($_POST)->save();
@@ -1558,6 +1570,20 @@ class MerchantAction extends BaseAction{
         $pagebar = $p->show2();
         $this->assign('pagebar', $pagebar);
 	    $this->display();
+    }
+
+    public function allergens(){
+        $database_allergent = D('Allergens');
+
+        $condition = array();
+        $count_merchant = $database_allergent->where($condition)->count();
+        import('@.ORG.system_page');
+        $p = new Page($count_merchant, 15);
+        $list = $database_allergent->field(true)->where($condition)->order('id ASC')->limit($p->firstRow.','.$p->listRows)->select();
+        $this->assign('list', $list);
+        $pagebar = $p->show2();
+        $this->assign('pagebar', $pagebar);
+        $this->display();
     }
 
     public function store_list(){

@@ -7,11 +7,12 @@ core/Extend
 core/Lib
 core/Tpl
 core/pigcms.php
-core/.DS_Store
+.DS_Store
 runtime/
 upload/
 .idea/
 test_log.txt
+deliverect_log.log
 /tpl/System/_Newface/Merchant/index--.php
 /tpl/System/_Newface/Index/main--.php
 /sample/style2.css
@@ -19,3 +20,4 @@ test_log.txt
 /nginx.htaccess
 /ioncube/README.txt
 /favicon.ico
+DeliverMenu/

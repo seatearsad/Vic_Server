@@ -76,6 +76,12 @@
                                             <input class="col-sm-2" size="20" name="value_name-{pigcms{$vo.id}" id="value_name-{pigcms{$vo.id}" data-id="old_{pigcms{$vo.id}" type="text" value="{pigcms{$vo.name}"/>
                                             <label class="col-sm-1"><label for="sort">{pigcms{:L('ITEM_PRICE_BKADMIN')}</label></label>
                                             <input class="col-sm-1" size="10" name="value_price-{pigcms{$vo.id}" id="value_price-{pigcms{$vo.id}" placeholder="0.00" data-id="old_{pigcms{$vo.id}" type="text" value="{pigcms{$vo.price}"/>
+                                            <label class="col-sm-1"><label for="sort">{pigcms{:L('STATUS_BKADMIN')}</label></label>
+                                            <label class="statusSwitch" style="display:inline-block;">
+                                                <input name="switch-field-1" class="ace ace-switch ace-switch-6" type="checkbox" data-id="{pigcms{$vo.id}" <if condition="$vo['status'] eq 1">checked="checked" data-status="OPEN"<else/>data-status="CLOSED"</if>/>
+                                                <span class="lbl"></span>
+                                            </label>
+                                            <input type="hidden" name="value_status-{pigcms{$vo.id}" value="{pigcms{$vo.status}" />
                                             <label class="col-sm-1" style="float: right;"><label class="single_del" data-id="old_{pigcms{$vo.id}" for="sort">{pigcms{:L('DELETE_BKADMIN')}</label></label>
                                         </div>
                                     </volist>
@@ -120,6 +126,8 @@
                 return false;
             }
         });
+
+        updateStatus(".statusSwitch .ace-switch", ".statusSwitch", "OPEN", "CLOSED", "shopstatus");
     }
 
     $('.single_del').bind('click',function () {
@@ -150,6 +158,11 @@
         str += '<label class="col-sm-1"><label for="sort">{pigcms{:L('ITEM_PRICE_BKADMIN')}</label></label>';
         str += '<input class="col-sm-1" size="10" name="value_price_new-'+new_num+'" id="value_price_new-'+new_num+'" placeholder="0.00" data-id="new_'+new_num+'" type="text" value=""/>';
         str += '<label class="col-sm-1" style="float: right;"><label class="single_del" data-id="new_'+new_num+'" for="sort">{pigcms{:L('DELETE_BKADMIN')}</label></label>';
+        str += '<label class="col-sm-1"><label for="sort">{pigcms{:L('STATUS_BKADMIN')}</label></label>';
+        str += '<label class="statusSwitch" style="display:inline-block;">';
+        str += '<input name="switch-field-1" class="ace ace-switch ace-switch-6" type="checkbox" data-id="new-'+new_num+'" checked="checked" data-status="OPEN" />';
+        str += '<span class="lbl"></span></label>';
+        str += '<input type="hidden" name="value_status_new-'+new_num+'" value="1" />';
 
         return str;
     }
@@ -234,6 +247,42 @@
             reader.onload = function (e) {$('#image_preview_box').html('<img style="width:120px;height:120px" src="'+e.target.result+'" alt="图片预览" title="图片预览"/>');}
             reader.readAsDataURL(input.files[0]);
         }
+    }
+
+    updateStatus(".statusSwitch .ace-switch", ".statusSwitch", "OPEN", "CLOSED", "shopstatus");
+
+    function updateStatus(dom1, dom2, status1, status2, attribute){
+        $(dom1).each(function(){
+            $(this).unbind();
+        });
+        $(dom1).each(function(){
+            if($(this).attr("data-status")==status1){
+                $(this).attr("checked",true);
+            }else{
+                $(this).attr("checked",false);
+            }
+            $(dom2).show();
+        }).click(function(){
+            var _this = $(this),
+                type = 'open',
+                id = $(this).attr("data-id");
+            _this.attr("disabled",true);
+
+            if(Number(id))
+                var inputName = "value_status-"+id;
+            else
+                var inputName = "value_status_"+id;
+
+            if(_this.attr("checked")){	//开启
+                type = 'open';
+                $('input[name="'+inputName+'"]').val(1);
+            }else{		//关闭
+                type = 'close';
+                $('input[name="'+inputName+'"]').val(0);
+            }
+
+            _this.attr("disabled",false);
+        });
     }
 </script>
 

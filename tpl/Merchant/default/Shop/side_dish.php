@@ -31,6 +31,7 @@
                                 <th width="80">{pigcms{:L('MAX_BKADMIN')}</th>
                                 <th width="80">{pigcms{:L('MULTI_CAP_BKADMIN')}</th>
                                 <th width="50">{pigcms{:L('TOTAL_BKADMIN')}</th>
+                                <th width="50">{pigcms{:L('STATUS_BKADMIN')}</th>
                                 <th width="100" class="button-column">{pigcms{:L('ACTION_BKADMIN')}</th>
                             </tr>
                             </thead>
@@ -49,6 +50,12 @@
                                 </if>
                             </td>
                             <td>{pigcms{$vo.count}</td>
+                            <td>
+                                <label class="statusSwitch" style="display:inline-block;">
+                                    <input name="switch-field-1" class="ace ace-switch ace-switch-6" type="checkbox" data-id="{pigcms{$vo.id}" <if condition="$vo['status'] eq 1">checked="checked" data-status="OPEN"<else/>data-status="CLOSED"</if>/>
+                                    <span class="lbl"></span>
+                                </label>
+                            </td>
                             <td class="button-column">
                                 <a title="{pigcms{:L('EDIT_BKADMIN')}" class="green" style="padding-right:8px;" href="{pigcms{:U('Shop/dish_add',array('goods_id'=>$vo['goods_id'],'page'=>$_GET['page'],'dish_id'=>$vo['id']))}">
                                     <i class="ace-icon fa fa-pencil bigger-130"></i>
@@ -79,6 +86,46 @@
     });
     function CreateDish(){
         window.location.href = "{pigcms{:U('Shop/dish_add',array('goods_id' => $now_goods['goods_id']))}";
+    }
+
+    updateStatus(".statusSwitch .ace-switch", ".statusSwitch", "OPEN", "CLOSED", "shopstatus");
+
+    function updateStatus(dom1, dom2, status1, status2, attribute){
+        $(dom1).each(function(){
+            if($(this).attr("data-status")==status1){
+                $(this).attr("checked",true);
+            }else{
+                $(this).attr("checked",false);
+            }
+            $(dom2).show();
+        }).click(function(){
+            var _this = $(this),
+                type = 'open',
+                id = $(this).attr("data-id");
+            _this.attr("disabled",true);
+            if(_this.attr("checked")){	//开启
+                type = 'open';
+            }else{		//关闭
+                type = 'close';
+            }
+            $.ajax({
+                url:"{pigcms{:U('Shop/side_dish_status')}",
+                type:"post",
+                data:{"type":type,"id":id,"status1":status1,"status2":status2,"attribute":attribute},
+                dataType:"text",
+                success:function(d){
+                    if(d != '1'){		//失败
+                        if (type=='open') {
+                            _this.attr("checked",false);
+                        } else {
+                            _this.attr("checked",true);
+                        }
+                        bootbox.alert("操作失败");
+                    }
+                    _this.attr("disabled",false);
+                }
+            });
+        });
     }
 </script>
 <include file="Public:footer"/>
