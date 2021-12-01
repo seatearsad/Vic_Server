@@ -28,7 +28,7 @@ class Deliverect
         'cash' => 1
     );
 
-    private $url = "https://api.staging.deliverect.com/";
+    private $url = "https://api.deliverect.com/";
 
     //获取token
     private $getTokenUrl = "oauth/token";
