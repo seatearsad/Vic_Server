@@ -202,14 +202,29 @@
             vertical-align: middle;
             font-size: 26px !important;
         }
-        .color_2 .title_icon{
-            color: #864648;
-        }
-        .color_3 .title_icon{
-            color: #7094E6;
-        }
         .color_0 .title_icon{
             color: #5D9CBA;
+        }
+        .color_1 .title_icon{
+            color: #864648;
+        }
+        .color_2 .title_icon{
+            color: #90839F;
+        }
+        .color_3 .title_icon{
+            color: #506343;
+        }
+        .color_4 .title_icon{
+            color: #ffa52d;
+        }
+        .color_5 .title_icon{
+            color: #344267;
+        }
+        .color_6 .title_icon{
+            color: #776553;
+        }
+        .color_7 .title_icon{
+            color: #57589A;
         }
         .send_btn{
             width: 92%;
@@ -298,9 +313,21 @@
                     $('#'+hide_id).hide();
                     $(this).addClass('active').siblings().removeClass('active');
 
-                    if(show_id == 'deliver_middle_div') loadProcess();
+                    if(show_id == 'deliver_middle_div') {
+                        loadProcess();
+                        location.hash = 1;
+                    }
+                    else {
+                        getList();
+                        location.hash = 0;
+                    }
                 });
             });
+
+            var curr_hash = location.hash.replace("#","");
+            if(curr_hash == "1"){
+                $('#deliver_count').trigger('click');
+            }
 
             function loadProcess(){
                 $.post("{pigcms{:U('Deliver/get_process')}",{"status":0,'lat':lat, 'lng':lng},function(result){
@@ -308,6 +335,8 @@
                         laytpl($('#processListBoxTpl').html()).render(result, function (html) {
                             $('#deliver_middle_div').html(html);
                         });
+
+                        setProcessOrder(result.list);
 
                         $('.deliver_order').bind('click',function () {
                             var order_id = $(this).data('id');
@@ -403,13 +432,7 @@
                 {{# } }}
                 {{ d.list[i].show_dining_time }}
             </div>
-            {{# if(d.list[i].status == 2){ }}
-                <div id="position_div" class="color_2">
-            {{# } else if(d.list[i].status == 3) { }}
-                <div id="position_div" class="color_3">
-            {{# } else { }}
-                <div id="position_div" class="color_0">
-            {{# } }}
+            <div id="position_div" class="color_{{ i%8 }}">
                 <div>
                     <span class="material-icons title_icon">restaurant</span>
                     {{ d.list[i].from_site }}
@@ -443,11 +466,19 @@
 
             map = new google.maps.Map(document.getElementById('all_map'),mapOptions);
 
+            var marker_deliver = new google.maps.Marker({
+                position: self_position,
+                map: map,
+                //icon:"{pigcms{$static_path}img/deliver_menu/customer_pin_3.png"
+            });
+
+            /**
             if(is_route == 1){//如果已有路线规划 显示路线图
                 loadRoute();
             }else{
                 loadPosition();
             }
+             */
         }
 
         //定位是否有问题
@@ -514,11 +545,50 @@
             }
         }
 
-        function loadRoute() {
+        function setProcessOrder(orderList) {
+            bounds = new google.maps.LatLngBounds();
+
+            for (var i = 0; i < orderList.length; i++) {
+                var order = orderList[i];
+
+                var user = {
+                    url:"{pigcms{$static_path}img/deliver_menu/customer_pin_"+(i%8+1)+".png",
+                    scaledSize: new google.maps.Size(35,35),
+                    size: new google.maps.Size(35,35)
+                };
+
+                var store =  {
+                    url:"{pigcms{$static_path}img/deliver_menu/restaurant_pin_"+(i%8+1)+".png",
+                    scaledSize: new google.maps.Size(35,35),
+                    size: new google.maps.Size(35,35)
+                };
+
+                var store_pos = {lat: parseFloat(order.from_lat), lng: parseFloat(order.from_lnt)};
+                var user_pos = {lat: parseFloat(order.aim_lat), lng: parseFloat(order.aim_lnt)};
+
+                // The marker, positioned at Uluru
+                marker_store = new google.maps.Marker({position: store_pos, map: map,icon:store});
+                marker_user = new google.maps.Marker({position: user_pos, map: map,icon:user});
+
+                bounds.extend(new   google.maps.LatLng(marker_store.getPosition().lat()
+                    ,marker_store.getPosition().lng()));
+                bounds.extend(new   google.maps.LatLng(marker_user.getPosition().lat()
+                    ,marker_user.getPosition().lng()));
+            }
+
+            map.fitBounds(bounds);
+        }
+
+        function loadRoute(orderDetail) {
             var directionsService = new google.maps.DirectionsService();
             var directionsDisplay = new google.maps.DirectionsRenderer();
-            var haight = self_position;
-            var oceanBeach = new google.maps.LatLng({pigcms{$route['destination_lat']?$route['destination_lat']:0}, {pigcms{$route['destination_lng']?$route['destination_lng']:0});
+            //var haight = self_position;
+            //var oceanBeach = new google.maps.LatLng({pigcms{$route['destination_lat']?$route['destination_lat']:0}, {pigcms{$route['destination_lng']?$route['destination_lng']:0});
+            var user_pos = {lat:parseFloat(orderDetail.aim_lat),lng:parseFloat(orderDetail.aim_lnt)};
+            var store_pos = {lat:parseFloat(orderDetail.from_lat),lng:parseFloat(orderDetail.from_lnt)};
+            
+            user_pos = new google.maps.LatLng(user_pos);
+            store_pos = new google.maps.LatLng(store_pos);
 
             directionsDisplay.setMap(map);
 
@@ -544,25 +614,25 @@
                 }]
             });
 
-            marker = new google.maps.Marker({
-                position: haight,
+            var marker_user = new google.maps.Marker({
+                position: user_pos,
                 map: map,
                 scaledSize: new google.maps.Size(10, 10),
                 icon:{url:"{pigcms{$static_path}img/deliver_menu/customer_pin_5.png",scaledSize: new google.maps.Size(35, 35)}
             });
 
             var marker_store = new google.maps.Marker({
-                position: oceanBeach,
+                position: store_pos,
                 map: map,
                 icon:{url:"{pigcms{$static_path}img/deliver_menu/restaurant_pin_5.png",scaledSize: new google.maps.Size(35, 35)},
             });
 
-            directionsDisplay.setOptions({polylineOptions: line,suppressMarkers:[marker,marker_store]});
+            directionsDisplay.setOptions({polylineOptions: line,suppressMarkers:[marker_store,marker_user]});
 
             //var selectedMode = document.getElementById('biz-map').value;
             var request = {
-                origin: haight,
-                destination: oceanBeach,
+                origin: store_pos,
+                destination: user_pos,
                 travelMode: 'DRIVING',
             };
 

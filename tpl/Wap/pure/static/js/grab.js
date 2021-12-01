@@ -61,7 +61,9 @@ function getList() {
 				list_detail(lat,lng);
 		});
 		return false;
-    }
+    }else{
+        list_detail(lat,lng);
+	}
 
 	
 	/*var geolocation = new BMap.Geolocation();
@@ -108,13 +110,16 @@ function list_detail(lat, lng)
             //$('#container').html('<p style="text-align: center;width: 90%;margin: auto;">No pending orders. Please wait for the next available order.</p>');
             $('#gray_middle_div').html('<div class="wait_div"><img src="' + static_path + 'img/deliver_menu/wait_order.gif"></div><div class="wait_div">Waiting for the next available order</div>');
 			return false;
-		}
-		laytpl($('#replyListBoxTpl').html()).render(result, function(html){
-			$('#gray_middle_div').html(html);
-		    $(".delivery p em").each(function(){
-		        $(this).width($(window).width() - $(this).siblings("i").width() -55) 
-	    	});
-		});
+		}else {
+            laytpl($('#replyListBoxTpl').html()).render(result, function (html) {
+                $('#gray_middle_div').html(html);
+                $(".delivery p em").each(function () {
+                    $(this).width($(window).width() - $(this).siblings("i").width() - 55)
+                });
+            });
+
+            loadRoute(result.list[0]);
+        }
 	}, 'json');
 }
 
