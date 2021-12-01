@@ -65,7 +65,7 @@ class Deliverect
         $data['grant_type'] = "client_credentials";
 
         $result = $this->curlPost($url,$data,false);
-        file_put_contents("./deliverect_log.log",date("Y/m/d")."   ".date("h:i:sa")."   "."Deliverect" ."   ". $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'--'.json_encode($result)."\r\n",FILE_APPEND);
+        //file_put_contents("./deliverect_log.log",date("Y/m/d")."   ".date("h:i:sa")."   "."Deliverect" ."   ". $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'--'.json_encode($result)."\r\n",FILE_APPEND);
 
         if(!$result['_error']){
             $this->token = $result['access_token'];
