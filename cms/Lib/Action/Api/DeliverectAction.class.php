@@ -214,7 +214,7 @@ class DeliverectAction
             $this->orderRefund($orderId);
         }
         if($status == 20){
-            $this->updatePrepTimeURL(true);
+            //$this->updatePrepTimeURL(true);
         }
 
         echo "statusUpdate";
@@ -245,6 +245,10 @@ class DeliverectAction
             $this->error_tips(replace_lang_str(L('D_F_TIP_3'),$shop['min_time']));
         }
         */
+
+        if($order['send_platform'] == 20){
+            $acceepted = true;
+        }
 
         if($this->data['pickupTime'] != '') {
             $preparationTime = $this->data['pickupTime'];
@@ -279,7 +283,7 @@ class DeliverectAction
         }
 
         if($acceepted) {
-            //$_POST['dining_time'] = $dining_time ? $dining_time : 0;
+            $_POST['dining_time'] = $dining_time ? $dining_time : 0;
 
             $store = D('Merchant_store')->field(true)->where(array('store_id' => $order['store_id']))->find();
 
