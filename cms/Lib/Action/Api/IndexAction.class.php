@@ -886,7 +886,8 @@ class IndexAction extends BaseAction
                     $all_list = D('Store_product')->where(array('id' => array('in', $all_dish_id), 'storeId' => $sid, 'status' => 1))->select();
 
                     if (count($all_dish_id) != count($all_list)) {
-                        $goods['status'] = 0;
+                        //$goods['status'] = 0;
+                        D('Cart')->where(array('uid'=>$uid,'fid'=>$goodsId,'dish_id'=>$product['dish_id']))->delete();
                     }
                 }
             }else {

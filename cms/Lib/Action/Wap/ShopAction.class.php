@@ -2464,22 +2464,26 @@ class ShopAction extends BaseAction{
                             $all_dish_id = array();
                             $all_dish_value_id = array();
                             foreach ($product['productParam'] as $dish) {
-                                if($dish['type'] == 'side_dish') {
+                                if($dish['type'] == 'side_dish' && $dish['dish_id'] != '') {
                                     $dish_arr = explode(',', $dish['dish_id']);
                                     if (!in_array($dish_arr[0], $all_dish_id)) $all_dish_id[] = $dish_arr[0];
                                     if (!in_array($dish_arr[1], $all_dish_value_id)) $all_dish_value_id[] = $dish_arr[1];
                                 }
                             }
 
-                            $all_list = D('Side_dish')->where(array('id' => array('in', $all_dish_id), 'status' => 1))->select();
+                            if(count($all_dish_id) > 0) {
+                                $all_list = D('Side_dish')->where(array('id' => array('in', $all_dish_id), 'status' => 1))->select();
 
-                            if (count($all_dish_id) != count($all_list)) {
-                                $allow_add = false;
+                                if (count($all_dish_id) != count($all_list)) {
+                                    $allow_add = false;
+                                }
                             }
 
-                            $all_value_list = D('Side_dish_value')->where(array('id' => array('in', $all_dish_value_id), 'status' => 1))->select();
-                            if (count($all_dish_value_id) != count($all_value_list)) {
-                                $allow_add = false;
+                            if(count($all_dish_value_id) > 0) {
+                                $all_value_list = D('Side_dish_value')->where(array('id' => array('in', $all_dish_value_id), 'status' => 1))->select();
+                                if (count($all_dish_value_id) != count($all_value_list)) {
+                                    $allow_add = false;
+                                }
                             }
                         }
 
