@@ -888,6 +888,7 @@ class IndexAction extends BaseAction
                     if (count($all_dish_id) != count($all_list)) {
                         //$goods['status'] = 0;
                         D('Cart')->where(array('uid'=>$uid,'fid'=>$goodsId,'dish_id'=>$product['dish_id']))->delete();
+                        $del_list[] = lang_substr($goods['name'],C('DEFAULT_LANG'));
                     }
                 }
             }else {
@@ -915,7 +916,10 @@ class IndexAction extends BaseAction
                         $is_del_dish = true;
                     }
 
-                    if($is_del_dish) D('Cart')->where(array('uid'=>$uid,'fid'=>$goodsId,'dish_id'=>$product['dish_id']))->delete();
+                    if($is_del_dish){
+                        D('Cart')->where(array('uid'=>$uid,'fid'=>$goodsId,'dish_id'=>$product['dish_id']))->delete();
+                        $del_list[] = lang_substr($goods['name'],C('DEFAULT_LANG'));
+                    }
                 }
             }
 
