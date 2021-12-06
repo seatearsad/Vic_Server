@@ -198,6 +198,7 @@
         }
     </style>
 	<body>
+        <include file="Public:google"/>
         <include file="Public:header"/>
         <div class="main" style="margin-top: 20px">
             <div class="main_left">

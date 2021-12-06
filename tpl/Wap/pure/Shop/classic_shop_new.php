@@ -538,6 +538,7 @@
             }
         </style>
 	<body onscroll="scrollProductEvent(1)">
+    <include file="Public:google"/>
 <!--    <div id="debug" style="position: fixed;color:red;width:auto;height: 40px;left:30px;top:200px;z-index: 1000000;background: white">Debug</div>-->
     <div id="debug2" style="position: fixed;color:red;width:auto;height: 40px;left:30px;top:220px;z-index: 1000000;background: white"></div>
     <div id="container">

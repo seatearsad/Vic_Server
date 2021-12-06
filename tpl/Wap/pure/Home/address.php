@@ -115,6 +115,7 @@
 
 </style>
 <body>
+<include file="Public:google"/>
 <div id="pageLoadTipShade" class="pageLoadTipBg">
     <div id="pageLoadTipBox" class="pageLoadTipBox">
         <div class="pageLoadTipLoader">

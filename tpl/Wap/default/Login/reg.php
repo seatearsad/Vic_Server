@@ -123,6 +123,7 @@
     }
 </style>
 <body>
+    <include file="Public:google"/>
     <div class="sign_title">
         Sign up
     </div>

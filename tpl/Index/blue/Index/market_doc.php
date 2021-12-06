@@ -44,6 +44,7 @@
     }
 </style>
 <body>
+    <include file="Public:google"/>
     <div class="header"></div>
     <div class="memo">
         <img src="./static/market/0001.jpg">

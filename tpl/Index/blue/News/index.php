@@ -283,6 +283,7 @@
         }
     </style>
 	<body>
+        <include file="Public:google"/>
         <include file="Public:header"/>
         <div style="">
         <div class="reg_desc">

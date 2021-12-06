@@ -21,7 +21,7 @@
     <include file="Public:facebook"/>
 </head>
 <body>
-
+<include file="Public:google"/>
 
 <?php if($is_app_browser && in_array($app_browser_type,array('android','ios')) && ($_REQUEST['app_version'] ? $_SESSION['app_version'] : $_SESSION['app_version']  || $app_version >= 60) ){ ?>
     <script type="text/javascript">

@@ -5,6 +5,7 @@ class IndexAction extends BaseAction
 	
     public function index() 
     {
+        redirect('/index.php');
 		$database_area = D('Area');
 		
 		//通过IP得到当前IP的地理位置

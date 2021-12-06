@@ -46,6 +46,7 @@
         <include file="Public:facebook"/>
 </head>
 <body>
+    <include file="Public:google"/>
 	<dl style="padding:0 10px;background-color:#fff;margin-top:10px;margin-bottom:10px;">
 		
 		<volist name='village_list' id='row'>

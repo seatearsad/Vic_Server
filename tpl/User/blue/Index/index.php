@@ -34,6 +34,7 @@ body{behavior:url("{pigcms{$static_path}css/csshover.htc");}
     <include file="Public:facebook"/>
 </head>
 <body id="orders" class="has-order-nav" style="position:static;">
+<include file="Public:google"/>
 <include file="Public:header_top"/>
  <div class="body pg-buy-process"> 
 	<div id="doc" class="bg-for-new-index">

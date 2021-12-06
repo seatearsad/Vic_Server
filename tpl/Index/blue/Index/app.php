@@ -104,6 +104,7 @@
         }
     </style>
 	<body>
+        <include file="Public:google"/>
         <include file="Public:header"/>
         <section class="main">
             <div id="memo">

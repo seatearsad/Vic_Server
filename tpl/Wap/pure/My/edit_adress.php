@@ -100,6 +100,7 @@
     <include file="Public:facebook"/>
 </head>
 <body id="index" data-com="pagecommon">
+<include file="Public:google"/>
 <include file="Public:header"/>
 <div class="main">
 
