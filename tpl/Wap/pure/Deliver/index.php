@@ -115,7 +115,7 @@
             width: 94%;
             margin-left: 3%;
             bottom: 80px;
-            top:50%;
+            top:46%;
             background-color: #FFF5E8;
             border-radius: 15px;
         }
@@ -149,6 +149,10 @@
             position: absolute;
             top: -10px;
         }
+        .order_memo{
+            height: 100%;
+            overflow: auto;
+        }
         #order_div{
             padding: 20px 5% 10px 5%;
             text-align: center;
@@ -161,10 +165,10 @@
             line-height: 50px;
         }
         .order_detail span{
-            flex: 1 1 25%;
+            flex: 1 1 30%;
         }
         .order_detail .amount{
-            flex: 1 1 75%;
+            flex: 1 1 70%;
             font-size: 32px;
             font-weight: bold;
         }
@@ -292,6 +296,17 @@
             $('#gray_count').html("0 Pending");
             $('#deliver_count').html("0 in Progress");
 
+            $.get("{pigcms{:U('Deliver/index_count')}", function(response){
+                if (response.err_code == false) {
+                    $('#gray_count').html(response.gray_count + " Pending");
+                    $('#deliver_count').html(response.deliver_count + " in Progress");
+                    $('#finish_count').html(response.finish_count);
+                    if(response.work_status == 1){
+                        window.location.reload();
+                    }
+                }
+            }, 'json');
+
             // setInterval(function(){
             //     $.get("{pigcms{:U('Deliver/index_count')}", function(response){
             //         if (response.err_code == false) {
@@ -327,6 +342,8 @@
             var curr_hash = location.hash.replace("#","");
             if(curr_hash == "1"){
                 $('#deliver_count').trigger('click');
+            }else{
+                getList();
             }
 
             function loadProcess(){
@@ -357,6 +374,7 @@
             {{# } else { }}
             <div id="top_label" style="background-color: #666666">Also open to others</div>
             {{# } }}
+            <div class="order_memo">
             <div id="order_div">
                 <div class="order_detail">
                 <span class="payment">
@@ -373,7 +391,11 @@
                     </label>
                 </span>
                     <span class="amount">${{ d.list[i].total_price }}</span>
+                    {{# if(d.list[i].just == 1){ }}
                     <span class="diff_time">{{ d.list[i].diff_time }}</span>
+                    {{# } else { }}
+                    <span></span>
+                    {{# } }}
                 </div>
                 <div class="store_name">
                     {{ d.list[i].store_name }}
@@ -382,9 +404,9 @@
                     {{ d.list[i].store_distance }} from you
                      ·
                     {{# if(d.list[i].is_dinning == 1){ }}
-                    Order is ready {{ d.list[i].show_dining_time }}
+                    Ready {{ d.list[i].show_dining_time }}
                     {{# } else { }}
-                    Order will be ready in {{ d.list[i].show_dining_time }}
+                    Ready in {{ d.list[i].show_dining_time }}
                     {{# } }}
                 </div>
             </div>
@@ -403,6 +425,7 @@
                 Accept
             </div>
             </a>
+            </div>
         {{# } }}
     </script>
     <script id="processListBoxTpl" type="text/html">
@@ -426,9 +449,9 @@
                 0.5 from you
                 ·
                 {{# if(d.list[i].is_dinning == 1){ }}
-                Order is ready
+                Ready
                 {{# } else { }}
-                Order will be ready in
+                Ready in
                 {{# } }}
                 {{ d.list[i].show_dining_time }}
             </div>

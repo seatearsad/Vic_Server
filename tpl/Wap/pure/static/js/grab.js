@@ -41,7 +41,7 @@ $(function(){
             updateNum();
         });
     });
-	getList();
+	//getList();
 	//var timer = setInterval(getList, 2000);
 	
 	$(document).on("click", '.go_detail', function(e){
@@ -126,8 +126,10 @@ function list_detail(lat, lng)
 function updateNum() {
     $.get(update_url, function(response){
         if (response.err_code == false) {
-            $('#gray_count').html(response.gray_count);
-            $('#deliver_count').html(response.deliver_count);
+            $('#gray_count').html(response.gray_count+" Pending");
+            $('#deliver_count').html(response.deliver_count+" in Progress");
+            //$('#gray_count').html(response.gray_count);
+            //$('#deliver_count').html(response.deliver_count);
             $('#finish_count').html(response.finish_count);
         }
     }, 'json');

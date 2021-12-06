@@ -74,9 +74,12 @@
         padding-left: 32px;
         line-height: 25px;
     }
+    .goods_detail{
+        margin-top: -10px;
+    }
     .goods_detail li{
         width: 90%;
-        margin: -10px auto 0 auto;
+        margin: 10px auto 0 auto;
     }
     .goods_detail .goods_item{
         margin-left: 32px;
@@ -123,14 +126,30 @@
         line-height: 25px;
         font-weight: bold;
     }
+    .order_all{
+        position: absolute;
+        bottom: 80px;
+        overflow: auto;
+        top: 0;
+    }
 </style>
 <body>
     <include file="index_header" />
+    <div class="order_all">
     <div class="order_title" style="background: #294068;">
         <span>
             {pigcms{$supply['statusStr']}
         </span>
-        <span class="span_right">10 hr 59 min</span>
+        <if condition="$supply['status'] eq 2">
+        <span class="span_right">
+            <if condition="$supply['is_dinning'] eq 1">
+                Ready
+                <else />
+                Ready in
+            </if>
+                {pigcms{$supply['show_dining_time']}
+        </span>
+        </if>
     </div>
     <div class="order_num" style="border-bottom: 1px solid #999999;">
         <span>
@@ -164,13 +183,17 @@
                 Please call and wait in front of the door to pick up the order
             </div>
             <div style="margin-left: 35px;margin-top: 20px;font-size: 18px">
-                <span style="line-height: 40px;background-color: #294068;padding:10px 20px;color: white;border-radius: 20px;">
+                <span style="line-height: 40px;background-color: #294068;padding:10px 20px;color: white;border-radius: 20px;" id="open_map">
                     <label class="material-icons" style="vertical-align: middle;width: 30px;">open_in_new</label>
                     Get Direction
                 </span>
+
                 <span style="width: 40px;height:40px;border-radius: 20px;background-color: #294068;float: right">
-                    <label class="material-icons" style="color: white;font-size: 26px;margin-top: 7px;margin-left: 7px;">phone</label>
+                    <a href="tel:{pigcms{$store['phone']}" style="display: inline-block">
+                        <label class="material-icons" style="color: white;font-size: 26px;margin-top: 7px;margin-left: 7px;">phone</label>
+                    </a>
                 </span>
+
             </div>
         </div>
     </if>
@@ -184,12 +207,14 @@
                 {pigcms{$supply['aim_site']}
             </div>
             <div style="margin-left: 30px;margin-top: 20px;font-size: 18px">
-                <span style="line-height: 40px;background-color: #294068;padding:10px 20px;color: white;border-radius: 20px;">
+                <span style="line-height: 40px;background-color: #294068;padding:10px 20px;color: white;border-radius: 20px;" id="open_map">
                     <label class="material-icons" style="vertical-align: middle;width: 30px;">open_in_new</label>
                     Get Direction
                 </span>
                 <span style="width: 40px;height:40px;border-radius: 20px;background-color: #294068;float: right">
-                    <label class="material-icons" style="color: white;font-size: 26px;margin-top: 7px;margin-left: 7px;">phone</label>
+                    <a href="tel:{pigcms{$order['userphone']}" style="display: inline-block">
+                        <label class="material-icons" style="color: white;font-size: 26px;margin-top: 7px;margin-left: 7px;">phone</label>
+                    </a>
                 </span>
             </div>
         </div>
@@ -358,7 +383,7 @@
             </volist>
         </ul>
     </div>
-
+    </div>
     <if condition="$supply['status'] neq 5">
     <div id="sub_btn">
         <if condition="$supply['status'] eq 2">
@@ -396,6 +421,27 @@ function updatePosition(lat,lng){
 
     return message;
 }
+
+$('#open_map').click(function () {
+    var status = "{pigcms{$supply['status']}";
+    if(typeof (window.linkJs) != 'undefined'){
+        var address;
+        if (status == 2)
+            address = "{pigcms{$supply['from_site']}";
+        else
+            address = "{pigcms{$supply['aim_site']}";
+
+        window.linkJs.openGoogleMap(address);
+    }else {
+        var url = '';
+        if (status == 2)
+            url = "https://maps.google.com/maps?q={pigcms{$supply['from_site']}&z=17&hl=en";
+        else
+            url = "https://maps.google.com/maps?q={pigcms{$supply['aim_site']}&z=17&hl=en";
+
+        location.href = url;
+    }
+});
 
 $('#pay_online').click(function () {
     location.href = "{pigcms{:U('Wap/Deliver/online', array('supply_id'=>$supply['supply_id'],'lang'=>'en'))}";
