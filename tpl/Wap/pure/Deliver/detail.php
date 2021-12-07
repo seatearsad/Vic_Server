@@ -131,6 +131,7 @@
         bottom: 80px;
         overflow: auto;
         top: 0;
+        width: 100%;
     }
 </style>
 <body>
@@ -143,11 +144,12 @@
         <if condition="$supply['status'] eq 2">
         <span class="span_right">
             <if condition="$supply['is_dinning'] eq 1">
-                Ready
+                <label style="color: #ffa52d">Ready
                 <else />
-                Ready in
+                <label>Ready in
             </if>
                 {pigcms{$supply['show_dining_time']}
+            </label>
         </span>
         </if>
     </div>
@@ -161,9 +163,7 @@
                     <if condition="$supply['uid'] eq 0">
                         {pigcms{:L('_ND_UNPAID_')}
                     </if>
-                    <if condition="$supply['uid'] neq 0 and $supply['pay_method'] eq 1">
-                        {pigcms{:L('_ND_PAID_')}
-                        <else />
+                    <if condition="$supply['uid'] neq 0 and $supply['pay_method'] neq 1">
                         {pigcms{:L('_ND_CASH_')}
                     </if>
                 </label>
@@ -204,7 +204,7 @@
         </div>
         <div class="order_time">
             <div style="color: #333333;font-weight: bold;margin-left: 30px;margin-top: -15px;">
-                {pigcms{$supply['aim_site']}
+                {pigcms{$order.address}
             </div>
             <div style="margin-left: 30px;margin-top: 20px;font-size: 18px">
                 <span style="line-height: 40px;background-color: #294068;padding:10px 20px;color: white;border-radius: 20px;" id="open_map">

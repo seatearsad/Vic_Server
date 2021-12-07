@@ -751,6 +751,7 @@ class DeliverAction extends BaseAction
 
 				$order = D('Shop_order')->get_order_by_orderid($val['order_id']);
 				$val['tip_charge'] = $order['tip_charge'];
+				$val['deliver_income'] = $val['freight_charge']+$val['tip_charge'];
                 $val['uid'] = $order['uid'];
                 $val['total_price'] = $order['total_price'];
 

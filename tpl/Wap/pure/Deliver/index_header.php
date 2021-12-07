@@ -233,10 +233,12 @@
         </div>
     </div>
     <div id="more_list">
+        <a href="tel:1-888-399-6668" style="display: block">
         <div>
             <span class="material-icons">phone</span>
             Contact Support
         </div>
+        </a>
         <if condition="(ACTION_NAME eq 'index' OR ACTION_NAME eq 'process') && $deliver_session['work_status'] eq 0">
             <a href="javascript:void(0)" class="stopOrder" ref="1">
                 <div>
@@ -389,7 +391,11 @@
     });
 
     $('#refresh_btn').click(function () {
-        window.location.reload();
+        if(typeof (window.linkJs) != 'undefined'){
+            window.linkJs.reloadWebView();
+        }else {
+            window.location.reload();
+        }
     });
 
     $('#index_more').click(function () {

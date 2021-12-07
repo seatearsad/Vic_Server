@@ -390,7 +390,7 @@
                         {{# } }}
                     </label>
                 </span>
-                    <span class="amount">${{ d.list[i].total_price }}</span>
+                    <span class="amount">${{ d.list[i].deliver_income }}</span>
                     {{# if(d.list[i].just == 1){ }}
                     <span class="diff_time">{{ d.list[i].diff_time }}</span>
                     {{# } else { }}
