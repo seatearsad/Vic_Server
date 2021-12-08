@@ -80,9 +80,9 @@
     var ua = navigator.userAgent;
     $('#mail').click(function () {
         if(!ua.match(/TuttiDeliver/i)) {
-            location.href = "mailto:hr@tutti.app";
+            location.href = "mailto:henry@tutti.app";
         }else{
-            alert("Please send email to hr@tutti.app");
+            alert("Please send email to henry@tutti.app");
         }
     });
 

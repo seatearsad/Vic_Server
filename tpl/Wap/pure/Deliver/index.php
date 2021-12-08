@@ -19,7 +19,11 @@
 			    if(data.error == 1){
                     alert(data.msg);
 			    }else {
-                    window.location.reload();
+                    if(typeof (window.linkJs) != 'undefined'){
+                        window.linkJs.reloadWebView();
+                    }else {
+                        window.location.reload();
+                    }
                 }
 			},'json');
 		});
