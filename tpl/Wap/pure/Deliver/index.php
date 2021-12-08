@@ -352,11 +352,11 @@
                         laytpl($('#processListBoxTpl').html()).render(result, function (html) {
                             $('#deliver_middle_div').html(html);
                         });
-                        if(result.list.length > 0) {
+                        //if(result.list.length > 0) {
                             setProcessOrder(result.list);
-                        }else{
-                            loadPosition();
-                        }
+                        //}else{
+                        //    loadPosition();
+                        //}
 
                         $('.deliver_order').bind('click',function () {
                             var order_id = $(this).data('id');
