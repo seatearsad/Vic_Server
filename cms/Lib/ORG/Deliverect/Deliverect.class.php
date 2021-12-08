@@ -206,6 +206,8 @@ class Deliverect
         if($result == NULL || $result == "NULL"){
             D("Shop_order")->where(array('order_id'=>$order['order_id']))->save(array('send_platform'=>1));
         }
+
+        D("StoreMenuV2")->saveIntegration($order['store_id'],"Order",$order['order_id']." - Send new",0);
     }
 
     public function curlGet($url,$timeout=30){

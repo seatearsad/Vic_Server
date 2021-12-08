@@ -206,6 +206,30 @@ class AreaAction extends BaseAction{
 			$condition_area['area_url'] = $_POST['area_url'];
 			$area_type = $database_area->where(array('area_id'=>$_POST['area_id']))->field('area_type')->select();
 			if($database_area->data($_POST)->save()){
+			    //当城市时间均为00:00:00时，为城市紧急状态将所有店铺设置为休假状态
+                $config = D('Config')->where(array('name'=>'emergency_close_store'))->find();
+                $close_arr = json_decode($config['value'],true);
+
+			    if($_POST['begin_time'] == '00:00:00' && $_POST['end_time'] == '00:00:00'){
+			        $store_id_list = array();
+                    $store_list = D('Merchant_store')->where(array('city_id'=>$_POST['area_id'],'status'=>1,'store_is_close'=>0))->select();
+                    foreach ($store_list as $c_store){
+                        $store_id_list[] = $c_store['store_id'];
+                    }
+                    $close_arr[$_POST['area_id']] = $store_id_list;
+
+                    D('Merchant_store')->where(array('store_id'=>array('in',$store_id_list)))->save(array('store_is_close'=>1));
+
+                    D('Config')->where(array('name'=>'emergency_close_store'))->save(array('value'=>json_encode($close_arr)));
+                }else{
+                    $open_list = $close_arr[$_POST['area_id']];
+                    if($open_list){
+                        D('Merchant_store')->where(array('store_id'=>array('in',$open_list)))->save(array('store_is_close'=>0));
+                        unset($close_arr[$_POST['area_id']]);
+                        D('Config')->where(array('name'=>'emergency_close_store'))->save(array('value'=>json_encode($close_arr)));
+                    }
+                }
+
 				import('ORG.Util.Dir');
 				Dir::delDirnotself('./runtime');
 				if ($area_type[0]['area_type']>3) {

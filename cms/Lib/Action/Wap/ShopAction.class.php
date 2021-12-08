@@ -2457,8 +2457,8 @@ class ShopAction extends BaseAction{
 
                     foreach ($productCart as $product) {
                         $goodsId = $product['productId'];
-                        $goods = D('Shop_goods')->where(array('goods_id' => $goodsId,'status'=>1))->find();
-                        if($goods) {
+                        $goods = D('Shop_goods')->where(array('goods_id' => $goodsId, 'status' => 1))->find();
+                        if ($goods) {
                             $allow_add = true;
                             if (count($product['productParam']) > 0) {
                                 $all_dish_id = array();
@@ -2471,24 +2471,24 @@ class ShopAction extends BaseAction{
                                     }
                                 }
 
+                                if (count($all_dish_id) > 0) {
+                                    $all_list = D('Side_dish')->where(array('id' => array('in', $all_dish_id), 'status' => 1))->select();
 
-                            if(count($all_dish_id) > 0) {
-                                $all_list = D('Side_dish')->where(array('id' => array('in', $all_dish_id), 'status' => 1))->select();
-
-                                if (count($all_dish_id) != count($all_list)) {
-                                    $allow_add = false;
+                                    if (count($all_dish_id) != count($all_list)) {
+                                        $allow_add = false;
+                                    }
                                 }
-                            }
 
-                            if(count($all_dish_value_id) > 0) {
-                                $all_value_list = D('Side_dish_value')->where(array('id' => array('in', $all_dish_value_id), 'status' => 1))->select();
-                                if (count($all_dish_value_id) != count($all_value_list)) {
-                                    $allow_add = false;
+                                if (count($all_dish_value_id) > 0) {
+                                    $all_value_list = D('Side_dish_value')->where(array('id' => array('in', $all_dish_value_id), 'status' => 1))->select();
+                                    if (count($all_dish_value_id) != count($all_value_list)) {
+                                        $allow_add = false;
+                                    }
                                 }
-                            }
 
-                            if (in_array($goods['sort_id'], $sortIdList) && $allow_add) {
-                                $newCart[] = $product;
+                                if (in_array($goods['sort_id'], $sortIdList) && $allow_add) {
+                                    $newCart[] = $product;
+                                }
                             }
                         }
                     }

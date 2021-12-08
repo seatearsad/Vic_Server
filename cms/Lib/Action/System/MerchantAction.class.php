@@ -1586,6 +1586,20 @@ class MerchantAction extends BaseAction{
         $this->display();
     }
 
+    public function integration(){
+        $database_integration = D('Integration_log');
+
+        $condition = array();
+        $count_merchant = $database_integration->where($condition)->count();
+        import('@.ORG.system_page');
+        $p = new Page($count_merchant, 15);
+        $list = $database_integration->field('i.*,s.name')->join("as i left join ".C('DB_PREFIX')."merchant_store as s ON s.store_id=i.storeId")->where($condition)->order('i.time DESC')->limit($p->firstRow.','.$p->listRows)->select();
+        $this->assign('list', $list);
+        $pagebar = $p->show2();
+        $this->assign('pagebar', $pagebar);
+        $this->display();
+    }
+
     public function store_list(){
         //搜索
         if(!empty($_GET['keyword'])){

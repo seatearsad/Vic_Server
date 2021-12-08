@@ -40,18 +40,26 @@ class DeliverectAction
         $status = $this->data['status'];
 
         $link_status = 0;
+        $log_type = "";
+        $log_action = "";
         switch ($status){
             case 'register':
                 $link_status = 1;
                 $status = 1;
+                $log_type = "Registration";
+                $log_action = "";
                 break;
             case 'active':
                 $link_status = 2;
                 $status = 1;
+                $log_type = "Activate";
+                $log_action = "";
                 break;
             case 'inactive':
                 $link_status = 3;
                 $status = 0;
+                $log_type = "Disable";
+                $log_action = "";
                 break;
 
             default:
@@ -65,6 +73,8 @@ class DeliverectAction
         $updateData['status'] = $status;
 
         D('Merchant_store')->where(array('store_id'=>$store_id))->save($updateData);
+
+        D("StoreMenuV2")->saveIntegration($store_id,$log_type,$log_action,1);
 
         $store = D('Merchant_store')->where(array('store_id'=>$store_id))->find();
         if($store['link_status'] == 2){
@@ -90,14 +100,23 @@ class DeliverectAction
         $responseResult['data']['locationId'] = $locationId;
         $responseResult['data']['allSnoozedItems'] = array();
 
-        if($action == "snooze") $updateData['status'] = 0;
-        else $updateData['status'] = 1;
+        if($action == "snooze"){
+            $updateData['status'] = 0;
+            $log_type = "Snnoze";
+        }
+        else{
+            $updateData['status'] = 1;
+            $log_type = "Unsnnoze";
+        }
 
         $where['storeId'] = $store['store_id'];
 
+        $log_action = array();
         foreach ($updateItems as $item){
             $responseResult['data']['allSnoozedItems'][] = $item['plu'];
             $where['plu'] = $item['_id'];
+
+            $log_action[] = $item['plu'];
 
             if($action == "snooze") $updateData['snoozeTime'] = $item['snoozeEnd'];
             else $updateData['snoozeTime'] = "";
@@ -106,6 +125,8 @@ class DeliverectAction
         }
 
         $response['result'][] = $responseResult;
+
+        D("StoreMenuV2")->saveIntegration($store['store_id'],$log_type,implode(',',$log_action),1);
 
         echo json_encode($response);
     }
@@ -165,8 +186,9 @@ class DeliverectAction
                 //print_r($menuData);
                 $products = array_merge($menu['products'], $menu['modifierGroups'], $menu['modifiers'], $menu['bundles']);
                 $this->intoProducts($products, $storeId);
-
             }
+
+            D("StoreMenuV2")->saveIntegration($storeId,"Menu Push",$this->data[0]['menu'],1);
         }
 
         if($store['link_status'] == 2){
@@ -181,12 +203,15 @@ class DeliverectAction
 
         $store = D('Merchant_store')->field(true)->where(array('link_id' => $link_id))->find();
         $shop_status = getClose($store);
+
+        $log_action = "";
         //0 关闭店铺 1打开店铺
         if($open_close == 0){
             if(!$shop_status['is_close']){
                 $data['store_is_close'] = $shop_status['open_num'];
                 D('Merchant_store')->where(array('store_id' => $store['store_id']))->save($data);
             }
+            $log_action = "Close store";
             //$this->success('Success');
         }else{//1打开店铺
             if($shop_status['is_close']){
@@ -197,8 +222,10 @@ class DeliverectAction
                     D('Merchant_store')->where(array('store_id' => $store['store_id']))->save($data);
                 }
             }
+            $log_action = "Open store";
             //$this->success('Success');
         }
+        D("StoreMenuV2")->saveIntegration($store['store_id'],"Busy Mode",$log_action,1);
 
         echo "busyMode";
     }
@@ -215,6 +242,8 @@ class DeliverectAction
         }
         if($status == 20){
             //$this->updatePrepTimeURL(true);
+            $order = D("Shop_order")->where(array('order_id'=>$orderId))->find();
+            D("StoreMenuV2")->saveIntegration($order['store_id'],"Order",$orderId." - Accepted",1);
         }
 
         echo "statusUpdate";
@@ -286,6 +315,8 @@ class DeliverectAction
             $_POST['dining_time'] = $dining_time ? $dining_time : 0;
 
             $store = D('Merchant_store')->field(true)->where(array('store_id' => $order['store_id']))->find();
+
+            D("StoreMenuV2")->saveIntegration($order['store_id'],"Order",$orderId." - Prep time=".$_POST['dining_time'],1);
 
             $data['status'] = 1;
             $data['order_status'] = 1;

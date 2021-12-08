@@ -2682,11 +2682,8 @@ class PayAction extends BaseAction{
             }
 
         }else{
-
             //如果不使用3D支付，就会走到下面来！
-
-            if($resp['responseCode'] != 'null' && $resp['responseCode'] < 50){
-
+            if($resp['responseCode'] && $resp['responseCode'] != 'null' && $resp['responseCode'] < 50){
                 $order = explode("_",$_POST['order_id']);
                 $order_id = $order[1];
                 //判断是否有减免配送费活动
@@ -2723,9 +2720,9 @@ class PayAction extends BaseAction{
             }else{
                 //var_dump($result_url);die();
                 if ($_POST['order_type']=='recharge'){
-                    $this->error($resp['message'],U("Wap/My/my_money",array('status'=>0)),true);
+                    $this->error(L("V3_ORDER_RESULT_PAYMENT_FAIL"),U("Wap/My/my_money",array('status'=>0)),true);
                 }else{
-                    $this->error($resp['message'],$result_url.'0',true);
+                    $this->error(L("V3_ORDER_RESULT_PAYMENT_FAIL"),$result_url.'0',true);
                 }
             }
         }

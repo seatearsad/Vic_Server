@@ -872,6 +872,12 @@ class MyAction extends BaseAction{
             $this->assign('order_id',$_GET['order_id']);
         }
 
+        if($_GET['type']){
+            $this->assign('type',$_GET['type']);
+        }else{
+            $this->assign('type','');
+        }
+
         $card_list = D('User_card')->getCardListByUid($this->user_session['uid']);
         $this->assign('card_list',$card_list);
         $this->display();

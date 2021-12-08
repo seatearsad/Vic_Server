@@ -14,6 +14,7 @@ class StoreMenuV2Model extends Model
     protected $categoriseTimeTable = "Store_categories_time";
     protected $productTable = "Store_product";
     protected $productRelationTable = "Store_product_relation";
+    protected $integrationTable = "Integration_log";
 
     public function getStoreMenu($storeId){
         $menuList = D($this->menuTable)->where(array('storeId'=>$storeId))->select();
@@ -550,5 +551,22 @@ class StoreMenuV2Model extends Model
             default:
                 return '';
         }
+    }
+
+    public function saveIntegration($storeId,$type,$action,$source){
+        $saveData['storeId'] = $storeId;
+        $saveData['type'] = $type;
+        $saveData['action'] = $action;
+        $saveData['time'] = time();
+        $saveData['source'] = $source;
+
+        if($type == "Activate"){
+            $count = D($this->integrationTable)->where(array('storeId'=>$storeId,'type'=>$type))->count();
+            if($count == 0){
+                $saveData['action'] = "First activation";
+            }
+        }
+
+        D($this->integrationTable)->add($saveData);
     }
 }
