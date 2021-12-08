@@ -339,24 +339,17 @@
                 });
             });
 
-            var curr_hash = location.hash.replace("#","");
-            if(curr_hash == "1"){
-                $('#deliver_count').trigger('click');
-            }else{
-                getList();
-            }
-
             function loadProcess(){
                 $.post("{pigcms{:U('Deliver/get_process')}",{"status":0,'lat':lat, 'lng':lng},function(result){
                     if(!result.error_code) {
                         laytpl($('#processListBoxTpl').html()).render(result, function (html) {
                             $('#deliver_middle_div').html(html);
                         });
-                        //if(result.list.length > 0) {
+                        if(result.list.length > 0) {
                             setProcessOrder(result.list);
-                        //}else{
-                        //    loadPosition();
-                        //}
+                        }else{
+                            loadPosition();
+                        }
 
                         $('.deliver_order').bind('click',function () {
                             var order_id = $(this).data('id');
@@ -505,6 +498,13 @@
                 loadPosition();
             }
              */
+
+            var curr_hash = location.hash.replace("#","");
+            if(curr_hash == "1"){
+                $('#deliver_count').trigger('click');
+            }else{
+                getList();
+            }
         }
 
         //定位是否有问题
