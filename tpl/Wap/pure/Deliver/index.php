@@ -352,8 +352,11 @@
                         laytpl($('#processListBoxTpl').html()).render(result, function (html) {
                             $('#deliver_middle_div').html(html);
                         });
-
-                        setProcessOrder(result.list);
+                        if(result.list.length > 0) {
+                            setProcessOrder(result.list);
+                        }else{
+                            loadPosition();
+                        }
 
                         $('.deliver_order').bind('click',function () {
                             var order_id = $(this).data('id');
@@ -545,7 +548,7 @@
             marker = new google.maps.Marker({
                 position: self_position,
                 map: map,
-                icon:"{pigcms{$static_path}img/deliver_menu/customer_pin_3.png"
+                //icon:"{pigcms{$static_path}img/deliver_menu/customer_pin_3.png"
             });
         }
 
