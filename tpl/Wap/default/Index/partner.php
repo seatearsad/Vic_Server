@@ -241,6 +241,7 @@
     }
 </style>
 <body>
+<include file="Public:google"/>
 <script>
     var app_name = 'TUTTI Partner';
     var app_url ='https://itunes.apple.com/us/app/tutti-partner/id1454731849?ls=1&mt=8';

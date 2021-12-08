@@ -1,0 +1,12 @@
+2021/09/29   04:00:48am   Deliverect   www.vicisland.ca/deliverect/channelStatus--null
+2021/09/29   04:03:09am   Deliverect   www.vicisland.ca/deliverect/channelStatus--null
+2021/09/29   04:04:00am   Deliverect   www.vicisland.ca/deliverect/channelStatus--null
+2021/09/29   04:10:49am   Deliverect   www.vicisland.ca/deliverect/channelStatus--null
+2021/09/29   04:16:16am   Deliverect   www.vicisland.ca/deliverect/channelStatus--"{\n    \"status\": \"register\",\n    \"channelLocationId\": \"123456\",\n    \"channelLinkId\": \"614d9dbb6ff48af09d5c47a4\"\n}"
+2021/09/29   04:19:31am   Deliverect   www.vicisland.ca/deliverect/channelStatus--"{\n    \"status\": \"register\",\n    \"channelLocationId\": \"123456\",\n    \"channelLinkId\": \"614d9dbb6ff48af09d5c47a4\"\n}"
+2021/09/29   04:30:14am   Deliverect   www.vicisland.ca/deliverect/channelStatus--"{\n    \"status\": \"register\",\n    \"channelLocationId\": \"123456\",\n    \"channelLinkId\": \"614d9dbb6ff48af09d5c47a4\"\n}"
+2021/09/29   04:36:20am   Deliverect   www.vicisland.ca/deliverect/channelStatus--"{\n    \"status\": \"register\",\n    \"channelLocationId\": \"123456\",\n    \"channelLinkId\": \"614d9dbb6ff48af09d5c47a4\"\n}"
+2021/09/30   12:31:41am   Deliverect   www.vicisland.ca/deliverect/channelStatus--"{\"status\": \"register\",\"channelLocationId\": \"51\",\"channelLinkId\": \"614d9dbb6ff48af09d5c47a4\"}"
+2021/09/30   12:48:59am   Deliverect   www.vicisland.ca/deliverect/channelStatus--"{\"status\": \"register\",\"channelLocationId\": \"51\",\"channelLinkId\": \"614d9dbb6ff48af09d5c47a4\"}"
+2021/09/30   12:49:26am   Deliverect   www.vicisland.ca/deliverect/channelStatus--"{\"status\": \"activate\",\"channelLocationId\": \"51\",\"channelLinkId\": \"614d9dbb6ff48af09d5c47a4\"}"
+2021/09/30   12:50:14am   Deliverect   www.vicisland.ca/deliverect/channelStatus--"{\"status\": \"active\",\"channelLocationId\": \"51\",\"channelLinkId\": \"614d9dbb6ff48af09d5c47a4\"}"

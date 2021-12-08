@@ -110,6 +110,7 @@
         <include file="Public:facebook"/>
 </head>
 <body>
+    <include file="Public:google"/>
 		<if condition="$_SESSION['source'] neq 1">
 	<!--div style="text-align:center;background-color:#fff;padding:10px 0;">
 		<button id="transaction" style="font-size:16px;width:45%;background-color:#00c4ac;border:1px solid #00c4ac;padding:8px;color:#fff;margin-right:-4px;z-index:100;-moz-border-radius:6px 0 0 6px;-webkit-border-radius:6px 0 0 6px;border-radius:6px 0 0 6px;">{pigcms{:L('_B_PURE_MY_40_')}</button>

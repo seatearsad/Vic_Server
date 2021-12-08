@@ -100,6 +100,7 @@
     <include file="Public:facebook"/>
 </head>
 <body id="index" data-com="pagecommon">
+<include file="Public:google"/>
 <include file="Public:header"/>
 <div class="main">
 
@@ -171,10 +172,11 @@
                         <label class="react">
                             <if condition="$from neq 'map'">
                                 <input type="checkbox" name="default" value="1" class="mt"  <if condition="$now_adress['default']">checked="checked"</if>/>
+                                {pigcms{:L('_B_PURE_MY_24_')}
                             <else />
-                                <input type="checkbox" name="default" value="1" class="mt"  checked="checked"/>
+                                <input type="checkbox" name="default" value="1" class="mt"  checked="checked" style="display: none;"/>
                             </if>
-                            {pigcms{:L('_B_PURE_MY_24_')}
+
                         </label>
                     </dd>
                 </dl>
@@ -260,6 +262,12 @@
                                 <?php if($_GET['from']!="map"){ ?>
                                 window.location.href="{pigcms{:U('My/adress',$params)}";
                                 <?php }else{ ?>
+                                $.cookie('userLocationId',"",{expires:700,path:'/'});
+                                $.cookie('userLocationCity', "{pigcms{$now_adress.city}",{expires:700,path:"/"});
+                                $.cookie('userLocation',"{pigcms{$now_adress.longitude},{pigcms{$now_adress.latitude}",{expires:700,path:'/'});
+                                $.cookie('userLocationLong',"{pigcms{$now_adress.longitude}",{expires:700,path:'/'});
+                                $.cookie('userLocationLat',"{pigcms{$now_adress.latitude}",{expires:700,path:'/'});
+                                $.cookie('userLocationName',"{pigcms{$now_adress.adress}",{expires:700,path:'/'});
                                 window.location.href="wap.php";
                                 <?php } ?>
                             </if>

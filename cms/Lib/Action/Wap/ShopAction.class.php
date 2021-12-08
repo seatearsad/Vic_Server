@@ -2444,8 +2444,8 @@ class ShopAction extends BaseAction{
     public function checkGoodsTime(){
         $store_id = isset($_POST['store_id']) ? intval($_POST['store_id']) : 0;
         $newCart = array();
+        $productCart = $this->getCookieData($store_id);
         if($store_id != 0) {
-            $productCart = $this->getCookieData($store_id);
             if(!empty($productCart)) {
                 $store = D("Merchant_store")->field(true)->where(array('store_id' => $store_id))->find();
                 if($store['menu_version'] == 1) {
@@ -2471,12 +2471,16 @@ class ShopAction extends BaseAction{
                                     }
                                 }
 
+
+                            if(count($all_dish_id) > 0) {
                                 $all_list = D('Side_dish')->where(array('id' => array('in', $all_dish_id), 'status' => 1))->select();
 
                                 if (count($all_dish_id) != count($all_list)) {
                                     $allow_add = false;
                                 }
+                            }
 
+                            if(count($all_dish_value_id) > 0) {
                                 $all_value_list = D('Side_dish_value')->where(array('id' => array('in', $all_dish_value_id), 'status' => 1))->select();
                                 if (count($all_dish_value_id) != count($all_value_list)) {
                                     $allow_add = false;
@@ -2504,9 +2508,16 @@ class ShopAction extends BaseAction{
                         if(count($product['productParam']) > 0) {
                             $all_dish_id = array();
                             foreach ($product['productParam'] as $dish) {
-                                $dish_arr = explode(',', $dish['dish_id']);
-                                if (!in_array($dish_arr[0], $all_dish_id)) $all_dish_id[] = $dish_arr[0];
-                                if (!in_array($dish_arr[1], $all_dish_id)) $all_dish_id[] = $dish_arr[1];
+                                if($dish['dish_id'] != "") {
+                                    $dish_arr = explode('|', $dish['dish_id']);
+                                    foreach ($dish_arr as $dish_value) {
+                                        if($dish_value != "") {
+                                            $dish_val_arr = explode(',', $dish_value);
+                                            if (!in_array($dish_val_arr[0], $all_dish_id)) $all_dish_id[] = $dish_val_arr[0];
+                                            if (!in_array($dish_val_arr[1], $all_dish_id)) $all_dish_id[] = $dish_val_arr[1];
+                                        }
+                                    }
+                                }
                             }
 
                             $all_list = D('Store_product')->where(array('id' => array('in', $all_dish_id), 'storeId' => $store_id, 'status' => 1))->select();
@@ -2533,7 +2544,7 @@ class ShopAction extends BaseAction{
             $msg = "Sorry, this store is currently unavailable!";
         }else if(count($productCart) > count($newCart)){
             $is_error = true;
-            $type = "produce";
+            $type = "product";
             $msg = "Please note that you have one or more item become unavailable at this time and will be removed from your cart. Do you confirm to continue checkout?";
         }else{
             $msg = "";
@@ -2850,6 +2861,25 @@ class ShopAction extends BaseAction{
                 } else {
                     $distance = getDistanceByGoogle($from, $aim);
                 }
+
+                $city = D('Area')->where(array('area_id'=>$return['store']['city_id']))->find();
+                if($city['range_type'] != 0) {
+                    switch ($city['range_type']){
+                        case 1://按照纬度限制的城市 小于某个纬度
+                            if($user_adress['latitude'] >= $city['range_para']) {
+                                $is_jump_address = 1;
+                                $user_adress=null;
+                            }
+                            else $is_jump_address = 0;
+                            break;
+                        default:
+                            $is_jump_address = 0;
+                            break;
+                    }
+                }else{
+                    $is_jump_address = 0;
+                }
+
                 //$distance = $distance / 1000;
                 //var_dump($distance);die();
 
@@ -2893,6 +2923,7 @@ class ShopAction extends BaseAction{
         }else{
             //没有获得默认地址
             $is_jump_address = 1;
+            $user_adress=null;
         }
         $this->assign('user_adress', $user_adress);
         //如果没有找到合适的配送地址

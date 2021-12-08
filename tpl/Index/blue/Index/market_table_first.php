@@ -161,6 +161,7 @@
     }
 </style>
 <body>
+    <include file="Public:google"/>
     <div class="header"></div>
     <div class="table">
         <h2>Congratulations on taking the first step to financial independence.</h2>

@@ -5,6 +5,7 @@
         <include file="Public:facebook"/>
 	</head>
 	<body>
+        <include file="Public:google"/>
 		<p style="margin-top:20px;margin-bottom:20px;text-align:center;">用户注册协议</p>
 		<p style="text-align:center1;">{pigcms{$config['register_agreement']|nl2br}</p>
 	</body>

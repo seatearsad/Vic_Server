@@ -43,6 +43,7 @@ filter:alpha(opacity=50);
     <include file="Public:facebook"/>
 </head>
 <body>
+ <include file="Public:google"/>
  <include file="Public:header_top"/>
  <div class="body pg-buy-process"> 
 	<div id="doc" class="bg-for-new-index">

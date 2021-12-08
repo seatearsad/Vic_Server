@@ -65,11 +65,13 @@ class MonerisPay
             //3D 2.0
             $resp = $this->threeDSAuthentication($data,$uid,$from_type);
             //var_dump($resp);die();
+
             if($resp['transStatus'] == "Y" || $resp['transStatus'] == "A"){
                 //return $this->purchase($data,$uid,$from_type,$order);
                 $order_md = D('Pay_moneris_md')->where(array('moneris_order_id'=>$resp['receiptId']))->find();
                 $MD = $order_md['order_md'];
 
+                file_put_contents("./test_log.txt",date("Y/m/d")."   ".date("h:i:sa")."   "."Moneris 3D" ."   ". $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'--'.json_encode($resp).'---'.json_encode($order_md)."\r\n",FILE_APPEND);
                 return $this->MPI_Cavv($MD,$resp['cavv'],$resp['eci'],$resp['threeDSServerTransId']);
             }elseif ($resp['transStatus'] == "N" || $resp['transStatus'] == "U"){
                 if($data['order_type'] != 'recharge')
@@ -80,7 +82,10 @@ class MonerisPay
                 return $resp;
             }
         }else {
-            return $this->purchase($data,$uid,$from_type,$order);
+            if($data['order_type'] != 'recharge')
+                return $this->purchase($data,$uid,$from_type,$order);
+            else
+                return array();
         }
     }
 
@@ -1074,6 +1079,7 @@ class MonerisPay
             $order_md = D('Pay_moneris_md')->where(array('moneris_order_id'=>$data['order_id']))->find();
             $md['order_md'] = $MD;
             $md['create_time'] = time();
+
             if($order_md){
                 D('Pay_moneris_md')->where(array('moneris_order_id'=>$data['order_id']))->save($md);
             }else{

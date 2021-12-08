@@ -28,7 +28,7 @@ class Deliverect
         'cash' => 1
     );
 
-    private $url = "https://api.staging.deliverect.com/";
+    private $url = "https://api.deliverect.com/";
 
     //获取token
     private $getTokenUrl = "oauth/token";
@@ -65,6 +65,7 @@ class Deliverect
         $data['grant_type'] = "client_credentials";
 
         $result = $this->curlPost($url,$data,false);
+        //file_put_contents("./deliverect_log.log",date("Y/m/d")."   ".date("h:i:sa")."   "."Deliverect" ."   ". $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'--'.json_encode($result)."\r\n",FILE_APPEND);
 
         if(!$result['_error']){
             $this->token = $result['access_token'];
@@ -198,8 +199,10 @@ class Deliverect
         //var_dump($data);die();
         $result = $this->curlPost($url,$data);
 
-        var_dump($result.'----'.$order['order_id']);
+        file_put_contents("./deliverect_log.log",date("Y/m/d")."   ".date("h:i:sa")."   "."Deliverect" ."   ". $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'--'.json_encode($result)."\r\n",FILE_APPEND);
 
+        var_dump($result);
+        var_dump($order['order_id']);
         if($result == NULL || $result == "NULL"){
             D("Shop_order")->where(array('order_id'=>$order['order_id']))->save(array('send_platform'=>1));
         }

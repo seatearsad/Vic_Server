@@ -69,6 +69,7 @@
     <include file="Public:facebook"/>
 </head>
 <body>
+    <include file="Public:google"/>
 	<section class="clerk">
 		<div class="clerk_top">
 			<div class="fl clerk_img">

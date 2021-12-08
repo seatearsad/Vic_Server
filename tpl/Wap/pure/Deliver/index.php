@@ -250,6 +250,7 @@
     }
 </style>
 <body>
+    <include file="Public:google"/>
     <include file="header" />
 	<section class="clerk">
         <div style="background-color: #F4F4F4;height: 10px;width: 100%"></div>

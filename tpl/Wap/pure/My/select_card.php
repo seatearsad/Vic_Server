@@ -371,6 +371,7 @@
         <include file="Public:facebook"/>
 	</head>
 	<body id="index" data-com="pagecommon">
+    <include file="Public:google"/>
     <include file="Public:header"/>
     <dd class="main Coupon">
 		<div id="tips" class="tips"></div>

@@ -29,6 +29,7 @@
     <include file="Public:facebook"/>
 </head>
 <body id="index" data-com="pagecommon">
+    <include file="Public:google"/>
         <!--header  class="navbar">
             <div class="nav-wrap-left">
                 <a class="react back" href="javascript:history.back()"><i class="text-icon icon-back"></i></a>

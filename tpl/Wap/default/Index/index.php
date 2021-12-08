@@ -393,29 +393,45 @@
     .city_list li{
         list-style: none;
         display: inline-block;
-        width: 45%;
+        width: 48%;
         height: 60px;
         line-height: 60px;
-        background-position: center left 10%;
+        background-position: center left 10px;
         background-size: auto 80%;
         background-repeat: no-repeat;
-        padding-left: 70px;
+        padding-left: 63px;
         margin: 10px auto;
         font-size: 16px;
     }
+    .city_list li span{
+        height: 60px;
+        display: inline-block;
+    }
     .city_list li:nth-child(1){
-        background-image: url("./tpl/Static/blue/images/new/city/Victoria.png");
+        background-image: url("./tpl/Static/blue/images/new/city/DT_Vancouver.png");
     }
     .city_list li:nth-child(2){
-        background-image: url("./tpl/Static/blue/images/new/city/Kamloops.png");
+        background-image: url("./tpl/Static/blue/images/new/city/Victoria.png");
     }
     .city_list li:nth-child(3){
-        background-image: url("./tpl/Static/blue/images/new/city/Nanaimo.png");
-    }
-    .city_list li:nth-child(4){
         background-image: url("./tpl/Static/blue/images/new/city/Kelowna.png");
     }
+    .city_list li:nth-child(4){
+        background-image: url("./tpl/Static/blue/images/new/city/Kamloops.png");
+    }
     .city_list li:nth-child(5){
+        background-image: url("./tpl/Static/blue/images/new/city/Nanaimo.png");
+    }
+    .city_list li:nth-child(6){
+        background-image: url("./tpl/Static/blue/images/new/city/Chilliwack.png");
+    }
+    .city_list li:nth-child(7){
+        background-image: url("./tpl/Static/blue/images/new/city/Maple_Ridge.png");
+    }
+    .city_list li:nth-child(8){
+        background-image: url("./tpl/Static/blue/images/new/city/Squamish.png");
+    }
+    .city_list li:nth-child(9){
         background-image: url("./tpl/Static/blue/images/new/city/More.png");
     }
     .ready_div{
@@ -505,6 +521,7 @@
     }
 </style>
 <body>
+<include file="Public:google"/>
 <script>
     var app_name = 'TUTTI - Online Food Community';
     var app_url = 'https://itunes.apple.com/us/app/tutti/id1439900347?ls=1&mt=8';
@@ -606,10 +623,18 @@
 <div class="white_line">
     <div class="serving_title">{pigcms{:L('4CITIES')}</div>
     <ul class="city_list">
-        <li>Victoria</li>
+        <li style="font-size: 14px">
+            Vancouver&nbsp;DT
+        </li>
+        <li>
+            <span>Victoria</span>
+        </li>
+        <li>Kelowna</li>
         <li>Kamloops</li>
         <li>Nanaimo</li>
-        <li>Kelowna</li>
+        <li>Chilliwack</li>
+        <li style="font-size: 14px">Maple&nbsp;Ridge</li>
+        <li>Squamish</li>
         <li>{pigcms{:L('4MORE')}</li>
     </ul>
 </div>

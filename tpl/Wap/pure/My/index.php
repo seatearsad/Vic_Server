@@ -230,6 +230,7 @@
     <include file="Public:facebook"/>
 </head>
 <body>
+<include file="Public:google"/>
 <include file="Public:header"/>
 <div class="main">
     <div style="position:relative;width: 90%;margin-left: 5%;margin-top: 10px;margin-bottom: 10px;display: inline-block;">

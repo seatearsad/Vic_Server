@@ -134,6 +134,7 @@
     }
 </style>
 <body>
+    <include file="Public:google"/>
     <div class="back_img"></div>
     <div class="logo"></div>
     <div class="star">

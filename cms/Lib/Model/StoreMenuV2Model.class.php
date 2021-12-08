@@ -367,7 +367,7 @@ class StoreMenuV2Model extends Model
             $productIds[] = $link['productId'];
         }
 
-        $where = array('p.id'=>array('in',$productIds),'p.storeId'=>$storeId);
+        $where = array('p.id'=>array('in',$productIds),'p.storeId'=>$storeId,'c.categoryId'=>$categoryId);
         if($status != -1) $where['p.status'] = $status;
         if($keyword != '') $where['p.name'] = array('like', '%' . $keyword . '%');
         $products = D($this->productTable)->field("p.*")->join('as p left join '.C('DB_PREFIX').'store_categories_product as c ON c.productId=p.id and c.storeId=p.storeId')->where($where)->order('c.sort asc')->select();

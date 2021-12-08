@@ -886,7 +886,9 @@ class IndexAction extends BaseAction
                     $all_list = D('Store_product')->where(array('id' => array('in', $all_dish_id), 'storeId' => $sid, 'status' => 1))->select();
 
                     if (count($all_dish_id) != count($all_list)) {
-                        $goods['status'] = 0;
+                        //$goods['status'] = 0;
+                        D('Cart')->where(array('uid'=>$uid,'fid'=>$goodsId,'dish_id'=>$product['dish_id']))->delete();
+                        $del_list[] = lang_substr($goods['name'],C('DEFAULT_LANG'));
                     }
                 }
             }else {
@@ -900,16 +902,23 @@ class IndexAction extends BaseAction
                         if (!in_array($dish_arr[0], $all_dish_id)) $all_dish_id[] = $dish_arr[0];
                         if (!in_array($dish_arr[1], $all_dish_value_id)) $all_dish_value_id[] = $dish_arr[1];
                     }
-
+                    $is_del_dish = false;
                     $all_list = D('Side_dish')->where(array('id' => array('in', $all_dish_id), 'status' => 1))->select();
 
                     if (count($all_dish_id) != count($all_list)) {
-                        $goods['status'] = 0;
+                        //$goods['status'] = 0;
+                        $is_del_dish = true;
                     }
 
                     $all_value_list = D('Side_dish_value')->where(array('id' => array('in', $all_dish_value_id), 'status' => 1))->select();
                     if (count($all_dish_value_id) != count($all_value_list)) {
-                        $goods['status'] = 0;
+                        //$goods['status'] = 0;
+                        $is_del_dish = true;
+                    }
+
+                    if($is_del_dish){
+                        D('Cart')->where(array('uid'=>$uid,'fid'=>$goodsId,'dish_id'=>$product['dish_id']))->delete();
+                        $del_list[] = lang_substr($goods['name'],C('DEFAULT_LANG'));
                     }
                 }
             }
