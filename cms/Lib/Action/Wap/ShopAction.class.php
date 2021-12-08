@@ -2457,34 +2457,35 @@ class ShopAction extends BaseAction{
 
                     foreach ($productCart as $product) {
                         $goodsId = $product['productId'];
-                        $goods = D('Shop_goods')->where(array('goods_id' => $goodsId))->find();
+                        $goods = D('Shop_goods')->where(array('goods_id' => $goodsId,'status'=>1))->find();
+                        if($goods) {
+                            $allow_add = true;
+                            if (count($product['productParam']) > 0) {
+                                $all_dish_id = array();
+                                $all_dish_value_id = array();
+                                foreach ($product['productParam'] as $dish) {
+                                    if ($dish['type'] == 'side_dish') {
+                                        $dish_arr = explode(',', $dish['dish_id']);
+                                        if (!in_array($dish_arr[0], $all_dish_id)) $all_dish_id[] = $dish_arr[0];
+                                        if (!in_array($dish_arr[1], $all_dish_value_id)) $all_dish_value_id[] = $dish_arr[1];
+                                    }
+                                }
 
-                        $allow_add = true;
-                        if(count($product['productParam']) > 0) {
-                            $all_dish_id = array();
-                            $all_dish_value_id = array();
-                            foreach ($product['productParam'] as $dish) {
-                                if($dish['type'] == 'side_dish') {
-                                    $dish_arr = explode(',', $dish['dish_id']);
-                                    if (!in_array($dish_arr[0], $all_dish_id)) $all_dish_id[] = $dish_arr[0];
-                                    if (!in_array($dish_arr[1], $all_dish_value_id)) $all_dish_value_id[] = $dish_arr[1];
+                                $all_list = D('Side_dish')->where(array('id' => array('in', $all_dish_id), 'status' => 1))->select();
+
+                                if (count($all_dish_id) != count($all_list)) {
+                                    $allow_add = false;
+                                }
+
+                                $all_value_list = D('Side_dish_value')->where(array('id' => array('in', $all_dish_value_id), 'status' => 1))->select();
+                                if (count($all_dish_value_id) != count($all_value_list)) {
+                                    $allow_add = false;
                                 }
                             }
 
-                            $all_list = D('Side_dish')->where(array('id' => array('in', $all_dish_id), 'status' => 1))->select();
-
-                            if (count($all_dish_id) != count($all_list)) {
-                                $allow_add = false;
+                            if (in_array($goods['sort_id'], $sortIdList) && $allow_add) {
+                                $newCart[] = $product;
                             }
-
-                            $all_value_list = D('Side_dish_value')->where(array('id' => array('in', $all_dish_value_id), 'status' => 1))->select();
-                            if (count($all_dish_value_id) != count($all_value_list)) {
-                                $allow_add = false;
-                            }
-                        }
-
-                        if (in_array($goods['sort_id'], $sortIdList) && $allow_add) {
-                            $newCart[] = $product;
                         }
                     }
                 }else if($store['menu_version'] == 2){
@@ -3799,6 +3800,10 @@ class ShopAction extends BaseAction{
             //var_dump($store);die();
             $images = $store_image_class->get_allImage_by_path($store['pic_info']);
             $store['image'] = isset($images[0]) ? $images[0] : '';
+
+            $store_shop = D('Merchant_store_shop')->where(array('store_id'=>$order['store_id']))->find();
+            $image_tmp = explode(',', $store_shop['background']);
+            $store['logo'] = C('config.site_url') . '/upload/background/' . $image_tmp[0] . '/' . $image_tmp['1'];
             cookie('shop_cart_' . $store['store_id'], null);
             for($i=0;$i<20;$i++){
                 if(cookie('shop_cart_' . $store['store_id'].'_'.$i)){

@@ -917,7 +917,8 @@ $(document).ready(function () {
                             content: "<label style='word-break: break-word;'>" + data.msg + "</label>",
                             btn: ['Confirm'],
                             end:function(){
-                                window.history.back();
+                                //window.history.back();
+                                window.location.href = "{pigcms{:U('classic_shop',array('shop_id'=>$store['store_id']))}";
                             }
                         });
                     }else{

@@ -222,7 +222,7 @@
     <if condition="$order.statusLog gt 3 AND 6 gt $order.statusLog AND $order.deliver_lng neq null AND $order.deliver_lat neq null">
         <div class="map_infor" id="web_map"></div>
     <else />
-        <div class="bg_infor"><img src="{pigcms{$store['image']}"> </div>
+        <div class="bg_infor"><img src="{pigcms{$store['logo']}"> </div>
     </if>
     <div class="msg_infor">
         <div class="msg_title info_common">{pigcms{$order.statusLogName}<span style="display:none; ">{pigcms{$order['statusLog']}-{pigcms{$order_details['status']}</span> </div>
