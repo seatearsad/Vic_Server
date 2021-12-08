@@ -177,10 +177,10 @@
             font-weight: bold;
         }
         .order_detail .payment label{
-            padding: 5px 10px;
+            padding: 6px 10px;
             border-radius: 10px;
             border: 2px solid #294068;
-            font-size: 16px;
+            font-size: 15px;
         }
         .store_name{
             padding: 10px 5%;

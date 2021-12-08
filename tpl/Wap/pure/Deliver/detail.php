@@ -245,7 +245,7 @@
             </div>
         </if>
     </if>
-    <if condition="$supply['status'] eq 4">
+    <if condition="$supply['status'] eq 4 and ($supply['uid'] eq 0 or $supply['pay_method'] neq 1)">
         <div class="amount_div" style="margin-top: 10px;">
             <div class="order_time" style="color: #294068;font-size: 16px;padding-bottom: 0px;">
                 <span style="padding-right:15px; padding-left: 10px; font-size: 18px;"> $ </span>
@@ -342,10 +342,10 @@
             <span class="material-icons" style="vertical-align: text-top;">person</span>
             <span style="margin-left: -10px;">{pigcms{$order['username']}</span>
         </if>
-        <if condition="$supply['status'] eq 3">
+        <if condition="$supply['status'] eq 3 and $order['deliver_cash'] gt 0">
             <if condition="$supply['uid'] eq 0 or $supply['pay_method'] neq 1">
             <div style="margin-left: 30px;font-size: 15px;margin-bottom: 10px;">
-                Amount Due on Delivery: ${pigcms{$order['deliver_cash']|floatval}
+                {pigcms{:L('_ND_DUEONDELIVERY_')}: ${pigcms{$order['deliver_cash']|floatval}
             </div>
             </if>
         </if>
