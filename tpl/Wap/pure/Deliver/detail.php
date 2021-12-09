@@ -152,18 +152,23 @@
             </label>
         </span>
         </if>
+        <if condition="$supply['status'] eq 5">
+            <span class="span_right">
+                {pigcms{$supply['totalTime']}
+            </span>
+        </if>
     </div>
     <div class="order_num" style="border-bottom: 1px solid #999999;">
         <span>
             Order {pigcms{$supply['order_id']}
         </span>
-        <if condition="$supply['pay_method'] neq 1">
+        <if condition="$order['pay_method'] neq 1">
             <span class="span_right">
                 <label style="border: 1px solid #294068; border-radius: 5px;font-size: 14px;padding: 5px 10px;">
                     <if condition="$supply['uid'] eq 0">
                         {pigcms{:L('_ND_UNPAID_')}
                     </if>
-                    <if condition="$supply['uid'] neq 0 and $supply['pay_method'] neq 1">
+                    <if condition="$supply['uid'] neq 0 and $order['pay_method'] neq 1">
                         {pigcms{:L('_ND_CASH_')}
                     </if>
                 </label>
@@ -204,7 +209,7 @@
         </div>
         <div class="order_time">
             <div style="color: #333333;font-weight: bold;margin-left: 30px;margin-top: -15px;">
-                {pigcms{$order.address}
+                {pigcms{$order.user_address}
             </div>
             <div style="margin-left: 30px;margin-top: 20px;font-size: 18px">
                 <span style="line-height: 40px;background-color: #294068;padding:10px 20px;color: white;border-radius: 20px;" id="open_map">
@@ -218,7 +223,7 @@
                 </span>
             </div>
         </div>
-        <if condition="$order['not_touch'] eq 1">
+        <if condition="$order['not_touch'] eq 1 and $supply['status'] eq 4">
         <div class="amount_div">
             <div class="order_time" style="color: #294068;font-size: 16px;">
                 <span class="material-icons" style="vertical-align: middle">assignment</span>
@@ -226,12 +231,12 @@
                         No Contact Delivery
                 </span>
                 <div style="margin-left: 30px;font-size: 14px;color: #333333">
-                    {pigcms{$user_address.detail}
+                    {pigcms{$order['user_address_detail']}
                 </div>
             </div>
         </div>
         </if>
-        <if condition="$user_address['detail'] neq ''">
+        <if condition="$user_address['detail'] neq '' and $supply['status'] eq 4">
             <div class="amount_div">
                 <div class="order_time" style="color: #294068;font-size: 16px;">
                     <span class="material-icons" style="vertical-align: middle">assignment</span>
@@ -245,7 +250,7 @@
             </div>
         </if>
     </if>
-    <if condition="$supply['status'] eq 4 and ($supply['uid'] eq 0 or $supply['pay_method'] neq 1)">
+    <if condition="$supply['status'] eq 4 and ($supply['uid'] eq 0 or $order['pay_method'] neq 1)">
         <div class="amount_div" style="margin-top: 10px;">
             <div class="order_time" style="color: #294068;font-size: 16px;padding-bottom: 0px;">
                 <span style="padding-right:15px; padding-left: 10px; font-size: 18px;"> $ </span>
@@ -256,7 +261,7 @@
                     <if condition="$supply['uid'] eq 0">
                         Collect payment from the customer by cash or online
                     </if>
-                    <if condition="$supply['pay_method'] neq 1">
+                    <if condition="$order['pay_method'] neq 1">
                         Please collect cash when you arrive. You can keep them and we’ll deduct the order price from your earnings
                     </if>
                 </div>
@@ -343,7 +348,7 @@
             <span style="margin-left: -10px;">{pigcms{$order['username']}</span>
         </if>
         <if condition="$supply['status'] eq 3 and $order['deliver_cash'] gt 0">
-            <if condition="$supply['uid'] eq 0 or $supply['pay_method'] neq 1">
+            <if condition="$supply['uid'] eq 0 or $order['pay_method'] neq 1">
             <div style="margin-left: 30px;font-size: 15px;margin-bottom: 10px;">
                 {pigcms{:L('_ND_DUEONDELIVERY_')}: ${pigcms{$order['deliver_cash']|floatval}
             </div>
@@ -407,6 +412,10 @@ if(!ua.match(/TuttiDeliver/i)) {
     navigator.geolocation.getCurrentPosition(function (position) {
         updatePosition(position.coords.latitude,position.coords.longitude);
     });
+}
+
+if(ua.match(/IPhonex/i)) {
+    $('.order_all').css("top","24px");
 }
 //ios app 更新位置
 function updatePosition(lat,lng){

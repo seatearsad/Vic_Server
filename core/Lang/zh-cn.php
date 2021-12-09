@@ -2541,4 +2541,5 @@ return array(
     "COUPON_ADD_TIP"=>"优惠金额不能大于最低消费金额，请重试！",
     "MAX_ORDER_PER" =>"送餐员接单上限",
     "ORDER_EDIT_ONCE"=>"订单只能修改一次，修改失败！",
+    "CHECK_BEGIN_END_TIME" => "起始日期不能大于结束日期，请重置！",
 );

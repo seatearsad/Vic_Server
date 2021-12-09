@@ -96,10 +96,20 @@
                 }
             });
             if(!is_submit){
-                alert("{pigcms{:L('_PLEASE_INPUT_ALL_')}");
+                //alert("{pigcms{:L('_PLEASE_INPUT_ALL_')}");
+                layer.open({
+                    title: "",
+                    content: "{pigcms{:L('_PLEASE_INPUT_ALL_')}",
+                    btn: ["{pigcms{:L('_B_D_LOGIN_CONIERM_')}"],
+                });
             }else{
                 if($('input[name="new_pwd"]').val() != $('input[name="re_new_pwd"]').val()){
-                    alert("{pigcms{:L('_B_LOGIN_DIFFERENTKEY_')}");
+                    //alert("{pigcms{:L('_B_LOGIN_DIFFERENTKEY_')}");
+                    layer.open({
+                        title: "",
+                        content: "{pigcms{:L('_B_LOGIN_DIFFERENTKEY_')}",
+                        btn: ["{pigcms{:L('_B_D_LOGIN_CONIERM_')}"],
+                    });
                 }else{
                     var form_data = {
                         'old_pwd':$('input[name="old_pwd"]').val(),
@@ -112,7 +122,12 @@
                         data: form_data,
                         success:function(date){
                             if(date.error != 0){
-                                alert(date.message);
+                                //alert(date.message);
+                                layer.open({
+                                    title: "",
+                                    content: " " + date.message + " ",
+                                    btn: ["{pigcms{:L('_B_D_LOGIN_CONIERM_')}"],
+                                });
                             }else{
                                 layer.open({title:"{pigcms{:L('_B_D_LOGIN_TIP2_')}",content: date.message,skin: 'msg', time:1,end:function () {
                                     window.parent.location = "{pigcms{:U('Deliver/account')}";

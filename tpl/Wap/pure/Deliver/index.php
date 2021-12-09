@@ -17,7 +17,12 @@
 		$(".startOrder,.stopOrder").click(function(){
 			$.get("/wap.php?g=Wap&c=Deliver&a=index&action=changeWorkstatus&type="+$(this).attr('ref'), function(data){
 			    if(data.error == 1){
-                    alert(data.msg);
+                    //alert(data.msg);
+                    layer.open({
+                        title: "",
+                        content: '' + data.msg + '',
+                        btn: ["{pigcms{:L('_B_D_LOGIN_CONIERM_')}"],
+                    });
 			    }else {
                     if(typeof (window.linkJs) != 'undefined'){
                         window.linkJs.reloadWebView();
@@ -383,7 +388,7 @@
                             {pigcms{:L('_ND_UNPAID_')}
                             {{# } else { }}
                             {{# if(d.list[i].pay_method == 1){ }}
-                                {pigcms{:L('_ND_PAID_')}
+                                Paid
                             {{# } else { }}
                                 {pigcms{:L('_ND_CASH_')}
                             {{# } }}

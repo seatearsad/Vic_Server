@@ -226,7 +226,9 @@
                 $("#appDate").val(valueText);
                 if ($("#appDate1").val() == '') {
                 } else {
-                    location.href="{pigcms{:U('Deliver/statistics')}&begin_time="+valueText+'&end_time='+$("#appDate1").val();
+                    if(checkoutTime(valueText,$("#appDate1").val())) {
+                        location.href = "{pigcms{:U('Deliver/statistics')}&begin_time=" + valueText + '&end_time=' + $("#appDate1").val();
+                    }
                 }
             }
         };
@@ -242,7 +244,9 @@
                 $("#appDate1").val(valueText);
                 if ($("#appDate").val() == '') {
                 } else {
-                    location.href="{pigcms{:U('Deliver/statistics')}&end_time="+valueText+'&begin_time='+$("#appDate").val();
+                    if(checkoutTime($("#appDate").val(),valueText)) {
+                        location.href = "{pigcms{:U('Deliver/statistics')}&end_time=" + valueText + '&begin_time=' + $("#appDate").val();
+                    }
                 }
             }
         };
@@ -250,6 +254,21 @@
         $("#end").mobiscroll($.extend(enddate['date'], enddate['default']));
     });
 
+    function checkoutTime(beginTime,endTime) {
+        beginTime = Date.parse(beginTime);
+        endTime = Date.parse(endTime);
+
+        if(endTime < beginTime){
+            layer.open({
+                title: "",
+                content: "{pigcms{:L('CHECK_BEGIN_END_TIME')}",
+                btn: ["{pigcms{:L('_B_D_LOGIN_CONIERM_')}"],
+            });
+
+            return false;
+        }
+        else return true;
+    }
     var is_flag = false;
     $(document).on('click', '.go_detail', function(e){
         e.stopPropagation();

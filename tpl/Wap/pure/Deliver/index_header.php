@@ -296,6 +296,12 @@
 <script type="text/javascript" src="{pigcms{$static_path}layer/layer.m.js" charset="utf-8"></script>
 <script src="{pigcms{$static_public}js/lang.js"></script>
 <script>
+    var ua = navigator.userAgent;
+    if(ua.match(/IPhonex/i)) {
+        $('#tutti_header').css("top","24px");
+        $('#menu_memo').css("top","84px");
+    }
+
     var is_open_menu = false;
     $('.hamburger').click(function () {
         if(is_open_menu) {
@@ -304,7 +310,7 @@
         }else {
             $(this).addClass('is-active');
             $('#menu_memo').addClass('is_open');
-            $('#menu_memo').height($(window).height() - 60);
+            $('#menu_memo').height($(window).height() - parseFloat($('#menu_memo').css('top')));
         }
 
         is_open_menu = !is_open_menu;

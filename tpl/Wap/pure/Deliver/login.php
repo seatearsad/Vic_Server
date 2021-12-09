@@ -101,6 +101,10 @@
 </body>
 <script src="{pigcms{$static_public}js/lang.js"></script>
 <script type="text/javascript">
+    var ua = navigator.userAgent;
+    if(ua.match(/IPhonex/i)) {
+        $('#lang_div').css("margin-top","34px");
+    }
 var store_index = "{pigcms{:U('Deliver/index')}";
 <if condition="!empty($refererUrl)">
 	store_index = "{pigcms{$refererUrl}";

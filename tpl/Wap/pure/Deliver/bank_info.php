@@ -162,11 +162,24 @@
     </div>
 	<script type="text/javascript">
         var is_pwd = "{pigcms{$is_pwd}";
+
+        if(is_pwd == 1){
+            $('body').find('input').each(function () {
+                $(this).removeAttr("readonly");
+            });
+            is_pwd = 3;
+        }
+
         $('#save').click(function () {
             if(is_pwd != 1) {
                 if(is_pwd != 3) {
                     if ($("input[name='pwd']").val() == '') {
-                        alert("{pigcms{:L('_B_D_LOGIN_CONFIRMKEY_')}");
+                        //alert("{pigcms{:L('_B_D_LOGIN_CONFIRMKEY_')}");
+                        layer.open({
+                            title: "",
+                            content: "{pigcms{:L('_B_D_LOGIN_CONFIRMKEY_')}",
+                            btn: ["{pigcms{:L('_B_D_LOGIN_CONIERM_')}"],
+                        });
                     } else {
                         $('#myform').submit();
                     }
@@ -178,7 +191,12 @@
                         }
                     });
                     if(!is_submit){
-                        alert("{pigcms{:L('_PLEASE_INPUT_ALL_')}");
+                        //alert("{pigcms{:L('_PLEASE_INPUT_ALL_')}");
+                        layer.open({
+                            title: "",
+                            content: "{pigcms{:L('_PLEASE_INPUT_ALL_')}",
+                            btn: ["{pigcms{:L('_B_D_LOGIN_CONIERM_')}"],
+                        });
                     }else{
                         var form_data = {
                             'ahname':$('#ahname').val(),
@@ -196,12 +214,12 @@
                                     alert(date.message);
                                 }else{
                                     layer.open({title:"{pigcms{:L('_B_D_LOGIN_TIP2_')}",content: date.message,skin: 'msg', time:1,end:function () {
-                                            $('#save').html('Edit');
-                                            $('#edit_div').hide();
-                                            $('body').find('input').each(function () {
-                                                $(this).attr("readonly","readonly");
-                                            });
-                                            is_pwd = 1;
+                                            //$('#save').html('Edit');
+                                            //$('#edit_div').hide();
+                                            //$('body').find('input').each(function () {
+                                            //    $(this).attr("readonly","readonly");
+                                            //});
+                                            //is_pwd = 1;
                                     }});
                                 }
                             }

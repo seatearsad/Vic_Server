@@ -2540,4 +2540,5 @@ return array(
     "COUPON_ADD_TIP"=>"Your discount amount cannot exceed the minimum order amount! Please try again.",
     "MAX_ORDER_PER" =>"Maximum # of orders per courier",
     "ORDER_EDIT_ONCE"=>"Failed! The price can only be adjusted once.",
+    "CHECK_BEGIN_END_TIME" => "The start date cannot exceed the end date. Please reset!",
 );

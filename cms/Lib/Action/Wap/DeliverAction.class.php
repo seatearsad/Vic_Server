@@ -1650,6 +1650,8 @@ class DeliverAction extends BaseAction
             $supply['show_dining_time'] = show_time_ago($show_dining_time);
         }
 
+        $supply['totalTime'] = show_time($supply['end_time'] - $supply['create_time']);
+
 		$supply['deliver_cash'] = floatval($supply['deliver_cash']);
 		$supply['distance'] = floatval($supply['distance']);
 		$supply['freight_charge'] = floatval($supply['freight_charge']);
@@ -3274,7 +3276,7 @@ class DeliverAction extends BaseAction
 	    if($_POST){
             $old_pwd = md5($_POST['old_pwd']);
             if($old_pwd != $this->deliver_session['pwd']){
-                exit(json_encode(array('error' => 1,'message' =>'当前密码不正确')));
+                exit(json_encode(array('error' => 1,'message' =>L('_B_MY_WRONGKEY_'))));
             }else{
                 $new_pwd = md5($_POST['new_pwd']);
                 D('Deliver_user')->where(array('uid'=>$this->deliver_session['uid']))->save(array('pwd'=>$new_pwd));
