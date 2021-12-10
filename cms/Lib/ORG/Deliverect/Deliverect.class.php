@@ -96,6 +96,8 @@ class Deliverect
             $data['cancellationReason'] = "Customer requests order cancellation";
 
             $result = $this->curlPost($url, $data);
+
+            file_put_contents("./deliverect_log.log",date("Y/m/d")."   ".date("h:i:sa")."   "."Deliverect createDelOrder" ."   ". $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'--'.json_encode($result)."\r\n",FILE_APPEND);
         }
     }
 
@@ -199,7 +201,7 @@ class Deliverect
         //var_dump($data);die();
         $result = $this->curlPost($url,$data);
 
-        file_put_contents("./deliverect_log.log",date("Y/m/d")."   ".date("h:i:sa")."   "."Deliverect" ."   ". $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'--'.json_encode($result)."\r\n",FILE_APPEND);
+        file_put_contents("./deliverect_log.log",date("Y/m/d")."   ".date("h:i:sa")."   "."Deliverect createOrder" ."   ". $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'--'.json_encode($result)."\r\n",FILE_APPEND);
 
         var_dump($result);
         var_dump($order['order_id']);
