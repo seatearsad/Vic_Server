@@ -2466,9 +2466,14 @@ class ShopAction extends BaseAction{
                                 foreach ($product['productParam'] as $dish) {
                                     if ($dish['type'] == 'side_dish') {
                                         if($dish['dish_id'] != "") {
-                                            $dish_arr = explode(',', $dish['dish_id']);
-                                            if (!in_array($dish_arr[0], $all_dish_id)) $all_dish_id[] = $dish_arr[0];
-                                            if (!in_array($dish_arr[1], $all_dish_value_id)) $all_dish_value_id[] = $dish_arr[1];
+                                            $dish_arr = explode('|', $dish['dish_id']);
+                                            foreach ($dish_arr as $dish_value) {
+                                                if($dish_value != "") {
+                                                    $dish_arr = explode(',', $dish_value);
+                                                    if (!in_array($dish_arr[0], $all_dish_id)) $all_dish_id[] = $dish_arr[0];
+                                                    if (!in_array($dish_arr[1], $all_dish_value_id)) $all_dish_value_id[] = $dish_arr[1];
+                                                }
+                                            }
                                         }
                                     }
                                 }
