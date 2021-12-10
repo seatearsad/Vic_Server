@@ -2489,6 +2489,10 @@ class ShopAction extends BaseAction{
                                 if (in_array($goods['sort_id'], $sortIdList) && $allow_add) {
                                     $newCart[] = $product;
                                 }
+                            }else{
+                                if (in_array($goods['sort_id'], $sortIdList) && $allow_add) {
+                                    $newCart[] = $product;
+                                }
                             }
                         }
                     }
