@@ -1795,7 +1795,12 @@ class Shop_goodsModel extends Model
                 $t_return = $this->check_stock($goods_id, $num, $spec_str, $store_shop['stock_type'], $store_id,$store['menu_version']);
                 if ($t_return['status'] == 0) {
                     unset($goodsData[$key]);
-                    setCookie('shop_cart_'.$store_id, json_encode($goodsData), 700,"/");
+                    //var_dump(json_encode($goodsData));die();
+                    $newList = array();
+                    foreach ($goodsData as $n){
+                        $newList[] = $n;
+                    }
+                    setCookie('shop_cart_'.$store_id, json_encode($newList));
                     return array('error_code' => true, 'msg' => $t_return['msg']);
                 } elseif ($t_return['status'] == 2) {
                     return array('error_code' => true, 'msg' => $t_return['msg']);
