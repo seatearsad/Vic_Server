@@ -1736,8 +1736,9 @@ class Shop_goodsModel extends Model
                 $max_freight = 0;
                 $template_total_price = 0;
             }
-            
-            foreach ($goodsData as $row) {
+
+            $new_goodsData = array();
+            foreach ($goodsData as $key=>$row) {
                 $goods_id = $row['productId'];
                 $num = $row['count'];
                 $spec_ids = array();
@@ -1793,9 +1794,13 @@ class Shop_goodsModel extends Model
 
                 $t_return = $this->check_stock($goods_id, $num, $spec_str, $store_shop['stock_type'], $store_id,$store['menu_version']);
                 if ($t_return['status'] == 0) {
+                    unset($goodsData[$key]);
+                    setCookie('shop_cart_'.$store_id, json_encode($goodsData), 700,"/");
                     return array('error_code' => true, 'msg' => $t_return['msg']);
                 } elseif ($t_return['status'] == 2) {
                     return array('error_code' => true, 'msg' => $t_return['msg']);
+                }else{
+                    $new_goodsData[] = $row;
                 }
                 //garfunkel add dish
                 if(count($dish_ids) > 0){
