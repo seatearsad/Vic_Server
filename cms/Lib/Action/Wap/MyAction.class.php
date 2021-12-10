@@ -5348,6 +5348,14 @@ class MyAction extends BaseAction{
                     }
                     //$this->success_tips(L('_B_MY_USEOFFLINECHANGEREFUND_'),U('Shop/status',array('order_id' => $now_order['order_id'], 'store_id' => $store_id, 'mer_id' => $this->mer_id)));
                     //peter 21-03-09 Wap&c=My&a=shop_order_list&select=history
+                    if($mer_store['link_type'] == 1) {
+                        $now_order['link_id'] = $mer_store['link_id'];
+
+                        import('@.ORG.Deliverect.Deliverect');
+                        $deliverect = new Deliverect();
+                        $result = $deliverect->createDelOrder($now_order);
+                    }
+
                     $this->success_tips(L('_B_MY_USEOFFLINECHANGEREFUND_'),U('Wap/My/shop_order_list',array('select' => "history")));
 
                 }
