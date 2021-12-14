@@ -95,10 +95,9 @@
 									<label class="col-sm-1"><label for="adress">{pigcms{:L('STORE_ADDRESS_BKADMIN')}</label></label>
 									<input class="col-sm-2" size="30" name="adress" id="adress" value="{pigcms{$now_store.adress}" type="text"/>
 								</div>
-								<div class="form-group hidden_obj">
-									<label class="col-sm-1"><label for="trafficroute">交通路线</label></label>
+								<div class="form-group">
+									<label class="col-sm-1"><label for="trafficroute">Pickup Instruction</label></label>
 									<input class="col-sm-2" name="trafficroute" id="trafficroute" type="text" value="{pigcms{$now_store.trafficroute}" style="width:600px"/>
-									<span class="form_tips">简单描述本店交通路线80字以内</span>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-1"><label for="sort">{pigcms{:L('STORE_LIST_ORDER_BKADMIN')}</label></label>

@@ -136,7 +136,11 @@
 </style>
 <body>
     <include file="index_header" />
-    <div class="order_all">
+    <if condition="$supply['status'] eq 5">
+        <div class="order_all" style="bottom: 0;">
+        <else/>
+        <div class="order_all">
+    </if>
     <div class="order_title" style="background: #294068;">
         <span>
             {pigcms{$supply['statusStr']}
@@ -184,8 +188,9 @@
             <div style="color: #333333;font-weight: bold;margin-left: 35px;margin-top: -15px;">
                 {pigcms{$supply['from_site']}
             </div>
+            <if condition="$store['trafficroute'] neq ''">
             <div style="margin-left: 35px;margin-top: 10px;">
-                Please call and wait in front of the door to pick up the order
+                {pigcms{$store['trafficroute']}
             </div>
             <div style="margin-left: 35px;margin-top: 20px;font-size: 18px">
                 <span style="line-height: 40px;background-color: #294068;padding:10px 20px;color: white;border-radius: 20px;" id="open_map">
@@ -230,13 +235,21 @@
                 <span style="margin-left: -10px;font-weight: bold;">
                         No Contact Delivery
                 </span>
-                <div style="margin-left: 30px;font-size: 14px;color: #333333">
-                    {pigcms{$order['user_address_detail']}
-                </div>
+                <if condition="$order['user_address_detail'] neq ''">
+                    <div style="margin-left: 30px;font-size: 14px;color: #333333">
+                        {pigcms{$order['user_address_detail']}
+                    </div>
+                </if>
+                <if condition="$order['user_address_detail'] eq ''">
+                    <div style="margin-left: 30px;font-size: 14px;color: #333333">
+                        The customer didn't leave any instruction.
+                    </div>
+                </if>
             </div>
         </div>
         </if>
-        <if condition="$user_address['detail'] neq '' and $supply['status'] eq 4">
+
+        <if condition="$order['not_touch'] neq 1 and $order['user_address_detail'] neq '' and $supply['status'] eq 4">
             <div class="amount_div">
                 <div class="order_time" style="color: #294068;font-size: 16px;">
                     <span class="material-icons" style="vertical-align: middle">assignment</span>
@@ -244,7 +257,7 @@
                         Delivery Instruction
                 </span>
                     <div style="margin-left: 30px;font-size: 14px;color: #333333">
-                        {pigcms{$user_address.detail}
+                        {pigcms{$order['user_address_detail']}
                     </div>
                 </div>
             </div>
@@ -309,24 +322,16 @@
         </div>
     </div>
     <div class="amount_div">
-        <if condition="$order['deliver_cash'] gt 0">
-        <div class="amount_sub" style="font-weight: bold;margin-bottom: 5px;">
-            <span>{pigcms{:L('_ND_DUEONDELIVERY_')}</span>
-            <span class="span_right">
-                ${pigcms{$order['deliver_cash']|floatval}
-            </span>
-        </div>
-        </if>
         <div class="amount_sub">
             <span>{pigcms{:L('_ND_DELIVERYFEE_')}</span>
             <span class="span_right">
-                ${pigcms{$order['freight_charge']}
+                ${pigcms{$order['freight_charge']+$order['tip_charge']|floatval}
             </span>
         </div>
         <div class="amount_sub">
-            <span>{pigcms{:L('_ND_TIP_')}</span>
+            <span>Bonus</span>
             <span class="span_right">
-                ${pigcms{$order['tip_charge']}
+                $0.00
             </span>
         </div>
         <div class="amount_sub" style="font-weight: bold;">
@@ -438,7 +443,7 @@ $('#open_map').click(function () {
         if (status == 2)
             address = "{pigcms{$supply['from_site']}";
         else
-            address = "{pigcms{$supply['aim_site']}";
+            address = "{pigcms{$order.user_address}";
 
         window.linkJs.openGoogleMap(address);
     }else {
@@ -446,7 +451,7 @@ $('#open_map').click(function () {
         if (status == 2)
             url = "https://maps.google.com/maps?q={pigcms{$supply['from_site']}&z=17&hl=en";
         else
-            url = "https://maps.google.com/maps?q={pigcms{$supply['aim_site']}&z=17&hl=en";
+            url = "https://maps.google.com/maps?q={pigcms{$order.user_address}&z=17&hl=en";
 
         location.href = url;
     }
@@ -491,7 +496,8 @@ $(document).ready(function(){
                         var pay_method = "{pigcms{$order['pay_method']}";
                         var content = "{pigcms{:L('_ND_CASHORDERNOTICE_')}";
                         if(pay_method == 1){
-                            content = "Order Completed! Delivery Fee: ${pigcms{$order.freight_charge}. Tips: ${pigcms{$order.tip_charge}. Thank you for your delivery!"
+                            //content = "Order Completed! Delivery Fee: ${pigcms{$order.freight_charge}. Tips: ${pigcms{$order.tip_charge}. Thank you for your delivery!"
+                            content = "Order complete! Your earning is ${pigcms{$order['freight_charge']+$order['tip_charge']}. Thank you for your delivery!";
                         }
                         layer.open({
                             title: ['{pigcms{:L("_ND_TISHI_")}', 'background-color:#ffa52d;color:#fff;'],

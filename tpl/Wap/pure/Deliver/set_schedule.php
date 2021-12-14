@@ -134,6 +134,10 @@
         top: 8px;
     }
 
+    #work_time .work_div.active .w_r{
+        background-image: url("{pigcms{$static_path}img/recomm_white.png");
+    }
+
     #work_time span,#recom span{
         float: left;
     }

@@ -1644,13 +1644,13 @@ class DeliverAction extends BaseAction
 
         if($show_dining_time < 0) {
             $supply['is_dinning'] = 0;
-            $supply['show_dining_time'] = show_time($show_dining_time);
+            $supply['show_dining_time'] = show_time($show_dining_time)*-1;
         }else {
             $supply['is_dinning'] = 1;
             $supply['show_dining_time'] = show_time_ago($show_dining_time);
         }
 
-        $supply['totalTime'] = show_time($supply['end_time'] - $supply['create_time']);
+        $supply['totalTime'] = show_time($supply['end_time'] - $supply['start_time']);
 
 		$supply['deliver_cash'] = floatval($supply['deliver_cash']);
 		$supply['distance'] = floatval($supply['distance']);

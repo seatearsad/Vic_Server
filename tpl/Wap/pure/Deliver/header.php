@@ -19,7 +19,7 @@
         flex: 1 1 100%;
     }
     #header_sign{
-        flex: 1 1 100%;
+        flex: 1 1 20%;
     }
 
     #header_sign a{
@@ -168,6 +168,18 @@
     .material-icons{
         width: 35px;
     }
+    .refresh{
+        height: 48px;
+        width: 48px;
+        cursor: pointer;
+        margin-left: 5%;
+        margin-top: 10px;
+        padding-top: 10px;
+        box-sizing: border-box;
+        background-color: white;
+        border-radius: 24px;
+        position: relative;
+    }
 </style>
 
 <div id="tutti_header">
@@ -189,6 +201,9 @@
     </div>
 
     <div id="header_sign">
+        <div class="refresh" id="refresh_btn">
+            <span class="material-icons" style="color: #294068;font-size: 26px;">restart_alt</span>
+        </div>
         <if condition="($city['urgent_time'] neq 0 OR $is_change eq 1) && (ACTION_NAME eq 'index' OR ACTION_NAME eq 'process') && $deliver_session['work_status'] eq 0">
             <if condition="$deliver_session['work_status'] eq '1'">
                 <a href="javascript:void(0)" class="startOrder" ref="0">{pigcms{:L('_CLOCK_IN_')}</a>
@@ -325,6 +340,14 @@
     });
     $("#setting").click(function () {
 
+    });
+
+    $('#refresh_btn').click(function () {
+        if(typeof (window.linkJs) != 'undefined'){
+            window.linkJs.reloadWebView();
+        }else {
+            window.location.reload();
+        }
     });
 
     var language = "{pigcms{:C('DEFAULT_LANG')}";

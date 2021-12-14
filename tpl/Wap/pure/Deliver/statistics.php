@@ -152,12 +152,12 @@
         </div>
         <div style="border-bottom: 1px solid lightgray;margin: 10px auto;"></div>
         <div style="font-size: 0px">
-            <span class="su_left">{pigcms{:L('_ND_TOTALDELIVERYFEE_')}</span>
-            <span class="su_right">${pigcms{$freight_charge|floatval}</span>
+            <span class="su_left">Delivery Earning</span>
+            <span class="su_right">${pigcms{$freight_charge+$tip|floatval}</span>
         </div>
         <div style="font-size: 0px">
-            <span class="su_left">{pigcms{:L('_ND_TIPS_')}</span>
-            <span class="su_right">${pigcms{$tip|default=0}+</span>
+            <span class="su_left">Bonus</span>
+            <span class="su_right">$0.00</span>
         </div>
         <!--div style="font-size: 0px">
             <span class="su_left" style="font-weight: bold;">Earning by Delivery Fees + Tips, or</span>
@@ -171,7 +171,7 @@
         <div style="font-size: 0px">
             <span class="su_left" style="font-weight: bold;">{pigcms{:L('_ND_ACTUALEARN_')}</span>
             <span class="su_right" style="font-weight: bold;">
-                    ${pigcms{$freight_charge+$tip}+
+                    ${pigcms{$freight_charge+$tip}
             </span>
         </div>
         <div style="font-size: 0px">

@@ -149,11 +149,11 @@
                         </div>
                         <div style="line-height: 20px;float:left;width: 100%;margin-bottom: 5px;">
                             <span style="float: left;width:150px;">{pigcms{:L('_CREDIT_CARD_NUM_')}：</span>
-                            <input type="text" maxlength="20" size="20" name="card_num" class="form-field" id="card_num" value="" style="height: 25px;float: left"/>
+                            <input type="number" maxlength="20" size="20" name="card_num" class="form-field" id="card_num" value="" style="height: 25px;float: left"/>
                         </div>
                         <div style="line-height: 20px;float:left;width: 100%;margin-bottom: 5px;">
                             <span style="float: left;width:150px;">{pigcms{:L('_EXPRIRY_DATE_')}：</span>
-                            <input type="text" maxlength="4" size="20" name="expiry" class="form-field" id="expiry" value="" style="height: 25px;float: left"/>
+                            <input type="number" maxlength="4" size="20" name="expiry" class="form-field" id="expiry" value="" style="height: 25px;float: left"/>
                         </div>
                     </dd>
                 </dl>
@@ -196,6 +196,13 @@ $(function(){
     CalTip();
 
     function payment(e) {
+        if($('#card_name').val() == "" || $('#card_num').val() == "" || $('#expiry').val() == ""){
+            layer.open({
+                title:['Message'],
+                content:"Please complete your payment information."
+            });
+            return false;
+        }
         e.stopPropagation();
         layer.open({type:2,content:"{pigcms{:L('_LOADING_TXT_')}",shadeClose:false});
         var re_data = {
