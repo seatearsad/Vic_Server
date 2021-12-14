@@ -13,7 +13,25 @@ var click_id = 0;
 var this_order;
 var order_info;
 var time_out;
+
+var audio = new Audio();
+audio.src = sound_url;
+audio.loop = "loop";
+
 getNewOrder();
+
+$('body').click(function () {
+    if(navigator.userAgent.match(/TuttiPartner/i))
+        window.webkit.messageHandlers.stopSound.postMessage([0]);
+    else if(/(tutti_android)/.test(navigator.userAgent.toLowerCase()))
+        window.linkJs.stopSound();
+    else {
+        if(!audio.paused) {
+            audio.pause();
+        }
+    }
+});
+
 function getNewOrder(){
     $.post(new_url,{last_time:last_time},function(result){
         if(result.error == 0){
@@ -29,8 +47,9 @@ function getNewOrder(){
                 else if(/(tutti_android)/.test(navigator.userAgent.toLowerCase()))
                     window.linkJs.newOrderSound();
                 else {
-                    var audio = new Audio();
-                    audio.src = sound_url;
+                    //var audio = new Audio();
+                    //audio.src = sound_url;
+                    //audio.loop = "loop";
                     audio.play();
                 }
             }

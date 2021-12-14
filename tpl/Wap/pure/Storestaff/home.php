@@ -60,6 +60,9 @@
 </script>
 <script type="text/javascript" src="{pigcms{$static_path}js/new_order.js?v=2.5"></script>
 <script>
+    if(/(tutti_android)/.test(navigator.userAgent.toLowerCase()))
+        window.linkJs.newOrderSound();
+
     var all_height = $(window).height();
     var all_width = $(window).width();
     if(all_height < all_width){
