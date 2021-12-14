@@ -82,7 +82,7 @@
         var sound_url = "{pigcms{$static_public}sound/soft-bells.mp3";
         var detail_url = "{pigcms{:U('Storestaff/getOrderDetail')}";
     </script>
-    <script type="text/javascript" src="{pigcms{$static_path}js/new_order.js?v=2.6"></script>
+    <script type="text/javascript" src="{pigcms{$static_path}js/new_order.js?v=2.7"></script>
     <script>
         //更新app 设备token
         function pushDeviceToken(token) {
