@@ -198,8 +198,18 @@
         font-size: 18px;
         width: 20px;
     }
+    #offsetTop{
+        width: 100%;
+        height: 24px;
+        background-color: white;
+        position: fixed;
+        top:0;
+        z-index: 999;
+    }
 </style>
-
+<if condition="ACTION_NAME eq 'detail'">
+<div id="offsetTop"></div>
+</if>
 <div id="tutti_header" <if condition="ACTION_NAME eq 'detail'">style="background-color:white;"</if>>
     <div id="header_menu">
         <if condition="ACTION_NAME eq 'detail'">
@@ -339,22 +349,25 @@
     var init_margin = parseFloat($('#menu_memo').css('margin-top'));
 
 
-    $(window).scroll(function () {
-        var top = $(document).scrollTop();
-        if((top > 0 && top <= init_top) || top < 0){
-            $('#tutti_header').css('margin-top',-top);
-            $('#menu_memo').css('margin-top',init_margin-top);
-        }
-        if(top > init_top){
-            $('#tutti_header').css('margin-top',-init_top);
-            $('#menu_memo').css('margin-top',init_margin - init_top);
-        }
-        if(top == 0){
-            $('#tutti_header').css('margin-top',0);
-            $('#menu_memo').css('margin-top',init_margin);
-
-        }
-    });
+    // $(window).scroll(function () {
+    //     var top = $(document).scrollTop();
+    //     if((top > 0 && top <= init_top) || top < 0){
+    //         $('#offsetTop').css('margin-top',-top);
+    //         $('#tutti_header').css('margin-top',-top);
+    //         $('#menu_memo').css('margin-top',init_margin-top);
+    //     }
+    //     if(top > init_top){
+    //         $('#offsetTop').css('margin-top',0);
+    //         $('#tutti_header').css('margin-top',-init_top);
+    //         $('#menu_memo').css('margin-top',init_margin - init_top);
+    //     }
+    //     if(top == 0){
+    //         $('#offsetTop').css('margin-top',0);
+    //         $('#tutti_header').css('margin-top',0);
+    //         $('#menu_memo').css('margin-top',init_margin);
+    //
+    //     }
+    // });
     $('#logout').click(function () {
         layer.open({
             title:['Reminder','background-color:#ffa52d;color:#fff;'],

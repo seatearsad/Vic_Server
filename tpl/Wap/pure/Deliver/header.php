@@ -180,8 +180,16 @@
         border-radius: 24px;
         position: relative;
     }
+    #offsetTop{
+        width: 100%;
+        height: 24px;
+        background-color: white;
+        position: fixed;
+        top:0;
+        z-index: 999;
+    }
 </style>
-
+<div id="offsetTop"></div>
 <div id="tutti_header">
     <div id="header_menu">
         <div id="hamburger-1" class="hamburger">
@@ -310,14 +318,17 @@
     $(window).scroll(function () {
         var top = $(document).scrollTop();
         if((top > 0 && top <= init_top) || top < 0){
+            $('#offsetTop').css('margin-top',-top);
             $('#tutti_header').css('margin-top',-top);
             $('#menu_memo').css('margin-top',init_margin-top);
         }
         if(top > init_top){
+            $('#offsetTop').css('margin-top',-init_top);
             $('#tutti_header').css('margin-top',-init_top);
             $('#menu_memo').css('margin-top',init_margin - init_top);
         }
         if(top == 0){
+            $('#offsetTop').css('margin-top',0);
             $('#tutti_header').css('margin-top',0);
             $('#menu_memo').css('margin-top',init_margin);
 

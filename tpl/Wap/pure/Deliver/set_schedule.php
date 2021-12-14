@@ -262,7 +262,7 @@
 	</section-->
 <!-- 	<script src="http://api.map.baidu.com/api?type=quick&ak=4c1bb2055e24296bbaef36574877b4e2&v=1.0"></script> -->
     <script src="{pigcms{$static_public}layer/layer.m.js"></script>
-    <script type="text/javascript" src="{pigcms{$static_public}js/artdialog/jquery.artDialog.js"></script>
+
 	<script type="text/javascript">
         $('input[name="repeat"]').click(function () {
             if($(this).prop('checked')){
