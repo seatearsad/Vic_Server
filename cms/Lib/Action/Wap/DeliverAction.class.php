@@ -729,7 +729,7 @@ class DeliverAction extends BaseAction
 
                 if($show_dining_time < 0) {
                     $val['is_dinning'] = 0;
-                    $val['show_dining_time'] = show_time($show_dining_time);
+                    $val['show_dining_time'] = show_time($show_dining_time*-1);
                 }else {
                     $val['is_dinning'] = 1;
                     $val['show_dining_time'] = show_time_ago($show_dining_time);
@@ -1644,7 +1644,7 @@ class DeliverAction extends BaseAction
 
         if($show_dining_time < 0) {
             $supply['is_dinning'] = 0;
-            $supply['show_dining_time'] = show_time($show_dining_time)*-1;
+            $supply['show_dining_time'] = show_time($show_dining_time*-1);
         }else {
             $supply['is_dinning'] = 1;
             $supply['show_dining_time'] = show_time_ago($show_dining_time);

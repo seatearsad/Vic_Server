@@ -2885,10 +2885,13 @@ class PayAction extends BaseAction{
             }else{
                 $detail_en= '';
             }
-            $detail_list=array('detail'=>$detail,'detail_en'=>$detail_en);
-            //var_dump($post["address_id"].'----'.$detail_list);die();
-            D('User_adress')->field(true)->where(array("adress_id"=>$post["address_id"]))->save($detail_list);
+        }else{
+            $detail = "";
+            $detail_en = "";
         }
+        $detail_list=array('detail'=>$detail,'detail_en'=>$detail_en);
+        //var_dump($post["address_id"].'----'.$detail_list);die();
+        D('User_adress')->field(true)->where(array("adress_id"=>$post["address_id"]))->save($detail_list);
     }
 
     //微信、支付宝请求支付!!!

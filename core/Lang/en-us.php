@@ -2060,7 +2060,7 @@ return array(
     "CUSTOMER_BKADMIN"=>"Customer",
     "COURIER_BKADMIN"=>"Courier",
     "_BACK_COURIER_INFO_"=>"Courier",
-    "_BACK_CITY_STATUS_"=>"Accepting new couriers",
+    "_BACK_CITY_DELI_STATUS_"=>"Accepting new couriers",
     "_BACK_CITY_DELI_BAG_"=>"Delivery Bag",
     "_BACK_CITY_DELI_PICKUP_"=>"Pickup",
     "_BACK_CITY_DELI_SHIPPING_"=>"Shipping",

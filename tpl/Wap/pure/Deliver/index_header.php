@@ -207,12 +207,12 @@
         z-index: 999;
     }
 </style>
-<if condition="ACTION_NAME eq 'detail'">
+<if condition="ACTION_NAME eq 'detail' or ACTION_NAME eq 'online'">
 <div id="offsetTop"></div>
 </if>
-<div id="tutti_header" <if condition="ACTION_NAME eq 'detail'">style="background-color:white;"</if>>
+<div id="tutti_header" <if condition="ACTION_NAME eq 'detail' or ACTION_NAME eq 'online'">style="background-color:white;"</if>>
     <div id="header_menu">
-        <if condition="ACTION_NAME eq 'detail'">
+        <if condition="ACTION_NAME eq 'detail' or ACTION_NAME eq 'online'">
             <div class="refresh" id="back_btn">
                 <span class="material-icons title_icon" style="color: #294068;font-size: 30px;">keyboard_arrow_left</span>
             </div>

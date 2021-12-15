@@ -136,11 +136,7 @@
 </style>
 <body>
     <include file="index_header" />
-    <if condition="$supply['status'] eq 5">
-        <div class="order_all" style="bottom: 0;">
-        <else/>
-        <div class="order_all">
-    </if>
+    <div class="order_all" <if condition="$supply['status'] eq 5">style="bottom: 0;"</if>>
     <div class="order_title" style="background: #294068;">
         <span>
             {pigcms{$supply['statusStr']}
@@ -192,6 +188,7 @@
             <div style="margin-left: 35px;margin-top: 10px;">
                 {pigcms{$store['trafficroute']}
             </div>
+            </if>
             <div style="margin-left: 35px;margin-top: 20px;font-size: 18px">
                 <span style="line-height: 40px;background-color: #294068;padding:10px 20px;color: white;border-radius: 20px;" id="open_map">
                     <label class="material-icons" style="vertical-align: middle;width: 30px;">open_in_new</label>
@@ -203,7 +200,6 @@
                         <label class="material-icons" style="color: white;font-size: 26px;margin-top: 7px;margin-left: 7px;">phone</label>
                     </a>
                 </span>
-
             </div>
         </div>
     </if>
@@ -228,25 +224,32 @@
                 </span>
             </div>
         </div>
-        <if condition="$order['not_touch'] eq 1 and $supply['status'] eq 4">
+        <if condition="$order['not_touch'] eq 1 and $supply['status'] eq 4 and $order['user_address_detail'] neq ''">
         <div class="amount_div">
             <div class="order_time" style="color: #294068;font-size: 16px;">
                 <span class="material-icons" style="vertical-align: middle">assignment</span>
                 <span style="margin-left: -10px;font-weight: bold;">
                         No Contact Delivery
                 </span>
-                <if condition="$order['user_address_detail'] neq ''">
-                    <div style="margin-left: 30px;font-size: 14px;color: #333333">
-                        {pigcms{$order['user_address_detail']}
-                    </div>
-                </if>
-                <if condition="$order['user_address_detail'] eq ''">
+                <div style="margin-left: 30px;font-size: 14px;color: #333333">
+                    {pigcms{$order['user_address_detail']}
+                </div>
+            </div>
+        </div>
+        </if>
+
+        <if condition="$order['not_touch'] eq 1 and $supply['status'] eq 4 and $order['user_address_detail'] eq ''">
+            <div class="amount_div">
+                <div class="order_time" style="color: #294068;font-size: 16px;">
+                    <span class="material-icons" style="vertical-align: middle">assignment</span>
+                    <span style="margin-left: -10px;font-weight: bold;">
+                        No Contact Delivery
+                    </span>
                     <div style="margin-left: 30px;font-size: 14px;color: #333333">
                         The customer didn't leave any instruction.
                     </div>
-                </if>
+                </div>
             </div>
-        </div>
         </if>
 
         <if condition="$order['not_touch'] neq 1 and $order['user_address_detail'] neq '' and $supply['status'] eq 4">
@@ -255,7 +258,7 @@
                     <span class="material-icons" style="vertical-align: middle">assignment</span>
                     <span style="margin-left: -10px;font-weight: bold;">
                         Delivery Instruction
-                </span>
+                    </span>
                     <div style="margin-left: 30px;font-size: 14px;color: #333333">
                         {pigcms{$order['user_address_detail']}
                     </div>
@@ -268,7 +271,7 @@
             <div class="order_time" style="color: #294068;font-size: 16px;padding-bottom: 0px;">
                 <span style="padding-right:15px; padding-left: 10px; font-size: 18px;"> $ </span>
                 <span style="margin-left: -10px;font-weight: bold;">
-                    {pigcms{:L('_ND_DUEONDELIVERY_')}: ${pigcms{$order['deliver_cash']|floatval}
+                    {pigcms{:L('_ND_DUEONDELIVERY_')}: ${pigcms{$supply['deliver_cash']|floatval}
                 </span>
                 <div style="margin-left: 30px;font-size: 14px;color: #333333;margin-top: 10px;">
                     <if condition="$supply['uid'] eq 0">
@@ -342,7 +345,6 @@
         </div>
     </div>
     </if>
-
     <div class="order_num">
         <if condition="$supply['status'] eq 5">
             <span class="material-icons" style="vertical-align: text-top;">subject</span>

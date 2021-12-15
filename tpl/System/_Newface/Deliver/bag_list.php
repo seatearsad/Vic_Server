@@ -20,7 +20,7 @@
         </div>
         <div class="col-lg-6 " style="height 90px;margin-top:40px;">
             <div class="btn-group float-right">
-                <a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Deliver/bag_add')}','{pigcms{:L(\'_BACK_BAG_LIST_ADD_\')}',880,760,true,false,false,editbtn,'edit',true);" style="float:right;margin-left: 10px;"><button class="btn btn-primary">{pigcms{:L('_BACK_BAG_LIST_ADD_')}</button></a>
+                <a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Deliver/bag_add')}','{pigcms{:L(\'_BACK_BAG_LIST_ADD_\')}',680,560,true,false,false,editbtn,'edit',true);" style="float:right;margin-left: 10px;"><button class="btn btn-primary">{pigcms{:L('_BACK_BAG_LIST_ADD_')}</button></a>
             </div>
         </div>
     </div>
@@ -67,7 +67,7 @@
                                             </td>
                                             <td class="textcenter">　
                                                 <a href="javascript:void(0);"
-                                                   onclick="window.top.artiframe('{pigcms{:U('Deliver/bag_edit',array('bag_id'=>$vo['bag_id']))}','{pigcms{:L(\'_BACK_EDIT_COURIER_\')}',880,760,true,false,false,editbtn,'edit',true);">
+                                                   onclick="window.top.artiframe('{pigcms{:U('Deliver/bag_edit',array('bag_id'=>$vo['bag_id']))}','{pigcms{:L(\'_BACK_EDIT_COURIER_\')}',680,560,true,false,false,editbtn,'edit',true);">
                                                     <button class="btn btn-white text-grey" type="button">
                                                         {pigcms{:L('_BACK_EDIT_')}
                                                     </button>

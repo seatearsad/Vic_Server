@@ -73,7 +73,7 @@
             Account & Payment Questions
         </div>
         <div style="margin-top: 2px;">
-            For inquiries about your account info, payment status, and other questions, please email our human resource department at hr@tutti.app.
+            For inquiries about your account info, payment status, and other questions, please email our human resource department at henry@tutti.app.
         </div>
     </div>
 <script>
@@ -82,7 +82,12 @@
         if(!ua.match(/TuttiDeliver/i)) {
             location.href = "mailto:henry@tutti.app";
         }else{
-            alert("Please send email to henry@tutti.app");
+            layer.open({
+                title: "",
+                content: "Please send email to henry@tutti.app",
+                btn: ["{pigcms{:L('_B_D_LOGIN_CONIERM_')}"],
+            });
+            //alert("Please send email to henry@tutti.app");
         }
     });
 

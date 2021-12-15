@@ -61,7 +61,7 @@
     </style>
 </head>
 <body>
-<include file="header" />
+<include file="index_header" />
     <div class="order_title" style="background: #294068;">
             <span>
                 Arriving
@@ -149,11 +149,11 @@
                         </div>
                         <div style="line-height: 20px;float:left;width: 100%;margin-bottom: 5px;">
                             <span style="float: left;width:150px;">{pigcms{:L('_CREDIT_CARD_NUM_')}：</span>
-                            <input type="number" maxlength="20" size="20" name="card_num" class="form-field" id="card_num" value="" style="height: 25px;float: left"/>
+                            <input type="tel" maxlength="20" size="20" name="card_num" class="form-field" id="card_num" value="" style="height: 25px;float: left"/>
                         </div>
                         <div style="line-height: 20px;float:left;width: 100%;margin-bottom: 5px;">
                             <span style="float: left;width:150px;">{pigcms{:L('_EXPRIRY_DATE_')}：</span>
-                            <input type="number" maxlength="4" size="20" name="expiry" class="form-field" id="expiry" value="" style="height: 25px;float: left"/>
+                            <input type="tel" maxlength="4" size="20" name="expiry" class="form-field" id="expiry" value="" style="height: 25px;float: left"/>
                         </div>
                     </dd>
                 </dl>
@@ -169,6 +169,10 @@
     </section>
 </section>
 <script type="text/javascript">
+    if(ua.match(/IPhonex/i)) {
+        $('.order_title').css("padding-top","94px");
+    }
+
 $(function(){
 	$(".delivery p em").each(function(){
 		$(this).width($(window).width() - $(this).siblings("i").width() - 55); 

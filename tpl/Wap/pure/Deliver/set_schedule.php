@@ -112,7 +112,7 @@
         font-size: 16px;
         margin-top: 10px;
         border-radius: 10px;
-        background: #DDDDDD;
+        background: white;
         color: #294068;
         font-weight: bold;
         position: relative;
@@ -363,8 +363,12 @@
             for(var i=0;i<time_list.length;i++){
                 if(time_list[i]['is_check'])
                     html += '<div class="work_div active">';
-                else
-                    html += '<div class="work_div">';
+                else {
+                    if(is_set)
+                        html += '<div class="work_div">';
+                    else
+                        html += '<div class="work_div" style="background-color: #DDDDDD;">';
+                }
 
                 if(time_list[i]['is_recomm'] == 1)
                     html += '<span class="w_r"></span>';

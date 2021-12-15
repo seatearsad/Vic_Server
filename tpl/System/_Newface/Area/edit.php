@@ -13,7 +13,7 @@
                         <form id="myform" method="post" action="{pigcms{:U('Area/amend')}" frame="true" refresh="true">
                             <input type="hidden" name="area_id" value="{pigcms{$now_area['area_id']}"/>
                             <div class="form-group  row">
-                                <label class="col-sm-3 col-form-label">{pigcms{:L('G_NAME')}|||</label>
+                                <label class="col-sm-3 col-form-label">{pigcms{:L('G_NAME')}</label>
                                 <div class="col-sm-9">
                                     <input type="text" class="form-control" name="area_name" value="{pigcms{$now_area.area_name}" size="20" placeholder="" validate="maxlength:30,required:true"/>
                                 </div>
