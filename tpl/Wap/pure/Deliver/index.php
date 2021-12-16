@@ -175,6 +175,7 @@
         }
         .order_detail span{
             flex: 1 1 30%;
+            word-break: normal;
         }
         .order_detail .amount{
             flex: 1 1 70%;
