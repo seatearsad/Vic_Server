@@ -452,7 +452,12 @@
                 {{ d.list[i].store_name }}
             </div>
             <div class="order_time" style="text-align: center;border-bottom: 0px;">
-                0.5 from you
+                {{# if(d.list[i].status < 4){ }}
+                {{ d.list[i].store_distance }} from you
+                {{# } else { }}
+                {{ d.list[i].user_distance }} from you
+                {{# } }}
+                {{# if(d.list[i].status < 4){ }}
                 ·
                 {{# if(d.list[i].is_dinning == 1){ }}
                 Ready
@@ -460,6 +465,7 @@
                 Ready in
                 {{# } }}
                 {{ d.list[i].show_dining_time }}
+                {{# } }}
             </div>
             <div id="position_div" class="color_{{ i%8 }}">
                 <div>

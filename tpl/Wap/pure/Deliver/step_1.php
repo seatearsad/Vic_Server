@@ -86,6 +86,7 @@
     }
     li input:disabled{
         background: #e6e6e6;
+        opacity: 100%;
     }
     li input.sm {
         width: 39%;
@@ -138,6 +139,9 @@
     }
     .gray_bg{
         background: #e6e6e6;
+    }
+    #vehicle_type{
+        opacity: 100%;
     }
 </style>
 <body style="background:url('{pigcms{$static_path}img/login_bg.png');">

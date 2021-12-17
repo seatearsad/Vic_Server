@@ -61,13 +61,13 @@
         background-color: #294068;
     }
     .menu_font{
-        font-size: 0.95em;
+        font-size: 0.9em;
         line-height: 48px;
         background-color: #294068;
         color: white;
         display: inline;
         margin: 10px 15px 5px 15px;
-        padding: 0 20px;
+        padding: 0 10px;
         border-radius: 24px;
     }
     #hamburger-1.is-active .line:nth-child(1) {
@@ -224,11 +224,9 @@
             </div>
         </if>
         <if condition="ACTION_NAME eq 'index' OR ACTION_NAME eq 'process'">
-        <div class="menu_font">Status:
-            <if condition="$deliver_session['work_status'] eq '1'">
-                <span class="off_shift">{pigcms{:L('_ND_OFFSHIFT_')}</span>
-            <else />
-                <span class="on_shift">{pigcms{:L('_ND_ONSHIFT_')}</span>
+        <div class="menu_font">{pigcms{:L('_ND_ONSHIFT_')}
+            <if condition="$header_time_show neq ''">
+                : {pigcms{$header_time_show}
             </if>
         </div>
         </if>

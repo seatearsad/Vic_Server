@@ -9,6 +9,7 @@
     <title>{pigcms{:L('_COURIER_CENTER_')}</title>
     <meta name="description" content="{pigcms{$config.seo_description}"/>
     <link href="{pigcms{$static_path}css/deliver.css?v=1.0.4" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
     <script src="{pigcms{:C('JQUERY_FILE')}"></script>
     <script src="{pigcms{$static_public}js/laytpl.js"></script>
     <script src="{pigcms{$static_path}layer/layer.m.js"></script>
@@ -85,10 +86,10 @@
         border-radius: 3px;
     }
     #memo_up{
-        width:80%;
+        width:90%;
         font-size: 12px;
         line-height: 1.3;
-        margin: 20px auto 5px auto;
+        margin: 60px auto 5px auto;
     }
     #memo_up a{
         text-decoration: underline;
@@ -100,75 +101,74 @@
     .text_b{
         font-weight: bold;
     }
+    .status_div{
+        background-color: white;
+        border-radius: 10px;
+        padding: 20px 20px 10px 20px;
+        margin-top: 20px;
+    }
+    .status_title{
+        color: #333333;
+        font-size: 14px;
+        font-weight: bold;
+    }
+    .status_show{
+        line-height: 30px;
+        font-size: 13px;
+        margin-top: 10px;
+    }
+    .status_show .material-icons{
+        vertical-align: top;
+        margin-top: 2px;
+    }
+    .status_txt{
+        padding-left: 25px;
+        height: 50px;
+    }
+    .upload_btn{
+        float: right;
+        background-color: #ffa52d;
+        padding: 2px 5px;
+        color: white;
+        border-radius: 5px;
+        font-weight: normal;
+    }
 </style>
 <body style="background:url('{pigcms{$static_path}img/login_bg.png');">
 <section>
     <div class="Land_top" style="color:#333333;">
         <span class="fillet" style="background: url('./tpl/Static/blue/images/new/icon.png') center no-repeat; background-size: contain;"></span>
         <div style="font-size: 14px">{pigcms{:L('_ND_BECOMEACOURIER_')}</div>
-        <div style="color: #999999;font-size: 12px;margin-top: 10px;">Thank you! You are almost there!</div>
-    </div>
-    <div id="step_now">
-        <div>4.{pigcms{:L('_ND_GETYOURBAG_')}</div>
-        <ul>
-        <li class="act"></li><li class="act"></li><li class="act"></li><li class="act"></li>
-        </ul>
     </div>
     <div id="memo_up">
-        <p class="y_c text_b" style="font-size: 13px;">Getting Your Delivery Bag</p>
-        <p>&nbsp;</p>
-        <p>
-            <label class="text_b">For Vancouver couriers</label>, please pick up your delivery bag between <label style="text-decoration: underline black;">9:30 am and 4:30 pm Monday to Friday</label> at:
-        </p>
-        <p>
-            <label class="text_b">&nbsp;&nbsp;&nbsp;&nbsp;500-789 West Pender St, Vancouver BC</label>
-        </p>
-        <!--p> - A link to <a href="https://calendly.com/calvin-tutti/15min" target="_blank">book a time slot</a> for pick up,</p>
-        <p> - The address of the pick-up location (in downtown Victoria).</p>
-        <p>&nbsp;</p>
-        <p> Please make sure you’ve booked a time slot before coming to pick up your bag!</p-->
-        <p>&nbsp;</p>
-        <label class="text_b">For couriers in all other cities</label>, your bag will be shipped to you once you complete the payment process. One of our agents will call you to confirm your address before shipping the bag.
-        <p>&nbsp;</p>
-        After you get your delivery bag and your account has been activated, you will receive another email with a link to our delivery instructions on how to use the courier app.
-        <p>&nbsp;</p>
-        If you have any questions about your delivery bag and registration process, please email <a href="mailto:hr@tutti.app">hr@tutti.app</div>!
-    <p>&nbsp;</p>
-    </div>
-    <!--div id="address">
-        <div>
-            #218-852 Fort St
-        </div>
-        <div>
-            Victoria BC
-        </div>
-        <div>&nbsp;</div>
-        <div style="color: #999999">
-            Hours:
-        </div>
-        <div>
-            Monday 2 pm - 6 pm
-        </div>
-        <div>
-            Tuesday to Friday 11 am - 6 pm
-        </div>
-    </div>
-    <div id="memo">
-        {pigcms{:L('_ND_PICKUPNOTICE1_')}
-    </div-->
-    <div style="border-bottom: 1px dashed #666666;margin: 0px auto;width: 80%;">
+        <span class="status_title">Application Status</span>
 
-    </div>
-    <div id="memo">
-        {pigcms{:L('_ND_PICKUPNOTICE2_')}
-    </div>
-    <div id="memo" style="text-decoration: underline">
-        <a href="{pigcms{:U('Deliver/account')}">
-        {pigcms{:L('_ND_COMPLETINGAPP_')}
-        </a>
-    </div>
-    <div id="memo">
-        {pigcms{:L('_ND_PICKUPNOTICE3_')}
+        <div class="status_div">
+            <div class="status_title">
+                <span>Required Documents</span>
+                <span class="upload_btn">Upload</span>
+            </div>
+            <div class="status_show" style="color: #ffa52d">
+                <span class="material-icons">check_circle_outline</span><!--info check_circle check_circle_outline-->
+                Incomplete! Please upload
+            </div>
+            <div class="status_txt">
+                We'll start reviewing your application when you upload all documents.
+            </div>
+        </div>
+        <div class="status_div">
+            <div class="status_title">
+                <span>Delivery Bag</span>
+                <span class="upload_btn">Pay Now</span>
+            </div>
+            <div class="status_show" style="color: #ffa52d">
+                <span class="material-icons">info</span>
+                Incomplete! Please upload
+            </div>
+            <div class="status_txt">
+                We'll start reviewing your application when you upload all documents.
+            </div>
+        </div>
     </div>
 </section>
 <script>

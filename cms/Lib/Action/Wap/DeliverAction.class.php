@@ -245,6 +245,8 @@ class DeliverAction extends BaseAction
             $is_scheduled = 1;
         }
 
+        $header_time_show = "";
+
         $schedule_list = D('Deliver_schedule')->where(array('uid'=>$this->deliver_session['uid'],'time_id' => array('in', $time_ids),'week_num' => $week_num, 'whether' => 1, 'status' => 1))->select();
         if($schedule_list){
             $is_change_work_status = 1;
@@ -253,6 +255,7 @@ class DeliverAction extends BaseAction
                 $new_hour = $hour + $city['jetlag'];
                 if(($new_hour >= $ids['start_time'] && $new_hour < $ids['end_time']) || ($min >= 50 && $new_hour+1 >= $ids['start_time'] && $new_hour+1 < $ids['end_time'])){
                     $show_time = "Today, ".$ids['start_time'].':00 - '.$ids['end_time'].':00';
+                    $header_time_show = $ids['start_time'].':00 - '.$ids['end_time'].':00';
                 }
             }
         }else{
@@ -285,9 +288,14 @@ class DeliverAction extends BaseAction
             $is_change_work_status = 0;
         }
 
+        if($header_time_show == "" && $city['urgent_time'] != 0){
+            $header_time_show = date("H:i",$city['urgent_time'])." - ".date("H:i",$city['urgent_time']+7200);
+        }
+
         $this->assign('is_change',$is_change_work_status);
         $this->assign('is_scheduled',$is_scheduled);
         $this->assign('show_time',$show_time);
+        $this->assign('header_time_show',$header_time_show);
 
         //修改上下班状态 只有在紧急状态下才能修改上班状态
 		if($_GET['action'] == 'changeWorkstatus') {// && ($city['urgent_time'] != 0 || $is_change_work_status == 1)
@@ -878,7 +886,8 @@ class DeliverAction extends BaseAction
                 $val['appoint_time'] = date('Y-m-d H:i', $val['appoint_time']);
                 $val['order_time'] = $val['order_time'] ? date('Y-m-d H:i', $val['order_time']) : '--';
                 $val['real_orderid'] = $val['real_orderid'] ? $val['real_orderid'] : $val['order_id'];
-// 			$val['store_distance'] = getRange(getDistance($val['from_lat'], $val['from_lnt'], $lat, $lng));
+ 			    $val['store_distance'] = getRange(getDistance($val['from_lat'], $val['from_lnt'], $this->deliver_session['lat'], $this->deliver_session['lng']));
+                $val['user_distance'] = getRange(getDistance($val['aim_lat'], $val['aim_lnt'], $this->deliver_session['lat'], $this->deliver_session['lng']));
                 $val['map_url'] = U('Deliver/map', array('supply_id' => $val['supply_id']));
                 if ($val['change_log']) {
                     $changes = explode(',', $val['change_log']);
@@ -2498,6 +2507,7 @@ class DeliverAction extends BaseAction
             }
             $order = D('Shop_order')->get_order_by_orderid($supply['order_id']);
             $supply['tip_charge'] = $order['tip_charge'];
+            $supply['discount'] = $order['coupon_price'] + $order['delivery_discount'] + $order['merchant_reduce'];
             $supply['uid'] = $order['uid'];
             $supply['username'] = $order['username'];
             $supply['goods_price'] = $order['goods_price'];

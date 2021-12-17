@@ -78,7 +78,7 @@
         <if condition="$begin_time neq '' and $end_time neq ''">
             {pigcms{$begin_time} -- {pigcms{$end_time}
         <else />
-            {pigcms{:L('_ND_ALLORDERS_')}
+            &nbsp;
         </if>
     </div>
     <volist name="list" id="month_order">

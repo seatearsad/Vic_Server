@@ -1467,7 +1467,7 @@ return array(
     "QW_WAITING"=>"Waiting for a Courier",
     "QW_Accepted"=>"Waiting for pickup",
     "QW_PICKED"=>"Picked Up",
-    "QW_ARRIVING"=>"Arriving",
+    "QW_ARRIVING"=>"Heading to the Customer",
     "QW_COMPLETED"=>"Completed",
     "QW_ORDERINFO"=>"Placed by %s at %s",
     "QW_NOTE"=>"Customer Note",

@@ -104,7 +104,10 @@
                     <span>Bottle Deposit:</span><span style="float: right;">${pigcms{$supply['deposit_price']}</span>
                 </div>
                 <div>
-                    <span>Driver Tip:</span><span id="tip_num" style="float: right;">$0</span>
+                    <span>Discount Received:</span><span style="float: right;">-${pigcms{$supply['discount']}</span>
+                </div>
+                <div>
+                    <span>Driver Tip:</span><span id="tip_num" style="float: right;">${pigcms{$supply['tip_charge']}</span>
                 </div>
             </div>
             <div class="Namelist p10">

@@ -165,10 +165,10 @@
         <if condition="$order['pay_method'] neq 1">
             <span class="span_right">
                 <label style="border: 1px solid #294068; border-radius: 5px;font-size: 14px;padding: 5px 10px;">
-                    <if condition="$supply['uid'] eq 0">
+                    <if condition="$order['uid'] eq 0">
                         {pigcms{:L('_ND_UNPAID_')}
                     </if>
-                    <if condition="$supply['uid'] neq 0 and $order['pay_method'] neq 1">
+                    <if condition="$order['uid'] neq 0 and $order['pay_method'] neq 1">
                         {pigcms{:L('_ND_CASH_')}
                     </if>
                 </label>
@@ -298,7 +298,7 @@
                     Assigned
                 </if>
                 <if condition="$supply['get_type'] eq 2">
-                    From Courier - {pigcms{$supply['change_name']}
+                    Assigned
                 </if>
                 <if condition="$supply['get_type'] eq 0">
                     Accepted
@@ -357,7 +357,7 @@
         <if condition="$supply['status'] eq 3 and $order['deliver_cash'] gt 0">
             <if condition="$supply['uid'] eq 0 or $order['pay_method'] neq 1">
             <div style="margin-left: 30px;font-size: 15px;margin-bottom: 10px;">
-                {pigcms{:L('_ND_DUEONDELIVERY_')}: ${pigcms{$order['deliver_cash']|floatval}
+                {pigcms{:L('_ND_DUEONDELIVERY_')}: ${pigcms{$supply['deliver_cash']|floatval}
             </div>
             </if>
         </if>
