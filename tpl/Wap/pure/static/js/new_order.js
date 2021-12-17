@@ -21,9 +21,9 @@ audio.loop = "loop";
 getNewOrder();
 
 $('body').click(function () {
-    if(navigator.userAgent.match(/TuttiPartner/i))
-        window.webkit.messageHandlers.stopSound.postMessage([0]);
-    else if(/(tutti_android)/.test(navigator.userAgent.toLowerCase()))
+    if(navigator.userAgent.match(/TuttiPartner/i)) {
+        //window.webkit.messageHandlers.stopSound.postMessage([0]);
+    }else if(/(tutti_android)/.test(navigator.userAgent.toLowerCase()))
         window.linkJs.stopSound();
     else {
         if(!audio.paused) {
