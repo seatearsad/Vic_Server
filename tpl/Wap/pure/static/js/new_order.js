@@ -23,9 +23,11 @@ getNewOrder();
 $('body').click(function () {
     if(navigator.userAgent.match(/TuttiPartner/i)) {
         //window.webkit.messageHandlers.stopSound.postMessage([0]);
-    }else if(/(tutti_android)/.test(navigator.userAgent.toLowerCase()))
-        window.linkJs.stopSound();
-    else {
+    }else if(/(tutti_android)/.test(navigator.userAgent.toLowerCase())) {
+        if (typeof (window.linkJs.stopSound) != 'undefined') {
+            window.linkJs.stopSound();
+        }
+    }else {
         if(!audio.paused) {
             audio.pause();
         }
@@ -44,9 +46,11 @@ function getNewOrder(){
                 });
                 if(navigator.userAgent.match(/TuttiPartner/i))
                     window.webkit.messageHandlers.newOrderSound.postMessage([0]);
-                else if(/(tutti_android)/.test(navigator.userAgent.toLowerCase()))
-                    window.linkJs.newOrderSound();
-                else {
+                else if(/(tutti_android)/.test(navigator.userAgent.toLowerCase())) {
+                    if (typeof (window.linkJs.newOrderSound) != 'undefined') {
+                        window.linkJs.newOrderSound();
+                    }
+                }else {
                     //var audio = new Audio();
                     //audio.src = sound_url;
                     //audio.loop = "loop";
