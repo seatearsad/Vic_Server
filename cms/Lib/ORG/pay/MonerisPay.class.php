@@ -761,13 +761,13 @@ class MonerisPay
         $mpgRequest = new mpgRequest($mpgTxn);
         $mpgRequest->setProcCountryCode($this->countryCode); //"US" for sending transaction to US environment
         $mpgRequest->setTestMode($this->testMode);
-        file_put_contents("./test_log.log",date("Y/m/d")."   ".date("h:i:sa")."   "."Moneris3DCavvRequest" ."   ". $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'--'.json_encode($mpgTxn)."\r\n",FILE_APPEND);
+        //file_put_contents("./test_log.log",date("Y/m/d")."   ".date("h:i:sa")."   "."Moneris3DCavvRequest" ."   ". $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'--'.json_encode($mpgTxn)."\r\n",FILE_APPEND);
         $mpgHttpPost = new mpgHttpsPost($this->store_id,$this->api_token,$mpgRequest);
 
         $mpgResponse = $mpgHttpPost->getMpgResponse();
 
         $resp = $this->arrageResp($mpgResponse,$txnArray['pan'],$txnArray['expdate'],0,$order_id);
-        file_put_contents("./test_log.log",date("Y/m/d")."   ".date("h:i:sa")."   "."Moneris3DCavvResponse" ."   ". $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'--'.json_encode($resp)."\r\n",FILE_APPEND);
+        //file_put_contents("./test_log.log",date("Y/m/d")."   ".date("h:i:sa")."   "."Moneris3DCavvResponse" ."   ". $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'--'.json_encode($resp)."\r\n",FILE_APPEND);
         if($resp['responseCode'] != "null" && $resp['responseCode'] < 50){
             if($orderInfo['save'] == 1) {
                 $isC = D('User_card')->getCardByUserAndNum($orderInfo['uid'], $pan);
@@ -1070,7 +1070,7 @@ class MonerisPay
         $mpgRequest->setTestMode($this->testMode); //false or comment out this line for production transactions
 
         /****************************** HTTPS Post Object *******************************/
-        file_put_contents("./test_log.log",date("Y/m/d")."   ".date("h:i:sa")."   "."Moneris3DRequest" ."   ". $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'--'.json_encode($mpiRequest)."\r\n",FILE_APPEND);
+        //file_put_contents("./test_log.log",date("Y/m/d")."   ".date("h:i:sa")."   "."Moneris3DRequest" ."   ". $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'--'.json_encode($mpiRequest)."\r\n",FILE_APPEND);
         $mpgHttpPost  =new mpgHttpsPost($this->store_id,$this->api_token,$mpgRequest);
 
         /************************************* Response *********************************/
@@ -1092,7 +1092,7 @@ class MonerisPay
         $resp['cavv'] = $mpgResponse->getMpiCavv();
         $resp['site_url'] = $merchantUrl;
 
-        file_put_contents("./test_log.log",date("Y/m/d")."   ".date("h:i:sa")."   "."Moneris3DResponse" ."   ". $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'--'.json_encode($resp)."\r\n",FILE_APPEND);
+        //file_put_contents("./test_log.log",date("Y/m/d")."   ".date("h:i:sa")."   "."Moneris3DResponse" ."   ". $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'--'.json_encode($resp)."\r\n",FILE_APPEND);
         //var_dump($resp);die();
         if($resp['transStatus'] == "C" || $resp['transStatus'] == "Y" || $resp['transStatus'] == "A"){
             $order_md = D('Pay_moneris_md')->where(array('moneris_order_id'=>$data['order_id']))->find();
