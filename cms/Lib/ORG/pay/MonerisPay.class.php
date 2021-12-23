@@ -1053,13 +1053,13 @@ class MonerisPay
         $mpgRequest->setTestMode($this->testMode); //false or comment out this line for production transactions
 
         /****************************** HTTPS Post Object *******************************/
-
+        file_put_contents("./deliverect_log.log",date("Y/m/d")."   ".date("h:i:sa")."   "."Moneris3DRequest" ."   ". $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'--'.json_encode($mpgRequest)."\r\n",FILE_APPEND);
         $mpgHttpPost  =new mpgHttpsPost($this->store_id,$this->api_token,$mpgRequest);
 
         /************************************* Response *********************************/
 
         $mpgResponse=$mpgHttpPost->getMpgResponse();
-
+        file_put_contents("./deliverect_log.log",date("Y/m/d")."   ".date("h:i:sa")."   "."Moneris3DResponse" ."   ". $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'--'.json_encode($mpgResponse)."\r\n",FILE_APPEND);
         $resp['requestMode'] = "mpi";
 
         $resp['responseCode'] = $mpgResponse->getResponseCode();
