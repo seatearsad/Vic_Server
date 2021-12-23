@@ -58,7 +58,7 @@
     var sound_url = "{pigcms{$static_public}sound/soft-bells.mp3";
     var detail_url = "{pigcms{:U('Storestaff/getOrderDetail')}";
 </script>
-<script type="text/javascript" src="{pigcms{$static_path}js/new_order.js?v=2.9"></script>
+<script type="text/javascript" src="{pigcms{$static_path}js/new_order.js?v=2.0.1"></script>
 <script>
     var all_height = $(window).height();
     var all_width = $(window).width();
