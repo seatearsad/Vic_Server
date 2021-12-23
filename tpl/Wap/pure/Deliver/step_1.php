@@ -31,7 +31,7 @@
         position: absolute;
         top: 2%;
         width: 100%;
-        font-size: 10px;
+        font-size: 12px;
         color: #666666;
     }
     #step_now{
@@ -125,7 +125,7 @@
     li div{
 
         display: inline-block;
-        width: 50%;
+        width: 80%;
         font-size: 12px;
     }
     input#sms_code{
@@ -142,6 +142,18 @@
     }
     #vehicle_type{
         opacity: 100%;
+    }
+    #online_div{
+        text-align: left;
+        font-weight: bold;
+        margin-top: 5px;
+        width: 78%;
+    }
+    #city_id{
+        background-color: white;
+    }
+    #reg_form:disabled{
+        background-color: #999999;
     }
 </style>
 <body style="background:url('{pigcms{$static_path}img/login_bg.png');">
@@ -169,7 +181,7 @@
                 <select name="city_id" id="city_id" class="gray-bg" data-not-online="{pigcms{$not_online}">
                     <option value="0">------{pigcms{:L('_ND_DELIVERYCITY_')}------</option>
                     <volist name="city_list" id="city">
-                        <option value="{pigcms{$city['area_id']}">{pigcms{$city['area_name']}</option>
+                        <option value="{pigcms{$city['area_id']}" <if condition="$user['city_id'] eq $city['area_id']">selected="selected"</if>>{pigcms{$city['area_name']}</option>
                     </volist>
                 </select>
                 <div id="online_div" style="display: none">Sorry, we’re temporarily not accepting new couriers in this city. We will notify you by email when we start accepting more applicants.</div>
@@ -177,16 +189,16 @@
             <li>
                 <select name="vehicle_type" class="gray-bg" id="vehicle_type" disabled="disabled">
                     <option value="0">------Vehicle Type------</option>
-                    <option value="1">Car</option>
-                    <option value="2">Bike</option>
-                    <option value="3">Motorcycle/Scooter</option>
+                    <option value="1" <if condition="$user['vehicle_type'] eq 1">selected="selected"</if>>Car</option>
+                    <option value="2" <if condition="$user['vehicle_type'] eq 2">selected="selected"</if>>Bike</option>
+                    <option value="3" <if condition="$user['vehicle_type'] eq 3">selected="selected"</if>>Motorcycle/Scooter</option>
                 </select>
             </li>
             <li>
                 <input type="text" class="gray-bg" placeholder="{pigcms{:L('_BIRTHDAY_TXT_')}*" id="birthday" name="birthday" disabled="disabled">
             </li>
             <li>
-                <input type="text" class="gray-bg pac-target-input" placeholder="{pigcms{:L('_ND_ADDRESS_')}" id="address" name="address" disabled="disabled">
+                <input type="text" class="gray-bg pac-target-input" placeholder="{pigcms{:L('_ND_ADDRESS_')}*" id="address" name="address" disabled="disabled">
             </li>
             <li>
                 <input type="text" class="gray-bg" placeholder="Apartment,suite,unit,etc." id="apartment" name="apartment" disabled="disabled">
@@ -200,7 +212,7 @@
             </li>
 
             <li class="Landd">
-                <input type="button" value="Continue" id="reg_form" style="background-color: #ffa52d;width: 80%;"  disabled="disabled">
+                <input type="button" value="Continue" id="reg_form" style="width: 80%;"  disabled="disabled">
             </li>
         </ul>
         <input type="hidden" name="lng" id="lng">
@@ -352,13 +364,13 @@
 
     function check_form() {
         var is_check = true;
-        // $("#reg_list").find('input').each(function () {
-        //     if($(this).val() == ''){
-        //         show_tip("{pigcms{:L('_PLEASE_INPUT_ALL_')}",$(this));
-        //         is_check = false;
-        //         return false;
-        //     }
-        // });
+        $("#reg_list").find('input').each(function () {
+            if($(this).attr("name") != "apartment" && $(this).val() == ''){
+                show_tip("{pigcms{:L('_PLEASE_INPUT_ALL_')}",$(this));
+                is_check = false;
+                return false;
+            }
+        });
         if($("input[name='lng']").val() == '')
             $("input[name='lng']").val(0);
         if($("input[name='lat']").val() == '')

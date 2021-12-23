@@ -116,7 +116,10 @@
                                 </div>
                                 <div style="margin-left: 20px;margin-top: 5px;">Address Name:<input name="bag_address_name" value="{pigcms{$now_area['bag_address_name']}" class="form-control" type="text"/> </div>
                                 <div style="margin-left: 20px;margin-top: 5px;">Address :<input name="bag_address"  value="{pigcms{$now_area['bag_address']}" class="form-control" type="text"/> </div>
-                                <div style="margin-left: 20px;margin-top: 5px;"><input   type="checkbox" name="is_show_url" value="1"> URL: <input name="bag_address_url" type="text" class="form-control"  value="{pigcms{$now_area['bag_address_url']}"/></div>
+                                <div style="margin-left: 20px;margin-top: 5px;">
+                                    <input   type="checkbox" name="is_show_url" value="1" <if condition="$now_area['bag_url_show'] eq 1">checked="checked"</if>>
+                                    URL: <input name="bag_address_url" type="text" class="form-control"  value="{pigcms{$now_area['bag_address_url']}"/>
+                                </div>
                         </div>
                     </div>
                     <div class="form-group  row">

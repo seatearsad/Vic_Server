@@ -9,6 +9,7 @@
     <title>{pigcms{:L('_COURIER_CENTER_')}</title>
     <meta name="description" content="{pigcms{$config.seo_description}"/>
     <link href="{pigcms{$static_path}css/deliver.css?v=1.0.4" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
     <script src="{pigcms{:C('JQUERY_FILE')}"></script>
     <script src="{pigcms{$static_public}js/laytpl.js"></script>
     <script src="{pigcms{$static_path}layer/layer.m.js"></script>
@@ -31,7 +32,7 @@
         position: absolute;
         top: 2%;
         width: 100%;
-        font-size: 10px;
+        font-size: 12px;
         color: #666666;
     }
 
@@ -107,7 +108,7 @@
         margin-top: 2px;
         font-size: 12px;
     }
-    li.Landd input {
+    .Landd input {
         background: #ffa52d;
         text-indent: 0px;
         font-size: 12px;
@@ -115,6 +116,7 @@
         margin-left: 0;
         padding: 0px;
         height: 30px;
+        border-radius: 5px;
     }
     #send_code{
         background: #ffa52d;
@@ -161,6 +163,49 @@
     .price_div{
         line-height: 20px;
     }
+    input[type="file"] {
+        display: block;
+        position: absolute;
+        opacity: 0;
+        -ms-filter: 'alpha(opacity=0)';
+    }
+    #J_selectImage_0{
+        background-color: white;
+        background-image: url("{pigcms{$static_path}img/step2.png");
+        background-size: 40px 40px;
+        background-repeat: no-repeat;
+        background-position:left 10px center;
+        color: #ffa52d;
+        text-indent: 0px;
+        font-size: 12px;
+        border-radius: 5px;
+        padding: 0px;
+        height: 50px;
+        line-height: 50px;
+        padding-left: 55px;
+        box-sizing: border-box;
+        display: inline-block;
+        width: 100%;
+    }
+    .img_0{
+        width: 100%;
+        text-align: center;
+        margin-top: 10px;
+    }
+    .img_0 img{
+        height: 100px;
+    }
+    .img_left,.img_right{
+        font-size: 36px;
+        padding: 60px 0;
+        cursor: pointer;
+    }
+    .bag_img_div{
+        width:258px;background-color: #aaaaaa;padding: 10px 0;box-sizing: border-box;display:flex;margin-top: -20px;
+    }
+    .bag_img_list{
+        height: 150px;position: relative;flex: 1 1 100%;text-align: center;overflow:hidden;
+    }
 </style>
 <body style="background:url('{pigcms{$static_path}img/login_bg.png');">
 <section>
@@ -172,14 +217,23 @@
     <div class="memo">
         Last step! You’re required to carry a Tutti delivery bag to pick up and drop off orders. Please select at least one of the following:
     </div>
-
+    <div class="memo" style="text-align: right;font-size: 14px;margin: 10px auto;">
+        <span>Use my own bag</span>
+        <span id="own_bag" class="material-icons" style="vertical-align: middle;font-size: 36px;">toggle_off</span>
+    </div>
+    <div id="buy_bag">
     <if condition="is_array($bag)">
         <div class="memo">
             <volist name="bag" id="vo">
                 <table style="width: 100%;text-align: center;padding: 8px">
                     <tr>
-                        <td style="background-color: #c0c0c0;;width: 120px;height: 120px;">
-                            <img src="{pigcms{$static_public}images/deliver_box.png" style="width: 100px;height:100px"></td>
+                        <td class="bag_img" style="background-color: #c0c0c0;;width: 120px;height: 120px;" data-id="{pigcms{$key}" data-count="{pigcms{:count($vo['bag_photos'])}" data-desc="{pigcms{$vo.bag_description}">
+                            <if condition="count($vo['bag_photos']) gt 0">
+                                <img src="{pigcms{$vo['bag_photos'][0]}" style="width: 100px;height:100px">
+                                <else />
+                                <img src="{pigcms{$static_public}images/deliver_box.png" style="width: 100px;height:100px">
+                            </if>
+                        </td>
                         <td style="position:relative;background-color: white;vertical-align: top;padding: 10px;text-align: left">
                             <div style="font-size: 16px;font-weight: bold">{pigcms{$vo.bag_name}</div>
                             <div style="font-size: 13px;font-weight: bold;margin-top: 4px;">${pigcms{$vo.bag_price}</div>
@@ -202,7 +256,6 @@
             </volist>
         </div>
     </if>
-    </DIV>
 
     <div class="memo-sm" style="text-align: right;text-align: center;font-size: 12px;height: 20px;margin-top: 20px;">
         <if condition="$city['bag_type'] eq 1">
@@ -240,17 +293,37 @@
         <div id="reg_list">
             <ul>
                 <li>
-                    <input type="text" class="" placeholder="{pigcms{:L('_ND_ADDRESS_')}" id="address" name="address" value="{pigcms{$user.ship_adress}">
+                    <if condition="$user['ship_adress'] eq ''">
+                        <input type="text" class="" placeholder="{pigcms{:L('_ND_ADDRESS_')}" id="address" name="address" value="{pigcms{$user.site}" />
+                        <else />
+                        <input type="text" class="" placeholder="{pigcms{:L('_ND_ADDRESS_')}" id="address" name="address" value="{pigcms{$user.ship_adress}">
+                    </if>
                 </li>
                 <li>
-                    <input type="text" class="" placeholder="Apartment,suite,unit,etc." id="apartment" name="apartment" value="{pigcms{$user.ship_apartment}">
+                    <if condition="$user['ship_apartment'] eq ''">
+                        <input type="text" class="" placeholder="Apartment,suite,unit,etc." id="apartment" name="apartment" value="{pigcms{$user.apartment}">
+                        <else />
+                        <input type="text" class="" placeholder="Apartment,suite,unit,etc." id="apartment" name="apartment" value="{pigcms{$user.ship_apartment}">
+                    </if>
                 </li>
                 <li>
-                    <input type="text" class="sm " placeholder="City*" id="city"  name="city" value="{pigcms{$user.ship_city_str}">
-                    <input type="text" class="sm" placeholder="Province*" id="province"  name="province" value="{pigcms{$user.ship_province_str}">
+                    <if condition="$user['ship_city_str'] eq ''">
+                        <input type="text" class="sm " placeholder="City*" id="city"  name="city" value="{pigcms{$user.city_str}">
+                        <else />
+                        <input type="text" class="sm " placeholder="City*" id="city"  name="city" value="{pigcms{$user.ship_city_str}">
+                    </if>
+                    <if condition="$user['ship_province_str'] eq ''">
+                        <input type="text" class="sm" placeholder="Province*" id="province"  name="province" value="{pigcms{$user.province_str}">
+                        <else />
+                        <input type="text" class="sm" placeholder="Province*" id="province"  name="province" value="{pigcms{$user.ship_province_str}">
+                    </if>
                 </li>
                 <li>
-                    <input type="text" class="" placeholder="Postal Code*" id="postalcode" name="postalcode" value="{pigcms{$user.ship_postal_code}">
+                    <if condition="$user['ship_postal_code'] eq ''">
+                        <input type="text" class="" placeholder="Postal Code*" id="postalcode" name="postalcode" value="{pigcms{$user.postal_code}">
+                        <else />
+                        <input type="text" class="" placeholder="Postal Code*" id="postalcode" name="postalcode" value="{pigcms{$user.ship_postal_code}">
+                    </if>
                 </li>
             </ul>
         </div>
@@ -291,11 +364,35 @@
             </li>
         </ul>
     </div>
-
+    </div>
+    <div id="no_buy_bag" class="memo" style="display: none;">
+        <div style="font-weight: bold;margin-bottom: 20px;">
+            Upload a photo of your thermal bag with a piece of your ID. Please make sure your photo is clear.
+        </div>
+        <div style="display:inline-block;" id="J_selectImage_0">
+            <div class="btn btn-sm btn-success" style="position:relative;height:50px;line-height: 50px;text-align: left;">
+                Proof of Bag Possession
+            </div>
+        </div>
+        <if condition="$user['bag_get_type'] eq -1">
+            <input type="hidden" id="own_bag_input" name="own_bag" value="{pigcms{$user['bag_get_id']}" />
+            <else />
+            <input type="hidden" id="own_bag_input" name="own_bag" value="" />
+        </if>
+        <div class="img_0">
+            <if condition="$user['bag_get_type'] eq -1">
+                <img src="./{pigcms{$user['bag_get_id']}" />
+            </if>
+        </div>
+        <div class="Landd">
+            <input type="button" value="Save & Continue" id="own_form" style="background-color: #ffa52d;width: 100%;color: white;">
+        </div>
+    </div>
 </section>
 </body>
 <script src="{pigcms{$static_public}js/lang.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKlguA2QFIUVwWTo3danbOqSKv3nYbBCg&libraries=places&language=en" async defer></script>
+<script type="text/javascript" src="{pigcms{$static_public}js/webuploader.min.js"></script>
 <script type="text/javascript">
     <!--    //bag_type 0:未设置 1:自取 2：邮寄 3：全选-->
     <if condition="$city['bag_type'] eq 1">
@@ -304,9 +401,54 @@
         <if condition="$city['bag_type'] eq 2">
             var init_bag_select=2;
         <else />
-            var init_bag_select=2;
+            var init_bag_select=1;
         </if>
     </if>
+
+
+    var  uploader = WebUploader.create({
+        auto: true,
+        swf: '{pigcms{$static_public}js/Uploader.swf',
+        server: "{pigcms{:U('Deliver/ajax_upload')}",
+        accept: {
+            title: 'Images',
+            extensions: 'gif,jpg,jpeg,png',
+            mimeTypes: 'image/gif,image/jpeg,image/jpg,image/png'
+        }
+    });
+
+    function addUploadBtn() {
+        uploader.addButton({
+            id: '#J_selectImage_0',
+            name: 'image_0',
+            multiple: false
+        });
+    }
+
+    uploader.on('fileQueued',function(file){
+        if($('.upload_pic_li').size() >= 5){
+            uploader.cancelFile(file);
+            alert('最多上传5个图片！');
+            return false;
+        }
+    });
+    uploader.on('uploadSuccess',function(file,response){
+        if(response.error == 0){
+            var fid = file.source.ruid;
+            var ruid = fid.split('_');
+            //var img = findImg(ruid[1],response.file);
+            $(".img_0").html('<img src="'+response.url+'"/>');
+            $(".img_0").css("height","100px");
+            $("#own_bag_input").val(response.file);
+        }else{
+            alert(response.info);
+        }
+    });
+
+    uploader.on('uploadError', function(file,reason){
+        $('.loading'+file.id).remove();
+        alert('上传失败！请重试。');
+    });
 
     var select_buy_mode = 0;
     var shipping_fee = parseFloat("{pigcms{$city.bag_shipping_fee}");
@@ -364,14 +506,26 @@
         }
 
         if (select_buy_mode==2){
-            $("#radiotype2").click();
+            $("#radiotype2").trigger("click");
             $(".shipping_fee_box").html(shipping_fee);
         }else{
-            $("#radiotype1").click();
+            $("#radiotype1").trigger("click");
         }
     }
 
     $(function(){
+        $(":radio").click(function(){
+            if($(this).val()==2){
+                $("#shipping_div").hide();
+                $("#pickup_div").show();
+                select_buy_mode=1;
+            }else{
+                $("#shipping_div").show();
+                $("#pickup_div").hide();
+                select_buy_mode=2;
+            }
+        });
+
         init_save_user_data();
 
         $('.btn_minus,.btn_plus').click(function(){
@@ -385,18 +539,6 @@
             $(".bagid_" + bagid).html(num);
 
             set_bag_id_number();
-        });
-
-        $(":radio").click(function(){
-            if($(this).val()==2){
-                $("#shipping_div").hide();
-                $("#pickup_div").show();
-                select_buy_mode=1;
-            }else{
-                $("#shipping_div").show();
-                $("#pickup_div").hide();
-                select_buy_mode=2;
-            }
         });
     });
 
@@ -505,7 +647,7 @@
                         layer.open({title:"{pigcms{:L('_B_D_LOGIN_TIP2_')}",content: date.msg,skin: 'msg', time:1,end:function () {
                                 //window.parent.location = "{pigcms{:U('Deliver/step_4')}";
                                 //layer.open({content:"Saved"});
-                                //window.parent.location = "{pigcms{:U('Deliver/step_4')}&type=jump";
+                                window.parent.location = "{pigcms{:U('Deliver/step_4')}&type=jump";
                             }});
                     }
                 }
@@ -514,7 +656,105 @@
         }
     });
 
+    $("#own_form").click(function () {
+        var post_data = {
+            own_bag:1,
+            bag_img:$("#own_bag_input").val()
+        };
+
+        $.ajax({
+            url: "{pigcms{:U('Deliver/step_3')}",
+            type: 'POST',
+            dataType: 'json',
+            data: post_data,
+            success:function(date){
+                layer.closeAll();
+                console.log(date);
+                if(date.error_code){
+                    layer.open({title:"{pigcms{:L('_B_D_LOGIN_TIP2_')}",content:date.msg, btn:["{pigcms{:L('_B_D_LOGIN_CONIERM_')}"],});
+                }else{
+                    layer.open({title:"{pigcms{:L('_B_D_LOGIN_TIP2_')}",content: date.msg,skin: 'msg', time:1,end:function () {
+                            window.parent.location = "{pigcms{:U('Deliver/step_4')}";
+                        }});
+                }
+            }
+        });
+    });
 
 
+    $("#own_bag").click(function () {
+        var curr = $(this).html();
+        if(curr == "toggle_off"){
+            $("#buy_bag").hide();
+            $("#no_buy_bag").show();
+            $(this).html("toggle_on");
+            $(this).css("color","#294068");
+            addUploadBtn();
+        }else{
+            $("#buy_bag").show();
+            $("#no_buy_bag").hide();
+            $(this).html("toggle_off");
+            $(this).css("color","#666666");
+        }
+    });
+
+    function changeBagImg(sort,length) {
+        var curr = 0;
+        $('.bag_img_list').find('img').each(function () {
+            if(!$(this).is(":hidden")){
+                curr = $(this).data("sort");
+            }
+        });
+
+        var new_curr = curr+sort;
+        new_curr = new_curr < 0 ? length-1 : new_curr;
+        new_curr = new_curr > length-1 ? 0 : new_curr;
+
+        if(new_curr != curr){
+            $('.bag_img_list').find('img').each(function () {
+                if($(this).data('sort') == new_curr){
+                    $(this).show().siblings().hide();
+                }
+            });
+        }
+    }
+
+    $('.bag_img').click(function () {
+        var img_count = $(this).data("count");
+        var bag_id = $(this).data("id");
+        var desc = $(this).data("desc");
+
+        var all_bag = $.parseJSON('{pigcms{:json_encode($bag)}');
+        //alert(all_bag[bag_id]['bag_photos'].length);
+
+        var img_html = "<div class='bag_img_div'>";
+        img_html += "<span class='material-icons img_left'>chevron_left</span>";
+        img_html += "<div class='bag_img_list'>";
+        for(var i=0;i<all_bag[bag_id]['bag_photos'].length;i++) {
+            if(i != 0) {
+                img_html += "<img src='" + all_bag[bag_id]['bag_photos'][i] + "' data-sort='"+i+"' width='150' style='display: none;'>";
+            }else{
+                img_html += "<img src='" + all_bag[bag_id]['bag_photos'][i] + "' data-sort='"+i+"' width='150'>";
+            }
+        }
+        img_html += "</div>";
+        img_html += "<span class='material-icons img_right'>chevron_right</span>";
+        img_html += "</div>";
+        img_html += "<div style='width:258px;margin-top: 10px;'>"+desc+"</div>";
+        layer.open({
+            title:[' ','border:none'],
+            content:img_html,
+            style: 'border:none; background-color:#ffffff; color:#333333;'
+        });
+
+        $('.img_left').unbind();
+        $('.img_right').unbind();
+        $('.img_left').bind("click",function () {
+            changeBagImg(-1,all_bag[bag_id]['bag_photos'].length);
+        });
+        $('.img_right').bind("click",function () {
+            changeBagImg(1,all_bag[bag_id]['bag_photos'].length);
+        });
+    });
 </script>
 </html>

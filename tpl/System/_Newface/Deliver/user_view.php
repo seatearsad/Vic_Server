@@ -252,37 +252,63 @@
                                     <if condition="$now_user['group'] neq 1">
 <!--是否通过-->
                                         <tr>
-                                            <th width="15%">{pigcms{:L('_BACK_WHETHER_PASS_')}</th>
+                                            <th width="25%">{pigcms{:L('_BACK_WHETHER_PASS_')}</th>
                                             <td colspan=3>
-                                                <span class="cb-enable"><label class="cb-enable "><span>{pigcms{:L('_BACK_PASS_REVIEW_')}</span><input
-                                                                type="radio" name="review" value="1"/></label></span>
-                                                <span class="cb-disable"><label class="cb-disable selected"><span>{pigcms{:L('_BACK_NO_PASS_REVIEW_')}</span><input
-                                                                type="radio" name="review" value="0"  checked="checked"/></label></span>
+                                                <span class="cb-enable">
+                                                    <label class="cb-enable ">
+                                                        <span>{pigcms{:L('_BACK_PASS_REVIEW_')}</span>
+                                                        <input type="radio" name="review" value="1"/>
+                                                    </label>
+                                                </span>
+                                                <span class="cb-disable">
+                                                    <label class="cb-disable selected">
+                                                        <span>{pigcms{:L('_BACK_NO_PASS_REVIEW_')}</span>
+                                                        <input type="radio" name="review" value="0"  checked="checked"/>
+                                                    </label>
+                                                </span>
                                             </td>
                                         </tr>
                                         <tr id="review_desc" <if condition="$img['review_desc'] eq ''">style="display: none"</if> >
-                                        <th width="15%">{pigcms{:L('_BACK_REVIEW_DESC_')}</th>
+                                        <th width="25%">{pigcms{:L('_BACK_REVIEW_DESC_')}</th>
                                         <td colspan=3>
                                             <input type="text" class="input fl" name="review_desc"
                                                    value="{pigcms{$img['review_desc']}">
                                         </td>
                                         </tr>
                                     </if>
-
                                     <if condition="$now_user['reg_status'] eq 4">
                                         <tr>
-                                            <th width="15%">{pigcms{:L('_BACK_WHETHER_RECE_')}</th>
+                                            <th width="25%">{pigcms{:L('_BACK_WHETHER_RECE_')}</th>
                                             <td colspan=3>
-                                                <span class="cb-enable"><label class="cb-enable"><span>Yes</span><input
-                                                                type="radio" name="receive" value="1"/></label></span>
-                                                <span class="cb-disable"><label
-                                                            class="cb-disable selected"><span>No</span><input
-                                                                type="radio" name="receive" value="0"
-                                                                checked="checked"/></label></span>
+                                                <span class="cb-enable">
+                                                    <label class="cb-enable"><span>Yes</span>
+                                                        <input type="radio" name="receive" value="1"/>
+                                                    </label>
+                                                </span>
+                                                <span class="cb-disable">
+                                                    <label class="cb-disable selected">
+                                                        <span>No</span>
+                                                        <input type="radio" name="receive" value="0" checked="checked"/>
+                                                    </label>
+                                                </span>
                                             </td>
                                         </tr>
                                     </if>
-
+                                    <if condition="$now_user['bag_get_type'] eq -1">
+                                        <tr id="bag_review_desc" <if condition="$img['bag_review_desc'] eq ''">style="display: none"</if> >
+                                        <th width="25%">{pigcms{:L('_BACK_REVIEW_DESC_')}</th>
+                                        <td colspan=3>
+                                            <input type="text" class="input fl" name="bag_review_desc"
+                                                   value="{pigcms{$img['bag_review_desc']}">
+                                        </td>
+                                        </tr>
+                                        <tr>
+                                            <th width="25%">Own Bag</th>
+                                            <td colspan=3>
+                                                <img src="{pigcms{:C('config.site_url')}{pigcms{$now_user['bag_get_id']}" height="100"/>
+                                            </td>
+                                        </tr>
+                                    </if>
                                 </table>
                                 <input type="hidden" name="city_id" id="city_id" value="{pigcms{$now_user['city_id']}">
                                 <input type="hidden" name="province_id" id="province_id"
@@ -398,6 +424,14 @@
                     } else {
                         $('#review_desc').hide();
                         set_req();
+                    }
+                });
+
+                $('input:radio[name=receive]').click(function () {
+                    if ($(this).val() == 0) {//未通过
+                        $('#bag_review_desc').show();
+                    } else {
+                        $('#bag_review_desc').hide();
                     }
                 });
 

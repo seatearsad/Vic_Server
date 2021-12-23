@@ -35,7 +35,7 @@
     }
     #upload_pic_box{margin-top:20px;height:150px;}
     #upload_pic_box .upload_pic_li{width:130px;float:left;list-style:none;}
-    #upload_pic_box img{width:100px;height:70px;}
+    #upload_pic_box img{width:100px;height:100px;}
 </style>
 <body style="background-color: #fff;">
 <div id="wrapper-singlepage">

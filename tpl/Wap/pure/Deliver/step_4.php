@@ -146,33 +146,139 @@
         <div class="status_div">
             <div class="status_title">
                 <span>Required Documents</span>
-                <span class="upload_btn">Upload</span>
+                <if condition="$userImg['upload_status'] eq 0 or $userImg['upload_status'] eq 3">
+                    <span class="upload_btn" id="upload_doc">Upload</span>
+                    <else />
+                    <span class="material-icons" style="float: right">chevron_right</span>
+                </if>
             </div>
-            <div class="status_show" style="color: #ffa52d">
-                <span class="material-icons">check_circle_outline</span><!--info check_circle check_circle_outline-->
+            <if condition="$userImg['upload_status'] eq 0">
+                <div class="status_show" style="color: #ffa52d">
+                <span class="material-icons">info</span><!--info check_circle check_circle_outline-->
                 Incomplete! Please upload
-            </div>
-            <div class="status_txt">
-                We'll start reviewing your application when you upload all documents.
-            </div>
+                </div>
+                <div class="status_txt">
+                    We'll start reviewing your application when you upload all documents.
+                </div>
+            </if>
+            <if condition="$userImg['upload_status'] eq 1">
+                <div class="status_show" style="color: #72AB29">
+                    <span class="material-icons">check_circle_outline</span><!--info check_circle check_circle_outline-->
+                    Uploaded! Waiting for review
+                </div>
+                <div class="status_txt">
+                    We'll notify you when we finish reviewing your application.
+                </div>
+            </if>
+            <if condition="$userImg['upload_status'] eq 2">
+                <div class="status_show" style="color: #72AB29">
+                    <span class="material-icons">check_circle</span><!--info check_circle check_circle_outline-->
+                    Approved!
+                </div>
+                <div class="status_txt">
+
+                </div>
+            </if>
+            <if condition="$userImg['upload_status'] eq 3">
+                <div class="status_show" style="color: #ffa52d">
+                <span class="material-icons">info</span><!--info check_circle check_circle_outline-->
+                Review Disapproved
+                </div>
+                <div class="status_txt">
+                    {pigcms{$userImg['review_desc']}
+                </div>
+            </if>
         </div>
         <div class="status_div">
             <div class="status_title">
                 <span>Delivery Bag</span>
-                <span class="upload_btn">Pay Now</span>
+                <if condition="$userImg['online_paid'] eq 0">
+                    <span class="upload_btn" id="pay_bag">Manage</span>
+                <else />
+                    <span class="material-icons" style="float: right">chevron_right</span>
+                </if>
             </div>
-            <div class="status_show" style="color: #ffa52d">
-                <span class="material-icons">info</span>
-                Incomplete! Please upload
-            </div>
-            <div class="status_txt">
-                We'll start reviewing your application when you upload all documents.
-            </div>
+            <if condition="$user['bag_get_type'] eq -1 and $userImg['bag_received'] eq 0 and $userImg['bag_review_desc'] neq ''">
+                <div class="status_show" style="color: #ffa52d">
+                    <span class="material-icons">info</span>
+                    Rejected!
+                </div>
+                <div class="status_txt">
+                    {pigcms{$userImg['bag_review_desc']}
+                </div>
+            </if>
+            <if condition="$userImg['online_paid'] eq 0">
+                <div class="status_show" style="color: #ffa52d">
+                    <span class="material-icons">info</span>
+                    Incomplete!
+                </div>
+                <div class="status_txt">
+                    Click “Manage” to purchase a Tutti bag or request to use your own bag.
+                </div>
+            <else />
+                <if condition="$user['bag_get_type'] eq -1 and $userImg['bag_received'] eq 0 and $userImg['bag_review_desc'] eq ''">
+                    <div class="status_show" style="color: #72AB29">
+                    <span class="material-icons">check_circle</span>
+                    Waiting for Review
+                    </div>
+                </if>
+                <if condition="$user['bag_get_type'] eq -1 and $userImg['bag_received'] eq 1">
+                    <div class="status_show" style="color: #72AB29">
+                    <span class="material-icons">check_circle</span>
+                    Approved
+                    </div>
+                </if>
+                <if condition="$user['bag_get_type'] eq 1 and $userImg['bag_received'] eq 1">
+                    <div class="status_show" style="color: #72AB29">
+                    <span class="material-icons">check_circle</span>
+                    Shopped!
+                    </div>
+                </if>
+                <if condition="($user['bag_get_type'] eq 1 and $userImg['bag_received'] eq 0) or $user['bag_get_type'] eq 2">
+                    <div class="status_show" style="color: #72AB29">
+                    <span class="material-icons">check_circle</span>
+                    Payment Success!
+                    </div>
+                </if>
+
+                <if condition="$user['bag_get_type'] eq 1 and $userImg['bag_received'] eq 0 and $city['bag_url_show'] eq 1">
+                    <div class="status_txt">
+                    Please book a time slot {pigcms{$city['bag_address_url']} to pick up your delivery bag at {pigcms{$city['bag_address']}
+                    </div>
+                </if>
+                <if condition="$user['bag_get_type'] eq 1 and $userImg['bag_received'] eq 0 and $city['bag_url_show'] eq 0">
+                    <div class="status_txt">
+                    Please pick up your delivery bag at {pigcms{$city['bag_address']}
+                    </div>
+                </if>
+                <if condition="$user['bag_get_type'] eq 2 and $userImg['bag_received'] eq 0">
+                    <div class="status_txt">
+                    We'll ship your delivery bag to you and a tracking number will be available soon.
+                    </div>
+                </if>
+                <if condition="$user['bag_get_type'] eq -1 and $userImg['bag_received'] eq 0 and $userImg['bag_review_desc'] eq ''">
+                    <div class="status_txt">
+                    Once approved, you can use your own bag to do deliveries!
+                    </div>
+                </if>
+                <if condition="$user['bag_get_type'] eq -1 and $userImg['bag_received'] eq 1">
+                    <div class="status_txt">
+                    You can use your own bag to do deliveries!
+                    </div>
+                </if>
+            </if>
         </div>
     </div>
 </section>
 <script>
     $("body").css({"height":$(window).height()});
+
+    $("#upload_doc").click(function () {
+        window.parent.location = "{pigcms{:U('Deliver/step_2')}&from=4";
+    });
+    $("#pay_bag").click(function () {
+        window.parent.location = "{pigcms{:U('Deliver/step_3')}&from=4";
+    });
 </script>
 <!-- Begin INDEED conversion code -->
 <script type="text/javascript">

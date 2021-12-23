@@ -80,7 +80,7 @@ class DeliverAction extends BaseAction
                 header('Location:' . U('Deliver/step_' . $deliver['reg_status']));
         }else{
             if(ACTION_NAME == 'step_5')
-                header('Location:' . U('Deliver/index'));
+                header('Location:' . U('Deliver/step_4'));
         }
 	}
 
@@ -2794,6 +2794,7 @@ class DeliverAction extends BaseAction
             $this->ajaxReturn($result);
         }else {
             $now_user = $database_deliver_user->field(true)->where(array('uid' => $this->deliver_session['uid']))->find();
+            $this->assign('user',$now_user);
             if($now_user['reg_status'] != 1)
                 header('Location:'.U('Deliver/step_'.$now_user['reg_status']));
 
@@ -2823,15 +2824,20 @@ class DeliverAction extends BaseAction
             else
                 D('Deliver_img')->add($data);
 
-            $database_deliver_user->where(array('uid' => $this->deliver_session['uid']))->save(array('reg_status'=>3,'last_time'=>time()));
+            if($_GET['from'] != 4)
+                $database_deliver_user->where(array('uid' => $this->deliver_session['uid']))->save(array('reg_status'=>3,'last_time'=>time()));
 
             $result = array('error_code'=>false,'msg'=>L('_B_LOGIN_REGISTSUCESS_'));
             $this->ajaxReturn($result);
 
         }else {
             $now_user = $database_deliver_user->field(true)->where(array('uid' => $this->deliver_session['uid']))->find();
-            if ($now_user['reg_status'] != 2)
+            if ($now_user['reg_status'] != 2 && $_GET['from'] != 4)
                 header('Location:' . U('Deliver/step_' . $now_user['reg_status']));
+            else{
+                $deliver_img = D('Deliver_img')->where(array('uid'=>$this->deliver_session['uid']))->find();
+                $this->assign("userImg",$deliver_img);
+            }
             $this->display();
         }
     }
@@ -2847,72 +2853,81 @@ class DeliverAction extends BaseAction
             $user_data["bag_get_id"]=$_POST['bag_id'];
         }else{      //pickup
             $user_data["bag_get_type"]=2;
+            $user_data["bag_get_id"]=$_POST['bag_id'];
         }
         D('Deliver_user')->where(array('uid'=>$this->deliver_session['uid']))->save($user_data);
     }
 
     public function step_3(){
-
         $database_deliver_user = D('Deliver_user');
         $now_user = $database_deliver_user->field(true)->where(array('uid' => $this->deliver_session['uid']))->find();
         if($_POST){
-            $this->pre_save_step3();
-            if($_POST['just_save']=="1"){
-                //$result = array('error_code' => true, 'msg' => "Saved");
-                $result = array('error_code' => false, 'msg' => L('_PAYMENT_SUCCESS_'));
-            }else{
-                import('@.ORG.pay.MonerisPay.mpgClasses');
-                $where = array('tab_id'=>'moneris','gid'=>7);
-                $result = D('Config')->field(true)->where($where)->select();
-                foreach($result as $v){
-                    if($v['info'] == 'store_id')
-                        $store_id = $v['value'];
-                    elseif ($v['info'] == 'token')
-                        $api_token = $v['value'];
-                }
+            if($_POST['own_bag'] == 1){
+                $saveData['bag_get_type'] = -1;
+                $saveData['bag_get_id'] = $_POST['bag_img'];
+                $saveData["reg_status"] = 4;
+                $saveData["last_time"] = time();
+                $database_deliver_user->where(array('uid' => $this->deliver_session['uid']))->save($saveData);
+                $result = array('error_code' => false, 'msg' => L('SUCCESS_BKADMIN'));
+            }else {
+                $this->pre_save_step3();
+                if ($_POST['just_save'] == "1") {
+                    //$result = array('error_code' => true, 'msg' => "Saved");
+                    $result = array('error_code' => false, 'msg' => L('SUCCESS_BKADMIN'));
+                } else {
+                    import('@.ORG.pay.MonerisPay.mpgClasses');
+                    $where = array('tab_id' => 'moneris', 'gid' => 7);
+                    $result = D('Config')->field(true)->where($where)->select();
+                    foreach ($result as $v) {
+                        if ($v['info'] == 'store_id')
+                            $store_id = $v['value'];
+                        elseif ($v['info'] == 'token')
+                            $api_token = $v['value'];
+                    }
 
-                $txnArray['type'] = 'purchase';
-                $txnArray['crypt_type'] = '7';
-                $txnArray['pan'] = $_POST['c_number'];
-                $txnArray['expdate'] = transYM($_POST['e_date']);
-                $txnArray['order_id'] = 'TuttiDeliver_'.$this->deliver_session['uid'].'_'.time();
-                $txnArray['cust_id'] = $this->deliver_session['uid'];
-                $txnArray['amount'] = $_POST["total_price"];
+                    $txnArray['type'] = 'purchase';
+                    $txnArray['crypt_type'] = '7';
+                    $txnArray['pan'] = $_POST['c_number'];
+                    $txnArray['expdate'] = transYM($_POST['e_date']);
+                    $txnArray['order_id'] = 'TuttiDeliver_' . $this->deliver_session['uid'] . '_' . time();
+                    $txnArray['cust_id'] = $this->deliver_session['uid'];
+                    $txnArray['amount'] = $_POST["total_price"];
 
-                /**************************** Transaction Object *****************************/
+                    /**************************** Transaction Object *****************************/
 
-                $mpgTxn = new mpgTransaction($txnArray);
+                    $mpgTxn = new mpgTransaction($txnArray);
 
-                /****************************** Request Object *******************************/
+                    /****************************** Request Object *******************************/
 
-                $mpgRequest = new mpgRequest($mpgTxn);
-                $mpgRequest->setProcCountryCode("CA"); //"US" for sending transaction to US environment
-                $mpgRequest->setTestMode(false);
+                    $mpgRequest = new mpgRequest($mpgTxn);
+                    $mpgRequest->setProcCountryCode("CA"); //"US" for sending transaction to US environment
+                    $mpgRequest->setTestMode(false);
 
-                $mpgHttpPost  =new mpgHttpsPost($store_id,$api_token,$mpgRequest);
+                    $mpgHttpPost = new mpgHttpsPost($store_id, $api_token, $mpgRequest);
 
-                $mpgResponse=$mpgHttpPost->getMpgResponse();
+                    $mpgResponse = $mpgHttpPost->getMpgResponse();
 
-                if($mpgResponse->getResponseCode() != "null" && $mpgResponse->getResponseCode() < 50){//支付成功
+                    if ($mpgResponse->getResponseCode() != "null" && $mpgResponse->getResponseCode() < 50) {//支付成功
 
-                    $data['card_name'] = $_POST['c_name'];
-                    $data['card_num'] = $_POST['c_number'];
-                    $data['expdate'] = $txnArray['expdate'];
-                    $data['order_id'] = $txnArray['order_id'];
-                    $data['txnNumber'] = $mpgResponse->getTxnNumber();
+                        $data['card_name'] = $_POST['c_name'];
+                        $data['card_num'] = $_POST['c_number'];
+                        $data['expdate'] = $txnArray['expdate'];
+                        $data['order_id'] = $txnArray['order_id'];
+                        $data['txnNumber'] = $mpgResponse->getTxnNumber();
 
-                    D('Deliver_img')->where(array('uid'=>$this->deliver_session['uid']))->save($data);
+                        D('Deliver_img')->where(array('uid' => $this->deliver_session['uid']))->save($data);
 
-                    //D('Deliver_user')->where(array('uid'=>$this->deliver_session['uid']))->save(array('reg_status'=>4,'last_time'=>time()));
-                    $user_data["reg_status"]=4;
-                    $user_data["last_time"]=time();
+                        //D('Deliver_user')->where(array('uid'=>$this->deliver_session['uid']))->save(array('reg_status'=>4,'last_time'=>time()));
+                        $user_data["reg_status"] = 4;
+                        $user_data["last_time"] = time();
 
-                    D('Deliver_user')->where(array('uid'=>$this->deliver_session['uid']))->save($user_data);
+                        D('Deliver_user')->where(array('uid' => $this->deliver_session['uid']))->save($user_data);
 
-                    $this->sendMail($now_user);
-                    $result = array('error_code' => false, 'msg' => L('_PAYMENT_SUCCESS_'));
-                }else{
-                    $result = array('error_code' => true, 'msg' => $mpgResponse->getMessage());
+                        $this->sendMail($now_user);
+                        $result = array('error_code' => false, 'msg' => L('_PAYMENT_SUCCESS_'));
+                    } else {
+                        $result = array('error_code' => true, 'msg' => $mpgResponse->getMessage());
+                    }
                 }
             }
             $this->ajaxReturn($result);
@@ -2922,6 +2937,15 @@ class DeliverAction extends BaseAction
 
             $database_bag = D('Bag');
             $bag = $database_bag->field(true)->where(array('bag_switch' => "1"))->select();
+            foreach ($bag as &$b){
+                $new_img = array();
+                $bag_img = explode(';',$b['bag_photos']);
+                foreach ($bag_img as $img){
+                    $image_tmp = explode(',', $img);
+                    $new_img[] = C('config.site_url') . '/upload/deliver/' . $image_tmp[0] . '/' . $image_tmp['1'];
+                }
+                $b['bag_photos'] = $new_img;
+            }
 
             $this->assign('bag',$bag);
 
@@ -2931,13 +2955,17 @@ class DeliverAction extends BaseAction
             $this->assign('city',$areas);
             //bag_type 0:未设置 1:自取 2：邮寄 3：全选
 
-            $bag_list = explode("|",$now_user['bag_get_id']);
-            foreach ($bag_list as &$b){
-                $b = explode(",",$b);
+            if($now_user['bag_get_type'] != -1) {
+                $bag_list = explode("|", $now_user['bag_get_id']);
+                foreach ($bag_list as &$b) {
+                    $b = explode(",", $b);
+                }
+            }else{
+                $bag_list = array();
             }
             $this->assign('bag_list',$bag_list);
 
-            if ($now_user['reg_status'] != 3)
+            if ($now_user['reg_status'] != 3 && $_GET['from'] != 4)
                 header('Location:' . U('Deliver/step_' . $now_user['reg_status']));
 
             $this->display();
@@ -2947,7 +2975,7 @@ class DeliverAction extends BaseAction
     public function step_4(){
         $database_deliver_user = D('Deliver_user');
         $now_user = $database_deliver_user->field(true)->where(array('uid' => $this->deliver_session['uid']))->find();
-        if($now_user['reg_status'] != 4) {
+        if($now_user['reg_status'] != 4 && $now_user['reg_status'] != 5 && $now_user['reg_status'] != 0) {
             if($_GET['type'] == 'jump'){
                 D('Deliver_user')->where(array('uid'=>$this->deliver_session['uid']))->save(array('reg_status'=>4));
                 //$this->sendMail($now_user);
@@ -2955,6 +2983,56 @@ class DeliverAction extends BaseAction
                 header('Location:' . U('Deliver/step_' . $now_user['reg_status']));
             }
         }
+
+        $user_img = D("Deliver_img")->where(array('uid'=>$this->deliver_session['uid']))->find();
+
+        $uploadStatus = 0;
+        if($user_img['driver_license'] != '' && $user_img['insurance'] != '' && $user_img['certificate'] != '' && $user_img['sin_num'] != ''){//是否全部上传
+            if($now_user['group'] == 1){//通过审核
+                $uploadStatus = 2;
+            }else if($now_user['group'] == -1){//未通过审核
+                $uploadStatus = 3;
+            }else{//等待审核
+                $uploadStatus = 1;
+            }
+        }else{//未全部上传资料
+            $uploadStatus = 0;
+        }
+
+        if($user_img['card_num'] != '' && $user_img['txnNumber'] != ''){
+            $is_online = 1;
+        }else{
+            $is_online = 0;
+        }
+
+        if($now_user['bag_get_type'] == -1){//使用自己的背包
+            if($now_user['bag_get_id'] == ''){//未上传图片
+                $is_online = 0;
+            }else{//已上传图片
+                $is_online = 1;
+            }
+        }else if($now_user['bag_get_type'] == 1){//邮寄背包
+
+        }else if($now_user['bag_get_type'] == 2){//自提背包
+
+        }else{//未选择
+
+        }
+
+        $city = D('Area')->where(array('area_id'=>$now_user['city_id']))->find();
+        $this->assign('city',$city);
+
+        if($now_user['reg_status'] == 5 || $now_user['reg_status'] == 0){//背包是否已发出
+            $user_img['bag_received'] = 1;
+        }else{
+            $user_img['bag_received'] = 0;
+        }
+
+        $user_img['upload_status'] = $uploadStatus;
+        $user_img['online_paid'] = $is_online;
+
+        $this->assign('user',$now_user);
+        $this->assign('userImg',$user_img);
         $this->display();
     }
 

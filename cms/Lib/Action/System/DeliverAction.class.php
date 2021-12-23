@@ -1894,13 +1894,16 @@ class DeliverAction extends BaseAction {
                 if($_POST['review_desc'] && $_POST['review_desc'] != '') {
                     $data['group'] = -1;
                     $data_img['review_desc'] = $_POST['review_desc'];
-                    D('Deliver_img')->where(array('uid' => $uid))->save($data_img);
+                    //D('Deliver_img')->where(array('uid' => $uid))->save($data_img);
                 }
             }
 
             $data_img['driver_license'] = $_POST['driver_license'];
             $data_img['insurance'] = $_POST['insurance'];
             $data_img['certificate'] = $_POST['certificate'];
+            if($_POST['bag_review_desc'] && $_POST['bag_review_desc'] != ""){
+                $data_img['bag_review_desc'] = $_POST['bag_review_desc'];
+            }
             D('Deliver_img')->where(array('uid' => $uid))->save($data_img);
 
             D('deliver_user')->where(array('uid' => $uid))->save($data);
@@ -1908,12 +1911,12 @@ class DeliverAction extends BaseAction {
             if ($deliver['reg_status'] == 4){
                 if($_POST['receive'] == 1){
                     if($data['group'] == 1 || $deliver['group'] == 1){
-                        $data['reg_status'] = 0;
+                        $data['reg_status'] = 5;
                     }
                     if(!isset($data['reg_status']) || $data['reg_status'] != 0) {
                         $data['reg_status'] = 5;
                     }
-                    $data['status'] = 1;
+                    //$data['status'] = 1;
                     D('deliver_user')->where(array('uid' => $uid))->save($data);
                 }
                 $this->user_edit();

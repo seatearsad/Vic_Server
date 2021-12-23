@@ -222,6 +222,9 @@ class AreaAction extends BaseAction{
             }else{
                 $_POST["bag_type"]=0;
             }
+
+            $_POST['bag_url_show'] = $_POST['is_show_url'];
+
 			$area_type = $database_area->where(array('area_id'=>$_POST['area_id']))->field('area_type')->select();
 			if($database_area->data($_POST)->save()){
 				import('ORG.Util.Dir');

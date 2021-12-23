@@ -31,7 +31,7 @@
         position: absolute;
         top: 2%;
         width: 100%;
-        font-size: 10px;
+        font-size: 12px;
         color: #666666;
     }
     #step_now{
@@ -90,7 +90,7 @@
         background-position:left 10px center;
         color: #666666;
         text-indent: 0px;
-        font-size: 9px;
+        font-size: 11px;
         border-radius: 5px;
         padding: 0px;
         height: 50px;
@@ -141,7 +141,7 @@
         1. Proof of Work Eligibility
     </div>
     <div style="margin: 10px auto;width: 85%;">
-        <input type="text" style="padding-left: 10px;" placeholder="Enter Social Insurance Number*" id="sin_num" name="sin_num">
+        <input type="text" style="padding-left: 10px;" placeholder="Enter Social Insurance Number*" id="sin_num" name="sin_num" value="{pigcms{$userImg['sin_num']}">
     </div>
     <div id="memo">
         This is for taxation purpose only
@@ -202,7 +202,7 @@
     <div id="memo" style="color: silver;margin-bottom: 30px;">
         {pigcms{:L('_ND_SKIPUPLOAD_')}
     </div>
-    <div id="memo" style="text-align: center;margin-top: 20px">
+    <div id="memo" style="text-align: center;margin-top: 20px;margin-bottom: 20px;">
         <span id="filename_0" style="display: none;"></span>
         <span id="filename_1" style="display: none;"></span>
         <span id="filename_2" style="display: none;"></span>
@@ -313,7 +313,7 @@
         // if($('#ahname').val() == '' || $('#transit').val() == '' || $('#institution').val() == '' || $('#account').val() == '' || $('#sin_num').val() == ''){
         //     is_next = false;
         // }
-
+        var from = "{pigcms{$_GET['from']}";
         if(!is_next)
             alert("{pigcms{:L('_PLEASE_INPUT_ALL_')}");
         else{
@@ -324,13 +324,16 @@
                 sin_num:$('#sin_num').val()
             };
             $.ajax({
-                url: "{pigcms{:U('Deliver/step_2')}",
+                url: "{pigcms{:U('Deliver/step_2')}&from="+from,
                 type: 'POST',
                 dataType: 'json',
                 data: post_data,
                 success:function(dat){
                     //console.log(dat);
-                    window.parent.location = "{pigcms{:U('Deliver/step_3')}";
+                    if(from != "4")
+                        window.parent.location = "{pigcms{:U('Deliver/step_3')}";
+                    else
+                        window.parent.location = "{pigcms{:U('Deliver/step_4')}";
                 }
 
             });
