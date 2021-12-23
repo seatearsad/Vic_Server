@@ -380,7 +380,7 @@
             <input type="hidden" id="own_bag_input" name="own_bag" value="" />
         </if>
         <div class="img_0">
-            <if condition="$user['bag_get_type'] eq -1">
+            <if condition="$user['bag_get_type'] eq -1 and $user['bag_get_id'] neq ''">
                 <img src="./{pigcms{$user['bag_get_id']}" />
             </if>
         </div>

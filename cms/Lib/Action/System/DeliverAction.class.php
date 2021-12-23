@@ -1841,11 +1841,19 @@ class DeliverAction extends BaseAction {
         foreach ($user_list as &$v){
             $is_online = 0;
             $is_upload = 0;
-            if($v['reg_status'] == 4){
+            if($v['reg_status'] == 4 || $v['reg_status'] == 5){
                 $deliver_img = D('Deliver_img')->field(true)->where(array('uid' => $v['uid']))->find();
                 if($deliver_img['card_num'] != '' && $deliver_img['txnNumber'] != ''){
                     $is_online = 1;
                 }
+                if($v['bag_get_type'] == -1){//使用自己的背包
+                    if($v['bag_get_id'] == ''){//未上传图片
+                        $is_online = 0;
+                    }else{//已上传图片
+                        $is_online = 1;
+                    }
+                }
+
                 if($deliver_img['driver_license'] != '' && $deliver_img['insurance'] != '' && $deliver_img['certificate'] != '' && $deliver_img['sin_num'] != ''){
                     $is_upload = 1;
                 }
@@ -1879,7 +1887,7 @@ class DeliverAction extends BaseAction {
                 //Sms::telesign_send_sms($deliver['phone'],$sms_txt,0);
                 Sms::sendTwilioSms($deliver['phone'],$sms_txt);
                 if($deliver['reg_status'] == 5){
-                    $data['reg_status'] = 0;
+                    //$data['reg_status'] = 0;
                 }
 
                 if($deliver['email'] != "") {
@@ -1918,6 +1926,9 @@ class DeliverAction extends BaseAction {
                     }
                     //$data['status'] = 1;
                     D('deliver_user')->where(array('uid' => $uid))->save($data);
+                }else{
+                    if($deliver['bag_get_type'] == -1)
+                        D('deliver_user')->where(array('uid' => $uid))->save(array('bag_get_id'=>''));
                 }
                 $this->user_edit();
             }else{

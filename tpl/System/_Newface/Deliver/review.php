@@ -89,7 +89,7 @@
                                         <td>{pigcms{$vo.email}</td>
                                         <td>{pigcms{$vo.create_time|date='Y-m-d H:i:s',###}</td>
                                         <td class="textcenter">
-                                            <if condition="$vo['allow_reg'] eq 0 and $vo['reg_status'] eq 1">
+                                            <if condition="$vo['bag_is_recruit'] eq 0 and $vo['reg_status'] eq 1">
                                                 <font color="red">On Waitlist</font>
                                                 <else />
                                                 <if condition="$vo['reg_status'] neq 4 and $vo['reg_status'] neq 5 ">
@@ -100,11 +100,35 @@
 
                                             <if condition="$vo['reg_status'] eq 4">
                                                 <font color="green">
-                                                    {pigcms{:L('_BACK_DELIVER_BOX_')}
-                                                    <if condition="$vo['is_online_pay'] eq 1">
-                                                        (Paid)
-                                                        <else />
-                                                        (Unpaid)
+                                                    <if condition="$vo['bag_get_type'] eq -1 and $vo['is_online_pay'] eq 0">
+                                                        <font color="red">Incomplete (Own Bag)</font>
+                                                    </if>
+                                                    <if condition="$vo['bag_get_type'] eq -1 and $vo['is_online_pay'] eq 1">
+                                                        <font color="orange">Waiting for Bag Review</font>
+                                                    </if>
+                                                    <if condition="$vo['bag_get_type'] neq -1 and $vo['is_online_pay'] eq 0">
+                                                        <font color="red">Incomplete (Purchase)</font>
+                                                    </if>
+                                                    <if condition="$vo['bag_get_type'] eq 1 and $vo['is_online_pay'] eq 1">
+                                                        <font color="orange">Paid, Waiting for Shipping</font>
+                                                    </if>
+                                                    <if condition="$vo['bag_get_type'] eq 2 and $vo['is_online_pay'] eq 1">
+                                                        <font color="green">Paid, Waiting for Pickup</font>
+                                                    </if>
+                                                </font>
+                                                |
+                                            </if>
+
+                                            <if condition="$vo['reg_status'] eq 5">
+                                                <font color="green">
+                                                    <if condition="$vo['bag_get_type'] eq -1">
+                                                        <font color="green">Bag Approved</font>
+                                                    </if>
+                                                    <if condition="$vo['bag_get_type'] eq 1">
+                                                        <font color="green">Paid & Shipped</font>
+                                                    </if>
+                                                    <if condition="$vo['bag_get_type'] eq 2">
+                                                        <font color="green">Paid, Waiting for Pickup</font>
                                                     </if>
                                                 </font>
                                                 |
@@ -115,10 +139,10 @@
                                                     <font color="red">{pigcms{:L('D_INCOMPLETE_REGIST')}</font>
                                                     <else />
                                                     <if condition="$vo['group'] eq 0">
-                                                        <font color="red">{pigcms{:L('D_AWAITING_APPROVAL')}</font>
+                                                        <font color="orange">{pigcms{:L('D_AWAITING_APPROVAL')}</font>
                                                     </if>
                                                     <if condition="$vo['group'] eq -1">
-                                                        <font color="red">未通过审核</font>
+                                                        <font color="red">{pigcms{:L('D_INCOMPLETE_REGIST')}</font>
                                                     </if>
                                                     <if condition="$vo['group'] eq 1">
                                                         <font color="green">{pigcms{:L('D_APPROVED')}</font>

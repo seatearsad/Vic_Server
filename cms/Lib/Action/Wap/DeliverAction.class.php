@@ -73,14 +73,17 @@ class DeliverAction extends BaseAction
             }
         }
 
-        $save_address = array('login','reg','ajax_city_name',"ajax_save_city_id_for_deliver_user",'ajax_upload','forgetpwd','account','change_pwd','bank_info','step_1','step_2','step_3','step_4','step_5','support','ver_info');
+        $save_address = array('login','reg','ajax_city_name',"ajax_save_city_id_for_deliver_user",'ajax_upload','forgetpwd','account','change_pwd','bank_info','step_1','step_2','step_3','step_4','step_5','support','ver_info','activate_deliver');
         if(!in_array(ACTION_NAME,$save_address)) {
             $deliver = D('Deliver_user')->field('reg_status')->where(['uid' => $this->deliver_session['uid']])->find();
-            if ($deliver['reg_status'] != 0 && !($deliver['reg_status'] == 5 && ACTION_NAME == 'index'))
-                header('Location:' . U('Deliver/step_' . $deliver['reg_status']));
+
+            if ($deliver['reg_status'] != 0)
+                header('Location:' . U('Deliver/step_').$deliver['reg_status']);
         }else{
             if(ACTION_NAME == 'step_5')
                 header('Location:' . U('Deliver/step_4'));
+            if(ACTION_NAME == 'step_0')
+                header('Location:' . U('Deliver/index'));
         }
 	}
 
@@ -2814,15 +2817,18 @@ class DeliverAction extends BaseAction
 
             $data['uid'] = $this->deliver_session['uid'];
             $data['sin_num'] = $_POST['sin_num'] ? $_POST['sin_num'] : "";
-            $data['driver_license'] = $_POST['img_1'];
-            $data['insurance'] = $_POST['img_2'];
-            $data['certificate'] = $_POST['img_0'];
+            $data['driver_license'] = trim($_POST['img_1']);
+            $data['insurance'] = trim($_POST['img_2']);
+            $data['certificate'] = trim($_POST['img_0']);
+            $data['review_desc'] = "";
 
             $deliver_img = D('Deliver_img')->where(array('uid'=>$this->deliver_session['uid']))->find();
             if($deliver_img)
                 D('Deliver_img')->save($data);
             else
                 D('Deliver_img')->add($data);
+
+            $database_deliver_user->where(array('uid' => $this->deliver_session['uid']))->save(array('group'=>0));
 
             if($_GET['from'] != 4)
                 $database_deliver_user->where(array('uid' => $this->deliver_session['uid']))->save(array('reg_status'=>3,'last_time'=>time()));
@@ -2868,6 +2874,7 @@ class DeliverAction extends BaseAction
                 $saveData["reg_status"] = 4;
                 $saveData["last_time"] = time();
                 $database_deliver_user->where(array('uid' => $this->deliver_session['uid']))->save($saveData);
+                D('Deliver_img')->where(array('uid' => $this->deliver_session['uid']))->save(array('bag_review_desc'=>""));
                 $result = array('error_code' => false, 'msg' => L('SUCCESS_BKADMIN'));
             }else {
                 $this->pre_save_step3();
@@ -2975,7 +2982,7 @@ class DeliverAction extends BaseAction
     public function step_4(){
         $database_deliver_user = D('Deliver_user');
         $now_user = $database_deliver_user->field(true)->where(array('uid' => $this->deliver_session['uid']))->find();
-        if($now_user['reg_status'] != 4 && $now_user['reg_status'] != 5 && $now_user['reg_status'] != 0) {
+        if($now_user['reg_status'] != 4 && $now_user['reg_status'] != 5) {
             if($_GET['type'] == 'jump'){
                 D('Deliver_user')->where(array('uid'=>$this->deliver_session['uid']))->save(array('reg_status'=>4));
                 //$this->sendMail($now_user);
@@ -3034,6 +3041,19 @@ class DeliverAction extends BaseAction
         $this->assign('user',$now_user);
         $this->assign('userImg',$user_img);
         $this->display();
+    }
+
+    public function activate_deliver(){
+        $database_deliver_user = D('Deliver_user');
+        $now_user = $database_deliver_user->field(true)->where(array('uid' => $this->deliver_session['uid']))->find();
+        if($now_user['group'] == 1 && $now_user['reg_status'] == 5){
+            $database_deliver_user->where(array('uid' => $this->deliver_session['uid']))->save(array('status'=>1,'reg_status'=>0));
+            $result = array('error_code' => false, 'msg' => 'Success');
+        }else {
+            $result = array('error_code' => true, 'msg' => 'Fail');
+        }
+
+        $this->ajaxReturn($result);
     }
 
     public function sendMail($now_user){

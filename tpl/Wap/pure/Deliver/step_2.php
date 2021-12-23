@@ -168,7 +168,9 @@
             </div>
         </div>
         <div class="img_0">
-
+            <if condition="$userImg['certificate'] neq ''">
+                <img src=".{pigcms{$userImg['certificate']}" width="100" />
+            </if>
         </div>
     </div>
     <div id="step_title">
@@ -181,7 +183,9 @@
             </div>
         </div>
         <div class="img_1">
-
+            <if condition="$userImg['driver_license'] neq ''">
+                <img src=".{pigcms{$userImg['driver_license']}" width="100" />
+            </if>
         </div>
     </div>
 
@@ -196,16 +200,30 @@
             </div>
         </div>
         <div class="img_2">
-
+            <if condition="$userImg['insurance'] neq ''">
+                <img src=".{pigcms{$userImg['insurance']}" width="100" />
+            </if>
         </div>
     </div>
     <div id="memo" style="color: silver;margin-bottom: 30px;">
         {pigcms{:L('_ND_SKIPUPLOAD_')}
     </div>
     <div id="memo" style="text-align: center;margin-top: 20px;margin-bottom: 20px;">
-        <span id="filename_0" style="display: none;"></span>
-        <span id="filename_1" style="display: none;"></span>
-        <span id="filename_2" style="display: none;"></span>
+        <span id="filename_0" style="display: none;">
+            <if condition="$userImg['certificate'] neq ''">
+                {pigcms{$userImg['certificate']}
+            </if>
+        </span>
+        <span id="filename_1" style="display: none;">
+            <if condition="$userImg['driver_license'] neq ''">
+                {pigcms{$userImg['driver_license']}
+            </if>
+        </span>
+        <span id="filename_2" style="display: none;">
+            <if condition="$userImg['insurance'] neq ''">
+                {pigcms{$userImg['insurance']}
+            </if>
+        </span>
         <input type="button" value="{pigcms{:L('_ND_SAVENCONTINUE_')}" id="reg_form">
     </div>
 

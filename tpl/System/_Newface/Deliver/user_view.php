@@ -298,14 +298,15 @@
                                         <tr id="bag_review_desc" <if condition="$img['bag_review_desc'] eq ''">style="display: none"</if> >
                                         <th width="25%">{pigcms{:L('_BACK_REVIEW_DESC_')}</th>
                                         <td colspan=3>
-                                            <input type="text" class="input fl" name="bag_review_desc"
-                                                   value="{pigcms{$img['bag_review_desc']}">
+                                            <input type="text" class="input fl" name="bag_review_desc" value="{pigcms{$img['bag_review_desc']}">
                                         </td>
                                         </tr>
                                         <tr>
                                             <th width="25%">Own Bag</th>
                                             <td colspan=3>
-                                                <img src="{pigcms{:C('config.site_url')}{pigcms{$now_user['bag_get_id']}" height="100"/>
+                                                <if condition="$now_user['bag_get_id'] neq ''">
+                                                    <img src="{pigcms{:C('config.site_url')}{pigcms{$now_user['bag_get_id']}" height="100"/>
+                                                </if>
                                             </td>
                                         </tr>
                                     </if>

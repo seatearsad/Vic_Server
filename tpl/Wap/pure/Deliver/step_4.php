@@ -133,6 +133,18 @@
         border-radius: 5px;
         font-weight: normal;
     }
+    .activate_btn{
+        width: 90%;
+        line-height: 35px;
+        margin-left: 5%;
+        margin-top: 30px;
+        background-color: #ffa52d;
+        text-align: center;
+        font-size: 16px;
+        color: white;
+        border-radius: 6px;
+        cursor: pointer;
+    }
 </style>
 <body style="background:url('{pigcms{$static_path}img/login_bg.png');">
 <section>
@@ -208,17 +220,19 @@
                 </div>
             </if>
             <if condition="$userImg['online_paid'] eq 0">
-                <div class="status_show" style="color: #ffa52d">
-                    <span class="material-icons">info</span>
-                    Incomplete!
-                </div>
-                <div class="status_txt">
-                    Click “Manage” to purchase a Tutti bag or request to use your own bag.
-                </div>
+                <if condition="$userImg['bag_review_desc'] eq ''">
+                    <div class="status_show" style="color: #ffa52d">
+                        <span class="material-icons">info</span>
+                        Incomplete!
+                    </div>
+                    <div class="status_txt">
+                        Click “Manage” to purchase a Tutti bag or request to use your own bag.
+                    </div>
+                </if>
             <else />
                 <if condition="$user['bag_get_type'] eq -1 and $userImg['bag_received'] eq 0 and $userImg['bag_review_desc'] eq ''">
                     <div class="status_show" style="color: #72AB29">
-                    <span class="material-icons">check_circle</span>
+                    <span class="material-icons">check_circle_outline</span>
                     Waiting for Review
                     </div>
                 </if>
@@ -269,6 +283,11 @@
             </if>
         </div>
     </div>
+    <if condition="$user['group'] eq 1 and $user['reg_status'] eq 5">
+        <div class="activate_btn">
+            Activate my account!
+        </div>
+    </if>
 </section>
 <script>
     $("body").css({"height":$(window).height()});
@@ -278,6 +297,14 @@
     });
     $("#pay_bag").click(function () {
         window.parent.location = "{pigcms{:U('Deliver/step_3')}&from=4";
+    });
+
+    $(".activate_btn").click(function () {
+        $.post("{pigcms{:U('Deliver/activate_deliver')}", {}, function (result) {
+            if(!result.error_code){
+                window.parent.location = "{pigcms{:U('Deliver/index')}";
+            }
+        }, 'JSON');
     });
 </script>
 <!-- Begin INDEED conversion code -->
