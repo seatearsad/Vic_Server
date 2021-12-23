@@ -1042,6 +1042,22 @@ class MonerisPay
         $mpiThreeDSAuthentication->setBrowserScreenWidth("1920"); //(pixel width of cardholder screen)
         $mpiThreeDSAuthentication->setBrowserLanguage("en-GB"); //(defined by IETF BCP47)
 
+        $mpiRequest['orderId'] = $data['order_id'];
+        $mpiRequest['cardholderName'] = $txnArray['name'];
+        $mpiRequest['pan'] = $txnArray['pan'];
+        $mpiRequest['expdate'] = $txnArray['expdate'];
+        $mpiRequest['amount'] = $amount;
+        $mpiRequest['ThreeDSCompletionInd'] = "Y";
+        $mpiRequest['RequestType'] = "01";
+        $mpiRequest['PurchaseDate'] = date("YYYYMMDDHHMMSS");
+        $mpiRequest['NotificationURL'] = $merchantUrl;
+        $mpiRequest['ChallengeWindowSize'] = "03";
+        $mpiRequest['BrowserUserAgent'] = $userAgent;
+        $mpiRequest['BrowserJavaEnabled'] = "true";
+        $mpiRequest['BrowserScreenHeight'] = "1000";
+        $mpiRequest['BrowserScreenWidth'] = "1920";
+        $mpiRequest['BrowserLanguage'] = "en-GB";
+        $mpiRequest['ProcCountryCode'] = $this->countryCode;
 
         /****************************** Transaction Object *******************************/
 
@@ -1054,7 +1070,7 @@ class MonerisPay
         $mpgRequest->setTestMode($this->testMode); //false or comment out this line for production transactions
 
         /****************************** HTTPS Post Object *******************************/
-        file_put_contents("./test_log.log",date("Y/m/d")."   ".date("h:i:sa")."   "."Moneris3DRequest" ."   ". $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'--'.json_encode($mpgTxn)."\r\n",FILE_APPEND);
+        file_put_contents("./test_log.log",date("Y/m/d")."   ".date("h:i:sa")."   "."Moneris3DRequest" ."   ". $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'--'.json_encode($mpiRequest)."\r\n",FILE_APPEND);
         $mpgHttpPost  =new mpgHttpsPost($this->store_id,$this->api_token,$mpgRequest);
 
         /************************************* Response *********************************/
