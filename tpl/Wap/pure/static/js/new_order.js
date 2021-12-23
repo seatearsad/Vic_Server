@@ -22,7 +22,9 @@ getNewOrder();
 
 $('body').click(function () {
     if(navigator.userAgent.match(/TuttiPartner/i)) {
-        //window.webkit.messageHandlers.stopSound.postMessage([0]);
+        if(/(tuttipartner version)/.test(navigator.userAgent.toLowerCase())){
+            window.webkit.messageHandlers.stopSound.postMessage([0]);
+        }
     }else if(/(tutti_android)/.test(navigator.userAgent.toLowerCase())) {
         if (typeof (window.linkJs.stopSound) != 'undefined') {
             window.linkJs.stopSound();
