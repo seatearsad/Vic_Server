@@ -17,6 +17,7 @@
         <script src="{pigcms{$static_path}js/jquery.timer.min.js"></script>
         <script src="{pigcms{$static_path}js/popper.min.js"></script>
         <script src="{pigcms{$static_path}js/bootstrap.js"></script>
+        <script src="{pigcms{$static_path}js/plugins/jquery-ui/jquery-ui.min.js"></script>
         <!--图片切割-->
         <link href="{pigcms{$static_path}css/plugins/cropper/cropper.min.css" rel="stylesheet">
         <!-- Image cropper -->

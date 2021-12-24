@@ -2022,6 +2022,7 @@ class DeliverAction extends BaseAction {
             }
             D('Deliver_rule')->addAll($save_all);
 
+            D('Deliver_bonus')->where(array('city_id'=>$city_id))->delete();
             $save_bonus_all = array();
             foreach ($bonus_data as $vv){
                 $save_bonus_data['week'] = $vv['day_bonus_new'];

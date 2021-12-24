@@ -176,10 +176,10 @@
                                                 </select>
                                             </td>
                                             <td style="text-align: center">
-                                                <input class="form-control hasDatepicker" type="text" value="{pigcms{$vo.begin_time}" name="begin_bonus_new-{pigcms{$vo.id}" onfocus="WdatePicker({isShowClear:false,readOnly:true,dateFmt:'HH:mm:ss',lang:'en'})">
+                                                <input class="form-control bonus_time" type="text" value="{pigcms{$vo.begin_time}" name="begin_bonus_new-{pigcms{$vo.id}">
                                             </td>
                                             <td style="text-align: center">
-                                                <input class="form-control hasDatepicker" type="text" value="{pigcms{$vo.end_time}" name="end_bonus_new-{pigcms{$vo.id}" onfocus="WdatePicker({isShowClear:false,readOnly:true,dateFmt:'HH:mm:ss',lang:'en'})">
+                                                <input class="form-control bonus_time" type="text" value="{pigcms{$vo.end_time}" name="end_bonus_new-{pigcms{$vo.id}">
                                             </td>
                                             <td style="text-align: center">
                                                 <input class="form-control" type="text" value="{pigcms{$vo.amount}" name="amount_bonus_new-{pigcms{$vo.id}">
@@ -210,7 +210,16 @@
             </div>
         </div>
     </div>
+    <script type="text/javascript" src="{pigcms{$static_path}js/jquery-ui.custom.min.js"></script>
+    <script type="text/javascript" src="{pigcms{$static_path}js/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="{pigcms{$static_path}js/jquery.ui.touch-punch.min.js"></script>
+
+    <script type="text/javascript" src="{pigcms{$static_path}js/jquery-ui-i18n.min.js"></script>
+    <script type="text/javascript" src="{pigcms{$static_path}js/jquery-ui-timepicker-addon.min.js"></script>
+    <link rel="stylesheet" href="{pigcms{$static_path}css/jquery-ui.css">
+    <link rel="stylesheet" href="{pigcms{$static_path}css/jquery-ui-timepicker-addon.css">
 <script>
+    $('.bonus_time').timepicker($.extend($.datepicker.regional['zh-cn'], {timeFormat: 'hh:mm:ss',showSecond: true}));
     var city_id = $('#city_select').val();
 
     var new_num = 90000;
@@ -255,8 +264,8 @@
         var html_td = '<td  style="text-align: center">';
         var html = '<tr id="tr_bonus_'+new_bonus_num+'">';
         html += html_td + getWeekSelect(new_bonus_num);
-        html += html_td + '<input class="form-control hasDatepicker" type="text" name="begin_bonus_new-' + new_bonus_num + '" onfocus="WdatePicker({isShowClear:false,readOnly:true,dateFmt:\'HH:mm:ss\',lang:\'en\'})"></td>';
-        html += html_td + '<input class="form-control hasDatepicker" type="text" name="end_bonus_new-' + new_bonus_num + '" onfocus="WdatePicker({isShowClear:false,readOnly:true,dateFmt:\'HH:mm:ss\',lang:\'en\'})"></td>';
+        html += html_td + '<input class="form-control bonus_time" type="text" name="begin_bonus_new-' + new_bonus_num + '"></td>';
+        html += html_td + '<input class="form-control bonus_time" type="text" name="end_bonus_new-' + new_bonus_num + '"></td>';
         html += html_td + '<input class="form-control" type="text" name="amount_bonus_new-' + new_bonus_num + '"></td>';
         html += html_td + '<input class="form-control" type="text" name="expiry_bonus_new-' + new_bonus_num + '" onfocus="WdatePicker({isShowClear:false,readOnly:true,dateFmt:\'yyyy-MM-dd\',lang:\'en\'})"></td>';
         html += html_td + '</td>';
@@ -274,6 +283,8 @@
                 //return false;
             }
         });
+
+        $('.bonus_time').timepicker($.extend($.datepicker.regional['zh-cn'], {timeFormat: 'hh:mm:ss',showSecond: true}));
     });
 
 
