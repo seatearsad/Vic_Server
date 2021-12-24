@@ -1967,13 +1967,15 @@ class DeliverAction extends BaseAction {
         $fee_list = D('Deliver_rule')->where(array('type'=>1,'city_id'=>$city_id))->select();
         $this->assign('fee_list',$fee_list);
 
+        $bonus_list = D('Deliver_bonus')->where(array('city_id'=>$city_id))->select();
+        $this->assign('bonus_list',$bonus_list);
+
         $city = D('Area')->where(array('area_type'=>2,'is_open'=>1))->select();
         $this->assign('city',$city);
         $this->display();
     }
 
     public function update_rule(){
-
         if($_POST){
             $base_data['start'] = 0;
             $base_data['end'] = $_POST['base_rule_mile'];
@@ -1990,9 +1992,13 @@ class DeliverAction extends BaseAction {
 
             $data = array();
             $new_data = array();
+            $bonus_data = array();
             foreach ($_POST as $k=>$v){
                 $key = explode('-',$k);
-                if(strpos($key[0],'new') !== false){
+                if(strpos($key[0],'bonus_new') !== false){
+                    $bonus_data[$key[1]][$key[0]] = $v;
+                }
+                else if(strpos($key[0],'new') !== false){
                     $new_data[$key[1]][$key[0]] = $v;
                 }else{
                     $data[$key[1]][$key[0]] = $v;
@@ -2004,6 +2010,7 @@ class DeliverAction extends BaseAction {
             D('Deliver_rule')->where($where_delete)->delete();
 
             //新加数据处理
+            $save_all = array();
             foreach ($new_data as $k=>$v){
                 $save_data['start'] = $v['start_mile_new'];
                 $save_data['end'] = $v['end_mile_new'];
@@ -2011,8 +2018,22 @@ class DeliverAction extends BaseAction {
                 $save_data['type'] = 1;
                 $save_data['city_id'] = $city_id;
 
-                D('Deliver_rule')->add($save_data);
+                $save_all[] = $save_data;
             }
+            D('Deliver_rule')->addAll($save_all);
+
+            $save_bonus_all = array();
+            foreach ($bonus_data as $vv){
+                $save_bonus_data['week'] = $vv['day_bonus_new'];
+                $save_bonus_data['begin_time'] = $vv['begin_bonus_new'];
+                $save_bonus_data['end_time'] = $vv['end_bonus_new'];
+                $save_bonus_data['amount'] = $vv['amount_bonus_new'];
+                $save_bonus_data['expiry'] = $vv['expiry_bonus_new'];
+                $save_bonus_data['city_id'] = $city_id;
+
+                $save_bonus_all[] = $save_bonus_data;
+            }
+            D('Deliver_bonus')->addAll($save_bonus_all);
 
 //            //更新老数据
 //            $save_data = array();
