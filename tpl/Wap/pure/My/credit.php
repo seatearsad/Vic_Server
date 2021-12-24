@@ -133,12 +133,13 @@
     <include file="Public:facebook"/>
 </head>
 <body id="index">
+<include file="Public:google"/>
 <include file="Public:header"/>
 <div class="main">
         <div id="tips" class="tips"></div>
         <div class="wrapper btn-wrapper">
             <if condition="$order_id">
-                <a class="address-add btn btn-larger btn-warning btn-block" href="{pigcms{:U('My/edit_card',array('order_id'=>$order_id))}">{pigcms{:L('_ADD_CREDIT_CARD_')}</a>
+                <a class="address-add btn btn-larger btn-warning btn-block" href="{pigcms{:U('My/edit_card',array('order_id'=>$order_id,'type'=>$type))}">{pigcms{:L('_ADD_CREDIT_CARD_')}</a>
             <else />
 		        <a class="address-add btn btn-larger btn-warning btn-block" href="{pigcms{:U('My/edit_card')}">{pigcms{:L('_ADD_CREDIT_CARD_')}</a>
             </if>

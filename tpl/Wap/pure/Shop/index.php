@@ -144,6 +144,7 @@
         }
     </style>
 	<body>
+    <include file="Public:google"/>
     <include file="Public:header"/>
     <div id="container">
         <div id="category">

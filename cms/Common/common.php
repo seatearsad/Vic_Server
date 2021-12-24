@@ -806,15 +806,18 @@ function real_ip()
     return $realip;
 }
 function checkAutoOpen($store){
-    $shop_status = getClose($store);
-    //如果当前时段是手动关闭的便不自动开启 否则自动开启
-    if($store['store_is_close'] != $shop_status['open_num']){
-        //如果当前时间为凌晨开始 即连续 不自动开启
-        $open_name = 'open_'.$shop_status['open_num'];
-        if($store[$open_name] != '00:00:00') {
-            $store['store_is_close'] = 0;
-            $data['store_is_close'] = 0;
-            D('Merchant_store')->where(array('store_id' => $store['store_id']))->save($data);
+    //只有本平台的店铺 才自动开启
+    if($store['link_type'] == 0) {
+        $shop_status = getClose($store);
+        //如果当前时段是手动关闭的便不自动开启 否则自动开启
+        if ($store['store_is_close'] != $shop_status['open_num']) {
+            //如果当前时间为凌晨开始 即连续 不自动开启
+            $open_name = 'open_' . $shop_status['open_num'];
+            if ($store[$open_name] != '00:00:00') {
+                $store['store_is_close'] = 0;
+                $data['store_is_close'] = 0;
+                D('Merchant_store')->where(array('store_id' => $store['store_id']))->save($data);
+            }
         }
     }
     return $store;

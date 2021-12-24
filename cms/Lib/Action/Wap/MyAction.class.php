@@ -872,6 +872,12 @@ class MyAction extends BaseAction{
             $this->assign('order_id',$_GET['order_id']);
         }
 
+        if($_GET['type']){
+            $this->assign('type',$_GET['type']);
+        }else{
+            $this->assign('type','');
+        }
+
         $card_list = D('User_card')->getCardListByUid($this->user_session['uid']);
         $this->assign('card_list',$card_list);
         $this->display();
@@ -5342,6 +5348,14 @@ class MyAction extends BaseAction{
                     }
                     //$this->success_tips(L('_B_MY_USEOFFLINECHANGEREFUND_'),U('Shop/status',array('order_id' => $now_order['order_id'], 'store_id' => $store_id, 'mer_id' => $this->mer_id)));
                     //peter 21-03-09 Wap&c=My&a=shop_order_list&select=history
+                    if($mer_store['link_type'] == 1) {
+                        $now_order['link_id'] = $mer_store['link_id'];
+
+                        import('@.ORG.Deliverect.Deliverect');
+                        $deliverect = new Deliverect();
+                        $result = $deliverect->createDelOrder($now_order);
+                    }
+
                     $this->success_tips(L('_B_MY_USEOFFLINECHANGEREFUND_'),U('Wap/My/shop_order_list',array('select' => "history")));
 
                 }
@@ -5461,6 +5475,14 @@ class MyAction extends BaseAction{
 				$go_refund_param['msg'] = L('_B_MY_ORDERCANCELLEDACCESS_');
 			}
 			D('Shop_order_log')->add_log(array('order_id' => $order_id, 'status' => 9));
+
+            if($mer_store['link_type'] == 1) {
+                $now_order['link_id'] = $mer_store['link_id'];
+
+                import('@.ORG.Deliverect.Deliverect');
+                $deliverect = new Deliverect();
+                $result = $deliverect->createDelOrder($now_order);
+            }
 			//$this->success_tips($go_refund_param['msg'], U('Shop/status',array('order_id' => $order_id, 'store_id' => $store_id, 'mer_id' => $this->mer_id)));
             $this->success_tips($go_refund_param['msg'], U('Wap/My/shop_order_list',array('select' => "history")));
 

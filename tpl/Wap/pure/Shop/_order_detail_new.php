@@ -17,6 +17,7 @@
         <include file="Public:facebook"/>
     </head>
     <body>
+        <include file="Public:google"/>
         <section class="public">
             <a class="return link-url" href="javascript:window.history.go(-1);"></a>
             <div class="content">{pigcms{:L('_ORDER_DETAIL_')}</div>

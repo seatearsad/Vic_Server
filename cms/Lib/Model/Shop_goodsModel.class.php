@@ -30,6 +30,7 @@ class Shop_goodsModel extends Model
 		//garfunkel add
 		$data['tax_num'] = $goods['tax_num'];
 		$data['deposit_price'] = $goods['deposit_price'];
+		$data['allergens'] = $goods['allergens'];
 
 		$data['freight_template'] = intval($goods['freight_template']);
 		$data['freight_type'] = intval($goods['freight_type']);
@@ -783,27 +784,52 @@ class Shop_goodsModel extends Model
 	 * @param string $spec_ids = 'id_id'
 	 * @return multitype:number string |multitype:number unknown |multitype:number string Ambigous <number, mixed>
 	 */
-	public function check_stock($goods_id, $num, $spec_ids = '', $stock_type = 0, $store_id = 0)
+	public function check_stock($goods_id, $num, $spec_ids = '', $stock_type = 0, $store_id = 0,$menu_version = 1)
 	{
 		if ($store_id) {
-			$now_goods = $this->field(true)->where(array('goods_id' => $goods_id, 'store_id' => $store_id))->find();
+            if($menu_version == 1) {
+                $now_goods = $this->field(true)->where(array('goods_id' => $goods_id, 'store_id' => $store_id))->find();
+                $image = '';
+                if(!empty($now_goods['image'])){
+                    $goods_image_class = new goods_image();
+                    $tmp_pic_arr = explode(';', $now_goods['image']);
+                    foreach ($tmp_pic_arr as $key => $value) {
+                        if (empty($image)) {
+                            $image = $goods_image_class->get_image_by_path($value, 's');
+                            break;
+                        }
+                    }
+                }
+            }else if($menu_version == 2) {
+                $now_goods = D('StoreMenuV2')->getProduct($goods_id, $store_id);
+                $image = $now_goods['image'];
+            }
 		} else {
 			$now_goods = $this->field(true)->where(array('goods_id' => $goods_id))->find();
+            $image = '';
+            if(!empty($now_goods['image'])){
+                $goods_image_class = new goods_image();
+                $tmp_pic_arr = explode(';', $now_goods['image']);
+                foreach ($tmp_pic_arr as $key => $value) {
+                    if (empty($image)) {
+                        $image = $goods_image_class->get_image_by_path($value, 's');
+                        break;
+                    }
+                }
+            }
 		}
 		if (empty($now_goods)) return array('status' => 0, 'msg' => '商品不存在');
-		$image = '';
-		if(!empty($now_goods['image'])){
-			$goods_image_class = new goods_image();
-			$tmp_pic_arr = explode(';', $now_goods['image']);
-			foreach ($tmp_pic_arr as $key => $value) {
-				if (empty($image)) {
-					$image = $goods_image_class->get_image_by_path($value, 's');
-					break;
-				}
-			}
-		}
+
+        if ($now_goods['status'] != 1) return array('status' => 0, 'msg' => 'Sorry, '.$now_goods['name'] . ' is currently unavailable');
+
+
+
+        if($menu_version == 2){
+            return array('status' => 1, 'num' => $num, 'is_seckill_price' => false, 'old_price' => 0, 'cost_price' => 0, 'price' => $now_goods['price']/100, 'image' => $image, 'packing_charge' => 0, 'freight_type' => 0, 'freight_value' => 0.00, 'freight_template' => 0, 'unit' => "", 'number' => 0, 'sort_id' => 0, 'name' => $now_goods['name'],'tax_num'=>$now_goods['tax']/1000,'deposit_price'=>0);
+        }
+
 		$stock_num = 0;
-		if ($now_goods['status'] != 1) return array('status' => 0, 'msg' => $now_goods['name'] . '商品已下架');
+
 		$today = date('Ymd');
 		//商品的库存类型（0：每日更新相同的库存，1:商品的总库存不会自动更新）
 		$now_goods['sell_day'] = $stock_type ? $today : $now_goods['sell_day'];
@@ -1710,8 +1736,9 @@ class Shop_goodsModel extends Model
                 $max_freight = 0;
                 $template_total_price = 0;
             }
-            
-            foreach ($goodsData as $row) {
+
+            $new_goodsData = array();
+            foreach ($goodsData as $key=>$row) {
                 $goods_id = $row['productId'];
                 $num = $row['count'];
                 $spec_ids = array();
@@ -1738,9 +1765,12 @@ class Shop_goodsModel extends Model
                             $dish_desc = "";
                             foreach($curr_dish as $vv){
                                 $one_dish = explode(",",$vv);
-
-                                $dish_vale = D('Side_dish_value')->where(array('id'=>$one_dish[1]))->find();
-                                $dish_vale['name'] = lang_substr($dish_vale['name'],C('DEFAULT_LANG'));
+                                if($store['menu_version'] == 1) {
+                                    $dish_vale = D('Side_dish_value')->where(array('id' => $one_dish[1]))->find();
+                                    $dish_vale['name'] = lang_substr($dish_vale['name'], C('DEFAULT_LANG'));
+                                }else if($store['menu_version'] == 2){
+                                    $dish_vale = D('StoreMenuV2')->getProduct($one_dish[1],$store_id);
+                                }
 
                                 $add_str = $one_dish[2] > 1 ? $dish_vale['name']."*".$one_dish[2] : $dish_vale['name'];
 
@@ -1762,11 +1792,20 @@ class Shop_goodsModel extends Model
 
                 $dish_str = count($dish_ids)>0 ? implode('|',$dish_ids) : '';
 
-                $t_return = $this->check_stock($goods_id, $num, $spec_str, $store_shop['stock_type'], $store_id);
+                $t_return = $this->check_stock($goods_id, $num, $spec_str, $store_shop['stock_type'], $store_id,$store['menu_version']);
                 if ($t_return['status'] == 0) {
+                    unset($goodsData[$key]);
+                    //var_dump(json_encode($goodsData));die();
+                    $newList = array();
+                    foreach ($goodsData as $n){
+                        $newList[] = $n;
+                    }
+                    setCookie('shop_cart_'.$store_id, json_encode($newList));
                     return array('error_code' => true, 'msg' => $t_return['msg']);
                 } elseif ($t_return['status'] == 2) {
                     return array('error_code' => true, 'msg' => $t_return['msg']);
+                }else{
+                    $new_goodsData[] = $row;
                 }
                 //garfunkel add dish
                 if(count($dish_ids) > 0){
@@ -1780,7 +1819,12 @@ class Shop_goodsModel extends Model
                 $extra_price += $row['productExtraPrice'] * $num;
                 $packing_charge += $t_return['packing_charge'] * $num;
                 $deposit_price += $t_return['deposit_price'] * $num;
-                $tax_price += ($t_return['price'] * $t_return['tax_num']/100)*$num;
+                if($store['menu_version'] == 1) {
+                    $tax_price += ($t_return['price'] * $t_return['tax_num'] / 100) * $num;
+                }else{
+                    $orderDetail = array('goods_id'=>$goods_id,'num'=>$num,'store_id'=>$store_id,'dish_id'=>$dish_str);
+                    $tax_price += D('StoreMenuV2')->calculationTaxFromOrder($orderDetail);
+                }
         
                 if ($address_id) {
                     //-----计算运费--------  freight_type ==> 0:最大，1：单独

@@ -79,6 +79,7 @@
     <include file="Public:facebook"/>
 </head>
 <body id="index" data-com="pagecommon">
+<include file="Public:google"/>
 <include file="Public:header"/>
 <div class="main">
 
@@ -159,7 +160,11 @@
 								if(result.status == 1){
 									//return;
 									<if condition="$_GET['order_id']">
+                                        <if condition="$_GET['type'] eq 'recharge'">
+                                        window.location.href="{pigcms{:U('Pay/check',array('type'=>'recharge','order_id'=>$_GET['order_id'],'card_id'=>$card['id']))}";
+                                        <else/>
 										window.location.href="{pigcms{:U('Pay/check',array('type'=>'shop','order_id'=>$_GET['order_id'],'card_id'=>$card['id']))}";
+                                        </if>
 									<else/>
 										window.location.href="{pigcms{:U('My/credit',$params)}";
 									</if>

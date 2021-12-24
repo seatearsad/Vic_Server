@@ -161,6 +161,7 @@
     }
 </style>
 <body>
+    <include file="Public:google"/>
     <div class="header"></div>
     <div class="table">
         <h2>Application Form – Complete and get started</h2>

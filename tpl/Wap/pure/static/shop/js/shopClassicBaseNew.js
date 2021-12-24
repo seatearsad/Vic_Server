@@ -121,7 +121,7 @@ function showGood(shop_id,product_id){
         pageLoadHides();
     }else{                                  //重新加载spec单页
 
-        $.getJSON(ajax_url_root+'ajax_goods',{goods_id:product_id},function(result) {
+        $.getJSON(ajax_url_root+'ajax_goods',{goods_id:product_id,store_id:shop_id},function(result) {
             nowProduct = result;
             productPicList = [];
             for (var i in result.pic_arr) {
@@ -170,6 +170,7 @@ function showGood(shop_id,product_id){
                 $('#shopDetailPageTitle .content').html(result.des).show();
                 //$('#shopDetailPageTitle').show();
             }else if(nowShop.store.delivery){
+                $('#shopDetailPageTitle .content').html('').show();
                 //$('#shopDetailPageContent .content').html(getLangStr('_REMINDER_STRING_')).show();
                 //$('#shopDetailPageContent').show();
                 //$('#shopDetailPageContent').hide();
@@ -477,16 +478,25 @@ function showShop(shopId){
             //     $(this).addClass('active').siblings('li').removeClass('active');
             // }else
 			if(!$(this).hasClass('active')){
-                var tmpActiveSize = $(this).closest('ul').find('.active').size();//当前的UL中已经选中的几个？
+                var tmpActiveSize = 0;
+                var currDishId = $(this).data('dish_id');
+                $(this).parent('ul').find('.active').each(function () {//当前的UL中已经选中的几个？
+                    if(!$(this).is(":hidden") && currDishId == $(this).data('dish_id')) tmpActiveSize++;
+                });
+
                 //alert(tmpActiveSize);
                 if(max != -1 && tmpActiveSize >= max){
                 	if(max == 1 && tmpActiveSize==1){
-                        $(this).closest('ul').find('.active').each(function () {
-                            //if ($(this).hasClass('active')) {
-                                $(this).removeClass('active');
-                            //}
+                        $(this).parent('ul').find('.active').each(function () {
+                            $(this).find('.dish_second').each(function () {
+                                $(this).hide();
+                            });
                         });
                         $(this).addClass('active').siblings('li').removeClass('active');
+
+                        $(this).find('.dish_second').each(function () {
+                            $(this).show();
+                        });
                      }else {
 					//motify.log($(this).closest('ul').data('dish_name') + ' Options Maximum ' + max + '');
                     	motify.log('Please choose maximum ' + max + ' option(s) for ' + $(this).closest('ul').data('dish_name'));
@@ -496,15 +506,24 @@ function showShop(shopId){
                         motify.log('您最多能选择 '+maxSize+' 个，现在已经选择满了');
                     } */
                     $(this).addClass('active');
+
+                    $(this).find('.dish_second').each(function () {
+                        $(this).show();
+                    });
                 }
             }else{
                 $(this).removeClass('active');
+                $(this).find('.dish_second').each(function () {
+                    $(this).hide();
+                });
             }
+
+            event.stopPropagation();
             changeProductSpec();
         });
 
 		// Dish + 选择
-        $(document).on('click','#shopDetailPageDish .product_btn.plus',function () {
+        $(document).on('click','#shopDetailPageDish .product_btn.plus',function (event) {
 
             mcslo("Dish + 选择","click");
 
@@ -530,10 +549,11 @@ function showShop(shopId){
                     motify.log('Please choose maximum ' + max + ' option(s) for ' + $(this).parent().data('dish_name'));
                 }
             }
+            event.stopPropagation();
         });
 
 		//Dish - 选择
-        $(document).on('click','#shopDetailPageDish .product_btn.min',function () {
+        $(document).on('click','#shopDetailPageDish .product_btn.min',function (event) {
             mcslo("Dish - 选择","click");
 
             var curr_num = parseInt($(this).parent().children('.number').html());
@@ -541,6 +561,7 @@ function showShop(shopId){
                 $(this).parent().children('.number').html(curr_num - 1);
                 changeProductSpec();
             }
+            event.stopPropagation();
         });
 
 		//Proper Radio选择
@@ -566,6 +587,7 @@ function showShop(shopId){
             }else{
                 $(this).removeClass('active');
             }
+
             changeProductSpec();
         });
 
@@ -609,12 +631,15 @@ function showShop(shopId){
                 var dish_name = $(item).data('name');
                 //var dish_val_name = $(item).data('dish_val_name');
 
+                var currDishId = $(this).attr('id').split("_")[1];
                 $.each($(item).find('li.active'),function(j,jtem){
-                    num += 1;
+                    if(!$(jtem).is(":hidden") && currDishId == $(this).data('dish_id')) num += 1;
                 });
                 $.each($(item).find('div.dish_memo'),function (j,jtem) {
-                    var this_num = parseInt($(jtem).children('.number').html());
-                    num += this_num;
+                    if(!$(jtem).is(":hidden") && currDishId == $(this).data('dish_id')) {
+                        var this_num = parseInt($(jtem).children('.number').html());
+                        num += this_num;
+                    }
                 });
                 if(num < min_num){
                     //motify.log(dish_name + ' selection(s) '+min_num+' required');
@@ -624,6 +649,35 @@ function showShop(shopId){
                         motify.log('Please choose minimum '+min_num+' option(s) for '+ dish_name);
 					}
                     is_no_select = true;
+                }
+            });
+
+            $.each($('#shopDetailPageDish .dish_second'),function(i,item){
+                if(!$(this).is(":hidden")) {
+                    var num = 0;
+                    var min_num = $(item).data('min');
+                    var max_num = $(item).data('max');
+                    var dish_name = $(item).data('name');
+                    //var dish_val_name = $(item).data('dish_val_name');
+
+                    $.each($(item).find('li.active'), function (j, jtem) {
+                        if(!$(jtem).is(":hidden")) num += 1;
+                    });
+                    $.each($(item).find('div.dish_memo'), function (j, jtem) {
+                        if(!$(jtem).is(":hidden")) {
+                            var this_num = parseInt($(jtem).children('.number').html());
+                            num += this_num;
+                        }
+                    });
+                    if (num < min_num) {
+                        //motify.log(dish_name + ' selection(s) '+min_num+' required');
+                        if (min_num == max_num) {
+                            motify.log('Please choose exactly ' + min_num + ' option(s) for ' + dish_name);
+                        } else {
+                            motify.log('Please choose minimum ' + min_num + ' option(s) for ' + dish_name);
+                        }
+                        is_no_select = true;
+                    }
                 }
             });
 
@@ -1024,37 +1078,90 @@ function changeProductSpec(){
 		$.each($('#shopDetailPageDish .row'),function(i,item){
             var dish_id = "";
             var dish_name = "";
-            $.each($(item).find('li.active'),function(j,jtem){
-                var new_dish = $(jtem).data('dish_id') + "," + $(jtem).data('dish_val_id') + ",1," + $(jtem).data('dish_price');
-                if (dish_id == "")
-                    dish_id = new_dish;
-                else
-                    dish_id += "|" + new_dish;
-                //productDish.push($(jtem).data('dish_id')+'_'+$(jtem).data('dish_val_id'));
-                curr_price += parseFloat($(jtem).data('dish_price'));
-                //nowProductCartLabel = nowProductCartLabel+'_'+$(jtem).data('dish_id')+'_'+$(jtem).data('dish_val_id')+'_1';
 
-            });
 
-            $.each($(item).find('div.dish_memo'),function (j,jtem) {
-                var this_num = parseInt($(jtem).children('.number').html());
-                var name_div = $(this).parent('div').find('.dish_name');
-                if(this_num > 0) {
-                    var new_dish = $(jtem).data('dish_id') + "," + $(jtem).data('dish_val_id') + "," + this_num + "," + $(jtem).data('dish_price');
+            $.each($(item).children('div.fl').children('ul').children('li.active'),function(j,jtem){
+                if(!$(this).is(":hidden")) {
+                    var new_dish = $(jtem).data('dish_id') + "," + $(jtem).data('dish_val_id') + ",1," + $(jtem).data('dish_price');
                     if (dish_id == "")
                         dish_id = new_dish;
                     else
                         dish_id += "|" + new_dish;
+                    //productDish.push($(jtem).data('dish_id')+'_'+$(jtem).data('dish_val_id'));
+                    curr_price += parseFloat($(jtem).data('dish_price'));
+                    //nowProductCartLabel = nowProductCartLabel+'_'+$(jtem).data('dish_id')+'_'+$(jtem).data('dish_val_id')+'_1';
 
-                    //productDish.push($(jtem).data('dish_id') + '_' + $(jtem).data('dish_val_id') + '_' + this_num);
-                    curr_price += parseFloat($(jtem).data('dish_price')) * this_num;
-                    $(name_div).css("color","#ffa52d");
-                    //nowProductCartLabel = nowProductCartLabel+'_'+$(jtem).data('dish_id')+'_'+$(jtem).data('dish_val_id')+ '_' + this_num;
-                }else{
-                    $(name_div).css("color","#000000");
-				}
-            })
-            nowProductCartLabel = nowProductCartLabel+'_'+dish_id;
+                    $.each($(jtem).children('.dish_second'),function(k,ktem){
+                        $.each($(ktem).children('div.fl').children('ul').children('li.active'),function(l,ltem){
+                            if(!$(this).is(":hidden")) {
+                                var new_dish = $(ltem).data('dish_id') + "," + $(ltem).data('dish_val_id') + ",1," + $(ltem).data('dish_price');
+                                if (dish_id == "")
+                                    dish_id = new_dish;
+                                else
+                                    dish_id += "|" + new_dish;
+                                //productDish.push($(jtem).data('dish_id')+'_'+$(jtem).data('dish_val_id'));
+                                curr_price += parseFloat($(ltem).data('dish_price'));
+                                //nowProductCartLabel = nowProductCartLabel+'_'+$(jtem).data('dish_id')+'_'+$(jtem).data('dish_val_id')+'_1';
+                            }
+                        });
+                        $.each($(ktem).children('div').children('div.dish_memo'),function (l,ltem) {
+                            if(!$(this).is(":hidden")) {
+                                var this_num = parseInt($(ltem).children('.number').html());
+                                var name_div = $(this).parent('div').find('.dish_name');
+                                if (this_num > 0) {
+                                    var new_dish = $(ltem).data('dish_id') + "," + $(ltem).data('dish_val_id') + "," + this_num + "," + $(ltem).data('dish_price');
+                                    if (dish_id == "")
+                                        dish_id = new_dish;
+                                    else
+                                        dish_id += "|" + new_dish;
+
+                                    //productDish.push($(jtem).data('dish_id') + '_' + $(jtem).data('dish_val_id') + '_' + this_num);
+                                    curr_price += parseFloat($(ltem).data('dish_price')) * this_num;
+                                    $(name_div).css("color", "#ffa52d");
+                                    //nowProductCartLabel = nowProductCartLabel+'_'+$(jtem).data('dish_id')+'_'+$(jtem).data('dish_val_id')+ '_' + this_num;
+                                } else {
+                                    $(name_div).css("color", "#000000");
+                                }
+                            }
+                        });
+                    });
+                }
+            });
+            /**
+            $.each($(item).find('li.active'),function(j,jtem){
+                if(!$(this).is(":hidden")) {
+                    var new_dish = $(jtem).data('dish_id') + "," + $(jtem).data('dish_val_id') + ",1," + $(jtem).data('dish_price');
+                    if (dish_id == "")
+                        dish_id = new_dish;
+                    else
+                        dish_id += "|" + new_dish;
+                    //productDish.push($(jtem).data('dish_id')+'_'+$(jtem).data('dish_val_id'));
+                    curr_price += parseFloat($(jtem).data('dish_price'));
+                    //nowProductCartLabel = nowProductCartLabel+'_'+$(jtem).data('dish_id')+'_'+$(jtem).data('dish_val_id')+'_1';
+                }
+            });
+            */
+            $.each($(item).children('div').children('div.dish_memo'),function (j,jtem) {
+                if(!$(this).is(":hidden")) {
+                    var this_num = parseInt($(jtem).children('.number').html());
+                    var name_div = $(this).parent('div').find('.dish_name');
+                    if (this_num > 0) {
+                        var new_dish = $(jtem).data('dish_id') + "," + $(jtem).data('dish_val_id') + "," + this_num + "," + $(jtem).data('dish_price');
+                        if (dish_id == "")
+                            dish_id = new_dish;
+                        else
+                            dish_id += "|" + new_dish;
+
+                        //productDish.push($(jtem).data('dish_id') + '_' + $(jtem).data('dish_val_id') + '_' + this_num);
+                        curr_price += parseFloat($(jtem).data('dish_price')) * this_num;
+                        $(name_div).css("color", "#ffa52d");
+                        //nowProductCartLabel = nowProductCartLabel+'_'+$(jtem).data('dish_id')+'_'+$(jtem).data('dish_val_id')+ '_' + this_num;
+                    } else {
+                        $(name_div).css("color", "#000000");
+                    }
+                }
+            });
+            nowProductCartLabel = nowProductCartLabel+'|'+dish_id;
 
         });
 	}
@@ -1070,7 +1177,7 @@ function changeProductSpec(){
 	$('#shopDetailPageNumber .number').addClass('productNum-'+ DecodeIdClass(nowProductCartLabel));
 
 	//console.log("------------------------");
-    mcslo(nowProductCartLabel,"changeProductSpec","选中ProductKey是什么？")
+    console.log(nowProductCartLabel,"changeProductSpec","选中ProductKey是什么？");
 	//console.log(productCart);
     //如果从购物车数据中能够找到存在的记录，就显示数字增加功能
 	if(productCart[nowProductCartLabel]){
@@ -1215,48 +1322,126 @@ function cartFunction(type,obj,dataObj){
 			}
 
         if(nowProduct.side_dish){
-
 				var tmpProductDish = [];
 				$.each($('#shopDetailPageDish .row'),function(i,item){
-
 					var dish_id = "";
 					var dish_name = "";
 
+                    $.each($(item).children('div.fl').children('ul').children('li.active'),function(j,jtem){
+                        if(!$(this).is(":hidden")) {
+                            var new_dish = $(jtem).data('dish_id') + "," + $(jtem).data('dish_val_id') + ",1," + $(jtem).data('dish_price');
+                            if (dish_id == "")
+                                dish_id = new_dish;
+                            else
+                                dish_id += "|" + new_dish;
+
+                            dish_name += dish_name == "" ? $(jtem).data('dish_val_name') : ";" + $(jtem).data('dish_val_name');
+                            productPrice += parseFloat($(jtem).data('dish_price'));
+
+                            $.each($(jtem).children('.dish_second'),function(k,ktem){
+                                $.each($(ktem).children('div.fl').children('ul').children('li.active'),function(l,ltem){
+                                    if(!$(this).is(":hidden")) {
+                                        var new_dish = $(ltem).data('dish_id') + "," + $(ltem).data('dish_val_id') + ",1," + $(ltem).data('dish_price');
+                                        if (dish_id == "")
+                                            dish_id = new_dish;
+                                        else
+                                            dish_id += "|" + new_dish;
+
+                                        dish_name += dish_name == "" ? $(ltem).data('dish_val_name') : ";" + $(ltem).data('dish_val_name');
+                                        productPrice += parseFloat($(ltem).data('dish_price'));
+                                    }
+                                });
+                                $.each($(ktem).children('div').children('div.dish_memo'),function (l,ltem) {
+                                    if(!$(this).is(":hidden")) {
+                                        var this_num = parseInt($(ltem).children('.number').html());
+                                        if (this_num > 0) {
+                                            //productKey = productKey+'_'+$(jtem).data('dish_id')+'_'+$(jtem).data('dish_val_id')+'_'+this_num;
+                                            //tmpProductDish.push({'dish_id':$(jtem).data('dish_id'),'dish_val_id':$(jtem).data('dish_val_id'),'dish_num':this_num,'dish_name':$(jtem).data('dish_name'),'dish_val_name':$(jtem).data('dish_val_name'),'dish_price':$(jtem).data('dish_price')});
+                                            var new_dish = $(ltem).data('dish_id') + "," + $(ltem).data('dish_val_id') + "," + this_num + "," + $(ltem).data('dish_price');
+                                            if (dish_id == "")
+                                                dish_id = new_dish;
+                                            else
+                                                dish_id += "|" + new_dish;
+
+                                            var c_name = "";
+                                            if (this_num > 1) {
+                                                c_name = $(ltem).data('dish_val_name') + "*" + this_num;
+                                            } else {
+                                                c_name = $(ltem).data('dish_val_name');
+                                            }
+
+                                            dish_name += dish_name == "" ? c_name : ";" + c_name;
+                                            productPrice += parseFloat($(ltem).data('dish_price')) * this_num;
+
+                                        }
+                                    }
+                                });
+                            });
+                        }
+                    });
+
+                    $.each($(item).children('div').children('div.dish_memo'),function (j,jtem) {
+                        if(!$(this).is(":hidden")) {
+                            var this_num = parseInt($(jtem).children('.number').html());
+                            if (this_num > 0) {
+                                var new_dish = $(jtem).data('dish_id') + "," + $(jtem).data('dish_val_id') + "," + this_num + "," + $(jtem).data('dish_price');
+                                if (dish_id == "")
+                                    dish_id = new_dish;
+                                else
+                                    dish_id += "|" + new_dish;
+
+                                var c_name = "";
+                                if (this_num > 1) {
+                                    c_name = $(jtem).data('dish_val_name') + "*" + this_num;
+                                } else {
+                                    c_name = $(jtem).data('dish_val_name');
+                                }
+
+                                dish_name += dish_name == "" ? c_name : ";" + c_name;
+                                productPrice += parseFloat($(jtem).data('dish_price')) * this_num;
+                            }
+                        }
+                    });
+
+                    /**
 					$.each($(item).find('li.active'),function(j,jtem){
-						//productKey = productKey+'_'+$(jtem).data('dish_id')+'_'+$(jtem).data('dish_val_id')+'_1';
-						//tmpProductDish.push({'dish_id':$(jtem).data('dish_id'),'dish_val_id':$(jtem).data('dish_val_id'),'dish_num':1,'dish_name':$(jtem).data('dish_name'),'dish_val_name':$(jtem).data('dish_val_name'),'dish_price':$(jtem).data('dish_price')});
-						var new_dish = $(jtem).data('dish_id')+","+$(jtem).data('dish_val_id')+",1,"+$(jtem).data('dish_price');
-						if(dish_id == "")
-							dish_id = new_dish;
-						else
-							dish_id += "|" + new_dish;
-						dish_name += dish_name == "" ? $(jtem).data('dish_val_name') : ";" + $(jtem).data('dish_val_name');
-						productPrice += parseFloat($(jtem).data('dish_price'));
+						if(!$(jtem).is(":hidden")) {
+                            var new_dish = $(jtem).data('dish_id') + "," + $(jtem).data('dish_val_id') + ",1," + $(jtem).data('dish_price');
+                            if (dish_id == "")
+                                dish_id = new_dish;
+                            else
+                                dish_id += "|" + new_dish;
+                            dish_name += dish_name == "" ? $(jtem).data('dish_val_name') : ";" + $(jtem).data('dish_val_name');
+                            productPrice += parseFloat($(jtem).data('dish_price'));
+                        }
 					});
 
 					$.each($(item).find('div.dish_memo'),function (j,jtem) {
-						var this_num = parseInt($(jtem).children('.number').html());
-						if(this_num > 0) {
-							//productKey = productKey+'_'+$(jtem).data('dish_id')+'_'+$(jtem).data('dish_val_id')+'_'+this_num;
-							//tmpProductDish.push({'dish_id':$(jtem).data('dish_id'),'dish_val_id':$(jtem).data('dish_val_id'),'dish_num':this_num,'dish_name':$(jtem).data('dish_name'),'dish_val_name':$(jtem).data('dish_val_name'),'dish_price':$(jtem).data('dish_price')});
-							var new_dish = $(jtem).data('dish_id')+","+$(jtem).data('dish_val_id')+","+this_num+","+$(jtem).data('dish_price');
-							if(dish_id == "")
-								dish_id = new_dish;
-							else
-								dish_id += "|" + new_dish;
+                        if(!$(jtem).is(":hidden")) {
+                            var this_num = parseInt($(jtem).children('.number').html());
+                            if (this_num > 0) {
+                                //productKey = productKey+'_'+$(jtem).data('dish_id')+'_'+$(jtem).data('dish_val_id')+'_'+this_num;
+                                //tmpProductDish.push({'dish_id':$(jtem).data('dish_id'),'dish_val_id':$(jtem).data('dish_val_id'),'dish_num':this_num,'dish_name':$(jtem).data('dish_name'),'dish_val_name':$(jtem).data('dish_val_name'),'dish_price':$(jtem).data('dish_price')});
+                                var new_dish = $(jtem).data('dish_id') + "," + $(jtem).data('dish_val_id') + "," + this_num + "," + $(jtem).data('dish_price');
+                                if (dish_id == "")
+                                    dish_id = new_dish;
+                                else
+                                    dish_id += "|" + new_dish;
 
-							var c_name = "";
-							if(this_num > 1){
-								c_name = $(jtem).data('dish_val_name')+"*"+this_num;
-							}else{
-								c_name = $(jtem).data('dish_val_name');
-							}
+                                var c_name = "";
+                                if (this_num > 1) {
+                                    c_name = $(jtem).data('dish_val_name') + "*" + this_num;
+                                } else {
+                                    c_name = $(jtem).data('dish_val_name');
+                                }
 
-							dish_name += dish_name == "" ? c_name : ";" + c_name;
-							productPrice += parseFloat($(jtem).data('dish_price')) * this_num;
+                                dish_name += dish_name == "" ? c_name : ";" + c_name;
+                                productPrice += parseFloat($(jtem).data('dish_price')) * this_num;
 
-						}
+                            }
+                        }
 					});
+                     */
 					//productParam.push({'type':'side_dish','data':tmpProductDish});
 					productParam.push({'type':'side_dish','dish_id':dish_id,'dish_name':dish_name});
                     productKey=productKey+'_'+dish_id;

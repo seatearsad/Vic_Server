@@ -25,6 +25,10 @@ class ShopAction extends BaseAction
         $store_list = D()->query($sql);
         // 		echo D()->_sql();
         // 		$store_list = D()->table($db_arr)->field(true)->where("`s`.`mer_id`='$mer_id' AND `s`.`status`='1' AND `s`.`have_shop`='1' AND `s`.`area_id`=`a`.`area_id`")->order('`sort` DESC,`store_id` ASC')->limit($p->firstRow.','.$p->listRows)->select();
+
+        foreach ($store_list as &$store){
+            $store['menuList'] = D('StoreMenuV2')->getStoreMenu($store['store_id']);
+        }
         $this->assign('store_list', $store_list);
 
         $pagebar = $p->show();
@@ -858,6 +862,10 @@ class ShopAction extends BaseAction
         $this->assign('now_store', $now_store);
 
         $this->assign('express_template', D('Express_template')->field(true)->where(array('mer_id' => $this->merchant_session['mer_id']))->select());
+
+        $allergens_list = D('Allergens')->select();
+        $this->assign('allergens_list',$allergens_list);
+
         $this->display();
     }
 
@@ -1004,6 +1012,9 @@ class ShopAction extends BaseAction
         $this->assign('now_sort', $now_sort);
         $this->assign('now_store', $now_store);
         $this->assign('express_template', D('Express_template')->field(true)->where(array('mer_id' => $this->merchant_session['mer_id']))->select());
+
+        $allergens_list = D('Allergens')->select();
+        $this->assign('allergens_list',$allergens_list);
         $this->display();
     }
 
@@ -1137,10 +1148,14 @@ class ShopAction extends BaseAction
                     $new_value[$k_arr[1]]['price'] = $v;
                 }elseif($k_arr[0] == 'value_name_new') {
                     $new_value[$k_arr[1]]['name'] = fulltext_filter($v);
+                }elseif($k_arr[0] == 'value_status_new') {
+                    $new_value[$k_arr[1]]['status'] = $v;
                 }elseif($k_arr[0] == 'value_price'){
                     $old_value[$k_arr[1]]['price'] = $v;
                 }elseif($k_arr[0] == 'value_name'){
                     $old_value[$k_arr[1]]['name'] = fulltext_filter($v);
+                }elseif($k_arr[0] == 'value_status'){
+                    $old_value[$k_arr[1]]['status'] = $v;
                 }
             }
 
@@ -1149,6 +1164,7 @@ class ShopAction extends BaseAction
                 $add['dish_id'] = $dish_id;
                 $add['name'] = $v['name'];
                 $add['price'] = $v['price'];
+                $add['status'] = $v['status'];
                 $add_arr[] = $add;
             }
             $dish_value_db->addAll($add_arr);
@@ -1334,6 +1350,23 @@ class ShopAction extends BaseAction
         }else {
             $data_goods['status'] = $_POST['type'] == 'open' ? '1' : '0';
         }
+        if($database_goods->where($condition_goods)->data($data_goods)->save()){
+            exit('1');
+        }else{
+            exit;
+        }
+    }
+
+    /* 配菜状态 */
+    public function side_dish_status()
+    {
+        $database_goods = D('Side_dish');
+        $condition_goods['id'] = $_POST['id'];
+
+        $data_goods = array();
+
+        $data_goods['status'] = $_POST['type'] == 'open' ? '1' : '0';
+
         if($database_goods->where($condition_goods)->data($data_goods)->save()){
             exit('1');
         }else{
@@ -2798,5 +2831,43 @@ class ShopAction extends BaseAction
         }else{
             exit(json_encode(array('error_code' => true, 'msg' => 'Data Error')));
         }
+    }
+
+
+
+    public function menuCategories(){
+        $now_store = $this->check_store(intval($_GET['store_id']));
+        $this->assign('now_store',$now_store);
+
+        $menuId = $_GET['menuId'];
+
+        $categories = D('StoreMenuV2')->getMenuCategories($menuId,$now_store['store_id']);
+
+        $this->assign('categories',$categories);
+
+        $this->display();
+    }
+
+    public function menuProduct(){
+        $categoryId = $_GET['categoryId'];
+        $storeId = $_GET['store_id'];
+
+        $category = D('StoreMenuV2')->getMenuCategory($categoryId,$storeId);
+        $this->assign('category',$category);
+
+        if($_GET['productId']){
+            $productId = $_GET['productId'];
+            $products = D('StoreMenuV2')->getProductRelation($productId,$storeId);
+
+            $parentProduct = D('StoreMenuV2')->getProduct($productId,$storeId);
+
+            $this->assign('parentProduct',$parentProduct);
+        }else {
+            $products = D('StoreMenuV2')->getMenuCategoriesProduct($categoryId,$storeId);
+        }
+
+        $this->assign('products',$products);
+
+        $this->display();
     }
 }

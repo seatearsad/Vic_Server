@@ -98,6 +98,7 @@
     }
 </style>
 <body>
+    <include file="Public:google"/>
     <div class="sign_title">
         Sign in
     </div>

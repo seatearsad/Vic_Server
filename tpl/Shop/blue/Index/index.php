@@ -36,6 +36,7 @@
     <include file="Public:facebook"/>
 </head>
 	<body>
+        <include file="Public:google"/>
 		<!-- 公用导航 -->
 
 			<include file="Public:header_top"/>

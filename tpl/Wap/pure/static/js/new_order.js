@@ -13,7 +13,29 @@ var click_id = 0;
 var this_order;
 var order_info;
 var time_out;
+
+var audio = new Audio();
+audio.src = sound_url;
+audio.loop = "loop";
+
 getNewOrder();
+
+$('body').click(function () {
+    if(navigator.userAgent.match(/TuttiPartner/i)) {
+        if(/(tuttipartner version)/.test(navigator.userAgent.toLowerCase())){
+            window.webkit.messageHandlers.stopSound.postMessage([0]);
+        }
+    }else if(/(tutti_android)/.test(navigator.userAgent.toLowerCase())) {
+        if (typeof (window.linkJs.stopSound) != 'undefined') {
+            window.linkJs.stopSound();
+        }
+    }else {
+        if(!audio.paused) {
+            audio.pause();
+        }
+    }
+});
+
 function getNewOrder(){
     $.post(new_url,{last_time:last_time},function(result){
         if(result.error == 0){
@@ -26,11 +48,14 @@ function getNewOrder(){
                 });
                 if(navigator.userAgent.match(/TuttiPartner/i))
                     window.webkit.messageHandlers.newOrderSound.postMessage([0]);
-                else if(/(tutti_android)/.test(navigator.userAgent.toLowerCase()))
-                    window.linkJs.newOrderSound();
-                else {
-                    var audio = new Audio();
-                    audio.src = sound_url;
+                else if(/(tutti_android)/.test(navigator.userAgent.toLowerCase())) {
+                    if (typeof (window.linkJs.newOrderSound) != 'undefined') {
+                        window.linkJs.newOrderSound();
+                    }
+                }else {
+                    //var audio = new Audio();
+                    //audio.src = sound_url;
+                    //audio.loop = "loop";
                     audio.play();
                 }
             }

@@ -68,6 +68,7 @@ filter:alpha(opacity=50);
     <include file="Public:facebook"/>
 </head>
 <body id="order-detail">
+    <include file="Public:google"/>
 	<div id="doc" class="bg-for-new-index">
 		<header id="site-mast" class="site-mast">
 			<include file="Public:header_top"/>

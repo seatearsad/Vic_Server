@@ -11,6 +11,7 @@
     <include file="Public:facebook"/>
 </head>
 <body class=" hIphone" style="padding-bottom: initial;">
+<include file="Public:google"/>
 <div id="fis_elm__0"></div>
 <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/lib_5e96991.css">
 <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/style_dd39d16.css">

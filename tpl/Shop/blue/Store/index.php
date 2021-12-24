@@ -37,6 +37,7 @@
     <include file="Public:facebook"/>
 </head>
 <body style="background: #f5f5f5;">
+    <include file="Public:google"/>
 	<section class="shoptop">
 		<div class="shopto_top">
 			<div class="w1200 clr">

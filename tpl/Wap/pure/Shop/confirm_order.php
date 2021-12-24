@@ -16,7 +16,7 @@
 <meta content="telephone=no, address=no" name="format-detection">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<link rel="stylesheet" type="text/css" href="{pigcms{$static_path}shop/css/main.css" media="all">
+<link rel="stylesheet" type="text/css" href="{pigcms{$static_path}shop/css/main.css?v=2.6.6" media="all">
     <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/pageloader.css?217"/>
 <style>
 #dingcai_adress_info{
@@ -388,8 +388,8 @@ a {
 		<volist name="goods" id="ditem">
 		<li>
             <if condition="!empty($ditem['image'])">
-			<div class="imglogo">
-				<img src="{pigcms{$ditem['image']}" alt="">
+			<div class="imglogo" style="background-image: url('{pigcms{$ditem["image"]}');background-position: center; background-size: cover; background-repeat: no-repeat;display: inline-block; height: 58px; margin-top: 5px;">
+
 			</div>
             </if>
 			<div>
@@ -912,23 +912,36 @@ $(document).ready(function () {
             pageLoadTips({showBg:false});
 			$.post("{pigcms{:U('Shop/checkGoodsTime')}",{'store_id':"{pigcms{$store['store_id']}"},function(data){
                 if(data.error){
-                    //motify.log(data.msg);
-                    $.cookie('shop_cart_'+"{pigcms{$store['store_id']}",JSON.stringify(data.cartList),{expires:700,path:'/'});
-                    var remindTipLayer = layer.open({
-                        content: "<label style='word-break: break-word;'>" + data.msg + "</label>",
-                        btn: ['Yes','No'],
-                        yes:function(){
-                            $.cookie('auto_location',1); //reload后自动submit
-                            layer.close(remindTipLayer);
-                            window.location.reload();
-                        },
-                        no: function(){
-                            $.cookie('auto_location',0);
-                            layer.close(remindTipLayer);
-                            window.location.reload();
-                        }
+                    if(data.type == 'store') {
+                        var remindTipLayer = layer.open({
+                            content: "<label style='word-break: break-word;'>" + data.msg + "</label>",
+                            btn: ['Confirm'],
+                            end:function(){
+                                //window.history.back();
+                                window.location.href = "{pigcms{:U('classic_shop',array('shop_id'=>$store['store_id']))}";
+                            }
+                        });
+                    }else{
+                        $.cookie('shop_cart_' + "{pigcms{$store['store_id']}", JSON.stringify(data.cartList), {
+                            expires: 700,
+                            path: '/'
+                        });
+                        var remindTipLayer = layer.open({
+                            content: "<label style='word-break: break-word;'>" + data.msg + "</label>",
+                            btn: ['Yes', 'No'],
+                            yes: function () {
+                                $.cookie('auto_location', 1); //reload后自动submit
+                                layer.close(remindTipLayer);
+                                window.location.reload();
+                            },
+                            no: function () {
+                                $.cookie('auto_location', 0);
+                                layer.close(remindTipLayer);
+                                window.location.reload();
+                            }
 
-                    });
+                        });
+                    }
                     pageLoadHides();
                 }else{
                     document.cart_confirm_form.submit();

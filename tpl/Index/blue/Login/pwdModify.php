@@ -22,6 +22,7 @@
     <include file="Public:facebook"/>
 </head>
 <body id="login" class="theme--www" style="position: static;">
+    <include file="Public:google"/>
 	<header id="site-mast" class="site-mast site-mast--mini">
 	    <div class="site-mast__branding cf">
 			<a href="{pigcms{$config.site_url}"><img src="{pigcms{$config.site_logo}" alt="{pigcms{$config.site_name}" title="{pigcms{$config.site_name}" style="width:190px;height:60px;"/></a>

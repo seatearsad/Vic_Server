@@ -196,7 +196,8 @@
     <include file="Public:facebook"/>
 </head>
 <body id="index">
-         <div id="tips" class="tips"></div>
+    <include file="Public:google"/>
+        <div id="tips" class="tips"></div>
 		<dl class="list" style="margin-top:0px;">
 		    <dd>
 			<div class="tabs">

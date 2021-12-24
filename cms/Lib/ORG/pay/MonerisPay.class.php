@@ -65,11 +65,13 @@ class MonerisPay
             //3D 2.0
             $resp = $this->threeDSAuthentication($data,$uid,$from_type);
             //var_dump($resp);die();
+
             if($resp['transStatus'] == "Y" || $resp['transStatus'] == "A"){
                 //return $this->purchase($data,$uid,$from_type,$order);
                 $order_md = D('Pay_moneris_md')->where(array('moneris_order_id'=>$resp['receiptId']))->find();
                 $MD = $order_md['order_md'];
 
+                //file_put_contents("./test_log.txt",date("Y/m/d")."   ".date("h:i:sa")."   "."Moneris 3D" ."   ". $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'--'.json_encode($resp).'---'.json_encode($order_md)."\r\n",FILE_APPEND);
                 return $this->MPI_Cavv($MD,$resp['cavv'],$resp['eci'],$resp['threeDSServerTransId']);
             }elseif ($resp['transStatus'] == "N" || $resp['transStatus'] == "U"){
                 if($data['order_type'] != 'recharge')
@@ -759,12 +761,13 @@ class MonerisPay
         $mpgRequest = new mpgRequest($mpgTxn);
         $mpgRequest->setProcCountryCode($this->countryCode); //"US" for sending transaction to US environment
         $mpgRequest->setTestMode($this->testMode);
-
+        //file_put_contents("./test_log.log",date("Y/m/d")."   ".date("h:i:sa")."   "."Moneris3DCavvRequest" ."   ". $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'--'.json_encode($mpgTxn)."\r\n",FILE_APPEND);
         $mpgHttpPost = new mpgHttpsPost($this->store_id,$this->api_token,$mpgRequest);
 
         $mpgResponse = $mpgHttpPost->getMpgResponse();
-        $resp = $this->arrageResp($mpgResponse,$txnArray['pan'],$txnArray['expdate'],0,$order_id);
 
+        $resp = $this->arrageResp($mpgResponse,$txnArray['pan'],$txnArray['expdate'],0,$order_id);
+        //file_put_contents("./test_log.log",date("Y/m/d")."   ".date("h:i:sa")."   "."Moneris3DCavvResponse" ."   ". $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'--'.json_encode($resp)."\r\n",FILE_APPEND);
         if($resp['responseCode'] != "null" && $resp['responseCode'] < 50){
             if($orderInfo['save'] == 1) {
                 $isC = D('User_card')->getCardByUserAndNum($orderInfo['uid'], $pan);
@@ -1039,6 +1042,22 @@ class MonerisPay
         $mpiThreeDSAuthentication->setBrowserScreenWidth("1920"); //(pixel width of cardholder screen)
         $mpiThreeDSAuthentication->setBrowserLanguage("en-GB"); //(defined by IETF BCP47)
 
+        $mpiRequest['orderId'] = $data['order_id'];
+        $mpiRequest['cardholderName'] = $txnArray['name'];
+        $mpiRequest['pan'] = $txnArray['pan'];
+        $mpiRequest['expdate'] = $txnArray['expdate'];
+        $mpiRequest['amount'] = $amount;
+        $mpiRequest['ThreeDSCompletionInd'] = "Y";
+        $mpiRequest['RequestType'] = "01";
+        $mpiRequest['PurchaseDate'] = date("YYYYMMDDHHMMSS");
+        $mpiRequest['NotificationURL'] = $merchantUrl;
+        $mpiRequest['ChallengeWindowSize'] = "03";
+        $mpiRequest['BrowserUserAgent'] = $userAgent;
+        $mpiRequest['BrowserJavaEnabled'] = "true";
+        $mpiRequest['BrowserScreenHeight'] = "1000";
+        $mpiRequest['BrowserScreenWidth'] = "1920";
+        $mpiRequest['BrowserLanguage'] = "en-GB";
+        $mpiRequest['ProcCountryCode'] = $this->countryCode;
 
         /****************************** Transaction Object *******************************/
 
@@ -1051,7 +1070,7 @@ class MonerisPay
         $mpgRequest->setTestMode($this->testMode); //false or comment out this line for production transactions
 
         /****************************** HTTPS Post Object *******************************/
-
+        //file_put_contents("./test_log.log",date("Y/m/d")."   ".date("h:i:sa")."   "."Moneris3DRequest" ."   ". $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'--'.json_encode($mpiRequest)."\r\n",FILE_APPEND);
         $mpgHttpPost  =new mpgHttpsPost($this->store_id,$this->api_token,$mpgRequest);
 
         /************************************* Response *********************************/
@@ -1072,11 +1091,14 @@ class MonerisPay
         $resp['eci'] = $mpgResponse->getMpiEci();
         $resp['cavv'] = $mpgResponse->getMpiCavv();
         $resp['site_url'] = $merchantUrl;
+
+        //file_put_contents("./test_log.log",date("Y/m/d")."   ".date("h:i:sa")."   "."Moneris3DResponse" ."   ". $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'--'.json_encode($resp)."\r\n",FILE_APPEND);
         //var_dump($resp);die();
         if($resp['transStatus'] == "C" || $resp['transStatus'] == "Y" || $resp['transStatus'] == "A"){
             $order_md = D('Pay_moneris_md')->where(array('moneris_order_id'=>$data['order_id']))->find();
             $md['order_md'] = $MD;
             $md['create_time'] = time();
+
             if($order_md){
                 D('Pay_moneris_md')->where(array('moneris_order_id'=>$data['order_id']))->save($md);
             }else{

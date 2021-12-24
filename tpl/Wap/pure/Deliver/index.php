@@ -284,6 +284,7 @@
 </head>
 
 <body>
+    <include file="Public:google"/>
     <include file="index_header" />
 	<div id="all_map"></div>
     <div id="gray_middle_div">

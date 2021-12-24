@@ -507,6 +507,7 @@
         }
     </style>
 	<body>
+        <include file="Public:google"/>
         <include file="Public:header"/>
         <div class="main">
             <video class="div_video" autoplay="" loop="" muted="" poster="" type="video/mp4" class="e_videoback e_videoback-000 p_videoback" webkit-playsinline="true" x-webkit-airplay="true" playsinline="true" x5-video-player-type="h5" x5-video-orientation="h5" x5-video-player-fullscreen="true">

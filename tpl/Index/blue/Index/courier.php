@@ -284,6 +284,7 @@
         }
     </style>
 	<body>
+        <include file="Public:google"/>
         <include file="Public:header"/>
         <div class="main"></div>
         <div class="become_div">

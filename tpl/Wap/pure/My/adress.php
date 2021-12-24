@@ -194,6 +194,7 @@
     <include file="Public:facebook"/>
 </head>
 <body id="index">
+<include file="Public:google"/>
 <include file="Public:header"/>
 <div class="main">
 

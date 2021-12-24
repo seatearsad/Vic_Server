@@ -202,11 +202,21 @@ class Shop_orderModel extends Model
 			//$trow['name'] = $trow['spec'] ? $trow['name'] . ' (' . $trow['spec'] . ')' : $trow['name'];
 			$trow['money'] = floatval($trow['price'] * $trow['num']);
             $trow['spec'] = str_replace(";","; ",$trow['spec']);
-			$goods = D('Shop_goods')->field(true)->where(array('goods_id'=>$trow['goods_id']))->find();
-			$trow['tax_num'] = $goods['tax_num'];
-			$trow['deposit_price'] = $goods['deposit_price'];
-            $tax_price += $trow['price'] * $goods['tax_num']/100 * $trow['num'];
-            $deposit_price += $goods['deposit_price'] * $trow['num'];
+            if($merchant_store['menu_version'] == 1) {
+                $goods = D('Shop_goods')->field(true)->where(array('goods_id' => $trow['goods_id']))->find();
+                $trow['tax_num'] = $goods['tax_num'];
+                $trow['deposit_price'] = $goods['deposit_price'];
+                $tax_price += $trow['price'] * $trow['tax_num']/100 * $trow['num'];
+            }elseif ($merchant_store['menu_version'] == 2){
+                $goods = D('StoreMenuV2')->getProduct($trow['goods_id'],$now_order['store_id']);
+                $trow['tax_num'] = $goods['tax']/1000;
+                $trow['deposit_price'] = 0;
+				$tax_price += D('StoreMenuV2')->calculationTaxFromOrder($trow);
+                //$tax_price += $trow['price'] * $trow['tax_num']/100 * $trow['num'];
+			}
+
+
+            $deposit_price += $trow['deposit_price'] * $trow['num'];
 		}
         $tax_price = $tax_price + ($now_order['freight_charge'] + $now_order['packing_charge']) * $merchant_store['tax_num']/100;
 
