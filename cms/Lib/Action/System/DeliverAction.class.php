@@ -1967,7 +1967,7 @@ class DeliverAction extends BaseAction {
         $fee_list = D('Deliver_rule')->where(array('type'=>1,'city_id'=>$city_id))->select();
         $this->assign('fee_list',$fee_list);
 
-        $bonus_list = D('Deliver_bonus')->where(array('city_id'=>$city_id))->select();
+        $bonus_list = D('Deliver_bonus')->where(array('city_id'=>$city_id))->order('status asc')->select();
         $this->assign('bonus_list',$bonus_list);
 
         $city = D('Area')->where(array('area_type'=>2,'is_open'=>1))->select();

@@ -157,7 +157,7 @@
         </div>
         <div style="font-size: 0px">
             <span class="su_left">Bonus</span>
-            <span class="su_right">$0.00</span>
+            <span class="su_right">${pigcms{$bonus|number_format=###,2}</span>
         </div>
         <!--div style="font-size: 0px">
             <span class="su_left" style="font-weight: bold;">Earning by Delivery Fees + Tips, or</span>
@@ -171,7 +171,7 @@
         <div style="font-size: 0px">
             <span class="su_left" style="font-weight: bold;">{pigcms{:L('_ND_ACTUALEARN_')}</span>
             <span class="su_right" style="font-weight: bold;">
-                    ${pigcms{$freight_charge+$tip}
+                    ${pigcms{$freight_charge+$tip+$bonus}
             </span>
         </div>
         <div style="font-size: 0px">
@@ -181,7 +181,7 @@
         <div style="font-size: 0px">
             <span class="su_left" style="font-weight: bold;">{pigcms{:L('_ND_AMOUNTPAYABLE_')}</span>
             <span class="su_right" style="font-weight: bold;">
-                    ${pigcms{$freight_charge+$tip-$offline_money|floatval}
+                    ${pigcms{$freight_charge+$bonus+$tip-$offline_money|floatval}
             </span>
         </div>
         <div class="order_history">

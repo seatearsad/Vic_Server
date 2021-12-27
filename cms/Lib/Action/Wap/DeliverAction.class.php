@@ -2161,9 +2161,11 @@ class DeliverAction extends BaseAction
         $sql .= " order by s.create_time DESC";
         $list = D()->query($sql);
 
+        $result['bonus'] = 0;
         $month_list = array();
         foreach ($list as $k=>&$val){
             $result['tip'] = $result['tip'] ? $result['tip'] + $val['tip_charge'] : $val['tip_charge'];
+            $result['bonus'] += $val['bonus'];
             if($val['coupon_price'] > 0) $val['price'] = $val['price'] - $val['coupon_price'];
             $val['pay_type'] = $val['payType'];
             if($val['pay_type'] == 'offline' || $val['pay_type'] == 'Cash'){//统计现金
@@ -2211,10 +2213,10 @@ class DeliverAction extends BaseAction
             $val['uid'] = $order['uid'];
             $store = D('Merchant_store')->field(true)->where(array('store_id'=>$val['store_id']))->find();
             $val['store_name'] = lang_substr($store['name'],C('DEFAULT_LANG'));
-            $val['summary'] = floatval($val['freight_charge'])+floatval($order['tip_charge']);
+            $val['summary'] = floatval($val['freight_charge'])+floatval($order['tip_charge']+$val['bonus']);
 
             $month_list[$val['month_key']]['list'][] = $val;
-            $month_list[$val['month_key']]['summary'] += floatval($val['freight_charge'])+floatval($order['tip_charge']);
+            $month_list[$val['month_key']]['summary'] += floatval($val['freight_charge'])+floatval($order['tip_charge']+$val['bonus']);
         }
 
         $result['order_count'] = count($list);
@@ -2248,6 +2250,8 @@ class DeliverAction extends BaseAction
         $result['begin_time'] = $begin_time;
         $result['end_time'] = $end_time;
 
+        $result['bonus'] = 0.00;
+
         $b_date = $_GET['begin_time'].' 00:00:00';
         $e_date = $_GET['end_time'].' 24:00:00';
 
@@ -2263,6 +2267,8 @@ class DeliverAction extends BaseAction
         $list = D()->query($sql);
         foreach ($list as $k=>&$val){
             $result['tip'] = $result['tip'] ? $result['tip'] + $val['tip_charge'] : $val['tip_charge'];
+            $result['bonus'] += $val['bonus'];
+
             if($val['coupon_price'] > 0) $val['price'] = $val['price'] - $val['coupon_price'];
             if($val['delivery_discount'] > 0) $val['price'] = $val['price'] - $val['delivery_discount'];
             if($val['merchant_reduce'] > 0) $val['price'] = $val['price'] - $val['merchant_reduce'];
@@ -2475,7 +2481,8 @@ class DeliverAction extends BaseAction
 
                 $this->success(L('_PAYMENT_SUCCESS_'),$url,true);
             }else{
-                $this->error($resp['message'],'',true);
+                //$this->error($resp['message'],'',true);
+                $this->error("Declined. Please verify payment information and try again.",'',true);
             }
         }else{
             $supply_id = intval(I("supply_id"));

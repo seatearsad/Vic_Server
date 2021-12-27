@@ -429,7 +429,11 @@
             </div>
             <a href="javascript:void(0);" class="rob" data-spid="{{ d.list[i].supply_id }}" style="display: block;">
             <div class="send_btn">
-                Accept
+                {{# if(d.list[i].bonus > 0){ }}
+                    Accept to Earn ${{ d.list[i].bonus }} Bonus
+                {{# } else { }}
+                    Accept
+                {{# } }}
             </div>
             </a>
             </div>
@@ -458,7 +462,7 @@
                 {{# } else { }}
                 {{ d.list[i].user_distance }} from you
                 {{# } }}
-                {{# if(d.list[i].status < 4){ }}
+                {{# if(d.list[i].status < 3){ }}
                 ·
                 {{# if(d.list[i].is_dinning == 1){ }}
                 Ready

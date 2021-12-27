@@ -165,8 +165,14 @@
         <if condition="$order['pay_method'] neq 1">
             <span class="span_right">
                 <label style="border: 1px solid #294068; border-radius: 5px;font-size: 14px;padding: 5px 10px;">
-                    <if condition="$order['uid'] eq 0">
+                    <if condition="$order['uid'] eq 0 and $supply['status'] neq 5">
                         {pigcms{:L('_ND_UNPAID_')}
+                    </if>
+                    <if condition="$order['uid'] eq 0 and $supply['pay_type'] eq 'moneris' and $supply['status'] eq 5">
+                        {pigcms{:L('_ND_PAID_')}
+                    </if>
+                    <if condition="$order['uid'] eq 0 and $supply['pay_type'] neq 'moneris' and $supply['status'] eq 5">
+                        {pigcms{:L('_ND_CASH_')}
                     </if>
                     <if condition="$order['uid'] neq 0 and $order['pay_method'] neq 1">
                         {pigcms{:L('_ND_CASH_')}
@@ -325,6 +331,16 @@
         </div>
     </div>
     <div class="amount_div">
+        <if condition="$order['uid'] neq 0 and $order['pay_method'] neq 1">
+        <div class="amount_sub" style="font-weight: bold;">
+            <span>
+                {pigcms{:L('_ND_DUEONDELIVERY_')}:
+            </span>
+            <span class="span_right">
+                ${pigcms{$supply['deliver_cash']|floatval}
+            </span>
+        </div>
+        </if>
         <div class="amount_sub">
             <span>{pigcms{:L('_ND_DELIVERYFEE_')}</span>
             <span class="span_right">
@@ -334,13 +350,13 @@
         <div class="amount_sub">
             <span>Bonus</span>
             <span class="span_right">
-                $0.00
+                ${pigcms{$supply['bonus']}
             </span>
         </div>
         <div class="amount_sub" style="font-weight: bold;">
             <span>Total</span>
             <span class="span_right">
-                ${pigcms{$order['freight_charge']+$order['tip_charge']|floatval}
+                ${pigcms{$order['freight_charge']+$order['tip_charge']+$supply['bonus']|floatval}
             </span>
         </div>
     </div>
@@ -499,7 +515,7 @@ $(document).ready(function(){
                         var content = "{pigcms{:L('_ND_CASHORDERNOTICE_')}";
                         if(pay_method == 1){
                             //content = "Order Completed! Delivery Fee: ${pigcms{$order.freight_charge}. Tips: ${pigcms{$order.tip_charge}. Thank you for your delivery!"
-                            content = "Order complete! Your earning is ${pigcms{$order['freight_charge']+$order['tip_charge']}. Thank you for your delivery!";
+                            content = "Order complete! Your earning is ${pigcms{$order['freight_charge']+$order['tip_charge']+$supply['bonus']}. Thank you for your delivery!";
                         }
                         layer.open({
                             title: ['{pigcms{:L("_ND_TISHI_")}', 'background-color:#ffa52d;color:#fff;'],

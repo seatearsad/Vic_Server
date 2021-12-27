@@ -64,7 +64,7 @@
 <include file="index_header" />
     <div class="order_title" style="background: #294068;">
             <span>
-                Arriving
+                Heading to the Customer
             </span>
             <span class="span_right"></span>
     </div>

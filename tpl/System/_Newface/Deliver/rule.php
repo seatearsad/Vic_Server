@@ -188,7 +188,15 @@
                                                 <input class="form-control" type="text" value="{pigcms{$vo.expiry}"  name="expiry_bonus_new-{pigcms{$vo.id}" onfocus="WdatePicker({isShowClear:false,readOnly:true,dateFmt:'yyyy-MM-dd',lang:'en'})" readonly="">
                                             </td>
                                             <td style="text-align: center">
-                                                <span class="label label-primary">Activate</span>
+                                                <if condition="$vo['status'] eq 0">
+                                                    <span class="label">Inactivate</span>
+                                                </if>
+                                                <if condition="$vo['status'] eq 1">
+                                                    <span class="label label-primary">Activate</span>
+                                                </if>
+                                                <if condition="$vo['status'] eq 2">
+                                                    <span class="label">Expiry</span>
+                                                </if>
                                             </td>
                                             <td style="text-align: center">
                                                 <a class="del_bonus" data-rowid="{pigcms{$vo.id}">X</a>
