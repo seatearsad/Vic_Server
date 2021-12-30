@@ -54,10 +54,10 @@
                                 </div>
                             </div>
                             <div class="form-group  row">
-                                <label class="col-sm-4 col-form-label">{pigcms{:L('E_DINE_IN')}</label>
+                                <label class="col-sm-4 col-form-label">{pigcms{:L('_SELF_LIFT_')}</label>
                                 <div class="col-sm-8">
-                                    <span class="cb-enable"><label class="cb-enable <if condition="$store['have_meal'] eq 1">selected</if>"><span>{pigcms{:L('_BACK_ON_')}</span><input type="radio" name="have_meal" value="1" <if condition="$store['have_meal'] eq 1">checked="checked"</if> /></label></span>
-                                    <span class="cb-disable"><label class="cb-disable <if condition="$store['have_meal'] eq 0">selected</if>"><span>{pigcms{:L('_BACK_OFF_')}</span><input type="radio" name="have_meal" value="0" <if condition="$store['have_meal'] eq 0">checked="checked"</if>/></label></span>
+                                    <span class="cb-enable"><label class="cb-enable <if condition="$store['is_pickup'] eq 1">selected</if>"><span>{pigcms{:L('_BACK_ON_')}</span><input type="radio" name="is_pickup" value="1" <if condition="$store['is_pickup'] eq 1">checked="checked"</if> /></label></span>
+                                    <span class="cb-disable"><label class="cb-disable <if condition="$store['is_pickup'] eq 0">selected</if>"><span>{pigcms{:L('_BACK_OFF_')}</span><input type="radio" name="is_pickup" value="0" <if condition="$store['is_pickup'] eq 0">checked="checked"</if>/></label></span>
                                 </div>
                             </div>
                             <div class="form-group  row">
@@ -106,6 +106,20 @@
                                 <label class="col-sm-4 col-form-label">{pigcms{:L('E_SERVICE_FEE')}</label>
                                 <div class="col-sm-8 input-group bootstrap-touchspin bootstrap-touchspin-injected">
                                     <input type="text" class="touchspin2 form-control" name="service_fee" size="5" value="{pigcms{$store['service_fee']}" validate="required:true,number:true,maxlength:6" />
+                                    <span class="input-group-addon bootstrap-touchspin-postfix input-group-append"><span class="input-group-text">%</span></span>
+                                </div>
+                            </div>
+                            <div class="form-group  row">
+                                <label class="col-sm-4 col-form-label">{pigcms{:L('E_SERVICE_FEE')}({pigcms{:L('_SELF_LIFT_')})</label>
+                                <div class="col-sm-8 input-group bootstrap-touchspin bootstrap-touchspin-injected">
+                                    <input type="text" class="touchspin2 form-control" name="pickup_service_fee" size="5" value="{pigcms{$store['pickup_service_fee']}" validate="required:true,number:true,maxlength:6" />
+                                    <span class="input-group-addon bootstrap-touchspin-postfix input-group-append"><span class="input-group-text">%</span></span>
+                                </div>
+                            </div>
+                            <div class="form-group  row">
+                                <label class="col-sm-4 col-form-label">{pigcms{:L('_BACK_PROPORTION_')}({pigcms{:L('_SELF_LIFT_')})</label>
+                                <div class="col-sm-8 input-group bootstrap-touchspin bootstrap-touchspin-injected">
+                                    <input type="text" class="touchspin2 form-control" name="pickup_proprotion" size="5" value="{pigcms{$store['pickup_proprotion']}" validate="required:true,number:true,maxlength:6" />
                                     <span class="input-group-addon bootstrap-touchspin-postfix input-group-append"><span class="input-group-text">%</span></span>
                                 </div>
                             </div>

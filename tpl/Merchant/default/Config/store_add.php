@@ -115,8 +115,8 @@
 								</div>
 								<if condition="$config['store_open_meal']">
 									<div class="form-group">
-										<label class="col-sm-1" for="have_meal">{pigcms{:L('_BACK_DINE_')}</label>
-										<select name="have_meal" id="have_meal">
+										<label class="col-sm-1" for="have_meal">{pigcms{:L('_SELF_LIFT_')}</label>
+										<select name="is_pickup" id="have_meal">
 											<option value="1" selected="selected">{pigcms{:L('ENABLE_BKADMIN')}</option>
 											<option value="0">{pigcms{:L('DISABLE_BKADMIN')}</option>
 										</select>

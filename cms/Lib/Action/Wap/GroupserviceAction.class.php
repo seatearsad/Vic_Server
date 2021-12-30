@@ -57,6 +57,8 @@ class GroupserviceAction extends BaseAction{
 			}
 			$new_group_list = sortArrayAsc($group_list,'Srange');
 		}elseif($content_type=='shop'){
+			$modelSelect = cookie('userModelSelect') ? cookie('userModelSelect') : 'delivery';
+
 			$key = '';
 			$sort = $_GET['sort'] ? $_GET['sort'] : 0;
 			if($sort == 0) $order = 'juli';
@@ -85,7 +87,7 @@ class GroupserviceAction extends BaseAction{
                 $_COOKIE['userLocationCity'] = $city_id;
             }
 
-            $where = array('deliver_type' => $deliver_type, 'order' => $order, 'lat' => $lat, 'long' => $long, 'cat_id' => $cat_id, 'cat_fid' => $cat_fid, 'page' => $page);
+            $where = array('deliver_type' => $deliver_type, 'order' => $order, 'lat' => $lat, 'long' => $long, 'cat_id' => $cat_id, 'cat_fid' => $cat_fid, 'page' => $page,'model'=>$modelSelect);
 			$key && $where['key'] = $key;
 
 			$lists = D('Merchant_store_shop')->get_list_by_option($where,3);
@@ -421,44 +423,46 @@ class GroupserviceAction extends BaseAction{
 			}
 			$new_group_list['store'] =$return;
 
-            $category = D('Shop_category')->field(true)->where(array('cat_fid'=>0,'cat_type'=>0,'city_id'=>$city_id))->order('cat_sort desc')->select();
-            if(count($category) == 0){
-                $category = D('Shop_category')->field(true)->where(array('cat_fid'=>0,'cat_type'=>0,'city_id'=>0))->order('cat_sort desc')->select();
-            }
-            $nav_list = array();
-            $categoryList = array();
-            foreach ($category as $v){
-                $nav['title'] = lang_substr($v['cat_name'],C('DEFAULT_LANG'));
-                $nav['image'] = 'https://www.tutti.app/static/images/category/'.$v['cat_url'].'.png?v=1.2.0';
-                $nav['id'] = $v['cat_id'];
-                $categoryList[] = $v['cat_id'];
-                $nav_list[] = $nav;
-            }
-            $arr['nav'] = $nav_list;
+			$category = D('Shop_category')->field(true)->where(array('cat_fid' => 0, 'cat_type' => 0, 'city_id' => $city_id))->order('cat_sort desc')->select();
+			if (count($category) == 0) {
+				$category = D('Shop_category')->field(true)->where(array('cat_fid' => 0, 'cat_type' => 0, 'city_id' => 0))->order('cat_sort desc')->select();
+			}
+			$nav_list = array();
+			$categoryList = array();
+			foreach ($category as $v) {
+				$nav['title'] = lang_substr($v['cat_name'], C('DEFAULT_LANG'));
+				$nav['image'] = 'https://www.tutti.app/static/images/category/' . $v['cat_url'] . '.png?v=1.2.0';
+				$nav['id'] = $v['cat_id'];
+				$categoryList[] = $v['cat_id'];
+				$nav_list[] = $nav;
+			}
+			$arr['nav'] = $nav_list;
 
-            $sub_where['cat_fid'] = array('in',$categoryList);
-            $sub_where['cat_status'] = 1;
-            $subCategory = D('Shop_category')->where($sub_where)->order('cat_sort desc')->select();
-            $sub_nav_list = array();
-            foreach ($subCategory as $v){
-                $sub_nav['title'] = lang_substr($v['cat_name'],C('DEFAULT_LANG'));
-                $cate_image_class = new category_image();
-                if($v['cat_img'] != '') {
-                    $sub_nav['image'] = $cate_image_class->get_image_by_path($v['cat_img']);
-                }else{
-                    $sub_nav['image'] = '';
-                }
-                $sub_nav['id'] = $v['cat_id'];
-                $sub_nav['fid'] = $v['cat_fid'];
+			$sub_where['cat_fid'] = array('in', $categoryList);
+			$sub_where['cat_status'] = 1;
+			$subCategory = D('Shop_category')->where($sub_where)->order('cat_sort desc')->select();
+			$sub_nav_list = array();
+			foreach ($subCategory as $v) {
+				$sub_nav['title'] = lang_substr($v['cat_name'], C('DEFAULT_LANG'));
+				$cate_image_class = new category_image();
+				if ($v['cat_img'] != '') {
+					$sub_nav['image'] = $cate_image_class->get_image_by_path($v['cat_img']);
+				} else {
+					$sub_nav['image'] = '';
+				}
+				$sub_nav['id'] = $v['cat_id'];
+				$sub_nav['fid'] = $v['cat_fid'];
 
-                $sub_nav_list[] = $sub_nav;
-            }
-            $new_group_list['sub_nav'] = $sub_nav_list;
+				$sub_nav_list[] = $sub_nav;
+			}
+			$new_group_list['sub_nav'] = $sub_nav_list;
+            if($modelSelect == 'delivery') {
+				$recommend_list = $this->getRecommendList($city_id, $lat, $long);
 
-            $recommend_list = $this->getRecommendList($city_id,$lat,$long);
-
-            $new_group_list['recommend'] = $recommend_list;
-
+				$new_group_list['recommend'] = $recommend_list;
+            }else{
+                $new_group_list['recommend'] = array();
+			}
             $new_group_list['has_more'] = $lists['total'] > $page*5 ? true : false;
 			//echo json_encode(array('store_list' => $return, 'has_more' => $lists['has_more'] ? true : false));
 		}elseif($content_type=='meal'){

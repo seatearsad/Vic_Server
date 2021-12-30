@@ -411,6 +411,17 @@
         #recommendList ul::-webkit-scrollbar,#category ul::-webkit-scrollbar,.store_img ul::-webkit-scrollbar{
             display: none;
         }
+        .model_select{
+            text-align: center;
+            padding: 10px auto;
+        }
+        .model_select span{
+            margin-left: 10px;
+            cursor: pointer;
+        }
+        .model_select .active{
+            color: #ffa52d;
+        }
     </style>
     <include file="Public:facebook"/>
 </head>
@@ -450,6 +461,10 @@
                 </volist-->
             </ul>
             <div class="cate_right"></div>
+        </div>
+        <div class="model_select">
+            <span class="active" data-type="delivery">Delivery</span>
+            <span data-type="pickup">Pick up</span>
         </div>
         <div id="recommendList"></div>
         <!--div class="gray_line"></div-->

@@ -22,6 +22,9 @@ class Merchant_store_shopModel extends Model
 
 		if($menu_version != -1) $condition_where .= " AND s.menu_version=".$menu_version;
 
+		if($where['model'] == 'delivery') $condition_where .= " AND s.have_shop=1";
+		else if($where['model'] == 'pickup') $condition_where .= " AND s.is_pickup=1";
+
 		if (C('config.store_shop_auth') == 1) {
 			$condition_where .= " AND s.auth>2";
 		}

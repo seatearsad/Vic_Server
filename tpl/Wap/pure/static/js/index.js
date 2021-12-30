@@ -37,6 +37,23 @@ $(function(){
 			}
 		},1000);
 	}
+
+
+
+	$('.model_select').children('span').click(function () {
+		$(this).addClass('active').siblings().removeClass('active');
+		if($(this).data('type') != $.cookie('userModelSelect')) $.cookie('userModelSelect', $(this).data('type'),{expires:700,path:"/"});
+
+        like_page = 1;
+		getRecommendList();
+    });
+
+	if(typeof($.cookie('userModelSelect')) != 'undefined'){
+        $('.model_select').children('span').each(function () {
+            if($(this).data('type') == $.cookie('userModelSelect')) $(this).addClass('active').siblings().removeClass('active');
+        });
+	}
+
 	var upIcon = $("#up-icon"),
 		downIcon = $("#pullDown");
 	// myScroll = new IScroll('#container', { probeType: 3,disableMouse:true,disablePointer:true,mouseWheel: false,scrollX: false, scrollY:true,click:false,scrollbars:true,shrinkScrollbars: 'scale',resizeScrollbars:false,fadeScrollbars:true});

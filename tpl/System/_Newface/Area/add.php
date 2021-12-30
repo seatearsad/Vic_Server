@@ -88,6 +88,34 @@
                                         - <input type="text" class="input fl area_time" placeholder="00:00:00" value="{pigcms{$now_area['end_time']}" name="end_time" validate="" />
                                     </div>
                                 </div>
+                                <div class="form-group  row">
+                                    <label class="col-sm-5 col-form-label">{pigcms{:L('E_SERVICE_FEE')}(Delivery)</label>
+                                    <div class="col-sm-7 input-group bootstrap-touchspin bootstrap-touchspin-injected">
+                                        <input type="text" class="touchspin2 form-control" name="delivery_service_fee" size="5" value="0" validate="required:true,number:true,maxlength:6" />
+                                        <span class="input-group-addon bootstrap-touchspin-postfix input-group-append"><span class="input-group-text">%</span></span>
+                                    </div>
+                                </div>
+                                <div class="form-group  row">
+                                    <label class="col-sm-5 col-form-label">{pigcms{:L('_BACK_PROPORTION_')}({Delivery)</label>
+                                    <div class="col-sm-7 input-group bootstrap-touchspin bootstrap-touchspin-injected">
+                                        <input type="text" class="touchspin2 form-control" name="delivery_proprotion" size="5" value="0" validate="required:true,number:true,maxlength:6" />
+                                        <span class="input-group-addon bootstrap-touchspin-postfix input-group-append"><span class="input-group-text">%</span></span>
+                                    </div>
+                                </div>
+                                <div class="form-group  row">
+                                    <label class="col-sm-5 col-form-label">{pigcms{:L('E_SERVICE_FEE')}({pigcms{:L('_SELF_LIFT_')})</label>
+                                    <div class="col-sm-7 input-group bootstrap-touchspin bootstrap-touchspin-injected">
+                                        <input type="text" class="touchspin2 form-control" name="pickup_service_fee" size="5" value="0" validate="required:true,number:true,maxlength:6" />
+                                        <span class="input-group-addon bootstrap-touchspin-postfix input-group-append"><span class="input-group-text">%</span></span>
+                                    </div>
+                                </div>
+                                <div class="form-group  row">
+                                    <label class="col-sm-5 col-form-label">{pigcms{:L('_BACK_PROPORTION_')}({pigcms{:L('_SELF_LIFT_')})</label>
+                                    <div class="col-sm-7 input-group bootstrap-touchspin bootstrap-touchspin-injected">
+                                        <input type="text" class="touchspin2 form-control" name="pickup_proprotion" size="5" value="0" validate="required:true,number:true,maxlength:6" />
+                                        <span class="input-group-addon bootstrap-touchspin-postfix input-group-append"><span class="input-group-text">%</span></span>
+                                    </div>
+                                </div>
                             </if>
                             <div class="btn tutti_hidden_obj">
                                 <input type="submit" name="dosubmit" id="dosubmit" value="提交" class="button" />
