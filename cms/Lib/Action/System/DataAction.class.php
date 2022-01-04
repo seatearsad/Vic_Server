@@ -866,14 +866,23 @@ class DataAction extends BaseAction
             $begin_time = strtotime($_GET['begin_time']." 00:00:00");
             $end_time = strtotime($_GET['end_time']." 23:59:59");
 
-            $where['add_time'] = array('between',array($begin_time,$end_time));
+            $where['u.add_time'] = array('between',array($begin_time,$end_time));
+
+            $city_name = "";
+            if($_GET['city_id']){
+                $where['a.city'] = $_GET['city_id'];
+                $where['a.default'] = 1;
+                $area = D('Area')->where(array('area_id'=>$_GET['city_id']))->find();
+                $city_name = $area['area_name'];
+                if($city_name) $title .= '('.$city_name.')';
+            }
 
             if($_GET['status'] != -1){
-                $where['status'] = $_GET['status'];
+                $where['u.status'] = $_GET['status'];
             }
 
             $database_user = D('User');
-            $count_user = $database_user->where($where)->count();
+            $count_user = $database_user->join(' as u left join '.C('DB_PREFIX').'user_adress as a on a.uid=u.uid')->where($where)->count();
 
             $length = ceil($count_user / 1000);
             for ($i = 0; $i < $length; $i++) {
@@ -906,7 +915,7 @@ class DataAction extends BaseAction
 //                $objActSheet->setCellValue('R1', '账号是否正常');
 
 
-                $user_list = $database_user->field(true)->where($where)->limit($i * 1000 . ',1000')->order('add_time desc')->select();
+                $user_list = $database_user->field('u.*,a.city')->join(' as u left join '.C('DB_PREFIX').'user_adress as a on a.uid=u.uid')->where($where)->limit($i * 1000 . ',1000')->order('add_time desc')->select();
 
                 if (!empty($user_list)) {
                     import('ORG.Net.IpLocation');
