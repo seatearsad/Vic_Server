@@ -30,7 +30,7 @@
     }
     section{
         position: absolute;
-        top: 2%;
+        top: 7%;
         width: 100%;
         font-size: 10px;
         color: #666666;

@@ -30,7 +30,7 @@
     }
     section{
         position: absolute;
-        top: 2%;
+        top: 7%;
         width: 100%;
         font-size: 12px;
         color: #666666;
@@ -464,12 +464,6 @@
 
         bag_get_id = "";
 
-        if (select_buy_mode==2){
-            show_shipping_fee = shipping_fee;
-        }else{
-            show_shipping_fee = 0;
-        }
-
         $('body').find('.btn_number').each(function () {
             if($(this).html().replace(/\s*/g,"") == "") $(this).html("0");
 
@@ -482,6 +476,13 @@
             if(num > 0) {
                 if(bag_get_id != "") bag_get_id += "|";
                 bag_get_id += $(this).data("bagid") + "," + num;
+                if (select_buy_mode==2){
+                    show_shipping_fee = shipping_fee;
+                }else{
+                    show_shipping_fee = 0;
+                }
+            }else{
+                show_shipping_fee = 0;
             }
         });
 
@@ -525,6 +526,8 @@
                 $("#pickup_div").hide();
                 select_buy_mode=2;
             }
+
+            set_bag_id_number();
         });
 
         init_save_user_data();
