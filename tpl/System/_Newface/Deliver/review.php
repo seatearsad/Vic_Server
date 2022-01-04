@@ -74,7 +74,8 @@
                                 <th>{pigcms{:L('_BACK_PHONE_NUM_')}</th>
                                 <th>{pigcms{:L('_BACK_EMAIL_')}</th>
                                 <th>{pigcms{:L('_BACK_REG_TIME_')}</th>
-                                <th class="textcenter">{pigcms{:L('_BACK_STATUS_')}</th>
+                                <th class="textcenter">Application Status</th>
+                                <th class="textcenter">Bag Status</th>
                                 <th class="textcenter">{pigcms{:L('_BACK_CZ_')}</th>
                             </tr>
                             </thead>
@@ -89,36 +90,13 @@
                                         <td>{pigcms{$vo.email}</td>
                                         <td>{pigcms{$vo.create_time|date='Y-m-d H:i:s',###}</td>
                                         <td class="textcenter">
-                                            <if condition="$vo['bag_is_recruit'] eq 0 and $vo['reg_status'] eq 1">
+                                            <if condition="$vo['city_id'] eq 0 or ($vo['bag_is_recruit'] eq 0 and $vo['reg_status'] eq 1)">
                                                 <font color="red">On Waitlist</font>
                                                 <else />
                                                 <if condition="$vo['reg_status'] neq 4 and $vo['reg_status'] neq 5 ">
                                                     <font color="red">{pigcms{:L('_BACK_REGISTERED_')}</font>
                                                 </if>
                                             </if>
-
-
-                                            <if condition="$vo['reg_status'] eq 4">
-                                                <font color="green">
-                                                    <if condition="$vo['bag_get_type'] eq -1 and $vo['is_online_pay'] eq 0">
-                                                        <font color="red">Incomplete (Own Bag)</font>
-                                                    </if>
-                                                    <if condition="$vo['bag_get_type'] eq -1 and $vo['is_online_pay'] eq 1">
-                                                        <font color="orange">Waiting for Bag Review</font>
-                                                    </if>
-                                                    <if condition="$vo['bag_get_type'] neq -1 and $vo['is_online_pay'] eq 0">
-                                                        <font color="red">Incomplete (Purchase)</font>
-                                                    </if>
-                                                    <if condition="$vo['bag_get_type'] eq 1 and $vo['is_online_pay'] eq 1">
-                                                        <font color="orange">Paid, Waiting for Shipping</font>
-                                                    </if>
-                                                    <if condition="$vo['bag_get_type'] eq 2 and $vo['is_online_pay'] eq 1">
-                                                        <font color="green">Paid, Waiting for Pickup</font>
-                                                    </if>
-                                                </font>
-                                                |
-                                            </if>
-
                                             <if condition="$vo['reg_status'] eq 5">
                                                 <font color="green">
                                                     <if condition="$vo['bag_get_type'] eq -1">
@@ -150,6 +128,27 @@
                                                 </if>
                                             </if>
 
+                                        </td>
+                                        <td class="textcenter">
+                                            <if condition="$vo['reg_status'] eq 4">
+                                                <font color="green">
+                                                    <if condition="$vo['bag_get_type'] eq -1 and $vo['is_online_pay'] eq 0">
+                                                        <font color="red">Incomplete (Own Bag)</font>
+                                                    </if>
+                                                    <if condition="$vo['bag_get_type'] eq -1 and $vo['is_online_pay'] eq 1">
+                                                        <font color="orange">Waiting for Bag Review</font>
+                                                    </if>
+                                                    <if condition="$vo['bag_get_type'] neq -1 and $vo['is_online_pay'] eq 0">
+                                                        <font color="red">Incomplete (Purchase)</font>
+                                                    </if>
+                                                    <if condition="$vo['bag_get_type'] eq 1 and $vo['is_online_pay'] eq 1">
+                                                        <font color="orange">Paid, Waiting for Shipping</font>
+                                                    </if>
+                                                    <if condition="$vo['bag_get_type'] eq 2 and $vo['is_online_pay'] eq 1">
+                                                        <font color="green">Paid, Waiting for Pickup</font>
+                                                    </if>
+                                                </font>
+                                            </if>
                                         </td>
                                         <td class="textcenter">　
                                             <a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('Deliver/user_view',array('uid'=>$vo['uid']))}','{pigcms{:L(\'_BACK_EDIT_COURIER_\')}',680,560,true,false,false,editbtn,'edit',true);"><button class="btn btn-white text-grey" type="button">{pigcms{:L('_BACK_EDIT_')}</button></a>

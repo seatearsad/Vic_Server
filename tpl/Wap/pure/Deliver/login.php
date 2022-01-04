@@ -46,7 +46,7 @@
         color: #666666;
         line-height: 30px;
         padding-left: 30px;
-        margin-top: 10px;
+        margin-top: 25px;
         margin-left: 10px;
         background-image:url('{pigcms{$static_path}img/language.png');
         background-repeat: no-repeat;

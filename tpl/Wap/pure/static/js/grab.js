@@ -119,6 +119,13 @@ function list_detail(lat, lng)
                 });
             });
 
+            $('#gray_count').html(result.gray_count + " Pending");
+            $('#deliver_count').html(result.deliver_count + " in Progress");
+            $('#finish_count').html(result.finish_count);
+            if (result.work_status == 1) {
+                window.location.reload();
+            }
+
             loadRoute(result.list[0]);
         }
 	}, 'json');

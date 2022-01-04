@@ -302,21 +302,24 @@
     <if condition="$deliver_session['reg_status'] eq 0 and $deliver_session['group'] eq 1">
         <script type="text/javascript" src="{pigcms{$static_path}js/grab.js?211" charset="utf-8"></script>
         <script>
+            var grab_timer,order_timer;
             $('#grab_list').html('');
 
             $('#gray_count').html("0 Pending");
             $('#deliver_count').html("0 in Progress");
 
-            $.get("{pigcms{:U('Deliver/index_count')}", function(response){
-                if (response.err_code == false) {
-                    $('#gray_count').html(response.gray_count + " Pending");
-                    $('#deliver_count').html(response.deliver_count + " in Progress");
-                    $('#finish_count').html(response.finish_count);
-                    if(response.work_status == 1){
-                        window.location.reload();
+            function getOrderNum() {
+                $.get("{pigcms{:U('Deliver/index_count')}", function (response) {
+                    if (response.err_code == false) {
+                        $('#gray_count').html(response.gray_count + " Pending");
+                        $('#deliver_count').html(response.deliver_count + " in Progress");
+                        $('#finish_count').html(response.finish_count);
+                        if (response.work_status == 1) {
+                            window.location.reload();
+                        }
                     }
-                }
-            }, 'json');
+                }, 'json');
+            }
 
             // setInterval(function(){
             //     $.get("{pigcms{:U('Deliver/index_count')}", function(response){
@@ -341,14 +344,21 @@
 
                     if(show_id == 'deliver_middle_div') {
                         loadProcess();
+                        order_timer = setInterval(getOrderNum, 2000);
+                        clearInterval(grab_timer);
                         location.hash = 1;
                     }
                     else {
-                        getList();
+                        grab_timer = setInterval(getList, 2000);
+                        clearInterval(order_timer);
                         location.hash = 0;
                     }
                 });
             });
+            
+            function gotoPending() {
+                $('#bottom_nav').children('span').first().trigger('click');
+            }
 
             function loadProcess(){
                 $.post("{pigcms{:U('Deliver/get_process')}",{"status":0,'lat':lat, 'lng':lng},function(result){
@@ -366,6 +376,11 @@
                             var order_id = $(this).data('id');
                             location.href = "{pigcms{:U('Wap/Deliver/detail', array('supply_id'=>'"+order_id+"'))}";
                         });
+                    }else{
+                        var insertHtml = '<div class="wait_div" style="margin-top: 50px;font-weight: bold;">No order accepted yet</div>';
+                        insertHtml += '<div class="wait_div" onclick="gotoPending();" style="margin: 20px 10%;background-color: #294068;color:white;border-radius: 8px;line-height: 45px;">Go To Pending Orders</div>';
+
+                        $('#deliver_middle_div').html(insertHtml);
                     }
                 },'json');
             }
@@ -524,7 +539,7 @@
             if(curr_hash == "1"){
                 $('#deliver_count').trigger('click');
             }else{
-                getList();
+                grab_timer = setInterval(getList, 2000);
             }
         }
 
@@ -626,68 +641,83 @@
             map.fitBounds(bounds);
         }
 
+        var record_id;
         function loadRoute(orderDetail) {
-            var directionsService = new google.maps.DirectionsService();
-            var directionsDisplay = new google.maps.DirectionsRenderer();
-            //var haight = self_position;
-            //var oceanBeach = new google.maps.LatLng({pigcms{$route['destination_lat']?$route['destination_lat']:0}, {pigcms{$route['destination_lng']?$route['destination_lng']:0});
-            var user_pos = {lat:parseFloat(orderDetail.aim_lat),lng:parseFloat(orderDetail.aim_lnt)};
-            var store_pos = {lat:parseFloat(orderDetail.from_lat),lng:parseFloat(orderDetail.from_lnt)};
-            
-            user_pos = new google.maps.LatLng(user_pos);
-            store_pos = new google.maps.LatLng(store_pos);
+            if(record_id != orderDetail.supply_id) {
+                record_id = orderDetail.supply_id;
 
-            directionsDisplay.setMap(map);
+                var directionsService = new google.maps.DirectionsService();
+                var directionsDisplay = new google.maps.DirectionsRenderer();
+                //var haight = self_position;
+                //var oceanBeach = new google.maps.LatLng({pigcms{$route['destination_lat']?$route['destination_lat']:0}, {pigcms{$route['destination_lng']?$route['destination_lng']:0});
+                var user_pos = {lat: parseFloat(orderDetail.aim_lat), lng: parseFloat(orderDetail.aim_lnt)};
+                var store_pos = {lat: parseFloat(orderDetail.from_lat), lng: parseFloat(orderDetail.from_lnt)};
 
-            // var polyline = new google.maps.Polyline({
-            //     strokeColor: '#C00',
-            //     strokeOpacity: 0.7,
-            //     strokeWeight: 5
-            // });
+                user_pos = new google.maps.LatLng(user_pos);
+                store_pos = new google.maps.LatLng(store_pos);
 
-            var lineSymbol = {
-                path: "M 0,-1 0,1",
-                strokeOpacity: 1,
-                scale: 3,
-            };
+                directionsDisplay.setMap(map);
 
-            var line = new google.maps.Polyline({
-                strokeOpacity:0,
-                strokeColor:"#FFAC1C",
-                icons:[{
-                    icon: lineSymbol,
-                    offset:"0",
-                    repeat:"25px",
-                }]
-            });
+                // var polyline = new google.maps.Polyline({
+                //     strokeColor: '#C00',
+                //     strokeOpacity: 0.7,
+                //     strokeWeight: 5
+                // });
 
-            var marker_user = new google.maps.Marker({
-                position: user_pos,
-                map: map,
-                scaledSize: new google.maps.Size(10, 10),
-                icon:{url:"{pigcms{$static_path}img/deliver_menu/customer_pin_5.png",scaledSize: new google.maps.Size(35, 35)}
-            });
+                var lineSymbol = {
+                    path: "M 0,-1 0,1",
+                    strokeOpacity: 1,
+                    scale: 3,
+                };
 
-            var marker_store = new google.maps.Marker({
-                position: store_pos,
-                map: map,
-                icon:{url:"{pigcms{$static_path}img/deliver_menu/restaurant_pin_5.png",scaledSize: new google.maps.Size(35, 35)},
-            });
+                var line = new google.maps.Polyline({
+                    strokeOpacity: 0,
+                    strokeColor: "#294068",
+                    icons: [{
+                        icon: lineSymbol,
+                        offset: "0",
+                        repeat: "15px",
+                    }]
+                });
 
-            directionsDisplay.setOptions({polylineOptions: line,suppressMarkers:[marker_store,marker_user]});
+                var marker_user = new google.maps.Marker({
+                    position: user_pos,
+                    map: map,
+                    scaledSize: new google.maps.Size(10, 10),
+                    icon: {
+                        url: "{pigcms{$static_path}img/deliver_menu/customer_pin_6.png",
+                        scaledSize: new google.maps.Size(35, 35)
+                    }
+                });
 
-            //var selectedMode = document.getElementById('biz-map').value;
-            var request = {
-                origin: store_pos,
-                destination: user_pos,
-                travelMode: 'DRIVING',
-            };
+                var marker_store = new google.maps.Marker({
+                    position: store_pos,
+                    map: map,
+                    icon: {
+                        url: "{pigcms{$static_path}img/deliver_menu/restaurant_pin_6.png",
+                        scaledSize: new google.maps.Size(35, 35)
+                    },
+                });
 
-            directionsService.route(request, function (response, status) {
-                if (status == 'OK') {
-                    directionsDisplay.setDirections(response);
-                }
-            });
+                directionsDisplay.setOptions({polylineOptions: line, suppressMarkers: [marker_store, marker_user]});
+
+                //var selectedMode = document.getElementById('biz-map').value;
+                var request = {
+                    origin: store_pos,
+                    destination: user_pos,
+                    travelMode: 'DRIVING',
+                };
+
+                directionsService.route(request, function (response, status) {
+                    if (status == 'OK') {
+                        directionsDisplay.setDirections(response);
+                        // var mapOptions = {
+                        //     zoom: map.getZoom()+20,
+                        // };
+                        // map.update(mapOptions);
+                    }
+                });
+            }
         }
     </script>
 </body>

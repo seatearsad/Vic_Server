@@ -160,7 +160,7 @@ return array(
 
     //MY
     '_B_LOGIN_SUCESS_'                      =>  'Logged in successful',
-    '_B_LOGIN_PHONENOHAVE_'                 =>  'This number is alread linked to a Tutti account. Please try another one or contact support.',
+    '_B_LOGIN_PHONENOHAVE_'                 =>  'This number is already linked to a Tutti account. Please try another one or contact support.',
     '_B_LOGIN_ENTERPHONENO_'                =>  'Please enter your phone number',
     '_B_LOGIN_ENTERKEY_'                    =>  'Please enter your password',
     '_B_LOGIN_ENTERGOODNO_'                 =>  'Incorrect phone number format, numbers only',

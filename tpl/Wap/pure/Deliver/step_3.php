@@ -280,7 +280,7 @@
 
 
     <div id="pickup_div" style="display: none">
-        <div class="step_title">You’ll pick up your bag in {pigcms{$city.area_name}!</div>
+        <div class="step_title">You’ll pick up your bag in {pigcms{$city.bag_address_name}!</div>
         <div class="memo">
             You will receive an email with the exact address and a link to book a pick-up time slot.
         </div>
@@ -456,8 +456,6 @@
 
     var bag_get_id = "";
 
-    set_bag_id_number();
-
     function set_bag_id_number(){
         var sub_total = 0;
         var show_shipping_fee = 0;
@@ -465,13 +463,20 @@
         var tax_price = 0;
 
         bag_get_id = "";
+
+        if (select_buy_mode==2){
+            show_shipping_fee = shipping_fee;
+        }else{
+            show_shipping_fee = 0;
+        }
+
         $('body').find('.btn_number').each(function () {
             if($(this).html().replace(/\s*/g,"") == "") $(this).html("0");
 
             var bag_price = parseFloat($(this).data("bagprice"));
             var bag_tax_rate = parseFloat($(this).data("bagtaxrate"));
             var num = parseInt($(this).html());
-            tax_price += bag_price * bag_tax_rate.toFixed(2) * num;
+            tax_price += parseFloat((bag_price * bag_tax_rate * num).toFixed(2));
             sub_total += parseFloat((bag_price * num).toFixed(2));
             //console.log("bag_price",bag_price);
             if(num > 0) {
@@ -480,11 +485,7 @@
             }
         });
 
-        if (select_buy_mode==2){
-            show_shipping_fee = shipping_fee;
-        }else{
-            show_shipping_fee = 0;
-        }
+        tax_price += parseFloat((show_shipping_fee * 0.05).toFixed(2));
 
         total = parseFloat((sub_total + show_shipping_fee + tax_price).toFixed(2));
 
@@ -527,6 +528,8 @@
         });
 
         init_save_user_data();
+
+        set_bag_id_number();
 
         $('.btn_minus,.btn_plus').click(function(){
             var bagid = $(this).data('bagid');

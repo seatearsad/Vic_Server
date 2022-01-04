@@ -203,7 +203,6 @@ class DeliverAction extends BaseAction
 	
 	public function index() 
 	{
-
 	    //$deliver = D('Deliver_user')->field('reg_status')->where(['uid' => $this->deliver_session['uid']])->find();
 	    //if($deliver['reg_status'] != 0)
         //    header('Location:'.U('Deliver/step_'.$deliver['reg_status']));
@@ -366,7 +365,7 @@ class DeliverAction extends BaseAction
             $this->display();
         }
 	}
-	public function index_count()
+	public function index_count($from = 0)//如果其他的调用 from=1
 	{
         $city_id = $this->deliver_session['city_id'];
         $city = D('Area')->where(array('area_id'=>$city_id))->find();
@@ -409,7 +408,10 @@ class DeliverAction extends BaseAction
 		$deliver_count = D('Deliver_supply')->where(array('uid' => $this->deliver_session['uid'], 'status' => array(array('gt', 0), array('lt', 5))))->count();
 		$finish_count = D('Deliver_supply')->where(array('uid' => $this->deliver_session['uid'], 'status' => 5))->count();
 
-		exit(json_encode(array('err_code' => false, 'gray_count' => $gray_count, 'deliver_count' => $deliver_count, 'finish_count' => $finish_count,'work_status'=>$this->deliver_session['work_status'])));
+		if($from == 0)
+		    exit(json_encode(array('err_code' => false, 'gray_count' => $gray_count, 'deliver_count' => $deliver_count, 'finish_count' => $finish_count,'work_status'=>$this->deliver_session['work_status'])));
+		else
+		    return array('gray_count' => $gray_count, 'deliver_count' => $deliver_count, 'finish_count' => $finish_count,'work_status'=>$this->deliver_session['work_status']);
 	}
 	
 	private function rollback($supply_id, $status)
@@ -781,7 +783,10 @@ class DeliverAction extends BaseAction
                 $store = D('Merchant_store')->field(true)->where(array('store_id'=>$val['store_id']))->find();
                 $val['store_name'] = lang_substr($store['name'],C('DEFAULT_LANG'));
 			}
-			exit(json_encode(array('err_code' => false, 'list' => $list)));
+
+			$num_arr = $this->index_count(1);
+			//array('gray_count' => $gray_count, 'deliver_count' => $deliver_count, 'finish_count' => $finish_count,'work_status'=>$this->deliver_session['work_status']);
+			exit(json_encode(array('err_code' => false, 'list' => $list,'gray_count' => $num_arr['gray_count'], 'deliver_count' => $num_arr['deliver_count'], 'finish_count' => $num_arr['finish_count'],'work_status'=>$num_arr['work_status'])));
 		}
 		
 		//$this->display();
@@ -928,7 +933,10 @@ class DeliverAction extends BaseAction
             $pick_num = $this->deliver_supply->where(array('status'=>3,'uid'=>$uid))->count();
             $route_num = $this->deliver_supply->where(array('status'=>4,'uid'=>$uid))->count();
 
-            exit(json_encode(array('error_code' => false, 'list' => $list,'anum'=>$acc_num,'pnum'=>$pick_num,'rnum'=>$route_num)));
+            if(count($list) == 0)
+                exit(json_encode(array('error_code' => true, 'list' => $list,'anum'=>$acc_num,'pnum'=>$pick_num,'rnum'=>$route_num)));
+            else
+                exit(json_encode(array('error_code' => false, 'list' => $list,'anum'=>$acc_num,'pnum'=>$pick_num,'rnum'=>$route_num)));
         }
     }
 	
@@ -2725,7 +2733,7 @@ class DeliverAction extends BaseAction
 
             $deliver = D('Deliver_user')->field(true)->where(array('phone'=>$data['phone']))->find();
 	        if($deliver){
-                $result = array('error_code' => true, 'msg' => L('_B_LOGIN_PHONENOHAVE_'));
+                $result = array('error_code' => true, 'msg' => 'This number is already registered. Please sign in directly or try a different number.');
                 $this->ajaxReturn($result);
             }
 
@@ -2952,7 +2960,7 @@ class DeliverAction extends BaseAction
                         $this->sendMail($now_user);
                         $result = array('error_code' => false, 'msg' => L('_PAYMENT_SUCCESS_'));
                     } else {
-                        $result = array('error_code' => true, 'msg' => $mpgResponse->getMessage());
+                        $result = array('error_code' => true, 'msg' => "Payment Declined");
                     }
                 }
             }
