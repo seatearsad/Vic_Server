@@ -53,7 +53,7 @@ $(function(){
 function getList() {
     var ua = navigator.userAgent;
     if(!ua.match(/TuttiDeliver/i)) {
-        try {
+        if(document.location.protocol == 'https') {
             navigator.geolocation.getCurrentPosition(function (position) {
                 console.log(position);
                 list_detail(position.coords.latitude, position.coords.longitude);
@@ -61,7 +61,7 @@ function getList() {
                 if (error)
                     list_detail(lat, lng);
             });
-        }catch (e) {
+        }else{
             list_detail(lat, lng);
         }
 		return false;
