@@ -2512,6 +2512,9 @@ class StorestaffAction extends BaseAction
             }
             $_POST['address_id']=$user_add;//客户地址id
 
+            $_POST['lng']=sprintf("%10.6f", $_POST['longitude']);
+            $_POST['lat']=sprintf("%10.6f", $_POST['latitude']);
+
             //**代客下单 用discount_price记录税费**
             //**代客下单 用packing_charge记录押金**
             $order_id = M('Shop_order')->data($_POST)->add();
