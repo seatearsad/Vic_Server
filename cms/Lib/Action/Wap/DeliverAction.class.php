@@ -718,8 +718,10 @@ class DeliverAction extends BaseAction
                 }
             }
 
+            $num_arr = $this->index_count(1);
+
 			if (empty($list)) {
-				exit(json_encode(array('err_code' => true)));
+				exit(json_encode(array('err_code' => true,'gray_count' => $num_arr['gray_count'], 'deliver_count' => $num_arr['deliver_count'], 'finish_count' => $num_arr['finish_count'],'work_status'=>$num_arr['work_status'])));
 			}
 			
 			foreach ($list as &$val) {
@@ -783,8 +785,6 @@ class DeliverAction extends BaseAction
                 $store = D('Merchant_store')->field(true)->where(array('store_id'=>$val['store_id']))->find();
                 $val['store_name'] = lang_substr($store['name'],C('DEFAULT_LANG'));
 			}
-
-			$num_arr = $this->index_count(1);
 			//array('gray_count' => $gray_count, 'deliver_count' => $deliver_count, 'finish_count' => $finish_count,'work_status'=>$this->deliver_session['work_status']);
 			exit(json_encode(array('err_code' => false, 'list' => $list,'gray_count' => $num_arr['gray_count'], 'deliver_count' => $num_arr['deliver_count'], 'finish_count' => $num_arr['finish_count'],'work_status'=>$num_arr['work_status'])));
 		}

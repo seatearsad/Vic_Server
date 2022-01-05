@@ -53,13 +53,17 @@ $(function(){
 function getList() {
     var ua = navigator.userAgent;
     if(!ua.match(/TuttiDeliver/i)) {
-		navigator.geolocation.getCurrentPosition(function (position) {
-			console.log(position);
-			list_detail(position.coords.latitude, position.coords.longitude);
-		},function(error) {
-			if(error)
-				list_detail(lat,lng);
-		});
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                console.log(position);
+                list_detail(position.coords.latitude, position.coords.longitude);
+            }, function (error) {
+                if (error)
+                    list_detail(lat, lng);
+            });
+        }else {
+            list_detail(lat, lng);
+        }
 		return false;
     }else{
         list_detail(lat,lng);
@@ -119,14 +123,14 @@ function list_detail(lat, lng)
                 });
             });
 
-            $('#gray_count').html(result.gray_count + " Pending");
-            $('#deliver_count').html(result.deliver_count + " in Progress");
-            $('#finish_count').html(result.finish_count);
-            if (result.work_status == 1) {
-                window.location.reload();
-            }
-
             loadRoute(result.list[0]);
+        }
+
+        $('#gray_count').html(result.gray_count + " Pending");
+        $('#deliver_count').html(result.deliver_count + " in Progress");
+        $('#finish_count').html(result.finish_count);
+        if (result.work_status == 1) {
+            window.location.reload();
         }
 	}, 'json');
 }

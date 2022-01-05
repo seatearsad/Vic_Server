@@ -300,7 +300,7 @@
 
     <script src="{pigcms{$static_public}js/laytpl.js"></script>
     <if condition="$deliver_session['reg_status'] eq 0 and $deliver_session['group'] eq 1">
-        <script type="text/javascript" src="{pigcms{$static_path}js/grab.js?211" charset="utf-8"></script>
+        <script type="text/javascript" src="{pigcms{$static_path}js/grab.js?212" charset="utf-8"></script>
         <script>
             var grab_timer,order_timer;
             $('#grab_list').html('');
@@ -317,6 +317,8 @@
                         if (response.work_status == 1) {
                             window.location.reload();
                         }
+
+                        if(response.deliver_count == 0) loadPosition();
                     }
                 }, 'json');
             }
@@ -381,6 +383,8 @@
                         insertHtml += '<div class="wait_div" onclick="gotoPending();" style="margin: 20px 10%;background-color: #294068;color:white;border-radius: 8px;line-height: 45px;">Go To Pending Orders</div>';
 
                         $('#deliver_middle_div').html(insertHtml);
+
+                        loadPosition();
                     }
                 },'json');
             }
@@ -586,6 +590,8 @@
                 map: map,
                 //icon:"{pigcms{$static_path}img/deliver_menu/customer_pin_3.png"
             });
+
+            map.setCenter(self_position);
         }
 
         function run_update_location() {
