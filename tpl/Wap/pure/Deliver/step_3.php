@@ -441,13 +441,15 @@
             $(".img_0").css("height","100px");
             $("#own_bag_input").val(response.file);
         }else{
-            alert(response.info);
+            //alert(response.info);
+            layer.open({title:"{pigcms{:L('_B_D_LOGIN_TIP2_')}",content:response.info, btn:["{pigcms{:L('_B_D_LOGIN_CONIERM_')}"]});
         }
     });
 
     uploader.on('uploadError', function(file,reason){
         $('.loading'+file.id).remove();
-        alert('上传失败！请重试。');
+        //alert('上传失败！请重试。');
+        layer.open({title:"{pigcms{:L('_B_D_LOGIN_TIP2_')}",content:"Fail", btn:["{pigcms{:L('_B_D_LOGIN_CONIERM_')}"]});
     });
 
     var select_buy_mode = 0;
@@ -564,9 +566,14 @@
                 is_next = true;
             }
         }
-        if(!is_next)
-            alert("{pigcms{:L('_PLEASE_INPUT_ALL_')}");
-        else{
+        if(!is_next) {
+            //alert("{pigcms{:L('_PLEASE_INPUT_ALL_')}");
+            layer.open({
+                title: "{pigcms{:L('_B_D_LOGIN_TIP2_')}",
+                content: "{pigcms{:L('_PLEASE_INPUT_ALL_')}",
+                btn: ["{pigcms{:L('_B_D_LOGIN_CONIERM_')}"],
+            });
+        }else{
             $(this).attr("disabled","disabled");
             var post_data = {
                 c_name:$('#c_name').val(),
