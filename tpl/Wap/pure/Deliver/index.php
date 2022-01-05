@@ -348,6 +348,7 @@
                         loadProcess();
                         order_timer = setInterval(getOrderNum, 2000);
                         clearInterval(grab_timer);
+                        record_id = 0;
                         location.hash = 1;
                     }
                     else {
@@ -590,7 +591,7 @@
                 map: map,
                 //icon:"{pigcms{$static_path}img/deliver_menu/customer_pin_3.png"
             });
-
+            record_id = 0;
             map.setCenter(self_position);
         }
 
