@@ -52,7 +52,7 @@ class SmssendAction extends BaseAction{
         if(isset($_POST['phone']) && !empty($_POST['phone'])){
             $condition_user['phone'] = $_POST['phone'];
             if(D('Deliver_user')->field('`uid`')->where($condition_user)->find()){
-                $result = array('error_code' => true, 'msg' => L('_B_LOGIN_PHONENOHAVE_'));
+                $result = array('error_code' => true, 'msg' => "This number is already registered. Please sign in directly or try a different number.");
             }
             if(!empty($result)&&$_POST['reg']){
                 $this->ajaxReturn($result);

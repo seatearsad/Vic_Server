@@ -161,7 +161,7 @@
                 <if condition="$userImg['upload_status'] eq 0 or $userImg['upload_status'] eq 3">
                     <span class="upload_btn" id="upload_doc">Upload</span>
                     <else />
-                    <span class="material-icons" style="float: right">chevron_right</span>
+                    <!--span class="material-icons" style="float: right">chevron_right</span-->
                 </if>
             </div>
             <if condition="$userImg['upload_status'] eq 0">
@@ -207,7 +207,7 @@
                 <if condition="$userImg['online_paid'] eq 0">
                     <span class="upload_btn" id="pay_bag">Manage</span>
                 <else />
-                    <span class="material-icons" style="float: right">chevron_right</span>
+                    <!--span class="material-icons" style="float: right">chevron_right</span-->
                 </if>
             </div>
             <if condition="$user['bag_get_type'] eq -1 and $userImg['bag_received'] eq 0 and $userImg['bag_review_desc'] neq ''">

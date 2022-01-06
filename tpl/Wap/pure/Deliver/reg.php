@@ -54,7 +54,6 @@
         width: 80%;
         height: 25px;
         padding: 8px 0;
-        text-indent: 10px;
         color: #787c81;
         font-size: 14px;
         border-radius: 5px;

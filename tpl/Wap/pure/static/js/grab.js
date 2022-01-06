@@ -111,7 +111,6 @@ function list_detail(lat, lng)
             //$('#container').html('<p style="text-align: center;width: 90%;margin: auto;">No pending orders. Please wait for the next available order.</p>');
             $('#gray_middle_div').html('<div class="wait_div"><img src="' + static_path + 'img/deliver_menu/wait_order.gif"></div><div class="wait_div">Waiting for the next available order</div>');
             loadPosition();
-			return false;
 		}else {
             laytpl($('#replyListBoxTpl').html()).render(result, function (html) {
                 $('#gray_middle_div').html(html);

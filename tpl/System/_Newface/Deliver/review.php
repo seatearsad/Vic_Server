@@ -90,7 +90,7 @@
                                         <td>{pigcms{$vo.email}</td>
                                         <td>{pigcms{$vo.create_time|date='Y-m-d H:i:s',###}</td>
                                         <td class="textcenter">
-                                            <if condition="$vo['city_id'] eq 0 or ($vo['bag_is_recruit'] eq 0 and $vo['reg_status'] eq 1)">
+                                            <if condition="$vo['city_id'] neq 0 and $vo['bag_is_recruit'] eq 0 and $vo['reg_status'] eq 1">
                                                 <font color="red">On Waitlist</font>
                                                 <else />
                                                 <if condition="$vo['reg_status'] neq 4 and $vo['reg_status'] neq 5 ">

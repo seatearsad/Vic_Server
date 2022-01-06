@@ -215,7 +215,7 @@
     </div>
     <div class="step_title">Delivery Bag</div>
     <div class="memo">
-        Last step! You’re required to carry a Tutti delivery bag to pick up and drop off orders. Please select at least one of the following:
+        Last step! You’re required to carry a delivery bag to pick up and drop off orders. Please select at least one of the following:
     </div>
     <div class="memo" style="text-align: right;font-size: 14px;margin: 10px auto;">
         <span>Use my own bag</span>
@@ -227,18 +227,19 @@
             <volist name="bag" id="vo">
                 <table style="width: 100%;text-align: center;padding: 8px">
                     <tr>
-                        <td class="bag_img" style="background-color: #c0c0c0;;width: 120px;height: 120px;" data-id="{pigcms{$key}" data-count="{pigcms{:count($vo['bag_photos'])}" data-desc="{pigcms{$vo.bag_description}">
+                        <td class="bag_img" style="background-color: #c0c0c0;;width: 120px;height: 120px;position: relative;" data-id="{pigcms{$key}" data-count="{pigcms{:count($vo['bag_photos'])}" data-desc="{pigcms{$vo.bag_description}">
                             <if condition="count($vo['bag_photos']) gt 0">
                                 <img src="{pigcms{$vo['bag_photos'][0]}" style="width: 100px;height:100px">
                                 <else />
                                 <img src="{pigcms{$static_public}images/deliver_box.png" style="width: 100px;height:100px">
                             </if>
+                            <span class="material-icons" style="position: absolute;bottom: 2px;right: 2px;color: white;font-size: 28px;">zoom_in</span>
                         </td>
-                        <td style="position:relative;background-color: white;vertical-align: top;padding: 10px;text-align: left">
+                        <td style="position:relative;background-color: white;vertical-align: top;padding: 8px;text-align: left">
                             <div style="font-size: 16px;font-weight: bold">{pigcms{$vo.bag_name}</div>
                             <div style="font-size: 13px;font-weight: bold;margin-top: 4px;">${pigcms{$vo.bag_price}</div>
-                            <div style="font-size: 12px;;margin-top: 4px;">{pigcms{$vo.bag_description}</div>
-                            <div style="position: absolute;bottom: 5px;right: 5px">
+                            <div style="font-size: 12px;;margin-top: 4px;overflow:hidden;display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 2;">{pigcms{$vo.bag_description}</div>
+                            <div style="position: absolute;bottom: 0px;right: 3px">
                                 <input type="hidden" id="photos_{pigcms{$vo.bag_id}" value="photos_{pigcms{$vo.bag_id}"/>
                                 <div class="btn_circle btn_minus" data-bagid="{pigcms{$vo.bag_id}" data-num = "-1">-</div>
                                 <div class="btn_number bagid_{pigcms{$vo.bag_id}" data-bagid="{pigcms{$vo.bag_id}" data-bagprice="{pigcms{$vo.bag_price}" data-bagtaxrate="{pigcms{$vo['bag_tax_rate']/100}">
@@ -488,9 +489,11 @@
             }
         });
 
+        sub_total = sub_total.toFixed(2);
         tax_price += parseFloat((show_shipping_fee * 0.05).toFixed(2));
-
-        total = parseFloat((sub_total + show_shipping_fee + tax_price).toFixed(2));
+        tax_price = tax_price.toFixed(2);
+        total = parseFloat(sub_total + show_shipping_fee + tax_price);
+        total = total.toFixed(2);
 
         $(".subtotal_box").html(sub_total);
         $(".shipping_fee_box").html(show_shipping_fee);

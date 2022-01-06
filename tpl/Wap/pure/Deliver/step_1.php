@@ -364,6 +364,10 @@
 
     function check_form() {
         var is_check = true;
+        if($('#vehicle_type').val() == 0){
+            is_check = false;
+            show_tip("{pigcms{:L('_PLEASE_INPUT_ALL_')}",$(this));
+        }
         $("#reg_list").find('input').each(function () {
             if($(this).attr("name") != "apartment" && $(this).val() == ''){
                 show_tip("{pigcms{:L('_PLEASE_INPUT_ALL_')}",$(this));
