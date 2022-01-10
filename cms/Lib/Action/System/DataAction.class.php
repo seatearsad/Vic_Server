@@ -1347,7 +1347,7 @@ class DataAction extends BaseAction
         $b_time = strtotime($b_date);
         $e_time = strtotime($e_date);
 
-        $sql = "SELECT s.order_id, s.create_time,s.uid,s.freight_charge, u.name,u.family_name,u.city_id as user_city_id, u.phone,u.remark,o.tip_charge,o.price,o.pay_type,o.coupon_price,o.delivery_discount,o.merchant_reduce FROM " . C('DB_PREFIX') . "deliver_supply AS s INNER JOIN " . C('DB_PREFIX') . "merchant_store AS m ON m.store_id=s.store_id LEFT JOIN " . C('DB_PREFIX') . "deliver_user AS u ON s.uid=u.uid LEFT JOIN " . C('DB_PREFIX') . "shop_order AS o ON s.order_id=o.order_id";
+        $sql = "SELECT s.order_id, s.create_time,s.uid,s.freight_charge,s.bonus, u.name,u.family_name,u.city_id as user_city_id, u.phone,u.remark,o.tip_charge,o.price,o.pay_type,o.coupon_price,o.delivery_discount,o.merchant_reduce FROM " . C('DB_PREFIX') . "deliver_supply AS s INNER JOIN " . C('DB_PREFIX') . "merchant_store AS m ON m.store_id=s.store_id LEFT JOIN " . C('DB_PREFIX') . "deliver_user AS u ON s.uid=u.uid LEFT JOIN " . C('DB_PREFIX') . "shop_order AS o ON s.order_id=o.order_id";
 
         $sql .= ' where s.status = 5 and s.create_time >='.$b_time.' and s.create_time <='.$e_time.' and o.is_del = 0';
         $sql .= ' order by s.uid';
@@ -1367,6 +1367,7 @@ class DataAction extends BaseAction
             $show_list[$v['uid']]['remark'] = $v['remark'];
             $show_list[$v['uid']]['order_num'] = $show_list[$v['uid']]['order_num'] ? $show_list[$v['uid']]['order_num']+ 1 : 1;
             $show_list[$v['uid']]['tip'] = $show_list[$v['uid']]['tip'] ? $show_list[$v['uid']]['tip'] + $v['tip_charge'] : $v['tip_charge'];
+            $show_list[$v['uid']]['bonus'] = $show_list[$v['uid']]['bonus'] ? $show_list[$v['uid']]['bonus'] + $v['bonus'] : $v['bonus'];
             $show_list[$v['uid']]['freight'] = $show_list[$v['uid']]['freight'] ? $show_list[$v['uid']]['freight'] + $v['freight_charge'] : $v['freight_charge'];
             if($v['pay_type'] == 'offline' || $v['pay_type'] == 'Cash'){//统计现金
                 if($v['coupon_price'] > 0) $v['price'] = $v['price'] - $v['coupon_price'];
@@ -1400,9 +1401,10 @@ class DataAction extends BaseAction
         $objActSheet->setCellValue('F1', '#of orders');
         $objActSheet->setCellValue('G1', 'Total Tip');
         $objActSheet->setCellValue('H1', 'Total Delivery Fee');
-        $objActSheet->setCellValue('I1', 'Total Cash');
-        $objActSheet->setCellValue('J1', 'Total');
-        $objActSheet->setCellValue('K1', 'Notes');
+        $objActSheet->setCellValue('I1', 'Total Bonus');
+        $objActSheet->setCellValue('J1', 'Total Cash');
+        $objActSheet->setCellValue('K1', 'Total');
+        $objActSheet->setCellValue('L1', 'Notes');
 
         $index = 2;
         foreach ($show_list as $k=>$v){
@@ -1415,9 +1417,10 @@ class DataAction extends BaseAction
             $objActSheet->setCellValueExplicit('F'.$index,$v['order_num']);
             $objActSheet->setCellValueExplicit('G'.$index,sprintf("%.2f", $v['tip']));
             $objActSheet->setCellValueExplicit('H'.$index,sprintf("%.2f", $v['freight']));
-            $objActSheet->setCellValueExplicit('I'.$index,sprintf("%.2f", $v['cash']));
-            $objActSheet->setCellValueExplicit('J'.$index,sprintf("%.2f",$v['tip'] + $v['freight'] - $v['cash']));
-            $objActSheet->setCellValueExplicit('K'.$index,$v['remark']);
+            $objActSheet->setCellValueExplicit('I'.$index,sprintf("%.2f", $v['bonus']));
+            $objActSheet->setCellValueExplicit('J'.$index,sprintf("%.2f", $v['cash']));
+            $objActSheet->setCellValueExplicit('K'.$index,sprintf("%.2f",$v['tip'] + $v['freight'] + $v['bonus'] - $v['cash']));
+            $objActSheet->setCellValueExplicit('L'.$index,$v['remark']);
             $index++;
         }
 
@@ -1569,11 +1572,12 @@ class DataAction extends BaseAction
             $objActSheet->setCellValue('H1', 'Order Amount');
             $objActSheet->setCellValue('I1', 'Delivery Fee');
             $objActSheet->setCellValue('J1', 'Tips');
-            $objActSheet->setCellValue('K1', 'Cash Due');
-            $objActSheet->setCellValue('L1', 'Total');
-            $objActSheet->setCellValue('M1', 'Status');
-            $objActSheet->setCellValue('N1', 'Acceptance Time');
-            $objActSheet->setCellValue('O1', 'Complete Time');
+            $objActSheet->setCellValue('K1', 'Bonus');
+            $objActSheet->setCellValue('L1', 'Cash Due');
+            $objActSheet->setCellValue('M1', 'Total');
+            $objActSheet->setCellValue('N1', 'Status');
+            $objActSheet->setCellValue('O1', 'Acceptance Time');
+            $objActSheet->setCellValue('P1', 'Complete Time');
 
 
             $sql = "SELECT s.`supply_id`, s.order_id, s.item, s.name as username, s.phone as userphone, m.name as storename, s.money, s.start_time, s.end_time, s.aim_site, s.pay_type, s.paid, s.status, s.deliver_cash,s.freight_charge,o.tip_charge as tips FROM " . C('DB_PREFIX') . "deliver_supply AS s left JOIN " . C('DB_PREFIX') . "merchant_store AS m ON m.store_id=s.store_id left join ". C('DB_PREFIX') ."shop_order as o on s.order_id=o.order_id";
@@ -1613,8 +1617,9 @@ class DataAction extends BaseAction
                     $objActSheet->setCellValueExplicit('H' . $index, floatval($value['money']));
                     $objActSheet->setCellValueExplicit('I' . $index, floatval($value['freight_charge']));
                     $objActSheet->setCellValueExplicit('J' . $index, floatval($value['tips']));
-                    $objActSheet->setCellValueExplicit('K' . $index, floatval($value['deliver_cash']));
-                    $objActSheet->setCellValueExplicit('L' . $index, floatval($value['freight_charge']+$value['tips']-$value['deliver_cash']));
+                    $objActSheet->setCellValueExplicit('K' . $index, floatval($value['bonus']));
+                    $objActSheet->setCellValueExplicit('L' . $index, floatval($value['deliver_cash']));
+                    $objActSheet->setCellValueExplicit('M' . $index, floatval($value['freight_charge']+$value['tips']+$value['bonus']-$value['deliver_cash']));
                     switch ($value['status']) {
                         case 1:
                             $value['order_status'] = '<font color="red">等待接单</font>';
@@ -1635,9 +1640,9 @@ class DataAction extends BaseAction
                             $value['order_status'] = "订单失效";
                             break;
                     }
-                    $objActSheet->setCellValueExplicit('M' . $index, $value['order_status']);
-                    $objActSheet->setCellValueExplicit('N' . $index, $value['start_time'] ? date('Y-m-d H:i:s', $value['start_time']) : '--');
-                    $objActSheet->setCellValueExplicit('O' . $index, $value['end_time'] ? date('Y-m-d H:i:s', $value['end_time']) : '--');
+                    $objActSheet->setCellValueExplicit('N' . $index, $value['order_status']);
+                    $objActSheet->setCellValueExplicit('O' . $index, $value['start_time'] ? date('Y-m-d H:i:s', $value['start_time']) : '--');
+                    $objActSheet->setCellValueExplicit('P' . $index, $value['end_time'] ? date('Y-m-d H:i:s', $value['end_time']) : '--');
 
                     $index++;
                 }

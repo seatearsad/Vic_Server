@@ -323,6 +323,15 @@ class DeliverAction extends BaseAction
 			$this->assign('store', $store);
 		}
 
+        $img = D("Deliver_img")->where(array('uid'=>$this->deliver_session['uid']))->find();
+        if(($img['insurace_expiry'] != '' && strtotime($img['insurace_expiry']) < time()) || ($img['certificate_expiry'] != '' && strtotime($img['certificate_expiry']) < time())){
+            $expiry = 1;
+            $this->display('expiry');
+            exit();
+        }else{
+            $expiry = 0;
+        }
+
         if($this->deliver_session['work_status'] == 1){
             $gray_count = 0;
 

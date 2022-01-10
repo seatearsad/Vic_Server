@@ -88,48 +88,48 @@
                                 <span>{pigcms{:L('_BACK_FORBID_')}</span><input type="radio" name="is_open" value="0" <if condition="$now_area['is_open'] eq 0">checked="checked"</if>/></label></span>
                         </div>
                     </div>
-                    <div class="form-group  row">
-                        <label class="col-sm-3 col-form-label">{pigcms{:L('_BACK_CITY_DELI_STATUS_')}</label>
-                        <div class="col-sm-9">
-                            <span class="cb-enable">
-                                <if condition="$now_area['bag_is_recruit'] eq 1">
-                                    <label class="cb-enable selected">
-                                    <else/>
-                                    <label class="cb-enable">
-                                </if>
-                                <span>YES</span><input type="radio" name="bag_is_recruit" value="1" <if condition="$now_area['bag_is_recruit'] eq 1">checked="checked"</if> /></label></span>
-                            <span class="cb-disable">
-                                <if condition="$now_area['bag_is_recruit'] eq 0">
-                                    <label class="cb-disable selected">
-                                    <else/>
-                                    <label class="cb-disable">
-                                </if>
-                                <span>No</span><input type="radio" name="bag_is_recruit" value="0" <if condition="$now_area['bag_is_recruit'] eq 0">checked="checked"</if>/></label></span>
-                        </div>
-                    </div>
-                    <div class="form-group  row">
-                        <label class="col-sm-3 col-form-label">{pigcms{:L('_BACK_CITY_DELI_BAG_')}</label>
-                        <div class="col-sm-9">
-                                <div>
-                                    <input type="checkbox"  name="is_pick_up" value="1" <if condition="$now_area['bag_type'] eq 1 or $now_area['bag_type'] eq 3">checked="checked"</if> />
-                                    &nbsp;{pigcms{:L('_BACK_CITY_DELI_PICKUP_')}
-                                </div>
-                                <div style="margin-left: 20px;margin-top: 5px;">Address Name:<input name="bag_address_name" value="{pigcms{$now_area['bag_address_name']}" class="form-control" type="text"/> </div>
-                                <div style="margin-left: 20px;margin-top: 5px;">Address :<input name="bag_address"  value="{pigcms{$now_area['bag_address']}" class="form-control" type="text"/> </div>
-                                <div style="margin-left: 20px;margin-top: 5px;">
-                                    <input   type="checkbox" name="is_show_url" value="1" <if condition="$now_area['bag_url_show'] eq 1">checked="checked"</if>>
-                                    URL: <input name="bag_address_url" type="text" class="form-control"  value="{pigcms{$now_area['bag_address_url']}"/>
-                                </div>
-                        </div>
-                    </div>
-                    <div class="form-group  row">
-                        <label class="col-sm-3 col-form-label"></label>
-                        <div class="col-sm-9">
-                            <div><input type="checkbox"  name="is_shipping" value="1" <if condition="$now_area['bag_type'] eq 2 or $now_area['bag_type'] eq 3">checked="checked"</if> />&nbsp;{pigcms{:L('_BACK_CITY_DELI_SHIPPING_')}</div>
-                            <div style="margin-left: 20px;margin-top: 5px;">{pigcms{:L('_BACK_CITY_DELI_SHIPPING_FEE_')}:$<input  name="bag_shipping_fee" value="{pigcms{$now_area['bag_shipping_fee']}" class="form-control" type="text"/> </div>
-                        </div>
-                    </div>
                     <if condition="$now_area['area_type'] eq 2">
+                        <div class="form-group  row">
+                            <label class="col-sm-3 col-form-label">{pigcms{:L('_BACK_CITY_DELI_STATUS_')}</label>
+                            <div class="col-sm-9">
+                                <span class="cb-enable">
+                                    <if condition="$now_area['bag_is_recruit'] eq 1">
+                                        <label class="cb-enable selected">
+                                        <else/>
+                                        <label class="cb-enable">
+                                    </if>
+                                    <span>YES</span><input type="radio" name="bag_is_recruit" value="1" <if condition="$now_area['bag_is_recruit'] eq 1">checked="checked"</if> /></label></span>
+                                <span class="cb-disable">
+                                    <if condition="$now_area['bag_is_recruit'] eq 0">
+                                        <label class="cb-disable selected">
+                                        <else/>
+                                        <label class="cb-disable">
+                                    </if>
+                                    <span>No</span><input type="radio" name="bag_is_recruit" value="0" <if condition="$now_area['bag_is_recruit'] eq 0">checked="checked"</if>/></label></span>
+                            </div>
+                        </div>
+                        <div class="form-group  row">
+                            <label class="col-sm-3 col-form-label">{pigcms{:L('_BACK_CITY_DELI_BAG_')}</label>
+                            <div class="col-sm-9">
+                                    <div>
+                                        <input type="checkbox"  name="is_pick_up" value="1" <if condition="$now_area['bag_type'] eq 1 or $now_area['bag_type'] eq 3">checked="checked"</if> />
+                                        &nbsp;{pigcms{:L('_BACK_CITY_DELI_PICKUP_')}
+                                    </div>
+                                    <div style="margin-left: 20px;margin-top: 5px;">Address Name:<input name="bag_address_name" value="{pigcms{$now_area['bag_address_name']}" class="form-control" type="text"/> </div>
+                                    <div style="margin-left: 20px;margin-top: 5px;">Address :<input name="bag_address"  value="{pigcms{$now_area['bag_address']}" class="form-control" type="text"/> </div>
+                                    <div style="margin-left: 20px;margin-top: 5px;">
+                                        <input   type="checkbox" name="is_show_url" value="1" <if condition="$now_area['bag_url_show'] eq 1">checked="checked"</if>>
+                                        URL: <input name="bag_address_url" type="text" class="form-control"  value="{pigcms{$now_area['bag_address_url']}"/>
+                                    </div>
+                            </div>
+                        </div>
+                        <div class="form-group  row">
+                            <label class="col-sm-3 col-form-label"></label>
+                            <div class="col-sm-9">
+                                <div><input type="checkbox"  name="is_shipping" value="1" <if condition="$now_area['bag_type'] eq 2 or $now_area['bag_type'] eq 3">checked="checked"</if> />&nbsp;{pigcms{:L('_BACK_CITY_DELI_SHIPPING_')}</div>
+                                <div style="margin-left: 20px;margin-top: 5px;">{pigcms{:L('_BACK_CITY_DELI_SHIPPING_FEE_')}:$<input  name="bag_shipping_fee" value="{pigcms{$now_area['bag_shipping_fee']}" class="form-control" type="text"/> </div>
+                            </div>
+                        </div>
                         <div class="form-group  row">
                             <label class="col-sm-3 col-form-label">范围类型</label>
                             <div class="col-sm-9">

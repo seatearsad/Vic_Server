@@ -145,8 +145,16 @@
         border-radius: 6px;
         cursor: pointer;
     }
+    .refresh{
+        float: right;
+        margin-top: 30px;
+        margin-right: 20px;
+    }
 </style>
 <body style="background:url('{pigcms{$static_path}img/login_bg.png');">
+<div class="refresh" id="refresh_btn">
+    <span class="material-icons" style="color: #294068;font-size: 26px;">restart_alt</span>
+</div>
 <section>
     <div class="Land_top" style="color:#333333;">
         <span class="fillet" style="background: url('./tpl/Static/blue/images/new/icon.png') center no-repeat; background-size: contain;"></span>
@@ -242,30 +250,31 @@
                     Approved
                     </div>
                 </if>
-                <if condition="$user['bag_get_type'] eq 1 and $userImg['bag_received'] eq 1">
+                <if condition="$user['bag_get_type'] eq 1 and $userImg['bag_express_num'] neq ''">
                     <div class="status_show" style="color: #72AB29">
                     <span class="material-icons">check_circle</span>
-                    Shopped!
+                        Shopped!
+                        <br><label style="color: gray;margin-left: 28px;">Tracking# {pigcms{$userImg['bag_express_num']}</label>
                     </div>
                 </if>
-                <if condition="($user['bag_get_type'] eq 1 and $userImg['bag_received'] eq 0) or $user['bag_get_type'] eq 2">
+                <if condition="($user['bag_get_type'] eq 1 and $userImg['bag_express_num'] eq '') or $user['bag_get_type'] eq 2">
                     <div class="status_show" style="color: #72AB29">
                     <span class="material-icons">check_circle</span>
                     Payment Success!
                     </div>
                 </if>
 
-                <if condition="$user['bag_get_type'] eq 1 and $userImg['bag_received'] eq 0 and $city['bag_url_show'] eq 1">
+                <if condition="$user['bag_get_type'] eq 2 and $userImg['bag_received'] eq 0 and $city['bag_url_show'] eq 1">
                     <div class="status_txt">
                     Please book a time slot {pigcms{$city['bag_address_url']} to pick up your delivery bag at {pigcms{$city['bag_address']}
                     </div>
                 </if>
-                <if condition="$user['bag_get_type'] eq 1 and $userImg['bag_received'] eq 0 and $city['bag_url_show'] eq 0">
+                <if condition="$user['bag_get_type'] eq 2 and $userImg['bag_received'] eq 0 and $city['bag_url_show'] eq 0">
                     <div class="status_txt">
                     Please pick up your delivery bag at {pigcms{$city['bag_address']}
                     </div>
                 </if>
-                <if condition="$user['bag_get_type'] eq 2 and $userImg['bag_received'] eq 0">
+                <if condition="$user['bag_get_type'] eq 1 and $userImg['bag_express_num'] eq ''">
                     <div class="status_txt">
                     We'll ship your delivery bag to you and a tracking number will be available soon.
                     </div>
@@ -305,6 +314,14 @@
                 window.parent.location = "{pigcms{:U('Deliver/index')}";
             }
         }, 'JSON');
+    });
+
+    $('#refresh_btn').click(function () {
+        if(typeof (window.linkJs) != 'undefined'){
+            window.linkJs.reloadWebView();
+        }else {
+            window.location.reload();
+        }
     });
 </script>
 <!-- Begin INDEED conversion code -->

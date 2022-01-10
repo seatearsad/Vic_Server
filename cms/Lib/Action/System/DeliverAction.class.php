@@ -153,6 +153,19 @@ class DeliverAction extends BaseAction {
         //$user_list = $this->deliver_user->field('u.*,a.area_name')->join('as u left join '.C('DB_PREFIX').'area as a ON u.city_id=a.area_id')->where($condition_user)->order('`uid` DESC')->limit($p->firstRow . ',' . $p->listRows)->select();
         $user_list = $this->deliver_user->field('u.*,a.area_name')->join('as u left join '.C('DB_PREFIX').'area as a ON u.city_id=a.area_id')->where($where)->order('`uid` DESC')->limit($p->firstRow . ',' . $p->listRows)->select();
         //var_dump($user_list);die();
+        foreach ($user_list as &$deliver){
+            if($deliver['status'] == 1){
+                $img = D("Deliver_img")->where(array('uid'=>$deliver['uid']))->find();
+                if(($img['insurace_expiry'] != '' && strtotime($img['insurace_expiry']) < time()) || ($img['certificate_expiry'] != '' && strtotime($img['certificate_expiry']) < time())){
+                    $deliver['expiry'] = 1;
+                }else{
+                    $deliver['expiry'] = 0;
+                }
+            }else{
+                $deliver['expiry'] = 0;
+            }
+        }
+
         $this->assign('user_list', $user_list);
         $pagebar = $p->show2();
         $this->assign('pagebar', $pagebar);
@@ -231,6 +244,14 @@ class DeliverAction extends BaseAction {
                 $data_img['driver_license'] = $_POST['driver_license'];
                 $data_img['insurance'] = $_POST['insurance'];
                 $data_img['certificate'] = $_POST['certificate'];
+
+                if($_POST['certificate_type'] == -1){
+                    $data_img['certificate_expiry'] = "-1";
+                }else{
+                    $data_img['certificate_expiry'] = $_POST['certificate_expiry'];
+                }
+                $data_img['insurace_expiry'] = $_POST['insurace_expiry'];
+
                 D('Deliver_img')->where(array('uid' => $id))->save($data_img);
             }
     		$this->success(L('J_SUCCEED3'));
@@ -276,6 +297,7 @@ class DeliverAction extends BaseAction {
             $column['birthday'] = $_POST['birthday'];
             $column['remark'] = $_POST['remark'];
             $column['work_status'] = $_POST['work_status'];
+
             if($_POST['work_status'] == 1){
                 $current_order_num = D('Deliver_supply')->where(array('uid'=>$uid,'status'=>array('lt',5)))->count();
                 if($current_order_num > 0){
@@ -300,11 +322,6 @@ class DeliverAction extends BaseAction {
     			$this->error(L('_BACK_PHONE_ALREADY_'));
     		}
 
-    		$data_img['driver_license'] = $_POST['driver_license'];
-            $data_img['insurance'] = $_POST['insurance'];
-            $data_img['certificate'] = $_POST['certificate'];
-            D('Deliver_img')->where(array('uid' => $uid))->save($data_img);
-
     		if(D('deliver_user')->where(array('uid'=>$uid))->data($column)->save()){
     		    $card_id = D('Deliver_card')->field('id')->where(array('deliver_id'=>$uid))->find();
     		    if($card_id){
@@ -322,6 +339,21 @@ class DeliverAction extends BaseAction {
                     else
                         D('Deliver_img')->add($data);
                 }
+
+                $data_img['driver_license'] = $_POST['driver_license'];
+                $data_img['insurance'] = $_POST['insurance'];
+                $data_img['certificate'] = $_POST['certificate'];
+                if($_POST['certificate_type'] == -1){
+                    $data_img['certificate_expiry'] = "-1";
+                }else{
+                    $data_img['certificate_expiry'] = $_POST['certificate_expiry'];
+                }
+                $data_img['insurace_expiry'] = $_POST['insurace_expiry'];
+
+                if($_POST['bag_express_num']) $data_img['bag_express_num'] = $_POST['bag_express_num'];
+
+                D('Deliver_img')->where(array('uid' => $uid))->save($data_img);
+
     			$this->success('Success');
     		}else{
     			$this->error('修改失败！请检查内容是否有过修改（必须修改）后重试~');
@@ -1885,7 +1917,7 @@ class DeliverAction extends BaseAction {
                 //Sms::sendSms2($sms_data);
                 $sms_txt = "Congratulations! Your courier application has been approved and your account is now active. You can start scheduling your shifts and accepting delivery orders. Welcome to the Tutti team!";
                 //Sms::telesign_send_sms($deliver['phone'],$sms_txt,0);
-                Sms::sendTwilioSms($deliver['phone'],$sms_txt);
+                //Sms::sendTwilioSms($deliver['phone'],$sms_txt);
                 if($deliver['reg_status'] == 5){
                     //$data['reg_status'] = 0;
                 }
@@ -1947,6 +1979,33 @@ class DeliverAction extends BaseAction {
             $deliver['city_name'] = $city['area_name'];
 
             $deliver_img = D('Deliver_img')->field(true)->where(array('uid' => $uid))->find();
+
+            $bagDesc = "";
+            $allPrice = 0;
+            if($deliver['bag_get_type'] != -1 && $deliver['bag_get_id'] != ''){
+                if($deliver_img['card_num'] != '' && $deliver_img['txnNumber'] != '') {
+                    $bag_list = explode("|", $deliver['bag_get_id']);
+                    foreach ($bag_list as $bag) {
+                        $value = explode(',', $bag);
+                        $bagValue = D("Bag")->where(array('bag_id' => $value[0]))->find();
+
+                        $allPrice += $bagValue['bag_price'] + $bagValue['bag_price'] * $bagValue['bag_tax_rate'] / 100;
+                        $currDesc = $value[1] . ' X ' . $bagValue['bag_name'] . ' ($' . $bagValue['bag_price'] . ')';
+                        $bagDesc .= $bagValue == '' ? $currDesc : '<br>' . $currDesc;
+                    }
+
+                    if ($deliver['bag_get_type'] == 1) {
+                        $bagDesc .= '<br>Shopping: $' . round($city['bag_shipping_fee'] + $city['bag_shipping_fee'] * 0.05, 2);
+                        $allPrice += $city['bag_shipping_fee'] + $city['bag_shipping_fee'] * 0.05;
+                    }
+
+                    $allPrice = round($allPrice, 2);
+                    $bagDesc .= '<br>Total paid: $' . $allPrice;
+                }
+            }
+
+            $deliver['bagDesc'] = $bagDesc == '' ? '-' : $bagDesc;
+
             $this->assign('now_user', $deliver);
             $this->assign('img', $deliver_img);
 

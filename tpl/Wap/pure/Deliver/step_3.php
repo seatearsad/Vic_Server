@@ -206,8 +206,16 @@
     .bag_img_list{
         height: 150px;position: relative;flex: 1 1 100%;text-align: center;overflow:hidden;
     }
+    .refresh{
+        float: right;
+        margin-top: 30px;
+        margin-right: 20px;
+    }
 </style>
 <body style="background:url('{pigcms{$static_path}img/login_bg.png');">
+<div class="refresh" id="refresh_btn">
+    <span class="material-icons" style="color: #294068;font-size: 26px;">restart_alt</span>
+</div>
 <section>
     <div class="Land_top" style="color:#333333;">
         <span class="fillet" style="background: url('./tpl/Static/blue/images/new/icon.png') center no-repeat; background-size: contain;"></span>
@@ -519,6 +527,14 @@
             $("#radiotype1").trigger("click");
         }
     }
+
+    $('#refresh_btn').click(function () {
+        if(typeof (window.linkJs) != 'undefined'){
+            window.linkJs.reloadWebView();
+        }else {
+            window.location.reload();
+        }
+    });
 
     $(function(){
         $(":radio").click(function(){

@@ -188,10 +188,8 @@
                                         {pigcms{:L('_ND_UPLOAD1_')}
                                     </div>
                                 </div>
-
                                 <div class="img_0">
                                 </div>
-
                             </div>
                             <!--车辆保险-->
                             <div class="form-group  row">
@@ -201,11 +199,13 @@
                                         {pigcms{:L('_ND_UPLOAD2_')}
                                     </div>
                                 </div>
+                                <div class="img_1">
 
-                                    <div class="img_1">
-
-                                    </div>
-
+                                </div>
+                                <div style="margin-left: 155px;margin-top: 10px;display: flex;">
+                                    <span style="flex: 1 1 50%;line-height: 36px;">Expiry Date</span>
+                                    <input type="text" class="form-control" name="insurace_expiry" size="20" validate="maxlength:50" onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd',lang:'en'})" />
+                                </div>
                             </div>
                             <!--工作证明-->
                             <div class="form-group  row">
@@ -215,11 +215,18 @@
                                         {pigcms{:L('_ND_UPLOAD3_')}
                                     </div>
                                 </div>
+                                <div class="img_2">
 
-                                    <div class="img_2">
-
-                                    </div>
-
+                                </div>
+                                <div style="margin-left: 155px;margin-top: 10px;display: flex;">
+                                    <input type="radio" name="certificate_type" value="1" checked="checked" />
+                                    &nbsp;<span style="flex: 1 1 50%;line-height: 36px;">Expiry Date</span>
+                                    <input type="text" class="form-control" name="certificate_expiry" size="20" validate="maxlength:50" onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd',lang:'en'})" />
+                                </div>
+                                <div style="margin-left: 155px;margin-top: 10px;display: flex;">
+                                    <input type="radio" name="certificate_type" value="-1" />
+                                    &nbsp;<span style="flex: 1 1 50%;line-height: 36px;">Does not expiry</span>
+                                </div>
                             </div>
                             <input type="hidden" name="driver_license" id="filename_0"
                                    value="{pigcms{$img['driver_license']}">

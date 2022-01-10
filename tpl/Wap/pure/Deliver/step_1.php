@@ -12,6 +12,7 @@
     <script src="{pigcms{:C('JQUERY_FILE')}"></script>
     <script src="{pigcms{$static_public}js/laytpl.js"></script>
     <script src="{pigcms{$static_path}layer/layer.m.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
     <script type="text/javascript" src="{pigcms{$static_public}js/mobiscroll/mobiscroll.custom.min.js"></script>
     <link rel="stylesheet" type="text/css" href="{pigcms{$static_public}js/mobiscroll/mobiscroll.custom.min.css" media="all">
 </head>
@@ -155,8 +156,16 @@
     #reg_form:disabled{
         background-color: #999999;
     }
+    .refresh{
+        float: right;
+        margin-top: 30px;
+        margin-right: 20px;
+    }
 </style>
 <body style="background:url('{pigcms{$static_path}img/login_bg.png');">
+<div class="refresh" id="refresh_btn">
+    <span class="material-icons" style="color: #294068;font-size: 26px;">restart_alt</span>
+</div>
 <section>
     <div class="Land_top" style="color:#333333;">
         <span class="fillet" style="background: url('./tpl/Static/blue/images/new/icon.png') center no-repeat; background-size: contain;"></span>
@@ -235,6 +244,14 @@
     if($("#city_id").val() != 0) {
         set_city_id($("#city_id").val());
     }
+
+    $('#refresh_btn').click(function () {
+        if(typeof (window.linkJs) != 'undefined'){
+            window.linkJs.reloadWebView();
+        }else {
+            window.location.reload();
+        }
+    });
 
     function close_input(){
 

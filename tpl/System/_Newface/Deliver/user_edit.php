@@ -233,6 +233,10 @@
                                              height="100"/>
                                     </div>
                                 </if>
+                                <div style="margin-left: 155px;margin-top: 10px;display: flex;">
+                                    <span style="flex: 1 1 50%;line-height: 36px;">Expiry Date</span>
+                                    <input type="text" class="form-control" name="insurace_expiry" size="20" validate="maxlength:50" value="{pigcms{$img.insurace_expiry}" onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd',lang:'en'})" />
+                                </div>
                             </div>
                             <!--工作证明-->
                             <div class="form-group  row">
@@ -252,7 +256,15 @@
                                              height="100"/>
                                     </div>
                                 </if>
-                            </div>
+                                <div style="margin-left: 155px;margin-top: 10px;display: flex;">
+                                    <input type="radio" name="certificate_type" value="1" <if condition="$img['certificate_expiry'] neq -1">checked="checked"</if> />
+                                    &nbsp;<span style="flex: 1 1 50%;line-height: 36px;">Expiry Date</span>
+                                    <input type="text" class="form-control" name="certificate_expiry" size="20" validate="maxlength:50" <if condition="$img['certificate_expiry'] neq -1">value="{pigcms{$img.certificate_expiry}"</if> onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd',lang:'en'})" />
+                                </div>
+                                <div style="margin-left: 155px;margin-top: 10px;display: flex;">
+                                    <input type="radio" name="certificate_type" value="-1" <if condition="$img['certificate_expiry'] eq -1">checked="checked"</if> />
+                                    &nbsp;<span style="flex: 1 1 50%;line-height: 36px;">Does not expiry</span>
+                                </div>                            </div>
                             <input type="hidden" name="driver_license" id="filename_0"
                                    value="{pigcms{$img['driver_license']}">
                             <input type="hidden" name="insurance" id="filename_1"

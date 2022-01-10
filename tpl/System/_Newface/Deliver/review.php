@@ -97,20 +97,6 @@
                                                     <font color="red">{pigcms{:L('_BACK_REGISTERED_')}</font>
                                                 </if>
                                             </if>
-                                            <if condition="$vo['reg_status'] eq 5">
-                                                <font color="green">
-                                                    <if condition="$vo['bag_get_type'] eq -1">
-                                                        <font color="green">Bag Approved</font>
-                                                    </if>
-                                                    <if condition="$vo['bag_get_type'] eq 1">
-                                                        <font color="green">Paid & Shipped</font>
-                                                    </if>
-                                                    <if condition="$vo['bag_get_type'] eq 2">
-                                                        <font color="green">Paid, Waiting for Pickup</font>
-                                                    </if>
-                                                </font>
-                                                |
-                                            </if>
 
                                             <if condition="$vo['reg_status'] eq 4 or $vo['reg_status'] eq 5">
                                                 <if condition="$vo['is_upload'] eq 0">
@@ -127,7 +113,6 @@
                                                     </if>
                                                 </if>
                                             </if>
-
                                         </td>
                                         <td class="textcenter">
                                             <if condition="$vo['reg_status'] eq 4">
@@ -145,6 +130,19 @@
                                                         <font color="orange">Paid, Waiting for Shipping</font>
                                                     </if>
                                                     <if condition="$vo['bag_get_type'] eq 2 and $vo['is_online_pay'] eq 1">
+                                                        <font color="green">Paid, Waiting for Pickup</font>
+                                                    </if>
+                                                </font>
+                                            </if>
+                                            <if condition="$vo['reg_status'] eq 5">
+                                                <font color="green">
+                                                    <if condition="$vo['bag_get_type'] eq -1">
+                                                        <font color="green">Bag Approved</font>
+                                                    </if>
+                                                    <if condition="$vo['bag_get_type'] eq 1">
+                                                        <font color="green">Paid & Shipped</font>
+                                                    </if>
+                                                    <if condition="$vo['bag_get_type'] eq 2">
                                                         <font color="green">Paid, Waiting for Pickup</font>
                                                     </if>
                                                 </font>

@@ -121,8 +121,7 @@
                                     <div class="form-group  row">
                                         <label class="col-sm-3 col-form-label">{pigcms{:L('_BIRTHDAY_TXT_')}</label>
                                         <div class="col-sm-9">
-                                            <input type="text" class="form-control" name="birthday" size="20" validate="maxlength:50,required:true" value="{pigcms{$now_user.birthday}"/>
-
+                                            <input type="text" class="form-control" name="birthday" size="20" validate="maxlength:50,required:true" value="{pigcms{$now_user.birthday}" onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd',lang:'en'})" />
                                         </div>
                                     </div>
                                     <div class="form-group  row">
@@ -226,6 +225,10 @@
                                                          height="100"/>
                                                 </div>
                                             </if>
+                                            <div style="margin-left: 155px;margin-top: 10px;display: flex;">
+                                                <span style="flex: 1 1 50%;line-height: 36px;">Expiry Date</span>
+                                                <input type="text" class="form-control" name="insurace_expiry" size="20" validate="maxlength:50" value="{pigcms{$img.insurace_expiry}" onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd',lang:'en'})" />
+                                            </div>
                                         </div>
  <!--工作证明-->
                                         <div class="form-group  row">
@@ -245,6 +248,15 @@
                                                          height="100"/>
                                                 </div>
                                             </if>
+                                            <div style="margin-left: 155px;margin-top: 10px;display: flex;">
+                                                <input type="radio" name="certificate_type" value="1" <if condition="$img['certificate_expiry'] neq -1">checked="checked"</if> />
+                                                &nbsp;<span style="flex: 1 1 50%;line-height: 36px;">Expiry Date</span>
+                                                <input type="text" class="form-control" name="certificate_expiry" size="20" validate="maxlength:50" <if condition="$img['certificate_expiry'] neq -1">value="{pigcms{$img.certificate_expiry}"</if> onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd',lang:'en'})" />
+                                            </div>
+                                            <div style="margin-left: 155px;margin-top: 10px;display: flex;">
+                                                <input type="radio" name="certificate_type" value="-1" <if condition="$img['certificate_expiry'] eq -1">checked="checked"</if> />
+                                                &nbsp;<span style="flex: 1 1 50%;line-height: 36px;">Does not expiry</span>
+                                            </div>
                                         </div>
 <!--工作证明-->
                                     </if>
@@ -276,9 +288,76 @@
                                         </td>
                                         </tr>
                                     </if>
-                                    <if condition="$now_user['reg_status'] eq 4">
+                                    <if condition="$now_user['reg_status'] eq 4 and $now_user['bag_get_type'] neq -1">
                                         <tr>
-                                            <th width="25%">{pigcms{:L('_BACK_WHETHER_RECE_')}</th>
+                                            <th width="25%">Bag Type</th>
+                                            <td colspan=3>
+                                                Tutti Bag
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th width="25%">Bag Order</th>
+                                            <td colspan=3>
+                                                <if condition="$now_user['bag_get_type'] neq -1 and $now_user['bag_get_id'] neq ''">
+                                                    {pigcms{$now_user['bagDesc']}
+                                                </if>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th width="25%">Pickup/Shopping</th>
+                                            <td colspan=3>
+                                                <if condition="$now_user['bag_get_type'] eq 1">
+                                                    Shopping
+                                                </if>
+                                                <if condition="$now_user['bag_get_type'] eq 2">
+                                                    Pickup
+                                                </if>
+                                            </td>
+                                        </tr>
+                                        <if condition="$now_user['bag_get_type'] eq 1">
+                                            <tr>
+                                                <th width="25%">Tracking #</th>
+                                                <td colspan=3>
+                                                    <input type="text" class="form-control" name="bag_express_num" value="{pigcms{$img['bag_express_num']}"/>
+                                                </td>
+                                            </tr>
+                                        <else />
+                                            <tr>
+                                                <th width="25%">{pigcms{:L('_BACK_WHETHER_RECE_')}</th>
+                                                <td colspan=3>
+                                                    <span class="cb-enable">
+                                                        <label class="cb-enable"><span>Yes</span>
+                                                            <input type="radio" name="receive" value="1"/>
+                                                        </label>
+                                                    </span>
+                                                    <span class="cb-disable">
+                                                        <label class="cb-disable selected">
+                                                            <span>No</span>
+                                                            <input type="radio" name="receive" value="0" checked="checked"/>
+                                                        </label>
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        </if>
+                                    </if>
+
+                                    <if condition="$now_user['bag_get_type'] eq -1 and $now_user['reg_status'] eq 4">
+                                        <tr>
+                                            <th width="25%">Bag Type</th>
+                                            <td colspan=3>
+                                                Own Bag
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th width="25%">Bag Photo</th>
+                                            <td colspan=3>
+                                                <if condition="$now_user['bag_get_id'] neq ''">
+                                                    <img src="{pigcms{:C('config.site_url')}{pigcms{$now_user['bag_get_id']}" height="100"/>
+                                                </if>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th width="25%">Qualified?</th>
                                             <td colspan=3>
                                                 <span class="cb-enable">
                                                     <label class="cb-enable"><span>Yes</span>
@@ -293,21 +372,11 @@
                                                 </span>
                                             </td>
                                         </tr>
-                                    </if>
-                                    <if condition="$now_user['bag_get_type'] eq -1">
                                         <tr id="bag_review_desc" <if condition="$img['bag_review_desc'] eq ''">style="display: none"</if> >
                                         <th width="25%">{pigcms{:L('_BACK_REVIEW_DESC_')}</th>
                                         <td colspan=3>
                                             <input type="text" class="input fl" name="bag_review_desc" value="{pigcms{$img['bag_review_desc']}">
                                         </td>
-                                        </tr>
-                                        <tr>
-                                            <th width="25%">Own Bag</th>
-                                            <td colspan=3>
-                                                <if condition="$now_user['bag_get_id'] neq ''">
-                                                    <img src="{pigcms{:C('config.site_url')}{pigcms{$now_user['bag_get_id']}" height="100"/>
-                                                </if>
-                                            </td>
                                         </tr>
                                     </if>
                                 </table>
