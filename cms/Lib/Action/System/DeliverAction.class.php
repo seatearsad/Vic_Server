@@ -350,7 +350,9 @@ class DeliverAction extends BaseAction {
                 }
                 $data_img['insurace_expiry'] = $_POST['insurace_expiry'];
 
-                if($_POST['bag_express_num']) $data_img['bag_express_num'] = $_POST['bag_express_num'];
+                if($_POST['bag_express_num'] && $_POST['bag_express_num'] != ''){
+                    $data_img['bag_express_num'] = $_POST['bag_express_num'];
+                }
 
                 D('Deliver_img')->where(array('uid' => $uid))->save($data_img);
 
@@ -370,6 +372,8 @@ class DeliverAction extends BaseAction {
             $city = D('Area')->where(array('area_id'=>$deliver['city_id']))->find();
             $deliver['city_name'] = $city['area_name'];
     		$this->assign('now_user',$deliver);
+
+
 
     		$card = D('Deliver_card')->field(true)->where(array('deliver_id'=>$uid))->find();
     		$this->assign('card',$card);
@@ -1918,9 +1922,9 @@ class DeliverAction extends BaseAction {
                 $sms_txt = "Congratulations! Your courier application has been approved and your account is now active. You can start scheduling your shifts and accepting delivery orders. Welcome to the Tutti team!";
                 //Sms::telesign_send_sms($deliver['phone'],$sms_txt,0);
                 //Sms::sendTwilioSms($deliver['phone'],$sms_txt);
-                if($deliver['reg_status'] == 5){
+                //if($deliver['reg_status'] == 5){
                     //$data['reg_status'] = 0;
-                }
+                //}
 
                 if($deliver['email'] != "") {
                     $email = array(array("address"=>$deliver['email'],"userName"=>$deliver['name']));
@@ -1938,6 +1942,11 @@ class DeliverAction extends BaseAction {
                 }
             }
 
+            if($deliver['group'] == 1 && $deliver['reg_status'] == 5 && $_POST['activate_account'] == 1){
+                $data['status'] = 1;
+                $data['reg_status'] = 0;
+            }
+
             $data_img['driver_license'] = $_POST['driver_license'];
             $data_img['insurance'] = $_POST['insurance'];
             $data_img['certificate'] = $_POST['certificate'];
@@ -1949,6 +1958,9 @@ class DeliverAction extends BaseAction {
             D('deliver_user')->where(array('uid' => $uid))->save($data);
 
             if ($deliver['reg_status'] == 4){
+                if($_POST['bag_express_num'] && $_POST['bag_express_num'] != ''){
+                    $data['reg_status'] = 5;
+                }
                 if($_POST['receive'] == 1){
                     if($data['group'] == 1 || $deliver['group'] == 1){
                         $data['reg_status'] = 5;
@@ -1956,12 +1968,11 @@ class DeliverAction extends BaseAction {
                     if(!isset($data['reg_status']) || $data['reg_status'] != 0) {
                         $data['reg_status'] = 5;
                     }
-                    //$data['status'] = 1;
-                    D('deliver_user')->where(array('uid' => $uid))->save($data);
                 }else{
-                    if($deliver['bag_get_type'] == -1)
-                        D('deliver_user')->where(array('uid' => $uid))->save(array('bag_get_id'=>''));
+                    if($deliver['bag_get_type'] == -1) $data = array('bag_get_id'=>'');
                 }
+                D('deliver_user')->where(array('uid' => $uid))->save($data);
+
                 $this->user_edit();
             }else{
                 $this->user_edit();

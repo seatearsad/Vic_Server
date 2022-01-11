@@ -404,8 +404,9 @@
 <script type="text/javascript" src="{pigcms{$static_public}js/webuploader.min.js"></script>
 <script type="text/javascript">
     <!--    //bag_type 0:未设置 1:自取 2：邮寄 3：全选-->
-    <if condition="$city['bag_type'] eq 1">
-        var init_bag_select=1;
+
+    <if condition="$user['bag_get_type'] gt 0">
+        var init_bag_select="{pigcms{$user['bag_get_type']}";
     <else />
         <if condition="$city['bag_type'] eq 2">
             var init_bag_select=2;
@@ -475,6 +476,7 @@
 
         bag_get_id = "";
 
+        var totalNum = 0;
         $('body').find('.btn_number').each(function () {
             if($(this).html().replace(/\s*/g,"") == "") $(this).html("0");
 
@@ -485,17 +487,17 @@
             sub_total += parseFloat((bag_price * num).toFixed(2));
             //console.log("bag_price",bag_price);
             if(num > 0) {
+                totalNum += num;
                 if(bag_get_id != "") bag_get_id += "|";
                 bag_get_id += $(this).data("bagid") + "," + num;
-                if (select_buy_mode==2){
-                    show_shipping_fee = shipping_fee;
-                }else{
-                    show_shipping_fee = 0;
-                }
-            }else{
-                show_shipping_fee = 0;
             }
         });
+
+        if(totalNum > 0 && select_buy_mode == 2){
+            show_shipping_fee = shipping_fee;
+        }else{
+            show_shipping_fee = 0;
+        }
 
         sub_total = sub_total.toFixed(2);
         tax_price += parseFloat((show_shipping_fee * 0.05).toFixed(2));

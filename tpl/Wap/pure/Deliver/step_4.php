@@ -109,12 +109,12 @@
     }
     .status_title{
         color: #333333;
-        font-size: 14px;
+        font-size: 20px;
         font-weight: bold;
     }
     .status_show{
         line-height: 30px;
-        font-size: 13px;
+        font-size: 18px;
         margin-top: 10px;
     }
     .status_show .material-icons{
@@ -124,6 +124,7 @@
     .status_txt{
         padding-left: 25px;
         height: 50px;
+        font-size: 18px;
     }
     .upload_btn{
         float: right;
@@ -244,10 +245,10 @@
                     Waiting for Review
                     </div>
                 </if>
-                <if condition="$user['bag_get_type'] eq -1 and $userImg['bag_received'] eq 1">
+                <if condition="($user['bag_get_type'] eq -1 and $userImg['bag_received'] eq 1) or ($user['bag_get_type'] eq 2 and $userImg['bag_received'] eq 1)">
                     <div class="status_show" style="color: #72AB29">
                     <span class="material-icons">check_circle</span>
-                    Approved
+                    Approved!
                     </div>
                 </if>
                 <if condition="$user['bag_get_type'] eq 1 and $userImg['bag_express_num'] neq ''">
@@ -257,7 +258,7 @@
                         <br><label style="color: gray;margin-left: 28px;">Tracking# {pigcms{$userImg['bag_express_num']}</label>
                     </div>
                 </if>
-                <if condition="($user['bag_get_type'] eq 1 and $userImg['bag_express_num'] eq '') or $user['bag_get_type'] eq 2">
+                <if condition="($user['bag_get_type'] eq 1 and $userImg['bag_express_num'] eq '') or ($user['bag_get_type'] eq 2 and $userImg['bag_received'] eq 0)">
                     <div class="status_show" style="color: #72AB29">
                     <span class="material-icons">check_circle</span>
                     Payment Success!

@@ -127,10 +127,10 @@
                                                         <font color="red">Incomplete (Purchase)</font>
                                                     </if>
                                                     <if condition="$vo['bag_get_type'] eq 1 and $vo['is_online_pay'] eq 1">
-                                                        <font color="orange">Paid, Waiting for Shipping</font>
+                                                        <font color="orange">Waiting for Shipping</font>
                                                     </if>
                                                     <if condition="$vo['bag_get_type'] eq 2 and $vo['is_online_pay'] eq 1">
-                                                        <font color="green">Paid, Waiting for Pickup</font>
+                                                        <font color="green">Waiting for Pickup</font>
                                                     </if>
                                                 </font>
                                             </if>
@@ -140,10 +140,10 @@
                                                         <font color="green">Bag Approved</font>
                                                     </if>
                                                     <if condition="$vo['bag_get_type'] eq 1">
-                                                        <font color="green">Paid & Shipped</font>
+                                                        <font color="green">Shipped</font>
                                                     </if>
                                                     <if condition="$vo['bag_get_type'] eq 2">
-                                                        <font color="green">Paid, Waiting for Pickup</font>
+                                                        <font color="green">Picked up</font>
                                                     </if>
                                                 </font>
                                             </if>

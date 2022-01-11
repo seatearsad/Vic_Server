@@ -255,7 +255,7 @@
                                             </div>
                                             <div style="margin-left: 155px;margin-top: 10px;display: flex;">
                                                 <input type="radio" name="certificate_type" value="-1" <if condition="$img['certificate_expiry'] eq -1">checked="checked"</if> />
-                                                &nbsp;<span style="flex: 1 1 50%;line-height: 36px;">Does not expiry</span>
+                                                &nbsp;<span style="flex: 1 1 50%;line-height: 36px;">Does not expire</span>
                                             </div>
                                         </div>
 <!--工作证明-->
@@ -304,10 +304,10 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <th width="25%">Pickup/Shopping</th>
+                                            <th width="25%">Pickup/Shipping</th>
                                             <td colspan=3>
                                                 <if condition="$now_user['bag_get_type'] eq 1">
-                                                    Shopping
+                                                    Shipping
                                                 </if>
                                                 <if condition="$now_user['bag_get_type'] eq 2">
                                                     Pickup
@@ -377,6 +377,25 @@
                                         <td colspan=3>
                                             <input type="text" class="input fl" name="bag_review_desc" value="{pigcms{$img['bag_review_desc']}">
                                         </td>
+                                        </tr>
+                                    </if>
+                                    <if condition="$now_user['group'] eq 1 and $now_user['reg_status'] eq 5">
+                                        <tr>
+                                            <th width="25%">Activate account</th>
+                                            <td colspan=3>
+                                                <span class="cb-enable">
+                                                    <label class="cb-enable selected">
+                                                        <span>Activate</span>
+                                                        <input type="radio" name="activate_account" value="1" checked="checked" />
+                                                    </label>
+                                                </span>
+                                                <span class="cb-disable">
+                                                    <label class="cb-disable">
+                                                        <span>Inactivate</span>
+                                                        <input type="radio" name="activate_account" value="0" />
+                                                    </label>
+                                                </span>
+                                            </td>
                                         </tr>
                                     </if>
                                 </table>
@@ -555,10 +574,10 @@
                             $.post("{pigcms{$config.site_url}/index.php?g=Index&c=Index&a=ajax_city_name", {city_name: city_name}, function (result) {
                                 if (result.error == 1) {
                                     $("input[name='city_id']").val(0);
-                                    $('#city_name').html('');
+                                    $('#city_area').html('');
                                 } else {
                                     $("input[name='city_id']").val(result['info']['city_id']);
-                                    $('#city_name').html(city_name);
+                                    $('#city_area').html(city_name);
                                 }
                             }, 'JSON');
                         }

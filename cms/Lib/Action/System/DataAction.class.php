@@ -1263,14 +1263,20 @@ class DataAction extends BaseAction
     }
 
     public function courier_info(){
-        if($_GET['status'] != -1){
+        if($_GET['status'] != -1 && $_GET['status'] != 2){
             $where['status'] = $_GET['status'];
+        }
+
+        if($_GET['status'] == 2){
+            $where['status'] = 1;
         }
 
         $where['group'] = 1;
         $where['reg_status'] = 0;
 
         $list = D('Deliver_user')->where($where)->select();
+
+        $expired_list = array();
         foreach ($list as &$deliver){
             $area = D('Area')->where(array('area_id'=>$deliver['city_id']))->find();
             $deliver['city_name'] = $area['area_name'];
@@ -1279,6 +1285,18 @@ class DataAction extends BaseAction
             $deliver['sin_num'] = $other['sin_num'];
 
             $deliver['status_name'] = $deliver['status'] == 1 ? 'Active' : 'Inactive';
+
+            if($_GET['status'] == 2){
+                if(($other['insurace_expiry'] != '' && strtotime($other['insurace_expiry']) < time()) || ($other['certificate_expiry'] != '-1' && $other['certificate_expiry'] != '' && strtotime($other['certificate_expiry']) < time())){
+                    $deliver['status_name'] = "Expired";
+                    $expired_list[] = $deliver;
+                }
+            }
+        }
+
+
+        if($_GET['status'] == 2){
+            $list = $expired_list;
         }
 
         require_once APP_PATH . 'Lib/ORG/phpexcel/PHPExcel.php';
@@ -1580,7 +1598,7 @@ class DataAction extends BaseAction
             $objActSheet->setCellValue('P1', 'Complete Time');
 
 
-            $sql = "SELECT s.`supply_id`, s.order_id, s.item, s.name as username, s.phone as userphone, m.name as storename, s.money, s.start_time, s.end_time, s.aim_site, s.pay_type, s.paid, s.status, s.deliver_cash,s.freight_charge,o.tip_charge as tips FROM " . C('DB_PREFIX') . "deliver_supply AS s left JOIN " . C('DB_PREFIX') . "merchant_store AS m ON m.store_id=s.store_id left join ". C('DB_PREFIX') ."shop_order as o on s.order_id=o.order_id";
+            $sql = "SELECT s.`supply_id`, s.order_id, s.item, s.name as username, s.phone as userphone, m.name as storename, s.money, s.start_time, s.end_time, s.aim_site, s.pay_type, s.paid, s.status, s.deliver_cash,s.freight_charge,s.bonus,o.tip_charge as tips FROM " . C('DB_PREFIX') . "deliver_supply AS s left JOIN " . C('DB_PREFIX') . "merchant_store AS m ON m.store_id=s.store_id left join ". C('DB_PREFIX') ."shop_order as o on s.order_id=o.order_id";
             $sql .= ' WHERE s.type=0 AND s.uid=' . $uid;
             if ($begin_time && $end_time) {
                 $sql .= ' AND s.start_time>' . strtotime($begin_time." 00:00:00") . ' AND s.start_time<' . strtotime($end_time." 23:59:59");

@@ -241,7 +241,7 @@ function check_form() {
     var is_check = true;
     $("#reg_list").find('input').each(function () {
         if($(this).val() == ''){
-            show_tip("{pigcms{:L('_PLEASE_INPUT_ALL_')}",$(this));
+            show_tip("Please complete all required fields.",$(this));
             is_check = false;
             return false;
         }

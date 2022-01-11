@@ -90,6 +90,16 @@
         background-color: #294068;
         color: white;
     }
+    .update_btn{
+        font-size: 12px;
+        background-color: #ffa52d;
+        color: white;
+        text-align: center;
+        line-height: 20px;
+        display: inline-block;
+        padding: 5px;
+        border-radius: 5px;
+    }
 </style>
 </head>
 <body>
@@ -123,7 +133,17 @@
         <div class="div_title" style="margin-top: 20px;">
             <span class="material-icons title_icon">drive_eta</span>
             Vehicle Type
-            <span style="float: right;">Car</span>
+            <span style="float: right;">
+                <if condition="$deliver_session['vehicle_type'] eq 0 or $deliver_session['vehicle_type'] eq 1">
+                    Car
+                </if>
+                <if condition="$deliver_session['vehicle_type'] eq 2">
+                    Bike
+                </if>
+                <if condition="$deliver_session['vehicle_type'] eq 3">
+                    Motorcycle/Scooter
+                </if>
+            </span>
         </div>
     </div>
     <div class="div_line">
@@ -147,36 +167,65 @@
             <span class="material-icons title_icon">featured_play_list</span>
             Work Eligibility
             <span style="float: right;">
-                <if condition="$deliver_session['group'] eq 1">
+                <if condition="$deliver_session['group'] eq 1 and ($deliver_img['insurace_expiry'] eq '-1' or $deliver_img['insurace_expiry_type'] eq 1)">
                     Approved
                 <else />
-                    <if condition="$deliver_img['certificate'] eq ''">
-                        Please Update
-                    <else />
-                        Waiting for Approval
+                    <if condition="$deliver_img['insurace_expiry'] neq '-1' and ($deliver_img['insurace_expiry_type'] eq 0 or $deliver_img['insurace_expiry_type'] eq 2)">
+                        <span class="update_btn">
+                            <span class="material-icons" style="width: auto;vertical-align: middle;">report_problem</span>
+                            Update
+                        </span>
                     </if>
                 </if>
             </span>
             <div class="div_desc">
-                Expires on 2022-03-01
+                <if condition="$deliver_img['insurace_expiry'] eq '-1'">
+                    Does not expire
+                </if>
+                <if condition="$deliver_img['insurace_expiry'] neq '-1' and $deliver_img['insurace_expiry_type'] eq 0">
+                    <label style="color: #984447">
+                        Expires on {pigcms{$deliver_img['insurace_expiry']}
+                    </label>
+                </if>
+                <if condition="$deliver_img['insurace_expiry'] neq '-1' and $deliver_img['insurace_expiry_type'] eq 2">
+                    <label style="color: #6A6A6A">
+                        Expires on {pigcms{$deliver_img['insurace_expiry']}
+                    </label>
+                </if>
+                <if condition="$deliver_img['insurace_expiry'] neq '-1' and $deliver_img['insurace_expiry_type'] eq 1">
+                    Expires on {pigcms{$deliver_img['insurace_expiry']}
+                </if>
             </div>
         </div>
         <div class="div_title" style="margin-top: 20px;">
             <span class="material-icons title_icon">featured_play_list</span>
             Vehicle Insurance
             <span style="float: right;">
-                <if condition="$deliver_session['group'] eq 1">
+                <if condition="$deliver_session['group'] eq 1 and $deliver_img['certificate_expiry_type'] eq 1">
                     Approved
                 <else />
-                    <if condition="$deliver_img['insurance'] eq ''">
-                        Please Update
-                    <else />
-                        Waiting for Approval
+                    <if condition="$deliver_img['certificate_expiry_type'] eq 0 or $deliver_img['certificate_expiry_type'] eq 2">
+                        <span class="update_btn">
+                            <span class="material-icons" style="width: auto;vertical-align: middle;">report_problem</span>
+                            Update
+                        </span>
                     </if>
                 </if>
             </span>
             <div class="div_desc">
-                Expires on 2022-03-01
+                <if condition="$deliver_img['certificate_expiry_type'] eq 0">
+                    <label style="color: #984447">
+                        Expires on {pigcms{$deliver_img['certificate_expiry']}
+                    </label>
+                </if>
+                <if condition="$deliver_img['certificate_expiry_type'] eq 2">
+                    <label style="color: #6A6A6A">
+                        Expires on {pigcms{$deliver_img['certificate_expiry']}
+                    </label>
+                </if>
+                <if condition="$deliver_img['certificate_expiry_type'] eq 1">
+                    Expires on {pigcms{$deliver_img['certificate_expiry']}
+                </if>
             </div>
         </div>
     </div>

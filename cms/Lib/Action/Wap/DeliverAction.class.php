@@ -324,13 +324,21 @@ class DeliverAction extends BaseAction
 		}
 
         $img = D("Deliver_img")->where(array('uid'=>$this->deliver_session['uid']))->find();
-        if(($img['insurace_expiry'] != '' && strtotime($img['insurace_expiry']) < time()) || ($img['certificate_expiry'] != '' && strtotime($img['certificate_expiry']) < time())){
-            $expiry = 1;
+        $expiry = array();
+        if($img['insurace_expiry'] != '' && strtotime($img['insurace_expiry']) < time()){
+            $expiry[] = "Vehicle Insurance";
+        }
+
+        if($img['certificate_expiry'] != '-1' && $img['certificate_expiry'] != '' && strtotime($img['certificate_expiry']) < time()) {
+            $expiry[] = "Work Eligibility";
+        }
+
+        $this->assign('expiry',$expiry);
+        if(count($expiry) > 0){
             $this->display('expiry');
             exit();
-        }else{
-            $expiry = 0;
         }
+
 
         if($this->deliver_session['work_status'] == 1){
             $gray_count = 0;
@@ -2778,7 +2786,7 @@ class DeliverAction extends BaseAction
             $now_user = $database_deliver_user->field(true)->where(array('uid'=>$deliver_id))->find();
             session('deliver_session', serialize($now_user));
 
-            $result = array('error_code'=>false,'msg'=>L('_B_LOGIN_REGISTSUCESS_'));
+            $result = array('error_code'=>false,'msg'=>L('SUCCESS_BKADMIN'));
             $this->ajaxReturn($result);
         }else
 	        $this->display();
@@ -2859,12 +2867,15 @@ class DeliverAction extends BaseAction
             $data['review_desc'] = "";
 
             $deliver_img = D('Deliver_img')->where(array('uid'=>$this->deliver_session['uid']))->find();
-            if($deliver_img)
+            if($deliver_img && ($deliver_img['sin_num'] != $data['sin_num'] || $deliver_img['driver_license'] != $data['driver_license'] || $deliver_img['insurance'] != $data['insurance'] || $deliver_img['certificate'] != $data['certificate'])){
                 D('Deliver_img')->save($data);
-            else
-                D('Deliver_img')->add($data);
+                $database_deliver_user->where(array('uid' => $this->deliver_session['uid']))->save(array('group'=>0));
+            }
 
-            $database_deliver_user->where(array('uid' => $this->deliver_session['uid']))->save(array('group'=>0));
+            if(!$deliver_img){
+                D('Deliver_img')->add($data);
+                $database_deliver_user->where(array('uid' => $this->deliver_session['uid']))->save(array('group'=>0));
+            }
 
             if($_GET['from'] != 4)
                 $database_deliver_user->where(array('uid' => $this->deliver_session['uid']))->save(array('reg_status'=>3,'last_time'=>time()));
@@ -3412,6 +3423,23 @@ class DeliverAction extends BaseAction
 	    $this->assign('city',$city);
 
         $deliver_img = D('Deliver_img')->where(array('uid'=>$this->deliver_session['uid']))->find();
+        $deliver_img['insurace_expiry_type'] = 1;//0过期 1未过期 2即将过期
+        $deliver_img['certificate_expiry_type'] = 1;//0过期 1未过期 2即将过期
+        if($deliver_img['insurace_expiry'] != '' && strtotime($deliver_img['insurace_expiry']) < time()){
+            $deliver_img['insurace_expiry_type'] = 0;
+        }else{
+            if((strtotime($deliver_img['insurace_expiry']) - time())/86400 < 30){
+                $deliver_img['insurace_expiry_type'] = 2;
+            }
+        }
+
+        if($deliver_img['certificate_expiry'] != '-1' && $deliver_img['certificate_expiry'] != '' && strtotime($deliver_img['certificate_expiry']) < time()) {
+            $deliver_img['certificate_expiry_type'] = 0;
+        }else{
+            if((strtotime($deliver_img['certificate_expiry']) - time())/86400 < 30){
+                $deliver_img['certificate_expiry_type'] = 2;
+            }
+        }
         $this->assign('deliver_img',$deliver_img);
 	    $this->display();
     }

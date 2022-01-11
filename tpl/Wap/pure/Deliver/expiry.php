@@ -63,19 +63,15 @@
         .f_t{
             font-size: 14px;
             height:220px;
-            background-image:url('{pigcms{$static_path}img/deliver_menu/city_background.png');
-            background-repeat: no-repeat;
-            background-position: center top;
-            background-size: 100% auto;
             position: relative;
         }
         .f_t span{
             position: absolute;
-            width: 60%;
+            width: 50%;
             height: 80%;
             bottom: 10px;
-            left: 20%;
-            background-image:url("{pigcms{$static_path}img/deliver_menu/car.png");
+            left: 25%;
+            background-image:url("{pigcms{$static_path}img/deliver_menu/expired.png");
             background-repeat: no-repeat;
             background-position: center bottom;
             background-size: 100% auto;
@@ -84,6 +80,8 @@
             font-size: 14px;
             margin-top: 10px;
             padding: 5px;
+            width: 90%;
+            margin-left: 5%;
         }
         .clock_btn{
             font-size: 18px;
@@ -109,12 +107,17 @@
 
         </span>
     </div>
-    <div class="tip" style="text-align: center">
+    <div class="tip" style="text-align: center;font-size: 18px;">
         <b>ACTION REQUIRED</b>
     </div>
     <div class="tip">
         The following doc(s) are expired. Please upload a photo or you cannot continue working.
     </div>
+    <ul style="width: 60%;margin-left: 20%;font-size: 14px;margin-top: 10px;line-height: 25px;">
+        <volist name="expiry" id="e">
+            <li style="list-style-type: disc;">{pigcms{$e}</li>
+        </volist>
+    </ul>
     <div style="text-align: center;margin-top: 20px">
             <span class="clock_btn" ref="0">
                 Update Now
@@ -140,7 +143,7 @@
     function changeHeight(){
         if(window.innerHeight >= window.innerWidth){
             $('.f_t').css({'height':'220px',"background-size": "100% auto"});
-            $('.f_t span').css({'width':'60%','left':'20%'});
+            $('.f_t span').css({'width':'50%','left':'25%'});
         }else{
             $('.f_t').css({'height':'350px',"background-size": "auto 100%"});
             $('.f_t span').css({'width':'30%','left':'35%'});
