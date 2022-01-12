@@ -3080,6 +3080,7 @@ class DeliverAction extends BaseAction
 
         if($now_user['reg_status'] == 5 || $now_user['reg_status'] == 0){//背包是否已发出
             $user_img['bag_received'] = 1;
+            $is_online = 1;
         }else{
             $user_img['bag_received'] = 0;
         }
