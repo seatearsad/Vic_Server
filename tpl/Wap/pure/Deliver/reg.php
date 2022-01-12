@@ -42,8 +42,7 @@
         height: 25px;
         padding: 8px 0;
         text-indent: 10px;
-        color: #333333;
-        font-size: 14px;
+        color: #000000;
         background-color: white;
         border-radius: 5px;
         margin-left: 1%;
