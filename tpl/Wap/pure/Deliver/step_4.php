@@ -123,7 +123,7 @@
     }
     .status_txt{
         padding-left: 25px;
-        height: 50px;
+        height: 80px;
         font-size: 16px;
     }
     .upload_btn{
@@ -133,6 +133,7 @@
         color: white;
         border-radius: 5px;
         font-weight: normal;
+        font-size: 14px;
     }
     .activate_btn{
         width: 90%;
