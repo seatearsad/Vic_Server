@@ -255,7 +255,7 @@
                 <if condition="$user['bag_get_type'] eq 1 and $userImg['bag_express_num'] neq ''">
                     <div class="status_show" style="color: #72AB29">
                     <span class="material-icons">check_circle</span>
-                        Shopped!
+                        Shipped!
                         <br><label style="color: gray;margin-left: 28px;">Tracking# {pigcms{$userImg['bag_express_num']}</label>
                     </div>
                 </if>

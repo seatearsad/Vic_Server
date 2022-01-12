@@ -753,12 +753,12 @@
         }
     }
 
+    var all_bag = $.parseJSON('{pigcms{:json_encode($bag)}');
+    
     $('.bag_img').click(function () {
         var img_count = $(this).data("count");
         var bag_id = $(this).data("id");
         var desc = $(this).data("desc");
-
-        var all_bag = $.parseJSON('{pigcms{:json_encode($bag)}');
         //alert(all_bag[bag_id]['bag_photos'].length);
 
         var img_html = "<div class='bag_img_div'>";
