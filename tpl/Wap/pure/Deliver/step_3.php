@@ -251,9 +251,9 @@
                                 <input type="hidden" id="photos_{pigcms{$vo.bag_id}" value="photos_{pigcms{$vo.bag_id}"/>
                                 <div class="btn_circle btn_minus" data-bagid="{pigcms{$vo.bag_id}" data-num = "-1">-</div>
                                 <div class="btn_number bagid_{pigcms{$vo.bag_id}" data-bagid="{pigcms{$vo.bag_id}" data-bagprice="{pigcms{$vo.bag_price}" data-bagtaxrate="{pigcms{$vo['bag_tax_rate']/100}">
-                                    <volist name="bag_list" id="bag">
-                                        <if condition="$bag[0] eq $vo['bag_id']">
-                                            {pigcms{$bag[1]}
+                                    <volist name="bag_list" id="bag_show">
+                                        <if condition="$bag_show[0] eq $vo['bag_id']">
+                                            {pigcms{$bag_show[1]}
                                         </if>
                                     </volist>
                                 </div>
@@ -754,7 +754,7 @@
     }
 
     var all_bag = $.parseJSON('{pigcms{:json_encode($bag)}');
-    
+
     $('.bag_img').click(function () {
         var img_count = $(this).data("count");
         var bag_id = $(this).data("id");
