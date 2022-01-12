@@ -246,7 +246,7 @@
                     Waiting for Review
                     </div>
                 </if>
-                <if condition="($user['bag_get_type'] eq -1 and $userImg['bag_received'] eq 1) or ($user['bag_get_type'] eq 2 and $userImg['bag_received'] eq 1)">
+                <if condition="$user['bag_get_type'] eq -1 and $userImg['bag_received'] eq 1">
                     <div class="status_show" style="color: #72AB29">
                     <span class="material-icons">check_circle</span>
                     Approved!
@@ -259,7 +259,7 @@
                         <br><label style="color: gray;margin-left: 28px;">Tracking# {pigcms{$userImg['bag_express_num']}</label>
                     </div>
                 </if>
-                <if condition="($user['bag_get_type'] eq 1 and $userImg['bag_express_num'] eq '') or ($user['bag_get_type'] eq 2 and $userImg['bag_received'] eq 0)">
+                <if condition="($user['bag_get_type'] eq 1 and $userImg['bag_express_num'] eq '') or $user['bag_get_type'] eq 2">
                     <div class="status_show" style="color: #72AB29">
                     <span class="material-icons">check_circle</span>
                     Payment Success!
