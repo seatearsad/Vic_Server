@@ -109,12 +109,12 @@
     }
     .status_title{
         color: #333333;
-        font-size: 20px;
+        font-size: 18px;
         font-weight: bold;
     }
     .status_show{
         line-height: 30px;
-        font-size: 18px;
+        font-size: 16px;
         margin-top: 10px;
     }
     .status_show .material-icons{
@@ -124,7 +124,7 @@
     .status_txt{
         padding-left: 25px;
         height: 50px;
-        font-size: 18px;
+        font-size: 16px;
     }
     .upload_btn{
         float: right;
