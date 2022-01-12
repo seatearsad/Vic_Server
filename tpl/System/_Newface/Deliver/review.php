@@ -99,18 +99,17 @@
                                             </if>
 
                                             <if condition="$vo['reg_status'] eq 4 or $vo['reg_status'] eq 5">
+                                                <if condition="$vo['group'] eq 1">
+                                                    <font color="green">{pigcms{:L('D_APPROVED')}</font>
+                                                </if>
                                                 <if condition="$vo['is_upload'] eq 0">
                                                     <font color="red">{pigcms{:L('D_INCOMPLETE_REGIST')}</font>
-                                                    <else />
-                                                    <if condition="$vo['group'] eq 0">
-                                                        <font color="orange">{pigcms{:L('D_AWAITING_APPROVAL')}</font>
-                                                    </if>
-                                                    <if condition="$vo['group'] eq -1">
-                                                        <font color="red">{pigcms{:L('D_INCOMPLETE_REGIST')}</font>
-                                                    </if>
-                                                    <if condition="$vo['group'] eq 1">
-                                                        <font color="green">{pigcms{:L('D_APPROVED')}</font>
-                                                    </if>
+                                                </if>
+                                                <if condition="$vo['group'] eq 0 and $vo['is_upload'] eq 1">
+                                                    <font color="orange">{pigcms{:L('D_AWAITING_APPROVAL')}</font>
+                                                </if>
+                                                <if condition="$vo['group'] eq -1 and $vo['is_upload'] eq 1">
+                                                    <font color="red">{pigcms{:L('D_INCOMPLETE_REGIST')}</font>
                                                 </if>
                                             </if>
                                         </td>

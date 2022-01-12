@@ -3030,7 +3030,7 @@ class DeliverAction extends BaseAction
         $database_deliver_user = D('Deliver_user');
         $now_user = $database_deliver_user->field(true)->where(array('uid' => $this->deliver_session['uid']))->find();
         if($now_user['reg_status'] != 4 && $now_user['reg_status'] != 5) {
-            if($_GET['type'] == 'jump'){
+            if($_GET['type'] == 'jump' && $now_user['reg_status'] != 0){
                 D('Deliver_user')->where(array('uid'=>$this->deliver_session['uid']))->save(array('reg_status'=>4));
                 //$this->sendMail($now_user);
             }else {
