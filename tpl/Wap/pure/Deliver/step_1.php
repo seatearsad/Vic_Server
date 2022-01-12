@@ -77,13 +77,13 @@
     }
     li input {
         width: 80%;
-        height: 15px;
+        height: 25px;
         padding: 8px 0;
         text-indent: 10px;
         border-radius: 5px;
         margin-left: 1%;
         margin-top: 2px;
-        font-size: 12px;
+        font-size: 14px;
     }
     li input:disabled{
         background: #e6e6e6;
@@ -91,19 +91,20 @@
     }
     li input.sm {
         width: 39%;
-        height: 15px;
+        height: 25px;
         padding: 8px 0;
         text-indent: 10px;
         border-radius: 5px;
         margin-left: 1%;
         margin-top: 2px;
-        font-size: 12px;
+        font-size: 14px;
     }
     li select{
         width: 80%;
-        height: 31px;
+        height: 40px;
         text-indent: 5px;
         border-radius: 5px;
+        font-size: 14px;
     }
     li.Landd input {
         background: #ffa52d;
@@ -113,7 +114,7 @@
         margin-left: 0;
         padding: 0px;
         color: white;
-        height: 30px;
+        height: 40px;
     }
     #send_code{
         background: #ffa52d;
