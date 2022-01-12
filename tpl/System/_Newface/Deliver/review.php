@@ -102,7 +102,7 @@
                                                 <if condition="$vo['group'] eq 1">
                                                     <font color="green">{pigcms{:L('D_APPROVED')}</font>
                                                 </if>
-                                                <if condition="$vo['is_upload'] eq 0">
+                                                <if condition="$vo['is_upload'] eq 0 and $vo['group'] neq 1">
                                                     <font color="red">{pigcms{:L('D_INCOMPLETE_REGIST')}</font>
                                                 </if>
                                                 <if condition="$vo['group'] eq 0 and $vo['is_upload'] eq 1">
