@@ -105,6 +105,7 @@
         text-indent: 5px;
         border-radius: 5px;
         font-size: 14px;
+        color: black;
     }
     li.Landd input {
         background: #ffa52d;
@@ -125,7 +126,6 @@
         height: 30px;
     }
     li div{
-
         display: inline-block;
         width: 80%;
         font-size: 12px;
@@ -140,7 +140,7 @@
         background: #ffffff;
     }
     .gray_bg{
-        background: #e6e6e6;
+        background: #EEEEEE;
     }
     #vehicle_type{
         opacity: 100%;
