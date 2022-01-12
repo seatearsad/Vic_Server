@@ -86,7 +86,7 @@
         font-size: 14px;
     }
     li input:disabled{
-        background: #e6e6e6;
+        background: #EEEEEE;
         opacity: 100%;
     }
     li input.sm {
