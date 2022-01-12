@@ -3562,4 +3562,24 @@ class DeliverAction extends BaseAction
 
         return $body;
     }
+
+    public function update_work(){
+	    if($_POST){
+            D('Deliver_img')->where(array('uid' => $this->deliver_session['uid']))->save($_POST);
+            $result = array('error_code'=>false,'msg'=>'Success');
+            $this->ajaxReturn($result);
+        }else {
+            $this->display();
+        }
+    }
+
+    public function update_insurance(){
+        if($_POST){
+            D('Deliver_img')->where(array('uid' => $this->deliver_session['uid']))->save($_POST);
+            $result = array('error_code'=>false,'msg'=>'Success');
+            $this->ajaxReturn($result);
+        }else {
+            $this->display();
+        }
+    }
 }

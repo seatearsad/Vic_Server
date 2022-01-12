@@ -165,13 +165,13 @@
         </div>
         <div class="div_title" style="margin-top: 20px;">
             <span class="material-icons title_icon">featured_play_list</span>
-            Work Eligibility
+            Vehicle Insurance
             <span style="float: right;">
-                <if condition="$deliver_session['group'] eq 1 and ($deliver_img['insurace_expiry'] eq '-1' or $deliver_img['insurace_expiry_type'] eq 1)">
+                <if condition="$deliver_session['group'] eq 1 and $deliver_img['insurace_expiry_type'] eq 1">
                     Approved
                 <else />
-                    <if condition="$deliver_img['insurace_expiry'] neq '-1' and ($deliver_img['insurace_expiry_type'] eq 0 or $deliver_img['insurace_expiry_type'] eq 2)">
-                        <span class="update_btn">
+                    <if condition="$deliver_img['insurace_expiry_type'] eq 0 or $deliver_img['insurace_expiry_type'] eq 2">
+                        <span class="update_btn" data-url="{pigcms{:U('Deliver/update_insurance')}">
                             <span class="material-icons" style="width: auto;vertical-align: middle;">report_problem</span>
                             Update
                         </span>
@@ -179,33 +179,30 @@
                 </if>
             </span>
             <div class="div_desc">
-                <if condition="$deliver_img['insurace_expiry'] eq '-1'">
-                    Does not expire
-                </if>
-                <if condition="$deliver_img['insurace_expiry'] neq '-1' and $deliver_img['insurace_expiry_type'] eq 0">
+                <if condition="$deliver_img['insurace_expiry_type'] eq 0">
                     <label style="color: #984447">
                         Expires on {pigcms{$deliver_img['insurace_expiry']}
                     </label>
                 </if>
-                <if condition="$deliver_img['insurace_expiry'] neq '-1' and $deliver_img['insurace_expiry_type'] eq 2">
+                <if condition="$deliver_img['insurace_expiry_type'] eq 2">
                     <label style="color: #6A6A6A">
                         Expires on {pigcms{$deliver_img['insurace_expiry']}
                     </label>
                 </if>
-                <if condition="$deliver_img['insurace_expiry'] neq '-1' and $deliver_img['insurace_expiry_type'] eq 1">
+                <if condition="$deliver_img['insurace_expiry_type'] eq 1">
                     Expires on {pigcms{$deliver_img['insurace_expiry']}
                 </if>
             </div>
         </div>
         <div class="div_title" style="margin-top: 20px;">
             <span class="material-icons title_icon">featured_play_list</span>
-            Vehicle Insurance
+            Work Eligibility
             <span style="float: right;">
-                <if condition="$deliver_session['group'] eq 1 and $deliver_img['certificate_expiry_type'] eq 1">
+                <if condition="$deliver_session['group'] eq 1 and ($deliver_img['certificate_expiry'] eq '-1' or $deliver_img['certificate_expiry_type'] eq 1)">
                     Approved
                 <else />
-                    <if condition="$deliver_img['certificate_expiry_type'] eq 0 or $deliver_img['certificate_expiry_type'] eq 2">
-                        <span class="update_btn">
+                    <if condition="$deliver_img['certificate_expiry'] neq '-1' and ($deliver_img['certificate_expiry_type'] eq 0 or $deliver_img['certificate_expiry_type'] eq 2)">
+                        <span class="update_btn" data-url="{pigcms{:U('Deliver/update_work')}">
                             <span class="material-icons" style="width: auto;vertical-align: middle;">report_problem</span>
                             Update
                         </span>
@@ -213,17 +210,20 @@
                 </if>
             </span>
             <div class="div_desc">
-                <if condition="$deliver_img['certificate_expiry_type'] eq 0">
+                <if condition="$deliver_img['certificate_expiry'] eq '-1'">
+                    Does not expire
+                </if>
+                <if condition="$deliver_img['certificate_expiry'] neq '-1' and $deliver_img['certificate_expiry_type'] eq 0">
                     <label style="color: #984447">
                         Expires on {pigcms{$deliver_img['certificate_expiry']}
                     </label>
                 </if>
-                <if condition="$deliver_img['certificate_expiry_type'] eq 2">
+                <if condition="$deliver_img['certificate_expiry'] neq '-1' and $deliver_img['certificate_expiry_type'] eq 2">
                     <label style="color: #6A6A6A">
                         Expires on {pigcms{$deliver_img['certificate_expiry']}
                     </label>
                 </if>
-                <if condition="$deliver_img['certificate_expiry_type'] eq 1">
+                <if condition="$deliver_img['certificate_expiry'] neq '-1' and $deliver_img['certificate_expiry_type'] eq 1">
                     Expires on {pigcms{$deliver_img['certificate_expiry']}
                 </if>
             </div>
@@ -275,6 +275,10 @@
     });
     $('#change_pwd').click(function () {
         location.href = "{pigcms{:U('Deliver/change_pwd')}";
+    });
+
+    $('.update_btn').click(function () {
+        location.href = $(this).data('url');
     });
 
     var ua = navigator.userAgent;
