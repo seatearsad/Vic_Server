@@ -2909,6 +2909,7 @@ class DeliverAction extends BaseAction
             $user_data["bag_get_id"]=$_POST['bag_id'];
         }
         D('Deliver_user')->where(array('uid'=>$this->deliver_session['uid']))->save($user_data);
+        D('Deliver_img')->where(array('uid' => $this->deliver_session['uid']))->save(array('bag_review_desc'=>""));
     }
 
     public function step_3(){
@@ -2921,7 +2922,6 @@ class DeliverAction extends BaseAction
                 $saveData["reg_status"] = 4;
                 $saveData["last_time"] = time();
                 $database_deliver_user->where(array('uid' => $this->deliver_session['uid']))->save($saveData);
-                D('Deliver_img')->where(array('uid' => $this->deliver_session['uid']))->save(array('bag_review_desc'=>""));
                 $result = array('error_code' => false, 'msg' => L('SUCCESS_BKADMIN'));
             }else {
                 $this->pre_save_step3();
