@@ -3042,15 +3042,17 @@ class DeliverAction extends BaseAction
 
         $uploadStatus = 0;
         if($user_img['driver_license'] != '' && $user_img['insurance'] != '' && $user_img['certificate'] != '' && $user_img['sin_num'] != ''){//是否全部上传
-            if($now_user['group'] == 1){//通过审核
-                $uploadStatus = 2;
-            }else if($now_user['group'] == -1){//未通过审核
+            if($now_user['group'] == -1){//未通过审核
                 $uploadStatus = 3;
             }else{//等待审核
                 $uploadStatus = 1;
             }
         }else{//未全部上传资料
             $uploadStatus = 0;
+        }
+
+        if($now_user['group'] == 1){//通过审核
+            $uploadStatus = 2;
         }
 
         if($user_img['card_num'] != '' && $user_img['txnNumber'] != ''){
