@@ -113,8 +113,15 @@
                                     </div>
                                     <div class="form-group  row">
                                         <label class="col-sm-3 col-form-label">{pigcms{:L('_BACK_DELIVER_AREA_')}</label>
-                                        <div class="col-sm-9" id="city_area">{pigcms{$now_user.city_name}</div>
-                                        <input type="hidden" id="city_id" name="city_id" value="{pigcms{$now_user.city_id}">
+                                        <div class="col-sm-9" id="city_area">
+                                            <select name="city_id" id="city_select" class="form-control">
+                                                <option value="0" <if condition="$city_id eq '' or $city_id eq 0">selected="selected"</if>>All</option>
+                                                <volist name="city" id="vo">
+                                                    <option value="{pigcms{$vo.area_id}" <if condition="$vo['area_id'] eq $now_user['city_id']">selected="selected"</if>>{pigcms{$vo.area_name}</option>
+                                                </volist>
+                                            </select>
+                                        </div>
+                                        <!--input type="hidden" id="city_id" name="city_id" value="{pigcms{$now_user.city_id}"-->
                                     </div>
 
 
@@ -316,6 +323,30 @@
                                         </tr>
                                         <if condition="$now_user['bag_get_type'] eq 1">
                                             <tr>
+                                                <th width="25%">Address</th>
+                                                <td colspan=3>
+                                                    {pigcms{$now_user['ship_adress']}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th width="25%">City</th>
+                                                <td colspan=3>
+                                                    {pigcms{$now_user['ship_city_str']} {pigcms{$now_user['ship_province_str']}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th width="25%">Apartment, suite, unit, etc</th>
+                                                <td colspan=3>
+                                                    {pigcms{$now_user['ship_apartment']}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th width="25%">Postal Code</th>
+                                                <td colspan=3>
+                                                    {pigcms{$now_user['ship_postal_code']}
+                                                </td>
+                                            </tr>
+                                            <tr>
                                                 <th width="25%">Tracking #</th>
                                                 <td colspan=3>
                                                     <input type="text" class="form-control" name="bag_express_num" value="{pigcms{$img['bag_express_num']}"/>
@@ -384,22 +415,22 @@
                                             <th width="25%">Activate account</th>
                                             <td colspan=3>
                                                 <span class="cb-enable">
-                                                    <label class="cb-enable selected">
+                                                    <label class="cb-enable ">
                                                         <span>Activate</span>
-                                                        <input type="radio" name="activate_account" value="1" checked="checked" />
+                                                        <input type="radio" name="activate_account" value="1" />
                                                     </label>
                                                 </span>
                                                 <span class="cb-disable">
-                                                    <label class="cb-disable">
+                                                    <label class="cb-disable selected">
                                                         <span>Inactivate</span>
-                                                        <input type="radio" name="activate_account" value="0" />
+                                                        <input type="radio" name="activate_account" value="0" checked="checked" />
                                                     </label>
                                                 </span>
                                             </td>
                                         </tr>
                                     </if>
                                 </table>
-                                <input type="hidden" name="city_id" id="city_id" value="{pigcms{$now_user['city_id']}">
+                                <!--input type="hidden" name="city_id" id="city_id" value="{pigcms{$now_user['city_id']}"-->
                                 <input type="hidden" name="province_id" id="province_id"
                                        value="{pigcms{$now_user['province_id']}">
                                 <input type="hidden" name="driver_license" id="filename_0"
@@ -563,7 +594,7 @@
                     //$("input[name='lng']").val(place.geometry.location.lng());
                     //$("input[name='lat']").val(place.geometry.location.lat());
                     $('#long_lat').val(place.geometry.location.lng() + ',' + place.geometry.location.lat());
-
+                    /**
                     var add_com = place.address_components;
                     console.log(add_com);
                     var is_get_city = false;
@@ -582,6 +613,7 @@
                             }, 'JSON');
                         }
                     }
+                    */
                 }
             </script>
             <include file="Public:footer_inc"/>

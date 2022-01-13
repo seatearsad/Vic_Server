@@ -104,8 +104,15 @@
                             </div>
                             <div class="form-group  row">
                                 <label class="col-sm-3 col-form-label">{pigcms{:L('_BACK_DELIVER_AREA_')}</label>
-                                <div class="col-sm-9" id="city_area"></div>
-                                <input type="hidden" id="city_id" name="city_id">
+                                <div class="col-sm-9" id="city_area">
+                                    <select name="city_id" id="city_select" class="form-control">
+                                        <option value="0">All</option>
+                                        <volist name="city" id="vo">
+                                            <option value="{pigcms{$vo.area_id}">{pigcms{$vo.area_name}</option>
+                                        </volist>
+                                    </select>
+                                </div>
+                                <!--input type="hidden" id="city_id" name="city_id"-->
                             </div>
                             <div class="form-group  row">
                                 <label class="col-sm-3 col-form-label">{pigcms{:L('_BIRTHDAY_TXT_')}</label>

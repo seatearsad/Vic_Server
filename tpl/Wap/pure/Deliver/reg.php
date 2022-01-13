@@ -122,7 +122,7 @@
                 <input type="password" placeholder="{pigcms{:L('_B_D_LOGIN_CONFIRMKEY_')}*" id="c_pwd">
             </li>
             <li>
-                <span>By clicking “Sign Up”, I agree to Tutti’s Terms of Use and acknowledge that I have read the <a href="../intro/2.html" target="_blank" style="text-decoration: underline">Privacy Policy.</a></span>
+                <span>By clicking “Sign Up”, I agree to Tutti’s Terms of Use and acknowledge that I have read the <a href="{pigcms{:U('Deliver/policy')}" style="text-decoration: underline">Privacy Policy.</a></span>
             </li>
             <li class="Landd">
                 <input type="button" value="{pigcms{:L('_ND_REGISTER_')}" id="reg_form" style="background-color: #ffa52d;">

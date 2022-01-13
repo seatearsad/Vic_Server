@@ -104,7 +104,7 @@
     .status_div{
         background-color: white;
         border-radius: 10px;
-        padding: 20px 20px 10px 20px;
+        padding: 20px;
         margin-top: 20px;
     }
     .status_title{
@@ -123,7 +123,7 @@
     }
     .status_txt{
         padding-left: 25px;
-        height: 80px;
+        /*height: 80px;*/
         font-size: 16px;
     }
     .upload_btn{
@@ -155,7 +155,7 @@
 </style>
 <body style="background:url('{pigcms{$static_path}img/login_bg.png');">
 <div class="refresh" id="refresh_btn">
-    <span class="material-icons" style="color: #294068;font-size: 26px;">restart_alt</span>
+    <span class="material-icons" style="color: #294068;font-size: 36px;">restart_alt</span>
 </div>
 <section>
     <div class="Land_top" style="color:#333333;">

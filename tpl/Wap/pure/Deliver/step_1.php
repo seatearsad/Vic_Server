@@ -165,7 +165,7 @@
 </style>
 <body style="background:url('{pigcms{$static_path}img/login_bg.png');">
 <div class="refresh" id="refresh_btn">
-    <span class="material-icons" style="color: #294068;font-size: 26px;">restart_alt</span>
+    <span class="material-icons" style="color: #294068;font-size: 36px;">restart_alt</span>
 </div>
 <section>
     <div class="Land_top" style="color:#333333;">
@@ -211,7 +211,7 @@
                 <input type="text" class="gray-bg pac-target-input" placeholder="{pigcms{:L('_ND_ADDRESS_')}*" id="address" name="address" disabled="disabled">
             </li>
             <li>
-                <input type="text" class="gray-bg" placeholder="Apartment,suite,unit,etc." id="apartment" name="apartment" disabled="disabled">
+                <input type="text" class="gray-bg" placeholder="Apartment, suite, unit, etc" id="apartment" name="apartment" disabled="disabled">
             </li>
             <li>
                 <input type="text" class="sm gray-bg" placeholder="City*" id="city"  name="city" disabled="disabled">
@@ -384,7 +384,7 @@
         var is_check = true;
         if($('#vehicle_type').val() == 0){
             is_check = false;
-            show_tip("{pigcms{:L('_PLEASE_INPUT_ALL_')}",$(this));
+            show_tip("Please complete all required fields",$(this));
         }
         $("#reg_list").find('input').each(function () {
             if($(this).attr("name") != "apartment" && $(this).val() == ''){

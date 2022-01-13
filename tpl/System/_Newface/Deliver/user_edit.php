@@ -117,8 +117,15 @@
                             </div>
                             <div class="form-group  row">
                                 <label class="col-sm-3 col-form-label">{pigcms{:L('_BACK_DELIVER_AREA_')}</label>
-                                <div class="col-sm-9" id="city_area">{pigcms{$now_user.city_name}</div>
-                                <input type="hidden" id="city_id" name="city_id" value="{pigcms{$now_user.city_id}">
+                                <div class="col-sm-9" id="city_area">
+                                    <select name="city_id" id="city_select" class="form-control">
+                                        <option value="0" <if condition="$city_id eq '' or $city_id eq 0">selected="selected"</if>>All</option>
+                                        <volist name="city" id="vo">
+                                            <option value="{pigcms{$vo.area_id}" <if condition="$vo['area_id'] eq $now_user['city_id']">selected="selected"</if>>{pigcms{$vo.area_name}</option>
+                                        </volist>
+                                    </select>
+                                </div>
+                                <!--input type="hidden" id="city_id" name="city_id" value="{pigcms{$now_user.city_id}"-->
                             </div>
                             <div class="form-group  row">
                                 <label class="col-sm-3 col-form-label">{pigcms{:L('_BIRTHDAY_TXT_')}</label>
@@ -411,5 +418,5 @@
 	</script>
 	<!--<script type="text/javascript" src="{pigcms{$static_path}js/area.js"></script>-->
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKlguA2QFIUVwWTo3danbOqSKv3nYbBCg&libraries=places&language=en"></script>
-	<script type="text/javascript" src="{pigcms{$static_path}js/map.js"></script>
+	<script type="text/javascript" src="{pigcms{$static_path}js/map.js?1.1"></script>
 <include file="Public:footer_inc"/>

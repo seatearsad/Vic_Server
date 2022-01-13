@@ -32,7 +32,7 @@
         position: absolute;
         top: 7%;
         width: 100%;
-        font-size: 12px;
+        font-size: 14px;
         color: #666666;
     }
     #step_now{
@@ -74,7 +74,8 @@
     #step_title{
         width:80%;
         margin: 20px auto 5px auto;
-        font-size: 14px;
+        font-size: 18px;
+        font-weight: bold;
         color: #333333;
     }
     input[type="file"] {
@@ -91,7 +92,7 @@
         background-position:left 10px center;
         color: #666666;
         text-indent: 0px;
-        font-size: 11px;
+        font-size: 12px;
         border-radius: 5px;
         padding: 0px;
         height: 50px;
@@ -103,7 +104,7 @@
     }
     input{
         width: 100%;
-        padding: 10px 0px;
+        padding: 12px 0px;
         border-radius: 3px;
     }
     .img_0,.img_1,.img_2{
@@ -125,7 +126,7 @@
 </style>
 <body style="background:url('{pigcms{$static_path}img/login_bg.png');">
 <div class="refresh" id="refresh_btn">
-    <span class="material-icons" style="color: #294068;font-size: 26px;">restart_alt</span>
+    <span class="material-icons" style="color: #294068;font-size: 36px;">restart_alt</span>
 </div>
 <section>
     <div class="Land_top" style="color:#333333;">
@@ -213,7 +214,7 @@
             </if>
         </div>
     </div>
-    <div id="memo" style="color: silver;margin-bottom: 30px;">
+    <div id="memo" style="color: #353535;margin-bottom: 30px;">
         {pigcms{:L('_ND_SKIPUPLOAD_')}
     </div>
     <div id="memo" style="text-align: center;margin-top: 20px;margin-bottom: 20px;">
@@ -285,7 +286,7 @@
             img.html('<img src="'+response.url+'"/>');
             img.css("height","100px");
         }else{
-            alert(response.info);
+            layer.open({title:"{pigcms{:L('_B_D_LOGIN_TIP2_')}",content:"Oops! Something went wrong. Photos no larger than 5MB is recommended! Please try again.", btn:["{pigcms{:L('_B_D_LOGIN_CONIERM_')}"]});
         }
     });
 

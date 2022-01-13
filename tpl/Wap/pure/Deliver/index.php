@@ -302,6 +302,12 @@
     <if condition="$deliver_session['reg_status'] eq 0 and $deliver_session['group'] eq 1">
         <script type="text/javascript" src="{pigcms{$static_path}js/grab.js?213" charset="utf-8"></script>
         <script>
+            window.onpageshow = function(event) {
+                if (event.persisted) {
+                    window.location.reload();
+                }
+            }
+
             var grab_timer,order_timer;
             $('#grab_list').html('');
 
@@ -349,9 +355,13 @@
                         order_timer = setInterval(getOrderNum, 2000);
                         clearInterval(grab_timer);
                         record_id = 0;
+                        directionsDisplay.setMap(null);
+                        marker_store.setMap(null);
+                        marker_user.setMap(null);
                         location.hash = 1;
                     }
                     else {
+                        getList();
                         grab_timer = setInterval(getList, 2000);
                         clearInterval(order_timer);
                         location.hash = 0;
@@ -507,7 +517,7 @@
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKlguA2QFIUVwWTo3danbOqSKv3nYbBCg&callback=initMap&language=en" async defer></script>
 	<script type="text/javascript">
-        var self_position,is_route,map;
+        var self_position,is_route,map,directionsService,directionsDisplay,record_id,marker_store,marker_user;
 
         function initMap() {
             is_route = {pigcms{$is_route};
@@ -539,6 +549,11 @@
                 loadPosition();
             }
              */
+
+            directionsService = new google.maps.DirectionsService();
+            directionsDisplay = new google.maps.DirectionsRenderer();
+            marker_store = new google.maps.Marker();
+            marker_user = new google.maps.Marker();
 
             var curr_hash = location.hash.replace("#","");
             if(curr_hash == "1"){
@@ -592,6 +607,9 @@
                 //icon:"{pigcms{$static_path}img/deliver_menu/customer_pin_3.png"
             });
             record_id = 0;
+            directionsDisplay.setMap(null);
+            marker_store.setMap(null);
+            marker_user.setMap(null);
             map.setCenter(self_position);
         }
 
@@ -648,13 +666,12 @@
             map.fitBounds(bounds);
         }
 
-        var record_id;
         function loadRoute(orderDetail) {
             if(record_id != orderDetail.supply_id) {
                 record_id = orderDetail.supply_id;
-
-                var directionsService = new google.maps.DirectionsService();
-                var directionsDisplay = new google.maps.DirectionsRenderer();
+                directionsDisplay.setMap(null);
+                marker_store.setMap(null);
+                marker_user.setMap(null);
                 //var haight = self_position;
                 //var oceanBeach = new google.maps.LatLng({pigcms{$route['destination_lat']?$route['destination_lat']:0}, {pigcms{$route['destination_lng']?$route['destination_lng']:0});
                 var user_pos = {lat: parseFloat(orderDetail.aim_lat), lng: parseFloat(orderDetail.aim_lnt)};
@@ -687,7 +704,7 @@
                     }]
                 });
 
-                var marker_user = new google.maps.Marker({
+                marker_user = new google.maps.Marker({
                     position: user_pos,
                     map: map,
                     scaledSize: new google.maps.Size(10, 10),
@@ -697,7 +714,7 @@
                     }
                 });
 
-                var marker_store = new google.maps.Marker({
+                marker_store = new google.maps.Marker({
                     position: store_pos,
                     map: map,
                     icon: {

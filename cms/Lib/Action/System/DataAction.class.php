@@ -1287,7 +1287,7 @@ class DataAction extends BaseAction
             $deliver['status_name'] = $deliver['status'] == 1 ? 'Active' : 'Inactive';
 
             if($_GET['status'] == 2){
-                if(($other['insurace_expiry'] != '' && strtotime($other['insurace_expiry']) < time()) || ($other['certificate_expiry'] != '-1' && $other['certificate_expiry'] != '' && strtotime($other['certificate_expiry']) < time())){
+                if(($other['insurace_expiry'] != '' && strtotime($other['insurace_expiry']." 23:59:59") < time()) || ($other['certificate_expiry'] != '-1' && $other['certificate_expiry'] != '' && strtotime($other['certificate_expiry']." 23:59:59") < time())){
                     $deliver['status_name'] = "Expired";
                     $expired_list[] = $deliver;
                 }

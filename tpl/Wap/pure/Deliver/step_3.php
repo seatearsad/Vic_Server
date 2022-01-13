@@ -32,7 +32,7 @@
         position: absolute;
         top: 7%;
         width: 100%;
-        font-size: 12px;
+        font-size: 14px;
         color: #666666;
     }
 
@@ -76,7 +76,8 @@
     .step_title{
         width:80%;
         margin: 20px auto 5px auto;
-        font-size: 14px;
+        font-size: 18px;
+        font-weight: bold;
         color: #333333;
     }
     #step_now{
@@ -90,28 +91,27 @@
     }
     li input {
         width: 80%;
-        height: 15px;
+        height: 25px;
         padding: 8px 0;
         text-indent: 10px;
         border-radius: 5px;
         margin-left: 1%;
         margin-top: 2px;
-        font-size: 12px;
+        font-size: 14px;
     }
     li input.sm {
         width: 39%;
-        height: 15px;
+        height: 25px;
         padding: 8px 0;
         text-indent: 10px;
         border-radius: 5px;
         margin-left: 1%;
         margin-top: 2px;
-        font-size: 12px;
+        font-size: 14px;
     }
     .Landd input {
         background: #ffa52d;
         text-indent: 0px;
-        font-size: 12px;
         margin-top: 30px;
         margin-left: 0;
         padding: 0px;
@@ -214,7 +214,7 @@
 </style>
 <body style="background:url('{pigcms{$static_path}img/login_bg.png');">
 <div class="refresh" id="refresh_btn">
-    <span class="material-icons" style="color: #294068;font-size: 26px;">restart_alt</span>
+    <span class="material-icons" style="color: #294068;font-size: 36px;">restart_alt</span>
 </div>
 <section>
     <div class="Land_top" style="color:#333333;">
@@ -266,7 +266,7 @@
         </div>
     </if>
 
-    <div class="memo-sm" style="text-align: right;text-align: center;font-size: 12px;height: 20px;margin-top: 20px;">
+    <div class="memo-sm" style="text-align: right;text-align: center;height: 20px;margin-top: 20px;">
         <if condition="$city['bag_type'] eq 1">
             <input type="hidden"  name="bag_type" value="1">
             <else />
@@ -282,7 +282,7 @@
             </if>
         </if>
     </div>
-    <div class="memo-sm" style="text-align: right;font-size: 12px;font-weight: bold">
+    <div class="memo-sm" style="text-align: right;font-weight: bold">
         <div class="price_div">Subtotal : $<span class="subtotal_box">0</span></div>
         <div class="price_div">Shipping : $<span class="shipping_fee_box">0</span></div>
     </div>
@@ -291,7 +291,7 @@
     <div id="pickup_div" style="display: none">
         <div class="step_title">You’ll pick up your bag in {pigcms{$city.bag_address_name}!</div>
         <div class="memo">
-            You will receive an email with the exact address and a link to book a pick-up time slot.
+            The exact pickup address will be available after we receive your delivery bag order
         </div>
     </div>
     <div id="shipping_div" style="display: none">
@@ -354,7 +354,7 @@
             <li>
                 <input type="text" placeholder="3-digit number" id="cvv">
             </li>
-            <div class="memo-sm" style="text-align: right;font-size: 12px;font-weight: bold">
+            <div class="memo-sm" style="text-align: right;font-weight: bold">
                 <div class="price_div">Subtotal : $<span class="subtotal_box">0</span></div>
                 <div class="price_div">Shipping : $<span class="shipping_fee_box">0</span></div>
                 <div class="price_div">Tax : $<span class="tax_box">0</span></div>
@@ -369,7 +369,7 @@
                 </div>
             </li>
             <li class="Landd">
-                <input type="button" value="Save & Pay Later" id="jump_btn" style="background-color: darkgrey;color:white;font-size:10px;width: 80%;margin-top: 10px;margin-bottom: 30px">
+                <input type="button" value="Save & Pay Later" id="jump_btn" style="background-color: darkgrey;color:white;width: 80%;margin-top: 10px;margin-bottom: 30px">
             </li>
         </ul>
     </div>
@@ -452,7 +452,7 @@
             $("#own_bag_input").val(response.file);
         }else{
             //alert(response.info);
-            layer.open({title:"{pigcms{:L('_B_D_LOGIN_TIP2_')}",content:response.info, btn:["{pigcms{:L('_B_D_LOGIN_CONIERM_')}"]});
+            layer.open({title:"{pigcms{:L('_B_D_LOGIN_TIP2_')}",content:"Oops! Something went wrong. Photos no larger than 5MB is recommended! Please try again.", btn:["{pigcms{:L('_B_D_LOGIN_CONIERM_')}"]});
         }
     });
 
@@ -493,7 +493,7 @@
             }
         });
 
-        if(totalNum > 0 && select_buy_mode == 2){
+        if(select_buy_mode == 2){
             show_shipping_fee = shipping_fee;
         }else{
             show_shipping_fee = 0;
@@ -502,7 +502,7 @@
         sub_total = sub_total.toFixed(2);
         tax_price += parseFloat((show_shipping_fee * 0.05).toFixed(2));
         tax_price = tax_price.toFixed(2);
-        total = parseFloat(sub_total + show_shipping_fee + tax_price);
+        total = parseFloat(sub_total) + parseFloat(show_shipping_fee) + parseFloat(tax_price);
         total = total.toFixed(2);
 
         $(".subtotal_box").html(sub_total);
@@ -591,7 +591,7 @@
             //alert("{pigcms{:L('_PLEASE_INPUT_ALL_')}");
             layer.open({
                 title: "{pigcms{:L('_B_D_LOGIN_TIP2_')}",
-                content: "{pigcms{:L('_PLEASE_INPUT_ALL_')}",
+                content: "Please complete all required fields",
                 btn: ["{pigcms{:L('_B_D_LOGIN_CONIERM_')}"],
             });
         }else{

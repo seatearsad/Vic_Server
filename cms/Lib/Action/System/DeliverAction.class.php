@@ -156,7 +156,7 @@ class DeliverAction extends BaseAction {
         foreach ($user_list as &$deliver){
             if($deliver['status'] == 1){
                 $img = D("Deliver_img")->where(array('uid'=>$deliver['uid']))->find();
-                if(($img['insurace_expiry'] != '' && strtotime($img['insurace_expiry']) < time()) || ($img['certificate_expiry'] != '' && strtotime($img['certificate_expiry']) < time())){
+                if(($img['insurace_expiry'] != '' && strtotime($img['insurace_expiry']." 23:59:59") < time()) || ($img['certificate_expiry'] != '' && $img['certificate_expiry'] != '-1' && strtotime($img['certificate_expiry']." 23:59:59") < time())){
                     $deliver['expiry'] = 1;
                 }else{
                     $deliver['expiry'] = 0;
@@ -255,12 +255,17 @@ class DeliverAction extends BaseAction {
                 D('Deliver_img')->where(array('uid' => $id))->save($data_img);
             }
     		$this->success(L('J_SUCCEED3'));
-    	}
-    	//garfunkel 判断城市管理员
-        //if($this->system_session['level'] == 3){
+    	}else {
+            //garfunkel 判断城市管理员
+            //if($this->system_session['level'] == 3){
             //$this->error('当前管理员没有此权限');
-        //}
-    	$this->display();
+            //}
+
+            $city = D('Area')->where(array('area_type'=>2,'is_open'=>1))->select();
+            $this->assign('city',$city);
+
+            $this->display();
+        }
     }
     
     /**
@@ -380,6 +385,9 @@ class DeliverAction extends BaseAction {
 
             $deliver_img = D('Deliver_img')->field(true)->where(array('uid' => $uid))->find();
             $this->assign('img', $deliver_img);
+
+            $city = D('Area')->where(array('area_type'=>2,'is_open'=>1))->select();
+            $this->assign('city',$city);
     	}
     	$this->display();
     }
@@ -2022,6 +2030,9 @@ class DeliverAction extends BaseAction {
 
             $card = D('Deliver_card')->field(true)->where(array('deliver_id'=>$uid))->find();
             $this->assign('card',$card);
+
+            $city = D('Area')->where(array('area_type'=>2,'is_open'=>1))->select();
+            $this->assign('city',$city);
 
             $this->display();
         }

@@ -23,7 +23,7 @@ class DeliverAction extends BaseAction
 			}
 			
 			if (empty($this->deliver_session)) {
-				if (ACTION_NAME != 'login' && ACTION_NAME != 'reg' &&  ACTION_NAME != 'ajax_city_name' && ACTION_NAME != 'forgetpwd') {
+				if (ACTION_NAME != 'login' && ACTION_NAME != 'reg' &&  ACTION_NAME != 'ajax_city_name' && ACTION_NAME != 'forgetpwd' && ACTION_NAME != 'policy') {
 					redirect(U('Deliver/login', array('referer' => urlencode('http://' . $_SERVER['HTTP_HOST'] . (!empty($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'])))));
 					exit();
 				}
@@ -325,11 +325,11 @@ class DeliverAction extends BaseAction
 
         $img = D("Deliver_img")->where(array('uid'=>$this->deliver_session['uid']))->find();
         $expiry = array();
-        if($img['insurace_expiry'] != '' && strtotime($img['insurace_expiry']) < time()){
+        if($img['insurace_expiry'] != '' && strtotime($img['insurace_expiry']." 23:59:59") < time()){
             $expiry[] = "Vehicle Insurance";
         }
 
-        if($img['certificate_expiry'] != '-1' && $img['certificate_expiry'] != '' && strtotime($img['certificate_expiry']) < time()) {
+        if($img['certificate_expiry'] != '-1' && $img['certificate_expiry'] != '' && strtotime($img['certificate_expiry']." 23:59:59") < time()) {
             $expiry[] = "Work Eligibility";
         }
 
@@ -3428,18 +3428,18 @@ class DeliverAction extends BaseAction
         $deliver_img = D('Deliver_img')->where(array('uid'=>$this->deliver_session['uid']))->find();
         $deliver_img['insurace_expiry_type'] = 1;//0过期 1未过期 2即将过期
         $deliver_img['certificate_expiry_type'] = 1;//0过期 1未过期 2即将过期
-        if($deliver_img['insurace_expiry'] != '' && strtotime($deliver_img['insurace_expiry']) < time()){
+        if($deliver_img['insurace_expiry'] != '' && strtotime($deliver_img['insurace_expiry']." 23:59:59") < time()){
             $deliver_img['insurace_expiry_type'] = 0;
         }else{
-            if((strtotime($deliver_img['insurace_expiry']) - time())/86400 < 30){
+            if((strtotime($deliver_img['insurace_expiry']." 23:59:59") - time())/86400 < 30){
                 $deliver_img['insurace_expiry_type'] = 2;
             }
         }
 
-        if($deliver_img['certificate_expiry'] != '-1' && $deliver_img['certificate_expiry'] != '' && strtotime($deliver_img['certificate_expiry']) < time()) {
+        if($deliver_img['certificate_expiry'] != '-1' && $deliver_img['certificate_expiry'] != '' && strtotime($deliver_img['certificate_expiry']." 23:59:59") < time()) {
             $deliver_img['certificate_expiry_type'] = 0;
         }else{
-            if((strtotime($deliver_img['certificate_expiry']) - time())/86400 < 30){
+            if((strtotime($deliver_img['certificate_expiry']." 23:59:59") - time())/86400 < 30){
                 $deliver_img['certificate_expiry_type'] = 2;
             }
         }
@@ -3581,5 +3581,9 @@ class DeliverAction extends BaseAction
         }else {
             $this->display();
         }
+    }
+
+    public function policy(){
+        $this->display();
     }
 }
