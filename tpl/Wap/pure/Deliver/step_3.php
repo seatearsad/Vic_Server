@@ -210,6 +210,8 @@
         float: right;
         margin-top: 30px;
         margin-right: 20px;
+        position: relative;
+        z-index: 99;
     }
 </style>
 <body style="background:url('{pigcms{$static_path}img/login_bg.png');">
@@ -408,7 +410,7 @@
     <if condition="$user['bag_get_type'] gt 0">
         var init_bag_select="{pigcms{$user['bag_get_type']}";
     <else />
-        <if condition="$city['bag_type'] eq 2">
+        <if condition="$city['bag_type'] eq 1">
             var init_bag_select=2;
         <else />
             var init_bag_select=1;
@@ -513,13 +515,13 @@
 
     function init_save_user_data(){
         if (init_bag_select==1){
-            $("#shipping_div").hide();
-            $("#pickup_div").show();
-            select_buy_mode=1;
-        }else{
             $("#shipping_div").show();
             $("#pickup_div").hide();
             select_buy_mode=2;
+        }else{
+            $("#shipping_div").hide();
+            $("#pickup_div").show();
+            select_buy_mode=1;
         }
 
         if (select_buy_mode==2){
@@ -577,16 +579,16 @@
 
         var is_next = true;
 
-        if($('#c_name').val() == '' || $('#c_number').val() == '' || $('#e_date').val() == '' || $('#cvv').val() == ''){
+        if($('#c_name').val() == '' || $('#c_number').val() == '' || $('#e_date').val() == '' || $('#cvv').val() == '' || bag_get_id == ""){
             is_next = false;
         }
+
         if(select_buy_mode==2){
             if(select_buy_mode==0 || bag_get_id == "" || $('#address').val() == '' || $('#apartment').val() == '' || $('#city').val() == '' || $('#postalcode').val() == ''|| $('#province').val() == ''){
                 is_next = false;
-            }else{
-                is_next = true;
             }
         }
+
         if(!is_next) {
             //alert("{pigcms{:L('_PLEASE_INPUT_ALL_')}");
             layer.open({

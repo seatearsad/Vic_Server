@@ -225,7 +225,13 @@ class AreaAction extends BaseAction{
 
             $_POST['bag_url_show'] = $_POST['is_show_url'];
 
-			$area_type = $database_area->where(array('area_id'=>$_POST['area_id']))->field('area_type')->select();
+            $area = $database_area->where(array('area_id'=>$_POST['area_id']))->find();
+			$area_type = $area['area_type'];
+
+            //开放城市的送餐员招聘 发送通知邮件
+			if($area['bag_is_recruit'] == 0 && $_POST['bag_is_recruit'] == 1){
+                $this->sendMailToDeliver($_POST['area_id'],$area['area_name']);
+            }
 			if($database_area->data($_POST)->save()){
 			    //当城市时间均为00:00:00时，为城市紧急状态将所有店铺设置为休假状态
                 $config = D('Config')->where(array('name'=>'emergency_close_store'))->find();
@@ -485,5 +491,36 @@ class AreaAction extends BaseAction{
         }
         $return['info'] = $data;
         exit(json_encode($return));
+    }
+
+    public function sendMailToDeliver($area_id,$area_name){
+        $deliver_list = D("Deliver_user")->where(array('city_id'=>$area_id,'reg_status'=>1))->select();
+        foreach ($deliver_list as $deliver){
+            if($deliver['email'] != "") {
+                $email = array(array("address"=>$deliver['email'],"userName"=>$deliver['name']));
+                $title = "We’re accepting new couriers in ".$area_name;
+                $body = $this->getMailBody($deliver['name'],$area_name);
+                $mail = getMail($title, $body, $email);
+                $mail->send();
+            }
+        }
+    }
+
+    public function getMailBody($name,$city_name)
+    {
+        $body = "<p>Hi " . $name . ",</p>";
+        $body .= "<p>&nbsp;</p>";
+        $body .= "<p>You are receiving this email because you have previously applied to be a Tutti Courier in ".$city_name.", and we are now accepting new courier applications!</p>";
+        $body .= "<p>&nbsp;</p>";
+        $body .= "<p>Please follow this link to login and continue your application:<a href='https://tutti.app/wap.php?g=Wap&c=Deliver&a=login' target='_blank'>https://tutti.app/wap.php?g=Wap&c=Deliver&a=login</a></p>";
+        $body .= "<p>&nbsp;</p>";
+        $body .= "<p>You can also finish your application on our app (search “Tutti Courier” on the App Store or Google Play Store).</p>";
+        $body .= "<p>&nbsp;</p>";
+        $body .= "<p>For any questions, please contact us at 1-888-399-6668 or email <a href='mailto:hr@tutti.app'>hr@tutti.app</a>.</p>";
+        $body .= "<p>&nbsp;</p>";
+        $body .= "<p>Best regards,</p>";
+        $body .= "<p>Tutti Courier Team</p>";
+
+        return $body;
     }
 }

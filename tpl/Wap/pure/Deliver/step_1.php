@@ -161,6 +161,8 @@
         float: right;
         margin-top: 30px;
         margin-right: 20px;
+        position: relative;
+        z-index: 99;
     }
 </style>
 <body style="background:url('{pigcms{$static_path}img/login_bg.png');">
@@ -388,7 +390,7 @@
         }
         $("#reg_list").find('input').each(function () {
             if($(this).attr("name") != "apartment" && $(this).val() == ''){
-                show_tip("{pigcms{:L('_PLEASE_INPUT_ALL_')}",$(this));
+                show_tip("Please complete all required fields",$(this));
                 is_check = false;
                 return false;
             }

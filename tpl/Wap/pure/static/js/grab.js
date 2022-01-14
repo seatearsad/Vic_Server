@@ -126,7 +126,11 @@ function list_detail(lat, lng)
         $('#deliver_count').html(result.deliver_count + " in Progress");
         $('#finish_count').html(result.finish_count);
         if (result.work_status == 1) {
-            window.location.reload();
+            if(typeof (window.linkJs) != 'undefined'){
+                window.linkJs.reloadWebView();
+            }else {
+                window.location.reload();
+            }
         }
 	}, 'json');
 }

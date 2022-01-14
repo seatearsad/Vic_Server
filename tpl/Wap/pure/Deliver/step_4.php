@@ -151,6 +151,8 @@
         float: right;
         margin-top: 30px;
         margin-right: 20px;
+        position: relative;
+        z-index: 99;
     }
 </style>
 <body style="background:url('{pigcms{$static_path}img/login_bg.png');">

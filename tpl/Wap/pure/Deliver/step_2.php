@@ -117,11 +117,15 @@
     #reg_form{
         background-color: #ffa52d;
         color: white;
+        font-weight: bold;
+        font-size: 18px;
     }
     .refresh{
         float: right;
         margin-top: 30px;
         margin-right: 20px;
+        position: relative;
+        z-index: 99;
     }
 </style>
 <body style="background:url('{pigcms{$static_path}img/login_bg.png');">
@@ -134,10 +138,6 @@
         <div style="font-size: 14px">{pigcms{:L('_ND_BECOMEACOURIER_')}</div>
         <div style="color: #999999;font-size: 10px;margin: 10px auto;width: 90%;">
         </div>
-    </div>
-
-    <div id="memo" class="android_tip">
-        Please use your browser to upload images if the uploading function does not work here. To do so, visit www.tutti.app and click on Menu > Become a Courier > Get Started.
     </div>
     <div id="step_title">
         Required Documents
@@ -241,9 +241,6 @@
 <script src="{pigcms{$static_public}js/lang.js"></script>
 <script type="text/javascript" src="{pigcms{$static_public}js/webuploader.min.js"></script>
 <script type="text/javascript">
-    if(!/(tutti_android)/.test(navigator.userAgent.toLowerCase())){
-        $('.android_tip').hide();
-    }
     $("body").css({"height":$(window).height()});
 
     var  uploader = WebUploader.create({

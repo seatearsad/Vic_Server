@@ -1921,18 +1921,22 @@ class DeliverAction extends BaseAction {
             if ($review_status == 1) {//通过
                 //$data['reg_status'] = 3;
                 $data['group'] = 1;
-                $sms_data['uid'] = $uid;
-                $sms_data['mobile'] = $deliver['phone'];
-                $sms_data['sendto'] = 'deliver';
-                $sms_data['tplid'] = 522180;
-                $sms_data['params'] = [];
-                //Sms::sendSms2($sms_data);
-                $sms_txt = "Congratulations! Your courier application has been approved and your account is now active. You can start scheduling your shifts and accepting delivery orders. Welcome to the Tutti team!";
-                //Sms::telesign_send_sms($deliver['phone'],$sms_txt,0);
-                //Sms::sendTwilioSms($deliver['phone'],$sms_txt);
-                //if($deliver['reg_status'] == 5){
-                    //$data['reg_status'] = 0;
-                //}
+                if($deliver['group'] != 1){
+                    $this->sendUpdateMail($deliver);
+                }
+            } else {//未通过
+                //$data['reg_status'] = 1;
+                if($_POST['review_desc'] && $_POST['review_desc'] != '') {
+                    $data['group'] = -1;
+                    $data_img['review_desc'] = $_POST['review_desc'];
+                    $this->sendUpdateMail($deliver);
+                    //D('Deliver_img')->where(array('uid' => $uid))->save($data_img);
+                }
+            }
+
+            if($deliver['group'] == 1 && $deliver['reg_status'] == 5 && $_POST['activate_account'] == 1){
+                $data['status'] = 1;
+                $data['reg_status'] = 0;
 
                 if($deliver['email'] != "") {
                     $email = array(array("address"=>$deliver['email'],"userName"=>$deliver['name']));
@@ -1941,18 +1945,6 @@ class DeliverAction extends BaseAction {
                     $mail = getMail($title, $body, $email);
                     $mail->send();
                 }
-            } else {//未通过
-                //$data['reg_status'] = 1;
-                if($_POST['review_desc'] && $_POST['review_desc'] != '') {
-                    $data['group'] = -1;
-                    $data_img['review_desc'] = $_POST['review_desc'];
-                    //D('Deliver_img')->where(array('uid' => $uid))->save($data_img);
-                }
-            }
-
-            if($deliver['group'] == 1 && $deliver['reg_status'] == 5 && $_POST['activate_account'] == 1){
-                $data['status'] = 1;
-                $data['reg_status'] = 0;
             }
 
             $data_img['driver_license'] = $_POST['driver_license'];
@@ -1960,6 +1952,7 @@ class DeliverAction extends BaseAction {
             $data_img['certificate'] = $_POST['certificate'];
             if($_POST['bag_review_desc'] && $_POST['bag_review_desc'] != ""){
                 $data_img['bag_review_desc'] = $_POST['bag_review_desc'];
+                $this->sendUpdateMail($deliver);
             }
             D('Deliver_img')->where(array('uid' => $uid))->save($data_img);
 
@@ -1976,6 +1969,7 @@ class DeliverAction extends BaseAction {
                     if(!isset($data['reg_status']) || $data['reg_status'] != 0) {
                         $data['reg_status'] = 5;
                     }
+                    $this->sendUpdateMail($deliver);
                 }else{
                     if($deliver['bag_get_type'] == -1) $data = array('bag_get_id'=>'');
                 }
@@ -2318,6 +2312,10 @@ class DeliverAction extends BaseAction {
         $body .= "<p>&nbsp;</p>";
         $body .= "<p>Here is a link to our delivery instructions on how to use our courier app and complete delivery orders: <a href='https://qrco.de/bbyGle' target='_blank'>https://qrco.de/bbyGle</a>. Please go through this file before starting your first delivery.</p>";
         $body .= "<p>&nbsp;</p>";
+        $body .= "<p>Please go through this file before starting your first delivery.</p>";
+        $body .= "<p>&nbsp;</p>";
+        $body .= "<p>Please also remember to fill in your direct deposit information by pressing Menu on the top right > Account > Banking Info.</p>";
+        $body .= "<p>&nbsp;</p>";
         $body .= "<p>For any questions, please contact us at 1-888-399-6668 or email <a href='mailto:hr@tutti.app'>hr@tutti.app</a>.</p>";
         $body .= "<p>&nbsp;</p>";
         $body .= "<p>Best regards,</p>";
@@ -2371,5 +2369,32 @@ class DeliverAction extends BaseAction {
         $this->assign('list',$list);
 
         $this->display();
+    }
+
+
+    public function sendUpdateMail($deliver){
+        if($deliver['email'] != "") {
+            $email = array(array("address"=>$deliver['email'],"userName"=>$deliver['name']));
+            $title = "Status update on your courier application!";
+            $body = $this->getUpdateMailBody($deliver['name']);
+            $mail = getMail($title, $body, $email);
+            $mail->send();
+        }
+    }
+
+    public function getUpdateMailBody($name)
+    {
+        $body = "<p>Hi " . $name . ",</p>";
+        $body .= "<p>&nbsp;</p>";
+        $body .= "<p>Thank you for registering as a Tutti Courier!</p>";
+        $body .= "<p>&nbsp;</p>";
+        $body .= "<p>Your application status has been updated. To review your account, please follow this link <a href='https://tutti.app/wap.php?g=Wap&c=Deliver&a=login' target='_blank'>https://tutti.app/wap.php?g=Wap&c=Deliver&a=login</a> or download our app by searching “Tutti Courier” on the App Store or Google Play Store.</p>";
+        $body .= "<p>&nbsp;</p>";
+        $body .= "<p>For any questions, please contact us at 1-888-399-6668 or email <a href='mailto:hr@tutti.app'>hr@tutti.app</a>.</p>";
+        $body .= "<p>&nbsp;</p>";
+        $body .= "<p>Best regards,</p>";
+        $body .= "<p>Tutti Courier Team</p>";
+
+        return $body;
     }
 }

@@ -3283,6 +3283,49 @@ class IndexAction extends BaseAction
         }
 
         //var_dump($work_delver_list);
+
+        $day_3 = date("Y-m-d",time() + 3*86400);
+        $day_30 = date("Y-m-d",time() + 30*86400);
+
+        $work_list_3 = D("Deliver_img")->where(array("certificate_expiry"=>$day_3))->select();
+        $work_list_30 = D("Deliver_img")->where(array("certificate_expiry"=>$day_30))->select();
+
+        $in_list_3 = D("Deliver_img")->where(array("insurace_expiry"=>$day_3))->select();
+        $in_list_30 = D("Deliver_img")->where(array("insurace_expiry"=>$day_30))->select();
+
+        $this->sendUpdateMail($work_list_3,3,'Work Eligibility');
+        $this->sendUpdateMail($work_list_30,30,'Work Eligibility');
+        $this->sendUpdateMail($in_list_3,3,'Vehicle Insurance');
+        $this->sendUpdateMail($in_list_30,30,'Vehicle Insurance');
+    }
+
+    public function sendUpdateMail($list,$day_num,$file_name){
+        foreach ($list as $data){
+            $deliver = D("Deliver_user")->where(array("uid"=>$data['uid']))->find();
+            if($deliver['email'] != "") {
+                $email = array(array("address"=>$deliver['email'],"userName"=>$deliver['name']));
+                $title = "Your Tutti courier account needs more information!";
+                $body = $this->getMailBody($deliver['name'],$day_num,$file_name);
+                $mail = getMail($title, $body, $email);
+                $mail->send();
+            }
+        }
+    }
+
+    public function getMailBody($name,$day,$file_name)
+    {
+        $body = "<p>Hi " . $name . ",</p>";
+        $body .= "<p>&nbsp;</p>";
+        $body .= "<p>This is a reminder that your ".$file_name." is going to expire in ".$day." days. Please login to your account and go to Menu > Account to submit a photo of your renewed document before it expires.</p>";
+        $body .= "<p>&nbsp;</p>";
+        $body .= "<p>Please note that if we don’t receive your updated document before it expires, your access to deliveries would be suspended until we receive updated information.</p>";
+        $body .= "<p>&nbsp;</p>";
+        $body .= "<p>For any questions, please contact us at 1-888-399-6668 or email <a href='mailto:hr@tutti.app'>hr@tutti.app</a>.</p>";
+        $body .= "<p>&nbsp;</p>";
+        $body .= "<p>Best regards,</p>";
+        $body .= "<p>Tutti Courier Team</p>";
+
+        return $body;
     }
 
     public function updateSql(){

@@ -2868,6 +2868,13 @@ class DeliverAction extends BaseAction
 
             $deliver_img = D('Deliver_img')->where(array('uid'=>$this->deliver_session['uid']))->find();
             if($deliver_img && ($deliver_img['sin_num'] != $data['sin_num'] || $deliver_img['driver_license'] != $data['driver_license'] || $deliver_img['insurance'] != $data['insurance'] || $deliver_img['certificate'] != $data['certificate'])){
+                $file_name = "";
+                if($deliver_img['driver_license'] != $data['driver_license']) $file_name .= "Driver’s License ";
+                if($deliver_img['certificate'] != $data['certificate']) $file_name .= "Work Eligibility ";
+                if($deliver_img['insurance'] != $data['insurance']) $file_name .= "Vehicle Insurance ";
+
+                if($file_name != "") $this->sendUpdateMail($this->deliver_session['uid'],$file_name);
+
                 D('Deliver_img')->save($data);
                 $database_deliver_user->where(array('uid' => $this->deliver_session['uid']))->save(array('group'=>0));
             }
@@ -2921,6 +2928,7 @@ class DeliverAction extends BaseAction
                 $saveData['bag_get_id'] = $_POST['bag_img'];
                 $saveData["reg_status"] = 4;
                 $saveData["last_time"] = time();
+                D('Deliver_img')->where(array('uid' => $this->deliver_session['uid']))->save(array('bag_review_desc'=>""));
                 $database_deliver_user->where(array('uid' => $this->deliver_session['uid']))->save($saveData);
                 $result = array('error_code' => false, 'msg' => L('SUCCESS_BKADMIN'));
             }else {
@@ -3567,6 +3575,7 @@ class DeliverAction extends BaseAction
 	    if($_POST){
             D('Deliver_img')->where(array('uid' => $this->deliver_session['uid']))->save($_POST);
             $result = array('error_code'=>false,'msg'=>'Success');
+            $this->sendUpdateMail($this->deliver_session['uid'],"Work Eligibility");
             $this->ajaxReturn($result);
         }else {
             $this->display();
@@ -3577,6 +3586,7 @@ class DeliverAction extends BaseAction
         if($_POST){
             D('Deliver_img')->where(array('uid' => $this->deliver_session['uid']))->save($_POST);
             $result = array('error_code'=>false,'msg'=>'Success');
+            $this->sendUpdateMail($this->deliver_session['uid'],"Vehicle Insurance");
             $this->ajaxReturn($result);
         }else {
             $this->display();
@@ -3585,5 +3595,24 @@ class DeliverAction extends BaseAction
 
     public function policy(){
         $this->display();
+    }
+
+    public function sendUpdateMail($uid,$file_name){
+        $email = array(array("address"=>"product@tutti.app","userName"=>"Tutti"));
+        $title = "Driver Doc Update";
+        $body = $this->getMailBody($uid,$file_name);
+        $mail = getMail($title, $body, $email);
+        $mail->send();
+    }
+
+    public function getMailBody($uid,$file_name)
+    {
+        $body = "<p>Driver ID: " . $uid . "</p>";
+        $body .= "<p>&nbsp;</p>";
+        $body .= "<p>Updated Doc: ".$file_name."</p>";
+        $body .= "<p>&nbsp;</p>";
+        $body .= "<p>Please review on the backend at \"New Courier Verification\". If the updated document is approved, please set a new expiry date and activate the driver's account. If the doc isn't approved, please contact the driver to submit it again.</p>";
+
+        return $body;
     }
 }

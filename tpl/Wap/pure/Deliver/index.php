@@ -321,7 +321,11 @@
                         $('#deliver_count').html(response.deliver_count + " in Progress");
                         $('#finish_count').html(response.finish_count);
                         if (response.work_status == 1) {
-                            window.location.reload();
+                            if(typeof (window.linkJs) != 'undefined'){
+                                window.linkJs.reloadWebView();
+                            }else {
+                                window.location.reload();
+                            }
                         }
 
                         if(response.deliver_count == 0) loadPosition();
