@@ -233,7 +233,7 @@
     </div>
     <div id="buy_bag">
     <if condition="is_array($bag)">
-        <div class="memo">
+        <div class="memo" style="width: 90%;">
             <volist name="bag" id="vo">
                 <table style="width: 100%;text-align: center;padding: 8px">
                     <tr>
@@ -246,7 +246,7 @@
                             <span class="material-icons" style="position: absolute;bottom: 2px;right: 2px;color: white;font-size: 28px;">zoom_in</span>
                         </td>
                         <td style="position:relative;background-color: white;vertical-align: top;padding: 8px;text-align: left">
-                            <div style="font-size: 16px;font-weight: bold">{pigcms{$vo.bag_name}</div>
+                            <div style="font-size: 14px;font-weight: bold;overflow: hidden;display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 1;">{pigcms{$vo.bag_name}</div>
                             <div style="font-size: 13px;font-weight: bold;margin-top: 4px;">${pigcms{$vo.bag_price}</div>
                             <div style="font-size: 12px;;margin-top: 4px;overflow:hidden;display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 2;">{pigcms{$vo.bag_description}</div>
                             <div style="position: absolute;bottom: 0px;right: 3px">

@@ -181,16 +181,16 @@
             <div class="div_desc">
                 <if condition="$deliver_img['insurace_expiry_type'] eq 0">
                     <label style="color: #984447">
-                        Expires on {pigcms{$deliver_img['insurace_expiry']}
+                        Expired on {pigcms{$deliver_img['insurace_expiry']}
                     </label>
                 </if>
                 <if condition="$deliver_img['insurace_expiry_type'] eq 2">
                     <label style="color: #6A6A6A">
-                        Expires on {pigcms{$deliver_img['insurace_expiry']}
+                        Expired on {pigcms{$deliver_img['insurace_expiry']}
                     </label>
                 </if>
                 <if condition="$deliver_img['insurace_expiry_type'] eq 1">
-                    Expires on {pigcms{$deliver_img['insurace_expiry']}
+                    Expired on {pigcms{$deliver_img['insurace_expiry']}
                 </if>
             </div>
         </div>
@@ -215,16 +215,16 @@
                 </if>
                 <if condition="$deliver_img['certificate_expiry'] neq '-1' and $deliver_img['certificate_expiry_type'] eq 0">
                     <label style="color: #984447">
-                        Expires on {pigcms{$deliver_img['certificate_expiry']}
+                        Expired on {pigcms{$deliver_img['certificate_expiry']}
                     </label>
                 </if>
                 <if condition="$deliver_img['certificate_expiry'] neq '-1' and $deliver_img['certificate_expiry_type'] eq 2">
                     <label style="color: #6A6A6A">
-                        Expires on {pigcms{$deliver_img['certificate_expiry']}
+                        Expired on {pigcms{$deliver_img['certificate_expiry']}
                     </label>
                 </if>
                 <if condition="$deliver_img['certificate_expiry'] neq '-1' and $deliver_img['certificate_expiry_type'] eq 1">
-                    Expires on {pigcms{$deliver_img['certificate_expiry']}
+                    Expired on {pigcms{$deliver_img['certificate_expiry']}
                 </if>
             </div>
         </div>

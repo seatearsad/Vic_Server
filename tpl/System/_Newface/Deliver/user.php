@@ -82,6 +82,7 @@
                                 <th data-sort-ignore="true">{pigcms{:L('_BACK_PHONE_NUM_')}</th>
                                 <th data-sort-ignore="true">Email</th>
                                 <th data-sort-ignore="true">City</th>
+                                <th data-sort-ignore="true">Vehicle Type</th>
                                 <th data-sort-ignore="true">{pigcms{:L('_BACK_DELIVERY_AREA_')}</th>
                                 <th data-sort-ignore="true">{pigcms{:L('_BACK_TOTAL_DELIVERY_')}</th>
                                 <th data-sort-ignore="true">{pigcms{:L('_BACK_STATUS_')}</th>
@@ -100,6 +101,7 @@
                                         <td>{pigcms{$vo.phone}</td>
                                         <td>{pigcms{$vo.email}</td>
                                         <td>{pigcms{$vo.area_name}</td>
+                                        <td>{pigcms{$vo.vehicle_name}</td>
                                         <td>{pigcms{$vo.range}</td>
                                         <td class="textcenter">{pigcms{$vo.num}</td>
                                         <td class="textcenter td_v_middle">

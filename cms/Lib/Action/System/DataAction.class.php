@@ -1369,7 +1369,7 @@ class DataAction extends BaseAction
 
         $sql .= ' where s.status = 5 and s.create_time >='.$b_time.' and s.create_time <='.$e_time.' and o.is_del = 0';
         $sql .= ' order by s.uid';
-
+var_dump($sql);die();
         $list = D()->query($sql);
 
         $show_list = array();

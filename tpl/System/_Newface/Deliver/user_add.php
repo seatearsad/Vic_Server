@@ -122,6 +122,17 @@
                                 </div>
                             </div>
                             <div class="form-group  row">
+                                <label class="col-sm-3 col-form-label">Vehicle Type</label>
+                                <div class="col-sm-9">
+                                    <select name="vehicle_type" class="form-control" id="vehicle_type">
+                                        <option value="0">------Vehicle Type------</option>
+                                        <option value="1">Car</option>
+                                        <option value="2">Bike</option>
+                                        <option value="3">Motorcycle/Scooter</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group  row">
                                 <label class="col-sm-3 col-form-label">{pigcms{:L('_BACK_DELIVERY_AREA_')}</label>
                                 <div class="col-sm-9"><input type="text" size="20" class="form-control"
                                                              name="range"

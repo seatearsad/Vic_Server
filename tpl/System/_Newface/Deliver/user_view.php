@@ -132,6 +132,17 @@
                                         </div>
                                     </div>
                                     <div class="form-group  row">
+                                        <label class="col-sm-3 col-form-label">Vehicle Type</label>
+                                        <div class="col-sm-9">
+                                            <select name="vehicle_type" class="form-control" id="vehicle_type">
+                                                <option value="0">------Vehicle Type------</option>
+                                                <option value="1" <if condition="$now_user['vehicle_type'] eq 1">selected="selected"</if>>Car</option>
+                                                <option value="2" <if condition="$now_user['vehicle_type'] eq 2">selected="selected"</if>>Bike</option>
+                                                <option value="3" <if condition="$now_user['vehicle_type'] eq 3">selected="selected"</if>>Motorcycle/Scooter</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group  row">
                                         <label class="col-sm-3 col-form-label">{pigcms{:L('_BACK_PHONE_NUM_')}</label>
                                         <div class="col-sm-9"><input type="text"  class="form-control"
                                                                      name="phone"
@@ -290,8 +301,7 @@
                                         <tr id="review_desc" <if condition="$img['review_desc'] eq ''">style="display: none"</if> >
                                         <th width="25%">{pigcms{:L('_BACK_REVIEW_DESC_')}</th>
                                         <td colspan=3>
-                                            <input type="text" class="input fl" name="review_desc"
-                                                   value="{pigcms{$img['review_desc']}">
+                                            <input type="text" class="input fl" name="review_desc" value="{pigcms{$img['review_desc']}" />
                                         </td>
                                         </tr>
                                     </if>

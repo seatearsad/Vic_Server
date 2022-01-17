@@ -153,6 +153,8 @@ class DeliverAction extends BaseAction {
         //$user_list = $this->deliver_user->field('u.*,a.area_name')->join('as u left join '.C('DB_PREFIX').'area as a ON u.city_id=a.area_id')->where($condition_user)->order('`uid` DESC')->limit($p->firstRow . ',' . $p->listRows)->select();
         $user_list = $this->deliver_user->field('u.*,a.area_name')->join('as u left join '.C('DB_PREFIX').'area as a ON u.city_id=a.area_id')->where($where)->order('`uid` DESC')->limit($p->firstRow . ',' . $p->listRows)->select();
         //var_dump($user_list);die();
+
+        $vehicle_name = array("","Car","Bike","Motorcycle/Scooter");
         foreach ($user_list as &$deliver){
             if($deliver['status'] == 1){
                 $img = D("Deliver_img")->where(array('uid'=>$deliver['uid']))->find();
@@ -164,6 +166,7 @@ class DeliverAction extends BaseAction {
             }else{
                 $deliver['expiry'] = 0;
             }
+            $deliver['vehicle_name'] = $vehicle_name[$deliver['vehicle_type']];
         }
 
         $this->assign('user_list', $user_list);
@@ -302,6 +305,7 @@ class DeliverAction extends BaseAction {
             $column['birthday'] = $_POST['birthday'];
             $column['remark'] = $_POST['remark'];
             $column['work_status'] = $_POST['work_status'];
+            $column['vehicle_type'] = $_POST['vehicle_type'];
 
             if($_POST['work_status'] == 1){
                 $current_order_num = D('Deliver_supply')->where(array('uid'=>$uid,'status'=>array('lt',5)))->count();
@@ -1918,18 +1922,23 @@ class DeliverAction extends BaseAction {
             $uid = $_POST['uid'];
             $deliver = D('deliver_user')->where(array('uid' => $uid))->find();
             $review_status = $_POST['review'];
+            $send_mail = false;
             if ($review_status == 1) {//通过
                 //$data['reg_status'] = 3;
                 $data['group'] = 1;
                 if($deliver['group'] != 1){
                     $this->sendUpdateMail($deliver);
+                    $send_mail = true;
                 }
             } else {//未通过
-                //$data['reg_status'] = 1;
+                if($_POST['review_desc'] == ''){
+                    //$this->error("Please enter a reason for rejection");
+                }
                 if($_POST['review_desc'] && $_POST['review_desc'] != '') {
                     $data['group'] = -1;
                     $data_img['review_desc'] = $_POST['review_desc'];
                     $this->sendUpdateMail($deliver);
+                    $send_mail = true;
                     //D('Deliver_img')->where(array('uid' => $uid))->save($data_img);
                 }
             }
@@ -1939,11 +1948,14 @@ class DeliverAction extends BaseAction {
                 $data['reg_status'] = 0;
 
                 if($deliver['email'] != "") {
-                    $email = array(array("address"=>$deliver['email'],"userName"=>$deliver['name']));
-                    $title = $title = "Tutti Courier Instructions";
-                    $body = $this->getMailBody($deliver['name']);
-                    $mail = getMail($title, $body, $email);
-                    $mail->send();
+                    if(!$send_mail) {
+                        $email = array(array("address" => $deliver['email'], "userName" => $deliver['name']));
+                        $title = $title = "Tutti Courier Instructions";
+                        $body = $this->getMailBody($deliver['name']);
+                        $mail = getMail($title, $body, $email);
+                        $mail->send();
+                        $send_mail = true;
+                    }
                 }
             }
 
@@ -1952,7 +1964,10 @@ class DeliverAction extends BaseAction {
             $data_img['certificate'] = $_POST['certificate'];
             if($_POST['bag_review_desc'] && $_POST['bag_review_desc'] != ""){
                 $data_img['bag_review_desc'] = $_POST['bag_review_desc'];
-                $this->sendUpdateMail($deliver);
+                if(!$send_mail) {
+                    $this->sendUpdateMail($deliver);
+                    $send_mail = true;
+                }
             }
             D('Deliver_img')->where(array('uid' => $uid))->save($data_img);
 
@@ -1969,9 +1984,15 @@ class DeliverAction extends BaseAction {
                     if(!isset($data['reg_status']) || $data['reg_status'] != 0) {
                         $data['reg_status'] = 5;
                     }
-                    $this->sendUpdateMail($deliver);
+                    if(!$send_mail) {
+                        $this->sendUpdateMail($deliver);
+                        $send_mail = true;
+                    }
                 }else{
-                    if($deliver['bag_get_type'] == -1) $data = array('bag_get_id'=>'');
+                    if($deliver['bag_get_type'] == -1) {
+                        $data = array('bag_get_id'=>'');
+                        //if($_POST['bag_review_desc'] == "") $this->error("Please enter a reason for rejection");
+                    }
                 }
                 D('deliver_user')->where(array('uid' => $uid))->save($data);
 

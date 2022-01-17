@@ -135,6 +135,17 @@
                                 </div>
                             </div>
                             <div class="form-group  row">
+                                <label class="col-sm-3 col-form-label">Vehicle Type</label>
+                                <div class="col-sm-9">
+                                    <select name="vehicle_type" class="form-control" id="vehicle_type">
+                                        <option value="0">------Vehicle Type------</option>
+                                        <option value="1" <if condition="$now_user['vehicle_type'] eq 1">selected="selected"</if>>Car</option>
+                                        <option value="2" <if condition="$now_user['vehicle_type'] eq 2">selected="selected"</if>>Bike</option>
+                                        <option value="3" <if condition="$now_user['vehicle_type'] eq 3">selected="selected"</if>>Motorcycle/Scooter</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group  row">
                                 <label class="col-sm-3 col-form-label">{pigcms{:L('_BACK_DELIVERY_AREA_')}</label>
                                 <div class="col-sm-9"><input type="text" size="20" class="form-control"
                                                              name="range"
@@ -270,7 +281,7 @@
                                 </div>
                                 <div style="margin-left: 155px;margin-top: 10px;display: flex;">
                                     <input type="radio" name="certificate_type" value="-1" <if condition="$img['certificate_expiry'] eq -1">checked="checked"</if> />
-                                    &nbsp;<span style="flex: 1 1 50%;line-height: 36px;">Does not expiry</span>
+                                    &nbsp;<span style="flex: 1 1 50%;line-height: 36px;">Does not expire</span>
                                 </div>                            </div>
                             <input type="hidden" name="driver_license" id="filename_0"
                                    value="{pigcms{$img['driver_license']}">
