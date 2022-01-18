@@ -3573,7 +3573,10 @@ class DeliverAction extends BaseAction
 
     public function update_work(){
 	    if($_POST){
-            D('Deliver_img')->where(array('uid' => $this->deliver_session['uid']))->save($_POST);
+	        $data['certificate'] = $_POST['certificate'];
+	        if($_POST['sin_num'] != "") $data['sin_num'] = $_POST['sin_num'];
+
+            D('Deliver_img')->where(array('uid' => $this->deliver_session['uid']))->save($data);
             $result = array('error_code'=>false,'msg'=>'Success');
             $this->sendUpdateMail($this->deliver_session['uid'],"Work Eligibility");
             $this->ajaxReturn($result);

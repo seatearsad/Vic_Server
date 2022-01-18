@@ -136,7 +136,7 @@
         </div>
         <div class="tip" style="color: black">
             <div style="font-weight: bold;margin-bottom: 10px;">Social Insurance Number</div>
-            Your proof of work eligibility is expiring soon or has already expired. Please update or you may not be able to do deliveries.
+            If your Social Insurance Number has been changed, please enter the new one below. If not, leave it empty to keep using your current one.
         </div>
 
         <div class="tip">
@@ -203,7 +203,8 @@
         addUploadBtn();
 
         $('#save').click(function () {
-            if($('input[name="sin_num"]').val() == '' || $("#img_file").val() == ''){
+            //$('input[name="sin_num"]').val() == '' ||
+            if($("#img_file").val() == ''){
                 layer.open({title:"{pigcms{:L('_B_D_LOGIN_TIP2_')}",content:"{pigcms{:L('_PLEASE_INPUT_ALL_')}", btn:["{pigcms{:L('_B_D_LOGIN_CONIERM_')}"]});
             }else{
                 var data = {'sin_num':$('input[name="sin_num"]').val(),'certificate':$("#img_file").val()};
