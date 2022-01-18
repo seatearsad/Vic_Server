@@ -1011,6 +1011,18 @@ function show_time_ago($time){
     return $time_str;
 }
 
+function show_time_min_ago($time){
+    if($time < 0){
+        $time_str = show_time($time*-1);
+    }else {
+        $min = intval($time  / 60);
+
+        $time_str = $min . " min ago";
+    }
+
+    return $time_str;
+}
+
 function show_time($time){
     $hour = intval($time / 3600);
     $min = intval(($time-($hour*3600)) / 60);

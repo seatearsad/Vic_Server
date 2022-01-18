@@ -123,7 +123,7 @@
             position: absolute;
             width: 94%;
             margin-left: 3%;
-            bottom: 80px;
+            bottom: 65px;
             top:46%;
             background-color: #FFF5E8;
             border-radius: 15px;
@@ -196,8 +196,9 @@
         }
         .order_time{
             color: #555555;
-            padding: 5px 5% 15px 5%;
+            padding: 5px 2% 15px 2%;
             border-bottom: 1px solid #CCCCCC;
+            font-size: 15px;
         }
         #position_div{
             padding: 0px 10%;
@@ -242,7 +243,7 @@
         }
         .send_btn{
             width: 92%;
-            margin-top: 20px;
+            margin-top: 10px;
             margin-left: 4%;
             background-color: #ffa52d;
             color: white;
@@ -458,7 +459,7 @@
                 </div>
                 <div>
                     <span class="material-icons title_icon">pin_drop</span>
-                    {{ d.list[i].user_address.adress }}
+                    {{ d.list[i].aim_site }}
                 </div>
             </div>
             <a href="javascript:void(0);" class="rob" data-spid="{{ d.list[i].supply_id }}" style="display: block;">
@@ -513,7 +514,7 @@
                 </div>
                 <div>
                     <span class="material-icons title_icon">pin_drop</span>
-                    {{ d.list[i].user_address.adress }}
+                    {{ d.list[i].aim_site }}
                 </div>
             </div>
         </div>

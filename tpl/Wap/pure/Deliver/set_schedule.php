@@ -436,7 +436,12 @@
                 $(this).addClass('active');
             else
                 $(this).removeClass('active');
+
+            if(typeof(default_list[init_num]) == 'undefined'){
+                default_list[init_num] = 0;
+            }
         }
+
         function mt_click(){
             var t_num = $(this).data('num');
             if($(this).prop('checked')){

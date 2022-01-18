@@ -179,18 +179,23 @@
                 </if>
             </span>
             <div class="div_desc">
-                <if condition="$deliver_img['insurace_expiry_type'] eq 0">
+                <if condition="$deliver_img['update_review'] eq 2 or $deliver_img['update_review'] eq 10">
+                    <label style="color: #984447">
+                        Waiting for review
+                    </label>
+                </if>
+                <if condition="$deliver_img['update_review'] neq 2 and $deliver_img['update_review'] neq 10 and $deliver_img['insurace_expiry_type'] eq 0">
                     <label style="color: #984447">
                         Expired on {pigcms{$deliver_img['insurace_expiry']}
                     </label>
                 </if>
-                <if condition="$deliver_img['insurace_expiry_type'] eq 2">
+                <if condition="$deliver_img['update_review'] neq 2 and $deliver_img['update_review'] neq 10 and $deliver_img['insurace_expiry_type'] eq 2">
                     <label style="color: #6A6A6A">
-                        Expired on {pigcms{$deliver_img['insurace_expiry']}
+                        Expires on {pigcms{$deliver_img['insurace_expiry']}
                     </label>
                 </if>
                 <if condition="$deliver_img['insurace_expiry_type'] eq 1">
-                    Expired on {pigcms{$deliver_img['insurace_expiry']}
+                    Expires on {pigcms{$deliver_img['insurace_expiry']}
                 </if>
             </div>
         </div>
@@ -213,18 +218,23 @@
                 <if condition="$deliver_img['certificate_expiry'] eq '-1'">
                     Does not expire
                 </if>
-                <if condition="$deliver_img['certificate_expiry'] neq '-1' and $deliver_img['certificate_expiry_type'] eq 0">
+                <if condition="$deliver_img['update_review'] eq 1 or $deliver_img['update_review'] eq 10">
+                    <label style="color: #984447">
+                        Waiting for review
+                    </label>
+                </if>
+                <if condition="$deliver_img['update_review'] neq 1 and $deliver_img['update_review'] neq 10 and $deliver_img['certificate_expiry'] neq '-1' and $deliver_img['certificate_expiry_type'] eq 0">
                     <label style="color: #984447">
                         Expired on {pigcms{$deliver_img['certificate_expiry']}
                     </label>
                 </if>
-                <if condition="$deliver_img['certificate_expiry'] neq '-1' and $deliver_img['certificate_expiry_type'] eq 2">
+                <if condition="$deliver_img['update_review'] neq 1 and $deliver_img['update_review'] neq 10 and $deliver_img['certificate_expiry'] neq '-1' and $deliver_img['certificate_expiry_type'] eq 2">
                     <label style="color: #6A6A6A">
-                        Expired on {pigcms{$deliver_img['certificate_expiry']}
+                        Expires on {pigcms{$deliver_img['certificate_expiry']}
                     </label>
                 </if>
                 <if condition="$deliver_img['certificate_expiry'] neq '-1' and $deliver_img['certificate_expiry_type'] eq 1">
-                    Expired on {pigcms{$deliver_img['certificate_expiry']}
+                    Expires on {pigcms{$deliver_img['certificate_expiry']}
                 </if>
             </div>
         </div>

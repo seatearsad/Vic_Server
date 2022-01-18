@@ -277,7 +277,7 @@
             <div class="order_time" style="color: #294068;font-size: 16px;padding-bottom: 0px;">
                 <span style="padding-right:15px; padding-left: 10px; font-size: 18px;"> $ </span>
                 <span style="margin-left: -10px;font-weight: bold;">
-                    {pigcms{:L('_ND_DUEONDELIVERY_')}: ${pigcms{$supply['deliver_cash']|floatval}
+                    Collect From Customer: ${pigcms{$supply['deliver_cash']|floatval}
                 </span>
                 <div style="margin-left: 30px;font-size: 14px;color: #333333;margin-top: 10px;">
                     <if condition="$supply['uid'] eq 0">
@@ -334,7 +334,7 @@
         <if condition="$order['uid'] neq 0 and $order['pay_method'] neq 1">
         <div class="amount_sub" style="font-weight: bold;">
             <span>
-                {pigcms{:L('_ND_DUEONDELIVERY_')}:
+                Collect From Customer:
             </span>
             <span class="span_right">
                 ${pigcms{$supply['deliver_cash']|floatval}
@@ -373,7 +373,7 @@
         <if condition="$supply['status'] eq 3 and $order['deliver_cash'] gt 0">
             <if condition="$supply['uid'] eq 0 or $order['pay_method'] neq 1">
             <div style="margin-left: 30px;font-size: 15px;margin-bottom: 10px;">
-                {pigcms{:L('_ND_DUEONDELIVERY_')}: ${pigcms{$supply['deliver_cash']|floatval}
+                Collect From Customer: ${pigcms{$supply['deliver_cash']|floatval}
             </div>
             </if>
         </if>

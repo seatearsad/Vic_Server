@@ -764,10 +764,10 @@ class DeliverAction extends BaseAction
                     $val['show_dining_time'] = show_time($show_dining_time*-1);
                 }else {
                     $val['is_dinning'] = 1;
-                    $val['show_dining_time'] = show_time_ago($show_dining_time);
+                    $val['show_dining_time'] = show_time_min_ago($show_dining_time);
                 }
 
-                $val['show_create_time'] = show_time_ago($show_create_time);
+                $val['show_create_time'] = show_time_min_ago($show_create_time);
                 //$val['show_dining_time'] = show_time_ago($show_dining_time);
 
                 $val['deliver_cash'] = floatval($val['deliver_cash']);
@@ -3572,26 +3572,42 @@ class DeliverAction extends BaseAction
     }
 
     public function update_work(){
+        $img = D('Deliver_img')->where(array('uid' => $this->deliver_session['uid']))->find();
 	    if($_POST){
 	        $data['certificate'] = $_POST['certificate'];
 	        if($_POST['sin_num'] != "") $data['sin_num'] = $_POST['sin_num'];
+
+	        if($img['update_review'] == 0){
+	            $data['update_review'] = 1;
+            }else if($img['update_review'] == 2){
+	            $data['update_review'] = 10;
+            }
 
             D('Deliver_img')->where(array('uid' => $this->deliver_session['uid']))->save($data);
             $result = array('error_code'=>false,'msg'=>'Success');
             $this->sendUpdateMail($this->deliver_session['uid'],"Work Eligibility");
             $this->ajaxReturn($result);
         }else {
+            $this->assign('deliver_img',$img);
             $this->display();
         }
     }
 
     public function update_insurance(){
+        $img = D('Deliver_img')->where(array('uid' => $this->deliver_session['uid']))->find();
         if($_POST){
+            if($img['update_review'] == 0){
+                $_POST['update_review'] = 2;
+            }else if($img['update_review'] == 1){
+                $_POST['update_review'] = 10;
+            }
+
             D('Deliver_img')->where(array('uid' => $this->deliver_session['uid']))->save($_POST);
             $result = array('error_code'=>false,'msg'=>'Success');
             $this->sendUpdateMail($this->deliver_session['uid'],"Vehicle Insurance");
             $this->ajaxReturn($result);
         }else {
+            $this->assign('deliver_img',$img);
             $this->display();
         }
     }

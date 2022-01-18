@@ -339,10 +339,12 @@ class DeliverAction extends BaseAction {
     		        $card['deliver_id'] = $uid;
                     D('Deliver_card')->data($card)->add();
                 }
+
+                $deliver_img = D('Deliver_img')->where(array('uid' => $uid))->find();
                 if($_POST['sin_num'] && $_POST['sin_num'] != '') {
     		        $data['sin_num'] = $_POST['sin_num'];
     		        $data['uid'] = $uid;
-                    $deliver_img = D('Deliver_img')->where(array('uid' => $uid))->find();
+
                     if ($deliver_img)
                         D('Deliver_img')->save($data);
                     else
@@ -355,9 +357,17 @@ class DeliverAction extends BaseAction {
                 if($_POST['certificate_type'] == -1){
                     $data_img['certificate_expiry'] = "-1";
                 }else{
-                    $data_img['certificate_expiry'] = $_POST['certificate_expiry'];
+                    if($_POST['certificate_expiry'] != $deliver_img['certificate_expiry']) {
+                        $data_img['certificate_expiry'] = $_POST['certificate_expiry'];
+                        if($deliver_img['update_review'] == 1) $data_img['update_review'] = 0;
+                        if($deliver_img['update_review'] == 10) $data_img['update_review'] = 2;
+                    }
                 }
-                $data_img['insurace_expiry'] = $_POST['insurace_expiry'];
+                if($_POST['insurace_expiry'] != $deliver_img['insurace_expiry']) {
+                    $data_img['insurace_expiry'] = $_POST['insurace_expiry'];
+                    if($deliver_img['update_review'] == 2) $data_img['update_review'] = 0;
+                    if($deliver_img['update_review'] == 10) $data_img['update_review'] = 1;
+                }
 
                 if($_POST['bag_express_num'] && $_POST['bag_express_num'] != ''){
                     $data_img['bag_express_num'] = $_POST['bag_express_num'];
