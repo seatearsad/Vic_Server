@@ -218,7 +218,7 @@
                 <if condition="$deliver_img['certificate_expiry'] eq '-1'">
                     Does not expire
                 </if>
-                <if condition="$deliver_img['update_review'] eq 1 or $deliver_img['update_review'] eq 10">
+                <if condition="$deliver_img['certificate_expiry'] neq '-1' and ($deliver_img['update_review'] eq 1 or $deliver_img['update_review'] eq 10)">
                     <label style="color: #984447">
                         Waiting for review
                     </label>

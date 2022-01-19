@@ -356,6 +356,8 @@ class DeliverAction extends BaseAction {
                 $data_img['certificate'] = $_POST['certificate'];
                 if($_POST['certificate_type'] == -1){
                     $data_img['certificate_expiry'] = "-1";
+                    if($deliver_img['update_review'] == 1) $data_img['update_review'] = 0;
+                    if($deliver_img['update_review'] == 10) $data_img['update_review'] = 2;
                 }else{
                     if($_POST['certificate_expiry'] != $deliver_img['certificate_expiry']) {
                         $data_img['certificate_expiry'] = $_POST['certificate_expiry'];
@@ -758,18 +760,23 @@ class DeliverAction extends BaseAction {
 			$pre = '';
 			$data = array();
 			foreach ($users as $user) {
-				$user['range'] = getRange(getDistance($supply['from_lat'], $supply['from_lnt'], $user['lat'], $user['lng']));
-				$user['now_range'] = getRange(getDistance($supply['from_lat'], $supply['from_lnt'], $user['lat'], $user['lng']));
-				$data[$user['uid']] = $user;
-				$uids .= $pre . $user['uid'];
-				$pre = ',';
+                $img = D("Deliver_img")->where(array('uid'=>$user['uid']))->find();
+                if(($img['insurace_expiry'] != '' && strtotime($img['insurace_expiry']." 23:59:59") < time()) || ($img['certificate_expiry'] != '' && $img['certificate_expiry'] != '-1' && strtotime($img['certificate_expiry']." 23:59:59") < time())){
+
+                }else {
+                    $user['range'] = getRange(getDistance($supply['from_lat'], $supply['from_lnt'], $user['lat'], $user['lng']));
+                    $user['now_range'] = getRange(getDistance($supply['from_lat'], $supply['from_lnt'], $user['lat'], $user['lng']));
+                    $data[$user['uid']] = $user;
+                    $uids .= $pre . $user['uid'];
+                    $pre = ',';
+                }
 			}
 			$sql = "SELECT a.pigcms_id, a.uid, a.lat, a.lng FROM " . C('DB_PREFIX') . "deliver_user_location_log AS a INNER JOIN (SELECT uid, MAX(pigcms_id) AS pigcms_id FROM " . C('DB_PREFIX') . "deliver_user_location_log GROUP BY uid) AS b ON a.uid = b.uid AND a.pigcms_id = b.pigcms_id WHERE a.uid IN ({$uids})";
 			$now_users = D()->query($sql);
 			foreach ($now_users as $v) {
-				if (isset($data[$v['uid']])) {
-					$data[$v['uid']]['now_range'] = getRange(getDistance($supply['from_lat'], $supply['from_lnt'], $v['lat'], $v['lng']));
-				}
+                if (isset($data[$v['uid']])) {
+                    $data[$v['uid']]['now_range'] = getRange(getDistance($supply['from_lat'], $supply['from_lnt'], $v['lat'], $v['lng']));
+                }
 			}
 			$this->assign('users', $data);
 			$this->display();

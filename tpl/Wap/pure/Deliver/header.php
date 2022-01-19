@@ -28,7 +28,7 @@
         border-radius: 3px;
     }
 
-    .hamburger{
+    .hamburger,.refresh{
         height: 50px;
         width: 25px;
         cursor: pointer;
@@ -192,11 +192,17 @@
 <div id="offsetTop"></div>
 <div id="tutti_header">
     <div id="header_menu">
-        <div id="hamburger-1" class="hamburger">
-            <span class="line"></span>
-            <span class="line"></span>
-            <span class="line"></span>
-        </div>
+        <if condition="ACTION_NAME neq 'schedule' and ACTION_NAME neq 'statistics' and ACTION_NAME neq 'orders' and ACTION_NAME neq 'inst' and ACTION_NAME neq 'account' and ACTION_NAME neq 'support' and ACTION_NAME neq 'index'">
+            <div class="refresh" id="back_btn">
+                <span class="material-icons" style="color: #294068;font-size: 30px;">keyboard_arrow_left</span>
+            </div>
+            <else />
+            <div id="hamburger-1" class="hamburger">
+                <span class="line"></span>
+                <span class="line"></span>
+                <span class="line"></span>
+            </div>
+        </if>
         <if condition="ACTION_NAME eq 'index' OR ACTION_NAME eq 'process'">
         <div class="menu_font">Status:
             <if condition="$deliver_session['work_status'] eq '1'">
@@ -381,5 +387,8 @@
                 location.reload();
             }
         });
+    });
+    $('#back_btn').click(function () {
+        window.history.go(-1);
     });
 </script>

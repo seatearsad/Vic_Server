@@ -216,7 +216,7 @@
         </div>
         <div class="order_time">
             <div style="color: #333333;font-weight: bold;margin-left: 30px;margin-top: -15px;">
-                {pigcms{$order.user_address}
+                {pigcms{$supply.aim_site}
             </div>
             <div style="margin-left: 30px;margin-top: 20px;font-size: 18px">
                 <span style="line-height: 40px;background-color: #294068;padding:10px 20px;color: white;border-radius: 20px;" id="open_map">
@@ -331,7 +331,7 @@
         </div>
     </div>
     <div class="amount_div">
-        <if condition="$order['uid'] neq 0 and $order['pay_method'] neq 1">
+        <if condition="$supply['uid'] eq 0 or $order['pay_method'] neq 1">
         <div class="amount_sub" style="font-weight: bold;">
             <span>
                 Collect From Customer:
@@ -461,7 +461,7 @@ $('#open_map').click(function () {
         if (status == 2)
             address = "{pigcms{$supply['from_site']}";
         else
-            address = "{pigcms{$order.user_address}";
+            address = "{pigcms{$supply['aim_site']}";
 
         window.linkJs.openGoogleMap(address);
     }else {
@@ -469,7 +469,7 @@ $('#open_map').click(function () {
         if (status == 2)
             url = "https://maps.google.com/maps?q={pigcms{$supply['from_site']}&z=17&hl=en";
         else
-            url = "https://maps.google.com/maps?q={pigcms{$order.user_address}&z=17&hl=en";
+            url = "https://maps.google.com/maps?q={pigcms{$supply['aim_site']}&z=17&hl=en";
 
         location.href = url;
     }
