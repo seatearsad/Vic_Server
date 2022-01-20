@@ -368,7 +368,13 @@ class DeliverAction extends BaseAction {
                 if($_POST['insurace_expiry'] != $deliver_img['insurace_expiry']) {
                     $data_img['insurace_expiry'] = $_POST['insurace_expiry'];
                     if($deliver_img['update_review'] == 2) $data_img['update_review'] = 0;
-                    if($deliver_img['update_review'] == 10) $data_img['update_review'] = 1;
+
+                    if($deliver_img['update_review'] == 10){
+                        if($data_img['update_review'] == 2)
+                            $data_img['update_review'] = 0;
+                        else
+                            $data_img['update_review'] = 1;
+                    }
                 }
 
                 if($_POST['bag_express_num'] && $_POST['bag_express_num'] != ''){
