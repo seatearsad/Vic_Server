@@ -241,7 +241,7 @@ class DeliverectAction
             $this->orderRefund($orderId);
         }
         if($status == 20){
-            //$this->updatePrepTimeURL(true);
+            $this->updatePrepTimeURL(true);
             $order = D("Shop_order")->where(array('order_id'=>$orderId))->find();
             D("StoreMenuV2")->saveIntegration($order['store_id'],"Order",$orderId." - Accepted",1);
         }
@@ -282,10 +282,11 @@ class DeliverectAction
         */
 
         if($acceepted) $dining_time = 20;
-
+        /**
         if($order['send_platform'] == 20){
             $acceepted = true;
         }
+         */
 
         if($this->data['pickupTime'] != '') {
             $preparationTime = $this->data['pickupTime'];
@@ -489,7 +490,7 @@ class DeliverectAction
             else
                 $productData['isCombo'] = 0;
 
-            $productData['max'] = $product['max'];
+            $productData['max'] = $product['max'] == 0 ? -1 : $product['max'];
             $productData['min'] = $product['min'];
             if($product['multiMax'])
                 $productData['multiMax'] = $product['multiMax'];
