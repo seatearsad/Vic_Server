@@ -230,7 +230,7 @@
                 </span>
             </div>
         </div>
-        <if condition="$order['not_touch'] eq 1 and $supply['status'] eq 4 and $order['user_address_detail'] neq ''">
+        <if condition="$order['not_touch'] eq 1 and $supply['status'] eq 4 and $order['address_detail'] neq ''">
         <div class="amount_div">
             <div class="order_time" style="color: #294068;font-size: 16px;">
                 <span class="material-icons" style="vertical-align: middle">assignment</span>
@@ -238,13 +238,13 @@
                         No Contact Delivery
                 </span>
                 <div style="margin-left: 30px;font-size: 14px;color: #333333">
-                    {pigcms{$order['user_address_detail']}
+                    {pigcms{$order['address_detail']}
                 </div>
             </div>
         </div>
         </if>
 
-        <if condition="$order['not_touch'] eq 1 and $supply['status'] eq 4 and $order['user_address_detail'] eq ''">
+        <if condition="$order['not_touch'] eq 1 and $supply['status'] eq 4 and $order['address_detail'] eq ''">
             <div class="amount_div">
                 <div class="order_time" style="color: #294068;font-size: 16px;">
                     <span class="material-icons" style="vertical-align: middle">assignment</span>
@@ -258,7 +258,7 @@
             </div>
         </if>
 
-        <if condition="$order['not_touch'] neq 1 and $order['user_address_detail'] neq '' and $supply['status'] eq 4">
+        <if condition="$order['not_touch'] neq 1 and $order['address_detail'] neq '' and $supply['status'] eq 4">
             <div class="amount_div">
                 <div class="order_time" style="color: #294068;font-size: 16px;">
                     <span class="material-icons" style="vertical-align: middle">assignment</span>
@@ -266,7 +266,7 @@
                         Delivery Instruction
                     </span>
                     <div style="margin-left: 30px;font-size: 14px;color: #333333">
-                        {pigcms{$order['user_address_detail']}
+                        {pigcms{$order['address_detail']}
                     </div>
                 </div>
             </div>

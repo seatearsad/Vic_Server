@@ -312,6 +312,11 @@ class DeliverAction extends BaseAction {
                 if($current_order_num > 0){
                     $this->error('All accepted orders must be completed before you clock out.');
                 }
+            }else{
+                $img = D("Deliver_img")->where(array('uid'=>$uid))->find();
+                if(($img['insurace_expiry'] != '' && strtotime($img['insurace_expiry']." 23:59:59") < time()) || ($img['certificate_expiry'] != '' && $img['certificate_expiry'] != '-1' && strtotime($img['certificate_expiry']." 23:59:59") < time())){
+                    $this->error('Expired!');
+                }
             }
             $column['inaction_num'] = 0;
 

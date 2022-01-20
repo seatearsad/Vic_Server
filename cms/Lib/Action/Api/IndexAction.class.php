@@ -1206,7 +1206,8 @@ class IndexAction extends BaseAction
 
         $order_data['username'] = $address['name'];
         $order_data['userphone'] = $address['phone'];
-        $order_data['address'] = $address['adress'].' '.$address['detail'].' '.$address['zipcode'];
+        $order_data['address'] = $address['adress'];
+        $order_data['address_detail'] = $address['detail'];
         $order_data['address_id'] = $adr_id;
         $order_data['lat'] = $address['latitude'];
         $order_data['lng'] = $address['longitude'];
