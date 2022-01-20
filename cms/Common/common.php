@@ -813,7 +813,11 @@ function checkAutoOpen($store){
         if ($store['store_is_close'] != $shop_status['open_num']) {
             //如果当前时间为凌晨开始 即连续 不自动开启
             $open_name = 'open_' . $shop_status['open_num'];
-            if ($store[$open_name] != '00:00:00') {
+            //城市的紧急关闭状态
+            $config = D('Config')->where(array('name'=>'emergency_close_store'))->find();
+            $close_arr = json_decode($config['value'],true);
+            $close_list = $close_arr[$store['city_id']];
+            if ($store[$open_name] != '00:00:00' && !in_array($store['store_id'],$close_list)) {
                 $store['store_is_close'] = 0;
                 $data['store_is_close'] = 0;
                 D('Merchant_store')->where(array('store_id' => $store['store_id']))->save($data);
