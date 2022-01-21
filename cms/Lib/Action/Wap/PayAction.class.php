@@ -2804,22 +2804,33 @@ class PayAction extends BaseAction{
         $desc=$post['note'];
         $detail=$post['address_detail'];
 
+        $userAddress = D('User_adress')->field(true)->where(array("adress_id"=>$post["address_id"]))->find();
         //----------------------------------------------------
-        if($detail != null) {
-            if(!checkEnglish($detail) && trim($detail) != ''){
-                $detail_en= translationCnToEn($detail);
-            }else{
-                $detail_en= '';
+        if($userAddress['detail'] != $detail) {
+            if ($detail != null) {
+                if (!checkEnglish($detail) && trim($detail) != '') {
+                    $detail_en = translationCnToEn($detail);
+                } else {
+                    $detail_en = '';
+                }
+            } else {
+                $detail = "";
+                $detail_en = "";
             }
+
+            $detail_list=array('detail'=>$detail,'detail_en'=>$detail_en);
+            D('User_adress')->field(true)->where(array("adress_id"=>$post["address_id"]))->save($detail_list);
         }else{
-            $detail = "";
-            $detail_en = "";
+            $detail_en = $userAddress['detail_en'];
         }
-        $detail_list=array('detail'=>$detail,'detail_en'=>$detail_en);
 
-        D('User_adress')->field(true)->where(array("adress_id"=>$post["address_id"]))->save($detail_list);
 
-        $save_list['address_detail'] = $detail_en == "" ? $detail : $detail_en;
+        if($detail_en != ''){
+            $save_list['address_detail'] = $detail_en ." (".$detail.")";
+        }else {
+            $save_list['address_detail'] = $detail;
+        }
+
         //----------------------------------------------------
 
         if($not_touch != null && $not_touch == 1){

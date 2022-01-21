@@ -1207,7 +1207,11 @@ class IndexAction extends BaseAction
         $order_data['username'] = $address['name'];
         $order_data['userphone'] = $address['phone'];
         $order_data['address'] = $address['adress'];
-        $order_data['address_detail'] = $address['detail'];
+        if($address['detail_en'] != ''){
+            $order_data['address_detail'] = $address['detail_en'] ." (".$address['detail'].")";
+        }else {
+            $order_data['address_detail'] = $address['detail'];
+        }
         $order_data['address_id'] = $adr_id;
         $order_data['lat'] = $address['latitude'];
         $order_data['lng'] = $address['longitude'];
@@ -1624,11 +1628,17 @@ class IndexAction extends BaseAction
         $order_detail['merchant_reduce'] = $order['merchant_reduce'];
         $order_detail['coupon_discount'] = $order['coupon_price'];
 
+        $order_detail['user_lat'] = $order['lat'];
+        $order_detail['user_lng'] = $order['lng'];
+        $order_detail['address2'] = $order['address_detail'] == "" ? $order['address'] : $order['address']." - ".$order['address_detail'];
+
+        /**
         $address = D('User_adress')->where(array('adress_id'=>$order['address_id']))->find();
         $order_detail['user_lat'] = $address['latitude'];
         $order_detail['user_lng'] = $address['longitude'];
         if($address && $address['detail'] != '')
             $order_detail['address2'] = $address['adress'].' ('.$address['detail'].')';
+        */
 
         $store = D('Store')->get_store_by_id($order['store_id']);
         $order_detail['jetlag'] = 0;

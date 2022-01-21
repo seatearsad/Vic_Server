@@ -88,12 +88,12 @@
                                 <if condition="$order['is_pick_in_store'] eq 2">
                                     <tr>
                                         <th class="text-nowrap" scope="row">{pigcms{:L('_SELF_LIFT_ADDRESS_')}</th>
-                                        <td colspan="5">{pigcms{$order['address']}</td>
+                                        <td colspan="5">{pigcms{$order['address']}<if condition="$order['address_detail'] neq ''">&nbsp;- {pigcms{$order['address_detail']}</if></td>
                                     </tr>
                                     <else/>
                                     <tr>
                                         <th class="text-nowrap" scope="row">{pigcms{:L('_BACK_CUSTOM_ADD_')}</th>
-                                        <td colspan="5">{pigcms{$order['address']}</td>
+                                        <td colspan="5">{pigcms{$order['address']}<if condition="$order['address_detail'] neq ''">&nbsp;- {pigcms{$order['address_detail']}</if></td>
                                     </tr>
                                 </if>
                                 <!--tr>

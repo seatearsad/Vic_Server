@@ -143,7 +143,7 @@
                                         <td >{pigcms{$vo.order_id}</td>
                                         <td>{pigcms{$vo.storename}</td>
                                         <td>{pigcms{$vo.username}<br/>{pigcms{$vo.userphone}</td>
-                                        <td>{pigcms{$vo.aim_site}</td>
+                                        <td>{pigcms{$vo.aim_site}<if condition="$vo['address_detail'] neq ''">&nbsp;- {pigcms{$vo.address_detail}</if></td>
                                         <td>{pigcms{$vo.paid}</td>
 <!--                                        <td>{pigcms{$vo.money|floatval}</td>-->
                                         <td>{pigcms{$vo.deliver_cash|floatval}</td>

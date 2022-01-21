@@ -3242,10 +3242,12 @@ class DeliverAction extends BaseAction
 
 	    $re_list = array();
 	    foreach ($list as $v){
-            $re_list[$v['week_num']]['is_repeat'] = $v['is_repeat'];
-            $re_list[$v['week_num']]['id_list'][] = $v['time_id'];
-            $time_data = D('Deliver_schedule_time')->where(array('id' => $v['time_id']))->find();
-            $re_list[$v['week_num']]['ids'][] = $time_data;
+            $time_data = D('Deliver_schedule_time')->where(array('id' => $v['time_id'],'city_id'=>$this->deliver_session['city_id']))->find();
+            if($time_data) {
+                $re_list[$v['week_num']]['is_repeat'] = $v['is_repeat'];
+                $re_list[$v['week_num']]['id_list'][] = $v['time_id'];
+                $re_list[$v['week_num']]['ids'][] = $time_data;
+            }
         }
 
         foreach ($re_list as &$v){
