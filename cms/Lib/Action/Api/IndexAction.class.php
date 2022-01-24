@@ -1065,6 +1065,10 @@ class IndexAction extends BaseAction
                 $goods = D('Shop_goods')->where(array('goods_id' => $goodsId))->find();
             }
 
+            if(!D('Cart')->where(array('uid'=>$uid,'fid'=>$goodsId))->find()){
+                $is_error = true;
+            }
+
             if(!in_array($goods['sort_id'],$sortIdList)){
                 $is_cut = true;
                 D('Cart')->where(array('uid'=>$uid,'fid'=>$goodsId))->delete();

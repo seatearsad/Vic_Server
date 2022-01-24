@@ -241,9 +241,15 @@ class DeliverectAction
             $this->orderRefund($orderId);
         }
         if($status == 20){
-            //$this->updatePrepTimeURL(true);
+            $this->updatePrepTimeURL(true);
             $order = D("Shop_order")->where(array('order_id'=>$orderId))->find();
             D("StoreMenuV2")->saveIntegration($order['store_id'],"Order",$orderId." - Accepted",1);
+        }
+
+        if($status == 90 || $status == 95){
+            $this->updatePrepTimeURL(true);
+            $order = D("Shop_order")->where(array('order_id'=>$orderId))->find();
+            D("StoreMenuV2")->saveIntegration($order['store_id'],"Order",$orderId." - Accepted ".$status,1);
         }
 
         echo "statusUpdate";
@@ -275,9 +281,12 @@ class DeliverectAction
         }
         */
 
+        if($acceepted) $dining_time = 20;
+        /**
         if($order['send_platform'] == 20){
             $acceepted = true;
         }
+         */
 
         if($this->data['pickupTime'] != '') {
             $preparationTime = $this->data['pickupTime'];
@@ -288,6 +297,7 @@ class DeliverectAction
 
             $database->where(array('order_id' => $order['order_id']))->save(array('dining_time' => $dining_time));
             D('Deliver_supply')->where(array('order_id' => $order['order_id']))->save(array('dining_time' => $dining_time));
+            D("StoreMenuV2")->saveIntegration($order['store_id'],"Order",$orderId." - Prep time=".$dining_time,1);
         }
 
         if (empty($order)) {
@@ -315,8 +325,6 @@ class DeliverectAction
             $_POST['dining_time'] = $dining_time ? $dining_time : 0;
 
             $store = D('Merchant_store')->field(true)->where(array('store_id' => $order['store_id']))->find();
-
-            D("StoreMenuV2")->saveIntegration($order['store_id'],"Order",$orderId." - Prep time=".$_POST['dining_time'],1);
 
             $data['status'] = 1;
             $data['order_status'] = 1;
@@ -482,7 +490,7 @@ class DeliverectAction
             else
                 $productData['isCombo'] = 0;
 
-            $productData['max'] = $product['max'];
+            $productData['max'] = $product['max'] == 0 ? -1 : $product['max'];
             $productData['min'] = $product['min'];
             if($product['multiMax'])
                 $productData['multiMax'] = $product['multiMax'];

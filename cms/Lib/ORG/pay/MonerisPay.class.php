@@ -737,7 +737,8 @@ class MonerisPay
         $amount = $orderInfo['amount'];
         $pan = $orderInfo['card_num'];
         $expiry_date = $orderInfo['expiry'];
-        $crypt_type = '7';
+        //$crypt_type = '7';
+        $crypt_type = $eci;
 
         $txnArray=array(
             'type'=>$type,
