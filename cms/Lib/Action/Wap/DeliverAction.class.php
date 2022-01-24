@@ -1029,7 +1029,8 @@ class DeliverAction extends BaseAction
 			} elseif ($supply['item'] == 2) {
 				//更新订单状态
 				$result = D("Shop_order")->where(array('order_id' => $order_id))->data(array('order_status' => 3))->save();
-				if (!$result) {
+				$curr_order = D("Shop_order")->where(array('order_id' => $order_id))->find();
+				if (!$result && $curr_order['order_status'] != 3) {
 					$this->rollback($supply_id, 2);
 					$this->error("更新订单信息错误");
 					exit;

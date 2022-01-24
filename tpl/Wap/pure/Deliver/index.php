@@ -369,10 +369,21 @@
                         getList();
                         grab_timer = setInterval(getList, 2000);
                         clearInterval(order_timer);
+                        clearMarker();
                         location.hash = 0;
                     }
                 });
             });
+
+            function clearMarker() {
+                for(var i=0;i<marker_store_list.length;i++){
+                    marker_store_list[i].setMap(null);
+                }
+
+                for(var i=0;i<marker_user_list.length;i++){
+                    marker_user_list[i].setMap(null);
+                }
+            }
             
             function gotoPending() {
                 $('#bottom_nav').children('span').first().trigger('click');
@@ -522,7 +533,7 @@
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKlguA2QFIUVwWTo3danbOqSKv3nYbBCg&callback=initMap&language=en" async defer></script>
 	<script type="text/javascript">
-        var self_position,is_route,map,directionsService,directionsDisplay,record_id,marker_store,marker_user;
+        var self_position,is_route,map,directionsService,directionsDisplay,record_id,marker_store,marker_user,marker_store_list,marker_user_list;
 
         function initMap() {
             is_route = {pigcms{$is_route};
@@ -559,6 +570,8 @@
             directionsDisplay = new google.maps.DirectionsRenderer();
             marker_store = new google.maps.Marker();
             marker_user = new google.maps.Marker();
+            marker_store_list = [];
+            marker_user_list = [];
 
             var curr_hash = location.hash.replace("#","");
             if(curr_hash == "1"){
@@ -615,6 +628,7 @@
             directionsDisplay.setMap(null);
             marker_store.setMap(null);
             marker_user.setMap(null);
+            clearMarker();
             map.setCenter(self_position);
         }
 
@@ -639,7 +653,9 @@
 
         function setProcessOrder(orderList) {
             bounds = new google.maps.LatLngBounds();
-
+            clearMarker();
+            marker_store_list = [];
+            marker_user_list = [];
             for (var i = 0; i < orderList.length; i++) {
                 var order = orderList[i];
 
@@ -661,6 +677,9 @@
                 // The marker, positioned at Uluru
                 marker_store = new google.maps.Marker({position: store_pos, map: map,icon:store});
                 marker_user = new google.maps.Marker({position: user_pos, map: map,icon:user});
+
+                marker_store_list[i] = marker_store;
+                marker_user_list[i] = marker_user;
 
                 bounds.extend(new   google.maps.LatLng(marker_store.getPosition().lat()
                     ,marker_store.getPosition().lng()));
