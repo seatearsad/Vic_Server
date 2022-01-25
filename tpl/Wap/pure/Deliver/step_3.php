@@ -408,7 +408,11 @@
     <!--    //bag_type 0:未设置 1:自取 2：邮寄 3：全选 -->
 
     <if condition="$user['bag_get_type'] gt 0">
-        var init_bag_select=parseInt("{pigcms{$user['bag_get_type']}");
+        <if condition="$city['bag_type'] eq 1">
+            var init_bag_select=1;
+        <else />
+            var init_bag_select=parseInt("{pigcms{$user['bag_get_type']}");
+        </if>
     <else />
         <if condition="$city['bag_type'] eq 1">
             var init_bag_select=1;
