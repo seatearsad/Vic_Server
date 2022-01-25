@@ -3108,6 +3108,13 @@ class DeliverAction extends BaseAction
         $now_user = $database_deliver_user->field(true)->where(array('uid' => $this->deliver_session['uid']))->find();
         if($now_user['group'] == 1 && $now_user['reg_status'] == 5){
             $database_deliver_user->where(array('uid' => $this->deliver_session['uid']))->save(array('status'=>1,'reg_status'=>0));
+
+            $email = array(array("address" => $this->deliver_session['email'], "userName" => $this->deliver_session['name']));
+            $title = "Tutti Courier Instructions";
+            $body = $this->getMailBodyToDeliver($this->deliver_session['name']);
+            $mail = getMail($title, $body, $email);
+            $mail->send();
+
             $result = array('error_code' => false, 'msg' => 'Success');
         }else {
             $result = array('error_code' => true, 'msg' => 'Fail');
@@ -3635,6 +3642,26 @@ class DeliverAction extends BaseAction
         $body .= "<p>Updated Doc: ".$file_name."</p>";
         $body .= "<p>&nbsp;</p>";
         $body .= "<p>Please review on the backend at \"New Courier Verification\". If the updated document is approved, please set a new expiry date and activate the driver's account. If the doc isn't approved, please contact the driver to submit it again.</p>";
+
+        return $body;
+    }
+
+    public function getMailBodyToDeliver($name)
+    {
+        $body = "<p>Hi " . $name . ",</p>";
+        $body .= "<p>&nbsp;</p>";
+        $body .= "<p>Congratulations! Your Tutti courier account is now active!</p>";
+        $body .= "<p>&nbsp;</p>";
+        $body .= "<p>Here is a link to our delivery instructions on how to use our courier app and complete delivery orders: <a href='https://qrco.de/bbyGle' target='_blank'>https://qrco.de/bbyGle</a>. Please go through this file before starting your first delivery.</p>";
+        $body .= "<p>&nbsp;</p>";
+        $body .= "<p>Please go through this file before starting your first delivery.</p>";
+        $body .= "<p>&nbsp;</p>";
+        $body .= "<p>Please also remember to fill in your direct deposit information by pressing Menu on the top right > Account > Banking Info.</p>";
+        $body .= "<p>&nbsp;</p>";
+        $body .= "<p>For any questions, please contact us at 1-888-399-6668 or email <a href='mailto:hr@tutti.app'>hr@tutti.app</a>.</p>";
+        $body .= "<p>&nbsp;</p>";
+        $body .= "<p>Best regards,</p>";
+        $body .= "<p>Tutti Courier Team</p>";
 
         return $body;
     }
