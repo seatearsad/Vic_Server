@@ -413,9 +413,7 @@
         <else />
             var init_bag_select=1;
         </if>
-    </if>
-
-    <if condition="$user['bag_get_type'] gt 0">
+    <else />
         <if condition="$city['bag_type'] eq 1">
             var init_bag_select=2;
         <else />
