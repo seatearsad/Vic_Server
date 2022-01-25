@@ -422,7 +422,11 @@
             $("#more_list").hide();
     });
 
+    var from_url = "{pigcms{$_GET['from']}";
     $('#back_btn').click(function () {
-        window.history.go(-1);
+        if(from_url == 'index')
+            location.href = "{pigcms{:U('Deliver/index')}#1";
+        else
+            window.history.go(-1);
     });
 </script>

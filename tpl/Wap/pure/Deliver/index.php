@@ -407,7 +407,7 @@
 
                         $('.deliver_order').bind('click',function () {
                             var order_id = $(this).data('id');
-                            location.href = "{pigcms{:U('Wap/Deliver/detail', array('supply_id'=>'"+order_id+"'))}";
+                            location.href = "{pigcms{:U('Wap/Deliver/detail', array('supply_id'=>'"+order_id+"','from'=>'index'))}";
                         });
                     }else{
                         var insertHtml = '<div class="wait_div" style="margin-top: 50px;font-weight: bold;">No order accepted yet</div>';
