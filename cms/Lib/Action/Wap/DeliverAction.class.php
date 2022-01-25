@@ -2869,13 +2869,14 @@ class DeliverAction extends BaseAction
 
             $deliver_img = D('Deliver_img')->where(array('uid'=>$this->deliver_session['uid']))->find();
             if($deliver_img && ($deliver_img['sin_num'] != $data['sin_num'] || $deliver_img['driver_license'] != $data['driver_license'] || $deliver_img['insurance'] != $data['insurance'] || $deliver_img['certificate'] != $data['certificate'])){
+                /**
                 $file_name = "";
                 if($deliver_img['driver_license'] != $data['driver_license']) $file_name .= "Driver’s License ";
                 if($deliver_img['certificate'] != $data['certificate']) $file_name .= "Work Eligibility ";
                 if($deliver_img['insurance'] != $data['insurance']) $file_name .= "Vehicle Insurance ";
 
                 if($file_name != "") $this->sendUpdateMail($this->deliver_session['uid'],$file_name);
-
+                */
                 D('Deliver_img')->save($data);
                 $database_deliver_user->where(array('uid' => $this->deliver_session['uid']))->save(array('group'=>0));
             }
