@@ -3301,19 +3301,21 @@ class IndexAction extends BaseAction
 
         //var_dump($work_delver_list);
 
-        $day_3 = date("Y-m-d",time() + 3*86400);
-        $day_30 = date("Y-m-d",time() + 30*86400);
+        if($hour == 0) {
+            $day_3 = date("Y-m-d", time() + 3 * 86400);
+            $day_30 = date("Y-m-d", time() + 30 * 86400);
 
-        $work_list_3 = D("Deliver_img")->where(array("certificate_expiry"=>$day_3))->select();
-        $work_list_30 = D("Deliver_img")->where(array("certificate_expiry"=>$day_30))->select();
+            $work_list_3 = D("Deliver_img")->where(array("certificate_expiry" => $day_3))->select();
+            $work_list_30 = D("Deliver_img")->where(array("certificate_expiry" => $day_30))->select();
 
-        $in_list_3 = D("Deliver_img")->where(array("insurace_expiry"=>$day_3))->select();
-        $in_list_30 = D("Deliver_img")->where(array("insurace_expiry"=>$day_30))->select();
+            $in_list_3 = D("Deliver_img")->where(array("insurace_expiry" => $day_3))->select();
+            $in_list_30 = D("Deliver_img")->where(array("insurace_expiry" => $day_30))->select();
 
-        $this->sendUpdateMail($work_list_3,3,'Work Eligibility');
-        $this->sendUpdateMail($work_list_30,30,'Work Eligibility');
-        $this->sendUpdateMail($in_list_3,3,'Vehicle Insurance');
-        $this->sendUpdateMail($in_list_30,30,'Vehicle Insurance');
+            $this->sendUpdateMail($work_list_3, 3, 'Work Eligibility');
+            $this->sendUpdateMail($work_list_30, 30, 'Work Eligibility');
+            $this->sendUpdateMail($in_list_3, 3, 'Vehicle Insurance');
+            $this->sendUpdateMail($in_list_30, 30, 'Vehicle Insurance');
+        }
     }
 
     public function sendUpdateMail($list,$day_num,$file_name){
