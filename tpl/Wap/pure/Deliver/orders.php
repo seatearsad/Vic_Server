@@ -8,7 +8,7 @@
 <meta charset="utf-8">
 <title>{pigcms{$deliver_session['name']}-{pigcms{:L('_STATISTICS_TXT_')}</title>
 <meta name="description" content="{pigcms{$config.seo_description}"/>
-<link href="{pigcms{$static_path}css/deliver.css?v=1.0.4" rel="stylesheet"/>
+<link href="{pigcms{$static_path}css/deliver.css?v=2.0.0" rel="stylesheet"/>
 <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/mobiscroll.2.13.2.css"/>
 <script src="{pigcms{$static_path}js/jquery.min.js"></script>
 <!-- <script type="text/javascript" src="{pigcms{$static_path}js/swiper.min.js"></script> -->

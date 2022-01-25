@@ -8,7 +8,7 @@
     <meta charset="utf-8">
     <title>{pigcms{:L('_COURIER_CENTER_')}</title>
     <meta name="description" content="{pigcms{$config.seo_description}"/>
-    <link href="{pigcms{$static_path}css/deliver.css?v=1.0.4" rel="stylesheet"/>
+    <link href="{pigcms{$static_path}css/deliver.css?v=2.0.0" rel="stylesheet"/>
     <script src="{pigcms{:C('JQUERY_FILE')}"></script>
     <script src="{pigcms{$static_public}js/laytpl.js"></script>
     <script src="{pigcms{$static_path}layer/layer.m.js"></script>
