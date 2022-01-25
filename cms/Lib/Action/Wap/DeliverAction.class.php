@@ -2488,7 +2488,7 @@ class DeliverAction extends BaseAction
             if($resp['responseCode'] != 'null' && $resp['responseCode'] < 50){
                 $order = explode("_",$post_data['order_id']);
                 $order_id = $order[1];
-                $url =U("Wap/Deliver/my");
+                $url =U("Wap/Deliver/detail")."&supply_id=".$supply_id."&from=index";
 
                 //修改supply 和 order的支付相关数据
                 $data['pay_type'] = 'moneris';
