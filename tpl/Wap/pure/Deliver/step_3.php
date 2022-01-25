@@ -276,10 +276,10 @@
                 <input type="hidden"  name="bag_type" value="2">
                 <else />
                 <div style="float: left">
-                    <input type="radio" id="radiotype1" name="bag_type" value="1" style="vertical-align: top"> Shipping(${pigcms{$city.bag_shipping_fee})
+                    <input type="radio" id="radiotype1" name="bag_type" value="2" style="vertical-align: top"> Shipping(${pigcms{$city.bag_shipping_fee})
                 </div>
                 <div style="float: right">
-                    <input type="radio" id="radiotype2" name="bag_type" value="2" style="vertical-align: top"> Pick up
+                    <input type="radio" id="radiotype2" name="bag_type" value="1" style="vertical-align: top"> Pick up
                 </div>
             </if>
         </if>
@@ -405,19 +405,15 @@
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKlguA2QFIUVwWTo3danbOqSKv3nYbBCg&libraries=places&language=en" async defer></script>
 <script type="text/javascript" src="{pigcms{$static_public}js/webuploader.min.js"></script>
 <script type="text/javascript">
-    <!--    //bag_type 0:未设置 1:自取 2：邮寄 3：全选  这个两个值写反了-->
+    <!--    //bag_type 0:未设置 1:自取 2：邮寄 3：全选 -->
 
-    <if condition="$user['bag_get_type'] eq 0">
-        <if condition="$city['bag_type'] eq 1">
-            var init_bag_select=2;
-        <else />
-            var init_bag_select=1;
-        </if>
+    <if condition="$user['bag_get_type'] gt 0">
+        var init_bag_select=parseInt("{pigcms{$user['bag_get_type']}");
     <else />
         <if condition="$city['bag_type'] eq 1">
-            var init_bag_select=2;
+            var init_bag_select=1;
         <else />
-            var init_bag_select=parseInt("{pigcms{$user['bag_get_type']}");
+            var init_bag_select=2;
         </if>
     </if>
 
@@ -519,11 +515,11 @@
     }
 
     function init_save_user_data(){
-        if (init_bag_select==2){
+        if (init_bag_select==2){ //shipping
             $("#shipping_div").show();
             $("#pickup_div").hide();
             select_buy_mode=2;
-        }else{
+        }else{ // pickup
             $("#shipping_div").hide();
             $("#pickup_div").show();
             select_buy_mode=1;
@@ -547,7 +543,7 @@
 
     $(function(){
         $(":radio").click(function(){
-            if($(this).val()==2){
+            if($(this).val()==1){
                 $("#shipping_div").hide();
                 $("#pickup_div").show();
                 select_buy_mode=1;
