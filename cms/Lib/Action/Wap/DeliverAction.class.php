@@ -2905,7 +2905,7 @@ class DeliverAction extends BaseAction
     }
     public function pre_save_step3(){
         if($_POST['buy_mode']==2){   //shipping
-            $user_data["bag_get_type"]=1;
+            $user_data["bag_get_type"]=2;
             $user_data["ship_adress"]=$_POST['address'];
             $user_data["ship_apartment"]=$_POST['apartment'];
             $user_data["ship_city_str"]=$_POST['city'];
@@ -2914,7 +2914,7 @@ class DeliverAction extends BaseAction
             $user_data["bag_amount"]=$_POST['bag_amount'];
             $user_data["bag_get_id"]=$_POST['bag_id'];
         }else{      //pickup
-            $user_data["bag_get_type"]=2;
+            $user_data["bag_get_type"]=1;
             $user_data["bag_get_id"]=$_POST['bag_id'];
         }
         D('Deliver_user')->where(array('uid'=>$this->deliver_session['uid']))->save($user_data);
