@@ -3203,7 +3203,9 @@ class IndexAction extends BaseAction
             //更新送餐员的最大接单数
             if($hour == 0){
                 D('Config')->where(array('name'=>'deliver_max_order'))->save(array("value"=>2));
+            }
 
+            if($hour == 1){
                 //发送通知邮件
                 $day_3 = date("Y-m-d", time() + 3 * 86400);
                 $day_30 = date("Y-m-d", time() + 30 * 86400);
