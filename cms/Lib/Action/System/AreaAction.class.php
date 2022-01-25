@@ -231,7 +231,7 @@ class AreaAction extends BaseAction{
 
             //开放城市的送餐员招聘 发送通知邮件
 			if($area['bag_is_recruit'] == 0 && $_POST['bag_is_recruit'] == 1){
-                $this->sendMailToDeliver($_POST['area_id'],$area['area_name']);
+                //$this->sendMailToDeliver($_POST['area_id'],$area['area_name']);
             }
 			if($database_area->data($_POST)->save()){
 			    //当城市时间均为00:00:00时，为城市紧急状态将所有店铺设置为休假状态
