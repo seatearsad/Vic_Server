@@ -225,7 +225,7 @@
     </div>
     <div class="step_title">Delivery Bag</div>
     <div class="memo">
-        Last step! You’re required to carry a delivery bag to pick up and drop off orders. Please select at least one of the following:
+        Last step! You will need a delivery bag to pick up and drop off orders. Please select whether you'd like to purchase a Tutti bag or use your own bag with approval
     </div>
     <div class="memo" style="text-align: right;font-size: 14px;margin: 10px auto;">
         <span>Use my own bag</span>
