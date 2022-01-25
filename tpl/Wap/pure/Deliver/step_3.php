@@ -417,7 +417,7 @@
         <if condition="$city['bag_type'] eq 1">
             var init_bag_select=2;
         <else />
-            var init_bag_select="$user['bag_get_type']";
+            var init_bag_select="{pigcms{$user['bag_get_type']}";
         </if>
     </if>
 
