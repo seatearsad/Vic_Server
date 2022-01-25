@@ -305,7 +305,11 @@
         <script>
             window.onpageshow = function(event) {
                 if (event.persisted) {
-                    window.location.reload();
+                    if(typeof (window.linkJs) != 'undefined'){
+                        window.linkJs.reloadWebView();
+                    }else {
+                        window.location.reload();
+                    }
                 }
             }
 
