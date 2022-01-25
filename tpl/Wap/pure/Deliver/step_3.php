@@ -408,11 +408,7 @@
     <!--    //bag_type 0:未设置 1:自取 2：邮寄 3：全选-->
 
     <if condition="$user['bag_get_type'] gt 0">
-        <if condition="$user['bag_get_type'] eq 1">
-            var init_bag_select = 2;
-        <else />
-            var init_bag_select = 1;
-        </if>
+        var init_bag_select = "$user['bag_get_type']";
     <else />
         <if condition="$city['bag_type'] eq 1">
             var init_bag_select=2;
@@ -518,7 +514,7 @@
     }
 
     function init_save_user_data(){
-        if (init_bag_select==1){
+        if (init_bag_select==2){
             $("#shipping_div").show();
             $("#pickup_div").hide();
             select_buy_mode=2;
