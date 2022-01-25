@@ -584,7 +584,7 @@
         }
 
         if(select_buy_mode==2){
-            if(select_buy_mode==0 || bag_get_id == "" || $('#address').val() == '' || $('#apartment').val() == '' || $('#city').val() == '' || $('#postalcode').val() == ''|| $('#province').val() == ''){
+            if(select_buy_mode==0 || bag_get_id == "" || $('#address').val() == '' || $('#city').val() == '' || $('#postalcode').val() == ''|| $('#province').val() == ''){
                 is_next = false;
             }
         }
