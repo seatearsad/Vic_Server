@@ -1992,14 +1992,15 @@ class DeliverAction extends BaseAction {
             $data_img['certificate'] = $_POST['certificate'];
             if($_POST['bag_review_desc'] && $_POST['bag_review_desc'] != ""){
                 $data_img['bag_review_desc'] = $_POST['bag_review_desc'];
+                if($deliver['bag_get_type'] == -1) {
+                    $data = array('bag_get_id'=>'');
+                }
                 if(!$send_mail) {
                     $this->sendUpdateMail($deliver);
                     $send_mail = true;
                 }
             }
             D('Deliver_img')->where(array('uid' => $uid))->save($data_img);
-
-            D('deliver_user')->where(array('uid' => $uid))->save($data);
 
             if ($deliver['reg_status'] == 4){
                 if($_POST['bag_express_num'] && $_POST['bag_express_num'] != ''){
@@ -2016,16 +2017,13 @@ class DeliverAction extends BaseAction {
                         $this->sendUpdateMail($deliver);
                         $send_mail = true;
                     }
-                }else{
-                    if($deliver['bag_get_type'] == -1) {
-                        $data = array('bag_get_id'=>'');
-                        //if($_POST['bag_review_desc'] == "") $this->error("Please enter a reason for rejection");
-                    }
                 }
                 D('deliver_user')->where(array('uid' => $uid))->save($data);
 
                 $this->user_edit();
             }else{
+                D('deliver_user')->where(array('uid' => $uid))->save($data);
+
                 $this->user_edit();
             }
         }else {
