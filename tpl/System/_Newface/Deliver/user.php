@@ -82,6 +82,7 @@
                                 <th data-sort-ignore="true">{pigcms{:L('_BACK_PHONE_NUM_')}</th>
                                 <th data-sort-ignore="true">Email</th>
                                 <th data-sort-ignore="true">City</th>
+                                <th data-sort-ignore="true">Vehicle Type</th>
                                 <th data-sort-ignore="true">{pigcms{:L('_BACK_DELIVERY_AREA_')}</th>
                                 <th data-sort-ignore="true">{pigcms{:L('_BACK_TOTAL_DELIVERY_')}</th>
                                 <th data-sort-ignore="true">{pigcms{:L('_BACK_STATUS_')}</th>
@@ -100,9 +101,20 @@
                                         <td>{pigcms{$vo.phone}</td>
                                         <td>{pigcms{$vo.email}</td>
                                         <td>{pigcms{$vo.area_name}</td>
+                                        <td>{pigcms{$vo.vehicle_name}</td>
                                         <td>{pigcms{$vo.range}</td>
                                         <td class="textcenter">{pigcms{$vo.num}</td>
-                                        <td class="textcenter td_v_middle"><if condition="$vo['status'] eq 1"><font color="green">{pigcms{:L('_BACK_NORMAL_')}</font><else/><font color="red">{pigcms{:L('_BACK_BANNED_')}</font></if></td>
+                                        <td class="textcenter td_v_middle">
+                                            <if condition="$vo['expiry'] eq 1">
+                                                <font color="red">Expired</font>
+                                            </if>
+                                            <if condition="$vo['expiry'] eq 0 and $vo['status'] eq 1">
+                                                <font color="green">{pigcms{:L('_BACK_NORMAL_')}</font>
+                                            </if>
+                                            <if condition="$vo['expiry'] eq 0 and $vo['status'] eq 0">
+                                                <font color="red">{pigcms{:L('_BACK_BANNED_')}</font>
+                                            </if>
+                                        </td>
                                         <td>{pigcms{$vo.site}</td>
                                         <td >{pigcms{$vo.remark}</td>
                                         <td>{pigcms{$vo.last_time|date='Y-m-d H:i:s',###}</td>

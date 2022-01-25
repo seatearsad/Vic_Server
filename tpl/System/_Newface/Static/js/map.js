@@ -32,6 +32,7 @@ $(function(){
 
 	var setPoint = function(event){
 		$('#long_lat').val(event.latLng.lng()+','+event.latLng.lat());
+
 		var geocoder = new google.maps.Geocoder();
 		var request = {
 			location:{lat:event.latLng.lat(), lng:event.latLng.lng()}
@@ -39,6 +40,7 @@ $(function(){
 		geocoder.geocode(request, function(results, status){
 			if(status == 'OK') {
 				$("#adress").val(results[0].formatted_address);
+				/**
                 var add_com = results[0].address_components;
                 var is_get_city = false;
                 for(var i=0;i<add_com.length;i++){
@@ -61,9 +63,11 @@ $(function(){
                     $('#city_area').html('');
                     $('#city_id').val(0);
                 }
+				 */
 			}
 			console.log(results);
 			console.log(status);
+
 		});
 	}
 

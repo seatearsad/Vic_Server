@@ -9,15 +9,15 @@
  */
 
 class DeliverAction extends BaseAction {
-	protected $deliver_user, $deliver_store, $deliver_location, $deliver_supply;
+	protected $bag,$deliver_user, $deliver_store, $deliver_location, $deliver_supply;
 	
 	protected function _initialize() {
 		parent::_initialize();
+        $this->bag = D("Bag");
 		$this->deliver_user = D("Deliver_user");
 		$this->deliver_store = D("Deliver_store");
 		$this->deliver_location = D("Deliver_location");
 		$this->deliver_supply = D("Deliver_supply");
-
 	}
 
     public function __construct()
@@ -153,6 +153,22 @@ class DeliverAction extends BaseAction {
         //$user_list = $this->deliver_user->field('u.*,a.area_name')->join('as u left join '.C('DB_PREFIX').'area as a ON u.city_id=a.area_id')->where($condition_user)->order('`uid` DESC')->limit($p->firstRow . ',' . $p->listRows)->select();
         $user_list = $this->deliver_user->field('u.*,a.area_name')->join('as u left join '.C('DB_PREFIX').'area as a ON u.city_id=a.area_id')->where($where)->order('`uid` DESC')->limit($p->firstRow . ',' . $p->listRows)->select();
         //var_dump($user_list);die();
+
+        $vehicle_name = array("","Car","Bike","Motorcycle/Scooter");
+        foreach ($user_list as &$deliver){
+            if($deliver['status'] == 1){
+                $img = D("Deliver_img")->where(array('uid'=>$deliver['uid']))->find();
+                if(($img['insurace_expiry'] != '' && strtotime($img['insurace_expiry']." 23:59:59") < time()) || ($img['certificate_expiry'] != '' && $img['certificate_expiry'] != '-1' && strtotime($img['certificate_expiry']." 23:59:59") < time())){
+                    $deliver['expiry'] = 1;
+                }else{
+                    $deliver['expiry'] = 0;
+                }
+            }else{
+                $deliver['expiry'] = 0;
+            }
+            $deliver['vehicle_name'] = $vehicle_name[$deliver['vehicle_type']];
+        }
+
         $this->assign('user_list', $user_list);
         $pagebar = $p->show2();
         $this->assign('pagebar', $pagebar);
@@ -231,15 +247,28 @@ class DeliverAction extends BaseAction {
                 $data_img['driver_license'] = $_POST['driver_license'];
                 $data_img['insurance'] = $_POST['insurance'];
                 $data_img['certificate'] = $_POST['certificate'];
+
+                if($_POST['certificate_type'] == -1){
+                    $data_img['certificate_expiry'] = "-1";
+                }else{
+                    $data_img['certificate_expiry'] = $_POST['certificate_expiry'];
+                }
+                $data_img['insurace_expiry'] = $_POST['insurace_expiry'];
+
                 D('Deliver_img')->where(array('uid' => $id))->save($data_img);
             }
     		$this->success(L('J_SUCCEED3'));
-    	}
-    	//garfunkel 判断城市管理员
-        //if($this->system_session['level'] == 3){
+    	}else {
+            //garfunkel 判断城市管理员
+            //if($this->system_session['level'] == 3){
             //$this->error('当前管理员没有此权限');
-        //}
-    	$this->display();
+            //}
+
+            $city = D('Area')->where(array('area_type'=>2,'is_open'=>1))->select();
+            $this->assign('city',$city);
+
+            $this->display();
+        }
     }
     
     /**
@@ -276,10 +305,17 @@ class DeliverAction extends BaseAction {
             $column['birthday'] = $_POST['birthday'];
             $column['remark'] = $_POST['remark'];
             $column['work_status'] = $_POST['work_status'];
+            $column['vehicle_type'] = $_POST['vehicle_type'];
+
             if($_POST['work_status'] == 1){
                 $current_order_num = D('Deliver_supply')->where(array('uid'=>$uid,'status'=>array('lt',5)))->count();
                 if($current_order_num > 0){
                     $this->error('All accepted orders must be completed before you clock out.');
+                }
+            }else{
+                $img = D("Deliver_img")->where(array('uid'=>$uid))->find();
+                if(($img['insurace_expiry'] != '' && strtotime($img['insurace_expiry']." 23:59:59") < time()) || ($img['certificate_expiry'] != '' && $img['certificate_expiry'] != '-1' && strtotime($img['certificate_expiry']." 23:59:59") < time())){
+                    $this->error('Expired!');
                 }
             }
             $column['inaction_num'] = 0;
@@ -300,11 +336,6 @@ class DeliverAction extends BaseAction {
     			$this->error(L('_BACK_PHONE_ALREADY_'));
     		}
 
-    		$data_img['driver_license'] = $_POST['driver_license'];
-            $data_img['insurance'] = $_POST['insurance'];
-            $data_img['certificate'] = $_POST['certificate'];
-            D('Deliver_img')->where(array('uid' => $uid))->save($data_img);
-
     		if(D('deliver_user')->where(array('uid'=>$uid))->data($column)->save()){
     		    $card_id = D('Deliver_card')->field('id')->where(array('deliver_id'=>$uid))->find();
     		    if($card_id){
@@ -313,15 +344,50 @@ class DeliverAction extends BaseAction {
     		        $card['deliver_id'] = $uid;
                     D('Deliver_card')->data($card)->add();
                 }
+
+                $deliver_img = D('Deliver_img')->where(array('uid' => $uid))->find();
                 if($_POST['sin_num'] && $_POST['sin_num'] != '') {
     		        $data['sin_num'] = $_POST['sin_num'];
     		        $data['uid'] = $uid;
-                    $deliver_img = D('Deliver_img')->where(array('uid' => $uid))->find();
+
                     if ($deliver_img)
                         D('Deliver_img')->save($data);
                     else
                         D('Deliver_img')->add($data);
                 }
+
+                $data_img['driver_license'] = $_POST['driver_license'];
+                $data_img['insurance'] = $_POST['insurance'];
+                $data_img['certificate'] = $_POST['certificate'];
+                if($_POST['certificate_type'] == -1){
+                    $data_img['certificate_expiry'] = "-1";
+                    if($deliver_img['update_review'] == 1) $data_img['update_review'] = 0;
+                    if($deliver_img['update_review'] == 10) $data_img['update_review'] = 2;
+                }else{
+                    if($_POST['certificate_expiry'] != $deliver_img['certificate_expiry']) {
+                        $data_img['certificate_expiry'] = $_POST['certificate_expiry'];
+                        if($deliver_img['update_review'] == 1) $data_img['update_review'] = 0;
+                        if($deliver_img['update_review'] == 10) $data_img['update_review'] = 2;
+                    }
+                }
+                if($_POST['insurace_expiry'] != $deliver_img['insurace_expiry']) {
+                    $data_img['insurace_expiry'] = $_POST['insurace_expiry'];
+                    if($deliver_img['update_review'] == 2) $data_img['update_review'] = 0;
+
+                    if($deliver_img['update_review'] == 10){
+                        if($data_img['update_review'] == 2)
+                            $data_img['update_review'] = 0;
+                        else
+                            $data_img['update_review'] = 1;
+                    }
+                }
+
+                if($_POST['bag_express_num'] && $_POST['bag_express_num'] != ''){
+                    $data_img['bag_express_num'] = $_POST['bag_express_num'];
+                }
+
+                D('Deliver_img')->where(array('uid' => $uid))->save($data_img);
+
     			$this->success('Success');
     		}else{
     			$this->error('修改失败！请检查内容是否有过修改（必须修改）后重试~');
@@ -339,11 +405,16 @@ class DeliverAction extends BaseAction {
             $deliver['city_name'] = $city['area_name'];
     		$this->assign('now_user',$deliver);
 
+
+
     		$card = D('Deliver_card')->field(true)->where(array('deliver_id'=>$uid))->find();
     		$this->assign('card',$card);
 
             $deliver_img = D('Deliver_img')->field(true)->where(array('uid' => $uid))->find();
             $this->assign('img', $deliver_img);
+
+            $city = D('Area')->where(array('area_type'=>2,'is_open'=>1))->select();
+            $this->assign('city',$city);
     	}
     	$this->display();
     }
@@ -477,7 +548,7 @@ class DeliverAction extends BaseAction {
             }
         }
 
-		$sql = "SELECT s.`supply_id`,s.order_id, s.item, s.real_orderid as real_orderid,s.name as username, s.phone as userphone, m.name as storename, s.money, u.name, u.phone, s.start_time, s.end_time, s.aim_site, s.pay_type, s.paid, s.status, s.deliver_cash, s.distance, s.from_lat, s.aim_lat, s.from_lnt, s.aim_lnt FROM " . C('DB_PREFIX') . "deliver_supply AS s INNER JOIN " . C('DB_PREFIX') . "merchant_store AS m ON m.store_id=s.store_id LEFT JOIN " . C('DB_PREFIX') . "deliver_user AS u ON s.uid=u.uid";
+		$sql = "SELECT s.`supply_id`,s.order_id, s.item, s.real_orderid as real_orderid,s.name as username, s.phone as userphone, m.name as storename, s.money, u.name, u.phone, s.start_time, s.end_time, s.aim_site, s.pay_type, s.paid, s.status, s.deliver_cash, s.distance, s.from_lat, s.aim_lat, s.from_lnt, s.aim_lnt,o.address_detail FROM " . C('DB_PREFIX') . "deliver_supply AS s INNER JOIN " . C('DB_PREFIX') . "merchant_store AS m ON m.store_id=s.store_id LEFT JOIN " . C('DB_PREFIX') . "deliver_user AS u ON s.uid=u.uid LEFT JOIN " . C('DB_PREFIX') . "shop_order AS o ON o.order_id=s.order_id";
 		$sql_count = "SELECT count(1) AS count FROM " . C('DB_PREFIX') . "deliver_supply AS s INNER JOIN " . C('DB_PREFIX') . "merchant_store AS m ON m.store_id=s.store_id LEFT JOIN " . C('DB_PREFIX') . "deliver_user AS u ON s.uid=u.uid";
 
 		$sql_common="";
@@ -700,18 +771,23 @@ class DeliverAction extends BaseAction {
 			$pre = '';
 			$data = array();
 			foreach ($users as $user) {
-				$user['range'] = getRange(getDistance($supply['from_lat'], $supply['from_lnt'], $user['lat'], $user['lng']));
-				$user['now_range'] = getRange(getDistance($supply['from_lat'], $supply['from_lnt'], $user['lat'], $user['lng']));
-				$data[$user['uid']] = $user;
-				$uids .= $pre . $user['uid'];
-				$pre = ',';
+                $img = D("Deliver_img")->where(array('uid'=>$user['uid']))->find();
+                if(($img['insurace_expiry'] != '' && strtotime($img['insurace_expiry']." 23:59:59") < time()) || ($img['certificate_expiry'] != '' && $img['certificate_expiry'] != '-1' && strtotime($img['certificate_expiry']." 23:59:59") < time())){
+
+                }else {
+                    $user['range'] = getRange(getDistance($supply['from_lat'], $supply['from_lnt'], $user['lat'], $user['lng']));
+                    $user['now_range'] = getRange(getDistance($supply['from_lat'], $supply['from_lnt'], $user['lat'], $user['lng']));
+                    $data[$user['uid']] = $user;
+                    $uids .= $pre . $user['uid'];
+                    $pre = ',';
+                }
 			}
 			$sql = "SELECT a.pigcms_id, a.uid, a.lat, a.lng FROM " . C('DB_PREFIX') . "deliver_user_location_log AS a INNER JOIN (SELECT uid, MAX(pigcms_id) AS pigcms_id FROM " . C('DB_PREFIX') . "deliver_user_location_log GROUP BY uid) AS b ON a.uid = b.uid AND a.pigcms_id = b.pigcms_id WHERE a.uid IN ({$uids})";
 			$now_users = D()->query($sql);
 			foreach ($now_users as $v) {
-				if (isset($data[$v['uid']])) {
-					$data[$v['uid']]['now_range'] = getRange(getDistance($supply['from_lat'], $supply['from_lnt'], $v['lat'], $v['lng']));
-				}
+                if (isset($data[$v['uid']])) {
+                    $data[$v['uid']]['now_range'] = getRange(getDistance($supply['from_lat'], $supply['from_lnt'], $v['lat'], $v['lng']));
+                }
 			}
 			$this->assign('users', $data);
 			$this->display();
@@ -760,8 +836,7 @@ class DeliverAction extends BaseAction {
 			$sql .= ' AND s.start_time>' . ($begin_time) . ' AND s.start_time<' . ($end_time);
 			$sql_count .= ' AND s.start_time>' . ($begin_time) . ' AND s.start_time<' . ($end_time);
 		}
-		//echo $sql;
-        
+
         import('@.ORG.system_page');
         
         $res_count = D()->query($sql_count);
@@ -1636,20 +1711,178 @@ class DeliverAction extends BaseAction {
             exit(json_encode(array('error' => 1, 'msg' => 'Fail,City not exist！', 'dom_id' => 'account')));
         }
     }
+    /**
+     * 送货箱添加
+     */
+    public function bag_add() {
+
+        if($_POST){
+
+            $column['bag_name'] = isset($_POST['bag_name']) ? htmlspecialchars($_POST['bag_name']) : '';
+            $column['bag_price'] = isset($_POST['bag_price']) ? htmlspecialchars($_POST['bag_price']) : '';
+            $column['bag_tax_rate'] = $_POST['bag_tax_rate'];
+            $column['bag_switch'] = intval($_POST['bag_switch']);
+            $column['bag_description'] = $_POST['bag_description'];
+
+            if(empty($_POST['pic'])){
+                $this->error(L('LEAST_ONE_BKADMIN'));
+            }
+
+            $column['bag_photos'] = implode(';',$_POST['pic']);
+
+            if (empty($column['bag_name'])) {
+                $this->error('bag_name不能为空');
+            }
+            if (empty($column['bag_price'])) {
+                $this->error('bag_price不能为空');
+            }
+            if (empty($column['bag_tax_rate'])) {
+                $this->error('bag_tax_rate不能为空');
+            }
+
+            $id = D('bag')->data($column)->add();
+
+            if(!$id){
+                $this->error('保存失败，请重试');
+            }else{
+
+            }
+
+            $this->success(L('J_SUCCEED3'));
+        }
+        //garfunkel 判断城市管理员
+        //if($this->system_session['level'] == 3){
+        //$this->error('当前管理员没有此权限');
+        //}
+        $this->display();
+    }
+
+    //修改送货箱的是否开启的状态
+    public function change_switch(){
+        $bag_switch = $_POST['switch'];
+        $bid=$_POST['bid'];
+        D('bag')->where(array('bag_id'=>$bid))->save(array('bag_switch'=>$bag_switch));
+        exit('1');
+        die();
+//        if(1){
+//            exit('1');
+//        }else{
+//            exit('0');
+//        }
+    }
+    /**
+     * 送货箱修改
+     */
+    public function bag_edit() {
+        if($_POST){
+
+            $bag_id  = intval($_POST['bag_id']);
+            $column['bag_name'] = isset($_POST['bag_name']) ? htmlspecialchars($_POST['bag_name']) : '';
+            $column['bag_price'] = isset($_POST['bag_price']) ? htmlspecialchars($_POST['bag_price']) : '';
+            $column['bag_tax_rate'] = $_POST['bag_tax_rate'];
+            $column['bag_switch'] = intval($_POST['bag_switch']);
+            $column['bag_description'] = $_POST['bag_description'];
+
+            if(empty($_POST['pic'])){
+                $this->error(L('LEAST_ONE_BKADMIN'));
+            }
+
+            $column['bag_photos'] = implode(';',$_POST['pic']);
+
+            if (empty($column['bag_name'])) {
+                $this->error('bag_name不能为空');
+            }
+            if (empty($column['bag_price'])) {
+                $this->error('bag_price不能为空');
+            }
+            if (empty($column['bag_tax_rate'])) {
+                $this->error('bag_tax_rate不能为空');
+            }
+            $bag = D('bag')->field(true)->where(array('bag_id' => $bag_id))->find();
+            if (!$bag) {
+                $this->error(L('未找到匹配数据'));
+            }
+
+            if(D('bag')->where(array('bag_id' => $bag_id))->save($column)){
+                $this->success('Success');
+            }else{
+                $this->error('修改失败！请检查内容是否有过修改（必须修改）后重试~');
+            }
+
+            $this->success(L('J_SUCCEED3'));
+
+        }else{
+            $bag_id=$_GET["bag_id"];
+            $now_bag= D('bag')->where(array('bag_id'=>$bag_id))->find();
+            if(!$now_bag){
+                $this->error('非法操作');
+            }
+
+            if(!empty($now_bag['bag_photos'])){
+                $bag_image_class = new bag_image();
+                $tmp_pic_arr = explode(';',$now_bag['bag_photos']);
+                foreach($tmp_pic_arr as $key=>$value){
+                    $now_bag['pic'][$key]['title'] = $value;
+                    $now_bag['pic'][$key]['url'] = $bag_image_class->get_image_by_path($value);
+                }
+            }
+
+//
+//            $city = D('Area')->where(array('area_id'=>$deliver['city_id']))->find();
+//            $deliver['city_name'] = $city['area_name'];
+//            $this->assign('bag',$deliver);
+//
+//            $card = D('Deliver_card')->field(true)->where(array('deliver_id'=>$uid))->find();
+//            $this->assign('card',$card);
+//
+//            $deliver_img = D('Deliver_img')->field(true)->where(array('uid' => $uid))->find();
+            $this->assign('now_bag', $now_bag);
+        }
+        $this->display();
+    }
+
+    public function bag_list(){
+
+        $count_bag = $this->bag->count();
+        import('@.ORG.system_page');
+        $p = new Page($count_bag, 15);
+        $bag_list = $this->bag->field(true)->order('`bag_id` DESC')->limit($p->firstRow . ',' . $p->listRows)->select();
+
+//        foreach ($user_list as &$v){
+//            $is_online = 0;
+//            $is_upload = 0;
+//            if($v['reg_status'] == 4){
+//                $deliver_img = D('Deliver_img')->field(true)->where(array('uid' => $v['uid']))->find();
+//                if($deliver_img['card_num'] != '' && $deliver_img['txnNumber'] != ''){
+//                    $is_online = 1;
+//                }
+//                if($deliver_img['driver_license'] != '' && $deliver_img['insurance'] != '' && $deliver_img['certificate'] != '' && $deliver_img['sin_num'] != ''){
+//                    $is_upload = 1;
+//                }
+//            }
+//
+//            $v['is_online_pay'] = $is_online;
+//            $v['is_upload'] = $is_upload;
+//        }
+        $this->assign('bag_list', $bag_list);
+        $pagebar = $p->show2();
+        $this->assign('pagebar', $pagebar);
+        $this->display();
+    }
 
     public function review(){
         //搜索
         if (!empty($_GET['keyword'])) {
             if ($_GET['searchtype'] == 'uid') {
-                $condition_user['uid'] = $_GET['keyword'];
+                $condition_user['d.uid'] = $_GET['keyword'];
             } else if ($_GET['searchtype'] == 'firstname') {
-                $condition_user['name'] = array('like', '%' . $_GET['keyword'] . '%');
+                $condition_user['d.name'] = array('like', '%' . $_GET['keyword'] . '%');
             } else if ($_GET['searchtype'] == 'lastname') {
-                $condition_user['family_name'] = array('like', '%' . $_GET['keyword'] . '%');
+                $condition_user['d.family_name'] = array('like', '%' . $_GET['keyword'] . '%');
             } else if ($_GET['searchtype'] == 'phone') {
-                $condition_user['phone'] = array('like', '%' . $_GET['keyword'] . '%');
+                $condition_user['d.phone'] = array('like', '%' . $_GET['keyword'] . '%');
             }else if($_GET['searchtype'] == 'email'){
-                $condition_user['email'] = array('like', '%' . $_GET['keyword'] . '%');
+                $condition_user['d.email'] = array('like', '%' . $_GET['keyword'] . '%');
             }
             $this->assign('searchtype',$_GET['searchtype']);
         }else{
@@ -1659,7 +1892,7 @@ class DeliverAction extends BaseAction {
         if($_GET['city_id']){
             $this->assign('city_id',$_GET['city_id']);
             if($_GET['city_id'] != 0){
-                $condition_user['city_id'] = $_GET['city_id'];
+                $condition_user['d.city_id'] = $_GET['city_id'];
             }
         }else{
             $this->assign('city_id',0);
@@ -1669,23 +1902,34 @@ class DeliverAction extends BaseAction {
 
         //未审核的
         //$condition_user['group'] = array('between','-1,0');
-        $condition_user['reg_status'] = array('neq',0);
+        $condition_user['d.reg_status'] = array('neq',0);
         //garfunkel 判断城市管理员
         if($this->system_session['level'] == 3){
-            $condition_user['city_id'] = $this->system_session['area_id'];
+            $condition_user['d.city_id'] = $this->system_session['area_id'];
         }
-        $count_user = $this->deliver_user->where($condition_user)->count();
+        //var_dump($condition_user);
+        $count_user = $this->deliver_user->join(' as d LEFT JOIN ' . C('DB_PREFIX') . 'area as a ON d.city_id=a.area_id')->where($condition_user)->count();
+
         import('@.ORG.system_page');
         $p = new Page($count_user, 15);
-        $user_list = $this->deliver_user->field(true)->where($condition_user)->order('`last_time` DESC')->limit($p->firstRow . ',' . $p->listRows)->select();
+        $user_list = $this->deliver_user->field("d.*,a.*")->join(' as d LEFT JOIN ' . C('DB_PREFIX') . 'area as  a ON d.city_id=a.area_id')->where($condition_user)->order(' last_time DESC')->limit($p->firstRow . ',' . $p->listRows)->select();
+
         foreach ($user_list as &$v){
             $is_online = 0;
             $is_upload = 0;
-            if($v['reg_status'] == 4){
+            if($v['reg_status'] == 4 || $v['reg_status'] == 5){
                 $deliver_img = D('Deliver_img')->field(true)->where(array('uid' => $v['uid']))->find();
                 if($deliver_img['card_num'] != '' && $deliver_img['txnNumber'] != ''){
                     $is_online = 1;
                 }
+                if($v['bag_get_type'] == -1){//使用自己的背包
+                    if($v['bag_get_id'] == ''){//未上传图片
+                        $is_online = 0;
+                    }else{//已上传图片
+                        $is_online = 1;
+                    }
+                }
+
                 if($deliver_img['driver_license'] != '' && $deliver_img['insurance'] != '' && $deliver_img['certificate'] != '' && $deliver_img['sin_num'] != ''){
                     $is_upload = 1;
                 }
@@ -1700,61 +1944,86 @@ class DeliverAction extends BaseAction {
         $this->display();
     }
 
+
     public function user_view(){
         if($_POST) {
             $uid = $_POST['uid'];
             $deliver = D('deliver_user')->where(array('uid' => $uid))->find();
             $review_status = $_POST['review'];
+            $send_mail = false;
             if ($review_status == 1) {//通过
                 //$data['reg_status'] = 3;
                 $data['group'] = 1;
-                $sms_data['uid'] = $uid;
-                $sms_data['mobile'] = $deliver['phone'];
-                $sms_data['sendto'] = 'deliver';
-                $sms_data['tplid'] = 522180;
-                $sms_data['params'] = [];
-                //Sms::sendSms2($sms_data);
-                $sms_txt = "Congratulations! Your courier application has been approved and your account is now active. You can start scheduling your shifts and accepting delivery orders. Welcome to the Tutti team!";
-                //Sms::telesign_send_sms($deliver['phone'],$sms_txt,0);
-                Sms::sendTwilioSms($deliver['phone'],$sms_txt);
-                if($deliver['reg_status'] == 5){
-                    $data['reg_status'] = 0;
-                }
-
-                if($deliver['email'] != "") {
-                    $email = array(array("address"=>$deliver['email'],"userName"=>$deliver['name']));
-                    $title = $title = "Tutti Courier Instructions";
-                    $body = $this->getMailBody($deliver['name']);
-                    $mail = getMail($title, $body, $email);
-                    $mail->send();
+                if($deliver['group'] != 1){
+                    $this->sendUpdateMail($deliver);
+                    $send_mail = true;
                 }
             } else {//未通过
-                //$data['reg_status'] = 1;
+                if($_POST['review_desc'] == ''){
+                    //$this->error("Please enter a reason for rejection");
+                }
                 if($_POST['review_desc'] && $_POST['review_desc'] != '') {
                     $data['group'] = -1;
                     $data_img['review_desc'] = $_POST['review_desc'];
-                    D('Deliver_img')->where(array('uid' => $uid))->save($data_img);
+                    $this->sendUpdateMail($deliver);
+                    $send_mail = true;
+                    //D('Deliver_img')->where(array('uid' => $uid))->save($data_img);
+                }
+            }
+
+            if($deliver['group'] == 1 && $deliver['reg_status'] == 5 && $_POST['activate_account'] == 1){
+                $data['status'] = 1;
+                $data['reg_status'] = 0;
+
+                if($deliver['email'] != "") {
+                    if(!$send_mail) {
+                        $email = array(array("address" => $deliver['email'], "userName" => $deliver['name']));
+                        $title = $title = "Tutti Courier Instructions";
+                        $body = $this->getMailBody($deliver['name']);
+                        $mail = getMail($title, $body, $email);
+                        $mail->send();
+                        $send_mail = true;
+                    }
                 }
             }
 
             $data_img['driver_license'] = $_POST['driver_license'];
             $data_img['insurance'] = $_POST['insurance'];
             $data_img['certificate'] = $_POST['certificate'];
+            if($_POST['bag_review_desc'] && $_POST['bag_review_desc'] != ""){
+                $data_img['bag_review_desc'] = $_POST['bag_review_desc'];
+                if(!$send_mail) {
+                    $this->sendUpdateMail($deliver);
+                    $send_mail = true;
+                }
+            }
             D('Deliver_img')->where(array('uid' => $uid))->save($data_img);
 
             D('deliver_user')->where(array('uid' => $uid))->save($data);
 
             if ($deliver['reg_status'] == 4){
+                if($_POST['bag_express_num'] && $_POST['bag_express_num'] != ''){
+                    $data['reg_status'] = 5;
+                }
                 if($_POST['receive'] == 1){
                     if($data['group'] == 1 || $deliver['group'] == 1){
-                        $data['reg_status'] = 0;
+                        $data['reg_status'] = 5;
                     }
                     if(!isset($data['reg_status']) || $data['reg_status'] != 0) {
                         $data['reg_status'] = 5;
                     }
-                    $data['status'] = 1;
-                    D('deliver_user')->where(array('uid' => $uid))->save($data);
+                    if(!$send_mail) {
+                        $this->sendUpdateMail($deliver);
+                        $send_mail = true;
+                    }
+                }else{
+                    if($deliver['bag_get_type'] == -1) {
+                        $data = array('bag_get_id'=>'');
+                        //if($_POST['bag_review_desc'] == "") $this->error("Please enter a reason for rejection");
+                    }
                 }
+                D('deliver_user')->where(array('uid' => $uid))->save($data);
+
                 $this->user_edit();
             }else{
                 $this->user_edit();
@@ -1772,11 +2041,41 @@ class DeliverAction extends BaseAction {
             $deliver['city_name'] = $city['area_name'];
 
             $deliver_img = D('Deliver_img')->field(true)->where(array('uid' => $uid))->find();
+
+            $bagDesc = "";
+            $allPrice = 0;
+            if($deliver['bag_get_type'] != -1 && $deliver['bag_get_id'] != ''){
+                if($deliver_img['card_num'] != '' && $deliver_img['txnNumber'] != '') {
+                    $bag_list = explode("|", $deliver['bag_get_id']);
+                    foreach ($bag_list as $bag) {
+                        $value = explode(',', $bag);
+                        $bagValue = D("Bag")->where(array('bag_id' => $value[0]))->find();
+
+                        $allPrice += $bagValue['bag_price'] + $bagValue['bag_price'] * $bagValue['bag_tax_rate'] / 100;
+                        $currDesc = $value[1] . ' X ' . $bagValue['bag_name'] . ' ($' . $bagValue['bag_price'] . ')';
+                        $bagDesc .= $bagValue == '' ? $currDesc : '<br>' . $currDesc;
+                    }
+
+                    if ($deliver['bag_get_type'] == 1) {
+                        $bagDesc .= '<br>Shopping: $' . round($city['bag_shipping_fee'] + $city['bag_shipping_fee'] * 0.05, 2);
+                        $allPrice += $city['bag_shipping_fee'] + $city['bag_shipping_fee'] * 0.05;
+                    }
+
+                    $allPrice = round($allPrice, 2);
+                    $bagDesc .= '<br>Total paid: $' . $allPrice;
+                }
+            }
+
+            $deliver['bagDesc'] = $bagDesc == '' ? '-' : $bagDesc;
+
             $this->assign('now_user', $deliver);
             $this->assign('img', $deliver_img);
 
             $card = D('Deliver_card')->field(true)->where(array('deliver_id'=>$uid))->find();
             $this->assign('card',$card);
+
+            $city = D('Area')->where(array('area_type'=>2,'is_open'=>1))->select();
+            $this->assign('city',$city);
 
             $this->display();
         }
@@ -1792,13 +2091,15 @@ class DeliverAction extends BaseAction {
         $fee_list = D('Deliver_rule')->where(array('type'=>1,'city_id'=>$city_id))->select();
         $this->assign('fee_list',$fee_list);
 
+        $bonus_list = D('Deliver_bonus')->where(array('city_id'=>$city_id))->order('status asc')->select();
+        $this->assign('bonus_list',$bonus_list);
+
         $city = D('Area')->where(array('area_type'=>2,'is_open'=>1))->select();
         $this->assign('city',$city);
         $this->display();
     }
 
     public function update_rule(){
-
         if($_POST){
             $base_data['start'] = 0;
             $base_data['end'] = $_POST['base_rule_mile'];
@@ -1815,9 +2116,13 @@ class DeliverAction extends BaseAction {
 
             $data = array();
             $new_data = array();
+            $bonus_data = array();
             foreach ($_POST as $k=>$v){
                 $key = explode('-',$k);
-                if(strpos($key[0],'new') !== false){
+                if(strpos($key[0],'bonus_new') !== false){
+                    $bonus_data[$key[1]][$key[0]] = $v;
+                }
+                else if(strpos($key[0],'new') !== false){
                     $new_data[$key[1]][$key[0]] = $v;
                 }else{
                     $data[$key[1]][$key[0]] = $v;
@@ -1829,6 +2134,7 @@ class DeliverAction extends BaseAction {
             D('Deliver_rule')->where($where_delete)->delete();
 
             //新加数据处理
+            $save_all = array();
             foreach ($new_data as $k=>$v){
                 $save_data['start'] = $v['start_mile_new'];
                 $save_data['end'] = $v['end_mile_new'];
@@ -1836,8 +2142,23 @@ class DeliverAction extends BaseAction {
                 $save_data['type'] = 1;
                 $save_data['city_id'] = $city_id;
 
-                D('Deliver_rule')->add($save_data);
+                $save_all[] = $save_data;
             }
+            D('Deliver_rule')->addAll($save_all);
+
+            D('Deliver_bonus')->where(array('city_id'=>$city_id))->delete();
+            $save_bonus_all = array();
+            foreach ($bonus_data as $vv){
+                $save_bonus_data['week'] = $vv['day_bonus_new'];
+                $save_bonus_data['begin_time'] = $vv['begin_bonus_new'];
+                $save_bonus_data['end_time'] = $vv['end_bonus_new'];
+                $save_bonus_data['amount'] = $vv['amount_bonus_new'];
+                $save_bonus_data['expiry'] = $vv['expiry_bonus_new'];
+                $save_bonus_data['city_id'] = $city_id;
+
+                $save_bonus_all[] = $save_bonus_data;
+            }
+            D('Deliver_bonus')->addAll($save_bonus_all);
 
 //            //更新老数据
 //            $save_data = array();
@@ -2028,7 +2349,10 @@ class DeliverAction extends BaseAction {
             exit(json_encode(array('error' => 1,'message' =>'没有选择图片')));
         }
     }
-
+    public function ajax_del_pic(){
+        $store_image_class = new bag_image();
+        $store_image_class->del_image_by_path($_POST['path']);
+    }
     public function getMailBody($name)
     {
         $body = "<p>Hi " . $name . ",</p>";
@@ -2036,6 +2360,10 @@ class DeliverAction extends BaseAction {
         $body .= "<p>Congratulations! Your Tutti courier account is now active!</p>";
         $body .= "<p>&nbsp;</p>";
         $body .= "<p>Here is a link to our delivery instructions on how to use our courier app and complete delivery orders: <a href='https://qrco.de/bbyGle' target='_blank'>https://qrco.de/bbyGle</a>. Please go through this file before starting your first delivery.</p>";
+        $body .= "<p>&nbsp;</p>";
+        $body .= "<p>Please go through this file before starting your first delivery.</p>";
+        $body .= "<p>&nbsp;</p>";
+        $body .= "<p>Please also remember to fill in your direct deposit information by pressing Menu on the top right > Account > Banking Info.</p>";
         $body .= "<p>&nbsp;</p>";
         $body .= "<p>For any questions, please contact us at 1-888-399-6668 or email <a href='mailto:hr@tutti.app'>hr@tutti.app</a>.</p>";
         $body .= "<p>&nbsp;</p>";
@@ -2090,5 +2418,32 @@ class DeliverAction extends BaseAction {
         $this->assign('list',$list);
 
         $this->display();
+    }
+
+
+    public function sendUpdateMail($deliver){
+        if($deliver['email'] != "") {
+            $email = array(array("address"=>$deliver['email'],"userName"=>$deliver['name']));
+            $title = "Status update on your courier application!";
+            $body = $this->getUpdateMailBody($deliver['name']);
+            $mail = getMail($title, $body, $email);
+            $mail->send();
+        }
+    }
+
+    public function getUpdateMailBody($name)
+    {
+        $body = "<p>Hi " . $name . ",</p>";
+        $body .= "<p>&nbsp;</p>";
+        $body .= "<p>Thank you for registering as a Tutti Courier!</p>";
+        $body .= "<p>&nbsp;</p>";
+        $body .= "<p>Your application status has been updated. To review your account, please follow this link <a href='https://tutti.app/wap.php?g=Wap&c=Deliver&a=login' target='_blank'>https://tutti.app/wap.php?g=Wap&c=Deliver&a=login</a> or download our app by searching “Tutti Courier” on the App Store or Google Play Store.</p>";
+        $body .= "<p>&nbsp;</p>";
+        $body .= "<p>For any questions, please contact us at 1-888-399-6668 or email <a href='mailto:hr@tutti.app'>hr@tutti.app</a>.</p>";
+        $body .= "<p>&nbsp;</p>";
+        $body .= "<p>Best regards,</p>";
+        $body .= "<p>Tutti Courier Team</p>";
+
+        return $body;
     }
 }

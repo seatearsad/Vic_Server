@@ -23,7 +23,7 @@ class DeliverAction extends BaseAction
 			}
 			
 			if (empty($this->deliver_session)) {
-				if (ACTION_NAME != 'login' && ACTION_NAME != 'reg' &&  ACTION_NAME != 'ajax_city_name' && ACTION_NAME != 'forgetpwd') {
+				if (ACTION_NAME != 'login' && ACTION_NAME != 'reg' &&  ACTION_NAME != 'ajax_city_name' && ACTION_NAME != 'forgetpwd' && ACTION_NAME != 'policy') {
 					redirect(U('Deliver/login', array('referer' => urlencode('http://' . $_SERVER['HTTP_HOST'] . (!empty($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'])))));
 					exit();
 				}
@@ -73,13 +73,16 @@ class DeliverAction extends BaseAction
             }
         }
 
-        $save_address = array('login','reg','ajax_city_name','ajax_upload','forgetpwd','account','change_pwd','bank_info','step_1','step_2','step_3','step_4','step_5','support','ver_info');
+        $save_address = array('login','reg','ajax_city_name',"ajax_save_city_id_for_deliver_user",'ajax_upload','forgetpwd','account','change_pwd','bank_info','step_1','step_2','step_3','step_4','step_5','support','ver_info','activate_deliver');
         if(!in_array(ACTION_NAME,$save_address)) {
             $deliver = D('Deliver_user')->field('reg_status')->where(['uid' => $this->deliver_session['uid']])->find();
-            if ($deliver['reg_status'] != 0 && !($deliver['reg_status'] == 5 && ACTION_NAME == 'index'))
-                header('Location:' . U('Deliver/step_' . $deliver['reg_status']));
+
+            if ($deliver['reg_status'] != 0)
+                header('Location:' . U('Deliver/step_').$deliver['reg_status']);
         }else{
             if(ACTION_NAME == 'step_5')
+                header('Location:' . U('Deliver/step_4'));
+            if(ACTION_NAME == 'step_0')
                 header('Location:' . U('Deliver/index'));
         }
 	}
@@ -200,7 +203,6 @@ class DeliverAction extends BaseAction
 	
 	public function index() 
 	{
-
 	    //$deliver = D('Deliver_user')->field('reg_status')->where(['uid' => $this->deliver_session['uid']])->find();
 	    //if($deliver['reg_status'] != 0)
         //    header('Location:'.U('Deliver/step_'.$deliver['reg_status']));
@@ -245,6 +247,8 @@ class DeliverAction extends BaseAction
             $is_scheduled = 1;
         }
 
+        $header_time_show = "";
+
         $schedule_list = D('Deliver_schedule')->where(array('uid'=>$this->deliver_session['uid'],'time_id' => array('in', $time_ids),'week_num' => $week_num, 'whether' => 1, 'status' => 1))->select();
         if($schedule_list){
             $is_change_work_status = 1;
@@ -253,8 +257,8 @@ class DeliverAction extends BaseAction
                 $new_hour = $hour + $city['jetlag'];
                 if(($new_hour >= $ids['start_time'] && $new_hour < $ids['end_time']) || ($min >= 50 && $new_hour+1 >= $ids['start_time'] && $new_hour+1 < $ids['end_time'])){
                     $show_time = "Today, ".$ids['start_time'].':00 - '.$ids['end_time'].':00';
+                    $header_time_show = $ids['start_time'].':00 - '.$ids['end_time'].':00';
                 }
-
             }
         }else{
             for($i = 0;$i < 7;++$i){
@@ -286,12 +290,17 @@ class DeliverAction extends BaseAction
             $is_change_work_status = 0;
         }
 
+        if($header_time_show == "" && $city['urgent_time'] != 0){
+            $header_time_show = date("H:i",$city['urgent_time'])." - ".date("H:i",$city['urgent_time']+7200);
+        }
+
         $this->assign('is_change',$is_change_work_status);
         $this->assign('is_scheduled',$is_scheduled);
         $this->assign('show_time',$show_time);
+        $this->assign('header_time_show',$header_time_show);
 
         //修改上下班状态 只有在紧急状态下才能修改上班状态
-		if($_GET['action'] == 'changeWorkstatus' && ($city['urgent_time'] != 0 || $is_change_work_status == 1)) {
+		if($_GET['action'] == 'changeWorkstatus') {// && ($city['urgent_time'] != 0 || $is_change_work_status == 1)
 		    if($_GET['type'] == 1){
                 $current_order_num = D('Deliver_supply')->where(array('uid'=>$this->deliver_session['uid'],'status'=>array('lt',5)))->count();
             }
@@ -313,6 +322,23 @@ class DeliverAction extends BaseAction
 			$store['image'] = $images ? array_shift($images) : '';
 			$this->assign('store', $store);
 		}
+
+        $img = D("Deliver_img")->where(array('uid'=>$this->deliver_session['uid']))->find();
+        $expiry = array();
+        if($img['insurace_expiry'] != '' && strtotime($img['insurace_expiry']." 23:59:59") < time()){
+            $expiry[] = "Vehicle Insurance";
+        }
+
+        if($img['certificate_expiry'] != '-1' && $img['certificate_expiry'] != '' && strtotime($img['certificate_expiry']." 23:59:59") < time()) {
+            $expiry[] = "Work Eligibility";
+        }
+
+        $this->assign('expiry',$expiry);
+        if(count($expiry) > 0){
+            $this->display('expiry');
+            exit();
+        }
+
 
         if($this->deliver_session['work_status'] == 1){
             $gray_count = 0;
@@ -356,7 +382,7 @@ class DeliverAction extends BaseAction
             $this->display();
         }
 	}
-	public function index_count()
+	public function index_count($from = 0)//如果其他的调用 from=1
 	{
         $city_id = $this->deliver_session['city_id'];
         $city = D('Area')->where(array('area_id'=>$city_id))->find();
@@ -399,7 +425,10 @@ class DeliverAction extends BaseAction
 		$deliver_count = D('Deliver_supply')->where(array('uid' => $this->deliver_session['uid'], 'status' => array(array('gt', 0), array('lt', 5))))->count();
 		$finish_count = D('Deliver_supply')->where(array('uid' => $this->deliver_session['uid'], 'status' => 5))->count();
 
-		exit(json_encode(array('err_code' => false, 'gray_count' => $gray_count, 'deliver_count' => $deliver_count, 'finish_count' => $finish_count,'work_status'=>$this->deliver_session['work_status'])));
+		if($from == 0)
+		    exit(json_encode(array('err_code' => false, 'gray_count' => $gray_count, 'deliver_count' => $deliver_count, 'finish_count' => $finish_count,'work_status'=>$this->deliver_session['work_status'])));
+		else
+		    return array('gray_count' => $gray_count, 'deliver_count' => $deliver_count, 'finish_count' => $finish_count,'work_status'=>$this->deliver_session['work_status']);
 	}
 	
 	private function rollback($supply_id, $status)
@@ -706,8 +735,10 @@ class DeliverAction extends BaseAction
                 }
             }
 
+            $num_arr = $this->index_count(1);
+
 			if (empty($list)) {
-				exit(json_encode(array('err_code' => true)));
+				exit(json_encode(array('err_code' => true,'gray_count' => $num_arr['gray_count'], 'deliver_count' => $num_arr['deliver_count'], 'finish_count' => $num_arr['finish_count'],'work_status'=>$num_arr['work_status'])));
 			}
 			
 			foreach ($list as &$val) {
@@ -728,13 +759,16 @@ class DeliverAction extends BaseAction
                 $show_create_time = time() -$val['create_time'];
                 $show_dining_time = time() - ($val['create_time'] + $val['dining_time']*60);
 
-                if($show_dining_time < 0)
+                if($show_dining_time < 0) {
                     $val['is_dinning'] = 0;
-                else
+                    $val['show_dining_time'] = show_time($show_dining_time*-1);
+                }else {
                     $val['is_dinning'] = 1;
+                    $val['show_dining_time'] = show_time_min_ago($show_dining_time);
+                }
 
-                $val['show_create_time'] = show_time_ago($show_create_time);
-                $val['show_dining_time'] = show_time_ago($show_dining_time);
+                $val['show_create_time'] = show_time_min_ago($show_create_time);
+                //$val['show_dining_time'] = show_time_ago($show_dining_time);
 
                 $val['deliver_cash'] = floatval($val['deliver_cash']);
 				$val['distance'] = floatval($val['distance']);
@@ -749,7 +783,9 @@ class DeliverAction extends BaseAction
 
 				$order = D('Shop_order')->get_order_by_orderid($val['order_id']);
 				$val['tip_charge'] = $order['tip_charge'];
+				$val['deliver_income'] = $val['freight_charge']+$val['tip_charge'];
                 $val['uid'] = $order['uid'];
+                $val['total_price'] = $order['total_price'];
 
                 $address = D('User_adress')->where(array('adress_id'=>$order['address_id']))->find();
                 if(!$address) {
@@ -766,7 +802,8 @@ class DeliverAction extends BaseAction
                 $store = D('Merchant_store')->field(true)->where(array('store_id'=>$val['store_id']))->find();
                 $val['store_name'] = lang_substr($store['name'],C('DEFAULT_LANG'));
 			}
-			exit(json_encode(array('err_code' => false, 'list' => $list)));
+			//array('gray_count' => $gray_count, 'deliver_count' => $deliver_count, 'finish_count' => $finish_count,'work_status'=>$this->deliver_session['work_status']);
+			exit(json_encode(array('err_code' => false, 'list' => $list,'gray_count' => $num_arr['gray_count'], 'deliver_count' => $num_arr['deliver_count'], 'finish_count' => $num_arr['finish_count'],'work_status'=>$num_arr['work_status'])));
 		}
 		
 		//$this->display();
@@ -855,13 +892,16 @@ class DeliverAction extends BaseAction
                 $show_create_time = time() -$val['create_time'];
                 $show_dining_time = time() - ($val['create_time'] + $val['dining_time']*60);
 
-                if($show_dining_time < 0)
+                if($show_dining_time < 0) {
                     $val['is_dinning'] = 0;
-                else
+                    $val['show_dining_time'] = show_time($show_dining_time*-1);
+                }else {
                     $val['is_dinning'] = 1;
+                    $val['show_dining_time'] = show_time_ago($show_dining_time);
+                }
 
                 $val['show_create_time'] = show_time_ago($show_create_time);
-                $val['show_dining_time'] = show_time_ago($show_dining_time);
+                //$val['show_dining_time'] = show_time_ago($show_dining_time);
 
                 $val['deliver_cash'] = floatval($val['deliver_cash']);
                 $val['distance'] = floatval($val['distance']);
@@ -871,7 +911,8 @@ class DeliverAction extends BaseAction
                 $val['appoint_time'] = date('Y-m-d H:i', $val['appoint_time']);
                 $val['order_time'] = $val['order_time'] ? date('Y-m-d H:i', $val['order_time']) : '--';
                 $val['real_orderid'] = $val['real_orderid'] ? $val['real_orderid'] : $val['order_id'];
-// 			$val['store_distance'] = getRange(getDistance($val['from_lat'], $val['from_lnt'], $lat, $lng));
+ 			    $val['store_distance'] = getRange(getDistance($val['from_lat'], $val['from_lnt'], $this->deliver_session['lat'], $this->deliver_session['lng']));
+                $val['user_distance'] = getRange(getDistance($val['aim_lat'], $val['aim_lnt'], $this->deliver_session['lat'], $this->deliver_session['lng']));
                 $val['map_url'] = U('Deliver/map', array('supply_id' => $val['supply_id']));
                 if ($val['change_log']) {
                     $changes = explode(',', $val['change_log']);
@@ -909,7 +950,10 @@ class DeliverAction extends BaseAction
             $pick_num = $this->deliver_supply->where(array('status'=>3,'uid'=>$uid))->count();
             $route_num = $this->deliver_supply->where(array('status'=>4,'uid'=>$uid))->count();
 
-            exit(json_encode(array('error_code' => false, 'list' => $list,'anum'=>$acc_num,'pnum'=>$pick_num,'rnum'=>$route_num)));
+            if(count($list) == 0)
+                exit(json_encode(array('error_code' => true, 'list' => $list,'anum'=>$acc_num,'pnum'=>$pick_num,'rnum'=>$route_num)));
+            else
+                exit(json_encode(array('error_code' => false, 'list' => $list,'anum'=>$acc_num,'pnum'=>$pick_num,'rnum'=>$route_num)));
         }
     }
 	
@@ -985,7 +1029,8 @@ class DeliverAction extends BaseAction
 			} elseif ($supply['item'] == 2) {
 				//更新订单状态
 				$result = D("Shop_order")->where(array('order_id' => $order_id))->data(array('order_status' => 3))->save();
-				if (!$result) {
+				$curr_order = D("Shop_order")->where(array('order_id' => $order_id))->find();
+				if (!$result && $curr_order['order_status'] != 3) {
 					$this->rollback($supply_id, 2);
 					$this->error("更新订单信息错误");
 					exit;
@@ -1633,6 +1678,18 @@ class DeliverAction extends BaseAction
 			exit;
 		}
 
+        $show_dining_time = time() - ($supply['create_time'] + $supply['dining_time']*60);
+
+        if($show_dining_time < 0) {
+            $supply['is_dinning'] = 0;
+            $supply['show_dining_time'] = show_time($show_dining_time*-1);
+        }else {
+            $supply['is_dinning'] = 1;
+            $supply['show_dining_time'] = show_time_ago($show_dining_time);
+        }
+
+        $supply['totalTime'] = show_time($supply['end_time'] - $supply['start_time']);
+
 		$supply['deliver_cash'] = floatval($supply['deliver_cash']);
 		$supply['distance'] = floatval($supply['distance']);
 		$supply['freight_charge'] = floatval($supply['freight_charge']);
@@ -1644,6 +1701,21 @@ class DeliverAction extends BaseAction
 		$supply['real_orderid'] = $supply['real_orderid'] ? $supply['real_orderid'] : $supply['order_id'];
 // 		$supply['store_distance'] = getRange(getDistance($supply['from_lat'], $supply['from_lnt'], $lat, $lng));
 		$supply['map_url'] = U('Deliver/map', array('supply_id' => $supply['supply_id']));
+
+        if($supply['status'] == 0){
+            $supply['statusStr'] = L('QW_PLEASECONFIRM');
+        }else if($supply['status'] == 1){
+            $supply['statusStr'] = L('QW_WAITING');
+        }else if($supply['status'] == 2){
+            $supply['statusStr'] = L('QW_Accepted');
+        }else if($supply['status'] == 3){
+            $supply['statusStr'] = L('QW_PICKED');
+        }else if($supply['status'] == 4){
+            $supply['statusStr'] = L('QW_ARRIVING');
+        }else if($supply['status'] == 5){
+            $supply['statusStr'] = L('QW_COMPLETED');
+        }
+
 		if ($supply['change_log']) {
 			$changes = explode(',', $supply['change_log']);
 			$uid = array_pop($changes);
@@ -2109,13 +2181,17 @@ class DeliverAction extends BaseAction
 
         $sql = "SELECT s.*, u.name, u.phone,o.tip_charge,o.price,o.pay_type as payType,o.coupon_price FROM " . C('DB_PREFIX') . "deliver_supply AS s INNER JOIN " . C('DB_PREFIX') . "deliver_user AS u ON s.uid=u.uid LEFT JOIN " . C('DB_PREFIX') . "shop_order AS o ON s.order_id=o.order_id";
 
-        $sql .= ' where s.uid = '.$this->deliver_session['uid'].' and s.status = 5 and o.is_del = 0';
+        $sql .= ' where s.uid = '.$this->deliver_session['uid'].' and s.status = 5 and o.is_del = 0 and s.end_time > 0';
         if ($begin_time && $end_time)
             $sql .= ' and s.create_time >='.$b_time.' and s.create_time <='.$e_time;
         $sql .= " order by s.create_time DESC";
         $list = D()->query($sql);
+
+        $result['bonus'] = 0;
+        $month_list = array();
         foreach ($list as $k=>&$val){
             $result['tip'] = $result['tip'] ? $result['tip'] + $val['tip_charge'] : $val['tip_charge'];
+            $result['bonus'] += $val['bonus'];
             if($val['coupon_price'] > 0) $val['price'] = $val['price'] - $val['coupon_price'];
             $val['pay_type'] = $val['payType'];
             if($val['pay_type'] == 'offline' || $val['pay_type'] == 'Cash'){//统计现金
@@ -2148,7 +2224,8 @@ class DeliverAction extends BaseAction
             $val['create_time'] = date('Y-m-d H:i', $val['create_time']);
             $val['appoint_time'] = date('Y-m-d H:i', $val['appoint_time']);
             $val['order_time'] = $val['order_time'] ? date('Y-m-d H:i', $val['order_time']) : '--';
-            $val['end_time'] = $val['end_time'] ? date('Y-m-d H:i', $val['end_time']) : '未送达';
+            $val['month_key'] = date('F Y', $val['end_time']);
+            $val['end_time'] = $val['end_time'] ? date('m-d', $val['end_time']) : '未送达';
             $val['real_orderid'] = $val['real_orderid'] ? $val['real_orderid'] : $val['order_id'];
 // 			$val['store_distance'] = getRange(getDistance($val['from_lat'], $val['from_lnt'], $lat, $lng));
             $val['map_url'] = U('Deliver/map', array('supply_id' => $val['supply_id']));
@@ -2162,12 +2239,16 @@ class DeliverAction extends BaseAction
             $val['uid'] = $order['uid'];
             $store = D('Merchant_store')->field(true)->where(array('store_id'=>$val['store_id']))->find();
             $val['store_name'] = lang_substr($store['name'],C('DEFAULT_LANG'));
+            $val['summary'] = floatval($val['freight_charge'])+floatval($order['tip_charge']+$val['bonus']);
+
+            $month_list[$val['month_key']]['list'][] = $val;
+            $month_list[$val['month_key']]['summary'] += floatval($val['freight_charge'])+floatval($order['tip_charge']+$val['bonus']);
         }
 
         $result['order_count'] = count($list);
 
 		$this->assign($result);
-		$this->assign('list',$list);
+		$this->assign('list',$month_list);
 		$this->display();
 	}
 
@@ -2195,6 +2276,8 @@ class DeliverAction extends BaseAction
         $result['begin_time'] = $begin_time;
         $result['end_time'] = $end_time;
 
+        $result['bonus'] = 0.00;
+
         $b_date = $_GET['begin_time'].' 00:00:00';
         $e_date = $_GET['end_time'].' 24:00:00';
 
@@ -2210,6 +2293,8 @@ class DeliverAction extends BaseAction
         $list = D()->query($sql);
         foreach ($list as $k=>&$val){
             $result['tip'] = $result['tip'] ? $result['tip'] + $val['tip_charge'] : $val['tip_charge'];
+            $result['bonus'] += $val['bonus'];
+
             if($val['coupon_price'] > 0) $val['price'] = $val['price'] - $val['coupon_price'];
             if($val['delivery_discount'] > 0) $val['price'] = $val['price'] - $val['delivery_discount'];
             if($val['merchant_reduce'] > 0) $val['price'] = $val['price'] - $val['merchant_reduce'];
@@ -2422,7 +2507,8 @@ class DeliverAction extends BaseAction
 
                 $this->success(L('_PAYMENT_SUCCESS_'),$url,true);
             }else{
-                $this->error($resp['message'],'',true);
+                //$this->error($resp['message'],'',true);
+                $this->error("Declined. Please verify payment information and try again.",'',true);
             }
         }else{
             $supply_id = intval(I("supply_id"));
@@ -2435,43 +2521,55 @@ class DeliverAction extends BaseAction
             if ($this->deliver_session['group'] == 2 && $this->deliver_session['store_id']) {
                 $where['store_id'] = $this->deliver_session['store_id'];
             }
-            $list = $this->deliver_supply->field(true)->where($where)->order("`create_time` DESC")->select();
-            if (false === $list) {
+            $supply = $this->deliver_supply->field(true)->where($where)->order("`create_time` DESC")->find();
+            if (false === $supply) {
                 $this->error("系统错误");exit;
             }
 
-            foreach ($list as &$val) {
-                switch ($val['pay_type']) {
-                    case 'offline':
-                    case 'Cash':
-                        $val['pay_method'] = 0;
-                        break;
-                    default:
-                        if ($val['paid']) {
-                            $val['pay_method'] = 1;
-                        } else {
-                            $val['pay_method'] = 0;
-                        }
-                        break;
-                }
-                $val['deliver_cash'] = floatval($val['deliver_cash']);
-                $val['distance'] = floatval($val['distance']);
-                $val['freight_charge'] = floatval($val['freight_charge']);
-                $val['create_time'] = date('Y-m-d H:i', $val['create_time']);
-                $val['appoint_time'] = date('Y-m-d H:i', $val['appoint_time']);
-                $val['order_time'] = $val['order_time'] ? date('Y-m-d H:i', $val['order_time']) : '--';
-                $val['real_orderid'] = $val['real_orderid'] ? $val['real_orderid'] : $val['order_id'];
-                $val['map_url'] = U('Deliver/map', array('supply_id' => $val['supply_id']));
-                if ($val['change_log']) {
-                    $changes = explode(',', $val['change_log']);
-                    $uid = array_pop($changes);
-                    $val['change_name'] = $this->getDeliverUser($uid);
-                }
-                $order = D('Shop_order')->get_order_by_orderid($val['order_id']);
-                $val['tip_charge'] = $order['tip_charge'];
-                $val['uid'] = $order['uid'];
+
+            switch ($supply['pay_type']) {
+                case 'offline':
+                case 'Cash':
+                    $val['pay_method'] = 0;
+                    break;
+                default:
+                    if ($supply['paid']) {
+                        $supply['pay_method'] = 1;
+                    } else {
+                        $supply['pay_method'] = 0;
+                    }
+                    break;
             }
-            $this->assign('list', $list);
+            $supply['deliver_cash'] = floatval($supply['deliver_cash']);
+            $supply['distance'] = floatval($supply['distance']);
+            $supply['freight_charge'] = floatval($supply['freight_charge']);
+            $supply['create_time'] = date('Y-m-d H:i', $supply['create_time']);
+            $supply['appoint_time'] = date('Y-m-d H:i', $supply['appoint_time']);
+            $supply['order_time'] = $supply['order_time'] ? date('Y-m-d H:i', $supply['order_time']) : '--';
+            $supply['real_orderid'] = $supply['real_orderid'] ? $supply['real_orderid'] : $supply['order_id'];
+            $supply['map_url'] = U('Deliver/map', array('supply_id' => $supply['supply_id']));
+            if ($supply['change_log']) {
+                $changes = explode(',', $supply['change_log']);
+                $uid = array_pop($changes);
+                $supply['change_name'] = $this->getDeliverUser($uid);
+            }
+            $order = D('Shop_order')->get_order_by_orderid($supply['order_id']);
+            $supply['tip_charge'] = $order['tip_charge'];
+            $supply['discount'] = $order['coupon_price'] + $order['delivery_discount'] + $order['merchant_reduce'];
+            $supply['uid'] = $order['uid'];
+            $supply['username'] = $order['username'];
+            $supply['goods_price'] = $order['goods_price'];
+
+            $deposit_price = 0;
+
+            $order_goods = D('Shop_order_detail')->where(array('order_id'=>$order['order_id']))->select();
+            foreach ($order_goods as $good){
+                $deposit_price += $good['deposit_price']*$good['num'];
+            }
+            $supply['deposit_price'] = $deposit_price;
+            $supply['tax_price'] = $order['total_price'] - $supply['goods_price'] - $supply['freight_charge'] - $supply['deposit_price'];
+
+            $this->assign('supply', $supply);
             $this->display();
         }
     }
@@ -2653,7 +2751,7 @@ class DeliverAction extends BaseAction
 
             $deliver = D('Deliver_user')->field(true)->where(array('phone'=>$data['phone']))->find();
 	        if($deliver){
-                $result = array('error_code' => true, 'msg' => L('_B_LOGIN_PHONENOHAVE_'));
+                $result = array('error_code' => true, 'msg' => 'This number is already registered. Please sign in directly or try a different number.');
                 $this->ajaxReturn($result);
             }
 
@@ -2661,7 +2759,7 @@ class DeliverAction extends BaseAction
 	        $deliver_data['email'] = $_POST['email'];
 	        $deliver_data['name'] = $_POST['first_name'];
 	        $deliver_data['family_name'] = $_POST['last_name'];
-	        $deliver_data['birthday'] = $_POST['birthday'];
+//	        $deliver_data['birthday'] = $_POST['birthday'];
 	        $deliver_data['pwd'] = md5($_POST['password']);
 	        //$deliver_data['site'] = $_POST['address'];
 	        //$deliver_data['lng'] = sprintf('%.7f',$_POST['lng']);
@@ -2689,7 +2787,7 @@ class DeliverAction extends BaseAction
             $now_user = $database_deliver_user->field(true)->where(array('uid'=>$deliver_id))->find();
             session('deliver_session', serialize($now_user));
 
-            $result = array('error_code'=>false,'msg'=>L('_B_LOGIN_REGISTSUCESS_'));
+            $result = array('error_code'=>false,'msg'=>L('SUCCESS_BKADMIN'));
             $this->ajaxReturn($result);
         }else
 	        $this->display();
@@ -2703,32 +2801,38 @@ class DeliverAction extends BaseAction
             //$data['insurance'] = $_POST['img_1'];
             //$data['certificate'] = $_POST['img_2'];
 
-            $data['sin_num'] = $_POST['sin_num'] ? $_POST['sin_num'] : "";
+            //$data['sin_num'] = $_POST['sin_num'] ? $_POST['sin_num'] : "";
 
-            $deliver_img = D('Deliver_img')->where(array('uid'=>$this->deliver_session['uid']))->find();
-            if($deliver_img)
-                D('Deliver_img')->save($data);
-            else
-                D('Deliver_img')->add($data);
+//            $deliver_img = D('Deliver_img')->where(array('uid'=>$this->deliver_session['uid']))->find();
+//            if($deliver_img)
+//                D('Deliver_img')->save($data);
+//            else
+//                D('Deliver_img')->add($data);
 
-            $card_data['ahname'] = $_POST['ahname'];
-            $card_data['transit'] = $_POST['transit'];
-            $card_data['institution'] = $_POST['institution'];
-            $card_data['account'] = $_POST['account'];
+//            $card_data['ahname'] = $_POST['ahname'];
+//            $card_data['transit'] = $_POST['transit'];
+//            $card_data['institution'] = $_POST['institution'];
+//            $card_data['account'] = $_POST['account'];
 
-            $deliver_card = D('Deliver_card')->field(true)->where(array('deliver_id'=>$this->deliver_session['uid']))->find();
-            if($deliver_card)
-                D('Deliver_card')->where(array('deliver_id'=>$this->deliver_session['uid']))->save($card_data);
-            else{
-                $card_data['deliver_id'] = $this->deliver_session['uid'];
-                D('Deliver_card')->add($card_data);
-            }
+//            $deliver_card = D('Deliver_card')->field(true)->where(array('deliver_id'=>$this->deliver_session['uid']))->find();
+//            if($deliver_card)
+//                D('Deliver_card')->where(array('deliver_id'=>$this->deliver_session['uid']))->save($card_data);
+//            else{
+//                $card_data['deliver_id'] = $this->deliver_session['uid'];
+//                D('Deliver_card')->add($card_data);
+//            }
 
             //新修改的注册流程
-            $userdata['site'] = $_POST['address'] ? $_POST['address'] : '';
-            $userdata['lng'] = $_POST['lng'] ? $_POST['lng'] : '0';
-            $userdata['lat'] = $_POST['lat'] ? $_POST['lat'] : '0';
+            $userdata['birthday'] = $_POST['birthday'];
             $userdata['city_id'] = $_POST['city_id'] ? $_POST['city_id'] : '0';
+            $userdata['site'] = $_POST['address'] ? $_POST['address'] : '';
+            $userdata['vehicle_type'] = $_POST['vehicle_type'] ? $_POST['vehicle_type'] : '0';
+            $userdata['apartment'] = $_POST['apartment'] ? $_POST['apartment'] : '';
+            $userdata['city_str'] = $_POST['city'] ? $_POST['city'] : '';
+            $userdata['province_str'] = $_POST['province'] ? $_POST['province'] : '';
+            $userdata['postal_code'] = $_POST['postal_code'] ? $_POST['postal_code'] : '';
+            $userdata['lat'] = $_POST['lat'] ? $_POST['lat'] : '0';
+            $userdata['lng'] = $_POST['lng'] ? $_POST['lng'] : '0';
             $userdata['reg_status'] = 2;
             $userdata['last_time'] = time();
 
@@ -2738,16 +2842,16 @@ class DeliverAction extends BaseAction
             $this->ajaxReturn($result);
         }else {
             $now_user = $database_deliver_user->field(true)->where(array('uid' => $this->deliver_session['uid']))->find();
+            $this->assign('user',$now_user);
             if($now_user['reg_status'] != 1)
                 header('Location:'.U('Deliver/step_'.$now_user['reg_status']));
 
-            $deliver_img = D('Deliver_img')->field(true)->where(array('uid'=>$this->deliver_session['uid']))->find();
-            if ($deliver_img)
-                $this->assign('deliver_img',$deliver_img);
+//            $deliver_img = D('Deliver_img')->field(true)->where(array('uid'=>$this->deliver_session['uid']))->find();
+//            if ($deliver_img)
+//                $this->assign('deliver_img',$deliver_img);
 
             $city_list = D('Area')->where(array('is_open'=>1,'area_type'=>2))->select();
             $this->assign('city_list',$city_list);
-
             $this->display();
         }
     }
@@ -2755,83 +2859,178 @@ class DeliverAction extends BaseAction
     public function step_2(){
         $database_deliver_user = D('Deliver_user');
         if($_POST){
+
             $data['uid'] = $this->deliver_session['uid'];
-            $data['driver_license'] = $_POST['img_0'];
-            $data['insurance'] = $_POST['img_1'];
-            $data['certificate'] = $_POST['img_2'];
+            $data['sin_num'] = $_POST['sin_num'] ? $_POST['sin_num'] : "";
+            $data['driver_license'] = trim($_POST['img_1']);
+            $data['insurance'] = trim($_POST['img_2']);
+            $data['certificate'] = trim($_POST['img_0']);
+            $data['review_desc'] = "";
 
-            D('Deliver_img')->save($data);
+            $deliver_img = D('Deliver_img')->where(array('uid'=>$this->deliver_session['uid']))->find();
+            if($deliver_img && ($deliver_img['sin_num'] != $data['sin_num'] || $deliver_img['driver_license'] != $data['driver_license'] || $deliver_img['insurance'] != $data['insurance'] || $deliver_img['certificate'] != $data['certificate'])){
+                $file_name = "";
+                if($deliver_img['driver_license'] != $data['driver_license']) $file_name .= "Driver’s License ";
+                if($deliver_img['certificate'] != $data['certificate']) $file_name .= "Work Eligibility ";
+                if($deliver_img['insurance'] != $data['insurance']) $file_name .= "Vehicle Insurance ";
 
-            $database_deliver_user->where(array('uid' => $this->deliver_session['uid']))->save(array('reg_status'=>3,'last_time'=>time()));
+                if($file_name != "") $this->sendUpdateMail($this->deliver_session['uid'],$file_name);
+
+                D('Deliver_img')->save($data);
+                $database_deliver_user->where(array('uid' => $this->deliver_session['uid']))->save(array('group'=>0));
+            }
+
+            if(!$deliver_img){
+                D('Deliver_img')->add($data);
+                $database_deliver_user->where(array('uid' => $this->deliver_session['uid']))->save(array('group'=>0));
+            }
+
+            if($_GET['from'] != 4)
+                $database_deliver_user->where(array('uid' => $this->deliver_session['uid']))->save(array('reg_status'=>3,'last_time'=>time()));
 
             $result = array('error_code'=>false,'msg'=>L('_B_LOGIN_REGISTSUCESS_'));
             $this->ajaxReturn($result);
+
         }else {
             $now_user = $database_deliver_user->field(true)->where(array('uid' => $this->deliver_session['uid']))->find();
-            if ($now_user['reg_status'] != 2)
+            if ($now_user['reg_status'] != 2 && $_GET['from'] != 4)
                 header('Location:' . U('Deliver/step_' . $now_user['reg_status']));
+            else{
+                $deliver_img = D('Deliver_img')->where(array('uid'=>$this->deliver_session['uid']))->find();
+                $this->assign("userImg",$deliver_img);
+            }
             $this->display();
         }
+    }
+    public function pre_save_step3(){
+        if($_POST['buy_mode']==2){   //shipping
+            $user_data["bag_get_type"]=1;
+            $user_data["ship_adress"]=$_POST['address'];
+            $user_data["ship_apartment"]=$_POST['apartment'];
+            $user_data["ship_city_str"]=$_POST['city'];
+            $user_data["ship_province_str"]=$_POST['province'];
+            $user_data["ship_postal_code"]=$_POST['postalcode'];
+            $user_data["bag_amount"]=$_POST['bag_amount'];
+            $user_data["bag_get_id"]=$_POST['bag_id'];
+        }else{      //pickup
+            $user_data["bag_get_type"]=2;
+            $user_data["bag_get_id"]=$_POST['bag_id'];
+        }
+        D('Deliver_user')->where(array('uid'=>$this->deliver_session['uid']))->save($user_data);
+        D('Deliver_img')->where(array('uid' => $this->deliver_session['uid']))->save(array('bag_review_desc'=>""));
     }
 
     public function step_3(){
         $database_deliver_user = D('Deliver_user');
         $now_user = $database_deliver_user->field(true)->where(array('uid' => $this->deliver_session['uid']))->find();
         if($_POST){
-            import('@.ORG.pay.MonerisPay.mpgClasses');
-            $where = array('tab_id'=>'moneris','gid'=>7);
-            $result = D('Config')->field(true)->where($where)->select();
-            foreach($result as $v){
-                if($v['info'] == 'store_id')
-                    $store_id = $v['value'];
-                elseif ($v['info'] == 'token')
-                    $api_token = $v['value'];
-            }
+            if($_POST['own_bag'] == 1){
+                $saveData['bag_get_type'] = -1;
+                $saveData['bag_get_id'] = $_POST['bag_img'];
+                $saveData["reg_status"] = 4;
+                $saveData["last_time"] = time();
+                D('Deliver_img')->where(array('uid' => $this->deliver_session['uid']))->save(array('bag_review_desc'=>""));
+                $database_deliver_user->where(array('uid' => $this->deliver_session['uid']))->save($saveData);
+                $result = array('error_code' => false, 'msg' => L('SUCCESS_BKADMIN'));
+            }else {
+                $this->pre_save_step3();
+                if ($_POST['just_save'] == "1") {
+                    //$result = array('error_code' => true, 'msg' => "Saved");
+                    $result = array('error_code' => false, 'msg' => L('SUCCESS_BKADMIN'));
+                } else {
+                    import('@.ORG.pay.MonerisPay.mpgClasses');
+                    $where = array('tab_id' => 'moneris', 'gid' => 7);
+                    $result = D('Config')->field(true)->where($where)->select();
+                    foreach ($result as $v) {
+                        if ($v['info'] == 'store_id')
+                            $store_id = $v['value'];
+                        elseif ($v['info'] == 'token')
+                            $api_token = $v['value'];
+                    }
 
-            $txnArray['type'] = 'purchase';
-            $txnArray['crypt_type'] = '7';
-            $txnArray['pan'] = $_POST['c_number'];
-            $txnArray['expdate'] = transYM($_POST['e_date']);
-            $txnArray['order_id'] = 'TuttiDeliver_'.$this->deliver_session['uid'].'_'.time();
-            $txnArray['cust_id'] = $this->deliver_session['uid'];
-            $txnArray['amount'] = '68.25';
+                    $txnArray['type'] = 'purchase';
+                    $txnArray['crypt_type'] = '7';
+                    $txnArray['pan'] = $_POST['c_number'];
+                    $txnArray['expdate'] = transYM($_POST['e_date']);
+                    $txnArray['order_id'] = 'TuttiDeliver_' . $this->deliver_session['uid'] . '_' . time();
+                    $txnArray['cust_id'] = $this->deliver_session['uid'];
+                    $txnArray['amount'] = $_POST["total_price"];
 
-            /**************************** Transaction Object *****************************/
+                    /**************************** Transaction Object *****************************/
 
-            $mpgTxn = new mpgTransaction($txnArray);
+                    $mpgTxn = new mpgTransaction($txnArray);
 
-            /****************************** Request Object *******************************/
+                    /****************************** Request Object *******************************/
 
-            $mpgRequest = new mpgRequest($mpgTxn);
-            $mpgRequest->setProcCountryCode("CA"); //"US" for sending transaction to US environment
-            $mpgRequest->setTestMode(false);
+                    $mpgRequest = new mpgRequest($mpgTxn);
+                    $mpgRequest->setProcCountryCode("CA"); //"US" for sending transaction to US environment
+                    $mpgRequest->setTestMode(false);
 
-            $mpgHttpPost  =new mpgHttpsPost($store_id,$api_token,$mpgRequest);
+                    $mpgHttpPost = new mpgHttpsPost($store_id, $api_token, $mpgRequest);
 
-            $mpgResponse=$mpgHttpPost->getMpgResponse();
+                    $mpgResponse = $mpgHttpPost->getMpgResponse();
 
-            if($mpgResponse->getResponseCode() != "null" && $mpgResponse->getResponseCode() < 50){//支付成功
-                $data['card_name'] = $_POST['c_name'];
-                $data['card_num'] = $_POST['c_number'];
-                $data['expdate'] = $txnArray['expdate'];
-                $data['order_id'] = $txnArray['order_id'];
-                $data['txnNumber'] = $mpgResponse->getTxnNumber();
+                    if ($mpgResponse->getResponseCode() != "null" && $mpgResponse->getResponseCode() < 50) {//支付成功
 
-                D('Deliver_img')->where(array('uid'=>$this->deliver_session['uid']))->save($data);
+                        $data['card_name'] = $_POST['c_name'];
+                        $data['card_num'] = $_POST['c_number'];
+                        $data['expdate'] = $txnArray['expdate'];
+                        $data['order_id'] = $txnArray['order_id'];
+                        $data['txnNumber'] = $mpgResponse->getTxnNumber();
 
-                D('Deliver_user')->where(array('uid'=>$this->deliver_session['uid']))->save(array('reg_status'=>4,'last_time'=>time()));
+                        D('Deliver_img')->where(array('uid' => $this->deliver_session['uid']))->save($data);
 
-                //$this->sendMail($now_user);
-                $result = array('error_code' => false, 'msg' => L('_PAYMENT_SUCCESS_'));
-            }else{
-                $result = array('error_code' => true, 'msg' => $mpgResponse->getMessage());
+                        //D('Deliver_user')->where(array('uid'=>$this->deliver_session['uid']))->save(array('reg_status'=>4,'last_time'=>time()));
+                        $user_data["reg_status"] = 4;
+                        $user_data["last_time"] = time();
+
+                        D('Deliver_user')->where(array('uid' => $this->deliver_session['uid']))->save($user_data);
+
+                        //$this->sendMail($now_user);
+                        $result = array('error_code' => false, 'msg' => L('_PAYMENT_SUCCESS_'));
+                    } else {
+                        $result = array('error_code' => true, 'msg' => "Payment Declined");
+                    }
+                }
             }
             $this->ajaxReturn($result);
+
         }else {
-            $database_deliver_user = D('Deliver_user');
-            $now_user = $database_deliver_user->field(true)->where(array('uid' => $this->deliver_session['uid']))->find();
-            if ($now_user['reg_status'] != 3)
+            $this->assign('user',$now_user);
+
+            $database_bag = D('Bag');
+            $bag = $database_bag->field(true)->where(array('bag_switch' => "1"))->select();
+            foreach ($bag as &$b){
+                $new_img = array();
+                $bag_img = explode(';',$b['bag_photos']);
+                foreach ($bag_img as $img){
+                    $image_tmp = explode(',', $img);
+                    $new_img[] = C('config.site_url') . '/upload/deliver/' . $image_tmp[0] . '/' . $image_tmp['1'];
+                }
+                $b['bag_photos'] = $new_img;
+            }
+
+            $this->assign('bag',$bag);
+
+            $city_id=$now_user["city_id"];
+            $areas=D('Area')->where(array("area_id"=>$city_id))->find();
+
+            $this->assign('city',$areas);
+            //bag_type 0:未设置 1:自取 2：邮寄 3：全选
+
+            if($now_user['bag_get_type'] != -1) {
+                $bag_list = explode("|", $now_user['bag_get_id']);
+                foreach ($bag_list as &$b) {
+                    $b = explode(",", $b);
+                }
+            }else{
+                $bag_list = array();
+            }
+            $this->assign('bag_list',$bag_list);
+
+            if ($now_user['reg_status'] != 3 && $_GET['from'] != 4)
                 header('Location:' . U('Deliver/step_' . $now_user['reg_status']));
+
             $this->display();
         }
     }
@@ -2839,15 +3038,81 @@ class DeliverAction extends BaseAction
     public function step_4(){
         $database_deliver_user = D('Deliver_user');
         $now_user = $database_deliver_user->field(true)->where(array('uid' => $this->deliver_session['uid']))->find();
-        if($now_user['reg_status'] != 4) {
-            if($_GET['type'] == 'jump'){
+        if($now_user['reg_status'] != 4 && $now_user['reg_status'] != 5) {
+            if($_GET['type'] == 'jump' && $now_user['reg_status'] != 0){
                 D('Deliver_user')->where(array('uid'=>$this->deliver_session['uid']))->save(array('reg_status'=>4));
                 //$this->sendMail($now_user);
             }else {
                 header('Location:' . U('Deliver/step_' . $now_user['reg_status']));
             }
         }
+
+        $user_img = D("Deliver_img")->where(array('uid'=>$this->deliver_session['uid']))->find();
+
+        $uploadStatus = 0;
+        if($user_img['driver_license'] != '' && $user_img['insurance'] != '' && $user_img['certificate'] != '' && $user_img['sin_num'] != ''){//是否全部上传
+            if($now_user['group'] == -1){//未通过审核
+                $uploadStatus = 3;
+            }else{//等待审核
+                $uploadStatus = 1;
+            }
+        }else{//未全部上传资料
+            $uploadStatus = 0;
+        }
+
+        if($now_user['group'] == 1){//通过审核
+            $uploadStatus = 2;
+        }
+
+        if($user_img['card_num'] != '' && $user_img['txnNumber'] != ''){
+            $is_online = 1;
+        }else{
+            $is_online = 0;
+        }
+
+        if($now_user['bag_get_type'] == -1){//使用自己的背包
+            if($now_user['bag_get_id'] == ''){//未上传图片
+                $is_online = 0;
+            }else{//已上传图片
+                $is_online = 1;
+            }
+        }else if($now_user['bag_get_type'] == 1){//邮寄背包
+
+        }else if($now_user['bag_get_type'] == 2){//自提背包
+
+        }else{//未选择
+
+        }
+
+        $city = D('Area')->where(array('area_id'=>$now_user['city_id']))->find();
+        $this->assign('city',$city);
+
+        if($now_user['reg_status'] == 5 || $now_user['reg_status'] == 0){//背包是否已发出
+            $user_img['bag_received'] = 1;
+            $is_online = 1;
+        }else{
+            $user_img['bag_received'] = 0;
+        }
+
+        $user_img['upload_status'] = $uploadStatus;
+        $user_img['online_paid'] = $is_online;
+
+        $this->assign('user',$now_user);
+        $this->assign('userImg',$user_img);
         $this->display();
+    }
+
+    public function activate_deliver(){
+        $database_deliver_user = D('Deliver_user');
+        $now_user = $database_deliver_user->field(true)->where(array('uid' => $this->deliver_session['uid']))->find();
+        if($now_user['group'] == 1 && $now_user['reg_status'] == 5){
+            $database_deliver_user->where(array('uid' => $this->deliver_session['uid']))->save(array('status'=>1,'reg_status'=>0));
+            $result = array('error_code' => false, 'msg' => 'Success');
+        }else {
+            $result = array('error_code' => true, 'msg' => 'Fail');
+        }
+
+        $this->ajaxReturn($result);
     }
 
     public function sendMail($now_user){
@@ -2916,7 +3181,8 @@ class DeliverAction extends BaseAction
         }else {
             $week_num = date("w");
             $link_num = isset($_GET['num']) ? $_GET['num'] : $week_num;
-            $today = date('Y-m-d');
+            //$today = date('Y-m-d');
+            $today = time();
             $this->assign('week_num', $week_num);
             $this->assign('link_num',$link_num);
             $this->assign('today', $today);
@@ -2963,6 +3229,7 @@ class DeliverAction extends BaseAction
                 }
             }
 
+            $this->assign('work_list',json_encode($work_list));
             $this->assign('work_time_list', json_encode($work_time_list));
             $this->assign('default_list',json_encode($default_list));
             $this->display();
@@ -2976,10 +3243,12 @@ class DeliverAction extends BaseAction
 
 	    $re_list = array();
 	    foreach ($list as $v){
-            $re_list[$v['week_num']]['is_repeat'] = $v['is_repeat'];
-            $re_list[$v['week_num']]['id_list'][] = $v['time_id'];
-            $time_data = D('Deliver_schedule_time')->where(array('id' => $v['time_id']))->find();
-            $re_list[$v['week_num']]['ids'][] = $time_data;
+            $time_data = D('Deliver_schedule_time')->where(array('id' => $v['time_id'],'city_id'=>$this->deliver_session['city_id']))->find();
+            if($time_data) {
+                $re_list[$v['week_num']]['is_repeat'] = $v['is_repeat'];
+                $re_list[$v['week_num']]['id_list'][] = $v['time_id'];
+                $re_list[$v['week_num']]['ids'][] = $time_data;
+            }
         }
 
         foreach ($re_list as &$v){
@@ -3071,7 +3340,22 @@ class DeliverAction extends BaseAction
             exit(json_encode(array('error' => 1,'message' =>'没有选择图片')));
         }
     }
+    public function ajax_save_city_id_for_deliver_user(){
 
+        $uid = $this->deliver_session['uid'];
+        $city_id = $_POST['city_id'];
+        $where = array('area_id'=>$city_id,"bag_is_recruit"=>1);
+        $area = D('Area')->where($where)->find();
+        $where2 = array('uid'=>$uid);
+        $du=D('Deliver_user')->where($where2)->save(array('city_id' => $city_id));
+        if ($area){
+            $return['error'] = 1;
+        }else{
+            $return['error'] = 0;
+        }
+        exit(json_encode($return));
+        //exit("1111");
+    }
     public function ajax_city_name(){
         $city_name = $_POST['city_name'];
         $where = array('area_name'=>$city_name,'area_type'=>2);
@@ -3153,6 +3437,23 @@ class DeliverAction extends BaseAction
 	    $this->assign('city',$city);
 
         $deliver_img = D('Deliver_img')->where(array('uid'=>$this->deliver_session['uid']))->find();
+        $deliver_img['insurace_expiry_type'] = 1;//0过期 1未过期 2即将过期
+        $deliver_img['certificate_expiry_type'] = 1;//0过期 1未过期 2即将过期
+        if($deliver_img['insurace_expiry'] != '' && strtotime($deliver_img['insurace_expiry']." 23:59:59") < time()){
+            $deliver_img['insurace_expiry_type'] = 0;
+        }else{
+            if((strtotime($deliver_img['insurace_expiry']." 23:59:59") - time())/86400 < 30){
+                $deliver_img['insurace_expiry_type'] = 2;
+            }
+        }
+
+        if($deliver_img['certificate_expiry'] != '-1' && $deliver_img['certificate_expiry'] != '' && strtotime($deliver_img['certificate_expiry']." 23:59:59") < time()) {
+            $deliver_img['certificate_expiry_type'] = 0;
+        }else{
+            if((strtotime($deliver_img['certificate_expiry']." 23:59:59") - time())/86400 < 30){
+                $deliver_img['certificate_expiry_type'] = 2;
+            }
+        }
         $this->assign('deliver_img',$deliver_img);
 	    $this->display();
     }
@@ -3161,7 +3462,7 @@ class DeliverAction extends BaseAction
 	    if($_POST){
             $old_pwd = md5($_POST['old_pwd']);
             if($old_pwd != $this->deliver_session['pwd']){
-                exit(json_encode(array('error' => 1,'message' =>'当前密码不正确')));
+                exit(json_encode(array('error' => 1,'message' =>L('_B_MY_WRONGKEY_'))));
             }else{
                 $new_pwd = md5($_POST['new_pwd']);
                 D('Deliver_user')->where(array('uid'=>$this->deliver_session['uid']))->save(array('pwd'=>$new_pwd));
@@ -3269,6 +3570,70 @@ class DeliverAction extends BaseAction
         $body .= "<p>&nbsp;</p>";
         $body .= "<p>Best regards,</p>";
         $body .= "<p>Tutti Courier Team</p>";
+
+        return $body;
+    }
+
+    public function update_work(){
+        $img = D('Deliver_img')->where(array('uid' => $this->deliver_session['uid']))->find();
+	    if($_POST){
+	        $data['certificate'] = $_POST['certificate'];
+	        if($_POST['sin_num'] != "") $data['sin_num'] = $_POST['sin_num'];
+
+	        if($img['update_review'] == 0){
+	            $data['update_review'] = 1;
+            }else if($img['update_review'] == 2){
+	            $data['update_review'] = 10;
+            }
+
+            D('Deliver_img')->where(array('uid' => $this->deliver_session['uid']))->save($data);
+            $result = array('error_code'=>false,'msg'=>'Success');
+            $this->sendUpdateMail($this->deliver_session['uid'],"Work Eligibility");
+            $this->ajaxReturn($result);
+        }else {
+            $this->assign('deliver_img',$img);
+            $this->display();
+        }
+    }
+
+    public function update_insurance(){
+        $img = D('Deliver_img')->where(array('uid' => $this->deliver_session['uid']))->find();
+        if($_POST){
+            if($img['update_review'] == 0){
+                $_POST['update_review'] = 2;
+            }else if($img['update_review'] == 1){
+                $_POST['update_review'] = 10;
+            }
+
+            D('Deliver_img')->where(array('uid' => $this->deliver_session['uid']))->save($_POST);
+            $result = array('error_code'=>false,'msg'=>'Success');
+            $this->sendUpdateMail($this->deliver_session['uid'],"Vehicle Insurance");
+            $this->ajaxReturn($result);
+        }else {
+            $this->assign('deliver_img',$img);
+            $this->display();
+        }
+    }
+
+    public function policy(){
+        $this->display();
+    }
+
+    public function sendUpdateMail($uid,$file_name){
+        $email = array(array("address"=>"product@tutti.app","userName"=>"Tutti"));
+        $title = "Driver Doc Update";
+        $body = $this->getMailBody($uid,$file_name);
+        $mail = getMail($title, $body, $email);
+        $mail->send();
+    }
+
+    public function getMailBody($uid,$file_name)
+    {
+        $body = "<p>Driver ID: " . $uid . "</p>";
+        $body .= "<p>&nbsp;</p>";
+        $body .= "<p>Updated Doc: ".$file_name."</p>";
+        $body .= "<p>&nbsp;</p>";
+        $body .= "<p>Please review on the backend at \"New Courier Verification\". If the updated document is approved, please set a new expiry date and activate the driver's account. If the doc isn't approved, please contact the driver to submit it again.</p>";
 
         return $body;
     }

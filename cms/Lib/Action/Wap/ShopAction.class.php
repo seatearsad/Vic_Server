@@ -3032,6 +3032,7 @@ class ShopAction extends BaseAction{
             $phone = isset($_POST['ouserTel']) ? htmlspecialchars($_POST['ouserTel']) : '';
             $name = isset($_POST['ouserName']) ? htmlspecialchars($_POST['ouserName']) : '';
             $address = isset($_POST['ouserAddres']) ? htmlspecialchars($_POST['ouserAddres']) : '';
+            $addressDetail = isset($_POST['ouserAddressDetail']) ? htmlspecialchars($_POST['ouserAddressDetail']) : '';
             $pick_address = isset($_POST['pick_address']) ? htmlspecialchars($_POST['pick_address']) : '';
             $invoice_head = isset($_POST['invoice_head']) ? htmlspecialchars($_POST['invoice_head']) : '';
             $address_id = isset($_POST['address_id']) ? intval($_POST['address_id']) : 0;
@@ -3151,6 +3152,7 @@ class ShopAction extends BaseAction{
                 $order_data['username'] = $name;
                 $order_data['userphone'] = $phone;
                 $order_data['address'] = $address;
+                $order_data['address_detail'] = $addressDetail;
                 $order_data['address_id'] = $address_id;
                 $order_data['lat'] = $user_address['latitude'];
                 $order_data['lng'] = $user_address['longitude'];

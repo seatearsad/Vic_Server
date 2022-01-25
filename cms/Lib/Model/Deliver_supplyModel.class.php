@@ -78,7 +78,7 @@ class Deliver_supplyModel extends Model
             $location2 = $longlat_class->baiduToGcj02($order['lat'], $order['lng']);
             $data['user_lat'] = $location2['lat'];//收货人地址维度（高德坐标系）
             $data['user_lng'] = $location2['lng'];//收货人地址经度（高德坐标系）
-            
+
             $result = $dada->addOrder($data);
             if ($result['status'] == 'success') {
                 return array('error_code' => 0, 'msg' => '接单成功！');
@@ -128,6 +128,18 @@ class Deliver_supplyModel extends Model
 
                 //garfunkel add
                 $supply['dining_time'] = $_POST['dining_time'] ? $_POST['dining_time'] : 20;
+
+                //获取Bonus
+                $week = date('w');
+                $curr_time = date('His');
+                $bonus_list = D('Deliver_bonus')->where(array('city_id'=>$store['city_id'],'status'=>1,'week'=>$week))->select();
+                foreach ($bonus_list as $b){
+                    $beginTime = str_replace(':','',$b['begin_time']);
+                    $endTime = str_replace(':','',$b['end_time']);
+                    if ($curr_time >= $beginTime && $curr_time < $endTime){
+                        $supply['bonus'] = $b['amount'];
+                    }
+                }
 
                 if ($this->create($supply) != false) {
                     if ($addResult = $this->add($supply)) {

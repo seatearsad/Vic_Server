@@ -62,16 +62,18 @@
                                     </div>
                                 </div>
                             </div>
-
-               <if condition="$parentid eq 0"><!--                           主分类-->
+                      <!--                           主分类-->
+                      <if condition="$parentid eq 0">
                             <div class="form-group  row">
                                 <label class="col-sm-3 col-form-label">{pigcms{:L('C_CATETYPE')}</label>
                                 <div class="col-sm-9 col-form-label">
-                                    <span class="cb-enable"><label class="cb-enable <if condition="$now_category['cat_type'] eq 0">selected</if>"><span>{pigcms{:L('C_CATEGORYNOR')}</span>
-                                    <input type="radio" class="cat_type"  id="cat_type_0" name="cat_type" value="0" <if condition="$now_category['cat_type'] eq 0">checked="checked"</if> /></label></span>
 
-                            <span class="cb-disable"><label class="cb-disable <if condition="$now_category['cat_type'] eq 1">selected</if>"><span>{pigcms{:L('C_CATEGORYFT')}</span>
-                                    <input type="radio" class="cat_type"  id="cat_type_1" name="cat_type" value="1" <if condition="$now_category['cat_type'] eq 1">checked="checked"</if> /></label></span>
+                                    <span class="cb-enable"><label id="cat_type_0" class="cb-enable <if condition="$now_category['cat_type'] eq 0">selected</if>"><span>{pigcms{:L('C_CATEGORYNOR')}</span>
+                                    <input type="radio" class="cat_type"  name="cat_type" value="0" <if condition="$now_category['cat_type'] eq 0">checked="checked"</if> /></label></span>
+
+                                    <span class="cb-disable"><label id="cat_type_1" class="cb-disable <if condition="$now_category['cat_type'] eq 1">selected</if>"><span>{pigcms{:L('C_CATEGORYFT')}</span>
+                                    <input type="radio" class="cat_type"   name="cat_type" value="1" <if condition="$now_category['cat_type'] eq 1">checked="checked"</if> /></label></span>
+
                                 </div>
                             </div>
                             <div class="form-group  row city_list"  <if condition="$now_category['cat_type'] eq 0">style="display:none;"</if>>

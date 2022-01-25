@@ -245,7 +245,7 @@
                                             {pigcms{$vo.reg_user_phone}
                                         </td>
                                         <td>
-                                            {pigcms{$vo.address}
+                                            {pigcms{$vo.address}<if condition="$vo['address_detail'] neq ''">&nbsp;- {pigcms{$vo.address_detail}</if>
                                         </td>
                                         <td>
                                             {pigcms{$vo.deliver_status_str}

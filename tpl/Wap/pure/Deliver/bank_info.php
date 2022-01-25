@@ -28,27 +28,29 @@
 </script>
 <style>
     body{
-        background-color: white;
+        background-color: #F8F8F8;
     }
     #all{
-        width: 90%;
+        width: 85%;
         margin: 60px auto 20px auto;
         font-size: 12px;
-        color: #333333;
+        color: #294068;
     }
     #title{
         text-align: center;
         font-size: 16px;
         line-height: 40px;
         margin-bottom: 10px;
+        margin-top: 100px;
+        font-weight: bold;
     }
     .tip{
-        text-align: center;
-        color: silver;
-        font-size: 10px;
+        margin-top: 30px;
+        font-size: 14px;
     }
     .input_div,.card_div{
         font-size: 0;
+        margin-top: 30px;
     }
     .input_title{
         display: inline-block;
@@ -57,33 +59,41 @@
     }
     .card_div .input_title{
         display: inline-block;
-        width: 40%;
-        font-size: 12px;
+        width: 100%;
+        font-size: 14px;
+        color: #666666;
+        margin-left: 15px;
+        line-height: 25px;
     }
     .card_div input{
-        width: 60%;
+        width: 100%;
+        margin-bottom: 20px;
     }
     input[readonly]{
         background-color: white;
     }
     input{
-        width: 80%;
-        border-radius: 5px;
-        background-color: #EEEEEE;
-        height: 30px;
+        width: 100%;
+        border-radius: 12px;
+        border: 1px solid #EEEEEE;
+        background-color: white;
+        height: 40px;
         text-indent: 10px;
-        margin-top: 10px;
+
+        font-size: 14px;
         color: #666666;
     }
     #save{
-        width: 50%;
-        height: 30px;
-        line-height: 30px;
+        width: 100%;
+        height: 40px;
+        line-height: 40px;
         color: white;
         text-align: center;
-        margin: 20px auto;
+        margin: 40px auto;
         background-color: #ffa52d;
-        border-radius: 5px;
+        border-radius: 12px;
+        font-weight: bold;
+        font-size: 16px;
         cursor: pointer;
     }
     .red{
@@ -109,25 +119,30 @@
         <if condition="$is_pwd neq 1">
         <form id="myform" method="post" action="{pigcms{:U('Deliver/bank_info')}" frame="true" refresh="true" autocomplete="off">
         <div class="input_div">
-            <span class="input_title">Password:</span>
-            <input type="password" placeholder="" name="pwd">
+            <input type="password" placeholder="Enter your login password to continue" name="pwd">
         </div>
         </form>
         <else />
             <div class="card_div">
-                <span class="input_title">Full Name:</span>
+                <span class="input_title">Full Name</span>
                 <input type="text" placeholder="Account holder's name" name="ahname" id="ahname" value="{pigcms{$deliver_card['ahname']}" readonly="readonly">
 
-                <span class="input_title">Institution Number:</span>
+                <div style="width:48%;float: left;">
+                <span class="input_title">Institution Number</span>
                 <input type="text" maxlength="3" placeholder="3 digits" name="institution" id="institution" value="{pigcms{$deliver_card['institution']}" readonly="readonly">
-
-                <span class="input_title">Transit Number:</span>
+                </div>
+                <div style="width:48%;float: left;margin-left: 4%">
+                <span class="input_title">Transit Number</span>
                 <input type="text" maxlength="5" placeholder="5 digits" name="transit" id="transit" value="{pigcms{$deliver_card['transit']}" readonly="readonly">
-
-                <span class="input_title">Account Number:</span>
-                <input type="text" maxlength="12" minlength="7" placeholder="7 to 12 digits" name="account" id="account" value="{pigcms{$deliver_card['account']}" readonly="readonly">
+                </div>
+                <span class="input_title">Account Number</span>
+                <input type="text" maxlength="12" minlength="7" placeholder="7-12 digits" name="account" id="account" value="{pigcms{$deliver_card['account']}" readonly="readonly">
             </div>
             <div class="tip" id="edit_div" style="display: none;margin-top: 10px">
+                Please make sure the above information is correct before your submission. Incorrect information may result in failure of the deposit.
+            </div>
+
+            <div class="tip" style="font-weight: bold">
                 Please make sure the above information is correct before your submission. Incorrect information may result in failure of the deposit.
             </div>
         </if>
@@ -141,17 +156,30 @@
             <if condition="$is_pwd neq 1">
                 Continue
             <else />
-                Edit
+                Confirm & Submit
             </if>
         </div>
     </div>
 	<script type="text/javascript">
         var is_pwd = "{pigcms{$is_pwd}";
+
+        if(is_pwd == 1){
+            $('body').find('input').each(function () {
+                $(this).removeAttr("readonly");
+            });
+            is_pwd = 3;
+        }
+
         $('#save').click(function () {
             if(is_pwd != 1) {
                 if(is_pwd != 3) {
                     if ($("input[name='pwd']").val() == '') {
-                        alert("{pigcms{:L('_B_D_LOGIN_CONFIRMKEY_')}");
+                        //alert("{pigcms{:L('_B_D_LOGIN_CONFIRMKEY_')}");
+                        layer.open({
+                            title: "",
+                            content: "{pigcms{:L('_B_D_LOGIN_CONFIRMKEY_')}",
+                            btn: ["{pigcms{:L('_B_D_LOGIN_CONIERM_')}"],
+                        });
                     } else {
                         $('#myform').submit();
                     }
@@ -163,7 +191,12 @@
                         }
                     });
                     if(!is_submit){
-                        alert("{pigcms{:L('_PLEASE_INPUT_ALL_')}");
+                        //alert("{pigcms{:L('_PLEASE_INPUT_ALL_')}");
+                        layer.open({
+                            title: "",
+                            content: "{pigcms{:L('_PLEASE_INPUT_ALL_')}",
+                            btn: ["{pigcms{:L('_B_D_LOGIN_CONIERM_')}"],
+                        });
                     }else{
                         var form_data = {
                             'ahname':$('#ahname').val(),
@@ -181,12 +214,12 @@
                                     alert(date.message);
                                 }else{
                                     layer.open({title:"{pigcms{:L('_B_D_LOGIN_TIP2_')}",content: date.message,skin: 'msg', time:1,end:function () {
-                                            $('#save').html('Edit');
-                                            $('#edit_div').hide();
-                                            $('body').find('input').each(function () {
-                                                $(this).attr("readonly","readonly");
-                                            });
-                                            is_pwd = 1;
+                                            //$('#save').html('Edit');
+                                            //$('#edit_div').hide();
+                                            //$('body').find('input').each(function () {
+                                            //    $(this).attr("readonly","readonly");
+                                            //});
+                                            //is_pwd = 1;
                                     }});
                                 }
                             }

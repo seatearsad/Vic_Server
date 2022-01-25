@@ -29,7 +29,7 @@
 <script src="{pigcms{$static_path}js/plugins/footable/footable.all.min.js?v=2"></script>
 
 <!-- jQuery UI -->
-<script src="{pigcms{$static_path}js/plugins/jquery-ui/jquery-ui.min.js"></script>
+
 
 <!-- GITTER JS-->
 <script src="{pigcms{$static_path}js/plugins/gritter/jquery.gritter.min.js"></script>

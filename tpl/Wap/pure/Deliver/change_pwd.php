@@ -28,37 +28,42 @@
 </script>
 <style>
     body{
-        background-color: white;
+        background-color: #F8F8F8;
     }
     #all{
-        width: 90%;
+        width: 85%;
         margin: 60px auto 20px auto;
         font-size: 12px;
-        color: #333333;
+        color: #294068;
     }
     #title{
-        font-size: 16px;
+        font-size: 18px;
         line-height: 40px;
         margin-bottom: 10px;
+        margin-top: 100px;
+        font-weight: bold;
+        text-align: center;
     }
     input{
         width: 100%;
-        border-radius: 5px;
-        background-color: #EEEEEE;
-        height: 30px;
+        border-radius: 12px;
+        border: 1px solid #EEEEEE;
+        background-color: white;
+        height: 40px;
         text-indent: 10px;
-        margin-top: 10px;
+        margin-top: 20px;
         color: #666666;
     }
     #save{
-        width: 50%;
-        height: 30px;
-        line-height: 30px;
+        width: 100%;
+        height: 40px;
+        line-height: 40px;
         color: white;
         text-align: center;
-        margin: 20px auto;
+        font-size: 16px;
+        margin: 40px auto;
         background-color: #ffa52d;
-        border-radius: 5px;
+        border-radius: 12px;
         cursor: pointer;
     }
 </style>
@@ -91,10 +96,20 @@
                 }
             });
             if(!is_submit){
-                alert("{pigcms{:L('_PLEASE_INPUT_ALL_')}");
+                //alert("{pigcms{:L('_PLEASE_INPUT_ALL_')}");
+                layer.open({
+                    title: "",
+                    content: "{pigcms{:L('_PLEASE_INPUT_ALL_')}",
+                    btn: ["{pigcms{:L('_B_D_LOGIN_CONIERM_')}"],
+                });
             }else{
                 if($('input[name="new_pwd"]').val() != $('input[name="re_new_pwd"]').val()){
-                    alert("{pigcms{:L('_B_LOGIN_DIFFERENTKEY_')}");
+                    //alert("{pigcms{:L('_B_LOGIN_DIFFERENTKEY_')}");
+                    layer.open({
+                        title: "",
+                        content: "{pigcms{:L('_B_LOGIN_DIFFERENTKEY_')}",
+                        btn: ["{pigcms{:L('_B_D_LOGIN_CONIERM_')}"],
+                    });
                 }else{
                     var form_data = {
                         'old_pwd':$('input[name="old_pwd"]').val(),
@@ -107,7 +122,12 @@
                         data: form_data,
                         success:function(date){
                             if(date.error != 0){
-                                alert(date.message);
+                                //alert(date.message);
+                                layer.open({
+                                    title: "",
+                                    content: " " + date.message + " ",
+                                    btn: ["{pigcms{:L('_B_D_LOGIN_CONIERM_')}"],
+                                });
                             }else{
                                 layer.open({title:"{pigcms{:L('_B_D_LOGIN_TIP2_')}",content: date.message,skin: 'msg', time:1,end:function () {
                                     window.parent.location = "{pigcms{:U('Deliver/account')}";

@@ -633,17 +633,20 @@ $(function(){
 	});
 	//开关
 	$('.cb-enable').click(function(){
+		//console.log(".cb-enable");
 		$(this).find('label').addClass('selected');
 		$(this).find('label').find('input').prop('checked',true);
 		$(this).next('.cb-disable').find('label').find('input').prop('checked',false);
 		$(this).next('.cb-disable').find('label').removeClass('selected');
 	});
 	$('.cb-disable').click(function(){
+        //console.log(".cb-disable");
 		$(this).find('label').addClass('selected');
 		$(this).find('label').find('input').prop('checked',true);
 		$(this).prev('.cb-enable').find('label').find('input').prop('checked',false);
 		$(this).prev('.cb-enable').find('label').removeClass('selected');
 	});
+
 	//预览大图
 	$('.view_msg').click(function(){
 		window.top.art.dialog({

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no,height=device-height" />
 <meta http-equiv="Expires" content="-1">
 <meta http-equiv="Cache-Control" content="no-cache">
 <meta http-equiv="Pragma" content="no-cache">
@@ -43,6 +43,10 @@
     ];
 </script>
 <style>
+    body{
+        position: unset;
+        background: #f8f8f8;
+    }
 	.startOrder{color: #fff;float: right;background: green;border: 1px solid #ccc;padding: 5px 10px 5px 10px;}
 	.stopOrder{color: #000;float: right;background: #ccc;border: 1px solid #ccc;padding: 5px 10px 5px 10px;}
     .clerk{
@@ -51,86 +55,103 @@
     }
 
     #week_list{
-        margin-top: 10px;
-        margin-right: 10px;
-        display: flex;
+        margin: 20px 10px 50px 5%;
+        white-space: nowrap;
+        overflow: auto;
     }
     #week_list div{
-        width: 20px;
-        height: 60px;
+        position: relative;
+        width: 70px;
+        height: 70px;
         line-height: 30px;
-        background-color: white;
-        border-radius: 2px;
+        background-color: #E3EAFD;
+        border-radius: 12px;
         text-align: center;
-        margin-left: 1.5%;
-        flex: 1 1 auto;
+        margin-right: 2%;
+        display: inline-block;
         font-size: 12px;
+        color: #7297E6;
         cursor: pointer;
-    }
-    #week_list div.is_set{
-        background-image: url("{pigcms{$static_path}img/set_y.png");
-        background-repeat: no-repeat;
-        background-position: center bottom 10px;
-        background-size: auto 30%;
-    }
-    #week_list div.active.is_set{
-        background-image: url("{pigcms{$static_path}img/set_w.png");
     }
     #week_list div.active{
         color: white;
-        background-color: #ffa52d;
+        background-color: #294068;
     }
     #date_div{
         width: 100%;
         text-align: center;
-        margin-top: 10px;
-        font-size: 12px;
+        margin: 30px auto;
+        font-size: 16px;
+        font-weight: bold;
+        color: #294068;
         text-decoration: underline;
     }
     #set_btn{
         box-sizing: border-box;
-        width: 100px;
-        height: 25px;
-        line-height: 25px;
+        width: 90%;
+        height: 40px;
+        line-height: 40px;
         text-align: center;
-        color: white;
-        font-size: 12px;
-        background-color: #ffa52d;
-        margin: 10px 10px 20px auto;
+        color: #614213;
+        font-size: 16px;
+        border-radius: 12px;
+        background-color: #F8E9D0;
         cursor: pointer;
+        position: absolute;
+        bottom: 50px;
+        left: 5%;
     }
     #work_list{
-        width: 70%;
+        width: 90%;
         margin: 10px auto;
         text-align: center;
     }
     #work_list div{
-        height: 30px;
+        height: 50px;
         margin-top: 10px;
-        line-height: 30px;
-        font-size: 12px;
-        border: 1px solid #ffa52d;
+        line-height: 50px;
+        font-size: 16px;
+        border-radius: 12px;
+        font-weight: bold;
+        color: #294068;
         background-color: white;
+
     }
     #list_txt{
-        font-size: 9px;margin: 20px auto;color: #999999;width: 80%;
+        font-size: 14px;margin: 20px auto;color: #555555;width: 80%;
+    }
+    .title_icon{
+        font-size: 6px !important;
+        position: absolute;
+        width: 6px !important;
+        bottom: 10px;
+        left: 32px;
+    }
+    .date_span{
+        position: absolute;
+        width: 100%;
+        left: 0;
+        top: 22px;
+        font-size: 24px;
+        font-weight: bold;
+        color: #294068;
+    }
+    #week_list div.active .date_span{
+        color: white;
     }
 </style>
 </head>
 <body>
     <include file="header" />
-	<section class="clerk" style="margin-top: 70px;text-align: center">
-        <div id="set_btn">
-            {pigcms{:L('_ND_ADDSHIFT_')}
-        </div>
+    <div class="page_title" style="padding-bottom: 10px;">
+        Schedule
+    </div>
+	<section class="clerk" style="text-align: center">
 		<div id="week_list">
 
 		</div>
         <div id="date_div">
             {pigcms{:date('Y-m-d',$today)}
-        </div>
-        <div style="margin: 20px auto">
-            {pigcms{:L('_ND_MYSHIFT_')}:
         </div>
         <div id="work_list">
 
@@ -139,6 +160,11 @@
 
         </div>
 	</section>
+
+    <div id="set_btn">
+        <span class="material-icons" style="vertical-align: text-top;margin-top: -3px;">add_circle_outline</span>
+        Manage Shifts
+    </div>
 <!-- 	<script src="http://api.map.baidu.com/api?type=quick&ak=4c1bb2055e24296bbaef36574877b4e2&v=1.0"></script> -->
 	<script type="text/javascript">
         var work_list = JSON.parse('{pigcms{$work_list}');
@@ -162,7 +188,16 @@
                 html += '<div class="'+className+'" data-id="' + curr_num + '" data-num="' + i + '">';
             }
 
+            var show_date = new Date(time_str*1000 + 86400000*i);
+            var d = show_date.getDate();
+
+            d = (Array(2).join('0')+d).slice(-2);
+
             html += week_all[curr_num];
+            html += '<span class="date_span">'+d+'</span>';
+            if(typeof(work_list[curr_num]) != 'undefined') {
+                html += '<span class="material-icons title_icon">lens</span>';
+            }
             html += '</div>';
         }
         $('#week_list').html(html);
@@ -203,12 +238,12 @@
                         html += format_time(curr_work[i]['start_time']) + ' -- ' + format_time(curr_work[i]['end_time']);
                         html += '</div>';
                     }
-                    list_txt = '{pigcms{:L('_ND_MYSHIFT2_')}';
+                    list_txt = '';
                 }else{
-                    list_txt = '{pigcms{:L('_ND_MYSHIFT1_')}';
+                    list_txt = 'No shift scheduled for the day you choose';
                 }
             }else{
-                list_txt = '{pigcms{:L('_ND_MYSHIFT1_')}';
+                list_txt = 'No shift scheduled for the day you choose';
             }
 
             $('#list_txt').html(list_txt);

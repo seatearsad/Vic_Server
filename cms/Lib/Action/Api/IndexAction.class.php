@@ -8,6 +8,8 @@
 
 class IndexAction extends BaseAction
 {
+    public $mail;
+
     public function index(){
         if($_POST['lat'] != 'null' && $_POST['long'] != 'null'){
             $lat = $_POST['lat'];
@@ -1208,7 +1210,12 @@ class IndexAction extends BaseAction
 
         $order_data['username'] = $address['name'];
         $order_data['userphone'] = $address['phone'];
-        $order_data['address'] = $address['adress'].' '.$address['detail'].' '.$address['zipcode'];
+        $order_data['address'] = $address['adress'];
+        if($address['detail_en'] != ''){
+            $order_data['address_detail'] = $address['detail_en'] ." (".$address['detail'].")";
+        }else {
+            $order_data['address_detail'] = $address['detail'];
+        }
         $order_data['address_id'] = $adr_id;
         $order_data['lat'] = $address['latitude'];
         $order_data['lng'] = $address['longitude'];
@@ -1625,11 +1632,17 @@ class IndexAction extends BaseAction
         $order_detail['merchant_reduce'] = $order['merchant_reduce'];
         $order_detail['coupon_discount'] = $order['coupon_price'];
 
+        $order_detail['user_lat'] = $order['lat'];
+        $order_detail['user_lng'] = $order['lng'];
+        $order_detail['address2'] = $order['address_detail'] == "" ? $order['address'] : $order['address']." - ".$order['address_detail'];
+
+        /**
         $address = D('User_adress')->where(array('adress_id'=>$order['address_id']))->find();
         $order_detail['user_lat'] = $address['latitude'];
         $order_detail['user_lng'] = $address['longitude'];
         if($address && $address['detail'] != '')
             $order_detail['address2'] = $address['adress'].' ('.$address['detail'].')';
+        */
 
         $store = D('Store')->get_store_by_id($order['store_id']);
         $order_detail['jetlag'] = 0;
@@ -3287,6 +3300,83 @@ class IndexAction extends BaseAction
         }
 
         //var_dump($work_delver_list);
+
+        $day_3 = date("Y-m-d",time() + 3*86400);
+        $day_30 = date("Y-m-d",time() + 30*86400);
+
+        $work_list_3 = D("Deliver_img")->where(array("certificate_expiry"=>$day_3))->select();
+        $work_list_30 = D("Deliver_img")->where(array("certificate_expiry"=>$day_30))->select();
+
+        $in_list_3 = D("Deliver_img")->where(array("insurace_expiry"=>$day_3))->select();
+        $in_list_30 = D("Deliver_img")->where(array("insurace_expiry"=>$day_30))->select();
+
+        $this->sendUpdateMail($work_list_3,3,'Work Eligibility');
+        $this->sendUpdateMail($work_list_30,30,'Work Eligibility');
+        $this->sendUpdateMail($in_list_3,3,'Vehicle Insurance');
+        $this->sendUpdateMail($in_list_30,30,'Vehicle Insurance');
+    }
+
+    public function sendUpdateMail($list,$day_num,$file_name){
+        foreach ($list as $data){
+            $deliver = D("Deliver_user")->where(array("uid"=>$data['uid']))->find();
+            if($deliver['email'] != "") {
+                $email = array(array("address"=>$deliver['email'],"userName"=>$deliver['name']));
+                $title = "Your Tutti courier account needs more information!";
+                $body = $this->getMailBody($deliver['name'],$day_num,$file_name);
+
+                if(!$this->mail) $this->mail = $this->getMail();
+                $this->mail->clearAddresses();
+                foreach ($email as $address) {
+                    $this->mail->addAddress($address['address'], $address['userName']);
+                }
+
+                $this->mail->isHTML(true);
+                $this->mail->Subject = $title;
+                $this->mail->Body    = $body;
+                $this->mail->AltBody = '';
+
+                $this->mail->send();
+            }
+        }
+    }
+
+    function getMail(){
+        $config = D('Config')->get_config();
+        $gmail_pwd = $config['gmail_password'];
+
+        require './mailer/PHPMailer.php';
+        require './mailer/SMTP.php';
+        require './mailer/Exception.php';
+
+        $mail = new PHPMailer\PHPMailer\PHPMailer();
+
+        $mail->isSMTP();                                      // Set mailer to use SMTP
+        $mail->Host = 'smtp.gmail.com';                       // Specify main and backup SMTP servers. 这里改成smtp.gmail.com
+        $mail->SMTPAuth = true;                               // Enable SMTP authentication
+        $mail->Username = 'donotreply.tutti@gmail.com';       // SMTP username 这里改成自己的gmail邮箱，最好新注册一个，因为后期设置会导致安全性降低
+        $mail->Password = $gmail_pwd;                         // SMTP password 这里改成对应邮箱密码
+        $mail->SMTPSecure = 'ssl';                            // Enable TLS encryption, `ssl` also accepted
+        $mail->Port = 465;
+
+        $mail->setFrom('donotreply.tutti@gmail.com', 'Tutti');
+
+        return $mail;
+    }
+
+    public function getMailBody($name,$day,$file_name)
+    {
+        $body = "<p>Hi " . $name . ",</p>";
+        $body .= "<p>&nbsp;</p>";
+        $body .= "<p>This is a reminder that your ".$file_name." is going to expire in ".$day." days. Please login to your account and go to Menu > Account to submit a photo of your renewed document before it expires.</p>";
+        $body .= "<p>&nbsp;</p>";
+        $body .= "<p>Please note that if we don’t receive your updated document before it expires, your access to deliveries would be suspended until we receive updated information.</p>";
+        $body .= "<p>&nbsp;</p>";
+        $body .= "<p>For any questions, please contact us at 1-888-399-6668 or email <a href='mailto:hr@tutti.app'>hr@tutti.app</a>.</p>";
+        $body .= "<p>&nbsp;</p>";
+        $body .= "<p>Best regards,</p>";
+        $body .= "<p>Tutti Courier Team</p>";
+
+        return $body;
     }
 
     public function updateSql(){

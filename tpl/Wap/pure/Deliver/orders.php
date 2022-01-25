@@ -10,12 +10,12 @@
 <meta name="description" content="{pigcms{$config.seo_description}"/>
 <link href="{pigcms{$static_path}css/deliver.css?v=1.0.4" rel="stylesheet"/>
 <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/mobiscroll.2.13.2.css"/>
-<script src="{pigcms{:C('JQUERY_FILE')}"></script>
+<script src="{pigcms{$static_path}js/jquery.min.js"></script>
 <!-- <script type="text/javascript" src="{pigcms{$static_path}js/swiper.min.js"></script> -->
 <script type="text/javascript" src="{pigcms{$static_path}js/mobiscroll.2.13.2.js"></script>
 </head>
 <style>
-    body{background-color: white;}
+    body{background-color: #F8F8F8;}
     .order_title .pay_status{
         float: right;
         border: 1px solid cornflowerblue;
@@ -48,56 +48,57 @@
         color: #666666;
         font-size: 11px;
     }
+
+    .list_head{
+        width: 90%;
+        margin: 5px auto;
+        font-weight: bold;
+        color: #ffa52d;
+        font-size: 18px;
+    }
+    .list_order{
+        display: flex;
+        width: 85%;
+        margin: 5px auto;
+        line-height: 50px;
+        font-size: 16px;
+        font-weight: bolder;
+        color: #555555;
+        border-bottom: 1px solid #EEEEEE;
+        cursor: pointer;
+    }
+    .list_order span{
+        flex: 1 1 21%;
+    }
 </style>
 <body>
     <include file="header" />
-    <div style="height: 70px"></div>
+    <div class="page_title" style="padding-bottom: 5px;">{pigcms{:L('_ND_ORDERHISTORY_')}</div>
     <div style="text-align: center">
         <if condition="$begin_time neq '' and $end_time neq ''">
             {pigcms{$begin_time} -- {pigcms{$end_time}
         <else />
-            {pigcms{:L('_ND_ALLORDERS_')}
+            &nbsp;
         </if>
     </div>
-    <volist name="list" id="order">
-        <section class="robbed go_detail supply_{pigcms{$order.supply_id}" data-id="{pigcms{$order.supply_id}">
-            <div class="order_title">
-                <span>Order # {pigcms{$order.order_id}</span>
-                <span style="margin-left: 10px;color: #999999;font-size: 10px;">{pigcms{$order['end_time']}</span>
-                <span style="margin-left: 10px;color: #999999;font-size: 10px;">{pigcms{$order['show_time']}</span>
-                <if condition="$order['pay_method'] eq 1">
-                <span class="pay_status">
-                    {pigcms{:L('_ND_PAID_')}
+    <volist name="list" id="month_order">
+        <div class="list_head">
+            <span>{pigcms{$key}</span>
+            <span style="float: right">${pigcms{:number_format($month_order['summary'],2,'.','')}</span>
+        </div>
+        <volist name="month_order.list" id="order">
+            <div class="list_order go_detail supply_{pigcms{$order.supply_id}" data-id="{pigcms{$order.supply_id}">
+                <span>{pigcms{$order.end_time}</span>
+                <span style="flex: 1 1 35%;">#{pigcms{$order.order_id}</span>
+                <span>
+                    <if condition="$order['pay_method'] neq 1">
+                        {pigcms{:L('_ND_CASH_')}
+                    </if>
                 </span>
-                <else />
-                <span class="pay_status_red">
-                    {pigcms{:L('_ND_CASH_')}
-                </span>
-                </if>
+                <span>${pigcms{:number_format($order['summary'],2,'.','')}</span>
+                <label class="material-icons" style="margin-top: 15px; font-size: 20px; text-align: right;">arrow_forward</label>
             </div>
-            <div class="store_name">
-                {pigcms{$order.store_name}
-            </div>
-            <div style="margin-top: 5px;">
-                {pigcms{:L('_ACTUAL_PAYMENT_')} :
-                <if condition="$order['pay_method'] eq 1">
-                    $0.00
-                <else />
-                    ${pigcms{$order['deliver_cash']}
-                </if>
-            </div>
-            <div style="margin-top: 5px;">
-                {pigcms{:L('_DELI_PRICE_')} : ${pigcms{$order.freight_charge}
-            </div>
-            <div style="margin-top: 5px;">
-                {pigcms{:L('_ND_TIPS_')} :
-                <if condition="$order['pay_method'] eq 1">
-                    ${pigcms{$order.tip_charge}
-                <else />
-                    N/A
-                </if>
-            </div>
-        </section>
+        </volist>
     </volist>
 <script type="text/javascript">
 var DetailUrl = "{pigcms{:U('Wap/Deliver/detail', array('supply_id'=>'d%'))}";
