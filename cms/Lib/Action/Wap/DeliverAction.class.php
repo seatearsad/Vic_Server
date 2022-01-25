@@ -3450,7 +3450,7 @@ class DeliverAction extends BaseAction
         if($deliver_img['insurace_expiry'] != '' && strtotime($deliver_img['insurace_expiry']." 23:59:59") < time()){
             $deliver_img['insurace_expiry_type'] = 0;
         }else{
-            if((strtotime($deliver_img['insurace_expiry']." 23:59:59") - time())/86400 <= 30){
+            if((strtotime($deliver_img['insurace_expiry']." 23:59:59") - time())/86400 <= 29){
                 $deliver_img['insurace_expiry_type'] = 2;
             }
         }
@@ -3458,7 +3458,7 @@ class DeliverAction extends BaseAction
         if($deliver_img['certificate_expiry'] != '-1' && $deliver_img['certificate_expiry'] != '' && strtotime($deliver_img['certificate_expiry']." 23:59:59") < time()) {
             $deliver_img['certificate_expiry_type'] = 0;
         }else{
-            if((strtotime($deliver_img['certificate_expiry']." 23:59:59") - time())/86400 <= 30){
+            if((strtotime($deliver_img['certificate_expiry']." 23:59:59") - time())/86400 <= 29){
                 $deliver_img['certificate_expiry_type'] = 2;
             }
         }
