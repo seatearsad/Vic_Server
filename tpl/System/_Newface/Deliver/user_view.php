@@ -323,15 +323,15 @@
                                         <tr>
                                             <th width="25%">Pickup/Shipping</th>
                                             <td colspan=3>
-                                                <if condition="$now_user['bag_get_type'] eq 1">
+                                                <if condition="$now_user['bag_get_type'] eq 2">
                                                     Shipping
                                                 </if>
-                                                <if condition="$now_user['bag_get_type'] eq 2">
+                                                <if condition="$now_user['bag_get_type'] eq 1">
                                                     Pickup
                                                 </if>
                                             </td>
                                         </tr>
-                                        <if condition="$now_user['bag_get_type'] eq 1">
+                                        <if condition="$now_user['bag_get_type'] eq 2">
                                             <tr>
                                                 <th width="25%">Address</th>
                                                 <td colspan=3>
