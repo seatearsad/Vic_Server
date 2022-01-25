@@ -276,10 +276,10 @@
                 <input type="hidden"  name="bag_type" value="2">
                 <else />
                 <div style="float: left">
-                    <input type="radio" id="radiotype1" name="bag_type" value="2" style="vertical-align: top"> Shipping(${pigcms{$city.bag_shipping_fee})
+                    <input type="radio" id="radiotype2" name="bag_type" value="2" style="vertical-align: top"> Shipping(${pigcms{$city.bag_shipping_fee})
                 </div>
                 <div style="float: right">
-                    <input type="radio" id="radiotype2" name="bag_type" value="1" style="vertical-align: top"> Pick up
+                    <input type="radio" id="radiotype1" name="bag_type" value="1" style="vertical-align: top"> Pick up
                 </div>
             </if>
         </if>
@@ -525,10 +525,10 @@
             select_buy_mode=1;
         }
 
-        if (select_buy_mode==2){
+        if (select_buy_mode==2){//shipping
             $("#radiotype2").trigger("click");
             $(".shipping_fee_box").html(shipping_fee);
-        }else{
+        }else{//pickup
             $("#radiotype1").trigger("click");
         }
     }
