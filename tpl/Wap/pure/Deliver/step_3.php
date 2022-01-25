@@ -405,17 +405,24 @@
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKlguA2QFIUVwWTo3danbOqSKv3nYbBCg&libraries=places&language=en" async defer></script>
 <script type="text/javascript" src="{pigcms{$static_public}js/webuploader.min.js"></script>
 <script type="text/javascript">
-    <!--    //bag_type 0:未设置 1:自取 2：邮寄 3：全选-->
+    <!--    //bag_type 0:未设置 1:自取 2：邮寄 3：全选  这个两个值写反了-->
 
-    <if condition="$user['bag_get_type'] gt 0">
-        var init_bag_select = "$user['bag_get_type']";
-    <else />
+    <if condition="$user['bag_get_type'] eq 0">
         <if condition="$city['bag_type'] eq 1">
             var init_bag_select=2;
         <else />
             var init_bag_select=1;
         </if>
     </if>
+
+    <if condition="$user['bag_get_type'] gt 0">
+        <if condition="$city['bag_type'] eq 1">
+            var init_bag_select=2;
+        <else />
+            var init_bag_select="$user['bag_get_type']";
+        </if>
+    </if>
+
 
 
     var  uploader = WebUploader.create({
