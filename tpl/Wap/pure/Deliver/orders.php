@@ -164,7 +164,7 @@ function updatePosition(lat,lng){
         }else {
             message = 'Error';
         }
-    });
+    },'json');
 
     return message;
 }

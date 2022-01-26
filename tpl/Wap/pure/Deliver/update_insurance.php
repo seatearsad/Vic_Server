@@ -21,7 +21,7 @@
                 }else {
                     message = 'Error';
                 }
-            });
+            },'json');
 
             return message;
         }
