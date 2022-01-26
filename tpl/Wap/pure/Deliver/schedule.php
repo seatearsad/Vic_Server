@@ -23,7 +23,7 @@
         var message = '';
 	    $.post("{pigcms{:U('Deliver/App_update')}", {'lat':lat, 'lng':lng}, function(result) {
             if(result){
-                message = result.message;
+                message = result.msg;
             }else {
                 message = 'Error';
             }

@@ -3447,7 +3447,10 @@ class DeliverAction extends BaseAction
         $deliver_img = D('Deliver_img')->where(array('uid'=>$this->deliver_session['uid']))->find();
         $deliver_img['insurace_expiry_type'] = 1;//0过期 1未过期 2即将过期
         $deliver_img['certificate_expiry_type'] = 1;//0过期 1未过期 2即将过期
-        if($deliver_img['insurace_expiry'] != '' && strtotime($deliver_img['insurace_expiry']." 23:59:59") < time()){
+
+        if($deliver_img['insurace_expiry'] == ''){
+            $deliver_img['insurace_expiry_type'] = 1;
+        }else if(strtotime($deliver_img['insurace_expiry']." 23:59:59") < time()){
             $deliver_img['insurace_expiry_type'] = 0;
         }else{
             if((strtotime($deliver_img['insurace_expiry']." 23:59:59") - time())/86400 <= 31){
@@ -3455,7 +3458,9 @@ class DeliverAction extends BaseAction
             }
         }
 
-        if($deliver_img['certificate_expiry'] != '-1' && $deliver_img['certificate_expiry'] != '' && strtotime($deliver_img['certificate_expiry']." 23:59:59") < time()) {
+        if($deliver_img['certificate_expiry'] == '') {
+            $deliver_img['certificate_expiry_type'] = 1;
+        }else if($deliver_img['certificate_expiry'] != '-1' && strtotime($deliver_img['certificate_expiry']." 23:59:59") < time()) {
             $deliver_img['certificate_expiry_type'] = 0;
         }else{
             if((strtotime($deliver_img['certificate_expiry']." 23:59:59") - time())/86400 <= 31){
