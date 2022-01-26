@@ -20,16 +20,16 @@
     });
     //ios app 更新位置
     function updatePosition(lat,lng){
-        var message = '';
+        var message = 'send';
 	    $.post("{pigcms{:U('Deliver/App_update')}", {'lat':lat, 'lng':lng}, function(result) {
             if(result){
                 message = result.msg;
             }else {
                 message = 'Error';
             }
-
-            return message;
         });
+
+	    return message;
     }
 
     var week_all = [
