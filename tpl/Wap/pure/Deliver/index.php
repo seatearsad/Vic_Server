@@ -39,6 +39,8 @@
 	    $.post("{pigcms{:U('Deliver/App_update')}", {'lat':lat, 'lng':lng}, function(result) {
             if(result){
                 message = result.msg;
+                self_position = new google.maps.LatLng(lat, lng);
+                marker_deliver.setPosition(self_position);
             }else {
                 message = 'Error';
             }
@@ -537,7 +539,7 @@
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKlguA2QFIUVwWTo3danbOqSKv3nYbBCg&callback=initMap&language=en" async defer></script>
 	<script type="text/javascript">
-        var self_position,is_route,map,directionsService,directionsDisplay,record_id,marker_store,marker_user,marker_store_list,marker_user_list;
+        var self_position,is_route,map,directionsService,directionsDisplay,record_id,marker_deliver,marker_store,marker_user,marker_store_list,marker_user_list;
 
         function initMap() {
             is_route = {pigcms{$is_route};
@@ -556,7 +558,7 @@
 
             map = new google.maps.Map(document.getElementById('all_map'),mapOptions);
 
-            var marker_deliver = new google.maps.Marker({
+            marker_deliver = new google.maps.Marker({
                 position: self_position,
                 map: map,
                 //icon:"{pigcms{$static_path}img/deliver_menu/customer_pin_3.png"
@@ -588,7 +590,6 @@
         //定位是否有问题
         var location_error = false;
 
-        var marker;
         var ua = navigator.userAgent;
         if(!ua.match(/TuttiDeliver/i)) {
             if(navigator.geolocation) {
@@ -623,11 +624,7 @@
         }
 
         function loadPosition(){
-            marker = new google.maps.Marker({
-                position: self_position,
-                map: map,
-                //icon:"{pigcms{$static_path}img/deliver_menu/customer_pin_3.png"
-            });
+            marker_deliver.setPosition(self_position);
             record_id = 0;
             directionsDisplay.setMap(null);
             marker_store.setMap(null);
