@@ -3577,11 +3577,12 @@ class IndexAction extends BaseAction
     public function test_assign(){
         //$deliver_id = D('Deliver_assign')->getDeliverList(9373);
         //var_dump($deliver_id);
-        import('@.ORG.Deliverect.Deliverect');
-        $deliverect = new Deliverect();
+        import('@.ORG.RegionalCalu.RegionalCalu');
+        $region = new RegionalCalu();
 
-        $result = $deliverect->getAllergensTag();
-        var_dump($result);die();
+        $region->index();
+        //$result = $deliverect->getAllergensTag();
+        //var_dump($result);die();
 //        $all_list = array();
 //        foreach ($result as $k=>$v){
 //            $d = array();
