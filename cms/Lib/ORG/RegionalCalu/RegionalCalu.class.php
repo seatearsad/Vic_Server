@@ -34,8 +34,13 @@ class RegionalCalu
 //        $this->region[] = array(116.406881,39.863357);
     }
 
-    public function index(){
-        $this->city_id = 3472;
+    /**
+     * @param $city_id
+     * @param $lng 经度 x
+     * @param $lat 纬度 y
+     */
+    public function index($city_id,$lng,$lat){
+        $this->city_id = $city_id;
 
         $city = D('Area')->where(array('area_id'=>$this->city_id))->find();
 
@@ -44,6 +49,8 @@ class RegionalCalu
             foreach ($para as $v){
                 $this->region[] = explode(",",$v);
             }
+        }else{
+            exit("城市不匹配");
         }
 
         //var_dump($this->region);die();
@@ -51,8 +58,8 @@ class RegionalCalu
         $this->initRectangles();
         $this->initLinse();
 
-        if($this->checkPoint(-123.18216,49.27347)) echo "true";
-        else echo "false";
+        if($this->checkPoint($lng,$lat)) echo "范围内";
+        else echo "范围外";
     }
 
     private function initRectangles(){
@@ -163,7 +170,9 @@ class RegionalCalu
      * 获取 y=y0 与区域的所有边的交点，并去除和顶点重复的，再叫交点风味左右两个部分
      */
     private function getCrossPointInCertain(){
-        $crossPoint = null;
+        $crossPoint = array();
+        $crossPoint['left'] = array();
+        $crossPoint['right'] = array();
 
         //是否正好在顶点上
         foreach ($this->region as $p){
@@ -176,9 +185,14 @@ class RegionalCalu
             //如果有一条垂直边
             if($v['k'] == 0){
                 if($this->point_y >= $v['minY'] && $this->point_y <= $v['maxY']){
-                    if($v['lx'] < $this->point_x && !in_array($v['lx'],$crossPoint['left'])) $crossPoint['left'][] = $v['lx'];
-                    if($v['rx'] > $this->point_x && !in_array($v['rx'],$crossPoint['right'])) $crossPoint['right'][] = $v['rx'];
-                    echo "0";
+                    if($v['lx'] == $v['rx']){
+                        if($this->point_x == $v['lx']) return true;
+                    }
+                    
+                    if ($v['lx'] < $this->point_x && !in_array($v['lx'], $crossPoint['left'])) $crossPoint['left'][] = $v['lx'];
+                    if ($v['rx'] > $this->point_x && !in_array($v['rx'], $crossPoint['right'])) $crossPoint['right'][] = $v['rx'];
+                    echo "b";
+
                 }
             }else {//其他的斜边
                 //交点的x坐标
@@ -187,9 +201,9 @@ class RegionalCalu
                 if ($x0 == $this->point_x) return true;
 
                 if($x0 > $v['lx'] && $x0 < $v['rx']){
-                    if($x0 < $this->point_x) $crossPoint['left'][] = $x0;
-                    if($x0 > $this->point_x) $crossPoint['right'][] = $x0;
-                    echo "1";
+                    if($x0 < $this->point_x && !in_array(strval($x0),$crossPoint['left'])) $crossPoint['left'][] = strval($x0);
+                    if($x0 > $this->point_x && !in_array(strval($x0),$crossPoint['right'])) $crossPoint['right'][] = strval($x0);
+                    echo "c";
                 }
             }
         }

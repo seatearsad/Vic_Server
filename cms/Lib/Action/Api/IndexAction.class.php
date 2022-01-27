@@ -3579,8 +3579,10 @@ class IndexAction extends BaseAction
         //var_dump($deliver_id);
         import('@.ORG.RegionalCalu.RegionalCalu');
         $region = new RegionalCalu();
-
-        $region->index();
+        $city_id = $_GET['city_id'];
+        $lat = $_GET['lat'];
+        $lng = $_GET['lng'];
+        $region->index($city_id,$lng,$lat);
         //$result = $deliverect->getAllergensTag();
         //var_dump($result);die();
 //        $all_list = array();
