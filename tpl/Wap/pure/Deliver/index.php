@@ -195,6 +195,9 @@
             font-size: 18px;
             font-weight: bold;
             color: #294068;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
         }
         .order_time{
             color: #555555;
