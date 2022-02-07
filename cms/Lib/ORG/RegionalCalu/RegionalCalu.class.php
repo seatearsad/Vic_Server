@@ -44,13 +44,16 @@ class RegionalCalu
 
         $city = D('Area')->where(array('area_id'=>$this->city_id))->find();
 
-        if($city['range_type'] == 2){
-            $para = explode("|",$city['range_para']);
-            foreach ($para as $v){
-                $this->region[] = explode(",",$v);
-            }
-        }else{
-            exit("城市不匹配");
+        //if($this->checkCity($city,$lng,$lat)) echo "范围内";
+        //else echo "范围外";
+
+        return $this->checkCity($city,$lng,$lat);
+    }
+
+    public function checkCity($city,$lng,$lat){
+        $para = explode("|",$city['range_para']);
+        foreach ($para as $v){
+            $this->region[] = explode(",",$v);
         }
 
         //var_dump($this->region);die();
@@ -58,8 +61,7 @@ class RegionalCalu
         $this->initRectangles();
         $this->initLinse();
 
-        if($this->checkPoint($lng,$lat)) echo "范围内";
-        else echo "范围外";
+        return $this->checkPoint($lng,$lat);
     }
 
     private function initRectangles(){
@@ -207,7 +209,7 @@ class RegionalCalu
                 }
             }
         }
-        var_dump($crossPoint);
+        //var_dump($crossPoint);
         return $crossPoint;
     }
 

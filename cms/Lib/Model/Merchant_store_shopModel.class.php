@@ -18,7 +18,7 @@ class Merchant_store_shopModel extends Model
 
 
 //		$condition_where = "s.city_id='".C('config.now_city')."' AND s.have_meal=1 AND s.status=1 AND s.store_id=m.store_id";
-		$condition_where = "s.status=1 AND s.store_id=m.store_id AND s.have_shop=1 AND (cc.range_type=0 OR (cc.range_type=1 AND {$lat}<cc.range_para))";
+		$condition_where = "s.status=1 AND s.store_id=m.store_id AND s.have_shop=1 AND (cc.range_type=0 OR cc.range_type=2 OR (cc.range_type=1 AND {$lat}<cc.range_para))";
 
 		if($menu_version != -1) $condition_where .= " AND s.menu_version=".$menu_version;
 
@@ -891,6 +891,12 @@ class Merchant_store_shopModel extends Model
             $city_id = D('Store')->geocoderGoogle($lat,$long);
             $city_id = $city_id ? $city_id : 0;
         }
+
+        //如果城市为自定义的话 修改type值 返回数组
+        import('@.ORG.RegionalCalu.RegionalCalu');
+        $region = new RegionalCalu();
+        if(!$region->index($city_id,$long,$lat)) $type = 0;
+        /////
 
         switch ($type){
             case 1:

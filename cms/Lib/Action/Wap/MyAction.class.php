@@ -757,6 +757,15 @@ class MyAction extends BaseAction{
                                     if($value['latitude'] >= $city['range_para']) $value['is_allow'] = 0;
                                     else $value['is_allow'] = 1;
                                     break;
+                                case 2://自定义区域
+                                    import('@.ORG.RegionalCalu.RegionalCalu');
+                                    $region = new RegionalCalu();
+                                    if($region->checkCity($city,$value['longitude'],$value['latitude'])){
+                                        $value['is_allow'] = 1;
+                                    }else{
+                                        $value['is_allow'] = 0;
+                                    }
+                                    break;
                                 default:
                                     $value['is_allow'] = 1;
                                     break;
