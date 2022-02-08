@@ -237,7 +237,7 @@ function getRecommendList(){
             $("#moress").remove();
 		}
 		//myScroll.refresh();
-	});
+	},"json");
 }
 function format_time(time){
 	return time < 10 ? '0'+time : time;
