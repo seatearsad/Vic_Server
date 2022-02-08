@@ -193,7 +193,7 @@ class RegionalCalu
                     
                     if ($v['lx'] < $this->point_x && !in_array($v['lx'], $crossPoint['left'])) $crossPoint['left'][] = $v['lx'];
                     if ($v['rx'] > $this->point_x && !in_array($v['rx'], $crossPoint['right'])) $crossPoint['right'][] = $v['rx'];
-                    echo "b";
+                    //echo "b";
 
                 }
             }else {//其他的斜边
@@ -205,7 +205,7 @@ class RegionalCalu
                 if($x0 > $v['lx'] && $x0 < $v['rx']){
                     if($x0 < $this->point_x && !in_array(strval($x0),$crossPoint['left'])) $crossPoint['left'][] = strval($x0);
                     if($x0 > $this->point_x && !in_array(strval($x0),$crossPoint['right'])) $crossPoint['right'][] = strval($x0);
-                    echo "c";
+                    //echo "c";
                 }
             }
         }
