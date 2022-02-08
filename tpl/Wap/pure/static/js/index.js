@@ -192,12 +192,14 @@ function getRecommendList(){
 				//$("#moress").remove();
 			}
 		}
+
+		console.log("a");
 		if (result != '') {
 			if (like_page == 1) $('.youlike').show().find('.likeBox').empty();
 			laytpl($('#indexRecommendBoxTpl').html()).render(result.store, function (html) {
 				$('.youlike').show().find('.likeBox').append(html);
 			});
-
+            console.log("b");
             if (like_page == 1) {
                 var html = '';
                 for (var i = 0; i < result.sub_nav.length; ++i) {
@@ -215,7 +217,7 @@ function getRecommendList(){
                 }
 
                 $('#category ul').html(html);
-
+                console.log("c");
                 laytpl($('#indexRecommendListTpl').html()).render(result.recommend, function (html) {
                     $('#recommendList').html(html);
                 });
@@ -226,7 +228,7 @@ function getRecommendList(){
 		if (like_page >= guess_num) {
 			//$("#moress").remove();
 		}
-
+        console.log("d");
 		pageLoadTipHide();
         if(result.has_more){
             like_page++;
