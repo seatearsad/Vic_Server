@@ -287,6 +287,10 @@
                                                         <li class="fa fa-trash-o tutti_icon_dark"
                                                             title="{pigcms{:L('_BACK_DEL_')}"></li>
                                                     </a>
+
+                                                    <if condition="$vo.link_type eq 1">
+                                                        <img src="{pigcms{$static_path}images/deliverect.png" width="20"/>
+                                                    </if>
                                                 </div>
                                             </div>
                                         </td>

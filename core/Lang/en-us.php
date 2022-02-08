@@ -1164,7 +1164,7 @@ return array(
     '_BACK_PREVIOUS_'       =>  'Previous',
     '_BACK_NEXT_'           =>  'Next',
     '_BACK_UNSET_'          =>  'Unset',
-    '_BACK_MILES_'          =>  'Miles',
+    '_BACK_MILES_'          =>  'KM',
     '_BACK_STORE_SET_'      =>  'Store Service Setting',
     '_BACK_ACTIVE_'         =>  'Active',
     '_BACK_STORE_LIST_'     =>  'Store List',

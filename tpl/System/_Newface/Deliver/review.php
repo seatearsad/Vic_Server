@@ -125,10 +125,10 @@
                                                     <if condition="$vo['bag_get_type'] neq -1 and $vo['is_online_pay'] eq 0">
                                                         <font color="red">Incomplete (Purchase)</font>
                                                     </if>
-                                                    <if condition="$vo['bag_get_type'] eq 1 and $vo['is_online_pay'] eq 1">
+                                                    <if condition="$vo['bag_get_type'] eq 2 and $vo['is_online_pay'] eq 1">
                                                         <font color="orange">Waiting for Shipping</font>
                                                     </if>
-                                                    <if condition="$vo['bag_get_type'] eq 2 and $vo['is_online_pay'] eq 1">
+                                                    <if condition="$vo['bag_get_type'] eq 1 and $vo['is_online_pay'] eq 1">
                                                         <font color="green">Waiting for Pickup</font>
                                                     </if>
                                                 </font>
@@ -138,10 +138,10 @@
                                                     <if condition="$vo['bag_get_type'] eq -1">
                                                         <font color="green">Bag Approved</font>
                                                     </if>
-                                                    <if condition="$vo['bag_get_type'] eq 1">
+                                                    <if condition="$vo['bag_get_type'] eq 2">
                                                         <font color="green">Shipped</font>
                                                     </if>
-                                                    <if condition="$vo['bag_get_type'] eq 2">
+                                                    <if condition="$vo['bag_get_type'] eq 1">
                                                         <font color="green">Picked up</font>
                                                     </if>
                                                 </font>

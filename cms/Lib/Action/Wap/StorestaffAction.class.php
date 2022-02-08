@@ -3472,8 +3472,9 @@ class StorestaffAction extends BaseAction
             $shop['name'] = str_replace("'",'’',$shop['name']);
         }
         $order_data['store_name'] = $shop['name'];
-
         $order_data['store_phone'] = $shop['phone'];
+        $order_data['link_type'] = $shop['link_type'];
+
         $order_data['pay_time_str'] = date("Y-m-d H:i:s",$order['pay_time']);
         if(strpos($order['desc'], "'") !== false) {
             $order['desc'] = str_replace("'",'’',$order['desc']);
@@ -3520,6 +3521,8 @@ class StorestaffAction extends BaseAction
         $order_data['busy_mode'] = $area['busy_mode'];
         $order_data['min_time'] = $area['min_time'];
         $order_data['tip_msg'] = replace_lang_str(L('D_F_TIP_2'),$order_data['min_time']);
+
+
 
         $data['order_data'] = $order_data;
 
