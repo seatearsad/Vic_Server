@@ -179,7 +179,7 @@ var like_page	=	1;
 var page_count	=	10;
 var has_more = true;
 function getRecommendList(){
-	//alert("getRecommendList");
+	alert("getRecommendList");
 	pageLoadTip({showBg: false});
 	has_more = false;
 	$.post(window.location.pathname + '?c=Groupservice&a=indexRecommendList&page=' + like_page + '&long=' + $.cookie('userLocationLong') + '&lat=' + $.cookie('userLocationLat') + '&sort=' + sortType, function (result) {
