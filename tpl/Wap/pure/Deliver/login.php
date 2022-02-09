@@ -114,7 +114,8 @@ var openid = false;
 	openid = "{pigcms{$openid}";
 </if>
 $("#findpwd").click(function () {
-    window.location.href = "{pigcms{:U('Deliver/forgetpwd')}";
+    //window.location.href = "{pigcms{:U('Deliver/forgetpwd')}";
+    window.linkJs.openGoogleMap("1668 West Broadway, Vancouver, BC, Canada");
 });
 $(function(){
     var ua = navigator.userAgent;
