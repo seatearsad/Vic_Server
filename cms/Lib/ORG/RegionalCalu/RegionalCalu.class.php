@@ -46,8 +46,11 @@ class RegionalCalu
 
         //if($this->checkCity($city,$lng,$lat)) echo "范围内";
         //else echo "范围外";
-
-        return $this->checkCity($city,$lng,$lat);
+        if($city['range_type'] == 2) {
+            return $this->checkCity($city, $lng, $lat);
+        }else{
+            return true;
+        }
     }
 
     public function checkCity($city,$lng,$lat){

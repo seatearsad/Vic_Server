@@ -7,7 +7,7 @@ class Merchant_store_shopModel extends Model
 	 * @param array $where
 	 * @param number $limit
 	 */
-	public function get_list_by_option($where = array(), $is_wap = 1,$menu_version = -1)
+	public function get_list_by_option($where = array(), $is_wap = 1,$menu_version = -1,$city_id = -1)
 	{
 		$deliver_type = isset($where['deliver_type']) ? $where['deliver_type'] : 'all';
 		$order_str = isset($where['order']) ? $where['order'] : 'juli';
@@ -21,6 +21,7 @@ class Merchant_store_shopModel extends Model
 		$condition_where = "s.status=1 AND s.store_id=m.store_id AND s.have_shop=1 AND (cc.range_type=0 OR cc.range_type=2 OR (cc.range_type=1 AND {$lat}<cc.range_para))";
 
 		if($menu_version != -1) $condition_where .= " AND s.menu_version=".$menu_version;
+		if($city_id != -1) $condition_where .= " AND s.city_id=".$city_id;
 
 		if (C('config.store_shop_auth') == 1) {
 			$condition_where .= " AND s.auth>2";
@@ -900,7 +901,7 @@ class Merchant_store_shopModel extends Model
 
         switch ($type){
             case 1:
-                $t_list = $this->get_list_by_option($where,$is_wap,$menu_version);
+                $t_list = $this->get_list_by_option($where,$is_wap,$menu_version,$city_id);
                 break;
 
             case 2:
