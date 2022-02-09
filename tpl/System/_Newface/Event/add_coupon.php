@@ -25,14 +25,22 @@
                                     <textarea class="form-control" name="desc" validate="required:true">{pigcms{$coupon.desc|default=''}</textarea>
                                 </div>
                             </div>
+                            <if condition="$event_type neq 6">
                             <div class="form-group  row">
                                 <label class="col-sm-3 col-form-label">{pigcms{:L('G_MIN_ORDER')}</label>
                                 <div class="col-sm-9">
                                     <input type="text" class="form-control" name="use_price" size="20" validate="maxlength:20,required:true" value="{pigcms{$coupon.use_price|default='0.00'}"/>
                                 </div>
                             </div>
+                            </if>
                             <div class="form-group  row">
-                                <label class="col-sm-3 col-form-label">{pigcms{:L('G_DISCOUNT_AMOUNT')}</label>
+                                <label class="col-sm-3 col-form-label">
+                                    <if condition="$event_type neq 6">
+                                    {pigcms{:L('G_DISCOUNT_AMOUNT')}
+                                        <else />
+                                        商品折扣
+                                    </if>
+                                </label>
                                 <div class="col-sm-9">
                                     <input type="text" class="form-control" name="discount" size="20" validate="maxlength:20,required:true" value="{pigcms{$coupon.discount|default='0.00'}"/>
                                 </div>
@@ -43,6 +51,7 @@
                                     <input type="text" class="form-control" name="limit_day" size="20" validate="maxlength:20,required:true" value="{pigcms{$coupon.limit_day|default=''}"/>
                                 </div>
                             </div>
+                            <if condition="$event_type neq 6">
                             <div class="form-group  row">
                                 <label class="col-sm-3 col-form-label">
                                     <if condition="$event_type eq 3 or $event_type eq 4 or $event_type eq 5">
@@ -70,6 +79,7 @@
                                     </select>
                                 </div>
                             </div>
+                            </if>
                             <div class="btn tutti_hidden_obj">
                                 <input type="submit" name="dosubmit" id="dosubmit" value="提交" class="button" />
                                 <input type="reset" value="取消" class="button" />

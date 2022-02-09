@@ -82,9 +82,10 @@ class New_eventModel extends Model
      * 3 规定范围内免配送费
      * 4 店铺满减活动
      * 5 店铺减免配送费
+     * 6 店铺商品折扣
      */
     public function getTypeName($type){
-        $typeName = ['无效活动',L('G_NEW_USER_REGISTRATION'),L('G_FRIEND_REFERRAL'),L('G_FREE_DISTANCE'),L('G_MERCHANT_DISCOUNT'),L('G_FREE_SELECTED')];
+        $typeName = ['无效活动',L('G_NEW_USER_REGISTRATION'),L('G_FRIEND_REFERRAL'),L('G_FREE_DISTANCE'),L('G_MERCHANT_DISCOUNT'),L('G_FREE_SELECTED'),"店铺商品折扣"];
         if($type == -1)
             return $typeName;
         else

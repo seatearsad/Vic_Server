@@ -533,12 +533,25 @@ class StoreModel extends Model
     public function arrange_goods_for_goods($goodList){
         $goods_image_class = new goods_image();
         $returnList = array();
+
+        //获取商品折扣活动
+        $eventList = D('New_event')->getEventList(1,6);
+        $store_coupon = null;
+        if(count($eventList) > 0) {
+            $store_coupon = D('New_event_coupon')->where(array('event_id' => $eventList[0]['id'],'limit_day'=>$goodList[0]['store_id']))->find();
+        }
+        if($store_coupon){
+            $goodsDiscount = $store_coupon['discount'];
+        }else{
+            $goodsDiscount = 1;
+        }
+
         foreach($goodList as $k=>$v) {
             $returnList[$k]['fid'] = $v['goods_id'];
             $returnList[$k]['group_id'] = $v['sort_id'];
             $returnList[$k]['sid'] = $v['store_id'];
             $returnList[$k]['name'] = lang_substr($v['name'], C('DEFAULT_LANG'));
-            $returnList[$k]['price'] = $v['price'];
+            $returnList[$k]['price'] = $v['price']*$goodsDiscount;
             $returnList[$k]['market_price'] = $v['old_price'];
             $returnList[$k]['desc'] = $v['des'];
             $returnList[$k]['stock'] = $v['stock_num'] == -1 ? 10000 : $v['stock_num'];//10000;//库存

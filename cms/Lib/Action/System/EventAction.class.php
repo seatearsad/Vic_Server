@@ -149,7 +149,7 @@ class EventAction extends BaseAction
         $type_name = L('G_EFFECTIVE_DAYS');
         if($event['type'] == 3){
             $type_name = L('G_DISTANCE_LIMIT');
-        }else if($event['type'] == 4 || $event['type'] == 5){
+        }else if($event['type'] == 4 || $event['type'] == 5 || $event['type'] == 6){
             $type_name = L('G_STORE_ID');
         }
 
@@ -161,10 +161,10 @@ class EventAction extends BaseAction
             $data['event_id'] = $_POST['event_id'];
             $data['name'] = $_POST['name'];
             $data['desc'] = $_POST['desc'];
-            $data['use_price'] = $_POST['use_price'];
+            $data['use_price'] = $_POST['use_price'] ? $_POST['use_price'] : 0;
             $data['discount'] = $_POST['discount'];
             $data['limit_day'] = $_POST['limit_day'];
-            $data['type'] = $_POST['type'];
+            $data['type'] = $_POST['type'] ? $_POST['type'] : 0;
 
             if($_POST['coupon_id'] != 0){
                 D('New_event_coupon')->where(array('id'=>$_POST['coupon_id']))->save($data);
