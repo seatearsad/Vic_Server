@@ -582,9 +582,32 @@ class Shop_goodsModel extends Model
 	public function get_goods_by_id($goods_id)
 	{
 		$now_goods = $this->field(true)->where(array('goods_id' => $goods_id))->find();
+
+        //获取商品折扣活动
+        $eventList = D('New_event')->getEventList(1,6);
+        $store_coupon = null;
+        if(count($eventList) > 0) {
+            $store_coupon = D('New_event_coupon')->where(array('event_id' => $eventList[0]['id'],'limit_day'=>$now_goods['store_id']))->find();
+        }
+        if($store_coupon){
+            $goodsDiscount = $store_coupon['discount'];
+            if($store_coupon['type'] == 1){
+                $goodsDishDiscount = $store_coupon['discount'];
+            }else{
+                $goodsDishDiscount = 1;
+            }
+        }else{
+            $goodsDiscount = 1;
+            $goodsDishDiscount = 1;
+        }
+
 		if(empty($now_goods)){
 			return false;
-		}
+		}else{
+            $now_goods['price'] = $now_goods['price']*$goodsDiscount;
+            $now_goods['goodsDiscount'] = $goodsDiscount;
+            $now_goods['goodsDishDiscount'] = $goodsDishDiscount;
+        }
 		$shop = D('Merchant_store_shop')->where(array('store_id' => $now_goods['store_id']))->find();
 		if (empty($shop)) return false; 
 		$stock_type = $shop['stock_type'];
@@ -784,11 +807,13 @@ class Shop_goodsModel extends Model
 	 * @param string $spec_ids = 'id_id'
 	 * @return multitype:number string |multitype:number unknown |multitype:number string Ambigous <number, mixed>
 	 */
-	public function check_stock($goods_id, $num, $spec_ids = '', $stock_type = 0, $store_id = 0,$menu_version = 1)
+	public function check_stock($goods_id, $num, $spec_ids = '', $stock_type = 0, $store_id = 0,$menu_version = 1,$goodsDiscount)
 	{
 		if ($store_id) {
             if($menu_version == 1) {
                 $now_goods = $this->field(true)->where(array('goods_id' => $goods_id, 'store_id' => $store_id))->find();
+                $now_goods['cost_price'] = $now_goods['price'];
+                $now_goods['price'] = $now_goods['price']*$goodsDiscount;
                 $image = '';
                 if(!empty($now_goods['image'])){
                     $goods_image_class = new goods_image();
@@ -806,6 +831,8 @@ class Shop_goodsModel extends Model
             }
 		} else {
 			$now_goods = $this->field(true)->where(array('goods_id' => $goods_id))->find();
+            $now_goods['cost_price'] = $now_goods['price'];
+            $now_goods['price'] = $now_goods['price']*$goodsDiscount;
             $image = '';
             if(!empty($now_goods['image'])){
                 $goods_image_class = new goods_image();
@@ -1438,7 +1465,7 @@ class Shop_goodsModel extends Model
 		return $s_list;
     }
     
-    public function checkCart($store_id, $uid, $goodsData, $isCookie = 1, $address_id = 0)
+    public function checkCart($store_id, $uid, $goodsData, $isCookie = 1, $address_id = 0,$goodsDiscount = 1)
     {
         $store = D("Merchant_store")->field(true)->where(array('store_id' => $store_id))->find();
         if ($store['have_shop'] == 0 || $store['status'] != 1) {
@@ -1792,7 +1819,7 @@ class Shop_goodsModel extends Model
 
                 $dish_str = count($dish_ids)>0 ? implode('|',$dish_ids) : '';
 
-                $t_return = $this->check_stock($goods_id, $num, $spec_str, $store_shop['stock_type'], $store_id,$store['menu_version']);
+                $t_return = $this->check_stock($goods_id, $num, $spec_str, $store_shop['stock_type'], $store_id,$store['menu_version'],$goodsDiscount);
                 if ($t_return['status'] == 0) {
                     unset($goodsData[$key]);
                     //var_dump(json_encode($goodsData));die();

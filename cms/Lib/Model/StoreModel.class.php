@@ -542,8 +542,14 @@ class StoreModel extends Model
         }
         if($store_coupon){
             $goodsDiscount = $store_coupon['discount'];
+            if($store_coupon['type'] == 1){
+                $goodsDishDiscount = $store_coupon['discount'];
+            }else{
+                $goodsDishDiscount = 1;
+            }
         }else{
             $goodsDiscount = 1;
+            $goodsDishDiscount = 1;
         }
 
         foreach($goodList as $k=>$v) {

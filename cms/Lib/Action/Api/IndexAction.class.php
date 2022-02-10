@@ -1091,6 +1091,23 @@ class IndexAction extends BaseAction
         }
 
         ///////////
+        //获取商品折扣活动
+        $eventList = D('New_event')->getEventList(1,6);
+        $store_coupon = null;
+        if(count($eventList) > 0) {
+            $store_coupon = D('New_event_coupon')->where(array('event_id' => $eventList[0]['id'],'limit_day'=>$sid))->find();
+        }
+        if($store_coupon){
+            $goodsDiscount = $store_coupon['discount'];
+            if($store_coupon['type'] == 1){
+                $goodsDishDiscount = $store_coupon['discount'];
+            }else{
+                $goodsDishDiscount = 1;
+            }
+        }else{
+            $goodsDiscount = 1;
+            $goodsDishDiscount = 1;
+        }
 
         foreach ($cart_array as $v){
             if($store['menu_version'] == 2){
@@ -1103,6 +1120,7 @@ class IndexAction extends BaseAction
                 $good['stock_num'] = -1;
             }else{
                 $good = D('Shop_goods')->field(true)->where(array('goods_id' => $v['fid']))->find();
+                $good['price'] = $good['price']*$goodsDiscount;
                 $t_good['productId'] = $v['fid'];
                 $t_good['productName'] = lang_substr($good['name'],C('DEFAULT_LANG'));
             }
@@ -1180,7 +1198,7 @@ class IndexAction extends BaseAction
         }
 
 
-        $return = D('Shop_goods')->checkCart($sid, $uid, $orderData);
+        $return = D('Shop_goods')->checkCart($sid, $uid, $orderData,1,0,$goodsDiscount);
 
         //garfunkel add
         $area = D('Area')->where(array('area_id'=>$store['city_id']))->find();
@@ -1833,6 +1851,7 @@ class IndexAction extends BaseAction
                     $values = D('Side_dish_value')->where(array('dish_id' => $v['id'], 'status' => 1))->select();
                     foreach ($values as &$vv) {
                         $vv['name'] = lang_substr($vv['name'], C('DEFAULT_LANG'));
+                        $vv['price'] = $vv['price']*$now_goods['goodsDishDiscount'];
                         $vv['list'] = array();
                     }
                     if ($values) {

@@ -36,9 +36,9 @@
                             <div class="form-group  row">
                                 <label class="col-sm-3 col-form-label">
                                     <if condition="$event_type neq 6">
-                                    {pigcms{:L('G_DISCOUNT_AMOUNT')}
+                                        {pigcms{:L('G_DISCOUNT_AMOUNT')}
                                         <else />
-                                        商品折扣
+                                        {pigcms{:L('G_DISCOUNT_AMOUNT_GOODS')}
                                     </if>
                                 </label>
                                 <div class="col-sm-9">
@@ -51,11 +51,12 @@
                                     <input type="text" class="form-control" name="limit_day" size="20" validate="maxlength:20,required:true" value="{pigcms{$coupon.limit_day|default=''}"/>
                                 </div>
                             </div>
-                            <if condition="$event_type neq 6">
                             <div class="form-group  row">
                                 <label class="col-sm-3 col-form-label">
                                     <if condition="$event_type eq 3 or $event_type eq 4 or $event_type eq 5">
                                         {pigcms{:L('G_COMBINED')}
+                                        <elseif condition="$event_type eq 6" />
+                                            Apply discount to options
                                         <else />
                                         {pigcms{:L('G_COUP_TYPE')}
                                     </if>
@@ -65,6 +66,8 @@
                                         <option value="0" <if condition="$coupon.type eq 0">selected</if>>
                                         <if condition="$event_type eq 3 or $event_type eq 4 or $event_type eq 5">
                                             {pigcms{:L('G_NO')}
+                                            <elseif condition="$event_type eq 6" />
+                                            NO
                                             <else />
                                             {pigcms{:L('G_INVITEE')}
                                         </if>
@@ -72,6 +75,8 @@
                                         <option value="1" <if condition="$coupon.type eq 1">selected</if>>
                                         <if condition="$event_type eq 3 or $event_type eq 4 or $event_type eq 5">
                                             {pigcms{:L('G_YES')}
+                                            <elseif condition="$event_type eq 6" />
+                                            YES
                                             <else />
                                             {pigcms{:L('G_INVITER')}
                                         </if>
@@ -79,7 +84,6 @@
                                     </select>
                                 </div>
                             </div>
-                            </if>
                             <div class="btn tutti_hidden_obj">
                                 <input type="submit" name="dosubmit" id="dosubmit" value="提交" class="button" />
                                 <input type="reset" value="取消" class="button" />

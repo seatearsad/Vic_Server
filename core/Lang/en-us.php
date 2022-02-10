@@ -2147,6 +2147,7 @@ return array(
     "G_FREE_SELECTED"=>"Free Delivery for Selected Restaurants",
     "G_MIN_ORDER"=>"Min Order Amount",
     "G_DISCOUNT_AMOUNT"=>"Discount Amount",
+    "G_DISCOUNT_AMOUNT_GOODS"=>"Discount for Entire Store",
     "G_EFFECTIVE_DAYS"=>"Effective Days",
     "G_NUMBER_CLAIMS"=>"Number of Claims",
     "G_NUMBER_USED"=>"Number of Used",

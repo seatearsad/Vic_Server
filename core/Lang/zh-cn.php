@@ -2148,6 +2148,7 @@ return array(
     "G_FREE_SELECTED"=>"店铺减免配送费",
     "G_MIN_ORDER"=>"消费金额",
     "G_DISCOUNT_AMOUNT"=>"优惠金额",
+    "G_DISCOUNT_AMOUNT_GOODS"=>"全店折扣",
     "G_EFFECTIVE_DAYS"=>"限制天数",
     "G_NUMBER_CLAIMS"=>"领取数",
     "G_NUMBER_USED"=>"使用数",

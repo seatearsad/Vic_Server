@@ -248,6 +248,18 @@ class CartModel extends Model
 
         $store = D('Store')->get_store_by_id($sid);
 
+        //获取商品折扣活动
+        $eventList = D('New_event')->getEventList(1,6);
+        $store_coupon = null;
+        if(count($eventList) > 0) {
+            $store_coupon = D('New_event_coupon')->where(array('event_id' => $eventList[0]['id'],'limit_day'=>$sid))->find();
+        }
+        if($store_coupon){
+            $goodsDiscount = $store_coupon['discount'];
+        }else{
+            $goodsDiscount = 1;
+        }
+
         foreach ($cartList as $v){
             if($store['menu_version'] == 2){
                 $good = D('StoreMenuV2')->getProduct($v['fid'],$sid);
@@ -258,6 +270,7 @@ class CartModel extends Model
             }else {
                 $good = D('Shop_goods')->field(true)->where(array('goods_id' => $v['fid']))->find();
                 $t_good['fname'] = lang_substr($good['name'], C('DEFAULT_LANG'));
+                $good['price'] = $good['price']*$goodsDiscount;
             }
 
             $t_good['stock'] = $v['stock'];
