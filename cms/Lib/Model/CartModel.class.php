@@ -390,9 +390,9 @@ class CartModel extends Model
                         import('@.ORG.RegionalCalu.RegionalCalu');
                         $region = new RegionalCalu();
                         if($region->checkCity($city,$address['mapLng'],$address['mapLat'])){
-                            $value['is_allow'] = 1;
+                            $result['is_allow'] = 1;
                         }else{
-                            $value['is_allow'] = 0;
+                            $result['is_allow'] = 0;
                         }
                         break;
                     default:

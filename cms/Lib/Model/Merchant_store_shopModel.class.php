@@ -18,10 +18,12 @@ class Merchant_store_shopModel extends Model
 
 
 //		$condition_where = "s.city_id='".C('config.now_city')."' AND s.have_meal=1 AND s.status=1 AND s.store_id=m.store_id";
-		$condition_where = "s.status=1 AND s.store_id=m.store_id AND s.have_shop=1 AND (cc.range_type=0 OR cc.range_type=2 OR (cc.range_type=1 AND {$lat}<cc.range_para))";
+        if($city_id != -1)
+            $condition_where = "s.status=1 AND s.store_id=m.store_id AND s.have_shop=1 AND (cc.range_type=0 OR (cc.range_type=2 AND s.city_id={$city_id}) OR (cc.range_type=1 AND {$lat}<cc.range_para))";
+        else
+		    $condition_where = "s.status=1 AND s.store_id=m.store_id AND s.have_shop=1 AND (cc.range_type=0 OR cc.range_type=2 OR (cc.range_type=1 AND {$lat}<cc.range_para))";
 
 		if($menu_version != -1) $condition_where .= " AND s.menu_version=".$menu_version;
-		if($city_id != -1) $condition_where .= " AND s.city_id=".$city_id;
 
 		if (C('config.store_shop_auth') == 1) {
 			$condition_where .= " AND s.auth>2";
