@@ -6,6 +6,7 @@ class Merchant_store_shopModel extends Model
 	 * 根据条件获取商家列表
 	 * @param array $where
 	 * @param number $limit
+     * city_id 包含此值的为app端使用 非-wap端使用
 	 */
 	public function get_list_by_option($where = array(), $is_wap = 1,$menu_version = -1,$city_id = -1)
 	{
@@ -24,6 +25,10 @@ class Merchant_store_shopModel extends Model
 		    $condition_where = "s.status=1 AND s.store_id=m.store_id AND s.have_shop=1 AND (cc.range_type=0 OR cc.range_type=2 OR (cc.range_type=1 AND {$lat}<cc.range_para))";
 
 		if($menu_version != -1) $condition_where .= " AND s.menu_version=".$menu_version;
+        if($city_id != -1){//判断用户所在城市的类型 如果为自定义区域 仅能看到本城市的店铺
+            $city = D('Area')->where(array('area_id'=>$city_id))->find();
+            if($city['range_type'] == 2) $condition_where .= " AND s.city_id=".$city_id;
+        }
 
 		if (C('config.store_shop_auth') == 1) {
 			$condition_where .= " AND s.auth>2";
