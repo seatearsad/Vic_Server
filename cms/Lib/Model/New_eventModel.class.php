@@ -347,4 +347,26 @@ class New_eventModel extends Model
 //        }
         return $delivery_coupon;
     }
+
+    public function getStoreNewDiscount($store_id){
+        //获取商品折扣活动
+        $eventList = $this->getEventList(1,6);
+        $store_coupon = null;
+        if(count($eventList) > 0) {
+            $store_coupon = D('New_event_coupon')->where(array('event_id' => $eventList[0]['id'],'limit_day'=>$store_id))->find();
+        }
+        if($store_coupon){
+            $data['goodsDiscount'] = $store_coupon['discount'];
+            if($store_coupon['type'] == 1){
+                $data['goodsDishDiscount'] = $store_coupon['discount'];
+            }else{
+                $data['goodsDishDiscount'] = 1;
+            }
+        }else{
+            $data['goodsDiscount'] = 1;
+            $data['goodsDishDiscount'] = 1;
+        }
+
+        return $data;
+    }
 }

@@ -498,6 +498,11 @@ class Shop_goodsModel extends Model
 		} else {
 			$g_list = $this->field(true)->where(array('store_id' => $store_id, 'status' => 1))->order('sort DESC, goods_id ASC')->select();
 		}
+
+        //获取商品折扣活动
+        $store_discount = D('New_event')->getStoreNewDiscount($store_id);
+        $goodsDiscount = $store_discount['goodsDiscount'];
+        $goodsDishDiscount = $store_discount['goodsDishDiscount'];
 		
 		$sort_result = array();
 		foreach ($g_list as $row) {
@@ -519,7 +524,7 @@ class Shop_goodsModel extends Model
 				$row['price'] = floatval($row['price']);
 			}
 
-// 			$row['price'] = floatval($row['price']);
+ 			$row['price'] = $row['price']*$goodsDiscount;
 			$row['old_price'] = floatval($row['old_price']);
 			$row['seckill_price'] = floatval($row['seckill_price']);
 			$tmp_pic_arr = explode(';', $row['image']);
@@ -584,22 +589,9 @@ class Shop_goodsModel extends Model
 		$now_goods = $this->field(true)->where(array('goods_id' => $goods_id))->find();
 
         //获取商品折扣活动
-        $eventList = D('New_event')->getEventList(1,6);
-        $store_coupon = null;
-        if(count($eventList) > 0) {
-            $store_coupon = D('New_event_coupon')->where(array('event_id' => $eventList[0]['id'],'limit_day'=>$now_goods['store_id']))->find();
-        }
-        if($store_coupon){
-            $goodsDiscount = $store_coupon['discount'];
-            if($store_coupon['type'] == 1){
-                $goodsDishDiscount = $store_coupon['discount'];
-            }else{
-                $goodsDishDiscount = 1;
-            }
-        }else{
-            $goodsDiscount = 1;
-            $goodsDishDiscount = 1;
-        }
+        $store_discount = D('New_event')->getStoreNewDiscount($now_goods['store_id']);
+        $goodsDiscount = $store_discount['goodsDiscount'];
+        $goodsDishDiscount = $store_discount['goodsDishDiscount'];
 
 		if(empty($now_goods)){
 			return false;
@@ -887,7 +879,7 @@ class Shop_goodsModel extends Model
 		} else {
 			$price = floatval($now_goods['price']);
 		}
-		$old_price = floatval($now_goods['price']);
+		$old_price = floatval($now_goods['cost_price']);
 		$cost_price = floatval($now_goods['cost_price']);
 // 		$price = $now_goods['price'];
 		if ($spec_ids && $now_goods['spec_value']) {
@@ -1839,6 +1831,9 @@ class Shop_goodsModel extends Model
                     foreach ($dish_ids as $v){
                         $dish = explode(',',$v);
                         $t_return['price'] += $dish[3]*$dish[2];
+                        //存储单品的原始价格
+                        $curr_dish_value = D("Side_dish_value")->where(array('id'=>$dish[1]))->find();
+                        $t_return['cost_price'] += $curr_dish_value['price'] * $dish[2];
                     }
                 }
                 $total += $num;

@@ -1092,22 +1092,9 @@ class IndexAction extends BaseAction
 
         ///////////
         //获取商品折扣活动
-        $eventList = D('New_event')->getEventList(1,6);
-        $store_coupon = null;
-        if(count($eventList) > 0) {
-            $store_coupon = D('New_event_coupon')->where(array('event_id' => $eventList[0]['id'],'limit_day'=>$sid))->find();
-        }
-        if($store_coupon){
-            $goodsDiscount = $store_coupon['discount'];
-            if($store_coupon['type'] == 1){
-                $goodsDishDiscount = $store_coupon['discount'];
-            }else{
-                $goodsDishDiscount = 1;
-            }
-        }else{
-            $goodsDiscount = 1;
-            $goodsDishDiscount = 1;
-        }
+        $store_discount = D('New_event')->getStoreNewDiscount($sid);
+        $goodsDiscount = $store_discount['goodsDiscount'];
+        $goodsDishDiscount = $store_discount['goodsDishDiscount'];
 
         foreach ($cart_array as $v){
             if($store['menu_version'] == 2){

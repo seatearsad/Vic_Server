@@ -1782,6 +1782,7 @@ class ShopAction extends BaseAction{
                 $values = D('Side_dish_value')->where(array('dish_id' => $v['id'], 'status' => 1))->select();
                 foreach ($values as &$vv) {
                     $vv['name'] = lang_substr($vv['name'], C('DEFAULT_LANG'));
+                    $vv['price'] = round($vv['price']*$now_goods['goodsDishDiscount'],2);
                     $vv['list'] = array();
                 }
                 $v['list'] = $values;
@@ -2592,6 +2593,11 @@ class ShopAction extends BaseAction{
                 exit;
             }else{
                 $store = D('Merchant_store')->where(array('store_id'=>$store_id))->find();
+                //获取商品折扣活动
+                $store_discount = D('New_event')->getStoreNewDiscount($store_id);
+                $goodsDiscount = $store_discount['goodsDiscount'];
+                $goodsDishDiscount = $store_discount['goodsDishDiscount'];
+
                 //查看所有的cookie商品是否存在 如果不存在删除cookie
                 if($store['menu_version'] == 2){
                     $all_id = array();
@@ -2621,7 +2627,7 @@ class ShopAction extends BaseAction{
                     }
                 }
             }
-            $return = D('Shop_goods')->checkCart($store_id, $this->user_session['uid'], $cookieData);
+            $return = D('Shop_goods')->checkCart($store_id, $this->user_session['uid'], $cookieData,1,0,$goodsDiscount);
             //var_dump($return);die("----");
         }
 
@@ -3016,7 +3022,13 @@ class ShopAction extends BaseAction{
                 redirect(U('Shop/index') . '#shop-' . $store_id);
                 exit;
             }
-            $return = D('Shop_goods')->checkCart($store_id, $this->user_session['uid'], $cookieData);
+
+            //获取商品折扣活动
+            $store_discount = D('New_event')->getStoreNewDiscount($store_id);
+            $goodsDiscount = $store_discount['goodsDiscount'];
+            $goodsDishDiscount = $store_discount['goodsDishDiscount'];
+
+            $return = D('Shop_goods')->checkCart($store_id, $this->user_session['uid'], $cookieData,1,0,$goodsDiscount);
         }
 
 // 		$order_id = isset($_POST['order_id']) ? intval($_POST['order_id']) : 0;
