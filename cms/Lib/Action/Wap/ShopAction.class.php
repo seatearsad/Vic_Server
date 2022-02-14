@@ -597,6 +597,11 @@ class ShopAction extends BaseAction{
                     case 1://按照纬度限制的城市 小于某个纬度
                         if($lat >= $city['range_para']) $is_add = false;
                         break;
+                    case 2://自定义区域
+                        import('@.ORG.RegionalCalu.RegionalCalu');
+                        $region = new RegionalCalu();
+                        $is_add = $region->checkCity($city,$long,$lat);
+                        break;
                     default:
                         break;
                 }
@@ -2882,6 +2887,16 @@ class ShopAction extends BaseAction{
                                 $user_adress=null;
                             }
                             else $is_jump_address = 0;
+                            break;
+                        case 2://自定义区域
+                            import('@.ORG.RegionalCalu.RegionalCalu');
+                            $region = new RegionalCalu();
+                            if($region->checkCity($city,$user_adress['longitude'],$user_adress['latitude'])){
+                                $is_jump_address = 0;
+                            }else{
+                                $is_jump_address = 1;
+                                $user_adress=null;
+                            }
                             break;
                         default:
                             $is_jump_address = 0;

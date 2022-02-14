@@ -937,6 +937,15 @@ class StoreModel extends Model
                             if($data['mapLat'] >= $city['range_para']) $data['is_allow'] = 0;
                             else $data['is_allow'] = 1;
                             break;
+                        case 2://自定义区域
+                            import('@.ORG.RegionalCalu.RegionalCalu');
+                            $region = new RegionalCalu();
+                            if($region->checkCity($city,$data['mapLng'],$data['mapLat'])){
+                                $data['is_allow'] = 1;
+                            }else{
+                                $data['is_allow'] = 0;
+                            }
+                            break;
                         default:
                             $data['is_allow'] = 1;
                             break;

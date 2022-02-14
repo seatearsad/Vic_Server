@@ -386,6 +386,15 @@ class CartModel extends Model
                         if($address['mapLat'] >= $city['range_para']) $result['is_allow'] = 0;
                         else $result['is_allow'] = 1;
                         break;
+                    case 2://自定义区域
+                        import('@.ORG.RegionalCalu.RegionalCalu');
+                        $region = new RegionalCalu();
+                        if($region->checkCity($city,$address['mapLng'],$address['mapLat'])){
+                            $result['is_allow'] = 1;
+                        }else{
+                            $result['is_allow'] = 0;
+                        }
+                        break;
                     default:
                         $result['is_allow'] = 1;
                         break;

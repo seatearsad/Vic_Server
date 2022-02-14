@@ -136,13 +136,14 @@
                                 <select name="range_type" id="select_type" class="form-control">
                                     <option value="0" <if condition="$now_area['range_type'] eq 0">selected</if>>正常城市</option>
                                     <option value="1" <if condition="$now_area['range_type'] eq 1">selected</if>>纬度限制</option>
+                                    <option value="2" <if condition="$now_area['range_type'] eq 2">selected</if>>自定义范围</option>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group  row">
                             <label class="col-sm-3 col-form-label">范围参数</label>
                             <div class="col-sm-9">
-                                <input type="text" class="input fl" value="{pigcms{$now_area['range_para']}" name="range_para" size="10" validate="number:true,maxlength:10" />
+                                <input type="text" class="input form-control" value="{pigcms{$now_area['range_para']}" name="range_para" validate="" />
                             </div>
                         </div>
                         <div class="form-group  row">
