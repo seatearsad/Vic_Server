@@ -849,14 +849,33 @@ class StoreModel extends Model
             $store = $this->get_store_by_id($sid);
         }
 
+        $result = array();
         foreach ($adr as $v){
             $result[] = $this->arrange_address($v,$store);
         }
+
         if($store) {
             $cmf_arr = array_column($result, 'distance');
             array_multisort($cmf_arr, SORT_ASC, $result);
-            $cmf_arr = array_column($result, 'is_allow');
-            array_multisort($cmf_arr, SORT_DESC, $result);
+            //$cmf_arr = array_column($result, 'is_allow');
+            //array_multisort($cmf_arr, SORT_DESC, $result);
+
+            $address_list_allow = array();
+            $address_list_not_allow = array();
+
+            foreach ($result as $v) {
+                if ($v['is_allow'] == 1) {
+                    $address_list_allow[] = $v;
+                }
+            }
+
+            foreach ($result as $v) {
+                if ($v['is_allow'] == 0) {
+                    $address_list_not_allow[] = $v;
+                }
+            }
+
+            $result = array_merge($address_list_allow,$address_list_not_allow);
         }
 
         return $result;
