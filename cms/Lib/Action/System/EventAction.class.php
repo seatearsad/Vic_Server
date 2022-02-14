@@ -9,7 +9,18 @@
 class EventAction extends BaseAction
 {
     public function index(){
-        $event_list = D('New_event')->getEventList(-1);
+        //$event_list = D('New_event')->getEventList(-1);
+        $where = array();
+        $count_count = D('New_event')->where($where)->count();
+        import('@.ORG.system_page');
+        $p = new Page($count_count, 15);
+        $list = D('New_event')->field(true)->where($where)->order('id desc')->limit($p->firstRow . ',' . $p->listRows)->select();
+
+        $pagebar = $p->show2();
+        $this->assign('pagebar', $pagebar);
+
+        $event_list = D('New_event')->arrange_list(-1,$list);
+
         $this->assign('event_list',$event_list);
         $this->assign('module_name','Market');
         $this->display();

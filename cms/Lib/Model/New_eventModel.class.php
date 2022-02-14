@@ -29,6 +29,13 @@ class New_eventModel extends Model
         }
 
         $list = $this->field(true)->where($where)->select();
+
+        $new_list = $this->arrange_list($status,$list);
+
+        return $new_list;
+    }
+
+    public function arrange_list($status,$list){
         $new_list = array();
         foreach ($list as &$v){
             $v['type_name'] = $this->getTypeName($v['type']);
