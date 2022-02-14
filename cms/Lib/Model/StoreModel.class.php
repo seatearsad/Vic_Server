@@ -534,12 +534,16 @@ class StoreModel extends Model
         $goods_image_class = new goods_image();
         $returnList = array();
 
-        //获取商品折扣活动
-        $store_discount = D('New_event')->getStoreNewDiscount($goodList[0]['store_id']);
-        $goodsDiscount = $store_discount['goodsDiscount'];
-        $goodsDishDiscount = $store_discount['goodsDishDiscount'];
-
         foreach($goodList as $k=>$v) {
+            if($v['menu_version'] == 1) {
+                //获取商品折扣活动
+                $store_discount = D('New_event')->getStoreNewDiscount($v['store_id']);
+                $goodsDiscount = $store_discount['goodsDiscount'];
+                $goodsDishDiscount = $store_discount['goodsDishDiscount'];
+            }else{
+                $goodsDiscount = 1;
+            }
+
             $returnList[$k]['fid'] = $v['goods_id'];
             $returnList[$k]['group_id'] = $v['sort_id'];
             $returnList[$k]['sid'] = $v['store_id'];

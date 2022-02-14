@@ -257,7 +257,7 @@ class CartModel extends Model
             if($store['menu_version'] == 2){
                 $good = D('StoreMenuV2')->getProduct($v['fid'],$sid);
                 $t_good['fname'] = $good['name'];
-                $good['price'] = $good['price']/100;
+                $good['price'] = $good['price']/100*$goodsDiscount;
                 $good['tax_num'] = $good['tax']/1000;
                 $good['deposit_price'] = 0;
             }else {

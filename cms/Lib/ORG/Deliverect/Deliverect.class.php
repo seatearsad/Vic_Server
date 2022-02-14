@@ -142,13 +142,18 @@ class Deliverect
         $productAllPrice = 0;
         $items = array();
 
+        //获取商品折扣活动
+        $store_discount = D('New_event')->getStoreNewDiscount($order['store_id']);
+        $goodsDiscount = $store_discount['goodsDiscount'];
+        $goodsDishDiscount = $store_discount['goodsDishDiscount'];
+
         $tax_price = 0;
         foreach ($order_detail as $detail){
             $item = array();
             $product = D("StoreMenuV2")->getProduct($detail['goods_id'],$order['store_id']);
             $item['plu'] = $product['plu'];
             $item['name'] = $product['name'];
-            $item['price'] = intval($product['price']);
+            $item['price'] = intval($product['price']*$goodsDiscount);
             $item['quantity'] = intval($detail['num']);
             $item['remark'] = "";
 
@@ -163,7 +168,7 @@ class Deliverect
                     $sub_product = D("StoreMenuV2")->getProduct($sub_dish[1], $order['store_id']);
                     $subItem['plu'] = $sub_product['plu'];
                     $subItem['name'] = $sub_product['name'];
-                    $subItem['price'] = intval($sub_product['price']);
+                    $subItem['price'] = intval($sub_product['price']*$goodsDishDiscount);
                     $subItem['quantity'] = intval($sub_dish[2]);
 
                     $productAllPrice += $subItem['price'];

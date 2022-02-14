@@ -819,6 +819,8 @@ class Shop_goodsModel extends Model
                 }
             }else if($menu_version == 2) {
                 $now_goods = D('StoreMenuV2')->getProduct($goods_id, $store_id);
+                $now_goods['cost_price'] = $now_goods['price']/100;
+                $now_goods['price'] = $now_goods['price']/100*$goodsDiscount;
                 $image = $now_goods['image'];
             }
 		} else {
@@ -844,7 +846,7 @@ class Shop_goodsModel extends Model
 
 
         if($menu_version == 2){
-            return array('status' => 1, 'num' => $num, 'is_seckill_price' => false, 'old_price' => 0, 'cost_price' => 0, 'price' => $now_goods['price']/100, 'image' => $image, 'packing_charge' => 0, 'freight_type' => 0, 'freight_value' => 0.00, 'freight_template' => 0, 'unit' => "", 'number' => 0, 'sort_id' => 0, 'name' => $now_goods['name'],'tax_num'=>$now_goods['tax']/1000,'deposit_price'=>0);
+            return array('status' => 1, 'num' => $num, 'is_seckill_price' => false, 'old_price' => $now_goods['cost_price'], 'cost_price' => $now_goods['cost_price'], 'price' => $now_goods['price'], 'image' => $image, 'packing_charge' => 0, 'freight_type' => 0, 'freight_value' => 0.00, 'freight_template' => 0, 'unit' => "", 'number' => 0, 'sort_id' => 0, 'name' => $now_goods['name'],'tax_num'=>$now_goods['tax']/1000,'deposit_price'=>0);
         }
 
 		$stock_num = 0;
@@ -1831,9 +1833,16 @@ class Shop_goodsModel extends Model
                     foreach ($dish_ids as $v){
                         $dish = explode(',',$v);
                         $t_return['price'] += $dish[3]*$dish[2];
+
                         //存储单品的原始价格
-                        $curr_dish_value = D("Side_dish_value")->where(array('id'=>$dish[1]))->find();
-                        $t_return['cost_price'] += $curr_dish_value['price'] * $dish[2];
+                        if($store['menu_version'] == 1) {
+                            $curr_dish_value = D("Side_dish_value")->where(array('id' => $dish[1]))->find();
+                            $t_return['cost_price'] += $curr_dish_value['price'] * $dish[2];
+                        }else{
+                            $curr_dish_value = D('StoreMenuV2')->getProduct($dish[1],$store_id);
+                            $t_return['cost_price'] += $curr_dish_value['price']/100 * $dish[2];
+                        }
+
                     }
                 }
                 $total += $num;
