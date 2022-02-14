@@ -192,6 +192,7 @@ function getRecommendList(){
 				//$("#moress").remove();
 			}
 		}
+
 		if (result != '') {
 			if (like_page == 1) $('.youlike').show().find('.likeBox').empty();
 			laytpl($('#indexRecommendBoxTpl').html()).render(result.store, function (html) {
@@ -226,7 +227,7 @@ function getRecommendList(){
 		if (like_page >= guess_num) {
 			//$("#moress").remove();
 		}
-
+        
 		pageLoadTipHide();
         if(result.has_more){
             like_page++;
@@ -235,7 +236,7 @@ function getRecommendList(){
             $("#moress").remove();
 		}
 		//myScroll.refresh();
-	});
+	},"json");
 }
 function format_time(time){
 	return time < 10 ? '0'+time : time;
