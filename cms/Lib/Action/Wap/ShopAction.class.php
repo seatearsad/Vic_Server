@@ -281,7 +281,7 @@ class ShopAction extends BaseAction{
             if ($is_wap > 0) {
                 $lists = D('Merchant_store_shop')->get_list_by_option($where, $is_wap,-1,$city_id);
             } else {
-                $lists = D('Merchant_store_shop')->get_list_by_option($where,0,-1,$city_id);
+                $lists = D('Merchant_store_shop')->get_list_by_option($where,1,-1,$city_id);
             }
         }
         $return = array();
