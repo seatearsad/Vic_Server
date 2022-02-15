@@ -123,7 +123,7 @@ class New_eventModel extends Model
         }
 
         //店铺减免配送费不判断是否存在
-        if($type != 5) {
+        if($type != 5 && $type != 6) {
             if ($this->where($where)->find()) {
                 return false;
             }

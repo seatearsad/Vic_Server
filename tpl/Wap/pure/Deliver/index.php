@@ -165,7 +165,7 @@
             overflow: auto;
         }
         #order_div{
-            padding: 20px 5% 10px 5%;
+            padding: 20px 5% 0px 5%;
             text-align: center;
             font-size: 16px;
         }
@@ -181,7 +181,7 @@
         }
         .order_detail .amount{
             flex: 1 1 70%;
-            font-size: 32px;
+            font-size: 4vh;
             font-weight: bold;
         }
         .order_detail .payment label{
@@ -191,8 +191,8 @@
             font-size: 15px;
         }
         .store_name{
-            padding: 10px 5%;
-            font-size: 18px;
+            padding: 5px 5%;
+            font-size: 2.5vh;
             font-weight: bold;
             color: #294068;
             white-space: nowrap;
@@ -201,12 +201,12 @@
         }
         .order_time{
             color: #555555;
-            padding: 5px 2% 15px 2%;
-            border-bottom: 1px solid #CCCCCC;
+            padding: 5px 2% 0px 2%;
+            /*border-bottom: 1px solid #CCCCCC;*/
             font-size: 15px;
         }
         #position_div{
-            padding: 0px 10%;
+            padding: 5px 10%;
             font-size: 16px;
             line-height: 35px;
             color: #333333;
@@ -472,6 +472,15 @@
                     {{# } }}
                 </div>
             </div>
+            <a href="javascript:void(0);" class="rob" data-spid="{{ d.list[i].supply_id }}" style="display: block;">
+                <div class="send_btn">
+                    {{# if(d.list[i].bonus > 0){ }}
+                    Accept to Earn ${{ d.list[i].bonus }} Bonus
+                    {{# } else { }}
+                    Accept
+                    {{# } }}
+                </div>
+            </a>
             <div id="position_div">
                 <div>
                     <span class="material-icons title_icon">restaurant</span>
@@ -482,15 +491,6 @@
                     {{ d.list[i].aim_site }}
                 </div>
             </div>
-            <a href="javascript:void(0);" class="rob" data-spid="{{ d.list[i].supply_id }}" style="display: block;">
-            <div class="send_btn">
-                {{# if(d.list[i].bonus > 0){ }}
-                    Accept to Earn ${{ d.list[i].bonus }} Bonus
-                {{# } else { }}
-                    Accept
-                {{# } }}
-            </div>
-            </a>
             </div>
         {{# } }}
     </script>
@@ -586,7 +586,8 @@
             if(curr_hash == "1"){
                 $('#deliver_count').trigger('click');
             }else{
-                grab_timer = setInterval(getList, 2000);
+                //grab_timer = setInterval(getList, 2000);
+                getList();
             }
         }
 

@@ -106,7 +106,7 @@ class EventAction extends BaseAction
             $coupon_list = D('New_event_coupon')->where(array('event_id'=>$event_id))->select();
             foreach ($coupon_list as &$v){
                 $v = D('New_event')->getCouponUserNum($v);
-                if($event['type'] == 4 || $event['type'] == 5){
+                if($event['type'] == 4 || $event['type'] == 5 || $event['type'] == 6){
                     $store = D('Merchant_store')->field('name')->where(array('store_id'=>$v['limit_day']))->find();
                     $v['store_name'] = lang_substr($store['name'],C('DEFAULT_LANG'));
                 }
@@ -176,6 +176,10 @@ class EventAction extends BaseAction
             $data['discount'] = $_POST['discount'];
             $data['limit_day'] = $_POST['limit_day'];
             $data['type'] = $_POST['type'] ? $_POST['type'] : 0;
+
+            if($_POST['discount'] == 0){
+                $this->frame_submit_tips(0, 'Discount cannot be 0.');
+            }
 
             if($_POST['coupon_id'] != 0){
                 D('New_event_coupon')->where(array('id'=>$_POST['coupon_id']))->save($data);
