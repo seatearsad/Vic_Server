@@ -6289,18 +6289,28 @@ class MyAction extends BaseAction{
 
     public function ajax_city_name(){
         $city_name = $_POST['city_name'];
-        $where = array('area_name'=>$city_name,'area_type'=>2);
-        $area = D('Area')->where($where)->find();
+        //$where = array('area_name'=>$city_name,'area_type'=>2);
+        //$area = D('Area')->where($where)->find();
+
+        $city_id = 0;
+        $area_list = D('Area')->where(array('area_type'=>2))->select();
+        foreach ($area_list as $city){
+            $city_arr = explode("|",$city['area_ip_desc']);
+            if(in_array($city_name,$city_arr)){
+                $city_id = $city['area_id'];
+            }
+        }
+
         $data = array();
-        if($area){
-            $data['area_id'] = 0;
-            $data['city_id'] = $area['area_id'];
-            $data['province_id'] = $area['area_pid'];
+        //if($area){
+        $data['area_id'] = 0;
+        $data['city_id'] = $city_id
+            $data['province_id'] = 0;
 
             $return['error'] = 0;
-        }else{
-            $return['error'] = 1;
-        }
+        //}else{
+        //    $return['error'] = 1;
+        //}
         $return['info'] = $data;
         exit(json_encode($return));
     }
