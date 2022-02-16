@@ -1846,7 +1846,7 @@ class IndexAction extends BaseAction
                     $values = D('Side_dish_value')->where(array('dish_id' => $v['id'], 'status' => 1))->select();
                     foreach ($values as &$vv) {
                         $vv['name'] = lang_substr($vv['name'], C('DEFAULT_LANG'));
-                        $vv['price'] = $vv['price']*$now_goods['goodsDishDiscount'];
+                        $vv['price'] = round($vv['price']*$now_goods['goodsDishDiscount'],2);
                         $vv['list'] = array();
                     }
                     if ($values) {
