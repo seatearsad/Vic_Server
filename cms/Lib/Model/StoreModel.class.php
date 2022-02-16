@@ -826,10 +826,15 @@ class StoreModel extends Model
         return $result;
     }
 
-    public function getDefaultAdr($uid){
+    public function getDefaultAdr($uid,$address_id=-1){
         $addressModle = D('User_adress');
 
-        $address = $addressModle->field(true)->where(array('uid'=>$uid,'default'=>1))->find();
+        if($address_id != -1){
+            $address = $addressModle->field(true)->where(array('adress_id'=>$address_id))->find();
+        }else {
+            $address = $addressModle->field(true)->where(array('uid' => $uid, 'default' => 1))->find();
+        }
+
         //if ($address == null)
         //    $address = $addressModle->field(true)->where(array('uid'=>$uid))->find();
 
@@ -980,8 +985,8 @@ class StoreModel extends Model
         return $data;
     }
 
-    public function CalculationDeliveryFee($uid,$sid){
-        $address = $this->getDefaultAdr($uid);
+    public function CalculationDeliveryFee($uid,$sid,$address_id=-1){
+        $address = $this->getDefaultAdr($uid,$address_id);
         $store = $this->get_store_by_id($sid);
 
         //$distance = getDistance($address['mapLat'], $address['mapLng'], $store['lat'], $store['lng']);

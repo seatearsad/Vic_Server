@@ -1229,7 +1229,7 @@ class IndexAction extends BaseAction
         $order_data['lng'] = $address['longitude'];
 
         $order_data['expect_use_time'] = D('Store')->get_store_delivery_time($sid);
-        $order_data['freight_charge'] = $delivery_fee = D('Store')->CalculationDeliveryFee($uid,$sid);
+        $order_data['freight_charge'] = $delivery_fee = D('Store')->CalculationDeliveryFee($uid,$sid,$adr_id);
 
         $order_data['is_pick_in_store'] = 0;
 
