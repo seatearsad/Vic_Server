@@ -1263,18 +1263,10 @@ class StoreModel extends Model
         }
 
         $city_id = 0;
-        //$where = array('area_name'=>$city_name,'area_type'=>2);
-        //$area = D('Area')->where($where)->find();
-        //if($area) {
-        //    $city_id = $area['area_id'];
-        //}
-
-        $area_list = D('Area')->where(array('area_type'=>2))->select();
-        foreach ($area_list as $city){
-            $city_arr = explode("|",$city['area_ip_desc']);
-            if(in_array($city_name,$city_arr)){
-                $city_id = $city['area_id'];
-            }
+        $where = array('area_name'=>$city_name,'area_type'=>2);
+        $area = D('Area')->where($where)->find();
+        if($area) {
+            $city_id = $area['area_id'];
         }
 
         return $city_id;
