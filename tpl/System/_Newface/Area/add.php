@@ -35,14 +35,12 @@
                                     </div>
                                 </div>
                             </if>
-                            <if condition="$_GET['type'] gt 1 && $_GET['type'] lt 4">
-                                <div class="form-group  row">
-                                    <label class="col-sm-3 col-form-label">{pigcms{:L('I_IP_SYMPOL')}</label>
-                                    <div class="col-sm-9">
-                                        <input type="text" class="input fl" name="area_ip_desc" size="20" placeholder="" validate="maxlength:30,required:true" tips="{pigcms{:L('TGFIXC')}"/>
-                                    </div>
+                            <div class="form-group  row">
+                                <label class="col-sm-3 col-form-label">{pigcms{:L('I_IP_SYMPOL')}</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="input fl" name="area_ip_desc" size="20" placeholder="" validate="maxlength:30,required:true" tips="{pigcms{:L('TGFIXC')}"/>
                                 </div>
-                            </if>
+                            </div>
                             <div class="form-group  row">
                                 <label class="col-sm-3 col-form-label">{pigcms{:L('I_LISTING_ORDER')}</label>
                                 <div class="col-sm-9">
