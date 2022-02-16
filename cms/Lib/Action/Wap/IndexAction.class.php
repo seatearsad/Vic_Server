@@ -799,7 +799,7 @@ class IndexAction extends BaseAction
         $data = array();
         //if($area){
             $data['area_id'] = 0;
-            $data['city_id'] = $city_id
+            $data['city_id'] = $city_id;
             $data['province_id'] = 0;
 
             $return['error'] = 0;
