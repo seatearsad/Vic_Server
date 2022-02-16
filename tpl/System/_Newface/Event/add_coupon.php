@@ -44,7 +44,7 @@
                                 <div class="col-sm-9">
                                     <input type="text" class="form-control" name="discount" size="20" validate="maxlength:20,required:true" value="{pigcms{$coupon.discount|default=''}"/>
                                     <if condition="$event_type eq 6">
-                                        eg.Key in 0.80 for a 20% off discount
+                                        eg. Key in 0.80 for a 20% off discount
                                     </if>
                                 </div>
                             </div>
