@@ -524,7 +524,7 @@ class Shop_goodsModel extends Model
 				$row['price'] = floatval($row['price']);
 			}
 
- 			$row['price'] = $row['price']*$goodsDiscount;
+ 			$row['price'] = round($row['price']*$goodsDiscount,2);
 			$row['old_price'] = floatval($row['old_price']);
 			$row['seckill_price'] = floatval($row['seckill_price']);
 			$tmp_pic_arr = explode(';', $row['image']);
@@ -596,7 +596,7 @@ class Shop_goodsModel extends Model
 		if(empty($now_goods)){
 			return false;
 		}else{
-            $now_goods['price'] = $now_goods['price']*$goodsDiscount;
+            $now_goods['price'] = round($now_goods['price']*$goodsDiscount,2);
             $now_goods['goodsDiscount'] = $goodsDiscount;
             $now_goods['goodsDishDiscount'] = $goodsDishDiscount;
         }
@@ -805,7 +805,7 @@ class Shop_goodsModel extends Model
             if($menu_version == 1) {
                 $now_goods = $this->field(true)->where(array('goods_id' => $goods_id, 'store_id' => $store_id))->find();
                 $now_goods['cost_price'] = $now_goods['price'];
-                $now_goods['price'] = $now_goods['price']*$goodsDiscount;
+                $now_goods['price'] = round($now_goods['price']*$goodsDiscount,2);
                 $image = '';
                 if(!empty($now_goods['image'])){
                     $goods_image_class = new goods_image();
@@ -820,13 +820,13 @@ class Shop_goodsModel extends Model
             }else if($menu_version == 2) {
                 $now_goods = D('StoreMenuV2')->getProduct($goods_id, $store_id);
                 $now_goods['cost_price'] = $now_goods['price']/100;
-                $now_goods['price'] = $now_goods['price']/100*$goodsDiscount;
+                $now_goods['price'] = round($now_goods['price']/100*$goodsDiscount,2);
                 $image = $now_goods['image'];
             }
 		} else {
 			$now_goods = $this->field(true)->where(array('goods_id' => $goods_id))->find();
             $now_goods['cost_price'] = $now_goods['price'];
-            $now_goods['price'] = $now_goods['price']*$goodsDiscount;
+            $now_goods['price'] = round($now_goods['price']*$goodsDiscount,2);
             $image = '';
             if(!empty($now_goods['image'])){
                 $goods_image_class = new goods_image();

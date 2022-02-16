@@ -257,13 +257,13 @@ class CartModel extends Model
             if($store['menu_version'] == 2){
                 $good = D('StoreMenuV2')->getProduct($v['fid'],$sid);
                 $t_good['fname'] = $good['name'];
-                $good['price'] = $good['price']/100*$goodsDiscount;
+                $good['price'] = round($good['price']/100*$goodsDiscount,2);
                 $good['tax_num'] = $good['tax']/1000;
                 $good['deposit_price'] = 0;
             }else {
                 $good = D('Shop_goods')->field(true)->where(array('goods_id' => $v['fid']))->find();
                 $t_good['fname'] = lang_substr($good['name'], C('DEFAULT_LANG'));
-                $good['price'] = $good['price']*$goodsDiscount;
+                $good['price'] = round($good['price']*$goodsDiscount,2);
             }
 
             $t_good['stock'] = $v['stock'];

@@ -198,7 +198,7 @@ class EventAction extends BaseAction
             $coupon = D('New_event_coupon')->where(array('id'=>$id))->find();
             if($coupon){
                 $event = D('New_event')->where(array('id'=>$coupon['event_id']))->find();
-                if($event['type'] == 4 || $event['type'] == 5){
+                if($event['type'] == 4 || $event['type'] == 5 || $event['type'] == 6){
                     D('New_event_coupon')->where(array('id'=>$id))->delete();
                     $this->success('Success');
                 }else{

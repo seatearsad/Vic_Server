@@ -1115,7 +1115,7 @@ class IndexAction extends BaseAction
                 $good['stock_num'] = -1;
             }else{
                 $good = D('Shop_goods')->field(true)->where(array('goods_id' => $v['fid']))->find();
-                $good['price'] = $good['price']*$goodsDiscount;
+                $good['price'] = round($good['price']*$goodsDiscount,2);
                 $t_good['productId'] = $v['fid'];
                 $t_good['productName'] = lang_substr($good['name'],C('DEFAULT_LANG'));
             }

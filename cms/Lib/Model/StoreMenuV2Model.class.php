@@ -256,7 +256,7 @@ class StoreMenuV2Model extends Model
         $new_product['name'] = $product['name'];
         $new_product['desc'] = $product['desc'];
         $new_product['market_price'] = $product['price']/100;
-        $new_product['price'] = $product['price']/100*$goodsDiscount;
+        $new_product['price'] = round($product['price']/100*$goodsDiscount,2);
         $new_product['status'] = $product['status'];
         $new_product['number'] = "";
         $new_product['packing_charge'] = 0;

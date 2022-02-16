@@ -548,7 +548,7 @@ class StoreModel extends Model
             $returnList[$k]['group_id'] = $v['sort_id'];
             $returnList[$k]['sid'] = $v['store_id'];
             $returnList[$k]['name'] = lang_substr($v['name'], C('DEFAULT_LANG'));
-            $returnList[$k]['price'] = $v['price']*$goodsDiscount;
+            $returnList[$k]['price'] = round($v['price']*$goodsDiscount,2);
             $returnList[$k]['market_price'] = $v['old_price'];
             $returnList[$k]['desc'] = $v['des'];
             $returnList[$k]['stock'] = $v['stock_num'] == -1 ? 10000 : $v['stock_num'];//10000;//库存
