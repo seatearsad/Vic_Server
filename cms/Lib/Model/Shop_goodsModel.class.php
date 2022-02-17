@@ -1459,7 +1459,7 @@ class Shop_goodsModel extends Model
 		return $s_list;
     }
     
-    public function checkCart($store_id, $uid, $goodsData, $isCookie = 1, $address_id = 0,$goodsDiscount = 1)
+    public function checkCart($store_id, $uid, $goodsData, $isCookie = 1, $address_id = 0,$goodsDiscount = 1,$goodsDishDiscount = 1)
     {
         $store = D("Merchant_store")->field(true)->where(array('store_id' => $store_id))->find();
         if ($store['have_shop'] == 0 || $store['status'] != 1) {
@@ -1759,14 +1759,17 @@ class Shop_goodsModel extends Model
             }
 
             $new_goodsData = array();
-            foreach ($goodsData as $key=>$row) {
+
+            $is_update_cookie = false;
+            foreach ($goodsData as $key=>&$row) {
                 $goods_id = $row['productId'];
                 $num = $row['count'];
                 $spec_ids = array();
                 $pro_ids = array();
                 $dish_ids = array();
                 $str_s = array(); $str_p = array();$str_d = array();
-                foreach ($row['productParam'] as $r) {
+
+                foreach ($row['productParam'] as &$r) {
                     if ($r['type'] == 'spec') {
                         $spec_ids[] = $r['id'];
                         $str_s[] = $r['name'];
@@ -1784,19 +1787,30 @@ class Shop_goodsModel extends Model
                         }else if($r['dish_id']){
                             $curr_dish = explode("|",$r['dish_id']);
                             $dish_desc = "";
-                            foreach($curr_dish as $vv){
+                            foreach($curr_dish as &$vv){
                                 $one_dish = explode(",",$vv);
                                 if($store['menu_version'] == 1) {
                                     $dish_vale = D('Side_dish_value')->where(array('id' => $one_dish[1]))->find();
                                     $dish_vale['name'] = lang_substr($dish_vale['name'], C('DEFAULT_LANG'));
                                 }else if($store['menu_version'] == 2){
                                     $dish_vale = D('StoreMenuV2')->getProduct($one_dish[1],$store_id);
+                                    $dish_vale['price'] = $dish_vale['price']/100;
+                                }else{
+                                    $dish_vale = array();
+                                }
+
+                                //如果商品折扣优惠活动变化
+                                if($dish_vale['price']*$goodsDishDiscount != $one_dish[3]){
+                                    $one_dish[3] = round($dish_vale['price']*$goodsDishDiscount,2);
+                                    $vv = implode(',',$one_dish);
                                 }
 
                                 $add_str = $one_dish[2] > 1 ? $dish_vale['name']."*".$one_dish[2] : $dish_vale['name'];
 
                                 $dish_desc = $dish_desc == "" ? $add_str : $dish_desc.";".$add_str;
                             }
+
+                            $r['dish_id'] = implode("|",$curr_dish);
                             $dish_ids = array_merge($dish_ids,$curr_dish);
                             $str_d[] = $dish_desc;
                         }
@@ -1830,9 +1844,8 @@ class Shop_goodsModel extends Model
                 }
                 //garfunkel add dish
                 if(count($dish_ids) > 0){
-                    foreach ($dish_ids as $v){
+                    foreach ($dish_ids as &$v){
                         $dish = explode(',',$v);
-                        $t_return['price'] += $dish[3]*$dish[2];
 
                         //存储单品的原始价格
                         if($store['menu_version'] == 1) {
@@ -1843,13 +1856,21 @@ class Shop_goodsModel extends Model
                             $t_return['cost_price'] += $curr_dish_value['price']/100 * $dish[2];
                         }
 
+                        $t_return['price'] += $dish[3]*$dish[2];
                     }
                 }
                 $total += $num;
-                $price += $t_return['price'] * $num;
+                $price += round($t_return['price'] * $num,2);
                 $extra_price += $row['productExtraPrice'] * $num;
                 $packing_charge += $t_return['packing_charge'] * $num;
                 $deposit_price += $t_return['deposit_price'] * $num;
+
+                //如果实际价格与添加到购物车是价格不等
+                if($price != $row['productPrice']){
+                    $row['productPrice'] = $price;
+                    $is_update_cookie = true;
+                }
+
                 if($store['menu_version'] == 1) {
                     $tax_price += ($t_return['price'] * $t_return['tax_num'] / 100) * $num;
                 }else{
@@ -1963,6 +1984,11 @@ class Shop_goodsModel extends Model
                     'tax_num'   => $t_return['tax_num'],
                     'deposit_price' =>  $t_return['deposit_price']
                 );
+            }
+
+            //更新一下存储
+            if($is_update_cookie){
+                setCookie('shop_cart_'.$store_id, json_encode($goodsData));
             }
         } elseif ($isCookie == 2) {
             foreach ($goodsData as $row) {

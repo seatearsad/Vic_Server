@@ -360,7 +360,10 @@ class New_eventModel extends Model
         $eventList = $this->getEventList(1,6);
         $store_coupon = null;
         if(count($eventList) > 0) {
-            $store_coupon = D('New_event_coupon')->where(array('event_id' => $eventList[0]['id'],'limit_day'=>$store_id))->find();
+            foreach ($eventList as $event) {
+                $curr_coupon = D('New_event_coupon')->where(array('event_id' => $event['id'], 'limit_day' => $store_id))->find();
+                if($curr_coupon) $store_coupon = $curr_coupon;
+            }
         }
         if($store_coupon){
             $data['goodsDiscount'] = $store_coupon['discount'];

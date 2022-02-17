@@ -105,50 +105,55 @@ class CartModel extends Model
 
         //$del_arr = array();
         foreach($cartList as $k=>$v){
-            $allnum += $v['num'];
-
             $store = D('Store')->get_store_by_id($v['sid']);
-            if($store['menu_version'] == 2){
-                $product = D('StoreMenuV2')->getProduct($v['fid'],$v['sid']);
-                /**
-                $is_del = false;
 
-                if($product['status'] == 0) $is_del = true;
-                if($v['dish_id'] != '') {
-                    $dish_list = explode('|', $v['dish_id']);
-                    $all_dish_id = array();
-                    foreach ($dish_list as $dish) {
-                        $dish_arr = explode(',', $dish);
-                        if (!in_array($dish_arr[0], $all_dish_id)) $all_dish_id[] = $dish_arr[0];
-                        if (!in_array($dish_arr[1], $all_dish_id)) $all_dish_id[] = $dish_arr[1];
-                    }
+            //获取商品折扣活动
+            $store_discount = D('New_event')->getStoreNewDiscount($v['sid']);
+            $goodsDiscount = $store_discount['goodsDiscount'];
+            $goodsDishDiscount = $store_discount['goodsDishDiscount'];
 
-                    $all_list = D('Store_product')->where(array('id' => array('in', $all_dish_id), 'storeId' => $v['sid'], 'status' => 1))->select();
-
-                    if (count($all_dish_id) != count($all_list)) {
-                        $is_del = true;
-                    }
+            $is_update_cart = false;
+            $curr_dish = explode("|",$v['dish_id']);
+            foreach($curr_dish as &$vv){
+                $one_dish = explode(",",$vv);
+                if($store['menu_version'] == 1) {
+                    $dish_vale = D('Side_dish_value')->where(array('id' => $one_dish[1]))->find();
+                    $dish_vale['name'] = lang_substr($dish_vale['name'], C('DEFAULT_LANG'));
+                }else if($store['menu_version'] == 2){
+                    $dish_vale = D('StoreMenuV2')->getProduct($one_dish[1],$v['sid']);
+                    $dish_vale['price'] = $dish_vale['price']/100;
+                }else{
+                    $dish_vale = array();
                 }
 
-                if($is_del){
-                    unset($cartList[$k]);
-                    $del_arr[] = $v['itemId'];
+                //如果商品折扣优惠活动变化
+                if($dish_vale['price']*$goodsDishDiscount != $one_dish[3]){
+                    $one_dish[3] = round($dish_vale['price']*$goodsDishDiscount,2);
+                    $vv = implode(',',$one_dish);
+                    $is_update_cart = true;
+                }
+            }
 
-                    continue;
-                }else {
-                 * */
-                    $good = D('StoreMenuV2')->arrangeProductAppOne($product);
-                    $good['goods_id'] = $product['id'];
-                    $good['store_id'] = $product['storeId'];
-                    $good['sort_id'] = $v['categoryId'];
-                    $good['old_price'] = 0;
-                    $good['stock_num'] = -1;
-                    $good['deposit_price'] = 0;
-                    $good['sell_mouth'] = 0;
-                    $good['des'] = $product['desc'];
-                    $good['subNum'] = $product['subNum'];
-                    $good['menu_version'] = 2;
-                //}
+            $v['dish_id'] = implode("|",$curr_dish);
+            if($is_update_cart){
+                $this->where(array('itemId'=>$v['itemId']))->save($v);
+            }
+
+            $allnum += $v['num'];
+
+            if($store['menu_version'] == 2){
+                $product = D('StoreMenuV2')->getProduct($v['fid'],$v['sid']);
+                $good = D('StoreMenuV2')->arrangeProductAppOne($product);
+                $good['goods_id'] = $product['id'];
+                $good['store_id'] = $product['storeId'];
+                $good['sort_id'] = $v['categoryId'];
+                $good['old_price'] = 0;
+                $good['stock_num'] = -1;
+                $good['deposit_price'] = 0;
+                $good['sell_mouth'] = 0;
+                $good['des'] = $product['desc'];
+                $good['subNum'] = $product['subNum'];
+                $good['menu_version'] = 2;
             }else{
                 $good = D('Shop_goods')->field(true)->where(array('goods_id' => $v['fid']))->find();
                 //获取规格价格
@@ -253,7 +258,8 @@ class CartModel extends Model
         $goodsDiscount = $store_discount['goodsDiscount'];
         $goodsDishDiscount = $store_discount['goodsDishDiscount'];
 
-        foreach ($cartList as $v){
+        foreach ($cartList as &$v){
+            $is_update_cart = false;
             if($store['menu_version'] == 2){
                 $good = D('StoreMenuV2')->getProduct($v['fid'],$sid);
                 $t_good['fname'] = $good['name'];
@@ -308,17 +314,14 @@ class CartModel extends Model
             }
             $t_good['proper_desc'] = $proper_desc;
 
-            $t_good['dish_id'] = $v['dish_id'];
             $dish_desc = "";
             $add_price = 0;
             if($v['dish_id'] != "" && $v['dish_id'] != null){
+                $old_dish_id = $v['dish_id'];
                 $dish_list = explode("|",$v['dish_id']);
-                foreach($dish_list as $vv){
+                foreach($dish_list as &$vv){
                     $one_dish = explode(",",$vv);
                     //0 dish_id 1 id 2 num 3 price
-                    if($one_dish[3] > 0){
-                        $add_price += $one_dish[3]*$one_dish[2];
-                    }
 
                     if($store['menu_version'] == 1) {
                         $dish_vale = D('Side_dish_value')->where(array('id' => $one_dish[1]))->find();
@@ -326,7 +329,22 @@ class CartModel extends Model
                     }elseif ($store['menu_version'] == 2){
                         $product_dish = D('StoreMenuV2')->getProduct($one_dish[1],$sid);
                         $dish_vale['name'] = $product_dish['name'];
+                        $dish_vale['price'] = $product_dish['price']/100;
+                    }else{
+                        $dish_vale = array();
                     }
+
+                    //如果商品折扣优惠活动变化
+                    if($dish_vale['price']*$goodsDishDiscount != $one_dish[3]){
+                        $one_dish[3] = round($dish_vale['price']*$goodsDishDiscount,2);
+                        $vv = implode(',',$one_dish);
+                        $is_update_cart = true;
+                    }
+
+                    if($one_dish[3] > 0){
+                        $add_price += $one_dish[3]*$one_dish[2];
+                    }
+
                     //$dish_vale = D('Side_dish_value')->where(array('id'=>$one_dish[1]))->find();
                     //$dish_vale['name'] = lang_substr($dish_vale['name'],C('DEFAULT_LANG'));
 
@@ -334,9 +352,14 @@ class CartModel extends Model
 
                     $dish_desc = $dish_desc == "" ? $add_str : $dish_desc.";".$add_str;
                 }
+                $v['dish_id'] = implode("|",$dish_list);
 
                 $good['price'] = $good['price'] + $add_price;
+
+                if($is_update_cart) $this->where(array('uid'=>$uid,'fid'=>$v['fid'],'sid'=>$sid,'dish_id'=>$old_dish_id))->save($v);
             }
+            $t_good['dish_id'] = $v['dish_id'];
+
             $t_good['dish_desc'] = $dish_desc;
 
             $t_good['attr'] = $spec_desc;

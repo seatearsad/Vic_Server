@@ -1512,6 +1512,15 @@ class ShopAction extends BaseAction{
             echo json_encode(array('store' => $store, 'product_list' => $list));
 
         } else {
+            $cookieData = $this->getCookieData($store_id);
+
+            //获取商品折扣活动
+            $store_discount = D('New_event')->getStoreNewDiscount($store_id);
+            $goodsDiscount = $store_discount['goodsDiscount'];
+            $goodsDishDiscount = $store_discount['goodsDishDiscount'];
+
+            D('Shop_goods')->checkCart($store_id, $this->user_session['uid'], $cookieData,1,0,$goodsDiscount,$goodsDishDiscount);
+
             if($now_store['menu_version'] == 2){
                 $categories = D('StoreMenuV2')->getStoreCategories($store_id,true);
                 $sortList = D('StoreMenuV2')->arrangeWap($categories);
@@ -2632,7 +2641,7 @@ class ShopAction extends BaseAction{
                     }
                 }
             }
-            $return = D('Shop_goods')->checkCart($store_id, $this->user_session['uid'], $cookieData,1,0,$goodsDiscount);
+            $return = D('Shop_goods')->checkCart($store_id, $this->user_session['uid'], $cookieData,1,0,$goodsDiscount,$goodsDishDiscount);
             //var_dump($return);die("----");
         }
 
@@ -3043,7 +3052,7 @@ class ShopAction extends BaseAction{
             $goodsDiscount = $store_discount['goodsDiscount'];
             $goodsDishDiscount = $store_discount['goodsDishDiscount'];
 
-            $return = D('Shop_goods')->checkCart($store_id, $this->user_session['uid'], $cookieData,1,0,$goodsDiscount);
+            $return = D('Shop_goods')->checkCart($store_id, $this->user_session['uid'], $cookieData,1,0,$goodsDiscount,$goodsDishDiscount);
         }
 
 // 		$order_id = isset($_POST['order_id']) ? intval($_POST['order_id']) : 0;

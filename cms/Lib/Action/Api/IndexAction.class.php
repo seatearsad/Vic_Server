@@ -1193,7 +1193,7 @@ class IndexAction extends BaseAction
         }
 
 
-        $return = D('Shop_goods')->checkCart($sid, $uid, $orderData,1,0,$goodsDiscount);
+        $return = D('Shop_goods')->checkCart($sid, $uid, $orderData,1,0,$goodsDiscount,$goodsDishDiscount);
 
         //garfunkel add
         $area = D('Area')->where(array('area_id'=>$store['city_id']))->find();
