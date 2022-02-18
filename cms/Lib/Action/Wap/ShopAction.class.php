@@ -2536,10 +2536,12 @@ class ShopAction extends BaseAction{
                                 }
                             }
 
-                            $all_list = D('Store_product')->where(array('id' => array('in', $all_dish_id), 'storeId' => $store_id, 'status' => 1))->select();
+                            if(count($all_dish_id) > 0) {
+                                $all_list = D('Store_product')->where(array('id' => array('in', $all_dish_id), 'storeId' => $store_id, 'status' => 1))->select();
 
-                            if (count($all_dish_id) != count($all_list)) {
-                                $allow_add = false;
+                                if (count($all_dish_id) != count($all_list)) {
+                                    $allow_add = false;
+                                }
                             }
                         }
 
