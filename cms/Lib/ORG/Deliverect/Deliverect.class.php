@@ -133,7 +133,8 @@ class Deliverect
         $data['deliveryAddress']['extraAddressInfo'] = $customer['detail'];
 
         $data['orderIsAlreadyPaid'] = ($order['pay_type'] == "offline" || $order['pay_type'] == "Cash") ? false : true;
-        $data['payment']['amount'] = intval(($order['price'] - $order['merchant_reduce'])*100);
+        //总价 - 商家优惠 - 包装费 - 包装费税
+        $data['payment']['amount'] = intval(($order['price'] - $order['merchant_reduce'] - $order['packing_charge'] - $order['packing_charge']*$order['store_tax']/100)*100);
         $data['payment']['type'] = ($order['pay_type'] == "offline" || $order['pay_type'] == "Cash") ? 1 : 0;
 
         $data['note'] = $order['desc'];
@@ -153,7 +154,7 @@ class Deliverect
             $product = D("StoreMenuV2")->getProduct($detail['goods_id'],$order['store_id']);
             $item['plu'] = $product['plu'];
             $item['name'] = $product['name'];
-            $item['price'] = intval($product['price']*$goodsDiscount);
+            $item['price'] = intval(round($product['price']*$goodsDiscount));
             $item['quantity'] = intval($detail['num']);
             $item['remark'] = "";
 
@@ -168,7 +169,7 @@ class Deliverect
                     $sub_product = D("StoreMenuV2")->getProduct($sub_dish[1], $order['store_id']);
                     $subItem['plu'] = $sub_product['plu'];
                     $subItem['name'] = $sub_product['name'];
-                    $subItem['price'] = intval($sub_product['price']*$goodsDishDiscount);
+                    $subItem['price'] = intval(round($sub_product['price']*$goodsDishDiscount));
                     $subItem['quantity'] = intval($sub_dish[2]);
 
                     $productAllPrice += $subItem['price'];

@@ -20,9 +20,15 @@
         </div>
         <div class="col-lg-3" style="height 90px;margin-top:40px;">
             <div class="btn-group float-right">
-                <button class="btn btn-white">
-                    <a href="{pigcms{:U('Coupon/index')}" style="color: inherit">{pigcms{:L('_BACK_COUPON_LIST_')}</a>
-                </button>
+                <a href="{pigcms{:U('Coupon/index')}" style="color: inherit">
+                    <button class="btn btn-white">
+                        {pigcms{:L('_BACK_COUPON_LIST_')}
+                    </button>
+                </a>
+
+                <a href="{pigcms{:U('Coupon/pull_export',$_GET)}" style="margin-left: 10px;">
+                    <button type="button" class="btn btn-primary float-right">{pigcms{:L('DATA_EXPORT')}</button>
+                </a>
             </div>
         </div>
     </div>

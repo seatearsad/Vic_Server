@@ -11,10 +11,19 @@ class EventAction extends BaseAction
     public function index(){
         //$event_list = D('New_event')->getEventList(-1);
         $where = array();
+        if($_GET['type_select'] != 0) {
+            $where['type'] = $_GET['type_select'];
+            $this->assign('type',$_GET['type_select']);
+        }
+        if($_GET['city_select'] != 0) {
+            $where['city_id'] = $_GET['city_select'];
+            $this->assign('city_id',$_GET['city_select']);
+        }
+
         $count_count = D('New_event')->where($where)->count();
         import('@.ORG.system_page');
         $p = new Page($count_count, 15);
-        $list = D('New_event')->field(true)->where($where)->order('id desc')->limit($p->firstRow . ',' . $p->listRows)->select();
+        $list = D('New_event')->field(true)->where($where)->order('status asc,id desc')->limit($p->firstRow . ',' . $p->listRows)->select();
 
         $pagebar = $p->show2();
         $this->assign('pagebar', $pagebar);
@@ -23,6 +32,13 @@ class EventAction extends BaseAction
 
         $this->assign('event_list',$event_list);
         $this->assign('module_name','Market');
+
+        $city = D('Area')->where(array('area_type'=>2,'is_open'=>1))->select();
+        $this->assign('city',$city);
+
+        $type_list = D('New_event')->getTypeName(-1);
+        $this->assign('type_list',$type_list);
+
         $this->display();
     }
 

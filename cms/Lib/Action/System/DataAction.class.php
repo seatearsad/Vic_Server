@@ -287,7 +287,7 @@ class DataAction extends BaseAction
             $objActSheet->setCellValue('AA1', '配送费优惠类型');
             $objActSheet->setCellValue('AB1', 'Food Prep出餐时间');
 
-            $sql = "SELECT o.*, d.name as good_name,d.price as good_price ,d.cost_price as good_old_price,d.unit,d.cost_price, d.num as good_num,d.tax_num,d.deposit_price FROM (select oo.*,ss.tax_num as store_tax,ss.name AS store_name from pigcms_shop_order as oo left join pigcms_merchant_store as ss on ss.store_id=oo.store_id ".$condition_where." LIMIT ". $i*1000 .",1000)o LEFT JOIN pigcms_shop_order_detail AS d ON `d`.`order_id`=`o`.`order_id` ORDER BY o.order_id DESC";
+            $sql = "SELECT o.*,d.goods_id, d.name as good_name,d.price as good_price ,d.cost_price as good_old_price,d.unit,d.cost_price, d.num as good_num,d.tax_num,d.deposit_price,d.dish_id FROM (select oo.*,ss.tax_num as store_tax,ss.name AS store_name,ss.menu_version from pigcms_shop_order as oo left join pigcms_merchant_store as ss on ss.store_id=oo.store_id ".$condition_where." LIMIT ". $i*1000 .",1000)o LEFT JOIN pigcms_shop_order_detail AS d ON `d`.`order_id`=`o`.`order_id` ORDER BY o.order_id DESC";
 
             $result_list = D()->query($sql);
             fdump(D()->getDbError());
@@ -315,13 +315,23 @@ class DataAction extends BaseAction
                             $curr_order = $v['order_id'];
                         }
 
-                        $curr_tax = $v['good_price']*$v['good_num']*$v['tax_num']/100;
+                        if($v['menu_version'] == 1)
+                            $curr_tax = $v['good_price']*$v['good_num']*$v['tax_num']/100;
+                        else{
+                            $orderDetail = array('goods_id'=>$v['goods_id'],'num'=>$v['good_num'],'store_id'=>$v['store_id'],'dish_id'=>$v['dish_id'],"good_price"=>$v['good_price']);
+                            $curr_tax = D('StoreMenuV2')->calculationTaxExportOrder($orderDetail);
+                        }
                         $curr_deposit = $v['good_num']*$v['deposit_price'];
-                        $curr_good_discount = $v['good_old_price'] - $v['good_price'];
+                        $curr_good_discount = ($v['good_old_price'] - $v['good_price'])*$v['good_num'];
                     }else{
-                        $curr_tax += $v['good_price']*$v['good_num']*$v['tax_num']/100;
+                        if($v['menu_version'] == 1)
+                            $curr_tax += $v['good_price']*$v['good_num']*$v['tax_num']/100;
+                        else{
+                            $orderDetail = array('goods_id'=>$v['goods_id'],'num'=>$v['good_num'],'store_id'=>$v['store_id'],'dish_id'=>$v['dish_id'],"good_price"=>$v['good_price']);
+                            $curr_tax += D('StoreMenuV2')->calculationTaxExportOrder($orderDetail);
+                        }
                         $curr_deposit += $v['good_num']*$v['deposit_price'];
-                        $curr_good_discount += $v['good_old_price'] - $v['good_price'];
+                        $curr_good_discount += ($v['good_old_price'] - $v['good_price'])*$v['good_num'];
                     }
 
                     $curr_num++;
@@ -1107,7 +1117,7 @@ class DataAction extends BaseAction
             $objActSheet->setCellValue('M1', 'Time|时间');
 
             //$sql = "SELECT  o.*, m.name AS merchant_name,d.name as good_name,d.price as good_price ,d.unit,d.cost_price, d.num as good_num, s.name AS store_name FROM " . C('DB_PREFIX') . "shop_order AS o INNER JOIN " . C('DB_PREFIX') . "merchant_store AS s ON s.store_id=o.store_id INNER JOIN " . C('DB_PREFIX') . "merchant AS m ON `s`.`mer_id`=`m`.`mer_id` INNER JOIN " . C('DB_PREFIX') . "shop_order_detail AS d ON `d`.`order_id`=`o`.`order_id` ".$condition_where." ORDER BY o.order_id DESC LIMIT " . $i * 1000 . ",1000";
-            $sql = "SELECT  o.*, m.name AS merchant_name,g.name as good_name,g.tax_num as good_tax,g.deposit_price,s.tax_num as store_tax,d.price as good_price ,d.cost_price as good_old_price,d.unit,d.cost_price, d.num as good_num, s.name AS store_name FROM " . C('DB_PREFIX') . "shop_order AS o LEFT JOIN " . C('DB_PREFIX') . "merchant_store AS s ON s.store_id=o.store_id LEFT JOIN " . C('DB_PREFIX') . "merchant AS m ON `s`.`mer_id`=`m`.`mer_id` LEFT JOIN " . C('DB_PREFIX') . "shop_order_detail AS d ON `d`.`order_id`=`o`.`order_id`  LEFT JOIN " . C('DB_PREFIX') . "shop_goods AS g ON `g`.`goods_id`=`d`.`goods_id` ".$condition_where." ORDER BY o.order_id DESC LIMIT " . $i * 1000 . ",1000";
+            $sql = "SELECT  o.*, m.name AS merchant_name,g.name as good_name,g.tax_num as good_tax,g.deposit_price,s.tax_num as store_tax,s.menu_version,d.goods_id,d.price as good_price ,d.cost_price as good_old_price,d.unit,d.cost_price,d.dish_id, d.num as good_num, s.name AS store_name FROM " . C('DB_PREFIX') . "shop_order AS o LEFT JOIN " . C('DB_PREFIX') . "merchant_store AS s ON s.store_id=o.store_id LEFT JOIN " . C('DB_PREFIX') . "merchant AS m ON `s`.`mer_id`=`m`.`mer_id` LEFT JOIN " . C('DB_PREFIX') . "shop_order_detail AS d ON `d`.`order_id`=`o`.`order_id`  LEFT JOIN " . C('DB_PREFIX') . "shop_goods AS g ON `g`.`goods_id`=`d`.`goods_id` ".$condition_where." ORDER BY o.order_id DESC LIMIT " . $i * 1000 . ",1000";
 
             $result_list = D()->query($sql);
             //计算订单税费及押金
@@ -1193,7 +1203,12 @@ class DataAction extends BaseAction
                         $all_deposit = 0;
                     }
 
-                    $all_tax += $val['good_price'] * $val['good_tax']/100*$val['good_num'];
+                    if($val['menu_version'] == 1)
+                        $all_tax += $val['good_price'] * $val['good_tax']/100*$val['good_num'];
+                    else{
+                        $orderDetail = array('goods_id'=>$val['goods_id'],'num'=>$val['good_num'],'store_id'=>$val['store_id'],'dish_id'=>$val['dish_id'],"good_price"=>$val['good_price']);
+                        $all_tax += D('StoreMenuV2')->calculationTaxExportOrder($orderDetail);
+                    }
                     $all_deposit += $val['deposit_price']*$val['good_num'];
                     $total_tax = $all_tax + ($val['freight_charge']+$val['packing_charge'])*$val['store_tax']/100;
 

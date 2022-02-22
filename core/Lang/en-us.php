@@ -2145,6 +2145,7 @@ return array(
     "G_FREE_DISTANCE"=>"Free Delivery w/ Distance Limit",
     "G_MERCHANT_DISCOUNT"=>"Merchant Discount",
     "G_FREE_SELECTED"=>"Free Delivery for Selected Restaurants",
+    "G_GOOD_DISCOUNT"=>"% Discount for Entire Store",
     "G_MIN_ORDER"=>"Min Order Amount",
     "G_DISCOUNT_AMOUNT"=>"Discount Amount",
     "G_DISCOUNT_AMOUNT_GOODS"=>"Discount for Entire Store",

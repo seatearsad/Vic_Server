@@ -2479,7 +2479,7 @@ class StorestaffAction extends BaseAction
             $return_data['real_orderid']=$real_orderid;//订单编号
             $return_data['desc']="Merchant--{$staff['name']}--order from merchant";//备注
             $return_data['goods_price_tax'] = $_POST['goods_tax'] ? $_POST['goods_tax'] : 0;
-            $return_data['deposit'] = $_POST['goods_deposit'] ? $_POST['goods_deposit'] : 0;
+            $return_data['deposit'] = $_POST['deposit'] ? $_POST['deposit'] : 0;
             $return_data['all_tax'] = floatval(sprintf("%.2f", $return_data['goods_price_tax'])) + floatval(sprintf("%.2f", $freight_charge_tax));
             $price = floatval(sprintf("%.2f", $goods_price))+floatval(sprintf("%.2f", $return_data['goods_price_tax']))+floatval(sprintf("%.2f", $return['delivery_fee']))+floatval(sprintf("%.2f", $freight_charge_tax))+floatval(sprintf("%.2f", $return_data['deposit']));
             $return_data['total_price']=$price;//总价=实际支付

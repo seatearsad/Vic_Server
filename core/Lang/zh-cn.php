@@ -2146,6 +2146,7 @@ return array(
     "G_FREE_DISTANCE"=>"规定范围内免配送费",
     "G_MERCHANT_DISCOUNT"=>"店铺满减活动",
     "G_FREE_SELECTED"=>"店铺减免配送费",
+    "G_GOOD_DISCOUNT"=>"店铺商品折扣",
     "G_MIN_ORDER"=>"消费金额",
     "G_DISCOUNT_AMOUNT"=>"优惠金额",
     "G_DISCOUNT_AMOUNT_GOODS"=>"全店折扣",
