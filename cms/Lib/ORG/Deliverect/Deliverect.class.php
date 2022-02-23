@@ -158,7 +158,7 @@ class Deliverect
             $item['quantity'] = intval($detail['num']);
             $item['remark'] = "";
 
-            $productAllPrice += $item['price'];
+            $productAllPrice += $item['price']*$item['quantity'];
 
             $subItems = array();
             if($detail['dish_id'] != "") {
@@ -172,7 +172,7 @@ class Deliverect
                     $subItem['price'] = intval(round($sub_product['price']*$goodsDishDiscount));
                     $subItem['quantity'] = intval($sub_dish[2]);
 
-                    $productAllPrice += $subItem['price'];
+                    $productAllPrice += $subItem['price']*$subItem['quantity']*$item['quantity'];
 
                     $subItems[] = $subItem;
                 }
