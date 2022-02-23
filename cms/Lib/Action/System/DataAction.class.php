@@ -303,40 +303,46 @@ class DataAction extends BaseAction
                 $curr_num = 0;
 
                 $curr_good_discount = 0;
+
+                $all_behalf_order = array();
                 foreach ($result_list as $k=>$v){
-                    if($curr_order != $v['order_id']){
-                        if($curr_order == ''){
-                            $curr_order = $v['order_id'];
-                        }else{
-                            $record_list[$curr_order]['goods_tax'] = $curr_tax;
-                            $record_list[$curr_order]['deposit_price'] = $curr_deposit;
-                            $record_list[$curr_order]['good_discount'] = $curr_good_discount;
+                    if($v['uid'] == 0){
+                        $all_behalf_order[] = $v;
+                    }else {
+                        if ($curr_order != $v['order_id']) {
+                            if ($curr_order == '') {
+                                $curr_order = $v['order_id'];
+                            } else {
+                                $record_list[$curr_order]['goods_tax'] = $curr_tax;
+                                $record_list[$curr_order]['deposit_price'] = $curr_deposit;
+                                $record_list[$curr_order]['good_discount'] = $curr_good_discount;
 
-                            $curr_order = $v['order_id'];
-                        }
+                                $curr_order = $v['order_id'];
+                            }
 
-                        if($v['menu_version'] == 1)
-                            $curr_tax = $v['good_price']*$v['good_num']*$v['tax_num']/100;
-                        else{
-                            $orderDetail = array('goods_id'=>$v['goods_id'],'num'=>$v['good_num'],'store_id'=>$v['store_id'],'dish_id'=>$v['dish_id'],"good_price"=>$v['good_price']);
-                            $curr_tax = D('StoreMenuV2')->calculationTaxExportOrder($orderDetail);
+                            if ($v['menu_version'] == 1)
+                                $curr_tax = $v['good_price'] * $v['good_num'] * $v['tax_num'] / 100;
+                            else {
+                                $orderDetail = array('goods_id' => $v['goods_id'], 'num' => $v['good_num'], 'store_id' => $v['store_id'], 'dish_id' => $v['dish_id'], "good_price" => $v['good_price']);
+                                $curr_tax = D('StoreMenuV2')->calculationTaxExportOrder($orderDetail);
+                            }
+                            $curr_deposit = $v['good_num'] * $v['deposit_price'];
+                            $curr_good_discount = ($v['good_old_price'] - $v['good_price']) * $v['good_num'];
+                        } else {
+                            if ($v['menu_version'] == 1)
+                                $curr_tax += $v['good_price'] * $v['good_num'] * $v['tax_num'] / 100;
+                            else {
+                                $orderDetail = array('goods_id' => $v['goods_id'], 'num' => $v['good_num'], 'store_id' => $v['store_id'], 'dish_id' => $v['dish_id'], "good_price" => $v['good_price']);
+                                $curr_tax += D('StoreMenuV2')->calculationTaxExportOrder($orderDetail);
+                            }
+                            $curr_deposit += $v['good_num'] * $v['deposit_price'];
+                            $curr_good_discount += ($v['good_old_price'] - $v['good_price']) * $v['good_num'];
                         }
-                        $curr_deposit = $v['good_num']*$v['deposit_price'];
-                        $curr_good_discount = ($v['good_old_price'] - $v['good_price'])*$v['good_num'];
-                    }else{
-                        if($v['menu_version'] == 1)
-                            $curr_tax += $v['good_price']*$v['good_num']*$v['tax_num']/100;
-                        else{
-                            $orderDetail = array('goods_id'=>$v['goods_id'],'num'=>$v['good_num'],'store_id'=>$v['store_id'],'dish_id'=>$v['dish_id'],"good_price"=>$v['good_price']);
-                            $curr_tax += D('StoreMenuV2')->calculationTaxExportOrder($orderDetail);
-                        }
-                        $curr_deposit += $v['good_num']*$v['deposit_price'];
-                        $curr_good_discount += ($v['good_old_price'] - $v['good_price'])*$v['good_num'];
                     }
 
                     $curr_num++;
 
-                    if($curr_num == count($result_list)) {
+                    if ($curr_num == count($result_list)) {
                         $record_list[$curr_order]['goods_tax'] = $curr_tax;
                         $record_list[$curr_order]['deposit_price'] = $curr_deposit;
                         $record_list[$curr_order]['good_discount'] = $curr_good_discount;
@@ -347,6 +353,12 @@ class DataAction extends BaseAction
                     }
                 }
 
+
+                foreach ($all_behalf_order as $vv){
+                    $record_list[$vv['order_id']]['goods_tax'] = $vv['discount_price'];
+                    $record_list[$vv['order_id']]['deposit_price'] = $vv['deposit_price'];
+                    $record_list[$vv['order_id']]['good_discount'] = 0;
+                }
 
                 $index = 2;
                 foreach ($result_list as $value) {
