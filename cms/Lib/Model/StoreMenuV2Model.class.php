@@ -568,6 +568,52 @@ class StoreMenuV2Model extends Model
         return $tax;
     }
 
+    public function calculationTaxExportPdf($orderDetail){
+        $tax = 0;
+        $gst_tax = 0;
+        $pst_tax = 0;
+        $product = $this->getProduct($orderDetail['goods_id'],$orderDetail['store_id']);
+
+        $dishList = explode("|",$orderDetail['dish_id']);
+
+        $all_dish_price = 0;
+        foreach ($dishList as $dishStr){
+            $dish = explode(',',$dishStr);
+
+            $dishProduct = $this->getProduct($dish[1],$orderDetail['store_id']);
+            if ($dishProduct['tax'] <= 5000) {
+                $gst_tax += floatval($dish[3] * ($dishProduct['tax']/100000))*$dish[2]*$orderDetail['num'];
+                $pst_tax += 0;
+            } else {
+                $gst_tax += floatval($dish[3] * 0.05)*$dish[2]*$orderDetail['num'];
+                $pst_tax += $dish[3]*($dishProduct['tax']/1000 - 5)/100*$dish[2]*$orderDetail['num'];
+            }
+
+            $dishProductTax = floatval($dish[3] * ($dishProduct['tax']/100000))*$dish[2];
+            $tax += $dishProductTax * $orderDetail['num'];
+
+            $all_dish_price += $dish[3]*$dish[2];
+        }
+
+        if ($product['tax'] <= 5000) {
+            $gst_tax += floatval(($orderDetail['good_price'] - $all_dish_price) * ($product['tax']/100000)) * $orderDetail['num'];
+            $pst_tax += 0;
+        }else{
+            $gst_tax += floatval(($orderDetail['good_price'] - $all_dish_price) * 0.05) * $orderDetail['num'];
+            $pst_tax += floatval(($orderDetail['good_price'] - $all_dish_price) * ($product['tax']/1000 - 5)/100) * $orderDetail['num'];
+        }
+
+        $productTax = floatval(($orderDetail['good_price'] - $all_dish_price) * ($product['tax']/100000)) * $orderDetail['num'];
+
+        $tax += $productTax;
+
+        $data['all_tax'] = $tax;
+        $data['gst_tax'] = $gst_tax;
+        $data['pst_tax'] = $pst_tax;
+
+        return $data;
+    }
+
     public function getCategoryTimeWeekStr($categoryTime){
         $weekArr = array();
         foreach ($categoryTime as $time){

@@ -306,7 +306,7 @@ class DataAction extends BaseAction
 
                 $all_behalf_order = array();
                 foreach ($result_list as $k=>$v){
-                    if($v['uid'] == 0){
+                    if($v['uid'] == 0){//取出代客下单的订单
                         $all_behalf_order[] = $v;
                     }else {
                         if ($curr_order != $v['order_id']) {
