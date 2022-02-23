@@ -2503,6 +2503,8 @@ class ShopAction extends BaseAction
                 $total_all_price += $val['price'];
                 $total_cash += $val['price'];
                 $total_reduce += $val['merchant_reduce'];
+
+                $all_tax = $val['discount_price'];
             }else{
                 if($curr_order != $record_id){
                     //记录上一张订单的税费和押金
