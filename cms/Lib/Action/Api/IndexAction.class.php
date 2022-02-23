@@ -1109,7 +1109,7 @@ class IndexAction extends BaseAction
                 $good = D('StoreMenuV2')->getProduct($v['fid'],$sid);
                 $t_good['productId'] = $v['fid'];
                 $t_good['productName'] = $good['name'];
-                $good['price'] = $good['price']/100;
+                $good['price'] = round($good['price']*$goodsDiscount/100,2);
                 $good['tax_num'] = $good['tax']/1000;
                 $good['deposit_price'] = 0;
                 $good['stock_num'] = -1;
@@ -1250,7 +1250,7 @@ class IndexAction extends BaseAction
         //$order_data['price'] = $order_data['discount_price'] - $order_data['merchant_reduce'] - $order_data['balance_reduce'] + $delivery_fee + $return['packing_charge'];//实际要支付的价格
         //$order_data['price'] = $order_data['price'] * 1.05; //税费
 
-        $tax_price = $tax_price + ($delivery_fee + $return['store']['pack_fee'])*$return['store']['tax_num']/100;
+        $tax_price = $return['tax_price'] + ($delivery_fee + $return['store']['pack_fee'])*$return['store']['tax_num']/100;
         $order_data['total_price'] = $return['price'] + $tax_price + $deposit_price + $delivery_fee + $return['store']['pack_fee'] + $order_data['service_fee'];
         $order_data['price'] = $order_data['total_price'];
 
