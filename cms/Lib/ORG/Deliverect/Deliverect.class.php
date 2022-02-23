@@ -205,7 +205,7 @@ class Deliverect
         $data['taxes'][0]['name'] = "productTax";
         $data['taxes'][0]['total'] = intval(round($tax_price,2)*100);
 
-        $data['payment']['amount'] = $productAllPrice + intval(round($tax_price,2)*100) + $data['deliveryCost'] + $data['deliveryCostTax'] + $data['serviceCharge'];
+        $data['payment']['amount'] = $productAllPrice + intval(round($tax_price,2)*100) + $data['deliveryCost'] + $data['deliveryCostTax'] + $data['serviceCharge'] + $data['discountTotal'];
         //var_dump($data);die();
         $result = $this->curlPost($url,$data);
 
