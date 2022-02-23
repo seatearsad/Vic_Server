@@ -134,7 +134,7 @@ class Deliverect
 
         $data['orderIsAlreadyPaid'] = ($order['pay_type'] == "offline" || $order['pay_type'] == "Cash") ? false : true;
         //总价 - 商家优惠 - 包装费 - 包装费税
-        $data['payment']['amount'] = intval(($order['price'] - $order['merchant_reduce'] - $order['packing_charge'] - $order['packing_charge']*$order['store_tax']/100)*100);
+        //$data['payment']['amount'] = intval(($order['price'] - $order['merchant_reduce'] - $order['packing_charge'] - $order['packing_charge']*$order['store_tax']/100)*100);
         $data['payment']['type'] = ($order['pay_type'] == "offline" || $order['pay_type'] == "Cash") ? 1 : 0;
 
         $data['note'] = $order['desc'];
@@ -204,6 +204,8 @@ class Deliverect
         $data['taxes'][0]['taxes'] = $order['store_tax'];
         $data['taxes'][0]['name'] = "productTax";
         $data['taxes'][0]['total'] = intval(round($tax_price,2)*100);
+
+        $data['payment']['amount'] = $productAllPrice + intval(round($tax_price,2)*100) + $data['deliveryCost'] + $data['deliveryCostTax'] + $data['serviceCharge'];
         //var_dump($data);die();
         $result = $this->curlPost($url,$data);
 
