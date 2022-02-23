@@ -356,7 +356,7 @@ class DataAction extends BaseAction
 
                 foreach ($all_behalf_order as $vv){
                     $record_list[$vv['order_id']]['goods_tax'] = $vv['discount_price'];
-                    $record_list[$vv['order_id']]['deposit_price'] = $vv['deposit_price'];
+                    $record_list[$vv['order_id']]['deposit_price'] = $vv['packing_charge'];
                     $record_list[$vv['order_id']]['good_discount'] = 0;
                 }
 
