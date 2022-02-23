@@ -1180,7 +1180,7 @@ class IndexAction extends BaseAction
             $t_good['tax_num'] = $good['tax_num'];
             $t_good['deposit_price'] = $good['deposit_price'];
 
-            if($store['menu_version'] == 1) {
+            if($store['menu_version'] == 1) {//这个计算税已无效
                 $tax_price += $good['price'] * $good['tax_num']/100 * $v['stock'];
             }else{
                 $orderDetail = array('goods_id'=>$t_good['productId'],'num'=>$v['stock'],'store_id'=>$sid,'dish_id'=>$v['dish_id']);

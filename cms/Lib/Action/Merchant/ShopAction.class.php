@@ -2559,6 +2559,7 @@ class ShopAction extends BaseAction
 
                     $all_gst_tax += $curr_order_tax['gst_tax'];
                     $all_pst_tax += $curr_order_tax['pst_tax'];
+                    $all_tax += $curr_order_tax['all_tax'];
                 }
                 $all_deposit += $val['deposit_price']*$val['good_num'];
                 $total_tax = $all_tax + ($val['freight_charge']+$val['packing_charge'])*$val['store_tax']/100;
