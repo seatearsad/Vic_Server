@@ -548,17 +548,22 @@ class StoreMenuV2Model extends Model
     public function calculationTaxExportOrder($orderDetail){
         $tax = 0;
         $product = $this->getProduct($orderDetail['goods_id'],$orderDetail['store_id']);
-        $productTax = floatval(($orderDetail['good_price']/100) * ($product['tax']/100000)) * $orderDetail['num'];
 
-        $tax += $productTax;
         $dishList = explode("|",$orderDetail['dish_id']);
+
+        $all_dish_price = 0;
         foreach ($dishList as $dishStr){
             $dish = explode(',',$dishStr);
 
             $dishProduct = $this->getProduct($dish[1],$orderDetail['store_id']);
-            $dishProductTax = floatval(($dish[3]/100) * ($dishProduct['tax']/100000))*$dish[2];
+            $dishProductTax = floatval($dish[3] * ($dishProduct['tax']/100000))*$dish[2];
+            $all_dish_price += $dish[3];
             $tax += $dishProductTax * $orderDetail['num'];
         }
+
+        $productTax = floatval(($orderDetail['good_price'] - $all_dish_price) * ($product['tax']/100000)) * $orderDetail['num'];
+
+        $tax += $productTax;
 
         return $tax;
     }
