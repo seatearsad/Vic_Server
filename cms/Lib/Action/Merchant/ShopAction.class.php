@@ -2494,6 +2494,7 @@ class ShopAction extends BaseAction
 
                 $total_goods_price += $val['goods_price'];
                 $total_goods_tax += $val['discount_price'];
+                $total_goods_gst_tax += $val['discount_price'];
                 $total_freight_price += $val['freight_charge'];
                 $total_freight_tax += $val['freight_charge']*$val['store_tax']/100;
                 $total_packing_price += $val['packing_charge'];
@@ -2503,8 +2504,6 @@ class ShopAction extends BaseAction
                 $total_all_price += $val['price'];
                 $total_cash += $val['price'];
                 $total_reduce += $val['merchant_reduce'];
-
-                $all_tax = $val['discount_price'];
             }else{
                 if($curr_order != $record_id){
                     //记录上一张订单的税费和押金
