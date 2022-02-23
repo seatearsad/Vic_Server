@@ -1099,6 +1099,10 @@ class IndexAction extends BaseAction
         }
 
         ///////////
+        //获取商品折扣活动
+        $store_discount = D('New_event')->getStoreNewDiscount($sid);
+        $goodsDiscount = $store_discount['goodsDiscount'];
+        $goodsDishDiscount = $store_discount['goodsDishDiscount'];
 
         foreach ($cart_array as $v){
             if($store['menu_version'] == 2){
@@ -1111,6 +1115,7 @@ class IndexAction extends BaseAction
                 $good['stock_num'] = -1;
             }else{
                 $good = D('Shop_goods')->field(true)->where(array('goods_id' => $v['fid']))->find();
+                $good['price'] = round($good['price']*$goodsDiscount,2);
                 $t_good['productId'] = $v['fid'];
                 $t_good['productName'] = lang_substr($good['name'],C('DEFAULT_LANG'));
             }
@@ -1188,7 +1193,7 @@ class IndexAction extends BaseAction
         }
 
 
-        $return = D('Shop_goods')->checkCart($sid, $uid, $orderData);
+        $return = D('Shop_goods')->checkCart($sid, $uid, $orderData,1,0,$goodsDiscount,$goodsDishDiscount);
 
         //garfunkel add
         $area = D('Area')->where(array('area_id'=>$store['city_id']))->find();
@@ -1841,6 +1846,7 @@ class IndexAction extends BaseAction
                     $values = D('Side_dish_value')->where(array('dish_id' => $v['id'], 'status' => 1))->select();
                     foreach ($values as &$vv) {
                         $vv['name'] = lang_substr($vv['name'], C('DEFAULT_LANG'));
+                        $vv['price'] = round($vv['price']*$now_goods['goodsDishDiscount'],2);
                         $vv['list'] = array();
                     }
                     if ($values) {

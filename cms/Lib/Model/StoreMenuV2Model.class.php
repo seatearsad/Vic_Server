@@ -108,7 +108,7 @@ class StoreMenuV2Model extends Model
             $products = $this->getMenuCategoriesProduct($category['id'],$storeId,1,$keyword);
 
             if($from_type == 1){
-                $currCate['product_list'] = $this->arrangeProductWap($products,$category['id']);
+                $currCate['product_list'] = $this->arrangeProductWap($products,$category['id'],$storeId);
             }
 
             $allList[] = $currCate;
@@ -189,7 +189,12 @@ class StoreMenuV2Model extends Model
         return $newCategories;
     }
 
-    public function arrangeProductWap($products,$categoryId){
+    public function arrangeProductWap($products,$categoryId,$store_id){
+        //获取商品折扣活动
+        $store_discount = D('New_event')->getStoreNewDiscount($store_id);
+        $goodsDiscount = $store_discount['goodsDiscount'];
+        $goodsDishDiscount = $store_discount['goodsDishDiscount'];
+
         $newProducts = array();
         foreach ($products as $product){
             $new_product = array();
@@ -197,7 +202,7 @@ class StoreMenuV2Model extends Model
             $new_product['categoryId'] = $categoryId;
             $new_product['product_name'] = $product['name'];
             $new_product['product_desc'] = $product['desc'];
-            $new_product['product_price'] = $product['price']/100;
+            $new_product['product_price'] = round($product['price']/100*$goodsDiscount,2);
             $new_product['is_seckill_price'] = false;
             $new_product['o_price'] = $product['price']/100;
             $new_product['number'] = "";
@@ -240,13 +245,18 @@ class StoreMenuV2Model extends Model
     }
 
     public function arrangeProductAppOne($product,$category){
+        //获取商品折扣活动
+        $store_discount = D('New_event')->getStoreNewDiscount($product['storeId']);
+        $goodsDiscount = $store_discount['goodsDiscount'];
+        $goodsDishDiscount = $store_discount['goodsDishDiscount'];
+
         $new_product['fid'] = $product['id'];
         $new_product['group_id'] = $category ? $category['id'] : 0;
         $new_product['sid'] = $product['storeId'];
         $new_product['name'] = $product['name'];
         $new_product['desc'] = $product['desc'];
         $new_product['market_price'] = $product['price']/100;
-        $new_product['price'] = $product['price']/100;
+        $new_product['price'] = round($product['price']/100*$goodsDiscount,2);
         $new_product['status'] = $product['status'];
         $new_product['number'] = "";
         $new_product['packing_charge'] = 0;
@@ -274,12 +284,17 @@ class StoreMenuV2Model extends Model
     }
 
     public function arrangeProductWapShow($product){
+        //获取商品折扣活动
+        $store_discount = D('New_event')->getStoreNewDiscount($product['storeId']);
+        $goodsDiscount = $store_discount['goodsDiscount'];
+        $goodsDishDiscount = $store_discount['goodsDishDiscount'];
+
         $newProduct = array();
         $newProduct['goods_id'] = $product['id'];
         $newProduct['store_id'] = $product['storeId'];
         $newProduct['name'] = $product['name'];
         $newProduct['des'] = $product['desc'];
-        $newProduct['price'] = $product['price']/100;
+        $newProduct['price'] = round($product['price']/100*$goodsDiscount,2);
         $newProduct['image'] = $product['image'];
         $newProduct['pic_arr'] = array(array('title'=>'','url'=>$product['image']));
         $newProduct['unit'] = "";
@@ -296,6 +311,11 @@ class StoreMenuV2Model extends Model
      * @return array
      */
     public function arrangeDishWap($dish_list,$productId,$storeId,$from){
+        //获取商品折扣活动
+        $store_discount = D('New_event')->getStoreNewDiscount($storeId);
+        $goodsDiscount = $store_discount['goodsDiscount'];
+        $goodsDishDiscount = $store_discount['goodsDishDiscount'];
+
         $dish_list_new = array();
         foreach ($dish_list as $dish){
             $newDish = array();
@@ -318,7 +338,7 @@ class StoreMenuV2Model extends Model
                 $newSide['id'] = $l['id'];
                 $newSide['dish_id'] = $dish['id'];
                 $newSide['name'] = $l['name'];
-                $newSide['price'] = $l['price']/100;
+                $newSide['price'] = round($l['price']/100*$goodsDishDiscount,2);
                 $newSide['status'] = $l['status'];
 
                 if($l['subNum'] > 0){
@@ -503,9 +523,14 @@ class StoreMenuV2Model extends Model
     }
 
     public function calculationTaxFromOrder($orderDetail){
+        //获取商品折扣活动
+        $store_discount = D('New_event')->getStoreNewDiscount($orderDetail['store_id']);
+        $goodsDiscount = $store_discount['goodsDiscount'];
+        $goodsDishDiscount = $store_discount['goodsDishDiscount'];
+
         $tax = 0;
         $product = $this->getProduct($orderDetail['goods_id'],$orderDetail['store_id']);
-        $productTax = floatval(($product['price']/100) * ($product['tax']/100000)) * $orderDetail['num'];
+        $productTax = floatval(($product['price']/100*$goodsDiscount) * ($product['tax']/100000)) * $orderDetail['num'];
 
         $tax += $productTax;
         $dishList = explode("|",$orderDetail['dish_id']);
@@ -513,9 +538,32 @@ class StoreMenuV2Model extends Model
             $dish = explode(',',$dishStr);
 
             $dishProduct = $this->getProduct($dish[1],$orderDetail['store_id']);
-            $dishProductTax = floatval(($dishProduct['price']/100) * ($dishProduct['tax']/100000))*$dish[2];
+            $dishProductTax = floatval(($dishProduct['price']/100*$goodsDishDiscount) * ($dishProduct['tax']/100000))*$dish[2];
             $tax += $dishProductTax * $orderDetail['num'];
         }
+
+        return $tax;
+    }
+
+    public function calculationTaxExportOrder($orderDetail){
+        $tax = 0;
+        $product = $this->getProduct($orderDetail['goods_id'],$orderDetail['store_id']);
+
+        $dishList = explode("|",$orderDetail['dish_id']);
+
+        $all_dish_price = 0;
+        foreach ($dishList as $dishStr){
+            $dish = explode(',',$dishStr);
+
+            $dishProduct = $this->getProduct($dish[1],$orderDetail['store_id']);
+            $dishProductTax = floatval($dish[3] * ($dishProduct['tax']/100000))*$dish[2];
+            $all_dish_price += $dish[3]*$dish[2]*$orderDetail['num'];
+            $tax += $dishProductTax * $orderDetail['num'];
+        }
+
+        $productTax = floatval(($orderDetail['good_price'] - $all_dish_price) * ($product['tax']/100000)) * $orderDetail['num'];
+
+        $tax += $productTax;
 
         return $tax;
     }
