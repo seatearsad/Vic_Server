@@ -25,16 +25,27 @@
                                     <textarea class="form-control" name="desc" validate="required:true">{pigcms{$coupon.desc|default=''}</textarea>
                                 </div>
                             </div>
+                            <if condition="$event_type neq 6">
                             <div class="form-group  row">
                                 <label class="col-sm-3 col-form-label">{pigcms{:L('G_MIN_ORDER')}</label>
                                 <div class="col-sm-9">
                                     <input type="text" class="form-control" name="use_price" size="20" validate="maxlength:20,required:true" value="{pigcms{$coupon.use_price|default='0.00'}"/>
                                 </div>
                             </div>
+                            </if>
                             <div class="form-group  row">
-                                <label class="col-sm-3 col-form-label">{pigcms{:L('G_DISCOUNT_AMOUNT')}</label>
+                                <label class="col-sm-3 col-form-label">
+                                    <if condition="$event_type neq 6">
+                                        {pigcms{:L('G_DISCOUNT_AMOUNT')}
+                                        <else />
+                                        {pigcms{:L('G_DISCOUNT_AMOUNT_GOODS')}
+                                    </if>
+                                </label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" name="discount" size="20" validate="maxlength:20,required:true" value="{pigcms{$coupon.discount|default='0.00'}"/>
+                                    <input type="text" class="form-control" name="discount" size="20" validate="maxlength:20,required:true" value="{pigcms{$coupon.discount|default=''}"/>
+                                    <if condition="$event_type eq 6">
+                                        eg. Key in 0.80 for a 20% off discount
+                                    </if>
                                 </div>
                             </div>
                             <div class="form-group  row">
@@ -47,6 +58,8 @@
                                 <label class="col-sm-3 col-form-label">
                                     <if condition="$event_type eq 3 or $event_type eq 4 or $event_type eq 5">
                                         {pigcms{:L('G_COMBINED')}
+                                        <elseif condition="$event_type eq 6" />
+                                            Apply discount to options
                                         <else />
                                         {pigcms{:L('G_COUP_TYPE')}
                                     </if>
@@ -56,6 +69,8 @@
                                         <option value="0" <if condition="$coupon.type eq 0">selected</if>>
                                         <if condition="$event_type eq 3 or $event_type eq 4 or $event_type eq 5">
                                             {pigcms{:L('G_NO')}
+                                            <elseif condition="$event_type eq 6" />
+                                            NO
                                             <else />
                                             {pigcms{:L('G_INVITEE')}
                                         </if>
@@ -63,6 +78,8 @@
                                         <option value="1" <if condition="$coupon.type eq 1">selected</if>>
                                         <if condition="$event_type eq 3 or $event_type eq 4 or $event_type eq 5">
                                             {pigcms{:L('G_YES')}
+                                            <elseif condition="$event_type eq 6" />
+                                            YES
                                             <else />
                                             {pigcms{:L('G_INVITER')}
                                         </if>

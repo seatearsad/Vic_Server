@@ -346,6 +346,113 @@ class CouponAction extends BaseAction {
 			$this->display();
 		}
 
+		public function pull_export(){
+            set_time_limit(0);
+            require_once APP_PATH . 'Lib/ORG/phpexcel/PHPExcel.php';
+            $title = 'Claim List';
+            $objExcel = new PHPExcel();
+            $objProps = $objExcel->getProperties();
+            // 设置文档基本属性
+            $objProps->setCreator($title);
+            $objProps->setTitle($title);
+            $objProps->setSubject($title);
+            $objProps->setDescription($title);
+
+            $order_string = 'h.receive_time DESC ,h.id DESC';
+            $where['h.uid']=array('neq','');
+            if(!empty($_GET['keyword'])){
+                if ($_GET['searchtype'] == 'nickname') {
+                    $where['u.nickname'] =array('like', "%".$_GET['keyword']."%");
+                }elseif ($_GET['searchtype'] == 'uid'){
+                    $where['h.uid'] = $_GET['keyword'];
+                }elseif ($_GET['searchtype'] == 'cid'){
+                    $where['c.coupon_id'] = $_GET['keyword'];
+                    //$where['c.notice'] = $_GET['keyword'];
+                }
+            }
+            if($this->system_session['level'] == 3) {
+                $where['c.city_id'] = $this->system_session['area_id'];
+            }
+            $coupon = M('System_coupon_hadpull');
+
+            $coupon = M('System_coupon_hadpull');
+            $count_count = $coupon->join('as h left join '.C('DB_PREFIX').'system_coupon c ON h.coupon_id = c.coupon_id')->join(C('DB_PREFIX').'user u ON h.uid = u.uid')->field('h.id,c.name,u.nickname,h.num,h.receive_time,h.is_use,h.phone,h.admin_name')->where($where)->count();
+
+            $length = ceil($count_count / 1000);
+            for ($i = 0; $i < $length; $i++) {
+                $i && $objExcel->createSheet();
+                $objExcel->setActiveSheetIndex($i);
+                $objExcel->getActiveSheet()->setTitle(strval($i + 1));
+                $objActSheet = $objExcel->getActiveSheet();
+                $objExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
+                $objExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
+                $objExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
+                $objExcel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
+                $objExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
+                $objExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
+                $objExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
+                $objExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
+                $objExcel->getActiveSheet()->getColumnDimension('I')->setAutoSize(true);
+                $objExcel->getActiveSheet()->getColumnDimension('J')->setAutoSize(true);
+
+                $objActSheet->setCellValue('A1', 'ID');
+                $objActSheet->setCellValue('B1', 'Coupon Name');
+                $objActSheet->setCellValue('C1', 'Coupon ID');
+                $objActSheet->setCellValue('D1', 'User Name');
+                $objActSheet->setCellValue('E1', 'User ID');
+                $objActSheet->setCellValue('F1', 'User E-mail');
+                $objActSheet->setCellValue('G1', 'Quantity');//无
+                $objActSheet->setCellValue('H1', 'Date');
+                $objActSheet->setCellValue('I1', 'Admin');
+                $objActSheet->setCellValue('J1', 'Status');
+
+                $coupon_list = $coupon->join('as h left join '.C('DB_PREFIX').'system_coupon c ON h.coupon_id = c.coupon_id')->join(C('DB_PREFIX').'user u ON h.uid = u.uid')->field('h.id,c.coupon_id,h.uid,c.name,u.nickname,u.email,h.num,h.receive_time,h.is_use,h.phone,h.admin_name')->where($where)->order($order_string)->limit($i*1000 . ',1000')->select();
+
+                $index = 2;
+                foreach ($coupon_list as $value){
+                    if($value['is_use'] == 1){
+                        $statusName = "Used";
+                    }elseif($value['is_use'] == 0){
+                        $statusName = "Not Yet";
+                    }elseif($value['is_use'] == 2){
+                        $statusName = "Void";
+                    }else{
+                        $statusName = "";
+                    }
+
+                    $objActSheet->setCellValueExplicit('A' . $index, $value['id']);
+                    $objActSheet->setCellValueExplicit('B' . $index, $value['name']);
+                    $objActSheet->setCellValueExplicit('C' . $index, $value['coupon_id']);
+                    $objActSheet->setCellValueExplicit('D' . $index, $value['nickname']);
+                    $objActSheet->setCellValueExplicit('E' . $index, $value['uid']);
+                    $objActSheet->setCellValueExplicit('F' . $index, $value['email']);
+                    $objActSheet->setCellValueExplicit('G' . $index, $value['num']);
+                    $objActSheet->setCellValueExplicit('H' . $index, date('Y-m-d',$value['receive_time']));
+                    $objActSheet->setCellValueExplicit('I' . $index, $value['admin_name']);
+                    $objActSheet->setCellValueExplicit('J' . $index, $statusName);
+
+                    $index++;
+                }
+
+                sleep(2);
+            }
+
+            //输出
+            $objWriter = new PHPExcel_Writer_Excel5($objExcel);
+            ob_end_clean();
+            header("Pragma: public");
+            header("Expires: 0");
+            header("Cache-Control:must-revalidate, post-check=0, pre-check=0");
+            header("Content-Type:application/force-download");
+            header("Content-Type:application/vnd.ms-execl");
+            header("Content-Type:application/octet-stream");
+            header("Content-Type:application/download");
+            header('Content-Disposition:attachment;filename="' . $title . '.xls"');
+            header("Content-Transfer-Encoding:binary");
+            $objWriter->save('php://output');
+            exit();
+        }
+
 		public function del(){
 			if(IS_POST){
 				if(!empty($_POST['coupon_id'])){

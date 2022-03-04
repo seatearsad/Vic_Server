@@ -135,6 +135,7 @@
             {{ d.desc }}
         </span>
         </div>
+        {{# if(d.link_type == 0){ }}
         {{# if(d.info != null){ }}
         {{# for(var i = 0, len = d.info.length; i < len; i++){ }}
         {{# if(i > 0){ }}
@@ -196,7 +197,9 @@
         {{# } }}
         <div class="b_line"></div>
         {{# } }}
-
+        {{# }else{ }}
+        <div style="margin-top: 20px;">Please check order details with your integration partner.</div>
+        {{# } }}
         <div class="order_total">
             <div>{pigcms{:L('QW_SUBTOTAL')}: ${{ d.goods_price }}</div>
             <div>{pigcms{:L('QW_TAX')}: ${{ d.tax_price }}</div>

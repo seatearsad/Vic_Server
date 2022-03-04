@@ -28,7 +28,7 @@ class Deliverect
         'cash' => 1
     );
 
-    private $url = "https://api.deliverect.com/";
+    private $url = "https://api.deliverect.com/";//"https://api.staging.deliverect.com/";
 
     //获取token
     private $getTokenUrl = "oauth/token";
@@ -133,7 +133,8 @@ class Deliverect
         $data['deliveryAddress']['extraAddressInfo'] = $customer['detail'];
 
         $data['orderIsAlreadyPaid'] = ($order['pay_type'] == "offline" || $order['pay_type'] == "Cash") ? false : true;
-        $data['payment']['amount'] = intval(($order['price'] - $order['merchant_reduce'])*100);
+        //总价 - 商家优惠 - 包装费 - 包装费税
+        //$data['payment']['amount'] = intval(($order['price'] - $order['merchant_reduce'] - $order['packing_charge'] - $order['packing_charge']*$order['store_tax']/100)*100);
         $data['payment']['type'] = ($order['pay_type'] == "offline" || $order['pay_type'] == "Cash") ? 1 : 0;
 
         $data['note'] = $order['desc'];
@@ -142,17 +143,22 @@ class Deliverect
         $productAllPrice = 0;
         $items = array();
 
+        //获取商品折扣活动
+        $store_discount = D('New_event')->getStoreNewDiscount($order['store_id']);
+        $goodsDiscount = $store_discount['goodsDiscount'];
+        $goodsDishDiscount = $store_discount['goodsDishDiscount'];
+
         $tax_price = 0;
         foreach ($order_detail as $detail){
             $item = array();
             $product = D("StoreMenuV2")->getProduct($detail['goods_id'],$order['store_id']);
             $item['plu'] = $product['plu'];
             $item['name'] = $product['name'];
-            $item['price'] = intval($product['price']);
+            $item['price'] = intval(round($product['price']*$goodsDiscount));
             $item['quantity'] = intval($detail['num']);
             $item['remark'] = "";
 
-            $productAllPrice += $item['price'];
+            $productAllPrice += $item['price']*$item['quantity'];
 
             $subItems = array();
             if($detail['dish_id'] != "") {
@@ -163,10 +169,10 @@ class Deliverect
                     $sub_product = D("StoreMenuV2")->getProduct($sub_dish[1], $order['store_id']);
                     $subItem['plu'] = $sub_product['plu'];
                     $subItem['name'] = $sub_product['name'];
-                    $subItem['price'] = intval($sub_product['price']);
+                    $subItem['price'] = intval(round($sub_product['price']*$goodsDishDiscount));
                     $subItem['quantity'] = intval($sub_dish[2]);
 
-                    $productAllPrice += $subItem['price'];
+                    $productAllPrice += $subItem['price']*$subItem['quantity']*$item['quantity'];
 
                     $subItems[] = $subItem;
                 }
@@ -198,6 +204,8 @@ class Deliverect
         $data['taxes'][0]['taxes'] = $order['store_tax'];
         $data['taxes'][0]['name'] = "productTax";
         $data['taxes'][0]['total'] = intval(round($tax_price,2)*100);
+
+        $data['payment']['amount'] = $productAllPrice + intval(round($tax_price,2)*100) + $data['deliveryCost'] + $data['deliveryCostTax'] + $data['serviceCharge'] + $data['discountTotal'];
         //var_dump($data);die();
         $result = $this->curlPost($url,$data);
 

@@ -795,7 +795,7 @@ class MyAction extends BaseAction{
             //var_dump($address_list_allow);die();
             foreach ($adress_list as $v) {
                 if ($v['is_allow'] == 0) {
-                    $address_list_not_allow[] = $v;;
+                    $address_list_not_allow[] = $v;
                 }
             }
             //var_dump($address_list_allow);

@@ -9,9 +9,36 @@
 class EventAction extends BaseAction
 {
     public function index(){
-        $event_list = D('New_event')->getEventList(-1);
+        //$event_list = D('New_event')->getEventList(-1);
+        $where = array();
+        if($_GET['type_select'] != 0) {
+            $where['type'] = $_GET['type_select'];
+            $this->assign('type',$_GET['type_select']);
+        }
+        if($_GET['city_select'] != 0) {
+            $where['city_id'] = $_GET['city_select'];
+            $this->assign('city_id',$_GET['city_select']);
+        }
+
+        $count_count = D('New_event')->where($where)->count();
+        import('@.ORG.system_page');
+        $p = new Page($count_count, 15);
+        $list = D('New_event')->field(true)->where($where)->order('status asc,id desc')->limit($p->firstRow . ',' . $p->listRows)->select();
+
+        $pagebar = $p->show2();
+        $this->assign('pagebar', $pagebar);
+
+        $event_list = D('New_event')->arrange_list(-1,$list);
+
         $this->assign('event_list',$event_list);
         $this->assign('module_name','Market');
+
+        $city = D('Area')->where(array('area_type'=>2,'is_open'=>1))->select();
+        $this->assign('city',$city);
+
+        $type_list = D('New_event')->getTypeName(-1);
+        $this->assign('type_list',$type_list);
+
         $this->display();
     }
 
@@ -95,7 +122,7 @@ class EventAction extends BaseAction
             $coupon_list = D('New_event_coupon')->where(array('event_id'=>$event_id))->select();
             foreach ($coupon_list as &$v){
                 $v = D('New_event')->getCouponUserNum($v);
-                if($event['type'] == 4 || $event['type'] == 5){
+                if($event['type'] == 4 || $event['type'] == 5 || $event['type'] == 6){
                     $store = D('Merchant_store')->field('name')->where(array('store_id'=>$v['limit_day']))->find();
                     $v['store_name'] = lang_substr($store['name'],C('DEFAULT_LANG'));
                 }
@@ -149,7 +176,7 @@ class EventAction extends BaseAction
         $type_name = L('G_EFFECTIVE_DAYS');
         if($event['type'] == 3){
             $type_name = L('G_DISTANCE_LIMIT');
-        }else if($event['type'] == 4 || $event['type'] == 5){
+        }else if($event['type'] == 4 || $event['type'] == 5 || $event['type'] == 6){
             $type_name = L('G_STORE_ID');
         }
 
@@ -161,10 +188,14 @@ class EventAction extends BaseAction
             $data['event_id'] = $_POST['event_id'];
             $data['name'] = $_POST['name'];
             $data['desc'] = $_POST['desc'];
-            $data['use_price'] = $_POST['use_price'];
+            $data['use_price'] = $_POST['use_price'] ? $_POST['use_price'] : 0;
             $data['discount'] = $_POST['discount'];
             $data['limit_day'] = $_POST['limit_day'];
-            $data['type'] = $_POST['type'];
+            $data['type'] = $_POST['type'] ? $_POST['type'] : 0;
+
+            if($_POST['discount'] == 0){
+                $this->frame_submit_tips(0, 'Discount cannot be 0.');
+            }
 
             if($_POST['coupon_id'] != 0){
                 D('New_event_coupon')->where(array('id'=>$_POST['coupon_id']))->save($data);
@@ -183,7 +214,7 @@ class EventAction extends BaseAction
             $coupon = D('New_event_coupon')->where(array('id'=>$id))->find();
             if($coupon){
                 $event = D('New_event')->where(array('id'=>$coupon['event_id']))->find();
-                if($event['type'] == 4 || $event['type'] == 5){
+                if($event['type'] == 4 || $event['type'] == 5 || $event['type'] == 6){
                     D('New_event_coupon')->where(array('id'=>$id))->delete();
                     $this->success('Success');
                 }else{

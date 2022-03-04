@@ -254,31 +254,31 @@
                     Approved!
                     </div>
                 </if>
-                <if condition="$user['bag_get_type'] eq 1 and $userImg['bag_express_num'] neq ''">
+                <if condition="$user['bag_get_type'] eq 2 and $userImg['bag_express_num'] neq ''">
                     <div class="status_show" style="color: #72AB29">
                     <span class="material-icons">check_circle</span>
                         Shipped!
                         <br><label style="color: gray;margin-left: 28px;">Tracking# {pigcms{$userImg['bag_express_num']}</label>
                     </div>
                 </if>
-                <if condition="($user['bag_get_type'] eq 1 and $userImg['bag_express_num'] eq '') or $user['bag_get_type'] eq 2">
+                <if condition="($user['bag_get_type'] eq 2 and $userImg['bag_express_num'] eq '') or $user['bag_get_type'] eq 1">
                     <div class="status_show" style="color: #72AB29">
                     <span class="material-icons">check_circle</span>
                     Payment Success!
                     </div>
                 </if>
 
-                <if condition="$user['bag_get_type'] eq 2 and $userImg['bag_received'] eq 0 and $city['bag_url_show'] eq 1">
+                <if condition="$user['bag_get_type'] eq 1 and $userImg['bag_received'] eq 0 and $city['bag_url_show'] eq 1">
                     <div class="status_txt">
                     Please book a time slot {pigcms{$city['bag_address_url']} to pick up your delivery bag at {pigcms{$city['bag_address']}
                     </div>
                 </if>
-                <if condition="$user['bag_get_type'] eq 2 and $userImg['bag_received'] eq 0 and $city['bag_url_show'] eq 0">
+                <if condition="$user['bag_get_type'] eq 1 and $userImg['bag_received'] eq 0 and $city['bag_url_show'] eq 0">
                     <div class="status_txt">
                     Please pick up your delivery bag at {pigcms{$city['bag_address']}
                     </div>
                 </if>
-                <if condition="$user['bag_get_type'] eq 1 and $userImg['bag_express_num'] eq ''">
+                <if condition="$user['bag_get_type'] eq 2 and $userImg['bag_express_num'] eq ''">
                     <div class="status_txt">
                     We'll ship your delivery bag to you and a tracking number will be available soon.
                     </div>

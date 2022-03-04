@@ -454,6 +454,12 @@ function updatePosition(lat,lng){
     return message;
 }
 
+function appToPosition(lat,long){
+    updatePosition(lat,long);
+
+    return "{pigcms{$deliver_session['uid']}";
+}
+
 $('#open_map').click(function () {
     var status = "{pigcms{$supply['status']}";
     if(typeof (window.linkJs) != 'undefined'){

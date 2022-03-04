@@ -533,12 +533,22 @@ class StoreModel extends Model
     public function arrange_goods_for_goods($goodList){
         $goods_image_class = new goods_image();
         $returnList = array();
+
         foreach($goodList as $k=>$v) {
+            if($v['menu_version'] == 1) {
+                //获取商品折扣活动
+                $store_discount = D('New_event')->getStoreNewDiscount($v['store_id']);
+                $goodsDiscount = $store_discount['goodsDiscount'];
+                $goodsDishDiscount = $store_discount['goodsDishDiscount'];
+            }else{
+                $goodsDiscount = 1;
+            }
+
             $returnList[$k]['fid'] = $v['goods_id'];
             $returnList[$k]['group_id'] = $v['sort_id'];
             $returnList[$k]['sid'] = $v['store_id'];
             $returnList[$k]['name'] = lang_substr($v['name'], C('DEFAULT_LANG'));
-            $returnList[$k]['price'] = $v['price'];
+            $returnList[$k]['price'] = round($v['price']*$goodsDiscount,2);
             $returnList[$k]['market_price'] = $v['old_price'];
             $returnList[$k]['desc'] = $v['des'];
             $returnList[$k]['stock'] = $v['stock_num'] == -1 ? 10000 : $v['stock_num'];//10000;//库存
@@ -826,10 +836,15 @@ class StoreModel extends Model
         return $result;
     }
 
-    public function getDefaultAdr($uid){
+    public function getDefaultAdr($uid,$address_id=-1){
         $addressModle = D('User_adress');
 
-        $address = $addressModle->field(true)->where(array('uid'=>$uid,'default'=>1))->find();
+        if($address_id != -1){
+            $address = $addressModle->field(true)->where(array('adress_id'=>$address_id))->find();
+        }else {
+            $address = $addressModle->field(true)->where(array('uid' => $uid, 'default' => 1))->find();
+        }
+
         //if ($address == null)
         //    $address = $addressModle->field(true)->where(array('uid'=>$uid))->find();
 
@@ -849,14 +864,33 @@ class StoreModel extends Model
             $store = $this->get_store_by_id($sid);
         }
 
+        $result = array();
         foreach ($adr as $v){
             $result[] = $this->arrange_address($v,$store);
         }
+
         if($store) {
             $cmf_arr = array_column($result, 'distance');
             array_multisort($cmf_arr, SORT_ASC, $result);
-            $cmf_arr = array_column($result, 'is_allow');
-            array_multisort($cmf_arr, SORT_DESC, $result);
+            //$cmf_arr = array_column($result, 'is_allow');
+            //array_multisort($cmf_arr, SORT_DESC, $result);
+
+            $address_list_allow = array();
+            $address_list_not_allow = array();
+
+            foreach ($result as $v) {
+                if ($v['is_allow'] == 1) {
+                    $address_list_allow[] = $v;
+                }
+            }
+
+            foreach ($result as $v) {
+                if ($v['is_allow'] == 0) {
+                    $address_list_not_allow[] = $v;
+                }
+            }
+
+            $result = array_merge($address_list_allow,$address_list_not_allow);
         }
 
         return $result;
@@ -961,8 +995,8 @@ class StoreModel extends Model
         return $data;
     }
 
-    public function CalculationDeliveryFee($uid,$sid){
-        $address = $this->getDefaultAdr($uid);
+    public function CalculationDeliveryFee($uid,$sid,$address_id=-1){
+        $address = $this->getDefaultAdr($uid,$address_id);
         $store = $this->get_store_by_id($sid);
 
         //$distance = getDistance($address['mapLat'], $address['mapLng'], $store['lat'], $store['lng']);

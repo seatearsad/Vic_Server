@@ -88,7 +88,7 @@ class GroupserviceAction extends BaseAction{
             $where = array('deliver_type' => $deliver_type, 'order' => $order, 'lat' => $lat, 'long' => $long, 'cat_id' => $cat_id, 'cat_fid' => $cat_fid, 'page' => $page);
 			$key && $where['key'] = $key;
 
-			$lists = D('Merchant_store_shop')->get_list_by_option($where,3);
+			$lists = D('Merchant_store_shop')->get_list_by_option($where,3,-1,$city_id);
 			$return = array();
 			$now_time = date('H:i:s');
 			$n= 1;

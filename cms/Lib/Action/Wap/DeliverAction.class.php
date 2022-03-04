@@ -3077,9 +3077,9 @@ class DeliverAction extends BaseAction
             }else{//已上传图片
                 $is_online = 1;
             }
-        }else if($now_user['bag_get_type'] == 1){//邮寄背包
+        }else if($now_user['bag_get_type'] == 1){//自提背包
 
-        }else if($now_user['bag_get_type'] == 2){//自提背包
+        }else if($now_user['bag_get_type'] == 2){//邮寄背包
 
         }else{//未选择
 
@@ -3633,7 +3633,7 @@ class DeliverAction extends BaseAction
     }
 
     public function sendUpdateMail($uid,$file_name){
-        $email = array(array("address"=>"product@tutti.app","userName"=>"Tutti"));
+        $email = array(array("address"=>"driver@tutti.app","userName"=>"Tutti"));
         $title = "Driver Doc Update";
         $body = $this->getMailBody($uid,$file_name);
         $mail = getMail($title, $body, $email);

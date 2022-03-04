@@ -1099,18 +1099,23 @@ class IndexAction extends BaseAction
         }
 
         ///////////
+        //获取商品折扣活动
+        $store_discount = D('New_event')->getStoreNewDiscount($sid);
+        $goodsDiscount = $store_discount['goodsDiscount'];
+        $goodsDishDiscount = $store_discount['goodsDishDiscount'];
 
         foreach ($cart_array as $v){
             if($store['menu_version'] == 2){
                 $good = D('StoreMenuV2')->getProduct($v['fid'],$sid);
                 $t_good['productId'] = $v['fid'];
                 $t_good['productName'] = $good['name'];
-                $good['price'] = $good['price']/100;
+                $good['price'] = round($good['price']*$goodsDiscount/100,2);
                 $good['tax_num'] = $good['tax']/1000;
                 $good['deposit_price'] = 0;
                 $good['stock_num'] = -1;
             }else{
                 $good = D('Shop_goods')->field(true)->where(array('goods_id' => $v['fid']))->find();
+                $good['price'] = round($good['price']*$goodsDiscount,2);
                 $t_good['productId'] = $v['fid'];
                 $t_good['productName'] = lang_substr($good['name'],C('DEFAULT_LANG'));
             }
@@ -1175,7 +1180,7 @@ class IndexAction extends BaseAction
             $t_good['tax_num'] = $good['tax_num'];
             $t_good['deposit_price'] = $good['deposit_price'];
 
-            if($store['menu_version'] == 1) {
+            if($store['menu_version'] == 1) {//这个计算税已无效
                 $tax_price += $good['price'] * $good['tax_num']/100 * $v['stock'];
             }else{
                 $orderDetail = array('goods_id'=>$t_good['productId'],'num'=>$v['stock'],'store_id'=>$sid,'dish_id'=>$v['dish_id']);
@@ -1188,7 +1193,7 @@ class IndexAction extends BaseAction
         }
 
 
-        $return = D('Shop_goods')->checkCart($sid, $uid, $orderData);
+        $return = D('Shop_goods')->checkCart($sid, $uid, $orderData,1,0,$goodsDiscount,$goodsDishDiscount);
 
         //garfunkel add
         $area = D('Area')->where(array('area_id'=>$store['city_id']))->find();
@@ -1229,7 +1234,7 @@ class IndexAction extends BaseAction
         $order_data['lng'] = $address['longitude'];
 
         $order_data['expect_use_time'] = D('Store')->get_store_delivery_time($sid);
-        $order_data['freight_charge'] = $delivery_fee = D('Store')->CalculationDeliveryFee($uid,$sid);
+        $order_data['freight_charge'] = $delivery_fee = D('Store')->CalculationDeliveryFee($uid,$sid,$adr_id);
 
         $order_data['is_pick_in_store'] = 0;
 
@@ -1245,7 +1250,7 @@ class IndexAction extends BaseAction
         //$order_data['price'] = $order_data['discount_price'] - $order_data['merchant_reduce'] - $order_data['balance_reduce'] + $delivery_fee + $return['packing_charge'];//实际要支付的价格
         //$order_data['price'] = $order_data['price'] * 1.05; //税费
 
-        $tax_price = $tax_price + ($delivery_fee + $return['store']['pack_fee'])*$return['store']['tax_num']/100;
+        $tax_price = $return['tax_price'] + ($delivery_fee + $return['store']['pack_fee'])*$return['store']['tax_num']/100;
         $order_data['total_price'] = $return['price'] + $tax_price + $deposit_price + $delivery_fee + $return['store']['pack_fee'] + $order_data['service_fee'];
         $order_data['price'] = $order_data['total_price'];
 
@@ -1841,6 +1846,7 @@ class IndexAction extends BaseAction
                     $values = D('Side_dish_value')->where(array('dish_id' => $v['id'], 'status' => 1))->select();
                     foreach ($values as &$vv) {
                         $vv['name'] = lang_substr($vv['name'], C('DEFAULT_LANG'));
+                        $vv['price'] = round($vv['price']*$now_goods['goodsDishDiscount'],2);
                         $vv['list'] = array();
                     }
                     if ($values) {

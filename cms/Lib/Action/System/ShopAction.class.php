@@ -619,18 +619,20 @@ class ShopAction extends BaseAction
         $temp = array();
         if ($store_ids) {
             $store_ids = implode(',', $store_ids);
-            $sql = "SELECT `m`.`name` AS merchant_name, `s`.`name` AS store_name, `s`.`phone` AS store_phone, `s`.`store_id`,`s`.`tax_num` FROM " . C('DB_PREFIX') . "merchant AS m INNER JOIN " . C('DB_PREFIX') . "merchant_store AS s ON `s`.`mer_id`=`m`.`mer_id` WHERE `s`.`store_id` IN ($store_ids)";
+            $sql = "SELECT `m`.`name` AS merchant_name, `s`.`name` AS store_name, `s`.`phone` AS store_phone, `s`.`store_id`,`s`.`tax_num`,`s`.`link_type` FROM " . C('DB_PREFIX') . "merchant AS m INNER JOIN " . C('DB_PREFIX') . "merchant_store AS s ON `s`.`mer_id`=`m`.`mer_id` WHERE `s`.`store_id` IN ($store_ids)";
             $mod = new Model();
             $res = $mod->query($sql);
             foreach ($res as $r) {
                 $temp[$r['store_id']] = $r;
             }
         }
+
         foreach ($result['order_list'] as &$li) {
             $li['merchant_name'] = isset($temp[$li['store_id']]['merchant_name']) ? $temp[$li['store_id']]['merchant_name'] : '';
             $li['store_name'] = isset($temp[$li['store_id']]['store_name']) ? $temp[$li['store_id']]['store_name'] : '';
             $li['store_phone'] = isset($temp[$li['store_id']]['store_phone']) ? $temp[$li['store_id']]['store_phone'] : '';
             $li['duty_price'] = sprintf("%.2f", $li['total_price'] * 0.05);
+            $li['link_type'] = $temp[$li['store_id']]['link_type'];
             $tax_price = 0;
             $order = D('Shop_order')->get_order_detail(array('order_id' => $li['order_id']));
             foreach ($order['info'] as $k => $v) {

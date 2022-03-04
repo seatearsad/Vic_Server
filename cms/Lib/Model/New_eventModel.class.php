@@ -29,6 +29,13 @@ class New_eventModel extends Model
         }
 
         $list = $this->field(true)->where($where)->select();
+
+        $new_list = $this->arrange_list($status,$list);
+
+        return $new_list;
+    }
+
+    public function arrange_list($status,$list){
         $new_list = array();
         foreach ($list as &$v){
             $v['type_name'] = $this->getTypeName($v['type']);
@@ -82,9 +89,10 @@ class New_eventModel extends Model
      * 3 规定范围内免配送费
      * 4 店铺满减活动
      * 5 店铺减免配送费
+     * 6 店铺商品折扣
      */
     public function getTypeName($type){
-        $typeName = ['无效活动',L('G_NEW_USER_REGISTRATION'),L('G_FRIEND_REFERRAL'),L('G_FREE_DISTANCE'),L('G_MERCHANT_DISCOUNT'),L('G_FREE_SELECTED')];
+        $typeName = ['All',L('G_NEW_USER_REGISTRATION'),L('G_FRIEND_REFERRAL'),L('G_FREE_DISTANCE'),L('G_MERCHANT_DISCOUNT'),L('G_FREE_SELECTED'),L("G_GOOD_DISCOUNT")];
         if($type == -1)
             return $typeName;
         else
@@ -115,7 +123,7 @@ class New_eventModel extends Model
         }
 
         //店铺减免配送费不判断是否存在
-        if($type != 5) {
+        if($type != 5 && $type != 6) {
             if ($this->where($where)->find()) {
                 return false;
             }
@@ -345,5 +353,30 @@ class New_eventModel extends Model
 //            die();
 //        }
         return $delivery_coupon;
+    }
+
+    public function getStoreNewDiscount($store_id){
+        //获取商品折扣活动
+        $eventList = $this->getEventList(1,6);
+        $store_coupon = null;
+        if(count($eventList) > 0) {
+            foreach ($eventList as $event) {
+                $curr_coupon = D('New_event_coupon')->where(array('event_id' => $event['id'], 'limit_day' => $store_id))->find();
+                if($curr_coupon) $store_coupon = $curr_coupon;
+            }
+        }
+        if($store_coupon){
+            $data['goodsDiscount'] = $store_coupon['discount'];
+            if($store_coupon['type'] == 1){
+                $data['goodsDishDiscount'] = $store_coupon['discount'];
+            }else{
+                $data['goodsDishDiscount'] = 1;
+            }
+        }else{
+            $data['goodsDiscount'] = 1;
+            $data['goodsDishDiscount'] = 1;
+        }
+
+        return $data;
     }
 }
