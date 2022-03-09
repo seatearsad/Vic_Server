@@ -356,7 +356,11 @@ final class Sms {
         }
 
         $url = 'https://fcm.googleapis.com/fcm/send';
-        $data['to'] = $device_id;
+        if(is_array($device_id)){
+            $data['registration_ids'] = json_encode($device_id);
+        }else {
+            $data['to'] = $device_id;
+        }
         //"priority": "high"
         $data['priority'] = 'high';
         $data['data'] = array('message'=>'Message From Tutti');
