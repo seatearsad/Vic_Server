@@ -403,36 +403,39 @@ class CartModel extends Model
         $delivery_coupon = D('New_event')->getFreeDeliverCoupon($sid,$store['city_id']);
 
         $address = D('Store')->getDefaultAdr($uid);
-
-        $distance = getDistance($store['lat'], $store['lng'], $address['mapLat'], $address['mapLng']);
-        if ($distance <= $store['delivery_radius'] * 1000) {
-            //$result['is_allow'] = 1;
-            //获取特殊城市属性
-            $city = D('Area')->where(array('area_id'=>$store['city_id']))->find();
-            if($city['range_type'] != 0) {
-                switch ($city['range_type']){
-                    case 1://按照纬度限制的城市 小于某个纬度
-                        if($address['mapLat'] >= $city['range_para']) $result['is_allow'] = 0;
-                        else $result['is_allow'] = 1;
-                        break;
-                    case 2://自定义区域
-                        import('@.ORG.RegionalCalu.RegionalCalu');
-                        $region = new RegionalCalu();
-                        if($region->checkCity($city,$address['mapLng'],$address['mapLat'])){
-                            $result['is_allow'] = 1;
-                        }else{
-                            $result['is_allow'] = 0;
-                        }
-                        break;
-                    default:
-                        $result['is_allow'] = 1;
-                        break;
-                }
-            }else{
-                $result['is_allow'] = 1;
-            }
-        }else{
+        if($address['city'] != $store['city_id']){
             $result['is_allow'] = 0;
+        }else {
+            $distance = getDistance($store['lat'], $store['lng'], $address['mapLat'], $address['mapLng']);
+            if ($distance <= $store['delivery_radius'] * 1000) {
+                //$result['is_allow'] = 1;
+                //获取特殊城市属性
+                $city = D('Area')->where(array('area_id' => $store['city_id']))->find();
+                if ($city['range_type'] != 0) {
+                    switch ($city['range_type']) {
+                        case 1://按照纬度限制的城市 小于某个纬度
+                            if ($address['mapLat'] >= $city['range_para']) $result['is_allow'] = 0;
+                            else $result['is_allow'] = 1;
+                            break;
+                        case 2://自定义区域
+                            import('@.ORG.RegionalCalu.RegionalCalu');
+                            $region = new RegionalCalu();
+                            if ($region->checkCity($city, $address['mapLng'], $address['mapLat'])) {
+                                $result['is_allow'] = 1;
+                            } else {
+                                $result['is_allow'] = 0;
+                            }
+                            break;
+                        default:
+                            $result['is_allow'] = 1;
+                            break;
+                    }
+                } else {
+                    $result['is_allow'] = 1;
+                }
+            } else {
+                $result['is_allow'] = 0;
+            }
         }
         $store['free_delivery'] = 0;
         $store['event'] = "";

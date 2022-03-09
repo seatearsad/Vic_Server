@@ -662,11 +662,6 @@ class MyAction extends BaseAction{
 
         $adress_list = D('User_adress')->get_adress_list($this->user_session['uid']);
         $sid = $_GET['store_id'] ? $_GET['store_id'] : 0;
-        if($sid != 0){
-            $store = D('Store')->get_store_by_id($sid);
-        }else{
-            $store = null;
-        }
         
         if ($_GET["from"]=="shop"){
             $_GET["from"]="address";
@@ -746,35 +741,39 @@ class MyAction extends BaseAction{
                 $value['distance'] = 0;
 
                 if ($store) {
-                    $distance = getDistance($store['lat'], $store['lng'], $value['latitude'], $value['longitude']);
-                    $value['distance'] = $distance;
-                    if ($distance <= $store['delivery_radius'] * 1000) {
-                        //获取特殊城市属性
-                        $city = D('Area')->where(array('area_id'=>$store['city_id']))->find();
-                        if($city['range_type'] != 0) {
-                            switch ($city['range_type']){
-                                case 1://按照纬度限制的城市 小于某个纬度
-                                    if($value['latitude'] >= $city['range_para']) $value['is_allow'] = 0;
-                                    else $value['is_allow'] = 1;
-                                    break;
-                                case 2://自定义区域
-                                    import('@.ORG.RegionalCalu.RegionalCalu');
-                                    $region = new RegionalCalu();
-                                    if($region->checkCity($city,$value['longitude'],$value['latitude'])){
-                                        $value['is_allow'] = 1;
-                                    }else{
-                                        $value['is_allow'] = 0;
-                                    }
-                                    break;
-                                default:
-                                    $value['is_allow'] = 1;
-                                    break;
-                            }
-                        }else{
-                            $value['is_allow'] = 1;
-                        }
-                    } else {
+                    if($store['city_id'] != $value['city']){
                         $value['is_allow'] = 0;
+                    }else {
+                        $distance = getDistance($store['lat'], $store['lng'], $value['latitude'], $value['longitude']);
+                        $value['distance'] = $distance;
+                        if ($distance <= $store['delivery_radius'] * 1000) {
+                            //获取特殊城市属性
+                            $city = D('Area')->where(array('area_id' => $store['city_id']))->find();
+                            if ($city['range_type'] != 0) {
+                                switch ($city['range_type']) {
+                                    case 1://按照纬度限制的城市 小于某个纬度
+                                        if ($value['latitude'] >= $city['range_para']) $value['is_allow'] = 0;
+                                        else $value['is_allow'] = 1;
+                                        break;
+                                    case 2://自定义区域
+                                        import('@.ORG.RegionalCalu.RegionalCalu');
+                                        $region = new RegionalCalu();
+                                        if ($region->checkCity($city, $value['longitude'], $value['latitude'])) {
+                                            $value['is_allow'] = 1;
+                                        } else {
+                                            $value['is_allow'] = 0;
+                                        }
+                                        break;
+                                    default:
+                                        $value['is_allow'] = 1;
+                                        break;
+                                }
+                            } else {
+                                $value['is_allow'] = 1;
+                            }
+                        } else {
+                            $value['is_allow'] = 0;
+                        }
                     }
                 } else {
                     $value['is_allow'] = 1;

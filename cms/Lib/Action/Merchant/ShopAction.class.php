@@ -257,7 +257,7 @@ class ShopAction extends BaseAction
             $this->assign('close_old_store', $close_old_store);
             //所有分类
             $database_shop_category = D('Shop_category');
-            $category_list = $database_shop_category->lists();//field(true)->where(array('cat_status' => 1))->order('`cat_sort` DESC,`cat_id` ASC')->select();
+            $category_list = $database_shop_category->lists(false,$now_store['city_id']);//field(true)->where(array('cat_status' => 1))->order('`cat_sort` DESC,`cat_id` ASC')->select();
             //var_dump($category_list);die();
             $this->assign('category_list', $category_list);
 
