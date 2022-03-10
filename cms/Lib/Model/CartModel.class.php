@@ -403,7 +403,7 @@ class CartModel extends Model
         $delivery_coupon = D('New_event')->getFreeDeliverCoupon($sid,$store['city_id']);
 
         $address = D('Store')->getDefaultAdr($uid);
-        if($address['city'] != $store['city_id']){
+        if($address['areaID'] != $store['city_id']){
             $result['is_allow'] = 0;
         }else {
             $distance = getDistance($store['lat'], $store['lng'], $address['mapLat'], $address['mapLng']);
