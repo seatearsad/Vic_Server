@@ -788,12 +788,22 @@ class IndexAction extends BaseAction
         $data['default'] = $_POST['default'];
         if($_POST['city_name']){
             $city_name = $_POST['city_name'];
-            $where = array('area_name'=>$city_name,'area_type'=>2);
-            $area = D('Area')->where($where)->find();
-            if($area) {
+            //$where = array('area_name'=>$city_name,'area_type'=>2);
+            //$area = D('Area')->where($where)->find();
+            $city_id = 0;
+            $area_pid = 0;
+            $area_list = D('Area')->where(array('area_type'=>2))->select();
+            foreach ($area_list as $city){
+                $city_arr = explode("|",$city['area_ip_desc']);
+                if(in_array($city_name,$city_arr)){
+                    $city_id = $city['area_id'];
+                    $area_pid = $city['area_pid'];
+                }
+            }
+            if($city_id) {
                 $data['area'] = 0;
-                $data['city'] = $area['area_id'];
-                $data['province'] = $area['area_pid'];
+                $data['city'] = $city_id;
+                $data['province'] = $area_pid;
             }else{
                 $data['area'] = 0;
                 $data['city'] = 0;
@@ -805,6 +815,7 @@ class IndexAction extends BaseAction
             $data['city'] = $city_id ? $city_id : 0;
         }
 
+        $data['city_name'] = $_POST['city_name'];
         $result = $this->loadModel()->addUserAddress($data);
 
         $data['areaID'] = $data['city'];
