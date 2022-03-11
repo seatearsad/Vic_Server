@@ -350,4 +350,41 @@ class ConfigAction extends BaseAction {
             exit(json_encode(array("error_code" => false, "msg" => "获取成功")));
         }
     }
+
+    public function message(){
+        $list = D('System_message')->select();
+
+        $this->assign('message_list',$list);
+        $this->assign('module_name','System');
+        $this->display();
+    }
+
+    public function add_message(){
+        $area_list = D('Area')->where(array('area_type'=>2,'is_open'=>1))->select();
+        $this->assign('city',$area_list);
+
+        if($_GET['id']){
+            $message = D('System_message')->where(array('id'=>$_GET['id']))->find();
+
+            $this->assign('message',$message);
+        }
+        $this->display();
+    }
+
+    public function modify_message(){
+        $_POST['begin_time'] = strtotime($_POST['begin_time']. " 00:00:00");
+        $_POST['end_time'] = strtotime($_POST['end_time']. " 23:59:59");
+
+        if($_POST['type'] == 1){
+            $_POST['content'] = $_POST['content_img'];
+        }
+
+        if($_POST['id'] == 0){
+            D('System_message')->add($_POST);
+        }else{
+            D('System_message')->where(array('id'=>$_POST['id']))->save($_POST);
+        }
+
+        $this->frame_submit_tips(1, 'Success!');
+    }
 }
