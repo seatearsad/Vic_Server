@@ -352,8 +352,32 @@ class ConfigAction extends BaseAction {
     }
 
     public function message(){
-        $list = D('System_message')->select();
+        $where = array();
+        if($_GET['type_select'] && $_GET['type_select'] != -1){
+            $where['type'] = $_GET['type_select'];
+            $this->assign('type',$_GET['type_select']);
+        }else{
+            $this->assign('type',-1);
+        }
+        if($_GET['city_select'] && $_GET['city_select'] != 0){
+            $where['city_id'] = $_GET['city_select'];
+            $this->assign('city_id',$_GET['city_select']);
+        }else{
+            $this->assign('city_id',0);
+        }
 
+        $area_list = D('Area')->where(array('area_type'=>2,'is_open'=>1))->select();
+        $this->assign('city',$area_list);
+
+        $list = D('System_message')->where($where)->order('id desc')->select();
+
+        foreach ($list as &$value) {
+            if($value['city_id'] == 0){
+                $value['city_name'] = L('G_UNIVERSAL');
+            }else{
+                $value['city_name'] = D("Area")->where(array('area_id'=>$value['city_id']))->find()['area_name'];
+            }
+        }
         $this->assign('message_list',$list);
         $this->assign('module_name','System');
         $this->display();
