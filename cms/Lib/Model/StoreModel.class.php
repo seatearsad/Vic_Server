@@ -942,8 +942,12 @@ class StoreModel extends Model
         $data['rowID'] = $address['adress_id'];
         $data['zoneID'] = $address['city'];
         if($address['city'] != 0){
-            $city = D('Area')->where(array('area_id'=>$address['city']))->find();
-            $data['zoneName'] = $city['area_name'];
+            if($address['city_name'] != ''){
+                $data['zoneName'] = $address['city_name'];
+            }else {
+                $city = D('Area')->where(array('area_id' => $address['city']))->find();
+                $data['zoneName'] = $city['area_name'];
+            }
         }else {
             $data['zoneName'] = '';
         }
