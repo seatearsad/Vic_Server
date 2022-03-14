@@ -228,4 +228,79 @@ class EventAction extends BaseAction
         }
         $this->error($msg);
     }
+
+
+    public function message(){
+        $where = array();
+        if(isset($_GET['type_select']) && $_GET['type_select'] >= 0) $where['type'] = $_GET['type_select'];
+
+        $list = D('Cloud_message')->where($where)->select();
+
+        foreach ($list as &$v){
+            $v['type_name'] = D('Cloud_message')->messageType[$v['type']];
+        }
+        $this->assign('list',$list);
+        $this->assign('type_list',D('Cloud_message')->messageType);
+        $this->assign('module_name','Market');
+        $this->display();
+    }
+
+    public function add_message(){
+        if($_GET){
+            $data['type'] = $_GET['type'];
+            $data['days'] = $_GET['days'];
+            $message = D('Cloud_message')->where($data)->find();
+
+            $this->assign('message',$message);
+        }
+
+        $this->assign('type',D('Cloud_message')->messageType);
+        $this->display();
+    }
+
+    public function modify_message(){
+        if($_POST){
+            if(isset($_POST['old_type']) && isset($_POST['old_days']) && $_POST['old_type'] != '' && $_POST['old_days'] != ''){
+                $data['type'] = $_POST['type'];
+                $data['days'] = $_POST['days'];
+
+                if($_POST['old_type'] != $_POST['type'] || $_POST['old_days'] != $_POST['days']){
+                    if($this->checkMessage($_POST['type'],$_POST['days'])){
+                        $this->frame_submit_tips(0,L('K_ACTIVIT_EXISTS'));
+                    }else{
+                        D('Cloud_message')->where($data)->save($_POST);
+                    }
+                }else{
+                    D('Cloud_message')->where($data)->save($_POST);
+                }
+            }else {
+                if ($this->checkMessage($_POST['type'], $_POST['days'])) {
+                    $this->frame_submit_tips(0, L('K_ACTIVIT_EXISTS'));
+                } else {
+                    D('Cloud_message')->add($_POST);
+                }
+            }
+        }
+
+        $this->frame_submit_tips(1, 'Success！');
+    }
+
+    private function checkMessage($type,$days){
+        $data['type'] = $type;
+        $data['days'] = $days;
+        $old_message = D('Cloud_message')->where($data)->find();
+
+        return $old_message;
+    }
+
+    public function del_message(){
+        $data['type'] = $_POST['type'];
+        $data['days'] = $_POST['days'];
+
+        if(D('Cloud_message')->where($data)->delete()){
+            $this->success('Success');
+        }else{
+            $this->error("Error");
+        }
+    }
 }

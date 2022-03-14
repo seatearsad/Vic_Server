@@ -3726,6 +3726,53 @@ class IndexAction extends BaseAction
 
         }
     }
+
+    public function send_cloud_message(){
+        $curr_time = date("H:i");//,'send_time'=>$curr_time
+        $send_list = D("Cloud_message")->where(array('status'=>1))->order('sort desc')->select();
+
+        $arr_list = array();
+        foreach ($send_list as $v){
+            $userList = D("Cloud_message")->getUserListFromType($v['type'],$v['days']);
+            if(count($userList) > 0){
+                $arr_list[$v['type']][$v['days']]['list'] = $userList;
+                $arr_list[$v['type']][$v['days']]['value'] = $v;
+            }
+        }
+
+        $send_user = array();
+        foreach ($arr_list as $t){
+            foreach ($t as $d){
+                $title = $d['value']['title'];
+                $content = $d['value']['content'];
+
+                $curr_send_arr = array();
+                foreach ($d['list'] as $u){
+                    if(!in_array($u['uid'],$send_user)){
+                        $send_user[] = $u['uid'];
+                        if($u['device_id'] != ''){
+                            $curr_send_arr[] = $u['uid'];
+                        }
+                    }
+                }
+
+                if(count($curr_send_arr) > 0){
+                    if(count($curr_send_arr) == 1){
+                        $curr_send_arr = $curr_send_arr[0];
+                        //D('User')->where(array('uid'=>$curr_send_arr))->setField('is_send_message', 1);
+                    } else {
+                        //D('User')->where(array('uid', array('in', $curr_send_arr)))->setField('is_send_message', 1);
+                    }
+
+                    //Sms::sendMessageToGoogle($curr_send_arr,$content,1,$title);
+
+                    echo $title.' ('.$content.') --'.json_encode($curr_send_arr);
+                }
+            }
+        }
+
+        //var_dump($arr_list);
+    }
     /**
     public function get_goods_desc(){
         $list = D('Shop_goods')->where(array('des'=>array('neq','')))->order('goods_id desc')->select();

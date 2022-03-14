@@ -45,7 +45,7 @@ class CouponAction extends BaseAction {
 						break;
 				}
 			}
-			$coupon = M('System_coupon');
+			$coupon = D('System_coupon');
 			$count_count = $coupon->where($condition_coupon)->count();
 			import('@.ORG.system_page');
 			$p = new Page($count_count, 15);
@@ -58,8 +58,8 @@ class CouponAction extends BaseAction {
 					$v['cate_id'] = $tmp['cat_name'];
 				}
 				if($v['end_time']<$_SERVER['REQUEST_TIME']){
-					D('System_coupon')->where(array('coupon_id'=>$v['coupon_id']))->setField('status',2);
-					$v['status']=2;
+					//D('System_coupon')->where(array('coupon_id'=>$v['coupon_id']))->setField('status',2);
+					//$v['status']=2;
 				}
 				if($v['city_id'] != 0){
                     $city = D('Area')->where(array('area_id'=>$v['city_id']))->find();
