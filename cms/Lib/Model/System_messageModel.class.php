@@ -60,6 +60,10 @@ class System_messageModel extends Model
             }
         }
 
+        if($message && $message['type'] == 1){
+            $message['content'] = C('config.site_url').$message['content'];
+        }
+
         return $message;
     }
 
