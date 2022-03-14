@@ -324,6 +324,10 @@ class IndexAction extends BaseAction
         $arr['recommend'] = $recommend_list;
         $arr['city_id'] = $city_id;
 
+        //获取系统消息 $from 0Wap 1iOS 2Android
+
+        $arr['system_message'] = D("System_message")->getSystemMessage($_POST['from'],$_POST['version'],$city_id);
+
         $this->returnCode(0,'data',$arr);
     }
 

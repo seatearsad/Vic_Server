@@ -84,7 +84,7 @@
                             <div class="form-group  row">
                                 <label class="col-sm-3 col-form-label">Version</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" name="version" size="20" validate="maxlength:200,required:true" value="{pigcms{$message.version|default=''}"/>
+                                    <input type="text" class="form-control" name="version" size="20" validate="maxlength:200,required:true" value="{pigcms{$message.version|default='0'}"/>
                                 </div>
                             </div>
                             <div class="form-group  row">
@@ -97,15 +97,15 @@
                                 <label class="col-sm-3 col-form-label">Wap</label>
                                 <div class="col-sm-9">
                                     <span class="cb-enable">
-                                        <label class="cb-enable <if condition=" $message['is_wap'] eq 1">selected</if>">
+                                        <label class="cb-enable <if condition=" $message['is_wap'] eq 1 or $message['is_wap'] eq ''">selected</if>">
                                         <span>{pigcms{:L('_BACK_NORMAL_')}</span>
-                                        <input type="radio" name="is_wap" value="1"  <if condition="$message['is_wap'] eq 1">checked="checked"</if>/>
+                                        <input type="radio" name="is_wap" value="1"  <if condition="$message['is_wap'] eq 1 or $message['is_wap'] eq ''">checked="checked"</if>/>
                                         </label>
                                     </span>
                                     <span class="cb-disable">
-                                        <label class="cb-disable <if condition=" $message['is_wap'] eq 0">selected</if>">
+                                        <label class="cb-disable <if condition=" $message['is_wap'] eq 0 and $message['is_wap'] neq ''">selected</if>">
                                         <span>{pigcms{:L('_BACK_FORBID_')}</span>
-                                        <input type="radio" name="is_wap" value="0"  <if condition="$message['is_wap'] eq 0">checked="checked"</if>/>
+                                        <input type="radio" name="is_wap" value="0"  <if condition="$message['is_wap'] eq 0 and $message['is_wap'] neq ''">checked="checked"</if>/>
                                         </label>
                                     </span>
                                 </div>
@@ -114,15 +114,15 @@
                                 <label class="col-sm-3 col-form-label">iOS</label>
                                 <div class="col-sm-9">
                                     <span class="cb-enable">
-                                        <label class="cb-enable <if condition=" $message['is_ios'] eq 1">selected</if>">
+                                        <label class="cb-enable <if condition=" $message['is_ios'] eq 1 or $message['is_ios'] eq ''">selected</if>">
                                         <span>{pigcms{:L('_BACK_NORMAL_')}</span>
-                                        <input type="radio" name="is_ios" value="1"  <if condition="$message['is_ios'] eq 1">checked="checked"</if>/>
+                                        <input type="radio" name="is_ios" value="1"  <if condition="$message['is_ios'] eq 1 or $message['is_ios'] eq ''">checked="checked"</if>/>
                                         </label>
                                     </span>
                                     <span class="cb-disable">
-                                        <label class="cb-disable <if condition=" $message['is_ios'] eq 0">selected</if>">
+                                        <label class="cb-disable <if condition=" $message['is_ios'] eq 0 and $message['is_ios'] neq ''">selected</if>">
                                         <span>{pigcms{:L('_BACK_FORBID_')}</span>
-                                        <input type="radio" name="is_ios" value="0"  <if condition="$message['is_ios'] eq 0">checked="checked"</if>/>
+                                        <input type="radio" name="is_ios" value="0"  <if condition="$message['is_ios'] eq 0 and $message['is_ios'] neq ''">checked="checked"</if>/>
                                         </label>
                                     </span>
                                 </div>
@@ -131,15 +131,15 @@
                                 <label class="col-sm-3 col-form-label">Android</label>
                                 <div class="col-sm-9">
                                     <span class="cb-enable">
-                                        <label class="cb-enable <if condition=" $message['is_android'] eq 1">selected</if>">
+                                        <label class="cb-enable <if condition=" $message['is_android'] eq 1 or $message['is_android'] eq ''">selected</if>">
                                         <span>{pigcms{:L('_BACK_NORMAL_')}</span>
-                                        <input type="radio" name="is_android" value="1"  <if condition="$message['is_android'] eq 1">checked="checked"</if>/>
+                                        <input type="radio" name="is_android" value="1"  <if condition="$message['is_android'] eq 1 or $message['is_android'] eq ''">checked="checked"</if>/>
                                         </label>
                                     </span>
                                     <span class="cb-disable">
-                                        <label class="cb-disable <if condition=" $message['is_android'] eq 0">selected</if>">
+                                        <label class="cb-disable <if condition=" $message['is_android'] eq 0 and $message['is_android'] neq ''">selected</if>">
                                         <span>{pigcms{:L('_BACK_FORBID_')}</span>
-                                        <input type="radio" name="is_android" value="0"  <if condition="$message['is_android'] eq 0">checked="checked"</if>/>
+                                        <input type="radio" name="is_android" value="0"  <if condition="$message['is_android'] eq 0 and $message['is_android'] neq ''">checked="checked"</if>/>
                                         </label>
                                     </span>
                                 </div>
@@ -148,15 +148,15 @@
                                 <label class="col-sm-3 col-form-label">{pigcms{:L('_BACK_STATUS_')}</label>
                                 <div class="col-sm-9">
                                     <span class="cb-enable">
-                                        <label class="cb-enable <if condition=" $message['status'] eq 1">selected</if>">
+                                        <label class="cb-enable <if condition=" $message['status'] eq 1 or $message['is_android'] eq ''">selected</if>">
                                         <span>{pigcms{:L('_BACK_NORMAL_')}</span>
-                                        <input type="radio" name="status" value="1"  <if condition="$message['status'] eq 1">checked="checked"</if>/>
+                                        <input type="radio" name="status" value="1"  <if condition="$message['status'] eq 1 or $message['is_android'] eq ''">checked="checked"</if>/>
                                         </label>
                                     </span>
                                     <span class="cb-disable">
-                                        <label class="cb-disable <if condition=" $message['status'] eq 0">selected</if>">
+                                        <label class="cb-disable <if condition=" $message['status'] eq 0 and $message['is_android'] neq ''">selected</if>">
                                         <span>{pigcms{:L('_BACK_FORBID_')}</span>
-                                        <input type="radio" name="status" value="0"  <if condition="$message['status'] eq 0">checked="checked"</if>/>
+                                        <input type="radio" name="status" value="0"  <if condition="$message['status'] eq 0 and $message['is_android'] neq ''">checked="checked"</if>/>
                                         </label>
                                     </span>
                                 </div>
@@ -165,15 +165,15 @@
                                 <label class="col-sm-3 col-form-label">Close</label>
                                 <div class="col-sm-9">
                                     <span class="cb-enable">
-                                        <label class="cb-enable <if condition=" $message['is_close'] eq 1">selected</if>">
+                                        <label class="cb-enable <if condition=" $message['is_close'] eq 1 or $message['is_close'] eq ''">selected</if>">
                                         <span>{pigcms{:L('_BACK_NORMAL_')}</span>
-                                        <input type="radio" name="is_close" value="1"  <if condition="$message['is_close'] eq 1">checked="checked"</if>/>
+                                        <input type="radio" name="is_close" value="1"  <if condition="$message['is_close'] eq 1 or $message['is_close'] eq ''">checked="checked"</if>/>
                                         </label>
                                     </span>
                                     <span class="cb-disable">
-                                        <label class="cb-disable <if condition=" $message['is_close'] eq 0">selected</if>">
+                                        <label class="cb-disable <if condition=" $message['is_close'] eq 0 and $message['is_close'] neq ''">selected</if>">
                                         <span>{pigcms{:L('_BACK_FORBID_')}</span>
-                                        <input type="radio" name="is_close" value="0"  <if condition="$message['is_close'] eq 0">checked="checked"</if>/>
+                                        <input type="radio" name="is_close" value="0"  <if condition="$message['is_close'] eq 0 and $message['is_close'] neq ''">checked="checked"</if>/>
                                         </label>
                                     </span>
                                 </div>
@@ -182,15 +182,15 @@
                                 <label class="col-sm-3 col-form-label">Area</label>
                                 <div class="col-sm-9">
                                     <span class="cb-enable">
-                                        <label class="cb-enable <if condition=" $message['in_area'] eq 1">selected</if>">
+                                        <label class="cb-enable <if condition=" $message['in_area'] eq 1 or $message['in_area'] eq ''">selected</if>">
                                         <span>{pigcms{:L('_BACK_NORMAL_')}</span>
-                                        <input type="radio" name="in_area" value="1"  <if condition="$message['in_area'] eq 1">checked="checked"</if>/>
+                                        <input type="radio" name="in_area" value="1"  <if condition="$message['in_area'] eq 1 or $message['in_area'] eq ''">checked="checked"</if>/>
                                         </label>
                                     </span>
                                     <span class="cb-disable">
-                                        <label class="cb-disable <if condition=" $message['in_area'] eq 0">selected</if>">
+                                        <label class="cb-disable <if condition=" $message['in_area'] eq 0 and $message['in_area'] neq ''">selected</if>">
                                         <span>{pigcms{:L('_BACK_FORBID_')}</span>
-                                        <input type="radio" name="in_area" value="0"  <if condition="$message['in_area'] eq 0">checked="checked"</if>/>
+                                        <input type="radio" name="in_area" value="0"  <if condition="$message['in_area'] eq 0 and $message['in_area'] neq ''">checked="checked"</if>/>
                                         </label>
                                     </span>
                                 </div>
