@@ -251,6 +251,9 @@ class EventAction extends BaseAction
             $data['days'] = $_GET['days'];
             $message = D('Cloud_message')->where($data)->find();
 
+            $message['title'] = emoji_decode($message['title']);
+            $message['content'] = emoji_decode($message['content']);
+
             $this->assign('message',$message);
         }
 
@@ -263,6 +266,9 @@ class EventAction extends BaseAction
             if(isset($_POST['old_type']) && isset($_POST['old_days']) && $_POST['old_type'] != '' && $_POST['old_days'] != ''){
                 $data['type'] = $_POST['type'];
                 $data['days'] = $_POST['days'];
+
+                $_POST['title'] = emoji_encode($_POST['title']);
+                $_POST['content'] = emoji_encode($_POST['content']);
 
                 if($_POST['old_type'] != $_POST['type'] || $_POST['old_days'] != $_POST['days']){
                     if($this->checkMessage($_POST['type'],$_POST['days'])){
