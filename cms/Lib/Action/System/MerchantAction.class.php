@@ -1187,7 +1187,7 @@ class MerchantAction extends BaseAction{
         if($_GET['city_id']){
             $this->assign('city_id',$_GET['city_id']);
             if($_GET['city_id'] != 0) {
-                $where .= " AND m.city_id =" . $_GET['city_id'];
+                $where .= " AND s.city_id =" . $_GET['city_id'];
             }
         }else{
             $this->assign('city_id',0);
