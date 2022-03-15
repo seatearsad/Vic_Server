@@ -55,7 +55,7 @@ class Cloud_messageModel extends Model
         $where['add_time'] = array('between',array($dayData['begin_time'],$dayData['end_time']));
         $where['status'] = 1;
         $where['is_send_message'] = 0;
-        //$where['last_order_time'] = 0;
+        $where['last_order_time'] = 0;
 
         $list = D("User")->where($where)->select();
 
