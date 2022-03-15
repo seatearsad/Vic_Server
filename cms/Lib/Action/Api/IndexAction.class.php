@@ -3602,7 +3602,7 @@ class IndexAction extends BaseAction
     public function test_assign(){
         //$deliver_id = D('Deliver_assign')->getDeliverList(9373);
         //var_dump($deliver_id);
-        var_dump(strtotime('2022-02-28 10:40:00'));die();
+        var_dump(strtotime('2022-03-07 10:40:00').'---'.strtotime('2022-03-13 10:40:00'));die();
 
         import('@.ORG.RegionalCalu.RegionalCalu');
         $region = new RegionalCalu();
@@ -3769,7 +3769,7 @@ class IndexAction extends BaseAction
 
                     //Sms::sendMessageToGoogle($curr_send_arr,$content,1,$title);
 
-                    echo $title.' ('.$content.') --'.json_encode($curr_send_arr);
+                    echo $title.' ('.$content.') --'.json_encode($curr_send_arr)."<br/>";
                 }
             }
         }
