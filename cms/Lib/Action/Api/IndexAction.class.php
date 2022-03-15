@@ -3741,7 +3741,7 @@ class IndexAction extends BaseAction
                 $arr_list[$v['type']][$v['days']]['value'] = $v;
             }
         }
-
+var_dump($arr_list);die();
         $send_user = array();
         foreach ($arr_list as $t){
             foreach ($t as $d){
