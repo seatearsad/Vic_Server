@@ -22,7 +22,7 @@ class Cloud_messageModel extends Model
 
         $dayData['begin_time'] = $search_begin_day;
         $dayData['end_time'] = $search_end_day;
-        var_dump(date("Y-m-d H:i:s",$dayData['begin_time'])."----".date("Y-m-d H:i:s",$dayData['end_time']));die();
+        var_dump($type.">>>>>>>".date("Y-m-d H:i:s",$dayData['begin_time'])."----".date("Y-m-d H:i:s",$dayData['end_time']));
         switch ($type){
             case 0:
                 $list = $this->getNewRegistration($dayData);
