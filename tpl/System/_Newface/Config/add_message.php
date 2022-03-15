@@ -51,7 +51,7 @@
                                 </div>
                             </div>
                             <div class="form-group  row">
-                                <label class="col-sm-3 col-form-label">{pigcms{:L('I_URL')}</label>
+                                <label class="col-sm-3 col-form-label">{pigcms{:L('I_URL')} (update_app)</label>
                                 <div class="col-sm-9">
                                     <input type="text" class="form-control" name="link" size="20" validate="maxlength:200,required:true" value="{pigcms{$message.link|default=''}"/>
                                 </div>
