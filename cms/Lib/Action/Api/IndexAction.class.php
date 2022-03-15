@@ -3602,6 +3602,8 @@ class IndexAction extends BaseAction
     public function test_assign(){
         //$deliver_id = D('Deliver_assign')->getDeliverList(9373);
         //var_dump($deliver_id);
+        var_dump(strtotime('2022-02-28 10:40:00'));die();
+
         import('@.ORG.RegionalCalu.RegionalCalu');
         $region = new RegionalCalu();
         $city_id = $_GET['city_id'];
