@@ -34,6 +34,13 @@ class Cloud_messageModel extends Model
                 $list = $this->getAfterRedeem($dayData);
                 break;
             case 3:
+                $today = strtotime(date("Y-m-d"));
+                $search_begin_day = $today + 86400*$days;
+                $search_end_day = $search_begin_day + 86399;
+
+                $dayData['begin_time'] = $search_begin_day;
+                $dayData['end_time'] = $search_end_day;
+                
                 $list = $this->getBeforeExpire($dayData);
                 break;
             default:
