@@ -3769,7 +3769,7 @@ class IndexAction extends BaseAction
 
                     //Sms::sendMessageToGoogle($curr_send_arr,$content,1,$title);
 
-                    echo $title.' ('.$content.') --'.json_encode($curr_send_arr)."<br/>";
+                    echo emoji_decode($title).' ('.emoji_decode($content).') --'.json_encode($curr_send_arr)."<br/>";
                 }
             }
         }
