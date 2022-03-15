@@ -3741,7 +3741,7 @@ class IndexAction extends BaseAction
                 $arr_list[$v['type']][$v['days']]['value'] = $v;
             }
         }
-var_dump($arr_list);die();
+
         $send_user = array();
         foreach ($arr_list as $t){
             foreach ($t as $d){
@@ -3752,9 +3752,10 @@ var_dump($arr_list);die();
                 foreach ($d['list'] as $u){
                     if(!in_array($u['uid'],$send_user)){
                         $send_user[] = $u['uid'];
-                        if($u['device_id'] != ''){
+                        //正式上线时需选择设备号！！！！！！！！！！！！！！！！！！！！！！！！！
+                        //if($u['device_id'] != ''){
                             $curr_send_arr[] = $u['uid'];
-                        }
+                        //}
                     }
                 }
 
