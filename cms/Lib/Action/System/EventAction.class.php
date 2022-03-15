@@ -274,7 +274,7 @@ class EventAction extends BaseAction
                     if($this->checkMessage($_POST['type'],$_POST['days'])){
                         $this->frame_submit_tips(0,L('K_ACTIVIT_EXISTS'));
                     }else{
-                        D('Cloud_message')->where($data)->save($_POST);
+                        D('Cloud_message')->where(array('type'=>$_POST['old_type'],'days'=>$_POST['old_days']))->save($_POST);
                     }
                 }else{
                     D('Cloud_message')->where($data)->save($_POST);
