@@ -220,6 +220,34 @@ function getRecommendList(){
                 laytpl($('#indexRecommendListTpl').html()).render(result.recommend, function (html) {
                     $('#recommendList').html(html);
                 });
+
+                if(result.system_message != null){
+                	var system_message = result.system_message;
+
+                    if(system_message['type'] == 1){
+                        $('#system_message').show();
+                        $('#system_message').bind("click",function () {
+                            $(this).hide();
+                            $('#message_content').html("");
+                        });
+
+						var img_width = $('#message_content').width();
+						var img = "<img src='"+system_message['content']+"' width='"+img_width+"'/>";
+						$('#message_content').html(img);
+
+                        $('#message_content').css('left',(window_width - img_width)/2);
+                        $('#message_content').css('top',(window_height - img_width)/2);
+
+					}else{
+                        var messageLayer = layer.open({
+                            content: system_message['content'],
+                            btn: ['Confirm'],
+                            end: function () {
+                                layer.close(messageLayer);
+                            }
+                        });
+					}
+				}
             }
 		}
 
