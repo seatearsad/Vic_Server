@@ -203,11 +203,17 @@ class ShopAction extends BaseAction
             // 			if($database_merchant_store_meal->data($_POST)->save()){
             $database_shop_category_relation = D('Shop_category_relation');
             $condition_shop_category_relation['store_id'] = $now_store['store_id'];
+            $old_list = $database_shop_category_relation->where($condition_shop_category_relation)->select();
             $database_shop_category_relation->where($condition_shop_category_relation)->delete();
             foreach($cat_ids as $key => $value){
                 $data_shop_category_relation[$key]['cat_id'] = $value['cat_id'];
                 $data_shop_category_relation[$key]['cat_fid'] = $value['cat_fid'];
                 $data_shop_category_relation[$key]['store_id'] = $now_store['store_id'];
+                foreach ($old_list as $o){
+                    if($value['cat_id'] == $o['cat_id'] && $value['cat_fid'] == $o['cat_fid']){
+                        $data_shop_category_relation[$key]['store_sort'] = $o['store_sort'];
+                    }
+                }
             }
             $database_shop_category_relation->addAll($data_shop_category_relation);
 
@@ -591,6 +597,8 @@ class ShopAction extends BaseAction
             $this->assign('error_tips', $error_tips);
         }
         $now_sort['sort_discount'] *= 0.1;
+        $now_sort['sort_name'] = str_replace('"','&quot;',$now_sort['sort_name']);
+
         $this->assign('fid', $fid);
         $this->assign('now_sort', $now_sort);
         $this->assign('now_store', $now_store);
@@ -602,6 +610,8 @@ class ShopAction extends BaseAction
                 $l['name'] = $l['name'] ? $l['name'] : '打印机-' . $l['pigcms_id'];
             }
         }
+
+
         $this->assign('sort', $sort);
         $this->assign('print_list', $print_list);
         $this->display();
