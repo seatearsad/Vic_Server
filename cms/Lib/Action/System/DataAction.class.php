@@ -913,7 +913,7 @@ class DataAction extends BaseAction
             }
 
             $database_user = D('User');
-            $count_user = $database_user->join(' as u left join '.C('DB_PREFIX').'user_adress as a on a.uid=u.uid')->where($where)->count();
+            $count_user = $database_user->field('u.*,a.city')->join(' as u left join '.C('DB_PREFIX').'user_adress as a on a.uid=u.uid')->where($where)->group('u.uid')->count();
 
             $length = ceil($count_user / 1000);
             for ($i = 0; $i < $length; $i++) {
@@ -946,7 +946,7 @@ class DataAction extends BaseAction
 //                $objActSheet->setCellValue('R1', '账号是否正常');
 
 
-                $user_list = $database_user->field('u.*,a.city')->join(' as u left join '.C('DB_PREFIX').'user_adress as a on a.uid=u.uid')->where($where)->limit($i * 1000 . ',1000')->order('add_time desc')->select();
+                $user_list = $database_user->field('u.*,a.city')->join(' as u left join '.C('DB_PREFIX').'user_adress as a on a.uid=u.uid')->where($where)->group('u.uid')->limit($i * 1000 . ',1000')->order('add_time desc')->select();
 
                 if (!empty($user_list)) {
                     import('ORG.Net.IpLocation');
