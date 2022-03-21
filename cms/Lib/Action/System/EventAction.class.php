@@ -234,10 +234,11 @@ class EventAction extends BaseAction
         $where = array();
         if(isset($_GET['type_select']) && $_GET['type_select'] >= 0) $where['type'] = $_GET['type_select'];
 
-        $list = D('Cloud_message')->where($where)->select();
+        $list = D('Cloud_message')->where($where)->order("status desc,send_time asc,sort desc")->select();
 
         foreach ($list as &$v){
             $v['type_name'] = D('Cloud_message')->messageType[$v['type']];
+            $v['title'] = emoji_decode($v['title']);
         }
         $this->assign('list',$list);
         $this->assign('type_list',D('Cloud_message')->messageType);

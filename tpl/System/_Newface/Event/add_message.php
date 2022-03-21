@@ -57,7 +57,7 @@
                             <div class="form-group  row">
                                 <label class="col-sm-3 col-form-label">{pigcms{:L('I_CONTENT')}</label>
                                 <div class="col-sm-9">
-                                    <textarea class="form-control" name="content" validate="required:true">{pigcms{$message.content|default=''}</textarea>
+                                    <textarea class="form-control" name="content" validate="maxlength:500,required:true">{pigcms{$message.content|default=''}</textarea>
                                 </div>
                             </div>
                             <div class="form-group  row">
