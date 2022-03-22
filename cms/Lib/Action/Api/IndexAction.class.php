@@ -3754,7 +3754,7 @@ class IndexAction extends BaseAction
                         $send_user[] = $u['uid'];
                         //正式上线时需选择设备号！！！！！！！！！！！！！！！！！！！！！！！！！
                         if($u['device_id'] != ''){
-                            $curr_send_arr[] = $u['uid'];
+                            $curr_send_arr[] = $u['device_id'];
                         }
                     }
                 }
