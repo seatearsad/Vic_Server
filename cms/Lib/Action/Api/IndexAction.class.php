@@ -3767,7 +3767,7 @@ class IndexAction extends BaseAction
                         //D('User')->where(array('uid', array('in', $curr_send_arr)))->setField('is_send_message', 1);
                     //}
 
-                    Sms::sendMessageToGoogle($curr_send_arr,$content,1,$title);
+                    Sms::sendMessageToGoogle($curr_send_arr,emoji_decode($content),1,emoji_decode($title));
                     //var_dump($curr_send_arr);
                     echo emoji_decode($title).' ('.emoji_decode($content).') --'.json_encode($curr_send_arr)."<br/>";
                 }
