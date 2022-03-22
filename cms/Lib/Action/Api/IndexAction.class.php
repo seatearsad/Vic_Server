@@ -3730,8 +3730,8 @@ class IndexAction extends BaseAction
     }
 
     public function send_cloud_message(){
-        $curr_time = date("H:i");//,'send_time'=>$curr_time
-        $send_list = D("Cloud_message")->where(array('status'=>1))->order('sort desc')->select();
+        $curr_time = date("H:i");
+        $send_list = D("Cloud_message")->where(array('status'=>1,'send_time'=>$curr_time))->order('sort desc')->select();
 
         $arr_list = array();
         foreach ($send_list as $v){
@@ -3762,9 +3762,9 @@ class IndexAction extends BaseAction
                 if(count($curr_send_arr) > 0){
                     if(count($curr_send_arr) == 1){
                         $curr_send_arr = $curr_send_arr[0];
-                        //D('User')->where(array('uid'=>$curr_send_arr))->setField('is_send_message', 1);
+                        D('User')->where(array('uid'=>$send_user))->setField('is_send_message', 1);
                     } else {
-                        //D('User')->where(array('uid', array('in', $curr_send_arr)))->setField('is_send_message', 1);
+                        D('User')->where(array('uid', array('in', $send_user)))->setField('is_send_message', 1);
                     }
 
                     $result = Sms::sendMessageToGoogle($curr_send_arr,emoji_decode($content),1,emoji_decode($title));
