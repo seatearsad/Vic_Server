@@ -3768,8 +3768,8 @@ class IndexAction extends BaseAction
                     }
 
                     //Sms::sendMessageToGoogle($curr_send_arr,$content,1,$title);
-                    var_dump($curr_send_arr);
-                    //echo emoji_decode($title).' ('.emoji_decode($content).') --'.json_encode($curr_send_arr)."<br/>";
+                    //var_dump($curr_send_arr);
+                    echo emoji_decode($title).' ('.emoji_decode($content).') --'.json_encode($curr_send_arr)."<br/>";
                 }
             }
         }
