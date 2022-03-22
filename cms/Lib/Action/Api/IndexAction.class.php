@@ -3753,9 +3753,9 @@ class IndexAction extends BaseAction
                     if(!in_array($u['uid'],$send_user)){
                         $send_user[] = $u['uid'];
                         //正式上线时需选择设备号！！！！！！！！！！！！！！！！！！！！！！！！！
-                        //if($u['device_id'] != ''){
+                        if($u['device_id'] != ''){
                             $curr_send_arr[] = $u['uid'];
-                        //}
+                        }
                     }
                 }
 
@@ -3767,9 +3767,9 @@ class IndexAction extends BaseAction
                         //D('User')->where(array('uid', array('in', $curr_send_arr)))->setField('is_send_message', 1);
                     }
 
-                    //Sms::sendMessageToGoogle($curr_send_arr,$content,1,$title);
+                    Sms::sendMessageToGoogle($curr_send_arr,$content,1,$title);
 
-                    echo emoji_decode($title).' ('.emoji_decode($content).') --'.json_encode($curr_send_arr)."<br/>";
+                    //echo emoji_decode($title).' ('.emoji_decode($content).') --'.json_encode($curr_send_arr)."<br/>";
                 }
             }
         }
