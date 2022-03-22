@@ -3760,12 +3760,11 @@ class IndexAction extends BaseAction
                 }
 
                 if(count($curr_send_arr) > 0){
-                    if(count($curr_send_arr) == 1){
+                    if(count($curr_send_arr) == 1) {
                         $curr_send_arr = $curr_send_arr[0];
-                        D('User')->where(array('uid'=>$send_user))->setField('is_send_message', 1);
-                    } else {
-                        D('User')->where(array('uid', array('in', $send_user)))->setField('is_send_message', 1);
                     }
+                    
+                    D('User')->where(array('uid', array('in', $send_user)))->setField('is_send_message', 1);
 
                     $result = Sms::sendMessageToGoogle($curr_send_arr,emoji_decode($content),1,emoji_decode($title));
                     //var_dump($curr_send_arr);
