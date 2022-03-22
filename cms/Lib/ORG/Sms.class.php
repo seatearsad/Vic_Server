@@ -357,7 +357,7 @@ final class Sms {
 
         $url = 'https://fcm.googleapis.com/fcm/send';
         if(is_array($device_id)){
-            $data['registration_ids'] = json_encode($device_id);
+            $data['registration_ids'] = $device_id;
         }else {
             $data['to'] = $device_id;
         }
