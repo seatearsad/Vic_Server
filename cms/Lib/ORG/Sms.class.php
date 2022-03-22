@@ -364,10 +364,7 @@ final class Sms {
         //"priority": "high"
         $data['priority'] = 'high';
         $data['data'] = array('message'=>'Message From Tutti');
-        $data['notification'] = array('title'=>$title,'body'=>$message,"sound"=>"default");
-
-        $data['android']['notification']['channel_id'] = "11111119";
-
+        $data['notification'] = array('title'=>$title,'body'=>$message,"sound"=>"default","android_channel_id"=>"11111119");
 
         $ch = curl_init();
         $headers[] = "Content-Type:application/json";//"Content-Type: multipart/form-data; boundary=" .  uniqid('------------------');
