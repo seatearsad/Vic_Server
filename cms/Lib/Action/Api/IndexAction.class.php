@@ -3733,8 +3733,8 @@ class IndexAction extends BaseAction
         $curr_time = date("H:i");//
         $send_list = D("Cloud_message")->where(array('status'=>1,'send_time'=>$curr_time))->order('sort desc')->select();
 
-        if($curr_time == "00:00")
-            D('User')->where(array('is_send_message'=>1))->setField('is_send_message', 0);
+        if($curr_time == "11:30")
+            D('User')->where(array('is_send_message'=>1))->save(array('is_send_message'=>0));
 
         $arr_list = array();
         foreach ($send_list as $v){
