@@ -3775,7 +3775,7 @@ class IndexAction extends BaseAction
             }
         }
         var_dump($send_user);
-        D('User')->where(array('uid', array('in', $send_user)))->save(array('is_send_message'=>1));
+        D('User')->where(array('uid'=>array('in', $send_user)))->save(array('is_send_message'=>1));
 
         //var_dump($arr_list);
     }
