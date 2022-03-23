@@ -3733,6 +3733,8 @@ class IndexAction extends BaseAction
         $curr_time = date("H:i");
         $send_list = D("Cloud_message")->where(array('status'=>1,'send_time'=>$curr_time))->order('sort desc')->select();
 
+        if($curr_time == "00:00")
+            D('User')->where(array('is_send_message', 1))->setField('is_send_message', 0);
         $arr_list = array();
         foreach ($send_list as $v){
             $userList = D("Cloud_message")->getUserListFromType($v['type'],$v['days']);
@@ -3764,8 +3766,6 @@ class IndexAction extends BaseAction
                         $curr_send_arr = $curr_send_arr[0];
                     }
 
-                    D('User')->where(array('uid', array('in', $send_user)))->setField('is_send_message', 1);
-
                     $result = Sms::sendMessageToGoogle($curr_send_arr,emoji_decode($content),1,emoji_decode($title));
                     //var_dump($curr_send_arr);
                     //echo emoji_decode($title).' ('.emoji_decode($content).') --'.json_encode($curr_send_arr)."<br/>";
@@ -3773,6 +3773,7 @@ class IndexAction extends BaseAction
                 }
             }
         }
+        D('User')->where(array('uid', array('in', $send_user)))->setField('is_send_message', 1);
 
         //var_dump($arr_list);
     }
