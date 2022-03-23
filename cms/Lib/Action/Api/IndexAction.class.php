@@ -3767,13 +3767,14 @@ class IndexAction extends BaseAction
                         $curr_send_arr = $curr_send_arr[0];
                     }
 
-                    $result = Sms::sendMessageToGoogle($curr_send_arr,emoji_decode($content),1,emoji_decode($title));
+                    //$result = Sms::sendMessageToGoogle($curr_send_arr,emoji_decode($content),1,emoji_decode($title));
                     //var_dump($curr_send_arr);
                     echo emoji_decode($title).' ('.emoji_decode($content).') --'.json_encode($curr_send_arr)."<br/>";
-                    var_dump($result);
+
                 }
             }
         }
+        var_dump($send_user);
         D('User')->where(array('uid', array('in', $send_user)))->setField('is_send_message', 1);
 
         //var_dump($arr_list);
