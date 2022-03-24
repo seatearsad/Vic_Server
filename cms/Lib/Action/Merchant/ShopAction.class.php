@@ -209,11 +209,16 @@ class ShopAction extends BaseAction
                 $data_shop_category_relation[$key]['cat_id'] = $value['cat_id'];
                 $data_shop_category_relation[$key]['cat_fid'] = $value['cat_fid'];
                 $data_shop_category_relation[$key]['store_id'] = $now_store['store_id'];
+
+                $is_find = false;
                 foreach ($old_list as $o){
                     if($value['cat_id'] == $o['cat_id'] && $value['cat_fid'] == $o['cat_fid']){
                         $data_shop_category_relation[$key]['store_sort'] = $o['store_sort'];
+                        $is_find = true;
                     }
                 }
+
+                if(!$is_find) $data_shop_category_relation[$key]['store_sort'] = 0;
             }
             $database_shop_category_relation->addAll($data_shop_category_relation);
 
