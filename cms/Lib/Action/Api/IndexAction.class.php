@@ -3753,6 +3753,9 @@ class IndexAction extends BaseAction
                 $title = str_replace("&amp;","&",$d['value']['title']);
                 $content = str_replace("&amp;","&",$d['value']['content']);
 
+                $title = str_replace("&quot;","\"",$title);
+                $content = str_replace("&quot;","\"",$content);
+
                 $curr_send_arr = array();
                 foreach ($d['list'] as $u){
                     if(!in_array($u['uid'],$send_user)){
