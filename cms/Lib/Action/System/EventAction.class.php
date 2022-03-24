@@ -284,6 +284,8 @@ class EventAction extends BaseAction
                 if ($this->checkMessage($_POST['type'], $_POST['days'])) {
                     $this->frame_submit_tips(0, L('K_ACTIVIT_EXISTS'));
                 } else {
+                    $_POST['title'] = emoji_encode($_POST['title']);
+                    $_POST['content'] = emoji_encode($_POST['content']);
                     D('Cloud_message')->add($_POST);
                 }
             }
