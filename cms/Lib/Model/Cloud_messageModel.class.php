@@ -52,10 +52,10 @@ class Cloud_messageModel extends Model
     }
 
     private function getNewRegistration($dayData){
-        $where['add_time'] = array('between',array($dayData['begin_time'],$dayData['end_time']));
         $where['status'] = 1;
         $where['is_send_message'] = 0;
         $where['last_order_time'] = 0;
+        $where['add_time'] = array('between',array($dayData['begin_time'],$dayData['end_time']));
 
         $list = D("User")->where($where)->select();
 
@@ -63,9 +63,9 @@ class Cloud_messageModel extends Model
     }
 
     private function getLastOrder($dayData){
-        $where['last_order_time'] = array('between',array($dayData['begin_time'],$dayData['end_time']));
         $where['status'] = 1;
         $where['is_send_message'] = 0;
+        $where['last_order_time'] = array('between',array($dayData['begin_time'],$dayData['end_time']));
 
         $list = D("User")->where($where)->select();
 
@@ -73,8 +73,8 @@ class Cloud_messageModel extends Model
     }
 
     private function getAfterRedeem($dayData){
-        $where['receive_time'] = array('between',array($dayData['begin_time'],$dayData['end_time']));
         $where['is_use'] = 0;
+        $where['receive_time'] = array('between',array($dayData['begin_time'],$dayData['end_time']));
 
         $had_list = D('System_coupon_hadpull')->where($where)->select();
 
@@ -95,9 +95,9 @@ class Cloud_messageModel extends Model
     }
 
     private function getBeforeExpire($dayData){
-        $where['c.end_time'] = array('between',array($dayData['begin_time'],$dayData['end_time']));
         $where['c.status'] = 1;
         $where['h.is_use'] = 0;
+        $where['c.end_time'] = array('between',array($dayData['begin_time'],$dayData['end_time']));
 
         $had_list = D('System_coupon')->join('as c left join '.C('DB_PREFIX').'system_coupon_hadpull h ON h.coupon_id = c.coupon_id')->where($where)->select();
 
