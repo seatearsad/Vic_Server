@@ -850,7 +850,7 @@ class StoreModel extends Model
 
         if($address != null) {
             if($address['city'] == 0){
-                $address['city'] = D('Store')->geocoderGoogle($address['latitude'], $address['longitude']);
+                $address['city'] = $this->geocoderGoogle($address['latitude'], $address['longitude']);
                 $addressModle->where(array('adress_id'=>$address['adress_id']))->save(array('city'=>$address['city']));
             }
 
@@ -872,6 +872,10 @@ class StoreModel extends Model
 
         $result = array();
         foreach ($adr as $v){
+            if($v['city'] == 0){
+                $v['city'] = $this->geocoderGoogle($v['latitude'], $v['longitude']);
+                $addressModle->where(array('adress_id'=>$v['adress_id']))->save(array('city'=>$v['city']));
+            }
             $result[] = $this->arrange_address($v,$store);
         }
 
