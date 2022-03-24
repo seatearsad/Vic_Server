@@ -12,10 +12,10 @@ class System_couponModel extends Model{
         }
 
         //整理所有只有新用户可用优惠券
-        $list = $this->join('as c left join '.C('DB_PREFIX').'system_coupon_hadpull h ON h.coupon_id = c.coupon_id')->where(array('c.allow_new'=>1,'c.status'=>1,'h.is_use'=>0,'h.use_time'=>0))->select();
+        $list = $this->field('h.*,u.order_num')->join('as c left join '.C('DB_PREFIX').'system_coupon_hadpull h ON h.coupon_id = c.coupon_id left join '.C('DB_PREFIX').'user as u on h.uid=u.uid')->where(array('c.allow_new'=>1,'c.status'=>1,'h.is_use'=>0,'h.use_time'=>0))->select();
 
         foreach ($list as $c){
-            if(!D('User')->check_new($c['uid'],'all')){
+            if($c['order_num'] != 0){
                 D('System_coupon_hadpull')->where(array('id'=>$c['id']))->setField('is_use',2);
             }
         }
