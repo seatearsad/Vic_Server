@@ -848,8 +848,14 @@ class StoreModel extends Model
         //if ($address == null)
         //    $address = $addressModle->field(true)->where(array('uid'=>$uid))->find();
 
-        if($address != null)
+        if($address != null) {
+            if($address['city'] == 0){
+                $address['city'] = D('Store')->geocoderGoogle($address['latitude'], $address['longitude']);
+                $addressModle->where(array('adress_id'=>$address['adress_id']))->save(array('city'=>$address['city']));
+            }
+
             $result = $this->arrange_address($address);
+        }
 
         return $result;
     }
