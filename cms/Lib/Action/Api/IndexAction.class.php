@@ -3750,8 +3750,8 @@ class IndexAction extends BaseAction
         $send_user = array();
         foreach ($arr_list as $t){
             foreach ($t as $d){
-                $title = htmlspecialchars($d['value']['title']);
-                $content = htmlspecialchars($d['value']['content']);
+                $title = htmlentities($d['value']['title']);
+                $content = htmlentities($d['value']['content']);
 
                 $curr_send_arr = array();
                 foreach ($d['list'] as $u){
