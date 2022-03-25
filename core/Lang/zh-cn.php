@@ -2546,4 +2546,5 @@ return array(
     "CHECK_BEGIN_END_TIME" => "起始日期不能大于结束日期，请重置！",
     "ALLERGENS"=>"过敏原",
     "SYSTEM_MESSAGE"=>"系统消息",
+    "EVENT_NOTIFICATIONS"=>"推送",
 );

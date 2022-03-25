@@ -356,12 +356,15 @@ final class Sms {
         }
 
         $url = 'https://fcm.googleapis.com/fcm/send';
-        $data['to'] = $device_id;
+        if(is_array($device_id)){
+            $data['registration_ids'] = $device_id;
+        }else {
+            $data['to'] = $device_id;
+        }
         //"priority": "high"
         $data['priority'] = 'high';
         $data['data'] = array('message'=>'Message From Tutti');
-        $data['notification'] = array('title'=>$title,'body'=>$message,"sound"=>"default");
-
+        $data['notification'] = array('title'=>$title,'body'=>$message,"sound"=>"default","android_channel_id"=>"11111119");
 
         $ch = curl_init();
         $headers[] = "Content-Type:application/json";//"Content-Type: multipart/form-data; boundary=" .  uniqid('------------------');

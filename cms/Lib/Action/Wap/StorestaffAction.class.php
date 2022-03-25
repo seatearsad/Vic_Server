@@ -3600,6 +3600,7 @@ class StorestaffAction extends BaseAction
             $store_id = intval($this->store['store_id']);
             $sort_id = $_GET['sort_id'];
             $sort = D('Shop_goods_sort')->where(array('sort_id' => $sort_id, 'store_id' => $store_id))->find();
+            $sort['sort_name'] = str_replace('"','&quot;',$sort['sort_name']);
             $name = explode('|', $sort['sort_name']);
             $sort['en_name'] = $name[0];
             $sort['cn_name'] = $name[1];

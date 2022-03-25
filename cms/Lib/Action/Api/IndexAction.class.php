@@ -792,12 +792,22 @@ class IndexAction extends BaseAction
         $data['default'] = $_POST['default'];
         if($_POST['city_name']){
             $city_name = $_POST['city_name'];
-            $where = array('area_name'=>$city_name,'area_type'=>2);
-            $area = D('Area')->where($where)->find();
-            if($area) {
+            //$where = array('area_name'=>$city_name,'area_type'=>2);
+            //$area = D('Area')->where($where)->find();
+            $city_id = 0;
+            $area_pid = 0;
+            $area_list = D('Area')->where(array('area_type'=>2))->select();
+            foreach ($area_list as $city){
+                $city_arr = explode("|",$city['area_ip_desc']);
+                if(in_array($city_name,$city_arr)){
+                    $city_id = $city['area_id'];
+                    $area_pid = $city['area_pid'];
+                }
+            }
+            if($city_id) {
                 $data['area'] = 0;
-                $data['city'] = $area['area_id'];
-                $data['province'] = $area['area_pid'];
+                $data['city'] = $city_id;
+                $data['province'] = $area_pid;
             }else{
                 $data['area'] = 0;
                 $data['city'] = 0;
@@ -809,6 +819,7 @@ class IndexAction extends BaseAction
             $data['city'] = $city_id ? $city_id : 0;
         }
 
+        $data['city_name'] = $_POST['city_name'];
         $result = $this->loadModel()->addUserAddress($data);
 
         $data['areaID'] = $data['city'];
@@ -3595,6 +3606,8 @@ class IndexAction extends BaseAction
     public function test_assign(){
         //$deliver_id = D('Deliver_assign')->getDeliverList(9373);
         //var_dump($deliver_id);
+        var_dump(strtotime('2022-03-07 10:40:00').'---'.strtotime('2022-03-13 10:40:00'));die();
+
         import('@.ORG.RegionalCalu.RegionalCalu');
         $region = new RegionalCalu();
         $city_id = $_GET['city_id'];
@@ -3718,6 +3731,63 @@ class IndexAction extends BaseAction
             }
 
         }
+    }
+
+    public function send_cloud_message(){
+        $curr_time = date("H:i");//
+        $send_list = D("Cloud_message")->where(array('status'=>1,'send_time'=>$curr_time))->order('sort desc')->select();
+
+        if($curr_time == "00:00")
+            D('User')->where(array('is_send_message'=>1))->save(array('is_send_message'=>0));
+
+        $arr_list = array();
+        foreach ($send_list as $v){
+            $userList = D("Cloud_message")->getUserListFromType($v['type'],$v['days']);
+            if(count($userList) > 0){
+                $arr_list[$v['type']][$v['days']]['list'] = $userList;
+                $arr_list[$v['type']][$v['days']]['value'] = $v;
+            }
+        }
+
+        $test_arr = array(3339,12992,43943,14078,57789,57791);
+
+        $send_user = array();
+        foreach ($arr_list as $t){
+            foreach ($t as $d){
+                $title = str_replace("&amp;","&",$d['value']['title']);
+                $content = str_replace("&amp;","&",$d['value']['content']);
+
+                $title = str_replace("&quot;","\"",$title);
+                $content = str_replace("&quot;","\"",$content);
+
+                $curr_send_arr = array();
+                foreach ($d['list'] as $u){
+                    if(!in_array($u['uid'],$send_user)){
+                        $send_user[] = $u['uid'];
+                        //正式上线时需选择设备号！！！！！！！！！！！！！！！！！！！！！！！！！
+                        if($u['device_id'] != ''){
+                            if(in_array($u['uid'],$test_arr)) {
+                                $curr_send_arr[] = $u['device_id'];
+                            }
+                        }
+                    }
+                }
+
+                if(count($curr_send_arr) > 0){
+                    if(count($curr_send_arr) == 1) {
+                        $curr_send_arr = $curr_send_arr[0];
+                    }
+
+                    $result = Sms::sendMessageToGoogle($curr_send_arr,emoji_decode($content),1,emoji_decode($title));
+                    //var_dump($curr_send_arr);
+                    //echo emoji_decode($title).' ('.emoji_decode($content).') --'.json_encode($curr_send_arr)."<br/>";
+                }
+            }
+        }
+        //var_dump($send_user);
+        D('User')->where(array('uid'=>array('in', $send_user)))->save(array('is_send_message'=>1));
+
+        //var_dump($arr_list);
     }
     /**
     public function get_goods_desc(){

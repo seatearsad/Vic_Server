@@ -2545,4 +2545,5 @@ return array(
     "CHECK_BEGIN_END_TIME" => "The start date cannot exceed the end date. Please reset!",
     "ALLERGENS"=>"Allergens",
     "SYSTEM_MESSAGE"=>"System Message",
+    "EVENT_NOTIFICATIONS"=>"Notifications",
 );

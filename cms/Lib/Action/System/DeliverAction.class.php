@@ -764,8 +764,8 @@ class DeliverAction extends BaseAction {
     		$store = D('Merchant_store')->field(true)->where(array('store_id' => $supply['store_id']))->find();
     		if (empty($store)) $this->error('店铺不存在');
     		//$users = D('Deliver_user')->field(true)->where(array('circle_id' => $store['circle_id'], 'group' => 1, 'status' => 1))->select();
-			$users = D('Deliver_user')->field(true)->where(array('city_id' => $store['city_id'], 'group' => 1, 'status' => 1))->order('work_status asc')->select();
-			$users || $users = D('Deliver_user')->field(true)->where(array('province_id' => $store['province_id'], 'group' => 1, 'status' => 1))->order('work_status asc')->select();
+			$users = D('Deliver_user')->field(true)->where(array('city_id' => $store['city_id'], 'group' => 1, 'status' => 1,'reg_status'=>0))->order('work_status asc')->select();
+			//$users || $users = D('Deliver_user')->field(true)->where(array('province_id' => $store['province_id'], 'group' => 1, 'status' => 1))->order('work_status asc')->select();
 			if (empty($users)) $this->error('Courier Unavailable');
 			$uids = '';
 			$pre = '';

@@ -848,8 +848,14 @@ class StoreModel extends Model
         //if ($address == null)
         //    $address = $addressModle->field(true)->where(array('uid'=>$uid))->find();
 
-        if($address != null)
+        if($address != null) {
+            if($address['city'] == 0){
+                $address['city'] = $this->geocoderGoogle($address['latitude'], $address['longitude']);
+                $addressModle->where(array('adress_id'=>$address['adress_id']))->save(array('city'=>$address['city']));
+            }
+
             $result = $this->arrange_address($address);
+        }
 
         return $result;
     }
@@ -866,6 +872,10 @@ class StoreModel extends Model
 
         $result = array();
         foreach ($adr as $v){
+            if($v['city'] == 0){
+                $v['city'] = $this->geocoderGoogle($v['latitude'], $v['longitude']);
+                $addressModle->where(array('adress_id'=>$v['adress_id']))->save(array('city'=>$v['city']));
+            }
             $result[] = $this->arrange_address($v,$store);
         }
 
@@ -942,8 +952,12 @@ class StoreModel extends Model
         $data['rowID'] = $address['adress_id'];
         $data['zoneID'] = $address['city'];
         if($address['city'] != 0){
-            $city = D('Area')->where(array('area_id'=>$address['city']))->find();
-            $data['zoneName'] = $city['area_name'];
+            if($address['city_name'] != ''){
+                $data['zoneName'] = $address['city_name'];
+            }else {
+                $city = D('Area')->where(array('area_id' => $address['city']))->find();
+                $data['zoneName'] = $city['area_name'];
+            }
         }else {
             $data['zoneName'] = '';
         }
@@ -960,35 +974,39 @@ class StoreModel extends Model
         $data['areaID'] = $address['city'];
         $data['distance'] = 0;
         if($store) {
-            $distance = getDistance($store['lat'], $store['lng'], $data['mapLat'], $data['mapLng']);
-            $data['distance'] = $distance;
-            if ($distance <= $store['delivery_radius'] * 1000) {
-                //获取特殊城市属性
-                $city = D('Area')->where(array('area_id'=>$store['city_id']))->find();
-                if($city['range_type'] != 0) {
-                    switch ($city['range_type']){
-                        case 1://按照纬度限制的城市 小于某个纬度
-                            if($data['mapLat'] >= $city['range_para']) $data['is_allow'] = 0;
-                            else $data['is_allow'] = 1;
-                            break;
-                        case 2://自定义区域
-                            import('@.ORG.RegionalCalu.RegionalCalu');
-                            $region = new RegionalCalu();
-                            if($region->checkCity($city,$data['mapLng'],$data['mapLat'])){
-                                $data['is_allow'] = 1;
-                            }else{
-                                $data['is_allow'] = 0;
-                            }
-                            break;
-                        default:
-                            $data['is_allow'] = 1;
-                            break;
-                    }
-                }else{
-                    $data['is_allow'] = 1;
-                }
-            }else{
+            if($store['city_id'] != $address['city']){
                 $data['is_allow'] = 0;
+            }else {
+                $distance = getDistance($store['lat'], $store['lng'], $data['mapLat'], $data['mapLng']);
+                $data['distance'] = $distance;
+                if ($distance <= $store['delivery_radius'] * 1000) {
+                    //获取特殊城市属性
+                    $city = D('Area')->where(array('area_id' => $store['city_id']))->find();
+                    if ($city['range_type'] != 0) {
+                        switch ($city['range_type']) {
+                            case 1://按照纬度限制的城市 小于某个纬度
+                                if ($data['mapLat'] >= $city['range_para']) $data['is_allow'] = 0;
+                                else $data['is_allow'] = 1;
+                                break;
+                            case 2://自定义区域
+                                import('@.ORG.RegionalCalu.RegionalCalu');
+                                $region = new RegionalCalu();
+                                if ($region->checkCity($city, $data['mapLng'], $data['mapLat'])) {
+                                    $data['is_allow'] = 1;
+                                } else {
+                                    $data['is_allow'] = 0;
+                                }
+                                break;
+                            default:
+                                $data['is_allow'] = 1;
+                                break;
+                        }
+                    } else {
+                        $data['is_allow'] = 1;
+                    }
+                } else {
+                    $data['is_allow'] = 0;
+                }
             }
         }
 
@@ -1268,10 +1286,20 @@ class StoreModel extends Model
         }
 
         $city_id = 0;
+        /**
         $where = array('area_name'=>$city_name,'area_type'=>2);
         $area = D('Area')->where($where)->find();
         if($area) {
             $city_id = $area['area_id'];
+        }
+         * */
+
+        $area_list = D('Area')->where(array('area_type'=>2))->select();
+        foreach ($area_list as $city){
+            $city_arr = explode("|",$city['area_ip_desc']);
+            if(in_array($city_name,$city_arr)){
+                $city_id = $city['area_id'];
+            }
         }
 
         return $city_id;

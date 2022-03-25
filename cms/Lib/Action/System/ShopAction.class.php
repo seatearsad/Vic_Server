@@ -1102,7 +1102,7 @@ class ShopAction extends BaseAction
         if ($_GET['city_id']) {
             $this->assign('city_id', $_GET['city_id']);
             if ($_GET['city_id'] != 0) {
-                $where_city = " AND m.city_id=".$_GET['city_id']." ";
+                $where_city = " AND s.city_id=".$_GET['city_id']." ";
             }
         } else {
             $this->assign('city_id', 0);
@@ -1117,6 +1117,9 @@ class ShopAction extends BaseAction
             $area_index = $this->system_session['level'] == 1 ? 'area_id' : 'city_id';
             $where .= " AND s.{$area_index} = '{$this->system_session['area_id']}'";
         }
+
+        $where .= " AND s.status=1";
+
         $sql_count = "SELECT count(1) AS cnt FROM " . C('DB_PREFIX') . "merchant AS m INNER JOIN " . C('DB_PREFIX') . "merchant_store AS s ON `s`.`mer_id`=`m`.`mer_id` INNER JOIN " . C('DB_PREFIX') . "merchant_store_shop AS sh ON `sh`.`store_id`=`s`.`store_id` WHERE {$where}";
         $mode = new model();
         $count = $mode->query($sql_count);

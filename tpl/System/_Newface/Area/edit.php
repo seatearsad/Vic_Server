@@ -37,7 +37,7 @@
                             <div class="form-group  row">
                                 <label class="col-sm-3 col-form-label">{pigcms{:L('I_IP_SYMPOL')}</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" name="area_ip_desc" value="{pigcms{$now_area.area_ip_desc}" size="20" placeholder="" validate="maxlength:30,required:true" tips="{pigcms{:L('TGFIXC')}"/>
+                                    <input type="text" class="form-control" name="area_ip_desc" value="{pigcms{$now_area.area_ip_desc}" size="20" placeholder="" validate="maxlength:100,required:true" tips="{pigcms{:L('TGFIXC')}"/>
                                 </div>
                             </div>
                             <div class="form-group  row">
