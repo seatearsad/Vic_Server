@@ -3745,7 +3745,7 @@ class IndexAction extends BaseAction
             }
         }
 
-        $test_arr = array(3339,12992,43943,14078,57789,57791);
+        //$test_arr = array(3339,12992,43943,14078,57789,57791);
 
         $send_user = array();
         foreach ($arr_list as $t){
@@ -3762,9 +3762,9 @@ class IndexAction extends BaseAction
                         $send_user[] = $u['uid'];
                         //正式上线时需选择设备号！！！！！！！！！！！！！！！！！！！！！！！！！
                         if($u['device_id'] != ''){
-                            if(in_array($u['uid'],$test_arr)) {
+                            //if(in_array($u['uid'],$test_arr)) {
                                 $curr_send_arr[] = $u['device_id'];
-                            }
+                            //}
                         }
                     }
                 }
