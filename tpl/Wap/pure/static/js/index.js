@@ -223,20 +223,28 @@ function getRecommendList(){
 
                 if(result.system_message != null){
                 	var system_message = result.system_message;
-
+					$('body').css("overflow","hidden");
                     if(system_message['type'] == 1){
                         $('#system_message').show();
                         $('#system_message').bind("click",function () {
                             $(this).hide();
                             $('#message_content').html("");
+                            $('body').css("overflow","auto");
                         });
 
 						var img_width = $('#message_content').width();
 						var img = "<img src='"+system_message['content']+"' width='"+img_width+"'/>";
+                        img += "<img src='/tpl/Static/blue/images/new/icon-close-white.png' id='close_message' width='50' style='display: block;margin: 10px auto;'/>";
 						$('#message_content').html(img);
 
+						$('#close_message').bind("click",function () {
+                            $('#system_message').hide();
+                            $('#message_content').html("");
+                            $('body').css("overflow","auto");
+                        });
+
                         $('#message_content').css('left',(window_width - img_width)/2);
-                        $('#message_content').css('top',(window_height - img_width)/2);
+                        $('#message_content').css('top',(window_height - img_width*1.25)/2);
 
 					}else{
                         var messageLayer = layer.open({

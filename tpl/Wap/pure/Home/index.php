@@ -424,7 +424,7 @@
         }
         #message_content{
             position: absolute;
-            width: 100%;
+            width: 80%;
             top: 0;
             max-width: 480px;
             min-width: 240px;
