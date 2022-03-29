@@ -53,16 +53,16 @@
                             <div class="form-group  row">
                                 <label class="col-sm-3 col-form-label">{pigcms{:L('I_URL')} (update_app)</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" name="link" size="20" validate="maxlength:200,required:true" value="{pigcms{$message.link|default=''}"/>
+                                    <input type="text" class="form-control" name="link" size="20" validate="maxlength:200" value="{pigcms{$message.link|default=''}"/>
                                 </div>
                             </div>
                             <div class="form-group  row" id="city_tr">
                                 <label class="col-sm-3 col-form-label">{pigcms{:L('G_CITY')}</label>
                                 <div class="col-sm-9">
                                     <select name="city_id" class="form-control">
-                                        <option value="0" <if condition="$message and $message['city_id'] eq 0">selected="selected"</if>>{pigcms{:L('G_UNIVERSAL')}</option>
+                                        <option value="0" <if condition="!$message or $message['city_id'] eq 0">selected="selected"</if>>{pigcms{:L('G_UNIVERSAL')}</option>
                                         <volist name="city" id="vo">
-                                            <option value="{pigcms{$vo.area_id}" <if condition="$event and $event['city_id'] eq $vo['area_id']">selected="selected"</if>>{pigcms{$vo.area_name}</option>
+                                            <option value="{pigcms{$vo.area_id}" <if condition="$message and $message['city_id'] eq $vo['area_id']">selected="selected"</if>>{pigcms{$vo.area_name}</option>
                                         </volist>
                                     </select>
                                 </div>
@@ -220,6 +220,7 @@
     }
 
     .img_0{
+        width: 100%;
         margin-top: 10px;
     }
     .img_0 img {
@@ -238,11 +239,6 @@
             extensions: 'gif,jpg,jpeg,png',
             mimeTypes: 'image/gif,image/jpeg,image/jpg,image/png'
         }
-    });
-    uploader.addButton({
-        id: '#J_selectImage_0',
-        name: 'image_0',
-        multiple: false
     });
 
     uploader.on('fileQueued', function (file) {
@@ -312,6 +308,12 @@
         }else{
             $('#text_div').hide();
             $('#image_div').show();
+
+            uploader.addButton({
+                id: '#J_selectImage_0',
+                name: 'image_0',
+                multiple: false
+            });
         }
 
         $('#clear_begin').click(function () {
@@ -328,6 +330,12 @@
             }else{
                 $('#text_div').hide();
                 $('#image_div').show();
+
+                uploader.addButton({
+                    id: '#J_selectImage_0',
+                    name: 'image_0',
+                    multiple: false
+                });
             }
         });
     });

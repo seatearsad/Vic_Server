@@ -399,8 +399,12 @@ class ConfigAction extends BaseAction {
         $_POST['begin_time'] = strtotime($_POST['begin_time']. " 00:00:00");
         $_POST['end_time'] = strtotime($_POST['end_time']. " 23:59:59");
 
+        $_POST['link'] = htmlspecialchars_decode($_POST['link']);
+
         if($_POST['type'] == 1){
             $_POST['content'] = $_POST['content_img'];
+        }else{
+            $_POST['content'] = htmlspecialchars_decode($_POST['content']);
         }
 
         if($_POST['id'] == 0){

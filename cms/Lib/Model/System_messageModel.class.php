@@ -71,11 +71,13 @@ class System_messageModel extends Model
     public function get_iOSMessage($list,$version){
         foreach ($list as $v){
             //首先判断是否包含此版本号
-            if($v['version'] == 0){
+            if($v['version'] == "0"){
                 return $v;
             }else{
-                $version_arr = explode($v['version'],"|");
-                if(str_replace(".","",$version) <= str_replace(".","",$version_arr[0])){
+                $version_arr = explode("|",$v['version']);
+                $version = intval(str_replace(".","",$version));
+                $checkVersion = intval(str_replace(".","",$version_arr[0]));
+                if($version <= $checkVersion){
                     return $v;
                 }
             }
@@ -88,13 +90,13 @@ class System_messageModel extends Model
             if($v['version'] == 0){
                 return $v;
             }else{
-                $version_arr = explode($v['version'],"|");
+                $version_arr = explode("|",$v['version']);
                 if(count($version_arr) == 1){
-                    if(str_replace(".","",$version) <= str_replace(".","",$version_arr[0])){
+                    if(intval(str_replace(".","",$version)) <= intval(str_replace(".","",$version_arr[0]))){
                         return $v;
                     }
                 }else {
-                    if ($version_arr[1] && str_replace(".", "", $version) <= str_replace(".", "", $version_arr[1])) {
+                    if ($version_arr[1] && intval(str_replace(".", "", $version)) <= intval(str_replace(".", "", $version_arr[1]))) {
                         return $v;
                     }
                 }
