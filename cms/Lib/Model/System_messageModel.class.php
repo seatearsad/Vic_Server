@@ -23,7 +23,7 @@ class System_messageModel extends Model
      * @param $city_id 城市id
      * @return array
      */
-    public function getSystemMessage($from,$version,$city_id){
+    public function getSystemMessage($from,$version,$city_id,$lat,$lng){
         $where = array('status'=>1);
         switch ($from){
             case 0:
@@ -39,7 +39,19 @@ class System_messageModel extends Model
                 break;
         }
 
+        $city = D("Area")->where(array("area_id"=>$city_id))->find();
+        if($city['range_type'] == 2){
+            import('@.ORG.RegionalCalu.RegionalCalu');
+            $region = new RegionalCalu();
+            $is_continue = $region->checkCity($city,$lng,$lat);
+
+            if($is_continue) $where['in_area'] = 1;
+            else $where['in_area'] = 0;
+        }
         $where['city_id'] = array('in',array(0,$city_id));
+
+        $where['begin_time'] = array('elt',time());
+        $where['end_time'] = array('gt',time());
 
         $list = $this->where($where)->order('sort desc')->select();
 

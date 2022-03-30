@@ -49,6 +49,10 @@
                                 <div class="col-sm-9">
                                     <textarea class="form-control" name="content" validate="">{pigcms{$message.content|default=''}</textarea>
                                 </div>
+                                <label class="col-sm-3 col-form-label"></label>
+                                <div class="col-sm-9">
+                                    Set the button name by changing the "Name" above
+                                </div>
                             </div>
                             <div class="form-group  row">
                                 <label class="col-sm-3 col-form-label">{pigcms{:L('I_URL')} (update_app)</label>
@@ -59,10 +63,10 @@
                             <div class="form-group  row" id="city_tr">
                                 <label class="col-sm-3 col-form-label">{pigcms{:L('G_CITY')}</label>
                                 <div class="col-sm-9">
-                                    <select name="city_id" class="form-control">
-                                        <option value="0" <if condition="!$message or $message['city_id'] eq 0">selected="selected"</if>>{pigcms{:L('G_UNIVERSAL')}</option>
+                                    <select name="city_id" id="city_select" class="form-control">
+                                        <option value="0" data-type="0" <if condition="!$message or $message['city_id'] eq 0">selected="selected"</if>>{pigcms{:L('G_UNIVERSAL')}</option>
                                         <volist name="city" id="vo">
-                                            <option value="{pigcms{$vo.area_id}" <if condition="$message and $message['city_id'] eq $vo['area_id']">selected="selected"</if>>{pigcms{$vo.area_name}</option>
+                                            <option value="{pigcms{$vo.area_id}" data-type="{pigcms{$vo.range_type}" <if condition="$message and $message['city_id'] eq $vo['area_id']">selected="selected"</if>>{pigcms{$vo.area_name}</option>
                                         </volist>
                                     </select>
                                 </div>
@@ -70,25 +74,25 @@
                             <div class="form-group  row">
                                 <label class="col-sm-3 col-form-label">{pigcms{:L('G_START_TIME')}</label>
                                 <div class="col-sm-8 input-group bootstrap-touchspin bootstrap-touchspin-injected">
-                                    <input type="text" class="form-control" name="begin_time" style="width:120px;" id="d4311" onfocus="WdatePicker({isShowClear:false,readOnly:true,dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'d4312\')}'})" <if condition="$message['begin_time'] neq 0">value="{pigcms{$message.begin_time|date='Y-m-d',###}"</if>/>
+                                    <input type="text" class="form-control" name="begin_time" style="width:120px;" id="d4311" validate="required:true" onfocus="WdatePicker({isShowClear:false,readOnly:true,dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'d4312\')}'})" <if condition="$message['begin_time'] neq 0">value="{pigcms{$message.begin_time|date='Y-m-d',###}"</if>/>
                                     <span id="clear_begin" class="input-group-addon bootstrap-touchspin-postfix input-group-append"><span class="input-group-text">{pigcms{:L('G_CLEAR')}</span></span>
                                 </div>
                             </div>
                             <div class="form-group  row">
                                 <label class="col-sm-3 col-form-label">{pigcms{:L('G_END_TIME')}</label>
                                 <div class="col-sm-8 input-group bootstrap-touchspin bootstrap-touchspin-injected">
-                                    <input type="text" class="form-control" name="end_time" style="width:120px;" id="d4312" onfocus="WdatePicker({isShowClear:false,readOnly:true,dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'d4311\')}'})" <if condition="$message['end_time'] neq 0">value="{pigcms{$message.end_time|date='Y-m-d',###}"</if>/>
+                                    <input type="text" class="form-control" name="end_time" style="width:120px;" id="d4312" validate="required:true" onfocus="WdatePicker({isShowClear:false,readOnly:true,dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'d4311\')}'})" <if condition="$message['end_time'] neq 0">value="{pigcms{$message.end_time|date='Y-m-d',###}"</if>/>
                                     <span id="clear_end" class="input-group-addon bootstrap-touchspin-postfix input-group-append"><span class="input-group-text">{pigcms{:L('G_CLEAR')}</span></span>
                                 </div>
                             </div>
                             <div class="form-group  row">
-                                <label class="col-sm-3 col-form-label">Version</label>
+                                <label class="col-sm-3 col-form-label">App Version</label>
                                 <div class="col-sm-9">
                                     <input type="text" class="form-control" name="version" size="20" validate="maxlength:200,required:true" value="{pigcms{$message.version|default='0'}"/>
                                 </div>
                             </div>
                             <div class="form-group  row">
-                                <label class="col-sm-3 col-form-label">{pigcms{:L('_BACK_SORT_ORDER_')}</label>
+                                <label class="col-sm-3 col-form-label">{pigcms{:L('QW_LISTINGORDER')}</label>
                                 <div class="col-sm-9">
                                     <input type="text" class="form-control" name="sort" size="20" validate="maxlength:200,required:true" value="{pigcms{$message.sort|default='0'}"/>
                                 </div>
@@ -162,7 +166,7 @@
                                 </div>
                             </div>
                             <div class="form-group  row">
-                                <label class="col-sm-3 col-form-label">Close</label>
+                                <label class="col-sm-3 col-form-label">Close Button</label>
                                 <div class="col-sm-9">
                                     <span class="cb-enable">
                                         <label class="cb-enable <if condition=" $message['is_close'] eq 1 or $message['is_close'] eq ''">selected</if>">
@@ -177,9 +181,13 @@
                                         </label>
                                     </span>
                                 </div>
+                                <label class="col-sm-3 col-form-label"></label>
+                                <div class="col-sm-9">
+                                    When switch to "Inactive" customers will NOT be able to close the popup window. Please only switch off for mandatory app update.
+                                </div>
                             </div>
-                            <div class="form-group  row">
-                                <label class="col-sm-3 col-form-label">Area</label>
+                            <div class="form-group  row" id="select_area" style="display: none;">
+                                <label class="col-sm-3 col-form-label">Within Defined Service Area</label>
                                 <div class="col-sm-9">
                                     <span class="cb-enable">
                                         <label class="cb-enable <if condition=" $message['in_area'] eq 1 or $message['in_area'] eq ''">selected</if>">
@@ -193,6 +201,10 @@
                                         <input type="radio" name="in_area" value="0"  <if condition="$message['in_area'] eq 0 and $message['in_area'] neq ''">checked="checked"</if>/>
                                         </label>
                                     </span>
+                                </div>
+                                <label class="col-sm-3 col-form-label"></label>
+                                <div class="col-sm-9">
+                                    This will only work for cities that have a defined area. "Active" means only apply to customers within the defined service area; "Inactive" means only for customers outside of the area
                                 </div>
                             </div>
                             <div class="btn tutti_hidden_obj">
@@ -338,6 +350,27 @@
                 });
             }
         });
+
+        $("#city_select").change(getCityType);
+
+        getCityType();
     });
+
+    function getCityType () {
+        var city_id = $("#city_select").val();
+        var city_type = 0;
+        $("#city_select").find("option").each(function () {
+            //console.log("city_select:" + $(this).data('type'));
+            if(city_id == $(this).val()){
+                city_type = $(this).data('type');
+            }
+        });
+
+        if(city_type == 2){
+            $("#select_area").show();
+        }else{
+            $("#select_area").hide();
+        }
+    }
 </script>
 <include file="Public:footer_inc"/>

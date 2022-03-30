@@ -466,7 +466,7 @@ class GroupserviceAction extends BaseAction{
 
             $new_group_list['has_more'] = $lists['total'] > $page*5 ? true : false;
 
-            $new_group_list['system_message'] = D("System_message")->getSystemMessage(0,0,$city_id);
+            $new_group_list['system_message'] = D("System_message")->getSystemMessage(0,0,$city_id,$lat,$long);
 			//echo json_encode(array('store_list' => $return, 'has_more' => $lists['has_more'] ? true : false));
 		}elseif($content_type=='meal'){
 			$this->header_json();

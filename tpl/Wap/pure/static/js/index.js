@@ -253,9 +253,12 @@ function getRecommendList(){
                         $('#message_content').css('top',(window_height - img_width*1.25)/2);
 
 					}else{
+                    	var btnName = ["OK"];
+                        if(system_message['link'] != "") btnName = [system_message['name']];
+
                         var messageLayer = layer.open({
                             content: system_message['content'],
-                            btn: [system_message['name']],
+                            btn: btnName,
                             yes: function () {
                                 if(system_message['link'] != ""){
                                 	window.location.href = system_message['link'];

@@ -353,7 +353,7 @@ class ConfigAction extends BaseAction {
 
     public function message(){
         $where = array();
-        if($_GET['type_select'] && $_GET['type_select'] != -1){
+        if(isset($_GET['type_select']) && $_GET['type_select'] != -1){
             $where['type'] = $_GET['type_select'];
             $this->assign('type',$_GET['type_select']);
         }else{
@@ -371,13 +371,38 @@ class ConfigAction extends BaseAction {
 
         $list = D('System_message')->where($where)->order('id desc')->select();
 
+        $nomalArr = array();
+        $expireArr = array();
+        $inactiveArr = array();
         foreach ($list as &$value) {
             if($value['city_id'] == 0){
                 $value['city_name'] = L('G_UNIVERSAL');
             }else{
                 $value['city_name'] = D("Area")->where(array('area_id'=>$value['city_id']))->find()['area_name'];
             }
+
+            $value['platform'] = "";
+            if($value['is_wap'] == 1) $value['platform'] = "Wap";
+            if($value['is_ios'] == 1) $value['platform'] .= $value['platform'] == "" ? "iOS" : "<br>iOS";
+            if($value['is_android'] == 1) $value['platform'] .= $value['platform'] == "" ? "Android" : "<br>Android";
+
+            switch ($value['status']){
+                case 0:
+                    $inactiveArr[] = $value;
+                    break;
+                case 1:
+                    $nomalArr[] = $value;
+                    break;
+                case 2:
+                    $expireArr[] = $value;
+                    break;
+                default:
+                    break;
+            }
         }
+
+        $list = array_merge($nomalArr,$inactiveArr,$expireArr);
+
         $this->assign('message_list',$list);
         $this->assign('module_name','System');
         $this->display();
@@ -396,8 +421,8 @@ class ConfigAction extends BaseAction {
     }
 
     public function modify_message(){
-        $_POST['begin_time'] = strtotime($_POST['begin_time']. " 00:00:00");
-        $_POST['end_time'] = strtotime($_POST['end_time']. " 23:59:59");
+        if($_POST['begin_time'] != "") $_POST['begin_time'] = strtotime($_POST['begin_time']. " 00:00:00");
+        if($_POST['end_time'] != "") $_POST['end_time'] = strtotime($_POST['end_time']. " 23:59:59");
 
         $_POST['link'] = htmlspecialchars_decode($_POST['link']);
 
