@@ -350,4 +350,95 @@ class ConfigAction extends BaseAction {
             exit(json_encode(array("error_code" => false, "msg" => "获取成功")));
         }
     }
+
+    public function message(){
+        $where = array();
+        if(isset($_GET['type_select']) && $_GET['type_select'] != -1){
+            $where['type'] = $_GET['type_select'];
+            $this->assign('type',$_GET['type_select']);
+        }else{
+            $this->assign('type',-1);
+        }
+        if($_GET['city_select'] && $_GET['city_select'] != 0){
+            $where['city_id'] = $_GET['city_select'];
+            $this->assign('city_id',$_GET['city_select']);
+        }else{
+            $this->assign('city_id',0);
+        }
+
+        $area_list = D('Area')->where(array('area_type'=>2,'is_open'=>1))->select();
+        $this->assign('city',$area_list);
+
+        $list = D('System_message')->where($where)->order('id desc')->select();
+
+        $nomalArr = array();
+        $expireArr = array();
+        $inactiveArr = array();
+        foreach ($list as &$value) {
+            if($value['city_id'] == 0){
+                $value['city_name'] = L('G_UNIVERSAL');
+            }else{
+                $value['city_name'] = D("Area")->where(array('area_id'=>$value['city_id']))->find()['area_name'];
+            }
+
+            $value['platform'] = "";
+            if($value['is_wap'] == 1) $value['platform'] = "Wap";
+            if($value['is_ios'] == 1) $value['platform'] .= $value['platform'] == "" ? "iOS" : "<br>iOS";
+            if($value['is_android'] == 1) $value['platform'] .= $value['platform'] == "" ? "Android" : "<br>Android";
+
+            switch ($value['status']){
+                case 0:
+                    $inactiveArr[] = $value;
+                    break;
+                case 1:
+                    $nomalArr[] = $value;
+                    break;
+                case 2:
+                    $expireArr[] = $value;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        $list = array_merge($nomalArr,$inactiveArr,$expireArr);
+
+        $this->assign('message_list',$list);
+        $this->assign('module_name','System');
+        $this->display();
+    }
+
+    public function add_message(){
+        $area_list = D('Area')->where(array('area_type'=>2,'is_open'=>1))->select();
+        $this->assign('city',$area_list);
+
+        if($_GET['id']){
+            $message = D('System_message')->where(array('id'=>$_GET['id']))->find();
+
+            $this->assign('message',$message);
+        }
+        $this->display();
+    }
+
+    public function modify_message(){
+        if($_POST['begin_time'] != "") $_POST['begin_time'] = strtotime($_POST['begin_time']. " 00:00:00");
+        if($_POST['end_time'] != "") $_POST['end_time'] = strtotime($_POST['end_time']. " 23:59:59");
+
+        $_POST['name'] = htmlspecialchars_decode($_POST['name']);
+        $_POST['link'] = htmlspecialchars_decode($_POST['link']);
+
+        if($_POST['type'] == 1){
+            $_POST['content'] = $_POST['content_img'];
+        }else{
+            $_POST['content'] = htmlspecialchars_decode($_POST['content']);
+        }
+
+        if($_POST['id'] == 0){
+            D('System_message')->add($_POST);
+        }else{
+            D('System_message')->where(array('id'=>$_POST['id']))->save($_POST);
+        }
+
+        $this->frame_submit_tips(1, 'Success!');
+    }
 }
