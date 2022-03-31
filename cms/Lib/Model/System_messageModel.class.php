@@ -40,20 +40,32 @@ class System_messageModel extends Model
         }
 
         $city = D("Area")->where(array("area_id"=>$city_id))->find();
-        if($city['range_type'] == 2){
-            import('@.ORG.RegionalCalu.RegionalCalu');
-            $region = new RegionalCalu();
-            $is_continue = $region->checkCity($city,$lng,$lat);
 
-            if($is_continue) $where['in_area'] = 1;
-            else $where['in_area'] = 0;
-        }
         $where['city_id'] = array('in',array(0,$city_id));
 
         $where['begin_time'] = array('elt',time());
         $where['end_time'] = array('gt',time());
 
         $list = $this->where($where)->order('sort desc')->select();
+
+        $newList = array();
+        if($city['range_type'] == 2){
+            import('@.ORG.RegionalCalu.RegionalCalu');
+            $region = new RegionalCalu();
+            $is_continue = $region->checkCity($city,$lng,$lat);
+
+            foreach ($list as &$v){
+                if($v['city_id'] == $city_id){
+                    if(($is_continue && $v['in_area'] == 1) || (!$is_continue && $v['in_area'] == 0)){
+                        $newList[] = $v;
+                    }
+                }else{
+                    $newList[] = $v;
+                }
+            }
+        }else{
+            $newList = $list;
+        }
 
         $message = null;
         if(count($list) > 0) {
@@ -62,10 +74,10 @@ class System_messageModel extends Model
                     $message = $list[0];
                     break;
                 case 1:
-                    $message = $this->get_iOSMessage($list,$version);
+                    $message = $this->get_iOSMessage($newList,$version);
                     break;
                 case 2:
-                    $message = $this->getAndroidMessage($list,$version);
+                    $message = $this->getAndroidMessage($newList,$version);
                     break;
                 default:
                     break;
