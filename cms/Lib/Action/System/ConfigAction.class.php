@@ -424,6 +424,7 @@ class ConfigAction extends BaseAction {
         if($_POST['begin_time'] != "") $_POST['begin_time'] = strtotime($_POST['begin_time']. " 00:00:00");
         if($_POST['end_time'] != "") $_POST['end_time'] = strtotime($_POST['end_time']. " 23:59:59");
 
+        $_POST['name'] = htmlspecialchars_decode($_POST['name']);
         $_POST['link'] = htmlspecialchars_decode($_POST['link']);
 
         if($_POST['type'] == 1){
