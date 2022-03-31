@@ -68,10 +68,10 @@ class System_messageModel extends Model
         }
 
         $message = null;
-        if(count($list) > 0) {
+        if(count($newList) > 0) {
             switch ($from) {
                 case 0:
-                    $message = $list[0];
+                    $message = $newList[0];
                     break;
                 case 1:
                     $message = $this->get_iOSMessage($newList,$version);
