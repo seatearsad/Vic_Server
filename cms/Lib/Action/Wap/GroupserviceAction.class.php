@@ -90,7 +90,7 @@ class GroupserviceAction extends BaseAction{
             $where = array('deliver_type' => $deliver_type, 'order' => $order, 'lat' => $lat, 'long' => $long, 'cat_id' => $cat_id, 'cat_fid' => $cat_fid, 'page' => $page,'model'=>$modelSelect);
 			$key && $where['key'] = $key;
 
-			$lists = D('Merchant_store_shop')->get_list_by_option($where,3);
+			$lists = D('Merchant_store_shop')->get_list_by_option($where,3,-1,$city_id);
 			$return = array();
 			$now_time = date('H:i:s');
 			$n= 1;
@@ -414,6 +414,11 @@ class GroupserviceAction extends BaseAction{
 						case 1://按照纬度限制的城市 小于某个纬度
                             if($lat >= $city['range_para']) $is_add = false;
 							break;
+						case 2://自定义区域
+                            import('@.ORG.RegionalCalu.RegionalCalu');
+                            $region = new RegionalCalu();
+                            $is_add = $region->checkCity($city,$long,$lat);
+							break;
 						default:
 							break;
 					}
@@ -464,6 +469,8 @@ class GroupserviceAction extends BaseAction{
                 $new_group_list['recommend'] = array();
 			}
             $new_group_list['has_more'] = $lists['total'] > $page*5 ? true : false;
+
+            $new_group_list['system_message'] = D("System_message")->getSystemMessage(0,0,$city_id,$lat,$long);
 			//echo json_encode(array('store_list' => $return, 'has_more' => $lists['has_more'] ? true : false));
 		}elseif($content_type=='meal'){
 			$this->header_json();
@@ -605,6 +612,27 @@ class GroupserviceAction extends BaseAction{
 	}
 
 	public function getRecommendList($city_id,$lat,$lng){
+        //获取特殊城市属性
+		$is_continue = true;
+        $city = D('Area')->where(array('area_id'=>$city_id))->find();
+        if($city['range_type'] != 0) {
+            switch ($city['range_type']){
+                case 1://按照纬度限制的城市 小于某个纬度
+                    if($lat >= $city['range_para']) $is_continue = false;
+                    break;
+                case 2://自定义区域
+                    import('@.ORG.RegionalCalu.RegionalCalu');
+                    $region = new RegionalCalu();
+                    $is_continue = $region->checkCity($city,$lng,$lat);
+                    break;
+                default:
+
+                    break;
+            }
+        }
+
+        if(!$is_continue) return array();
+
         //获取推荐列表
         $re_category = D('Shop_category')->field(true)->where(array('cat_fid'=>0,'cat_type'=>1,'city_id'=>$city_id))->order('cat_sort desc')->select();
         $categoryList = array();

@@ -6,8 +6,9 @@ class Merchant_store_shopModel extends Model
 	 * 根据条件获取商家列表
 	 * @param array $where
 	 * @param number $limit
+     * city_id 包含此值的为app端使用 非-wap端使用
 	 */
-	public function get_list_by_option($where = array(), $is_wap = 1,$menu_version = -1)
+	public function get_list_by_option($where = array(), $is_wap = 1,$menu_version = -1,$city_id = -1)
 	{
 		$deliver_type = isset($where['deliver_type']) ? $where['deliver_type'] : 'all';
 		$order_str = isset($where['order']) ? $where['order'] : 'juli';
@@ -18,9 +19,19 @@ class Merchant_store_shopModel extends Model
 
 
 //		$condition_where = "s.city_id='".C('config.now_city')."' AND s.have_meal=1 AND s.status=1 AND s.store_id=m.store_id";
-		$condition_where = "s.status=1 AND s.store_id=m.store_id AND s.have_shop=1 AND (cc.range_type=0 OR (cc.range_type=1 AND {$lat}<cc.range_para))";
+        //if($city_id != -1)
+        //    $condition_where = "s.status=1 AND s.store_id=m.store_id AND s.have_shop=1 AND (cc.range_type=0 OR (cc.range_type=2 AND s.city_id={$city_id}) OR (cc.range_type=1 AND {$lat}<cc.range_para))";
+        //else
+		    $condition_where = "s.status=1 AND s.store_id=m.store_id AND s.have_shop=1 AND (cc.range_type=0 OR cc.range_type=2 OR (cc.range_type=1 AND {$lat}<cc.range_para))";
 
 		if($menu_version != -1) $condition_where .= " AND s.menu_version=".$menu_version;
+		/**
+        if($city_id != -1){//判断用户所在城市的类型 如果为自定义区域 仅能看到本城市的店铺
+            $city = D('Area')->where(array('area_id'=>$city_id))->find();
+            if($city['range_type'] == 2) $condition_where .= " AND s.city_id=".$city_id;
+        }
+         * */
+        $condition_where .= " AND s.city_id=".$city_id;
 
 		if($where['model'] == 'delivery') $condition_where .= " AND s.have_shop=1";
 		else if($where['model'] == 'pickup') $condition_where .= " AND s.is_pickup=1";
@@ -895,9 +906,15 @@ class Merchant_store_shopModel extends Model
             $city_id = $city_id ? $city_id : 0;
         }
 
+        //如果城市为自定义的话 修改type值 返回数组
+        import('@.ORG.RegionalCalu.RegionalCalu');
+        $region = new RegionalCalu();
+        if(!$region->index($city_id,$long,$lat)) $type = 0;
+        /////
+
         switch ($type){
             case 1:
-                $t_list = $this->get_list_by_option($where,$is_wap,$menu_version);
+                $t_list = $this->get_list_by_option($where,$is_wap,$menu_version,$city_id);
                 break;
 
             case 2:

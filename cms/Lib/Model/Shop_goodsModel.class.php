@@ -498,6 +498,11 @@ class Shop_goodsModel extends Model
 		} else {
 			$g_list = $this->field(true)->where(array('store_id' => $store_id, 'status' => 1))->order('sort DESC, goods_id ASC')->select();
 		}
+
+        //获取商品折扣活动
+        $store_discount = D('New_event')->getStoreNewDiscount($store_id);
+        $goodsDiscount = $store_discount['goodsDiscount'];
+        $goodsDishDiscount = $store_discount['goodsDishDiscount'];
 		
 		$sort_result = array();
 		foreach ($g_list as $row) {
@@ -519,7 +524,7 @@ class Shop_goodsModel extends Model
 				$row['price'] = floatval($row['price']);
 			}
 
-// 			$row['price'] = floatval($row['price']);
+ 			$row['price'] = round($row['price']*$goodsDiscount,2);
 			$row['old_price'] = floatval($row['old_price']);
 			$row['seckill_price'] = floatval($row['seckill_price']);
 			$tmp_pic_arr = explode(';', $row['image']);
@@ -582,9 +587,19 @@ class Shop_goodsModel extends Model
 	public function get_goods_by_id($goods_id)
 	{
 		$now_goods = $this->field(true)->where(array('goods_id' => $goods_id))->find();
+
+        //获取商品折扣活动
+        $store_discount = D('New_event')->getStoreNewDiscount($now_goods['store_id']);
+        $goodsDiscount = $store_discount['goodsDiscount'];
+        $goodsDishDiscount = $store_discount['goodsDishDiscount'];
+
 		if(empty($now_goods)){
 			return false;
-		}
+		}else{
+            $now_goods['price'] = round($now_goods['price']*$goodsDiscount,2);
+            $now_goods['goodsDiscount'] = $goodsDiscount;
+            $now_goods['goodsDishDiscount'] = $goodsDishDiscount;
+        }
 		$shop = D('Merchant_store_shop')->where(array('store_id' => $now_goods['store_id']))->find();
 		if (empty($shop)) return false; 
 		$stock_type = $shop['stock_type'];
@@ -784,11 +799,13 @@ class Shop_goodsModel extends Model
 	 * @param string $spec_ids = 'id_id'
 	 * @return multitype:number string |multitype:number unknown |multitype:number string Ambigous <number, mixed>
 	 */
-	public function check_stock($goods_id, $num, $spec_ids = '', $stock_type = 0, $store_id = 0,$menu_version = 1)
+	public function check_stock($goods_id, $num, $spec_ids = '', $stock_type = 0, $store_id = 0,$menu_version = 1,$goodsDiscount)
 	{
 		if ($store_id) {
             if($menu_version == 1) {
                 $now_goods = $this->field(true)->where(array('goods_id' => $goods_id, 'store_id' => $store_id))->find();
+                $now_goods['cost_price'] = $now_goods['price'];
+                $now_goods['price'] = round($now_goods['price']*$goodsDiscount,2);
                 $image = '';
                 if(!empty($now_goods['image'])){
                     $goods_image_class = new goods_image();
@@ -802,10 +819,14 @@ class Shop_goodsModel extends Model
                 }
             }else if($menu_version == 2) {
                 $now_goods = D('StoreMenuV2')->getProduct($goods_id, $store_id);
+                $now_goods['cost_price'] = $now_goods['price']/100;
+                $now_goods['price'] = round($now_goods['price']/100*$goodsDiscount,2);
                 $image = $now_goods['image'];
             }
 		} else {
 			$now_goods = $this->field(true)->where(array('goods_id' => $goods_id))->find();
+            $now_goods['cost_price'] = $now_goods['price'];
+            $now_goods['price'] = round($now_goods['price']*$goodsDiscount,2);
             $image = '';
             if(!empty($now_goods['image'])){
                 $goods_image_class = new goods_image();
@@ -825,7 +846,7 @@ class Shop_goodsModel extends Model
 
 
         if($menu_version == 2){
-            return array('status' => 1, 'num' => $num, 'is_seckill_price' => false, 'old_price' => 0, 'cost_price' => 0, 'price' => $now_goods['price']/100, 'image' => $image, 'packing_charge' => 0, 'freight_type' => 0, 'freight_value' => 0.00, 'freight_template' => 0, 'unit' => "", 'number' => 0, 'sort_id' => 0, 'name' => $now_goods['name'],'tax_num'=>$now_goods['tax']/1000,'deposit_price'=>0);
+            return array('status' => 1, 'num' => $num, 'is_seckill_price' => false, 'old_price' => $now_goods['cost_price'], 'cost_price' => $now_goods['cost_price'], 'price' => $now_goods['price'], 'image' => $image, 'packing_charge' => 0, 'freight_type' => 0, 'freight_value' => 0.00, 'freight_template' => 0, 'unit' => "", 'number' => 0, 'sort_id' => 0, 'name' => $now_goods['name'],'tax_num'=>$now_goods['tax']/1000,'deposit_price'=>0);
         }
 
 		$stock_num = 0;
@@ -860,7 +881,7 @@ class Shop_goodsModel extends Model
 		} else {
 			$price = floatval($now_goods['price']);
 		}
-		$old_price = floatval($now_goods['price']);
+		$old_price = floatval($now_goods['cost_price']);
 		$cost_price = floatval($now_goods['cost_price']);
 // 		$price = $now_goods['price'];
 		if ($spec_ids && $now_goods['spec_value']) {
@@ -1438,7 +1459,7 @@ class Shop_goodsModel extends Model
 		return $s_list;
     }
     
-    public function checkCart($store_id, $uid, $goodsData, $isCookie = 1, $address_id = 0)
+    public function checkCart($store_id, $uid, $goodsData, $isCookie = 1, $address_id = 0,$goodsDiscount = 1,$goodsDishDiscount = 1)
     {
         $store = D("Merchant_store")->field(true)->where(array('store_id' => $store_id))->find();
         if ($store['have_shop'] == 0 || $store['status'] != 1) {
@@ -1738,14 +1759,17 @@ class Shop_goodsModel extends Model
             }
 
             $new_goodsData = array();
-            foreach ($goodsData as $key=>$row) {
+
+            $is_update_cookie = false;
+            foreach ($goodsData as $key=>&$row) {
                 $goods_id = $row['productId'];
                 $num = $row['count'];
                 $spec_ids = array();
                 $pro_ids = array();
                 $dish_ids = array();
                 $str_s = array(); $str_p = array();$str_d = array();
-                foreach ($row['productParam'] as $r) {
+
+                foreach ($row['productParam'] as &$r) {
                     if ($r['type'] == 'spec') {
                         $spec_ids[] = $r['id'];
                         $str_s[] = $r['name'];
@@ -1763,19 +1787,30 @@ class Shop_goodsModel extends Model
                         }else if($r['dish_id']){
                             $curr_dish = explode("|",$r['dish_id']);
                             $dish_desc = "";
-                            foreach($curr_dish as $vv){
+                            foreach($curr_dish as &$vv){
                                 $one_dish = explode(",",$vv);
                                 if($store['menu_version'] == 1) {
                                     $dish_vale = D('Side_dish_value')->where(array('id' => $one_dish[1]))->find();
                                     $dish_vale['name'] = lang_substr($dish_vale['name'], C('DEFAULT_LANG'));
                                 }else if($store['menu_version'] == 2){
                                     $dish_vale = D('StoreMenuV2')->getProduct($one_dish[1],$store_id);
+                                    $dish_vale['price'] = $dish_vale['price']/100;
+                                }else{
+                                    $dish_vale = array();
+                                }
+
+                                //如果商品折扣优惠活动变化
+                                if($dish_vale['price']*$goodsDishDiscount != $one_dish[3]){
+                                    $one_dish[3] = round($dish_vale['price']*$goodsDishDiscount,2);
+                                    $vv = implode(',',$one_dish);
                                 }
 
                                 $add_str = $one_dish[2] > 1 ? $dish_vale['name']."*".$one_dish[2] : $dish_vale['name'];
 
                                 $dish_desc = $dish_desc == "" ? $add_str : $dish_desc.";".$add_str;
                             }
+
+                            $r['dish_id'] = implode("|",$curr_dish);
                             $dish_ids = array_merge($dish_ids,$curr_dish);
                             $str_d[] = $dish_desc;
                         }
@@ -1792,7 +1827,7 @@ class Shop_goodsModel extends Model
 
                 $dish_str = count($dish_ids)>0 ? implode('|',$dish_ids) : '';
 
-                $t_return = $this->check_stock($goods_id, $num, $spec_str, $store_shop['stock_type'], $store_id,$store['menu_version']);
+                $t_return = $this->check_stock($goods_id, $num, $spec_str, $store_shop['stock_type'], $store_id,$store['menu_version'],$goodsDiscount);
                 if ($t_return['status'] == 0) {
                     unset($goodsData[$key]);
                     //var_dump(json_encode($goodsData));die();
@@ -1809,16 +1844,33 @@ class Shop_goodsModel extends Model
                 }
                 //garfunkel add dish
                 if(count($dish_ids) > 0){
-                    foreach ($dish_ids as $v){
+                    foreach ($dish_ids as &$v){
                         $dish = explode(',',$v);
+
+                        //存储单品的原始价格
+                        if($store['menu_version'] == 1) {
+                            $curr_dish_value = D("Side_dish_value")->where(array('id' => $dish[1]))->find();
+                            $t_return['cost_price'] += $curr_dish_value['price'] * $dish[2];
+                        }else{
+                            $curr_dish_value = D('StoreMenuV2')->getProduct($dish[1],$store_id);
+                            $t_return['cost_price'] += $curr_dish_value['price']/100 * $dish[2];
+                        }
+
                         $t_return['price'] += $dish[3]*$dish[2];
                     }
                 }
                 $total += $num;
-                $price += $t_return['price'] * $num;
+                $price += round($t_return['price'] * $num,2);
                 $extra_price += $row['productExtraPrice'] * $num;
                 $packing_charge += $t_return['packing_charge'] * $num;
                 $deposit_price += $t_return['deposit_price'] * $num;
+
+                //如果实际价格与添加到购物车是价格不等
+                if($price != $row['productPrice']){
+                    $row['productPrice'] = $price;
+                    $is_update_cookie = true;
+                }
+
                 if($store['menu_version'] == 1) {
                     $tax_price += ($t_return['price'] * $t_return['tax_num'] / 100) * $num;
                 }else{
@@ -1932,6 +1984,11 @@ class Shop_goodsModel extends Model
                     'tax_num'   => $t_return['tax_num'],
                     'deposit_price' =>  $t_return['deposit_price']
                 );
+            }
+
+            //更新一下存储
+            if($is_update_cookie){
+                setCookie('shop_cart_'.$store_id, json_encode($goodsData));
             }
         } elseif ($isCookie == 2) {
             foreach ($goodsData as $row) {

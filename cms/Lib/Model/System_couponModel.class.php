@@ -1,5 +1,26 @@
 <?php
 class System_couponModel extends Model{
+    public function __construct($name = '', $tablePrefix = '', $connection = '')
+    {
+        parent::__construct($name, $tablePrefix, $connection);
+
+        //修改已过期的优惠券
+        $all_list = $this->where(array('status'=>1,'end_time'=>array('lt',time())))->select();
+        foreach ($all_list as $v){
+            $this->where(array('coupon_id'=>$v['coupon_id']))->setField('status',2);
+            D('System_coupon_hadpull')->where(array('coupon_id'=>$v['coupon_id'],'is_use'=>0))->setField('is_use',2);
+        }
+
+        //整理所有只有新用户可用优惠券
+        $list = $this->field('h.*,u.order_num')->join('as c left join '.C('DB_PREFIX').'system_coupon_hadpull h ON h.coupon_id = c.coupon_id left join '.C('DB_PREFIX').'user as u on h.uid=u.uid')->where(array('c.allow_new'=>1,'c.status'=>1,'h.is_use'=>0,'h.use_time'=>0))->select();
+
+        foreach ($list as $c){
+            if($c['order_num'] != 0){
+                D('System_coupon_hadpull')->where(array('id'=>$c['id']))->setField('is_use',2);
+            }
+        }
+    }
+
     public function get_qrcode($id){
         $condition_store['coupon_id'] = $id;
         $qrcode_id = $this->field('`coupon_id`,`qrcode_id`')->where($condition_store)->find();

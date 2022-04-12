@@ -12,6 +12,7 @@
     <script src="{pigcms{:C('JQUERY_FILE')}"></script>
     <script src="{pigcms{$static_public}js/laytpl.js"></script>
     <script src="{pigcms{$static_path}layer/layer.m.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
     <script type="text/javascript" src="{pigcms{$static_public}js/mobiscroll/mobiscroll.custom.min.js"></script>
     <link rel="stylesheet" type="text/css" href="{pigcms{$static_public}js/mobiscroll/mobiscroll.custom.min.css" media="all">
 </head>
@@ -20,8 +21,8 @@
         padding: 0px;
         margin: 0px auto;
         font-size: 14px;
-        min-width: 320px;
-        max-width: 100%;
+        min-width: 320px
+        max-width: 640px;
         background-color: #f4f4f4;
         color: #333333;
         position: relative;
@@ -29,9 +30,9 @@
     }
     section{
         position: absolute;
-        top: 2%;
+        top: 7%;
         width: 100%;
-        font-size: 10px;
+        font-size: 14px;
         color: #666666;
     }
     #step_now{
@@ -73,7 +74,8 @@
     #step_title{
         width:80%;
         margin: 20px auto 5px auto;
-        font-size: 14px;
+        font-size: 18px;
+        font-weight: bold;
         color: #333333;
     }
     input[type="file"] {
@@ -90,7 +92,7 @@
         background-position:left 10px center;
         color: #666666;
         text-indent: 0px;
-        font-size: 9px;
+        font-size: 12px;
         border-radius: 5px;
         padding: 0px;
         height: 50px;
@@ -101,9 +103,8 @@
         width: 100%;
     }
     input{
-        background-color: #ffa52d;
-        color: white;
-        padding: 10px 15px;
+        width: 100%;
+        padding: 12px 0px;
         border-radius: 3px;
     }
     .img_0,.img_1,.img_2{
@@ -113,90 +114,133 @@
     .img_0 img,.img_1 img,.img_2 img{
         height: 100px;
     }
+    #reg_form{
+        background-color: #ffa52d;
+        color: white;
+        font-weight: bold;
+        font-size: 18px;
+    }
+    .refresh{
+        float: right;
+        margin-top: 30px;
+        margin-right: 20px;
+        position: relative;
+        z-index: 99;
+    }
 </style>
 <body style="background:url('{pigcms{$static_path}img/login_bg.png');">
+<div class="refresh" id="refresh_btn">
+    <span class="material-icons" style="color: #294068;font-size: 36px;">restart_alt</span>
+</div>
 <section>
     <div class="Land_top" style="color:#333333;">
         <span class="fillet" style="background: url('./tpl/Static/blue/images/new/icon.png') center no-repeat; background-size: contain;"></span>
         <div style="font-size: 14px">{pigcms{:L('_ND_BECOMEACOURIER_')}</div>
         <div style="color: #999999;font-size: 10px;margin: 10px auto;width: 90%;">
-            {pigcms{:L('_ND_UPLOADNOTICE_')}
         </div>
     </div>
-    <div id="step_now">
-        <div>2.{pigcms{:L('_ND_DOCUPLOAD_')}</div>
-        <ul>
-            <li class="act"></li><li class="act"></li><li></li><li></li>
-        </ul>
+    <div id="step_title">
+        Required Documents
     </div>
-    <div id="memo" class="android_tip">
-        Please use your browser to upload images if the uploading function does not work here. To do so, visit www.tutti.app and click on Menu > Become a Courier > Get Started.
+    <div id="memo" >
+        The following documents are required to verify that you’re eligible to become a courier. All information are kept securely.<br/><br/>
+        Make sure your photos are clear, especially the name and expiration date. Photos that are unclear or invalid may result in verification failure and delay your application.
     </div>
     <div id="step_title">
-        a.{pigcms{:L('_ND_DRIVERSLICENSE_')}
+        1. Proof of Work Eligibility
+    </div>
+    <div style="margin: 10px auto;width: 85%;">
+        <input type="text" style="padding-left: 10px;" placeholder="Enter Social Insurance Number*" id="sin_num" name="sin_num" value="{pigcms{$userImg['sin_num']}">
     </div>
     <div id="memo">
-        {pigcms{:L('_ND_UPLOADNOTIC_')}
+        This is for taxation purpose only
     </div>
+    <div id="memo" style="margin-top: 15px">
+        Upload one of the following documents to prove you can legally work in Canada as a contract courier:<br/>
+        - Canadian passport<br/>
+        - Citizenship card<br/>
+        - Residency card<br/>
+        - Work permit<br/>
+        - Study permit that allows off-campus work<br/>
+        - Social insurance card<br/>
+    </div>
+    <!--    <div id="step_title">-->
+    <!--        c.{pigcms{:L('_ND_WORKELIGIBILITY_')}-->
+    <!--    </div>-->
+    <!--    <div id="memo">-->
+    <!--        {pigcms{:L('_ND_ELIGIBILITYNOTICE_')}-->
+    <!--    </div>-->
     <div style="margin: 10px auto;width: 85%;">
         <div style="display:inline-block;" id="J_selectImage_0">
-            <div class="btn btn-sm btn-success" style="position:relative;height:50px;line-height: 50px;text-align: left;">
-                {pigcms{:L('_ND_UPLOAD1_')}
-            </div>
-        </div>
-        <div class="img_0">
-
-        </div>
-    </div>
-    <div id="step_title">
-        b.{pigcms{:L('_ND_VEHICLEINSUR_')}
-    </div>
-    <div id="memo">
-        {pigcms{:L('_ND_UPLOADNOTIC_')}
-    </div>
-    <div style="margin: 10px auto;width: 85%;">
-        <div style="display:inline-block;" id="J_selectImage_1">
-            <div class="btn btn-sm btn-success" style="position:relative;height:50px;line-height: 50px;text-align: left;">
-                {pigcms{:L('_ND_UPLOAD2_')}
-            </div>
-        </div>
-        <div class="img_1">
-
-        </div>
-    </div>
-    <div id="step_title">
-        c.{pigcms{:L('_ND_WORKELIGIBILITY_')}
-    </div>
-    <div id="memo">
-        {pigcms{:L('_ND_ELIGIBILITYNOTICE_')}
-    </div>
-    <div style="margin: 10px auto;width: 85%;">
-        <div style="display:inline-block;" id="J_selectImage_2">
             <div class="btn btn-sm btn-success" style="position:relative;height:50px;line-height: 50px;text-align: left;">
                 {pigcms{:L('_ND_UPLOAD3_')}
             </div>
         </div>
-        <div class="img_2">
-
+        <div class="img_0">
+            <if condition="$userImg['certificate'] neq ''">
+                <img src=".{pigcms{$userImg['certificate']}" width="100" />
+            </if>
         </div>
     </div>
-    <div id="memo" style="text-align: center;margin-top: 20px">
-        <span id="filename_0" style="display: none;"></span>
-        <span id="filename_1" style="display: none;"></span>
-        <span id="filename_2" style="display: none;"></span>
-        <input type="button" value="{pigcms{:L('_ND_SAVENCONTINUE_')}" id="reg_form">
+    <div id="step_title">
+        2. Driver’s License
     </div>
-    <div id="memo" style="text-align: center;color: silver;margin-bottom: 30px;">
+    <div style="margin: 10px auto;width: 85%;">
+        <div style="display:inline-block;" id="J_selectImage_1">
+            <div class="btn btn-sm btn-success" style="position:relative;height:50px;line-height: 50px;text-align: left;">
+                {pigcms{:L('_ND_UPLOAD1_')}
+            </div>
+        </div>
+        <div class="img_1">
+            <if condition="$userImg['driver_license'] neq ''">
+                <img src=".{pigcms{$userImg['driver_license']}" width="100" />
+            </if>
+        </div>
+    </div>
+
+    <div id="step_title">
+        3. Vehicle Insurance
+    </div>
+
+    <div style="margin: 10px auto;width: 85%;">
+        <div style="display:inline-block;" id="J_selectImage_2">
+            <div class="btn btn-sm btn-success" style="position:relative;height:50px;line-height: 50px;text-align: left;">
+                {pigcms{:L('_ND_UPLOAD2_')}
+            </div>
+        </div>
+        <div class="img_2">
+            <if condition="$userImg['insurance'] neq ''">
+                <img src=".{pigcms{$userImg['insurance']}" width="100" />
+            </if>
+        </div>
+    </div>
+    <div id="memo" style="color: #353535;margin-bottom: 30px;">
         {pigcms{:L('_ND_SKIPUPLOAD_')}
     </div>
+    <div id="memo" style="text-align: center;margin-top: 20px;margin-bottom: 20px;">
+        <span id="filename_0" style="display: none;">
+            <if condition="$userImg['certificate'] neq ''">
+                {pigcms{$userImg['certificate']}
+            </if>
+        </span>
+        <span id="filename_1" style="display: none;">
+            <if condition="$userImg['driver_license'] neq ''">
+                {pigcms{$userImg['driver_license']}
+            </if>
+        </span>
+        <span id="filename_2" style="display: none;">
+            <if condition="$userImg['insurance'] neq ''">
+                {pigcms{$userImg['insurance']}
+            </if>
+        </span>
+        <input type="button" value="{pigcms{:L('_ND_SAVENCONTINUE_')}" id="reg_form">
+    </div>
+
 </section>
 
 <script src="{pigcms{$static_public}js/lang.js"></script>
 <script type="text/javascript" src="{pigcms{$static_public}js/webuploader.min.js"></script>
 <script type="text/javascript">
-    if(!/(tutti_android)/.test(navigator.userAgent.toLowerCase())){
-        $('.android_tip').hide();
-    }
     $("body").css({"height":$(window).height()});
 
     var  uploader = WebUploader.create({
@@ -239,7 +283,7 @@
             img.html('<img src="'+response.url+'"/>');
             img.css("height","100px");
         }else{
-            alert(response.info);
+            layer.open({title:"{pigcms{:L('_B_D_LOGIN_TIP2_')}",content:"Oops! Something went wrong. Photos no larger than 5MB is recommended! Please try again.", btn:["{pigcms{:L('_B_D_LOGIN_CONIERM_')}"]});
         }
     });
 
@@ -269,15 +313,21 @@
                         }else{
                             is_addcss = false;
                         }
-
                         $('#filename_'+i).html(file);
                     }
                 }
             });
         }
-
         return img;
     }
+
+    $('#refresh_btn').click(function () {
+        if(typeof (window.linkJs) != 'undefined'){
+            window.linkJs.reloadWebView();
+        }else {
+            window.location.reload();
+        }
+    });
 
     $('#reg_form').click(function () {
         var is_next = true;
@@ -295,22 +345,27 @@
         // if($('#ahname').val() == '' || $('#transit').val() == '' || $('#institution').val() == '' || $('#account').val() == '' || $('#sin_num').val() == ''){
         //     is_next = false;
         // }
-
+        var from = "{pigcms{$_GET['from']}";
         if(!is_next)
             alert("{pigcms{:L('_PLEASE_INPUT_ALL_')}");
         else{
             var post_data = {
                 img_0:$('#filename_0').html(),
                 img_1:$('#filename_1').html(),
-                img_2:$('#filename_2').html()
+                img_2:$('#filename_2').html(),
+                sin_num:$('#sin_num').val()
             };
             $.ajax({
-                url: "{pigcms{:U('Deliver/step_2')}",
+                url: "{pigcms{:U('Deliver/step_2')}&from="+from,
                 type: 'POST',
                 dataType: 'json',
                 data: post_data,
-                success:function(date){
-                    window.parent.location = "{pigcms{:U('Deliver/step_3')}";
+                success:function(dat){
+                    //console.log(dat);
+                    if(from != "4")
+                        window.parent.location = "{pigcms{:U('Deliver/step_3')}";
+                    else
+                        window.parent.location = "{pigcms{:U('Deliver/step_4')}";
                 }
 
             });

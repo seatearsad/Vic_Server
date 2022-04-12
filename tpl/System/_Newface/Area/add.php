@@ -35,14 +35,12 @@
                                     </div>
                                 </div>
                             </if>
-                            <if condition="$_GET['type'] gt 1 && $_GET['type'] lt 4">
-                                <div class="form-group  row">
-                                    <label class="col-sm-3 col-form-label">{pigcms{:L('I_IP_SYMPOL')}</label>
-                                    <div class="col-sm-9">
-                                        <input type="text" class="input fl" name="area_ip_desc" size="20" placeholder="" validate="maxlength:30,required:true" tips="{pigcms{:L('TGFIXC')}"/>
-                                    </div>
+                            <div class="form-group  row">
+                                <label class="col-sm-3 col-form-label">{pigcms{:L('I_IP_SYMPOL')}</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="input fl" name="area_ip_desc" size="20" placeholder="" validate="maxlength:100,required:true" tips="{pigcms{:L('TGFIXC')}"/>
                                 </div>
-                            </if>
+                            </div>
                             <div class="form-group  row">
                                 <label class="col-sm-3 col-form-label">{pigcms{:L('I_LISTING_ORDER')}</label>
                                 <div class="col-sm-9">
@@ -63,6 +61,25 @@
                                 <div class="col-sm-9">
                                     <span class="cb-enable"><label class="cb-enable selected"><span>{pigcms{:L('I_ACTIVE')}</span><input type="radio" name="is_open" value="1" checked="checked" /></label></span>
                                     <span class="cb-disable"><label class="cb-disable"><span>{pigcms{:L('_BACK_FORBID_')}</span><input type="radio" name="is_open" value="0" /></label></span>
+                                </div>
+                            </div>
+                            <div class="form-group  row">
+                                <label class="col-sm-3 col-form-label">{pigcms{:L('_BACK_CITY_DELI_BAG_')}</label>
+                                <div class="col-sm-9">
+                                    <div>
+                                        <input type="checkbox"  name="is_pick_up" value="1" <if condition="$now_area['bag_type'] eq 1">checked="checked"</if> />
+                                        &nbsp;{pigcms{:L('_BACK_CITY_DELI_PICKUP_')}
+                                    </div>
+                                    <div style="margin-left: 20px;margin-top: 5px;">Address Name:<input name="bag_address_name"  class="form-control" type="text"/> </div>
+                                    <div style="margin-left: 20px;margin-top: 5px;">Address :<input name="bag_address"  class="form-control" type="text"/> </div>
+                                    <div style="margin-left: 20px;margin-top: 5px;"><input  type="checkbox" name="is_show_url" value="1"> URL: <input  name="bag_address_url"  type="text" class="form-control"/></div>
+                                </div>
+                            </div>
+                            <div class="form-group  row">
+                                <label class="col-sm-3 col-form-label"></label>
+                                <div class="col-sm-9">
+                                    <div><input type="checkbox"  name="is_shipping" value="1" <if condition="$now_area['bag_type'] eq 2">checked="checked"</if> />&nbsp;{pigcms{:L('_BACK_CITY_DELI_SHIPPING_')}</div>
+                                    <div style="margin-left: 20px;margin-top: 5px;">{pigcms{:L('_BACK_CITY_DELI_SHIPPING_FEE_')}:$<input  name="bag_shipping_fee"  class="form-control" type="text"/> </div>
                                 </div>
                             </div>
                             <if condition="$_GET['type'] eq 2">

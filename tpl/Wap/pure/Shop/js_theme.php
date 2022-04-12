@@ -342,7 +342,7 @@
 						<div class="spec" data-product_id="{{ i }}">{{ tmpParamStr }}</div>
 					{{# } }}
 				</div>
-				<div class="cartRight">
+				<div class="cartRight">22313123
 					<div class="product_btn plus cart"></div>
 					<div class="product_btn number cart productNum-{{ i }}">{{ d[i].count }}</div>
 					<div class="product_btn min cart"></div>

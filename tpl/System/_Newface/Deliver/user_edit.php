@@ -117,14 +117,32 @@
                             </div>
                             <div class="form-group  row">
                                 <label class="col-sm-3 col-form-label">{pigcms{:L('_BACK_DELIVER_AREA_')}</label>
-                                <div class="col-sm-9" id="city_area">{pigcms{$now_user.city_name}</div>
-                                <input type="hidden" id="city_id" name="city_id" value="{pigcms{$now_user.city_id}">
+                                <div class="col-sm-9" id="city_area">
+                                    <select name="city_id" id="city_select" class="form-control">
+                                        <option value="0" <if condition="$city_id eq '' or $city_id eq 0">selected="selected"</if>>All</option>
+                                        <volist name="city" id="vo">
+                                            <option value="{pigcms{$vo.area_id}" <if condition="$vo['area_id'] eq $now_user['city_id']">selected="selected"</if>>{pigcms{$vo.area_name}</option>
+                                        </volist>
+                                    </select>
+                                </div>
+                                <!--input type="hidden" id="city_id" name="city_id" value="{pigcms{$now_user.city_id}"-->
                             </div>
                             <div class="form-group  row">
                                 <label class="col-sm-3 col-form-label">{pigcms{:L('_BIRTHDAY_TXT_')}</label>
                                 <div class="col-sm-9"><input type="text" size="20" class="form-control"
                                                              name="birthday" value="{pigcms{$now_user.birthday}"
                                                              size="20" validate="maxlength:20,required:true"/>
+                                </div>
+                            </div>
+                            <div class="form-group  row">
+                                <label class="col-sm-3 col-form-label">Vehicle Type</label>
+                                <div class="col-sm-9">
+                                    <select name="vehicle_type" class="form-control" id="vehicle_type">
+                                        <option value="0">------Vehicle Type------</option>
+                                        <option value="1" <if condition="$now_user['vehicle_type'] eq 1">selected="selected"</if>>Car</option>
+                                        <option value="2" <if condition="$now_user['vehicle_type'] eq 2">selected="selected"</if>>Bike</option>
+                                        <option value="3" <if condition="$now_user['vehicle_type'] eq 3">selected="selected"</if>>Motorcycle/Scooter</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="form-group  row">
@@ -233,6 +251,10 @@
                                              height="100"/>
                                     </div>
                                 </if>
+                                <div style="margin-left: 155px;margin-top: 10px;display: flex;">
+                                    <span style="flex: 1 1 50%;line-height: 36px;">Expiry Date</span>
+                                    <input type="text" class="form-control" name="insurace_expiry" size="20" validate="maxlength:50" value="{pigcms{$img.insurace_expiry}" onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd',lang:'en'})" />
+                                </div>
                             </div>
                             <!--工作证明-->
                             <div class="form-group  row">
@@ -252,7 +274,15 @@
                                              height="100"/>
                                     </div>
                                 </if>
-                            </div>
+                                <div style="margin-left: 155px;margin-top: 10px;display: flex;">
+                                    <input type="radio" name="certificate_type" value="1" <if condition="$img['certificate_expiry'] neq -1">checked="checked"</if> />
+                                    &nbsp;<span style="flex: 1 1 50%;line-height: 36px;">Expiry Date</span>
+                                    <input type="text" class="form-control" name="certificate_expiry" size="20" validate="maxlength:50" <if condition="$img['certificate_expiry'] neq -1">value="{pigcms{$img.certificate_expiry}"</if> onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd',lang:'en'})" />
+                                </div>
+                                <div style="margin-left: 155px;margin-top: 10px;display: flex;">
+                                    <input type="radio" name="certificate_type" value="-1" <if condition="$img['certificate_expiry'] eq -1">checked="checked"</if> />
+                                    &nbsp;<span style="flex: 1 1 50%;line-height: 36px;">Does not expire</span>
+                                </div>                            </div>
                             <input type="hidden" name="driver_license" id="filename_0"
                                    value="{pigcms{$img['driver_license']}">
                             <input type="hidden" name="insurance" id="filename_1"
@@ -399,5 +429,5 @@
 	</script>
 	<!--<script type="text/javascript" src="{pigcms{$static_path}js/area.js"></script>-->
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKlguA2QFIUVwWTo3danbOqSKv3nYbBCg&libraries=places&language=en"></script>
-	<script type="text/javascript" src="{pigcms{$static_path}js/map.js"></script>
+	<script type="text/javascript" src="{pigcms{$static_path}js/map.js?1.1"></script>
 <include file="Public:footer_inc"/>

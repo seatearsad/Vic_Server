@@ -21,64 +21,73 @@
             }else {
                 message = 'Error';
             }
-        });
+        },'json');
 
 	    return message;
     }
 </script>
 <style>
     body{
-        background-color: white;
+        background-color: #F8F8F8;
     }
     #phone,#mail{
         width: 85%;
         margin: 20px auto;
-        border-radius: 5px;
-        border: 2px solid #ffa52d;
+        border-radius: 10px;
         padding: 20px 20px 20px 50px;
         box-sizing: border-box;
-        font-size: 12px;
-        background-repeat: no-repeat;
-        background-position: center left 9px;
-        background-size:32px auto;
+        font-size: 14px;
+        background: #E3EAFD;
+        color: #294068;
     }
-    #phone{
-        background-image:url('{pigcms{$static_path}img/phone_or.png');
+    .div_title{
+        font-weight: bolder;
+        font-size: 16px;
+        margin-bottom: 10px;
     }
-    #mail{
-        background-image:url('{pigcms{$static_path}img/mail_or.png');
-        cursor: pointer;
+
+    .title_icon{
+        margin-left: -35px;
+        position: absolute;
+        display: table-cell;
     }
 </style>
 </head>
 <body>
     <include file="header" />
-    <div style="height: 60px"></div>
+    <div class="page_title" style="padding-bottom: 10px;">{pigcms{:L('_ND_COURIERSUPPORT_')}</div>
     <a href="tel:1-888-399-6668">
     <div id="phone">
-        <div>
-            Order and Delivery Questions
+        <div class="div_title">
+            <span class="material-icons title_icon">phone</span>
+            Order & Delivery Questions
         </div>
-        <div style="font-size: 10px;margin-top: 2px;">
+        <div style="margin-top: 2px;">
             Please contact our customer support if you have any questions about your order or delivery at 1-888-399-6668.
         </div>
     </div>
     </a>
     <div id="mail">
-        <div>
-            Account and Payment Questions
+        <div class="div_title">
+            <span class="material-icons title_icon">markunread</span>
+            Account & Payment Questions
         </div>
-        <div style="font-size: 10px;margin-top: 2px;">
-            For inquiries about your account info, payment status, and other questions, please email our human resource department at hr@tutti.app.
+        <div style="margin-top: 2px;">
+            For inquiries about your account info, payment status, and other questions, please email our human resource department at driver@tutti.app.
         </div>
     </div>
 <script>
     var ua = navigator.userAgent;
     $('#mail').click(function () {
         if(!ua.match(/TuttiDeliver/i)) {
-            location.href = "mailto:hr@tutti.app";
+            location.href = "mailto:driver@tutti.app";
         }else{
-            alert("Please send email to hr@tutti.app");
+            layer.open({
+                title: "",
+                content: "Please send email to driver@tutti.app",
+                btn: ["{pigcms{:L('_B_D_LOGIN_CONIERM_')}"],
+            });
+            //alert("Please send email to henry@tutti.app");
         }
     });
 

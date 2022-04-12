@@ -662,11 +662,6 @@ class MyAction extends BaseAction{
 
         $adress_list = D('User_adress')->get_adress_list($this->user_session['uid']);
         $sid = $_GET['store_id'] ? $_GET['store_id'] : 0;
-        if($sid != 0){
-            $store = D('Store')->get_store_by_id($sid);
-        }else{
-            $store = null;
-        }
         
         if ($_GET["from"]=="shop"){
             $_GET["from"]="address";
@@ -746,26 +741,39 @@ class MyAction extends BaseAction{
                 $value['distance'] = 0;
 
                 if ($store) {
-                    $distance = getDistance($store['lat'], $store['lng'], $value['latitude'], $value['longitude']);
-                    $value['distance'] = $distance;
-                    if ($distance <= $store['delivery_radius'] * 1000) {
-                        //获取特殊城市属性
-                        $city = D('Area')->where(array('area_id'=>$store['city_id']))->find();
-                        if($city['range_type'] != 0) {
-                            switch ($city['range_type']){
-                                case 1://按照纬度限制的城市 小于某个纬度
-                                    if($value['latitude'] >= $city['range_para']) $value['is_allow'] = 0;
-                                    else $value['is_allow'] = 1;
-                                    break;
-                                default:
-                                    $value['is_allow'] = 1;
-                                    break;
-                            }
-                        }else{
-                            $value['is_allow'] = 1;
-                        }
-                    } else {
+                    if($store['city_id'] != $value['city']){
                         $value['is_allow'] = 0;
+                    }else {
+                        $distance = getDistance($store['lat'], $store['lng'], $value['latitude'], $value['longitude']);
+                        $value['distance'] = $distance;
+                        if ($distance <= $store['delivery_radius'] * 1000) {
+                            //获取特殊城市属性
+                            $city = D('Area')->where(array('area_id' => $store['city_id']))->find();
+                            if ($city['range_type'] != 0) {
+                                switch ($city['range_type']) {
+                                    case 1://按照纬度限制的城市 小于某个纬度
+                                        if ($value['latitude'] >= $city['range_para']) $value['is_allow'] = 0;
+                                        else $value['is_allow'] = 1;
+                                        break;
+                                    case 2://自定义区域
+                                        import('@.ORG.RegionalCalu.RegionalCalu');
+                                        $region = new RegionalCalu();
+                                        if ($region->checkCity($city, $value['longitude'], $value['latitude'])) {
+                                            $value['is_allow'] = 1;
+                                        } else {
+                                            $value['is_allow'] = 0;
+                                        }
+                                        break;
+                                    default:
+                                        $value['is_allow'] = 1;
+                                        break;
+                                }
+                            } else {
+                                $value['is_allow'] = 1;
+                            }
+                        } else {
+                            $value['is_allow'] = 0;
+                        }
                     }
                 } else {
                     $value['is_allow'] = 1;
@@ -786,7 +794,7 @@ class MyAction extends BaseAction{
             //var_dump($address_list_allow);die();
             foreach ($adress_list as $v) {
                 if ($v['is_allow'] == 0) {
-                    $address_list_not_allow[] = $v;;
+                    $address_list_not_allow[] = $v;
                 }
             }
             //var_dump($address_list_allow);
@@ -6280,18 +6288,28 @@ class MyAction extends BaseAction{
 
     public function ajax_city_name(){
         $city_name = $_POST['city_name'];
-        $where = array('area_name'=>$city_name,'area_type'=>2);
-        $area = D('Area')->where($where)->find();
-        $data = array();
-        if($area){
-            $data['area_id'] = 0;
-            $data['city_id'] = $area['area_id'];
-            $data['province_id'] = $area['area_pid'];
+        //$where = array('area_name'=>$city_name,'area_type'=>2);
+        //$area = D('Area')->where($where)->find();
 
-            $return['error'] = 0;
-        }else{
-            $return['error'] = 1;
+        $city_id = 0;
+        $area_list = D('Area')->where(array('area_type'=>2))->select();
+        foreach ($area_list as $city){
+            $city_arr = explode("|",$city['area_ip_desc']);
+            if(in_array($city_name,$city_arr)){
+                $city_id = $city['area_id'];
+            }
         }
+
+        $data = array();
+        //if($area){
+        $data['area_id'] = 0;
+        $data['city_id'] = $city_id;
+        $data['province_id'] = 0;
+
+        $return['error'] = 0;
+        //}else{
+        //    $return['error'] = 1;
+        //}
         $return['info'] = $data;
         exit(json_encode($return));
     }

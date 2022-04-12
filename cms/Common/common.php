@@ -1015,6 +1015,18 @@ function show_time_ago($time){
     return $time_str;
 }
 
+function show_time_min_ago($time){
+    if($time < 0){
+        $time_str = show_time($time*-1);
+    }else {
+        $min = intval($time  / 60);
+
+        $time_str = $min . " min ago";
+    }
+
+    return $time_str;
+}
+
 function show_time($time){
     $hour = intval($time / 3600);
     $min = intval(($time-($hour*3600)) / 60);
@@ -1114,5 +1126,28 @@ function is_mobile_request(){
         return true;
     else
         return false;
+}
+
+//对emoji表情转义
+function emoji_encode($str){
+    $strEncode = '';
+    $length = mb_strlen($str,'utf-8');
+    for ($i=0; $i < $length; $i++) {
+        $_tmpStr = mb_substr($str,$i,1,'utf-8');
+        if(strlen($_tmpStr) >= 4){
+            $strEncode .= '[[EMOJI:'.rawurlencode($_tmpStr).']]';
+        }else{
+            $strEncode .= $_tmpStr;
+        }
+    }
+    return $strEncode;
+}
+
+//对emoji表情转反义
+function emoji_decode($str){
+    $strDecode = preg_replace_callback('|\[\[EMOJI:(.*?)\]\]|', function($matches){
+        return rawurldecode($matches[1]);
+    }, $str);
+    return $strDecode;
 }
 ?>

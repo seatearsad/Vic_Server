@@ -18,7 +18,7 @@
     <script type="text/javascript" src="{pigcms{$static_path}js/iscroll.js" charset="utf-8"></script>
 </head>
 <style>
-    body{background-color: white;}
+    body{background-color: #F8F8F8;}
     #banner{
         width: 100%;
         background-color: silver;
@@ -27,22 +27,26 @@
     #all_list{
         width: 90%;
         margin: 10px auto;
-        font-size: 13px;
-        color: #666666;
+        font-size: 16px;
+        color: #294068;
+    }
+    #all_list a{
+        color: #294068;
     }
     #list_title{
         text-align: center;
         margin: 20px auto;
     }
-    #all_list li{
-        padding-left: 20px;
+    #all_list li .list_title{
         text-decoration: underline;
         line-height: 24px;
+        margin-left: 30px;
+        display: inline-block;
     }
 </style>
 <body>
 <include file="header" />
-<div style="height: 60px"></div>
+<div class="page_title">{pigcms{:L('_ND_INSANN_')}</div>
 <section id="banner_hei" class="banner">
     <div class="swiper-container swiper-container1">
         <div class="swiper-wrapper">
@@ -59,13 +63,13 @@
 </section>
 
 <div id="all_list">
-    <div id="list_title">
-        Articles & Instructions
-    </div>
     <ul>
         <volist name="list" id="doc">
             <a href="{pigcms{:U('Deliver/inst')}&did={pigcms{$doc['id']}">
-            <li>{pigcms{$doc.title}</li>
+            <li>
+                <span class="material-icons" style="vertical-align: text-top;position: absolute;">subject</span>
+                <span class="list_title">{pigcms{$doc.title}</span>
+            </li>
             </a>
         </volist>
     </ul>
@@ -169,7 +173,7 @@
             }else {
                 message = 'Error';
             }
-        });
+        },'json');
 
         return message;
     }

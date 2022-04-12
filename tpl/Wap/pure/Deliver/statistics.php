@@ -21,17 +21,17 @@
     }
     .summary{
         width: 80%;
-        margin: 10px auto;
-        border: 1px solid #ffa52d;
-        border-radius: 2px;
-        font-size: 12px;
-        color: #777777;
+        margin: 50px auto;
+        border-radius: 10px;
+        font-size: 14px;
+        color: #294068;
         padding: 10px 5%;
+        background-color: #E3EAFD;
         text-align: center;
     }
     .summary_txt{
         width: 80%;
-        margin: 10px auto;
+        margin: 50px auto 0 auto;
         font-size: 12px;
         color: #777777;
         padding: 5px;
@@ -41,28 +41,28 @@
         display: inline-block;
         width: 70%;
         text-align: left;
-        font-size: 12px;
-        line-height: 25px;
+        font-size: 16px;
+        line-height: 30px;
     }
     .su_right{
         display: inline-block;
         width: 30%;
         text-align: right;
-        font-size: 12px;
-        line-height: 25px;
+        font-size: 16px;
+        line-height: 30px;
     }
     .y_c{
         color: #ffa52d;
     }
     .order_history{
-        color: white;
-        background-color: #ffa52d;
+        color: #294068;
         line-height: 25px;
-        margin: 20px auto;
+        margin: 60px auto 20px auto;
         border-radius: 1px;
         cursor: pointer;
-        width: 50%;
-        font-size: 10px;
+        text-decoration: underline;
+        font-size: 14px;
+        text-align: right;
     }
     .my_earning{
         text-align: center;
@@ -123,33 +123,41 @@
     .border_blue .earn_num{
         color: dodgerblue;
     }
+    .Statistics_top a .material-icons{
+        position: absolute;
+        margin-left: -30px;
+        margin-top: 5px;
+    }
 </style>
 <body>
 <include file="header" />
+<div class="page_title">{pigcms{:L('_ND_MYSTATISTICS_')}</div>
 <section class="Statistics">
     <div class="Statistics_top clr">
-        <a href="javascript:void(0);" id="begin">
-            <h2><i>{pigcms{:L('_START_TIME_')}</i></h2>
+        <a href="javascript:void(0);" id="begin" style="margin-left: 5%;">
             <input type="text" readonly="readonly" placeholder="{pigcms{:L('_ND_STARTDATE_')}"  name="appDate" id="appDate" value="{pigcms{$begin_time}">
+            <span class="material-icons">arrow_drop_down</span>
         </a>
+        <label style="float: left;line-height: 40px;margin: 0 10px;"> To </label>
         <a href="javascript:void(0)" id="end">
-            <h2><i>{pigcms{:L('_END_TIME_')}</i></h2>
             <input type="text" readonly="readonly" placeholder="{pigcms{:L('_ND_ENDDATE_')}"  name="appDate1" id="appDate1" value="{pigcms{$end_time}">
+            <span class="material-icons">arrow_drop_down</span>
         </a>
     </div>
     <section class="summary">
-        <div style="margin: 5px auto 15px auto;font-weight: bold;">{pigcms{:L('_ND_SUMMARY_')}</div>
+        <div style="margin: 5px auto 15px auto;font-weight: bold;font-size: 18px;">Summary</div>
         <div style="font-size: 0px">
-            <span class="su_left y_c">{pigcms{:L('_ND_TOTALORDER_')}</span>
-            <span class="su_right y_c">{pigcms{$order_count|default=0}</span>
+            <span class="su_left">{pigcms{:L('_ND_TOTALORDER_')}</span>
+            <span class="su_right">{pigcms{$order_count|default=0}</span>
+        </div>
+        <div style="border-bottom: 1px solid lightgray;margin: 10px auto;"></div>
+        <div style="font-size: 0px">
+            <span class="su_left">Delivery Earning</span>
+            <span class="su_right">${pigcms{$freight_charge+$tip|floatval}</span>
         </div>
         <div style="font-size: 0px">
-            <span class="su_left">{pigcms{:L('_ND_TOTALDELIVERYFEE_')}</span>
-            <span class="su_right">${pigcms{$freight_charge|floatval}</span>
-        </div>
-        <div style="font-size: 0px">
-            <span class="su_left">{pigcms{:L('_ND_TIPS_')}</span>
-            <span class="su_right">${pigcms{$tip|default=0}+</span>
+            <span class="su_left">Bonus</span>
+            <span class="su_right">${pigcms{$bonus|number_format=###,2}</span>
         </div>
         <!--div style="font-size: 0px">
             <span class="su_left" style="font-weight: bold;">Earning by Delivery Fees + Tips, or</span>
@@ -159,11 +167,11 @@
             <span class="su_left" style="font-weight: bold;">Guaranteed Earning ($10/order)*</span>
             <span class="su_right" style="font-weight: bold;">${pigcms{$guara_money|floatval}</span>
         </div-->
-        <div style="border-bottom: 1px solid lightgray;margin: 15px auto;"></div>
+
         <div style="font-size: 0px">
             <span class="su_left" style="font-weight: bold;">{pigcms{:L('_ND_ACTUALEARN_')}</span>
             <span class="su_right" style="font-weight: bold;">
-                    ${pigcms{$freight_charge+$tip}+
+                    ${pigcms{$freight_charge+$tip+$bonus}
             </span>
         </div>
         <div style="font-size: 0px">
@@ -171,18 +179,18 @@
             <span class="su_right">(${pigcms{$offline_money|floatval})</span>
         </div>
         <div style="font-size: 0px">
-            <span class="su_left y_c">{pigcms{:L('_ND_AMOUNTPAYABLE_')}</span>
-            <span class="su_right y_c">
-                    ${pigcms{$freight_charge+$tip-$offline_money|floatval}
+            <span class="su_left" style="font-weight: bold;">{pigcms{:L('_ND_AMOUNTPAYABLE_')}</span>
+            <span class="su_right" style="font-weight: bold;">
+                    ${pigcms{$freight_charge+$bonus+$tip-$offline_money|floatval}
             </span>
         </div>
         <div class="order_history">
             {pigcms{:L('_ND_VIEWORDERHIS_')}
         </div>
     </section>
-    <!--div class="summary_txt">
-        * Effective on February 16th, 2021, you're guaranteed a ${pigcms{$one_money} average earning per order. If the total of delivery fees + tips is lower than the guaranteed earning for the pay period, you will be paid based on the guaranteed earning calculation. Please note that this only applies to your pay period, which is the 1st-15th and 16th-31st of every month. If you select a different date range, the number given will not be accurate.
-    </div-->
+    <div class="summary_txt">
+        Your earnings will be paid semi-monthly by bank deposits. Please ensure you have updated your bank account information at Menu > Account. Pay periods are from the 1st to 15th and 16th to the end of each mounth.
+    </div>
     <!--section class="my_earning">
         <span>{pigcms{:L('_ND_MYEARNING_')}</span>
         <span class="btn act" data-type="0">{pigcms{:L('_ND_TODAY_')}</span>
@@ -218,7 +226,9 @@
                 $("#appDate").val(valueText);
                 if ($("#appDate1").val() == '') {
                 } else {
-                    location.href="{pigcms{:U('Deliver/statistics')}&begin_time="+valueText+'&end_time='+$("#appDate1").val();
+                    if(checkoutTime(valueText,$("#appDate1").val())) {
+                        location.href = "{pigcms{:U('Deliver/statistics')}&begin_time=" + valueText + '&end_time=' + $("#appDate1").val();
+                    }
                 }
             }
         };
@@ -234,7 +244,9 @@
                 $("#appDate1").val(valueText);
                 if ($("#appDate").val() == '') {
                 } else {
-                    location.href="{pigcms{:U('Deliver/statistics')}&end_time="+valueText+'&begin_time='+$("#appDate").val();
+                    if(checkoutTime($("#appDate").val(),valueText)) {
+                        location.href = "{pigcms{:U('Deliver/statistics')}&end_time=" + valueText + '&begin_time=' + $("#appDate").val();
+                    }
                 }
             }
         };
@@ -242,6 +254,21 @@
         $("#end").mobiscroll($.extend(enddate['date'], enddate['default']));
     });
 
+    function checkoutTime(beginTime,endTime) {
+        beginTime = Date.parse(beginTime);
+        endTime = Date.parse(endTime);
+
+        if(endTime < beginTime){
+            layer.open({
+                title: "",
+                content: "{pigcms{:L('CHECK_BEGIN_END_TIME')}",
+                btn: ["{pigcms{:L('_B_D_LOGIN_CONIERM_')}"],
+            });
+
+            return false;
+        }
+        else return true;
+    }
     var is_flag = false;
     $(document).on('click', '.go_detail', function(e){
         e.stopPropagation();
@@ -267,7 +294,7 @@
             }else {
                 message = 'Error';
             }
-        });
+        },'json');
 
         return message;
     }

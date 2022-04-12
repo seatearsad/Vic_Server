@@ -419,8 +419,30 @@
             margin-left: 10px;
             cursor: pointer;
         }
-        .model_select .active{
+        .model_select .active {
             color: #ffa52d;
+        }
+
+        #system_message{
+            position: absolute;
+            top:0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: black;
+            opacity: 50%;
+            z-index: 1000;
+            display: none;
+        }
+        #message_content{
+            position: absolute;
+            width: 80%;
+            top: 0;
+            max-width: 480px;
+            min-width: 240px;
+            margin-left: auto;
+            margin-right: auto;
+            z-index: 1001;
         }
     </style>
     <include file="Public:facebook"/>
@@ -886,5 +908,7 @@
 
 </script>
 {pigcms{$shareScript}
+<div id="system_message"></div>
+<div id="message_content"></div>
 </body>
 </html>

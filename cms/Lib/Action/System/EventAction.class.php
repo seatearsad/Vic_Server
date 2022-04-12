@@ -9,9 +9,36 @@
 class EventAction extends BaseAction
 {
     public function index(){
-        $event_list = D('New_event')->getEventList(-1);
+        //$event_list = D('New_event')->getEventList(-1);
+        $where = array();
+        if($_GET['type_select'] != 0) {
+            $where['type'] = $_GET['type_select'];
+            $this->assign('type',$_GET['type_select']);
+        }
+        if($_GET['city_select'] != 0) {
+            $where['city_id'] = $_GET['city_select'];
+            $this->assign('city_id',$_GET['city_select']);
+        }
+
+        $count_count = D('New_event')->where($where)->count();
+        import('@.ORG.system_page');
+        $p = new Page($count_count, 15);
+        $list = D('New_event')->field(true)->where($where)->order('status asc,id desc')->limit($p->firstRow . ',' . $p->listRows)->select();
+
+        $pagebar = $p->show2();
+        $this->assign('pagebar', $pagebar);
+
+        $event_list = D('New_event')->arrange_list(-1,$list);
+
         $this->assign('event_list',$event_list);
         $this->assign('module_name','Market');
+
+        $city = D('Area')->where(array('area_type'=>2,'is_open'=>1))->select();
+        $this->assign('city',$city);
+
+        $type_list = D('New_event')->getTypeName(-1);
+        $this->assign('type_list',$type_list);
+
         $this->display();
     }
 
@@ -95,7 +122,7 @@ class EventAction extends BaseAction
             $coupon_list = D('New_event_coupon')->where(array('event_id'=>$event_id))->select();
             foreach ($coupon_list as &$v){
                 $v = D('New_event')->getCouponUserNum($v);
-                if($event['type'] == 4 || $event['type'] == 5){
+                if($event['type'] == 4 || $event['type'] == 5 || $event['type'] == 6){
                     $store = D('Merchant_store')->field('name')->where(array('store_id'=>$v['limit_day']))->find();
                     $v['store_name'] = lang_substr($store['name'],C('DEFAULT_LANG'));
                 }
@@ -149,7 +176,7 @@ class EventAction extends BaseAction
         $type_name = L('G_EFFECTIVE_DAYS');
         if($event['type'] == 3){
             $type_name = L('G_DISTANCE_LIMIT');
-        }else if($event['type'] == 4 || $event['type'] == 5){
+        }else if($event['type'] == 4 || $event['type'] == 5 || $event['type'] == 6){
             $type_name = L('G_STORE_ID');
         }
 
@@ -161,10 +188,14 @@ class EventAction extends BaseAction
             $data['event_id'] = $_POST['event_id'];
             $data['name'] = $_POST['name'];
             $data['desc'] = $_POST['desc'];
-            $data['use_price'] = $_POST['use_price'];
+            $data['use_price'] = $_POST['use_price'] ? $_POST['use_price'] : 0;
             $data['discount'] = $_POST['discount'];
             $data['limit_day'] = $_POST['limit_day'];
-            $data['type'] = $_POST['type'];
+            $data['type'] = $_POST['type'] ? $_POST['type'] : 0;
+
+            if($_POST['discount'] == 0){
+                $this->frame_submit_tips(0, 'Discount cannot be 0.');
+            }
 
             if($_POST['coupon_id'] != 0){
                 D('New_event_coupon')->where(array('id'=>$_POST['coupon_id']))->save($data);
@@ -183,7 +214,7 @@ class EventAction extends BaseAction
             $coupon = D('New_event_coupon')->where(array('id'=>$id))->find();
             if($coupon){
                 $event = D('New_event')->where(array('id'=>$coupon['event_id']))->find();
-                if($event['type'] == 4 || $event['type'] == 5){
+                if($event['type'] == 4 || $event['type'] == 5 || $event['type'] == 6){
                     D('New_event_coupon')->where(array('id'=>$id))->delete();
                     $this->success('Success');
                 }else{
@@ -196,5 +227,89 @@ class EventAction extends BaseAction
             $msg = "ID Error";
         }
         $this->error($msg);
+    }
+
+
+    public function message(){
+        $where = array();
+        if(isset($_GET['type_select']) && $_GET['type_select'] >= 0) $where['type'] = $_GET['type_select'];
+
+        $list = D('Cloud_message')->where($where)->order("status desc,send_time asc,sort desc")->select();
+
+        foreach ($list as &$v){
+            $v['type_name'] = D('Cloud_message')->messageType[$v['type']];
+            $v['title'] = emoji_decode($v['title']);
+        }
+        $this->assign('list',$list);
+        $this->assign('type_list',D('Cloud_message')->messageType);
+        $this->assign('module_name','Market');
+        $this->display();
+    }
+
+    public function add_message(){
+        if($_GET){
+            $data['type'] = $_GET['type'];
+            $data['days'] = $_GET['days'];
+            $message = D('Cloud_message')->where($data)->find();
+
+            $message['title'] = emoji_decode($message['title']);
+            $message['content'] = emoji_decode($message['content']);
+
+            $this->assign('message',$message);
+        }
+
+        $this->assign('type',D('Cloud_message')->messageType);
+        $this->display();
+    }
+
+    public function modify_message(){
+        if($_POST){
+            if(isset($_POST['old_type']) && isset($_POST['old_days']) && $_POST['old_type'] != '' && $_POST['old_days'] != ''){
+                $data['type'] = $_POST['type'];
+                $data['days'] = $_POST['days'];
+
+                $_POST['title'] = emoji_encode($_POST['title']);
+                $_POST['content'] = emoji_encode($_POST['content']);
+
+                if($_POST['old_type'] != $_POST['type'] || $_POST['old_days'] != $_POST['days']){
+                    if($this->checkMessage($_POST['type'],$_POST['days'])){
+                        $this->frame_submit_tips(0,L('K_ACTIVIT_EXISTS'));
+                    }else{
+                        D('Cloud_message')->where(array('type'=>$_POST['old_type'],'days'=>$_POST['old_days']))->save($_POST);
+                    }
+                }else{
+                    D('Cloud_message')->where($data)->save($_POST);
+                }
+            }else {
+                if ($this->checkMessage($_POST['type'], $_POST['days'])) {
+                    $this->frame_submit_tips(0, L('K_ACTIVIT_EXISTS'));
+                } else {
+                    $_POST['title'] = emoji_encode($_POST['title']);
+                    $_POST['content'] = emoji_encode($_POST['content']);
+                    D('Cloud_message')->add($_POST);
+                }
+            }
+        }
+
+        $this->frame_submit_tips(1, 'Success！');
+    }
+
+    private function checkMessage($type,$days){
+        $data['type'] = $type;
+        $data['days'] = $days;
+        $old_message = D('Cloud_message')->where($data)->find();
+
+        return $old_message;
+    }
+
+    public function del_message(){
+        $data['type'] = $_POST['type'];
+        $data['days'] = $_POST['days'];
+
+        if(D('Cloud_message')->where($data)->delete()){
+            $this->success('Success');
+        }else{
+            $this->error("Error");
+        }
     }
 }

@@ -468,7 +468,8 @@ a {
 	  <input class="hidden" id="order_id" name="order_id" value="{pigcms{$order_id}">
 	  <input class="hidden" id="ouserName" name="ouserName" value="{pigcms{$user_adress['name']}">
 	  <input class="hidden" id="ouserTel" name="ouserTel" value="{pigcms{$user_adress['phone']}">
-	  <input class="hidden" id="ouserAddres" name="ouserAddres" value="{pigcms{$user_adress['adress']}  {pigcms{$user_adress['detail']}">
+	  <input class="hidden" id="ouserAddres" name="ouserAddres" value="{pigcms{$user_adress['adress']}">
+      <input class="hidden" id="ouserAddressDetail" name="ouserAddressDetail" value="{pigcms{$user_adress['detail']}">
 	  <input class="hidden" id="address_id" name="address_id" value="{pigcms{$user_adress['adress_id']}">
 	  <input type="hidden" name="pick_address" value="{pigcms{$pick_address['area_info']['province']} {pigcms{$pick_address['area_info']['city']} {pigcms{$pick_address['area_info']['area']} {pigcms{$pick_address['name']} 电话：{pigcms{$pick_address['phone']}"/>
 	  <input type="hidden" name="pick_id" value="{pigcms{$pick_address['pick_addr_id']}"/>

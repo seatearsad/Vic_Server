@@ -1,6 +1,8 @@
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
 <style>
     body{
         max-width: 100%;
+        background-color: #F8F8F8;
     }
     #tutti_header{
         width: 100%;
@@ -17,7 +19,7 @@
         flex: 1 1 100%;
     }
     #header_sign{
-        flex: 1 1 100%;
+        flex: 1 1 20%;
     }
 
     #header_sign a{
@@ -26,7 +28,7 @@
         border-radius: 3px;
     }
 
-    .hamburger{
+    .hamburger,.refresh{
         height: 50px;
         width: 25px;
         cursor: pointer;
@@ -36,7 +38,7 @@
     .hamburger .line {
         width: 25px;
         height: 3px;
-        background-color: #ffa52d;
+        background-color: #294068;
         display: block;
         margin: 5px auto;
         -moz-border-radius: 3px;
@@ -47,7 +49,7 @@
         transition: all 0.3s ease-in-out;
     }
     .hamburger:hover .line{
-        background-color: #ffa64d;
+        background-color: #294068;
     }
     .menu_font{
         margin-top: 16px;
@@ -75,7 +77,7 @@
         top:60px;
         max-width: 100%;
         width: 500px;
-        background-color: white;
+        background-color: #294068;
         transition: transform .4s ease;
         transform: translate3d(-150%, 0, 0);
         display: flex;
@@ -88,25 +90,21 @@
     #menu_memo ul{
         width: 92%;
         margin-left: 5%;
-        margin-top: 40px;
+        margin-top: 60px;
         padding: 0;
     }
     #menu_memo ul li{
         list-style-type: none;
-        height: 30px;
-        line-height: 30px;
+        height: 40px;
+        line-height: 25px;
         cursor: pointer;
-        background-image: url("./tpl/Static/blue/images/new/black_arrow.png");
         background-size: auto 16px;
         background-repeat: no-repeat;
         background-position: right;
         display: flex;
         margin-top: 5px;
-        color: #3f3f3f;
-    }
-    #menu_memo ul li:hover{
-        color: #ffa52d;
-        background-image: url("./tpl/Static/blue/images/new/or_arrow.png");
+        color: white;
+        font-weight: bold;
     }
 
     .menu_font span{
@@ -122,9 +120,9 @@
         width: 90%;
         height: 30px;
         margin-left: 5%;
-        padding-top: 5px;
+        padding-top: 15px;
         position: inherit;
-        border-bottom: 2px solid #f5f5f5;
+        color: white;
     }
     .startOrder{color: #fff;float: right;background: green;border: 1px solid #ccc;padding: 5px 10px 5px 10px;}
     .stopOrder{color: #000;float: right;background: #ccc;border: 1px solid #ccc;padding: 5px 10px 5px 10px;}
@@ -146,13 +144,13 @@
         padding-left: 20px;
     }
     #logout{
-        color: #ffa52d;
+        color: white;
         float: right;
         cursor: pointer;
         line-height: 30px;
     }
     #lang_div{
-        color: #666666;
+        color: white;
         line-height: 30px;
         padding-left: 30px;
         float: left;
@@ -167,42 +165,44 @@
     #lang_div span.act{
         color: #ffa52d;
     }
-    .m_img{
+    .material-icons{
         width: 35px;
-        background-repeat: no-repeat;
-        background-position: center left;
-        background-size:auto 70%;
     }
-    #menu_home .m_img{
-        background-image:url('{pigcms{$static_path}img/deliver_menu/home.png');
+    .refresh{
+        height: 48px;
+        width: 48px;
+        cursor: pointer;
+        margin-left: 5%;
+        margin-top: 10px;
+        padding-top: 10px;
+        box-sizing: border-box;
+        background-color: white;
+        border-radius: 24px;
+        position: relative;
     }
-    #menu_shift .m_img{
-        background-image:url('{pigcms{$static_path}img/deliver_menu/shift.png');
-    }
-    #menu_stat .m_img{
-        background-image:url('{pigcms{$static_path}img/deliver_menu/static.png');
-    }
-    #menu_order .m_img{
-        background-image:url('{pigcms{$static_path}img/deliver_menu/order.png');
-    }
-    #menu_inst .m_img{
-        background-image:url('{pigcms{$static_path}img/deliver_menu/inst.png');
-    }
-    #menu_account .m_img{
-        background-image:url('{pigcms{$static_path}img/deliver_menu/account.png');
-    }
-    #menu_support .m_img{
-        background-image:url('{pigcms{$static_path}img/deliver_menu/support.png');
+    #offsetTop{
+        width: 100%;
+        height: 24px;
+        background-color: white;
+        position: fixed;
+        top:0;
+        z-index: 999;
     }
 </style>
-
+<div id="offsetTop"></div>
 <div id="tutti_header">
     <div id="header_menu">
-        <div id="hamburger-1" class="hamburger">
-            <span class="line"></span>
-            <span class="line"></span>
-            <span class="line"></span>
-        </div>
+        <if condition="ACTION_NAME neq 'schedule' and ACTION_NAME neq 'statistics' and ACTION_NAME neq 'orders' and ACTION_NAME neq 'inst' and ACTION_NAME neq 'account' and ACTION_NAME neq 'support' and ACTION_NAME neq 'index'">
+            <div class="refresh" id="back_btn">
+                <span class="material-icons" style="color: #294068;font-size: 30px;">keyboard_arrow_left</span>
+            </div>
+            <else />
+            <div id="hamburger-1" class="hamburger">
+                <span class="line"></span>
+                <span class="line"></span>
+                <span class="line"></span>
+            </div>
+        </if>
         <if condition="ACTION_NAME eq 'index' OR ACTION_NAME eq 'process'">
         <div class="menu_font">Status:
             <if condition="$deliver_session['work_status'] eq '1'">
@@ -215,6 +215,9 @@
     </div>
 
     <div id="header_sign">
+        <div class="refresh" id="refresh_btn">
+            <span class="material-icons" style="color: #294068;font-size: 26px;">restart_alt</span>
+        </div>
         <if condition="($city['urgent_time'] neq 0 OR $is_change eq 1) && (ACTION_NAME eq 'index' OR ACTION_NAME eq 'process') && $deliver_session['work_status'] eq 0">
             <if condition="$deliver_session['work_status'] eq '1'">
                 <a href="javascript:void(0)" class="startOrder" ref="0">{pigcms{:L('_CLOCK_IN_')}</a>
@@ -231,31 +234,31 @@
     </div>
     <ul>
         <li id="menu_home">
-            <span class="m_img"> </span>
+            <span class="material-icons">home</span>
             <span>{pigcms{:L('_ND_HOME_')}</span>
         </li>
         <li id="menu_shift">
-            <span class="m_img"> </span>
+            <span class="material-icons">event</span>
             <span>{pigcms{:L('_ND_MYSHIFTS_')}</span>
         </li>
         <li id="menu_stat">
-            <span class="m_img"> </span>
+            <span class="material-icons">account_balance_wallet</span>
             <span>{pigcms{:L('_ND_MYSTATISTICS_')}</span>
         </li>
         <li id="menu_order">
-            <span class="m_img"> </span>
+            <span class="material-icons">watch_later</span>
             <span>{pigcms{:L('_ND_ORDERHISTORY_')}</span>
         </li>
         <li id="menu_inst">
-            <span class="m_img"> </span>
+            <span class="material-icons">error</span>
             <span>{pigcms{:L('_ND_INSANN_')}</span>
         </li>
         <li id="menu_account">
-            <span class="m_img"> </span>
+            <span class="material-icons">account_circle</span>
             <span>{pigcms{:L('_ND_MYACCOUNT_')}</span>
         </li>
         <li id="menu_support">
-            <span class="m_img"> </span>
+            <span class="material-icons">help</span>
             <span>{pigcms{:L('_ND_COURIERSUPPORT_')}</span>
         </li>
     </ul>
@@ -272,6 +275,15 @@
 <script type="text/javascript" src="{pigcms{$static_path}layer/layer.m.js" charset="utf-8"></script>
 <script src="{pigcms{$static_public}js/lang.js"></script>
 <script>
+    $(function () {
+        var ua = navigator.userAgent;
+        if(ua.match(/IPhonex/i)) {
+            $('#tutti_header').css("top","24px");
+            $('#menu_memo').css("top","84px");
+            $('.page_title').css("padding-top","104px");
+        }
+    });
+
     var is_open_menu = false;
     $('.hamburger').click(function () {
         if(is_open_menu) {
@@ -280,7 +292,7 @@
         }else {
             $(this).addClass('is-active');
             $('#menu_memo').addClass('is_open');
-            $('#menu_memo').height($(window).height() - 60);
+            $('#menu_memo').height($(window).height() - parseFloat($('#menu_memo').css('top')));
         }
 
         is_open_menu = !is_open_menu;
@@ -312,14 +324,17 @@
     $(window).scroll(function () {
         var top = $(document).scrollTop();
         if((top > 0 && top <= init_top) || top < 0){
+            $('#offsetTop').css('margin-top',-top);
             $('#tutti_header').css('margin-top',-top);
             $('#menu_memo').css('margin-top',init_margin-top);
         }
         if(top > init_top){
+            $('#offsetTop').css('margin-top',-init_top);
             $('#tutti_header').css('margin-top',-init_top);
             $('#menu_memo').css('margin-top',init_margin - init_top);
         }
         if(top == 0){
+            $('#offsetTop').css('margin-top',0);
             $('#tutti_header').css('margin-top',0);
             $('#menu_memo').css('margin-top',init_margin);
 
@@ -344,6 +359,14 @@
 
     });
 
+    $('#refresh_btn').click(function () {
+        if(typeof (window.linkJs) != 'undefined'){
+            window.linkJs.reloadWebView();
+        }else {
+            window.location.reload();
+        }
+    });
+
     var language = "{pigcms{:C('DEFAULT_LANG')}";
     setLanguage(language);
     function setLanguage(language){
@@ -364,5 +387,8 @@
                 location.reload();
             }
         });
+    });
+    $('#back_btn').click(function () {
+        window.history.go(-1);
     });
 </script>

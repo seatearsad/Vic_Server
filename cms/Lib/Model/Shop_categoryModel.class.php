@@ -2,10 +2,10 @@
 class Shop_categoryModel extends Model
 {
 
-	public function lists($is_add_all = false)
+	public function lists($is_add_all = false,$city_id = 0)
 	{
         $tmpMap = array();
-		$items = $this->field(true)->order('cat_sort DESC')->select();
+		$items = $this->field(true)->where('city_id=0 or city_id='.$city_id)->order('cat_sort DESC')->select();
         foreach ($items as $k=>$item) {
             $items[$k]['cat_name']= lang_substr($item['cat_name'] ,C('DEFAULT_LANG'));
             $tmpMap[$item['cat_id']] = $items[$k];

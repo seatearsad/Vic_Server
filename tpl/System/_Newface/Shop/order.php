@@ -245,7 +245,7 @@
                                             {pigcms{$vo.reg_user_phone}
                                         </td>
                                         <td>
-                                            {pigcms{$vo.address}
+                                            {pigcms{$vo.address}<if condition="$vo['address_detail'] neq ''">&nbsp;- {pigcms{$vo.address_detail}</if>
                                         </td>
                                         <td>
                                             {pigcms{$vo.deliver_status_str}
@@ -287,6 +287,10 @@
                                                         <li class="fa fa-trash-o tutti_icon_dark"
                                                             title="{pigcms{:L('_BACK_DEL_')}"></li>
                                                     </a>
+
+                                                    <if condition="$vo.link_type eq 1">
+                                                        <img src="{pigcms{$static_path}images/deliverect.png" width="20"/>
+                                                    </if>
                                                 </div>
                                             </div>
                                         </td>

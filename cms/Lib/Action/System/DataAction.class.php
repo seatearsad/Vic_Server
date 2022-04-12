@@ -252,6 +252,7 @@ class DataAction extends BaseAction
             $objExcel->getActiveSheet()->getColumnDimension('Y')->setAutoSize(true);
             $objExcel->getActiveSheet()->getColumnDimension('Z')->setAutoSize(true);
             $objExcel->getActiveSheet()->getColumnDimension('AA')->setAutoSize(true);
+            $objExcel->getActiveSheet()->getColumnDimension('AB')->setAutoSize(true);
             //$objExcel->getActiveSheet()->getColumnDimension('AB')->setAutoSize(true);
 
             $objActSheet->setCellValue('A1', 'Order # 订单编号');
@@ -273,19 +274,20 @@ class DataAction extends BaseAction
             $objActSheet->setCellValue('N1', 'Tips小费');
             $objActSheet->setCellValue('O1', 'Delivery Discount配送费优惠');
             $objActSheet->setCellValue('P1', 'Coupon优惠卷');
-            $objActSheet->setCellValue('Q1', '(Merchant Discount商家优惠)');
-            $objActSheet->setCellValue('R1', 'Amount Paid实付总价');
-            $objActSheet->setCellValue('S1', 'Payment Info支付情况');
-            $objActSheet->setCellValue('T1', 'Payment Time支付时间');
-            $objActSheet->setCellValue('U1', 'Complete Time送达时间');
-            $objActSheet->setCellValue('V1', '出餐时间');
-            $objActSheet->setCellValue('W1', 'User Name客户姓名');
-            $objActSheet->setCellValue('X1', 'User Phone Number客户电话');
-            $objActSheet->setCellValue('Y1', 'Address客户地址');
-            $objActSheet->setCellValue('Z1', '配送费优惠类型');
-            $objActSheet->setCellValue('AA1', 'Food Prep出餐时间');
+            $objActSheet->setCellValue('Q1', '(Merchant Discount商家满减优惠)');
+            $objActSheet->setCellValue('R1', '(Merchant % Discount商家折扣)');
+            $objActSheet->setCellValue('S1', 'Amount Paid实付总价');
+            $objActSheet->setCellValue('T1', 'Payment Info支付情况');
+            $objActSheet->setCellValue('U1', 'Payment Time支付时间');
+            $objActSheet->setCellValue('V1', 'Complete Time送达时间');
+            $objActSheet->setCellValue('W1', '出餐时间');
+            $objActSheet->setCellValue('X1', 'User Name客户姓名');
+            $objActSheet->setCellValue('Y1', 'User Phone Number客户电话');
+            $objActSheet->setCellValue('Z1', 'Address客户地址');
+            $objActSheet->setCellValue('AA1', '配送费优惠类型');
+            $objActSheet->setCellValue('AB1', 'Food Prep出餐时间');
 
-            $sql = "SELECT o.*, d.name as good_name,d.price as good_price ,d.unit,d.cost_price, d.num as good_num,d.tax_num,d.deposit_price FROM (select oo.*,ss.tax_num as store_tax,ss.name AS store_name from pigcms_shop_order as oo left join pigcms_merchant_store as ss on ss.store_id=oo.store_id ".$condition_where." LIMIT ". $i*1000 .",1000)o LEFT JOIN pigcms_shop_order_detail AS d ON `d`.`order_id`=`o`.`order_id` ORDER BY o.order_id DESC";
+            $sql = "SELECT o.*,d.goods_id, d.name as good_name,d.price as good_price ,d.cost_price as good_old_price,d.unit,d.cost_price, d.num as good_num,d.tax_num,d.deposit_price,d.dish_id FROM (select oo.*,ss.tax_num as store_tax,ss.name AS store_name,ss.menu_version from pigcms_shop_order as oo left join pigcms_merchant_store as ss on ss.store_id=oo.store_id ".$condition_where." LIMIT ". $i*1000 .",1000)o LEFT JOIN pigcms_shop_order_detail AS d ON `d`.`order_id`=`o`.`order_id` ORDER BY o.order_id DESC";
 
             $result_list = D()->query($sql);
             fdump(D()->getDbError());
@@ -299,29 +301,51 @@ class DataAction extends BaseAction
                 $curr_deposit = 0;
 
                 $curr_num = 0;
+
+                $curr_good_discount = 0;
+
+                $all_behalf_order = array();
                 foreach ($result_list as $k=>$v){
-                    if($curr_order != $v['order_id']){
-                        if($curr_order == ''){
-                            $curr_order = $v['order_id'];
-                        }else{
-                            $record_list[$curr_order]['goods_tax'] = $curr_tax;
-                            $record_list[$curr_order]['deposit_price'] = $curr_deposit;
+                    if($v['uid'] == 0){//取出代客下单的订单
+                        $all_behalf_order[] = $v;
+                    }else {
+                        if ($curr_order != $v['order_id']) {
+                            if ($curr_order == '') {
+                                $curr_order = $v['order_id'];
+                            } else {
+                                $record_list[$curr_order]['goods_tax'] = $curr_tax;
+                                $record_list[$curr_order]['deposit_price'] = $curr_deposit;
+                                $record_list[$curr_order]['good_discount'] = $curr_good_discount;
 
-                            $curr_order = $v['order_id'];
+                                $curr_order = $v['order_id'];
+                            }
+
+                            if ($v['menu_version'] == 1)
+                                $curr_tax = $v['good_price'] * $v['good_num'] * $v['tax_num'] / 100;
+                            else {
+                                $orderDetail = array('goods_id' => $v['goods_id'], 'num' => $v['good_num'], 'store_id' => $v['store_id'], 'dish_id' => $v['dish_id'], "good_price" => $v['good_price']);
+                                $curr_tax = D('StoreMenuV2')->calculationTaxExportOrder($orderDetail);
+                            }
+                            $curr_deposit = $v['good_num'] * $v['deposit_price'];
+                            $curr_good_discount = ($v['good_old_price'] - $v['good_price']) * $v['good_num'];
+                        } else {
+                            if ($v['menu_version'] == 1)
+                                $curr_tax += $v['good_price'] * $v['good_num'] * $v['tax_num'] / 100;
+                            else {
+                                $orderDetail = array('goods_id' => $v['goods_id'], 'num' => $v['good_num'], 'store_id' => $v['store_id'], 'dish_id' => $v['dish_id'], "good_price" => $v['good_price']);
+                                $curr_tax += D('StoreMenuV2')->calculationTaxExportOrder($orderDetail);
+                            }
+                            $curr_deposit += $v['good_num'] * $v['deposit_price'];
+                            $curr_good_discount += ($v['good_old_price'] - $v['good_price']) * $v['good_num'];
                         }
-
-                        $curr_tax = $v['good_price']*$v['good_num']*$v['tax_num']/100;
-                        $curr_deposit = $v['good_num']*$v['deposit_price'];
-                    }else{
-                        $curr_tax += $v['good_price']*$v['good_num']*$v['tax_num']/100;
-                        $curr_deposit += $v['good_num']*$v['deposit_price'];
                     }
 
                     $curr_num++;
 
-                    if($curr_num == count($result_list)) {
+                    if ($curr_num == count($result_list)) {
                         $record_list[$curr_order]['goods_tax'] = $curr_tax;
                         $record_list[$curr_order]['deposit_price'] = $curr_deposit;
+                        $record_list[$curr_order]['good_discount'] = $curr_good_discount;
                     }
                     //如果订单未支付，暂修改订单状态为100
                     if($v['paid'] == 0){
@@ -329,6 +353,12 @@ class DataAction extends BaseAction
                     }
                 }
 
+
+                foreach ($all_behalf_order as $vv){
+                    $record_list[$vv['order_id']]['goods_tax'] = $vv['discount_price'];
+                    $record_list[$vv['order_id']]['deposit_price'] = $vv['packing_charge'];
+                    $record_list[$vv['order_id']]['good_discount'] = 0;
+                }
 
                 $index = 2;
                 foreach ($result_list as $value) {
@@ -384,16 +414,17 @@ class DataAction extends BaseAction
                         $objActSheet->setCellValueExplicit('O' . $index, floatval(sprintf("%.2f",$value['delivery_discount'])),PHPExcel_Cell_DataType::TYPE_NUMERIC);//减免配送费
                         $objActSheet->setCellValueExplicit('P' . $index, floatval(sprintf("%.2f",$value['coupon_price'])),PHPExcel_Cell_DataType::TYPE_NUMERIC);//优惠券金额
                         $objActSheet->setCellValueExplicit('Q' . $index, floatval(sprintf("%.2f",$value['merchant_reduce'])),PHPExcel_Cell_DataType::TYPE_NUMERIC);//商家优惠
-                        $objActSheet->setCellValueExplicit('R' . $index, floatval($value['total_price'] + $value['tip_charge'] - $value['coupon_price'] - $value['delivery_discount'] - $value['merchant_reduce']),PHPExcel_Cell_DataType::TYPE_NUMERIC);//实付总价
-                        $objActSheet->setCellValueExplicit('S' . $index, D('Pay')->get_pay_name($value['pay_type'], $value['is_mobile_pay'], $value['paid']));//支付情况
-                        $objActSheet->setCellValueExplicit('T' . $index, $value['pay_time'] ? date('Y-m-d H:i:s', $value['pay_time']) : '');//支付时间
-                        $objActSheet->setCellValueExplicit('U' . $index, $value['use_time'] ? date('Y-m-d H:i:s', $value['use_time']) : '');//送达时间
-                        $objActSheet->setCellValueExplicit('V' . $index, $value['dining_time'],PHPExcel_Cell_DataType::TYPE_NUMERIC);//出餐时间
-                        $objActSheet->setCellValueExplicit('W' . $index, $value['username']);//客户姓名
-                        $objActSheet->setCellValueExplicit('X' . $index, $value['userphone'] . ' ');//客户电话
-                        $objActSheet->setCellValueExplicit('Y' . $index, $value['address'] . ' ');//客户地址
-                        $objActSheet->setCellValueExplicit('Z' . $index, $value['delivery_discount_event']);
-                        $objActSheet->setCellValueExplicit('AA' . $index, $value['dining_time']);
+                        $objActSheet->setCellValueExplicit('R' . $index, floatval(sprintf("%.2f",$record_list[$value['order_id']]['good_discount'])),PHPExcel_Cell_DataType::TYPE_NUMERIC);//商家商品优惠
+                        $objActSheet->setCellValueExplicit('S' . $index, floatval($value['total_price'] + $value['tip_charge'] - $value['coupon_price'] - $value['delivery_discount'] - $value['merchant_reduce']),PHPExcel_Cell_DataType::TYPE_NUMERIC);//实付总价
+                        $objActSheet->setCellValueExplicit('T' . $index, D('Pay')->get_pay_name($value['pay_type'], $value['is_mobile_pay'], $value['paid']));//支付情况
+                        $objActSheet->setCellValueExplicit('U' . $index, $value['pay_time'] ? date('Y-m-d H:i:s', $value['pay_time']) : '');//支付时间
+                        $objActSheet->setCellValueExplicit('V' . $index, $value['use_time'] ? date('Y-m-d H:i:s', $value['use_time']) : '');//送达时间
+                        $objActSheet->setCellValueExplicit('W' . $index, $value['dining_time'],PHPExcel_Cell_DataType::TYPE_NUMERIC);//出餐时间
+                        $objActSheet->setCellValueExplicit('X' . $index, $value['username']);//客户姓名
+                        $objActSheet->setCellValueExplicit('Y' . $index, $value['userphone'] . ' ');//客户电话
+                        $objActSheet->setCellValueExplicit('Z' . $index, $value['address'] . ' ');//客户地址
+                        $objActSheet->setCellValueExplicit('AA' . $index, $value['delivery_discount_event']);
+                        $objActSheet->setCellValueExplicit('AB' . $index, $value['dining_time']);
 
 
                         $index++;
@@ -882,7 +913,7 @@ class DataAction extends BaseAction
             }
 
             $database_user = D('User');
-            $count_user = $database_user->join(' as u left join '.C('DB_PREFIX').'user_adress as a on a.uid=u.uid')->where($where)->count();
+            $count_user = $database_user->field('u.*,a.city')->join(' as u left join '.C('DB_PREFIX').'user_adress as a on a.uid=u.uid')->where($where)->group('u.uid')->count();
 
             $length = ceil($count_user / 1000);
             for ($i = 0; $i < $length; $i++) {
@@ -915,7 +946,7 @@ class DataAction extends BaseAction
 //                $objActSheet->setCellValue('R1', '账号是否正常');
 
 
-                $user_list = $database_user->field('u.*,a.city')->join(' as u left join '.C('DB_PREFIX').'user_adress as a on a.uid=u.uid')->where($where)->limit($i * 1000 . ',1000')->order('add_time desc')->select();
+                $user_list = $database_user->field('u.*,a.city')->join(' as u left join '.C('DB_PREFIX').'user_adress as a on a.uid=u.uid')->where($where)->group('u.uid')->limit($i * 1000 . ',1000')->order('add_time desc')->select();
 
                 if (!empty($user_list)) {
                     import('ORG.Net.IpLocation');
@@ -1081,22 +1112,24 @@ class DataAction extends BaseAction
             $objExcel->getActiveSheet()->getColumnDimension('J')->setAutoSize(true);
             $objExcel->getActiveSheet()->getColumnDimension('K')->setAutoSize(true);
             $objExcel->getActiveSheet()->getColumnDimension('L')->setAutoSize(true);
+            $objExcel->getActiveSheet()->getColumnDimension('M')->setAutoSize(true);
 
             $objActSheet->setCellValue('A1', 'Order ID|订单编号');
             $objActSheet->setCellValue('B1', 'Item|商品名称');
             $objActSheet->setCellValue('C1', 'Quantity|数量');
             $objActSheet->setCellValue('D1', 'Price|单价');
-            $objActSheet->setCellValue('E1', 'Customer Name|客户姓名');
-            $objActSheet->setCellValue('F1', 'Subtotal|商品总价（税前）');//无
-            $objActSheet->setCellValue('G1', 'Tax on Subtotal|商品税费');
-            $objActSheet->setCellValue('H1', 'Packing Fee|包装费');
-            $objActSheet->setCellValue('I1', 'Tax on Packing Fee|包装税费');
-            $objActSheet->setCellValue('J1', 'Bottle Deposit');
-            $objActSheet->setCellValue('K1', 'Merchant Discount|商家优惠');
-            $objActSheet->setCellValue('L1', 'Time|时间');
+            $objActSheet->setCellValue('E1', 'Item Discount|商品优惠');
+            $objActSheet->setCellValue('F1', 'Customer Name|客户姓名');
+            $objActSheet->setCellValue('G1', 'Subtotal|商品总价（税前）');//无
+            $objActSheet->setCellValue('H1', 'Tax on Subtotal|商品税费');
+            $objActSheet->setCellValue('I1', 'Packing Fee|包装费');
+            $objActSheet->setCellValue('J1', 'Tax on Packing Fee|包装税费');
+            $objActSheet->setCellValue('K1', 'Bottle Deposit');
+            $objActSheet->setCellValue('L1', 'Merchant Discount|商家优惠');
+            $objActSheet->setCellValue('M1', 'Time|时间');
 
             //$sql = "SELECT  o.*, m.name AS merchant_name,d.name as good_name,d.price as good_price ,d.unit,d.cost_price, d.num as good_num, s.name AS store_name FROM " . C('DB_PREFIX') . "shop_order AS o INNER JOIN " . C('DB_PREFIX') . "merchant_store AS s ON s.store_id=o.store_id INNER JOIN " . C('DB_PREFIX') . "merchant AS m ON `s`.`mer_id`=`m`.`mer_id` INNER JOIN " . C('DB_PREFIX') . "shop_order_detail AS d ON `d`.`order_id`=`o`.`order_id` ".$condition_where." ORDER BY o.order_id DESC LIMIT " . $i * 1000 . ",1000";
-            $sql = "SELECT  o.*, m.name AS merchant_name,g.name as good_name,g.tax_num as good_tax,g.deposit_price,s.tax_num as store_tax,d.price as good_price ,d.unit,d.cost_price, d.num as good_num, s.name AS store_name FROM " . C('DB_PREFIX') . "shop_order AS o LEFT JOIN " . C('DB_PREFIX') . "merchant_store AS s ON s.store_id=o.store_id LEFT JOIN " . C('DB_PREFIX') . "merchant AS m ON `s`.`mer_id`=`m`.`mer_id` LEFT JOIN " . C('DB_PREFIX') . "shop_order_detail AS d ON `d`.`order_id`=`o`.`order_id`  LEFT JOIN " . C('DB_PREFIX') . "shop_goods AS g ON `g`.`goods_id`=`d`.`goods_id` ".$condition_where." ORDER BY o.order_id DESC LIMIT " . $i * 1000 . ",1000";
+            $sql = "SELECT  o.*, m.name AS merchant_name,g.name as good_name,g.tax_num as good_tax,g.deposit_price,s.tax_num as store_tax,s.menu_version,d.goods_id,d.price as good_price ,d.cost_price as good_old_price,d.unit,d.cost_price,d.dish_id, d.num as good_num, s.name AS store_name FROM " . C('DB_PREFIX') . "shop_order AS o LEFT JOIN " . C('DB_PREFIX') . "merchant_store AS s ON s.store_id=o.store_id LEFT JOIN " . C('DB_PREFIX') . "merchant AS m ON `s`.`mer_id`=`m`.`mer_id` LEFT JOIN " . C('DB_PREFIX') . "shop_order_detail AS d ON `d`.`order_id`=`o`.`order_id`  LEFT JOIN " . C('DB_PREFIX') . "shop_goods AS g ON `g`.`goods_id`=`d`.`goods_id` ".$condition_where." ORDER BY o.order_id DESC LIMIT " . $i * 1000 . ",1000";
 
             $result_list = D()->query($sql);
             //计算订单税费及押金
@@ -1182,7 +1215,12 @@ class DataAction extends BaseAction
                         $all_deposit = 0;
                     }
 
-                    $all_tax += $val['good_price'] * $val['good_tax']/100*$val['good_num'];
+                    if($val['menu_version'] == 1)
+                        $all_tax += $val['good_price'] * $val['good_tax']/100*$val['good_num'];
+                    else{
+                        $orderDetail = array('goods_id'=>$val['goods_id'],'num'=>$val['good_num'],'store_id'=>$val['store_id'],'dish_id'=>$val['dish_id'],"good_price"=>$val['good_price']);
+                        $all_tax += D('StoreMenuV2')->calculationTaxExportOrder($orderDetail);
+                    }
                     $all_deposit += $val['deposit_price']*$val['good_num'];
                     $total_tax = $all_tax + ($val['freight_charge']+$val['packing_charge'])*$val['store_tax']/100;
 
@@ -1211,14 +1249,15 @@ class DataAction extends BaseAction
                         $objActSheet->setCellValueExplicit('B' . $index, $value['good_name']);//Item|商品名称
                         $objActSheet->setCellValueExplicit('C' . $index, $value['good_num'],PHPExcel_Cell_DataType::TYPE_NUMERIC);//数量
                         $objActSheet->setCellValueExplicit('D' . $index, $value['good_price'],PHPExcel_Cell_DataType::TYPE_NUMERIC);//单价
-                        $objActSheet->setCellValueExplicit('E' . $index, '');//客户姓名
-                        $objActSheet->setCellValueExplicit('F' . $index, '',PHPExcel_Cell_DataType::TYPE_NUMERIC);//商品总价（税前）//无
-                        $objActSheet->setCellValueExplicit('G' . $index, '',PHPExcel_Cell_DataType::TYPE_NUMERIC);//商品总税
-                        $objActSheet->setCellValueExplicit('H' . $index, '',PHPExcel_Cell_DataType::TYPE_NUMERIC);//Packing Fee|包装费
-                        $objActSheet->setCellValueExplicit('I' . $index, '',PHPExcel_Cell_DataType::TYPE_NUMERIC);//Tax on Packing Fee
-                        $objActSheet->setCellValueExplicit('J' . $index, '',PHPExcel_Cell_DataType::TYPE_NUMERIC);//Bottle Deposit
-                        $objActSheet->setCellValueExplicit('K' . $index, '');//商家优惠
-                        $objActSheet->setCellValueExplicit('L' . $index, '');//时间
+                        $objActSheet->setCellValueExplicit('E' . $index, ($value['good_old_price']-$value['good_price']),PHPExcel_Cell_DataType::TYPE_NUMERIC);//单价
+                        $objActSheet->setCellValueExplicit('F' . $index, '');//客户姓名
+                        $objActSheet->setCellValueExplicit('G' . $index, '',PHPExcel_Cell_DataType::TYPE_NUMERIC);//商品总价（税前）//无
+                        $objActSheet->setCellValueExplicit('H' . $index, '',PHPExcel_Cell_DataType::TYPE_NUMERIC);//商品总税
+                        $objActSheet->setCellValueExplicit('I' . $index, '',PHPExcel_Cell_DataType::TYPE_NUMERIC);//Packing Fee|包装费
+                        $objActSheet->setCellValueExplicit('J' . $index, '',PHPExcel_Cell_DataType::TYPE_NUMERIC);//Tax on Packing Fee
+                        $objActSheet->setCellValueExplicit('K' . $index, '',PHPExcel_Cell_DataType::TYPE_NUMERIC);//Bottle Deposit
+                        $objActSheet->setCellValueExplicit('L' . $index, '');//商家优惠
+                        $objActSheet->setCellValueExplicit('M' . $index, '');//时间
                         $index++;
                     }else{
                         $index++;
@@ -1226,14 +1265,15 @@ class DataAction extends BaseAction
                         $objActSheet->setCellValueExplicit('B' . $index, $value['good_name']);//商品名称
                         $objActSheet->setCellValueExplicit('C' . $index, $value['good_num'],PHPExcel_Cell_DataType::TYPE_NUMERIC);//数量
                         $objActSheet->setCellValueExplicit('D' . $index, $value['good_price'],PHPExcel_Cell_DataType::TYPE_NUMERIC);//单价
-                        $objActSheet->setCellValueExplicit('E' . $index, $value['username']);//客户姓名
-                        $objActSheet->setCellValueExplicit('F' . $index, $value['goods_price'],PHPExcel_Cell_DataType::TYPE_NUMERIC);//商品总价（税前）
-                        $objActSheet->setCellValueExplicit('G' . $index, floatval(sprintf("%.2f", $all_record[$value['real_orderid']]['all_tax'])),PHPExcel_Cell_DataType::TYPE_NUMERIC);//商品税
-                        $objActSheet->setCellValueExplicit('H' . $index, floatval(sprintf("%.2f", $value['packing_charge'])),PHPExcel_Cell_DataType::TYPE_NUMERIC);//Packing Fee|包装费
-                        $objActSheet->setCellValueExplicit('I' . $index, floatval(sprintf("%.2f", $all_record[$value['real_orderid']]['packing_tax'])),PHPExcel_Cell_DataType::TYPE_NUMERIC);//Packing Fee|包装费
-                        $objActSheet->setCellValueExplicit('J' . $index, floatval(sprintf("%.2f", $all_record[$value['real_orderid']]['all_deposit'])),PHPExcel_Cell_DataType::TYPE_NUMERIC);//Bottle Deposit
-                        $objActSheet->setCellValueExplicit('K' . $index, floatval(sprintf("%.2f",$value['merchant_reduce'])),PHPExcel_Cell_DataType::TYPE_NUMERIC);//商家优惠
-                        $objActSheet->setCellValueExplicit('L' . $index, $value['use_time'] ? date('Y-m-d H:i:s', $value['use_time']) : '');//送达时间
+                        $objActSheet->setCellValueExplicit('E' . $index, ($value['good_old_price']-$value['good_price']),PHPExcel_Cell_DataType::TYPE_NUMERIC);//单价
+                        $objActSheet->setCellValueExplicit('F' . $index, $value['username']);//客户姓名
+                        $objActSheet->setCellValueExplicit('G' . $index, $value['goods_price'],PHPExcel_Cell_DataType::TYPE_NUMERIC);//商品总价（税前）
+                        $objActSheet->setCellValueExplicit('H' . $index, floatval(sprintf("%.2f", $all_record[$value['real_orderid']]['all_tax'])),PHPExcel_Cell_DataType::TYPE_NUMERIC);//商品税
+                        $objActSheet->setCellValueExplicit('I' . $index, floatval(sprintf("%.2f", $value['packing_charge'])),PHPExcel_Cell_DataType::TYPE_NUMERIC);//Packing Fee|包装费
+                        $objActSheet->setCellValueExplicit('J' . $index, floatval(sprintf("%.2f", $all_record[$value['real_orderid']]['packing_tax'])),PHPExcel_Cell_DataType::TYPE_NUMERIC);//Packing Fee|包装费
+                        $objActSheet->setCellValueExplicit('K' . $index, floatval(sprintf("%.2f", $all_record[$value['real_orderid']]['all_deposit'])),PHPExcel_Cell_DataType::TYPE_NUMERIC);//Bottle Deposit
+                        $objActSheet->setCellValueExplicit('L' . $index, floatval(sprintf("%.2f",$value['merchant_reduce'])),PHPExcel_Cell_DataType::TYPE_NUMERIC);//商家优惠
+                        $objActSheet->setCellValueExplicit('M' . $index, $value['use_time'] ? date('Y-m-d H:i:s', $value['use_time']) : '');//送达时间
                         $index++;
                     }
                     $tmp_id = $value['real_orderid'];
@@ -1244,14 +1284,15 @@ class DataAction extends BaseAction
                 $objActSheet->setCellValueExplicit('B' . $index, '');//商品名称
                 $objActSheet->setCellValueExplicit('C' . $index, '');//数量
                 $objActSheet->setCellValueExplicit('D' . $index, '');//单价
-                $objActSheet->setCellValueExplicit('E' . $index, '');//客户姓名
-                $objActSheet->setCellValueExplicit('F' . $index, floatval(sprintf("%.2f", $total_goods_price)),PHPExcel_Cell_DataType::TYPE_NUMERIC);//商品总价（税前）////无
-                $objActSheet->setCellValueExplicit('G' . $index, floatval(sprintf("%.2f", $total_goods_tax)),PHPExcel_Cell_DataType::TYPE_NUMERIC);//商品总税
-                $objActSheet->setCellValueExplicit('H' . $index, floatval(sprintf("%.2f", $total_packing_price)),PHPExcel_Cell_DataType::TYPE_NUMERIC);//Packing Fee|包装费
-                $objActSheet->setCellValueExplicit('I' . $index, floatval(sprintf("%.2f", $total_packing_tax)),PHPExcel_Cell_DataType::TYPE_NUMERIC);//Tax on Packing Fee|包装费税
-                $objActSheet->setCellValueExplicit('J' . $index, floatval(sprintf("%.2f", $total_deposit)),PHPExcel_Cell_DataType::TYPE_NUMERIC);//Bottle Deposit
-                $objActSheet->setCellValueExplicit('K' . $index, floatval(sprintf("%.2f", $total_merchant_reduce)),PHPExcel_Cell_DataType::TYPE_NUMERIC);//商家优惠
-                $objActSheet->setCellValueExplicit('L' . $index, '');//送达时间
+                $objActSheet->setCellValueExplicit('E' . $index, '');//单价
+                $objActSheet->setCellValueExplicit('F' . $index, '');//客户姓名
+                $objActSheet->setCellValueExplicit('G' . $index, floatval(sprintf("%.2f", $total_goods_price)),PHPExcel_Cell_DataType::TYPE_NUMERIC);//商品总价（税前）////无
+                $objActSheet->setCellValueExplicit('H' . $index, floatval(sprintf("%.2f", $total_goods_tax)),PHPExcel_Cell_DataType::TYPE_NUMERIC);//商品总税
+                $objActSheet->setCellValueExplicit('I' . $index, floatval(sprintf("%.2f", $total_packing_price)),PHPExcel_Cell_DataType::TYPE_NUMERIC);//Packing Fee|包装费
+                $objActSheet->setCellValueExplicit('J' . $index, floatval(sprintf("%.2f", $total_packing_tax)),PHPExcel_Cell_DataType::TYPE_NUMERIC);//Tax on Packing Fee|包装费税
+                $objActSheet->setCellValueExplicit('K' . $index, floatval(sprintf("%.2f", $total_deposit)),PHPExcel_Cell_DataType::TYPE_NUMERIC);//Bottle Deposit
+                $objActSheet->setCellValueExplicit('L' . $index, floatval(sprintf("%.2f", $total_merchant_reduce)),PHPExcel_Cell_DataType::TYPE_NUMERIC);//商家优惠
+                $objActSheet->setCellValueExplicit('M' . $index, '');//送达时间
             }
             sleep(2);
         }
@@ -1272,14 +1313,20 @@ class DataAction extends BaseAction
     }
 
     public function courier_info(){
-        if($_GET['status'] != -1){
+        if($_GET['status'] != -1 && $_GET['status'] != 2){
             $where['status'] = $_GET['status'];
+        }
+
+        if($_GET['status'] == 2){
+            $where['status'] = 1;
         }
 
         $where['group'] = 1;
         $where['reg_status'] = 0;
 
         $list = D('Deliver_user')->where($where)->select();
+
+        $expired_list = array();
         foreach ($list as &$deliver){
             $area = D('Area')->where(array('area_id'=>$deliver['city_id']))->find();
             $deliver['city_name'] = $area['area_name'];
@@ -1288,6 +1335,18 @@ class DataAction extends BaseAction
             $deliver['sin_num'] = $other['sin_num'];
 
             $deliver['status_name'] = $deliver['status'] == 1 ? 'Active' : 'Inactive';
+
+            if($_GET['status'] == 2){
+                if(($other['insurace_expiry'] != '' && strtotime($other['insurace_expiry']." 23:59:59") < time()) || ($other['certificate_expiry'] != '-1' && $other['certificate_expiry'] != '' && strtotime($other['certificate_expiry']." 23:59:59") < time())){
+                    $deliver['status_name'] = "Expired";
+                    $expired_list[] = $deliver;
+                }
+            }
+        }
+
+
+        if($_GET['status'] == 2){
+            $list = $expired_list;
         }
 
         require_once APP_PATH . 'Lib/ORG/phpexcel/PHPExcel.php';
@@ -1356,7 +1415,7 @@ class DataAction extends BaseAction
         $b_time = strtotime($b_date);
         $e_time = strtotime($e_date);
 
-        $sql = "SELECT s.order_id, s.create_time,s.uid,s.freight_charge, u.name,u.family_name,u.city_id as user_city_id, u.phone,u.remark,o.tip_charge,o.price,o.pay_type,o.coupon_price,o.delivery_discount,o.merchant_reduce FROM " . C('DB_PREFIX') . "deliver_supply AS s INNER JOIN " . C('DB_PREFIX') . "merchant_store AS m ON m.store_id=s.store_id LEFT JOIN " . C('DB_PREFIX') . "deliver_user AS u ON s.uid=u.uid LEFT JOIN " . C('DB_PREFIX') . "shop_order AS o ON s.order_id=o.order_id";
+        $sql = "SELECT s.order_id, s.create_time,s.uid,s.freight_charge,s.bonus, u.name,u.family_name,u.city_id as user_city_id, u.phone,u.remark,o.tip_charge,o.price,o.pay_type,o.coupon_price,o.delivery_discount,o.merchant_reduce FROM " . C('DB_PREFIX') . "deliver_supply AS s INNER JOIN " . C('DB_PREFIX') . "merchant_store AS m ON m.store_id=s.store_id LEFT JOIN " . C('DB_PREFIX') . "deliver_user AS u ON s.uid=u.uid LEFT JOIN " . C('DB_PREFIX') . "shop_order AS o ON s.order_id=o.order_id";
 
         $sql .= ' where s.status = 5 and s.create_time >='.$b_time.' and s.create_time <='.$e_time.' and o.is_del = 0';
         $sql .= ' order by s.uid';
@@ -1376,6 +1435,7 @@ class DataAction extends BaseAction
             $show_list[$v['uid']]['remark'] = $v['remark'];
             $show_list[$v['uid']]['order_num'] = $show_list[$v['uid']]['order_num'] ? $show_list[$v['uid']]['order_num']+ 1 : 1;
             $show_list[$v['uid']]['tip'] = $show_list[$v['uid']]['tip'] ? $show_list[$v['uid']]['tip'] + $v['tip_charge'] : $v['tip_charge'];
+            $show_list[$v['uid']]['bonus'] = $show_list[$v['uid']]['bonus'] ? $show_list[$v['uid']]['bonus'] + $v['bonus'] : $v['bonus'];
             $show_list[$v['uid']]['freight'] = $show_list[$v['uid']]['freight'] ? $show_list[$v['uid']]['freight'] + $v['freight_charge'] : $v['freight_charge'];
             if($v['pay_type'] == 'offline' || $v['pay_type'] == 'Cash'){//统计现金
                 if($v['coupon_price'] > 0) $v['price'] = $v['price'] - $v['coupon_price'];
@@ -1409,9 +1469,10 @@ class DataAction extends BaseAction
         $objActSheet->setCellValue('F1', '#of orders');
         $objActSheet->setCellValue('G1', 'Total Tip');
         $objActSheet->setCellValue('H1', 'Total Delivery Fee');
-        $objActSheet->setCellValue('I1', 'Total Cash');
-        $objActSheet->setCellValue('J1', 'Total');
-        $objActSheet->setCellValue('K1', 'Notes');
+        $objActSheet->setCellValue('I1', 'Total Bonus');
+        $objActSheet->setCellValue('J1', 'Total Cash');
+        $objActSheet->setCellValue('K1', 'Total');
+        $objActSheet->setCellValue('L1', 'Notes');
 
         $index = 2;
         foreach ($show_list as $k=>$v){
@@ -1424,9 +1485,10 @@ class DataAction extends BaseAction
             $objActSheet->setCellValueExplicit('F'.$index,$v['order_num']);
             $objActSheet->setCellValueExplicit('G'.$index,sprintf("%.2f", $v['tip']));
             $objActSheet->setCellValueExplicit('H'.$index,sprintf("%.2f", $v['freight']));
-            $objActSheet->setCellValueExplicit('I'.$index,sprintf("%.2f", $v['cash']));
-            $objActSheet->setCellValueExplicit('J'.$index,sprintf("%.2f",$v['tip'] + $v['freight'] - $v['cash']));
-            $objActSheet->setCellValueExplicit('K'.$index,$v['remark']);
+            $objActSheet->setCellValueExplicit('I'.$index,sprintf("%.2f", $v['bonus']));
+            $objActSheet->setCellValueExplicit('J'.$index,sprintf("%.2f", $v['cash']));
+            $objActSheet->setCellValueExplicit('K'.$index,sprintf("%.2f",$v['tip'] + $v['freight'] + $v['bonus'] - $v['cash']));
+            $objActSheet->setCellValueExplicit('L'.$index,$v['remark']);
             $index++;
         }
 
@@ -1578,14 +1640,15 @@ class DataAction extends BaseAction
             $objActSheet->setCellValue('H1', 'Order Amount');
             $objActSheet->setCellValue('I1', 'Delivery Fee');
             $objActSheet->setCellValue('J1', 'Tips');
-            $objActSheet->setCellValue('K1', 'Cash Due');
-            $objActSheet->setCellValue('L1', 'Total');
-            $objActSheet->setCellValue('M1', 'Status');
-            $objActSheet->setCellValue('N1', 'Acceptance Time');
-            $objActSheet->setCellValue('O1', 'Complete Time');
+            $objActSheet->setCellValue('K1', 'Bonus');
+            $objActSheet->setCellValue('L1', 'Cash Due');
+            $objActSheet->setCellValue('M1', 'Total');
+            $objActSheet->setCellValue('N1', 'Status');
+            $objActSheet->setCellValue('O1', 'Acceptance Time');
+            $objActSheet->setCellValue('P1', 'Complete Time');
 
 
-            $sql = "SELECT s.`supply_id`, s.order_id, s.item, s.name as username, s.phone as userphone, m.name as storename, s.money, s.start_time, s.end_time, s.aim_site, s.pay_type, s.paid, s.status, s.deliver_cash,s.freight_charge,o.tip_charge as tips FROM " . C('DB_PREFIX') . "deliver_supply AS s left JOIN " . C('DB_PREFIX') . "merchant_store AS m ON m.store_id=s.store_id left join ". C('DB_PREFIX') ."shop_order as o on s.order_id=o.order_id";
+            $sql = "SELECT s.`supply_id`, s.order_id, s.item, s.name as username, s.phone as userphone, m.name as storename, s.money, s.start_time, s.end_time, s.aim_site, s.pay_type, s.paid, s.status, s.deliver_cash,s.freight_charge,s.bonus,o.tip_charge as tips FROM " . C('DB_PREFIX') . "deliver_supply AS s left JOIN " . C('DB_PREFIX') . "merchant_store AS m ON m.store_id=s.store_id left join ". C('DB_PREFIX') ."shop_order as o on s.order_id=o.order_id";
             $sql .= ' WHERE s.type=0 AND s.uid=' . $uid;
             if ($begin_time && $end_time) {
                 $sql .= ' AND s.start_time>' . strtotime($begin_time." 00:00:00") . ' AND s.start_time<' . strtotime($end_time." 23:59:59");
@@ -1622,8 +1685,9 @@ class DataAction extends BaseAction
                     $objActSheet->setCellValueExplicit('H' . $index, floatval($value['money']));
                     $objActSheet->setCellValueExplicit('I' . $index, floatval($value['freight_charge']));
                     $objActSheet->setCellValueExplicit('J' . $index, floatval($value['tips']));
-                    $objActSheet->setCellValueExplicit('K' . $index, floatval($value['deliver_cash']));
-                    $objActSheet->setCellValueExplicit('L' . $index, floatval($value['freight_charge']+$value['tips']-$value['deliver_cash']));
+                    $objActSheet->setCellValueExplicit('K' . $index, floatval($value['bonus']));
+                    $objActSheet->setCellValueExplicit('L' . $index, floatval($value['deliver_cash']));
+                    $objActSheet->setCellValueExplicit('M' . $index, floatval($value['freight_charge']+$value['tips']+$value['bonus']-$value['deliver_cash']));
                     switch ($value['status']) {
                         case 1:
                             $value['order_status'] = '<font color="red">等待接单</font>';
@@ -1644,9 +1708,9 @@ class DataAction extends BaseAction
                             $value['order_status'] = "订单失效";
                             break;
                     }
-                    $objActSheet->setCellValueExplicit('M' . $index, $value['order_status']);
-                    $objActSheet->setCellValueExplicit('N' . $index, $value['start_time'] ? date('Y-m-d H:i:s', $value['start_time']) : '--');
-                    $objActSheet->setCellValueExplicit('O' . $index, $value['end_time'] ? date('Y-m-d H:i:s', $value['end_time']) : '--');
+                    $objActSheet->setCellValueExplicit('N' . $index, $value['order_status']);
+                    $objActSheet->setCellValueExplicit('O' . $index, $value['start_time'] ? date('Y-m-d H:i:s', $value['start_time']) : '--');
+                    $objActSheet->setCellValueExplicit('P' . $index, $value['end_time'] ? date('Y-m-d H:i:s', $value['end_time']) : '--');
 
                     $index++;
                 }

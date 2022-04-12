@@ -8,6 +8,8 @@
 
 class IndexAction extends BaseAction
 {
+    public $mail;
+
     public function index(){
         if($_POST['lat'] != 'null' && $_POST['long'] != 'null'){
             $lat = $_POST['lat'];
@@ -124,195 +126,207 @@ class IndexAction extends BaseAction
         }
         $arr['sub_nav'] = $sub_nav_list;
 
-        //获取推荐列表
-        $re_category = D('Shop_category')->field(true)->where(array('cat_fid'=>0,'cat_type'=>1,'city_id'=>$city_id))->order('cat_sort desc')->select();
-        $categoryList = array();
-        foreach ($re_category as $v){
-            $categoryList[] = $v['cat_id'];
-        }
-        $sub_where['cat_fid'] = array('in',$categoryList);
-        $sub_where['cat_status'] = 1;
-        $subCategory = D('Shop_category')->where($sub_where)->order('cat_sort desc')->select();
-        $recommend_list = array();
 
-        foreach ($subCategory as $v){
-            $sub_recommend['title'] = lang_substr($v['cat_name'],C('DEFAULT_LANG'));
-            $sub_recommend['id'] = $v['cat_id'];
-            $sub_recommend['fid'] = $v['cat_fid'];
-            $sub_recommend['info'] = array();
-            $closeArr = array();
-            $openArr = array();
-            $storeList = D('Shop_category_relation')->where(array('cat_id'=>$v['cat_id']))->order('store_sort desc')->select();
-            $allClose = true;
-            foreach ($storeList as $store){
-                $store_where = array('st.store_id' => $store['store_id']);
-                if($this->app_version < 266) $store_where['st.menu_version'] = 1;
+        //如果城市为自定义的话 修改type值 返回数组
+        import('@.ORG.RegionalCalu.RegionalCalu');
+        $region = new RegionalCalu();
+        if(!$region->index($city_id,$long,$lat)){
+            $recommend_list = array();
+        }else {
+            //获取推荐列表
+            $re_category = D('Shop_category')->field(true)->where(array('cat_fid' => 0, 'cat_type' => 1, 'city_id' => $city_id))->order('cat_sort desc')->select();
+            $categoryList = array();
+            foreach ($re_category as $v) {
+                $categoryList[] = $v['cat_id'];
+            }
+            $sub_where['cat_fid'] = array('in', $categoryList);
+            $sub_where['cat_status'] = 1;
+            $subCategory = D('Shop_category')->where($sub_where)->order('cat_sort desc')->select();
+            $recommend_list = array();
 
-                $storeRow = D('Merchant_store')->field('st.*,sh.background,sh.delivery_radius')->join('as st left join ' . C('DB_PREFIX') . 'merchant_store_shop sh on st.store_id = sh.store_id ')->where($store_where)->find();
-                if($storeRow) {
-                    $storeMemo['store_id'] = $storeRow['store_id'];
-                    $storeMemo['name'] = lang_substr($storeRow['name'], C('DEFAULT_LANG'));
-                    if ($storeRow['background'] && $storeRow['background'] != '') {
-                        $image_tmp = explode(',', $storeRow['background']);
-                        $storeMemo['background'] = C('config.site_url') . '/upload/background/' . $image_tmp[0] . '/' . $image_tmp['1'];
-                    } else {
-                        $storeMemo['background'] = '';
-                    }
-                    $storeMemo['txt_info'] = $storeRow['txt_info'];
-                    $storeMemo['is_close'] = 1;
+            foreach ($subCategory as $v) {
+                $sub_recommend['title'] = lang_substr($v['cat_name'], C('DEFAULT_LANG'));
+                $sub_recommend['id'] = $v['cat_id'];
+                $sub_recommend['fid'] = $v['cat_fid'];
+                $sub_recommend['info'] = array();
+                $closeArr = array();
+                $openArr = array();
+                $storeList = D('Shop_category_relation')->where(array('cat_id' => $v['cat_id']))->order('store_sort desc')->select();
+                $allClose = true;
+                foreach ($storeList as $store) {
+                    $store_where = array('st.store_id' => $store['store_id']);
+                    if ($this->app_version < 266) $store_where['st.menu_version'] = 1;
 
-                    //@wangchuanyuan 周一到周天
-                    $date = date("w");//今天是星期几 @ydhl-wangchuanyuan 20171106
-                    $now_time = date('H:i:s');
-                    switch ($date) {
-                        case 1 :
-                            if ($storeRow['open_1'] != '00:00:00' || $storeRow['close_1'] != '00:00:00') {
-                                if ($storeRow['open_1'] < $now_time && $now_time < $storeRow['close_1']) {
-                                    $storeMemo['is_close'] = 0;
-                                }
-                            }
-                            if ($storeRow['open_2'] != '00:00:00' || $storeRow['close_2'] != '00:00:00') {
-                                if ($storeRow['open_2'] < $now_time && $now_time < $storeRow['close_2']) {
-                                    $storeMemo['is_close'] = 0;
-                                }
-                            }
-                            if ($storeRow['open_3'] != '00:00:00' || $storeRow['close_3'] != '00:00:00') {
-                                if ($storeRow['open_3'] < $now_time && $now_time < $storeRow['close_3']) {
-                                    $storeMemo['is_close'] = 0;
-                                }
-                            }
-                            break;
-                        case 2 ://周二
-                            if ($storeRow['open_4'] != '00:00:00' || $storeRow['close_4'] != '00:00:00') {
-                                if ($storeRow['open_4'] < $now_time && $now_time < $storeRow['close_4']) {
-                                    $storeMemo['is_close'] = 0;
-                                }
-                            }
-                            if ($storeRow['open_5'] != '00:00:00' || $storeRow['close_5'] != '00:00:00') {
-                                if ($storeRow['open_5'] < $now_time && $now_time < $storeRow['close_5']) {
-                                    $storeMemo['is_close'] = 0;
-                                }
-                            }
-                            if ($storeRow['open_6'] != '00:00:00' || $storeRow['close_6'] != '00:00:00') {
-                                if ($storeRow['open_6'] < $now_time && $now_time < $storeRow['close_6']) {
-                                    $storeMemo['is_close'] = 0;
-                                }
-                            }
-                            break;
-                        case 3 ://周三
-                            if ($storeRow['open_7'] != '00:00:00' || $storeRow['close_7'] != '00:00:00') {
-                                if ($storeRow['open_7'] < $now_time && $now_time < $storeRow['close_7']) {
-                                    $storeMemo['is_close'] = 0;
-                                }
-                            }
-                            if ($storeRow['open_8'] != '00:00:00' || $storeRow['close_8'] != '00:00:00') {
-                                if ($storeRow['open_8'] < $now_time && $now_time < $storeRow['close_8']) {
-                                    $storeMemo['is_close'] = 0;
-                                }
-                            }
-                            if ($storeRow['open_9'] != '00:00:00' || $storeRow['close_9'] != '00:00:00') {
-                                if ($storeRow['open_9'] < $now_time && $now_time < $storeRow['close_9']) {
-                                    $storeMemo['is_close'] = 0;
-                                }
-                            }
-                            break;
-                        case 4 :
-                            if ($storeRow['open_10'] != '00:00:00' || $storeRow['close_10'] != '00:00:00') {
-                                if ($storeRow['open_10'] < $now_time && $now_time < $storeRow['close_10']) {
-                                    $storeMemo['is_close'] = 0;
-                                }
-                            }
-                            if ($storeRow['open_11'] != '00:00:00' || $storeRow['close_11'] != '00:00:00') {
-                                if ($storeRow['open_11'] < $now_time && $now_time < $storeRow['close_11']) {
-                                    $storeMemo['is_close'] = 0;
-                                }
-                            }
-                            if ($storeRow['open_12'] != '00:00:00' || $storeRow['close_12'] != '00:00:00') {
-                                if ($storeRow['open_12'] < $now_time && $now_time < $storeRow['close_12']) {
-                                    $storeMemo['is_close'] = 0;
-                                }
-                            }
-                            break;
-                        case 5 :
-                            if ($storeRow['open_13'] != '00:00:00' || $storeRow['close_13'] != '00:00:00') {
-                                if ($storeRow['open_13'] < $now_time && $now_time < $storeRow['close_13']) {
-                                    $storeMemo['is_close'] = 0;
-                                }
-                            }
-                            if ($storeRow['open_14'] != '00:00:00' || $storeRow['close_14'] != '00:00:00') {
-                                if ($storeRow['open_14'] < $now_time && $now_time < $storeRow['close_14']) {
-                                    $storeMemo['is_close'] = 0;
-                                }
-                            }
-                            if ($storeRow['open_15'] != '00:00:00' || $storeRow['close_15'] != '00:00:00') {
-                                if ($storeRow['open_15'] < $now_time && $now_time < $storeRow['close_15']) {
-                                    $storeMemo['is_close'] = 0;
-                                }
-                            }
-                            break;
-                        case 6 :
-                            if ($storeRow['open_16'] != '00:00:00' || $storeRow['close_16'] != '00:00:00') {
-                                if ($storeRow['open_16'] < $now_time && $now_time < $storeRow['close_16']) {
-                                    $storeMemo['is_close'] = 0;
-                                }
-                            }
-                            if ($storeRow['open_17'] != '00:00:00' || $storeRow['close_17'] != '00:00:00') {
-                                if ($storeRow['open_17'] < $now_time && $now_time < $storeRow['close_17']) {
-                                    $storeMemo['is_close'] = 0;
-                                }
-                            }
-                            if ($storeRow['open_18'] != '00:00:00' || $storeRow['close_18'] != '00:00:00') {
-                                if ($storeRow['open_18'] < $now_time && $now_time < $storeRow['close_18']) {
-                                    $storeMemo['is_close'] = 0;
-                                }
-                            }
-                            break;
-                        case 0 :
-                            if ($storeRow['open_19'] != '00:00:00' || $storeRow['close_19'] != '00:00:00') {
-                                if ($storeRow['open_19'] < $now_time && $now_time < $storeRow['close_19']) {
-                                    $storeMemo['is_close'] = 0;
-                                }
-                            }
-                            if ($storeRow['open_20'] != '00:00:00' || $storeRow['close_20'] != '00:00:00') {
-                                if ($storeRow['open_20'] < $now_time && $now_time < $storeRow['close_20']) {
-                                    $storeMemo['is_close'] = 0;
-                                }
-                            }
-                            if ($storeRow['open_21'] != '00:00:00' || $storeRow['close_21'] != '00:00:00') {
-                                if ($storeRow['open_21'] < $now_time && $now_time < $storeRow['close_21']) {
-                                    $storeMemo['is_close'] = 0;
-                                }
-                            }
-                            break;
-                        default :
-                            $storeMemo['is_close'] = 1;
-                    }
-                    //garfunkel add
-                    if ($storeRow['store_is_close'] != 0) {
+                    $storeRow = D('Merchant_store')->field('st.*,sh.background,sh.delivery_radius')->join('as st left join ' . C('DB_PREFIX') . 'merchant_store_shop sh on st.store_id = sh.store_id ')->where($store_where)->find();
+                    if ($storeRow) {
+                        $storeMemo['store_id'] = $storeRow['store_id'];
+                        $storeMemo['name'] = lang_substr($storeRow['name'], C('DEFAULT_LANG'));
+                        if ($storeRow['background'] && $storeRow['background'] != '') {
+                            $image_tmp = explode(',', $storeRow['background']);
+                            $storeMemo['background'] = C('config.site_url') . '/upload/background/' . $image_tmp[0] . '/' . $image_tmp['1'];
+                        } else {
+                            $storeMemo['background'] = '';
+                        }
+                        $storeMemo['txt_info'] = $storeRow['txt_info'];
                         $storeMemo['is_close'] = 1;
-                    }
 
-                    if ($storeRow['status'] == 1) {
-                        $distance = getDistance($lat, $long, $storeRow['lat'], $storeRow['long']);
-                        if ($distance < $storeRow['delivery_radius'] * 1000) {
-                            if ($storeMemo['is_close'] == 0) {
-                                $allClose = false;
-                                $openArr[] = $storeMemo;
-                            } else {
-                                $closeArr[] = $storeMemo;
+                        //@wangchuanyuan 周一到周天
+                        $date = date("w");//今天是星期几 @ydhl-wangchuanyuan 20171106
+                        $now_time = date('H:i:s');
+                        switch ($date) {
+                            case 1 :
+                                if ($storeRow['open_1'] != '00:00:00' || $storeRow['close_1'] != '00:00:00') {
+                                    if ($storeRow['open_1'] < $now_time && $now_time < $storeRow['close_1']) {
+                                        $storeMemo['is_close'] = 0;
+                                    }
+                                }
+                                if ($storeRow['open_2'] != '00:00:00' || $storeRow['close_2'] != '00:00:00') {
+                                    if ($storeRow['open_2'] < $now_time && $now_time < $storeRow['close_2']) {
+                                        $storeMemo['is_close'] = 0;
+                                    }
+                                }
+                                if ($storeRow['open_3'] != '00:00:00' || $storeRow['close_3'] != '00:00:00') {
+                                    if ($storeRow['open_3'] < $now_time && $now_time < $storeRow['close_3']) {
+                                        $storeMemo['is_close'] = 0;
+                                    }
+                                }
+                                break;
+                            case 2 ://周二
+                                if ($storeRow['open_4'] != '00:00:00' || $storeRow['close_4'] != '00:00:00') {
+                                    if ($storeRow['open_4'] < $now_time && $now_time < $storeRow['close_4']) {
+                                        $storeMemo['is_close'] = 0;
+                                    }
+                                }
+                                if ($storeRow['open_5'] != '00:00:00' || $storeRow['close_5'] != '00:00:00') {
+                                    if ($storeRow['open_5'] < $now_time && $now_time < $storeRow['close_5']) {
+                                        $storeMemo['is_close'] = 0;
+                                    }
+                                }
+                                if ($storeRow['open_6'] != '00:00:00' || $storeRow['close_6'] != '00:00:00') {
+                                    if ($storeRow['open_6'] < $now_time && $now_time < $storeRow['close_6']) {
+                                        $storeMemo['is_close'] = 0;
+                                    }
+                                }
+                                break;
+                            case 3 ://周三
+                                if ($storeRow['open_7'] != '00:00:00' || $storeRow['close_7'] != '00:00:00') {
+                                    if ($storeRow['open_7'] < $now_time && $now_time < $storeRow['close_7']) {
+                                        $storeMemo['is_close'] = 0;
+                                    }
+                                }
+                                if ($storeRow['open_8'] != '00:00:00' || $storeRow['close_8'] != '00:00:00') {
+                                    if ($storeRow['open_8'] < $now_time && $now_time < $storeRow['close_8']) {
+                                        $storeMemo['is_close'] = 0;
+                                    }
+                                }
+                                if ($storeRow['open_9'] != '00:00:00' || $storeRow['close_9'] != '00:00:00') {
+                                    if ($storeRow['open_9'] < $now_time && $now_time < $storeRow['close_9']) {
+                                        $storeMemo['is_close'] = 0;
+                                    }
+                                }
+                                break;
+                            case 4 :
+                                if ($storeRow['open_10'] != '00:00:00' || $storeRow['close_10'] != '00:00:00') {
+                                    if ($storeRow['open_10'] < $now_time && $now_time < $storeRow['close_10']) {
+                                        $storeMemo['is_close'] = 0;
+                                    }
+                                }
+                                if ($storeRow['open_11'] != '00:00:00' || $storeRow['close_11'] != '00:00:00') {
+                                    if ($storeRow['open_11'] < $now_time && $now_time < $storeRow['close_11']) {
+                                        $storeMemo['is_close'] = 0;
+                                    }
+                                }
+                                if ($storeRow['open_12'] != '00:00:00' || $storeRow['close_12'] != '00:00:00') {
+                                    if ($storeRow['open_12'] < $now_time && $now_time < $storeRow['close_12']) {
+                                        $storeMemo['is_close'] = 0;
+                                    }
+                                }
+                                break;
+                            case 5 :
+                                if ($storeRow['open_13'] != '00:00:00' || $storeRow['close_13'] != '00:00:00') {
+                                    if ($storeRow['open_13'] < $now_time && $now_time < $storeRow['close_13']) {
+                                        $storeMemo['is_close'] = 0;
+                                    }
+                                }
+                                if ($storeRow['open_14'] != '00:00:00' || $storeRow['close_14'] != '00:00:00') {
+                                    if ($storeRow['open_14'] < $now_time && $now_time < $storeRow['close_14']) {
+                                        $storeMemo['is_close'] = 0;
+                                    }
+                                }
+                                if ($storeRow['open_15'] != '00:00:00' || $storeRow['close_15'] != '00:00:00') {
+                                    if ($storeRow['open_15'] < $now_time && $now_time < $storeRow['close_15']) {
+                                        $storeMemo['is_close'] = 0;
+                                    }
+                                }
+                                break;
+                            case 6 :
+                                if ($storeRow['open_16'] != '00:00:00' || $storeRow['close_16'] != '00:00:00') {
+                                    if ($storeRow['open_16'] < $now_time && $now_time < $storeRow['close_16']) {
+                                        $storeMemo['is_close'] = 0;
+                                    }
+                                }
+                                if ($storeRow['open_17'] != '00:00:00' || $storeRow['close_17'] != '00:00:00') {
+                                    if ($storeRow['open_17'] < $now_time && $now_time < $storeRow['close_17']) {
+                                        $storeMemo['is_close'] = 0;
+                                    }
+                                }
+                                if ($storeRow['open_18'] != '00:00:00' || $storeRow['close_18'] != '00:00:00') {
+                                    if ($storeRow['open_18'] < $now_time && $now_time < $storeRow['close_18']) {
+                                        $storeMemo['is_close'] = 0;
+                                    }
+                                }
+                                break;
+                            case 0 :
+                                if ($storeRow['open_19'] != '00:00:00' || $storeRow['close_19'] != '00:00:00') {
+                                    if ($storeRow['open_19'] < $now_time && $now_time < $storeRow['close_19']) {
+                                        $storeMemo['is_close'] = 0;
+                                    }
+                                }
+                                if ($storeRow['open_20'] != '00:00:00' || $storeRow['close_20'] != '00:00:00') {
+                                    if ($storeRow['open_20'] < $now_time && $now_time < $storeRow['close_20']) {
+                                        $storeMemo['is_close'] = 0;
+                                    }
+                                }
+                                if ($storeRow['open_21'] != '00:00:00' || $storeRow['close_21'] != '00:00:00') {
+                                    if ($storeRow['open_21'] < $now_time && $now_time < $storeRow['close_21']) {
+                                        $storeMemo['is_close'] = 0;
+                                    }
+                                }
+                                break;
+                            default :
+                                $storeMemo['is_close'] = 1;
+                        }
+                        //garfunkel add
+                        if ($storeRow['store_is_close'] != 0) {
+                            $storeMemo['is_close'] = 1;
+                        }
+
+                        if ($storeRow['status'] == 1) {
+                            $distance = getDistance($lat, $long, $storeRow['lat'], $storeRow['long']);
+                            if ($distance < $storeRow['delivery_radius'] * 1000) {
+                                if ($storeMemo['is_close'] == 0) {
+                                    $allClose = false;
+                                    $openArr[] = $storeMemo;
+                                } else {
+                                    $closeArr[] = $storeMemo;
+                                }
                             }
                         }
                     }
                 }
-            }
-            $sub_recommend['info'] = array_slice(array_merge($openArr,$closeArr),0,5);
+                $sub_recommend['info'] = array_slice(array_merge($openArr, $closeArr), 0, 5);
 
-            if(count($sub_recommend['info']) > 0 && !$allClose) {
-                $recommend_list[] = $sub_recommend;
+                if (count($sub_recommend['info']) > 0 && !$allClose) {
+                    $recommend_list[] = $sub_recommend;
+                }
             }
         }
         $arr['recommend'] = $recommend_list;
         $arr['city_id'] = $city_id;
+
+        //获取系统消息 $from 0Wap 1iOS 2Android
+
+        $arr['system_message'] = D("System_message")->getSystemMessage($_POST['from'],$_POST['version'],$city_id,$lat,$long);
 
         $this->returnCode(0,'data',$arr);
     }
@@ -778,12 +792,22 @@ class IndexAction extends BaseAction
         $data['default'] = $_POST['default'];
         if($_POST['city_name']){
             $city_name = $_POST['city_name'];
-            $where = array('area_name'=>$city_name,'area_type'=>2);
-            $area = D('Area')->where($where)->find();
-            if($area) {
+            //$where = array('area_name'=>$city_name,'area_type'=>2);
+            //$area = D('Area')->where($where)->find();
+            $city_id = 0;
+            $area_pid = 0;
+            $area_list = D('Area')->where(array('area_type'=>2))->select();
+            foreach ($area_list as $city){
+                $city_arr = explode("|",$city['area_ip_desc']);
+                if(in_array($city_name,$city_arr)){
+                    $city_id = $city['area_id'];
+                    $area_pid = $city['area_pid'];
+                }
+            }
+            if($city_id) {
                 $data['area'] = 0;
-                $data['city'] = $area['area_id'];
-                $data['province'] = $area['area_pid'];
+                $data['city'] = $city_id;
+                $data['province'] = $area_pid;
             }else{
                 $data['area'] = 0;
                 $data['city'] = 0;
@@ -795,6 +819,7 @@ class IndexAction extends BaseAction
             $data['city'] = $city_id ? $city_id : 0;
         }
 
+        $data['city_name'] = $_POST['city_name'];
         $result = $this->loadModel()->addUserAddress($data);
 
         $data['areaID'] = $data['city'];
@@ -1089,18 +1114,23 @@ class IndexAction extends BaseAction
         }
 
         ///////////
+        //获取商品折扣活动
+        $store_discount = D('New_event')->getStoreNewDiscount($sid);
+        $goodsDiscount = $store_discount['goodsDiscount'];
+        $goodsDishDiscount = $store_discount['goodsDishDiscount'];
 
         foreach ($cart_array as $v){
             if($store['menu_version'] == 2){
                 $good = D('StoreMenuV2')->getProduct($v['fid'],$sid);
                 $t_good['productId'] = $v['fid'];
                 $t_good['productName'] = $good['name'];
-                $good['price'] = $good['price']/100;
+                $good['price'] = round($good['price']*$goodsDiscount/100,2);
                 $good['tax_num'] = $good['tax']/1000;
                 $good['deposit_price'] = 0;
                 $good['stock_num'] = -1;
             }else{
                 $good = D('Shop_goods')->field(true)->where(array('goods_id' => $v['fid']))->find();
+                $good['price'] = round($good['price']*$goodsDiscount,2);
                 $t_good['productId'] = $v['fid'];
                 $t_good['productName'] = lang_substr($good['name'],C('DEFAULT_LANG'));
             }
@@ -1165,7 +1195,7 @@ class IndexAction extends BaseAction
             $t_good['tax_num'] = $good['tax_num'];
             $t_good['deposit_price'] = $good['deposit_price'];
 
-            if($store['menu_version'] == 1) {
+            if($store['menu_version'] == 1) {//这个计算税已无效
                 $tax_price += $good['price'] * $good['tax_num']/100 * $v['stock'];
             }else{
                 $orderDetail = array('goods_id'=>$t_good['productId'],'num'=>$v['stock'],'store_id'=>$sid,'dish_id'=>$v['dish_id']);
@@ -1178,7 +1208,7 @@ class IndexAction extends BaseAction
         }
 
 
-        $return = D('Shop_goods')->checkCart($sid, $uid, $orderData);
+        $return = D('Shop_goods')->checkCart($sid, $uid, $orderData,1,0,$goodsDiscount,$goodsDishDiscount);
 
         //garfunkel add
         $area = D('Area')->where(array('area_id'=>$store['city_id']))->find();
@@ -1208,13 +1238,18 @@ class IndexAction extends BaseAction
 
         $order_data['username'] = $address['name'];
         $order_data['userphone'] = $address['phone'];
-        $order_data['address'] = $address['adress'].' '.$address['detail'].' '.$address['zipcode'];
+        $order_data['address'] = $address['adress'];
+        if($address['detail_en'] != ''){
+            $order_data['address_detail'] = $address['detail_en'] ." (".$address['detail'].")";
+        }else {
+            $order_data['address_detail'] = $address['detail'];
+        }
         $order_data['address_id'] = $adr_id;
         $order_data['lat'] = $address['latitude'];
         $order_data['lng'] = $address['longitude'];
 
         $order_data['expect_use_time'] = D('Store')->get_store_delivery_time($sid);
-        $order_data['freight_charge'] = $delivery_fee = D('Store')->CalculationDeliveryFee($uid,$sid);
+        $order_data['freight_charge'] = $delivery_fee = D('Store')->CalculationDeliveryFee($uid,$sid,$adr_id);
 
         $order_data['is_pick_in_store'] = 0;
 
@@ -1230,7 +1265,7 @@ class IndexAction extends BaseAction
         //$order_data['price'] = $order_data['discount_price'] - $order_data['merchant_reduce'] - $order_data['balance_reduce'] + $delivery_fee + $return['packing_charge'];//实际要支付的价格
         //$order_data['price'] = $order_data['price'] * 1.05; //税费
 
-        $tax_price = $tax_price + ($delivery_fee + $return['store']['pack_fee'])*$return['store']['tax_num']/100;
+        $tax_price = $return['tax_price'] + ($delivery_fee + $return['store']['pack_fee'])*$return['store']['tax_num']/100;
         $order_data['total_price'] = $return['price'] + $tax_price + $deposit_price + $delivery_fee + $return['store']['pack_fee'] + $order_data['service_fee'];
         $order_data['price'] = $order_data['total_price'];
 
@@ -1625,11 +1660,17 @@ class IndexAction extends BaseAction
         $order_detail['merchant_reduce'] = $order['merchant_reduce'];
         $order_detail['coupon_discount'] = $order['coupon_price'];
 
+        $order_detail['user_lat'] = $order['lat'];
+        $order_detail['user_lng'] = $order['lng'];
+        $order_detail['address2'] = $order['address_detail'] == "" ? $order['address'] : $order['address']." - ".$order['address_detail'];
+
+        /**
         $address = D('User_adress')->where(array('adress_id'=>$order['address_id']))->find();
         $order_detail['user_lat'] = $address['latitude'];
         $order_detail['user_lng'] = $address['longitude'];
         if($address && $address['detail'] != '')
             $order_detail['address2'] = $address['adress'].' ('.$address['detail'].')';
+        */
 
         $store = D('Store')->get_store_by_id($order['store_id']);
         $order_detail['jetlag'] = 0;
@@ -1820,6 +1861,7 @@ class IndexAction extends BaseAction
                     $values = D('Side_dish_value')->where(array('dish_id' => $v['id'], 'status' => 1))->select();
                     foreach ($values as &$vv) {
                         $vv['name'] = lang_substr($vv['name'], C('DEFAULT_LANG'));
+                        $vv['price'] = round($vv['price']*$now_goods['goodsDishDiscount'],2);
                         $vv['list'] = array();
                     }
                     if ($values) {
@@ -3191,6 +3233,23 @@ class IndexAction extends BaseAction
             if($hour == 0){
                 D('Config')->where(array('name'=>'deliver_max_order'))->save(array("value"=>2));
             }
+
+            if($hour == 1){
+                //发送通知邮件
+                $day_3 = date("Y-m-d", time() + 3 * 86400);
+                $day_30 = date("Y-m-d", time() + 30 * 86400);
+
+                $work_list_3 = D("Deliver_img")->where(array("certificate_expiry" => $day_3))->select();
+                $work_list_30 = D("Deliver_img")->where(array("certificate_expiry" => $day_30))->select();
+
+                $in_list_3 = D("Deliver_img")->where(array("insurace_expiry" => $day_3))->select();
+                $in_list_30 = D("Deliver_img")->where(array("insurace_expiry" => $day_30))->select();
+
+                $this->sendUpdateMail($work_list_3, 3, 'Work Eligibility');
+                $this->sendUpdateMail($work_list_30, 30, 'Work Eligibility');
+                $this->sendUpdateMail($in_list_3, 3, 'Vehicle Insurance');
+                $this->sendUpdateMail($in_list_30, 30, 'Vehicle Insurance');
+            }
         }else{
             $hour = date('H') + 1;
         }
@@ -3287,6 +3346,69 @@ class IndexAction extends BaseAction
         }
 
         //var_dump($work_delver_list);
+    }
+
+    public function sendUpdateMail($list,$day_num,$file_name){
+        foreach ($list as $data){
+            $deliver = D("Deliver_user")->where(array("uid"=>$data['uid']))->find();
+            if($deliver['email'] != "") {
+                $email = array(array("address"=>$deliver['email'],"userName"=>$deliver['name']));
+                $title = "Your Tutti courier account needs more information!";
+                $body = $this->getMailBody($deliver['name'],$day_num,$file_name);
+
+                if(!$this->mail) $this->mail = $this->getMail();
+                $this->mail->clearAddresses();
+                foreach ($email as $address) {
+                    $this->mail->addAddress($address['address'], $address['userName']);
+                }
+
+                $this->mail->isHTML(true);
+                $this->mail->Subject = $title;
+                $this->mail->Body    = $body;
+                $this->mail->AltBody = '';
+
+                $this->mail->send();
+            }
+        }
+    }
+
+    function getMail(){
+        $config = D('Config')->get_config();
+        $gmail_pwd = $config['gmail_password'];
+
+        require './mailer/PHPMailer.php';
+        require './mailer/SMTP.php';
+        require './mailer/Exception.php';
+
+        $mail = new PHPMailer\PHPMailer\PHPMailer();
+
+        $mail->isSMTP();                                      // Set mailer to use SMTP
+        $mail->Host = 'smtp.gmail.com';                       // Specify main and backup SMTP servers. 这里改成smtp.gmail.com
+        $mail->SMTPAuth = true;                               // Enable SMTP authentication
+        $mail->Username = 'donotreply.tutti@gmail.com';       // SMTP username 这里改成自己的gmail邮箱，最好新注册一个，因为后期设置会导致安全性降低
+        $mail->Password = $gmail_pwd;                         // SMTP password 这里改成对应邮箱密码
+        $mail->SMTPSecure = 'ssl';                            // Enable TLS encryption, `ssl` also accepted
+        $mail->Port = 465;
+
+        $mail->setFrom('donotreply.tutti@gmail.com', 'Tutti');
+
+        return $mail;
+    }
+
+    public function getMailBody($name,$day,$file_name)
+    {
+        $body = "<p>Hi " . $name . ",</p>";
+        $body .= "<p>&nbsp;</p>";
+        $body .= "<p>This is a reminder that your ".$file_name." is going to expire in ".$day." days. Please login to your account and go to Menu > Account to submit a photo of your renewed document before it expires.</p>";
+        $body .= "<p>&nbsp;</p>";
+        $body .= "<p>Please note that if we don’t receive your updated document before it expires, your access to deliveries would be suspended until we receive updated information.</p>";
+        $body .= "<p>&nbsp;</p>";
+        $body .= "<p>For any questions, please contact us at 1-888-399-6668 or email <a href='mailto:hr@tutti.app'>hr@tutti.app</a>.</p>";
+        $body .= "<p>&nbsp;</p>";
+        $body .= "<p>Best regards,</p>";
+        $body .= "<p>Tutti Courier Team</p>";
+
+        return $body;
     }
 
     public function updateSql(){
@@ -3484,11 +3606,16 @@ class IndexAction extends BaseAction
     public function test_assign(){
         //$deliver_id = D('Deliver_assign')->getDeliverList(9373);
         //var_dump($deliver_id);
-        import('@.ORG.Deliverect.Deliverect');
-        $deliverect = new Deliverect();
+        var_dump(strtotime('2022-03-07 10:40:00').'---'.strtotime('2022-03-13 10:40:00'));die();
 
-        $result = $deliverect->getAllergensTag();
-        var_dump($result);die();
+        import('@.ORG.RegionalCalu.RegionalCalu');
+        $region = new RegionalCalu();
+        $city_id = $_GET['city_id'];
+        $lat = $_GET['lat'];
+        $lng = $_GET['lng'];
+        $region->index($city_id,$lng,$lat);
+        //$result = $deliverect->getAllergensTag();
+        //var_dump($result);die();
 //        $all_list = array();
 //        foreach ($result as $k=>$v){
 //            $d = array();
@@ -3604,6 +3731,63 @@ class IndexAction extends BaseAction
             }
 
         }
+    }
+
+    public function send_cloud_message(){
+        $curr_time = date("H:i");//
+        $send_list = D("Cloud_message")->where(array('status'=>1,'send_time'=>$curr_time))->order('sort desc')->select();
+
+        if($curr_time == "00:00")
+            D('User')->where(array('is_send_message'=>1))->save(array('is_send_message'=>0));
+
+        $arr_list = array();
+        foreach ($send_list as $v){
+            $userList = D("Cloud_message")->getUserListFromType($v['type'],$v['days']);
+            if(count($userList) > 0){
+                $arr_list[$v['type']][$v['days']]['list'] = $userList;
+                $arr_list[$v['type']][$v['days']]['value'] = $v;
+            }
+        }
+
+        //$test_arr = array(3339,12992,43943,14078,57789,57791);
+
+        $send_user = array();
+        foreach ($arr_list as $t){
+            foreach ($t as $d){
+                $title = str_replace("&amp;","&",$d['value']['title']);
+                $content = str_replace("&amp;","&",$d['value']['content']);
+
+                $title = str_replace("&quot;","\"",$title);
+                $content = str_replace("&quot;","\"",$content);
+
+                $curr_send_arr = array();
+                foreach ($d['list'] as $u){
+                    if(!in_array($u['uid'],$send_user)){
+                        $send_user[] = $u['uid'];
+                        //正式上线时需选择设备号！！！！！！！！！！！！！！！！！！！！！！！！！
+                        if($u['device_id'] != ''){
+                            //if(in_array($u['uid'],$test_arr)) {
+                                $curr_send_arr[] = $u['device_id'];
+                            //}
+                        }
+                    }
+                }
+
+                if(count($curr_send_arr) > 0){
+                    if(count($curr_send_arr) == 1) {
+                        $curr_send_arr = $curr_send_arr[0];
+                    }
+
+                    $result = Sms::sendMessageToGoogle($curr_send_arr,emoji_decode($content),1,emoji_decode($title));
+                    //var_dump($curr_send_arr);
+                    //echo emoji_decode($title).' ('.emoji_decode($content).') --'.json_encode($curr_send_arr)."<br/>";
+                }
+            }
+        }
+        //var_dump($send_user);
+        D('User')->where(array('uid'=>array('in', $send_user)))->save(array('is_send_message'=>1));
+
+        //var_dump($arr_list);
     }
     /**
     public function get_goods_desc(){

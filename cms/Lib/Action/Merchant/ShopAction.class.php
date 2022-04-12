@@ -203,11 +203,22 @@ class ShopAction extends BaseAction
             // 			if($database_merchant_store_meal->data($_POST)->save()){
             $database_shop_category_relation = D('Shop_category_relation');
             $condition_shop_category_relation['store_id'] = $now_store['store_id'];
+            $old_list = $database_shop_category_relation->where($condition_shop_category_relation)->select();
             $database_shop_category_relation->where($condition_shop_category_relation)->delete();
             foreach($cat_ids as $key => $value){
                 $data_shop_category_relation[$key]['cat_id'] = $value['cat_id'];
                 $data_shop_category_relation[$key]['cat_fid'] = $value['cat_fid'];
                 $data_shop_category_relation[$key]['store_id'] = $now_store['store_id'];
+
+                $is_find = false;
+                foreach ($old_list as $o){
+                    if($value['cat_id'] == $o['cat_id'] && $value['cat_fid'] == $o['cat_fid']){
+                        $data_shop_category_relation[$key]['store_sort'] = $o['store_sort'];
+                        $is_find = true;
+                    }
+                }
+
+                if(!$is_find) $data_shop_category_relation[$key]['store_sort'] = 0;
             }
             $database_shop_category_relation->addAll($data_shop_category_relation);
 
@@ -257,7 +268,7 @@ class ShopAction extends BaseAction
             $this->assign('close_old_store', $close_old_store);
             //所有分类
             $database_shop_category = D('Shop_category');
-            $category_list = $database_shop_category->lists();//field(true)->where(array('cat_status' => 1))->order('`cat_sort` DESC,`cat_id` ASC')->select();
+            $category_list = $database_shop_category->lists(false,$now_store['city_id']);//field(true)->where(array('cat_status' => 1))->order('`cat_sort` DESC,`cat_id` ASC')->select();
             //var_dump($category_list);die();
             $this->assign('category_list', $category_list);
 
@@ -591,6 +602,8 @@ class ShopAction extends BaseAction
             $this->assign('error_tips', $error_tips);
         }
         $now_sort['sort_discount'] *= 0.1;
+        $now_sort['sort_name'] = str_replace('"','&quot;',$now_sort['sort_name']);
+
         $this->assign('fid', $fid);
         $this->assign('now_sort', $now_sort);
         $this->assign('now_store', $now_store);
@@ -602,6 +615,8 @@ class ShopAction extends BaseAction
                 $l['name'] = $l['name'] ? $l['name'] : '打印机-' . $l['pigcms_id'];
             }
         }
+
+
         $this->assign('sort', $sort);
         $this->assign('print_list', $print_list);
         $this->display();
@@ -2445,7 +2460,7 @@ class ShopAction extends BaseAction
         $condition_where.=" AND o.is_del=0";
         $where['is_del'] = 0;
 
-        $sql = "SELECT  o.*, m.name AS merchant_name,g.name as good_name,d.tax_num as good_tax,g.deposit_price,s.tax_num as store_tax,d.price as good_price ,d.unit,d.cost_price, d.num as good_num, s.name AS store_name FROM " . C('DB_PREFIX') . "shop_order AS o LEFT JOIN " . C('DB_PREFIX') . "merchant_store AS s ON s.store_id=o.store_id LEFT JOIN " . C('DB_PREFIX') . "merchant AS m ON `s`.`mer_id`=`m`.`mer_id` LEFT JOIN " . C('DB_PREFIX') . "shop_order_detail AS d ON `d`.`order_id`=`o`.`order_id`  LEFT JOIN " . C('DB_PREFIX') . "shop_goods AS g ON `g`.`goods_id`=`d`.`goods_id` ".$condition_where." ORDER BY o.order_id DESC";
+        $sql = "SELECT  o.*, m.name AS merchant_name,g.name as good_name,d.tax_num as good_tax,g.deposit_price,s.tax_num as store_tax,d.price as good_price ,d.unit,d.cost_price, d.num as good_num,d.dish_id,d.goods_id, s.name AS store_name,s.menu_version FROM " . C('DB_PREFIX') . "shop_order AS o LEFT JOIN " . C('DB_PREFIX') . "merchant_store AS s ON s.store_id=o.store_id LEFT JOIN " . C('DB_PREFIX') . "merchant AS m ON `s`.`mer_id`=`m`.`mer_id` LEFT JOIN " . C('DB_PREFIX') . "shop_order_detail AS d ON `d`.`order_id`=`o`.`order_id`  LEFT JOIN " . C('DB_PREFIX') . "shop_goods AS g ON `g`.`goods_id`=`d`.`goods_id` ".$condition_where." ORDER BY o.order_id DESC";
 
         $result_list = D()->query($sql);
 
@@ -2494,6 +2509,7 @@ class ShopAction extends BaseAction
 
                 $total_goods_price += $val['goods_price'];
                 $total_goods_tax += $val['discount_price'];
+                $total_goods_gst_tax += $val['discount_price'];
                 $total_freight_price += $val['freight_charge'];
                 $total_freight_tax += $val['freight_charge']*$val['store_tax']/100;
                 $total_packing_price += $val['packing_charge'];
@@ -2543,13 +2559,22 @@ class ShopAction extends BaseAction
                     $all_deposit = 0;
                 }
 
-                $all_tax += $val['good_price'] * $val['good_tax']/100*$val['good_num'];
-                if($val['good_tax'] <= 5){
-                    $all_gst_tax += $val['good_price'] * $val['good_tax']/100*$val['good_num'];
-                    $all_pst_tax += 0;
+                if($val['menu_version'] == 1) {
+                    $all_tax += $val['good_price'] * $val['good_tax'] / 100 * $val['good_num'];
+                    if ($val['good_tax'] <= 5) {
+                        $all_gst_tax += $val['good_price'] * $val['good_tax'] / 100 * $val['good_num'];
+                        $all_pst_tax += 0;
+                    } else {
+                        $all_gst_tax += $val['good_price'] * 5 / 100 * $val['good_num'];
+                        $all_pst_tax += $val['good_price'] * ($val['good_tax'] - 5) / 100 * $val['good_num'];
+                    }
                 }else{
-                    $all_gst_tax += $val['good_price'] * 5/100*$val['good_num'];
-                    $all_pst_tax += $val['good_price'] * ($val['good_tax']-5)/100*$val['good_num'];
+                    $orderDetail = array('goods_id' => $val['goods_id'], 'num' => $val['good_num'], 'store_id' => $val['store_id'], 'dish_id' => $val['dish_id'], "good_price" => $val['good_price']);
+                    $curr_order_tax = D('StoreMenuV2')->calculationTaxExportPdf($orderDetail);
+
+                    $all_gst_tax += $curr_order_tax['gst_tax'];
+                    $all_pst_tax += $curr_order_tax['pst_tax'];
+                    $all_tax += $curr_order_tax['all_tax'];
                 }
                 $all_deposit += $val['deposit_price']*$val['good_num'];
                 $total_tax = $all_tax + ($val['freight_charge']+$val['packing_charge'])*$val['store_tax']/100;

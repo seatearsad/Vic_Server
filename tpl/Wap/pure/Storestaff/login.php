@@ -65,11 +65,13 @@
         background-image: url("{pigcms{$static_path}img/staff_menu/Login-2.png");
         background-size: auto 90%;
         background-position: center left 2px;
+        background-repeat: no-repeat;
     }
     #login_pwd{
         background-image: url("{pigcms{$static_path}img/staff_menu/Login-3.png");
         background-size: auto 90%;
         background-position: center left 2px;
+        background-repeat: no-repeat;
     }
     .x_img{
         background-image: url("{pigcms{$static_path}img/staff_menu/login_img.png");

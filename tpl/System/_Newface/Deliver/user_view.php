@@ -113,16 +113,33 @@
                                     </div>
                                     <div class="form-group  row">
                                         <label class="col-sm-3 col-form-label">{pigcms{:L('_BACK_DELIVER_AREA_')}</label>
-                                        <div class="col-sm-9" id="city_area">{pigcms{$now_user.city_name}</div>
-                                        <input type="hidden" id="city_id" name="city_id" value="{pigcms{$now_user.city_id}">
+                                        <div class="col-sm-9" id="city_area">
+                                            <select name="city_id" id="city_select" class="form-control">
+                                                <option value="0" <if condition="$city_id eq '' or $city_id eq 0">selected="selected"</if>>All</option>
+                                                <volist name="city" id="vo">
+                                                    <option value="{pigcms{$vo.area_id}" <if condition="$vo['area_id'] eq $now_user['city_id']">selected="selected"</if>>{pigcms{$vo.area_name}</option>
+                                                </volist>
+                                            </select>
+                                        </div>
+                                        <!--input type="hidden" id="city_id" name="city_id" value="{pigcms{$now_user.city_id}"-->
                                     </div>
 
 
                                     <div class="form-group  row">
                                         <label class="col-sm-3 col-form-label">{pigcms{:L('_BIRTHDAY_TXT_')}</label>
                                         <div class="col-sm-9">
-                                            <input type="text" class="form-control" name="birthday" size="20" validate="maxlength:50,required:true" value="{pigcms{$now_user.birthday}"/>
-
+                                            <input type="text" class="form-control" name="birthday" size="20" validate="maxlength:50,required:true" value="{pigcms{$now_user.birthday}" onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd',lang:'en'})" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group  row">
+                                        <label class="col-sm-3 col-form-label">Vehicle Type</label>
+                                        <div class="col-sm-9">
+                                            <select name="vehicle_type" class="form-control" id="vehicle_type">
+                                                <option value="0">------Vehicle Type------</option>
+                                                <option value="1" <if condition="$now_user['vehicle_type'] eq 1">selected="selected"</if>>Car</option>
+                                                <option value="2" <if condition="$now_user['vehicle_type'] eq 2">selected="selected"</if>>Bike</option>
+                                                <option value="3" <if condition="$now_user['vehicle_type'] eq 3">selected="selected"</if>>Motorcycle/Scooter</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="form-group  row">
@@ -226,6 +243,10 @@
                                                          height="100"/>
                                                 </div>
                                             </if>
+                                            <div style="margin-left: 155px;margin-top: 10px;display: flex;">
+                                                <span style="flex: 1 1 50%;line-height: 36px;">Expiry Date</span>
+                                                <input type="text" class="form-control" name="insurace_expiry" size="20" validate="maxlength:50" value="{pigcms{$img.insurace_expiry}" onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd',lang:'en'})" />
+                                            </div>
                                         </div>
  <!--工作证明-->
                                         <div class="form-group  row">
@@ -245,6 +266,15 @@
                                                          height="100"/>
                                                 </div>
                                             </if>
+                                            <div style="margin-left: 155px;margin-top: 10px;display: flex;">
+                                                <input type="radio" name="certificate_type" value="1" <if condition="$img['certificate_expiry'] neq -1">checked="checked"</if> />
+                                                &nbsp;<span style="flex: 1 1 50%;line-height: 36px;">Expiry Date</span>
+                                                <input type="text" class="form-control" name="certificate_expiry" size="20" validate="maxlength:50" <if condition="$img['certificate_expiry'] neq -1">value="{pigcms{$img.certificate_expiry}"</if> onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd',lang:'en'})" />
+                                            </div>
+                                            <div style="margin-left: 155px;margin-top: 10px;display: flex;">
+                                                <input type="radio" name="certificate_type" value="-1" <if condition="$img['certificate_expiry'] eq -1">checked="checked"</if> />
+                                                &nbsp;<span style="flex: 1 1 50%;line-height: 36px;">Does not expire</span>
+                                            </div>
                                         </div>
 <!--工作证明-->
                                     </if>
@@ -252,39 +282,165 @@
                                     <if condition="$now_user['group'] neq 1">
 <!--是否通过-->
                                         <tr>
-                                            <th width="15%">{pigcms{:L('_BACK_WHETHER_PASS_')}</th>
+                                            <th width="25%">{pigcms{:L('_BACK_WHETHER_PASS_')}</th>
                                             <td colspan=3>
-                                                <span class="cb-enable"><label class="cb-enable "><span>{pigcms{:L('_BACK_PASS_REVIEW_')}</span><input
-                                                                type="radio" name="review" value="1"/></label></span>
-                                                <span class="cb-disable"><label class="cb-disable selected"><span>{pigcms{:L('_BACK_NO_PASS_REVIEW_')}</span><input
-                                                                type="radio" name="review" value="0"  checked="checked"/></label></span>
+                                                <span class="cb-enable">
+                                                    <label class="cb-enable ">
+                                                        <span>{pigcms{:L('_BACK_PASS_REVIEW_')}</span>
+                                                        <input type="radio" name="review" value="1"/>
+                                                    </label>
+                                                </span>
+                                                <span class="cb-disable">
+                                                    <label class="cb-disable selected">
+                                                        <span>{pigcms{:L('_BACK_NO_PASS_REVIEW_')}</span>
+                                                        <input type="radio" name="review" value="0"  checked="checked"/>
+                                                    </label>
+                                                </span>
                                             </td>
                                         </tr>
                                         <tr id="review_desc" <if condition="$img['review_desc'] eq ''">style="display: none"</if> >
-                                        <th width="15%">{pigcms{:L('_BACK_REVIEW_DESC_')}</th>
+                                        <th width="25%">{pigcms{:L('_BACK_REVIEW_DESC_')}</th>
                                         <td colspan=3>
-                                            <input type="text" class="input fl" name="review_desc"
-                                                   value="{pigcms{$img['review_desc']}">
+                                            <input type="text" class="input fl" name="review_desc" value="{pigcms{$img['review_desc']}" />
                                         </td>
                                         </tr>
                                     </if>
-
-                                    <if condition="$now_user['reg_status'] eq 4">
+                                    <if condition="$now_user['reg_status'] eq 4 and $now_user['bag_get_type'] neq -1">
                                         <tr>
-                                            <th width="15%">{pigcms{:L('_BACK_WHETHER_RECE_')}</th>
+                                            <th width="25%">Bag Type</th>
                                             <td colspan=3>
-                                                <span class="cb-enable"><label class="cb-enable"><span>Yes</span><input
-                                                                type="radio" name="receive" value="1"/></label></span>
-                                                <span class="cb-disable"><label
-                                                            class="cb-disable selected"><span>No</span><input
-                                                                type="radio" name="receive" value="0"
-                                                                checked="checked"/></label></span>
+                                                Tutti Bag
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th width="25%">Bag Order</th>
+                                            <td colspan=3>
+                                                <if condition="$now_user['bag_get_type'] neq -1 and $now_user['bag_get_id'] neq ''">
+                                                    {pigcms{$now_user['bagDesc']}
+                                                </if>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th width="25%">Pickup/Shipping</th>
+                                            <td colspan=3>
+                                                <if condition="$now_user['bag_get_type'] eq 2">
+                                                    Shipping
+                                                </if>
+                                                <if condition="$now_user['bag_get_type'] eq 1">
+                                                    Pickup
+                                                </if>
+                                            </td>
+                                        </tr>
+                                        <if condition="$now_user['bag_get_type'] eq 2">
+                                            <tr>
+                                                <th width="25%">Address</th>
+                                                <td colspan=3>
+                                                    {pigcms{$now_user['ship_adress']}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th width="25%">City</th>
+                                                <td colspan=3>
+                                                    {pigcms{$now_user['ship_city_str']} {pigcms{$now_user['ship_province_str']}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th width="25%">Apartment, suite, unit, etc</th>
+                                                <td colspan=3>
+                                                    {pigcms{$now_user['ship_apartment']}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th width="25%">Postal Code</th>
+                                                <td colspan=3>
+                                                    {pigcms{$now_user['ship_postal_code']}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th width="25%">Tracking #</th>
+                                                <td colspan=3>
+                                                    <input type="text" class="form-control" name="bag_express_num" value="{pigcms{$img['bag_express_num']}"/>
+                                                </td>
+                                            </tr>
+                                        <else />
+                                            <tr>
+                                                <th width="25%">{pigcms{:L('_BACK_WHETHER_RECE_')}</th>
+                                                <td colspan=3>
+                                                    <span class="cb-enable">
+                                                        <label class="cb-enable"><span>Yes</span>
+                                                            <input type="radio" name="receive" value="1"/>
+                                                        </label>
+                                                    </span>
+                                                    <span class="cb-disable">
+                                                        <label class="cb-disable selected">
+                                                            <span>No</span>
+                                                            <input type="radio" name="receive" value="0" checked="checked"/>
+                                                        </label>
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        </if>
+                                    </if>
+
+                                    <if condition="$now_user['bag_get_type'] eq -1 and $now_user['reg_status'] eq 4">
+                                        <tr>
+                                            <th width="25%">Bag Type</th>
+                                            <td colspan=3>
+                                                Own Bag
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th width="25%">Bag Photo</th>
+                                            <td colspan=3>
+                                                <if condition="$now_user['bag_get_id'] neq ''">
+                                                    <img src="{pigcms{:C('config.site_url')}{pigcms{$now_user['bag_get_id']}" height="100"/>
+                                                </if>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th width="25%">Qualified?</th>
+                                            <td colspan=3>
+                                                <span class="cb-enable">
+                                                    <label class="cb-enable"><span>Yes</span>
+                                                        <input type="radio" name="receive" value="1"/>
+                                                    </label>
+                                                </span>
+                                                <span class="cb-disable">
+                                                    <label class="cb-disable selected">
+                                                        <span>No</span>
+                                                        <input type="radio" name="receive" value="0" checked="checked"/>
+                                                    </label>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr id="bag_review_desc" <if condition="$img['bag_review_desc'] eq ''">style="display: none"</if> >
+                                        <th width="25%">{pigcms{:L('_BACK_REVIEW_DESC_')}</th>
+                                        <td colspan=3>
+                                            <input type="text" class="input fl" name="bag_review_desc" value="{pigcms{$img['bag_review_desc']}">
+                                        </td>
+                                        </tr>
+                                    </if>
+                                    <if condition="$now_user['group'] eq 1 and $now_user['reg_status'] eq 5">
+                                        <tr>
+                                            <th width="25%">Activate account</th>
+                                            <td colspan=3>
+                                                <span class="cb-enable">
+                                                    <label class="cb-enable ">
+                                                        <span>Activate</span>
+                                                        <input type="radio" name="activate_account" value="1" />
+                                                    </label>
+                                                </span>
+                                                <span class="cb-disable">
+                                                    <label class="cb-disable selected">
+                                                        <span>Inactivate</span>
+                                                        <input type="radio" name="activate_account" value="0" checked="checked" />
+                                                    </label>
+                                                </span>
                                             </td>
                                         </tr>
                                     </if>
-
                                 </table>
-                                <input type="hidden" name="city_id" id="city_id" value="{pigcms{$now_user['city_id']}">
+                                <!--input type="hidden" name="city_id" id="city_id" value="{pigcms{$now_user['city_id']}"-->
                                 <input type="hidden" name="province_id" id="province_id"
                                        value="{pigcms{$now_user['province_id']}">
                                 <input type="hidden" name="driver_license" id="filename_0"
@@ -401,6 +557,14 @@
                     }
                 });
 
+                $('input:radio[name=receive]').click(function () {
+                    if ($(this).val() == 0) {//未通过
+                        $('#bag_review_desc').show();
+                    } else {
+                        $('#bag_review_desc').hide();
+                    }
+                });
+
                 function cancel_req() {
                     $('body').find('input').each(function () {
                         $(this).validate({
@@ -440,7 +604,7 @@
                     //$("input[name='lng']").val(place.geometry.location.lng());
                     //$("input[name='lat']").val(place.geometry.location.lat());
                     $('#long_lat').val(place.geometry.location.lng() + ',' + place.geometry.location.lat());
-
+                    /**
                     var add_com = place.address_components;
                     console.log(add_com);
                     var is_get_city = false;
@@ -451,14 +615,15 @@
                             $.post("{pigcms{$config.site_url}/index.php?g=Index&c=Index&a=ajax_city_name", {city_name: city_name}, function (result) {
                                 if (result.error == 1) {
                                     $("input[name='city_id']").val(0);
-                                    $('#city_name').html('');
+                                    $('#city_area').html('');
                                 } else {
                                     $("input[name='city_id']").val(result['info']['city_id']);
-                                    $('#city_name').html(city_name);
+                                    $('#city_area').html(city_name);
                                 }
                             }, 'JSON');
                         }
                     }
+                    */
                 }
             </script>
             <include file="Public:footer_inc"/>

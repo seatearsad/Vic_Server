@@ -41,8 +41,8 @@ $(function(){
             updateNum();
         });
     });
-	getList();
-	var timer = setInterval(getList, 2000);
+	//getList();
+	//var timer = setInterval(getList, 2000);
 	
 	$(document).on("click", '.go_detail', function(e){
 		//e.stopPropagation();
@@ -53,15 +53,18 @@ $(function(){
 function getList() {
     var ua = navigator.userAgent;
     if(!ua.match(/TuttiDeliver/i)) {
-		navigator.geolocation.getCurrentPosition(function (position) {
-			console.log(position);
-			list_detail(position.coords.latitude, position.coords.longitude);
-		},function(error) {
-			if(error)
-				list_detail(lat,lng);
-		});
+        navigator.geolocation.getCurrentPosition(function (position) {
+            console.log(position);
+            list_detail(position.coords.latitude, position.coords.longitude);
+        }, function (error) {
+            if (error)
+                list_detail(lat, lng);
+        });
+
 		return false;
-    }
+    }else{
+        list_detail(lat,lng);
+	}
 
 	
 	/*var geolocation = new BMap.Geolocation();
@@ -105,23 +108,40 @@ function list_detail(lat, lng)
 	$.get(location_url, {'lat':lat, 'lng':lng}, function(result){
 		if (result.err_code) {
 			//$('#container').html('<div class="psnone" ><img src="' + static_path + 'images/qdz_02.jpg"></div>');
-            $('#container').html('<p style="text-align: center;width: 90%;margin: auto;">No pending orders. Please wait for the next available order.</p>');
-			return false;
-		}
-		laytpl($('#replyListBoxTpl').html()).render(result, function(html){
-			$('#container').html(html);
-		    $(".delivery p em").each(function(){
-		        $(this).width($(window).width() - $(this).siblings("i").width() -55) 
-	    	});
-		});
+            //$('#container').html('<p style="text-align: center;width: 90%;margin: auto;">No pending orders. Please wait for the next available order.</p>');
+            $('#gray_middle_div').html('<div class="wait_div"><img src="' + static_path + 'img/deliver_menu/wait_order.gif"></div><div class="wait_div">Waiting for the next available order</div>');
+            loadPosition();
+		}else {
+            laytpl($('#replyListBoxTpl').html()).render(result, function (html) {
+                $('#gray_middle_div').html(html);
+                $(".delivery p em").each(function () {
+                    $(this).width($(window).width() - $(this).siblings("i").width() - 55)
+                });
+            });
+
+            loadRoute(result.list[0]);
+        }
+
+        $('#gray_count').html(result.gray_count + " Pending");
+        $('#deliver_count').html(result.deliver_count + " in Progress");
+        $('#finish_count').html(result.finish_count);
+        if (result.work_status == 1) {
+            if(typeof (window.linkJs) != 'undefined'){
+                window.linkJs.reloadWebView();
+            }else {
+                window.location.reload();
+            }
+        }
 	}, 'json');
 }
 
 function updateNum() {
     $.get(update_url, function(response){
         if (response.err_code == false) {
-            $('#gray_count').html(response.gray_count);
-            $('#deliver_count').html(response.deliver_count);
+            $('#gray_count').html(response.gray_count+" Pending");
+            $('#deliver_count').html(response.deliver_count+" in Progress");
+            //$('#gray_count').html(response.gray_count);
+            //$('#deliver_count').html(response.deliver_count);
             $('#finish_count').html(response.finish_count);
         }
     }, 'json');

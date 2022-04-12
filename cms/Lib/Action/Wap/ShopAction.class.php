@@ -279,9 +279,9 @@ class ShopAction extends BaseAction{
             $key && $where['key'] = $key;
 
             if ($is_wap > 0) {
-                $lists = D('Merchant_store_shop')->get_list_by_option($where, $is_wap);
+                $lists = D('Merchant_store_shop')->get_list_by_option($where, $is_wap,-1,$city_id);
             } else {
-                $lists = D('Merchant_store_shop')->get_list_by_option($where);
+                $lists = D('Merchant_store_shop')->get_list_by_option($where,1,-1,$city_id);
             }
         }
         $return = array();
@@ -596,6 +596,11 @@ class ShopAction extends BaseAction{
                 switch ($city['range_type']){
                     case 1://按照纬度限制的城市 小于某个纬度
                         if($lat >= $city['range_para']) $is_add = false;
+                        break;
+                    case 2://自定义区域
+                        import('@.ORG.RegionalCalu.RegionalCalu');
+                        $region = new RegionalCalu();
+                        $is_add = $region->checkCity($city,$long,$lat);
                         break;
                     default:
                         break;
@@ -1507,6 +1512,15 @@ class ShopAction extends BaseAction{
             echo json_encode(array('store' => $store, 'product_list' => $list));
 
         } else {
+            $cookieData = $this->getCookieData($store_id);
+
+            //获取商品折扣活动
+            $store_discount = D('New_event')->getStoreNewDiscount($store_id);
+            $goodsDiscount = $store_discount['goodsDiscount'];
+            $goodsDishDiscount = $store_discount['goodsDishDiscount'];
+
+            D('Shop_goods')->checkCart($store_id, $this->user_session['uid'], $cookieData,1,0,$goodsDiscount,$goodsDishDiscount);
+
             if($now_store['menu_version'] == 2){
                 $categories = D('StoreMenuV2')->getStoreCategories($store_id,true);
                 $sortList = D('StoreMenuV2')->arrangeWap($categories);
@@ -1782,6 +1796,7 @@ class ShopAction extends BaseAction{
                 $values = D('Side_dish_value')->where(array('dish_id' => $v['id'], 'status' => 1))->select();
                 foreach ($values as &$vv) {
                     $vv['name'] = lang_substr($vv['name'], C('DEFAULT_LANG'));
+                    $vv['price'] = round($vv['price']*$now_goods['goodsDishDiscount'],2);
                     $vv['list'] = array();
                 }
                 $v['list'] = $values;
@@ -2531,10 +2546,12 @@ class ShopAction extends BaseAction{
                                 }
                             }
 
-                            $all_list = D('Store_product')->where(array('id' => array('in', $all_dish_id), 'storeId' => $store_id, 'status' => 1))->select();
+                            if(count($all_dish_id) > 0) {
+                                $all_list = D('Store_product')->where(array('id' => array('in', $all_dish_id), 'storeId' => $store_id, 'status' => 1))->select();
 
-                            if (count($all_dish_id) != count($all_list)) {
-                                $allow_add = false;
+                                if (count($all_dish_id) != count($all_list)) {
+                                    $allow_add = false;
+                                }
                             }
                         }
 
@@ -2592,6 +2609,11 @@ class ShopAction extends BaseAction{
                 exit;
             }else{
                 $store = D('Merchant_store')->where(array('store_id'=>$store_id))->find();
+                //获取商品折扣活动
+                $store_discount = D('New_event')->getStoreNewDiscount($store_id);
+                $goodsDiscount = $store_discount['goodsDiscount'];
+                $goodsDishDiscount = $store_discount['goodsDishDiscount'];
+
                 //查看所有的cookie商品是否存在 如果不存在删除cookie
                 if($store['menu_version'] == 2){
                     $all_id = array();
@@ -2621,7 +2643,7 @@ class ShopAction extends BaseAction{
                     }
                 }
             }
-            $return = D('Shop_goods')->checkCart($store_id, $this->user_session['uid'], $cookieData);
+            $return = D('Shop_goods')->checkCart($store_id, $this->user_session['uid'], $cookieData,1,0,$goodsDiscount,$goodsDishDiscount);
             //var_dump($return);die("----");
         }
 
@@ -2850,51 +2872,63 @@ class ShopAction extends BaseAction{
         //计算配送费
         $is_jump_address = 0;
         if ($user_adress) {
+            if($user_adress['city'] != $return['store']['city_id']){
+                $is_jump_address = 1;
+                $user_adress = null;
+            }else {
+                //$distance = getDistance($user_adress['latitude'], $user_adress['longitude'], $return['store']['lat'], $return['store']['long']);
+                $from = $return['store']['lat'] . ',' . $return['store']['long'];
+                $aim = $user_adress['latitude'] . ',' . $user_adress['longitude'];
 
-            //$distance = getDistance($user_adress['latitude'], $user_adress['longitude'], $return['store']['lat'], $return['store']['long']);
-            $from = $return['store']['lat'].','.$return['store']['long'];
-            $aim = $user_adress['latitude'].','.$user_adress['longitude'];
+                $distance = getDistance($return['store']['lat'], $return['store']['long'], $user_adress['latitude'], $user_adress['longitude']);
+                //var_dump($distance);die("++++++++++++++==".$return['store']['delivery_radius'] * 1000);
+                if ($distance <= $return['store']['delivery_radius'] * 1000) {
+                    $return['store']['free_delivery'] = 0;
+                    $return['store']['event'] = "";
+                    if ($delivery_coupon != "" && $delivery_coupon['limit_day'] * 1000 >= $distance) {
+                        $return['store']['free_delivery'] = 1;
+                        $t_event['use_price'] = $delivery_coupon['use_price'];
+                        $t_event['discount'] = $delivery_coupon['discount'];
+                        $t_event['miles'] = $delivery_coupon['limit_day'] * 1000;
+                        $t_event['desc'] = $delivery_coupon['desc'];
+                        $t_event['event_type'] = $delivery_coupon['event_type'];
 
-            $distance = getDistance($return['store']['lat'],$return['store']['long'],$user_adress['latitude'],$user_adress['longitude']);
-            //var_dump($distance);die("++++++++++++++==".$return['store']['delivery_radius'] * 1000);
-            if($distance <= $return['store']['delivery_radius'] * 1000) {
-                $return['store']['free_delivery'] = 0;
-                $return['store']['event'] = "";
-                if ($delivery_coupon != "" && $delivery_coupon['limit_day'] * 1000 >= $distance) {
-                    $return['store']['free_delivery'] = 1;
-                    $t_event['use_price'] = $delivery_coupon['use_price'];
-                    $t_event['discount'] = $delivery_coupon['discount'];
-                    $t_event['miles'] = $delivery_coupon['limit_day'] * 1000;
-                    $t_event['desc'] = $delivery_coupon['desc'];
-                    $t_event['event_type'] = $delivery_coupon['event_type'];
-
-                    $return['store']['event'] = $t_event;
-                } else {
-                    $distance = getDistanceByGoogle($from, $aim);
-                }
-
-                $city = D('Area')->where(array('area_id'=>$return['store']['city_id']))->find();
-                if($city['range_type'] != 0) {
-                    switch ($city['range_type']){
-                        case 1://按照纬度限制的城市 小于某个纬度
-                            if($user_adress['latitude'] >= $city['range_para']) {
-                                $is_jump_address = 1;
-                                $user_adress=null;
-                            }
-                            else $is_jump_address = 0;
-                            break;
-                        default:
-                            $is_jump_address = 0;
-                            break;
+                        $return['store']['event'] = $t_event;
+                    } else {
+                        $distance = getDistanceByGoogle($from, $aim);
                     }
-                }else{
-                    $is_jump_address = 0;
-                }
 
-                //$distance = $distance / 1000;
-                //var_dump($distance);die();
+                    $city = D('Area')->where(array('area_id' => $return['store']['city_id']))->find();
+                    if ($city['range_type'] != 0) {
+                        switch ($city['range_type']) {
+                            case 1://按照纬度限制的城市 小于某个纬度
+                                if ($user_adress['latitude'] >= $city['range_para']) {
+                                    $is_jump_address = 1;
+                                    $user_adress = null;
+                                } else $is_jump_address = 0;
+                                break;
+                            case 2://自定义区域
+                                import('@.ORG.RegionalCalu.RegionalCalu');
+                                $region = new RegionalCalu();
+                                if ($region->checkCity($city, $user_adress['longitude'], $user_adress['latitude'])) {
+                                    $is_jump_address = 0;
+                                } else {
+                                    $is_jump_address = 1;
+                                    $user_adress = null;
+                                }
+                                break;
+                            default:
+                                $is_jump_address = 0;
+                                break;
+                        }
+                    } else {
+                        $is_jump_address = 0;
+                    }
 
-                //获取配送费用
+                    //$distance = $distance / 1000;
+                    //var_dump($distance);die();
+
+                    //获取配送费用
 //			$deliveryCfg = [];
 //			$deliverys = D("Config")->get_gid_config(20);
 //			foreach($deliverys as $r){
@@ -2914,22 +2948,23 @@ class ShopAction extends BaseAction{
 //			}elseif($distance > 20) {
 //				$return['delivery_fee'] = round($deliveryCfg['delivery_distance_more'], 2);
 //			}
-                $return['delivery_fee'] = calculateDeliveryFee($distance, $return['store']['city_id']);
-                $return['delivery_fee2'] = $return['delivery_fee'];
+                    $return['delivery_fee'] = calculateDeliveryFee($distance, $return['store']['city_id']);
+                    $return['delivery_fee2'] = $return['delivery_fee'];
 
-                /*$pass_distance = $distance > $return['basic_distance'] ? floatval($distance - $return['basic_distance']) : 0;
-                $return['delivery_fee'] += round($pass_distance * $return['per_km_price'], 2);
-                $return['delivery_fee'] = $return['delivery_fee'] - $return['delivery_fee_reduce'];
-                $return['delivery_fee'] = $return['delivery_fee'] > 0 ? $return['delivery_fee'] : 0;
+                    /*$pass_distance = $distance > $return['basic_distance'] ? floatval($distance - $return['basic_distance']) : 0;
+                    $return['delivery_fee'] += round($pass_distance * $return['per_km_price'], 2);
+                    $return['delivery_fee'] = $return['delivery_fee'] - $return['delivery_fee_reduce'];
+                    $return['delivery_fee'] = $return['delivery_fee'] > 0 ? $return['delivery_fee'] : 0;
 
-                $pass_distance = $distance > $return['basic_distance2'] ? floatval($distance - $return['basic_distance2']) : 0;
-                $return['delivery_fee2'] += round($pass_distance * $return['per_km_price2'], 2);
-                $return['delivery_fee2'] = $return['delivery_fee2'] - $return['delivery_fee_reduce'];
-                $return['delivery_fee2'] = $return['delivery_fee2'] > 0 ? $return['delivery_fee2'] : 0;*/
-            }else{
-                //超出了配送范围
-                $is_jump_address = 1;
-                $user_adress=null;
+                    $pass_distance = $distance > $return['basic_distance2'] ? floatval($distance - $return['basic_distance2']) : 0;
+                    $return['delivery_fee2'] += round($pass_distance * $return['per_km_price2'], 2);
+                    $return['delivery_fee2'] = $return['delivery_fee2'] - $return['delivery_fee_reduce'];
+                    $return['delivery_fee2'] = $return['delivery_fee2'] > 0 ? $return['delivery_fee2'] : 0;*/
+                } else {
+                    //超出了配送范围
+                    $is_jump_address = 1;
+                    $user_adress = null;
+                }
             }
         }else{
             //没有获得默认地址
@@ -3016,7 +3051,13 @@ class ShopAction extends BaseAction{
                 redirect(U('Shop/index') . '#shop-' . $store_id);
                 exit;
             }
-            $return = D('Shop_goods')->checkCart($store_id, $this->user_session['uid'], $cookieData);
+
+            //获取商品折扣活动
+            $store_discount = D('New_event')->getStoreNewDiscount($store_id);
+            $goodsDiscount = $store_discount['goodsDiscount'];
+            $goodsDishDiscount = $store_discount['goodsDishDiscount'];
+
+            $return = D('Shop_goods')->checkCart($store_id, $this->user_session['uid'], $cookieData,1,0,$goodsDiscount,$goodsDishDiscount);
         }
 
 // 		$order_id = isset($_POST['order_id']) ? intval($_POST['order_id']) : 0;
@@ -3032,6 +3073,7 @@ class ShopAction extends BaseAction{
             $phone = isset($_POST['ouserTel']) ? htmlspecialchars($_POST['ouserTel']) : '';
             $name = isset($_POST['ouserName']) ? htmlspecialchars($_POST['ouserName']) : '';
             $address = isset($_POST['ouserAddres']) ? htmlspecialchars($_POST['ouserAddres']) : '';
+            $addressDetail = isset($_POST['ouserAddressDetail']) ? htmlspecialchars($_POST['ouserAddressDetail']) : '';
             $pick_address = isset($_POST['pick_address']) ? htmlspecialchars($_POST['pick_address']) : '';
             $invoice_head = isset($_POST['invoice_head']) ? htmlspecialchars($_POST['invoice_head']) : '';
             $address_id = isset($_POST['address_id']) ? intval($_POST['address_id']) : 0;
@@ -3151,6 +3193,7 @@ class ShopAction extends BaseAction{
                 $order_data['username'] = $name;
                 $order_data['userphone'] = $phone;
                 $order_data['address'] = $address;
+                $order_data['address_detail'] = $addressDetail;
                 $order_data['address_id'] = $address_id;
                 $order_data['lat'] = $user_address['latitude'];
                 $order_data['lng'] = $user_address['longitude'];

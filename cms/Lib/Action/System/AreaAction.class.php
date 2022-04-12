@@ -5,6 +5,7 @@
  */
 
 class AreaAction extends BaseAction{
+    public $mail;
 	public function index(){
 		$database_area = D('Area');
 		if(!isset($_GET['type'])){
@@ -172,6 +173,15 @@ class AreaAction extends BaseAction{
 	}
 	public function modify(){
 		if(IS_POST){
+            if (($_POST['is_pick_up']==1) && ($_POST['is_shipping']==1)){
+                $_POST["bag_type"]=3;
+            }else if ($_POST['is_pick_up']==1){
+                $_POST["bag_type"]=1;
+            }else if ($_POST['is_shipping']==1){
+                $_POST["bag_type"]=2;
+            }else{
+                $_POST["bag_type"]=0;
+            }
 			$database_area = D('Area');
 			$condition_area['area_url'] = $_POST['area_url'];
 			if($database_area->where($condition_area)->find()){
@@ -204,7 +214,25 @@ class AreaAction extends BaseAction{
 		if(IS_POST){
 			$database_area = D('Area');
 			$condition_area['area_url'] = $_POST['area_url'];
-			$area_type = $database_area->where(array('area_id'=>$_POST['area_id']))->field('area_type')->select();
+            if (($_POST['is_pick_up']==1) && ($_POST['is_shipping']==1)){
+                $_POST["bag_type"]=3;
+            }else if ($_POST['is_pick_up']==1){
+                $_POST["bag_type"]=1;
+            }else if ($_POST['is_shipping']==1){
+                $_POST["bag_type"]=2;
+            }else{
+                $_POST["bag_type"]=0;
+            }
+
+            $_POST['bag_url_show'] = $_POST['is_show_url'];
+
+            $area = $database_area->where(array('area_id'=>$_POST['area_id']))->find();
+			$area_type = $area['area_type'];
+
+            //开放城市的送餐员招聘 发送通知邮件
+			if($area['bag_is_recruit'] == 0 && $_POST['bag_is_recruit'] == 1){
+                //$this->sendMailToDeliver($_POST['area_id'],$area['area_name']);
+            }
 			if($database_area->data($_POST)->save()){
 			    //当城市时间均为00:00:00时，为城市紧急状态将所有店铺设置为休假状态
                 $config = D('Config')->where(array('name'=>'emergency_close_store'))->find();
@@ -464,5 +492,71 @@ class AreaAction extends BaseAction{
         }
         $return['info'] = $data;
         exit(json_encode($return));
+    }
+
+    public function sendMailToDeliver($area_id,$area_name){
+        $deliver_list = D("Deliver_user")->where(array('city_id'=>$area_id,'reg_status'=>1))->select();
+        foreach ($deliver_list as $deliver){
+            if($deliver['email'] != "") {
+                $email = array(array("address"=>$deliver['email'],"userName"=>$deliver['name']));
+                $title = "We’re accepting new couriers in ".$area_name;
+                $body = $this->getMailBody($deliver['name'],$area_name);
+
+                if(!$this->mail) $this->mail = $this->getMail();
+
+                $this->mail->clearAddresses();
+                foreach ($email as $address) {
+                    $this->mail->addAddress($address['address'], $address['userName']);
+                }
+
+                $this->mail->isHTML(true);
+                $this->mail->Subject = $title;
+                $this->mail->Body    = $body;
+                $this->mail->AltBody = '';
+
+                $this->mail->send();
+            }
+        }
+    }
+
+    function getMail(){
+        $config = D('Config')->get_config();
+        $gmail_pwd = $config['gmail_password'];
+
+        require './mailer/PHPMailer.php';
+        require './mailer/SMTP.php';
+        require './mailer/Exception.php';
+
+        $mail = new PHPMailer\PHPMailer\PHPMailer();
+
+        $mail->isSMTP();                                      // Set mailer to use SMTP
+        $mail->Host = 'smtp.gmail.com';                       // Specify main and backup SMTP servers. 这里改成smtp.gmail.com
+        $mail->SMTPAuth = true;                               // Enable SMTP authentication
+        $mail->Username = 'donotreply.tutti@gmail.com';       // SMTP username 这里改成自己的gmail邮箱，最好新注册一个，因为后期设置会导致安全性降低
+        $mail->Password = $gmail_pwd;                         // SMTP password 这里改成对应邮箱密码
+        $mail->SMTPSecure = 'ssl';                            // Enable TLS encryption, `ssl` also accepted
+        $mail->Port = 465;
+
+        $mail->setFrom('donotreply.tutti@gmail.com', 'Tutti');
+
+        return $mail;
+    }
+
+    public function getMailBody($name,$city_name)
+    {
+        $body = "<p>Hi " . $name . ",</p>";
+        $body .= "<p>&nbsp;</p>";
+        $body .= "<p>You are receiving this email because you have previously applied to be a Tutti Courier in ".$city_name.", and we are now accepting new courier applications!</p>";
+        $body .= "<p>&nbsp;</p>";
+        $body .= "<p>Please follow this link to login and continue your application:<a href='https://tutti.app/wap.php?g=Wap&c=Deliver&a=login' target='_blank'>https://tutti.app/wap.php?g=Wap&c=Deliver&a=login</a></p>";
+        $body .= "<p>&nbsp;</p>";
+        $body .= "<p>You can also finish your application on our app (search “Tutti Courier” on the App Store or Google Play Store).</p>";
+        $body .= "<p>&nbsp;</p>";
+        $body .= "<p>For any questions, please contact us at 1-888-399-6668 or email <a href='mailto:hr@tutti.app'>hr@tutti.app</a>.</p>";
+        $body .= "<p>&nbsp;</p>";
+        $body .= "<p>Best regards,</p>";
+        $body .= "<p>Tutti Courier Team</p>";
+
+        return $body;
     }
 }
