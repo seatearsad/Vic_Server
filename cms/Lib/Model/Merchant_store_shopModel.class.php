@@ -22,7 +22,13 @@ class Merchant_store_shopModel extends Model
         //if($city_id != -1)
         //    $condition_where = "s.status=1 AND s.store_id=m.store_id AND s.have_shop=1 AND (cc.range_type=0 OR (cc.range_type=2 AND s.city_id={$city_id}) OR (cc.range_type=1 AND {$lat}<cc.range_para))";
         //else
-		    $condition_where = "s.status=1 AND s.store_id=m.store_id AND s.have_shop=1 AND (cc.range_type=0 OR cc.range_type=2 OR (cc.range_type=1 AND {$lat}<cc.range_para))";
+
+        if($where['selectType'] == 0) {//Delivery
+            $condition_where = "s.status=1 AND s.store_id=m.store_id AND s.have_shop=1 AND (cc.range_type=0 OR cc.range_type=2 OR (cc.range_type=1 AND {$lat}<cc.range_para))";
+            $condition_where .= " AND s.city_id=".$city_id;
+        }else {//Pickup
+            $condition_where = "s.status=1 AND s.store_id=m.store_id AND s.is_pickup=1";
+        }
 
 		if($menu_version != -1) $condition_where .= " AND s.menu_version=".$menu_version;
 		/**
@@ -31,10 +37,6 @@ class Merchant_store_shopModel extends Model
             if($city['range_type'] == 2) $condition_where .= " AND s.city_id=".$city_id;
         }
          * */
-        $condition_where .= " AND s.city_id=".$city_id;
-
-		if($where['model'] == 'delivery') $condition_where .= " AND s.have_shop=1";
-		else if($where['model'] == 'pickup') $condition_where .= " AND s.is_pickup=1";
 
 		if (C('config.store_shop_auth') == 1) {
 			$condition_where .= " AND s.auth>2";
@@ -62,8 +64,13 @@ class Merchant_store_shopModel extends Model
 			} elseif ($deliver_type == 'pick') {
 				$condition_where .= " AND `m`.`deliver_type` IN (2, 3, 4)";
 			} else {
-				$condition_where .= " AND (`m`.`deliver_type` IN (2, 3, 4, 5) OR (`m`.`delivery_range_type`=0 AND `m`.`deliver_type` IN (0, 1) AND ROUND(6378.137 * 2 * ASIN(SQRT(POW(SIN(({$lat}*PI()/180-`s`.`lat`*PI()/180)/2),2)+COS({$lat}*PI()/180)*COS(`s`.`lat`*PI()/180)*POW(SIN(({$long}*PI()/180-`s`.`long`*PI()/180)/2),2)))*1000) < `m`.`delivery_radius`*1000)";
-				$condition_where .= " OR (`m`.`delivery_range_type`=1 AND MBRContains(PolygonFromText(`m`.`delivery_range_polygon`),PolygonFromText('Point({$long} {$lat})'))>0))";
+                if($where['selectType'] == 0) {//Delivery
+                    $condition_where .= " AND (`m`.`deliver_type` IN (2, 3, 4, 5) OR (`m`.`delivery_range_type`=0 AND `m`.`deliver_type` IN (0, 1) AND ROUND(6378.137 * 2 * ASIN(SQRT(POW(SIN(({$lat}*PI()/180-`s`.`lat`*PI()/180)/2),2)+COS({$lat}*PI()/180)*COS(`s`.`lat`*PI()/180)*POW(SIN(({$long}*PI()/180-`s`.`long`*PI()/180)/2),2)))*1000) < `m`.`delivery_radius`*1000)";
+                    $condition_where .= " OR (`m`.`delivery_range_type`=1 AND MBRContains(PolygonFromText(`m`.`delivery_range_polygon`),PolygonFromText('Point({$long} {$lat})'))>0))";
+                }else{//Pickup
+                    $condition_where .= " AND (`m`.`deliver_type` IN (2, 3, 4, 5) OR (`m`.`delivery_range_type`=0 AND `m`.`deliver_type` IN (0, 1) AND ROUND(6378.137 * 2 * ASIN(SQRT(POW(SIN(({$lat}*PI()/180-`s`.`lat`*PI()/180)/2),2)+COS({$lat}*PI()/180)*COS(`s`.`lat`*PI()/180)*POW(SIN(({$long}*PI()/180-`s`.`long`*PI()/180)/2),2)))*1000) < `m`.`pickup_radius`*1000)";
+                    $condition_where .= " OR (`m`.`delivery_range_type`=1 AND MBRContains(PolygonFromText(`m`.`delivery_range_polygon`),PolygonFromText('Point({$long} {$lat})'))>0))";
+                }
 			}
 		}
 
@@ -906,11 +913,13 @@ class Merchant_store_shopModel extends Model
             $city_id = $city_id ? $city_id : 0;
         }
 
-        //如果城市为自定义的话 修改type值 返回数组
-        import('@.ORG.RegionalCalu.RegionalCalu');
-        $region = new RegionalCalu();
-        if(!$region->index($city_id,$long,$lat)) $type = 0;
-        /////
+        if($where['selectType'] == 0) {//Delivery
+            //如果城市为自定义的话 修改type值 返回数组
+            import('@.ORG.RegionalCalu.RegionalCalu');
+            $region = new RegionalCalu();
+            if (!$region->index($city_id, $long, $lat)) $type = 0;
+            /////
+        }
 
         switch ($type){
             case 1:
@@ -966,6 +975,8 @@ class Merchant_store_shopModel extends Model
             $temp['delivery'] = $temp['delivery'] ? true : false;
             $temp['time'] = $row['send_time'];//配送时长
             $temp['delivery_price'] = floatval($row['basic_price']);//起送价
+            $temp['have_shop'] = $row['have_shop'];
+            $temp['is_pickup'] = $row['is_pickup'];
             if($lat != 0 && $long != 0){
                 $temp['delivery_money'] = getDeliveryFee($row['lat'],$row['long'],$lat,$long,$row['city_id']);
             }else{

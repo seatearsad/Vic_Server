@@ -19,6 +19,9 @@ class IndexAction extends BaseAction
         //v2.6.1添加
         $userId = $_POST['uid'] ? $_POST['uid'] : 0;
 
+        //0-delivery 1-pickup
+        $selectType = $_POST['select_type'] ? $_POST['select_type'] : 0;
+
         //顶部广告
         if($city_id == -1) {
             if($userId != 0) {
@@ -67,7 +70,7 @@ class IndexAction extends BaseAction
         $cat_fid = 0;
 
         $key = '';
-        $where = array('deliver_type' => $deliver_type, 'order' => $order, 'lat' => $lat, 'long' => $long, 'cat_id' => $cat_id, 'cat_fid' => $cat_fid, 'page' => $page,'limit'=>$limit);
+        $where = array('deliver_type' => $deliver_type, 'order' => $order, 'lat' => $lat, 'long' => $long, 'cat_id' => $cat_id, 'cat_fid' => $cat_fid, 'page' => $page,'limit'=>$limit,"selectType"=>$selectType);
         $key && $where['key'] = $key;
 
         $getMenuVersion = -1;//-1 全部 1只有version=1的 2

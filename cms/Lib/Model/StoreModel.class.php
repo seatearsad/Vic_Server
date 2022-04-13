@@ -48,6 +48,8 @@ class StoreModel extends Model
         $store['pay_method'] = $row['pay_method'];
         $store['delivery_radius'] = $row['delivery_radius'];
         $store['menu_version'] = $row['menu_version'];
+        $store['have_shop'] = $row['have_shop'];
+        $store['is_pickup'] = $row['is_pickup'];
 
         if($row['background'] && $row['background'] != '') {
             $image_tmp = explode(',', $row['background']);
@@ -332,29 +334,38 @@ class StoreModel extends Model
         }
         //modify garfunkel
         if($lat != 0 && $lng != 0) {
-            $from = $row['lat'].','.$row['long'];
-            $aim = $lat.','.$lng;
-            $distance = getDistanceByGoogle($from,$aim);
-            $store['shipfee'] = calculateDeliveryFee($distance,$store['city_id']);
-            //$store['shipfee'] = getDeliveryFee($row['lat'], $row['long'], $lat, $lng,$row['city_id']);
+            if($row['have_shop'] == 1) {
+                $from = $row['lat'] . ',' . $row['long'];
+                $aim = $lat . ',' . $lng;
+                $distance = getDistanceByGoogle($from, $aim);
+                $store['shipfee'] = calculateDeliveryFee($distance, $store['city_id']);
 
-            //$distance = getDistance($row['lat'], $row['long'], $lat, $lng);
-            $store['free_delivery'] = 0;
-            $store['event'] = array("use_price"=>"0","discount"=>"0","miles"=>0);
-            if($delivery_coupon != "" && $delivery_coupon['limit_day']*1000 >= $distance*1000){
-                $store['free_delivery'] = 1;
-                $t_event['use_price'] = $delivery_coupon['use_price'];
-                $t_event['discount'] = $delivery_coupon['discount'];
-                $t_event['miles'] = $delivery_coupon['limit_day']*1000;
-                $t_event['desc'] = $delivery_coupon['desc'];
-                $t_event['event_type'] = $delivery_coupon['event_type'];
+                //$store['shipfee'] = getDeliveryFee($row['lat'], $row['long'], $lat, $lng,$row['city_id']);
 
-                $store['event'] = $t_event;
+                //$distance = getDistance($row['lat'], $row['long'], $lat, $lng);
+                $store['free_delivery'] = 0;
+                $store['event'] = array("use_price" => "0", "discount" => "0", "miles" => 0);
+                if ($delivery_coupon != "" && $delivery_coupon['limit_day'] * 1000 >= $distance * 1000) {
+                    $store['free_delivery'] = 1;
+                    $t_event['use_price'] = $delivery_coupon['use_price'];
+                    $t_event['discount'] = $delivery_coupon['discount'];
+                    $t_event['miles'] = $delivery_coupon['limit_day'] * 1000;
+                    $t_event['desc'] = $delivery_coupon['desc'];
+                    $t_event['event_type'] = $delivery_coupon['event_type'];
 
-                //$temp['delivery_money'] =  $temp['delivery_money'] - $delivery_coupon['discount'];
+                    $store['event'] = $t_event;
+
+                    //$temp['delivery_money'] =  $temp['delivery_money'] - $delivery_coupon['discount'];
+                }
             }
-        }else
+        } else {
             $store['shipfee'] = C('config.delivery_distance_1');
+        }
+
+        if($row['is_pickup'] == 1){
+            $store['pickup_distance'] = round(getDistance($row['lat'], $row['long'], $lat, $lng)/1000,2) . "km";
+        }
+
         //$store['delivery_money'] = floatval($store['delivery_money']);
 // 		$store['delivery_money'] = $row['deliver_type'] == 0 ? C('config.delivery_fee') : $row['delivery_fee'];//配送费
 // 		$store['delivery_money'] = floatval($store['delivery_money']);//配送费

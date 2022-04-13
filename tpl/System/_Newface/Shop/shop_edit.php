@@ -35,6 +35,12 @@
                                                value="{pigcms{$now_shop.delivery_radius|floatval}" id="reduce_money"
                                                size="10"/></td>
                                 </tr>
+                                <tr style="height: 50px">
+                                    <th width="90">Pickup Distance</th>
+                                    <td><input type="text" class="form-control" name="pickup_radius"
+                                               value="{pigcms{$now_shop.pickup_radius|floatval}" id="reduce_money"
+                                               size="10"/></td>
+                                </tr>
                                 <!--tr class="delivery_range_type1">
                                     <td>自定义范围</td>
                                     <td><input type="button" class="button" value="绘制配送范围" id="baiduMap"/></td>
