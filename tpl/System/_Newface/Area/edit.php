@@ -159,7 +159,7 @@
                             </div>
                         </div>
                         <div class="form-group  row">
-                            <label class="col-sm-5 col-form-label">{pigcms{:L('_BACK_PROPORTION_')}({Delivery)</label>
+                            <label class="col-sm-5 col-form-label">{pigcms{:L('_BACK_PROPORTION_')}(Delivery)</label>
                             <div class="col-sm-7 input-group bootstrap-touchspin bootstrap-touchspin-injected">
                                 <input type="text" class="touchspin2 form-control" name="delivery_proprotion" size="5" value="{pigcms{$now_area['delivery_proprotion']}" validate="required:true,number:true,maxlength:6" />
                                 <span class="input-group-addon bootstrap-touchspin-postfix input-group-append"><span class="input-group-text">%</span></span>

@@ -32,10 +32,18 @@ class IndexAction extends BaseAction
 
         $_COOKIE['userLocationCity'] = $city_id;
 
-        $head_adver = D('Adver')->get_adver_by_key('app_index_top',5);
-        if(empty($head_adver)){
-            $head_adver = D('Adver')->get_adver_by_key('wap_index_top',5);
+        if($selectType == 0) {//Delivery
+            $head_adver = D('Adver')->get_adver_by_key('app_index_top', 5);
+            if (empty($head_adver)) {
+                $head_adver = D('Adver')->get_adver_by_key('wap_index_top', 5);
+            }
+        }else{//Pickup
+            $head_adver = D('Adver')->get_adver_by_key('pick_up_banner', 5);
+            if (empty($head_adver)) {
+                $head_adver = D('Adver')->get_adver_by_key('wap_index_top', 5);
+            }
         }
+
         if(!empty($head_adver)){
             $banner = array();
             foreach($head_adver as &$head_adver_value){
