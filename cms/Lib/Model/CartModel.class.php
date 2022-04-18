@@ -238,7 +238,7 @@ class CartModel extends Model
         return array();
     }
 
-    public function getCartList($uid,$cartList,$version){
+    public function getCartList($uid,$cartList,$version,$lat,$lng){
         $list = array();
         $total_price = 0;
         $total_market_price = 0;
@@ -251,7 +251,7 @@ class CartModel extends Model
         else
             $sid = $cartList[0]['storeId'];
 
-        $store = D('Store')->get_store_by_id($sid);
+        $store = D('Store')->get_store_by_id($sid,$lat,$lng);
 
         //获取商品折扣活动
         $store_discount = D('New_event')->getStoreNewDiscount($sid);
@@ -486,13 +486,17 @@ class CartModel extends Model
             }
         }
         ///////-garfunkel-店铺满减////////
+        $total_pickup_pay_total = $total_pay_price;
         $result['ship_fee'] = $delivey_fee;
         $total_pay_price += $delivey_fee;
         //获取预计到达时间
         $delivery_time = D('Store')->get_store_delivery_time($sid);
         //计算税费
+        $pickup_tax_price = $tax_price + $store['pack_fee']*$store['tax_num']/100;
         $tax_price = $tax_price + ($store['pack_fee'] + $delivey_fee)*$store['tax_num']/100;
+
         $total_pay_price = $total_pay_price + $tax_price + $deposit_price;
+        $total_pickup_pay_total = $total_pickup_pay_total + $pickup_tax_price + $deposit_price;
 
         $result['store_id'] = $store['site_id'];
         $result['store_name'] = $store['site_name'];
@@ -502,12 +506,28 @@ class CartModel extends Model
         $result['food_total_price'] = $total_price;
         //garfunkel 计算服务费
         $result['service_fee'] = number_format($total_price * $store['service_fee']/100,2);
+        $result['pickup_service_fee'] = number_format($total_price * $store['pickup_service_fee']/100,2);
+
         $result['store_service_fee'] = $store['service_fee'];
+        $result['store_service_fee_pickup'] = $store['pickup_service_fee'];
+
         $total_pay_price = $total_pay_price + $result['service_fee'];
+        $total_pickup_pay_total = $total_pickup_pay_total + $result['pickup_service_fee'];
+
         $result['total_pay_price'] = number_format($total_pay_price,2);
+        $result['total_pickup_pay_price'] = number_format($total_pickup_pay_total,2);
+
         $result['tax_price'] = number_format($tax_price,2);
+        $result['pickup_tax_price'] = number_format($pickup_tax_price,2);
+
         $result['deposit_price'] = number_format($deposit_price,2);
         $result['pay_method'] = explode('|',$store['pay_method']);
+        $result['have_shop'] = $store['have_shop'];
+        $result['is_pickup'] = $store['is_pickup'];
+        $result['lng'] = $store['lng'];
+        $result['lat'] = $store['lat'];
+        $result['address'] = $store['address'];
+        $result['pickup_distance'] = $store['pickup_distance'];
 
         $result['full_discount'] = '0';
 

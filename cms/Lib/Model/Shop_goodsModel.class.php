@@ -1462,7 +1462,7 @@ class Shop_goodsModel extends Model
     public function checkCart($store_id, $uid, $goodsData, $isCookie = 1, $address_id = 0,$goodsDiscount = 1,$goodsDishDiscount = 1)
     {
         $store = D("Merchant_store")->field(true)->where(array('store_id' => $store_id))->find();
-        if ($store['have_shop'] == 0 || $store['status'] != 1) {
+        if (($store['have_shop'] == 0 && $store['is_pickup'] == 0) || $store['status'] != 1) {
             return array('error_code' => true, 'msg' => L('_STORE_IS_CLOSE_'));
         }
         if (C('config.store_shop_auth') == 1 && $store['auth'] < 3) {

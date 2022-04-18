@@ -50,6 +50,7 @@ class StoreModel extends Model
         $store['menu_version'] = $row['menu_version'];
         $store['have_shop'] = $row['have_shop'];
         $store['is_pickup'] = $row['is_pickup'];
+        $store['pickup_service_fee'] = $row['pickup_service_fee'];
 
         if($row['background'] && $row['background'] != '') {
             $image_tmp = explode(',', $row['background']);
@@ -363,7 +364,7 @@ class StoreModel extends Model
         }
 
         if($row['is_pickup'] == 1){
-            $store['pickup_distance'] = round(getDistance($row['lat'], $row['long'], $lat, $lng)/1000,2) . "km";
+            $store['pickup_distance'] = round(getDistance($row['lat'], $row['long'], $lat, $lng)/1000,2);
         }
 
         //$store['delivery_money'] = floatval($store['delivery_money']);

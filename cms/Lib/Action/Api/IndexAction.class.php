@@ -1018,7 +1018,10 @@ class IndexAction extends BaseAction
         if($this->app_version < 266)
             $getMenuVersion = 1;
 
-        $result = D('Cart')->getCartList($uid,$cart_array,$getMenuVersion);
+        $lat = $_POST['lat'] ? $_POST['lat'] : 0;
+        $lng = $_POST['lng'] ? $_POST['lng'] : 0;
+
+        $result = D('Cart')->getCartList($uid,$cart_array,$getMenuVersion,$lat,$lng);
 
         if($result['store_name']) {
             //平台优惠劵
@@ -1048,7 +1051,7 @@ class IndexAction extends BaseAction
         $adr_id = $_POST['addr_item_id'];
 
         $address = D('User_adress')->where(array('adress_id'=>$adr_id))->find();
-        if($address_mark != $address['detail']){
+        if($address && $address_mark != $address['detail']){
             $addressData['detail'] = $address_mark;
             if(!checkEnglish($address_mark) && trim($address_mark) != ''){
                 $addressData['detail_en'] = translationCnToEn($address_mark);
@@ -1227,11 +1230,15 @@ class IndexAction extends BaseAction
         //garfunkel add
         $area = D('Area')->where(array('area_id'=>$store['city_id']))->find();
 
+        $selectType = $_POST['selectType'] ? $_POST['selectType'] : 0;
+
         $now_time = time()+ $area['jetlag']*3600;
         $order_data = array();
         $order_data['mer_id'] = $return['mer_id'];
         $order_data['store_id'] = $return['store_id'];
         $order_data['uid'] = $uid;
+        //0-Delivery 1-Pickup
+        $order_data['order_type'] = $selectType;
 
         $order_data['desc'] = $note;
         $order_data['create_time'] = $now_time;
@@ -1248,28 +1255,48 @@ class IndexAction extends BaseAction
         $order_data['real_orderid'] = $orderid;
         $order_data['no_bill_money'] = 0;//无需跟平台对账的金额
 
-        $address = D('User_adress')->field(true)->where(array('adress_id' => $adr_id, 'uid' => $uid))->find();
+        $order_data['goods_price'] = $return['price'];//商品的价格
 
-        $order_data['username'] = $address['name'];
-        $order_data['userphone'] = $address['phone'];
-        $order_data['address'] = $address['adress'];
-        if($address['detail_en'] != ''){
-            $order_data['address_detail'] = $address['detail_en'] ." (".$address['detail'].")";
-        }else {
-            $order_data['address_detail'] = $address['detail'];
+        if($selectType == 0) {//Delivery
+            $address = D('User_adress')->field(true)->where(array('adress_id' => $adr_id, 'uid' => $uid))->find();
+
+            $order_data['username'] = $address['name'];
+            $order_data['userphone'] = $address['phone'];
+            $order_data['address'] = $address['adress'];
+            if ($address['detail_en'] != '') {
+                $order_data['address_detail'] = $address['detail_en'] . " (" . $address['detail'] . ")";
+            } else {
+                $order_data['address_detail'] = $address['detail'];
+            }
+            $order_data['address_id'] = $adr_id;
+            $order_data['lat'] = $address['latitude'];
+            $order_data['lng'] = $address['longitude'];
+
+            $order_data['freight_charge'] = $delivery_fee = D('Store')->CalculationDeliveryFee($uid,$sid,$adr_id);
+            //garfunkel 计算服务费
+            $order_data['service_fee'] = number_format($order_data['goods_price'] * $return['store']['service_fee']/100,2);
+        }else{//Pickup
+            $user = D("User")->where(array("uid"=>$uid))->find();
+            $order_data['username'] = $user['nickname'];
+            $order_data['userphone'] = $user['phone'];
+            $order_data['address'] = "";
+            $order_data['address_detail'] = "";
+            $order_data['address_id'] = 0;
+            $order_data['lat'] = $_POST['lat'] ? $_POST['lat'] : 0;
+            $order_data['lng'] = $_POST['lng'] ? $_POST['lng'] : 0;
+
+            $_POST['tip'] = 0;
+            $_POST['delivery_discount'] = 0;
+
+            $order_data['freight_charge'] = $delivery_fee = 0;
+            //garfunkel 计算服务费
+            $order_data['service_fee'] = number_format($order_data['goods_price'] * $return['store']['pickup_service_fee']/100,2);
         }
-        $order_data['address_id'] = $adr_id;
-        $order_data['lat'] = $address['latitude'];
-        $order_data['lng'] = $address['longitude'];
 
         $order_data['expect_use_time'] = D('Store')->get_store_delivery_time($sid);
-        $order_data['freight_charge'] = $delivery_fee = D('Store')->CalculationDeliveryFee($uid,$sid,$adr_id);
 
         $order_data['is_pick_in_store'] = 0;
 
-        $order_data['goods_price'] = $return['price'];//商品的价格
-        //garfunkel 计算服务费
-        $order_data['service_fee'] = number_format($order_data['goods_price'] * $return['store']['service_fee']/100,2);
         $order_data['extra_price'] = $return['extra_price'];//另外要支付的金额
         $order_data['discount_price'] = $return['vip_discount_money'];//商品折扣后的总价
         //modify garfunkel
@@ -1329,7 +1356,7 @@ class IndexAction extends BaseAction
             }
         }
 
-        if($_POST['delivery_discount']) {
+        if($_POST['delivery_discount'] && $_POST['delivery_discount'] != 0) {
             $order_data['delivery_discount'] = $_POST['delivery_discount'];
             $delivery_coupon = D('New_event')->getFreeDeliverCoupon($return['store_id'], $store['city_id']);
             $distance = getDistance($store['lat'], $store['long'], $address['latitude'], $address['longitude']);
