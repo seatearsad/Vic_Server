@@ -1129,7 +1129,7 @@ class DataAction extends BaseAction
             $objActSheet->setCellValue('M1', 'Time|时间');
 
             //$sql = "SELECT  o.*, m.name AS merchant_name,d.name as good_name,d.price as good_price ,d.unit,d.cost_price, d.num as good_num, s.name AS store_name FROM " . C('DB_PREFIX') . "shop_order AS o INNER JOIN " . C('DB_PREFIX') . "merchant_store AS s ON s.store_id=o.store_id INNER JOIN " . C('DB_PREFIX') . "merchant AS m ON `s`.`mer_id`=`m`.`mer_id` INNER JOIN " . C('DB_PREFIX') . "shop_order_detail AS d ON `d`.`order_id`=`o`.`order_id` ".$condition_where." ORDER BY o.order_id DESC LIMIT " . $i * 1000 . ",1000";
-            $sql = "SELECT  o.*, m.name AS merchant_name,g.name as good_name,g.tax_num as good_tax,g.deposit_price,s.tax_num as store_tax,s.menu_version,d.goods_id,d.price as good_price ,d.cost_price as good_old_price,d.unit,d.cost_price,d.dish_id, d.num as good_num, s.name AS store_name FROM " . C('DB_PREFIX') . "shop_order AS o LEFT JOIN " . C('DB_PREFIX') . "merchant_store AS s ON s.store_id=o.store_id LEFT JOIN " . C('DB_PREFIX') . "merchant AS m ON `s`.`mer_id`=`m`.`mer_id` LEFT JOIN " . C('DB_PREFIX') . "shop_order_detail AS d ON `d`.`order_id`=`o`.`order_id`  LEFT JOIN " . C('DB_PREFIX') . "shop_goods AS g ON `g`.`goods_id`=`d`.`goods_id` ".$condition_where." ORDER BY o.order_id DESC LIMIT " . $i * 1000 . ",1000";
+            $sql = "SELECT  o.*, m.name AS merchant_name,g.name as good_name,g.tax_num as good_tax,g.deposit_price,s.tax_num as store_tax,s.menu_version,d.goods_id,d.name as order_good_name,d.price as good_price ,d.cost_price as good_old_price,d.unit,d.cost_price,d.dish_id, d.num as good_num, s.name AS store_name FROM " . C('DB_PREFIX') . "shop_order AS o LEFT JOIN " . C('DB_PREFIX') . "merchant_store AS s ON s.store_id=o.store_id LEFT JOIN " . C('DB_PREFIX') . "merchant AS m ON `s`.`mer_id`=`m`.`mer_id` LEFT JOIN " . C('DB_PREFIX') . "shop_order_detail AS d ON `d`.`order_id`=`o`.`order_id`  LEFT JOIN " . C('DB_PREFIX') . "shop_goods AS g ON `g`.`goods_id`=`d`.`goods_id` ".$condition_where." ORDER BY o.order_id DESC LIMIT " . $i * 1000 . ",1000";
 
             $result_list = D()->query($sql);
             //计算订单税费及押金
@@ -1246,7 +1246,10 @@ class DataAction extends BaseAction
                 foreach ($result_list as $value) {
                     if($tmp_id == $value['real_orderid']){
                         $objActSheet->setCellValueExplicit('A' . $index, '');//Order Number|订单编号
-                        $objActSheet->setCellValueExplicit('B' . $index, $value['good_name']);//Item|商品名称
+                        if($value['menu_version'] == 1)
+                            $objActSheet->setCellValueExplicit('B' . $index, $value['good_name']);//Item|商品名称
+                        else
+                            $objActSheet->setCellValueExplicit('B' . $index, $value['order_good_name']);//Item|商品名称
                         $objActSheet->setCellValueExplicit('C' . $index, $value['good_num'],PHPExcel_Cell_DataType::TYPE_NUMERIC);//数量
                         $objActSheet->setCellValueExplicit('D' . $index, $value['good_price'],PHPExcel_Cell_DataType::TYPE_NUMERIC);//单价
                         $objActSheet->setCellValueExplicit('E' . $index, ($value['good_old_price']-$value['good_price']),PHPExcel_Cell_DataType::TYPE_NUMERIC);//单价
@@ -1262,7 +1265,10 @@ class DataAction extends BaseAction
                     }else{
                         $index++;
                         $objActSheet->setCellValueExplicit('A' . $index, $value['order_id']);//订单编号
-                        $objActSheet->setCellValueExplicit('B' . $index, $value['good_name']);//商品名称
+                        if($value['menu_version'] == 1)
+                            $objActSheet->setCellValueExplicit('B' . $index, $value['good_name']);//Item|商品名称
+                        else
+                            $objActSheet->setCellValueExplicit('B' . $index, $value['order_good_name']);//Item|商品名称
                         $objActSheet->setCellValueExplicit('C' . $index, $value['good_num'],PHPExcel_Cell_DataType::TYPE_NUMERIC);//数量
                         $objActSheet->setCellValueExplicit('D' . $index, $value['good_price'],PHPExcel_Cell_DataType::TYPE_NUMERIC);//单价
                         $objActSheet->setCellValueExplicit('E' . $index, ($value['good_old_price']-$value['good_price']),PHPExcel_Cell_DataType::TYPE_NUMERIC);//单价
