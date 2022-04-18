@@ -66,7 +66,17 @@
                         <!-------------------------------- 工具条 -------------------------------------->
                             <div style="margin-bottom: 15px;min-height: 70px">
 
-                            <div id="tool_bar" style="form-group " >
+                            <div id="tool_bar" style="form-group">
+                                <span class="float-right text-right">
+                                    <div class="btn-group" id="order_select">
+                                        <button class="btn btn-white <if condition="$_GET['type'] and $_GET['type'] eq 'all'">active</if>" data-type="all">{pigcms{:L('_ALL_TXT_')}</button>
+                                        <button class="btn btn-white <if condition="!$_GET['type'] or $_GET['type'] eq 'delivery'">active</if>" data-type="delivery">{pigcms{:L('_DELI_TXT_')}</button>
+                                        <button class="btn btn-white <if condition="$_GET['type'] and $_GET['type'] eq 'pickup'">active</if>" data-type="pickup" <if condition="$is_tip eq 1">style="background-color:red;color:white;"</if>>{pigcms{:L('_SELF_LIFT_')}</button>
+                                    </div>
+                                    <if condition="$is_tip eq 1">
+                                        <span class="fa fa-exclamation-circle tutti_icon_danger" style="vertical-align: middle;"></span>
+                                    </if>
+                                </span>
 
                                 <form action="{pigcms{:U('Shop/order')}" method="get" class="form-inline ">
                                     <input type="hidden" name="c" value="Shop"/>
@@ -152,17 +162,16 @@
                         </div>
                         <!------------------------------------------------------------------------------>
                         <!-- <form name="myform" id="myform" action="" method="post">-->
-                        <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="20"
-                               data-sorting="false">
+                            <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="20" data-sorting="false" <if condition="$_GET['type'] and $_GET['type'] eq 'pickup'">style="background-color: #FFF5E8;"</if>>
                             <thead>
                             <tr>
                                 <th data-sort-ignore="true">Order ID</th>
                                 <th data-sort-ignore="true" style="width:15%">{pigcms{:L('_BACK_STORE_NAME_')}</th>
-                                <th  data-sort-ignore="true">{pigcms{:L('_BACK_STORE_PHONE_')}</th>
-                                <th  data-sort-ignore="true">{pigcms{:L('_BACK_USER_NAME_')}</th>
-                                <th  data-sort-ignore="true">{pigcms{:L('_BACK_USER_PHONE_')}</th>
-                                <th  data-sort-ignore="true">{pigcms{:L('_BACK_INIT_TOTAL_')}</th>
-                                <th  data-sort-ignore="true">{pigcms{:L('_BACK_TOTAL_')}</th>
+                                <th data-sort-ignore="true">{pigcms{:L('_BACK_STORE_PHONE_')}</th>
+                                <th data-sort-ignore="true">{pigcms{:L('_BACK_USER_NAME_')}</th>
+                                <th data-sort-ignore="true">{pigcms{:L('_BACK_USER_PHONE_')}</th>
+                                <th data-sort-ignore="true">{pigcms{:L('_BACK_INIT_TOTAL_')}</th>
+                                <th data-sort-ignore="true">{pigcms{:L('_BACK_TOTAL_')}</th>
                                 <th data-sort-ignore="true">{pigcms{:L('_BACK_TIPS_')}</th>
                                 <th data-sort-ignore="true">{pigcms{:L('_BACK_TUTTI_DIS_')}</th>
                                 <th data-sort-ignore="true">{pigcms{:L('_BACK_MER_DIS_')}</th>
@@ -350,6 +359,12 @@
     </script>
 
     <script>
+        $('#order_select').children('button').each(function () {
+            $(this).click(function () {
+                location.href = "{pigcms{:U('Shop/order', $_GET)}" + "&type=" + $(this).data('type');
+                $(this).addClass('active').siblings().removeClass('active');
+            });
+        });
 
         var city_id = $('#city_select').val();
         $('#city_select').change(function () {

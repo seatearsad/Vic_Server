@@ -65,7 +65,7 @@ return array(
     '_SELF_DIST_'           =>  '门店自提',
     '_MIN_DELI_PRICE_'      =>  '起送价',
     '_DELI_PRICE_'          =>  '配送费',
-    '_DELI_TXT_'            =>  '配送',
+    '_DELI_TXT_'            =>  '外卖',
     '_SELF_LIFT_'           =>  '自提',
     '_PACK_PRICE_'          =>  '打包费',
     '_AT_REST_'             =>  '休息中',

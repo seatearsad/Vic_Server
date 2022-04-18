@@ -564,19 +564,13 @@ class ShopAction extends BaseAction
         }
 
         $status = isset($_GET['status']) ? intval($_GET['status']) : -1;
-        $type = isset($_GET['type']) && $_GET['type'] ? $_GET['type'] : '';
+        $type = isset($_GET['type']) && $_GET['type'] ? $_GET['type'] : 'delivery';
         $sort = isset($_GET['sort']) && $_GET['sort'] ? $_GET['sort'] : '';
         $pay_type = isset($_GET['pay_type']) && $_GET['pay_type'] ? $_GET['pay_type'] : '';
 
         if ($sort != 'DESC' && $sort != 'ASC') $sort = '';
-        if ($type != 'price' && $type != 'pay_time') $type = '';
-        $order_sort = '';
-        if ($type && $sort) {
-            $order_sort .= $type . ' ' . $sort . ',';
-            $order_sort .= 'pay_time DESC';
-        } else {
-            $order_sort .= 'pay_time DESC';
-        }
+        $order_sort = 'pay_time DESC';
+
         if ($status == 100) {
             $where['paid'] = 0;
         } elseif ($status == 2) {
@@ -596,6 +590,17 @@ class ShopAction extends BaseAction
             $where['_string'] = $where['_string'] == "" ? "`pay_type`<>'Cash' and (`balance_pay`<>0 OR `merchant_balance` <> 0 )" : $where['_string'] . " and `pay_type`<>'Cash' and (`balance_pay`<>0 OR `merchant_balance` <> 0 )";
         } else if ($pay_type == 'merchant_request'){
             $where['_string'] = $where['_string'] == "" ? " `uid`=0" : $where['_string'] . " and `uid`=0 ";
+        }
+
+        switch ($type){
+            case "delivery":
+                $where['_string'] .= ($where['_string'] ? ' AND ' : '') . " order_type=0";
+                break;
+            case "pickup":
+                $where['_string'] .= ($where['_string'] ? ' AND ' : '') . " order_type=1";
+                break;
+            default:
+                break;
         }
 
         //筛选时间
@@ -664,11 +669,26 @@ class ShopAction extends BaseAction
 
         $this->assign($result);
 
+        /**
         $field = 'sum(price) AS total_price, sum(price - card_price - merchant_balance - balance_pay - payment_money - score_deducte - coupon_price - card_give_money - merchant_reduce) AS offline_price, sum(card_price + merchant_balance + balance_pay + payment_money + score_deducte + coupon_price + card_give_money) AS online_price';
         $count_where = "paid=1 AND status<>4 AND status<>5 AND (pay_type<>'offline' OR (pay_type='offline' AND third_id<>''))";
         $result_total = D('Shop_order')->field($field)->where($count_where)->select();
         $result_total = isset($result_total[0]) ? $result_total[0] : '';
         $this->assign($result_total);
+         */
+
+        $pickup_settings = D('Config')->where(array('gid'=>52))->select();
+        foreach ($pickup_settings as $v){
+            if($v['name'] == "pickup_pay_time_tip") $pickup_pay_time_tip = $v['value'];
+        }
+
+        $is_tip = 0;
+        $checkTime = time() - $pickup_pay_time_tip*60;
+        $pay_count = D('Shop_order')->where(array("paid"=>1,"status"=>0,"pay_time"=>array("lt",$checkTime),"order_type"=>1))->count();
+        if($pay_count > 0){
+            $is_tip = 1;
+        }
+        $this->assign("is_tip",$is_tip);
 
         $this->display();
     }
