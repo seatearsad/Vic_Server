@@ -147,11 +147,28 @@ function getOrderDetail(order_id) {
                             });
                         }
                         $('.con_layer_confirm').hide();
-                        $('#item_all_num').html(this_order.num);
+                        //$('#item_all_num').html(this_order.num);
+                        $('.confirm_btn').html('Confirm <label id="item_all_num">'+this_order.num+'</label> Item(s)');
+
+                        if(this_order.order_type == 0){
+                            $('.con_layer').css("background","#ffa52d");
+                            $('.confirm_btn').css("background","#ffa52d");
+                        }else {
+                            $('.con_layer').css("background","#294068");
+                            $('.confirm_btn').css("background","#294068");
+                        }
                     }else {
                         $('.con_layer').hide();
                         $('.con_layer_confirm').show();
                         $('.cha_time').html(this_order.time_cha);
+
+                        if(this_order.order_type == 1 && this_order.order_status == 1) {
+                            $('.confirm_btn').css({"background":"#294068","color":"white"});
+                            $('.confirm_btn').html("READY FOR PICKUP");
+                        }else {
+                            $('.confirm_btn').attr("style", "");
+                            $('.confirm_btn').html('<label id="item_all_con_num">'+this_order.num+'</label> Item(s) Confirmed');
+                        }
 
                         if(this_order.order_status == 1 || this_order.order_status == 2) {
                             $('#add_dining_time').show();
@@ -162,9 +179,11 @@ function getOrderDetail(order_id) {
                             $('#add_dining_time').hide();
                             $('.con_layer_confirm .confirm_txt').hide();
                             $('.con_layer_confirm .cha_time').hide();
+                            $('.confirm_btn').css({"background":"#294068","color":"white"});
+                            $('.confirm_btn').html("MARK AS DONE");
                         }
 
-                        $('#item_all_con_num').html(this_order.num);
+                        //$('#item_all_con_num').html(this_order.num);
                         $('#print_order').unbind('click');
                         $('#print_order').click(printOrderToAndroid);
                     }

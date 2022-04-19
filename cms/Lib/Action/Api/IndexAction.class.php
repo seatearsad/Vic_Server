@@ -1700,6 +1700,7 @@ class IndexAction extends BaseAction
         $order_detail['delivery_discount'] = $order['delivery_discount'];
         $order_detail['merchant_reduce'] = $order['merchant_reduce'];
         $order_detail['coupon_discount'] = $order['coupon_price'];
+        $order_detail['order_type'] = $order['order_type'];
 
         $order_detail['user_lat'] = $order['lat'];
         $order_detail['user_lng'] = $order['lng'];

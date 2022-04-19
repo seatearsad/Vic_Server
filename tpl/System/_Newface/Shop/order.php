@@ -81,7 +81,7 @@
                                 <form action="{pigcms{:U('Shop/order')}" method="get" class="form-inline ">
                                     <input type="hidden" name="c" value="Shop"/>
                                     <input type="hidden" name="a" value="order"/>
-
+                                    <input type="hidden" name="type" value="{pigcms{$_GET['type']}">
                                     <div style="width:100%;">
                                         <if condition="$system_session['level'] neq 3">
                                             City:&nbsp;&nbsp;
@@ -296,6 +296,9 @@
                                                         <li class="fa fa-trash-o tutti_icon_dark"
                                                             title="{pigcms{:L('_BACK_DEL_')}"></li>
                                                     </a>
+                                                    <if condition="$vo['order_type'] eq 1 and $vo['order_status'] gt 0 and $vo['order_status'] lt 5">
+                                                        <li class="fa fa-check-square-o tutti_icon_ok fa_action" onclick="set_done({pigcms{$vo['order_id']})" title="{pigcms{:L('_BACK_SWITCH_COM_')}">
+                                                    </if>
 
                                                     <if condition="$vo.link_type eq 1">
                                                         <img src="{pigcms{$static_path}images/deliverect.png" width="20"/>
@@ -409,6 +412,27 @@
             });
         });
 
+        function set_done(sid){
+            var order_id = sid;
+            window.top.art.dialog({
+                lock: true,
+                title: 'Reminder',
+                content: "{pigcms{:L('_BACK_SURE_CHANGE_')}",
+                okVal: 'Yes',
+                ok: function () {
+                    $.get("{pigcms{:U('Shop/pickup_complete')}", {order_id: order_id}, function (response) {
+                        if (response.error_code) {
+                            window.top.msg(0, response.msg);
+                        } else {
+                            window.top.msg(1, response.msg, true);
+                            obj.remove();
+                        }
+                    }, 'json');
+                },
+                cancelVal: 'Cancel',
+                cancel: true
+            });
+        }
     </script>
 
     <!----------------------------------------    以下不要写代码     ------------------------------------------------>

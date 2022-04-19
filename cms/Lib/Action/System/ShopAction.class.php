@@ -1746,6 +1746,27 @@ class ShopAction extends BaseAction
         exit();
     }
 
+    public function pickup_complete(){
+        $order_id = $_GET['order_id'];
+        $where = array("order_id"=>$order_id,"order_type"=>1,"order_status"=>array("between",array(1,4)));
+        $order = D("Shop_order")->where($where)->find();
+        if($order){
+            $data['status'] = 2;
+            $data['order_status'] = 5;
+            D("Shop_order")->where($where->save($data);
+
+            //更新用户订单数量信息
+            //$user = D('User')->where(array('uid'=>$order['uid']))->find();
+            //$userData = array('order_num'=>($user['order_num']+1),'last_order_time'=>$data['use_time']);
+            //D('User')->where(array('uid'=>$order['uid']))->save($userData);
+
+            D('Shop_order_log')->add_log(array('order_id' => $order['order_id'], 'status' => 6, 'name' => '系统管理员：' . $this->system_session['realname'], 'phone' => $this->system_session['phone']));
+            exit(json_encode(array('error_code' => false, 'msg' => "Successful")));
+        }else{
+            exit(json_encode(array('error_code' => true, 'msg' => "更新状态失败")));
+        }
+    }
+
     public function export_total()
     {
         set_time_limit(0);

@@ -10,7 +10,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="format-detection" content="address=no">
     <link href="{pigcms{$static_path}css/eve.7c92a906.css" rel="stylesheet"/>
-    <link href="{pigcms{$static_path}css/staff.css?v=1.1" rel="stylesheet"/>
+    <link href="{pigcms{$static_path}css/staff.css?v=1.2" rel="stylesheet"/>
     <script src="{pigcms{:C('JQUERY_FILE')}"></script>
     <script src="{pigcms{$static_public}js/laytpl.js"></script>
     <script src="{pigcms{$static_path}layer/layer.m.js"></script>
@@ -191,9 +191,28 @@
         var is_send = false;
         $('.confirm_btn').click(function () {
             if(is_send) return false;
+            if(this_order.order_status == 3){
+                layer.open({
+                    title: '',
+                    content: 'Please confirm the customer has picked up this order',
+                    btn: ['Confirm', 'Cancel'],
+                    shadeClose: false,
+                    yes: function() {
+                        layer.closeAll();
+                        updateStatus();
+                    }
+                });
+            }else{
+                updateStatus();
+            }
+
+            return false;
+        });
+
+        function updateStatus() {
             layer.open({
-                type:2,
-                content:'Loading...'
+                type: 2,
+                content: 'Loading...'
             });
             var time_val = $('select[name="dining_time"] option:selected').val();
             is_send = true;
@@ -217,8 +236,7 @@
                     });
                 }
             },'json');
-            return false;
-        });
+        }
 
         function printOrderToAndroid(time_val){
             if(typeof (time_val) == "undefined" || !/^[0-9]*$/.test(time_val)){
@@ -330,15 +348,32 @@
             <span>#{{ d[i].order_id }}</span>
             <span>{{ d[i].username }}</span>
             {{# if(d[i].status == 1){ }}
-            <span class="confirm_order">{pigcms{:L('QW_CONFIRMED')}</span>
+                {{# if(d[i].order_type == 0){ }}
+                <span class="confirm_order">{pigcms{:L('QW_CONFIRMED')}</span>
+                {{# }else{ }}
+                <span class="confirm_order" style="color: #294068">
+                    {{# if(d[i].order_status == 1){ }}
+                        {pigcms{:L('QW_CONFIRMED')}
+                    {{# }else{ }}
+                        Prepared
+                    {{# } }}
+                </span>
+                {{# } }}
             {{# }else{ }}
-            <span class="new_order">{pigcms{:L('QW_NEW')}</span>
+                {{# if(d[i].order_type == 0){ }}
+                    <span class="new_order">{pigcms{:L('QW_NEW')}</span>
+                {{# }else{ }}
+                    <span class="new_order" style="background-color: #294068;">{pigcms{:L('QW_NEW')}</span>
+                {{# } }}
             {{# } }}
         </li>
         {{# } }}
     </script>
     <script id="OrderDetailTpl" type="text/html">
         <div class="detail_title">
+            {{# if(d.order_type == 1){ }}
+                <span style="background-color: #294068;color: white;padding: 5px 10px;border-radius: 5px;">{pigcms{:L('_SELF_LIFT_')}</span>
+            {{# } }}
             Order #{{ d.order_id }}
             (
             {{# if(d.status == 0){ }}
@@ -362,12 +397,21 @@
         <div class="detail_user">
             Placed by {{ d.username }} ({{ d.userphone }}) at {{ d.date }}
         </div>
-        <div class="detail_note">
-            {pigcms{:L('QW_NOTE')}:
-        <span class="t_color">
-            {{ d.desc }}
-        </span>
-        </div>
+        {{# if(d.order_type == 0){ }}
+            <div class="detail_note">
+                {pigcms{:L('QW_NOTE')}:
+                <span class="t_color">
+                    {{ d.desc }}
+                </span>
+            </div>
+        {{# }else{ }}
+            <div class="detail_note" style="border-color: #294068;">
+                {pigcms{:L('QW_NOTE')}:
+                <span class="t_color">
+                        {{ d.desc }}
+                    </span>
+            </div>
+        {{# } }}
         {{# if(d.link_type == 0){ }}
         {{# if(d.info != null){ }}
         {{# for(var i = 0, len = d.info.length; i < len; i++){ }}
@@ -376,7 +420,11 @@
         {{# } }}
         <div class="order_item">
             {{# if(d.info[i].num > 1){ }}
-            <span class="item_num num_more">x{{ d.info[i].num }}</span>
+                {{# if(d.order_type == 1){ }}
+                    <span class="item_num num_more" style="border: 2px solid #294068;background: #294068;">x{{ d.info[i].num }}</span>
+                {{# }else{ }}
+                    <span class="item_num num_more">x{{ d.info[i].num }}</span>
+                {{# } }}
             {{# }else{ }}
             <span class="item_num num_one">x{{ d.info[i].num }}</span>
             {{# } }}
