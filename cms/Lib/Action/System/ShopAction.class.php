@@ -1753,7 +1753,7 @@ class ShopAction extends BaseAction
         if($order){
             $data['status'] = 2;
             $data['order_status'] = 5;
-            D("Shop_order")->where($where->save($data);
+            D("Shop_order")->where($where)->save($data);
 
             //更新用户订单数量信息
             //$user = D('User')->where(array('uid'=>$order['uid']))->find();
