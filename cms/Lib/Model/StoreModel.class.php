@@ -365,6 +365,8 @@ class StoreModel extends Model
 
         if($row['is_pickup'] == 1){
             $store['pickup_distance'] = round(getDistance($row['lat'], $row['long'], $lat, $lng)/1000,2);
+        }else{
+            $store['pickup_distance'] = 0;
         }
 
         //$store['delivery_money'] = floatval($store['delivery_money']);
