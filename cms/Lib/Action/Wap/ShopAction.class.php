@@ -3927,8 +3927,8 @@ class ShopAction extends BaseAction{
                     $order['statusLogName']=L('V3_UNPAID');
                     $order['statusDesc'] = L('V3_UNPAID_DESC');
                 }else{
-                    $order['statusLogName'] = D('Store')->getOrderStatusLogName($n_status['status']);
-                    $order['statusDesc'] = D('Store')->getOrderStatusDesc($n_status['status'],$order,0,$store['name'],$add_time);
+                    $order['statusLogName'] = D('Store')->getOrderStatusLogName($n_status['status'],$order['order_type']);
+                    $order['statusDesc'] = D('Store')->getOrderStatusDesc($n_status['status'],$order,0,$store['name'],$add_time,$store['store_id']);
                 }
 
             }

@@ -260,6 +260,7 @@ class StoreModel extends Model
         $store['deposit_price'] = floatval($row['deposit_price']);
         $store['service_fee'] = $row['service_fee'];
         $store['city_id'] = $row['city_id'];
+        $store['pickup_instruction'] = $row['trafficroute'];
 
         //$store['deliver_name'] = $delivers[$row['deliver_type']];
         $is_have_two_time = 0;//是否是第二时段的配送显示
@@ -1092,7 +1093,7 @@ class StoreModel extends Model
         return $status_list[$status];
     }
 
-    public function getOrderStatusLogName($status){
+    public function getOrderStatusLogName($status,$order_type = 0){
         $status_list = array(
             L('V3_CONFIRMING'),
             L('V3_CONFIRMING'),
@@ -1111,12 +1112,17 @@ class StoreModel extends Model
             L('_ORDER_STATUS_14_'),
             L('_ORDER_STATUS_15_'),
             30 => L('_ORDER_STATUS_30_'),
-            33 => L('_ORDER_STATUS_33_'));
+            33 => L('_ORDER_STATUS_33_')
+        );
+
+        if($order_type == 1) {
+            $status_list[5] = "Order is ready";
+        }
 
         return $status_list[$status];
     }
 
-    public function getOrderStatusDesc($status,$order,$log,$storeName,$add_time=0){
+    public function getOrderStatusDesc($status,$order,$log,$storeName,$add_time=0,$store_id){
         $desc = "";
 //        echo $status;
 //        echo "--------------";
@@ -1153,8 +1159,14 @@ class StoreModel extends Model
         if($status == 4)
             $desc = L('V3_PICKEDUPSUB');
 
-        if($status == 5)
-            $desc = L('V3_HEADINGTOYOUSUB');
+        if($status == 5) {
+            if($order['order_type'] == 0)
+                $desc = L('V3_HEADINGTOYOUSUB');
+            else {
+                $close_time = $this->getCurrEndTime($store_id);
+                $desc = "Please pickup your order before the store closes (" . $close_time . ").";
+            }
+        }
 
         if($status == 6 || $status == 7 || $status == 8)
             $desc = L('V3_COMPLETESUB');
@@ -1317,5 +1329,20 @@ class StoreModel extends Model
         }
 
         return $city_id;
+    }
+
+    public function getCurrEndTime($store_id){
+        $store = D("Merchant_store")->where(array("store_id"=>$store_id))->find();
+        $week = date("w");
+        $time = date("His");
+
+        $close_time = "";
+        for ($i = $week*3;$i > $week*3-3;$i--){
+            if(str_replace(':','',$store['open_'.$i]) <= $time && str_replace(':','',$store['close_'.$i]) > $time){
+                $close_time = $store['close_'.$i];
+            }
+        }
+
+        return $close_time;
     }
 }

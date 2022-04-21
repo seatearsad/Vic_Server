@@ -3977,14 +3977,13 @@ class StorestaffAction extends BaseAction
             $order_id = $_POST['order_id'];
             $add_time = $_POST['dining_time'];
 
-            $supply = D('Deliver_supply')->where(array('order_id'=>$order_id))->find();
-            $data['dining_time'] = $supply['dining_time'] + $add_time;
+            $order = D('Shop_order')->where(array('order_id'=>$order_id))->find();
+            $data['dining_time'] = $order['dining_time'] + $add_time;
             D('Deliver_supply')->where(array('order_id'=>$order_id))->save($data);
             D('Shop_order')->where(array('order_id'=>$order_id))->save($data);
 
             D('Shop_order_log')->add_log(array('order_id' => $order_id, 'status' => 33, 'note' => $add_time));
 
-            $order = D('Shop_order')->where(array('order_id'=>$order_id))->find();
             $store = D('Merchant_store')->where(array('store_id'=>$order['store_id']))->find();
             $store['name'] = lang_substr($store['name'], 'en-us');
             //发送给用户

@@ -361,6 +361,9 @@ class IndexAction extends BaseAction
 
         $city_id = $_POST['city_id'] ? $_POST['city_id'] : -1;
 
+        //0-delivery 1-pickup
+        $selectType = $_POST['select_type'] ? $_POST['select_type'] : 0;
+
         if($cat_id == 0)
             $cat_where['cat_id'] = $cat_fid;
         else
@@ -373,7 +376,7 @@ class IndexAction extends BaseAction
         if($this->app_version < 266)
             $getMenuVersion = 1;
 
-        $where = array('deliver_type' => $deliver_type, 'order' => $order, 'lat' => $lat, 'long' => $long, 'cat_id' => $cat_id, 'cat_fid' => $cat_fid, 'page' => $page, 'limit' => $limit);
+        $where = array('deliver_type' => $deliver_type, 'order' => $order, 'lat' => $lat, 'long' => $long, 'cat_id' => $cat_id, 'cat_fid' => $cat_fid, 'page' => $page, 'limit' => $limit,"selectType"=>$selectType);
         if($category['cat_type'] == 1){
             if($page == 1)
                 $shop_list = D('Merchant_store_shop')->get_list_arrange($where,1,2,$limit,$page,$lat,$long,$city_id,$getMenuVersion);
@@ -1550,13 +1553,14 @@ class IndexAction extends BaseAction
             $status = D('Shop_order_log')->field(true)->where(array('order_id' => $val['order_id']))->order('id DESC')->find();
             $status['status'] = $status['status'] == 33 ? 2 : $status['status'];
             $t['statusLog'] = $status['status'];
-            $t['statusLogName'] = D('Store')->getOrderStatusLogName($status['status']);
+            $t['statusLogName'] = D('Store')->getOrderStatusLogName($status['status'],$val['order_type']);
             $t['goodsImage'] = $val['image'];
             $t['orderType'] = "0";
             $t['tip_fee'] = $val['tip_charge'];
             $t['total_price'] = $val['price'];
             $t['paid'] = $val['paid'];
             $t['order_id'] = $val['order_id'];
+            $t['order_type'] = $val['order_type'];
             $t['discount'] = $val['coupon_price'];
             $t['delivery_discount'] = $val['delivery_discount'];
             $t['merchant_reduce'] = $val['merchant_reduce'];
@@ -1701,13 +1705,23 @@ class IndexAction extends BaseAction
         $order_detail['merchant_reduce'] = $order['merchant_reduce'];
         $order_detail['coupon_discount'] = $order['coupon_price'];
         $order_detail['order_type'] = $order['order_type'];
-        $store = D("Merchant_store")->where(array("store_id"=>$order['store_id']))->find();
-        $order_detail['store_address'] = $store['adress'];
-        $order_detail['store_phone'] = $store['phone'];
 
         $order_detail['user_lat'] = $order['lat'];
         $order_detail['user_lng'] = $order['lng'];
         $order_detail['address2'] = $order['address_detail'] == "" ? $order['address'] : $order['address']." - ".$order['address_detail'];
+
+        //order_prepared是否已经出餐
+        $order_detail['preparing_time'] = date("H:i",($order['last_time'] + $order['dining_time']*60));
+        if($order['order_status'] == 1){
+            $preparing_time = time() - ($order['last_time'] + $order['dining_time']*60);
+            if($preparing_time > 0) {
+                $order_detail['order_prepared'] = 1;
+            }else{
+                $order_detail['order_prepared'] = 0;
+            }
+        }else{
+            $order_detail['order_prepared'] = 0;
+        }
 
         /**
         $address = D('User_adress')->where(array('adress_id'=>$order['address_id']))->find();
@@ -1729,10 +1743,14 @@ class IndexAction extends BaseAction
         $order_detail['site_name'] = $store['site_name'];
         $order_detail['tel'] = $store['phone'];
         $order_detail['store_service_fee'] = $store['service_fee'];
+        $order_detail['store_pickup_service_fee'] = $store['pickup_service_fee'];
         $order_detail['background'] = $store['background'];
         $order_detail['pay_method'] = $store['pay_method'];
         $order_detail['store_lat'] = $store['lat'];
         $order_detail['store_lng'] = $store['lng'];
+        $order_detail['store_address'] = $store['address'];
+        $order_detail['store_phone'] = $store['phone'];
+        $order_detail['pickup_instruction'] = $store['pickup_instruction'];
 
         $status = D('Shop_order_log')->field(true)->where(array('order_id' => $order['order_id']))->order('id DESC')->find();
         $add_time = 0;
@@ -1748,8 +1766,8 @@ class IndexAction extends BaseAction
             }
         }
         $order_detail['status_log'] = $status['status'];
-        $order_detail['statusName'] = D('Store')->getOrderStatusLogName($status['status']);
-        $order_detail['statusDesc'] = D('Store')->getOrderStatusDesc($status['status'],$order,$status,$store['site_name'],$add_time);
+        $order_detail['statusName'] = D('Store')->getOrderStatusLogName($status['status'],$order['order_type']);
+        $order_detail['statusDesc'] = D('Store')->getOrderStatusDesc($status['status'],$order,$status,$store['site_name'],$add_time,$order['store_id']);
 
         if($order['paid'] == 0) {
             $order_detail['statusName'] = "Unpaid";
@@ -3651,7 +3669,17 @@ class IndexAction extends BaseAction
     public function test_assign(){
         //$deliver_id = D('Deliver_assign')->getDeliverList(9373);
         //var_dump($deliver_id);
-        var_dump(strtotime('2022-03-07 10:40:00').'---'.strtotime('2022-03-13 10:40:00'));die();
+        $store = D("Merchant_store")->where(array("store_id"=>44))->find();
+        $week = date("w");
+        $time = date("His");
+
+        $close_time = "";
+        for ($i = $week*3;$i > $week*3-3;$i--){
+            if(str_replace(':','',$store['open_'.$i]) <= $time && str_replace(':','',$store['close_'.$i]) > $time){
+                $close_time = $store['close_'.$i];
+            }
+        }
+        var_dump($close_time);die();
 
         import('@.ORG.RegionalCalu.RegionalCalu');
         $region = new RegionalCalu();
