@@ -71,9 +71,15 @@
 
         bounds = new google.maps.LatLngBounds();
 
+        store =  {
+            url:store_icon,
+            scaledSize: new google.maps.Size(35,35),
+            size: new google.maps.Size(35,35)
+        };
+
         marker_store = new google.maps.Marker({position: store_pos, map: map,icon:store});
         marker_user = new google.maps.Marker({position: user_pos, map: map});
-        
+
         if(type == 2) {
             deliver = {
                 url: deliver_icon,
@@ -85,12 +91,6 @@
             bounds.extend(new google.maps.LatLng(marker_deliver.getPosition().lat()
                 , marker_deliver.getPosition().lng()));
         }
-
-        store =  {
-            url:store_icon,
-            scaledSize: new google.maps.Size(35,35),
-            size: new google.maps.Size(35,35)
-        };
 
         bounds.extend(new   google.maps.LatLng(marker_store.getPosition().lat()
             ,marker_store.getPosition().lng()));
