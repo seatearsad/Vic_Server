@@ -24,6 +24,7 @@
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKlguA2QFIUVwWTo3danbOqSKv3nYbBCg&callback=initMap"
         async defer></script>
 <script>
+    var type = "{pigcms{$data['type']}";
     var store_lat = "{pigcms{$data['store_lat']}";
     var store_lng = "{pigcms{$data['store_lng']}";
     var user_lat = "{pigcms{$data['user_lat']}";
@@ -44,7 +45,6 @@
         return null;
     }
 
-    var uluru = {lat: parseFloat(deliver_lat), lng: parseFloat(deliver_lng)};
     var store_pos = {lat:parseFloat(store_lat), lng:parseFloat(store_lng)};
     var user_pos = {lat:parseFloat(user_lat), lng:parseFloat(user_lng)};
     // The map, centered at Uluru
@@ -52,9 +52,12 @@
 
     var deliver,store,marker_deliver,marker_store,marker_user,bounds;
 
-    setInterval(function (){
-        updatePosition();
+    if(type == 2) {
+        var uluru = {lat: parseFloat(deliver_lat), lng: parseFloat(deliver_lng)};
+        setInterval(function () {
+            updatePosition();
         }, 30000);
+    }
 
     function initMap() {
         // The location of Uluru
@@ -66,11 +69,22 @@
         map = new google.maps.Map(
             document.getElementById('map'), {zoom: 18, center: uluru});
 
-        deliver = {
-            url:deliver_icon,
-            scaledSize: new google.maps.Size(35,35),
-            size: new google.maps.Size(35,35)
-        };
+        bounds = new google.maps.LatLngBounds();
+
+        marker_store = new google.maps.Marker({position: store_pos, map: map,icon:store});
+        marker_user = new google.maps.Marker({position: user_pos, map: map});
+        
+        if(type == 2) {
+            deliver = {
+                url: deliver_icon,
+                scaledSize: new google.maps.Size(35, 35),
+                size: new google.maps.Size(35, 35)
+            };
+            marker_deliver = new google.maps.Marker({position: uluru, map: map,icon:deliver});
+
+            bounds.extend(new google.maps.LatLng(marker_deliver.getPosition().lat()
+                , marker_deliver.getPosition().lng()));
+        }
 
         store =  {
             url:store_icon,
@@ -78,15 +92,6 @@
             size: new google.maps.Size(35,35)
         };
 
-        // The marker, positioned at Uluru
-        marker_deliver = new google.maps.Marker({position: uluru, map: map,icon:deliver});
-        marker_store = new google.maps.Marker({position: store_pos, map: map,icon:store});
-        marker_user = new google.maps.Marker({position: user_pos, map: map});
-
-        bounds = new google.maps.LatLngBounds();
-
-        bounds.extend(new   google.maps.LatLng(marker_deliver.getPosition().lat()
-            ,marker_deliver.getPosition().lng()));
         bounds.extend(new   google.maps.LatLng(marker_store.getPosition().lat()
             ,marker_store.getPosition().lng()));
         bounds.extend(new   google.maps.LatLng(marker_user.getPosition().lat()

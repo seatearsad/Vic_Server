@@ -531,6 +531,11 @@ class CartModel extends Model
 
         $result['full_discount'] = '0';
 
+        $pickup_settings = D('Config')->where(array('gid'=>52))->select();
+        foreach ($pickup_settings as $v){
+            if($v['name'] == "pickup_distance_tip") $result['distance_tip'] = $v['value'];
+        }
+
         $config = D('Config')->get_gid_config(43);
         $not_touch = array();
         foreach ($config as $v){

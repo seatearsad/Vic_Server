@@ -336,6 +336,7 @@ class Merchant_store_shopModel extends Model
 			$v['mean_money'] = floatval($v['mean_money']);
 			$v['wap_url'] = U('Shop/shop', array('mer_id' => $v['mer_id'], 'store_id' => $v['store_id']));
 			$v['deliver'] = $v['deliver_type'] == 2 ? false : true;
+            $v['pickup_distance'] = round(getDistance($v['lat'], $v['long'], $lat, $long)/1000,2);
 
 			if ($v['juli']) {
 				$v['range'] = getRange($v['juli']);
@@ -977,6 +978,8 @@ class Merchant_store_shopModel extends Model
             $temp['delivery_price'] = floatval($row['basic_price']);//起送价
             $temp['have_shop'] = $row['have_shop'];
             $temp['is_pickup'] = $row['is_pickup'];
+            $temp['pickup_distance'] = $row['pickup_distance'];
+
             if($lat != 0 && $long != 0){
                 $temp['delivery_money'] = getDeliveryFee($row['lat'],$row['long'],$lat,$long,$row['city_id']);
             }else{

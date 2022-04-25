@@ -1750,7 +1750,7 @@ class IndexAction extends BaseAction
         $order_detail['store_lng'] = $store['lng'];
         $order_detail['store_address'] = $store['address'];
         $order_detail['store_phone'] = $store['phone'];
-        $order_detail['pickup_instruction'] = $store['pickup_instruction'];
+        $order_detail['pickup_instruction'] = htmlspecialchars_decode($store['pickup_instruction']);
 
         $status = D('Shop_order_log')->field(true)->where(array('order_id' => $order['order_id']))->order('id DESC')->find();
         $add_time = 0;
