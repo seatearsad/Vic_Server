@@ -2551,12 +2551,19 @@ class ShopAction extends BaseAction
                         $total_cash += $val['price'];
                     }
 
-                    //清空商品税费
-                    $all_tax = 0;//($val['freight_charge'] + $val['packing_charge'])*$val['store_tax']/100;
-                    $all_gst_tax = 0;
-                    $all_pst_tax = 0;
-                    //清空押金
-                    $all_deposit = 0;
+                    //Deliverect 税费的临时计算方法
+                    if($val['menu_version'] != 1) {
+                        $deliverectTax = $val['price'] - $val['goods_price'] - $val['freight_charge'] - $val['freight_charge']*$val['store_tax']/100 - $val['packing_charge'] - $val['packing_charge']*$val['store_tax']/100 - $val['service_price'];
+                        $all_gst_tax = $deliverectTax;
+                        $all_tax = $deliverectTax;
+                    } else {
+                        //清空商品税费
+                        $all_tax = 0;//($val['freight_charge'] + $val['packing_charge'])*$val['store_tax']/100;
+                        $all_gst_tax = 0;
+                        $all_pst_tax = 0;
+                        //清空押金
+                        $all_deposit = 0;
+                    }
                 }
 
                 if($val['menu_version'] == 1) {
@@ -2569,12 +2576,14 @@ class ShopAction extends BaseAction
                         $all_pst_tax += $val['good_price'] * ($val['good_tax'] - 5) / 100 * $val['good_num'];
                     }
                 }else{
-                    $orderDetail = array('goods_id' => $val['goods_id'], 'num' => $val['good_num'], 'store_id' => $val['store_id'], 'dish_id' => $val['dish_id'], "good_price" => $val['good_price']);
-                    $curr_order_tax = D('StoreMenuV2')->calculationTaxExportPdf($orderDetail);
-
-                    $all_gst_tax += $curr_order_tax['gst_tax'];
-                    $all_pst_tax += $curr_order_tax['pst_tax'];
-                    $all_tax += $curr_order_tax['all_tax'];
+//                    $orderDetail = array('goods_id' => $val['goods_id'], 'num' => $val['good_num'], 'store_id' => $val['store_id'], 'dish_id' => $val['dish_id'], "good_price" => $val['good_price']);
+//                    $curr_order_tax = D('StoreMenuV2')->calculationTaxExportPdf($orderDetail);
+//
+//                    $all_gst_tax += $curr_order_tax['gst_tax'];
+//                    $all_pst_tax += $curr_order_tax['pst_tax'];
+//                    $all_tax += $curr_order_tax['all_tax'];
+                    $all_gst_tax -= $val['deposit_price']*$val['good_num'];
+                    $all_tax -= $val['deposit_price']*$val['good_num'];
                 }
                 $all_deposit += $val['deposit_price']*$val['good_num'];
                 $total_tax = $all_tax + ($val['freight_charge']+$val['packing_charge'])*$val['store_tax']/100;
