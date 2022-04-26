@@ -2553,7 +2553,7 @@ class ShopAction extends BaseAction
 
                     //Deliverect 税费的临时计算方法
                     if($val['menu_version'] != 1) {
-                        $deliverectTax = $val['price'] - $val['goods_price'] - $val['freight_charge'] - $val['freight_charge']*$val['store_tax']/100 - $val['packing_charge'] - $val['packing_charge']*$val['store_tax']/100 - $val['service_price'] - $val['coupon_price'] - $val['merchant_reduce'];
+                        $deliverectTax = $val['price'] - $val['goods_price'] - $val['freight_charge'] - $val['freight_charge']*$val['store_tax']/100 - $val['packing_charge'] - $val['packing_charge']*$val['store_tax']/100 - $val['service_fee'];
                         $all_gst_tax = $deliverectTax;
                         $all_tax = $deliverectTax;
                     } else {
