@@ -362,7 +362,7 @@ class IndexAction extends BaseAction
         $city_id = $_POST['city_id'] ? $_POST['city_id'] : -1;
 
         //0-delivery 1-pickup
-        $selectType = $_POST['select_type'] ? $_POST['select_type'] : 0;
+        $selectType = $_POST['select_type'] ? $_POST['select_type'] : -1;
 
         if($cat_id == 0)
             $cat_where['cat_id'] = $cat_fid;
@@ -1771,7 +1771,10 @@ class IndexAction extends BaseAction
 
         if($order['paid'] == 0) {
             $order_detail['statusName'] = "Unpaid";
-            $order_detail['statusDesc'] = "This order will be expired and removed in 5 minutes. Please make a payment to get it delivered to you.";
+            if($order['order_type'] == 0)
+                $order_detail['statusDesc'] = "This order will be expired and removed in 5 minutes. Please make a payment to get it delivered to you.";
+            else
+                $order_detail['statusDesc'] = "This order will be expired and removed in 5 minutes. Please make a payment before it's gone.";
         }
 
         $result['order'] = $order_detail;

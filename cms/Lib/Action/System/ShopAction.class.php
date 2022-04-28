@@ -1128,7 +1128,7 @@ class ShopAction extends BaseAction
             $this->assign('city_id', 0);
         }
 
-        $where = "s.status=1 AND s.have_shop=1 AND sh.deliver_type IN (0, 3)".$where_city;//array('status' => 1);
+        $where = "s.status=1 AND (s.have_shop=1 OR is_pickup=1) AND sh.deliver_type IN (0, 3)".$where_city;//array('status' => 1);
 
         if (!empty($_GET['keyword'])) {
             $where .= " AND s.name LIKE '%{$_GET['keyword']}%'";
