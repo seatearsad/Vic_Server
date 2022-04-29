@@ -3266,7 +3266,7 @@ class StorestaffAction extends BaseAction
         $where['status'] = array('lt',2);
         $where['is_del'] = 0;
 
-        $order = D('Shop_order')->field(array('order_id','create_time','username','order_type'))->where($where)->order('create_time desc')->find();
+        $order = D('Shop_order')->field(array('order_id','create_time','username','order_status','order_type'))->where($where)->order('create_time desc')->find();
         if($order){
             if($last_time == 0) {
                 $data['is_new'] = 0;
@@ -3285,7 +3285,7 @@ class StorestaffAction extends BaseAction
         }
 
 //        if($last_time == 0)
-            $list = D('Shop_order')->field(array('order_id','status','username','order_type'))->where($where)->order('status asc,create_time desc')->select();
+            $list = D('Shop_order')->field(array('order_id','status','username','order_status','order_type'))->where($where)->order('status asc,create_time desc')->select();
 //        else {
 //            $where['create_time'] = array('gt',$last_time);
 //            $list = D('Shop_order')->field(array('order_id','status'))->where($where)->order('status asc,create_time desc')->select();

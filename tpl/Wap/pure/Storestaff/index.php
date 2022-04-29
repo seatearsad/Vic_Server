@@ -353,9 +353,9 @@
                 {{# }else{ }}
                 <span class="confirm_order" style="color: #294068">
                     {{# if(d[i].order_status == 1){ }}
-                        {pigcms{:L('QW_CONFIRMED')}
+                        Preparing
                     {{# }else{ }}
-                        Prepared
+                        Ready
                     {{# } }}
                 </span>
                 {{# } }}
@@ -376,18 +376,26 @@
             {{# } }}
             Order #{{ d.order_id }}
             (
-            {{# if(d.status == 0){ }}
-            <span class="t_color">{pigcms{:L('QW_PLEASECONFIRM')}</span>
-            {{# }else if(d.order_status == 1){ }}
-            <span class="t_color">{pigcms{:L('QW_WAITING')}</span>
-            {{# }else if(d.order_status == 2){ }}
-            <span class="t_color">{pigcms{:L('QW_Accepted')}</span>
-            {{# }else if(d.order_status == 3){ }}
-            <span class="t_color">{pigcms{:L('QW_PICKED')}</span>
-            {{# }else if(d.order_status == 4){ }}
-            <span class="t_color">{pigcms{:L('QW_ARRIVING')}</span>
-            {{# }else if(d.order_status == 5){ }}
-            <span class="t_color">{pigcms{:L('QW_COMPLETED')}</span>
+            {{# if(d.order_type == 0){ }}
+                {{# if(d.status == 0){ }}
+                <span class="t_color">{pigcms{:L('QW_PLEASECONFIRM')}</span>
+                {{# }else if(d.order_status == 1){ }}
+                <span class="t_color">{pigcms{:L('QW_WAITING')}</span>
+                {{# }else if(d.order_status == 2){ }}
+                <span class="t_color">{pigcms{:L('QW_Accepted')}</span>
+                {{# }else if(d.order_status == 3){ }}
+                <span class="t_color">{pigcms{:L('QW_PICKED')}</span>
+                {{# }else if(d.order_status == 4){ }}
+                <span class="t_color">{pigcms{:L('QW_ARRIVING')}</span>
+                {{# }else if(d.order_status == 5){ }}
+                <span class="t_color">{pigcms{:L('QW_COMPLETED')}</span>
+                {{# } }}
+            {{# }else{ }}
+                {{# if(d.order_status == 1){ }}
+                    <span style="color: #294068">Preparing</span>
+                {{# }else{ }}
+                    <span style="color: #294068">Ready for Pickup</span>
+                {{# } }}
             {{# } }}
             )
             {{# if(d.status > 0 && d.status < 4 && d.is_app){ }}
