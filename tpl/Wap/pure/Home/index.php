@@ -104,7 +104,7 @@
         }
         #container{
             width: 100%;
-            padding-top: 60px;
+            padding-top: 120px;
             max-width: 640px;
             min-width: 320px;
             margin: 0 auto;
@@ -411,17 +411,6 @@
         #recommendList ul::-webkit-scrollbar,#category ul::-webkit-scrollbar,.store_img ul::-webkit-scrollbar{
             display: none;
         }
-        .model_select{
-            text-align: center;
-            padding: 10px auto;
-        }
-        .model_select span{
-            margin-left: 10px;
-            cursor: pointer;
-        }
-        .model_select .active {
-            color: #ffa52d;
-        }
 
         #system_message{
             position: absolute;
@@ -484,10 +473,6 @@
             </ul>
             <div class="cate_right"></div>
         </div>
-        <div class="model_select">
-            <span class="active" data-type="delivery">Delivery</span>
-            <span data-type="pickup">Pick up</span>
-        </div>
         <div id="recommendList"></div>
         <!--div class="gray_line"></div-->
         <div class="all_title">
@@ -547,9 +532,15 @@
                         <img src="./static/images/icon-star-enter.png" width="12">
                         {{# } }}
                     </div>
-                    <div class="brand" style="margin-left: 10px;font-size: 12px;color: grey">${{ d[i].delivery_money }} + · {{ d[i].keywords }}</div>
+                    <div class="brand" style="margin-left: 10px;font-size: 12px;color: grey">
+                        {{# if(userModelSelect == 0){ }}
+                            ${{ d[i].delivery_money }} + · {{ d[i].keywords }}
+                        {{# }else{ }}
+                            {{ d[i].pickup_distance }} km · {{ d[i].keywords }}
+                        {{# } }}
+                    </div>
                     <div class="brand" style="margin-left: 10px;margin-bottom: 5px;">
-                        {{# if(d[i].free_delivery == 1){ }}
+                        {{# if(d[i].free_delivery == 1 && userModelSelect == 0){ }}
                         <span class="show_span" style="margin-right: 5px;">{{ d[i].event.desc }}</span>
                         {{# } }}
                         {{# if(d[i].merchant_reduce_list){ }}

@@ -285,8 +285,12 @@ class Shop_orderModel extends Model
                 	'merchant_reduce_type'	=>	$now_order['merchant_reduce_type'],
 					'service_fee'		=>	$now_order['service_fee'],
 					'store_service_fee' =>	$merchant_store['service_fee'],
-               		 'coupon_id' 		=>	$now_order['coupon_id'],
-				     'coupon_price' 	=>	$now_order['coupon_price']
+					'coupon_id' 		=>	$now_order['coupon_id'],
+					'coupon_price' 		=>	$now_order['coupon_price'],
+					'orderType'			=> 	$now_order['order_type'],
+					'store_address'		=>  $merchant_store['adress'],
+                	'store_lat'		=>  $merchant_store['lat'],
+                	'store_lng'		=>  $merchant_store['long'],
 			);
 		} else {
 			$order_info = array(
@@ -337,10 +341,16 @@ class Shop_orderModel extends Model
                 'service_fee'		=>	$now_order['service_fee'],
                 'store_service_fee' =>	$merchant_store['service_fee'],
                 'coupon_id' 		=>	$now_order['coupon_id'],
-                'coupon_price' 	=>	$now_order['coupon_price']
+                'coupon_price' 		=>	$now_order['coupon_price'],
+                'orderType'			=> 	$now_order['order_type'],
+				'store_address'		=>  $merchant_store['adress'],
+                'store_lat'			=>  $merchant_store['lat'],
+                'store_lng'			=>  $merchant_store['long'],
 			);
 		}
         //var_dump($order_info);
+		if($order_info['orderType'] == 1) $order_info['store_service_fee'] = $merchant_store['pickup_service_fee'];
+		
 		return array('error' => 0, 'order_info' => $order_info);
 	}
 

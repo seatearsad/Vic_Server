@@ -530,6 +530,7 @@ return array(
     '_SELF_LIFT_ADDRESS_'   =>  'Pick-up location',
     '_EXPECTED_TIME_'       =>  'Expected Time',
     '_DIST_INFO_'           =>  'Delivery Info',
+    '_PICKUP_INFO_'         =>  'Pickup Info',
     '_RECE_INFO_'           =>  'Address',
     '_DIST_DETAIL_'         =>  'Courier',
     '_DISTOR_TXT_'          =>  'Driver',

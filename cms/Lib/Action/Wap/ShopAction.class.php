@@ -1086,6 +1086,15 @@ class ShopAction extends BaseAction{
         $store['isverify'] = $now_mer['isverify'];
         $store['store_status'] = $now_store['status'];
         $store['shop_remind'] = $row['shop_remind'];
+        $store['have_shop'] = $row['have_shop'];
+        $store['is_pickup'] = $row['is_pickup'];
+
+        if($row['is_pickup'] == 1){
+            $store['pickup_distance'] = round(getDistance($row['lat'], $row['long'], $user_long_lat['lat'], $user_long_lat['long'])/1000,2);
+        }else{
+            $store['pickup_distance'] = 0;
+        }
+
         $now_time = date('H:i:s');
         $keywords = D('Keywords')->where(array('third_type' => 'Merchant_store', 'third_id' => $row['store_id']))->select();
         $str = "";
@@ -3016,6 +3025,20 @@ class ShopAction extends BaseAction{
         $return['price'] = $return['price'] + $return['delivery_fee'] + $store_shop['pack_fee'] + $return['tax_price'] + $return['deposit_price'];
         $return['price'] = sprintf("%.2f",$return['price']);
         $pick_address['distance'] = $this->wapFriendRange($pick_address['distance']);
+
+        if($_COOKIE['userLocationLat']){
+            $user_long_lat['lat'] = $_COOKIE['userLocationLat'];
+            $user_long_lat['long'] = $_COOKIE['userLocationLong'];
+        }else{
+            $user_long_lat['lat'] = 0;
+            $user_long_lat['long'] = 0;
+        }
+
+        if($return['store']['is_pickup'] == 1){
+            $return['store']['pickup_distance'] = round(getDistance($return['store']['lat'], $return['store']['long'], $user_long_lat['lat'], $user_long_lat['long'])/1000,2);
+        }else{
+            $return['store']['pickup_distance'] = 0;
+        }
         $this->assign('store_name',$return['store']['name']);
 
         $this->assign($return);
@@ -3042,6 +3065,8 @@ class ShopAction extends BaseAction{
         //delivery_type 0:平台配送，1：商家配送，2：自提，3:平台配送或自提，4：商家配送或自提
         $store_id = isset($_GET['store_id']) ? intval($_GET['store_id']) : 0;
         $order_id = isset($_POST['order_id']) ? intval($_POST['order_id']) : 0;
+
+        $selectType = cookie('userModelSelect') ? cookie('userModelSelect') : '0';
         //-------------------------------
         if ($order_id && ($order = D('Shop_order')->get_order_detail(array('order_id' => $order_id, 'uid' => $this->user_session['uid'])))) {
             $return = D('Shop_goods')->checkCart($store_id, $this->user_session['uid'], $order['info'], 0);
@@ -3102,7 +3127,8 @@ class ShopAction extends BaseAction{
                 $store_coupon = D('New_event_coupon')->where(array('event_id' => $eventList[0]['id'], 'limit_day' => $store_id))->order('use_price asc')->select();
             }
             /////
-            if ($deliver_type != 1) {//配送方式是：非自提和非快递配送
+            //if ($deliver_type != 1) {//配送方式是：非自提和非快递配送
+            if($selectType == 0){//Delivery
                 if (empty($name)) $this->error_tips('联系人不能为空');
                 if (empty($phone)) $this->error_tips('联系电话不能为空');
 // 				if ($return['delivery_type'] == 1 || $return['delivery_type'] == 4) {
@@ -3178,16 +3204,19 @@ class ShopAction extends BaseAction{
             $order_data['real_orderid'] = $orderid;
             $order_data['no_bill_money'] = 0;//无需跟平台对账的金额
 
-            if ($deliver_type == 1) {//自提
-                if (empty($pick_id)) $this->error_tips('请选择自提点');
+            $order_data['order_type'] = $selectType;
+
+            //if ($deliver_type == 1) {//自提
+            if ($selectType == 1) {//自提
+                //if (empty($pick_id)) $this->error_tips('请选择自提点');
                 $order_data['is_pick_in_store'] = 2;//配送方式 0：平台配送，1：商家配送，2：自提，3:快递配送
                 $delivery_fee = $order_data['freight_charge'] = 0;//运费
                 $order_data['username'] = isset($this->user_session['nickname']) && $this->user_session['nickname'] ? $this->user_session['nickname'] : '';
                 $order_data['userphone'] = isset($this->user_session['phone']) && $this->user_session['phone'] ? $this->user_session['phone'] : '';
-                $order_data['address'] = $pick_address;
+                $order_data['address'] = "";
                 $order_data['address_id'] = 0;
-                $order_data['pick_id'] = $pick_id;
-                $order_data['status'] = 7;
+                //$order_data['pick_id'] = $pick_id;
+                //$order_data['status'] = 7;
                 $order_data['expect_use_time'] = time() + $return['store']['send_time'] * 60;//客户期望使用时间
             } else {//配送
                 $order_data['username'] = $name;
@@ -3300,33 +3329,6 @@ class ShopAction extends BaseAction{
                 $return['delivery_fee2'] = $delivery_fee = $order_data['freight_charge'] = $return['delivery_fee'];
                 $order_data['merchant_reduce']=0;
                 $order_data['delivery_discount']=0;
-                //garfunkel 如果存在减免配送费的活动
-                if ($return['store']['event']) {
-                    if ($return['price'] >= $return['store']['event']['use_price']) {
-                        //如果优惠金额大于配送费
-                        if ($return['delivery_fee'] < $return['store']['event']['discount'])
-                            $order_data['delivery_discount'] = $return['delivery_fee'];
-                        else
-                            $order_data['delivery_discount'] = $return['store']['event']['discount'];
-
-                        //是否可与优惠券公用 0不可 1可以
-                        $order_data['delivery_discount_type'] = $return['store']['event']['type'];
-                        //平台活动还是店铺活动 0平台 1店铺活动的id
-                        $order_data['delivery_discount_event'] = $return['store']['event']['event_type'];
-                    }
-                }
-                //garfunke 店铺满减活动
-                if ($store_coupon && $store_coupon != '') {
-                    foreach ($store_coupon as $c) {
-                        if ($return['price'] >= $c['use_price']) {
-                            $order_data['merchant_reduce'] = $c['discount'];
-                            $order_data['merchant_reduce_type'] = $c['type'];
-                        }
-                    }
-                }
-                // 缓存
-                $order_data['merchant_reduce_save'] = $order_data['merchant_reduce'];
-                $order_data['delivery_discount_save'] = $order_data['delivery_discount'];
                 /*
                 if ($return['delivery_type'] == 5) {//快递配送
                     $pass_distance = $distance > $return['basic_distance'] ? floatval($distance - $return['basic_distance']) : 0;
@@ -3362,6 +3364,34 @@ class ShopAction extends BaseAction{
                 }
             }
 
+            //garfunkel 如果存在减免配送费的活动
+            if ($return['store']['event']) {
+                if ($return['price'] >= $return['store']['event']['use_price']) {
+                    //如果优惠金额大于配送费
+                    if ($return['delivery_fee'] < $return['store']['event']['discount'])
+                        $order_data['delivery_discount'] = $return['delivery_fee'];
+                    else
+                        $order_data['delivery_discount'] = $return['store']['event']['discount'];
+
+                    //是否可与优惠券公用 0不可 1可以
+                    $order_data['delivery_discount_type'] = $return['store']['event']['type'];
+                    //平台活动还是店铺活动 0平台 1店铺活动的id
+                    $order_data['delivery_discount_event'] = $return['store']['event']['event_type'];
+                }
+            }
+            //garfunke 店铺满减活动
+            if ($store_coupon && $store_coupon != '') {
+                foreach ($store_coupon as $c) {
+                    if ($return['price'] >= $c['use_price']) {
+                        $order_data['merchant_reduce'] = $c['discount'];
+                        $order_data['merchant_reduce_type'] = $c['type'];
+                    }
+                }
+            }
+            // 缓存
+            $order_data['merchant_reduce_save'] = $order_data['merchant_reduce'] ? $order_data['merchant_reduce'] : 0;
+            $order_data['delivery_discount_save'] = $order_data['delivery_discount'] ? $order_data['delivery_discount'] : 0;
+
             //判断期望时间是否在营业时间内
 // 			if ($order_data['expect_use_time']) {
 // 				$now_time = date('H:i:s', $order_data['expect_use_time']);
@@ -3390,7 +3420,11 @@ class ShopAction extends BaseAction{
 
             $order_data['goods_price'] = $return['price'];//商品的价格
             //garfunkel 计算服务费
-            $order_data['service_fee'] = number_format($order_data['goods_price'] * $return['store']['service_fee'] / 100, 2);
+            if($selectType == 0)
+                $order_data['service_fee'] = number_format($order_data['goods_price'] * $return['store']['service_fee'] / 100, 2);
+            else
+                $order_data['service_fee'] = number_format($order_data['goods_price'] * $return['store']['pickup_service_fee'] / 100, 2);
+
             $order_data['extra_price'] = $return['extra_price'];//另外要支付的金额
             $order_data['discount_price'] = $return['vip_discount_money'];//商品折扣后的总价
             //modify garfunkel
@@ -3403,7 +3437,7 @@ class ShopAction extends BaseAction{
             //$order_data['price'] = $order_data['price'] * 1.05; //税费
 
             $return['tax_price'] = $return['tax_price'] + ($delivery_fee + $return['store']['pack_fee']) * $return['store']['tax_num'] / 100;
-            $order_data['price'] = $return['price'] + $return['delivery_fee'] + $return['store']['pack_fee'] + $return['tax_price'] + $return['deposit_price'] + $order_data['service_fee'];
+            $order_data['price'] = $return['price'] + $delivery_fee + $return['store']['pack_fee'] + $return['tax_price'] + $return['deposit_price'] + $order_data['service_fee'];
             $order_data['total_price'] = $order_data['price'];
 
             $order_data['discount_detail'] = $return['discount_list'] ? serialize($return['discount_list']) : '';//优惠详情

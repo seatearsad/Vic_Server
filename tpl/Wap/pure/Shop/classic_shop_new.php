@@ -75,7 +75,7 @@
 
             #shopBanner{
                 width: 90%;
-                height: 130px;
+                height: 190px;
                 left:5%;
                 border-radius: 10px;
                 border:2px solid #eeeeee;
@@ -86,12 +86,13 @@
                 padding-top:0px;
             }
             #shopTitle{
-                line-height: 20px;
+                line-height: 102%;
                 margin-left: 0px;
                 margin-top: 10px;
                 margin-bottom: 4px;
                 margin-right: 50px;
                 font-size: 21px;
+                font-weight: bold;
                 color: #000000;
                 overflow: hidden;
                 text-overflow: ellipsis;
@@ -409,9 +410,10 @@
             .star span{
                 border: 1px solid #ffa52d;
                 border-radius: 2px;
-                padding: 0px 2px;
+                padding: 1px 2px;
                 font-size: 12px;
-                color: #ffa52d;
+                color: white;
+                background-color: #ffa52d;
                 margin-right: 5px;
             }
             #shopMerchantBox .merchantReduce{
@@ -536,6 +538,41 @@
                 display: block;
                 border-bottom: none;
             }
+
+            #selectDiv{
+                margin: 10px auto 10px -5px;
+                display: none;
+            }
+
+            #selectDiv ul{
+                width: 300px;
+                height: 40px;
+                background-color: #E5E5E5;
+                border-radius: 20px;
+                font-size: 0px;
+            }
+            #selectDiv li{
+                display: inline-block;
+                font-size: 13px;
+                width: 146px;
+                height: 36px;
+                margin: 2px;
+                border-radius: 18px;
+                text-align: center;
+                color: #4E4D4D;
+                font-weight: bold;
+                padding-top: 2px;
+            }
+
+            #selectDiv li.active{
+                background-color: #4E4D4D;
+                color: white;
+            }
+            #selectDiv li .select_desc{
+                font-size: 12px;
+                font-weight: normal;
+                line-height: 100%;
+            }
         </style>
 	<body onscroll="scrollProductEvent(1)">
     <include file="Public:google"/>
@@ -626,6 +663,18 @@
 				<div class="text">
                     <div id="stars"><span id="stars_text">.</span><div id="rating"></div></div>
                     <div id="shopTitle"></div>
+                    <div id="selectDiv">
+                        <ul>
+                            <li id="delivery_li" data-type="0" class="active">
+                                <p>DELIVER</p>
+                                <p class="select_desc">Unavailable</p>
+                            </li>
+                            <li id="pickup_li" data-type="1">
+                                <p>PICKUP</p>
+                                <p class="select_desc">Unavailable</p>
+                            </li>
+                        </ul>
+                    </div>
 					<div id="deliveryText"></div>
 					<div id="shopNoticeText"></div>
                     <div class="star">
@@ -861,7 +910,6 @@
 		<include file="Shop:classic_js_theme"/>
     </div>
 		<script type="text/javascript">
-
             $(document).ready(function(){
                 var s = "";
                 s += " 屏幕高度："+ window.screen.availHeight+"\n";

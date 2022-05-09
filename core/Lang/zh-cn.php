@@ -530,6 +530,7 @@ return array(
     '_SELF_LIFT_ADDRESS_'   =>  '自提地址',
     '_EXPECTED_TIME_'       =>  '期望时间',
     '_DIST_INFO_'           =>  '配送信息',
+    '_PICKUP_INFO_'         =>  '自提信息',
     '_RECE_INFO_'           =>  '收货信息',
     '_DIST_DETAIL_'         =>  '配送员',
     '_DISTOR_TXT_'          =>  '配送员',

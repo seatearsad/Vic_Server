@@ -57,7 +57,7 @@ class GroupserviceAction extends BaseAction{
 			}
 			$new_group_list = sortArrayAsc($group_list,'Srange');
 		}elseif($content_type=='shop'){
-			$modelSelect = cookie('userModelSelect') ? cookie('userModelSelect') : 'delivery';
+			$selectType = cookie('userModelSelect') ? cookie('userModelSelect') : '0';
 
 			$key = '';
 			$sort = $_GET['sort'] ? $_GET['sort'] : 0;
@@ -87,7 +87,7 @@ class GroupserviceAction extends BaseAction{
                 $_COOKIE['userLocationCity'] = $city_id;
             }
 
-            $where = array('deliver_type' => $deliver_type, 'order' => $order, 'lat' => $lat, 'long' => $long, 'cat_id' => $cat_id, 'cat_fid' => $cat_fid, 'page' => $page,'model'=>$modelSelect);
+            $where = array('deliver_type' => $deliver_type, 'order' => $order, 'lat' => $lat, 'long' => $long, 'cat_id' => $cat_id, 'cat_fid' => $cat_fid, 'page' => $page,'selectType'=>$selectType);
 			$key && $where['key'] = $key;
 
 			$lists = D('Merchant_store_shop')->get_list_by_option($where,3,-1,$city_id);
@@ -118,10 +118,15 @@ class GroupserviceAction extends BaseAction{
 				$temp['delivery'] = $temp['delivery'] ? true : false;
 				$temp['delivery_time'] = $row['send_time'];//配送时长
 				$temp['delivery_price'] = floatval($row['basic_price']);//起送价
+				$temp['have_shop'] = $row['have_shop'];
+				$temp['is_pickup'] = $row['is_pickup'];
+
 				if($lat != 0 && $long != 0){
                     $temp['delivery_money'] = getDeliveryFee($row['lat'],$row['long'],$lat,$long,$row['city_id']);
+                    $temp['pickup_distance'] = round(getDistance($row['lat'], $row['long'], $lat, $long)/1000,2);
 				}else{
                     $temp['delivery_money'] = floatval($row['delivery_fee']);//配送费
+                    $temp['pickup_distance'] = 0;
                 }
 				//modify garfunkel
                 		$temp['pack_alias'] = $row['pack_alias'];
@@ -408,21 +413,23 @@ class GroupserviceAction extends BaseAction{
 
                 //获取特殊城市属性
 				$is_add = true;
-				$city = D('Area')->where(array('area_id'=>$row['city_id']))->find();
-                if($city['range_type'] != 0){
-                	switch ($city['range_type']){
-						case 1://按照纬度限制的城市 小于某个纬度
-                            if($lat >= $city['range_para']) $is_add = false;
-							break;
-						case 2://自定义区域
-                            import('@.ORG.RegionalCalu.RegionalCalu');
-                            $region = new RegionalCalu();
-                            $is_add = $region->checkCity($city,$long,$lat);
-							break;
-						default:
-							break;
-					}
-				}
+                if($selectType == 0) {
+                    $city = D('Area')->where(array('area_id' => $row['city_id']))->find();
+                    if ($city['range_type'] != 0) {
+                        switch ($city['range_type']) {
+                            case 1://按照纬度限制的城市 小于某个纬度
+                                if ($lat >= $city['range_para']) $is_add = false;
+                                break;
+                            case 2://自定义区域
+                                import('@.ORG.RegionalCalu.RegionalCalu');
+                                $region = new RegionalCalu();
+                                $is_add = $region->checkCity($city, $long, $lat);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
 
 				if($is_add) $return[] = $temp;
 			}
@@ -461,7 +468,7 @@ class GroupserviceAction extends BaseAction{
 				$sub_nav_list[] = $sub_nav;
 			}
 			$new_group_list['sub_nav'] = $sub_nav_list;
-            if($modelSelect == 'delivery') {
+            if($selectType == 0) {
 				$recommend_list = $this->getRecommendList($city_id, $lat, $long);
 
 				$new_group_list['recommend'] = $recommend_list;

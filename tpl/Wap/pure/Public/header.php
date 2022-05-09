@@ -9,8 +9,7 @@
 
     #tutti_header {
         width: 100%;
-        height: 60px;
-        display: flex;
+        /*height: 60px;*/
         background-color: #ffffff;
         position: fixed;
         z-index: 999;
@@ -57,13 +56,14 @@
     .header_search {
         width: 40px;
         height: 50px;
-        margin-top: 5px;
+        margin-top: 10px;
         margin-right: 10px;
         float: right;
         background-image: url("./tpl/Static/blue/images/new/search.png");
         background-repeat: no-repeat;
         background-size: auto 55%;
         cursor: pointer;
+        flex: 0 0 auto;
     }
     .home_style {
         position: absolute;
@@ -325,6 +325,7 @@
         background-repeat: no-repeat;
         background-position: center;
         cursor: pointer;
+        flex: 0 0 auto;
     }
 
     #search_key {
@@ -360,6 +361,7 @@
         overflow: hidden;
         word-break: break-all;
         width: 65%;
+        flex:1 1 100%;
     }
 
     .this_header {
@@ -406,6 +408,32 @@
         left: 8%;
         cursor: pointer;
     }
+    #select_div{
+        width: 100%;
+    }
+    #select_div ul{
+        width: 220px;
+        margin: 10px auto;
+        height: 36px;
+        background-color: #E5E5E5;
+        border-radius: 18px;
+        font-size: 0;
+    }
+    #select_div li{
+        width: 50%;
+        line-height: 36px;
+        display: inline-block;
+        text-align: center;
+        font-size: 14px;
+        border-radius: 18px;
+        font-weight: bold;
+        cursor: pointer;
+        color: #191919;
+    }
+    #select_div li.active{
+        background-color: #191919;
+        color: white;
+    }
 </style>
 <div class="down_header">
     <div class="down_close">X</div>
@@ -416,12 +444,20 @@
     <div class="down_view"></div>
 </div>
 <div id="tutti_header">
+    <if condition="MODULE_NAME eq 'Home' and ACTION_NAME eq 'index'">
+        <div id="select_div">
+            <ul>
+                <li class="active" data-type="0">DELIVERY</li>
+                <li data-type="1">PICKUP</li>
+            </ul>
+        </div>
+    </if>
     <div id="header_menu">
         <if condition="MODULE_NAME == 'Home'">
             <php>setcookie("path_by_what",1);</php>
             <div class="local_div" data-url="{pigcms{:U('Home/address')}"></div>
-            <div class="header_search home_style"></div>
             <div id="header_address_div"></div>
+            <div class="header_search"></div>
         </if>
         <if condition="MODULE_NAME == 'Shop'">
             <if condition="ACTION_NAME == 'pay_result'">
@@ -447,8 +483,8 @@
             <if condition="ACTION_NAME == 'index'">
                 <php>setcookie("path_by_what",2);</php>
                 <div class="local_div" data-url="{pigcms{:U('Shop/classic_address')}"></div>
-                <div class="header_search home_style"></div>
                 <div id="header_address_div"></div>
+                <div class="header_search"></div>
             </if>
         </if>
 
@@ -599,14 +635,12 @@
 <script type="text/javascript" src="{pigcms{$static_public}js/lang.js" charset="utf-8"></script>
 <script src="{pigcms{$static_path}js/jquery.cookie.js"></script>
 <script>
+    var keyword = "{pigcms{$keyword}";
+    if(keyword != "") {
+        $('#search_label').show();
+        $('#search_key').val(keyword);
+    }
 
-    var keyword = '';
-    <if condition = "$keyword">
-    keyword = "{pigcms{$keyword}";
-
-    $('#search_label').show();
-    $('#search_key').val(keyword);
-    </if>
     $('#search_label').css('margin-top', $('#tutti_header').height());
 
     $('#header_logo').click(function () {
@@ -626,9 +660,20 @@
         is_open_menu = !is_open_menu;
     });
 
+    var module_name = "{pigcms{:MODULE_NAME}";
+    var action_name = "{pigcms{:ACTION_NAME}";
+
     var init_top = $('#tutti_header').offset().top;
     var init_margin = parseFloat($('#menu_memo').css('margin-top'));
-    //console.log(navigator.userAgent.toLowerCase());
+
+    var select_height = 0;
+    var record_top = 0;
+    var cha_top = 0;
+    var select_hide = false;
+
+    if(module_name == "Home" && action_name == "index"){
+        select_height = 60;
+    }
 
     $('.down_close').click(function () {
         $('.down_header').hide();
@@ -658,7 +703,46 @@
             $('#tutti_header').css('margin-top', -init_top);
             $('#menu_memo').css('margin-top', init_margin - init_top);
             $('#search_label').css('margin-top', -init_top + $('#tutti_header').height());
+            if(select_height > 0) {
+                cha_top += top - record_top;
+
+                if(cha_top > 0 && select_hide) cha_top = 0;
+                if(cha_top < 0 && !select_hide) cha_top = 0;
+
+                if (cha_top > 0 && cha_top <= select_height && !select_hide) {
+                    $('#tutti_header').css('margin-top', -(init_top+cha_top));
+                    $('#search_label').css('margin-top', -(init_top+cha_top) + $('#tutti_header').height());
+                    console.log("select hide a");
+                }
+                if(cha_top >= select_height && !select_hide){
+                    $('#tutti_header').css('margin-top', -(init_top+select_height));
+                    select_hide = true;
+                    console.log("select hide b");
+                }
+                if(select_hide && cha_top == 0){
+                    $('#tutti_header').css('margin-top', -(init_top+select_height));
+                    $('#search_label').css('margin-top', -(init_top+select_height) + $('#tutti_header').height());
+                }
+
+                if (cha_top < 0 && cha_top >= -select_height && select_hide) {
+                    $('#tutti_header').css('margin-top', -(init_top+select_height+cha_top));
+                    $('#search_label').css('margin-top', -(init_top+select_height+cha_top) + $('#tutti_header').height());
+                    console.log("select hide c");
+                }
+                if(cha_top <= -select_height && select_hide){
+                    $('#tutti_header').css('margin-top', -init_top);
+                    select_hide = false;
+                    console.log("select hide d");
+                }
+
+                if(!select_hide && cha_top == 0){
+                    $('#tutti_header').css('margin-top', -init_top);
+                    $('#search_label').css('margin-top', -init_top + $('#tutti_header').height());
+                }
+            }
         }
+        record_top = top;
+
         if (top == 0) {
             $('#tutti_header').css('margin-top', 0);
             $('#menu_memo').css('margin-top', init_margin);

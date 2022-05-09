@@ -1,4 +1,4 @@
-var myScroll,wx;
+var myScroll,wx,userModelSelect;
 $(function(){
 	/*if(!app_version){
 	$(window).resize(function(){
@@ -40,18 +40,25 @@ $(function(){
 
 
 
-	$('.model_select').children('span').click(function () {
+	$('#select_div').find('li').click(function () {
 		$(this).addClass('active').siblings().removeClass('active');
-		if($(this).data('type') != $.cookie('userModelSelect')) $.cookie('userModelSelect', $(this).data('type'),{expires:700,path:"/"});
+		if($(this).data('type') != $.cookie('userModelSelect')) {
+			$.cookie('userModelSelect', $(this).data('type'),{expires:700,path:"/"});
+            userModelSelect = $.cookie('userModelSelect');
+        }
 
         like_page = 1;
 		getRecommendList();
     });
 
 	if(typeof($.cookie('userModelSelect')) != 'undefined'){
-        $('.model_select').children('span').each(function () {
+        $('#select_div').find('li').each(function () {
             if($(this).data('type') == $.cookie('userModelSelect')) $(this).addClass('active').siblings().removeClass('active');
         });
+        userModelSelect = $.cookie('userModelSelect');
+	}else{
+        $.cookie('userModelSelect', 0,{expires:700,path:"/"});
+        userModelSelect = 0;
 	}
 
 	var upIcon = $("#up-icon"),

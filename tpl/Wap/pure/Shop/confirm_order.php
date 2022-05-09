@@ -205,7 +205,7 @@ a {
 	word-wrap: break-word;
 }
 .container{
-    padding: 70px 10px 40px 10px;
+    padding: 50px 10px 40px 10px;
 }
 .user_address{
     width: 100%;
@@ -215,12 +215,13 @@ a {
     background-repeat: no-repeat;
     background-size: auto 40px;
     background-position: 10px center;
-    padding: 10px 0 0 10px;
+    padding: 10px 0 0 0px;
 }
 .user_address .div_title{
     border-bottom: 1px solid #f0efed;
     line-height: 25px;
-    padding-right: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
     font-size: 18px;
     padding-bottom: 8px;
     background-repeat: no-repeat;
@@ -233,7 +234,7 @@ a {
     line-height: 25px;
     padding-right: 60px;
     font-size: 16px;
-    padding-left: 5px;
+    padding-left: 10px;
     width: 98%;
     margin: 10px 0 10px 0;
     background-image: url(./tpl/Static/blue/images/new/black_arrow.png);
@@ -350,17 +351,64 @@ a {
     background-color:unset;
 }
 
+#select_div ul{
+    width: 100% !important;
+    margin: 15px auto !important;
+    height: 42px !important;
+    border-radius: 21px !important;
+}
+
+#select_div li{
+    border-radius: 21px !important;
+    line-height: 38px !important;
+    height: 42px;
+    position: relative;
+}
+#select_div li p{
+    line-height: 100%;
+    position: absolute;
+    bottom: 4px;
+    width: 100%;
+    text-align: center;
+    font-size: 11px;
+    font-weight: normal;
+    display: none;
+}
+#pickup_map{
+    width: 100%;
+    background-color: #999999;
+    height: 150px;
+    margin-top: 10px;
+}
 </style>
 </head>
 <script type="text/javascript" src="{pigcms{$static_path}shop/js/scroller.js"></script>
 <body onselectstart="return true;" ondragstart="return false;">
 <include file="Public:header"/>
 <div class="container">
+    <div id="select_div">
+        <ul>
+            <li class="active" data-type="0">
+                DELIVERY
+                <p>
+                    Unavailable
+                </p>
+            </li>
+            <li data-type="1">
+                PICKUP
+                <p>
+                    Unavailable
+                </p>
+            </li>
+        </ul>
+    </div>
 	<form name="cart_confirm_form" action="{pigcms{:U('Shop/save_order',array('store_id'=> $store['store_id'], 'mer_id' => $store['mer_id'], 'frm' => $_GET['frm'], 'village_id'=>$village_id))}" method="post">
 
         <a href="{pigcms{:U('My/adress',array('buy_type' => 'shop', 'store_id'=>$store['store_id'], 'village_id'=>$village_id, 'mer_id' => $store['mer_id'], 'frm' => $_GET['frm'], 'adress_id'=>$user_adress['adress_id'], 'order_id' => $order_id))}">
         <div class="user_address">
-            <div class="div_title">{pigcms{:L('_C_DELIVERY_ADDRESS_')}</div>
+            <div class="div_title">
+                {pigcms{:L('_DIST_INFO_')}
+            </div>
             <div class="div_content">
                 <if condition="$user_adress['adress_id']">
                     <div>{pigcms{$user_adress['name']} {pigcms{$user_adress['phone']}</div>
@@ -369,6 +417,14 @@ a {
                 <else/>
                     <div class="div_select">{pigcms{:L('_CLICK_ADD_NEW_A_')}</div>
                 </if>
+            </div>
+            <div class="div_store_address" style="margin:10px auto;">
+                <div style="padding-left: 10px;">
+                    {pigcms{$store.adress}
+                </div>
+                <div id="pickup_map">
+
+                </div>
             </div>
         </div>
         </a>
@@ -579,6 +635,8 @@ a {
 		</script>
 	</volist>
 </if>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKlguA2QFIUVwWTo3danbOqSKv3nYbBCg&callback=initMap" async defer></script>
 <script type="text/javascript">
 var motify = {
 	timer:null,
@@ -945,6 +1003,7 @@ $(document).ready(function () {
                     }
                     pageLoadHides();
                 }else{
+                    $.cookie('userModelSelect', userModelSelect, {expires: 700, path: "/"});
                     document.cart_confirm_form.submit();
                 }
 
@@ -994,6 +1053,95 @@ function callbackUserAddress(address){ alert("callbackUserAddress");
 		unset($tmpGet['adress_id']);
 	</php>
 	window.location.href = "{pigcms{:U('confirm_order',$tmpGet)}&adress_id="+addressArr[0];
+}
+
+
+var have_shop = "{pigcms{$store.have_shop}";
+var is_pickup = "{pigcms{$store.is_pickup}";
+var userModelSelect;
+var deliveryStr = "{pigcms{:L('_DIST_INFO_')}";
+var pickupStr = "{pigcms{:L('_PICKUP_INFO_')}";
+var is_free_delivery = "{pigcms{$store['free_delivery']}";
+
+$('#select_div').find('li').each(function () {
+    if(($(this).data("type") == 0 && have_shop == "1") || ($(this).data("type") == 1 && is_pickup == "1")) {
+        $(this).click(function () {
+            $(this).addClass('active').siblings().removeClass('active');
+            if ($(this).data('type') != $.cookie('userModelSelect')) {
+                //$.cookie('userModelSelect', $(this).data('type'), {expires: 700, path: "/"});
+                //userModelSelect = $.cookie('userModelSelect');
+            }
+
+            userModelSelect = $(this).data('type');
+
+            if(userModelSelect == 0){
+                $(".div_title").html(deliveryStr);
+                if(is_free_delivery == 1) $("#free_delivery").show();
+                $(".div_content").show();
+                $(".div_store_address").hide();
+            }else {
+                $(".div_title").html(pickupStr + "<span style='float:right;font-size: 16px;'>{pigcms{$store.pickup_distance} km · ASAP</span>");
+                $("#free_delivery").hide();
+                $(".div_content").hide();
+                $(".div_store_address").show();
+            }
+        });
+    }else{
+        $(this).children("p").show();
+        $(this).css("color","#707070");
+    }
+});
+
+if(typeof($.cookie('userModelSelect')) != 'undefined'){
+    userModelSelect = $.cookie('userModelSelect');
+
+    if(userModelSelect == 0 && have_shop == "0") userModelSelect = 1;
+    if(userModelSelect == 1 && is_pickup == "0") userModelSelect = 0;
+
+    $('#select_div').find('li').each(function () {
+        if($(this).data('type') == userModelSelect) $(this).trigger("click");
+    });
+}
+
+var store_icon = "{pigcms{$static_public}images/deliver/icon_store_map.png";
+var user_icon = "{pigcms{$static_public}images/deliver/icon_blue_point.png";
+var store_lat = "{pigcms{$store['lat']}";
+var store_lng = "{pigcms{$store['long']}";
+var user_lat = $.cookie("userLocationLat");
+var user_lng = $.cookie("userLocationLong");
+
+var store_pos = {lat:parseFloat(store_lat), lng:parseFloat(store_lng)};
+var user_pos = {lat:parseFloat(user_lat), lng:parseFloat(user_lng)};
+
+var map,store,user,marker_store,marker_user,bounds;
+
+function initMap() {
+    map = new google.maps.Map(
+        document.getElementById('pickup_map'), {zoom: 18, center: store_pos});
+
+    bounds = new google.maps.LatLngBounds();
+
+    store =  {
+        url:store_icon,
+        scaledSize: new google.maps.Size(35,35),
+        size: new google.maps.Size(35,35)
+    };
+
+    user =  {
+        url:user_icon,
+        scaledSize: new google.maps.Size(35,35),
+        size: new google.maps.Size(35,35)
+    };
+
+    marker_store = new google.maps.Marker({position: store_pos, map: map,icon:store});
+    marker_user = new google.maps.Marker({position: user_pos, map: map,icon:user});
+
+    bounds.extend(new   google.maps.LatLng(marker_store.getPosition().lat()
+        ,marker_store.getPosition().lng()));
+    bounds.extend(new   google.maps.LatLng(marker_user.getPosition().lat()
+        ,marker_user.getPosition().lng()));
+
+    map.fitBounds(bounds);
 }
 </script>
 <script src="{pigcms{$static_path}js/pageloader.js?215"></script>
