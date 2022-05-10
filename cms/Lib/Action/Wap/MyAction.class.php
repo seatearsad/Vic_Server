@@ -3466,7 +3466,7 @@ class MyAction extends BaseAction{
             $status = D('Shop_order_log')->field(true)->where(array('order_id' => $val['order_id']))->order('id DESC')->find();
             $status['status'] = $status['status'] == 33 ? 2 : $status['status'];
             $list[$key]['statusLog'] = $status['status'];
-            $list[$key]['statusLogName'] = D('Store')->getOrderStatusLogName($status['status']);
+            $list[$key]['statusLogName'] = D('Store')->getOrderStatusLogName($status['status'],$val['order_type']);
 
             //-------------------------------------------------------------------------------------
 

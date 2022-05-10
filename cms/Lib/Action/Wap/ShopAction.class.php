@@ -234,6 +234,9 @@ class ShopAction extends BaseAction{
         $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
         $is_wap = $_GET['is_wap'] + 0;
         $page = max(1, $page);
+
+        $selectType = cookie('userModelSelect') ? cookie('userModelSelect') : '0';
+
         $cat_id = 0;
         $cat_fid = 0;
         //garfunkel add
@@ -275,8 +278,10 @@ class ShopAction extends BaseAction{
         if($now_category['cat_type'] == 1){
             $lists = D('Merchant_store_shop')->getRecommendList($city_id,$lat,$long,$cat_id,$cat_fid);
         }else {
-            $where = array('deliver_type' => $deliver_type, 'order' => $order, 'lat' => $lat, 'long' => $long, 'cat_id' => $cat_id, 'cat_fid' => $cat_fid, 'page' => $page);
-            $key && $where['key'] = $key;
+            if($key != "")
+                $where = array('deliver_type' => $deliver_type, 'order' => $order, 'lat' => $lat, 'long' => $long, 'cat_id' => $cat_id, 'cat_fid' => $cat_fid, 'page' => $page,'key'=>$key);
+            else
+                $where = array('deliver_type' => $deliver_type, 'order' => $order, 'lat' => $lat, 'long' => $long, 'cat_id' => $cat_id, 'cat_fid' => $cat_fid, 'page' => $page,'selectType'=>$selectType);
 
             if ($is_wap > 0) {
                 $lists = D('Merchant_store_shop')->get_list_by_option($where, $is_wap,-1,$city_id);
@@ -318,6 +323,16 @@ class ShopAction extends BaseAction{
             $temp['pack_fee'] = $row['pack_fee'];
             $temp['tax_num'] = $row['tax_num'];
             $temp['deposit_price'] = $row['deposit_price'];
+            $temp['have_shop'] = $row['have_shop'];
+            $temp['is_pickup'] = $row['is_pickup'];
+
+            if($lat != 0 && $long != 0){
+                $temp['delivery_money'] = getDeliveryFee($row['lat'],$row['long'],$lat,$long,$row['city_id']);
+                $temp['pickup_distance'] = round(getDistance($row['lat'], $row['long'], $lat, $long)/1000,2);
+            }else{
+                $temp['delivery_money'] = floatval($row['delivery_fee']);//配送费
+                $temp['pickup_distance'] = 0;
+            }
 
 //			if ($row['open_1'] == '00:00:00' && $row['close_1'] == '00:00:00') {
 //				$temp['time'] = '24小时营业';
@@ -3209,6 +3224,14 @@ class ShopAction extends BaseAction{
             //if ($deliver_type == 1) {//自提
             if ($selectType == 1) {//自提
                 //if (empty($pick_id)) $this->error_tips('请选择自提点');
+                if($_COOKIE['userLocationLat']){
+                    $user_long_lat['lat'] = $_COOKIE['userLocationLat'];
+                    $user_long_lat['long'] = $_COOKIE['userLocationLong'];
+                }else{
+                    $user_long_lat['lat'] = 0;
+                    $user_long_lat['long'] = 0;
+                }
+
                 $order_data['is_pick_in_store'] = 2;//配送方式 0：平台配送，1：商家配送，2：自提，3:快递配送
                 $delivery_fee = $order_data['freight_charge'] = 0;//运费
                 $order_data['username'] = isset($this->user_session['nickname']) && $this->user_session['nickname'] ? $this->user_session['nickname'] : '';
@@ -3217,6 +3240,8 @@ class ShopAction extends BaseAction{
                 $order_data['address_id'] = 0;
                 //$order_data['pick_id'] = $pick_id;
                 //$order_data['status'] = 7;
+                $order_data['lat'] = $user_long_lat['lat'];
+                $order_data['lng'] = $user_long_lat['long'];
                 $order_data['expect_use_time'] = time() + $return['store']['send_time'] * 60;//客户期望使用时间
             } else {//配送
                 $order_data['username'] = $name;
@@ -3895,7 +3920,7 @@ class ShopAction extends BaseAction{
         //
         //var_dump($order);die();
         if ($order) {
-
+            $store = D('Merchant_store')->field(true)->where(array('store_id' => $order['store_id']))->find();
             //-------------------------------  获取地图位置 --------------------------------------peter
 
             $supply = D('Deliver_supply')->where(array('order_id'=>$order_id))->find();
@@ -3908,10 +3933,13 @@ class ShopAction extends BaseAction{
                 $order['user_lng'] = $supply['aim_lnt'];
                 $order['deliver_lat'] = $deliver['lat'];
                 $order['deliver_lng'] = $deliver['lng'];
+            }else{
+                $order['store_lat'] = $store['lat'];
+                $order['store_lng'] = $store['long'];
+                $order['user_lat'] = $order['lat'];
+                $order['user_lng'] = $order['lng'];
             }
             //------------------------------------------------------------------------------------
-
-            $store = D('Merchant_store')->field(true)->where(array('store_id' => $order['store_id']))->find();
 
             $store_image_class = new store_image();
             //modify garfunkel
@@ -3960,6 +3988,20 @@ class ShopAction extends BaseAction{
                 if( ($order['paid'] == 0) && ($n_status['status']=="1" || $n_status['status']=="0")){
                     $order['statusLogName']=L('V3_UNPAID');
                     $order['statusDesc'] = L('V3_UNPAID_DESC');
+                }elseif ($order['order_type'] == 1 && $order['statusLog'] == 2){
+                    $order['statusLogName'] = D('Store')->getOrderStatusLogName($n_status['status'],$order['order_type']);
+                    //order_prepared是否已经出餐
+                    $order['preparing_time'] = date("H:i",($order['last_time'] + $order['dining_time']*60));
+                    if($order['order_status'] == 1){
+                        $preparing_time = time() - ($order['last_time'] + $order['dining_time']*60);
+                        if($preparing_time > 0) {
+                            $order['statusDesc'] = "Your order is expected to be ready now according to the prep time, please contact the merchant to see if your order is ready before picking it up.";
+                        }else{
+                            $order['statusDesc'] = "Your order is expected to be ready by ".$order['preparing_time'];
+                        }
+                    }else{
+                        $order['statusDesc'] = "Your order is expected to be ready by ".$order['preparing_time'];
+                    }
                 }else{
                     $order['statusLogName'] = D('Store')->getOrderStatusLogName($n_status['status'],$order['order_type']);
                     $order['statusDesc'] = D('Store')->getOrderStatusDesc($n_status['status'],$order,0,$store['name'],$add_time,$store['store_id']);
@@ -4044,8 +4086,13 @@ class ShopAction extends BaseAction{
                 'pay_type' => $order['pay_type'],
                 'tip_charge' => $order['tip_charge'],
                 'delivery_discount'=>$order['delivery_discount'],
-                'service_fee'=>$order['service_fee']
+                'service_fee'=>$order['service_fee'],
+                'orderType'=>$order['order_type'],
+                'store_service_fee'=>$store['service_fee']
             );
+            //自提订单 取自提的服务费比例
+            if($order['order_type'] == 1) $arr['order_details']['store_service_fee'] = $store['pickup_service_fee'];
+
             $tax_price = 0;
             $deposit_price = 0;
             foreach($order['info'] as $v) {

@@ -350,7 +350,7 @@ class Shop_orderModel extends Model
 		}
         //var_dump($order_info);
 		if($order_info['orderType'] == 1) $order_info['store_service_fee'] = $merchant_store['pickup_service_fee'];
-		
+
 		return array('error' => 0, 'order_info' => $order_info);
 	}
 

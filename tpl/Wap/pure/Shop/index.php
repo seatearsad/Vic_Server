@@ -201,9 +201,15 @@
                     <img src="./static/images/icon-star-enter.png" width="12">
                     {{# } }}
                 </div>
-                <div class="brand" style="margin-left: 10px;font-size: 12px;color: grey">${{ d[i].delivery_money }} + · {{ d[i].keywords }}</div>
+                <div class="brand" style="margin-left: 10px;font-size: 12px;color: grey">
+                    {{# if(userModelSelect == 0){ }}
+                        ${{ d[i].delivery_money }} + · {{ d[i].keywords }}
+                    {{# }else{ }}
+                        {{ d[i].pickup_distance }} km · {{ d[i].keywords }}
+                    {{# } }}
+                </div>
                 <div class="brand" style="margin-left: 10px;margin-bottom: 5px;">
-                    {{# if(d[i].free_delivery == 1){ }}
+                    {{# if(d[i].free_delivery == 1 && userModelSelect == 0){ }}
                     <span class="show_span" style="margin-right: 5px;">{{ d[i].event.desc }}</span>
                     {{# } }}
                     {{# if(d[i].merchant_reduce_list){ }}
@@ -292,6 +298,7 @@
 			var page = 1;
             var user_long = $.cookie('userLocationLong');
             var user_lat = $.cookie('userLocationLat');
+            var userModelSelect = $.cookie("userModelSelect");
 
             var is_more = false;
 
@@ -311,6 +318,7 @@
                 }
                 $.getJSON("{pigcms{:U('ajax_list')}",{cat_id:cat_id,cat_fid:cat_fid,user_lat:user_lat,user_long:user_long,page:page,key:keyword},function(result){
                     if(result.store_list && result.store_list.length > 0){
+                        if(keyword != "") userModelSelect = 0;
                         laytpl($('#listShopTpl').html()).render(result.store_list, function(html){
                             if(newPage){
                                 $('#storeList .dealcard').html(html);
