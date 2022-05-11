@@ -954,6 +954,7 @@
             var base_width = $('#shopProductLeftBar2').find('dl').width();
             var act_width = 0;
             var move_size = 0;
+            var pickupImg = "<img src='./tpl/Static/blue/images/new/pickup_icon.png' height='20' style='vertical-align: sub' /> ";
             $('#shopProductLeftBar2').find('dl').scroll(function () {
                 move_size = $(this).scrollLeft();
                 setSubMove();

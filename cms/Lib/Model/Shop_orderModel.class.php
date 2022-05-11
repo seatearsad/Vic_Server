@@ -419,7 +419,7 @@ class Shop_orderModel extends Model
 	//手机端支付前订单处理
 	public function wap_befor_pay($order_info, $now_coupon, $merchant_balance, $now_user)
 	{
-		$pay_money = round($order_info['order_total_money'] * 100) / 100; //本次支付的总金额
+		$pay_money = intval($order_info['order_total_money'] * 100) / 100; //本次支付的总金额
 
 		//减免配送费活动
 		if($order_info['delivery_discount'] > 0){
@@ -471,7 +471,7 @@ class Shop_orderModel extends Model
 				return $this->wap_after_pay_before($order_info);
 			}
 			$pay_money -= round($now_coupon['coupon_price'] * 100)/100;
-			$pay_money = round($pay_money * 100)/100;
+			$pay_money = intval($pay_money * 100)/100;
 		}
 
 		// 使用积分
@@ -487,7 +487,7 @@ class Shop_orderModel extends Model
 				return $this->wap_after_pay_before($order_info);
 			}
 			$pay_money -= $order_info['score_deducte'];
-			$pay_money = round($pay_money * 100)/100;
+			$pay_money = intval($pay_money * 100)/100;
 		}
 
 		//判断商家余额
@@ -505,7 +505,7 @@ class Shop_orderModel extends Model
 				$data_shop_order['merchant_balance'] = $merchant_balance['card_money'];
 			}
 			$pay_money -= $merchant_balance['card_money'];
-			$pay_money = round($pay_money * 100)/100;
+			$pay_money = intval($pay_money * 100)/100;
 		}
 
 		if(!empty($merchant_balance['card_give_money'])&&$order_info['use_merchant_balance']){
@@ -524,7 +524,7 @@ class Shop_orderModel extends Model
 
 		//判断帐户余额
 		if(!empty($now_user['now_money'])&&$order_info['use_balance']){
-			$now_user['now_money'] = round($now_user['now_money'] * 100)/100;
+			$now_user['now_money'] = intval($now_user['now_money'] * 100)/100;
 			if($now_user['now_money'] >= $pay_money){
 				$data_shop_order['balance_pay'] = $pay_money;
 				$order_info['balance_pay'] = $pay_money;

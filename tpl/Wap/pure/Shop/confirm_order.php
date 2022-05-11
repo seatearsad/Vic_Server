@@ -403,9 +403,8 @@ a {
         </ul>
     </div>
 	<form name="cart_confirm_form" action="{pigcms{:U('Shop/save_order',array('store_id'=> $store['store_id'], 'mer_id' => $store['mer_id'], 'frm' => $_GET['frm'], 'village_id'=>$village_id))}" method="post">
-
-        <a href="{pigcms{:U('My/adress',array('buy_type' => 'shop', 'store_id'=>$store['store_id'], 'village_id'=>$village_id, 'mer_id' => $store['mer_id'], 'frm' => $_GET['frm'], 'adress_id'=>$user_adress['adress_id'], 'order_id' => $order_id))}">
         <div class="user_address">
+            <a href="{pigcms{:U('My/adress',array('buy_type' => 'shop', 'store_id'=>$store['store_id'], 'village_id'=>$village_id, 'mer_id' => $store['mer_id'], 'frm' => $_GET['frm'], 'adress_id'=>$user_adress['adress_id'], 'order_id' => $order_id))}">
             <div class="div_title">
                 {pigcms{:L('_DIST_INFO_')}
             </div>
@@ -418,6 +417,7 @@ a {
                     <div class="div_select">{pigcms{:L('_CLICK_ADD_NEW_A_')}</div>
                 </if>
             </div>
+            </a>
             <div class="div_store_address" style="margin:10px auto;">
                 <div style="padding-left: 10px;">
                     {pigcms{$store.adress}
@@ -427,7 +427,6 @@ a {
                 </div>
             </div>
         </div>
-        </a>
 
     <section class="menu_wrap pay_wrap">
 		<if condition="!empty($goods)">
@@ -705,6 +704,8 @@ $(document).ready(function () {
     var today = '{pigcms{$today}';
     var is_cross_day_1 = {pigcms{$is_cross_day_1}, is_cross_day_2 = {pigcms{$is_cross_day_2};
     var opt = {};
+    var distance_tip = "{pigcms{$distance_tip}";
+    var pickup_distance = "{pigcms{$store.pickup_distance}";
 
     opt.date = {preset:'date', minDate: new Date(minYear, minMouth, minDay, minHour_tomorrow, minMinute_tomorrow), maxDate:new Date(maxYear,maxMouth, maxDay, maxHour, maxMinute)};
 
@@ -923,7 +924,7 @@ $(document).ready(function () {
 
 	$("#submit_order").click(function(){
         //console.log("submit_order");
-		if($('#deliver_type').val() == 0 && $('#address_id').val() == ''){
+		if(userModelSelect == 0 && $('#deliver_type').val() == 0 && $('#address_id').val() == ''){
 			motify.log('Please choose an address');
 			return false;
 		}
@@ -1003,8 +1004,23 @@ $(document).ready(function () {
                     }
                     pageLoadHides();
                 }else{
-                    $.cookie('userModelSelect', userModelSelect, {expires: 700, path: "/"});
-                    document.cart_confirm_form.submit();
+                    if(userModelSelect == 1 && pickup_distance > distance_tip) {
+                        layer.open({
+                            content: "<label style='word-break: break-word;'>It looks like you’re "+pickup_distance+" km away from {pigcms{$store_name}. Please confirm that you are able to pick up this order.</label>",
+                            btn: ['Yes', 'No'],
+                            yes: function () {
+                                $.cookie('userModelSelect', userModelSelect, {expires: 700, path: "/"});
+                                document.cart_confirm_form.submit();
+                            },
+                            no: function () {
+                                pageLoadHides();
+                                $("#submit_order").removeClass('disabled');
+                            }
+                        });
+                    }else {
+                        $.cookie('userModelSelect', userModelSelect, {expires: 700, path: "/"});
+                        document.cart_confirm_form.submit();
+                    }
                 }
 
             },"json");
@@ -1062,6 +1078,9 @@ var userModelSelect;
 var deliveryStr = "{pigcms{:L('_DIST_INFO_')}";
 var pickupStr = "{pigcms{:L('_PICKUP_INFO_')}";
 var is_free_delivery = "{pigcms{$store['free_delivery']}";
+var is_jump = "{pigcms{$is_jump}";
+var jump_url = "{pigcms{$jump_url}";
+var from = "{pigcms{$_GET['from']}";
 
 $('#select_div').find('li').each(function () {
     if(($(this).data("type") == 0 && have_shop == "1") || ($(this).data("type") == 1 && is_pickup == "1")) {
@@ -1079,11 +1098,15 @@ $('#select_div').find('li').each(function () {
                 if(is_free_delivery == 1) $("#free_delivery").show();
                 $(".div_content").show();
                 $(".div_store_address").hide();
+                if(is_jump == 1 && from != "address"){
+                    window.location.href = jump_url;
+                }
             }else {
                 $(".div_title").html(pickupStr + "<span style='float:right;font-size: 16px;'>{pigcms{$store.pickup_distance} km · ASAP</span>");
                 $("#free_delivery").hide();
                 $(".div_content").hide();
                 $(".div_store_address").show();
+                if(loadGoogle) initMap();
             }
         });
     }else{
@@ -1094,6 +1117,8 @@ $('#select_div').find('li').each(function () {
 
 if(typeof($.cookie('userModelSelect')) != 'undefined'){
     userModelSelect = $.cookie('userModelSelect');
+
+    if(from == "address") userModelSelect = 0;
 
     if(userModelSelect == 0 && have_shop == "0") userModelSelect = 1;
     if(userModelSelect == 1 && is_pickup == "0") userModelSelect = 0;
@@ -1114,8 +1139,10 @@ var store_pos = {lat:parseFloat(store_lat), lng:parseFloat(store_lng)};
 var user_pos = {lat:parseFloat(user_lat), lng:parseFloat(user_lng)};
 
 var map,store,user,marker_store,marker_user,bounds;
+var loadGoogle = false;
 
 function initMap() {
+    loadGoogle = true;
     map = new google.maps.Map(
         document.getElementById('pickup_map'), {zoom: 18, center: store_pos});
 

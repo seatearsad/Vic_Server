@@ -293,7 +293,7 @@ function showShop(shopId){
                 if(userModelSelect == 0){
                     $('#deliveryText').html(getLangStr('_PACK_PRICE_') +' $'+ nowShop.store.pack_fee);
                 }else{
-                    $('#deliveryText').html(nowShop.store.adress);
+                    $('#deliveryText').html(pickupImg + nowShop.store.adress);
                 }
             });
         });
@@ -907,7 +907,7 @@ function showShop(shopId){
 			if(userModelSelect == 0){
                 $('#deliveryText').html(getLangStr('_PACK_PRICE_') +' $'+ result.store.pack_fee);
 			}else{
-                $('#deliveryText').html(result.store.adress);
+                $('#deliveryText').html(pickupImg + result.store.adress);
 			}
 			$('#shopNoticeText').html(result.store.store_notice);
 			// $('#shopCouponText').html(parseCoupon(result.store.coupon_list,'text')+';'+result.store.store_notice);

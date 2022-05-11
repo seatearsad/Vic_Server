@@ -606,19 +606,21 @@ class ShopAction extends BaseAction{
 
             //获取特殊城市属性
             $is_add = true;
-            $city = D('Area')->where(array('area_id'=>$row['city_id']))->find();
-            if($city['range_type'] != 0){
-                switch ($city['range_type']){
-                    case 1://按照纬度限制的城市 小于某个纬度
-                        if($lat >= $city['range_para']) $is_add = false;
-                        break;
-                    case 2://自定义区域
-                        import('@.ORG.RegionalCalu.RegionalCalu');
-                        $region = new RegionalCalu();
-                        $is_add = $region->checkCity($city,$long,$lat);
-                        break;
-                    default:
-                        break;
+            if($selectType == 0) {
+                $city = D('Area')->where(array('area_id' => $row['city_id']))->find();
+                if ($city['range_type'] != 0) {
+                    switch ($city['range_type']) {
+                        case 1://按照纬度限制的城市 小于某个纬度
+                            if ($lat >= $city['range_para']) $is_add = false;
+                            break;
+                        case 2://自定义区域
+                            import('@.ORG.RegionalCalu.RegionalCalu');
+                            $region = new RegionalCalu();
+                            $is_add = $region->checkCity($city, $long, $lat);
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
 
@@ -3001,8 +3003,22 @@ class ShopAction extends BaseAction{
             $store = $return['store'];
             //redirect(U('My/adress',array('buy_type' => 'shop', 'store_id'=>$store['store_id'], 'village_id'=>$village_id, 'mer_id' => $store['mer_id'], 'frm' => $_GET['frm'], 'adress_id'=>$user_adress['adress_id'], 'order_id' => $order_id)));
             //die("redirect");
-            redirect(U('My/adress',array('buy_type' => 'shop', 'store_id'=>$store['store_id'], 'village_id'=>$village_id, 'mer_id' => $store['mer_id'], 'frm' => $_GET['frm'], 'adress_id'=>0, 'order_id' => $order_id, 'from' => "shop")));
+            //redirect(U('My/adress',array('buy_type' => 'shop', 'store_id'=>$store['store_id'], 'village_id'=>$village_id, 'mer_id' => $store['mer_id'], 'frm' => $_GET['frm'], 'adress_id'=>0, 'order_id' => $order_id, 'from' => "shop")));
+
         }
+        $jump_url = U('My/adress',array('buy_type' => 'shop', 'store_id'=>$store['store_id'], 'village_id'=>$village_id, 'mer_id' => $store['mer_id'], 'frm' => $_GET['frm'], 'adress_id'=>0, 'order_id' => $order_id, 'from' => "shop"));
+
+        $this->assign("is_jump",$is_jump_address);
+        $this->assign("jump_url",$jump_url);
+
+        //自提需要提示的距离
+        $pickup_settings = D('Config')->where(array('gid'=>52))->select();
+        $distance_tip = 15;
+        foreach ($pickup_settings as $v){
+            if($v['name'] == "pickup_distance_tip") $distance_tip = $v['value'];
+        }
+        $this->assign("distance_tip",$distance_tip);
+
         //计算打包费 add garfunkel
         $store_shop = D("Merchant_store_shop")->field(true)->where(array('store_id' => $store_id))->find();
         $this->assign('store_shop',$store_shop);

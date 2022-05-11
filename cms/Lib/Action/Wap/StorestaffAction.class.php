@@ -1809,17 +1809,17 @@ class StorestaffAction extends BaseAction
                 //add garfunkel
                 $userInfo = D('User')->field(true)->where(array('uid' => $order['uid']))->find();
                 if ($userInfo['device_id'] != "") {
-                    $message = 'Your order has been accepted by the store, they are preparing it now. Our Courier is on the way, thank you for your patience!';
-                    Sms::sendMessageToGoogle($userInfo['device_id'], $message);
+                    $title = "Order Confirmed";
+                    if($order['order_type'] == 0)
+                        $message = 'Your order has been accepted by the store, they are preparing it now. Our Courier is on the way, thank you for your patience!';
+                    else
+                        $message = 'Your order has been accepted by the store, and they are preparing it now!';
+                    Sms::sendMessageToGoogle($userInfo['device_id'], $message,1,$title);
                 } else {
-                    $sms_data['uid'] = $order['uid'];
-                    $sms_data['mobile'] = $order['userphone'];
-                    $sms_data['sendto'] = 'user';
-                    $sms_data['tplid'] = 172700;
-                    $sms_data['params'] = [];
-                    //Sms::sendSms2($sms_data);
-                    $sms_txt = "Your order has been accepted by the store, they are preparing your order now. Our Courier is on the way, thank you for your patience.";
-                    //Sms::telesign_send_sms($order['userphone'],$sms_txt,0);
+                    if($order['order_type'] == 0)
+                        $sms_txt = "Your order has been accepted by the store, they are preparing your order now. Our Courier is on the way, thank you for your patience.";
+                    else
+                        $sms_txt = 'Your order has been accepted by the store, and they are preparing it now!';
                     Sms::sendTwilioSms($order['userphone'], $sms_txt);
                 }
 
@@ -1841,6 +1841,16 @@ class StorestaffAction extends BaseAction
                 }
 
                 $this->success('已接单');
+            }elseif ($new_status == 5){
+                $userInfo = D('User')->field(true)->where(array('uid' => $order['uid']))->find();
+                if ($userInfo['device_id'] != "") {
+                    $title = "Your order is ready for pickup!";
+                    $message = 'Please pick up your order from {store_name} before they close.';
+                    Sms::sendMessageToGoogle($userInfo['device_id'], $message,1,$title);
+                } else {
+                    $sms_txt = "Your order is ready! Please pick it up before the store closes.";
+                    Sms::sendTwilioSms($order['userphone'], $sms_txt);
+                }
             }else{
                 $this->success('Success');
             }
@@ -3516,8 +3526,12 @@ class StorestaffAction extends BaseAction
             $order_data['expect_use_time'] = "ASAP";
         }
 
-        $order_data['dining_time'] = $supply['dining_time'] ? $supply['dining_time'] : '0';
-        $order_data['rece_time'] = $supply['create_time'] ? $supply['create_time'] : '0';
+        $order_data['dining_time'] = $order['dining_time'] ? $order['dining_time'] : '0';
+        if($order['order_type'] == 0)
+            $order_data['rece_time'] = $supply['create_time'] ? $supply['create_time'] : '0';
+        else
+            $order_data['rece_time'] = $order['create_time'] ? $order['create_time'] : '0';
+
         $order_data['now_time'] = time();
 
         $cha_time = time() - $order_data['create_time'];

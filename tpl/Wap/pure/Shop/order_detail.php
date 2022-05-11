@@ -245,7 +245,7 @@
 <!--        <div class="header_active">{pigcms{:L('_ORDER_INFO_TXT_')}</div>-->
 <!--    </div>-->
 <section class="g_details">
-    <if condition="$order.statusLog gt 3 AND 6 gt $order.statusLog or ($order_details['orderType'] eq 1 and $order.statusLog eq 2)">
+    <if condition="($order.status neq 4 and $order.status neq 5) and ($order.statusLog gt 3 AND 6 gt $order.statusLog or ($order_details['orderType'] eq 1 and $order.statusLog eq 2))">
         <div class="map_infor" id="web_map"></div>
     <else />
         <div class="bg_infor"><img src="{pigcms{$store['logo']}"> </div>
@@ -280,7 +280,7 @@
         <div class="gray_line"></div>
     </if>
 
-    <if condition="$order.statusLog gt 1 AND 6 gt $order.statusLog AND $order_details['orderType'] eq 1">
+    <if condition="$order.statusLog gt 1 AND 6 gt $order.statusLog AND $order_details['orderType'] eq 1 and ($order.status neq 4 and $order.status neq 5)">
         <div class="infor" style="margin-bottom: 0px;">
             <div style="padding:0 10px;">
                 <div style="font-size: 18px;font-weight: bold">Order #{pigcms{$order['order_id']}</div>
@@ -523,7 +523,7 @@
     }
 </style>
 
-<if condition="$order.statusLog gt 3 AND 6 gt $order.statusLog or ($order_details['orderType'] eq 1 and $order.statusLog eq 2)">
+<if condition="($order.status neq 4 and $order.status neq 5) and ($order.statusLog gt 3 AND 6 gt $order.statusLog or ($order_details['orderType'] eq 1 and $order.statusLog eq 2))">
  <script>
     var store_lat = "{pigcms{$order.store_lat}";
     var store_lng = "{pigcms{$order.store_lng}";
