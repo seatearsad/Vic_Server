@@ -666,7 +666,7 @@
                     <div id="selectDiv">
                         <ul>
                             <li id="delivery_li" data-type="0" class="active">
-                                <p>DELIVER</p>
+                                <p>DELIVERY</p>
                                 <p class="select_desc">Unavailable</p>
                             </li>
                             <li id="pickup_li" data-type="1">

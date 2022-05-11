@@ -478,6 +478,13 @@ class GroupserviceAction extends BaseAction{
             $new_group_list['has_more'] = $lists['total'] > $page*5 ? true : false;
 
             $new_group_list['system_message'] = D("System_message")->getSystemMessage(0,0,$city_id,$lat,$long);
+
+            if($selectType == 0)
+            	$wap_index_top_adver = D('Adver')->get_adver_by_key('wap_index_top',5);
+            else
+                $wap_index_top_adver = D('Adver')->get_adver_by_key('pick_up_banner',5);
+
+            $new_group_list['adver'] = $wap_index_top_adver;
 			//echo json_encode(array('store_list' => $return, 'has_more' => $lists['has_more'] ? true : false));
 		}elseif($content_type=='meal'){
 			$this->header_json();

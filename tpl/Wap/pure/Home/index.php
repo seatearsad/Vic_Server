@@ -33,7 +33,7 @@
         var address_url = "{pigcms{:U('Home/address')}";
         var static_url = "{pigcms{$static_public}";
     </script>
-    <script type="text/javascript" src="{pigcms{$static_path}js/index.js?v=1.8" charset="utf-8"></script>
+    <script type="text/javascript" src="{pigcms{$static_path}js/index.js?v=2.0" charset="utf-8"></script>
     <script type="text/javascript" src="{pigcms{$static_public}js/lang/{pigcms{:C('DEFAULT_LANG')}.js" charset="utf-8"></script>
     <script type="text/javascript" src="{pigcms{$static_path}js/common.js" charset="utf-8"></script>
     <script type="text/javascript" src="{pigcms{$static_public}js/mobileSelect/mobileSelect.js"></script>
@@ -441,22 +441,9 @@
 <include file="Public:header"/>
 <div id="container">
     <div id="scroller">
-        <if condition="$wap_index_top_adver">
-            <section id="banner_hei" class="banner">
-                <div class="swiper-container swiper-container1">
-                    <div class="swiper-wrapper">
-                        <volist name="wap_index_top_adver" id="vo">
-                            <div class="swiper-slide">
-                                <a href="{pigcms{$vo.url}">
-                                    <img src="{pigcms{$vo.pic}"/>
-                                </a>
-                            </div>
-                        </volist>
-                    </div>
-                    <div class="swiper-pagination swiper-pagination1"></div>
-                </div>
-            </section>
-        </if>
+        <section id="banner_hei" class="banner">
+
+        </section>
         <div id="category">
             <div class="cate_left"></div>
             <ul>
@@ -719,6 +706,19 @@
                 {{# } }}
                 {{# } }}
             </if>
+        </script>
+
+        <script id="indexTopAdver" type="text/html">
+            <div class="swiper-container swiper-container1">
+                <div class="swiper-wrapper">
+                    {{# for(var i = 0, len = d.length; i < len; i++){ }}
+                    <div class="swiper-slide">
+                        <a href="{{ d[i].url }}"><img src="{{ d[i].pic }}"/></a>
+                    </div>
+                    {{# } }}
+                </div>
+                <div class="swiper-pagination swiper-pagination1"></div>
+            </div>
         </script>
 
         <script id="indexRecommendListTpl" type="text/html">

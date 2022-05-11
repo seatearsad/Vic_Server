@@ -3995,7 +3995,7 @@ class ShopAction extends BaseAction{
                     if($order['order_status'] == 1){
                         $preparing_time = time() - ($order['last_time'] + $order['dining_time']*60);
                         if($preparing_time > 0) {
-                            $order['statusDesc'] = "Your order is expected to be ready now according to the prep time, please contact the merchant to see if your order is ready before picking it up.";
+                            $order['statusDesc'] = "Your order should be ready but the merchant has not confirmed. Please contact the restaurant before picking up your order!";
                         }else{
                             $order['statusDesc'] = "Your order is expected to be ready by ".$order['preparing_time'];
                         }

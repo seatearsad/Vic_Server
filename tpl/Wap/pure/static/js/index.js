@@ -110,15 +110,6 @@ $(function(){
 		}
 	});*/
 
-	var mySwiper = $('.swiper-container1').swiper({
-		pagination:'.swiper-pagination1',
-		loop:true,
-		grabCursor: true,
-		paginationClickable: true,
-		autoplay:3000,
-		autoplayDisableOnInteraction:false,
-		simulateTouch:false
-	});
 	var mySwiper2 = $('.swiper-container2').swiper({
 		pagination:'.swiper-pagination2',
 		loop:true,
@@ -244,6 +235,23 @@ function getRecommendList(){
                 laytpl($('#indexRecommendListTpl').html()).render(result.recommend, function (html) {
                     $('#recommendList').html(html);
                 });
+
+                var mySwiper;
+                if(result.adver != null) {
+                    laytpl($('#indexTopAdver').html()).render(result.adver, function (html) {
+                        $('#banner_hei').html(html);
+                        if (typeof (mySwiper) != "undefined") mySwiper.swipeReset();
+                        mySwiper = $('.swiper-container1').swiper({
+                            pagination: '.swiper-pagination1',
+                            loop: true,
+                            grabCursor: true,
+                            paginationClickable: true,
+                            autoplay: 3000,
+                            autoplayDisableOnInteraction: false,
+                            simulateTouch: false
+                        });
+                    });
+                }
 
                 if(result.system_message != null){
                 	var system_message = result.system_message;
