@@ -109,7 +109,10 @@ class Deliverect
         $data['channelOrderDisplayId'] = "Tutti-".$order['order_id'];
         $data['channelLinkId'] = $order['link_id'];
         $data['by'] = "Tutti";
-        $data['orderType'] = $this->orderType['delivery'];
+        if($order['order_type'] == 0)
+            $data['orderType'] = $this->orderType['delivery'];
+        else
+            $data['orderType'] = $this->orderType['pickup'];
         $data['channel'] = 0;
         $data['pickupTime'] = gmdate("Y-m-d\TH:i:s\Z");//date("Y-m-d H:i:s");//date("Y-m-d")."T".date("H:i:s")."Z";
         $data['estimatedPickupTime'] = date("Y-m-d");//date("Y-m-d")."T".date("H:i:s")."Z";

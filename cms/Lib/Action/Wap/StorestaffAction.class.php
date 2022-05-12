@@ -1843,9 +1843,11 @@ class StorestaffAction extends BaseAction
                 $this->success('已接单');
             }elseif ($new_status == 5){
                 $userInfo = D('User')->field(true)->where(array('uid' => $order['uid']))->find();
+                $store = D('Merchant_store')->where(array('store_id' => $order['store_id']))->find();
+                $store['name'] = lang_substr($store['name'], 'en-us');
                 if ($userInfo['device_id'] != "") {
                     $title = "Your order is ready for pickup!";
-                    $message = 'Please pick up your order from {store_name} before they close.';
+                    $message = 'Please pick up your order from ' . $store['name'] . ' before they close.';
                     Sms::sendMessageToGoogle($userInfo['device_id'], $message,1,$title);
                 } else {
                     $sms_txt = "Your order is ready! Please pick it up before the store closes.";
@@ -3529,8 +3531,10 @@ class StorestaffAction extends BaseAction
         $order_data['dining_time'] = $order['dining_time'] ? $order['dining_time'] : '0';
         if($order['order_type'] == 0)
             $order_data['rece_time'] = $supply['create_time'] ? $supply['create_time'] : '0';
-        else
-            $order_data['rece_time'] = $order['create_time'] ? $order['create_time'] : '0';
+        else {
+            $order_log = D('Shop_order_log')->field(true)->where(array('order_id' => $order['order_id'], 'status' => 2))->order('id DESC')->find();
+            $order_data['rece_time'] = $order_log['dateline'] ? $order_log['dateline'] : $order['create_time'];
+        }
 
         $order_data['now_time'] = time();
 

@@ -1107,7 +1107,7 @@ class ShopAction extends BaseAction{
         $store['is_pickup'] = $row['is_pickup'];
 
         if($row['is_pickup'] == 1){
-            $store['pickup_distance'] = round(getDistance($row['lat'], $row['long'], $user_long_lat['lat'], $user_long_lat['long'])/1000,2);
+            $store['pickup_distance'] = number_format(getDistance($row['lat'], $row['long'], $user_long_lat['lat'], $user_long_lat['long'])/1000,2,'.','');
         }else{
             $store['pickup_distance'] = 0;
         }

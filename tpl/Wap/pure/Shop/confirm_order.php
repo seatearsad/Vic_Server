@@ -404,10 +404,10 @@ a {
     </div>
 	<form name="cart_confirm_form" action="{pigcms{:U('Shop/save_order',array('store_id'=> $store['store_id'], 'mer_id' => $store['mer_id'], 'frm' => $_GET['frm'], 'village_id'=>$village_id))}" method="post">
         <div class="user_address">
-            <a href="{pigcms{:U('My/adress',array('buy_type' => 'shop', 'store_id'=>$store['store_id'], 'village_id'=>$village_id, 'mer_id' => $store['mer_id'], 'frm' => $_GET['frm'], 'adress_id'=>$user_adress['adress_id'], 'order_id' => $order_id))}">
             <div class="div_title">
                 {pigcms{:L('_DIST_INFO_')}
             </div>
+            <a href="{pigcms{:U('My/adress',array('buy_type' => 'shop', 'store_id'=>$store['store_id'], 'village_id'=>$village_id, 'mer_id' => $store['mer_id'], 'frm' => $_GET['frm'], 'adress_id'=>$user_adress['adress_id'], 'order_id' => $order_id))}">
             <div class="div_content">
                 <if condition="$user_adress['adress_id']">
                     <div>{pigcms{$user_adress['name']} {pigcms{$user_adress['phone']}</div>
@@ -1128,8 +1128,8 @@ if(typeof($.cookie('userModelSelect')) != 'undefined'){
     });
 }
 
-var store_icon = "{pigcms{$static_public}images/deliver/icon_store_map.png";
-var user_icon = "{pigcms{$static_public}images/deliver/icon_blue_point.png";
+var store_icon = "{pigcms{$static_public}images/deliver/icon_map_store.png";
+var user_icon = "{pigcms{$static_public}images/deliver/icon_map_user.png";
 var store_lat = "{pigcms{$store['lat']}";
 var store_lng = "{pigcms{$store['long']}";
 var user_lat = $.cookie("userLocationLat");

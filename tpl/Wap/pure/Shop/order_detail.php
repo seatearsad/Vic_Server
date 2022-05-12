@@ -532,9 +532,9 @@
     var deliver_lat ="{pigcms{$order.deliver_lat}";
     var deliver_lng = "{pigcms{$order.deliver_lng}";
 
-    var deliver_icon = "{pigcms{$static_public}images/deliver/icon_deliver_map.png";
-    var store_icon = "{pigcms{$static_public}images/deliver/icon_store_map.png";
-    var user_icon = "{pigcms{$static_public}images/deliver/icon_blue_point.png";
+    var deliver_icon = "{pigcms{$static_public}images/deliver/icon_map_deliver.png";
+    var store_icon = "{pigcms{$static_public}images/deliver/icon_map_store.png";
+    var user_icon = "{pigcms{$static_public}images/deliver/icon_map_user.png";
 
     //获取get传值的方法
     function getQueryString(name) {

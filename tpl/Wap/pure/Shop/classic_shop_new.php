@@ -111,6 +111,13 @@
             }
             #deliveryText{
                 margin-bottom: 5px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+            #deliveryText a{
+                color: black;
+                text-decoration: underline;
             }
             #shopNoticeText{
                 margin-bottom: 3px;

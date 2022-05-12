@@ -1897,8 +1897,8 @@
        });
    });
 
-       var store_icon = "{pigcms{$static_public}images/deliver/icon_store_map.png";
-       var user_icon = "{pigcms{$static_public}images/deliver/icon_blue_point.png";
+       var store_icon = "{pigcms{$static_public}images/deliver/icon_map_store.png";
+       var user_icon = "{pigcms{$static_public}images/deliver/icon_map_user.png";
        var store_lat = "{pigcms{$order_info['store_lat']}";
        var store_lng = "{pigcms{$order_info['store_lng']}";
        var user_lat = $.cookie("userLocationLat");

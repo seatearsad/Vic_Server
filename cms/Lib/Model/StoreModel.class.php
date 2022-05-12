@@ -1164,7 +1164,7 @@ class StoreModel extends Model
                 $desc = L('V3_HEADINGTOYOUSUB');
             else {
                 $close_time = $this->getCurrEndTime($store_id);
-                $desc = "Please pickup your order before the store closes (" . $close_time . ").";
+                $desc = "Please note that this merchant closes at (" . $close_time . ").";
             }
         }
 
