@@ -1659,6 +1659,7 @@ return array(
 
     "V3_UNPAID"=>"Unpaid",
     "V3_UNPAID_DESC"=>"This order will be expired and removed in 10 minutes. Please make a payment to get it delivered to you.",
+    "V3_UNPAID_PICKUP_DESC"=>"this order will be expired and removed in 10 minutes. Please make a payment before it's gone.",
     "V3_CONFIRMING"=>"Order placed",
     "V3_CONFIRMINGSUB"=>"Waiting for %s to confirm your order",
     "V3_PREPARING"=>"Preparing your order",

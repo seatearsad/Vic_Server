@@ -4003,7 +4003,10 @@ class ShopAction extends BaseAction{
 
                 if( ($order['paid'] == 0) && ($n_status['status']=="1" || $n_status['status']=="0")){
                     $order['statusLogName']=L('V3_UNPAID');
-                    $order['statusDesc'] = L('V3_UNPAID_DESC');
+                    if($order['order_type'] == 0)
+                        $order['statusDesc'] = L('V3_UNPAID_DESC');
+                    else
+                        $order['statusDesc'] = L('V3_UNPAID_PICKUP_DESC');
                 }elseif ($order['order_type'] == 1 && $order['statusLog'] == 2){
                     $order['statusLogName'] = D('Store')->getOrderStatusLogName($n_status['status'],$order['order_type']);
                     //order_prepared是否已经出餐

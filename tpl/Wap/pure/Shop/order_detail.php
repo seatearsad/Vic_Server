@@ -418,7 +418,7 @@
                 <li class="clr first">
                     <div class="fl match">
                         <if condition="$order_details['orderType'] eq 0">
-                            {pigcms{:L('_ORDER_INFO_')}
+                            Delivery Order
                             <else/>
                             Pickup Order
                         </if>

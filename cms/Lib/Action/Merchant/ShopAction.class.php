@@ -19,7 +19,7 @@ class ShopAction extends BaseAction
         $p = new Page($count_store, 30);
 
         $sql = "SELECT `s`.`store_id`, `s`.`mer_id`, `s`.`name`, `s`.`adress`, `s`.`phone`, `s`.`sort`, `s`.`status`, `ss`.`store_theme`, `ss`.`store_id` AS sid FROM ". C('DB_PREFIX') . "merchant_store AS s LEFT JOIN  ". C('DB_PREFIX') . "merchant_store_shop AS ss ON `s`.`store_id`=`ss`.`store_id`";
-        $sql .= " WHERE `s`.`mer_id`={$mer_id} AND (`s`.`status`='1' OR `s`.`status`='0') AND (`s`.`have_shop`='1' OR `s`.`is_pickup`='1')";
+        $sql .= " WHERE `s`.`mer_id`={$mer_id} AND (`s`.`status`='1' OR `s`.`status`='0')";// AND (`s`.`have_shop`='1' OR `s`.`is_pickup`='1')
         $sql .= " ORDER BY `s`.`sort` DESC,`s`.`store_id` ASC";
         $sql .= " LIMIT {$p->firstRow}, {$p->listRows}";
         $store_list = D()->query($sql);

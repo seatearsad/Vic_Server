@@ -28,7 +28,7 @@ class Deliverect
         'cash' => 1
     );
 
-    private $url = "https://api.deliverect.com/";//"https://api.staging.deliverect.com/";
+    protected $url; //"https://api.deliverect.com/";"https://api.staging.deliverect.com/";
 
     //获取token
     private $getTokenUrl = "oauth/token";
@@ -50,6 +50,8 @@ class Deliverect
                 $this->expiry = $v['value'];
             elseif ($v['name'] == 'deliverect_token_type')
                 $this->token_type = $v['value'];
+            elseif ($v['name'] == 'deliverect_url')
+                $this->url = $v['value'];
         }
 
         if($this->token == "" || $this->expiry < time()){

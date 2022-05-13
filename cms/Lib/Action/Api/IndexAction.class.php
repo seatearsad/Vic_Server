@@ -362,7 +362,7 @@ class IndexAction extends BaseAction
         $city_id = $_POST['city_id'] ? $_POST['city_id'] : -1;
 
         //0-delivery 1-pickup
-        $selectType = $_POST['select_type'] ? $_POST['select_type'] : -1;
+        $selectType = isset($_POST['select_type']) ? $_POST['select_type'] : -1;
 
         if($cat_id == 0)
             $cat_where['cat_id'] = $cat_fid;
@@ -1987,6 +1987,10 @@ class IndexAction extends BaseAction
                             $data['proper'] = $detail['pro_id'];
                             $data['dish_id'] = $detail['dish_id'];
                             $data['time'] = date("Y-m-d H:i:s");
+                            if($store['link_type'] == 0) {
+                                $goods = D("Shop_goods")->where(array("goods_id"=>$detail['goods_id']))->find();
+                                $data['categoryId'] = $goods['sort_id'];
+                            }
 
                             $add_list[] = $data;
                         }

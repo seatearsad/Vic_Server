@@ -1274,7 +1274,7 @@ class Merchant_store_shopModel extends Model
         foreach ($storeList as $store){
             if(!in_array($store['store_id'],$temp)) {
                 $temp[] = $store['store_id'];
-                $curr_where = array('st.store_id' => $store['store_id']);
+                $curr_where = array('st.store_id' => $store['store_id'],'st.have_shop'=>1);
 
                 if($menu_version == 1) $curr_where['menu_version'] = 1;
                 $storeRow = D('Merchant_store')->field('st.*,sh.*')->join('as st left join ' . C('DB_PREFIX') . 'merchant_store_shop sh on st.store_id = sh.store_id ')->where($curr_where)->find();

@@ -1659,6 +1659,7 @@ return array(
 
     "V3_UNPAID"=>"未支付",
     "V3_UNPAID_DESC"=>"您的订单将在10分钟后失效，请继续支付",
+    "V3_UNPAID_PICKUP_DESC"=>"您的订单将在10分钟后失效，请继续支付",
     "V3_CONFIRMING"=>"下单成功",
     "V3_CONFIRMINGSUB"=>"等待%s确认您的订单。",
     "V3_PREPARING"=>"准备出餐",
