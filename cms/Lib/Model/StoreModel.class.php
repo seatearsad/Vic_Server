@@ -361,8 +361,9 @@ class StoreModel extends Model
                 }
 
                 if ($distance <= $row['delivery_radius']) {
+                    $city_id = D('Store')->geocoderGoogle($lat,$lng);
                     //获取特殊城市属性
-                    $city = D('Area')->where(array('area_id' => $row['city_id']))->find();
+                    $city = D('Area')->where(array('area_id' => $city_id))->find();
                     if ($city['range_type'] != 0) {
                         switch ($city['range_type']) {
                             case 1://按照纬度限制的城市 小于某个纬度
@@ -391,6 +392,7 @@ class StoreModel extends Model
             }
         } else {
             $store['shipfee'] = C('config.delivery_distance_1');
+            $store['is_delivery'] = 0;
         }
 
         if($row['is_pickup'] == 1){

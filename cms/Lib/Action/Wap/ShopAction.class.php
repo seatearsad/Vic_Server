@@ -1410,8 +1410,15 @@ class ShopAction extends BaseAction{
             }
 
             if ($store['distance'] <= $store['delivery_radius']) {
+                if($_COOKIE['userLocationCity']){
+                    $city_id = $_COOKIE['userLocationCity'];
+                }else{
+                    $city_id = D('Store')->geocoderGoogle($user_long_lat['lat'],$user_long_lat['long']);
+                    $city_id = $city_id ? $city_id : 0;
+                    $_COOKIE['userLocationCity'] = $city_id;
+                }
                 //获取特殊城市属性
-                $city = D('Area')->where(array('area_id' => $store['city_id']))->find();
+                $city = D('Area')->where(array('area_id' => $city_id))->find();
                 if ($city['range_type'] != 0) {
                     switch ($city['range_type']) {
                         case 1://按照纬度限制的城市 小于某个纬度
