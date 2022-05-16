@@ -279,7 +279,7 @@ class ShopAction extends BaseAction{
             $lists = D('Merchant_store_shop')->getRecommendList($city_id,$lat,$long,$cat_id,$cat_fid);
         }else {
             if($key != "")
-                $where = array('deliver_type' => $deliver_type, 'order' => $order, 'lat' => $lat, 'long' => $long, 'cat_id' => $cat_id, 'cat_fid' => $cat_fid, 'page' => $page,'key'=>$key);
+                $where = array('deliver_type' => $deliver_type, 'order' => $order, 'lat' => $lat, 'long' => $long, 'cat_id' => $cat_id, 'cat_fid' => $cat_fid, 'page' => $page,'key'=>$key,'selectType'=>-1);
             else
                 $where = array('deliver_type' => $deliver_type, 'order' => $order, 'lat' => $lat, 'long' => $long, 'cat_id' => $cat_id, 'cat_fid' => $cat_fid, 'page' => $page,'selectType'=>$selectType);
 
@@ -1105,6 +1105,7 @@ class ShopAction extends BaseAction{
         $store['shop_remind'] = $row['shop_remind'];
         $store['have_shop'] = $row['have_shop'];
         $store['is_pickup'] = $row['is_pickup'];
+        $store['delivery_radius'] = $row['delivery_radius'];
 
         if($row['is_pickup'] == 1){
             $store['pickup_distance'] = number_format(getDistance($row['lat'], $row['long'], $user_long_lat['lat'], $user_long_lat['long'])/1000,2,'.','');
@@ -1407,8 +1408,38 @@ class ShopAction extends BaseAction{
 
                 //$temp['delivery_money'] =  $temp['delivery_money'] - $delivery_coupon['discount'];
             }
+
+            if ($store['distance'] <= $store['delivery_radius']) {
+                //获取特殊城市属性
+                $city = D('Area')->where(array('area_id' => $store['city_id']))->find();
+                if ($city['range_type'] != 0) {
+                    switch ($city['range_type']) {
+                        case 1://按照纬度限制的城市 小于某个纬度
+                            if ($user_long_lat['lat'] >= $city['range_para']) $store['is_delivery'] = 0;
+                            else $store['is_delivery'] = 1;
+                            break;
+                        case 2://自定义区域
+                            import('@.ORG.RegionalCalu.RegionalCalu');
+                            $region = new RegionalCalu();
+                            if ($region->checkCity($city, $user_long_lat['long'], $user_long_lat['lat'])) {
+                                $store['is_delivery'] = 1;
+                            } else {
+                                $store['is_delivery'] = 0;
+                            }
+                            break;
+                        default:
+                            $store['is_delivery'] = 1;
+                            break;
+                    }
+                } else {
+                    $store['is_delivery'] = 1;
+                }
+            } else {
+                $store['is_delivery'] = 0;
+            }
         }else{
             $store['delivery_money'] = C('config.delivery_distance_1');
+            $store['is_delivery'] = 0;
         }
         //$store['delivery_money'] = floatval($store['delivery_money']);
         // 		$store['delivery_money'] = $row['deliver_type'] == 0 ? C('config.delivery_fee') : $row['delivery_fee'];//配送费

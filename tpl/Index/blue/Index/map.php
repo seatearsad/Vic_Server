@@ -37,6 +37,7 @@
     var deliver_icon = "{pigcms{$static_public}images/deliver/icon_map_deliver.png";
     var store_icon = "{pigcms{$static_public}images/deliver/icon_map_store.png";
     var user_icon = "{pigcms{$static_public}images/deliver/icon_map_user.png";
+    var local_icon = "{pigcms{$static_public}images/deliver/icon_blue_point.png";
 
     //获取get传值的方法
     function getQueryString(name) {
@@ -51,7 +52,7 @@
     // The map, centered at Uluru
     var map;
 
-    var deliver,store,user,marker_deliver,marker_store,marker_user,bounds;
+    var deliver,store,user,local,marker_deliver,marker_store,marker_user,bounds;
 
     if(type == 2) {
         var uluru = {lat: parseFloat(deliver_lat), lng: parseFloat(deliver_lng)};
@@ -84,10 +85,16 @@
             size: new google.maps.Size(35,35)
         };
 
+        local =  {
+            url:local_icon,
+            scaledSize: new google.maps.Size(35,35),
+            size: new google.maps.Size(35,35)
+        };
+
         marker_store = new google.maps.Marker({position: store_pos, map: map,icon:store});
-        marker_user = new google.maps.Marker({position: user_pos, map: map,icon:user});
 
         if(type == 2) {
+            marker_user = new google.maps.Marker({position: user_pos, map: map,icon:user});
             deliver = {
                 url: deliver_icon,
                 scaledSize: new google.maps.Size(35, 35),
@@ -97,6 +104,8 @@
 
             bounds.extend(new google.maps.LatLng(marker_deliver.getPosition().lat()
                 , marker_deliver.getPosition().lng()));
+        }else{
+            marker_user = new google.maps.Marker({position: user_pos, map: map,icon:local});
         }
 
         bounds.extend(new   google.maps.LatLng(marker_store.getPosition().lat()

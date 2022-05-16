@@ -600,9 +600,9 @@ class MyAction extends BaseAction{
 
                 //如果存在平台优惠 而且 delivery_discount_type=0，优惠券 也是可用的
                 //if ((float)$now_order['delivery_discount']>0 && $now_order['delivery_discount_type']==0){
-                if (((float)$now_order['delivery_discount']>0 && $now_order['delivery_discount_type']==0)||
+                if (($now_order['order_type'] == 0 && (float)$now_order['delivery_discount']>0 && $now_order['delivery_discount_type']==0)||
                     ((float)$now_order['merchant_reduce']>0 && $now_order['merchant_reduce_type']==0)){
-                    //那么就要提示用户，互斥提示
+                    //那么就要提示用户，互斥提示 仅外卖订单
                     $value['need_notify_delivery_discount'] = "1";
                 }else{
                     //否则，随便用户使用优惠券

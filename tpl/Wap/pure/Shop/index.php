@@ -142,6 +142,22 @@
             border-radius: 2px;
             line-height: 1.5;
         }
+        .only_tab,.only_tab_old{
+            position: absolute;
+            background-color: #4E4D4D;
+            right: 10px;
+            padding: 5px 10px;
+            border: 1px solid white;
+            border-radius: 5px;
+            color: white;
+            font-size: 12px;
+        }
+        .only_tab{
+            top: 5px;
+        }
+        .only_tab_old{
+            bottom: 5px;
+        }
     </style>
 	<body>
     <include file="Public:google"/>
@@ -217,6 +233,12 @@
                     {{# } }}
                     &nbsp;
                 </div>
+                    {{# if(d[i].have_shop == 0 && d[i].is_pickup == 1 && keyword != ''){ }}
+                        <div class="only_tab">Pickup Only</div>
+                    {{# } }}
+                    {{# if(d[i].have_shop == 1 && d[i].is_pickup == 0 && keyword != ''){ }}
+                        <div class="only_tab">Delivery Only</div>
+                    {{# } }}
             </dd>
             {{# }else{ }}
             <dd class="recommend-link-url" data-url="./wap.php?c=Shop&a=classic_shop&shop_id={{ d[i].id }}" data-url-type="openRightFloatWindow" {{# if(d[i].is_close){ }}style="opacity:0.6;"{{# } }}>
@@ -278,6 +300,12 @@
                 {{# } }}
                 {{# if(d[i].free_delivery == 1){ }}
                 <div class="free_delivery"></div>
+                {{# } }}
+                {{# if(d[i].have_shop == 0 && d[i].is_pickup == 1 && keyword != ''){ }}
+                <div class="only_tab_old">Pickup Only</div>
+                {{# } }}
+                {{# if(d[i].have_shop == 1 && d[i].is_pickup == 0 && keyword != ''){ }}
+                <div class="only_tab_old">Delivery Only</div>
                 {{# } }}
             </dd>
             {{# } }}

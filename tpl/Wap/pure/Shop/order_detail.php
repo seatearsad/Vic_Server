@@ -535,6 +535,7 @@
     var deliver_icon = "{pigcms{$static_public}images/deliver/icon_map_deliver.png";
     var store_icon = "{pigcms{$static_public}images/deliver/icon_map_store.png";
     var user_icon = "{pigcms{$static_public}images/deliver/icon_map_user.png";
+    var local_icon = "{pigcms{$static_public}images/deliver/icon_blue_point.png";
 
     //获取get传值的方法
     function getQueryString(name) {
@@ -568,12 +569,20 @@
             size: new google.maps.Size(35,35)
         };
 
+        var local  =  {
+            url:local_icon,
+            scaledSize: new google.maps.Size(35,35),
+            size: new google.maps.Size(35,35)
+        };
+
         var marker_store = new google.maps.Marker({position: store_pos, map: map,icon:store});
-        var marker_user = new google.maps.Marker({position: user_pos, map: map,icon:user});
+
 
         var bounds = new google.maps.LatLngBounds();
 
         if(orderType == 0) {
+            var marker_user = new google.maps.Marker({position: user_pos, map: map,icon:user});
+
             var deliver = {
                 url: deliver_icon,
                 scaledSize: new google.maps.Size(35, 35),
@@ -584,6 +593,8 @@
 
             bounds.extend(new   google.maps.LatLng(marker_deliver.getPosition().lat()
                 ,marker_deliver.getPosition().lng()));
+        }else{
+            var marker_user = new google.maps.Marker({position: user_pos, map: map,icon:local});
         }
 
         bounds.extend(new   google.maps.LatLng(marker_store.getPosition().lat()

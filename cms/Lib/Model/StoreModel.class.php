@@ -359,6 +359,35 @@ class StoreModel extends Model
 
                     //$temp['delivery_money'] =  $temp['delivery_money'] - $delivery_coupon['discount'];
                 }
+
+                if ($distance <= $row['delivery_radius']) {
+                    //获取特殊城市属性
+                    $city = D('Area')->where(array('area_id' => $row['city_id']))->find();
+                    if ($city['range_type'] != 0) {
+                        switch ($city['range_type']) {
+                            case 1://按照纬度限制的城市 小于某个纬度
+                                if ($lat >= $city['range_para']) $store['is_delivery'] = 0;
+                                else $store['is_delivery'] = 1;
+                                break;
+                            case 2://自定义区域
+                                import('@.ORG.RegionalCalu.RegionalCalu');
+                                $region = new RegionalCalu();
+                                if ($region->checkCity($city, $lng, $lat)) {
+                                    $store['is_delivery'] = 1;
+                                } else {
+                                    $store['is_delivery'] = 0;
+                                }
+                                break;
+                            default:
+                                $store['is_delivery'] = 1;
+                                break;
+                        }
+                    } else {
+                        $store['is_delivery'] = 1;
+                    }
+                } else {
+                    $store['is_delivery'] = 0;
+                }
             }
         } else {
             $store['shipfee'] = C('config.delivery_distance_1');

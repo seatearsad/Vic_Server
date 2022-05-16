@@ -881,7 +881,10 @@ function showShop(shopId){
             $("#selectDiv").show();
 
             if(result.store.have_shop == 1){
-                $("#delivery_li").find(".select_desc").html("$"+result.store.delivery_money);
+                if(result.store.is_delivery == 1)
+                    $("#delivery_li").find(".select_desc").html("$"+result.store.delivery_money);
+                else
+                    $("#delivery_li").find(".select_desc").html("Out of delivery zone");
             }else{
                 $("#delivery_li").unbind("click");
                 $("#delivery_li").css("color","#707070");

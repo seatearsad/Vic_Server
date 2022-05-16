@@ -684,7 +684,7 @@ class ShopAction extends BaseAction
 
         $is_tip = 0;
         $checkTime = time() - $pickup_pay_time_tip*60;
-        $pay_count = D('Shop_order')->where(array("paid"=>1,"status"=>0,"pay_time"=>array("lt",$checkTime),"order_type"=>1))->count();
+        $pay_count = D('Shop_order')->where(array("paid"=>1,"status"=>0,"pay_time"=>array("lt",$checkTime),"order_type"=>1,"is_del"=>0))->count();
         if($pay_count > 0){
             $is_tip = 1;
         }

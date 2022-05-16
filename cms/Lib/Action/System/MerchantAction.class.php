@@ -447,6 +447,7 @@ class MerchantAction extends BaseAction{
 
 	public function store_amend(){
 		if(IS_POST){
+		    $store = D("Merchant_store")->where(array('store_id'=>$_POST['store_id']))->find();
 			$long_lat = explode(',',$_POST['long_lat']);
 			$_POST['long'] = $long_lat[0];
 			$_POST['lat'] = $long_lat[1];
@@ -456,6 +457,14 @@ class MerchantAction extends BaseAction{
             $area = D('Area')->where(array('area_id'=>$_POST['city_id']))->find();
             $_POST['province_id'] = $area ? $area['area_pid'] : 0;
             $_POST['area_id'] = 0;
+
+            if(($store['have_shop'] != 0 || $store['is_pickup'] != 0) && $_POST['have_shop'] == 0 && $_POST['is_pickup'] == 0){
+                $_POST['status'] = 0;
+            }
+            if($_POST['status'] == 1 && $store['have_shop'] == 0 && $store['is_pickup'] == 0 && $_POST['have_shop'] == 0 && $_POST['is_pickup'] == 0){
+                $_POST['have_shop'] = 1;
+            }
+
 			$database_merchant_store = D('Merchant_store');
 			if($database_merchant_store->data($_POST)->save()){
 				$this->success('Success');

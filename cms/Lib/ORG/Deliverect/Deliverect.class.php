@@ -122,8 +122,14 @@ class Deliverect
         $data['deliveryIsAsap'] = true;
         $data['courier'] = "Tutti";
 
-        $customer = D("User_adress")->where(array('adress_id'=>$order['address_id']))->find();
-        $data['customer']['name'] = $customer['name'];
+        if($order['order_type'] == 0) {
+            $customer = D("User_adress")->where(array('adress_id' => $order['address_id']))->find();
+            $data['customer']['name'] = $customer['name'];
+        }else {
+            $customer = D("User")->where(array('uid' => $order['uid']))->find();
+            $data['customer']['name'] = $customer['nickname'];
+        }
+
         $data['customer']['companyName'] = "";
         $data['customer']['phoneNumber'] = $customer['phone'];
         $data['customer']['email'] = "";

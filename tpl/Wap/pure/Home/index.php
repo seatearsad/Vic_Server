@@ -550,7 +550,13 @@
                         {{# if(d[i].delivery){ }}
                         <div class="price">
                             <!--span>{pigcms{:L('_MIN_DELI_PRICE_')} ${{ d[i].delivery_price }}</span-->
-                            <span class="delivery">{pigcms{:L('_DELI_PRICE_')} ${{ d[i].delivery_money }}+</span>
+                            <span class="delivery">
+                                {{# if(userModelSelect == 0){ }}
+                                    ${{ d[i].delivery_money }} + · {{ d[i].keywords }}
+                                {{# }else{ }}
+                                    {{ d[i].pickup_distance }} km · {{ d[i].keywords }}
+                                {{# } }}
+                            </span>
                             <!--span class="delivery">{pigcms{:L('_PACK_PRICE_')} ${{ d[i].pack_fee }}</span-->
                             {{# if(d[i].delivery_system){ }}
                             <!--em class="location-right">{pigcms{:L('_PLAT_DIST_')}</em-->
@@ -596,7 +602,7 @@
                         {{# } }}
                     </div>
                     {{# } }}
-                    {{# if(d[i].free_delivery == 1){ }}
+                    {{# if(d[i].free_delivery == 1 && userModelSelect == 0){ }}
                         <div class="free_delivery"></div>
                     {{# } }}
                 </dd>

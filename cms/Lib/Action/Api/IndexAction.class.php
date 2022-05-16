@@ -167,7 +167,7 @@ class IndexAction extends BaseAction
                     $storeList = D('Shop_category_relation')->where(array('cat_id' => $v['cat_id']))->order('store_sort desc')->select();
                     $allClose = true;
                     foreach ($storeList as $store) {
-                        $store_where = array('st.store_id' => $store['store_id']);
+                        $store_where = array('st.store_id' => $store['store_id'],'st.have_shop'=>1);
                         if ($this->app_version < 266) $store_where['st.menu_version'] = 1;
 
                         $storeRow = D('Merchant_store')->field('st.*,sh.background,sh.delivery_radius')->join('as st left join ' . C('DB_PREFIX') . 'merchant_store_shop sh on st.store_id = sh.store_id ')->where($store_where)->find();
