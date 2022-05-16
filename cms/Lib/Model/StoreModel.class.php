@@ -362,6 +362,7 @@ class StoreModel extends Model
 
                 if ($distance <= $row['delivery_radius']) {
                     $city_id = D('Store')->geocoderGoogle($lat,$lng);
+                    $store['user_city_id'] = $city_id;
                     //获取特殊城市属性
                     $city = D('Area')->where(array('area_id' => $city_id))->find();
                     if ($city['range_type'] != 0) {
@@ -383,12 +384,14 @@ class StoreModel extends Model
                                 $store['is_delivery'] = 1;
                                 break;
                         }
-                    } else {
+                    }    else {
                         $store['is_delivery'] = 1;
                     }
                 } else {
                     $store['is_delivery'] = 0;
                 }
+            }else{
+                $store['is_delivery'] = 0;
             }
         } else {
             $store['shipfee'] = C('config.delivery_distance_1');
